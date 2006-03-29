@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- python -*-
 
 import gconf
 import gtk
@@ -91,15 +92,18 @@ class vmmManager:
         self.conf = vmmConfig()
         self.vmm = libvirt.openReadOnly(None)
         #self.vmm = libvirt.open(None)
+        print self.vmm.getInfo()
 
         self.stats = vmmStats(self.vmm, self.conf)
-        self.populate_vms()
+        self.prepare_vmlist()
         self.about = None
         self.preferences = None
 
         # Setup update timers
         self.conf.on_stats_update_interval_changed(self.change_timer_interval)
-        self.schedule_timer()
+
+        self.stats.connect_to_signal("vm_added", self.vm_added)
+        self.stats.connect_to_signal("vm_removed", self.vm_removed)
 
         self.conf.on_vmlist_status_visible_changed(self.toggle_status_visible_widget)
         self.conf.on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
@@ -131,6 +135,9 @@ class vmmManager:
         self.vm_selected(None)
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
 
+        self.stats.tick()
+        self.schedule_timer()
+
         
     def exit_app(self, ignore=None,ignore2=None):
         gtk.main_quit()
@@ -140,6 +147,34 @@ class vmmManager:
         print "Scheduling at " + str(interval)
         self.timer_started = time() * 1000
         self.timer = gobject.timeout_add(interval, self.refresh_stats)
+
+
+    def vm_added(self, name):
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
+
+        dup = 0
+        for row in range(model.iter_n_children(None)):
+            vm = model.get_value(model.iter_nth_child(None, row), 0)
+            if vm == name:
+                dup = 1
+
+        if dup != 1:
+            print "Add " + name
+            model.append([name])
+
+
+    def vm_removed(self, name):
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
+
+        dup = 0
+        for row in range(model.iter_n_children(None)):
+            vm = model.get_value(model.iter_nth_child(None, row), 0)
+            if vm == name:
+                model.remove(model.iter_nth_child(None, row))
+                print "Remove " + name
+                break
 
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
@@ -184,7 +219,7 @@ class vmmManager:
         return 1
     
 
-    def populate_vms(self):
+    def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
         model = gtk.ListStore(str)
@@ -232,12 +267,6 @@ class vmmManager:
         networkTrafficCol.pack_start(networkTraffic_txt, True)
         networkTrafficCol.set_cell_data_func(networkTraffic_txt, self.network_usage_text, None)
         networkTrafficCol.set_visible(self.conf.is_vmlist_network_traffic_visible())
-        
-        doms = self.vmm.listDomainsID()
-        if doms != None:
-            for id in self.vmm.listDomainsID():
-                vm = self.vmm.lookupByID(id)
-                model.append([vm.name()])
 
     def toggle_status_visible_conf(self, menu):
         self.conf.set_vmlist_status_visible(menu.get_active())
@@ -291,13 +320,13 @@ class vmmManager:
 
     def cpu_usage_text(self,  column, cell, model, iter, data):
         name = model.get_value(iter, 0)
-        cell.set_property('text', "%2.2f %%" % self.stats.percent_cpu_time(name))
+        cell.set_property('text', "%2.2f %%" % self.stats.cpu_time_percentage(name))
 
     def memory_usage_text(self,  column, cell, model, iter, data):
         name = model.get_value(iter, 0)
         current = self.stats.current_memory(name)
-        maximum = self.stats.maximum_memory(name)
-        cell.set_property('text', "%s of %s" % (self.pretty_mem(current), self.pretty_mem(maximum)))
+        currentPercent = self.stats.current_memory_percentage(name)
+        cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
         #cell.set_property('text', self.pretty_mem(current[2]))
 
     def pretty_mem(self, mem):
@@ -402,9 +431,9 @@ class vmmStats:
     def __init__(self, vmm, conf):
         self.vmm = vmm
         self.vms = {}
+        self.hostinfo = vmm.getInfo()
         self.conf = conf
-        self.callbacks = { "notify_added": [], "notify_removed": [] }
-        self.tick()
+        self.callbacks = { "vm_added": [], "vm_removed": [] }
 
     def connect_to_signal(self, name, callback):
         if not(self.callbacks.has_key(name)):
@@ -412,16 +441,17 @@ class vmmStats:
 
         self.callbacks[name].append(callback)
 
-    def notify_added(self, name):
-        for cb in self.callbacks["notify_added"]:
+    def notify_vm_added(self, name):
+        for cb in self.callbacks["vm_added"]:
             cb(name)
         
 
-    def notify_removed(self, name):
-        for cb in self.callbacks["notify_added"]:
+    def notify_vm_removed(self, name):
+        for cb in self.callbacks["vm_removed"]:
             cb(name)
 
     def tick(self):
+        print "Tick"
         doms = self.vmm.listDomainsID()
         newVms = {}
         if doms != None:
@@ -432,13 +462,13 @@ class vmmStats:
         for name in self.vms.keys():
             if not(newVms.has_key(name)):
                 del self.vms[name]
-                self.notify_removed(name)
+                self.notify_vm_removed(name)
 
         for name in newVms.keys():
             if not(self.vms.has_key(name)):
                 self.vms[name] = { "handle": newVms[name],
                                    "stats": [] }
-                self.notify_added(name)
+                self.notify_vm_added(name)
 
         now = time()
 
@@ -453,33 +483,54 @@ class vmmStats:
             prevTimestamp = 0
             if len(self.vms[name]["stats"]) > 0:
                 prevTimestamp = self.vms[name]["stats"][0]["timestamp"]
-                prevCpuTime = self.vms[name]["stats"][0]["absCpuTime"]
+                prevCpuTime = self.vms[name]["stats"][0]["cpuTimeAbs"]
 
-            print str(now-prevTimestamp)
-            print str(info[4]-prevCpuTime)
-            print str((now - prevTimestamp)*1000 * 1000)
-            print
-            pcentCpuTime = (info[4]-prevCpuTime) * 100 / ((now - prevTimestamp)*1000 * 1000*1000)
+            pcentCpuTime = (info[4]-prevCpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000)
+            #pcentCpuTime = pcentCpuTime / self.host_active_processor_count()
+
+            pcentCurrMem = info[2] * 100 / self.host_memory_size()
+            pcentMaxMem = info[1] * 100 / self.host_memory_size()
             
             newStats = [{ "timestamp": now,
                           "status": info[0],
-                          "absCpuTime": info[4],
-                          "relCpuTime": (info[4]-prevCpuTime),
-                          "pcentCpuTime": pcentCpuTime,
+                          "cpuTime": (info[4]-prevCpuTime),
+                          "cpuTimeAbs": info[4],
+                          "cpuTimePercent": pcentCpuTime,
                           "currMem": info[2],
-                          "maxMem": info[1] }]
-            totalCpuTime = totalCpuTime + newStats[0]["relCpuTime"]
+                          "currMemPercent": pcentCurrMem,
+                          "maxMem": info[1],
+                          "maxMemPercent": pcentMaxMem,
+                          }]
+            totalCpuTime = totalCpuTime + newStats[0]["cpuTime"]
             newStats.append(self.vms[name]["stats"])
             self.vms[name]["stats"] = newStats
+
+    def host_memory_size(self):
+        return self.hostinfo[1]*1024
+
+    def host_active_processor_count(self):
+        return self.hostinfo[2]
+
+    def host_maximum_processor_count(self):
+        return self.hostinfo[4] * self.hostinfo[5] * self.hostinfo[6] * self.hostinfo[7]
 
     def current_memory(self, name):
         return self.vms[name]["stats"][0]["currMem"]
     
+    def current_memory_percentage(self, name):
+        return self.vms[name]["stats"][0]["currMemPercent"]
+    
     def maximum_memory(self, name):
         return self.vms[name]["stats"][0]["maxMem"]
+
+    def maximum_memory_percentage(self, name):
+        return self.vms[name]["stats"][0]["maxMemPercent"]
+
+    def cpu_time(self, name):
+        return self.vms[name]["stats"][0]["cpuTime"]
     
-    def percent_cpu_time(self, name):
-        return self.vms[name]["stats"][0]["pcentCpuTime"]
+    def cpu_time_percentage(self, name):
+        return self.vms[name]["stats"][0]["cpuTimePercent"]
     
     def run_status(self, name):
         status = self.vms[name]["stats"][0]["status"]
