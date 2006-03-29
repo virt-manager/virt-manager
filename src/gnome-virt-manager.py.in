@@ -45,9 +45,57 @@ class vmmAbout:
 
 
 class vmmDetails:
-    def __init__(self, vmm):
+    def __init__(self, vmm, stats, conf, vmname):
         self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-details")
         self.vmm = vmm
+        self.stats = stats
+        self.conf = conf
+        self.vmname = vmname
+
+        topwin = self.window.get_widget("vmm-details")
+        topwin.hide()
+        topwin.set_title(vmname + " " + topwin.get_title())
+
+        self.window.get_widget("overview-name").set_text(vmname)
+
+        
+        #self.window.get_widget("overview-cpu-usage-graph").set_curve_type(gtk.CURVE_TYPE_SPLINE)
+        #self.window.get_widget("overview-memory-usage-graph").set_curve_type(gtk.CURVE_TYPE_LINEAR)
+
+        conf.on_stats_history_length_changed(self.change_graph_ranges)
+
+        self.window.signal_autoconnect({
+            "on_vmm_details_delete_event": self.close,
+            })
+
+        self.stats.connect_to_signal("vm_updated", self.refresh_overview)
+        self.refresh_overview(vmname)
+        self.change_graph_ranges()
+
+    def show(self):
+        dialog = self.window.get_widget("vmm-details")
+        dialog.show_all()
+
+    def close(self,ignore1=None,ignore2=None):
+        self.window.get_widget("vmm-details").hide()
+        return 1
+
+    def change_graph_ranges(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
+        len = self.conf.get_stats_history_length()
+        self.window.get_widget("overview-cpu-usage-graph").set_range(0, len, 0, 100)
+        self.window.get_widget("overview-memory-usage-graph").set_range(0, len, 0, 100)
+        self.window.get_widget("overview-network-traffic-graph").set_range(0, len, 0, 100)
+
+    def refresh_overview(self, vmname):
+        if not(vmname == self.vmname):
+            return
+
+        self.window.get_widget("overview-status-text").set_text(self.stats.run_status(vmname))
+        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.stats.run_status_icon(vmname))
+        self.window.get_widget("overview-cpu-usage-graph").set_vector(self.stats.cpu_time_vector(vmname))
+        self.window.get_widget("overview-memory-usage-graph").set_vector(self.stats.current_memory_vector(vmname))
+        self.window.get_widget("overview-cpu-usage-text").set_text("%2.2f%%" % self.stats.cpu_time_percentage(vmname))
+        self.window.get_widget("overview-memory-usage-text").set_text("%2.2f MB of %2.2f MB" % (self.stats.current_memory(vmname)/1024, self.stats.host_memory_size()/1024))
 
 
 class vmmPreferences:
@@ -100,8 +148,10 @@ class vmmManager:
 
         self.stats = vmmStats(self.vmm, self.conf)
         self.prepare_vmlist()
+        
         self.about = None
         self.preferences = None
+        self.details = {}
 
         # Setup update timers
         self.conf.on_stats_update_interval_changed(self.change_timer_interval)
@@ -131,6 +181,7 @@ class vmmManager:
             "on_vm_manager_delete_event": self.exit_app,
             "on_menu_file_quit_activate": self.exit_app,
             "on_vmm_close_clicked": self.exit_app,
+            "on_vm_details_clicked": self.show_vm_details,
 
             "on_menu_edit_preferences_activate": self.show_preferences,
             "on_menu_help_about_activate": self.show_about,
@@ -180,6 +231,20 @@ class vmmManager:
                 print "Remove " + name
                 break
 
+    def current_vm(self):
+        vmlist = self.window.get_widget("vm-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] != None:
+            return active[0].get_value(active[1], 0)
+        return None
+
+    def show_vm_details(self,ignore):
+        vmname = self.current_vm()
+        if not(self.details.has_key(vmname)):
+            self.details[vmname] = vmmDetails(self.vmm, self.stats, self.conf, vmname)
+
+        self.details[vmname].show()
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
         print "Removing timer"
@@ -286,16 +351,6 @@ class vmmManager:
         model.set_sort_func(VMLIST_SORT_MEMORY_USAGE, self.vmlist_memory_usage_sorter)
         model.set_sort_column_id(VMLIST_SORT_NAME, gtk.SORT_ASCENDING)
 
-        self.vmlist_icons = {
-            "blocked": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_blocked.png"),
-            "crashed": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_crashed.png"),
-            "paused": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_paused.png"),
-            "running": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_running.png"),
-            "shutdown": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_shutdown.png"),
-            "shutoff": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_shutoff.png"),
-            "idle": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_idle.png"),
-            }
-
         #vmlist.set_headers_clickable(True)
 
     # XXX does python have a built-in sort op like perl's <=> / cmp ?
@@ -368,8 +423,7 @@ class vmmManager:
 
     def status_icon(self, column, cell, model, iter, data):
         name = model.get_value(iter, 0)
-        pb = self.vmlist_icons[self.stats.run_status(name).lower()]
-        cell.set_property('pixbuf', pb)
+        cell.set_property('pixbuf', self.stats.run_status_icon(name))
 
     def cpu_usage_text(self,  column, cell, model, iter, data):
         name = model.get_value(iter, 0)
@@ -488,7 +542,18 @@ class vmmStats:
         self.vms = {}
         self.hostinfo = vmm.getInfo()
         self.conf = conf
-        self.callbacks = { "vm_added": [], "vm_removed": [] }
+        self.callbacks = { "vm_added": [], "vm_removed": [], "vm_updated": [] }
+
+        self.status_icons = {
+            "blocked": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_blocked.png"),
+            "crashed": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_crashed.png"),
+            "paused": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_paused.png"),
+            "running": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_running.png"),
+            "shutdown": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_shutdown.png"),
+            "shutoff": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_shutoff.png"),
+            "idle": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_idle.png"),
+            }
+
 
     def connect_to_signal(self, name, callback):
         if not(self.callbacks.has_key(name)):
@@ -496,13 +561,22 @@ class vmmStats:
 
         self.callbacks[name].append(callback)
 
+    def disconnect_from_signal(self, name, callback):
+        for i in len(self.callbacks[name]):
+            if self.callbacks[i] == callback:
+                del self.callbacks[i:i]
+                
+
     def notify_vm_added(self, name):
         for cb in self.callbacks["vm_added"]:
             cb(name)
-        
 
     def notify_vm_removed(self, name):
         for cb in self.callbacks["vm_removed"]:
+            cb(name)
+
+    def notify_vm_updated(self, name):
+        for cb in self.callbacks["vm_updated"]:
             cb(name)
 
     def tick(self):
@@ -531,8 +605,9 @@ class vmmStats:
         for name in self.vms.keys():
             info = self.vms[name]["handle"].info()
 
-            if len(self.vms[name]["stats"]) > self.conf.get_stats_history_length():
-                self.vms[name]["stats"] = self.vms[name]["stats"][0:len(self.vms[name]["stats"])-1]
+            if (len(self.vms[name]["stats"])+1) > self.conf.get_stats_history_length():
+                end = len(self.vms[name]["stats"])
+                del self.vms[name]["stats"][end-1:end]
 
             prevCpuTime = 0
             prevTimestamp = 0
@@ -546,7 +621,7 @@ class vmmStats:
             pcentCurrMem = info[2] * 100 / self.host_memory_size()
             pcentMaxMem = info[1] * 100 / self.host_memory_size()
             
-            newStats = [{ "timestamp": now,
+            newStats = { "timestamp": now,
                           "status": info[0],
                           "cpuTime": (info[4]-prevCpuTime),
                           "cpuTimeAbs": info[4],
@@ -555,10 +630,11 @@ class vmmStats:
                           "currMemPercent": pcentCurrMem,
                           "maxMem": info[1],
                           "maxMemPercent": pcentMaxMem,
-                          }]
-            totalCpuTime = totalCpuTime + newStats[0]["cpuTime"]
-            newStats.append(self.vms[name]["stats"])
-            self.vms[name]["stats"] = newStats
+                          }
+            totalCpuTime = totalCpuTime + newStats["cpuTime"]
+            self.vms[name]["stats"].insert(0, newStats)
+
+            self.notify_vm_updated(name)
 
     def host_memory_size(self):
         return self.hostinfo[1]*1024
@@ -586,6 +662,25 @@ class vmmStats:
     
     def cpu_time_percentage(self, name):
         return self.vms[name]["stats"][0]["cpuTimePercent"]
+
+    def cpu_time_vector(self, name):
+        vector = []
+        stats = self.vms[name]["stats"]
+        print "Len " + str(len(stats))
+        for i in range(self.conf.get_stats_history_length()):
+            if i < len(stats):
+                vector.append(stats[i]["cpuTimePercent"])
+            else:
+                vector.append(0)
+        return vector
+    
+    def current_memory_vector(self, name):
+        vector = []
+        stats = self.vms[name]["stats"]
+        for i in range(len(stats)):
+            vector.append(stats[i]["currMemPercent"])
+        return vector
+    
     
     def run_status(self, name):
         status = self.vms[name]["stats"][0]["status"]
@@ -605,7 +700,11 @@ class vmmStats:
             return "Crashed"
         else:
             raise "Unknown status code"
-    
+
+    def run_status_icon(self, name):
+        status = self.run_status(name)
+        return self.status_icons[status.lower()]
+
         
 # Run me!
 def main():
