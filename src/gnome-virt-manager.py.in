@@ -11,18 +11,18 @@ import os
 import os.path
 import libvirt
 
-gconf_dir = "/apps/gnome-virtual-manager"
+appname = "::PACKAGE::"
+gconf_dir = "/apps/" + appname
 
-# Ought not to hardcode stuff as being in /usr
-gladedir = "/usr/share/gnome-vm-manager"
+gladedir = "::GLADEDIR::"
 
 # Hack for dev purposes
-if os.path.exists("./gnome-vm-manager.glade"):
+if os.path.exists("./" + appname + ".glade"):
     gladedir = "."
 
 class vmmAbout:
     def __init__(self):
-        self.window = gtk.glade.XML(gladedir + "/gnome-vm-manager.glade", "vmm-about")
+        self.window = gtk.glade.XML(gladedir + "/" + appname + ".glade", "vmm-about")
         self.window.get_widget("vmm-about").hide()
 
         self.window.signal_autoconnect({
@@ -41,13 +41,13 @@ class vmmAbout:
 
 class vmmDetails:
     def __init__(self, vmm):
-        self.window = gtk.glade.XML(gladedir + "/gnome-vm-manager.glade", "vmm-details")
+        self.window = gtk.glade.XML(gladedir + "/" + appname + ".glade", "vmm-details")
         self.vmm = vmm
 
 
 class vmmPreferences:
     def __init__(self, conf):
-        self.window = gtk.glade.XML(gladedir + "/gnome-vm-manager.glade", "vmm-preferences")
+        self.window = gtk.glade.XML(gladedir + "/" + appname + ".glade", "vmm-preferences")
         self.conf = conf
         self.window.get_widget("vmm-preferences").hide()
 
@@ -87,7 +87,7 @@ class vmmPreferences:
 
 class vmmManager:
     def __init__(self):
-        self.window = gtk.glade.XML(gladedir + "/gnome-vm-manager.glade", "vmm-manager")
+        self.window = gtk.glade.XML(gladedir + "/" + appname + ".glade", "vmm-manager")
         self.conf = vmmConfig()
         self.vmm = libvirt.openReadOnly(None)
         #self.vmm = libvirt.open(None)
