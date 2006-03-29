@@ -15,15 +15,19 @@ import libvirt
 appname = "::PACKAGE::"
 gconf_dir = "/apps/" + appname
 
-gladedir = "::GLADEDIR::"
+asset_dir = "::ASSETDIR::"
+
+VMLIST_SORT_NAME = 1
+VMLIST_SORT_CPU_USAGE = 2
+VMLIST_SORT_MEMORY_USAGE = 3
 
 # Hack for dev purposes
 if os.path.exists("./" + appname + ".glade"):
-    gladedir = "."
+    asset_dir = "."
 
 class vmmAbout:
     def __init__(self):
-        self.window = gtk.glade.XML(gladedir + "/" + appname + ".glade", "vmm-about")
+        self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-about")
         self.window.get_widget("vmm-about").hide()
 
         self.window.signal_autoconnect({
@@ -42,13 +46,13 @@ class vmmAbout:
 
 class vmmDetails:
     def __init__(self, vmm):
-        self.window = gtk.glade.XML(gladedir + "/" + appname + ".glade", "vmm-details")
+        self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-details")
         self.vmm = vmm
 
 
 class vmmPreferences:
     def __init__(self, conf):
-        self.window = gtk.glade.XML(gladedir + "/" + appname + ".glade", "vmm-preferences")
+        self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-preferences")
         self.conf = conf
         self.window.get_widget("vmm-preferences").hide()
 
@@ -88,7 +92,7 @@ class vmmPreferences:
 
 class vmmManager:
     def __init__(self):
-        self.window = gtk.glade.XML(gladedir + "/" + appname + ".glade", "vmm-manager")
+        self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-manager")
         self.conf = vmmConfig()
         self.vmm = libvirt.openReadOnly(None)
         #self.vmm = libvirt.open(None)
@@ -235,6 +239,7 @@ class vmmManager:
         name_txt = gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
         nameCol.add_attribute(name_txt, 'text', 0)
+        nameCol.set_sort_column_id(VMLIST_SORT_NAME)
 
         vmlist.append_column(nameCol)
         vmlist.append_column(statusCol)
@@ -244,19 +249,27 @@ class vmmManager:
         vmlist.append_column(networkTrafficCol)
 
         status_txt = gtk.CellRendererText()
+        status_icon = gtk.CellRendererPixbuf()
+        statusCol.pack_start(status_icon, False)
         statusCol.pack_start(status_txt, True)
         statusCol.set_cell_data_func(status_txt, self.status_text, None)
+        statusCol.set_cell_data_func(status_icon, self.status_icon, None)        
         statusCol.set_visible(self.conf.is_vmlist_status_visible())
+
+
+
 
         cpuUsage_txt = gtk.CellRendererText()
         cpuUsageCol.pack_start(cpuUsage_txt, True)
         cpuUsageCol.set_cell_data_func(cpuUsage_txt, self.cpu_usage_text, None)
         cpuUsageCol.set_visible(self.conf.is_vmlist_cpu_usage_visible())
+        cpuUsageCol.set_sort_column_id(VMLIST_SORT_CPU_USAGE)
         
         memoryUsage_txt = gtk.CellRendererText()
         memoryUsageCol.pack_start(memoryUsage_txt, True)
         memoryUsageCol.set_cell_data_func(memoryUsage_txt, self.memory_usage_text, None)
         memoryUsageCol.set_visible(self.conf.is_vmlist_memory_usage_visible())
+        memoryUsageCol.set_sort_column_id(VMLIST_SORT_MEMORY_USAGE)
         
         diskUsage_txt = gtk.CellRendererText()
         diskUsageCol.pack_start(diskUsage_txt, True)
@@ -267,6 +280,41 @@ class vmmManager:
         networkTrafficCol.pack_start(networkTraffic_txt, True)
         networkTrafficCol.set_cell_data_func(networkTraffic_txt, self.network_usage_text, None)
         networkTrafficCol.set_visible(self.conf.is_vmlist_network_traffic_visible())
+
+        model.set_sort_func(VMLIST_SORT_NAME, self.vmlist_name_sorter)
+        model.set_sort_func(VMLIST_SORT_CPU_USAGE, self.vmlist_cpu_usage_sorter) 
+        model.set_sort_func(VMLIST_SORT_MEMORY_USAGE, self.vmlist_memory_usage_sorter)
+        model.set_sort_column_id(VMLIST_SORT_NAME, gtk.SORT_ASCENDING)
+
+        self.vmlist_icons = {
+            "blocked": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_blocked.png"),
+            "crashed": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_crashed.png"),
+            "paused": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_paused.png"),
+            "running": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_running.png"),
+            "shutdown": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_shutdown.png"),
+            "shutoff": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_shutoff.png"),
+            "idle": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_idle.png"),
+            }
+
+        #vmlist.set_headers_clickable(True)
+
+    # XXX does python have a built-in sort op like perl's <=> / cmp ?
+    def sort_op(self, a, b):
+        if a > b:
+            return 1
+        elif a < b:
+            return -1
+        return 0
+
+    def vmlist_name_sorter(self, model, iter1, iter2):
+        print "Sort "+ model.get_value(iter1, 0) + " <=> " + model.get_value(iter2, 0)
+        return self.sort_op(model.get_value(iter1, 0), model.get_value(iter2, 0))
+
+    def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
+        return self.sort_op(self.stats.cpu_time(model.get_value(iter1, 0)), self.stats.cpu_time(model.get_value(iter2, 0)))
+
+    def vmlist_memory_usage_sorter(self, model, iter1, iter2):
+        return self.sort_op(self.stats.current_memory(model.get_value(iter1, 0)), self.stats.current_memory(model.get_value(iter2, 0)))
 
     def toggle_status_visible_conf(self, menu):
         self.conf.set_vmlist_status_visible(menu.get_active())
@@ -318,6 +366,11 @@ class vmmManager:
         name = model.get_value(iter, 0)
         cell.set_property('text', self.stats.run_status(name))
 
+    def status_icon(self, column, cell, model, iter, data):
+        name = model.get_value(iter, 0)
+        pb = self.vmlist_icons[self.stats.run_status(name).lower()]
+        cell.set_property('pixbuf', pb)
+
     def cpu_usage_text(self,  column, cell, model, iter, data):
         name = model.get_value(iter, 0)
         cell.set_property('text', "%2.2f %%" % self.stats.cpu_time_percentage(name))
@@ -327,18 +380,20 @@ class vmmManager:
         current = self.stats.current_memory(name)
         currentPercent = self.stats.current_memory_percentage(name)
         cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
-        #cell.set_property('text', self.pretty_mem(current[2]))
 
+    # XXX or should we just always display MB ?
     def pretty_mem(self, mem):
         if mem > (1024*1024):
             return "%2.2f GB" % (mem/(1024.0*1024.0))
         else:
             return "%2.2f MB" % (mem/1024.0)
 
+    # XXX implement me
     def disk_usage_text(self,  column, cell, model, iter, data):
         #cell.set_property('text', "600 MB of 1 GB")
         cell.set_property('text', "-")
 
+    # XXX implement me
     def network_usage_text(self,  column, cell, model, iter, data):
         #cell.set_property('text', "100 bytes/sec")
         cell.set_property('text', "-")

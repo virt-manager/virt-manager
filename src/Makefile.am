@@ -22,7 +22,7 @@ EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(python_SOURCES) $(glade_DATA)
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::ICONDIR::,$(pkgdatadir)," < $< > $@
 
 %.py: $(srcdir)/%.py.in
-	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::GLADEDIR::,$(pkgdatadir)," < $< > $@
+	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::ASSETDIR::,$(pkgdatadir)," < $< > $@
 
 gnome-virt-manager: $(srcdir)/gnome-virt-manager.in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PYTHONDIR::,$(pkgdatadir)," < $< > $@

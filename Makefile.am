@@ -1,5 +1,5 @@
 
-SUBDIRS = src
+SUBDIRS = src pixmaps
 
 EXTRA_DIST = @PACKAGE@.spec
 
