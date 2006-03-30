@@ -58,13 +58,49 @@ class vmmDetails:
 
         self.window.get_widget("overview-name").set_text(vmname)
 
-        
-        #self.window.get_widget("overview-cpu-usage-graph").set_curve_type(gtk.CURVE_TYPE_SPLINE)
-        #self.window.get_widget("overview-memory-usage-graph").set_curve_type(gtk.CURVE_TYPE_LINEAR)
+        self.window.get_widget("control-run").set_sensitive(False)
+        self.window.get_widget("control-run").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-run").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
+
+        self.window.get_widget("control-pause").set_sensitive(False)
+        self.window.get_widget("control-pause").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-pause").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_pause.png")
+
+        self.window.get_widget("control-shutdown").set_sensitive(False)
+        self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
+        #self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
+
+        self.window.get_widget("launch-term").set_sensitive(False)
+        self.window.get_widget("launch-term").set_icon_widget(gtk.Image())
+        self.window.get_widget("launch-term").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_launch_term.png")
+
+        self.window.get_widget("take-snapshot").set_sensitive(False)
+        self.window.get_widget("take-snapshot").set_icon_widget(gtk.Image())
+        self.window.get_widget("take-snapshot").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_snapshot.png")
+
+
+
+        self.window.get_widget("hw-processor").set_icon_widget(gtk.Image())
+        self.window.get_widget("hw-processor").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_cpu.png")
+
+        self.window.get_widget("hw-memory").set_icon_widget(gtk.Image())
+        #self.window.get_widget("hw-memory").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_ram.png")
+
+        self.window.get_widget("hw-disk").set_icon_widget(gtk.Image())
+        self.window.get_widget("hw-disk").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_hdd.png")
+
+        self.window.get_widget("hw-network").set_icon_widget(gtk.Image())
+        self.window.get_widget("hw-network").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_ethernet.png")
+
+        self.window.get_widget("hw-add").set_icon_widget(gtk.Image())
+        self.window.get_widget("hw-add").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_addnew.png")
+
+
 
         conf.on_stats_history_length_changed(self.change_graph_ranges)
 
         self.window.signal_autoconnect({
+            "on_close_details_clicked": self.close,
             "on_vmm_details_delete_event": self.close,
             })
 
@@ -85,6 +121,7 @@ class vmmDetails:
         self.window.get_widget("overview-cpu-usage-graph").set_range(0, len, 0, 100)
         self.window.get_widget("overview-memory-usage-graph").set_range(0, len, 0, 100)
         self.window.get_widget("overview-network-traffic-graph").set_range(0, len, 0, 100)
+        
 
     def refresh_overview(self, vmname):
         if not(vmname == self.vmname):
@@ -96,6 +133,9 @@ class vmmDetails:
         self.window.get_widget("overview-memory-usage-graph").set_vector(self.stats.current_memory_vector(vmname))
         self.window.get_widget("overview-cpu-usage-text").set_text("%2.2f%%" % self.stats.cpu_time_percentage(vmname))
         self.window.get_widget("overview-memory-usage-text").set_text("%2.2f MB of %2.2f MB" % (self.stats.current_memory(vmname)/1024, self.stats.host_memory_size()/1024))
+
+        #self.window.get_widget("overview-cpu-usage-graph").set_curve_type(gtk.CURVE_TYPE_LINEAR)
+        self.window.get_widget("overview-memory-usage-graph").set_curve_type(gtk.CURVE_TYPE_LINEAR)
 
 
 class vmmPreferences:
@@ -170,6 +210,11 @@ class vmmManager:
         self.window.get_widget("menu_view_memory_usage").set_active(self.conf.is_vmlist_memory_usage_visible())
         self.window.get_widget("menu_view_disk_usage").set_active(self.conf.is_vmlist_disk_usage_visible())
         self.window.get_widget("menu_view_network_traffic").set_active(self.conf.is_vmlist_network_traffic_visible())
+
+        self.window.get_widget("menu_file_new").set_sensitive(False)
+        self.window.get_widget("vm-new").set_sensitive(False)
+        self.window.get_widget("vm-view").set_sensitive(False)
+        self.window.get_widget("vm-view").set_active(0)
 
         self.window.signal_autoconnect({
             "on_menu_view_status_activate" : self.toggle_status_visible_conf,
@@ -260,10 +305,13 @@ class vmmManager:
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
         else:
-            self.window.get_widget("vm-delete").set_sensitive(True)
+            #self.window.get_widget("vm-delete").set_sensitive(True)
+            self.window.get_widget("vm-delete").set_sensitive(False)
             self.window.get_widget("vm-details").set_sensitive(True)
-            self.window.get_widget("vm-open").set_sensitive(True)
-            self.window.get_widget("menu_edit_delete").set_sensitive(True)
+            #self.window.get_widget("vm-open").set_sensitive(True)
+            self.window.get_widget("vm-open").set_sensitive(False)
+            #self.window.get_widget("menu_edit_delete").set_sensitive(True)
+            self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
 
     def show_about(self, ignore=None):
