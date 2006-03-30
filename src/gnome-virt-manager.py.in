@@ -227,6 +227,7 @@ class vmmManager:
             "on_menu_file_quit_activate": self.exit_app,
             "on_vmm_close_clicked": self.exit_app,
             "on_vm_details_clicked": self.show_vm_details,
+            "on_menu_edit_details_activate": self.show_vm_details,
 
             "on_menu_edit_preferences_activate": self.show_preferences,
             "on_menu_help_about_activate": self.show_about,
@@ -373,14 +374,20 @@ class vmmManager:
 
 
         cpuUsage_txt = gtk.CellRendererText()
+        cpuUsage_img = gtk.CellRendererProgress()
         cpuUsageCol.pack_start(cpuUsage_txt, True)
+        cpuUsageCol.pack_start(cpuUsage_img, False)
         cpuUsageCol.set_cell_data_func(cpuUsage_txt, self.cpu_usage_text, None)
+        cpuUsageCol.set_cell_data_func(cpuUsage_img, self.cpu_usage_img, None)
         cpuUsageCol.set_visible(self.conf.is_vmlist_cpu_usage_visible())
         cpuUsageCol.set_sort_column_id(VMLIST_SORT_CPU_USAGE)
         
         memoryUsage_txt = gtk.CellRendererText()
+        memoryUsage_img = gtk.CellRendererProgress()
         memoryUsageCol.pack_start(memoryUsage_txt, True)
+        memoryUsageCol.pack_start(memoryUsage_img, True)
         memoryUsageCol.set_cell_data_func(memoryUsage_txt, self.memory_usage_text, None)
+        memoryUsageCol.set_cell_data_func(memoryUsage_img, self.memory_usage_img, None)
         memoryUsageCol.set_visible(self.conf.is_vmlist_memory_usage_visible())
         memoryUsageCol.set_sort_column_id(VMLIST_SORT_MEMORY_USAGE)
         
@@ -477,11 +484,22 @@ class vmmManager:
         name = model.get_value(iter, 0)
         cell.set_property('text', "%2.2f %%" % self.stats.cpu_time_percentage(name))
 
+    def cpu_usage_img(self,  column, cell, model, iter, data):
+        name = model.get_value(iter, 0)
+        cell.set_property('text', '')
+        cell.set_property('value', self.stats.cpu_time_percentage(name))
+
     def memory_usage_text(self,  column, cell, model, iter, data):
         name = model.get_value(iter, 0)
         current = self.stats.current_memory(name)
         currentPercent = self.stats.current_memory_percentage(name)
         cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
+
+    def memory_usage_img(self,  column, cell, model, iter, data):
+        name = model.get_value(iter, 0)
+        currentPercent = self.stats.current_memory_percentage(name)
+        cell.set_property('text', '')
+        cell.set_property('value', currentPercent)
 
     # XXX or should we just always display MB ?
     def pretty_mem(self, mem):
@@ -664,7 +682,7 @@ class vmmStats:
                 prevCpuTime = self.vms[name]["stats"][0]["cpuTimeAbs"]
 
             pcentCpuTime = (info[4]-prevCpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000)
-            #pcentCpuTime = pcentCpuTime / self.host_active_processor_count()
+            pcentCpuTime = pcentCpuTime / self.host_active_processor_count()
 
             pcentCurrMem = info[2] * 100 / self.host_memory_size()
             pcentMaxMem = info[1] * 100 / self.host_memory_size()
