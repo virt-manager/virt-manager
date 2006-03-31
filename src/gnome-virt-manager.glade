@@ -522,7 +522,7 @@ Inactive virtual machines</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_width">500</property>
+  <property name="default_width">700</property>
   <property name="default_height">540</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -895,7 +895,7 @@ Inactive virtual machines</property>
 			      <property name="right_padding">0</property>
 
 			      <child>
-				<widget class="GtkTable" id="table6">
+				<widget class="GtkTable" id="graph-table">
 				  <property name="border_width">3</property>
 				  <property name="visible">True</property>
 				  <property name="n_rows">4</property>
@@ -1125,54 +1125,6 @@ Inactive virtual machines</property>
 				      <property name="bottom_attach">4</property>
 				      <property name="x_options">fill</property>
 				      <property name="y_options"></property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkCurve" id="overview-cpu-usage-graph">
-				      <property name="visible">True</property>
-				      <property name="min_x">0</property>
-				      <property name="max_x">1</property>
-				      <property name="min_y">0</property>
-				      <property name="max_y">1</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">1</property>
-				      <property name="right_attach">2</property>
-				      <property name="top_attach">0</property>
-				      <property name="bottom_attach">1</property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkCurve" id="overview-memory-usage-graph">
-				      <property name="visible">True</property>
-				      <property name="min_x">0</property>
-				      <property name="max_x">1</property>
-				      <property name="min_y">0</property>
-				      <property name="max_y">1</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">1</property>
-				      <property name="right_attach">2</property>
-				      <property name="top_attach">1</property>
-				      <property name="bottom_attach">2</property>
-				    </packing>
-				  </child>
-
-				  <child>
-				    <widget class="GtkCurve" id="overview-network-traffic-graph">
-				      <property name="visible">True</property>
-				      <property name="min_x">0</property>
-				      <property name="max_x">1</property>
-				      <property name="min_y">0</property>
-				      <property name="max_y">1</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">1</property>
-				      <property name="right_attach">2</property>
-				      <property name="top_attach">3</property>
-				      <property name="bottom_attach">4</property>
 				    </packing>
 				  </child>
 

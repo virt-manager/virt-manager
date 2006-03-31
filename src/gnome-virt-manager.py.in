@@ -12,6 +12,16 @@ import os
 import os.path
 import libvirt
 
+import matplotlib
+matplotlib.use('GTK')
+ 
+from matplotlib.figure import Figure
+from matplotlib.axes import Subplot
+from matplotlib.backends.backend_gtk import FigureCanvasGTK, NavigationToolbar
+ 
+from matplotlib.numerix import arange, sin, pi
+
+
 appname = "::PACKAGE::"
 gconf_dir = "/apps/" + appname
 
@@ -95,7 +105,27 @@ class vmmDetails:
         self.window.get_widget("hw-add").set_icon_widget(gtk.Image())
         self.window.get_widget("hw-add").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_addnew.png")
 
+        
+        self.cpu_usage_figure = Figure()
+        self.cpu_usage_graph = self.cpu_usage_figure.add_subplot(111)
+        self.cpu_usage_line = None
+        self.cpu_usage_canvas = FigureCanvasGTK(self.cpu_usage_figure)
+        self.cpu_usage_canvas.show()
+        self.window.get_widget("graph-table").attach(self.cpu_usage_canvas, 1, 2, 0, 1)
 
+        self.memory_usage_figure = Figure()
+        self.memory_usage_graph = self.memory_usage_figure.add_subplot(111)
+        self.memory_usage_line = None
+        self.memory_usage_canvas = FigureCanvasGTK(self.memory_usage_figure)
+        self.memory_usage_canvas.show()
+        self.window.get_widget("graph-table").attach(self.memory_usage_canvas, 1, 2, 1, 2)
+
+        self.network_traffic_figure = Figure()
+        self.network_traffic_graph = self.network_traffic_figure.add_subplot(111)
+        self.network_traffic_line = None
+        self.network_traffic_canvas = FigureCanvasGTK(self.network_traffic_figure)
+        self.network_traffic_canvas.show()
+        self.window.get_widget("graph-table").attach(self.network_traffic_canvas, 1, 2, 3, 4)
 
         conf.on_stats_history_length_changed(self.change_graph_ranges)
 
@@ -105,8 +135,8 @@ class vmmDetails:
             })
 
         self.stats.connect_to_signal("vm_updated", self.refresh_overview)
-        self.refresh_overview(vmname)
         self.change_graph_ranges()
+        self.refresh_overview(vmname)
 
     def show(self):
         dialog = self.window.get_widget("vmm-details")
@@ -117,11 +147,23 @@ class vmmDetails:
         return 1
 
     def change_graph_ranges(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
-        len = self.conf.get_stats_history_length()
-        self.window.get_widget("overview-cpu-usage-graph").set_range(0, len, 0, 100)
-        self.window.get_widget("overview-memory-usage-graph").set_range(0, len, 0, 100)
-        self.window.get_widget("overview-network-traffic-graph").set_range(0, len, 0, 100)
-        
+        self.cpu_usage_graph.clear()
+        #self.cpu_usage_graph.set_xlabel('History')
+        #self.cpu_usage_graph.set_ylabel('% utilization')
+        self.cpu_usage_graph.grid(True)
+        self.cpu_usage_line = None
+
+        self.memory_usage_graph.clear()
+        #self.memory_usage_graph.set_xlabel('History')
+        #self.memory_usage_graph.set_ylabel('% utilization')
+        self.memory_usage_graph.grid(True)
+        self.memory_usage_line = None
+
+        self.network_traffic_graph.clear()
+        #self.network_traffic_graph.set_xlabel('History')
+        #self.network_traffic_graph.set_ylabel('% utilization')
+        self.network_traffic_graph.grid(True)
+        self.network_traffic_line = None
 
     def refresh_overview(self, vmname):
         if not(vmname == self.vmname):
@@ -129,13 +171,46 @@ class vmmDetails:
 
         self.window.get_widget("overview-status-text").set_text(self.stats.run_status(vmname))
         self.window.get_widget("overview-status-icon").set_from_pixbuf(self.stats.run_status_icon(vmname))
-        self.window.get_widget("overview-cpu-usage-graph").set_vector(self.stats.cpu_time_vector(vmname))
-        self.window.get_widget("overview-memory-usage-graph").set_vector(self.stats.current_memory_vector(vmname))
-        self.window.get_widget("overview-cpu-usage-text").set_text("%2.2f%%" % self.stats.cpu_time_percentage(vmname))
-        self.window.get_widget("overview-memory-usage-text").set_text("%2.2f MB of %2.2f MB" % (self.stats.current_memory(vmname)/1024, self.stats.host_memory_size()/1024))
+        self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.stats.cpu_time_percentage(vmname))
+        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.stats.current_memory(vmname)/1024, self.stats.host_memory_size()/1024))
 
-        #self.window.get_widget("overview-cpu-usage-graph").set_curve_type(gtk.CURVE_TYPE_LINEAR)
-        self.window.get_widget("overview-memory-usage-graph").set_curve_type(gtk.CURVE_TYPE_LINEAR)
+        history_len = self.conf.get_stats_history_length()
+        if self.cpu_usage_line == None:
+            self.cpu_usage_line = self.cpu_usage_graph.plot(self.stats.cpu_time_vector(vmname))
+            self.cpu_usage_graph.set_xlim(0, history_len)
+            self.cpu_usage_graph.set_ylim(0, 100)
+        else:
+            self.cpu_usage_line[0].set_ydata(self.stats.cpu_time_vector(vmname))
+            self.cpu_usage_graph.set_xlim(0, history_len)
+            self.cpu_usage_graph.set_ylim(0, 100)
+        self.cpu_usage_graph.set_yticklabels(["0","","","","","100"])
+        self.cpu_usage_graph.set_xticklabels([])
+        self.cpu_usage_canvas.draw()
+
+        history_len = self.conf.get_stats_history_length()
+        if self.memory_usage_line == None:
+            self.memory_usage_line = self.memory_usage_graph.plot(self.stats.current_memory_vector(vmname))
+            self.memory_usage_graph.set_xlim(0, history_len)
+            self.memory_usage_graph.set_ylim(0, 100)
+        else:
+            self.memory_usage_line[0].set_ydata(self.stats.current_memory_vector(vmname))
+            self.memory_usage_graph.set_xlim(0, history_len)
+            self.memory_usage_graph.set_ylim(0, 100)
+        self.memory_usage_graph.set_yticklabels(["0","","","","","100"])
+        self.memory_usage_graph.set_xticklabels([])
+        self.memory_usage_canvas.draw()
+
+        history_len = self.conf.get_stats_history_length()
+        #if self.network_traffic_line == None:
+            #self.network_traffic_line = self.network_traffic_graph.plot(self.stats.network_traffic_vector(vmname))
+        #else:
+            #self.network_traffic_line[0].set_ydata(self.stats.network_traffic_vector(vmname))
+        self.network_traffic_graph.set_xlim(0, history_len)
+        self.network_traffic_graph.set_ylim(0, 100)
+        self.network_traffic_graph.set_yticklabels(["0","","","","","100"])
+        self.network_traffic_graph.set_xticklabels([])
+        self.network_traffic_canvas.draw()
+
 
 
 class vmmPreferences:
@@ -732,7 +807,6 @@ class vmmStats:
     def cpu_time_vector(self, name):
         vector = []
         stats = self.vms[name]["stats"]
-        print "Len " + str(len(stats))
         for i in range(self.conf.get_stats_history_length()):
             if i < len(stats):
                 vector.append(stats[i]["cpuTimePercent"])
@@ -743,8 +817,18 @@ class vmmStats:
     def current_memory_vector(self, name):
         vector = []
         stats = self.vms[name]["stats"]
-        for i in range(len(stats)):
-            vector.append(stats[i]["currMemPercent"])
+        for i in range(self.conf.get_stats_history_length()):
+            if i < len(stats):
+                vector.append(stats[i]["currMemPercent"])
+            else:
+                vector.append(0)
+        return vector
+    
+    def network_traffic_vector(self, name):
+        vector = []
+        stats = self.vms[name]["stats"]
+        for i in range(self.conf.get_stats_history_length()):
+            vector.append(0)
         return vector
     
     
