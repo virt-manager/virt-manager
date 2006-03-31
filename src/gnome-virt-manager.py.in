@@ -175,12 +175,14 @@ class vmmDetails:
         self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.stats.current_memory(vmname)/1024, self.stats.host_memory_size()/1024))
 
         history_len = self.conf.get_stats_history_length()
+        cpu_vector = self.stats.cpu_time_vector(vmname)
+        cpu_vector.reverse()
         if self.cpu_usage_line == None:
-            self.cpu_usage_line = self.cpu_usage_graph.plot(self.stats.cpu_time_vector(vmname))
+            self.cpu_usage_line = self.cpu_usage_graph.plot(cpu_vector)
             self.cpu_usage_graph.set_xlim(0, history_len)
             self.cpu_usage_graph.set_ylim(0, 100)
         else:
-            self.cpu_usage_line[0].set_ydata(self.stats.cpu_time_vector(vmname))
+            self.cpu_usage_line[0].set_ydata(cpu_vector)
             self.cpu_usage_graph.set_xlim(0, history_len)
             self.cpu_usage_graph.set_ylim(0, 100)
         self.cpu_usage_graph.set_yticklabels(["0","","","","","100"])
@@ -188,12 +190,14 @@ class vmmDetails:
         self.cpu_usage_canvas.draw()
 
         history_len = self.conf.get_stats_history_length()
+        memory_vector = self.stats.current_memory_vector(vmname)
+        memory_vector.reverse()
         if self.memory_usage_line == None:
-            self.memory_usage_line = self.memory_usage_graph.plot(self.stats.current_memory_vector(vmname))
+            self.memory_usage_line = self.memory_usage_graph.plot(memory_vector)
             self.memory_usage_graph.set_xlim(0, history_len)
             self.memory_usage_graph.set_ylim(0, 100)
         else:
-            self.memory_usage_line[0].set_ydata(self.stats.current_memory_vector(vmname))
+            self.memory_usage_line[0].set_ydata(memory_vector)
             self.memory_usage_graph.set_xlim(0, history_len)
             self.memory_usage_graph.set_ylim(0, 100)
         self.memory_usage_graph.set_yticklabels(["0","","","","","100"])
@@ -746,9 +750,10 @@ class vmmStats:
         for name in self.vms.keys():
             info = self.vms[name]["handle"].info()
 
-            if (len(self.vms[name]["stats"])+1) > self.conf.get_stats_history_length():
+            if len(self.vms[name]["stats"]) > self.conf.get_stats_history_length():
                 end = len(self.vms[name]["stats"])
                 del self.vms[name]["stats"][end-1:end]
+                print "Lengh " + str(len(self.vms[name]["stats"]))
 
             prevCpuTime = 0
             prevTimestamp = 0
@@ -807,7 +812,7 @@ class vmmStats:
     def cpu_time_vector(self, name):
         vector = []
         stats = self.vms[name]["stats"]
-        for i in range(self.conf.get_stats_history_length()):
+        for i in range(self.conf.get_stats_history_length()+1):
             if i < len(stats):
                 vector.append(stats[i]["cpuTimePercent"])
             else:
@@ -817,7 +822,7 @@ class vmmStats:
     def current_memory_vector(self, name):
         vector = []
         stats = self.vms[name]["stats"]
-        for i in range(self.conf.get_stats_history_length()):
+        for i in range(self.conf.get_stats_history_length()+1):
             if i < len(stats):
                 vector.append(stats[i]["currMemPercent"])
             else:
@@ -827,7 +832,7 @@ class vmmStats:
     def network_traffic_vector(self, name):
         vector = []
         stats = self.vms[name]["stats"]
-        for i in range(self.conf.get_stats_history_length()):
+        for i in range(self.conf.get_stats_history_length()+1):
             vector.append(0)
         return vector
     
