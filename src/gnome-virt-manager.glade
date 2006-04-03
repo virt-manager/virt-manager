@@ -1692,7 +1692,7 @@ Inactive virtual machines</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -1969,7 +1969,7 @@ Inactive virtual machines</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">5 1 60 1 5 5</property>
-			  <signal name="changed" handler="on_stats_update_interval_changed" last_modification_time="Wed, 29 Mar 2006 10:12:17 GMT"/>
+			  <signal name="value_changed" handler="on_stats_update_interval_changed" last_modification_time="Mon, 03 Apr 2006 15:27:12 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -2047,7 +2047,7 @@ Inactive virtual machines</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">10 10 100 1 5 5</property>
-			  <signal name="changed" handler="on_stats_history_length_changed" last_modification_time="Wed, 29 Mar 2006 10:12:22 GMT"/>
+			  <signal name="value_changed" handler="on_stats_history_length_changed" last_modification_time="Mon, 03 Apr 2006 15:27:39 GMT"/>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
