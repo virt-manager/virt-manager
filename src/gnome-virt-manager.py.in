@@ -227,6 +227,7 @@ class vmmDetails:
 
         self.cpu_usage_figure = Figure()
         self.cpu_usage_graph = self.cpu_usage_figure.add_subplot(111)
+        self.cpu_usage_graph.set_autoscale_on(False)
         self.cpu_usage_line = None
         self.cpu_usage_canvas = FigureCanvasGTK(self.cpu_usage_figure)
         self.cpu_usage_canvas.show()
@@ -234,6 +235,7 @@ class vmmDetails:
 
         self.memory_usage_figure = Figure()
         self.memory_usage_graph = self.memory_usage_figure.add_subplot(111)
+        self.memory_usage_graph.set_autoscale_on(False)
         self.memory_usage_line = None
         self.memory_usage_canvas = FigureCanvasGTK(self.memory_usage_figure)
         self.memory_usage_canvas.show()
@@ -241,6 +243,7 @@ class vmmDetails:
 
         self.network_traffic_figure = Figure()
         self.network_traffic_graph = self.network_traffic_figure.add_subplot(111)
+        self.network_traffic_graph.set_autoscale_on(False)
         self.network_traffic_line = None
         self.network_traffic_canvas = FigureCanvasGTK(self.network_traffic_figure)
         self.network_traffic_canvas.show()
