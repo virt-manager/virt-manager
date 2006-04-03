@@ -30,6 +30,8 @@ asset_dir = "::ASSETDIR::"
 VMLIST_SORT_NAME = 1
 VMLIST_SORT_CPU_USAGE = 2
 VMLIST_SORT_MEMORY_USAGE = 3
+VMLIST_SORT_DISK_USAGE = 4
+VMLIST_SORT_NETWORK_USAGE = 5
 
 # Hack for dev purposes
 if os.path.exists("./" + appname + ".glade"):
@@ -89,6 +91,7 @@ class vmmConsole:
 
             "on_control_terminal_clicked": self.control_vm_terminal,
             "on_control_snapshot_clicked": self.control_vm_snapshot,
+            "on_control_details_clicked": self.control_vm_details,
             })
 
         self.engine.connect_to_signal("vm_updated", self.refresh_status)
@@ -132,6 +135,9 @@ class vmmConsole:
 
     def control_vm_snapshot(self, src):
         return 0
+
+    def control_vm_details(self, src):
+        self.engine.show_details(self.vmname)
 
     def refresh_status(self, vmname):
         if not(vmname == self.vmname):
@@ -491,6 +497,8 @@ class vmmManager:
             "on_vm_open_clicked": self.open_vm_console,
             "on_menu_edit_details_activate": self.show_vm_details,
 
+            "on_vm_list_row_activated": self.open_vm_console,
+
             "on_menu_edit_preferences_activate": self.show_preferences,
             "on_menu_help_about_activate": self.show_about,
             })
@@ -554,7 +562,7 @@ class vmmManager:
     def show_vm_details(self,ignore):
         self.engine.show_details(self.current_vm())
 
-    def open_vm_console(self,ignore):
+    def open_vm_console(self,ignore,ignore2=None,ignore3=None):
         self.engine.show_console(self.current_vm())
 
 
@@ -608,7 +616,7 @@ class vmmManager:
         status_txt = gtk.CellRendererText()
         status_icon = gtk.CellRendererPixbuf()
         statusCol.pack_start(status_icon, False)
-        statusCol.pack_start(status_txt, True)
+        statusCol.pack_start(status_txt, False)
         statusCol.set_cell_data_func(status_txt, self.status_text, None)
         statusCol.set_cell_data_func(status_icon, self.status_icon, None)        
         statusCol.set_visible(self.engine.get_config().is_vmlist_status_visible())
@@ -618,7 +626,7 @@ class vmmManager:
 
         cpuUsage_txt = gtk.CellRendererText()
         cpuUsage_img = gtk.CellRendererProgress()
-        cpuUsageCol.pack_start(cpuUsage_txt, True)
+        cpuUsageCol.pack_start(cpuUsage_txt, False)
         cpuUsageCol.pack_start(cpuUsage_img, False)
         cpuUsageCol.set_cell_data_func(cpuUsage_txt, self.cpu_usage_text, None)
         cpuUsageCol.set_cell_data_func(cpuUsage_img, self.cpu_usage_img, None)
@@ -627,29 +635,39 @@ class vmmManager:
         
         memoryUsage_txt = gtk.CellRendererText()
         memoryUsage_img = gtk.CellRendererProgress()
-        memoryUsageCol.pack_start(memoryUsage_txt, True)
-        memoryUsageCol.pack_start(memoryUsage_img, True)
+        memoryUsageCol.pack_start(memoryUsage_txt, False)
+        memoryUsageCol.pack_start(memoryUsage_img, False)
         memoryUsageCol.set_cell_data_func(memoryUsage_txt, self.memory_usage_text, None)
         memoryUsageCol.set_cell_data_func(memoryUsage_img, self.memory_usage_img, None)
         memoryUsageCol.set_visible(self.engine.get_config().is_vmlist_memory_usage_visible())
         memoryUsageCol.set_sort_column_id(VMLIST_SORT_MEMORY_USAGE)
         
         diskUsage_txt = gtk.CellRendererText()
-        diskUsageCol.pack_start(diskUsage_txt, True)
+        diskUsage_img = gtk.CellRendererProgress()
+        diskUsageCol.pack_start(diskUsage_txt, False)
+        diskUsageCol.pack_start(diskUsage_img, False)
         diskUsageCol.set_cell_data_func(diskUsage_txt, self.disk_usage_text, None)
+        diskUsageCol.set_cell_data_func(diskUsage_img, self.disk_usage_img, None)
         diskUsageCol.set_visible(self.engine.get_config().is_vmlist_disk_usage_visible())
+        diskUsageCol.set_sort_column_id(VMLIST_SORT_DISK_USAGE)
         
         networkTraffic_txt = gtk.CellRendererText()
-        networkTrafficCol.pack_start(networkTraffic_txt, True)
-        networkTrafficCol.set_cell_data_func(networkTraffic_txt, self.network_usage_text, None)
+        networkTraffic_img = gtk.CellRendererProgress()
+        networkTrafficCol.pack_start(networkTraffic_txt, False)
+        networkTrafficCol.pack_start(networkTraffic_img, False)
+        networkTrafficCol.set_cell_data_func(networkTraffic_txt, self.network_traffic_text, None)
+        networkTrafficCol.set_cell_data_func(networkTraffic_img, self.network_traffic_img, None)
         networkTrafficCol.set_visible(self.engine.get_config().is_vmlist_network_traffic_visible())
+        networkTrafficCol.set_sort_column_id(VMLIST_SORT_NETWORK_USAGE)
 
         model.set_sort_func(VMLIST_SORT_NAME, self.vmlist_name_sorter)
         model.set_sort_func(VMLIST_SORT_CPU_USAGE, self.vmlist_cpu_usage_sorter) 
         model.set_sort_func(VMLIST_SORT_MEMORY_USAGE, self.vmlist_memory_usage_sorter)
+        model.set_sort_func(VMLIST_SORT_DISK_USAGE, self.vmlist_disk_usage_sorter)
+        model.set_sort_func(VMLIST_SORT_NETWORK_USAGE, self.vmlist_network_usage_sorter)
+        
         model.set_sort_column_id(VMLIST_SORT_NAME, gtk.SORT_ASCENDING)
 
-        #vmlist.set_headers_clickable(True)
 
     # XXX does python have a built-in sort op like perl's <=> / cmp ?
     def sort_op(self, a, b):
@@ -668,6 +686,12 @@ class vmmManager:
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2):
         return self.sort_op(self.engine.get_stats().current_memory(model.get_value(iter1, 0)), self.engine.get_stats().current_memory(model.get_value(iter2, 0)))
+
+    def vmlist_disk_usage_sorter(self, model, iter1, iter2):
+        return self.sort_op(self.engine.get_stats().disk_usage(model.get_value(iter1, 0)), self.engine.get_stats().disk_usage(model.get_value(iter2, 0)))
+
+    def vmlist_network_usage_sorter(self, model, iter1, iter2):
+        return self.sort_op(self.engine.get_stats().network_traffic(model.get_value(iter1, 0)), self.engine.get_stats().network_traffic(model.get_value(iter2, 0)))
 
     def toggle_status_visible_conf(self, menu):
         self.engine.get_config().set_vmlist_status_visible(menu.get_active())
@@ -744,6 +768,30 @@ class vmmManager:
         cell.set_property('text', '')
         cell.set_property('value', currentPercent)
 
+    def disk_usage_text(self,  column, cell, model, iter, data):
+        name = model.get_value(iter, 0)
+        current = self.engine.get_stats().disk_usage(name)
+        currentPercent = self.engine.get_stats().disk_usage_percentage(name)
+        cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
+
+    def disk_usage_img(self,  column, cell, model, iter, data):
+        name = model.get_value(iter, 0)
+        currentPercent = self.engine.get_stats().disk_usage_percentage(name)
+        cell.set_property('text', '')
+        cell.set_property('value', currentPercent)
+
+    def network_traffic_text(self,  column, cell, model, iter, data):
+        name = model.get_value(iter, 0)
+        current = self.engine.get_stats().network_traffic(name)
+        currentPercent = self.engine.get_stats().network_traffic_percentage(name)
+        cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
+
+    def network_traffic_img(self,  column, cell, model, iter, data):
+        name = model.get_value(iter, 0)
+        currentPercent = self.engine.get_stats().network_traffic_percentage(name)
+        cell.set_property('text', '')
+        cell.set_property('value', currentPercent)
+
     # XXX or should we just always display MB ?
     def pretty_mem(self, mem):
         if mem > (1024*1024):
@@ -751,15 +799,6 @@ class vmmManager:
         else:
             return "%2.2f MB" % (mem/1024.0)
 
-    # XXX implement me
-    def disk_usage_text(self,  column, cell, model, iter, data):
-        #cell.set_property('text', "600 MB of 1 GB")
-        cell.set_property('text', "-")
-
-    # XXX implement me
-    def network_usage_text(self,  column, cell, model, iter, data):
-        #cell.set_property('text', "100 bytes/sec")
-        cell.set_property('text', "-")
 
 class vmmConfig:
     def __init__(self):
@@ -946,6 +985,18 @@ class vmmStats:
             return 0
         return self.record[vmname][0]["cpuTimePercent"]
 
+    def network_traffic(self, vmname):
+        return 1
+
+    def network_traffic_percentage(self, vmname):
+        return 1
+
+    def disk_usage(self, vmname):
+        return 1
+
+    def disk_usage_percentage(self, vmname):
+        return 1
+
     def cpu_time_vector(self, vmname):
         vector = []
         stats = self.record[vmname]
@@ -970,7 +1021,14 @@ class vmmStats:
         vector = []
         stats = self.record[vmname]
         for i in range(self.engine.get_config().get_stats_history_length()+1):
-            vector.append(0)
+            vector.append(1)
+        return vector
+    
+    def disk_usage_vector(self, vmname):
+        vector = []
+        stats = self.record[vmname]
+        for i in range(self.engine.get_config().get_stats_history_length()+1):
+            vector.append(1)
         return vector
     
     
