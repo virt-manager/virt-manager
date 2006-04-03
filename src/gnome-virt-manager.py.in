@@ -193,8 +193,8 @@ class vmmDetails:
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         #self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
 
-        self.window.get_widget("control-console").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-console").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_launch_term.png")
+        self.window.get_widget("control-terminal").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-terminal").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_launch_term.png")
 
         self.window.get_widget("control-snapshot").set_icon_widget(gtk.Image())
         self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_snapshot.png")
@@ -259,7 +259,7 @@ class vmmDetails:
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
 
-            "on_control_console_clicked": self.control_vm_console,
+            "on_control_terminal_clicked": self.control_vm_terminal,
             "on_control_snapshot_clicked": self.control_vm_snapshot,
             })
 
@@ -313,7 +313,7 @@ class vmmDetails:
                     print "Resume requested, but machine is already running"
 
 
-    def control_vm_console(self, src):
+    def control_vm_terminal(self, src):
         return 0
 
     def control_vm_snapshot(self, src):
@@ -350,12 +350,12 @@ class vmmDetails:
         if status in [ "shutoff", "shutdown" ]:
             self.window.get_widget("control-pause").set_sensitive(False)
             self.window.get_widget("control-shutdown").set_sensitive(False)
-            self.window.get_widget("control-console").set_sensitive(False)
+            self.window.get_widget("control-terminal").set_sensitive(False)
             self.window.get_widget("control-snapshot").set_sensitive(False)            
         else:
             self.window.get_widget("control-pause").set_sensitive(True)
             self.window.get_widget("control-shutdown").set_sensitive(True)
-            self.window.get_widget("control-console").set_sensitive(True)
+            self.window.get_widget("control-terminal").set_sensitive(True)
             self.window.get_widget("control-snapshot").set_sensitive(True)            
             if status == "paused":
                 self.window.get_widget("control-pause").set_active(True)
