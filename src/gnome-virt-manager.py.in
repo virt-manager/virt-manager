@@ -197,24 +197,32 @@ class vmmDetails:
         self.window.get_widget("control-snapshot").set_icon_widget(gtk.Image())
         self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_snapshot.png")
 
+        self.window.get_widget("hw-panel").set_show_tabs(False)
+
+        hwListModel = gtk.ListStore(int, str, gtk.gdk.Pixbuf)
+        self.window.get_widget("hw-list").set_model(hwListModel)
+
+        hwListModel.append([0, "Processor", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_cpu.png")])
+        #hwListModel.append([1, "Memory", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_ram.png")])
+        hwListModel.append([1, "Memory", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_cpu.png")])
+        hwListModel.append([2, "Disk", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_hdd.png")])
+        hwListModel.append([3, "Network", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_ethernet.png")])
+        hwListModel.append([4, "Add hardware", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_addnew.png")])
+
+        self.window.get_widget("hw-list").get_selection().connect("changed", self.hw_selected)
 
 
-        self.window.get_widget("hw-processor").set_icon_widget(gtk.Image())
-        self.window.get_widget("hw-processor").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_cpu.png")
-
-        self.window.get_widget("hw-memory").set_icon_widget(gtk.Image())
-        #self.window.get_widget("hw-memory").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_ram.png")
-
-        self.window.get_widget("hw-disk").set_icon_widget(gtk.Image())
-        self.window.get_widget("hw-disk").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_hdd.png")
-
-        self.window.get_widget("hw-network").set_icon_widget(gtk.Image())
-        self.window.get_widget("hw-network").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_ethernet.png")
-
-        self.window.get_widget("hw-add").set_icon_widget(gtk.Image())
-        self.window.get_widget("hw-add").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_addnew.png")
-
+        hwCol = gtk.TreeViewColumn("Hardware")
+        hw_txt = gtk.CellRendererText()
+        hw_img = gtk.CellRendererPixbuf()
+        hwCol.pack_start(hw_txt, True)
+        hwCol.pack_start(hw_img, False)
+        hwCol.add_attribute(hw_txt, 'text', 1)
+        hwCol.add_attribute(hw_img, 'pixbuf', 2)
         
+        self.window.get_widget("hw-list").append_column(hwCol)
+        
+
         self.cpu_usage_figure = Figure()
         self.cpu_usage_graph = self.cpu_usage_figure.add_subplot(111)
         self.cpu_usage_line = None
@@ -253,6 +261,7 @@ class vmmDetails:
         self.stats.connect_to_signal("vm_updated", self.refresh_overview)
         self.change_graph_ranges()
         self.refresh_overview(vmname)
+        self.hw_selected()
 
     def show(self):
         dialog = self.window.get_widget("vmm-details")
@@ -261,6 +270,18 @@ class vmmDetails:
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-details").hide()
         return 1
+
+    def hw_selected(self, src=None):
+        vmlist = self.window.get_widget("hw-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] != None:
+            print "Activate " + str(active[0].get_value(active[1], 0))
+            self.window.get_widget("hw-panel").set_sensitive(True)
+            self.window.get_widget("hw-panel").set_current_page(active[0].get_value(active[1], 0))
+        else:
+            print "Dactive" + str(active)
+            self.window.get_widget("hw-panel").set_sensitive(False)
 
     def control_vm_run(self, src):
         return 0
