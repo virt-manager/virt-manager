@@ -53,6 +53,119 @@ class vmmAbout:
         self.window.get_widget("vmm-about").hide()
         return 1
 
+class vmmConsole:
+    def __init__(self, vmm, stats, conf, vmname):
+        self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-console")
+        self.vmm = vmm
+        self.stats = stats
+        self.conf = conf
+        self.vmname = vmname
+        self.lastStatus = None
+
+        topwin = self.window.get_widget("vmm-console")
+        topwin.hide()
+        topwin.set_title(vmname + " " + topwin.get_title())
+
+        self.window.get_widget("control-run").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-run").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
+
+        self.window.get_widget("control-pause").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-pause").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_pause.png")
+
+        self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
+        #self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
+
+        self.window.get_widget("control-terminal").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-terminal").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_launch_term.png")
+
+        self.window.get_widget("control-snapshot").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_snapshot.png")
+
+
+        self.window.signal_autoconnect({
+            "on_vmm_console_delete_event": self.close,
+
+            "on_control_run_clicked": self.control_vm_run,
+            "on_control_shutdown_clicked": self.control_vm_shutdown,
+            "on_control_pause_toggled": self.control_vm_pause,
+
+            "on_control_terminal_clicked": self.control_vm_terminal,
+            "on_control_snapshot_clicked": self.control_vm_snapshot,
+            })
+
+        self.stats.connect_to_signal("vm_updated", self.refresh_status)
+        self.refresh_status(vmname)
+
+    def show(self):
+        dialog = self.window.get_widget("vmm-console")
+        dialog.show_all()
+
+    def close(self,ignore1=None,ignore2=None):
+        self.window.get_widget("vmm-console").hide()
+        return 1
+
+    def control_vm_run(self, src):
+        return 0
+
+    def control_vm_shutdown(self, src):
+        if not(self.stats.run_status(self.vmname) in [ "shutdown", "shutoff" ]):
+            self.vmm.shutdown()
+        else:
+            print "Shutdown requested, but machine is already shutting down / shutoff"
+
+    def control_vm_pause(self, src):
+        if self.stats.run_status(self.vmname) in [ "shutdown", "shutoff" ]:
+            print "Pause/resume requested, but machine is shutdown / shutoff"
+        else:
+            if self.stats.run_status(self.vmname) in [ "paused" ]:
+                if not src.get_active():
+                    self.vmm.resume()
+                else:
+                    print "Pause requested, but machine is already paused"
+            else:
+                if src.get_active():
+                    self.vmm.suspend()
+                else:
+                    print "Resume requested, but machine is already running"
+
+
+    def control_vm_terminal(self, src):
+        return 0
+
+    def control_vm_snapshot(self, src):
+        return 0
+
+    def refresh_status(self, vmname):
+        if not(vmname == self.vmname):
+            return
+
+        status = self.stats.run_status(vmname)
+
+        if self.lastStatus == status:
+            return
+
+        if status == "shutoff":
+            self.window.get_widget("control-run").set_sensitive(True)
+        else:
+            self.window.get_widget("control-run").set_sensitive(False)
+
+        if status in [ "shutoff", "shutdown" ]:
+            self.window.get_widget("control-pause").set_sensitive(False)
+            self.window.get_widget("control-shutdown").set_sensitive(False)
+            self.window.get_widget("control-terminal").set_sensitive(False)
+            self.window.get_widget("control-snapshot").set_sensitive(False)            
+        else:
+            self.window.get_widget("control-pause").set_sensitive(True)
+            self.window.get_widget("control-shutdown").set_sensitive(True)
+            self.window.get_widget("control-terminal").set_sensitive(True)
+            self.window.get_widget("control-snapshot").set_sensitive(True)            
+            if status == "paused":
+                self.window.get_widget("control-pause").set_active(True)
+            else:
+                self.window.get_widget("control-pause").set_active(False)
+
+        self.lastStatus = status
+
 
 class vmmDetails:
     def __init__(self, vmm, stats, conf, vmname):
@@ -61,6 +174,7 @@ class vmmDetails:
         self.stats = stats
         self.conf = conf
         self.vmname = vmname
+        self.lastStatus = None
 
         topwin = self.window.get_widget("vmm-details")
         topwin.hide()
@@ -68,25 +182,20 @@ class vmmDetails:
 
         self.window.get_widget("overview-name").set_text(vmname)
 
-        self.window.get_widget("control-run").set_sensitive(False)
         self.window.get_widget("control-run").set_icon_widget(gtk.Image())
         self.window.get_widget("control-run").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
 
-        self.window.get_widget("control-pause").set_sensitive(False)
         self.window.get_widget("control-pause").set_icon_widget(gtk.Image())
         self.window.get_widget("control-pause").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_pause.png")
 
-        self.window.get_widget("control-shutdown").set_sensitive(False)
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         #self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
 
-        self.window.get_widget("launch-term").set_sensitive(False)
-        self.window.get_widget("launch-term").set_icon_widget(gtk.Image())
-        self.window.get_widget("launch-term").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_launch_term.png")
+        self.window.get_widget("control-console").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-console").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_launch_term.png")
 
-        self.window.get_widget("take-snapshot").set_sensitive(False)
-        self.window.get_widget("take-snapshot").set_icon_widget(gtk.Image())
-        self.window.get_widget("take-snapshot").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_snapshot.png")
+        self.window.get_widget("control-snapshot").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_snapshot.png")
 
 
 
@@ -132,6 +241,13 @@ class vmmDetails:
         self.window.signal_autoconnect({
             "on_close_details_clicked": self.close,
             "on_vmm_details_delete_event": self.close,
+
+            "on_control_run_clicked": self.control_vm_run,
+            "on_control_shutdown_clicked": self.control_vm_shutdown,
+            "on_control_pause_toggled": self.control_vm_pause,
+
+            "on_control_console_clicked": self.control_vm_console,
+            "on_control_snapshot_clicked": self.control_vm_snapshot,
             })
 
         self.stats.connect_to_signal("vm_updated", self.refresh_overview)
@@ -145,6 +261,37 @@ class vmmDetails:
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-details").hide()
         return 1
+
+    def control_vm_run(self, src):
+        return 0
+
+    def control_vm_shutdown(self, src):
+        if not(self.stats.run_status(self.vmname) in [ "shutdown", "shutoff" ]):
+            self.vmm.shutdown()
+        else:
+            print "Shutdown requested, but machine is already shutting down / shutoff"
+
+    def control_vm_pause(self, src):
+        if self.stats.run_status(self.vmname) in [ "shutdown", "shutoff" ]:
+            print "Pause/resume requested, but machine is shutdown / shutoff"
+        else:
+            if self.stats.run_status(self.vmname) in [ "paused" ]:
+                if not src.get_active():
+                    self.vmm.resume()
+                else:
+                    print "Pause requested, but machine is already paused"
+            else:
+                if src.get_active():
+                    self.vmm.suspend()
+                else:
+                    print "Resume requested, but machine is already running"
+
+
+    def control_vm_console(self, src):
+        return 0
+
+    def control_vm_snapshot(self, src):
+        return 0
 
     def change_graph_ranges(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.cpu_usage_graph.clear()
@@ -165,11 +312,40 @@ class vmmDetails:
         self.network_traffic_graph.grid(True)
         self.network_traffic_line = None
 
+    def update_widget_states(self, status):
+        if self.lastStatus == status:
+            return
+
+        if status == "shutoff":
+            self.window.get_widget("control-run").set_sensitive(True)
+        else:
+            self.window.get_widget("control-run").set_sensitive(False)
+
+        if status in [ "shutoff", "shutdown" ]:
+            self.window.get_widget("control-pause").set_sensitive(False)
+            self.window.get_widget("control-shutdown").set_sensitive(False)
+            self.window.get_widget("control-console").set_sensitive(False)
+            self.window.get_widget("control-snapshot").set_sensitive(False)            
+        else:
+            self.window.get_widget("control-pause").set_sensitive(True)
+            self.window.get_widget("control-shutdown").set_sensitive(True)
+            self.window.get_widget("control-console").set_sensitive(True)
+            self.window.get_widget("control-snapshot").set_sensitive(True)            
+            if status == "paused":
+                self.window.get_widget("control-pause").set_active(True)
+            else:
+                self.window.get_widget("control-pause").set_active(False)
+
+        self.lastStatus = status
+
     def refresh_overview(self, vmname):
         if not(vmname == self.vmname):
             return
 
-        self.window.get_widget("overview-status-text").set_text(self.stats.run_status(vmname))
+        status = self.stats.run_status(vmname)
+        self.update_widget_states(status)
+
+        self.window.get_widget("overview-status-text").set_text(status)
         self.window.get_widget("overview-status-icon").set_from_pixbuf(self.stats.run_status_icon(vmname))
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.stats.cpu_time_percentage(vmname))
         self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.stats.current_memory(vmname)/1024, self.stats.host_memory_size()/1024))
@@ -271,6 +447,7 @@ class vmmManager:
         self.about = None
         self.preferences = None
         self.details = {}
+        self.consoles = {}
 
         # Setup update timers
         self.conf.on_stats_update_interval_changed(self.change_timer_interval)
@@ -306,6 +483,7 @@ class vmmManager:
             "on_menu_file_quit_activate": self.exit_app,
             "on_vmm_close_clicked": self.exit_app,
             "on_vm_details_clicked": self.show_vm_details,
+            "on_vm_open_clicked": self.open_vm_console,
             "on_menu_edit_details_activate": self.show_vm_details,
 
             "on_menu_edit_preferences_activate": self.show_preferences,
@@ -371,6 +549,13 @@ class vmmManager:
 
         self.details[vmname].show()
 
+    def open_vm_console(self,ignore):
+        vmname = self.current_vm()
+        if not(self.consoles.has_key(vmname)):
+            self.consoles[vmname] = vmmConsole(self.vmm, self.stats, self.conf, vmname)
+
+        self.consoles[vmname].show()
+
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
         print "Removing timer"
         gobject.source_remove(self.timer)
@@ -388,8 +573,7 @@ class vmmManager:
             #self.window.get_widget("vm-delete").set_sensitive(True)
             self.window.get_widget("vm-delete").set_sensitive(False)
             self.window.get_widget("vm-details").set_sensitive(True)
-            #self.window.get_widget("vm-open").set_sensitive(True)
-            self.window.get_widget("vm-open").set_sensitive(False)
+            self.window.get_widget("vm-open").set_sensitive(True)
             #self.window.get_widget("menu_edit_delete").set_sensitive(True)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(True)

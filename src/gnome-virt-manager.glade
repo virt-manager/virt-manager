@@ -427,6 +427,7 @@ Inactive virtual machines</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="on_vm_open_clicked" last_modification_time="Mon, 03 Apr 2006 09:52:21 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -542,7 +543,7 @@ Inactive virtual machines</property>
       <property name="spacing">0</property>
 
       <child>
-	<widget class="GtkToolbar" id="toolbar1">
+	<widget class="GtkToolbar" id="toolbar4">
 	  <property name="visible">True</property>
 	  <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 	  <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
@@ -557,6 +558,7 @@ Inactive virtual machines</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_control_run_clicked" last_modification_time="Mon, 03 Apr 2006 08:15:12 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -565,13 +567,15 @@ Inactive virtual machines</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="control-pause">
+	    <widget class="GtkToggleToolButton" id="control-pause">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Pause</property>
 	      <property name="use_underline">True</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
+	      <property name="active">False</property>
+	      <signal name="toggled" handler="on_control_pause_toggled" last_modification_time="Mon, 03 Apr 2006 08:17:10 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -587,6 +591,7 @@ Inactive virtual machines</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_control_shutdown_clicked" last_modification_time="Mon, 03 Apr 2006 08:15:00 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -595,7 +600,7 @@ Inactive virtual machines</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkSeparatorToolItem" id="separatortoolitem1">
+	    <widget class="GtkSeparatorToolItem" id="separatortoolitem3">
 	      <property name="visible">True</property>
 	      <property name="draw">True</property>
 	      <property name="visible_horizontal">True</property>
@@ -608,13 +613,14 @@ Inactive virtual machines</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="launch-term">
+	    <widget class="GtkToolButton" id="control-console">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Launch terminal</property>
+	      <property name="label" translatable="yes">Open console</property>
 	      <property name="use_underline">True</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_control_console_clicked" last_modification_time="Mon, 03 Apr 2006 09:31:46 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -623,13 +629,14 @@ Inactive virtual machines</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="take-snapshot">
+	    <widget class="GtkToolButton" id="control-snapshot">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Take snapshot</property>
 	      <property name="use_underline">True</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_control_snapshot_clicked" last_modification_time="Mon, 03 Apr 2006 09:31:41 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -640,7 +647,7 @@ Inactive virtual machines</property>
 	<packing>
 	  <property name="padding">0</property>
 	  <property name="expand">False</property>
-	  <property name="fill">True</property>
+	  <property name="fill">False</property>
 	</packing>
       </child>
 
@@ -1715,6 +1722,186 @@ Inactive virtual machines</property>
 	      <property name="expand">True</property>
 	      <property name="fill">True</property>
 	    </packing>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkWindow" id="vmm-console">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">window1</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="default_width">650</property>
+  <property name="default_height">500</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="icon">icon_cpu.png</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
+
+  <child>
+    <widget class="GtkVBox" id="vbox6">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">0</property>
+
+      <child>
+	<widget class="GtkToolbar" id="toolbar3">
+	  <property name="visible">True</property>
+	  <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+	  <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+	  <property name="tooltips">True</property>
+	  <property name="show_arrow">False</property>
+
+	  <child>
+	    <widget class="GtkToolButton" id="control-run">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Run</property>
+	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_control_run_clicked" last_modification_time="Mon, 03 Apr 2006 08:15:12 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToggleToolButton" id="control-pause">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Pause</property>
+	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <property name="active">False</property>
+	      <signal name="toggled" handler="on_control_pause_toggled" last_modification_time="Mon, 03 Apr 2006 08:17:10 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToolButton" id="control-shutdown">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Shutdown</property>
+	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_control_shutdown_clicked" last_modification_time="Mon, 03 Apr 2006 08:15:00 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkSeparatorToolItem" id="separatortoolitem2">
+	      <property name="visible">True</property>
+	      <property name="draw">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToolButton" id="control-terminal">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Open terminal</property>
+	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_control_terminal_clicked" last_modification_time="Mon, 03 Apr 2006 09:54:01 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToolButton" id="control-snapshot">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Take snapshot</property>
+	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_control_snapshot_clicked" last_modification_time="Mon, 03 Apr 2006 09:53:54 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkScrolledWindow" id="console-pane">
+	  <property name="visible">True</property>
+	  <property name="can_focus">True</property>
+	  <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
+	  <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+	  <property name="shadow_type">GTK_SHADOW_NONE</property>
+	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+	  <child>
+	    <widget class="GtkViewport" id="viewport2">
+	      <property name="visible">True</property>
+	      <property name="shadow_type">GTK_SHADOW_IN</property>
+
+	      <child>
+		<widget class="GtkLabel" id="label52">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">&lt;b&gt;The console is currently unavailable&lt;/b&gt;</property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">True</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0.5</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+		  <property name="width_chars">-1</property>
+		  <property name="single_line_mode">False</property>
+		  <property name="angle">0</property>
+		</widget>
+	      </child>
+	    </widget>
 	  </child>
 	</widget>
 	<packing>
