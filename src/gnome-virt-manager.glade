@@ -298,6 +298,7 @@ Inactive virtual machines</property>
 	      <property name="hover_selection">False</property>
 	      <property name="hover_expand">False</property>
 	      <signal name="row_activated" handler="on_vm_list_row_activated" last_modification_time="Mon, 03 Apr 2006 13:43:20 GMT"/>
+	      <signal name="button_press_event" handler="on_vm_list_button_press_event" last_modification_time="Mon, 03 Apr 2006 14:14:43 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -2119,6 +2120,7 @@ Inactive virtual machines</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
   <property name="urgency_hint">False</property>
+  <signal name="delete_event" handler="on_vmm_console_delete_event" last_modification_time="Mon, 03 Apr 2006 14:21:14 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox6">

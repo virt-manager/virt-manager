@@ -483,6 +483,22 @@ class vmmManager:
         self.window.get_widget("vm-view").set_sensitive(False)
         self.window.get_widget("vm-view").set_active(0)
 
+        self.vmmenu = gtk.Menu()
+        self.vmmenu_items = {}
+        
+        self.vmmenu_items["details"] = gtk.MenuItem("_Details")
+        self.vmmenu_items["details"].connect("activate", self.show_vm_details)
+        self.vmmenu_items["details"].show()
+        self.vmmenu.add(self.vmmenu_items["details"])
+
+        self.vmmenu_items["open"] = gtk.MenuItem("Open")
+        self.vmmenu_items["open"].connect("activate", self.open_vm_console)
+        self.vmmenu_items["open"].show()
+        self.vmmenu.add(self.vmmenu_items["open"])
+
+        self.vmmenu.show_all()
+
+
         self.window.signal_autoconnect({
             "on_menu_view_status_activate" : self.toggle_status_visible_conf,
             "on_menu_view_cpu_usage_activate" : self.toggle_cpu_usage_visible_conf,
@@ -498,6 +514,8 @@ class vmmManager:
             "on_menu_edit_details_activate": self.show_vm_details,
 
             "on_vm_list_row_activated": self.open_vm_console,
+
+            "on_vm_list_button_press_event": self.popup_vm_menu,
 
             "on_menu_edit_preferences_activate": self.show_preferences,
             "on_menu_help_about_activate": self.show_about,
@@ -581,6 +599,12 @@ class vmmManager:
             #self.window.get_widget("menu_edit_delete").set_sensitive(True)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
+
+    def popup_vm_menu(self, widget, event):
+        vm = self.current_vm()
+        if vm != None:
+            if event.button == 3:
+                self.vmmenu.popup(None, None, None, 0, event.time)
 
     def show_about(self, src):
         self.engine.show_about()
