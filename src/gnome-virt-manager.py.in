@@ -50,6 +50,7 @@ class vmmAbout:
         dialog = self.window.get_widget("vmm-about")
         dialog.set_version("0.1")
         dialog.show_all()
+        dialog.present()
 
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-about").hide()
@@ -100,6 +101,7 @@ class vmmConsole:
     def show(self):
         dialog = self.window.get_widget("vmm-console")
         dialog.show_all()
+        dialog.present()
 
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-console").hide()
@@ -271,6 +273,7 @@ class vmmDetails:
     def show(self):
         dialog = self.window.get_widget("vmm-details")
         dialog.show_all()
+        dialog.present()
 
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-details").hide()
@@ -444,7 +447,9 @@ class vmmPreferences:
         return 1
 
     def show(self):
-        self.window.get_widget("vmm-preferences").show_all()
+        win = self.window.get_widget("vmm-preferences")
+        win.show_all()
+        win.present()
 
     def refresh_update_interval(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.window.get_widget("stats-update-interval").set_value(self.engine.get_config().get_stats_update_interval())
@@ -529,7 +534,9 @@ class vmmManager:
 
 
     def show(self):
-        self.window.get_widget("vmm-manager").show_all()
+        win = self.window.get_widget("vmm-manager")
+        win.show_all()
+        win.present()
 
 
     def exit_app(self, ignore=None,ignore2=None):
