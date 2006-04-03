@@ -231,6 +231,7 @@ class vmmDetails:
         self.cpu_usage_graph = self.cpu_usage_figure.add_subplot(111)
         self.cpu_usage_graph.set_autoscale_on(False)
         self.cpu_usage_line = None
+        self.cpu_usage_line_avg = None
         self.cpu_usage_canvas = FigureCanvasGTK(self.cpu_usage_figure)
         self.cpu_usage_canvas.show()
         self.window.get_widget("graph-table").attach(self.cpu_usage_canvas, 1, 2, 0, 1)
@@ -382,12 +383,16 @@ class vmmDetails:
         history_len = self.engine.get_config().get_stats_history_length()
         cpu_vector = self.engine.get_stats().cpu_time_vector(vmname)
         cpu_vector.reverse()
+        cpu_vector_avg = self.engine.get_stats().cpu_time_moving_avg_vector(vmname)
+        cpu_vector_avg.reverse()
         if self.cpu_usage_line == None:
             self.cpu_usage_line = self.cpu_usage_graph.plot(cpu_vector)
+            self.cpu_usage_line_avg = self.cpu_usage_graph.plot(cpu_vector_avg)
             self.cpu_usage_graph.set_xlim(0, history_len)
             self.cpu_usage_graph.set_ylim(0, 100)
         else:
             self.cpu_usage_line[0].set_ydata(cpu_vector)
+            self.cpu_usage_line_avg[0].set_ydata(cpu_vector_avg)
             self.cpu_usage_graph.set_xlim(0, history_len)
             self.cpu_usage_graph.set_ylim(0, 100)
         self.cpu_usage_graph.set_yticklabels(["0","","","","","100"])
@@ -960,8 +965,7 @@ class vmmStats:
             prevTimestamp = self.record[vmname][0]["timestamp"]
             prevCpuTime = self.record[vmname][0]["cpuTimeAbs"]
 
-        pcentCpuTime = (info[4]-prevCpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000)
-        pcentCpuTime = pcentCpuTime / self.host_active_processor_count()
+        pcentCpuTime = (info[4]-prevCpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000*self.host_active_processor_count())
         
         pcentCurrMem = info[2] * 100 / self.host_memory_size()
         pcentMaxMem = info[1] * 100 / self.host_memory_size()
@@ -978,7 +982,22 @@ class vmmStats:
                      }
 
         self.record[vmname].insert(0, newStats)
-        
+
+        nSamples = 5
+        #nSamples = len(self.record[vmname])
+        if nSamples > len(self.record[vmname]):
+            nSamples = len(self.record[vmname])
+
+        startCpuTime = self.record[vmname][nSamples-1]["cpuTimeAbs"]
+        startTimestamp = self.record[vmname][nSamples-1]["timestamp"]
+
+        if startTimestamp == now:
+            self.record[vmname][0]["cpuTimeMovingAvg"] = self.record[vmname][0]["cpuTimeAbs"]
+            self.record[vmname][0]["cpuTimeMovingAvgPercent"] = 0
+        else:
+            self.record[vmname][0]["cpuTimeMovingAvg"] = (self.record[vmname][0]["cpuTimeAbs"]-startCpuTime) / nSamples
+            self.record[vmname][0]["cpuTimeMovingAvgPercent"] = (self.record[vmname][0]["cpuTimeAbs"]-startCpuTime) * 100 / ((now-startTimestamp)*1000*1000*1000 * self.host_active_processor_count())
+            
 
     def host_memory_size(self):
         return self.hostinfo[1]*1024
@@ -1037,6 +1056,16 @@ class vmmStats:
         for i in range(self.engine.get_config().get_stats_history_length()+1):
             if i < len(stats):
                 vector.append(stats[i]["cpuTimePercent"])
+            else:
+                vector.append(0)
+        return vector
+    
+    def cpu_time_moving_avg_vector(self, vmname):
+        vector = []
+        stats = self.record[vmname]
+        for i in range(self.engine.get_config().get_stats_history_length()+1):
+            if i < len(stats):
+                vector.append(stats[i]["cpuTimeMovingAvgPercent"])
             else:
                 vector.append(0)
         return vector
