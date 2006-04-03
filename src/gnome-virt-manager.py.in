@@ -54,11 +54,9 @@ class vmmAbout:
         return 1
 
 class vmmConsole:
-    def __init__(self, vmm, stats, conf, vmname):
+    def __init__(self, engine, vmname):
         self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-console")
-        self.vmm = vmm
-        self.stats = stats
-        self.conf = conf
+        self.engine = engine
         self.vmname = vmname
         self.lastStatus = None
 
@@ -93,7 +91,7 @@ class vmmConsole:
             "on_control_snapshot_clicked": self.control_vm_snapshot,
             })
 
-        self.stats.connect_to_signal("vm_updated", self.refresh_status)
+        self.engine.connect_to_signal("vm_updated", self.refresh_status)
         self.refresh_status(vmname)
 
     def show(self):
@@ -108,16 +106,16 @@ class vmmConsole:
         return 0
 
     def control_vm_shutdown(self, src):
-        if not(self.stats.run_status(self.vmname) in [ "shutdown", "shutoff" ]):
+        if not(self.engine.get_stats().run_status(self.vmname) in [ "shutdown", "shutoff" ]):
             self.vmm.shutdown()
         else:
             print "Shutdown requested, but machine is already shutting down / shutoff"
 
     def control_vm_pause(self, src):
-        if self.stats.run_status(self.vmname) in [ "shutdown", "shutoff" ]:
+        if self.engine.get_stats().run_status(self.vmname) in [ "shutdown", "shutoff" ]:
             print "Pause/resume requested, but machine is shutdown / shutoff"
         else:
-            if self.stats.run_status(self.vmname) in [ "paused" ]:
+            if self.engine.get_stats().run_status(self.vmname) in [ "paused" ]:
                 if not src.get_active():
                     self.vmm.resume()
                 else:
@@ -139,7 +137,7 @@ class vmmConsole:
         if not(vmname == self.vmname):
             return
 
-        status = self.stats.run_status(vmname)
+        status = self.engine.get_stats().run_status(vmname)
 
         if self.lastStatus == status:
             return
@@ -168,11 +166,9 @@ class vmmConsole:
 
 
 class vmmDetails:
-    def __init__(self, vmm, stats, conf, vmname):
+    def __init__(self, engine, vmname):
         self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-details")
-        self.vmm = vmm
-        self.stats = stats
-        self.conf = conf
+        self.engine = engine
         self.vmname = vmname
         self.lastStatus = None
 
@@ -244,7 +240,7 @@ class vmmDetails:
         self.network_traffic_canvas.show()
         self.window.get_widget("graph-table").attach(self.network_traffic_canvas, 1, 2, 3, 4)
 
-        conf.on_stats_history_length_changed(self.change_graph_ranges)
+        self.engine.get_config().on_stats_history_length_changed(self.change_graph_ranges)
 
         self.window.signal_autoconnect({
             "on_close_details_clicked": self.close,
@@ -258,7 +254,7 @@ class vmmDetails:
             "on_control_snapshot_clicked": self.control_vm_snapshot,
             })
 
-        self.stats.connect_to_signal("vm_updated", self.refresh_overview)
+        self.engine.connect_to_signal("vm_updated", self.refresh_overview)
         self.change_graph_ranges()
         self.refresh_overview(vmname)
         self.hw_selected()
@@ -287,16 +283,16 @@ class vmmDetails:
         return 0
 
     def control_vm_shutdown(self, src):
-        if not(self.stats.run_status(self.vmname) in [ "shutdown", "shutoff" ]):
+        if not(self.engine.get_stats().run_status(self.vmname) in [ "shutdown", "shutoff" ]):
             self.vmm.shutdown()
         else:
             print "Shutdown requested, but machine is already shutting down / shutoff"
 
     def control_vm_pause(self, src):
-        if self.stats.run_status(self.vmname) in [ "shutdown", "shutoff" ]:
+        if self.engine.get_stats().run_status(self.vmname) in [ "shutdown", "shutoff" ]:
             print "Pause/resume requested, but machine is shutdown / shutoff"
         else:
-            if self.stats.run_status(self.vmname) in [ "paused" ]:
+            if self.engine.get_stats().run_status(self.vmname) in [ "paused" ]:
                 if not src.get_active():
                     self.vmm.resume()
                 else:
@@ -363,16 +359,16 @@ class vmmDetails:
         if not(vmname == self.vmname):
             return
 
-        status = self.stats.run_status(vmname)
+        status = self.engine.get_stats().run_status(vmname)
         self.update_widget_states(status)
 
         self.window.get_widget("overview-status-text").set_text(status)
-        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.stats.run_status_icon(vmname))
-        self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.stats.cpu_time_percentage(vmname))
-        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.stats.current_memory(vmname)/1024, self.stats.host_memory_size()/1024))
+        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.engine.get_stats().run_status_icon(vmname))
+        self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.engine.get_stats().cpu_time_percentage(vmname))
+        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.engine.get_stats().current_memory(vmname)/1024, self.engine.get_stats().host_memory_size()/1024))
 
-        history_len = self.conf.get_stats_history_length()
-        cpu_vector = self.stats.cpu_time_vector(vmname)
+        history_len = self.engine.get_config().get_stats_history_length()
+        cpu_vector = self.engine.get_stats().cpu_time_vector(vmname)
         cpu_vector.reverse()
         if self.cpu_usage_line == None:
             self.cpu_usage_line = self.cpu_usage_graph.plot(cpu_vector)
@@ -386,8 +382,8 @@ class vmmDetails:
         self.cpu_usage_graph.set_xticklabels([])
         self.cpu_usage_canvas.draw()
 
-        history_len = self.conf.get_stats_history_length()
-        memory_vector = self.stats.current_memory_vector(vmname)
+        history_len = self.engine.get_config().get_stats_history_length()
+        memory_vector = self.engine.get_stats().current_memory_vector(vmname)
         memory_vector.reverse()
         if self.memory_usage_line == None:
             self.memory_usage_line = self.memory_usage_graph.plot(memory_vector)
@@ -401,11 +397,11 @@ class vmmDetails:
         self.memory_usage_graph.set_xticklabels([])
         self.memory_usage_canvas.draw()
 
-        history_len = self.conf.get_stats_history_length()
+        history_len = self.engine.get_config().get_stats_history_length()
         #if self.network_traffic_line == None:
-            #self.network_traffic_line = self.network_traffic_graph.plot(self.stats.network_traffic_vector(vmname))
+            #self.network_traffic_line = self.network_traffic_graph.plot(self.engine.get_stats().network_traffic_vector(vmname))
         #else:
-            #self.network_traffic_line[0].set_ydata(self.stats.network_traffic_vector(vmname))
+            #self.network_traffic_line[0].set_ydata(self.engine.get_stats().network_traffic_vector(vmname))
         self.network_traffic_graph.set_xlim(0, history_len)
         self.network_traffic_graph.set_ylim(0, 100)
         self.network_traffic_graph.set_yticklabels(["0","","","","","100"])
@@ -415,13 +411,13 @@ class vmmDetails:
 
 
 class vmmPreferences:
-    def __init__(self, conf):
+    def __init__(self, engine):
         self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-preferences")
-        self.conf = conf
+        self.engine = engine
         self.window.get_widget("vmm-preferences").hide()
 
-        self.conf.on_stats_update_interval_changed(self.refresh_update_interval)
-        self.conf.on_stats_history_length_changed(self.refresh_history_length)
+        self.engine.get_config().on_stats_update_interval_changed(self.refresh_update_interval)
+        self.engine.get_config().on_stats_history_length_changed(self.refresh_history_length)
 
         self.refresh_update_interval()
         self.refresh_history_length()
@@ -442,51 +438,39 @@ class vmmPreferences:
         self.window.get_widget("vmm-preferences").show_all()
 
     def refresh_update_interval(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
-        self.window.get_widget("stats-update-interval").set_value(self.conf.get_stats_update_interval())
+        self.window.get_widget("stats-update-interval").set_value(self.engine.get_config().get_stats_update_interval())
 
     def refresh_history_length(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
-        self.window.get_widget("stats-history-length").set_value(self.conf.get_stats_history_length())
+        self.window.get_widget("stats-history-length").set_value(self.engine.get_config().get_stats_history_length())
 
     def change_update_interval(self, src):
-        self.conf.set_stats_update_interval(src.get_value_as_int())
+        self.engine.get_config().set_stats_update_interval(src.get_value_as_int())
 
     def change_history_length(self, src):
-        self.conf.set_stats_history_length(src.get_value_as_int())
+        self.engine.get_config().set_stats_history_length(src.get_value_as_int())
 
 
 class vmmManager:
-    def __init__(self):
+    def __init__(self, engine):
         self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-manager")
-        self.conf = vmmConfig()
-        self.vmm = libvirt.openReadOnly(None)
-        #self.vmm = libvirt.open(None)
-        print self.vmm.getInfo()
-
-        self.stats = vmmStats(self.vmm, self.conf)
+        self.engine = engine
         self.prepare_vmlist()
-        
-        self.about = None
-        self.preferences = None
-        self.details = {}
-        self.consoles = {}
 
-        # Setup update timers
-        self.conf.on_stats_update_interval_changed(self.change_timer_interval)
+        self.engine.connect_to_signal("vm_added", self.vm_added)
+        self.engine.connect_to_signal("vm_removed", self.vm_removed)
+        self.engine.connect_to_signal("vm_updated", self.vm_updated)
 
-        self.stats.connect_to_signal("vm_added", self.vm_added)
-        self.stats.connect_to_signal("vm_removed", self.vm_removed)
+        self.engine.get_config().on_vmlist_status_visible_changed(self.toggle_status_visible_widget)
+        self.engine.get_config().on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
+        self.engine.get_config().on_vmlist_memory_usage_visible_changed(self.toggle_memory_usage_visible_widget)
+        self.engine.get_config().on_vmlist_disk_usage_visible_changed(self.toggle_disk_usage_visible_widget)
+        self.engine.get_config().on_vmlist_network_traffic_visible_changed(self.toggle_network_traffic_visible_widget)
 
-        self.conf.on_vmlist_status_visible_changed(self.toggle_status_visible_widget)
-        self.conf.on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
-        self.conf.on_vmlist_memory_usage_visible_changed(self.toggle_memory_usage_visible_widget)
-        self.conf.on_vmlist_disk_usage_visible_changed(self.toggle_disk_usage_visible_widget)
-        self.conf.on_vmlist_network_traffic_visible_changed(self.toggle_network_traffic_visible_widget)
-
-        self.window.get_widget("menu_view_status").set_active(self.conf.is_vmlist_status_visible())
-        self.window.get_widget("menu_view_cpu_usage").set_active(self.conf.is_vmlist_cpu_usage_visible())
-        self.window.get_widget("menu_view_memory_usage").set_active(self.conf.is_vmlist_memory_usage_visible())
-        self.window.get_widget("menu_view_disk_usage").set_active(self.conf.is_vmlist_disk_usage_visible())
-        self.window.get_widget("menu_view_network_traffic").set_active(self.conf.is_vmlist_network_traffic_visible())
+        self.window.get_widget("menu_view_status").set_active(self.engine.get_config().is_vmlist_status_visible())
+        self.window.get_widget("menu_view_cpu_usage").set_active(self.engine.get_config().is_vmlist_cpu_usage_visible())
+        self.window.get_widget("menu_view_memory_usage").set_active(self.engine.get_config().is_vmlist_memory_usage_visible())
+        self.window.get_widget("menu_view_disk_usage").set_active(self.engine.get_config().is_vmlist_disk_usage_visible())
+        self.window.get_widget("menu_view_network_traffic").set_active(self.engine.get_config().is_vmlist_network_traffic_visible())
 
         self.window.get_widget("menu_file_new").set_sensitive(False)
         self.window.get_widget("vm-new").set_sensitive(False)
@@ -514,18 +498,13 @@ class vmmManager:
         self.vm_selected(None)
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
 
-        self.stats.tick()
-        self.schedule_timer()
 
-        
+    def show(self):
+        self.window.get_widget("vmm-manager").show_all()
+
+
     def exit_app(self, ignore=None,ignore2=None):
         gtk.main_quit()
-
-    def schedule_timer(self):
-        interval = self.conf.get_stats_update_interval() * 1000
-        print "Scheduling at " + str(interval)
-        self.timer_started = time() * 1000
-        self.timer = gobject.timeout_add(interval, self.refresh_stats)
 
 
     def vm_added(self, name):
@@ -555,6 +534,15 @@ class vmmManager:
                 print "Remove " + name
                 break
 
+    def vm_updated(self, name):
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
+
+        for row in range(model.iter_n_children(None)):
+            iter = model.iter_nth_child(None, row)
+            if model.get_value(iter, 0) == name:
+                model.row_changed(str(row), iter)
+
     def current_vm(self):
         vmlist = self.window.get_widget("vm-list")
         selection = vmlist.get_selection()
@@ -564,24 +552,11 @@ class vmmManager:
         return None
 
     def show_vm_details(self,ignore):
-        vmname = self.current_vm()
-        if not(self.details.has_key(vmname)):
-            self.details[vmname] = vmmDetails(self.vmm, self.stats, self.conf, vmname)
-
-        self.details[vmname].show()
+        self.engine.show_details(self.current_vm())
 
     def open_vm_console(self,ignore):
-        vmname = self.current_vm()
-        if not(self.consoles.has_key(vmname)):
-            self.consoles[vmname] = vmmConsole(self.vmm, self.stats, self.conf, vmname)
+        self.engine.show_console(self.current_vm())
 
-        self.consoles[vmname].show()
-
-    def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
-        print "Removing timer"
-        gobject.source_remove(self.timer)
-        self.refresh_stats()
-        self.schedule_timer()
 
     def vm_selected(self, selection):
         if selection == None or selection.count_selected_rows() == 0:
@@ -599,27 +574,11 @@ class vmmManager:
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
 
-    def show_about(self, ignore=None):
-        if self.about == None:
-            self.about = vmmAbout()
-        self.about.show()
-            
-    def show_preferences(self, ignore=None):
-        if self.preferences == None:
-            self.preferences = vmmPreferences(self.conf)
-        self.preferences.show()
-            
-    def refresh_stats(self):
-        self.stats.tick()
+    def show_about(self, src):
+        self.engine.show_about()
 
-        vmlist = self.window.get_widget("vm-list")
-        model = vmlist.get_model()
-
-        for row in range(model.iter_n_children(None)):
-            model.row_changed(str(row), model.iter_nth_child(None, row))
-
-        return 1
-    
+    def show_preferences(self, src):
+        self.engine.show_preferences()
 
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
@@ -652,7 +611,7 @@ class vmmManager:
         statusCol.pack_start(status_txt, True)
         statusCol.set_cell_data_func(status_txt, self.status_text, None)
         statusCol.set_cell_data_func(status_icon, self.status_icon, None)        
-        statusCol.set_visible(self.conf.is_vmlist_status_visible())
+        statusCol.set_visible(self.engine.get_config().is_vmlist_status_visible())
 
 
 
@@ -663,7 +622,7 @@ class vmmManager:
         cpuUsageCol.pack_start(cpuUsage_img, False)
         cpuUsageCol.set_cell_data_func(cpuUsage_txt, self.cpu_usage_text, None)
         cpuUsageCol.set_cell_data_func(cpuUsage_img, self.cpu_usage_img, None)
-        cpuUsageCol.set_visible(self.conf.is_vmlist_cpu_usage_visible())
+        cpuUsageCol.set_visible(self.engine.get_config().is_vmlist_cpu_usage_visible())
         cpuUsageCol.set_sort_column_id(VMLIST_SORT_CPU_USAGE)
         
         memoryUsage_txt = gtk.CellRendererText()
@@ -672,18 +631,18 @@ class vmmManager:
         memoryUsageCol.pack_start(memoryUsage_img, True)
         memoryUsageCol.set_cell_data_func(memoryUsage_txt, self.memory_usage_text, None)
         memoryUsageCol.set_cell_data_func(memoryUsage_img, self.memory_usage_img, None)
-        memoryUsageCol.set_visible(self.conf.is_vmlist_memory_usage_visible())
+        memoryUsageCol.set_visible(self.engine.get_config().is_vmlist_memory_usage_visible())
         memoryUsageCol.set_sort_column_id(VMLIST_SORT_MEMORY_USAGE)
         
         diskUsage_txt = gtk.CellRendererText()
         diskUsageCol.pack_start(diskUsage_txt, True)
         diskUsageCol.set_cell_data_func(diskUsage_txt, self.disk_usage_text, None)
-        diskUsageCol.set_visible(self.conf.is_vmlist_disk_usage_visible())
+        diskUsageCol.set_visible(self.engine.get_config().is_vmlist_disk_usage_visible())
         
         networkTraffic_txt = gtk.CellRendererText()
         networkTrafficCol.pack_start(networkTraffic_txt, True)
         networkTrafficCol.set_cell_data_func(networkTraffic_txt, self.network_usage_text, None)
-        networkTrafficCol.set_visible(self.conf.is_vmlist_network_traffic_visible())
+        networkTrafficCol.set_visible(self.engine.get_config().is_vmlist_network_traffic_visible())
 
         model.set_sort_func(VMLIST_SORT_NAME, self.vmlist_name_sorter)
         model.set_sort_func(VMLIST_SORT_CPU_USAGE, self.vmlist_cpu_usage_sorter) 
@@ -705,83 +664,83 @@ class vmmManager:
         return self.sort_op(model.get_value(iter1, 0), model.get_value(iter2, 0))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
-        return self.sort_op(self.stats.cpu_time(model.get_value(iter1, 0)), self.stats.cpu_time(model.get_value(iter2, 0)))
+        return self.sort_op(self.engine.get_stats().cpu_time(model.get_value(iter1, 0)), self.engine.get_stats().cpu_time(model.get_value(iter2, 0)))
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2):
-        return self.sort_op(self.stats.current_memory(model.get_value(iter1, 0)), self.stats.current_memory(model.get_value(iter2, 0)))
+        return self.sort_op(self.engine.get_stats().current_memory(model.get_value(iter1, 0)), self.engine.get_stats().current_memory(model.get_value(iter2, 0)))
 
     def toggle_status_visible_conf(self, menu):
-        self.conf.set_vmlist_status_visible(menu.get_active())
+        self.engine.get_config().set_vmlist_status_visible(menu.get_active())
 
     def toggle_status_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_status")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(1)
-        col.set_visible(self.conf.is_vmlist_status_visible())
+        col.set_visible(self.engine.get_config().is_vmlist_status_visible())
 
     def toggle_cpu_usage_visible_conf(self, menu):
-        self.conf.set_vmlist_cpu_usage_visible(menu.get_active())
+        self.engine.get_config().set_vmlist_cpu_usage_visible(menu.get_active())
 
     def toggle_cpu_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_cpu_usage")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(2)
-        col.set_visible(self.conf.is_vmlist_cpu_usage_visible())
+        col.set_visible(self.engine.get_config().is_vmlist_cpu_usage_visible())
 
     def toggle_memory_usage_visible_conf(self, menu):
-        self.conf.set_vmlist_memory_usage_visible(menu.get_active())
+        self.engine.get_config().set_vmlist_memory_usage_visible(menu.get_active())
 
     def toggle_memory_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_memory_usage")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(3)
-        col.set_visible(self.conf.is_vmlist_memory_usage_visible())
+        col.set_visible(self.engine.get_config().is_vmlist_memory_usage_visible())
 
     def toggle_disk_usage_visible_conf(self, menu):
-        self.conf.set_vmlist_disk_usage_visible(menu.get_active())
+        self.engine.get_config().set_vmlist_disk_usage_visible(menu.get_active())
 
     def toggle_disk_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_disk_usage")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(4)
-        col.set_visible(self.conf.is_vmlist_disk_usage_visible())
+        col.set_visible(self.engine.get_config().is_vmlist_disk_usage_visible())
 
     def toggle_network_traffic_visible_conf(self, menu):
-        self.conf.set_vmlist_network_traffic_visible(menu.get_active())
+        self.engine.get_config().set_vmlist_network_traffic_visible(menu.get_active())
 
     def toggle_network_traffic_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_network_traffic")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(5)
-        col.set_visible(self.conf.is_vmlist_network_traffic_visible())
+        col.set_visible(self.engine.get_config().is_vmlist_network_traffic_visible())
 
 
     def status_text(self, column, cell, model, iter, data):
         name = model.get_value(iter, 0)
-        cell.set_property('text', self.stats.run_status(name))
+        cell.set_property('text', self.engine.get_stats().run_status(name))
 
     def status_icon(self, column, cell, model, iter, data):
         name = model.get_value(iter, 0)
-        cell.set_property('pixbuf', self.stats.run_status_icon(name))
+        cell.set_property('pixbuf', self.engine.get_stats().run_status_icon(name))
 
     def cpu_usage_text(self,  column, cell, model, iter, data):
         name = model.get_value(iter, 0)
-        cell.set_property('text', "%2.2f %%" % self.stats.cpu_time_percentage(name))
+        cell.set_property('text', "%2.2f %%" % self.engine.get_stats().cpu_time_percentage(name))
 
     def cpu_usage_img(self,  column, cell, model, iter, data):
         name = model.get_value(iter, 0)
         cell.set_property('text', '')
-        cell.set_property('value', self.stats.cpu_time_percentage(name))
+        cell.set_property('value', self.engine.get_stats().cpu_time_percentage(name))
 
     def memory_usage_text(self,  column, cell, model, iter, data):
         name = model.get_value(iter, 0)
-        current = self.stats.current_memory(name)
-        currentPercent = self.stats.current_memory_percentage(name)
+        current = self.engine.get_stats().current_memory(name)
+        currentPercent = self.engine.get_stats().current_memory_percentage(name)
         cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
 
     def memory_usage_img(self,  column, cell, model, iter, data):
         name = model.get_value(iter, 0)
-        currentPercent = self.stats.current_memory_percentage(name)
+        currentPercent = self.engine.get_stats().current_memory_percentage(name)
         cell.set_property('text', '')
         cell.set_property('value', currentPercent)
 
@@ -887,12 +846,10 @@ class vmmConfig:
 
 
 class vmmStats:
-    def __init__(self, vmm, conf):
-        self.vmm = vmm
-        self.vms = {}
-        self.hostinfo = vmm.getInfo()
-        self.conf = conf
-        self.callbacks = { "vm_added": [], "vm_removed": [], "vm_updated": [] }
+    def __init__(self, engine, hostinfo):
+        self.engine = engine
+        self.hostinfo = hostinfo
+        self.record = {}
 
         self.status_icons = {
             "blocked": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_blocked.png"),
@@ -903,6 +860,188 @@ class vmmStats:
             "shutoff": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_shutoff.png"),
             "idle": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_idle.png"),
             }
+
+        self.engine.connect_to_signal("vm_added", self.vm_added)
+
+
+    def vm_added(self, vmname):
+        self.record[vmname] = []
+
+    def vm_removed(self, vmname):
+        del self.record[vmname]
+
+    def update(self, vmname, vm):
+        now = time()
+
+        info = vm.info()
+
+        expected = self.engine.get_config().get_stats_history_length()
+        current = len(self.record[vmname])
+        if current > expected:
+            del self.record[vmname][expected:current]
+            print "Lengh " + str(len(self.record[vmname]))
+            
+        prevCpuTime = 0
+        prevTimestamp = 0
+        if len(self.record[vmname]) > 0:
+            prevTimestamp = self.record[vmname][0]["timestamp"]
+            prevCpuTime = self.record[vmname][0]["cpuTimeAbs"]
+
+        pcentCpuTime = (info[4]-prevCpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000)
+        pcentCpuTime = pcentCpuTime / self.host_active_processor_count()
+        
+        pcentCurrMem = info[2] * 100 / self.host_memory_size()
+        pcentMaxMem = info[1] * 100 / self.host_memory_size()
+        
+        newStats = { "timestamp": now,
+                     "status": info[0],
+                     "cpuTime": (info[4]-prevCpuTime),
+                     "cpuTimeAbs": info[4],
+                     "cpuTimePercent": pcentCpuTime,
+                     "currMem": info[2],
+                     "currMemPercent": pcentCurrMem,
+                     "maxMem": info[1],
+                     "maxMemPercent": pcentMaxMem,
+                     }
+
+        self.record[vmname].insert(0, newStats)
+        
+
+    def host_memory_size(self):
+        return self.hostinfo[1]*1024
+
+    def host_active_processor_count(self):
+        return self.hostinfo[2]
+
+    def host_maximum_processor_count(self):
+        return self.hostinfo[4] * self.hostinfo[5] * self.hostinfo[6] * self.hostinfo[7]
+
+    def current_memory(self, vmname):
+        if len(self.record[vmname]) == 0:
+            return 0
+        return self.record[vmname][0]["currMem"]
+    
+    def current_memory_percentage(self, vmname):
+        if len(self.record[vmname]) == 0:
+            return 0
+        return self.record[vmname][0]["currMemPercent"]
+    
+    def maximum_memory(self, vmname):
+        if len(self.record[vmname]) == 0:
+            return 0
+        return self.record[vmname][0]["maxMem"]
+
+    def maximum_memory_percentage(self, vmname):
+        if len(self.record[vmname]) == 0:
+            return 0
+        return self.record[vmname][0]["maxMemPercent"]
+
+    def cpu_time(self, vmname):
+        if len(self.record[vmname]) == 0:
+            return 0
+        return self.record[vmname][0]["cpuTime"]
+    
+    def cpu_time_percentage(self, vmname):
+        if len(self.record[vmname]) == 0:
+            return 0
+        return self.record[vmname][0]["cpuTimePercent"]
+
+    def cpu_time_vector(self, vmname):
+        vector = []
+        stats = self.record[vmname]
+        for i in range(self.engine.get_config().get_stats_history_length()+1):
+            if i < len(stats):
+                vector.append(stats[i]["cpuTimePercent"])
+            else:
+                vector.append(0)
+        return vector
+    
+    def current_memory_vector(self, vmname):
+        vector = []
+        stats = self.record[vmname]
+        for i in range(self.engine.get_config().get_stats_history_length()+1):
+            if i < len(stats):
+                vector.append(stats[i]["currMemPercent"])
+            else:
+                vector.append(0)
+        return vector
+    
+    def network_traffic_vector(self, vmname):
+        vector = []
+        stats = self.record[vmname]
+        for i in range(self.engine.get_config().get_stats_history_length()+1):
+            vector.append(0)
+        return vector
+    
+    
+    def run_status(self, vmname):
+        if len(self.record[vmname]) == 0:
+            return "Shutoff"
+        status = self.record[vmname][0]["status"]
+        if status == libvirt.VIR_DOMAIN_NOSTATE:
+            return "Idle"
+        elif status == libvirt.VIR_DOMAIN_RUNNING:
+            return "Running"
+        elif status == libvirt.VIR_DOMAIN_BLOCKED:
+            return "Blocked"
+        elif status == libvirt.VIR_DOMAIN_PAUSED:
+            return "Paused"
+        elif status == libvirt.VIR_DOMAIN_SHUTDOWN:
+            return "Shutdown"
+        elif status == libvirt.VIR_DOMAIN_SHUTOFF:
+            return "Shutoff"
+        elif status == libvirt.VIR_DOMAIN_CRASHED:
+            return "Crashed"
+        else:
+            raise "Unknown status code"
+
+    def run_status_icon(self, name):
+        status = self.run_status(name)
+        return self.status_icons[status.lower()]
+
+class vmmEngine:
+    def __init__(self):
+        self.config = None
+        self.vmm = libvirt.openReadOnly(None)
+        #self.vmm = libvirt.open(None)
+        self.windowManager = None
+        self.windowPreferences = None
+        self.windowAbout = None
+        self.windowDetails = {}
+        self.windowConsole = {}
+        self.vms = {}
+        
+        self.timer = None
+        self.last_timeout = 0
+
+        self.callbacks = { "vm_added": [], "vm_removed": [], "vm_updated": [] }
+
+        self.config = vmmConfig()
+        self.stats = vmmStats(self, self.vmm.getInfo())
+        self.config.on_stats_update_interval_changed(self.reschedule_timer)
+
+        self.schedule_timer()
+        self.windowManager = vmmManager(self)
+        self.tick()
+
+    def reschedule_timer(self, ignore1,ignore2,ignore3,ignore4):
+        self.schedule_timer()
+
+    def schedule_timer(self):
+        interval = self.get_config().get_stats_update_interval() * 1000
+        now = time() * 1000
+        print "Scheule at " + str(interval)
+        if self.timer != None:
+            gobject.source_remove(self.timer)
+            self.timer = None
+
+        self.timer = gobject.timeout_add(interval, self.tick)
+
+    def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
+        print "Removing timer"
+        gobject.source_remove(self.timer)
+        self.refresh_stats()
+        self.schedule_timer()
 
 
     def connect_to_signal(self, name, callback):
@@ -929,12 +1068,44 @@ class vmmStats:
         for cb in self.callbacks["vm_updated"]:
             cb(name)
 
+    def get_config(self):
+        return self.config
+
+    def get_stats(self):
+        return self.stats
+
+    def show_about(self):
+        if self.windowAbout == None:
+            self.windowAbout = vmmAbout()
+        self.windowAbout.show()
+
+    def show_preferences(self):
+        if self.windowPreferences == None:
+            self.windowPreferences = vmmPreferences(self)
+        self.windowPreferences.show()
+
+    def show_manager(self):    
+        self.windowManager.show()
+
+    def show_details(self, vmname):
+        if not(self.windowDetails.has_key(vmname)):
+            self.windowDetails[vmname] = vmmDetails(self, vmname)
+
+        self.windowDetails[vmname].show()
+
+    def show_console(self, vmname):
+        if not(self.windowConsole.has_key(vmname)):
+            self.windowConsole[vmname] = vmmConsole(self, vmname)
+
+        self.windowConsole[vmname].show()
+
+
     def tick(self):
         print "Tick"
         doms = self.vmm.listDomainsID()
         newVms = {}
         if doms != None:
-            for id in self.vmm.listDomainsID():
+            for id in doms:
                 vm = self.vmm.lookupByID(id)
                 newVms[vm.name()] = vm
 
@@ -945,130 +1116,21 @@ class vmmStats:
 
         for name in newVms.keys():
             if not(self.vms.has_key(name)):
-                self.vms[name] = { "handle": newVms[name],
-                                   "stats": [] }
+                self.vms[name] = newVms[name]
                 self.notify_vm_added(name)
 
-        now = time()
-
-        totalCpuTime = 0
         for name in self.vms.keys():
-            info = self.vms[name]["handle"].info()
-
-            if len(self.vms[name]["stats"]) > self.conf.get_stats_history_length():
-                end = len(self.vms[name]["stats"])
-                del self.vms[name]["stats"][end-1:end]
-                print "Lengh " + str(len(self.vms[name]["stats"]))
-
-            prevCpuTime = 0
-            prevTimestamp = 0
-            if len(self.vms[name]["stats"]) > 0:
-                prevTimestamp = self.vms[name]["stats"][0]["timestamp"]
-                prevCpuTime = self.vms[name]["stats"][0]["cpuTimeAbs"]
-
-            pcentCpuTime = (info[4]-prevCpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000)
-            pcentCpuTime = pcentCpuTime / self.host_active_processor_count()
-
-            pcentCurrMem = info[2] * 100 / self.host_memory_size()
-            pcentMaxMem = info[1] * 100 / self.host_memory_size()
-            
-            newStats = { "timestamp": now,
-                          "status": info[0],
-                          "cpuTime": (info[4]-prevCpuTime),
-                          "cpuTimeAbs": info[4],
-                          "cpuTimePercent": pcentCpuTime,
-                          "currMem": info[2],
-                          "currMemPercent": pcentCurrMem,
-                          "maxMem": info[1],
-                          "maxMemPercent": pcentMaxMem,
-                          }
-            totalCpuTime = totalCpuTime + newStats["cpuTime"]
-            self.vms[name]["stats"].insert(0, newStats)
-
+            self.stats.update(name, self.vms[name])
             self.notify_vm_updated(name)
 
-    def host_memory_size(self):
-        return self.hostinfo[1]*1024
-
-    def host_active_processor_count(self):
-        return self.hostinfo[2]
-
-    def host_maximum_processor_count(self):
-        return self.hostinfo[4] * self.hostinfo[5] * self.hostinfo[6] * self.hostinfo[7]
-
-    def current_memory(self, name):
-        return self.vms[name]["stats"][0]["currMem"]
-    
-    def current_memory_percentage(self, name):
-        return self.vms[name]["stats"][0]["currMemPercent"]
-    
-    def maximum_memory(self, name):
-        return self.vms[name]["stats"][0]["maxMem"]
-
-    def maximum_memory_percentage(self, name):
-        return self.vms[name]["stats"][0]["maxMemPercent"]
-
-    def cpu_time(self, name):
-        return self.vms[name]["stats"][0]["cpuTime"]
-    
-    def cpu_time_percentage(self, name):
-        return self.vms[name]["stats"][0]["cpuTimePercent"]
-
-    def cpu_time_vector(self, name):
-        vector = []
-        stats = self.vms[name]["stats"]
-        for i in range(self.conf.get_stats_history_length()+1):
-            if i < len(stats):
-                vector.append(stats[i]["cpuTimePercent"])
-            else:
-                vector.append(0)
-        return vector
-    
-    def current_memory_vector(self, name):
-        vector = []
-        stats = self.vms[name]["stats"]
-        for i in range(self.conf.get_stats_history_length()+1):
-            if i < len(stats):
-                vector.append(stats[i]["currMemPercent"])
-            else:
-                vector.append(0)
-        return vector
-    
-    def network_traffic_vector(self, name):
-        vector = []
-        stats = self.vms[name]["stats"]
-        for i in range(self.conf.get_stats_history_length()+1):
-            vector.append(0)
-        return vector
-    
-    
-    def run_status(self, name):
-        status = self.vms[name]["stats"][0]["status"]
-        if status == libvirt.VIR_DOMAIN_NOSTATE:
-            return "Idle"
-        elif status == libvirt.VIR_DOMAIN_RUNNING:
-            return "Running"
-        elif status == libvirt.VIR_DOMAIN_BLOCKED:
-            return "Blocked"
-        elif status == libvirt.VIR_DOMAIN_PAUSED:
-            return "Paused"
-        elif status == libvirt.VIR_DOMAIN_SHUTDOWN:
-            return "Shutdown"
-        elif status == libvirt.VIR_DOMAIN_SHUTOFF:
-            return "Shutoff"
-        elif status == libvirt.VIR_DOMAIN_CRASHED:
-            return "Crashed"
-        else:
-            raise "Unknown status code"
-
-    def run_status_icon(self, name):
-        status = self.run_status(name)
-        return self.status_icons[status.lower()]
+        return 1
+        
 
         
 # Run me!
 def main():
-    window = vmmManager()
+    engine = vmmEngine()
+    engine.show_manager()
     gtk.main()
 
 if __name__ == "__main__":
