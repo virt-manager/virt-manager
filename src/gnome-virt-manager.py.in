@@ -57,15 +57,15 @@ class vmmAbout:
         return 1
 
 class vmmConsole:
-    def __init__(self, engine, vmname):
+    def __init__(self, engine, vmuuid, name):
         self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-console")
         self.engine = engine
-        self.vmname = vmname
+        self.vmuuid = vmuuid
         self.lastStatus = None
 
         topwin = self.window.get_widget("vmm-console")
         topwin.hide()
-        topwin.set_title(vmname + " " + topwin.get_title())
+        topwin.set_title(name + " " + topwin.get_title())
 
         self.window.get_widget("control-run").set_icon_widget(gtk.Image())
         self.window.get_widget("control-run").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
@@ -96,7 +96,7 @@ class vmmConsole:
             })
 
         self.engine.connect_to_signal("vm_updated", self.refresh_status)
-        self.refresh_status(vmname)
+        self.refresh_status(vmuuid)
 
     def show(self):
         dialog = self.window.get_widget("vmm-console")
@@ -111,16 +111,16 @@ class vmmConsole:
         return 0
 
     def control_vm_shutdown(self, src):
-        if not(self.engine.get_stats().run_status(self.vmname) in [ "shutdown", "shutoff" ]):
+        if not(self.engine.get_stats().run_status(self.vmuuid) in [ "shutdown", "shutoff" ]):
             self.vmm.shutdown()
         else:
             print "Shutdown requested, but machine is already shutting down / shutoff"
 
     def control_vm_pause(self, src):
-        if self.engine.get_stats().run_status(self.vmname) in [ "shutdown", "shutoff" ]:
+        if self.engine.get_stats().run_status(self.vmuuid) in [ "shutdown", "shutoff" ]:
             print "Pause/resume requested, but machine is shutdown / shutoff"
         else:
-            if self.engine.get_stats().run_status(self.vmname) in [ "paused" ]:
+            if self.engine.get_stats().run_status(self.vmuuid) in [ "paused" ]:
                 if not src.get_active():
                     self.vmm.resume()
                 else:
@@ -139,13 +139,13 @@ class vmmConsole:
         return 0
 
     def control_vm_details(self, src):
-        self.engine.show_details(self.vmname)
+        self.engine.show_details(self.vmuuid)
 
-    def refresh_status(self, vmname):
-        if not(vmname == self.vmname):
+    def refresh_status(self, vmuuid):
+        if not(vmuuid == self.vmuuid):
             return
 
-        status = self.engine.get_stats().run_status(vmname)
+        status = self.engine.get_stats().run_status(vmuuid)
 
         if self.lastStatus == status:
             return
@@ -174,17 +174,18 @@ class vmmConsole:
 
 
 class vmmDetails:
-    def __init__(self, engine, vmname):
+    def __init__(self, engine, vmuuid, name):
         self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-details")
         self.engine = engine
-        self.vmname = vmname
+        self.vmuuid = vmuuid
         self.lastStatus = None
 
         topwin = self.window.get_widget("vmm-details")
         topwin.hide()
-        topwin.set_title(vmname + " " + topwin.get_title())
+        topwin.set_title(name + " " + topwin.get_title())
 
-        self.window.get_widget("overview-name").set_text(vmname)
+        self.window.get_widget("overview-name").set_text(name)
+        self.window.get_widget("overview-uuid").set_text(vmuuid)
 
         self.window.get_widget("control-run").set_icon_widget(gtk.Image())
         self.window.get_widget("control-run").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
@@ -268,7 +269,7 @@ class vmmDetails:
 
         self.engine.connect_to_signal("vm_updated", self.refresh_overview)
         self.change_graph_ranges()
-        self.refresh_overview(vmname)
+        self.refresh_overview(vmuuid)
         self.hw_selected()
 
     def show(self):
@@ -285,27 +286,25 @@ class vmmDetails:
         selection = vmlist.get_selection()
         active = selection.get_selected()
         if active[1] != None:
-            print "Activate " + str(active[0].get_value(active[1], 0))
             self.window.get_widget("hw-panel").set_sensitive(True)
             self.window.get_widget("hw-panel").set_current_page(active[0].get_value(active[1], 0))
         else:
-            print "Dactive" + str(active)
             self.window.get_widget("hw-panel").set_sensitive(False)
 
     def control_vm_run(self, src):
         return 0
 
     def control_vm_shutdown(self, src):
-        if not(self.engine.get_stats().run_status(self.vmname) in [ "shutdown", "shutoff" ]):
+        if not(self.engine.get_stats().run_status(self.vmuuid) in [ "shutdown", "shutoff" ]):
             self.vmm.shutdown()
         else:
             print "Shutdown requested, but machine is already shutting down / shutoff"
 
     def control_vm_pause(self, src):
-        if self.engine.get_stats().run_status(self.vmname) in [ "shutdown", "shutoff" ]:
+        if self.engine.get_stats().run_status(self.vmuuid) in [ "shutdown", "shutoff" ]:
             print "Pause/resume requested, but machine is shutdown / shutoff"
         else:
-            if self.engine.get_stats().run_status(self.vmname) in [ "paused" ]:
+            if self.engine.get_stats().run_status(self.vmuuid) in [ "paused" ]:
                 if not src.get_active():
                     self.vmm.resume()
                 else:
@@ -368,22 +367,22 @@ class vmmDetails:
 
         self.lastStatus = status
 
-    def refresh_overview(self, vmname):
-        if not(vmname == self.vmname):
+    def refresh_overview(self, vmuuid):
+        if not(vmuuid == self.vmuuid):
             return
 
-        status = self.engine.get_stats().run_status(vmname)
+        status = self.engine.get_stats().run_status(vmuuid)
         self.update_widget_states(status)
 
         self.window.get_widget("overview-status-text").set_text(status)
-        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.engine.get_stats().run_status_icon(vmname))
-        self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.engine.get_stats().cpu_time_percentage(vmname))
-        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.engine.get_stats().current_memory(vmname)/1024, self.engine.get_stats().host_memory_size()/1024))
+        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.engine.get_stats().run_status_icon(vmuuid))
+        self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.engine.get_stats().cpu_time_percentage(vmuuid))
+        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.engine.get_stats().current_memory(vmuuid)/1024, self.engine.get_stats().host_memory_size()/1024))
 
         history_len = self.engine.get_config().get_stats_history_length()
-        cpu_vector = self.engine.get_stats().cpu_time_vector(vmname)
+        cpu_vector = self.engine.get_stats().cpu_time_vector(vmuuid)
         cpu_vector.reverse()
-        cpu_vector_avg = self.engine.get_stats().cpu_time_moving_avg_vector(vmname)
+        cpu_vector_avg = self.engine.get_stats().cpu_time_moving_avg_vector(vmuuid)
         cpu_vector_avg.reverse()
         if self.cpu_usage_line == None:
             self.cpu_usage_line = self.cpu_usage_graph.plot(cpu_vector)
@@ -400,7 +399,7 @@ class vmmDetails:
         self.cpu_usage_canvas.draw()
 
         history_len = self.engine.get_config().get_stats_history_length()
-        memory_vector = self.engine.get_stats().current_memory_vector(vmname)
+        memory_vector = self.engine.get_stats().current_memory_vector(vmuuid)
         memory_vector.reverse()
         if self.memory_usage_line == None:
             self.memory_usage_line = self.memory_usage_graph.plot(memory_vector)
@@ -416,9 +415,9 @@ class vmmDetails:
 
         history_len = self.engine.get_config().get_stats_history_length()
         #if self.network_traffic_line == None:
-            #self.network_traffic_line = self.network_traffic_graph.plot(self.engine.get_stats().network_traffic_vector(vmname))
+            #self.network_traffic_line = self.network_traffic_graph.plot(self.engine.get_stats().network_traffic_vector(vmuuid))
         #else:
-            #self.network_traffic_line[0].set_ydata(self.engine.get_stats().network_traffic_vector(vmname))
+            #self.network_traffic_line[0].set_ydata(self.engine.get_stats().network_traffic_vector(vmuuid))
         self.network_traffic_graph.set_xlim(0, history_len)
         self.network_traffic_graph.set_ylim(0, 100)
         self.network_traffic_graph.set_yticklabels(["0","","","","","100"])
@@ -548,40 +547,38 @@ class vmmManager:
         gtk.main_quit()
 
 
-    def vm_added(self, name):
+    def vm_added(self, vmuuid, name):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
         dup = 0
         for row in range(model.iter_n_children(None)):
             vm = model.get_value(model.iter_nth_child(None, row), 0)
-            if vm == name:
+            if vm == vmuuid:
                 dup = 1
 
         if dup != 1:
-            print "Add " + name
-            model.append([name])
+            model.append([vmuuid, name])
 
 
-    def vm_removed(self, name):
+    def vm_removed(self, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
         dup = 0
         for row in range(model.iter_n_children(None)):
             vm = model.get_value(model.iter_nth_child(None, row), 0)
-            if vm == name:
+            if vm == vmuuid:
                 model.remove(model.iter_nth_child(None, row))
-                print "Remove " + name
                 break
 
-    def vm_updated(self, name):
+    def vm_updated(self, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
         for row in range(model.iter_n_children(None)):
             iter = model.iter_nth_child(None, row)
-            if model.get_value(iter, 0) == name:
+            if model.get_value(iter, 0) == vmuuid:
                 model.row_changed(str(row), iter)
 
     def current_vm(self):
@@ -630,7 +627,7 @@ class vmmManager:
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
-        model = gtk.ListStore(str)
+        model = gtk.ListStore(str, str)
         vmlist.set_model(model)
 
         nameCol = gtk.TreeViewColumn("Name")
@@ -642,7 +639,7 @@ class vmmManager:
 
         name_txt = gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
-        nameCol.add_attribute(name_txt, 'text', 0)
+        nameCol.add_attribute(name_txt, 'text', 1)
         nameCol.set_sort_column_id(VMLIST_SORT_NAME)
 
         vmlist.append_column(nameCol)
@@ -717,7 +714,6 @@ class vmmManager:
         return 0
 
     def vmlist_name_sorter(self, model, iter1, iter2):
-        print "Sort "+ model.get_value(iter1, 0) + " <=> " + model.get_value(iter2, 0)
         return self.sort_op(model.get_value(iter1, 0), model.get_value(iter2, 0))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
@@ -942,28 +938,27 @@ class vmmStats:
         self.engine.connect_to_signal("vm_added", self.vm_added)
 
 
-    def vm_added(self, vmname):
-        self.record[vmname] = []
+    def vm_added(self, vmuuid, name):
+        self.record[vmuuid] = []
 
-    def vm_removed(self, vmname):
-        del self.record[vmname]
+    def vm_removed(self, vmuuid):
+        del self.record[vmuuid]
 
-    def update(self, vmname, vm):
+    def update(self, vmuuid, vm):
         now = time()
 
         info = vm.info()
 
         expected = self.engine.get_config().get_stats_history_length()
-        current = len(self.record[vmname])
+        current = len(self.record[vmuuid])
         if current > expected:
-            del self.record[vmname][expected:current]
-            print "Lengh " + str(len(self.record[vmname]))
+            del self.record[vmuuid][expected:current]
             
         prevCpuTime = 0
         prevTimestamp = 0
-        if len(self.record[vmname]) > 0:
-            prevTimestamp = self.record[vmname][0]["timestamp"]
-            prevCpuTime = self.record[vmname][0]["cpuTimeAbs"]
+        if len(self.record[vmuuid]) > 0:
+            prevTimestamp = self.record[vmuuid][0]["timestamp"]
+            prevCpuTime = self.record[vmuuid][0]["cpuTimeAbs"]
 
         pcentCpuTime = (info[4]-prevCpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000*self.host_active_processor_count())
         
@@ -981,22 +976,22 @@ class vmmStats:
                      "maxMemPercent": pcentMaxMem,
                      }
 
-        self.record[vmname].insert(0, newStats)
+        self.record[vmuuid].insert(0, newStats)
 
         nSamples = 5
-        #nSamples = len(self.record[vmname])
-        if nSamples > len(self.record[vmname]):
-            nSamples = len(self.record[vmname])
+        #nSamples = len(self.record[vmuuid])
+        if nSamples > len(self.record[vmuuid]):
+            nSamples = len(self.record[vmuuid])
 
-        startCpuTime = self.record[vmname][nSamples-1]["cpuTimeAbs"]
-        startTimestamp = self.record[vmname][nSamples-1]["timestamp"]
+        startCpuTime = self.record[vmuuid][nSamples-1]["cpuTimeAbs"]
+        startTimestamp = self.record[vmuuid][nSamples-1]["timestamp"]
 
         if startTimestamp == now:
-            self.record[vmname][0]["cpuTimeMovingAvg"] = self.record[vmname][0]["cpuTimeAbs"]
-            self.record[vmname][0]["cpuTimeMovingAvgPercent"] = 0
+            self.record[vmuuid][0]["cpuTimeMovingAvg"] = self.record[vmuuid][0]["cpuTimeAbs"]
+            self.record[vmuuid][0]["cpuTimeMovingAvgPercent"] = 0
         else:
-            self.record[vmname][0]["cpuTimeMovingAvg"] = (self.record[vmname][0]["cpuTimeAbs"]-startCpuTime) / nSamples
-            self.record[vmname][0]["cpuTimeMovingAvgPercent"] = (self.record[vmname][0]["cpuTimeAbs"]-startCpuTime) * 100 / ((now-startTimestamp)*1000*1000*1000 * self.host_active_processor_count())
+            self.record[vmuuid][0]["cpuTimeMovingAvg"] = (self.record[vmuuid][0]["cpuTimeAbs"]-startCpuTime) / nSamples
+            self.record[vmuuid][0]["cpuTimeMovingAvgPercent"] = (self.record[vmuuid][0]["cpuTimeAbs"]-startCpuTime) * 100 / ((now-startTimestamp)*1000*1000*1000 * self.host_active_processor_count())
             
 
     def host_memory_size(self):
@@ -1008,51 +1003,51 @@ class vmmStats:
     def host_maximum_processor_count(self):
         return self.hostinfo[4] * self.hostinfo[5] * self.hostinfo[6] * self.hostinfo[7]
 
-    def current_memory(self, vmname):
-        if len(self.record[vmname]) == 0:
+    def current_memory(self, vmuuid):
+        if len(self.record[vmuuid]) == 0:
             return 0
-        return self.record[vmname][0]["currMem"]
+        return self.record[vmuuid][0]["currMem"]
     
-    def current_memory_percentage(self, vmname):
-        if len(self.record[vmname]) == 0:
+    def current_memory_percentage(self, vmuuid):
+        if len(self.record[vmuuid]) == 0:
             return 0
-        return self.record[vmname][0]["currMemPercent"]
+        return self.record[vmuuid][0]["currMemPercent"]
     
-    def maximum_memory(self, vmname):
-        if len(self.record[vmname]) == 0:
+    def maximum_memory(self, vmuuid):
+        if len(self.record[vmuuid]) == 0:
             return 0
-        return self.record[vmname][0]["maxMem"]
+        return self.record[vmuuid][0]["maxMem"]
 
-    def maximum_memory_percentage(self, vmname):
-        if len(self.record[vmname]) == 0:
+    def maximum_memory_percentage(self, vmuuid):
+        if len(self.record[vmuuid]) == 0:
             return 0
-        return self.record[vmname][0]["maxMemPercent"]
+        return self.record[vmuuid][0]["maxMemPercent"]
 
-    def cpu_time(self, vmname):
-        if len(self.record[vmname]) == 0:
+    def cpu_time(self, vmuuid):
+        if len(self.record[vmuuid]) == 0:
             return 0
-        return self.record[vmname][0]["cpuTime"]
+        return self.record[vmuuid][0]["cpuTime"]
     
-    def cpu_time_percentage(self, vmname):
-        if len(self.record[vmname]) == 0:
+    def cpu_time_percentage(self, vmuuid):
+        if len(self.record[vmuuid]) == 0:
             return 0
-        return self.record[vmname][0]["cpuTimePercent"]
+        return self.record[vmuuid][0]["cpuTimePercent"]
 
-    def network_traffic(self, vmname):
+    def network_traffic(self, vmuuid):
         return 1
 
-    def network_traffic_percentage(self, vmname):
+    def network_traffic_percentage(self, vmuuid):
         return 1
 
-    def disk_usage(self, vmname):
+    def disk_usage(self, vmuuid):
         return 1
 
-    def disk_usage_percentage(self, vmname):
+    def disk_usage_percentage(self, vmuuid):
         return 1
 
-    def cpu_time_vector(self, vmname):
+    def cpu_time_vector(self, vmuuid):
         vector = []
-        stats = self.record[vmname]
+        stats = self.record[vmuuid]
         for i in range(self.engine.get_config().get_stats_history_length()+1):
             if i < len(stats):
                 vector.append(stats[i]["cpuTimePercent"])
@@ -1060,9 +1055,9 @@ class vmmStats:
                 vector.append(0)
         return vector
     
-    def cpu_time_moving_avg_vector(self, vmname):
+    def cpu_time_moving_avg_vector(self, vmuuid):
         vector = []
-        stats = self.record[vmname]
+        stats = self.record[vmuuid]
         for i in range(self.engine.get_config().get_stats_history_length()+1):
             if i < len(stats):
                 vector.append(stats[i]["cpuTimeMovingAvgPercent"])
@@ -1070,9 +1065,9 @@ class vmmStats:
                 vector.append(0)
         return vector
     
-    def current_memory_vector(self, vmname):
+    def current_memory_vector(self, vmuuid):
         vector = []
-        stats = self.record[vmname]
+        stats = self.record[vmuuid]
         for i in range(self.engine.get_config().get_stats_history_length()+1):
             if i < len(stats):
                 vector.append(stats[i]["currMemPercent"])
@@ -1080,25 +1075,25 @@ class vmmStats:
                 vector.append(0)
         return vector
     
-    def network_traffic_vector(self, vmname):
+    def network_traffic_vector(self, vmuuid):
         vector = []
-        stats = self.record[vmname]
+        stats = self.record[vmuuid]
         for i in range(self.engine.get_config().get_stats_history_length()+1):
             vector.append(1)
         return vector
     
-    def disk_usage_vector(self, vmname):
+    def disk_usage_vector(self, vmuuid):
         vector = []
-        stats = self.record[vmname]
+        stats = self.record[vmuuid]
         for i in range(self.engine.get_config().get_stats_history_length()+1):
             vector.append(1)
         return vector
     
     
-    def run_status(self, vmname):
-        if len(self.record[vmname]) == 0:
+    def run_status(self, vmuuid):
+        if len(self.record[vmuuid]) == 0:
             return "Shutoff"
-        status = self.record[vmname][0]["status"]
+        status = self.record[vmuuid][0]["status"]
         if status == libvirt.VIR_DOMAIN_NOSTATE:
             return "Idle"
         elif status == libvirt.VIR_DOMAIN_RUNNING:
@@ -1151,7 +1146,7 @@ class vmmEngine:
     def schedule_timer(self):
         interval = self.get_config().get_stats_update_interval() * 1000
         now = time() * 1000
-        print "Scheule at " + str(interval)
+
         if self.timer != None:
             gobject.source_remove(self.timer)
             self.timer = None
@@ -1159,7 +1154,6 @@ class vmmEngine:
         self.timer = gobject.timeout_add(interval, self.tick)
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
-        print "Removing timer"
         gobject.source_remove(self.timer)
         self.refresh_stats()
         self.schedule_timer()
@@ -1177,17 +1171,17 @@ class vmmEngine:
                 del self.callbacks[i:i]
                 
 
-    def notify_vm_added(self, name):
+    def notify_vm_added(self, uuid, name):
         for cb in self.callbacks["vm_added"]:
-            cb(name)
+            cb(uuid, name)
 
-    def notify_vm_removed(self, name):
+    def notify_vm_removed(self, uuid):
         for cb in self.callbacks["vm_removed"]:
-            cb(name)
+            cb(uuid)
 
-    def notify_vm_updated(self, name):
+    def notify_vm_updated(self, uuid):
         for cb in self.callbacks["vm_updated"]:
-            cb(name)
+            cb(uuid)
 
     def get_config(self):
         return self.config
@@ -1208,44 +1202,52 @@ class vmmEngine:
     def show_manager(self):    
         self.windowManager.show()
 
-    def show_details(self, vmname):
-        if not(self.windowDetails.has_key(vmname)):
-            self.windowDetails[vmname] = vmmDetails(self, vmname)
+    def show_details(self, vmuuid):
+        if not(self.windowDetails.has_key(vmuuid)):
+            self.windowDetails[vmuuid] = vmmDetails(self, vmuuid, self.vms[vmuuid].name())
 
-        self.windowDetails[vmname].show()
+        self.windowDetails[vmuuid].show()
 
-    def show_console(self, vmname):
-        if not(self.windowConsole.has_key(vmname)):
-            self.windowConsole[vmname] = vmmConsole(self, vmname)
+    def show_console(self, vmuuid):
+        if not(self.windowConsole.has_key(vmuuid)):
+            self.windowConsole[vmuuid] = vmmConsole(self, vmuuid, self.vms[vmuuid].name())
 
-        self.windowConsole[vmname].show()
+        self.windowConsole[vmuuid].show()
 
 
     def tick(self):
-        print "Tick"
         doms = self.vmm.listDomainsID()
         newVms = {}
         if doms != None:
             for id in doms:
                 vm = self.vmm.lookupByID(id)
-                newVms[vm.name()] = vm
+                newVms[self.uuidstr(vm.UUID())] = vm
 
-        for name in self.vms.keys():
-            if not(newVms.has_key(name)):
-                del self.vms[name]
-                self.notify_vm_removed(name)
+        for uuid in self.vms.keys():
+            if not(newVms.has_key(uuid)):
+                del self.vms[uuid]
+                self.notify_vm_removed(uuid)
 
-        for name in newVms.keys():
-            if not(self.vms.has_key(name)):
-                self.vms[name] = newVms[name]
-                self.notify_vm_added(name)
+        for uuid in newVms.keys():
+            if not(self.vms.has_key(uuid)):
+                self.vms[uuid] = newVms[uuid]
+                self.notify_vm_added(uuid, newVms[uuid].name())
 
-        for name in self.vms.keys():
-            self.stats.update(name, self.vms[name])
-            self.notify_vm_updated(name)
+        for uuid in self.vms.keys():
+            self.stats.update(uuid, self.vms[uuid])
+            self.notify_vm_updated(uuid)
 
         return 1
-        
+
+    def uuidstr(self, rawuuid):
+        hex = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+        uuid = []
+        for i in range(16):
+            uuid.append(hex[((ord(rawuuid[i]) >> 4) & 0xf)])
+            uuid.append(hex[(ord(rawuuid[i]) & 0xf)])
+            if i == 3 or i == 5 or i == 7 or i == 9:
+                uuid.append('-')
+        return "".join(uuid)        
 
         
 # Run me!
