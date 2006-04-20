@@ -6,6 +6,9 @@ import gtk
 import gobject
 import gtk.gdk
 import gtk.glade
+import dbus
+import dbus.glib
+import dbus.service
 from time import time
 import re
 import os
@@ -1249,10 +1252,39 @@ class vmmEngine:
                 uuid.append('-')
         return "".join(uuid)        
 
+class vmmRemote(dbus.service.Object):
+    def __init__(self, engine, bus_name, object_path="/com/redhat/virt/manager/ui"):
+        dbus.service.Object.__init__(self, bus_name, object_path)
+
+        self.engine = engine
+
+    @dbus.service.method("com.redhat.virt.manager.ui")
+    def show_domain_creator(self):
+        # XXX fixme
+        self.engine.show_about()
+
+    @dbus.service.method("com.redhat.virt.manager.ui", in_signature="s")
+    def show_domain_editor(self, uuid):
+        self.engine.show_details(uuid)
+        
+    @dbus.service.method("com.redhat.virt.manager.ui", in_signature="s")
+    def show_domain_performance(self, uuid):
+        self.engine.show_details(uuid)
+        
+    @dbus.service.method("com.redhat.virt.manager.ui", in_signature="s")
+    def show_domain_console(self, uuid):
+        self.engine.show_console(uuid)
+        
+    @dbus.service.method("com.redhat.virt.manager.ui")
+    def show_host_summary(self):
+        self.engine.show_details(uuid)
         
 # Run me!
 def main():
     engine = vmmEngine()
+    bus = dbus.SessionBus()
+    name = dbus.service.BusName("com.redhat.virt.manager.ui", bus=bus)
+    remote = vmmRemote(engine, name)
     engine.show_manager()
     gtk.main()
 

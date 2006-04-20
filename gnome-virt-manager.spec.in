@@ -16,7 +16,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: python
 Requires: pygtk2 >= 1.99.12-6
 Requires: gnome-python2-gconf >= 1.99.11-7
-Requires: libvirt-python >= 0.0.6
+Requires: libvirt-python >= 0.1.0
 Requires: python-matplotlib
 
 BuildArchitectures: noarch
@@ -43,9 +43,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 /usr/bin/%{name}
+/usr/libexec/%{name}-launch
 /usr/share/%{name}/*
 /usr/share/applications/%{name}.desktop
+/usr/share/dbus-1/services/%{name}.service
 
 %changelog
-* Wed Mar 29 2006  <berrange@redhat.com> - 0.0.1-1
+* Thu Apr 20 2006 Daniel Berrange <berrange@redhat.com> - 0.0.2-1
+- Added DBus remote control service
+
+* Wed Mar 29 2006 Daniel Berrange <berrange@redhat.com> - 0.0.1-1
 - Initial RPM build

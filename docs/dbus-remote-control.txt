@@ -1,0 +1,75 @@
+   DBus Remote Control
+   ===================
+
+The GNOME virt manager provides the ability to control its high level
+UI actions via a DBus service. 
+
+Interface description
+---------------------
+
+The service is intended to run on the session bus, and when launched 
+will register a well known bus name of 'com.redhat.virt.manager.ui'.
+Within this service, a single object is to be exported under the
+path of '/com/redhat/virt/manager/ui'.
+
+This object implements a single interface 'com.redhat.virt.manager.ui'
+which contains the following methods:
+
+ - show_domain_performance(string:uuid)
+     Takes a domain's UUID in printable string format and displays
+     the window showing detailed performance data
+
+ - show_domain_editor(string:uuid)
+     Takes a domain's UUID in printable string format and displays
+     the window for configuring the VM hardware resources
+
+ - show_domain_console(string:uuid)
+     Takes a domain's UUID in printable string format and displays
+     the window for accessing the graphical framebuffer associated
+     with the VM.
+
+ - show_domain_creator()
+     Displys the window for creating & configuring a new domain
+
+ - show_host_summary()
+     Displays the window showing a summary of all active domains 
+     on the host
+
+Example usage from shell
+------------------------
+
+To display the performance window for the domain with a UUID of
+'349025e8-ad34-34ff-239a-12ae095249f3', one would use the dbus-send
+command as follows:
+
+  # First ensure the application is running
+  $ dbus-send --session --dest="org.freedesktop.DBus" \
+              "/org/freedesktop/DBus" \
+              "org.freedesktop.DBus.StartServiceByName" \
+              "string:com.redhat.virt.manager.ui"
+
+  # Now call the show_domain_performance method
+  $dbus-send --session --dest="com.redhat.virt.manager.ui" \
+             "/com/redhat/virt/manager/ui"
+             "com.redhat.virt.manager.ui.show_domain_performance" \
+             "string:349025e8-ad34-34ff-239a-12ae095249f3"
+
+Example usage from python
+-------------------------
+
+  import dbus
+
+  bus = dbus.SessionBus()
+
+  bus_object = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
+  bus_iface = dbus.Interface(bus_object, "org.freedesktop.DBus")
+  bus_iface.StartServiceByName("com.redhat.virt.manager.ui")
+
+
+  virt_object = bus.get_object("com.redhat.virt.manager.ui",
+                               "/com/redhat/virt/manager/ui")
+  virt_iface = dbus.Interface(virt_object, "com.redhat.virt.manager.ui")
+  virt_iface.show_domain_performance("349025e8-ad34-34ff-239a-12ae095249f3")
+
+
+
