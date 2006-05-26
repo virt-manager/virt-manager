@@ -17,11 +17,11 @@ import libvirt
 
 import matplotlib
 matplotlib.use('GTK')
- 
+
 from matplotlib.figure import Figure
 from matplotlib.axes import Subplot
 from matplotlib.backends.backend_gtk import FigureCanvasGTK, NavigationToolbar
- 
+
 from matplotlib.numerix import arange, sin, pi
 
 
@@ -162,12 +162,12 @@ class vmmConsole:
             self.window.get_widget("control-pause").set_sensitive(False)
             self.window.get_widget("control-shutdown").set_sensitive(False)
             self.window.get_widget("control-terminal").set_sensitive(False)
-            self.window.get_widget("control-snapshot").set_sensitive(False)            
+            self.window.get_widget("control-snapshot").set_sensitive(False)
         else:
             self.window.get_widget("control-pause").set_sensitive(True)
             self.window.get_widget("control-shutdown").set_sensitive(True)
             self.window.get_widget("control-terminal").set_sensitive(True)
-            self.window.get_widget("control-snapshot").set_sensitive(True)            
+            self.window.get_widget("control-snapshot").set_sensitive(True)
             if status == "paused":
                 self.window.get_widget("control-pause").set_active(True)
             else:
@@ -227,9 +227,9 @@ class vmmDetails:
         hwCol.pack_start(hw_img, False)
         hwCol.add_attribute(hw_txt, 'text', 1)
         hwCol.add_attribute(hw_img, 'pixbuf', 2)
-        
+
         self.window.get_widget("hw-list").append_column(hwCol)
-        
+
 
         self.cpu_usage_figure = Figure()
         self.cpu_usage_graph = self.cpu_usage_figure.add_subplot(111)
@@ -357,12 +357,12 @@ class vmmDetails:
             self.window.get_widget("control-pause").set_sensitive(False)
             self.window.get_widget("control-shutdown").set_sensitive(False)
             self.window.get_widget("control-terminal").set_sensitive(False)
-            self.window.get_widget("control-snapshot").set_sensitive(False)            
+            self.window.get_widget("control-snapshot").set_sensitive(False)
         else:
             self.window.get_widget("control-pause").set_sensitive(True)
             self.window.get_widget("control-shutdown").set_sensitive(True)
             self.window.get_widget("control-terminal").set_sensitive(True)
-            self.window.get_widget("control-snapshot").set_sensitive(True)            
+            self.window.get_widget("control-snapshot").set_sensitive(True)
             if status == "paused":
                 self.window.get_widget("control-pause").set_active(True)
             else:
@@ -500,7 +500,7 @@ class vmmManager:
 
         self.vmmenu = gtk.Menu()
         self.vmmenu_items = {}
-        
+
         self.vmmenu_items["details"] = gtk.MenuItem("_Details")
         self.vmmenu_items["details"].connect("activate", self.show_vm_details)
         self.vmmenu_items["details"].show()
@@ -657,7 +657,7 @@ class vmmManager:
         statusCol.pack_start(status_icon, False)
         statusCol.pack_start(status_txt, False)
         statusCol.set_cell_data_func(status_txt, self.status_text, None)
-        statusCol.set_cell_data_func(status_icon, self.status_icon, None)        
+        statusCol.set_cell_data_func(status_icon, self.status_icon, None)
         statusCol.set_visible(self.engine.get_config().is_vmlist_status_visible())
 
 
@@ -671,7 +671,7 @@ class vmmManager:
         cpuUsageCol.set_cell_data_func(cpuUsage_img, self.cpu_usage_img, None)
         cpuUsageCol.set_visible(self.engine.get_config().is_vmlist_cpu_usage_visible())
         cpuUsageCol.set_sort_column_id(VMLIST_SORT_CPU_USAGE)
-        
+
         memoryUsage_txt = gtk.CellRendererText()
         memoryUsage_img = gtk.CellRendererProgress()
         memoryUsageCol.pack_start(memoryUsage_txt, False)
@@ -680,7 +680,7 @@ class vmmManager:
         memoryUsageCol.set_cell_data_func(memoryUsage_img, self.memory_usage_img, None)
         memoryUsageCol.set_visible(self.engine.get_config().is_vmlist_memory_usage_visible())
         memoryUsageCol.set_sort_column_id(VMLIST_SORT_MEMORY_USAGE)
-        
+
         diskUsage_txt = gtk.CellRendererText()
         diskUsage_img = gtk.CellRendererProgress()
         diskUsageCol.pack_start(diskUsage_txt, False)
@@ -689,7 +689,7 @@ class vmmManager:
         diskUsageCol.set_cell_data_func(diskUsage_img, self.disk_usage_img, None)
         diskUsageCol.set_visible(self.engine.get_config().is_vmlist_disk_usage_visible())
         diskUsageCol.set_sort_column_id(VMLIST_SORT_DISK_USAGE)
-        
+
         networkTraffic_txt = gtk.CellRendererText()
         networkTraffic_img = gtk.CellRendererProgress()
         networkTrafficCol.pack_start(networkTraffic_txt, False)
@@ -700,11 +700,11 @@ class vmmManager:
         networkTrafficCol.set_sort_column_id(VMLIST_SORT_NETWORK_USAGE)
 
         model.set_sort_func(VMLIST_SORT_NAME, self.vmlist_name_sorter)
-        model.set_sort_func(VMLIST_SORT_CPU_USAGE, self.vmlist_cpu_usage_sorter) 
+        model.set_sort_func(VMLIST_SORT_CPU_USAGE, self.vmlist_cpu_usage_sorter)
         model.set_sort_func(VMLIST_SORT_MEMORY_USAGE, self.vmlist_memory_usage_sorter)
         model.set_sort_func(VMLIST_SORT_DISK_USAGE, self.vmlist_disk_usage_sorter)
         model.set_sort_func(VMLIST_SORT_NETWORK_USAGE, self.vmlist_network_usage_sorter)
-        
+
         model.set_sort_column_id(VMLIST_SORT_NAME, gtk.SORT_ASCENDING)
 
 
@@ -863,16 +863,16 @@ class vmmConfig:
 
     def set_vmlist_status_visible(self, state):
         self.conf.set_bool(gconf_dir + "/vmlist-fields/status", state)
-        
+
     def set_vmlist_cpu_usage_visible(self, state):
         self.conf.set_bool(gconf_dir + "/vmlist-fields/cpu_usage", state)
-        
+
     def set_vmlist_memory_usage_visible(self, state):
         self.conf.set_bool(gconf_dir + "/vmlist-fields/memory_usage", state)
-        
+
     def set_vmlist_disk_usage_visible(self, state):
         self.conf.set_bool(gconf_dir + "/vmlist-fields/disk_usage", state)
-        
+
     def set_vmlist_network_traffic_visible(self, state):
         self.conf.set_bool(gconf_dir + "/vmlist-fields/network_traffic", state)
 
@@ -956,7 +956,7 @@ class vmmStats:
         current = len(self.record[vmuuid])
         if current > expected:
             del self.record[vmuuid][expected:current]
-            
+
         prevCpuTime = 0
         prevTimestamp = 0
         if len(self.record[vmuuid]) > 0:
@@ -964,10 +964,10 @@ class vmmStats:
             prevCpuTime = self.record[vmuuid][0]["cpuTimeAbs"]
 
         pcentCpuTime = (info[4]-prevCpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000*self.host_active_processor_count())
-        
+
         pcentCurrMem = info[2] * 100 / self.host_memory_size()
         pcentMaxMem = info[1] * 100 / self.host_memory_size()
-        
+
         newStats = { "timestamp": now,
                      "status": info[0],
                      "cpuTime": (info[4]-prevCpuTime),
@@ -995,7 +995,7 @@ class vmmStats:
         else:
             self.record[vmuuid][0]["cpuTimeMovingAvg"] = (self.record[vmuuid][0]["cpuTimeAbs"]-startCpuTime) / nSamples
             self.record[vmuuid][0]["cpuTimeMovingAvgPercent"] = (self.record[vmuuid][0]["cpuTimeAbs"]-startCpuTime) * 100 / ((now-startTimestamp)*1000*1000*1000 * self.host_active_processor_count())
-            
+
 
     def host_memory_size(self):
         return self.hostinfo[1]*1024
@@ -1010,12 +1010,12 @@ class vmmStats:
         if len(self.record[vmuuid]) == 0:
             return 0
         return self.record[vmuuid][0]["currMem"]
-    
+
     def current_memory_percentage(self, vmuuid):
         if len(self.record[vmuuid]) == 0:
             return 0
         return self.record[vmuuid][0]["currMemPercent"]
-    
+
     def maximum_memory(self, vmuuid):
         if len(self.record[vmuuid]) == 0:
             return 0
@@ -1030,7 +1030,7 @@ class vmmStats:
         if len(self.record[vmuuid]) == 0:
             return 0
         return self.record[vmuuid][0]["cpuTime"]
-    
+
     def cpu_time_percentage(self, vmuuid):
         if len(self.record[vmuuid]) == 0:
             return 0
@@ -1057,7 +1057,7 @@ class vmmStats:
             else:
                 vector.append(0)
         return vector
-    
+
     def cpu_time_moving_avg_vector(self, vmuuid):
         vector = []
         stats = self.record[vmuuid]
@@ -1067,7 +1067,7 @@ class vmmStats:
             else:
                 vector.append(0)
         return vector
-    
+
     def current_memory_vector(self, vmuuid):
         vector = []
         stats = self.record[vmuuid]
@@ -1077,22 +1077,22 @@ class vmmStats:
             else:
                 vector.append(0)
         return vector
-    
+
     def network_traffic_vector(self, vmuuid):
         vector = []
         stats = self.record[vmuuid]
         for i in range(self.engine.get_config().get_stats_history_length()+1):
             vector.append(1)
         return vector
-    
+
     def disk_usage_vector(self, vmuuid):
         vector = []
         stats = self.record[vmuuid]
         for i in range(self.engine.get_config().get_stats_history_length()+1):
             vector.append(1)
         return vector
-    
-    
+
+
     def run_status(self, vmuuid):
         if len(self.record[vmuuid]) == 0:
             return "Shutoff"
@@ -1129,7 +1129,7 @@ class vmmEngine:
         self.windowDetails = {}
         self.windowConsole = {}
         self.vms = {}
-        
+
         self.timer = None
         self.last_timeout = 0
 
@@ -1172,7 +1172,7 @@ class vmmEngine:
         for i in len(self.callbacks[name]):
             if self.callbacks[i] == callback:
                 del self.callbacks[i:i]
-                
+
 
     def notify_vm_added(self, uuid, name):
         for cb in self.callbacks["vm_added"]:
@@ -1202,7 +1202,7 @@ class vmmEngine:
             self.windowPreferences = vmmPreferences(self)
         self.windowPreferences.show()
 
-    def show_manager(self):    
+    def show_manager(self):
         self.windowManager.show()
 
     def show_details(self, vmuuid):
@@ -1250,7 +1250,7 @@ class vmmEngine:
             uuid.append(hex[(ord(rawuuid[i]) & 0xf)])
             if i == 3 or i == 5 or i == 7 or i == 9:
                 uuid.append('-')
-        return "".join(uuid)        
+        return "".join(uuid)
 
 class vmmRemote(dbus.service.Object):
     def __init__(self, engine, bus_name, object_path="/com/redhat/virt/manager/ui"):
@@ -1266,19 +1266,19 @@ class vmmRemote(dbus.service.Object):
     @dbus.service.method("com.redhat.virt.manager.ui", in_signature="s")
     def show_domain_editor(self, uuid):
         self.engine.show_details(uuid)
-        
+
     @dbus.service.method("com.redhat.virt.manager.ui", in_signature="s")
     def show_domain_performance(self, uuid):
         self.engine.show_details(uuid)
-        
+
     @dbus.service.method("com.redhat.virt.manager.ui", in_signature="s")
     def show_domain_console(self, uuid):
         self.engine.show_console(uuid)
-        
+
     @dbus.service.method("com.redhat.virt.manager.ui")
     def show_host_summary(self):
         self.engine.show_details(uuid)
-        
+
 # Run me!
 def main():
     engine = vmmEngine()
