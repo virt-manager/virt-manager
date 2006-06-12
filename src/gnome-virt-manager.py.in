@@ -13,6 +13,7 @@ from time import time
 import re
 import os
 import os.path
+import sys
 import libvirt
 
 import matplotlib
@@ -27,8 +28,16 @@ from matplotlib.numerix import arange, sin, pi
 
 appname = "::PACKAGE::"
 gconf_dir = "/apps/" + appname
-
 asset_dir = "::ASSETDIR::"
+glade_dir = asset_dir
+icon_dir = asset_dir + "/pixmaps"
+
+# Hack for dev purposes
+if os.path.exists(os.getcwd() + "/src/" + appname + ".glade"):
+    glade_dir = os.getcwd() + "/src"
+if os.path.exists(os.getcwd() + "/pixmaps/icon_run.png"):
+    icon_dir = os.getcwd() + "/pixmaps"
+
 
 VMLIST_SORT_NAME = 1
 VMLIST_SORT_CPU_USAGE = 2
@@ -36,13 +45,9 @@ VMLIST_SORT_MEMORY_USAGE = 3
 VMLIST_SORT_DISK_USAGE = 4
 VMLIST_SORT_NETWORK_USAGE = 5
 
-# Hack for dev purposes
-if os.path.exists("./" + appname + ".glade"):
-    asset_dir = "."
-
 class vmmAbout:
     def __init__(self):
-        self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-about")
+        self.window = gtk.glade.XML(glade_dir + "/" + appname + ".glade", "vmm-about")
         self.window.get_widget("vmm-about").hide()
 
         self.window.signal_autoconnect({
@@ -61,7 +66,7 @@ class vmmAbout:
 
 class vmmConsole:
     def __init__(self, engine, vmuuid, name):
-        self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-console")
+        self.window = gtk.glade.XML(glade_dir + "/" + appname + ".glade", "vmm-console")
         self.engine = engine
         self.vmuuid = vmuuid
         self.lastStatus = None
@@ -71,19 +76,19 @@ class vmmConsole:
         topwin.set_title(name + " " + topwin.get_title())
 
         self.window.get_widget("control-run").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-run").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
+        self.window.get_widget("control-run").get_icon_widget().set_from_file(icon_dir + "/icon_run.png")
 
         self.window.get_widget("control-pause").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-pause").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_pause.png")
+        self.window.get_widget("control-pause").get_icon_widget().set_from_file(icon_dir + "/icon_pause.png")
 
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
-        #self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
+        #self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(icon_dir + "/icon_run.png")
 
         self.window.get_widget("control-terminal").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-terminal").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_launch_term.png")
+        self.window.get_widget("control-terminal").get_icon_widget().set_from_file(icon_dir + "/icon_launch_term.png")
 
         self.window.get_widget("control-snapshot").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_snapshot.png")
+        self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(icon_dir + "/icon_snapshot.png")
 
 
         self.window.signal_autoconnect({
@@ -178,7 +183,7 @@ class vmmConsole:
 
 class vmmDetails:
     def __init__(self, engine, vmuuid, name):
-        self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-details")
+        self.window = gtk.glade.XML(glade_dir + "/" + appname + ".glade", "vmm-details")
         self.engine = engine
         self.vmuuid = vmuuid
         self.lastStatus = None
@@ -191,31 +196,31 @@ class vmmDetails:
         self.window.get_widget("overview-uuid").set_text(vmuuid)
 
         self.window.get_widget("control-run").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-run").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
+        self.window.get_widget("control-run").get_icon_widget().set_from_file(icon_dir + "/icon_run.png")
 
         self.window.get_widget("control-pause").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-pause").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_pause.png")
+        self.window.get_widget("control-pause").get_icon_widget().set_from_file(icon_dir + "/icon_pause.png")
 
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
-        #self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_run.png")
+        #self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(icon_dir + "/icon_run.png")
 
         self.window.get_widget("control-terminal").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-terminal").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_launch_term.png")
+        self.window.get_widget("control-terminal").get_icon_widget().set_from_file(icon_dir + "/icon_launch_term.png")
 
         self.window.get_widget("control-snapshot").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(asset_dir + "/pixmaps/icon_snapshot.png")
+        self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(icon_dir + "/icon_snapshot.png")
 
         self.window.get_widget("hw-panel").set_show_tabs(False)
 
         hwListModel = gtk.ListStore(int, str, gtk.gdk.Pixbuf)
         self.window.get_widget("hw-list").set_model(hwListModel)
 
-        hwListModel.append([0, "Processor", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_cpu.png")])
-        #hwListModel.append([1, "Memory", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_ram.png")])
-        hwListModel.append([1, "Memory", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_cpu.png")])
-        hwListModel.append([2, "Disk", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_hdd.png")])
-        hwListModel.append([3, "Network", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_ethernet.png")])
-        hwListModel.append([4, "Add hardware", gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/icon_addnew.png")])
+        hwListModel.append([0, "Processor", gtk.gdk.pixbuf_new_from_file(icon_dir + "/icon_cpu.png")])
+        #hwListModel.append([1, "Memory", gtk.gdk.pixbuf_new_from_file(icon_dir + "/icon_ram.png")])
+        hwListModel.append([1, "Memory", gtk.gdk.pixbuf_new_from_file(icon_dir + "/icon_cpu.png")])
+        hwListModel.append([2, "Disk", gtk.gdk.pixbuf_new_from_file(icon_dir + "/icon_hdd.png")])
+        hwListModel.append([3, "Network", gtk.gdk.pixbuf_new_from_file(icon_dir + "/icon_ethernet.png")])
+        hwListModel.append([4, "Add hardware", gtk.gdk.pixbuf_new_from_file(icon_dir + "/icon_addnew.png")])
 
         self.window.get_widget("hw-list").get_selection().connect("changed", self.hw_selected)
 
@@ -431,7 +436,7 @@ class vmmDetails:
 
 class vmmPreferences:
     def __init__(self, engine):
-        self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-preferences")
+        self.window = gtk.glade.XML(glade_dir + "/" + appname + ".glade", "vmm-preferences")
         self.engine = engine
         self.window.get_widget("vmm-preferences").hide()
 
@@ -473,7 +478,7 @@ class vmmPreferences:
 
 class vmmManager:
     def __init__(self, engine):
-        self.window = gtk.glade.XML(asset_dir + "/" + appname + ".glade", "vmm-manager")
+        self.window = gtk.glade.XML(glade_dir + "/" + appname + ".glade", "vmm-manager")
         self.engine = engine
         self.prepare_vmlist()
 
@@ -929,13 +934,13 @@ class vmmStats:
         self.record = {}
 
         self.status_icons = {
-            "blocked": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_blocked.png"),
-            "crashed": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_crashed.png"),
-            "paused": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_paused.png"),
-            "running": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_running.png"),
-            "shutdown": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_shutdown.png"),
-            "shutoff": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_shutoff.png"),
-            "idle": gtk.gdk.pixbuf_new_from_file(asset_dir + "/pixmaps/state_idle.png"),
+            "blocked": gtk.gdk.pixbuf_new_from_file(icon_dir + "/state_blocked.png"),
+            "crashed": gtk.gdk.pixbuf_new_from_file(icon_dir + "/state_crashed.png"),
+            "paused": gtk.gdk.pixbuf_new_from_file(icon_dir + "/state_paused.png"),
+            "running": gtk.gdk.pixbuf_new_from_file(icon_dir + "/state_running.png"),
+            "shutdown": gtk.gdk.pixbuf_new_from_file(icon_dir + "/state_shutdown.png"),
+            "shutoff": gtk.gdk.pixbuf_new_from_file(icon_dir + "/state_shutoff.png"),
+            "idle": gtk.gdk.pixbuf_new_from_file(icon_dir + "/state_idle.png"),
             }
 
         self.engine.connect_to_signal("vm_added", self.vm_added)
@@ -1121,7 +1126,7 @@ class vmmStats:
 class vmmEngine:
     def __init__(self):
         self.config = None
-        self.vmm = libvirt.openReadOnly(None)
+        self.vmm = libvirt.openReadOnly("test:///default")
         #self.vmm = libvirt.open(None)
         self.windowManager = None
         self.windowPreferences = None
@@ -1282,9 +1287,14 @@ class vmmRemote(dbus.service.Object):
 # Run me!
 def main():
     engine = vmmEngine()
-    bus = dbus.SessionBus()
-    name = dbus.service.BusName("com.redhat.virt.manager.ui", bus=bus)
-    remote = vmmRemote(engine, name)
+    try:
+        bus = dbus.SessionBus()
+        name = dbus.service.BusName("com.redhat.virt.manager.ui", bus=bus)
+
+        remote = vmmRemote(engine, name)
+    except:
+        print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
+        print "Could not initialize DBus sub-system, disabling bus service"
     engine.show_manager()
     gtk.main()
 
