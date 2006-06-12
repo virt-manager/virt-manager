@@ -1,7 +1,3 @@
-#!/bin/sh
+#!/usr/bin/python
 
-set -e
-
-dbus-send --session --dest="org.freedesktop.DBus" /org/freedesktop/DBus org.freedesktop.DBus.StartServiceByName string:'com.redhat.virt.manager.ui'
-
-dbus-send --session --dest="com.redhat.virt.manager.ui" /com/redhat/virt/manager/ui com.redhat.virt.manager.ui.show_host_summary
+exec python "::PYTHONDIR::/::PACKAGE::.py" "$@"

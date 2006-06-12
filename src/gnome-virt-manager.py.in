@@ -16,8 +16,13 @@ import os.path
 import sys
 import libvirt
 
+from optparse import OptionParser
 import matplotlib
 matplotlib.use('GTK')
+# Obnoxious matplotlib sets its own icon as the default
+# which is a totally inappropriate action for a library
+# to take
+#gtk.window_set_default_icon(None)
 
 from matplotlib.figure import Figure
 from matplotlib.axes import Subplot
@@ -478,6 +483,62 @@ class vmmPreferences:
         self.config.set_stats_history_length(src.get_value_as_int())
 
 
+class vmmOpenConnection:
+    def __init__(self, engine):
+        self.window = gtk.glade.XML(glade_dir + "/" + appname + ".glade", "vmm-open-connection")
+        self.engine = engine
+        self.window.get_widget("vmm-open-connection").hide()
+
+        self.window.get_widget("remote-xen-options").set_sensitive(False)
+        self.window.get_widget("other-hv-options").set_sensitive(False)
+
+        self.window.signal_autoconnect({
+            "on_type_local_xen_toggled": self.change_active_type,
+            "on_type_remote_xen_toggled": self.change_active_type,
+            "on_type_other_hv_toggled": self.change_active_type,
+            "on_cancel_clicked": self.close,
+            "on_connect_clicked": self.open_connection,
+            "on_vmm_open_connection_delete_event": self.close,
+            })
+
+    def close(self,ignore1=None,ignore2=None):
+        self.window.get_widget("vmm-open-connection").hide()
+        return 1
+
+    def show(self):
+        win = self.window.get_widget("vmm-open-connection")
+        win.show_all()
+        win.present()
+
+    def change_active_type(self, src):
+        if src.get_active():
+            if src.get_name() == "type-local-xen":
+                self.window.get_widget("remote-xen-options").set_sensitive(False)
+                self.window.get_widget("other-hv-options").set_sensitive(False)
+            elif src.get_name() == "type-remote-xen":
+                self.window.get_widget("remote-xen-options").set_sensitive(True)
+                self.window.get_widget("other-hv-options").set_sensitive(False)
+            else:
+                self.window.get_widget("remote-xen-options").set_sensitive(False)
+                self.window.get_widget("other-hv-options").set_sensitive(True)
+
+    def open_connection(self,src):
+        uri = None
+
+        if self.window.get_widget("type-local-xen").get_active():
+            uri = None
+        elif self.window.get_widget("type-remote-xen").get_active():
+            protocol = "http"
+            if self.window.get_widget("remote-xen-secure").get_active():
+                protocol = "https"
+                uri = protocol + "://" + self.window.get_widget("remote-xen-host").get_text() + ":" + self.window.get_widget("remote-xen-port").get_text()
+        else:
+            uri = self.window.get_widget("other-hv-uri").get_text()
+
+        con = self.engine.get_connection(uri, self.window.get_widget("option-read-only").get_active())
+        con.show_manager()
+        self.close()
+
 class vmmManager:
     def __init__(self, config, connection):
         self.window = gtk.glade.XML(glade_dir + "/" + appname + ".glade", "vmm-manager")
@@ -530,6 +591,7 @@ class vmmManager:
             "on_menu_view_network_traffic_activate" : self.toggle_network_traffic_visible_conf,
 
             "on_vm_manager_delete_event": self.exit_app,
+            "on_menu_file_open_connection_activate": self.open_connection,
             "on_menu_file_quit_activate": self.exit_app,
             "on_vmm_close_clicked": self.exit_app,
             "on_vm_details_clicked": self.show_vm_details,
@@ -557,6 +619,8 @@ class vmmManager:
     def exit_app(self, ignore=None,ignore2=None):
         gtk.main_quit()
 
+    def open_connection(self, src=None):
+        self.connection.show_open_connection()
 
     def vm_added(self, vmuuid, name):
         vmlist = self.window.get_widget("vm-list")
@@ -1128,11 +1192,15 @@ class vmmStats:
         return self.status_icons[status.lower()]
 
 class vmmConnection:
-    def __init__(self, engine, config, uri):
+    def __init__(self, engine, config, uri, readOnly):
         self.engine = engine
         self.config = config
 
-        self.vmm = libvirt.openReadOnly(uri)
+        if readOnly:
+            self.vmm = libvirt.openReadOnly(uri)
+        else:
+            self.vmm = libvirt.open(uri)
+
         self.windowManager = None
         self.windowDetails = {}
         self.windowConsole = {}
@@ -1148,7 +1216,7 @@ class vmmConnection:
         self.engine.show_about()
 
     def show_preferences(self):
-        self.engine.show_config()
+        self.engine.show_preferences()
 
     def show_manager(self):
         if self.windowManager == None:
@@ -1170,11 +1238,18 @@ class vmmConnection:
 
         self.windowConsole[vmuuid].show()
 
+    def show_open_connection(self):
+        self.engine.show_open_connection()
+
     def connect_to_signal(self, name, callback):
         if not(self.callbacks.has_key(name)):
             raise "unknown signal " + name + "requested"
 
         self.callbacks[name].append(callback)
+
+        if name == "vm_removed":
+            for uuid in self.vms.keys():
+                self.notify_vm_added(uuid, self.vms[uuid].name())
 
     def disconnect_from_signal(self, name, callback):
         for i in len(self.callbacks[name]):
@@ -1231,6 +1306,7 @@ class vmmConnection:
 
 class vmmEngine:
     def __init__(self):
+        self.windowOpenConnection = None
         self.windowPreferences = None
         self.windowAbout = None
 
@@ -1265,6 +1341,7 @@ class vmmEngine:
             except:
                 print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
                 print "Error refreshing connection " + uri
+        return 1
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
         gobject.source_remove(self.timer)
@@ -1280,58 +1357,105 @@ class vmmEngine:
 
     def show_preferences(self):
         if self.windowPreferences == None:
-            self.windowPreferences = vmmPreferences(self)
+            self.windowPreferences = vmmPreferences(self.get_config())
         self.windowPreferences.show()
 
-    def get_connection(self, uri):
+    def show_open_connection(self):
+        if self.windowOpenConnection == None:
+            self.windowOpenConnection = vmmOpenConnection(self)
+        self.windowOpenConnection.show()
+
+    def show_console(self, uri, uuid):
+        con = self.get_connection(uri)
+        con.show_console(uuid)
+
+    def show_details(self, uri, uuid):
+        con = self.get_connection(uri)
+        con.show_details(uuid)
+
+    def show_manager(self, uri):
+        con = self.get_connection(uri)
+        con.show_manager()
+
+    def get_connection(self, uri, readOnly=True):
         key = uri
-        if key == None:
+        if key == None or key == "":
             key = "__default__"
 
         if not(self.connections.has_key(key)):
-            self.connections[key] = vmmConnection(self, self.get_config(), uri)
+            self.connections[key] = vmmConnection(self, self.get_config(), uri, readOnly)
+            self.connections[key].tick()
         return self.connections[key]
 
 
 class vmmRemote(dbus.service.Object):
-    def __init__(self, engine, bus_name, object_path="/com/redhat/virt/manager/ui"):
+    def __init__(self, engine, bus_name, object_path="/com/redhat/virt/manager"):
         dbus.service.Object.__init__(self, bus_name, object_path)
 
         self.engine = engine
 
-    @dbus.service.method("com.redhat.virt.manager.ui")
-    def show_domain_creator(self):
+    @dbus.service.method("com.redhat.virt.manager", in_signature="s")
+    def show_domain_creator(self, uri):
         # XXX fixme
-        self.engine.show_about()
+        self.engine.show_manager(uri)
 
-    @dbus.service.method("com.redhat.virt.manager.ui", in_signature="s")
-    def show_domain_editor(self, uuid):
-        self.engine.show_details(uuid)
+    @dbus.service.method("com.redhat.virt.manager", in_signature="ss")
+    def show_domain_editor(self, uri, uuid):
+        self.engine.show_details(uri, uuid)
 
-    @dbus.service.method("com.redhat.virt.manager.ui", in_signature="s")
-    def show_domain_performance(self, uuid):
-        self.engine.show_details(uuid)
+    @dbus.service.method("com.redhat.virt.manager", in_signature="ss")
+    def show_domain_performance(self, uri, uuid):
+        self.engine.show_details(uri, uuid)
 
-    @dbus.service.method("com.redhat.virt.manager.ui", in_signature="s")
-    def show_domain_console(self, uuid):
-        self.engine.show_console(uuid)
+    @dbus.service.method("com.redhat.virt.manager", in_signature="ss")
+    def show_domain_console(self, uri, uuid):
+        self.engine.show_console(uri, uuid)
 
-    @dbus.service.method("com.redhat.virt.manager.ui")
-    def show_host_summary(self):
-        self.engine.show_details(uuid)
+    @dbus.service.method("com.redhat.virt.manager", in_signature="s")
+    def show_host_summary(self, uri):
+        print "Openning manage " + uri
+        self.engine.show_manager(uri)
+
+    @dbus.service.method("com.redhat.virt.manager")
+    def show_open_connection(self):
+        self.engine.show_open_connection()
 
 # Run me!
 def main():
+    optParser = OptionParser()
+    optParser.add_option("-c", "--connect", dest="uri", help="Connect to hypervisor at URI", metavar="URI")
+
+    (options, args) = optParser.parse_args()
+
     engine = vmmEngine()
+    bus = None
     try:
         bus = dbus.SessionBus()
-        name = dbus.service.BusName("com.redhat.virt.manager.ui", bus=bus)
 
-        remote = vmmRemote(engine, name)
+        dbusProxy = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
+        dbusObj = dbus.Interface(dbusProxy, "org.freedesktop.DBus")
+
+        # If we're already running, then just talk to existing process
+        if os.getenv("DBUS_ACTIVATION_BUS_ADDRESS"):
+            name = dbus.service.BusName("com.redhat.virt.manager", bus=bus)
+            remote = vmmRemote(engine, name)
+        else:
+            managerProxy = bus.get_object("com.redhat.virt.manager", "/com/redhat/virt/manager")
+            managerObj = dbus.Interface(managerProxy, "com.redhat.virt.manager")
+            if options.uri != None:
+                print "Asking existing instance to open URI '" + str(options.uri) + "'"
+                managerObj.show_host_summary(options.uri)
+            else:
+                managerObj.show_open_connection()
+            # yes, we exit completely now - remote service is in charge
+            return
     except:
         print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
-        print "Could not initialize DBus sub-system, disabling bus service"
-    engine.get_connection(None).show_manager()
+        print "Could not connection to session bus, disabling DBus service"
+        if options.uri != None:
+            engine.show_manager(options.uri)
+        else:
+            engine.show_open_connection()
     gtk.main()
 
 if __name__ == "__main__":
