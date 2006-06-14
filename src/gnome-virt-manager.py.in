@@ -16,7 +16,6 @@ from virtManager.remote import vmmRemote
 
 from optparse import OptionParser
 
-
 appname = "::PACKAGE::"
 gconf_dir = "/apps/" + appname
 asset_dir = "::ASSETDIR::"
@@ -33,6 +32,11 @@ if os.path.exists(os.getcwd() + "/pixmaps/icon_run.png"):
 if os.path.exists(os.getcwd() + "/src/" + appname + "/__init__.py"):
     sys.path.insert(0, os.getcwd() + "/src")
 
+# Obnoxious matplotlib sets its own icon as the default
+# which is a totally inappropriate action for a library
+# to take. Make sure this comes after the virtManager.*
+# import so that we override the matplotlib crap
+gtk.window_set_default_icon_from_file(icon_dir + "/" + appname + "-icon.svg")
 
 # Run me!
 def main():

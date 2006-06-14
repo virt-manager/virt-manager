@@ -4,10 +4,6 @@ import gtk.glade
 
 import matplotlib
 matplotlib.use('GTK')
-# Obnoxious matplotlib sets its own icon as the default
-# which is a totally inappropriate action for a library
-# to take
-#gtk.window_set_default_icon(None)
 
 from matplotlib.figure import Figure
 from matplotlib.axes import Subplot
