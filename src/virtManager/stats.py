@@ -9,16 +9,6 @@ class vmmStats:
         self.connection = connection
         self.record = {}
 
-        self.status_icons = {
-            "blocked": gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/state_blocked.png"),
-            "crashed": gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/state_crashed.png"),
-            "paused": gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/state_paused.png"),
-            "running": gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/state_running.png"),
-            "shutdown": gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/state_shutdown.png"),
-            "shutoff": gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/state_shutoff.png"),
-            "idle": gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/state_idle.png"),
-            }
-
         self.hostinfo = self.connection.get_host_info()
         self.connection.connect("vm-added", self._vm_added)
         self.connection.connect("vm-removed", self._vm_removed)
@@ -199,4 +189,4 @@ class vmmStats:
 
     def run_status_icon(self, name):
         status = self.run_status(name)
-        return self.status_icons[status.lower()]
+        return self.config.get_vm_status_icon(status.lower())

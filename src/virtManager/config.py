@@ -1,5 +1,7 @@
 import gconf
 
+import gtk.gdk
+
 class vmmConfig:
     def __init__(self, appname, gconf_dir, glade_dir, icon_dir):
         self.appname = appname
@@ -10,6 +12,20 @@ class vmmConfig:
 
         self.glade_dir = glade_dir
         self.icon_dir = icon_dir
+
+        self.status_icons = {
+            "blocked": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_blocked.png"),
+            "crashed": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_crashed.png"),
+            "paused": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_paused.png"),
+            "running": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_running.png"),
+            "shutdown": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_shutdown.png"),
+            "shutoff": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_shutoff.png"),
+            "idle": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_idle.png"),
+            }
+
+
+    def get_vm_status_icon(self, state):
+        return self.status_icons[state]
 
     def get_appname(self):
         return self.appname
