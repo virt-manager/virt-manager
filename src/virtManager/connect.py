@@ -1,3 +1,4 @@
+import gtk.glade
 
 class vmmConnect:
     def __init__(self, config, engine):
