@@ -1,4 +1,5 @@
 
+import gobject
 import libvirt
 
 from virtManager.stats import vmmStats
@@ -6,8 +7,19 @@ from virtManager.manager import vmmManager
 from virtManager.details import vmmDetails
 from virtManager.console import vmmConsole
 
-class vmmConnection:
+class vmmConnection(gobject.GObject):
+    __gsignals__ = {
+        "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                     (str, str,)),
+        "vm-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                       (str,)),
+        "vm-updated": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                       (str,)),
+        "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, (str,))
+        }
+
     def __init__(self, engine, config, uri, readOnly):
+        self.__gobject_init__()
         self.engine = engine
         self.config = config
 
@@ -21,7 +33,6 @@ class vmmConnection:
         self.windowConsole = {}
         self.vms = {}
 
-        self.callbacks = { "vm_added": [], "vm_removed": [], "vm_updated": [] }
         self.stats = vmmStats(config, self)
 
     def get_stats(self):
@@ -37,6 +48,11 @@ class vmmConnection:
         if self.windowManager == None:
             self.windowManager = vmmManager(self.config, self)
         self.windowManager.show()
+
+    def disconnect(self):
+        self.vmm.disconnect()
+        self.vmm = None
+        self.emit("disconnected")
 
     def get_host_info(self):
         return self.vmm.getInfo()
@@ -56,35 +72,17 @@ class vmmConnection:
     def show_open_connection(self):
         self.engine.show_open_connection()
 
-    def connect_to_signal(self, name, callback):
-        if not(self.callbacks.has_key(name)):
-            raise "unknown signal " + name + "requested"
-
-        self.callbacks[name].append(callback)
-
-        if name == "vm_removed":
+    def connect(self, name, callback):
+        gobject.GObject.connect(self, name, callback)
+        print "Cnnect " + name + " to " + str(callback)
+        if name == "vm-added":
             for uuid in self.vms.keys():
-                self.notify_vm_added(uuid, self.vms[uuid].name())
-
-    def disconnect_from_signal(self, name, callback):
-        for i in len(self.callbacks[name]):
-            if self.callbacks[i] == callback:
-                del self.callbacks[i:i]
-
-
-    def notify_vm_added(self, uuid, name):
-        for cb in self.callbacks["vm_added"]:
-            cb(uuid, name)
-
-    def notify_vm_removed(self, uuid):
-        for cb in self.callbacks["vm_removed"]:
-            cb(uuid)
-
-    def notify_vm_updated(self, uuid):
-        for cb in self.callbacks["vm_updated"]:
-            cb(uuid)
+                self.emit("vm-added", uuid, self.vms[uuid].name())
 
     def tick(self):
+        if self.vmm == None:
+            return
+
         doms = self.vmm.listDomainsID()
         newVms = {}
         if doms != None:
@@ -95,16 +93,17 @@ class vmmConnection:
         for uuid in self.vms.keys():
             if not(newVms.has_key(uuid)):
                 del self.vms[uuid]
-                self.notify_vm_removed(uuid)
+                self.emit("vm-removed", uuid)
 
         for uuid in newVms.keys():
             if not(self.vms.has_key(uuid)):
                 self.vms[uuid] = newVms[uuid]
-                self.notify_vm_added(uuid, newVms[uuid].name())
+                print "Trying to emit"
+                self.emit("vm-added",uuid, newVms[uuid].name())
 
         for uuid in self.vms.keys():
             self.stats.update(uuid, self.vms[uuid])
-            self.notify_vm_updated(uuid)
+            self.emit("vm-updated", uuid)
 
         return 1
 
@@ -118,4 +117,5 @@ class vmmConnection:
                 uuid.append('-')
         return "".join(uuid)
 
+gobject.type_register(vmmConnection)
 

@@ -20,14 +20,14 @@ class vmmStats:
             }
 
         self.hostinfo = self.connection.get_host_info()
-        self.connection.connect_to_signal("vm_added", self._vm_added)
-        self.connection.connect_to_signal("vm_removed", self._vm_removed)
+        self.connection.connect("vm-added", self._vm_added)
+        self.connection.connect("vm-removed", self._vm_removed)
 
 
-    def _vm_added(self, vmuuid, name):
+    def _vm_added(self, connection, vmuuid, name):
         self.record[vmuuid] = []
 
-    def _vm_removed(self, vmuuid):
+    def _vm_removed(self, connection, vmuuid):
         del self.record[vmuuid]
 
     def update(self, vmuuid, vm):

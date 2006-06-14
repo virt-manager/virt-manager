@@ -15,9 +15,9 @@ class vmmManager:
         self.connection = connection
         self.prepare_vmlist()
 
-        self.connection.connect_to_signal("vm_added", self.vm_added)
-        self.connection.connect_to_signal("vm_removed", self.vm_removed)
-        self.connection.connect_to_signal("vm_updated", self.vm_updated)
+        self.connection.connect("vm-added", self.vm_added)
+        self.connection.connect("vm-removed", self.vm_removed)
+        self.connection.connect("vm-updated", self.vm_updated)
 
         self.config.on_vmlist_status_visible_changed(self.toggle_status_visible_widget)
         self.config.on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
@@ -91,10 +91,10 @@ class vmmManager:
     def open_connection(self, src=None):
         self.connection.show_open_connection()
 
-    def vm_added(self, vmuuid, name):
+    def vm_added(self, connection, vmuuid, name):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
-
+        print "Added\n"
         dup = 0
         for row in range(model.iter_n_children(None)):
             vm = model.get_value(model.iter_nth_child(None, row), 0)
@@ -105,7 +105,7 @@ class vmmManager:
             model.append([vmuuid, name])
 
 
-    def vm_removed(self, vmuuid):
+    def vm_removed(self, connection, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
@@ -116,7 +116,7 @@ class vmmManager:
                 model.remove(model.iter_nth_child(None, row))
                 break
 
-    def vm_updated(self, vmuuid):
+    def vm_updated(self, connection, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 

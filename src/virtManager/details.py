@@ -107,9 +107,9 @@ class vmmDetails:
             "on_control_snapshot_clicked": self.control_vm_snapshot,
             })
 
-        self.connection.connect_to_signal("vm_updated", self.refresh_overview)
+        self.connection.connect("vm-updated", self.refresh_overview)
         self.change_graph_ranges()
-        self.refresh_overview(vmuuid)
+        self.refresh_overview(self.connection, vmuuid)
         self.hw_selected()
 
     def show(self):
@@ -207,7 +207,7 @@ class vmmDetails:
 
         self.lastStatus = status
 
-    def refresh_overview(self, vmuuid):
+    def refresh_overview(self, connection, vmuuid):
         if not(vmuuid == self.vmuuid):
             return
 

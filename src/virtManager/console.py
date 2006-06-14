@@ -43,7 +43,7 @@ class vmmConsole:
             "on_control_details_clicked": self.control_vm_details,
             })
 
-        self.connection.connect_to_signal("vm_updated", self.vm_updated)
+        self.connection.connect("vm-updated", self.vm_updated)
         self.refresh_status()
 
     def show(self):
@@ -91,7 +91,7 @@ class vmmConsole:
     def control_vm_details(self, src):
         self.connection.show_details(self.vmuuid)
 
-    def vm_updated(self, uuid):
+    def vm_updated(self, connection, uuid):
         if uuid == self.vmuuid:
             self.refresh_status()
 
