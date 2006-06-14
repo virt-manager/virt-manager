@@ -104,8 +104,6 @@ class vmmConsole(gobject.GObject):
     def update_widget_states(self, vm, status):
         self.ignorePause = True
         try:
-            print "Hell " + str(self) + " " + str(self.vm)
-            print "Update statu" + vm.run_status()
             if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
                 self.window.get_widget("control-run").set_sensitive(True)
             else:

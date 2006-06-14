@@ -59,7 +59,7 @@ class vmmConnection(gobject.GObject):
 
     def connect(self, name, callback):
         gobject.GObject.connect(self, name, callback)
-        print "Cnnect " + name + " to " + str(callback)
+
         if name == "vm-added":
             for uuid in self.vms.keys():
                 self.emit("vm-added", self.uri, uuid)

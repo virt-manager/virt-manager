@@ -48,7 +48,7 @@
 		      <signal name="activate" handler="on_menu_file_new_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image15">
+			<widget class="GtkImage" id="image24">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -75,7 +75,7 @@
 		      <signal name="activate" handler="on_menu_file_open_connection_activate" last_modification_time="Mon, 12 Jun 2006 20:34:47 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image16">
+			<widget class="GtkImage" id="image25">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>
@@ -91,6 +91,15 @@
 		  <child>
 		    <widget class="GtkSeparatorMenuItem" id="separatormenuitem1">
 		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkImageMenuItem" id="menu_file_close">
+		      <property name="visible">True</property>
+		      <property name="label">gtk-close</property>
+		      <property name="use_stock">True</property>
+		      <signal name="activate" handler="on_menu_file_close_activate" last_modification_time="Wed, 14 Jun 2006 22:45:26 GMT"/>
 		    </widget>
 		  </child>
 
@@ -119,12 +128,12 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_edit_details">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Machine details</property>
+		      <property name="label" translatable="yes">Machine details...</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_edit_details_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image17">
+			<widget class="GtkImage" id="image26">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-properties</property>
 			  <property name="icon_size">1</property>
@@ -145,7 +154,7 @@
 		      <signal name="activate" handler="on_menu_edit_delete_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image18">
+			<widget class="GtkImage" id="image27">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-delete</property>
 			  <property name="icon_size">1</property>
@@ -685,6 +694,22 @@ Inactive virtual machines</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
 	      <signal name="clicked" handler="on_control_snapshot_clicked" last_modification_time="Mon, 03 Apr 2006 09:31:41 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToolButton" id="control-console">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Machine console</property>
+	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_control_console_clicked" last_modification_time="Wed, 14 Jun 2006 22:46:31 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -1368,7 +1393,7 @@ Inactive virtual machines</property>
 		  <child>
 		    <widget class="GtkLabel" id="label64">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">label64</property>
+		      <property name="label" translatable="yes">Processor configuration not available</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1647,7 +1672,7 @@ Inactive virtual machines</property>
 		  <child>
 		    <widget class="GtkLabel" id="label65">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">label65</property>
+		      <property name="label" translatable="yes">Disk configuration not available</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1694,7 +1719,7 @@ Inactive virtual machines</property>
 		  <child>
 		    <widget class="GtkLabel" id="label66">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">label66</property>
+		      <property name="label" translatable="yes">Network configuration not available</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1741,7 +1766,7 @@ Inactive virtual machines</property>
 		  <child>
 		    <widget class="GtkLabel" id="label67">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">label67</property>
+		      <property name="label" translatable="yes">New hardware configuration not available</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>

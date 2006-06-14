@@ -75,6 +75,7 @@ class vmmManager(gobject.GObject):
             "on_vm_manager_delete_event": self.close,
             "on_menu_file_open_connection_activate": self.open_connection,
             "on_menu_file_quit_activate": self.exit_app,
+            "on_menu_file_close_activate": self.close,
             "on_vmm_close_clicked": self.close,
             "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
@@ -139,11 +140,9 @@ class vmmManager(gobject.GObject):
                 break
 
     def vm_status_changed(self, domain, status):
-        print "Status changed"
         self.vm_updated(domain.get_uuid())
 
     def vm_resources_sampled(self, domain):
-        print "Resource sampled"
         self.vm_updated(domain.get_uuid())
 
     def vm_updated(self, vmuuid):

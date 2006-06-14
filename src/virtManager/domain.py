@@ -42,7 +42,7 @@ class vmmDomain(gobject.GObject):
             info = self.vm.info()
             status = info[0]
         status = self._normalize_status(status)
-        print "Update status check " + str(status) + " old " + str(self.lastStatus)
+
         if status != self.lastStatus:
             self.lastStatus = status
             self.emit("status-changed", status)
@@ -81,7 +81,7 @@ class vmmDomain(gobject.GObject):
                      "maxMem": info[1],
                      "maxMemPercent": pcentMaxMem,
                      }
-        print "Update " + str(newStats)
+
         self.record.insert(0, newStats)
 
         nSamples = 5
@@ -190,17 +190,14 @@ class vmmDomain(gobject.GObject):
         return vector
 
     def shutdown(self):
-        print "Do shutdown"
         self.vm.shutdown()
         self._update_status()
 
     def suspend(self):
-        print "Do suspend"
         self.vm.suspend()
         self._update_status()
 
     def resume(self):
-        print "Do resume"
         self.vm.resume()
         self._update_status()
 

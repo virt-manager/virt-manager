@@ -50,6 +50,9 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("control-snapshot").set_icon_widget(gtk.Image())
         self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_snapshot.png")
 
+        self.window.get_widget("control-console").set_icon_widget(gtk.Image())
+        #self.window.get_widget("control-console").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_snapshot.png")
+
         self.window.get_widget("hw-panel").set_show_tabs(False)
 
         hwListModel = gtk.ListStore(int, str, gtk.gdk.Pixbuf)
@@ -113,6 +116,7 @@ class vmmDetails(gobject.GObject):
 
             "on_control_terminal_clicked": self.control_vm_terminal,
             "on_control_snapshot_clicked": self.control_vm_snapshot,
+            "on_control_console_clicked": self.control_vm_console,
             })
 
         self.change_graph_ranges()
@@ -174,6 +178,9 @@ class vmmDetails(gobject.GObject):
     def control_vm_terminal(self, src):
         self.emit("action-launch-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
+    def control_vm_console(self, src):
+        self.emit("action-show-console", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+
     def control_vm_snapshot(self, src):
         self.emit("action-take-snapshot", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
@@ -199,7 +206,6 @@ class vmmDetails(gobject.GObject):
     def update_widget_states(self, vm, status):
         self.ignorePause = True
         try:
-            print "Update statu" + vm.run_status()
             if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
                 self.window.get_widget("control-run").set_sensitive(True)
             else:
@@ -227,7 +233,6 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())
 
     def refresh_resources(self, vm):
-        print "In details refresh"
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
         self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.vm.current_memory()/1024, self.vm.get_connection().host_memory_size()/1024))
 
