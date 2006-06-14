@@ -1,4 +1,5 @@
 import gobject
+import gtk
 
 from virtManager.about import vmmAbout
 from virtManager.connect import vmmConnect
@@ -21,6 +22,24 @@ class vmmEngine:
 
         self.schedule_timer()
         self.tick()
+
+
+    def _connection_disconnected(self, connection, dummy):
+        del self.connections[connection.get_uri()]
+
+        if len(self.connections.keys()) == 0 and self.windowOpenConnection == None:
+            print "No more connections, getting out"
+            gtk.main_quit()
+
+    def _connect_to_uri(self, connect, uri, readOnly):
+        self.windowOpenConnection = None
+        if uri != None:
+            conn = self.get_connection(uri, readOnly)
+            self.show_manager(uri)
+
+        if len(self.connections.keys()) == 0 and self.windowOpenConnection == None:
+            print "No more connections, getting out"
+            gtk.main_quit()
 
 
     def reschedule_timer(self, ignore1,ignore2,ignore3,ignore4):
@@ -64,6 +83,7 @@ class vmmEngine:
     def show_open_connection(self):
         if self.windowOpenConnection == None:
             self.windowOpenConnection = vmmConnect(self.get_config(), self)
+            self.windowOpenConnection.connect("completed", self._connect_to_uri)
         self.windowOpenConnection.show()
 
     def show_console(self, uri, uuid):
@@ -85,5 +105,6 @@ class vmmEngine:
 
         if not(self.connections.has_key(key)):
             self.connections[key] = vmmConnection(self, self.get_config(), uri, readOnly)
+            self.connections[key].connect("disconnected", self._connection_disconnected)
             self.connections[key].tick()
         return self.connections[key]

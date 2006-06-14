@@ -1,7 +1,13 @@
+import gobject
 import gtk.glade
 
-class vmmConnect:
+class vmmConnect(gobject.GObject):
+    __gsignals__ = {
+        "completed": (gobject.SIGNAL_RUN_FIRST,
+                      gobject.TYPE_NONE, (str,bool))
+        }
     def __init__(self, config, engine):
+        self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-open-connection")
         self.engine = engine
         self.window.get_widget("vmm-open-connection").hide()
@@ -13,14 +19,18 @@ class vmmConnect:
             "on_type_local_xen_toggled": self.change_active_type,
             "on_type_remote_xen_toggled": self.change_active_type,
             "on_type_other_hv_toggled": self.change_active_type,
-            "on_cancel_clicked": self.close,
+            "on_cancel_clicked": self.cancel,
             "on_connect_clicked": self.open_connection,
-            "on_vmm_open_connection_delete_event": self.close,
+            "on_vmm_open_connection_delete_event": self.cancel,
             })
 
-    def close(self,ignore1=None,ignore2=None):
-        self.window.get_widget("vmm-open-connection").hide()
+    def cancel(self,ignore1=None,ignore2=None):
+        self.close()
+        self.emit("completed", None, False)
         return 1
+
+    def close(self):
+        self.window.get_widget("vmm-open-connection").hide()
 
     def show(self):
         win = self.window.get_widget("vmm-open-connection")
@@ -39,7 +49,7 @@ class vmmConnect:
                 self.window.get_widget("remote-xen-options").set_sensitive(False)
                 self.window.get_widget("other-hv-options").set_sensitive(True)
 
-    def open_connection(self,src):
+    def open_connection(self, src):
         uri = None
 
         if self.window.get_widget("type-local-xen").get_active():
@@ -52,6 +62,7 @@ class vmmConnect:
         else:
             uri = self.window.get_widget("other-hv-uri").get_text()
 
-        con = self.engine.get_connection(uri, self.window.get_widget("option-read-only").get_active())
-        con.show_manager()
         self.close()
+        self.emit("completed", uri, self.window.get_widget("option-read-only").get_active())
+
+gobject.type_register(vmmConnect)

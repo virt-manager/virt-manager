@@ -22,6 +22,7 @@ class vmmConnection(gobject.GObject):
         self.__gobject_init__()
         self.engine = engine
         self.config = config
+        self.uri = uri
 
         if readOnly:
             self.vmm = libvirt.openReadOnly(uri)
@@ -34,6 +35,9 @@ class vmmConnection(gobject.GObject):
         self.vms = {}
 
         self.stats = vmmStats(config, self)
+
+    def get_uri(self):
+        return self.uri
 
     def get_stats(self):
         return self.stats
@@ -50,9 +54,22 @@ class vmmConnection(gobject.GObject):
         self.windowManager.show()
 
     def disconnect(self):
-        self.vmm.disconnect()
+        if self.vmm == None:
+            return
+
+        #self.vmm.close()
         self.vmm = None
-        self.emit("disconnected")
+        if self.windowManager != None:
+            self.windowManager.close()
+            self.windowManager = None
+        for uuid in self.windowDetails.keys():
+            self.windowDetails[uuid].close()
+            del self.windowDetails[uuid]
+        for uuid in self.windowConsole.keys():
+            self.windowConsole[uuid].close()
+            del self.windowConsole[uuid]
+
+        self.emit("disconnected", "dummy")
 
     def get_host_info(self):
         return self.vmm.getInfo()

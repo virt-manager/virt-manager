@@ -59,10 +59,10 @@ class vmmManager:
             "on_menu_view_disk_usage_activate" : self.toggle_disk_usage_visible_conf,
             "on_menu_view_network_traffic_activate" : self.toggle_network_traffic_visible_conf,
 
-            "on_vm_manager_delete_event": self.exit_app,
+            "on_vm_manager_delete_event": self.close,
             "on_menu_file_open_connection_activate": self.open_connection,
             "on_menu_file_quit_activate": self.exit_app,
-            "on_vmm_close_clicked": self.exit_app,
+            "on_vmm_close_clicked": self.close,
             "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
             "on_menu_edit_details_activate": self.show_vm_details,
@@ -77,15 +77,20 @@ class vmmManager:
 
         self.vm_selected(None)
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
-
+        self.connection.connect("disconnected", self.close)
 
     def show(self):
         win = self.window.get_widget("vmm-manager")
         win.show_all()
         win.present()
 
+    def close(self, src=None, src2=None):
+        self.connection.disconnect()
+        win = self.window.get_widget("vmm-manager")
+        win.hide()
+        return 1
 
-    def exit_app(self, ignore=None,ignore2=None):
+    def exit_app(self, src=None, src2=None):
         gtk.main_quit()
 
     def open_connection(self, src=None):
