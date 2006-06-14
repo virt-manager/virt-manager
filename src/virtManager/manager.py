@@ -22,12 +22,11 @@ class vmmManager(gobject.GObject):
         "action-show-preferences": (gobject.SIGNAL_RUN_FIRST,
                                     gobject.TYPE_NONE, []),
         }
-    def __init__(self, config, connection, hvuri):
+    def __init__(self, config, connection):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-manager")
         self.config = config
         self.connection = connection
-        self.hvuri = hvuri
         self.prepare_vmlist()
 
         self.connection.connect("vm-added", self.vm_added)
@@ -111,7 +110,7 @@ class vmmManager(gobject.GObject):
     def open_connection(self, src=None):
         self.emit("action-show-connect");
 
-    def vm_added(self, connection, uri, vmuuid, name):
+    def vm_added(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
         print "Added\n"
@@ -120,6 +119,8 @@ class vmmManager(gobject.GObject):
             vm = model.get_value(model.iter_nth_child(None, row), 0)
             if vm == vmuuid:
                 dup = 1
+
+        name = self.connection.get_vm(vmuuid).get_name()
 
         if dup != 1:
             model.append([vmuuid, name])
@@ -154,12 +155,10 @@ class vmmManager(gobject.GObject):
         return None
 
     def show_vm_details(self,ignore):
-        print "Show detail"
-        self.emit("action-show-details", self.hvuri, self.current_vm())
+        self.emit("action-show-details", self.connection.get_uri(), self.current_vm())
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
-        print "Show console"
-        self.emit("action-show-console", self.hvuri, self.current_vm())
+        self.emit("action-show-console", self.connection.get_uri(), self.current_vm())
 
 
     def vm_selected(self, selection):
@@ -283,16 +282,16 @@ class vmmManager(gobject.GObject):
         return self.sort_op(model.get_value(iter1, 0), model.get_value(iter2, 0))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
-        return self.sort_op(self.connection.get_stats().cpu_time(model.get_value(iter1, 0)), self.connection.get_stats().cpu_time(model.get_value(iter2, 0)))
+        return self.sort_op(self.connection.get_vm(model.get_value(iter1, 0)).cpu_time(), self.connection.get_vm(model.get_value(iter2, 0)).cpu_time())
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2):
-        return self.sort_op(self.connection.get_stats().current_memory(model.get_value(iter1, 0)), self.connection.get_stats().current_memory(model.get_value(iter2, 0)))
+        return self.sort_op(self.connection.get_vm(model.get_value(iter1, 0)).current_memory(), self.connection.get_vm(model.get_value(iter2, 0)).current_memory())
 
     def vmlist_disk_usage_sorter(self, model, iter1, iter2):
-        return self.sort_op(self.connection.get_stats().disk_usage(model.get_value(iter1, 0)), self.connection.get_stats().disk_usage(model.get_value(iter2, 0)))
+        return self.sort_op(self.connection.get_vm(model.get_value(iter1, 0)).disk_usage(), self.connection.get_vm(model.get_value(iter2, 0)).disk_usage())
 
     def vmlist_network_usage_sorter(self, model, iter1, iter2):
-        return self.sort_op(self.connection.get_stats().network_traffic(model.get_value(iter1, 0)), self.connection.get_stats().network_traffic(model.get_value(iter2, 0)))
+        return self.sort_op(self.connection.get_vm(model.get_value(iter1, 0)).network_traffic(), self.connection.get_vm(model.get_value(iter2, 0)).network_traffic())
 
     def toggle_status_visible_conf(self, menu):
         self.config.set_vmlist_status_visible(menu.get_active())
@@ -341,55 +340,55 @@ class vmmManager(gobject.GObject):
 
 
     def status_text(self, column, cell, model, iter, data):
-        name = model.get_value(iter, 0)
-        cell.set_property('text', self.connection.get_stats().run_status(name))
+        uuid = model.get_value(iter, 0)
+        cell.set_property('text', self.connection.get_vm(uuid).run_status())
 
     def status_icon(self, column, cell, model, iter, data):
-        name = model.get_value(iter, 0)
-        cell.set_property('pixbuf', self.connection.get_stats().run_status_icon(name))
+        uuid = model.get_value(iter, 0)
+        cell.set_property('pixbuf', self.connection.get_vm(uuid).run_status_icon())
 
     def cpu_usage_text(self,  column, cell, model, iter, data):
-        name = model.get_value(iter, 0)
-        cell.set_property('text', "%2.2f %%" % self.connection.get_stats().cpu_time_percentage(name))
+        uuid = model.get_value(iter, 0)
+        cell.set_property('text', "%2.2f %%" % self.connection.get_vm(uuid).cpu_time_percentage())
 
     def cpu_usage_img(self,  column, cell, model, iter, data):
-        name = model.get_value(iter, 0)
+        uuid = model.get_value(iter, 0)
         cell.set_property('text', '')
-        cell.set_property('value', self.connection.get_stats().cpu_time_percentage(name))
+        cell.set_property('value', self.connection.get_vm(uuid).cpu_time_percentage())
 
     def memory_usage_text(self,  column, cell, model, iter, data):
-        name = model.get_value(iter, 0)
-        current = self.connection.get_stats().current_memory(name)
-        currentPercent = self.connection.get_stats().current_memory_percentage(name)
+        uuid = model.get_value(iter, 0)
+        current = self.connection.get_vm(uuid).current_memory()
+        currentPercent = self.connection.get_vm(uuid).current_memory_percentage()
         cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
 
     def memory_usage_img(self,  column, cell, model, iter, data):
-        name = model.get_value(iter, 0)
-        currentPercent = self.connection.get_stats().current_memory_percentage(name)
+        uuid = model.get_value(iter, 0)
+        currentPercent = self.connection.get_vm(uuid).current_memory_percentage()
         cell.set_property('text', '')
         cell.set_property('value', currentPercent)
 
     def disk_usage_text(self,  column, cell, model, iter, data):
-        name = model.get_value(iter, 0)
-        current = self.connection.get_stats().disk_usage(name)
-        currentPercent = self.connection.get_stats().disk_usage_percentage(name)
+        uuid = model.get_value(iter, 0)
+        current = self.connection.get_vm(uuid).disk_usage()
+        currentPercent = self.connection.get_vm(uuid).disk_usage_percentage()
         cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
 
     def disk_usage_img(self,  column, cell, model, iter, data):
-        name = model.get_value(iter, 0)
-        currentPercent = self.connection.get_stats().disk_usage_percentage(name)
+        uuid = model.get_value(iter, 0)
+        currentPercent = self.connection.get_vm(uuid).disk_usage_percentage()
         cell.set_property('text', '')
         cell.set_property('value', currentPercent)
 
     def network_traffic_text(self,  column, cell, model, iter, data):
-        name = model.get_value(iter, 0)
-        current = self.connection.get_stats().network_traffic(name)
-        currentPercent = self.connection.get_stats().network_traffic_percentage(name)
+        uuid = model.get_value(iter, 0)
+        current = self.connection.get_vm(uuid).network_traffic()
+        currentPercent = self.connection.get_vm(uuid).network_traffic_percentage()
         cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
 
     def network_traffic_img(self,  column, cell, model, iter, data):
-        name = model.get_value(iter, 0)
-        currentPercent = self.connection.get_stats().network_traffic_percentage(name)
+        uuid = model.get_value(iter, 0)
+        currentPercent = self.connection.get_vm(uuid).network_traffic_percentage()
         cell.set_property('text', '')
         cell.set_property('value', currentPercent)
 

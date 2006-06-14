@@ -21,22 +21,19 @@ class vmmDetails(gobject.GObject):
         "action-take-snapshot": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str))
         }
-    def __init__(self, config, hvuri, stats, vm, vmuuid):
+    def __init__(self, config, vm):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-details")
         self.config = config
-        self.hvuri = hvuri
-        self.stats = stats
         self.vm = vm
-        self.vmuuid = vmuuid
         self.lastStatus = None
 
         topwin = self.window.get_widget("vmm-details")
         topwin.hide()
-        topwin.set_title(vm.name() + " " + topwin.get_title())
+        topwin.set_title(self.vm.get_name() + " " + topwin.get_title())
 
-        self.window.get_widget("overview-name").set_text(vm.name())
-        self.window.get_widget("overview-uuid").set_text(vmuuid)
+        self.window.get_widget("overview-name").set_text(self.vm.get_name())
+        self.window.get_widget("overview-uuid").set_text(self.vm.get_uuid())
 
         self.window.get_widget("control-run").set_icon_widget(gtk.Image())
         self.window.get_widget("control-run").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_run.png")
@@ -145,16 +142,16 @@ class vmmDetails(gobject.GObject):
         return 0
 
     def control_vm_shutdown(self, src):
-        if not(self.stats.run_status(self.vmuuid) in [ "shutdown", "shutoff" ]):
+        if not(self.vm.run_status() in [ "shutdown", "shutoff" ]):
             self.vm.shutdown()
         else:
             print "Shutdown requested, but machine is already shutting down / shutoff"
 
     def control_vm_pause(self, src):
-        if self.stats.run_status(self.vmuuid) in [ "shutdown", "shutoff" ]:
+        if self.vm.run_status() in [ "shutdown", "shutoff" ]:
             print "Pause/resume requested, but machine is shutdown / shutoff"
         else:
-            if self.stats.run_status(self.vmuuid) in [ "paused" ]:
+            if self.vm.run_status() in [ "paused" ]:
                 if not src.get_active():
                     self.vm.resume()
                 else:
@@ -167,10 +164,10 @@ class vmmDetails(gobject.GObject):
 
 
     def control_vm_terminal(self, src):
-        self.emit("action-launch-terminal", self.hvuri, self.vmuuid)
+        self.emit("action-launch-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_snapshot(self, src):
-        self.emit("action-take-snapshot", self.hvuri, self.vmuuid)
+        self.emit("action-take-snapshot", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def change_graph_ranges(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.cpu_usage_graph.clear()
@@ -219,18 +216,18 @@ class vmmDetails(gobject.GObject):
 
     def refresh(self):
         print "In details refresh"
-        status = self.stats.run_status(self.vmuuid)
+        status = self.vm.run_status()
         self.update_widget_states(status)
 
         self.window.get_widget("overview-status-text").set_text(status)
-        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.stats.run_status_icon(self.vmuuid))
-        self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.stats.cpu_time_percentage(self.vmuuid))
-        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.stats.current_memory(self.vmuuid)/1024, self.stats.host_memory_size()/1024))
+        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())
+        self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
+        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.vm.current_memory()/1024, self.vm.get_connection().host_memory_size()/1024))
 
         history_len = self.config.get_stats_history_length()
-        cpu_vector = self.stats.cpu_time_vector(self.vmuuid)
+        cpu_vector = self.vm.cpu_time_vector()
         cpu_vector.reverse()
-        cpu_vector_avg = self.stats.cpu_time_moving_avg_vector(self.vmuuid)
+        cpu_vector_avg = self.vm.cpu_time_moving_avg_vector()
         cpu_vector_avg.reverse()
         if self.cpu_usage_line == None:
             self.cpu_usage_line = self.cpu_usage_graph.plot(cpu_vector)
@@ -247,7 +244,7 @@ class vmmDetails(gobject.GObject):
         self.cpu_usage_canvas.draw()
 
         history_len = self.config.get_stats_history_length()
-        memory_vector = self.stats.current_memory_vector(self.vmuuid)
+        memory_vector = self.vm.current_memory_vector()
         memory_vector.reverse()
         if self.memory_usage_line == None:
             self.memory_usage_line = self.memory_usage_graph.plot(memory_vector)
@@ -263,9 +260,9 @@ class vmmDetails(gobject.GObject):
 
         history_len = self.config.get_stats_history_length()
         #if self.network_traffic_line == None:
-            #self.network_traffic_line = self.network_traffic_graph.plot(self.stats.network_traffic_vector(self.vmuuid))
+            #self.network_traffic_line = self.network_traffic_graph.plot(self.vm.network_traffic_vector())
         #else:
-            #self.network_traffic_line[0].set_ydata(self.stats.network_traffic_vector(self.vmuuid))
+            #self.network_traffic_line[0].set_ydata(self.vm.network_traffic_vector())
         self.network_traffic_graph.set_xlim(0, history_len)
         self.network_traffic_graph.set_ylim(0, 100)
         self.network_traffic_graph.set_yticklabels(["0","","","","","100"])

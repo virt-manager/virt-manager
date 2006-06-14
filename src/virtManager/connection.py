@@ -1,17 +1,18 @@
 
 import gobject
 import libvirt
+from time import time
 
-from virtManager.stats import vmmStats
+from virtManager.domain import vmmDomain
 
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
         "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                     (str, str, str,)),
+                     [str, str]),
         "vm-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                       (str, str)),
+                       [str, str]),
         "vm-updated": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                       (str, str)),
+                       [str, str]),
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str])
         }
 
@@ -29,14 +30,10 @@ class vmmConnection(gobject.GObject):
         self.windowDetails = {}
         self.windowConsole = {}
         self.vms = {}
-
-        self.stats = vmmStats(config, self)
+        self.tick()
 
     def get_uri(self):
         return self.uri
-
-    def get_stats(self):
-        return self.stats
 
     def get_vm(self, uuid):
         return self.vms[uuid]
@@ -60,14 +57,24 @@ class vmmConnection(gobject.GObject):
         self.emit("disconnected", self.uri)
 
     def get_host_info(self):
-        return self.vmm.getInfo()
+        return self.hostinfo
 
     def connect(self, name, callback):
         gobject.GObject.connect(self, name, callback)
         print "Cnnect " + name + " to " + str(callback)
         if name == "vm-added":
             for uuid in self.vms.keys():
-                self.emit("vm-added", self.uri, uuid, self.vms[uuid].name())
+                self.emit("vm-added", self.uri, uuid)
+
+    def host_memory_size(self):
+        return self.hostinfo[1]*1024
+
+    def host_active_processor_count(self):
+        return self.hostinfo[2]
+
+    def host_maximum_processor_count(self):
+        return self.hostinfo[4] * self.hostinfo[5] * self.hostinfo[6] * self.hostinfo[7]
+
 
     def tick(self):
         if self.vmm == None:
@@ -78,7 +85,8 @@ class vmmConnection(gobject.GObject):
         if doms != None:
             for id in doms:
                 vm = self.vmm.lookupByID(id)
-                newVms[self.uuidstr(vm.UUID())] = vm
+                uuid = self.uuidstr(vm.UUID())
+                newVms[uuid] = vmmDomain(self.config, self, vm, uuid)
 
         for uuid in self.vms.keys():
             if not(newVms.has_key(uuid)):
@@ -88,11 +96,12 @@ class vmmConnection(gobject.GObject):
         for uuid in newVms.keys():
             if not(self.vms.has_key(uuid)):
                 self.vms[uuid] = newVms[uuid]
-                print "Trying to emit"
-                self.emit("vm-added", self.uri, uuid, newVms[uuid].name())
+                self.emit("vm-added", self.uri, uuid)
 
+        now = time()
+        self.hostinfo = self.vmm.getInfo()
         for uuid in self.vms.keys():
-            self.stats.update(uuid, self.vms[uuid])
+            self.vms[uuid].tick(now)
             self.emit("vm-updated", self.uri, uuid)
 
         return 1

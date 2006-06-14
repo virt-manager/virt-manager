@@ -127,10 +127,7 @@ class vmmEngine:
 
         if not(self.connections[uri]["windowConsole"].has_key(uuid)):
             console = vmmConsole(self.get_config(),
-                                 uri,
-                                 con.get_stats(),
-                                 con.get_vm(uuid),
-                                 uuid)
+                                 con.get_vm(uuid))
             console.connect("action-show-details", self._do_show_details)
             self.connections[uri]["windowConsole"][uuid] = console
         self.connections[uri]["windowConsole"][uuid].show()
@@ -140,10 +137,7 @@ class vmmEngine:
 
         if not(self.connections[uri]["windowDetails"].has_key(uuid)):
             details = vmmDetails(self.get_config(),
-                                 uri,
-                                 con.get_stats(),
-                                 con.get_vm(uuid),
-                                 uuid)
+                                 con.get_vm(uuid))
             details.connect("action-show-console", self._do_show_console)
             self.connections[uri]["windowDetails"][uuid] = details
         self.connections[uri]["windowDetails"][uuid].show()
@@ -153,8 +147,7 @@ class vmmEngine:
 
         if self.connections[uri]["windowManager"] == None:
             manager = vmmManager(self.get_config(),
-                                 con,
-                                 uri)
+                                 con)
             manager.connect("action-show-console", self._do_show_console)
             manager.connect("action-show-details", self._do_show_details)
             manager.connect("action-show-preferences", self._do_show_preferences)

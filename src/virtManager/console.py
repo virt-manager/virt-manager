@@ -12,19 +12,16 @@ class vmmConsole(gobject.GObject):
         "action-take-snapshot": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str))
         }
-    def __init__(self, config, hvuri, stats, vm, vmuuid):
+    def __init__(self, config, vm):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-console")
         self.config = config
-        self.hvuri = hvuri
-        self.stats = stats
         self.vm = vm
-        self.vmuuid = vmuuid
         self.lastStatus = None
 
         topwin = self.window.get_widget("vmm-console")
         topwin.hide()
-        topwin.set_title(vm.name() + " " + topwin.get_title())
+        topwin.set_title(vm.get_name() + " " + topwin.get_title())
 
         self.window.get_widget("control-run").set_icon_widget(gtk.Image())
         self.window.get_widget("control-run").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_run.png")
@@ -76,11 +73,11 @@ class vmmConsole(gobject.GObject):
             print "Shutdown requested, but machine is already shutting down / shutoff"
 
     def control_vm_pause(self, src):
-        info = self.vm.info()
-        if info[0] in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+        status = self.vm.status()
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
             print "Pause/resume requested, but machine is shutdown / shutoff"
         else:
-            if info[0] in [ libvirt.VIR_DOMAIN_PAUSED ]:
+            if status in [ libvirt.VIR_DOMAIN_PAUSED ]:
                 if not src.get_active():
                     self.vm.resume()
                 else:
@@ -93,19 +90,17 @@ class vmmConsole(gobject.GObject):
 
 
     def control_vm_terminal(self, src):
-        self.emit("action-launch-terminal", self.hvuri, self.vmuuid)
+        self.emit("action-launch-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_snapshot(self, src):
-        self.emit("action-take-snapshot", self.hvuri, self.vmuuid)
+        self.emit("action-take-snapshot", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_details(self, src):
-        self.emit("action-show-details", self.hvuri, self.vmuuid)
+        self.emit("action-show-details", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def refresh(self):
-        print "In console refresh"
-        info = self.vm.info()
-        status = info[0]
-
+        print "Hell " + str(self) + " " + str(self.vm)
+        status = self.vm.status()
         if self.lastStatus == status:
             return
 
