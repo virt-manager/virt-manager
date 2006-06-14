@@ -53,18 +53,6 @@ class vmmEngine:
             self.connections[hvuri]["windowConsole"][vmuuid].hide()
             del self.connections[hvuri]["windowConsole"][vmuuid]
 
-    def _do_vm_updated(self, connection, hvuri, vmuuid):
-        for uuid in self.connections[hvuri]["windowDetails"].keys():
-            try:
-                self.connections[hvuri]["windowDetails"][uuid].refresh()
-            except:
-                pass
-        for uuid in self.connections[hvuri]["windowConsole"].keys():
-            try:
-                self.connections[hvuri]["windowConsole"][uuid].refresh()
-            except:
-                pass
-
     def reschedule_timer(self, ignore1,ignore2,ignore3,ignore4):
         self.schedule_timer()
 
@@ -169,7 +157,6 @@ class vmmEngine:
                 "windowConsole": {}
                 }
             self.connections[key]["connection"].connect("disconnected", self._do_connection_disconnected)
-            self.connections[key]["connection"].connect("vm-updated", self._do_vm_updated)
             self.connections[key]["connection"].connect("vm-removed", self._do_vm_removed)
             self.connections[key]["connection"].tick()
 

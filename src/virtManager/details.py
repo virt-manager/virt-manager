@@ -2,6 +2,7 @@
 import gobject
 import gtk
 import gtk.glade
+import libvirt
 
 import matplotlib
 matplotlib.use('GTK')
@@ -26,7 +27,6 @@ class vmmDetails(gobject.GObject):
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-details")
         self.config = config
         self.vm = vm
-        self.lastStatus = None
 
         topwin = self.window.get_widget("vmm-details")
         topwin.hide()
@@ -116,8 +116,12 @@ class vmmDetails(gobject.GObject):
             })
 
         self.change_graph_ranges()
-        self.refresh()
         self.hw_selected()
+        self.vm.connect("status-changed", self.update_widget_states)
+        self.vm.connect("resources-sampled", self.refresh_resources)
+
+        self.update_widget_states(vm, vm.status())
+        self.refresh_resources(vm)
 
     def show(self):
         dialog = self.window.get_widget("vmm-details")
@@ -142,16 +146,21 @@ class vmmDetails(gobject.GObject):
         return 0
 
     def control_vm_shutdown(self, src):
-        if not(self.vm.run_status() in [ "shutdown", "shutoff" ]):
+        status = self.vm.status()
+        if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
             self.vm.shutdown()
         else:
             print "Shutdown requested, but machine is already shutting down / shutoff"
 
     def control_vm_pause(self, src):
-        if self.vm.run_status() in [ "shutdown", "shutoff" ]:
+        if self.ignorePause:
+            return
+
+        status = self.vm.status()
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
             print "Pause/resume requested, but machine is shutdown / shutoff"
         else:
-            if self.vm.run_status() in [ "paused" ]:
+            if status in [ libvirt.VIR_DOMAIN_PAUSED ]:
                 if not src.get_active():
                     self.vm.resume()
                 else:
@@ -161,7 +170,6 @@ class vmmDetails(gobject.GObject):
                     self.vm.suspend()
                 else:
                     print "Resume requested, but machine is already running"
-
 
     def control_vm_terminal(self, src):
         self.emit("action-launch-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
@@ -188,39 +196,38 @@ class vmmDetails(gobject.GObject):
         self.network_traffic_graph.grid(True)
         self.network_traffic_line = None
 
-    def update_widget_states(self, status):
-        if self.lastStatus == status:
-            return
-
-        if status == "shutoff":
-            self.window.get_widget("control-run").set_sensitive(True)
-        else:
-            self.window.get_widget("control-run").set_sensitive(False)
-
-        if status in [ "shutoff", "shutdown" ]:
-            self.window.get_widget("control-pause").set_sensitive(False)
-            self.window.get_widget("control-shutdown").set_sensitive(False)
-            self.window.get_widget("control-terminal").set_sensitive(False)
-            self.window.get_widget("control-snapshot").set_sensitive(False)
-        else:
-            self.window.get_widget("control-pause").set_sensitive(True)
-            self.window.get_widget("control-shutdown").set_sensitive(True)
-            self.window.get_widget("control-terminal").set_sensitive(True)
-            self.window.get_widget("control-snapshot").set_sensitive(True)
-            if status == "paused":
-                self.window.get_widget("control-pause").set_active(True)
+    def update_widget_states(self, vm, status):
+        self.ignorePause = True
+        try:
+            print "Update statu" + vm.run_status()
+            if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+                self.window.get_widget("control-run").set_sensitive(True)
             else:
-                self.window.get_widget("control-pause").set_active(False)
+                self.window.get_widget("control-run").set_sensitive(False)
 
-        self.lastStatus = status
+            if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+                self.window.get_widget("control-pause").set_sensitive(False)
+                self.window.get_widget("control-shutdown").set_sensitive(False)
+                self.window.get_widget("control-terminal").set_sensitive(False)
+                self.window.get_widget("control-snapshot").set_sensitive(False)
+            else:
+                self.window.get_widget("control-pause").set_sensitive(True)
+                self.window.get_widget("control-shutdown").set_sensitive(True)
+                self.window.get_widget("control-terminal").set_sensitive(True)
+                self.window.get_widget("control-snapshot").set_sensitive(True)
+                if status == libvirt.VIR_DOMAIN_PAUSED:
+                    self.window.get_widget("control-pause").set_active(True)
+                else:
+                    self.window.get_widget("control-pause").set_active(False)
+        except:
+            self.ignorePause = False
+        self.ignorePause = False
 
-    def refresh(self):
-        print "In details refresh"
-        status = self.vm.run_status()
-        self.update_widget_states(status)
-
-        self.window.get_widget("overview-status-text").set_text(status)
+        self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
         self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())
+
+    def refresh_resources(self, vm):
+        print "In details refresh"
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
         self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.vm.current_memory()/1024, self.vm.get_connection().host_memory_size()/1024))
 

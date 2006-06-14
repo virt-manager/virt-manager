@@ -17,7 +17,6 @@ class vmmConsole(gobject.GObject):
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-console")
         self.config = config
         self.vm = vm
-        self.lastStatus = None
 
         topwin = self.window.get_widget("vmm-console")
         topwin.hide()
@@ -38,6 +37,7 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("control-snapshot").set_icon_widget(gtk.Image())
         self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_snapshot.png")
 
+        self.ignorePause = False
 
         self.window.signal_autoconnect({
             "on_vmm_console_delete_event": self.close,
@@ -51,7 +51,8 @@ class vmmConsole(gobject.GObject):
             "on_control_details_clicked": self.control_vm_details,
             })
 
-        self.refresh()
+        self.vm.connect("status-changed", self.update_widget_states)
+        self.update_widget_states(vm, vm.status())
 
     def show(self):
         dialog = self.window.get_widget("vmm-console")
@@ -66,13 +67,16 @@ class vmmConsole(gobject.GObject):
         return 0
 
     def control_vm_shutdown(self, src):
-        info = self.vm.info()
-        if not(info[0] in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ]):
+        status = self.vm.status()
+        if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
             self.vm.shutdown()
         else:
             print "Shutdown requested, but machine is already shutting down / shutoff"
 
     def control_vm_pause(self, src):
+        if self.ignorePause:
+            return
+
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
             print "Pause/resume requested, but machine is shutdown / shutoff"
@@ -88,7 +92,6 @@ class vmmConsole(gobject.GObject):
                 else:
                     print "Resume requested, but machine is already running"
 
-
     def control_vm_terminal(self, src):
         self.emit("action-launch-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
@@ -98,32 +101,32 @@ class vmmConsole(gobject.GObject):
     def control_vm_details(self, src):
         self.emit("action-show-details", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def refresh(self):
-        print "Hell " + str(self) + " " + str(self.vm)
-        status = self.vm.status()
-        if self.lastStatus == status:
-            return
-
-        if status == libvirt.VIR_DOMAIN_SHUTOFF:
-            self.window.get_widget("control-run").set_sensitive(True)
-        else:
-            self.window.get_widget("control-run").set_sensitive(False)
-
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ]:
-            self.window.get_widget("control-pause").set_sensitive(False)
-            self.window.get_widget("control-shutdown").set_sensitive(False)
-            self.window.get_widget("control-terminal").set_sensitive(False)
-            self.window.get_widget("control-snapshot").set_sensitive(False)
-        else:
-            self.window.get_widget("control-pause").set_sensitive(True)
-            self.window.get_widget("control-shutdown").set_sensitive(True)
-            self.window.get_widget("control-terminal").set_sensitive(True)
-            self.window.get_widget("control-snapshot").set_sensitive(True)
-            if status == libvirt.VIR_DOMAIN_PAUSED:
-                self.window.get_widget("control-pause").set_active(True)
+    def update_widget_states(self, vm, status):
+        self.ignorePause = True
+        try:
+            print "Hell " + str(self) + " " + str(self.vm)
+            print "Update statu" + vm.run_status()
+            if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+                self.window.get_widget("control-run").set_sensitive(True)
             else:
-                self.window.get_widget("control-pause").set_active(False)
+                self.window.get_widget("control-run").set_sensitive(False)
 
-        self.lastStatus = status
+            if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
+                self.window.get_widget("control-pause").set_sensitive(False)
+                self.window.get_widget("control-shutdown").set_sensitive(False)
+                self.window.get_widget("control-terminal").set_sensitive(False)
+                self.window.get_widget("control-snapshot").set_sensitive(False)
+            else:
+                self.window.get_widget("control-pause").set_sensitive(True)
+                self.window.get_widget("control-shutdown").set_sensitive(True)
+                self.window.get_widget("control-terminal").set_sensitive(True)
+                self.window.get_widget("control-snapshot").set_sensitive(True)
+                if status == libvirt.VIR_DOMAIN_PAUSED:
+                    self.window.get_widget("control-pause").set_active(True)
+                else:
+                    self.window.get_widget("control-pause").set_active(False)
+        except:
+            self.ignorePause = False
+        self.ignorePause = False
 
 gobject.type_register(vmmConsole)

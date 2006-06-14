@@ -6,7 +6,10 @@ class vmmDomain(gobject.GObject):
     __gsignals__ = {
         "status-changed": (gobject.SIGNAL_RUN_FIRST,
                            gobject.TYPE_NONE,
-                           [str]),
+                           [int]),
+        "resources-sampled": (gobject.SIGNAL_RUN_FIRST,
+                              gobject.TYPE_NONE,
+                              []),
         }
 
     def __init__(self, config, connection, vm, uuid):
@@ -39,6 +42,7 @@ class vmmDomain(gobject.GObject):
             info = self.vm.info()
             status = info[0]
         status = self._normalize_status(status)
+        print "Update status check " + str(status) + " old " + str(self.lastStatus)
         if status != self.lastStatus:
             self.lastStatus = status
             self.emit("status-changed", status)
@@ -57,21 +61,27 @@ class vmmDomain(gobject.GObject):
             prevTimestamp = self.record[0]["timestamp"]
             prevCpuTime = self.record[0]["cpuTimeAbs"]
 
-        pcentCpuTime = (info[4]-prevCpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000*self.connection.host_active_processor_count())
+        cpuTime = 0
+        cpuTimeAbs = 0
+        pcentCpuTime = 0
+        if not(info[0] in [libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED]):
+            cpuTime = info[4] - prevCpuTime
+            cpuTimeAbs = info[4]
+            pcentCpuTime = (cpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000*self.connection.host_active_processor_count())
 
         pcentCurrMem = info[2] * 100 / self.connection.host_memory_size()
         pcentMaxMem = info[1] * 100 / self.connection.host_memory_size()
 
         newStats = { "timestamp": now,
-                     "cpuTime": (info[4]-prevCpuTime),
-                     "cpuTimeAbs": info[4],
+                     "cpuTime": cpuTime,
+                     "cpuTimeAbs": cpuTimeAbs,
                      "cpuTimePercent": pcentCpuTime,
                      "currMem": info[2],
                      "currMemPercent": pcentCurrMem,
                      "maxMem": info[1],
                      "maxMemPercent": pcentMaxMem,
                      }
-
+        print "Update " + str(newStats)
         self.record.insert(0, newStats)
 
         nSamples = 5
@@ -90,6 +100,7 @@ class vmmDomain(gobject.GObject):
             self.record[0]["cpuTimeMovingAvgPercent"] = (self.record[0]["cpuTimeAbs"]-startCpuTime) * 100 / ((now-startTimestamp)*1000*1000*1000 * self.connection.host_active_processor_count())
 
         self._update_status(info[0])
+        self.emit("resources-sampled")
 
 
     def current_memory(self):
@@ -179,14 +190,17 @@ class vmmDomain(gobject.GObject):
         return vector
 
     def shutdown(self):
+        print "Do shutdown"
         self.vm.shutdown()
         self._update_status()
 
     def suspend(self):
+        print "Do suspend"
         self.vm.suspend()
         self._update_status()
 
     def resume(self):
+        print "Do resume"
         self.vm.resume()
         self._update_status()
 

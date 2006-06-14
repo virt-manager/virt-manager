@@ -31,7 +31,6 @@ class vmmManager(gobject.GObject):
 
         self.connection.connect("vm-added", self.vm_added)
         self.connection.connect("vm-removed", self.vm_removed)
-        self.connection.connect("vm-updated", self.vm_updated)
 
         self.config.on_vmlist_status_visible_changed(self.toggle_status_visible_widget)
         self.config.on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
@@ -113,17 +112,19 @@ class vmmManager(gobject.GObject):
     def vm_added(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
-        print "Added\n"
+
         dup = 0
         for row in range(model.iter_n_children(None)):
             vm = model.get_value(model.iter_nth_child(None, row), 0)
             if vm == vmuuid:
                 dup = 1
 
-        name = self.connection.get_vm(vmuuid).get_name()
+        vm = self.connection.get_vm(vmuuid)
 
         if dup != 1:
-            model.append([vmuuid, name])
+            model.append([vmuuid, vm.get_name()])
+            vm.connect("status-changed", self.vm_status_changed)
+            vm.connect("resources-sampled", self.vm_resources_sampled)
 
 
     def vm_removed(self, connection, uri, vmuuid):
@@ -137,7 +138,15 @@ class vmmManager(gobject.GObject):
                 model.remove(model.iter_nth_child(None, row))
                 break
 
-    def vm_updated(self, connection, uri, vmuuid):
+    def vm_status_changed(self, domain, status):
+        print "Status changed"
+        self.vm_updated(domain.get_uuid())
+
+    def vm_resources_sampled(self, domain):
+        print "Resource sampled"
+        self.vm_updated(domain.get_uuid())
+
+    def vm_updated(self, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 

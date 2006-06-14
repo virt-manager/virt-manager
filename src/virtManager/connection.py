@@ -11,8 +11,6 @@ class vmmConnection(gobject.GObject):
                      [str, str]),
         "vm-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                        [str, str]),
-        "vm-updated": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                       [str, str]),
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str])
         }
 
@@ -102,7 +100,6 @@ class vmmConnection(gobject.GObject):
         self.hostinfo = self.vmm.getInfo()
         for uuid in self.vms.keys():
             self.vms[uuid].tick(now)
-            self.emit("vm-updated", self.uri, uuid)
 
         return 1
 
