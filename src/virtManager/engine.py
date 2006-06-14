@@ -45,6 +45,14 @@ class vmmEngine:
             gtk.main_quit()
 
 
+    def _do_vm_removed(self, connection, hvuri, vmuuid):
+        if self.connections[hvuri]["windowDetails"].has_key(vmuuid):
+            self.connections[hvuri]["windowDetails"][vmuuid].hide()
+            del self.connections[hvuri]["windowDetails"][vmuuid]
+        if self.connections[hvuri]["windowConsole"].has_key(vmuuid):
+            self.connections[hvuri]["windowConsole"][vmuuid].hide()
+            del self.connections[hvuri]["windowConsole"][vmuuid]
+
     def _do_vm_updated(self, connection, hvuri, vmuuid):
         for uuid in self.connections[hvuri]["windowDetails"].keys():
             try:
@@ -162,13 +170,14 @@ class vmmEngine:
 
         if not(self.connections.has_key(key)):
             self.connections[key] = {
-                "connection": vmmConnection(self, self.get_config(), uri, readOnly),
+                "connection": vmmConnection(self.get_config(), uri, readOnly),
                 "windowManager": None,
                 "windowDetails": {},
                 "windowConsole": {}
                 }
             self.connections[key]["connection"].connect("disconnected", self._do_connection_disconnected)
             self.connections[key]["connection"].connect("vm-updated", self._do_vm_updated)
+            self.connections[key]["connection"].connect("vm-removed", self._do_vm_removed)
             self.connections[key]["connection"].tick()
 
         return self.connections[key]["connection"]

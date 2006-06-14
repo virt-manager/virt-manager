@@ -15,9 +15,8 @@ class vmmConnection(gobject.GObject):
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str])
         }
 
-    def __init__(self, engine, config, uri, readOnly):
+    def __init__(self, config, uri, readOnly):
         self.__gobject_init__()
-        self.engine = engine
         self.config = config
         self.uri = uri
 
