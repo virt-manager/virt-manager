@@ -1,14 +1,18 @@
 import gobject
 import gtk
+import sys
 
 from virtManager.about import vmmAbout
 from virtManager.connect import vmmConnect
 from virtManager.connection import vmmConnection
 from virtManager.preferences import vmmPreferences
+from virtManager.manager import vmmManager
+from virtManager.details import vmmDetails
+from virtManager.console import vmmConsole
 
 class vmmEngine:
     def __init__(self, config):
-        self.windowOpenConnection = None
+        self.windowConnect = None
         self.windowPreferences = None
         self.windowAbout = None
 
@@ -24,11 +28,10 @@ class vmmEngine:
         self.tick()
 
 
-    def _connection_disconnected(self, connection, dummy):
+    def _do_connection_disconnected(self, connection, hvuri):
         del self.connections[connection.get_uri()]
 
-        if len(self.connections.keys()) == 0 and self.windowOpenConnection == None:
-            print "No more connections, getting out"
+        if len(self.connections.keys()) == 0 and self.windowConnect == None:
             gtk.main_quit()
 
     def _connect_to_uri(self, connect, uri, readOnly):
@@ -41,6 +44,18 @@ class vmmEngine:
             print "No more connections, getting out"
             gtk.main_quit()
 
+
+    def _do_vm_updated(self, connection, hvuri, vmuuid):
+        for uuid in self.connections[hvuri]["windowDetails"].keys():
+            try:
+                self.connections[hvuri]["windowDetails"][uuid].refresh()
+            except:
+                pass
+        for uuid in self.connections[hvuri]["windowConsole"].keys():
+            try:
+                self.connections[hvuri]["windowConsole"][uuid].refresh()
+            except:
+                pass
 
     def reschedule_timer(self, ignore1,ignore2,ignore3,ignore4):
         self.schedule_timer()
@@ -57,7 +72,7 @@ class vmmEngine:
     def tick(self):
         for uri in self.connections.keys():
             try:
-                self.connections[uri].tick()
+                self.connections[uri]["connection"].tick()
             except:
                 print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
                 print "Error refreshing connection " + uri
@@ -70,6 +85,19 @@ class vmmEngine:
     def get_config(self):
         return self.config
 
+    def _do_show_about(self, src):
+        self.show_about()
+    def _do_show_preferences(self, src):
+        self.show_preferences()
+    def _do_show_connect(self, src):
+        self.show_connect()
+    def _do_show_manager(self, src, uri):
+        self.show_manager(uri)
+    def _do_show_details(self, src, uri, uuid):
+        self.show_details(uri, uuid)
+    def _do_show_console(self, src, uri, uuid):
+        self.show_console(uri, uuid)
+
     def show_about(self):
         if self.windowAbout == None:
             self.windowAbout = vmmAbout(self.get_config())
@@ -80,23 +108,52 @@ class vmmEngine:
             self.windowPreferences = vmmPreferences(self.get_config())
         self.windowPreferences.show()
 
-    def show_open_connection(self):
-        if self.windowOpenConnection == None:
-            self.windowOpenConnection = vmmConnect(self.get_config(), self)
-            self.windowOpenConnection.connect("completed", self._connect_to_uri)
-        self.windowOpenConnection.show()
+    def show_connect(self):
+        if self.windowConnect == None:
+            self.windowConnect = vmmConnect(self.get_config(), self)
+            self.windowConnect.connect("completed", self._connect_to_uri)
+        self.windowConnect.show()
 
     def show_console(self, uri, uuid):
         con = self.get_connection(uri)
-        con.show_console(uuid)
+
+        if not(self.connections[uri]["windowConsole"].has_key(uuid)):
+            console = vmmConsole(self.get_config(),
+                                 uri,
+                                 con.get_stats(),
+                                 con.get_vm(uuid),
+                                 uuid)
+            console.connect("action-show-details", self._do_show_details)
+            self.connections[uri]["windowConsole"][uuid] = console
+        self.connections[uri]["windowConsole"][uuid].show()
 
     def show_details(self, uri, uuid):
         con = self.get_connection(uri)
-        con.show_details(uuid)
+
+        if not(self.connections[uri]["windowDetails"].has_key(uuid)):
+            details = vmmDetails(self.get_config(),
+                                 uri,
+                                 con.get_stats(),
+                                 con.get_vm(uuid),
+                                 uuid)
+            details.connect("action-show-console", self._do_show_console)
+            self.connections[uri]["windowDetails"][uuid] = details
+        self.connections[uri]["windowDetails"][uuid].show()
 
     def show_manager(self, uri):
         con = self.get_connection(uri)
-        con.show_manager()
+
+        if self.connections[uri]["windowManager"] == None:
+            manager = vmmManager(self.get_config(),
+                                 con,
+                                 uri)
+            manager.connect("action-show-console", self._do_show_console)
+            manager.connect("action-show-details", self._do_show_details)
+            manager.connect("action-show-preferences", self._do_show_preferences)
+            manager.connect("action-show-about", self._do_show_about)
+            manager.connect("action-show-connect", self._do_show_connect)
+            self.connections[uri]["windowManager"] = manager
+        self.connections[uri]["windowManager"].show()
 
     def get_connection(self, uri, readOnly=True):
         key = uri
@@ -104,7 +161,14 @@ class vmmEngine:
             key = "__default__"
 
         if not(self.connections.has_key(key)):
-            self.connections[key] = vmmConnection(self, self.get_config(), uri, readOnly)
-            self.connections[key].connect("disconnected", self._connection_disconnected)
-            self.connections[key].tick()
-        return self.connections[key]
+            self.connections[key] = {
+                "connection": vmmConnection(self, self.get_config(), uri, readOnly),
+                "windowManager": None,
+                "windowDetails": {},
+                "windowConsole": {}
+                }
+            self.connections[key]["connection"].connect("disconnected", self._do_connection_disconnected)
+            self.connections[key]["connection"].connect("vm-updated", self._do_vm_updated)
+            self.connections[key]["connection"].tick()
+
+        return self.connections[key]["connection"]

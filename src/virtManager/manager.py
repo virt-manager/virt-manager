@@ -1,4 +1,5 @@
 
+import gobject
 import gtk
 import gtk.glade
 
@@ -8,11 +9,25 @@ VMLIST_SORT_MEMORY_USAGE = 3
 VMLIST_SORT_DISK_USAGE = 4
 VMLIST_SORT_NETWORK_USAGE = 5
 
-class vmmManager:
-    def __init__(self, config, connection):
+class vmmManager(gobject.GObject):
+    __gsignals__ = {
+        "action-show-connect":(gobject.SIGNAL_RUN_FIRST,
+                                  gobject.TYPE_NONE, []),
+        "action-show-console": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, (str,str)),
+        "action-show-details": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, (str,str)),
+        "action-show-about": (gobject.SIGNAL_RUN_FIRST,
+                              gobject.TYPE_NONE, []),
+        "action-show-preferences": (gobject.SIGNAL_RUN_FIRST,
+                                    gobject.TYPE_NONE, []),
+        }
+    def __init__(self, config, connection, hvuri):
+        self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-manager")
         self.config = config
         self.connection = connection
+        self.hvuri = hvuri
         self.prepare_vmlist()
 
         self.connection.connect("vm-added", self.vm_added)
@@ -94,9 +109,9 @@ class vmmManager:
         gtk.main_quit()
 
     def open_connection(self, src=None):
-        self.connection.show_open_connection()
+        self.emit("action-show-connect");
 
-    def vm_added(self, connection, vmuuid, name):
+    def vm_added(self, connection, uri, vmuuid, name):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
         print "Added\n"
@@ -110,7 +125,7 @@ class vmmManager:
             model.append([vmuuid, name])
 
 
-    def vm_removed(self, connection, vmuuid):
+    def vm_removed(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
@@ -121,7 +136,7 @@ class vmmManager:
                 model.remove(model.iter_nth_child(None, row))
                 break
 
-    def vm_updated(self, connection, vmuuid):
+    def vm_updated(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
@@ -139,10 +154,12 @@ class vmmManager:
         return None
 
     def show_vm_details(self,ignore):
-        self.connection.show_details(self.current_vm())
+        print "Show detail"
+        self.emit("action-show-details", self.hvuri, self.current_vm())
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
-        self.connection.show_console(self.current_vm())
+        print "Show console"
+        self.emit("action-show-console", self.hvuri, self.current_vm())
 
 
     def vm_selected(self, selection):
@@ -168,10 +185,10 @@ class vmmManager:
                 self.vmmenu.popup(None, None, None, 0, event.time)
 
     def show_about(self, src):
-        self.connection.show_about()
+        self.emit("action-show-about")
 
     def show_preferences(self, src):
-        self.connection.show_preferences()
+        self.emit("action-show-preferences")
 
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
@@ -383,3 +400,4 @@ class vmmManager:
         else:
             return "%2.2f MB" % (mem/1024.0)
 
+gobject.type_register(vmmManager)

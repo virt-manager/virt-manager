@@ -24,10 +24,10 @@ class vmmStats:
         self.connection.connect("vm-removed", self._vm_removed)
 
 
-    def _vm_added(self, connection, vmuuid, name):
+    def _vm_added(self, connection, uri, vmuuid, name):
         self.record[vmuuid] = []
 
-    def _vm_removed(self, connection, vmuuid):
+    def _vm_removed(self, connection, uri, vmuuid):
         del self.record[vmuuid]
 
     def update(self, vmuuid, vm):

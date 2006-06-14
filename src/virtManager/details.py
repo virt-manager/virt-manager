@@ -1,4 +1,5 @@
 
+import gobject
 import gtk
 import gtk.glade
 
@@ -11,11 +12,21 @@ from matplotlib.backends.backend_gtk import FigureCanvasGTK, NavigationToolbar
 
 from matplotlib.numerix import arange, sin, pi
 
-class vmmDetails:
-    def __init__(self, config, connection, vm, vmuuid):
+class vmmDetails(gobject.GObject):
+    __gsignals__ = {
+        "action-show-console": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, (str,str)),
+        "action-launch-terminal": (gobject.SIGNAL_RUN_FIRST,
+                                   gobject.TYPE_NONE, (str,str)),
+        "action-take-snapshot": (gobject.SIGNAL_RUN_FIRST,
+                                 gobject.TYPE_NONE, (str,str))
+        }
+    def __init__(self, config, hvuri, stats, vm, vmuuid):
+        self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-details")
         self.config = config
-        self.connection = connection
+        self.hvuri = hvuri
+        self.stats = stats
         self.vm = vm
         self.vmuuid = vmuuid
         self.lastStatus = None
@@ -107,9 +118,8 @@ class vmmDetails:
             "on_control_snapshot_clicked": self.control_vm_snapshot,
             })
 
-        self.connection.connect("vm-updated", self.refresh_overview)
         self.change_graph_ranges()
-        self.refresh_overview(self.connection, vmuuid)
+        self.refresh()
         self.hw_selected()
 
     def show(self):
@@ -135,16 +145,16 @@ class vmmDetails:
         return 0
 
     def control_vm_shutdown(self, src):
-        if not(self.connection.get_stats().run_status(self.vmuuid) in [ "shutdown", "shutoff" ]):
+        if not(self.stats.run_status(self.vmuuid) in [ "shutdown", "shutoff" ]):
             self.vm.shutdown()
         else:
             print "Shutdown requested, but machine is already shutting down / shutoff"
 
     def control_vm_pause(self, src):
-        if self.connection.get_stats().run_status(self.vmuuid) in [ "shutdown", "shutoff" ]:
+        if self.stats.run_status(self.vmuuid) in [ "shutdown", "shutoff" ]:
             print "Pause/resume requested, but machine is shutdown / shutoff"
         else:
-            if self.connection.get_stats().run_status(self.vmuuid) in [ "paused" ]:
+            if self.stats.run_status(self.vmuuid) in [ "paused" ]:
                 if not src.get_active():
                     self.vm.resume()
                 else:
@@ -157,10 +167,10 @@ class vmmDetails:
 
 
     def control_vm_terminal(self, src):
-        return 0
+        self.emit("action-launch-terminal", self.hvuri, self.vmuuid)
 
     def control_vm_snapshot(self, src):
-        return 0
+        self.emit("action-take-snapshot", self.hvuri, self.vmuuid)
 
     def change_graph_ranges(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.cpu_usage_graph.clear()
@@ -207,22 +217,20 @@ class vmmDetails:
 
         self.lastStatus = status
 
-    def refresh_overview(self, connection, vmuuid):
-        if not(vmuuid == self.vmuuid):
-            return
-
-        status = self.connection.get_stats().run_status(vmuuid)
+    def refresh(self):
+        print "In details refresh"
+        status = self.stats.run_status(self.vmuuid)
         self.update_widget_states(status)
 
         self.window.get_widget("overview-status-text").set_text(status)
-        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.connection.get_stats().run_status_icon(vmuuid))
-        self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.connection.get_stats().cpu_time_percentage(vmuuid))
-        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.connection.get_stats().current_memory(vmuuid)/1024, self.connection.get_stats().host_memory_size()/1024))
+        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.stats.run_status_icon(self.vmuuid))
+        self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.stats.cpu_time_percentage(self.vmuuid))
+        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.stats.current_memory(self.vmuuid)/1024, self.stats.host_memory_size()/1024))
 
         history_len = self.config.get_stats_history_length()
-        cpu_vector = self.connection.get_stats().cpu_time_vector(vmuuid)
+        cpu_vector = self.stats.cpu_time_vector(self.vmuuid)
         cpu_vector.reverse()
-        cpu_vector_avg = self.connection.get_stats().cpu_time_moving_avg_vector(vmuuid)
+        cpu_vector_avg = self.stats.cpu_time_moving_avg_vector(self.vmuuid)
         cpu_vector_avg.reverse()
         if self.cpu_usage_line == None:
             self.cpu_usage_line = self.cpu_usage_graph.plot(cpu_vector)
@@ -239,7 +247,7 @@ class vmmDetails:
         self.cpu_usage_canvas.draw()
 
         history_len = self.config.get_stats_history_length()
-        memory_vector = self.connection.get_stats().current_memory_vector(vmuuid)
+        memory_vector = self.stats.current_memory_vector(self.vmuuid)
         memory_vector.reverse()
         if self.memory_usage_line == None:
             self.memory_usage_line = self.memory_usage_graph.plot(memory_vector)
@@ -255,12 +263,13 @@ class vmmDetails:
 
         history_len = self.config.get_stats_history_length()
         #if self.network_traffic_line == None:
-            #self.network_traffic_line = self.network_traffic_graph.plot(self.connection.get_stats().network_traffic_vector(vmuuid))
+            #self.network_traffic_line = self.network_traffic_graph.plot(self.stats.network_traffic_vector(self.vmuuid))
         #else:
-            #self.network_traffic_line[0].set_ydata(self.connection.get_stats().network_traffic_vector(vmuuid))
+            #self.network_traffic_line[0].set_ydata(self.stats.network_traffic_vector(self.vmuuid))
         self.network_traffic_graph.set_xlim(0, history_len)
         self.network_traffic_graph.set_ylim(0, 100)
         self.network_traffic_graph.set_yticklabels(["0","","","","","100"])
         self.network_traffic_graph.set_xticklabels([])
         self.network_traffic_canvas.draw()
 
+gobject.type_register(vmmDetails)

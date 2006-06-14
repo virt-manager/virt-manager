@@ -1,12 +1,23 @@
 
+import gobject
 import gtk.glade
 import libvirt
 
-class vmmConsole:
-    def __init__(self, config, connection, vm, vmuuid):
+class vmmConsole(gobject.GObject):
+    __gsignals__ = {
+        "action-show-details": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, (str,str)),
+        "action-launch-terminal": (gobject.SIGNAL_RUN_FIRST,
+                                   gobject.TYPE_NONE, (str,str)),
+        "action-take-snapshot": (gobject.SIGNAL_RUN_FIRST,
+                                 gobject.TYPE_NONE, (str,str))
+        }
+    def __init__(self, config, hvuri, stats, vm, vmuuid):
+        self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-console")
         self.config = config
-        self.connection = connection
+        self.hvuri = hvuri
+        self.stats = stats
         self.vm = vm
         self.vmuuid = vmuuid
         self.lastStatus = None
@@ -43,8 +54,7 @@ class vmmConsole:
             "on_control_details_clicked": self.control_vm_details,
             })
 
-        self.connection.connect("vm-updated", self.vm_updated)
-        self.refresh_status()
+        self.refresh()
 
     def show(self):
         dialog = self.window.get_widget("vmm-console")
@@ -83,19 +93,16 @@ class vmmConsole:
 
 
     def control_vm_terminal(self, src):
-        return 0
+        self.emit("action-launch-terminal", self.hvuri, self.vmuuid)
 
     def control_vm_snapshot(self, src):
-        return 0
+        self.emit("action-take-snapshot", self.hvuri, self.vmuuid)
 
     def control_vm_details(self, src):
-        self.connection.show_details(self.vmuuid)
+        self.emit("action-show-details", self.hvuri, self.vmuuid)
 
-    def vm_updated(self, connection, uuid):
-        if uuid == self.vmuuid:
-            self.refresh_status()
-
-    def refresh_status(self):
+    def refresh(self):
+        print "In console refresh"
         info = self.vm.info()
         status = info[0]
 
@@ -124,3 +131,4 @@ class vmmConsole:
 
         self.lastStatus = status
 
+gobject.type_register(vmmConsole)

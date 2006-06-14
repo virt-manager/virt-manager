@@ -3,19 +3,16 @@ import gobject
 import libvirt
 
 from virtManager.stats import vmmStats
-from virtManager.manager import vmmManager
-from virtManager.details import vmmDetails
-from virtManager.console import vmmConsole
 
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
         "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                     (str, str,)),
+                     (str, str, str,)),
         "vm-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                       (str,)),
+                       (str, str)),
         "vm-updated": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                       (str,)),
-        "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, (str,))
+                       (str, str)),
+        "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str])
         }
 
     def __init__(self, engine, config, uri, readOnly):
@@ -42,16 +39,8 @@ class vmmConnection(gobject.GObject):
     def get_stats(self):
         return self.stats
 
-    def show_about(self):
-        self.engine.show_about()
-
-    def show_preferences(self):
-        self.engine.show_preferences()
-
-    def show_manager(self):
-        if self.windowManager == None:
-            self.windowManager = vmmManager(self.config, self)
-        self.windowManager.show()
+    def get_vm(self, uuid):
+        return self.vms[uuid]
 
     def disconnect(self):
         if self.vmm == None:
@@ -69,32 +58,17 @@ class vmmConnection(gobject.GObject):
             self.windowConsole[uuid].close()
             del self.windowConsole[uuid]
 
-        self.emit("disconnected", "dummy")
+        self.emit("disconnected", self.uri)
 
     def get_host_info(self):
         return self.vmm.getInfo()
-
-    def show_details(self, vmuuid):
-        if not(self.windowDetails.has_key(vmuuid)):
-            self.windowDetails[vmuuid] = vmmDetails(self.config, self, self.vms[vmuuid], vmuuid)
-
-        self.windowDetails[vmuuid].show()
-
-    def show_console(self, vmuuid):
-        if not(self.windowConsole.has_key(vmuuid)):
-            self.windowConsole[vmuuid] = vmmConsole(self.config, self, self.vms[vmuuid], vmuuid)
-
-        self.windowConsole[vmuuid].show()
-
-    def show_open_connection(self):
-        self.engine.show_open_connection()
 
     def connect(self, name, callback):
         gobject.GObject.connect(self, name, callback)
         print "Cnnect " + name + " to " + str(callback)
         if name == "vm-added":
             for uuid in self.vms.keys():
-                self.emit("vm-added", uuid, self.vms[uuid].name())
+                self.emit("vm-added", self.uri, uuid, self.vms[uuid].name())
 
     def tick(self):
         if self.vmm == None:
@@ -110,17 +84,17 @@ class vmmConnection(gobject.GObject):
         for uuid in self.vms.keys():
             if not(newVms.has_key(uuid)):
                 del self.vms[uuid]
-                self.emit("vm-removed", uuid)
+                self.emit("vm-removed", self.uri, uuid)
 
         for uuid in newVms.keys():
             if not(self.vms.has_key(uuid)):
                 self.vms[uuid] = newVms[uuid]
                 print "Trying to emit"
-                self.emit("vm-added",uuid, newVms[uuid].name())
+                self.emit("vm-added", self.uri, uuid, newVms[uuid].name())
 
         for uuid in self.vms.keys():
             self.stats.update(uuid, self.vms[uuid])
-            self.emit("vm-updated", uuid)
+            self.emit("vm-updated", self.uri, uuid)
 
         return 1
 
