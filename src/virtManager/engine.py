@@ -41,7 +41,6 @@ class vmmEngine:
             self.show_manager(uri)
 
         if len(self.connections.keys()) == 0 and self.windowOpenConnection == None:
-            print "No more connections, getting out"
             gtk.main_quit()
 
 

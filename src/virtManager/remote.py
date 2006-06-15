@@ -26,7 +26,6 @@ class vmmRemote(dbus.service.Object):
 
     @dbus.service.method("com.redhat.virt.manager", in_signature="s")
     def show_host_summary(self, uri):
-        print "Openning manage " + uri
         self.engine.show_manager(uri)
 
     @dbus.service.method("com.redhat.virt.manager")
