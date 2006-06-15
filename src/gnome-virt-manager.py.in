@@ -65,7 +65,7 @@ def main():
                 print "Asking existing instance to open URI '" + str(options.uri) + "'"
                 managerObj.show_host_summary(options.uri)
             else:
-                managerObj.show_open_connection()
+                managerObj.show_connect()
             # yes, we exit completely now - remote service is in charge
             return
     except:
@@ -74,7 +74,7 @@ def main():
         if options.uri != None:
             engine.show_manager(options.uri)
         else:
-            engine.show_open_connection()
+            engine.show_connect()
     gtk.main()
 
 if __name__ == "__main__":

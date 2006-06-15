@@ -30,5 +30,5 @@ class vmmRemote(dbus.service.Object):
         self.engine.show_manager(uri)
 
     @dbus.service.method("com.redhat.virt.manager")
-    def show_open_connection(self):
-        self.engine.show_open_connection()
+    def show_connect(self):
+        self.engine.show_connect()
