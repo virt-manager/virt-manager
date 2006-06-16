@@ -48,6 +48,15 @@ class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
     def get_pixmap(self):
         return self.pixmap
 
+    def clone_pixmap(self):
+        if self.pixmap == None:
+            return None
+        width, height = self.pixmap.get_size()
+        clone = gtk.gdk.Pixmap(self.canvas.window, width, height)
+        gc = clone.new_gc()
+        clone.draw_drawable(gc, self.pixmap, 0, 0, 0, 0, -1, -1)
+        return clone
+
     def init_screen(self, width, height, name):
         self.pixmap = gtk.gdk.Pixmap(self.canvas.window, width, height)
 
@@ -144,7 +153,8 @@ class GRFBViewer(gtk.DrawingArea):
 
         self.fb = GRFBFrameBuffer(self)
         self.client = None
-        
+        self.authenticated = False
+
         self.fb.connect("resize", self.resize_display)
         self.fb.connect("invalidate", self.repaint_region)
 
@@ -176,6 +186,7 @@ class GRFBViewer(gtk.DrawingArea):
         self.client.connect("disconnected", self._client_disconnected)
 
         self.client.init()
+        self.authenticated = False
         self.emit("connected", host, port)
 
     def _client_disconnected(self, src):
@@ -195,7 +206,9 @@ class GRFBViewer(gtk.DrawingArea):
         try:
             self.client.auth()
         except:
+            print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
             return 0
+        self.authenticated = True
         self.emit("authenticated")
         return 1
 
@@ -203,6 +216,11 @@ class GRFBViewer(gtk.DrawingArea):
         self.client.start()
         self.client.request_update()
         self.emit("activated")
+
+    def is_authenticated(self):
+        if not(self.is_connected()):
+            return False
+        return self.authenticated
 
     def is_connected(self):
         if self.client == None:
@@ -223,6 +241,9 @@ class GRFBViewer(gtk.DrawingArea):
             mask = mask + 16
 
         return mask
+
+    def take_screenshot(self):
+        return self.fb.clone_pixmap()
 
     def update_pointer(self, win, event):
         x, y, state = event.window.get_pointer()

@@ -2,6 +2,7 @@
 import gobject
 import gtk.glade
 import libvirt
+import sys
 
 from vncViewer.vnc import GRFBViewer
 
@@ -41,7 +42,11 @@ class vmmConsole(gobject.GObject):
 
         self.vncViewer = GRFBViewer()
         scrolledWin = gtk.ScrolledWindow()
-        scrolledWin.add_with_viewport(self.vncViewer)
+
+        vp = gtk.Viewport()
+        vp.set_shadow_type(gtk.SHADOW_NONE)
+        vp.add(self.vncViewer)
+        scrolledWin.add(vp)
 
         self.window.get_widget("console-pages").set_show_tabs(False)
         self.window.get_widget("console-pages").append_page(scrolledWin, gtk.Label("VNC"))
@@ -70,9 +75,6 @@ class vmmConsole(gobject.GObject):
 
         self.vncViewer.connect("disconnected", self._vnc_disconnected)
 
-        self.try_login()
-
-
     def show(self):
         dialog = self.window.get_widget("vmm-console")
         dialog.show_all()
@@ -96,17 +98,29 @@ class vmmConsole(gobject.GObject):
 
         protocol, host, port = self.vm.get_console_info()
 
-        if protocol != "vnc" or self.vm.get_id() == 0:
+        if self.vm.get_id() == 0:
+            pass
+        #return
+
+        print protocol + "://" + host + ":" + str(port)
+        if protocol != "vnc":
+            print "Activate inactive"
             self.window.get_widget("console-pages").set_curent_page(0)
             return
 
         if not(self.vncViewer.is_connected()):
             self.vncViewer.connect_to_host(host, port)
 
-        if password and self.vncViewer.authenticate(password) == 1:
+        print "K " + str(self.vncViewer.is_authenticated())
+
+        if self.vncViewer.is_authenticated():
+            print "Activate console"
+            self.window.get_widget("console-pages").set_current_page(3)
+        elif password and (self.vncViewer.authenticate(password) == 1):
             self.window.get_widget("console-pages").set_current_page(3)
             self.vncViewer.activate()
         else:
+            print "activate auth"
             self.window.get_widget("console-auth-password").set_text("")
             self.window.get_widget("console-pages").set_current_page(2)
 
@@ -154,6 +168,7 @@ class vmmConsole(gobject.GObject):
                 self.window.get_widget("control-run").set_sensitive(False)
 
             if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
+                print "actoivate inactive"
                 self.window.get_widget("control-pause").set_sensitive(False)
                 self.window.get_widget("control-shutdown").set_sensitive(False)
                 self.window.get_widget("control-terminal").set_sensitive(False)
@@ -167,7 +182,27 @@ class vmmConsole(gobject.GObject):
                     self.window.get_widget("control-pause").set_active(True)
                 else:
                     self.window.get_widget("control-pause").set_active(False)
+
+            if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
+                self.window.get_widget("console-pages").set_current_page(0)
+            else:
+                if status == libvirt.VIR_DOMAIN_PAUSED:
+                    screenshot = None
+                    if self.vncViewer.is_authenticated():
+                        screenshot = self.vncViewer.take_screenshot()
+                    if screenshot != None:
+                        gc = screenshot.new_gc()
+                        width, height = screenshot.get_size()
+                        screenshot.draw_line(gc, 0, 0, width, height)
+                        screenshot.draw_line(gc, 0, height, width, 0)
+                        self.window.get_widget("console-screenshot").set_from_pixmap(screenshot, None)
+                        self.window.get_widget("console-pages").set_current_page(1)
+                    else:
+                        self.window.get_widget("console-pages").set_current_page(0)
+                else:
+                    self.try_login()
         except:
+            print "Bad shit"
             self.ignorePause = False
         self.ignorePause = False
 
