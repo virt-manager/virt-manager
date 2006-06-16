@@ -83,7 +83,7 @@ class vmmConsole(gobject.GObject):
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-console").hide()
         if self.vncViewer.is_connected():
-            self.vncViewer.disconnect()
+            self.vncViewer.disconnect_from_host()
         return 1
 
     def control_vm_run(self, src):
@@ -99,10 +99,9 @@ class vmmConsole(gobject.GObject):
         protocol, host, port = self.vm.get_console_info()
 
         if self.vm.get_id() == 0:
-            pass
-        #return
+            return
 
-        print protocol + "://" + host + ":" + str(port)
+        #print protocol + "://" + host + ":" + str(port)
         if protocol != "vnc":
             print "Activate inactive"
             self.window.get_widget("console-pages").set_curent_page(0)
@@ -111,16 +110,12 @@ class vmmConsole(gobject.GObject):
         if not(self.vncViewer.is_connected()):
             self.vncViewer.connect_to_host(host, port)
 
-        print "K " + str(self.vncViewer.is_authenticated())
-
         if self.vncViewer.is_authenticated():
-            print "Activate console"
             self.window.get_widget("console-pages").set_current_page(3)
         elif password and (self.vncViewer.authenticate(password) == 1):
             self.window.get_widget("console-pages").set_current_page(3)
             self.vncViewer.activate()
         else:
-            print "activate auth"
             self.window.get_widget("console-auth-password").set_text("")
             self.window.get_widget("console-pages").set_current_page(2)
 
@@ -168,7 +163,6 @@ class vmmConsole(gobject.GObject):
                 self.window.get_widget("control-run").set_sensitive(False)
 
             if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
-                print "actoivate inactive"
                 self.window.get_widget("control-pause").set_sensitive(False)
                 self.window.get_widget("control-shutdown").set_sensitive(False)
                 self.window.get_widget("control-terminal").set_sensitive(False)
