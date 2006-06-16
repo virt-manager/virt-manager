@@ -3,6 +3,8 @@ import gobject
 import gtk.glade
 import libvirt
 
+from vncViewer.vnc import GRFBViewer
+
 class vmmConsole(gobject.GObject):
     __gsignals__ = {
         "action-show-details": (gobject.SIGNAL_RUN_FIRST,
@@ -37,6 +39,16 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("control-snapshot").set_icon_widget(gtk.Image())
         self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_snapshot.png")
 
+        self.vncViewer = GRFBViewer()
+        scrolledWin = gtk.ScrolledWindow()
+        scrolledWin.add_with_viewport(self.vncViewer)
+
+        self.window.get_widget("console-pages").set_show_tabs(False)
+        self.window.get_widget("console-pages").append_page(scrolledWin, gtk.Label("VNC"))
+
+        scrolledWin.show()
+        self.vncViewer.show()
+
         self.ignorePause = False
 
         self.window.signal_autoconnect({
@@ -49,10 +61,17 @@ class vmmConsole(gobject.GObject):
             "on_control_terminal_clicked": self.control_vm_terminal,
             "on_control_snapshot_clicked": self.control_vm_snapshot,
             "on_control_details_clicked": self.control_vm_details,
+
+            "on_console_auth_login_clicked": self.try_login,
             })
 
         self.vm.connect("status-changed", self.update_widget_states)
         self.update_widget_states(vm, vm.status())
+
+        self.vncViewer.connect("disconnected", self._vnc_disconnected)
+
+        self.try_login()
+
 
     def show(self):
         dialog = self.window.get_widget("vmm-console")
@@ -61,10 +80,35 @@ class vmmConsole(gobject.GObject):
 
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-console").hide()
+        if self.vncViewer.is_connected():
+            self.vncViewer.disconnect()
         return 1
 
     def control_vm_run(self, src):
         return 0
+
+    def _vnc_disconnected(self, src):
+        self.window.get_widget("console-auth-password").set_text("")
+        self.window.get_widget("console-pages").set_current_page(2)
+
+    def try_login(self, src=None):
+        password = self.window.get_widget("console-auth-password").get_text()
+
+        protocol, host, port = self.vm.get_console_info()
+
+        if protocol != "vnc" or self.vm.get_id() == 0:
+            self.window.get_widget("console-pages").set_curent_page(0)
+            return
+
+        if not(self.vncViewer.is_connected()):
+            self.vncViewer.connect_to_host(host, port)
+
+        if password and self.vncViewer.authenticate(password) == 1:
+            self.window.get_widget("console-pages").set_current_page(3)
+            self.vncViewer.activate()
+        else:
+            self.window.get_widget("console-auth-password").set_text("")
+            self.window.get_widget("console-pages").set_current_page(2)
 
     def control_vm_shutdown(self, src):
         status = self.vm.status()

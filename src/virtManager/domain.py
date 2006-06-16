@@ -24,6 +24,9 @@ class vmmDomain(gobject.GObject):
     def get_connection(self):
         return self.connection
 
+    def get_id(self):
+        return self.vm.ID()
+
     def get_name(self):
         return self.vm.name()
 
@@ -221,6 +224,12 @@ class vmmDomain(gobject.GObject):
     def run_status_icon(self):
         status = self.run_status()
         return self.config.get_vm_status_icon(status.lower())
+
+    def get_console_info(self):
+        # XXX don't hardcode me! need to really extract info from
+        # the libvirt XML as & when the display device info gets
+        # added
+        return ["vnc", "localhost", 5900 + self.get_id()]
 
 
 gobject.type_register(vmmDomain)
