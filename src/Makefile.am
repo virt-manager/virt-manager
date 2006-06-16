@@ -1,5 +1,5 @@
 
-SUBDIRS = virtManager
+SUBDIRS = virtManager vncViewer
 
 bin_SOURCES = gnome-virt-manager.in
 bin_SCRIPTS = gnome-virt-manager

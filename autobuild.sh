@@ -29,6 +29,6 @@ if [ -f /usr/bin/rpmbuild ]; then
     NOW=`date +"%s"`
     EXTRA_RELEASE=".$USER$NOW"
   fi
-  rpmbuild --define "extra_release $EXTRA_RELEASE" -ta --clean *.tar.gz
+  rpmbuild --nodeps --define "extra_release $EXTRA_RELEASE" -ta --clean *.tar.gz
 fi
 

@@ -9,15 +9,22 @@ Summary: GNOME Virtual Machine Manager
 
 Group: Applications/Emulators
 License: GPL v2+
-URL: http://harp.boston.redhat.com/olpcdev/tools/qemu-admin
+URL: http://harp.boston.redhat.com/virtdev/applications/gnome-virt-manager
 Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires: python
 Requires: pygtk2 >= 1.99.12-6
 Requires: gnome-python2-gconf >= 1.99.11-7
-Requires: libvirt-python >= 0.1.0
+Requires: libvirt-python >= 0.1.1
+Requires: dbus-python >= 0.61
+
 Requires: python-matplotlib
+# src/vncViewer/image.py needs either this
+Requires: python-imaging
+# Or this
+Requires: pygame
+# But not both!
 
 BuildArchitectures: noarch
 
@@ -49,6 +56,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/dbus-1/services/%{name}.service
 
 %changelog
+* Fri Jun 16 2006 Daniel Berrange <berrange@redhat.com> - 0.1.0-1
+- Added initial support for using VNC console
+
 * Thu Apr 20 2006 Daniel Berrange <berrange@redhat.com> - 0.0.2-1
 - Added DBus remote control service
 
