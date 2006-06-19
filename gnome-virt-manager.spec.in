@@ -23,7 +23,8 @@ Requires: python-matplotlib
 # src/vncViewer/image.py needs either this
 Requires: python-imaging
 # Or this
-Requires: pygame
+# pygame pulls in crazy dependancies such as Tcl, so we use python-imaging for now
+#Requires: pygame
 # But not both!
 
 BuildArchitectures: noarch
