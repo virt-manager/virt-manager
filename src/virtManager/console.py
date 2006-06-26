@@ -196,7 +196,7 @@ class vmmConsole(gobject.GObject):
                 else:
                     self.try_login()
         except:
-            print "Bad shit"
+            print "Couldn't open console " + str(sys.exc_info())
             self.ignorePause = False
         self.ignorePause = False
 

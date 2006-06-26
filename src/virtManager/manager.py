@@ -3,6 +3,8 @@ import gobject
 import gtk
 import gtk.glade
 
+import sparkline
+
 VMLIST_SORT_NAME = 1
 VMLIST_SORT_CPU_USAGE = 2
 VMLIST_SORT_MEMORY_USAGE = 3
@@ -234,7 +236,8 @@ class vmmManager(gobject.GObject):
 
 
         cpuUsage_txt = gtk.CellRendererText()
-        cpuUsage_img = gtk.CellRendererProgress()
+        #cpuUsage_img = gtk.CellRendererProgress()
+        cpuUsage_img = sparkline.CellRendererSparkline()
         cpuUsageCol.pack_start(cpuUsage_txt, False)
         cpuUsageCol.pack_start(cpuUsage_img, False)
         cpuUsageCol.set_cell_data_func(cpuUsage_txt, self.cpu_usage_text, None)
@@ -361,8 +364,11 @@ class vmmManager(gobject.GObject):
 
     def cpu_usage_img(self,  column, cell, model, iter, data):
         uuid = model.get_value(iter, 0)
-        cell.set_property('text', '')
-        cell.set_property('value', self.connection.get_vm(uuid).cpu_time_percentage())
+        #cell.set_property('text', '')
+        #cell.set_property('value', self.connection.get_vm(uuid).cpu_time_percentage())
+        data = self.connection.get_vm(uuid).cpu_time_vector()
+        data.reverse()
+        cell.set_property('data_array', data)
 
     def memory_usage_text(self,  column, cell, model, iter, data):
         uuid = model.get_value(iter, 0)

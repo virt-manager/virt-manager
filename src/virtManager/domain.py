@@ -34,9 +34,9 @@ class vmmDomain(gobject.GObject):
         return self.uuid
 
     def _normalize_status(self, status):
-        if self.lastStatus == libvirt.VIR_DOMAIN_NOSTATE:
+        if status == libvirt.VIR_DOMAIN_NOSTATE:
             return libvirt.VIR_DOMAIN_RUNNING
-        elif self.lastStatus == libvirt.VIR_DOMAIN_BLOCKED:
+        elif status == libvirt.VIR_DOMAIN_BLOCKED:
             return libvirt.VIR_DOMAIN_RUNNING
         return status
 
@@ -153,7 +153,7 @@ class vmmDomain(gobject.GObject):
         stats = self.record
         for i in range(self.config.get_stats_history_length()+1):
             if i < len(stats):
-                vector.append(stats[i]["cpuTimePercent"])
+                vector.append(stats[i]["cpuTimePercent"]/100.0*10)
             else:
                 vector.append(0)
         return vector
@@ -229,7 +229,8 @@ class vmmDomain(gobject.GObject):
         # XXX don't hardcode me! need to really extract info from
         # the libvirt XML as & when the display device info gets
         # added
-        return ["vnc", "localhost", 5901 + self.get_id()]
+        prin
+        return ["vnc", "localhost", 5900 + self.get_id()]
 
 
 gobject.type_register(vmmDomain)

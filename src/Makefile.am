@@ -1,5 +1,5 @@
 
-SUBDIRS = virtManager vncViewer
+SUBDIRS = virtManager vncViewer graphWidgets
 
 bin_SOURCES = gnome-virt-manager.in
 bin_SCRIPTS = gnome-virt-manager
@@ -34,7 +34,10 @@ EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES)
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PREFIX::,$(prefix)," < $< > $@
 
 %.py: $(srcdir)/%.py.in
-	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::ASSETDIR::,$(pkgdatadir)," < $< > $@
+	sed -e "s,::PACKAGE::,$(PACKAGE)," \
+	  -e "s,::ASSETDIR::,$(pkgdatadir)," \
+	  -e "s,::PYLIBDIR::,$(pkgdatadir)," \
+          -e "s,::PYARCHLIBDIR::,$(pkglibdir)," < $< > $@
 
 gnome-virt-manager: $(srcdir)/gnome-virt-manager.in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PYTHONDIR::,$(pkgdatadir)," < $< > $@

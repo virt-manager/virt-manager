@@ -22,6 +22,7 @@ asset_dir = "::ASSETDIR::"
 glade_dir = asset_dir
 icon_dir = asset_dir + "/pixmaps"
 pylib_dir = "::PYLIBDIR::"
+pyarchlib_dir = "::PYARCHLIBDIR::"
 
 # Hack for dev purposes
 if os.path.exists(os.getcwd() + "/src/" + appname + ".glade"):
@@ -31,6 +32,10 @@ if os.path.exists(os.getcwd() + "/pixmaps/icon_run.png"):
 
 if os.path.exists(os.getcwd() + "/src/" + appname + "/__init__.py"):
     sys.path.insert(0, os.getcwd() + "/src")
+    sys.path.insert(0, os.getcwd() + "/build/src/.libs")
+else:
+    sys.path.insert(0, pylib_dir)
+    sys.path.insert(0, pyarchlib_dir)
 
 # Obnoxious matplotlib sets its own icon as the default
 # which is a totally inappropriate action for a library

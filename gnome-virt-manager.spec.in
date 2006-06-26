@@ -27,7 +27,8 @@ Requires: python-imaging
 #Requires: pygame
 # But not both!
 
-BuildArchitectures: noarch
+BuildRequires: pygtk2-devel
+BuildRequires: gtk2-devel
 
 %description
 GNOME Virtual Machine Manager provides a graphical tool for administering
@@ -44,17 +45,20 @@ make %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 make install  DESTDIR=$RPM_BUILD_ROOT
+rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/sparkline.a
+rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/sparkline.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-/usr/bin/%{name}
-/usr/libexec/%{name}-launch
-/usr/share/%{name}/*
-/usr/share/applications/%{name}.desktop
-/usr/share/dbus-1/services/%{name}.service
+%{_bindir}/%{name}
+%{_libexecdir}/%{name}-launch
+%{_libdir}/%{name}/*
+%{_datadir}/%{name}/*
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
 * Fri Jun 16 2006 Daniel Berrange <berrange@redhat.com> - 0.1.0-1

@@ -1,0 +1,13 @@
+%%
+headers
+#include <Python.h>               
+#include "pygobject.h"
+#include "cellrenderersparkline.h"
+%%
+modulename cellrenderersparkline
+%%
+import gtk.CellRenderer as PyGtkCellRenderer_Type       
+%%
+ignore-glob
+  *_get_type                            
+%%
