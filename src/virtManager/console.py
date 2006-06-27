@@ -162,7 +162,7 @@ class vmmConsole(gobject.GObject):
             else:
                 self.window.get_widget("control-run").set_sensitive(False)
 
-            if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
+            if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_management_domain():
                 self.window.get_widget("control-pause").set_sensitive(False)
                 self.window.get_widget("control-shutdown").set_sensitive(False)
                 self.window.get_widget("control-terminal").set_sensitive(False)
@@ -177,7 +177,7 @@ class vmmConsole(gobject.GObject):
                 else:
                     self.window.get_widget("control-pause").set_active(False)
 
-            if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
+            if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_management_domain():
                 self.window.get_widget("console-pages").set_current_page(0)
             else:
                 if status == libvirt.VIR_DOMAIN_PAUSED:

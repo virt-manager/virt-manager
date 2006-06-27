@@ -33,6 +33,11 @@ class vmmDomain(gobject.GObject):
     def get_uuid(self):
         return self.uuid
 
+    def is_management_domain(self):
+        if self.vm.ID() == 0:
+            return True
+        return False
+
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:
             return libvirt.VIR_DOMAIN_RUNNING
