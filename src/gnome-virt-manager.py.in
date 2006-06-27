@@ -10,10 +10,6 @@ from os import getcwd
 import os.path
 import sys
 
-from virtManager.config import vmmConfig
-from virtManager.engine import vmmEngine
-from virtManager.remote import vmmRemote
-
 from optparse import OptionParser
 
 appname = "::PACKAGE::"
@@ -30,12 +26,17 @@ if os.path.exists(os.getcwd() + "/src/" + appname + ".glade"):
 if os.path.exists(os.getcwd() + "/pixmaps/icon_run.png"):
     icon_dir = os.getcwd() + "/pixmaps"
 
-if os.path.exists(os.getcwd() + "/src/" + appname + "/__init__.py"):
+if os.path.exists(os.getcwd() + "/src/virtManager/__init__.py"):
     sys.path.insert(0, os.getcwd() + "/src")
-    sys.path.insert(0, os.getcwd() + "/build/src/.libs")
+    sys.path.insert(0, os.getcwd() + "/build/src/graphWidgets/.libs")
 else:
     sys.path.insert(0, pylib_dir)
     sys.path.insert(0, pyarchlib_dir)
+print "Path is " + str(sys.path)
+
+from virtManager.config import vmmConfig
+from virtManager.engine import vmmEngine
+from virtManager.remote import vmmRemote
 
 # Obnoxious matplotlib sets its own icon as the default
 # which is a totally inappropriate action for a library
