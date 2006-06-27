@@ -4,7 +4,9 @@ import gtk.glade
 class vmmConnect(gobject.GObject):
     __gsignals__ = {
         "completed": (gobject.SIGNAL_RUN_FIRST,
-                      gobject.TYPE_NONE, (str,bool))
+                      gobject.TYPE_NONE, (str,bool)),
+        "cancelled": (gobject.SIGNAL_RUN_FIRST,
+                      gobject.TYPE_NONE, ())
         }
     def __init__(self, config, engine):
         self.__gobject_init__()
@@ -26,7 +28,7 @@ class vmmConnect(gobject.GObject):
 
     def cancel(self,ignore1=None,ignore2=None):
         self.close()
-        self.emit("completed", None, False)
+        self.emit("cancelled")
         return 1
 
     def close(self):

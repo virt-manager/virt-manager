@@ -36,11 +36,20 @@ class vmmEngine:
 
     def _connect_to_uri(self, connect, uri, readOnly):
         self.windowOpenConnection = None
-        if uri != None:
+
+        try:
             conn = self.get_connection(uri, readOnly)
             self.show_manager(uri)
+        except:
+            print "Unable to open connection to hypervisor URI '" + str(uri) + "'"
+            print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
 
-        if len(self.connections.keys()) == 0 and self.windowOpenConnection == None:
+        if len(self.connections.keys()) == 0:
+            gtk.main_quit()
+
+    def _connect_cancelled(self, connect):
+        self.windowOpenConnection = None
+        if len(self.connections.keys()) == 0:
             gtk.main_quit()
 
 
