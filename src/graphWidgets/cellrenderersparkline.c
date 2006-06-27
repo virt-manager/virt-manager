@@ -254,6 +254,7 @@ gtk_cell_renderer_sparkline_render (GtkCellRenderer *cell,
 				    GdkRectangle *expose_area,
 				    GtkCellRendererState flags)
 {
+#if 0
   cairo_t *cr;
   int index;
   double right_margin_x;
@@ -319,6 +320,7 @@ gtk_cell_renderer_sparkline_render (GtkCellRenderer *cell,
   */
 
   cairo_destroy (cr);
+#endif
 }
 
 #define __GTK_CELL_RENDERER_SPARKLINE_C__
