@@ -110,7 +110,7 @@ class vmmManager(gobject.GObject):
         gtk.main_quit()
 
     def open_connection(self, src=None):
-        self.emit("action-show-connect");
+        self.emit("action-show-connect")
 
     def vm_added(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")

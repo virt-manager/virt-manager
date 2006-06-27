@@ -29,13 +29,13 @@ class vmmEngine:
 
 
     def _do_connection_disconnected(self, connection, hvuri):
-        del self.connections[connection.get_uri()]
+        del self.connections[hvuri]
 
         if len(self.connections.keys()) == 0 and self.windowConnect == None:
             gtk.main_quit()
 
     def _connect_to_uri(self, connect, uri, readOnly):
-        self.windowOpenConnection = None
+        self.windowConnect = None
 
         try:
             conn = self.get_connection(uri, readOnly)
@@ -48,7 +48,7 @@ class vmmEngine:
             gtk.main_quit()
 
     def _connect_cancelled(self, connect):
-        self.windowOpenConnection = None
+        self.windowConnect = None
         if len(self.connections.keys()) == 0:
             gtk.main_quit()
 
@@ -154,19 +154,15 @@ class vmmEngine:
         self.connections[uri]["windowManager"].show()
 
     def get_connection(self, uri, readOnly=True):
-        key = uri
-        if key == None or key == "":
-            key = "__default__"
-
-        if not(self.connections.has_key(key)):
-            self.connections[key] = {
+        if not(self.connections.has_key(uri)):
+            self.connections[uri] = {
                 "connection": vmmConnection(self.get_config(), uri, readOnly),
                 "windowManager": None,
                 "windowDetails": {},
                 "windowConsole": {}
                 }
-            self.connections[key]["connection"].connect("disconnected", self._do_connection_disconnected)
-            self.connections[key]["connection"].connect("vm-removed", self._do_vm_removed)
-            self.connections[key]["connection"].tick()
+            self.connections[uri]["connection"].connect("disconnected", self._do_connection_disconnected)
+            self.connections[uri]["connection"].connect("vm-removed", self._do_vm_removed)
+            self.connections[uri]["connection"].tick()
 
-        return self.connections[key]["connection"]
+        return self.connections[uri]["connection"]

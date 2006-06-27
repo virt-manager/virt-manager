@@ -19,14 +19,14 @@ class vmmConnection(gobject.GObject):
         self.config = config
         self.uri = uri
 
+        openURI = uri
+        if openURI == "Xen":
+            openURI = None
         if readOnly:
-            self.vmm = libvirt.openReadOnly(uri)
+            self.vmm = libvirt.openReadOnly(openURI)
         else:
-            self.vmm = libvirt.open(uri)
+            self.vmm = libvirt.open(openURI)
 
-        self.windowManager = None
-        self.windowDetails = {}
-        self.windowConsole = {}
         self.vms = {}
         self.tick()
 
@@ -42,16 +42,6 @@ class vmmConnection(gobject.GObject):
 
         #self.vmm.close()
         self.vmm = None
-        if self.windowManager != None:
-            self.windowManager.close()
-            self.windowManager = None
-        for uuid in self.windowDetails.keys():
-            self.windowDetails[uuid].close()
-            del self.windowDetails[uuid]
-        for uuid in self.windowConsole.keys():
-            self.windowConsole[uuid].close()
-            del self.windowConsole[uuid]
-
         self.emit("disconnected", self.uri)
 
     def get_host_info(self):

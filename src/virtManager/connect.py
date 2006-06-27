@@ -17,6 +17,9 @@ class vmmConnect(gobject.GObject):
         self.window.get_widget("remote-xen-options").set_sensitive(False)
         self.window.get_widget("other-hv-options").set_sensitive(False)
 
+        # Not securely implemented yet by XenD, so disable it
+        self.window.get_widget("type-remote-xen").set_sensitive(False)
+
         self.window.signal_autoconnect({
             "on_type_local_xen_toggled": self.change_active_type,
             "on_type_remote_xen_toggled": self.change_active_type,
@@ -55,7 +58,7 @@ class vmmConnect(gobject.GObject):
         uri = None
 
         if self.window.get_widget("type-local-xen").get_active():
-            uri = None
+            uri = "xen"
         elif self.window.get_widget("type-remote-xen").get_active():
             protocol = "http"
             if self.window.get_widget("remote-xen-secure").get_active():
