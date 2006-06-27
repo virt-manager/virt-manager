@@ -39,7 +39,6 @@ IMG_VIDEOPACKET = 4
 try:
   # try to pygame 1.6 or newer.
   import pygame
-  print >>sys.stderr, 'Using pygame', pygame.ver
   pygame.init()
   def imgsize(img):
     return img.get_size()
@@ -86,7 +85,6 @@ except ImportError:
   except ImportError:
     print >>sys.stderr, 'Either Pygame or Python Imaging Library is required.'
     sys.exit(1)
-  print >>sys.stderr, 'Using PIL', Image.VERSION
   def imgsize(img):
     return img.size
   def create_image(w, h):

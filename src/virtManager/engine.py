@@ -116,6 +116,7 @@ class vmmEngine:
         if self.windowConnect == None:
             self.windowConnect = vmmConnect(self.get_config(), self)
             self.windowConnect.connect("completed", self._connect_to_uri)
+            self.windowConnect.connect("cancelled", self._connect_cancelled)
         self.windowConnect.show()
 
     def show_console(self, uri, uuid):

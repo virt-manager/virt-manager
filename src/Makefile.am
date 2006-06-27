@@ -1,8 +1,8 @@
 
 SUBDIRS = virtManager vncViewer graphWidgets
 
-bin_SOURCES = gnome-virt-manager.in
-bin_SCRIPTS = gnome-virt-manager
+bin_SOURCES = virt-manager.in
+bin_SCRIPTS = virt-manager
 
 pythondir = $(pkgdatadir)
 python_SOURCES = $(PACKAGE).py.in
@@ -12,7 +12,7 @@ libexec_SOURCES = $(PACKAGE)-launch.in
 libexec_SCRIPTS = $(PACKAGE)-launch
 
 gladedir = $(pkgdatadir)
-glade_DATA = $(wildcard $(srcdir)/*.glade)
+glade_DATA = $(PACKAGE).glade
 
 desktopdir = $(datadir)/applications
 desktop_SOURCES = $(PACKAGE).desktop.in
@@ -28,7 +28,7 @@ EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES)
 
 
 %.desktop: $(srcdir)/%.desktop.in
-	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::ICONDIR::,$(pkgdatadir)," < $< > $@
+	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::ICONDIR::,$(pkgdatadir)/pixmaps," < $< > $@
 
 %.service: $(srcdir)/%.service.in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PREFIX::,$(prefix)," < $< > $@
@@ -39,10 +39,10 @@ EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES)
 	  -e "s,::PYLIBDIR::,$(pkgdatadir)," \
           -e "s,::PYARCHLIBDIR::,$(pkglibdir)," < $< > $@
 
-gnome-virt-manager: $(srcdir)/gnome-virt-manager.in
+$(PACKAGE): $(srcdir)/$(PACKAGE).in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PYTHONDIR::,$(pkgdatadir)," < $< > $@
 
-gnome-virt-manager-launch: $(srcdir)/gnome-virt-manager-launch.in
+$(PACKAGE)-launch: $(srcdir)/$(PACKAGE)-launch.in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PYTHONDIR::,$(pkgdatadir)," < $< > $@
 
 

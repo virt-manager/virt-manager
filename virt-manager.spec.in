@@ -5,7 +5,7 @@
 Name: @PACKAGE@
 Version: @VERSION@
 Release: 1%{_extra_release}
-Summary: GNOME Virtual Machine Manager
+Summary: Virtual Machine Manager
 
 Group: Applications/Emulators
 License: GPL v2+
@@ -31,8 +31,9 @@ BuildRequires: pygtk2-devel
 BuildRequires: gtk2-devel
 
 %description
-GNOME Virtual Machine Manager provides a graphical tool for administering
-virtual machines managed via libvirt.
+Virtual Machine Manager provides a graphical tool for administering
+virtual machines such as Xen. It uses libvirt as the backend management
+API.
 
 %prep
 %setup -q

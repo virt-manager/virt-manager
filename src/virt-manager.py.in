@@ -32,7 +32,6 @@ if os.path.exists(os.getcwd() + "/src/virtManager/__init__.py"):
 else:
     sys.path.insert(0, pylib_dir)
     sys.path.insert(0, pyarchlib_dir)
-print "Path is " + str(sys.path)
 
 from virtManager.config import vmmConfig
 from virtManager.engine import vmmEngine

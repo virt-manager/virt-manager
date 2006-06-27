@@ -1,5 +1,5 @@
-AC_INIT(gnome-virt-manager.spec.in)
-AM_INIT_AUTOMAKE(gnome-virt-manager, 0.1.1)
+AC_INIT(virt-manager.spec.in)
+AM_INIT_AUTOMAKE(virt-manager, 0.1.1)
 
 AC_PROG_CC
 AC_PROG_LIBTOOL
@@ -15,4 +15,4 @@ AC_OUTPUT(Makefile
           src/vncViewer/Makefile
           src/graphWidgets/Makefile
           pixmaps/Makefile
-          gnome-virt-manager.spec)
+          virt-manager.spec)
