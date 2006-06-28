@@ -18,6 +18,7 @@ class vmmConnection(gobject.GObject):
         self.__gobject_init__()
         self.config = config
         self.uri = uri
+        self.readOnly = readOnly
 
         openURI = uri
         if openURI == "Xen":
@@ -29,6 +30,9 @@ class vmmConnection(gobject.GObject):
 
         self.vms = {}
         self.tick()
+
+    def is_read_only(self):
+        return self.readOnly
 
     def get_uri(self):
         return self.uri

@@ -33,6 +33,13 @@ class vmmDomain(gobject.GObject):
     def get_uuid(self):
         return self.uuid
 
+    def is_read_only(self):
+        if self.connection.is_read_only():
+            return True
+        if self.is_management_domain():
+            return True
+        return False
+
     def is_management_domain(self):
         if self.vm.ID() == 0:
             return True
