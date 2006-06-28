@@ -234,7 +234,6 @@ class vmmDomain(gobject.GObject):
         # XXX don't hardcode me! need to really extract info from
         # the libvirt XML as & when the display device info gets
         # added
-        prin
         return ["vnc", "localhost", 5900 + self.get_id()]
 
 
