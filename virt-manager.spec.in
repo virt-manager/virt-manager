@@ -4,7 +4,7 @@
 
 Name: @PACKAGE@
 Version: @VERSION@
-Release: 2%{_extra_release}
+Release: 3%{_extra_release}
 Summary: Virtual Machine Manager
 
 Group: Applications/Emulators
@@ -63,6 +63,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Wed Jun 28 2006 Daniel Berrange <berrange@redhat.com> - 0.1.2-3
+- Added missing copyright headers on all .py files
+
 * Wed Jun 28 2006 Daniel Berrange <berrange@redhat.com> - 0.1.2-2
 - Added python-devel to BuildRequires
 
