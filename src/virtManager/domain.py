@@ -158,7 +158,7 @@ class vmmDomain(gobject.GObject):
         stats = self.record
         for i in range(self.config.get_stats_history_length()+1):
             if i < len(stats):
-                vector.append(stats[i]["cpuTimePercent"]/100.0*10)
+                vector.append(stats[i]["cpuTimePercent"]/100.0)
             else:
                 vector.append(0)
         return vector
