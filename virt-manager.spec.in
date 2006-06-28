@@ -4,7 +4,7 @@
 
 Name: @PACKAGE@
 Version: @VERSION@
-Release: 1%{_extra_release}
+Release: 2%{_extra_release}
 Summary: Virtual Machine Manager
 
 Group: Applications/Emulators
@@ -29,6 +29,7 @@ Requires: python-imaging
 
 BuildRequires: pygtk2-devel
 BuildRequires: gtk2-devel
+BuildRequires: python-devel
 
 %description
 Virtual Machine Manager provides a graphical tool for administering
@@ -62,6 +63,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Wed Jun 28 2006 Daniel Berrange <berrange@redhat.com> - 0.1.2-2
+- Added python-devel to BuildRequires
+
 * Wed Jun 28 2006 Daniel Berrange <berrange@redhat.com> - 0.1.2-1
 - Change URL to public location
 
