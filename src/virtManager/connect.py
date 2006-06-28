@@ -1,5 +1,6 @@
 import gobject
 import gtk.glade
+import os
 
 class vmmConnect(gobject.GObject):
     __gsignals__ = {
@@ -14,8 +15,7 @@ class vmmConnect(gobject.GObject):
         self.engine = engine
         self.window.get_widget("vmm-open-connection").hide()
 
-        self.window.get_widget("remote-xen-options").set_sensitive(False)
-        self.window.get_widget("other-hv-options").set_sensitive(False)
+        self.change_active_type(self.window.get_widget("type-local-xen"))
 
         # Not securely implemented yet by XenD, so disable it
         self.window.get_widget("type-remote-xen").set_sensitive(False)
@@ -54,11 +54,22 @@ class vmmConnect(gobject.GObject):
                 self.window.get_widget("remote-xen-options").set_sensitive(False)
                 self.window.get_widget("other-hv-options").set_sensitive(True)
 
+            if src.get_name() == "type-local-xen" and os.getuid() != 0:
+                self.window.get_widget("option-read-only").set_sensitive(False)
+                self.window.get_widget("option-read-only").set_active(True)
+            else:
+                self.window.get_widget("option-read-only").set_active(False)
+                self.window.get_widget("option-read-only").set_sensitive(True)
+
+
     def open_connection(self, src):
         uri = None
 
+        readOnly = self.window.get_widget("option-read-only").get_active()
         if self.window.get_widget("type-local-xen").get_active():
             uri = "xen"
+            if os.getuid() != 0:
+                readOnly = True
         elif self.window.get_widget("type-remote-xen").get_active():
             protocol = "http"
             if self.window.get_widget("remote-xen-secure").get_active():
@@ -68,6 +79,6 @@ class vmmConnect(gobject.GObject):
             uri = self.window.get_widget("other-hv-uri").get_text()
 
         self.close()
-        self.emit("completed", uri, self.window.get_widget("option-read-only").get_active())
+        self.emit("completed", uri, readOnly)
 
 gobject.type_register(vmmConnect)
