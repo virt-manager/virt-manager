@@ -255,7 +255,7 @@ gtk_cell_renderer_sparkline_render (GtkCellRenderer *cell,
 				    GdkRectangle *expose_area,
 				    GtkCellRendererState flags)
 {
-#if 1
+#if USE_CAIRO
   cairo_t *cr;
   int index;
   double right_margin_x;
@@ -321,6 +321,32 @@ gtk_cell_renderer_sparkline_render (GtkCellRenderer *cell,
   */
 
   cairo_destroy (cr);
+#else
+  GtkCellRendererSparklinePrivate *priv;
+  GValueArray *data;
+  GdkPoint *points;
+  int index;
+  GdkGC *gc;
+
+  priv = GTK_CELL_RENDERER_SPARKLINE_GET_PRIVATE(cell);
+
+  data = priv->data_array;
+  
+  gc = gdk_gc_new(GDK_DRAWABLE(window));
+
+  points = g_new(GdkPoint, data->n_values);
+  for (index=0;index<data->n_values;index++) {
+    double cx = get_x (cell_area->width, 1, index, data->n_values) + cell_area->x;
+    double cy = get_y (cell_area, data, index);
+
+    points[index].x = cx;
+    points[index].y = cy;
+  }
+  gdk_draw_lines(GDK_DRAWABLE(window), gc, points, data->n_values);
+
+  g_free(points);
+  g_object_unref(gc);
+
 #endif
 }
 
