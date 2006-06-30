@@ -35,3 +35,5 @@ sparkline_la_LIBADD = \
     $(PYTHON_LDFLAGS)
 
 sparkline_la_LDFLAGS = -module -avoid-version -fPIC
+
+EXTRA_DIST = pysparklinemodule.override
