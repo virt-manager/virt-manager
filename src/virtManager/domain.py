@@ -193,7 +193,7 @@ class vmmDomain(gobject.GObject):
         stats = self.record
         for i in range(self.config.get_stats_history_length()+1):
             if i < len(stats):
-                vector.append(stats[i]["cpuTimeMovingAvgPercent"])
+                vector.append(stats[i]["cpuTimeMovingAvgPercent"]/100.0)
             else:
                 vector.append(0)
         return vector
@@ -203,7 +203,7 @@ class vmmDomain(gobject.GObject):
         stats = self.record
         for i in range(self.config.get_stats_history_length()+1):
             if i < len(stats):
-                vector.append(stats[i]["currMemPercent"])
+                vector.append(stats[i]["currMemPercent"]/100.0)
             else:
                 vector.append(0)
         return vector
@@ -212,14 +212,14 @@ class vmmDomain(gobject.GObject):
         vector = []
         stats = self.record
         for i in range(self.config.get_stats_history_length()+1):
-            vector.append(1)
+            vector.append(0)
         return vector
 
     def disk_usage_vector(self):
         vector = []
         stats = self.record
         for i in range(self.config.get_stats_history_length()+1):
-            vector.append(1)
+            vector.append(0)
         return vector
 
     def shutdown(self):

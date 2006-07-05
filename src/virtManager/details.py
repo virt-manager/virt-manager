@@ -21,15 +21,7 @@ import gobject
 import gtk
 import gtk.glade
 import libvirt
-
-import matplotlib
-matplotlib.use('GTK')
-
-from matplotlib.figure import Figure
-from matplotlib.axes import Subplot
-from matplotlib.backends.backend_gtk import FigureCanvasGTK, NavigationToolbar
-
-from matplotlib.numerix import arange, sin, pi
+import sparkline
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
@@ -97,32 +89,17 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("hw-list").append_column(hwCol)
 
 
-        self.cpu_usage_figure = Figure()
-        self.cpu_usage_graph = self.cpu_usage_figure.add_subplot(111)
-        self.cpu_usage_graph.set_autoscale_on(False)
-        self.cpu_usage_line = None
-        self.cpu_usage_line_avg = None
-        self.cpu_usage_canvas = FigureCanvasGTK(self.cpu_usage_figure)
-        self.cpu_usage_canvas.show()
-        self.window.get_widget("graph-table").attach(self.cpu_usage_canvas, 1, 2, 0, 1)
+        self.cpu_usage_graph = sparkline.Sparkline()
+        self.cpu_usage_graph.show()
+        self.window.get_widget("graph-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
 
-        self.memory_usage_figure = Figure()
-        self.memory_usage_graph = self.memory_usage_figure.add_subplot(111)
-        self.memory_usage_graph.set_autoscale_on(False)
-        self.memory_usage_line = None
-        self.memory_usage_canvas = FigureCanvasGTK(self.memory_usage_figure)
-        self.memory_usage_canvas.show()
-        self.window.get_widget("graph-table").attach(self.memory_usage_canvas, 1, 2, 1, 2)
+        self.memory_usage_graph = sparkline.Sparkline()
+        self.memory_usage_graph.show()
+        self.window.get_widget("graph-table").attach(self.memory_usage_graph, 1, 2, 1, 2)
 
-        self.network_traffic_figure = Figure()
-        self.network_traffic_graph = self.network_traffic_figure.add_subplot(111)
-        self.network_traffic_graph.set_autoscale_on(False)
-        self.network_traffic_line = None
-        self.network_traffic_canvas = FigureCanvasGTK(self.network_traffic_figure)
-        self.network_traffic_canvas.show()
-        self.window.get_widget("graph-table").attach(self.network_traffic_canvas, 1, 2, 3, 4)
-
-        self.config.on_stats_history_length_changed(self.change_graph_ranges)
+        self.network_traffic_graph = sparkline.Sparkline()
+        self.network_traffic_graph.show()
+        self.window.get_widget("graph-table").attach(self.network_traffic_graph, 1, 2, 3, 4)
 
         self.window.signal_autoconnect({
             "on_close_details_clicked": self.close,
@@ -137,7 +114,6 @@ class vmmDetails(gobject.GObject):
             "on_control_console_clicked": self.control_vm_console,
             })
 
-        self.change_graph_ranges()
         self.hw_selected()
         self.vm.connect("status-changed", self.update_widget_states)
         self.vm.connect("resources-sampled", self.refresh_resources)
@@ -202,25 +178,6 @@ class vmmDetails(gobject.GObject):
     def control_vm_snapshot(self, src):
         self.emit("action-take-snapshot", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def change_graph_ranges(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
-        self.cpu_usage_graph.clear()
-        #self.cpu_usage_graph.set_xlabel('History')
-        #self.cpu_usage_graph.set_ylabel('% utilization')
-        self.cpu_usage_graph.grid(True)
-        self.cpu_usage_line = None
-
-        self.memory_usage_graph.clear()
-        #self.memory_usage_graph.set_xlabel('History')
-        #self.memory_usage_graph.set_ylabel('% utilization')
-        self.memory_usage_graph.grid(True)
-        self.memory_usage_line = None
-
-        self.network_traffic_graph.clear()
-        #self.network_traffic_graph.set_xlabel('History')
-        #self.network_traffic_graph.set_ylabel('% utilization')
-        self.network_traffic_graph.grid(True)
-        self.network_traffic_line = None
-
     def update_widget_states(self, vm, status):
         self.ignorePause = True
         try:
@@ -257,46 +214,15 @@ class vmmDetails(gobject.GObject):
         history_len = self.config.get_stats_history_length()
         cpu_vector = self.vm.cpu_time_vector()
         cpu_vector.reverse()
-        cpu_vector_avg = self.vm.cpu_time_moving_avg_vector()
-        cpu_vector_avg.reverse()
-        if self.cpu_usage_line == None:
-            self.cpu_usage_line = self.cpu_usage_graph.plot(cpu_vector)
-            self.cpu_usage_line_avg = self.cpu_usage_graph.plot(cpu_vector_avg)
-            self.cpu_usage_graph.set_xlim(0, history_len)
-            self.cpu_usage_graph.set_ylim(0, 100)
-        else:
-            self.cpu_usage_line[0].set_ydata(cpu_vector)
-            self.cpu_usage_line_avg[0].set_ydata(cpu_vector_avg)
-            self.cpu_usage_graph.set_xlim(0, history_len)
-            self.cpu_usage_graph.set_ylim(0, 100)
-        self.cpu_usage_graph.set_yticklabels(["0","","","","","100"])
-        self.cpu_usage_graph.set_xticklabels([])
-        self.cpu_usage_canvas.draw()
+        self.cpu_usage_graph.set_property("data_array", cpu_vector)
 
-        history_len = self.config.get_stats_history_length()
         memory_vector = self.vm.current_memory_vector()
         memory_vector.reverse()
-        if self.memory_usage_line == None:
-            self.memory_usage_line = self.memory_usage_graph.plot(memory_vector)
-            self.memory_usage_graph.set_xlim(0, history_len)
-            self.memory_usage_graph.set_ylim(0, 100)
-        else:
-            self.memory_usage_line[0].set_ydata(memory_vector)
-            self.memory_usage_graph.set_xlim(0, history_len)
-            self.memory_usage_graph.set_ylim(0, 100)
-        self.memory_usage_graph.set_yticklabels(["0","","","","","100"])
-        self.memory_usage_graph.set_xticklabels([])
-        self.memory_usage_canvas.draw()
+        self.memory_usage_graph.set_property("data_array", memory_vector)
 
-        history_len = self.config.get_stats_history_length()
-        #if self.network_traffic_line == None:
-            #self.network_traffic_line = self.network_traffic_graph.plot(self.vm.network_traffic_vector())
-        #else:
-            #self.network_traffic_line[0].set_ydata(self.vm.network_traffic_vector())
-        self.network_traffic_graph.set_xlim(0, history_len)
-        self.network_traffic_graph.set_ylim(0, 100)
-        self.network_traffic_graph.set_yticklabels(["0","","","","","100"])
-        self.network_traffic_graph.set_xticklabels([])
-        self.network_traffic_canvas.draw()
+        network_vector = self.vm.network_traffic_vector()
+        network_vector.reverse()
+        self.network_traffic_graph.set_property("data_array", network_vector)
+
 
 gobject.type_register(vmmDetails)

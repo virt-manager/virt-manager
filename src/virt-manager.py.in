@@ -55,10 +55,6 @@ from virtManager.config import vmmConfig
 from virtManager.engine import vmmEngine
 from virtManager.remote import vmmRemote
 
-# Obnoxious matplotlib sets its own icon as the default
-# which is a totally inappropriate action for a library
-# to take. Make sure this comes after the virtManager.*
-# import so that we override the matplotlib crap
 gtk.window_set_default_icon_from_file(icon_dir + "/" + appname + "-icon.svg")
 
 # Run me!
