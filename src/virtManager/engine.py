@@ -95,6 +95,8 @@ class vmmEngine:
         for uri in self.connections.keys():
             try:
                 self.connections[uri]["connection"].tick()
+            except KeyboardInterrupt:
+                raise KeyboardInterrupt
             except:
                 print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
                 print "Error refreshing connection " + uri
