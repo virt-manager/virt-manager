@@ -225,7 +225,6 @@ gtk_sparkline_expose (GtkWidget *widget,
   GtkAllocation *cell_area = &widget->allocation;
 #if USE_CAIRO
   cairo_t *cr;
-  double margin = 2;
 #endif
 
   priv = GTK_SPARKLINE_GET_PRIVATE (widget);
@@ -289,7 +288,7 @@ gtk_sparkline_expose (GtkWidget *widget,
   }
   if (priv->filled) {
     double baseline_y = cell_area->height + cell_area->y;
-    cairo_line_to (cr, cell_area->x + cell_area->width - margin, baseline_y);
+    cairo_line_to (cr, cell_area->x + cell_area->width, baseline_y);
     cairo_line_to (cr, 0, baseline_y);
     cairo_fill (cr);
   } else {

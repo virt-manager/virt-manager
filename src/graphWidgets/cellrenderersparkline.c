@@ -104,7 +104,7 @@ static void gtk_cell_renderer_sparkline_init (GtkCellRendererSparkline *cellspar
   priv = GTK_CELL_RENDERER_SPARKLINE_GET_PRIVATE (cellsparkline);
 
   priv->filled = TRUE;
-    priv->filled = FALSE;
+  //    priv->filled = FALSE;
   priv->data_array = g_value_array_new(0);
 }
 
@@ -266,9 +266,9 @@ gtk_cell_renderer_sparkline_render (GtkCellRenderer *cell,
   for (index=0;index<data->n_values;index++) {
     double cx = ((double)index * pixels_per_point);
     double cy = get_y (cell_area, data, index);
-
+    
     points[index].x = cx + cell_area->x;
-    points[index].y = cy + cell_area->y;
+    points[index].y = cy;
   }
 
 
@@ -283,13 +283,14 @@ gtk_cell_renderer_sparkline_render (GtkCellRenderer *cell,
   /* Render the line: */
   cairo_set_line_width (cr, (double)0.5);
 
-
+#if 0
   cairo_move_to(cr, cell_area->x, cell_area->y);
   cairo_line_to(cr, cell_area->x, cell_area->y + cell_area->height);
   cairo_line_to(cr, cell_area->x + cell_area->width, cell_area->y + cell_area->height);
   cairo_line_to(cr, cell_area->x + cell_area->width, cell_area->y);
   cairo_line_to(cr, cell_area->x, cell_area->y);
   cairo_stroke(cr);
+#endif
 
   for (index=0;index<data->n_values;index++) {
     double cx = points[index].x;
