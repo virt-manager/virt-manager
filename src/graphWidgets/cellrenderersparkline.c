@@ -104,7 +104,7 @@ static void gtk_cell_renderer_sparkline_init (GtkCellRendererSparkline *cellspar
   priv = GTK_CELL_RENDERER_SPARKLINE_GET_PRIVATE (cellsparkline);
 
   priv->filled = TRUE;
-  priv->filled = FALSE;
+    priv->filled = FALSE;
   priv->data_array = g_value_array_new(0);
 }
 
@@ -229,19 +229,11 @@ static void gtk_cell_renderer_sparkline_get_size (GtkCellRenderer *cell,
   }
 }
 
-static double get_x (double right_margin_x,
-		     double data_points_per_pixel,
-		     int index,
-		     int num_data_points)
-{
-  return right_margin_x - ((double)(num_data_points-(index+1))/data_points_per_pixel);
-}
-
 static double get_y (GdkRectangle *cell_area,
 		     GValueArray *data,
 		     int index)
 {
-  double baseline_y = cell_area->y + cell_area->height;
+  double baseline_y = cell_area->y + cell_area->height-1;
   GValue *val = g_value_array_get_nth(data, index);
   return baseline_y - (cell_area->height * g_value_get_double(val));
 }
@@ -255,45 +247,53 @@ gtk_cell_renderer_sparkline_render (GtkCellRenderer *cell,
 				    GdkRectangle *expose_area,
 				    GtkCellRendererState flags)
 {
-#if USE_CAIRO
-  cairo_t *cr;
-  int index;
-  double right_margin_x;
-  double margin = 2.0;
-  double dot_radius = 1.0;
-  double data_points_per_pixel = 1.0;
-  double baseline_y = cell_area->y + cell_area->height;
-
   GtkCellRendererSparklinePrivate *priv;
   GValueArray *data;
+  GdkPoint *points;
+  int index;
+  double pixels_per_point;
+#if USE_CAIRO
+  cairo_t *cr;
+#endif
 
-  priv = GTK_CELL_RENDERER_SPARKLINE_GET_PRIVATE (cell);
+  priv = GTK_CELL_RENDERER_SPARKLINE_GET_PRIVATE(cell);
 
   data = priv->data_array;
 
-  /*
-  printf ("sparkline_render\n");
-  printf ("background_area=(%d,%d,%d,%d)\n", background_area->x, background_area->y, background_area->width, background_area->height);
-  printf ("cell_area=(%d,%d,%d,%d)\n", cell_area->x, cell_area->y, cell_area->width, cell_area->height);
-  printf ("expose_area=(%d,%d,%d,%d)\n", expose_area->x, expose_area->y, expose_area->width, expose_area->height);
-  */
+  pixels_per_point = (double)cell_area->width / ((double)data->n_values-1);
 
-  cr = gdk_cairo_create (window);
+  points = g_new(GdkPoint, data->n_values);
+  for (index=0;index<data->n_values;index++) {
+    double cx = ((double)index * pixels_per_point);
+    double cy = get_y (cell_area, data, index);
+
+    points[index].x = cx + cell_area->x;
+    points[index].y = cy + cell_area->y;
+  }
+
+
+#if USE_CAIRO
+  cr = gdk_cairo_create (GDK_DRAWABLE(window));
 
   /* Clip to the cell: */
   cairo_save (cr);
   cairo_rectangle (cr, cell_area->x, cell_area->y, cell_area->width, cell_area->height);
   cairo_clip (cr);
 
-  right_margin_x = cell_area->x + cell_area->width - margin;
-
   /* Render the line: */
-  //cairo_set_line_width (cr, (double)cell_area->width*0.5/(double)NUM_VALUES);
   cairo_set_line_width (cr, (double)0.5);
 
+
+  cairo_move_to(cr, cell_area->x, cell_area->y);
+  cairo_line_to(cr, cell_area->x, cell_area->y + cell_area->height);
+  cairo_line_to(cr, cell_area->x + cell_area->width, cell_area->y + cell_area->height);
+  cairo_line_to(cr, cell_area->x + cell_area->width, cell_area->y);
+  cairo_line_to(cr, cell_area->x, cell_area->y);
+  cairo_stroke(cr);
+
   for (index=0;index<data->n_values;index++) {
-    double cx = get_x (right_margin_x, data_points_per_pixel, index, data->n_values);
-    double cy = get_y (cell_area, data, index);
+    double cx = points[index].x;
+    double cy = points[index].y;
     if (index) {
       cairo_line_to (cr, cx, cy);
     } else {
@@ -301,53 +301,25 @@ gtk_cell_renderer_sparkline_render (GtkCellRenderer *cell,
     }
   }
   if (priv->filled) {
-    cairo_line_to (cr, right_margin_x, baseline_y);
-    cairo_line_to (cr, get_x (right_margin_x, data_points_per_pixel, 0, data->n_values), baseline_y);
+    double baseline_y = cell_area->height + cell_area->y;
+    cairo_line_to (cr, points[data->n_values-1].x, baseline_y);
+    cairo_line_to (cr, 0, baseline_y);
     cairo_fill (cr);
   } else {
     cairo_stroke (cr);
   }
-
   /* Stop clipping: */
   cairo_restore (cr);
 
-  /* Render the dot for the last value: */
-  /*
-  if (data->n_values>0) {
-    cairo_set_source_rgb (cr, 1., 0., 0.);
-    cairo_arc (cr, right_margin_x, get_y (cell_area, data, data->n_values-1), dot_radius, 0., 2 * 3.14159265359);
-    cairo_fill (cr);
-  }
-  */
-
   cairo_destroy (cr);
 #else
-  GtkCellRendererSparklinePrivate *priv;
-  GValueArray *data;
-  GdkPoint *points;
-  int index;
-  GdkGC *gc;
-
-  priv = GTK_CELL_RENDERER_SPARKLINE_GET_PRIVATE(cell);
-
-  data = priv->data_array;
-  
-  gc = gdk_gc_new(GDK_DRAWABLE(window));
-
-  points = g_new(GdkPoint, data->n_values);
-  for (index=0;index<data->n_values;index++) {
-    double cx = get_x (cell_area->width, 1, index, data->n_values) + cell_area->x;
-    double cy = get_y (cell_area, data, index);
-
-    points[index].x = cx;
-    points[index].y = cy;
-  }
-  gdk_draw_lines(GDK_DRAWABLE(window), gc, points, data->n_values);
+  gdk_draw_lines(GDK_DRAWABLE(window),
+		 widget->style->fg_gc[GTK_WIDGET_STATE(widget)],
+		 points, data->n_values);
+#endif
 
   g_free(points);
-  g_object_unref(gc);
 
-#endif
 }
 
 #define __GTK_CELL_RENDERER_SPARKLINE_C__

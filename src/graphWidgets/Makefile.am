@@ -25,6 +25,7 @@ sparkline_la_SOURCES = \
     sparkline.h
 
 sparkline_la_CFLAGS = -fPIC -Wall \
+    -DUSE_CAIRO=1 \
     $(PYGTK2_CFLAGS) \
     $(GTK2_CFLAGS) \
     $(PYTHON_CPPFLAGS)
