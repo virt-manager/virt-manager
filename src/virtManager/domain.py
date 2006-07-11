@@ -100,10 +100,10 @@ class vmmDomain(gobject.GObject):
         if not(info[0] in [libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED]):
             cpuTime = info[4] - prevCpuTime
             cpuTimeAbs = info[4]
-            pcentCpuTime = (cpuTime) * 100 / ((now - prevTimestamp)*1000*1000*1000*self.connection.host_active_processor_count())
+            pcentCpuTime = (cpuTime) * 100.0 / ((now - prevTimestamp)*1000.0*1000.0*1000.0*self.connection.host_active_processor_count())
 
-        pcentCurrMem = info[2] * 100 / self.connection.host_memory_size()
-        pcentMaxMem = info[1] * 100 / self.connection.host_memory_size()
+        pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
+        pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
 
         newStats = { "timestamp": now,
                      "cpuTime": cpuTime,
@@ -130,7 +130,7 @@ class vmmDomain(gobject.GObject):
             self.record[0]["cpuTimeMovingAvgPercent"] = 0
         else:
             self.record[0]["cpuTimeMovingAvg"] = (self.record[0]["cpuTimeAbs"]-startCpuTime) / nSamples
-            self.record[0]["cpuTimeMovingAvgPercent"] = (self.record[0]["cpuTimeAbs"]-startCpuTime) * 100 / ((now-startTimestamp)*1000*1000*1000 * self.connection.host_active_processor_count())
+            self.record[0]["cpuTimeMovingAvgPercent"] = (self.record[0]["cpuTimeAbs"]-startCpuTime) * 100.0 / ((now-startTimestamp)*1000.0*1000.0*1000.0 * self.connection.host_active_processor_count())
 
         self._update_status(info[0])
         self.emit("resources-sampled")
