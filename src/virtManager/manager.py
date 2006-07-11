@@ -299,28 +299,20 @@ class vmmManager(gobject.GObject):
         model.set_sort_column_id(VMLIST_SORT_NAME, gtk.SORT_ASCENDING)
 
 
-    # XXX does python have a built-in sort op like perl's <=> / cmp ?
-    def sort_op(self, a, b):
-        if a > b:
-            return 1
-        elif a < b:
-            return -1
-        return 0
-
     def vmlist_name_sorter(self, model, iter1, iter2):
-        return self.sort_op(model.get_value(iter1, 0), model.get_value(iter2, 0))
+        return cmp(model.get_value(iter1, 0), model.get_value(iter2, 0))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
-        return self.sort_op(self.connection.get_vm(model.get_value(iter1, 0)).cpu_time(), self.connection.get_vm(model.get_value(iter2, 0)).cpu_time())
+        return cmp(self.connection.get_vm(model.get_value(iter1, 0)).cpu_time(), self.connection.get_vm(model.get_value(iter2, 0)).cpu_time())
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2):
-        return self.sort_op(self.connection.get_vm(model.get_value(iter1, 0)).current_memory(), self.connection.get_vm(model.get_value(iter2, 0)).current_memory())
+        return cmp(self.connection.get_vm(model.get_value(iter1, 0)).current_memory(), self.connection.get_vm(model.get_value(iter2, 0)).current_memory())
 
     def vmlist_disk_usage_sorter(self, model, iter1, iter2):
-        return self.sort_op(self.connection.get_vm(model.get_value(iter1, 0)).disk_usage(), self.connection.get_vm(model.get_value(iter2, 0)).disk_usage())
+        return cmp(self.connection.get_vm(model.get_value(iter1, 0)).disk_usage(), self.connection.get_vm(model.get_value(iter2, 0)).disk_usage())
 
     def vmlist_network_usage_sorter(self, model, iter1, iter2):
-        return self.sort_op(self.connection.get_vm(model.get_value(iter1, 0)).network_traffic(), self.connection.get_vm(model.get_value(iter2, 0)).network_traffic())
+        return cmp(self.connection.get_vm(model.get_value(iter1, 0)).network_traffic(), self.connection.get_vm(model.get_value(iter2, 0)).network_traffic())
 
     def toggle_status_visible_conf(self, menu):
         self.config.set_vmlist_status_visible(menu.get_active())
