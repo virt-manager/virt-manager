@@ -75,7 +75,7 @@ def main():
         dbusObj = dbus.Interface(dbusProxy, "org.freedesktop.DBus")
 
         # If we're already running, then just talk to existing process
-        if os.getenv("DBUS_ACTIVATION_BUS_ADDRESS"):
+        if os.getenv("DBUS_STARTER_ADDRESS"):
             name = dbus.service.BusName("com.redhat.virt.manager", bus=bus)
             remote = vmmRemote(engine, name)
         else:
