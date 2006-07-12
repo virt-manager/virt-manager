@@ -63,6 +63,9 @@ class vmmConfig:
     def is_vmlist_cpu_usage_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/cpu_usage")
 
+    def is_vmlist_virtual_cpus_visible(self):
+        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/virtual_cpus")
+
     def is_vmlist_memory_usage_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/memory_usage")
 
@@ -80,6 +83,9 @@ class vmmConfig:
     def set_vmlist_cpu_usage_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/cpu_usage", state)
 
+    def set_vmlist_virtual_cpus_visible(self, state):
+        self.conf.set_bool(self.conf_dir + "/vmlist-fields/virtual_cpus", state)
+
     def set_vmlist_memory_usage_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/memory_usage", state)
 
@@ -96,6 +102,9 @@ class vmmConfig:
 
     def on_vmlist_cpu_usage_visible_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/cpu_usage", callback)
+
+    def on_vmlist_virtual_cpus_visible_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/vmlist-fields/virtual_cpus", callback)
 
     def on_vmlist_memory_usage_visible_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/memory_usage", callback)

@@ -111,6 +111,7 @@ class vmmDomain(gobject.GObject):
                      "cpuTimePercent": pcentCpuTime,
                      "currMem": info[2],
                      "currMemPercent": pcentCurrMem,
+                     "vcpuCount": info[3],
                      "maxMem": info[1],
                      "maxMemPercent": pcentMaxMem,
                      }
@@ -177,6 +178,11 @@ class vmmDomain(gobject.GObject):
 
     def disk_usage_percentage(self):
         return 1
+
+    def vcpu_count(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["vcpuCount"]
 
     def cpu_time_vector(self):
         vector = []
