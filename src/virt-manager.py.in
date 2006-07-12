@@ -22,6 +22,7 @@
 import gtk
 
 import dbus
+import dbus.glib
 import dbus.service
 
 from os import getcwd
@@ -80,8 +81,8 @@ def main():
         else:
             managerProxy = bus.get_object("com.redhat.virt.manager", "/com/redhat/virt/manager")
             managerObj = dbus.Interface(managerProxy, "com.redhat.virt.manager")
+
             if options.uri != None:
-                print "Asking existing instance to open URI '" + str(options.uri) + "'"
                 managerObj.show_host_summary(options.uri)
             else:
                 managerObj.show_connect()
