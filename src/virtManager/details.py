@@ -126,6 +126,12 @@ class vmmDetails(gobject.GObject):
         dialog.show_all()
         dialog.present()
 
+    def activate_performance_page(self):
+        self.window.get_widget("details-pages").set_current_page(0)
+
+    def activate_config_page(self):
+        self.window.get_widget("details-pages").set_current_page(1)
+
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-details").hide()
         return 1

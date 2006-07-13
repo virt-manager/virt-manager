@@ -149,6 +149,14 @@ class vmmEngine:
             self.connections[uri]["windowConsole"][uuid] = console
         self.connections[uri]["windowConsole"][uuid].show()
 
+    def show_details_performance(self, uri, uuid):
+        win = self.show_details(uri, uuid)
+        win.activate_performance_page()
+
+    def show_details_config(self, uri, uuid):
+        win = self.show_details(uri, uuid)
+        win.activate_config_page()
+        
     def show_details(self, uri, uuid):
         con = self.get_connection(uri)
 
@@ -158,6 +166,7 @@ class vmmEngine:
             details.connect("action-show-console", self._do_show_console)
             self.connections[uri]["windowDetails"][uuid] = details
         self.connections[uri]["windowDetails"][uuid].show()
+        return self.connections[uri]["windowDetails"][uuid]
 
     def show_manager(self, uri):
         con = self.get_connection(uri)
