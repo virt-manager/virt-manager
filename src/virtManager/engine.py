@@ -73,10 +73,10 @@ class vmmEngine:
 
     def _do_vm_removed(self, connection, hvuri, vmuuid):
         if self.connections[hvuri]["windowDetails"].has_key(vmuuid):
-            self.connections[hvuri]["windowDetails"][vmuuid].hide()
+            self.connections[hvuri]["windowDetails"][vmuuid].close()
             del self.connections[hvuri]["windowDetails"][vmuuid]
         if self.connections[hvuri]["windowConsole"].has_key(vmuuid):
-            self.connections[hvuri]["windowConsole"][vmuuid].hide()
+            self.connections[hvuri]["windowConsole"][vmuuid].close()
             del self.connections[hvuri]["windowConsole"][vmuuid]
 
     def reschedule_timer(self, ignore1,ignore2,ignore3,ignore4):
