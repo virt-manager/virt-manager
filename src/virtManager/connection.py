@@ -90,23 +90,36 @@ class vmmConnection(gobject.GObject):
         if self.vmm == None:
             return
 
+        ids = {}
+        for uuid in self.vms.keys():
+            vm = self.vms[uuid]
+            ids[vm.get_id()] = vm
+
         doms = self.vmm.listDomainsID()
         newVms = {}
         if doms != None:
             for id in doms:
-                vm = self.vmm.lookupByID(id)
-                uuid = self.uuidstr(vm.UUID())
-                newVms[uuid] = vmmDomain(self.config, self, vm, uuid)
+                if ids.has_key(id):
+                    # Existing VM, so just keep handle
+                    vm = ids[id]
+                    del ids[id]
+                else:
+                    # New VM so create wrapper object
+                    vm = self.vmm.lookupByID(id)
+                    uuid = self.uuidstr(vm.UUID())
+                    newVms[uuid] = vm
 
-        for uuid in self.vms.keys():
-            if not(newVms.has_key(uuid)):
-                del self.vms[uuid]
-                self.emit("vm-removed", self.uri, uuid)
+        # Any left in ids hash are old removed VMs
+        for id in ids:
+            vm = ids[id]
+            del self.vms[vm.get_uuid()]
+            self.emit("vm-removed", self.uri, vm.get_uuid())
 
+        # Any in newVms hash are added
         for uuid in newVms.keys():
-            if not(self.vms.has_key(uuid)):
-                self.vms[uuid] = newVms[uuid]
-                self.emit("vm-added", self.uri, uuid)
+            vm = newVms[uuid]
+            self.vms[uuid] = vmmDomain(self.config, self, vm, uuid)
+            self.emit("vm-added", self.uri, uuid)
 
         now = time()
         self.hostinfo = self.vmm.getInfo()
