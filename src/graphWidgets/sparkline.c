@@ -207,7 +207,7 @@ static double get_y (GtkAllocation *cell_area,
 		     GValueArray *data,
 		     int index)
 {
-  double baseline_y = cell_area->height-1;
+  double baseline_y = cell_area->height;
   GValue *val = g_value_array_get_nth(data, index);
   return baseline_y - ((cell_area->height-1) * g_value_get_double(val));
 }
