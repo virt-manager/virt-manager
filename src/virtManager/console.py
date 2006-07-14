@@ -18,6 +18,7 @@
 #
 
 import gobject
+import cairo
 import gtk.glade
 import libvirt
 import sys
@@ -203,10 +204,25 @@ class vmmConsole(gobject.GObject):
                     if self.vncViewer.is_authenticated():
                         screenshot = self.vncViewer.take_screenshot()
                     if screenshot != None:
-                        gc = screenshot.new_gc()
+                        cr = screenshot.cairo_create()
                         width, height = screenshot.get_size()
-                        screenshot.draw_line(gc, 0, 0, width, height)
-                        screenshot.draw_line(gc, 0, height, width, 0)
+
+                        # Set 60% gray overlayed
+                        cr.set_source_rgba(0, 0, 0, 0.6)
+                        cr.rectangle(0, 0, width, height)
+                        cr.fill()
+
+                        # Render a big text 'paused' across it
+                        cr.set_source_rgba(1, 1,1, 1)
+                        cr.set_font_size(80)
+                        cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+                        overlay = "paused"
+                        extents = cr.text_extents(overlay)
+                        x = width/2 - (extents[2]/2)
+                        y = height/2 - (extents[3]/2)
+                        cr.move_to(x, y)
+                        cr.show_text(overlay)
+
                         self.window.get_widget("console-screenshot").set_from_pixmap(screenshot, None)
                         self.window.get_widget("console-pages").set_current_page(1)
                     else:
