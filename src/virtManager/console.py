@@ -82,9 +82,19 @@ class vmmConsole(gobject.GObject):
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
 
+            "on_menu_vm_run_activate": self.control_vm_run,
+            "on_menu_vm_shutdown_activate": self.control_vm_shutdown,
+            "on_menu_vm_pause_activate": self.control_vm_pause,
+
             "on_control_terminal_clicked": self.control_vm_terminal,
             "on_control_snapshot_clicked": self.control_vm_snapshot,
             "on_control_details_clicked": self.control_vm_details,
+
+            "on_menu_vm_terminal_activate": self.control_vm_terminal,
+            "on_menu_vm_snapshot_activate": self.control_vm_snapshot,
+            "on_menu_vm_details_activate": self.control_vm_details,
+
+            "on_menu_vm_close_activate": self.close,
 
             "on_console_auth_login_clicked": self.try_login,
             })
@@ -178,23 +188,35 @@ class vmmConsole(gobject.GObject):
         try:
             if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
                 self.window.get_widget("control-run").set_sensitive(True)
+                self.window.get_widget("menu-vm-run").set_sensitive(True)
             else:
                 self.window.get_widget("control-run").set_sensitive(False)
+                self.window.get_widget("menu-vm-run").set_sensitive(False)
 
             if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
                 self.window.get_widget("control-pause").set_sensitive(False)
                 self.window.get_widget("control-shutdown").set_sensitive(False)
                 self.window.get_widget("control-terminal").set_sensitive(False)
                 self.window.get_widget("control-snapshot").set_sensitive(False)
+                self.window.get_widget("menu-vm-pause").set_sensitive(False)
+                self.window.get_widget("menu-vm-shutdown").set_sensitive(False)
+                self.window.get_widget("menu-vm-terminal").set_sensitive(False)
+                self.window.get_widget("menu-vm-snapshot").set_sensitive(False)
             else:
                 self.window.get_widget("control-pause").set_sensitive(True)
                 self.window.get_widget("control-shutdown").set_sensitive(True)
                 self.window.get_widget("control-terminal").set_sensitive(True)
                 self.window.get_widget("control-snapshot").set_sensitive(True)
+                self.window.get_widget("menu-vm-pause").set_sensitive(True)
+                self.window.get_widget("menu-vm-shutdown").set_sensitive(True)
+                self.window.get_widget("menu-vm-terminal").set_sensitive(True)
+                self.window.get_widget("menu-vm-snapshot").set_sensitive(True)
                 if status == libvirt.VIR_DOMAIN_PAUSED:
                     self.window.get_widget("control-pause").set_active(True)
+                    self.window.get_widget("menu-vm-pause").set_active(True)
                 else:
                     self.window.get_widget("control-pause").set_active(False)
+                    self.window.get_widget("menu-vm-pause").set_active(False)
 
             if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_management_domain():
                 self.window.get_widget("console-pages").set_current_page(0)

@@ -2291,7 +2291,7 @@ Inactive virtual machines</property>
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Run</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_menu-vm-run_activate" last_modification_time="Mon, 03 Apr 2006 10:12:18 GMT"/>
+		      <signal name="activate" handler="on_menu_vm_run_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
 		    </widget>
 		  </child>
 
@@ -2301,7 +2301,7 @@ Inactive virtual machines</property>
 		      <property name="label" translatable="yes">_Pause</property>
 		      <property name="use_underline">True</property>
 		      <property name="active">False</property>
-		      <signal name="activate" handler="on_menu-vm-pause_activate" last_modification_time="Mon, 03 Apr 2006 10:12:18 GMT"/>
+		      <signal name="activate" handler="on_menu_vm_pause_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
 		    </widget>
 		  </child>
 
@@ -2310,7 +2310,7 @@ Inactive virtual machines</property>
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Shutdown</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_menu-vm-shutdown_activate" last_modification_time="Mon, 03 Apr 2006 10:12:18 GMT"/>
+		      <signal name="activate" handler="on_menu_vm_shutdown_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
 		    </widget>
 		  </child>
 
@@ -2325,7 +2325,7 @@ Inactive virtual machines</property>
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Details</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_menu-vm-details_activate" last_modification_time="Mon, 03 Apr 2006 10:12:18 GMT"/>
+		      <signal name="activate" handler="on_menu_vm_details_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
 		    </widget>
 		  </child>
 
@@ -2334,7 +2334,7 @@ Inactive virtual machines</property>
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">Take _Snapshot</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_menu-vm-snapshot_activate" last_modification_time="Mon, 03 Apr 2006 10:15:07 GMT"/>
+		      <signal name="activate" handler="on_menu_vm_snapshot_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
 		    </widget>
 		  </child>
 
@@ -2343,7 +2343,7 @@ Inactive virtual machines</property>
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">Launch _Terminal</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_menu-vm-terminal_activate" last_modification_time="Mon, 03 Apr 2006 10:15:07 GMT"/>
+		      <signal name="activate" handler="on_menu_vm_terminal_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
 		    </widget>
 		  </child>
 
@@ -2358,7 +2358,7 @@ Inactive virtual machines</property>
 		      <property name="visible">True</property>
 		      <property name="label">gtk-close</property>
 		      <property name="use_stock">True</property>
-		      <signal name="activate" handler="on_menu-vm-close_activate" last_modification_time="Mon, 03 Apr 2006 10:15:07 GMT"/>
+		      <signal name="activate" handler="on_menu_vm_close_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
 		    </widget>
 		  </child>
 		</widget>
@@ -2376,11 +2376,11 @@ Inactive virtual machines</property>
 		<widget class="GtkMenu" id="menuitem9_menu">
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="about2">
+		    <widget class="GtkImageMenuItem" id="menu-help-about">
 		      <property name="visible">True</property>
 		      <property name="label">gtk-about</property>
 		      <property name="use_stock">True</property>
-		      <signal name="activate" handler="on_about2_activate" last_modification_time="Mon, 03 Apr 2006 10:15:47 GMT"/>
+		      <signal name="activate" handler="on_menu_help_about_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
 		    </widget>
 		  </child>
 		</widget>
