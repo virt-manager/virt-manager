@@ -23,11 +23,12 @@ import gtk.glade
 
 import sparkline
 
-VMLIST_SORT_NAME = 1
-VMLIST_SORT_CPU_USAGE = 2
-VMLIST_SORT_MEMORY_USAGE = 3
-VMLIST_SORT_DISK_USAGE = 4
-VMLIST_SORT_NETWORK_USAGE = 5
+VMLIST_SORT_ID = 1
+VMLIST_SORT_NAME = 2
+VMLIST_SORT_CPU_USAGE = 3
+VMLIST_SORT_MEMORY_USAGE = 4
+VMLIST_SORT_DISK_USAGE = 5
+VMLIST_SORT_NETWORK_USAGE = 6
 
 class vmmManager(gobject.GObject):
     __gsignals__ = {
@@ -52,6 +53,7 @@ class vmmManager(gobject.GObject):
         self.connection.connect("vm-added", self.vm_added)
         self.connection.connect("vm-removed", self.vm_removed)
 
+        self.config.on_vmlist_domain_id_visible_changed(self.toggle_domain_id_visible_widget)
         self.config.on_vmlist_status_visible_changed(self.toggle_status_visible_widget)
         self.config.on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
         self.config.on_vmlist_virtual_cpus_visible_changed(self.toggle_virtual_cpus_visible_widget)
@@ -59,6 +61,7 @@ class vmmManager(gobject.GObject):
         self.config.on_vmlist_disk_usage_visible_changed(self.toggle_disk_usage_visible_widget)
         self.config.on_vmlist_network_traffic_visible_changed(self.toggle_network_traffic_visible_widget)
 
+        self.window.get_widget("menu_view_domain_id").set_active(self.config.is_vmlist_domain_id_visible())
         self.window.get_widget("menu_view_status").set_active(self.config.is_vmlist_status_visible())
         self.window.get_widget("menu_view_cpu_usage").set_active(self.config.is_vmlist_cpu_usage_visible())
         self.window.get_widget("menu_view_virtual_cpus").set_active(self.config.is_vmlist_virtual_cpus_visible())
@@ -89,6 +92,7 @@ class vmmManager(gobject.GObject):
 
 
         self.window.signal_autoconnect({
+            "on_menu_view_domain_id_activate" : self.toggle_domain_id_visible_conf,
             "on_menu_view_status_activate" : self.toggle_status_visible_conf,
             "on_menu_view_cpu_usage_activate" : self.toggle_cpu_usage_visible_conf,
             "on_menu_view_virtual_cpus_activate" : self.toggle_virtual_cpus_visible_conf,
@@ -227,6 +231,7 @@ class vmmManager(gobject.GObject):
         model = gtk.ListStore(str, str)
         vmlist.set_model(model)
 
+        idCol = gtk.TreeViewColumn("ID")
         nameCol = gtk.TreeViewColumn("Name")
         statusCol = gtk.TreeViewColumn("Status")
         cpuUsageCol = gtk.TreeViewColumn("CPU usage")
@@ -235,11 +240,7 @@ class vmmManager(gobject.GObject):
         diskUsageCol = gtk.TreeViewColumn("Disk usage")
         networkTrafficCol = gtk.TreeViewColumn("Network traffic")
 
-        name_txt = gtk.CellRendererText()
-        nameCol.pack_start(name_txt, True)
-        nameCol.add_attribute(name_txt, 'text', 1)
-        nameCol.set_sort_column_id(VMLIST_SORT_NAME)
-
+        vmlist.append_column(idCol)
         vmlist.append_column(nameCol)
         vmlist.append_column(statusCol)
         vmlist.append_column(cpuUsageCol)
@@ -247,6 +248,17 @@ class vmmManager(gobject.GObject):
         vmlist.append_column(memoryUsageCol)
         vmlist.append_column(diskUsageCol)
         vmlist.append_column(networkTrafficCol)
+
+        id_txt = gtk.CellRendererText()
+        idCol.pack_start(id_txt, True)
+        idCol.set_cell_data_func(id_txt, self.domain_id_text, None)
+        idCol.set_visible(self.config.is_vmlist_domain_id_visible())
+        idCol.set_sort_column_id(VMLIST_SORT_ID)
+
+        name_txt = gtk.CellRendererText()
+        nameCol.pack_start(name_txt, True)
+        nameCol.add_attribute(name_txt, 'text', 1)
+        nameCol.set_sort_column_id(VMLIST_SORT_NAME)
 
         status_txt = gtk.CellRendererText()
         status_icon = gtk.CellRendererPixbuf()
@@ -298,6 +310,7 @@ class vmmManager(gobject.GObject):
         networkTrafficCol.set_visible(self.config.is_vmlist_network_traffic_visible())
         networkTrafficCol.set_sort_column_id(VMLIST_SORT_NETWORK_USAGE)
 
+        model.set_sort_func(VMLIST_SORT_ID, self.vmlist_domain_id_sorter)
         model.set_sort_func(VMLIST_SORT_NAME, self.vmlist_name_sorter)
         model.set_sort_func(VMLIST_SORT_CPU_USAGE, self.vmlist_cpu_usage_sorter)
         model.set_sort_func(VMLIST_SORT_MEMORY_USAGE, self.vmlist_memory_usage_sorter)
@@ -306,6 +319,9 @@ class vmmManager(gobject.GObject):
 
         model.set_sort_column_id(VMLIST_SORT_NAME, gtk.SORT_ASCENDING)
 
+
+    def vmlist_domain_id_sorter(self, model, iter1, iter2):
+        return cmp(self.connection.get_vm(model.get_value(iter1, 0)).get_id(), self.connection.get_vm(model.get_value(iter2, 0)).get_id())
 
     def vmlist_name_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, 0), model.get_value(iter2, 0))
@@ -322,13 +338,22 @@ class vmmManager(gobject.GObject):
     def vmlist_network_usage_sorter(self, model, iter1, iter2):
         return cmp(self.connection.get_vm(model.get_value(iter1, 0)).network_traffic(), self.connection.get_vm(model.get_value(iter2, 0)).network_traffic())
 
+    def toggle_domain_id_visible_conf(self, menu):
+        self.config.set_vmlist_domain_id_visible(menu.get_active())
+
+    def toggle_domain_id_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
+        menu = self.window.get_widget("menu_view_domain_id")
+        vmlist = self.window.get_widget("vm-list")
+        col = vmlist.get_column(0)
+        col.set_visible(self.config.is_vmlist_domain_id_visible())
+
     def toggle_status_visible_conf(self, menu):
         self.config.set_vmlist_status_visible(menu.get_active())
 
     def toggle_status_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_status")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(1)
+        col = vmlist.get_column(2)
         col.set_visible(self.config.is_vmlist_status_visible())
 
     def toggle_cpu_usage_visible_conf(self, menu):
@@ -337,7 +362,7 @@ class vmmManager(gobject.GObject):
     def toggle_cpu_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_cpu_usage")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(2)
+        col = vmlist.get_column(3)
         col.set_visible(self.config.is_vmlist_cpu_usage_visible())
 
     def toggle_virtual_cpus_visible_conf(self, menu):
@@ -346,7 +371,7 @@ class vmmManager(gobject.GObject):
     def toggle_virtual_cpus_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_virtual_cpus")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(3)
+        col = vmlist.get_column(4)
         col.set_visible(self.config.is_vmlist_virtual_cpus_visible())
 
     def toggle_memory_usage_visible_conf(self, menu):
@@ -355,7 +380,7 @@ class vmmManager(gobject.GObject):
     def toggle_memory_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_memory_usage")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(4)
+        col = vmlist.get_column(5)
         col.set_visible(self.config.is_vmlist_memory_usage_visible())
 
     def toggle_disk_usage_visible_conf(self, menu):
@@ -364,7 +389,7 @@ class vmmManager(gobject.GObject):
     def toggle_disk_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_disk_usage")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(5)
+        col = vmlist.get_column(6)
         col.set_visible(self.config.is_vmlist_disk_usage_visible())
 
     def toggle_network_traffic_visible_conf(self, menu):
@@ -373,9 +398,13 @@ class vmmManager(gobject.GObject):
     def toggle_network_traffic_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_network_traffic")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(6)
+        col = vmlist.get_column(7)
         col.set_visible(self.config.is_vmlist_network_traffic_visible())
 
+
+    def domain_id_text(self, column, cell, model, iter, data):
+        uuid = model.get_value(iter, 0)
+        cell.set_property('text', str(self.connection.get_vm(uuid).get_id()))
 
     def status_text(self, column, cell, model, iter, data):
         uuid = model.get_value(iter, 0)

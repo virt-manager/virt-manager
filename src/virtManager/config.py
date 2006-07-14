@@ -57,6 +57,9 @@ class vmmConfig:
     def get_icon_dir(self):
         return self.icon_dir
 
+    def is_vmlist_domain_id_visible(self):
+        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/domain_id")
+
     def is_vmlist_status_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/status")
 
@@ -77,6 +80,9 @@ class vmmConfig:
 
 
 
+    def set_vmlist_domain_id_visible(self, state):
+        self.conf.set_bool(self.conf_dir + "/vmlist-fields/domain_id", state)
+
     def set_vmlist_status_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/status", state)
 
@@ -96,6 +102,9 @@ class vmmConfig:
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/network_traffic", state)
 
 
+
+    def on_vmlist_domain_id_visible_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/vmlist-fields/domain_id", callback)
 
     def on_vmlist_status_visible_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/status", callback)

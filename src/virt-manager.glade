@@ -51,7 +51,7 @@
 		      <signal name="activate" handler="on_menu_file_new_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image36">
+			<widget class="GtkImage" id="image42">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -78,7 +78,7 @@
 		      <signal name="activate" handler="on_menu_file_open_connection_activate" last_modification_time="Mon, 12 Jun 2006 20:34:47 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image37">
+			<widget class="GtkImage" id="image43">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>
@@ -136,7 +136,7 @@
 		      <signal name="activate" handler="on_menu_edit_details_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image38">
+			<widget class="GtkImage" id="image44">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-properties</property>
 			  <property name="icon_size">1</property>
@@ -157,7 +157,7 @@
 		      <signal name="activate" handler="on_menu_edit_delete_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image39">
+			<widget class="GtkImage" id="image45">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-delete</property>
 			  <property name="icon_size">1</property>
@@ -199,6 +199,16 @@
 		<widget class="GtkMenu" id="menuitem6_menu">
 
 		  <child>
+		    <widget class="GtkCheckMenuItem" id="menu_view_domain_id">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Domain ID</property>
+		      <property name="use_underline">True</property>
+		      <property name="active">True</property>
+		      <signal name="activate" handler="on_menu_view_domain_id_activate" last_modification_time="Fri, 14 Jul 2006 13:23:42 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
 		    <widget class="GtkCheckMenuItem" id="menu_view_status">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">Status</property>
@@ -223,7 +233,7 @@
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">Virtual CPUs</property>
 		      <property name="use_underline">True</property>
-		      <property name="active">False</property>
+		      <property name="active">True</property>
 		      <signal name="activate" handler="on_menu_view_virtual_cpus_activate" last_modification_time="Wed, 12 Jul 2006 20:33:23 GMT"/>
 		    </widget>
 		  </child>
