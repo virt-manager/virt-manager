@@ -32,13 +32,13 @@ class vmmConfig:
         self.icon_dir = icon_dir
 
         self.status_icons = {
-            "blocked": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_blocked.png"),
-            "crashed": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_crashed.png"),
-            "paused": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_paused.png"),
-            "running": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_running.png"),
-            "shutdown": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_shutdown.png"),
-            "shutoff": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_shutoff.png"),
-            "idle": gtk.gdk.pixbuf_new_from_file(self.get_icon_dir() + "/state_idle.png"),
+            "blocked": gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_blocked.png", 18, 18),
+            "crashed": gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_crashed.png", 18, 18),
+            "paused": gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_paused.png", 18, 18),
+            "running": gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 18, 18),
+            "shutdown": gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_shutdown.png", 18, 18),
+            "shutoff": gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_shutoff.png", 18, 18),
+            "idle": gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_idle.png", 18, 18),
             }
 
 
