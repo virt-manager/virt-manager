@@ -208,4 +208,16 @@ class vmmEngine:
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED, libvirt.VIR_DOMAIN_PAUSED ]:
             print "Save requested, but machine is shutdown / shutoff / paused"
         else:
+            dialog = gtk.FileChooserDialog("Save Virtual Machine",
+                                           None,
+                                           gtk.FILE_CHOOSER_ACTION_SAVE,
+                                           (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                            gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
+                                           None)
+            response = dialog.run()
+            if(response == gtk.RESPONSE_ACCEPT):
+                uri_to_save = dialog.get_uri()
+                print "Got file URI " + uri_to_save
+            dialog.destroy()
+                                           
             print "XXX actually save the domain"
