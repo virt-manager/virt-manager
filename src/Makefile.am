@@ -6,7 +6,7 @@ bin_SCRIPTS = virt-manager
 
 pythondir = $(pkgdatadir)
 python_SOURCES = $(PACKAGE).py.in
-python_DATA = $(PACKAGE).py
+python_SCRIPTS = $(PACKAGE).py
 
 libexec_SOURCES = $(PACKAGE)-launch.in
 libexec_SCRIPTS = $(PACKAGE)-launch
