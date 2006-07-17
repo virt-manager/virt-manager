@@ -19,6 +19,7 @@
 import gobject
 import gtk
 import sys
+import libvirt
 
 from virtManager.about import vmmAbout
 from virtManager.connect import vmmConnect
@@ -27,6 +28,7 @@ from virtManager.preferences import vmmPreferences
 from virtManager.manager import vmmManager
 from virtManager.details import vmmDetails
 from virtManager.console import vmmConsole
+# from virtManager.savedialog import vmmSaveDialog
 
 class vmmEngine:
     def __init__(self, config):
@@ -121,6 +123,8 @@ class vmmEngine:
         self.show_details(uri, uuid)
     def _do_show_console(self, src, uri, uuid):
         self.show_console(uri, uuid)
+    def _do_save_domain(self, src, uri, uuid):
+        self.save_domain(uri, uuid)
 
     def show_about(self):
         if self.windowAbout == None:
@@ -164,6 +168,7 @@ class vmmEngine:
             details = vmmDetails(self.get_config(),
                                  con.get_vm(uuid))
             details.connect("action-show-console", self._do_show_console)
+            details.connect("action-save-domain", self._do_save_domain)
             self.connections[uri]["windowDetails"][uuid] = details
         self.connections[uri]["windowDetails"][uuid].show()
         return self.connections[uri]["windowDetails"][uuid]
@@ -195,3 +200,12 @@ class vmmEngine:
             self.connections[uri]["connection"].tick()
 
         return self.connections[uri]["connection"]
+
+    def save_domain(self, uri, uuid):
+        con = self.get_connection(uri, False)
+        vm = con.get_vm(uuid)
+        status = vm.status()
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED, libvirt.VIR_DOMAIN_PAUSED ]:
+            print "Save requested, but machine is shutdown / shutoff / paused"
+        else:
+            print "XXX actually save the domain"

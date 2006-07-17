@@ -29,7 +29,7 @@ class vmmDetails(gobject.GObject):
                                 gobject.TYPE_NONE, (str,str)),
         "action-launch-terminal": (gobject.SIGNAL_RUN_FIRST,
                                    gobject.TYPE_NONE, (str,str)),
-        "action-take-snapshot": (gobject.SIGNAL_RUN_FIRST,
+        "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str))
         }
     def __init__(self, config, vm):
@@ -57,8 +57,8 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("control-terminal").set_icon_widget(gtk.Image())
         self.window.get_widget("control-terminal").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_launch_term.png")
 
-        self.window.get_widget("control-snapshot").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-snapshot").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_snapshot.png")
+        self.window.get_widget("control-save-domain").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-save-domain").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_snapshot.png")
 
         self.window.get_widget("control-console").set_icon_widget(gtk.Image())
         #self.window.get_widget("control-console").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_snapshot.png")
@@ -110,7 +110,7 @@ class vmmDetails(gobject.GObject):
             "on_control_pause_toggled": self.control_vm_pause,
 
             "on_control_terminal_clicked": self.control_vm_terminal,
-            "on_control_snapshot_clicked": self.control_vm_snapshot,
+            "on_control_save_clicked": self.control_vm_save_domain,
             "on_control_console_clicked": self.control_vm_console,
             })
 
@@ -181,8 +181,8 @@ class vmmDetails(gobject.GObject):
     def control_vm_console(self, src):
         self.emit("action-show-console", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_snapshot(self, src):
-        self.emit("action-take-snapshot", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+    def control_vm_save_domain(self, src):
+        self.emit("action-save-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def update_widget_states(self, vm, status):
         self.ignorePause = True
@@ -196,12 +196,12 @@ class vmmDetails(gobject.GObject):
                 self.window.get_widget("control-pause").set_sensitive(False)
                 self.window.get_widget("control-shutdown").set_sensitive(False)
                 self.window.get_widget("control-terminal").set_sensitive(False)
-                self.window.get_widget("control-snapshot").set_sensitive(False)
+                self.window.get_widget("control-save-domain").set_sensitive(False)
             else:
                 self.window.get_widget("control-pause").set_sensitive(True)
                 self.window.get_widget("control-shutdown").set_sensitive(True)
                 self.window.get_widget("control-terminal").set_sensitive(True)
-                self.window.get_widget("control-snapshot").set_sensitive(True)
+                self.window.get_widget("control-save-domain").set_sensitive(True)
                 if status == libvirt.VIR_DOMAIN_PAUSED:
                     self.window.get_widget("control-pause").set_active(True)
                 else:
