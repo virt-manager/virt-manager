@@ -20,6 +20,7 @@ import gobject
 import gtk
 import sys
 import libvirt
+from time import sleep
 
 from virtManager.about import vmmAbout
 from virtManager.connect import vmmConnect
@@ -28,7 +29,6 @@ from virtManager.preferences import vmmPreferences
 from virtManager.manager import vmmManager
 from virtManager.details import vmmDetails
 from virtManager.console import vmmConsole
-# from virtManager.savedialog import vmmSaveDialog
 
 class vmmEngine:
     def __init__(self, config):
@@ -124,7 +124,7 @@ class vmmEngine:
     def _do_show_console(self, src, uri, uuid):
         self.show_console(uri, uuid)
     def _do_save_domain(self, src, uri, uuid):
-        self.save_domain(uri, uuid)
+        self.save_domain(src, uri, uuid)
 
     def show_about(self):
         if self.windowAbout == None:
@@ -201,23 +201,45 @@ class vmmEngine:
 
         return self.connections[uri]["connection"]
 
-    def save_domain(self, uri, uuid):
+    def save_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)
         vm = con.get_vm(uuid)
         status = vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED, libvirt.VIR_DOMAIN_PAUSED ]:
             print "Save requested, but machine is shutdown / shutoff / paused"
         else:
-            dialog = gtk.FileChooserDialog("Save Virtual Machine",
-                                           None,
+            self.fcdialog = gtk.FileChooserDialog("Save Virtual Machine",
+                                           src.window.get_widget("vmm-details"),
                                            gtk.FILE_CHOOSER_ACTION_SAVE,
                                            (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                             gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
                                            None)
-            response = dialog.run()
+            self.fcdialog.set_do_overwrite_confirmation(True)
+            response = self.fcdialog.run()
+            self.fcdialog.hide()
             if(response == gtk.RESPONSE_ACCEPT):
-                uri_to_save = dialog.get_uri()
-                print "Got file URI " + uri_to_save
-            dialog.destroy()
-                                           
-            print "XXX actually save the domain"
+                print "file save dialog should now be hidden"
+                uri_to_save = self.fcdialog.get_filename()
+                # show a lovely bouncing progress bar until the vm actually saves
+                self.pbar_dlg = gtk.Dialog("Saving VM Image",
+                                           src.window.get_widget("vmm-details"))
+                self.pbar_dlg.connect("destroy", self.destroy_pbar_dlg)
+
+                self.pbar = gtk.ProgressBar()
+                self.pbar_dlg.vbox.add(self.pbar)
+                self.pbar.show()
+
+                print "About to present the progress bar"
+                self.timer = gobject.timeout_add (100, self.pbar.pulse)
+                self.pbar_dlg.present()
+
+                # actually save the vm
+                vm.save( uri_to_save )
+                self.pbar_dlg.destroy()
+            self.fcdialog.destroy()
+
+    def destroy_pbar_dlg(self, widget, data=None):
+        gobject.source_remove(self.timer)
+        self.timer = 0
+        widget.destroy();
+        
