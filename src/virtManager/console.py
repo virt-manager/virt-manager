@@ -139,13 +139,20 @@ class vmmConsole(gobject.GObject):
 
         if self.vncViewer.is_authenticated():
             self.activate_viewer_page()
-        elif password and (self.vncViewer.authenticate(password) == 1):
-            if self.window.get_widget("console-auth-remember").get_active():
-                self.config.set_console_password(self.vm, password)
+        elif password:
+            if self.vncViewer.authenticate(password) == 1:
+                if self.window.get_widget("console-auth-remember").get_active():
+                    self.config.set_console_password(self.vm, password)
+                else:
+                    self.config.clear_console_password(self.vm)
+                self.activate_viewer_page()
+                self.vncViewer.activate()
             else:
-                self.config.clear_console_password(self.vm)
-            self.activate_viewer_page()
-            self.vncViewer.activate()
+                # Our VNC console doesn't like it when password is
+                # wrong and gets out of sync in its state machine
+                # So we force disconnect
+                self.vncViewer.disconnect_from_host()
+                self.activate_auth_page()
         else:
             self.activate_auth_page()
 
