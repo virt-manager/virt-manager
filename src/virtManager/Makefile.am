@@ -1,5 +1,5 @@
 
 pythondir = $(pkgdatadir)/virtManager
-python_DATA = $(wildcard $(srcdir)/*.py)
+python_SCRIPTS = $(wildcard $(srcdir)/*.py)
 
-EXTRA_DIST = $(python_DATA)
+EXTRA_DIST = $(python_SCRIPTS)
