@@ -217,7 +217,7 @@ class vmmEngine:
                                            None)
             self.fcdialog.set_do_overwrite_confirmation(True)
             # also set up the progress bar now
-            self.pbar_glade = gtk.glade.XML(config.get_glade_file(), "vmm-save-progress")
+            self.pbar_glade = gtk.glade.XML(self.get_config().get_glade_file(), "vmm-save-progress")
             self.pbar_win = self.pbar_glade.get_widget("vmm-save-progress")
             self.pbar_win.hide()
 
