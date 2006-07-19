@@ -117,7 +117,6 @@ class vmmDomain(gobject.GObject):
                      }
 
         self.record.insert(0, newStats)
-
         nSamples = 5
         #nSamples = len(self.record)
         if nSamples > len(self.record):
@@ -238,6 +237,10 @@ class vmmDomain(gobject.GObject):
 
     def resume(self):
         self.vm.resume()
+        self._update_status()
+
+    def save(self, file):
+        self.vm.save(file)
         self._update_status()
 
     def status(self):

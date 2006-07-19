@@ -28,14 +28,12 @@ from virtManager.preferences import vmmPreferences
 from virtManager.manager import vmmManager
 from virtManager.details import vmmDetails
 from virtManager.console import vmmConsole
-# from virtManager.savedialog import vmmSaveDialog
 
 class vmmEngine:
     def __init__(self, config):
         self.windowConnect = None
         self.windowPreferences = None
         self.windowAbout = None
-
         self.connections = {}
 
         self.timer = None
@@ -124,7 +122,7 @@ class vmmEngine:
     def _do_show_console(self, src, uri, uuid):
         self.show_console(uri, uuid)
     def _do_save_domain(self, src, uri, uuid):
-        self.save_domain(uri, uuid)
+        self.save_domain(src, uri, uuid)
 
     def show_about(self):
         if self.windowAbout == None:
@@ -201,11 +199,41 @@ class vmmEngine:
 
         return self.connections[uri]["connection"]
 
-    def save_domain(self, uri, uuid):
+    def save_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)
         vm = con.get_vm(uuid)
         status = vm.status()
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED, libvirt.VIR_DOMAIN_PAUSED ]:
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
+                       libvirt.VIR_DOMAIN_SHUTOFF,
+                       libvirt.VIR_DOMAIN_CRASHED,
+                       libvirt.VIR_DOMAIN_PAUSED ]:
             print "Save requested, but machine is shutdown / shutoff / paused"
         else:
-            print "XXX actually save the domain"
+            self.fcdialog = gtk.FileChooserDialog("Save Virtual Machine",
+                                           src.window.get_widget("vmm-details"),
+                                           gtk.FILE_CHOOSER_ACTION_SAVE,
+                                           (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                            gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
+                                           None)
+            self.fcdialog.set_do_overwrite_confirmation(True)
+            # also set up the progress bar now
+            self.pbar_glade = gtk.glade.XML(config.get_glade_file(), "vmm-save-progress")
+            self.pbar_win = self.pbar_glade.get_widget("vmm-save-progress")
+            self.pbar_win.hide()
+
+            response = self.fcdialog.run()
+            self.fcdialog.hide()
+            if(response == gtk.RESPONSE_ACCEPT):
+                uri_to_save = self.fcdialog.get_filename()
+                # show a lovely bouncing progress bar until the vm actually saves
+                self.timer = gobject.timeout_add (100,
+                                                  self.pbar_glade.get_widget("pbar").pulse)
+                self.pbar_win.present()
+
+                # actually save the vm
+                vm.save( uri_to_save )
+                gobject.source_remove(self.timer)
+                self.timer = 0
+                self.pbar_win.hide()
+            self.fcdialog.destroy()
+            self.pbar_win.destroy()
