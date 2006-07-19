@@ -52,7 +52,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("control-pause").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_pause.png")
 
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
-        #self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_run.png")
+        self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
         self.window.get_widget("control-terminal").set_icon_widget(gtk.Image())
         self.window.get_widget("control-terminal").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_launch_term.png")
@@ -61,7 +61,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("control-save-domain").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_snapshot.png")
 
         self.window.get_widget("control-console").set_icon_widget(gtk.Image())
-        #self.window.get_widget("control-console").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_snapshot.png")
+        self.window.get_widget("control-console").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_launch_term.png")
 
         self.window.get_widget("hw-panel").set_show_tabs(False)
 
