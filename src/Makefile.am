@@ -22,7 +22,7 @@ dbusdir = $(datadir)/dbus-1/services
 dbus_SOURCES = $(PACKAGE).service.in
 dbus_DATA = $(PACKAGE).service
 
-CLEANFILES = $(bin_SCRIPTS) $(desktop_DATA) $(dbus_DATA) $(python_DATA)  $(libexec_SCRIPTS)
+CLEANFILES = $(bin_SCRIPTS) $(desktop_DATA) $(dbus_DATA) $(python_SCRIPTS)  $(libexec_SCRIPTS)
 
 EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES) $(glade_DATA) $(libexec_SOURCES)
 
