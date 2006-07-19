@@ -20,7 +20,6 @@ import gobject
 import gtk
 import sys
 import libvirt
-from time import sleep
 
 from virtManager.about import vmmAbout
 from virtManager.connect import vmmConnect
@@ -35,7 +34,6 @@ class vmmEngine:
         self.windowConnect = None
         self.windowPreferences = None
         self.windowAbout = None
-
         self.connections = {}
 
         self.timer = None
@@ -205,7 +203,10 @@ class vmmEngine:
         con = self.get_connection(uri, False)
         vm = con.get_vm(uuid)
         status = vm.status()
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED, libvirt.VIR_DOMAIN_PAUSED ]:
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
+                       libvirt.VIR_DOMAIN_SHUTOFF,
+                       libvirt.VIR_DOMAIN_CRASHED,
+                       libvirt.VIR_DOMAIN_PAUSED ]:
             print "Save requested, but machine is shutdown / shutoff / paused"
         else:
             self.fcdialog = gtk.FileChooserDialog("Save Virtual Machine",
@@ -215,31 +216,24 @@ class vmmEngine:
                                             gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
                                            None)
             self.fcdialog.set_do_overwrite_confirmation(True)
+            # also set up the progress bar now
+            self.pbar_glade = gtk.glade.XML(config.get_glade_file(), "vmm-save-progress")
+            self.pbar_win = self.pbar_glade.get_widget("vmm-save-progress")
+            self.pbar_win.hide()
+
             response = self.fcdialog.run()
             self.fcdialog.hide()
             if(response == gtk.RESPONSE_ACCEPT):
-                print "file save dialog should now be hidden"
                 uri_to_save = self.fcdialog.get_filename()
                 # show a lovely bouncing progress bar until the vm actually saves
-                self.pbar_dlg = gtk.Dialog("Saving VM Image",
-                                           src.window.get_widget("vmm-details"))
-                self.pbar_dlg.connect("destroy", self.destroy_pbar_dlg)
-
-                self.pbar = gtk.ProgressBar()
-                self.pbar_dlg.vbox.add(self.pbar)
-                self.pbar.show()
-
-                print "About to present the progress bar"
-                self.timer = gobject.timeout_add (100, self.pbar.pulse)
-                self.pbar_dlg.present()
+                self.timer = gobject.timeout_add (100,
+                                                  self.pbar_glade.get_widget("pbar").pulse)
+                self.pbar_win.present()
 
                 # actually save the vm
                 vm.save( uri_to_save )
-                self.pbar_dlg.destroy()
+                gobject.source_remove(self.timer)
+                self.timer = 0
+                self.pbar_win.hide()
             self.fcdialog.destroy()
-
-    def destroy_pbar_dlg(self, widget, data=None):
-        gobject.source_remove(self.timer)
-        self.timer = 0
-        widget.destroy();
-        
+            self.pbar_win.destroy()
