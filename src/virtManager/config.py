@@ -20,6 +20,8 @@ import gconf
 
 import gtk.gdk
 
+from virtManager.keyring import *
+
 class vmmConfig:
     def __init__(self, appname, gconf_dir, glade_dir, icon_dir):
         self.appname = appname
@@ -30,6 +32,10 @@ class vmmConfig:
 
         self.glade_dir = glade_dir
         self.icon_dir = icon_dir
+        # We don;t create it straight away, since we don't want
+        # to block the app pending user authorizaation to access
+        # the keyring
+        self.keyring = None
 
         self.status_icons = {
             "blocked": gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_blocked.png", 18, 18),
@@ -153,3 +159,48 @@ class vmmConfig:
         self.conf.notify_add(self.conf_dir + "/stats/history-length", callback)
 
 
+    def get_secret_name(self, vm):
+        return "vm-console-" + vm.get_uuid()
+
+    def clear_console_password(self, vm):
+        id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
+
+        if id != None:
+            if self.keyring == None:
+                self.keyring = vmmKeyring()
+
+            self.keyring.clear_secret(id)
+            self.conf.unset(self.conf_dir + "/console/passwords/" + vm.get_uuid())
+
+    def get_console_password(self, vm):
+        id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
+        if id != None:
+            if self.keyring == None:
+                try:
+                    self.keyring = vmmKeyring()
+                except:
+                    print "Unable to access keyring"
+                    return ""
+
+            secret = self.keyring.get_secret(id)
+            if secret != None and secret.get_name() == self.get_secret_name(vm):
+                # XXX validate attributes
+                return secret.get_secret()
+        return ""
+
+    def set_console_password(self, vm, password):
+        if self.keyring == None:
+            try:
+                self.keyring = vmmKeyring()
+            except:
+                print "Unable to access keyring"
+                return
+
+        # Nb, we don't bother to check if there is an existing
+        # secret, because gnome-keyring auto-replaces an existing
+        # one if the attributes match - which they will since UUID
+        # is our unique key
+
+        secret = vmmSecret(self.get_secret_name(vm), password, { "uuid" : vm.get_uuid(), "hvuri": vm.get_connection().get_uri() })
+        id = self.keyring.add_secret(secret)
+        self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), id)
