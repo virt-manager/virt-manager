@@ -85,6 +85,8 @@ class vmmConnection(gobject.GObject):
     def host_maximum_processor_count(self):
         return self.hostinfo[4] * self.hostinfo[5] * self.hostinfo[6] * self.hostinfo[7]
 
+    def restore(self, frm):
+        self.vmm.restore(frm)
 
     def tick(self):
         if self.vmm == None:

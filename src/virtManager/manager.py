@@ -20,8 +20,11 @@
 import gobject
 import gtk
 import gtk.glade
+import threading
 
 import sparkline
+
+from virtManager.asyncjob import asyncJob
 
 VMLIST_SORT_ID = 1
 VMLIST_SORT_NAME = 2
@@ -104,6 +107,7 @@ class vmmManager(gobject.GObject):
             "on_menu_file_open_connection_activate": self.open_connection,
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
+            "on_menu_restore_saved_activate": self.restore_saved,
             "on_vmm_close_clicked": self.close,
             "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
@@ -137,6 +141,25 @@ class vmmManager(gobject.GObject):
 
     def open_connection(self, src=None):
         self.emit("action-show-connect")
+
+    def restore_saved(self, src=None):
+        # get filename
+        self.fcdialog = gtk.FileChooserDialog("Restore Virtual Machine",
+                                              self.window.get_widget("vmm-manager"),
+                                              gtk.FILE_CHOOSER_ACTION_OPEN,
+                                              (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                               gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
+                                              None)
+        # pop up progress dialog
+        response = self.fcdialog.run()
+        self.fcdialog.hide()
+        if(response == gtk.RESPONSE_ACCEPT):
+            file_to_load = self.fcdialog.get_filename()
+            progWin = asyncJob(self.config, self.connection.restore,
+                               [file_to_load], "Restoring Virtual Machine")
+            progWin.run()
+            
+        self.fcdialog.destroy()
 
     def vm_added(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
