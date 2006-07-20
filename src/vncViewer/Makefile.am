@@ -1,5 +1,5 @@
 
 pythondir = $(pkgdatadir)/vncViewer
-python_SCRIPTS = $(wildcard $(srcdir)/*.py)
+python_DATA = $(wildcard $(srcdir)/*.py)
 
-EXTRA_DIST = $(python_SCRIPTS)
+EXTRA_DIST = $(python_DATA)

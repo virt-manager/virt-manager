@@ -1,4 +1,3 @@
-#!/usr/bin/python
 #
 # Copyright (C) 2006  Daniel Berrange
 # Copyright (C) 2006 Red Hat
