@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 ##
 ##  pyvnc2swf - rfb.py
 ##
