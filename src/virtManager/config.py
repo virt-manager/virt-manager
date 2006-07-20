@@ -167,13 +167,18 @@ class vmmConfig:
 
         if id != None:
             if self.keyring == None:
-                self.keyring = vmmKeyring()
+                try:
+                    self.keyring = vmmKeyring()
+                except:
+                    print "Unable to access keyring"
+                    return
 
             self.keyring.clear_secret(id)
             self.conf.unset(self.conf_dir + "/console/passwords/" + vm.get_uuid())
 
     def get_console_password(self, vm):
         id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
+
         if id != None:
             if self.keyring == None:
                 try:
