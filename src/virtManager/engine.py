@@ -66,7 +66,7 @@ class vmmEngine:
         if len(self.connections.keys()) == 0:
             gtk.main_quit()
 
-	    def _connect_cancelled(self, connect):
+    def _connect_cancelled(self, connect):
         self.windowConnect = None
         if len(self.connections.keys()) == 0:
             gtk.main_quit()
