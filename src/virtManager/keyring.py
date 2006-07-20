@@ -25,6 +25,8 @@
 # docs are non-existant so i've no clue what bits are the callers
 # responsibility to free() :-(
 
+import gtk
+
 from ctypes import *
 import gobject
 
@@ -52,8 +54,6 @@ class vmmKeyring:
                     ('len', c_uint)]
 
     def __init__(self):
-        self.loop  = gobject.MainLoop()
-
         # Load the two libs we need to play with
         self.glib = cdll.LoadLibrary("libglib-2.0.so")
         self.krlib = cdll.LoadLibrary("libgnome-keyring.so")
@@ -69,18 +69,11 @@ class vmmKeyring:
         f = self.krlib.gnome_keyring_get_default_keyring(self.cb, None, None)
         # Block until complete
         # XXX lame - blocks whole UI
-        self.loop.run()
+        gtk.main()
 
         # User might have denied access
         if self.keyring == None:
             raise "Cannot access default keyring"
-
-        
-        s = vmmSecret("Hello! World", "hus!h!hush", { "fdosdo": "bar1", "wi1zz": 3, "wow": 222 })
-        sid = self.add_secret(s)
-        self.secrets = {}
-
-        sout = self.get_secret(sid)
 
 
     def add_secret(self, secret):
@@ -125,7 +118,7 @@ class vmmKeyring:
         # Now add the secret
         creator(None, c_int(0), c_char_p(secret.get_name()), attrs, c_char_p(secret.get_secret()), c_int(1), self.cbadd, pointer(id), None)
         # Block until compelte
-        self.loop.run()
+        gtk.main()
 
         # Release attributes no longer neede
         self.glib.g_array_free(attrs)
@@ -147,7 +140,7 @@ class vmmKeyring:
         # Fetch the basic info
         p = getinfo(c_char_p(self.keyring), c_int(id), self.cbgetinfo, pointer(i), None)
         # Block until done
-        self.loop.run()
+        gtk.main()
         if self.secrets.has_key(id):
             # Declare callback type
             cbgetattrstype = CFUNCTYPE(c_void_p, c_int, POINTER(vmmKeyring.GArray), POINTER(c_int))
@@ -160,7 +153,7 @@ class vmmKeyring:
             # Fetch the attrs
             getattrs(c_char_p(self.keyring), c_int(id), self.cbgetattrs, pointer(i), None)
             # Block until done
-            self.loop.run()
+            gtk.main()
             
             secret = self.secrets[id]
             del self.secrets[id]
@@ -180,33 +173,33 @@ class vmmKeyring:
         # Fetch the basic info
         p = getinfo(c_char_p(self.keyring), c_int(id), self.cbdelete, None, None)
         # Block until done
-        self.loop.run()
+        gtk.main()
 
     def _get_default_keyring_complete(self, status, name, data):
         if status != 0:
             self.keyring = None
-            self.loop.quit()
+            gtk.main_quit()
             return
         # Save name of default keyring somewhere safe
         if name == None:
             name = ""
         self.keyring = name
-        self.loop.quit()
+        gtk.main_quit()
 
     def _add_secret_complete(self, status, id, data):
         if status != 0:
             data.contents.value = -1
-            self.loop.quit()
+            gtk.main_quit()
             return
         data.contents.value = id
-        self.loop.quit()
+        gtk.main_quit()
 
     def _delete_item_complete(self, status, data):
-        self.loop.quit()
+        gtk.main_quit()
 
     def _get_item_info_complete(self, status, info, data=None):
         if status != 0:
-            self.loop.quit()
+            gtk.main_quit()
             return
 
         getname = self.krlib.gnome_keyring_item_info_get_display_name
@@ -220,15 +213,15 @@ class vmmKeyring:
 
         self.secrets[data.contents.value] = vmmSecret(name, secret)
 
-        self.loop.quit()
+        gtk.main_quit()
 
     def _get_item_attrs_complete(self, status, attrs, data=None):
         if status != 0:
-            self.loop.quit()
+            gtk.main_quit()
             return
 
         # XXX @#%$&(#%@  glib has a macro for accessing
         # elements in array which can obviously can't use
         # from python. Figure out nasty pointer magic here...
 
-        self.loop.quit()
+        gtk.main_quit()
