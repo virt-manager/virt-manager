@@ -4,3 +4,98 @@
 This application provides a graphical tool for managing virtual machines
 via the libvirt library.
 
+The front end of the application uses the PyGTK / Glade libraries for
+all user interaction components. The back end uses libvirt for managing
+Xen virtual machines. Although primarily tested with Xen, the UI code is
+intended to be portable to any virtualization backend libvirt supports. So
+when libvirt is ported to QEMU / UML / VmWare the UI should not require
+any significant changes to deal with these technologies.
+
+Terminology
+-----------
+
+In prose this app should be referred to as 'Virtual Machine Manager'.
+For source / RPM packaging, & the command name, it is called by the
+shortened form 'virt-manager'
+
+Pre-requisite software
+----------------------
+
+Where versions are noted below these are the versions tested to definitely
+work. For some of them you may be able to run with earlier releases, so
+please report any success to the mailing lists 
+
+ python  >= 2.4
+ pygtk2 >= 1.99.12-6
+ gnome-python2-gconf >= 1.99.11-7
+ libvirt-python >= 0.1.1
+ dbus-python >= 0.61
+ gnome-keyring >= 0.4.9
+ python-ctypes >= 0.9.9.6
+ python-imaging
+
+Contact
+-------
+
+All comments / suggestions / patches should be directed to the fedora-xen
+mailing list:
+
+  http://www.redhat.com/mailman/listinfo/fedora-xen
+
+There are futher project details on the website:
+
+  http://virt-manager.et.redhat.com/
+
+Submitting patches
+------------------
+
+Patches should be submitted either as unified diffs:
+
+   tar zxvf virt-manager-X.Y.Z.tar.gz
+   cp -a virt-manager-X.Y.Z virt-manager-X.Y.Z-myfeature
+   cd virt-manager-X.Y.Z-myfeature
+   ... make some changes .. 
+   cd ..
+   diff -ruN virt-manager-X.Y.Z virt-manager-X.Y.Z-myfeature \
+      > myfeature.patch
+
+Alternatively use Mercurial and submit a changeset bundle against
+the main source repository:
+
+   hg clone  http://hg.et.redhat.com/virt/applications/virt-manager--devel
+   cd virt-manager--devel
+   ... make some changes & commit them locally...
+   hg bundle myfeature.hg http://hg.et.redhat.com/virt/applications/virt-manager--devel
+
+Then mail the 'myfeature.hg' file to fedora-xen list. This approach is
+preferred to plain patches, because the Mercurial bundle preserves all
+your local commit messages & history.
+
+Related software
+----------------
+
+Links which are relevant:
+
+  http://libvirt.org
+  http://xensource.com/xen/
+  http://pygtk.org/
+  http://gtk.org/
+
+Copyright /  License
+--------------------
+
+Unless otherwise noted, all the code for the Virtual Machine Manager
+is covered under the GPL, and Copyright (C) Red Hat.
+
+The exception to this is the backend RFB protocol code for the embedded
+VNC viewer widget. This code is taken from the excellant pyvnc2swf 
+application:
+
+  http://www.unixuser.org/~euske/vnc2swf/pyvnc2swf.html
+
+It is also covered under the GPL, but refer to the individual source
+code files under 'src/vncViewer' for details of all the copyright holders
+and original authors.
+
+-- End of broadcast!
+
