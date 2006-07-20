@@ -25,17 +25,24 @@ import gobject
 # Displays a progress bar while executing the "callback" method.
 
 class asyncJob(gobject.GObject):
+    # This thin wrapper only exists so we can put debugging
+    # code in the run() method every now & then
+    class asyncJobWorker(threading.Thread):
+        def __init__(self, callback, args):
+            threading.Thread.__init__(self, target=callback, args=args)
+
+        def run(self):
+            threading.Thread.run(self)
+
     def __init__(self, config, callback, args=None, title="Progress"):
         self.__gobject_init__()
         self.config = config
-        self.callback = callback
-        self.args = args
         self.pbar_glade = gtk.glade.XML(self.config.get_glade_file(), "vmm-progress")
         self.pbar_win = self.pbar_glade.get_widget("vmm-progress")
         self.pbar = self.pbar_glade.get_widget("pbar")
         self.pbar_win.set_title(title)
         self.pbar_win.hide()
-        self.bg_thread = threading.Thread(target=self.callback, args=self.args)
+        self.bg_thread = asyncJob.asyncJobWorker(callback, args)
 
     def run(self):
         self.timer = gobject.timeout_add (100, self.pulse_pbar)
@@ -47,8 +54,10 @@ class asyncJob(gobject.GObject):
         self.pbar_win.destroy()
 
     def pulse_pbar(self):
-        print "About to frobnicate the pbar"
         if(self.bg_thread.isAlive()):
             self.pbar.pulse()
+            return True
         else:
             gtk.main_quit()
+            return False
+
