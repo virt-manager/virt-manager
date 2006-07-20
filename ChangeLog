@@ -1,8 +1,121 @@
+2006-07-20  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/keyring.py:
+	Initialize self.secrets hash, accidentally removed
+	[debbdd9bf168] [tip]
+
+	* src/virt-manager.py.in:
+	Switch to gtk.gdk.threads_init() since gtk.threasd_init() is
+	deprecated
+	[748ada9cda8f]
+
+	* .hgtags:
+	Added tag RELEASE-0.1.4-1 for changeset
+	263881a07fa4addc6314fad90a2fa745211116bd
+	[3de5f305a0a6]
+
+	* src/virt-manager.glade:
+	Put back in authors, accidentally reverted in earlier merge
+	[263881a07fa4] [RELEASE-0.1.4-1]
+
+	* src/virtManager/config.py:
+	Catch error when keyring is not available
+	[c6c295260d66]
+
+	* src/virtManager/keyring.py:
+	Replace glib mainloop with gtk mainloop, since the later works
+	correctly in a threaded environment
+	[a005c4d2119d]
+
+2006-07-20  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* pixmaps/icon_save.png, src/virt-manager.glade,
+	src/virtManager/asyncjob.py, src/virtManager/console.py,
+	src/virtManager/details.py, src/virtManager/engine.py:
+	Add save feature to console, update save icons
+	[82f8096f5e24]
+
+2006-07-20  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/asyncjob.py:
+	Fix timer callback return value to ensure it fires many times rather
+	than just once
+	[a9afd34ea984]
+
+	* src/virtManager/console.py:
+	Wrapp connect/disconnect methods for VNC in a try..except block
+	[3fe45ea030c2]
+
+	* src/vncViewer/vnc.py:
+	Dont store a ref to the VNC client until we've actually successfully
+	connected
+	[e3be17aeab09]
+
+	* Merge heads
+	[59e261655a11]
+
+	* src/virtManager/engine.py:
+	Merge heads
+	[6bf18e0fa53b]
+
+2006-07-20  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/engine.py:
+	fix indentation typo in engine
+	[9e460be02a18]
+
+2006-07-20  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.py.in:
+	Merge heads
+	[25428779caf0]
+
+	* configure.ac, virt-manager.spec.in:
+	Bump to 0.1.4 in preparation for new release
+	[af11fb18282e]
+
+2006-07-20  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/engine.py:
+	merged Dan's changes
+	[470f388572a8]
+
+	* src/virt-manager.glade, src/virt-manager.py.in,
+	src/virtManager/asyncjob.py, src/virtManager/connection.py,
+	src/virtManager/engine.py, src/virtManager/manager.py:
+	Make the progress bar threaded so that it will bounce back and forth
+	in the background (still doesn't work) and abstract the progress bar
+	functionality
+	[c2ddab7f68ee]
+
+2006-07-20  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/Makefile.am, src/virt-manager.py.in,
+	src/virtManager/Makefile.am, src/vncViewer/Makefile.am,
+	src/vncViewer/crippled_des.py, src/vncViewer/image.py,
+	src/vncViewer/rfb.py, src/vncViewer/vnc.py:
+	Change _SCRIPTS back to _DATA, and instead remove the
+	#!/usr/bin/python stuff which is what rpmlint was really complaining
+	about
+	[a0459e9890fb]
+
+	* AUTHORS:
+	Filled out authors
+	[273e12e75b8f]
+
+	* README:
+	Filled out the README file
+	[3d706b59224e]
+
 2006-07-19  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* ChangeLog:
+	Re-generate Changelog from 'hg log --style changelog' command
+	[b5b70d98342e]
 
 	* NEWS, src/virt-manager.glade:
 	Added Hugh & Máirín to authors credits
-	[bb27454a9bf1] [tip]
+	[bb27454a9bf1]
 
 	* src/virtManager/console.py:
 	Disconnect & re-connect when password auth is wrong to avoid bugs in
