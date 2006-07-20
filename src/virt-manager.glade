@@ -618,11 +618,7 @@ Inactive virtual machines</property>
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 </property>
   <property name="wrap_license">False</property>
-  <property name="authors">Daniel P. Berrange &lt;berrange@redhat.com&gt;
-Hugh O. Brock &lt;hbrock@redhat.com&gt;
-Máirín Duffy &lt;duffy@redhat.com&gt;
-</property>
-  <property name="artists">Máirín Duffy &lt;duffy@redhat.com&gt;	</property>
+  <property name="authors">Daniel P. Berrange &lt;berrange@redhat.com&gt;</property>
   <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
   <signal name="delete_event" handler="on_vmm_about_delete_event" last_modification_time="Wed, 29 Mar 2006 10:31:19 GMT"/>
 </widget>
@@ -2358,11 +2354,11 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 		  </child>
 
 		  <child>
-		    <widget class="GtkMenuItem" id="menu-vm-snapshot">
+		    <widget class="GtkMenuItem" id="menu-vm-save">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Take _Snapshot</property>
+		      <property name="label" translatable="yes">_Save</property>
 		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_menu_vm_snapshot_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
+		      <signal name="activate" handler="on_menu_vm_save_activate" last_modification_time="Thu, 20 Jul 2006 17:25:54 GMT"/>
 		    </widget>
 		  </child>
 
@@ -2510,14 +2506,14 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	  </child>
 
 	  <child>
-	    <widget class="GtkToolButton" id="control-snapshot">
+	    <widget class="GtkToolButton" id="control-save">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Take snapshot</property>
+	      <property name="label" translatable="yes">Save domain</property>
 	      <property name="use_underline">True</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_control_snapshot_clicked" last_modification_time="Mon, 03 Apr 2006 09:53:54 GMT"/>
+	      <signal name="clicked" handler="on_control_save_clicked" last_modification_time="Thu, 20 Jul 2006 17:25:06 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>

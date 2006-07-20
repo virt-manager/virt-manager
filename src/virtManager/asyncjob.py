@@ -60,4 +60,3 @@ class asyncJob(gobject.GObject):
         else:
             gtk.main_quit()
             return False
-

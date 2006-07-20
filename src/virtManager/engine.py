@@ -149,6 +149,7 @@ class vmmEngine:
             console = vmmConsole(self.get_config(),
                                  con.get_vm(uuid))
             console.connect("action-show-details", self._do_show_details)
+            console.connect("action-save-domain", self._do_save_domain)
             self.connections[uri]["windowConsole"][uuid] = console
         self.connections[uri]["windowConsole"][uuid].show()
 
