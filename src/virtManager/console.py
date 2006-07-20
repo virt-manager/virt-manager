@@ -112,7 +112,10 @@ class vmmConsole(gobject.GObject):
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-console").hide()
         if self.vncViewer.is_connected():
-            self.vncViewer.disconnect_from_host()
+	    try:
+                self.vncViewer.disconnect_from_host()
+	    except:
+		print "Failure when disconnecting"
         return 1
 
     def control_vm_run(self, src):
@@ -123,7 +126,6 @@ class vmmConsole(gobject.GObject):
 
     def try_login(self, src=None):
         password = self.window.get_widget("console-auth-password").get_text()
-
         protocol, host, port = self.vm.get_console_info()
 
         if self.vm.get_id() == 0:
@@ -135,8 +137,12 @@ class vmmConsole(gobject.GObject):
             return
 
         if not(self.vncViewer.is_connected()):
-            self.vncViewer.connect_to_host(host, port)
-
+	    try:
+                self.vncViewer.connect_to_host(host, port)
+	    except:
+		print "Unable to activate console"
+                self.activate_unavailable_page()
+		return
         if self.vncViewer.is_authenticated():
             self.activate_viewer_page()
         elif password:
