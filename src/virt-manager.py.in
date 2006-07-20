@@ -19,7 +19,7 @@
 #
 
 import gtk
-gtk.threads_init()
+gtk.gdk.threads_init()
 
 import dbus
 import dbus.glib
