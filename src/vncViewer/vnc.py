@@ -180,11 +180,15 @@ class GRFBViewer(gtk.DrawingArea):
     def connect_to_host(self, host, port):
         if self.client != None:
             self.disconnect_from_host()
+	    self.client = NOne
 
-        self.client = GRFBNetworkClient(host, port, self.fb)
-        self.client.connect("disconnected", self._client_disconnected)
+        client = GRFBNetworkClient(host, port, self.fb)
+        client.connect("disconnected", self._client_disconnected)
 
-        self.client.init()
+        client.init()
+        # NB we delibrately dont assign to self.client until
+        # we're successfully connected.
+        self.client = client
         self.authenticated = False
         self.emit("connected", host, port)
 
