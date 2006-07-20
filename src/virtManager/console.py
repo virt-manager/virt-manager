@@ -51,7 +51,7 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("control-pause").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_pause.png")
 
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
-        #self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_run.png")
+        self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
         self.window.get_widget("control-terminal").set_icon_widget(gtk.Image())
         self.window.get_widget("control-terminal").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_launch_term.png")
@@ -119,8 +119,7 @@ class vmmConsole(gobject.GObject):
         return 0
 
     def _vnc_disconnected(self, src):
-        self.window.get_widget("console-auth-password").set_text("")
-        self.window.get_widget("console-pages").set_current_page(2)
+        self.activate_auth_page()
 
     def try_login(self, src=None):
         password = self.window.get_widget("console-auth-password").get_text()
@@ -132,22 +131,50 @@ class vmmConsole(gobject.GObject):
 
         #print protocol + "://" + host + ":" + str(port)
         if protocol != "vnc":
-            print "Activate inactive"
-            self.window.get_widget("console-pages").set_curent_page(0)
+            self.activate_unavailable_page()
             return
 
         if not(self.vncViewer.is_connected()):
             self.vncViewer.connect_to_host(host, port)
 
         if self.vncViewer.is_authenticated():
-            self.window.get_widget("console-pages").set_current_page(3)
-        elif password and (self.vncViewer.authenticate(password) == 1):
-            self.window.get_widget("console-pages").set_current_page(3)
-            self.vncViewer.activate()
+            self.activate_viewer_page()
+        elif password:
+            if self.vncViewer.authenticate(password) == 1:
+                if self.window.get_widget("console-auth-remember").get_active():
+                    self.config.set_console_password(self.vm, password)
+                else:
+                    self.config.clear_console_password(self.vm)
+                self.activate_viewer_page()
+                self.vncViewer.activate()
+            else:
+                # Our VNC console doesn't like it when password is
+                # wrong and gets out of sync in its state machine
+                # So we force disconnect
+                self.vncViewer.disconnect_from_host()
+                self.activate_auth_page()
         else:
-            self.window.get_widget("console-auth-password").set_text("")
-            self.window.get_widget("console-pages").set_current_page(2)
+            self.activate_auth_page()
 
+
+    def activate_unavailable_page(self):
+        self.window.get_widget("console-pages").set_current_page(0)
+
+    def activate_screenshot_page(self):
+        self.window.get_widget("console-pages").set_current_page(1)
+
+    def activate_auth_page(self):
+        pw = self.config.get_console_password(self.vm)
+        self.window.get_widget("console-auth-password").set_text(pw)
+        if pw != None and pw != "":
+            self.window.get_widget("console-auth-remember").set_active(True)
+        else:
+            self.window.get_widget("console-auth-remember").set_active(False)
+        self.window.get_widget("console-pages").set_current_page(2)
+
+    def activate_viewer_page(self):
+        self.window.get_widget("console-pages").set_current_page(3)
+                    
     def control_vm_shutdown(self, src):
         status = self.vm.status()
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
@@ -246,9 +273,9 @@ class vmmConsole(gobject.GObject):
                         cr.show_text(overlay)
 
                         self.window.get_widget("console-screenshot").set_from_pixmap(screenshot, None)
-                        self.window.get_widget("console-pages").set_current_page(1)
+                        self.activate_screenshot_page()
                     else:
-                        self.window.get_widget("console-pages").set_current_page(0)
+                        self.activate_unavailable_page()
                 else:
                     self.try_login()
         except:

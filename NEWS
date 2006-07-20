@@ -1,8 +1,33 @@
  Virtual Machine Manager News
  ============================
 
-2006-03-29
-----------
+Release 0.1.4
+-------------
 
-  * First iteration of development
+ * Integration with GNOME keyring for the VNC console to avoid
+   need to remember passwords when accessing the guest domain's
+   console
+ * Use cairo to rendered a '50% alpha gray wash' over the screenshot
+   to give appearance of a 'dimmed' display when paused. Also render
+   the word 'paused' in big letters.
+ * Initial cut of code for saving domain snapshots to disk
+ * Added icons for buttons which were missing graphics
+ * Miscellaneous RPM spec file fixes to comply with rpmlint
+ * Update status icons to match those in the gnome-applet-vm
+ * Added domain ID and # VCPUs to summary view
+ * Misc bug fixes
+	
+Release 0.1.3
+-------------
 
+ * Fixed DBus service activation & general brokenness
+ * Added a display of virtual CPU count in summary page
+ * Fixed alignment of status label in details page
+ * Make hardware config panel resizeable
+ * Switch detailed graph rendering to use sparkline code
+ * Switch to use filled sparkline graphs
+	
+Release 0.1.2
+-------------
+
+ * First public release

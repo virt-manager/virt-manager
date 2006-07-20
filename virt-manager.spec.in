@@ -13,11 +13,20 @@ URL: http://virt-manager.et.redhat.com/
 Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+# Any modern python should do
 Requires: python
+# These two are just the oldest version tested
 Requires: pygtk2 >= 1.99.12-6
 Requires: gnome-python2-gconf >= 1.99.11-7
+# Absolutely require this version or newer
 Requires: libvirt-python >= 0.1.1
+# Definitely does not work with earlier due to python API changes
 Requires: dbus-python >= 0.61
+# Might work with earlier, but this is what we've tested
+# We use 'ctypes' so don't need the 'gnome-keyring-python' bits
+Requires: gnome-keyring >= 0.4.9
+# Minimum we've tested with
+Requires: python-ctypes >= 0.9.9.6
 
 # src/vncViewer/image.py needs this but we'd like to kill it off
 # soon because it pulls in TCL/TK :-(
