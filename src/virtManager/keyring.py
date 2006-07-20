@@ -64,6 +64,8 @@ class vmmKeyring:
 
         # This gets filled out by callback with keyring name
         self.keyring = None
+	# Used by callback to store secret info
+	self.secrets = {}
         
         # Get the keyring name
         f = self.krlib.gnome_keyring_get_default_keyring(self.cb, None, None)
