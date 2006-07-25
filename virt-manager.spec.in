@@ -1,20 +1,22 @@
 # -*- rpm-spec -*-
 
+# This macro is used for the continuous automated builds. It just
+# allows an extra fragment based on the timestamp to be appended
+# to the release. This distinguishes automated builds, from formal
+# Fedora RPM builds
 %define _extra_release %{?extra_release:%{extra_release}}
 
 Name: @PACKAGE@
 Version: @VERSION@
-Release: 1%{_extra_release}
+Release: 2%{_extra_release}
 Summary: Virtual Machine Manager
 
 Group: Applications/Emulators
 License: GPL
 URL: http://virt-manager.et.redhat.com/
-Source0: %{name}-%{version}.tar.gz
+Source0: http://virt-manager.et.redhat.com/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-# Any modern python should do
-Requires: python
 # These two are just the oldest version tested
 Requires: pygtk2 >= 1.99.12-6
 Requires: gnome-python2-gconf >= 1.99.11-7
@@ -64,11 +66,31 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/%{name}
 %{_libexecdir}/%{name}-launch
 %{_libdir}/%{name}/*
-%{_datadir}/%{name}/*
+
+%{_datadir}/%{name}/*.glade
+%{_datadir}/%{name}/pixmaps/*.png
+%{_datadir}/%{name}/pixmaps/*.svg
+
+%{_datadir}/%{name}/*.py
+%{_datadir}/%{name}/*.pyc
+%ghost %{_datadir}/%{name}/*.pyo
+
+%{_datadir}/%{name}/virtManager/*.py
+%{_datadir}/%{name}/virtManager/*.pyc
+%ghost %{_datadir}/%{name}/virtManager/*.pyo
+
+%{_datadir}/%{name}/vncViewer/*.py
+%{_datadir}/%{name}/vncViewer/*.pyc
+%ghost %{_datadir}/%{name}/vncViewer/*.pyo
+
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Mon Jul 24 2006 Daniel Berrange <berrange@redhat.com> - 0.1.5-2
+- Prefix *.pyo files with 'ghost' macro
+- Use fully qualified URL in Source  tag
+
 * Thu Jul 20 2006 Daniel Berrange <berrange@redhat.com> - 0.1.5-1
 - Update to new 0.1.5 release snapshot
 
