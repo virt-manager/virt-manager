@@ -117,6 +117,8 @@ class vmmDetails(gobject.GObject):
         self.hw_selected()
         self.vm.connect("status-changed", self.update_widget_states)
         self.vm.connect("resources-sampled", self.refresh_resources)
+        cpus = self.vm.get_connection().host_maximum_processor_count()
+        self.window.get_widget("physical-cpus").set_text(`cpus`)
 
         self.update_widget_states(vm, vm.status())
         self.refresh_resources(vm)

@@ -1508,7 +1508,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				  </child>
 
 				  <child>
-				    <widget class="GtkSpinButton" id="spinbutton2">
+				    <widget class="GtkSpinButton" id="cpus-desired">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
@@ -1517,7 +1517,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">5 1 32 1 10 10</property>
+				      <property name="adjustment">1 1 32 1 10 10</property>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>
@@ -1558,7 +1558,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="PhysHostCPUs">
+				    <widget class="GtkLabel" id="physical-cpus">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">256	</property>
 				      <property name="use_underline">False</property>
@@ -1574,6 +1574,9 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				      <property name="width_chars">-1</property>
 				      <property name="single_line_mode">False</property>
 				      <property name="angle">0</property>
+				      <accessibility>
+					<atkproperty name="AtkObject::accessible_name" translatable="yes">physical-cpus</atkproperty>
+				      </accessibility>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>
