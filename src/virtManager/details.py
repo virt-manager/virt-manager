@@ -112,13 +112,15 @@ class vmmDetails(gobject.GObject):
             "on_control_terminal_clicked": self.control_vm_terminal,
             "on_control_save_clicked": self.control_vm_save_domain,
             "on_control_console_clicked": self.control_vm_console,
+            "on_config_cpus_apply_clicked": self.config_cpus_apply,
+            "on_config_vm_cpus_changed": self.config_vm_cpus,
+            "on_config_memory_value_changed": self.config_memory_value,
+            "on_config_memory_apply_clicked": self.config_memory_apply
             })
 
         self.hw_selected()
         self.vm.connect("status-changed", self.update_widget_states)
         self.vm.connect("resources-sampled", self.refresh_resources)
-        cpus = self.vm.get_connection().host_maximum_processor_count()
-        self.window.get_widget("physical-cpus").set_text(`cpus`)
 
         self.update_widget_states(vm, vm.status())
         self.refresh_resources(vm)
@@ -147,6 +149,12 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("hw-panel").set_current_page(active[0].get_value(active[1], 0))
         else:
             self.window.get_widget("hw-panel").set_sensitive(False)
+        # When the user changes tabs on the hw panel, reset to the default state
+        self.update_config_memory()
+        self.update_config_cpus()
+        self.update_state_cpus()
+        self.window.get_widget("config-memory-apply").set_sensitive(False)
+        self.window.get_widget("config-cpus-apply").set_sensitive(False)
 
     def control_vm_run(self, src):
         return 0
@@ -217,7 +225,9 @@ class vmmDetails(gobject.GObject):
 
     def refresh_resources(self, vm):
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
-        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (self.vm.current_memory()/1024, self.vm.get_connection().host_memory_size()/1024))
+        vm_memory = self.vm.current_memory()
+        host_memory = self.vm.get_connection().host_memory_size()
+        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (vm_memory/1024, host_memory/1024))
 
         history_len = self.config.get_stats_history_length()
         cpu_vector = self.vm.cpu_time_vector()
@@ -232,5 +242,40 @@ class vmmDetails(gobject.GObject):
         network_vector.reverse()
         self.network_traffic_graph.set_property("data_array", network_vector)
 
+        # update HW config values
+        self.window.get_widget("state-host-memory").set_text("%d MB" % (host_memory/1024))
+        self.window.get_widget("config-memory").get_adjustment().upper = vm.maximum_memory()/1024
+        self.window.get_widget("state-vm-memory").set_text("%d MB" % (vm_memory/1024))
 
+    def update_config_memory(self):
+        self.window.get_widget("config-memory").get_adjustment().value = self.vm.current_memory()/1024
+
+    def update_config_cpus(self):
+        self.window.get_widget("config-vm-cpus").get_adjustment().value = self.vm.vcpu_count()
+
+    def update_state_cpus(self):
+        self.window.get_widget("state-host-cpus").set_text(`(self.vm.get_connection().host_maximum_processor_count())`)
+    def config_cpus_apply(self, src):
+        # Apply the change to the number of CPUs
+
+        vcpus = self.window.get_widget("config-vm-cpus").get_adjustment().value
+
+        # if requested # of CPUS > host CPUS, pop up warning dialog (not implemented yet)
+
+        self.vm.set_vcpu_count(vcpus)
+        self.window.get_widget("config-cpus-apply").set_sensitive(False)
+
+    def config_vm_cpus(self, src):
+        # cpu spinbox changed, make the apply button available
+        self.window.get_widget("config-cpus-apply").set_sensitive(True)
+
+    def config_memory_value(self, src):
+        self.window.get_widget("config-memory-apply").set_sensitive(True)
+
+    def config_memory_apply(self, src):
+        memory = self.window.get_widget("config-memory").get_adjustment().value
+        newmem = self.vm.set_memory(memory)
+        self.window.get_widget("config-memory-apply").set_sensitive(False)
+        self.window.get_widget("state-vm-memory").set_text("%d MB" % (newmem/1024))
+        
 gobject.type_register(vmmDetails)

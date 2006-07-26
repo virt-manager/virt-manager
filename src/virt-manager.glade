@@ -1508,7 +1508,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				  </child>
 
 				  <child>
-				    <widget class="GtkSpinButton" id="cpus-desired">
+				    <widget class="GtkSpinButton" id="config-vm-cpus">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="climb_rate">1</property>
@@ -1518,6 +1518,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
 				      <property name="adjustment">1 1 32 1 10 10</property>
+				      <signal name="changed" handler="on_config_vm_cpus_changed" last_modification_time="Wed, 26 Jul 2006 21:40:26 GMT"/>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>
@@ -1558,7 +1559,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="physical-cpus">
+				    <widget class="GtkLabel" id="state-host-cpus">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">256	</property>
 				      <property name="use_underline">False</property>
@@ -1575,7 +1576,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				      <property name="single_line_mode">False</property>
 				      <property name="angle">0</property>
 				      <accessibility>
-					<atkproperty name="AtkObject::accessible_name" translatable="yes">physical-cpus</atkproperty>
+					<atkproperty name="AtkObject::accessible_name" translatable="yes">state-host-cpus</atkproperty>
 				      </accessibility>
 				    </widget>
 				    <packing>
@@ -1724,26 +1725,16 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 			      <property name="spacing">5</property>
 
 			      <child>
-				<widget class="GtkButton" id="button14">
+				<widget class="GtkButton" id="config-cpus-apply">
 				  <property name="visible">True</property>
-				  <property name="can_default">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label">gtk-cancel</property>
-				  <property name="use_stock">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkButton" id="button15">
-				  <property name="visible">True</property>
+				  <property name="sensitive">False</property>
 				  <property name="can_default">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label">gtk-apply</property>
 				  <property name="use_stock">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
+				  <signal name="clicked" handler="on_config_cpus_apply_clicked" last_modification_time="Wed, 26 Jul 2006 21:03:46 GMT"/>
 				</widget>
 			      </child>
 			    </widget>
@@ -1851,7 +1842,8 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				      <property name="digits">1</property>
 				      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
 				      <property name="inverted">False</property>
-				      <property name="adjustment">10.2 0 100 0 0 0</property>
+				      <property name="adjustment">256 0 1024 0 0 0</property>
+				      <signal name="value_changed" handler="on_config_memory_value_changed" last_modification_time="Wed, 26 Jul 2006 22:00:46 GMT"/>
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>
@@ -2017,6 +2009,9 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				  <property name="width_chars">-1</property>
 				  <property name="single_line_mode">False</property>
 				  <property name="angle">0</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">state-host-memory</atkproperty>
+				  </accessibility>
 				</widget>
 				<packing>
 				  <property name="left_attach">1</property>
@@ -2056,26 +2051,16 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 			      <property name="spacing">5</property>
 
 			      <child>
-				<widget class="GtkButton" id="button18">
+				<widget class="GtkButton" id="config-memory-apply">
 				  <property name="visible">True</property>
-				  <property name="can_default">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="label">gtk-cancel</property>
-				  <property name="use_stock">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkButton" id="button19">
-				  <property name="visible">True</property>
+				  <property name="sensitive">False</property>
 				  <property name="can_default">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label">gtk-apply</property>
 				  <property name="use_stock">True</property>
 				  <property name="relief">GTK_RELIEF_NORMAL</property>
 				  <property name="focus_on_click">True</property>
+				  <signal name="clicked" handler="on_config_memory_apply_clicked" last_modification_time="Wed, 26 Jul 2006 22:01:44 GMT"/>
 				</widget>
 			      </child>
 			    </widget>
