@@ -274,8 +274,9 @@ class vmmDetails(gobject.GObject):
 
     def config_memory_apply(self, src):
         memory = self.window.get_widget("config-memory").get_adjustment().value
-        newmem = self.vm.set_memory(memory)
+        newmem = self.vm.set_memory(memory*1024)
         self.window.get_widget("config-memory-apply").set_sensitive(False)
         self.window.get_widget("state-vm-memory").set_text("%d MB" % (newmem/1024))
+        self.window.get_widget("config-memory").get_adjustment().value = newmem/1024
         
 gobject.type_register(vmmDetails)
