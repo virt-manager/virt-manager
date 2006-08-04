@@ -30,10 +30,6 @@ Requires: gnome-keyring >= 0.4.9
 # Minimum we've tested with
 Requires: python-ctypes >= 0.9.9.6
 
-# src/vncViewer/image.py needs this but we'd like to kill it off
-# soon because it pulls in TCL/TK :-(
-Requires: python-imaging
-
 BuildRequires: pygtk2-devel
 BuildRequires: gtk2-devel
 BuildRequires: python-devel
