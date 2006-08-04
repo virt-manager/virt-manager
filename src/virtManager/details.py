@@ -164,7 +164,7 @@ class vmmDetails(gobject.GObject):
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
             self.vm.shutdown()
         else:
-            print "Shutdown requested, but machine is already shutting down / shutoff"
+            print _("Shutdown requested, but machine is already shutting down / shutoff")
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -172,18 +172,18 @@ class vmmDetails(gobject.GObject):
 
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            print "Pause/resume requested, but machine is shutdown / shutoff"
+            print _("Pause/resume requested, but machine is shutdown / shutoff")
         else:
             if status in [ libvirt.VIR_DOMAIN_PAUSED ]:
                 if not src.get_active():
                     self.vm.resume()
                 else:
-                    print "Pause requested, but machine is already paused"
+                    print _("Pause requested, but machine is already paused")
             else:
                 if src.get_active():
                     self.vm.suspend()
                 else:
-                    print "Resume requested, but machine is already running"
+                    print _("Resume requested, but machine is already running")
 
     def control_vm_terminal(self, src):
         self.emit("action-launch-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())

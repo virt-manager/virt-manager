@@ -248,17 +248,17 @@ class vmmDomain(gobject.GObject):
 
     def run_status(self):
         if self.lastStatus == libvirt.VIR_DOMAIN_RUNNING:
-            return "Running"
+            return _("Running")
         elif self.lastStatus == libvirt.VIR_DOMAIN_PAUSED:
-            return "Paused"
+            return _("Paused")
         elif self.lastStatus == libvirt.VIR_DOMAIN_SHUTDOWN:
-            return "Shutdown"
+            return _("Shutdown")
         elif self.lastStatus == libvirt.VIR_DOMAIN_SHUTOFF:
-            return "Shutoff"
+            return _("Shutoff")
         elif self.lastStatus == libvirt.VIR_DOMAIN_CRASHED:
-            return "Crashed"
+            return _("Crashed")
         else:
-            raise "Unknown status code"
+            raise _("Unknown status code")
 
     def run_status_icon(self):
         status = self.run_status()

@@ -140,7 +140,7 @@ class vmmConsole(gobject.GObject):
 	    try:
                 self.vncViewer.connect_to_host(host, port)
 	    except:
-		print "Unable to activate console"
+		print _("Unable to activate console")
                 self.activate_unavailable_page()
 		return
         if self.vncViewer.is_authenticated():
@@ -186,7 +186,7 @@ class vmmConsole(gobject.GObject):
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
             self.vm.shutdown()
         else:
-            print "Shutdown requested, but machine is already shutting down / shutoff"
+            print _("Shutdown requested, but machine is already shutting down / shutoff")
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -194,18 +194,18 @@ class vmmConsole(gobject.GObject):
 
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            print "Pause/resume requested, but machine is shutdown / shutoff"
+            print _("Pause/resume requested, but machine is shutdown / shutoff")
         else:
             if status in [ libvirt.VIR_DOMAIN_PAUSED ]:
                 if not src.get_active():
                     self.vm.resume()
                 else:
-                    print "Pause requested, but machine is already paused"
+                    print _("Pause requested, but machine is already paused")
             else:
                 if src.get_active():
                     self.vm.suspend()
                 else:
-                    print "Resume requested, but machine is already running"
+                    print _("Resume requested, but machine is already running")
 
     def control_vm_terminal(self, src):
         self.emit("action-launch-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
@@ -271,7 +271,7 @@ class vmmConsole(gobject.GObject):
                         cr.set_source_rgba(1, 1,1, 1)
                         cr.set_font_size(80)
                         cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-                        overlay = "paused"
+                        overlay = _("paused")
                         extents = cr.text_extents(overlay)
                         x = width/2 - (extents[2]/2)
                         y = height/2 - (extents[3]/2)
@@ -285,7 +285,7 @@ class vmmConsole(gobject.GObject):
                 else:
                     self.try_login()
         except:
-            print "Couldn't open console " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
+            print _("Couldn't open console: ") + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
             self.ignorePause = False
         self.ignorePause = False
 

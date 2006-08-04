@@ -60,7 +60,7 @@ class vmmEngine:
             conn = self.get_connection(uri, readOnly)
             self.show_manager(uri)
         except:
-            print "Unable to open connection to hypervisor URI '" + str(uri) + "'"
+            print _("Unable to open connection to hypervisor URI '%s'") % str(uri)
             print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
 
         if len(self.connections.keys()) == 0:
@@ -100,7 +100,7 @@ class vmmEngine:
                 raise KeyboardInterrupt
             except:
                 print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
-                print "Error refreshing connection " + uri
+                print _("Error refreshing connection '%s'") % uri
         return 1
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
@@ -209,20 +209,21 @@ class vmmEngine:
                        libvirt.VIR_DOMAIN_SHUTOFF,
                        libvirt.VIR_DOMAIN_CRASHED,
                        libvirt.VIR_DOMAIN_PAUSED ]:
-            print "Save requested, but machine is shutdown / shutoff / paused"
+            print _("Save requested, but machine is shutdown / shutoff / paused")
         else:
-            self.fcdialog = gtk.FileChooserDialog("Save Virtual Machine",
-                                           src.window.get_widget("vmm-details"),
-                                           gtk.FILE_CHOOSER_ACTION_SAVE,
-                                           (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                            gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
-                                           None)
+            self.fcdialog = gtk.FileChooserDialog(_("Save Virtual Machine"),
+                                                  src.window.get_widget("vmm-details"),
+                                                  gtk.FILE_CHOOSER_ACTION_SAVE,
+                                                  (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                                   gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
+                                                  None)
             self.fcdialog.set_do_overwrite_confirmation(True)
             response = self.fcdialog.run()
             self.fcdialog.hide()
             if(response == gtk.RESPONSE_ACCEPT):
                 file_to_save = self.fcdialog.get_filename()
                 progWin = vmmAsyncJob(self.config, vm.save,
-                               [file_to_save], "Saving Virtual Machine")
+                                      [file_to_save],
+                                      _("Saving Virtual Machine"))
                 progWin.run()
                 self.fcdialog.destroy()

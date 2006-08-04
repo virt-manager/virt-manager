@@ -23,8 +23,9 @@ import gtk.gdk
 from virtManager.keyring import *
 
 class vmmConfig:
-    def __init__(self, appname, gconf_dir, glade_dir, icon_dir):
+    def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir):
         self.appname = appname
+        self.appversion = appversion
         self.conf_dir = gconf_dir
         self.conf = gconf.client_get_default()
         self.conf.add_dir (gconf_dir,
@@ -53,6 +54,9 @@ class vmmConfig:
 
     def get_appname(self):
         return self.appname
+
+    def get_appversion(self):
+        return self.appversion
 
     def get_glade_dir(self):
         return self.glade_dir
@@ -170,7 +174,7 @@ class vmmConfig:
                 try:
                     self.keyring = vmmKeyring()
                 except:
-                    print "Unable to access keyring"
+                    print _("Unable to access keyring")
                     return
 
             self.keyring.clear_secret(id)
@@ -184,7 +188,7 @@ class vmmConfig:
                 try:
                     self.keyring = vmmKeyring()
                 except:
-                    print "Unable to access keyring"
+                    print _("Unable to access keyring")
                     return ""
 
             secret = self.keyring.get_secret(id)
@@ -198,7 +202,7 @@ class vmmConfig:
             try:
                 self.keyring = vmmKeyring()
             except:
-                print "Unable to access keyring"
+                print _("Unable to access keyring")
                 return
 
         # Nb, we don't bother to check if there is an existing

@@ -35,8 +35,10 @@ EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES)
 
 %.py: $(srcdir)/%.py.in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," \
+	  -e "s,::VERSION::,$(VERSION)," \
 	  -e "s,::ASSETDIR::,$(pkgdatadir)," \
 	  -e "s,::PYLIBDIR::,$(pkgdatadir)," \
+	  -e "s,::GETTEXTDIR::,$(datadir)/locale," \
           -e "s,::PYARCHLIBDIR::,$(pkglibdir)," < $< > $@
 
 $(PACKAGE): $(srcdir)/$(PACKAGE).in
