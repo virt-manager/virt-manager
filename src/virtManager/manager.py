@@ -24,7 +24,7 @@ import threading
 
 import sparkline
 
-from virtManager.asyncjob import asyncJob
+from virtManager.asyncjob import vmmAsyncJob
 
 VMLIST_SORT_ID = 1
 VMLIST_SORT_NAME = 2
@@ -125,6 +125,9 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
         self.connection.connect("disconnected", self.close)
 
+        # store any error message from the restore-domain callback
+        self.domain_restore_error = ""
+
     def show(self):
         win = self.window.get_widget("vmm-manager")
         win.show_all()
@@ -155,11 +158,28 @@ class vmmManager(gobject.GObject):
         self.fcdialog.hide()
         if(response == gtk.RESPONSE_ACCEPT):
             file_to_load = self.fcdialog.get_filename()
-            progWin = asyncJob(self.config, self.connection.restore,
+            progWin = vmmAsyncJob(self.config, self.restore_saved_callback,
                                [file_to_load], "Restoring Virtual Machine")
             progWin.run()
             
         self.fcdialog.destroy()
+        if(self.domain_restore_error != ""):
+            self.error_msg = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                               gtk.DIALOG_DESTROY_WITH_PARENT,
+                                               gtk.MESSAGE_ERROR,
+                                               gtk.BUTTONS_OK,
+                                               self.domain_restore_error)
+            self.error_msg.run()
+            self.error_msg.destroy()
+            self.domain_restore_error = ""
+            
+
+    def restore_saved_callback(self, file_to_load):
+        status = self.connection.restore(file_to_load)
+        if(status != 0):
+            self.domain_restore_error = "Error restoring domain " + file_to_load + \
+                                        ". Is the domain already running?"
+        
 
     def vm_added(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")

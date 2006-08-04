@@ -24,7 +24,7 @@ import gobject
 
 # Displays a progress bar while executing the "callback" method.
 
-class asyncJob(gobject.GObject):
+class vmmAsyncJob(gobject.GObject):
     # This thin wrapper only exists so we can put debugging
     # code in the run() method every now & then
     class asyncJobWorker(threading.Thread):
@@ -42,7 +42,7 @@ class asyncJob(gobject.GObject):
         self.pbar = self.pbar_glade.get_widget("pbar")
         self.pbar_win.set_title(title)
         self.pbar_win.hide()
-        self.bg_thread = asyncJob.asyncJobWorker(callback, args)
+        self.bg_thread = vmmAsyncJob.asyncJobWorker(callback, args)
 
     def run(self):
         self.timer = gobject.timeout_add (100, self.pulse_pbar)

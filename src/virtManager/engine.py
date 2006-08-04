@@ -28,7 +28,7 @@ from virtManager.preferences import vmmPreferences
 from virtManager.manager import vmmManager
 from virtManager.details import vmmDetails
 from virtManager.console import vmmConsole
-from virtManager.asyncjob import asyncJob
+from virtManager.asyncjob import vmmAsyncJob
 
 class vmmEngine:
     def __init__(self, config):
@@ -222,7 +222,7 @@ class vmmEngine:
             self.fcdialog.hide()
             if(response == gtk.RESPONSE_ACCEPT):
                 file_to_save = self.fcdialog.get_filename()
-                progWin = asyncJob(self.config, vm.save,
+                progWin = vmmAsyncJob(self.config, vm.save,
                                [file_to_save], "Saving Virtual Machine")
                 progWin.run()
                 self.fcdialog.destroy()

@@ -19,6 +19,7 @@
 
 import gobject
 import libvirt
+import os
 from time import time
 
 from virtManager.domain import vmmDomain
@@ -86,7 +87,10 @@ class vmmConnection(gobject.GObject):
         return self.hostinfo[4] * self.hostinfo[5] * self.hostinfo[6] * self.hostinfo[7]
 
     def restore(self, frm):
-        self.vmm.restore(frm)
+        status = self.vmm.restore(frm)
+        if(status == 0):
+            os.remove(frm)
+        return status
 
     def tick(self):
         if self.vmm == None:

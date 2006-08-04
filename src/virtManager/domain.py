@@ -270,5 +270,14 @@ class vmmDomain(gobject.GObject):
         # added
         return ["vnc", "localhost", 5900 + self.get_id()]
 
+    def set_vcpu_count(self, vcpus):
+        print "If this was implemented, it would set this domain to have " + `vcpus` + " virtual cpus."
+
+    def set_memory(self, memory):
+        memory = int(memory)
+        if(memory > self.maximum_memory()):
+            print "XXX add proper error handling here. You may not set vm memory larger than the maximum set for the vm."
+        self.vm.setMemory(memory)
+        return self.vm.info()[2]
 
 gobject.type_register(vmmDomain)
