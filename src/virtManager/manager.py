@@ -368,7 +368,7 @@ class vmmManager(gobject.GObject):
         return cmp(self.connection.get_vm(model.get_value(iter1, 0)).get_id(), self.connection.get_vm(model.get_value(iter2, 0)).get_id())
 
     def vmlist_name_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, 0), model.get_value(iter2, 0))
+        return cmp(model.get_value(iter1, 1), model.get_value(iter2, 1))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
         return cmp(self.connection.get_vm(model.get_value(iter1, 0)).cpu_time(), self.connection.get_vm(model.get_value(iter2, 0)).cpu_time())
