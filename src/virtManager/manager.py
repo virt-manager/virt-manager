@@ -147,7 +147,7 @@ class vmmManager(gobject.GObject):
 
     def restore_saved(self, src=None):
         # get filename
-        self.fcdialog = gtk.FileChooserDialog("Restore Virtual Machine",
+        self.fcdialog = gtk.FileChooserDialog(_("Restore Virtual Machine"),
                                               self.window.get_widget("vmm-manager"),
                                               gtk.FILE_CHOOSER_ACTION_OPEN,
                                               (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
@@ -158,8 +158,10 @@ class vmmManager(gobject.GObject):
         self.fcdialog.hide()
         if(response == gtk.RESPONSE_ACCEPT):
             file_to_load = self.fcdialog.get_filename()
-            progWin = vmmAsyncJob(self.config, self.restore_saved_callback,
-                               [file_to_load], "Restoring Virtual Machine")
+            progWin = vmmAsyncJob(self.config,
+                                  self.restore_saved_callback,
+                                  [file_to_load],
+                                  _("Restoring Virtual Machine"))
             progWin.run()
             
         self.fcdialog.destroy()
@@ -177,8 +179,7 @@ class vmmManager(gobject.GObject):
     def restore_saved_callback(self, file_to_load):
         status = self.connection.restore(file_to_load)
         if(status != 0):
-            self.domain_restore_error = "Error restoring domain " + file_to_load + \
-                                        ". Is the domain already running?"
+            self.domain_restore_error = _("Error restoring domain '%s'. Is the domain already running?") % file_to_load
         
 
     def vm_added(self, connection, uri, vmuuid):
@@ -274,14 +275,14 @@ class vmmManager(gobject.GObject):
         model = gtk.ListStore(str, str)
         vmlist.set_model(model)
 
-        idCol = gtk.TreeViewColumn("ID")
-        nameCol = gtk.TreeViewColumn("Name")
-        statusCol = gtk.TreeViewColumn("Status")
-        cpuUsageCol = gtk.TreeViewColumn("CPU usage")
-        virtualCPUsCol = gtk.TreeViewColumn("VCPUs")
-        memoryUsageCol = gtk.TreeViewColumn("Memory usage")
-        diskUsageCol = gtk.TreeViewColumn("Disk usage")
-        networkTrafficCol = gtk.TreeViewColumn("Network traffic")
+        idCol = gtk.TreeViewColumn(_("ID"))
+        nameCol = gtk.TreeViewColumn(_("Name"))
+        statusCol = gtk.TreeViewColumn(_("Status"))
+        cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
+        virtualCPUsCol = gtk.TreeViewColumn(_("VCPUs"))
+        memoryUsageCol = gtk.TreeViewColumn(_("Memory usage"))
+        diskUsageCol = gtk.TreeViewColumn(_("Disk usage"))
+        networkTrafficCol = gtk.TreeViewColumn(_("Network traffic"))
 
         vmlist.append_column(idCol)
         vmlist.append_column(nameCol)
@@ -367,7 +368,7 @@ class vmmManager(gobject.GObject):
         return cmp(self.connection.get_vm(model.get_value(iter1, 0)).get_id(), self.connection.get_vm(model.get_value(iter2, 0)).get_id())
 
     def vmlist_name_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, 0), model.get_value(iter2, 0))
+        return cmp(model.get_value(iter1, 1), model.get_value(iter2, 1))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
         return cmp(self.connection.get_vm(model.get_value(iter1, 0)).cpu_time(), self.connection.get_vm(model.get_value(iter2, 0)).cpu_time())

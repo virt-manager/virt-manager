@@ -23,6 +23,7 @@ class vmmAbout:
     def __init__(self, config):
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-about")
         self.window.get_widget("vmm-about").hide()
+        self.config = config
 
         self.window.signal_autoconnect({
             "on_vmm_about_delete_event": self.close,
@@ -30,7 +31,7 @@ class vmmAbout:
 
     def show(self):
         dialog = self.window.get_widget("vmm-about")
-        dialog.set_version("0.1")
+        dialog.set_version(self.config.get_appversion())
         dialog.show_all()
         dialog.present()
 

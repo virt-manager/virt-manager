@@ -1,0 +1,27 @@
+    Virt Manager TODO list
+    ----------------------
+
+A list of random items which need implementing in no particular
+order / importance:
+
+
+ 1. Handle renaming of domains. Libvirt caches the name when you get
+    the initial handle to the domain, so this may be more difficult
+    than it seems - particularly since we really want to minimse as
+    may XenD RPC/HTTP calls as possible
+
+ 2. Implement tracking of network & disk stats. Needs support in 
+    libvirt.
+
+ 3. Support for dealing with inactive / passive domains
+
+ 4. Auto-resize console window to match size of virtual displays
+
+ 5. Deal with VNC display resizing
+
+ 6. Ability to send arbitrary keystrokes to VNC (ie keys which local
+    WM would otherwise capture, eg Ctrl+Alt+F1 to switch console)
+
+ 7. Implement 'open terminal' to get serial console
+
+ 8. Pick up VNC port from domain's XML

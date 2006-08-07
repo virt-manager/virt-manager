@@ -18,6 +18,23 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
+from os import getcwd
+import os.path
+import sys
+
+import locale
+import gettext
+
+gettext_app = "virt-manager"
+gettext_dir = "::GETTEXTDIR::"
+
+if os.path.exists(os.getcwd() + "/locale/en.po"):
+    gettext_dir = os.getcwd() + "/locale"
+
+locale.setlocale(locale.LC_ALL, '')
+gettext.install(gettext_app, gettext_dir)
+
+
 import gtk
 gtk.gdk.threads_init()
 
@@ -25,13 +42,10 @@ import dbus
 import dbus.glib
 import dbus.service
 
-from os import getcwd
-import os.path
-import sys
-
 from optparse import OptionParser
 
 appname = "::PACKAGE::"
+appversion = "::VERSION::"
 gconf_dir = "/apps/" + appname
 asset_dir = "::ASSETDIR::"
 glade_dir = asset_dir
@@ -45,7 +59,9 @@ if os.path.exists(os.getcwd() + "/src/" + appname + ".glade"):
 if os.path.exists(os.getcwd() + "/pixmaps/icon_run.png"):
     icon_dir = os.getcwd() + "/pixmaps"
 
-if os.path.exists(os.getcwd() + "/src/virtManager/__init__.py"):
+if os.path.exists(os.getcwd() + "/src/virt-manager.py"):
+    sys.path.insert(0, os.getcwd() + "/src/graphWidgets/.libs")
+elif os.path.exists(os.getcwd() + "/build/src/virt-manager.py"):
     sys.path.insert(0, os.getcwd() + "/src")
     sys.path.insert(0, os.getcwd() + "/build/src/graphWidgets/.libs")
 else:
@@ -65,7 +81,7 @@ def main():
 
     (options, args) = optParser.parse_args()
 
-    config = vmmConfig(appname, gconf_dir, glade_dir, icon_dir)
+    config = vmmConfig(appname, appversion, gconf_dir, glade_dir, icon_dir)
     engine = vmmEngine(config)
     bus = None
     try:
@@ -90,7 +106,7 @@ def main():
             return
     except:
         print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
-        print "Could not connection to session bus, disabling DBus service"
+        print _("Could not connection to session bus, disabling DBus service")
         if options.uri != None:
             engine.show_manager(options.uri)
         else:
