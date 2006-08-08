@@ -28,9 +28,6 @@ import gettext
 gettext_app = "virt-manager"
 gettext_dir = "::GETTEXTDIR::"
 
-if os.path.exists(os.getcwd() + "/locale/en.po"):
-    gettext_dir = os.getcwd() + "/locale"
-
 locale.setlocale(locale.LC_ALL, '')
 gettext.install(gettext_app, gettext_dir)
 

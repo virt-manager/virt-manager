@@ -52,11 +52,12 @@ rm -rf $RPM_BUILD_ROOT
 make install  DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/sparkline.a
 rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/sparkline.la
+%find_lang %{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc README COPYING AUTHORS ChangeLog NEWS
 %{_bindir}/%{name}
@@ -78,6 +79,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/vncViewer/*.py
 %{_datadir}/%{name}/vncViewer/*.pyc
 %ghost %{_datadir}/%{name}/vncViewer/*.pyo
+
 
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/dbus-1/services/%{name}.service

@@ -10,9 +10,10 @@ PKG_CHECK_MODULES(PYGTK2, pygtk-2.0 >= 1.99.11)
 PKG_CHECK_MODULES(GTK2, gtk+-2.0 >= 2.2.0)
 
 AC_OUTPUT(Makefile
+          pixmaps/Makefile
+          po/Makefile
           src/Makefile
           src/virtManager/Makefile
           src/vncViewer/Makefile
           src/graphWidgets/Makefile
-          pixmaps/Makefile
           virt-manager.spec)

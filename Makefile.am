@@ -1,6 +1,6 @@
 ACLOCAL_AMFLAGS = -I m4/
 
-SUBDIRS = src pixmaps
+SUBDIRS = src pixmaps po
 
 EXTRA_DIST = @PACKAGE@.spec
 
