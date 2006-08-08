@@ -20,6 +20,7 @@
 import gobject
 import libvirt
 
+
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
         "status-changed": (gobject.SIGNAL_RUN_FIRST,
@@ -261,8 +262,7 @@ class vmmDomain(gobject.GObject):
             raise _("Unknown status code")
 
     def run_status_icon(self):
-        status = self.run_status()
-        return self.config.get_vm_status_icon(status.lower())
+        return self.config.get_vm_status_icon(self.status())
 
     def get_console_info(self):
         # XXX don't hardcode me! need to really extract info from
