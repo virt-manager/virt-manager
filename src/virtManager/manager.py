@@ -45,7 +45,8 @@ class vmmManager(gobject.GObject):
                               gobject.TYPE_NONE, []),
         "action-show-preferences": (gobject.SIGNAL_RUN_FIRST,
                                     gobject.TYPE_NONE, []),
-        }
+        "action-show-create": (gobject.SIGNAL_RUN_FIRST,
+                               gobject.TYPE_NONE, []),}
     def __init__(self, config, connection):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-manager")
@@ -73,8 +74,8 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("menu_view_network_traffic").set_active(self.config.is_vmlist_network_traffic_visible())
 
 
-        self.window.get_widget("menu_file_new").set_sensitive(False)
-        self.window.get_widget("vm-new").set_sensitive(False)
+        self.window.get_widget("menu_file_new").set_sensitive(True)
+        self.window.get_widget("vm-new").set_sensitive(True)
         self.window.get_widget("vm-view").set_sensitive(False)
         self.window.get_widget("vm-view").set_active(0)
 
@@ -105,12 +106,14 @@ class vmmManager(gobject.GObject):
 
             "on_vm_manager_delete_event": self.close,
             "on_menu_file_open_connection_activate": self.open_connection,
+            "on_menu_file_new_activate": self.show_vm_create,
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
             "on_menu_restore_saved_activate": self.restore_saved,
             "on_vmm_close_clicked": self.close,
             "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
+            "on_vm_new_clicked": self.show_vm_create,
             "on_menu_edit_details_activate": self.show_vm_details,
 
             "on_vm_list_row_activated": self.open_vm_console,
@@ -236,6 +239,9 @@ class vmmManager(gobject.GObject):
 
     def show_vm_details(self,ignore):
         self.emit("action-show-details", self.connection.get_uri(), self.current_vm())
+
+    def show_vm_create(self,ignore):
+        self.emit("action-show-create")
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
         self.emit("action-show-console", self.connection.get_uri(), self.current_vm())

@@ -29,12 +29,14 @@ from virtManager.manager import vmmManager
 from virtManager.details import vmmDetails
 from virtManager.console import vmmConsole
 from virtManager.asyncjob import vmmAsyncJob
+from virtManager.create import vmmCreate
 
 class vmmEngine:
     def __init__(self, config):
         self.windowConnect = None
         self.windowPreferences = None
         self.windowAbout = None
+        self.windowCreate = None
         self.connections = {}
 
         self.timer = None
@@ -120,6 +122,8 @@ class vmmEngine:
         self.show_manager(uri)
     def _do_show_details(self, src, uri, uuid):
         self.show_details(uri, uuid)
+    def _do_show_create(self, src):
+        self.show_create()
     def _do_show_console(self, src, uri, uuid):
         self.show_console(uri, uuid)
     def _do_save_domain(self, src, uri, uuid):
@@ -182,10 +186,16 @@ class vmmEngine:
             manager.connect("action-show-console", self._do_show_console)
             manager.connect("action-show-details", self._do_show_details)
             manager.connect("action-show-preferences", self._do_show_preferences)
+            manager.connect("action-show-create", self._do_show_create)
             manager.connect("action-show-about", self._do_show_about)
             manager.connect("action-show-connect", self._do_show_connect)
             self.connections[uri]["windowManager"] = manager
         self.connections[uri]["windowManager"].show()
+
+    def show_create(self):
+        if self.windowCreate == None:
+            self.windowCreate = vmmCreate(self.get_config())
+        self.windowCreate.show()
 
     def get_connection(self, uri, readOnly=True):
         if not(self.connections.has_key(uri)):
