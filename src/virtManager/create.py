@@ -74,10 +74,11 @@ class vmmCreate(gobject.GObject):
     def page_changed(self):
         notebook = self.xml.get_widget("create-pages")
         page_number = notebook.get_current_page()
-        if(page_number == 0):
+        if page_number == 0:
             #set up the front page
-
-        elif(page_number == 1):
+            print "page 0"
+        elif page_number == 1:
             #set up the system-name page
-
+            print "page 1"
+        
     
