@@ -53,7 +53,7 @@ report:
 
 CLEANFILES = $(FMTCATALOGS) $(GLADESCRATCHFILE) tmp
 
-install-data-local:	$(FMTCARALOGS) 
+install-data-local: $(FMTCATALOGS) 
 	mkdir -p $(DESTDIR)$(NLSDIR)
 	for n in $(FMTCATALOGS); do \
 	    l=`basename $$n .mo`; \
