@@ -195,6 +195,7 @@ class vmmEngine:
     def show_create(self):
         if self.windowCreate == None:
             self.windowCreate = vmmCreate(self.get_config())
+        self.windowCreate.reset_state()
         self.windowCreate.show()
 
     def get_connection(self, uri, readOnly=True):

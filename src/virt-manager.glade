@@ -3789,7 +3789,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	    <widget class="GtkTable" id="remote-xen-options">
 	      <property name="border_width">3</property>
 	      <property name="visible">True</property>
-	      <property name="n_rows">1</property>
+	      <property name="n_rows">2</property>
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">3</property>
@@ -3888,6 +3888,28 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 		  <property name="right_attach">1</property>
 		  <property name="top_attach">0</property>
 		  <property name="bottom_attach">1</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCheckButton" id="remote-xen-secure">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Secure connection</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">4</property>
+		  <property name="top_attach">1</property>
+		  <property name="bottom_attach">2</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -5617,6 +5639,7 @@ TB</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
   <property name="urgency_hint">False</property>
+  <signal name="delete_event" handler="on_vmm_create_delete_event" last_modification_time="Wed, 09 Aug 2006 18:11:39 GMT"/>
 
   <child>
     <widget class="GtkVBox" id="vbox23">
@@ -5634,6 +5657,7 @@ TB</property>
 	  <property name="tab_pos">GTK_POS_TOP</property>
 	  <property name="scrollable">False</property>
 	  <property name="enable_popup">False</property>
+	  <signal name="switch_page" handler="on_create_pages_switch_page" last_modification_time="Wed, 09 Aug 2006 18:04:01 GMT"/>
 
 	  <child>
 	    <widget class="GtkVBox" id="vbox22">
@@ -6183,7 +6207,6 @@ TB</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
-			      <property name="mnemonic_widget">entry5</property>
 			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 			      <property name="width_chars">-1</property>
 			      <property name="single_line_mode">False</property>
@@ -6258,16 +6281,17 @@ TB</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="entry5">
+			    <widget class="GtkEntry" id="create-vm-name">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
 			      <property name="visibility">True</property>
-			      <property name="max_length">0</property>
+			      <property name="max_length">31</property>
 			      <property name="text" translatable="yes"></property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">•</property>
 			      <property name="activates_default">False</property>
+			      <signal name="focus_out_event" handler="on_create_vm_name_focus_out_event" last_modification_time="Wed, 09 Aug 2006 20:52:25 GMT"/>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -6439,7 +6463,7 @@ TB</property>
 			      <property name="right_padding">0</property>
 
 			      <child>
-				<widget class="GtkRadioButton" id="radiobutton14">
+				<widget class="GtkRadioButton" id="virt-method-pv">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">_Paravirtualized:</property>
@@ -6449,6 +6473,7 @@ TB</property>
 				  <property name="active">True</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
+				  <signal name="toggled" handler="on_virt_method_toggled" last_modification_time="Wed, 09 Aug 2006 21:30:22 GMT"/>
 				</widget>
 			      </child>
 			    </widget>
@@ -6497,7 +6522,7 @@ TB</property>
 			      <property name="right_padding">0</property>
 
 			      <child>
-				<widget class="GtkRadioButton" id="radiobutton15">
+				<widget class="GtkRadioButton" id="virt-method-fv">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes">_Fully Virtualized:</property>
@@ -6507,6 +6532,8 @@ TB</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
+				  <property name="group">virt-method-pv</property>
+				  <signal name="toggled" handler="on_virt_method_toggled" last_modification_time="Wed, 09 Aug 2006 21:30:36 GMT"/>
 				</widget>
 			      </child>
 			    </widget>
@@ -6744,6 +6771,7 @@ TB</property>
 				  <property name="active">True</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
+				  <signal name="toggled" handler="on_media_toggled" last_modification_time="Wed, 09 Aug 2006 21:54:33 GMT"/>
 				</widget>
 			      </child>
 			    </widget>
@@ -6835,6 +6863,7 @@ TB</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
 				  <property name="group">media-iso-image</property>
+				  <signal name="toggled" handler="on_media_toggled" last_modification_time="Wed, 09 Aug 2006 21:54:24 GMT"/>
 				</widget>
 			      </child>
 			    </widget>
@@ -6904,7 +6933,7 @@ TB</property>
 				      <property name="right_padding">0</property>
 
 				      <child>
-					<widget class="GtkEntry" id="entry6">
+					<widget class="GtkEntry" id="fv-iso-location">
 					  <property name="visible">True</property>
 					  <property name="can_focus">True</property>
 					  <property name="editable">True</property>
@@ -7166,7 +7195,7 @@ TB</property>
 			      <property name="right_padding">0</property>
 
 			      <child>
-				<widget class="GtkRadioButton" id="radiobutton8">
+				<widget class="GtkRadioButton" id="media-url-tree">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes"></property>
@@ -7176,6 +7205,7 @@ TB</property>
 				  <property name="active">True</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
+				  <signal name="toggled" handler="on_media_toggled" last_modification_time="Wed, 09 Aug 2006 21:54:46 GMT"/>
 				</widget>
 			      </child>
 			    </widget>
@@ -7228,7 +7258,7 @@ TB</property>
 			      <property name="right_padding">0</property>
 
 			      <child>
-				<widget class="GtkRadioButton" id="radiobutton9">
+				<widget class="GtkRadioButton" id="media-url-ks">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="label" translatable="yes"></property>
@@ -7238,7 +7268,8 @@ TB</property>
 				  <property name="active">False</property>
 				  <property name="inconsistent">False</property>
 				  <property name="draw_indicator">True</property>
-				  <property name="group">media-iso-image</property>
+				  <property name="group">media-url-tree</property>
+				  <signal name="toggled" handler="on_media_toggled" last_modification_time="Wed, 09 Aug 2006 21:54:57 GMT"/>
 				</widget>
 			      </child>
 			    </widget>
@@ -7337,7 +7368,7 @@ TB</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="entry10">
+			    <widget class="GtkEntry" id="pv-media-url">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -7500,7 +7531,7 @@ TB</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkEntry" id="entry11">
+			    <widget class="GtkEntry" id="pv-ks-url">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
@@ -8965,13 +8996,14 @@ You'll now be able to view and work with $SYSTEM_NAME in the virtual machine man
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button26">
+	    <widget class="GtkButton" id="create-cancel">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="on_create_cancel_clicked" last_modification_time="Wed, 09 Aug 2006 17:55:38 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -8981,13 +9013,14 @@ You'll now be able to view and work with $SYSTEM_NAME in the virtual machine man
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button27">
+	    <widget class="GtkButton" id="create-back">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-go-back</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="on_create_back_clicked" last_modification_time="Wed, 09 Aug 2006 17:54:59 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -8997,13 +9030,30 @@ You'll now be able to view and work with $SYSTEM_NAME in the virtual machine man
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="button28">
+	    <widget class="GtkButton" id="create-forward">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-go-forward</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="on_create_forward_clicked" last_modification_time="Wed, 09 Aug 2006 17:55:24 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="create-finish">
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">_Finish</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <signal name="clicked" handler="on_create_finish_clicked" last_modification_time="Wed, 09 Aug 2006 18:56:13 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
