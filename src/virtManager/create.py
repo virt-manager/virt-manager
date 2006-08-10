@@ -231,6 +231,13 @@ class vmmCreate(gobject.GObject):
             
         elif page_number == 7:
             #set up the congrats page
+            congrats = self.window.get_widget("create-congrats-label")
+            
+            # XXX the validation doesn't really go here
+            if self.vm_name == None: self.vm_name = "No Name"
+            
+            congrats.set_text(_("Congratulations, you have successfully created a new virtual system, <b>\"%s\"</b>. \n\nYou'll now be able to view and work with \"%s\" in the virtual machine manager.") % (self.vm_name, self.vm_name) )
+            congrats.set_use_markup(True)
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
         
