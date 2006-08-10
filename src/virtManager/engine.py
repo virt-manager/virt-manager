@@ -122,8 +122,8 @@ class vmmEngine:
         self.show_manager(uri)
     def _do_show_details(self, src, uri, uuid):
         self.show_details(uri, uuid)
-    def _do_show_create(self, src):
-        self.show_create()
+    def _do_show_create(self, src, uri):
+        self.show_create(uri)
     def _do_show_console(self, src, uri, uuid):
         self.show_console(uri, uuid)
     def _do_save_domain(self, src, uri, uuid):
@@ -192,9 +192,9 @@ class vmmEngine:
             self.connections[uri]["windowManager"] = manager
         self.connections[uri]["windowManager"].show()
 
-    def show_create(self):
+    def show_create(self, uri):
         if self.windowCreate == None:
-            self.windowCreate = vmmCreate(self.get_config())
+            self.windowCreate = vmmCreate(self.get_config(), self.get_connection(uri))
         self.windowCreate.reset_state()
         self.windowCreate.show()
 

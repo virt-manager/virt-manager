@@ -39,9 +39,10 @@ VM_STORAGE_FILE = 2
 
 
 class vmmCreate(gobject.GObject):
-    def __init__(self, config):
+    def __init__(self, config, connection):
         self.__gobject_init__()
         self.config = config
+        self.connection = connection
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-create")
         self.topwin = self.window.get_widget("vmm-create")
         self.topwin.hide()
@@ -64,8 +65,10 @@ class vmmCreate(gobject.GObject):
             "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
             "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
             "on_storage_toggled" : self.set_storage_type,
-            "on_storage_file_size_changed" : self.set_storage_file_size
-            
+            "on_storage_file_size_changed" : self.set_storage_file_size,
+            "on_create_memory_max_value_changed" : self.set_max_memory,
+            "on_create_memory_startup_value_changed" : self.set_startup_memory,
+            "on_create_vcpus_changed" : self.set_vcpus,
             })
 
         self.set_initial_state()
@@ -87,8 +90,9 @@ class vmmCreate(gobject.GObject):
         self.storage_method = VM_STORAGE_PARTITION
         self.storage_address = None
         self.storage_file_size = 0
-        self.memory = 0
-        self.vcpus = 0
+        self.max_memory = 0
+        self.startup_memory = 0
+        self.vcpus = 1
 
     def set_initial_state(self):
         notebook = self.window.get_widget("create-pages")
@@ -144,22 +148,26 @@ class vmmCreate(gobject.GObject):
 
         
     def page_changed(self, notebook, page, page_number):
+        # would you like some spaghetti with your salad, sir?
         
         if page_number == 0:
             #set up the front page
             self.window.get_widget("create-back").set_sensitive(False)
+            
         elif page_number == 1:
             #set up the system-name page
             if self.vm_name != None:
                 self.window.get_widget("create-vm-name").set_text(self.vm_name)
             else:
                 self.window.get_widget("create-vm-name").set_text("")
+                
         elif page_number == 2:
             #set up the virt method page
             if self.virt_method == VM_PARAVIRT:
                 self.window.get_widget("virt-method-pv").set_active(True)
             else:
                 self.window.get_widget("virt-method-fv").set_active(True)
+                
         elif page_number == 3:
             #set up the fv install media page
             if self.install_fv_media_type == VM_INSTALL_FROM_ISO:
@@ -172,6 +180,7 @@ class vmmCreate(gobject.GObject):
             else:
                 self.window.get_widget("media-physical").set_active(True)
                 self.window.get_widget("fv-iso-location-box").set_sensitive(False)
+                
         elif page_number == 4:
             #set up the pv install media page
             if self.install_pv_media_type == VM_INSTALL_FROM_URL:
@@ -182,6 +191,7 @@ class vmmCreate(gobject.GObject):
                 self.window.get_widget("media-url-ks").set_active(True)
                 self.window.get_widget("pv-media-url").set_sensitive(False)
                 self.window.get_widget("pv-ks-url").set_sensitive(True)
+                
         elif page_number == 5:
             #set up the storage space page
             if self.storage_method == VM_STORAGE_PARTITION:
@@ -193,9 +203,32 @@ class vmmCreate(gobject.GObject):
                 self.window.get_widget("storage-file-backed").set_active(True)
                 self.window.get_widget("storage-partition-box").set_sensitive(False)
                 self.window.get_widget("storage-file-box").set_sensitive(True)
+                
         elif page_number == 6:
-            #set up the CPU and Memory page
-            print "loaded cpu/memory page"
+            # memory stuff
+            max_mem = self.connection.host_memory_size()/1024 # in megabytes from henceforth
+
+            #avoid absurdity, hopefully
+            if self.max_memory == 0:
+                self.max_memory = max_mem / 2
+            if self.startup_memory > self.max_memory:
+                self.startup_memory = self.max_memory
+                        
+            max_mem_slider = self.window.get_widget("create-memory-max")
+            self.window.get_widget("create-host-memory").set_text("%d MB" % max_mem)
+            max_mem_slider.get_adjustment().upper = max_mem
+            max_mem_slider.get_adjustment().value = self.max_memory
+            startup_mem_slider = self.window.get_widget("create-memory-startup")
+            startup_mem_slider.get_adjustment().upper = self.max_memory
+            startup_mem_slider.get_adjustment().value = self.startup_memory
+
+            #vcpu stuff
+            max_cpus = self.connection.host_maximum_processor_count()
+            self.window.get_widget("create-cpus-physical").set_text(`max_cpus`)
+            cpu_spinbox = self.window.get_widget("create-vcpus").get_adjustment()
+            cpu_spinbox.upper = max_cpus
+            cpu_spinbox.value = self.vcpus
+            
         elif page_number == 7:
             #set up the congrats page
             self.window.get_widget("create-forward").hide()
@@ -219,7 +252,10 @@ class vmmCreate(gobject.GObject):
               "\n Install media address: " + self.install_media_address + \
               "\n Install storage type: " + `self.storage_method` + \
               "\n Install storage address: " + self.storage_address + \
-              "\n Install storage file size: " + `self.storage_file_size`
+              "\n Install storage file size: " + `self.storage_file_size` + \
+              "\n Install max kernel memory: " + `self.max_memory` + \
+              "\n Install startup kernel memory: " + `self.startup_memory` + \
+              "\n Install vcpus: " + `self.vcpus`
 
         self.close()
 
@@ -320,3 +356,16 @@ class vmmCreate(gobject.GObject):
 
     def set_storage_file_size(self, src):
         self.storage_file_size = src.get_adjustment().value
+
+    def set_max_memory(self, src):
+        self.max_memory = src.get_adjustment().value
+        startup_mem_adjustment = self.window.get_widget("create-memory-startup").get_adjustment()
+        if startup_mem_adjustment.value > self.max_memory:
+            startup_mem_adjustment.value = self.max_memory
+        startup_mem_adjustment.upper = self.max_memory
+
+    def set_startup_memory(self, src):
+        self.startup_memory = src.get_adjustment().value
+
+    def set_vcpus(self, src):
+        self.vcpus = src.get_adjustment().value
