@@ -46,7 +46,7 @@ class vmmManager(gobject.GObject):
         "action-show-preferences": (gobject.SIGNAL_RUN_FIRST,
                                     gobject.TYPE_NONE, []),
         "action-show-create": (gobject.SIGNAL_RUN_FIRST,
-                               gobject.TYPE_NONE, []),}
+                               gobject.TYPE_NONE, [str]),}
     def __init__(self, config, connection):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-manager")
@@ -241,7 +241,7 @@ class vmmManager(gobject.GObject):
         self.emit("action-show-details", self.connection.get_uri(), self.current_vm())
 
     def show_vm_create(self,ignore):
-        self.emit("action-show-create")
+        self.emit("action-show-create", self.connection.get_uri())
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
         self.emit("action-show-console", self.connection.get_uri(), self.current_vm())
