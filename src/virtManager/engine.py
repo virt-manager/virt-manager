@@ -30,6 +30,7 @@ from virtManager.details import vmmDetails
 from virtManager.console import vmmConsole
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.create import vmmCreate
+from virtManager.serialcon import vmmSerialConsole
 
 class vmmEngine:
     def __init__(self, config):
@@ -126,6 +127,8 @@ class vmmEngine:
         self.show_create()
     def _do_show_console(self, src, uri, uuid):
         self.show_console(uri, uuid)
+    def _do_show_terminal(self, src, uri, uuid):
+        self.show_serial_console(uri, uuid)
     def _do_save_domain(self, src, uri, uuid):
         self.save_domain(src, uri, uuid)
 
@@ -153,9 +156,19 @@ class vmmEngine:
             console = vmmConsole(self.get_config(),
                                  con.get_vm(uuid))
             console.connect("action-show-details", self._do_show_details)
+            console.connect("action-show-terminal", self._do_show_terminal)
             console.connect("action-save-domain", self._do_save_domain)
             self.connections[uri]["windowConsole"][uuid] = console
         self.connections[uri]["windowConsole"][uuid].show()
+
+    def show_serial_console(self, uri, uuid):
+        con = self.get_connection(uri)
+
+        if not(self.connections[uri]["windowSerialConsole"].has_key(uuid)):
+            console = vmmSerialConsole(self.get_config(),
+                                       con.get_vm(uuid))
+            self.connections[uri]["windowSerialConsole"][uuid] = console
+        self.connections[uri]["windowSerialConsole"][uuid].show()
 
     def show_details_performance(self, uri, uuid):
         win = self.show_details(uri, uuid)
@@ -172,6 +185,7 @@ class vmmEngine:
             details = vmmDetails(self.get_config(),
                                  con.get_vm(uuid))
             details.connect("action-show-console", self._do_show_console)
+            details.connect("action-show-terminal", self._do_show_terminal)
             details.connect("action-save-domain", self._do_save_domain)
             self.connections[uri]["windowDetails"][uuid] = details
         self.connections[uri]["windowDetails"][uuid].show()
@@ -204,7 +218,8 @@ class vmmEngine:
                 "connection": vmmConnection(self.get_config(), uri, readOnly),
                 "windowManager": None,
                 "windowDetails": {},
-                "windowConsole": {}
+                "windowConsole": {},
+                "windowSerialConsole": {},
                 }
             self.connections[uri]["connection"].connect("disconnected", self._do_connection_disconnected)
             self.connections[uri]["connection"].connect("vm-removed", self._do_vm_removed)

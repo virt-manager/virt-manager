@@ -29,7 +29,7 @@ class vmmConsole(gobject.GObject):
     __gsignals__ = {
         "action-show-details": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
-        "action-launch-terminal": (gobject.SIGNAL_RUN_FIRST,
+        "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
                                    gobject.TYPE_NONE, (str,str)),
         "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str))
@@ -126,7 +126,7 @@ class vmmConsole(gobject.GObject):
 
     def try_login(self, src=None):
         password = self.window.get_widget("console-auth-password").get_text()
-        protocol, host, port = self.vm.get_console_info()
+        protocol, host, port = self.vm.get_graphics_console()
 
         if self.vm.get_id() == 0:
             return
@@ -208,7 +208,7 @@ class vmmConsole(gobject.GObject):
                     print _("Resume requested, but machine is already running")
 
     def control_vm_terminal(self, src):
-        self.emit("action-launch-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+        self.emit("action-show-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_save_domain(self, src):
         self.emit("action-save-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())

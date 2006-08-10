@@ -27,7 +27,7 @@ class vmmDetails(gobject.GObject):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
-        "action-launch-terminal": (gobject.SIGNAL_RUN_FIRST,
+        "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
                                    gobject.TYPE_NONE, (str,str)),
         "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str))
@@ -186,7 +186,7 @@ class vmmDetails(gobject.GObject):
                     print _("Resume requested, but machine is already running")
 
     def control_vm_terminal(self, src):
-        self.emit("action-launch-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+        self.emit("action-show-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_console(self, src):
         self.emit("action-show-console", self.vm.get_connection().get_uri(), self.vm.get_uuid())

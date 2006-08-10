@@ -19,7 +19,7 @@
 
 import gobject
 import libvirt
-
+import libxml2
 
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
@@ -264,11 +264,40 @@ class vmmDomain(gobject.GObject):
     def run_status_icon(self):
         return self.config.get_vm_status_icon(self.status())
 
-    def get_console_info(self):
-        # XXX don't hardcode me! need to really extract info from
-        # the libvirt XML as & when the display device info gets
-        # added
-        return ["vnc", "localhost", 5900 + self.get_id()]
+    def get_xml_string(self, path):
+        xml = self.vm.XMLDesc(0)
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return None
+        ctx = doc.xpathNewContext()
+        try:
+            ret = ctx.xpathEval(path)
+            tty = None
+            if len(ret) == 1:
+                tty = ret[0].content
+            ctx.xpathFreeContext()
+            doc.freeDoc()
+            return tty
+        except:
+            ctx.xpathFreeContext()
+            doc.freeDoc()
+            return None
+
+    def get_serial_console_tty(self):
+        return self.get_xml_string("/domain/devices/console/@tty")
+
+    def get_graphics_console(self):
+        type = self.get_xml_string("/domain/devices/graphics/@type")
+        port = None
+        if type == "vnc":
+            port = self.get_xml_string("/domain/devices/graphics[type='vnc']/@port")
+            if port == None:
+                return []
+            else:
+                port = int(port)
+        return [type, "localhost", port]
 
     def set_vcpu_count(self, vcpus):
         print "If this was implemented, it would set this domain to have " + `vcpus` + " virtual cpus."
