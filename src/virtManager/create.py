@@ -30,8 +30,9 @@ VM_FULLY_VIRT = 2
 
 VM_INSTALL_FROM_ISO = 1
 VM_INSTALL_FROM_CD = 2
-VM_INSTALL_FROM_URL = 3
-VM_INSTALL_FROM_KS_URL = 4
+
+VM_INSTALL_FROM_URL = 1
+VM_INSTALL_FROM_KS_URL = 2
 
 VM_STORAGE_PARTITION = 1
 VM_STORAGE_FILE = 2
@@ -53,7 +54,18 @@ class vmmCreate(gobject.GObject):
             "on_create_finish_clicked" : self.finish,
             "on_create_vm_name_focus_out_event" : self.set_name,
             "on_virt_method_toggled" : self.set_virt_method,
-            "on_media_toggled" : self.set_install_from
+            "on_media_toggled" : self.set_install_from,
+            "on_fv_iso_location_browse_clicked" : self.browse_iso_location,
+            "on_fv_iso_location_focus_out_event" : self.set_media_address,
+            "on_pv_media_url_focus_out_event" : self.set_media_address,
+            "on_pv_ks_url_focus_out_event" : self.set_media_address,
+            "on_storage_partition_address_focus_out_event" : self.set_storage_address,
+            "on_storage_file_address_focus_out_event" : self.set_storage_address,
+            "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
+            "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
+            "on_storage_toggled" : self.set_storage_type,
+            "on_storage_file_size_changed" : self.set_storage_file_size
+            
             })
 
         self.set_initial_state()
@@ -63,11 +75,18 @@ class vmmCreate(gobject.GObject):
 
     def _init_members(self):
         #the dahta
-        self.vm_name = ""
+        self.vm_name = None
         self.virt_method = VM_PARAVIRT
-        self.install_media_type = VM_INSTALL_FROM_ISO
-        self.install_media_address = ""
+
+        # having two install-media fields is strange, but eliminates
+        # some spaghetti in the UI
+        self.install_fv_media_type = VM_INSTALL_FROM_ISO
+        self.install_pv_media_type = VM_INSTALL_FROM_URL
+
+        self.install_media_address = None
         self.storage_method = VM_STORAGE_PARTITION
+        self.storage_address = None
+        self.storage_file_size = 0
         self.memory = 0
         self.vcpus = 0
 
@@ -97,9 +116,8 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-finish").hide()
         self.window.get_widget("create-forward").show()
         self.window.get_widget("create-back").set_sensitive(False)
+        self.window.get_widget("storage-file-size").set_sensitive(False)
 
-        # add code here to clear any previously set create wizard values and set
-        # the buttons to the proper state
 
     def forward(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
@@ -132,7 +150,10 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("create-back").set_sensitive(False)
         elif page_number == 1:
             #set up the system-name page
-            self.window.get_widget("create-vm-name").set_text(self.vm_name)
+            if self.vm_name != None:
+                self.window.get_widget("create-vm-name").set_text(self.vm_name)
+            else:
+                self.window.get_widget("create-vm-name").set_text("")
         elif page_number == 2:
             #set up the virt method page
             if self.virt_method == VM_PARAVIRT:
@@ -141,28 +162,39 @@ class vmmCreate(gobject.GObject):
                 self.window.get_widget("virt-method-fv").set_active(True)
         elif page_number == 3:
             #set up the fv install media page
-            if self.install_media_type != VM_INSTALL_FROM_ISO and \
-               self.install_media_type != VM_INSTALL_FROM_CD:
-                self.install_media_type = VM_INSTALL_FROM_ISO
-            if self.install_media_type == VM_INSTALL_FROM_ISO:
+            if self.install_fv_media_type == VM_INSTALL_FROM_ISO:
                 self.window.get_widget("media-iso-image").set_active(True)
+                self.window.get_widget("fv-iso-location-box").set_sensitive(True)
+                if self.install_media_address != None:
+                    self.window.get_widget("fv-iso-location").set_text(self.install_media_address)
+                else:
+                    self.window.get_widget("fv-iso-location").set_text("")
             else:
                 self.window.get_widget("media-physical").set_active(True)
+                self.window.get_widget("fv-iso-location-box").set_sensitive(False)
         elif page_number == 4:
             #set up the pv install media page
-            if self.install_media_type != VM_INSTALL_FROM_URL and \
-               self.install_media_type != VM_INSTALL_FROM_KS_URL:
-                self.install_media_type = VM_INSTALL_FROM_URL
-            if self.install_media_type == VM_INSTALL_FROM_URL:
+            if self.install_pv_media_type == VM_INSTALL_FROM_URL:
                 self.window.get_widget("media-url-tree").set_active(True)
+                self.window.get_widget("pv-media-url").set_sensitive(True)
+                self.window.get_widget("pv-ks-url").set_sensitive(False)
             else:
                 self.window.get_widget("media-url-ks").set_active(True)
+                self.window.get_widget("pv-media-url").set_sensitive(False)
+                self.window.get_widget("pv-ks-url").set_sensitive(True)
         elif page_number == 5:
             #set up the storage space page
-            print "loaded storage space page"
+            if self.storage_method == VM_STORAGE_PARTITION:
+                self.window.get_widget("storage-partition").set_active(True)
+                self.window.get_widget("storage-partition-box").set_sensitive(True)
+                self.window.get_widget("storage-file-box").set_sensitive(False)
+                
+            else:
+                self.window.get_widget("storage-file-backed").set_active(True)
+                self.window.get_widget("storage-partition-box").set_sensitive(False)
+                self.window.get_widget("storage-file-box").set_sensitive(True)
         elif page_number == 6:
             #set up the CPU and Memory page
-            # if the user went backwards
             print "loaded cpu/memory page"
         elif page_number == 7:
             #set up the congrats page
@@ -174,9 +206,21 @@ class vmmCreate(gobject.GObject):
         return 1
     
     def finish(self, ignore=None):
+        # Validation?
+        if self.vm_name == None: self.vm_name = "None specified"
+        if self.install_media_address == None: self.install_media_address = "None specified"
+        if self.storage_address == None: self.storage_address = "None specified"
+
+        #Action?
         print "your vm properties: \n Name=" + self.vm_name + \
               "\n Virt method: " + `self.virt_method` + \
-              "\n Install media type: " + `self.install_media_type`
+              "\n Install media type (fv): " + `self.install_fv_media_type` + \
+              "\n Install media type (pv): " + `self.install_pv_media_type` + \
+              "\n Install media address: " + self.install_media_address + \
+              "\n Install storage type: " + `self.storage_method` + \
+              "\n Install storage address: " + self.storage_address + \
+              "\n Install storage file size: " + `self.storage_file_size`
+
         self.close()
 
     def set_name(self, src, ignore=None):
@@ -192,17 +236,87 @@ class vmmCreate(gobject.GObject):
     def set_install_from(self, button):
         if button.get_active():
             if button.name == "media-iso-image":
-                self.install_media_type = VM_INSTALL_FROM_ISO
-                self.window.get_widget("fv-iso-location").set_sensitive(True)
+                self.install_fv_media_type = VM_INSTALL_FROM_ISO
+                self.window.get_widget("fv-iso-location-box").set_sensitive(True)
             elif button.name == "media-physical":
-                self.install_media_type = VM_INSTALL_FROM_CD
-                self.window.get_widget("fv-iso-location").set_sensitive(False)
+                self.install_fv_media_type = VM_INSTALL_FROM_CD
+                self.window.get_widget("fv-iso-location-box").set_sensitive(False)
             elif button.name == "media-url-tree":
-                self.install_media_type = VM_INSTALL_FROM_URL
+                self.install_pv_media_type = VM_INSTALL_FROM_URL
                 self.window.get_widget("pv-media-url").set_sensitive(True)
                 self.window.get_widget("pv-ks-url").set_sensitive(False)
             else:
-                self.install_media_type = VM_INSTALL_FROM_KS_URL
+                self.install_pv_media_type = VM_INSTALL_FROM_KS_URL
                 self.window.get_widget("pv-media-url").set_sensitive(False)
                 self.window.get_widget("pv-ks-url").set_sensitive(True)
             
+    def browse_iso_location(self, ignore1=None, ignore2=None):
+        self.install_media_address = self._browse_file(_("Locate ISO Image"))
+        if self.install_media_address != None:
+            self.window.get_widget("fv-iso-location").set_text(self.install_media_address)
+
+    def _browse_file(self, dialog_name):
+        # user wants to browse for an ISO
+        fcdialog = gtk.FileChooserDialog(dialog_name,
+                                         self.window.get_widget("vmm-create"),
+                                         gtk.FILE_CHOOSER_ACTION_OPEN,
+                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                          gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
+                                         None)
+        response = fcdialog.run()
+        fcdialog.hide()
+        if(response == gtk.RESPONSE_ACCEPT):
+            filename = fcdialog.get_filename()
+            fcdialog.destroy()
+            return filename
+        else:
+            fcdialog.destroy()
+            return None
+        
+    def set_media_address(self, src, ignore=None):
+        self.install_media_address = src.get_text()
+    
+    def set_storage_address(self, src, ignore=None):
+        self.storage_address = src.get_text()
+
+    def browse_storage_partition_address(self, src, ignore=None):
+        self.storage_address = self._browse_file(_("Locate Storage Partition"))
+        if self.storage_address != None:
+            self.window.get_widget("storage-partition-address").set_text(self.storage_address)
+
+    def browse_storage_file_address(self, src, ignore=None):
+        self.window.get_widget("storage-file-size").set_sensitive(True)
+        fcdialog = gtk.FileChooserDialog(_("Locate or Create New Storage File"),
+                                         self.window.get_widget("vmm-create"),
+                                         gtk.FILE_CHOOSER_ACTION_SAVE,
+                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                          gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
+                                         None)
+        fcdialog.set_do_overwrite_confirmation(True)
+        fcdialog.connect("confirm-overwrite", self.confirm_overwrite_callback)
+        response = fcdialog.run()
+        fcdialog.hide()
+        if(response == gtk.RESPONSE_ACCEPT):
+            self.storage_address = fcdialog.get_filename()
+
+        if self.storage_address != None:
+            self.window.get_widget("storage-file-address").set_text(self.storage_address)
+
+    def confirm_overwrite_callback(self, chooser):
+        # Only called when the user has chosen an existing file
+        self.window.get_widget("storage-file-size").set_sensitive(False)
+        return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
+            
+    def set_storage_type(self, button):
+        if button.get_active():
+            if button.name == "storage-partition":
+                self.storage_method = VM_STORAGE_PARTITION
+                self.window.get_widget("storage-partition-box").set_sensitive(True)
+                self.window.get_widget("storage-file-box").set_sensitive(False)
+            else:
+                self.storage_method = VM_STORAGE_FILE
+                self.window.get_widget("storage-partition-box").set_sensitive(False)
+                self.window.get_widget("storage-file-box").set_sensitive(True)
+
+    def set_storage_file_size(self, src):
+        self.storage_file_size = src.get_adjustment().value
