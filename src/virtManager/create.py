@@ -125,8 +125,9 @@ class vmmCreate(gobject.GObject):
 
     def forward(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
-        # do this always, since there's no "leaving a notebook page" event.
-        self.window.get_widget("create-back").set_sensitive(True)
+        if(self.validate(notebook.get_current_page()) != True):
+            return
+
         if (notebook.get_current_page() == 2 and self.virt_method == VM_PARAVIRT):
             notebook.set_current_page(4)
         elif (notebook.get_current_page() == 3 and self.virt_method == VM_FULLY_VIRT):
@@ -236,7 +237,7 @@ class vmmCreate(gobject.GObject):
             # XXX the validation doesn't really go here
             if self.vm_name == None: self.vm_name = "No Name"
             
-            congrats.set_text(_("Congratulations, you have successfully created a new virtual system, <b>\"%s\"</b>. \n\nYou'll now be able to view and work with \"%s\" in the virtual machine manager.") % (self.vm_name, self.vm_name) )
+            congrats.set_text(_("Congratulations, you have successfully created a new virtual system, <b>\"%s\"</b>. \n\You'll now be able to view and work with \"%s\" in the virtual machine manager.") % (self.vm_name, self.vm_name) )
             congrats.set_use_markup(True)
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
@@ -376,3 +377,21 @@ class vmmCreate(gobject.GObject):
 
     def set_vcpus(self, src):
         self.vcpus = src.get_adjustment().value
+
+    def validate(self, page_num):
+        if page_num == 1:
+            name = self.window.get_widget("create-vm-name").get_text()
+            if len(name) > 50 or " " in name or len(name) == 0:
+                message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
+                                                0, \
+                                                gtk.MESSAGE_ERROR, \
+                                                gtk.BUTTONS_OK, \
+                                                _("Invalid system name") )
+                message_box.format_secondary_text(_("System name must be non-blank, less than 50 characters, and contain no spaces"))
+                message_box.run()
+                message_box.destroy()
+                return False
+
+        # do this always, since there's no "leaving a notebook page" event.
+        self.window.get_widget("create-back").set_sensitive(True)
+        return True
