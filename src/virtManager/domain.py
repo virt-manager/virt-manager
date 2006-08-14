@@ -292,9 +292,9 @@ class vmmDomain(gobject.GObject):
         type = self.get_xml_string("/domain/devices/graphics/@type")
         port = None
         if type == "vnc":
-            port = self.get_xml_string("/domain/devices/graphics[type='vnc']/@port")
+            port = self.get_xml_string("/domain/devices/graphics[@type='vnc']/@port")
             if port == None:
-                return []
+                port = 5900 + self.get_id()
             else:
                 port = int(port)
         return [type, "localhost", port]
