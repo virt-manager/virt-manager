@@ -272,14 +272,16 @@ class vmmCreate(gobject.GObject):
             try:
                 guest.cdrom = self.install_media_address
             except ValueError, e:
-                self._validation_error_box(e)
+                self._validation_error_box(_("Invalid FV media address"),e.args[0])
                 self.install_media_address = None
         else:
             guest = xeninst.ParaVirtGuest()
+            if self.install_pv_media_type == VM_INSTALL_FROM_KS_URL:
+                guest.extraargs = "ks=%s" % self.install_pv_media_type
             try:
                 guest.location = self.install_media_address
             except ValueError, e:
-                self._validation_error_box(`e`)
+                self._validation_error_box(_("Invalid PV media address"), e.args[0])
                 self.install_media_address = None
                 return
 
@@ -287,7 +289,7 @@ class vmmCreate(gobject.GObject):
         try:
             guest.name = self.vm_name
         except ValueError, e:
-            self._validation_error_box(`e`)
+            self._validation_error_box(_("Invalid system name"), e.args[0])
             self.vm_name = None
             return
         
@@ -295,7 +297,7 @@ class vmmCreate(gobject.GObject):
         try:
             guest.memory = self.max_memory
         except ValueError:
-            self._validation_error_box(`e`)
+            self._validation_error_box(_("Invalid memory setting"), e.args[0])
             self.max_memory = None
             return
         
@@ -306,7 +308,7 @@ class vmmCreate(gobject.GObject):
         try:
             d = xeninst.XenDisk(self.storage_address, filesize)
         except ValueError, e:
-            self._validation_error_box(`e`)
+            self._validation_error_box(_("Invalid storage address"), e.args[0])
             self.storage_address = self.storage_file_size = None
             return
         guest.disks.append(d)
@@ -315,13 +317,13 @@ class vmmCreate(gobject.GObject):
         n = xeninst.XenNetworkInterface(None)
         guest.nics.append(n)
 
-
+        # let's go
         try:
             print "\n\nStarting install..."
             r = guest.start_install(True)
             print r
         except RuntimeError, e:
-            print >> sys.stderr, "ERROR: ", e
+            print >> sys.stderr, "ERROR: ", e.args[0]
             return
 
         self.close()
