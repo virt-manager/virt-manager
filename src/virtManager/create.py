@@ -247,13 +247,11 @@ class vmmCreate(gobject.GObject):
         return 1
     
     def finish(self, ignore=None):
-        #for debugging
+        #begin DEBUG STUFF
         if self.install_kickstart_address == None:
             ks = "None"
         else:
             ks = self.install_kickstart_address
-        
-        
         print "your vm properties: \n Name=" + self.vm_name + \
               "\n Virt method: " + `self.virt_method` + \
               "\n Install media type (fv): " + `self.install_fv_media_type` + \
@@ -265,9 +263,9 @@ class vmmCreate(gobject.GObject):
               "\n Install max kernel memory: " + `self.max_memory` + \
               "\n Install startup kernel memory: " + `self.startup_memory` + \
               "\n Install vcpus: " + `self.vcpus`
+        # end DEBUG STUFF
         
         # first things first, are we trying to create a fully virt guest?
-        
         if self.virt_method == VM_FULLY_VIRT:
             guest = xeninst.FullVirtGuest()
             #XXX use HAL to get the local path for an install image
