@@ -33,9 +33,6 @@ VM_FULLY_VIRT = 2
 VM_INSTALL_FROM_ISO = 1
 VM_INSTALL_FROM_CD = 2
 
-VM_INSTALL_FROM_URL = 1
-VM_INSTALL_FROM_KS_URL = 2
-
 VM_STORAGE_PARTITION = 1
 VM_STORAGE_FILE = 2
 
@@ -61,7 +58,7 @@ class vmmCreate(gobject.GObject):
             "on_fv_iso_location_browse_clicked" : self.browse_iso_location,
             "on_fv_iso_location_focus_out_event" : self.set_media_address,
             "on_pv_media_url_focus_out_event" : self.set_media_address,
-            "on_pv_ks_url_focus_out_event" : self.set_media_address,
+            "on_pv_ks_url_focus_out_event" : self.set_kickstart_address,
             "on_storage_partition_address_focus_out_event" : self.set_storage_address,
             "on_storage_file_address_focus_out_event" : self.set_storage_address,
             "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
@@ -82,13 +79,9 @@ class vmmCreate(gobject.GObject):
         #the dahta
         self.vm_name = None
         self.virt_method = VM_PARAVIRT
-
-        # having two install-media fields is strange, but eliminates
-        # some spaghetti in the UI
         self.install_fv_media_type = VM_INSTALL_FROM_ISO
-        self.install_pv_media_type = VM_INSTALL_FROM_URL
-
         self.install_media_address = None
+        self.install_kickstart_address = None
         self.storage_method = VM_STORAGE_PARTITION
         self.storage_address = None
         self.storage_file_size = None
@@ -159,10 +152,12 @@ class vmmCreate(gobject.GObject):
             
         elif page_number == 1:
             #set up the system-name page
+            name_widget = self.window.get_widget("create-vm-name")
             if self.vm_name != None:
-                self.window.get_widget("create-vm-name").set_text(self.vm_name)
+                name_widget.set_text(self.vm_name)
             else:
-                self.window.get_widget("create-vm-name").set_text("")
+                name_widget.set_text("")
+            name_widget.grab_focus()
                 
         elif page_number == 2:
             #set up the virt method page
@@ -186,14 +181,17 @@ class vmmCreate(gobject.GObject):
                 
         elif page_number == 4:
             #set up the pv install media page
-            if self.install_pv_media_type == VM_INSTALL_FROM_URL:
-                self.window.get_widget("media-url-tree").set_active(True)
-                self.window.get_widget("pv-media-url").set_sensitive(True)
-                self.window.get_widget("pv-ks-url").set_sensitive(False)
+            url_widget = self.window.get_widget("pv-media-url")
+            ks_widget = self.window.get_widget("pv-ks-url")
+            if self.install_media_address != None:
+                url_widget.set_text(self.install_media_address)
             else:
-                self.window.get_widget("media-url-ks").set_active(True)
-                self.window.get_widget("pv-media-url").set_sensitive(False)
-                self.window.get_widget("pv-ks-url").set_sensitive(True)
+                url_widget.set_text("")
+            if self.install_kickstart_address != None:
+                ks_widget.set_text(self.install_kickstart_address)
+            else:
+                ks_widget.set_text("")
+            url_widget.grab_focus()
                 
         elif page_number == 5:
             #set up the storage space page
@@ -239,7 +237,7 @@ class vmmCreate(gobject.GObject):
             # XXX the validation doesn't really go here
             if self.vm_name == None: self.vm_name = "No Name"
             
-            congrats.set_text(_("Congratulations, you have successfully created a new virtual system, <b>\"%s\"</b>. \n\You'll now be able to view and work with \"%s\" in the virtual machine manager.") % (self.vm_name, self.vm_name) )
+            congrats.set_text(_("Congratulations, you have successfully created a new virtual system, <b>\"%s\"</b>. \nYou'll now be able to view and work with \"%s\" in the virtual machine manager.") % (self.vm_name, self.vm_name) )
             congrats.set_use_markup(True)
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
@@ -249,11 +247,18 @@ class vmmCreate(gobject.GObject):
         return 1
     
     def finish(self, ignore=None):
+        #for debugging
+        if self.install_kickstart_address == None:
+            ks = "None"
+        else:
+            ks = self.install_kickstart_address
+        
+        
         print "your vm properties: \n Name=" + self.vm_name + \
               "\n Virt method: " + `self.virt_method` + \
               "\n Install media type (fv): " + `self.install_fv_media_type` + \
-              "\n Install media type (pv): " + `self.install_pv_media_type` + \
               "\n Install media address: " + self.install_media_address + \
+              "\n Install kickstart address: " + ks + \
               "\n Install storage type: " + `self.storage_method` + \
               "\n Install storage address: " + self.storage_address + \
               "\n Install storage file size: " + `self.storage_file_size/1024` + \
@@ -276,8 +281,8 @@ class vmmCreate(gobject.GObject):
                 self.install_media_address = None
         else:
             guest = xeninst.ParaVirtGuest()
-            if self.install_pv_media_type == VM_INSTALL_FROM_KS_URL:
-                guest.extraargs = "ks=%s" % self.install_pv_media_type
+            if self.install_kickstart_address != None:
+                guest.extraargs = "ks=%s" % self.install_kickstart_address
             try:
                 guest.location = self.install_media_address
             except ValueError, e:
@@ -346,14 +351,6 @@ class vmmCreate(gobject.GObject):
             elif button.name == "media-physical":
                 self.install_fv_media_type = VM_INSTALL_FROM_CD
                 self.window.get_widget("fv-iso-location-box").set_sensitive(False)
-            elif button.name == "media-url-tree":
-                self.install_pv_media_type = VM_INSTALL_FROM_URL
-                self.window.get_widget("pv-media-url").set_sensitive(True)
-                self.window.get_widget("pv-ks-url").set_sensitive(False)
-            else:
-                self.install_pv_media_type = VM_INSTALL_FROM_KS_URL
-                self.window.get_widget("pv-media-url").set_sensitive(False)
-                self.window.get_widget("pv-ks-url").set_sensitive(True)
             
     def browse_iso_location(self, ignore1=None, ignore2=None):
         self.install_media_address = self._browse_file(_("Locate ISO Image"))
@@ -383,6 +380,9 @@ class vmmCreate(gobject.GObject):
     def set_media_address(self, src, ignore=None):
         self.install_media_address = src.get_text()
     
+    def set_kickstart_address(self, src, ignore=None):
+        self.install_kickstart_address = src.get_text()
+
     def set_storage_address(self, src, ignore=None):
         self.storage_address = src.get_text()
 
@@ -464,8 +464,8 @@ class vmmCreate(gobject.GObject):
 
         elif page_num == 4: # the paravirt media page
             if self.install_media_address == None or len(self.install_media_address) == 0:
-                self._validation_error_box(_("URL or Kickstart Location Required"), \
-                                           _("You must specify a URL or a kickstart address for the guest install"))
+                self._validation_error_box(_("URL Required"), \
+                                           _("You must specify a URL for the install image for the guest install"))
                 return False
 
         elif page_num == 5: # the storage page
