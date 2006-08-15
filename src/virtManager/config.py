@@ -166,16 +166,17 @@ class vmmConfig:
     def get_secret_name(self, vm):
         return "vm-console-" + vm.get_uuid()
 
+    def has_keyring(self):
+        if self.keyring == None:
+            self.keyring = vmmKeyring()
+        return self.keyring.is_available()
+
     def clear_console_password(self, vm):
         id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
 
         if id != None:
-            if self.keyring == None:
-                try:
-                    self.keyring = vmmKeyring()
-                except:
-                    print _("Unable to access keyring")
-                    return
+            if not(self.has_keyring()):
+                return
 
             self.keyring.clear_secret(id)
             self.conf.unset(self.conf_dir + "/console/passwords/" + vm.get_uuid())
@@ -183,27 +184,27 @@ class vmmConfig:
     def get_console_password(self, vm):
         id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
 
-        if id != None:
-            if self.keyring == None:
-                try:
-                    self.keyring = vmmKeyring()
-                except:
-                    print _("Unable to access keyring")
-                    return ""
+        if id != None and id != 0:
+            if not(self.has_keyring()):
+                return ""
 
             secret = self.keyring.get_secret(id)
             if secret != None and secret.get_name() == self.get_secret_name(vm):
-                # XXX validate attributes
+                if not(secret.has_attribute("hvuri")):
+                    return ""
+                if secret.get_attribute("hvuri") != vm.get_connection().get_uri():
+                    return ""
+                if not(secret.has_attribute("uuid")):
+                    return ""
+                if secret.get_attribute("uuid") != vm.get_uuid():
+                    return ""
+                
                 return secret.get_secret()
         return ""
 
     def set_console_password(self, vm, password):
-        if self.keyring == None:
-            try:
-                self.keyring = vmmKeyring()
-            except:
-                print _("Unable to access keyring")
-                return
+        if not(self.has_keyring()):
+            return
 
         # Nb, we don't bother to check if there is an existing
         # secret, because gnome-keyring auto-replaces an existing

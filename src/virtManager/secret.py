@@ -35,6 +35,12 @@ class vmmSecret:
     def get_name(self):
         return self.name
 
+    def get_attributes(self):
+        return self.attributes
+
+    def has_attribute(self, key):
+        return self.attributes.has_key(key)
+
     def add_attribute(self, key, value):
         if type(value) != str:
             value = str(value)
