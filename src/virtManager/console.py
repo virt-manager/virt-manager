@@ -172,10 +172,14 @@ class vmmConsole(gobject.GObject):
     def activate_auth_page(self):
         pw = self.config.get_console_password(self.vm)
         self.window.get_widget("console-auth-password").set_text(pw)
-        if pw != None and pw != "":
-            self.window.get_widget("console-auth-remember").set_active(True)
+        if self.config.has_keyring():
+            self.window.get_widget("console-auth-remember").set_sensitive(True)
+            if pw != None and pw != "":
+                self.window.get_widget("console-auth-remember").set_active(True)
+            else:
+                self.window.get_widget("console-auth-remember").set_active(False)
         else:
-            self.window.get_widget("console-auth-remember").set_active(False)
+            self.window.get_widget("console-auth-remember").set_sensitive(False)
         self.window.get_widget("console-pages").set_current_page(2)
 
     def activate_viewer_page(self):
@@ -226,11 +230,9 @@ class vmmConsole(gobject.GObject):
             self.window.get_widget("menu-vm-run").set_sensitive(False)
 
         if vm.is_serial_console_tty_accessible():
-            print "Access"
             self.window.get_widget("control-terminal").set_sensitive(True)
             self.window.get_widget("menu-vm-terminal").set_sensitive(True)
         else:
-            print "Denied"
             self.window.get_widget("control-terminal").set_sensitive(False)
             self.window.get_widget("menu-vm-terminal").set_sensitive(False)
 
