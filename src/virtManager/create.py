@@ -268,8 +268,23 @@ class vmmCreate(gobject.GObject):
         
         if self.virt_method == VM_FULLY_VIRT:
             guest = xeninst.FullVirtGuest()
+            #XXX use HAL to get the local path for an install image
+            if self.install_fv_media_type == VM_INSTALL_FROM_CD:
+                self._validation_error_box(_("Installs from local CD are not yet supported"))
+                return
+            try:
+                guest.cdrom = self.install_media_address
+            except ValueError, e:
+                self._validation_error_box(e)
+                self.install_media_address = None
         else:
             guest = xeninst.ParaVirtGuest()
+            try:
+                guest.location = self.install_media_address
+            except ValueError, e:
+                self._validation_error_box(e)
+                self.install_media_address = None
+                return
 
         # set the name
         try:
@@ -299,6 +314,7 @@ class vmmCreate(gobject.GObject):
         # network
         n = xeninst.XenNetworkInterface(None)
         guest.nics.append(n)
+
 
         try:
             print "\n\nStarting install..."
