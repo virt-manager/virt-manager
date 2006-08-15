@@ -20,6 +20,7 @@
 import gobject
 import libvirt
 import libxml2
+import os
 
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
@@ -288,6 +289,12 @@ class vmmDomain(gobject.GObject):
     def get_serial_console_tty(self):
         return self.get_xml_string("/domain/devices/console/@tty")
 
+    def is_serial_console_tty_accessible(self):
+        tty = self.get_serial_console_tty()
+        if tty == None:
+            return False
+        return os.access(tty, os.R_OK | os.W_OK)
+
     def get_graphics_console(self):
         type = self.get_xml_string("/domain/devices/graphics/@type")
         port = None
@@ -300,7 +307,8 @@ class vmmDomain(gobject.GObject):
         return [type, "localhost", port]
 
     def set_vcpu_count(self, vcpus):
-        print "If this was implemented, it would set this domain to have " + `vcpus` + " virtual cpus."
+        vcpus = int(vcpus)
+        self.vm.setVcpus(vcpus)
 
     def set_memory(self, memory):
         memory = int(memory)

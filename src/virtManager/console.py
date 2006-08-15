@@ -218,75 +218,80 @@ class vmmConsole(gobject.GObject):
 
     def update_widget_states(self, vm, status):
         self.ignorePause = True
-        try:
-            if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-                self.window.get_widget("control-run").set_sensitive(True)
-                self.window.get_widget("menu-vm-run").set_sensitive(True)
-            else:
-                self.window.get_widget("control-run").set_sensitive(False)
-                self.window.get_widget("menu-vm-run").set_sensitive(False)
+        if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+            self.window.get_widget("control-run").set_sensitive(True)
+            self.window.get_widget("menu-vm-run").set_sensitive(True)
+        else:
+            self.window.get_widget("control-run").set_sensitive(False)
+            self.window.get_widget("menu-vm-run").set_sensitive(False)
 
-            if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
-                self.window.get_widget("control-pause").set_sensitive(False)
-                self.window.get_widget("control-shutdown").set_sensitive(False)
-                self.window.get_widget("control-terminal").set_sensitive(False)
-                self.window.get_widget("control-save").set_sensitive(False)
-                self.window.get_widget("menu-vm-pause").set_sensitive(False)
-                self.window.get_widget("menu-vm-shutdown").set_sensitive(False)
-                self.window.get_widget("menu-vm-terminal").set_sensitive(False)
-                self.window.get_widget("menu-vm-save").set_sensitive(False)
+        if vm.is_serial_console_tty_accessible():
+            print "Access"
+            self.window.get_widget("control-terminal").set_sensitive(True)
+            self.window.get_widget("menu-vm-terminal").set_sensitive(True)
+        else:
+            print "Denied"
+            self.window.get_widget("control-terminal").set_sensitive(False)
+            self.window.get_widget("menu-vm-terminal").set_sensitive(False)
+
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
+            self.window.get_widget("control-pause").set_sensitive(False)
+            self.window.get_widget("control-shutdown").set_sensitive(False)
+            self.window.get_widget("control-save").set_sensitive(False)
+            self.window.get_widget("menu-vm-pause").set_sensitive(False)
+            self.window.get_widget("menu-vm-shutdown").set_sensitive(False)
+            self.window.get_widget("menu-vm-save").set_sensitive(False)
+        else:
+            self.window.get_widget("control-pause").set_sensitive(True)
+            self.window.get_widget("control-shutdown").set_sensitive(True)
+            self.window.get_widget("control-save").set_sensitive(True)
+            self.window.get_widget("menu-vm-pause").set_sensitive(True)
+            self.window.get_widget("menu-vm-shutdown").set_sensitive(True)
+            self.window.get_widget("menu-vm-save").set_sensitive(True)
+            if status == libvirt.VIR_DOMAIN_PAUSED:
+                self.window.get_widget("control-pause").set_active(True)
+                self.window.get_widget("menu-vm-pause").set_active(True)
             else:
-                self.window.get_widget("control-pause").set_sensitive(True)
-                self.window.get_widget("control-shutdown").set_sensitive(True)
-                self.window.get_widget("control-terminal").set_sensitive(True)
-                self.window.get_widget("control-save").set_sensitive(True)
-                self.window.get_widget("menu-vm-pause").set_sensitive(True)
-                self.window.get_widget("menu-vm-shutdown").set_sensitive(True)
-                self.window.get_widget("menu-vm-terminal").set_sensitive(True)
-                self.window.get_widget("menu-vm-save").set_sensitive(True)
-                if status == libvirt.VIR_DOMAIN_PAUSED:
-                    self.window.get_widget("control-pause").set_active(True)
-                    self.window.get_widget("menu-vm-pause").set_active(True)
+                self.window.get_widget("control-pause").set_active(False)
+                self.window.get_widget("menu-vm-pause").set_active(False)
+
+        if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_management_domain():
+            self.window.get_widget("console-pages").set_current_page(0)
+        else:
+            if status == libvirt.VIR_DOMAIN_PAUSED:
+                screenshot = None
+                if self.vncViewer.is_authenticated():
+                    screenshot = self.vncViewer.take_screenshot()
+                if screenshot != None:
+                    cr = screenshot.cairo_create()
+                    width, height = screenshot.get_size()
+                    
+                    # Set 60% gray overlayed
+                    cr.set_source_rgba(0, 0, 0, 0.6)
+                    cr.rectangle(0, 0, width, height)
+                    cr.fill()
+                    
+                    # Render a big text 'paused' across it
+                    cr.set_source_rgba(1, 1,1, 1)
+                    cr.set_font_size(80)
+                    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+                    overlay = _("paused")
+                    extents = cr.text_extents(overlay)
+                    x = width/2 - (extents[2]/2)
+                    y = height/2 - (extents[3]/2)
+                    cr.move_to(x, y)
+                    cr.show_text(overlay)
+                    
+                    self.window.get_widget("console-screenshot").set_from_pixmap(screenshot, None)
+                    self.activate_screenshot_page()
                 else:
-                    self.window.get_widget("control-pause").set_active(False)
-                    self.window.get_widget("menu-vm-pause").set_active(False)
-
-            if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_management_domain():
-                self.window.get_widget("console-pages").set_current_page(0)
+                    self.activate_unavailable_page()
             else:
-                if status == libvirt.VIR_DOMAIN_PAUSED:
-                    screenshot = None
-                    if self.vncViewer.is_authenticated():
-                        screenshot = self.vncViewer.take_screenshot()
-                    if screenshot != None:
-                        cr = screenshot.cairo_create()
-                        width, height = screenshot.get_size()
-
-                        # Set 60% gray overlayed
-                        cr.set_source_rgba(0, 0, 0, 0.6)
-                        cr.rectangle(0, 0, width, height)
-                        cr.fill()
-
-                        # Render a big text 'paused' across it
-                        cr.set_source_rgba(1, 1,1, 1)
-                        cr.set_font_size(80)
-                        cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
-                        overlay = _("paused")
-                        extents = cr.text_extents(overlay)
-                        x = width/2 - (extents[2]/2)
-                        y = height/2 - (extents[3]/2)
-                        cr.move_to(x, y)
-                        cr.show_text(overlay)
-
-                        self.window.get_widget("console-screenshot").set_from_pixmap(screenshot, None)
-                        self.activate_screenshot_page()
-                    else:
-                        self.activate_unavailable_page()
-                else:
+                try:
                     self.try_login()
-        except:
-            print _("Couldn't open console: ") + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
-            self.ignorePause = False
+                except:
+                    print _("Couldn't open console: ") + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
+                    self.ignorePause = False
         self.ignorePause = False
 
 gobject.type_register(vmmConsole)
