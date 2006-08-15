@@ -21,6 +21,8 @@ import gobject
 import gtk
 import gtk.gdk
 import gtk.glade
+import xeninst 
+import sys
 
 from rhpl.exception import installExceptionHandler
 from rhpl.translate import _, N_, textdomain, utf8
@@ -89,7 +91,7 @@ class vmmCreate(gobject.GObject):
         self.install_media_address = None
         self.storage_method = VM_STORAGE_PARTITION
         self.storage_address = None
-        self.storage_file_size = 0
+        self.storage_file_size = None
         self.max_memory = 0
         self.startup_memory = 0
         self.vcpus = 1
@@ -247,9 +249,6 @@ class vmmCreate(gobject.GObject):
         return 1
     
     def finish(self, ignore=None):
-        # Validation?
-        if self.vm_name == None: self.vm_name = "None specified"
-        if self.install_media_address == None: self.install_media_address = "None specified"
         if self.storage_address == None: self.storage_address = "None specified"
 
         #Action?
@@ -264,6 +263,50 @@ class vmmCreate(gobject.GObject):
               "\n Install max kernel memory: " + `self.max_memory` + \
               "\n Install startup kernel memory: " + `self.startup_memory` + \
               "\n Install vcpus: " + `self.vcpus`
+        
+        # first things first, are we trying to create a fully virt guest?
+        
+        if self.virt_method == VM_FULLY_VIRT:
+            guest = xeninst.FullVirtGuest()
+        else:
+            guest = xeninst.ParaVirtGuest()
+
+        # set the name
+        try:
+            guest.name = self.vm_name
+        except ValueError, e:
+            self._validation_error_box(e)
+            self.vm_name = None
+            return
+        
+        # set the memory
+        try:
+            guest.memory = self.max_memory
+        except ValueError:
+            self._validation_error_box(e)
+            self.max_memory = None
+            return
+        
+        # disks
+        try:
+            d = xeninst.XenDisk(self.storage_address, self.storage_file_size)
+        except ValueError, e:
+            self._validation_error_box(e)
+            self.storage_address = self.storage_file_size = None
+            return
+        guest.disks.append(d)
+
+        # network
+        n = xeninst.XenNetworkInterface(None)
+        guest.nics.append(n)
+
+        try:
+            print "\n\nStarting install..."
+            r = guest.start_install(True)
+            print r
+        except RuntimeError, e:
+            print >> sys.stderr, "ERROR: ", e
+            return
 
         self.close()
 
@@ -299,7 +342,7 @@ class vmmCreate(gobject.GObject):
         if self.install_media_address != None:
             self.window.get_widget("fv-iso-location").set_text(self.install_media_address)
 
-    def _browse_file(self, dialog_name):
+    def _browse_file(self, dialog_name, folder=None):
         # user wants to browse for an ISO
         fcdialog = gtk.FileChooserDialog(dialog_name,
                                          self.window.get_widget("vmm-create"),
@@ -307,6 +350,8 @@ class vmmCreate(gobject.GObject):
                                          (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                           gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                          None)
+        if folder != None:
+            fcdialog.set_current_folder(folder)
         response = fcdialog.run()
         fcdialog.hide()
         if(response == gtk.RESPONSE_ACCEPT):
@@ -324,7 +369,7 @@ class vmmCreate(gobject.GObject):
         self.storage_address = src.get_text()
 
     def browse_storage_partition_address(self, src, ignore=None):
-        self.storage_address = self._browse_file(_("Locate Storage Partition"))
+        self.storage_address = self._browse_file(_("Locate Storage Partition"), "/dev")
         if self.storage_address != None:
             self.window.get_widget("storage-partition-address").set_text(self.storage_address)
 
@@ -379,19 +424,49 @@ class vmmCreate(gobject.GObject):
         self.vcpus = src.get_adjustment().value
 
     def validate(self, page_num):
-        if page_num == 1:
+        if page_num == 1: # the system name page
             name = self.window.get_widget("create-vm-name").get_text()
             if len(name) > 50 or " " in name or len(name) == 0:
-                message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
-                                                0, \
-                                                gtk.MESSAGE_ERROR, \
-                                                gtk.BUTTONS_OK, \
-                                                _("Invalid system name") )
-                message_box.format_secondary_text(_("System name must be non-blank, less than 50 characters, and contain no spaces"))
-                message_box.run()
-                message_box.destroy()
+                self._validation_error_box(_("Invalid System Name"), \
+                                           _("System name must be non-blank, less than 50 characters, and contain no spaces"))
+                return False
+
+        elif page_num == 2: # the virt method page
+            if self.virt_method == VM_FULLY_VIRT and not xeninst.util.is_hvm_capable():
+                self._validation_error_box(_("Hardware Support Required"), \
+                                           _("Your hardware does not appear to support full virtualization. Only paravirtualized guests will be available on this hardware."))
+                return False
+
+        elif page_num == 3: # the fully virt media page
+            if self.install_fv_media_type == VM_INSTALL_FROM_ISO and \
+                   (self.install_media_address == None or len(self.install_media_address) == 0):
+                self._validation_error_box(_("ISO Location Required"), \
+                                           _("You must specify an ISO location for the guest install image"))
+                return False
+
+        elif page_num == 4: # the paravirt media page
+            if self.install_media_address == None or len(self.install_media_address) == 0:
+                self._validation_error_box(_("URL or Kickstart Location Required"), \
+                                           _("You must specify a URL or a kickstart address for the guest install"))
+                return False
+
+        elif page_num == 5: # the storage page
+            if self.storage_address == None or len(self.storage_address) == 0:
+                self._validation_error_box(_("Storage Address Required"), \
+                                           _("You must specify a partition or a file for storage for the guest install"))
                 return False
 
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-back").set_sensitive(True)
         return True
+    
+    def _validation_error_box(self, text1, text2=None):
+        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
+                                                0, \
+                                                gtk.MESSAGE_ERROR, \
+                                                gtk.BUTTONS_OK, \
+                                                text1)
+        if text2 != None:
+            message_box.format_secondary_text(text2)
+        message_box.run()
+        message_box.destroy()
