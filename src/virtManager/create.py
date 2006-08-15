@@ -249,9 +249,6 @@ class vmmCreate(gobject.GObject):
         return 1
     
     def finish(self, ignore=None):
-        if self.storage_address == None: self.storage_address = "None specified"
-
-        #Action?
         print "your vm properties: \n Name=" + self.vm_name + \
               "\n Virt method: " + `self.virt_method` + \
               "\n Install media type (fv): " + `self.install_fv_media_type` + \
@@ -259,7 +256,7 @@ class vmmCreate(gobject.GObject):
               "\n Install media address: " + self.install_media_address + \
               "\n Install storage type: " + `self.storage_method` + \
               "\n Install storage address: " + self.storage_address + \
-              "\n Install storage file size: " + `self.storage_file_size` + \
+              "\n Install storage file size: " + `self.storage_file_size/1024` + \
               "\n Install max kernel memory: " + `self.max_memory` + \
               "\n Install startup kernel memory: " + `self.startup_memory` + \
               "\n Install vcpus: " + `self.vcpus`
@@ -282,7 +279,7 @@ class vmmCreate(gobject.GObject):
             try:
                 guest.location = self.install_media_address
             except ValueError, e:
-                self._validation_error_box(e)
+                self._validation_error_box(`e`)
                 self.install_media_address = None
                 return
 
@@ -290,7 +287,7 @@ class vmmCreate(gobject.GObject):
         try:
             guest.name = self.vm_name
         except ValueError, e:
-            self._validation_error_box(e)
+            self._validation_error_box(`e`)
             self.vm_name = None
             return
         
@@ -298,15 +295,18 @@ class vmmCreate(gobject.GObject):
         try:
             guest.memory = self.max_memory
         except ValueError:
-            self._validation_error_box(e)
+            self._validation_error_box(`e`)
             self.max_memory = None
             return
         
         # disks
+        filesize = None
+        if self.storage_file_size != None:
+            filesize = int(self.storage_file_size/1024)
         try:
-            d = xeninst.XenDisk(self.storage_address, self.storage_file_size)
+            d = xeninst.XenDisk(self.storage_address, filesize)
         except ValueError, e:
-            self._validation_error_box(e)
+            self._validation_error_box(`e`)
             self.storage_address = self.storage_file_size = None
             return
         guest.disks.append(d)
