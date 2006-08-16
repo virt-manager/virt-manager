@@ -40,6 +40,9 @@ VM_STORAGE_FILE = 2
 
 
 class vmmCreate(gobject.GObject):
+    __gsignals__ = {
+        "action-show-console": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, (str,str)),}
     def __init__(self, config, connection):
         self.__gobject_init__()
         self.config = config
@@ -73,6 +76,7 @@ class vmmCreate(gobject.GObject):
             })
 
         self.set_initial_state()
+        self.connection.connect("vm-added", self.open_vm_console)
         
     def show(self):
         self.topwin.show()
@@ -90,6 +94,7 @@ class vmmCreate(gobject.GObject):
         self.max_memory = 0
         self.startup_memory = 0
         self.vcpus = 1
+        self.vm_uuid = None
 
     def set_initial_state(self):
         notebook = self.window.get_widget("create-pages")
@@ -322,6 +327,8 @@ class vmmCreate(gobject.GObject):
         n = xeninst.XenNetworkInterface(None)
         guest.nics.append(n)
 
+        #grab the uuid before we start
+        self.vm_uuid = guest.uuid = xeninst.util.uuidToString(xeninst.util.randomUUID())
 
         #let's go
         progWin = vmmAsyncJob(self.config, self.do_install, [guest],
@@ -493,3 +500,10 @@ class vmmCreate(gobject.GObject):
             message_box.format_secondary_text(text2)
         message_box.run()
         message_box.destroy()
+
+    def open_vm_console(self,ignore,uri,uuid):
+        print "********* create.py: got vm-added signal. uuid = %s, self.vm_uuid = %s" % (uuid, self.vm_uuid)
+        if uuid == self.vm_uuid:
+            self.emit("action-show-console", self.connection.get_uri(), self.vm_uuid)
+        
+        
