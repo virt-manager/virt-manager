@@ -56,6 +56,9 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("control-terminal").set_icon_widget(gtk.Image())
         self.window.get_widget("control-terminal").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_launch_term.png")
 
+        self.window.get_widget("control-screenshot").set_icon_widget(gtk.Image())
+        self.window.get_widget("control-screenshot").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_screenshot.png")
+
         self.window.get_widget("control-save").set_icon_widget(gtk.Image())
         self.window.get_widget("control-save").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_save.png")
 
@@ -87,6 +90,7 @@ class vmmConsole(gobject.GObject):
             "on_menu_vm_pause_activate": self.control_vm_pause,
 
             "on_control_terminal_clicked": self.control_vm_terminal,
+            "on_control_screenshot_clicked": self.control_vm_screenshot,
             "on_control_save_clicked": self.control_vm_save_domain,
             "on_control_details_clicked": self.control_vm_details,
 
@@ -165,12 +169,15 @@ class vmmConsole(gobject.GObject):
 
     def activate_unavailable_page(self):
         self.window.get_widget("console-pages").set_current_page(0)
+        self.window.get_widget("control-screenshot").set_sensitive(False)
 
     def activate_screenshot_page(self):
         self.window.get_widget("console-pages").set_current_page(1)
+        self.window.get_widget("control-screenshot").set_sensitive(True)
 
     def activate_auth_page(self):
         pw = self.config.get_console_password(self.vm)
+        self.window.get_widget("control-screenshot").set_sensitive(False)
         self.window.get_widget("console-auth-password").set_text(pw)
         if self.config.has_keyring():
             self.window.get_widget("console-auth-remember").set_sensitive(True)
@@ -184,7 +191,52 @@ class vmmConsole(gobject.GObject):
 
     def activate_viewer_page(self):
         self.window.get_widget("console-pages").set_current_page(3)
-                    
+        self.window.get_widget("control-screenshot").set_sensitive(True)
+
+    def control_vm_screenshot(self, src):
+        # If someone feels kind they could extend this code to allow
+        # user to choose what image format they'd like to save in....
+        fcdialog = gtk.FileChooserDialog(_("Save Virtual Machine Screenshot"),
+                                         self.window.get_widget("vmm-console"),
+                                         gtk.FILE_CHOOSER_ACTION_SAVE,
+                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                          gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
+                                         None)
+        png = gtk.FileFilter()
+        png.set_name("PNG files")
+        png.add_pattern("*.png")
+        fcdialog.add_filter(png)
+        fcdialog.set_do_overwrite_confirmation(True)
+        if fcdialog.run() == gtk.RESPONSE_ACCEPT:
+            fcdialog.hide()
+            file = fcdialog.get_filename()
+            if not(file.endswith(".png")):
+                file = file + ".png"
+            screenshot = self.vncViewer.take_screenshot()
+            width, height = screenshot.get_size()
+            image = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8,
+                                   width, height)
+            image.get_from_drawable(screenshot,
+                                    gtk.gdk.colormap_get_system(),
+                                    0, 0, 0, 0, width, height)
+
+            # Save along with a little metadata about us & the domain
+            image.save(file, 'png', { 'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
+                                      'tEXt::Domain Name': self.vm.get_name(),
+                                      'tEXt::Domain UUID': self.vm.get_uuid(),
+                                      'tEXt::Generator App': self.config.get_appname(),
+                                      'tEXt::Generator Version': self.config.get_appversion() })
+            msg = gtk.MessageDialog(self.window.get_widget("vmm-console"),
+                                    gtk.DIALOG_MODAL,
+                                    gtk.MESSAGE_INFO,
+                                    gtk.BUTTONS_OK,_("The screenshot has been saved to:\n%s") % file)
+            msg.set_title(_("Screenshot saved"))
+            msg.run()
+            msg.destroy()
+        else:
+            fcdialog.hide()
+        fcdialog.destroy()
+               
     def control_vm_shutdown(self, src):
         status = self.vm.status()
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
