@@ -21,6 +21,7 @@ from virtManager.secret import *
 import sys
 
 haveKeyring = False
+
 try:
     import gnomekeyring
     haveKeyring = True
@@ -33,6 +34,8 @@ class vmmKeyring:
     def __init__(self):
         if haveKeyring:
             try:
+                if not("default" in gnomekeyring.list_keyring_names_sync()):
+                    gnomekeyring.create_sync("default", None)
                 self.keyring = gnomekeyring.get_default_keyring_sync()
             except:
                 print _("Keyring unavailable: '%s'") % (str((sys.exc_info())[0]) + " "  + str((sys.exc_info())[1]))
@@ -47,23 +50,33 @@ class vmmKeyring:
         return True
 
     def add_secret(self, secret):
-        id = gnomekeyring.item_create_sync(self.keyring,
-                                           gnomekeyring.ITEM_GENERIC_SECRET,
-                                           secret.get_name(),
-                                           secret.get_attributes(),
-                                           secret.get_secret(),
-                                           True)
-    
-        return id
+        try:
+            id = gnomekeyring.item_create_sync(self.keyring,
+                                               gnomekeyring.ITEM_GENERIC_SECRET,
+                                               secret.get_name(),
+                                               secret.get_attributes(),
+                                               secret.get_secret(),
+                                               True)
+            
+            return id
+        except:
+            return None
 
     def get_secret(self, id):
-        item = gnomekeyring.item_get_info_sync(self.keyring, id)
-
-        attrs = gnomekeyring.item_get_attributes_sync(self.keyring, id)
-
-        return vmmSecret(item.get_display_name(), item.get_secret(), attrs)
+        try:
+            item = gnomekeyring.item_get_info_sync(self.keyring, id)
+            
+            attrs = gnomekeyring.item_get_attributes_sync(self.keyring, id)
+            
+            return vmmSecret(item.get_display_name(), item.get_secret(), attrs)
+        except:
+            return None
         
 
     def clear_secret(self, id):
-        gnomekeyring.item_delete_sync(self.keyring, id)
+        try:
+            gnomekeyring.item_delete_sync(self.keyring, id)
+            return True
+        except:
+            return False
 
