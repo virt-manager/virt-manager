@@ -25,14 +25,18 @@ try:
     import gnomekeyring
     haveKeyring = True
 except:
-    print "No support for gnome-keyring"
+    print _("No support for gnome-keyring")
     pass
 
 class vmmKeyring:
 
     def __init__(self):
         if haveKeyring:
-            self.keyring = gnomekeyring.get_default_keyring_sync()
+            try:
+                self.keyring = gnomekeyring.get_default_keyring_sync()
+            except:
+                print _("Keyring unavailable: '%s'") % (str((sys.exc_info())[0]) + " "  + str((sys.exc_info())[1]))
+                self.keyring = None
         else:
             self.keyring = None
 
