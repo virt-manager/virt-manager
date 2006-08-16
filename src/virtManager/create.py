@@ -27,6 +27,8 @@ import sys
 from rhpl.exception import installExceptionHandler
 from rhpl.translate import _, N_, textdomain, utf8
 
+from virtManager.asyncjob import vmmAsyncJob
+
 VM_PARAVIRT = 1
 VM_FULLY_VIRT = 2
 
@@ -320,7 +322,14 @@ class vmmCreate(gobject.GObject):
         n = xeninst.XenNetworkInterface(None)
         guest.nics.append(n)
 
-        # let's go
+
+        #let's go
+        progWin = vmmAsyncJob(self.config, self.do_install, [guest],
+                              title=_("Creating Virtual Machine"))
+        progWin.run()
+        self.close()
+
+    def do_install(self, guest):
         try:
             print "\n\nStarting install..."
             r = guest.start_install(True)
@@ -328,9 +337,7 @@ class vmmCreate(gobject.GObject):
         except RuntimeError, e:
             print >> sys.stderr, "ERROR: ", e.args[0]
             return
-
-        self.close()
-
+    
     def set_name(self, src, ignore=None):
         self.vm_name = src.get_text()
 
