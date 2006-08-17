@@ -64,8 +64,8 @@ class vmmCreate(gobject.GObject):
             "on_fv_iso_location_focus_out_event" : self.set_media_address,
             "on_pv_media_url_focus_out_event" : self.set_media_address,
             "on_pv_ks_url_focus_out_event" : self.set_kickstart_address,
-            "on_storage_partition_address_focus_out_event" : self.set_storage_address,
-            "on_storage_file_address_focus_out_event" : self.set_storage_address,
+            "on_storage_partition_address_focus_out_event" : self.set_storage_partition_address,
+            "on_storage_file_address_focus_out_event" : self.set_storage_file_address,
             "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
             "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
             "on_storage_toggled" : self.set_storage_type,
@@ -89,7 +89,8 @@ class vmmCreate(gobject.GObject):
         self.install_media_address = None
         self.install_kickstart_address = None
         self.storage_method = VM_STORAGE_PARTITION
-        self.storage_address = None
+        self.storage_partition_address = None
+        self.storage_file_address = None
         self.storage_file_size = None
         self.max_memory = 0
         self.startup_memory = 0
@@ -175,13 +176,13 @@ class vmmCreate(gobject.GObject):
                 
         elif page_number == 3:
             #set up the fv install media page
+            if self.install_media_address != None:
+                self.window.get_widget("fv-iso-location").set_text(self.install_media_address)
+            else:
+                self.window.get_widget("fv-iso-location").set_text("")
             if self.install_fv_media_type == VM_INSTALL_FROM_ISO:
                 self.window.get_widget("media-iso-image").set_active(True)
                 self.window.get_widget("fv-iso-location-box").set_sensitive(True)
-                if self.install_media_address != None:
-                    self.window.get_widget("fv-iso-location").set_text(self.install_media_address)
-                else:
-                    self.window.get_widget("fv-iso-location").set_text("")
             else:
                 self.window.get_widget("media-physical").set_active(True)
                 self.window.get_widget("fv-iso-location-box").set_sensitive(False)
@@ -202,11 +203,21 @@ class vmmCreate(gobject.GObject):
                 
         elif page_number == 5:
             #set up the storage space page
+            partwidget = self.window.get_widget("storage-partition-address")
+            filewidget = self.window.get_widget("storage-file-address")
+
+            if self.storage_partition_address != None:
+                partwidget.set_text(self.storage_partition_address)
+            else:
+                partwidget.set_text("")
+            if self.storage_file_address != None:
+                filewidget.set_text(self.storage_file_address)
+            else:
+                filewidget.set_text("")
             if self.storage_method == VM_STORAGE_PARTITION:
                 self.window.get_widget("storage-partition").set_active(True)
                 self.window.get_widget("storage-partition-box").set_sensitive(True)
                 self.window.get_widget("storage-file-box").set_sensitive(False)
-                
             else:
                 self.window.get_widget("storage-file-backed").set_active(True)
                 self.window.get_widget("storage-partition-box").set_sensitive(False)
@@ -259,14 +270,22 @@ class vmmCreate(gobject.GObject):
             ks = "None"
         else:
             ks = self.install_kickstart_address
+        if self.storage_file_size==None:
+            sfs = "Preset"
+        else:
+            sfs = `self.storage_file_size/1024`
+        if self.storage_method == VM_STORAGE_PARTITION:
+            saddr = self.storage_partition_address
+        else:
+            saddr = self.storage_file_address
         print "your vm properties: \n Name=" + self.vm_name + \
               "\n Virt method: " + `self.virt_method` + \
               "\n Install media type (fv): " + `self.install_fv_media_type` + \
               "\n Install media address: " + self.install_media_address + \
               "\n Install kickstart address: " + ks + \
               "\n Install storage type: " + `self.storage_method` + \
-              "\n Install storage address: " + self.storage_address + \
-              "\n Install storage file size: " + `self.storage_file_size/1024` + \
+              "\n Install storage address: " + saddr + \
+              "\n Install storage file size: " + sfs + \
               "\n Install max kernel memory: " + `self.max_memory` + \
               "\n Install startup kernel memory: " + `self.startup_memory` + \
               "\n Install vcpus: " + `self.vcpus`
@@ -286,7 +305,7 @@ class vmmCreate(gobject.GObject):
                 self.install_media_address = None
         else:
             guest = xeninst.ParaVirtGuest()
-            if self.install_kickstart_address != None:
+            if self.install_kickstart_address != None and self.install_kickstart_address != "":
                 guest.extraargs = "ks=%s" % self.install_kickstart_address
             try:
                 guest.location = self.install_media_address
@@ -312,14 +331,19 @@ class vmmCreate(gobject.GObject):
             return
         
         # disks
+        if self.storage_method == VM_STORAGE_PARTITION:
+            saddr = self.storage_partition_address
+        else:
+            saddr = self.storage_file_address
+
         filesize = None
         if self.storage_file_size != None:
             filesize = int(self.storage_file_size/1024)
         try:
-            d = xeninst.XenDisk(self.storage_address, filesize)
+            d = xeninst.XenDisk(saddr, filesize)
         except ValueError, e:
             self._validation_error_box(_("Invalid storage address"), e.args[0])
-            self.storage_address = self.storage_file_size = None
+            self.storage_partition_address = self.storage_file_address = self.storage_file_size = None
             return
         guest.disks.append(d)
 
@@ -328,7 +352,8 @@ class vmmCreate(gobject.GObject):
         guest.nics.append(n)
 
         #grab the uuid before we start
-        self.vm_uuid = guest.uuid = xeninst.util.uuidToString(xeninst.util.randomUUID())
+        self.vm_uuid = xeninst.util.uuidToString(xeninst.util.randomUUID())
+        guest.set_uuid(self.vm_uuid)
 
         #let's go
         progWin = vmmAsyncJob(self.config, self.do_install, [guest],
@@ -339,8 +364,7 @@ class vmmCreate(gobject.GObject):
     def do_install(self, guest):
         try:
             print "\n\nStarting install..."
-            r = guest.start_install(True)
-            print r
+            r = guest.start_install(False)
         except RuntimeError, e:
             print >> sys.stderr, "ERROR: ", e.args[0]
             return
@@ -354,6 +378,7 @@ class vmmCreate(gobject.GObject):
                 self.virt_method = VM_PARAVIRT
             else:
                 self.virt_method = VM_FULLY_VIRT
+            self.install_media_address = None
 
     def set_install_from(self, button):
         if button.get_active():
@@ -395,13 +420,16 @@ class vmmCreate(gobject.GObject):
     def set_kickstart_address(self, src, ignore=None):
         self.install_kickstart_address = src.get_text()
 
-    def set_storage_address(self, src, ignore=None):
-        self.storage_address = src.get_text()
+    def set_storage_partition_address(self, src, ignore=None):
+        self.storage_partition_address = src.get_text()
+
+    def set_storage_file_address(self, src, ignore=None):
+        self.storage_file_address = src.get_text()
 
     def browse_storage_partition_address(self, src, ignore=None):
-        self.storage_address = self._browse_file(_("Locate Storage Partition"), "/dev")
-        if self.storage_address != None:
-            self.window.get_widget("storage-partition-address").set_text(self.storage_address)
+        self.storage_partition_address = self._browse_file(_("Locate Storage Partition"), "/dev")
+        if self.storage_partition_address != None:
+            self.window.get_widget("storage-partition-address").set_text(self.storage_partition_address)
 
     def browse_storage_file_address(self, src, ignore=None):
         self.window.get_widget("storage-file-size").set_sensitive(True)
@@ -416,10 +444,10 @@ class vmmCreate(gobject.GObject):
         response = fcdialog.run()
         fcdialog.hide()
         if(response == gtk.RESPONSE_ACCEPT):
-            self.storage_address = fcdialog.get_filename()
+            self.storage_file_address = fcdialog.get_filename()
 
-        if self.storage_address != None:
-            self.window.get_widget("storage-file-address").set_text(self.storage_address)
+        if self.storage_file_address != None:
+            self.window.get_widget("storage-file-address").set_text(self.storage_file_address)
 
     def confirm_overwrite_callback(self, chooser):
         # Only called when the user has chosen an existing file
@@ -481,7 +509,7 @@ class vmmCreate(gobject.GObject):
                 return False
 
         elif page_num == 5: # the storage page
-            if self.storage_address == None or len(self.storage_address) == 0:
+            if (self.storage_partition_address == None or len(self.storage_partition_address) == 0) and (self.storage_file_address == None or len(self.storage_file_address) == 0):
                 self._validation_error_box(_("Storage Address Required"), \
                                            _("You must specify a partition or a file for storage for the guest install"))
                 return False

@@ -3289,22 +3289,6 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	      <property name="homogeneous">True</property>
 	    </packing>
 	  </child>
-
-	  <child>
-	    <widget class="GtkToolButton" id="control-screenshot">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Take screenshot</property>
-	      <property name="use_underline">True</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_control_screenshot_clicked" last_modification_time="Tue, 15 Aug 2006 20:47:57 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">True</property>
-	    </packing>
-	  </child>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
@@ -7433,7 +7417,7 @@ TB</property>
 				      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 				      <property name="snap_to_ticks">False</property>
 				      <property name="wrap">False</property>
-				      <property name="adjustment">256 0 16384 256 10 10</property>
+				      <property name="adjustment">500 0 16000 500 10 10</property>
 				      <signal name="changed" handler="on_storage_file_size_changed" last_modification_time="Thu, 10 Aug 2006 19:19:04 GMT"/>
 				    </widget>
 				  </child>
