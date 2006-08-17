@@ -64,6 +64,7 @@ class vmmConsole(gobject.GObject):
 
         self.vncViewer = GRFBViewer()
         scrolledWin = gtk.ScrolledWindow()
+        scrolledWin.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 
         vp = gtk.Viewport()
         vp.set_shadow_type(gtk.SHADOW_NONE)
@@ -74,6 +75,7 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("console-pages").append_page(scrolledWin, gtk.Label("VNC"))
 
         scrolledWin.show()
+        self.vncViewer.connect("size-request", self.autosize, vp)
         self.vncViewer.show()
 
         self.ignorePause = False
@@ -107,6 +109,23 @@ class vmmConsole(gobject.GObject):
         self.update_widget_states(vm, vm.status())
 
         self.vncViewer.connect("disconnected", self._vnc_disconnected)
+
+    # Auto-increase the window size to fit the console - within reason
+    # though, cos we don't want a min window size greater than the screen
+    # the user has scrollbars anyway if they want it smaller / it can't fit
+    def autosize(self, src, size, vp):
+        rootWidth = gtk.gdk.screen_width()
+        rootHeight = gtk.gdk.screen_height()
+
+        vncWidth, vncHeight = src.get_size_request()
+
+        if vncWidth > (rootWidth-200):
+            vncWidth = rootWidth - 200
+        if vncHeight > (rootHeight-200):
+            vncHeight = rootHeight - 200
+
+        vp.set_size_request(vncWidth+3, vncHeight+3)
+
 
     def show(self):
         dialog = self.window.get_widget("vmm-console")
@@ -319,12 +338,12 @@ class vmmConsole(gobject.GObject):
                 if screenshot != None:
                     cr = screenshot.cairo_create()
                     width, height = screenshot.get_size()
-                    
-                    # Set 60% gray overlayed
-                    cr.set_source_rgba(0, 0, 0, 0.6)
+
+                    # Set 50% gray overlayed
+                    cr.set_source_rgba(0, 0, 0, 0.5)
                     cr.rectangle(0, 0, width, height)
                     cr.fill()
-                    
+
                     # Render a big text 'paused' across it
                     cr.set_source_rgba(1, 1,1, 1)
                     cr.set_font_size(80)
@@ -335,7 +354,7 @@ class vmmConsole(gobject.GObject):
                     y = height/2 - (extents[3]/2)
                     cr.move_to(x, y)
                     cr.show_text(overlay)
-                    
+
                     self.window.get_widget("console-screenshot").set_from_pixmap(screenshot, None)
                     self.activate_screenshot_page()
                 else:

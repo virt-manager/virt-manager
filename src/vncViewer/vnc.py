@@ -29,10 +29,6 @@ stderr = sys.stderr
 
 from time import time
 
-#host = "courgette"
-host = "localhost"
-port = 5901
-
 class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
     __gsignals__= {
         "resize": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [int,int]),
@@ -43,6 +39,10 @@ class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
         self.__gobject_init__()
         self.canvas = canvas
         self.pixmap = None
+        self.name = "VNC"
+
+    def get_name(self):
+        return self.name
 
     def get_pixmap(self):
         return self.pixmap
@@ -57,8 +57,11 @@ class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
         return clone
 
     def init_screen(self, width, height, name):
-        self.pixmap = gtk.gdk.Pixmap(self.canvas.window, width, height)
+        self.name = name
+        return self.resize_screen(width, height)
 
+    def resize_screen(self, width, height):
+        self.pixmap = gtk.gdk.Pixmap(self.canvas.window, width, height)
         self.emit("resize", width, height)
         return (0, 0, width, height)
 
@@ -92,8 +95,8 @@ class GRFBNetworkClient(rfb.RFBNetworkClient, gobject.GObject):
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
         }
 
-    def __init__(self, host, port, converter):
-        rfb.RFBNetworkClient.__init__(self, host, port, converter)
+    def __init__(self, host, port, converter, debug=0):
+        rfb.RFBNetworkClient.__init__(self, host, port, converter, debug=debug,preferred_encoding=(rfb.ENCODING_RAW,rfb.ENCODING_DESKTOP_RESIZE))
         self.__gobject_init__()
         
         self.watch = None
@@ -177,6 +180,9 @@ class GRFBViewer(gtk.DrawingArea):
 
         self.set_property("can-focus", True)
 
+    def get_framebuffer_name(self):
+        return self.fb.get_name()
+
     def connect_to_host(self, host, port):
         if self.client != None:
             self.disconnect_from_host()
@@ -249,16 +255,19 @@ class GRFBViewer(gtk.DrawingArea):
         return self.fb.clone_pixmap()
 
     def update_pointer(self, win, event):
-        x, y, state = event.window.get_pointer()
-        self.client.update_pointer(self.state_to_mask(state), x, y)
+        if self.client != None:
+            x, y, state = event.window.get_pointer()
+            self.client.update_pointer(self.state_to_mask(state), x, y)
         return True
 
     def key_press(self, win, event):
-        self.client.update_key(1, event.keyval)
+        if self.client != None:
+            self.client.update_key(1, event.keyval)
         return True
     
     def key_release(self, win, event):
-        self.client.update_key(0, event.keyval)
+        if self.client != None:
+            self.client.update_key(0, event.keyval)
         return True
 
     def get_frame_buffer(self):
@@ -283,7 +292,10 @@ gobject.type_register(GRFBViewer)
 
 
 def main():
-    
+    host = sys.argv[1]
+    port = int(sys.argv[2])
+    password = sys.argv[3]
+
     win = gtk.Window()
     win.set_name("VNC")
     win.connect("destroy", lambda w: gtk.main_quit())
@@ -291,31 +303,39 @@ def main():
     pane = gtk.ScrolledWindow()
     pane.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
     win.add(pane)
-    pane.show()
 
     vp = gtk.Viewport()
     pane.add(vp)
-    vp.show()
-    
-    vnc = GRFBWidget()
-    vp.add(vnc)
-    vnc.show()
 
+    vnc = GRFBViewer()
+    vp.add(vnc)
+
+    win.show_all()
     win.present()
 
     vnc.connect_to_host(host, port)
+    vnc.authenticate(password)
+    vnc.activate()
+    win.set_title(vnc.get_framebuffer_name())
 
-    rootWidth = gtk.gdk.screen_width()
-    rootHeight = gtk.gdk.screen_height()
+    def autosize():
+        rootWidth = gtk.gdk.screen_width()
+        rootHeight = gtk.gdk.screen_height()
 
-    vncWidth, vncHeight = vnc.get_size_request()
+        vncWidth, vncHeight = vnc.get_size_request()
 
-    if vncWidth > (rootWidth-200):
-        vncWidth = rootWidth - 200
-    if vncHeight > (rootHeight-200):
-        vncHeight = rootHeight - 200
-    
-    vp.set_size_request(vncWidth+2, vncHeight+2)
+        if vncWidth > (rootWidth-200):
+            vncWidth = rootWidth - 200
+        if vncHeight > (rootHeight-200):
+            vncHeight = rootHeight - 200
+
+        vp.set_size_request(vncWidth+3, vncHeight+3)
+
+    def resize(src, size):
+        autosize()
+
+    vnc.connect('size-request', resize)
+
     gtk.main()
     vnc.disconnect_from_host()
 

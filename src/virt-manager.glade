@@ -3289,6 +3289,22 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	      <property name="homogeneous">True</property>
 	    </packing>
 	  </child>
+
+	  <child>
+	    <widget class="GtkToolButton" id="control-screenshot">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Take screenshot</property>
+	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_control_screenshot_clicked" last_modification_time="Tue, 15 Aug 2006 20:47:57 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
@@ -3358,8 +3374,8 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	    <widget class="GtkScrolledWindow" id="scrolledwindow6">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
-	      <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+	      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 	      <property name="shadow_type">GTK_SHADOW_NONE</property>
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
@@ -3371,8 +3387,8 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 		  <child>
 		    <widget class="GtkImage" id="console-screenshot">
 		      <property name="visible">True</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
 		    </widget>

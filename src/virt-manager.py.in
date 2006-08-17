@@ -76,39 +76,46 @@ gtk.window_set_default_icon_from_file(icon_dir + "/" + appname + "-icon.svg")
 def main():
     optParser = OptionParser()
     optParser.add_option("-c", "--connect", dest="uri", help="Connect to hypervisor at URI", metavar="URI")
+    optParser.add_option("--no-dbus", action="store_true", dest="nodbus", help="Disable DBus service for controlling UI")
 
     (options, args) = optParser.parse_args()
 
     config = vmmConfig(appname, appversion, gconf_dir, glade_dir, icon_dir)
     engine = vmmEngine(config)
-    bus = None
-    try:
-        bus = dbus.SessionBus()
-
-        dbusProxy = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
-        dbusObj = dbus.Interface(dbusProxy, "org.freedesktop.DBus")
-
-        # If we're already running, then just talk to existing process
-        if os.getenv("DBUS_STARTER_ADDRESS"):
-            name = dbus.service.BusName("com.redhat.virt.manager", bus=bus)
-            remote = vmmRemote(engine, name)
-        else:
-            managerProxy = bus.get_object("com.redhat.virt.manager", "/com/redhat/virt/manager")
-            managerObj = dbus.Interface(managerProxy, "com.redhat.virt.manager")
-
-            if options.uri != None:
-                managerObj.show_host_summary(options.uri)
-            else:
-                managerObj.show_connect()
-            # yes, we exit completely now - remote service is in charge
-            return
-    except:
-        print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
-        print _("Could not connection to session bus, disabling DBus service")
+    if options.nodbus:
         if options.uri != None:
             engine.show_manager(options.uri)
         else:
             engine.show_connect()
+    else:
+        bus = None
+        try:
+            bus = dbus.SessionBus()
+
+            dbusProxy = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
+            dbusObj = dbus.Interface(dbusProxy, "org.freedesktop.DBus")
+
+            # If we're already running, then just talk to existing process
+            if os.getenv("DBUS_STARTER_ADDRESS"):
+                name = dbus.service.BusName("com.redhat.virt.manager", bus=bus)
+                remote = vmmRemote(engine, name)
+            else:
+                managerProxy = bus.get_object("com.redhat.virt.manager", "/com/redhat/virt/manager")
+                managerObj = dbus.Interface(managerProxy, "com.redhat.virt.manager")
+
+                if options.uri != None:
+                    managerObj.show_host_summary(options.uri)
+                else:
+                    managerObj.show_connect()
+                # yes, we exit completely now - remote service is in charge
+                return
+        except:
+            print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
+            print _("Could not connection to session bus, disabling DBus service")
+            if options.uri != None:
+                engine.show_manager(options.uri)
+            else:
+                engine.show_connect()
     gtk.main()
 
 if __name__ == "__main__":
