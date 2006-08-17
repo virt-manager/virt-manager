@@ -43,7 +43,16 @@ class RFBError(Exception): pass
 class RFBAuthError(RFBError): pass
 class RFBProtocolError(RFBError): pass
 
-
+ENCODING_RAW = 0
+ENCODING_COPY_RECT = 1
+ENCODING_RRE = 2
+ENCODING_CORRE = 4
+ENCODING_HEXTILE = 5
+ENCODING_ZRLE = 16
+ENCODING_DESKTOP_RESIZE = -223
+ENCODING_CURSOR_POS = -232
+ENCODING_RICH_CURSOR = -239
+ENCODING_XCURSOR = -240
 
 ##  RFBFrameBuffer
 ##
@@ -51,6 +60,9 @@ class RFBFrameBuffer:
 
   def init_screen(self, width, height, name):
     #print >>stderr, 'init_screen: %dx%d, name=%r' % (width, height, name)
+    raise NotImplementedError
+
+  def resize_screen(self, width, height):
     raise NotImplementedError
 
   def set_converter(self, convert_pixels, convert_color1):
@@ -88,7 +100,7 @@ class RFBFrameBuffer:
 class RFBProxy:
   "Abstract class of RFB clients."
 
-  def __init__(self, fb=None, preferred_encoding=(5,0), debug=0):
+  def __init__(self, fb=None, preferred_encoding=(ENCODING_RAW,ENCODING_HEXTILE), debug=0):
     self.fb = fb
     self.debug = debug
     self.preferred_encoding = preferred_encoding
@@ -274,19 +286,19 @@ class RFBProxy:
         (x0, y0, width, height, t) = unpack('>HHHHl', self.recv_relay(12))
         if self.debug:
           print >>stderr, ' %d: %d x %d at (%d,%d), type=%d' % (rectindex, width, height, x0, y0, t)
-        # RawEncoding
-        if t == 0:
+
+        if t == ENCODING_RAW:
           l = width*height*self.bytesperpixel
           data = self.recv_relay(l)
           if self.debug:
             print >>stderr, ' RawEncoding: len=%d, received=%d' % (l, len(data))
           if self.fb:
             self.fb.process_pixels(x0, y0, width, height, data)
-        # CopyRectEncoding
-        elif t == 1:
+
+        elif t == ENCODING_COPY_RECT:
           raise RFBProtocolError('unsupported: CopyRectEncoding')
-        # RREEncoding
-        elif t == 2:
+
+        elif t == ENCODING_RRE:
           (nsubrects,) = unpack('>L', self.recv_relay(4))
           bgcolor = self.recv_relay(self.bytesperpixel)
           if self.debug:
@@ -300,8 +312,8 @@ class RFBProxy:
               self.fb.process_solid(x0+x, y0+y, w, h, fgcolor)
             if 2 <= self.debug:
               print >>stderr, ' RREEncoding: ', (x,y,w,h,fgcolor)
-        # CoRREEncoding
-        elif t == 4:
+
+        elif t == ENCODING_CORRE:
           (nsubrects,) = unpack('>L', self.recv_relay(4))
           bgcolor = self.recv_relay(self.bytesperpixel)
           if self.debug:
@@ -315,8 +327,8 @@ class RFBProxy:
               self.fb.process_solid(x0+x, y0+y, w, h, fgcolor)
             if 2 <= self.debug:
               print >>stderr, ' CoRREEncoding: ', (x,y,w,h,fgcolor)
-        # HextileEncoding
-        elif t == 5:
+
+        elif t == ENCODING_HEXTILE:
           if self.debug:
             print >>stderr, ' HextileEncoding'
           (fgcolor, bgcolor) = (None, None)
@@ -368,11 +380,14 @@ class RFBProxy:
                     self.fb.process_solid(x0+x+(xy>>4), y0+y+(xy&15), (wh>>4)+1, (wh&15)+1, fgcolor)
                   if 3 <= self.debug:
                     print >>stderr, '  ', (xy,wh)
-        # ZRLEEncoding
-        elif t == 16:
+
+        elif t == ENCODING_ZRLE:
           raise RFBProtocolError('unsupported: ZRLEEncoding')
-        # RichCursor
-        elif t == -239:
+
+        elif t == ENCODING_DESKTOP_RESIZE:
+          self.clipping = self.fb.resize_screen(width, height)
+
+        elif t == ENCODING_RICH_CURSOR:
           if width and height:
             rowbytes = (width + 7) / 8;
             # Cursor image RGB
@@ -392,8 +407,8 @@ class RFBProxy:
                   return '\x00\x00\x00\x00'
               data = ''.join([ conv1(i) for i in xrange(0, len(data), 4) ])
               self.fb.change_cursor(width, height, x0, y0, data)
-        # XCursor
-        elif t == -240:
+
+        elif t == ENCODING_XCURSOR:
           if width and height:
             rowbytes = (width + 7) / 8;
             # Foreground RGB
@@ -419,8 +434,8 @@ class RFBProxy:
                   return '\x00\x00\x00\x00'
               data = ''.join([ conv1(i) for i in xrange(len(data)) ])
               self.fb.change_cursor(width, height, x0, y0, data)
-        # CursorPos -> only change the cursor position
-        elif t == -232:
+
+        elif t == ENCODING_CURSOR_POS:
           if self.debug:
             print >>stderr, 'CursorPos: %d,%d' % (x0,y0)
           if self.fb:
@@ -467,7 +482,7 @@ class RFBProxy:
 class RFBNetworkClient(RFBProxy):
   
   def __init__(self, host, port, fb=None, pwdfile=None,
-               preferred_encoding=(0,5), debug=0):
+               preferred_encoding=(ENCODING_RAW,ENCODING_HEXTILE), debug=0):
     RFBProxy.__init__(self, fb=fb, preferred_encoding=preferred_encoding, debug=debug)
     self.host = host
     self.port = port
@@ -478,8 +493,6 @@ class RFBNetworkClient(RFBProxy):
   def init(self):
     self.sock.connect((self.host, self.port))
     x = RFBProxy.init(self)
-    print >>stderr, 'Connected: %s:%d, protocol_version=3.%d, preferred_encoding=%s' % \
-          (self.host, self.port, self.protocol_version, self.preferred_encoding)
     return x
 
   def recv(self, n):
