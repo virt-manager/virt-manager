@@ -178,13 +178,13 @@ class vmmConfig:
             if not(self.has_keyring()):
                 return
 
-            self.keyring.clear_secret(id)
-            self.conf.unset(self.conf_dir + "/console/passwords/" + vm.get_uuid())
+            if self.keyring.clear_secret(id):
+                self.conf.unset(self.conf_dir + "/console/passwords/" + vm.get_uuid())
 
     def get_console_password(self, vm):
         id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
 
-        if id != None and id != 0:
+        if id != None:
             if not(self.has_keyring()):
                 return ""
 
@@ -213,4 +213,5 @@ class vmmConfig:
 
         secret = vmmSecret(self.get_secret_name(vm), password, { "uuid" : vm.get_uuid(), "hvuri": vm.get_connection().get_uri() })
         id = self.keyring.add_secret(secret)
-        self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), id)
+        if id != None:
+            self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), id)
