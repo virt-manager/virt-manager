@@ -52,7 +52,7 @@
 		      <accelerator key="n" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image65">
+			<widget class="GtkImage" id="image90">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -66,7 +66,7 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="restore_saved">
+		    <widget class="GtkImageMenuItem" id="menu_file_restore_saved">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Restore a saved machine from a filesystem image</property>
 		      <property name="label" translatable="yes">Restore saved machine...</property>
@@ -75,7 +75,7 @@
 		      <accelerator key="r" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image66">
+			<widget class="GtkImage" id="image91">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -102,7 +102,7 @@
 		      <signal name="activate" handler="on_menu_file_open_connection_activate" last_modification_time="Mon, 12 Jun 2006 20:34:47 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image67">
+			<widget class="GtkImage" id="image92">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>
@@ -160,7 +160,7 @@
 		      <signal name="activate" handler="on_menu_edit_details_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image68">
+			<widget class="GtkImage" id="image93">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-properties</property>
 			  <property name="icon_size">1</property>
@@ -181,7 +181,7 @@
 		      <signal name="activate" handler="on_menu_edit_delete_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image69">
+			<widget class="GtkImage" id="image94">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-delete</property>
 			  <property name="icon_size">1</property>
@@ -3805,7 +3805,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	    <widget class="GtkTable" id="remote-xen-options">
 	      <property name="border_width">3</property>
 	      <property name="visible">True</property>
-	      <property name="n_rows">2</property>
+	      <property name="n_rows">1</property>
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">3</property>
@@ -3904,28 +3904,6 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 		  <property name="right_attach">1</property>
 		  <property name="top_attach">0</property>
 		  <property name="bottom_attach">1</property>
-		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkCheckButton" id="remote-xen-secure">
-		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Secure connection</property>
-		  <property name="use_underline">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="focus_on_click">True</property>
-		  <property name="active">False</property>
-		  <property name="inconsistent">False</property>
-		  <property name="draw_indicator">True</property>
-		</widget>
-		<packing>
-		  <property name="left_attach">1</property>
-		  <property name="right_attach">4</property>
-		  <property name="top_attach">1</property>
-		  <property name="bottom_attach">2</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>

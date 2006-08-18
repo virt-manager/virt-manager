@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-15 16:04-0400\n"
+"POT-Creation-Date: 2006-08-18 14:06-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,58 +16,144 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../src/virt-manager.py.in:106
+#: ../../src/virt-manager.py.in:114
 msgid "Could not connection to session bus, disabling DBus service"
 msgstr ""
 
-#: ../../src/virtManager/console.py:143
+#: ../../src/virtManager/console.py:166
 msgid "Unable to activate console"
 msgstr ""
 
-#: ../../src/virtManager/console.py:193 ../../src/virtManager/details.py:167
+#: ../../src/virtManager/console.py:218
+msgid "Save Virtual Machine Screenshot"
+msgstr ""
+
+#: ../../src/virtManager/console.py:251
+#, python-format
+msgid ""
+"The screenshot has been saved to:\n"
+"%s"
+msgstr ""
+
+#: ../../src/virtManager/console.py:252
+msgid "Screenshot saved"
+msgstr ""
+
+#: ../../src/virtManager/console.py:264 ../../src/virtManager/details.py:167
 msgid "Shutdown requested, but machine is already shutting down / shutoff"
 msgstr ""
 
-#: ../../src/virtManager/console.py:201 ../../src/virtManager/details.py:175
+#: ../../src/virtManager/console.py:272 ../../src/virtManager/details.py:175
 msgid "Pause/resume requested, but machine is shutdown / shutoff"
 msgstr ""
 
-#: ../../src/virtManager/console.py:207 ../../src/virtManager/details.py:181
+#: ../../src/virtManager/console.py:278 ../../src/virtManager/details.py:181
 msgid "Pause requested, but machine is already paused"
 msgstr ""
 
-#: ../../src/virtManager/console.py:212 ../../src/virtManager/details.py:186
+#: ../../src/virtManager/console.py:283 ../../src/virtManager/details.py:186
 msgid "Resume requested, but machine is already running"
 msgstr ""
 
-#: ../../src/virtManager/console.py:280
+#: ../../src/virtManager/console.py:351
 msgid "paused"
 msgstr ""
 
-#: ../../src/virtManager/console.py:295
+#: ../../src/virtManager/console.py:366
 msgid "Couldn't open console: "
 msgstr ""
 
-#: ../../src/virtManager/create.py:239
+#: ../../src/virtManager/create.py:258
 #, python-format
 msgid ""
 "Congratulations, you have successfully created a new virtual system, <b>\"%s"
 "\"</b>. \n"
-"\n"
 "You'll now be able to view and work with \"%s\" in the virtual machine "
 "manager."
 msgstr ""
 
-#: ../../src/virtManager/create.py:297
+#: ../../src/virtManager/create.py:299
+msgid "Installs from local CD are not yet supported"
+msgstr ""
+
+#: ../../src/virtManager/create.py:304
+msgid "Invalid FV media address"
+msgstr ""
+
+#: ../../src/virtManager/create.py:313
+msgid "Invalid PV media address"
+msgstr ""
+
+#: ../../src/virtManager/create.py:321
+msgid "Invalid system name"
+msgstr ""
+
+#: ../../src/virtManager/create.py:329
+msgid "Invalid memory setting"
+msgstr ""
+
+#: ../../src/virtManager/create.py:345
+msgid "Invalid storage address"
+msgstr ""
+
+#: ../../src/virtManager/create.py:360
+msgid "Creating Virtual Machine"
+msgstr ""
+
+#: ../../src/virtManager/create.py:393
 msgid "Locate ISO Image"
 msgstr ""
 
-#: ../../src/virtManager/create.py:326
+#: ../../src/virtManager/create.py:430
 msgid "Locate Storage Partition"
 msgstr ""
 
-#: ../../src/virtManager/create.py:332
+#: ../../src/virtManager/create.py:436
 msgid "Locate or Create New Storage File"
+msgstr ""
+
+#: ../../src/virtManager/create.py:488
+msgid "Invalid System Name"
+msgstr ""
+
+#: ../../src/virtManager/create.py:489
+msgid ""
+"System name must be non-blank, less than 50 characters, and contain no spaces"
+msgstr ""
+
+#: ../../src/virtManager/create.py:494
+msgid "Hardware Support Required"
+msgstr ""
+
+#: ../../src/virtManager/create.py:495
+msgid ""
+"Your hardware does not appear to support full virtualization. Only "
+"paravirtualized guests will be available on this hardware."
+msgstr ""
+
+#: ../../src/virtManager/create.py:501
+msgid "ISO Location Required"
+msgstr ""
+
+#: ../../src/virtManager/create.py:502
+msgid "You must specify an ISO location for the guest install image"
+msgstr ""
+
+#: ../../src/virtManager/create.py:507
+msgid "URL Required"
+msgstr ""
+
+#: ../../src/virtManager/create.py:508
+msgid "You must specify a URL for the install image for the guest install"
+msgstr ""
+
+#: ../../src/virtManager/create.py:513
+msgid "Storage Address Required"
+msgstr ""
+
+#: ../../src/virtManager/create.py:514
+msgid ""
+"You must specify a partition or a file for storage for the guest install"
 msgstr ""
 
 #: ../../src/virtManager/domain.py:253
@@ -78,7 +164,7 @@ msgstr ""
 msgid "Paused"
 msgstr ""
 
-#: ../../src/virtManager/domain.py:257 tmp/virt-manager.glade.h:141
+#: ../../src/virtManager/domain.py:257 tmp/virt-manager.glade.h:139
 msgid "Shutdown"
 msgstr ""
 
@@ -99,207 +185,212 @@ msgstr ""
 msgid "Unable to open connection to hypervisor URI '%s'"
 msgstr ""
 
-#: ../../src/virtManager/engine.py:106
+#: ../../src/virtManager/engine.py:109
 #, python-format
 msgid "Error refreshing connection '%s'"
 msgstr ""
 
-#: ../../src/virtManager/engine.py:238
+#: ../../src/virtManager/engine.py:242
 msgid "Save requested, but machine is shutdown / shutoff / paused"
 msgstr ""
 
-#: ../../src/virtManager/engine.py:240
+#: ../../src/virtManager/engine.py:244
 msgid "Save Virtual Machine"
 msgstr ""
 
-#: ../../src/virtManager/engine.py:253
+#: ../../src/virtManager/engine.py:257
 msgid "Saving Virtual Machine"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:153
+#: ../../src/virtManager/keyring.py:29
+msgid "No support for gnome-keyring"
+msgstr ""
+
+#: ../../src/virtManager/keyring.py:41
+#, python-format
+msgid "Keyring unavailable: '%s'"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:158
 msgid "Restore Virtual Machine"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:167
+#: ../../src/virtManager/manager.py:172
 msgid "Restoring Virtual Machine"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:185
+#: ../../src/virtManager/manager.py:190
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:284
+#: ../../src/virtManager/manager.py:289
 msgid "ID"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:285
+#: ../../src/virtManager/manager.py:290
 msgid "Name"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:286 tmp/virt-manager.glade.h:144
+#: ../../src/virtManager/manager.py:291 tmp/virt-manager.glade.h:142
 msgid "Status"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:287 tmp/virt-manager.glade.h:60
+#: ../../src/virtManager/manager.py:292 tmp/virt-manager.glade.h:59
 msgid "CPU usage"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:288
+#: ../../src/virtManager/manager.py:293
 msgid "VCPUs"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:289 tmp/virt-manager.glade.h:100
+#: ../../src/virtManager/manager.py:294 tmp/virt-manager.glade.h:99
 msgid "Memory usage"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:290 tmp/virt-manager.glade.h:73
+#: ../../src/virtManager/manager.py:295 tmp/virt-manager.glade.h:72
 msgid "Disk usage"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:291 tmp/virt-manager.glade.h:106
+#: ../../src/virtManager/manager.py:296 tmp/virt-manager.glade.h:105
 msgid "Network traffic"
 msgstr ""
 
 #: tmp/virt-manager.glade.h:1
-msgid "\t"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:2
 msgid " free"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:3
+#: tmp/virt-manager.glade.h:2
 msgid " of "
 msgstr ""
 
-#: tmp/virt-manager.glade.h:4
+#: tmp/virt-manager.glade.h:3
 msgid "/tmp"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:5
+#: tmp/virt-manager.glade.h:4
 msgid "00:16:3e:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:6
+#: tmp/virt-manager.glade.h:5
 msgid "10 TB"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:8
+#: tmp/virt-manager.glade.h:7
 #, no-c-format
 msgid "18%"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:9
+#: tmp/virt-manager.glade.h:8
 msgid "2 GB"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:10
+#: tmp/virt-manager.glade.h:9
 msgid "20 bits/sec"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:11
+#: tmp/virt-manager.glade.h:10
 msgid "200 MB"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:12
+#: tmp/virt-manager.glade.h:11
 msgid "256\t"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:13
+#: tmp/virt-manager.glade.h:12
 msgid "30 MB of 128 MB"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:14
+#: tmp/virt-manager.glade.h:13
 msgid "80 MB of 1 GB"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:15
+#: tmp/virt-manager.glade.h:14
 msgid ":"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:16
+#: tmp/virt-manager.glade.h:15
 msgid "<b>Basic details</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:17
+#: tmp/virt-manager.glade.h:16
 msgid "<b>CPUs:</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:18
+#: tmp/virt-manager.glade.h:17
 msgid "<b>CPUs</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:19
+#: tmp/virt-manager.glade.h:18
 msgid "<b>Example:</b> system1"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:20
+#: tmp/virt-manager.glade.h:19
 msgid "<b>Memory:</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:21
+#: tmp/virt-manager.glade.h:20
 msgid "<b>Memory</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:22
+#: tmp/virt-manager.glade.h:21
 msgid "<b>Memory</b> and <b>CPU</b> allocation"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:23
+#: tmp/virt-manager.glade.h:22
 msgid "<b>Network</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:24
+#: tmp/virt-manager.glade.h:23
 msgid "<b>Performance</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:25
+#: tmp/virt-manager.glade.h:24
 msgid "<b>Physical</b> host CPU count: "
 msgstr ""
 
-#: tmp/virt-manager.glade.h:26
+#: tmp/virt-manager.glade.h:25
 msgid "<b>Status monitoring</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:27
+#: tmp/virt-manager.glade.h:26
 msgid "<b>Storage</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:28
+#: tmp/virt-manager.glade.h:27
 msgid ""
 "<b>Storage</b> details - which disk partitions or files the system should use"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:29
+#: tmp/virt-manager.glade.h:28
 msgid "<b>The console is currently unavailable</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:30
+#: tmp/virt-manager.glade.h:29
 msgid ""
 "<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
 "letters A-F"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:31
+#: tmp/virt-manager.glade.h:30
 msgid ""
 "<b>Tip:</b> File location paths are as seen from the physical host. Mount "
 "points are as seen from the virtual machine."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:32
+#: tmp/virt-manager.glade.h:31
 msgid ""
 "<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
 "than the number of physical CPUs on the host system."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:33
+#: tmp/virt-manager.glade.h:32
 msgid ""
 "<b>Tip:</b> You may only increase the size of file-based storage; you can't "
 "decrease its size."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:34
+#: tmp/virt-manager.glade.h:33
 msgid ""
 "<b>Too Many Virtual CPUs</b>\n"
 "\n"
@@ -307,127 +398,127 @@ msgid ""
 "physically. This may result in poor performance in the virtual machine."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:37
+#: tmp/virt-manager.glade.h:36
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:38
+#: tmp/virt-manager.glade.h:37
 msgid ""
 "<small><b>Example:</b> ftp://hostname.example.com/ks/rhel5.0-vs-x86.ks</"
 "small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:39
+#: tmp/virt-manager.glade.h:38
 msgid ""
 "<small><b>Example:</b> nfs://servername.example.com/rhel-5/u0/vs/i386/tree</"
 "small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:40
+#: tmp/virt-manager.glade.h:39
 msgid ""
 "<small><b>Note:</b> File size parameter is only relevant for new files</"
 "small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:41
+#: tmp/virt-manager.glade.h:40
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than the number of physical CPUs on the host system.</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:42
+#: tmp/virt-manager.glade.h:41
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
 "tools you would on a physical system.</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:43
+#: tmp/virt-manager.glade.h:42
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocate memory "
 "and CPU</span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:44
+#: tmp/virt-manager.glade.h:43
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
 "storage space</span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:45
+#: tmp/virt-manager.glade.h:44
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing a "
 "virtualization method</span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:46
+#: tmp/virt-manager.glade.h:45
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual system </span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:47
+#: tmp/virt-manager.glade.h:46
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Finished "
 "creating a new virtual system</span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:48
+#: tmp/virt-manager.glade.h:47
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation media</span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:49
+#: tmp/virt-manager.glade.h:48
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:50
+#: tmp/virt-manager.glade.h:49
 msgid "A <b>name</b> for your new virtual system"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:51
+#: tmp/virt-manager.glade.h:50
 msgid "Add Virtual NIC"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:52
+#: tmp/virt-manager.glade.h:51
 msgid "Add hardware"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:53
+#: tmp/virt-manager.glade.h:52
 msgid "Add virtual NIC with:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:54
+#: tmp/virt-manager.glade.h:53
 msgid "Alert"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:55
+#: tmp/virt-manager.glade.h:54
 msgid ""
 "All virtual machines\n"
 "Active virtual machines\n"
 "Inactive virtual machines"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:58
+#: tmp/virt-manager.glade.h:57
 msgid "Auth"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:59
+#: tmp/virt-manager.glade.h:58
 msgid "Browse..."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:61
+#: tmp/virt-manager.glade.h:60
 msgid "CPU usage:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:62
+#: tmp/virt-manager.glade.h:61
 msgid "CPUs"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:63
+#: tmp/virt-manager.glade.h:62
 msgid ""
 "Congratulations, you have successfully created a new virtual system, <b>"
 "$SYSTEM_NAME</b>.\n"
@@ -436,533 +527,526 @@ msgid ""
 "manager."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:66
+#: tmp/virt-manager.glade.h:65
 msgid "Connect"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:67
+#: tmp/virt-manager.glade.h:66
 msgid "Copyright (C) 2006 Red Hat Inc."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:68
+#: tmp/virt-manager.glade.h:67
 msgid "Create a new virtual system"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:69
+#: tmp/virt-manager.glade.h:68
 msgid "Current usage:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:70
+#: tmp/virt-manager.glade.h:69
 msgid "Delete machine"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:71
+#: tmp/virt-manager.glade.h:70
 msgid "Details"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:72
+#: tmp/virt-manager.glade.h:71
 msgid "Disk"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:74
+#: tmp/virt-manager.glade.h:73
 msgid "Disk usage:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:75
+#: tmp/virt-manager.glade.h:74
 msgid "Domain ID"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:76
+#: tmp/virt-manager.glade.h:75
 msgid "File _Location:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:77
+#: tmp/virt-manager.glade.h:76
 msgid "File _Size:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:78
+#: tmp/virt-manager.glade.h:77
 msgid "Hardware"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:79
+#: tmp/virt-manager.glade.h:78
 msgid "Host:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:80
+#: tmp/virt-manager.glade.h:79
 msgid "How many <b>virtual</b> CPUs should this sytem have?"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:81
+#: tmp/virt-manager.glade.h:80
 msgid "How much memory should this VM start up with?"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:82
+#: tmp/virt-manager.glade.h:81
 msgid "ISO _Location:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:83
+#: tmp/virt-manager.glade.h:82
 msgid "Install Media _URL:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:84
+#: tmp/virt-manager.glade.h:83
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
 "systems."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:85
+#: tmp/virt-manager.glade.h:84
 msgid "Keep CPU Settings"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:86
+#: tmp/virt-manager.glade.h:85
 msgid "Kickstart U_RL:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:87
+#: tmp/virt-manager.glade.h:86
 msgid "Launch _Terminal"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:88
+#: tmp/virt-manager.glade.h:87
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
 "Better performance than fully virtualized systems."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:89
+#: tmp/virt-manager.glade.h:88
 msgid "Local Xen host"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:90
+#: tmp/virt-manager.glade.h:89
 msgid "Login"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:91
+#: tmp/virt-manager.glade.h:90
 msgid "MB"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:92
+#: tmp/virt-manager.glade.h:91
 msgid ""
 "MB\n"
 "GB\n"
 "TB"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:95
+#: tmp/virt-manager.glade.h:94
 msgid "Machine console"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:96
+#: tmp/virt-manager.glade.h:95
 msgid "Machine details"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:97
+#: tmp/virt-manager.glade.h:96
 msgid "Machine details..."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:98
+#: tmp/virt-manager.glade.h:97
 msgid "Maintain history of"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:99
+#: tmp/virt-manager.glade.h:98
 msgid "Memory"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:101
+#: tmp/virt-manager.glade.h:100
 msgid "Memory usage:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:102
+#: tmp/virt-manager.glade.h:101
 msgid "Modify CPU Settings"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:103
+#: tmp/virt-manager.glade.h:102
 msgid "Modify File Storage"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:104
+#: tmp/virt-manager.glade.h:103
 msgid "Name:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:105
+#: tmp/virt-manager.glade.h:104
 msgid "Network"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:107
+#: tmp/virt-manager.glade.h:106
 msgid "Network usage:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:108
+#: tmp/virt-manager.glade.h:107
 msgid "New hardware configuration not available"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:109
+#: tmp/virt-manager.glade.h:108
 msgid "New machine..."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:110
+#: tmp/virt-manager.glade.h:109
 msgid "Normal Disk _Partition:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:111
+#: tmp/virt-manager.glade.h:110
 msgid "Open connection"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:112
+#: tmp/virt-manager.glade.h:111
 msgid "Open connection..."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:113
+#: tmp/virt-manager.glade.h:112
 msgid "Open terminal"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:114
+#: tmp/virt-manager.glade.h:113
 msgid "Other hypervisor"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:115
+#: tmp/virt-manager.glade.h:114
 msgid "Overview"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:116
+#: tmp/virt-manager.glade.h:115
 msgid "P_artition:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:117
+#: tmp/virt-manager.glade.h:116
 msgid "Password:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:118
+#: tmp/virt-manager.glade.h:117
 msgid "Pause"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:119
+#: tmp/virt-manager.glade.h:118
 msgid "Physical host CPU count:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:120
+#: tmp/virt-manager.glade.h:119
 msgid "Please choose a name for your virtual system:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:121
+#: tmp/virt-manager.glade.h:120
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
 "system's operating system."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:122
+#: tmp/virt-manager.glade.h:121
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
 "system:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:123
+#: tmp/virt-manager.glade.h:122
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
-"system:"
+"system. Optionally you can provide the URL for a kickstart file that "
+"describes your system:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:124
+#: tmp/virt-manager.glade.h:123
 msgid ""
 "Please insert disc 1 of the installation media for the desired operating "
 "system now."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:125
+#: tmp/virt-manager.glade.h:124
 msgid "Please wait..."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:126
+#: tmp/virt-manager.glade.h:125
 msgid "Port:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:127
+#: tmp/virt-manager.glade.h:126
 msgid "Processor"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:128
+#: tmp/virt-manager.glade.h:127
 msgid "Randomly generated MAC address"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:129
+#: tmp/virt-manager.glade.h:128
 msgid "Read only connection"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:130
+#: tmp/virt-manager.glade.h:129
 msgid "Remote Xen host"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:131
+#: tmp/virt-manager.glade.h:130
 msgid "Restore a saved machine from a filesystem image"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:132
+#: tmp/virt-manager.glade.h:131
 msgid "Restore saved machine..."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:133
+#: tmp/virt-manager.glade.h:132
 msgid "Run"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:134
+#: tmp/virt-manager.glade.h:133
 msgid "Save Domain"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:135
+#: tmp/virt-manager.glade.h:134
 msgid "Save domain"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:136
+#: tmp/virt-manager.glade.h:135
 msgid "Save this password in your keyring"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:137
+#: tmp/virt-manager.glade.h:136
 msgid "Saving VM Image"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:138
+#: tmp/virt-manager.glade.h:137
 msgid "Screenshot"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:139
-msgid "Secure connection"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:140
+#: tmp/virt-manager.glade.h:138
 msgid "Shut down"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:142
+#: tmp/virt-manager.glade.h:140
 msgid "Simple _File:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:143
+#: tmp/virt-manager.glade.h:141
 msgid "Specified MAC address:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:145
+#: tmp/virt-manager.glade.h:143
 msgid "Status:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:146
+#: tmp/virt-manager.glade.h:144
 msgid "System _Name:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:147
+#: tmp/virt-manager.glade.h:145
+msgid "Take screenshot"
+msgstr ""
+
+#: tmp/virt-manager.glade.h:146
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:148
+#: tmp/virt-manager.glade.h:147
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
 "create, such as:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:149
+#: tmp/virt-manager.glade.h:148
 msgid "Total memory on host machine:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:150
+#: tmp/virt-manager.glade.h:149
 msgid "URI:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:151
+#: tmp/virt-manager.glade.h:150
 msgid "UUID:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:152
+#: tmp/virt-manager.glade.h:151
 msgid "Unavailable"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:153
+#: tmp/virt-manager.glade.h:152
 msgid "Update status every"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:154
+#: tmp/virt-manager.glade.h:153
 msgid "Virtual CPUs"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:155
+#: tmp/virt-manager.glade.h:154
 msgid "Virtual Machine Console"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:156
+#: tmp/virt-manager.glade.h:155
 msgid "Virtual Machine Details"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:157
+#: tmp/virt-manager.glade.h:156
 msgid "Virtual Machine Manager"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:158
+#: tmp/virt-manager.glade.h:157
 msgid "Virtual Machine Manager Preferences"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:159
+#: tmp/virt-manager.glade.h:158
 msgid "Virtual _Machine"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:160
+#: tmp/virt-manager.glade.h:159
 msgid "What is the maximum amount of memory this VM should be able to use?"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:161
+#: tmp/virt-manager.glade.h:160
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:162
+#: tmp/virt-manager.glade.h:161
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:163
+#: tmp/virt-manager.glade.h:162
 msgid "_Browse..."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:164
+#: tmp/virt-manager.glade.h:163
 msgid "_CD-ROM or DVD:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:165
+#: tmp/virt-manager.glade.h:164
 msgid "_Details"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:166
+#: tmp/virt-manager.glade.h:165
 msgid "_Edit"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:167
+#: tmp/virt-manager.glade.h:166
 msgid "_File"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:168
+#: tmp/virt-manager.glade.h:167
 msgid "_Finish"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:169
+#: tmp/virt-manager.glade.h:168
 msgid "_Fully Virtualized:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:170
+#: tmp/virt-manager.glade.h:169
 msgid "_Help"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:171
+#: tmp/virt-manager.glade.h:170
 msgid "_ISO Image Location:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:172
-msgid "_Install Media URL (http/ftp/nfs):"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:173
-msgid "_Kickstart URL (http/ftp/nsf):"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:174
+#: tmp/virt-manager.glade.h:171
 msgid "_Mount Point (on virtual system):"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:175
+#: tmp/virt-manager.glade.h:172
 msgid "_Paravirtualized:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:176
+#: tmp/virt-manager.glade.h:173
 msgid "_Pause"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:177
+#: tmp/virt-manager.glade.h:174
 msgid "_Run"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:178
+#: tmp/virt-manager.glade.h:175
 msgid "_Save"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:179
+#: tmp/virt-manager.glade.h:176
 msgid "_Shutdown"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:180
+#: tmp/virt-manager.glade.h:177
 msgid "_Size:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:181
+#: tmp/virt-manager.glade.h:178
 msgid "_View"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:182
+#: tmp/virt-manager.glade.h:179
 msgid "_View:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:183
+#: tmp/virt-manager.glade.h:180
 msgid "_Virtual CPUs:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:184
+#: tmp/virt-manager.glade.h:181
 msgid "intro"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:185
+#: tmp/virt-manager.glade.h:182
 msgid "mac-addr-random"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:186
+#: tmp/virt-manager.glade.h:183
 msgid "samples"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:187
+#: tmp/virt-manager.glade.h:184
 msgid "seconds"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:188
+#: tmp/virt-manager.glade.h:185
 msgid "state-host-cpus"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:189
+#: tmp/virt-manager.glade.h:186
 msgid "state-host-memory"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:190
+#: tmp/virt-manager.glade.h:187
 msgid "step1"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:191
+#: tmp/virt-manager.glade.h:188
 msgid "step2"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:192
+#: tmp/virt-manager.glade.h:189
 msgid "step3"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:193
+#: tmp/virt-manager.glade.h:190
 msgid "step3a"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:194
+#: tmp/virt-manager.glade.h:191
 msgid "step4"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:195
+#: tmp/virt-manager.glade.h:192
 msgid "step5"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:196
+#: tmp/virt-manager.glade.h:193
 msgid "step6"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:198
+#: tmp/virt-manager.glade.h:195
 msgid "translator-credits"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:199
+#: tmp/virt-manager.glade.h:196
 msgid "virtual CPU alert"
 msgstr ""
