@@ -27,8 +27,7 @@ class vmmRemote(dbus.service.Object):
 
     @dbus.service.method("com.redhat.virt.manager", in_signature="s")
     def show_domain_creator(self, uri):
-        # XXX fixme
-        self.engine.show_manager(uri)
+        self.engine.show_create(uri)
 
     @dbus.service.method("com.redhat.virt.manager", in_signature="ss")
     def show_domain_editor(self, uri, uuid):
