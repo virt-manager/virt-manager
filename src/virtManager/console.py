@@ -163,7 +163,7 @@ class vmmConsole(gobject.GObject):
 	    try:
                 self.vncViewer.connect_to_host(host, port)
 	    except:
-		print _("Unable to activate console")
+		print _("Unable to activate console") + " " + str((sys.exc_info())[0]) + " " + str((sys.exc_info())[1])
                 self.activate_unavailable_page()
 		return
         if self.vncViewer.is_authenticated():
