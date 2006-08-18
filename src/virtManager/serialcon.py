@@ -32,7 +32,7 @@ class vmmSerialConsole:
 
         self.window = gtk.Window()
         self.window.hide()
-        self.window.set_title(vm.get_name() + " " + "serial console")
+        self.window.set_title(vm.get_name() + " " + _("serial console"))
 
 	self.terminal = vte.Terminal()
 	self.terminal.set_cursor_blinks(True)
@@ -58,21 +58,21 @@ class vmmSerialConsole:
         self.ptysrc = None
         self.ptytermios = None
 
-        self.window.connect("delete-event", self.hide)
+        self.window.connect("delete-event", self.close)
 
 
     def show(self):
-        self.open()
+        self.opentty()
 	self.window.show_all()
 
-    def hide(self, src=None, ignore=None):
-        self.close()
+    def close(self, src=None, ignore=None):
+        self.closetty()
         self.window.hide()
         return True
 
-    def open(self):
+    def opentty(self):
         if self.ptyio != None:
-            self.close()
+            self.closetty()
         pty = self.vm.get_serial_console_tty()
 
         if pty == None:
@@ -84,7 +84,7 @@ class vmmSerialConsole:
         self.ptytermios = termios.tcgetattr(self.ptyio)
         tty.setraw(self.ptyio)
 
-    def close(self):
+    def closetty(self):
         if self.ptyio == None:
             return
         # Restore term settings
@@ -109,6 +109,6 @@ class vmmSerialConsole:
             self.terminal.feed(data, len(data))
             return True
         else:
-            self.close()
+            self.closetty()
             return False
 
