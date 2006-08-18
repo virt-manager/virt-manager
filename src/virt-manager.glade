@@ -19,6 +19,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="delete_event" handler="on_vm_manager_delete_event" last_modification_time="Tue, 28 Mar 2006 17:08:39 GMT"/>
 
   <child>
@@ -30,6 +31,8 @@
       <child>
 	<widget class="GtkMenuBar" id="menubar1">
 	  <property name="visible">True</property>
+	  <property name="pack_direction">GTK_PACK_DIRECTION_LTR</property>
+	  <property name="child_pack_direction">GTK_PACK_DIRECTION_LTR</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="menuitem4">
@@ -614,6 +617,7 @@ Inactive virtual machines</property>
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 </property>
+  <property name="wrap_license">False</property>
   <property name="authors">Daniel P. Berrange &lt;berrange@redhat.com&gt;
 Hugh O. Brock &lt;hbrock@redhat.com&gt;
 Máirín Duffy &lt;duffy@redhat.com&gt;
@@ -639,6 +643,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="delete_event" handler="on_vmm_details_delete_event" last_modification_time="Wed, 29 Mar 2006 18:04:05 GMT"/>
 
   <child>
@@ -1639,7 +1644,8 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 			      <child>
 				<widget class="GtkImage" id="image70">
 				  <property name="visible">True</property>
-				  <property name="pixbuf">gtk-info</property>
+				  <property name="stock">gtk-info</property>
+				  <property name="icon_size">4</property>
 				  <property name="xalign">0.5</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
@@ -2301,7 +2307,8 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 			      <child>
 				<widget class="GtkImage" id="image73">
 				  <property name="visible">True</property>
-				  <property name="pixbuf">gtk-info</property>
+				  <property name="stock">gtk-info</property>
+				  <property name="icon_size">4</property>
 				  <property name="xalign">0.5</property>
 				  <property name="yalign">0.5</property>
 				  <property name="xpad">0</property>
@@ -2728,6 +2735,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">False</property>
   <signal name="delete_event" handler="on_vmm_preferences_delete_event" last_modification_time="Wed, 29 Mar 2006 10:12:05 GMT"/>
 
@@ -3030,6 +3038,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="delete_event" handler="on_vmm_console_delete_event" last_modification_time="Mon, 03 Apr 2006 14:21:14 GMT"/>
 
   <child>
@@ -3041,6 +3050,8 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
       <child>
 	<widget class="GtkMenuBar" id="menubar2">
 	  <property name="visible">True</property>
+	  <property name="pack_direction">GTK_PACK_DIRECTION_LTR</property>
+	  <property name="child_pack_direction">GTK_PACK_DIRECTION_LTR</property>
 
 	  <child>
 	    <widget class="GtkMenuItem" id="menuitem8">
@@ -3630,6 +3641,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">False</property>
   <signal name="delete_event" handler="on_vmm_open_connection_delete_event" last_modification_time="Mon, 12 Jun 2006 20:42:45 GMT"/>
 
@@ -4041,6 +4053,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">True</property>
 
   <child>
     <widget class="GtkVBox" id="vbox13">
@@ -4106,6 +4119,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
   <accessibility>
     <atkproperty name="AtkObject::accessible_name" translatable="yes">virtual CPU alert</atkproperty>
@@ -4230,6 +4244,7 @@ You have set this virtual machine to have more CPUs than the host system has phy
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -4604,7 +4619,8 @@ TB</property>
 		      <child>
 			<widget class="GtkImage" id="image75">
 			  <property name="visible">True</property>
-			  <property name="pixbuf">gtk-info</property>
+			  <property name="stock">gtk-info</property>
+			  <property name="icon_size">4</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
@@ -4691,6 +4707,7 @@ TB</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -4995,7 +5012,8 @@ TB</property>
 		  <child>
 		    <widget class="GtkImage" id="image76">
 		      <property name="visible">True</property>
-		      <property name="pixbuf">gtk-info</property>
+		      <property name="stock">gtk-info</property>
+		      <property name="icon_size">4</property>
 		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
@@ -5080,6 +5098,7 @@ TB</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
   <signal name="delete_event" handler="on_vmm_create_delete_event" last_modification_time="Wed, 09 Aug 2006 18:11:39 GMT"/>
 
   <child>
@@ -8015,7 +8034,8 @@ TB</property>
 			  <child>
 			    <widget class="GtkImage" id="image88">
 			      <property name="visible">True</property>
-			      <property name="pixbuf">gtk-info</property>
+			      <property name="stock">gtk-info</property>
+			      <property name="icon_size">4</property>
 			      <property name="xalign">0.5</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
