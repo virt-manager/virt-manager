@@ -82,6 +82,9 @@ class vmmEngine:
         if self.connections[hvuri]["windowConsole"].has_key(vmuuid):
             self.connections[hvuri]["windowConsole"][vmuuid].close()
             del self.connections[hvuri]["windowConsole"][vmuuid]
+        if self.connections[hvuri]["windowSerialConsole"].has_key(vmuuid):
+            self.connections[hvuri]["windowSerialConsole"][vmuuid].close()
+            del self.connections[hvuri]["windowSerialConsole"][vmuuid]
 
     def reschedule_timer(self, ignore1,ignore2,ignore3,ignore4):
         self.schedule_timer()
