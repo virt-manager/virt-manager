@@ -88,7 +88,11 @@ class vmmSerialConsole:
         if self.ptyio == None:
             return
         # Restore term settings
-        termios.tcsetattr(self.ptyio, termios.TCSADRAIN, self.ptytermios)
+        try:
+            termios.tcsetattr(self.ptyio, termios.TCSADRAIN, self.ptytermios)
+        except:
+            # The domain may already have exited, destroying the pty, so ignore
+            pass
         os.close(self.ptyio)
         gobject.source_remove(self.ptysrc)
         self.ptyio = None
