@@ -74,8 +74,15 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("menu_view_network_traffic").set_active(self.config.is_vmlist_network_traffic_visible())
 
 
-        self.window.get_widget("menu_file_new").set_sensitive(True)
-        self.window.get_widget("vm-new").set_sensitive(True)
+        if self.connection.is_read_only():
+            self.window.get_widget("menu_file_new").set_sensitive(False)
+            self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
+            self.window.get_widget("vm-new").set_sensitive(False)
+        else:
+            self.window.get_widget("menu_file_new").set_sensitive(True)
+            self.window.get_widget("vm-new").set_sensitive(True)
+            self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
+
         self.window.get_widget("vm-view").set_sensitive(False)
         self.window.get_widget("vm-view").set_active(0)
 
