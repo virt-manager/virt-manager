@@ -42,7 +42,10 @@ VM_STORAGE_FILE = 2
 class vmmCreate(gobject.GObject):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),}
+                                gobject.TYPE_NONE, (str,str)),
+        "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, (str,str)),
+        }
     def __init__(self, config, connection):
         self.__gobject_init__()
         self.config = config
@@ -535,6 +538,7 @@ class vmmCreate(gobject.GObject):
     def open_vm_console(self,ignore,uri,uuid):
         print "********* create.py: got vm-added signal. uuid = %s, self.vm_uuid = %s" % (uuid, self.vm_uuid)
         if uuid == self.vm_uuid:
-            self.emit("action-show-console", self.connection.get_uri(), self.vm_uuid)
-        
-        
+            if (self.virt_method == VM_PARAVIRT):
+                self.emit("action-show-terminal", self.connection.get_uri(), self.vm_uuid)
+            else:
+                self.emit("action-show-console", self.connection.get_uri(), self.vm_uuid)
