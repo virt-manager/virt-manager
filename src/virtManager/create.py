@@ -229,7 +229,7 @@ class vmmCreate(gobject.GObject):
 
             #avoid absurdity, hopefully
             if self.max_memory == 0:
-                self.max_memory = max_mem / 2
+                self.max_memory = int(max_mem / 2)
             if self.startup_memory > self.max_memory:
                 self.startup_memory = self.max_memory
                         
@@ -286,9 +286,9 @@ class vmmCreate(gobject.GObject):
               "\n Install storage type: " + `self.storage_method` + \
               "\n Install storage address: " + saddr + \
               "\n Install storage file size: " + sfs + \
-              "\n Install max kernel memory: " + `self.max_memory` + \
-              "\n Install startup kernel memory: " + `self.startup_memory` + \
-              "\n Install vcpus: " + `self.vcpus`
+              "\n Install max kernel memory: " + `int(self.max_memory)` + \
+              "\n Install startup kernel memory: " + `int(self.startup_memory)` + \
+              "\n Install vcpus: " + `int(self.vcpus)`
         # end DEBUG STUFF
         
         # first things first, are we trying to create a fully virt guest?
@@ -324,11 +324,14 @@ class vmmCreate(gobject.GObject):
         
         # set the memory
         try:
-            guest.memory = self.max_memory
+            guest.memory = int(self.max_memory)
         except ValueError:
             self._validation_error_box(_("Invalid memory setting"), e.args[0])
             self.max_memory = None
             return
+
+        # set vcpus
+        guest.vcpus = int(self.vcpus)
         
         # disks
         if self.storage_method == VM_STORAGE_PARTITION:
