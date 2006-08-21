@@ -79,9 +79,9 @@ class vmmCreate(gobject.GObject):
             })
 
         self.set_initial_state()
-        self.connection.connect("vm-added", self.open_vm_console)
         
     def show(self):
+        self.vm_added_handle = self.connection.connect("vm-added", self.open_vm_console)
         self.topwin.show()
 
     def _init_members(self):
@@ -99,6 +99,7 @@ class vmmCreate(gobject.GObject):
         self.startup_memory = 0
         self.vcpus = 1
         self.vm_uuid = None
+        self.vm_added_handle = None
 
     def set_initial_state(self):
         notebook = self.window.get_widget("create-pages")
@@ -264,6 +265,8 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("create-finish").show()
         
     def close(self, ignore1=None,ignore2=None):
+        self.connection.disconnect(int(self.vm_added_handle))
+        self.vm_added_handle = None
         self.topwin.hide()
         return 1
     
@@ -536,7 +539,6 @@ class vmmCreate(gobject.GObject):
         message_box.destroy()
 
     def open_vm_console(self,ignore,uri,uuid):
-        print "********* create.py: got vm-added signal. uuid = %s, self.vm_uuid = %s" % (uuid, self.vm_uuid)
         if uuid == self.vm_uuid:
             if (self.virt_method == VM_PARAVIRT):
                 self.emit("action-show-terminal", self.connection.get_uri(), self.vm_uuid)

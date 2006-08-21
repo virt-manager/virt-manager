@@ -59,7 +59,7 @@ class vmmConnection(gobject.GObject):
     def get_vm(self, uuid):
         return self.vms[uuid]
 
-    def disconnect(self):
+    def close(self):
         if self.vmm == None:
             return
 
@@ -71,11 +71,13 @@ class vmmConnection(gobject.GObject):
         return self.hostinfo
 
     def connect(self, name, callback):
-        gobject.GObject.connect(self, name, callback)
+        handle_id = gobject.GObject.connect(self, name, callback)
 
         if name == "vm-added":
             for uuid in self.vms.keys():
                 self.emit("vm-added", self.uri, uuid)
+
+        return handle_id
 
     def host_memory_size(self):
         return self.hostinfo[1]*1024

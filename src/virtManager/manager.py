@@ -144,7 +144,7 @@ class vmmManager(gobject.GObject):
         win.present()
 
     def close(self, src=None, src2=None):
-        self.connection.disconnect()
+        self.connection.close()
         win = self.window.get_widget("vmm-manager")
         win.hide()
         return 1
