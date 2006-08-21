@@ -26,6 +26,7 @@ import os, sys
 import subprocess
 import urlgrabber.grabber as grabber
 import tempfile
+import logging
 
 from rhpl.exception import installExceptionHandler
 from rhpl.translate import _, N_, textdomain, utf8
@@ -288,7 +289,7 @@ class vmmCreate(gobject.GObject):
             saddr = self.storage_partition_address
         else:
             saddr = self.storage_file_address
-        print "your vm properties: \n Name=" + self.vm_name + \
+        logging.debug("your vm properties: \n Name=" + self.vm_name + \
               "\n Virt method: " + `self.virt_method` + \
               "\n Install media type (fv): " + `self.install_fv_media_type` + \
               "\n Install media address: " + self.install_media_address + \
@@ -298,7 +299,7 @@ class vmmCreate(gobject.GObject):
               "\n Install storage file size: " + sfs + \
               "\n Install max kernel memory: " + `int(self.max_memory)` + \
               "\n Install startup kernel memory: " + `int(self.startup_memory)` + \
-              "\n Install vcpus: " + `int(self.vcpus)`
+              "\n Install vcpus: " + `int(self.vcpus)`)
         # end DEBUG STUFF
         
         # first things first, are we trying to create a fully virt guest?
@@ -315,8 +316,6 @@ class vmmCreate(gobject.GObject):
                 self.install_media_address = None
         else:
             guest = xeninst.ParaVirtGuest()
-            if self.install_kickstart_address != None and self.install_kickstart_address != "":
-                guest.extraargs = "ks=%s" % self.install_kickstart_address
             try:
                 guest.location = self.install_media_address
             except ValueError, e:
@@ -326,9 +325,16 @@ class vmmCreate(gobject.GObject):
             # we got this far, now let's see if the location is really valid
             valid = self._validate_pv_url(guest.location)
             if valid != None:
-                self._validation_error_box(_("Error locating PV media"), valid)
+                self._validation_error_box(_("Error locating PV install image"), valid)
                 return
-
+            # also check the kickstart URL if it exists
+            if self.install_kickstart_address != None and self.install_kickstart_address != "":
+                valid = self._validate_pv_ks_url(self.install_kickstart_address)
+                if valid != None:
+                    self._validation_error_box(_("Error locating PV kickstart file"),valid)
+                    return
+                guest.extraargs = "ks=%s" % self.install_kickstart_address
+                    
         # set the name
         try:
             guest.name = self.vm_name
@@ -385,12 +391,10 @@ class vmmCreate(gobject.GObject):
 
     def do_install(self, guest):
         try:
-            print "\n\nStarting install..."
-            r = guest.start_install(False)
+            guest.start_install(False)
         except RuntimeError, e:
             self.install_error = "ERROR: %s" % e
-            # XXX use log4j for this later
-            print >> sys.stderr, "ERROR: %s" % e
+            logging.exception(e)
             return
     
     def set_name(self, src, ignore=None):
@@ -586,3 +590,22 @@ class vmmCreate(gobject.GObject):
         initrd.close()
         return None
     
+    def _validate_pv_ks_url(self, url):
+        if url.startswith("http://") or \
+               url.startswith("ftp://"):
+            try:
+                ks = grabber.urlopen(url)
+            except IOError, e:
+                return "Invalid URL location given: %s" % e.args[1]
+        elif self.location.startswith("nfs:"):
+            nfsmntdir = tempfile.mkdtemp(prefix="xennfs.", dir="/var/lib/xen")
+            cmd = ["mount", "-o", "ro", self.location[4:], nfsmntdir]
+            ret = subprocess.call(cmd)
+            if ret != 0:
+                return "Unable to mount NFS location %s" % url
+            try:
+                ks = open(url, "r")
+            except IOError, e:
+                return "Invalid NFS location given: %s" % e.args[1]
+        ks.close()
+        return None
