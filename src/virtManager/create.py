@@ -22,7 +22,10 @@ import gtk
 import gtk.gdk
 import gtk.glade
 import xeninst 
-import sys
+import os, sys
+import subprocess
+import urlgrabber.grabber as grabber
+import tempfile
 
 from rhpl.exception import installExceptionHandler
 from rhpl.translate import _, N_, textdomain, utf8
@@ -100,6 +103,7 @@ class vmmCreate(gobject.GObject):
         self.vcpus = 1
         self.vm_uuid = None
         self.vm_added_handle = None
+        self.install_error = None
 
     def set_initial_state(self):
         notebook = self.window.get_widget("create-pages")
@@ -319,6 +323,11 @@ class vmmCreate(gobject.GObject):
                 self._validation_error_box(_("Invalid PV media address"), e.args[0])
                 self.install_media_address = None
                 return
+            # we got this far, now let's see if the location is really valid
+            valid = self._validate_pv_url(guest.location)
+            if valid != None:
+                self._validation_error_box(_("Error locating PV media"), valid)
+                return
 
         # set the name
         try:
@@ -365,9 +374,13 @@ class vmmCreate(gobject.GObject):
         guest.set_uuid(self.vm_uuid)
 
         #let's go
+        self.install_error = None
         progWin = vmmAsyncJob(self.config, self.do_install, [guest],
                               title=_("Creating Virtual Machine"))
         progWin.run()
+        if self.install_error != None:
+            self._validation_error_box(_("Guest Install Error"), self.install_error)
+            return
         self.close()
 
     def do_install(self, guest):
@@ -375,7 +388,9 @@ class vmmCreate(gobject.GObject):
             print "\n\nStarting install..."
             r = guest.start_install(False)
         except RuntimeError, e:
-            print >> sys.stderr, "ERROR: ", e.args[0]
+            self.install_error = "ERROR: %s" % e
+            # XXX use log4j for this later
+            print >> sys.stderr, "ERROR: %s" % e
             return
     
     def set_name(self, src, ignore=None):
@@ -544,3 +559,30 @@ class vmmCreate(gobject.GObject):
                 self.emit("action-show-terminal", self.connection.get_uri(), self.vm_uuid)
             else:
                 self.emit("action-show-console", self.connection.get_uri(), self.vm_uuid)
+
+    def _validate_pv_url(self, url):
+        if url.startswith("http://") or \
+               url.startswith("ftp://"):
+            try:
+                kernel = grabber.urlopen("%s/images/xen/vmlinuz"
+                                         %(url,))
+                initrd = grabber.urlopen("%s/images/xen/initrd.img"
+                                         %(url,))
+            except IOError, e:
+                return "Invalid URL location given: %s" % e.args[1]
+        elif self.location.startswith("nfs:"):
+            nfsmntdir = tempfile.mkdtemp(prefix="xennfs.", dir="/var/lib/xen")
+            cmd = ["mount", "-o", "ro", self.location[4:], nfsmntdir]
+            ret = subprocess.call(cmd)
+            if ret != 0:
+                return "Unable to mount NFS location %s" % url
+            try:
+                kernel = open("%s/images/xen/vmlinuz" %(nfsmntdir,), "r")
+                initrd = open("%s/images/xen/initrd.img" %(nfsmntdir,), "r")
+            except IOError, e:
+                return "Invalid NFS location given: %s" % e.args[1]
+
+        kernel.close()
+        initrd.close()
+        return None
+    
