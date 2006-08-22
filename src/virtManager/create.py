@@ -612,6 +612,7 @@ class vmmCreate(gobject.GObject):
             except IOError, e:
                 logging.exception(e)
                 return "Invalid URL location given: %s" % e.args[1]
+            ks.close()
         elif url.startswith("nfs:"):
             nfsmntdir = tempfile.mkdtemp(prefix="xennfs.", dir="/var/lib/xen")
             cmd = ["mount", "-o", "ro", url[4:], nfsmntdir]
@@ -624,8 +625,8 @@ class vmmCreate(gobject.GObject):
                 logging.exception(e)
                 self._unmount_nfs_dir(nfsmntdir)
                 return "Invalid NFS location given: %s" % e.args[1]
-        ks.close()
-        self._unmount_nfs_dir(nfsmntdir)
+            ks.close()
+            self._unmount_nfs_dir(nfsmntdir)
         return None
 
     def _unmount_nfs_dir(self, nfsmntdir):
