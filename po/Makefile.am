@@ -63,9 +63,9 @@ install-data-local: $(FMTCATALOGS)
 		$(DESTDIR)$(NLSDIR)/$$l/LC_MESSAGES/$(PACKAGE).mo; \
 	done
 
-.PHONY: missing
+.PHONY: missing-msgs
 
-missing:
+missing-msgs:
 	mkdir -p missing; \
 	for n in $(FMTCATALOGS); do \
 	    msghack -w 999999 --missing $$n > missing/$$n-; \
