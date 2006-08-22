@@ -570,24 +570,38 @@ class vmmCreate(gobject.GObject):
             try:
                 kernel = grabber.urlopen("%s/images/xen/vmlinuz"
                                          %(url,))
+            except IOError, e:
+                return "Invalid URL location given: %s" % e.args[1]
+            try:
                 initrd = grabber.urlopen("%s/images/xen/initrd.img"
                                          %(url,))
             except IOError, e:
+                kernel.close()
                 return "Invalid URL location given: %s" % e.args[1]
-        elif self.location.startswith("nfs:"):
+            kernel.close()
+            initrd.close()
+        elif url.startswith("nfs:"):
             nfsmntdir = tempfile.mkdtemp(prefix="xennfs.", dir="/var/lib/xen")
-            cmd = ["mount", "-o", "ro", self.location[4:], nfsmntdir]
+            cmd = ["mount", "-o", "ro", url[4:], nfsmntdir]
             ret = subprocess.call(cmd)
             if ret != 0:
                 return "Unable to mount NFS location %s" % url
             try:
                 kernel = open("%s/images/xen/vmlinuz" %(nfsmntdir,), "r")
+            except IOError, e:
+                logging.exception(e)
+                self._unmount_nfs_dir(nfsmntdir)
+                return "Invalid NFS location given: %s" % e.args[1]
+            try:
                 initrd = open("%s/images/xen/initrd.img" %(nfsmntdir,), "r")
             except IOError, e:
+                logging.exception(e)
+                kernel.close()
+                self._unmount_nfs_dir(nfsmntdir)
                 return "Invalid NFS location given: %s" % e.args[1]
-
-        kernel.close()
-        initrd.close()
+            kernel.close()
+            initrd.close()
+            self._unmount_nfs_dir(nfsmntdir)
         return None
     
     def _validate_pv_ks_url(self, url):
@@ -596,16 +610,28 @@ class vmmCreate(gobject.GObject):
             try:
                 ks = grabber.urlopen(url)
             except IOError, e:
+                logging.exception(e)
                 return "Invalid URL location given: %s" % e.args[1]
-        elif self.location.startswith("nfs:"):
+            ks.close()
+        elif url.startswith("nfs:"):
             nfsmntdir = tempfile.mkdtemp(prefix="xennfs.", dir="/var/lib/xen")
-            cmd = ["mount", "-o", "ro", self.location[4:], nfsmntdir]
+            cmd = ["mount", "-o", "ro", url[4:], nfsmntdir]
             ret = subprocess.call(cmd)
             if ret != 0:
                 return "Unable to mount NFS location %s" % url
             try:
                 ks = open(url, "r")
             except IOError, e:
+                logging.exception(e)
+                self._unmount_nfs_dir(nfsmntdir)
                 return "Invalid NFS location given: %s" % e.args[1]
-        ks.close()
+            ks.close()
+            self._unmount_nfs_dir(nfsmntdir)
         return None
+
+    def _unmount_nfs_dir(self, nfsmntdir):
+        # and unmount
+        cmd = ["umount", nfsmntdir]
+        ret = subprocess.call(cmd)
+        os.rmdir(nfsmntdir)
+        
