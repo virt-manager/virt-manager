@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-18 17:01-0400\n"
+"POT-Creation-Date: 2006-08-22 11:33-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 msgid "Couldn't open console: "
 msgstr ""
 
-#: ../../src/virtManager/create.py:261
+#: ../../src/virtManager/create.py:267
 #, python-format
 msgid ""
 "Congratulations, you have successfully created a new virtual system, <b>\"%s"
@@ -72,86 +72,98 @@ msgid ""
 "manager."
 msgstr ""
 
-#: ../../src/virtManager/create.py:302
+#: ../../src/virtManager/create.py:310
 msgid "Installs from local CD are not yet supported"
 msgstr ""
 
-#: ../../src/virtManager/create.py:307
+#: ../../src/virtManager/create.py:315
 msgid "Invalid FV media address"
 msgstr ""
 
-#: ../../src/virtManager/create.py:316
+#: ../../src/virtManager/create.py:322
 msgid "Invalid PV media address"
 msgstr ""
 
-#: ../../src/virtManager/create.py:324
+#: ../../src/virtManager/create.py:328
+msgid "Error locating PV install image"
+msgstr ""
+
+#: ../../src/virtManager/create.py:334
+msgid "Error locating PV kickstart file"
+msgstr ""
+
+#: ../../src/virtManager/create.py:342
 msgid "Invalid system name"
 msgstr ""
 
-#: ../../src/virtManager/create.py:332
+#: ../../src/virtManager/create.py:350
 msgid "Invalid memory setting"
 msgstr ""
 
-#: ../../src/virtManager/create.py:351
+#: ../../src/virtManager/create.py:369
 msgid "Invalid storage address"
 msgstr ""
 
-#: ../../src/virtManager/create.py:366
+#: ../../src/virtManager/create.py:385
 msgid "Creating Virtual Machine"
 msgstr ""
 
-#: ../../src/virtManager/create.py:399
+#: ../../src/virtManager/create.py:388
+msgid "Guest Install Error"
+msgstr ""
+
+#: ../../src/virtManager/create.py:421
 msgid "Locate ISO Image"
 msgstr ""
 
-#: ../../src/virtManager/create.py:436
+#: ../../src/virtManager/create.py:458
 msgid "Locate Storage Partition"
 msgstr ""
 
-#: ../../src/virtManager/create.py:442
+#: ../../src/virtManager/create.py:464
 msgid "Locate or Create New Storage File"
 msgstr ""
 
-#: ../../src/virtManager/create.py:494
+#: ../../src/virtManager/create.py:516
 msgid "Invalid System Name"
 msgstr ""
 
-#: ../../src/virtManager/create.py:495
+#: ../../src/virtManager/create.py:517
 msgid ""
 "System name must be non-blank, less than 50 characters, and contain no spaces"
 msgstr ""
 
-#: ../../src/virtManager/create.py:500
+#: ../../src/virtManager/create.py:522
 msgid "Hardware Support Required"
 msgstr ""
 
-#: ../../src/virtManager/create.py:501
+#: ../../src/virtManager/create.py:523
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
 msgstr ""
 
-#: ../../src/virtManager/create.py:507
+#: ../../src/virtManager/create.py:529
 msgid "ISO Location Required"
 msgstr ""
 
-#: ../../src/virtManager/create.py:508
+#: ../../src/virtManager/create.py:530
 msgid "You must specify an ISO location for the guest install image"
 msgstr ""
 
-#: ../../src/virtManager/create.py:513
+#: ../../src/virtManager/create.py:535
 msgid "URL Required"
 msgstr ""
 
-#: ../../src/virtManager/create.py:514
+#: ../../src/virtManager/create.py:536
 msgid "You must specify a URL for the install image for the guest install"
 msgstr ""
 
-#: ../../src/virtManager/create.py:519
+#: ../../src/virtManager/create.py:541
 msgid "Storage Address Required"
 msgstr ""
 
-#: ../../src/virtManager/create.py:520
+#: ../../src/virtManager/create.py:542
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
 msgstr ""
@@ -190,15 +202,15 @@ msgstr ""
 msgid "Error refreshing connection '%s'"
 msgstr ""
 
-#: ../../src/virtManager/engine.py:243
+#: ../../src/virtManager/engine.py:244
 msgid "Save requested, but machine is shutdown / shutoff / paused"
 msgstr ""
 
-#: ../../src/virtManager/engine.py:245
+#: ../../src/virtManager/engine.py:246
 msgid "Save Virtual Machine"
 msgstr ""
 
-#: ../../src/virtManager/engine.py:258
+#: ../../src/virtManager/engine.py:259
 msgid "Saving Virtual Machine"
 msgstr ""
 
