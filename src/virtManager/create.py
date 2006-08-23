@@ -27,6 +27,7 @@ import subprocess
 import urlgrabber.grabber as grabber
 import tempfile
 import logging
+import dbus
 
 from rhpl.exception import installExceptionHandler
 from rhpl.translate import _, N_, textdomain, utf8
@@ -57,6 +58,12 @@ class vmmCreate(gobject.GObject):
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-create")
         self.topwin = self.window.get_widget("vmm-create")
         self.topwin.hide()
+        # Get a connection to the SYSTEM bus
+        self.bus = dbus.SystemBus()
+        # Get a handle to the HAL service
+        hal_object = self.bus.get_object('org.freedesktop.Hal', '/org/freedesktop/Hal/Manager')
+        self.hal_iface = dbus.Interface(hal_object, 'org.freedesktop.Hal.Manager')
+
         self.window.signal_autoconnect({
             "on_create_pages_switch_page" : self.page_changed,
             "on_create_cancel_clicked" : self.close,
@@ -80,6 +87,8 @@ class vmmCreate(gobject.GObject):
             "on_create_memory_max_value_changed" : self.set_max_memory,
             "on_create_memory_startup_value_changed" : self.set_startup_memory,
             "on_create_vcpus_changed" : self.set_vcpus,
+            "on_cd_focus_out_event" : self.choose_media_location,
+            "on_cd_path_changed" : self.choose_media_location,
             })
 
         self.set_initial_state()
@@ -121,6 +130,14 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("page4-title").modify_bg(gtk.STATE_NORMAL,black)
         self.window.get_widget("page5-title").modify_bg(gtk.STATE_NORMAL,black)
         self.window.get_widget("page6-title").modify_bg(gtk.STATE_NORMAL,black)
+
+        # set up the list for the cd-path widget
+        self.opt_media_list = self.window.get_widget("cd-path")
+        model = gtk.ListStore(str)
+        self.opt_media_list.set_model(model)
+        text = gtk.CellRendererText()
+        self.opt_media_list.pack_start(text, True)
+        self.opt_media_list.add_attribute(text, 'text', 0)
 
         self.reset_state()
 
@@ -185,6 +202,13 @@ class vmmCreate(gobject.GObject):
                 
         elif page_number == 3:
             #set up the fv install media page
+            model = self.opt_media_list.get_model()
+            model.clear()
+            #make sure the model has one empty item
+            model.append()
+            devs = self._get_optical_devices()
+            for dev in devs:
+                model.append([dev])
             if self.install_media_address != None:
                 self.window.get_widget("fv-iso-location").set_text(self.install_media_address)
             else:
@@ -305,10 +329,6 @@ class vmmCreate(gobject.GObject):
         # first things first, are we trying to create a fully virt guest?
         if self.virt_method == VM_FULLY_VIRT:
             guest = xeninst.FullVirtGuest()
-            #XXX use HAL to get the local path for an install image
-            if self.install_fv_media_type == VM_INSTALL_FROM_CD:
-                self._validation_error_box(_("Installs from local CD are not yet supported"))
-                return
             try:
                 guest.cdrom = self.install_media_address
             except ValueError, e:
@@ -413,10 +433,18 @@ class vmmCreate(gobject.GObject):
             if button.name == "media-iso-image":
                 self.install_fv_media_type = VM_INSTALL_FROM_ISO
                 self.window.get_widget("fv-iso-location-box").set_sensitive(True)
+                self.opt_media_list.set_sensitive(False)
             elif button.name == "media-physical":
                 self.install_fv_media_type = VM_INSTALL_FROM_CD
                 self.window.get_widget("fv-iso-location-box").set_sensitive(False)
+                self.opt_media_list.set_sensitive(True)
+                self.opt_media_list.set_active(0)
             
+    def choose_media_location(self, src):
+        model = self.opt_media_list.get_model()
+        logging.debug("User chose: " + model.get_value(self.opt_media_list.get_active_iter(), 0))
+        self.install_media_address = model.get_value(self.opt_media_list.get_active_iter(), 0)
+        
     def browse_iso_location(self, ignore1=None, ignore2=None):
         self.install_media_address = self._browse_file(_("Locate ISO Image"))
         if self.install_media_address != None:
@@ -522,7 +550,7 @@ class vmmCreate(gobject.GObject):
                 self._validation_error_box(_("Hardware Support Required"), \
                                            _("Your hardware does not appear to support full virtualization. Only paravirtualized guests will be available on this hardware."))
                 return False
-
+            
         elif page_num == 3: # the fully virt media page
             if self.install_fv_media_type == VM_INSTALL_FROM_ISO and \
                    (self.install_media_address == None or len(self.install_media_address) == 0):
@@ -634,4 +662,19 @@ class vmmCreate(gobject.GObject):
         cmd = ["umount", nfsmntdir]
         ret = subprocess.call(cmd)
         os.rmdir(nfsmntdir)
+        
+    def _get_optical_devices(self):
+        # get a list of optical devices with data discs in, for FV installs
+        optical_device_list = []
+        for d in self.hal_iface.FindDeviceByCapability("volume"):
+            dev = self.bus.get_object("org.freedesktop.Hal", d)
+            if dev.GetPropertyBoolean("volume.is_disc") and \
+                   dev.GetPropertyBoolean("volume.disc.has_data") and \
+                   dev.GetPropertyBoolean("volume.is_mounted"):
+                print " " + dev.GetProperty("volume.mount_point")
+                optical_device_list.append(dev.GetProperty("volume.mount_point"))
+            else:
+                print " Device " + d + " is not an optical disc with data."
+        return optical_device_list
+    
         
