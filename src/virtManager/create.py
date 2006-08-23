@@ -43,6 +43,7 @@ VM_INSTALL_FROM_CD = 2
 VM_STORAGE_PARTITION = 1
 VM_STORAGE_FILE = 2
 
+DEFAULT_STORAGE_FILE_SIZE = 500
 
 class vmmCreate(gobject.GObject):
     __gsignals__ = {
@@ -107,7 +108,7 @@ class vmmCreate(gobject.GObject):
         self.storage_method = VM_STORAGE_PARTITION
         self.storage_partition_address = None
         self.storage_file_address = None
-        self.storage_file_size = None
+        self.storage_file_size = DEFAULT_STORAGE_FILE_SIZE
         self.max_memory = 0
         self.startup_memory = 0
         self.vcpus = 1
@@ -488,6 +489,9 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("storage-partition-address").set_text(self.storage_partition_address)
 
     def browse_storage_file_address(self, src, ignore=None):
+        # Reset the storage_file_size value
+        if self.storage_file_size == None:
+            self.storage_file_size = STORAGE_FILE_SIZE
         self.window.get_widget("storage-file-size").set_sensitive(True)
         fcdialog = gtk.FileChooserDialog(_("Locate or Create New Storage File"),
                                          self.window.get_widget("vmm-create"),
@@ -508,7 +512,9 @@ class vmmCreate(gobject.GObject):
     def confirm_overwrite_callback(self, chooser):
         # Only called when the user has chosen an existing file
         self.window.get_widget("storage-file-size").set_sensitive(False)
+        self.storage_file_size = None
         return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
+    
             
     def set_storage_type(self, button):
         if button.get_active():
