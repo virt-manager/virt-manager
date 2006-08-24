@@ -677,10 +677,7 @@ class vmmCreate(gobject.GObject):
             if dev.GetPropertyBoolean("volume.is_disc") and \
                    dev.GetPropertyBoolean("volume.disc.has_data") and \
                    dev.GetPropertyBoolean("volume.is_mounted"):
-                print " " + dev.GetProperty("volume.mount_point")
                 optical_device_list.append(dev.GetProperty("volume.mount_point"))
-            else:
-                print " Device " + d + " is not an optical disc with data."
         return optical_device_list
     
         
