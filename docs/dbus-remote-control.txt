@@ -28,8 +28,15 @@ which contains the following methods:
      the window for accessing the graphical framebuffer associated
      with the VM.
 
+ - show_domain_serial_console(string:uri, string:uuid)
+     Takes a domain's UUID in printable string format and displays
+     the window for accessing the serial console connected to the
+     guest VM. NB, not all domains have a serial console activated,
+     and it is only typically accessible as root.
+
  - show_domain_creator(string:uri)
-     Displys the window for creating & configuring a new domain
+     Displys the window for creating & configuring a new domain.
+     NB. the domain creator is only accessible as root.
 
  - show_host_summary(string:uri)
      Displays the window showing a summary of all active domains 
@@ -49,13 +56,13 @@ To display the performance window for the domain with a UUID of
 command as follows:
 
   # First ensure the application is running
-  $ dbus-send --session --dest="org.freedesktop.DBus" \
+  $ dbus-send --print-reply --session --dest="org.freedesktop.DBus" \
               "/org/freedesktop/DBus" \
               "org.freedesktop.DBus.StartServiceByName" \
               "string:com.redhat.virt.manager"
 
   # Now call the show_domain_performance method
-  $dbus-send --session --dest="com.redhat.virt.manager" \
+  $dbus-send --print-reply --session --dest="com.redhat.virt.manager" \
              "/com/redhat/virt/manager"
              "com.redhat.virt.manager.show_domain_performance" \
              "string:xen" \

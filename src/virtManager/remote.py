@@ -41,6 +41,10 @@ class vmmRemote(dbus.service.Object):
     def show_domain_console(self, uri, uuid):
         self.engine.show_console(uri, uuid)
 
+    @dbus.service.method("com.redhat.virt.manager", in_signature="ss")
+    def show_domain_serial_console(self, uri, uuid):
+        self.engine.show_serial_console(uri, uuid)
+
     @dbus.service.method("com.redhat.virt.manager", in_signature="s")
     def show_host_summary(self, uri):
         self.engine.show_manager(uri)
