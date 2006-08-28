@@ -94,7 +94,7 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["details"].show()
         self.vmmenu.add(self.vmmenu_items["details"])
 
-        self.vmmenu_items["open"] = gtk.MenuItem("Open")
+        self.vmmenu_items["open"] = gtk.ImageMenuItem(gtk.STOCK_OPEN)
         self.vmmenu_items["open"].connect("activate", self.open_vm_console)
         self.vmmenu_items["open"].show()
         self.vmmenu.add(self.vmmenu_items["open"])
