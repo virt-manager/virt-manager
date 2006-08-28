@@ -73,7 +73,7 @@ class vmmDetails(gobject.GObject):
         hwListModel.append([1, "Memory", gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")])
         hwListModel.append([2, "Disk", gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_hdd.png")])
         hwListModel.append([3, "Network", gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_ethernet.png")])
-        hwListModel.append([4, "Add hardware", gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_addnew.png")])
+        #hwListModel.append([4, "Add hardware", gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_addnew.png")])
 
         self.window.get_widget("hw-list").get_selection().connect("changed", self.hw_selected)
 
@@ -144,7 +144,7 @@ class vmmDetails(gobject.GObject):
         vmlist = self.window.get_widget("hw-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
-        if active[1] != None:
+        if active[1] != None and not(self.vm.is_read_only()):
             self.window.get_widget("hw-panel").set_sensitive(True)
             self.window.get_widget("hw-panel").set_current_page(active[0].get_value(active[1], 0))
         else:
