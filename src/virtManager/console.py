@@ -124,13 +124,15 @@ class vmmConsole(gobject.GObject):
         if vncHeight > (rootHeight-200):
             vncHeight = rootHeight - 200
 
-        vp.set_size_request(vncWidth+3, vncHeight+3)
+        vp.set_size_request(vncWidth+2, vncHeight+2)
 
 
     def show(self):
         dialog = self.window.get_widget("vmm-console")
         dialog.show_all()
         dialog.present()
+
+        self.try_login()
 
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-console").hide()
@@ -166,9 +168,10 @@ class vmmConsole(gobject.GObject):
 		print _("Unable to activate console") + " " + str((sys.exc_info())[0]) + " " + str((sys.exc_info())[1])
                 self.activate_unavailable_page()
 		return
+
         if self.vncViewer.is_authenticated():
             self.activate_viewer_page()
-        elif password:
+        elif password or not(self.vncViewer.needs_password()):
             if self.vncViewer.authenticate(password) == 1:
                 if self.window.get_widget("console-auth-remember").get_active():
                     self.config.set_console_password(self.vm, password)
@@ -211,6 +214,7 @@ class vmmConsole(gobject.GObject):
     def activate_viewer_page(self):
         self.window.get_widget("console-pages").set_current_page(3)
         self.window.get_widget("control-screenshot").set_sensitive(True)
+        self.vncViewer.grab_focus()
 
     def control_vm_screenshot(self, src):
         # If someone feels kind they could extend this code to allow
@@ -359,12 +363,15 @@ class vmmConsole(gobject.GObject):
                     self.activate_screenshot_page()
                 else:
                     self.activate_unavailable_page()
-            else:
+            elif self.vncViewer.is_connected():
+                self.try_login()
                 try:
                     self.try_login()
                 except:
                     print _("Couldn't open console: ") + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
                     self.ignorePause = False
+            else:
+                self.activate_unavailable_page()
         self.ignorePause = False
 
 gobject.type_register(vmmConsole)

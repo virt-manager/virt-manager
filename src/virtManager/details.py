@@ -88,6 +88,8 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("hw-list").append_column(hwCol)
 
+        self.window.get_widget("close-details").grab_focus()
+        self.window.get_widget("close-details").grab_focus()
 
         self.cpu_usage_graph = sparkline.Sparkline()
         self.cpu_usage_graph.show()

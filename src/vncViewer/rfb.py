@@ -54,6 +54,18 @@ ENCODING_CURSOR_POS = -232
 ENCODING_RICH_CURSOR = -239
 ENCODING_XCURSOR = -240
 
+AUTH_INVALID = 0
+AUTH_NONE = 1
+AUTH_VNCAUTH = 2
+AUTH_RA2 = 5
+AUTH_RA2NE = 6
+AUTH_TIGHT = 16
+AUTH_ULTRA = 17
+AUTH_TLS = 18
+
+AUTH_VALID = [ AUTH_NONE, AUTH_VNCAUTH, AUTH_RA2, AUTH_RA2NE, AUTH_TIGHT, AUTH_ULTRA, AUTH_TLS ]
+AUTH_SUPPORTED = [ AUTH_NONE, AUTH_VNCAUTH ]
+
 ##  RFBFrameBuffer
 ##
 class RFBFrameBuffer:
@@ -155,10 +167,41 @@ class RFBProxy:
     self.send('RFB 003.%03d\x0a' % self.protocol_version)
     if self.debug:
       print >>stderr, 'protocol_version: 3.%d' % self.protocol_version
-    return self
+
+    self.auth_types = []
+
+    if self.protocol_version == 3:
+      # protocol 3.3 (or 3.6)
+      # recv: server security
+      (server_security,) = unpack('>L', self.recv(4))
+      if self.debug:
+        print >>stderr, 'server_security: %r' % server_security
+      # server_security might be 0, 1 or 2.
+      if int(server_security) == 0:
+        (reason_length,) = unpack('>L', self.recv(4))
+        reason = self.recv(reason_length)
+        raise RFBAuthError('Auth Error: %s' % reason)
+      elif int(server_security) in AUTH_VALID:
+        self.auth_types = [ server_security ]
+      else:
+        raise "illegal auth type %d" % server_security
+    elif self.protocol_version >= 7:
+      (nsecurities,) = unpack('>B', self.recv(1))
+      server_securities = self.recv(nsecurities)
+      if self.debug:
+        print >>stderr, 'server_securities: %r' % server_securities
+      for type in server_securities:
+        if ord(type) in AUTH_SUPPORTED:
+          self.auth_types.append(ord(type))
+
+      if len(self.auth_types) == 0:
+        raise "no valid auth types in " + str(server_securities)
+
+    return self.auth_types
 
   def getpass(self):
     raise NotImplementedError
+
 
   def auth(self):
 
@@ -182,40 +225,23 @@ class RFBProxy:
 
     server_result = 0
     if self.protocol_version == 3:
-      # protocol 3.3 (or 3.6)
-      # recv: server security
-      (server_security,) = unpack('>L', self.recv(4))
-      if self.debug:
-        print >>stderr, 'server_security: %r' % server_security
-      # server_security might be 0, 1 or 2.
-      if server_security == 0:
-        (reason_length,) = unpack('>L', self.recv(4))
-        reason = self.recv(reason_length)
-        raise RFBAuthError('Auth Error: %s' % reason)
-      elif server_security == 1:
-        pass
-      else:
+      if AUTH_NONE in self.auth_types:
+        server_result = 0
+      elif AUTH_VNCAUTH in self.auth_types:
         server_result = crauth()
-    else:
-      # protocol 3.7 or 3.8
-      # recv: multiple server securities
-      (nsecurities,) = unpack('>B', self.recv(1))
-      server_securities = self.recv(nsecurities)
-      if self.debug:
-        print >>stderr, 'server_securities: %r' % server_securities
-      # must include None or VNCAuth
-      if '\x01' in server_securities:
-        # None
+    elif self.protocol_version >= 7:
+      if AUTH_NONE in self.auth_types:
         self.send('\x01')
         if self.protocol_version == 8:
           # Protocol 3.8: must recv security result
           (server_result,) = unpack('>L', self.recv(4))
         else:
           server_result = 0
-      elif '\x02' in server_securities:
-        # VNCAuth
+      elif AUTH_VNCAUTH in self.auth_types:
         self.send('\x02')
         server_result = crauth()
+      else:
+        raise "no supported auth types"
     # result returned.
     if self.debug:
       print >>stderr, 'server_result: %r' % server_result
@@ -227,12 +253,13 @@ class RFBProxy:
       else:
         reason = server_result
       raise RFBAuthError('Auth Error: %s' % reason)
-    # negotiation ok.
-    # send: always shared.
-    self.send('\x01')
-    return self
 
-  def start(self):
+  def start(self, shared=True):
+    if shared:
+      self.send('\x01')
+    else:
+      self.send('\x00')
+
     # server info.
     server_init = self.recv(24)
     (width, height, pixelformat, namelen) = unpack('>HH16sL', server_init)
@@ -492,8 +519,7 @@ class RFBNetworkClient(RFBProxy):
 
   def init(self):
     self.sock.connect((self.host, self.port))
-    x = RFBProxy.init(self)
-    return x
+    return RFBProxy.init(self)
 
   def recv(self, n):
     # MS-Windows doesn't have MSG_WAITALL, so we emulate it.

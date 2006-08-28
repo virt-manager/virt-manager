@@ -103,7 +103,7 @@ class GRFBNetworkClient(rfb.RFBNetworkClient, gobject.GObject):
         self.password = None
 
     def init(self):
-        rfb.RFBNetworkClient.init(self)
+        return rfb.RFBNetworkClient.init(self)
 
     def start(self):
         rfb.RFBNetworkClient.start(self)
@@ -156,6 +156,7 @@ class GRFBViewer(gtk.DrawingArea):
         self.fb = GRFBFrameBuffer(self)
         self.client = None
         self.authenticated = False
+        self.needpw = True
 
         self.fb.connect("resize", self.resize_display)
         self.fb.connect("invalidate", self.repaint_region)
@@ -191,12 +192,17 @@ class GRFBViewer(gtk.DrawingArea):
         client = GRFBNetworkClient(host, port, self.fb)
         client.connect("disconnected", self._client_disconnected)
 
-        client.init()
+        auth_types = client.init()
+
         # NB we delibrately dont assign to self.client until
         # we're successfully connected.
         self.client = client
         self.authenticated = False
         self.emit("connected", host, port)
+        if rfb.AUTH_NONE in auth_types:
+            self.needpw = False
+        else:
+            self.needpw = True
 
     def _client_disconnected(self, src):
         self.client = None
@@ -216,12 +222,16 @@ class GRFBViewer(gtk.DrawingArea):
             self.client.auth()
         except:
             print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
+            self.disconnect_from_host()
             return 0
         self.authenticated = True
         self.emit("authenticated")
         return 1
 
     def activate(self):
+        if self.client == None:
+            return
+
         self.client.start()
         self.client.request_update()
         self.emit("activated")
@@ -230,6 +240,9 @@ class GRFBViewer(gtk.DrawingArea):
         if not(self.is_connected()):
             return False
         return self.authenticated
+
+    def needs_password(self):
+        return self.needpw
 
     def is_connected(self):
         if self.client == None:
@@ -294,7 +307,9 @@ gobject.type_register(GRFBViewer)
 def main():
     host = sys.argv[1]
     port = int(sys.argv[2])
-    password = sys.argv[3]
+    password = None
+    if len(sys.argv) == 4:
+        password = sys.argv[3]
 
     win = gtk.Window()
     win.set_name("VNC")
@@ -313,9 +328,13 @@ def main():
     win.show_all()
     win.present()
 
-    vnc.connect_to_host(host, port)
+    if vnc.connect_to_host(host, port):
+        print "Need password"
+    else:
+        print "No password needed"
     vnc.authenticate(password)
     vnc.activate()
+
     win.set_title(vnc.get_framebuffer_name())
 
     def autosize():

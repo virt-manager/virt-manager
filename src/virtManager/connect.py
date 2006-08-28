@@ -39,6 +39,8 @@ class vmmConnect(gobject.GObject):
         # Not securely implemented yet by XenD, so disable it
         self.window.get_widget("type-remote-xen").set_sensitive(False)
 
+        self.window.get_widget("connect").grab_default()
+
         self.window.signal_autoconnect({
             "on_type_local_xen_toggled": self.change_active_type,
             "on_type_remote_xen_toggled": self.change_active_type,
