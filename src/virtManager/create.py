@@ -400,6 +400,9 @@ class vmmCreate(gobject.GObject):
         self.vm_uuid = xeninst.util.uuidToString(xeninst.util.randomUUID())
         guest.set_uuid(self.vm_uuid)
 
+        # set up the graphics to use SDL
+        guest.graphics = "vnc"
+
         #let's go
         self.install_error = None
         progWin = vmmAsyncJob(self.config, self.do_install, [guest],
@@ -593,10 +596,12 @@ class vmmCreate(gobject.GObject):
 
     def open_vm_console(self,ignore,uri,uuid):
         if uuid == self.vm_uuid:
-            if (self.virt_method == VM_PARAVIRT):
-                self.emit("action-show-terminal", self.connection.get_uri(), self.vm_uuid)
-            else:
+            vm = self.connection.get_vm(uuid)
+            (gtype, host, port) = vm.get_graphics_console()
+            if gtype == "vnc":
                 self.emit("action-show-console", self.connection.get_uri(), self.vm_uuid)
+            else:
+                self.emit("action-show-terminal", self.connection.get_uri(), self.vm_uuid)
 
     def _validate_pv_url(self, url):
         if url.startswith("http://") or \
