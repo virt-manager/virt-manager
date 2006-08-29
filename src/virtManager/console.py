@@ -87,6 +87,8 @@ class vmmConsole(gobject.GObject):
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
 
+            "on_control_fullscreen_toggled": self.toggle_fullscreen,
+
             "on_menu_vm_run_activate": self.control_vm_run,
             "on_menu_vm_shutdown_activate": self.control_vm_shutdown,
             "on_menu_vm_pause_activate": self.control_vm_pause,
@@ -125,6 +127,14 @@ class vmmConsole(gobject.GObject):
             vncHeight = rootHeight - 200
 
         vp.set_size_request(vncWidth+2, vncHeight+2)
+
+    def toggle_fullscreen(self, src):
+        if src.get_active():
+            self.window.get_widget("vmm-console").fullscreen()
+            #gtk.gdk.keyboard_grab(self.window.get_widget("vmm-console").get_root_window())
+        else:
+            self.window.get_widget("vmm-console").unfullscreen()
+            #gtk.gdk.keyboard_ungrab()
 
 
     def show(self):
