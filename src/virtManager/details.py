@@ -127,6 +127,12 @@ class vmmDetails(gobject.GObject):
         self.update_widget_states(vm, vm.status())
         self.refresh_resources(vm)
 
+        self.prepare_disk_list()
+        self.populate_disk_list()
+        
+        self.prepare_network_list()
+        self.populate_network_list()
+
     def show(self):
         dialog = self.window.get_widget("vmm-details")
         dialog.show_all()
@@ -279,5 +285,82 @@ class vmmDetails(gobject.GObject):
         newmem = self.vm.set_memory(memory*1024)
         self.window.get_widget("config-memory-apply").set_sensitive(False)
         self.window.get_widget("state-vm-memory").set_text("%d MB" % (newmem/1024))
-        
+
+    def prepare_disk_list(self):
+        disks = self.window.get_widget("storage-view")
+        disksModel = gtk.TreeStore(str,str,str,str)
+        disks.set_model(disksModel)
+
+        diskType_col = gtk.TreeViewColumn("Type")
+        diskType_text = gtk.CellRendererText()
+        diskType_col.pack_start(diskType_text, True)
+        diskType_col.add_attribute(diskType_text, 'text', 0)
+
+        diskSrc_col = gtk.TreeViewColumn("Source")
+        diskSrc_text = gtk.CellRendererText()
+        diskSrc_col.pack_start(diskSrc_text, True)
+        diskSrc_col.add_attribute(diskSrc_text, 'text', 1)
+
+        diskDevice_col = gtk.TreeViewColumn("Device")
+        diskDevice_text = gtk.CellRendererText()
+        diskDevice_col.pack_start(diskDevice_text, True)
+        diskDevice_col.add_attribute(diskDevice_text, 'text', 2)
+
+        diskDst_col = gtk.TreeViewColumn(_("Destination"))
+        diskDst_text = gtk.CellRendererText()
+        diskDst_col.pack_start(diskDst_text, True)
+        diskDst_col.add_attribute(diskDst_text, 'text', 3)
+
+        disks.append_column(diskType_col)
+        disks.append_column(diskSrc_col)
+        disks.append_column(diskDevice_col)
+        disks.append_column(diskDst_col)
+
+    def populate_disk_list(self):
+        diskList = self.vm.get_disk_devices()
+
+        disks = self.window.get_widget("storage-view")
+        disksModel = disks.get_model()
+        for d in diskList:
+            disksModel.append(None, d)
+            
+    def prepare_network_list(self):
+        nets = self.window.get_widget("network-view")
+        netsModel = gtk.TreeStore(str,str,str,str)
+        nets.set_model(netsModel)
+
+        netType_col = gtk.TreeViewColumn("Type")
+        netType_text = gtk.CellRendererText()
+        netType_col.pack_start(netType_text, True)
+        netType_col.add_attribute(netType_text, 'text', 0)
+
+        netSrc_col = gtk.TreeViewColumn("Source")
+        netSrc_text = gtk.CellRendererText()
+        netSrc_col.pack_start(netSrc_text, True)
+        netSrc_col.add_attribute(netSrc_text, 'text', 1)
+
+        netDevice_col = gtk.TreeViewColumn("Device")
+        netDevice_text = gtk.CellRendererText()
+        netDevice_col.pack_start(netDevice_text, True)
+        netDevice_col.add_attribute(netDevice_text, 'text', 2)
+
+        netDst_col = gtk.TreeViewColumn(_("MAC address"))
+        netDst_text = gtk.CellRendererText()
+        netDst_col.pack_start(netDst_text, True)
+        netDst_col.add_attribute(netDst_text, 'text', 3)
+
+        nets.append_column(netType_col)
+        nets.append_column(netSrc_col)
+        nets.append_column(netDevice_col)
+        nets.append_column(netDst_col)
+
+    def populate_network_list(self):
+        netList = self.vm.get_network_devices()
+
+        nets = self.window.get_widget("network-view")
+        netsModel = nets.get_model()
+        for d in netList:
+            netsModel.append(None, d)
+            
+
 gobject.type_register(vmmDetails)

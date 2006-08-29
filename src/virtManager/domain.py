@@ -21,6 +21,7 @@ import gobject
 import libvirt
 import libxml2
 import os
+import sys
 
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
@@ -305,6 +306,83 @@ class vmmDomain(gobject.GObject):
             else:
                 port = int(port)
         return [type, "localhost", port]
+
+    def get_disk_devices(self):
+        xml = self.vm.XMLDesc(0)
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return []
+        ctx = doc.xpathNewContext()
+        disks = []
+        try:
+            ret = ctx.xpathEval("/domain/devices/disk")
+            for node in ret:
+                type = node.prop("type")
+                srcpath = None
+                devdst = None
+                for child in node.children:
+                    if child.name == "source":
+                        if type == "file":
+                            srcpath = child.prop("file")
+                        elif type == "block":
+                            srcpath = child.prop("dev")
+                    elif child.name == "target":
+                        devdst = child.prop("dev")
+
+                if srcpath == None:
+                    raise "missing source path"
+                if devdst == None:
+                    raise "missing destination device"
+
+                devtype = node.prop("device")
+                if devtype == None:
+                    devtype = "disk"
+                disks.append([type, srcpath, devtype, devdst])
+
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+        return disks
+
+    def get_network_devices(self):
+        xml = self.vm.XMLDesc(0)
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return []
+        ctx = doc.xpathNewContext()
+        disks = []
+        try:
+            ret = ctx.xpathEval("/domain/devices/interface")
+
+            for node in ret:
+                type = node.prop("type")
+                devmac = None
+                source = None
+                for child in node.children:
+                    if child.name == "source":
+                        if type == "bridge":
+                            source = child.prop("bridge")
+                    elif child.name == "mac":
+                        devmac = child.prop("address")
+
+                if source == None:
+                    source = "-"
+
+                devdst = "eth%d" % len(disks)
+
+                disks.append([type, source, devdst, devmac])
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+        return disks
 
     def set_vcpu_count(self, vcpus):
         vcpus = int(vcpus)
