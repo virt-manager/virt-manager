@@ -1839,10 +1839,10 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				      <property name="can_focus">True</property>
 				      <property name="draw_value">True</property>
 				      <property name="value_pos">GTK_POS_BOTTOM</property>
-				      <property name="digits">1</property>
-				      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
+				      <property name="digits">0</property>
+				      <property name="update_policy">GTK_UPDATE_DISCONTINUOUS</property>
 				      <property name="inverted">False</property>
-				      <property name="adjustment">256 0 1024 0 0 0</property>
+				      <property name="adjustment">250 50 32000 1 1 1</property>
 				      <signal name="value_changed" handler="on_config_memory_value_changed" last_modification_time="Wed, 26 Jul 2006 22:00:46 GMT"/>
 				    </widget>
 				    <packing>
@@ -8164,7 +8164,7 @@ TB</property>
 			  <property name="digits">0</property>
 			  <property name="update_policy">GTK_UPDATE_DISCONTINUOUS</property>
 			  <property name="inverted">False</property>
-			  <property name="adjustment">512 0 1024 32 0 0</property>
+			  <property name="adjustment">250 50 32000 1 1 1</property>
 			  <signal name="value_changed" handler="on_create_memory_max_value_changed" last_modification_time="Thu, 10 Aug 2006 21:18:45 GMT"/>
 			</widget>
 		      </child>
@@ -8229,7 +8229,7 @@ TB</property>
 			  <property name="digits">0</property>
 			  <property name="update_policy">GTK_UPDATE_DISCONTINUOUS</property>
 			  <property name="inverted">False</property>
-			  <property name="adjustment">256 0 1024 32 0 0</property>
+			  <property name="adjustment">250 50 32000 1 1 1</property>
 			  <signal name="value_changed" handler="on_create_memory_startup_value_changed" last_modification_time="Thu, 10 Aug 2006 21:18:33 GMT"/>
 			</widget>
 		      </child>
