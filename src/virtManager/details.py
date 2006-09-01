@@ -105,7 +105,7 @@ class vmmDetails(gobject.GObject):
 
             "on_config_cpus_apply_clicked": self.config_cpus_apply,
             "on_config_vm_cpus_changed": self.config_vm_cpus,
-            "on_config_memory_value_changed": self.config_memory_value,
+            "on_config_memory_changed": self.config_memory_value,
             "on_config_memory_apply_clicked": self.config_memory_apply
             })
 
@@ -245,6 +245,7 @@ class vmmDetails(gobject.GObject):
 
     def refresh_resources(self, vm):
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
+        vm_maxmem = self.vm.maximum_memory()
         vm_memory = self.vm.current_memory()
         host_memory = self.vm.get_connection().host_memory_size()
         self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (vm_memory/1024, host_memory/1024))
@@ -265,6 +266,7 @@ class vmmDetails(gobject.GObject):
         # update HW config values
         self.window.get_widget("state-host-memory").set_text("%d MB" % (host_memory/1024))
         self.window.get_widget("config-memory").get_adjustment().upper = vm.maximum_memory()/1024
+        self.window.get_widget("state-vm-maxmem").set_text("%d MB" % (vm_maxmem/1024))
         self.window.get_widget("state-vm-memory").set_text("%d MB" % (vm_memory/1024))
 
     def update_config_memory(self):
