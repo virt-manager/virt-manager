@@ -1324,7 +1324,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="label48">
+				    <widget class="GtkLabel" id="overview-disk-usage-label">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">Disk usage:</property>
 				      <property name="use_underline">False</property>
@@ -1352,7 +1352,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="label47">
+				    <widget class="GtkLabel" id="overview-network-traffic-label">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">Network usage:</property>
 				      <property name="use_underline">False</property>
@@ -2364,80 +2364,6 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 			      <property name="visible">True</property>
 			      <property name="layout_style">GTK_BUTTONBOX_END</property>
 			      <property name="spacing">5</property>
-
-			      <child>
-				<widget class="GtkButton" id="modify-storage">
-				  <property name="visible">True</property>
-				  <property name="can_default">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="relief">GTK_RELIEF_NORMAL</property>
-				  <property name="focus_on_click">True</property>
-
-				  <child>
-				    <widget class="GtkAlignment" id="alignment30">
-				      <property name="visible">True</property>
-				      <property name="xalign">0.5</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xscale">0</property>
-				      <property name="yscale">0</property>
-				      <property name="top_padding">0</property>
-				      <property name="bottom_padding">0</property>
-				      <property name="left_padding">0</property>
-				      <property name="right_padding">0</property>
-
-				      <child>
-					<widget class="GtkHBox" id="hbox17">
-					  <property name="visible">True</property>
-					  <property name="homogeneous">False</property>
-					  <property name="spacing">2</property>
-
-					  <child>
-					    <widget class="GtkImage" id="image72">
-					      <property name="visible">True</property>
-					      <property name="stock">gtk-edit</property>
-					      <property name="icon_size">4</property>
-					      <property name="xalign">0.5</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					    </widget>
-					    <packing>
-					      <property name="padding">0</property>
-					      <property name="expand">False</property>
-					      <property name="fill">False</property>
-					    </packing>
-					  </child>
-
-					  <child>
-					    <widget class="GtkLabel" id="label104">
-					      <property name="visible">True</property>
-					      <property name="label">Modify...</property>
-					      <property name="use_underline">True</property>
-					      <property name="use_markup">False</property>
-					      <property name="justify">GTK_JUSTIFY_LEFT</property>
-					      <property name="wrap">False</property>
-					      <property name="selectable">False</property>
-					      <property name="xalign">0.5</property>
-					      <property name="yalign">0.5</property>
-					      <property name="xpad">0</property>
-					      <property name="ypad">0</property>
-					      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-					      <property name="width_chars">-1</property>
-					      <property name="single_line_mode">False</property>
-					      <property name="angle">0</property>
-					    </widget>
-					    <packing>
-					      <property name="padding">0</property>
-					      <property name="expand">False</property>
-					      <property name="fill">False</property>
-					    </packing>
-					  </child>
-					</widget>
-				      </child>
-				    </widget>
-				  </child>
-				</widget>
-			      </child>
 			    </widget>
 			  </child>
 			</widget>
@@ -2628,46 +2554,6 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 				  <property name="fill">True</property>
 				</packing>
 			      </child>
-
-			      <child>
-				<widget class="GtkAlignment" id="alignment39">
-				  <property name="visible">True</property>
-				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xscale">1</property>
-				  <property name="yscale">1</property>
-				  <property name="top_padding">0</property>
-				  <property name="bottom_padding">5</property>
-				  <property name="left_padding">0</property>
-				  <property name="right_padding">5</property>
-
-				  <child>
-				    <widget class="GtkHButtonBox" id="hbuttonbox8">
-				      <property name="visible">True</property>
-				      <property name="layout_style">GTK_BUTTONBOX_END</property>
-				      <property name="spacing">5</property>
-
-				      <child>
-					<widget class="GtkButton" id="button25">
-					  <property name="visible">True</property>
-					  <property name="can_default">True</property>
-					  <property name="can_focus">True</property>
-					  <property name="label">gtk-add</property>
-					  <property name="use_stock">True</property>
-					  <property name="relief">GTK_RELIEF_NORMAL</property>
-					  <property name="focus_on_click">True</property>
-					</widget>
-				      </child>
-				    </widget>
-				  </child>
-				</widget>
-				<packing>
-				  <property name="padding">0</property>
-				  <property name="expand">False</property>
-				  <property name="fill">False</property>
-				  <property name="pack_type">GTK_PACK_END</property>
-				</packing>
-			      </child>
 			    </widget>
 			  </child>
 			</widget>
@@ -2706,53 +2592,6 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 		    <widget class="GtkLabel" id="label56">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">Network</property>
-		      <property name="use_underline">False</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="type">tab</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkLabel" id="label67">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">New hardware configuration not available</property>
-		      <property name="use_underline">False</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="tab_expand">False</property>
-		      <property name="tab_fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkLabel" id="label57">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Add hardware</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>

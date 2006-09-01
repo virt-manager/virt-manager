@@ -74,15 +74,13 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("hw-list").append_column(hwCol)
 
         self.cpu_usage_graph = sparkline.Sparkline()
-        self.cpu_usage_graph.show()
         self.window.get_widget("graph-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
 
         self.memory_usage_graph = sparkline.Sparkline()
-        self.memory_usage_graph.show()
         self.window.get_widget("graph-table").attach(self.memory_usage_graph, 1, 2, 1, 2)
 
+
         self.network_traffic_graph = sparkline.Sparkline()
-        self.network_traffic_graph.show()
         self.window.get_widget("graph-table").attach(self.network_traffic_graph, 1, 2, 3, 4)
 
         self.window.signal_autoconnect({
@@ -131,6 +129,12 @@ class vmmDetails(gobject.GObject):
     def show(self):
         dialog = self.window.get_widget("vmm-details")
         dialog.show_all()
+        self.window.get_widget("overview-network-traffic-text").hide()
+        self.window.get_widget("overview-network-traffic-label").hide()
+        self.window.get_widget("overview-disk-usage-bar").hide()
+        self.window.get_widget("overview-disk-usage-text").hide()
+        self.window.get_widget("overview-disk-usage-label").hide()
+        self.network_traffic_graph.hide()
         dialog.present()
 
     def activate_performance_page(self):
@@ -147,9 +151,14 @@ class vmmDetails(gobject.GObject):
         vmlist = self.window.get_widget("hw-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
-        if active[1] != None and not(self.vm.is_read_only()):
+        if active[1] != None:
+            pagenum = active[0].get_value(active[1], 0)
             self.window.get_widget("hw-panel").set_sensitive(True)
-            self.window.get_widget("hw-panel").set_current_page(active[0].get_value(active[1], 0))
+            self.window.get_widget("hw-panel").set_current_page(pagenum)
+            if self.vm.is_read_only():
+                self.window.get_widget("hw-panel").get_nth_page(pagenum).set_sensitive(False)
+            else:
+                self.window.get_widget("hw-panel").get_nth_page(pagenum).set_sensitive(True)
         else:
             self.window.get_widget("hw-panel").set_sensitive(False)
         # When the user changes tabs on the hw panel, reset to the default state

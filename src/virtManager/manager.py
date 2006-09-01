@@ -72,6 +72,8 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("menu_view_memory_usage").set_active(self.config.is_vmlist_memory_usage_visible())
         self.window.get_widget("menu_view_disk_usage").set_active(self.config.is_vmlist_disk_usage_visible())
         self.window.get_widget("menu_view_network_traffic").set_active(self.config.is_vmlist_network_traffic_visible())
+        self.window.get_widget("menu_view_disk_usage").set_sensitive(False)
+        self.window.get_widget("menu_view_network_traffic").set_sensitive(False)
 
 
         if self.connection.is_read_only():
