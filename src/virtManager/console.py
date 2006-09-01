@@ -281,6 +281,9 @@ class vmmConsole(gobject.GObject):
                 else:
                     print _("Resume requested, but machine is already running")
 
+        self.window.get_widget("control-pause").set_active(src.get_active())
+        self.window.get_widget("menu-vm-pause").set_active(src.get_active())
+
     def control_vm_terminal(self, src):
         self.emit("action-show-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
