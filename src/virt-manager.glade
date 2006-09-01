@@ -653,7 +653,134 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
       <property name="spacing">0</property>
 
       <child>
-	<widget class="GtkToolbar" id="toolbar4">
+	<widget class="GtkMenuBar" id="menubar3">
+	  <property name="visible">True</property>
+	  <property name="pack_direction">GTK_PACK_DIRECTION_LTR</property>
+	  <property name="child_pack_direction">GTK_PACK_DIRECTION_LTR</property>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="virtual_machine1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Virtual _Machine</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_virtual_machine1_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+
+	      <child>
+		<widget class="GtkMenu" id="virtual_machine1_menu">
+
+		  <child>
+		    <widget class="GtkMenuItem" id="details-menu-run">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Run</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_details_menu_run_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkCheckMenuItem" id="details-menu-pause">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Pause</property>
+		      <property name="use_underline">True</property>
+		      <property name="active">False</property>
+		      <signal name="activate" handler="on_details_menu_pause_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="details-menu-shutdown">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Shutdown</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_details_menu_shutdown_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="details-menu-save">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Save</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_details_menu_save_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="separator8">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkImageMenuItem" id="details-menu-close">
+		      <property name="visible">True</property>
+		      <property name="label">gtk-close</property>
+		      <property name="use_stock">True</property>
+		      <signal name="activate" handler="on_details_menu_close_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkMenuItem" id="view2">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_View</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_view2_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+
+	      <child>
+		<widget class="GtkMenu" id="view2_menu">
+
+		  <child>
+		    <widget class="GtkMenuItem" id="details-menu-graphics">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Graphical Console</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_details_menu_graphics_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="details-menu-serial">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Serial Console</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_details_menu_serial_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="separator7">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkCheckMenuItem" id="details-menu-view-toolbar">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Toolbar</property>
+		      <property name="use_underline">True</property>
+		      <property name="active">True</property>
+		      <signal name="activate" handler="on_details_menu_view_toolbar_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolbar" id="details-toolbar">
 	  <property name="visible">True</property>
 	  <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 	  <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
@@ -665,6 +792,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Run</property>
 	      <property name="use_underline">True</property>
+	      <property name="stock_id">gtk-media-play</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -681,6 +809,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Pause</property>
 	      <property name="use_underline">True</property>
+	      <property name="stock_id">gtk-media-pause</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -702,67 +831,6 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
 	      <signal name="clicked" handler="on_control_shutdown_clicked" last_modification_time="Mon, 03 Apr 2006 08:15:00 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">True</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkSeparatorToolItem" id="separatortoolitem3">
-	      <property name="visible">True</property>
-	      <property name="draw">True</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">False</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkToolButton" id="control-terminal">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Open terminal</property>
-	      <property name="use_underline">True</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_control_terminal_clicked" last_modification_time="Mon, 03 Apr 2006 15:36:51 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">True</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkToolButton" id="control-save-domain">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Save Domain</property>
-	      <property name="use_underline">True</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_control_save_clicked" last_modification_time="Thu, 13 Jul 2006 19:53:05 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">True</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkToolButton" id="control-console">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Machine console</property>
-	      <property name="use_underline">True</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_control_console_clicked" last_modification_time="Wed, 14 Jun 2006 22:46:31 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -2651,72 +2719,6 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	  <property name="fill">True</property>
 	</packing>
       </child>
-
-      <child>
-	<widget class="GtkHBox" id="hbox2">
-	  <property name="visible">True</property>
-	  <property name="homogeneous">False</property>
-	  <property name="spacing">0</property>
-
-	  <child>
-	    <widget class="GtkHButtonBox" id="hbuttonbox4">
-	      <property name="border_width">3</property>
-	      <property name="visible">True</property>
-	      <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
-	      <property name="spacing">0</property>
-
-	      <child>
-		<widget class="GtkButton" id="button11">
-		  <property name="visible">True</property>
-		  <property name="can_default">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="label">gtk-help</property>
-		  <property name="use_stock">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="focus_on_click">True</property>
-		</widget>
-	      </child>
-	    </widget>
-	    <packing>
-	      <property name="padding">0</property>
-	      <property name="expand">False</property>
-	      <property name="fill">True</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkHButtonBox" id="hbuttonbox3">
-	      <property name="border_width">3</property>
-	      <property name="visible">True</property>
-	      <property name="layout_style">GTK_BUTTONBOX_END</property>
-	      <property name="spacing">3</property>
-
-	      <child>
-		<widget class="GtkButton" id="close-details">
-		  <property name="visible">True</property>
-		  <property name="can_default">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="label">gtk-close</property>
-		  <property name="use_stock">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_close_details_clicked" last_modification_time="Thu, 30 Mar 2006 12:03:31 GMT"/>
-		</widget>
-	      </child>
-	    </widget>
-	    <packing>
-	      <property name="padding">0</property>
-	      <property name="expand">True</property>
-	      <property name="fill">True</property>
-	    </packing>
-	  </child>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
     </widget>
   </child>
 </widget>
@@ -3136,7 +3138,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	  <child>
 	    <widget class="GtkMenuItem" id="view1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">View</property>
+	      <property name="label" translatable="yes">_View</property>
 	      <property name="use_underline">True</property>
 
 	      <child>

@@ -45,23 +45,8 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("overview-name").set_text(self.vm.get_name())
         self.window.get_widget("overview-uuid").set_text(self.vm.get_uuid())
 
-        self.window.get_widget("control-run").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-run").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_run.png")
-
-        self.window.get_widget("control-pause").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-pause").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_pause.png")
-
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
-
-        self.window.get_widget("control-terminal").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-terminal").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_launch_term.png")
-
-        self.window.get_widget("control-save-domain").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-save-domain").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_save.png")
-
-        self.window.get_widget("control-console").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-console").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_launch_term.png")
 
         self.window.get_widget("hw-panel").set_show_tabs(False)
 
@@ -88,9 +73,6 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("hw-list").append_column(hwCol)
 
-        self.window.get_widget("close-details").grab_focus()
-        self.window.get_widget("close-details").grab_focus()
-
         self.cpu_usage_graph = sparkline.Sparkline()
         self.cpu_usage_graph.show()
         self.window.get_widget("graph-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
@@ -105,15 +87,22 @@ class vmmDetails(gobject.GObject):
 
         self.window.signal_autoconnect({
             "on_close_details_clicked": self.close,
+            "on_details_menu_close_activate": self.close,
             "on_vmm_details_delete_event": self.close,
 
             "on_control_run_clicked": self.control_vm_run,
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
 
-            "on_control_terminal_clicked": self.control_vm_terminal,
-            "on_control_save_clicked": self.control_vm_save_domain,
-            "on_control_console_clicked": self.control_vm_console,
+            "on_details_menu_run_activate": self.control_vm_run,
+            "on_details_menu_pause_activate": self.control_vm_pause,
+            "on_details_menu_shutdown_activate": self.control_vm_shutdown,
+            "on_details_menu_save_activate": self.control_vm_save_domain,
+
+            "on_details_menu_graphics_activate": self.control_vm_console,
+            "on_details_menu_serial_activate": self.control_vm_terminal,
+            "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
+
             "on_config_cpus_apply_clicked": self.config_cpus_apply,
             "on_config_vm_cpus_changed": self.config_vm_cpus,
             "on_config_memory_value_changed": self.config_memory_value,
@@ -132,6 +121,12 @@ class vmmDetails(gobject.GObject):
         
         self.prepare_network_list()
         self.populate_network_list()
+
+    def toggle_toolbar(self, src):
+        if src.get_active():
+            self.window.get_widget("details-toolbar").show()
+        else:
+            self.window.get_widget("details-toolbar").hide()
 
     def show(self):
         dialog = self.window.get_widget("vmm-details")
@@ -193,6 +188,9 @@ class vmmDetails(gobject.GObject):
                 else:
                     print _("Resume requested, but machine is already running")
 
+        self.window.get_widget("control-pause").set_active(src.get_active())
+        self.window.get_widget("details-menu-pause").set_active(src.get_active())
+
     def control_vm_terminal(self, src):
         self.emit("action-show-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
@@ -207,29 +205,43 @@ class vmmDetails(gobject.GObject):
         try:
             if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
                 self.window.get_widget("control-run").set_sensitive(True)
+                self.window.get_widget("details-menu-run").set_sensitive(True)
             else:
                 self.window.get_widget("control-run").set_sensitive(False)
+                self.window.get_widget("details-menu-run").set_sensitive(False)
+
 
             if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
                 self.window.get_widget("control-pause").set_sensitive(False)
                 self.window.get_widget("control-shutdown").set_sensitive(False)
-                self.window.get_widget("control-terminal").set_sensitive(False)
-                self.window.get_widget("control-save-domain").set_sensitive(False)
+                self.window.get_widget("details-menu-pause").set_sensitive(False)
+                self.window.get_widget("details-menu-shutdown").set_sensitive(False)
+                self.window.get_widget("details-menu-save").set_sensitive(False)                                                
             else:
                 self.window.get_widget("control-pause").set_sensitive(True)
                 self.window.get_widget("control-shutdown").set_sensitive(True)
-                self.window.get_widget("control-terminal").set_sensitive(True)
-                self.window.get_widget("control-save-domain").set_sensitive(True)
+                self.window.get_widget("details-menu-pause").set_sensitive(True)
+                self.window.get_widget("details-menu-shutdown").set_sensitive(True)
+                self.window.get_widget("details-menu-save").set_sensitive(True)                                                
+
                 if status == libvirt.VIR_DOMAIN_PAUSED:
                     self.window.get_widget("control-pause").set_active(True)
+                    self.window.get_widget("details-menu-pause").set_active(True)
                 else:
                     self.window.get_widget("control-pause").set_active(False)
+                    self.window.get_widget("details-menu-pause").set_active(False)                    
         except:
             self.ignorePause = False
         self.ignorePause = False
 
         self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
         self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())
+
+        if vm.is_serial_console_tty_accessible():
+            self.window.get_widget("details-menu-serial").set_sensitive(True)
+        else:
+            self.window.get_widget("details-menu-serial").set_sensitive(False)
+        
 
     def refresh_resources(self, vm):
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
