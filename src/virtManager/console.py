@@ -44,23 +44,8 @@ class vmmConsole(gobject.GObject):
         topwin.hide()
         topwin.set_title(vm.get_name() + " " + topwin.get_title())
 
-        self.window.get_widget("control-run").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-run").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_run.png")
-
-        self.window.get_widget("control-pause").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-pause").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_pause.png")
-
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
-
-        self.window.get_widget("control-terminal").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-terminal").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_launch_term.png")
-
-        self.window.get_widget("control-screenshot").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-screenshot").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_screenshot.png")
-
-        self.window.get_widget("control-save").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-save").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_save.png")
 
         self.vncViewer = GRFBViewer()
         scrolledWin = gtk.ScrolledWindow()
@@ -87,20 +72,16 @@ class vmmConsole(gobject.GObject):
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
 
-            "on_control_fullscreen_toggled": self.toggle_fullscreen,
-
             "on_menu_vm_run_activate": self.control_vm_run,
             "on_menu_vm_shutdown_activate": self.control_vm_shutdown,
             "on_menu_vm_pause_activate": self.control_vm_pause,
-
-            "on_control_terminal_clicked": self.control_vm_terminal,
-            "on_control_screenshot_clicked": self.control_vm_screenshot,
-            "on_control_save_clicked": self.control_vm_save_domain,
-            "on_control_details_clicked": self.control_vm_details,
-
-            "on_menu_vm_terminal_activate": self.control_vm_terminal,
             "on_menu_vm_save_activate": self.control_vm_save_domain,
-            "on_menu_vm_details_activate": self.control_vm_details,
+            "on_menu_vm_screenshot_activate": self.control_vm_screenshot,
+
+            "on_menu_view_serial_activate": self.control_vm_terminal,
+            "on_menu_view_details_activate": self.control_vm_details,
+            "on_menu_view_fullscreen_activate": self.toggle_fullscreen,
+            "on_menu_view_toolbar_activate": self.toggle_toolbar,
 
             "on_menu_vm_close_activate": self.close,
 
@@ -136,6 +117,11 @@ class vmmConsole(gobject.GObject):
             self.window.get_widget("vmm-console").unfullscreen()
             #gtk.gdk.keyboard_ungrab()
 
+    def toggle_toolbar(self, src):
+        if src.get_active():
+            self.window.get_widget("console-toolbar").show()
+        else:
+            self.window.get_widget("console-toolbar").hide()
 
     def show(self):
         dialog = self.window.get_widget("vmm-console")
@@ -201,15 +187,14 @@ class vmmConsole(gobject.GObject):
 
     def activate_unavailable_page(self):
         self.window.get_widget("console-pages").set_current_page(0)
-        self.window.get_widget("control-screenshot").set_sensitive(False)
+        self.window.get_widget("menu-vm-screenshot").set_sensitive(False)
 
     def activate_screenshot_page(self):
         self.window.get_widget("console-pages").set_current_page(1)
-        self.window.get_widget("control-screenshot").set_sensitive(True)
-
+        self.window.get_widget("menu-vm-screenshot").set_sensitive(True)        
     def activate_auth_page(self):
         pw = self.config.get_console_password(self.vm)
-        self.window.get_widget("control-screenshot").set_sensitive(False)
+        self.window.get_widget("menu-vm-screenshot").set_sensitive(False)
         self.window.get_widget("console-auth-password").set_text(pw)
         if self.config.has_keyring():
             self.window.get_widget("console-auth-remember").set_sensitive(True)
@@ -223,7 +208,7 @@ class vmmConsole(gobject.GObject):
 
     def activate_viewer_page(self):
         self.window.get_widget("console-pages").set_current_page(3)
-        self.window.get_widget("control-screenshot").set_sensitive(True)
+        self.window.get_widget("menu-vm-screenshot").set_sensitive(True)
         self.vncViewer.grab_focus()
 
     def control_vm_screenshot(self, src):
@@ -315,23 +300,19 @@ class vmmConsole(gobject.GObject):
             self.window.get_widget("menu-vm-run").set_sensitive(False)
 
         if vm.is_serial_console_tty_accessible():
-            self.window.get_widget("control-terminal").set_sensitive(True)
-            self.window.get_widget("menu-vm-terminal").set_sensitive(True)
+            self.window.get_widget("menu-view-serial").set_sensitive(True)
         else:
-            self.window.get_widget("control-terminal").set_sensitive(False)
-            self.window.get_widget("menu-vm-terminal").set_sensitive(False)
+            self.window.get_widget("menu-view-serial").set_sensitive(False)
 
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
             self.window.get_widget("control-pause").set_sensitive(False)
             self.window.get_widget("control-shutdown").set_sensitive(False)
-            self.window.get_widget("control-save").set_sensitive(False)
             self.window.get_widget("menu-vm-pause").set_sensitive(False)
             self.window.get_widget("menu-vm-shutdown").set_sensitive(False)
             self.window.get_widget("menu-vm-save").set_sensitive(False)
         else:
             self.window.get_widget("control-pause").set_sensitive(True)
             self.window.get_widget("control-shutdown").set_sensitive(True)
-            self.window.get_widget("control-save").set_sensitive(True)
             self.window.get_widget("menu-vm-pause").set_sensitive(True)
             self.window.get_widget("menu-vm-shutdown").set_sensitive(True)
             self.window.get_widget("menu-vm-save").set_sensitive(True)

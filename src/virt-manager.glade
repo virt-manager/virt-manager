@@ -599,7 +599,7 @@ Inactive virtual machines</property>
 
 <widget class="GtkAboutDialog" id="vmm-about">
   <property name="visible">True</property>
-  <property name="destroy_with_parent">False</property>
+  <property name="destroy_with_parent">True</property>
   <property name="name" translatable="yes">Virtual Machine Manager</property>
   <property name="copyright" translatable="yes">Copyright (C) 2006 Red Hat Inc.</property>
   <property name="comments" translatable="yes"></property>
@@ -3091,21 +3091,6 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 		  </child>
 
 		  <child>
-		    <widget class="GtkSeparatorMenuItem" id="separatormenuitem2">
-		      <property name="visible">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="menu-vm-details">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Details</property>
-		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_menu_vm_details_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
-		    </widget>
-		  </child>
-
-		  <child>
 		    <widget class="GtkMenuItem" id="menu-vm-save">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Save</property>
@@ -3115,16 +3100,22 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 		  </child>
 
 		  <child>
-		    <widget class="GtkMenuItem" id="menu-vm-terminal">
+		    <widget class="GtkSeparatorMenuItem" id="separatormenuitem2">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Launch _Terminal</property>
-		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_menu_vm_terminal_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
 		    </widget>
 		  </child>
 
 		  <child>
-		    <widget class="GtkSeparatorMenuItem" id="separator3">
+		    <widget class="GtkMenuItem" id="menu-vm-screenshot">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Take Screenshot</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_vm_screenshot_activate" last_modification_time="Fri, 01 Sep 2006 14:48:05 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="separator6">
 		      <property name="visible">True</property>
 		    </widget>
 		  </child>
@@ -3143,20 +3134,55 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="menuitem9">
+	    <widget class="GtkMenuItem" id="view1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">_Help</property>
+	      <property name="label" translatable="yes">View</property>
 	      <property name="use_underline">True</property>
 
 	      <child>
-		<widget class="GtkMenu" id="menuitem9_menu">
+		<widget class="GtkMenu" id="view1_menu">
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="menu-help-about">
+		    <widget class="GtkMenuItem" id="menu-view-details">
 		      <property name="visible">True</property>
-		      <property name="label">gtk-about</property>
-		      <property name="use_stock">True</property>
-		      <signal name="activate" handler="on_menu_help_about_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
+		      <property name="label" translatable="yes">_Details</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_view_details_activate" last_modification_time="Fri, 01 Sep 2006 14:33:18 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkCheckMenuItem" id="menu-view-fullscreen">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_FullScreen</property>
+		      <property name="use_underline">True</property>
+		      <property name="active">False</property>
+		      <signal name="activate" handler="on_menu_view_fullscreen_activate" last_modification_time="Fri, 01 Sep 2006 14:33:18 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-view-serial">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Serial Console</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_view_serial_activate" last_modification_time="Fri, 01 Sep 2006 14:31:44 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="separator5">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkCheckMenuItem" id="menu-view-toolbar">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Toolbar</property>
+		      <property name="use_underline">True</property>
+		      <property name="active">True</property>
+		      <signal name="activate" handler="on_menu_view_toolbar_activate" last_modification_time="Fri, 01 Sep 2006 14:31:44 GMT"/>
 		    </widget>
 		  </child>
 		</widget>
@@ -3172,7 +3198,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
       </child>
 
       <child>
-	<widget class="GtkToolbar" id="toolbar3">
+	<widget class="GtkToolbar" id="console-toolbar">
 	  <property name="visible">True</property>
 	  <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 	  <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
@@ -3184,6 +3210,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Run</property>
 	      <property name="use_underline">True</property>
+	      <property name="stock_id">gtk-media-play</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -3200,6 +3227,7 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Pause</property>
 	      <property name="use_underline">True</property>
+	      <property name="stock_id">gtk-media-pause</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -3221,102 +3249,6 @@ Máirín Duffy &lt;duffy@redhat.com&gt;
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
 	      <signal name="clicked" handler="on_control_shutdown_clicked" last_modification_time="Mon, 03 Apr 2006 08:15:00 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">True</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkSeparatorToolItem" id="separatortoolitem2">
-	      <property name="visible">True</property>
-	      <property name="draw">True</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">False</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkToolButton" id="control-terminal">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Open terminal</property>
-	      <property name="use_underline">True</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_control_terminal_clicked" last_modification_time="Mon, 03 Apr 2006 09:54:01 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">True</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkToolButton" id="control-save">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Save domain</property>
-	      <property name="use_underline">True</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_control_save_clicked" last_modification_time="Thu, 20 Jul 2006 17:25:06 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">True</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkToolButton" id="control-details">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Machine details</property>
-	      <property name="use_underline">True</property>
-	      <property name="stock_id">gtk-properties</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_control_details_clicked" last_modification_time="Mon, 03 Apr 2006 13:41:26 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">True</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkToolButton" id="control-screenshot">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Take screenshot</property>
-	      <property name="use_underline">True</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	      <property name="is_important">False</property>
-	      <signal name="clicked" handler="on_control_screenshot_clicked" last_modification_time="Tue, 15 Aug 2006 20:47:57 GMT"/>
-	    </widget>
-	    <packing>
-	      <property name="expand">False</property>
-	      <property name="homogeneous">True</property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkToggleToolButton" id="control-fullscreen">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Full screen</property>
-	      <property name="use_underline">True</property>
-	      <property name="stock_id">gtk-zoom-fit</property>
-	      <property name="visible_horizontal">True</property>
-	      <property name="visible_vertical">True</property>
-	      <property name="is_important">False</property>
-	      <property name="active">False</property>
-	      <signal name="toggled" handler="on_control_fullscreen_toggled" last_modification_time="Tue, 29 Aug 2006 20:00:28 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
