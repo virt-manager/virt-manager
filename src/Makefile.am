@@ -22,9 +22,13 @@ dbusdir = $(datadir)/dbus-1/services
 dbus_SOURCES = $(PACKAGE).service.in
 dbus_DATA = $(PACKAGE).service
 
-CLEANFILES = $(bin_SCRIPTS) $(desktop_DATA) $(dbus_DATA) $(python_DATA)  $(libexec_SCRIPTS)
+schemadir = $(sysconfdir)/gconf/schemas
+schema_SOURCES = $(PACKAGE).schemas.in
+schema_DATA = $(PACKAGE).schemas
 
-EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES) $(glade_DATA) $(libexec_SOURCES)
+CLEANFILES = $(bin_SCRIPTS) $(desktop_DATA) $(dbus_DATA) $(python_DATA)  $(libexec_SCRIPTS) $(schema_DATA)
+
+EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES) $(glade_DATA) $(libexec_SOURCES) $(schema_SOURCES)
 
 
 %.desktop: $(srcdir)/%.desktop.in
@@ -32,6 +36,9 @@ EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES)
 
 %.service: $(srcdir)/%.service.in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PREFIX::,$(prefix)," < $< > $@
+
+%.schemas: $(srcdir)/%.schemas.in
+	sed -e "s,::PACKAGE::,$(PACKAGE)," < $< > $@
 
 %.py: $(srcdir)/%.py.in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," \

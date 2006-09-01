@@ -70,9 +70,21 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/sparkline.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+SCHEMAS="%{name}.schemas"
+for S in $SCHEMAS; do
+  gconftool-2 --makefile-install-rule /etc/gconf/schemas/$S > /dev/null
+done
+update-desktop-database %{_datadir}/applications
+
+%postun
+update-desktop-database %{_datadir}/applications
+
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc README COPYING AUTHORS ChangeLog NEWS
+%{_sysconfdir}/gconf/schemas/%{name}.schemas
 %{_bindir}/%{name}
 %{_libexecdir}/%{name}-launch
 %{_libdir}/%{name}/*

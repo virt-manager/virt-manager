@@ -44,7 +44,7 @@ class vmmPreferences:
 
     def show(self):
         win = self.window.get_widget("vmm-preferences")
-        win.show_all()
+        win.show()
         win.present()
 
     def refresh_update_interval(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
