@@ -48,20 +48,11 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
         self.vncViewer = GRFBViewer()
-        scrolledWin = gtk.ScrolledWindow()
-        scrolledWin.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-
-        vp = gtk.Viewport()
-        vp.set_shadow_type(gtk.SHADOW_NONE)
-        vp.add(self.vncViewer)
-        scrolledWin.add(vp)
+        self.window.get_widget("console-vnc-align").add(self.vncViewer)
+        self.vncViewer.connect("size-request", self.autosize)
+        self.vncViewer.show()
 
         self.window.get_widget("console-pages").set_show_tabs(False)
-        self.window.get_widget("console-pages").append_page(scrolledWin, gtk.Label("VNC"))
-
-        scrolledWin.show()
-        self.vncViewer.connect("size-request", self.autosize, vp)
-        self.vncViewer.show()
 
         self.ignorePause = False
 
@@ -89,14 +80,13 @@ class vmmConsole(gobject.GObject):
             })
 
         self.vm.connect("status-changed", self.update_widget_states)
-        self.update_widget_states(vm, vm.status())
 
         self.vncViewer.connect("disconnected", self._vnc_disconnected)
 
     # Auto-increase the window size to fit the console - within reason
     # though, cos we don't want a min window size greater than the screen
     # the user has scrollbars anyway if they want it smaller / it can't fit
-    def autosize(self, src, size, vp):
+    def autosize(self, src, size):
         rootWidth = gtk.gdk.screen_width()
         rootHeight = gtk.gdk.screen_height()
 
@@ -107,15 +97,15 @@ class vmmConsole(gobject.GObject):
         if vncHeight > (rootHeight-200):
             vncHeight = rootHeight - 200
 
-        vp.set_size_request(vncWidth+2, vncHeight+2)
+        self.window.get_widget("console-vnc-vp").set_size_request(vncWidth+2, vncHeight+2)
 
     def toggle_fullscreen(self, src):
         if src.get_active():
             self.window.get_widget("vmm-console").fullscreen()
-            #gtk.gdk.keyboard_grab(self.window.get_widget("vmm-console").get_root_window())
+            gtk.gdk.keyboard_grab(self.vncViewer.window, 1, 0)
         else:
             self.window.get_widget("vmm-console").unfullscreen()
-            #gtk.gdk.keyboard_ungrab()
+            gtk.gdk.keyboard_ungrab()
 
     def toggle_toolbar(self, src):
         if src.get_active():
@@ -129,6 +119,7 @@ class vmmConsole(gobject.GObject):
         dialog.present()
 
         self.try_login()
+        self.update_widget_states(self.vm, self.vm.status())
 
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-console").hide()
@@ -352,7 +343,6 @@ class vmmConsole(gobject.GObject):
                     y = height/2 - (extents[3]/2)
                     cr.move_to(x, y)
                     cr.show_text(overlay)
-
                     self.window.get_widget("console-screenshot").set_from_pixmap(screenshot, None)
                     self.activate_screenshot_page()
                 else:
