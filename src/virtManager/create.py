@@ -21,7 +21,7 @@ import gobject
 import gtk
 import gtk.gdk
 import gtk.glade
-import xeninst 
+import xeninst
 import os, sys
 import subprocess
 import urlgrabber.grabber as grabber
@@ -153,7 +153,10 @@ class vmmCreate(gobject.GObject):
         if(self.validate(notebook.get_current_page()) != True):
             return
 
-        if (notebook.get_current_page() == 2 and self.virt_method == VM_PARAVIRT):
+        if notebook.get_current_page() == 1 and not xeninst.util.is_hvm_capable():
+            notebook.set_current_page(4)
+            self.virt_method = VM_PARAVIRT
+        elif (notebook.get_current_page() == 2 and self.virt_method == VM_PARAVIRT):
             notebook.set_current_page(4)
         elif (notebook.get_current_page() == 3 and self.virt_method == VM_FULLY_VIRT):
             notebook.set_current_page(5)
