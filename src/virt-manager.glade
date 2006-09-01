@@ -8078,43 +8078,6 @@ TB</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkAlignment" id="alignment108">
-		      <property name="visible">True</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xscale">1</property>
-		      <property name="yscale">1</property>
-		      <property name="top_padding">0</property>
-		      <property name="bottom_padding">0</property>
-		      <property name="left_padding">0</property>
-		      <property name="right_padding">0</property>
-
-		      <child>
-			<widget class="GtkHScale" id="create-memory-max">
-			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="draw_value">True</property>
-			  <property name="value_pos">GTK_POS_BOTTOM</property>
-			  <property name="digits">0</property>
-			  <property name="update_policy">GTK_UPDATE_DISCONTINUOUS</property>
-			  <property name="inverted">False</property>
-			  <property name="adjustment">250 50 32000 1 1 1</property>
-			  <signal name="value_changed" handler="on_create_memory_max_value_changed" last_modification_time="Thu, 10 Aug 2006 21:18:45 GMT"/>
-			</widget>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="left_attach">1</property>
-		      <property name="right_attach">4</property>
-		      <property name="top_attach">2</property>
-		      <property name="bottom_attach">3</property>
-		      <property name="x_padding">30</property>
-		      <property name="x_options">fill</property>
-		      <property name="y_options">fill</property>
-		    </packing>
-		  </child>
-
-		  <child>
 		    <widget class="GtkLabel" id="label303">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">How much memory should this VM start up with?</property>
@@ -8143,6 +8106,44 @@ TB</property>
 		  </child>
 
 		  <child>
+		    <widget class="GtkAlignment" id="alignment108">
+		      <property name="visible">True</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xscale">1</property>
+		      <property name="yscale">1</property>
+		      <property name="top_padding">0</property>
+		      <property name="bottom_padding">0</property>
+		      <property name="left_padding">0</property>
+		      <property name="right_padding">0</property>
+
+		      <child>
+			<widget class="GtkSpinButton" id="create-memory-max">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="climb_rate">1</property>
+			  <property name="digits">0</property>
+			  <property name="numeric">True</property>
+			  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			  <property name="snap_to_ticks">False</property>
+			  <property name="wrap">False</property>
+			  <property name="adjustment">249 50 32000 1 10 10</property>
+			  <signal name="changed" handler="on_create_memory_max_value_changed" last_modification_time="Fri, 01 Sep 2006 17:46:12 GMT"/>
+			</widget>
+		      </child>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">4</property>
+		      <property name="top_attach">2</property>
+		      <property name="bottom_attach">3</property>
+		      <property name="x_padding">30</property>
+		      <property name="x_options"></property>
+		      <property name="y_options">fill</property>
+		    </packing>
+		  </child>
+
+		  <child>
 		    <widget class="GtkAlignment" id="alignment118">
 		      <property name="visible">True</property>
 		      <property name="xalign">0.5</property>
@@ -8155,16 +8156,17 @@ TB</property>
 		      <property name="right_padding">0</property>
 
 		      <child>
-			<widget class="GtkHScale" id="create-memory-startup">
+			<widget class="GtkSpinButton" id="create-memory-startup">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="draw_value">True</property>
-			  <property name="value_pos">GTK_POS_BOTTOM</property>
+			  <property name="climb_rate">1</property>
 			  <property name="digits">0</property>
-			  <property name="update_policy">GTK_UPDATE_DISCONTINUOUS</property>
-			  <property name="inverted">False</property>
-			  <property name="adjustment">250 50 32000 1 1 1</property>
-			  <signal name="value_changed" handler="on_create_memory_startup_value_changed" last_modification_time="Thu, 10 Aug 2006 21:18:33 GMT"/>
+			  <property name="numeric">True</property>
+			  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+			  <property name="snap_to_ticks">False</property>
+			  <property name="wrap">False</property>
+			  <property name="adjustment">249 50 32000 1 10 10</property>
+			  <signal name="changed" handler="on_create_memory_startup_value_changed" last_modification_time="Fri, 01 Sep 2006 17:46:25 GMT"/>
 			</widget>
 		      </child>
 		    </widget>
@@ -8174,7 +8176,7 @@ TB</property>
 		      <property name="top_attach">4</property>
 		      <property name="bottom_attach">5</property>
 		      <property name="x_padding">30</property>
-		      <property name="x_options">fill</property>
+		      <property name="x_options"></property>
 		      <property name="y_options">fill</property>
 		    </packing>
 		  </child>
