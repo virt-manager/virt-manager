@@ -76,11 +76,6 @@ class vmmCreate(gobject.GObject):
             "on_virt_method_toggled" : self.set_virt_method,
             "on_media_toggled" : self.set_install_from,
             "on_fv_iso_location_browse_clicked" : self.browse_iso_location,
-            "on_fv_iso_location_focus_out_event" : self.set_media_address,
-            "on_pv_media_url_focus_out_event" : self.set_media_address,
-            "on_pv_ks_url_focus_out_event" : self.set_kickstart_address,
-            "on_storage_partition_address_focus_out_event" : self.set_storage_partition_address,
-            "on_storage_file_address_focus_out_event" : self.set_storage_file_address,
             "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
             "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
             "on_storage_toggled" : self.set_storage_type,
@@ -274,6 +269,7 @@ class vmmCreate(gobject.GObject):
             startup_mem_slider = self.window.get_widget("create-memory-startup")
             startup_mem_slider.get_adjustment().upper = self.max_memory
             startup_mem_slider.get_adjustment().value = self.startup_memory
+            startup_mem_slider.set_value(self.max_memory)
 
             #vcpu stuff
             max_cpus = self.connection.host_maximum_processor_count()
@@ -343,17 +339,7 @@ class vmmCreate(gobject.GObject):
                 self._validation_error_box(_("Invalid PV media address"), e.args[0])
                 self.install_media_address = None
                 return
-            # we got this far, now let's see if the location is really valid
-            valid = self._validate_pv_url(guest.location)
-            if valid != None:
-                self._validation_error_box(_("Error locating PV install image"), valid)
-                return
-            # also check the kickstart URL if it exists
             if self.install_kickstart_address != None and self.install_kickstart_address != "":
-                valid = self._validate_pv_ks_url(self.install_kickstart_address)
-                if valid != None:
-                    self._validation_error_box(_("Error locating PV kickstart file"),valid)
-                    return
                 guest.extraargs = "ks=%s" % self.install_kickstart_address
                     
         # set the name
@@ -383,7 +369,7 @@ class vmmCreate(gobject.GObject):
 
         filesize = None
         if self.storage_file_size != None:
-            filesize = int(self.storage_file_size/1024)
+            filesize = int(self.storage_file_size)/1024
         try:
             d = xeninst.XenDisk(saddr, filesize)
         except ValueError, e:
@@ -475,10 +461,10 @@ class vmmCreate(gobject.GObject):
             return None
         
     def set_media_address(self, src, ignore=None):
-        self.install_media_address = src.get_text()
+        self.install_media_address = src.get_text().strip()
     
     def set_kickstart_address(self, src, ignore=None):
-        self.install_kickstart_address = src.get_text()
+        self.install_kickstart_address = src.get_text().strip()
 
     def set_storage_partition_address(self, src, ignore=None):
         self.storage_partition_address = src.get_text()
@@ -561,19 +547,27 @@ class vmmCreate(gobject.GObject):
                 return False
             
         elif page_num == 3: # the fully virt media page
-            if self.install_fv_media_type == VM_INSTALL_FROM_ISO and \
-                   (self.install_media_address == None or len(self.install_media_address) == 0):
-                self._validation_error_box(_("ISO Location Required"), \
-                                           _("You must specify an ISO location for the guest install image"))
-                return False
+            if self.install_fv_media_type == VM_INSTALL_FROM_ISO:
+                self.set_media_address(self.window.get_widget("fv-iso-location"))
+                if (self.install_media_address == None or len(self.install_media_address) == 0):
+                    self._validation_error_box(_("ISO Location Required"), \
+                                               _("You must specify an ISO location for the guest install image"))
+                    return False
 
         elif page_num == 4: # the paravirt media page
+            self.set_media_address(self.window.get_widget("pv-media-url"))
+            self.set_kickstart_address(self.window.get_widget("pv-ks-url"))
             if self.install_media_address == None or len(self.install_media_address) == 0:
                 self._validation_error_box(_("URL Required"), \
                                            _("You must specify a URL for the install image for the guest install"))
                 return False
 
         elif page_num == 5: # the storage page
+            if self.window.get_widget("storage-partition").get_active():
+                self.set_storage_partition_address(self.window.get_widget("storage-partition-address"))
+            else:
+                self.set_storage_file_address(self.window.get_widget("storage-file-address"))
+                
             if (self.storage_partition_address == None or len(self.storage_partition_address) == 0) and (self.storage_file_address == None or len(self.storage_file_address) == 0):
                 self._validation_error_box(_("Storage Address Required"), \
                                            _("You must specify a partition or a file for storage for the guest install"))
@@ -603,77 +597,6 @@ class vmmCreate(gobject.GObject):
             else:
                 self.emit("action-show-terminal", self.connection.get_uri(), self.vm_uuid)
 
-    def _validate_pv_url(self, url):
-        if url.startswith("http://") or \
-               url.startswith("ftp://"):
-            try:
-                kernel = grabber.urlopen("%s/images/xen/vmlinuz"
-                                         %(url,))
-            except IOError, e:
-                return "Invalid URL location given: %s" % e.args[1]
-            try:
-                initrd = grabber.urlopen("%s/images/xen/initrd.img"
-                                         %(url,))
-            except IOError, e:
-                kernel.close()
-                return "Invalid URL location given: %s" % e.args[1]
-            kernel.close()
-            initrd.close()
-        elif url.startswith("nfs:"):
-            nfsmntdir = tempfile.mkdtemp(prefix="xennfs.", dir="/var/lib/xen")
-            cmd = ["mount", "-o", "ro", url[4:], nfsmntdir]
-            ret = subprocess.call(cmd)
-            if ret != 0:
-                return "Unable to mount NFS location %s" % url
-            try:
-                kernel = open("%s/images/xen/vmlinuz" %(nfsmntdir,), "r")
-            except IOError, e:
-                logging.exception(e)
-                self._unmount_nfs_dir(nfsmntdir)
-                return "Invalid NFS location given: %s" % e.args[1]
-            try:
-                initrd = open("%s/images/xen/initrd.img" %(nfsmntdir,), "r")
-            except IOError, e:
-                logging.exception(e)
-                kernel.close()
-                self._unmount_nfs_dir(nfsmntdir)
-                return "Invalid NFS location given: %s" % e.args[1]
-            kernel.close()
-            initrd.close()
-            self._unmount_nfs_dir(nfsmntdir)
-        return None
-    
-    def _validate_pv_ks_url(self, url):
-        if url.startswith("http://") or \
-               url.startswith("ftp://"):
-            try:
-                ks = grabber.urlopen(url)
-            except IOError, e:
-                logging.exception(e)
-                return "Invalid URL location given: %s" % e.args[1]
-            ks.close()
-        elif url.startswith("nfs:"):
-            nfsmntdir = tempfile.mkdtemp(prefix="xennfs.", dir="/var/lib/xen")
-            cmd = ["mount", "-o", "ro", url[4:], nfsmntdir]
-            ret = subprocess.call(cmd)
-            if ret != 0:
-                return "Unable to mount NFS location %s" % url
-            try:
-                ks = open(url, "r")
-            except IOError, e:
-                logging.exception(e)
-                self._unmount_nfs_dir(nfsmntdir)
-                return "Invalid NFS location given: %s" % e.args[1]
-            ks.close()
-            self._unmount_nfs_dir(nfsmntdir)
-        return None
-
-    def _unmount_nfs_dir(self, nfsmntdir):
-        # and unmount
-        cmd = ["umount", nfsmntdir]
-        ret = subprocess.call(cmd)
-        os.rmdir(nfsmntdir)
-        
     def _get_optical_devices(self):
         # get a list of optical devices with data discs in, for FV installs
         optical_device_list = []
