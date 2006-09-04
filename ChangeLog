@@ -1,8 +1,614 @@
+2006-09-01  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/virt-manager.pot, src/Makefile.am, src/virt-manager.glade, src
+	/virt-manager.schemas.in, src/virtManager/preferences.py, virt-
+	manager.spec.in:
+	Hide preference for stats history length. Add gconf schema to setup
+	default config settings.
+	[1ab3b1657a5b] [tip]
+
+	* src/virt-manager.glade, src/virtManager/details.py,
+	src/virtManager/manager.py:
+	Hide / disable stuff we're not implementing yet - ie disk/net stats
+	& new hardware
+	[d41ce447fd19]
+
+	* src/virt-manager.glade, src/virtManager/details.py:
+	Change slider to spin box for adjusting memory
+	[80753ab23d1b]
+
+2006-09-01  "Jeremy Katz  <katzj@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/console.py:
+	merge
+	[8a71c82f3208]
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	some text tweaks. also, don't ask about PV vs FV if not on a FV
+	capable box
+	[d73bd51d34a4]
+
+	* src/virt-manager.glade:
+	switch memory config to spin buttons
+	[be2ff5d5065e]
+
+	* src/virt-manager.glade, src/virtManager/details.py:
+	add a menu bar for the details view, move some things around to be
+	similar to the console view
+	[10efc7ee07d0]
+
+	* src/virtManager/console.py:
+	tie together pause buttons
+	[a222c2f9bfe6]
+
+	* pixmaps/icon_shutdown.png, src/virt-manager.glade,
+	src/virtManager/console.py:
+	various UI tweaks for the graphical console to match the HIG as well
+	as to be a little cleaner looking
+	[b212dd69d528]
+
+2006-09-01  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.glade:
+	Merge heads
+	[89413ec479a2]
+
+2006-09-01  "Jeremy Katz  <katzj@redhat.com>
+
+	* src/virt-manager.glade:
+	merge
+	[e32d7b41e2fd]
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	some UI cleanups for domain creation wizard
+	[a19f67306922]
+
+2006-08-31  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.glade:
+	Switched memory slider policy to discontinuous & ensure adjustments
+	are in units of 1, not fractional
+	[fa21d7642401]
+
+2006-08-29  "Jeremy Katz  <katzj@redhat.com>
+
+	* merge
+	[0db881092cda]
+
+2006-08-28  "Jeremy Katz  <katzj@redhat.com>
+
+	* src/virtManager/create.py:
+	support for graphics console with PV guests, show the appropriate
+	console once the guest is created
+	[d1df8674daf9]
+
+2006-09-01  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/virt-manager.pot, src/virt-manager.glade,
+	src/virtManager/console.py:
+	Grab keyboard when going full screen. Center vnc/image widgets so it
+	looks better full screen
+	[5ac5dd9841d7]
+
+2006-08-29  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/console.py:
+	Added button to make VNC window fullscreen
+	[5b6f6e513dfd]
+
+	* src/virt-manager.glade, src/virtManager/details.py,
+	src/virtManager/domain.py:
+	Extract disk & network device information from domain XML
+	[1a988faa3844]
+
+2006-08-28  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/manager.py:
+	Use a stock label for popup menu
+	[c519f8a691c6]
+
+	* po/virt-manager.pot, src/virtManager/connect.py,
+	src/virtManager/console.py, src/virtManager/details.py,
+	src/virtManager/remote.py, src/vncViewer/rfb.py,
+	src/vncViewer/vnc.py:
+	Re-factor VNC auth protocol handling to allow caller to determine
+	whether a password is needed or not. Go straight to VNC viewer if no
+	auth is needed. Set default button/focus handling.
+	[a7281bebdce3]
+
+	* src/virtManager/details.py:
+	Disable hardware config if we're read only. Hide unused 'add
+	hardware' option
+	[219fbd513836]
+
+2006-08-25  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* docs/dbus-remote-control.txt, src/virtManager/remote.py:
+	Hook up the serial console to dbus service
+	[41b18c50618d]
+
+	* virt-manager.spec.in:
+	Pulled in latest changes to spec file from Fedora
+	[047346ff3818]
+
+2006-08-24  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py:
+	remove ugly print spew
+	[959bff8e7c94]
+
+2006-08-23  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py:
+	Fix default value on file size spinner
+	[e3c10baaa3e3]
+
+	* merge Dan's changes
+	[9a395dff3d21]
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	Pull cdrom path from HAL -- allow installs from CD as well as iso
+	[658a94a58d9b]
+
+2006-08-22  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.2.0-1 for changeset
+	869707b48d518080f877bace387fa43458e197e0
+	[59614715161b]
+
+	* po/Makefile.am:
+	Rename one of the targets to avoid accidental build artifacts
+	getting into the dist tarball
+	[869707b48d51] [RELEASE-0.2.0-1]
+
+	* Merged heads
+	[ddd0925ecb0f]
+
+	* README, configure.ac, po/virt-manager.pot, virt-manager.spec.in:
+	Incremented deps on xeninst & libvirt. Bumped release to 0.2.0
+	[815a974f1e27]
+
+2006-08-22  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py:
+	Fix typo
+	[43d3fe453377]
+
+	* src/virtManager/create.py:
+	properly unmount nfs dirs when done, do better with error handling
+	[140b26d878c9]
+
+2006-08-21  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/config.py, src/virtManager/create.py:
+	Add proper python logging, better kickstart URL validation, better
+	create error handling.
+	[f91df0c68be8]
+
+	* src/virtManager/create.py:
+	Add URL validation, better error handling. Better logging coming.
+	[ded6e0492a04]
+
+	* src/virtManager/connection.py, src/virtManager/create.py,
+	src/virtManager/engine.py, src/virtManager/manager.py:
+	Add code to register/unregister vm-added signal to stop consoles
+	from spontaneously popping up
+	[9ef14336af51]
+
+2006-08-18  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.glade:
+	Wrap message about max memory in details dialog box
+	[548990eead29]
+
+	* po/virt-manager.pot, src/virt-manager.glade:
+	Reverting a bunch of stuff an old version of glade-2 changed when it
+	shouldn't have from changeset d189201f4cf6
+	[695c219eb1d1]
+
+	* docs/dbus-remote-control.txt, src/virtManager/remote.py:
+	Hook up domain creator to dbus service. Fix dbus docs
+	[c43faf7c5a63]
+
+	* src/virtManager/serialcon.py:
+	Fix method naming to be consistent with other widgets - this makes
+	auto-close upon domain destroy work
+	[0d628d6f6b76]
+
+	* po/virt-manager.pot, src/virtManager/serialcon.py:
+	Catch & ignore errors when closing serial console
+	[ee203d7879f5]
+
+	* po/virt-manager.pot, src/virtManager/create.py,
+	src/virtManager/engine.py:
+	If creating a PV domain, show the serial terminal instead of VNC
+	console (temporary until PV vfb works)
+	[1d44b35da842]
+
+	* po/virt-manager.pot, src/virtManager/console.py:
+	Print error message when failing to use console
+	[15affad10836]
+
+	* src/virt-manager.glade:
+	Merge heads
+	[d189201f4cf6]
+
+	* po/virt-manager.pot, src/virt-manager.glade:
+	Remove the 'secure connection' radiobutton (again). Rename
+	restoremenu
+	[7d7ca9b9dea0]
+
+	* src/virtManager/manager.py:
+	Disable new domain, restore domain menus / buttons for a read only
+	connections
+	[e5f4bbbd0fb3]
+
+	* src/virtManager/engine.py:
+	Destroy serial console window when a domain goes away
+	[82e8bf8761f0]
+
+2006-08-18  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py:
+	Fix vcpu bug and memory-size-int issue
+	[43100d1ef03d]
+
+2006-08-18  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.glade:
+	Tweak layout / text for VCPU / memory config
+	[5d6d5cd90301]
+
+2006-08-17  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.glade:
+	Merge heads
+	[5c362a797b91]
+
+	* virt-manager.spec.in:
+	Added requirement on python-xeninst for VM creation
+	[5f14a423a71e]
+
+	* src/virt-manager.glade, src/virtManager/console.py,
+	src/vncViewer/rfb.py, src/vncViewer/vnc.py:
+	Added support for desktop resize protocol, auto-resize window to fit
+	VNC widget
+	[fbbdc266efd3]
+
+	* src/virt-manager.py.in:
+	Added commandline flag to disable dbus service (useful in testing)
+	[a0233e84b761]
+
+2006-08-17  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* merged Dan's changes
+	[ea99084d949d]
+
+	* src/virt-manager.glade, src/virtManager/create.py,
+	src/virtManager/engine.py:
+	UI bugs fixed, make the create wizard exit after the machine is
+	created
+	[4954d625ae46]
+
+2006-08-17  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* Merge heads
+	[56b0410be677]
+
+	* src/virtManager/config.py:
+	Make keyring use a little more safe
+	[102100b937ac]
+
+	* src/virt-manager.py.in:
+	Initialize threads, otherwise GNOME VFS goes crash-tastic
+	[115d33e9aaa9]
+
+2006-08-16  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade:
+	merge Dan's changes
+	[f86064a1f371]
+
+	* src/virt-manager.glade, src/virtManager/create.py,
+	src/virtManager/engine.py:
+	pop up the console window for the new VM
+	[2baf9f2ba2e2]
+
+	* src/virtManager/create.py:
+	first pass at progress bar while creating the VM
+	[a43541ecdbfd]
+
+2006-08-16  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/keyring.py:
+	We have to make sure the 'default' keyring is created or we'll
+	abort() on an NULL pointer. Also handle keyring failure gracefully
+	[6c0627fddd85]
+
+2006-08-16  berrange  <berrange@dhcp-5-251.virt.boston.redhat.com>
+
+	* src/virt-manager.glade:
+	Merge heads
+	[9c8b03120525]
+
+	* README, virt-manager.spec.in:
+	Bump min required libvirt to 0.1.4 to pull in requsite bug fixes /
+	features we need
+	[f7708cb34e88]
+
+	* pixmaps/icon_screenshot.png, src/virt-manager.glade,
+	src/virtManager/console.py:
+	Added UI for taking a screenshot of the VNC window
+	[e43deaae9dcd]
+
+	* src/virtManager/keyring.py:
+	Catch exceptions from gnomekeyring - eg the daemon not running is
+	one problem
+	[cbd393bba558]
+
+2006-08-15  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade:
+	resolve danpb's changes
+	[5ae165154544]
+
+	* src/virtManager/create.py:
+	create works *if* xeninst is present -- waiting on packaging
+	[ac360ad91a71]
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	Kickstart arg is optional, URL is required -- it's not either/or
+	like we thought.
+	[75fbb1545570]
+
+	* src/virtManager/create.py:
+	Try for better error handling again
+	[813b554fc640]
+
+	* src/virtManager/create.py:
+	Try for better error handling
+	[3786c4ded0ed]
+
+	* src/virtManager/create.py:
+	Oops better set the install location too
+	[4b1381515e1e]
+
+	* src/virtManager/create.py:
+	first pass at making it actually do something
+	[610dc5684837]
+
+2006-08-14  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	Add validation for system name: must be nonblank, less than 50
+	chars, no spaces
+	[db64ec6b8135]
+
+2006-08-15  berrange  <berrange@dhcp-5-251.virt.boston.redhat.com>
+
+	* virt-manager.spec.in:
+	Fixed dependancy on gnomekeyring
+	[868497d237a9]
+
+	* po/virt-manager.pot:
+	Re-generate translations
+	[89b85d664a94]
+
+	* README, src/virtManager/config.py, src/virtManager/console.py,
+	src/virtManager/keyring.py, src/virtManager/secret.py, virt-
+	manager.spec.in:
+	Switched keyring code to use gnomekeyring module. Disable keyring
+	support if not available
+	[f0a6b8bf93b4]
+
+	* src/virt-manager.glade:
+	Mark bullet points as non-translatable
+	[ce0e4d313ea8]
+
+2006-08-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py, src/virtManager/domain.py:
+	Set the 'launch terminal' button sensitivity according ot whether we
+	can access the /dev/pts/* device
+	[e18bee199c04]
+
+2006-08-14  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/domain.py:
+	Fix extract of VNC port attribute XPath expression
+	[8fe8e7a9992f]
+
+2006-08-10  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	Forgot to add the system name to the last page, there it is
+	[7718e37241cb]
+
+	* src/virtManager/engine.py:
+	Merging unrelated changes to engine.py
+	[2de0218bfd22]
+
+	* src/virt-manager.glade, src/virtManager/create.py,
+	src/virtManager/engine.py, src/virtManager/manager.py:
+	UI with events complete. Still doesn't actually create the VM.
+	[4ab689140d17]
+
+2006-08-10  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* README, src/virtManager/console.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/virtManager/engine.py,
+	src/virtManager/serialcon.py, virt-manager.spec.in:
+	Added support for connecting to & displaying the serial console for
+	guest VMs using the 'vte' module
+	[6e342b12eb3c]
+
+2006-08-10  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	All but the memory/cpu page now behaves and gathers data correctly
+	[13051516541e]
+
+2006-08-09  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/create.py,
+	src/virtManager/engine.py:
+	Some things actually work now. Working out collecting data, and
+	obnoxious edge cases.
+	[fdab871d7b35]
+
+2006-08-09  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/Makefile.am:
+	Fixed typo in target pre-requisite
+	[d0390538d4a9]
+
+2006-08-09  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py:
+	a working version this time
+	[7c4488e92850]
+
+	* src/virtManager/create.py:
+	left this one out
+	[d35245e861d9]
+
+2006-08-08  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/engine.py,
+	src/virtManager/manager.py:
+	create wizard now actually appears when you push the new button.
+	Still doesn't do anything.
+	[39c8b502a7c2]
+
+2006-08-08  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.glade:
+	Merge heads
+	[9d64e79bd07d]
+
+2006-08-07  hbrock  <hbrock@puck.indigologic.com>
+
+	* src/virt-manager.glade:
+	Finished Glade work on create wizard
+	[052a78d8a000]
+
+	* src/vncViewer/image.py:
+	merge Dan's changes
+	[c413960b9a31]
+
+	* src/virt-manager.glade:
+	First cut at Glade UI for create wizard.
+	[e98b05c31cf9]
+
+2006-08-08  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* Makefile.am, configure.ac, po/Makefile.am, po/en_GB.po, po/virt-
+	manager.pot, src/virt-manager.py.in, virt-manager.spec.in:
+	Added infrastructure for generating & packaging .po files, with
+	dummy en_GB.po file as example
+	[e57e4982c5e3]
+
+	* src/virtManager/config.py, src/virtManager/domain.py:
+	Lookup status icons based on libvirt constant, not the
+	translatable(!) string
+	[7d9081af70bd]
+
+	* src/virt-manager.glade:
+	Remove 'secure connection' checkbox from connection form
+	[f018fbda2e9c]
+
+2006-08-07  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* TODO:
+	Added TODO list
+	[38068e41a8b5]
+
+	* src/virtManager/manager.py:
+	Fixed sorting of name column
+	[f59798957105]
+
+2006-08-04  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/Makefile.am, src/virt-manager.py.in, src/virtManager/about.py,
+	src/virtManager/config.py, src/virtManager/console.py,
+	src/virtManager/details.py, src/virtManager/domain.py,
+	src/virtManager/engine.py, src/virtManager/manager.py:
+	Added gettext support. Internationalize all strings which could be
+	shown to user. Fix about dialog to show corect version number
+	[bed31aa3e813]
+
+	* README, src/vncViewer/image.py, src/vncViewer/rfb.py, virt-
+	manager.spec.in:
+	Remove python-imaging related code since we dont need it for the
+	specialized VNC widget code paths
+	[f676abe070e8]
+
+	* Merge heads
+	[a98827d19456]
+
+2006-07-25  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* virt-manager.spec.in:
+	Updates required to RPM spec by Fedora review
+	[b4e38784109b]
+
+2006-07-28  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/details.py:
+	Make the memory slider react properly
+	[0b519d2958eb]
+
+	* src/virtManager/details.py:
+	Add back end to correctly alter memory in a VM
+	[a89f3a0e9514]
+
+2006-07-26  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/domain.py:
+	setMemory wants an int, give it
+	[5907ec70aecf]
+
+	* src/virt-manager.glade, src/virtManager/details.py,
+	src/virtManager/domain.py:
+	Add teeth to set-memory page, and almost teeth to set-cpus page
+	[75e7e671a3e1]
+
+	* src/virt-manager.glade, src/virtManager/details.py:
+	Add physical CPU backing for UI
+	[874a8f72be8e]
+
+	* src/virt-manager.glade:
+	Finished HW tab UI
+	[adfb6810a88e]
+
+2006-07-25  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade:
+	Added widgets for CPU and memory VM changes.
+	[c7e7f28b9c16]
+
+2006-07-24  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/asyncjob.py, src/virtManager/connection.py,
+	src/virtManager/engine.py, src/virtManager/manager.py:
+	Added error dialog for domain restore errors
+	[442d020f0617]
+
 2006-07-20  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.1.5-1 for changeset
+	a5976d3f807f516d06b8890e754f9b0265f2bd52
+	[1e8a1c3157d0]
+
+	* ChangeLog, configure.ac, virt-manager.spec.in:
+	Bump release to 0.1.5
+	[a5976d3f807f] [RELEASE-0.1.5-1]
 
 	* src/virtManager/keyring.py:
 	Initialize self.secrets hash, accidentally removed
-	[debbdd9bf168] [tip]
+	[debbdd9bf168]
 
 	* src/virt-manager.py.in:
 	Switch to gtk.gdk.threads_init() since gtk.threasd_init() is
@@ -58,14 +664,6 @@
 	Merge heads
 	[6bf18e0fa53b]
 
-2006-07-20  "Hugh O. Brock  <hbrock@redhat.com>
-
-	* src/virtManager/engine.py:
-	fix indentation typo in engine
-	[9e460be02a18]
-
-2006-07-20  "Daniel P. Berrange  <berrange@redhat.com>
-
 	* src/virt-manager.py.in:
 	Merge heads
 	[25428779caf0]
@@ -73,22 +671,6 @@
 	* configure.ac, virt-manager.spec.in:
 	Bump to 0.1.4 in preparation for new release
 	[af11fb18282e]
-
-2006-07-20  "Hugh O. Brock  <hbrock@redhat.com>
-
-	* src/virt-manager.glade, src/virtManager/engine.py:
-	merged Dan's changes
-	[470f388572a8]
-
-	* src/virt-manager.glade, src/virt-manager.py.in,
-	src/virtManager/asyncjob.py, src/virtManager/connection.py,
-	src/virtManager/engine.py, src/virtManager/manager.py:
-	Make the progress bar threaded so that it will bounce back and forth
-	in the background (still doesn't work) and abstract the progress bar
-	functionality
-	[c2ddab7f68ee]
-
-2006-07-20  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* src/Makefile.am, src/virt-manager.py.in,
 	src/virtManager/Makefile.am, src/vncViewer/Makefile.am,
@@ -106,6 +688,24 @@
 	* README:
 	Filled out the README file
 	[3d706b59224e]
+
+2006-07-20  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/engine.py:
+	fix indentation typo in engine
+	[9e460be02a18]
+
+	* src/virt-manager.glade, src/virtManager/engine.py:
+	merged Dan's changes
+	[470f388572a8]
+
+	* src/virt-manager.glade, src/virt-manager.py.in,
+	src/virtManager/asyncjob.py, src/virtManager/connection.py,
+	src/virtManager/engine.py, src/virtManager/manager.py:
+	Make the progress bar threaded so that it will bounce back and forth
+	in the background (still doesn't work) and abstract the progress bar
+	functionality
+	[c2ddab7f68ee]
 
 2006-07-19  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -129,6 +729,12 @@
 	* src/virtManager/console.py, virt-manager.spec.in:
 	Merge heads
 	[12b3b2c7d26d]
+
+	* src/virtManager/config.py, src/virtManager/console.py,
+	src/virtManager/keyring.py, src/virtManager/secret.py, virt-
+	manager.spec.in:
+	Added initial support for saving VNC password in the GNOME keyring
+	[884f6fda6c3b]
 
 	* pixmaps/icon_shutdown.png, src/virtManager/console.py,
 	src/virtManager/details.py:
@@ -177,16 +783,6 @@
 	* src/virtManager/engine.py:
 	Pop up dialog for saving images (still doesn't actually do anything)
 	[fa854bc44f20]
-
-2006-07-19  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* src/virtManager/config.py, src/virtManager/console.py,
-	src/virtManager/keyring.py, src/virtManager/secret.py, virt-
-	manager.spec.in:
-	Added initial support for saving VNC password in the GNOME keyring
-	[884f6fda6c3b]
-
-2006-07-17  "Hugh O. Brock  <hbrock@redhat.com>
 
 	* src/virt-manager.glade, src/virtManager/details.py,
 	src/virtManager/engine.py:
