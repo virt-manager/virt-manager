@@ -602,7 +602,7 @@ Inactive virtual machines</property>
   <property name="destroy_with_parent">True</property>
   <property name="name" translatable="yes">Virtual Machine Manager</property>
   <property name="copyright" translatable="yes">Copyright (C) 2006 Red Hat Inc.</property>
-  <property name="comments" translatable="yes"></property>
+  <property name="comments" translatable="yes">Powered by libvirt</property>
   <property name="license">    This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -618,13 +618,17 @@ Inactive virtual machines</property>
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 </property>
   <property name="wrap_license">False</property>
+  <property name="website">http://virt-manager.et.redhat.com/</property>
+  <property name="website_label" translatable="yes"></property>
   <property name="authors">Daniel P. Berrange &lt;berrange@redhat.com&gt;
 Hugh O. Brock &lt;hbrock@redhat.com&gt;
 Máirín Duffy &lt;duffy@redhat.com&gt;
+Jeremy Katz &lt;katzj@redhat.com&gt;
 </property>
   <property name="artists">Máirín Duffy &lt;duffy@redhat.com&gt;	</property>
   <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
   <signal name="delete_event" handler="on_vmm_about_delete_event" last_modification_time="Wed, 29 Mar 2006 10:31:19 GMT"/>
+  <signal name="response" handler="on_vmm_about_response" last_modification_time="Mon, 11 Sep 2006 16:26:44 GMT"/>
 </widget>
 
 <widget class="GtkWindow" id="vmm-details">
