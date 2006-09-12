@@ -34,7 +34,7 @@ from rhpl.translate import _, N_, textdomain, utf8
 
 from virtManager.asyncjob import vmmAsyncJob
 
-VM_PARAVIRT = 1
+VM_PARA_VIRT = 1
 VM_FULLY_VIRT = 2
 
 VM_INSTALL_FROM_ISO = 1
@@ -72,44 +72,21 @@ class vmmCreate(gobject.GObject):
             "on_create_back_clicked" : self.back,
             "on_create_forward_clicked" : self.forward,
             "on_create_finish_clicked" : self.finish,
-            "on_create_vm_name_focus_out_event" : self.set_name,
-            "on_virt_method_toggled" : self.set_virt_method,
-            "on_media_toggled" : self.set_install_from,
             "on_fv_iso_location_browse_clicked" : self.browse_iso_location,
+            "on_create_memory_max_value_changed": self.set_max_memory,
             "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
             "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
-            "on_storage_toggled" : self.set_storage_type,
-            "on_storage_file_size_changed" : self.set_storage_file_size,
-            "on_create_memory_max_value_changed" : self.set_max_memory,
-            "on_create_memory_startup_value_changed" : self.set_startup_memory,
-            "on_create_vcpus_changed" : self.set_vcpus,
-            "on_cd_focus_out_event" : self.choose_media_location,
-            "on_cd_path_changed" : self.choose_media_location,
+            "on_storage_file_address_changed": self.toggle_storage_size,
+            "on_storage_toggled" : self.change_storage_type,
+            "on_media_toggled" : self.change_media_type,
             })
-
         self.set_initial_state()
-        
+
     def show(self):
         self.vm_added_handle = self.connection.connect("vm-added", self.open_vm_console)
         self.topwin.show()
-
-    def _init_members(self):
-        #the dahta
-        self.vm_name = None
-        self.virt_method = VM_PARAVIRT
-        self.install_fv_media_type = VM_INSTALL_FROM_ISO
-        self.install_media_address = None
-        self.install_kickstart_address = None
-        self.storage_method = VM_STORAGE_PARTITION
-        self.storage_partition_address = None
-        self.storage_file_address = None
-        self.storage_file_size = DEFAULT_STORAGE_FILE_SIZE
-        self.max_memory = 0
-        self.startup_memory = 0
-        self.vcpus = 1
-        self.vm_uuid = None
-        self.vm_added_handle = None
-        self.install_error = None
+        self.reset_state()
+        self.topwin.present()
 
     def set_initial_state(self):
         notebook = self.window.get_widget("create-pages")
@@ -135,10 +112,9 @@ class vmmCreate(gobject.GObject):
         self.opt_media_list.pack_start(text, True)
         self.opt_media_list.add_attribute(text, 'text', 0)
 
-        self.reset_state()
+        self.window.get_widget("create-cpus-physical").set_text(str(self.connection.host_maximum_processor_count()))
 
     def reset_state(self):
-        self._init_members()
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
         # Hide the "finish" button until the appropriate time
@@ -146,6 +122,35 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-forward").show()
         self.window.get_widget("create-back").set_sensitive(False)
         self.window.get_widget("storage-file-size").set_sensitive(False)
+
+        self.change_media_type()
+        self.change_storage_type()
+        self.window.get_widget("create-vm-name").set_text("")
+        self.window.get_widget("virt-method-pv").set_active(True)
+        self.window.get_widget("media-iso-image").set_active(True)
+        self.window.get_widget("fv-iso-location").set_text("")
+        self.window.get_widget("pv-media-url").set_text("")
+        self.window.get_widget("pv-ks-url").set_text("")
+        self.window.get_widget("storage-partition").set_active(True)
+        self.window.get_widget("storage-partition-address").set_text("")
+        self.window.get_widget("storage-file-address").set_text("")
+        self.window.get_widget("storage-file-size").set_value(2000)
+        self.window.get_widget("create-memory-max").set_value(500)
+        self.window.get_widget("create-memory-startup").set_value(500)
+        self.window.get_widget("create-vcpus").set_value(1)
+
+
+        model = self.opt_media_list.get_model()
+        model.clear()
+        #make sure the model has one empty item
+        model.append()
+        devs = self._get_optical_devices()
+        for dev in devs:
+            model.append([dev])
+
+        self.vm_uuid = None
+        self.vm_added_handle = None
+        self.install_error = None
 
 
     def forward(self, ignore=None):
@@ -155,10 +160,9 @@ class vmmCreate(gobject.GObject):
 
         if notebook.get_current_page() == 1 and not xeninst.util.is_hvm_capable():
             notebook.set_current_page(4)
-            self.virt_method = VM_PARAVIRT
-        elif (notebook.get_current_page() == 2 and self.virt_method == VM_PARAVIRT):
+        elif (notebook.get_current_page() == 2 and self.get_config_method() == VM_PARA_VIRT):
             notebook.set_current_page(4)
-        elif (notebook.get_current_page() == 3 and self.virt_method == VM_FULLY_VIRT):
+        elif (notebook.get_current_page() == 3 and self.get_config_method() == VM_FULLY_VIRT):
             notebook.set_current_page(5)
         else:
             notebook.next_page()
@@ -168,213 +172,160 @@ class vmmCreate(gobject.GObject):
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-finish").hide()
         self.window.get_widget("create-forward").show()
-        if notebook.get_current_page() == 4 and self.virt_method == VM_PARAVIRT:
+        if notebook.get_current_page() == 4 and self.get_config_method() == VM_PARA_VIRT:
             notebook.set_current_page(2)
-        elif notebook.get_current_page() == 5 and self.virt_method == VM_FULLY_VIRT:
+        elif notebook.get_current_page() == 5 and self.get_config_method() == VM_FULLY_VIRT:
             notebook.set_current_page(3)
         else:
             notebook.prev_page()
 
-        
+    def get_config_name(self):
+        return self.window.get_widget("create-vm-name").get_text()
+
+    def get_config_method(self):
+        if self.window.get_widget("virt-method-pv").get_active():
+            return VM_PARA_VIRT
+        elif self.window.get_widget("virt-method-fv").get_active():
+            return VM_FULLY_VIRT
+        else:
+            return VM_PARA_VIRT
+
+    def get_config_install_source(self):
+        if self.get_config_method() == VM_PARA_VIRT:
+            return self.window.get_widget("pv-media-url").get_text()
+        else:
+            if self.window.get_widget("media-iso-image").get_active():
+                return self.window.get_widget("fv-iso-location").get_text()
+            else:
+                cd = self.window.get_widget("cd-path")
+                model = cd.get_model()
+                return model.get_value(cd.get_active_iter(), 0)
+
+    def get_config_kickstart_source(self):
+        if self.get_config_method() == VM_PARA_VIRT:
+            return self.window.get_widget("pv-ks-url").get_text()
+        else:
+            return ""
+
+    def get_config_disk_image(self):
+        if self.window.get_widget("storage-partition").get_active():
+            return self.window.get_widget("storage-partition-address").get_text()
+        else:
+            return self.window.get_widget("storage-file-address").get_text()
+
+    def get_config_disk_size(self):
+        if self.window.get_widget("storage-partition").get_active():
+            return None
+        else:
+            return self.window.get_widget("storage-file-size").get_value()
+
+    def get_config_maximum_memory(self):
+        return self.window.get_widget("create-memory-max").get_value()
+
+    def get_config_initial_memory(self):
+        return self.window.get_widget("create-memory-startup").get_value()
+
+    def get_config_virtual_cpus(self):
+        return self.window.get_widget("create-vcpus").get_value()
+
     def page_changed(self, notebook, page, page_number):
         # would you like some spaghetti with your salad, sir?
-        
+
         if page_number == 0:
-            #set up the front page
             self.window.get_widget("create-back").set_sensitive(False)
-            
         elif page_number == 1:
-            #set up the system-name page
             name_widget = self.window.get_widget("create-vm-name")
-            if self.vm_name != None:
-                name_widget.set_text(self.vm_name)
-            else:
-                name_widget.set_text("")
             name_widget.grab_focus()
-                
         elif page_number == 2:
             #set up the virt method page
-            if self.virt_method == VM_PARAVIRT:
-                self.window.get_widget("virt-method-pv").set_active(True)
-            else:
-                self.window.get_widget("virt-method-fv").set_active(True)
-                
+            pass
         elif page_number == 3:
             #set up the fv install media page
-            model = self.opt_media_list.get_model()
-            model.clear()
-            #make sure the model has one empty item
-            model.append()
-            devs = self._get_optical_devices()
-            for dev in devs:
-                model.append([dev])
-            if self.install_media_address != None:
-                self.window.get_widget("fv-iso-location").set_text(self.install_media_address)
-            else:
-                self.window.get_widget("fv-iso-location").set_text("")
-            if self.install_fv_media_type == VM_INSTALL_FROM_ISO:
-                self.window.get_widget("media-iso-image").set_active(True)
-                self.window.get_widget("fv-iso-location-box").set_sensitive(True)
-            else:
-                self.window.get_widget("media-physical").set_active(True)
-                self.window.get_widget("fv-iso-location-box").set_sensitive(False)
-                
+            pass
         elif page_number == 4:
             #set up the pv install media page
             url_widget = self.window.get_widget("pv-media-url")
-            ks_widget = self.window.get_widget("pv-ks-url")
-            if self.install_media_address != None:
-                url_widget.set_text(self.install_media_address)
-            else:
-                url_widget.set_text("")
-            if self.install_kickstart_address != None:
-                ks_widget.set_text(self.install_kickstart_address)
-            else:
-                ks_widget.set_text("")
             url_widget.grab_focus()
-                
         elif page_number == 5:
             #set up the storage space page
             partwidget = self.window.get_widget("storage-partition-address")
             filewidget = self.window.get_widget("storage-file-address")
-
-            if self.storage_partition_address != None:
-                partwidget.set_text(self.storage_partition_address)
-            else:
-                partwidget.set_text("")
-            if self.storage_file_address != None:
-                filewidget.set_text(self.storage_file_address)
-            else:
-                filewidget.set_text("")
-            if self.storage_method == VM_STORAGE_PARTITION:
-                self.window.get_widget("storage-partition").set_active(True)
-                self.window.get_widget("storage-partition-box").set_sensitive(True)
-                self.window.get_widget("storage-file-box").set_sensitive(False)
-            else:
-                self.window.get_widget("storage-file-backed").set_active(True)
-                self.window.get_widget("storage-partition-box").set_sensitive(False)
-                self.window.get_widget("storage-file-box").set_sensitive(True)
-                
         elif page_number == 6:
             # memory stuff
-            max_mem = self.connection.host_memory_size()/1024 # in megabytes from henceforth
-
-            #avoid absurdity, hopefully
-            if self.max_memory == 0:
-                self.max_memory = int(max_mem / 2)
-            if self.startup_memory > self.max_memory:
-                self.startup_memory = self.max_memory
-                        
-            max_mem_slider = self.window.get_widget("create-memory-max")
-            self.window.get_widget("create-host-memory").set_text("%d MB" % max_mem)
-            max_mem_slider.get_adjustment().upper = max_mem
-            max_mem_slider.get_adjustment().value = self.max_memory
-            startup_mem_slider = self.window.get_widget("create-memory-startup")
-            startup_mem_slider.get_adjustment().upper = self.max_memory
-            startup_mem_slider.get_adjustment().value = self.startup_memory
-            startup_mem_slider.set_value(self.max_memory)
-
-            #vcpu stuff
-            max_cpus = self.connection.host_maximum_processor_count()
-            self.window.get_widget("create-cpus-physical").set_text(`max_cpus`)
-            cpu_spinbox = self.window.get_widget("create-vcpus").get_adjustment()
-            cpu_spinbox.upper = max_cpus
-            cpu_spinbox.value = self.vcpus
-            
+            pass
         elif page_number == 7:
-            #set up the congrats page
-            congrats = self.window.get_widget("create-congrats-label")
-            
-            # XXX the validation doesn't really go here
-            if self.vm_name == None: self.vm_name = "No Name"
-            
-            congrats.set_text(_("Congratulations, you have successfully created a new virtual system, <b>\"%s\"</b>. \nYou'll now be able to view and work with \"%s\" in the virtual machine manager.") % (self.vm_name, self.vm_name) )
-            congrats.set_use_markup(True)
+            self.window.get_widget("summary-name").set_text(self.get_config_name())
+            if self.get_config_method() == VM_PARA_VIRT:
+                self.window.get_widget("summary-method").set_text(_("Paravirtualized"))
+            else:
+                self.window.get_widget("summary-method").set_text(_("Fully virtualized"))
+            self.window.get_widget("summary-install-source").set_text(self.get_config_install_source())
+            self.window.get_widget("summary-kickstart-source").set_text(self.get_config_kickstart_source())
+            self.window.get_widget("summary-disk-image").set_text(self.get_config_disk_image())
+            disksize = self.get_config_disk_size()
+            if disksize != None:
+                self.window.get_widget("summary-disk-size").set_text(str(int(disksize)) + " MB")
+            else:
+                self.window.get_widget("summary-disk-size").set_text("-")
+            self.window.get_widget("summary-max-memory").set_text(str(int(self.get_config_maximum_memory())) + " MB")
+            self.window.get_widget("summary-initial-memory").set_text(str(int(self.get_config_initial_memory())) + " MB")
+            self.window.get_widget("summary-virtual-cpus").set_text(str(int(self.get_config_virtual_cpus())))
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
-        
+
     def close(self, ignore1=None,ignore2=None):
-        self.connection.disconnect(int(self.vm_added_handle))
+        if self.vm_added_handle != None:
+            self.connection.disconnect(int(self.vm_added_handle))
         self.vm_added_handle = None
         self.topwin.hide()
         return 1
-    
+
     def finish(self, ignore=None):
-        #begin DEBUG STUFF
-        if self.install_kickstart_address == None:
-            ks = "None"
-        else:
-            ks = self.install_kickstart_address
-        if self.storage_file_size==None:
-            sfs = "Preset"
-        else:
-            sfs = `self.storage_file_size/1024`
-        if self.storage_method == VM_STORAGE_PARTITION:
-            saddr = self.storage_partition_address
-        else:
-            saddr = self.storage_file_address
-        logging.debug("your vm properties: \n Name=" + self.vm_name + \
-              "\n Virt method: " + `self.virt_method` + \
-              "\n Install media type (fv): " + `self.install_fv_media_type` + \
-              "\n Install media address: " + self.install_media_address + \
-              "\n Install kickstart address: " + ks + \
-              "\n Install storage type: " + `self.storage_method` + \
-              "\n Install storage address: " + saddr + \
-              "\n Install storage file size: " + sfs + \
-              "\n Install max kernel memory: " + `int(self.max_memory)` + \
-              "\n Install startup kernel memory: " + `int(self.startup_memory)` + \
-              "\n Install vcpus: " + `int(self.vcpus)`)
-        # end DEBUG STUFF
-        
         # first things first, are we trying to create a fully virt guest?
-        if self.virt_method == VM_FULLY_VIRT:
+        if self.get_config_method() == VM_FULLY_VIRT:
             guest = xeninst.FullVirtGuest()
             try:
-                guest.cdrom = self.install_media_address
+                guest.cdrom = self.get_config_install_source()
             except ValueError, e:
                 self._validation_error_box(_("Invalid FV media address"),e.args[0])
                 self.install_media_address = None
         else:
             guest = xeninst.ParaVirtGuest()
             try:
-                guest.location = self.install_media_address
+                guest.location = self.get_config_install_source()
             except ValueError, e:
                 self._validation_error_box(_("Invalid PV media address"), e.args[0])
                 self.install_media_address = None
                 return
-            if self.install_kickstart_address != None and self.install_kickstart_address != "":
-                guest.extraargs = "ks=%s" % self.install_kickstart_address
-                    
+            ks = self.get_config_kickstart_source()
+            if ks != None and len(ks) != 0:
+                guest.extraargs = "ks=%s" % ks
+
         # set the name
         try:
-            guest.name = self.vm_name
+            guest.name = self.get_config_name()
         except ValueError, e:
             self._validation_error_box(_("Invalid system name"), e.args[0])
             self.vm_name = None
             return
-        
+
         # set the memory
         try:
-            guest.memory = int(self.max_memory)
+            guest.memory = int(self.get_config_maximum_memory())
         except ValueError:
             self._validation_error_box(_("Invalid memory setting"), e.args[0])
             self.max_memory = None
             return
 
         # set vcpus
-        guest.vcpus = int(self.vcpus)
-        
-        # disks
-        if self.storage_method == VM_STORAGE_PARTITION:
-            saddr = self.storage_partition_address
-        else:
-            saddr = self.storage_file_address
+        guest.vcpus = int(self.get_config_virtual_cpus())
 
+        # disks
         filesize = None
-        if self.storage_file_size != None:
-            filesize = int(self.storage_file_size)/1024
+        if self.get_config_disk_size() != None:
+            filesize = int(self.get_config_disk_size() / 1024.0)
         try:
-            d = xeninst.XenDisk(saddr, filesize)
+            d = xeninst.XenDisk(self.get_config_disk_image(), filesize)
         except ValueError, e:
             self._validation_error_box(_("Invalid storage address"), e.args[0])
             self.storage_partition_address = self.storage_file_address = self.storage_file_size = None
@@ -409,39 +360,11 @@ class vmmCreate(gobject.GObject):
             self.install_error = "ERROR: %s" % e
             logging.exception(e)
             return
-    
-    def set_name(self, src, ignore=None):
-        self.vm_name = src.get_text()
 
-    def set_virt_method(self, button):
-        if button.get_active():
-            if button.name == "virt-method-pv":
-                self.virt_method = VM_PARAVIRT
-            else:
-                self.virt_method = VM_FULLY_VIRT
-            self.install_media_address = None
-
-    def set_install_from(self, button):
-        if button.get_active():
-            if button.name == "media-iso-image":
-                self.install_fv_media_type = VM_INSTALL_FROM_ISO
-                self.window.get_widget("fv-iso-location-box").set_sensitive(True)
-                self.opt_media_list.set_sensitive(False)
-            elif button.name == "media-physical":
-                self.install_fv_media_type = VM_INSTALL_FROM_CD
-                self.window.get_widget("fv-iso-location-box").set_sensitive(False)
-                self.opt_media_list.set_sensitive(True)
-                self.opt_media_list.set_active(0)
-            
-    def choose_media_location(self, src):
-        model = self.opt_media_list.get_model()
-        logging.debug("User chose: " + model.get_value(self.opt_media_list.get_active_iter(), 0))
-        self.install_media_address = model.get_value(self.opt_media_list.get_active_iter(), 0)
-        
     def browse_iso_location(self, ignore1=None, ignore2=None):
-        self.install_media_address = self._browse_file(_("Locate ISO Image"))
-        if self.install_media_address != None:
-            self.window.get_widget("fv-iso-location").set_text(self.install_media_address)
+        file = self._browse_file(_("Locate ISO Image"))
+        if file != None:
+            self.window.get_widget("fv-iso-location").set_text(file)
 
     def _browse_file(self, dialog_name, folder=None):
         # user wants to browse for an ISO
@@ -462,28 +385,13 @@ class vmmCreate(gobject.GObject):
         else:
             fcdialog.destroy()
             return None
-        
-    def set_media_address(self, src, ignore=None):
-        self.install_media_address = src.get_text().strip()
-    
-    def set_kickstart_address(self, src, ignore=None):
-        self.install_kickstart_address = src.get_text().strip()
-
-    def set_storage_partition_address(self, src, ignore=None):
-        self.storage_partition_address = src.get_text()
-
-    def set_storage_file_address(self, src, ignore=None):
-        self.storage_file_address = src.get_text()
 
     def browse_storage_partition_address(self, src, ignore=None):
-        self.storage_partition_address = self._browse_file(_("Locate Storage Partition"), "/dev")
-        if self.storage_partition_address != None:
-            self.window.get_widget("storage-partition-address").set_text(self.storage_partition_address)
+        part = self._browse_file(_("Locate Storage Partition"), "/dev")
+        if part != None:
+            self.window.get_widget("storage-partition-address").set_text(part)
 
     def browse_storage_file_address(self, src, ignore=None):
-        # Reset the storage_file_size value
-        if self.storage_file_size == None:
-            self.storage_file_size = STORAGE_FILE_SIZE
         self.window.get_widget("storage-file-size").set_sensitive(True)
         fcdialog = gtk.FileChooserDialog(_("Locate or Create New Storage File"),
                                          self.window.get_widget("vmm-create"),
@@ -495,45 +403,48 @@ class vmmCreate(gobject.GObject):
         fcdialog.connect("confirm-overwrite", self.confirm_overwrite_callback)
         response = fcdialog.run()
         fcdialog.hide()
+        file = None
         if(response == gtk.RESPONSE_ACCEPT):
-            self.storage_file_address = fcdialog.get_filename()
+            file = fcdialog.get_filename()
 
-        if self.storage_file_address != None:
-            self.window.get_widget("storage-file-address").set_text(self.storage_file_address)
+        if file != None:
+            self.window.get_widget("storage-file-address").set_text(file)
+
+    def toggle_storage_size(self, src, ignore=None):
+        file = self.get_config_disk_image()
+        if not(os.path.exists(file)):
+            self.window.get_widget("storage-file-size").set_sensitive(True)
+        else:
+            self.window.get_widget("storage-file-size").set_sensitive(False)
 
     def confirm_overwrite_callback(self, chooser):
         # Only called when the user has chosen an existing file
         self.window.get_widget("storage-file-size").set_sensitive(False)
-        self.storage_file_size = None
         return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
-    
-            
-    def set_storage_type(self, button):
-        if button.get_active():
-            if button.name == "storage-partition":
-                self.storage_method = VM_STORAGE_PARTITION
-                self.window.get_widget("storage-partition-box").set_sensitive(True)
-                self.window.get_widget("storage-file-box").set_sensitive(False)
-            else:
-                self.storage_method = VM_STORAGE_FILE
-                self.window.get_widget("storage-partition-box").set_sensitive(False)
-                self.window.get_widget("storage-file-box").set_sensitive(True)
 
-    def set_storage_file_size(self, src):
-        self.storage_file_size = src.get_adjustment().value
+    def change_media_type(self, ignore=None):
+        if self.window.get_widget("media-iso-image").get_active():
+            self.window.get_widget("fv-iso-location-box").set_sensitive(True)
+            self.opt_media_list.set_sensitive(False)
+        else:
+            self.window.get_widget("fv-iso-location-box").set_sensitive(False)
+            self.opt_media_list.set_sensitive(True)
+            self.opt_media_list.set_active(0)
+
+    def change_storage_type(self, ignore=None):
+        if self.window.get_widget("storage-partition").get_active():
+            self.window.get_widget("storage-partition-box").set_sensitive(True)
+            self.window.get_widget("storage-file-box").set_sensitive(False)
+        else:
+            self.window.get_widget("storage-partition-box").set_sensitive(False)
+            self.window.get_widget("storage-file-box").set_sensitive(True)
 
     def set_max_memory(self, src):
-        self.max_memory = src.get_adjustment().value
+        max_memory = src.get_adjustment().value
         startup_mem_adjustment = self.window.get_widget("create-memory-startup").get_adjustment()
-        if startup_mem_adjustment.value > self.max_memory:
-            startup_mem_adjustment.value = self.max_memory
-        startup_mem_adjustment.upper = self.max_memory
-
-    def set_startup_memory(self, src):
-        self.startup_memory = src.get_adjustment().value
-
-    def set_vcpus(self, src):
-        self.vcpus = src.get_adjustment().value
+        if startup_mem_adjustment.value > max_memory:
+            startup_mem_adjustment.value = max_memory
+        startup_mem_adjustment.upper = max_memory
 
     def validate(self, page_num):
         if page_num == 1: # the system name page
@@ -544,34 +455,29 @@ class vmmCreate(gobject.GObject):
                 return False
 
         elif page_num == 2: # the virt method page
-            if self.virt_method == VM_FULLY_VIRT and not xeninst.util.is_hvm_capable():
+            if self.get_config_method() == VM_FULLY_VIRT and not xeninst.util.is_hvm_capable():
                 self._validation_error_box(_("Hardware Support Required"), \
                                            _("Your hardware does not appear to support full virtualization. Only paravirtualized guests will be available on this hardware."))
                 return False
-            
+
         elif page_num == 3: # the fully virt media page
-            if self.install_fv_media_type == VM_INSTALL_FROM_ISO:
-                self.set_media_address(self.window.get_widget("fv-iso-location"))
-                if (self.install_media_address == None or len(self.install_media_address) == 0):
+            if self.window.get_widget("media-iso-image").get_active():
+                src = self.get_config_install_source()
+                if src == None or len(src) == 0:
                     self._validation_error_box(_("ISO Location Required"), \
                                                _("You must specify an ISO location for the guest install image"))
                     return False
 
         elif page_num == 4: # the paravirt media page
-            self.set_media_address(self.window.get_widget("pv-media-url"))
-            self.set_kickstart_address(self.window.get_widget("pv-ks-url"))
-            if self.install_media_address == None or len(self.install_media_address) == 0:
+            src = self.get_config_install_source()
+            if src == None or len(src) == 0:
                 self._validation_error_box(_("URL Required"), \
                                            _("You must specify a URL for the install image for the guest install"))
                 return False
 
         elif page_num == 5: # the storage page
-            if self.window.get_widget("storage-partition").get_active():
-                self.set_storage_partition_address(self.window.get_widget("storage-partition-address"))
-            else:
-                self.set_storage_file_address(self.window.get_widget("storage-file-address"))
-                
-            if (self.storage_partition_address == None or len(self.storage_partition_address) == 0) and (self.storage_file_address == None or len(self.storage_file_address) == 0):
+            disk = self.get_config_disk_image()
+            if disk == None or len(disk) == 0:
                 self._validation_error_box(_("Storage Address Required"), \
                                            _("You must specify a partition or a file for storage for the guest install"))
                 return False
@@ -579,7 +485,7 @@ class vmmCreate(gobject.GObject):
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-back").set_sensitive(True)
         return True
-    
+
     def _validation_error_box(self, text1, text2=None):
         message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
                                                 0, \
@@ -610,5 +516,3 @@ class vmmCreate(gobject.GObject):
                    dev.GetPropertyBoolean("volume.is_mounted"):
                 optical_device_list.append(dev.GetProperty("volume.mount_point"))
         return optical_device_list
-    
-        
