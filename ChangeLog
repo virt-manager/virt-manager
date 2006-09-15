@@ -1,3 +1,48 @@
+2006-09-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/Makefile.am, po/en_GB.po, po/virt-manager.pot:
+	Refreshd POT files
+	[d5b685a8f1e4] [tip]
+
+	* src/virt-manager.glade:
+	Always enable VNC toolbars to avoid GTK window resizing issues
+	[a1a7e46e23a4]
+
+2006-09-13  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* Merge heads
+	[e8947829c1e6]
+
+	* src/vncViewer/rfb.py, src/vncViewer/vnc.py:
+	Added support for batching of redraws. Initial support for hextile,
+	albeit faaaaar to slow to turn on. Fix signature of cursor method
+	[4db02411579c]
+
+2006-09-12  berrange  <berrange@dhcp-4-245.virt.boston.redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	Re-factor the install wizard to only grab values at end of process.
+	Also display a config summary at end
+	[e8a823f31a35]
+
+2006-09-11  berrange  <berrange@dhcp-4-245.virt.boston.redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/about.py:
+	Since we don't run the blocking event loop, hook up the response
+	signal for the close button. bz 205943
+	[493496779f6a]
+
+2006-09-04  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.2.1-1 for changeset
+	4aba9106462877a7df2bf1211bc41eb5321af1ee
+	[d94ce2d634e1]
+
+	* ChangeLog, configure.ac, po/virt-manager.pot, virt-manager.spec.in:
+	Bump to 0.2.1 for new release
+	[4aba91064628] [RELEASE-0.2.1-1]
+
 2006-09-01  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* po/virt-manager.pot, src/Makefile.am, src/virt-manager.glade, src
@@ -5,7 +50,7 @@
 	manager.spec.in:
 	Hide preference for stats history length. Add gconf schema to setup
 	default config settings.
-	[1ab3b1657a5b] [tip]
+	[1ab3b1657a5b]
 
 	* src/virt-manager.glade, src/virtManager/details.py,
 	src/virtManager/manager.py:
@@ -53,6 +98,12 @@
 	Merge heads
 	[89413ec479a2]
 
+	* po/virt-manager.pot, src/virt-manager.glade,
+	src/virtManager/console.py:
+	Grab keyboard when going full screen. Center vnc/image widgets so it
+	looks better full screen
+	[5ac5dd9841d7]
+
 2006-09-01  "Jeremy Katz  <katzj@redhat.com>
 
 	* src/virt-manager.glade:
@@ -81,14 +132,6 @@
 	support for graphics console with PV guests, show the appropriate
 	console once the guest is created
 	[d1df8674daf9]
-
-2006-09-01  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* po/virt-manager.pot, src/virt-manager.glade,
-	src/virtManager/console.py:
-	Grab keyboard when going full screen. Center vnc/image widgets so it
-	looks better full screen
-	[5ac5dd9841d7]
 
 2006-08-29  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -487,22 +530,6 @@
 	Merge heads
 	[9d64e79bd07d]
 
-2006-08-07  hbrock  <hbrock@puck.indigologic.com>
-
-	* src/virt-manager.glade:
-	Finished Glade work on create wizard
-	[052a78d8a000]
-
-	* src/vncViewer/image.py:
-	merge Dan's changes
-	[c413960b9a31]
-
-	* src/virt-manager.glade:
-	First cut at Glade UI for create wizard.
-	[e98b05c31cf9]
-
-2006-08-08  "Daniel P. Berrange  <berrange@redhat.com>
-
 	* Makefile.am, configure.ac, po/Makefile.am, po/en_GB.po, po/virt-
 	manager.pot, src/virt-manager.py.in, virt-manager.spec.in:
 	Added infrastructure for generating & packaging .po files, with
@@ -517,6 +544,20 @@
 	* src/virt-manager.glade:
 	Remove 'secure connection' checkbox from connection form
 	[f018fbda2e9c]
+
+2006-08-07  hbrock  <hbrock@puck.indigologic.com>
+
+	* src/virt-manager.glade:
+	Finished Glade work on create wizard
+	[052a78d8a000]
+
+	* src/vncViewer/image.py:
+	merge Dan's changes
+	[c413960b9a31]
+
+	* src/virt-manager.glade:
+	First cut at Glade UI for create wizard.
+	[e98b05c31cf9]
 
 2006-08-07  "Daniel P. Berrange  <berrange@redhat.com>
 
