@@ -18,7 +18,7 @@ all: $(FMTCATALOGS)
 
 EXTRA_DIST = $(POTFILE) $(POS)
 
-$(POTFILE): $(POTFILES) $(GLADESCRATCHFILE)
+refresh-pot: $(POTFILES) $(GLADESCRATCHFILE)
 	xgettext --default-domain=$(PACKAGE) \
 		 --keyword=_ --keyword=N_ $(POTFILES) $(GLADESCRATCHFILE)
 	if cmp -s $(PACKAGE).po $(POTFILE); then \
@@ -31,7 +31,7 @@ $(GLADESCRATCHFILE): $(GLADEFILE)
 	rm -rf tmp/
 	intltool-extract --type=gettext/glade -l $<
 
-update-po: Makefile $(POTFILE) refresh-po
+update-po: Makefile refresh-pot refresh-po
 
 refresh-po: Makefile
 	for cat in $(POS); do \
