@@ -318,7 +318,7 @@ class vmmCreate(gobject.GObject):
         # disks
         filesize = None
         if self.get_config_disk_size() != None:
-            filesize = int(self.get_config_disk_size() / 1024.0)
+            filesize = self.get_config_disk_size() / 1024.0
         try:
             d = xeninst.XenDisk(self.get_config_disk_image(), filesize)
         except ValueError, e:
