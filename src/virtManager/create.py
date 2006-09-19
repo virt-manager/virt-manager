@@ -410,9 +410,9 @@ class vmmCreate(gobject.GObject):
         if file != None:
             self.window.get_widget("storage-file-address").set_text(file)
 
-    def toggle_storage_size(self, src, ignore=None):
+    def toggle_storage_size(self, ignore1=None, ignore2=None):
         file = self.get_config_disk_image()
-        if not(os.path.exists(file)):
+        if file != None and len(file) > 0 and not(os.path.exists(file)):
             self.window.get_widget("storage-file-size").set_sensitive(True)
         else:
             self.window.get_widget("storage-file-size").set_sensitive(False)
@@ -435,9 +435,11 @@ class vmmCreate(gobject.GObject):
         if self.window.get_widget("storage-partition").get_active():
             self.window.get_widget("storage-partition-box").set_sensitive(True)
             self.window.get_widget("storage-file-box").set_sensitive(False)
+            self.window.get_widget("storage-file-size").set_sensitive(False)
         else:
             self.window.get_widget("storage-partition-box").set_sensitive(False)
             self.window.get_widget("storage-file-box").set_sensitive(True)
+            self.toggle_storage_size()
 
     def set_max_memory(self, src):
         max_memory = src.get_adjustment().value
