@@ -105,12 +105,16 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("page6-title").modify_bg(gtk.STATE_NORMAL,black)
 
         # set up the list for the cd-path widget
-        self.opt_media_list = self.window.get_widget("cd-path")
-        model = gtk.ListStore(str)
-        self.opt_media_list.set_model(model)
+        cd_list = self.window.get_widget("cd-path")
+        # Fields are raw device path, volume label, flag indicating
+        # whether volume is present or not, and HAL path
+        cd_model = gtk.ListStore(str, str, bool, str)
+        cd_list.set_model(cd_model)
         text = gtk.CellRendererText()
-        self.opt_media_list.pack_start(text, True)
-        self.opt_media_list.add_attribute(text, 'text', 0)
+        cd_list.pack_start(text, True)
+        cd_list.add_attribute(text, 'text', 1)
+        cd_list.add_attribute(text, 'sensitive', 2)
+        self.populate_opt_media(cd_model)
 
         self.window.get_widget("create-cpus-physical").set_text(str(self.connection.host_maximum_processor_count()))
 
@@ -138,15 +142,6 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-memory-max").set_value(500)
         self.window.get_widget("create-memory-startup").set_value(500)
         self.window.get_widget("create-vcpus").set_value(1)
-
-
-        model = self.opt_media_list.get_model()
-        model.clear()
-        #make sure the model has one empty item
-        model.append()
-        devs = self._get_optical_devices()
-        for dev in devs:
-            model.append([dev])
 
         self.vm_uuid = None
         self.vm_added_handle = None
@@ -425,11 +420,11 @@ class vmmCreate(gobject.GObject):
     def change_media_type(self, ignore=None):
         if self.window.get_widget("media-iso-image").get_active():
             self.window.get_widget("fv-iso-location-box").set_sensitive(True)
-            self.opt_media_list.set_sensitive(False)
+            self.window.get_widget("cd-path").set_sensitive(False)
         else:
             self.window.get_widget("fv-iso-location-box").set_sensitive(False)
-            self.opt_media_list.set_sensitive(True)
-            self.opt_media_list.set_active(0)
+            self.window.get_widget("cd-path").set_sensitive(True)
+            self.window.get_widget("cd-path").set_active(-1)
 
     def change_storage_type(self, ignore=None):
         if self.window.get_widget("storage-partition").get_active():
@@ -466,10 +461,19 @@ class vmmCreate(gobject.GObject):
             if self.window.get_widget("media-iso-image").get_active():
                 src = self.get_config_install_source()
                 if src == None or len(src) == 0:
-                    self._validation_error_box(_("ISO Location Required"), \
-                                               _("You must specify an ISO location for the guest install image"))
+                    self._validation_error_box(_("ISO Path Required"), \
+                                               _("You must specify an ISO location for the guest installation"))
                     return False
-
+                elif not(os.path.exists(src)):
+                    self._validation_error_box(_("ISO Path Not Found"), \
+                                               _("You must specify a valid path to the ISO image for guest installation"))
+                    return False
+            else:
+                cdlist = self.window.get_widget("cd-path")
+                if cdlist.get_active() == -1:
+                    self._validation_error_box(_("Install media required"), \
+                                               _("You must select the CDROM install media for guest installation"))
+                    return False
         elif page_num == 4: # the paravirt media page
             src = self.get_config_install_source()
             if src == None or len(src) == 0:
@@ -508,13 +512,71 @@ class vmmCreate(gobject.GObject):
             else:
                 self.emit("action-show-terminal", self.connection.get_uri(), self.vm_uuid)
 
-    def _get_optical_devices(self):
+    def populate_opt_media(self, model):
         # get a list of optical devices with data discs in, for FV installs
-        optical_device_list = []
+        vollabel = {}
+        volpath = {}
+        # Track device add/removes so we can detect newly inserted CD media
+        self.hal_iface.connect_to_signal("DeviceAdded", self._device_added)
+        self.hal_iface.connect_to_signal("DeviceRemoved", self._device_removed)
+
+        # Find info about all current present media
         for d in self.hal_iface.FindDeviceByCapability("volume"):
+            vol = self.bus.get_object("org.freedesktop.Hal", d)
+            if vol.GetPropertyBoolean("volume.is_disc") and \
+                   vol.GetPropertyBoolean("volume.disc.has_data"):
+                devnode = vol.GetProperty("block.device")
+                label = vol.GetProperty("volume.label")
+                if label == None or len(label) == 0:
+                    label = devnode
+                vollabel[devnode] = label
+                volpath[devnode] = d
+
+
+        for d in self.hal_iface.FindDeviceByCapability("storage.cdrom"):
             dev = self.bus.get_object("org.freedesktop.Hal", d)
-            if dev.GetPropertyBoolean("volume.is_disc") and \
-                   dev.GetPropertyBoolean("volume.disc.has_data") and \
-                   dev.GetPropertyBoolean("volume.is_mounted"):
-                optical_device_list.append(dev.GetProperty("volume.mount_point"))
-        return optical_device_list
+            devnode = dev.GetProperty("block.device")
+            if vollabel.has_key(devnode):
+                model.append([devnode, vollabel[devnode], True, volpath[devnode]])
+            else:
+                model.append([devnode, _("No media present"), False, None])
+
+    def _device_added(self, path):
+        vol = self.bus.get_object("org.freedesktop.Hal", path)
+        if vol.QueryCapability("volume"):
+            if vol.GetPropertyBoolean("volume.is_disc") and \
+                   vol.GetPropertyBoolean("volume.disc.has_data"):
+                devnode = vol.GetProperty("block.device")
+                label = vol.GetProperty("volume.label")
+                if label == None or len(label) == 0:
+                    label = devnode
+
+                cdlist = self.window.get_widget("cd-path")
+                model = cdlist.get_model()
+
+                # Search for the row with matching device node and
+                # fill in info about inserted media
+                for row in model:
+                    if row[0] == devnode:
+                        row[1] = label
+                        row[2] = True
+                        row[3] = path
+
+    def _device_removed(self, path):
+        vol = self.bus.get_object("org.freedesktop.Hal", path)
+        cdlist = self.window.get_widget("cd-path")
+        model = cdlist.get_model()
+
+        active = cdlist.get_active()
+        idx = 0
+        # Search for the row containing matching HAL volume path
+        # and update (clear) it, de-activating it if its currently
+        # selected
+        for row in model:
+            if row[3] == path:
+                row[1] = _("No media present")
+                row[2] = False
+                row[3] = None
+                if idx == active:
+                    cdlist.set_active(-1)
+            idx = idx + 1
