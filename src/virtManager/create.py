@@ -83,7 +83,6 @@ class vmmCreate(gobject.GObject):
         self.set_initial_state()
 
     def show(self):
-        self.vm_added_handle = self.connection.connect("vm-added", self.open_vm_console)
         self.topwin.show()
         self.reset_state()
         self.topwin.present()
@@ -143,8 +142,6 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-memory-startup").set_value(500)
         self.window.get_widget("create-vcpus").set_value(1)
 
-        self.vm_uuid = None
-        self.vm_added_handle = None
         self.install_error = None
 
 
@@ -269,9 +266,6 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("create-finish").show()
 
     def close(self, ignore1=None,ignore2=None):
-        if self.vm_added_handle != None:
-            self.connection.disconnect(int(self.vm_added_handle))
-        self.vm_added_handle = None
         self.topwin.hide()
         return 1
 
@@ -283,14 +277,12 @@ class vmmCreate(gobject.GObject):
                 guest.cdrom = self.get_config_install_source()
             except ValueError, e:
                 self._validation_error_box(_("Invalid FV media address"),e.args[0])
-                self.install_media_address = None
         else:
             guest = xeninst.ParaVirtGuest()
             try:
                 guest.location = self.get_config_install_source()
             except ValueError, e:
                 self._validation_error_box(_("Invalid PV media address"), e.args[0])
-                self.install_media_address = None
                 return
             ks = self.get_config_kickstart_source()
             if ks != None and len(ks) != 0:
@@ -301,7 +293,6 @@ class vmmCreate(gobject.GObject):
             guest.name = self.get_config_name()
         except ValueError, e:
             self._validation_error_box(_("Invalid system name"), e.args[0])
-            self.vm_name = None
             return
 
         # set the memory
@@ -309,7 +300,6 @@ class vmmCreate(gobject.GObject):
             guest.memory = int(self.get_config_maximum_memory())
         except ValueError:
             self._validation_error_box(_("Invalid memory setting"), e.args[0])
-            self.max_memory = None
             return
 
         # set vcpus
@@ -323,20 +313,27 @@ class vmmCreate(gobject.GObject):
             d = xeninst.XenDisk(self.get_config_disk_image(), filesize)
         except ValueError, e:
             self._validation_error_box(_("Invalid storage address"), e.args[0])
-            self.storage_partition_address = self.storage_file_address = self.storage_file_size = None
             return
         guest.disks.append(d)
+
+        # uuid
+        guest.uuid = xeninst.util.uuidToString(xeninst.util.randomUUID())
 
         # network
         n = xeninst.XenNetworkInterface(None)
         guest.nics.append(n)
 
-        #grab the uuid before we start
-        self.vm_uuid = xeninst.util.uuidToString(xeninst.util.randomUUID())
-        guest.set_uuid(self.vm_uuid)
-
         # set up the graphics to use SDL
         guest.graphics = "vnc"
+
+        logging.debug("Creating a VM " + guest.name + \
+                      "\n  UUID: " + guest.uuid + \
+                      "\n  Source: " + self.get_config_install_source() + \
+                      "\n  Kickstart: " + self.get_config_kickstart_source() + \
+                      "\n  Memory: " + str(guest.memory) + \
+                      "\n  # VCPUs: " + str(guest.vcpus) + \
+                      "\n  Filesize: " + str(filesize) + \
+                      "\n  Disk image: " + str(self.get_config_disk_image()))
 
         #let's go
         self.install_error = None
@@ -346,6 +343,13 @@ class vmmCreate(gobject.GObject):
         if self.install_error != None:
             self._validation_error_box(_("Guest Install Error"), self.install_error)
             return
+
+        vm = self.connection.get_vm(guest.uuid)
+        (gtype, host, port) = vm.get_graphics_console()
+        if gtype == "vnc":
+            self.emit("action-show-console", self.connection.get_uri(), guest.uuid)
+        else:
+            self.emit("action-show-terminal", self.connection.get_uri(), guest.uuid)
         self.close()
 
     def do_install(self, guest):
@@ -502,15 +506,6 @@ class vmmCreate(gobject.GObject):
             message_box.format_secondary_text(text2)
         message_box.run()
         message_box.destroy()
-
-    def open_vm_console(self,ignore,uri,uuid):
-        if uuid == self.vm_uuid:
-            vm = self.connection.get_vm(uuid)
-            (gtype, host, port) = vm.get_graphics_console()
-            if gtype == "vnc":
-                self.emit("action-show-console", self.connection.get_uri(), self.vm_uuid)
-            else:
-                self.emit("action-show-terminal", self.connection.get_uri(), self.vm_uuid)
 
     def populate_opt_media(self, model):
         # get a list of optical devices with data discs in, for FV installs
