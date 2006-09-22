@@ -482,6 +482,10 @@ class vmmManager(gobject.GObject):
         #cell.set_property('text', '')
         #cell.set_property('value', self.connection.get_vm(uuid).cpu_time_percentage())
         data = self.connection.get_vm(uuid).cpu_time_vector()
+        # Prevent histogram getting too wide if we're tracking lots
+        # of data - full data is viewable in details window
+        if len(data) > 40:
+            data = data[0:40]
         data.reverse()
         cell.set_property('data_array', data)
 
