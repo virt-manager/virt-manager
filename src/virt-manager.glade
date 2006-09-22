@@ -543,56 +543,6 @@ Inactive virtual machines</property>
 	  <property name="fill">True</property>
 	</packing>
       </child>
-
-      <child>
-	<widget class="GtkHSeparator" id="hseparator1">
-	  <property name="visible">True</property>
-	</widget>
-	<packing>
-	  <property name="padding">10</property>
-	  <property name="expand">False</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkHButtonBox" id="hbuttonbox1">
-	  <property name="border_width">3</property>
-	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_DEFAULT_STYLE</property>
-	  <property name="spacing">0</property>
-
-	  <child>
-	    <widget class="GtkButton" id="vmm-help">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-help</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="vmm-close">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-close</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_vmm_close_clicked" last_modification_time="Tue, 28 Mar 2006 17:10:16 GMT"/>
-	    </widget>
-	  </child>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">True</property>
-	</packing>
-      </child>
     </widget>
   </child>
 </widget>
