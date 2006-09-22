@@ -165,7 +165,10 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-finish").hide()
         self.window.get_widget("create-forward").show()
         if notebook.get_current_page() == 4 and self.get_config_method() == VM_PARA_VIRT:
-            notebook.set_current_page(2)
+            if xeninst.util.is_hvm_capable():
+                notebook.set_current_page(2)
+            else:
+                notebook.set_current_page(1)
         elif notebook.get_current_page() == 5 and self.get_config_method() == VM_FULLY_VIRT:
             notebook.set_current_page(3)
         else:
