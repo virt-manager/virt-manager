@@ -122,6 +122,10 @@ class vmmConsole(gobject.GObject):
         self.update_widget_states(self.vm, self.vm.status())
 
     def close(self,ignore1=None,ignore2=None):
+        fs = self.window.get_widget("menu-view-fullscreen")
+        if fs.get_active():
+            fs.set_active(False)
+
         self.window.get_widget("vmm-console").hide()
         if self.vncViewer.is_connected():
 	    try:
