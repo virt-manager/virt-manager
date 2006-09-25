@@ -176,7 +176,7 @@ class vmmDetails(gobject.GObject):
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
             self.vm.shutdown()
         else:
-            print _("Shutdown requested, but machine is already shutting down / shutoff")
+            logging.warning("Shutdown requested, but machine is already shutting down / shutoff")
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -184,18 +184,18 @@ class vmmDetails(gobject.GObject):
 
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            print _("Pause/resume requested, but machine is shutdown / shutoff")
+            logging.warning("Pause/resume requested, but machine is shutdown / shutoff")
         else:
             if status in [ libvirt.VIR_DOMAIN_PAUSED ]:
                 if not src.get_active():
                     self.vm.resume()
                 else:
-                    print _("Pause requested, but machine is already paused")
+                    logging.warning("Pause requested, but machine is already paused")
             else:
                 if src.get_active():
                     self.vm.suspend()
                 else:
-                    print _("Resume requested, but machine is already running")
+                    logging.warning("Resume requested, but machine is already running")
 
         self.window.get_widget("control-pause").set_active(src.get_active())
         self.window.get_widget("details-menu-pause").set_active(src.get_active())
