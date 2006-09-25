@@ -103,10 +103,12 @@ class vmmConsole(gobject.GObject):
     def toggle_fullscreen(self, src):
         if src.get_active():
             self.window.get_widget("vmm-console").fullscreen()
-            gtk.gdk.keyboard_grab(self.vncViewer.window, 1, 0)
+            if not(self.vncViewer.will_autograb_keyboard()):
+                self.vncViewer.grab_keyboard()
         else:
+            if not(self.vncViewer.will_autograb_keyboard()):
+                self.vncViewer.ungrab_keyboard()
             self.window.get_widget("vmm-console").unfullscreen()
-            gtk.gdk.keyboard_ungrab()
 
     def toggle_toolbar(self, src):
         if src.get_active():
