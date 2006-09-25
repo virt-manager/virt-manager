@@ -95,7 +95,7 @@ class RFBFrameBuffer:
     raise NotImplementedError
 
   # data is given as ARGB
-  def change_cursor(self, width, height, data):
+  def change_cursor(self, width, height, x, y, data):
     #print >>stderr, 'change_cursor'
     raise NotImplementedError
 
@@ -542,7 +542,7 @@ class RFBNetworkClient(RFBProxy):
 
   def send(self, s):
     return self.sock.send(s)
-    
+
   def getpass(self):
     import getpass
     if self.pwdfile:

@@ -4,11 +4,11 @@
 # allows an extra fragment based on the timestamp to be appended
 # to the release. This distinguishes automated builds, from formal
 # Fedora RPM builds
-%define _extra_release %{?extra_release:%{extra_release}}
+%define _extra_release %{?dist:%{dist}}%{!?dist:%{?extra_release:%{extra_release}}}
 
 Name: @PACKAGE@
 Version: @VERSION@
-Release: 3%{_extra_release}
+Release: 1%{_extra_release}
 Summary: Virtual Machine Manager
 
 Group: Applications/Emulators
@@ -25,19 +25,21 @@ Requires: libvirt-python >= 0.1.4-3
 # Definitely does not work with earlier due to python API changes
 Requires: dbus-python >= 0.61
 # Might work with earlier, but this is what we've tested
-# We use 'ctypes' so don't need the 'gnome-keyring-python' bits
 Requires: gnome-keyring >= 0.4.9
 # Minimum we've tested with
 # Although if you don't have this, comment it out and the app
 # will work just fine - keyring functionality will simply be
-# disabled 
+# disabled
 Requires: gnome-python2-gnomekeyring >= 2.15.4
 # Minimum we've tested with
 Requires: libxml2-python >= 2.6.23
 # Required to install Xen guests
 Requires: python-xeninst >= 0.90.1
-
-# Earlier vte han broken python binding module
+# Required for loading the glade UI
+Requires: pygtk2-libglade
+# Required for our graphics which are currently SVG format
+Requires: librsvg2
+# Earlier vte had broken python binding module
 Requires: vte >= 0.12.2
 
 ExclusiveArch: %{ix86} x86_64 ia64
@@ -46,6 +48,10 @@ BuildRequires: pygtk2-devel
 BuildRequires: gtk2-devel
 BuildRequires: python-devel
 BuildRequires: gettext
+
+Requires(pre): GConf2
+Requires(post): GConf2
+Requires(preun): GConf2
 
 %description
 Virtual Machine Manager provides a graphical tool for administering
@@ -70,16 +76,29 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/sparkline.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+if [ "$1" -gt 1 ]; then
+    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+    gconftool-2 --makefile-uninstall-rule \
+      %{_sysconfdir}/gconf/schemas/%{name}.schemas > /dev/null || :
+fi
+
 %post
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-SCHEMAS="%{name}.schemas"
-for S in $SCHEMAS; do
-  gconftool-2 --makefile-install-rule /etc/gconf/schemas/$S > /dev/null
-done
+gconftool-2 --makefile-install-rule \
+  %{_sysconfdir}/gconf/schemas/%{name}.schemas > /dev/null || :
+
 update-desktop-database %{_datadir}/applications
 
 %postun
 update-desktop-database %{_datadir}/applications
+
+%preun
+if [ "$1" -eq 0 ]; then
+    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+    gconftool-2 --makefile-uninstall-rule \
+      %{_sysconfdir}/gconf/schemas/%{name}.schemas > /dev/null || :
+fi
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
@@ -95,21 +114,41 @@ update-desktop-database %{_datadir}/applications
 
 %{_datadir}/%{name}/*.py
 %{_datadir}/%{name}/*.pyc
-%ghost %{_datadir}/%{name}/*.pyo
+%{_datadir}/%{name}/*.pyo
 
 %{_datadir}/%{name}/virtManager/*.py
 %{_datadir}/%{name}/virtManager/*.pyc
-%ghost %{_datadir}/%{name}/virtManager/*.pyo
+%{_datadir}/%{name}/virtManager/*.pyo
 
 %{_datadir}/%{name}/vncViewer/*.py
 %{_datadir}/%{name}/vncViewer/*.pyc
-%ghost %{_datadir}/%{name}/vncViewer/*.pyo
+%{_datadir}/%{name}/vncViewer/*.pyo
 
 
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Fri Sep 15 2006 Daniel Berrange <berrange@redhat.com> - 0.2.2-1
+- Fix event handling in create VM wizard (bz 206660 & 206186)
+- Fix close button in about dialog (bz 205943)
+- Refresh .pot files
+- Turn on VNC scrollbars fulltime to avoid GTK window sizing issue
+  which consistently resize too small.
+
+* Mon Sep 11 2006 Daniel Berrange <berrange@redhat.com> - 0.2.1-3
+- Added requires on pygtk2-libglade & librsvg2 (bz 205941 & 205942)
+- Re-arrange to use console-helper to launch app
+- Added 'dist' component to release number
+
+* Wed Sep  6 2006 Jeremy Katz <katzj@redhat.com> - 0.2.1-2
+- don't ghost pyo files (#205448)
+
+* Mon Sep  4 2006 Daniel Berrange <berrange@redhat.com> - 0.2.1-1
+- Updated to 0.2.1 tar.gz
+- Added rules to install/uninstall gconf schemas in preun,post,pre
+  scriptlets
+
 * Thu Aug 24 2006 Jeremy Katz <katzj@redhat.com> - 0.2.0-3
 - BR gettext
 

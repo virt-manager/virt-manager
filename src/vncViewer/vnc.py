@@ -21,7 +21,7 @@
 import gobject
 import rfb
 import sys
-from struct import pack
+from struct import pack, unpack
 import pygtk
 import gtk
 
@@ -40,6 +40,7 @@ class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
         self.canvas = canvas
         self.pixmap = None
         self.name = "VNC"
+        self.dirtyregion = None
 
     def get_name(self):
         return self.name
@@ -62,6 +63,7 @@ class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
 
     def resize_screen(self, width, height):
         self.pixmap = gtk.gdk.Pixmap(self.canvas.window, width, height)
+        self.gc = self.pixmap.new_gc()
         self.emit("resize", width, height)
         return (0, 0, width, height)
 
@@ -69,19 +71,43 @@ class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
         if self.pixmap == None:
             return
 
-        gc = self.pixmap.new_gc()
-        self.pixmap.draw_rgb_32_image(gc, x, y, width, height, gtk.gdk.RGB_DITHER_NONE, data)
-        self.emit("invalidate", x, y, width, height)
+        self.pixmap.draw_rgb_32_image(self.gc, x, y, width, height, gtk.gdk.RGB_DITHER_NONE, data)
+        self.dirty(x,y,width,height)
 
+    def dirty(self, x, y, width, height):
+        if self.dirtyregion == None:
+            self.dirtyregion = { "x1": x, "y1": y, "x2": x+width, "y2": y+height }
+        else:
+            if x < self.dirtyregion["x1"]:
+                self.dirtyregion["x1"] = x
+            if (x + width) > self.dirtyregion["x2"]:
+                self.dirtyregion["x2"] = (x + width)
+            if y < self.dirtyregion["y1"]:
+                self.dirtyregion["y1"] = y
+            if (y + height) > self.dirtyregion["y2"]:
+                self.dirtyregion["y2"] = (y + height)
 
     def process_solid(self, x, y, width, height, color):
-        print >>stderr, 'process_solid: %dx%d at (%d,%d), color=%r' % (width,height,x,y, color)
+        # XXX very very evil assumes pure 32-bit RGBA format
+        (r,g,b,a) = unpack('BBBB', color)
+        self.gc.set_rgb_fg_color(gtk.gdk.Color(red=r*255,green=g*255,blue=b*255))
+        if width == 1 and height == 1:
+            self.pixmap.draw_point(self.gc, x, y)
+        else:
+            self.pixmap.draw_rectangle(self.gc, True, x, y, width, height)
+        self.dirty(x,y,width,height)
 
     def update_screen(self, t):
-        #print >>stderr, 'update_screen'
-        pass
+        if self.dirtyregion != None:
+            x1 = self.dirtyregion["x1"]
+            x2 = self.dirtyregion["x2"]
+            y1 = self.dirtyregion["y1"]
+            y2 = self.dirtyregion["y2"]
+            #print "Update %d,%d (%dx%d)" % (x1, y1, (x2-x1), (y2-y1))
+            self.emit("invalidate", x1, y1, x2-x1, y2-y1)
+            self.dirtyregion = None
 
-    def change_cursor(self, width, height, data):
+    def change_cursor(self, width, height, x, y, data):
         print >>stderr, 'change_cursor'
 
     def move_cursor(self, x, y):
@@ -95,8 +121,8 @@ class GRFBNetworkClient(rfb.RFBNetworkClient, gobject.GObject):
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
         }
 
-    def __init__(self, host, port, converter, debug=0):
-        rfb.RFBNetworkClient.__init__(self, host, port, converter, debug=debug,preferred_encoding=(rfb.ENCODING_RAW,rfb.ENCODING_DESKTOP_RESIZE))
+    def __init__(self, host, port, converter, debug=0, preferred_encoding=(rfb.ENCODING_RAW)):
+        rfb.RFBNetworkClient.__init__(self, host, port, converter, debug=debug,preferred_encoding=preferred_encoding)
         self.__gobject_init__()
 
         self.watch = None
@@ -115,7 +141,8 @@ class GRFBNetworkClient(rfb.RFBNetworkClient, gobject.GObject):
 
         try:
             self.loop1()
-        except:
+        except Exception, e:
+            print str(e)
             self.close()
             self.emit("disconnected")
             return 0
@@ -158,6 +185,10 @@ class GRFBViewer(gtk.DrawingArea):
         self.authenticated = False
         self.needpw = True
         self.autograbkey = autograbkey
+        self.preferred_encoding = (rfb.ENCODING_RAW, rfb.ENCODING_DESKTOP_RESIZE)
+        # Current impl of draw_solid is *far* too slow to be practical
+        # for Hextile which likes lots of 1x1 pixels solid rectangles
+        self.preferred_encoding = (rfb.ENCODING_HEXTILE, rfb.ENCODING_RAW, rfb.ENCODING_DESKTOP_RESIZE)
 
         self.fb.connect("resize", self.resize_display)
         self.fb.connect("invalidate", self.repaint_region)
@@ -206,12 +237,12 @@ class GRFBViewer(gtk.DrawingArea):
     def get_framebuffer_name(self):
         return self.fb.get_name()
 
-    def connect_to_host(self, host, port):
+    def connect_to_host(self, host, port, debug=0):
         if self.client != None:
             self.disconnect_from_host()
 	    self.client = NOne
 
-        client = GRFBNetworkClient(host, port, self.fb)
+        client = GRFBNetworkClient(host, port, self.fb, debug=debug, preferred_encoding=self.preferred_encoding)
         client.connect("disconnected", self._client_disconnected)
 
         auth_types = client.init()
@@ -225,6 +256,7 @@ class GRFBViewer(gtk.DrawingArea):
             self.needpw = False
         else:
             self.needpw = True
+        return self.needpw
 
     def _client_disconnected(self, src):
         self.client = None
@@ -302,7 +334,7 @@ class GRFBViewer(gtk.DrawingArea):
         return self.autograbkey
 
     def grab_keyboard(self):
-        gtk.gdk.keyboard_grab(win.window, 1, long(0))
+        gtk.gdk.keyboard_grab(self.window, 1, long(0))
         self.grabbedKeyboard = True
 
     def ungrab_keyboard(self):
@@ -315,7 +347,7 @@ class GRFBViewer(gtk.DrawingArea):
 
     def leave_notify(self, win, event):
         if self.autograbkey:
-            gtk.ungrab_keyboard()
+            self.ungrab_keyboard()
 
     def key_press(self, win, event):
         # Key handling in VNC is screwy. The event.keyval from GTK is
@@ -428,14 +460,16 @@ def main():
     vp = gtk.Viewport()
     pane.add(vp)
 
-    vnc = GRFBViewer()
+    vnc = GRFBViewer(autograbkey=True)
     vp.add(vnc)
 
     win.show_all()
     win.present()
 
-    if vnc.connect_to_host(host, port):
+    if vnc.connect_to_host(host, port, debug=0):
         print "Need password"
+        if password == None:
+            return 1
     else:
         print "No password needed"
     vnc.authenticate(password)

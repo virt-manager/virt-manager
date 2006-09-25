@@ -210,7 +210,6 @@ class vmmEngine:
         self.connections[uri]["windowManager"].show()
 
     def show_create(self, uri):
-        
         if self.windowCreate == None:
             self.windowCreate = vmmCreate(self.get_config(), self.get_connection(uri, False))
         self.windowCreate.connect("action-show-console", self._do_show_console)

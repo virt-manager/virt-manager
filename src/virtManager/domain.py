@@ -186,6 +186,10 @@ class vmmDomain(gobject.GObject):
             return 0
         return self.record[0]["vcpuCount"]
 
+    def vcpu_max_count(self):
+        cpus = self.get_xml_string("/domain/vcpu")
+        return int(cpus)
+
     def cpu_time_vector(self):
         vector = []
         stats = self.record
