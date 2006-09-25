@@ -98,7 +98,7 @@ class GRFBNetworkClient(rfb.RFBNetworkClient, gobject.GObject):
     def __init__(self, host, port, converter, debug=0):
         rfb.RFBNetworkClient.__init__(self, host, port, converter, debug=debug,preferred_encoding=(rfb.ENCODING_RAW,rfb.ENCODING_DESKTOP_RESIZE))
         self.__gobject_init__()
-        
+
         self.watch = None
         self.password = None
 
@@ -150,13 +150,14 @@ class GRFBViewer(gtk.DrawingArea):
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
         }
 
-    def __init__(self):
+    def __init__(self, autograbkey=False):
         gtk.DrawingArea.__init__(self)
 
         self.fb = GRFBFrameBuffer(self)
         self.client = None
         self.authenticated = False
         self.needpw = True
+        self.autograbkey = autograbkey
 
         self.fb.connect("resize", self.resize_display)
         self.fb.connect("invalidate", self.repaint_region)
@@ -168,6 +169,27 @@ class GRFBViewer(gtk.DrawingArea):
 	self.connect("button-release-event", self.update_pointer)
 	self.connect("key-press-event", self.key_press)
 	self.connect("key-release-event", self.key_release)
+        self.connect("enter-notify-event", self.enter_notify)
+        self.connect("leave-notify-event", self.leave_notify)
+
+        # If we press one of these keys 3 times in a row
+        # its become sticky until a key outside this set
+        # is pressed. This lets you do  Ctrl-Alt-F1, eg
+        # by "Ctrl Ctrl Ctrl   Alt-F1"
+        self.stickyMods = (gtk.gdk.keyval_from_name("Alt_L"), \
+                           gtk.gdk.keyval_from_name("Alt_R"), \
+                           gtk.gdk.keyval_from_name("Shift_L"), \
+                           gtk.gdk.keyval_from_name("Shift_R"), \
+                           gtk.gdk.keyval_from_name("Super_L"), \
+                           gtk.gdk.keyval_from_name("Super_R"), \
+                           gtk.gdk.keyval_from_name("Hyper_L"), \
+                           gtk.gdk.keyval_from_name("Hyper_R"), \
+                           gtk.gdk.keyval_from_name("Meta_L"), \
+                           gtk.gdk.keyval_from_name("Meta_R"), \
+                           gtk.gdk.keyval_from_name("Control_L"), \
+                           gtk.gdk.keyval_from_name("Control_R"))
+        self.lastKeyVal = None
+        self.lastKeyRepeat = 0
 
         self.set_events(gtk.gdk.EXPOSURE_MASK |
                         gtk.gdk.LEAVE_NOTIFY_MASK |
@@ -273,14 +295,98 @@ class GRFBViewer(gtk.DrawingArea):
             self.client.update_pointer(self.state_to_mask(state), x, y)
         return True
 
+    def has_grabbed_keyboard(self):
+        return self.grabbedKeyboard
+
+    def will_autograb_keyboard(self):
+        return self.autograbkey
+
+    def grab_keyboard(self):
+        gtk.gdk.keyboard_grab(win.window, 1, long(0))
+        self.grabbedKeyboard = True
+
+    def ungrab_keyboard(self):
+        gtk.gdk.keyboard_ungrab()
+        self.grabbedKeyboard = False
+
+    def enter_notify(self, win, event):
+        if self.autograbkey:
+            self.grab_keyboard()
+
+    def leave_notify(self, win, event):
+        if self.autograbkey:
+            gtk.ungrab_keyboard()
+
     def key_press(self, win, event):
+        # Key handling in VNC is screwy. The event.keyval from GTK is
+        # interpreted relative to modifier state. This really messes
+        # up with VNC which has no concept of modifiers. If we interpret
+        # at client end you can end up with 'Alt' key press generating
+        # Alt_L, and key release generated ISO_Prev_Group. This really
+        # really confuses the VNC server - 'Alt' gets stuck on.
+        #
+        # So we have to redo GTK's  keycode -> keyval translation
+        # using only the SHIFT modifier which explicitly has to be
+        # interpreted at client end.
+        map = gtk.gdk.keymap_get_default()
+        maskedstate = event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.LOCK_MASK)
+        (val,group,level,mod) = map.translate_keyboard_state(event.hardware_keycode, maskedstate, 0)
+
+        stickyVal = None
+
+        if val in self.stickyMods:
+            # No previous mod pressed, start counting our presses
+            if self.lastKeyVal == None:
+                self.lastKeyVal = val
+                self.lastKeyRepeat = 1
+            else:
+                if self.lastKeyVal == val:
+                    # Match last key pressed, so increase count
+                    self.lastKeyRepeat = self.lastKeyRepeat + 1
+                elif self.lastKeyRepeat < 3:
+                    # Different modifier & last one was not yet
+                    # sticky so reset it
+                    self.lastKeyVal = None
+        else:
+            # If the prev modifier was pressed 3 times in row its sticky
+            if self.lastKeyVal != None and self.lastKeyRepeat >= 3:
+                stickyVal = self.lastKeyVal
+
         if self.client != None:
-            self.client.update_key(1, event.keyval)
+            # Send fake sticky modifier key
+            if stickyVal != None:
+                self.client.update_key(1, stickyVal)
+
+            self.client.update_key(1, val)
+            #self.client.update_key(1, event.keyval)
+
         return True
-    
+
     def key_release(self, win, event):
+        # Key handling in VNC is screwy. See above
+        map = gtk.gdk.keymap_get_default()
+        maskedstate = event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.LOCK_MASK)
+        (val,group,level,mod) = map.translate_keyboard_state(event.hardware_keycode, maskedstate, 0)
+
+        stickyVal = None
+
+        if not(val in self.stickyMods):
+            # If a sticky modifier is active, we must release it
+            if self.lastKeyVal != None and self.lastKeyRepeat >= 3:
+                stickyVal = self.lastKeyVal
+
+            # Release of any non-modifier clears stickyness
+            self.lastKeyVal = None
+
         if self.client != None:
-            self.client.update_key(0, event.keyval)
+            self.client.update_key(0, val)
+            #self.client.update_key(0, event.keyval)
+
+            # Release the sticky modifier
+            if stickyVal != None:
+                self.client.update_key(0, stickyVal)
+
+
         return True
 
     def get_frame_buffer(self):
