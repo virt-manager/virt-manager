@@ -24,12 +24,28 @@ import sys
 
 import locale
 import gettext
+import logging
 
 gettext_app = "virt-manager"
 gettext_dir = "::GETTEXTDIR::"
 
 locale.setlocale(locale.LC_ALL, '')
 gettext.install(gettext_app, gettext_dir)
+
+# set up logging
+vm_dir = os.path.expanduser("~/.virt-manager")
+if not os.access(vm_dir,os.W_OK):
+    try:
+        os.mkdir(vm_dir)
+    except IOError, e:
+        raise RuntimeError, "Could not create %d directory: " % vm_dir, e
+
+# XXX should we get logging level from gconf, or command line args ?
+logging.basicConfig(level=logging.DEBUG,
+                    format="%(asctime)s %(levelname)-8s %(message)s",
+                    datefmt="%a, %d %b %Y %H:%M:%S",
+                    filename="%s/virt-manager.log" % vm_dir,
+                    filemode='w')
 
 # Urgh, pygtk merely logs a warning when failing to open
 # the X11 display connection, and lets everything carry
@@ -104,6 +120,8 @@ def main():
     else:
         bus = None
         try:
+            if os.getenv("DBUS_STARTER_ADDRESS") == None and os.getenv("DBUS_SESSION_BUS_ADDRESS") == None:
+                raise RuntimeError, "DBus session/starter bus address not defined"
             bus = dbus.SessionBus()
 
             dbusProxy = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
@@ -124,8 +142,8 @@ def main():
                 # yes, we exit completely now - remote service is in charge
                 return
         except:
-            print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
-            print _("Could not connection to session bus, disabling DBus service")
+            logging.warning("Could not connection to session bus, disabling DBus service " + \
+                            str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
             if options.uri != None:
                 engine.show_manager(options.uri)
             else:

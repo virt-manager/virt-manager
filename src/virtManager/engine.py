@@ -20,6 +20,7 @@ import gobject
 import gtk
 import sys
 import libvirt
+import logging
 
 from virtManager.about import vmmAbout
 from virtManager.connect import vmmConnect
@@ -63,8 +64,8 @@ class vmmEngine:
             conn = self.get_connection(uri, readOnly)
             self.show_manager(uri)
         except:
-            print _("Unable to open connection to hypervisor URI '%s'") % str(uri)
-            print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
+            logging.error((("Unable to open connection to hypervisor URI '%s'") % str(uri)) + \
+                          str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
 
         if len(self.connections.keys()) == 0:
             gtk.main_quit()
@@ -105,8 +106,7 @@ class vmmEngine:
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
             except:
-                print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
-                print _("Error refreshing connection '%s'") % uri
+                logging.error(("Could not refresh connection %s" % (uri)) + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
         return 1
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
@@ -240,7 +240,7 @@ class vmmEngine:
                        libvirt.VIR_DOMAIN_SHUTOFF,
                        libvirt.VIR_DOMAIN_CRASHED,
                        libvirt.VIR_DOMAIN_PAUSED ]:
-            print _("Save requested, but machine is shutdown / shutoff / paused")
+            logging.warning("Save requested, but machine is shutdown / shutoff / paused")
         else:
             self.fcdialog = gtk.FileChooserDialog(_("Save Virtual Machine"),
                                                   src.window.get_widget("vmm-details"),

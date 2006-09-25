@@ -18,7 +18,6 @@
 #
 import gconf
 import os
-import logging
 
 import gtk.gdk
 import libvirt
@@ -33,21 +32,7 @@ class vmmConfig:
         self.conf = gconf.client_get_default()
         self.conf.add_dir (gconf_dir,
                            gconf.CLIENT_PRELOAD_NONE)
-        # set up logging
-        vm_dir = "%s/.virt-manager" % os.environ['HOME'] 
-        if not os.access(vm_dir,os.W_OK):
-            try:
-                os.mkdir(vm_dir)
-            except IOError, e:
-                raise RuntimeError, "Could not create %d directory: " % vm_dir, e
 
-        # XXX should get logging level from gconf
-        logging.basicConfig(level=logging.DEBUG,
-                            format="%(asctime)s %(levelname)-8s %(message)s",
-                            datefmt="%a, %d %b %Y %H:%M:%S",
-                            filename="%s/virt-manager.log" % vm_dir,
-                            filemode='w')
-        logging.debug("Initialized Python logger")
         self.glade_dir = glade_dir
         self.icon_dir = icon_dir
         # We don't create it straight away, since we don't want

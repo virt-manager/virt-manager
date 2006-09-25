@@ -22,6 +22,7 @@ import libvirt
 import libxml2
 import os
 import sys
+import logging
 
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
@@ -394,8 +395,8 @@ class vmmDomain(gobject.GObject):
 
     def set_memory(self, memory):
         memory = int(memory)
-        if(memory > self.maximum_memory()):
-            print "XXX add proper error handling here. You may not set vm memory larger than the maximum set for the vm."
+        if (memory > self.maximum_memory()):
+            logging.warning("Requested memory " + str(memory) + " over maximum " + self.maximum_memory())
         self.vm.setMemory(memory)
         return self.vm.info()[2]
 

@@ -22,6 +22,7 @@ import cairo
 import gtk.glade
 import libvirt
 import sys
+import logging
 
 from vncViewer.vnc import GRFBViewer
 
@@ -131,7 +132,7 @@ class vmmConsole(gobject.GObject):
 	    try:
                 self.vncViewer.disconnect_from_host()
 	    except:
-		print "Failure when disconnecting"
+		logging.error("Failure when disconnecting from VNC server")
         return 1
 
     def control_vm_run(self, src):
@@ -147,7 +148,7 @@ class vmmConsole(gobject.GObject):
         if self.vm.get_id() == 0:
             return
 
-        #print protocol + "://" + host + ":" + str(port)
+        logging.debug("Graphics " + protocol + "://" + host + ":" + str(port))
         if protocol != "vnc":
             self.activate_unavailable_page()
             return
@@ -156,7 +157,7 @@ class vmmConsole(gobject.GObject):
 	    try:
                 self.vncViewer.connect_to_host(host, port)
 	    except:
-		print _("Unable to activate console") + " " + str((sys.exc_info())[0]) + " " + str((sys.exc_info())[1])
+		logging.error("Unable to activate console " + str((sys.exc_info())[0]) + " " + str((sys.exc_info())[1]))
                 self.activate_unavailable_page()
 		return
 
@@ -255,7 +256,7 @@ class vmmConsole(gobject.GObject):
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
             self.vm.shutdown()
         else:
-            print _("Shutdown requested, but machine is already shutting down / shutoff")
+            logging.warning("Shutdown requested, but machine is already shutting down / shutoff")
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -263,18 +264,18 @@ class vmmConsole(gobject.GObject):
 
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            print _("Pause/resume requested, but machine is shutdown / shutoff")
+            logging.warning("Pause/resume requested, but machine is shutdown / shutoff")
         else:
             if status in [ libvirt.VIR_DOMAIN_PAUSED ]:
                 if not src.get_active():
                     self.vm.resume()
                 else:
-                    print _("Pause requested, but machine is already paused")
+                    logging.warning("Pause requested, but machine is already paused")
             else:
                 if src.get_active():
                     self.vm.suspend()
                 else:
-                    print _("Resume requested, but machine is already running")
+                    logging.warning("Resume requested, but machine is already running")
 
         self.window.get_widget("control-pause").set_active(src.get_active())
         self.window.get_widget("menu-vm-pause").set_active(src.get_active())
@@ -356,7 +357,7 @@ class vmmConsole(gobject.GObject):
                 try:
                     self.try_login()
                 except:
-                    print _("Couldn't open console: ") + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
+                    logging.error("Couldn't open console " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
                     self.ignorePause = False
             else:
                 self.activate_unavailable_page()
