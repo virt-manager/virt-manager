@@ -344,7 +344,11 @@ class vmmCreate(gobject.GObject):
                               title=_("Creating Virtual Machine"))
         progWin.run()
         if self.install_error != None:
+            logging.error("Async job failed to create VM " + str(self.install_error))
             self._validation_error_box(_("Guest Install Error"), self.install_error)
+            # Don't close becase we allow user to go back in wizard & correct
+            # their mistakes
+            #self.close()
             return
 
         vm = self.connection.get_vm(guest.uuid)
@@ -357,10 +361,16 @@ class vmmCreate(gobject.GObject):
 
     def do_install(self, guest):
         try:
-            guest.start_install(False)
-        except RuntimeError, e:
+            logging.debug("Starting background install process")
+            dom = guest.start_install(False)
+            if dom == None:
+                self.install_error = "Guest installation failed to complete"
+                logging.error("Guest install did not return a domain")
+            else:
+                logging.debug("Install completed")
+        except Exception, e:
             self.install_error = "ERROR: %s" % e
-            logging.exception(e)
+            logging.exception("Could not complete install " + str(e))
             return
 
     def browse_iso_location(self, ignore1=None, ignore2=None):
