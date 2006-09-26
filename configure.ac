@@ -1,5 +1,5 @@
 AC_INIT(virt-manager.spec.in)
-AM_INIT_AUTOMAKE(virt-manager, 0.2.2)
+AM_INIT_AUTOMAKE(virt-manager, 0.2.3)
 
 AC_PROG_CC
 AC_PROG_LIBTOOL
