@@ -374,11 +374,11 @@ class vmmCreate(gobject.GObject):
             return
 
     def browse_iso_location(self, ignore1=None, ignore2=None):
-        file = self._browse_file(_("Locate ISO Image"))
+        file = self._browse_file(_("Locate ISO Image"), type="iso")
         if file != None:
             self.window.get_widget("fv-iso-location").set_text(file)
 
-    def _browse_file(self, dialog_name, folder=None):
+    def _browse_file(self, dialog_name, folder=None, type=None):
         # user wants to browse for an ISO
         fcdialog = gtk.FileChooserDialog(dialog_name,
                                          self.window.get_widget("vmm-create"),
@@ -386,6 +386,10 @@ class vmmCreate(gobject.GObject):
                                          (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                           gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                          None)
+        if type != None:
+            f = gtk.FileFilter()
+            f.add_pattern("*." + type)
+            fcdialog.set_filter(f)
         if folder != None:
             fcdialog.set_current_folder(folder)
         response = fcdialog.run()
