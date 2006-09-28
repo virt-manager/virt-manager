@@ -104,7 +104,17 @@ class vmmDomain(gobject.GObject):
         if not(info[0] in [libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED]):
             cpuTime = info[4] - prevCpuTime
             cpuTimeAbs = info[4]
+
             pcentCpuTime = (cpuTime) * 100.0 / ((now - prevTimestamp)*1000.0*1000.0*1000.0*self.connection.host_active_processor_count())
+            # Due to timing diffs between getting wall time & getting
+            # the domain's time, its possible to go a tiny bit over
+            # 100% utilization. This freaks out users of the data, so
+            # we hard limit it.
+            if pcentCpuTime > 100.0:
+                pcentCpuTime = 100.0
+            # Enforce >= 0 just in case
+            if pcentCpuTime < 0.0:
+                pcentCpuTime = 0.0
 
         pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
         pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
