@@ -351,6 +351,9 @@ class vmmCreate(gobject.GObject):
             #self.close()
             return
 
+        # Ensure new VM is loaded
+        self.connection.tick(noStatsUpdate=True)
+
         vm = self.connection.get_vm(guest.uuid)
         (gtype, host, port) = vm.get_graphics_console()
         if gtype == "vnc":
