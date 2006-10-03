@@ -65,7 +65,23 @@ class vmmEngine:
             self.show_manager(uri)
         except:
             logging.error((("Unable to open connection to hypervisor URI '%s'") % str(uri)) + \
-                          str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
+                          ": " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
+
+            if uri is None:
+                uri = "xen"
+            if uri == "xen":
+                dg = gtk.MessageDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                       _("Unable to open a connection to the Xen hypervisor/daemon.\n\n" + \
+                                         "Verify that:\n" + \
+                                         " - A Xen host kernel was booted\n" + \
+                                         " - The Xen service has been started\n"))
+            else:
+                dg = gtk.MessageDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                       _("Unable to open connection to hypervisor '%s'") % str(uri))
+            dg.set_title(_("Virtual Machine Manager Connection Failure"))
+            dg.run()
+            dg.hide()
+            dg.destroy()
 
         if len(self.connections.keys()) == 0:
             gtk.main_quit()
