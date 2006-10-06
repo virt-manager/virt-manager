@@ -144,13 +144,18 @@ class vmmConsole(gobject.GObject):
         self.activate_auth_page()
 
     def try_login(self, src=None):
-        password = self.window.get_widget("console-auth-password").get_text()
-        protocol, host, port = self.vm.get_graphics_console()
-
         if self.vm.get_id() == 0:
             return
 
-        logging.debug("Graphics " + protocol + "://" + host + ":" + str(port))
+        password = self.window.get_widget("console-auth-password").get_text()
+        protocol, host, port = self.vm.get_graphics_console()
+
+        if protocol is None:
+            logging.debug("No graphics configured in guest")
+            return
+
+        logging.debug("Graphics " + str(protocol) + "://" + str(host) + ":" + str(port))
+
         if protocol != "vnc":
             self.activate_unavailable_page()
             return
