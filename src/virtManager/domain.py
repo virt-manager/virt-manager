@@ -42,6 +42,12 @@ class vmmDomain(gobject.GObject):
         self.lastStatus = None
         self.record = []
 
+    def is_active(self):
+        if self.vm.ID() == -1:
+            return False
+        else:
+            return True
+
     def get_connection(self):
         return self.connection
 

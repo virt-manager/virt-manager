@@ -463,7 +463,11 @@ class vmmManager(gobject.GObject):
 
     def domain_id_text(self, column, cell, model, iter, data):
         uuid = model.get_value(iter, 0)
-        cell.set_property('text', str(self.connection.get_vm(uuid).get_id()))
+        id = self.connection.get_vm(uuid).get_id()
+        if id >= 0:
+            cell.set_property('text', str(id))
+        else:
+            cell.set_property('text', "-")
 
     def status_text(self, column, cell, model, iter, data):
         uuid = model.get_value(iter, 0)
