@@ -2785,19 +2785,6 @@ Jeremy Katz &lt;katzj@redhat.com&gt;
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
-	    <widget class="GtkButton" id="helpbutton1">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-help</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <property name="response_id">-11</property>
-	    </widget>
-	  </child>
-
-	  <child>
 	    <widget class="GtkButton" id="close">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
@@ -2849,7 +2836,7 @@ Jeremy Katz &lt;katzj@redhat.com&gt;
 		    <widget class="GtkTable" id="table3">
 		      <property name="border_width">3</property>
 		      <property name="visible">True</property>
-		      <property name="n_rows">2</property>
+		      <property name="n_rows">3</property>
 		      <property name="n_columns">3</property>
 		      <property name="homogeneous">False</property>
 		      <property name="row_spacing">3</property>
@@ -2885,6 +2872,7 @@ Jeremy Katz &lt;katzj@redhat.com&gt;
 
 		      <child>
 			<widget class="GtkLabel" id="label37">
+			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Maintain history of</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
