@@ -204,7 +204,7 @@ class vmmConnection(gobject.GObject):
 
         updateVMs = self.vms
         if noStatsUpdate:
-            updateVMs = newVms
+            updateVMs = newUUIDs
 
         for uuid in updateVMs.keys():
             self.vms[uuid].tick(now)

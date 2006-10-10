@@ -119,6 +119,7 @@ class vmmManager(gobject.GObject):
             "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
             "on_vm_new_clicked": self.show_vm_create,
+            "on_vm_delete_clicked": self.delete_vm,
             "on_menu_edit_details_activate": self.show_vm_details,
 
             "on_vm_view_changed": self.vm_view_changed,
@@ -295,6 +296,15 @@ class vmmManager(gobject.GObject):
             return active[0].get_value(active[1], 0)
         return None
 
+    def delete_vm(self, src=None):
+        vmuuid = self.current_vm()
+        vm = self.connection.get_vm(vmuuid)
+        if vm.is_active():
+            return
+
+        vm.delete()
+        self.connection.tick(noStatsUpdate=True)
+
     def show_vm_details(self,ignore):
         self.emit("action-show-details", self.connection.get_uri(), self.current_vm())
 
@@ -313,12 +323,16 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
         else:
-            #self.window.get_widget("vm-delete").set_sensitive(True)
-            self.window.get_widget("vm-delete").set_sensitive(False)
+            vmuuid = self.current_vm()
+            vm = self.connection.get_vm(vmuuid)
+            if vm.is_active():
+                self.window.get_widget("vm-delete").set_sensitive(False)
+                self.window.get_widget("menu_edit_delete").set_sensitive(False)
+            else:
+                self.window.get_widget("vm-delete").set_sensitive(True)
+                self.window.get_widget("menu_edit_delete").set_sensitive(True)
             self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(True)
-            #self.window.get_widget("menu_edit_delete").set_sensitive(True)
-            self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
 
     def popup_vm_menu(self, widget, event):

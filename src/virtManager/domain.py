@@ -266,6 +266,9 @@ class vmmDomain(gobject.GObject):
         self.vm.suspend()
         self._update_status()
 
+    def delete(self):
+        self.vm.undefine()
+
     def resume(self):
         self.vm.resume()
         self._update_status()
