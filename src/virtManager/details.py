@@ -169,7 +169,11 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("config-cpus-apply").set_sensitive(False)
 
     def control_vm_run(self, src):
-        return 0
+        status = self.vm.status()
+        if status != libvirt.VIR_DOMAIN_SHUTOFF:
+            pass
+        else:
+            self.vm.startup()
 
     def control_vm_shutdown(self, src):
         status = self.vm.status()

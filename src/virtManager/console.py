@@ -130,9 +130,6 @@ class vmmConsole(gobject.GObject):
 		print "Failure when disconnecting"
         return 1
 
-    def control_vm_run(self, src):
-        return 0
-
     def _vnc_disconnected(self, src):
         self.activate_auth_page()
 
@@ -182,7 +179,8 @@ class vmmConsole(gobject.GObject):
 
     def activate_screenshot_page(self):
         self.window.get_widget("console-pages").set_current_page(1)
-        self.window.get_widget("menu-vm-screenshot").set_sensitive(True)        
+        self.window.get_widget("menu-vm-screenshot").set_sensitive(True)
+
     def activate_auth_page(self):
         pw = self.config.get_console_password(self.vm)
         self.window.get_widget("menu-vm-screenshot").set_sensitive(False)
@@ -245,7 +243,15 @@ class vmmConsole(gobject.GObject):
         else:
             fcdialog.hide()
         fcdialog.destroy()
-               
+
+    def control_vm_run(self, src):
+        status = self.vm.status()
+        if status != libvirt.VIR_DOMAIN_SHUTOFF:
+            pass
+        else:
+            self.vm.startup()
+
+
     def control_vm_shutdown(self, src):
         status = self.vm.status()
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):

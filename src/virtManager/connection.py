@@ -125,7 +125,7 @@ class vmmConnection(gobject.GObject):
                 if oldActiveIDs.has_key(id):
                     # No change, copy across existing VM object
                     vm = oldActiveIDs[id]
-                    #print "Existing active " + str(vm)
+                    #print "Existing active " + str(vm.get_name()) + " " + vm.get_uuid()
                     curUUIDs[vm.get_uuid()] = vm
                 else:
                     # May be a new VM, we have no choice but
@@ -135,7 +135,7 @@ class vmmConnection(gobject.GObject):
                     uuid = self.uuidstr(vm.UUID())
                     maybeNewUUIDs[uuid] = vmmDomain(self.config, self, vm, uuid)
                     curUUIDs[uuid] = maybeNewUUIDs[uuid]
-                    #print "Maybe new active " + str(maybeNewUUIDs[uuid])
+                    #print "Maybe new active " + str(maybeNewUUIDs[uuid].get_name()) + " " + uuid
 
         # Filter out inactive domains which haven't changed
         if newInactiveNames != None:
@@ -143,7 +143,7 @@ class vmmConnection(gobject.GObject):
                 if oldInactiveNames.has_key(name):
                     # No change, copy across existing VM object
                     vm = oldInactiveNames[name]
-                    #print "Existing inactive " + str(vm)
+                    #print "Existing inactive " + str(vm.get_name()) + " " + vm.get_uuid()
                     curUUIDs[vm.get_uuid()] = vm
                 else:
                     # May be a new VM, we have no choice but
@@ -153,7 +153,7 @@ class vmmConnection(gobject.GObject):
                     uuid = self.uuidstr(vm.UUID())
                     maybeNewUUIDs[uuid] = vmmDomain(self.config, self, vm, uuid)
                     curUUIDs[uuid] = maybeNewUUIDs[uuid]
-                    #print "Maybe new inactive " + str(maybeNewUUIDs[uuid])
+                    #print "Maybe new inactive " + str(maybeNewUUIDs[uuid].get_name()) + " " + uuid
 
         # At this point, maybeNewUUIDs has domains which are
         # either completely new, or changed state.
