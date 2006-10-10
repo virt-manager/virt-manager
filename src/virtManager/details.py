@@ -22,6 +22,7 @@ import gtk
 import gtk.glade
 import libvirt
 import sparkline
+import logging
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
@@ -102,7 +103,7 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
 
             "on_config_cpus_apply_clicked": self.config_cpus_apply,
-            "on_config_vm_cpus_changed": self.config_vm_cpus,
+            "on_config_vcpus_changed": self.config_vm_cpus,
             "on_config_memory_changed": self.config_memory_value,
             "on_config_memory_apply_clicked": self.config_memory_apply
             })
@@ -180,7 +181,7 @@ class vmmDetails(gobject.GObject):
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
             self.vm.shutdown()
         else:
-            print _("Shutdown requested, but machine is already shutting down / shutoff")
+            logging.warning("Shutdown requested, but machine is already shutting down / shutoff")
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -188,18 +189,18 @@ class vmmDetails(gobject.GObject):
 
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            print _("Pause/resume requested, but machine is shutdown / shutoff")
+            logging.warning("Pause/resume requested, but machine is shutdown / shutoff")
         else:
             if status in [ libvirt.VIR_DOMAIN_PAUSED ]:
                 if not src.get_active():
                     self.vm.resume()
                 else:
-                    print _("Pause requested, but machine is already paused")
+                    logging.warning("Pause requested, but machine is already paused")
             else:
                 if src.get_active():
                     self.vm.suspend()
                 else:
-                    print _("Resume requested, but machine is already running")
+                    logging.warning("Resume requested, but machine is already running")
 
         self.window.get_widget("control-pause").set_active(src.get_active())
         self.window.get_widget("details-menu-pause").set_active(src.get_active())
@@ -229,20 +230,20 @@ class vmmDetails(gobject.GObject):
                 self.window.get_widget("control-shutdown").set_sensitive(False)
                 self.window.get_widget("details-menu-pause").set_sensitive(False)
                 self.window.get_widget("details-menu-shutdown").set_sensitive(False)
-                self.window.get_widget("details-menu-save").set_sensitive(False)                                                
+                self.window.get_widget("details-menu-save").set_sensitive(False)
             else:
                 self.window.get_widget("control-pause").set_sensitive(True)
                 self.window.get_widget("control-shutdown").set_sensitive(True)
                 self.window.get_widget("details-menu-pause").set_sensitive(True)
                 self.window.get_widget("details-menu-shutdown").set_sensitive(True)
-                self.window.get_widget("details-menu-save").set_sensitive(True)                                                
+                self.window.get_widget("details-menu-save").set_sensitive(True)
 
                 if status == libvirt.VIR_DOMAIN_PAUSED:
                     self.window.get_widget("control-pause").set_active(True)
                     self.window.get_widget("details-menu-pause").set_active(True)
                 else:
                     self.window.get_widget("control-pause").set_active(False)
-                    self.window.get_widget("details-menu-pause").set_active(False)                    
+                    self.window.get_widget("details-menu-pause").set_active(False)
         except:
             self.ignorePause = False
         self.ignorePause = False
@@ -254,7 +255,6 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("details-menu-serial").set_sensitive(True)
         else:
             self.window.get_widget("details-menu-serial").set_sensitive(False)
-        
 
     def refresh_resources(self, vm):
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
@@ -282,18 +282,23 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("state-vm-maxmem").set_text("%d MB" % (vm_maxmem/1024))
         self.window.get_widget("state-vm-memory").set_text("%d MB" % (vm_memory/1024))
 
+        self.window.get_widget("state-host-cpus").set_text("%d" % self.vm.get_connection().host_active_processor_count())
+        self.window.get_widget("config-vcpus").get_adjustment().upper = vm.vcpu_max_count()
+        self.window.get_widget("state-vm-vcpus").set_text("%d" % (vm.vcpu_count()))
+        self.window.get_widget("state-vm-max-vcpus").set_text("%d" % (vm.vcpu_max_count()))
+
     def update_config_memory(self):
         self.window.get_widget("config-memory").get_adjustment().value = self.vm.current_memory()/1024
 
     def update_config_cpus(self):
-        self.window.get_widget("config-vm-cpus").get_adjustment().value = self.vm.vcpu_count()
+        self.window.get_widget("config-vcpus").get_adjustment().value = self.vm.vcpu_count()
 
     def update_state_cpus(self):
         self.window.get_widget("state-host-cpus").set_text(`(self.vm.get_connection().host_maximum_processor_count())`)
     def config_cpus_apply(self, src):
         # Apply the change to the number of CPUs
 
-        vcpus = self.window.get_widget("config-vm-cpus").get_adjustment().value
+        vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
 
         # if requested # of CPUS > host CPUS, pop up warning dialog (not implemented yet)
 

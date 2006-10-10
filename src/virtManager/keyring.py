@@ -19,6 +19,7 @@
 from virtManager.secret import *
 
 import sys
+import logging
 
 haveKeyring = False
 
@@ -26,7 +27,7 @@ try:
     import gnomekeyring
     haveKeyring = True
 except:
-    print _("No support for gnome-keyring")
+    logging.warning("No support for gnome-keyring")
     pass
 
 class vmmKeyring:
@@ -38,7 +39,7 @@ class vmmKeyring:
                     gnomekeyring.create_sync("default", None)
                 self.keyring = gnomekeyring.get_default_keyring_sync()
             except:
-                print _("Keyring unavailable: '%s'") % (str((sys.exc_info())[0]) + " "  + str((sys.exc_info())[1]))
+                logging.warning(("Keyring unavailable: '%s'") % (str((sys.exc_info())[0]) + " "  + str((sys.exc_info())[1])))
                 self.keyring = None
         else:
             self.keyring = None

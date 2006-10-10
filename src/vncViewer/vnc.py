@@ -21,7 +21,7 @@
 import gobject
 import rfb
 import sys
-from struct import pack
+from struct import pack, unpack
 import pygtk
 import gtk
 
@@ -40,6 +40,7 @@ class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
         self.canvas = canvas
         self.pixmap = None
         self.name = "VNC"
+        self.dirtyregion = None
 
     def get_name(self):
         return self.name
@@ -62,6 +63,7 @@ class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
 
     def resize_screen(self, width, height):
         self.pixmap = gtk.gdk.Pixmap(self.canvas.window, width, height)
+        self.gc = self.pixmap.new_gc()
         self.emit("resize", width, height)
         return (0, 0, width, height)
 
@@ -69,19 +71,43 @@ class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
         if self.pixmap == None:
             return
 
-        gc = self.pixmap.new_gc()
-        self.pixmap.draw_rgb_32_image(gc, x, y, width, height, gtk.gdk.RGB_DITHER_NONE, data)
-        self.emit("invalidate", x, y, width, height)
+        self.pixmap.draw_rgb_32_image(self.gc, x, y, width, height, gtk.gdk.RGB_DITHER_NONE, data)
+        self.dirty(x,y,width,height)
 
+    def dirty(self, x, y, width, height):
+        if self.dirtyregion == None:
+            self.dirtyregion = { "x1": x, "y1": y, "x2": x+width, "y2": y+height }
+        else:
+            if x < self.dirtyregion["x1"]:
+                self.dirtyregion["x1"] = x
+            if (x + width) > self.dirtyregion["x2"]:
+                self.dirtyregion["x2"] = (x + width)
+            if y < self.dirtyregion["y1"]:
+                self.dirtyregion["y1"] = y
+            if (y + height) > self.dirtyregion["y2"]:
+                self.dirtyregion["y2"] = (y + height)
 
     def process_solid(self, x, y, width, height, color):
-        print >>stderr, 'process_solid: %dx%d at (%d,%d), color=%r' % (width,height,x,y, color)
+        # XXX very very evil assumes pure 32-bit RGBA format
+        (r,g,b,a) = unpack('BBBB', color)
+        self.gc.set_rgb_fg_color(gtk.gdk.Color(red=r*255,green=g*255,blue=b*255))
+        if width == 1 and height == 1:
+            self.pixmap.draw_point(self.gc, x, y)
+        else:
+            self.pixmap.draw_rectangle(self.gc, True, x, y, width, height)
+        self.dirty(x,y,width,height)
 
     def update_screen(self, t):
-        #print >>stderr, 'update_screen'
-        pass
+        if self.dirtyregion != None:
+            x1 = self.dirtyregion["x1"]
+            x2 = self.dirtyregion["x2"]
+            y1 = self.dirtyregion["y1"]
+            y2 = self.dirtyregion["y2"]
+            #print "Update %d,%d (%dx%d)" % (x1, y1, (x2-x1), (y2-y1))
+            self.emit("invalidate", x1, y1, x2-x1, y2-y1)
+            self.dirtyregion = None
 
-    def change_cursor(self, width, height, data):
+    def change_cursor(self, width, height, x, y, data):
         print >>stderr, 'change_cursor'
 
     def move_cursor(self, x, y):
@@ -95,10 +121,10 @@ class GRFBNetworkClient(rfb.RFBNetworkClient, gobject.GObject):
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
         }
 
-    def __init__(self, host, port, converter, debug=0):
-        rfb.RFBNetworkClient.__init__(self, host, port, converter, debug=debug,preferred_encoding=(rfb.ENCODING_RAW,rfb.ENCODING_DESKTOP_RESIZE))
+    def __init__(self, host, port, converter, debug=0, preferred_encoding=(rfb.ENCODING_RAW)):
+        rfb.RFBNetworkClient.__init__(self, host, port, converter, debug=debug,preferred_encoding=preferred_encoding)
         self.__gobject_init__()
-        
+
         self.watch = None
         self.password = None
 
@@ -115,7 +141,8 @@ class GRFBNetworkClient(rfb.RFBNetworkClient, gobject.GObject):
 
         try:
             self.loop1()
-        except:
+        except Exception, e:
+            print str(e)
             self.close()
             self.emit("disconnected")
             return 0
@@ -150,13 +177,18 @@ class GRFBViewer(gtk.DrawingArea):
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
         }
 
-    def __init__(self):
+    def __init__(self, autograbkey=False):
         gtk.DrawingArea.__init__(self)
 
         self.fb = GRFBFrameBuffer(self)
         self.client = None
         self.authenticated = False
         self.needpw = True
+        self.autograbkey = autograbkey
+        self.preferred_encoding = (rfb.ENCODING_RAW, rfb.ENCODING_DESKTOP_RESIZE)
+        # Current impl of draw_solid is *far* too slow to be practical
+        # for Hextile which likes lots of 1x1 pixels solid rectangles
+        #self.preferred_encoding = (rfb.ENCODING_HEXTILE, rfb.ENCODING_RAW, rfb.ENCODING_DESKTOP_RESIZE)
 
         self.fb.connect("resize", self.resize_display)
         self.fb.connect("invalidate", self.repaint_region)
@@ -168,6 +200,27 @@ class GRFBViewer(gtk.DrawingArea):
 	self.connect("button-release-event", self.update_pointer)
 	self.connect("key-press-event", self.key_press)
 	self.connect("key-release-event", self.key_release)
+        self.connect("enter-notify-event", self.enter_notify)
+        self.connect("leave-notify-event", self.leave_notify)
+
+        # If we press one of these keys 3 times in a row
+        # its become sticky until a key outside this set
+        # is pressed. This lets you do  Ctrl-Alt-F1, eg
+        # by "Ctrl Ctrl Ctrl   Alt-F1"
+        self.stickyMods = (gtk.gdk.keyval_from_name("Alt_L"), \
+                           gtk.gdk.keyval_from_name("Alt_R"), \
+                           gtk.gdk.keyval_from_name("Shift_L"), \
+                           gtk.gdk.keyval_from_name("Shift_R"), \
+                           gtk.gdk.keyval_from_name("Super_L"), \
+                           gtk.gdk.keyval_from_name("Super_R"), \
+                           gtk.gdk.keyval_from_name("Hyper_L"), \
+                           gtk.gdk.keyval_from_name("Hyper_R"), \
+                           gtk.gdk.keyval_from_name("Meta_L"), \
+                           gtk.gdk.keyval_from_name("Meta_R"), \
+                           gtk.gdk.keyval_from_name("Control_L"), \
+                           gtk.gdk.keyval_from_name("Control_R"))
+        self.lastKeyVal = None
+        self.lastKeyRepeat = 0
 
         self.set_events(gtk.gdk.EXPOSURE_MASK |
                         gtk.gdk.LEAVE_NOTIFY_MASK |
@@ -184,12 +237,12 @@ class GRFBViewer(gtk.DrawingArea):
     def get_framebuffer_name(self):
         return self.fb.get_name()
 
-    def connect_to_host(self, host, port):
+    def connect_to_host(self, host, port, debug=0):
         if self.client != None:
             self.disconnect_from_host()
 	    self.client = NOne
 
-        client = GRFBNetworkClient(host, port, self.fb)
+        client = GRFBNetworkClient(host, port, self.fb, debug=debug, preferred_encoding=self.preferred_encoding)
         client.connect("disconnected", self._client_disconnected)
 
         auth_types = client.init()
@@ -203,6 +256,7 @@ class GRFBViewer(gtk.DrawingArea):
             self.needpw = False
         else:
             self.needpw = True
+        return self.needpw
 
     def _client_disconnected(self, src):
         self.client = None
@@ -273,14 +327,98 @@ class GRFBViewer(gtk.DrawingArea):
             self.client.update_pointer(self.state_to_mask(state), x, y)
         return True
 
+    def has_grabbed_keyboard(self):
+        return self.grabbedKeyboard
+
+    def will_autograb_keyboard(self):
+        return self.autograbkey
+
+    def grab_keyboard(self):
+        gtk.gdk.keyboard_grab(self.window, 1, long(0))
+        self.grabbedKeyboard = True
+
+    def ungrab_keyboard(self):
+        gtk.gdk.keyboard_ungrab()
+        self.grabbedKeyboard = False
+
+    def enter_notify(self, win, event):
+        if self.autograbkey:
+            self.grab_keyboard()
+
+    def leave_notify(self, win, event):
+        if self.autograbkey:
+            self.ungrab_keyboard()
+
     def key_press(self, win, event):
+        # Key handling in VNC is screwy. The event.keyval from GTK is
+        # interpreted relative to modifier state. This really messes
+        # up with VNC which has no concept of modifiers. If we interpret
+        # at client end you can end up with 'Alt' key press generating
+        # Alt_L, and key release generated ISO_Prev_Group. This really
+        # really confuses the VNC server - 'Alt' gets stuck on.
+        #
+        # So we have to redo GTK's  keycode -> keyval translation
+        # using only the SHIFT modifier which explicitly has to be
+        # interpreted at client end.
+        map = gtk.gdk.keymap_get_default()
+        maskedstate = event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.LOCK_MASK)
+        (val,group,level,mod) = map.translate_keyboard_state(event.hardware_keycode, maskedstate, 0)
+
+        stickyVal = None
+
+        if val in self.stickyMods:
+            # No previous mod pressed, start counting our presses
+            if self.lastKeyVal == None:
+                self.lastKeyVal = val
+                self.lastKeyRepeat = 1
+            else:
+                if self.lastKeyVal == val:
+                    # Match last key pressed, so increase count
+                    self.lastKeyRepeat = self.lastKeyRepeat + 1
+                elif self.lastKeyRepeat < 3:
+                    # Different modifier & last one was not yet
+                    # sticky so reset it
+                    self.lastKeyVal = None
+        else:
+            # If the prev modifier was pressed 3 times in row its sticky
+            if self.lastKeyVal != None and self.lastKeyRepeat >= 3:
+                stickyVal = self.lastKeyVal
+
         if self.client != None:
-            self.client.update_key(1, event.keyval)
+            # Send fake sticky modifier key
+            if stickyVal != None:
+                self.client.update_key(1, stickyVal)
+
+            self.client.update_key(1, val)
+            #self.client.update_key(1, event.keyval)
+
         return True
-    
+
     def key_release(self, win, event):
+        # Key handling in VNC is screwy. See above
+        map = gtk.gdk.keymap_get_default()
+        maskedstate = event.state & (gtk.gdk.SHIFT_MASK | gtk.gdk.LOCK_MASK)
+        (val,group,level,mod) = map.translate_keyboard_state(event.hardware_keycode, maskedstate, 0)
+
+        stickyVal = None
+
+        if not(val in self.stickyMods):
+            # If a sticky modifier is active, we must release it
+            if self.lastKeyVal != None and self.lastKeyRepeat >= 3:
+                stickyVal = self.lastKeyVal
+
+            # Release of any non-modifier clears stickyness
+            self.lastKeyVal = None
+
         if self.client != None:
-            self.client.update_key(0, event.keyval)
+            self.client.update_key(0, val)
+            #self.client.update_key(0, event.keyval)
+
+            # Release the sticky modifier
+            if stickyVal != None:
+                self.client.update_key(0, stickyVal)
+
+
         return True
 
     def get_frame_buffer(self):
@@ -322,14 +460,16 @@ def main():
     vp = gtk.Viewport()
     pane.add(vp)
 
-    vnc = GRFBViewer()
+    vnc = GRFBViewer(autograbkey=True)
     vp.add(vnc)
 
     win.show_all()
     win.present()
 
-    if vnc.connect_to_host(host, port):
+    if vnc.connect_to_host(host, port, debug=0):
         print "Need password"
+        if password == None:
+            return 1
     else:
         print "No password needed"
     vnc.authenticate(password)

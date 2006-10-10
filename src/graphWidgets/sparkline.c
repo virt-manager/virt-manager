@@ -286,13 +286,15 @@ gtk_sparkline_expose (GtkWidget *widget,
       cairo_move_to (cr, cx, cy);
     }
   }
-  if (priv->filled) {
-    double baseline_y = cell_area->height + cell_area->y;
-    cairo_line_to (cr, cell_area->x + cell_area->width, baseline_y);
-    cairo_line_to (cr, 0, baseline_y);
-    cairo_fill (cr);
-  } else {
-    cairo_stroke (cr);
+  if (data->n_values) {
+    if (priv->filled) {
+      double baseline_y = cell_area->height + cell_area->y;
+      cairo_line_to (cr, cell_area->x + cell_area->width, baseline_y);
+      cairo_line_to (cr, 0, baseline_y);
+      cairo_fill (cr);
+    } else {
+      cairo_stroke (cr);
+    }
   }
 
   /* Stop clipping: */

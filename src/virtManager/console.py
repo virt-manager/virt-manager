@@ -22,6 +22,7 @@ import cairo
 import gtk.glade
 import libvirt
 import sys
+import logging
 
 from vncViewer.vnc import GRFBViewer
 
@@ -102,10 +103,12 @@ class vmmConsole(gobject.GObject):
     def toggle_fullscreen(self, src):
         if src.get_active():
             self.window.get_widget("vmm-console").fullscreen()
-            gtk.gdk.keyboard_grab(self.vncViewer.window, 1, 0)
+            if not(self.vncViewer.will_autograb_keyboard()):
+                self.vncViewer.grab_keyboard()
         else:
+            if not(self.vncViewer.will_autograb_keyboard()):
+                self.vncViewer.ungrab_keyboard()
             self.window.get_widget("vmm-console").unfullscreen()
-            gtk.gdk.keyboard_ungrab()
 
     def toggle_toolbar(self, src):
         if src.get_active():
@@ -122,25 +125,34 @@ class vmmConsole(gobject.GObject):
         self.update_widget_states(self.vm, self.vm.status())
 
     def close(self,ignore1=None,ignore2=None):
+        fs = self.window.get_widget("menu-view-fullscreen")
+        if fs.get_active():
+            fs.set_active(False)
+
         self.window.get_widget("vmm-console").hide()
         if self.vncViewer.is_connected():
 	    try:
                 self.vncViewer.disconnect_from_host()
 	    except:
-		print "Failure when disconnecting"
+		logging.error("Failure when disconnecting from VNC server")
         return 1
 
     def _vnc_disconnected(self, src):
         self.activate_auth_page()
 
     def try_login(self, src=None):
-        password = self.window.get_widget("console-auth-password").get_text()
-        protocol, host, port = self.vm.get_graphics_console()
-
         if self.vm.get_id() == 0:
             return
 
-        #print protocol + "://" + host + ":" + str(port)
+        password = self.window.get_widget("console-auth-password").get_text()
+        protocol, host, port = self.vm.get_graphics_console()
+
+        if protocol is None:
+            logging.debug("No graphics configured in guest")
+            return
+
+        logging.debug("Graphics " + str(protocol) + "://" + str(host) + ":" + str(port))
+
         if protocol != "vnc":
             self.activate_unavailable_page()
             return
@@ -149,7 +161,7 @@ class vmmConsole(gobject.GObject):
 	    try:
                 self.vncViewer.connect_to_host(host, port)
 	    except:
-		print _("Unable to activate console") + " " + str((sys.exc_info())[0]) + " " + str((sys.exc_info())[1])
+		logging.error("Unable to activate console " + str((sys.exc_info())[0]) + " " + str((sys.exc_info())[1]))
                 self.activate_unavailable_page()
 		return
 
@@ -257,7 +269,7 @@ class vmmConsole(gobject.GObject):
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
             self.vm.shutdown()
         else:
-            print _("Shutdown requested, but machine is already shutting down / shutoff")
+            logging.warning("Shutdown requested, but machine is already shutting down / shutoff")
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -265,18 +277,18 @@ class vmmConsole(gobject.GObject):
 
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            print _("Pause/resume requested, but machine is shutdown / shutoff")
+            logging.warning("Pause/resume requested, but machine is shutdown / shutoff")
         else:
             if status in [ libvirt.VIR_DOMAIN_PAUSED ]:
                 if not src.get_active():
                     self.vm.resume()
                 else:
-                    print _("Pause requested, but machine is already paused")
+                    logging.warning("Pause requested, but machine is already paused")
             else:
                 if src.get_active():
                     self.vm.suspend()
                 else:
-                    print _("Resume requested, but machine is already running")
+                    logging.warning("Resume requested, but machine is already running")
 
         self.window.get_widget("control-pause").set_active(src.get_active())
         self.window.get_widget("menu-vm-pause").set_active(src.get_active())
@@ -358,7 +370,7 @@ class vmmConsole(gobject.GObject):
                 try:
                     self.try_login()
                 except:
-                    print _("Couldn't open console: ") + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
+                    logging.error("Couldn't open console " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
                     self.ignorePause = False
             else:
                 self.activate_unavailable_page()

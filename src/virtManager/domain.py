@@ -22,6 +22,7 @@ import libvirt
 import libxml2
 import os
 import sys
+import logging
 
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
@@ -109,7 +110,17 @@ class vmmDomain(gobject.GObject):
         if not(info[0] in [libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED]):
             cpuTime = info[4] - prevCpuTime
             cpuTimeAbs = info[4]
+
             pcentCpuTime = (cpuTime) * 100.0 / ((now - prevTimestamp)*1000.0*1000.0*1000.0*self.connection.host_active_processor_count())
+            # Due to timing diffs between getting wall time & getting
+            # the domain's time, its possible to go a tiny bit over
+            # 100% utilization. This freaks out users of the data, so
+            # we hard limit it.
+            if pcentCpuTime > 100.0:
+                pcentCpuTime = 100.0
+            # Enforce >= 0 just in case
+            if pcentCpuTime < 0.0:
+                pcentCpuTime = 0.0
 
         pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
         pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
@@ -191,6 +202,10 @@ class vmmDomain(gobject.GObject):
         if len(self.record) == 0:
             return 0
         return self.record[0]["vcpuCount"]
+
+    def vcpu_max_count(self):
+        cpus = self.get_xml_string("/domain/vcpu")
+        return int(cpus)
 
     def cpu_time_vector(self):
         vector = []
@@ -315,7 +330,8 @@ class vmmDomain(gobject.GObject):
                 port = 5900 + self.get_id()
             else:
                 port = int(port)
-        return [type, "localhost", port]
+            return [type, "localhost", port]
+        return [type, None, None]
 
     def get_disk_devices(self):
         xml = self.vm.XMLDesc(0)
@@ -400,8 +416,8 @@ class vmmDomain(gobject.GObject):
 
     def set_memory(self, memory):
         memory = int(memory)
-        if(memory > self.maximum_memory()):
-            print "XXX add proper error handling here. You may not set vm memory larger than the maximum set for the vm."
+        if (memory > self.maximum_memory()):
+            logging.warning("Requested memory " + str(memory) + " over maximum " + self.maximum_memory())
         self.vm.setMemory(memory)
         return self.vm.info()[2]
 

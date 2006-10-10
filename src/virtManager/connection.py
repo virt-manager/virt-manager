@@ -93,7 +93,7 @@ class vmmConnection(gobject.GObject):
             os.remove(frm)
         return status
 
-    def tick(self):
+    def tick(self, noStatsUpdate=False):
         if self.vmm == None:
             return
 
@@ -194,9 +194,13 @@ class vmmConnection(gobject.GObject):
         # Finally, we sample each domain
         now = time()
         self.hostinfo = self.vmm.getInfo()
-        for uuid in self.vms.keys():
-            self.vms[uuid].tick(now)
 
+        updateVMs = self.vms
+        if noStatsUpdate:
+            updateVMs = newVms
+
+        for uuid in updateVMs.keys():
+            self.vms[uuid].tick(now)
         return 1
 
     def uuidstr(self, rawuuid):
