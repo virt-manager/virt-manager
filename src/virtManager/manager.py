@@ -54,9 +54,6 @@ class vmmManager(gobject.GObject):
         self.connection = connection
         self.prepare_vmlist()
 
-        self.connection.connect("vm-added", self.vm_added)
-        self.connection.connect("vm-removed", self.vm_removed)
-
         self.config.on_vmlist_domain_id_visible_changed(self.toggle_domain_id_visible_widget)
         self.config.on_vmlist_status_visible_changed(self.toggle_status_visible_widget)
         self.config.on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
@@ -85,7 +82,6 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("vm-new").set_sensitive(True)
             self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
 
-        self.window.get_widget("vm-view").set_sensitive(False)
         self.window.get_widget("vm-view").set_active(0)
 
         self.vmmenu = gtk.Menu()
@@ -125,6 +121,7 @@ class vmmManager(gobject.GObject):
             "on_vm_new_clicked": self.show_vm_create,
             "on_menu_edit_details_activate": self.show_vm_details,
 
+            "on_vm_view_changed": self.vm_view_changed,
             "on_vm_list_row_activated": self.open_vm_console,
 
             "on_vm_list_button_press_event": self.popup_vm_menu,
@@ -136,6 +133,10 @@ class vmmManager(gobject.GObject):
         self.vm_selected(None)
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
         self.connection.connect("disconnected", self.close)
+
+        self.connection.connect("vm-added", self.vm_added)
+        self.connection.connect("vm-removed", self.vm_removed)
+
 
         # store any error message from the restore-domain callback
         self.domain_restore_error = ""
@@ -157,6 +158,19 @@ class vmmManager(gobject.GObject):
     def open_connection(self, src=None):
         self.emit("action-show-connect")
 
+    def is_showing_active(self):
+        active = self.window.get_widget("vm-view").get_active()
+        if active in [0,1]:
+            return True
+        return False
+
+    def is_showing_inactive(self):
+        active = self.window.get_widget("vm-view").get_active()
+        if active in [0,2]:
+            return True
+        return False
+
+
     def restore_saved(self, src=None):
         # get filename
         self.fcdialog = gtk.FileChooserDialog(_("Restore Virtual Machine"),
@@ -175,7 +189,7 @@ class vmmManager(gobject.GObject):
                                   [file_to_load],
                                   _("Restoring Virtual Machine"))
             progWin.run()
-            
+
         self.fcdialog.destroy()
         if(self.domain_restore_error != ""):
             self.error_msg = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
@@ -186,56 +200,91 @@ class vmmManager(gobject.GObject):
             self.error_msg.run()
             self.error_msg.destroy()
             self.domain_restore_error = ""
-            
 
     def restore_saved_callback(self, file_to_load):
         status = self.connection.restore(file_to_load)
         if(status != 0):
             self.domain_restore_error = _("Error restoring domain '%s'. Is the domain already running?") % file_to_load
-        
+
+
+    def vm_view_changed(self, src):
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
+        model.clear()
+
+        uuids = self.connection.list_vm_uuids()
+        for vmuuid in uuids:
+            vm = self.connection.get_vm(vmuuid)
+            if vm.is_active():
+                if not(self.is_showing_active()):
+                    continue
+            else:
+                if not(self.is_showing_inactive()):
+                    continue
+
+            model.append([vmuuid, vm.get_name()])
 
     def vm_added(self, connection, uri, vmuuid):
+        vm = self.connection.get_vm(vmuuid)
+        vm.connect("status-changed", self.vm_status_changed)
+        vm.connect("resources-sampled", self.vm_resources_sampled)
+
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
-        dup = 0
-        for row in range(model.iter_n_children(None)):
-            vm = model.get_value(model.iter_nth_child(None, row), 0)
-            if vm == vmuuid:
-                dup = 1
+        if vm.is_active():
+            if not(self.is_showing_active()):
+                return
+        else:
+            if not(self.is_showing_inactive()):
+                return
 
-        vm = self.connection.get_vm(vmuuid)
-
-        if dup != 1:
-            model.append([vmuuid, vm.get_name()])
-            vm.connect("status-changed", self.vm_status_changed)
-            vm.connect("resources-sampled", self.vm_resources_sampled)
+        model.append([vmuuid, vm.get_name()])
 
 
     def vm_removed(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
-        dup = 0
         for row in range(model.iter_n_children(None)):
             vm = model.get_value(model.iter_nth_child(None, row), 0)
             if vm == vmuuid:
                 model.remove(model.iter_nth_child(None, row))
                 break
 
-    def vm_status_changed(self, domain, status):
-        self.vm_updated(domain.get_uuid())
+    def vm_status_changed(self, vm, status):
+        wanted = False
+        if vm.is_active():
+            if self.is_showing_active():
+                wanted = True
+        else:
+            if self.is_showing_inactive():
+                wanted = True
 
-    def vm_resources_sampled(self, domain):
-        self.vm_updated(domain.get_uuid())
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
 
-    def vm_updated(self, vmuuid):
+        missing = True
+        for row in range(model.iter_n_children(None)):
+            iter = model.iter_nth_child(None, row)
+            if model.get_value(iter, 0) == vm.get_uuid():
+                if wanted:
+                    missing = False
+                else:
+                    model.remove(model.iter_nth_child(None, row))
+                break
+
+        if missing and wanted:
+            model.append([vm.get_uuid(), vm.get_name()])
+
+
+    def vm_resources_sampled(self, vm):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
         for row in range(model.iter_n_children(None)):
             iter = model.iter_nth_child(None, row)
-            if model.get_value(iter, 0) == vmuuid:
+            if model.get_value(iter, 0) == vm.get_uuid():
                 model.row_changed(str(row), iter)
 
     def current_vm(self):

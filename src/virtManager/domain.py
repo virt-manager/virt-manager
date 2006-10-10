@@ -43,6 +43,9 @@ class vmmDomain(gobject.GObject):
         self.lastStatus = None
         self.record = []
 
+    def set_handle(self, vm):
+        self.vm = vm
+
     def is_active(self):
         if self.vm.ID() == -1:
             return False

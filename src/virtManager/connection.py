@@ -66,6 +66,9 @@ class vmmConnection(gobject.GObject):
         self.vmm = None
         self.emit("disconnected", self.uri)
 
+    def list_vm_uuids(self):
+        return self.vms.keys()
+
     def get_host_info(self):
         return self.hostinfo
 
@@ -133,8 +136,7 @@ class vmmConnection(gobject.GObject):
                     # if its a previously inactive domain.
                     vm = self.vmm.lookupByID(id)
                     uuid = self.uuidstr(vm.UUID())
-                    maybeNewUUIDs[uuid] = vmmDomain(self.config, self, vm, uuid)
-                    curUUIDs[uuid] = maybeNewUUIDs[uuid]
+                    maybeNewUUIDs[uuid] = vm
                     #print "Maybe new active " + str(maybeNewUUIDs[uuid].get_name()) + " " + uuid
 
         # Filter out inactive domains which haven't changed
@@ -151,8 +153,7 @@ class vmmConnection(gobject.GObject):
                     # if its a previously inactive domain.
                     vm = self.vmm.lookupByName(name)
                     uuid = self.uuidstr(vm.UUID())
-                    maybeNewUUIDs[uuid] = vmmDomain(self.config, self, vm, uuid)
-                    curUUIDs[uuid] = maybeNewUUIDs[uuid]
+                    maybeNewUUIDs[uuid] = vm
                     #print "Maybe new inactive " + str(maybeNewUUIDs[uuid].get_name()) + " " + uuid
 
         # At this point, maybeNewUUIDs has domains which are
@@ -161,13 +162,17 @@ class vmmConnection(gobject.GObject):
         # Filter out VMs which merely changed state, leaving
         # only new domains
         for uuid in maybeNewUUIDs.keys():
-            vm = maybeNewUUIDs[uuid]
-            if not(self.vms.has_key(vm.get_uuid())):
+            rawvm = maybeNewUUIDs[uuid]
+            if not(self.vms.has_key(uuid)):
                 #print "Completely new VM " + str(vm)
+                vm = vmmDomain(self.config, self, rawvm, uuid)
                 newUUIDs[vm.get_uuid()] = vm
+                curUUIDs[uuid] = vm
             else:
+                vm = self.vms[uuid]
+                vm.set_handle(rawvm)
+                curUUIDs[uuid] = vm
                 #print "Mere state change " + str(vm)
-                pass
 
         # Finalize list of domains which went away altogether
         for uuid in self.vms.keys():
@@ -185,10 +190,12 @@ class vmmConnection(gobject.GObject):
         # Inform everyone what changed
         for uuid in oldUUIDs:
             vm = oldUUIDs[uuid]
+            #print "Remove " + vm.get_name() + " " + uuid
             self.emit("vm-removed", self.uri, uuid)
 
         for uuid in newUUIDs:
             vm = newUUIDs[uuid]
+            #print "Add " + vm.get_name() + " " + uuid
             self.emit("vm-added", self.uri, uuid)
 
         # Finally, we sample each domain
