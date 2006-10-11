@@ -21,6 +21,7 @@ import gobject
 import libvirt
 import os
 from time import time
+import logging
 
 from virtManager.domain import vmmDomain
 
@@ -110,7 +111,11 @@ class vmmConnection(gobject.GObject):
                 oldActiveIDs[vm.get_id()] = vm
 
         newActiveIDs = self.vmm.listDomainsID()
-        newInactiveNames = self.vmm.listDefinedDomains()
+        newInactiveNames = []
+        try:
+            newInactiveNames = self.vmm.listDefinedDomains()
+        except:
+            logging.warn("Unable to list inactive domains")
 
         newUUIDs = {}
         oldUUIDs = {}
