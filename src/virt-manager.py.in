@@ -107,6 +107,7 @@ def main():
     optParser = OptionParser()
     optParser.add_option("-c", "--connect", dest="uri", help="Connect to hypervisor at URI", metavar="URI")
     optParser.add_option("--no-dbus", action="store_true", dest="nodbus", help="Disable DBus service for controlling UI")
+    optParser.add_option("--profile", dest="profile", help="Generate runtime performance profile stats", metavar="FILE")
 
     (options, args) = optParser.parse_args()
 
@@ -148,7 +149,14 @@ def main():
                 engine.show_manager(options.uri)
             else:
                 engine.show_connect()
-    gtk.main()
+
+    if options.profile != None:
+        import hotshot
+        prof = hotshot.Profile(options.profile)
+        prof.runcall(gtk.main)
+        prof.close()
+    else:
+        gtk.main()
 
 if __name__ == "__main__":
     main()
