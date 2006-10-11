@@ -339,6 +339,10 @@ class vmmCreate(gobject.GObject):
             filesize = self.get_config_disk_size() / 1024.0
         try:
             d = xeninst.XenDisk(self.get_config_disk_image(), filesize)
+            if d.type == xeninst.XenDisk.TYPE_FILE and \
+                   self.get_config_method() == VM_PARA_VIRT \
+                   and xeninst.util.is_blktap_capable():
+                d.driver_name = xeninst.XenDisk.DRIVER_TAP
         except ValueError, e:
             self._validation_error_box(_("Invalid storage address"), e.args[0])
             return
