@@ -122,20 +122,12 @@ class vmmCreate(gobject.GObject):
         media_url_list = self.window.get_widget("pv-media-url")
         media_url_model = gtk.ListStore(str)
         media_url_list.set_model(media_url_model)
-        text = gtk.CellRendererText()
-        text.set_property("alignment", pango.ALIGN_LEFT)
-        text.set_property("xalign", 0.0)
-        media_url_list.pack_start(text, True)
-        media_url_list.add_attribute(text, 'text', 0)
+        media_url_list.set_text_column(0)
 
         ks_url_list = self.window.get_widget("pv-ks-url")
         ks_url_model = gtk.ListStore(str)
         ks_url_list.set_model(ks_url_model)
-        text = gtk.CellRendererText()
-        text.set_property("alignment", pango.ALIGN_LEFT)
-        text.set_property("xalign", 0.0)
-        ks_url_list.pack_start(text, True)
-        ks_url_list.add_attribute(text, 'text', 0)
+        ks_url_list.set_text_column(0)
 
         self.window.get_widget("create-cpus-physical").set_text(str(self.connection.host_maximum_processor_count()))
 
