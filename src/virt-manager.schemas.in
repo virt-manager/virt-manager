@@ -117,5 +117,18 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/urls/url-list-length</key>
+      <applyto>/apps/::PACKAGE::/urls/url-list-length</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>int</type>
+      <default>10</default>
+
+      <locale name="C">
+        <short>The length of the list of URLs</short>
+        <long>The number of urls to keep in the history for the install media address page.</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

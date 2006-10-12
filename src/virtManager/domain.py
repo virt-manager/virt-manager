@@ -320,7 +320,8 @@ class vmmDomain(gobject.GObject):
                 port = 5900 + self.get_id()
             else:
                 port = int(port)
-        return [type, "localhost", port]
+            return [type, "localhost", port]
+        return [type, None, None]
 
     def get_disk_devices(self):
         xml = self.vm.XMLDesc(0)

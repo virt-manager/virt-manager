@@ -21,6 +21,7 @@ import gobject
 import gtk
 import gtk.gdk
 import gtk.glade
+import pango
 import xeninst
 import os, sys
 import subprocess
@@ -79,6 +80,8 @@ class vmmCreate(gobject.GObject):
             "on_storage_file_address_changed": self.toggle_storage_size,
             "on_storage_toggled" : self.change_storage_type,
             "on_media_toggled" : self.change_media_type,
+            "on_pv_media_url_changed" : self.change_combo_box,
+            "on_pv_ks_url_changed" : self.change_combo_box,
             })
         self.set_initial_state()
 
@@ -115,6 +118,17 @@ class vmmCreate(gobject.GObject):
         cd_list.add_attribute(text, 'sensitive', 2)
         self.populate_opt_media(cd_model)
 
+        # set up the lists for the url widgets
+        media_url_list = self.window.get_widget("pv-media-url")
+        media_url_model = gtk.ListStore(str)
+        media_url_list.set_model(media_url_model)
+        media_url_list.set_text_column(0)
+
+        ks_url_list = self.window.get_widget("pv-ks-url")
+        ks_url_model = gtk.ListStore(str)
+        ks_url_list.set_model(ks_url_model)
+        ks_url_list.set_text_column(0)
+
         self.window.get_widget("create-cpus-physical").set_text(str(self.connection.host_maximum_processor_count()))
 
     def reset_state(self):
@@ -132,8 +146,6 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("virt-method-pv").set_active(True)
         self.window.get_widget("media-iso-image").set_active(True)
         self.window.get_widget("fv-iso-location").set_text("")
-        self.window.get_widget("pv-media-url").set_text("")
-        self.window.get_widget("pv-ks-url").set_text("")
         self.window.get_widget("storage-partition").set_active(True)
         self.window.get_widget("storage-partition-address").set_text("")
         self.window.get_widget("storage-file-address").set_text("")
@@ -141,6 +153,10 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-memory-max").set_value(500)
         self.window.get_widget("create-memory-startup").set_value(500)
         self.window.get_widget("create-vcpus").set_value(1)
+        model = self.window.get_widget("pv-media-url").get_model()
+        self.populate_url_model(model, self.config.get_media_urls())
+        model = self.window.get_widget("pv-ks-url").get_model()
+        self.populate_url_model(model, self.config.get_kickstart_urls())
 
         self.install_error = None
 
@@ -187,7 +203,12 @@ class vmmCreate(gobject.GObject):
 
     def get_config_install_source(self):
         if self.get_config_method() == VM_PARA_VIRT:
-            return self.window.get_widget("pv-media-url").get_text()
+            widget = self.window.get_widget("pv-media-url")
+            url= widget.child.get_text()
+            # Add the URL to the list, if it's different
+            self.config.add_media_url(url)
+            self.populate_url_model(widget.get_model(), self.config.get_media_urls())
+            return url
         else:
             if self.window.get_widget("media-iso-image").get_active():
                 return self.window.get_widget("fv-iso-location").get_text()
@@ -198,7 +219,11 @@ class vmmCreate(gobject.GObject):
 
     def get_config_kickstart_source(self):
         if self.get_config_method() == VM_PARA_VIRT:
-            return self.window.get_widget("pv-ks-url").get_text()
+            widget = self.window.get_widget("pv-ks-url")
+            url = widget.child.get_text()
+            self.config.add_kickstart_url(url)
+            self.populate_url_model(widget.get_model(), self.config.get_kickstart_urls())
+            return url
         else:
             return ""
 
@@ -314,6 +339,10 @@ class vmmCreate(gobject.GObject):
             filesize = self.get_config_disk_size() / 1024.0
         try:
             d = xeninst.XenDisk(self.get_config_disk_image(), filesize)
+            if d.type == xeninst.XenDisk.TYPE_FILE and \
+                   self.get_config_method() == VM_PARA_VIRT \
+                   and xeninst.util.is_blktap_capable():
+                d.driver_name = xeninst.XenDisk.DRIVER_TAP
         except ValueError, e:
             self._validation_error_box(_("Invalid storage address"), e.args[0])
             return
@@ -595,3 +624,18 @@ class vmmCreate(gobject.GObject):
                 if idx == active:
                     cdlist.set_active(-1)
             idx = idx + 1
+
+    def populate_url_model(self, model, urls):
+        model.clear()
+        for url in urls:
+            model.append([url])
+        
+    def change_combo_box(self, box):
+        model = box.get_model()
+        try:
+            box.child.set_text(model.get_value(box.get_active_iter(), 0))
+        except TypeError, e:
+            # pygtk throws a bogus type error here, ignore it
+            return
+        
+                           
