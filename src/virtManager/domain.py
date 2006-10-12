@@ -58,6 +58,12 @@ class vmmDomain(gobject.GObject):
     def get_id(self):
         return self.vm.ID()
 
+    def get_id_pretty(self):
+        id = self.get_id()
+        if id < 0:
+            return "-"
+        return str(id)
+
     def get_name(self):
         return self.vm.name()
 
@@ -169,6 +175,14 @@ class vmmDomain(gobject.GObject):
             return 0
         return self.record[0]["currMemPercent"]
 
+    def current_memory_pretty(self):
+        mem = self.current_memory_percentage()
+        if mem > (1024*1024):
+            return "%2.2f GB" % (mem/(1024.0*1024.0))
+        else:
+            return "%2.2f MB" % (mem/1024.0)
+
+
     def maximum_memory(self):
         if len(self.record) == 0:
             return 0
@@ -188,6 +202,9 @@ class vmmDomain(gobject.GObject):
         if len(self.record) == 0:
             return 0
         return self.record[0]["cpuTimePercent"]
+
+    def cpu_time_pretty(self):
+        return "%2.2f %%" % self.cpu_time_percentage()
 
     def network_traffic(self):
         return 1
@@ -219,6 +236,12 @@ class vmmDomain(gobject.GObject):
             else:
                 vector.append(0)
         return vector
+
+    def cpu_time_vector_limit(self, limit):
+        cpudata = self.cpu_time_vector()
+        if len(cpudata) > limit:
+            cpudata = cpudata[0:limit]
+        return cpudata
 
     def cpu_time_moving_avg_vector(self):
         vector = []
