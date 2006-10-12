@@ -48,7 +48,7 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
-        self.vncViewer = GRFBViewer()
+        self.vncViewer = GRFBViewer(autograbkey=True)
         self.window.get_widget("console-vnc-align").add(self.vncViewer)
         self.vncViewer.connect("size-request", self.autosize)
         self.vncViewer.show()
