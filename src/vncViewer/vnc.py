@@ -396,7 +396,8 @@ class GRFBViewer(gtk.DrawingArea):
     def focus_out(self, win, event):
         # Forceably release any modifiers still on
         for key in self.modifiersOn.keys():
-            self.client.update_key(0, key)
+            if not(self.client is None):
+                self.client.update_key(0, key)
         self.modifiersOn = {}
 
 
