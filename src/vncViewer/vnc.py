@@ -307,6 +307,12 @@ class GRFBViewer(gtk.DrawingArea):
         if self.client == None:
             return
 
+        # Reset server state in case we have modifiers pressed
+        for key in self.modifiersOn.keys():
+            if not(self.client is None):
+                self.client.update_key(0, key)
+        self.modifiersOn = {}
+
         self.client.close()
         self.client = None
         self.emit("disconnected")
