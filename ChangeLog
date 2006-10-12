@@ -1,8 +1,113 @@
+2006-10-12  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/vncViewer/vnc.py:
+	Reset modifiers when disconnectin from server too
+	[963a1d4668e9] [tip]
+
+	* src/vncViewer/vnc.py:
+	Only fake events if there is an active VNC connection
+	[74c7ba84a353]
+
+	* src/virtManager/console.py:
+	Merge heads
+	[a85632c84130]
+
+	* configure.ac, virt-manager.spec.in:
+	Get ready for 0.2.4 release
+	[4d31437e9e0e]
+
+	* src/virtManager/console.py:
+	Automatically grab keyboard in guest consoles
+	[34653c9a7b05]
+
+	* src/vncViewer/vnc.py:
+	Fix for 'stuck' modifier keys, faking keyup when we loose focus
+	[18610f26c019]
+
+2006-10-11  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade:
+	Mnemonic updates and clean-up on memory and cpu screens. Fixes BZ
+	208408.
+	[27902e672c40]
+
+2006-10-11  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/create.py:
+	Make file backed disks blktap based by default, if available
+	[a2adaa31d863]
+
+	* src/virtManager/create.py:
+	Don't create a text renderer, because GTK already does that for us
+	[451e4c09fff0]
+
+2006-10-11  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virt-manager.schemas.in,
+	src/virtManager/config.py, src/virtManager/create.py:
+	Add drop-down lists for PV media and kickstart URLs
+	[5650465dc7fa]
+
+2006-10-09  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade:
+	Remove help button from preferences dialog
+	[503f9261374a]
+
+2006-10-06  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/domain.py:
+	Don't return hostname or port if VNC isn't active
+	[3d4a40a061aa]
+
+	* src/virtManager/console.py:
+	Fixed stringification problem when no graphics are active
+	[af5a8f7bdfdc]
+
+2006-10-03  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/create.py:
+	Force immediate refresh of VMs after creating one
+	[b00a03871a52]
+
+	* src/virtManager/engine.py:
+	Improve error reporting to user if hypervisor connection attempt
+	fails (bz 209122)
+	[e81393d95b2e]
+
+2006-09-28  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/domain.py:
+	Clamp the CPU utilization values between 0 & 100 to avoid freaking
+	out sparkline renderer (more bz 208185)
+	[bf53891faa22]
+
+2006-09-27  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/graphWidgets/cellrenderersparkline.c,
+	src/graphWidgets/sparkline.c:
+	Avoid array underflow (& thus SEGV) when no data points are set
+	(workaround segv in bz 208185)
+	[1cb01dfe5d34]
+
+	* virt-manager.spec.in:
+	Fixup download URL
+	[5f81ecc8e603]
+
 2006-09-26  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.2.3-1 for changeset
+	408e703e0a36d1f601b7038e3ee633236c5a5a28
+	[5cd1df4bc304]
+
+	* ChangeLog, README, configure.ac, virt-manager.spec.in:
+	Bumped for release 0.2.3
+	[408e703e0a36] [RELEASE-0.2.3-1]
 
 	* po/en_GB.po, po/virt-manager.pot:
 	Re-generate POT files
-	[4635350fbedc] [tip]
+	[4635350fbedc]
 
 	* src/virtManager/create.py:
 	Filter ISO filechooser to just *.iso files
@@ -25,27 +130,6 @@
 	Merge heads
 	[84a6389d11f3]
 
-	* src/Makefile.am, src/virt-manager.py.in,
-	src/virtManager/Makefile.am, src/virtManager/config.py,
-	src/virtManager/console.py, src/virtManager/details.py,
-	src/virtManager/domain.py, src/virtManager/engine.py,
-	src/virtManager/keyring.py:
-	Replace numerous 'print' statements with calls to python logging.
-	Added syntax checking of all modules
-	[16a2e8ff4402]
-
-	* src/vncViewer/vnc.py:
-	Merge heads
-	[07acbe79dda0]
-
-	* src/virtManager/console.py, src/vncViewer/vnc.py:
-	Re-work handling of keyboard modifiers to ensure un-modified keyvals
-	are sent over wire, allowing remote client to interpret modifiers as
-	it so desires (only exception being shift which is intepreted
-	locally). Also allow VNC widget to auto-grab keyboard on mouse
-	enter/ ungrab on exit
-	[edde7854a4ac]
-
 2006-09-22  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* src/virt-manager.glade:
@@ -61,6 +145,23 @@
 	Only display 40 CPU samples in manage window to avoid graph getting
 	too wide
 	[f1db328b64cb]
+
+2006-09-25  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/Makefile.am, src/virt-manager.py.in,
+	src/virtManager/Makefile.am, src/virtManager/config.py,
+	src/virtManager/console.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/virtManager/engine.py,
+	src/virtManager/keyring.py:
+	Replace numerous 'print' statements with calls to python logging.
+	Added syntax checking of all modules
+	[16a2e8ff4402]
+
+	* src/vncViewer/vnc.py:
+	Merge heads
+	[07acbe79dda0]
+
+2006-09-22  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* AUTHORS, src/virtManager/create.py:
 	When going back in create wizard, skip fv/pv choice page if host
@@ -124,15 +225,20 @@
 	Always enable VNC toolbars to avoid GTK window resizing issues
 	[a1a7e46e23a4]
 
+2006-09-25  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py, src/vncViewer/vnc.py:
+	Re-work handling of keyboard modifiers to ensure un-modified keyvals
+	are sent over wire, allowing remote client to interpret modifiers as
+	it so desires (only exception being shift which is intepreted
+	locally). Also allow VNC widget to auto-grab keyboard on mouse
+	enter/ ungrab on exit
+	[edde7854a4ac]
+
 2006-09-13  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* Merge heads
 	[e8947829c1e6]
-
-	* src/vncViewer/rfb.py, src/vncViewer/vnc.py:
-	Added support for batching of redraws. Initial support for hextile,
-	albeit faaaaar to slow to turn on. Fix signature of cursor method
-	[4db02411579c]
 
 2006-09-12  berrange  <berrange@dhcp-4-245.virt.boston.redhat.com>
 
@@ -230,6 +336,13 @@
 	some UI cleanups for domain creation wizard
 	[a19f67306922]
 
+2006-09-13  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/vncViewer/rfb.py, src/vncViewer/vnc.py:
+	Added support for batching of redraws. Initial support for hextile,
+	albeit faaaaar to slow to turn on. Fix signature of cursor method
+	[4db02411579c]
+
 2006-08-31  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* src/virt-manager.glade:
@@ -324,10 +437,6 @@
 	* Merged heads
 	[ddd0925ecb0f]
 
-	* README, configure.ac, po/virt-manager.pot, virt-manager.spec.in:
-	Incremented deps on xeninst & libvirt. Bumped release to 0.2.0
-	[815a974f1e27]
-
 2006-08-22  "Hugh O. Brock  <hbrock@redhat.com>
 
 	* src/virtManager/create.py:
@@ -337,6 +446,12 @@
 	* src/virtManager/create.py:
 	properly unmount nfs dirs when done, do better with error handling
 	[140b26d878c9]
+
+2006-08-22  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* README, configure.ac, po/virt-manager.pot, virt-manager.spec.in:
+	Incremented deps on xeninst & libvirt. Bumped release to 0.2.0
+	[815a974f1e27]
 
 2006-08-21  "Hugh O. Brock  <hbrock@redhat.com>
 
@@ -393,6 +508,14 @@
 	Merge heads
 	[d189201f4cf6]
 
+2006-08-18  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py:
+	Fix vcpu bug and memory-size-int issue
+	[43100d1ef03d]
+
+2006-08-18  "Daniel P. Berrange  <berrange@redhat.com>
+
 	* po/virt-manager.pot, src/virt-manager.glade:
 	Remove the 'secure connection' radiobutton (again). Rename
 	restoremenu
@@ -407,14 +530,6 @@
 	Destroy serial console window when a domain goes away
 	[82e8bf8761f0]
 
-2006-08-18  "Hugh O. Brock  <hbrock@redhat.com>
-
-	* src/virtManager/create.py:
-	Fix vcpu bug and memory-size-int issue
-	[43100d1ef03d]
-
-2006-08-18  "Daniel P. Berrange  <berrange@redhat.com>
-
 	* src/virt-manager.glade:
 	Tweak layout / text for VCPU / memory config
 	[5d6d5cd90301]
@@ -424,20 +539,6 @@
 	* src/virt-manager.glade:
 	Merge heads
 	[5c362a797b91]
-
-	* virt-manager.spec.in:
-	Added requirement on python-xeninst for VM creation
-	[5f14a423a71e]
-
-	* src/virt-manager.glade, src/virtManager/console.py,
-	src/vncViewer/rfb.py, src/vncViewer/vnc.py:
-	Added support for desktop resize protocol, auto-resize window to fit
-	VNC widget
-	[fbbdc266efd3]
-
-	* src/virt-manager.py.in:
-	Added commandline flag to disable dbus service (useful in testing)
-	[a0233e84b761]
 
 2006-08-17  "Hugh O. Brock  <hbrock@redhat.com>
 
@@ -458,6 +559,20 @@
 	* src/virtManager/config.py:
 	Make keyring use a little more safe
 	[102100b937ac]
+
+	* virt-manager.spec.in:
+	Added requirement on python-xeninst for VM creation
+	[5f14a423a71e]
+
+	* src/virt-manager.glade, src/virtManager/console.py,
+	src/vncViewer/rfb.py, src/vncViewer/vnc.py:
+	Added support for desktop resize protocol, auto-resize window to fit
+	VNC widget
+	[fbbdc266efd3]
+
+	* src/virt-manager.py.in:
+	Added commandline flag to disable dbus service (useful in testing)
+	[a0233e84b761]
 
 	* src/virt-manager.py.in:
 	Initialize threads, otherwise GNOME VFS goes crash-tastic
@@ -704,12 +819,6 @@
 	* Merge heads
 	[a98827d19456]
 
-2006-07-25  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* virt-manager.spec.in:
-	Updates required to RPM spec by Fedora review
-	[b4e38784109b]
-
 2006-07-28  "Hugh O. Brock  <hbrock@redhat.com>
 
 	* src/virtManager/details.py:
@@ -751,6 +860,12 @@
 	src/virtManager/engine.py, src/virtManager/manager.py:
 	Added error dialog for domain restore errors
 	[442d020f0617]
+
+2006-07-25  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* virt-manager.spec.in:
+	Updates required to RPM spec by Fedora review
+	[b4e38784109b]
 
 2006-07-20  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -907,19 +1022,6 @@
 	_SCRIPTS rename
 	[4e9caca0a3f9]
 
-2006-07-17  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* virt-manager.spec.in:
-	Updated project URL & make license compliant with rpmlint
-	requirements & add documentation
-	[d5dc13d96450]
-
-	* src/Makefile.am, src/virtManager/Makefile.am,
-	src/vncViewer/Makefile.am:
-	Ensure python scripts are installed as SCRIPTS, rather than DATA to
-	stop rpmlint complaining
-	[ec9da56ebd96]
-
 2006-07-19  "Hugh O. Brock  <hbrock@redhat.com>
 
 	* src/virt-manager.glade, src/virtManager/engine.py:
@@ -946,6 +1048,19 @@
 	Add UI bits for saving vm snapshots. Actual "save" dialog and save
 	code to follow.
 	[762abe5412de]
+
+2006-07-17  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* virt-manager.spec.in:
+	Updated project URL & make license compliant with rpmlint
+	requirements & add documentation
+	[d5dc13d96450]
+
+	* src/Makefile.am, src/virtManager/Makefile.am,
+	src/vncViewer/Makefile.am:
+	Ensure python scripts are installed as SCRIPTS, rather than DATA to
+	stop rpmlint complaining
+	[ec9da56ebd96]
 
 2006-07-14  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -1064,13 +1179,6 @@
 	* Merge with head
 	[6652953b3972]
 
-2006-06-28  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* .hgtags:
-	Added tag RELEASE-0.1.2-3 for changeset
-	189d414f9fe41333bbb768f2070f4f5656fa2da5
-	[77350578e51e]
-
 2006-06-30  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* src/graphWidgets/Makefile.am:
@@ -1089,6 +1197,11 @@
 	[5ccaa1773fbb]
 
 2006-06-28  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.1.2-3 for changeset
+	189d414f9fe41333bbb768f2070f4f5656fa2da5
+	[77350578e51e]
 
 	* AUTHORS, ChangeLog, NEWS, README,
 	src/graphWidgets/cellrenderersparkline.c,
@@ -1213,16 +1326,6 @@
 	* Merge heads
 	[ec4f5f51be05]
 
-2006-06-15  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* src/virtManager/engine.py, src/virtManager/remote.py:
-	Remote some debug prints
-	[a14e7970af03]
-
-	* src/gnome-virt-manager.py.in, src/virtManager/remote.py:
-	Fixed method names for DBus remote
-	[859655db8611]
-
 2006-06-16  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* autobuild.sh, configure.ac, gnome-virt-manager.spec.in,
@@ -1245,6 +1348,16 @@
 	src/vncViewer/rfb.py, src/vncViewer/vnc.py:
 	Initial prototype for embedded VNC framebuffer
 	[cb07eff840b5]
+
+2006-06-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/engine.py, src/virtManager/remote.py:
+	Remote some debug prints
+	[a14e7970af03]
+
+	* src/gnome-virt-manager.py.in, src/virtManager/remote.py:
+	Fixed method names for DBus remote
+	[859655db8611]
 
 2006-06-14  "Daniel P. Berrange  <berrange@redhat.com>
 
