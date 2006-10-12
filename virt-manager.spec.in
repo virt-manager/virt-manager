@@ -129,6 +129,18 @@ fi
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Thu Oct 12 2006 Daniel Berrange <berrange@redhat.com> - 0.2.4-1
+- Fix duplicated mnemonics (bz 208408)
+- Use blktap backed disks if available
+- Use a drop down list to remember past URLs (bz 209479)
+- Remove unused help button from preferences dialog (bz 209251)
+- Fix exception when no VNC graphics is defined
+- Force immediate refresh of VMs after creating a new one
+- Improve error reporting if run on a kernel without Xen (bz 209122)
+- Clamp CPU utilization between 0 & 100 pcent (bz 208185)
+- Fix array underflow SEGV when no data points available (bz 208185)
+- More fixes to avoid stuck modifier keys on focus-out (bz 207949)
+
 * Tue Sep 26 2006 Daniel Berrange <berrange@redhat.com> - 0.2.3-1
 - Require xeninst >= 0.93.0 to fix block backed devices
 - Skip para/fully-virt step when going back in wizard if not HVM host (bz 207409)
