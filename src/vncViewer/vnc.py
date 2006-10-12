@@ -202,6 +202,47 @@ class GRFBViewer(gtk.DrawingArea):
 	self.connect("key-release-event", self.key_release)
         self.connect("enter-notify-event", self.enter_notify)
         self.connect("leave-notify-event", self.leave_notify)
+        self.connect("focus-in-event", self.focus_in)
+        self.connect("focus-out-event", self.focus_out)
+
+        # We keep a big list of likely modifier keys, so when we get
+        # a focus-out event while one of these is presed, we then
+        # send a fake KeyUp event to VNC. This avoid trouble with
+        # the guest having 'stuck' modifier keys.
+        self.modifiers = (gtk.gdk.keyval_from_name("Shift_L"), \
+                          gtk.gdk.keyval_from_name("Shift_R"), \
+                          gtk.gdk.keyval_from_name("Control_L"), \
+                          gtk.gdk.keyval_from_name("Control_R"), \
+                          gtk.gdk.keyval_from_name("Caps_Lock"), \
+                          gtk.gdk.keyval_from_name("Shift_Lock"), \
+                          gtk.gdk.keyval_from_name("Meta_L"), \
+                          gtk.gdk.keyval_from_name("Meta_R"), \
+                          gtk.gdk.keyval_from_name("Alt_L"), \
+                          gtk.gdk.keyval_from_name("Alt_R"), \
+                          gtk.gdk.keyval_from_name("Super_L"), \
+                          gtk.gdk.keyval_from_name("Super_R"), \
+                          gtk.gdk.keyval_from_name("Hyper_L"), \
+                          gtk.gdk.keyval_from_name("Hyper_R"), \
+                          gtk.gdk.keyval_from_name("ISO_Lock"), \
+                          gtk.gdk.keyval_from_name("ISO_Level2_Latch"), \
+                          gtk.gdk.keyval_from_name("ISO_Level2_Shift"), \
+                          gtk.gdk.keyval_from_name("ISO_Level3_Latch"), \
+                          gtk.gdk.keyval_from_name("ISO_Level3_Lock"), \
+                          gtk.gdk.keyval_from_name("ISO_Group_Shift"), \
+                          gtk.gdk.keyval_from_name("ISO_Group_Latch"), \
+                          gtk.gdk.keyval_from_name("ISO_Group_Lock"), \
+                          gtk.gdk.keyval_from_name("ISO_Next_Group"), \
+                          gtk.gdk.keyval_from_name("ISO_Next_Group_Lock"), \
+                          gtk.gdk.keyval_from_name("ISO_Prev_Group"), \
+                          gtk.gdk.keyval_from_name("ISO_Prev_Group_Lock"), \
+                          gtk.gdk.keyval_from_name("ISO_First_Group"), \
+                          gtk.gdk.keyval_from_name("ISO_First_Group_Lock"), \
+                          gtk.gdk.keyval_from_name("ISO_Last_Group"), \
+                          gtk.gdk.keyval_from_name("ISO_Last_Group_Lock"), \
+                          gtk.gdk.keyval_from_name("Mode_switch"), \
+                          gtk.gdk.keyval_from_name("Num_Lock"), \
+                          )
+        self.modifiersOn = {}
 
         # If we press one of these keys 3 times in a row
         # its become sticky until a key outside this set
@@ -349,6 +390,16 @@ class GRFBViewer(gtk.DrawingArea):
         if self.autograbkey:
             self.ungrab_keyboard()
 
+    def focus_in(self, win, event):
+        self.modifiersOn = {}
+
+    def focus_out(self, win, event):
+        # Forceably release any modifiers still on
+        for key in self.modifiersOn.keys():
+            self.client.update_key(0, key)
+        self.modifiersOn = {}
+
+
     def key_press(self, win, event):
         # Key handling in VNC is screwy. The event.keyval from GTK is
         # interpreted relative to modifier state. This really messes
@@ -392,6 +443,9 @@ class GRFBViewer(gtk.DrawingArea):
             self.client.update_key(1, val)
             #self.client.update_key(1, event.keyval)
 
+            if val in self.modifiers:
+                self.modifiersOn[val] = 1
+
         return True
 
     def key_release(self, win, event):
@@ -411,6 +465,9 @@ class GRFBViewer(gtk.DrawingArea):
             self.lastKeyVal = None
 
         if self.client != None:
+            if val in self.modifiers and self.modifiersOn.has_key(val):
+                del self.modifiersOn[val]
+
             self.client.update_key(0, val)
             #self.client.update_key(0, event.keyval)
 
