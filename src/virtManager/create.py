@@ -130,6 +130,8 @@ class vmmCreate(gobject.GObject):
         ks_url_list.set_text_column(0)
 
         self.window.get_widget("create-cpus-physical").set_text(str(self.connection.host_maximum_processor_count()))
+        memory = int(self.connection.host_memory_size())/1024
+        self.window.get_widget("create-host-memory").set_text("%d GB" % memory)
 
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
