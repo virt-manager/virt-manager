@@ -177,7 +177,7 @@ class GRFBViewer(gtk.DrawingArea):
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
         }
 
-    def __init__(self, autograbkey=False):
+    def __init__(self, topwin, autograbkey=False):
         gtk.DrawingArea.__init__(self)
 
         self.fb = GRFBFrameBuffer(self)
@@ -185,6 +185,8 @@ class GRFBViewer(gtk.DrawingArea):
         self.authenticated = False
         self.needpw = True
         self.autograbkey = autograbkey
+        self.topwin = topwin
+        self.accel_groups = gtk.accel_groups_from_object(topwin)
         self.preferred_encoding = (rfb.ENCODING_RAW, rfb.ENCODING_DESKTOP_RESIZE)
         # Current impl of draw_solid is *far* too slow to be practical
         # for Hextile which likes lots of 1x1 pixels solid rectangles
@@ -381,11 +383,15 @@ class GRFBViewer(gtk.DrawingArea):
         return self.autograbkey
 
     def grab_keyboard(self):
-        gtk.gdk.keyboard_grab(self.window, 1, long(0))
+        gtk.gdk.keyboard_grab(self.window, False, long(0))
+        for g in self.accel_groups:
+            self.topwin.remove_accel_group(g)
         self.grabbedKeyboard = True
 
     def ungrab_keyboard(self):
         gtk.gdk.keyboard_ungrab()
+        for g in self.accel_groups:
+            self.topwin.add_accel_group(g)
         self.grabbedKeyboard = False
 
     def enter_notify(self, win, event):
@@ -524,7 +530,7 @@ def main():
     vp = gtk.Viewport()
     pane.add(vp)
 
-    vnc = GRFBViewer(autograbkey=True)
+    vnc = GRFBViewer(win, autograbkey=True)
     vp.add(vnc)
 
     win.show_all()

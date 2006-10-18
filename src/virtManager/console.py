@@ -40,15 +40,14 @@ class vmmConsole(gobject.GObject):
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-console")
         self.config = config
         self.vm = vm
-
+        
         topwin = self.window.get_widget("vmm-console")
         topwin.hide()
         topwin.set_title(vm.get_name() + " " + topwin.get_title())
-
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
-        self.vncViewer = GRFBViewer(autograbkey=True)
+        self.vncViewer = GRFBViewer(topwin, autograbkey=True)
         self.window.get_widget("console-vnc-align").add(self.vncViewer)
         self.vncViewer.connect("size-request", self.autosize)
         self.vncViewer.show()
