@@ -22,7 +22,7 @@ import gtk
 import gtk.gdk
 import gtk.glade
 import pango
-import xeninst
+import virtinst
 import os, sys
 import subprocess
 import urlgrabber.grabber as grabber
@@ -168,7 +168,7 @@ class vmmCreate(gobject.GObject):
         if(self.validate(notebook.get_current_page()) != True):
             return
 
-        if notebook.get_current_page() == 1 and not xeninst.util.is_hvm_capable():
+        if notebook.get_current_page() == 1 and not virtinst.util.is_hvm_capable():
             notebook.set_current_page(4)
         elif (notebook.get_current_page() == 2 and self.get_config_method() == VM_PARA_VIRT):
             notebook.set_current_page(4)
@@ -183,7 +183,7 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-finish").hide()
         self.window.get_widget("create-forward").show()
         if notebook.get_current_page() == 4 and self.get_config_method() == VM_PARA_VIRT:
-            if xeninst.util.is_hvm_capable():
+            if virtinst.util.is_hvm_capable():
                 notebook.set_current_page(2)
             else:
                 notebook.set_current_page(1)
@@ -302,13 +302,13 @@ class vmmCreate(gobject.GObject):
     def finish(self, ignore=None):
         # first things first, are we trying to create a fully virt guest?
         if self.get_config_method() == VM_FULLY_VIRT:
-            guest = xeninst.FullVirtGuest()
+            guest = virtinst.FullVirtGuest()
             try:
                 guest.cdrom = self.get_config_install_source()
             except ValueError, e:
                 self._validation_error_box(_("Invalid FV media address"),e.args[0])
         else:
-            guest = xeninst.ParaVirtGuest()
+            guest = virtinst.ParaVirtGuest()
             try:
                 guest.location = self.get_config_install_source()
             except ValueError, e:
@@ -340,21 +340,21 @@ class vmmCreate(gobject.GObject):
         if self.get_config_disk_size() != None:
             filesize = self.get_config_disk_size() / 1024.0
         try:
-            d = xeninst.XenDisk(self.get_config_disk_image(), filesize)
-            if d.type == xeninst.XenDisk.TYPE_FILE and \
+            d = virtinst.XenDisk(self.get_config_disk_image(), filesize)
+            if d.type == virtinst.XenDisk.TYPE_FILE and \
                    self.get_config_method() == VM_PARA_VIRT \
-                   and xeninst.util.is_blktap_capable():
-                d.driver_name = xeninst.XenDisk.DRIVER_TAP
+                   and virtinst.util.is_blktap_capable():
+                d.driver_name = virtinst.XenDisk.DRIVER_TAP
         except ValueError, e:
             self._validation_error_box(_("Invalid storage address"), e.args[0])
             return
         guest.disks.append(d)
 
         # uuid
-        guest.uuid = xeninst.util.uuidToString(xeninst.util.randomUUID())
+        guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
 
         # network
-        n = xeninst.XenNetworkInterface(None)
+        n = virtinst.XenNetworkInterface(None)
         guest.nics.append(n)
 
         # set up the graphics to use SDL
@@ -507,7 +507,7 @@ class vmmCreate(gobject.GObject):
                 return False
 
         elif page_num == 2: # the virt method page
-            if self.get_config_method() == VM_FULLY_VIRT and not xeninst.util.is_hvm_capable():
+            if self.get_config_method() == VM_FULLY_VIRT and not virtinst.util.is_hvm_capable():
                 self._validation_error_box(_("Hardware Support Required"), \
                                            _("Your hardware does not appear to support full virtualization. Only paravirtualized guests will be available on this hardware."))
                 return False
