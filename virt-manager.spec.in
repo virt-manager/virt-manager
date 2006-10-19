@@ -34,7 +34,7 @@ Requires: gnome-python2-gnomekeyring >= 2.15.4
 # Minimum we've tested with
 Requires: libxml2-python >= 2.6.23
 # Required to install Xen guests
-Requires: python-xeninst >= 0.93.0
+Requires: python-virtinst >= 0.95.0
 # Required for loading the glade UI
 Requires: pygtk2-libglade
 # Required for our graphics which are currently SVG format
@@ -129,6 +129,14 @@ fi
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Thu Oct 19 2006 Daniel P. Berrange <berrange@redhat.com> - 0.2.5-1
+- Switch to use python-virtinst instead of python-xeninst due to 
+  renaming of original package
+- Disable keyboard accelerators when grabbing mouse to avoid things like
+  Ctrl-W closing the local window, instead of remote window bz 210364
+- Fix host memory reporting bz 211281
+- Remove duplicate application menu entry bz 211230
+
 * Thu Oct 12 2006 Daniel Berrange <berrange@redhat.com> - 0.2.4-1
 - Fix duplicated mnemonics (bz 208408)
 - Use blktap backed disks if available
