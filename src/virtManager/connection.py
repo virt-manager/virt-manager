@@ -19,6 +19,7 @@
 
 import gobject
 import libvirt
+import logging
 import os
 from time import time
 
@@ -113,9 +114,12 @@ class vmmConnection(gobject.GObject):
                     del ids[id]
                 else:
                     # New VM so create wrapper object
-                    vm = self.vmm.lookupByID(id)
-                    uuid = self.uuidstr(vm.UUID())
-                    newVms[uuid] = vm
+                    try:
+                        vm = self.vmm.lookupByID(id)
+                        uuid = self.uuidstr(vm.UUID())
+                        newVms[uuid] = vm
+                    except libvirt.libvirtError:
+                        logging.debug("Couldn't fetch domain id " + str(id) + "; it probably went away")
 
         # Any left in ids hash are old removed VMs
         for id in ids:
