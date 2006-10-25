@@ -385,15 +385,16 @@ class vmmCreate(gobject.GObject):
         progWin = vmmAsyncJob(self.config, self.do_install, [guest],
                               title=_("Creating Virtual Machine"))
         progWin.run()
-        self.topwin.set_sensitive(True)
         if self.install_error != None:
             logging.error("Async job failed to create VM " + str(self.install_error))
             self._validation_error_box(_("Guest Install Error"), self.install_error)
+            self.topwin.set_sensitive(True)
             # Don't close becase we allow user to go back in wizard & correct
             # their mistakes
             #self.close()
             return
 
+        self.topwin.set_sensitive(True)
         # Ensure new VM is loaded
         self.connection.tick(noStatsUpdate=True)
 
