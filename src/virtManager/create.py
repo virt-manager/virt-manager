@@ -22,6 +22,7 @@ import gtk
 import gtk.gdk
 import gtk.glade
 import pango
+import libvirt
 import virtinst
 import os, sys
 import subprocess
@@ -29,9 +30,6 @@ import urlgrabber.grabber as grabber
 import tempfile
 import logging
 import dbus
-
-from rhpl.exception import installExceptionHandler
-from rhpl.translate import _, N_, textdomain, utf8
 
 from virtManager.asyncjob import vmmAsyncJob
 
@@ -60,11 +58,6 @@ class vmmCreate(gobject.GObject):
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-create")
         self.topwin = self.window.get_widget("vmm-create")
         self.topwin.hide()
-        # Get a connection to the SYSTEM bus
-        self.bus = dbus.SystemBus()
-        # Get a handle to the HAL service
-        hal_object = self.bus.get_object('org.freedesktop.Hal', '/org/freedesktop/Hal/Manager')
-        self.hal_iface = dbus.Interface(hal_object, 'org.freedesktop.Hal.Manager')
 
         self.window.signal_autoconnect({
             "on_create_pages_switch_page" : self.page_changed,
@@ -83,6 +76,7 @@ class vmmCreate(gobject.GObject):
             "on_pv_media_url_changed" : self.change_combo_box,
             "on_pv_ks_url_changed" : self.change_combo_box,
             })
+
         self.set_initial_state()
 
     def show(self):
@@ -116,7 +110,23 @@ class vmmCreate(gobject.GObject):
         cd_list.pack_start(text, True)
         cd_list.add_attribute(text, 'text', 1)
         cd_list.add_attribute(text, 'sensitive', 2)
-        self.populate_opt_media(cd_model)
+        try:
+            # Get a connection to the SYSTEM bus
+            self.bus = dbus.SystemBus()
+            # Get a handle to the HAL service
+            hal_object = self.bus.get_object('org.freedesktop.Hal', '/org/freedesktop/Hal/Manager')
+            self.hal_iface = dbus.Interface(hal_object, 'org.freedesktop.Hal.Manager')
+            self.populate_opt_media(cd_model)
+        except Exception, e:
+            logging.error("Unable to connect to HAL to list cdrom volumes: '%s'", e)
+            self.window.get_widget("media-physical").set_sensitive(False)
+            self.bus = None
+            self.hal_iface = None
+            msg = gtk.MessageDialog(parent=None, flags=0, type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+                                    message_format="Unable to enumerate CDROM volumes")
+            msg.format_secondary_text("Can not connect to HAL device manager")
+            msg.run()
+            msg.destroy()
 
         # set up the lists for the url widgets
         media_url_list = self.window.get_widget("pv-media-url")
@@ -407,7 +417,6 @@ class vmmCreate(gobject.GObject):
         except Exception, e:
             self.install_error = "ERROR: %s" % e
             logging.exception("Could not complete install " + str(e))
-            return
 
     def browse_iso_location(self, ignore1=None, ignore2=None):
         file = self._browse_file(_("Locate ISO Image"), type="iso")
