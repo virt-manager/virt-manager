@@ -70,7 +70,7 @@ import dbus.glib
 dbus.glib.threads_init()
 import dbus.service
 
-from optparse import OptionParser
+from optparse import OptionParser, OptionValueError
 
 appname = "::PACKAGE::"
 appversion = "::VERSION::"
@@ -102,21 +102,74 @@ from virtManager.remote import vmmRemote
 
 gtk.window_set_default_icon_from_file(icon_dir + "/" + appname + "-icon.svg")
 
+# maps --show-* to engine methods
+def show_engine(engine, show, uri, uuid):
+    if show=='creator':
+        engine.show_create(uri)
+    elif show=='editor':
+        engine.show_details_config(uri, uuid)
+    elif show=='performance':
+        engine.show_details_performance(uri, uuid)
+    elif show=='console':
+        engine.show_console(uri, uuid)
+    elif show=='summary' or uri:
+        engine.show_manager(uri)
+    else:
+        engine.show_connect()
+
+# maps --show-* to remote manager methods
+def show_remote(managerObj, show, uri, uuid):
+    if show=='creator':
+        managerObj.show_domain_creator(uri)
+    elif show=='editor':
+        managerObj.show_domain_editor(uri, uuid)
+    elif show=='performance':
+        managerObj.show_domain_performance(uri, uuid)
+    elif show=='console':
+        managerObj.show_domain_console(uri, uuid)
+    elif show=='summary' or uri:
+        managerObj.show_host_summary(uri)
+    else:
+        managerObj.show_connect()
+
+# Generic OptionParser callback for all --show-* options
+# This routine stores UUID to options.uuid for all --show-* options 
+# where is metavar="UUID" and also sets options.show
+def opt_show_cb(option, opt_str, value, parser):
+    if option.metavar=="UUID":
+        setattr(parser.values, "uuid", value)        
+    s = str(option)
+    show = s[s.rindex('-')+1:]
+    setattr(parser.values, "show", show)
+
 # Run me!
 def main():
     optParser = OptionParser()
-    optParser.add_option("-c", "--connect", dest="uri", help="Connect to hypervisor at URI", metavar="URI")
-    optParser.add_option("--no-dbus", action="store_true", dest="nodbus", help="Disable DBus service for controlling UI")
+    optParser.set_defaults(uuid=None)
+    optParser.add_option("-c", "--connect", dest="uri", 
+        help="Connect to hypervisor at URI", metavar="URI")
+    optParser.add_option("--no-dbus", action="store_true", dest="nodbus", 
+        help="Disable DBus service for controlling UI")
+    optParser.add_option("--show-domain-creator", action="callback", 
+        callback=opt_show_cb, dest="show", help="Create a new virtual machine")
+    optParser.add_option("--show-domain-editor",  type="string", metavar="UUID",
+        action="callback", callback=opt_show_cb, help="Edit a domain configuration")
+    optParser.add_option("--show-domain-performance", type="string", metavar="UUID", 
+        action="callback", callback=opt_show_cb, help="Show a domain performance")
+    optParser.add_option("--show-domain-console", type="string", metavar="UUID",
+        action="callback", callback=opt_show_cb, help="Show a domain console")
+    optParser.add_option("--show-host-summary", action="callback", 
+       callback=opt_show_cb, help="Show a host summary")
 
     (options, args) = optParser.parse_args()
+
+    if options.show and options.uri==None:
+        raise OptionValueError("can't use --show-* options without --connect")
 
     config = vmmConfig(appname, appversion, gconf_dir, glade_dir, icon_dir)
     engine = vmmEngine(config)
     if options.nodbus:
-        if options.uri != None:
-            engine.show_manager(options.uri)
-        else:
-            engine.show_connect()
+        show_engine(engine, options.show, options.uri, options.uuid)
     else:
         bus = None
         try:
@@ -135,19 +188,14 @@ def main():
                 managerProxy = bus.get_object("com.redhat.virt.manager", "/com/redhat/virt/manager")
                 managerObj = dbus.Interface(managerProxy, "com.redhat.virt.manager")
 
-                if options.uri != None:
-                    managerObj.show_host_summary(options.uri)
-                else:
-                    managerObj.show_connect()
+                show_remote(managerObj, options.show, options.uri, options.uuid)
+
                 # yes, we exit completely now - remote service is in charge
                 return
         except:
             logging.warning("Could not connection to session bus, disabling DBus service " + \
                             str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
-            if options.uri != None:
-                engine.show_manager(options.uri)
-            else:
-                engine.show_connect()
+            show_engine(engine, options.show, options.uri, options.uuid)
     gtk.main()
 
 if __name__ == "__main__":
