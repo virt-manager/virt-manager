@@ -39,6 +39,8 @@ class vmmManager(gobject.GObject):
                                   gobject.TYPE_NONE, []),
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
+        "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, (str,str)),
         "action-show-details": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
         "action-show-about": (gobject.SIGNAL_RUN_FIRST,
@@ -210,7 +212,14 @@ class vmmManager(gobject.GObject):
             model.append([vmuuid, vm.get_name()])
             vm.connect("status-changed", self.vm_status_changed)
             vm.connect("resources-sampled", self.vm_resources_sampled)
-
+            if self.config.get_console_pref() == 2 and range(model.iter_n_children(None)) > 1:
+                # user has requested consoles on all vms
+                (gtype, host, port) = vm.get_graphics_console()
+                if gtype == "vnc":
+                    self.emit("action-show-console", uri, vmuuid)
+                else:
+                    self.emit("action-show-terminal", uri, vmuuid)
+        
 
     def vm_removed(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")

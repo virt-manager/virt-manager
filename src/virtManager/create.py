@@ -398,12 +398,14 @@ class vmmCreate(gobject.GObject):
         # Ensure new VM is loaded
         self.connection.tick(noStatsUpdate=True)
 
-        vm = self.connection.get_vm(guest.uuid)
-        (gtype, host, port) = vm.get_graphics_console()
-        if gtype == "vnc":
-            self.emit("action-show-console", self.connection.get_uri(), guest.uuid)
-        else:
-            self.emit("action-show-terminal", self.connection.get_uri(), guest.uuid)
+        if self.config.get_console_pref() == 1:
+            # user has requested console on new created vms only
+            vm = self.connection.get_vm(guest.uuid)
+            (gtype, host, port) = vm.get_graphics_console()
+            if gtype == "vnc":
+                self.emit("action-show-console", self.connection.get_uri(), guest.uuid)
+            else:
+                self.emit("action-show-terminal", self.connection.get_uri(), guest.uuid)
         self.close()
 
     def do_install(self, guest):

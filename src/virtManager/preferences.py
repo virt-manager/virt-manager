@@ -24,16 +24,24 @@ class vmmPreferences:
         self.config = config
         self.window.get_widget("vmm-preferences").hide()
 
+#         box = self.window.get_widget("console-pref")
+#         model = gtk.ListStore(str)
+#         box.set_model(model)
+#         model.append(["Never"])
+#         model.append(["For new domains"])
+#         model.append(["For all domains"])
+        self.config.on_console_pref_changed(self.refresh_console_pref)
         self.config.on_stats_update_interval_changed(self.refresh_update_interval)
         self.config.on_stats_history_length_changed(self.refresh_history_length)
 
         self.refresh_update_interval()
         self.refresh_history_length()
+        self.refresh_console_pref()
 
         self.window.signal_autoconnect({
             "on_stats_update_interval_changed": self.change_update_interval,
             "on_stats_history_length_changed": self.change_history_length,
-
+            "on_console_pref_changed": self.change_console_pref,
             "on_close_clicked": self.close,
             "on_vmm_preferences_delete_event": self.close,
             })
@@ -45,7 +53,7 @@ class vmmPreferences:
     def show(self):
         win = self.window.get_widget("vmm-preferences")
         win.show()
-        win.present()
+        # win.present()
 
     def refresh_update_interval(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.window.get_widget("stats-update-interval").set_value(self.config.get_stats_update_interval())
@@ -53,9 +61,14 @@ class vmmPreferences:
     def refresh_history_length(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.window.get_widget("stats-history-length").set_value(self.config.get_stats_history_length())
 
+    def refresh_console_pref(self,ignore1=None,ignore2=None,ignore3=None,ignore4=None):
+        self.window.get_widget("console-pref").set_active(self.config.get_console_pref())
+
     def change_update_interval(self, src):
         self.config.set_stats_update_interval(src.get_value_as_int())
 
     def change_history_length(self, src):
         self.config.set_stats_history_length(src.get_value_as_int())
 
+    def change_console_pref(self, box):
+        self.config.set_console_pref(box.get_active())

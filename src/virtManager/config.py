@@ -24,6 +24,10 @@ import libvirt
 
 from virtManager.keyring import *
 
+CONSOLE_NEVER = 0
+CONSOLE_NEW_ONLY = 1
+CONSOLE_ALWAYS = 2
+
 class vmmConfig:
     def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir):
         self.appname = appname
@@ -163,6 +167,17 @@ class vmmConfig:
     def on_stats_history_length_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/stats/history-length", callback)
 
+    def on_console_pref_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/console/popup-pref", callback)
+
+    def get_console_pref(self):
+        console_pref = self.conf.get_int(self.conf_dir + "/console/popup-pref")
+        if console_pref == None:
+            console_pref = 0
+        return console_pref
+
+    def set_console_pref(self, pref):
+        self.conf.set_int(self.conf_dir + "/console/popup-pref", pref)
 
     def get_secret_name(self, vm):
         return "vm-console-" + vm.get_uuid()
@@ -254,5 +269,5 @@ class vmmConfig:
 
     def get_kickstart_urls(self):
         return self.conf.get_list(self.conf_dir + "/urls/kickstart", gconf.VALUE_STRING)
-
+    
         

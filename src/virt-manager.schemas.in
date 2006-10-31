@@ -130,5 +130,18 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/console/popup-pref</key>
+      <applyto>/apps/::PACKAGE::/console/popup-pref</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>int</type>
+      <default>0</default>
+
+      <locale name="C">
+        <short>When to pop up a console for a guest</short>
+        <long>Whether to pop up a console for a guest. 0 = never, 1 = only on creation of a new guest, 2 = On creation of any guest</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>
