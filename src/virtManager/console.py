@@ -193,11 +193,13 @@ class vmmConsole(gobject.GObject):
 
     def activate_screenshot_page(self):
         self.window.get_widget("console-pages").set_current_page(1)
-        self.window.get_widget("menu-vm-screenshot").set_sensitive(True)        
+        self.window.get_widget("menu-vm-screenshot").set_sensitive(True)
+
     def activate_auth_page(self):
         pw = self.config.get_console_password(self.vm)
         self.window.get_widget("menu-vm-screenshot").set_sensitive(False)
         self.window.get_widget("console-auth-password").set_text(pw)
+        self.window.get_widget("console-auth-password").grab_focus()
         if self.config.has_keyring():
             self.window.get_widget("console-auth-remember").set_sensitive(True)
             if pw != None and pw != "":
