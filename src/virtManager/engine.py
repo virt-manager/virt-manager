@@ -116,6 +116,9 @@ class vmmEngine:
         self.timer = gobject.timeout_add(interval, self.tick)
 
     def tick(self):
+        if self.windowConnect == None and gtk.main_level() > 0 and self.count_visible_windows() == 0:
+            gtk.main_quit()
+
         for uri in self.connections.keys():
             try:
                 self.connections[uri]["connection"].tick()
@@ -124,6 +127,18 @@ class vmmEngine:
             except:
                 logging.error(("Could not refresh connection %s" % (uri)) + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
         return 1
+
+    def count_visible_windows(self):
+        ct = 0
+        for conn in self.connections.values():
+            for name in [ "windowDetails", "windowConsole", "windowSerialConsole" ]:
+                for window in conn[name].values():
+                    ct += window.is_visible()
+            if conn["windowManager"]:
+                ct += conn["windowManager"].is_visible()
+        if self.windowCreate:
+                ct += self.windowCreate.is_visible()
+        return ct
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
         gobject.source_remove(self.timer)

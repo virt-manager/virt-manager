@@ -136,6 +136,11 @@ class vmmConsole(gobject.GObject):
 		logging.error("Failure when disconnecting from VNC server")
         return 1
 
+    def is_visible(self):
+        if self.window.get_widget("vmm-console").flags() & gtk.VISIBLE:
+           return 1
+        return 0
+
     def control_vm_run(self, src):
         return 0
 

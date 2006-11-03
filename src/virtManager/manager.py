@@ -153,6 +153,11 @@ class vmmManager(gobject.GObject):
         win.hide()
         return 1
 
+    def is_visible(self):
+        if self.window.get_widget("vmm-manager").flags() & gtk.VISIBLE:
+           return 1
+        return 0
+
     def exit_app(self, src=None, src2=None):
         gtk.main_quit()
 

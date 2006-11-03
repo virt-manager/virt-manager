@@ -71,6 +71,11 @@ class vmmSerialConsole:
         self.window.hide()
         return True
 
+    def is_visible(self):
+        if self.window.flags() & gtk.VISIBLE:
+           return 1
+        return 0
+
     def opentty(self):
         if self.ptyio != None:
             self.closetty()

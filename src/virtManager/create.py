@@ -309,6 +309,11 @@ class vmmCreate(gobject.GObject):
         self.topwin.hide()
         return 1
 
+    def is_visible(self):
+        if self.topwin.flags() & gtk.VISIBLE:
+           return 1
+        return 0
+
     def finish(self, ignore=None):
         # first things first, are we trying to create a fully virt guest?
         if self.get_config_method() == VM_FULLY_VIRT:

@@ -148,6 +148,11 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("vmm-details").hide()
         return 1
 
+    def is_visible(self):
+        if self.window.get_widget("vmm-details").flags() & gtk.VISIBLE:
+           return 1
+        return 0
+
     def hw_selected(self, src=None):
         vmlist = self.window.get_widget("hw-list")
         selection = vmlist.get_selection()
