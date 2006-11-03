@@ -63,7 +63,8 @@ class vmmSerialConsole:
 
     def show(self):
         self.opentty()
-	self.window.show_all()
+        self.window.show_all()
+        self.window.present()
 
     def close(self, src=None, ignore=None):
         self.closetty()
