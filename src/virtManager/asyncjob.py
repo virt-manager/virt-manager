@@ -19,6 +19,7 @@
 
 import threading
 import gtk
+import gtk.gdk
 import gtk.glade
 import gobject
 
@@ -47,6 +48,7 @@ class vmmAsyncJob(gobject.GObject):
     def run(self):
         self.timer = gobject.timeout_add (100, self.pulse_pbar)
         self.pbar_win.present()
+        self.pbar_win.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
         self.bg_thread.start()
         gtk.main()
         gobject.source_remove(self.timer)
