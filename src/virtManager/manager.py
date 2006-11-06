@@ -139,6 +139,9 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
         self.connection.connect("disconnected", self.close)
 
+        win = self.window.get_widget("vmm-manager")
+        win.set_title(win.get_title() + " (" + self.connection.get_name() + ")")
+
         # store any error message from the restore-domain callback
         self.domain_restore_error = ""
 

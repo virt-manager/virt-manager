@@ -22,6 +22,7 @@ import libvirt
 import logging
 import os
 from time import time
+from socket import gethostbyaddr, gethostname
 
 from virtManager.domain import vmmDomain
 
@@ -53,6 +54,13 @@ class vmmConnection(gobject.GObject):
 
     def is_read_only(self):
         return self.readOnly
+
+    def get_name(self):
+        if self.uri == "xen" or self.uri == "Xen" or (self.uri is None):
+            (hostname, aliases, ipaddrs) = gethostbyaddr(gethostname())
+            return "Xen: " + hostname
+        else:
+            return self.uri
 
     def get_uri(self):
         return self.uri
