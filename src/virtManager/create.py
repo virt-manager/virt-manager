@@ -152,6 +152,24 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-back").set_sensitive(False)
         self.window.get_widget("storage-file-size").set_sensitive(False)
 
+        # If we don't have full-virt support disable the choice, and
+        # display a message telling the user why it is not working
+        if virtinst.util.is_hvm_capable():
+            self.window.get_widget("virt-method-fv").set_sensitive(True)
+            self.window.get_widget("virt-method-fv-unsupported").hide()
+            self.window.get_widget("virt-method-fv-disabled").hide()
+        else:
+            self.window.get_widget("virt-method-fv").set_sensitive(False)
+            flags = virtinst.util.get_cpu_flags()
+            if "vmx" in flags or "svm" in flags:
+                # Host has support, but disabled in bios
+                self.window.get_widget("virt-method-fv-unsupported").hide()
+                self.window.get_widget("virt-method-fv-disabled").show()
+            else:
+                # Host has no support
+                self.window.get_widget("virt-method-fv-unsupported").show()
+                self.window.get_widget("virt-method-fv-disabled").hide()
+
         self.change_media_type()
         self.change_storage_type()
         self.window.get_widget("create-vm-name").set_text("")
@@ -178,9 +196,7 @@ class vmmCreate(gobject.GObject):
         if(self.validate(notebook.get_current_page()) != True):
             return
 
-        if notebook.get_current_page() == 1 and not virtinst.util.is_hvm_capable():
-            notebook.set_current_page(4)
-        elif (notebook.get_current_page() == 2 and self.get_config_method() == VM_PARA_VIRT):
+        if (notebook.get_current_page() == 2 and self.get_config_method() == VM_PARA_VIRT):
             notebook.set_current_page(4)
         elif (notebook.get_current_page() == 3 and self.get_config_method() == VM_FULLY_VIRT):
             notebook.set_current_page(5)
@@ -193,10 +209,7 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-finish").hide()
         self.window.get_widget("create-forward").show()
         if notebook.get_current_page() == 4 and self.get_config_method() == VM_PARA_VIRT:
-            if virtinst.util.is_hvm_capable():
-                notebook.set_current_page(2)
-            else:
-                notebook.set_current_page(1)
+            notebook.set_current_page(2)
         elif notebook.get_current_page() == 5 and self.get_config_method() == VM_FULLY_VIRT:
             notebook.set_current_page(3)
         else:
