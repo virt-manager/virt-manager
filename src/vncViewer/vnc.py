@@ -24,6 +24,7 @@ import sys
 from struct import pack, unpack
 import pygtk
 import gtk
+import logging
 
 stderr = sys.stderr
 
@@ -103,15 +104,14 @@ class GRFBFrameBuffer(rfb.RFBFrameBuffer, gobject.GObject):
             x2 = self.dirtyregion["x2"]
             y1 = self.dirtyregion["y1"]
             y2 = self.dirtyregion["y2"]
-            #print "Update %d,%d (%dx%d)" % (x1, y1, (x2-x1), (y2-y1))
             self.emit("invalidate", x1, y1, x2-x1, y2-y1)
             self.dirtyregion = None
 
     def change_cursor(self, width, height, x, y, data):
-        print >>stderr, 'change_cursor'
+        logging.error("Unsupported change_cursor operation requested")
 
     def move_cursor(self, x, y):
-        print >>stderr, 'move_cursor'
+        logging.error("Unsupported move_cursor operation requested")
 
 gobject.type_register(GRFBFrameBuffer)
 
@@ -142,7 +142,7 @@ class GRFBNetworkClient(rfb.RFBNetworkClient, gobject.GObject):
         try:
             self.loop1()
         except Exception, e:
-            print str(e)
+            logging.warn("Failure while handling VNC I/O, closing socket: " + str(e))
             self.close()
             self.emit("disconnected")
             return 0
@@ -323,8 +323,8 @@ class GRFBViewer(gtk.DrawingArea):
         self.client.setpass(password)
         try:
             self.client.auth()
-        except:
-            print str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1])
+        except Exception, e:
+            logging.warn("Failure while authenticating " + str(e))
             self.disconnect_from_host()
             return 0
         self.authenticated = True

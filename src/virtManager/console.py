@@ -51,6 +51,8 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("console-vnc-align").add(self.vncViewer)
         self.vncViewer.connect("size-request", self.autosize)
         self.vncViewer.show()
+        self.vncViewerFailures = 0
+        self.vncViewerRetryDelay = 125
 
         self.window.get_widget("console-pages").set_show_tabs(False)
 
@@ -147,6 +149,10 @@ class vmmConsole(gobject.GObject):
     def _vnc_disconnected(self, src):
         self.activate_auth_page()
 
+    def retry_login(self):
+        self.try_login()
+        return False
+
     def try_login(self, src=None):
         if self.vm.get_id() == 0:
             return
@@ -158,7 +164,8 @@ class vmmConsole(gobject.GObject):
             logging.debug("No graphics configured in guest")
             return
 
-        logging.debug("Graphics " + str(protocol) + "://" + str(host) + ":" + str(port))
+        uri = str(protocol) + "://" + str(host) + ":" + str(port)
+        logging.debug("Graphics console configured at " + uri)
 
         if protocol != "vnc":
             self.activate_unavailable_page()
@@ -168,9 +175,21 @@ class vmmConsole(gobject.GObject):
 	    try:
                 self.vncViewer.connect_to_host(host, port)
 	    except:
-		logging.error("Unable to activate console " + str((sys.exc_info())[0]) + " " + str((sys.exc_info())[1]))
+                self.vncViewerFailures = self.vncViewerFailures + 1
+                logging.warn("Unable to activate console " + uri + ": " + str((sys.exc_info())[0]) + " " + str((sys.exc_info())[1]))
                 self.activate_unavailable_page()
+                if self.vncViewerFailures < 10:
+                    logging.warn("Retrying connection in %d ms", self.vncViewerRetryDelay)
+                    gobject.timeout_add(self.vncViewerRetryDelay, self.retry_login)
+                    if self.vncViewerRetryDelay < 2000:
+                        self.vncViewerRetryDelay = self.vncViewerRetryDelay * 2
+                else:
+                    logging.error("Too many connection failures, not retrying again")
 		return
+
+        # Had a succesfull connect, so reset counters now
+        self.vncViewerFailures = 0
+        self.vncViewerRetryDelay = 125
 
         if self.vncViewer.is_authenticated():
             self.activate_viewer_page()
