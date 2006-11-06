@@ -24,9 +24,13 @@ import libvirt
 
 from virtManager.keyring import *
 
-CONSOLE_NEVER = 0
-CONSOLE_NEW_ONLY = 1
-CONSOLE_ALWAYS = 2
+CONSOLE_POPUP_NEVER = 0
+CONSOLE_POPUP_NEW_ONLY = 1
+CONSOLE_POPUP_ALWAYS = 2
+
+CONSOLE_KEYGRAB_NEVER = 0
+CONSOLE_KEYGRAB_FULLSCREEN = 1
+CONSOLE_KEYGRAB_MOUSEOVER = 2
 
 class vmmConfig:
     def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir):
@@ -167,20 +171,33 @@ class vmmConfig:
     def on_stats_history_length_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/stats/history-length", callback)
 
-    def on_console_pref_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/console/popup-pref", callback)
+    def on_console_popup_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/console/popup", callback)
 
-    def get_console_pref(self):
-        console_pref = self.conf.get_int(self.conf_dir + "/console/popup-pref")
+    def get_console_popup(self):
+        console_pref = self.conf.get_int(self.conf_dir + "/console/popup")
         if console_pref == None:
             console_pref = 0
         return console_pref
 
-    def set_console_pref(self, pref):
-        self.conf.set_int(self.conf_dir + "/console/popup-pref", pref)
+    def set_console_popup(self, pref):
+        self.conf.set_int(self.conf_dir + "/console/popup", pref)
+
+    def on_console_keygrab_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/console/keygrab", callback)
+
+    def get_console_keygrab(self):
+        console_pref = self.conf.get_int(self.conf_dir + "/console/keygrab")
+        if console_pref == None:
+            console_pref = 0
+        return console_pref
+
+    def set_console_keygrab(self, pref):
+        self.conf.set_int(self.conf_dir + "/console/keygrab", pref)
 
     def get_secret_name(self, vm):
         return "vm-console-" + vm.get_uuid()
+
     def has_keyring(self):
         if self.keyring == None:
             self.keyring = vmmKeyring()

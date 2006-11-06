@@ -382,6 +382,9 @@ class GRFBViewer(gtk.DrawingArea):
     def will_autograb_keyboard(self):
         return self.autograbkey
 
+    def set_autograb_keyboard(self, grab):
+        self.autograbkey = grab
+
     def grab_keyboard(self):
         gtk.gdk.keyboard_grab(self.window, False, long(0))
         for g in self.accel_groups:

@@ -47,7 +47,10 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
-        self.vncViewer = GRFBViewer(topwin, autograbkey=True)
+        if self.config.get_console_keygrab() == 2:
+            self.vncViewer = GRFBViewer(topwin, autograbkey=True)
+        else:
+            self.vncViewer = GRFBViewer(topwin, autograbkey=False)
         self.window.get_widget("console-vnc-align").add(self.vncViewer)
         self.vncViewer.connect("size-request", self.autosize)
         self.vncViewer.show()
@@ -55,6 +58,8 @@ class vmmConsole(gobject.GObject):
         self.vncViewerRetryDelay = 125
 
         self.window.get_widget("console-pages").set_show_tabs(False)
+
+        self.config.on_console_keygrab_changed(self.keygrab_changed)
 
         self.ignorePause = False
 
@@ -101,13 +106,19 @@ class vmmConsole(gobject.GObject):
 
         self.window.get_widget("console-vnc-vp").set_size_request(vncWidth+2, vncHeight+2)
 
+    def keygrab_changed(self, src, ignore1=None,ignore2=None,ignore3=None):
+        if self.config.get_console_keygrab() == 2:
+            self.vncViewer.set_autograb_keyboard(True)
+        else:
+            self.vncViewer.set_autograb_keyboard(False)
+
     def toggle_fullscreen(self, src):
         if src.get_active():
             self.window.get_widget("vmm-console").fullscreen()
-            if not(self.vncViewer.will_autograb_keyboard()):
+            if self.config.get_console_keygrab() == 1:
                 self.vncViewer.grab_keyboard()
         else:
-            if not(self.vncViewer.will_autograb_keyboard()):
+            if self.config.get_console_keygrab() == 1:
                 self.vncViewer.ungrab_keyboard()
             self.window.get_widget("vmm-console").unfullscreen()
 

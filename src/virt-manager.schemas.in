@@ -131,8 +131,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/::PACKAGE::/console/popup-pref</key>
-      <applyto>/apps/::PACKAGE::/console/popup-pref</applyto>
+      <key>/schemas/apps/::PACKAGE::/console/popup</key>
+      <applyto>/apps/::PACKAGE::/console/popup</applyto>
       <owner>::PACKAGE::</owner>
       <type>int</type>
       <default>1</default>
@@ -140,6 +140,19 @@
       <locale name="C">
         <short>When to pop up a console for a guest</short>
         <long>Whether to pop up a console for a guest. 0 = never, 1 = only on creation of a new guest, 2 = On creation of any guest</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/console/keygrab</key>
+      <applyto>/apps/::PACKAGE::/console/keygrab</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>int</type>
+      <default>2</default>
+
+      <locale name="C">
+        <short>When to grab keyboard input for the console</short>
+        <long>Whether to grab keyboard input for a guest console. 0 = never, 1 = only when in full screen mode, 2 = when mouse is over console</long>
       </locale>
     </schema>
 

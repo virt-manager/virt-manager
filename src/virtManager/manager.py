@@ -220,7 +220,7 @@ class vmmManager(gobject.GObject):
             model.append([vmuuid, vm.get_name()])
             vm.connect("status-changed", self.vm_status_changed)
             vm.connect("resources-sampled", self.vm_resources_sampled)
-            if self.config.get_console_pref() == 2 and range(model.iter_n_children(None)) > 1:
+            if self.config.get_console_popup() == 2 and range(model.iter_n_children(None)) > 1:
                 # user has requested consoles on all vms
                 (gtype, host, port) = vm.get_graphics_console()
                 if gtype == "vnc":
