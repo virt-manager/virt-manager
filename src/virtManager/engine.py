@@ -232,6 +232,7 @@ class vmmEngine:
             manager = vmmManager(self.get_config(),
                                  con)
             manager.connect("action-show-console", self._do_show_console)
+            manager.connect("action-show-terminal", self._do_show_terminal)
             manager.connect("action-show-details", self._do_show_details)
             manager.connect("action-show-preferences", self._do_show_preferences)
             manager.connect("action-show-create", self._do_show_create)
