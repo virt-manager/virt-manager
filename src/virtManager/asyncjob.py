@@ -38,7 +38,7 @@ class vmmAsyncJob(gobject.GObject):
     def __init__(self, config, callback, args=None, title="Progress"):
         self.__gobject_init__()
         self.config = config
-        self.pbar_glade = gtk.glade.XML(self.config.get_glade_file(), "vmm-progress")
+        self.pbar_glade = gtk.glade.XML(self.config.get_glade_file(), "vmm-progress", domain="virt-manager")
         self.pbar_win = self.pbar_glade.get_widget("vmm-progress")
         self.pbar = self.pbar_glade.get_widget("pbar")
         self.pbar_win.set_title(title)

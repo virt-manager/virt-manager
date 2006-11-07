@@ -51,7 +51,7 @@ class vmmManager(gobject.GObject):
                                gobject.TYPE_NONE, [str]),}
     def __init__(self, config, connection):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_file(), "vmm-manager")
+        self.window = gtk.glade.XML(config.get_glade_file(), "vmm-manager", domain="virt-manager")
         self.config = config
         self.connection = connection
         self.prepare_vmlist()
