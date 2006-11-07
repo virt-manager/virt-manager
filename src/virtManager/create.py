@@ -400,6 +400,7 @@ class vmmCreate(gobject.GObject):
         #let's go
         self.install_error = None
         self.topwin.set_sensitive(False)
+        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
         progWin = vmmAsyncJob(self.config, self.do_install, [guest],
                               title=_("Creating Virtual Machine"))
         progWin.run()
@@ -407,12 +408,14 @@ class vmmCreate(gobject.GObject):
             logging.error("Async job failed to create VM " + str(self.install_error))
             self._validation_error_box(_("Guest Install Error"), self.install_error)
             self.topwin.set_sensitive(True)
+            self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
             # Don't close becase we allow user to go back in wizard & correct
             # their mistakes
             #self.close()
             return
 
         self.topwin.set_sensitive(True)
+        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
         # Ensure new VM is loaded
         self.connection.tick(noStatsUpdate=True)
 
