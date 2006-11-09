@@ -1,8 +1,190 @@
+2006-11-09  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* virt-manager.spec.in:
+	Updated changelog
+	[657717d357b6] [tip]
+
+	* NEWS:
+	Summary of 0.2.6 release changes
+	[008c1a197bcd]
+
+	* configure.ac:
+	Updated to 0.2.6 release
+	[1b8570500ec0]
+
+	* docs/RELEASE-PROCESS.txt:
+	Added notes on release process
+	[edcf366d6403]
+
+	* po/README.txt:
+	Added notes on translation process
+	[2b776e4aeb6d]
+
+	* po/ru.po:
+	Imported initial russian translation
+	[8036348399cd]
+
+2006-11-07  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.glade:
+	Change most scrollbars to automatic (except console which has resize
+	issues)
+	[9fa186e9831c]
+
+	* src/virtManager/create.py:
+	Set busy cursor in wizard while creating VM
+	[7b7299a55192]
+
+	* po/as.po, po/da.po, po/de.po, po/en_GB.po, po/es.po, po/fr.po,
+	po/gu.po, po/hi.po, po/hr.po, po/ja.po, po/ml.po, po/ms.po,
+	po/or.po, po/pa.po, po/pt.po, po/pt_BR.po, po/sr.po, po/sr@Latn.po,
+	po/sv.po, po/ta.po, po/virt-manager.pot, po/zh_CN.po, po/zh_TW.po:
+	Rebuild pot file & import translated .po's from Fedora i18n
+	repository
+	[749284df42c6]
+
+	* src/virt-manager.py.in, src/virtManager/about.py,
+	src/virtManager/asyncjob.py, src/virtManager/connect.py,
+	src/virtManager/console.py, src/virtManager/create.py,
+	src/virtManager/details.py, src/virtManager/manager.py,
+	src/virtManager/preferences.py:
+	Explicitly pass i18n domain into glade constructor because it is
+	failing to pick up default domain
+	[cd83d1e8e7fb]
+
+2006-11-06  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.glade, src/virt-manager.schemas.in,
+	src/virtManager/config.py, src/virtManager/console.py,
+	src/virtManager/create.py, src/virtManager/manager.py,
+	src/virtManager/preferences.py, src/vncViewer/vnc.py:
+	Added preference for determining when/whether to grab keyboard
+	input. Renamed console popup preference apis a little
+	[48c75380985e]
+
+	* src/virtManager/asyncjob.py:
+	Set busy cursor when displaying progress bar
+	[61d04972191e]
+
+	* src/virtManager/console.py, src/vncViewer/vnc.py:
+	Add a auto-retry with exponential backoff to VNC connection, since
+	with auto-console popup we often launch before the VNC daemon has
+	started for the guest
+	[52d0377abcb8]
+
+	* src/virtManager/engine.py:
+	Connect up show-terminal signal in the manager
+	[8514f7e603bb]
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	Don't skip virt-type wizard step if fully-virt is not available.
+	Instead disable option & inform user why (bz 212451)
+	[8cc9ccf3bfb4]
+
+	* AUTHORS, src/virt-manager.glade, src/virtManager/about.py, virt-
+	manager.spec.in:
+	Make URLs & email addrs in about dialog clickable (bz 210782)
+	[22889cdd3c60]
+
+	* src/virt-manager.glade:
+	Change 'physical' to 'logical' in text refering to host CPUs
+	[52a07614f81f]
+
+	* src/virt-manager.schemas.in:
+	Change default to activate popup of console for newly created guests
+	[0baa980b3021]
+
+	* src/virtManager/connection.py, src/virtManager/manager.py:
+	Include info about hypervisor connection in titlebar ( bz 213093)
+	[7de904410eb7]
+
+2006-11-03  Karel Zak  <kzak@redhat.com>
+
+	* AUTHORS, src/virtManager/console.py, src/virtManager/create.py,
+	src/virtManager/details.py, src/virtManager/engine.py,
+	src/virtManager/manager.py, src/virtManager/serialcon.py:
+	fix problem with never ending gtk.main()
+	[a5c3cd610da2]
+
+2006-11-03  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py:
+	Grab focus to the password field when showing login
+	[d09e1774c693]
+
+	* src/virtManager/serialcon.py:
+	Call 'present' to ensure serial console is raised & focused
+	[8435965bbaa5]
+
+2006-10-31  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virt-manager.schemas.in,
+	src/virtManager/config.py, src/virtManager/create.py,
+	src/virtManager/manager.py, src/virtManager/preferences.py:
+	bz 211385: add preference to automatically pop up console on new vm
+	creation or all vm creation.
+	[9223d00fe776]
+
+2006-10-26  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.py.in:
+	Re-arrange startup to not use DBus activation in normal case
+	(partial fix for bz 211636)
+	[bfde999c4f9d]
+
+2006-10-26  Karel Zak  <kzak@redhat.com>
+
+	* src/virt-manager.py.in:
+	add command line option
+	[0e19c5b92f62]
+
+2006-10-25  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/create.py:
+	Don't make the create wizard sensitive again until after the error
+	dialog has gone
+	[43bf9d79afbc]
+
+	* src/virtManager/create.py:
+	Catch & deal with HAL not running more gracefully, by disabling
+	CDROM config & logging error info. bz 211901
+	[a77ff57c95d6]
+
+	* src/virt-manager.glade:
+	Allow long URls to ellipsize in VM create summary page
+	[fbc8ede2c02f]
+
+	* src/virtManager/connection.py:
+	Catch & ignore exception when looking up a domain, in case it went
+	away, or is a zombie
+	[38fec2ded04d]
+
+	* src/virtManager/create.py:
+	Disable wizard sensitivity while VM creation is taking place (bz
+	211624)
+	[bb3152c45312]
+
+2006-10-19  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.2.5-1 for changeset
+	f026bca68967ffcbf61ac60f2c653b3fba243785
+	[127d61c9062e]
+
+	* .hgtags:
+	Added tag RELEASE-0.2.4-1 for changeset
+	a72f4fcfc37be3ccca9c966d8d62c1c95212bdbc
+	[f026bca68967] [RELEASE-0.2.5-1]
+
+	* ChangeLog:
+	Re-generate changelog for 0.2.5
+	[94fafa058a00]
+
 2006-10-19  berrange  <berrange@localhost.localdomain>
 
 	* configure.ac, virt-manager.spec.in:
 	Bump release numbers
-	[f8050caf9b4d] [tip]
+	[f8050caf9b4d]
 
 	* src/virt-manager.desktop.in:
 	Remove duplicate menu entry (bz 211230)
@@ -30,7 +212,7 @@
 
 	* ChangeLog:
 	Re-generate changelog for 0.2.4
-	[a72f4fcfc37b]
+	[a72f4fcfc37b] [RELEASE-0.2.4-1]
 
 	* src/vncViewer/vnc.py:
 	Reset modifiers when disconnectin from server too
