@@ -1,0 +1,22 @@
+   Procedure for doing new releases
+  =================================
+
+Preparing the source tree:
+
+ 1. Sync up latest translations - see po/README.txt
+ 2. Change release number in configure.ac
+ 3. Update NEWS file
+ 4. Re-generate ChangeLog with 'hg log --style changelog > ChangeLog'
+ 6. Update virt-manager.spec.in changelog & reset Release to '1'
+ 5. Checkin changes
+ 6. Run 'hg tag RELEASE-X.Y.Z-1'
+
+Preparing the build:
+
+ 1. Get a fresh checkout from  http://hg.et.redhat.com/virt/applications/virt-manager--devel
+ 2. Run 'autobuild.sh'
+ 3. Upload build/virt-manager-X.Y.Z.tar.gz  to website download area
+ 4. Update the website download.html page
+ 5. Mail fedora-xen and libvirt mailing lists
+ 6. Update freshmeat record
+ 7. Mail  lwn.net release announcement
