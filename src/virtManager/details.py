@@ -102,9 +102,10 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_serial_activate": self.control_vm_terminal,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
 
-            "on_config_cpus_apply_clicked": self.config_cpus_apply,
-            "on_config_vcpus_changed": self.config_vm_cpus,
-            "on_config_memory_changed": self.config_memory_value,
+            "on_config_vcpus_apply_clicked": self.config_vcpus_apply,
+            "on_config_vcpus_changed": self.config_vcpus_changed,
+            "on_config_memory_changed": self.config_memory_changed,
+            "on_config_maxmem_changed": self.config_maxmem_changed,
             "on_config_memory_apply_clicked": self.config_memory_apply
             })
 
@@ -116,10 +117,7 @@ class vmmDetails(gobject.GObject):
         self.refresh_resources(vm)
 
         self.prepare_disk_list()
-        self.populate_disk_list()
-        
         self.prepare_network_list()
-        self.populate_network_list()
 
     def toggle_toolbar(self, src):
         if src.get_active():
@@ -161,18 +159,19 @@ class vmmDetails(gobject.GObject):
             pagenum = active[0].get_value(active[1], 0)
             self.window.get_widget("hw-panel").set_sensitive(True)
             self.window.get_widget("hw-panel").set_current_page(pagenum)
-            if self.vm.is_read_only():
-                self.window.get_widget("hw-panel").get_nth_page(pagenum).set_sensitive(False)
-            else:
-                self.window.get_widget("hw-panel").get_nth_page(pagenum).set_sensitive(True)
+
+            if pagenum == 0:
+                self.window.get_widget("config-vcpus-apply").set_sensitive(False)
+                self.refresh_config_cpu()
+            elif pagenum == 1:
+                self.window.get_widget("config-memory-apply").set_sensitive(False)
+                self.refresh_config_memory()
+            elif pagenum == 2:
+                self.refresh_config_disk()
+            elif pagenum == 3:
+                self.refresh_config_network()
         else:
             self.window.get_widget("hw-panel").set_sensitive(False)
-        # When the user changes tabs on the hw panel, reset to the default state
-        self.update_config_memory()
-        self.update_config_cpus()
-        self.update_state_cpus()
-        self.window.get_widget("config-memory-apply").set_sensitive(False)
-        self.window.get_widget("config-cpus-apply").set_sensitive(False)
 
     def control_vm_run(self, src):
         status = self.vm.status()
@@ -225,10 +224,15 @@ class vmmDetails(gobject.GObject):
             if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
                 self.window.get_widget("control-run").set_sensitive(True)
                 self.window.get_widget("details-menu-run").set_sensitive(True)
+                self.window.get_widget("config-vcpus").set_sensitive(True)
+                self.window.get_widget("config-memory").set_sensitive(True)
+                self.window.get_widget("config-maxmem").set_sensitive(True)
             else:
                 self.window.get_widget("control-run").set_sensitive(False)
                 self.window.get_widget("details-menu-run").set_sensitive(False)
-
+                self.window.get_widget("config-vcpus").set_sensitive(self.vm.is_vcpu_hotplug_capable())
+                self.window.get_widget("config-memory").set_sensitive(self.vm.is_memory_hotplug_capable())
+                self.window.get_widget("config-maxmem").set_sensitive(False)
 
             if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
                 self.window.get_widget("control-pause").set_sensitive(False)
@@ -261,9 +265,22 @@ class vmmDetails(gobject.GObject):
         else:
             self.window.get_widget("details-menu-serial").set_sensitive(False)
 
-    def refresh_resources(self, vm):
+    def refresh_resources(self, ignore):
+        self.refresh_summary()
+
+        hw = self.window.get_widget("hw-panel")
+        pagenum = hw.get_current_page()
+        if pagenum == 0:
+            self.refresh_config_cpu()
+        elif pagenum == 1:
+            self.refresh_config_memory()
+        #elif pagenum == 2:
+        #    self.refresh_config_disk()
+        #elif pagenum == 3:
+        #    self.refresh_config_network()
+
+    def refresh_summary(self):
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
-        vm_maxmem = self.vm.maximum_memory()
         vm_memory = self.vm.current_memory()
         host_memory = self.vm.get_connection().host_memory_size()
         self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (vm_memory/1024, host_memory/1024))
@@ -281,47 +298,81 @@ class vmmDetails(gobject.GObject):
         network_vector.reverse()
         self.network_traffic_graph.set_property("data_array", network_vector)
 
-        # update HW config values
-        self.window.get_widget("state-host-memory").set_text("%d MB" % (host_memory/1024))
-        self.window.get_widget("config-memory").get_adjustment().upper = vm.maximum_memory()/1024
-        self.window.get_widget("state-vm-maxmem").set_text("%d MB" % (vm_maxmem/1024))
-        self.window.get_widget("state-vm-memory").set_text("%d MB" % (vm_memory/1024))
-
+    def refresh_config_cpu(self):
         self.window.get_widget("state-host-cpus").set_text("%d" % self.vm.get_connection().host_active_processor_count())
-        self.window.get_widget("config-vcpus").get_adjustment().upper = vm.vcpu_max_count()
-        self.window.get_widget("state-vm-vcpus").set_text("%d" % (vm.vcpu_count()))
-        self.window.get_widget("state-vm-max-vcpus").set_text("%d" % (vm.vcpu_max_count()))
+        status = self.vm.status()
+        if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+            self.window.get_widget("config-vcpus").get_adjustment().upper = 32
+            self.window.get_widget("state-vm-maxvcpus").set_text("32")
+        else:
+            self.window.get_widget("config-vcpus").get_adjustment().upper = self.vm.vcpu_max_count()
+            self.window.get_widget("state-vm-maxvcpus").set_text("%d" % (self.vm.vcpu_max_count()))
 
-    def update_config_memory(self):
-        self.window.get_widget("config-memory").get_adjustment().value = self.vm.current_memory()/1024
+        if not(self.window.get_widget("config-vcpus-apply").get_property("sensitive")):
+            self.window.get_widget("config-vcpus").get_adjustment().value = self.vm.vcpu_count()
+            # XXX hack - changing the value above will have just re-triggered
+            # the callback making apply button sensitive again. So we have to
+            # turn it off again....
+            self.window.get_widget("config-vcpus-apply").set_sensitive(False)
+        self.window.get_widget("state-vm-vcpus").set_text("%d" % (self.vm.vcpu_count()))
 
-    def update_config_cpus(self):
-        self.window.get_widget("config-vcpus").get_adjustment().value = self.vm.vcpu_count()
+    def refresh_config_memory(self):
+        self.window.get_widget("state-host-memory").set_text("%d MB" % (self.vm.get_connection().host_memory_size()/1024))
+        if self.window.get_widget("config-memory-apply").get_property("sensitive"):
+            self.window.get_widget("config-memory").get_adjustment().upper = self.window.get_widget("config-maxmem").get_adjustment().value
+        else:
+            self.window.get_widget("config-memory").get_adjustment().value = self.vm.current_memory()/1024
+            self.window.get_widget("config-maxmem").get_adjustment().value = self.vm.maximum_memory()/1024
+            # XXX hack - changing the value above will have just re-triggered
+            # the callback making apply button sensitive again. So we have to
+            # turn it off again....
+            self.window.get_widget("config-memory-apply").set_sensitive(False)
 
-    def update_state_cpus(self):
-        self.window.get_widget("state-host-cpus").set_text(`(self.vm.get_connection().host_maximum_processor_count())`)
-    def config_cpus_apply(self, src):
-        # Apply the change to the number of CPUs
+        self.window.get_widget("state-vm-memory").set_text("%d MB" % (self.vm.current_memory()/1024))
 
+    def refresh_config_disk(self):
+        self.populate_disk_list()
+
+    def refresh_config_network(self):
+        self.populate_network_list()
+
+
+
+    def config_vcpus_changed(self, src):
+        self.window.get_widget("config-vcpus-apply").set_sensitive(True)
+
+    def config_vcpus_apply(self, src):
         vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
-
-        # if requested # of CPUS > host CPUS, pop up warning dialog (not implemented yet)
-
+        logging.info("Setting vcpus for " + self.vm.get_uuid() + " to " + str(vcpus))
         self.vm.set_vcpu_count(vcpus)
-        self.window.get_widget("config-cpus-apply").set_sensitive(False)
+        self.window.get_widget("config-vcpus-apply").set_sensitive(False)
 
-    def config_vm_cpus(self, src):
-        # cpu spinbox changed, make the apply button available
-        self.window.get_widget("config-cpus-apply").set_sensitive(True)
 
-    def config_memory_value(self, src):
+
+    def config_memory_changed(self, src):
         self.window.get_widget("config-memory-apply").set_sensitive(True)
 
+    def config_maxmem_changed(self, src):
+        self.window.get_widget("config-memory-apply").set_sensitive(True)
+        memory = self.window.get_widget("config-maxmem").get_adjustment().value
+        memadj = self.window.get_widget("config-memory").get_adjustment()
+        memadj.upper = memory
+        if memadj.value > memory:
+            memadj.value = memory
+
     def config_memory_apply(self, src):
+        status = self.vm.status()
+        if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+            memory = self.window.get_widget("config-maxmem").get_adjustment().value
+            logging.info("Setting max memory for " + self.vm.get_uuid() + " to " + str(memory))
+            self.vm.set_max_memory(memory*1024)
         memory = self.window.get_widget("config-memory").get_adjustment().value
-        newmem = self.vm.set_memory(memory*1024)
+        logging.info("Setting memory for " + self.vm.get_uuid() + " to " + str(memory))
+        self.vm.set_memory(memory*1024)
+
         self.window.get_widget("config-memory-apply").set_sensitive(False)
-        self.window.get_widget("state-vm-memory").set_text("%d MB" % (newmem/1024))
+
+
 
     def prepare_disk_list(self):
         disks = self.window.get_widget("storage-view")
@@ -358,9 +409,10 @@ class vmmDetails(gobject.GObject):
 
         disks = self.window.get_widget("storage-view")
         disksModel = disks.get_model()
+        disksModel.clear()
         for d in diskList:
             disksModel.append(None, d)
-            
+
     def prepare_network_list(self):
         nets = self.window.get_widget("network-view")
         netsModel = gtk.TreeStore(str,str,str,str)
@@ -396,8 +448,8 @@ class vmmDetails(gobject.GObject):
 
         nets = self.window.get_widget("network-view")
         netsModel = nets.get_model()
+        netsModel.clear()
         for d in netList:
             netsModel.append(None, d)
-            
 
 gobject.type_register(vmmDetails)

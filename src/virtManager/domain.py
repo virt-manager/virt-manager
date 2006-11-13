@@ -82,6 +82,16 @@ class vmmDomain(gobject.GObject):
             return True
         return False
 
+    def is_vcpu_hotplug_capable(self):
+        if self.connection.is_read_only():
+            return False
+        return True
+
+    def is_memory_hotplug_capable(self):
+        if self.connection.is_read_only():
+            return False
+        return True
+
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:
             return libvirt.VIR_DOMAIN_RUNNING
