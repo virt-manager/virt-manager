@@ -101,6 +101,9 @@ class vmmManager(gobject.GObject):
 
         self.vmmenu.show_all()
 
+        # Mapping of VM UUID -> tree model rows to
+        # allow O(1) access instead of O(n)
+        self.rows = {}
 
         self.window.signal_autoconnect({
             "on_menu_view_domain_id_activate" : self.toggle_domain_id_visible_conf,
@@ -231,7 +234,7 @@ class vmmManager(gobject.GObject):
                 if not(self.is_showing_inactive()):
                     continue
 
-            model.append([vm, vm.get_name()])
+            self._append_vm(model, mv)
 
     def vm_added(self, connection, uri, vmuuid):
         vm = self.connection.get_vm(vmuuid)
@@ -248,7 +251,7 @@ class vmmManager(gobject.GObject):
             if not(self.is_showing_inactive()):
                 return
 
-        model.append([vm, vm.get_name()])
+        self._append_vm(model, vm)
 
         if self.config.get_console_popup() == 2 and range(model.iter_n_children(None)) > 1:
             # user has requested consoles on all vms
@@ -258,6 +261,14 @@ class vmmManager(gobject.GObject):
             else:
                 self.emit("action-show-terminal", uri, vmuuid)
         
+    def _append_vm(self, model, vm):
+        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar
+        iter = model.append([vm, vm.get_name(), vm.get_id_pretty(), vm.run_status(), \
+                             vm.run_status_icon(), vm.cpu_time_pretty(), vm.vcpu_count(), \
+                             vm.current_memory_pretty(), vm.current_memory_percentage()])
+        path = model.get_path(iter)
+        self.rows[vm.get_uuid()] = model[path]
+
     def vm_removed(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
@@ -266,6 +277,7 @@ class vmmManager(gobject.GObject):
             vm = model.get_value(model.iter_nth_child(None, row), 0)
             if vm.get_uuid() == vmuuid:
                 model.remove(model.iter_nth_child(None, row))
+                del self.rows[vmuuid]
                 break
 
     def vm_status_changed(self, vm, status):
@@ -288,20 +300,26 @@ class vmmManager(gobject.GObject):
                     missing = False
                 else:
                     model.remove(model.iter_nth_child(None, row))
+                    del self.rows[vm.get_uuid()]
                 break
 
         if missing and wanted:
-            model.append([vm, vm.get_name()])
+            self._append_vm(model, vm)
 
 
     def vm_resources_sampled(self, vm):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
-        for row in range(model.iter_n_children(None)):
-            iter = model.iter_nth_child(None, row)
-            if model.get_value(iter, 0).get_uuid() == vm.get_uuid():
-                model.row_changed(str(row), iter)
+        row = self.rows[vm.get_uuid()]
+        # Handle, name, ID, status, status icon, cpu, cpu graph, vcpus, mem, mem bar
+        row[3] = vm.run_status()
+        row[4] = vm.run_status_icon()
+        row[5] = vm.cpu_time_pretty()
+        row[6] = vm.vcpu_count()
+        row[7] = vm.current_memory_pretty()
+        row[8] = vm.current_memory_percentage()
+        model.row_changed(row.path, row.iter)
 
     def current_vm(self):
         vmlist = self.window.get_widget("vm-list")
@@ -369,7 +387,8 @@ class vmmManager(gobject.GObject):
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
-        model = gtk.ListStore(object, str)
+        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar
+        model = gtk.ListStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int)
         vmlist.set_model(model)
 
         idCol = gtk.TreeViewColumn(_("ID"))
@@ -390,9 +409,18 @@ class vmmManager(gobject.GObject):
         vmlist.append_column(diskUsageCol)
         vmlist.append_column(networkTrafficCol)
 
+        # For the columsn which follow, we delibrately bind columns
+        # to fields in the list store & on each update copy the info
+        # out of the vmmDomain object into the store. Although this
+        # sounds foolish, empirically this is faster than using the
+        # set_cell_data_func() callbacks to pull the data out of
+        # vmmDomain on demand. I suspect this is because the latter
+        # needs to do many transitions  C<->Python for callbacks
+        # which are relatively slow.
+
         id_txt = gtk.CellRendererText()
         idCol.pack_start(id_txt, True)
-        idCol.set_cell_data_func(id_txt, self.domain_id_text, None)
+        idCol.add_attribute(id_txt, 'text', 2)
         idCol.set_visible(self.config.is_vmlist_domain_id_visible())
         idCol.set_sort_column_id(VMLIST_SORT_ID)
 
@@ -405,31 +433,30 @@ class vmmManager(gobject.GObject):
         status_icon = gtk.CellRendererPixbuf()
         statusCol.pack_start(status_icon, False)
         statusCol.pack_start(status_txt, False)
-        statusCol.set_cell_data_func(status_txt, self.status_text, None)
-        statusCol.set_cell_data_func(status_icon, self.status_icon, None)
+        statusCol.add_attribute(status_txt, 'text', 3)
+        statusCol.add_attribute(status_icon, 'pixbuf', 4)
         statusCol.set_visible(self.config.is_vmlist_status_visible())
 
         cpuUsage_txt = gtk.CellRendererText()
-        #cpuUsage_img = gtk.CellRendererProgress()
         cpuUsage_img = sparkline.CellRendererSparkline()
         cpuUsageCol.pack_start(cpuUsage_txt, False)
         cpuUsageCol.pack_start(cpuUsage_img, False)
-        cpuUsageCol.set_cell_data_func(cpuUsage_txt, self.cpu_usage_text, None)
+        cpuUsageCol.add_attribute(cpuUsage_txt, 'text', 5)
         cpuUsageCol.set_cell_data_func(cpuUsage_img, self.cpu_usage_img, None)
         cpuUsageCol.set_visible(self.config.is_vmlist_cpu_usage_visible())
         cpuUsageCol.set_sort_column_id(VMLIST_SORT_CPU_USAGE)
 
         virtualCPUs_txt = gtk.CellRendererText()
         virtualCPUsCol.pack_start(virtualCPUs_txt, False)
-        virtualCPUsCol.set_cell_data_func(virtualCPUs_txt, self.virtual_cpus_text, None)
+        virtualCPUsCol.add_attribute(virtualCPUs_txt, 'text', 6)
         virtualCPUsCol.set_visible(self.config.is_vmlist_virtual_cpus_visible())
 
         memoryUsage_txt = gtk.CellRendererText()
         memoryUsage_img = gtk.CellRendererProgress()
         memoryUsageCol.pack_start(memoryUsage_txt, False)
         memoryUsageCol.pack_start(memoryUsage_img, False)
-        memoryUsageCol.set_cell_data_func(memoryUsage_txt, self.memory_usage_text, None)
-        memoryUsageCol.set_cell_data_func(memoryUsage_img, self.memory_usage_img, None)
+        memoryUsageCol.add_attribute(memoryUsage_txt, 'text', 7)
+        memoryUsageCol.add_attribute(memoryUsage_img, 'value', 8)
         memoryUsageCol.set_visible(self.config.is_vmlist_memory_usage_visible())
         memoryUsageCol.set_sort_column_id(VMLIST_SORT_MEMORY_USAGE)
 
@@ -437,8 +464,6 @@ class vmmManager(gobject.GObject):
         diskUsage_img = gtk.CellRendererProgress()
         diskUsageCol.pack_start(diskUsage_txt, False)
         diskUsageCol.pack_start(diskUsage_img, False)
-        diskUsageCol.set_cell_data_func(diskUsage_txt, self.disk_usage_text, None)
-        diskUsageCol.set_cell_data_func(diskUsage_img, self.disk_usage_img, None)
         diskUsageCol.set_visible(self.config.is_vmlist_disk_usage_visible())
         diskUsageCol.set_sort_column_id(VMLIST_SORT_DISK_USAGE)
 
@@ -446,8 +471,6 @@ class vmmManager(gobject.GObject):
         networkTraffic_img = gtk.CellRendererProgress()
         networkTrafficCol.pack_start(networkTraffic_txt, False)
         networkTrafficCol.pack_start(networkTraffic_img, False)
-        networkTrafficCol.set_cell_data_func(networkTraffic_txt, self.network_traffic_text, None)
-        networkTrafficCol.set_cell_data_func(networkTraffic_img, self.network_traffic_img, None)
         networkTrafficCol.set_visible(self.config.is_vmlist_network_traffic_visible())
         networkTrafficCol.set_sort_column_id(VMLIST_SORT_NETWORK_USAGE)
 
@@ -542,73 +565,9 @@ class vmmManager(gobject.GObject):
         col = vmlist.get_column(7)
         col.set_visible(self.config.is_vmlist_network_traffic_visible())
 
-
-    def domain_id_text(self, column, cell, model, iter, data):
-        id = model.get_value(iter, 0).get_id()
-        if id >= 0:
-            cell.set_property('text', str(id))
-        else:
-            cell.set_property('text', "-")
-
-    def status_text(self, column, cell, model, iter, data):
-        cell.set_property('text', model.get_value(iter, 0).run_status())
-
-    def status_icon(self, column, cell, model, iter, data):
-        cell.set_property('pixbuf', model.get_value(iter, 0).run_status_icon())
-
-    def cpu_usage_text(self,  column, cell, model, iter, data):
-        cell.set_property('text', "%2.2f %%" % model.get_value(iter, 0).cpu_time_percentage())
-
     def cpu_usage_img(self,  column, cell, model, iter, data):
-        #cell.set_property('text', '')
-        #cell.set_property('value', self.connection.get_vm(uuid).cpu_time_percentage())
-        data = model.get_value(iter, 0).cpu_time_vector()
-        # Prevent histogram getting too wide if we're tracking lots
-        # of data - full data is viewable in details window
-        if len(data) > 40:
-            data = data[0:40]
+        data = model.get_value(iter, 0).cpu_time_vector_limit(40)
         data.reverse()
         cell.set_property('data_array', data)
-
-    def virtual_cpus_text(self,  column, cell, model, iter, data):
-        cell.set_property('text', str(model.get_value(iter, 0).vcpu_count()))
-
-
-    def memory_usage_text(self,  column, cell, model, iter, data):
-        current = model.get_value(iter, 0).current_memory()
-        currentPercent = model.get_value(iter, 0).current_memory_percentage()
-        cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
-
-    def memory_usage_img(self,  column, cell, model, iter, data):
-        currentPercent = model.get_value(iter, 0).current_memory_percentage()
-        cell.set_property('text', '')
-        cell.set_property('value', currentPercent)
-
-    def disk_usage_text(self,  column, cell, model, iter, data):
-        current = model.get_value(iter, 0).disk_usage()
-        currentPercent = model.get_value(iter, 0).disk_usage_percentage()
-        cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
-
-    def disk_usage_img(self,  column, cell, model, iter, data):
-        currentPercent = model.get_value(iter, 0).disk_usage_percentage()
-        cell.set_property('text', '')
-        cell.set_property('value', currentPercent)
-
-    def network_traffic_text(self,  column, cell, model, iter, data):
-        current = model.get_value(iter, 0).network_traffic()
-        currentPercent = model.get_value(iter, 0).network_traffic_percentage()
-        cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
-
-    def network_traffic_img(self,  column, cell, model, iter, data):
-        currentPercent = model.get_value(iter, 0).network_traffic_percentage()
-        cell.set_property('text', '')
-        cell.set_property('value', currentPercent)
-
-    # XXX or should we just always display MB ?
-    def pretty_mem(self, mem):
-        if mem > (1024*1024):
-            return "%2.2f GB" % (mem/(1024.0*1024.0))
-        else:
-            return "%2.2f MB" % (mem/1024.0)
 
 gobject.type_register(vmmManager)
