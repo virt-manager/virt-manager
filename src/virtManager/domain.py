@@ -131,6 +131,14 @@ class vmmDomain(gobject.GObject):
             if pcentCpuTime < 0.0:
                 pcentCpuTime = 0.0
 
+        # Xen reports complete crap for Dom0 max memory
+        # (ie MAX_LONG) so lets clamp it to the actual
+        # physical RAM in machine which is the effective
+        # real world limit
+        # XXX need to skip this for non-Xen
+        if self.get_id() == 0:
+            info[1] = self.connection.host_memory_size()
+
         pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
         pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
 
