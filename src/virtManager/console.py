@@ -40,7 +40,7 @@ class vmmConsole(gobject.GObject):
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-console", domain="virt-manager")
         self.config = config
         self.vm = vm
-        
+
         topwin = self.window.get_widget("vmm-console")
         topwin.hide()
         topwin.set_title(vm.get_name() + " " + topwin.get_title())
@@ -155,7 +155,7 @@ class vmmConsole(gobject.GObject):
         return 0
 
     def _vnc_disconnected(self, src):
-        self.activate_auth_page()
+        self.try_login()
 
     def retry_login(self):
         self.try_login()
@@ -400,15 +400,12 @@ class vmmConsole(gobject.GObject):
                     self.activate_screenshot_page()
                 else:
                     self.activate_unavailable_page()
-            elif self.vncViewer.is_connected():
-                self.try_login()
+            else:
                 try:
                     self.try_login()
                 except:
                     logging.error("Couldn't open console " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
                     self.ignorePause = False
-            else:
-                self.activate_unavailable_page()
         self.ignorePause = False
 
 gobject.type_register(vmmConsole)
