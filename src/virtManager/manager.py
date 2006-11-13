@@ -197,11 +197,20 @@ class vmmManager(gobject.GObject):
         self.fcdialog.hide()
         if(response == gtk.RESPONSE_ACCEPT):
             file_to_load = self.fcdialog.get_filename()
-            progWin = vmmAsyncJob(self.config,
-                                  self.restore_saved_callback,
-                                  [file_to_load],
-                                  _("Restoring Virtual Machine"))
-            progWin.run()
+            if self.is_valid_saved_image(file_to_load):
+                progWin = vmmAsyncJob(self.config,
+                                      self.restore_saved_callback,
+                                      [file_to_load],
+                                      _("Restoring Virtual Machine"))
+                progWin.run()
+            else:
+                err = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                        gtk.DIALOG_DESTROY_WITH_PARENT,
+                                        gtk.MESSAGE_ERROR,
+                                        gtk.BUTTONS_OK,
+                                        _("The file '%s' does not appear to be a valid saved machine image") % file_to_load)
+                err.run()
+                err.destroy()
 
         self.fcdialog.destroy()
         if(self.domain_restore_error != ""):
@@ -213,6 +222,16 @@ class vmmManager(gobject.GObject):
             self.error_msg.run()
             self.error_msg.destroy()
             self.domain_restore_error = ""
+
+    def is_valid_saved_image(self, file):
+        try:
+            f = open(file, "r")
+            magic = f.read(16)
+            if magic != "LinuxGuestRecord":
+                return False
+            return True
+        except:
+            return False
 
     def restore_saved_callback(self, file_to_load):
         status = self.connection.restore(file_to_load)
