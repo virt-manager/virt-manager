@@ -223,6 +223,7 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
         model.clear()
+        self.rows = {}
 
         uuids = self.connection.list_vm_uuids()
         for vmuuid in uuids:
@@ -234,7 +235,7 @@ class vmmManager(gobject.GObject):
                 if not(self.is_showing_inactive()):
                     continue
 
-            self._append_vm(model, mv)
+            self._append_vm(model, vm)
 
     def vm_added(self, connection, uri, vmuuid):
         vm = self.connection.get_vm(vmuuid)
@@ -310,6 +311,9 @@ class vmmManager(gobject.GObject):
     def vm_resources_sampled(self, vm):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
+
+        if not(self.rows.has_key(vm.get_uuid())):
+            return
 
         row = self.rows[vm.get_uuid()]
         # Handle, name, ID, status, status icon, cpu, cpu graph, vcpus, mem, mem bar
