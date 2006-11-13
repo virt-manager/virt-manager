@@ -313,6 +313,10 @@ class vmmManager(gobject.GObject):
 
         row = self.rows[vm.get_uuid()]
         # Handle, name, ID, status, status icon, cpu, cpu graph, vcpus, mem, mem bar
+        if vm.get_id() == -1:
+            row[2] = "-"
+        else:
+            row[2] = vm.get_id()
         row[3] = vm.run_status()
         row[4] = vm.run_status_icon()
         row[5] = vm.cpu_time_pretty()
