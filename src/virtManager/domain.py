@@ -176,7 +176,7 @@ class vmmDomain(gobject.GObject):
         return self.record[0]["currMemPercent"]
 
     def current_memory_pretty(self):
-        mem = self.current_memory_percentage()
+        mem = self.current_memory()
         if mem > (1024*1024):
             return "%2.2f GB" % (mem/(1024.0*1024.0))
         else:
@@ -446,8 +446,12 @@ class vmmDomain(gobject.GObject):
     def set_memory(self, memory):
         memory = int(memory)
         if (memory > self.maximum_memory()):
-            logging.warning("Requested memory " + str(memory) + " over maximum " + self.maximum_memory())
+            logging.warning("Requested memory " + str(memory) + " over maximum " + str(self.maximum_memory()))
+            memory = self.maximum_memory()
         self.vm.setMemory(memory)
-        return self.vm.info()[2]
+
+    def set_max_memory(self, memory):
+        memory = int(memory)
+        self.vm.setMaxMemory(memory)
 
 gobject.type_register(vmmDomain)
