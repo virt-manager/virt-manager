@@ -22,6 +22,7 @@ import libvirt
 import logging
 import os
 from time import time
+import logging
 from socket import gethostbyaddr, gethostname
 
 from virtManager.domain import vmmDomain
@@ -50,7 +51,6 @@ class vmmConnection(gobject.GObject):
             self.vmm = libvirt.open(openURI)
 
         self.vms = {}
-        self.tick()
 
     def is_read_only(self):
         return self.readOnly
@@ -75,6 +75,9 @@ class vmmConnection(gobject.GObject):
         #self.vmm.close()
         self.vmm = None
         self.emit("disconnected", self.uri)
+
+    def list_vm_uuids(self):
+        return self.vms.keys()
 
     def get_host_info(self):
         return self.hostinfo
@@ -107,46 +110,118 @@ class vmmConnection(gobject.GObject):
         if self.vmm == None:
             return
 
-        ids = {}
+        oldActiveIDs = {}
+        oldInactiveNames = {}
         for uuid in self.vms.keys():
             vm = self.vms[uuid]
-            ids[vm.get_id()] = vm
+            if vm.get_id() == -1:
+                oldInactiveNames[vm.get_name()] = vm
+            else:
+                oldActiveIDs[vm.get_id()] = vm
 
-        doms = self.vmm.listDomainsID()
-        newVms = {}
-        if doms != None:
-            for id in doms:
-                if ids.has_key(id):
-                    # Existing VM, so just keep handle
-                    vm = ids[id]
-                    del ids[id]
+        newActiveIDs = self.vmm.listDomainsID()
+        newInactiveNames = []
+        try:
+            newInactiveNames = self.vmm.listDefinedDomains()
+        except:
+            logging.warn("Unable to list inactive domains")
+
+        newUUIDs = {}
+        oldUUIDs = {}
+        curUUIDs = {}
+        maybeNewUUIDs = {}
+
+        # NB in these first 2 loops, we go to great pains to
+        # avoid actually instantiating a new VM object so that
+        # the common case of 'no new/old VMs' avoids hitting
+        # XenD too much & thus slowing stuff down.
+
+        # Filter out active domains which haven't changed
+        if newActiveIDs != None:
+            for id in newActiveIDs:
+                if oldActiveIDs.has_key(id):
+                    # No change, copy across existing VM object
+                    vm = oldActiveIDs[id]
+                    #print "Existing active " + str(vm.get_name()) + " " + vm.get_uuid()
+                    curUUIDs[vm.get_uuid()] = vm
                 else:
-                    # New VM so create wrapper object
+                    # May be a new VM, we have no choice but
+                    # to create the wrapper so we can see
+                    # if its a previously inactive domain.
+                    vm = self.vmm.lookupByID(id)
+                    uuid = self.uuidstr(vm.UUID())
+                    maybeNewUUIDs[uuid] = vm
+                    #print "Maybe new active " + str(maybeNewUUIDs[uuid].get_name()) + " " + uuid
+
+        # Filter out inactive domains which haven't changed
+        if newInactiveNames != None:
+            for name in newInactiveNames:
+                if oldInactiveNames.has_key(name):
+                    # No change, copy across existing VM object
+                    vm = oldInactiveNames[name]
+                    #print "Existing inactive " + str(vm.get_name()) + " " + vm.get_uuid()
+                    curUUIDs[vm.get_uuid()] = vm
+                else:
+                    # May be a new VM, we have no choice but
+                    # to create the wrapper so we can see
+                    # if its a previously inactive domain.
                     try:
-                        vm = self.vmm.lookupByID(id)
+                        vm = self.vmm.lookupByName(name)
                         uuid = self.uuidstr(vm.UUID())
-                        newVms[uuid] = vm
+                        maybeNewUUIDs[uuid] = vm
                     except libvirt.libvirtError:
                         logging.debug("Couldn't fetch domain id " + str(id) + "; it probably went away")
+                    #print "Maybe new inactive " + str(maybeNewUUIDs[uuid].get_name()) + " " + uuid
 
-        # Any left in ids hash are old removed VMs
-        for id in ids:
-            vm = ids[id]
-            del self.vms[vm.get_uuid()]
-            self.emit("vm-removed", self.uri, vm.get_uuid())
+        # At this point, maybeNewUUIDs has domains which are
+        # either completely new, or changed state.
 
-        # Any in newVms hash are added
-        for uuid in newVms.keys():
-            vm = newVms[uuid]
-            self.vms[uuid] = vmmDomain(self.config, self, vm, uuid)
+        # Filter out VMs which merely changed state, leaving
+        # only new domains
+        for uuid in maybeNewUUIDs.keys():
+            rawvm = maybeNewUUIDs[uuid]
+            if not(self.vms.has_key(uuid)):
+                #print "Completely new VM " + str(vm)
+                vm = vmmDomain(self.config, self, rawvm, uuid)
+                newUUIDs[vm.get_uuid()] = vm
+                curUUIDs[uuid] = vm
+            else:
+                vm = self.vms[uuid]
+                vm.set_handle(rawvm)
+                curUUIDs[uuid] = vm
+                #print "Mere state change " + str(vm)
+
+        # Finalize list of domains which went away altogether
+        for uuid in self.vms.keys():
+            vm = self.vms[uuid]
+            if not(curUUIDs.has_key(uuid)):
+                #print "Completly old VM " + str(vm)
+                oldUUIDs[uuid] = vm
+            else:
+                #print "Mere state change " + str(vm)
+                pass
+
+        # We have our new master list
+        self.vms = curUUIDs
+
+        # Inform everyone what changed
+        for uuid in oldUUIDs:
+            vm = oldUUIDs[uuid]
+            #print "Remove " + vm.get_name() + " " + uuid
+            self.emit("vm-removed", self.uri, uuid)
+
+        for uuid in newUUIDs:
+            vm = newUUIDs[uuid]
+            #print "Add " + vm.get_name() + " " + uuid
             self.emit("vm-added", self.uri, uuid)
 
+        # Finally, we sample each domain
         now = time()
         self.hostinfo = self.vmm.getInfo()
 
         updateVMs = self.vms
         if noStatsUpdate:
-            updateVMs = newVms
+            updateVMs = newUUIDs
 
         for uuid in updateVMs.keys():
             self.vms[uuid].tick(now)

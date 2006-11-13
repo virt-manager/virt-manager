@@ -146,6 +146,7 @@ def opt_show_cb(option, opt_str, value, parser):
 # Run me!
 def main():
     optParser = OptionParser()
+    optParser.add_option("--profile", dest="profile", help="Generate runtime performance profile stats", metavar="FILE")
     optParser.set_defaults(uuid=None)
     optParser.add_option("-c", "--connect", dest="uri", 
         help="Connect to hypervisor at URI", metavar="URI")
@@ -200,7 +201,13 @@ def main():
 
     # Finally start the app for real
     show_engine(engine, options.show, options.uri, options.uuid)
-    gtk.main()
+    if options.profile != None:
+        import hotshot
+        prof = hotshot.Profile(options.profile)
+        prof.runcall(gtk.main)
+        prof.close()
+    else:
+        gtk.main()
 
 if __name__ == "__main__":
     main()

@@ -56,9 +56,6 @@ class vmmManager(gobject.GObject):
         self.connection = connection
         self.prepare_vmlist()
 
-        self.connection.connect("vm-added", self.vm_added)
-        self.connection.connect("vm-removed", self.vm_removed)
-
         self.config.on_vmlist_domain_id_visible_changed(self.toggle_domain_id_visible_widget)
         self.config.on_vmlist_status_visible_changed(self.toggle_status_visible_widget)
         self.config.on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
@@ -87,7 +84,6 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("vm-new").set_sensitive(True)
             self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
 
-        self.window.get_widget("vm-view").set_sensitive(False)
         self.window.get_widget("vm-view").set_active(0)
 
         self.vmmenu = gtk.Menu()
@@ -125,8 +121,10 @@ class vmmManager(gobject.GObject):
             "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
             "on_vm_new_clicked": self.show_vm_create,
+            "on_vm_delete_clicked": self.delete_vm,
             "on_menu_edit_details_activate": self.show_vm_details,
 
+            "on_vm_view_changed": self.vm_view_changed,
             "on_vm_list_row_activated": self.open_vm_console,
 
             "on_vm_list_button_press_event": self.popup_vm_menu,
@@ -138,6 +136,9 @@ class vmmManager(gobject.GObject):
         self.vm_selected(None)
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
         self.connection.connect("disconnected", self.close)
+
+        self.connection.connect("vm-added", self.vm_added)
+        self.connection.connect("vm-removed", self.vm_removed)
 
         win = self.window.get_widget("vmm-manager")
         win.set_title(win.get_title() + " (" + self.connection.get_name() + ")")
@@ -167,6 +168,19 @@ class vmmManager(gobject.GObject):
     def open_connection(self, src=None):
         self.emit("action-show-connect")
 
+    def is_showing_active(self):
+        active = self.window.get_widget("vm-view").get_active()
+        if active in [0,1]:
+            return True
+        return False
+
+    def is_showing_inactive(self):
+        active = self.window.get_widget("vm-view").get_active()
+        if active in [0,2]:
+            return True
+        return False
+
+
     def restore_saved(self, src=None):
         # get filename
         self.fcdialog = gtk.FileChooserDialog(_("Restore Virtual Machine"),
@@ -185,7 +199,7 @@ class vmmManager(gobject.GObject):
                                   [file_to_load],
                                   _("Restoring Virtual Machine"))
             progWin.run()
-            
+
         self.fcdialog.destroy()
         if(self.domain_restore_error != ""):
             self.error_msg = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
@@ -196,63 +210,97 @@ class vmmManager(gobject.GObject):
             self.error_msg.run()
             self.error_msg.destroy()
             self.domain_restore_error = ""
-            
 
     def restore_saved_callback(self, file_to_load):
         status = self.connection.restore(file_to_load)
         if(status != 0):
             self.domain_restore_error = _("Error restoring domain '%s'. Is the domain already running?") % file_to_load
-        
+
+    def vm_view_changed(self, src):
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
+        model.clear()
+
+        uuids = self.connection.list_vm_uuids()
+        for vmuuid in uuids:
+            vm = self.connection.get_vm(vmuuid)
+            if vm.is_active():
+                if not(self.is_showing_active()):
+                    continue
+            else:
+                if not(self.is_showing_inactive()):
+                    continue
+
+            model.append([vm, vm.get_name()])
 
     def vm_added(self, connection, uri, vmuuid):
+        vm = self.connection.get_vm(vmuuid)
+        vm.connect("status-changed", self.vm_status_changed)
+        vm.connect("resources-sampled", self.vm_resources_sampled)
+
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
-        dup = 0
-        for row in range(model.iter_n_children(None)):
-            vm = model.get_value(model.iter_nth_child(None, row), 0)
-            if vm == vmuuid:
-                dup = 1
+        if vm.is_active():
+            if not(self.is_showing_active()):
+                return
+        else:
+            if not(self.is_showing_inactive()):
+                return
 
-        vm = self.connection.get_vm(vmuuid)
+        model.append([vm, vm.get_name()])
 
-        if dup != 1:
-            model.append([vmuuid, vm.get_name()])
-            vm.connect("status-changed", self.vm_status_changed)
-            vm.connect("resources-sampled", self.vm_resources_sampled)
-            if self.config.get_console_popup() == 2 and range(model.iter_n_children(None)) > 1:
-                # user has requested consoles on all vms
-                (gtype, host, port) = vm.get_graphics_console()
-                if gtype == "vnc":
-                    self.emit("action-show-console", uri, vmuuid)
-                else:
-                    self.emit("action-show-terminal", uri, vmuuid)
+        if self.config.get_console_popup() == 2 and range(model.iter_n_children(None)) > 1:
+            # user has requested consoles on all vms
+            (gtype, host, port) = vm.get_graphics_console()
+            if gtype == "vnc":
+                self.emit("action-show-console", uri, vmuuid)
+            else:
+                self.emit("action-show-terminal", uri, vmuuid)
         
-
     def vm_removed(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
-        dup = 0
         for row in range(model.iter_n_children(None)):
             vm = model.get_value(model.iter_nth_child(None, row), 0)
-            if vm == vmuuid:
+            if vm.get_uuid() == vmuuid:
                 model.remove(model.iter_nth_child(None, row))
                 break
 
-    def vm_status_changed(self, domain, status):
-        self.vm_updated(domain.get_uuid())
+    def vm_status_changed(self, vm, status):
+        wanted = False
+        if vm.is_active():
+            if self.is_showing_active():
+                wanted = True
+        else:
+            if self.is_showing_inactive():
+                wanted = True
 
-    def vm_resources_sampled(self, domain):
-        self.vm_updated(domain.get_uuid())
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
 
-    def vm_updated(self, vmuuid):
+        missing = True
+        for row in range(model.iter_n_children(None)):
+            iter = model.iter_nth_child(None, row)
+            if model.get_value(iter, 0).get_uuid() == vm.get_uuid():
+                if wanted:
+                    missing = False
+                else:
+                    model.remove(model.iter_nth_child(None, row))
+                break
+
+        if missing and wanted:
+            model.append([vm, vm.get_name()])
+
+
+    def vm_resources_sampled(self, vm):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
         for row in range(model.iter_n_children(None)):
             iter = model.iter_nth_child(None, row)
-            if model.get_value(iter, 0) == vmuuid:
+            if model.get_value(iter, 0).get_uuid() == vm.get_uuid():
                 model.row_changed(str(row), iter)
 
     def current_vm(self):
@@ -263,14 +311,28 @@ class vmmManager(gobject.GObject):
             return active[0].get_value(active[1], 0)
         return None
 
+    def current_vmuuid(self):
+        vm = self.current_vm()
+        if vm is None:
+            return None
+        return vm.get_uuid()
+
+    def delete_vm(self, src=None):
+        vm = self.current_vm()
+        if vm is None or vm.is_active():
+            return
+
+        vm.delete()
+        self.connection.tick(noStatsUpdate=True)
+
     def show_vm_details(self,ignore):
-        self.emit("action-show-details", self.connection.get_uri(), self.current_vm())
+        self.emit("action-show-details", self.connection.get_uri(), self.current_vmuuid())
 
     def show_vm_create(self,ignore):
         self.emit("action-show-create", self.connection.get_uri())
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
-        self.emit("action-show-console", self.connection.get_uri(), self.current_vm())
+        self.emit("action-show-console", self.connection.get_uri(), self.current_vmuuid())
 
 
     def vm_selected(self, selection):
@@ -281,12 +343,15 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
         else:
-            #self.window.get_widget("vm-delete").set_sensitive(True)
-            self.window.get_widget("vm-delete").set_sensitive(False)
+            vm = self.current_vm()
+            if vm.is_active():
+                self.window.get_widget("vm-delete").set_sensitive(False)
+                self.window.get_widget("menu_edit_delete").set_sensitive(False)
+            else:
+                self.window.get_widget("vm-delete").set_sensitive(True)
+                self.window.get_widget("menu_edit_delete").set_sensitive(True)
             self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(True)
-            #self.window.get_widget("menu_edit_delete").set_sensitive(True)
-            self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
 
     def popup_vm_menu(self, widget, event):
@@ -304,7 +369,7 @@ class vmmManager(gobject.GObject):
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
-        model = gtk.ListStore(str, str)
+        model = gtk.ListStore(object, str)
         vmlist.set_model(model)
 
         idCol = gtk.TreeViewColumn(_("ID"))
@@ -397,22 +462,22 @@ class vmmManager(gobject.GObject):
 
 
     def vmlist_domain_id_sorter(self, model, iter1, iter2):
-        return cmp(self.connection.get_vm(model.get_value(iter1, 0)).get_id(), self.connection.get_vm(model.get_value(iter2, 0)).get_id())
+        return cmp(model.get_value(iter1, 0).get_id(), model.get_value(iter2, 0).get_id())
 
     def vmlist_name_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, 1), model.get_value(iter2, 1))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
-        return cmp(self.connection.get_vm(model.get_value(iter1, 0)).cpu_time(), self.connection.get_vm(model.get_value(iter2, 0)).cpu_time())
+        return cmp(model.get_value(iter1, 0).cpu_time(), model.get_value(iter2, 0).cpu_time())
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2):
-        return cmp(self.connection.get_vm(model.get_value(iter1, 0)).current_memory(), self.connection.get_vm(model.get_value(iter2, 0)).current_memory())
+        return cmp(model.get_value(iter1, 0).current_memory(), model.get_value(iter2, 0).current_memory())
 
     def vmlist_disk_usage_sorter(self, model, iter1, iter2):
-        return cmp(self.connection.get_vm(model.get_value(iter1, 0)).disk_usage(), self.connection.get_vm(model.get_value(iter2, 0)).disk_usage())
+        return cmp(model.get_value(iter1, 0).disk_usage(), model.get_value(iter2, 0).disk_usage())
 
     def vmlist_network_usage_sorter(self, model, iter1, iter2):
-        return cmp(self.connection.get_vm(model.get_value(iter1, 0)).network_traffic(), self.connection.get_vm(model.get_value(iter2, 0)).network_traffic())
+        return cmp(model.get_value(iter1, 0).network_traffic(), model.get_value(iter2, 0).network_traffic())
 
     def toggle_domain_id_visible_conf(self, menu):
         self.config.set_vmlist_domain_id_visible(menu.get_active())
@@ -479,26 +544,25 @@ class vmmManager(gobject.GObject):
 
 
     def domain_id_text(self, column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        cell.set_property('text', str(self.connection.get_vm(uuid).get_id()))
+        id = model.get_value(iter, 0).get_id()
+        if id >= 0:
+            cell.set_property('text', str(id))
+        else:
+            cell.set_property('text', "-")
 
     def status_text(self, column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        cell.set_property('text', self.connection.get_vm(uuid).run_status())
+        cell.set_property('text', model.get_value(iter, 0).run_status())
 
     def status_icon(self, column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        cell.set_property('pixbuf', self.connection.get_vm(uuid).run_status_icon())
+        cell.set_property('pixbuf', model.get_value(iter, 0).run_status_icon())
 
     def cpu_usage_text(self,  column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        cell.set_property('text', "%2.2f %%" % self.connection.get_vm(uuid).cpu_time_percentage())
+        cell.set_property('text', "%2.2f %%" % model.get_value(iter, 0).cpu_time_percentage())
 
     def cpu_usage_img(self,  column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
         #cell.set_property('text', '')
         #cell.set_property('value', self.connection.get_vm(uuid).cpu_time_percentage())
-        data = self.connection.get_vm(uuid).cpu_time_vector()
+        data = model.get_value(iter, 0).cpu_time_vector()
         # Prevent histogram getting too wide if we're tracking lots
         # of data - full data is viewable in details window
         if len(data) > 40:
@@ -507,43 +571,36 @@ class vmmManager(gobject.GObject):
         cell.set_property('data_array', data)
 
     def virtual_cpus_text(self,  column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        cell.set_property('text', str(self.connection.get_vm(uuid).vcpu_count()))
+        cell.set_property('text', str(model.get_value(iter, 0).vcpu_count()))
 
 
     def memory_usage_text(self,  column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        current = self.connection.get_vm(uuid).current_memory()
-        currentPercent = self.connection.get_vm(uuid).current_memory_percentage()
+        current = model.get_value(iter, 0).current_memory()
+        currentPercent = model.get_value(iter, 0).current_memory_percentage()
         cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
 
     def memory_usage_img(self,  column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        currentPercent = self.connection.get_vm(uuid).current_memory_percentage()
+        currentPercent = model.get_value(iter, 0).current_memory_percentage()
         cell.set_property('text', '')
         cell.set_property('value', currentPercent)
 
     def disk_usage_text(self,  column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        current = self.connection.get_vm(uuid).disk_usage()
-        currentPercent = self.connection.get_vm(uuid).disk_usage_percentage()
+        current = model.get_value(iter, 0).disk_usage()
+        currentPercent = model.get_value(iter, 0).disk_usage_percentage()
         cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
 
     def disk_usage_img(self,  column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        currentPercent = self.connection.get_vm(uuid).disk_usage_percentage()
+        currentPercent = model.get_value(iter, 0).disk_usage_percentage()
         cell.set_property('text', '')
         cell.set_property('value', currentPercent)
 
     def network_traffic_text(self,  column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        current = self.connection.get_vm(uuid).network_traffic()
-        currentPercent = self.connection.get_vm(uuid).network_traffic_percentage()
+        current = model.get_value(iter, 0).network_traffic()
+        currentPercent = model.get_value(iter, 0).network_traffic_percentage()
         cell.set_property('text', "%s (%2.2f%%)" % (self.pretty_mem(current) , currentPercent))
 
     def network_traffic_img(self,  column, cell, model, iter, data):
-        uuid = model.get_value(iter, 0)
-        currentPercent = self.connection.get_vm(uuid).network_traffic_percentage()
+        currentPercent = model.get_value(iter, 0).network_traffic_percentage()
         cell.set_property('text', '')
         cell.set_property('value', currentPercent)
 

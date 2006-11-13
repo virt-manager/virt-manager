@@ -360,12 +360,12 @@
 	  <child>
 	    <widget class="GtkComboBox" id="vm-view">
 	      <property name="visible">True</property>
-	      <property name="sensitive">False</property>
 	      <property name="items" translatable="yes">All virtual machines
 Active virtual machines
 Inactive virtual machines</property>
 	      <property name="add_tearoffs">False</property>
 	      <property name="focus_on_click">True</property>
+	      <signal name="changed" handler="on_vm_view_changed" last_modification_time="Tue, 10 Oct 2006 20:44:44 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -423,7 +423,6 @@ Inactive virtual machines</property>
 	  <child>
 	    <widget class="GtkButton" id="vm-delete">
 	      <property name="visible">True</property>
-	      <property name="sensitive">False</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-delete</property>

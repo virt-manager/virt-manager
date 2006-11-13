@@ -43,6 +43,15 @@ class vmmDomain(gobject.GObject):
         self.lastStatus = None
         self.record = []
 
+    def set_handle(self, vm):
+        self.vm = vm
+
+    def is_active(self):
+        if self.vm.ID() == -1:
+            return False
+        else:
+            return True
+
     def get_connection(self):
         return self.connection
 
@@ -249,9 +258,16 @@ class vmmDomain(gobject.GObject):
         self.vm.shutdown()
         self._update_status()
 
+    def startup(self):
+        self.vm.create()
+        self._update_status()
+
     def suspend(self):
         self.vm.suspend()
         self._update_status()
+
+    def delete(self):
+        self.vm.undefine()
 
     def resume(self):
         self.vm.resume()

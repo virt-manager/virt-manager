@@ -154,9 +154,6 @@ class vmmConsole(gobject.GObject):
            return 1
         return 0
 
-    def control_vm_run(self, src):
-        return 0
-
     def _vnc_disconnected(self, src):
         self.activate_auth_page()
 
@@ -293,7 +290,15 @@ class vmmConsole(gobject.GObject):
         else:
             fcdialog.hide()
         fcdialog.destroy()
-               
+
+    def control_vm_run(self, src):
+        status = self.vm.status()
+        if status != libvirt.VIR_DOMAIN_SHUTOFF:
+            pass
+        else:
+            self.vm.startup()
+
+
     def control_vm_shutdown(self, src):
         status = self.vm.status()
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
