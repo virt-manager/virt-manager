@@ -171,7 +171,10 @@ class vmmDetails(gobject.GObject):
             elif pagenum == 3:
                 self.refresh_config_network()
         else:
-            self.window.get_widget("hw-panel").set_sensitive(False)
+            logging.debug("In hw_selected with null tree iter")
+            self.window.get_widget("hw-panel").set_sensitive(True)
+            selection.select_path(0)
+            self.window.get_widget("hw-panel").set_current_page(0)
 
     def control_vm_run(self, src):
         status = self.vm.status()
