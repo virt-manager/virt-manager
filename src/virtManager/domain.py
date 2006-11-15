@@ -63,7 +63,7 @@ class vmmDomain(gobject.GObject):
         if id < 0:
             return "-"
         return str(id)
-
+ 
     def get_name(self):
         return self.vm.name()
 
@@ -317,6 +317,9 @@ class vmmDomain(gobject.GObject):
     def save(self, file):
         self.vm.save(file)
         self._update_status()
+
+    def destroy(self):
+        self.vm.destroy()
 
     def status(self):
         return self.lastStatus

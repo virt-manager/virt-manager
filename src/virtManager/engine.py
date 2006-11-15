@@ -165,6 +165,8 @@ class vmmEngine:
         self.show_serial_console(uri, uuid)
     def _do_save_domain(self, src, uri, uuid):
         self.save_domain(src, uri, uuid)
+    def _do_destroy_domain(self, src, uri, uuid):
+        self.destroy_domain(src, uri, uuid)
 
     def show_about(self):
         if self.windowAbout == None:
@@ -192,6 +194,7 @@ class vmmEngine:
             console.connect("action-show-details", self._do_show_details)
             console.connect("action-show-terminal", self._do_show_terminal)
             console.connect("action-save-domain", self._do_save_domain)
+            console.connect("action-destroy-domain", self._do_destroy_domain)
             self.connections[uri]["windowConsole"][uuid] = console
         self.connections[uri]["windowConsole"][uuid].show()
 
@@ -221,6 +224,7 @@ class vmmEngine:
             details.connect("action-show-console", self._do_show_console)
             details.connect("action-show-terminal", self._do_show_terminal)
             details.connect("action-save-domain", self._do_save_domain)
+            details.connect("action-destroy-domain", self._do_destroy_domain)
             self.connections[uri]["windowDetails"][uuid] = details
         self.connections[uri]["windowDetails"][uuid].show()
         return self.connections[uri]["windowDetails"][uuid]
@@ -290,3 +294,24 @@ class vmmEngine:
                                       _("Saving Virtual Machine"))
                 progWin.run()
                 self.fcdialog.destroy()
+
+    def destroy_domain(self, src, uri, uuid):
+        con = self.get_connection(uri, False)
+        vm = con.get_vm(uuid)
+        status = vm.status()
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
+                       libvirt.VIR_DOMAIN_SHUTOFF ]:
+            logging.warning("Destroy requested, but machine is shutdown / shutoff")
+        else:
+            message_box = gtk.MessageDialog(None, \
+                                            gtk.DIALOG_MODAL, \
+                                            gtk.MESSAGE_WARNING, \
+                                            gtk.BUTTONS_OK_CANCEL, \
+                                            _("About to destroy virtual machine %s" % vm.get_name()))
+            message_box.format_secondary_text(_("This will immediately destroy the VM and may corrupt its disk image. Are you sure?"))
+            response_id = message_box.run()
+            message_box.destroy()
+            if response_id == gtk.RESPONSE_OK:
+                vm.destroy()
+            else:
+                return

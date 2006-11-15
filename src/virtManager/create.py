@@ -124,7 +124,7 @@ class vmmCreate(gobject.GObject):
             self.hal_iface = None
             msg = gtk.MessageDialog(parent=None, flags=0, type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                                     message_format="Unable to enumerate CDROM volumes")
-            msg.format_secondary_text("Can not connect to HAL device manager")
+            msg.format_secondary_text("Cannot connect to HAL device manager")
             msg.run()
             msg.destroy()
 

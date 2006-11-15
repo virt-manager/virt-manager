@@ -643,7 +643,7 @@ Jeremy Katz &lt;katzj@redhat.com&gt;
 		  <child>
 		    <widget class="GtkMenuItem" id="details-menu-shutdown">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Shutdown</property>
+		      <property name="label" translatable="yes">S_hutdown</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_details_menu_shutdown_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
 		    </widget>
@@ -655,6 +655,15 @@ Jeremy Katz &lt;katzj@redhat.com&gt;
 		      <property name="label" translatable="yes">_Save</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_details_menu_save_activate" last_modification_time="Fri, 01 Sep 2006 14:58:20 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="details-menu-destroy">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Destroy</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_details_menu_destroy_activate" last_modification_time="Wed, 15 Nov 2006 16:07:29 GMT"/>
 		    </widget>
 		  </child>
 
@@ -3268,7 +3277,7 @@ For all domains</property>
 		  <child>
 		    <widget class="GtkMenuItem" id="menu-vm-shutdown">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Shutdown</property>
+		      <property name="label" translatable="yes">S_hutdown</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_vm_shutdown_activate" last_modification_time="Fri, 14 Jul 2006 14:26:39 GMT"/>
 		    </widget>
@@ -3280,6 +3289,15 @@ For all domains</property>
 		      <property name="label" translatable="yes">_Save</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_vm_save_activate" last_modification_time="Thu, 20 Jul 2006 17:25:54 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-vm-destroy">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Destroy</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_vm_destroy_activate" last_modification_time="Wed, 15 Nov 2006 16:47:34 GMT"/>
 		    </widget>
 		  </child>
 
