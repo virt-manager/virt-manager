@@ -184,17 +184,33 @@ class vmmDomain(gobject.GObject):
 
 
     def current_memory(self):
+        if self.get_id() == -1:
+            return 0
+        return self.get_memory()
+
+    def current_memory_percentage(self):
+        if self.get_id() == -1:
+            return 0
+        return self.get_memory_percentage()
+
+    def current_memory_pretty(self):
+        if self.get_id() == -1:
+            return "0.00 MB"
+        return self.get_memory_pretty()
+
+
+    def get_memory(self):
         if len(self.record) == 0:
             return 0
         return self.record[0]["currMem"]
 
-    def current_memory_percentage(self):
+    def get_memory_percentage(self):
         if len(self.record) == 0:
             return 0
         return self.record[0]["currMemPercent"]
 
-    def current_memory_pretty(self):
-        mem = self.current_memory()
+    def get_memory_pretty(self):
+        mem = self.get_memory()
         if mem > (1024*1024):
             return "%2.2f GB" % (mem/(1024.0*1024.0))
         else:
@@ -210,6 +226,14 @@ class vmmDomain(gobject.GObject):
         if len(self.record) == 0:
             return 0
         return self.record[0]["maxMemPercent"]
+
+    def maximum_memory_pretty(self):
+        mem = self.maximum_memory()
+        if mem > (1024*1024):
+            return "%2.2f GB" % (mem/(1024.0*1024.0))
+        else:
+            return "%2.2f MB" % (mem/1024.0)
+
 
     def cpu_time(self):
         if len(self.record) == 0:

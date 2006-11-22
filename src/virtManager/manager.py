@@ -285,7 +285,7 @@ class vmmManager(gobject.GObject):
         # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar
         iter = model.append([vm, vm.get_name(), vm.get_id_pretty(), vm.run_status(), \
                              vm.run_status_icon(), vm.cpu_time_pretty(), vm.vcpu_count(), \
-                             vm.current_memory_pretty(), vm.current_memory_percentage()])
+                             vm.get_memory_pretty(), vm.current_memory_percentage()])
         path = model.get_path(iter)
         self.rows[vm.get_uuid()] = model[path]
 
@@ -344,7 +344,7 @@ class vmmManager(gobject.GObject):
         row[4] = vm.run_status_icon()
         row[5] = vm.cpu_time_pretty()
         row[6] = vm.vcpu_count()
-        row[7] = vm.current_memory_pretty()
+        row[7] = vm.get_memory_pretty()
         row[8] = vm.current_memory_percentage()
         model.row_changed(row.path, row.iter)
 
@@ -521,7 +521,7 @@ class vmmManager(gobject.GObject):
         return cmp(model.get_value(iter1, 0).cpu_time(), model.get_value(iter2, 0).cpu_time())
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, 0).current_memory(), model.get_value(iter2, 0).current_memory())
+        return cmp(model.get_value(iter1, 0).get_memory(), model.get_value(iter2, 0).get_memory())
 
     def vmlist_disk_usage_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, 0).disk_usage(), model.get_value(iter2, 0).disk_usage())
