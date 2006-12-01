@@ -31,6 +31,8 @@ class vmmDetails(gobject.GObject):
         "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
                                    gobject.TYPE_NONE, (str,str)),
         "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
+                                 gobject.TYPE_NONE, (str,str)),
+        "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str))
         }
     def __init__(self, config, vm):
@@ -97,6 +99,7 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_pause_activate": self.control_vm_pause,
             "on_details_menu_shutdown_activate": self.control_vm_shutdown,
             "on_details_menu_save_activate": self.control_vm_save_domain,
+            "on_details_menu_destroy_activate": self.control_vm_destroy,
 
             "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_serial_activate": self.control_vm_terminal,
@@ -221,8 +224,16 @@ class vmmDetails(gobject.GObject):
     def control_vm_save_domain(self, src):
         self.emit("action-save-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
+    def control_vm_destroy(self, src):
+        self.emit("action-destroy-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+
     def update_widget_states(self, vm, status):
         self.ignorePause = True
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ] or vm.is_read_only():
+            # apologies for the spaghetti, but the destroy choice is a special case
+            self.window.get_widget("details-menu-destroy").set_sensitive(False)
+        else:
+            self.window.get_widget("details-menu-destroy").set_sensitive(True)
         try:
             if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
                 self.window.get_widget("control-run").set_sensitive(True)

@@ -33,6 +33,8 @@ class vmmConsole(gobject.GObject):
         "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
                                    gobject.TYPE_NONE, (str,str)),
         "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
+                                 gobject.TYPE_NONE, (str,str)),
+        "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str))
         }
     def __init__(self, config, vm):
@@ -74,6 +76,7 @@ class vmmConsole(gobject.GObject):
             "on_menu_vm_shutdown_activate": self.control_vm_shutdown,
             "on_menu_vm_pause_activate": self.control_vm_pause,
             "on_menu_vm_save_activate": self.control_vm_save_domain,
+            "on_menu_vm_destroy_activate": self.control_vm_destroy,
             "on_menu_vm_screenshot_activate": self.control_vm_screenshot,
 
             "on_menu_view_serial_activate": self.control_vm_terminal,
@@ -334,6 +337,9 @@ class vmmConsole(gobject.GObject):
     def control_vm_save_domain(self, src):
         self.emit("action-save-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
+    def control_vm_destroy(self, src):
+        self.emit("action-destroy-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+
     def control_vm_details(self, src):
         self.emit("action-show-details", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
@@ -350,6 +356,12 @@ class vmmConsole(gobject.GObject):
             self.window.get_widget("menu-view-serial").set_sensitive(True)
         else:
             self.window.get_widget("menu-view-serial").set_sensitive(False)
+
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ] or vm.is_read_only():
+            # apologies for the spaghetti, but the destroy choice is a special case
+            self.window.get_widget("menu-vm-destroy").set_sensitive(False)
+        else:
+            self.window.get_widget("menu-vm-destroy").set_sensitive(True)
 
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
             self.window.get_widget("control-pause").set_sensitive(False)

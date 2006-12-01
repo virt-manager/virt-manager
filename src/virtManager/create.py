@@ -25,6 +25,7 @@ import pango
 import libvirt
 import virtinst
 import os, sys
+import re
 import subprocess
 import urlgrabber.grabber as grabber
 import tempfile
@@ -124,7 +125,7 @@ class vmmCreate(gobject.GObject):
             self.hal_iface = None
             msg = gtk.MessageDialog(parent=None, flags=0, type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
                                     message_format="Unable to enumerate CDROM volumes")
-            msg.format_secondary_text("Can not connect to HAL device manager")
+            msg.format_secondary_text("Cannot connect to HAL device manager")
             msg.run()
             msg.destroy()
 
@@ -536,10 +537,15 @@ class vmmCreate(gobject.GObject):
     def validate(self, page_num):
         if page_num == 1: # the system name page
             name = self.window.get_widget("create-vm-name").get_text()
-            if len(name) > 50 or " " in name or len(name) == 0:
+            if len(name) > 50 or len(name) == 0:
                 self._validation_error_box(_("Invalid System Name"), \
-                                           _("System name must be non-blank, less than 50 characters, and contain no spaces"))
+                                           _("System name must be non-blank and less than 50 characters"))
                 return False
+            if re.match("^[a-zA-Z0-9_]*$", name) == None:
+                self._validation_error_box(_("Invalid System Name"), \
+                                           _("System name may contain alphanumeric and '_' characters only"))
+                return False
+                
 
         elif page_num == 2: # the virt method page
             if self.get_config_method() == VM_FULLY_VIRT and not virtinst.util.is_hvm_capable():
