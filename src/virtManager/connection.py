@@ -57,7 +57,12 @@ class vmmConnection(gobject.GObject):
 
     def get_name(self):
         if self.uri == "xen" or self.uri == "Xen" or (self.uri is None):
-            (hostname, aliases, ipaddrs) = gethostbyaddr(gethostname())
+            hostname = "localhost"
+            try:
+                (host, aliases, ipaddrs) = gethostbyaddr(gethostname())
+                hostname = host
+            except:
+                logging.warning("Unable to resolve local hostname for machine")
             return "Xen: " + hostname
         else:
             return self.uri
