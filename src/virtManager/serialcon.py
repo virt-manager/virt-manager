@@ -41,6 +41,9 @@ class vmmSerialConsole:
 	self.terminal.set_scrollback_lines(1000)
 	self.terminal.set_audible_bell(False)
 	self.terminal.set_visible_bell(True)
+        # XXX python VTE binding has bug failing to register constants
+        #self.terminal.set_backspace_binding(vte.ERASE_ASCII_BACKSPACE)
+        self.terminal.set_backspace_binding(1)
 
         self.terminal.connect("commit", self.send_data)
 	self.terminal.show()
