@@ -8182,7 +8182,7 @@ TB</property>
 		  <child>
 		    <widget class="GtkLabel" id="label338">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">VM _Startup Memory:</property>
+		      <property name="label" translatable="yes">VM _Startup Memory (MB):</property>
 		      <property name="use_underline">True</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -8211,7 +8211,7 @@ TB</property>
 		  <child>
 		    <widget class="GtkLabel" id="label337">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">VM _Max Memory:</property>
+		      <property name="label" translatable="yes">VM _Max Memory (MB):</property>
 		      <property name="use_underline">True</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -8296,9 +8296,9 @@ TB</property>
 		  <child>
 		    <widget class="GtkLabel" id="label272">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Please enter the memory configuration for this VM. You can specify the maximum amount of memory the VM should be able to use, and optionally a lower amount to grab on startup.</property>
+		      <property name="label" translatable="yes">Please enter the memory configuration for this VM. You can specify the maximum amount of memory the VM should be able to use, and optionally a lower amount to grab on startup. Warning: setting VM memory too high will cause out-of-memory errors in your host domain!</property>
 		      <property name="use_underline">False</property>
-		      <property name="use_markup">False</property>
+		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap">True</property>
 		      <property name="selectable">False</property>
