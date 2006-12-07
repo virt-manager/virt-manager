@@ -493,17 +493,23 @@ class vmmCreate(gobject.GObject):
         file = None
         if(response == gtk.RESPONSE_ACCEPT):
             file = fcdialog.get_filename()
-
         if file != None:
             self.window.get_widget("storage-file-address").set_text(file)
-
+            size = os.stat(file).st_size/(1024*1024)
+            self.window.get_widget("storage-file-size").set_value(size)
+            
     def toggle_storage_size(self, ignore1=None, ignore2=None):
         file = self.get_config_disk_image()
         if file != None and len(file) > 0 and not(os.path.exists(file)):
             self.window.get_widget("storage-file-size").set_sensitive(True)
         else:
             self.window.get_widget("storage-file-size").set_sensitive(False)
-
+        if file != None and len(file) > 0 and os.path.isfile(file):
+            size = os.path.getsize(file)/(1024*1024)
+            self.window.get_widget("storage-file-size").set_value(size)
+        else:
+            self.window.get_widget("storage-file-size").set_value(0)
+            
     def confirm_overwrite_callback(self, chooser):
         # Only called when the user has chosen an existing file
         self.window.get_widget("storage-file-size").set_sensitive(False)
@@ -584,6 +590,12 @@ class vmmCreate(gobject.GObject):
                 self._validation_error_box(_("Storage Address Required"), \
                                            _("You must specify a partition or a file for storage for the guest install"))
                 return False
+
+            if not self.window.get_widget("storage-partition").get_active():
+                if os.path.isdir(disk):
+                    self._validation_error_box(_("Storage Address Is Directory"), \
+                                               _("You chose 'Simple File' storage for your storage method, but chose a directory instead of a file. Please enter a new filename or choose an existing file."))
+                    return False
 
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-back").set_sensitive(True)
