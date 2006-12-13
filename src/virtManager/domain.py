@@ -83,14 +83,24 @@ class vmmDomain(gobject.GObject):
         return False
 
     def is_vcpu_hotplug_capable(self):
+        # Read only connections aren't allowed to change it
         if self.connection.is_read_only():
             return False
-        return True
+        # Running paravirt guests can change it, or any inactive guest
+        if self.vm.OSType() == "linux" or self.get_id() < 0:
+            return True
+        # Everyone else is out of luck
+        return False
 
     def is_memory_hotplug_capable(self):
+        # Read only connections aren't allowed to change it
         if self.connection.is_read_only():
             return False
-        return True
+        # Running paravirt guests can change it, or any inactive guest
+        if self.vm.OSType() == "linux" or self.get_id() < 0:
+            return True
+        # Everyone else is out of luck
+        return False
 
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:
