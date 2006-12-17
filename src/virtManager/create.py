@@ -42,6 +42,7 @@ VM_INSTALL_FROM_CD = 2
 
 VM_STORAGE_PARTITION = 1
 VM_STORAGE_FILE = 2
+VM_STORAGE_FILE_SPARSE = False
 
 DEFAULT_STORAGE_FILE_SIZE = 500
 
@@ -185,6 +186,8 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-memory-max").set_value(500)
         self.window.get_widget("create-memory-startup").set_value(500)
         self.window.get_widget("create-vcpus").set_value(1)
+        self.window.get_widget("non-sparse").set_active(True)
+        self.window.get_widget("sparse").set_active(False)
         model = self.window.get_widget("pv-media-url").get_model()
         self.populate_url_model(model, self.config.get_media_urls())
         model = self.window.get_widget("pv-ks-url").get_model()
@@ -370,11 +373,16 @@ class vmmCreate(gobject.GObject):
         if self.get_config_disk_size() != None:
             filesize = self.get_config_disk_size() / 1024.0
         try:
-            d = virtinst.XenDisk(self.get_config_disk_image(), filesize)
+            d = virtinst.XenDisk(self.get_config_disk_image(), filesize, sparse = self.is_sparse_file())
             if d.type == virtinst.XenDisk.TYPE_FILE and \
                    self.get_config_method() == VM_PARA_VIRT \
                    and virtinst.util.is_blktap_capable():
                 d.driver_name = virtinst.XenDisk.DRIVER_TAP
+            if d.type == virtinst.XenDisk.TYPE_FILE and not \
+               self.is_sparse_file():
+                self.non_sparse = True
+            else:
+                self.non_sparse = False
         except ValueError, e:
             self._validation_error_box(_("Invalid storage address"), e.args[0])
             return
@@ -397,14 +405,22 @@ class vmmCreate(gobject.GObject):
                       "\n  Memory: " + str(guest.memory) + \
                       "\n  # VCPUs: " + str(guest.vcpus) + \
                       "\n  Filesize: " + str(filesize) + \
-                      "\n  Disk image: " + str(self.get_config_disk_image()))
+                      "\n  Disk image: " + str(self.get_config_disk_image()) +\
+                      "\n  Non-sparse file: " + str(self.non_sparse))
 
         #let's go
         self.install_error = None
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        if not self.non_sparse:
+            text=_("Please wait...")
+            logging.debug("Sparse file or partition selected")
+        else:
+            text=_("Creating the storage file for your guest can take 30 seconds or more per GB, please be patient.")
+            logging.debug("Non-sparse file selected")
         progWin = vmmAsyncJob(self.config, self.do_install, [guest],
-                              title=_("Creating Virtual Machine"))
+                              title=_("Creating Virtual Machine"),
+                              text=text)
         progWin.run()
         if self.install_error != None:
             logging.error("Async job failed to create VM " + str(self.install_error))
@@ -495,15 +511,17 @@ class vmmCreate(gobject.GObject):
             file = fcdialog.get_filename()
         if file != None:
             self.window.get_widget("storage-file-address").set_text(file)
-            size = os.stat(file).st_size/(1024*1024)
-            self.window.get_widget("storage-file-size").set_value(size)
             
     def toggle_storage_size(self, ignore1=None, ignore2=None):
         file = self.get_config_disk_image()
         if file != None and len(file) > 0 and not(os.path.exists(file)):
             self.window.get_widget("storage-file-size").set_sensitive(True)
+            self.window.get_widget("sparse").set_sensitive(True)
+            self.window.get_widget("non-sparse").set_sensitive(True)
         else:
             self.window.get_widget("storage-file-size").set_sensitive(False)
+            self.window.get_widget("sparse").set_sensitive(False)
+            self.window.get_widget("non-sparse").set_sensitive(False)
         if file != None and len(file) > 0 and os.path.isfile(file):
             size = os.path.getsize(file)/(1024*1024)
             self.window.get_widget("storage-file-size").set_value(size)
@@ -529,6 +547,8 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("storage-partition-box").set_sensitive(True)
             self.window.get_widget("storage-file-box").set_sensitive(False)
             self.window.get_widget("storage-file-size").set_sensitive(False)
+            self.window.get_widget("sparse").set_sensitive(False)
+            self.window.get_widget("non-sparse").set_sensitive(False)
         else:
             self.window.get_widget("storage-partition-box").set_sensitive(False)
             self.window.get_widget("storage-file-box").set_sensitive(True)
@@ -700,3 +720,11 @@ class vmmCreate(gobject.GObject):
         else:
             return "%2.2f MB" % (mem/1024.0)
                            
+    def is_sparse_file(self):
+        if self.window.get_widget("sparse").get_active():
+            return True
+        elif self.window.get_widget("non-sparse").get_active():
+            return False
+        else:
+            return None
+        
