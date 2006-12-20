@@ -42,7 +42,6 @@ VM_INSTALL_FROM_CD = 2
 
 VM_STORAGE_PARTITION = 1
 VM_STORAGE_FILE = 2
-VM_STORAGE_FILE_SPARSE = False
 
 DEFAULT_STORAGE_FILE_SIZE = 500
 
@@ -187,7 +186,6 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-memory-startup").set_value(500)
         self.window.get_widget("create-vcpus").set_value(1)
         self.window.get_widget("non-sparse").set_active(True)
-        self.window.get_widget("sparse").set_active(False)
         model = self.window.get_widget("pv-media-url").get_model()
         self.populate_url_model(model, self.config.get_media_urls())
         model = self.window.get_widget("pv-ks-url").get_model()
@@ -516,11 +514,9 @@ class vmmCreate(gobject.GObject):
         file = self.get_config_disk_image()
         if file != None and len(file) > 0 and not(os.path.exists(file)):
             self.window.get_widget("storage-file-size").set_sensitive(True)
-            self.window.get_widget("sparse").set_sensitive(True)
             self.window.get_widget("non-sparse").set_sensitive(True)
         else:
             self.window.get_widget("storage-file-size").set_sensitive(False)
-            self.window.get_widget("sparse").set_sensitive(False)
             self.window.get_widget("non-sparse").set_sensitive(False)
         if file != None and len(file) > 0 and os.path.isfile(file):
             size = os.path.getsize(file)/(1024*1024)
@@ -547,7 +543,6 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("storage-partition-box").set_sensitive(True)
             self.window.get_widget("storage-file-box").set_sensitive(False)
             self.window.get_widget("storage-file-size").set_sensitive(False)
-            self.window.get_widget("sparse").set_sensitive(False)
             self.window.get_widget("non-sparse").set_sensitive(False)
         else:
             self.window.get_widget("storage-partition-box").set_sensitive(False)
@@ -721,10 +716,8 @@ class vmmCreate(gobject.GObject):
             return "%2.2f MB" % (mem/1024.0)
                            
     def is_sparse_file(self):
-        if self.window.get_widget("sparse").get_active():
-            return True
-        elif self.window.get_widget("non-sparse").get_active():
+        if self.window.get_widget("non-sparse").get_active():
             return False
         else:
-            return None
+            return True
         
