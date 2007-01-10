@@ -35,19 +35,20 @@ class vmmAsyncJob(gobject.GObject):
         def run(self):
             threading.Thread.run(self)
 
-    def __init__(self, config, callback, args=None, title="Progress", text="Please wait..."):
+    def __init__(self, config, callback, args=None, title="Progress"):
         self.__gobject_init__()
         self.config = config
         self.pbar_glade = gtk.glade.XML(self.config.get_glade_file(), "vmm-progress", domain="virt-manager")
         self.pbar_win = self.pbar_glade.get_widget("vmm-progress")
         self.pbar = self.pbar_glade.get_widget("pbar")
         self.pbar_win.set_title(title)
-        self.pbar_glade.get_widget("window-text").set_label(text)
         self.pbar_win.hide()
+        args.insert(0, self)
         self.bg_thread = vmmAsyncJob.asyncJobWorker(callback, args)
+        self.is_pulsing = False
 
     def run(self):
-        self.timer = gobject.timeout_add (100, self.pulse_pbar)
+        self.timer = gobject.timeout_add (100, self.exit_if_necessary)
         self.pbar_win.present()
         self.pbar_win.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
         self.bg_thread.start()
@@ -56,10 +57,28 @@ class vmmAsyncJob(gobject.GObject):
         self.timer = 0
         self.pbar_win.destroy()
 
-    def pulse_pbar(self):
+    def pulse_pbar(self, text=_("Working...")):
+        self.is_pulsing = True
+        self.pbar.set_text(text)
+
+    def set_pbar_fraction(self, frac, text):
+        # callback for progress meter when file size is known
+        self.is_pulsing=False
+        self.pbar.set_text(text)
+        self.pbar.set_fraction(frac)
+
+    def set_pbar_done(self, text):
+        #callback for progress meter when progress is done
+        self.is_pulsing=False
+        self.pbar.set_text(text)
+        self.pbar.set_fraction(1)
+    
+    def exit_if_necessary(self):
         if(self.bg_thread.isAlive()):
-            self.pbar.pulse()
+            if(self.is_pulsing):
+                self.pbar.pulse()
             return True
         else:
             gtk.main_quit()
             return False
+        

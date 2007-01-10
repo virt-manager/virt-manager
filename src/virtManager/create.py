@@ -27,7 +27,7 @@ import virtinst
 import os, sys
 import re
 import subprocess
-import urlgrabber.grabber as grabber
+import urlgrabber.progress as progress
 import tempfile
 import logging
 import dbus
@@ -45,6 +45,48 @@ VM_STORAGE_FILE = 2
 
 DEFAULT_STORAGE_FILE_SIZE = 500
 
+class vmmCreateMeter(progress.BaseMeter):
+    def __init__(self, asyncjob):
+        # progress meter has to run asynchronously, so pass in the
+        # async job to call back to with progress info
+        progress.BaseMeter.__init__(self)
+        self.asyncjob = asyncjob
+
+    def _do_start(self, now):
+        if self.text is not None:
+            text = self.text
+        else:
+            text = self.basename
+        if self.size is None:
+            self.asyncjob.pulse_pbar(text)
+        else:
+            self.asyncjob.set_pbar_fraction(0, text)
+
+    def _do_update(self, amount_read, now=None):
+        fread = progress.format_number(amount_read)
+        #self.size = None
+        if self.text is not None:
+            text = self.text
+        else:
+            text = self.basename
+        if self.size is None:
+            out = '\r%-60.60s    %5sB' % \
+                  (text, fread)
+            self.asyncjob.pulse_pbar(out)
+        else:
+            frac = self.re.fraction_read()
+            out = '\r%-25.25s %3i%% %5sB' % \
+                  (text, frac*100, fread)
+            self.asyncjob.set_pbar_fraction(frac, out)
+
+    def _do_end(self, amount_read, now=None):
+        if self.text is not None:
+            text = self.text
+        else:
+            text = self.basename
+        out = '\r%-25.25s 100%%' % text
+        self.asyncjob.set_pbar_done(out)
+
 class vmmCreate(gobject.GObject):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
@@ -59,7 +101,6 @@ class vmmCreate(gobject.GObject):
         self.window = gtk.glade.XML(config.get_glade_file(), "vmm-create", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-create")
         self.topwin.hide()
-
         self.window.signal_autoconnect({
             "on_create_pages_switch_page" : self.page_changed,
             "on_create_cancel_clicked" : self.close,
@@ -411,15 +452,14 @@ class vmmCreate(gobject.GObject):
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
         if not self.non_sparse:
-            text=_("Please wait...")
             logging.debug("Sparse file or partition selected")
         else:
-            text=_("Creating the storage file for your guest can take 30 seconds or more per GB, please be patient.")
             logging.debug("Non-sparse file selected")
+
         progWin = vmmAsyncJob(self.config, self.do_install, [guest],
-                              title=_("Creating Virtual Machine"),
-                              text=text)
+                              title=_("Creating Virtual Machine"))
         progWin.run()
+        
         if self.install_error != None:
             logging.error("Async job failed to create VM " + str(self.install_error))
             self._validation_error_box(_("Guest Install Error"), self.install_error)
@@ -445,10 +485,11 @@ class vmmCreate(gobject.GObject):
                 self.emit("action-show-terminal", self.connection.get_uri(), guest.uuid)
         self.close()
 
-    def do_install(self, guest):
+    def do_install(self, asyncjob, guest):
+        meter = vmmCreateMeter(asyncjob)
         try:
             logging.debug("Starting background install process")
-            dom = guest.start_install(False)
+            dom = guest.start_install(False, meter = meter)
             if dom == None:
                 self.install_error = "Guest installation failed to complete"
                 logging.error("Guest install did not return a domain")
@@ -720,4 +761,5 @@ class vmmCreate(gobject.GObject):
             return False
         else:
             return True
+        
         
