@@ -413,6 +413,9 @@ class vmmConsole(gobject.GObject):
                 else:
                     self.activate_unavailable_page()
             else:
+                # State changed, so better let it try connecting again
+                self.vncViewerFailures = 0
+                self.vncViewerRetryDelay = 125
                 try:
                     self.try_login()
                 except:
