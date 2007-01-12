@@ -40,12 +40,13 @@ class vmmAsyncJob(gobject.GObject):
         self.config = config
         self.pbar_glade = gtk.glade.XML(self.config.get_glade_file(), "vmm-progress", domain="virt-manager")
         self.pbar_win = self.pbar_glade.get_widget("vmm-progress")
+        self.pbar_text = self.pbar_glade.get_widget("pbar-text")
         self.pbar = self.pbar_glade.get_widget("pbar")
         self.pbar_win.set_title(title)
         self.pbar_win.hide()
-        args.insert(0, self)
+        args.append(self)
         self.bg_thread = vmmAsyncJob.asyncJobWorker(callback, args)
-        self.is_pulsing = False
+        self.is_pulsing = True
 
     def run(self):
         self.timer = gobject.timeout_add (100, self.exit_if_necessary)
@@ -57,20 +58,23 @@ class vmmAsyncJob(gobject.GObject):
         self.timer = 0
         self.pbar_win.destroy()
 
-    def pulse_pbar(self, text=_("Working...")):
+    def pulse_pbar(self, text=None):
         self.is_pulsing = True
-        self.pbar.set_text(text)
+        if text is not None:
+            self.pbar_text.set_text(text)
 
-    def set_pbar_fraction(self, frac, text):
+    def set_pbar_fraction(self, frac, text=None):
         # callback for progress meter when file size is known
         self.is_pulsing=False
-        self.pbar.set_text(text)
+        if text is not None:
+            self.pbar_text.set_text(text)
         self.pbar.set_fraction(frac)
 
-    def set_pbar_done(self, text):
+    def set_pbar_done(self, text=None):
         #callback for progress meter when progress is done
         self.is_pulsing=False
-        self.pbar.set_text(text)
+        if text is not None:
+            self.pbar_text.set_text(text)
         self.pbar.set_fraction(1)
     
     def exit_if_necessary(self):

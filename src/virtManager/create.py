@@ -485,7 +485,7 @@ class vmmCreate(gobject.GObject):
                 self.emit("action-show-terminal", self.connection.get_uri(), guest.uuid)
         self.close()
 
-    def do_install(self, asyncjob, guest):
+    def do_install(self, guest, asyncjob):
         meter = vmmCreateMeter(asyncjob)
         try:
             logging.debug("Starting background install process")

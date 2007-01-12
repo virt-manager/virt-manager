@@ -348,7 +348,7 @@ class vmmDomain(gobject.GObject):
         self.vm.resume()
         self._update_status()
 
-    def save(self, file):
+    def save(self, file, ignore1=None):
         self.vm.save(file)
         self._update_status()
 

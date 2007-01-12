@@ -233,7 +233,7 @@ class vmmManager(gobject.GObject):
         except:
             return False
 
-    def restore_saved_callback(self, file_to_load):
+    def restore_saved_callback(self, file_to_load, ignore1=None):
         status = self.connection.restore(file_to_load)
         if(status != 0):
             self.domain_restore_error = _("Error restoring domain '%s'. Is the domain already running?") % file_to_load

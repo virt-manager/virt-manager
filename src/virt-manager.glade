@@ -4270,25 +4270,64 @@ For all domains</property>
   <property name="urgency_hint">True</property>
 
   <child>
-    <widget class="GtkVBox" id="vbox13">
+    <widget class="GtkAlignment" id="alignment134">
       <property name="visible">True</property>
-      <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="xalign">0.5</property>
+      <property name="yalign">0.5</property>
+      <property name="xscale">1</property>
+      <property name="yscale">1</property>
+      <property name="top_padding">5</property>
+      <property name="bottom_padding">5</property>
+      <property name="left_padding">12</property>
+      <property name="right_padding">12</property>
 
       <child>
-	<widget class="GtkProgressBar" id="pbar">
+	<widget class="GtkVBox" id="vbox13">
 	  <property name="visible">True</property>
-	  <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
-	  <property name="fraction">0</property>
-	  <property name="pulse_step">0.10000000149</property>
-	  <property name="text" translatable="yes"></property>
-	  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	  <property name="homogeneous">False</property>
+	  <property name="spacing">5</property>
+
+	  <child>
+	    <widget class="GtkLabel" id="pbar-text">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Please wait...</property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	      <property name="width_chars">-1</property>
+	      <property name="single_line_mode">False</property>
+	      <property name="angle">0</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkProgressBar" id="pbar">
+	      <property name="visible">True</property>
+	      <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
+	      <property name="fraction">0</property>
+	      <property name="pulse_step">0.10000000149</property>
+	      <property name="text" translatable="yes"></property>
+	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
 	</widget>
-	<packing>
-	  <property name="padding">8</property>
-	  <property name="expand">False</property>
-	  <property name="fill">False</property>
-	</packing>
       </child>
     </widget>
   </child>
