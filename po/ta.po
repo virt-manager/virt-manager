@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-06 16:17-0500\n"
-"PO-Revision-Date: 2006-10-28 14:35+0530\n"
+"POT-Creation-Date: 2007-01-22 18:10-0500\n"
+"PO-Revision-Date: 2006-11-28 16:12+0530\n"
 "Last-Translator: Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,8 +17,10 @@ msgstr ""
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "\n"
+"\n"
+"\n"
 
-#: ../../src/virt-manager.py.in:61
+#: ../../src/virt-manager.py.in:62
 msgid "Unable to initialize GTK: "
 msgstr "GTKஐ ஆரம்பிக்க முடியவில்லை: "
 
@@ -39,74 +41,78 @@ msgstr ""
 msgid "Screenshot saved"
 msgstr "திரைப்பிடிப்பு சேமிக்கப்பட்டது"
 
-#: ../../src/virtManager/console.py:388
+#: ../../src/virtManager/console.py:405
 msgid "paused"
 msgstr "இடை நிறுத்தம்"
 
-#: ../../src/virtManager/create.py:304
+#: ../../src/virtManager/create.py:348
 msgid "Paravirtualized"
-msgstr "Paravirtualized"
+msgstr "பகுதி மெய்நிகராக்கப்பட்டது"
 
-#: ../../src/virtManager/create.py:306
+#: ../../src/virtManager/create.py:350
 msgid "Fully virtualized"
 msgstr "முழுவதும் மெய்நிகராக்கப்பட்டது"
 
-#: ../../src/virtManager/create.py:337
+#: ../../src/virtManager/create.py:381
 msgid "Invalid FV media address"
 msgstr "தவறான FV ஊடக முகவரி"
 
-#: ../../src/virtManager/create.py:343
+#: ../../src/virtManager/create.py:387
 msgid "Invalid PV media address"
 msgstr "தவறான PV ஊடக முகவரி"
 
-#: ../../src/virtManager/create.py:353
+#: ../../src/virtManager/create.py:397
 msgid "Invalid system name"
 msgstr "தவறான கணினி பெயர்"
 
-#: ../../src/virtManager/create.py:360
+#: ../../src/virtManager/create.py:404
 msgid "Invalid memory setting"
 msgstr "தவறான நினைவக அமைவு"
 
-#: ../../src/virtManager/create.py:377
+#: ../../src/virtManager/create.py:426
 msgid "Invalid storage address"
 msgstr "தவறான சேமிப்பக முகவரி"
 
-#: ../../src/virtManager/create.py:404
+#: ../../src/virtManager/create.py:460
 msgid "Creating Virtual Machine"
 msgstr "மெய்நிகர் கணினியை உருவாக்குகிறது"
 
-#: ../../src/virtManager/create.py:408
+#: ../../src/virtManager/create.py:465
 msgid "Guest Install Error"
 msgstr "விருந்தினர் நிறுவல் பிழை"
 
-#: ../../src/virtManager/create.py:443
+#: ../../src/virtManager/create.py:503
 msgid "Locate ISO Image"
 msgstr "ISO உருவை காட்டவும்"
 
-#: ../../src/virtManager/create.py:472
+#: ../../src/virtManager/create.py:532
 msgid "Locate Storage Partition"
 msgstr "சேமிப்பக பகிர்தலை காட்டவும்"
 
-#: ../../src/virtManager/create.py:478
+#: ../../src/virtManager/create.py:538
 msgid "Locate or Create New Storage File"
 msgstr "புதிய சேமிப்பக கோப்பினை காட்டவும் அல்லது உருவாக்கவும்"
 
-#: ../../src/virtManager/create.py:537
+#: ../../src/virtManager/create.py:604 ../../src/virtManager/create.py:608
 msgid "Invalid System Name"
 msgstr "தவறான கணினி பெயர்"
 
-#: ../../src/virtManager/create.py:538
-msgid ""
-"System name must be non-blank, less than 50 characters, and contain no spaces"
+#: ../../src/virtManager/create.py:605
+#, fuzzy
+msgid "System name must be non-blank and less than 50 characters"
 msgstr ""
 "கணினி பெயர் வெறுமையாக இருக்கக்கூடாது, 50 எழுத்துக்களுக்கு குறைவாக இருக்கக்கூடாது "
 "மற்றும் இடைவெளி இருக்கக்கூடாது"
 
-#: ../../src/virtManager/create.py:543
+#: ../../src/virtManager/create.py:609
+msgid "System name may contain alphanumeric and '_' characters only"
+msgstr ""
+
+#: ../../src/virtManager/create.py:615
 msgid "Hardware Support Required"
 msgstr "வன்பொருள் துணை தேவைப்படுகிறது"
 
-#: ../../src/virtManager/create.py:544
+#: ../../src/virtManager/create.py:616
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
@@ -114,80 +120,92 @@ msgstr ""
 "உங்கள் வன்பொருள் முழு மெய்நிகராக்கத்திற்கு துணைபுரியாததால் தோன்றாது. இந்த வன்பொருளில் "
 "பகுதி மெய்நிகராக்கப்பட்ட விருந்தினர்கள் இருக்கும்."
 
-#: ../../src/virtManager/create.py:551
+#: ../../src/virtManager/create.py:623
 msgid "ISO Path Required"
 msgstr "ISO பாதை தேவைப்படுகிறது"
 
-#: ../../src/virtManager/create.py:552
+#: ../../src/virtManager/create.py:624
 msgid "You must specify an ISO location for the guest installation"
 msgstr "ஒரு ISO இடத்தை விருந்தினர் நிறுவலுக்கு குறிப்பிட வேண்டும்"
 
-#: ../../src/virtManager/create.py:555
+#: ../../src/virtManager/create.py:627
 msgid "ISO Path Not Found"
 msgstr "ISO பாதை காணப்படவில்லை"
 
-#: ../../src/virtManager/create.py:556
+#: ../../src/virtManager/create.py:628
 msgid "You must specify a valid path to the ISO image for guest installation"
 msgstr "விருந்தினர் நிறுவலில் ISO உருவுக்கு சரியான பாதையை குறிப்பிட வேண்டும்"
 
-#: ../../src/virtManager/create.py:561
+#: ../../src/virtManager/create.py:633
 msgid "Install media required"
 msgstr "நிறுவல் ஊடகம் தேவைப்படுகிறது"
 
-#: ../../src/virtManager/create.py:562
+#: ../../src/virtManager/create.py:634
 msgid "You must select the CDROM install media for guest installation"
 msgstr "விருந்தினர் நிறுவலுக்கு குறுவட்டு நிறுவல் ஊடகத்தை தேர்ந்தெடுக்க வேண்டும்"
 
-#: ../../src/virtManager/create.py:567
+#: ../../src/virtManager/create.py:639
 msgid "URL Required"
 msgstr "URL தேவைப்படுகிறது"
 
-#: ../../src/virtManager/create.py:568
+#: ../../src/virtManager/create.py:640
 msgid "You must specify a URL for the install image for the guest install"
 msgstr "விருந்தினர் நிறுவலுக்கு நிறுவல் உருவுக்கு URL ஐ கொடுக்க வேண்டும்"
 
-#: ../../src/virtManager/create.py:574
+#: ../../src/virtManager/create.py:646
 msgid "Storage Address Required"
 msgstr "சேமிப்பக முகவரி தேவைப்படுகிறது"
 
-#: ../../src/virtManager/create.py:575
+#: ../../src/virtManager/create.py:647
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
 msgstr "விருந்தினர் நிறுவலுக்கு ஒரு பகிர்வு அல்லது சேமிக்க ஒரு கோப்பினை கொடுக்க வேண்டும்"
 
-#: ../../src/virtManager/create.py:620 ../../src/virtManager/create.py:655
+#: ../../src/virtManager/create.py:652
+#, fuzzy
+msgid "Storage Address Is Directory"
+msgstr "சேமிப்பக முகவரி தேவைப்படுகிறது"
+
+#: ../../src/virtManager/create.py:653
+msgid ""
+"You chose 'Simple File' storage for your storage method, but chose a "
+"directory instead of a file. Please enter a new filename or choose an "
+"existing file."
+msgstr ""
+
+#: ../../src/virtManager/create.py:698 ../../src/virtManager/create.py:733
 msgid "No media present"
 msgstr "ஊடகம் எதுவும் இல்லை"
 
-#: ../../src/virtManager/details.py:342
+#: ../../src/virtManager/details.py:411
 msgid "Destination"
 msgstr "இலக்கு"
 
-#: ../../src/virtManager/details.py:380
+#: ../../src/virtManager/details.py:450
 msgid "MAC address"
 msgstr "MAC முகவரி"
 
-#: ../../src/virtManager/domain.py:269
+#: ../../src/virtManager/domain.py:363
 msgid "Running"
 msgstr "இயங்குகிறது"
 
-#: ../../src/virtManager/domain.py:271
+#: ../../src/virtManager/domain.py:365
 msgid "Paused"
-msgstr "இடை நிறுத்தப்பட்டது"
+msgstr "இடைநிறுத்தப்பட்டது"
 
-#: ../../src/virtManager/domain.py:273 tmp/virt-manager.glade.h:162
+#: ../../src/virtManager/domain.py:367 tmp/virt-manager.glade.h:164
 msgid "Shutdown"
 msgstr "பணி நிறுத்தம்"
 
-#: ../../src/virtManager/domain.py:275
+#: ../../src/virtManager/domain.py:369
 msgid "Shutoff"
 msgstr "நிறுத்தம்"
 
-#: ../../src/virtManager/domain.py:277
+#: ../../src/virtManager/domain.py:371
 msgid "Crashed"
 msgstr "முடிவுற்றது"
 
-#: ../../src/virtManager/domain.py:279
+#: ../../src/virtManager/domain.py:373
 msgid "Unknown status code"
 msgstr "தெரியாத நிலை குறியீடு"
 
@@ -196,82 +214,96 @@ msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr ""
+"Xen hypervisor/டீமானை திறக்க முடியவில்லை.\n"
+"\n"
 
 #: ../../src/virtManager/engine.py:75
 msgid "Verify that:\n"
-msgstr ""
+msgstr "சரிபார்க்கப்பட்டது:\n"
 
 #: ../../src/virtManager/engine.py:76
 msgid " - A Xen host kernel was booted\n"
-msgstr ""
+msgstr " - ஒரு Xen புரவலன் கர்னல் துவக்கப்பட்டது\n"
 
 #: ../../src/virtManager/engine.py:77
-#, fuzzy
 msgid " - The Xen service has been started\n"
-msgstr ""
-"திரைப்பிடிப்பு சேமிக்கப்பட்ட இடம்:\n"
-"%s"
+msgstr " - Xen சேவை துவக்கப்பட்டது\n"
 
 #: ../../src/virtManager/engine.py:80
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
-msgstr ""
+msgstr "hypervisor '%s'க்கு இணைப்பை திறக்க முடியவில்லை"
 
 #: ../../src/virtManager/engine.py:81
-#, fuzzy
 msgid "Virtual Machine Manager Connection Failure"
-msgstr "மெய்நிகர் கணினி மேலாளர்"
+msgstr "மெய்நிகர் கணினி மேலாளர் இணைப்பு செயலிழக்கப்பட்டது"
 
-#: ../../src/virtManager/engine.py:277
+#: ../../src/virtManager/engine.py:281
 msgid "Save Virtual Machine"
 msgstr "மெய்நிகர் கணினியை சேமிக்கவும்"
 
-#: ../../src/virtManager/engine.py:290
+#: ../../src/virtManager/engine.py:294
 msgid "Saving Virtual Machine"
 msgstr "மெய்நிகர் கணினியை சேமிக்கவும்"
 
-#: ../../src/virtManager/manager.py:172
+#: ../../src/virtManager/engine.py:310
+#, fuzzy, python-format
+msgid "About to destroy virtual machine %s"
+msgstr "மெய்நிகர் கணினியை மீட்டெடுக்கவும்"
+
+#: ../../src/virtManager/engine.py:311
+msgid ""
+"This will immediately destroy the VM and may corrupt its disk image. Are you "
+"sure?"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:189
 msgid "Restore Virtual Machine"
 msgstr "மெய்நிகர் கணினியை மீட்டெடுக்கவும்"
 
-#: ../../src/virtManager/manager.py:186
+#: ../../src/virtManager/manager.py:204
 msgid "Restoring Virtual Machine"
 msgstr "மெய்நிகர் கணினியை மீட்டெடுக்கிறது"
 
-#: ../../src/virtManager/manager.py:204
+#: ../../src/virtManager/manager.py:211
+#, python-format
+msgid "The file '%s' does not appear to be a valid saved machine image"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:239
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr "செயற்களம் '%s'ஐ மீட்டெடுப்பதில் பிழை. செயற்களம் ஏற்கனவே இயக்கத்தில் உள்ளதா?"
 
-#: ../../src/virtManager/manager.py:310
+#: ../../src/virtManager/manager.py:421
 msgid "ID"
 msgstr "ID"
 
-#: ../../src/virtManager/manager.py:311 tmp/virt-manager.glade.h:123
+#: ../../src/virtManager/manager.py:422 tmp/virt-manager.glade.h:124
 msgid "Name"
 msgstr "பெயர்"
 
-#: ../../src/virtManager/manager.py:312 tmp/virt-manager.glade.h:165
+#: ../../src/virtManager/manager.py:423 tmp/virt-manager.glade.h:167
 msgid "Status"
 msgstr "நிலை"
 
-#: ../../src/virtManager/manager.py:313 tmp/virt-manager.glade.h:79
+#: ../../src/virtManager/manager.py:424 tmp/virt-manager.glade.h:80
 msgid "CPU usage"
 msgstr "CPU பயன்பாடு"
 
-#: ../../src/virtManager/manager.py:314
+#: ../../src/virtManager/manager.py:425
 msgid "VCPUs"
 msgstr "VCPUs"
 
-#: ../../src/virtManager/manager.py:315 tmp/virt-manager.glade.h:119
+#: ../../src/virtManager/manager.py:426 tmp/virt-manager.glade.h:120
 msgid "Memory usage"
 msgstr "நினைவக பயன்பாடு"
 
-#: ../../src/virtManager/manager.py:316 tmp/virt-manager.glade.h:91
+#: ../../src/virtManager/manager.py:427 tmp/virt-manager.glade.h:92
 msgid "Disk usage"
 msgstr "வட்டு பயன்பாடு"
 
-#: ../../src/virtManager/manager.py:317 tmp/virt-manager.glade.h:126
+#: ../../src/virtManager/manager.py:428 tmp/virt-manager.glade.h:127
 msgid "Network traffic"
 msgstr "பிணைய போக்குவரத்து"
 
@@ -281,7 +313,7 @@ msgstr "வரிசை பணியகம்"
 
 #: tmp/virt-manager.glade.h:1
 msgid " "
-msgstr ""
+msgstr " "
 
 #: tmp/virt-manager.glade.h:2
 msgid " free"
@@ -358,7 +390,7 @@ msgstr "8"
 
 #: tmp/virt-manager.glade.h:21
 msgid "80 MB of 1 GB"
-msgstr "80 MB of 1 GB"
+msgstr "1 GB இல் 80 MB"
 
 #: tmp/virt-manager.glade.h:22
 msgid ":"
@@ -370,16 +402,15 @@ msgstr "<b>அடிப்படை விவரங்கள்</b>"
 
 #: tmp/virt-manager.glade.h:24
 msgid "<b>CPUs:</b>"
-msgstr "<b>CPUs:</b>"
+msgstr "<b>CPUகள்:</b>"
 
 #: tmp/virt-manager.glade.h:25
 msgid "<b>CPUs</b>"
-msgstr "<b>CPUs</b>"
+msgstr "<b>CPUகள்</b>"
 
 #: tmp/virt-manager.glade.h:26
-#, fuzzy
 msgid "<b>Consoles</b>"
-msgstr "<b>CPUs</b>"
+msgstr "<b>பணியகங்கள்</b>"
 
 #: tmp/virt-manager.glade.h:27
 msgid "<b>Disk image:</b>"
@@ -500,12 +531,13 @@ msgstr ""
 "அமைத்திருக்கிறீர்கள். இதன் முடிவு மெய்நிகர் கணினியில் மோசமான செயல்திறனையே கொடுக்கும்."
 
 #: tmp/virt-manager.glade.h:52
-msgid "<b>Virtaulization method:</b>"
-msgstr "<b>மெய்நிகரக்க முறை:</b>"
+msgid "<b>Virtual CPUs:</b>"
+msgstr "<b>மெய்நிகர் CPUகள்:</b>"
 
 #: tmp/virt-manager.glade.h:53
-msgid "<b>Virtual CPUs:</b>"
-msgstr "<b>மெய்நிகர் CPUs:</b>"
+#, fuzzy
+msgid "<b>Virtualization method:</b>"
+msgstr "<b>மெய்நிகரக்க முறை:</b>"
 
 #: tmp/virt-manager.glade.h:54
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
@@ -525,35 +557,30 @@ msgstr ""
 
 #: tmp/virt-manager.glade.h:57
 msgid ""
-"<small><b>Note:</b> File size parameter is only relevant for new files</"
-"small>"
-msgstr ""
-"<small><b>குறிப்பு:</b> கோப்பு அளவு மதிப்புரு புதிய கோப்புகளுக்கு மட்டுமே "
-"தொடர்புடையது</small>"
-
-#: tmp/virt-manager.glade.h:58
-msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
 msgstr ""
+"<small><b>குறிப்பு:</b> இந்த கணினியிலுள்ள CPU(கள்) முழுவதும் மெய்நிகராக்கத்திற்கு "
+"துணைபுரிவதில்லை.</small>"
 
-#: tmp/virt-manager.glade.h:59
+#: tmp/virt-manager.glade.h:58
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
 msgstr ""
+"<small><b>குறிப்பு:</b> இந்த கணினியிலுள்ள புரவலன் CPU(கள்) முழுவதும் "
+"மெய்நிகராக்கத்திற்கு துணைபுரியும் ஆனால் இது BIOSஆல் செயல்படுத்தப்படவில்லை.</small>"
 
-#: tmp/virt-manager.glade.h:60
-#, fuzzy
+#: tmp/virt-manager.glade.h:59
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
 "small>"
 msgstr ""
 "<small><b>துணுக்கு:</b> நல்ல செயல்திறனுக்கு, மெய்நிகர் CPUகளின் எண்ணிக்கை புரவலன் "
-"கணினியில் பருநிலை CPUகளை விட குறைவாக (அல்லது சமமாக) இருக்க வேண்டும்.</small>"
+"கணினியில் தருக்க CPUகளை விட குறைவாக (அல்லது சமமாக) இருக்க வேண்டும்.</small>"
 
-#: tmp/virt-manager.glade.h:61
+#: tmp/virt-manager.glade.h:60
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
@@ -562,6 +589,14 @@ msgstr ""
 "<small><b>துணுக்கு:</b> நீங்கள் பருநிலை கணினியில் பயன்படுத்திய கருவியால் மெய்நிகர் "
 "கணினியை உருவாக்கிய பின் பிணையம் ஏற்றப்பட்ட சேமிப்பகத்தையும் சேர்த்து, நீங்கள் கூடுதல் "
 "சேமிப்பகத்தை சேர்க்கலாம்.</small>"
+
+#: tmp/virt-manager.glade.h:61
+msgid ""
+"<small><b>Warning:</b> If you do not allocate the entire disk at VM "
+"creation, space will be allocated as needed while the guest is running. If "
+"sufficient free space is not available on the host, this may result in data "
+"corruption on the guest.</small>"
+msgstr ""
 
 #: tmp/virt-manager.glade.h:62
 msgid ""
@@ -646,117 +681,118 @@ msgstr ""
 "செயலற்ற மெய்நிகர் கணினிகள்"
 
 #: tmp/virt-manager.glade.h:76
+msgid "Allocate entire virtual disk now?"
+msgstr ""
+
+#: tmp/virt-manager.glade.h:77
 msgid "Auth"
 msgstr "Auth"
 
-#: tmp/virt-manager.glade.h:77
-msgid "Automatically open consoles:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:78
+msgid "Automatically open consoles:"
+msgstr "தானாக பணியகங்களை திறக்கவும்:"
+
+#: tmp/virt-manager.glade.h:79
 msgid "Browse..."
 msgstr "உலாவுதல்..."
 
-#: tmp/virt-manager.glade.h:80
+#: tmp/virt-manager.glade.h:81
 msgid "CPU usage:"
 msgstr "CPU பயன்பாடு:"
 
-#: tmp/virt-manager.glade.h:81
+#: tmp/virt-manager.glade.h:82
 msgid "CPU/memory"
 msgstr "CPU/நினைவகம்"
 
-#: tmp/virt-manager.glade.h:82
+#: tmp/virt-manager.glade.h:83
 msgid "Change allocation:"
 msgstr "ஒதுக்கீட்டை மாற்றவும்"
 
-#: tmp/virt-manager.glade.h:83
-#, fuzzy
-msgid "Co_nnect"
-msgstr "இணைப்பு"
-
 #: tmp/virt-manager.glade.h:84
+msgid "Co_nnect"
+msgstr "இணைப்பு (_n)"
+
+#: tmp/virt-manager.glade.h:85
 msgid "Complete"
 msgstr "முடிக்கவும்"
 
-#: tmp/virt-manager.glade.h:85
-msgid "Copyright (C) 2006 Red Hat Inc."
-msgstr "பதிப்புரிமை (C) 2006 Red Hat Inc."
-
 #: tmp/virt-manager.glade.h:86
+msgid "Copyright (C) 2006 Red Hat Inc."
+msgstr "காப்புரிமை (C) 2006 Red Hat Inc."
+
+#: tmp/virt-manager.glade.h:87
 msgid "Create a new virtual system"
 msgstr "ஒரு புதிய மெய்நிகர் கணினியை உருவாக்கவும்"
 
-#: tmp/virt-manager.glade.h:87
+#: tmp/virt-manager.glade.h:88
 msgid "Current allocation:"
 msgstr "நடப்பு ஒதுக்கீடு:"
 
-#: tmp/virt-manager.glade.h:88
-#, fuzzy
-msgid "De_tails"
-msgstr "விவரங்கள்"
-
 #: tmp/virt-manager.glade.h:89
+msgid "De_tails"
+msgstr "விவரங்கள் (_t)"
+
+#: tmp/virt-manager.glade.h:90
 msgid "Delete machine"
 msgstr "கணினியை அழிக்கவும்"
 
-#: tmp/virt-manager.glade.h:90
+#: tmp/virt-manager.glade.h:91
 msgid "Disk"
 msgstr "வட்டு"
 
-#: tmp/virt-manager.glade.h:92
+#: tmp/virt-manager.glade.h:93
 msgid "Disk usage:"
 msgstr "வட்டு பயன்பாடு:"
 
-#: tmp/virt-manager.glade.h:93
-msgid "Domain ID"
-msgstr "செயற்கள ID"
-
 #: tmp/virt-manager.glade.h:94
+msgid "Domain ID"
+msgstr "செயற்கள குறியீடு"
+
+#: tmp/virt-manager.glade.h:95
 msgid "FV install"
 msgstr "FV நிறுவுதல்"
 
-#: tmp/virt-manager.glade.h:95
-#, fuzzy
-msgid "F_ully Virtualized:"
-msgstr "முழுவதும் மெய்நிகராக்கப்பட்டது (_F):"
-
 #: tmp/virt-manager.glade.h:96
+msgid "F_ully Virtualized:"
+msgstr "முழுவதும் மெய்நிகராக்கப்பட்டது (_u):"
+
+#: tmp/virt-manager.glade.h:97
 msgid "File _Location:"
 msgstr "கோப்பு இடம் (_L):"
 
-#: tmp/virt-manager.glade.h:97
+#: tmp/virt-manager.glade.h:98
 msgid "File _Size:"
 msgstr "கோப்பு அளவு (_S):"
 
-#: tmp/virt-manager.glade.h:98
-msgid "Grab keyboard input:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:99
+msgid "Grab keyboard input:"
+msgstr "விசைப்பலகை உள்ளீட்டை எடுக்கவும்:"
+
+#: tmp/virt-manager.glade.h:100
 msgid "Hardware"
 msgstr "வன்பொருள்"
 
-#: tmp/virt-manager.glade.h:100
+#: tmp/virt-manager.glade.h:101
 msgid "How many virtual CPUs should this machine be allocated?"
 msgstr "இந்த கணினிக்கு எத்தனை மெய்நிகர் CPUகள் ஒதுக்கப்பட்டன?"
 
-#: tmp/virt-manager.glade.h:101
+#: tmp/virt-manager.glade.h:102
 msgid "How much memory should this machine be allocated?"
 msgstr "இந்த கணினிக்கு எவ்வளவு நினைவகம் ஒதுக்கப்பட்டுள்ளது?"
 
-#: tmp/virt-manager.glade.h:102
-msgid "ISO _Location:"
-msgstr "ISO இடம்(_L):"
-
 #: tmp/virt-manager.glade.h:103
+msgid "ISO _Location:"
+msgstr "ISO இடம் (_L):"
+
+#: tmp/virt-manager.glade.h:104
 msgid "Install Media _URL:"
 msgstr "ஊடக _URLஐ நிறுவவும்:"
 
-#: tmp/virt-manager.glade.h:104
+#: tmp/virt-manager.glade.h:105
 msgid "Intro"
 msgstr "அறிமுகம்"
 
-#: tmp/virt-manager.glade.h:105
+#: tmp/virt-manager.glade.h:106
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
@@ -765,15 +801,15 @@ msgstr ""
 "வன்பொருள் கணக்கிடுதல் பெரிய அளவில் இயக்கத்தளங்களை அனுமதிப்பதை உள்ளடக்கியது (இயக்கத்தள "
 "மாற்றம் தேவைபடுவதில்லை). பகுதி மெய்நிகராக்கப்பட்ட கணினிகளை விட மெதுவானது."
 
-#: tmp/virt-manager.glade.h:106
+#: tmp/virt-manager.glade.h:107
 msgid "Keep CPU Settings"
 msgstr "CPU அமைவுகளை வைத்திருக்கவும்"
 
-#: tmp/virt-manager.glade.h:107
+#: tmp/virt-manager.glade.h:108
 msgid "Kickstart U_RL:"
 msgstr "கிக்ஸ்டார்ட் U_RL:"
 
-#: tmp/virt-manager.glade.h:108
+#: tmp/virt-manager.glade.h:109
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
@@ -783,20 +819,19 @@ msgstr ""
 "ஏனெனில் இயக்கத்தளம் பகுதி மெய்நிகராக்கத்திற்கு துணை புரிய சிறப்பாக மாற்றப்பட்டுள்ளது. இது "
 "முழு மெய்நிகர் கணினிகளை விட நல்ல செயல்திறனை கொண்டுள்ளது."
 
-#: tmp/virt-manager.glade.h:109
-#, fuzzy
-msgid "Logical host CPUs:"
-msgstr "பருநிலை புரவலன் CPU எண்ணிக்கை:"
-
 #: tmp/virt-manager.glade.h:110
-msgid "Login"
-msgstr "உள் அனுமதி"
+msgid "Logical host CPUs:"
+msgstr "தருக்க புரவலன் CPUகள்:"
 
 #: tmp/virt-manager.glade.h:111
+msgid "Login"
+msgstr "புகுபதிவு"
+
+#: tmp/virt-manager.glade.h:112
 msgid "MB"
 msgstr "MB"
 
-#: tmp/virt-manager.glade.h:112
+#: tmp/virt-manager.glade.h:113
 msgid ""
 "MB\n"
 "GB\n"
@@ -806,112 +841,122 @@ msgstr ""
 "GB\n"
 "TB"
 
-#: tmp/virt-manager.glade.h:115
+#: tmp/virt-manager.glade.h:116
 msgid "Machine details..."
 msgstr "கணினி விவரங்கள்..."
 
-#: tmp/virt-manager.glade.h:116
+#: tmp/virt-manager.glade.h:117
 msgid "Maintain history of"
 msgstr "வரலாற்றை பராமரிக்கவும்"
 
-#: tmp/virt-manager.glade.h:117
+#: tmp/virt-manager.glade.h:118
 msgid "Maximum allocation:"
 msgstr "அதிகபட்ச ஒதுக்கீடு:"
 
-#: tmp/virt-manager.glade.h:118
+#: tmp/virt-manager.glade.h:119
 msgid "Memory"
 msgstr "நினைவகம்"
 
-#: tmp/virt-manager.glade.h:120
+#: tmp/virt-manager.glade.h:121
 msgid "Memory usage:"
 msgstr "நினைவக பயன்பாடு:"
 
-#: tmp/virt-manager.glade.h:121
+#: tmp/virt-manager.glade.h:122
 msgid "Modify CPU Settings"
 msgstr "CPU அமைவுகளை மாற்றவும்"
 
-#: tmp/virt-manager.glade.h:122
+#: tmp/virt-manager.glade.h:123
 msgid "Modify File Storage"
 msgstr "கோப்பு சேமிப்பகத்தை மாற்றவும்"
 
-#: tmp/virt-manager.glade.h:124
+#: tmp/virt-manager.glade.h:125
 msgid "Name:"
 msgstr "பெயர்:"
 
-#: tmp/virt-manager.glade.h:125
+#: tmp/virt-manager.glade.h:126
 msgid "Network"
 msgstr "பிணையம்"
 
-#: tmp/virt-manager.glade.h:127
+#: tmp/virt-manager.glade.h:128
 msgid "Network usage:"
 msgstr "பிணைய பயன்பாடு:"
 
-#: tmp/virt-manager.glade.h:128
+#: tmp/virt-manager.glade.h:129
 msgid ""
 "Never\n"
 "For new domains\n"
 "For all domains"
 msgstr ""
+"ஒருபோதும்\n"
+"புதிய செயற்களங்களுக்கு\n"
+"அனைத்து செயற்களங்களுக்கு"
 
-#: tmp/virt-manager.glade.h:131
+#: tmp/virt-manager.glade.h:132
 msgid ""
 "Never\n"
 "When fullscreen\n"
 "On mouse over"
 msgstr ""
+"ஒதுபோதும்\n"
+"முழுதிரையின் போது\n"
+"சுட்டி முனை மேல் வரும் போது"
 
-#: tmp/virt-manager.glade.h:134
+#: tmp/virt-manager.glade.h:135
 msgid "New machine..."
 msgstr "புதிய கணினி..."
 
-#: tmp/virt-manager.glade.h:135
+#: tmp/virt-manager.glade.h:136
 msgid "Normal Disk _Partition:"
 msgstr "சாதாரண வட்டு பகிர்வு (_P):"
 
-#: tmp/virt-manager.glade.h:136
+#: tmp/virt-manager.glade.h:137
 msgid "Open connection"
 msgstr "திறந்த இணைப்புகள்"
 
-#: tmp/virt-manager.glade.h:137
+#: tmp/virt-manager.glade.h:138
 msgid "Open connection..."
 msgstr "திறந்த இணைப்புகள்..."
 
-#: tmp/virt-manager.glade.h:138
+#: tmp/virt-manager.glade.h:139
 msgid "Overview"
 msgstr "கண்ணோட்டம்"
 
-#: tmp/virt-manager.glade.h:139
+#: tmp/virt-manager.glade.h:140
 msgid "PVinstall"
 msgstr "PVinstall"
 
-#: tmp/virt-manager.glade.h:140
+#: tmp/virt-manager.glade.h:141
 msgid "P_artition:"
 msgstr "பகிர்தல் (_a):"
 
-#: tmp/virt-manager.glade.h:141
-msgid "Password:"
-msgstr "கடவுச் சொல்:"
-
 #: tmp/virt-manager.glade.h:142
-msgid "Pause"
-msgstr "இடை நிறுத்தம்"
+msgid "Password:"
+msgstr "கடவுச்சொல்:"
 
 #: tmp/virt-manager.glade.h:143
+msgid "Pause"
+msgstr "இடைநிறுத்தம்"
+
+#: tmp/virt-manager.glade.h:144
 msgid "Please choose a name for your virtual system:"
 msgstr "உங்கள் மெய்நிகர் கணினியின் பெயரை தேர்வு செய்யவும்:"
 
-#: tmp/virt-manager.glade.h:144
+#: tmp/virt-manager.glade.h:145
+#, fuzzy
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
 "maximum amount of memory the VM should be able to use, and optionally a "
-"lower amount to grab on startup."
+"lower amount to grab on startup. Warning: setting VM memory too high will "
+"cause out-of-memory errors in your host domain!"
 msgstr ""
-
-#: tmp/virt-manager.glade.h:145
-msgid "Please enter the number of virtual CPUs this VM should start up with."
-msgstr ""
+"இந்த VMஇன் நினைவக கட்டமைப்பை உள்ளிடவும். நீங்கள் VMஇல் பயன்படுத்தப்படும்அதிகபட்ச நினைவக "
+"அளவை குறிப்பிடவும், விருப்பமாக குறைந்த அளவை துவக்கத்தில் குறிப்பிடவும்."
 
 #: tmp/virt-manager.glade.h:146
+msgid "Please enter the number of virtual CPUs this VM should start up with."
+msgstr "இந்த VM துவக்க வேண்டிய மெய்நிகர் CPUகளின் எண்ணிக்கையை உள்ளிடவும்."
+
+#: tmp/virt-manager.glade.h:147
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
@@ -921,7 +966,7 @@ msgstr ""
 "ஒதுக்குவீர்கள் என்பதை குறிப்பிடவும். இந்த இடம் மெய்நிகர் கணினியின் இயக்கத்தளத்தை உருவாக்க "
 "பயன்படும்."
 
-#: tmp/virt-manager.glade.h:147
+#: tmp/virt-manager.glade.h:148
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
@@ -930,7 +975,7 @@ msgstr ""
 "நீங்கள் நிறுவ நினைக்கும் இந்தப் <b>முழு மெய்நிகராக்கப்பட்ட</b> மெய்நிகர் கணினியில் "
 "இயக்கத்தளத்திற்கான நிறுவல் ஊடகத்தை குறிப்பிடவும்."
 
-#: tmp/virt-manager.glade.h:148
+#: tmp/virt-manager.glade.h:149
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
@@ -941,15 +986,15 @@ msgstr ""
 "இயக்கத்தளத்திற்கான நிறுவல் ஊடகத்தை குறிப்பிடவும். விருப்பமாக, உங்கள் கணினியை வரையறுக்க "
 "நீங்கள் ஒரு கிக்ஸ்டார்ட் கோப்பினை குறிக்கும் URL ஐ கொடுக்கலாம்:"
 
-#: tmp/virt-manager.glade.h:149
+#: tmp/virt-manager.glade.h:150
 msgid "Please wait..."
 msgstr "காத்திருக்கவும்..."
 
-#: tmp/virt-manager.glade.h:150
+#: tmp/virt-manager.glade.h:151
 msgid "Powered by libvirt"
 msgstr "libvirt ஆல் திறனாக்கப்பட்டது"
 
-#: tmp/virt-manager.glade.h:151
+#: tmp/virt-manager.glade.h:152
 msgid ""
 "Press finish to create a new virtual machine with\n"
 "this configuration & display the virtual console."
@@ -957,66 +1002,70 @@ msgstr ""
 "முடிவு என்பதை அழுத்தி இந்த கட்டமைப்பில் புதிய மெய்நிகர் கணினியை உருவாக்கி\n"
 "மெய்நிகர் பணியகத்தை காட்டவும்"
 
-#: tmp/virt-manager.glade.h:153
+#: tmp/virt-manager.glade.h:154
 msgid "Processor"
 msgstr "செயலி"
 
-#: tmp/virt-manager.glade.h:154
+#: tmp/virt-manager.glade.h:155
 msgid "Randomly generated MAC address"
 msgstr "குறிப்பில்லாமல் உருவாக்கப்பட்ட MAC முகவரி"
 
-#: tmp/virt-manager.glade.h:155
+#: tmp/virt-manager.glade.h:156
 msgid "Restore a saved machine from a filesystem image"
 msgstr "ஒரு கோப்பு முறைமை உருவிலிருந்து சேமிக்கப்பட்ட கணினியை மீட்டெடுக்கவும்"
 
-#: tmp/virt-manager.glade.h:156
+#: tmp/virt-manager.glade.h:157
 msgid "Restore saved machine..."
 msgstr "சேமிக்கப்பட்ட கணினியை மீட்டெடுக்கவும்..."
 
-#: tmp/virt-manager.glade.h:157
+#: tmp/virt-manager.glade.h:158
 msgid "Run"
 msgstr "இயக்கவும்"
 
-#: tmp/virt-manager.glade.h:158
+#: tmp/virt-manager.glade.h:159
+#, fuzzy
+msgid "S_hutdown"
+msgstr "பணி நிறுத்தம்"
+
+#: tmp/virt-manager.glade.h:160
 msgid "Save this password in your keyring"
 msgstr "உங்கள் keyringஇல் இந்த கடவுச்சொல்லை சேமிக்கவும்"
 
-#: tmp/virt-manager.glade.h:159
+#: tmp/virt-manager.glade.h:161
 msgid "Saving VM Image"
 msgstr "VM உருவை சேமிக்கிறது"
 
-#: tmp/virt-manager.glade.h:160
+#: tmp/virt-manager.glade.h:162
 msgid "Screenshot"
 msgstr "திரைப்பிடிப்பு"
 
-#: tmp/virt-manager.glade.h:161
+#: tmp/virt-manager.glade.h:163
 msgid "Shut down"
 msgstr "பணி நிறுத்தம்"
 
-#: tmp/virt-manager.glade.h:163
-#, fuzzy
+#: tmp/virt-manager.glade.h:165
 msgid "Simple F_ile:"
-msgstr "எளிய கோப்பு (_F):"
+msgstr "எளிய கோப்பு (_i):"
 
-#: tmp/virt-manager.glade.h:164
+#: tmp/virt-manager.glade.h:166
 msgid "Specified MAC address:"
 msgstr "குறிப்பிட்ட MAC முகவரி:"
 
-#: tmp/virt-manager.glade.h:166
+#: tmp/virt-manager.glade.h:168
 msgid "Status:"
 msgstr "நிலை:"
 
-#: tmp/virt-manager.glade.h:167
+#: tmp/virt-manager.glade.h:169
 msgid "System _Name:"
 msgstr "கணினி பெயர் (_N):"
 
-#: tmp/virt-manager.glade.h:168
+#: tmp/virt-manager.glade.h:170
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
 msgstr "மெய்நிகர் கணினியில் இயக்கத்தளத்தை நிறுவ தேவைப்படும் கோப்புகளின் <b>இடம்</b>"
 
-#: tmp/virt-manager.glade.h:169
+#: tmp/virt-manager.glade.h:171
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
@@ -1025,71 +1074,73 @@ msgstr ""
 "இந்த உதவியாளர் உங்களை ஒரு புதிய மெய்நிகர் கணினியை உருவாக்க உதவும். நீங்கள் உருவாக்க "
 "நினைக்கும் மெய்நிகர் பற்றி சில தகவலான இவற்றைக் கேட்கும்:"
 
-#: tmp/virt-manager.glade.h:170
+#: tmp/virt-manager.glade.h:172
 msgid "Toolbar"
 msgstr "கருவிப்பட்டை"
 
-#: tmp/virt-manager.glade.h:171
+#: tmp/virt-manager.glade.h:173
 msgid "Total CPUs on host machine:"
 msgstr "புரவலன் கணினியிலுள்ள மொத்த CPUக்கள்:"
 
-#: tmp/virt-manager.glade.h:172
+#: tmp/virt-manager.glade.h:174
 msgid "Total memory on host machine:"
 msgstr "புரவலன் கணினியிலுள்ள மொத்த நினைவகம்:"
 
-#: tmp/virt-manager.glade.h:173
+#: tmp/virt-manager.glade.h:175
 msgid "Type"
 msgstr "வகை"
 
-#: tmp/virt-manager.glade.h:174
+#: tmp/virt-manager.glade.h:176
 msgid "UUID:"
 msgstr "UUID:"
 
-#: tmp/virt-manager.glade.h:175
+#: tmp/virt-manager.glade.h:177
 msgid "Unavailable"
-msgstr "இல்லாத"
+msgstr "இல்லை"
 
-#: tmp/virt-manager.glade.h:176
+#: tmp/virt-manager.glade.h:178
 msgid "Update status every"
 msgstr "நிலை மேம்படுத்தல்"
 
-#: tmp/virt-manager.glade.h:177
-msgid "VM _Max Memory:"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:178
-msgid "VM _Startup Memory:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:179
+#, fuzzy
+msgid "VM _Max Memory (MB):"
+msgstr "VM அதிகபட்ச நினைவகம் (_M):"
+
+#: tmp/virt-manager.glade.h:180
+#, fuzzy
+msgid "VM _Startup Memory (MB):"
+msgstr "VM துவக்க நினைவகம் (_S):"
+
+#: tmp/virt-manager.glade.h:181
 msgid "VNC"
 msgstr "VNC"
 
-#: tmp/virt-manager.glade.h:180
+#: tmp/virt-manager.glade.h:182
 msgid "Virtual CPUs"
 msgstr "மெய்நிகர் CPUகள்"
 
-#: tmp/virt-manager.glade.h:181
+#: tmp/virt-manager.glade.h:183
 msgid "Virtual Machine Console"
 msgstr "மெய்நிகர் கணினி பணியகம்"
 
-#: tmp/virt-manager.glade.h:182
+#: tmp/virt-manager.glade.h:184
 msgid "Virtual Machine Details"
 msgstr "மெய்நிகர் கணினி விவரங்கள்"
 
-#: tmp/virt-manager.glade.h:183
+#: tmp/virt-manager.glade.h:185
 msgid "Virtual Machine Manager"
 msgstr "மெய்நிகர் கணினி மேலாளர்"
 
-#: tmp/virt-manager.glade.h:184
+#: tmp/virt-manager.glade.h:186
 msgid "Virtual Machine Manager Preferences"
 msgstr "மெய்நிகர் கணினி மேலாளர் முன்னுரிமைகள்"
 
-#: tmp/virt-manager.glade.h:185
+#: tmp/virt-manager.glade.h:187
 msgid "Virtual _Machine"
 msgstr "மெய்நிகர் கணினி (_M)"
 
-#: tmp/virt-manager.glade.h:186
+#: tmp/virt-manager.glade.h:188
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
@@ -1097,179 +1148,172 @@ msgstr ""
 "இந்த கணினி <b>முழுவதும் மெய்நிகராக்கப்பட்டதா</b> அல்லது <b>பகுதி மெய்நிகராக்கப்பட்டதா</"
 "b>"
 
-#: tmp/virt-manager.glade.h:187
+#: tmp/virt-manager.glade.h:189
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr "உங்கள் புதிய கணினிக்கு ஒரு மெய்நிகராக்க முறையை தேர்ந்தெடுக்க வேண்டும்:"
 
-#: tmp/virt-manager.glade.h:188
-msgid "_Browse..."
-msgstr "உலாவு_B ..."
-
-#: tmp/virt-manager.glade.h:189
-msgid "_CD-ROM or DVD:"
-msgstr "_CD-ROM or DVD:"
-
 #: tmp/virt-manager.glade.h:190
-msgid "_Details"
-msgstr "விவரங்கள்_D "
+msgid "_Browse..."
+msgstr "உலாவுதல் (_B)..."
 
 #: tmp/virt-manager.glade.h:191
-msgid "_Edit"
-msgstr "தொகுத்தல்_E "
+msgid "_CD-ROM or DVD:"
+msgstr "குறுவட்டு அல்லது டிவிடி (_C):"
 
 #: tmp/virt-manager.glade.h:192
-msgid "_File"
-msgstr "கோப்பு_F "
+msgid "_Destroy"
+msgstr ""
 
 #: tmp/virt-manager.glade.h:193
-msgid "_Finish"
-msgstr "செய்து முடித்தல்_F "
+msgid "_Details"
+msgstr "விவரங்கள் (_D)"
 
 #: tmp/virt-manager.glade.h:194
-msgid "_FullScreen"
-msgstr "முழுத் திரை_F "
+msgid "_Edit"
+msgstr "திருத்துதல் (_E)"
 
 #: tmp/virt-manager.glade.h:195
+msgid "_File"
+msgstr "கோப்பு (_F)"
+
+#: tmp/virt-manager.glade.h:196
+msgid "_Finish"
+msgstr "முடிவு (_F)"
+
+#: tmp/virt-manager.glade.h:197
+msgid "_FullScreen"
+msgstr "முழுத்திரை (_F)"
+
+#: tmp/virt-manager.glade.h:198
 msgid "_Graphical Console"
 msgstr "வரைகலை பணியகம் (_G)"
 
-#: tmp/virt-manager.glade.h:196
+#: tmp/virt-manager.glade.h:199
 msgid "_Help"
-msgstr "உதவி_H "
+msgstr "உதவி (_H)"
 
-#: tmp/virt-manager.glade.h:197
-#, fuzzy
+#: tmp/virt-manager.glade.h:200
 msgid "_Host:"
-msgstr "புரவலன்:"
+msgstr "புரவலன் (_H):"
 
-#: tmp/virt-manager.glade.h:198
+#: tmp/virt-manager.glade.h:201
 msgid "_ISO Image Location:"
 msgstr "_ISO உரு இடம்:"
 
-#: tmp/virt-manager.glade.h:199
-#, fuzzy
+#: tmp/virt-manager.glade.h:202
 msgid "_Local Xen host"
-msgstr "உள்ளமை Xen புரவலன்"
+msgstr "உள்ளமை Xen புரவலன் (_L)"
 
-#: tmp/virt-manager.glade.h:200
+#: tmp/virt-manager.glade.h:203
 msgid "_Mount Point (on virtual system):"
 msgstr "ஏற்றப்புள்ளி (மெய்நிகர் கணினியில்) (_M):"
 
-#: tmp/virt-manager.glade.h:201
-#, fuzzy
+#: tmp/virt-manager.glade.h:204
 msgid "_Other hypervisor"
-msgstr "வேறு hypervisor"
+msgstr "வேறு hypervisor (_O)"
 
-#: tmp/virt-manager.glade.h:202
+#: tmp/virt-manager.glade.h:205
 msgid "_Paravirtualized:"
-msgstr "_Paravirtualized:"
+msgstr "பகுதி மெய்நிகராக்கப்பட்டது (_P):"
 
-#: tmp/virt-manager.glade.h:203
+#: tmp/virt-manager.glade.h:206
 msgid "_Path to install media:"
 msgstr "ஊடகத்தை நிறுவும் பாதை (_P):"
 
-#: tmp/virt-manager.glade.h:204
+#: tmp/virt-manager.glade.h:207
 msgid "_Pause"
 msgstr "இடை நிறுத்தம் (_P)"
 
-#: tmp/virt-manager.glade.h:205
-#, fuzzy
-msgid "_Port:"
-msgstr "துறை:"
-
-#: tmp/virt-manager.glade.h:206
-#, fuzzy
-msgid "_Read only connection"
-msgstr "வாசிப்பு மட்டும் இணைப்பு"
-
-#: tmp/virt-manager.glade.h:207
-#, fuzzy
-msgid "_Remote Xen host"
-msgstr "தொலை Xen புரவலன்"
-
 #: tmp/virt-manager.glade.h:208
+msgid "_Port:"
+msgstr "துறை (_P):"
+
+#: tmp/virt-manager.glade.h:209
+msgid "_Read only connection"
+msgstr "வாசிப்பு மட்டும் இணைப்பு (_R)"
+
+#: tmp/virt-manager.glade.h:210
+msgid "_Remote Xen host"
+msgstr "தொலை Xen புரவலன் (_R)"
+
+#: tmp/virt-manager.glade.h:211
 msgid "_Run"
 msgstr "இயக்கவும் (_R)"
 
-#: tmp/virt-manager.glade.h:209
+#: tmp/virt-manager.glade.h:212
 msgid "_Save"
 msgstr "சேமிக்கவும் (_S)"
 
-#: tmp/virt-manager.glade.h:210
+#: tmp/virt-manager.glade.h:213
 msgid "_Serial Console"
 msgstr "தொடர் பணியகம் (_S)"
 
-#: tmp/virt-manager.glade.h:211
-msgid "_Shutdown"
-msgstr "பணிநிறுத்தம் (_S)"
-
-#: tmp/virt-manager.glade.h:212
+#: tmp/virt-manager.glade.h:214
 msgid "_Size:"
 msgstr "அளவு (_S):"
 
-#: tmp/virt-manager.glade.h:213
+#: tmp/virt-manager.glade.h:215
 msgid "_Take Screenshot"
 msgstr "திரைப்பிடிப்பு எடுக்கவும் (_T)"
 
-#: tmp/virt-manager.glade.h:214
-#, fuzzy
-msgid "_URI:"
-msgstr "URI:"
-
-#: tmp/virt-manager.glade.h:215
-#, fuzzy
-msgid "_VCPUs:"
-msgstr "VCPUs"
-
 #: tmp/virt-manager.glade.h:216
+msgid "_URI:"
+msgstr "_URI:"
+
+#: tmp/virt-manager.glade.h:217
+msgid "_VCPUs:"
+msgstr "_VCPUகள்:"
+
+#: tmp/virt-manager.glade.h:218
 msgid "_View"
 msgstr "காட்சி (_V)"
 
-#: tmp/virt-manager.glade.h:217
+#: tmp/virt-manager.glade.h:219
 msgid "_View:"
 msgstr "காட்சி (_V):"
 
-#: tmp/virt-manager.glade.h:218
+#: tmp/virt-manager.glade.h:220
 msgid "demo"
-msgstr "செயல்முறை"
+msgstr "செய்முறை"
 
-#: tmp/virt-manager.glade.h:219
+#: tmp/virt-manager.glade.h:221
 msgid "http://"
 msgstr "http://"
 
-#: tmp/virt-manager.glade.h:220
+#: tmp/virt-manager.glade.h:222
 msgid "http://virt-manager.et.redhat.com/"
-msgstr ""
+msgstr "http://virt-manager.et.redhat.com/"
 
-#: tmp/virt-manager.glade.h:221
+#: tmp/virt-manager.glade.h:223
 msgid "mac-addr-random"
 msgstr "mac-addr-random"
 
-#: tmp/virt-manager.glade.h:222
+#: tmp/virt-manager.glade.h:224
 msgid "para"
-msgstr "para"
+msgstr "பகுதி"
 
-#: tmp/virt-manager.glade.h:223
+#: tmp/virt-manager.glade.h:225
 msgid "samples"
 msgstr "மாதிரிகள்"
 
-#: tmp/virt-manager.glade.h:224
+#: tmp/virt-manager.glade.h:226
 msgid "seconds"
 msgstr "வினாடிகள்"
 
-#: tmp/virt-manager.glade.h:226
+#: tmp/virt-manager.glade.h:228
 msgid "translator-credits"
 msgstr "மொழிபெயர்பாளர்-சன்மானம்"
 
-#: tmp/virt-manager.glade.h:227
+#: tmp/virt-manager.glade.h:229
 msgid "virtual CPU alert"
 msgstr "மெய்நிகர் CPU எச்சரிக்கை"
 
-#~ msgid "How many virtual CPUs should this system have?"
-#~ msgstr "இந்த கணனி எத்தனை மெய்நிகர் CPUக்களை கொண்டுள்ளது?"
+#~ msgid ""
+#~ "<small><b>Note:</b> File size parameter is only relevant for new files</"
+#~ "small>"
+#~ msgstr ""
+#~ "<small><b>குறிப்பு:</b> கோப்பு அளவு மதிப்புரு புதிய கோப்புகளுக்கு மட்டுமே "
+#~ "தொடர்புடையது</small>"
 
-#~ msgid "How much memory should this VM start up with?"
-#~ msgstr "இந்த VM எவ்வளவு நினைவகத்துடன் தொடங்கப்பட்டது?"
-
-#~ msgid "What is the maximum amount of memory this VM should be able to use?"
-#~ msgstr "இந்த VM அதிகபட்சமாக எவ்வளவு நினைவகத்தைப் பயன்படுத்தலாம்?"
+#~ msgid "_Shutdown"
+#~ msgstr "பணிநிறுத்தம் (_S)"

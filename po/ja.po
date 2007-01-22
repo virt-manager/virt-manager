@@ -1,22 +1,24 @@
+# translation of ja.po to
 # translation of ja.po to Japanese
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
-# Noriko Mizumoto <noriko@redhat.com>, 2006.
+# Noriko Mizumoto <noriko@redhat.com>, 2006, 2007.
+# kiyoto james hashida <khashida@brisbane.redhat.com>, 2007.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-06 16:17-0500\n"
-"PO-Revision-Date: 2006-11-01 16:59+1000\n"
+"POT-Creation-Date: 2007-01-22 18:10-0500\n"
+"PO-Revision-Date: 2007-01-15 13:37+1000\n"
 "Last-Translator: Noriko Mizumoto <noriko@redhat.com>\n"
-"Language-Team: Japanese <doc-i18n-list@redhat.com>\n"
+"Language-Team: Japanese <fedora-trans-ja@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 
-#: ../../src/virt-manager.py.in:61
+#: ../../src/virt-manager.py.in:62
 msgid "Unable to initialize GTK: "
 msgstr "GTK を初期化できません: "
 
@@ -37,74 +39,78 @@ msgstr ""
 msgid "Screenshot saved"
 msgstr "スクリーンショットが保存されました"
 
-#: ../../src/virtManager/console.py:388
+#: ../../src/virtManager/console.py:405
 msgid "paused"
 msgstr "一時停止されました"
 
-#: ../../src/virtManager/create.py:304
+#: ../../src/virtManager/create.py:348
 msgid "Paravirtualized"
 msgstr "準仮想化"
 
-#: ../../src/virtManager/create.py:306
+#: ../../src/virtManager/create.py:350
 msgid "Fully virtualized"
-msgstr "完全な仮想化"
+msgstr "完全仮想化"
 
-#: ../../src/virtManager/create.py:337
+#: ../../src/virtManager/create.py:381
 msgid "Invalid FV media address"
 msgstr "無効な FV メディアアドレスです"
 
-#: ../../src/virtManager/create.py:343
+#: ../../src/virtManager/create.py:387
 msgid "Invalid PV media address"
 msgstr "無効な PV メディアアドレスです"
 
-#: ../../src/virtManager/create.py:353
+#: ../../src/virtManager/create.py:397
 msgid "Invalid system name"
 msgstr "無効なシステム名です"
 
-#: ../../src/virtManager/create.py:360
+#: ../../src/virtManager/create.py:404
 msgid "Invalid memory setting"
 msgstr "無効なメモリ設定です"
 
-#: ../../src/virtManager/create.py:377
+#: ../../src/virtManager/create.py:426
 msgid "Invalid storage address"
 msgstr "無効なストレージアドレスです"
 
-#: ../../src/virtManager/create.py:404
+#: ../../src/virtManager/create.py:460
 msgid "Creating Virtual Machine"
 msgstr "仮想マシンを作成中"
 
-#: ../../src/virtManager/create.py:408
+#: ../../src/virtManager/create.py:465
 msgid "Guest Install Error"
 msgstr "ゲストのインストールエラー"
 
-#: ../../src/virtManager/create.py:443
+#: ../../src/virtManager/create.py:503
 msgid "Locate ISO Image"
 msgstr "ISO イメージの検索"
 
-#: ../../src/virtManager/create.py:472
+#: ../../src/virtManager/create.py:532
 msgid "Locate Storage Partition"
 msgstr "ストレージパーティションの検索"
 
-#: ../../src/virtManager/create.py:478
+#: ../../src/virtManager/create.py:538
 msgid "Locate or Create New Storage File"
 msgstr "新しいストレージファイルの検索または作成"
 
-#: ../../src/virtManager/create.py:537
+#: ../../src/virtManager/create.py:604 ../../src/virtManager/create.py:608
 msgid "Invalid System Name"
 msgstr "無効なシステム名です"
 
-#: ../../src/virtManager/create.py:538
-msgid ""
-"System name must be non-blank, less than 50 characters, and contain no spaces"
+#: ../../src/virtManager/create.py:605
+#, fuzzy
+msgid "System name must be non-blank and less than 50 characters"
 msgstr ""
-"システム名を空白にしておくことはできません。 50 文字以内でスペースを含まない"
-"名前にしてください。"
+"システム名を空白にはできません。 50 文字以内でスペースを含まない名前にしてく"
+"ださい。"
 
-#: ../../src/virtManager/create.py:543
+#: ../../src/virtManager/create.py:609
+msgid "System name may contain alphanumeric and '_' characters only"
+msgstr ""
+
+#: ../../src/virtManager/create.py:615
 msgid "Hardware Support Required"
 msgstr "ハードウェアのサポートが必要になります"
 
-#: ../../src/virtManager/create.py:544
+#: ../../src/virtManager/create.py:616
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
@@ -112,87 +118,98 @@ msgstr ""
 "ご使用のハードウェアは完全仮想化をサポートしていないようです。 このハードウェ"
 "ア上では準仮想化のゲストしか使用できません。"
 
-#: ../../src/virtManager/create.py:551
+#: ../../src/virtManager/create.py:623
 msgid "ISO Path Required"
 msgstr "ISO パスが必要です"
 
-#: ../../src/virtManager/create.py:552
+#: ../../src/virtManager/create.py:624
 msgid "You must specify an ISO location for the guest installation"
 msgstr "ゲストのインストールには ISO の場所を指定しなければなりません"
 
-#: ../../src/virtManager/create.py:555
+#: ../../src/virtManager/create.py:627
 msgid "ISO Path Not Found"
 msgstr "ISO パスが見つかりません"
 
-#: ../../src/virtManager/create.py:556
+#: ../../src/virtManager/create.py:628
 msgid "You must specify a valid path to the ISO image for guest installation"
 msgstr ""
 "ゲストのインストールには ISO イメージへの有効なパスを指定しなければなりません"
 
-#: ../../src/virtManager/create.py:561
+#: ../../src/virtManager/create.py:633
 msgid "Install media required"
 msgstr "インストールメディアが必要です"
 
-#: ../../src/virtManager/create.py:562
+#: ../../src/virtManager/create.py:634
 msgid "You must select the CDROM install media for guest installation"
 msgstr ""
 "ゲストのインストールには CDROM のインストールメディアを選択しなければなりませ"
 "ん"
 
-#: ../../src/virtManager/create.py:567
+#: ../../src/virtManager/create.py:639
 msgid "URL Required"
 msgstr "URL が必要です"
 
-#: ../../src/virtManager/create.py:568
+#: ../../src/virtManager/create.py:640
 msgid "You must specify a URL for the install image for the guest install"
 msgstr ""
 "ゲストのインストールにはインストールイメージの URL を指定しなければなりません"
 
-#: ../../src/virtManager/create.py:574
+#: ../../src/virtManager/create.py:646
 msgid "Storage Address Required"
 msgstr "ストレージアドレスが必要です"
 
-#: ../../src/virtManager/create.py:575
+#: ../../src/virtManager/create.py:647
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
 msgstr ""
 "ゲストのインストールにはストレージ用のファイルまたはパーティションを指定しな"
 "ければなりません"
 
-#: ../../src/virtManager/create.py:620 ../../src/virtManager/create.py:655
+#: ../../src/virtManager/create.py:652
+#, fuzzy
+msgid "Storage Address Is Directory"
+msgstr "ストレージアドレスが必要です"
+
+#: ../../src/virtManager/create.py:653
+msgid ""
+"You chose 'Simple File' storage for your storage method, but chose a "
+"directory instead of a file. Please enter a new filename or choose an "
+"existing file."
+msgstr ""
+
+#: ../../src/virtManager/create.py:698 ../../src/virtManager/create.py:733
 msgid "No media present"
 msgstr "メディアがありません"
 
-#: ../../src/virtManager/details.py:342
-#, fuzzy
+#: ../../src/virtManager/details.py:411
 msgid "Destination"
-msgstr "あて先"
+msgstr "目的地"
 
-#: ../../src/virtManager/details.py:380
+#: ../../src/virtManager/details.py:450
 msgid "MAC address"
 msgstr "MAC アドレス"
 
-#: ../../src/virtManager/domain.py:269
+#: ../../src/virtManager/domain.py:363
 msgid "Running"
 msgstr "実行中"
 
-#: ../../src/virtManager/domain.py:271
+#: ../../src/virtManager/domain.py:365
 msgid "Paused"
 msgstr "一時停止"
 
-#: ../../src/virtManager/domain.py:273 tmp/virt-manager.glade.h:162
+#: ../../src/virtManager/domain.py:367 tmp/virt-manager.glade.h:164
 msgid "Shutdown"
 msgstr "シャットダウン"
 
-#: ../../src/virtManager/domain.py:275
+#: ../../src/virtManager/domain.py:369
 msgid "Shutoff"
 msgstr "シャットオフ"
 
-#: ../../src/virtManager/domain.py:277
+#: ../../src/virtManager/domain.py:371
 msgid "Crashed"
 msgstr "クラッシュ"
 
-#: ../../src/virtManager/domain.py:279
+#: ../../src/virtManager/domain.py:373
 msgid "Unknown status code"
 msgstr "不明な状態コード"
 
@@ -201,84 +218,98 @@ msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr ""
+"Xen ハイパーバイザー/デーモンに対する接続を開けません。\n"
+"\n"
 
 #: ../../src/virtManager/engine.py:75
 msgid "Verify that:\n"
-msgstr ""
+msgstr "次の検証を行います:\n"
 
 #: ../../src/virtManager/engine.py:76
 msgid " - A Xen host kernel was booted\n"
-msgstr ""
+msgstr " - Xen ホストカーネルが起動された\n"
 
 #: ../../src/virtManager/engine.py:77
-#, fuzzy
 msgid " - The Xen service has been started\n"
-msgstr ""
-"スクリーンショットは次の場所に保存されています:\n"
-"%s"
+msgstr " - Xen サービスが起動している\n"
 
 #: ../../src/virtManager/engine.py:80
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
-msgstr ""
+msgstr "ハイパーバイザー '%s に対する接続を開けません"
 
 #: ../../src/virtManager/engine.py:81
 msgid "Virtual Machine Manager Connection Failure"
-msgstr ""
+msgstr "仮想マシンマネージャの接続障害"
 
-#: ../../src/virtManager/engine.py:277
+#: ../../src/virtManager/engine.py:281
 msgid "Save Virtual Machine"
 msgstr "仮想マシンの保存"
 
-#: ../../src/virtManager/engine.py:290
+#: ../../src/virtManager/engine.py:294
 msgid "Saving Virtual Machine"
 msgstr "仮想マシンの保存中"
 
-#: ../../src/virtManager/manager.py:172
+#: ../../src/virtManager/engine.py:310
+#, fuzzy, python-format
+msgid "About to destroy virtual machine %s"
+msgstr "仮想マシンの復元"
+
+#: ../../src/virtManager/engine.py:311
+msgid ""
+"This will immediately destroy the VM and may corrupt its disk image. Are you "
+"sure?"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:189
 msgid "Restore Virtual Machine"
 msgstr "仮想マシンの復元"
 
-#: ../../src/virtManager/manager.py:186
+#: ../../src/virtManager/manager.py:204
 msgid "Restoring Virtual Machine"
 msgstr "仮想マシンを復元中"
 
-#: ../../src/virtManager/manager.py:204
+#: ../../src/virtManager/manager.py:211
+#, python-format
+msgid "The file '%s' does not appear to be a valid saved machine image"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:239
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr ""
 "ドメイン「%s」を復元中にエラーが発生しました。 このドメインはすでに実行中では"
 "ないですか?"
 
-#: ../../src/virtManager/manager.py:310
+#: ../../src/virtManager/manager.py:421
 msgid "ID"
 msgstr "ID"
 
-#: ../../src/virtManager/manager.py:311 tmp/virt-manager.glade.h:123
+#: ../../src/virtManager/manager.py:422 tmp/virt-manager.glade.h:124
 msgid "Name"
 msgstr "名前"
 
-#: ../../src/virtManager/manager.py:312 tmp/virt-manager.glade.h:165
+#: ../../src/virtManager/manager.py:423 tmp/virt-manager.glade.h:167
 msgid "Status"
 msgstr "状態"
 
-#: ../../src/virtManager/manager.py:313 tmp/virt-manager.glade.h:79
+#: ../../src/virtManager/manager.py:424 tmp/virt-manager.glade.h:80
 msgid "CPU usage"
 msgstr "CPU 使用率"
 
-#: ../../src/virtManager/manager.py:314
+#: ../../src/virtManager/manager.py:425
 msgid "VCPUs"
 msgstr "VCPU"
 
-#: ../../src/virtManager/manager.py:315 tmp/virt-manager.glade.h:119
+#: ../../src/virtManager/manager.py:426 tmp/virt-manager.glade.h:120
 msgid "Memory usage"
 msgstr "メモリ使用率"
 
-#: ../../src/virtManager/manager.py:316 tmp/virt-manager.glade.h:91
+#: ../../src/virtManager/manager.py:427 tmp/virt-manager.glade.h:92
 msgid "Disk usage"
 msgstr "ディスク使用率"
 
-#: ../../src/virtManager/manager.py:317 tmp/virt-manager.glade.h:126
-#, fuzzy
+#: ../../src/virtManager/manager.py:428 tmp/virt-manager.glade.h:127
 msgid "Network traffic"
 msgstr "ネットワーク通信量"
 
@@ -288,7 +319,7 @@ msgstr "シリアルコンソール"
 
 #: tmp/virt-manager.glade.h:1
 msgid " "
-msgstr ""
+msgstr " "
 
 #: tmp/virt-manager.glade.h:2
 msgid " free"
@@ -384,9 +415,8 @@ msgid "<b>CPUs</b>"
 msgstr "<b>CPU</b>"
 
 #: tmp/virt-manager.glade.h:26
-#, fuzzy
 msgid "<b>Consoles</b>"
-msgstr "<b>CPU</b>"
+msgstr "<b>コンソール</b>"
 
 #: tmp/virt-manager.glade.h:27
 msgid "<b>Disk image:</b>"
@@ -442,7 +472,7 @@ msgstr "<b>パフォーマンス</b>"
 
 #: tmp/virt-manager.glade.h:40
 msgid "<b>Status monitoring</b>"
-msgstr ""
+msgstr "<b>状態のモニタリング</b>"
 
 #: tmp/virt-manager.glade.h:41
 msgid "<b>Storage</b>"
@@ -509,12 +539,13 @@ msgstr ""
 "があります。"
 
 #: tmp/virt-manager.glade.h:52
-msgid "<b>Virtaulization method:</b>"
-msgstr "<b>仮想化の方法:</b>"
-
-#: tmp/virt-manager.glade.h:53
 msgid "<b>Virtual CPUs:</b>"
 msgstr "<b>仮想 CPU:</b>"
+
+#: tmp/virt-manager.glade.h:53
+#, fuzzy
+msgid "<b>Virtualization method:</b>"
+msgstr "<b>仮想化の方法:</b>"
 
 #: tmp/virt-manager.glade.h:54
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
@@ -531,46 +562,47 @@ msgstr ""
 "<small><b>例:</b> http://servername.example.com/distro/i386/tree</small>"
 
 #: tmp/virt-manager.glade.h:57
-#, fuzzy
-msgid ""
-"<small><b>Note:</b> File size parameter is only relevant for new files</"
-"small>"
-msgstr ""
-"<small><b>註記:</b> ファイルサイズのパラメータは新しいファイルに対してのみ適"
-"切になります。</small>"
-
-#: tmp/virt-manager.glade.h:58
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
 msgstr ""
+"<small><b>注記:</b> このマシンのホスト CPU には完全仮想化のサポートはありませ"
+"ん。</small>"
 
-#: tmp/virt-manager.glade.h:59
+#: tmp/virt-manager.glade.h:58
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
 msgstr ""
+"<small><b>注記:</b>このマシンのホスト CPU は完全仮想化をサポートしています"
+"が、BIOS で有効にされてません。</small>"
 
-#: tmp/virt-manager.glade.h:60
-#, fuzzy
+#: tmp/virt-manager.glade.h:59
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
 "small>"
 msgstr ""
-"<small><b>ヒント:</b> 最大のパフォーマンスを得るには、  仮想 CPU の数をホスト"
-"システム上の物理 CPU 数より少く(または同数に)してください。</small>"
+"<small><b>ヒント:</b> 最大のパフォーマンスを得るには、 仮想 CPU の数をホスト"
+"システム上の物理 CPU 数より少く(または同数に)する必要があります。</small>"
 
-#: tmp/virt-manager.glade.h:61
-#, fuzzy
+#: tmp/virt-manager.glade.h:60
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
 "tools you would on a physical system.</small>"
 msgstr ""
-"<small><b>ヒント:</b> ネットワークマウントのストレージなど、物理システムで作"
-"成に使用した同様のツールを使ってそのストレージを追加で仮想システムに足すこと"
-"ができます。"
+"<small><b>ヒント:</b> ネットワークマウントのストレージなど、物理システムでそ"
+"のストレージの作成に使用した同様のツールを使ってそのストレージを追加で仮想シ"
+"ステムに加えることができます。</small>"
+
+#: tmp/virt-manager.glade.h:61
+msgid ""
+"<small><b>Warning:</b> If you do not allocate the entire disk at VM "
+"creation, space will be allocated as needed while the guest is running. If "
+"sufficient free space is not available on the host, this may result in data "
+"corruption on the guest.</small>"
+msgstr ""
 
 #: tmp/virt-manager.glade.h:62
 msgid ""
@@ -617,6 +649,8 @@ msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
 msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">仮想システムの名"
+"前を指定中</span>"
 
 #: tmp/virt-manager.glade.h:68
 msgid ""
@@ -628,19 +662,19 @@ msgstr ""
 
 #: tmp/virt-manager.glade.h:69
 msgid "A <b>name</b> for your new virtual system"
-msgstr ""
+msgstr "新しい仮想システムの<b>名前</b>です"
 
 #: tmp/virt-manager.glade.h:70
 msgid "Add Virtual NIC"
-msgstr ""
+msgstr "仮想 NIC の追加"
 
 #: tmp/virt-manager.glade.h:71
 msgid "Add virtual NIC with:"
-msgstr ""
+msgstr "仮想 NIC の追加:"
 
 #: tmp/virt-manager.glade.h:72
 msgid "Alert"
-msgstr ""
+msgstr "警告"
 
 #: tmp/virt-manager.glade.h:73
 msgid ""
@@ -648,590 +682,645 @@ msgid ""
 "Active virtual machines\n"
 "Inactive virtual machines"
 msgstr ""
+"すべての仮想マシン\n"
+"アクティブな仮想マシン\n"
+"非アクティブな仮想マシン"
 
 #: tmp/virt-manager.glade.h:76
-msgid "Auth"
+msgid "Allocate entire virtual disk now?"
 msgstr ""
 
 #: tmp/virt-manager.glade.h:77
-msgid "Automatically open consoles:"
-msgstr ""
+msgid "Auth"
+msgstr "認証"
 
 #: tmp/virt-manager.glade.h:78
-msgid "Browse..."
-msgstr ""
+msgid "Automatically open consoles:"
+msgstr "自動的に開くコンソール:"
 
-#: tmp/virt-manager.glade.h:80
-msgid "CPU usage:"
-msgstr ""
+#: tmp/virt-manager.glade.h:79
+msgid "Browse..."
+msgstr "閲覧..."
 
 #: tmp/virt-manager.glade.h:81
-msgid "CPU/memory"
-msgstr ""
+msgid "CPU usage:"
+msgstr "CPU 使用量:"
 
 #: tmp/virt-manager.glade.h:82
-msgid "Change allocation:"
-msgstr ""
+msgid "CPU/memory"
+msgstr "CPU/メモリ"
 
 #: tmp/virt-manager.glade.h:83
-msgid "Co_nnect"
-msgstr ""
+msgid "Change allocation:"
+msgstr "割り当て変更:"
 
 #: tmp/virt-manager.glade.h:84
-msgid "Complete"
-msgstr ""
+msgid "Co_nnect"
+msgstr "接続 (_N)"
 
 #: tmp/virt-manager.glade.h:85
-msgid "Copyright (C) 2006 Red Hat Inc."
-msgstr ""
+msgid "Complete"
+msgstr "完了"
 
 #: tmp/virt-manager.glade.h:86
-msgid "Create a new virtual system"
-msgstr ""
+msgid "Copyright (C) 2006 Red Hat Inc."
+msgstr "Copyright (C) 2006 Red Hat Inc."
 
 #: tmp/virt-manager.glade.h:87
-msgid "Current allocation:"
-msgstr ""
+msgid "Create a new virtual system"
+msgstr "新規の仮想システムを作成"
 
 #: tmp/virt-manager.glade.h:88
-msgid "De_tails"
-msgstr ""
+msgid "Current allocation:"
+msgstr "現在の場所:"
 
 #: tmp/virt-manager.glade.h:89
-msgid "Delete machine"
-msgstr ""
+msgid "De_tails"
+msgstr "詳細 (_T)"
 
 #: tmp/virt-manager.glade.h:90
-msgid "Disk"
-msgstr ""
+msgid "Delete machine"
+msgstr "マシンの削除"
 
-#: tmp/virt-manager.glade.h:92
-msgid "Disk usage:"
-msgstr ""
+#: tmp/virt-manager.glade.h:91
+msgid "Disk"
+msgstr "ディスク"
 
 #: tmp/virt-manager.glade.h:93
-msgid "Domain ID"
-msgstr ""
+msgid "Disk usage:"
+msgstr "ディスクの使用量:"
 
 #: tmp/virt-manager.glade.h:94
-msgid "FV install"
-msgstr ""
+msgid "Domain ID"
+msgstr "ドメイン ID"
 
 #: tmp/virt-manager.glade.h:95
-#, fuzzy
-msgid "F_ully Virtualized:"
-msgstr "完全な仮想化"
+msgid "FV install"
+msgstr "FV インストール"
 
 #: tmp/virt-manager.glade.h:96
-msgid "File _Location:"
-msgstr ""
+msgid "F_ully Virtualized:"
+msgstr "完全仮想化 (_U):"
 
 #: tmp/virt-manager.glade.h:97
-msgid "File _Size:"
-msgstr ""
+msgid "File _Location:"
+msgstr "ファイルの場所 (_L):"
 
 #: tmp/virt-manager.glade.h:98
-msgid "Grab keyboard input:"
-msgstr ""
+msgid "File _Size:"
+msgstr "ファイルサイズ (_S):"
 
 #: tmp/virt-manager.glade.h:99
-msgid "Hardware"
-msgstr ""
+msgid "Grab keyboard input:"
+msgstr "キーボード入力を取得:"
 
 #: tmp/virt-manager.glade.h:100
-msgid "How many virtual CPUs should this machine be allocated?"
-msgstr ""
+msgid "Hardware"
+msgstr "ハードウェア"
 
 #: tmp/virt-manager.glade.h:101
-msgid "How much memory should this machine be allocated?"
-msgstr ""
+msgid "How many virtual CPUs should this machine be allocated?"
+msgstr "このマシンに割り当てる仮想 CPU 数を入力してください。"
 
 #: tmp/virt-manager.glade.h:102
-msgid "ISO _Location:"
-msgstr ""
+msgid "How much memory should this machine be allocated?"
+msgstr "このマシンに割り当てるメモリ量を入力してください。"
 
 #: tmp/virt-manager.glade.h:103
-msgid "Install Media _URL:"
-msgstr ""
+msgid "ISO _Location:"
+msgstr "ISO の場所 (_L):"
 
 #: tmp/virt-manager.glade.h:104
-msgid "Intro"
-msgstr ""
+msgid "Install Media _URL:"
+msgstr "インストールメディアの URL (_U):"
 
 #: tmp/virt-manager.glade.h:105
+msgid "Intro"
+msgstr "はじめに"
+
+#: tmp/virt-manager.glade.h:106
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
 "systems."
 msgstr ""
-
-#: tmp/virt-manager.glade.h:106
-msgid "Keep CPU Settings"
-msgstr ""
+"ハードウェアシュミレーションを行い、より幅広いオペレーティングシステムの種類"
+"を使用できるようにします (OS の修正を不要とする)。 準仮想化のシステムより速度"
+"は低下します。"
 
 #: tmp/virt-manager.glade.h:107
-msgid "Kickstart U_RL:"
-msgstr ""
+msgid "Keep CPU Settings"
+msgstr "CPU の設定を維持"
 
 #: tmp/virt-manager.glade.h:108
+msgid "Kickstart U_RL:"
+msgstr "キックスタート URL (_R):"
+
+#: tmp/virt-manager.glade.h:109
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
 "Better performance than fully virtualized systems."
 msgstr ""
-
-#: tmp/virt-manager.glade.h:109
-msgid "Logical host CPUs:"
-msgstr ""
+"マシンの仮想化における軽量タイプのメソッドです。 準仮想化をサポートするよう"
+"OS に対して特別に変更を加える必要があるためオペレーティングシステムの種類は限"
+"られます。 完全仮想化システムに比べパフォーマンスがよくなります。"
 
 #: tmp/virt-manager.glade.h:110
-msgid "Login"
-msgstr ""
+msgid "Logical host CPUs:"
+msgstr "論理ホストの CPU:"
 
 #: tmp/virt-manager.glade.h:111
-msgid "MB"
-msgstr ""
+msgid "Login"
+msgstr "ログイン"
 
 #: tmp/virt-manager.glade.h:112
+msgid "MB"
+msgstr "MB"
+
+#: tmp/virt-manager.glade.h:113
 msgid ""
 "MB\n"
 "GB\n"
 "TB"
 msgstr ""
-
-#: tmp/virt-manager.glade.h:115
-msgid "Machine details..."
-msgstr ""
+"MB\n"
+"GB\n"
+"TB"
 
 #: tmp/virt-manager.glade.h:116
-msgid "Maintain history of"
-msgstr ""
+msgid "Machine details..."
+msgstr "マシンの詳細..."
 
 #: tmp/virt-manager.glade.h:117
-msgid "Maximum allocation:"
-msgstr ""
+msgid "Maintain history of"
+msgstr "履歴の管理"
 
 #: tmp/virt-manager.glade.h:118
-msgid "Memory"
-msgstr ""
+msgid "Maximum allocation:"
+msgstr "最大割り当て:"
 
-#: tmp/virt-manager.glade.h:120
-msgid "Memory usage:"
-msgstr ""
+#: tmp/virt-manager.glade.h:119
+msgid "Memory"
+msgstr "メモリ"
 
 #: tmp/virt-manager.glade.h:121
-msgid "Modify CPU Settings"
-msgstr ""
+msgid "Memory usage:"
+msgstr "メモリの使用量:"
 
 #: tmp/virt-manager.glade.h:122
-msgid "Modify File Storage"
-msgstr ""
+msgid "Modify CPU Settings"
+msgstr "CPU の設定を変更"
 
-#: tmp/virt-manager.glade.h:124
-msgid "Name:"
-msgstr ""
+#: tmp/virt-manager.glade.h:123
+msgid "Modify File Storage"
+msgstr "ファイルストレージの変更"
 
 #: tmp/virt-manager.glade.h:125
-msgid "Network"
-msgstr ""
+msgid "Name:"
+msgstr "名前"
 
-#: tmp/virt-manager.glade.h:127
-msgid "Network usage:"
-msgstr ""
+#: tmp/virt-manager.glade.h:126
+msgid "Network"
+msgstr "ネットワーク"
 
 #: tmp/virt-manager.glade.h:128
+msgid "Network usage:"
+msgstr "ネットワークの使用量:"
+
+#: tmp/virt-manager.glade.h:129
 msgid ""
 "Never\n"
 "For new domains\n"
 "For all domains"
 msgstr ""
+"なし\n"
+"新しいドメインに対して\n"
+"すべてのドメインに対して"
 
-#: tmp/virt-manager.glade.h:131
+#: tmp/virt-manager.glade.h:132
 msgid ""
 "Never\n"
 "When fullscreen\n"
 "On mouse over"
 msgstr ""
-
-#: tmp/virt-manager.glade.h:134
-msgid "New machine..."
-msgstr ""
+"なし\n"
+"全画面の場合\n"
+"マウスが通過したとき"
 
 #: tmp/virt-manager.glade.h:135
-msgid "Normal Disk _Partition:"
-msgstr ""
+msgid "New machine..."
+msgstr "新規のマシン..."
 
 #: tmp/virt-manager.glade.h:136
-msgid "Open connection"
-msgstr ""
+msgid "Normal Disk _Partition:"
+msgstr "通常のディスクパーティション (_P):"
 
 #: tmp/virt-manager.glade.h:137
-msgid "Open connection..."
-msgstr ""
+msgid "Open connection"
+msgstr "接続を開く"
 
 #: tmp/virt-manager.glade.h:138
-msgid "Overview"
-msgstr ""
+msgid "Open connection..."
+msgstr "接続を開く..."
 
 #: tmp/virt-manager.glade.h:139
-msgid "PVinstall"
-msgstr ""
+msgid "Overview"
+msgstr "概要"
 
 #: tmp/virt-manager.glade.h:140
-msgid "P_artition:"
-msgstr ""
+msgid "PVinstall"
+msgstr "PV インストール"
 
 #: tmp/virt-manager.glade.h:141
-msgid "Password:"
-msgstr ""
+msgid "P_artition:"
+msgstr "パーティション (_A):"
 
 #: tmp/virt-manager.glade.h:142
-msgid "Pause"
-msgstr ""
+msgid "Password:"
+msgstr "パスワード:"
 
 #: tmp/virt-manager.glade.h:143
-msgid "Please choose a name for your virtual system:"
-msgstr ""
+msgid "Pause"
+msgstr "一時停止"
 
 #: tmp/virt-manager.glade.h:144
+msgid "Please choose a name for your virtual system:"
+msgstr "ご使用の仮想システムの名前を選択してください:"
+
+#: tmp/virt-manager.glade.h:145
+#, fuzzy
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
 "maximum amount of memory the VM should be able to use, and optionally a "
-"lower amount to grab on startup."
+"lower amount to grab on startup. Warning: setting VM memory too high will "
+"cause out-of-memory errors in your host domain!"
 msgstr ""
-
-#: tmp/virt-manager.glade.h:145
-msgid "Please enter the number of virtual CPUs this VM should start up with."
-msgstr ""
+"この VM のメモリ構成を入力してください。 VM が使用できるメモリの最大量とオプ"
+"ションで起動時に取得する低めのメモリ量を指定できます。"
 
 #: tmp/virt-manager.glade.h:146
+msgid "Please enter the number of virtual CPUs this VM should start up with."
+msgstr "この VM の起動時における仮想 CPU 数を入力してください。"
+
+#: tmp/virt-manager.glade.h:147
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
 "system's operating system."
 msgstr ""
+"この物理ホストシステム上で、新しい仮想システムに対して割り当てる領域を入力し"
+"てください。 この領域は仮想システムのオペレーティングシステムのインストールに"
+"使用されます。"
 
-#: tmp/virt-manager.glade.h:147
+#: tmp/virt-manager.glade.h:148
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
 "system:"
 msgstr ""
+"この<b>完全仮想化する</b>の仮想マシン上にインストールするオペレーティングシス"
+"テムのインストールメディアを取得できる場所を入力してください。"
 
-#: tmp/virt-manager.glade.h:148
+#: tmp/virt-manager.glade.h:149
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
 "system. Optionally you can provide the URL for a kickstart file that "
 "describes your system:"
 msgstr ""
-
-#: tmp/virt-manager.glade.h:149
-msgid "Please wait..."
-msgstr ""
+"この<b>準仮想化する</b>仮想マシン上にインストールするオペレーティングシステム"
+"のインストールメディアを取得できる場所を入力してください。 オプションでシステ"
+"ムを記述するキックスタートファイルの URL を入力できます。"
 
 #: tmp/virt-manager.glade.h:150
-msgid "Powered by libvirt"
-msgstr ""
+msgid "Please wait..."
+msgstr "お待ちください..."
 
 #: tmp/virt-manager.glade.h:151
+msgid "Powered by libvirt"
+msgstr "Powered by libvirt"
+
+#: tmp/virt-manager.glade.h:152
 msgid ""
 "Press finish to create a new virtual machine with\n"
 "this configuration & display the virtual console."
 msgstr ""
-
-#: tmp/virt-manager.glade.h:153
-msgid "Processor"
-msgstr ""
+"この設定で新しい仮想マシンを作成して仮想コンソールを\n"
+"表示させるには完了を押します。"
 
 #: tmp/virt-manager.glade.h:154
-msgid "Randomly generated MAC address"
-msgstr ""
+msgid "Processor"
+msgstr "プロセッサ"
 
 #: tmp/virt-manager.glade.h:155
-msgid "Restore a saved machine from a filesystem image"
-msgstr ""
+msgid "Randomly generated MAC address"
+msgstr "MAC アドレスがランダムに生成されました"
 
 #: tmp/virt-manager.glade.h:156
-msgid "Restore saved machine..."
-msgstr ""
+msgid "Restore a saved machine from a filesystem image"
+msgstr "ファイルシステムのイメージから保存したマシンを復元します"
 
 #: tmp/virt-manager.glade.h:157
-msgid "Run"
-msgstr ""
+msgid "Restore saved machine..."
+msgstr "保存したマシンの復元..."
 
 #: tmp/virt-manager.glade.h:158
-msgid "Save this password in your keyring"
-msgstr ""
+msgid "Run"
+msgstr "実行"
 
 #: tmp/virt-manager.glade.h:159
-msgid "Saving VM Image"
-msgstr ""
+#, fuzzy
+msgid "S_hutdown"
+msgstr "シャットダウン"
 
 #: tmp/virt-manager.glade.h:160
-msgid "Screenshot"
-msgstr ""
+msgid "Save this password in your keyring"
+msgstr "キーリングにこのパスワードを保存します"
 
 #: tmp/virt-manager.glade.h:161
-msgid "Shut down"
-msgstr ""
+msgid "Saving VM Image"
+msgstr "VM イメージを保存中"
+
+#: tmp/virt-manager.glade.h:162
+msgid "Screenshot"
+msgstr "スクリーンショット"
 
 #: tmp/virt-manager.glade.h:163
-msgid "Simple F_ile:"
-msgstr ""
+msgid "Shut down"
+msgstr "シャットダウン"
 
-#: tmp/virt-manager.glade.h:164
-msgid "Specified MAC address:"
-msgstr ""
+#: tmp/virt-manager.glade.h:165
+msgid "Simple F_ile:"
+msgstr "シンプルファイル (_I):"
 
 #: tmp/virt-manager.glade.h:166
-msgid "Status:"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:167
-msgid "System _Name:"
-msgstr ""
+msgid "Specified MAC address:"
+msgstr "指定 MAC アドレス:"
 
 #: tmp/virt-manager.glade.h:168
+msgid "Status:"
+msgstr "状態:"
+
+#: tmp/virt-manager.glade.h:169
+msgid "System _Name:"
+msgstr "システム名 (_N):"
+
+#: tmp/virt-manager.glade.h:170
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
 msgstr ""
+"仮想システムにオペレーティングシステムをインストールするために必要となるファ"
+"イルの<b>場所</b>です。"
 
-#: tmp/virt-manager.glade.h:169
+#: tmp/virt-manager.glade.h:171
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
 "create, such as:"
 msgstr ""
-
-#: tmp/virt-manager.glade.h:170
-msgid "Toolbar"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:171
-msgid "Total CPUs on host machine:"
-msgstr ""
+"このプログラムで新しい仮想システムの作成を案内していきます。作成する仮想マシ"
+"ンに関して、次のような情報の入力が求められます。"
 
 #: tmp/virt-manager.glade.h:172
-msgid "Total memory on host machine:"
-msgstr ""
+msgid "Toolbar"
+msgstr "ツールバー"
 
 #: tmp/virt-manager.glade.h:173
-msgid "Type"
-msgstr ""
+msgid "Total CPUs on host machine:"
+msgstr "ホストマシン上の CPU 合計:"
 
 #: tmp/virt-manager.glade.h:174
-msgid "UUID:"
-msgstr ""
+msgid "Total memory on host machine:"
+msgstr "ホストマシン上のメモリ合計:"
 
 #: tmp/virt-manager.glade.h:175
-msgid "Unavailable"
-msgstr ""
+msgid "Type"
+msgstr "タイプ"
 
 #: tmp/virt-manager.glade.h:176
-msgid "Update status every"
-msgstr ""
+msgid "UUID:"
+msgstr "UUID:"
 
 #: tmp/virt-manager.glade.h:177
-msgid "VM _Max Memory:"
-msgstr ""
+msgid "Unavailable"
+msgstr "使用不可"
 
 #: tmp/virt-manager.glade.h:178
-msgid "VM _Startup Memory:"
-msgstr ""
+msgid "Update status every"
+msgstr "状態の更新間隔"
 
 #: tmp/virt-manager.glade.h:179
-msgid "VNC"
-msgstr ""
+#, fuzzy
+msgid "VM _Max Memory (MB):"
+msgstr "VM の最大メモリ (_M):"
 
 #: tmp/virt-manager.glade.h:180
-msgid "Virtual CPUs"
-msgstr ""
+#, fuzzy
+msgid "VM _Startup Memory (MB):"
+msgstr "VM の起動時メモリ:"
 
 #: tmp/virt-manager.glade.h:181
-msgid "Virtual Machine Console"
-msgstr ""
+msgid "VNC"
+msgstr "VNC"
 
 #: tmp/virt-manager.glade.h:182
-msgid "Virtual Machine Details"
-msgstr ""
+msgid "Virtual CPUs"
+msgstr "仮想 CPU"
 
 #: tmp/virt-manager.glade.h:183
-msgid "Virtual Machine Manager"
-msgstr ""
+msgid "Virtual Machine Console"
+msgstr "仮想マシンコンソール"
 
 #: tmp/virt-manager.glade.h:184
-msgid "Virtual Machine Manager Preferences"
-msgstr ""
+msgid "Virtual Machine Details"
+msgstr "仮想マシンの詳細"
 
 #: tmp/virt-manager.glade.h:185
-msgid "Virtual _Machine"
-msgstr ""
+msgid "Virtual Machine Manager"
+msgstr "仮想マシンマネージャ"
 
 #: tmp/virt-manager.glade.h:186
+msgid "Virtual Machine Manager Preferences"
+msgstr "仮想マシンマネージャの設定"
+
+#: tmp/virt-manager.glade.h:187
+msgid "Virtual _Machine"
+msgstr "仮想マシン (_M)"
+
+#: tmp/virt-manager.glade.h:188
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:187
-msgid "You will need to choose a virtualization method for your new system:"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:188
-msgid "_Browse..."
-msgstr ""
+msgstr "システムの<b>完全仮想化</b>または<b>準仮想化</b>"
 
 #: tmp/virt-manager.glade.h:189
-msgid "_CD-ROM or DVD:"
-msgstr ""
+msgid "You will need to choose a virtualization method for your new system:"
+msgstr "新しいシステムに対して仮想化のメソッドを選択する必要があります:"
 
 #: tmp/virt-manager.glade.h:190
-msgid "_Details"
-msgstr ""
+msgid "_Browse..."
+msgstr "ブラウズ (_B)..."
 
 #: tmp/virt-manager.glade.h:191
-msgid "_Edit"
-msgstr ""
+msgid "_CD-ROM or DVD:"
+msgstr "CD-ROM または DVD (_C):"
 
 #: tmp/virt-manager.glade.h:192
-msgid "_File"
+msgid "_Destroy"
 msgstr ""
 
 #: tmp/virt-manager.glade.h:193
-msgid "_Finish"
-msgstr ""
+msgid "_Details"
+msgstr "詳細 (_D)"
 
 #: tmp/virt-manager.glade.h:194
-msgid "_FullScreen"
-msgstr ""
+msgid "_Edit"
+msgstr "編集 (_E)"
 
 #: tmp/virt-manager.glade.h:195
-msgid "_Graphical Console"
-msgstr ""
+msgid "_File"
+msgstr "ファイル (_F)"
 
 #: tmp/virt-manager.glade.h:196
-msgid "_Help"
-msgstr ""
+msgid "_Finish"
+msgstr "完了 (_F)"
 
 #: tmp/virt-manager.glade.h:197
-msgid "_Host:"
-msgstr ""
+msgid "_FullScreen"
+msgstr "全画面 (_F)"
 
 #: tmp/virt-manager.glade.h:198
-msgid "_ISO Image Location:"
-msgstr ""
+msgid "_Graphical Console"
+msgstr "グラフィカルコンソール (_G)"
 
 #: tmp/virt-manager.glade.h:199
-msgid "_Local Xen host"
-msgstr ""
+msgid "_Help"
+msgstr "ヘルプ (_H)"
 
 #: tmp/virt-manager.glade.h:200
-msgid "_Mount Point (on virtual system):"
-msgstr ""
+msgid "_Host:"
+msgstr "ホスト (_H):"
 
 #: tmp/virt-manager.glade.h:201
-msgid "_Other hypervisor"
-msgstr ""
+msgid "_ISO Image Location:"
+msgstr "ISO イメージの場所 (_I):"
 
 #: tmp/virt-manager.glade.h:202
-msgid "_Paravirtualized:"
-msgstr ""
+msgid "_Local Xen host"
+msgstr "ローカル Xen ホスト (_L)"
 
 #: tmp/virt-manager.glade.h:203
-msgid "_Path to install media:"
-msgstr ""
+msgid "_Mount Point (on virtual system):"
+msgstr "マウントポイント(仮想システム上の) (_M):"
 
 #: tmp/virt-manager.glade.h:204
-msgid "_Pause"
-msgstr ""
+msgid "_Other hypervisor"
+msgstr "他のハイパーバイザー (_O)"
 
 #: tmp/virt-manager.glade.h:205
-msgid "_Port:"
-msgstr ""
+msgid "_Paravirtualized:"
+msgstr "準仮想化 (_P):"
 
 #: tmp/virt-manager.glade.h:206
-msgid "_Read only connection"
-msgstr ""
+msgid "_Path to install media:"
+msgstr "インストールメディアへのパス (_P):"
 
 #: tmp/virt-manager.glade.h:207
-msgid "_Remote Xen host"
-msgstr ""
+msgid "_Pause"
+msgstr "一時停止 (_P)"
 
 #: tmp/virt-manager.glade.h:208
-msgid "_Run"
-msgstr ""
+msgid "_Port:"
+msgstr "ポート (_P):"
 
 #: tmp/virt-manager.glade.h:209
-msgid "_Save"
-msgstr ""
+msgid "_Read only connection"
+msgstr "読み込み専用接続 (_R)"
 
 #: tmp/virt-manager.glade.h:210
-msgid "_Serial Console"
-msgstr ""
+msgid "_Remote Xen host"
+msgstr "リモート Xen ホスト (_R)"
 
 #: tmp/virt-manager.glade.h:211
-msgid "_Shutdown"
-msgstr ""
+msgid "_Run"
+msgstr "実行 (_R)"
 
 #: tmp/virt-manager.glade.h:212
-msgid "_Size:"
-msgstr ""
+msgid "_Save"
+msgstr "保存 (_S)"
 
 #: tmp/virt-manager.glade.h:213
-msgid "_Take Screenshot"
-msgstr ""
+msgid "_Serial Console"
+msgstr "シリアルコンソール (_S)"
 
 #: tmp/virt-manager.glade.h:214
-msgid "_URI:"
-msgstr ""
+msgid "_Size:"
+msgstr "サイズ (_S):"
 
 #: tmp/virt-manager.glade.h:215
-#, fuzzy
-msgid "_VCPUs:"
-msgstr "VCPU"
+msgid "_Take Screenshot"
+msgstr "スクリーンショットの取得 (_T)"
 
 #: tmp/virt-manager.glade.h:216
-msgid "_View"
-msgstr ""
+msgid "_URI:"
+msgstr "_URI:"
 
 #: tmp/virt-manager.glade.h:217
-msgid "_View:"
-msgstr ""
+msgid "_VCPUs:"
+msgstr "VCPU (_V):"
 
 #: tmp/virt-manager.glade.h:218
-msgid "demo"
-msgstr ""
+msgid "_View"
+msgstr "表示 (_V)"
 
 #: tmp/virt-manager.glade.h:219
-msgid "http://"
-msgstr ""
+msgid "_View:"
+msgstr "表示 (_V):"
 
 #: tmp/virt-manager.glade.h:220
-msgid "http://virt-manager.et.redhat.com/"
-msgstr ""
+msgid "demo"
+msgstr "デモ"
 
 #: tmp/virt-manager.glade.h:221
-msgid "mac-addr-random"
-msgstr ""
+msgid "http://"
+msgstr "http://"
 
 #: tmp/virt-manager.glade.h:222
-msgid "para"
-msgstr ""
+msgid "http://virt-manager.et.redhat.com/"
+msgstr "http://virt-manager.et.redhat.com/"
 
 #: tmp/virt-manager.glade.h:223
-msgid "samples"
-msgstr ""
+msgid "mac-addr-random"
+msgstr "mac-addr-random"
 
 #: tmp/virt-manager.glade.h:224
-msgid "seconds"
-msgstr ""
+msgid "para"
+msgstr "para"
+
+#: tmp/virt-manager.glade.h:225
+msgid "samples"
+msgstr "サンプル"
 
 #: tmp/virt-manager.glade.h:226
-msgid "translator-credits"
-msgstr ""
+msgid "seconds"
+msgstr "秒"
 
-#: tmp/virt-manager.glade.h:227
+#: tmp/virt-manager.glade.h:228
+msgid "translator-credits"
+msgstr "Noriko Mizumoto <noriko@redhat.com>, 2006"
+
+#: tmp/virt-manager.glade.h:229
 msgid "virtual CPU alert"
-msgstr ""
+msgstr "仮想 CPU 警告"
+
+#~ msgid ""
+#~ "<small><b>Note:</b> File size parameter is only relevant for new files</"
+#~ "small>"
+#~ msgstr ""
+#~ "<small><b>注記:</b> ファイルサイズのパラメータは新しいファイルに対してのみ"
+#~ "関連します。</small>"
+
+#~ msgid "_Shutdown"
+#~ msgstr "シャットダウン (_S)"

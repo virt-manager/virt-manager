@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-06 16:17-0500\n"
-"PO-Revision-Date: 2006-10-01 23:52+0100\n"
+"POT-Creation-Date: 2007-01-22 18:10-0500\n"
+"PO-Revision-Date: 2006-11-11 22:26+0100\n"
 "Last-Translator: Miloš Komarčević <kmilos@gmail.com>\n"
 "Language-Team: Serbian (sr) <fedora@prevod.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../src/virt-manager.py.in:61
+#: ../../src/virt-manager.py.in:62
 msgid "Unable to initialize GTK: "
 msgstr "Не могу да иницијализујем GTK: "
 
@@ -36,74 +36,78 @@ msgstr ""
 msgid "Screenshot saved"
 msgstr "Снимак је сачуван"
 
-#: ../../src/virtManager/console.py:388
+#: ../../src/virtManager/console.py:405
 msgid "paused"
 msgstr "паузирано"
 
-#: ../../src/virtManager/create.py:304
+#: ../../src/virtManager/create.py:348
 msgid "Paravirtualized"
 msgstr "Паравиртуализовано"
 
-#: ../../src/virtManager/create.py:306
+#: ../../src/virtManager/create.py:350
 msgid "Fully virtualized"
 msgstr "Потпуно вуртуелизовано"
 
-#: ../../src/virtManager/create.py:337
+#: ../../src/virtManager/create.py:381
 msgid "Invalid FV media address"
 msgstr "Неисправна адреса FV медијума"
 
-#: ../../src/virtManager/create.py:343
+#: ../../src/virtManager/create.py:387
 msgid "Invalid PV media address"
 msgstr "Неисправна адреса PV медијума"
 
-#: ../../src/virtManager/create.py:353
+#: ../../src/virtManager/create.py:397
 msgid "Invalid system name"
 msgstr "Неисправно име система"
 
-#: ../../src/virtManager/create.py:360
+#: ../../src/virtManager/create.py:404
 msgid "Invalid memory setting"
 msgstr "Неисправна поставка меморије"
 
-#: ../../src/virtManager/create.py:377
+#: ../../src/virtManager/create.py:426
 msgid "Invalid storage address"
 msgstr "Неисправна адреса складишта"
 
-#: ../../src/virtManager/create.py:404
+#: ../../src/virtManager/create.py:460
 msgid "Creating Virtual Machine"
 msgstr "Прављење виртуелне машине"
 
-#: ../../src/virtManager/create.py:408
+#: ../../src/virtManager/create.py:465
 msgid "Guest Install Error"
 msgstr "Грешка инсталације госта"
 
-#: ../../src/virtManager/create.py:443
+#: ../../src/virtManager/create.py:503
 msgid "Locate ISO Image"
 msgstr "Лоцирај ISO отисак"
 
-#: ../../src/virtManager/create.py:472
+#: ../../src/virtManager/create.py:532
 msgid "Locate Storage Partition"
 msgstr "Лоцирај партицију складишта"
 
-#: ../../src/virtManager/create.py:478
+#: ../../src/virtManager/create.py:538
 msgid "Locate or Create New Storage File"
 msgstr "Лоцирај или направи нову датотеку складишта"
 
-#: ../../src/virtManager/create.py:537
+#: ../../src/virtManager/create.py:604 ../../src/virtManager/create.py:608
 msgid "Invalid System Name"
 msgstr "Неисправно име система"
 
-#: ../../src/virtManager/create.py:538
-msgid ""
-"System name must be non-blank, less than 50 characters, and contain no spaces"
+#: ../../src/virtManager/create.py:605
+#, fuzzy
+msgid "System name must be non-blank and less than 50 characters"
 msgstr ""
 "Име система не сме бити празно, мора бити краће од 50 знакова, и не сме "
 "садржати размаке"
 
-#: ../../src/virtManager/create.py:543
+#: ../../src/virtManager/create.py:609
+msgid "System name may contain alphanumeric and '_' characters only"
+msgstr ""
+
+#: ../../src/virtManager/create.py:615
 msgid "Hardware Support Required"
 msgstr "Неопходна хардверска подршка"
 
-#: ../../src/virtManager/create.py:544
+#: ../../src/virtManager/create.py:616
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
@@ -111,80 +115,92 @@ msgstr ""
 "Изгледа да Ваш хардвер не подржава потпуну вуртуализацију. Само ће "
 "паравиртуализовани гости бити доступни на овом хардверу."
 
-#: ../../src/virtManager/create.py:551
+#: ../../src/virtManager/create.py:623
 msgid "ISO Path Required"
 msgstr "Неопходна ISO путања"
 
-#: ../../src/virtManager/create.py:552
+#: ../../src/virtManager/create.py:624
 msgid "You must specify an ISO location for the guest installation"
 msgstr "Морате навести ISO локацију за инсталацију госта"
 
-#: ../../src/virtManager/create.py:555
+#: ../../src/virtManager/create.py:627
 msgid "ISO Path Not Found"
 msgstr "Није нађена ISO путања"
 
-#: ../../src/virtManager/create.py:556
+#: ../../src/virtManager/create.py:628
 msgid "You must specify a valid path to the ISO image for guest installation"
 msgstr "Морате навести исправну путању до ISO одраза за инсталацију госта"
 
-#: ../../src/virtManager/create.py:561
+#: ../../src/virtManager/create.py:633
 msgid "Install media required"
 msgstr "Неопходан медијум инсталације"
 
-#: ../../src/virtManager/create.py:562
+#: ../../src/virtManager/create.py:634
 msgid "You must select the CDROM install media for guest installation"
 msgstr "Морате изабрати CDROM инсталационе медијуме за инсталацију госта"
 
-#: ../../src/virtManager/create.py:567
+#: ../../src/virtManager/create.py:639
 msgid "URL Required"
 msgstr "Неопходан УРЛ"
 
-#: ../../src/virtManager/create.py:568
+#: ../../src/virtManager/create.py:640
 msgid "You must specify a URL for the install image for the guest install"
 msgstr "Морате навести УРЛ до отиска инсталације за инсталацију госта"
 
-#: ../../src/virtManager/create.py:574
+#: ../../src/virtManager/create.py:646
 msgid "Storage Address Required"
 msgstr "Неопходна адреса складишта"
 
-#: ../../src/virtManager/create.py:575
+#: ../../src/virtManager/create.py:647
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
 msgstr "Морате навести партицију или датотеку за складиштење инсталације госта"
 
-#: ../../src/virtManager/create.py:620 ../../src/virtManager/create.py:655
+#: ../../src/virtManager/create.py:652
+#, fuzzy
+msgid "Storage Address Is Directory"
+msgstr "Неопходна адреса складишта"
+
+#: ../../src/virtManager/create.py:653
+msgid ""
+"You chose 'Simple File' storage for your storage method, but chose a "
+"directory instead of a file. Please enter a new filename or choose an "
+"existing file."
+msgstr ""
+
+#: ../../src/virtManager/create.py:698 ../../src/virtManager/create.py:733
 msgid "No media present"
 msgstr "Нема присутног медијума"
 
-#: ../../src/virtManager/details.py:342
+#: ../../src/virtManager/details.py:411
 msgid "Destination"
 msgstr "Одредиште"
 
-#: ../../src/virtManager/details.py:380
+#: ../../src/virtManager/details.py:450
 msgid "MAC address"
 msgstr "MAC адреса"
 
-#: ../../src/virtManager/domain.py:269
+#: ../../src/virtManager/domain.py:363
 msgid "Running"
 msgstr "Покренуто"
 
-#: ../../src/virtManager/domain.py:271
+#: ../../src/virtManager/domain.py:365
 msgid "Paused"
 msgstr "Паузирано"
 
-#: ../../src/virtManager/domain.py:273 tmp/virt-manager.glade.h:162
+#: ../../src/virtManager/domain.py:367 tmp/virt-manager.glade.h:164
 msgid "Shutdown"
 msgstr "Угаси"
 
-#: ../../src/virtManager/domain.py:275
+#: ../../src/virtManager/domain.py:369
 msgid "Shutoff"
 msgstr "Искључи"
 
-#: ../../src/virtManager/domain.py:277
+#: ../../src/virtManager/domain.py:371
 msgid "Crashed"
 msgstr "Крахирало"
 
-#: ../../src/virtManager/domain.py:279
+#: ../../src/virtManager/domain.py:373
 msgid "Unknown status code"
 msgstr "Непозната шифра статуса"
 
@@ -193,82 +209,96 @@ msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr ""
+"Не могу да отворим везу ка Xen хипервизору/демону.\n"
+"\n"
 
 #: ../../src/virtManager/engine.py:75
 msgid "Verify that:\n"
-msgstr ""
+msgstr "Проверите да ли је:\n"
 
 #: ../../src/virtManager/engine.py:76
 msgid " - A Xen host kernel was booted\n"
-msgstr ""
+msgstr " - Подигнуто језгро Xen домаћина\n"
 
 #: ../../src/virtManager/engine.py:77
-#, fuzzy
 msgid " - The Xen service has been started\n"
-msgstr ""
-"Снимак је сачуван у:\n"
-"%s"
+msgstr " - Покренут Xen сервис\n"
 
 #: ../../src/virtManager/engine.py:80
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
-msgstr ""
+msgstr "Не могу да отворим везу ка хипервизору „%s“"
 
 #: ../../src/virtManager/engine.py:81
-#, fuzzy
 msgid "Virtual Machine Manager Connection Failure"
-msgstr "Управник виртуелне машине"
+msgstr "Неуспело повезивање управника виртуелне машине"
 
-#: ../../src/virtManager/engine.py:277
+#: ../../src/virtManager/engine.py:281
 msgid "Save Virtual Machine"
 msgstr "Сачувај виртуелну машину"
 
-#: ../../src/virtManager/engine.py:290
+#: ../../src/virtManager/engine.py:294
 msgid "Saving Virtual Machine"
 msgstr "Чувам виртуелну машину"
 
-#: ../../src/virtManager/manager.py:172
+#: ../../src/virtManager/engine.py:310
+#, fuzzy, python-format
+msgid "About to destroy virtual machine %s"
+msgstr "Врати виртуелну машину"
+
+#: ../../src/virtManager/engine.py:311
+msgid ""
+"This will immediately destroy the VM and may corrupt its disk image. Are you "
+"sure?"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:189
 msgid "Restore Virtual Machine"
 msgstr "Врати виртуелну машину"
 
-#: ../../src/virtManager/manager.py:186
+#: ../../src/virtManager/manager.py:204
 msgid "Restoring Virtual Machine"
 msgstr "Враћам виртуелну машину"
 
-#: ../../src/virtManager/manager.py:204
+#: ../../src/virtManager/manager.py:211
+#, python-format
+msgid "The file '%s' does not appear to be a valid saved machine image"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:239
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr "Грешка при враћању домена „%s“. Да ли је домен већ покренут?"
 
-#: ../../src/virtManager/manager.py:310
+#: ../../src/virtManager/manager.py:421
 msgid "ID"
 msgstr "ID"
 
-#: ../../src/virtManager/manager.py:311 tmp/virt-manager.glade.h:123
+#: ../../src/virtManager/manager.py:422 tmp/virt-manager.glade.h:124
 msgid "Name"
 msgstr "Име"
 
-#: ../../src/virtManager/manager.py:312 tmp/virt-manager.glade.h:165
+#: ../../src/virtManager/manager.py:423 tmp/virt-manager.glade.h:167
 msgid "Status"
 msgstr "Статус"
 
-#: ../../src/virtManager/manager.py:313 tmp/virt-manager.glade.h:79
+#: ../../src/virtManager/manager.py:424 tmp/virt-manager.glade.h:80
 msgid "CPU usage"
 msgstr "CPU употреба"
 
-#: ../../src/virtManager/manager.py:314
+#: ../../src/virtManager/manager.py:425
 msgid "VCPUs"
 msgstr "VCPU-и"
 
-#: ../../src/virtManager/manager.py:315 tmp/virt-manager.glade.h:119
+#: ../../src/virtManager/manager.py:426 tmp/virt-manager.glade.h:120
 msgid "Memory usage"
 msgstr "Употреба меморије"
 
-#: ../../src/virtManager/manager.py:316 tmp/virt-manager.glade.h:91
+#: ../../src/virtManager/manager.py:427 tmp/virt-manager.glade.h:92
 msgid "Disk usage"
 msgstr "Употреба диска"
 
-#: ../../src/virtManager/manager.py:317 tmp/virt-manager.glade.h:126
+#: ../../src/virtManager/manager.py:428 tmp/virt-manager.glade.h:127
 msgid "Network traffic"
 msgstr "Мрежни саобраћај"
 
@@ -278,7 +308,7 @@ msgstr "серијска конзола"
 
 #: tmp/virt-manager.glade.h:1
 msgid " "
-msgstr ""
+msgstr " "
 
 #: tmp/virt-manager.glade.h:2
 msgid " free"
@@ -374,9 +404,8 @@ msgid "<b>CPUs</b>"
 msgstr "<b>CPU-и</b>"
 
 #: tmp/virt-manager.glade.h:26
-#, fuzzy
 msgid "<b>Consoles</b>"
-msgstr "<b>CPU-и</b>"
+msgstr "<b>Конзоле</b>"
 
 #: tmp/virt-manager.glade.h:27
 msgid "<b>Disk image:</b>"
@@ -473,7 +502,7 @@ msgid ""
 "than (or equal to) the number of physical CPUs on the host system."
 msgstr ""
 "<b>Савет:</b> За најбољи учинак, број виртуелних CPU-а треба да буде мањи "
-"(или једнак) од броја физичких CPU-а ма систему домаћина."
+"(или једнак) од броја физичких CPU-а на систему домаћина."
 
 #: tmp/virt-manager.glade.h:48
 msgid ""
@@ -496,12 +525,13 @@ msgstr ""
 "систем домаћина. Ово може довести до слабог учинка у виртуелној машини."
 
 #: tmp/virt-manager.glade.h:52
-msgid "<b>Virtaulization method:</b>"
-msgstr "<b>Метод виртуализације:</b>"
-
-#: tmp/virt-manager.glade.h:53
 msgid "<b>Virtual CPUs:</b>"
 msgstr "<b>Виртуелни CPU-и:</b>"
+
+#: tmp/virt-manager.glade.h:53
+#, fuzzy
+msgid "<b>Virtualization method:</b>"
+msgstr "<b>Метод виртуализације:</b>"
 
 #: tmp/virt-manager.glade.h:54
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
@@ -519,35 +549,30 @@ msgstr ""
 
 #: tmp/virt-manager.glade.h:57
 msgid ""
-"<small><b>Note:</b> File size parameter is only relevant for new files</"
-"small>"
-msgstr ""
-"<small><b>Напомена:</b> Параметар величине датотеке се односи само на нове "
-"датотеке</small>"
-
-#: tmp/virt-manager.glade.h:58
-msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
 msgstr ""
+"<small><b>Напомена:</b> Домаћински CPU(и) у овој машини немају подршку за "
+"потпуну виртуализацију.</small>"
 
-#: tmp/virt-manager.glade.h:59
+#: tmp/virt-manager.glade.h:58
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
 msgstr ""
+"<small><b>Напомена:</b> Домаћински CPU(и) у овој машини подржавају потпуну "
+"виртуализацију, али није укључена у BIOS-у.</small>"
 
-#: tmp/virt-manager.glade.h:60
-#, fuzzy
+#: tmp/virt-manager.glade.h:59
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
 "small>"
 msgstr ""
 "<small><b>Савет:</b> За најбољи учинак, број виртуелних CPU-а треба да буде "
-"мањи (или једнак) од броја физичких CPU-а ма систему домаћина.</small>"
+"мањи (или једнак) од броја логичких CPU-а на систему домаћина.</small>"
 
-#: tmp/virt-manager.glade.h:61
+#: tmp/virt-manager.glade.h:60
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
@@ -556,6 +581,14 @@ msgstr ""
 "<small><b>Савет:</b> Можете додати додатно складиште Вашем виртуелном "
 "систему, укључујући и складиште монтирано преко мреже, након његовог "
 "прављења користећи исте алате које би користили на физичком систему.</small>"
+
+#: tmp/virt-manager.glade.h:61
+msgid ""
+"<small><b>Warning:</b> If you do not allocate the entire disk at VM "
+"creation, space will be allocated as needed while the guest is running. If "
+"sufficient free space is not available on the host, this may result in data "
+"corruption on the guest.</small>"
+msgstr ""
 
 #: tmp/virt-manager.glade.h:62
 msgid ""
@@ -640,117 +673,118 @@ msgstr ""
 "Неактивне виртуелне машине"
 
 #: tmp/virt-manager.glade.h:76
+msgid "Allocate entire virtual disk now?"
+msgstr ""
+
+#: tmp/virt-manager.glade.h:77
 msgid "Auth"
 msgstr "Аутен."
 
-#: tmp/virt-manager.glade.h:77
-msgid "Automatically open consoles:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:78
+msgid "Automatically open consoles:"
+msgstr "Самостално отвори конзоле:"
+
+#: tmp/virt-manager.glade.h:79
 msgid "Browse..."
 msgstr "Разгледај..."
 
-#: tmp/virt-manager.glade.h:80
+#: tmp/virt-manager.glade.h:81
 msgid "CPU usage:"
 msgstr "CPU употреба:"
 
-#: tmp/virt-manager.glade.h:81
+#: tmp/virt-manager.glade.h:82
 msgid "CPU/memory"
 msgstr "CPU/меморија"
 
-#: tmp/virt-manager.glade.h:82
+#: tmp/virt-manager.glade.h:83
 msgid "Change allocation:"
 msgstr "Промени заузеће:"
 
-#: tmp/virt-manager.glade.h:83
-#, fuzzy
-msgid "Co_nnect"
-msgstr "Повежи се"
-
 #: tmp/virt-manager.glade.h:84
+msgid "Co_nnect"
+msgstr "По_вежи се"
+
+#: tmp/virt-manager.glade.h:85
 msgid "Complete"
 msgstr "Завршено"
 
-#: tmp/virt-manager.glade.h:85
+#: tmp/virt-manager.glade.h:86
 msgid "Copyright (C) 2006 Red Hat Inc."
 msgstr "Ауторска права 2006 Red Hat Inc."
 
-#: tmp/virt-manager.glade.h:86
+#: tmp/virt-manager.glade.h:87
 msgid "Create a new virtual system"
 msgstr "Направи нови виртуелни систем"
 
-#: tmp/virt-manager.glade.h:87
+#: tmp/virt-manager.glade.h:88
 msgid "Current allocation:"
 msgstr "Тренутно заузеће:"
 
-#: tmp/virt-manager.glade.h:88
-#, fuzzy
-msgid "De_tails"
-msgstr "Детаљи"
-
 #: tmp/virt-manager.glade.h:89
+msgid "De_tails"
+msgstr "Де_таљи"
+
+#: tmp/virt-manager.glade.h:90
 msgid "Delete machine"
 msgstr "Обриши машину"
 
-#: tmp/virt-manager.glade.h:90
+#: tmp/virt-manager.glade.h:91
 msgid "Disk"
 msgstr "Диск"
 
-#: tmp/virt-manager.glade.h:92
+#: tmp/virt-manager.glade.h:93
 msgid "Disk usage:"
 msgstr "Употреба диска:"
 
-#: tmp/virt-manager.glade.h:93
+#: tmp/virt-manager.glade.h:94
 msgid "Domain ID"
 msgstr "ID домена"
 
-#: tmp/virt-manager.glade.h:94
+#: tmp/virt-manager.glade.h:95
 msgid "FV install"
 msgstr "FV инсталација"
 
-#: tmp/virt-manager.glade.h:95
-#, fuzzy
-msgid "F_ully Virtualized:"
-msgstr "По_тпуно виртуализован:"
-
 #: tmp/virt-manager.glade.h:96
+msgid "F_ully Virtualized:"
+msgstr "По_тпуно виртуализовано:"
+
+#: tmp/virt-manager.glade.h:97
 msgid "File _Location:"
 msgstr "_Место датотеке:"
 
-#: tmp/virt-manager.glade.h:97
+#: tmp/virt-manager.glade.h:98
 msgid "File _Size:"
 msgstr "_Величина датотеке:"
 
-#: tmp/virt-manager.glade.h:98
-msgid "Grab keyboard input:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:99
+msgid "Grab keyboard input:"
+msgstr "Зграби уносе тастатуре:"
+
+#: tmp/virt-manager.glade.h:100
 msgid "Hardware"
 msgstr "Хардвер"
 
-#: tmp/virt-manager.glade.h:100
+#: tmp/virt-manager.glade.h:101
 msgid "How many virtual CPUs should this machine be allocated?"
 msgstr "Колико виртуелних CPU-а треба доделити овој машини?"
 
-#: tmp/virt-manager.glade.h:101
+#: tmp/virt-manager.glade.h:102
 msgid "How much memory should this machine be allocated?"
 msgstr "Колико меморије треба доделити овој машини?"
 
-#: tmp/virt-manager.glade.h:102
+#: tmp/virt-manager.glade.h:103
 msgid "ISO _Location:"
 msgstr "ISO _место:"
 
-#: tmp/virt-manager.glade.h:103
+#: tmp/virt-manager.glade.h:104
 msgid "Install Media _URL:"
 msgstr "_УРЛ медијума инсталације:"
 
-#: tmp/virt-manager.glade.h:104
+#: tmp/virt-manager.glade.h:105
 msgid "Intro"
 msgstr "Увод"
 
-#: tmp/virt-manager.glade.h:105
+#: tmp/virt-manager.glade.h:106
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
@@ -759,15 +793,15 @@ msgstr ""
 "Подразумева симулацију хардвера, дозвољавајући шири опсег оперативних "
 "система (не захтева измене ОС-а). Спорији од паравиртуализованих система."
 
-#: tmp/virt-manager.glade.h:106
+#: tmp/virt-manager.glade.h:107
 msgid "Keep CPU Settings"
 msgstr "Задржи CPU поставке"
 
-#: tmp/virt-manager.glade.h:107
+#: tmp/virt-manager.glade.h:108
 msgid "Kickstart U_RL:"
 msgstr "Kickstart У_РЛ:"
 
-#: tmp/virt-manager.glade.h:108
+#: tmp/virt-manager.glade.h:109
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
@@ -777,20 +811,19 @@ msgstr ""
 "пошто ОС мора бити наменски измењен да подржава паравиртуализацију. Бољи "
 "учинак него потпуно виртуализовани системи."
 
-#: tmp/virt-manager.glade.h:109
-#, fuzzy
-msgid "Logical host CPUs:"
-msgstr "Број физичких CPU-а домаћина:"
-
 #: tmp/virt-manager.glade.h:110
+msgid "Logical host CPUs:"
+msgstr "Логички CPU-и домаћина:"
+
+#: tmp/virt-manager.glade.h:111
 msgid "Login"
 msgstr "Пријава"
 
-#: tmp/virt-manager.glade.h:111
+#: tmp/virt-manager.glade.h:112
 msgid "MB"
 msgstr "МБ"
 
-#: tmp/virt-manager.glade.h:112
+#: tmp/virt-manager.glade.h:113
 msgid ""
 "MB\n"
 "GB\n"
@@ -800,112 +833,124 @@ msgstr ""
 "ГБ\n"
 "ТБ"
 
-#: tmp/virt-manager.glade.h:115
+#: tmp/virt-manager.glade.h:116
 msgid "Machine details..."
 msgstr "Детаљи о машини..."
 
-#: tmp/virt-manager.glade.h:116
+#: tmp/virt-manager.glade.h:117
 msgid "Maintain history of"
 msgstr "Одржавај историју од"
 
-#: tmp/virt-manager.glade.h:117
+#: tmp/virt-manager.glade.h:118
 msgid "Maximum allocation:"
 msgstr "Највеће заузеће:"
 
-#: tmp/virt-manager.glade.h:118
+#: tmp/virt-manager.glade.h:119
 msgid "Memory"
 msgstr "Меморија"
 
-#: tmp/virt-manager.glade.h:120
+#: tmp/virt-manager.glade.h:121
 msgid "Memory usage:"
 msgstr "Употреба меморије:"
 
-#: tmp/virt-manager.glade.h:121
+#: tmp/virt-manager.glade.h:122
 msgid "Modify CPU Settings"
 msgstr "Измени CPU поставке"
 
-#: tmp/virt-manager.glade.h:122
+#: tmp/virt-manager.glade.h:123
 msgid "Modify File Storage"
 msgstr "Измени складиште датотеке"
 
-#: tmp/virt-manager.glade.h:124
+#: tmp/virt-manager.glade.h:125
 msgid "Name:"
 msgstr "Име:"
 
-#: tmp/virt-manager.glade.h:125
+#: tmp/virt-manager.glade.h:126
 msgid "Network"
 msgstr "Мрежа"
 
-#: tmp/virt-manager.glade.h:127
+#: tmp/virt-manager.glade.h:128
 msgid "Network usage:"
 msgstr "Употреба мреже:"
 
-#: tmp/virt-manager.glade.h:128
+#: tmp/virt-manager.glade.h:129
 msgid ""
 "Never\n"
 "For new domains\n"
 "For all domains"
 msgstr ""
+"Никада\n"
+"За нове домене\n"
+"За све домене"
 
-#: tmp/virt-manager.glade.h:131
+#: tmp/virt-manager.glade.h:132
 msgid ""
 "Never\n"
 "When fullscreen\n"
 "On mouse over"
 msgstr ""
+"Никада\n"
+"Када је пун екран\n"
+"Када је миш преко"
 
-#: tmp/virt-manager.glade.h:134
+#: tmp/virt-manager.glade.h:135
 msgid "New machine..."
 msgstr "Нова машина..."
 
-#: tmp/virt-manager.glade.h:135
+#: tmp/virt-manager.glade.h:136
 msgid "Normal Disk _Partition:"
 msgstr "Обична диск пар_тиција"
 
-#: tmp/virt-manager.glade.h:136
+#: tmp/virt-manager.glade.h:137
 msgid "Open connection"
 msgstr "Отвори везу"
 
-#: tmp/virt-manager.glade.h:137
+#: tmp/virt-manager.glade.h:138
 msgid "Open connection..."
 msgstr "Отвори везу..."
 
-#: tmp/virt-manager.glade.h:138
+#: tmp/virt-manager.glade.h:139
 msgid "Overview"
 msgstr "Преглед"
 
-#: tmp/virt-manager.glade.h:139
+#: tmp/virt-manager.glade.h:140
 msgid "PVinstall"
 msgstr "PV инсталација"
 
-#: tmp/virt-manager.glade.h:140
+#: tmp/virt-manager.glade.h:141
 msgid "P_artition:"
 msgstr "П_артиција:"
 
-#: tmp/virt-manager.glade.h:141
+#: tmp/virt-manager.glade.h:142
 msgid "Password:"
 msgstr "Лозинка:"
 
-#: tmp/virt-manager.glade.h:142
+#: tmp/virt-manager.glade.h:143
 msgid "Pause"
 msgstr "Пауза"
 
-#: tmp/virt-manager.glade.h:143
+#: tmp/virt-manager.glade.h:144
 msgid "Please choose a name for your virtual system:"
 msgstr "Молим изаберите име за Ваш виртуелни систем:"
 
-#: tmp/virt-manager.glade.h:144
+#: tmp/virt-manager.glade.h:145
+#, fuzzy
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
 "maximum amount of memory the VM should be able to use, and optionally a "
-"lower amount to grab on startup."
+"lower amount to grab on startup. Warning: setting VM memory too high will "
+"cause out-of-memory errors in your host domain!"
 msgstr ""
-
-#: tmp/virt-manager.glade.h:145
-msgid "Please enter the number of virtual CPUs this VM should start up with."
-msgstr ""
+"Молим унесите подешавања меморије за ову VM. Можете навести највећу количину "
+"меморије коју VM може да користи, и изборно мању количину коју треба "
+"зграбити при покретању."
 
 #: tmp/virt-manager.glade.h:146
+msgid "Please enter the number of virtual CPUs this VM should start up with."
+msgstr ""
+"Молим унесите број виртуелних CPU-а са којим ова VM треба да се покрене."
+
+#: tmp/virt-manager.glade.h:147
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
@@ -915,7 +960,7 @@ msgstr ""
 "домаћина за Ваш нови виртуелни систем. Овај простор ће бити употребљен за "
 "инсталацију оперативног система виртуелног система."
 
-#: tmp/virt-manager.glade.h:147
+#: tmp/virt-manager.glade.h:148
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
@@ -925,7 +970,7 @@ msgstr ""
 "који желите да инсталирати на овај <b>потпуно виртуализовани</b> виртуелни "
 "систем:"
 
-#: tmp/virt-manager.glade.h:148
+#: tmp/virt-manager.glade.h:149
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
@@ -937,15 +982,15 @@ msgstr ""
 "систем. Изборно можете доставити УРЛ за kickstart датотеку која описује Ваш "
 "систем:"
 
-#: tmp/virt-manager.glade.h:149
+#: tmp/virt-manager.glade.h:150
 msgid "Please wait..."
 msgstr "Молим сачекајте..."
 
-#: tmp/virt-manager.glade.h:150
+#: tmp/virt-manager.glade.h:151
 msgid "Powered by libvirt"
 msgstr "Напаја се од libvirt"
 
-#: tmp/virt-manager.glade.h:151
+#: tmp/virt-manager.glade.h:152
 msgid ""
 "Press finish to create a new virtual machine with\n"
 "this configuration & display the virtual console."
@@ -953,60 +998,64 @@ msgstr ""
 "Притисните заврши за прављење нове виртуелне машине\n"
 "са овим подешавањима и приказ виртуелне конзоле."
 
-#: tmp/virt-manager.glade.h:153
+#: tmp/virt-manager.glade.h:154
 msgid "Processor"
 msgstr "Процесор"
 
-#: tmp/virt-manager.glade.h:154
+#: tmp/virt-manager.glade.h:155
 msgid "Randomly generated MAC address"
 msgstr "Случајно направљена MAC адреса"
 
-#: tmp/virt-manager.glade.h:155
+#: tmp/virt-manager.glade.h:156
 msgid "Restore a saved machine from a filesystem image"
 msgstr "Врати сачувану машину из одраза система датотека"
 
-#: tmp/virt-manager.glade.h:156
+#: tmp/virt-manager.glade.h:157
 msgid "Restore saved machine..."
 msgstr "Врати сачувану машину..."
 
-#: tmp/virt-manager.glade.h:157
+#: tmp/virt-manager.glade.h:158
 msgid "Run"
 msgstr "Покрени"
 
-#: tmp/virt-manager.glade.h:158
+#: tmp/virt-manager.glade.h:159
+#, fuzzy
+msgid "S_hutdown"
+msgstr "Угаси"
+
+#: tmp/virt-manager.glade.h:160
 msgid "Save this password in your keyring"
 msgstr "Сачувај ову лозинку на Вашем привеску"
 
-#: tmp/virt-manager.glade.h:159
+#: tmp/virt-manager.glade.h:161
 msgid "Saving VM Image"
 msgstr "Чувам VM одраз"
 
-#: tmp/virt-manager.glade.h:160
+#: tmp/virt-manager.glade.h:162
 msgid "Screenshot"
 msgstr "Снимак екрана"
 
-#: tmp/virt-manager.glade.h:161
+#: tmp/virt-manager.glade.h:163
 msgid "Shut down"
 msgstr "Угаси"
 
-#: tmp/virt-manager.glade.h:163
-#, fuzzy
+#: tmp/virt-manager.glade.h:165
 msgid "Simple F_ile:"
 msgstr "Обична _датотека:"
 
-#: tmp/virt-manager.glade.h:164
+#: tmp/virt-manager.glade.h:166
 msgid "Specified MAC address:"
 msgstr "Наведена MAC адреса:"
 
-#: tmp/virt-manager.glade.h:166
+#: tmp/virt-manager.glade.h:168
 msgid "Status:"
 msgstr "Статус:"
 
-#: tmp/virt-manager.glade.h:167
+#: tmp/virt-manager.glade.h:169
 msgid "System _Name:"
 msgstr "_Име система:"
 
-#: tmp/virt-manager.glade.h:168
+#: tmp/virt-manager.glade.h:170
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
@@ -1014,7 +1063,7 @@ msgstr ""
 "<b>Место</b> за датотеке је неопходно за инсталацију оперативног система на "
 "виртуелни систем."
 
-#: tmp/virt-manager.glade.h:169
+#: tmp/virt-manager.glade.h:171
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
@@ -1024,71 +1073,73 @@ msgstr ""
 "упитани за неке податке о виртуелном систему који желите да направите, као "
 "што су:"
 
-#: tmp/virt-manager.glade.h:170
+#: tmp/virt-manager.glade.h:172
 msgid "Toolbar"
 msgstr "Трака за алаткама:"
 
-#: tmp/virt-manager.glade.h:171
+#: tmp/virt-manager.glade.h:173
 msgid "Total CPUs on host machine:"
 msgstr "Укупно CPU-а на машини домаћина:"
 
-#: tmp/virt-manager.glade.h:172
+#: tmp/virt-manager.glade.h:174
 msgid "Total memory on host machine:"
 msgstr "Укупна меморија на машини домаћина:"
 
-#: tmp/virt-manager.glade.h:173
+#: tmp/virt-manager.glade.h:175
 msgid "Type"
 msgstr "Врста"
 
-#: tmp/virt-manager.glade.h:174
+#: tmp/virt-manager.glade.h:176
 msgid "UUID:"
 msgstr "UUID:"
 
-#: tmp/virt-manager.glade.h:175
+#: tmp/virt-manager.glade.h:177
 msgid "Unavailable"
 msgstr "Недоступно"
 
-#: tmp/virt-manager.glade.h:176
+#: tmp/virt-manager.glade.h:178
 msgid "Update status every"
 msgstr "Освежавај статус сваких"
 
-#: tmp/virt-manager.glade.h:177
-msgid "VM _Max Memory:"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:178
-msgid "VM _Startup Memory:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:179
+#, fuzzy
+msgid "VM _Max Memory (MB):"
+msgstr "Нај_више VM меморије:"
+
+#: tmp/virt-manager.glade.h:180
+#, fuzzy
+msgid "VM _Startup Memory (MB):"
+msgstr "VM меморија при по_кретању:"
+
+#: tmp/virt-manager.glade.h:181
 msgid "VNC"
 msgstr "VNC"
 
-#: tmp/virt-manager.glade.h:180
+#: tmp/virt-manager.glade.h:182
 msgid "Virtual CPUs"
 msgstr "Виртуелни CPU-и"
 
-#: tmp/virt-manager.glade.h:181
+#: tmp/virt-manager.glade.h:183
 msgid "Virtual Machine Console"
 msgstr "Конзола виртуелне машине"
 
-#: tmp/virt-manager.glade.h:182
+#: tmp/virt-manager.glade.h:184
 msgid "Virtual Machine Details"
 msgstr "Детаљи о виртуелној машини"
 
-#: tmp/virt-manager.glade.h:183
+#: tmp/virt-manager.glade.h:185
 msgid "Virtual Machine Manager"
 msgstr "Управник виртуелне машине"
 
-#: tmp/virt-manager.glade.h:184
+#: tmp/virt-manager.glade.h:186
 msgid "Virtual Machine Manager Preferences"
 msgstr "Поставке управника виртуелне машине"
 
-#: tmp/virt-manager.glade.h:185
+#: tmp/virt-manager.glade.h:187
 msgid "Virtual _Machine"
 msgstr "Виртуелна _машина"
 
-#: tmp/virt-manager.glade.h:186
+#: tmp/virt-manager.glade.h:188
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
@@ -1096,173 +1147,175 @@ msgstr ""
 "Да ли ће систем бити <b>потпуно виртуализован</b> или <b>пара-виртуализован</"
 "b>"
 
-#: tmp/virt-manager.glade.h:187
+#: tmp/virt-manager.glade.h:189
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr "Треба да изаберете метод виртуализације за Ваш нови систем:"
 
-#: tmp/virt-manager.glade.h:188
+#: tmp/virt-manager.glade.h:190
 msgid "_Browse..."
 msgstr "_Разгледај..."
 
-#: tmp/virt-manager.glade.h:189
+#: tmp/virt-manager.glade.h:191
 msgid "_CD-ROM or DVD:"
 msgstr "_CD-ROM или DVD:"
 
-#: tmp/virt-manager.glade.h:190
+#: tmp/virt-manager.glade.h:192
+msgid "_Destroy"
+msgstr ""
+
+#: tmp/virt-manager.glade.h:193
 msgid "_Details"
 msgstr "Де_таљи"
 
-#: tmp/virt-manager.glade.h:191
+#: tmp/virt-manager.glade.h:194
 msgid "_Edit"
 msgstr "_Уреди"
 
-#: tmp/virt-manager.glade.h:192
+#: tmp/virt-manager.glade.h:195
 msgid "_File"
 msgstr "_Датотека"
 
-#: tmp/virt-manager.glade.h:193
+#: tmp/virt-manager.glade.h:196
 msgid "_Finish"
 msgstr "_Заврши"
 
-#: tmp/virt-manager.glade.h:194
+#: tmp/virt-manager.glade.h:197
 msgid "_FullScreen"
 msgstr "Пун _екран"
 
-#: tmp/virt-manager.glade.h:195
+#: tmp/virt-manager.glade.h:198
 msgid "_Graphical Console"
 msgstr "_Графичка конзола"
 
-#: tmp/virt-manager.glade.h:196
+#: tmp/virt-manager.glade.h:199
 msgid "_Help"
 msgstr "_Помоћ"
 
-#: tmp/virt-manager.glade.h:197
-#, fuzzy
+#: tmp/virt-manager.glade.h:200
 msgid "_Host:"
-msgstr "Домаћин:"
+msgstr "До_маћин:"
 
-#: tmp/virt-manager.glade.h:198
+#: tmp/virt-manager.glade.h:201
 msgid "_ISO Image Location:"
 msgstr "Место _ISO одраза:"
 
-#: tmp/virt-manager.glade.h:199
-#, fuzzy
+#: tmp/virt-manager.glade.h:202
 msgid "_Local Xen host"
-msgstr "Локални Xen домаћин"
+msgstr "_Локални Xen домаћин"
 
-#: tmp/virt-manager.glade.h:200
+#: tmp/virt-manager.glade.h:203
 msgid "_Mount Point (on virtual system):"
 msgstr "Тачка _монтирања (на виртуелном систему):"
 
-#: tmp/virt-manager.glade.h:201
-#, fuzzy
+#: tmp/virt-manager.glade.h:204
 msgid "_Other hypervisor"
-msgstr "Други хивервизор"
+msgstr "Д_руги хивервизор"
 
-#: tmp/virt-manager.glade.h:202
+#: tmp/virt-manager.glade.h:205
 msgid "_Paravirtualized:"
 msgstr "Па_равиртуализован:"
 
-#: tmp/virt-manager.glade.h:203
+#: tmp/virt-manager.glade.h:206
 msgid "_Path to install media:"
 msgstr "Путањ_а до медијума инсталације:"
 
-#: tmp/virt-manager.glade.h:204
+#: tmp/virt-manager.glade.h:207
 msgid "_Pause"
 msgstr "Пау_за"
 
-#: tmp/virt-manager.glade.h:205
-#, fuzzy
-msgid "_Port:"
-msgstr "Порт:"
-
-#: tmp/virt-manager.glade.h:206
-#, fuzzy
-msgid "_Read only connection"
-msgstr "Веза само за читање"
-
-#: tmp/virt-manager.glade.h:207
-#, fuzzy
-msgid "_Remote Xen host"
-msgstr "Удаљени Xen домаћин"
-
 #: tmp/virt-manager.glade.h:208
+msgid "_Port:"
+msgstr "Пор_т:"
+
+#: tmp/virt-manager.glade.h:209
+msgid "_Read only connection"
+msgstr "Веза само за _читање"
+
+#: tmp/virt-manager.glade.h:210
+msgid "_Remote Xen host"
+msgstr "Удаље_ни Xen домаћин"
+
+#: tmp/virt-manager.glade.h:211
 msgid "_Run"
 msgstr "По_крени"
 
-#: tmp/virt-manager.glade.h:209
+#: tmp/virt-manager.glade.h:212
 msgid "_Save"
 msgstr "_Сачувај"
 
-#: tmp/virt-manager.glade.h:210
+#: tmp/virt-manager.glade.h:213
 msgid "_Serial Console"
 msgstr "_Серијска конзола"
 
-#: tmp/virt-manager.glade.h:211
-msgid "_Shutdown"
-msgstr "У_гаси"
-
-#: tmp/virt-manager.glade.h:212
+#: tmp/virt-manager.glade.h:214
 msgid "_Size:"
 msgstr "_Величина:"
 
-#: tmp/virt-manager.glade.h:213
+#: tmp/virt-manager.glade.h:215
 msgid "_Take Screenshot"
 msgstr "Сними _екран"
 
-#: tmp/virt-manager.glade.h:214
-#, fuzzy
-msgid "_URI:"
-msgstr "УРИ:"
-
-#: tmp/virt-manager.glade.h:215
-#, fuzzy
-msgid "_VCPUs:"
-msgstr "VCPU-и"
-
 #: tmp/virt-manager.glade.h:216
+msgid "_URI:"
+msgstr "УР_И:"
+
+#: tmp/virt-manager.glade.h:217
+msgid "_VCPUs:"
+msgstr "_VCPU-и"
+
+#: tmp/virt-manager.glade.h:218
 msgid "_View"
 msgstr "Пре_глед"
 
-#: tmp/virt-manager.glade.h:217
+#: tmp/virt-manager.glade.h:219
 msgid "_View:"
 msgstr "Пре_глед:"
 
-#: tmp/virt-manager.glade.h:218
+#: tmp/virt-manager.glade.h:220
 msgid "demo"
 msgstr "демо"
 
-#: tmp/virt-manager.glade.h:219
+#: tmp/virt-manager.glade.h:221
 msgid "http://"
 msgstr "http://"
 
-#: tmp/virt-manager.glade.h:220
+#: tmp/virt-manager.glade.h:222
 msgid "http://virt-manager.et.redhat.com/"
-msgstr ""
+msgstr "http://virt-manager.et.redhat.com/"
 
-#: tmp/virt-manager.glade.h:221
+#: tmp/virt-manager.glade.h:223
 msgid "mac-addr-random"
 msgstr "mac-адр-случајна"
 
-#: tmp/virt-manager.glade.h:222
+#: tmp/virt-manager.glade.h:224
 msgid "para"
 msgstr "пара"
 
-#: tmp/virt-manager.glade.h:223
+#: tmp/virt-manager.glade.h:225
 msgid "samples"
 msgstr "примерци"
 
-#: tmp/virt-manager.glade.h:224
+#: tmp/virt-manager.glade.h:226
 msgid "seconds"
 msgstr "секунди"
 
-#: tmp/virt-manager.glade.h:226
+#: tmp/virt-manager.glade.h:228
 msgid "translator-credits"
 msgstr "Miloš Komarčević <kmilos@gmail.com>, 2006."
 
-#: tmp/virt-manager.glade.h:227
+#: tmp/virt-manager.glade.h:229
 msgid "virtual CPU alert"
 msgstr "узбуна виртуелног CPU-а"
+
+#~ msgid ""
+#~ "<small><b>Note:</b> File size parameter is only relevant for new files</"
+#~ "small>"
+#~ msgstr ""
+#~ "<small><b>Напомена:</b> Параметар величине датотеке се односи само на "
+#~ "нове датотеке</small>"
+
+#~ msgid "_Shutdown"
+#~ msgstr "У_гаси"
 
 #~ msgid "How many virtual CPUs should this system have?"
 #~ msgstr "Колико виртуелних CPU-а треба да има овај систем?"

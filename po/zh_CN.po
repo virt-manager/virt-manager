@@ -1,21 +1,22 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# translation of zh_CN.po to 
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# Xi Huang <xhuang@redhat.com>, 2006.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: virt-manager 1.0\n"
+"Project-Id-Version: zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-06 16:17-0500\n"
-"PO-Revision-Date: 2006-10-06 18:07+0800\n"
-"Last-Translator: <zh_CN@li.org>\n"
-"Language-Team: <zh_CN@li.org>\n"
+"POT-Creation-Date: 2007-01-22 18:10-0500\n"
+"PO-Revision-Date: 2006-11-24 11:36+1000\n"
+"Last-Translator: Xi Huang <xhuang@redhat.com>\n"
+"Language-Team:  <zh@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.9.1\n"
 
-#: ../../src/virt-manager.py.in:61
+#: ../../src/virt-manager.py.in:62
 msgid "Unable to initialize GTK: "
 msgstr "无法初始化 GTK: "
 
@@ -36,151 +37,167 @@ msgstr ""
 msgid "Screenshot saved"
 msgstr "截屏已保存"
 
-#: ../../src/virtManager/console.py:388
+#: ../../src/virtManager/console.py:405
 msgid "paused"
 msgstr "暂停"
 
-#: ../../src/virtManager/create.py:304
+#: ../../src/virtManager/create.py:348
 msgid "Paravirtualized"
 msgstr "半虚拟化"
 
-#: ../../src/virtManager/create.py:306
+#: ../../src/virtManager/create.py:350
 msgid "Fully virtualized"
 msgstr "完全虚拟"
 
-#: ../../src/virtManager/create.py:337
+#: ../../src/virtManager/create.py:381
 msgid "Invalid FV media address"
 msgstr "无效的 FV 介质位置"
 
-#: ../../src/virtManager/create.py:343
+#: ../../src/virtManager/create.py:387
 msgid "Invalid PV media address"
 msgstr "无效的 PV 介质位置"
 
-#: ../../src/virtManager/create.py:353
+#: ../../src/virtManager/create.py:397
 msgid "Invalid system name"
 msgstr "无效的系统名"
 
-#: ../../src/virtManager/create.py:360
+#: ../../src/virtManager/create.py:404
 msgid "Invalid memory setting"
 msgstr "无效的内存设置"
 
-#: ../../src/virtManager/create.py:377
+#: ../../src/virtManager/create.py:426
 msgid "Invalid storage address"
 msgstr "无效的存储位置"
 
-#: ../../src/virtManager/create.py:404
+#: ../../src/virtManager/create.py:460
 msgid "Creating Virtual Machine"
 msgstr "创建虚拟机"
 
-#: ../../src/virtManager/create.py:408
+#: ../../src/virtManager/create.py:465
 msgid "Guest Install Error"
 msgstr "安装失败"
 
-#: ../../src/virtManager/create.py:443
+#: ../../src/virtManager/create.py:503
 msgid "Locate ISO Image"
 msgstr "定位 ISO 镜像文件"
 
-#: ../../src/virtManager/create.py:472
+#: ../../src/virtManager/create.py:532
 msgid "Locate Storage Partition"
 msgstr "定位存储分区"
 
-#: ../../src/virtManager/create.py:478
+#: ../../src/virtManager/create.py:538
 msgid "Locate or Create New Storage File"
 msgstr "定位或创建新的存储文件"
 
-#: ../../src/virtManager/create.py:537
+#: ../../src/virtManager/create.py:604 ../../src/virtManager/create.py:608
 msgid "Invalid System Name"
 msgstr "无效的系统名"
 
-#: ../../src/virtManager/create.py:538
-msgid ""
-"System name must be non-blank, less than 50 characters, and contain no spaces"
+#: ../../src/virtManager/create.py:605
+#, fuzzy
+msgid "System name must be non-blank and less than 50 characters"
 msgstr "系统名不能为空，应当少于 50 个字符，不包含空格"
 
-#: ../../src/virtManager/create.py:543
+#: ../../src/virtManager/create.py:609
+msgid "System name may contain alphanumeric and '_' characters only"
+msgstr ""
+
+#: ../../src/virtManager/create.py:615
 msgid "Hardware Support Required"
 msgstr "需要硬件支持"
 
-#: ../../src/virtManager/create.py:544
+#: ../../src/virtManager/create.py:616
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
 msgstr "您的硬件不支持完全虚拟。此硬件只支持半虚拟化。"
 
-#: ../../src/virtManager/create.py:551
+#: ../../src/virtManager/create.py:623
 msgid "ISO Path Required"
 msgstr "缺少 ISO 路径"
 
-#: ../../src/virtManager/create.py:552
+#: ../../src/virtManager/create.py:624
 msgid "You must specify an ISO location for the guest installation"
 msgstr "您必须指定 ISO 路径以安装客户系统"
 
-#: ../../src/virtManager/create.py:555
+#: ../../src/virtManager/create.py:627
 msgid "ISO Path Not Found"
 msgstr "未找到 ISO 路径"
 
-#: ../../src/virtManager/create.py:556
+#: ../../src/virtManager/create.py:628
 msgid "You must specify a valid path to the ISO image for guest installation"
 msgstr "您必须指定有效的 ISO 路径以安装客户系统"
 
-#: ../../src/virtManager/create.py:561
+#: ../../src/virtManager/create.py:633
 msgid "Install media required"
 msgstr "需要安装介质"
 
-#: ../../src/virtManager/create.py:562
+#: ../../src/virtManager/create.py:634
 msgid "You must select the CDROM install media for guest installation"
 msgstr "您必须在 CDROM 中插入安装介质以安装客户系统"
 
-#: ../../src/virtManager/create.py:567
+#: ../../src/virtManager/create.py:639
 msgid "URL Required"
 msgstr "需要 URL"
 
-#: ../../src/virtManager/create.py:568
+#: ../../src/virtManager/create.py:640
 msgid "You must specify a URL for the install image for the guest install"
 msgstr "您必须指定安装介质的 URL 以安装客户系统"
 
-#: ../../src/virtManager/create.py:574
+#: ../../src/virtManager/create.py:646
 msgid "Storage Address Required"
 msgstr "需要存储位置"
 
-#: ../../src/virtManager/create.py:575
+#: ../../src/virtManager/create.py:647
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
 msgstr "您必须指定一个分区或文件以安装客户系统"
 
-#: ../../src/virtManager/create.py:620 ../../src/virtManager/create.py:655
+#: ../../src/virtManager/create.py:652
+#, fuzzy
+msgid "Storage Address Is Directory"
+msgstr "需要存储位置"
+
+#: ../../src/virtManager/create.py:653
+msgid ""
+"You chose 'Simple File' storage for your storage method, but chose a "
+"directory instead of a file. Please enter a new filename or choose an "
+"existing file."
+msgstr ""
+
+#: ../../src/virtManager/create.py:698 ../../src/virtManager/create.py:733
 msgid "No media present"
 msgstr "找不到介质"
 
-#: ../../src/virtManager/details.py:342
+#: ../../src/virtManager/details.py:411
 msgid "Destination"
 msgstr "目的地址 ?是什么东西"
 
-#: ../../src/virtManager/details.py:380
+#: ../../src/virtManager/details.py:450
 msgid "MAC address"
 msgstr "MAC 地址"
 
-#: ../../src/virtManager/domain.py:269
+#: ../../src/virtManager/domain.py:363
 msgid "Running"
 msgstr "运行中"
 
-#: ../../src/virtManager/domain.py:271
+#: ../../src/virtManager/domain.py:365
 msgid "Paused"
 msgstr "已暂停"
 
-#: ../../src/virtManager/domain.py:273 tmp/virt-manager.glade.h:162
+#: ../../src/virtManager/domain.py:367 tmp/virt-manager.glade.h:164
 msgid "Shutdown"
 msgstr "关闭"
 
-#: ../../src/virtManager/domain.py:275
+#: ../../src/virtManager/domain.py:369
 msgid "Shutoff"
 msgstr "关闭? Shutoff 是什么"
 
-#: ../../src/virtManager/domain.py:277
+#: ../../src/virtManager/domain.py:371
 msgid "Crashed"
 msgstr "已崩溃"
 
-#: ../../src/virtManager/domain.py:279
+#: ../../src/virtManager/domain.py:373
 msgid "Unknown status code"
 msgstr "未知状态代码"
 
@@ -189,82 +206,96 @@ msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr ""
+"不能打开与 Xen 系统管理程序／守护进程的连接。\n"
+"\n"
 
 #: ../../src/virtManager/engine.py:75
 msgid "Verify that:\n"
-msgstr ""
+msgstr "确认：\n"
 
 #: ../../src/virtManager/engine.py:76
 msgid " - A Xen host kernel was booted\n"
-msgstr ""
+msgstr " - Xen 主机核心被引导\n"
 
 #: ../../src/virtManager/engine.py:77
-#, fuzzy
 msgid " - The Xen service has been started\n"
-msgstr ""
-"截屏已保存到: \n"
-"%s"
+msgstr " - Xen 服务已经被启动\n"
 
 #: ../../src/virtManager/engine.py:80
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
-msgstr ""
+msgstr "不能打开与管理程序 '%s'的连接"
 
 #: ../../src/virtManager/engine.py:81
-#, fuzzy
 msgid "Virtual Machine Manager Connection Failure"
-msgstr "虚拟系统管理"
+msgstr "虚拟机管理者连接失败"
 
-#: ../../src/virtManager/engine.py:277
+#: ../../src/virtManager/engine.py:281
 msgid "Save Virtual Machine"
 msgstr "保存虚拟机"
 
-#: ../../src/virtManager/engine.py:290
+#: ../../src/virtManager/engine.py:294
 msgid "Saving Virtual Machine"
 msgstr "正在保存虚拟机"
 
-#: ../../src/virtManager/manager.py:172
+#: ../../src/virtManager/engine.py:310
+#, fuzzy, python-format
+msgid "About to destroy virtual machine %s"
+msgstr "恢复虚拟机"
+
+#: ../../src/virtManager/engine.py:311
+msgid ""
+"This will immediately destroy the VM and may corrupt its disk image. Are you "
+"sure?"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:189
 msgid "Restore Virtual Machine"
 msgstr "恢复虚拟机"
 
-#: ../../src/virtManager/manager.py:186
+#: ../../src/virtManager/manager.py:204
 msgid "Restoring Virtual Machine"
 msgstr "正在恢复虚拟机"
 
-#: ../../src/virtManager/manager.py:204
+#: ../../src/virtManager/manager.py:211
+#, python-format
+msgid "The file '%s' does not appear to be a valid saved machine image"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:239
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr "恢复域 '%s' 时出错。它是否已在运行?"
 
-#: ../../src/virtManager/manager.py:310
+#: ../../src/virtManager/manager.py:421
 msgid "ID"
 msgstr "ID"
 
-#: ../../src/virtManager/manager.py:311 tmp/virt-manager.glade.h:123
+#: ../../src/virtManager/manager.py:422 tmp/virt-manager.glade.h:124
 msgid "Name"
 msgstr "名称"
 
-#: ../../src/virtManager/manager.py:312 tmp/virt-manager.glade.h:165
+#: ../../src/virtManager/manager.py:423 tmp/virt-manager.glade.h:167
 msgid "Status"
 msgstr "状态"
 
-#: ../../src/virtManager/manager.py:313 tmp/virt-manager.glade.h:79
+#: ../../src/virtManager/manager.py:424 tmp/virt-manager.glade.h:80
 msgid "CPU usage"
 msgstr "CPU 占用"
 
-#: ../../src/virtManager/manager.py:314
+#: ../../src/virtManager/manager.py:425
 msgid "VCPUs"
 msgstr "vCPU"
 
-#: ../../src/virtManager/manager.py:315 tmp/virt-manager.glade.h:119
+#: ../../src/virtManager/manager.py:426 tmp/virt-manager.glade.h:120
 msgid "Memory usage"
 msgstr "内存占用"
 
-#: ../../src/virtManager/manager.py:316 tmp/virt-manager.glade.h:91
+#: ../../src/virtManager/manager.py:427 tmp/virt-manager.glade.h:92
 msgid "Disk usage"
 msgstr "磁盘占用"
 
-#: ../../src/virtManager/manager.py:317 tmp/virt-manager.glade.h:126
+#: ../../src/virtManager/manager.py:428 tmp/virt-manager.glade.h:127
 msgid "Network traffic"
 msgstr "网络流量"
 
@@ -274,7 +305,7 @@ msgstr "串行口"
 
 #: tmp/virt-manager.glade.h:1
 msgid " "
-msgstr ""
+msgstr "　"
 
 #: tmp/virt-manager.glade.h:2
 msgid " free"
@@ -370,9 +401,8 @@ msgid "<b>CPUs</b>"
 msgstr "<b>CPU</b>"
 
 #: tmp/virt-manager.glade.h:26
-#, fuzzy
 msgid "<b>Consoles</b>"
-msgstr "<b>CPU</b>"
+msgstr "<b>Consoles</b>"
 
 #: tmp/virt-manager.glade.h:27
 msgid "<b>Disk image:</b>"
@@ -485,12 +515,13 @@ msgstr ""
 "您将虚拟机设置为拥有比宿主物理系统更多的 CPU。这样做将使虚拟机性能下降。"
 
 #: tmp/virt-manager.glade.h:52
-msgid "<b>Virtaulization method:</b>"
-msgstr "<b>虚拟化方式: </b>"
-
-#: tmp/virt-manager.glade.h:53
 msgid "<b>Virtual CPUs:</b>"
 msgstr "<b>虚拟 CPU: </b>"
+
+#: tmp/virt-manager.glade.h:53
+#, fuzzy
+msgid "<b>Virtualization method:</b>"
+msgstr "<b>虚拟化方式: </b>"
 
 #: tmp/virt-manager.glade.h:54
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
@@ -508,33 +539,30 @@ msgstr ""
 
 #: tmp/virt-manager.glade.h:57
 msgid ""
-"<small><b>Note:</b> File size parameter is only relevant for new files</"
-"small>"
-msgstr "<small><b>注意: </b> 文件大小只对新文件有意义</small>"
-
-#: tmp/virt-manager.glade.h:58
-msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
 msgstr ""
+"<small><b>注意：</b> 这台机器的主机 CPU(s) 不支持完全的虚拟化"
+"（virtualization）。</small>"
 
-#: tmp/virt-manager.glade.h:59
+#: tmp/virt-manager.glade.h:58
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
 msgstr ""
+"<small><b>注意：</b> 这台机器的主机 CPU(s) 支持完全的虚拟化"
+"（virtualization），但 BIOS 里并未启用这个功能。</small>"
 
-#: tmp/virt-manager.glade.h:60
-#, fuzzy
+#: tmp/virt-manager.glade.h:59
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
 "small>"
 msgstr ""
 "<small><b>提示: </b> 要获得最好的性能，虚拟 CPU 数量应当少于(或等于)宿主系统"
-"中的物理 CPU 数量。</small>"
+"中的逻辑 CPU 数量。</small>"
 
-#: tmp/virt-manager.glade.h:61
+#: tmp/virt-manager.glade.h:60
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
@@ -542,6 +570,14 @@ msgid ""
 msgstr ""
 "<small><b>提示: </b> 在虚拟机创建后，您仍可以添加更多存储，包括网络共享存储，"
 "工具与您在物理系统中使用的相同。</small>"
+
+#: tmp/virt-manager.glade.h:61
+msgid ""
+"<small><b>Warning:</b> If you do not allocate the entire disk at VM "
+"creation, space will be allocated as needed while the guest is running. If "
+"sufficient free space is not available on the host, this may result in data "
+"corruption on the guest.</small>"
+msgstr ""
 
 #: tmp/virt-manager.glade.h:62
 msgid ""
@@ -626,117 +662,118 @@ msgstr ""
 "不活动的虚拟机"
 
 #: tmp/virt-manager.glade.h:76
+msgid "Allocate entire virtual disk now?"
+msgstr ""
+
+#: tmp/virt-manager.glade.h:77
 msgid "Auth"
 msgstr "认证"
 
-#: tmp/virt-manager.glade.h:77
-msgid "Automatically open consoles:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:78
+msgid "Automatically open consoles:"
+msgstr "自动打开控制台："
+
+#: tmp/virt-manager.glade.h:79
 msgid "Browse..."
 msgstr "浏览..."
 
-#: tmp/virt-manager.glade.h:80
+#: tmp/virt-manager.glade.h:81
 msgid "CPU usage:"
 msgstr "CPU 占用: "
 
-#: tmp/virt-manager.glade.h:81
+#: tmp/virt-manager.glade.h:82
 msgid "CPU/memory"
 msgstr "CPU/内存"
 
-#: tmp/virt-manager.glade.h:82
+#: tmp/virt-manager.glade.h:83
 msgid "Change allocation:"
 msgstr "改变分配: "
 
-#: tmp/virt-manager.glade.h:83
-#, fuzzy
+#: tmp/virt-manager.glade.h:84
 msgid "Co_nnect"
 msgstr "连接"
 
-#: tmp/virt-manager.glade.h:84
+#: tmp/virt-manager.glade.h:85
 msgid "Complete"
 msgstr "完毕"
 
-#: tmp/virt-manager.glade.h:85
+#: tmp/virt-manager.glade.h:86
 msgid "Copyright (C) 2006 Red Hat Inc."
 msgstr "Copyright (C) 2006 Red Hat Inc."
 
-#: tmp/virt-manager.glade.h:86
+#: tmp/virt-manager.glade.h:87
 msgid "Create a new virtual system"
 msgstr "创建新的虚拟系统"
 
-#: tmp/virt-manager.glade.h:87
+#: tmp/virt-manager.glade.h:88
 msgid "Current allocation:"
 msgstr "当前分配: "
 
-#: tmp/virt-manager.glade.h:88
-#, fuzzy
+#: tmp/virt-manager.glade.h:89
 msgid "De_tails"
 msgstr "细节"
 
-#: tmp/virt-manager.glade.h:89
+#: tmp/virt-manager.glade.h:90
 msgid "Delete machine"
 msgstr "删除系统"
 
-#: tmp/virt-manager.glade.h:90
+#: tmp/virt-manager.glade.h:91
 msgid "Disk"
 msgstr "磁盘"
 
-#: tmp/virt-manager.glade.h:92
+#: tmp/virt-manager.glade.h:93
 msgid "Disk usage:"
 msgstr "磁盘占用: "
 
-#: tmp/virt-manager.glade.h:93
+#: tmp/virt-manager.glade.h:94
 msgid "Domain ID"
 msgstr "域 ID"
 
-#: tmp/virt-manager.glade.h:94
+#: tmp/virt-manager.glade.h:95
 msgid "FV install"
 msgstr "FV 安装"
 
-#: tmp/virt-manager.glade.h:95
-#, fuzzy
+#: tmp/virt-manager.glade.h:96
 msgid "F_ully Virtualized:"
 msgstr "完全虚拟(_F): "
 
-#: tmp/virt-manager.glade.h:96
+#: tmp/virt-manager.glade.h:97
 msgid "File _Location:"
 msgstr "文件位置(_L): "
 
-#: tmp/virt-manager.glade.h:97
+#: tmp/virt-manager.glade.h:98
 msgid "File _Size:"
 msgstr "文件大小(_S): "
 
-#: tmp/virt-manager.glade.h:98
-msgid "Grab keyboard input:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:99
+msgid "Grab keyboard input:"
+msgstr "获取键盘输入："
+
+#: tmp/virt-manager.glade.h:100
 msgid "Hardware"
 msgstr "硬件"
 
-#: tmp/virt-manager.glade.h:100
+#: tmp/virt-manager.glade.h:101
 msgid "How many virtual CPUs should this machine be allocated?"
 msgstr "此系统应分配多少个虚拟 CPU?"
 
-#: tmp/virt-manager.glade.h:101
+#: tmp/virt-manager.glade.h:102
 msgid "How much memory should this machine be allocated?"
 msgstr "此系统应分配多少内存?"
 
-#: tmp/virt-manager.glade.h:102
+#: tmp/virt-manager.glade.h:103
 msgid "ISO _Location:"
 msgstr "ISO 位置(_L): "
 
-#: tmp/virt-manager.glade.h:103
+#: tmp/virt-manager.glade.h:104
 msgid "Install Media _URL:"
 msgstr "安装介质 URL(_U): "
 
-#: tmp/virt-manager.glade.h:104
+#: tmp/virt-manager.glade.h:105
 msgid "Intro"
 msgstr "介绍"
 
-#: tmp/virt-manager.glade.h:105
+#: tmp/virt-manager.glade.h:106
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
@@ -744,15 +781,15 @@ msgid ""
 msgstr ""
 "使用硬件模拟，允许运行更多类型的操作系统(不必修改操作系统)。较半虚拟化更慢。"
 
-#: tmp/virt-manager.glade.h:106
+#: tmp/virt-manager.glade.h:107
 msgid "Keep CPU Settings"
 msgstr "保持 CPU 设置"
 
-#: tmp/virt-manager.glade.h:107
+#: tmp/virt-manager.glade.h:108
 msgid "Kickstart U_RL:"
 msgstr "Kickstart URL(_R): "
 
-#: tmp/virt-manager.glade.h:108
+#: tmp/virt-manager.glade.h:109
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
@@ -761,20 +798,19 @@ msgstr ""
 "轻量级的虚拟方式。支持的操作系统有限，因为必须修改操作系统以支持半虚拟化。较"
 "完全虚拟的性能更好。"
 
-#: tmp/virt-manager.glade.h:109
-#, fuzzy
-msgid "Logical host CPUs:"
-msgstr "宿主物理 CPU 数量: "
-
 #: tmp/virt-manager.glade.h:110
+msgid "Logical host CPUs:"
+msgstr "宿主逻辑 CPU 数量: "
+
+#: tmp/virt-manager.glade.h:111
 msgid "Login"
 msgstr "登录"
 
-#: tmp/virt-manager.glade.h:111
+#: tmp/virt-manager.glade.h:112
 msgid "MB"
 msgstr "MB"
 
-#: tmp/virt-manager.glade.h:112
+#: tmp/virt-manager.glade.h:113
 msgid ""
 "MB\n"
 "GB\n"
@@ -784,126 +820,136 @@ msgstr ""
 "GB\n"
 "TB"
 
-#: tmp/virt-manager.glade.h:115
+#: tmp/virt-manager.glade.h:116
 msgid "Machine details..."
 msgstr "系统细节..."
 
-#: tmp/virt-manager.glade.h:116
+#: tmp/virt-manager.glade.h:117
 msgid "Maintain history of"
 msgstr "保留历史，关于 ？是这样翻译么"
 
-#: tmp/virt-manager.glade.h:117
+#: tmp/virt-manager.glade.h:118
 msgid "Maximum allocation:"
 msgstr "最大分配量: "
 
-#: tmp/virt-manager.glade.h:118
+#: tmp/virt-manager.glade.h:119
 msgid "Memory"
 msgstr "内存"
 
-#: tmp/virt-manager.glade.h:120
+#: tmp/virt-manager.glade.h:121
 msgid "Memory usage:"
 msgstr "内存占用: "
 
-#: tmp/virt-manager.glade.h:121
+#: tmp/virt-manager.glade.h:122
 msgid "Modify CPU Settings"
 msgstr "修改 CPU 设置"
 
-#: tmp/virt-manager.glade.h:122
+#: tmp/virt-manager.glade.h:123
 msgid "Modify File Storage"
 msgstr "修改文件存储"
 
-#: tmp/virt-manager.glade.h:124
+#: tmp/virt-manager.glade.h:125
 msgid "Name:"
 msgstr "名称: "
 
-#: tmp/virt-manager.glade.h:125
+#: tmp/virt-manager.glade.h:126
 msgid "Network"
 msgstr "网络"
 
-#: tmp/virt-manager.glade.h:127
+#: tmp/virt-manager.glade.h:128
 msgid "Network usage:"
 msgstr "网络占用: "
 
-#: tmp/virt-manager.glade.h:128
+#: tmp/virt-manager.glade.h:129
 msgid ""
 "Never\n"
 "For new domains\n"
 "For all domains"
 msgstr ""
+"从不\n"
+"对于新域名\n"
+"对于所有域名"
 
-#: tmp/virt-manager.glade.h:131
+#: tmp/virt-manager.glade.h:132
 msgid ""
 "Never\n"
 "When fullscreen\n"
 "On mouse over"
 msgstr ""
+"从不\n"
+"全屏\n"
+"On mouse over"
 
-#: tmp/virt-manager.glade.h:134
+#: tmp/virt-manager.glade.h:135
 msgid "New machine..."
 msgstr "新系统..."
 
-#: tmp/virt-manager.glade.h:135
+#: tmp/virt-manager.glade.h:136
 msgid "Normal Disk _Partition:"
 msgstr "普通磁盘分区 (_P): 是这样吗？"
 
-#: tmp/virt-manager.glade.h:136
+#: tmp/virt-manager.glade.h:137
 msgid "Open connection"
 msgstr "连接到"
 
-#: tmp/virt-manager.glade.h:137
+#: tmp/virt-manager.glade.h:138
 msgid "Open connection..."
 msgstr "连接到..."
 
-#: tmp/virt-manager.glade.h:138
+#: tmp/virt-manager.glade.h:139
 msgid "Overview"
 msgstr "概况"
 
-#: tmp/virt-manager.glade.h:139
+#: tmp/virt-manager.glade.h:140
 msgid "PVinstall"
 msgstr "PV 安装"
 
-#: tmp/virt-manager.glade.h:140
+#: tmp/virt-manager.glade.h:141
 msgid "P_artition:"
 msgstr "分区(_a): "
 
-#: tmp/virt-manager.glade.h:141
+#: tmp/virt-manager.glade.h:142
 msgid "Password:"
 msgstr "密码: "
 
-#: tmp/virt-manager.glade.h:142
+#: tmp/virt-manager.glade.h:143
 msgid "Pause"
 msgstr "暂停"
 
-#: tmp/virt-manager.glade.h:143
+#: tmp/virt-manager.glade.h:144
 msgid "Please choose a name for your virtual system:"
 msgstr "请为您的虚拟系统命名: "
 
-#: tmp/virt-manager.glade.h:144
+#: tmp/virt-manager.glade.h:145
+#, fuzzy
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
 "maximum amount of memory the VM should be able to use, and optionally a "
-"lower amount to grab on startup."
+"lower amount to grab on startup. Warning: setting VM memory too high will "
+"cause out-of-memory errors in your host domain!"
 msgstr ""
-
-#: tmp/virt-manager.glade.h:145
-msgid "Please enter the number of virtual CPUs this VM should start up with."
-msgstr ""
+"请为这个虚拟机输入内存配置。你可以指定虚拟机应该能使用的最大内存数量，和在启"
+"动时获取的可选的较低值。"
 
 #: tmp/virt-manager.glade.h:146
+msgid "Please enter the number of virtual CPUs this VM should start up with."
+msgstr "请输入这个 VM 启动时使用的虚拟 CPU 的数量。"
+
+#: tmp/virt-manager.glade.h:147
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
 "system's operating system."
 msgstr "请在物理主机中为虚拟系统分配空间。此空间将用于安装虚拟机的操作系统。"
 
-#: tmp/virt-manager.glade.h:147
+#: tmp/virt-manager.glade.h:148
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
 "system:"
 msgstr "请指定将安装在此<b>完全虚拟</b>系统中的操作系统的安装镜像所在位置: "
 
-#: tmp/virt-manager.glade.h:148
+#: tmp/virt-manager.glade.h:149
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
@@ -913,329 +959,326 @@ msgstr ""
 "请指定将安装在此<b>半虚拟化</b>系统中的操作系统的安装镜像所在位置。或者，可以"
 "给出一个描述此系统的 Kickstart 文件的 URL: "
 
-#: tmp/virt-manager.glade.h:149
+#: tmp/virt-manager.glade.h:150
 msgid "Please wait..."
 msgstr "请等待..."
 
-#: tmp/virt-manager.glade.h:150
+#: tmp/virt-manager.glade.h:151
 msgid "Powered by libvirt"
 msgstr "基于 libvirt"
 
-#: tmp/virt-manager.glade.h:151
+#: tmp/virt-manager.glade.h:152
 msgid ""
 "Press finish to create a new virtual machine with\n"
 "this configuration & display the virtual console."
 msgstr "按下结束，以创建所配置的虚拟机，并显示虚拟终端。"
 
-#: tmp/virt-manager.glade.h:153
+#: tmp/virt-manager.glade.h:154
 msgid "Processor"
 msgstr "处理器"
 
-#: tmp/virt-manager.glade.h:154
+#: tmp/virt-manager.glade.h:155
 msgid "Randomly generated MAC address"
 msgstr "随机生成的 MAC 地址"
 
-#: tmp/virt-manager.glade.h:155
+#: tmp/virt-manager.glade.h:156
 msgid "Restore a saved machine from a filesystem image"
 msgstr "从文件系统镜像还原已保存的系统"
 
-#: tmp/virt-manager.glade.h:156
+#: tmp/virt-manager.glade.h:157
 msgid "Restore saved machine..."
 msgstr "还原系统..."
 
-#: tmp/virt-manager.glade.h:157
+#: tmp/virt-manager.glade.h:158
 msgid "Run"
 msgstr "运行"
 
-#: tmp/virt-manager.glade.h:158
+#: tmp/virt-manager.glade.h:159
+#, fuzzy
+msgid "S_hutdown"
+msgstr "关闭"
+
+#: tmp/virt-manager.glade.h:160
 msgid "Save this password in your keyring"
 msgstr "将密码保存到钥匙环"
 
-#: tmp/virt-manager.glade.h:159
+#: tmp/virt-manager.glade.h:161
 msgid "Saving VM Image"
 msgstr "保存 VM 镜像"
 
-#: tmp/virt-manager.glade.h:160
+#: tmp/virt-manager.glade.h:162
 msgid "Screenshot"
 msgstr "截屏"
 
-#: tmp/virt-manager.glade.h:161
+#: tmp/virt-manager.glade.h:163
 msgid "Shut down"
 msgstr "关闭"
 
-#: tmp/virt-manager.glade.h:163
-#, fuzzy
+#: tmp/virt-manager.glade.h:165
 msgid "Simple F_ile:"
 msgstr "简单文件(_F): "
 
-#: tmp/virt-manager.glade.h:164
+#: tmp/virt-manager.glade.h:166
 msgid "Specified MAC address:"
 msgstr "指定 MAC 地址: "
 
-#: tmp/virt-manager.glade.h:166
+#: tmp/virt-manager.glade.h:168
 msgid "Status:"
 msgstr "状态: "
 
-#: tmp/virt-manager.glade.h:167
+#: tmp/virt-manager.glade.h:169
 msgid "System _Name:"
 msgstr "系统名称(_N): "
 
-#: tmp/virt-manager.glade.h:168
+#: tmp/virt-manager.glade.h:170
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
 msgstr "在虚拟机中安装操作系统所需的文件<b>位置</b>"
 
-#: tmp/virt-manager.glade.h:169
+#: tmp/virt-manager.glade.h:171
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
 "create, such as:"
 msgstr "本助手将协助您创建新的虚拟系统。您将需要对新的系统进行一些设置，包括: "
 
-#: tmp/virt-manager.glade.h:170
+#: tmp/virt-manager.glade.h:172
 msgid "Toolbar"
 msgstr "工具条"
 
-#: tmp/virt-manager.glade.h:171
+#: tmp/virt-manager.glade.h:173
 msgid "Total CPUs on host machine:"
 msgstr "宿主系统的 CPU 总数: "
 
-#: tmp/virt-manager.glade.h:172
+#: tmp/virt-manager.glade.h:174
 msgid "Total memory on host machine:"
 msgstr "宿主系统的内存总量: "
 
-#: tmp/virt-manager.glade.h:173
+#: tmp/virt-manager.glade.h:175
 msgid "Type"
 msgstr "类型"
 
-#: tmp/virt-manager.glade.h:174
+#: tmp/virt-manager.glade.h:176
 msgid "UUID:"
 msgstr "UUID:"
 
-#: tmp/virt-manager.glade.h:175
+#: tmp/virt-manager.glade.h:177
 msgid "Unavailable"
 msgstr "不可用 <- 是这样翻译吗?"
 
-#: tmp/virt-manager.glade.h:176
+#: tmp/virt-manager.glade.h:178
 msgid "Update status every"
 msgstr "更新状态，每过"
 
-#: tmp/virt-manager.glade.h:177
-msgid "VM _Max Memory:"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:178
-msgid "VM _Startup Memory:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:179
+#, fuzzy
+msgid "VM _Max Memory (MB):"
+msgstr "VM 最大内存："
+
+#: tmp/virt-manager.glade.h:180
+#, fuzzy
+msgid "VM _Startup Memory (MB):"
+msgstr "VM 启动内存："
+
+#: tmp/virt-manager.glade.h:181
 msgid "VNC"
 msgstr "VNC"
 
-#: tmp/virt-manager.glade.h:180
+#: tmp/virt-manager.glade.h:182
 msgid "Virtual CPUs"
 msgstr "虚拟 CPU"
 
-#: tmp/virt-manager.glade.h:181
+#: tmp/virt-manager.glade.h:183
 msgid "Virtual Machine Console"
 msgstr "虚拟系统终端"
 
-#: tmp/virt-manager.glade.h:182
+#: tmp/virt-manager.glade.h:184
 msgid "Virtual Machine Details"
 msgstr "虚拟系统状态"
 
-#: tmp/virt-manager.glade.h:183
+#: tmp/virt-manager.glade.h:185
 msgid "Virtual Machine Manager"
 msgstr "虚拟系统管理"
 
-#: tmp/virt-manager.glade.h:184
+#: tmp/virt-manager.glade.h:186
 msgid "Virtual Machine Manager Preferences"
 msgstr "虚拟系统管理首选项"
 
-#: tmp/virt-manager.glade.h:185
+#: tmp/virt-manager.glade.h:187
 msgid "Virtual _Machine"
 msgstr "虚拟系统(_M)"
 
-#: tmp/virt-manager.glade.h:186
+#: tmp/virt-manager.glade.h:188
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr "此系统是<b>完全虚拟</b>还是<b>半虚拟化</b>?"
 
-#: tmp/virt-manager.glade.h:187
+#: tmp/virt-manager.glade.h:189
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr "您需要为新系统选择虚拟化方式: "
 
-#: tmp/virt-manager.glade.h:188
+#: tmp/virt-manager.glade.h:190
 msgid "_Browse..."
 msgstr "浏览(_B)..."
 
-#: tmp/virt-manager.glade.h:189
+#: tmp/virt-manager.glade.h:191
 msgid "_CD-ROM or DVD:"
 msgstr "CD-ROM 或 DVD(_C): "
 
-#: tmp/virt-manager.glade.h:190
+#: tmp/virt-manager.glade.h:192
+msgid "_Destroy"
+msgstr ""
+
+#: tmp/virt-manager.glade.h:193
 msgid "_Details"
 msgstr "细节(_D)"
 
-#: tmp/virt-manager.glade.h:191
+#: tmp/virt-manager.glade.h:194
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: tmp/virt-manager.glade.h:192
+#: tmp/virt-manager.glade.h:195
 msgid "_File"
 msgstr "文件(_F)"
 
-#: tmp/virt-manager.glade.h:193
+#: tmp/virt-manager.glade.h:196
 msgid "_Finish"
 msgstr "结束(_F)"
 
-#: tmp/virt-manager.glade.h:194
+#: tmp/virt-manager.glade.h:197
 msgid "_FullScreen"
 msgstr "全屏幕(_F)"
 
-#: tmp/virt-manager.glade.h:195
+#: tmp/virt-manager.glade.h:198
 msgid "_Graphical Console"
 msgstr "图形终端(_G)"
 
-#: tmp/virt-manager.glade.h:196
+#: tmp/virt-manager.glade.h:199
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: tmp/virt-manager.glade.h:197
-#, fuzzy
+#: tmp/virt-manager.glade.h:200
 msgid "_Host:"
 msgstr "主机: "
 
-#: tmp/virt-manager.glade.h:198
+#: tmp/virt-manager.glade.h:201
 msgid "_ISO Image Location:"
 msgstr "ISO 镜像位置(_I): "
 
-#: tmp/virt-manager.glade.h:199
-#, fuzzy
+#: tmp/virt-manager.glade.h:202
 msgid "_Local Xen host"
 msgstr "本地 Xen 宿主"
 
-#: tmp/virt-manager.glade.h:200
+#: tmp/virt-manager.glade.h:203
 msgid "_Mount Point (on virtual system):"
 msgstr "(在虚拟系统中的)挂载点(_M): "
 
-#: tmp/virt-manager.glade.h:201
-#, fuzzy
+#: tmp/virt-manager.glade.h:204
 msgid "_Other hypervisor"
 msgstr "其他监控者"
 
-#: tmp/virt-manager.glade.h:202
+#: tmp/virt-manager.glade.h:205
 msgid "_Paravirtualized:"
 msgstr "半虚拟化(_P): "
 
-#: tmp/virt-manager.glade.h:203
+#: tmp/virt-manager.glade.h:206
 msgid "_Path to install media:"
 msgstr "到安装介质的路径(_P): "
 
-#: tmp/virt-manager.glade.h:204
+#: tmp/virt-manager.glade.h:207
 msgid "_Pause"
 msgstr "暂停(_P)"
 
-#: tmp/virt-manager.glade.h:205
-#, fuzzy
+#: tmp/virt-manager.glade.h:208
 msgid "_Port:"
 msgstr "端口: "
 
-#: tmp/virt-manager.glade.h:206
-#, fuzzy
+#: tmp/virt-manager.glade.h:209
 msgid "_Read only connection"
 msgstr "只读连接"
 
-#: tmp/virt-manager.glade.h:207
-#, fuzzy
+#: tmp/virt-manager.glade.h:210
 msgid "_Remote Xen host"
 msgstr "远程 Xen 宿主"
 
-#: tmp/virt-manager.glade.h:208
+#: tmp/virt-manager.glade.h:211
 msgid "_Run"
 msgstr "运行(_R)"
 
-#: tmp/virt-manager.glade.h:209
+#: tmp/virt-manager.glade.h:212
 msgid "_Save"
 msgstr "保存(_S)"
 
-#: tmp/virt-manager.glade.h:210
+#: tmp/virt-manager.glade.h:213
 msgid "_Serial Console"
 msgstr "串行终端(_S)"
 
-#: tmp/virt-manager.glade.h:211
-msgid "_Shutdown"
-msgstr "关闭(_S)"
-
-#: tmp/virt-manager.glade.h:212
+#: tmp/virt-manager.glade.h:214
 msgid "_Size:"
 msgstr "大小(_S): "
 
-#: tmp/virt-manager.glade.h:213
+#: tmp/virt-manager.glade.h:215
 msgid "_Take Screenshot"
 msgstr "截取屏幕(_T)"
 
-#: tmp/virt-manager.glade.h:214
-#, fuzzy
-msgid "_URI:"
-msgstr "URI:"
-
-#: tmp/virt-manager.glade.h:215
-#, fuzzy
-msgid "_VCPUs:"
-msgstr "vCPU"
-
 #: tmp/virt-manager.glade.h:216
+msgid "_URI:"
+msgstr "_URI:"
+
+#: tmp/virt-manager.glade.h:217
+msgid "_VCPUs:"
+msgstr "_VCPUs:"
+
+#: tmp/virt-manager.glade.h:218
 msgid "_View"
 msgstr "查看(_V) 有怀疑"
 
-#: tmp/virt-manager.glade.h:217
+#: tmp/virt-manager.glade.h:219
 msgid "_View:"
 msgstr "查看(_V): 是这样吗？"
 
-#: tmp/virt-manager.glade.h:218
+#: tmp/virt-manager.glade.h:220
 msgid "demo"
 msgstr "演示"
 
-#: tmp/virt-manager.glade.h:219
+#: tmp/virt-manager.glade.h:221
 msgid "http://"
 msgstr "http://"
 
-#: tmp/virt-manager.glade.h:220
+#: tmp/virt-manager.glade.h:222
 msgid "http://virt-manager.et.redhat.com/"
-msgstr ""
+msgstr "http://virt-manager.et.redhat.com/"
 
-#: tmp/virt-manager.glade.h:221
+#: tmp/virt-manager.glade.h:223
 msgid "mac-addr-random"
 msgstr "mac-addr-random"
 
-#: tmp/virt-manager.glade.h:222
+#: tmp/virt-manager.glade.h:224
 msgid "para"
 msgstr "para 是什么"
 
-#: tmp/virt-manager.glade.h:223
+#: tmp/virt-manager.glade.h:225
 msgid "samples"
 msgstr "范例"
 
-#: tmp/virt-manager.glade.h:224
+#: tmp/virt-manager.glade.h:226
 msgid "seconds"
 msgstr "秒"
 
-#: tmp/virt-manager.glade.h:226
+#: tmp/virt-manager.glade.h:228
 msgid "translator-credits"
 msgstr "Yuan Yijun <bbbush.yuan@gmail.com>"
 
-#: tmp/virt-manager.glade.h:227
+#: tmp/virt-manager.glade.h:229
 msgid "virtual CPU alert"
 msgstr "虚拟 CPU 提示"
 
-#~ msgid "How many virtual CPUs should this system have?"
-#~ msgstr "此系统应拥有多少个虚拟 CPU?"
+#~ msgid ""
+#~ "<small><b>Note:</b> File size parameter is only relevant for new files</"
+#~ "small>"
+#~ msgstr "<small><b>注意: </b> 文件大小只对新文件有意义</small>"
 
-#~ msgid "How much memory should this VM start up with?"
-#~ msgstr "此系统启动时应占用多少内存?"
-
-#~ msgid "What is the maximum amount of memory this VM should be able to use?"
-#~ msgstr "此虚拟系统可以使用的内存最大值是多少?"
+#~ msgid "_Shutdown"
+#~ msgstr "关闭(_S)"

@@ -1,30 +1,28 @@
-# translation of pt_BR.po to Brazilian Portuguese
-# This file is distributed under the same license as the pt_BR package.
-# Copyright (C) 2006 THE pt_BR'S COPYRIGHT HOLDER.
-# Diego Búrigo Zacarão <diegobz@gmail.com>, 2006.
-# Valnir Ferreira Jr. <vferreir@redhat.com>, 2006.
-# Igor Pires Soares <igor@projetofedora.org>, 2006.
-# 
-# 
+# translation of ko.po to Korean
+# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# Eunju Kim <eukim@redhat.com>, 2006.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: pt_BR\n"
+"Project-Id-Version: ko\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-22 18:10-0500\n"
-"PO-Revision-Date: 2006-11-17 23:59-0200\n"
-"Last-Translator: Igor Pires Soares <igor@projetofedora.org>\n"
-"Language-Team: Brazilian Portuguese <fedora-trans-pt_br@redhat.com>\n"
+"PO-Revision-Date: 2006-11-27 14:45+1000\n"
+"Last-Translator: Eunju Kim <eukim@redhat.com>\n"
+"Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #: ../../src/virt-manager.py.in:62
 msgid "Unable to initialize GTK: "
-msgstr "Incapaz de inicializar o GTK: "
+msgstr "GTK 초기화 불가능:"
 
 #: ../../src/virtManager/console.py:256
 msgid "Save Virtual Machine Screenshot"
-msgstr "Salvar Screenshot da Máquina Virtual"
+msgstr "가상 기계장치 스크린샷 저장"
 
 #: ../../src/virtManager/console.py:289
 #, python-format
@@ -32,75 +30,73 @@ msgid ""
 "The screenshot has been saved to:\n"
 "%s"
 msgstr ""
-"O screenshot foi salvo em: \n"
+"스크린샷이 저장됨:\n"
 "%s"
 
 #: ../../src/virtManager/console.py:290
 msgid "Screenshot saved"
-msgstr "Screenshot salvo"
+msgstr "스크린샷 저장됨"
 
 #: ../../src/virtManager/console.py:405
 msgid "paused"
-msgstr "pausado"
+msgstr "중지됨"
 
 #: ../../src/virtManager/create.py:348
 msgid "Paravirtualized"
-msgstr "Paravirtualizado"
+msgstr "반가상화됨"
 
 #: ../../src/virtManager/create.py:350
 msgid "Fully virtualized"
-msgstr "Completamente Virtualizado:"
+msgstr "완전 가상화됨"
 
 #: ../../src/virtManager/create.py:381
 msgid "Invalid FV media address"
-msgstr "Endereço de mídia FV inválido"
+msgstr "잘못된 FV 매체 주소"
 
 #: ../../src/virtManager/create.py:387
 msgid "Invalid PV media address"
-msgstr "Endereço de mídia PV inválido"
+msgstr "잘못된 PV 매체 주소"
 
 #: ../../src/virtManager/create.py:397
 msgid "Invalid system name"
-msgstr "Nome de sistema inválido"
+msgstr "잘못된 시스템명"
 
 #: ../../src/virtManager/create.py:404
 msgid "Invalid memory setting"
-msgstr "Configuração de memória inválida"
+msgstr "잘못된 메모리 설정"
 
 #: ../../src/virtManager/create.py:426
 msgid "Invalid storage address"
-msgstr "Endereço de armazenamento inválido"
+msgstr "잘못된 저장 주소"
 
 #: ../../src/virtManager/create.py:460
 msgid "Creating Virtual Machine"
-msgstr "Criando Máquina Virtual"
+msgstr "가상 기계장치 생성하기"
 
 #: ../../src/virtManager/create.py:465
 msgid "Guest Install Error"
-msgstr "Erro de Instalação de Convidado"
+msgstr "게스트 설치 오류"
 
 #: ../../src/virtManager/create.py:503
 msgid "Locate ISO Image"
-msgstr "Localizar Imagem ISO"
+msgstr "ISO 이미지 배치"
 
 #: ../../src/virtManager/create.py:532
 msgid "Locate Storage Partition"
-msgstr "Localizar Partição de Armazenamento"
+msgstr "저장 파티션 배치"
 
 #: ../../src/virtManager/create.py:538
 msgid "Locate or Create New Storage File"
-msgstr "Localizar ou Criar Novo arquivo de Armazenamento"
+msgstr "새 저장 파일 생성 또는 배치"
 
 #: ../../src/virtManager/create.py:604 ../../src/virtManager/create.py:608
 msgid "Invalid System Name"
-msgstr "Nome de Sistema Inválido"
+msgstr "잘못된 시스템명"
 
 #: ../../src/virtManager/create.py:605
 #, fuzzy
 msgid "System name must be non-blank and less than 50 characters"
-msgstr ""
-"O nome do sistema não deve ser vazio, ter menos que 50 caracteres e não "
-"conter espaços."
+msgstr "시스템명은 빈 칸과 공백없이 50자 이하로 지정해야 함"
 
 #: ../../src/virtManager/create.py:609
 msgid "System name may contain alphanumeric and '_' characters only"
@@ -108,70 +104,61 @@ msgstr ""
 
 #: ../../src/virtManager/create.py:615
 msgid "Hardware Support Required"
-msgstr "Suporte a Hardware Necessário"
+msgstr "하드웨어 지원 필요"
 
 #: ../../src/virtManager/create.py:616
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
 msgstr ""
-"Seu hardware parece não suportar virtualização completamente. Somente "
-"paravirtualização de convidados estará disponível neste hardware."
+"완전 가상화 지원을 위한 하드웨어가 나타나지 않습니다. 이 하드웨어에서는 반가"
+"상화 게스트만을 사용하실 수 있습니다."
 
 #: ../../src/virtManager/create.py:623
 msgid "ISO Path Required"
-msgstr "Caminho do ISO Necessário"
+msgstr "ISO 경로 필요"
 
 #: ../../src/virtManager/create.py:624
 msgid "You must specify an ISO location for the guest installation"
-msgstr ""
-"Você deve especificar uma localização de ISO para a instalação do convidado"
+msgstr "게스트 설치를 위해 ISO 위치를 지정해야 함"
 
 #: ../../src/virtManager/create.py:627
 msgid "ISO Path Not Found"
-msgstr "Caminho do ISO não encontrado"
+msgstr "ISO 경로를 찾을 수 없음"
 
 #: ../../src/virtManager/create.py:628
 msgid "You must specify a valid path to the ISO image for guest installation"
-msgstr ""
-"Você deve especificar um caminho válido da imagem ISO para a instalação do "
-"convidado"
+msgstr "게스트 설치를 위해 유효한 ISO 이미지 경로를 지정해야 함"
 
 #: ../../src/virtManager/create.py:633
 msgid "Install media required"
-msgstr "Mídia de instalação é necessária"
+msgstr "설치 매체 필요"
 
 #: ../../src/virtManager/create.py:634
 msgid "You must select the CDROM install media for guest installation"
-msgstr ""
-"Você deve selecionar uma mídia de instalação em CDROM para a instalação do "
-"convidado"
+msgstr "게스트 설치를 위해 CDROM 설치 매체를 선택해야 함"
 
 #: ../../src/virtManager/create.py:639
 msgid "URL Required"
-msgstr "URL Necessária"
+msgstr "URL 필요"
 
 #: ../../src/virtManager/create.py:640
 msgid "You must specify a URL for the install image for the guest install"
-msgstr ""
-"Você deve especificar uma URL de imagem de instalação para a instalação do "
-"convidado"
+msgstr "게스트 설치를 위해 설치 이미지에 해당하는 URL을 지정해야 함"
 
 #: ../../src/virtManager/create.py:646
 msgid "Storage Address Required"
-msgstr "Endereço de Armazenamento é Necessário"
+msgstr "저장 주소 필요"
 
 #: ../../src/virtManager/create.py:647
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
-msgstr ""
-"Você deve especificar uma partição ou um arquivo para armazenamento da "
-"instalação do convidado"
+msgstr "게스트 설치를 위해 저장할 파티션 또는 파일을 지정해야 함"
 
 #: ../../src/virtManager/create.py:652
 #, fuzzy
 msgid "Storage Address Is Directory"
-msgstr "Endereço de Armazenamento é Necessário"
+msgstr "저장 주소 필요"
 
 #: ../../src/virtManager/create.py:653
 msgid ""
@@ -182,81 +169,81 @@ msgstr ""
 
 #: ../../src/virtManager/create.py:698 ../../src/virtManager/create.py:733
 msgid "No media present"
-msgstr "Mídia não está presente"
+msgstr "매체가 존재하지 않음"
 
 #: ../../src/virtManager/details.py:411
 msgid "Destination"
-msgstr "Destino"
+msgstr "수신지"
 
 #: ../../src/virtManager/details.py:450
 msgid "MAC address"
-msgstr "Endereço MAC "
+msgstr "MAC 주소"
 
 #: ../../src/virtManager/domain.py:363
 msgid "Running"
-msgstr "Executando"
+msgstr "실행 중"
 
 #: ../../src/virtManager/domain.py:365
 msgid "Paused"
-msgstr "Pausado"
+msgstr "중지됨"
 
 #: ../../src/virtManager/domain.py:367 tmp/virt-manager.glade.h:164
 msgid "Shutdown"
-msgstr "Desligamento"
+msgstr "종료"
 
 #: ../../src/virtManager/domain.py:369
 msgid "Shutoff"
-msgstr "Shutoff"
+msgstr "종료"
 
 #: ../../src/virtManager/domain.py:371
 msgid "Crashed"
-msgstr "Deixou de funcionar "
+msgstr "충돌됨"
 
 #: ../../src/virtManager/domain.py:373
 msgid "Unknown status code"
-msgstr "Código de status desconhecido"
+msgstr "알려지지 않은 상태 코드"
 
 #: ../../src/virtManager/engine.py:74
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr ""
-"Impossível abrir uma conexão com o hipervisor/daemon do Xen.\n"
+"Xen 하이퍼바이저/데몬에 연결할 수 없습니다.\n"
 "\n"
 
 #: ../../src/virtManager/engine.py:75
 msgid "Verify that:\n"
-msgstr "Verificar isto:\n"
+msgstr "다음을 확인:\n"
 
 #: ../../src/virtManager/engine.py:76
 msgid " - A Xen host kernel was booted\n"
-msgstr " - Um kernel de um host Xen foi inicializado\n"
+msgstr " - Xen 호스트 커널이 부팅됨\n"
 
 #: ../../src/virtManager/engine.py:77
 msgid " - The Xen service has been started\n"
-msgstr " - O serviço do Xen foi inicializado\n"
+msgstr " - Xen 서비스가 시작됨\n"
 
 #: ../../src/virtManager/engine.py:80
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
-msgstr "Impossível abrir conexão para o hipervisor '%s'"
+msgstr "하이퍼바이저 '%s'에 연결할 수 없음"
 
 #: ../../src/virtManager/engine.py:81
 msgid "Virtual Machine Manager Connection Failure"
-msgstr "Falha na Conexão do Gerenciador de Máquina Virtual"
+msgstr "가상 기계장치 관리자 연결 실패"
 
 #: ../../src/virtManager/engine.py:281
 msgid "Save Virtual Machine"
-msgstr "Salvar Máquina Virtual"
+msgstr "가상 기계장치 저장"
 
 #: ../../src/virtManager/engine.py:294
 msgid "Saving Virtual Machine"
-msgstr "Salvando Máquina Virtual"
+msgstr "가상 기계장치 저장하기"
 
 #: ../../src/virtManager/engine.py:310
 #, fuzzy, python-format
 msgid "About to destroy virtual machine %s"
-msgstr "Restaurar Máquina Virtual"
+msgstr "가상 기계장치 복구"
 
 #: ../../src/virtManager/engine.py:311
 msgid ""
@@ -266,11 +253,11 @@ msgstr ""
 
 #: ../../src/virtManager/manager.py:189
 msgid "Restore Virtual Machine"
-msgstr "Restaurar Máquina Virtual"
+msgstr "가상 기계장치 복구"
 
 #: ../../src/virtManager/manager.py:204
 msgid "Restoring Virtual Machine"
-msgstr "Restaurando Máquina Virtual"
+msgstr "가상 기계장치 복구하기"
 
 #: ../../src/virtManager/manager.py:211
 #, python-format
@@ -280,7 +267,7 @@ msgstr ""
 #: ../../src/virtManager/manager.py:239
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
-msgstr "Erro ao restaurar domínio '%s'. O domínio já está executando?"
+msgstr "도메인 '%s'를 복구하는데 오류 발생. 이미 도메인이 실행되고 있습니까?"
 
 #: ../../src/virtManager/manager.py:421
 msgid "ID"
@@ -288,35 +275,35 @@ msgstr "ID"
 
 #: ../../src/virtManager/manager.py:422 tmp/virt-manager.glade.h:124
 msgid "Name"
-msgstr "Nome"
+msgstr "이름"
 
 #: ../../src/virtManager/manager.py:423 tmp/virt-manager.glade.h:167
 msgid "Status"
-msgstr "Status"
+msgstr "상태"
 
 #: ../../src/virtManager/manager.py:424 tmp/virt-manager.glade.h:80
 msgid "CPU usage"
-msgstr "Uso da CPU"
+msgstr "CPU 사용법"
 
 #: ../../src/virtManager/manager.py:425
 msgid "VCPUs"
-msgstr "VCPUs"
+msgstr "VCPU"
 
 #: ../../src/virtManager/manager.py:426 tmp/virt-manager.glade.h:120
 msgid "Memory usage"
-msgstr "Uso da memória"
+msgstr "메모리 사용법"
 
 #: ../../src/virtManager/manager.py:427 tmp/virt-manager.glade.h:92
 msgid "Disk usage"
-msgstr "Uso do disco"
+msgstr "디스켓 사용법"
 
 #: ../../src/virtManager/manager.py:428 tmp/virt-manager.glade.h:127
 msgid "Network traffic"
-msgstr "Tráfego de rede"
+msgstr "네트워크 소통량"
 
 #: ../../src/virtManager/serialcon.py:35
 msgid "serial console"
-msgstr "console serial"
+msgstr "직렬 콘솔"
 
 #: tmp/virt-manager.glade.h:1
 msgid " "
@@ -324,11 +311,11 @@ msgstr " "
 
 #: tmp/virt-manager.glade.h:2
 msgid " free"
-msgstr " livre"
+msgstr " free"
 
 #: tmp/virt-manager.glade.h:3
 msgid " of "
-msgstr "de"
+msgstr " of "
 
 #: tmp/virt-manager.glade.h:4
 msgid "/tmp"
@@ -373,7 +360,7 @@ msgstr "256\t"
 
 #: tmp/virt-manager.glade.h:15
 msgid "30 MB of 128 MB"
-msgstr "30 MB of 128 MB"
+msgstr "128 MB 중 30 MB"
 
 #: tmp/virt-manager.glade.h:16
 msgid "400 MB"
@@ -397,7 +384,7 @@ msgstr "8"
 
 #: tmp/virt-manager.glade.h:21
 msgid "80 MB of 1 GB"
-msgstr "80 MB of 1 GB"
+msgstr "1 GB 중 80 MB"
 
 #: tmp/virt-manager.glade.h:22
 msgid ":"
@@ -405,127 +392,126 @@ msgstr ":"
 
 #: tmp/virt-manager.glade.h:23
 msgid "<b>Basic details</b>"
-msgstr "<b>Detalhes básicos</b>"
+msgstr "<b>기본 정보</b>"
 
 #: tmp/virt-manager.glade.h:24
 msgid "<b>CPUs:</b>"
-msgstr "<b>CPUs:</b>"
+msgstr "<b>CPU:</b>"
 
 #: tmp/virt-manager.glade.h:25
 msgid "<b>CPUs</b>"
-msgstr "<b>CPUs</b>"
+msgstr "<b>CPU</b>"
 
 #: tmp/virt-manager.glade.h:26
 msgid "<b>Consoles</b>"
-msgstr "<b>Consoles</b>"
+msgstr "<b>콘솔</b>"
 
 #: tmp/virt-manager.glade.h:27
 msgid "<b>Disk image:</b>"
-msgstr "<b>Imagem de Disco:</b>"
+msgstr "<b>디스켓 이미지:</b>"
 
 #: tmp/virt-manager.glade.h:28
 msgid "<b>Disk size:</b>"
-msgstr "<b>Tamanho do disco:</b>"
+msgstr "<b>디스켓 용량:</b>"
 
 #: tmp/virt-manager.glade.h:29
 msgid "<b>Example:</b> system1"
-msgstr "<b>Exemplo:</b> sistema1"
+msgstr "<b>예:</b> 시스템1"
 
 #: tmp/virt-manager.glade.h:30
 msgid "<b>Initial memory:</b>"
-msgstr "<b>Memória inicial</b>"
+msgstr "<b>초기 메모리:</b>"
 
 #: tmp/virt-manager.glade.h:31
 msgid "<b>Installation source:</b>"
-msgstr "<b>Origem da Instalação:</b>"
+msgstr "<b>설치 소스:</b>"
 
 #: tmp/virt-manager.glade.h:32
 msgid "<b>Kickstart source:</b>"
-msgstr "<b>Origem do Kickstart:</b>"
+msgstr "<b>킥스타트 소스:</b>"
 
 #: tmp/virt-manager.glade.h:33
 msgid "<b>Machine name:</b>"
-msgstr "<b>Nome da máquina:</b>"
+msgstr "<b>기계장치명:</b>"
 
 #: tmp/virt-manager.glade.h:34
 msgid "<b>Maximum memory:</b>"
-msgstr "<b>Memória máxima:</b>"
+msgstr "<b>최대 메모리:</b>"
 
 #: tmp/virt-manager.glade.h:35
 msgid "<b>Memory:</b>"
-msgstr "<b>Memória:</b>"
+msgstr "<b>메모리:</b>"
 
 #: tmp/virt-manager.glade.h:36
 msgid "<b>Memory</b>"
-msgstr "<b>Memória:</b>"
+msgstr "<b>메모리</b>"
 
 #: tmp/virt-manager.glade.h:37
 msgid "<b>Memory</b> and <b>CPU</b> allocation"
-msgstr "Alocação de <b>Memória:</b> e <b>CPU</b>"
+msgstr "<b>메모리</b> 및 <b>CPU</b> 할당"
 
 #: tmp/virt-manager.glade.h:38
 msgid "<b>Network</b>"
-msgstr "<b>Rede</b>"
+msgstr "<b>네트워크</b>"
 
 #: tmp/virt-manager.glade.h:39
 msgid "<b>Performance</b>"
-msgstr "<b>Performance</b>"
+msgstr "<b>실행</b>"
 
 #: tmp/virt-manager.glade.h:40
 msgid "<b>Status monitoring</b>"
-msgstr "<b>Monitorando status</b>"
+msgstr "<b>상태 모니터링</b>"
 
 #: tmp/virt-manager.glade.h:41
 msgid "<b>Storage</b>"
-msgstr "<b>Armazenamento</b>"
+msgstr "<b>저장</b>"
 
 #: tmp/virt-manager.glade.h:42
 msgid ""
 "<b>Storage</b> details - which disk partitions or files the system should use"
 msgstr ""
-"Detalhes de <b>Armazenamento</b> - Quais partições de disco ou arquivos o "
-"sistema deve usar"
+"<b>저장</b> 정보 - 시스템에서 사용해야 하는 디스크 파티션 또는 파일에 관한 정"
+"보"
 
 #: tmp/virt-manager.glade.h:43
 msgid "<b>Summary:</b>"
-msgstr "<b>Resumo:</b>"
+msgstr "<b>요약:</b>"
 
 #: tmp/virt-manager.glade.h:44
 msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>O console está atualmente indisponível</b>"
+msgstr "<b>현재 콘솔을 사용 할 수 없음</b>"
 
 #: tmp/virt-manager.glade.h:45
 msgid ""
 "<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
 "letters A-F"
 msgstr ""
-"<b>Dica:</b>  Valores aceitáveis para dígitos hexadecimais são números entre "
-"0 e 9 e letras entre A e F"
+"<b>힌트:</b> 0-9 사이의 숫자와 A-F 사이의 문자를 십육진수 값으로 사용할 수 있"
+"음"
 
 #: tmp/virt-manager.glade.h:46
 msgid ""
 "<b>Tip:</b> File location paths are as seen from the physical host. Mount "
 "points are as seen from the virtual machine."
 msgstr ""
-"<b>Dica:</b> As localizações dos caminhos dos arquivos estão como visíveis a "
-"partir do host físico. Pontos de montagem estão visíveis a partir da máquina "
-"virtual."
+"<b>힌트:</b> 파일 위치 경로는 물리적 호스트에 나타나 있는 것으로 합니다. 마운"
+"트 지점은 가상 기계장치에 나타나 있는 것으로 합니다."
 
 #: tmp/virt-manager.glade.h:47
 msgid ""
 "<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
 "than (or equal to) the number of physical CPUs on the host system."
 msgstr ""
-"<b>Dica:</b> Para uma melhor performance, o numero de CPUs virtuais deve ser "
-"menor (ou igual) ao numero de CPUs físicas do sistema."
+"<b>힌트:</b> 최상의 성능을 유지하기 위해, 호스트 시스템에서 가상 CPU의 숫자"
+"는 물리적 CPU의 숫자보다 적어야 (또는 같아야)합니다."
 
 #: tmp/virt-manager.glade.h:48
 msgid ""
 "<b>Tip:</b> You may only increase the size of file-based storage; you can't "
 "decrease its size."
 msgstr ""
-"<b>Dica:</b> Você somente pode aumentar o tamanho do arquivo base de "
-"armazenamento. você não pode diminuir seu tamanho."
+"<b>힌트:</b> 파일 기반 저장 용량을 늘리실 수 있습니다; 파일 기반 저장 용량을 "
+"줄이실 수 는 없습니다."
 
 #: tmp/virt-manager.glade.h:49
 msgid ""
@@ -534,49 +520,50 @@ msgid ""
 "You have set this virtual machine to have more CPUs than the host system has "
 "physically. This may result in poor performance in the virtual machine."
 msgstr ""
-"<b>Muitas CPUs Virtuais</b>\n"
+"<b>과도한 가상 CPU</b>\n"
 "\n"
-"Você tem mais CPUs configuradas nesta maquina virtual do que o sistema tem "
-"fisicamente. Isto pode resultar numa performance ruim na máquina virtual."
+"호스트 시스템이 물리적으로 보유하고 있는 것 보다 더 많은 CPU를 보유하기 위해 "
+"가상 기계장치를 설정하실 수 있습니다. 이는 가상 기계장치에서 성능 저하를 초래"
+"할 수 있습니다."
 
 #: tmp/virt-manager.glade.h:52
 msgid "<b>Virtual CPUs:</b>"
-msgstr "<b>CPUs Virtuais:</b>"
+msgstr "<b>가상화 CPU:</b>"
 
 #: tmp/virt-manager.glade.h:53
 #, fuzzy
 msgid "<b>Virtualization method:</b>"
-msgstr "<b>Método de Virtualização:</b>"
+msgstr "<b>가상화 :</b>"
 
 #: tmp/virt-manager.glade.h:54
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
-msgstr "<small><b>Exemplo:</b> /dev/hdc2</small>"
+msgstr "<small><b>예:</b> /dev/hdc2</small>"
 
 #: tmp/virt-manager.glade.h:55
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
-msgstr "<small><b>Exemplo:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
+msgstr "<small><b>예:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 
 #: tmp/virt-manager.glade.h:56
 msgid ""
 "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
 msgstr ""
-"<small><b>Exemplo:</b> http://servername.example.com/distro/i386/tree</small>"
+"<small><b>예:</b> http://servername.example.com/distro/i386/tree</small>"
 
 #: tmp/virt-manager.glade.h:57
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
 msgstr ""
-"<small><b>Nota:</b> A(s) CPU(s) host nesta máquina não tem suporte à "
-"virtualização completa.</small>"
+"<small><b>주의:</b> 이 기계에 있는 호스트 CPU는 완전 가상화를 지원하지 않습니"
+"다.</small>"
 
 #: tmp/virt-manager.glade.h:58
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
 msgstr ""
-"<small><b>Nota:</b> A(s) CPU(s) host nesta máquina suportam a virtualização "
-"completa, mas ela não está habilitada pela BIOS.</small>"
+"<small><b>주의:</b> 이 기계에 있는 호스트 CPU는 완전 가상화를 지원하지만, "
+"BIOS에 의해 활성화되지 않습니다.</small>"
 
 #: tmp/virt-manager.glade.h:59
 msgid ""
@@ -584,8 +571,8 @@ msgid ""
 "be less than (or equal to) the number of logical CPUs on the host system.</"
 "small>"
 msgstr ""
-"<small><b>Dica:</b> Para uma melhor performance, o numero de CPUs virtuais "
-"deve ser menor (ou igual) ao numero de CPUs lógicas do sistema.</small>"
+"<small><b>힌트:</b> 최상의 성능을 유지하기 위해, 호스트 시스템에서 가상 CPU"
+"의 숫자는 논리적 CPU의 숫자보다 적어야 (또는 같아야)합니다."
 
 #: tmp/virt-manager.glade.h:60
 msgid ""
@@ -593,10 +580,9 @@ msgid ""
 "storage, to your virtual system after it has been created using the same "
 "tools you would on a physical system.</small>"
 msgstr ""
-"<small><b>Dica:</b> Você pode adicionar armazenamento adicional, incluindo "
-"armazenamento montado via rede, em seu sistema virtual depois que o mesmo "
-"foi criado usando as mesmas ferramentas você usaria em um sistema físico.</"
-"small>"
+"<small><b>힌트:</b> 물리적 시스템에 있는 같은 도구를 사용하여 가상 시스템을 "
+"생성한 후에 네트워크에 마운트된 저장을 포함한 추가 저장을 가상 시스템에 포함"
+"시키실 수 있습니다.</small>"
 
 #: tmp/virt-manager.glade.h:61
 msgid ""
@@ -611,72 +597,72 @@ msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocate memory "
 "and CPU</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Memória alocada "
-"e CPU</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">메모리 및 CPU 할"
+"당</span>"
 
 #: tmp/virt-manager.glade.h:63
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
 "storage space</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Atribuindo "
-"espaço de armazenamento</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">저장 공간 할당하"
+"기</span>"
 
 #: tmp/virt-manager.glade.h:64
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing a "
 "virtualization method</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Fechando um "
-"método de virtualização</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">가상화 방법 선택"
+"하기</span>"
 
 #: tmp/virt-manager.glade.h:65
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual system </span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Criando um novo "
-"sistema virtual</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">새 가상 시스템 "
+"생성하기</span>"
 
 #: tmp/virt-manager.glade.h:66
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation media</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Localizando "
-"mídia de instalação</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">설치 매체배치하"
+"기</span>"
 
 #: tmp/virt-manager.glade.h:67
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Nomeando seu "
-"sistema virtual </span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">가상 시스템의 이"
+"름 정하기 </span>"
 
 #: tmp/virt-manager.glade.h:68
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to begin "
 "installation</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Checando para "
-"iniciar a instalação </span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">설치 시작 준비</"
+"span>"
 
 #: tmp/virt-manager.glade.h:69
 msgid "A <b>name</b> for your new virtual system"
-msgstr "Um <b>nome</b> para seu novo sistema virtual"
+msgstr "새 가상 시스템 <b>이름</b>"
 
 #: tmp/virt-manager.glade.h:70
 msgid "Add Virtual NIC"
-msgstr "Adicionar NIC Virtual:"
+msgstr "가상 NIC 추가"
 
 #: tmp/virt-manager.glade.h:71
 msgid "Add virtual NIC with:"
-msgstr "Adicionar NIC virtual com:"
+msgstr "가상 NIC 추가:"
 
 #: tmp/virt-manager.glade.h:72
 msgid "Alert"
-msgstr "Alerta"
+msgstr "통지"
 
 #: tmp/virt-manager.glade.h:73
 msgid ""
@@ -684,9 +670,9 @@ msgid ""
 "Active virtual machines\n"
 "Inactive virtual machines"
 msgstr ""
-"Todas as máquinas virtuais\n"
-"Máquinas virtuais ativas\n"
-"Máquinas virtuais inativas"
+"모든 가상 기계장치\n"
+"가상 기계장치 활성화\n"
+"가상 기계장치 비활성화"
 
 #: tmp/virt-manager.glade.h:76
 msgid "Allocate entire virtual disk now?"
@@ -694,111 +680,111 @@ msgstr ""
 
 #: tmp/virt-manager.glade.h:77
 msgid "Auth"
-msgstr "Autor"
+msgstr "인증"
 
 #: tmp/virt-manager.glade.h:78
 msgid "Automatically open consoles:"
-msgstr "Abrir automaticamente consoles:"
+msgstr "자동으로 콘솔 열기:"
 
 #: tmp/virt-manager.glade.h:79
 msgid "Browse..."
-msgstr "Procurar..."
+msgstr "검색..."
 
 #: tmp/virt-manager.glade.h:81
 msgid "CPU usage:"
-msgstr "Uso da CPU:"
+msgstr "CPU 사용법:"
 
 #: tmp/virt-manager.glade.h:82
 msgid "CPU/memory"
-msgstr "CPU/memória"
+msgstr "CPU/메모리"
 
 #: tmp/virt-manager.glade.h:83
 msgid "Change allocation:"
-msgstr "Alterar alocação:"
+msgstr "할당 변경:"
 
 #: tmp/virt-manager.glade.h:84
 msgid "Co_nnect"
-msgstr "Co_nectar"
+msgstr "연결(_n)"
 
 #: tmp/virt-manager.glade.h:85
 msgid "Complete"
-msgstr "Completo"
+msgstr "완료"
 
 #: tmp/virt-manager.glade.h:86
 msgid "Copyright (C) 2006 Red Hat Inc."
-msgstr "Copyright (C) 2006 Red Hat Inc."
+msgstr "저작권 (C) 2006 Red Hat Inc."
 
 #: tmp/virt-manager.glade.h:87
 msgid "Create a new virtual system"
-msgstr "Criar um novo sistema virtual"
+msgstr "새 가상 시스템 생성"
 
 #: tmp/virt-manager.glade.h:88
 msgid "Current allocation:"
-msgstr "Alocação atual:"
+msgstr "현재 할당:"
 
 #: tmp/virt-manager.glade.h:89
 msgid "De_tails"
-msgstr "De_talhes"
+msgstr "정보(_t)"
 
 #: tmp/virt-manager.glade.h:90
 msgid "Delete machine"
-msgstr "Remover máquina"
+msgstr "기계장치 삭제"
 
 #: tmp/virt-manager.glade.h:91
 msgid "Disk"
-msgstr "Disco"
+msgstr "디스켓"
 
 #: tmp/virt-manager.glade.h:93
 msgid "Disk usage:"
-msgstr "Uso do disco:"
+msgstr "디스켓 사용법:"
 
 #: tmp/virt-manager.glade.h:94
 msgid "Domain ID"
-msgstr "ID do Domínio:"
+msgstr "도메인 ID"
 
 #: tmp/virt-manager.glade.h:95
 msgid "FV install"
-msgstr "instalação FV "
+msgstr "FV 설치"
 
 #: tmp/virt-manager.glade.h:96
 msgid "F_ully Virtualized:"
-msgstr "Completamente Virt_ualizado:"
+msgstr "완전 가상화(_u):"
 
 #: tmp/virt-manager.glade.h:97
 msgid "File _Location:"
-msgstr "Localização do Arquivo:"
+msgstr "파일 위치(_L):"
 
 #: tmp/virt-manager.glade.h:98
 msgid "File _Size:"
-msgstr "Tamanho do arquivo"
+msgstr "파일 용량(_S):"
 
 #: tmp/virt-manager.glade.h:99
 msgid "Grab keyboard input:"
-msgstr "Pegar entrada do teclado:"
+msgstr "키보드 입력 잡기:"
 
 #: tmp/virt-manager.glade.h:100
 msgid "Hardware"
-msgstr "Hardware"
+msgstr "하드웨어"
 
 #: tmp/virt-manager.glade.h:101
 msgid "How many virtual CPUs should this machine be allocated?"
-msgstr "Quantas CPUs virtuais deste sistema devem ser alocadas?"
+msgstr "이 기계장치에 얼마의 가상 CPU를 할당해야 합니까?"
 
 #: tmp/virt-manager.glade.h:102
 msgid "How much memory should this machine be allocated?"
-msgstr "Quanto de memória desta máquina deve ser alocada? "
+msgstr "이 기계장치에 얼마의 메모리를 할당해야 합니까?"
 
 #: tmp/virt-manager.glade.h:103
 msgid "ISO _Location:"
-msgstr "_Localização do ISO:"
+msgstr "ISO 위치(_L):"
 
 #: tmp/virt-manager.glade.h:104
 msgid "Install Media _URL:"
-msgstr "Instalar Mídia _URL:"
+msgstr "설치 매체 URL(_U):"
 
 #: tmp/virt-manager.glade.h:105
 msgid "Intro"
-msgstr "Introdução"
+msgstr "소개"
 
 #: tmp/virt-manager.glade.h:106
 msgid ""
@@ -806,17 +792,16 @@ msgid ""
 "systems (does not require OS modification). Slower than paravirtualized "
 "systems."
 msgstr ""
-"Envolve a simulação do hardware, permitindo uma escala maior de sistemas "
-"operacionais (não requer a modificação do SO). Mais lento do que os sistemas "
-"paravirtualizados."
+"운영 체제의 더 많은 영역을 허용하기 위해 하드웨어 시뮬레이션을 포함시킵니다 "
+"(OS 수정을 필요하지 않음). 반가상화 시스템보다 속도가 느립니다."
 
 #: tmp/virt-manager.glade.h:107
 msgid "Keep CPU Settings"
-msgstr "Manter Configurações da CPU"
+msgstr "CPU 설정 유지"
 
 #: tmp/virt-manager.glade.h:108
 msgid "Kickstart U_RL:"
-msgstr "Kickstart U_RL:"
+msgstr "킥스타트 URL(_R):"
 
 #: tmp/virt-manager.glade.h:109
 msgid ""
@@ -824,18 +809,16 @@ msgid ""
 "because the OS must be specially modified to support paravirtualization. "
 "Better performance than fully virtualized systems."
 msgstr ""
-"Método customizado (Lightweight) de virtualização de máquinas. Limita a "
-"escolha do sistemas operacionais porque o SO deve especialmente ser "
-"modificado para suportar a paravirtualização. Melhor desempenho do que os "
-"sistemas completamente virtualizados. "
+"가상 기계장치의 경량의 방식. OS는 반가상화를 지원하기 위해 수정되어야 하므로 "
+"운영 체제 선택에 한계가 있음. 완전 가상화된 시스템보다 더 나은 성능을 유지함."
 
 #: tmp/virt-manager.glade.h:110
 msgid "Logical host CPUs:"
-msgstr "CPUs host lógicas:"
+msgstr "논리적 호스트 CPU:"
 
 #: tmp/virt-manager.glade.h:111
 msgid "Login"
-msgstr "Login"
+msgstr "로그인"
 
 #: tmp/virt-manager.glade.h:112
 msgid "MB"
@@ -853,43 +836,43 @@ msgstr ""
 
 #: tmp/virt-manager.glade.h:116
 msgid "Machine details..."
-msgstr "Detalhes da máquina..."
+msgstr "기계장치 정보..."
 
 #: tmp/virt-manager.glade.h:117
 msgid "Maintain history of"
-msgstr "Histórico de manutenção do"
+msgstr "히스토리 보존"
 
 #: tmp/virt-manager.glade.h:118
 msgid "Maximum allocation:"
-msgstr "Alocação máxima:"
+msgstr "최대 할당:"
 
 #: tmp/virt-manager.glade.h:119
 msgid "Memory"
-msgstr "Memória"
+msgstr "메모리"
 
 #: tmp/virt-manager.glade.h:121
 msgid "Memory usage:"
-msgstr "Uso da memória:"
+msgstr "메모리 사용법:"
 
 #: tmp/virt-manager.glade.h:122
 msgid "Modify CPU Settings"
-msgstr "Modificar Configurações de CPU"
+msgstr "CPU 설정 수정"
 
 #: tmp/virt-manager.glade.h:123
 msgid "Modify File Storage"
-msgstr "Modificar Arquivo de Armazenamento"
+msgstr "파일 저장 수정"
 
 #: tmp/virt-manager.glade.h:125
 msgid "Name:"
-msgstr "Nome:"
+msgstr "이름:"
 
 #: tmp/virt-manager.glade.h:126
 msgid "Network"
-msgstr "Rede"
+msgstr "네트워크"
 
 #: tmp/virt-manager.glade.h:128
 msgid "Network usage:"
-msgstr "Uso da rede:"
+msgstr "네트워크 사용법:"
 
 #: tmp/virt-manager.glade.h:129
 msgid ""
@@ -897,9 +880,9 @@ msgid ""
 "For new domains\n"
 "For all domains"
 msgstr ""
-"Nunca\n"
-"Para novos domínios\n"
-"Para todos domínios"
+"절대 사용안함\n"
+"새 도메인에 대해\n"
+"모든 도메인에 대해"
 
 #: tmp/virt-manager.glade.h:132
 msgid ""
@@ -907,49 +890,49 @@ msgid ""
 "When fullscreen\n"
 "On mouse over"
 msgstr ""
-"Nunca\n"
-"Quando em tela cheia\n"
-"Quando o mouse estiver sobre"
+"절대 사용안함\n"
+"전체 화면일 때\n"
+"마우스를 올렸을 때"
 
 #: tmp/virt-manager.glade.h:135
 msgid "New machine..."
-msgstr "Nova máquina..."
+msgstr "새 기계장치..."
 
 #: tmp/virt-manager.glade.h:136
 msgid "Normal Disk _Partition:"
-msgstr "_Partição Normal do Disco"
+msgstr "일반적인 디스켓 파티션(_P):"
 
 #: tmp/virt-manager.glade.h:137
 msgid "Open connection"
-msgstr "Abrir conexão"
+msgstr "연결하기"
 
 #: tmp/virt-manager.glade.h:138
 msgid "Open connection..."
-msgstr "Abrir conexão..."
+msgstr "연결하기..."
 
 #: tmp/virt-manager.glade.h:139
 msgid "Overview"
-msgstr "Visão geral"
+msgstr "개요"
 
 #: tmp/virt-manager.glade.h:140
 msgid "PVinstall"
-msgstr "Instalação PV"
+msgstr "PV설치"
 
 #: tmp/virt-manager.glade.h:141
 msgid "P_artition:"
-msgstr "P_artição:"
+msgstr "파티션(_a):"
 
 #: tmp/virt-manager.glade.h:142
 msgid "Password:"
-msgstr "Senha:"
+msgstr "암호:"
 
 #: tmp/virt-manager.glade.h:143
 msgid "Pause"
-msgstr "Pausar"
+msgstr "중지"
 
 #: tmp/virt-manager.glade.h:144
 msgid "Please choose a name for your virtual system:"
-msgstr "Por favor, escolha um nome para seu sistema virtual:"
+msgstr "가상 시스템명을 선택해 주십시오:"
 
 #: tmp/virt-manager.glade.h:145
 #, fuzzy
@@ -959,15 +942,13 @@ msgid ""
 "lower amount to grab on startup. Warning: setting VM memory too high will "
 "cause out-of-memory errors in your host domain!"
 msgstr ""
-"Por favor, insira a configuração de memória para está MV. Você pode "
-"especificar a quantidade máxima de memória que a MV deve estar habilitada a "
-"utilizar e opcionalmente a quantidade mínima a ser tomada na inicialização."
+"VM에 대한 메모리 설정을 입력해 주십시오. VM이 사용할 수 있는 최대 메모리 용량"
+"을 지정하시거나 또는 시작에서 취할 수 있는 낮은 용량을 지정하실 수 도 있습니"
+"다."
 
 #: tmp/virt-manager.glade.h:146
 msgid "Please enter the number of virtual CPUs this VM should start up with."
-msgstr ""
-"Por favor, insira o número de CPUs virtuais com as quais esta MV deve "
-"iniciar."
+msgstr "이 VM이 시작해야 하는 가상 CPU의 숫자를 입력해 주십시오."
 
 #: tmp/virt-manager.glade.h:147
 msgid ""
@@ -975,9 +956,9 @@ msgid ""
 "for your new virtual system. This space will be used to install the virtual "
 "system's operating system."
 msgstr ""
-"Por favor indique como você gostaria de alocar espaço neste host físico para "
-"o seu novo sistema virtual. Este espaço será usado para instalar o sistema "
-"operacional do sistema virtual."
+"새 가상 시스템에 대해 물리적 호스트 시스템에 있는 공간을 어떻게 할당하실 지"
+"를 알려주십시오. 이 공간은 가상 시스템의 운영 체제를 설치하기 위해 사용됩니"
+"다."
 
 #: tmp/virt-manager.glade.h:148
 msgid ""
@@ -985,9 +966,8 @@ msgid ""
 "system you would like to install on this <b>fully virtualized</b> virtual "
 "system:"
 msgstr ""
-"Por favor indique a localização da mídia de instalação disponível para o "
-"sistema operacional que você gostaria de instalar neste sistema virtual "
-"<b>fully virtualized</b>:"
+"<b>완전 가상화된</b> 가상 시스템에 설치하시고자 하는 운영 체제에 대해 설치 미"
+"디어를 사용할 수 있는 곳을 알려주십시오:"
 
 #: tmp/virt-manager.glade.h:149
 msgid ""
@@ -996,92 +976,88 @@ msgid ""
 "system. Optionally you can provide the URL for a kickstart file that "
 "describes your system:"
 msgstr ""
-"Por favor indique a localização da mídia de instalação disponível para o "
-"sistema operacional que você gostaria de instalar neste sistema virtual "
-"<b>paravirtualized</b>. Alternativamente, você pode fornecer a URL de um "
-"arquivo de kickstart que descreva o seu sistema:"
+"<b>완전 가상화된</b> 가상 시스템에 설치하시고자 하는 운영 체제에 대해 설치 미"
+"디어를 사용할 수 있는 곳을 알려주십시오. 시스템을 설명하는 킥스타트에 해당하"
+"는 URL을 알려주셔도 됩니다:"
 
 #: tmp/virt-manager.glade.h:150
 msgid "Please wait..."
-msgstr "Por favor aguarde..."
+msgstr "기다려 주십시오..."
 
 #: tmp/virt-manager.glade.h:151
 msgid "Powered by libvirt"
-msgstr "Powered by libvirt"
+msgstr "libvirt에 의해 실행됨"
 
 #: tmp/virt-manager.glade.h:152
 msgid ""
 "Press finish to create a new virtual machine with\n"
 "this configuration & display the virtual console."
 msgstr ""
-"Pressione em finalizar para criar uma nova máquina virtual com\n"
-"esta configuração e exibir o console virtual."
+"설정 & 디스플레이 가상 콘솔을 가지고 새 가상 기계장치를\n"
+"생성하기 위해 완료 버튼을 누르십시오."
 
 #: tmp/virt-manager.glade.h:154
 msgid "Processor"
-msgstr "Processador "
+msgstr "프로세서"
 
 #: tmp/virt-manager.glade.h:155
 msgid "Randomly generated MAC address"
-msgstr "Endereço MAC gerado randomicamente"
+msgstr "임의로 생성된 MAC 주소"
 
 #: tmp/virt-manager.glade.h:156
 msgid "Restore a saved machine from a filesystem image"
-msgstr ""
-"Restaurar uma maquina salva a partir de uma imagem de arquivo de sistema"
+msgstr "파일 시스템 이미지에서 저장된 기계장치 복구"
 
 #: tmp/virt-manager.glade.h:157
 msgid "Restore saved machine..."
-msgstr "Restaurar máquina salva..."
+msgstr "저장된 기계장치 복구..."
 
 #: tmp/virt-manager.glade.h:158
 msgid "Run"
-msgstr "Executar"
+msgstr "실행"
 
 #: tmp/virt-manager.glade.h:159
 #, fuzzy
 msgid "S_hutdown"
-msgstr "Desligamento"
+msgstr "종료"
 
 #: tmp/virt-manager.glade.h:160
 msgid "Save this password in your keyring"
-msgstr "Salvar esta senha em seu keyring"
+msgstr "키링에 암호 저장"
 
 #: tmp/virt-manager.glade.h:161
 msgid "Saving VM Image"
-msgstr "Salvando imagem VM"
+msgstr "VM 이미지 저장하기"
 
 #: tmp/virt-manager.glade.h:162
 msgid "Screenshot"
-msgstr "Screenshot"
+msgstr "스크린샷"
 
 #: tmp/virt-manager.glade.h:163
 msgid "Shut down"
-msgstr "Desligar"
+msgstr "종료"
 
 #: tmp/virt-manager.glade.h:165
 msgid "Simple F_ile:"
-msgstr "Arqu_ivo Simples:"
+msgstr "간단한 파일(_i):"
 
 #: tmp/virt-manager.glade.h:166
 msgid "Specified MAC address:"
-msgstr "Endereço MAC especificado:"
+msgstr "지정된 MAC 주소:"
 
 #: tmp/virt-manager.glade.h:168
 msgid "Status:"
-msgstr "Status:"
+msgstr "상태:"
 
 #: tmp/virt-manager.glade.h:169
 msgid "System _Name:"
-msgstr "_Nome do Sistema:"
+msgstr "시스템명(_N):"
 
 #: tmp/virt-manager.glade.h:170
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
-msgstr ""
-"A <b>localização</b> do arquivo necessário para instalação de um sistema "
-"operacional sobre o sistema virtual"
+msgstr "가상 시스템에 운영 체제를 설치하기 위해 필요한 파일의 <b>위치</b>"
 
 #: tmp/virt-manager.glade.h:171
 msgid ""
@@ -1089,25 +1065,24 @@ msgid ""
 "will be asked for some information about the virtual system you'd like to "
 "create, such as:"
 msgstr ""
-"Este assistente irá guia-lo criando um novo sistema virtual. Você será "
-"questionado sobre algumas informações de como você gostaria de criar seu "
-"sistema virtual, como:"
+"새 가상 시스템을 생성하여 안내해 드립니다. 다음과 같이, 생성하시고자 하는 가"
+"상 시스템에 관한 정보를 요구하게 됩니다:"
 
 #: tmp/virt-manager.glade.h:172
 msgid "Toolbar"
-msgstr "Barra de ferramentas"
+msgstr "툴바"
 
 #: tmp/virt-manager.glade.h:173
 msgid "Total CPUs on host machine:"
-msgstr "Total de CPUs da máquina host:"
+msgstr "호스트 기계장치의 전체 CPU:"
 
 #: tmp/virt-manager.glade.h:174
 msgid "Total memory on host machine:"
-msgstr "Total de memória da máquina host:"
+msgstr "가상 기계장치의 총 메모리:"
 
 #: tmp/virt-manager.glade.h:175
 msgid "Type"
-msgstr "Tipo"
+msgstr "유형"
 
 #: tmp/virt-manager.glade.h:176
 msgid "UUID:"
@@ -1115,21 +1090,21 @@ msgstr "UUID:"
 
 #: tmp/virt-manager.glade.h:177
 msgid "Unavailable"
-msgstr "Não disponível"
+msgstr "사용 불가능"
 
 #: tmp/virt-manager.glade.h:178
 msgid "Update status every"
-msgstr "Status de cada atualização"
+msgstr "..마다 상태 업데이트"
 
 #: tmp/virt-manager.glade.h:179
 #, fuzzy
 msgid "VM _Max Memory (MB):"
-msgstr "_Memória Máxima da MV:"
+msgstr "VM 최대 메모리(_M):"
 
 #: tmp/virt-manager.glade.h:180
 #, fuzzy
 msgid "VM _Startup Memory (MB):"
-msgstr "Memória de i_nicialização da MV:"
+msgstr "VM 시작 메모리(_S):"
 
 #: tmp/virt-manager.glade.h:181
 msgid "VNC"
@@ -1137,48 +1112,45 @@ msgstr "VNC"
 
 #: tmp/virt-manager.glade.h:182
 msgid "Virtual CPUs"
-msgstr "CPUs Virtuais"
+msgstr "가상 CPU"
 
 #: tmp/virt-manager.glade.h:183
 msgid "Virtual Machine Console"
-msgstr "Console da Máquina Virtual"
+msgstr "가상 기계장치 콘솔"
 
 #: tmp/virt-manager.glade.h:184
 msgid "Virtual Machine Details"
-msgstr "Detalhes da Máquina Virtual"
+msgstr "가상 기계장치 정보"
 
 #: tmp/virt-manager.glade.h:185
 msgid "Virtual Machine Manager"
-msgstr "Gerenciador de Máquina Virtual"
+msgstr "가상 기계장치 관리자"
 
 #: tmp/virt-manager.glade.h:186
 msgid "Virtual Machine Manager Preferences"
-msgstr "Gerenciador de Preferências de Máquina Virtual"
+msgstr "가상 기계장치 관리자 설정"
 
 #: tmp/virt-manager.glade.h:187
 msgid "Virtual _Machine"
-msgstr "_Máquinas Virtual"
+msgstr "가상 기계장치(_M)"
 
 #: tmp/virt-manager.glade.h:188
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
-msgstr ""
-"Se o sistema será <b>completamente virtualizado</b> ou <b>paravirtualizado</"
-"b>"
+msgstr "시스템이 <b>완전 가상화</b> 또는 <b>반가상화</b> 상태인지의 여부"
 
 #: tmp/virt-manager.glade.h:189
 msgid "You will need to choose a virtualization method for your new system:"
-msgstr ""
-"Você irá precisar escolher um método de virtualização para seu novo sistema:"
+msgstr "새로운 시스템에 대한 가상화 방식을 선택하셔야 합니다:"
 
 #: tmp/virt-manager.glade.h:190
 msgid "_Browse..."
-msgstr "Procurar..."
+msgstr "검색(_B)..."
 
 #: tmp/virt-manager.glade.h:191
 msgid "_CD-ROM or DVD:"
-msgstr "_CD-ROM ou DVD:"
+msgstr "_CD-ROM 또는 DVD:"
 
 #: tmp/virt-manager.glade.h:192
 msgid "_Destroy"
@@ -1186,95 +1158,95 @@ msgstr ""
 
 #: tmp/virt-manager.glade.h:193
 msgid "_Details"
-msgstr "_Detalhes"
+msgstr "정보(_D)"
 
 #: tmp/virt-manager.glade.h:194
 msgid "_Edit"
-msgstr "_Editar"
+msgstr "편집(_E)"
 
 #: tmp/virt-manager.glade.h:195
 msgid "_File"
-msgstr "Arquivo"
+msgstr "파일(_F)"
 
 #: tmp/virt-manager.glade.h:196
 msgid "_Finish"
-msgstr "Concluir"
+msgstr "완료(_F)"
 
 #: tmp/virt-manager.glade.h:197
 msgid "_FullScreen"
-msgstr "Tela Cheia"
+msgstr "전체 화면(_F)"
 
 #: tmp/virt-manager.glade.h:198
 msgid "_Graphical Console"
-msgstr "Console _Gráfico"
+msgstr "그래픽 콘솔(_G)"
 
 #: tmp/virt-manager.glade.h:199
 msgid "_Help"
-msgstr "_Ajuda"
+msgstr "도움말(_H)"
 
 #: tmp/virt-manager.glade.h:200
 msgid "_Host:"
-msgstr "_Host:"
+msgstr "호스트(_H):"
 
 #: tmp/virt-manager.glade.h:201
 msgid "_ISO Image Location:"
-msgstr "Localização da Imagem _ISO:"
+msgstr "ISO 이미지 위치(_I):"
 
 #: tmp/virt-manager.glade.h:202
 msgid "_Local Xen host"
-msgstr "Host Xen _local"
+msgstr "로컬 Xen 호스트(_L)"
 
 #: tmp/virt-manager.glade.h:203
 msgid "_Mount Point (on virtual system):"
-msgstr "Ponto de _Montagem (no sistema virtual):"
+msgstr "마운트 지점 (가상 시스템상에서)(_M):"
 
 #: tmp/virt-manager.glade.h:204
 msgid "_Other hypervisor"
-msgstr "_Outro hipervisor"
+msgstr "다른 하이퍼바이저(_O)"
 
 #: tmp/virt-manager.glade.h:205
 msgid "_Paravirtualized:"
-msgstr "Paravirtualizado:"
+msgstr "반가상화(_P):"
 
 #: tmp/virt-manager.glade.h:206
 msgid "_Path to install media:"
-msgstr "Caminho para instalar a mídia:"
+msgstr "설치 매체 경로(_P):"
 
 #: tmp/virt-manager.glade.h:207
 msgid "_Pause"
-msgstr "_Pausar"
+msgstr "중지(_P)"
 
 #: tmp/virt-manager.glade.h:208
 msgid "_Port:"
-msgstr "_Porta:"
+msgstr "포트(_P):"
 
 #: tmp/virt-manager.glade.h:209
 msgid "_Read only connection"
-msgstr "Conexão somente de leitu_ra"
+msgstr "읽기 전용 연결(_R)"
 
 #: tmp/virt-manager.glade.h:210
 msgid "_Remote Xen host"
-msgstr "Host Xen _remoto"
+msgstr "원격 Xen 호스트(_R)"
 
 #: tmp/virt-manager.glade.h:211
 msgid "_Run"
-msgstr "Executar"
+msgstr "실행(_R)"
 
 #: tmp/virt-manager.glade.h:212
 msgid "_Save"
-msgstr "_Salvar"
+msgstr "저장(_S)"
 
 #: tmp/virt-manager.glade.h:213
 msgid "_Serial Console"
-msgstr "Console _Serial"
+msgstr "직렬 콘솔(_S)"
 
 #: tmp/virt-manager.glade.h:214
 msgid "_Size:"
-msgstr "Tamanho:"
+msgstr "용량(_S):"
 
 #: tmp/virt-manager.glade.h:215
 msgid "_Take Screenshot"
-msgstr "Obter Screenshot"
+msgstr "스크린샷 찍기(_T)"
 
 #: tmp/virt-manager.glade.h:216
 msgid "_URI:"
@@ -1282,19 +1254,19 @@ msgstr "_URI:"
 
 #: tmp/virt-manager.glade.h:217
 msgid "_VCPUs:"
-msgstr "_VCPUs"
+msgstr "_VCPU:"
 
 #: tmp/virt-manager.glade.h:218
 msgid "_View"
-msgstr "_Visualização"
+msgstr "보기(_V)"
 
 #: tmp/virt-manager.glade.h:219
 msgid "_View:"
-msgstr "_Visualização:"
+msgstr "보기(_V):"
 
 #: tmp/virt-manager.glade.h:220
 msgid "demo"
-msgstr "demonstração"
+msgstr "데모"
 
 #: tmp/virt-manager.glade.h:221
 msgid "http://"
@@ -1314,37 +1286,24 @@ msgstr "para"
 
 #: tmp/virt-manager.glade.h:225
 msgid "samples"
-msgstr "exemplo"
+msgstr "예"
 
 #: tmp/virt-manager.glade.h:226
 msgid "seconds"
-msgstr "segundos"
+msgstr "초"
 
 #: tmp/virt-manager.glade.h:228
 msgid "translator-credits"
-msgstr "créditos do tradutor"
+msgstr "김은주 (eukim@redhat.com)"
 
 #: tmp/virt-manager.glade.h:229
 msgid "virtual CPU alert"
-msgstr "Alerta da CPU virtual"
+msgstr "가상 CPU 통지"
 
 #~ msgid ""
 #~ "<small><b>Note:</b> File size parameter is only relevant for new files</"
 #~ "small>"
-#~ msgstr ""
-#~ "<small><b>Nota:</b> O parâmetro tamanho de arquivo somente será relevante "
-#~ "para novos arquivos</small>"
+#~ msgstr "<small><b>주의:</b> 파일 용량 매개변수는 새 파일에만 관련됨</small>"
 
 #~ msgid "_Shutdown"
-#~ msgstr "De_sligar"
-
-#~ msgid "How many virtual CPUs should this system have?"
-#~ msgstr "Quantas CPUs de máquinas virtuais este sistema tem?"
-
-#~ msgid "How much memory should this VM start up with?"
-#~ msgstr "Com quanto memória esta VM deve iniciar? "
-
-#~ msgid "What is the maximum amount of memory this VM should be able to use?"
-#~ msgstr ""
-#~ "Qual é a quantidade máxima de memória desta VM deve estar disponível para "
-#~ "uso?"
+#~ msgstr "종료(_S)"

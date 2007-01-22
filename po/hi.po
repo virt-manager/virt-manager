@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-11-06 16:17-0500\n"
-"PO-Revision-Date: 2006-10-11 15:06+0530\n"
+"POT-Creation-Date: 2007-01-22 18:10-0500\n"
+"PO-Revision-Date: 2006-11-27 11:15+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -17,8 +17,9 @@ msgstr ""
 "X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "\n"
+"\n"
 
-#: ../../src/virt-manager.py.in:61
+#: ../../src/virt-manager.py.in:62
 msgid "Unable to initialize GTK: "
 msgstr "GTK आरंभ करने में विफल: "
 
@@ -39,73 +40,77 @@ msgstr ""
 msgid "Screenshot saved"
 msgstr "स्क्रीनशॉट सहेजा"
 
-#: ../../src/virtManager/console.py:388
+#: ../../src/virtManager/console.py:405
 msgid "paused"
 msgstr "ठहराया गया"
 
-#: ../../src/virtManager/create.py:304
+#: ../../src/virtManager/create.py:348
 msgid "Paravirtualized"
 msgstr "पैरावर्चुअलाइज्ड"
 
-#: ../../src/virtManager/create.py:306
+#: ../../src/virtManager/create.py:350
 msgid "Fully virtualized"
 msgstr "पूर्ण वर्चुअलीकृत"
 
-#: ../../src/virtManager/create.py:337
+#: ../../src/virtManager/create.py:381
 msgid "Invalid FV media address"
 msgstr "अवैध FV मीडिया पता"
 
-#: ../../src/virtManager/create.py:343
+#: ../../src/virtManager/create.py:387
 msgid "Invalid PV media address"
 msgstr "अवैध PV मीडिया पता"
 
-#: ../../src/virtManager/create.py:353
+#: ../../src/virtManager/create.py:397
 msgid "Invalid system name"
 msgstr "अवैध सिस्टम नाम"
 
-#: ../../src/virtManager/create.py:360
+#: ../../src/virtManager/create.py:404
 msgid "Invalid memory setting"
 msgstr "अवैध स्मृति जमावट"
 
-#: ../../src/virtManager/create.py:377
+#: ../../src/virtManager/create.py:426
 msgid "Invalid storage address"
 msgstr "अवैध भंडारण पता"
 
-#: ../../src/virtManager/create.py:404
+#: ../../src/virtManager/create.py:460
 msgid "Creating Virtual Machine"
 msgstr "वर्चुअल मशीन बना रहा है"
 
-#: ../../src/virtManager/create.py:408
+#: ../../src/virtManager/create.py:465
 msgid "Guest Install Error"
 msgstr "अतिथि अधिष्ठापन त्रुटि"
 
-#: ../../src/virtManager/create.py:443
+#: ../../src/virtManager/create.py:503
 msgid "Locate ISO Image"
 msgstr "ISO बिंब पता करें"
 
-#: ../../src/virtManager/create.py:472
+#: ../../src/virtManager/create.py:532
 msgid "Locate Storage Partition"
 msgstr "भंडारण विभाजन पता करें"
 
-#: ../../src/virtManager/create.py:478
+#: ../../src/virtManager/create.py:538
 msgid "Locate or Create New Storage File"
 msgstr "नया भंडारण फाइल बनायें या पता करें"
 
-#: ../../src/virtManager/create.py:537
+#: ../../src/virtManager/create.py:604 ../../src/virtManager/create.py:608
 msgid "Invalid System Name"
 msgstr "अवैध सिस्टम नाम"
 
-#: ../../src/virtManager/create.py:538
-msgid ""
-"System name must be non-blank, less than 50 characters, and contain no spaces"
+#: ../../src/virtManager/create.py:605
+#, fuzzy
+msgid "System name must be non-blank and less than 50 characters"
 msgstr ""
 "सिस्टम नाम जरूर खाली रहना चाहिये, 50 संप्रतीक से कम, और बिना खाली जगह के रहना चाहिये"
 
-#: ../../src/virtManager/create.py:543
+#: ../../src/virtManager/create.py:609
+msgid "System name may contain alphanumeric and '_' characters only"
+msgstr ""
+
+#: ../../src/virtManager/create.py:615
 msgid "Hardware Support Required"
 msgstr "हार्डवेयर समर्थन जरूरी"
 
-#: ../../src/virtManager/create.py:544
+#: ../../src/virtManager/create.py:616
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
@@ -113,80 +118,92 @@ msgstr ""
 "आपका हार्डवेयर पूर्ण वर्चुअलाइजेशन का समर्थन करता नहीं प्रतीत होता है. सिर्फ "
 "पैरावर्चुअलाइज्ड अतिथि इस हार्डवेयर पर उपलब्ध होंगे."
 
-#: ../../src/virtManager/create.py:551
+#: ../../src/virtManager/create.py:623
 msgid "ISO Path Required"
 msgstr "ISO पथ जरूरी"
 
-#: ../../src/virtManager/create.py:552
+#: ../../src/virtManager/create.py:624
 msgid "You must specify an ISO location for the guest installation"
 msgstr "आप एक ISO अवस्थिति अतिथि अधिष्ठापन के लिये जरूर निर्दिष्ट करें"
 
-#: ../../src/virtManager/create.py:555
+#: ../../src/virtManager/create.py:627
 msgid "ISO Path Not Found"
 msgstr "ISO पथ नहीं मिला"
 
-#: ../../src/virtManager/create.py:556
+#: ../../src/virtManager/create.py:628
 msgid "You must specify a valid path to the ISO image for guest installation"
 msgstr "अतिथि अधिष्ठापन के लिये ISO बिंब में वैध पथ आप जरूर निर्दिष्ट करें"
 
-#: ../../src/virtManager/create.py:561
+#: ../../src/virtManager/create.py:633
 msgid "Install media required"
 msgstr "अधिष्ठापन मीडिया जरूरी"
 
-#: ../../src/virtManager/create.py:562
+#: ../../src/virtManager/create.py:634
 msgid "You must select the CDROM install media for guest installation"
 msgstr "आपको CDROM अधिष्ठापन मीडिया अतिथि अधिष्ठापन के लिये जरूर चुनना चाहिये"
 
-#: ../../src/virtManager/create.py:567
+#: ../../src/virtManager/create.py:639
 msgid "URL Required"
 msgstr "URL जरूरी"
 
-#: ../../src/virtManager/create.py:568
+#: ../../src/virtManager/create.py:640
 msgid "You must specify a URL for the install image for the guest install"
 msgstr "आप अतिथि अधिष्ठापन के लिये अधिष्ठापन बिंब के लिये एक URL जरूर निर्दिष्ट करें"
 
-#: ../../src/virtManager/create.py:574
+#: ../../src/virtManager/create.py:646
 msgid "Storage Address Required"
 msgstr "भंडारण पता जरूरी"
 
-#: ../../src/virtManager/create.py:575
+#: ../../src/virtManager/create.py:647
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
 msgstr "आप अतिथि अधिष्ठापन के लिये भंडारण के लिये विभाजन या फाइल जरूर निर्दिष्ट करें"
 
-#: ../../src/virtManager/create.py:620 ../../src/virtManager/create.py:655
+#: ../../src/virtManager/create.py:652
+#, fuzzy
+msgid "Storage Address Is Directory"
+msgstr "भंडारण पता जरूरी"
+
+#: ../../src/virtManager/create.py:653
+msgid ""
+"You chose 'Simple File' storage for your storage method, but chose a "
+"directory instead of a file. Please enter a new filename or choose an "
+"existing file."
+msgstr ""
+
+#: ../../src/virtManager/create.py:698 ../../src/virtManager/create.py:733
 msgid "No media present"
 msgstr "कोई मीडिया मौजूद नहीं"
 
-#: ../../src/virtManager/details.py:342
+#: ../../src/virtManager/details.py:411
 msgid "Destination"
 msgstr "गंतव्य"
 
-#: ../../src/virtManager/details.py:380
+#: ../../src/virtManager/details.py:450
 msgid "MAC address"
 msgstr "MAC पता"
 
-#: ../../src/virtManager/domain.py:269
+#: ../../src/virtManager/domain.py:363
 msgid "Running"
 msgstr "कार्यशील"
 
-#: ../../src/virtManager/domain.py:271
+#: ../../src/virtManager/domain.py:365
 msgid "Paused"
 msgstr "ठहराया हुआ"
 
-#: ../../src/virtManager/domain.py:273 tmp/virt-manager.glade.h:162
+#: ../../src/virtManager/domain.py:367 tmp/virt-manager.glade.h:164
 msgid "Shutdown"
 msgstr "बंद"
 
-#: ../../src/virtManager/domain.py:275
+#: ../../src/virtManager/domain.py:369
 msgid "Shutoff"
 msgstr "बंद"
 
-#: ../../src/virtManager/domain.py:277
+#: ../../src/virtManager/domain.py:371
 msgid "Crashed"
 msgstr "क्रैश"
 
-#: ../../src/virtManager/domain.py:279
+#: ../../src/virtManager/domain.py:373
 msgid "Unknown status code"
 msgstr "अज्ञात स्थिति कोड"
 
@@ -195,82 +212,96 @@ msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr ""
+"Xen हाइपरविजर/डेमॉन में संबंधन खोलने में असमर्थ.\n"
+"\n"
 
 #: ../../src/virtManager/engine.py:75
 msgid "Verify that:\n"
-msgstr ""
+msgstr "इसे जांचें:\n"
 
 #: ../../src/virtManager/engine.py:76
 msgid " - A Xen host kernel was booted\n"
-msgstr ""
+msgstr " - Xen मेजबान कर्नेल बूट किया गया था\n"
 
 #: ../../src/virtManager/engine.py:77
-#, fuzzy
 msgid " - The Xen service has been started\n"
-msgstr ""
-"स्क्रीनशॉट इसमें सहेजा नहीं जा सका:\n"
-"%s"
+msgstr " - Xen सेवा आरंभ किया जा रहा है\n"
 
 #: ../../src/virtManager/engine.py:80
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
-msgstr ""
+msgstr "'%s' हाइपरविजर में संबंधन खोलने में असमर्थ"
 
 #: ../../src/virtManager/engine.py:81
-#, fuzzy
 msgid "Virtual Machine Manager Connection Failure"
-msgstr "वर्चुअल मशीन प्रबंधक"
+msgstr "वर्चुअल मशीन प्रबंधक संबंधन विफलता"
 
-#: ../../src/virtManager/engine.py:277
+#: ../../src/virtManager/engine.py:281
 msgid "Save Virtual Machine"
 msgstr "वर्चुअल मशीन सहेजें"
 
-#: ../../src/virtManager/engine.py:290
+#: ../../src/virtManager/engine.py:294
 msgid "Saving Virtual Machine"
 msgstr "वर्चुअल मशीन सहेजें"
 
-#: ../../src/virtManager/manager.py:172
+#: ../../src/virtManager/engine.py:310
+#, fuzzy, python-format
+msgid "About to destroy virtual machine %s"
+msgstr "वर्चुअल मशीन फिर जमा करें"
+
+#: ../../src/virtManager/engine.py:311
+msgid ""
+"This will immediately destroy the VM and may corrupt its disk image. Are you "
+"sure?"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:189
 msgid "Restore Virtual Machine"
 msgstr "वर्चुअल मशीन फिर जमा करें"
 
-#: ../../src/virtManager/manager.py:186
+#: ../../src/virtManager/manager.py:204
 msgid "Restoring Virtual Machine"
 msgstr "वर्चुअल मशीन फिर जमा रहा है"
 
-#: ../../src/virtManager/manager.py:204
+#: ../../src/virtManager/manager.py:211
+#, python-format
+msgid "The file '%s' does not appear to be a valid saved machine image"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:239
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr "'%s' डोमेन के पुनर्भंडारण में त्रुटि. क्या डोमेन पहले से चल रहा है?"
 
-#: ../../src/virtManager/manager.py:310
+#: ../../src/virtManager/manager.py:421
 msgid "ID"
 msgstr "ID"
 
-#: ../../src/virtManager/manager.py:311 tmp/virt-manager.glade.h:123
+#: ../../src/virtManager/manager.py:422 tmp/virt-manager.glade.h:124
 msgid "Name"
 msgstr "नाम"
 
-#: ../../src/virtManager/manager.py:312 tmp/virt-manager.glade.h:165
+#: ../../src/virtManager/manager.py:423 tmp/virt-manager.glade.h:167
 msgid "Status"
 msgstr "स्थिति"
 
-#: ../../src/virtManager/manager.py:313 tmp/virt-manager.glade.h:79
+#: ../../src/virtManager/manager.py:424 tmp/virt-manager.glade.h:80
 msgid "CPU usage"
 msgstr "CPU प्रयोग"
 
-#: ../../src/virtManager/manager.py:314
+#: ../../src/virtManager/manager.py:425
 msgid "VCPUs"
 msgstr "VCPU"
 
-#: ../../src/virtManager/manager.py:315 tmp/virt-manager.glade.h:119
+#: ../../src/virtManager/manager.py:426 tmp/virt-manager.glade.h:120
 msgid "Memory usage"
 msgstr "स्मृति प्रयोग"
 
-#: ../../src/virtManager/manager.py:316 tmp/virt-manager.glade.h:91
+#: ../../src/virtManager/manager.py:427 tmp/virt-manager.glade.h:92
 msgid "Disk usage"
 msgstr "डिस्क प्रयोग"
 
-#: ../../src/virtManager/manager.py:317 tmp/virt-manager.glade.h:126
+#: ../../src/virtManager/manager.py:428 tmp/virt-manager.glade.h:127
 msgid "Network traffic"
 msgstr "संजाल परिवहन"
 
@@ -280,15 +311,15 @@ msgstr "सीरियल कंसोल"
 
 #: tmp/virt-manager.glade.h:1
 msgid " "
-msgstr ""
+msgstr " "
 
 #: tmp/virt-manager.glade.h:2
 msgid " free"
-msgstr " free"
+msgstr " मुक्त"
 
 #: tmp/virt-manager.glade.h:3
 msgid " of "
-msgstr " of "
+msgstr " इसका "
 
 #: tmp/virt-manager.glade.h:4
 msgid "/tmp"
@@ -321,7 +352,7 @@ msgstr "2 GB"
 
 #: tmp/virt-manager.glade.h:12
 msgid "20 bits/sec"
-msgstr "20 bits/sec"
+msgstr "20 बिट/सेकेंड"
 
 #: tmp/virt-manager.glade.h:13
 msgid "200 MB"
@@ -376,9 +407,8 @@ msgid "<b>CPUs</b>"
 msgstr "<b>CPU</b>"
 
 #: tmp/virt-manager.glade.h:26
-#, fuzzy
 msgid "<b>Consoles</b>"
-msgstr "<b>CPU</b>"
+msgstr "<b>कंसोल</b>"
 
 #: tmp/virt-manager.glade.h:27
 msgid "<b>Disk image:</b>"
@@ -474,7 +504,7 @@ msgid ""
 "than (or equal to) the number of physical CPUs on the host system."
 msgstr ""
 "<b>संकेत:</b> सर्वाधिक अच्छे प्रदर्शन के लिये, वर्चुअल CPU की संख्या को मेजबान सिस्टम पर "
-"भौतिक CPU की संख्या से कम (या समान) होनी चाहिये."
+"भौतिक CPU की संख्या से कम (या समान) होना चाहिये."
 
 #: tmp/virt-manager.glade.h:48
 msgid ""
@@ -492,16 +522,17 @@ msgid ""
 msgstr ""
 "<b>कई वर्चुअल CPU</b>\n"
 "\n"
-"आपने वर्चुअल मशीन को ज्यादा CPU रखने के लिये सेट किया है बनिस्पत जितना एख मेजबान सिस्टम "
+"आपने वर्चुअल मशीन को ज्यादा CPU रखने के लिये सेट किया है बनिस्पत जितना एक मेजबान सिस्टम "
 "के पास भौतिक रूप से है. यह वर्चुअल मशीन में बुरे प्रदर्शन के रूप में परिणाम लायेगा."
 
 #: tmp/virt-manager.glade.h:52
-msgid "<b>Virtaulization method:</b>"
-msgstr "<b>वर्चुअलाइजेशन विधि:</b>"
-
-#: tmp/virt-manager.glade.h:53
 msgid "<b>Virtual CPUs:</b>"
 msgstr "<b>वर्चुअल CPU:</b>"
+
+#: tmp/virt-manager.glade.h:53
+#, fuzzy
+msgid "<b>Virtualization method:</b>"
+msgstr "<b>वर्चुअलाइजेशन विधि:</b>"
 
 #: tmp/virt-manager.glade.h:54
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
@@ -519,34 +550,29 @@ msgstr ""
 
 #: tmp/virt-manager.glade.h:57
 msgid ""
-"<small><b>Note:</b> File size parameter is only relevant for new files</"
-"small>"
-msgstr ""
-"<small><b>नोट:</b> फाइल आकार पैरामीटर नये फाइल के लिये लिये सिर्फ संदर्भित है</small>"
-
-#: tmp/virt-manager.glade.h:58
-msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
 msgstr ""
+"<small><b>नोट:</b> मशीन में मेजबान CPU पूर्ण वर्चुअलाइजेशन के लिये समर्थन नहीं है.</small>"
 
-#: tmp/virt-manager.glade.h:59
+#: tmp/virt-manager.glade.h:58
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
 msgstr ""
+"<small><b>नोट:</b> मशीन में मेजबान CPU पूर्ण वर्चुअलाइजेशन का समर्थन करता है, लेकिन यह "
+"BIOS द्वारा सक्रिय नहीं है.</small>"
 
-#: tmp/virt-manager.glade.h:60
-#, fuzzy
+#: tmp/virt-manager.glade.h:59
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
 "small>"
 msgstr ""
 "<small><b>संकेत:</b> सर्वोत्तम प्रदर्शन के लिये, वर्चुअल CPU की संख्या को मेजबान सिस्टम पर "
-"भौतिक CPU की संख्या से कम (या समान) होनी चाहिये.</small>"
+"तार्किक CPU की संख्या से कम (या समान) होनी चाहिये.</small>"
 
-#: tmp/virt-manager.glade.h:61
+#: tmp/virt-manager.glade.h:60
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
@@ -555,6 +581,14 @@ msgstr ""
 "<small><b>संकेत:</b> अपने वर्चुअल सिस्टम में, संजाल आरोहित भंडारण के साथ, आप अतिरिक्त "
 "भंडारण जोड़ सकते हैं जब इसे समान औजार के प्रयोग से बनाया जाता है जिसे आप अपने भौतिक "
 "सिस्टम पर रखना चाहते हैं.</small>"
+
+#: tmp/virt-manager.glade.h:61
+msgid ""
+"<small><b>Warning:</b> If you do not allocate the entire disk at VM "
+"creation, space will be allocated as needed while the guest is running. If "
+"sufficient free space is not available on the host, this may result in data "
+"corruption on the guest.</small>"
+msgstr ""
 
 #: tmp/virt-manager.glade.h:62
 msgid ""
@@ -622,7 +656,7 @@ msgstr "वर्चुअल NIC जोड़ें"
 
 #: tmp/virt-manager.glade.h:71
 msgid "Add virtual NIC with:"
-msgstr "वर्चुअल NIC को इसके साथ जोड़े:"
+msgstr "वर्चुअल NIC को इसके साथ जोड़ें:"
 
 #: tmp/virt-manager.glade.h:72
 msgid "Alert"
@@ -634,122 +668,123 @@ msgid ""
 "Active virtual machines\n"
 "Inactive virtual machines"
 msgstr ""
-"सारा वर्चुअल मशीन\n"
+"सभी वर्चुअल मशीन\n"
 "सक्रिय वर्चुअल मशीन\n"
 "निष्क्रिय वर्चुअल मशीन"
 
 #: tmp/virt-manager.glade.h:76
+msgid "Allocate entire virtual disk now?"
+msgstr ""
+
+#: tmp/virt-manager.glade.h:77
 msgid "Auth"
 msgstr "Auth"
 
-#: tmp/virt-manager.glade.h:77
-msgid "Automatically open consoles:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:78
+msgid "Automatically open consoles:"
+msgstr "स्वतः कंसोल खोलें:"
+
+#: tmp/virt-manager.glade.h:79
 msgid "Browse..."
 msgstr "ब्रॉउज करें..."
 
-#: tmp/virt-manager.glade.h:80
+#: tmp/virt-manager.glade.h:81
 msgid "CPU usage:"
 msgstr "CPU प्रयोग:"
 
-#: tmp/virt-manager.glade.h:81
+#: tmp/virt-manager.glade.h:82
 msgid "CPU/memory"
 msgstr "CPU/स्मृति"
 
-#: tmp/virt-manager.glade.h:82
+#: tmp/virt-manager.glade.h:83
 msgid "Change allocation:"
 msgstr "संभाजन बदलें:"
 
-#: tmp/virt-manager.glade.h:83
-#, fuzzy
-msgid "Co_nnect"
-msgstr "जोड़ें"
-
 #: tmp/virt-manager.glade.h:84
+msgid "Co_nnect"
+msgstr "जोड़ें (_n)"
+
+#: tmp/virt-manager.glade.h:85
 msgid "Complete"
 msgstr "पूर्ण"
 
-#: tmp/virt-manager.glade.h:85
-msgid "Copyright (C) 2006 Red Hat Inc."
-msgstr "Copyright (C) 2006 Red Hat Inc."
-
 #: tmp/virt-manager.glade.h:86
+msgid "Copyright (C) 2006 Red Hat Inc."
+msgstr "कॉपीराइट (C) 2006 Red Hat Inc."
+
+#: tmp/virt-manager.glade.h:87
 msgid "Create a new virtual system"
 msgstr "एक नया वर्चुअल सिस्टम बनायें"
 
-#: tmp/virt-manager.glade.h:87
+#: tmp/virt-manager.glade.h:88
 msgid "Current allocation:"
 msgstr "मौजूदा संभाजन:"
 
-#: tmp/virt-manager.glade.h:88
-#, fuzzy
-msgid "De_tails"
-msgstr "विवरण"
-
 #: tmp/virt-manager.glade.h:89
+msgid "De_tails"
+msgstr "विवरण (_t)"
+
+#: tmp/virt-manager.glade.h:90
 msgid "Delete machine"
 msgstr "मशीन मिटायें"
 
-#: tmp/virt-manager.glade.h:90
+#: tmp/virt-manager.glade.h:91
 msgid "Disk"
 msgstr "डिस्क"
 
-#: tmp/virt-manager.glade.h:92
+#: tmp/virt-manager.glade.h:93
 msgid "Disk usage:"
 msgstr "डिस्क प्रयोग:"
 
-#: tmp/virt-manager.glade.h:93
+#: tmp/virt-manager.glade.h:94
 msgid "Domain ID"
 msgstr "डोमेन ID"
 
-#: tmp/virt-manager.glade.h:94
+#: tmp/virt-manager.glade.h:95
 msgid "FV install"
 msgstr "FV अधिष्ठापन"
 
-#: tmp/virt-manager.glade.h:95
-#, fuzzy
-msgid "F_ully Virtualized:"
-msgstr "पूर्ण वर्चुअलाइज्ड (_F):"
-
 #: tmp/virt-manager.glade.h:96
+msgid "F_ully Virtualized:"
+msgstr "पूर्ण वर्चुअलाइज्ड (_u):"
+
+#: tmp/virt-manager.glade.h:97
 msgid "File _Location:"
 msgstr "फाइल अवस्थिति (_L):"
 
-#: tmp/virt-manager.glade.h:97
+#: tmp/virt-manager.glade.h:98
 msgid "File _Size:"
 msgstr "फाइल आकार (_S):"
 
-#: tmp/virt-manager.glade.h:98
-msgid "Grab keyboard input:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:99
+msgid "Grab keyboard input:"
+msgstr "कुंजीपटल इनपुट पकड़ें:"
+
+#: tmp/virt-manager.glade.h:100
 msgid "Hardware"
 msgstr "हार्डवेयर"
 
-#: tmp/virt-manager.glade.h:100
+#: tmp/virt-manager.glade.h:101
 msgid "How many virtual CPUs should this machine be allocated?"
 msgstr "कितना वर्चुअल CPU इस मशीन को दिया जाना चाहिये?"
 
-#: tmp/virt-manager.glade.h:101
+#: tmp/virt-manager.glade.h:102
 msgid "How much memory should this machine be allocated?"
 msgstr "कितनी स्मृति इस मशीन को दी जानी चाहिये?"
 
-#: tmp/virt-manager.glade.h:102
+#: tmp/virt-manager.glade.h:103
 msgid "ISO _Location:"
 msgstr "ISO अवस्थिति (_L):"
 
-#: tmp/virt-manager.glade.h:103
-msgid "Install Media _URL:"
-msgstr "मीडिया _URL अधिष्ठापित करें:"
-
 #: tmp/virt-manager.glade.h:104
+msgid "Install Media _URL:"
+msgstr "मीडिया URL अधिष्ठापित करें (_U):"
+
+#: tmp/virt-manager.glade.h:105
 msgid "Intro"
 msgstr "प्रस्तावना"
 
-#: tmp/virt-manager.glade.h:105
+#: tmp/virt-manager.glade.h:106
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
@@ -758,15 +793,15 @@ msgstr ""
 "हार्डवेयर सिमुलेशन शामिल करता है , ऑपरेटिंग सिस्टम की बड़ी मात्रा के साथ (OS रूपांतरण "
 "जरूरी नहीं). पैरावर्चुअलाइज्ड सिस्टम से धीमा."
 
-#: tmp/virt-manager.glade.h:106
+#: tmp/virt-manager.glade.h:107
 msgid "Keep CPU Settings"
 msgstr "CPU जमावट रखें"
 
-#: tmp/virt-manager.glade.h:107
-msgid "Kickstart U_RL:"
-msgstr "U_RL किकस्टार्ट करे:"
-
 #: tmp/virt-manager.glade.h:108
+msgid "Kickstart U_RL:"
+msgstr "U_RL किकस्टार्ट करें:"
+
+#: tmp/virt-manager.glade.h:109
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
@@ -776,20 +811,19 @@ msgstr ""
 "जरूर पैरावर्चुअलाइजेशन का समर्थन करने के लिये विशेष रूप से रूपांतरित किया जाना चाहिये. पूर्ण "
 "वर्चुअलाइज्ड सिस्टम से ज्यादा अच्छा प्रदर्शन."
 
-#: tmp/virt-manager.glade.h:109
-#, fuzzy
-msgid "Logical host CPUs:"
-msgstr "भौतिक मेजबान CPU गिनती:"
-
 #: tmp/virt-manager.glade.h:110
+msgid "Logical host CPUs:"
+msgstr "तार्किक मेजबान CPU:"
+
+#: tmp/virt-manager.glade.h:111
 msgid "Login"
 msgstr "लॉगिन"
 
-#: tmp/virt-manager.glade.h:111
+#: tmp/virt-manager.glade.h:112
 msgid "MB"
 msgstr "MB"
 
-#: tmp/virt-manager.glade.h:112
+#: tmp/virt-manager.glade.h:113
 msgid ""
 "MB\n"
 "GB\n"
@@ -799,112 +833,122 @@ msgstr ""
 "GB\n"
 "TB"
 
-#: tmp/virt-manager.glade.h:115
+#: tmp/virt-manager.glade.h:116
 msgid "Machine details..."
 msgstr "मशीन विवरण..."
 
-#: tmp/virt-manager.glade.h:116
+#: tmp/virt-manager.glade.h:117
 msgid "Maintain history of"
 msgstr "इसका इतिहास देखभाल करें"
 
-#: tmp/virt-manager.glade.h:117
+#: tmp/virt-manager.glade.h:118
 msgid "Maximum allocation:"
 msgstr "अधिकतम संभाजन:"
 
-#: tmp/virt-manager.glade.h:118
+#: tmp/virt-manager.glade.h:119
 msgid "Memory"
 msgstr "स्मृति"
 
-#: tmp/virt-manager.glade.h:120
+#: tmp/virt-manager.glade.h:121
 msgid "Memory usage:"
 msgstr "स्मृति प्रयोग:"
 
-#: tmp/virt-manager.glade.h:121
+#: tmp/virt-manager.glade.h:122
 msgid "Modify CPU Settings"
 msgstr "CPU जमावट रूपांतरित करें"
 
-#: tmp/virt-manager.glade.h:122
+#: tmp/virt-manager.glade.h:123
 msgid "Modify File Storage"
 msgstr "फाइल भंडारण रूपांतरित करें"
 
-#: tmp/virt-manager.glade.h:124
+#: tmp/virt-manager.glade.h:125
 msgid "Name:"
 msgstr "नाम:"
 
-#: tmp/virt-manager.glade.h:125
+#: tmp/virt-manager.glade.h:126
 msgid "Network"
 msgstr "संजाल"
 
-#: tmp/virt-manager.glade.h:127
+#: tmp/virt-manager.glade.h:128
 msgid "Network usage:"
 msgstr "संजाल प्रयोग:"
 
-#: tmp/virt-manager.glade.h:128
+#: tmp/virt-manager.glade.h:129
 msgid ""
 "Never\n"
 "For new domains\n"
 "For all domains"
 msgstr ""
+"कभी नहीं\n"
+"नये डोमेन के लिये\n"
+"सारे डोमेन के लिये"
 
-#: tmp/virt-manager.glade.h:131
+#: tmp/virt-manager.glade.h:132
 msgid ""
 "Never\n"
 "When fullscreen\n"
 "On mouse over"
 msgstr ""
+"कभी नहीं\n"
+"जब पूर्ण स्क्रीन हो\n"
+"इसपर माउस"
 
-#: tmp/virt-manager.glade.h:134
+#: tmp/virt-manager.glade.h:135
 msgid "New machine..."
 msgstr "नया मशीन..."
 
-#: tmp/virt-manager.glade.h:135
+#: tmp/virt-manager.glade.h:136
 msgid "Normal Disk _Partition:"
 msgstr "सामान्य डिस्क विभाजन (_P):"
 
-#: tmp/virt-manager.glade.h:136
+#: tmp/virt-manager.glade.h:137
 msgid "Open connection"
 msgstr "खुला संबंधन"
 
-#: tmp/virt-manager.glade.h:137
+#: tmp/virt-manager.glade.h:138
 msgid "Open connection..."
 msgstr "खुला संबंधन..."
 
-#: tmp/virt-manager.glade.h:138
+#: tmp/virt-manager.glade.h:139
 msgid "Overview"
 msgstr "सारांश"
 
-#: tmp/virt-manager.glade.h:139
+#: tmp/virt-manager.glade.h:140
 msgid "PVinstall"
 msgstr "PVinstall"
 
-#: tmp/virt-manager.glade.h:140
+#: tmp/virt-manager.glade.h:141
 msgid "P_artition:"
 msgstr "विभाजन (_a):"
 
-#: tmp/virt-manager.glade.h:141
+#: tmp/virt-manager.glade.h:142
 msgid "Password:"
 msgstr "शब्दकूट:"
 
-#: tmp/virt-manager.glade.h:142
+#: tmp/virt-manager.glade.h:143
 msgid "Pause"
 msgstr "ठहरें"
 
-#: tmp/virt-manager.glade.h:143
+#: tmp/virt-manager.glade.h:144
 msgid "Please choose a name for your virtual system:"
 msgstr "अपने वर्चुअल सिस्टम के लिये एक नाम चुनें:"
 
-#: tmp/virt-manager.glade.h:144
+#: tmp/virt-manager.glade.h:145
+#, fuzzy
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
 "maximum amount of memory the VM should be able to use, and optionally a "
-"lower amount to grab on startup."
+"lower amount to grab on startup. Warning: setting VM memory too high will "
+"cause out-of-memory errors in your host domain!"
 msgstr ""
-
-#: tmp/virt-manager.glade.h:145
-msgid "Please enter the number of virtual CPUs this VM should start up with."
-msgstr ""
+"कृपया इस VM के लिये स्मृति विन्यास डालें. आप स्मृति की अधिकतम संख्या डाल सकते हैं जिसे VM को "
+"प्रयोग करना चाहिये, और वैकल्पिक रूप से कम मात्रा आरंभन को पकड़ने के लिये."
 
 #: tmp/virt-manager.glade.h:146
+msgid "Please enter the number of virtual CPUs this VM should start up with."
+msgstr "वर्चुअल CPU की संख्या को डालें जिससे यह VM आरंभ होगा."
+
+#: tmp/virt-manager.glade.h:147
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
@@ -913,7 +957,7 @@ msgstr ""
 "कृपया बतायें कि अपने नये वर्चुअल सिस्टम के लिये इस भौतिक मेजबान सिस्टम पर कैसे आप स्थान देना "
 "चाहेंगे. यह स्थान वर्चुअल सिस्टम के ऑपरेटिंग सिस्टम के अधिष्ठापन में प्रयोग किया जायेगा."
 
-#: tmp/virt-manager.glade.h:147
+#: tmp/virt-manager.glade.h:148
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
@@ -922,7 +966,7 @@ msgstr ""
 "कृपया बतायें कि कहां अधिष्ठापन मीडिया उपलब्ध है ऑपरेटिंग सिस्टम के लिये जिसे आप इस <b>पूर्ण "
 "वर्चुअलाइज्ड</b> वर्चुअल सिस्टम पर अधिष्ठापित करना चाहेंगे:"
 
-#: tmp/virt-manager.glade.h:148
+#: tmp/virt-manager.glade.h:149
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
@@ -933,15 +977,15 @@ msgstr ""
 "<b>पैरावर्चुअलाइज्ड</b> वर्चुअल सिस्टम पर अधिष्ठापित करना चाहेंगे. विकल्प रूप में आप "
 "किकस्टार्ट के लिये URL दे सकते हैं जो आपके सिस्टम को वर्णित करता है:"
 
-#: tmp/virt-manager.glade.h:149
+#: tmp/virt-manager.glade.h:150
 msgid "Please wait..."
 msgstr "कृपया प्रतीक्षा करें..."
 
-#: tmp/virt-manager.glade.h:150
+#: tmp/virt-manager.glade.h:151
 msgid "Powered by libvirt"
 msgstr "libvirt के द्वारा शक्ति प्राप्त"
 
-#: tmp/virt-manager.glade.h:151
+#: tmp/virt-manager.glade.h:152
 msgid ""
 "Press finish to create a new virtual machine with\n"
 "this configuration & display the virtual console."
@@ -949,67 +993,71 @@ msgstr ""
 "इस विन्यास के साथ नया वर्चुअल मशीन बनाने के लिये\n"
 "समाप्त करें दबायें और वर्चुअल कंसोल दिखायें."
 
-#: tmp/virt-manager.glade.h:153
+#: tmp/virt-manager.glade.h:154
 msgid "Processor"
 msgstr "प्रोसेसर"
 
-#: tmp/virt-manager.glade.h:154
+#: tmp/virt-manager.glade.h:155
 msgid "Randomly generated MAC address"
 msgstr "बेतरतीब रूप से उत्पन्न MAC पता"
 
-#: tmp/virt-manager.glade.h:155
+#: tmp/virt-manager.glade.h:156
 msgid "Restore a saved machine from a filesystem image"
 msgstr "एक फाइल सिस्टम बिंब से एक सहेजा मशीन पुनर्भंडारित करें"
 
-#: tmp/virt-manager.glade.h:156
+#: tmp/virt-manager.glade.h:157
 msgid "Restore saved machine..."
 msgstr "सहेजा मशीन पुनर्भंडारित करें..."
 
-#: tmp/virt-manager.glade.h:157
+#: tmp/virt-manager.glade.h:158
 msgid "Run"
 msgstr "चलायें"
 
-#: tmp/virt-manager.glade.h:158
+#: tmp/virt-manager.glade.h:159
+#, fuzzy
+msgid "S_hutdown"
+msgstr "बंद"
+
+#: tmp/virt-manager.glade.h:160
 msgid "Save this password in your keyring"
 msgstr "अपने कीरिंग में शब्दकूट सहेजें"
 
-#: tmp/virt-manager.glade.h:159
+#: tmp/virt-manager.glade.h:161
 msgid "Saving VM Image"
 msgstr "VM बिंब सहेज रहा है"
 
-#: tmp/virt-manager.glade.h:160
+#: tmp/virt-manager.glade.h:162
 msgid "Screenshot"
 msgstr "स्क्रीनशॉट"
 
-#: tmp/virt-manager.glade.h:161
+#: tmp/virt-manager.glade.h:163
 msgid "Shut down"
 msgstr "बंद करें"
 
-#: tmp/virt-manager.glade.h:163
-#, fuzzy
+#: tmp/virt-manager.glade.h:165
 msgid "Simple F_ile:"
-msgstr "सरल फाइल (_F):"
+msgstr "सरल फाइल (_i):"
 
-#: tmp/virt-manager.glade.h:164
+#: tmp/virt-manager.glade.h:166
 msgid "Specified MAC address:"
 msgstr "विशिष्ट MAC पता:"
 
-#: tmp/virt-manager.glade.h:166
+#: tmp/virt-manager.glade.h:168
 msgid "Status:"
 msgstr "स्थिति:"
 
-#: tmp/virt-manager.glade.h:167
+#: tmp/virt-manager.glade.h:169
 msgid "System _Name:"
 msgstr "सिस्टम नाम (_N):"
 
-#: tmp/virt-manager.glade.h:168
+#: tmp/virt-manager.glade.h:170
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
 msgstr ""
 "वर्चुअल सिस्टम पर एक ऑपरेटिंग सिस्टम के अधिष्ठापन के लिये आवश्यक फाइल का <b>स्थान</b>"
 
-#: tmp/virt-manager.glade.h:169
+#: tmp/virt-manager.glade.h:171
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
@@ -1018,249 +1066,243 @@ msgstr ""
 "यह सहायक आपको नये वर्चुअल सिस्टम बनाने से होकर निर्देश देगा. आपको कुछ सूचना के लिये पूछा "
 "जायेगा वर्चुअल सिस्टम के बारे में जिसे आप बनाना चाहेंगे, जैसे कि:"
 
-#: tmp/virt-manager.glade.h:170
+#: tmp/virt-manager.glade.h:172
 msgid "Toolbar"
 msgstr "औजारपट्टी"
 
-#: tmp/virt-manager.glade.h:171
+#: tmp/virt-manager.glade.h:173
 msgid "Total CPUs on host machine:"
 msgstr "मेजबान मशीन पर कुल CPU:"
 
-#: tmp/virt-manager.glade.h:172
+#: tmp/virt-manager.glade.h:174
 msgid "Total memory on host machine:"
 msgstr "मेजबान मशीन पर कुल स्मृति:"
 
-#: tmp/virt-manager.glade.h:173
+#: tmp/virt-manager.glade.h:175
 msgid "Type"
 msgstr "प्रकार"
 
-#: tmp/virt-manager.glade.h:174
+#: tmp/virt-manager.glade.h:176
 msgid "UUID:"
 msgstr "UUID:"
 
-#: tmp/virt-manager.glade.h:175
+#: tmp/virt-manager.glade.h:177
 msgid "Unavailable"
 msgstr "अनुपलब्ध"
 
-#: tmp/virt-manager.glade.h:176
+#: tmp/virt-manager.glade.h:178
 msgid "Update status every"
 msgstr "स्थिति अद्यतन करें हर"
 
-#: tmp/virt-manager.glade.h:177
-msgid "VM _Max Memory:"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:178
-msgid "VM _Startup Memory:"
-msgstr ""
-
 #: tmp/virt-manager.glade.h:179
+#, fuzzy
+msgid "VM _Max Memory (MB):"
+msgstr "VM अधिकतम स्मृति (_M):"
+
+#: tmp/virt-manager.glade.h:180
+#, fuzzy
+msgid "VM _Startup Memory (MB):"
+msgstr "VM आरंभ स्मृति (_S):"
+
+#: tmp/virt-manager.glade.h:181
 msgid "VNC"
 msgstr "VNC"
 
-#: tmp/virt-manager.glade.h:180
+#: tmp/virt-manager.glade.h:182
 msgid "Virtual CPUs"
 msgstr "वर्चुअल CPU"
 
-#: tmp/virt-manager.glade.h:181
+#: tmp/virt-manager.glade.h:183
 msgid "Virtual Machine Console"
 msgstr "वर्चुअल मशीन कंसोल"
 
-#: tmp/virt-manager.glade.h:182
+#: tmp/virt-manager.glade.h:184
 msgid "Virtual Machine Details"
 msgstr "वर्चुअल मशीन विवरण"
 
-#: tmp/virt-manager.glade.h:183
+#: tmp/virt-manager.glade.h:185
 msgid "Virtual Machine Manager"
 msgstr "वर्चुअल मशीन प्रबंधक"
 
-#: tmp/virt-manager.glade.h:184
+#: tmp/virt-manager.glade.h:186
 msgid "Virtual Machine Manager Preferences"
 msgstr "वर्चुअल मशीन प्रबंधक वरीयता"
 
-#: tmp/virt-manager.glade.h:185
+#: tmp/virt-manager.glade.h:187
 msgid "Virtual _Machine"
 msgstr "वर्चुअल मशीन (_M)"
 
-#: tmp/virt-manager.glade.h:186
+#: tmp/virt-manager.glade.h:188
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr "क्या सिस्टम <b>पूर्ण वर्चुअलाइज्ड</b> या <b>पैरा वर्चुअलाइज्ड</b> है"
 
-#: tmp/virt-manager.glade.h:187
+#: tmp/virt-manager.glade.h:189
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr "आपको अपने नये सिस्टम के लिये वर्चुअलाइजेशन विधि चुनने की जरूरत है:"
 
-#: tmp/virt-manager.glade.h:188
+#: tmp/virt-manager.glade.h:190
 msgid "_Browse..."
 msgstr "ब्रॉउज करें (_B)..."
 
-#: tmp/virt-manager.glade.h:189
+#: tmp/virt-manager.glade.h:191
 msgid "_CD-ROM or DVD:"
 msgstr "_CD-ROM या DVD:"
 
-#: tmp/virt-manager.glade.h:190
+#: tmp/virt-manager.glade.h:192
+msgid "_Destroy"
+msgstr ""
+
+#: tmp/virt-manager.glade.h:193
 msgid "_Details"
 msgstr "विवरण (_D)"
 
-#: tmp/virt-manager.glade.h:191
+#: tmp/virt-manager.glade.h:194
 msgid "_Edit"
 msgstr "संपादित करें (_E)"
 
-#: tmp/virt-manager.glade.h:192
+#: tmp/virt-manager.glade.h:195
 msgid "_File"
 msgstr "फाइल (_F)"
 
-#: tmp/virt-manager.glade.h:193
+#: tmp/virt-manager.glade.h:196
 msgid "_Finish"
 msgstr "समाप्त (_F)"
 
-#: tmp/virt-manager.glade.h:194
+#: tmp/virt-manager.glade.h:197
 msgid "_FullScreen"
 msgstr "पूर्ण स्क्रीन (_F)"
 
-#: tmp/virt-manager.glade.h:195
+#: tmp/virt-manager.glade.h:198
 msgid "_Graphical Console"
 msgstr "आलेखीय कंसोल (_G)"
 
-#: tmp/virt-manager.glade.h:196
+#: tmp/virt-manager.glade.h:199
 msgid "_Help"
 msgstr "मदद (_H)"
 
-#: tmp/virt-manager.glade.h:197
-#, fuzzy
+#: tmp/virt-manager.glade.h:200
 msgid "_Host:"
-msgstr "मेजबान:"
+msgstr "मेजबान (_H):"
 
-#: tmp/virt-manager.glade.h:198
+#: tmp/virt-manager.glade.h:201
 msgid "_ISO Image Location:"
 msgstr "_ISO बिंब स्थान:"
 
-#: tmp/virt-manager.glade.h:199
-#, fuzzy
-msgid "_Local Xen host"
-msgstr "स्थानीय Xen मेजबान"
-
-#: tmp/virt-manager.glade.h:200
-msgid "_Mount Point (on virtual system):"
-msgstr "आरोह बिंदु (_M) (वर्चुअल सिस्टम पर):"
-
-#: tmp/virt-manager.glade.h:201
-#, fuzzy
-msgid "_Other hypervisor"
-msgstr "अन्य हाइपरविजर"
-
 #: tmp/virt-manager.glade.h:202
+msgid "_Local Xen host"
+msgstr "स्थानीय Xen मेजबान (_L)"
+
+#: tmp/virt-manager.glade.h:203
+msgid "_Mount Point (on virtual system):"
+msgstr "आरोह बिंदु (वर्चुअल सिस्टम पर) (_M):"
+
+#: tmp/virt-manager.glade.h:204
+msgid "_Other hypervisor"
+msgstr "अन्य हाइपरविजर (_O)"
+
+#: tmp/virt-manager.glade.h:205
 msgid "_Paravirtualized:"
 msgstr "पैरावर्चुअलाइज्ड (_P):"
 
-#: tmp/virt-manager.glade.h:203
+#: tmp/virt-manager.glade.h:206
 msgid "_Path to install media:"
 msgstr "अधिष्ठापन मीडिया में पथ (_P):"
 
-#: tmp/virt-manager.glade.h:204
+#: tmp/virt-manager.glade.h:207
 msgid "_Pause"
 msgstr "ठहरें (_P)"
 
-#: tmp/virt-manager.glade.h:205
-#, fuzzy
-msgid "_Port:"
-msgstr "पोर्ट:"
-
-#: tmp/virt-manager.glade.h:206
-#, fuzzy
-msgid "_Read only connection"
-msgstr "सिर्फ पढ़ने के लिये संबंधन"
-
-#: tmp/virt-manager.glade.h:207
-#, fuzzy
-msgid "_Remote Xen host"
-msgstr "दूरस्थ Xen मेजबान"
-
 #: tmp/virt-manager.glade.h:208
+msgid "_Port:"
+msgstr "पोर्ट (_P):"
+
+#: tmp/virt-manager.glade.h:209
+msgid "_Read only connection"
+msgstr "सिर्फ पढ़ने के लिये संबंधन (_R)"
+
+#: tmp/virt-manager.glade.h:210
+msgid "_Remote Xen host"
+msgstr "दूरस्थ Xen मेजबान (_R)"
+
+#: tmp/virt-manager.glade.h:211
 msgid "_Run"
 msgstr "चलायें (_R)"
 
-#: tmp/virt-manager.glade.h:209
+#: tmp/virt-manager.glade.h:212
 msgid "_Save"
 msgstr "सहेजें (_S)"
 
-#: tmp/virt-manager.glade.h:210
+#: tmp/virt-manager.glade.h:213
 msgid "_Serial Console"
 msgstr "सीरियल कंसोल (_S)"
 
-#: tmp/virt-manager.glade.h:211
-msgid "_Shutdown"
-msgstr "बंद करें (_S)"
-
-#: tmp/virt-manager.glade.h:212
+#: tmp/virt-manager.glade.h:214
 msgid "_Size:"
 msgstr "आकार (_S):"
 
-#: tmp/virt-manager.glade.h:213
+#: tmp/virt-manager.glade.h:215
 msgid "_Take Screenshot"
 msgstr "स्क्रीनशॉट लें (_T)"
 
-#: tmp/virt-manager.glade.h:214
-#, fuzzy
-msgid "_URI:"
-msgstr "URI:"
-
-#: tmp/virt-manager.glade.h:215
-#, fuzzy
-msgid "_VCPUs:"
-msgstr "VCPU"
-
 #: tmp/virt-manager.glade.h:216
+msgid "_URI:"
+msgstr "_URI:"
+
+#: tmp/virt-manager.glade.h:217
+msgid "_VCPUs:"
+msgstr "_VCPU:"
+
+#: tmp/virt-manager.glade.h:218
 msgid "_View"
 msgstr "देखें (_V)"
 
-#: tmp/virt-manager.glade.h:217
+#: tmp/virt-manager.glade.h:219
 msgid "_View:"
 msgstr "देखें (_V):"
 
-#: tmp/virt-manager.glade.h:218
+#: tmp/virt-manager.glade.h:220
 msgid "demo"
 msgstr "डेमो"
 
-#: tmp/virt-manager.glade.h:219
+#: tmp/virt-manager.glade.h:221
 msgid "http://"
 msgstr "http://"
 
-#: tmp/virt-manager.glade.h:220
+#: tmp/virt-manager.glade.h:222
 msgid "http://virt-manager.et.redhat.com/"
-msgstr ""
+msgstr "http://virt-manager.et.redhat.com/"
 
-#: tmp/virt-manager.glade.h:221
+#: tmp/virt-manager.glade.h:223
 msgid "mac-addr-random"
 msgstr "mac-addr-random"
 
-#: tmp/virt-manager.glade.h:222
+#: tmp/virt-manager.glade.h:224
 msgid "para"
 msgstr "अनुच्छेद"
 
-#: tmp/virt-manager.glade.h:223
+#: tmp/virt-manager.glade.h:225
 msgid "samples"
 msgstr "नमूना"
 
-#: tmp/virt-manager.glade.h:224
+#: tmp/virt-manager.glade.h:226
 msgid "seconds"
 msgstr "सेकेंड"
 
-#: tmp/virt-manager.glade.h:226
+#: tmp/virt-manager.glade.h:228
 msgid "translator-credits"
 msgstr "राजेश रंजन (rranjan@redhat.com, rajeshkajha@yahoo.com)"
 
-#: tmp/virt-manager.glade.h:227
+#: tmp/virt-manager.glade.h:229
 msgid "virtual CPU alert"
 msgstr "वर्चुअल CPU चेतावनी"
 
-#~ msgid "How many virtual CPUs should this system have?"
-#~ msgstr "कितना वर्चुअल CPU को इस सिस्टम को रखना चाहिये?"
+#~ msgid ""
+#~ "<small><b>Note:</b> File size parameter is only relevant for new files</"
+#~ "small>"
+#~ msgstr ""
+#~ "<small><b>नोट:</b> फाइल आकार पैरामीटर नये फाइल के लिये सिर्फ संदर्भित है</small>"
 
-#~ msgid "How much memory should this VM start up with?"
-#~ msgstr "कितनी स्मृति इस VM आरंभ करने के लिये चाहिये?"
-
-#~ msgid "What is the maximum amount of memory this VM should be able to use?"
-#~ msgstr "इस VM को स्मृति की कितनी अधिकतम मात्रा प्रयोग करने में समर्थ रहनी चाहिये?"
+#~ msgid "_Shutdown"
+#~ msgstr "बंद करें (_S)"
