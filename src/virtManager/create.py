@@ -412,12 +412,12 @@ class vmmCreate(gobject.GObject):
         if self.get_config_disk_size() != None:
             filesize = self.get_config_disk_size() / 1024.0
         try:
-            d = virtinst.XenDisk(self.get_config_disk_image(), filesize, sparse = self.is_sparse_file())
-            if d.type == virtinst.XenDisk.TYPE_FILE and \
+            d = virtinst.VirtualDisk(self.get_config_disk_image(), filesize, sparse = self.is_sparse_file())
+            if d.type == virtinst.VirtualDisk.TYPE_FILE and \
                    self.get_config_method() == VM_PARA_VIRT \
                    and virtinst.util.is_blktap_capable():
-                d.driver_name = virtinst.XenDisk.DRIVER_TAP
-            if d.type == virtinst.XenDisk.TYPE_FILE and not \
+                d.driver_name = virtinst.VirtualDisk.DRIVER_TAP
+            if d.type == virtinst.VirtualDisk.TYPE_FILE and not \
                self.is_sparse_file():
                 self.non_sparse = True
             else:
@@ -431,7 +431,7 @@ class vmmCreate(gobject.GObject):
         guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
 
         # network
-        n = virtinst.XenNetworkInterface(None)
+        n = virtinst.VirtualNetworkInterface(None)
         guest.nics.append(n)
 
         # set up the graphics to use SDL
