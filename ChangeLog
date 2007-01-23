@@ -1,8 +1,260 @@
+2007-01-22  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/as.po, po/bn_IN.po, po/ca.po, po/da.po, po/de.po, po/es.po,
+	po/fr.po, po/gu.po, po/hi.po, po/hr.po, po/is.po, po/it.po,
+	po/ja.po, po/kn.po, po/ko.po, po/ml.po, po/mr.po, po/ms.po,
+	po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po, po/te.po,
+	po/tr.po, po/virt-manager.pot, po/zh_CN.po, po/zh_TW.po:
+	Refresh po/pot files
+	[5bc1bd05a9e5] [tip]
+
+	* src/virtManager/create.py:
+	Updated to new virt-inst API
+	[0564b1e55ec0]
+
+2007-01-12  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/asyncjob.py,
+	src/virtManager/create.py, src/virtManager/domain.py,
+	src/virtManager/manager.py:
+	Change save/restore code to work with new progress bar interface.
+	Also clean up progress bar a bit so it doesn't jump around quite so
+	much.
+	[90194e42e78d]
+
+2007-01-10  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* merge 369:1d72ca0a0d8e
+	[4e1a11b51dd9]
+
+	* src/virt-manager.glade, src/virtManager/asyncjob.py,
+	src/virtManager/create.py:
+	graphical progress bar hooks for pv guests
+	[fa0838adc8e5]
+
+2007-01-08  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py:
+	Reset vnc failure count & delay on state changes. This ensures we
+	re-try the connection when switching from shutoff -> running state
+	transitions with inactive guests
+	[1d72ca0a0d8e]
+
+2006-12-20  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	Update non-sparse file UI to match rhel5 patch
+	[d08d20fefc15]
+
+2006-12-17  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/asyncjob.py,
+	src/virtManager/create.py:
+	add a radio button for sparse vs. non-sparse viles. Add appropriate
+	cautions and text to the progress dialog.
+	[240bbcbcbf77]
+
+2006-12-13  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* Merge heads
+	[280936348501]
+
+	* src/virtManager/domain.py:
+	Disabled memory/cpu hotplug for active HVM guests (bz 214432)
+	[34cfe7880a7e]
+
+2006-12-07  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	Fixes bz 218201. Choosing an existing file, using the dialog or
+	typing the path manually, will now cause the file's size to show up
+	in the file size box. Also the wizard will complain if the user
+	manually types a directory path instead of an existing file or a new
+	file.
+	[795d0dea350d]
+
+	* src/virt-manager.glade, src/virtManager/create.py:
+	Fixes 213855. Added documentation to warn the operator not to
+	allocate too much memory to a new VM; limited the max memory spinbox
+	to physical RAM present; cleaned up physical RAM display.
+	[746677a25334]
+
+2006-12-04  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/serialcon.py:
+	Fix handling of backspace key in serial console (bz 217596)
+	[742f520c9080]
+
+2006-12-01  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py:
+	Deal with errors from hostname lookup (bz 216975)
+	[eaf93af32bde]
+
+	* src/virtManager/domain.py:
+	Merge heads
+	[90df913df2d0]
+
+2006-11-15  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py:
+	Validate vm name
+	[6095446de9c1]
+
+	* src/virtManager/domain.py:
+	domain.py merge??
+	[54d1c612d578]
+
+	* src/virt-manager.glade, src/virtManager/console.py,
+	src/virtManager/create.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/virtManager/engine.py:
+	Add destroy option to details and console menus
+	[9c6d46c2f6ad]
+
+2006-11-22  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/domain.py, src/virtManager/manager.py:
+	Differentiate memory allocated, from that actually used on host.
+	Helps visualization of inactive guests
+	[75d791ba22a1]
+
+2006-11-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/domain.py:
+	Switch to use explicit ipv4 address 127.0.0.1 for console because
+	some FC6 systems have broke /etc/hosts which only list ipv6 address
+	(and VNC doesn't listen on ipv6)
+	[7e5d94efe78d]
+
+2006-11-15  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/details.py:
+	Initially select something when opening the details pane
+	[eabce880c9f2]
+
+2006-11-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* Merge heads
+	[c348f9520742]
+
+2006-11-13  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/manager.py:
+	Valid file magic when restoring a domain from saved image
+	[7bffdbff49e3]
+
+	* src/virt-manager.glade:
+	Fix typo
+	[72aed8333003]
+
+	* src/virtManager/console.py:
+	Ensure we always retry failed connections, to deal with inactive
+	domain startup/shutdown sequences
+	[f65d9eec0786]
+
+	* src/virtManager/manager.py:
+	Clear out listmodel row cache when swiching views
+	[bfe118877c73]
+
+	* src/virt-manager.glade, src/virtManager/details.py,
+	src/virtManager/domain.py:
+	Re-factored config changing UI to deal with inactive domains &
+	better handle Dom0
+	[c4cf0fee60f1]
+
+	* src/virtManager/domain.py:
+	Fix max-mem reporting for Dom0
+	[1cf722426910]
+
+	* src/virtManager/domain.py:
+	Fix pretty memory accounting. Add set_max_memory API. Fixed logging
+	string cast
+	[42885b78d291]
+
+	* src/virtManager/manager.py:
+	Update the ID column on each refresh, in case a domain
+	started/stopped (ie its id changes)
+	[ee06cbe20c82]
+
+	* src/virtManager/manager.py:
+	Merge heads
+	[72e8718c0c6c]
+
+	* po/en_GB.po, src/virt-manager.glade, src/virt-manager.py.in,
+	src/virtManager/connection.py, src/virtManager/console.py,
+	src/virtManager/details.py, src/virtManager/manager.py:
+	Merge heads
+	[72dec4df30de]
+
+2006-10-12  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/domain.py, src/virtManager/manager.py:
+	Explicitly populate liststore with all we need rather than using
+	per-cell callbacks
+	[1e2297d7b96d]
+
+	* src/virtManager/manager.py:
+	Store the VM object itself in the list model to lower overheads in
+	refresh
+	[3973f2eb7407]
+
+2006-10-11  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py:
+	Catch & log failure of listDefinedDomains method for older libvirt
+	not supporting inactive domains
+	[ffa5f13ab279]
+
+	* src/virt-manager.py.in:
+	Added support for running app under hotshot profiler
+	[f1e28b2177fd]
+
+2006-10-10  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.glade, src/virtManager/connection.py,
+	src/virtManager/domain.py, src/virtManager/manager.py:
+	Support deleting of VMs
+	[ce3995271cdc]
+
+	* src/virt-manager.glade, src/virtManager/connection.py,
+	src/virtManager/domain.py, src/virtManager/manager.py:
+	Hooked up domain filter in manager list. Ensure we don't recreate
+	vmmDomain object on state changes
+	[2e86c3cb0025]
+
+	* src/virtManager/connection.py, src/virtManager/console.py,
+	src/virtManager/details.py, src/virtManager/domain.py,
+	src/virtManager/manager.py:
+	Merged heads
+	[951c6c3cf97b]
+
+	* src/virtManager/connection.py, src/virtManager/console.py,
+	src/virtManager/details.py, src/virtManager/domain.py:
+	Added support for starting inactive VMs
+	[7364bcc08bdb]
+
+2006-10-09  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/domain.py,
+	src/virtManager/manager.py:
+	Include listing of inactive domains
+	[c831835a0f94]
+
 2006-11-09  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.2.6-1 for changeset
+	912d53a50279d9c6e05d263b54837ad001a0ccb3
+	[1f43bfc1da4e]
+
+	* ChangeLog:
+	Re-generate changelog
+	[912d53a50279] [RELEASE-0.2.6-1]
 
 	* virt-manager.spec.in:
 	Updated changelog
-	[657717d357b6] [tip]
+	[657717d357b6]
 
 	* NEWS:
 	Summary of 0.2.6 release changes

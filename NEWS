@@ -1,6 +1,21 @@
  Virtual Machine Manager News
  ============================
 
+Release 0.3.0
+-------------
+
+This release brings a major functionality update, enabling management
+of inactive domains. This requires a new libvirt (at least 0.1.11)
+to provide implementations of inactive domain management for Xen 3.0.3
+and Xen 3.0.4. With this new functionality the display will list all
+guests which are in the 'shutoff' state. The guest can be started with
+the 'Run' button in the virtual console window. The vistinst package
+must also be updated to at least version 0.100.0 to ensure that during
+provisioning of guests it uses the new inactive domain management APIs.
+Finally there have been a variety of minor UI fixes & enhancements
+such as progress bars during guest creation, reliability fixes to the
+virtual console and even greater coverage for translations.
+
 Release 0.2.6
 -------------
 
