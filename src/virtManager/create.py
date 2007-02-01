@@ -58,34 +58,38 @@ class vmmCreateMeter(progress.BaseMeter):
         else:
             text = self.basename
         if self.size is None:
-            self.asyncjob.pulse_pbar(text)
+            out = "    %5sB" % (0)
+            self.asyncjob.pulse_pbar(out, text)
         else:
-            self.asyncjob.set_pbar_fraction(0, text)
+            out = "%3i%% %5sB" % (0, 0)
+            self.asyncjob.set_pbar_fraction(0, out, text)
 
     def _do_update(self, amount_read, now=None):
-        fread = progress.format_number(amount_read)
-        #self.size = None
         if self.text is not None:
             text = self.text
         else:
             text = self.basename
+        fread = progress.format_number(amount_read)
         if self.size is None:
-            out = '\r%-60.60s    %5sB' % \
-                  (text, fread)
-            self.asyncjob.pulse_pbar(out)
+            out = "    %5sB" % (fread)
+            self.asyncjob.pulse_pbar(out, text)
         else:
             frac = self.re.fraction_read()
-            out = '\r%-25.25s %3i%% %5sB' % \
-                  (text, frac*100, fread)
-            self.asyncjob.set_pbar_fraction(frac, out)
+            out = "%3i%% %5sB" % (frac*100, fread)
+            self.asyncjob.set_pbar_fraction(frac, out, text)
 
     def _do_end(self, amount_read, now=None):
         if self.text is not None:
             text = self.text
         else:
             text = self.basename
-        out = '\r%-25.25s 100%%' % text
-        self.asyncjob.set_pbar_done(out)
+        fread = progress.format_number(amount_read)
+        if self.size is None:
+            out = "    %5sB" % (fread)
+            self.asyncjob.pulse_pbar(out, text)
+        else:
+            out = "%3i%% %5sB" % (100, fread)
+            self.asyncjob.set_pbar_done(out, text)
 
 class vmmCreate(gobject.GObject):
     __gsignals__ = {
@@ -399,7 +403,13 @@ class vmmCreate(gobject.GObject):
 
         # set the memory
         try:
-            guest.memory = int(self.get_config_maximum_memory())
+            guest.memory = int(self.get_config_initial_memory())
+        except ValueError:
+            self._validation_error_box(_("Invalid memory setting"), e.args[0])
+            return
+
+        try:
+            guest.maxmemory = int(self.get_config_maximum_memory())
         except ValueError:
             self._validation_error_box(_("Invalid memory setting"), e.args[0])
             return
@@ -442,6 +452,7 @@ class vmmCreate(gobject.GObject):
                       "\n  Source: " + self.get_config_install_source() + \
                       "\n  Kickstart: " + self.get_config_kickstart_source() + \
                       "\n  Memory: " + str(guest.memory) + \
+                      "\n  Max Memory: " + str(guest.maxmemory) + \
                       "\n  # VCPUs: " + str(guest.vcpus) + \
                       "\n  Filesize: " + str(filesize) + \
                       "\n  Disk image: " + str(self.get_config_disk_image()) +\
@@ -457,9 +468,13 @@ class vmmCreate(gobject.GObject):
             logging.debug("Non-sparse file selected")
 
         progWin = vmmAsyncJob(self.config, self.do_install, [guest],
-                              title=_("Creating Virtual Machine"))
+                              title=_("Creating Virtual Machine"),
+                              text=_("The virtual machine is now being created. " + \
+                                     "Allocation of disk storage and retrieval of " + \
+                                     "the installation images may a few minutes " + \
+                                     "to complete."))
         progWin.run()
-        
+
         if self.install_error != None:
             logging.error("Async job failed to create VM " + str(self.install_error))
             self._validation_error_box(_("Guest Install Error"), self.install_error)

@@ -35,54 +35,68 @@ class vmmAsyncJob(gobject.GObject):
         def run(self):
             threading.Thread.run(self)
 
-    def __init__(self, config, callback, args=None, title="Progress"):
+    def __init__(self, config, callback, args=None, text=_("Please wait a few moments..."), title=_("Operation in progress")):
         self.__gobject_init__()
         self.config = config
-        self.pbar_glade = gtk.glade.XML(self.config.get_glade_file(), "vmm-progress", domain="virt-manager")
-        self.pbar_win = self.pbar_glade.get_widget("vmm-progress")
-        self.pbar_text = self.pbar_glade.get_widget("pbar-text")
-        self.pbar = self.pbar_glade.get_widget("pbar")
-        self.pbar_win.set_title(title)
-        self.pbar_win.hide()
+
+        self.window = gtk.glade.XML(self.config.get_glade_file(), "vmm-progress", domain="virt-manager")
+        self.window.get_widget("pbar-text").set_text(text)
+
+        self.topwin = self.window.get_widget("vmm-progress")
+        self.topwin.set_title(title)
+        self.topwin.hide()
+
+        self.stage = self.window.get_widget("pbar-stage")
+        self.pbar = self.window.get_widget("pbar")
+
         args.append(self)
         self.bg_thread = vmmAsyncJob.asyncJobWorker(callback, args)
         self.is_pulsing = True
 
     def run(self):
         self.timer = gobject.timeout_add (100, self.exit_if_necessary)
-        self.pbar_win.present()
-        self.pbar_win.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+        self.topwin.present()
+        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
         self.bg_thread.start()
         gtk.main()
         gobject.source_remove(self.timer)
         self.timer = 0
-        self.pbar_win.destroy()
+        self.topwin.destroy()
 
-    def pulse_pbar(self, text=None):
+    def pulse_pbar(self, progress="", stage=None):
         self.is_pulsing = True
-        if text is not None:
-            self.pbar_text.set_text(text)
+        self.pbar.set_text(progress)
+        if stage is not None:
+            self.stage.set_text(stage)
+        else:
+            self.stage.set_text(_("Processing..."))
 
-    def set_pbar_fraction(self, frac, text=None):
+    def set_pbar_fraction(self, frac, progress, stage=None):
         # callback for progress meter when file size is known
         self.is_pulsing=False
-        if text is not None:
-            self.pbar_text.set_text(text)
+        if stage is not None:
+            self.stage.set_text(stage)
+        else:
+            self.stage.set_text(_("Processing..."))
+        self.pbar.set_text(progress)
         self.pbar.set_fraction(frac)
 
-    def set_pbar_done(self, text=None):
+    def set_pbar_done(self, progress, stage=None):
         #callback for progress meter when progress is done
         self.is_pulsing=False
-        if text is not None:
-            self.pbar_text.set_text(text)
+        if stage is not None:
+            self.stage.set_text(stage)
+        else:
+            self.stage.set_text(_("Completed"))
+        self.pbar.set_text(progress)
         self.pbar.set_fraction(1)
-    
+
     def exit_if_necessary(self):
-        if(self.bg_thread.isAlive()):
+        if self.bg_thread.isAlive():
             if(self.is_pulsing):
                 self.pbar.pulse()
             return True
         else:
             gtk.main_quit()
             return False
-        
+
