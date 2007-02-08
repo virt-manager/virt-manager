@@ -42,6 +42,7 @@ class vmmDomain(gobject.GObject):
         self.uuid = uuid
         self.lastStatus = None
         self.record = []
+        self._update_status()
 
     def set_handle(self, vm):
         self.vm = vm
@@ -370,7 +371,7 @@ class vmmDomain(gobject.GObject):
         elif self.lastStatus == libvirt.VIR_DOMAIN_CRASHED:
             return _("Crashed")
         else:
-            raise _("Unknown status code")
+            raise RuntimeError(_("Unknown status code"))
 
     def run_status_icon(self):
         return self.config.get_vm_status_icon(self.status())
