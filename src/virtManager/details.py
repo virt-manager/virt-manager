@@ -335,14 +335,14 @@ class vmmDetails(gobject.GObject):
         if self.window.get_widget("config-memory-apply").get_property("sensitive"):
             self.window.get_widget("config-memory").get_adjustment().upper = self.window.get_widget("config-maxmem").get_adjustment().value
         else:
-            self.window.get_widget("config-memory").get_adjustment().value = self.vm.current_memory()/1024
+            self.window.get_widget("config-memory").get_adjustment().value = self.vm.get_memory()/1024
             self.window.get_widget("config-maxmem").get_adjustment().value = self.vm.maximum_memory()/1024
             # XXX hack - changing the value above will have just re-triggered
             # the callback making apply button sensitive again. So we have to
             # turn it off again....
             self.window.get_widget("config-memory-apply").set_sensitive(False)
 
-        self.window.get_widget("state-vm-memory").set_text("%d MB" % (self.vm.current_memory()/1024))
+        self.window.get_widget("state-vm-memory").set_text("%d MB" % (self.vm.get_memory()/1024))
 
     def refresh_config_disk(self):
         self.populate_disk_list()
