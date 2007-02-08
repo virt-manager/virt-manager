@@ -174,7 +174,11 @@ class GRFBViewer(gtk.DrawingArea):
         "connected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str, int]),
         "authenticated": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
         "activated": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
-        "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
+        "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
+        "pointer-grabbed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
+        "pointer-ungrabbed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
+        "keyboard-grabbed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
+        "keyboard-ungrabbed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
         }
 
     def __init__(self, topwin, autograbkey=False):
@@ -185,6 +189,7 @@ class GRFBViewer(gtk.DrawingArea):
         self.authenticated = False
         self.needpw = True
         self.autograbkey = autograbkey
+        self.autograbptr = True
         self.topwin = topwin
         self.accel_groups = gtk.accel_groups_from_object(topwin)
         self.preferred_encoding = (rfb.ENCODING_RAW, rfb.ENCODING_DESKTOP_RESIZE)
@@ -197,9 +202,10 @@ class GRFBViewer(gtk.DrawingArea):
 
         self.connect("expose-event", self.expose_region)
 
-	self.connect("motion-notify-event", self.update_pointer)
-	self.connect("button-press-event", self.update_pointer)
-	self.connect("button-release-event", self.update_pointer)
+	self.connect("motion-notify-event", self.pointer_move)
+	self.connect("button-press-event", self.pointer_press)
+	self.connect("button-release-event", self.pointer_release)
+	self.connect("scroll-event", self.pointer_scroll)
 	self.connect("key-press-event", self.key_press)
 	self.connect("key-release-event", self.key_release)
         self.connect("enter-notify-event", self.enter_notify)
@@ -264,6 +270,10 @@ class GRFBViewer(gtk.DrawingArea):
                            gtk.gdk.keyval_from_name("Control_R"))
         self.lastKeyVal = None
         self.lastKeyRepeat = 0
+
+        empty = gtk.gdk.Pixmap(None, 1, 1, 1)
+        clear = gtk.gdk.Color()
+        self.nullcursor = gtk.gdk.Cursor(empty, empty, clear, clear, 0, 0)
 
         self.set_events(gtk.gdk.EXPOSURE_MASK |
                         gtk.gdk.LEAVE_NOTIFY_MASK |
@@ -364,17 +374,47 @@ class GRFBViewer(gtk.DrawingArea):
             mask = mask + 8
         if state & gtk.gdk.BUTTON5_MASK:
             mask = mask + 16
-
         return mask
 
     def take_screenshot(self):
         return self.fb.clone_pixmap()
+
+    def pointer_move(self, win, event):
+        self.update_pointer(win, event)
+
+    def pointer_press(self, win, event):
+        if not gtk.gdk.pointer_is_grabbed() and self.will_autograb_pointer():
+            self.grab_pointer()
+        self.update_pointer(win, event)
+
+    def pointer_release(self, win, event):
+        self.update_pointer(win, event)
+
+    def pointer_scroll(self, win, event):
+        if self.client != None:
+            x, y, state = event.window.get_pointer()
+            newstate = state
+            if event.direction == gtk.gdk.SCROLL_UP:
+                newstate = newstate | gtk.gdk.BUTTON4_MASK
+            else:
+                newstate = newstate | gtk.gdk.BUTTON5_MASK
+            self.client.update_pointer(self.state_to_mask(newstate), x, y)
+            self.client.update_pointer(self.state_to_mask(state), x, y)
 
     def update_pointer(self, win, event):
         if self.client != None:
             x, y, state = event.window.get_pointer()
             self.client.update_pointer(self.state_to_mask(state), x, y)
         return True
+
+
+    def will_autograb_pointer(self):
+        return self.autograbptr
+
+    def set_autograb_pointer(self, grab):
+        self.autograbptr = grab
+        if grab == False and gtk.gdk.pointer_is_grabbed():
+            self.ungrab_pointer()
 
     def has_grabbed_keyboard(self):
         return self.grabbedKeyboard
@@ -384,18 +424,38 @@ class GRFBViewer(gtk.DrawingArea):
 
     def set_autograb_keyboard(self, grab):
         self.autograbkey = grab
+        if grab == False and grabbedKeyboard:
+            self.ungrab_keyboard()
+
+
+    def grab_pointer(self):
+        gtk.gdk.pointer_grab(self.window, False,
+                             gtk.gdk.LEAVE_NOTIFY_MASK |
+                             gtk.gdk.ENTER_NOTIFY_MASK |
+                             gtk.gdk.BUTTON_RELEASE_MASK |
+                             gtk.gdk.BUTTON_PRESS_MASK |
+                             gtk.gdk.POINTER_MOTION_MASK |
+                             gtk.gdk.POINTER_MOTION_HINT_MASK,
+                             self.window, self.nullcursor)
+        self.emit("pointer-grabbed")
+
+    def ungrab_pointer(self):
+        gtk.gdk.pointer_ungrab()
+        self.emit("pointer-ungrabbed")
 
     def grab_keyboard(self):
         gtk.gdk.keyboard_grab(self.window, False, long(0))
         for g in self.accel_groups:
             self.topwin.remove_accel_group(g)
         self.grabbedKeyboard = True
+        self.emit("keyboard-grabbed")
 
     def ungrab_keyboard(self):
         gtk.gdk.keyboard_ungrab()
         for g in self.accel_groups:
             self.topwin.add_accel_group(g)
         self.grabbedKeyboard = False
+        self.emit("keyboard-ungrabbed")
 
     def enter_notify(self, win, event):
         if self.autograbkey:
@@ -417,6 +477,13 @@ class GRFBViewer(gtk.DrawingArea):
 
 
     def key_press(self, win, event):
+        # Allow Ctrl+Alt+Esc to break the pointer grab
+        if self.will_autograb_pointer():
+            if event.state & gtk.gdk.CONTROL_MASK and event.state & gtk.gdk.MOD1_MASK and gtk.gdk.pointer_is_grabbed():
+                self.ungrab_pointer()
+                return
+
+        self.ungrab_pointer()
         # Key handling in VNC is screwy. The event.keyval from GTK is
         # interpreted relative to modifier state. This really messes
         # up with VNC which has no concept of modifiers. If we interpret

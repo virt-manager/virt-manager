@@ -23,6 +23,7 @@ import gtk.glade
 import libvirt
 import sys
 import logging
+import dbus
 
 from vncViewer.vnc import GRFBViewer
 
@@ -45,7 +46,8 @@ class vmmConsole(gobject.GObject):
 
         topwin = self.window.get_widget("vmm-console")
         topwin.hide()
-        topwin.set_title(vm.get_name() + " " + topwin.get_title())
+        self.title = vm.get_name() + " " + topwin.get_title()
+        topwin.set_title(self.title)
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
@@ -53,6 +55,9 @@ class vmmConsole(gobject.GObject):
             self.vncViewer = GRFBViewer(topwin, autograbkey=True)
         else:
             self.vncViewer = GRFBViewer(topwin, autograbkey=False)
+        self.vncViewer.connect("pointer-grabbed", self.notify_grabbed)
+        self.vncViewer.connect("pointer-ungrabbed", self.notify_ungrabbed)
+
         self.window.get_widget("console-vnc-align").add(self.vncViewer)
         self.vncViewer.connect("size-request", self.autosize)
         self.vncViewer.show()
@@ -108,6 +113,32 @@ class vmmConsole(gobject.GObject):
             vncHeight = rootHeight - 200
 
         self.window.get_widget("console-vnc-vp").set_size_request(vncWidth+2, vncHeight+2)
+
+    def notify_grabbed(self, src):
+        topwin = self.window.get_widget("vmm-console")
+        try:
+            bus = dbus.SessionBus()
+            noteSvr = bus.get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+            noteObj = dbus.Interface(noteSvr, "org.freedesktop.Notifications")
+            (x, y) = topwin.window.get_origin()
+            noteObj.Notify(topwin.get_title(),
+                           0,
+                           '',
+                           "Pointer grabbed",
+                           "The mouse pointer has been restricted to the virtual " +
+                           "console window. To release the pointer press the key pair " +
+                           "Ctrl+Alt",
+                           [],
+                           {"desktop-entry": "virt-manager",
+                            "x": x+200, "y": y},
+                           5 * 1000);
+        except Exception, e:
+            pass
+        topwin.set_title(_("Press Ctrl+Alt to release mouse.") + " " + self.title)
+
+    def notify_ungrabbed(self, src):
+        topwin = self.window.get_widget("vmm-console")
+        topwin.set_title(self.title)
 
     def keygrab_changed(self, src, ignore1=None,ignore2=None,ignore3=None):
         if self.config.get_console_keygrab() == 2:
