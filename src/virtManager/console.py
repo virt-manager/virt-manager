@@ -40,7 +40,7 @@ class vmmConsole(gobject.GObject):
         }
     def __init__(self, config, vm):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_file(), "vmm-console", domain="virt-manager")
+        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-console.glade", "vmm-console", domain="virt-manager")
         self.config = config
         self.vm = vm
 

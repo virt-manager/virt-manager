@@ -33,7 +33,7 @@ gtk.about_dialog_set_url_hook(on_url)
 
 class vmmAbout:
     def __init__(self, config):
-        self.window = gtk.glade.XML(config.get_glade_file(), "vmm-about", domain="virt-manager")
+        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-about.glade", "vmm-about", domain="virt-manager")
         self.window.get_widget("vmm-about").hide()
         self.config = config
 

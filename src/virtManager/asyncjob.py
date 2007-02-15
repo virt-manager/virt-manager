@@ -39,7 +39,7 @@ class vmmAsyncJob(gobject.GObject):
         self.__gobject_init__()
         self.config = config
 
-        self.window = gtk.glade.XML(self.config.get_glade_file(), "vmm-progress", domain="virt-manager")
+        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-progress.glade", "vmm-progress", domain="virt-manager")
         self.window.get_widget("pbar-text").set_text(text)
 
         self.topwin = self.window.get_widget("vmm-progress")

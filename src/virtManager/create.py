@@ -102,7 +102,7 @@ class vmmCreate(gobject.GObject):
         self.__gobject_init__()
         self.config = config
         self.connection = connection
-        self.window = gtk.glade.XML(config.get_glade_file(), "vmm-create", domain="virt-manager")
+        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-create.glade", "vmm-create", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-create")
         self.topwin.hide()
         self.window.signal_autoconnect({

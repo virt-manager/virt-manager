@@ -12,7 +12,7 @@ libexec_SOURCES = $(PACKAGE)-launch.in
 libexec_SCRIPTS = $(PACKAGE)-launch
 
 gladedir = $(pkgdatadir)
-glade_DATA = $(PACKAGE).glade
+glade_DATA = $(wildcard $(srcdir)/*.glade)
 
 desktopdir = $(datadir)/applications
 desktop_SOURCES = $(PACKAGE).desktop.in

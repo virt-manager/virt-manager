@@ -20,7 +20,7 @@ import gtk.glade
 
 class vmmPreferences:
     def __init__(self, config):
-        self.window = gtk.glade.XML(config.get_glade_file(), "vmm-preferences", domain="virt-manager")
+        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-preferences.glade", "vmm-preferences", domain="virt-manager")
         self.config = config
         self.window.get_widget("vmm-preferences").hide()
 

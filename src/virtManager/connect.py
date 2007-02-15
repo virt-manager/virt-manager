@@ -30,7 +30,7 @@ class vmmConnect(gobject.GObject):
         }
     def __init__(self, config, engine):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_file(), "vmm-open-connection", domain="virt-manager")
+        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-open-connection.glade", "vmm-open-connection", domain="virt-manager")
         self.engine = engine
         self.window.get_widget("vmm-open-connection").hide()
 
