@@ -424,7 +424,7 @@ class GRFBViewer(gtk.DrawingArea):
 
     def set_autograb_keyboard(self, grab):
         self.autograbkey = grab
-        if grab == False and grabbedKeyboard:
+        if grab == False and self.grabbedKeyboard:
             self.ungrab_keyboard()
 
 
