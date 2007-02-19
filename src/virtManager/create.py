@@ -121,6 +121,7 @@ class vmmCreate(gobject.GObject):
             "on_media_toggled" : self.change_media_type,
             "on_pv_media_url_changed" : self.change_combo_box,
             "on_pv_ks_url_changed" : self.change_combo_box,
+            "on_os_type_changed" : self.change_os_type,
             })
 
         self.set_initial_state()
@@ -185,6 +186,21 @@ class vmmCreate(gobject.GObject):
         ks_url_list.set_model(ks_url_model)
         ks_url_list.set_text_column(0)
 
+        # set up the lists for the os-type/os-variant widgets
+        os_type_list = self.window.get_widget("os-type")
+        os_type_model = gtk.ListStore(str)
+        os_type_list.set_model(os_type_model)
+        text = gtk.CellRendererText()
+        os_type_list.pack_start(text, True)
+        os_type_list.add_attribute(text, 'text', 0)
+
+        os_variant_list = self.window.get_widget("os-variant")
+        os_variant_model = gtk.ListStore(str)
+        os_variant_list.set_model(os_variant_model)
+        text = gtk.CellRendererText()
+        os_variant_list.pack_start(text, True)
+        os_variant_list.add_attribute(text, 'text', 0)
+
         self.window.get_widget("create-cpus-physical").set_text(str(self.connection.host_maximum_processor_count()))
         memory = int(self.connection.host_memory_size())
         self.window.get_widget("create-host-memory").set_text(self.pretty_memory(memory))
@@ -235,7 +251,11 @@ class vmmCreate(gobject.GObject):
         self.populate_url_model(model, self.config.get_media_urls())
         model = self.window.get_widget("pv-ks-url").get_model()
         self.populate_url_model(model, self.config.get_kickstart_urls())
-
+        model = self.window.get_widget("os-type").get_model()
+        os_list = virtinst.FullVirtGuest.OS_TYPES.keys()
+        self.populate_os_model(model, os_list)
+        # set the default os to Linux
+        self.window.get_widget("os-type").set_active(os_list.index("Linux"))
         self.install_error = None
 
 
@@ -321,6 +341,13 @@ class vmmCreate(gobject.GObject):
     def get_config_virtual_cpus(self):
         return self.window.get_widget("create-vcpus").get_value()
 
+    def get_config_os_type(self):
+        return self.window.get_widget("os-type").get_active_text()
+
+    def get_config_os_variant(self):
+        return self.window.get_widget("os-variant").get_active_text()
+
+
     def page_changed(self, notebook, page, page_number):
         # would you like some spaghetti with your salad, sir?
 
@@ -350,8 +377,13 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("summary-name").set_text(self.get_config_name())
             if self.get_config_method() == VM_PARA_VIRT:
                 self.window.get_widget("summary-method").set_text(_("Paravirtualized"))
+                self.window.get_widget("summary-os-label").hide()
+                self.window.get_widget("summary-os").hide()
             else:
                 self.window.get_widget("summary-method").set_text(_("Fully virtualized"))
+                self.window.get_widget("summary-os-label").show()
+                self.window.get_widget("summary-os").set_text(self.get_config_os_variant())
+                self.window.get_widget("summary-os").show()
             self.window.get_widget("summary-install-source").set_text(self.get_config_install_source())
             self.window.get_widget("summary-kickstart-source").set_text(self.get_config_kickstart_source())
             self.window.get_widget("summary-disk-image").set_text(self.get_config_disk_image())
@@ -383,6 +415,17 @@ class vmmCreate(gobject.GObject):
                 guest.cdrom = self.get_config_install_source()
             except ValueError, e:
                 self._validation_error_box(_("Invalid FV media address"),e.args[0])
+            try:
+                logging.debug("OS Type: %s" % self.get_config_os_type())
+                guest.os_type = self.get_config_os_type()
+            except ValueError, e:
+                self._validation_error_box(_("Invalid FV OS Type"),e.args[0])
+            try:
+                logging.debug("OS Variant: %s" % self.get_config_os_variant())
+                guest.os_variant = self.get_config_os_variant()
+            except ValueError, e:
+                self._validation_error_box(_("Invalid FV OS Variant"),e.args[0])
+
         else:
             guest = virtinst.ParaVirtGuest()
             try:
@@ -450,6 +493,7 @@ class vmmCreate(gobject.GObject):
         logging.debug("Creating a VM " + guest.name + \
                       "\n  UUID: " + guest.uuid + \
                       "\n  Source: " + self.get_config_install_source() + \
+                      "\n  OS: " + self.get_config_os_variant() + \
                       "\n  Kickstart: " + self.get_config_kickstart_source() + \
                       "\n  Memory: " + str(guest.memory) + \
                       "\n  Max Memory: " + str(guest.maxmemory) + \
@@ -759,12 +803,22 @@ class vmmCreate(gobject.GObject):
         
     def change_combo_box(self, box):
         model = box.get_model()
-        try:
-            box.child.set_text(model.get_value(box.get_active_iter(), 0))
-        except TypeError, e:
-            # pygtk throws a bogus type error here, ignore it
-            return
+        box.child.set_text(model.get_value(box.get_active_iter(), 0))
+        return
+
+    def populate_os_model(self, model, oses):
+        model.clear()
+        for os in oses:
+            model.append([os])
         
+    def change_os_type(self, box):
+        model = box.get_model()
+        os_type = model.get_value(box.get_active_iter(), 0)
+        variant = self.window.get_widget("os-variant")
+        variant_model = variant.get_model()
+        self.populate_os_model(variant_model, virtinst.FullVirtGuest.OS_TYPES[os_type].keys())
+        variant.set_active(0)
+
     def pretty_memory(self, mem):
         if mem > (1024*1024):
             return "%2.2f GB" % (mem/(1024.0*1024.0))
