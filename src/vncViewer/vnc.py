@@ -165,6 +165,10 @@ class GRFBNetworkClient(rfb.RFBNetworkClient, gobject.GObject):
         self.send(pack('>BBHI', 4, down, 0, key))
 
     def update_pointer(self, mask, x, y):
+        if x < 0:
+            x = 0
+        if y < 0:
+            y = 0
         self.send(pack('>BBHH', 5, mask, x, y))
 gobject.type_register(GRFBNetworkClient)
 
