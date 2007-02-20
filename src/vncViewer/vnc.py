@@ -483,7 +483,6 @@ class GRFBViewer(gtk.DrawingArea):
                 self.ungrab_pointer()
                 return
 
-        self.ungrab_pointer()
         # Key handling in VNC is screwy. The event.keyval from GTK is
         # interpreted relative to modifier state. This really messes
         # up with VNC which has no concept of modifiers. If we interpret
