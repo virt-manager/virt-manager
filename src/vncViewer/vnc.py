@@ -479,7 +479,10 @@ class GRFBViewer(gtk.DrawingArea):
     def key_press(self, win, event):
         # Allow Ctrl+Alt+Esc to break the pointer grab
         if self.will_autograb_pointer():
-            if event.state & gtk.gdk.CONTROL_MASK and event.state & gtk.gdk.MOD1_MASK and gtk.gdk.pointer_is_grabbed():
+            if ((event.state & gtk.gdk.CONTROL_MASK and event.state & gtk.gdk.MOD1_MASK) or \
+                (event.state & gtk.gdk.MOD2_MASK and event.state & gtk.gdk.MOD1_MASK) or \
+                (event.state & gtk.gdk.CONTROL_MASK and event.state & gtk.gdk.MOD2_MASK)) and \
+                gtk.gdk.pointer_is_grabbed():
                 self.ungrab_pointer()
                 return
 
