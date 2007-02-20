@@ -508,7 +508,6 @@ class vmmCreate(gobject.GObject):
 
         logging.debug("Creating a VM " + guest.name + \
                       "\n  Type: " + guest.type + \
-                      "\n  Architecture: " + str(guest.arch) + \
                       "\n  UUID: " + guest.uuid + \
                       "\n  Source: " + self.get_config_install_source() + \
                       "\n  OS: " + self.get_config_os_variant() + \
