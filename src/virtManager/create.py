@@ -169,11 +169,6 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("media-physical").set_sensitive(False)
             self.bus = None
             self.hal_iface = None
-            msg = gtk.MessageDialog(parent=None, flags=0, type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
-                                    message_format="Unable to enumerate CDROM volumes")
-            msg.format_secondary_text("Cannot connect to HAL device manager")
-            msg.run()
-            msg.destroy()
 
         # set up the lists for the url widgets
         media_url_list = self.window.get_widget("pv-media-url")
