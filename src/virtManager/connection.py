@@ -55,15 +55,37 @@ class vmmConnection(gobject.GObject):
     def is_read_only(self):
         return self.readOnly
 
+    def get_type(self):
+        return self.vmm.getType()
+
     def get_name(self):
-        if self.uri == "xen" or self.uri == "Xen" or (self.uri is None):
-            hostname = "localhost"
-            try:
-                (host, aliases, ipaddrs) = gethostbyaddr(gethostname())
-                hostname = host
-            except:
-                logging.warning("Unable to resolve local hostname for machine")
-            return "Xen: " + hostname
+        hostname = "localhost"
+        try:
+            (host, aliases, ipaddrs) = gethostbyaddr(gethostname())
+            hostname = host
+        except:
+            logging.warning("Unable to resolve local hostname for machine")
+
+        if self.get_type()[0:3] == "Xen":
+            if self.uri == "xen" or self.uri == "Xen" or self.uri is None:
+                return "Xen: " + hostname
+            else:
+                try:
+                    urlbits = urlparse(self.uri)
+                    return "Xen: " + urlbits.netloc
+                except:
+                    return self.uri
+        elif self.get_type() == "QEMU":
+            if self.uri == "qemu:///session":
+                return "QEMU session: " + hostname
+            elif self.uri == "qemu:///system":
+                return "QEMU system: " + hostname
+            else:
+                try:
+                    urlbits = urlparse(self.uri)
+                    return "QEMU system: " + urlbits.netloc
+                except:
+                    return self.uri
         else:
             return self.uri
 

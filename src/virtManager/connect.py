@@ -34,21 +34,22 @@ class vmmConnect(gobject.GObject):
         self.engine = engine
         self.window.get_widget("vmm-open-connection").hide()
 
-        self.change_active_type(self.window.get_widget("type-local-xen"))
-
-        # Not securely implemented yet by XenD, so disable it
-        self.window.get_widget("type-remote-xen").set_sensitive(False)
+        # Not securely implemented yet by XenD/QEMU yet so disable it
+        self.window.get_widget("type-remote-host").set_sensitive(False)
 
         self.window.get_widget("connect").grab_default()
 
         self.window.signal_autoconnect({
-            "on_type_local_xen_toggled": self.change_active_type,
-            "on_type_remote_xen_toggled": self.change_active_type,
-            "on_type_other_hv_toggled": self.change_active_type,
+            "on_type_local_host_toggled": self.update_widget_states,
+            "on_type_remote_host_toggled": self.update_widget_states,
+            "on_type_other_hv_toggled": self.update_widget_states,
+            "on_type_hypervisor_changed": self.update_widget_states,
             "on_cancel_clicked": self.cancel,
             "on_connect_clicked": self.open_connection,
             "on_vmm_open_connection_delete_event": self.cancel,
             })
+
+        self.window.get_widget("type-hypervisor").set_active(0)
 
     def cancel(self,ignore1=None,ignore2=None):
         self.close()
@@ -63,39 +64,53 @@ class vmmConnect(gobject.GObject):
         win.show_all()
         win.present()
 
-    def change_active_type(self, src):
-        if src.get_active():
-            if src.get_name() == "type-local-xen":
-                self.window.get_widget("remote-xen-options").set_sensitive(False)
-                self.window.get_widget("other-hv-options").set_sensitive(False)
-            elif src.get_name() == "type-remote-xen":
-                self.window.get_widget("remote-xen-options").set_sensitive(True)
-                self.window.get_widget("other-hv-options").set_sensitive(False)
-            else:
-                self.window.get_widget("remote-xen-options").set_sensitive(False)
-                self.window.get_widget("other-hv-options").set_sensitive(True)
+    def update_widget_states(self, ignore=None):
+        type = self.window.get_widget("type-hypervisor")
+        local = self.window.get_widget("type-local-host")
+        remote = self.window.get_widget("type-remote-host")
 
-            if src.get_name() == "type-local-xen" and os.getuid() != 0:
-                self.window.get_widget("option-read-only").set_sensitive(False)
-                self.window.get_widget("option-read-only").set_active(True)
-            else:
-                self.window.get_widget("option-read-only").set_active(False)
-                self.window.get_widget("option-read-only").set_sensitive(True)
+        if local.get_active():
+            self.window.get_widget("remote-host-options").set_sensitive(False)
+            self.window.get_widget("other-hv-options").set_sensitive(False)
+        elif remote.get_active():
+            self.window.get_widget("remote-host-options").set_sensitive(True)
+            self.window.get_widget("other-hv-options").set_sensitive(False)
+        else:
+            self.window.get_widget("remote-host-options").set_sensitive(False)
+            self.window.get_widget("other-hv-options").set_sensitive(True)
+
+        if local.get_active() and os.getuid() != 0 and type.get_active() == 0:
+            self.window.get_widget("option-read-only").set_sensitive(False)
+            self.window.get_widget("option-read-only").set_active(True)
+        else:
+            self.window.get_widget("option-read-only").set_active(False)
+            self.window.get_widget("option-read-only").set_sensitive(True)
 
 
     def open_connection(self, src):
+        type = self.window.get_widget("type-hypervisor")
+        local = self.window.get_widget("type-local-host")
+        remote = self.window.get_widget("type-remote-host")
         uri = None
 
         readOnly = self.window.get_widget("option-read-only").get_active()
-        if self.window.get_widget("type-local-xen").get_active():
-            uri = "xen"
-            if os.getuid() != 0:
-                readOnly = True
-        elif self.window.get_widget("type-remote-xen").get_active():
-            protocol = "http"
-            if self.window.get_widget("remote-xen-secure").get_active():
-                protocol = "https"
-                uri = protocol + "://" + self.window.get_widget("remote-xen-host").get_text() + ":" + self.window.get_widget("remote-xen-port").get_text()
+
+        if local.get_active():
+            if type.get_active() == 0:
+                uri = "xen"
+                if os.getuid() != 0:
+                    readOnly = True
+            else:
+                if os.getuid() == 0:
+                    uri = "qemu///system"
+                else:
+                    uri = "qemu:///session"
+        elif remote.get_active():
+            if type.get_active() == 0:
+                # XXX fixme
+                uri = "http://" + self.window.get_widget("remote-host").get_text() + ":" + self.window.get_widget("remote-port").get_text()
+            else:
+                uri = "qemu://" + self.window.get_widget("remote-host").get_text() + ":" + self.window.get_widget("remote-port").get_text() + "/system"
         else:
             uri = self.window.get_widget("other-hv-uri").get_text()
 
