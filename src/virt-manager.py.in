@@ -83,7 +83,7 @@ pylib_dir = "::PYLIBDIR::"
 pyarchlib_dir = "::PYARCHLIBDIR::"
 
 # Hack for dev purposes
-if os.path.exists(os.getcwd() + "/src/" + appname + ".glade"):
+if os.path.exists(os.getcwd() + "/src/vmm-about.glade"):
     glade_dir = os.getcwd() + "/src"
 if os.path.exists(os.getcwd() + "/pixmaps/icon_run.png"):
     icon_dir = os.getcwd() + "/pixmaps"

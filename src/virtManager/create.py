@@ -122,6 +122,8 @@ class vmmCreate(gobject.GObject):
             "on_pv_media_url_changed" : self.change_combo_box,
             "on_pv_ks_url_changed" : self.change_combo_box,
             "on_os_type_changed" : self.change_os_type,
+            "on_cpu_architecture_changed": self.change_cpu_arch,
+            "on_virt_method_toggled": self.change_virt_method,
             })
 
         self.set_initial_state()
@@ -201,6 +203,16 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-host-memory").set_text(self.pretty_memory(memory))
         self.window.get_widget("create-memory-max").set_range(50, memory/1024)
 
+        if self.connection.get_type() == "QEMU":
+            self.window.get_widget("cpu-architecture").set_active(0)
+        else:
+            self.window.get_widget("cpu-architecture").set_active(-1)
+
+        self.window.get_widget("cpu-architecture").set_sensitive(False)
+        self.window.get_widget("cpu-accelerate").set_sensitive(False)
+        self.change_virt_method()
+
+
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
@@ -212,26 +224,33 @@ class vmmCreate(gobject.GObject):
 
         # If we don't have full-virt support disable the choice, and
         # display a message telling the user why it is not working
-        if virtinst.util.is_hvm_capable():
-            self.window.get_widget("virt-method-fv").set_sensitive(True)
+        if self.connection.get_type() == "QEMU":
+            self.window.get_widget("virt-method-pv").set_sensitive(False)
+            self.window.get_widget("virt-method-fv").set_active(True)
             self.window.get_widget("virt-method-fv-unsupported").hide()
             self.window.get_widget("virt-method-fv-disabled").hide()
         else:
-            self.window.get_widget("virt-method-fv").set_sensitive(False)
-            flags = virtinst.util.get_cpu_flags()
-            if "vmx" in flags or "svm" in flags:
-                # Host has support, but disabled in bios
+            self.window.get_widget("virt-method-pv").set_sensitive(True)
+            self.window.get_widget("virt-method-pv").set_active(True)
+            if virtinst.util.is_hvm_capable():
+                self.window.get_widget("virt-method-fv").set_sensitive(True)
                 self.window.get_widget("virt-method-fv-unsupported").hide()
-                self.window.get_widget("virt-method-fv-disabled").show()
-            else:
-                # Host has no support
-                self.window.get_widget("virt-method-fv-unsupported").show()
                 self.window.get_widget("virt-method-fv-disabled").hide()
+            else:
+                self.window.get_widget("virt-method-fv").set_sensitive(False)
+                flags = virtinst.util.get_cpu_flags()
+                if "vmx" in flags or "svm" in flags:
+                    # Host has support, but disabled in bios
+                    self.window.get_widget("virt-method-fv-unsupported").hide()
+                    self.window.get_widget("virt-method-fv-disabled").show()
+                else:
+                    # Host has no support
+                    self.window.get_widget("virt-method-fv-unsupported").show()
+                    self.window.get_widget("virt-method-fv-disabled").hide()
 
         self.change_media_type()
         self.change_storage_type()
         self.window.get_widget("create-vm-name").set_text("")
-        self.window.get_widget("virt-method-pv").set_active(True)
         self.window.get_widget("media-iso-image").set_active(True)
         self.window.get_widget("fv-iso-location").set_text("")
         self.window.get_widget("storage-partition").set_active(True)
@@ -405,7 +424,9 @@ class vmmCreate(gobject.GObject):
     def finish(self, ignore=None):
         # first things first, are we trying to create a fully virt guest?
         if self.get_config_method() == VM_FULLY_VIRT:
-            guest = virtinst.FullVirtGuest()
+            guest = virtinst.FullVirtGuest(type=self.get_domain_type(), \
+                                           hypervisorURI=self.connection.get_uri(), \
+                                           arch=self.get_domain_arch())
             try:
                 guest.cdrom = self.get_config_install_source()
             except ValueError, e:
@@ -422,7 +443,7 @@ class vmmCreate(gobject.GObject):
                 self._validation_error_box(_("Invalid FV OS Variant"),e.args[0])
 
         else:
-            guest = virtinst.ParaVirtGuest()
+            guest = virtinst.ParaVirtGuest(type=self.get_domain_type(), hypervisorURI=self.connection.get_uri())
             try:
                 guest.location = self.get_config_install_source()
             except ValueError, e:
@@ -486,6 +507,8 @@ class vmmCreate(gobject.GObject):
         guest.graphics = "vnc"
 
         logging.debug("Creating a VM " + guest.name + \
+                      "\n  Type: " + guest.type + \
+                      "\n  Architecture: " + str(guest.arch) + \
                       "\n  UUID: " + guest.uuid + \
                       "\n  Source: " + self.get_config_install_source() + \
                       "\n  OS: " + self.get_config_os_variant() + \
@@ -662,7 +685,7 @@ class vmmCreate(gobject.GObject):
                 self._validation_error_box(_("Invalid System Name"), \
                                            _("System name may contain alphanumeric and '_' characters only"))
                 return False
-                
+
 
         elif page_num == 2: # the virt method page
             if self.get_config_method() == VM_FULLY_VIRT and not virtinst.util.is_hvm_capable():
@@ -795,7 +818,7 @@ class vmmCreate(gobject.GObject):
         model.clear()
         for url in urls:
             model.append([url])
-        
+
     def change_combo_box(self, box):
         model = box.get_model()
         box.child.set_text(model.get_value(box.get_active_iter(), 0))
@@ -805,7 +828,7 @@ class vmmCreate(gobject.GObject):
         model.clear()
         for os in oses:
             model.append([os])
-        
+
     def change_os_type(self, box):
         model = box.get_model()
         os_type = model.get_value(box.get_active_iter(), 0)
@@ -814,16 +837,56 @@ class vmmCreate(gobject.GObject):
         self.populate_os_model(variant_model, virtinst.FullVirtGuest.OS_TYPES[os_type].keys())
         variant.set_active(0)
 
+    def change_virt_method(self, ignore=None):
+        arch = self.window.get_widget("cpu-architecture")
+        if self.connection.get_type() != "QEMU" or self.window.get_widget("virt-method-pv").get_active():
+            arch.set_sensitive(False)
+        else:
+            arch.set_sensitive(True)
+        self.change_cpu_arch(arch)
+
+    def change_cpu_arch(self, src):
+        model = src.get_model()
+        active = src.get_active()
+        canAccel = False
+        if active != -1 and src.get_property("sensitive") and \
+               (virtinst.util.is_kvm_capable() or virtinst.util.is_kqemu_capable()):
+            if os.uname()[4] == "i686" and model[active][0] == "i686":
+                canAccel = True
+            elif os.uname()[4] == "x86_64" and model[active][0] in ("i686", "x86_64"):
+                canAccel = True
+
+        self.window.get_widget("cpu-accelerate").set_sensitive(canAccel)
+        self.window.get_widget("cpu-accelerate").set_active(canAccel)
+
+    def get_domain_arch(self):
+        if self.connection.get_type() != "QEMU":
+            return None
+        arch = self.window.get_widget("cpu-architecture")
+        if arch.get_active() == -1:
+            return None
+        return arch.get_model()[arch.get_active()][0]
+
     def pretty_memory(self, mem):
         if mem > (1024*1024):
             return "%2.2f GB" % (mem/(1024.0*1024.0))
         else:
             return "%2.2f MB" % (mem/1024.0)
-                           
+
     def is_sparse_file(self):
         if self.window.get_widget("non-sparse").get_active():
             return False
         else:
             return True
-        
-        
+
+    def get_domain_type(self):
+        if self.connection.get_type() == "QEMU":
+            if self.window.get_widget("cpu-accelerate").get_active():
+                if virtinst.util.is_kvm_capable():
+                    return "kvm"
+                elif virtinst.util.is_kqemu_capable():
+                    return "kqemu"
+            return "qemu"
+        else:
+            return "xen"
+
