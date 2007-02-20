@@ -267,6 +267,7 @@ class vmmCreate(gobject.GObject):
         self.populate_url_model(model, self.config.get_kickstart_urls())
         model = self.window.get_widget("os-type").get_model()
         os_list = virtinst.FullVirtGuest.OS_TYPES.keys()
+        os_list.sort()
         self.populate_os_model(model, os_list)
         # set the default os to Linux
         self.window.get_widget("os-type").set_active(os_list.index("Linux"))
@@ -833,7 +834,9 @@ class vmmCreate(gobject.GObject):
         os_type = model.get_value(box.get_active_iter(), 0)
         variant = self.window.get_widget("os-variant")
         variant_model = variant.get_model()
-        self.populate_os_model(variant_model, virtinst.FullVirtGuest.OS_TYPES[os_type].keys())
+        variant_list = virtinst.FullVirtGuest.OS_TYPES[os_type].keys()
+        variant_list.sort()
+        self.populate_os_model(variant_model, variant_list)
         variant.set_active(0)
 
     def change_virt_method(self, ignore=None):
