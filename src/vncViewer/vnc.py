@@ -272,6 +272,10 @@ class GRFBViewer(gtk.DrawingArea):
                            gtk.gdk.keyval_from_name("Meta_R"), \
                            gtk.gdk.keyval_from_name("Control_L"), \
                            gtk.gdk.keyval_from_name("Control_R"))
+        self.ctrlMods = (gtk.gdk.keyval_from_name("Control_L"), \
+                         gtk.gdk.keyval_from_name("Control_R"))
+        self.altMods = (gtk.gdk.keyval_from_name("Alt_L"), \
+                        gtk.gdk.keyval_from_name("Alt_R"))
         self.lastKeyVal = None
         self.lastKeyRepeat = 0
 
@@ -481,15 +485,6 @@ class GRFBViewer(gtk.DrawingArea):
 
 
     def key_press(self, win, event):
-        # Allow Ctrl+Alt+Esc to break the pointer grab
-        if self.will_autograb_pointer():
-            if ((event.state & gtk.gdk.CONTROL_MASK and event.state & gtk.gdk.MOD1_MASK) or \
-                (event.state & gtk.gdk.MOD2_MASK and event.state & gtk.gdk.MOD1_MASK) or \
-                (event.state & gtk.gdk.CONTROL_MASK and event.state & gtk.gdk.MOD2_MASK)) and \
-                gtk.gdk.pointer_is_grabbed():
-                self.ungrab_pointer()
-                return
-
         # Key handling in VNC is screwy. The event.keyval from GTK is
         # interpreted relative to modifier state. This really messes
         # up with VNC which has no concept of modifiers. If we interpret
@@ -506,12 +501,19 @@ class GRFBViewer(gtk.DrawingArea):
 
         stickyVal = None
 
+        # Check modifiers for sticky keys, or pointer ungrab
         if val in self.stickyMods:
             # No previous mod pressed, start counting our presses
             if self.lastKeyVal == None:
                 self.lastKeyVal = val
                 self.lastKeyRepeat = 1
             else:
+                # Check for Alt+Ctrl  or Ctrl+Alt to release grab
+                if ((self.lastKeyVal in self.ctrlMods and val in self.altMods) or \
+                    (self.lastKeyVal in self.altMods and val in self.ctrlMods)) and \
+                    gtk.gdk.pointer_is_grabbed():
+                    self.ungrab_pointer()
+
                 if self.lastKeyVal == val:
                     # Match last key pressed, so increase count
                     self.lastKeyRepeat = self.lastKeyRepeat + 1
