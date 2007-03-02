@@ -102,12 +102,15 @@ class vmmConnect(gobject.GObject):
                     readOnly = True
             else:
                 if os.getuid() == 0:
-                    uri = "qemu///system"
+                    # Disabled for now, since the systemwide instance
+                    # has no init script just yet
+                    #uri = "qemu///system"
+                    uri = "qemu:///session"
                 else:
                     uri = "qemu:///session"
         elif remote.get_active():
             if type.get_active() == 0:
-                # XXX fixme
+                # XXX fixme these URIs should switch to the secure libvirtd when its finally written
                 uri = "http://" + self.window.get_widget("remote-host").get_text() + ":" + self.window.get_widget("remote-port").get_text()
             else:
                 uri = "qemu://" + self.window.get_widget("remote-host").get_text() + ":" + self.window.get_widget("remote-port").get_text() + "/system"

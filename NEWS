@@ -1,6 +1,20 @@
  Virtual Machine Manager News
  ============================
 
+Release 0.3.1
+-------------
+
+This release introduces support for managing QEMU / KVM virtual machines
+using the new libvirt QEMU driver backend. This requires a new libvirt
+(at least 0.2.0) to enable the QEMU driver. It also requires an install
+of the virtinst package of at least version 0.101.0 to support QEMU. The
+dual cursor problem is worked around by grabbing the mouse pointer upon
+first button press (release with Ctrl+Alt). The progress bar display
+when creating new VMs has had its appearance tweaked. The new VM creation
+wizard also allows the user to specify the type of guest OS being installed.
+This will allow the setup of virtual hardware to be optimized for the needs
+of specific guest OS.
+
 Release 0.3.0
 -------------
 
