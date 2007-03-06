@@ -3,6 +3,10 @@
     "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
   <!ENTITY GFDL SYSTEM "fdl-appendix.xml">
+  <!ENTITY appversion "0.3.0">
+  <!ENTITY manrevision "0.1">
+  <!ENTITY date "March 2007">
+  <!ENTITY app "virt-manager">
 ]>
 <!--
       (Do not remove this comment block.)
@@ -145,14 +149,37 @@
  <sect1 id="intro">
   <title>Introduction</title>
 
-  <sect2 id="aboutex">
-   <title>About this Document and Virtual Machine Manager</title>
+  <sect2 id="about-virt-manager">
+   <title>About <application>&app;</application></title>
    <indexterm>
     <primary>virt-manager</primary>
-    <secondary>Examples</secondary>
+    <secondary>About</secondary>
    </indexterm>
    <para>
-    Placeholder
+    <application>&app;</application> is a GUI tool for managing virtual
+    machines. It helps you create, destroy, edit, monitor, save, restore,
+    pause, and use the console on virtual machines running on multiple
+    hypervisors (and, soon, multiple physical hosts). Because
+    <application>&app;</application> relies entirely on
+    <application>libvirt</application> (<ulink type="http"
+     url="http://libvirt.org">http://libvirt.org</ulink>), the platform- and
+    hypervisor-independent virtualization library, it is insulated from
+    hypervisor API changes and virtualization system changes.
+   </para>
+   <para>
+    <application>&app;</application> is released under the GNU General Public
+    License. Contributions of source code patches are welcome and encouraged
+    at <ulink type="http"
+     url="http://virt-manager.org">virt-manager.org</ulink>, where you will 
+    also find plans for future development.
+   </para>
+  </sect2>
+  <sect2 id="aboutex">
+   <title>About this Document</title>
+   <para>
+    This document is released under the GNU Free Documentation
+    License. Corrections are welcome and encouraged at <ulink type="http"
+     url="http://virt-manager.org">virt-manager.org</ulink>.
    </para>
   </sect2>
  </sect1>
@@ -161,23 +188,130 @@
   <title>Getting Started</title>
   
   <para>
-   Placeholder 1
+   This section describes the different ways to start
+   <application>&app;</application>, the command-line options that are
+   available, and the various options in the Connection window.
   </para>
   <sect2 id="starting-virt-manager">
    <title>Starting virt-manager</title> 
    <para>You can start
     virt-manager from the Applications menu or from the command
     line</para>
+   <variablelist>
+    <varlistentry>
+     From the <term><guimenu>Applications</guimenu> menu</term>:
+     <listitem>
+      <para>Choose <menuchoice><guisubmenu>System
+	 Tools</guisubmenu><guimenuitem>Virtual Machine Manager</guimenuitem></menuchoice>. </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     From the <term>command line</term>:
+     <listitem>
+      <para>Execute the following command: <command>virt-manager</command></para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
   </sect2>
+  
   <sect2 id="connection-window">
    <title>The Connection Window</title> 
    <para>The connection window
     lets you choose the type of hypervisor to connect to, and also
     whether to connect locally or to a remote machine.</para>
+   <para>When you start <application>&app;</application>, the following window is displayed:</para>
+
+   <figure id="virt-manager-connection-window">
+    <title>Connection Window</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-connection-window.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows &app; connection window.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
+   <para>The Connection Window contains the following
+    elements: </para>
+   <variablelist>
+    <varlistentry> <term>Hypervisor pull-down</term>
+     <listitem>
+      <para>The Hypervisor pull-down lets you choose a supported hypervisor to
+      connect to. The hypervisor must be started before you can connect to it.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry> <term>&quot;Host Type&quot; radio buttons</term>
+     <listitem>
+      <para>The &quot;Host Type&quot; radio buttons let you choose whether to connect to
+      a hypervisor on the local physical host, or (soon) a hypervisor on a
+       remote physical host.</para>
+     </listitem>
+     <listitem>
+      <para>The &quot;Host&quot; box lets you enter the hostname of a remote host to
+       connect to.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry> <term>Read-only connection</term>
+     <listitem>
+      <para>Checking &quot;Read-only connection&quot; will allow you to
+       monitor a hypervisor's virtual machines, but not make any changes to
+       them. If you are running as an unprivileged user, you may only be able
+       to connect to certain hypervisors read-only.</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
   </sect2>
   <sect2 id="command-line">
    <title>Command-line Options</title>
-   <para>You can avoid the Connection Window using command-line options</para>
+   <para>If you run &app; from the command line, you can specify a hypervisor
+    URI to connect to, bypassing the Connection Window. You can also make
+    specific &app; windows appear using the command line, if you have already
+    established a connection to a hypervisor. The command line options are:</para>
+   <itemizedlist>
+    <listitem><para><command>-h, --help</command>: show command line help and exit</para>
+    </listitem>
+    <listitem>
+     <para><command>--profile=FILE</command>: Generate runtime performance profile stats</para>
+    </listitem>
+    <listitem>
+     <para><command>-c URI, --connect=URI</command>: Connect to hypervisor at
+      URI</para>
+    </listitem>
+    <listitem>
+     <para><command>--no-dbus</command>: Disable DBus service for controlling
+      UI</para>
+    </listitem>
+    <listitem>
+     <para><command>--show-domain-creator</command>: Create a new virtual
+      machine</para>
+    </listitem>
+    <listitem>
+     <para><command>--show-domain-editor=UUID</command>: Edit a domain
+      configuration</para>
+    </listitem>
+    <listitem>
+     <para><command>--show-domain-performance=UUID</command>: Show a domain
+      performance</para>
+    </listitem>
+    <listitem>
+     <para><command>--show-domain-console=UUID</command>: Show a domain
+      console</para>
+    </listitem>
+    <listitem>
+     <para><command>--show-host-summary</command>: Show a host summary</para>
+    </listitem>
+   </itemizedlist>
+   <note>
+    <title>Hypervisor URIs and the test hypervisor</title> <para>To connect to
+    a local Xen hypervisor, the URI is simply &quot;xen&quot; (the
+    default). To connect to a local QEMU session, the URI is
+     &quot;qemu:///session&quot;. There is also a test hypervisor that is
+     handy if you are trying to test a new &app; feature you have added. Its
+     URI is &quot;test:///default&quot;.</para>
+   </note>
   </sect2>
  </sect1>
 
