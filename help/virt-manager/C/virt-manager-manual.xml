@@ -317,11 +317,75 @@
 
  <sect1 id="manager-window">
   <title>The Manager Window</title>
-  <para>You manage all your virtual machines from here</para>
+  <para>The manager window gives you a quick snapshot of the virtual machines
+   that are available on your physical host, those that are actually running
+   on your physical host, and the resources those running VMs are
+   consuming. The manager window is customizable as described below.</para>
   
+   <figure id="manager-window-screenshot">
+    <title>Manager Window</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-manager-window.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows a typical Manager Window.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
   <sect2 id="vm-list">
    <title>The Virtual Machine List</title>
-   <para>All about the list of virtual machines</para>
+   <para>The manager window is dominated by a list of virtual machines on your
+   physical host. By default, the list has six columns of information:</para>
+   <variablelist>
+    <varlistentry><term>ID</term>
+     <listitem>
+      <para>The arbitrarily assigned ID number for the
+       virtual machine. Guaranteed unique only while a virtual machine is
+       running, and only to that particular host.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Name</term>
+     <listitem>
+      <para>The name of the virtual machine. Like the ID, guaranteed unique
+       only among running virtual machines on a particular host.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Status</term>
+     <listitem>
+      <para>The virtual machine's status. One of <guilabel>Running</guilabel>,
+       <guilabel>Paused</guilabel>, <guilabel>Shutdown</guilabel>,
+       <guilabel>Shutoff</guilabel>, or <guilabel>Crashed</guilabel>.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>CPU Usage</term>
+     <listitem>
+      <para>The virtual machine's CPU usage, as a percentage of total CPU
+       time and as a running graph.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>VCPUs</term>
+     <listitem>
+      <para>The number of VCPUs currently assigned to the guest. This
+       allocation can be changed on the fly for paravirtualized
+       guests.</para> 
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Memory Usage</term>
+     <listitem>
+      <para>The amount of memory allocated to the virtual machine, and the percentage
+       of total physical RAM on the host that the virtual machine is actually
+       using (the percentage will be zero if the guest is not currently
+       running). Note: The amount of memory for a virtual machine is the
+       amount it is currently allocated, not the maximum it could be
+       allocated. See the help for the <ulink type="help"
+	url="ghelp:?details-window">Details Window</ulink>
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
   </sect2>
   <sect2 id="file-menu">
    <title>File Menu Choices</title>

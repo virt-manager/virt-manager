@@ -1,2 +1,2 @@
 SUBDIRS = 						\
-	virt-manager-manual
+	virt-manager
