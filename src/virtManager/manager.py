@@ -23,6 +23,7 @@ import gtk.glade
 import threading
 
 import sparkline
+import libvirt
 
 from virtManager.asyncjob import vmmAsyncJob
 
@@ -89,10 +90,49 @@ class vmmManager(gobject.GObject):
 
         self.window.get_widget("vm-view").set_active(0)
 
+        self.vmmenu_icons = {}
+        self.vmmenu_icons["run"] = gtk.Image()
+        self.vmmenu_icons["run"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_run.png", 18, 18))
+        self.vmmenu_icons["pause"] = gtk.Image()
+        self.vmmenu_icons["pause"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_pause.png", 18, 18))	
+        self.vmmenu_icons["resume"] = gtk.Image()
+        self.vmmenu_icons["resume"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_pause.png", 18, 18))
+        self.vmmenu_icons["shutdown"] = gtk.Image()
+        self.vmmenu_icons["shutdown"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
+
         self.vmmenu = gtk.Menu()
         self.vmmenu_items = {}
 
-        self.vmmenu_items["details"] = gtk.MenuItem("_Details")
+        self.vmmenu_items["run"] = gtk.ImageMenuItem("_Run")
+        self.vmmenu_items["run"].set_image(self.vmmenu_icons["run"])
+        self.vmmenu_items["run"].show()
+        self.vmmenu_items["run"].connect("activate", self.start_vm)
+        self.vmmenu.add(self.vmmenu_items["run"])
+
+        self.vmmenu_items["pause"] = gtk.ImageMenuItem("_Pause")
+        self.vmmenu_items["pause"].set_image(self.vmmenu_icons["pause"])
+        self.vmmenu_items["pause"].set_sensitive(False)
+        self.vmmenu_items["pause"].show()
+        self.vmmenu_items["pause"].connect("activate", self.pause_vm)
+        self.vmmenu.add(self.vmmenu_items["pause"])
+
+        self.vmmenu_items["resume"] = gtk.ImageMenuItem("_Resume")
+        self.vmmenu_items["resume"].set_image(self.vmmenu_icons["resume"])
+        self.vmmenu_items["resume"].show()
+        self.vmmenu_items["resume"].connect("activate", self.resume_vm)
+        self.vmmenu.add(self.vmmenu_items["resume"])
+
+        self.vmmenu_items["shutdown"] = gtk.ImageMenuItem("_Shutdown")
+        self.vmmenu_items["shutdown"].set_image(self.vmmenu_icons["shutdown"])
+        self.vmmenu_items["shutdown"].show()
+        self.vmmenu_items["shutdown"].connect("activate", self.stop_vm)
+        self.vmmenu.add(self.vmmenu_items["shutdown"])
+
+        self.vmmenu_items["hsep"] = gtk.SeparatorMenuItem()
+        self.vmmenu_items["hsep"].show();
+        self.vmmenu.add(self.vmmenu_items["hsep"])
+
+        self.vmmenu_items["details"] = gtk.ImageMenuItem("_Details")
         self.vmmenu_items["details"].connect("activate", self.show_vm_details)
         self.vmmenu_items["details"].show()
         self.vmmenu.add(self.vmmenu_items["details"])
@@ -102,7 +142,7 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["open"].show()
         self.vmmenu.add(self.vmmenu_items["open"])
 
-        self.vmmenu.show_all()
+        self.vmmenu.show()
 
         # Mapping of VM UUID -> tree model rows to
         # allow O(1) access instead of O(n)
@@ -406,6 +446,35 @@ class vmmManager(gobject.GObject):
     def popup_vm_menu(self, widget, event):
         vm = self.current_vm()
         if vm != None:
+
+            # Update popup menu based upon vm status
+            if vm.is_read_only() == True:
+                self.vmmenu_items["run"].set_sensitive(False)
+                self.vmmenu_items["pause"].set_sensitive(False)
+                self.vmmenu_items["resume"].hide()
+                self.vmmenu_items["resume"].set_sensitive(False)
+                self.vmmenu_items["shutdown"].set_sensitive(False)
+            else:
+                if vm.status() == libvirt.VIR_DOMAIN_SHUTOFF:
+                    self.vmmenu_items["run"].set_sensitive(True)
+                    self.vmmenu_items["pause"].set_sensitive(False)
+                    self.vmmenu_items["resume"].hide()
+                    self.vmmenu_items["resume"].set_sensitive(False)
+                    self.vmmenu_items["shutdown"].set_sensitive(False)
+                elif vm.status() == libvirt.VIR_DOMAIN_RUNNING:
+                    self.vmmenu_items["run"].set_sensitive(False)
+                    self.vmmenu_items["pause"].set_sensitive(True)
+                    self.vmmenu_items["resume"].hide()
+                    self.vmmenu_items["resume"].set_sensitive(False)
+                    self.vmmenu_items["shutdown"].set_sensitive(True)
+                elif vm.status() == libvirt.VIR_DOMAIN_PAUSED:
+                    self.vmmenu_items["run"].set_sensitive(False)
+                    self.vmmenu_items["pause"].hide()
+                    self.vmmenu_items["pause"].set_sensitive(False)
+                    self.vmmenu_items["resume"].show()
+                    self.vmmenu_items["resume"].set_sensitive(True)
+                    self.vmmenu_items["shutdown"].set_sensitive(True)              
+
             if event.button == 3:
                 self.vmmenu.popup(None, None, None, 0, event.time)
 
@@ -604,5 +673,22 @@ class vmmManager(gobject.GObject):
         data = model.get_value(iter, 0).cpu_time_vector_limit(40)
         data.reverse()
         cell.set_property('data_array', data)
+
+    def start_vm(self, ignore):
+        vm = self.current_vm()
+        vm.startup()
+
+    def stop_vm(self, ignore):
+        vm = self.current_vm()
+        vm.shutdown()
+
+    def pause_vm(self, ignore):
+        vm = self.current_vm()
+        vm.suspend()
+
+    def resume_vm(self, ignore):
+        vm = self.current_vm()
+        vm.resume()
+
 
 gobject.type_register(vmmManager)
