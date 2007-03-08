@@ -179,8 +179,8 @@ class vmmEngine:
     def show_help(self, index):
         try:
             props = { gnome.PARAM_APP_DATADIR : self.config.get_data_dir()}
-            prog = gnome.program_init(self.config.get_appname(), self.config.get_appversion(), \
-                                      properties=props)
+            gnome.program_init(self.config.get_appname(), self.config.get_appversion(), \
+                               properties=props)
             gnome.help_display(self.config.get_appname(), index)
         except gobject.GError, e:
             logging.error((("Unable to display documentation:\n%s") % e))
