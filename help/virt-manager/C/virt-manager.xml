@@ -318,8 +318,11 @@
  <sect1 id="manager-window">
   <title>The Manager Window</title>
   <para>The manager window gives you a quick snapshot of the virtual machines
-   that are available on your physical host, those that are actually running
-   on your physical host, and the resources those running VMs are
+   that are available on your physical host. It displays both the virtual
+   machines that are actually running
+   on your physical host, and also the virtual machines for which it finds
+   config information even though they are not running. For running virtual
+   machines, the manager window displays the resources those running VMs are
    consuming. The manager window is customizable as described below.</para>
   
    <figure id="manager-window-screenshot">
@@ -337,7 +340,7 @@
 
   <sect2 id="vm-list">
    <title>The Virtual Machine List</title>
-   <para>The manager window is dominated by a list of virtual machines on your
+   <para>The manager window is dominated by a list of the virtual machines on your
    physical host. By default, the list has six columns of information:</para>
    <variablelist>
     <varlistentry><term>ID</term>
@@ -363,7 +366,7 @@
     <varlistentry><term>CPU Usage</term>
      <listitem>
       <para>The virtual machine's CPU usage, as a percentage of total CPU
-       time and as a running graph.</para>
+       usage and as a running graph.</para>
      </listitem>
     </varlistentry>
     <varlistentry><term>VCPUs</term>
@@ -380,8 +383,7 @@
        using (the percentage will be zero if the guest is not currently
        running). Note: The amount of memory for a virtual machine is the
        amount it is currently allocated, not the maximum it could be
-       allocated. See the help for the <ulink type="help"
-	url="ghelp:?details-window">Details Window</ulink>
+       allocated. See the help for the <xref linkend="details-window"/>.
       </para>
      </listitem>
     </varlistentry>
@@ -389,34 +391,71 @@
   </sect2>
   <sect2 id="file-menu">
    <title>File Menu Choices</title>
-   <para>All about the File menu choices</para>
+   <para>The File menu in the Manager window gives you the following
+    options:</para>
+   <variablelist>
+    <varlistentry><term>New machine...</term>
+     <listitem><para>Starts the virtual machine creation wizard. Clicking the
+       <guibutton>New</guibutton> button at the bottom of the window has the
+       same effect.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Restore saved machine...</term>
+     <listitem><para>Restores a previously saved virtual machine. You must
+       choose the memory image of a previously saved virtual machine in the
+       dialog that will follow.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Open connection...</term>
+     <listitem><para>Brings up the connection window again. You can connect to
+       multiple hypervisors at the same time with
+       <application>&app;</application>. At this writing opening a new
+       connection brings up a new manager window; soon the manager window will
+       display multiple connections to multiple machines.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Close</term>
+     <listitem><para>Closes the Manager window. Any other
+       <application>&app;</application> windows you have open will remain open.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Quit</term>
+     <listitem><para>Closes the Manager window and any other open windows and
+       stops the application. Note that any virtual machines running on the
+       host will continue running regardless of whether 
+       <application>&app;</application> is running or not.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
   </sect2>
   <sect2 id="edit-menu">
    <title>Edit Menu Choices</title>
-   <para>All about the Edit menu choices</para>
+   <para>The choices on the <guimenu>Edit</guimenu> menu are for working with
+    a specific machine, or for changing <application>&app;</application>
+    preferences.</para>
+   <variablelist>
+    <varlistentry><term>Machine details...</term>
+     <listitem><para>Opens the Details window for the virtual machine you have
+       highlighted in the list.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Delete machine</term>
+     <listitem><para>Deletes the configuration of an inactive virtual machine you have
+       highlighted in the list. Note that this does not touch the virtual
+       machine's disk storage.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Preferences</term>
+     <listitem><para>Brings up the <xref linkend="preferences-window"/></para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
   </sect2>
   <sect2 id="view-menu">
    <title>View Menu Choices</title>
-   <para>All about the View menu choices</para>
-   <para>
-    <itemizedlist>
-     <listitem>
-      <para>
-       Foo
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       Bar
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       <emphasis role="bold">Baz</emphasis>
-      </para>
-     </listitem>
-    </itemizedlist>
-   </para>
+   <para>The View Menu choices toggle on and off the virtual machine list
+    columns that are described above.</para>
   </sect2>
  </sect1>
 
@@ -428,6 +467,11 @@
  <sect1 id="console-window">
   <title>The Console Window</title>
   <para>You view the console of a specific virtual machine here</para>
+ </sect1>
+
+ <sect1 id="preferences-window">
+  <title>The Preferences Window</title>
+  <para>You set application preferences here</para>
  </sect1>
 
  <sect1 id="create-wizard">

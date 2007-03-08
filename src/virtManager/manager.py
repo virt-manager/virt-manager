@@ -48,7 +48,10 @@ class vmmManager(gobject.GObject):
         "action-show-preferences": (gobject.SIGNAL_RUN_FIRST,
                                     gobject.TYPE_NONE, []),
         "action-show-create": (gobject.SIGNAL_RUN_FIRST,
+                               gobject.TYPE_NONE, [str]),
+        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),}
+
     def __init__(self, config, connection):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-manager.glade", "vmm-manager", domain="virt-manager")
@@ -134,6 +137,7 @@ class vmmManager(gobject.GObject):
 
             "on_menu_edit_preferences_activate": self.show_preferences,
             "on_menu_help_about_activate": self.show_about,
+            "on_menu_help_activate": self.show_help,
             })
 
         self.vm_selected(None)
@@ -407,6 +411,10 @@ class vmmManager(gobject.GObject):
 
     def show_about(self, src):
         self.emit("action-show-about")
+
+    def show_help(self, src):
+        # From the manager window, show the help document from the beginning
+        self.emit("action-show-help", None) #No 'id', load the front page
 
     def show_preferences(self, src):
         self.emit("action-show-preferences")
