@@ -81,12 +81,15 @@ glade_dir = asset_dir
 icon_dir = asset_dir + "/pixmaps"
 pylib_dir = "::PYLIBDIR::"
 pyarchlib_dir = "::PYARCHLIBDIR::"
+data_dir = "::DATADIR::"
 
 # Hack for dev purposes
 if os.path.exists(os.getcwd() + "/src/vmm-about.glade"):
     glade_dir = os.getcwd() + "/src"
 if os.path.exists(os.getcwd() + "/pixmaps/icon_run.png"):
     icon_dir = os.getcwd() + "/pixmaps"
+if os.path.exists(os.getcwd() + "../gnome/help/virt-manager/C/virt-manager.xml"):
+    data_dir = os.getcwd() + "../"
 
 if os.path.exists(os.getcwd() + "/src/virt-manager.py"):
     sys.path.insert(0, os.getcwd() + "/src/graphWidgets/.libs")
@@ -168,7 +171,7 @@ def main():
     if options.show and options.uri==None:
         raise OptionValueError("can't use --show-* options without --connect")
 
-    config = vmmConfig(appname, appversion, gconf_dir, glade_dir, icon_dir)
+    config = vmmConfig(appname, appversion, gconf_dir, glade_dir, icon_dir, data_dir)
     engine = vmmEngine(config)
     if not(options.nodbus) and not( (os.getenv("DBUS_SESSION_BUS_ADDRESS") is None ) and ( os.getenv("DBUS_STARTER_ADDRESS") is None ) ):
         try:

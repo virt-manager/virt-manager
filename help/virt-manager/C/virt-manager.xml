@@ -1,0 +1,519 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY GFDL SYSTEM "fdl-appendix.xml">
+  <!ENTITY appversion "0.3.0">
+  <!ENTITY manrevision "0.1">
+  <!ENTITY date "March 2007">
+  <!ENTITY app "virt-manager">
+]>
+<!--
+      (Do not remove this comment block.)
+  Template Maintained by the GNOME Documentation Project:
+	  http://developer.gnome.org/projects/gdp
+  Template version: 2.0 beta
+  Template last modified Feb 12, 2002
+-->
+
+
+<!--
+      (Do not remove this comment block.)
+  Version: 0.0.1
+  Last modified: March 2, 2007
+  Maintainers:
+               Hugh Brock      <hbrock@redhat.com>
+               Dan Berrange    <berrange@redhat.com>
+  Translators:
+               (translators put your name and email here)
+-->
+
+
+
+<!-- =============Document Header ============================= -->
+<article id="index" lang="en">
+ <!-- please do not change the id; for translations, change lang to -->
+ <!-- appropriate code -->
+
+ <articleinfo>
+  <title>Virtual Machine Manager Manual</title>
+  <copyright>
+   <year>2007</year>
+   <holder>Red Hat Inc., and Hugh Brock</holder>
+  </copyright>
+
+  <!-- translators: uncomment this:
+
+  <copyright>
+  <year>2000</year>
+  <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+ </copyright>
+
+  -->
+  <!-- An address can be added to the publisher information.  If a role is
+  not specified, the publisher/author is the same for all versions of the
+  document.  -->
+  <publisher>
+   <publishername> Red Hat Inc. </publishername>
+  </publisher>
+
+  &legal;
+  <!-- This file  contains link to license for the documentation (GNU FDL), and
+  other legal stuff such as "NO WARRANTY" statement. Please do not change
+  any of this. -->
+  
+  <authorgroup>
+   <author>
+    <firstname>Hugh</firstname>
+    <surname>Brock</surname>
+    <affiliation>
+     <orgname>Red Hat Inc.</orgname>
+     <address> <email>hbrock@redhat.com</email> </address>
+    </affiliation>
+   </author>
+   <author>
+    <firstname>Daniel</firstname>
+    <surname>Berrange</surname>
+    <affiliation>
+     <orgname>Red Hat Inc.</orgname>
+     <address> <email>berrange@redhat.com</email> </address>
+    </affiliation>
+   </author>
+   <!-- This is appropriate place for other contributors: translators,
+   maintainers,  etc. Commented out by default.
+   <othercredit role="translator">
+   <firstname>Latin</firstname>
+   <surname>Translator 1</surname>
+   <affiliation>
+   <orgname>Latin Translation Team</orgname>
+   <address> <email>translator@gnome.org</email> </address>
+  </affiliation>
+   <contrib>Latin translation</contrib>
+  </othercredit>
+   -->
+  </authorgroup>
+
+  <!-- According to GNU FDL, revision history is mandatory if you are -->
+  <!-- modifying/reusing someone else's document.  If not, you can omit it. -->
+  <!-- Remember to remove the &manrevision; entity from the revision entries other
+  -->
+  <!-- than the current revision. -->
+  <!-- The revision numbering system for GNOME manuals is as follows: -->
+  <!-- * the revision number consists of two components -->
+  <!-- * the first component of the revision number reflects the release version of the GNOME desktop. -->
+  <!-- * the second component of the revision number is a decimal unit that is incremented with each revision of the manual. -->
+  <!-- For example, if the GNOME desktop release is V2.x, the first version of the manual that -->
+  <!-- is written in that desktop timeframe is V2.0, the second version of the manual is V2.1, etc. -->
+  <!-- When the desktop release version changes to V3.x, the revision number of the manual changes -->
+  <!-- to V3.0, and so on. -->
+  <!--
+  <revhistory>
+  <revision>
+  <revnumber>&app; Manual V&manrevision;</revnumber>
+  <date>&date;</date>
+  <revdescription>
+  <para role="author">Documentation Writer 2
+  <email>docwriter2@gnome.org</email>
+ </para>
+  <para role="publisher">GNOME Documentation Project</para>
+ </revdescription>
+ </revision>
+  <revision>
+  <revnumber>Full title of previous manual.</revnumber>
+  <date>Release date of previous manual.</date>
+  <revdescription>
+  <para role="author">Documentation Writer 1
+  <email>docwriter1@gnome.org</email>
+ </para>
+  <para role="publisher">GNOME Documentation Project</para>
+ </revdescription>
+ </revision>
+ </revhistory>
+  --> 
+  <releaseinfo>This manual describes how to manage virtual machines
+   with the Virtual Machine Manager program.
+  </releaseinfo>
+  <legalnotice>
+   <title>Feedback</title>
+   <para>To report a bug or make a suggestion regarding this package or
+    this manual, follow the directions in the
+    <ulink url="ghelp:gnome-feedback"
+     type="help">GNOME Feedback Page</ulink>.
+   </para>
+   <!-- Translators may also add here feedback address for translations -->
+  </legalnotice>
+ </articleinfo>
+
+ <!-- ============= Document Body ============================= -->
+ <!-- ============= Introduction ============================== -->
+ <sect1 id="intro">
+  <title>Introduction</title>
+
+  <sect2 id="about-virt-manager">
+   <title>About <application>&app;</application></title>
+   <indexterm>
+    <primary>virt-manager</primary>
+    <secondary>About</secondary>
+   </indexterm>
+   <para>
+    <application>&app;</application> is a GUI tool for managing virtual
+    machines. It helps you create, destroy, edit, monitor, save, restore,
+    pause, and use the console on virtual machines running on multiple
+    hypervisors (and, soon, multiple physical hosts). Because
+    <application>&app;</application> relies entirely on
+    <application>libvirt</application> (<ulink type="http"
+     url="http://libvirt.org">http://libvirt.org</ulink>), the platform- and
+    hypervisor-independent virtualization library, it is insulated from
+    hypervisor API changes and virtualization system changes.
+   </para>
+   <para>
+    <application>&app;</application> is released under the GNU General Public
+    License. Contributions of source code patches are welcome and encouraged
+    at <ulink type="http"
+     url="http://virt-manager.org">virt-manager.org</ulink>, where you will 
+    also find plans for future development.
+   </para>
+  </sect2>
+  <sect2 id="aboutex">
+   <title>About this Document</title>
+   <para>
+    This document is released under the GNU Free Documentation
+    License. Corrections are welcome and encouraged at <ulink type="http"
+     url="http://virt-manager.org">virt-manager.org</ulink>.
+   </para>
+  </sect2>
+ </sect1>
+ 
+ <sect1 id="getting-started">
+  <title>Getting Started</title>
+  
+  <para>
+   This section describes the different ways to start
+   <application>&app;</application>, the command-line options that are
+   available, and the various options in the Connection window.
+  </para>
+  <sect2 id="starting-virt-manager">
+   <title>Starting virt-manager</title> 
+   <para>You can start
+    virt-manager from the Applications menu or from the command
+    line</para>
+   <variablelist>
+    <varlistentry>
+     From the <term><guimenu>Applications</guimenu> menu</term>:
+     <listitem>
+      <para>Choose <menuchoice><guisubmenu>System
+	 Tools</guisubmenu><guimenuitem>Virtual Machine Manager</guimenuitem></menuchoice>. </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     From the <term>command line</term>:
+     <listitem>
+      <para>Execute the following command: <command>virt-manager</command></para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+  
+  <sect2 id="connection-window">
+   <title>The Connection Window</title> 
+   <para>The connection window
+    lets you choose the type of hypervisor to connect to, and also
+    whether to connect locally or to a remote machine.</para>
+   <para>When you start <application>&app;</application>, the following window is displayed:</para>
+
+   <figure id="virt-manager-connection-window">
+    <title>Connection Window</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-connection-window.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows &app; connection window.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
+   <para>The Connection Window contains the following
+    elements: </para>
+   <variablelist>
+    <varlistentry> <term>Hypervisor pull-down</term>
+     <listitem>
+      <para>The Hypervisor pull-down lets you choose a supported hypervisor to
+      connect to. The hypervisor must be started before you can connect to it.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry> <term>&quot;Host Type&quot; radio buttons</term>
+     <listitem>
+      <para>The &quot;Host Type&quot; radio buttons let you choose whether to connect to
+      a hypervisor on the local physical host, or (soon) a hypervisor on a
+       remote physical host.</para>
+     </listitem>
+     <listitem>
+      <para>The &quot;Host&quot; box lets you enter the hostname of a remote host to
+       connect to.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry> <term>Read-only connection</term>
+     <listitem>
+      <para>Checking &quot;Read-only connection&quot; will allow you to
+       monitor a hypervisor's virtual machines, but not make any changes to
+       them. If you are running as an unprivileged user, you may only be able
+       to connect to certain hypervisors read-only.</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+  <sect2 id="command-line">
+   <title>Command-line Options</title>
+   <para>If you run &app; from the command line, you can specify a hypervisor
+    URI to connect to, bypassing the Connection Window. You can also make
+    specific &app; windows appear using the command line, if you have already
+    established a connection to a hypervisor. The command line options are:</para>
+   <itemizedlist>
+    <listitem><para><command>-h, --help</command>: show command line help and exit</para>
+    </listitem>
+    <listitem>
+     <para><command>--profile=FILE</command>: Generate runtime performance profile stats</para>
+    </listitem>
+    <listitem>
+     <para><command>-c URI, --connect=URI</command>: Connect to hypervisor at
+      URI</para>
+    </listitem>
+    <listitem>
+     <para><command>--no-dbus</command>: Disable DBus service for controlling
+      UI</para>
+    </listitem>
+    <listitem>
+     <para><command>--show-domain-creator</command>: Create a new virtual
+      machine</para>
+    </listitem>
+    <listitem>
+     <para><command>--show-domain-editor=UUID</command>: Edit a domain
+      configuration</para>
+    </listitem>
+    <listitem>
+     <para><command>--show-domain-performance=UUID</command>: Show a domain
+      performance</para>
+    </listitem>
+    <listitem>
+     <para><command>--show-domain-console=UUID</command>: Show a domain
+      console</para>
+    </listitem>
+    <listitem>
+     <para><command>--show-host-summary</command>: Show a host summary</para>
+    </listitem>
+   </itemizedlist>
+   <note>
+    <title>Hypervisor URIs and the test hypervisor</title> <para>To connect to
+    a local Xen hypervisor, the URI is simply &quot;xen&quot; (the
+    default). To connect to a local QEMU session, the URI is
+     &quot;qemu:///session&quot;. There is also a test hypervisor that is
+     handy if you are trying to test a new &app; feature you have added. Its
+     URI is &quot;test:///default&quot;.</para>
+   </note>
+  </sect2>
+ </sect1>
+
+ <sect1 id="manager-window">
+  <title>The Manager Window</title>
+  <para>The manager window gives you a quick snapshot of the virtual machines
+   that are available on your physical host. It displays both the virtual
+   machines that are actually running
+   on your physical host, and also the virtual machines for which it finds
+   config information even though they are not running. For running virtual
+   machines, the manager window displays the resources those running VMs are
+   consuming. The manager window is customizable as described below.</para>
+  
+   <figure id="manager-window-screenshot">
+    <title>Manager Window</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-manager-window.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows a typical Manager Window.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
+  <sect2 id="vm-list">
+   <title>The Virtual Machine List</title>
+   <para>The manager window is dominated by a list of the virtual machines on your
+   physical host. By default, the list has six columns of information:</para>
+   <variablelist>
+    <varlistentry><term>ID</term>
+     <listitem>
+      <para>The arbitrarily assigned ID number for the
+       virtual machine. Guaranteed unique only while a virtual machine is
+       running, and only to that particular host.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Name</term>
+     <listitem>
+      <para>The name of the virtual machine. Like the ID, guaranteed unique
+       only among running virtual machines on a particular host.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Status</term>
+     <listitem>
+      <para>The virtual machine's status. One of <guilabel>Running</guilabel>,
+       <guilabel>Paused</guilabel>, <guilabel>Shutdown</guilabel>,
+       <guilabel>Shutoff</guilabel>, or <guilabel>Crashed</guilabel>.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>CPU Usage</term>
+     <listitem>
+      <para>The virtual machine's CPU usage, as a percentage of total CPU
+       usage and as a running graph.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>VCPUs</term>
+     <listitem>
+      <para>The number of VCPUs currently assigned to the guest. This
+       allocation can be changed on the fly for paravirtualized
+       guests.</para> 
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Memory Usage</term>
+     <listitem>
+      <para>The amount of memory allocated to the virtual machine, and the percentage
+       of total physical RAM on the host that the virtual machine is actually
+       using (the percentage will be zero if the guest is not currently
+       running). Note: The amount of memory for a virtual machine is the
+       amount it is currently allocated, not the maximum it could be
+       allocated. See the help for the <xref linkend="details-window"/>.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+  <sect2 id="file-menu">
+   <title>File Menu Choices</title>
+   <para>The File menu in the Manager window gives you the following
+    options:</para>
+   <variablelist>
+    <varlistentry><term>New machine...</term>
+     <listitem><para>Starts the virtual machine creation wizard. Clicking the
+       <guibutton>New</guibutton> button at the bottom of the window has the
+       same effect.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Restore saved machine...</term>
+     <listitem><para>Restores a previously saved virtual machine. You must
+       choose the memory image of a previously saved virtual machine in the
+       dialog that will follow.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Open connection...</term>
+     <listitem><para>Brings up the connection window again. You can connect to
+       multiple hypervisors at the same time with
+       <application>&app;</application>. At this writing opening a new
+       connection brings up a new manager window; soon the manager window will
+       display multiple connections to multiple machines.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Close</term>
+     <listitem><para>Closes the Manager window. Any other
+       <application>&app;</application> windows you have open will remain open.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Quit</term>
+     <listitem><para>Closes the Manager window and any other open windows and
+       stops the application. Note that any virtual machines running on the
+       host will continue running regardless of whether 
+       <application>&app;</application> is running or not.
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+  <sect2 id="edit-menu">
+   <title>Edit Menu Choices</title>
+   <para>The choices on the <guimenu>Edit</guimenu> menu are for working with
+    a specific machine, or for changing <application>&app;</application>
+    preferences.</para>
+   <variablelist>
+    <varlistentry><term>Machine details...</term>
+     <listitem><para>Opens the Details window for the virtual machine you have
+       highlighted in the list.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Delete machine</term>
+     <listitem><para>Deletes the configuration of an inactive virtual machine you have
+       highlighted in the list. Note that this does not touch the virtual
+       machine's disk storage.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Preferences</term>
+     <listitem><para>Brings up the <xref linkend="preferences-window"/></para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+  <sect2 id="view-menu">
+   <title>View Menu Choices</title>
+   <para>The View Menu choices toggle on and off the virtual machine list
+    columns that are described above.</para>
+  </sect2>
+ </sect1>
+
+ <sect1 id="details-window">
+  <title>The Details Window</title>
+  <para>You manage the details of a specific virtual machine here</para>
+ </sect1>
+ 
+ <sect1 id="console-window">
+  <title>The Console Window</title>
+  <para>You view the console of a specific virtual machine here</para>
+ </sect1>
+
+ <sect1 id="preferences-window">
+  <title>The Preferences Window</title>
+  <para>You set application preferences here</para>
+ </sect1>
+
+ <sect1 id="create-wizard">
+  <title>The Create Wizard</title>
+  <para>You create new virtual machines here</para>
+  <sect2 id="system-name">
+   <title>The System Name screen</title>
+   <para>Choose a name for your virtual system. The name must be non-blank,
+    alphanumeric (plus underscores), contain at least one letter, and be less
+    than 50 characters.</para>
+  </sect2>
+
+  <sect2 id="virt-method">
+   <title>The Virtualization Method screen</title>
+   <para>Choose a virtualization method for your new system.</para>
+  </sect2>
+
+  <sect2 id="installation-media">
+   <title>The Installation Media screens</title>
+   <para>Choose installation media for your new system.</para>
+  </sect2>
+
+  <sect2 id="storage-space">
+   <title>The Storage Space screen</title>
+   <para>Assign storage space for your new system.</para>
+  </sect2>
+
+  <sect2 id="memory-and-cpu">
+   <title>The Memory And CPU screen</title>
+   <para>Choose memory and cpu for your new system</para>
+  </sect2>
+
+  <sect2 id="begin-installation">
+   <title>The Validation screen</title>
+   <para>Verify the setup for your new system. If you need to, back up and
+    make changes. Clicking &quot;Finish&quot; will begin creating your virtual
+    machine.</para>
+  </sect2>
+ </sect1>
+
+ &GFDL;
+
+</article>
+
+

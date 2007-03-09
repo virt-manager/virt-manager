@@ -33,7 +33,7 @@ CONSOLE_KEYGRAB_FULLSCREEN = 1
 CONSOLE_KEYGRAB_MOUSEOVER = 2
 
 class vmmConfig:
-    def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir):
+    def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir, data_dir):
         self.appname = appname
         self.appversion = appversion
         self.conf_dir = gconf_dir
@@ -43,6 +43,7 @@ class vmmConfig:
 
         self.glade_dir = glade_dir
         self.icon_dir = icon_dir
+        self.data_dir = data_dir
         # We don't create it straight away, since we don't want
         # to block the app pending user authorizaation to access
         # the keyring
@@ -75,6 +76,9 @@ class vmmConfig:
 
     def get_icon_dir(self):
         return self.icon_dir
+
+    def get_data_dir(self):
+        return self.data_dir
 
     def is_vmlist_domain_id_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/domain_id")

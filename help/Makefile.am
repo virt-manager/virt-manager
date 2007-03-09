@@ -1,0 +1,2 @@
+SUBDIRS = 						\
+	virt-manager

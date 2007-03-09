@@ -46,6 +46,7 @@ EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES)
 	  -e "s,::ASSETDIR::,$(pkgdatadir)," \
 	  -e "s,::PYLIBDIR::,$(pkgdatadir)," \
 	  -e "s,::GETTEXTDIR::,$(datadir)/locale," \
+	  -e "s,::DATADIR::,$(datadir)," \
           -e "s,::PYARCHLIBDIR::,$(pkglibdir)," < $< > $@
 
 $(PACKAGE): $(srcdir)/$(PACKAGE).in

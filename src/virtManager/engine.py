@@ -21,6 +21,7 @@ import gtk
 import sys
 import libvirt
 import logging
+import gnome
 
 from virtManager.about import vmmAbout
 from virtManager.connect import vmmConnect
@@ -166,6 +167,8 @@ class vmmEngine:
         self.show_details(uri, uuid)
     def _do_show_create(self, src, uri):
         self.show_create(uri)
+    def _do_show_help(self, src, index):
+        self.show_help(index)
     def _do_show_console(self, src, uri, uuid):
         self.show_console(uri, uuid)
     def _do_show_terminal(self, src, uri, uuid):
@@ -179,6 +182,15 @@ class vmmEngine:
         if self.windowAbout == None:
             self.windowAbout = vmmAbout(self.get_config())
         self.windowAbout.show()
+
+    def show_help(self, index):
+        try:
+            props = { gnome.PARAM_APP_DATADIR : self.config.get_data_dir()}
+            prog = gnome.program_init(self.config.get_appname(), self.config.get_appversion(), \
+                                      properties=props)
+            gnome.help_display(self.config.get_appname(), index)
+        except gobject.GError, e:
+            logging.error((("Unable to display documentation:\n%s") % e))
 
     def show_preferences(self):
         if self.windowPreferences == None:
@@ -247,6 +259,7 @@ class vmmEngine:
             manager.connect("action-show-details", self._do_show_details)
             manager.connect("action-show-preferences", self._do_show_preferences)
             manager.connect("action-show-create", self._do_show_create)
+            manager.connect("action-show-help", self._do_show_help)
             manager.connect("action-show-about", self._do_show_about)
             manager.connect("action-show-connect", self._do_show_connect)
             self.connections[uri]["windowManager"] = manager

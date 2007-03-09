@@ -49,6 +49,7 @@ BuildRequires: pygtk2-devel
 BuildRequires: gtk2-devel
 BuildRequires: python-devel
 BuildRequires: gettext
+BuildRequires: scrollkeeper
 
 Requires(pre): GConf2
 Requires(post): GConf2
@@ -91,8 +92,12 @@ gconftool-2 --makefile-install-rule \
 
 update-desktop-database %{_datadir}/applications
 
+if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update -q -o %{_datadir}/omf/%{name}; fi
+
 %postun
 update-desktop-database %{_datadir}/applications
+
+if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update -q; fi
 
 %preun
 if [ "$1" -eq 0 ]; then
@@ -103,7 +108,7 @@ fi
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc README COPYING AUTHORS ChangeLog NEWS
+%doc README COPYING COPYING-DOCS AUTHORS ChangeLog NEWS
 %{_sysconfdir}/gconf/schemas/%{name}.schemas
 %{_bindir}/%{name}
 %{_libexecdir}/%{name}-launch
@@ -125,6 +130,8 @@ fi
 %{_datadir}/%{name}/vncViewer/*.pyc
 %{_datadir}/%{name}/vncViewer/*.pyo
 
+%{_datadir}/omf/%{name}
+%{_datadir}/gnome/help
 
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/dbus-1/services/%{name}.service
