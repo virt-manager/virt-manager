@@ -124,17 +124,17 @@ class vmmConsole(gobject.GObject):
             noteObj.Notify(topwin.get_title(),
                            0,
                            '',
-                           "Pointer grabbed",
-                           "The mouse pointer has been restricted to the virtual " +
-                           "console window. To release the pointer press the key pair " +
-                           "Ctrl+Alt",
+                           _("Pointer grabbed"),
+                           _("The mouse pointer has been restricted to the virtual " \
+                             "console window. To release the pointer press the key pair " \
+                             "Ctrl+Alt"),
                            [],
                            {"desktop-entry": "virt-manager",
                             "x": x+200, "y": y},
                            5 * 1000);
         except Exception, e:
             pass
-        topwin.set_title(_("Press Ctrl+Alt to release mouse.") + " " + self.title)
+        topwin.set_title(_("Press Ctrl+Alt to release pointer.") + " " + self.title)
 
     def notify_ungrabbed(self, src):
         topwin = self.window.get_widget("vmm-console")
@@ -192,8 +192,12 @@ class vmmConsole(gobject.GObject):
         self.try_login()
 
     def retry_login(self):
-        self.try_login()
-        return False
+        gtk.gdk.threads_enter()
+        try:
+            self.try_login()
+            return False
+        finally:
+            gtk.gdk.threads_leave()
 
     def try_login(self, src=None):
         if self.vm.get_id() == 0:

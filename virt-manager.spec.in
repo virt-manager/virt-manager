@@ -21,7 +21,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires: pygtk2 >= 1.99.12-6
 Requires: gnome-python2-gconf >= 1.99.11-7
 # Absolutely require this version or newer
-Requires: libvirt-python >= 0.1.11-1
+Requires: libvirt-python >= 0.2.0-1
 # Definitely does not work with earlier due to python API changes
 Requires: dbus-python >= 0.61
 # Might work with earlier, but this is what we've tested
@@ -34,8 +34,8 @@ Requires: gnome-python2-gnomekeyring >= 2.15.4
 Requires: gnome-python2-gnomevfs >= 2.15.4
 # Minimum we've tested with
 Requires: libxml2-python >= 2.6.23
-# Required to install Xen guests
-Requires: python-virtinst >= 0.100.0
+# Required to install Xen & QEMU guests
+Requires: python-virtinst >= 0.101.0
 # Required for loading the glade UI
 Requires: pygtk2-libglade
 # Required for our graphics which are currently SVG format
@@ -49,6 +49,7 @@ BuildRequires: pygtk2-devel
 BuildRequires: gtk2-devel
 BuildRequires: python-devel
 BuildRequires: gettext
+BuildRequires: scrollkeeper
 
 Requires(pre): GConf2
 Requires(post): GConf2
@@ -91,8 +92,12 @@ gconftool-2 --makefile-install-rule \
 
 update-desktop-database %{_datadir}/applications
 
+if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update -q -o %{_datadir}/omf/%{name}; fi
+
 %postun
 update-desktop-database %{_datadir}/applications
+
+if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update -q; fi
 
 %preun
 if [ "$1" -eq 0 ]; then
@@ -103,7 +108,7 @@ fi
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc README COPYING AUTHORS ChangeLog NEWS
+%doc README COPYING COPYING-DOCS AUTHORS ChangeLog NEWS
 %{_sysconfdir}/gconf/schemas/%{name}.schemas
 %{_bindir}/%{name}
 %{_libexecdir}/%{name}-launch
@@ -125,11 +130,17 @@ fi
 %{_datadir}/%{name}/vncViewer/*.pyc
 %{_datadir}/%{name}/vncViewer/*.pyo
 
+%{_datadir}/omf/%{name}
+%{_datadir}/gnome/help
 
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Tue Feb 20 2007  <berrange@aubergine.virt.boston.redhat.com> - 0.3.1-1
+- Added support for managing QEMU domains
+- Automatically grab mouse pointer to workaround dual-cursor crazyness
+
 * Mon Jan 22 2007 Daniel P. Berrange <berrange@redhat.com - 0.3.0-1
 - Added support for managing inactive domains
 - Require virt-inst >= 0.100.0 and libvirt >= 0.1.11 for ianctive

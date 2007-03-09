@@ -58,7 +58,9 @@ class vmmAsyncJob(gobject.GObject):
         self.topwin.present()
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
         self.bg_thread.start()
+        gtk.gdk.threads_enter()
         gtk.main()
+        gtk.gdk.threads_leave()
         gobject.source_remove(self.timer)
         self.timer = 0
         self.topwin.destroy()
@@ -92,6 +94,13 @@ class vmmAsyncJob(gobject.GObject):
         self.pbar.set_fraction(1)
 
     def exit_if_necessary(self):
+        gtk.gdk.threads_enter()
+        try:
+            self._exit_if_necessary(self)
+        finally:
+            gtk.gdk.threads_leave()
+
+    def _exit_if_necessary(self):
         if self.bg_thread.isAlive():
             if(self.is_pulsing):
                 self.pbar.pulse()

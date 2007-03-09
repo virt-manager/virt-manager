@@ -136,6 +136,13 @@ class GRFBNetworkClient(rfb.RFBNetworkClient, gobject.GObject):
         self.watch = gobject.io_add_watch(self.sock.fileno(), gobject.IO_IN | gobject.IO_ERR | gobject.IO_HUP, self.handle_io)
 
     def handle_io(self, src, condition):
+        gtk.gdk.threads_enter()
+        try:
+            return self._handle_io(src, condition)
+        finally:
+            gtk.gdk.threads_leave()
+
+    def _handle_io(self, src, condition):
         if self.watch == None:
             return 0
 
