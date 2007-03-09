@@ -204,10 +204,14 @@ def main():
     if options.profile != None:
         import hotshot
         prof = hotshot.Profile(options.profile)
+        gtk.gdk.threads_enter()
         prof.runcall(gtk.main)
+        gtk.gdk.threads_leave()
         prof.close()
     else:
+        gtk.gdk.threads_enter()
         gtk.main()
+        gtk.gdk.threads_leave()
 
 if __name__ == "__main__":
     main()

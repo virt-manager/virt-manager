@@ -192,8 +192,12 @@ class vmmConsole(gobject.GObject):
         self.try_login()
 
     def retry_login(self):
-        self.try_login()
-        return False
+        gtk.gdk.threads_enter()
+        try:
+            self.try_login()
+            return False
+        finally:
+            gtk.gdk.threads_leave()
 
     def try_login(self, src=None):
         if self.vm.get_id() == 0:

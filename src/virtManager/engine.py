@@ -116,6 +116,13 @@ class vmmEngine:
         self.timer = gobject.timeout_add(interval, self.tick)
 
     def tick(self):
+        gtk.gdk.threads_enter()
+        try:
+            self._tick()
+        finally:
+            gtk.gdk.threads_leave()
+
+    def _tick(self):
         if self.windowConnect == None and gtk.main_level() > 0 and self.count_visible_windows() == 0:
             gtk.main_quit()
 
