@@ -56,11 +56,6 @@
   <publisher>
    <publishername> Red Hat Inc. </publishername>
   </publisher>
-
-  &legal;
-  <!-- This file  contains link to license for the documentation (GNU FDL), and
-  other legal stuff such as "NO WARRANTY" statement. Please do not change
-  any of this. -->
   
   <authorgroup>
    <author>
@@ -93,11 +88,6 @@
    -->
   </authorgroup>
 
-  <!-- According to GNU FDL, revision history is mandatory if you are -->
-  <!-- modifying/reusing someone else's document.  If not, you can omit it. -->
-  <!-- Remember to remove the &manrevision; entity from the revision entries other
-  -->
-  <!-- than the current revision. -->
   <!-- The revision numbering system for GNOME manuals is as follows: -->
   <!-- * the revision number consists of two components -->
   <!-- * the first component of the revision number reflects the release version of the GNOME desktop. -->
@@ -106,50 +96,39 @@
   <!-- is written in that desktop timeframe is V2.0, the second version of the manual is V2.1, etc. -->
   <!-- When the desktop release version changes to V3.x, the revision number of the manual changes -->
   <!-- to V3.0, and so on. -->
-  <!--
+  
   <revhistory>
-  <revision>
-  <revnumber>&app; Manual V&manrevision;</revnumber>
-  <date>&date;</date>
-  <revdescription>
-  <para role="author">Documentation Writer 2
-  <email>docwriter2@gnome.org</email>
- </para>
-  <para role="publisher">GNOME Documentation Project</para>
- </revdescription>
- </revision>
-  <revision>
-  <revnumber>Full title of previous manual.</revnumber>
-  <date>Release date of previous manual.</date>
-  <revdescription>
-  <para role="author">Documentation Writer 1
-  <email>docwriter1@gnome.org</email>
- </para>
-  <para role="publisher">GNOME Documentation Project</para>
- </revdescription>
- </revision>
- </revhistory>
-  --> 
+   <revision>
+    <revnumber>&app; Man=ual V&manrevision;</revnumber>
+    <date>&date;</date>
+    <revdescription>
+     <para role="author">Hugh Brock
+      <email>hbrock@redhat.com</email>
+     </para>
+     <para role="publisher">Red Hat Inc.</para>
+    </revdescription>
+   </revision>
+  </revhistory>
   <releaseinfo>This manual describes how to manage virtual machines
    with the Virtual Machine Manager program.
   </releaseinfo>
   <legalnotice>
    <title>Feedback</title>
    <para>To report a bug or make a suggestion regarding this package or
-    this manual, follow the directions in the
-    <ulink url="ghelp:gnome-feedback"
-     type="help">GNOME Feedback Page</ulink>.
+    this manual, follow the directions at the
+    <ulink url="http://virt-manager.org"
+     type="http">virt-manager website</ulink>.
    </para>
    <!-- Translators may also add here feedback address for translations -->
   </legalnotice>
  </articleinfo>
-
+ 
  <!-- ============= Document Body ============================= -->
  <!-- ============= Introduction ============================== -->
- <sect1 id="intro">
+ <sect1 id="virt-manager-intro">
   <title>Introduction</title>
 
-  <sect2 id="about-virt-manager">
+  <sect2 id="virt-manager-about-vm">
    <title>About <application>&app;</application></title>
    <indexterm>
     <primary>virt-manager</primary>
@@ -174,7 +153,7 @@
     also find plans for future development.
    </para>
   </sect2>
-  <sect2 id="aboutex">
+  <sect2 id="virt-manager-about-doc">
    <title>About this Document</title>
    <para>
     This document is released under the GNU Free Documentation
@@ -184,7 +163,7 @@
   </sect2>
  </sect1>
  
- <sect1 id="getting-started">
+ <sect1 id="virt-manager-getting-started">
   <title>Getting Started</title>
   
   <para>
@@ -192,7 +171,7 @@
    <application>&app;</application>, the command-line options that are
    available, and the various options in the Connection window.
   </para>
-  <sect2 id="starting-virt-manager">
+  <sect2 id="virt-manager-starting">
    <title>Starting virt-manager</title> 
    <para>You can start
     virt-manager from the Applications menu or from the command
@@ -214,14 +193,14 @@
    </variablelist>
   </sect2>
   
-  <sect2 id="connection-window">
+  <sect2 id="virt-manager-conn-window">
    <title>The Connection Window</title> 
    <para>The connection window
     lets you choose the type of hypervisor to connect to, and also
     whether to connect locally or to a remote machine.</para>
    <para>When you start <application>&app;</application>, the following window is displayed:</para>
 
-   <figure id="virt-manager-connection-window">
+   <figure id="virt-manager-FIG-connection-window">
     <title>Connection Window</title>
     <screenshot>
      <mediaobject>
@@ -264,7 +243,7 @@
     </varlistentry>
    </variablelist>
   </sect2>
-  <sect2 id="command-line">
+  <sect2 id="virt-manager-CLI-opts">
    <title>Command-line Options</title>
    <para>If you run &app; from the command line, you can specify a hypervisor
     URI to connect to, bypassing the Connection Window. You can also make
@@ -315,7 +294,7 @@
   </sect2>
  </sect1>
 
- <sect1 id="manager-window">
+ <sect1 id="virt-manager-mgr-window">
   <title>The Manager Window</title>
   <para>The manager window gives you a quick snapshot of the virtual machines
    that are available on your physical host. It displays both the virtual
@@ -325,7 +304,7 @@
    machines, the manager window displays the resources those running VMs are
    consuming. The manager window is customizable as described below.</para>
   
-   <figure id="manager-window-screenshot">
+   <figure id="virt-manager-FIG-mgr-window">
     <title>Manager Window</title>
     <screenshot>
      <mediaobject>
@@ -338,7 +317,7 @@
     </screenshot>
    </figure>
 
-  <sect2 id="vm-list">
+  <sect2 id="virt-manager-vm-list">
    <title>The Virtual Machine List</title>
    <para>The manager window is dominated by a list of the virtual machines on your
    physical host. By default, the list has six columns of information:</para>
@@ -371,25 +350,25 @@
     </varlistentry>
     <varlistentry><term>VCPUs</term>
      <listitem>
-      <para>The number of VCPUs currently assigned to the guest. This
+      <para>The number of VCPUs currently assigned to the VM. This
        allocation can be changed on the fly for paravirtualized
-       guests.</para> 
+       VMs.</para> 
      </listitem>
     </varlistentry>
     <varlistentry><term>Memory Usage</term>
      <listitem>
       <para>The amount of memory allocated to the virtual machine, and the percentage
        of total physical RAM on the host that the virtual machine is actually
-       using (the percentage will be zero if the guest is not currently
+       using (the percentage will be zero if the VM is not currently
        running). Note: The amount of memory for a virtual machine is the
        amount it is currently allocated, not the maximum it could be
-       allocated. See the help for the <xref linkend="details-window"/>.
+       allocated. See the help for the <xref linkend="virt-manager-details-window"/>.
       </para>
      </listitem>
     </varlistentry>
    </variablelist>
   </sect2>
-  <sect2 id="file-menu">
+  <sect2 id="virt-manager-file-menu">
    <title>File Menu Choices</title>
    <para>The File menu in the Manager window gives you the following
     options:</para>
@@ -429,7 +408,7 @@
     </varlistentry>
    </variablelist>
   </sect2>
-  <sect2 id="edit-menu">
+  <sect2 id="virt-manager-edit-menu">
    <title>Edit Menu Choices</title>
    <para>The choices on the <guimenu>Edit</guimenu> menu are for working with
     a specific machine, or for changing <application>&app;</application>
@@ -447,72 +426,248 @@
      </listitem>
     </varlistentry>
     <varlistentry><term>Preferences</term>
-     <listitem><para>Brings up the <xref linkend="preferences-window"/></para>
+     <listitem><para>Brings up the <xref linkend="virt-manager-pref-window"/></para>
      </listitem>
     </varlistentry>
    </variablelist>
   </sect2>
-  <sect2 id="view-menu">
+  <sect2 id="virt-manager-view-menu">
    <title>View Menu Choices</title>
    <para>The View Menu choices toggle on and off the virtual machine list
     columns that are described above.</para>
   </sect2>
  </sect1>
 
- <sect1 id="details-window">
-  <title>The Details Window</title>
-  <para>You manage the details of a specific virtual machine here</para>
+ <sect1 id="virt-manager-details-window">
+  <title>The Details Window</title> <para>On its Overview tab, the details
+  window gives you a large view of the CPU and memory usage of a virtual
+  machine. On a separate Hardware tab, it provides you with the details of the
+  virtual hardware assigned to the machine. With sufficient privileges, you
+  can add or remove CPUs, add or remove memory, and (soon) add and remove
+  block devices and network devices. Finally, menu items allow you to pause
+  and resume virtual machines, save a virtual machine to disk, and bring up
+  the serial or graphical console for a virtual machine.</para>
+
+  <sect2 id="virt-manager-details-window-vm-info">
+   <title>Details Window Overview: Basic Details</title>
+
+   <figure id="virt-manager-FIG-details-overview">
+    <title>Details Window Overview</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-details-overview.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows a typical Details Window Overview tab.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
+   <para>At the top of the Overview tab you will find the name, the UUID, and
+    the status of the virtual machine you are examining. These are all
+    read-only fields; the UUID should not change over the lifetime of the
+    VM, and while the name of an inactive VM can change, there is no way to
+    change it using <application>&app;</application> at this time.
+   </para>
+  </sect2>
+  
+  <sect2 id="virt-manager-details-performance">
+   <title>Details Window Overview: Performance Information</title>
+   <para>The details window also displays performance information, including
+    the percentage of the physical host's CPU that the virtual machine is
+    taking up, as well as the amount of physical RAM the virtual machine is using.</para>
+  </sect2>
+  
+  <sect2 id="virt-manager-details-hardware">
+   <title>Details Window Hardware</title>
+   <para>The Details Window Hardware tab lets you view and, with appropriate
+    permissions, change the virtual hardware allocated to a virtual
+    machine. This includes the number of vcpus, the amount of memory, block
+    devices, and network devices.</para>
+   <note>
+    <title>Virtual machine changes: Sometimes they persist, sometimes they
+     don't</title>
+    <para>The Hardware tab lets you make changes to active (running) VMs,
+     and inactive VMs. Changes you make to inactive VMs are saved to the VM's
+     config file and will persist over time. Changes you make to active VMs,
+     by contrast, change the current settings for a VM, but will not be saved
+     to the VM's config file. If you shut down a VM and restart it, it will
+     restart with the last saved config.</para>
+   </note>
+  </sect2>
+
+  <sect2 id="virt-manager-details-hardware-vcpus">
+   <title>Details Window Hardware: VCPUs</title>
+
+   <figure id="virt-manager-FIG-details-hardware-vcpu">
+    <title>Details Window: VCPUs</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-details-hardware-vcpu.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows the VCPU pane in the Details Window.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
+   <para>Choosing the <guilabel>Processor</guilabel> item in the list on the
+    left of the Hardware tab brings up the <guilabel>Processor</guilabel>
+    pane. This pane shows you the number of VCPUs the VM is currently using,
+    as well as the number of physical cpus on the host, and the maximum number
+    of VCPUs you can assign to this VM. If you have adequate privileges, you
+    can set the number of VCPUs from one up to the maximum allowed.</para>
+   
+   <note>
+    <title>VCPUs and paravirtualized VMs</title>
+    <para>You can adjust the number of VCPUs for a running paravirtualized VM
+     between 1 and the maximum set in the config file. It is not yet possible to
+     adjust the number of VCPUs in a running, fully virtualized VM. The
+     same limitation applies to memory adjustments (see below).</para>
+   </note>
+
+   <note>
+    <title>Maximum VCPUs and inactive VMs</title>
+    <para>If you are changing the VCPUs for a running VM, you are limited
+     to a range from 1 to the maximum number of VCPUs in the VM's config when
+     it was started. On the other hand, if you change the VCPUs for an
+     inactive VM, you are limited only to a range from 1 to the maximum number
+     of VCPUs your virtualization system will support (32, for
+     example). Unless you have very specific reasons for doing so, it's
+     probably not a good idea to set the maximum VCPUs larger than the number
+     of physical processors on the machine, but
+     <application>&app;</application> will let you, and the number you set
+     will be saved to the inactive VM's config as both the maximum number of VCPUs, and
+     the current number of VCPUs.</para>
+   </note>
+  </sect2>
+
+  <sect2 id="virt-manager-details-hardware-memory">
+   <title>Details Window Hardware: Memory</title> 
+
+   <figure id="virt-manager-FIG-details-hardware-memory">
+    <title>Details Window: Memory</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-details-hardware-memory.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows the Memory pane in the Details Window.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
+   <para>Choosing the
+   <guilabel>Memory</guilabel> item on the list on the left of the Hardware
+   tab brings up the <guilabel>Memory</guilabel> pane. This pane shows you the
+   amount of memory your VM is currently allocated, the maximum it can be
+   allocated, and the amount of physical RAM on the machine. With adequate
+   privileges, you can adjust the amount of memory your running VM is
+   currently using, if your VM is <term>paravirtualized</term>. (It is not
+   currently possible to adjust the memory allocation of a running, fully
+   virtualized VM.) If your VM is not running, however, it is possible to
+   adjust both the startup memory allocation and the maximum memory
+    allocation.</para> 
+  </sect2>
+    
+  <sect2 id="virt-manager-details-disk">
+   <title>Details Window Hardware: Disk</title> 
+
+   <figure id="virt-manager-FIG-details-hardware-disk">
+    <title>Details Window: Disk</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-details-hardware-disk.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows the Disk pane in the Details Window.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
+   <para>Choosing the <guilabel>Disk</guilabel> item on the list on the left
+   of the Hardware tab displays the <guilabel>Disk</guilabel> pane. This
+   displays all the virtual block devices your VM is aware of. In the future
+   this pane will offer UI for adding and removing virtual block devices for a
+   VM.
+   </para>
+  </sect2>
+
+  <sect2 id="virt-manager-details-network">
+   <title>Details Window Hardware: Network</title>
+
+   <figure id="virt-manager-FIG-details-hardware-network">
+    <title>Details Window: Network</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-details-hardware-network.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows the Network pane in the Details Window.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
+   <para>Choosing the <guilabel>Network</guilabel> item on the list on the
+    left of the Hardware tab displays the <guilabel>Network</guilabel>
+    pane. This displays all the virtual network devices your VM is aware
+    of. In the future this pane will offer UI for adding and removing virtual
+    block devices for a VM.</para>
+  </sect2>
  </sect1>
  
- <sect1 id="console-window">
+ <sect1 id="virt-manager-console-window">
   <title>The Console Window</title>
   <para>You view the console of a specific virtual machine here</para>
  </sect1>
 
- <sect1 id="preferences-window">
+ <sect1 id="virt-manager-pref-window">
   <title>The Preferences Window</title>
   <para>You set application preferences here</para>
  </sect1>
 
- <sect1 id="create-wizard">
+ <sect1 id="virt-manager-create-wizard">
   <title>The Create Wizard</title>
   <para>You create new virtual machines here</para>
-  <sect2 id="system-name">
+  <sect2 id="virt-manager-system-name">
    <title>The System Name screen</title>
    <para>Choose a name for your virtual system. The name must be non-blank,
     alphanumeric (plus underscores), contain at least one letter, and be less
     than 50 characters.</para>
   </sect2>
 
-  <sect2 id="virt-method">
+  <sect2 id="virt-manager-virt-method">
    <title>The Virtualization Method screen</title>
    <para>Choose a virtualization method for your new system.</para>
   </sect2>
 
-  <sect2 id="installation-media">
+  <sect2 id="virt-manager-installation-media">
    <title>The Installation Media screens</title>
    <para>Choose installation media for your new system.</para>
   </sect2>
 
-  <sect2 id="storage-space">
+  <sect2 id="virt-manager-storage-space">
    <title>The Storage Space screen</title>
    <para>Assign storage space for your new system.</para>
   </sect2>
 
-  <sect2 id="memory-and-cpu">
+  <sect2 id="virt-manager-memory-and-cpu">
    <title>The Memory And CPU screen</title>
    <para>Choose memory and cpu for your new system</para>
   </sect2>
 
-  <sect2 id="begin-installation">
+  <sect2 id="virt-manager-begin-installation">
    <title>The Validation screen</title>
    <para>Verify the setup for your new system. If you need to, back up and
     make changes. Clicking &quot;Finish&quot; will begin creating your virtual
     machine.</para>
   </sect2>
  </sect1>
-
- &GFDL;
 
 </article>
 

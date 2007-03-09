@@ -18,6 +18,7 @@
 #
 import gconf
 import os
+import gnome
 
 import gtk.gdk
 import libvirt
@@ -58,6 +59,12 @@ class vmmConfig:
             libvirt.VIR_DOMAIN_SHUTOFF: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_shutoff.png", 18, 18),
             libvirt.VIR_DOMAIN_NOSTATE: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_idle.png", 18, 18),
             }
+        #initialize the help stuff
+        props = { gnome.PARAM_APP_DATADIR : self.get_data_dir()}
+        gnome.program_init(self.get_appname(), self.get_appversion(), \
+                               properties=props)
+
+
 
     def get_vm_status_icon(self, state):
         return self.status_icons[state]
