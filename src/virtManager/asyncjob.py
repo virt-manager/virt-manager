@@ -96,7 +96,7 @@ class vmmAsyncJob(gobject.GObject):
     def exit_if_necessary(self):
         gtk.gdk.threads_enter()
         try:
-            self._exit_if_necessary(self)
+            return self._exit_if_necessary(self)
         finally:
             gtk.gdk.threads_leave()
 

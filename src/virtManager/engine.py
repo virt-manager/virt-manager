@@ -119,7 +119,7 @@ class vmmEngine:
     def tick(self):
         gtk.gdk.threads_enter()
         try:
-            self._tick()
+            return self._tick()
         finally:
             gtk.gdk.threads_leave()
 
