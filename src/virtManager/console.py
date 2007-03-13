@@ -189,7 +189,8 @@ class vmmConsole(gobject.GObject):
         return 0
 
     def _vnc_disconnected(self, src):
-        self.try_login()
+        if self.is_visible():
+            self.try_login()
 
     def retry_login(self):
         gtk.gdk.threads_enter()
