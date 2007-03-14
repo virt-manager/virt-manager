@@ -443,9 +443,9 @@ class vmmDomain(gobject.GObject):
                         devdst = child.prop("dev")
 
                 if srcpath == None:
-                    raise "missing source path"
+                    raise RuntimeError("missing source path")
                 if devdst == None:
-                    raise "missing destination device"
+                    raise RuntimeError("missing destination device")
 
                 devtype = node.prop("device")
                 if devtype == None:
