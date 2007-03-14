@@ -31,6 +31,8 @@ class vmmConnection(gobject.GObject):
     __gsignals__ = {
         "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                      [str, str]),
+        "vm-started": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                     [str, str]),
         "vm-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                        [str, str]),
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str])
@@ -51,6 +53,7 @@ class vmmConnection(gobject.GObject):
             self.vmm = libvirt.open(openURI)
 
         self.vms = {}
+        self.activeUUIDs = []
 
     def is_read_only(self):
         return self.readOnly
@@ -140,12 +143,20 @@ class vmmConnection(gobject.GObject):
         oldActiveIDs = {}
         oldInactiveNames = {}
         for uuid in self.vms.keys():
+            # first pull out all the current inactive VMs we know about
             vm = self.vms[uuid]
             if vm.get_id() == -1:
                 oldInactiveNames[vm.get_name()] = vm
-            else:
+
+        for uuid in self.activeUUIDs:
+            # Now get all the vms that were active the last time around and are still active
+            vm = self.vms[uuid]
+            if vm.get_id() != -1:
                 oldActiveIDs[vm.get_id()] = vm
 
+        # Now we can clear the list of actives from the last time through
+        self.activeUUIDs = []
+                
         newActiveIDs = self.vmm.listDomainsID()
         newInactiveNames = []
         try:
@@ -157,6 +168,7 @@ class vmmConnection(gobject.GObject):
         oldUUIDs = {}
         curUUIDs = {}
         maybeNewUUIDs = {}
+        startedUUIDs = []
 
         # NB in these first 2 loops, we go to great pains to
         # avoid actually instantiating a new VM object so that
@@ -169,8 +181,8 @@ class vmmConnection(gobject.GObject):
                 if oldActiveIDs.has_key(id):
                     # No change, copy across existing VM object
                     vm = oldActiveIDs[id]
-                    #print "Existing active " + str(vm.get_name()) + " " + vm.get_uuid()
                     curUUIDs[vm.get_uuid()] = vm
+                    self.activeUUIDs.append(vm.get_uuid())
                 else:
                     # May be a new VM, we have no choice but
                     # to create the wrapper so we can see
@@ -178,7 +190,10 @@ class vmmConnection(gobject.GObject):
                     vm = self.vmm.lookupByID(id)
                     uuid = self.uuidstr(vm.UUID())
                     maybeNewUUIDs[uuid] = vm
+                    # also add the new or newly started VM to the "started" list
+                    startedUUIDs.append(uuid)
                     #print "Maybe new active " + str(maybeNewUUIDs[uuid].get_name()) + " " + uuid
+                    self.activeUUIDs.append(uuid)
 
         # Filter out inactive domains which haven't changed
         if newInactiveNames != None:
@@ -241,6 +256,9 @@ class vmmConnection(gobject.GObject):
             vm = newUUIDs[uuid]
             #print "Add " + vm.get_name() + " " + uuid
             self.emit("vm-added", self.uri, uuid)
+
+        for uuid in startedUUIDs:
+            self.emit("vm-started", self.uri, uuid)
 
         # Finally, we sample each domain
         now = time()

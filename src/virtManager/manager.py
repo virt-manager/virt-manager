@@ -21,6 +21,7 @@ import gobject
 import gtk
 import gtk.glade
 import threading
+import logging
 
 import sparkline
 import libvirt
@@ -193,6 +194,9 @@ class vmmManager(gobject.GObject):
         # store any error message from the restore-domain callback
         self.domain_restore_error = ""
 
+        # Do useful things when a vm starts
+        self.connection.connect("vm-started", self.vm_started)
+
     def show(self):
         win = self.window.get_widget("vmm-manager")
         win.show_all()
@@ -317,14 +321,17 @@ class vmmManager(gobject.GObject):
 
         self._append_vm(model, vm)
 
-        if self.config.get_console_popup() == 2 and range(model.iter_n_children(None)) > 1:
+    def vm_started(self, connection, uri, vmuuid):
+        vm = self.connection.get_vm(vmuuid)
+        logging.debug("VM %s started" % vm.get_name())
+        if self.config.get_console_popup() == 2 and not vm.is_management_domain():
             # user has requested consoles on all vms
             (gtype, host, port) = vm.get_graphics_console()
             if gtype == "vnc":
                 self.emit("action-show-console", uri, vmuuid)
             else:
                 self.emit("action-show-terminal", uri, vmuuid)
-        
+                
     def _append_vm(self, model, vm):
         # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar
         iter = model.append([vm, vm.get_name(), vm.get_id_pretty(), vm.run_status(), \
