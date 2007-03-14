@@ -462,6 +462,9 @@ class GRFBViewer(gtk.DrawingArea):
         gtk.gdk.keyboard_grab(self.window, False, long(0))
         for g in self.accel_groups:
             self.topwin.remove_accel_group(g)
+        self.gtk_settings = gtk.settings_get_default()
+        self.gtk_settings_accel = self.gtk_settings.get_property('gtk-menu-bar-accel')
+        self.gtk_settings.set_property('gtk-menu-bar-accel', None)
         self.grabbedKeyboard = True
         self.emit("keyboard-grabbed")
 
@@ -469,6 +472,7 @@ class GRFBViewer(gtk.DrawingArea):
         gtk.gdk.keyboard_ungrab()
         for g in self.accel_groups:
             self.topwin.add_accel_group(g)
+        self.gtk_settings.set_property('gtk-menu-bar-accel', self.gtk_settings_accel)
         self.grabbedKeyboard = False
         self.emit("keyboard-ungrabbed")
 
