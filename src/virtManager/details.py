@@ -33,7 +33,9 @@ class vmmDetails(gobject.GObject):
         "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str)),
         "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str,str))
+                                 gobject.TYPE_NONE, (str,str)),
+        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
+                               gobject.TYPE_NONE, [str]),
         }
     def __init__(self, config, vm):
         self.__gobject_init__()
@@ -109,7 +111,8 @@ class vmmDetails(gobject.GObject):
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
-            "on_config_memory_apply_clicked": self.config_memory_apply
+            "on_config_memory_apply_clicked": self.config_memory_apply,
+            "on_details_help_activate": self.show_help,
             })
 
         self.hw_selected()
@@ -138,6 +141,11 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("overview-disk-usage-label").hide()
         self.network_traffic_graph.hide()
         dialog.present()
+
+    def show_help(self, src):
+        # From the Details window, show the help document from the Details page
+        self.emit("action-show-help", "virt-manager-details-window") 
+
 
     def activate_performance_page(self):
         self.window.get_widget("details-pages").set_current_page(0)

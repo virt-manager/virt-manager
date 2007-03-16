@@ -187,7 +187,7 @@ class vmmEngine:
         try:
             gnome.help_display(self.config.get_appname(), index)
         except gobject.GError, e:
-            logging.error((("Unable to display documentation:\n%s") % e))
+            logging.error(("Unable to display documentation:\n%s") % e)
 
     def show_preferences(self):
         if self.windowPreferences == None:
@@ -241,6 +241,7 @@ class vmmEngine:
             details.connect("action-show-terminal", self._do_show_terminal)
             details.connect("action-save-domain", self._do_save_domain)
             details.connect("action-destroy-domain", self._do_destroy_domain)
+            details.connect("action-show-help", self._do_show_help)
             self.connections[uri]["windowDetails"][uuid] = details
         self.connections[uri]["windowDetails"][uuid].show()
         return self.connections[uri]["windowDetails"][uuid]
