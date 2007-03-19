@@ -42,7 +42,6 @@ class vmmConnect(gobject.GObject):
         self.window.signal_autoconnect({
             "on_type_local_host_toggled": self.update_widget_states,
             "on_type_remote_host_toggled": self.update_widget_states,
-            "on_type_other_hv_toggled": self.update_widget_states,
             "on_type_hypervisor_changed": self.update_widget_states,
             "on_cancel_clicked": self.cancel,
             "on_connect_clicked": self.open_connection,
@@ -71,13 +70,8 @@ class vmmConnect(gobject.GObject):
 
         if local.get_active():
             self.window.get_widget("remote-host-options").set_sensitive(False)
-            self.window.get_widget("other-hv-options").set_sensitive(False)
-        elif remote.get_active():
-            self.window.get_widget("remote-host-options").set_sensitive(True)
-            self.window.get_widget("other-hv-options").set_sensitive(False)
         else:
-            self.window.get_widget("remote-host-options").set_sensitive(False)
-            self.window.get_widget("other-hv-options").set_sensitive(True)
+            self.window.get_widget("remote-host-options").set_sensitive(True)
 
         if local.get_active() and os.getuid() != 0 and type.get_active() == 0:
             self.window.get_widget("option-read-only").set_sensitive(False)
@@ -108,15 +102,12 @@ class vmmConnect(gobject.GObject):
                     uri = "qemu:///session"
                 else:
                     uri = "qemu:///session"
-        elif remote.get_active():
+        else:
             if type.get_active() == 0:
                 # XXX fixme these URIs should switch to the secure libvirtd when its finally written
                 uri = "http://" + self.window.get_widget("remote-host").get_text() + ":" + self.window.get_widget("remote-port").get_text()
             else:
                 uri = "qemu://" + self.window.get_widget("remote-host").get_text() + ":" + self.window.get_widget("remote-port").get_text() + "/system"
-        else:
-            uri = self.window.get_widget("other-hv-uri").get_text()
-
         self.close()
         self.emit("completed", uri, readOnly)
 
