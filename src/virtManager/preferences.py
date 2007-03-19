@@ -17,9 +17,15 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 import gtk.glade
+import gobject
 
-class vmmPreferences:
+class vmmPreferences(gobject.GObject):
+    __gsignals__ = {
+        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
+                             gobject.TYPE_NONE, [str]),
+        }
     def __init__(self, config):
+        self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-preferences.glade", "vmm-preferences", domain="virt-manager")
         self.config = config
         self.window.get_widget("vmm-preferences").hide()
@@ -41,6 +47,7 @@ class vmmPreferences:
             "on_console_keygrab_changed": self.change_console_keygrab,
             "on_close_clicked": self.close,
             "on_vmm_preferences_delete_event": self.close,
+            "on_preferences_help_clicked": self.show_help,
             })
 
     def close(self,ignore1=None,ignore2=None):
@@ -76,3 +83,6 @@ class vmmPreferences:
     def change_console_keygrab(self, box):
         self.config.set_console_keygrab(box.get_active())
 
+    def show_help(self, src):
+        # From the Preferences window, show the help document from the Preferences page
+        self.emit("action-show-help", "virt-manager-preferences-window") 

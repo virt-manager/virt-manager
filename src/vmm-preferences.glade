@@ -5,7 +5,9 @@
 
 <widget class="GtkDialog" id="vmm-preferences">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Virtual Machine Manager Preferences</property>
+  <property name="can_focus">True</property>
+  <property name="has_focus">True</property>
+  <property name="title" translatable="yes">Preferences</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
   <property name="modal">False</property>
@@ -16,7 +18,7 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_CENTER</property>
-  <property name="focus_on_map">False</property>
+  <property name="focus_on_map">True</property>
   <property name="urgency_hint">False</property>
   <property name="has_separator">False</property>
   <signal name="delete_event" handler="on_vmm_preferences_delete_event" last_modification_time="Wed, 29 Mar 2006 10:12:05 GMT"/>
@@ -31,6 +33,20 @@
 	<widget class="GtkHButtonBox" id="dialog-action_area1">
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+
+	  <child>
+	    <widget class="GtkButton" id="button1">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-help</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-11</property>
+	      <signal name="clicked" handler="on_preferences_help_clicked" last_modification_time="Mon, 19 Mar 2007 21:45:58 GMT"/>
+	    </widget>
+	  </child>
 
 	  <child>
 	    <widget class="GtkButton" id="close">

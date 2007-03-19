@@ -749,9 +749,72 @@
   </sect2>
  </sect1>
 
- <sect1 id="virt-manager-pref-window">
+ <sect1 id="virt-manager-preferences-window">
   <title>The Preferences Window</title>
-  <para>You set application preferences here</para>
+  <para>The Preferences window lets you customize certain of the application's
+  behaviors. You can choose how frequently VM statistics are updated in the
+   Manager and Details windows, choose the circumstances under which a console
+  automatically appears, and finally choose how the console grabs your
+   keyboard input.</para>
+  
+   <figure id="virt-manager-FIG-preferences-window">
+    <title>Preferences Window</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-preferences.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows a preferences window.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
+  <sect2 id="virt-manager-pref-window-stats-refresh">
+   <title>Preferences: Status Monitoring</title>
+   <para>Here you can set how often your VM status graphs update. If you have
+    a large number of VMs, you may want to consider increasing the interval in
+    between status updates.</para>
+  </sect2>
+
+  <sect2 id="virt-manager-pref-window-consoles">
+   <title>Preferences: Console Pop-up</title> <para>Here you can set the
+   circumstances where you want <application>&app;</application> to pop up a
+    Console window. The choices are:</para>
+   <variablelist>
+    <varlistentry><term>For all domains</term>
+     <listitem><para>Pop up a Console window whenever a VM starts, including when
+       <application>&app;</application> first starts up. This can be useful if
+       you need to be sure you see what is happening right when starting a VM,
+       but it's probably overkill for most situations.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>For new domains</term>
+     <listitem><para>Pop up a Console window whenever a newly created domain
+       starts. This is the default behavior; the application pops up a Console
+       window for a newly created guest so that you can continue the guest
+       install.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Never</term>
+     <listitem><para>Never pop up a Console window automatically. With this
+       choice you will have to manually start a Console window for any domain
+       you want to connect to, by double-clicking on the domain in the <link
+	linkend="virt-manager-mgr-window">Manager window</link>.</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
+  <sect2 id="virt-manager-pref-window-grab-kbd">
+   <title>Preferences: Grab Keyboard</title>
+   <para>By default the Console window will grab input from your keyboard
+    whenever you position your mouse pointer over it. You may also choose
+    <guimenuitem>When fullscreen</guimenuitem> to grab keyboard input only
+    when the Console window is full screen, or
+    <guimenuitem>Never</guimenuitem>.
+   </para>
+  </sect2>
  </sect1>
 
  <sect1 id="virt-manager-create-wizard">

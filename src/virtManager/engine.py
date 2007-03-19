@@ -192,6 +192,7 @@ class vmmEngine:
     def show_preferences(self):
         if self.windowPreferences == None:
             self.windowPreferences = vmmPreferences(self.get_config())
+            self.windowPreferences.connect("action-show-help", self._do_show_help)
         self.windowPreferences.show()
 
     def show_connect(self):
