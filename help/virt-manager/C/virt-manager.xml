@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
     "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-  <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY GFDL SYSTEM "fdl-appendix.xml">
   <!ENTITY appversion "0.3.0">
   <!ENTITY manrevision "0.1">
   <!ENTITY date "March 2007">
@@ -136,7 +134,7 @@
    </indexterm>
    <para>
     <application>&app;</application> is a GUI tool for managing virtual
-    machines. It helps you create, destroy, edit, monitor, save, restore,
+    machines (VMs). It helps you create, destroy, edit, monitor, save, restore,
     pause, and use the console on virtual machines running on multiple
     hypervisors (and, soon, multiple physical hosts). Because
     <application>&app;</application> relies entirely on
@@ -156,9 +154,9 @@
   <sect2 id="virt-manager-about-doc">
    <title>About this Document</title>
    <para>
-    This document is released under the GNU Free Documentation
-    License. Corrections are welcome and encouraged at <ulink type="http"
-     url="http://virt-manager.org">virt-manager.org</ulink>.
+    This document is released under the Open Publication License v
+    1.0. Corrections are welcome and encouraged at <ulink type="http"
+    url="http://virt-manager.org">virt-manager.org</ulink>.
    </para>
   </sect2>
  </sect1>
@@ -448,6 +446,80 @@
   and resume virtual machines, save a virtual machine to disk, and bring up
   the serial or graphical console for a virtual machine.</para>
 
+  <sect2 id="virt-manager-details-window-menu">
+   <title>Details Window Menus</title>
+   <para>The menus in the Details window and the <link
+     linkend="virt-manager-console-window">Console window</link> are very
+    similar. The <guimenu>Virtual Machine</guimenu> menu gives you the
+    following options:</para>
+   <variablelist>
+    <varlistentry><term>Run</term>
+     <listitem><para><guisubmenu>Run</guisubmenu> starts the virtual machine,
+       if it isn't already running. The <guibutton>Run</guibutton> button on
+       the toolbar does the same thing.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Pause</term>
+     <listitem><para><guisubmenu>Pause</guisubmenu> freezes the virtual
+       machine, if it is running at the time. To unfreeze the machine, choose
+       <guisubmenu>Pause</guisubmenu> again. The <guibutton>Pause</guibutton>
+       button on the toolbar does the same thing.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Shutdown</term>
+     <listitem><para><guisubmenu>Shutdown</guisubmenu> shuts the machine
+       down, if it is running. For paravirtualized VMs, the hypervisor will
+       attempt to gracefully shut down the VM; for fully virtualized VMs,
+       <guisubmenu>Shutdown</guisubmenu> is equivalent to pulling the plug on
+       the machine. The <guibutton>Shutdown</guibutton> button on the toolbar
+       serves the same purpose.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Save</term>
+     <listitem><para><guisubmenu>Save</guisubmenu> saves the machine's memory
+       image to disk, shutting the machine down in the process. You can then
+       <guisubmenu>Restore</guisubmenu> the machine from the <link
+	linkend="virt-manager-mgr-window">Manager window</link> later. Note
+       that if you really wish to preserve a VM in its saved state, you will
+       also need a snapshot of the VM's disk image at the time you save
+       it. If you start a VM that you have saved and then later attempt to
+       restore the same VM using the same disk image, you will probably lose
+       data or worse.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Destroy</term>
+     <listitem><para><guisubmenu>Destroy</guisubmenu> is akin to pulling the
+       plug on a machine, even for paravirtualized VMs. You may experience
+       data loss, or worse. However, this command is useful if you have a wedged
+       paravirtualized VM that you need to get rid of altogether.</para>
+      </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>The <guimenu>View</guimenu> menu gives you the following
+    options:</para>
+   <variablelist>
+    <varlistentry><term>Graphical Console</term>
+     <listitem><para>The <guisubmenu>Graphical Console</guisubmenu> item pops up the
+      graphical console for the VM, if one is available. The availability of a
+      graphical console depends on whether the VM was created with graphics
+      support available; if it was not, only the Serial Console will be
+       available.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Serial Console</term>
+     <listitem><para>The <guisubmenu>Serial Console</guisubmenu> item pops up
+       the serial console window for the VM. It may not be available if the
+       VM was created with graphics support available.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Toolbar</term>
+     <listitem><para>The <guisubmenu>Toolbar</guisubmenu> item hides or shows
+       the toolbar with Run/Pause/Shutdown buttons</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </sect2>
+
   <sect2 id="virt-manager-details-window-vm-info">
    <title>Details Window Overview: Basic Details</title>
 
@@ -623,7 +695,58 @@
  
  <sect1 id="virt-manager-console-window">
   <title>The Console Window</title>
-  <para>You view the console of a specific virtual machine here</para>
+  <para>The Console window connects you to a VM's console, either in text mode
+  or graphically depending on how the VM was installed.</para>
+
+   <figure id="virt-manager-FIG-console-window">
+    <title>Graphical Console Window</title>
+    <screenshot>
+     <mediaobject>
+      <imageobject>
+       <imagedata fileref="figures/vm-graphic-console.png" format="PNG"/>
+      </imageobject>
+      <textobject> <phrase>Shows a graphical console window.</phrase>
+      </textobject>
+     </mediaobject>
+    </screenshot>
+   </figure>
+
+  <sect2 id="virt-manager-console-menus">
+   <title>Console Window Menus</title>
+   <para>The menus for the Console window are identical to those for the <link
+     linkend="virt-manager-details-window-menu">Details window</link>, with
+    the following exceptions:</para>
+   <itemizedlist>
+    <listitem><para>The <guimenu>Virtual Machine</guimenu> menu adds an item
+      <guimenuitem>Take Screenshot</guimenuitem> that lets you grab a
+      screenshot of the VM's console.</para>
+    </listitem>
+    <listitem><para>The <guimenu>View</guimenu> menu adds an item
+    <guimenuitem>FullScreen</guimenuitem> that will enlarge the Console window
+    to take up an entire screen, if you are using the graphical
+    console.</para>
+    </listitem>
+   </itemizedlist>
+  </sect2>
+  <sect2 id="virt-manager-console-tips">
+   <title>Console Window Tips</title>
+   <para>Some useful things to know about using the Console window:</para>
+   <itemizedlist>
+    <listitem>
+     <para>If you click your mouse anywhere in the graphical console window,
+      the window will "grab" it and pop up a warning informing you it has done
+      so. You can then use the mouse normally inside the console window. To
+      "break out" of the window, press the key combination 
+      <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap>
+      </keycombo>.</para>
+    </listitem>
+    <listitem>
+     <para>As of now, it is not possible to change the size of the console
+      window. This capability depends on upstream work, although it should be
+      available in a future release.</para>
+    </listitem>
+   </itemizedlist>
+  </sect2>
  </sect1>
 
  <sect1 id="virt-manager-pref-window">

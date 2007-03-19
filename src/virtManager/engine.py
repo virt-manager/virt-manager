@@ -211,6 +211,7 @@ class vmmEngine:
             console.connect("action-show-terminal", self._do_show_terminal)
             console.connect("action-save-domain", self._do_save_domain)
             console.connect("action-destroy-domain", self._do_destroy_domain)
+            console.connect("action-show-help", self._do_show_help)
             self.connections[uri]["windowConsole"][uuid] = console
         self.connections[uri]["windowConsole"][uuid].show()
 

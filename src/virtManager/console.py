@@ -35,6 +35,8 @@ class vmmConsole(gobject.GObject):
                                    gobject.TYPE_NONE, (str,str)),
         "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str)),
+        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
+                               gobject.TYPE_NONE, [str]),
         "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str))
         }
@@ -92,6 +94,7 @@ class vmmConsole(gobject.GObject):
             "on_menu_vm_close_activate": self.close,
 
             "on_console_auth_login_clicked": self.try_login,
+            "on_console_help_activate": self.show_help,
             })
 
         self.vm.connect("status-changed", self.update_widget_states)
@@ -169,6 +172,11 @@ class vmmConsole(gobject.GObject):
 
         self.try_login()
         self.update_widget_states(self.vm, self.vm.status())
+
+    def show_help(self, src):
+        # From the Console window, show the help document from the Console page
+        self.emit("action-show-help", "virt-manager-console-window") 
+
 
     def close(self,ignore1=None,ignore2=None):
         fs = self.window.get_widget("menu-view-fullscreen")
