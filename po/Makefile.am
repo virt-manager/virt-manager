@@ -6,9 +6,9 @@ NLSDIR = $(datadir)/locale
 
 POTFILE = $(srcdir)/$(PACKAGE).pot
 
-GLADEFILE = $(top_srcdir)/src/$(PACKAGE).glade
+GLADEFILES = $(wildcard $(top_srcdir)/src/*.glade)
 
-GLADESCRATCHFILE = tmp/$(PACKAGE).glade.h
+GLADESCRATCHFILES = $(GLADEFILES:$(top_srcdir)/src/%=tmp/%.h)
 
 POTFILES = $(top_srcdir)/src/*.py.in \
            $(top_srcdir)/src/virtManager/*.py \
@@ -18,17 +18,17 @@ all: $(FMTCATALOGS)
 
 EXTRA_DIST = $(POTFILE) $(POS)
 
-refresh-pot: $(POTFILES) $(GLADESCRATCHFILE)
+refresh-pot: $(POTFILES) $(GLADESCRATCHFILES)
 	xgettext --default-domain=$(PACKAGE) \
-		 --keyword=_ --keyword=N_ $(POTFILES) $(GLADESCRATCHFILE)
+		 --keyword=_ --keyword=N_ $(POTFILES) $(GLADESCRATCHFILES)
 	if cmp -s $(PACKAGE).po $(POTFILE); then \
 	    rm -f $(PACKAGE).po; \
 	else \
 	    mv $(PACKAGE).po $(POTFILE); \
 	fi
 
-$(GLADESCRATCHFILE): $(GLADEFILE)
-	rm -rf tmp/
+tmp/%.h: $(top_srcdir)/src/%
+	rm -f $@
 	intltool-extract --type=gettext/glade -l $<
 
 update-po: Makefile refresh-pot refresh-po
@@ -51,7 +51,7 @@ report:
 		msgfmt -v --statistics -o /dev/null $$cat; \
 	done
 
-CLEANFILES = $(FMTCATALOGS) $(GLADESCRATCHFILE) tmp
+CLEANFILES = $(FMTCATALOGS) $(GLADESCRATCHFILES) tmp
 
 install-data-local: $(FMTCATALOGS) 
 	mkdir -p $(DESTDIR)$(NLSDIR)
