@@ -96,10 +96,7 @@ class vmmConnect(gobject.GObject):
                     readOnly = True
             else:
                 if os.getuid() == 0:
-                    # Disabled for now, since the systemwide instance
-                    # has no init script just yet
-                    #uri = "qemu///system"
-                    uri = "qemu:///session"
+                    uri = "qemu:///system"
                 else:
                     uri = "qemu:///session"
         else:
