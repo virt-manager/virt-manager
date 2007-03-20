@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-22 18:10-0500\n"
+"POT-Creation-Date: 2007-03-20 12:41-0400\n"
 "PO-Revision-Date: 2007-01-22 01:42+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <translation-team-ms@lists.sourceforge.net>\n"
@@ -20,309 +20,371 @@ msgstr ""
 msgid "Unable to initialize GTK: "
 msgstr "RALAT: Tidak boleh menginitialisasikan persekitaran grafikal."
 
-#: ../../src/virtManager/console.py:256
+#: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:2
+#, fuzzy
+msgid "Please wait a few moments..."
+msgstr "Sila tunggu..."
+
+#: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:1
+msgid "Operation in progress"
+msgstr ""
+
+#: ../../src/virtManager/asyncjob.py:72 ../../src/virtManager/asyncjob.py:80
+#: tmp/vmm-progress.glade.h:3
+#, fuzzy
+msgid "Processing..."
+msgstr "Pemproses"
+
+#: ../../src/virtManager/asyncjob.py:90
+#, fuzzy
+msgid "Completed"
+msgstr "Selesai"
+
+#: ../../src/virtManager/console.py:130
+msgid "Pointer grabbed"
+msgstr ""
+
+#: ../../src/virtManager/console.py:131
+msgid ""
+"The mouse pointer has been restricted to the virtual console window. To "
+"release the pointer press the key pair Ctrl+Alt"
+msgstr ""
+
+#: ../../src/virtManager/console.py:140
+msgid "Press Ctrl+Alt to release pointer."
+msgstr ""
+
+#: ../../src/virtManager/console.py:300
 msgid "Save Virtual Machine Screenshot"
 msgstr ""
 
-#: ../../src/virtManager/console.py:289
+#: ../../src/virtManager/console.py:333
 #, fuzzy, python-format
 msgid ""
 "The screenshot has been saved to:\n"
 "%s"
 msgstr "Cekupanskrin bernama '%s' telah disimpan."
 
-#: ../../src/virtManager/console.py:290
+#: ../../src/virtManager/console.py:334
 #, fuzzy
 msgid "Screenshot saved"
 msgstr " byte diselamatkan)"
 
-#: ../../src/virtManager/console.py:405
+#: ../../src/virtManager/console.py:449
 msgid "paused"
 msgstr ""
 
-#: ../../src/virtManager/create.py:348
+#: ../../src/virtManager/create.py:395
 msgid "Paravirtualized"
 msgstr ""
 
-#: ../../src/virtManager/create.py:350
+#: ../../src/virtManager/create.py:399
 msgid "Fully virtualized"
 msgstr ""
 
-#: ../../src/virtManager/create.py:381
+#: ../../src/virtManager/create.py:435
 #, fuzzy
 msgid "Invalid FV media address"
 msgstr "Ralat: alamat IP tidak sah.\n"
 
-#: ../../src/virtManager/create.py:387
+#: ../../src/virtManager/create.py:440
+#, fuzzy
+msgid "Invalid FV OS Type"
+msgstr "Ralat: alamat IP tidak sah.\n"
+
+#: ../../src/virtManager/create.py:445
+#, fuzzy
+msgid "Invalid FV OS Variant"
+msgstr "Ralat: alamat IP tidak sah.\n"
+
+#: ../../src/virtManager/create.py:452
 #, fuzzy
 msgid "Invalid PV media address"
 msgstr "Ralat: alamat IP tidak sah.\n"
 
-#: ../../src/virtManager/create.py:397
+#: ../../src/virtManager/create.py:462
 #, fuzzy
 msgid "Invalid system name"
 msgstr "Sistem Nama Domain"
 
-#: ../../src/virtManager/create.py:404
+#: ../../src/virtManager/create.py:469 ../../src/virtManager/create.py:475
 #, fuzzy
 msgid "Invalid memory setting"
 msgstr "Menetapkan parameter rangkaian..."
 
-#: ../../src/virtManager/create.py:426
+#: ../../src/virtManager/create.py:497
 #, fuzzy
 msgid "Invalid storage address"
 msgstr "Alamat rangkaian tidak sah"
 
-#: ../../src/virtManager/create.py:460
+#: ../../src/virtManager/create.py:534
 #, fuzzy
 msgid "Creating Virtual Machine"
 msgstr "Alamat IP komputer:"
 
-#: ../../src/virtManager/create.py:465
+#: ../../src/virtManager/create.py:535
+msgid "The virtual machine is now being created. "
+msgstr ""
+
+#: ../../src/virtManager/create.py:536
+msgid "Allocation of disk storage and retrieval of "
+msgstr ""
+
+#: ../../src/virtManager/create.py:537
+msgid "the installation images may a few minutes "
+msgstr ""
+
+#: ../../src/virtManager/create.py:538
+#, fuzzy
+msgid "to complete."
+msgstr "Selesai"
+
+#: ../../src/virtManager/create.py:543
 #, fuzzy
 msgid "Guest Install Error"
 msgstr "Ralat membaca meklumat cara pemasangan:"
 
-#: ../../src/virtManager/create.py:503
+#: ../../src/virtManager/create.py:581
 #, fuzzy
 msgid "Locate ISO Image"
 msgstr "image-file.iso"
 
-#: ../../src/virtManager/create.py:532
+#: ../../src/virtManager/create.py:610
 #, fuzzy
 msgid "Locate Storage Partition"
 msgstr "Edit partisyen: /dev/%s"
 
-#: ../../src/virtManager/create.py:538
+#: ../../src/virtManager/create.py:616
 msgid "Locate or Create New Storage File"
 msgstr ""
 
-#: ../../src/virtManager/create.py:604 ../../src/virtManager/create.py:608
+#: ../../src/virtManager/create.py:682 ../../src/virtManager/create.py:686
 #, fuzzy
 msgid "Invalid System Name"
 msgstr "Sistem Nama Domain"
 
-#: ../../src/virtManager/create.py:605
+#: ../../src/virtManager/create.py:683
 msgid "System name must be non-blank and less than 50 characters"
 msgstr ""
 
-#: ../../src/virtManager/create.py:609
+#: ../../src/virtManager/create.py:687
 msgid "System name may contain alphanumeric and '_' characters only"
 msgstr ""
 
-#: ../../src/virtManager/create.py:615
+#: ../../src/virtManager/create.py:693
 #, fuzzy
 msgid "Hardware Support Required"
 msgstr "Media Pemasangan Yang Diperlukan"
 
-#: ../../src/virtManager/create.py:616
+#: ../../src/virtManager/create.py:694
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
 msgstr ""
 
-#: ../../src/virtManager/create.py:623
+#: ../../src/virtManager/create.py:701
 #, fuzzy
 msgid "ISO Path Required"
 msgstr "Media Pemasangan Yang Diperlukan"
 
-#: ../../src/virtManager/create.py:624
+#: ../../src/virtManager/create.py:702
 msgid "You must specify an ISO location for the guest installation"
 msgstr ""
 
-#: ../../src/virtManager/create.py:627
+#: ../../src/virtManager/create.py:705
 #, fuzzy
 msgid "ISO Path Not Found"
 msgstr "$0: konfigurasi bagi ${1} tidak dijumpai."
 
-#: ../../src/virtManager/create.py:628
+#: ../../src/virtManager/create.py:706
 msgid "You must specify a valid path to the ISO image for guest installation"
 msgstr ""
 
-#: ../../src/virtManager/create.py:633
+#: ../../src/virtManager/create.py:711
 #, fuzzy
 msgid "Install media required"
 msgstr "Media Pemasangan Yang Diperlukan"
 
-#: ../../src/virtManager/create.py:634
+#: ../../src/virtManager/create.py:712
 msgid "You must select the CDROM install media for guest installation"
 msgstr ""
 
-#: ../../src/virtManager/create.py:639
+#: ../../src/virtManager/create.py:717
 #, fuzzy
 msgid "URL Required"
 msgstr "Kebenaran Diperlukan"
 
-#: ../../src/virtManager/create.py:640
+#: ../../src/virtManager/create.py:718
 msgid "You must specify a URL for the install image for the guest install"
 msgstr ""
 
-#: ../../src/virtManager/create.py:646
+#: ../../src/virtManager/create.py:724
 #, fuzzy
 msgid "Storage Address Required"
 msgstr "Media Pemasangan Yang Diperlukan"
 
-#: ../../src/virtManager/create.py:647
+#: ../../src/virtManager/create.py:725
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
 msgstr ""
 
-#: ../../src/virtManager/create.py:652
+#: ../../src/virtManager/create.py:730
 #, fuzzy
 msgid "Storage Address Is Directory"
 msgstr "Media Pemasangan Yang Diperlukan"
 
-#: ../../src/virtManager/create.py:653
+#: ../../src/virtManager/create.py:731
 msgid ""
 "You chose 'Simple File' storage for your storage method, but chose a "
 "directory instead of a file. Please enter a new filename or choose an "
 "existing file."
 msgstr ""
 
-#: ../../src/virtManager/create.py:698 ../../src/virtManager/create.py:733
+#: ../../src/virtManager/create.py:776 ../../src/virtManager/create.py:811
 #, fuzzy
 msgid "No media present"
 msgstr "melangkau media %s: tiada hdlist"
 
-#: ../../src/virtManager/details.py:411
+#: ../../src/virtManager/details.py:419
 #, fuzzy
 msgid "Destination"
 msgstr "Destinasi"
 
-#: ../../src/virtManager/details.py:450
+#: ../../src/virtManager/details.py:458
 msgid "MAC address"
 msgstr "Alamat MAC"
 
-#: ../../src/virtManager/domain.py:363
+#: ../../src/virtManager/domain.py:364
 #, fuzzy
 msgid "Running"
 msgstr "Berfungsi"
 
-#: ../../src/virtManager/domain.py:365
+#: ../../src/virtManager/domain.py:366
 msgid "Paused"
 msgstr ""
 
-#: ../../src/virtManager/domain.py:367 tmp/virt-manager.glade.h:164
+#: ../../src/virtManager/domain.py:368 tmp/vmm-console.glade.h:10
+#: tmp/vmm-details.glade.h:39
 #, fuzzy
 msgid "Shutdown"
 msgstr "padamkan %s"
 
-#: ../../src/virtManager/domain.py:369
+#: ../../src/virtManager/domain.py:370
 msgid "Shutoff"
 msgstr ""
 
-#: ../../src/virtManager/domain.py:371
+#: ../../src/virtManager/domain.py:372
 msgid "Crashed"
 msgstr ""
 
-#: ../../src/virtManager/domain.py:373
+#: ../../src/virtManager/domain.py:374
 #, fuzzy
 msgid "Unknown status code"
 msgstr "Kod keluar yang tidak diketahui."
 
-#: ../../src/virtManager/engine.py:74
+#: ../../src/virtManager/engine.py:75
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr ""
 
-#: ../../src/virtManager/engine.py:75
+#: ../../src/virtManager/engine.py:76
 #, fuzzy
 msgid "Verify that:\n"
 msgstr "OK"
 
-#: ../../src/virtManager/engine.py:76
+#: ../../src/virtManager/engine.py:77
 msgid " - A Xen host kernel was booted\n"
 msgstr ""
 
-#: ../../src/virtManager/engine.py:77
+#: ../../src/virtManager/engine.py:78
 #, fuzzy
 msgid " - The Xen service has been started\n"
 msgstr "Cekupanskrin bernama '%s' telah disimpan."
 
-#: ../../src/virtManager/engine.py:80
+#: ../../src/virtManager/engine.py:81
 #, fuzzy, python-format
 msgid "Unable to open connection to hypervisor '%s'"
 msgstr "Tidak dapat membuka folder buku"
 
-#: ../../src/virtManager/engine.py:81
+#: ../../src/virtManager/engine.py:82
 #, fuzzy
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Memulakan pengurus paparan:"
 
-#: ../../src/virtManager/engine.py:281
+#: ../../src/virtManager/engine.py:302
 #, fuzzy
 msgid "Save Virtual Machine"
 msgstr "Alamat IP komputer:"
 
-#: ../../src/virtManager/engine.py:294
+#: ../../src/virtManager/engine.py:315
 #, fuzzy
 msgid "Saving Virtual Machine"
 msgstr "Alamat IP komputer:"
 
-#: ../../src/virtManager/engine.py:310
+#: ../../src/virtManager/engine.py:331
 #, fuzzy, python-format
 msgid "About to destroy virtual machine %s"
 msgstr "Alamat IP komputer:"
 
-#: ../../src/virtManager/engine.py:311
+#: ../../src/virtManager/engine.py:332
 msgid ""
 "This will immediately destroy the VM and may corrupt its disk image. Are you "
 "sure?"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:189
+#: ../../src/virtManager/manager.py:237
 #, fuzzy
 msgid "Restore Virtual Machine"
 msgstr "Alamat IP komputer:"
 
-#: ../../src/virtManager/manager.py:204
+#: ../../src/virtManager/manager.py:252
 #, fuzzy
 msgid "Restoring Virtual Machine"
 msgstr "Alamat IP komputer:"
 
-#: ../../src/virtManager/manager.py:211
+#: ../../src/virtManager/manager.py:259
 #, python-format
 msgid "The file '%s' does not appear to be a valid saved machine image"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:239
+#: ../../src/virtManager/manager.py:287
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:421
+#: ../../src/virtManager/manager.py:505
 msgid "ID"
 msgstr "ID"
 
-#: ../../src/virtManager/manager.py:422 tmp/virt-manager.glade.h:124
+#: ../../src/virtManager/manager.py:506 tmp/vmm-create.glade.h:61
 msgid "Name"
 msgstr "Nama"
 
-#: ../../src/virtManager/manager.py:423 tmp/virt-manager.glade.h:167
+#: ../../src/virtManager/manager.py:507 tmp/vmm-manager.glade.h:16
 msgid "Status"
 msgstr "Status"
 
-#: ../../src/virtManager/manager.py:424 tmp/virt-manager.glade.h:80
+#: ../../src/virtManager/manager.py:508 tmp/vmm-manager.glade.h:4
 #, fuzzy
 msgid "CPU usage"
 msgstr "penggunaan: %s [pilihan]"
 
-#: ../../src/virtManager/manager.py:425
+#: ../../src/virtManager/manager.py:509
 msgid "VCPUs"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:426 tmp/virt-manager.glade.h:120
+#: ../../src/virtManager/manager.py:510 tmp/vmm-manager.glade.h:10
 #, fuzzy
 msgid "Memory usage"
 msgstr "penggunaan: %s [pilihan]"
 
-#: ../../src/virtManager/manager.py:427 tmp/virt-manager.glade.h:92
+#: ../../src/virtManager/manager.py:511 tmp/vmm-manager.glade.h:7
 #, fuzzy
 msgid "Disk usage"
 msgstr "penggunaan: %s [pilihan]"
 
-#: ../../src/virtManager/manager.py:428 tmp/virt-manager.glade.h:127
+#: ../../src/virtManager/manager.py:512 tmp/vmm-manager.glade.h:11
 #, fuzzy
 msgid "Network traffic"
 msgstr "Penganalisa trafik rangkaian"
@@ -332,286 +394,327 @@ msgstr "Penganalisa trafik rangkaian"
 msgid "serial console"
 msgstr "Konsol Bersiri"
 
-#: tmp/virt-manager.glade.h:1
-msgid " "
-msgstr " "
-
-#: tmp/virt-manager.glade.h:2
+#: tmp/vmm-about.glade.h:1
 #, fuzzy
-msgid " free"
-msgstr "Bebas"
+msgid "Copyright (C) 2006 Red Hat Inc."
+msgstr "Hakcipta (c) 2001-2003 Red Hat, Inc."
 
-#: tmp/virt-manager.glade.h:3
-msgid " of "
+#: tmp/vmm-about.glade.h:2
+#, fuzzy
+msgid "Powered by libvirt"
+msgstr "Pakej                                  Diperlukan oleh\n"
+
+#: tmp/vmm-about.glade.h:3 tmp/vmm-manager.glade.h:18
+#, fuzzy
+msgid "Virtual Machine Manager"
+msgstr "Memulakan pengurus paparan:"
+
+#: tmp/vmm-about.glade.h:4
+msgid "http://virt-manager.et.redhat.com/"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:4
-msgid "/tmp"
-msgstr "/tmp"
+#: tmp/vmm-about.glade.h:6
+msgid "translator-credits"
+msgstr "Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>, 2004, 2005, 2006"
 
-#: tmp/virt-manager.glade.h:5
-msgid "/xen/demo.img"
-msgstr "/xen/demo.img"
-
-#: tmp/virt-manager.glade.h:6
+#: tmp/vmm-add-virtual-nic.glade.h:1
 msgid "00:16:3e:"
 msgstr "00:16:3e:"
 
-#: tmp/virt-manager.glade.h:7
-msgid "10 TB"
-msgstr "10 TB"
-
-#: tmp/virt-manager.glade.h:9
-#, no-c-format
-msgid "18%"
-msgstr "18%"
-
-#: tmp/virt-manager.glade.h:10
-msgid "2"
-msgstr "2"
-
-#: tmp/virt-manager.glade.h:11
-msgid "2 GB"
-msgstr "2 GB"
-
-#: tmp/virt-manager.glade.h:12
-#, fuzzy
-msgid "20 bits/sec"
-msgstr "256 Warna (8 Bit)"
-
-#: tmp/virt-manager.glade.h:13
-msgid "200 MB"
-msgstr "200 MB"
-
-#: tmp/virt-manager.glade.h:14
-msgid "256\t"
-msgstr "256\t"
-
-#: tmp/virt-manager.glade.h:15
-#, fuzzy
-msgid "30 MB of 128 MB"
-msgstr "Ruang Swap (MB)"
-
-#: tmp/virt-manager.glade.h:16
-msgid "400 MB"
-msgstr "400 MB"
-
-#: tmp/virt-manager.glade.h:17
-msgid "5\t"
-msgstr "5\t"
-
-#: tmp/virt-manager.glade.h:18
-msgid "5 GB"
-msgstr "5 GB"
-
-#: tmp/virt-manager.glade.h:19
-msgid "500 MB"
-msgstr "500 MB"
-
-#: tmp/virt-manager.glade.h:20
-msgid "8"
-msgstr "8"
-
-#: tmp/virt-manager.glade.h:21
-#, fuzzy
-msgid "80 MB of 1 GB"
-msgstr "Ruang Swap (MB)"
-
-#: tmp/virt-manager.glade.h:22
+#: tmp/vmm-add-virtual-nic.glade.h:2
 msgid ":"
 msgstr ":"
 
-#: tmp/virt-manager.glade.h:23
-#, fuzzy
-msgid "<b>Basic details</b>"
-msgstr "Perincian bagi '%s'"
-
-#: tmp/virt-manager.glade.h:24
-msgid "<b>CPUs:</b>"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:25
-msgid "<b>CPUs</b>"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:26
-#, fuzzy
-msgid "<b>Consoles</b>"
-msgstr " storan"
-
-#: tmp/virt-manager.glade.h:27
-#, fuzzy
-msgid "<b>Disk image:</b>"
-msgstr "Pilih imej cakera pemandu"
-
-#: tmp/virt-manager.glade.h:28
-#, fuzzy
-msgid "<b>Disk size:</b>"
-msgstr "_Saiz (MB):"
-
-#: tmp/virt-manager.glade.h:29
-#, fuzzy
-msgid "<b>Example:</b> system1"
-msgstr "EXAMPLE.COM"
-
-#: tmp/virt-manager.glade.h:30
-#, fuzzy
-msgid "<b>Initial memory:</b>"
-msgstr "Memori Rendah"
-
-#: tmp/virt-manager.glade.h:31
-#, fuzzy
-msgid "<b>Installation source:</b>"
-msgstr "Pemacu Sumber:"
-
-#: tmp/virt-manager.glade.h:32
-#, fuzzy
-msgid "<b>Kickstart source:</b>"
-msgstr "Pemacu Sumber:"
-
-#: tmp/virt-manager.glade.h:33
-#, fuzzy
-msgid "<b>Machine name:</b>"
-msgstr "Nama mesin:"
-
-#: tmp/virt-manager.glade.h:34
-#, fuzzy
-msgid "<b>Maximum memory:</b>"
-msgstr "Memori Rendah"
-
-#: tmp/virt-manager.glade.h:35
-#, fuzzy
-msgid "<b>Memory:</b>"
-msgstr "Memori:"
-
-#: tmp/virt-manager.glade.h:36
-#, fuzzy
-msgid "<b>Memory</b>"
-msgstr "Memori:"
-
-#: tmp/virt-manager.glade.h:37
-#, fuzzy
-msgid "<b>Memory</b> and <b>CPU</b> allocation"
-msgstr "Keperluan Memori dan Pemproses"
-
-#: tmp/virt-manager.glade.h:38
-#, fuzzy
-msgid "<b>Network</b>"
-msgstr " rangkaian"
-
-#: tmp/virt-manager.glade.h:39
-#, fuzzy
-msgid "<b>Performance</b>"
-msgstr "Prestasi"
-
-#: tmp/virt-manager.glade.h:40
-#, fuzzy
-msgid "<b>Status monitoring</b>"
-msgstr "Status Gugusan"
-
-#: tmp/virt-manager.glade.h:41
-#, fuzzy
-msgid "<b>Storage</b>"
-msgstr " storan"
-
-#: tmp/virt-manager.glade.h:42
-msgid ""
-"<b>Storage</b> details - which disk partitions or files the system should use"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:43
-#, fuzzy
-msgid "<b>Summary:</b>"
-msgstr "Ringkasan"
-
-#: tmp/virt-manager.glade.h:44
-#, fuzzy
-msgid "<b>The console is currently unavailable</b>"
-msgstr "Pakej \"%s\" sedang dipasang."
-
-#: tmp/virt-manager.glade.h:45
+#: tmp/vmm-add-virtual-nic.glade.h:3
 msgid ""
 "<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
 "letters A-F"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:46
-msgid ""
-"<b>Tip:</b> File location paths are as seen from the physical host. Mount "
-"points are as seen from the virtual machine."
+#: tmp/vmm-add-virtual-nic.glade.h:4
+#, fuzzy
+msgid "Add Virtual NIC"
+msgstr "Hos maya default"
+
+#: tmp/vmm-add-virtual-nic.glade.h:5
+msgid "Add virtual NIC with:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:47
-msgid ""
-"<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
-"than (or equal to) the number of physical CPUs on the host system."
+#: tmp/vmm-add-virtual-nic.glade.h:6
+#, fuzzy
+msgid "Randomly generated MAC address"
+msgstr "Id       Alamat MACs    Kualiti  Umur  RSSI"
+
+#: tmp/vmm-add-virtual-nic.glade.h:7
+#, fuzzy
+msgid "Specified MAC address:"
+msgstr "NUM       Alamat MAC"
+
+#: tmp/vmm-add-virtual-nic.glade.h:8
+msgid "mac-addr-random"
+msgstr "mac-addr-rawak"
+
+#: tmp/vmm-console.glade.h:1
+#, fuzzy
+msgid "<b>The console is currently unavailable</b>"
+msgstr "Pakej \"%s\" sedang dipasang."
+
+#: tmp/vmm-console.glade.h:2
+#, fuzzy
+msgid "Auth"
+msgstr "Kebenaran MAC"
+
+#: tmp/vmm-console.glade.h:3
+#, fuzzy
+msgid "Login"
+msgstr "_Logmasuk:"
+
+#: tmp/vmm-console.glade.h:4
+msgid "Password:"
+msgstr "Katalaluan:"
+
+#: tmp/vmm-console.glade.h:5 tmp/vmm-details.glade.h:34
+#, fuzzy
+msgid "Pause"
+msgstr "Sebentar"
+
+#: tmp/vmm-console.glade.h:6 tmp/vmm-details.glade.h:36
+msgid "Run"
+msgstr "Laksana"
+
+#: tmp/vmm-console.glade.h:7 tmp/vmm-details.glade.h:37
+#, fuzzy
+msgid "S_hutdown"
+msgstr "padamkan %s"
+
+#: tmp/vmm-console.glade.h:8
+msgid "Save this password in your keyring"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:48
-msgid ""
-"<b>Tip:</b> You may only increase the size of file-based storage; you can't "
-"decrease its size."
+#: tmp/vmm-console.glade.h:9
+#, fuzzy
+msgid "Screenshot"
+msgstr "Menyimpan Cekupanskrin"
+
+#: tmp/vmm-console.glade.h:11 tmp/vmm-details.glade.h:41
+#, fuzzy
+msgid "Toolbar"
+msgstr "Peralatan"
+
+#: tmp/vmm-console.glade.h:12
+#, fuzzy
+msgid "Unavailable"
+msgstr "Servis Tiada Buat Sementara"
+
+#: tmp/vmm-console.glade.h:13
+msgid "VNC"
+msgstr "VNC"
+
+#: tmp/vmm-console.glade.h:14
+#, fuzzy
+msgid "Virtual Machine Console"
+msgstr "Memuatkan sokongan console %s: "
+
+#: tmp/vmm-console.glade.h:15 tmp/vmm-details.glade.h:46
+#, fuzzy
+msgid "Virtual _Machine"
+msgstr "Nama mesin:"
+
+#: tmp/vmm-console.glade.h:16 tmp/vmm-details.glade.h:47
+msgid "_Destroy"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:49
-msgid ""
-"<b>Too Many Virtual CPUs</b>\n"
-"\n"
-"You have set this virtual machine to have more CPUs than the host system has "
-"physically. This may result in poor performance in the virtual machine."
+#: tmp/vmm-console.glade.h:17
+msgid "_Details"
+msgstr "_Terperinci"
+
+#: tmp/vmm-console.glade.h:18
+#, fuzzy
+msgid "_FullScreen"
+msgstr "Skrinpenuh"
+
+#: tmp/vmm-console.glade.h:19 tmp/vmm-details.glade.h:49
+#: tmp/vmm-manager.glade.h:21
+msgid "_Help"
+msgstr "_Bantuan"
+
+#: tmp/vmm-console.glade.h:20 tmp/vmm-details.glade.h:50
+#, fuzzy
+msgid "_Pause"
+msgstr "Sebentar"
+
+#: tmp/vmm-console.glade.h:21 tmp/vmm-details.glade.h:51
+msgid "_Run"
+msgstr "_Laksana"
+
+#: tmp/vmm-console.glade.h:22 tmp/vmm-details.glade.h:52
+msgid "_Save"
+msgstr "_Simpan"
+
+#: tmp/vmm-console.glade.h:23 tmp/vmm-details.glade.h:53
+msgid "_Serial Console"
+msgstr "Konsol Ber_siri"
+
+#: tmp/vmm-console.glade.h:24
+msgid "_Take Screenshot"
+msgstr "_Ambil Cekupanskrin"
+
+#: tmp/vmm-console.glade.h:25 tmp/vmm-details.glade.h:54
+#: tmp/vmm-manager.glade.h:22
+msgid "_View"
+msgstr "_Lihat"
+
+#: tmp/vmm-create.glade.h:1
+msgid " "
+msgstr " "
+
+#: tmp/vmm-create.glade.h:2
+msgid "/xen/demo.img"
+msgstr "/xen/demo.img"
+
+#: tmp/vmm-create.glade.h:3 tmp/vmm-details.glade.h:4
+msgid "2 GB"
+msgstr "2 GB"
+
+#: tmp/vmm-create.glade.h:4
+msgid "256\t"
+msgstr "256\t"
+
+#: tmp/vmm-create.glade.h:5
+msgid "400 MB"
+msgstr "400 MB"
+
+#: tmp/vmm-create.glade.h:6
+msgid "5\t"
+msgstr "5\t"
+
+#: tmp/vmm-create.glade.h:7
+msgid "5 GB"
+msgstr "5 GB"
+
+#: tmp/vmm-create.glade.h:8
+msgid "500 MB"
+msgstr "500 MB"
+
+#: tmp/vmm-create.glade.h:9
+msgid "<b>CPUs:</b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:52
+#: tmp/vmm-create.glade.h:10
+#, fuzzy
+msgid "<b>Disk image:</b>"
+msgstr "Pilih imej cakera pemandu"
+
+#: tmp/vmm-create.glade.h:11
+#, fuzzy
+msgid "<b>Disk size:</b>"
+msgstr "_Saiz (MB):"
+
+#: tmp/vmm-create.glade.h:12
+#, fuzzy
+msgid "<b>Example:</b> system1"
+msgstr "EXAMPLE.COM"
+
+#: tmp/vmm-create.glade.h:13
+#, fuzzy
+msgid "<b>Initial memory:</b>"
+msgstr "Memori Rendah"
+
+#: tmp/vmm-create.glade.h:14
+#, fuzzy
+msgid "<b>Installation source:</b>"
+msgstr "Pemacu Sumber:"
+
+#: tmp/vmm-create.glade.h:15
+#, fuzzy
+msgid "<b>Kickstart source:</b>"
+msgstr "Pemacu Sumber:"
+
+#: tmp/vmm-create.glade.h:16
+#, fuzzy
+msgid "<b>Machine name:</b>"
+msgstr "Nama mesin:"
+
+#: tmp/vmm-create.glade.h:17
+#, fuzzy
+msgid "<b>Maximum memory:</b>"
+msgstr "Memori Rendah"
+
+#: tmp/vmm-create.glade.h:18
+#, fuzzy
+msgid "<b>Memory:</b>"
+msgstr "Memori:"
+
+#: tmp/vmm-create.glade.h:19
+#, fuzzy
+msgid "<b>Memory</b> and <b>CPU</b> allocation"
+msgstr "Keperluan Memori dan Pemproses"
+
+#: tmp/vmm-create.glade.h:20
+msgid "<b>Operating System:</b>"
+msgstr ""
+
+#: tmp/vmm-create.glade.h:21
+msgid ""
+"<b>Storage</b> details - which disk partitions or files the system should use"
+msgstr ""
+
+#: tmp/vmm-create.glade.h:22
+#, fuzzy
+msgid "<b>Summary:</b>"
+msgstr "Ringkasan"
+
+#: tmp/vmm-create.glade.h:23
 #, fuzzy
 msgid "<b>Virtual CPUs:</b>"
 msgstr "Hos Maya"
 
-#: tmp/virt-manager.glade.h:53
+#: tmp/vmm-create.glade.h:24
 #, fuzzy
 msgid "<b>Virtualization method:</b>"
 msgstr "Kaedah Penyelamatan"
 
-#: tmp/virt-manager.glade.h:54
+#: tmp/vmm-create.glade.h:25
 #, fuzzy
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
 msgstr "Sebagai contoh: /dev/lp0"
 
-#: tmp/virt-manager.glade.h:55
+#: tmp/vmm-create.glade.h:26
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:56
+#: tmp/vmm-create.glade.h:27
 msgid ""
 "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:57
+#: tmp/vmm-create.glade.h:28
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:58
+#: tmp/vmm-create.glade.h:29
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:59
+#: tmp/vmm-create.glade.h:30
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
 "small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:60
+#: tmp/vmm-create.glade.h:31
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
 "tools you would on a physical system.</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:61
+#: tmp/vmm-create.glade.h:32
 msgid ""
 "<small><b>Warning:</b> If you do not allocate the entire disk at VM "
 "creation, space will be allocated as needed while the guest is running. If "
@@ -619,361 +722,182 @@ msgid ""
 "corruption on the guest.</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:62
+#: tmp/vmm-create.glade.h:33
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocate memory "
 "and CPU</span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:63
+#: tmp/vmm-create.glade.h:34
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
 "storage space</span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:64
+#: tmp/vmm-create.glade.h:35
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing a "
 "virtualization method</span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:65
+#: tmp/vmm-create.glade.h:36
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual system </span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:66
+#: tmp/vmm-create.glade.h:37
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation media</span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:67
+#: tmp/vmm-create.glade.h:38
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:68
+#: tmp/vmm-create.glade.h:39
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to begin "
 "installation</span>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:69
+#: tmp/vmm-create.glade.h:40
 #, fuzzy
 msgid "A <b>name</b> for your new virtual system"
 msgstr "Kemaskini baru terdapat untuk sistem anda"
 
-#: tmp/virt-manager.glade.h:70
-#, fuzzy
-msgid "Add Virtual NIC"
-msgstr "Hos maya default"
-
-#: tmp/virt-manager.glade.h:71
-msgid "Add virtual NIC with:"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:72
-msgid "Alert"
-msgstr "Amaran"
-
-#: tmp/virt-manager.glade.h:73
-msgid ""
-"All virtual machines\n"
-"Active virtual machines\n"
-"Inactive virtual machines"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:76
+#: tmp/vmm-create.glade.h:41
 msgid "Allocate entire virtual disk now?"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:77
-#, fuzzy
-msgid "Auth"
-msgstr "Kebenaran MAC"
-
-#: tmp/virt-manager.glade.h:78
-#, fuzzy
-msgid "Automatically open consoles:"
-msgstr "dulang terbuka"
-
-#: tmp/virt-manager.glade.h:79
+#: tmp/vmm-create.glade.h:42
 msgid "Browse..."
 msgstr "Lungsur..."
 
-#: tmp/virt-manager.glade.h:81
-#, fuzzy
-msgid "CPU usage:"
-msgstr "penggunaan: %s [pilihan]"
+#: tmp/vmm-create.glade.h:43
+msgid "CPU architecture:"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:82
+#: tmp/vmm-create.glade.h:44
 #, fuzzy
 msgid "CPU/memory"
 msgstr "Memori Rendah"
 
-#: tmp/virt-manager.glade.h:83
-#, fuzzy
-msgid "Change allocation:"
-msgstr "Tukar CDROM"
-
-#: tmp/virt-manager.glade.h:84
-#, fuzzy
-msgid "Co_nnect"
-msgstr "Pe_ngawal Domain Winbind"
-
-#: tmp/virt-manager.glade.h:85
+#: tmp/vmm-create.glade.h:45
 #, fuzzy
 msgid "Complete"
 msgstr "Selesai"
 
-#: tmp/virt-manager.glade.h:86
-#, fuzzy
-msgid "Copyright (C) 2006 Red Hat Inc."
-msgstr "Hakcipta (c) 2001-2003 Red Hat, Inc."
-
-#: tmp/virt-manager.glade.h:87
+#: tmp/vmm-create.glade.h:46
 #, fuzzy
 msgid "Create a new virtual system"
 msgstr "Cipta Volum Logikal Baru"
 
-#: tmp/virt-manager.glade.h:88
-#, fuzzy
-msgid "Current allocation:"
-msgstr "Masa Semasa:"
-
-#: tmp/virt-manager.glade.h:89
-#, fuzzy
-msgid "De_tails"
-msgstr "cookie.tjansen.de:0"
-
-#: tmp/virt-manager.glade.h:90
-#, fuzzy
-msgid "Delete machine"
-msgstr "Nama mesin:"
-
-#: tmp/virt-manager.glade.h:91
+#: tmp/vmm-create.glade.h:47 tmp/vmm-details.glade.h:21
 #, fuzzy
 msgid "Disk"
 msgstr "Ruang Cakera"
 
-#: tmp/virt-manager.glade.h:93
-#, fuzzy
-msgid "Disk usage:"
-msgstr "penggunaan: %s [pilihan]"
+#: tmp/vmm-create.glade.h:48
+msgid "Enable kernel / hardware acceleration"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:94
-#, fuzzy
-msgid "Domain ID"
-msgstr "ID SCSI"
-
-#: tmp/virt-manager.glade.h:95
+#: tmp/vmm-create.glade.h:49
 #, fuzzy
 msgid "FV install"
 msgstr "Tetingkap Pemasangan"
 
-#: tmp/virt-manager.glade.h:96
+#: tmp/vmm-create.glade.h:50
 msgid "F_ully Virtualized:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:97
+#: tmp/vmm-create.glade.h:51
 #, fuzzy
 msgid "File _Location:"
 msgstr "Lokasi Baru"
 
-#: tmp/virt-manager.glade.h:98
+#: tmp/vmm-create.glade.h:52
 #, fuzzy
 msgid "File _Size:"
 msgstr "Saiz fail: %d B"
 
-#: tmp/virt-manager.glade.h:99
-#, fuzzy
-msgid "Grab keyboard input:"
-msgstr "Kaedah masukan kebolehcapaian"
-
-#: tmp/virt-manager.glade.h:100
-msgid "Hardware"
-msgstr "Perkakasan"
-
-#: tmp/virt-manager.glade.h:101
-msgid "How many virtual CPUs should this machine be allocated?"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:102
-msgid "How much memory should this machine be allocated?"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:103
+#: tmp/vmm-create.glade.h:53
 #, fuzzy
 msgid "ISO _Location:"
 msgstr "Lokasi Baru"
 
-#: tmp/virt-manager.glade.h:104
+#: tmp/vmm-create.glade.h:54
 #, fuzzy
 msgid "Install Media _URL:"
 msgstr "Media Pemasangan Yang Diperlukan"
 
-#: tmp/virt-manager.glade.h:105
+#: tmp/vmm-create.glade.h:55
 msgid "Intro"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:106
+#: tmp/vmm-create.glade.h:56
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
 "systems."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:107
-#, fuzzy
-msgid "Keep CPU Settings"
-msgstr "Tetapan Rangkaian Lain-lain"
-
-#: tmp/virt-manager.glade.h:108
+#: tmp/vmm-create.glade.h:57
 #, fuzzy
 msgid "Kickstart U_RL:"
 msgstr "Ralat Kickstart"
 
-#: tmp/virt-manager.glade.h:109
+#: tmp/vmm-create.glade.h:58
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
 "Better performance than fully virtualized systems."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:110
+#: tmp/vmm-create.glade.h:59
 #, fuzzy
 msgid "Logical host CPUs:"
 msgstr "%s %s pemasangan pada hos %s"
 
-#: tmp/virt-manager.glade.h:111
-#, fuzzy
-msgid "Login"
-msgstr "_Logmasuk:"
-
-#: tmp/virt-manager.glade.h:112
+#: tmp/vmm-create.glade.h:60 tmp/vmm-details.glade.h:26
 msgid "MB"
 msgstr "MB"
 
-#: tmp/virt-manager.glade.h:113
-msgid ""
-"MB\n"
-"GB\n"
-"TB"
-msgstr ""
-"MB\n"
-"GB\n"
-"TB"
-
-#: tmp/virt-manager.glade.h:116
-#, fuzzy
-msgid "Machine details..."
-msgstr "Perincian bagi '%s'"
-
-#: tmp/virt-manager.glade.h:117
-#, fuzzy
-msgid "Maintain history of"
-msgstr "Buang Sejarah"
-
-#: tmp/virt-manager.glade.h:118
-#, fuzzy
-msgid "Maximum allocation:"
-msgstr "Volum Logikal Maksimum:"
-
-#: tmp/virt-manager.glade.h:119
-msgid "Memory"
-msgstr "Memori"
-
-#: tmp/virt-manager.glade.h:121
-#, fuzzy
-msgid "Memory usage:"
-msgstr "penggunaan: %s [pilihan]"
-
-#: tmp/virt-manager.glade.h:122
-#, fuzzy
-msgid "Modify CPU Settings"
-msgstr "Tetapan Rangkaian Lain-lain"
-
-#: tmp/virt-manager.glade.h:123
-#, fuzzy
-msgid "Modify File Storage"
-msgstr "Muat USB storan"
-
-#: tmp/virt-manager.glade.h:125
-msgid "Name:"
-msgstr "Nama:"
-
-#: tmp/virt-manager.glade.h:126
-msgid "Network"
-msgstr "Rangkaian"
-
-#: tmp/virt-manager.glade.h:128
-#, fuzzy
-msgid "Network usage:"
-msgstr "penggunaan: %s [pilihan]"
-
-#: tmp/virt-manager.glade.h:129
-msgid ""
-"Never\n"
-"For new domains\n"
-"For all domains"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:132
-msgid ""
-"Never\n"
-"When fullscreen\n"
-"On mouse over"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:135
-#, fuzzy
-msgid "New machine..."
-msgstr "Nama mesin:"
-
-#: tmp/virt-manager.glade.h:136
+#: tmp/vmm-create.glade.h:62
 #, fuzzy
 msgid "Normal Disk _Partition:"
 msgstr "Mempartition secara manual dengan Jurucipta _Cakera"
 
-#: tmp/virt-manager.glade.h:137
+#: tmp/vmm-create.glade.h:63
 #, fuzzy
-msgid "Open connection"
-msgstr "Sambungan Masatamat:"
+msgid "OS _Type:"
+msgstr "Jenis"
 
-#: tmp/virt-manager.glade.h:138
-#, fuzzy
-msgid "Open connection..."
-msgstr "Sambungan Masatamat:"
-
-#: tmp/virt-manager.glade.h:139
-msgid "Overview"
+#: tmp/vmm-create.glade.h:64
+msgid "OS _Variant:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:140
+#: tmp/vmm-create.glade.h:65
 msgid "PVinstall"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:141
+#: tmp/vmm-create.glade.h:66
 msgid "P_artition:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:142
-msgid "Password:"
-msgstr "Katalaluan:"
-
-#: tmp/virt-manager.glade.h:143
-#, fuzzy
-msgid "Pause"
-msgstr "Sebentar"
-
-#: tmp/virt-manager.glade.h:144
+#: tmp/vmm-create.glade.h:67
 msgid "Please choose a name for your virtual system:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:145
+#: tmp/vmm-create.glade.h:68
+msgid ""
+"Please choose the type of guest operating system you will be installing:"
+msgstr ""
+
+#: tmp/vmm-create.glade.h:69
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
 "maximum amount of memory the VM should be able to use, and optionally a "
@@ -981,25 +905,25 @@ msgid ""
 "cause out-of-memory errors in your host domain!"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:146
+#: tmp/vmm-create.glade.h:70
 msgid "Please enter the number of virtual CPUs this VM should start up with."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:147
+#: tmp/vmm-create.glade.h:71
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
 "system's operating system."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:148
+#: tmp/vmm-create.glade.h:72
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
 "system:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:149
+#: tmp/vmm-create.glade.h:73
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
@@ -1007,349 +931,518 @@ msgid ""
 "describes your system:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:150
-msgid "Please wait..."
-msgstr "Sila tunggu..."
-
-#: tmp/virt-manager.glade.h:151
-#, fuzzy
-msgid "Powered by libvirt"
-msgstr "Pakej                                  Diperlukan oleh\n"
-
-#: tmp/virt-manager.glade.h:152
+#: tmp/vmm-create.glade.h:74
 msgid ""
 "Press finish to create a new virtual machine with\n"
-"this configuration & display the virtual console."
+"this configuration."
 msgstr ""
 
-#: tmp/virt-manager.glade.h:154
-msgid "Processor"
-msgstr "Pemproses"
-
-#: tmp/virt-manager.glade.h:155
-#, fuzzy
-msgid "Randomly generated MAC address"
-msgstr "Id       Alamat MACs    Kualiti  Umur  RSSI"
-
-#: tmp/virt-manager.glade.h:156
-msgid "Restore a saved machine from a filesystem image"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:157
-#, fuzzy
-msgid "Restore saved machine..."
-msgstr "Alamat IP komputer:"
-
-#: tmp/virt-manager.glade.h:158
-msgid "Run"
-msgstr "Laksana"
-
-#: tmp/virt-manager.glade.h:159
-#, fuzzy
-msgid "S_hutdown"
-msgstr "padamkan %s"
-
-#: tmp/virt-manager.glade.h:160
-msgid "Save this password in your keyring"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:161
-#, fuzzy
-msgid "Saving VM Image"
-msgstr "Path imej boot:        %s"
-
-#: tmp/virt-manager.glade.h:162
-#, fuzzy
-msgid "Screenshot"
-msgstr "Menyimpan Cekupanskrin"
-
-#: tmp/virt-manager.glade.h:163
-#, fuzzy
-msgid "Shut down"
-msgstr "Matikan"
-
-#: tmp/virt-manager.glade.h:165
+#: tmp/vmm-create.glade.h:76
 #, fuzzy
 msgid "Simple F_ile:"
 msgstr "Pengurus tetingkap ringkas"
 
-#: tmp/virt-manager.glade.h:166
-#, fuzzy
-msgid "Specified MAC address:"
-msgstr "NUM       Alamat MAC"
-
-#: tmp/virt-manager.glade.h:168
-msgid "Status:"
-msgstr "Status:"
-
-#: tmp/virt-manager.glade.h:169
+#: tmp/vmm-create.glade.h:77
 #, fuzzy
 msgid "System _Name:"
 msgstr "Sistem Nama Domain"
 
-#: tmp/virt-manager.glade.h:170
+#: tmp/vmm-create.glade.h:78
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:171
+#: tmp/vmm-create.glade.h:79
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
 "create, such as:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:172
-#, fuzzy
-msgid "Toolbar"
-msgstr "Peralatan"
-
-#: tmp/virt-manager.glade.h:173
-msgid "Total CPUs on host machine:"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:174
+#: tmp/vmm-create.glade.h:80 tmp/vmm-details.glade.h:43
 msgid "Total memory on host machine:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:175
+#: tmp/vmm-create.glade.h:81
 msgid "Type"
 msgstr "Jenis"
 
-#: tmp/virt-manager.glade.h:176
-msgid "UUID:"
-msgstr "UUID:"
-
-#: tmp/virt-manager.glade.h:177
-#, fuzzy
-msgid "Unavailable"
-msgstr "Servis Tiada Buat Sementara"
-
-#: tmp/virt-manager.glade.h:178
-#, fuzzy
-msgid "Update status every"
-msgstr "Kemaskini status servis"
-
-#: tmp/virt-manager.glade.h:179
+#: tmp/vmm-create.glade.h:82
 #, fuzzy
 msgid "VM _Max Memory (MB):"
 msgstr "Saiz _memori tersendiri"
 
-#: tmp/virt-manager.glade.h:180
+#: tmp/vmm-create.glade.h:83
 #, fuzzy
 msgid "VM _Startup Memory (MB):"
 msgstr "Saiz _memori tersendiri"
 
-#: tmp/virt-manager.glade.h:181
-msgid "VNC"
-msgstr "VNC"
-
-#: tmp/virt-manager.glade.h:182
-#, fuzzy
-msgid "Virtual CPUs"
-msgstr "Hos Maya"
-
-#: tmp/virt-manager.glade.h:183
-#, fuzzy
-msgid "Virtual Machine Console"
-msgstr "Memuatkan sokongan console %s: "
-
-#: tmp/virt-manager.glade.h:184
-#, fuzzy
-msgid "Virtual Machine Details"
-msgstr "Perincian Kumpulan Pakej"
-
-#: tmp/virt-manager.glade.h:185
-#, fuzzy
-msgid "Virtual Machine Manager"
-msgstr "Memulakan pengurus paparan:"
-
-#: tmp/virt-manager.glade.h:186
-msgid "Virtual Machine Manager Preferences"
+#: tmp/vmm-create.glade.h:84
+msgid "VMS"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:187
-#, fuzzy
-msgid "Virtual _Machine"
-msgstr "Nama mesin:"
-
-#: tmp/virt-manager.glade.h:188
+#: tmp/vmm-create.glade.h:85
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:189
+#: tmp/vmm-create.glade.h:86
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:190
+#: tmp/vmm-create.glade.h:87
 msgid "_Browse..."
 msgstr "_Layari..."
 
-#: tmp/virt-manager.glade.h:191
+#: tmp/vmm-create.glade.h:88
 #, fuzzy
 msgid "_CD-ROM or DVD:"
 msgstr "Utiliti pelekapan CD-ROM."
 
-#: tmp/virt-manager.glade.h:192
-msgid "_Destroy"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:193
-msgid "_Details"
-msgstr "_Terperinci"
-
-#: tmp/virt-manager.glade.h:194
-#, fuzzy
-msgid "_Edit"
-msgstr "_Edit"
-
-#: tmp/virt-manager.glade.h:195
-msgid "_File"
-msgstr "_Fail"
-
-#: tmp/virt-manager.glade.h:196
+#: tmp/vmm-create.glade.h:89
 msgid "_Finish"
 msgstr "_Tamat"
 
-#: tmp/virt-manager.glade.h:197
-#, fuzzy
-msgid "_FullScreen"
-msgstr "Skrinpenuh"
-
-#: tmp/virt-manager.glade.h:198
-#, fuzzy
-msgid "_Graphical Console"
-msgstr "Konsol Bersiri"
-
-#: tmp/virt-manager.glade.h:199
-msgid "_Help"
-msgstr "_Bantuan"
-
-#: tmp/virt-manager.glade.h:200
-#, fuzzy
-msgid "_Host:"
-msgstr "Hos"
-
-#: tmp/virt-manager.glade.h:201
+#: tmp/vmm-create.glade.h:90
 #, fuzzy
 msgid "_ISO Image Location:"
 msgstr "image-file.iso"
 
-#: tmp/virt-manager.glade.h:202
-#, fuzzy
-msgid "_Local Xen host"
-msgstr "%s %s pemasangan pada hos %s"
-
-#: tmp/virt-manager.glade.h:203
-msgid "_Mount Point (on virtual system):"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:204
-#, fuzzy
-msgid "_Other hypervisor"
-msgstr "Port lain"
-
-#: tmp/virt-manager.glade.h:205
+#: tmp/vmm-create.glade.h:91
 msgid "_Paravirtualized:"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:206
+#: tmp/vmm-create.glade.h:92
 #, fuzzy
 msgid "_Path to install media:"
 msgstr "tidak dapat memasang pakej %s"
 
-#: tmp/virt-manager.glade.h:207
-#, fuzzy
-msgid "_Pause"
-msgstr "Sebentar"
+#: tmp/vmm-create.glade.h:93
+msgid "_VCPUs:"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:208
+#: tmp/vmm-create.glade.h:94
+msgid "demo"
+msgstr "demo"
+
+#: tmp/vmm-create.glade.h:95
+msgid "http://"
+msgstr "http://"
+
+#: tmp/vmm-create.glade.h:96
+msgid ""
+"i686\n"
+"x86_64\n"
+"ppc\n"
+"sparc\n"
+"mips\n"
+"mipsel"
+msgstr ""
+
+#: tmp/vmm-create.glade.h:102
+msgid "para"
+msgstr "para"
+
+#: tmp/vmm-details.glade.h:2
+#, no-c-format
+msgid "18%"
+msgstr "18%"
+
+#: tmp/vmm-details.glade.h:3
+msgid "2"
+msgstr "2"
+
+#: tmp/vmm-details.glade.h:5
+#, fuzzy
+msgid "20 bits/sec"
+msgstr "256 Warna (8 Bit)"
+
+#: tmp/vmm-details.glade.h:6
+msgid "200 MB"
+msgstr "200 MB"
+
+#: tmp/vmm-details.glade.h:7
+#, fuzzy
+msgid "30 MB of 128 MB"
+msgstr "Ruang Swap (MB)"
+
+#: tmp/vmm-details.glade.h:8
+msgid "8"
+msgstr "8"
+
+#: tmp/vmm-details.glade.h:9
+#, fuzzy
+msgid "80 MB of 1 GB"
+msgstr "Ruang Swap (MB)"
+
+#: tmp/vmm-details.glade.h:10
+#, fuzzy
+msgid "<b>Basic details</b>"
+msgstr "Perincian bagi '%s'"
+
+#: tmp/vmm-details.glade.h:11
+msgid "<b>CPUs</b>"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:12
+#, fuzzy
+msgid "<b>Memory</b>"
+msgstr "Memori:"
+
+#: tmp/vmm-details.glade.h:13
+#, fuzzy
+msgid "<b>Network</b>"
+msgstr " rangkaian"
+
+#: tmp/vmm-details.glade.h:14
+#, fuzzy
+msgid "<b>Performance</b>"
+msgstr "Prestasi"
+
+#: tmp/vmm-details.glade.h:15
+#, fuzzy
+msgid "<b>Storage</b>"
+msgstr " storan"
+
+#: tmp/vmm-details.glade.h:16
+msgid ""
+"<b>Tip:</b> File location paths are as seen from the physical host. Mount "
+"points are as seen from the virtual machine."
+msgstr ""
+
+#: tmp/vmm-details.glade.h:17
+msgid ""
+"<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
+"than (or equal to) the number of physical CPUs on the host system."
+msgstr ""
+
+#: tmp/vmm-details.glade.h:18
+#, fuzzy
+msgid "CPU usage:"
+msgstr "penggunaan: %s [pilihan]"
+
+#: tmp/vmm-details.glade.h:19
+#, fuzzy
+msgid "Change allocation:"
+msgstr "Tukar CDROM"
+
+#: tmp/vmm-details.glade.h:20
+#, fuzzy
+msgid "Current allocation:"
+msgstr "Masa Semasa:"
+
+#: tmp/vmm-details.glade.h:22
+#, fuzzy
+msgid "Disk usage:"
+msgstr "penggunaan: %s [pilihan]"
+
+#: tmp/vmm-details.glade.h:23
+msgid "Hardware"
+msgstr "Perkakasan"
+
+#: tmp/vmm-details.glade.h:24
+msgid "How many virtual CPUs should this machine be allocated?"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:25
+msgid "How much memory should this machine be allocated?"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:27
+#, fuzzy
+msgid "Maximum allocation:"
+msgstr "Volum Logikal Maksimum:"
+
+#: tmp/vmm-details.glade.h:28
+msgid "Memory"
+msgstr "Memori"
+
+#: tmp/vmm-details.glade.h:29
+#, fuzzy
+msgid "Memory usage:"
+msgstr "penggunaan: %s [pilihan]"
+
+#: tmp/vmm-details.glade.h:30
+msgid "Name:"
+msgstr "Nama:"
+
+#: tmp/vmm-details.glade.h:31
+msgid "Network"
+msgstr "Rangkaian"
+
+#: tmp/vmm-details.glade.h:32
+#, fuzzy
+msgid "Network usage:"
+msgstr "penggunaan: %s [pilihan]"
+
+#: tmp/vmm-details.glade.h:33
+msgid "Overview"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:35
+msgid "Processor"
+msgstr "Pemproses"
+
+#: tmp/vmm-details.glade.h:38
+#, fuzzy
+msgid "Shut down"
+msgstr "Matikan"
+
+#: tmp/vmm-details.glade.h:40
+msgid "Status:"
+msgstr "Status:"
+
+#: tmp/vmm-details.glade.h:42
+msgid "Total CPUs on host machine:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:44
+msgid "UUID:"
+msgstr "UUID:"
+
+#: tmp/vmm-details.glade.h:45
+#, fuzzy
+msgid "Virtual Machine Details"
+msgstr "Perincian Kumpulan Pakej"
+
+#: tmp/vmm-details.glade.h:48
+#, fuzzy
+msgid "_Graphical Console"
+msgstr "Konsol Bersiri"
+
+#: tmp/vmm-manager.glade.h:1
+msgid ""
+"All virtual machines\n"
+"Active virtual machines\n"
+"Inactive virtual machines"
+msgstr ""
+
+#: tmp/vmm-manager.glade.h:5
+#, fuzzy
+msgid "De_tails"
+msgstr "cookie.tjansen.de:0"
+
+#: tmp/vmm-manager.glade.h:6
+#, fuzzy
+msgid "Delete machine"
+msgstr "Nama mesin:"
+
+#: tmp/vmm-manager.glade.h:8
+#, fuzzy
+msgid "Domain ID"
+msgstr "ID SCSI"
+
+#: tmp/vmm-manager.glade.h:9
+#, fuzzy
+msgid "Machine details..."
+msgstr "Perincian bagi '%s'"
+
+#: tmp/vmm-manager.glade.h:12
+#, fuzzy
+msgid "New machine..."
+msgstr "Nama mesin:"
+
+#: tmp/vmm-manager.glade.h:13
+#, fuzzy
+msgid "Open connection..."
+msgstr "Sambungan Masatamat:"
+
+#: tmp/vmm-manager.glade.h:14
+msgid "Restore a saved machine from a filesystem image"
+msgstr ""
+
+#: tmp/vmm-manager.glade.h:15
+#, fuzzy
+msgid "Restore saved machine..."
+msgstr "Alamat IP komputer:"
+
+#: tmp/vmm-manager.glade.h:17
+#, fuzzy
+msgid "Virtual CPUs"
+msgstr "Hos Maya"
+
+#: tmp/vmm-manager.glade.h:19
+#, fuzzy
+msgid "_Edit"
+msgstr "_Edit"
+
+#: tmp/vmm-manager.glade.h:20
+msgid "_File"
+msgstr "_Fail"
+
+#: tmp/vmm-manager.glade.h:23
+msgid "_View:"
+msgstr "_Lihat:"
+
+#: tmp/vmm-modify-file-storage.glade.h:1
+#, fuzzy
+msgid " free"
+msgstr "Bebas"
+
+#: tmp/vmm-modify-file-storage.glade.h:2
+msgid " of "
+msgstr ""
+
+#: tmp/vmm-modify-file-storage.glade.h:3
+msgid "/tmp"
+msgstr "/tmp"
+
+#: tmp/vmm-modify-file-storage.glade.h:4
+msgid "10 TB"
+msgstr "10 TB"
+
+#: tmp/vmm-modify-file-storage.glade.h:5
+msgid ""
+"<b>Tip:</b> You may only increase the size of file-based storage; you can't "
+"decrease its size."
+msgstr ""
+
+#: tmp/vmm-modify-file-storage.glade.h:6
+msgid ""
+"MB\n"
+"GB\n"
+"TB"
+msgstr ""
+"MB\n"
+"GB\n"
+"TB"
+
+#: tmp/vmm-modify-file-storage.glade.h:9
+#, fuzzy
+msgid "Modify File Storage"
+msgstr "Muat USB storan"
+
+#: tmp/vmm-modify-file-storage.glade.h:10
+msgid "_Mount Point (on virtual system):"
+msgstr ""
+
+#: tmp/vmm-modify-file-storage.glade.h:11
+msgid "_Size:"
+msgstr "_Saiz:"
+
+#: tmp/vmm-open-connection.glade.h:1
+#, fuzzy
+msgid "Co_nnect"
+msgstr "Pe_ngawal Domain Winbind"
+
+#: tmp/vmm-open-connection.glade.h:2
+#, fuzzy
+msgid "Hypervisor:"
+msgstr "Port lain"
+
+#: tmp/vmm-open-connection.glade.h:3
+#, fuzzy
+msgid "Open connection"
+msgstr "Sambungan Masatamat:"
+
+#: tmp/vmm-open-connection.glade.h:4
+msgid ""
+"Xen\n"
+"QEMU"
+msgstr ""
+
+#: tmp/vmm-open-connection.glade.h:6
+#, fuzzy
+msgid "_Host:"
+msgstr "Hos"
+
+#: tmp/vmm-open-connection.glade.h:7
+#, fuzzy
+msgid "_Local host"
+msgstr "%s %s pemasangan pada hos %s"
+
+#: tmp/vmm-open-connection.glade.h:8
 msgid "_Port:"
 msgstr "_Port:"
 
-#: tmp/virt-manager.glade.h:209
+#: tmp/vmm-open-connection.glade.h:9
 #, fuzzy
 msgid "_Read only connection"
 msgstr "Mod lihat (baca sahaja)"
 
-#: tmp/virt-manager.glade.h:210
-msgid "_Remote Xen host"
+#: tmp/vmm-open-connection.glade.h:10
+#, fuzzy
+msgid "_Remote host"
 msgstr "_Hos Xen jauh"
 
-#: tmp/virt-manager.glade.h:211
-msgid "_Run"
-msgstr "_Laksana"
+#: tmp/vmm-preferences.glade.h:1
+#, fuzzy
+msgid "<b>Consoles</b>"
+msgstr " storan"
 
-#: tmp/virt-manager.glade.h:212
-msgid "_Save"
-msgstr "_Simpan"
+#: tmp/vmm-preferences.glade.h:2
+#, fuzzy
+msgid "<b>Status monitoring</b>"
+msgstr "Status Gugusan"
 
-#: tmp/virt-manager.glade.h:213
-msgid "_Serial Console"
-msgstr "Konsol Ber_siri"
+#: tmp/vmm-preferences.glade.h:3
+#, fuzzy
+msgid "Automatically open consoles:"
+msgstr "dulang terbuka"
 
-#: tmp/virt-manager.glade.h:214
-msgid "_Size:"
-msgstr "_Saiz:"
+#: tmp/vmm-preferences.glade.h:4
+#, fuzzy
+msgid "Grab keyboard input:"
+msgstr "Kaedah masukan kebolehcapaian"
 
-#: tmp/virt-manager.glade.h:215
-msgid "_Take Screenshot"
-msgstr "_Ambil Cekupanskrin"
+#: tmp/vmm-preferences.glade.h:5
+#, fuzzy
+msgid "Maintain history of"
+msgstr "Buang Sejarah"
 
-#: tmp/virt-manager.glade.h:216
-msgid "_URI:"
-msgstr "_URI:"
-
-#: tmp/virt-manager.glade.h:217
-msgid "_VCPUs:"
+#: tmp/vmm-preferences.glade.h:6
+msgid ""
+"Never\n"
+"For new domains\n"
+"For all domains"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:218
-msgid "_View"
-msgstr "_Lihat"
-
-#: tmp/virt-manager.glade.h:219
-msgid "_View:"
-msgstr "_Lihat:"
-
-#: tmp/virt-manager.glade.h:220
-msgid "demo"
-msgstr "demo"
-
-#: tmp/virt-manager.glade.h:221
-msgid "http://"
-msgstr "http://"
-
-#: tmp/virt-manager.glade.h:222
-msgid "http://virt-manager.et.redhat.com/"
+#: tmp/vmm-preferences.glade.h:9
+msgid ""
+"Never\n"
+"When fullscreen\n"
+"On mouse over"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:223
-msgid "mac-addr-random"
-msgstr "mac-addr-rawak"
+#: tmp/vmm-preferences.glade.h:12
+msgid "Preferences"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:224
-msgid "para"
-msgstr "para"
+#: tmp/vmm-preferences.glade.h:13
+#, fuzzy
+msgid "Update status every"
+msgstr "Kemaskini status servis"
 
-#: tmp/virt-manager.glade.h:225
+#: tmp/vmm-preferences.glade.h:14
 msgid "samples"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:226
+#: tmp/vmm-preferences.glade.h:15
 msgid "seconds"
 msgstr "saat"
 
-#: tmp/virt-manager.glade.h:228
-msgid "translator-credits"
-msgstr "Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>, 2004, 2005, 2006"
+#~ msgid "Alert"
+#~ msgstr "Amaran"
 
-#: tmp/virt-manager.glade.h:229
-msgid "virtual CPU alert"
-msgstr "amaran CPU virtual"
+#, fuzzy
+#~ msgid "Keep CPU Settings"
+#~ msgstr "Tetapan Rangkaian Lain-lain"
+
+#, fuzzy
+#~ msgid "Modify CPU Settings"
+#~ msgstr "Tetapan Rangkaian Lain-lain"
+
+#, fuzzy
+#~ msgid "Saving VM Image"
+#~ msgstr "Path imej boot:        %s"
+
+#~ msgid "_URI:"
+#~ msgstr "_URI:"
+
+#~ msgid "virtual CPU alert"
+#~ msgstr "amaran CPU virtual"
 
 #~ msgid "_Shutdown"
 #~ msgstr "_Matikan"

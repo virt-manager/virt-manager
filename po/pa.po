@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-22 18:10-0500\n"
+"POT-Creation-Date: 2007-03-20 12:41-0400\n"
 "PO-Revision-Date: 2007-01-04 23:37+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
@@ -22,11 +22,45 @@ msgstr ""
 msgid "Unable to initialize GTK: "
 msgstr "GTK ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਅਸਫ਼ਲ ਹੈ:"
 
-#: ../../src/virtManager/console.py:256
+#: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:2
+#, fuzzy
+msgid "Please wait a few moments..."
+msgstr "ਉਡੀਕੋ ਜੀ..."
+
+#: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:1
+msgid "Operation in progress"
+msgstr ""
+
+#: ../../src/virtManager/asyncjob.py:72 ../../src/virtManager/asyncjob.py:80
+#: tmp/vmm-progress.glade.h:3
+#, fuzzy
+msgid "Processing..."
+msgstr "ਪਰੋਸੈਸਰ"
+
+#: ../../src/virtManager/asyncjob.py:90
+#, fuzzy
+msgid "Completed"
+msgstr "ਮੁਕੰਮਲ"
+
+#: ../../src/virtManager/console.py:130
+msgid "Pointer grabbed"
+msgstr ""
+
+#: ../../src/virtManager/console.py:131
+msgid ""
+"The mouse pointer has been restricted to the virtual console window. To "
+"release the pointer press the key pair Ctrl+Alt"
+msgstr ""
+
+#: ../../src/virtManager/console.py:140
+msgid "Press Ctrl+Alt to release pointer."
+msgstr ""
+
+#: ../../src/virtManager/console.py:300
 msgid "Save Virtual Machine Screenshot"
 msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਸਕਰੀਨ-ਸ਼ਾਟ ਸੰਭਾਲੋ"
 
-#: ../../src/virtManager/console.py:289
+#: ../../src/virtManager/console.py:333
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -35,80 +69,107 @@ msgstr ""
 "ਸਕਰੀਨ-ਸ਼ਾਟ ਨੂੰ ਸੰਭਾਲਿਆ ਗਿਆ ਹੈ:\n"
 "%s"
 
-#: ../../src/virtManager/console.py:290
+#: ../../src/virtManager/console.py:334
 msgid "Screenshot saved"
 msgstr "ਸਕਰੀਨਸ਼ਾਟ ਸੰਭਲਿਆ"
 
-#: ../../src/virtManager/console.py:405
+#: ../../src/virtManager/console.py:449
 msgid "paused"
 msgstr "ਵਿਰਾਮ ਹੈ"
 
-#: ../../src/virtManager/create.py:348
+#: ../../src/virtManager/create.py:395
 msgid "Paravirtualized"
 msgstr "ਪੈਰਾ-ਵੁਰਚੁਲਾਈਜੇਸ਼ਨ"
 
-#: ../../src/virtManager/create.py:350
+#: ../../src/virtManager/create.py:399
 msgid "Fully virtualized"
 msgstr "ਪੂਰੀ ਵੁਰਚੁਲਾਈਜੇਸ਼ਨ"
 
-#: ../../src/virtManager/create.py:381
+#: ../../src/virtManager/create.py:435
 msgid "Invalid FV media address"
 msgstr "ਗਲਤ FV ਮੀਡਿਆ ਸਿਰਨਾਵਾਂ"
 
-#: ../../src/virtManager/create.py:387
+#: ../../src/virtManager/create.py:440
+#, fuzzy
+msgid "Invalid FV OS Type"
+msgstr "ਗਲਤ FV ਮੀਡਿਆ ਸਿਰਨਾਵਾਂ"
+
+#: ../../src/virtManager/create.py:445
+#, fuzzy
+msgid "Invalid FV OS Variant"
+msgstr "ਗਲਤ FV ਮੀਡਿਆ ਸਿਰਨਾਵਾਂ"
+
+#: ../../src/virtManager/create.py:452
 msgid "Invalid PV media address"
 msgstr "ਗਲਤ PV ਮੀਡਿਆ ਸਿਰਨਾਵਾਂ"
 
-#: ../../src/virtManager/create.py:397
+#: ../../src/virtManager/create.py:462
 msgid "Invalid system name"
 msgstr "ਗਲਤ ਸਿਸਟਮ ਨਾਂ"
 
-#: ../../src/virtManager/create.py:404
+#: ../../src/virtManager/create.py:469 ../../src/virtManager/create.py:475
 msgid "Invalid memory setting"
 msgstr "ਗਲਤ ਮੈਮੋਰੀ ਸੈਟਿੰਗ"
 
-#: ../../src/virtManager/create.py:426
+#: ../../src/virtManager/create.py:497
 msgid "Invalid storage address"
 msgstr "ਗਲਤ ਸਟੋਰੇਜ਼ ਸਿਰਨਾਵਾਂ"
 
-#: ../../src/virtManager/create.py:460
+#: ../../src/virtManager/create.py:534
 msgid "Creating Virtual Machine"
 msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਬਣਾਈ ਜਾ ਰਹੀ ਹੈ"
 
-#: ../../src/virtManager/create.py:465
+#: ../../src/virtManager/create.py:535
+msgid "The virtual machine is now being created. "
+msgstr ""
+
+#: ../../src/virtManager/create.py:536
+msgid "Allocation of disk storage and retrieval of "
+msgstr ""
+
+#: ../../src/virtManager/create.py:537
+msgid "the installation images may a few minutes "
+msgstr ""
+
+#: ../../src/virtManager/create.py:538
+#, fuzzy
+msgid "to complete."
+msgstr "ਮੁਕੰਮਲ"
+
+#: ../../src/virtManager/create.py:543
 msgid "Guest Install Error"
 msgstr "ਗੈਸਟ ਇੰਸਟਾਲ ਗਲਤੀ"
 
-#: ../../src/virtManager/create.py:503
+#: ../../src/virtManager/create.py:581
 msgid "Locate ISO Image"
 msgstr "ISO ਪ੍ਰਤੀਬਿੰਬ ਲੱਭੋ"
 
-#: ../../src/virtManager/create.py:532
+#: ../../src/virtManager/create.py:610
 msgid "Locate Storage Partition"
 msgstr "ਸਟੋਰੇਜ਼ ਭਾਗ ਲੱਭੋ"
 
-#: ../../src/virtManager/create.py:538
+#: ../../src/virtManager/create.py:616
 msgid "Locate or Create New Storage File"
 msgstr "ਸਟੋਰੇਜ਼ ਫਾਇਲ ਦੱਸੋ ਜਾਂ ਨਵੀਂ ਬਣਾਓ"
 
-#: ../../src/virtManager/create.py:604 ../../src/virtManager/create.py:608
+#: ../../src/virtManager/create.py:682 ../../src/virtManager/create.py:686
 msgid "Invalid System Name"
 msgstr "ਗਲਤ ਸਿਸਟਮ ਨਾਂ"
 
-#: ../../src/virtManager/create.py:605
+#: ../../src/virtManager/create.py:683
 #, fuzzy
 msgid "System name must be non-blank and less than 50 characters"
 msgstr "ਸਿਸਟਮ ਨਾਂ ਦਿੱਤਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ, 50 ਅੱਖਰਾਂ ਤੋਂ ਘੱਟ ਅਤੇ ਬਿਨਾਂ ਕਿਸੇ ਫਾਸਲੇ ਦੇ"
 
-#: ../../src/virtManager/create.py:609
+#: ../../src/virtManager/create.py:687
 msgid "System name may contain alphanumeric and '_' characters only"
 msgstr ""
 
-#: ../../src/virtManager/create.py:615
+#: ../../src/virtManager/create.py:693
 msgid "Hardware Support Required"
 msgstr "ਜੰਤਰ ਸਹਿਯੋਗ ਲੋੜੀਦਾ ਹੈ"
 
-#: ../../src/virtManager/create.py:616
+#: ../../src/virtManager/create.py:694
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
@@ -116,96 +177,97 @@ msgstr ""
 "ਤੁਹਾਡਾ ਹਾਰਡਵੇਅਰ ਪੂਰੀ ਵੁਰਚੁਅਲ ਨੂੰ ਸਹਿਯੋਗ ਨਹੀਂ ਕਰਦਾ ਜਾਪਦਾ ਹੈ। ਇਸ ਹਾਰਡਵੇਅਰ ਉੱਤੇ ਸਿਰਫ਼ ਪੈਰਾ-"
 "ਵੁਰਚੁਅਲ ਗੈਸਟ ਹੀ ਉਪਲੱਬਧ ਹੋਣਗੇ।"
 
-#: ../../src/virtManager/create.py:623
+#: ../../src/virtManager/create.py:701
 msgid "ISO Path Required"
 msgstr "ISO ਮਾਰਗ ਲੋੜੀਦਾ ਹੈ"
 
-#: ../../src/virtManager/create.py:624
+#: ../../src/virtManager/create.py:702
 msgid "You must specify an ISO location for the guest installation"
 msgstr "ਤੁਹਾਨੂੰ ਗੈਸਟ ਇੰਸਟਾਲੇਸ਼ਨ ਲਈ ਇੱਕ ISO ਟਿਕਾਣਾ ਦੇਣਾ ਪਵੇਗਾ।"
 
-#: ../../src/virtManager/create.py:627
+#: ../../src/virtManager/create.py:705
 msgid "ISO Path Not Found"
 msgstr "ISO ਮਾਰਗ ਨਹੀਂ ਮਿਲਿਆ ਹੈ"
 
-#: ../../src/virtManager/create.py:628
+#: ../../src/virtManager/create.py:706
 msgid "You must specify a valid path to the ISO image for guest installation"
 msgstr "ਤੁਹਾਨੂੰ ਗੈਸਟ ਇੰਸਟਾਲੇਸ਼ਨ ਲਈ ISO ਪ੍ਰਤੀਬਿੰਬ ਲਈ ਇੱਕ ਠੀਕ ਮਾਰਗ ਦੇਣਾ ਪਵੇਗਾ।"
 
-#: ../../src/virtManager/create.py:633
+#: ../../src/virtManager/create.py:711
 msgid "Install media required"
 msgstr "ਇੰਸਟਾਲ ਮੀਡਿਆ ਲੋੜੀਦਾ ਹੈ"
 
-#: ../../src/virtManager/create.py:634
+#: ../../src/virtManager/create.py:712
 msgid "You must select the CDROM install media for guest installation"
 msgstr "ਤੁਹਾਨੂੰ ਗੈੱਸਟ ਇੰਸਟਾਲੇਸ਼ਨ ਲਈ CDROM ਇੰਸਟਾਲ ਮੀਡਿਆ ਦੀ ਚੋਣ ਕਰਨੀ ਪਵੇਗੀ"
 
-#: ../../src/virtManager/create.py:639
+#: ../../src/virtManager/create.py:717
 msgid "URL Required"
 msgstr "URL ਲੋੜੀਦਾ"
 
-#: ../../src/virtManager/create.py:640
+#: ../../src/virtManager/create.py:718
 msgid "You must specify a URL for the install image for the guest install"
 msgstr "ਤੁਹਾਨੂੰ ਗੈਸਟ ਇੰਸਟਾਲ ਕਰਨ ਲਈ ਇੰਸਟਾਲ ਪ੍ਰਤੀਬਿੰਬ ਲਈ ਇੱਕ URL ਦੇਣਾ ਪਵੇਗਾ"
 
-#: ../../src/virtManager/create.py:646
+#: ../../src/virtManager/create.py:724
 msgid "Storage Address Required"
 msgstr "ਸਟੋਰੇਜ਼ ਸਿਰਨਾਵਾਂ ਲੋੜੀਦਾ ਹੈ"
 
-#: ../../src/virtManager/create.py:647
+#: ../../src/virtManager/create.py:725
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
 msgstr "ਤੁਹਾਨੂੰ ਗੈਸਟ ਇੰਸਟਾਲ ਕਰਨ ਲਈ ਸਟੋਰੇਜ਼ ਵਾਸਤੇ ਇੱਕ ਭਾਗ ਜਾਂ ਇੱਕ ਫਾਇਲ ਦੇਣੀ ਪਵੇਗੀ।"
 
-#: ../../src/virtManager/create.py:652
+#: ../../src/virtManager/create.py:730
 #, fuzzy
 msgid "Storage Address Is Directory"
 msgstr "ਸਟੋਰੇਜ਼ ਸਿਰਨਾਵਾਂ ਲੋੜੀਦਾ ਹੈ"
 
-#: ../../src/virtManager/create.py:653
+#: ../../src/virtManager/create.py:731
 msgid ""
 "You chose 'Simple File' storage for your storage method, but chose a "
 "directory instead of a file. Please enter a new filename or choose an "
 "existing file."
 msgstr ""
 
-#: ../../src/virtManager/create.py:698 ../../src/virtManager/create.py:733
+#: ../../src/virtManager/create.py:776 ../../src/virtManager/create.py:811
 msgid "No media present"
 msgstr "ਕੋਈ ਮੀਡਿਆ ਮੌਜੂਦ ਨਹੀਂ"
 
-#: ../../src/virtManager/details.py:411
+#: ../../src/virtManager/details.py:419
 msgid "Destination"
 msgstr "ਟਿਕਾਣਾ"
 
-#: ../../src/virtManager/details.py:450
+#: ../../src/virtManager/details.py:458
 msgid "MAC address"
 msgstr "MAC ਸਿਰਨਾਵਾਂ"
 
-#: ../../src/virtManager/domain.py:363
+#: ../../src/virtManager/domain.py:364
 msgid "Running"
 msgstr "ਚੱਲ ਰਿਹਾ ਹੈ"
 
-#: ../../src/virtManager/domain.py:365
+#: ../../src/virtManager/domain.py:366
 msgid "Paused"
 msgstr "ਵਿਰਾਮ ਹੈ"
 
-#: ../../src/virtManager/domain.py:367 tmp/virt-manager.glade.h:164
+#: ../../src/virtManager/domain.py:368 tmp/vmm-console.glade.h:10
+#: tmp/vmm-details.glade.h:39
 msgid "Shutdown"
 msgstr "ਬੰਦ ਹੈ"
 
-#: ../../src/virtManager/domain.py:369
+#: ../../src/virtManager/domain.py:370
 msgid "Shutoff"
 msgstr "ਬੰਦ ਕਰੋ"
 
-#: ../../src/virtManager/domain.py:371
+#: ../../src/virtManager/domain.py:372
 msgid "Crashed"
 msgstr "ਨਸ਼ਟ ਹੋਇਆ"
 
-#: ../../src/virtManager/domain.py:373
+#: ../../src/virtManager/domain.py:374
 msgid "Unknown status code"
 msgstr "ਅਣਜਾਣ ਹਾਲਤ ਕੋਡ"
 
-#: ../../src/virtManager/engine.py:74
+#: ../../src/virtManager/engine.py:75
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
@@ -213,93 +275,93 @@ msgstr ""
 "Xen ਹਾਈਪਰਵੀਜ਼ੋਰ/ਡੈਮਨ ਨਾਲ ਕੁਨੈਕਸ਼ਨ ਖੋਲ੍ਹਣ ਲਈ ਅਸਫ਼ਲ ਹੈ।\n"
 "\n"
 
-#: ../../src/virtManager/engine.py:75
+#: ../../src/virtManager/engine.py:76
 msgid "Verify that:\n"
 msgstr "ਜਾਂਚ ਕਰੋ ਕਿ:\n"
 
-#: ../../src/virtManager/engine.py:76
+#: ../../src/virtManager/engine.py:77
 msgid " - A Xen host kernel was booted\n"
 msgstr " - ਇੱਕ Xen ਮੇਜ਼ਬਾਨ ਕਰਨਲ ਬੂਟ ਕੀਤਾ ਗਿਆ ਹੈ।\n"
 
-#: ../../src/virtManager/engine.py:77
+#: ../../src/virtManager/engine.py:78
 msgid " - The Xen service has been started\n"
 msgstr " - Xen ਸੇਵਾ ਨੂੰ ਸ਼ੁਰੂ ਕੀਤਾ ਗਿਆ ਹੈ\n"
 
-#: ../../src/virtManager/engine.py:80
+#: ../../src/virtManager/engine.py:81
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
 msgstr "ਹਾਈਪਰਵੀਜ਼ਰ '%s' ਨਾਲ ਕੁਨੈਕਸ਼ਨ ਖੋਲ੍ਹਣ ਲਈ ਅਸਫ਼ਲ"
 
-#: ../../src/virtManager/engine.py:81
+#: ../../src/virtManager/engine.py:82
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਮੈਨੇਜਰ ਕੁਨੈਕਸ਼ਨ ਫੇਲ੍ਹ"
 
-#: ../../src/virtManager/engine.py:281
+#: ../../src/virtManager/engine.py:302
 msgid "Save Virtual Machine"
 msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਸੰਭਾਲੋ"
 
-#: ../../src/virtManager/engine.py:294
+#: ../../src/virtManager/engine.py:315
 msgid "Saving Virtual Machine"
 msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਸੰਭਾਲੀ ਜਾ ਰਹੀ ਹੈ"
 
-#: ../../src/virtManager/engine.py:310
+#: ../../src/virtManager/engine.py:331
 #, fuzzy, python-format
 msgid "About to destroy virtual machine %s"
 msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਮੁੜ-ਪ੍ਰਾਪਤ"
 
-#: ../../src/virtManager/engine.py:311
+#: ../../src/virtManager/engine.py:332
 msgid ""
 "This will immediately destroy the VM and may corrupt its disk image. Are you "
 "sure?"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:189
+#: ../../src/virtManager/manager.py:237
 msgid "Restore Virtual Machine"
 msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਮੁੜ-ਪ੍ਰਾਪਤ"
 
-#: ../../src/virtManager/manager.py:204
+#: ../../src/virtManager/manager.py:252
 msgid "Restoring Virtual Machine"
 msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਮੁੜ-ਪ੍ਰਾਪਤ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ"
 
-#: ../../src/virtManager/manager.py:211
+#: ../../src/virtManager/manager.py:259
 #, python-format
 msgid "The file '%s' does not appear to be a valid saved machine image"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:239
+#: ../../src/virtManager/manager.py:287
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr "ਡੋਮੇਨ '%s' ਮੁੜ ਪ੍ਰਾਪਤ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ ਹੈ। ਕੀ ਡੋਮੇਨ ਪਹਿਲਾਂ ਹੀ ਚੱਲ ਰਹੀ ਹੈ?"
 
-#: ../../src/virtManager/manager.py:421
+#: ../../src/virtManager/manager.py:505
 msgid "ID"
 msgstr "ID"
 
-#: ../../src/virtManager/manager.py:422 tmp/virt-manager.glade.h:124
+#: ../../src/virtManager/manager.py:506 tmp/vmm-create.glade.h:61
 msgid "Name"
 msgstr "ਨਾਂ"
 
-#: ../../src/virtManager/manager.py:423 tmp/virt-manager.glade.h:167
+#: ../../src/virtManager/manager.py:507 tmp/vmm-manager.glade.h:16
 msgid "Status"
 msgstr "ਹਾਲਤ"
 
-#: ../../src/virtManager/manager.py:424 tmp/virt-manager.glade.h:80
+#: ../../src/virtManager/manager.py:508 tmp/vmm-manager.glade.h:4
 msgid "CPU usage"
 msgstr "CPU ਵਰਤੋਂ"
 
-#: ../../src/virtManager/manager.py:425
+#: ../../src/virtManager/manager.py:509
 msgid "VCPUs"
 msgstr "VCPU"
 
-#: ../../src/virtManager/manager.py:426 tmp/virt-manager.glade.h:120
+#: ../../src/virtManager/manager.py:510 tmp/vmm-manager.glade.h:10
 msgid "Memory usage"
 msgstr "ਮੈਮੋਰੀ ਵਰਤੋਂ"
 
-#: ../../src/virtManager/manager.py:427 tmp/virt-manager.glade.h:92
+#: ../../src/virtManager/manager.py:511 tmp/vmm-manager.glade.h:7
 msgid "Disk usage"
 msgstr "ਡਿਸਕ ਵਰਤੋਂ"
 
-#: ../../src/virtManager/manager.py:428 tmp/virt-manager.glade.h:127
+#: ../../src/virtManager/manager.py:512 tmp/vmm-manager.glade.h:11
 msgid "Network traffic"
 msgstr "ਨੈੱਟਵਰਕ ਟਰੈਫਿਕ"
 
@@ -307,246 +369,272 @@ msgstr "ਨੈੱਟਵਰਕ ਟਰੈਫਿਕ"
 msgid "serial console"
 msgstr "ਸੀਰੀਅਲ ਕਨਸੋਂਲ"
 
-#: tmp/virt-manager.glade.h:1
-msgid " "
-msgstr " "
+#: tmp/vmm-about.glade.h:1
+msgid "Copyright (C) 2006 Red Hat Inc."
+msgstr "Copyright (C) 2006 Red Hat Inc."
 
-#: tmp/virt-manager.glade.h:2
-msgid " free"
-msgstr " ਮੁਕਤ"
+#: tmp/vmm-about.glade.h:2
+msgid "Powered by libvirt"
+msgstr "libvirt ਵਲੋਂ ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ"
 
-#: tmp/virt-manager.glade.h:3
-msgid " of "
-msgstr " ਵਿੱਚੋਂ"
+#: tmp/vmm-about.glade.h:3 tmp/vmm-manager.glade.h:18
+msgid "Virtual Machine Manager"
+msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਮੈਨੇਜਰ"
 
-#: tmp/virt-manager.glade.h:4
-msgid "/tmp"
-msgstr "/tmp"
+#: tmp/vmm-about.glade.h:4
+msgid "http://virt-manager.et.redhat.com/"
+msgstr "http://virt-manager.et.redhat.com/"
 
-#: tmp/virt-manager.glade.h:5
-msgid "/xen/demo.img"
-msgstr "/xen/demo.img"
+#: tmp/vmm-about.glade.h:6
+msgid "translator-credits"
+msgstr "ਅਮਨਪਰੀਤ ਸਿੰਘ ਆਲਮ <apbrar@gmail.com>"
 
-#: tmp/virt-manager.glade.h:6
+#: tmp/vmm-add-virtual-nic.glade.h:1
 msgid "00:16:3e:"
 msgstr "00:16:3e:"
 
-#: tmp/virt-manager.glade.h:7
-msgid "10 TB"
-msgstr "10 TB"
-
-#: tmp/virt-manager.glade.h:9
-#, no-c-format
-msgid "18%"
-msgstr "18%"
-
-#: tmp/virt-manager.glade.h:10
-msgid "2"
-msgstr "2"
-
-#: tmp/virt-manager.glade.h:11
-msgid "2 GB"
-msgstr "2 GB"
-
-#: tmp/virt-manager.glade.h:12
-msgid "20 bits/sec"
-msgstr "20 bits/sec"
-
-#: tmp/virt-manager.glade.h:13
-msgid "200 MB"
-msgstr "200 MB"
-
-#: tmp/virt-manager.glade.h:14
-msgid "256\t"
-msgstr "256\t"
-
-#: tmp/virt-manager.glade.h:15
-msgid "30 MB of 128 MB"
-msgstr "128 MB ਵਿੱਚੋਂ 30 MB"
-
-#: tmp/virt-manager.glade.h:16
-msgid "400 MB"
-msgstr "400 MB"
-
-#: tmp/virt-manager.glade.h:17
-msgid "5\t"
-msgstr "5\t"
-
-#: tmp/virt-manager.glade.h:18
-msgid "5 GB"
-msgstr "5 GB"
-
-#: tmp/virt-manager.glade.h:19
-msgid "500 MB"
-msgstr "500 MB"
-
-#: tmp/virt-manager.glade.h:20
-msgid "8"
-msgstr "8"
-
-#: tmp/virt-manager.glade.h:21
-msgid "80 MB of 1 GB"
-msgstr "1 GB ਵਿਚੋਂ 80 MB"
-
-#: tmp/virt-manager.glade.h:22
+#: tmp/vmm-add-virtual-nic.glade.h:2
 msgid ":"
 msgstr ":"
 
-#: tmp/virt-manager.glade.h:23
-msgid "<b>Basic details</b>"
-msgstr "<b>ਮੁੱਢਲਾ ਵੇਰਵਾ</b>"
-
-#: tmp/virt-manager.glade.h:24
-msgid "<b>CPUs:</b>"
-msgstr "<b>CPU:</b>"
-
-#: tmp/virt-manager.glade.h:25
-msgid "<b>CPUs</b>"
-msgstr "<b>CPU</b>"
-
-#: tmp/virt-manager.glade.h:26
-msgid "<b>Consoles</b>"
-msgstr "<b>ਕੰਨਸੋਲ</b>"
-
-#: tmp/virt-manager.glade.h:27
-msgid "<b>Disk image:</b>"
-msgstr "<b>ਡਿਸਕ ਪ੍ਰਤੀਬਿੰਬ:</b>"
-
-#: tmp/virt-manager.glade.h:28
-msgid "<b>Disk size:</b>"
-msgstr "<b>ਡਿਸਕ ਅਕਾਰ:</b>"
-
-#: tmp/virt-manager.glade.h:29
-msgid "<b>Example:</b> system1"
-msgstr "<b>ਉਦਾਹਰਨ:</b> ਸਿਸਟਮ1"
-
-#: tmp/virt-manager.glade.h:30
-msgid "<b>Initial memory:</b>"
-msgstr "<b>ਸ਼ੁਰੂਆਤੀ ਮੈਮੋਰੀ:</b>"
-
-#: tmp/virt-manager.glade.h:31
-msgid "<b>Installation source:</b>"
-msgstr "<b>ਇੰਸਟਾਲੇਸ਼ਨ ਸਰੋਤ:</b>"
-
-#: tmp/virt-manager.glade.h:32
-msgid "<b>Kickstart source:</b>"
-msgstr "<b>ਕਿੱਕਸਟਾਰਟ ਸਰੋਤ:</b>"
-
-#: tmp/virt-manager.glade.h:33
-msgid "<b>Machine name:</b>"
-msgstr "<b>ਮਸ਼ੀਨ ਨਾਂ:</b>"
-
-#: tmp/virt-manager.glade.h:34
-msgid "<b>Maximum memory:</b>"
-msgstr "<b>ਵੱਧ ਤੋਂ ਵੱਧ ਮੈਮੋਰੀ:</b>"
-
-#: tmp/virt-manager.glade.h:35
-msgid "<b>Memory:</b>"
-msgstr "<b>ਮੈਮੋਰੀ:</b>"
-
-#: tmp/virt-manager.glade.h:36
-msgid "<b>Memory</b>"
-msgstr "<b>ਮੈਮੋਰੀ</b>"
-
-#: tmp/virt-manager.glade.h:37
-msgid "<b>Memory</b> and <b>CPU</b> allocation"
-msgstr "ਜਾਰੀ ਕੀਤੀ <b>ਮੈਮੋਰੀ</b> ਅਤੇ <b>CPU</b>"
-
-#: tmp/virt-manager.glade.h:38
-msgid "<b>Network</b>"
-msgstr "<b>ਨੈੱਟਵਰਕ</b>"
-
-#: tmp/virt-manager.glade.h:39
-msgid "<b>Performance</b>"
-msgstr "<b>ਸਮਰੱਥਾ</b>"
-
-#: tmp/virt-manager.glade.h:40
-msgid "<b>Status monitoring</b>"
-msgstr "<b>ਹਾਲਤ ਨਿਗਰਾਨੀ</b>"
-
-#: tmp/virt-manager.glade.h:41
-msgid "<b>Storage</b>"
-msgstr "<b>ਸਟੋਰੇਜ਼</b>"
-
-#: tmp/virt-manager.glade.h:42
-msgid ""
-"<b>Storage</b> details - which disk partitions or files the system should use"
-msgstr "<b>ਸਟੋਰੇਜ਼</b> ਵੇਰਵਾ - ਕਿਹੜਾ ਡਿਸਕ ਭਾਗ ਜਾਂ ਫਾਇਲਾਂ ਨੂੰ ਸਿਸਟਮ ਵਰਤੇ"
-
-#: tmp/virt-manager.glade.h:43
-msgid "<b>Summary:</b>"
-msgstr "<b>ਸੰਖੇਪ:</b>"
-
-#: tmp/virt-manager.glade.h:44
-msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>ਕਨਸੋਂਸ ਇਸ ਸਮੇਂ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ</b>"
-
-#: tmp/virt-manager.glade.h:45
+#: tmp/vmm-add-virtual-nic.glade.h:3
 msgid ""
 "<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
 "letters A-F"
 msgstr "<b>ਇਸ਼ਾਰਾ:</b> ਹੈਕਸਾ ਡਿਜ਼ਟ ਦੇ ਮੰਨਣਯੋਗ ਮੁੱਲ 0-9 ਅੰਕ ਅਤੇ A-F ਅੱਖਰ ਹਨ"
 
-#: tmp/virt-manager.glade.h:46
-msgid ""
-"<b>Tip:</b> File location paths are as seen from the physical host. Mount "
-"points are as seen from the virtual machine."
-msgstr ""
-"<b>ਇਸ਼ਾਰਾ:</b> ਫਾਇਲ ਟਿਕਾਣਾ ਮਾਰਗ ਭੌਤਿਕ ਮੇਜ਼ਬਾਨ ਤੋਂ ਵੇਖੇ ਜਾ ਸਕਦੇ ਹਨ। ਮਾਊਂਟ ਥਾਵਾਂ ਨੂੰ ਵੁਰਚੁਅਲ "
-"ਮਸ਼ੀਨ ਤੋਂ ਵੇਖਿਆ ਜਾ ਸਕਦਾ ਹੈ।"
+#: tmp/vmm-add-virtual-nic.glade.h:4
+msgid "Add Virtual NIC"
+msgstr "ਵੁਰਚੁਅਲ NIC ਜੋੜੋ"
 
-#: tmp/virt-manager.glade.h:47
-msgid ""
-"<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
-"than (or equal to) the number of physical CPUs on the host system."
-msgstr ""
-"<b>ਇਸ਼ਾਰਾ:</b> ਵਧੀਆ ਕੰਮ ਸਮਰੱਥਾ ਲਈ, ਫ਼ਰਜ਼ੀ CPU ਦੀ ਗਿਣਤੀ ਮੇਜ਼ਬਾਨ ਸਿਸਟਮ ਉੱਤੇ ਮੌਜੂਦ ਭੌਤਿਕ "
-"CPU ਦੀ ਗਿਣਤੀ ਤੋਂ ਘੱਟ (ਜਾਂ ਬਰਾਬਰ) ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ।"
+#: tmp/vmm-add-virtual-nic.glade.h:5
+msgid "Add virtual NIC with:"
+msgstr "ਇੱਕ ਵੁਰਚੁਅਲ NIC ਨਾਲ:"
 
-#: tmp/virt-manager.glade.h:48
-msgid ""
-"<b>Tip:</b> You may only increase the size of file-based storage; you can't "
-"decrease its size."
-msgstr ""
-"<b>ਇਸ਼ਾਰਾ:</b> ਫਾਇਲ ਅਧਾਰਿਤ ਸਟੋਰੇਜ਼ ਦਾ ਅਕਾਰ ਤਾਂ ਤੁਸੀਂ ਵਧਾ ਸਕਦੇ ਹੋ, ਪਰ ਇਸ ਨੂੰ ਤੁਸੀਂ ਘਟਾ ਨਹੀਂ "
-"ਸਕਦੇ ਹੋ।"
+#: tmp/vmm-add-virtual-nic.glade.h:6
+msgid "Randomly generated MAC address"
+msgstr "ਰਲਵੇਂ ਤੌਰ ਉੱਤੇ ਤਿਆਰ MAC ਸਿਰਨਾਵਾਂ"
 
-#: tmp/virt-manager.glade.h:49
-msgid ""
-"<b>Too Many Virtual CPUs</b>\n"
-"\n"
-"You have set this virtual machine to have more CPUs than the host system has "
-"physically. This may result in poor performance in the virtual machine."
-msgstr ""
-"<b>ਬਹੁਤ ਜ਼ਿਆਦਾ ਵੁਰਚੁਅਲ CPU ਹਨ</b>\n"
-"\n"
-"ਤੁਸੀਂ ਇਸ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਲਈ ਆਪਣੇ ਮੇਜ਼ਬਾਨ ਸਿਸਟਮ ਦੇ ਅਸਲ ਵਿੱਚ ਮੌਜੂਦ CPU ਤੋਂ ਵੱਧ ਸੈੱਟ ਕੀਤੇ ਹਨ। ਇਸ "
-"ਨਾਲ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਦੀ ਕੰਮ-ਸਮਰੱਥਾ ਮਾੜੀ ਹੋ ਸਕਦੀ ਹੈ।"
+#: tmp/vmm-add-virtual-nic.glade.h:7
+msgid "Specified MAC address:"
+msgstr "ਦਿੱਤਾ MAC ਸਿਰਨਾਵਾਂ:"
 
-#: tmp/virt-manager.glade.h:52
+#: tmp/vmm-add-virtual-nic.glade.h:8
+msgid "mac-addr-random"
+msgstr "mac-addr-random"
+
+#: tmp/vmm-console.glade.h:1
+msgid "<b>The console is currently unavailable</b>"
+msgstr "<b>ਕਨਸੋਂਸ ਇਸ ਸਮੇਂ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ</b>"
+
+#: tmp/vmm-console.glade.h:2
+msgid "Auth"
+msgstr "ਪਰਮਾਣ"
+
+#: tmp/vmm-console.glade.h:3
+msgid "Login"
+msgstr "ਲਾਗਇਨ"
+
+#: tmp/vmm-console.glade.h:4
+msgid "Password:"
+msgstr "ਗੁਪਤ-ਕੋਡ:"
+
+#: tmp/vmm-console.glade.h:5 tmp/vmm-details.glade.h:34
+msgid "Pause"
+msgstr "ਵਿਰਾਮ"
+
+#: tmp/vmm-console.glade.h:6 tmp/vmm-details.glade.h:36
+msgid "Run"
+msgstr "ਚਲਾਓ"
+
+#: tmp/vmm-console.glade.h:7 tmp/vmm-details.glade.h:37
+#, fuzzy
+msgid "S_hutdown"
+msgstr "ਬੰਦ ਹੈ"
+
+#: tmp/vmm-console.glade.h:8
+msgid "Save this password in your keyring"
+msgstr "ਇਹ ਗੁਪਤ-ਕੋਡ ਆਪਣੇ ਕੀ-ਰਿੰਗ ਵਿੱਚ ਸੰਭਾਲੋ"
+
+#: tmp/vmm-console.glade.h:9
+msgid "Screenshot"
+msgstr "ਸਕਰੀਨ-ਸ਼ਾਟ"
+
+#: tmp/vmm-console.glade.h:11 tmp/vmm-details.glade.h:41
+msgid "Toolbar"
+msgstr "ਸੰਦ-ਪੱਟੀ"
+
+#: tmp/vmm-console.glade.h:12
+msgid "Unavailable"
+msgstr "ਨਾ-ਉਪਲੱਬਧ"
+
+#: tmp/vmm-console.glade.h:13
+msgid "VNC"
+msgstr "VNC"
+
+#: tmp/vmm-console.glade.h:14
+msgid "Virtual Machine Console"
+msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਕਨਸੋਂਲ"
+
+#: tmp/vmm-console.glade.h:15 tmp/vmm-details.glade.h:46
+msgid "Virtual _Machine"
+msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ(V_M)"
+
+#: tmp/vmm-console.glade.h:16 tmp/vmm-details.glade.h:47
+msgid "_Destroy"
+msgstr ""
+
+#: tmp/vmm-console.glade.h:17
+msgid "_Details"
+msgstr "ਵੇਰਵਾ(_D)"
+
+#: tmp/vmm-console.glade.h:18
+msgid "_FullScreen"
+msgstr "ਪੂਰੇ ਪਰਦੇ ਉੱਤੇ(_F)"
+
+#: tmp/vmm-console.glade.h:19 tmp/vmm-details.glade.h:49
+#: tmp/vmm-manager.glade.h:21
+msgid "_Help"
+msgstr "ਸਹਾਇਤਾ(_H)"
+
+#: tmp/vmm-console.glade.h:20 tmp/vmm-details.glade.h:50
+msgid "_Pause"
+msgstr "ਵਿਰਾਮ(_P)"
+
+#: tmp/vmm-console.glade.h:21 tmp/vmm-details.glade.h:51
+msgid "_Run"
+msgstr "ਚਲਾਓ(_R)"
+
+#: tmp/vmm-console.glade.h:22 tmp/vmm-details.glade.h:52
+msgid "_Save"
+msgstr "ਸੰਭਾਲੋ(_S)"
+
+#: tmp/vmm-console.glade.h:23 tmp/vmm-details.glade.h:53
+msgid "_Serial Console"
+msgstr "ਸੀਰੀਅਲ ਕਨਸੋਂਲ(_S)"
+
+#: tmp/vmm-console.glade.h:24
+msgid "_Take Screenshot"
+msgstr "ਸਕਰੀਨ-ਸ਼ਾਟ ਲਵੋ(_T)"
+
+#: tmp/vmm-console.glade.h:25 tmp/vmm-details.glade.h:54
+#: tmp/vmm-manager.glade.h:22
+msgid "_View"
+msgstr "ਝਲਕ(_V)"
+
+#: tmp/vmm-create.glade.h:1
+msgid " "
+msgstr " "
+
+#: tmp/vmm-create.glade.h:2
+msgid "/xen/demo.img"
+msgstr "/xen/demo.img"
+
+#: tmp/vmm-create.glade.h:3 tmp/vmm-details.glade.h:4
+msgid "2 GB"
+msgstr "2 GB"
+
+#: tmp/vmm-create.glade.h:4
+msgid "256\t"
+msgstr "256\t"
+
+#: tmp/vmm-create.glade.h:5
+msgid "400 MB"
+msgstr "400 MB"
+
+#: tmp/vmm-create.glade.h:6
+msgid "5\t"
+msgstr "5\t"
+
+#: tmp/vmm-create.glade.h:7
+msgid "5 GB"
+msgstr "5 GB"
+
+#: tmp/vmm-create.glade.h:8
+msgid "500 MB"
+msgstr "500 MB"
+
+#: tmp/vmm-create.glade.h:9
+msgid "<b>CPUs:</b>"
+msgstr "<b>CPU:</b>"
+
+#: tmp/vmm-create.glade.h:10
+msgid "<b>Disk image:</b>"
+msgstr "<b>ਡਿਸਕ ਪ੍ਰਤੀਬਿੰਬ:</b>"
+
+#: tmp/vmm-create.glade.h:11
+msgid "<b>Disk size:</b>"
+msgstr "<b>ਡਿਸਕ ਅਕਾਰ:</b>"
+
+#: tmp/vmm-create.glade.h:12
+msgid "<b>Example:</b> system1"
+msgstr "<b>ਉਦਾਹਰਨ:</b> ਸਿਸਟਮ1"
+
+#: tmp/vmm-create.glade.h:13
+msgid "<b>Initial memory:</b>"
+msgstr "<b>ਸ਼ੁਰੂਆਤੀ ਮੈਮੋਰੀ:</b>"
+
+#: tmp/vmm-create.glade.h:14
+msgid "<b>Installation source:</b>"
+msgstr "<b>ਇੰਸਟਾਲੇਸ਼ਨ ਸਰੋਤ:</b>"
+
+#: tmp/vmm-create.glade.h:15
+msgid "<b>Kickstart source:</b>"
+msgstr "<b>ਕਿੱਕਸਟਾਰਟ ਸਰੋਤ:</b>"
+
+#: tmp/vmm-create.glade.h:16
+msgid "<b>Machine name:</b>"
+msgstr "<b>ਮਸ਼ੀਨ ਨਾਂ:</b>"
+
+#: tmp/vmm-create.glade.h:17
+msgid "<b>Maximum memory:</b>"
+msgstr "<b>ਵੱਧ ਤੋਂ ਵੱਧ ਮੈਮੋਰੀ:</b>"
+
+#: tmp/vmm-create.glade.h:18
+msgid "<b>Memory:</b>"
+msgstr "<b>ਮੈਮੋਰੀ:</b>"
+
+#: tmp/vmm-create.glade.h:19
+msgid "<b>Memory</b> and <b>CPU</b> allocation"
+msgstr "ਜਾਰੀ ਕੀਤੀ <b>ਮੈਮੋਰੀ</b> ਅਤੇ <b>CPU</b>"
+
+#: tmp/vmm-create.glade.h:20
+msgid "<b>Operating System:</b>"
+msgstr ""
+
+#: tmp/vmm-create.glade.h:21
+msgid ""
+"<b>Storage</b> details - which disk partitions or files the system should use"
+msgstr "<b>ਸਟੋਰੇਜ਼</b> ਵੇਰਵਾ - ਕਿਹੜਾ ਡਿਸਕ ਭਾਗ ਜਾਂ ਫਾਇਲਾਂ ਨੂੰ ਸਿਸਟਮ ਵਰਤੇ"
+
+#: tmp/vmm-create.glade.h:22
+msgid "<b>Summary:</b>"
+msgstr "<b>ਸੰਖੇਪ:</b>"
+
+#: tmp/vmm-create.glade.h:23
 msgid "<b>Virtual CPUs:</b>"
 msgstr "<b>ਫ਼ਰਜ਼ੀ CPU:</b>"
 
-#: tmp/virt-manager.glade.h:53
+#: tmp/vmm-create.glade.h:24
 #, fuzzy
 msgid "<b>Virtualization method:</b>"
 msgstr "<b>ਵੁਰਚੁਅਲਾਈਜ਼ੇਸ਼ਨ ਢੰਗ:</b>"
 
-#: tmp/virt-manager.glade.h:54
+#: tmp/vmm-create.glade.h:25
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
 msgstr "<small><b>ਉਦਾਹਰਨ:</b> /dev/hdc2</small>"
 
-#: tmp/virt-manager.glade.h:55
+#: tmp/vmm-create.glade.h:26
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 msgstr "<small><b>ਉਦਾਹਰਨ:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 
-#: tmp/virt-manager.glade.h:56
+#: tmp/vmm-create.glade.h:27
 msgid ""
 "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
 msgstr ""
 "<small><b>ਉਦਾਹਰਨ:</b> http://servername.example.com/distro/i386/tree</small>"
 
-#: tmp/virt-manager.glade.h:57
+#: tmp/vmm-create.glade.h:28
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
@@ -554,7 +642,7 @@ msgstr ""
 "<small><b>ਸੂਚਨਾ:</b> ਇਹ ਮਸ਼ੀਨ ਵਿੱਚ ਮੇਜ਼ਬਾਨ CPU ਪੂਰੀ ਵੁਰਚੁਲਾਈਜ਼ੇਸ਼ਨ ਲਈ ਸਹਾਇਕ ਨਹੀਂ ਹੈ।</"
 "small>"
 
-#: tmp/virt-manager.glade.h:58
+#: tmp/vmm-create.glade.h:29
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
@@ -562,7 +650,7 @@ msgstr ""
 "<small><b>ਸੂਚਨਾ:</b> ਇਹ ਮਸ਼ੀਨ ਲਈ ਮੇਜ਼ਬਾਨ CPU ਵੁਰਚੁਲਾਈਜ਼ੇਸ਼ਨ ਲਈ ਪੂਰਾ ਸਹਾਇਕ ਹੈ, ਪਰ BIOS "
 "ਰਾਹੀਂ ਚਾਲੂ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।</small>"
 
-#: tmp/virt-manager.glade.h:59
+#: tmp/vmm-create.glade.h:30
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
@@ -571,7 +659,7 @@ msgstr ""
 "<small><b>ਇਸ਼ਾਰਾ:</b> ਵਧੀਆ ਕੰਮ-ਸਮਰੱਥਾ ਲਈ, ਫ਼ਰਜ਼ੀ CPU ਦੀ ਗਿਣਤੀ ਮੇਜ਼ਬਾਨ ਸਿਸਟਮ ਉੱਤੇ ਮੌਜੂਦ "
 "ਭੌਤਿਕ CPU ਦੀ ਗਿਣਤੀ ਤੋਂ ਘੱਟ (ਜਾਂ ਬਰਾਬਰ) ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ।</small>"
 
-#: tmp/virt-manager.glade.h:60
+#: tmp/vmm-create.glade.h:31
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
@@ -580,7 +668,7 @@ msgstr ""
 "<small><b>ਇਸ਼ਾਰਾ:</b> ਤੁਸੀਂ ਹੋਰ ਸਟੋਰੇਜ਼, ਨੈੱਟਵਰਕ-ਮਾਊਂਟ ਕੀਤਾ ਸਟੋਰੇਜ਼ ਸਮੇਤ, ਨੂੰ ਆਪਣੇ ਵੁਰਚੁਅਲ "
 "ਸਿਸਟਮ ਵਿੱਚ ਇੱਕ ਭੌਤਿਕ ਸਿਸਟਮ ਉੱਤੇ ਉਸੇ ਸੰਦ ਰਾਹੀਂ ਬਣਾ ਕੇ ਜੋੜ ਸਕਦੇ ਹੋ।</small>"
 
-#: tmp/virt-manager.glade.h:61
+#: tmp/vmm-create.glade.h:32
 msgid ""
 "<small><b>Warning:</b> If you do not allocate the entire disk at VM "
 "creation, space will be allocated as needed while the guest is running. If "
@@ -588,7 +676,7 @@ msgid ""
 "corruption on the guest.</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:62
+#: tmp/vmm-create.glade.h:33
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocate memory "
 "and CPU</span>"
@@ -596,7 +684,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਮੈਮੋਰੀ ਅਤੇ CPU "
 "ਜਾਰੀ ਕਰੋ</span>"
 
-#: tmp/virt-manager.glade.h:63
+#: tmp/vmm-create.glade.h:34
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
 "storage space</span>"
@@ -604,7 +692,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਦਿੱਤੀ ਸਟੋਰੇਜ਼ ਥਾਂ</"
 "span>"
 
-#: tmp/virt-manager.glade.h:64
+#: tmp/vmm-create.glade.h:35
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing a "
 "virtualization method</span>"
@@ -612,7 +700,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਇੱਕ ਵੁਰਚੁਅਲ ਢੰਗ ਚੁਣੋ</"
 "span>"
 
-#: tmp/virt-manager.glade.h:65
+#: tmp/vmm-create.glade.h:36
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual system </span>"
@@ -620,7 +708,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਇੱਕ ਨਵਾਂ ਵੁਰਚੁਅਲ "
 "ਸਿਸਟਮ ਬਣਾਓ</span>"
 
-#: tmp/virt-manager.glade.h:66
+#: tmp/vmm-create.glade.h:37
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation media</span>"
@@ -628,7 +716,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਇੰਸਟਾਲੇਸ਼ਨ ਮੀਡਿਆ "
 "ਜਾਰੀ ਕਰੋ</span>"
 
-#: tmp/virt-manager.glade.h:67
+#: tmp/vmm-create.glade.h:38
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
@@ -636,7 +724,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਆਪਣੇ ਵੁਰਚੁਅਲ ਸਿਸਟਮ "
 "ਨੂੰ ਨਾਂ ਦਿਓ </span>"
 
-#: tmp/virt-manager.glade.h:68
+#: tmp/vmm-create.glade.h:39
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to begin "
 "installation</span>"
@@ -644,145 +732,71 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ਇੰਸਟਾਲੇਸ਼ਨ ਸ਼ੁਰੂ ਕਰਨ "
 "ਲਈ ਤਿਆਰ</span>"
 
-#: tmp/virt-manager.glade.h:69
+#: tmp/vmm-create.glade.h:40
 msgid "A <b>name</b> for your new virtual system"
 msgstr "ਤੁਹਾਡੇ ਨਵੇਂ ਵੁਰਚੁਅਲ ਸਿਸਟਮ ਲਈ ਇੱਕ <b>ਨਾਂ</b>"
 
-#: tmp/virt-manager.glade.h:70
-msgid "Add Virtual NIC"
-msgstr "ਵੁਰਚੁਅਲ NIC ਜੋੜੋ"
-
-#: tmp/virt-manager.glade.h:71
-msgid "Add virtual NIC with:"
-msgstr "ਇੱਕ ਵੁਰਚੁਅਲ NIC ਨਾਲ:"
-
-#: tmp/virt-manager.glade.h:72
-msgid "Alert"
-msgstr "ਚੇਤਾਵਨੀ"
-
-#: tmp/virt-manager.glade.h:73
-msgid ""
-"All virtual machines\n"
-"Active virtual machines\n"
-"Inactive virtual machines"
-msgstr ""
-"ਸਭ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨਾਂ\n"
-"ਸਰਗਰਮ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨਾਂ\n"
-"ਨਾ-ਸਰਗਰਮ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨਾਂ"
-
-#: tmp/virt-manager.glade.h:76
+#: tmp/vmm-create.glade.h:41
 msgid "Allocate entire virtual disk now?"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:77
-msgid "Auth"
-msgstr "ਪਰਮਾਣ"
-
-#: tmp/virt-manager.glade.h:78
-msgid "Automatically open consoles:"
-msgstr "ਆਟੋਮੈਟਿਕ ਖੁੱਲੇ ਕੰਨਸੋਲ:"
-
-#: tmp/virt-manager.glade.h:79
+#: tmp/vmm-create.glade.h:42
 msgid "Browse..."
 msgstr "ਝਲਕ..."
 
-#: tmp/virt-manager.glade.h:81
-msgid "CPU usage:"
-msgstr "CPU ਵਰਤੋਂ:"
+#: tmp/vmm-create.glade.h:43
+msgid "CPU architecture:"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:82
+#: tmp/vmm-create.glade.h:44
 msgid "CPU/memory"
 msgstr "CPU/ਮੈਮੋਰੀ"
 
-#: tmp/virt-manager.glade.h:83
-msgid "Change allocation:"
-msgstr "ਜਾਰੀ ਤਬਦੀਲ:"
-
-#: tmp/virt-manager.glade.h:84
-msgid "Co_nnect"
-msgstr "ਕੁਨੈਕਸ਼ਨ ਜੋੜੋ(_n)"
-
-#: tmp/virt-manager.glade.h:85
+#: tmp/vmm-create.glade.h:45
 msgid "Complete"
 msgstr "ਮੁਕੰਮਲ"
 
-#: tmp/virt-manager.glade.h:86
-msgid "Copyright (C) 2006 Red Hat Inc."
-msgstr "Copyright (C) 2006 Red Hat Inc."
-
-#: tmp/virt-manager.glade.h:87
+#: tmp/vmm-create.glade.h:46
 msgid "Create a new virtual system"
 msgstr "ਇੱਕ ਨਵਾਂ ਵੁਰਚੁਅਲ ਸਿਸਟਮ ਬਣਾਓ"
 
-#: tmp/virt-manager.glade.h:88
-msgid "Current allocation:"
-msgstr "ਮੌਜੂਦਾ ਜਾਰੀ:"
-
-#: tmp/virt-manager.glade.h:89
-msgid "De_tails"
-msgstr "ਵੇਰਵਾ(_t)"
-
-#: tmp/virt-manager.glade.h:90
-msgid "Delete machine"
-msgstr "ਮਸ਼ੀਨ ਹਟਾਓ"
-
-#: tmp/virt-manager.glade.h:91
+#: tmp/vmm-create.glade.h:47 tmp/vmm-details.glade.h:21
 msgid "Disk"
 msgstr "ਡਿਸਕ"
 
-#: tmp/virt-manager.glade.h:93
-msgid "Disk usage:"
-msgstr "ਡਿਸਕ ਵਰਤੋਂ:"
+#: tmp/vmm-create.glade.h:48
+msgid "Enable kernel / hardware acceleration"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:94
-msgid "Domain ID"
-msgstr "ਡੋਮੇਨ ID"
-
-#: tmp/virt-manager.glade.h:95
+#: tmp/vmm-create.glade.h:49
 msgid "FV install"
 msgstr "FV ਇੰਸਟਾਲ"
 
-#: tmp/virt-manager.glade.h:96
+#: tmp/vmm-create.glade.h:50
 msgid "F_ully Virtualized:"
 msgstr "ਪੂਰਾ ਵੁਰਚੁਅਲ(_U):"
 
-#: tmp/virt-manager.glade.h:97
+#: tmp/vmm-create.glade.h:51
 msgid "File _Location:"
 msgstr "ਫਾਇਲ ਟਿਕਾਣਾ(_L):"
 
-#: tmp/virt-manager.glade.h:98
+#: tmp/vmm-create.glade.h:52
 msgid "File _Size:"
 msgstr "ਫਾਇਲ ਅਕਾਰ(_S):"
 
-#: tmp/virt-manager.glade.h:99
-msgid "Grab keyboard input:"
-msgstr "ਕੀ-ਬੋਰਡ ਇੰਪੁੱਟ ਲਵੋ:"
-
-#: tmp/virt-manager.glade.h:100
-msgid "Hardware"
-msgstr "ਜੰਤਰ"
-
-#: tmp/virt-manager.glade.h:101
-msgid "How many virtual CPUs should this machine be allocated?"
-msgstr "ਇਸ ਮਸ਼ੀਨ ਨੂੰ ਕਿੰਨੇ ਵੁਰਚੁਅਲ (ਫ਼ਰਜ਼ੀ) CPU ਜਾਰੀ ਕੀਤੇ ਜਾਣ?"
-
-#: tmp/virt-manager.glade.h:102
-msgid "How much memory should this machine be allocated?"
-msgstr "ਇਸ ਮਸ਼ੀਨ ਨੂੰ ਕਿੰਨੀ ਮੈਮੋਰੀ ਜਾਰੀ ਕੀਤੀ ਜਾ ਸਕਦੀ ਹੈ?"
-
-#: tmp/virt-manager.glade.h:103
+#: tmp/vmm-create.glade.h:53
 msgid "ISO _Location:"
 msgstr "ISO ਟਿਕਾਣਾ(_L):"
 
-#: tmp/virt-manager.glade.h:104
+#: tmp/vmm-create.glade.h:54
 msgid "Install Media _URL:"
 msgstr "ਇੰਸਟਾਲ ਮੀਡਿਆ _URL:"
 
-#: tmp/virt-manager.glade.h:105
+#: tmp/vmm-create.glade.h:55
 msgid "Intro"
 msgstr "ਜਾਣ ਪਛਾਣ"
 
-#: tmp/virt-manager.glade.h:106
+#: tmp/vmm-create.glade.h:56
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
@@ -791,15 +805,11 @@ msgstr ""
 "ਜੰਤਰ (ਹਾਰਡਵੇਅਰ) ਨਕਲ ਸ਼ਾਮਿਲ ਹੈ, ਵੱਧ ਓਪਰੇਟਿੰਗ ਸਿਸਟਮ ਉਪਲੱਬਧ ਹੁੰਦੇ ਹਨ (OS ਸੋਧਣ ਦੀ ਲੋੜ ਨਹੀਂ ਪੈਂਦੀ "
 "ਹੈ)। ਪੈਰਾ-ਵੁਰਚੁਅਲ ਸਿਸਟਮਾਂ ਨਾਲੋਂ ਕੰਮ-ਸਮਰੱਥਾ ਹੌਲੀ ਹੁੰਦੀ ਹੈ।"
 
-#: tmp/virt-manager.glade.h:107
-msgid "Keep CPU Settings"
-msgstr "CPU ਸੈਟਿੰਗ ਰੱਖੋ"
-
-#: tmp/virt-manager.glade.h:108
+#: tmp/vmm-create.glade.h:57
 msgid "Kickstart U_RL:"
 msgstr "ਕਿੱਕਸਟਾਰਟ U_RL:"
 
-#: tmp/virt-manager.glade.h:109
+#: tmp/vmm-create.glade.h:58
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
@@ -809,129 +819,45 @@ msgstr ""
 "ਵੁਰਚੁਲਾਈਜ਼ੇਸ਼ਨ ਲਈ ਖਾਸ ਤੌਰ ਉੱਤੇ ਸੋਧਿਆ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ। ਪੂਰੇ ਵੁਰਚੁਅਲ ਸਿਸਟਮ ਨਾਲੋਂ ਵਧੀਆ ਕੰਮ-ਸਮਰੱਥਾ "
 "ਵੇਖਾਉਦੇ ਹਨ।"
 
-#: tmp/virt-manager.glade.h:110
+#: tmp/vmm-create.glade.h:59
 msgid "Logical host CPUs:"
 msgstr "ਲਾਜ਼ੀਕਲ ਮੇਜ਼ਬਾਨ CPU:"
 
-#: tmp/virt-manager.glade.h:111
-msgid "Login"
-msgstr "ਲਾਗਇਨ"
-
-#: tmp/virt-manager.glade.h:112
+#: tmp/vmm-create.glade.h:60 tmp/vmm-details.glade.h:26
 msgid "MB"
 msgstr "MB"
 
-#: tmp/virt-manager.glade.h:113
-msgid ""
-"MB\n"
-"GB\n"
-"TB"
-msgstr ""
-"MB\n"
-"GB\n"
-"TB"
-
-#: tmp/virt-manager.glade.h:116
-msgid "Machine details..."
-msgstr "ਮਸ਼ੀਨ ਵੇਰਵਾ..."
-
-#: tmp/virt-manager.glade.h:117
-msgid "Maintain history of"
-msgstr "ਇਸ ਦਾ ਅਤੀਤ ਰੱਖੋ..."
-
-#: tmp/virt-manager.glade.h:118
-msgid "Maximum allocation:"
-msgstr "ਵੱਧ ਤੋਂ ਵੱਧ ਰੱਖੋ:"
-
-#: tmp/virt-manager.glade.h:119
-msgid "Memory"
-msgstr "ਮੈਮੋਰੀ"
-
-#: tmp/virt-manager.glade.h:121
-msgid "Memory usage:"
-msgstr "ਮੈਮੋਰੀ ਵਰਤੋਂ:"
-
-#: tmp/virt-manager.glade.h:122
-msgid "Modify CPU Settings"
-msgstr "CPU ਸਥਾਪਨ ਸੋਧ"
-
-#: tmp/virt-manager.glade.h:123
-msgid "Modify File Storage"
-msgstr "ਫਾਇਲ ਸਟੋਰੇਜ਼ ਸੋਧ"
-
-#: tmp/virt-manager.glade.h:125
-msgid "Name:"
-msgstr "ਨਾਂ:"
-
-#: tmp/virt-manager.glade.h:126
-msgid "Network"
-msgstr "ਨੈੱਟਵਰਕ"
-
-#: tmp/virt-manager.glade.h:128
-msgid "Network usage:"
-msgstr "ਨੈੱਟਵਰਕ ਵਰਤੋਂ:"
-
-#: tmp/virt-manager.glade.h:129
-msgid ""
-"Never\n"
-"For new domains\n"
-"For all domains"
-msgstr ""
-"ਕਦੇ ਨਹੀਂ\n"
-"ਨਵੇਂ ਡੋਮੇਨਾਂ ਲਈ\n"
-"ਸਭ ਡੋਮੇਨਾਂ ਲਈ"
-
-#: tmp/virt-manager.glade.h:132
-msgid ""
-"Never\n"
-"When fullscreen\n"
-"On mouse over"
-msgstr ""
-"ਕਦੇ ਨਹੀਂ\n"
-"ਜਦੋਂ ਪੂਰਾ ਪਰਦਾ ਹੋਵੇ\n"
-"ਮਾਊਸ ਉੱਤੇ ਹੋਵੇ"
-
-#: tmp/virt-manager.glade.h:135
-msgid "New machine..."
-msgstr "ਨਵੀਂ ਮਸ਼ੀਨ..."
-
-#: tmp/virt-manager.glade.h:136
+#: tmp/vmm-create.glade.h:62
 msgid "Normal Disk _Partition:"
 msgstr "ਸਧਾਰਨ ਡਿਸਕ ਭਾਗ(_P):"
 
-#: tmp/virt-manager.glade.h:137
-msgid "Open connection"
-msgstr "ਕੁਨੈਕਸ਼ਨ ਖੋਲ੍ਹੋ"
+#: tmp/vmm-create.glade.h:63
+#, fuzzy
+msgid "OS _Type:"
+msgstr "ਕਿਸਮ"
 
-#: tmp/virt-manager.glade.h:138
-msgid "Open connection..."
-msgstr "ਕੁਨੈਕਸ਼ਨ ਖੋਲ੍ਹੋ..."
+#: tmp/vmm-create.glade.h:64
+msgid "OS _Variant:"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:139
-msgid "Overview"
-msgstr "ਸੰਖੇਪ"
-
-#: tmp/virt-manager.glade.h:140
+#: tmp/vmm-create.glade.h:65
 msgid "PVinstall"
 msgstr "PV ਇੰਸਟਾਲ"
 
-#: tmp/virt-manager.glade.h:141
+#: tmp/vmm-create.glade.h:66
 msgid "P_artition:"
 msgstr "ਭਾਗ(_a):"
 
-#: tmp/virt-manager.glade.h:142
-msgid "Password:"
-msgstr "ਗੁਪਤ-ਕੋਡ:"
-
-#: tmp/virt-manager.glade.h:143
-msgid "Pause"
-msgstr "ਵਿਰਾਮ"
-
-#: tmp/virt-manager.glade.h:144
+#: tmp/vmm-create.glade.h:67
 msgid "Please choose a name for your virtual system:"
 msgstr "ਆਪਣੇ ਵੁਰਚੁਅਲ ਸਿਸਟਮ ਲਈ ਇੱਕ ਨਾਂ ਚੁਣੋ ਜੀ:"
 
-#: tmp/virt-manager.glade.h:145
+#: tmp/vmm-create.glade.h:68
+msgid ""
+"Please choose the type of guest operating system you will be installing:"
+msgstr ""
+
+#: tmp/vmm-create.glade.h:69
 #, fuzzy
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
@@ -942,11 +868,11 @@ msgstr ""
 "ਇਹ VM ਲਈ ਮੈਮੋਰੀ ਸੰਰਚਨ ਦਿਓ ਜੀ। ਤੁਸੀਂ ਵੱਧ ਤੋਂ ਵੱਧ ਮੈਮੋਰੀ ਦੀ ਮਾਤਰਾ ਦੇ ਸਕਦੇ ਹੋ, ਜੋ ਕਿ VM ਵਰਤ ਸਕੇ "
 "ਅਤੇ ਸ਼ੁਰੂ ਵੇਲੇ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ ਚੋਣਵੇਂ ਰੂਪ ਵਿੱਚ ਘੱਟੋ-ਘੱਟ ਮਾਤਰਾ ਵੀ।"
 
-#: tmp/virt-manager.glade.h:146
+#: tmp/vmm-create.glade.h:70
 msgid "Please enter the number of virtual CPUs this VM should start up with."
 msgstr "ਇਹ VM ਲਈ ਫ਼ਰਜ਼ੀ CPU ਦਿਓ, ਜਿਸ ਨਾਲ ਇਹ ਚਾਲੂ ਹੋਵੇ।"
 
-#: tmp/virt-manager.glade.h:147
+#: tmp/vmm-create.glade.h:71
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
@@ -955,7 +881,7 @@ msgstr ""
 "ਇਹ ਦੱਸੋ ਕਿ ਤੁਸੀਂ ਆਪਣੇ ਇਸ ਭੌਤਿਕ ਮੇਜ਼ਬਾਨ ਸਿਸਟਮ ਉੱਤੇ ਆਪਣੇ ਨਵੇਂ ਵੁਰਚੁਅਲ ਸਿਸਟਮ ਲਈ ਖਾਲੀ ਥਾਂ ਕਿਵੇਂ "
 "ਦੇਣੀ ਚਾਹੁੰਦੇ ਹੋ। ਇਹ ਥਾਂ ਨੂੰ ਵੁਰਚੁਅਲ ਸਿਸਟਮ ਦੇ ਓਪਰੇਟਿੰਗ ਸਿਸਟਮ ਨੂੰ ਇੰਸਟਾਲ ਕਰਨ ਲਈ ਵਰਤਿਆ ਜਾਵੇਗਾ।"
 
-#: tmp/virt-manager.glade.h:148
+#: tmp/vmm-create.glade.h:72
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
@@ -964,7 +890,7 @@ msgstr ""
 "ਇਹ ਦੱਸੋ ਕਿ ਇਹ <b>ਪੂਰਾ ਵੁਰਚੁਅਲ</b> ਸਿਸਟਮ ਉੱਤੇ ਇੰਸਟਾਲ ਕਰਨ ਲਈ ਓਪਰੇਟਿੰਗ ਸਿਸਟਮ ਲਈ ਇੰਸਟਾਲੇਸ਼ਨ "
 "ਮੀਡਿਆ ਕਿੱਥੇ ਉਪਲੱਬਧ ਹੈ:"
 
-#: tmp/virt-manager.glade.h:149
+#: tmp/vmm-create.glade.h:73
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
@@ -975,87 +901,31 @@ msgstr ""
 "ਮੀਡਿਆ ਕਿੱਥੇ ਉਪਲੱਬਧ ਹੈ। ਬਦਲਵੇਂ ਰੂਪ ਵਿੱਚ ਤੁਸੀਂ ਇੱਕ ਕਿੱਕਸਟਾਰਟ URL ਦੇ ਸਕਦੇ ਹੋ, ਜੋ ਕਿ ਤੁਹਾਡੇ ਸਿਸਟਮ "
 "ਨੂੰ ਦੱਸੇ:"
 
-#: tmp/virt-manager.glade.h:150
-msgid "Please wait..."
-msgstr "ਉਡੀਕੋ ਜੀ..."
-
-#: tmp/virt-manager.glade.h:151
-msgid "Powered by libvirt"
-msgstr "libvirt ਵਲੋਂ ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ"
-
-#: tmp/virt-manager.glade.h:152
+#: tmp/vmm-create.glade.h:74
+#, fuzzy
 msgid ""
 "Press finish to create a new virtual machine with\n"
-"this configuration & display the virtual console."
+"this configuration."
 msgstr ""
 "ਇਹ ਸੰਰਚਨਾ ਨਾਲ ਇੱਕ ਨਵੀਂ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਬਣਾਉਣ ਅਤੇ\n"
 "ਵੁਰਚੁਅਲ ਕਨਸੋਂਲ ਵੇਖਾਉਣ ਲਈ ਮੁਕੰਮਲ ਨੂੰ ਦਬਾਓ।"
 
-#: tmp/virt-manager.glade.h:154
-msgid "Processor"
-msgstr "ਪਰੋਸੈਸਰ"
-
-#: tmp/virt-manager.glade.h:155
-msgid "Randomly generated MAC address"
-msgstr "ਰਲਵੇਂ ਤੌਰ ਉੱਤੇ ਤਿਆਰ MAC ਸਿਰਨਾਵਾਂ"
-
-#: tmp/virt-manager.glade.h:156
-msgid "Restore a saved machine from a filesystem image"
-msgstr "ਇੱਕ ਫਾਇਲ-ਸਿਸਟਮ ਪ੍ਰਤੀਬਿੰਬ ਤੋਂ ਇੱਕ ਸੰਭਾਲੀ ਮਸ਼ੀਨ ਮੁੜ-ਪ੍ਰਾਪਤ ਕਰੋ"
-
-#: tmp/virt-manager.glade.h:157
-msgid "Restore saved machine..."
-msgstr "ਸੰਭਾਲੀ ਮਸ਼ੀਨ ਮੁੜ-ਪ੍ਰਾਪਤ...."
-
-#: tmp/virt-manager.glade.h:158
-msgid "Run"
-msgstr "ਚਲਾਓ"
-
-#: tmp/virt-manager.glade.h:159
-#, fuzzy
-msgid "S_hutdown"
-msgstr "ਬੰਦ ਹੈ"
-
-#: tmp/virt-manager.glade.h:160
-msgid "Save this password in your keyring"
-msgstr "ਇਹ ਗੁਪਤ-ਕੋਡ ਆਪਣੇ ਕੀ-ਰਿੰਗ ਵਿੱਚ ਸੰਭਾਲੋ"
-
-#: tmp/virt-manager.glade.h:161
-msgid "Saving VM Image"
-msgstr "VM ਪ੍ਰਤੀਬਿੰਬ ਸੰਭਾਲਿਆ ਜਾ ਰਿਹਾ ਹੈ"
-
-#: tmp/virt-manager.glade.h:162
-msgid "Screenshot"
-msgstr "ਸਕਰੀਨ-ਸ਼ਾਟ"
-
-#: tmp/virt-manager.glade.h:163
-msgid "Shut down"
-msgstr "ਬੰਦ ਕਰੋ"
-
-#: tmp/virt-manager.glade.h:165
+#: tmp/vmm-create.glade.h:76
 msgid "Simple F_ile:"
 msgstr "ਨਮੂਨਾ ਫਾਇਲ(_i):"
 
-#: tmp/virt-manager.glade.h:166
-msgid "Specified MAC address:"
-msgstr "ਦਿੱਤਾ MAC ਸਿਰਨਾਵਾਂ:"
-
-#: tmp/virt-manager.glade.h:168
-msgid "Status:"
-msgstr "ਹਾਲਤ:"
-
-#: tmp/virt-manager.glade.h:169
+#: tmp/vmm-create.glade.h:77
 msgid "System _Name:"
 msgstr "ਸਿਸਟਮ ਨਾਂ(_N):"
 
-#: tmp/virt-manager.glade.h:170
+#: tmp/vmm-create.glade.h:78
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
 msgstr ""
 "ਫਾਇਲਾਂ ਦਾ <b>ਟਿਕਾਣਾ</b> ਵੁਰਚੁਅਲ ਸਿਸਟਮ ਉੱਤੇ ਇੱਕ ਓਪਰੇਟਿੰਗ ਸਿਸਟਮ ਨੂੰ ਇੰਸਟਾਲ ਕਰਨ ਲਈ ਲਾਜ਼ਮੀ ਹੈ"
 
-#: tmp/virt-manager.glade.h:171
+#: tmp/vmm-create.glade.h:79
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
@@ -1064,237 +934,474 @@ msgstr ""
 "ਇਹ ਸਹਾਇਕ ਇੱਕ ਨਵਾਂ ਫ਼ਰਜ਼ੀ (ਵੁਰਚੁਅਲ) ਸਿਸਟਮ ਬਣਾਉਣ ਲਈ ਤੁਹਾਡੀ ਅਗਵਾਈ ਕਰੇਗਾ। ਤੁਹਾਨੂੰ ਤੁਹਾਡੇ ਲੋੜੀਦੇ "
 "ਨਵੇਂ ਵੁਰਚੁਅਲ ਸਿਸਟਮ ਬਣਾਉਣ ਲਈ ਕੁਝ ਜਾਣਕਾਰੀ ਪੁੱਛੀ ਜਾ ਸਕਦੀ ਹੈ, ਜਿਵੇਂ ਕਿ:"
 
-#: tmp/virt-manager.glade.h:172
-msgid "Toolbar"
-msgstr "ਸੰਦ-ਪੱਟੀ"
-
-#: tmp/virt-manager.glade.h:173
-msgid "Total CPUs on host machine:"
-msgstr "ਮੇਜ਼ਬਾਨ ਮਸ਼ੀਨ ਉੱਤੇ ਕੁੱਲ CPU:"
-
-#: tmp/virt-manager.glade.h:174
+#: tmp/vmm-create.glade.h:80 tmp/vmm-details.glade.h:43
 msgid "Total memory on host machine:"
 msgstr "ਮੇਜ਼ਬਾਨ ਮਸ਼ੀਨ ਉੱਤੇ ਕੁੱਲ ਮੈਮੋਰੀ:"
 
-#: tmp/virt-manager.glade.h:175
+#: tmp/vmm-create.glade.h:81
 msgid "Type"
 msgstr "ਕਿਸਮ"
 
-#: tmp/virt-manager.glade.h:176
-msgid "UUID:"
-msgstr "UUID:"
-
-#: tmp/virt-manager.glade.h:177
-msgid "Unavailable"
-msgstr "ਨਾ-ਉਪਲੱਬਧ"
-
-#: tmp/virt-manager.glade.h:178
-msgid "Update status every"
-msgstr "ਹਾਲਤ ਅੱਪਡੇਟ ਕਰੋ ਹਰੇਕ"
-
-#: tmp/virt-manager.glade.h:179
+#: tmp/vmm-create.glade.h:82
 #, fuzzy
 msgid "VM _Max Memory (MB):"
 msgstr "VM ਵੱਧੋ-ਵੱਧ ਮੈਮੋਰੀ(_M):"
 
-#: tmp/virt-manager.glade.h:180
+#: tmp/vmm-create.glade.h:83
 #, fuzzy
 msgid "VM _Startup Memory (MB):"
 msgstr "VM ਸ਼ੁਰੂਆਤੀ ਮੈਮੋਰੀ(_S):"
 
-#: tmp/virt-manager.glade.h:181
-msgid "VNC"
-msgstr "VNC"
+#: tmp/vmm-create.glade.h:84
+msgid "VMS"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:182
-msgid "Virtual CPUs"
-msgstr "ਵੁਰਚੁਅਲ CPU"
-
-#: tmp/virt-manager.glade.h:183
-msgid "Virtual Machine Console"
-msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਕਨਸੋਂਲ"
-
-#: tmp/virt-manager.glade.h:184
-msgid "Virtual Machine Details"
-msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਵੇਰਵਾ"
-
-#: tmp/virt-manager.glade.h:185
-msgid "Virtual Machine Manager"
-msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਮੈਨੇਜਰ"
-
-#: tmp/virt-manager.glade.h:186
-msgid "Virtual Machine Manager Preferences"
-msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਮੈਨੇਜਰ ਪਸੰਦ"
-
-#: tmp/virt-manager.glade.h:187
-msgid "Virtual _Machine"
-msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ(V_M)"
-
-#: tmp/virt-manager.glade.h:188
+#: tmp/vmm-create.glade.h:85
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr "ਕੀ ਸਿਸਟਮ <b>ਪੂਰਾ ਵੁਰਚੁਅਲ (FV)</b> ਹੋਵੇਗਾ ਜਾਂ <b>ਪੈਰਾ-ਵੁਰਚੁਅਲ (PV)</b>?"
 
-#: tmp/virt-manager.glade.h:189
+#: tmp/vmm-create.glade.h:86
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr "ਤੁਹਾਨੂੰ ਆਪਣੇ ਨਵੇਂ ਸਿਸਟਮ ਲਈ ਇੱਕ ਵੁਰਚੁਲਾਈਜ਼ੇਸ਼ਨ ਢੰਗ ਚੁਣਨਾ ਪਵੇਗਾ:"
 
-#: tmp/virt-manager.glade.h:190
+#: tmp/vmm-create.glade.h:87
 msgid "_Browse..."
 msgstr "ਝਲਕ(_B)..."
 
-#: tmp/virt-manager.glade.h:191
+#: tmp/vmm-create.glade.h:88
 msgid "_CD-ROM or DVD:"
 msgstr "_CD-ROM ਜਾਂ DVD:"
 
-#: tmp/virt-manager.glade.h:192
-msgid "_Destroy"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:193
-msgid "_Details"
-msgstr "ਵੇਰਵਾ(_D)"
-
-#: tmp/virt-manager.glade.h:194
-msgid "_Edit"
-msgstr "ਸੋਧ(_E)"
-
-#: tmp/virt-manager.glade.h:195
-msgid "_File"
-msgstr "ਫਾਇਲ(_F)"
-
-#: tmp/virt-manager.glade.h:196
+#: tmp/vmm-create.glade.h:89
 msgid "_Finish"
 msgstr "ਮੁਕੰਮਲ(_F)"
 
-#: tmp/virt-manager.glade.h:197
-msgid "_FullScreen"
-msgstr "ਪੂਰੇ ਪਰਦੇ ਉੱਤੇ(_F)"
-
-#: tmp/virt-manager.glade.h:198
-msgid "_Graphical Console"
-msgstr "ਗਰਾਫਿਕਲ ਕਨਸੋਂਲ(_G)"
-
-#: tmp/virt-manager.glade.h:199
-msgid "_Help"
-msgstr "ਸਹਾਇਤਾ(_H)"
-
-#: tmp/virt-manager.glade.h:200
-msgid "_Host:"
-msgstr "ਮੇਜ਼ਬਾਨ(_H):"
-
-#: tmp/virt-manager.glade.h:201
+#: tmp/vmm-create.glade.h:90
 msgid "_ISO Image Location:"
 msgstr "_ISO ਪ੍ਰਤੀਬਿੰਬ ਟਿਕਾਣਾ:"
 
-#: tmp/virt-manager.glade.h:202
-msgid "_Local Xen host"
-msgstr "ਲੋਕਲ ਜ਼ਿਨ (Xen) ਮੇਜ਼ਬਾਨ(_L)"
-
-#: tmp/virt-manager.glade.h:203
-msgid "_Mount Point (on virtual system):"
-msgstr "ਮਾਊਟ ਥਾਂ (ਵੁਰਚੁਅਲ ਸਿਸਟਮ ਉੱਤੇ)(_M):"
-
-#: tmp/virt-manager.glade.h:204
-msgid "_Other hypervisor"
-msgstr "ਹੋਰ ਹਾਈਪਰਵੀਜੋਰ(_O)"
-
-#: tmp/virt-manager.glade.h:205
+#: tmp/vmm-create.glade.h:91
 msgid "_Paravirtualized:"
 msgstr "ਪੈਰਾ-ਵੁਰਚੁਅਲ(_P):"
 
-#: tmp/virt-manager.glade.h:206
+#: tmp/vmm-create.glade.h:92
 msgid "_Path to install media:"
 msgstr "ਇੰਸਟਾਲ ਮੀਡਿਆ ਲਈ ਮਾਰਗ(_P):"
 
-#: tmp/virt-manager.glade.h:207
-msgid "_Pause"
-msgstr "ਵਿਰਾਮ(_P)"
-
-#: tmp/virt-manager.glade.h:208
-msgid "_Port:"
-msgstr "ਪੋਰਟ(_P):"
-
-#: tmp/virt-manager.glade.h:209
-msgid "_Read only connection"
-msgstr "ਸਿਰਫ਼ ਪੜ੍ਹਨ ਲਈ ਕੁਨੈਕਸ਼ਨ(_R)"
-
-#: tmp/virt-manager.glade.h:210
-msgid "_Remote Xen host"
-msgstr "ਰਿਮੋਟ ਜ਼ੈੱਨ (Xen) ਮੇਜ਼ਬਾਨ(_R)"
-
-#: tmp/virt-manager.glade.h:211
-msgid "_Run"
-msgstr "ਚਲਾਓ(_R)"
-
-#: tmp/virt-manager.glade.h:212
-msgid "_Save"
-msgstr "ਸੰਭਾਲੋ(_S)"
-
-#: tmp/virt-manager.glade.h:213
-msgid "_Serial Console"
-msgstr "ਸੀਰੀਅਲ ਕਨਸੋਂਲ(_S)"
-
-#: tmp/virt-manager.glade.h:214
-msgid "_Size:"
-msgstr "ਆਕਾਰ(_S):"
-
-#: tmp/virt-manager.glade.h:215
-msgid "_Take Screenshot"
-msgstr "ਸਕਰੀਨ-ਸ਼ਾਟ ਲਵੋ(_T)"
-
-#: tmp/virt-manager.glade.h:216
-msgid "_URI:"
-msgstr "_URI:"
-
-#: tmp/virt-manager.glade.h:217
+#: tmp/vmm-create.glade.h:93
 msgid "_VCPUs:"
 msgstr "_VCPU"
 
-#: tmp/virt-manager.glade.h:218
-msgid "_View"
-msgstr "ਝਲਕ(_V)"
-
-#: tmp/virt-manager.glade.h:219
-msgid "_View:"
-msgstr "ਝਲਕ(_V):"
-
-#: tmp/virt-manager.glade.h:220
+#: tmp/vmm-create.glade.h:94
 msgid "demo"
 msgstr "ਡੈਮੋ"
 
-#: tmp/virt-manager.glade.h:221
+#: tmp/vmm-create.glade.h:95
 msgid "http://"
 msgstr "http://"
 
-#: tmp/virt-manager.glade.h:222
-msgid "http://virt-manager.et.redhat.com/"
-msgstr "http://virt-manager.et.redhat.com/"
+#: tmp/vmm-create.glade.h:96
+msgid ""
+"i686\n"
+"x86_64\n"
+"ppc\n"
+"sparc\n"
+"mips\n"
+"mipsel"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:223
-msgid "mac-addr-random"
-msgstr "mac-addr-random"
-
-#: tmp/virt-manager.glade.h:224
+#: tmp/vmm-create.glade.h:102
 msgid "para"
 msgstr "ਪੈਰਾ"
 
-#: tmp/virt-manager.glade.h:225
+#: tmp/vmm-details.glade.h:2
+#, no-c-format
+msgid "18%"
+msgstr "18%"
+
+#: tmp/vmm-details.glade.h:3
+msgid "2"
+msgstr "2"
+
+#: tmp/vmm-details.glade.h:5
+msgid "20 bits/sec"
+msgstr "20 bits/sec"
+
+#: tmp/vmm-details.glade.h:6
+msgid "200 MB"
+msgstr "200 MB"
+
+#: tmp/vmm-details.glade.h:7
+msgid "30 MB of 128 MB"
+msgstr "128 MB ਵਿੱਚੋਂ 30 MB"
+
+#: tmp/vmm-details.glade.h:8
+msgid "8"
+msgstr "8"
+
+#: tmp/vmm-details.glade.h:9
+msgid "80 MB of 1 GB"
+msgstr "1 GB ਵਿਚੋਂ 80 MB"
+
+#: tmp/vmm-details.glade.h:10
+msgid "<b>Basic details</b>"
+msgstr "<b>ਮੁੱਢਲਾ ਵੇਰਵਾ</b>"
+
+#: tmp/vmm-details.glade.h:11
+msgid "<b>CPUs</b>"
+msgstr "<b>CPU</b>"
+
+#: tmp/vmm-details.glade.h:12
+msgid "<b>Memory</b>"
+msgstr "<b>ਮੈਮੋਰੀ</b>"
+
+#: tmp/vmm-details.glade.h:13
+msgid "<b>Network</b>"
+msgstr "<b>ਨੈੱਟਵਰਕ</b>"
+
+#: tmp/vmm-details.glade.h:14
+msgid "<b>Performance</b>"
+msgstr "<b>ਸਮਰੱਥਾ</b>"
+
+#: tmp/vmm-details.glade.h:15
+msgid "<b>Storage</b>"
+msgstr "<b>ਸਟੋਰੇਜ਼</b>"
+
+#: tmp/vmm-details.glade.h:16
+msgid ""
+"<b>Tip:</b> File location paths are as seen from the physical host. Mount "
+"points are as seen from the virtual machine."
+msgstr ""
+"<b>ਇਸ਼ਾਰਾ:</b> ਫਾਇਲ ਟਿਕਾਣਾ ਮਾਰਗ ਭੌਤਿਕ ਮੇਜ਼ਬਾਨ ਤੋਂ ਵੇਖੇ ਜਾ ਸਕਦੇ ਹਨ। ਮਾਊਂਟ ਥਾਵਾਂ ਨੂੰ ਵੁਰਚੁਅਲ "
+"ਮਸ਼ੀਨ ਤੋਂ ਵੇਖਿਆ ਜਾ ਸਕਦਾ ਹੈ।"
+
+#: tmp/vmm-details.glade.h:17
+msgid ""
+"<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
+"than (or equal to) the number of physical CPUs on the host system."
+msgstr ""
+"<b>ਇਸ਼ਾਰਾ:</b> ਵਧੀਆ ਕੰਮ ਸਮਰੱਥਾ ਲਈ, ਫ਼ਰਜ਼ੀ CPU ਦੀ ਗਿਣਤੀ ਮੇਜ਼ਬਾਨ ਸਿਸਟਮ ਉੱਤੇ ਮੌਜੂਦ ਭੌਤਿਕ "
+"CPU ਦੀ ਗਿਣਤੀ ਤੋਂ ਘੱਟ (ਜਾਂ ਬਰਾਬਰ) ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ।"
+
+#: tmp/vmm-details.glade.h:18
+msgid "CPU usage:"
+msgstr "CPU ਵਰਤੋਂ:"
+
+#: tmp/vmm-details.glade.h:19
+msgid "Change allocation:"
+msgstr "ਜਾਰੀ ਤਬਦੀਲ:"
+
+#: tmp/vmm-details.glade.h:20
+msgid "Current allocation:"
+msgstr "ਮੌਜੂਦਾ ਜਾਰੀ:"
+
+#: tmp/vmm-details.glade.h:22
+msgid "Disk usage:"
+msgstr "ਡਿਸਕ ਵਰਤੋਂ:"
+
+#: tmp/vmm-details.glade.h:23
+msgid "Hardware"
+msgstr "ਜੰਤਰ"
+
+#: tmp/vmm-details.glade.h:24
+msgid "How many virtual CPUs should this machine be allocated?"
+msgstr "ਇਸ ਮਸ਼ੀਨ ਨੂੰ ਕਿੰਨੇ ਵੁਰਚੁਅਲ (ਫ਼ਰਜ਼ੀ) CPU ਜਾਰੀ ਕੀਤੇ ਜਾਣ?"
+
+#: tmp/vmm-details.glade.h:25
+msgid "How much memory should this machine be allocated?"
+msgstr "ਇਸ ਮਸ਼ੀਨ ਨੂੰ ਕਿੰਨੀ ਮੈਮੋਰੀ ਜਾਰੀ ਕੀਤੀ ਜਾ ਸਕਦੀ ਹੈ?"
+
+#: tmp/vmm-details.glade.h:27
+msgid "Maximum allocation:"
+msgstr "ਵੱਧ ਤੋਂ ਵੱਧ ਰੱਖੋ:"
+
+#: tmp/vmm-details.glade.h:28
+msgid "Memory"
+msgstr "ਮੈਮੋਰੀ"
+
+#: tmp/vmm-details.glade.h:29
+msgid "Memory usage:"
+msgstr "ਮੈਮੋਰੀ ਵਰਤੋਂ:"
+
+#: tmp/vmm-details.glade.h:30
+msgid "Name:"
+msgstr "ਨਾਂ:"
+
+#: tmp/vmm-details.glade.h:31
+msgid "Network"
+msgstr "ਨੈੱਟਵਰਕ"
+
+#: tmp/vmm-details.glade.h:32
+msgid "Network usage:"
+msgstr "ਨੈੱਟਵਰਕ ਵਰਤੋਂ:"
+
+#: tmp/vmm-details.glade.h:33
+msgid "Overview"
+msgstr "ਸੰਖੇਪ"
+
+#: tmp/vmm-details.glade.h:35
+msgid "Processor"
+msgstr "ਪਰੋਸੈਸਰ"
+
+#: tmp/vmm-details.glade.h:38
+msgid "Shut down"
+msgstr "ਬੰਦ ਕਰੋ"
+
+#: tmp/vmm-details.glade.h:40
+msgid "Status:"
+msgstr "ਹਾਲਤ:"
+
+#: tmp/vmm-details.glade.h:42
+msgid "Total CPUs on host machine:"
+msgstr "ਮੇਜ਼ਬਾਨ ਮਸ਼ੀਨ ਉੱਤੇ ਕੁੱਲ CPU:"
+
+#: tmp/vmm-details.glade.h:44
+msgid "UUID:"
+msgstr "UUID:"
+
+#: tmp/vmm-details.glade.h:45
+msgid "Virtual Machine Details"
+msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਵੇਰਵਾ"
+
+#: tmp/vmm-details.glade.h:48
+msgid "_Graphical Console"
+msgstr "ਗਰਾਫਿਕਲ ਕਨਸੋਂਲ(_G)"
+
+#: tmp/vmm-manager.glade.h:1
+msgid ""
+"All virtual machines\n"
+"Active virtual machines\n"
+"Inactive virtual machines"
+msgstr ""
+"ਸਭ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨਾਂ\n"
+"ਸਰਗਰਮ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨਾਂ\n"
+"ਨਾ-ਸਰਗਰਮ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨਾਂ"
+
+#: tmp/vmm-manager.glade.h:5
+msgid "De_tails"
+msgstr "ਵੇਰਵਾ(_t)"
+
+#: tmp/vmm-manager.glade.h:6
+msgid "Delete machine"
+msgstr "ਮਸ਼ੀਨ ਹਟਾਓ"
+
+#: tmp/vmm-manager.glade.h:8
+msgid "Domain ID"
+msgstr "ਡੋਮੇਨ ID"
+
+#: tmp/vmm-manager.glade.h:9
+msgid "Machine details..."
+msgstr "ਮਸ਼ੀਨ ਵੇਰਵਾ..."
+
+#: tmp/vmm-manager.glade.h:12
+msgid "New machine..."
+msgstr "ਨਵੀਂ ਮਸ਼ੀਨ..."
+
+#: tmp/vmm-manager.glade.h:13
+msgid "Open connection..."
+msgstr "ਕੁਨੈਕਸ਼ਨ ਖੋਲ੍ਹੋ..."
+
+#: tmp/vmm-manager.glade.h:14
+msgid "Restore a saved machine from a filesystem image"
+msgstr "ਇੱਕ ਫਾਇਲ-ਸਿਸਟਮ ਪ੍ਰਤੀਬਿੰਬ ਤੋਂ ਇੱਕ ਸੰਭਾਲੀ ਮਸ਼ੀਨ ਮੁੜ-ਪ੍ਰਾਪਤ ਕਰੋ"
+
+#: tmp/vmm-manager.glade.h:15
+msgid "Restore saved machine..."
+msgstr "ਸੰਭਾਲੀ ਮਸ਼ੀਨ ਮੁੜ-ਪ੍ਰਾਪਤ...."
+
+#: tmp/vmm-manager.glade.h:17
+msgid "Virtual CPUs"
+msgstr "ਵੁਰਚੁਅਲ CPU"
+
+#: tmp/vmm-manager.glade.h:19
+msgid "_Edit"
+msgstr "ਸੋਧ(_E)"
+
+#: tmp/vmm-manager.glade.h:20
+msgid "_File"
+msgstr "ਫਾਇਲ(_F)"
+
+#: tmp/vmm-manager.glade.h:23
+msgid "_View:"
+msgstr "ਝਲਕ(_V):"
+
+#: tmp/vmm-modify-file-storage.glade.h:1
+msgid " free"
+msgstr " ਮੁਕਤ"
+
+#: tmp/vmm-modify-file-storage.glade.h:2
+msgid " of "
+msgstr " ਵਿੱਚੋਂ"
+
+#: tmp/vmm-modify-file-storage.glade.h:3
+msgid "/tmp"
+msgstr "/tmp"
+
+#: tmp/vmm-modify-file-storage.glade.h:4
+msgid "10 TB"
+msgstr "10 TB"
+
+#: tmp/vmm-modify-file-storage.glade.h:5
+msgid ""
+"<b>Tip:</b> You may only increase the size of file-based storage; you can't "
+"decrease its size."
+msgstr ""
+"<b>ਇਸ਼ਾਰਾ:</b> ਫਾਇਲ ਅਧਾਰਿਤ ਸਟੋਰੇਜ਼ ਦਾ ਅਕਾਰ ਤਾਂ ਤੁਸੀਂ ਵਧਾ ਸਕਦੇ ਹੋ, ਪਰ ਇਸ ਨੂੰ ਤੁਸੀਂ ਘਟਾ ਨਹੀਂ "
+"ਸਕਦੇ ਹੋ।"
+
+#: tmp/vmm-modify-file-storage.glade.h:6
+msgid ""
+"MB\n"
+"GB\n"
+"TB"
+msgstr ""
+"MB\n"
+"GB\n"
+"TB"
+
+#: tmp/vmm-modify-file-storage.glade.h:9
+msgid "Modify File Storage"
+msgstr "ਫਾਇਲ ਸਟੋਰੇਜ਼ ਸੋਧ"
+
+#: tmp/vmm-modify-file-storage.glade.h:10
+msgid "_Mount Point (on virtual system):"
+msgstr "ਮਾਊਟ ਥਾਂ (ਵੁਰਚੁਅਲ ਸਿਸਟਮ ਉੱਤੇ)(_M):"
+
+#: tmp/vmm-modify-file-storage.glade.h:11
+msgid "_Size:"
+msgstr "ਆਕਾਰ(_S):"
+
+#: tmp/vmm-open-connection.glade.h:1
+msgid "Co_nnect"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਜੋੜੋ(_n)"
+
+#: tmp/vmm-open-connection.glade.h:2
+#, fuzzy
+msgid "Hypervisor:"
+msgstr "ਹੋਰ ਹਾਈਪਰਵੀਜੋਰ(_O)"
+
+#: tmp/vmm-open-connection.glade.h:3
+msgid "Open connection"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਖੋਲ੍ਹੋ"
+
+#: tmp/vmm-open-connection.glade.h:4
+msgid ""
+"Xen\n"
+"QEMU"
+msgstr ""
+
+#: tmp/vmm-open-connection.glade.h:6
+msgid "_Host:"
+msgstr "ਮੇਜ਼ਬਾਨ(_H):"
+
+#: tmp/vmm-open-connection.glade.h:7
+#, fuzzy
+msgid "_Local host"
+msgstr "ਲੋਕਲ ਜ਼ਿਨ (Xen) ਮੇਜ਼ਬਾਨ(_L)"
+
+#: tmp/vmm-open-connection.glade.h:8
+msgid "_Port:"
+msgstr "ਪੋਰਟ(_P):"
+
+#: tmp/vmm-open-connection.glade.h:9
+msgid "_Read only connection"
+msgstr "ਸਿਰਫ਼ ਪੜ੍ਹਨ ਲਈ ਕੁਨੈਕਸ਼ਨ(_R)"
+
+#: tmp/vmm-open-connection.glade.h:10
+#, fuzzy
+msgid "_Remote host"
+msgstr "ਰਿਮੋਟ ਜ਼ੈੱਨ (Xen) ਮੇਜ਼ਬਾਨ(_R)"
+
+#: tmp/vmm-preferences.glade.h:1
+msgid "<b>Consoles</b>"
+msgstr "<b>ਕੰਨਸੋਲ</b>"
+
+#: tmp/vmm-preferences.glade.h:2
+msgid "<b>Status monitoring</b>"
+msgstr "<b>ਹਾਲਤ ਨਿਗਰਾਨੀ</b>"
+
+#: tmp/vmm-preferences.glade.h:3
+msgid "Automatically open consoles:"
+msgstr "ਆਟੋਮੈਟਿਕ ਖੁੱਲੇ ਕੰਨਸੋਲ:"
+
+#: tmp/vmm-preferences.glade.h:4
+msgid "Grab keyboard input:"
+msgstr "ਕੀ-ਬੋਰਡ ਇੰਪੁੱਟ ਲਵੋ:"
+
+#: tmp/vmm-preferences.glade.h:5
+msgid "Maintain history of"
+msgstr "ਇਸ ਦਾ ਅਤੀਤ ਰੱਖੋ..."
+
+#: tmp/vmm-preferences.glade.h:6
+msgid ""
+"Never\n"
+"For new domains\n"
+"For all domains"
+msgstr ""
+"ਕਦੇ ਨਹੀਂ\n"
+"ਨਵੇਂ ਡੋਮੇਨਾਂ ਲਈ\n"
+"ਸਭ ਡੋਮੇਨਾਂ ਲਈ"
+
+#: tmp/vmm-preferences.glade.h:9
+msgid ""
+"Never\n"
+"When fullscreen\n"
+"On mouse over"
+msgstr ""
+"ਕਦੇ ਨਹੀਂ\n"
+"ਜਦੋਂ ਪੂਰਾ ਪਰਦਾ ਹੋਵੇ\n"
+"ਮਾਊਸ ਉੱਤੇ ਹੋਵੇ"
+
+#: tmp/vmm-preferences.glade.h:12
+msgid "Preferences"
+msgstr ""
+
+#: tmp/vmm-preferences.glade.h:13
+msgid "Update status every"
+msgstr "ਹਾਲਤ ਅੱਪਡੇਟ ਕਰੋ ਹਰੇਕ"
+
+#: tmp/vmm-preferences.glade.h:14
 msgid "samples"
 msgstr "ਨਮੂਨੇ"
 
-#: tmp/virt-manager.glade.h:226
+#: tmp/vmm-preferences.glade.h:15
 msgid "seconds"
 msgstr "ਸਕਿੰਟ"
 
-#: tmp/virt-manager.glade.h:228
-msgid "translator-credits"
-msgstr "ਅਮਨਪਰੀਤ ਸਿੰਘ ਆਲਮ <apbrar@gmail.com>"
+#~ msgid ""
+#~ "<b>Too Many Virtual CPUs</b>\n"
+#~ "\n"
+#~ "You have set this virtual machine to have more CPUs than the host system "
+#~ "has physically. This may result in poor performance in the virtual "
+#~ "machine."
+#~ msgstr ""
+#~ "<b>ਬਹੁਤ ਜ਼ਿਆਦਾ ਵੁਰਚੁਅਲ CPU ਹਨ</b>\n"
+#~ "\n"
+#~ "ਤੁਸੀਂ ਇਸ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਲਈ ਆਪਣੇ ਮੇਜ਼ਬਾਨ ਸਿਸਟਮ ਦੇ ਅਸਲ ਵਿੱਚ ਮੌਜੂਦ CPU ਤੋਂ ਵੱਧ ਸੈੱਟ ਕੀਤੇ ਹਨ। ਇਸ "
+#~ "ਨਾਲ ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਦੀ ਕੰਮ-ਸਮਰੱਥਾ ਮਾੜੀ ਹੋ ਸਕਦੀ ਹੈ।"
 
-#: tmp/virt-manager.glade.h:229
-msgid "virtual CPU alert"
-msgstr "ਵੁਰਚੁਅਲ CPU ਚੇਤਾਵਨੀ"
+#~ msgid "Alert"
+#~ msgstr "ਚੇਤਾਵਨੀ"
+
+#~ msgid "Keep CPU Settings"
+#~ msgstr "CPU ਸੈਟਿੰਗ ਰੱਖੋ"
+
+#~ msgid "Modify CPU Settings"
+#~ msgstr "CPU ਸਥਾਪਨ ਸੋਧ"
+
+#~ msgid "Saving VM Image"
+#~ msgstr "VM ਪ੍ਰਤੀਬਿੰਬ ਸੰਭਾਲਿਆ ਜਾ ਰਿਹਾ ਹੈ"
+
+#~ msgid "Virtual Machine Manager Preferences"
+#~ msgstr "ਵੁਰਚੁਅਲ ਮਸ਼ੀਨ ਮੈਨੇਜਰ ਪਸੰਦ"
+
+#~ msgid "_URI:"
+#~ msgstr "_URI:"
+
+#~ msgid "virtual CPU alert"
+#~ msgstr "ਵੁਰਚੁਅਲ CPU ਚੇਤਾਵਨੀ"
 
 #~ msgid ""
 #~ "<small><b>Note:</b> File size parameter is only relevant for new files</"

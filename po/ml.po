@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-22 18:10-0500\n"
+"POT-Creation-Date: 2007-03-20 12:41-0400\n"
 "PO-Revision-Date: 2006-11-17 17:27+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -23,11 +23,45 @@ msgstr ""
 msgid "Unable to initialize GTK: "
 msgstr "GTK ഇനിഷ്യലൈസ് ചെയ്യുവാന്‍ അസാധ്യം: "
 
-#: ../../src/virtManager/console.py:256
+#: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:2
+#, fuzzy
+msgid "Please wait a few moments..."
+msgstr "കാത്തിരിക്കൂ..."
+
+#: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:1
+msgid "Operation in progress"
+msgstr ""
+
+#: ../../src/virtManager/asyncjob.py:72 ../../src/virtManager/asyncjob.py:80
+#: tmp/vmm-progress.glade.h:3
+#, fuzzy
+msgid "Processing..."
+msgstr "പ്രൊസസ്സര്‍"
+
+#: ../../src/virtManager/asyncjob.py:90
+#, fuzzy
+msgid "Completed"
+msgstr "പൂര്‍ത്തിയാക്കുക"
+
+#: ../../src/virtManager/console.py:130
+msgid "Pointer grabbed"
+msgstr ""
+
+#: ../../src/virtManager/console.py:131
+msgid ""
+"The mouse pointer has been restricted to the virtual console window. To "
+"release the pointer press the key pair Ctrl+Alt"
+msgstr ""
+
+#: ../../src/virtManager/console.py:140
+msgid "Press Ctrl+Alt to release pointer."
+msgstr ""
+
+#: ../../src/virtManager/console.py:300
 msgid "Save Virtual Machine Screenshot"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീനിന്‍റെ സ്ക്രീന്‍ഷോട്ട് സൂക്ഷിക്കുക"
 
-#: ../../src/virtManager/console.py:289
+#: ../../src/virtManager/console.py:333
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -36,82 +70,109 @@ msgstr ""
 "ഇതിലേക്ക് സ്ക്രീന്‍ഷോട്ട് സൂക്ഷിച്ചിരിക്കുന്നു:\n"
 "%s"
 
-#: ../../src/virtManager/console.py:290
+#: ../../src/virtManager/console.py:334
 msgid "Screenshot saved"
 msgstr "സ്ക്രീന്‍ഷോട്ട് സൂക്ഷിച്ചിരിക്കുന്നു"
 
-#: ../../src/virtManager/console.py:405
+#: ../../src/virtManager/console.py:449
 msgid "paused"
 msgstr "താല്‍ക്കാലികമായി നിര്‍ത്തിയിരിക്കുന്നു"
 
-#: ../../src/virtManager/create.py:348
+#: ../../src/virtManager/create.py:395
 msgid "Paravirtualized"
 msgstr "പകുതി വിര്‍ച്ച്വലൈസ്ഡ്"
 
-#: ../../src/virtManager/create.py:350
+#: ../../src/virtManager/create.py:399
 msgid "Fully virtualized"
 msgstr "പൂര്‍ണ്ണ വിര്‍ച്ച്വലൈസ്ഡ്"
 
-#: ../../src/virtManager/create.py:381
+#: ../../src/virtManager/create.py:435
 msgid "Invalid FV media address"
 msgstr "അസാധുവായ FV മീഡിയാ വിലാസം"
 
-#: ../../src/virtManager/create.py:387
+#: ../../src/virtManager/create.py:440
+#, fuzzy
+msgid "Invalid FV OS Type"
+msgstr "അസാധുവായ FV മീഡിയാ വിലാസം"
+
+#: ../../src/virtManager/create.py:445
+#, fuzzy
+msgid "Invalid FV OS Variant"
+msgstr "അസാധുവായ FV മീഡിയാ വിലാസം"
+
+#: ../../src/virtManager/create.py:452
 msgid "Invalid PV media address"
 msgstr "അസാധുവായ PV മീഡിയാ വിലാസം"
 
-#: ../../src/virtManager/create.py:397
+#: ../../src/virtManager/create.py:462
 msgid "Invalid system name"
 msgstr "അസാധുവായ സിസ്റ്റം നാമം"
 
-#: ../../src/virtManager/create.py:404
+#: ../../src/virtManager/create.py:469 ../../src/virtManager/create.py:475
 msgid "Invalid memory setting"
 msgstr "തെറ്റായ മെമ്മറിയുടെ ക്രമീകരണം"
 
-#: ../../src/virtManager/create.py:426
+#: ../../src/virtManager/create.py:497
 msgid "Invalid storage address"
 msgstr "തെറ്റായ സ്റ്റോറേജ് വിലാസം"
 
-#: ../../src/virtManager/create.py:460
+#: ../../src/virtManager/create.py:534
 msgid "Creating Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ ഉണ്ടാക്കുന്നു"
 
-#: ../../src/virtManager/create.py:465
+#: ../../src/virtManager/create.py:535
+msgid "The virtual machine is now being created. "
+msgstr ""
+
+#: ../../src/virtManager/create.py:536
+msgid "Allocation of disk storage and retrieval of "
+msgstr ""
+
+#: ../../src/virtManager/create.py:537
+msgid "the installation images may a few minutes "
+msgstr ""
+
+#: ../../src/virtManager/create.py:538
+#, fuzzy
+msgid "to complete."
+msgstr "പൂര്‍ത്തിയാക്കുക"
+
+#: ../../src/virtManager/create.py:543
 msgid "Guest Install Error"
 msgstr "ഗസ്റ്റ് ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതില്‍ പിശക്"
 
-#: ../../src/virtManager/create.py:503
+#: ../../src/virtManager/create.py:581
 msgid "Locate ISO Image"
 msgstr "ISO ഇമേജ് കണ്ടുപിടിക്കുക"
 
-#: ../../src/virtManager/create.py:532
+#: ../../src/virtManager/create.py:610
 msgid "Locate Storage Partition"
 msgstr "സ്റ്റോറേജ് പാര്‍ട്ടീഷന്‍ കണ്ടുപിടിക്കുക"
 
-#: ../../src/virtManager/create.py:538
+#: ../../src/virtManager/create.py:616
 msgid "Locate or Create New Storage File"
 msgstr "പുതിയ സ്റ്റോറേജ് ഫയല്‍ ഉണ്ടാക്കുക അല്ലെങ്കില്‍ കണ്ടുപിടിക്കുക"
 
-#: ../../src/virtManager/create.py:604 ../../src/virtManager/create.py:608
+#: ../../src/virtManager/create.py:682 ../../src/virtManager/create.py:686
 msgid "Invalid System Name"
 msgstr "തെറ്റായ സിസ്റ്റം നാമം"
 
-#: ../../src/virtManager/create.py:605
+#: ../../src/virtManager/create.py:683
 #, fuzzy
 msgid "System name must be non-blank and less than 50 characters"
 msgstr ""
 "സിസ്റ്റത്തിന്‍റെ പേര് ശൂന്യമാകുവാന്‍ പാടില്ല. കുറഞ്ഞത് 50 അക്കങ്ങള്‍ അല്ലെങ്കില്‍ അക്ഷരങ്ങള്‍ "
 "ഉണ്ടായിരിക്കണം, മാത്രമല്ല ഇടയ്ക്ക് സ്പെയിസ് പാടില്ല"
 
-#: ../../src/virtManager/create.py:609
+#: ../../src/virtManager/create.py:687
 msgid "System name may contain alphanumeric and '_' characters only"
 msgstr ""
 
-#: ../../src/virtManager/create.py:615
+#: ../../src/virtManager/create.py:693
 msgid "Hardware Support Required"
 msgstr "ഹാര്‍ഡ്‍വെയറിന് പിന്തുണ ആവശ്യമുണ്ട്"
 
-#: ../../src/virtManager/create.py:616
+#: ../../src/virtManager/create.py:694
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
@@ -119,97 +180,98 @@ msgstr ""
 "നിങ്ങളുടെ ഹാര്‍ഡ്‍വെയര്‍ പൂര്‍ണ്ണ വിര്‍ച്ച്വലൈസേഷന്‍ പിന്തുണയ്ക്കുന്നില്ല. പാരാവിര്‍ച്ച്വലൈസ്ഡ് ആയ ഗസ്റ്റുകള്‍ "
 "മാത്രമേ ഈ ഹാര്‍ഡ്‍വെയറില്‍ ലഭ്യമാകൂ."
 
-#: ../../src/virtManager/create.py:623
+#: ../../src/virtManager/create.py:701
 msgid "ISO Path Required"
 msgstr "ISO പാഥ് ആവശ്യമുണ്ട്"
 
-#: ../../src/virtManager/create.py:624
+#: ../../src/virtManager/create.py:702
 msgid "You must specify an ISO location for the guest installation"
 msgstr "ഗസ്റ്റ് ഇന്‍സ്റ്റലേഷനായി ഒരു ISO സ്ഥാനം വ്യക്തമാക്കുക"
 
-#: ../../src/virtManager/create.py:627
+#: ../../src/virtManager/create.py:705
 msgid "ISO Path Not Found"
 msgstr "ISO പാഥ് ലഭ്യമായില്ല"
 
-#: ../../src/virtManager/create.py:628
+#: ../../src/virtManager/create.py:706
 msgid "You must specify a valid path to the ISO image for guest installation"
 msgstr "ഗസ്റ്റ് ഇന്‍സ്റ്റലേഷനായി ഒരു ISO ഇമേജിലേക്കുളള ശരിയായ പാഥ് വ്യക്തമാക്കേണ്ടതാണ്."
 
-#: ../../src/virtManager/create.py:633
+#: ../../src/virtManager/create.py:711
 msgid "Install media required"
 msgstr "ആവശ്യമായ മീഡിയാ ഇന്‍സ്റ്റോള്‍ ചെയ്യുക"
 
-#: ../../src/virtManager/create.py:634
+#: ../../src/virtManager/create.py:712
 msgid "You must select the CDROM install media for guest installation"
 msgstr "ഗസ്റ്റ് ഇന്‍സ്റ്റലേഷനായി ഒരു CDROM ഇന്‍സ്റ്റോള്‍ മീഡിയാ തിരഞ്ഞെടുക്കേണ്ടതാണ്"
 
-#: ../../src/virtManager/create.py:639
+#: ../../src/virtManager/create.py:717
 msgid "URL Required"
 msgstr "URL ആവശ്യമുണ്ട്"
 
-#: ../../src/virtManager/create.py:640
+#: ../../src/virtManager/create.py:718
 msgid "You must specify a URL for the install image for the guest install"
 msgstr "ഗസ്റ്റ് ഇന്‍സ്റ്റോളിനുളള ഇന്‍സ്റ്റോള്‍ ഇമേജിനുളള URL വ്യക്തമാക്കേണ്ടതുണ്ട്"
 
-#: ../../src/virtManager/create.py:646
+#: ../../src/virtManager/create.py:724
 msgid "Storage Address Required"
 msgstr "സ്റ്റോറേജ് വിലാസം ആവശ്യമുണ്ട്"
 
-#: ../../src/virtManager/create.py:647
+#: ../../src/virtManager/create.py:725
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
 msgstr ""
 "ഗസ്റ്റ് ഇന്‍സ്റ്റോളിന് നിങ്ങള്‍ സ്റ്റോറേജിനായി ഒരു ഫയല്‍ അല്ലെങ്കില്‍ ഒരു പാര്‍ട്ടീഷന്‍ വ്യക്തമാക്കേണ്ടതുണ്ട്"
 
-#: ../../src/virtManager/create.py:652
+#: ../../src/virtManager/create.py:730
 #, fuzzy
 msgid "Storage Address Is Directory"
 msgstr "സ്റ്റോറേജ് വിലാസം ആവശ്യമുണ്ട്"
 
-#: ../../src/virtManager/create.py:653
+#: ../../src/virtManager/create.py:731
 msgid ""
 "You chose 'Simple File' storage for your storage method, but chose a "
 "directory instead of a file. Please enter a new filename or choose an "
 "existing file."
 msgstr ""
 
-#: ../../src/virtManager/create.py:698 ../../src/virtManager/create.py:733
+#: ../../src/virtManager/create.py:776 ../../src/virtManager/create.py:811
 msgid "No media present"
 msgstr "മീഡിയാ ലഭ്യമല്ല"
 
-#: ../../src/virtManager/details.py:411
+#: ../../src/virtManager/details.py:419
 msgid "Destination"
 msgstr "ലക്ഷ്യസ്ഥാനം"
 
-#: ../../src/virtManager/details.py:450
+#: ../../src/virtManager/details.py:458
 msgid "MAC address"
 msgstr "MAC വിലാസം"
 
-#: ../../src/virtManager/domain.py:363
+#: ../../src/virtManager/domain.py:364
 msgid "Running"
 msgstr "പ്രവര്‍ത്തനത്തില്‍"
 
-#: ../../src/virtManager/domain.py:365
+#: ../../src/virtManager/domain.py:366
 msgid "Paused"
 msgstr "താല്‍കാലികമായി നിര്‍ത്തിയിരിക്കുന്നു"
 
-#: ../../src/virtManager/domain.py:367 tmp/virt-manager.glade.h:164
+#: ../../src/virtManager/domain.py:368 tmp/vmm-console.glade.h:10
+#: tmp/vmm-details.glade.h:39
 msgid "Shutdown"
 msgstr "പുറത്ത കടക്കുക"
 
-#: ../../src/virtManager/domain.py:369
+#: ../../src/virtManager/domain.py:370
 msgid "Shutoff"
 msgstr "അടച്ചു പൂട്ടുക"
 
-#: ../../src/virtManager/domain.py:371
+#: ../../src/virtManager/domain.py:372
 msgid "Crashed"
 msgstr "തകര്‍ന്നിരിക്കുന്നു"
 
-#: ../../src/virtManager/domain.py:373
+#: ../../src/virtManager/domain.py:374
 msgid "Unknown status code"
 msgstr "അപരിചിതമായ സ്റ്റേറ്റസ് കോഡ്"
 
-#: ../../src/virtManager/engine.py:74
+#: ../../src/virtManager/engine.py:75
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
@@ -217,93 +279,93 @@ msgstr ""
 "Xen hypervisor/daemon-ലേക്ക് ഒരു കണക്ഷന്‍ ആരംഭിക്കുവാന്‍ സാധ്യമല്ല.\n"
 "\n"
 
-#: ../../src/virtManager/engine.py:75
+#: ../../src/virtManager/engine.py:76
 msgid "Verify that:\n"
 msgstr "ഉറപ്പ് വരുത്തുക:\n"
 
-#: ../../src/virtManager/engine.py:76
+#: ../../src/virtManager/engine.py:77
 msgid " - A Xen host kernel was booted\n"
 msgstr " - ഒരു Xen ഹോസ്റ്റ് കേര്‍ണല്‍ ബൂട്ട് ചെയ്തു എന്ന്\n"
 
-#: ../../src/virtManager/engine.py:77
+#: ../../src/virtManager/engine.py:78
 msgid " - The Xen service has been started\n"
 msgstr " - Xen സര്‍വീസ് ആരംഭിച്ചിരിക്കുന്നു\n"
 
-#: ../../src/virtManager/engine.py:80
+#: ../../src/virtManager/engine.py:81
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
 msgstr "ഹൈപ്പര്‍‍വൈസര്‍ '%s'-ലേക്ക് കണക്ഷന്‍ തുറക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../../src/virtManager/engine.py:81
+#: ../../src/virtManager/engine.py:82
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ മാനേജര്‍ കണക്ഷന്‍ പരാജയം"
 
-#: ../../src/virtManager/engine.py:281
+#: ../../src/virtManager/engine.py:302
 msgid "Save Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ സൂക്ഷിക്കുക"
 
-#: ../../src/virtManager/engine.py:294
+#: ../../src/virtManager/engine.py:315
 msgid "Saving Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ സൂക്ഷിക്കുന്നു"
 
-#: ../../src/virtManager/engine.py:310
+#: ../../src/virtManager/engine.py:331
 #, fuzzy, python-format
 msgid "About to destroy virtual machine %s"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ വീണ്ടെടുക്കുക"
 
-#: ../../src/virtManager/engine.py:311
+#: ../../src/virtManager/engine.py:332
 msgid ""
 "This will immediately destroy the VM and may corrupt its disk image. Are you "
 "sure?"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:189
+#: ../../src/virtManager/manager.py:237
 msgid "Restore Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ വീണ്ടെടുക്കുക"
 
-#: ../../src/virtManager/manager.py:204
+#: ../../src/virtManager/manager.py:252
 msgid "Restoring Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ വീണ്ടെടുക്കുന്നു"
 
-#: ../../src/virtManager/manager.py:211
+#: ../../src/virtManager/manager.py:259
 #, python-format
 msgid "The file '%s' does not appear to be a valid saved machine image"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:239
+#: ../../src/virtManager/manager.py:287
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr "ഡൊമെയിന്‍ '%s' വീണ്ടെടുക്കുന്നതില്‍ പിശക്. ഡൊമെയിന്‍ നിലവില്‍ പ്രവര്‍ത്തനത്തിലുണ്ടോ?"
 
-#: ../../src/virtManager/manager.py:421
+#: ../../src/virtManager/manager.py:505
 msgid "ID"
 msgstr "ID"
 
-#: ../../src/virtManager/manager.py:422 tmp/virt-manager.glade.h:124
+#: ../../src/virtManager/manager.py:506 tmp/vmm-create.glade.h:61
 msgid "Name"
 msgstr "പേര്"
 
-#: ../../src/virtManager/manager.py:423 tmp/virt-manager.glade.h:167
+#: ../../src/virtManager/manager.py:507 tmp/vmm-manager.glade.h:16
 msgid "Status"
 msgstr "അവസ്ഥ"
 
-#: ../../src/virtManager/manager.py:424 tmp/virt-manager.glade.h:80
+#: ../../src/virtManager/manager.py:508 tmp/vmm-manager.glade.h:4
 msgid "CPU usage"
 msgstr "CPU ഉപയോഗം"
 
-#: ../../src/virtManager/manager.py:425
+#: ../../src/virtManager/manager.py:509
 msgid "VCPUs"
 msgstr "VCPU"
 
-#: ../../src/virtManager/manager.py:426 tmp/virt-manager.glade.h:120
+#: ../../src/virtManager/manager.py:510 tmp/vmm-manager.glade.h:10
 msgid "Memory usage"
 msgstr "മെമ്മറിയുടെ ഉപയോംഗം"
 
-#: ../../src/virtManager/manager.py:427 tmp/virt-manager.glade.h:92
+#: ../../src/virtManager/manager.py:511 tmp/vmm-manager.glade.h:7
 msgid "Disk usage"
 msgstr "ഡിസ്കിന്‍റെ ഉപയോഗം"
 
-#: ../../src/virtManager/manager.py:428 tmp/virt-manager.glade.h:127
+#: ../../src/virtManager/manager.py:512 tmp/vmm-manager.glade.h:11
 msgid "Network traffic"
 msgstr "നെറ്റ്‍വര്‍ക്ക് ട്രാഫിക്ക്"
 
@@ -311,182 +373,35 @@ msgstr "നെറ്റ്‍വര്‍ക്ക് ട്രാഫിക്�
 msgid "serial console"
 msgstr "സീരിയല്‍ കണ്‍സോള്‍"
 
-#: tmp/virt-manager.glade.h:1
-msgid " "
-msgstr " "
+#: tmp/vmm-about.glade.h:1
+msgid "Copyright (C) 2006 Red Hat Inc."
+msgstr "Copyright (C) 2006 Red Hat Inc."
 
-#: tmp/virt-manager.glade.h:2
-msgid " free"
-msgstr "ഫ്രീ"
+#: tmp/vmm-about.glade.h:2
+msgid "Powered by libvirt"
+msgstr "libvirt വഴിയുളള നിയന്ത്രണം"
 
-#: tmp/virt-manager.glade.h:3
-msgid " of "
-msgstr " of "
+#: tmp/vmm-about.glade.h:3 tmp/vmm-manager.glade.h:18
+msgid "Virtual Machine Manager"
+msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ മാനേജര്‍"
 
-#: tmp/virt-manager.glade.h:4
-msgid "/tmp"
-msgstr "/tmp"
+#: tmp/vmm-about.glade.h:4
+msgid "http://virt-manager.et.redhat.com/"
+msgstr "http://virt-manager.et.redhat.com/"
 
-#: tmp/virt-manager.glade.h:5
-msgid "/xen/demo.img"
-msgstr "/xen/demo.img"
+#: tmp/vmm-about.glade.h:6
+msgid "translator-credits"
+msgstr "അനി പീറ്റര്‍ <apeter@redhat.com>"
 
-#: tmp/virt-manager.glade.h:6
+#: tmp/vmm-add-virtual-nic.glade.h:1
 msgid "00:16:3e:"
 msgstr "00:16:3e:"
 
-#: tmp/virt-manager.glade.h:7
-msgid "10 TB"
-msgstr "10 TB"
-
-#: tmp/virt-manager.glade.h:9
-#, no-c-format
-msgid "18%"
-msgstr "18%"
-
-#: tmp/virt-manager.glade.h:10
-msgid "2"
-msgstr "2"
-
-#: tmp/virt-manager.glade.h:11
-msgid "2 GB"
-msgstr "2 GB"
-
-#: tmp/virt-manager.glade.h:12
-msgid "20 bits/sec"
-msgstr "20 bits/sec"
-
-#: tmp/virt-manager.glade.h:13
-msgid "200 MB"
-msgstr "200 MB"
-
-#: tmp/virt-manager.glade.h:14
-msgid "256\t"
-msgstr "256\t"
-
-#: tmp/virt-manager.glade.h:15
-msgid "30 MB of 128 MB"
-msgstr "128 MB-ല്‍ 30 MB"
-
-#: tmp/virt-manager.glade.h:16
-msgid "400 MB"
-msgstr "400 MB"
-
-#: tmp/virt-manager.glade.h:17
-msgid "5\t"
-msgstr "5\t"
-
-#: tmp/virt-manager.glade.h:18
-msgid "5 GB"
-msgstr "5 GB"
-
-#: tmp/virt-manager.glade.h:19
-msgid "500 MB"
-msgstr "500 MB"
-
-#: tmp/virt-manager.glade.h:20
-msgid "8"
-msgstr "8"
-
-#: tmp/virt-manager.glade.h:21
-msgid "80 MB of 1 GB"
-msgstr "1 GB-ല്‍ 80 MB"
-
-#: tmp/virt-manager.glade.h:22
+#: tmp/vmm-add-virtual-nic.glade.h:2
 msgid ":"
 msgstr ":"
 
-#: tmp/virt-manager.glade.h:23
-msgid "<b>Basic details</b>"
-msgstr "<b>അടിസ്ഥാന വിവരങ്ങള്‍</b>"
-
-#: tmp/virt-manager.glade.h:24
-msgid "<b>CPUs:</b>"
-msgstr "<b>CPU:</b>"
-
-#: tmp/virt-manager.glade.h:25
-msgid "<b>CPUs</b>"
-msgstr "<b>CPU</b>"
-
-#: tmp/virt-manager.glade.h:26
-msgid "<b>Consoles</b>"
-msgstr "<b>കണ്‍സോളുകള്‍</b>"
-
-#: tmp/virt-manager.glade.h:27
-msgid "<b>Disk image:</b>"
-msgstr "<b>ഡിസ്കിന്‍റെ ഇമേജ്:</b>"
-
-#: tmp/virt-manager.glade.h:28
-msgid "<b>Disk size:</b>"
-msgstr "<b>ഡിസ്കിന്‍റെ വലിപ്പം:</b>"
-
-#: tmp/virt-manager.glade.h:29
-msgid "<b>Example:</b> system1"
-msgstr "<b>ഉദാഹരണം:</b> system1"
-
-#: tmp/virt-manager.glade.h:30
-msgid "<b>Initial memory:</b>"
-msgstr "<b>ഇനിഷ്യല്‍ മെമ്മറി:</b>"
-
-#: tmp/virt-manager.glade.h:31
-msgid "<b>Installation source:</b>"
-msgstr "<b>ഇന്‍സ്റ്റലേഷനുളള ഉറവിടം:</b>"
-
-#: tmp/virt-manager.glade.h:32
-msgid "<b>Kickstart source:</b>"
-msgstr "<b>കിക് സ്റ്റാര്‍ട്ടിനുളള ഉറവിടം:</b>"
-
-#: tmp/virt-manager.glade.h:33
-msgid "<b>Machine name:</b>"
-msgstr "<b>മഷീന്‍റെ പേര്:</b>"
-
-#: tmp/virt-manager.glade.h:34
-msgid "<b>Maximum memory:</b>"
-msgstr "<b>ഏറ്റവും കൂടുതല്‍ മെമ്മറി:</b>"
-
-#: tmp/virt-manager.glade.h:35
-msgid "<b>Memory:</b>"
-msgstr "<b>മെമ്മറി:</b>"
-
-#: tmp/virt-manager.glade.h:36
-msgid "<b>Memory</b>"
-msgstr "<b>മെമ്മറി</b>"
-
-#: tmp/virt-manager.glade.h:37
-msgid "<b>Memory</b> and <b>CPU</b> allocation"
-msgstr "<b>മെമ്മറി</b> , <b>CPU</b> അലോക്കേഷന്‍"
-
-#: tmp/virt-manager.glade.h:38
-msgid "<b>Network</b>"
-msgstr "<b>നെറ്റ്‍വര്‍ക്ക്</b>"
-
-#: tmp/virt-manager.glade.h:39
-msgid "<b>Performance</b>"
-msgstr "<b>പ്രവര്‍ത്തനം</b>"
-
-#: tmp/virt-manager.glade.h:40
-msgid "<b>Status monitoring</b>"
-msgstr "<b>സ്റ്റേറ്റസ് മോണിറ്ററിങ്</b>"
-
-#: tmp/virt-manager.glade.h:41
-msgid "<b>Storage</b>"
-msgstr "<b>സ്റ്റോറേജ്</b>"
-
-#: tmp/virt-manager.glade.h:42
-msgid ""
-"<b>Storage</b> details - which disk partitions or files the system should use"
-msgstr ""
-"<b>സ്റ്റോറേജ്</b> വിവരണങ്ങള്‍ - സിസ്റ്റം ഉപയോഗിക്കേണ്ട ഫയലുകള്‍ അല്ലെങ്കില്‍ ഡിസ്ക് പാര്‍ട്ടീഷനുകളും"
-
-#: tmp/virt-manager.glade.h:43
-msgid "<b>Summary:</b>"
-msgstr "<b>സമ്മറി:</b>"
-
-#: tmp/virt-manager.glade.h:44
-msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>കണ്‍സോള്‍ നിലവില്‍ ലഭ്യമല്ല</b>"
-
-#: tmp/virt-manager.glade.h:45
+#: tmp/vmm-add-virtual-nic.glade.h:3
 msgid ""
 "<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
 "letters A-F"
@@ -494,66 +409,239 @@ msgstr ""
 "<b>സൂചന:</b> 0-9 വരെയുളള അക്കങ്ങളും A-F ഉളള അക്ഷരങ്ങളും ആണ് ഹെക്സാ അക്കങ്ങളില്‍ "
 "അംഗീകരിക്കുന്നവ"
 
-#: tmp/virt-manager.glade.h:46
-msgid ""
-"<b>Tip:</b> File location paths are as seen from the physical host. Mount "
-"points are as seen from the virtual machine."
-msgstr ""
-"<b>സൂചന:</b> ഫിസിക്കല്‍ ഹോസ്റ്റില്‍ നിന്നും കാണുന്നപോലെയാണ് ഫയലിന്‍റെ ലോക്കേഷന്‍ പാഥുകള്‍. "
-"വിര്‍ച്ച്വല്‍ മഷീനുകളില്‍ നിന്നും കാണുന്നവയാണ് മൌണ്ട് പോയിന്‍റുകള്‍."
+#: tmp/vmm-add-virtual-nic.glade.h:4
+msgid "Add Virtual NIC"
+msgstr "വിര്‍ച്ച്വല്‍ NIC ചേര്‍ക്കുക"
 
-#: tmp/virt-manager.glade.h:47
-msgid ""
-"<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
-"than (or equal to) the number of physical CPUs on the host system."
-msgstr ""
-"<b>സൂചന:</b> ഏറ്റവും നല്ല പ്രവര്‍ത്തനത്തിന്, വിര്‍ച്ച്വല്‍ CPU-കളുടെ എണ്ണം ഹോസ്റ്റ് സിസ്റ്റമിലുളള "
-"ഫിസിക്കല്‍ CPU-കളുടെ എണ്ണത്തിനേക്കാള്‍ കുറവായിരിക്കണം (അല്ലെങ്കില്‍ സമമായിരിക്കണം)."
+#: tmp/vmm-add-virtual-nic.glade.h:5
+msgid "Add virtual NIC with:"
+msgstr "വിര്‍ച്ച്വല്‍ NIC ചേര്‍ക്കേണ്ടത് എന്തിനൊപ്പം:"
 
-#: tmp/virt-manager.glade.h:48
-msgid ""
-"<b>Tip:</b> You may only increase the size of file-based storage; you can't "
-"decrease its size."
-msgstr ""
-"<b>സൂചന:</b> നിങ്ങള്‍ ഫയല്‍-അടിസ്ഥാനത്തിലുളള സംഭരണത്തിന്‍റെ വലിപ്പം കൂട്ടൂവാന്‍ മാത്രമേ പാടുള്ളൂ; "
-"വലിപ്പം കുറയ്ക്കുവാന്‍ സാധ്യമല്ല."
+#: tmp/vmm-add-virtual-nic.glade.h:6
+msgid "Randomly generated MAC address"
+msgstr "റാന്‍ഡമായി ഉല്‍പാദിപ്പിക്കുന്ന MAC വിലാസം"
 
-#: tmp/virt-manager.glade.h:49
-msgid ""
-"<b>Too Many Virtual CPUs</b>\n"
-"\n"
-"You have set this virtual machine to have more CPUs than the host system has "
-"physically. This may result in poor performance in the virtual machine."
-msgstr ""
-"<b>ഒരുപാട് വിര്‍ച്ച്വല്‍ CPU</b>\n"
-"\n"
-"ഹോസ്റ്റ് സിസ്റ്റമിനേക്കാള്‍ കൂടുതല്‍ CPU-വിന് വേണ്ടിയാണ് നിങ്ങള്‍ ഈ വിര്‍ച്ച്വല്‍ മഷീന്‍ "
-"ക്രമീകരിച്ചിരിക്കുന്നത്. ഇത് വിര്‍ച്ച്വല്‍ മഷീന്‍റെ പ്രവര്‍ത്തനത്തെ ബാധിക്കുന്നു."
+#: tmp/vmm-add-virtual-nic.glade.h:7
+msgid "Specified MAC address:"
+msgstr "MAC വിലാസം വ്യക്തമാക്കുക:"
 
-#: tmp/virt-manager.glade.h:52
+#: tmp/vmm-add-virtual-nic.glade.h:8
+msgid "mac-addr-random"
+msgstr "mac-addr-random"
+
+#: tmp/vmm-console.glade.h:1
+msgid "<b>The console is currently unavailable</b>"
+msgstr "<b>കണ്‍സോള്‍ നിലവില്‍ ലഭ്യമല്ല</b>"
+
+#: tmp/vmm-console.glade.h:2
+msgid "Auth"
+msgstr "Auth"
+
+#: tmp/vmm-console.glade.h:3
+msgid "Login"
+msgstr "ലോഗിന്‍ ചെയ്യുക"
+
+#: tmp/vmm-console.glade.h:4
+msgid "Password:"
+msgstr "പാസ്‍വേര്‍ഡ്:"
+
+#: tmp/vmm-console.glade.h:5 tmp/vmm-details.glade.h:34
+msgid "Pause"
+msgstr "തല്‍ക്കാലികമായി നിര്‍ത്തുക"
+
+#: tmp/vmm-console.glade.h:6 tmp/vmm-details.glade.h:36
+msgid "Run"
+msgstr "പ്രവര്‍ത്തിപ്പിക്കുക"
+
+#: tmp/vmm-console.glade.h:7 tmp/vmm-details.glade.h:37
+#, fuzzy
+msgid "S_hutdown"
+msgstr "പുറത്ത കടക്കുക"
+
+#: tmp/vmm-console.glade.h:8
+msgid "Save this password in your keyring"
+msgstr "നിങ്ങളുടെ കീ റിങില്‍ ഈ പാസ്‍വേര്‍ഡ് സൂക്ഷിക്കുക"
+
+#: tmp/vmm-console.glade.h:9
+msgid "Screenshot"
+msgstr "സ്ക്രീന്‍ഷോട്ട്"
+
+#: tmp/vmm-console.glade.h:11 tmp/vmm-details.glade.h:41
+msgid "Toolbar"
+msgstr "ടൂള്‍ബാര്‍"
+
+#: tmp/vmm-console.glade.h:12
+msgid "Unavailable"
+msgstr "ലഭ്യമല്ലാത്തവ"
+
+#: tmp/vmm-console.glade.h:13
+msgid "VNC"
+msgstr "VNC"
+
+#: tmp/vmm-console.glade.h:14
+msgid "Virtual Machine Console"
+msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ കണ്‍സോള്‍"
+
+#: tmp/vmm-console.glade.h:15 tmp/vmm-details.glade.h:46
+msgid "Virtual _Machine"
+msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ (_M)"
+
+#: tmp/vmm-console.glade.h:16 tmp/vmm-details.glade.h:47
+msgid "_Destroy"
+msgstr ""
+
+#: tmp/vmm-console.glade.h:17
+msgid "_Details"
+msgstr "വിശദവിവരങ്ങള്‍ (_D)"
+
+#: tmp/vmm-console.glade.h:18
+msgid "_FullScreen"
+msgstr "സ്ക്രീന്‍ മുഴുവന്‍ വലിപ്പത്തില്‍ (_F)"
+
+#: tmp/vmm-console.glade.h:19 tmp/vmm-details.glade.h:49
+#: tmp/vmm-manager.glade.h:21
+msgid "_Help"
+msgstr "സഹായം (_H)"
+
+#: tmp/vmm-console.glade.h:20 tmp/vmm-details.glade.h:50
+msgid "_Pause"
+msgstr "താല്‍ക്കാലികമായി നിര്‍ത്തുക (_P)"
+
+#: tmp/vmm-console.glade.h:21 tmp/vmm-details.glade.h:51
+msgid "_Run"
+msgstr "പ്രവര്‍ത്തിപ്പിക്കുക (_R)"
+
+#: tmp/vmm-console.glade.h:22 tmp/vmm-details.glade.h:52
+msgid "_Save"
+msgstr "സൂക്ഷിക്കുക (_S)"
+
+#: tmp/vmm-console.glade.h:23 tmp/vmm-details.glade.h:53
+msgid "_Serial Console"
+msgstr "സീരിയില്‍ കണ്‍സോള്‍ (_S)"
+
+#: tmp/vmm-console.glade.h:24
+msgid "_Take Screenshot"
+msgstr "സ്ക്രീന്‍ ഷോട്ട് എടുക്കുക (_T)"
+
+#: tmp/vmm-console.glade.h:25 tmp/vmm-details.glade.h:54
+#: tmp/vmm-manager.glade.h:22
+msgid "_View"
+msgstr "കാഴ്ച (_V)"
+
+#: tmp/vmm-create.glade.h:1
+msgid " "
+msgstr " "
+
+#: tmp/vmm-create.glade.h:2
+msgid "/xen/demo.img"
+msgstr "/xen/demo.img"
+
+#: tmp/vmm-create.glade.h:3 tmp/vmm-details.glade.h:4
+msgid "2 GB"
+msgstr "2 GB"
+
+#: tmp/vmm-create.glade.h:4
+msgid "256\t"
+msgstr "256\t"
+
+#: tmp/vmm-create.glade.h:5
+msgid "400 MB"
+msgstr "400 MB"
+
+#: tmp/vmm-create.glade.h:6
+msgid "5\t"
+msgstr "5\t"
+
+#: tmp/vmm-create.glade.h:7
+msgid "5 GB"
+msgstr "5 GB"
+
+#: tmp/vmm-create.glade.h:8
+msgid "500 MB"
+msgstr "500 MB"
+
+#: tmp/vmm-create.glade.h:9
+msgid "<b>CPUs:</b>"
+msgstr "<b>CPU:</b>"
+
+#: tmp/vmm-create.glade.h:10
+msgid "<b>Disk image:</b>"
+msgstr "<b>ഡിസ്കിന്‍റെ ഇമേജ്:</b>"
+
+#: tmp/vmm-create.glade.h:11
+msgid "<b>Disk size:</b>"
+msgstr "<b>ഡിസ്കിന്‍റെ വലിപ്പം:</b>"
+
+#: tmp/vmm-create.glade.h:12
+msgid "<b>Example:</b> system1"
+msgstr "<b>ഉദാഹരണം:</b> system1"
+
+#: tmp/vmm-create.glade.h:13
+msgid "<b>Initial memory:</b>"
+msgstr "<b>ഇനിഷ്യല്‍ മെമ്മറി:</b>"
+
+#: tmp/vmm-create.glade.h:14
+msgid "<b>Installation source:</b>"
+msgstr "<b>ഇന്‍സ്റ്റലേഷനുളള ഉറവിടം:</b>"
+
+#: tmp/vmm-create.glade.h:15
+msgid "<b>Kickstart source:</b>"
+msgstr "<b>കിക് സ്റ്റാര്‍ട്ടിനുളള ഉറവിടം:</b>"
+
+#: tmp/vmm-create.glade.h:16
+msgid "<b>Machine name:</b>"
+msgstr "<b>മഷീന്‍റെ പേര്:</b>"
+
+#: tmp/vmm-create.glade.h:17
+msgid "<b>Maximum memory:</b>"
+msgstr "<b>ഏറ്റവും കൂടുതല്‍ മെമ്മറി:</b>"
+
+#: tmp/vmm-create.glade.h:18
+msgid "<b>Memory:</b>"
+msgstr "<b>മെമ്മറി:</b>"
+
+#: tmp/vmm-create.glade.h:19
+msgid "<b>Memory</b> and <b>CPU</b> allocation"
+msgstr "<b>മെമ്മറി</b> , <b>CPU</b> അലോക്കേഷന്‍"
+
+#: tmp/vmm-create.glade.h:20
+msgid "<b>Operating System:</b>"
+msgstr ""
+
+#: tmp/vmm-create.glade.h:21
+msgid ""
+"<b>Storage</b> details - which disk partitions or files the system should use"
+msgstr ""
+"<b>സ്റ്റോറേജ്</b> വിവരണങ്ങള്‍ - സിസ്റ്റം ഉപയോഗിക്കേണ്ട ഫയലുകള്‍ അല്ലെങ്കില്‍ ഡിസ്ക് പാര്‍ട്ടീഷനുകളും"
+
+#: tmp/vmm-create.glade.h:22
+msgid "<b>Summary:</b>"
+msgstr "<b>സമ്മറി:</b>"
+
+#: tmp/vmm-create.glade.h:23
 msgid "<b>Virtual CPUs:</b>"
 msgstr "<b>വിര്‍ച്ച്വല്‍ CPU:</b>"
 
-#: tmp/virt-manager.glade.h:53
+#: tmp/vmm-create.glade.h:24
 #, fuzzy
 msgid "<b>Virtualization method:</b>"
 msgstr "<b>വിര്‍ച്ച്വലൈസേഷന്‍ രീതി:</b>"
 
-#: tmp/virt-manager.glade.h:54
+#: tmp/vmm-create.glade.h:25
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
 msgstr "<small><b>ഉദാഹരണം:</b> /dev/hdc2</small>"
 
-#: tmp/virt-manager.glade.h:55
+#: tmp/vmm-create.glade.h:26
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 msgstr "<small><b>ഉദാഹരണം:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 
-#: tmp/virt-manager.glade.h:56
+#: tmp/vmm-create.glade.h:27
 msgid ""
 "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
 msgstr ""
 "<small><b>ഉദാഹരണം:</b> http://servername.example.com/distro/i386/tree</small>"
 
-#: tmp/virt-manager.glade.h:57
+#: tmp/vmm-create.glade.h:28
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
@@ -561,7 +649,7 @@ msgstr ""
 "<small><b>കുറിപ്പ്:</b> ഈ മഷീനിലുളള ഹോസ്റ്റ് CPU പൂര്‍ണ്ണ വിര്‍ച്ച്വലൈസേഷന്‍ പിന്തുണയ്ക്കുന്നില്ല.</"
 "small>"
 
-#: tmp/virt-manager.glade.h:58
+#: tmp/vmm-create.glade.h:29
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
@@ -569,7 +657,7 @@ msgstr ""
 "<small><b>കുറിപ്പ്:</b> ഈ മഷീനിലുളള ഹോസ്റ്റ് CPU പൂര്‍ണ്ണ വിര്‍ച്ച്വലൈസേഷന്‍ പിന്തുണയ്ക്കുന്നു, പക്ഷേ "
 "BIOS ഇത് പ്രവര്‍ത്തന സജ്ജമാക്കുവന്നില്ല.</small>"
 
-#: tmp/virt-manager.glade.h:59
+#: tmp/vmm-create.glade.h:30
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
@@ -579,7 +667,7 @@ msgstr ""
 "സിസ്റ്റമിലുളള ലോജിക്കല്‍ CPU-കളുടെ എണ്ണത്തിനേക്കാള്‍ കുറവായിരിക്കണം (അല്ലെങ്കില്‍ "
 "സമമായിരിക്കണം).</small> "
 
-#: tmp/virt-manager.glade.h:60
+#: tmp/vmm-create.glade.h:31
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
@@ -589,7 +677,7 @@ msgstr ""
 "ഉപയോഗിച്ച് വിര്‍ച്ച്വല്‍ സിസ്റ്റം ഉണ്ടാക്കിയ ശേഷം, അതില്‍ കൂടുതല്‍ സംഭരണ സംവിധാനം ചേര്‍ക്കാവുന്നതാണ്."
 "</small> "
 
-#: tmp/virt-manager.glade.h:61
+#: tmp/vmm-create.glade.h:32
 msgid ""
 "<small><b>Warning:</b> If you do not allocate the entire disk at VM "
 "creation, space will be allocated as needed while the guest is running. If "
@@ -597,7 +685,7 @@ msgid ""
 "corruption on the guest.</small>"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:62
+#: tmp/vmm-create.glade.h:33
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocate memory "
 "and CPU</span>"
@@ -605,7 +693,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">മെമ്മറി, CPU "
 "ലഭ്യമാക്കുക</span>"
 
-#: tmp/virt-manager.glade.h:63
+#: tmp/vmm-create.glade.h:34
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
 "storage space</span>"
@@ -613,7 +701,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">സ്റ്റോറേജ്സ്പെയിസ് "
 "ലഭ്യമാക്കുന്നു</span>"
 
-#: tmp/virt-manager.glade.h:64
+#: tmp/vmm-create.glade.h:35
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing a "
 "virtualization method</span>"
@@ -621,7 +709,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ഒരു "
 "വിര്‍ച്ച്വലൈസേഷന്‍രീതി തിരഞ്ഞെടുക്കുന്നു</span>"
 
-#: tmp/virt-manager.glade.h:65
+#: tmp/vmm-create.glade.h:36
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual system </span>"
@@ -629,7 +717,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ഒരു പുതിയ വിര്‍ച്ച്വല്‍ "
 "സിസ്റ്റം ഉണ്ടാക്കുന്നു </span>"
 
-#: tmp/virt-manager.glade.h:66
+#: tmp/vmm-create.glade.h:37
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation media</span>"
@@ -637,7 +725,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ഇന്‍സ്റ്റലേഷന്‍മീഡിയാ "
 "കണ്ടുപിടിക്കുന്നു</span>"
 
-#: tmp/virt-manager.glade.h:67
+#: tmp/vmm-create.glade.h:38
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
@@ -645,7 +733,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">നിങ്ങളുടെ "
 "വിര്‍ച്ച്വല്‍സിസ്റ്റമിന് പേര് നല്‍കുന്നു </span>"
 
-#: tmp/virt-manager.glade.h:68
+#: tmp/vmm-create.glade.h:39
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to begin "
 "installation</span>"
@@ -653,145 +741,71 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF"
 "\">ഇന്‍സ്റ്റലേഷന്‍ആരംഭിക്കുന്നു</span>"
 
-#: tmp/virt-manager.glade.h:69
+#: tmp/vmm-create.glade.h:40
 msgid "A <b>name</b> for your new virtual system"
 msgstr "നിങ്ങളുടെ വിര്‍ച്ച്വല്‍ സിസ്റ്റമിന് ഒരു <b>പേര്</b>"
 
-#: tmp/virt-manager.glade.h:70
-msgid "Add Virtual NIC"
-msgstr "വിര്‍ച്ച്വല്‍ NIC ചേര്‍ക്കുക"
-
-#: tmp/virt-manager.glade.h:71
-msgid "Add virtual NIC with:"
-msgstr "വിര്‍ച്ച്വല്‍ NIC ചേര്‍ക്കേണ്ടത് എന്തിനൊപ്പം:"
-
-#: tmp/virt-manager.glade.h:72
-msgid "Alert"
-msgstr "അറിയിക്കുക"
-
-#: tmp/virt-manager.glade.h:73
-msgid ""
-"All virtual machines\n"
-"Active virtual machines\n"
-"Inactive virtual machines"
-msgstr ""
-"എല്ലാ വിര്‍ച്ച്വല്‍ മഷീനുകളും\n"
-"സജീവമായ വിര്‍ച്ച്വല്‍ മഷീനുകളും\n"
-"സജീവമല്ലാത്ത വിര്‍ച്ച്വല്‍ മഷീനുകളും"
-
-#: tmp/virt-manager.glade.h:76
+#: tmp/vmm-create.glade.h:41
 msgid "Allocate entire virtual disk now?"
 msgstr ""
 
-#: tmp/virt-manager.glade.h:77
-msgid "Auth"
-msgstr "Auth"
-
-#: tmp/virt-manager.glade.h:78
-msgid "Automatically open consoles:"
-msgstr "കണ്‍സോളുകള്‍ ഓട്ടോമാറ്റിക്കായി തുറക്കുക:"
-
-#: tmp/virt-manager.glade.h:79
+#: tmp/vmm-create.glade.h:42
 msgid "Browse..."
 msgstr "തിരയുക..."
 
-#: tmp/virt-manager.glade.h:81
-msgid "CPU usage:"
-msgstr "CPU ഉപയോഗം:"
+#: tmp/vmm-create.glade.h:43
+msgid "CPU architecture:"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:82
+#: tmp/vmm-create.glade.h:44
 msgid "CPU/memory"
 msgstr "CPU/മെമ്മറി"
 
-#: tmp/virt-manager.glade.h:83
-msgid "Change allocation:"
-msgstr "അലോക്കേഷന്‍ മാറ്റുക:"
-
-#: tmp/virt-manager.glade.h:84
-msgid "Co_nnect"
-msgstr "കണക്ട് ചെയ്യുക (_n)"
-
-#: tmp/virt-manager.glade.h:85
+#: tmp/vmm-create.glade.h:45
 msgid "Complete"
 msgstr "പൂര്‍ത്തിയാക്കുക"
 
-#: tmp/virt-manager.glade.h:86
-msgid "Copyright (C) 2006 Red Hat Inc."
-msgstr "Copyright (C) 2006 Red Hat Inc."
-
-#: tmp/virt-manager.glade.h:87
+#: tmp/vmm-create.glade.h:46
 msgid "Create a new virtual system"
 msgstr "ഒരു പുതിയ വിര്‍ച്ച്വല്‍ സിസ്റ്റം ഉണ്ടാക്കുക"
 
-#: tmp/virt-manager.glade.h:88
-msgid "Current allocation:"
-msgstr "നിലവിലുളള അലോക്കേഷന്‍:"
-
-#: tmp/virt-manager.glade.h:89
-msgid "De_tails"
-msgstr "വിശദാംശങ്ങള്‍ (_t)"
-
-#: tmp/virt-manager.glade.h:90
-msgid "Delete machine"
-msgstr "മഷീന്‍ നീക്കം ചെയ്യുക"
-
-#: tmp/virt-manager.glade.h:91
+#: tmp/vmm-create.glade.h:47 tmp/vmm-details.glade.h:21
 msgid "Disk"
 msgstr "ഡിസ്ക്"
 
-#: tmp/virt-manager.glade.h:93
-msgid "Disk usage:"
-msgstr "ഡിസ്ക് ഉപയോഗം:"
+#: tmp/vmm-create.glade.h:48
+msgid "Enable kernel / hardware acceleration"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:94
-msgid "Domain ID"
-msgstr "ഡൊമെയിന്‍ ID"
-
-#: tmp/virt-manager.glade.h:95
+#: tmp/vmm-create.glade.h:49
 msgid "FV install"
 msgstr "FV ഇന്‍സ്റ്റോള്‍"
 
-#: tmp/virt-manager.glade.h:96
+#: tmp/vmm-create.glade.h:50
 msgid "F_ully Virtualized:"
 msgstr "പൂര്‍ണ്ണ വിര്‍ച്ച്വലൈസ്ഡ്: (_u)"
 
-#: tmp/virt-manager.glade.h:97
+#: tmp/vmm-create.glade.h:51
 msgid "File _Location:"
 msgstr "ഫയലിന്‍റെ സ്ഥാനം: (_L)"
 
-#: tmp/virt-manager.glade.h:98
+#: tmp/vmm-create.glade.h:52
 msgid "File _Size:"
 msgstr "ഫയലിന്‍റെ വലിപ്പം: (_S)"
 
-#: tmp/virt-manager.glade.h:99
-msgid "Grab keyboard input:"
-msgstr "കീബോര്‍ഡ് ഇന്‍പുട്ട് ലഭ്യമാക്കുക:"
-
-#: tmp/virt-manager.glade.h:100
-msgid "Hardware"
-msgstr "ഹാര്‍ഡ്‍വയര്‍"
-
-#: tmp/virt-manager.glade.h:101
-msgid "How many virtual CPUs should this machine be allocated?"
-msgstr "എത്ര വിര്‍ച്ച്വല്‍ CPU ഈ സിസ്റ്റത്തിന് ലഭ്യമാകണം?"
-
-#: tmp/virt-manager.glade.h:102
-msgid "How much memory should this machine be allocated?"
-msgstr "ഈ മഷീനിന് അനുവദിക്കേണ്ട മെമ്മറി എത്ര?"
-
-#: tmp/virt-manager.glade.h:103
+#: tmp/vmm-create.glade.h:53
 msgid "ISO _Location:"
 msgstr "ISO-യുടെ സ്ഥാനം: (_L)"
 
-#: tmp/virt-manager.glade.h:104
+#: tmp/vmm-create.glade.h:54
 msgid "Install Media _URL:"
 msgstr "മീഡിയായുടെ URL ഇന്‍സ്റ്റോള്‍ ചെയ്യുക: (_U)"
 
-#: tmp/virt-manager.glade.h:105
+#: tmp/vmm-create.glade.h:55
 msgid "Intro"
 msgstr "മുഖവുര"
 
-#: tmp/virt-manager.glade.h:106
+#: tmp/vmm-create.glade.h:56
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
@@ -800,15 +814,11 @@ msgstr ""
 "ഇതില്‍ ഹാര്‍ഡ്‍വെയര്‍ സിമുലേഷന്‍ ഉല്‍പ്പെടുന്നു. കൂടുതല്‍ ഓപ്പറേറ്റിങ് സിസ്റ്റമുകള്‍ അനുവദിക്കുന്നു (OS "
 "മാറ്റേണ്ടതില്ല). പാരാവിര്‍ച്ച്വലൈസ്ഡ് സിസ്റ്റമിനേക്കാള്‍ വേഗത കുറവാണ്."
 
-#: tmp/virt-manager.glade.h:107
-msgid "Keep CPU Settings"
-msgstr "CPU ക്രമീകരണങ്ങള്‍ സൂക്ഷിക്കുക"
-
-#: tmp/virt-manager.glade.h:108
+#: tmp/vmm-create.glade.h:57
 msgid "Kickstart U_RL:"
 msgstr "കിക്സ്റ്റാര്‍ട്ടിനുളള URL: (_R)"
 
-#: tmp/virt-manager.glade.h:109
+#: tmp/vmm-create.glade.h:58
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
@@ -818,129 +828,45 @@ msgstr ""
 "ല്‍ മാറ്റം വരുത്തേണ്ടതുണ്ട്, അതിനായി ഓപ്പറേറ്റിങ് സിസ്റ്റമിന് ഉപാധികള്‍ കുറവാണ്. പൂര്‍ണ്ണ "
 "വിര്‍ച്ച്വലൈസ്ഡ് സിസ്റ്റമിനേക്കാള്‍ നല്ല പ്രവര്‍ത്തനമാണ്."
 
-#: tmp/virt-manager.glade.h:110
+#: tmp/vmm-create.glade.h:59
 msgid "Logical host CPUs:"
 msgstr "ലോക്കല്‍ ഹോസ്റ്റ് CPU:"
 
-#: tmp/virt-manager.glade.h:111
-msgid "Login"
-msgstr "ലോഗിന്‍ ചെയ്യുക"
-
-#: tmp/virt-manager.glade.h:112
+#: tmp/vmm-create.glade.h:60 tmp/vmm-details.glade.h:26
 msgid "MB"
 msgstr "MB"
 
-#: tmp/virt-manager.glade.h:113
-msgid ""
-"MB\n"
-"GB\n"
-"TB"
-msgstr ""
-"MB\n"
-"GB\n"
-"TB"
-
-#: tmp/virt-manager.glade.h:116
-msgid "Machine details..."
-msgstr "മഷീനിന്‍റെ വിശദാംശങ്ങള്‍"
-
-#: tmp/virt-manager.glade.h:117
-msgid "Maintain history of"
-msgstr "ചരിത്രം കൈകാര്യം ചെയ്യേണ്ടത്"
-
-#: tmp/virt-manager.glade.h:118
-msgid "Maximum allocation:"
-msgstr "ഏറ്റവും കൂടുതല്‍ അലോക്കേഷന്‍:"
-
-#: tmp/virt-manager.glade.h:119
-msgid "Memory"
-msgstr "മെമ്മറി"
-
-#: tmp/virt-manager.glade.h:121
-msgid "Memory usage:"
-msgstr "മെമ്മറി ഉപയോഗം:"
-
-#: tmp/virt-manager.glade.h:122
-msgid "Modify CPU Settings"
-msgstr "CPU ക്രമീകരണങ്ങള്‍ മാറ്റുക"
-
-#: tmp/virt-manager.glade.h:123
-msgid "Modify File Storage"
-msgstr "ഫയല്‍ സ്റ്റോറേജ് മാറ്റുക"
-
-#: tmp/virt-manager.glade.h:125
-msgid "Name:"
-msgstr "പേര്:"
-
-#: tmp/virt-manager.glade.h:126
-msgid "Network"
-msgstr "നെറ്റ്‍വര്‍ക്ക്"
-
-#: tmp/virt-manager.glade.h:128
-msgid "Network usage:"
-msgstr "നെറ്റ്‍വര്‍ക്കിന്‍റെ ഉപയോഗം:"
-
-#: tmp/virt-manager.glade.h:129
-msgid ""
-"Never\n"
-"For new domains\n"
-"For all domains"
-msgstr ""
-"ഒരിക്കലുമില്ല\n"
-"പുതിയ ഡൊമെയിനുകള്‍ക്ക്\n"
-"എല്ലാ ഡൊമെയിനുകള്‍ക്ക്"
-
-#: tmp/virt-manager.glade.h:132
-msgid ""
-"Never\n"
-"When fullscreen\n"
-"On mouse over"
-msgstr ""
-"ഒരിക്കലുമില്ല\n"
-"സ്ക്രീന്‍ മുഴുവന്‍ വലിപ്പത്തില്‍ ആകുന്പോള്‍\n"
-"മൌസ് ഉപയോഗത്തിലുളളപ്പോള്‍"
-
-#: tmp/virt-manager.glade.h:135
-msgid "New machine..."
-msgstr "പുതിയ കംപ്യൂട്ടര്‍..."
-
-#: tmp/virt-manager.glade.h:136
+#: tmp/vmm-create.glade.h:62
 msgid "Normal Disk _Partition:"
 msgstr "സാധാരണയുളള ഡിസ്ക് പാര്‍ട്ടീഷന്‍: (_P)"
 
-#: tmp/virt-manager.glade.h:137
-msgid "Open connection"
-msgstr "കണക്ഷന്‍ തുറക്കുക"
+#: tmp/vmm-create.glade.h:63
+#, fuzzy
+msgid "OS _Type:"
+msgstr "ഏത് തരം"
 
-#: tmp/virt-manager.glade.h:138
-msgid "Open connection..."
-msgstr "കണക്ഷന്‍ തുറക്കുക..."
+#: tmp/vmm-create.glade.h:64
+msgid "OS _Variant:"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:139
-msgid "Overview"
-msgstr "ഓവര്‍ വ്യൂ"
-
-#: tmp/virt-manager.glade.h:140
+#: tmp/vmm-create.glade.h:65
 msgid "PVinstall"
 msgstr "PVinstall"
 
-#: tmp/virt-manager.glade.h:141
+#: tmp/vmm-create.glade.h:66
 msgid "P_artition:"
 msgstr "പാര്‍ട്ടീഷന്‍: (_a)"
 
-#: tmp/virt-manager.glade.h:142
-msgid "Password:"
-msgstr "പാസ്‍വേര്‍ഡ്:"
-
-#: tmp/virt-manager.glade.h:143
-msgid "Pause"
-msgstr "തല്‍ക്കാലികമായി നിര്‍ത്തുക"
-
-#: tmp/virt-manager.glade.h:144
+#: tmp/vmm-create.glade.h:67
 msgid "Please choose a name for your virtual system:"
 msgstr "നിങ്ങളുടെ വിര്‍ച്ച്വല്‍ സിസ്റ്റമിന് ഒരു പേര് തിരഞ്ഞെടുക്കുക:"
 
-#: tmp/virt-manager.glade.h:145
+#: tmp/vmm-create.glade.h:68
+msgid ""
+"Please choose the type of guest operating system you will be installing:"
+msgstr ""
+
+#: tmp/vmm-create.glade.h:69
 #, fuzzy
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
@@ -951,11 +877,11 @@ msgstr ""
 "ഈ VM-നുളള മെമ്മറി കോണ്‍ഫിഗറേഷന്‍ നല്‍കുക. VM-ന് ഉപയോഗിക്കുവാന്‍ സാധ്യമാകുന്ന ഏറ്റവും കൂടുതല്‍ "
 "മെമ്മറി വ്യക്തമാക്കുക. വേണമെങ്കില്‍, തുടക്കത്തിന്‍ ആവശ്യമുളള കുറഞ്ഞ മെമ്മറിയും നല്‍കാവുന്നതാണ്."
 
-#: tmp/virt-manager.glade.h:146
+#: tmp/vmm-create.glade.h:70
 msgid "Please enter the number of virtual CPUs this VM should start up with."
 msgstr "ഈ VM ആരംഭിക്കേണ്ട വിര്‍ച്ച്വല്‍ CPU-കളുടെ എണ്ണം നല്‍കുക."
 
-#: tmp/virt-manager.glade.h:147
+#: tmp/vmm-create.glade.h:71
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
@@ -965,7 +891,7 @@ msgstr ""
 "ദയവായി വ്യക്തമാക്കുക. വിര്‍ച്ച്വല്‍ സിസ്റ്റമിന്‍റെ ഓപ്പറേറ്റിങ് സിസ്റ്റം ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനായി ഈ "
 "സ്ഥലം ഉപയോഗിക്കുന്നു."
 
-#: tmp/virt-manager.glade.h:148
+#: tmp/vmm-create.glade.h:72
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
@@ -974,7 +900,7 @@ msgstr ""
 "ഈ <b>പൂര്‍ണ്ണ വിര്‍ച്ച്വലൈസ്ഡ്</b> വിര്‍ച്ച്വല്‍ സിസ്റ്റമില്‍ നിങ്ങള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്യുവാന്‍ ആഗ്രഹിക്കുന്ന "
 "ഓപ്പറേറ്റിങ് സിസ്റ്റമിനുളള ഇന്‍സ്റ്റലേഷന്‍ മീഡിയാ എവിടെയാണ് ലഭ്യമെന്ന് വ്യക്തമാക്കുക:"
 
-#: tmp/virt-manager.glade.h:149
+#: tmp/vmm-create.glade.h:73
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
@@ -985,80 +911,24 @@ msgstr ""
 "ഓപ്പറേറ്റിങ് സിസ്റ്റമിനുളള ഇന്‍സ്റ്റലേഷന്‍ മീഡിയാ എവിടെയാണ് ലഭ്യമെന്ന് വ്യക്തമാക്കുക. കൂടാതെ, "
 "നിങ്ങളുടെ സിസ്റ്റമിനുളള കിക്ക് സ്റ്റാര്‍ട്ട് ഫയല്‍ ലഭ്യമാകുന്ന URL നല്‍കാവുന്നതാണ്:"
 
-#: tmp/virt-manager.glade.h:150
-msgid "Please wait..."
-msgstr "കാത്തിരിക്കൂ..."
-
-#: tmp/virt-manager.glade.h:151
-msgid "Powered by libvirt"
-msgstr "libvirt വഴിയുളള നിയന്ത്രണം"
-
-#: tmp/virt-manager.glade.h:152
+#: tmp/vmm-create.glade.h:74
+#, fuzzy
 msgid ""
 "Press finish to create a new virtual machine with\n"
-"this configuration & display the virtual console."
+"this configuration."
 msgstr ""
 "ഈ കോണ്‍ഫിഗറേഷനില്‍ ഒരു വിര്‍ച്ച്വല്‍ മഷീന്‍ ഉണ്ടാക്കി\n"
 "വിര്‍ച്ച്വല്‍ കണ്‍സോള്‍ കാണുന്നതിനായി കഴിഞ്ഞു എന്ന ബട്ടണ്‍ അമര്‍ത്തുക."
 
-#: tmp/virt-manager.glade.h:154
-msgid "Processor"
-msgstr "പ്രൊസസ്സര്‍"
-
-#: tmp/virt-manager.glade.h:155
-msgid "Randomly generated MAC address"
-msgstr "റാന്‍ഡമായി ഉല്‍പാദിപ്പിക്കുന്ന MAC വിലാസം"
-
-#: tmp/virt-manager.glade.h:156
-msgid "Restore a saved machine from a filesystem image"
-msgstr "ഒരു ഫയല്‍ സിസ്റ്റം ഇമേജില്‍ നിന്നും സംരക്ഷിച്ച ഒരു മഷീന്‍ വീണ്ടെടുക്കുക"
-
-#: tmp/virt-manager.glade.h:157
-msgid "Restore saved machine..."
-msgstr "സൂക്ഷിച്ച മഷീന്‍ വീണ്ടെടുക്കുക..."
-
-#: tmp/virt-manager.glade.h:158
-msgid "Run"
-msgstr "പ്രവര്‍ത്തിപ്പിക്കുക"
-
-#: tmp/virt-manager.glade.h:159
-#, fuzzy
-msgid "S_hutdown"
-msgstr "പുറത്ത കടക്കുക"
-
-#: tmp/virt-manager.glade.h:160
-msgid "Save this password in your keyring"
-msgstr "നിങ്ങളുടെ കീ റിങില്‍ ഈ പാസ്‍വേര്‍ഡ് സൂക്ഷിക്കുക"
-
-#: tmp/virt-manager.glade.h:161
-msgid "Saving VM Image"
-msgstr "VM ഇമേജ് സൂക്ഷിക്കുന്നു"
-
-#: tmp/virt-manager.glade.h:162
-msgid "Screenshot"
-msgstr "സ്ക്രീന്‍ഷോട്ട്"
-
-#: tmp/virt-manager.glade.h:163
-msgid "Shut down"
-msgstr "അടച്ചു പൂട്ടുക"
-
-#: tmp/virt-manager.glade.h:165
+#: tmp/vmm-create.glade.h:76
 msgid "Simple F_ile:"
 msgstr "സാധാരണ ഫയല്‍: (_i)"
 
-#: tmp/virt-manager.glade.h:166
-msgid "Specified MAC address:"
-msgstr "MAC വിലാസം വ്യക്തമാക്കുക:"
-
-#: tmp/virt-manager.glade.h:168
-msgid "Status:"
-msgstr "അവസ്ഥ:"
-
-#: tmp/virt-manager.glade.h:169
+#: tmp/vmm-create.glade.h:77
 msgid "System _Name:"
 msgstr "സിസ്റ്റമിന്‍റെ പേര്: (_N)"
 
-#: tmp/virt-manager.glade.h:170
+#: tmp/vmm-create.glade.h:78
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
@@ -1066,7 +936,7 @@ msgstr ""
 "വിര്‍ച്ച്വല്‍ സിസ്റ്റമില്‍ ഒരു ഓപ്പറേറ്റിങ് സിസ്റ്റം ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനായി ആവശ്യമുളള ഫയലുകളുടെ "
 "<b>സ്ഥാനം</b>"
 
-#: tmp/virt-manager.glade.h:171
+#: tmp/vmm-create.glade.h:79
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
@@ -1075,238 +945,475 @@ msgstr ""
 "ഒരു വിര്‍ച്ച്വല്‍ സിസ്റ്റം ഉണ്ടാക്കുന്നതിനായി നിങ്ങള്‍ക്ക് ഈ സഹായി ലഭ്യമാണ്. നിങ്ങള്‍ ഉണ്ടാക്കുവാന്‍ "
 "ആഗ്രഹിക്കുന്ന വിര്‍ച്ച്വല്‍ സിസ്റ്റമിന് ആവശ്യമുളള താഴെ പറയുന്ന ചില വിവരങ്ങള്‍ നല്‍കുക:"
 
-#: tmp/virt-manager.glade.h:172
-msgid "Toolbar"
-msgstr "ടൂള്‍ബാര്‍"
-
-#: tmp/virt-manager.glade.h:173
-msgid "Total CPUs on host machine:"
-msgstr "ഹോസ്റ്റ് മഷീനില്‍ ഉളള മുഴുവന്‍ CPU:"
-
-#: tmp/virt-manager.glade.h:174
+#: tmp/vmm-create.glade.h:80 tmp/vmm-details.glade.h:43
 msgid "Total memory on host machine:"
 msgstr "ഹോസ്റ്റ് മഷീനില്‍ ഉളള മുഴുവന്‍ മെമ്മറി:"
 
-#: tmp/virt-manager.glade.h:175
+#: tmp/vmm-create.glade.h:81
 msgid "Type"
 msgstr "ഏത് തരം"
 
-#: tmp/virt-manager.glade.h:176
-msgid "UUID:"
-msgstr "UUID:"
-
-#: tmp/virt-manager.glade.h:177
-msgid "Unavailable"
-msgstr "ലഭ്യമല്ലാത്തവ"
-
-#: tmp/virt-manager.glade.h:178
-msgid "Update status every"
-msgstr "സ്റ്റേറ്റസ് പുതുക്കേണ്ട് എല്ലാ"
-
-#: tmp/virt-manager.glade.h:179
+#: tmp/vmm-create.glade.h:82
 #, fuzzy
 msgid "VM _Max Memory (MB):"
 msgstr "VM-നുളള ഏറ്റവും കൂടുതല്‍ മെമ്മറി: (_M)"
 
-#: tmp/virt-manager.glade.h:180
+#: tmp/vmm-create.glade.h:83
 #, fuzzy
 msgid "VM _Startup Memory (MB):"
 msgstr "VM സ്റ്റാര്‍ട് അപ്പ് മെമ്മറി: (_S)"
 
-#: tmp/virt-manager.glade.h:181
-msgid "VNC"
-msgstr "VNC"
+#: tmp/vmm-create.glade.h:84
+msgid "VMS"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:182
-msgid "Virtual CPUs"
-msgstr "വിര്‍ച്ച്വല്‍ CPU"
-
-#: tmp/virt-manager.glade.h:183
-msgid "Virtual Machine Console"
-msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ കണ്‍സോള്‍"
-
-#: tmp/virt-manager.glade.h:184
-msgid "Virtual Machine Details"
-msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ വിവരങ്ങള്‍"
-
-#: tmp/virt-manager.glade.h:185
-msgid "Virtual Machine Manager"
-msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ മാനേജര്‍"
-
-#: tmp/virt-manager.glade.h:186
-msgid "Virtual Machine Manager Preferences"
-msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ മാനേജര്‍ ഗുണഗണങ്ങള്‍"
-
-#: tmp/virt-manager.glade.h:187
-msgid "Virtual _Machine"
-msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ (_M)"
-
-#: tmp/virt-manager.glade.h:188
+#: tmp/vmm-create.glade.h:85
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr "സിസ്റ്റം <b>പൂര്‍ണ്ണ വിര്‍ച്ച്വലൈസ്ഡ്</b> അല്ലെങ്കില്‍ <b>പാരാ-വിര്‍ച്ച്വലൈസ്ഡ്</b> ആണോ എന്ന്"
 
-#: tmp/virt-manager.glade.h:189
+#: tmp/vmm-create.glade.h:86
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr ""
 "നിങ്ങളുടെ പുതിയ സിസ്റ്റത്തിന് വേണ്ടി നിങ്ങള്‍ ഒരു വിര്‍ച്ച്വലൈസേഷന്‍ മെഥേഡ് തിരഞ്ഞെടുക്കേണ്ടതുണ്ട്:"
 
-#: tmp/virt-manager.glade.h:190
+#: tmp/vmm-create.glade.h:87
 msgid "_Browse..."
 msgstr "തിരയുക... (_B)"
 
-#: tmp/virt-manager.glade.h:191
+#: tmp/vmm-create.glade.h:88
 msgid "_CD-ROM or DVD:"
 msgstr "CD-ROM അല്ലെങ്കില്‍ DVD: (_C)"
 
-#: tmp/virt-manager.glade.h:192
-msgid "_Destroy"
-msgstr ""
-
-#: tmp/virt-manager.glade.h:193
-msgid "_Details"
-msgstr "വിശദവിവരങ്ങള്‍ (_D)"
-
-#: tmp/virt-manager.glade.h:194
-msgid "_Edit"
-msgstr "മാറ്റം വരുത്തുക (_E)"
-
-#: tmp/virt-manager.glade.h:195
-msgid "_File"
-msgstr "ഫയല്‍ (_F)"
-
-#: tmp/virt-manager.glade.h:196
+#: tmp/vmm-create.glade.h:89
 msgid "_Finish"
 msgstr "അവസാനിച്ചു (_F)"
 
-#: tmp/virt-manager.glade.h:197
-msgid "_FullScreen"
-msgstr "സ്ക്രീന്‍ മുഴുവന്‍ വലിപ്പത്തില്‍ (_F)"
-
-#: tmp/virt-manager.glade.h:198
-msgid "_Graphical Console"
-msgstr "ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ (_G)"
-
-#: tmp/virt-manager.glade.h:199
-msgid "_Help"
-msgstr "സഹായം (_H)"
-
-#: tmp/virt-manager.glade.h:200
-msgid "_Host:"
-msgstr "ഹോസ്റ്റ്: (_H)"
-
-#: tmp/virt-manager.glade.h:201
+#: tmp/vmm-create.glade.h:90
 msgid "_ISO Image Location:"
 msgstr "ISO ഇമേജിന്‍റെ സ്ഥാനം: (_I)"
 
-#: tmp/virt-manager.glade.h:202
-msgid "_Local Xen host"
-msgstr "ലോക്കല്‍ Xen ഹോസ്റ്റ് (_L)"
-
-#: tmp/virt-manager.glade.h:203
-msgid "_Mount Point (on virtual system):"
-msgstr "മൌണ്ട് പോയിന്‍റ് (വിര്‍ച്ച്വല്‍ സിസ്റ്റമില്‍): (_M)"
-
-#: tmp/virt-manager.glade.h:204
-msgid "_Other hypervisor"
-msgstr "മറ്റ് ഹൈപ്പര്‍‍വൈസര്‍ (_O)"
-
-#: tmp/virt-manager.glade.h:205
+#: tmp/vmm-create.glade.h:91
 msgid "_Paravirtualized:"
 msgstr "പാരാവിര്‍ച്ച്വലൈസ്ഡ്: (_P)"
 
-#: tmp/virt-manager.glade.h:206
+#: tmp/vmm-create.glade.h:92
 msgid "_Path to install media:"
 msgstr "മീഡിയാ ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനുളള പാഥ്: (_P)"
 
-#: tmp/virt-manager.glade.h:207
-msgid "_Pause"
-msgstr "താല്‍ക്കാലികമായി നിര്‍ത്തുക (_P)"
-
-#: tmp/virt-manager.glade.h:208
-msgid "_Port:"
-msgstr "പോര്‍ട്ട്: (_P)"
-
-#: tmp/virt-manager.glade.h:209
-msgid "_Read only connection"
-msgstr "റീഡ് ഒണ്‍ലി കണക്ഷന്‍ (_R)"
-
-#: tmp/virt-manager.glade.h:210
-msgid "_Remote Xen host"
-msgstr "റിമോട്ട് Xen ഹോസ്റ്റ് (_R)"
-
-#: tmp/virt-manager.glade.h:211
-msgid "_Run"
-msgstr "പ്രവര്‍ത്തിപ്പിക്കുക (_R)"
-
-#: tmp/virt-manager.glade.h:212
-msgid "_Save"
-msgstr "സൂക്ഷിക്കുക (_S)"
-
-#: tmp/virt-manager.glade.h:213
-msgid "_Serial Console"
-msgstr "സീരിയില്‍ കണ്‍സോള്‍ (_S)"
-
-#: tmp/virt-manager.glade.h:214
-msgid "_Size:"
-msgstr "വലിപ്പം: (_S)"
-
-#: tmp/virt-manager.glade.h:215
-msgid "_Take Screenshot"
-msgstr "സ്ക്രീന്‍ ഷോട്ട് എടുക്കുക (_T)"
-
-#: tmp/virt-manager.glade.h:216
-msgid "_URI:"
-msgstr "_URI:"
-
-#: tmp/virt-manager.glade.h:217
+#: tmp/vmm-create.glade.h:93
 msgid "_VCPUs:"
 msgstr "_VCPUs:"
 
-#: tmp/virt-manager.glade.h:218
-msgid "_View"
-msgstr "കാഴ്ച (_V)"
-
-#: tmp/virt-manager.glade.h:219
-msgid "_View:"
-msgstr "കാഴ്ച: (_V)"
-
-#: tmp/virt-manager.glade.h:220
+#: tmp/vmm-create.glade.h:94
 msgid "demo"
 msgstr "ഡെമോ"
 
-#: tmp/virt-manager.glade.h:221
+#: tmp/vmm-create.glade.h:95
 msgid "http://"
 msgstr "http://"
 
-#: tmp/virt-manager.glade.h:222
-msgid "http://virt-manager.et.redhat.com/"
-msgstr "http://virt-manager.et.redhat.com/"
+#: tmp/vmm-create.glade.h:96
+msgid ""
+"i686\n"
+"x86_64\n"
+"ppc\n"
+"sparc\n"
+"mips\n"
+"mipsel"
+msgstr ""
 
-#: tmp/virt-manager.glade.h:223
-msgid "mac-addr-random"
-msgstr "mac-addr-random"
-
-#: tmp/virt-manager.glade.h:224
+#: tmp/vmm-create.glade.h:102
 msgid "para"
 msgstr "ഖണ്ഡിക"
 
-#: tmp/virt-manager.glade.h:225
+#: tmp/vmm-details.glade.h:2
+#, no-c-format
+msgid "18%"
+msgstr "18%"
+
+#: tmp/vmm-details.glade.h:3
+msgid "2"
+msgstr "2"
+
+#: tmp/vmm-details.glade.h:5
+msgid "20 bits/sec"
+msgstr "20 bits/sec"
+
+#: tmp/vmm-details.glade.h:6
+msgid "200 MB"
+msgstr "200 MB"
+
+#: tmp/vmm-details.glade.h:7
+msgid "30 MB of 128 MB"
+msgstr "128 MB-ല്‍ 30 MB"
+
+#: tmp/vmm-details.glade.h:8
+msgid "8"
+msgstr "8"
+
+#: tmp/vmm-details.glade.h:9
+msgid "80 MB of 1 GB"
+msgstr "1 GB-ല്‍ 80 MB"
+
+#: tmp/vmm-details.glade.h:10
+msgid "<b>Basic details</b>"
+msgstr "<b>അടിസ്ഥാന വിവരങ്ങള്‍</b>"
+
+#: tmp/vmm-details.glade.h:11
+msgid "<b>CPUs</b>"
+msgstr "<b>CPU</b>"
+
+#: tmp/vmm-details.glade.h:12
+msgid "<b>Memory</b>"
+msgstr "<b>മെമ്മറി</b>"
+
+#: tmp/vmm-details.glade.h:13
+msgid "<b>Network</b>"
+msgstr "<b>നെറ്റ്‍വര്‍ക്ക്</b>"
+
+#: tmp/vmm-details.glade.h:14
+msgid "<b>Performance</b>"
+msgstr "<b>പ്രവര്‍ത്തനം</b>"
+
+#: tmp/vmm-details.glade.h:15
+msgid "<b>Storage</b>"
+msgstr "<b>സ്റ്റോറേജ്</b>"
+
+#: tmp/vmm-details.glade.h:16
+msgid ""
+"<b>Tip:</b> File location paths are as seen from the physical host. Mount "
+"points are as seen from the virtual machine."
+msgstr ""
+"<b>സൂചന:</b> ഫിസിക്കല്‍ ഹോസ്റ്റില്‍ നിന്നും കാണുന്നപോലെയാണ് ഫയലിന്‍റെ ലോക്കേഷന്‍ പാഥുകള്‍. "
+"വിര്‍ച്ച്വല്‍ മഷീനുകളില്‍ നിന്നും കാണുന്നവയാണ് മൌണ്ട് പോയിന്‍റുകള്‍."
+
+#: tmp/vmm-details.glade.h:17
+msgid ""
+"<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
+"than (or equal to) the number of physical CPUs on the host system."
+msgstr ""
+"<b>സൂചന:</b> ഏറ്റവും നല്ല പ്രവര്‍ത്തനത്തിന്, വിര്‍ച്ച്വല്‍ CPU-കളുടെ എണ്ണം ഹോസ്റ്റ് സിസ്റ്റമിലുളള "
+"ഫിസിക്കല്‍ CPU-കളുടെ എണ്ണത്തിനേക്കാള്‍ കുറവായിരിക്കണം (അല്ലെങ്കില്‍ സമമായിരിക്കണം)."
+
+#: tmp/vmm-details.glade.h:18
+msgid "CPU usage:"
+msgstr "CPU ഉപയോഗം:"
+
+#: tmp/vmm-details.glade.h:19
+msgid "Change allocation:"
+msgstr "അലോക്കേഷന്‍ മാറ്റുക:"
+
+#: tmp/vmm-details.glade.h:20
+msgid "Current allocation:"
+msgstr "നിലവിലുളള അലോക്കേഷന്‍:"
+
+#: tmp/vmm-details.glade.h:22
+msgid "Disk usage:"
+msgstr "ഡിസ്ക് ഉപയോഗം:"
+
+#: tmp/vmm-details.glade.h:23
+msgid "Hardware"
+msgstr "ഹാര്‍ഡ്‍വയര്‍"
+
+#: tmp/vmm-details.glade.h:24
+msgid "How many virtual CPUs should this machine be allocated?"
+msgstr "എത്ര വിര്‍ച്ച്വല്‍ CPU ഈ സിസ്റ്റത്തിന് ലഭ്യമാകണം?"
+
+#: tmp/vmm-details.glade.h:25
+msgid "How much memory should this machine be allocated?"
+msgstr "ഈ മഷീനിന് അനുവദിക്കേണ്ട മെമ്മറി എത്ര?"
+
+#: tmp/vmm-details.glade.h:27
+msgid "Maximum allocation:"
+msgstr "ഏറ്റവും കൂടുതല്‍ അലോക്കേഷന്‍:"
+
+#: tmp/vmm-details.glade.h:28
+msgid "Memory"
+msgstr "മെമ്മറി"
+
+#: tmp/vmm-details.glade.h:29
+msgid "Memory usage:"
+msgstr "മെമ്മറി ഉപയോഗം:"
+
+#: tmp/vmm-details.glade.h:30
+msgid "Name:"
+msgstr "പേര്:"
+
+#: tmp/vmm-details.glade.h:31
+msgid "Network"
+msgstr "നെറ്റ്‍വര്‍ക്ക്"
+
+#: tmp/vmm-details.glade.h:32
+msgid "Network usage:"
+msgstr "നെറ്റ്‍വര്‍ക്കിന്‍റെ ഉപയോഗം:"
+
+#: tmp/vmm-details.glade.h:33
+msgid "Overview"
+msgstr "ഓവര്‍ വ്യൂ"
+
+#: tmp/vmm-details.glade.h:35
+msgid "Processor"
+msgstr "പ്രൊസസ്സര്‍"
+
+#: tmp/vmm-details.glade.h:38
+msgid "Shut down"
+msgstr "അടച്ചു പൂട്ടുക"
+
+#: tmp/vmm-details.glade.h:40
+msgid "Status:"
+msgstr "അവസ്ഥ:"
+
+#: tmp/vmm-details.glade.h:42
+msgid "Total CPUs on host machine:"
+msgstr "ഹോസ്റ്റ് മഷീനില്‍ ഉളള മുഴുവന്‍ CPU:"
+
+#: tmp/vmm-details.glade.h:44
+msgid "UUID:"
+msgstr "UUID:"
+
+#: tmp/vmm-details.glade.h:45
+msgid "Virtual Machine Details"
+msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ വിവരങ്ങള്‍"
+
+#: tmp/vmm-details.glade.h:48
+msgid "_Graphical Console"
+msgstr "ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ (_G)"
+
+#: tmp/vmm-manager.glade.h:1
+msgid ""
+"All virtual machines\n"
+"Active virtual machines\n"
+"Inactive virtual machines"
+msgstr ""
+"എല്ലാ വിര്‍ച്ച്വല്‍ മഷീനുകളും\n"
+"സജീവമായ വിര്‍ച്ച്വല്‍ മഷീനുകളും\n"
+"സജീവമല്ലാത്ത വിര്‍ച്ച്വല്‍ മഷീനുകളും"
+
+#: tmp/vmm-manager.glade.h:5
+msgid "De_tails"
+msgstr "വിശദാംശങ്ങള്‍ (_t)"
+
+#: tmp/vmm-manager.glade.h:6
+msgid "Delete machine"
+msgstr "മഷീന്‍ നീക്കം ചെയ്യുക"
+
+#: tmp/vmm-manager.glade.h:8
+msgid "Domain ID"
+msgstr "ഡൊമെയിന്‍ ID"
+
+#: tmp/vmm-manager.glade.h:9
+msgid "Machine details..."
+msgstr "മഷീനിന്‍റെ വിശദാംശങ്ങള്‍"
+
+#: tmp/vmm-manager.glade.h:12
+msgid "New machine..."
+msgstr "പുതിയ കംപ്യൂട്ടര്‍..."
+
+#: tmp/vmm-manager.glade.h:13
+msgid "Open connection..."
+msgstr "കണക്ഷന്‍ തുറക്കുക..."
+
+#: tmp/vmm-manager.glade.h:14
+msgid "Restore a saved machine from a filesystem image"
+msgstr "ഒരു ഫയല്‍ സിസ്റ്റം ഇമേജില്‍ നിന്നും സംരക്ഷിച്ച ഒരു മഷീന്‍ വീണ്ടെടുക്കുക"
+
+#: tmp/vmm-manager.glade.h:15
+msgid "Restore saved machine..."
+msgstr "സൂക്ഷിച്ച മഷീന്‍ വീണ്ടെടുക്കുക..."
+
+#: tmp/vmm-manager.glade.h:17
+msgid "Virtual CPUs"
+msgstr "വിര്‍ച്ച്വല്‍ CPU"
+
+#: tmp/vmm-manager.glade.h:19
+msgid "_Edit"
+msgstr "മാറ്റം വരുത്തുക (_E)"
+
+#: tmp/vmm-manager.glade.h:20
+msgid "_File"
+msgstr "ഫയല്‍ (_F)"
+
+#: tmp/vmm-manager.glade.h:23
+msgid "_View:"
+msgstr "കാഴ്ച: (_V)"
+
+#: tmp/vmm-modify-file-storage.glade.h:1
+msgid " free"
+msgstr "ഫ്രീ"
+
+#: tmp/vmm-modify-file-storage.glade.h:2
+msgid " of "
+msgstr " of "
+
+#: tmp/vmm-modify-file-storage.glade.h:3
+msgid "/tmp"
+msgstr "/tmp"
+
+#: tmp/vmm-modify-file-storage.glade.h:4
+msgid "10 TB"
+msgstr "10 TB"
+
+#: tmp/vmm-modify-file-storage.glade.h:5
+msgid ""
+"<b>Tip:</b> You may only increase the size of file-based storage; you can't "
+"decrease its size."
+msgstr ""
+"<b>സൂചന:</b> നിങ്ങള്‍ ഫയല്‍-അടിസ്ഥാനത്തിലുളള സംഭരണത്തിന്‍റെ വലിപ്പം കൂട്ടൂവാന്‍ മാത്രമേ പാടുള്ളൂ; "
+"വലിപ്പം കുറയ്ക്കുവാന്‍ സാധ്യമല്ല."
+
+#: tmp/vmm-modify-file-storage.glade.h:6
+msgid ""
+"MB\n"
+"GB\n"
+"TB"
+msgstr ""
+"MB\n"
+"GB\n"
+"TB"
+
+#: tmp/vmm-modify-file-storage.glade.h:9
+msgid "Modify File Storage"
+msgstr "ഫയല്‍ സ്റ്റോറേജ് മാറ്റുക"
+
+#: tmp/vmm-modify-file-storage.glade.h:10
+msgid "_Mount Point (on virtual system):"
+msgstr "മൌണ്ട് പോയിന്‍റ് (വിര്‍ച്ച്വല്‍ സിസ്റ്റമില്‍): (_M)"
+
+#: tmp/vmm-modify-file-storage.glade.h:11
+msgid "_Size:"
+msgstr "വലിപ്പം: (_S)"
+
+#: tmp/vmm-open-connection.glade.h:1
+msgid "Co_nnect"
+msgstr "കണക്ട് ചെയ്യുക (_n)"
+
+#: tmp/vmm-open-connection.glade.h:2
+#, fuzzy
+msgid "Hypervisor:"
+msgstr "മറ്റ് ഹൈപ്പര്‍‍വൈസര്‍ (_O)"
+
+#: tmp/vmm-open-connection.glade.h:3
+msgid "Open connection"
+msgstr "കണക്ഷന്‍ തുറക്കുക"
+
+#: tmp/vmm-open-connection.glade.h:4
+msgid ""
+"Xen\n"
+"QEMU"
+msgstr ""
+
+#: tmp/vmm-open-connection.glade.h:6
+msgid "_Host:"
+msgstr "ഹോസ്റ്റ്: (_H)"
+
+#: tmp/vmm-open-connection.glade.h:7
+#, fuzzy
+msgid "_Local host"
+msgstr "ലോക്കല്‍ Xen ഹോസ്റ്റ് (_L)"
+
+#: tmp/vmm-open-connection.glade.h:8
+msgid "_Port:"
+msgstr "പോര്‍ട്ട്: (_P)"
+
+#: tmp/vmm-open-connection.glade.h:9
+msgid "_Read only connection"
+msgstr "റീഡ് ഒണ്‍ലി കണക്ഷന്‍ (_R)"
+
+#: tmp/vmm-open-connection.glade.h:10
+#, fuzzy
+msgid "_Remote host"
+msgstr "റിമോട്ട് Xen ഹോസ്റ്റ് (_R)"
+
+#: tmp/vmm-preferences.glade.h:1
+msgid "<b>Consoles</b>"
+msgstr "<b>കണ്‍സോളുകള്‍</b>"
+
+#: tmp/vmm-preferences.glade.h:2
+msgid "<b>Status monitoring</b>"
+msgstr "<b>സ്റ്റേറ്റസ് മോണിറ്ററിങ്</b>"
+
+#: tmp/vmm-preferences.glade.h:3
+msgid "Automatically open consoles:"
+msgstr "കണ്‍സോളുകള്‍ ഓട്ടോമാറ്റിക്കായി തുറക്കുക:"
+
+#: tmp/vmm-preferences.glade.h:4
+msgid "Grab keyboard input:"
+msgstr "കീബോര്‍ഡ് ഇന്‍പുട്ട് ലഭ്യമാക്കുക:"
+
+#: tmp/vmm-preferences.glade.h:5
+msgid "Maintain history of"
+msgstr "ചരിത്രം കൈകാര്യം ചെയ്യേണ്ടത്"
+
+#: tmp/vmm-preferences.glade.h:6
+msgid ""
+"Never\n"
+"For new domains\n"
+"For all domains"
+msgstr ""
+"ഒരിക്കലുമില്ല\n"
+"പുതിയ ഡൊമെയിനുകള്‍ക്ക്\n"
+"എല്ലാ ഡൊമെയിനുകള്‍ക്ക്"
+
+#: tmp/vmm-preferences.glade.h:9
+msgid ""
+"Never\n"
+"When fullscreen\n"
+"On mouse over"
+msgstr ""
+"ഒരിക്കലുമില്ല\n"
+"സ്ക്രീന്‍ മുഴുവന്‍ വലിപ്പത്തില്‍ ആകുന്പോള്‍\n"
+"മൌസ് ഉപയോഗത്തിലുളളപ്പോള്‍"
+
+#: tmp/vmm-preferences.glade.h:12
+msgid "Preferences"
+msgstr ""
+
+#: tmp/vmm-preferences.glade.h:13
+msgid "Update status every"
+msgstr "സ്റ്റേറ്റസ് പുതുക്കേണ്ട് എല്ലാ"
+
+#: tmp/vmm-preferences.glade.h:14
 msgid "samples"
 msgstr "മാതൃകകള്‍"
 
-#: tmp/virt-manager.glade.h:226
+#: tmp/vmm-preferences.glade.h:15
 msgid "seconds"
 msgstr "സെക്കന്‍ഡുകള്‍"
 
-#: tmp/virt-manager.glade.h:228
-msgid "translator-credits"
-msgstr "അനി പീറ്റര്‍ <apeter@redhat.com>"
+#~ msgid ""
+#~ "<b>Too Many Virtual CPUs</b>\n"
+#~ "\n"
+#~ "You have set this virtual machine to have more CPUs than the host system "
+#~ "has physically. This may result in poor performance in the virtual "
+#~ "machine."
+#~ msgstr ""
+#~ "<b>ഒരുപാട് വിര്‍ച്ച്വല്‍ CPU</b>\n"
+#~ "\n"
+#~ "ഹോസ്റ്റ് സിസ്റ്റമിനേക്കാള്‍ കൂടുതല്‍ CPU-വിന് വേണ്ടിയാണ് നിങ്ങള്‍ ഈ വിര്‍ച്ച്വല്‍ മഷീന്‍ "
+#~ "ക്രമീകരിച്ചിരിക്കുന്നത്. ഇത് വിര്‍ച്ച്വല്‍ മഷീന്‍റെ പ്രവര്‍ത്തനത്തെ ബാധിക്കുന്നു."
 
-#: tmp/virt-manager.glade.h:229
-msgid "virtual CPU alert"
-msgstr "വിര്‍ച്ച്വല്‍ CPU അറിയിപ്പ്"
+#~ msgid "Alert"
+#~ msgstr "അറിയിക്കുക"
+
+#~ msgid "Keep CPU Settings"
+#~ msgstr "CPU ക്രമീകരണങ്ങള്‍ സൂക്ഷിക്കുക"
+
+#~ msgid "Modify CPU Settings"
+#~ msgstr "CPU ക്രമീകരണങ്ങള്‍ മാറ്റുക"
+
+#~ msgid "Saving VM Image"
+#~ msgstr "VM ഇമേജ് സൂക്ഷിക്കുന്നു"
+
+#~ msgid "Virtual Machine Manager Preferences"
+#~ msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ മാനേജര്‍ ഗുണഗണങ്ങള്‍"
+
+#~ msgid "_URI:"
+#~ msgstr "_URI:"
+
+#~ msgid "virtual CPU alert"
+#~ msgstr "വിര്‍ച്ച്വല്‍ CPU അറിയിപ്പ്"
 
 #~ msgid ""
 #~ "<small><b>Note:</b> File size parameter is only relevant for new files</"
