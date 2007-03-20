@@ -42,6 +42,8 @@ Requires: pygtk2-libglade
 Requires: librsvg2
 # Earlier vte had broken python binding module
 Requires: vte >= 0.12.2
+# For online help
+Requires: scrollkeeper
 
 ExclusiveArch: %{ix86} x86_64 ia64
 
@@ -137,11 +139,15 @@ fi
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
-* Tue Feb 20 2007  <berrange@aubergine.virt.boston.redhat.com> - 0.3.1-1
+* Tue Mar 20 2007 Daniel P. Berrange <berrange@redhat.com> - 0.3.2-1
+- Added online help to all windows
+- Bug fixes to virtual console popup, key grab & accelerator override
+
+* Tue Feb 20 2007 Daniel P. Berrange <berrange@redhat.com> - 0.3.1-1
 - Added support for managing QEMU domains
 - Automatically grab mouse pointer to workaround dual-cursor crazyness
 
-* Mon Jan 22 2007 Daniel P. Berrange <berrange@redhat.com - 0.3.0-1
+* Mon Jan 22 2007 Daniel P. Berrange <berrange@redhat.com> - 0.3.0-1
 - Added support for managing inactive domains
 - Require virt-inst >= 0.100.0 and libvirt >= 0.1.11 for ianctive
   domain management capabilities
