@@ -819,7 +819,10 @@
 
  <sect1 id="virt-manager-create-wizard">
   <title>The Create Wizard</title>
-  <para>You create new virtual machines here</para>
+  <para>The Create Wizard helps you gather the information necessary to create
+  new virtual machines. All the information in each screen is retained and can
+  be backed-up-to and modified until you click <guibutton>Finish</guibutton>
+   on the last screen.</para>
   <sect2 id="virt-manager-system-name">
    <title>The System Name screen</title>
    <para>Choose a name for your virtual system. The name must be non-blank,
@@ -829,29 +832,206 @@
 
   <sect2 id="virt-manager-virt-method">
    <title>The Virtualization Method screen</title>
-   <para>Choose a virtualization method for your new system.</para>
+   <para>Choose a virtualization method for your new system. The choices
+    are:</para>
+   <variablelist>
+    <varlistentry><term>Paravirtualized</term> <listitem><para>A
+       paravirtualized system typically performs better than a fully virtualized
+       system because certain operations &mdash; disk and network access, for
+       example &mdash; have direct access to the hardware. However a
+       paravirtualized VM requires a specially modified kernel. If you
+       choose paravirtualized, you must make sure this specially modified kernel
+       is available for the operating system you wish to install.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>Fully Virtualized</term>
+     <listitem>
+      <para>A fully virtualized system simulates all the hardware for the VM,
+       permitting no direct access. It allows for a greater range of operating
+       systems, but generally will not perform as well as a paravirtualized
+       system. Note that for some hypervisor types, full virtualization requires
+       hardware support. In addition if your hardware allows it, you can
+       enable hardware acceleration for your fully virtualized guest (this
+       item will be grayed out unless your hardware is acceleration-capable).</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
   </sect2>
 
   <sect2 id="virt-manager-installation-media">
    <title>The Installation Media screens</title>
-   <para>Choose installation media for your new system.</para>
+   <para>The Installation Media screens let you specify where the physical or
+    virtual install media for your VM are located, so that the installer can
+    find them. There are two screens, one for each type of virtual
+    machine.</para>
+   <sect3 id="virt-manager-installation-media-paravirt">
+    <title>Paravirtualized installation media</title>
+    <figure id="virt-manager-FIG-paravirt-media">
+     <title>Choose Install Media for Paravirtualized VMs</title>
+     <screenshot>
+      <mediaobject>
+       <imageobject>
+	<imagedata fileref="figures/vm-paravirt-media.png" format="PNG"/>
+       </imageobject>
+       <textobject> <phrase>Shows the paravirtualized VM media choice window.</phrase>
+       </textobject>
+      </mediaobject>
+     </screenshot>
+    </figure>
+    <para>A paravirtualized VM requires an install tree that follows the
+     pattern of the Fedora install tree (e.g. <ulink type="http"
+      url="http://download.fedora.redhat.com/pub/fedora/linux/core/6/i386/os/">
+      this tree</ulink>). The <guilabel>Install Media URL</guilabel> box lets
+     you enter a URL for a tree like this. When you then go to install the
+     guest, the installer will check to see if the URL you entered is
+     readable, and if so download the paravirtualized install kernel and
+     initrd that it will need to start the install. You can use the following
+     URL types:</para>
+    <variablelist>
+     <varlistentry><term>http:</term>
+      <listitem><para>e.g. <userinput>http://download.fedora.redhat.com/pub/fedora/linux/core/6/i386/os/</userinput></para>
+      </listitem>
+     </varlistentry>
+     <varlistentry><term>ftp:</term>
+      <listitem><para>e.g. <userinput>ftp://download.fedora.redhat.com/pub/fedora/linux/core/6/i386/os/</userinput></para>
+      </listitem>
+     </varlistentry>
+     <varlistentry><term>nfs:</term>
+      <listitem><para>e.g. <userinput>nfs:myfileserver:/images/linux/core/6/i386/os/</userinput></para>
+      </listitem>
+     </varlistentry>
+     <varlistentry><term>local file:</term>
+      <listitem><para>e.g. <userinput>/tmp/paravirttrees/fedora/os</userinput>
+       </para>
+      </listitem>
+     </varlistentry>
+    </variablelist>
+    <para>You can specify a kickstart URL for your paravirtualized VM in
+     exactly the same way as the install tree described
+     above. <application>&app;</application> will remember the last 5 URLs you
+     enter in these windows, so if you are installing multiple VMs you will
+     not have to type the URLs more than once.
+    </para>
+   </sect3>
+   <sect3 id="virt-manager-installation-media-full-virt">
+    <title>Fully Virtualized Installation Media</title>
+    <figure id="virt-manager-FIG-full-virt-media">
+     <title>Choose Install Media for Fully Virtualized VMs</title>
+     <screenshot>
+      <mediaobject>
+       <imageobject>
+	<imagedata fileref="figures/vm-full-virt-media.png" format="PNG"/>
+       </imageobject>
+       <textobject> <phrase>Shows the fully virtualized VM media choice window.</phrase>
+       </textobject>
+      </mediaobject>
+     </screenshot>
+    </figure>
+    <para>A fully virtualized VM requires the standard installation media that
+     the same non-virtualized OS would require: either an actual CD or DVD, or
+     a corresponding ISO image. On the Installation Media screen for a fully
+     virtualized VM, you can therefore choose the path to your CD or DVD from
+     the pull-down list, or you can enter or browse to the path of the ISO
+     image you have saved in your local filesystem.</para>
+    <para>For fully virtualized VMs, <application>&app;</application> also
+     asks for the operating system type and variant you are installing. The
+     installer uses this to set the <parameter>acpi</parameter> and
+     <parameter>apic</parameter> flags according to the OS type (other
+     parameters may be added to this list in the future).</para>
+   </sect3>
   </sect2>
 
   <sect2 id="virt-manager-storage-space">
-   <title>The Storage Space screen</title>
-   <para>Assign storage space for your new system.</para>
+   <title>Assigning Storage Space</title>
+    <figure id="virt-manager-FIG-assign-storage">
+     <title>Assign Storage</title>
+     <screenshot>
+      <mediaobject>
+       <imageobject>
+	<imagedata fileref="figures/vm-assign-storage.png" format="PNG"/>
+       </imageobject>
+       <textobject> <phrase>Shows the Assigning Storage window.</phrase>
+       </textobject>
+      </mediaobject>
+     </screenshot>
+    </figure>
+
+   <para>Designate the primary storage device for your VM. You may choose an
+    existing physical or LVM partition in the <guilabel>Partition</guilabel>
+    box; or, you may choose to use a file on the local filesystem. If you
+    choose to use a file that does not already exist, you may specify the size
+    of the file in megabytes. If you choose an existing file, that file's size
+    will not change. If you use a file for your primary storage device, you
+    may also choose whether to allocate the entire file
+    at creation time, or whether to allow it to grow to its maximum over
+    time.</para>
+   <warning>
+    <title>Sparse files can be dangerous</title>
+    <para>You may be tempted not to allocate your entire file when your VM is
+     created; filling a 5- to 10-GB file with 0s can take quite a while, and
+     you will avoid this wait by not allocating the entire file and instead using a
+     "sparse" file. However, be aware that this will slow down your VM's disk
+     performance significantly, as the underlying OS must keep allocating more
+     storage space as your VM runs. In addition, if the disk your sparse file
+     is on runs out of space, your VM may crash and lose data. You may
+     therefore only want to use a sparse file when testing, where guest
+     creation speed could be at a premium.</para>
+   </warning>
   </sect2>
 
   <sect2 id="virt-manager-memory-and-cpu">
-   <title>The Memory And CPU screen</title>
-   <para>Choose memory and cpu for your new system</para>
+   <title>Allocate Memory And CPU</title>
+   <figure id="virt-manager-FIG-mem-cpu">
+     <title>Set Memory and CPU</title>
+     <screenshot>
+      <mediaobject>
+       <imageobject>
+	<imagedata fileref="figures/vm-create-mem-cpu.png" format="PNG"/>
+       </imageobject>
+       <textobject> <phrase>Shows the VM Memory and CPU choice window.</phrase>
+       </textobject>
+      </mediaobject>
+     </screenshot>
+    </figure>
+   <para>The <guilabel>Memory</guilabel> section of this screen lets you set
+    two parameters, <guilabel>VM Max Memory</guilabel> and <guilabel>VM
+     Startup Memory</guilabel>. These settings work as follows:</para>
+   <variablelist>
+    <varlistentry><term>VM Max Memory</term> <listitem><para><guilabel>VM Max
+	Memory</guilabel> sets the maximum memory your VM can have unless you
+       reboot it with a higher setting. For paravirtualized VMs, the maximum
+       memory is a boot-time kernel setting; for fully virtualized VMs, the
+       maximum memory appears to the VM to be the amount of physical memory
+       available.</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry><term>VM Startup Memory</term>
+     <listitem><para>For paravirtualized VMs, <guilabel>VM Startup
+	Memory</guilabel> sets the amount of memory to start the VM with. The
+       VM's available memory can then be changed from <application>&app;</application>
+       while the VM is running. For fully virtualized guests, this setting has
+       no effect.</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+   <para>The virtual CPU section of this screen lets you set the number of
+    vCPUs your VM starts up with. For paravirtualized guests, this number can
+    be changed while the guest is running (although never to more than the VM
+    started with). For fully virtualized guests, this number can only be
+    changed while the guest is not running.</para>
   </sect2>
 
-  <sect2 id="virt-manager-begin-installation">
-   <title>The Validation screen</title>
-   <para>Verify the setup for your new system. If you need to, back up and
+  <sect2 id="virt-manager-validation">
+   <title>Validation</title>
+   <para>The Validation screen lets you erify the setup for your new
+    system. If you need to, you can back up and
     make changes. Clicking &quot;Finish&quot; will begin creating your virtual
-    machine.</para>
+    machine. If you have the <application>&app;</application> preferences set
+    to automatically open consoles, a <link
+     linkend="virt-manager-console-window">Console window</link> will pop up
+    as soon as the installer has downloaded the necessary images and booted
+    the VM's installer.
+   </para>
   </sect2>
  </sect1>
 

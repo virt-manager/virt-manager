@@ -97,6 +97,8 @@ class vmmCreate(gobject.GObject):
                                 gobject.TYPE_NONE, (str,str)),
         "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
+        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, [str]),
         }
     def __init__(self, config, connection):
         self.__gobject_init__()
@@ -119,11 +121,10 @@ class vmmCreate(gobject.GObject):
             "on_storage_file_address_changed": self.toggle_storage_size,
             "on_storage_toggled" : self.change_storage_type,
             "on_media_toggled" : self.change_media_type,
-            "on_pv_media_url_changed" : self.change_combo_box,
-            "on_pv_ks_url_changed" : self.change_combo_box,
             "on_os_type_changed" : self.change_os_type,
             "on_cpu_architecture_changed": self.change_cpu_arch,
             "on_virt_method_toggled": self.change_virt_method,
+            "on_create_help_clicked": self.show_help,
             })
 
         self.set_initial_state()
@@ -819,11 +820,6 @@ class vmmCreate(gobject.GObject):
         for url in urls:
             model.append([url])
 
-    def change_combo_box(self, box):
-        model = box.get_model()
-        box.child.set_text(model.get_value(box.get_active_iter(), 0))
-        return
-
     def populate_os_model(self, model, oses):
         model.clear()
         for os in oses:
@@ -892,3 +888,26 @@ class vmmCreate(gobject.GObject):
         else:
             return "xen"
 
+    def show_help(self, src):
+        # help to show depends on the notebook page, yahoo
+        page = self.window.get_widget("create-pages").get_current_page()
+        if page == 0:
+            self.emit("action-show-help", "virt-manager-create-wizard")
+        elif page == 1:
+            self.emit("action-show-help", "virt-manager-system-name")
+        elif page == 2:
+            self.emit("action-show-help", "virt-manager-virt-method")
+        elif page == 3:
+            self.emit("action-show-help", "virt-manager-installation-media-full-virt")
+        elif page == 4:
+            self.emit("action-show-help", "virt-manager-installation-media-paravirt")
+        elif page == 5:
+            self.emit("action-show-help", "virt-manager-storage-space")
+        elif page == 6:
+            self.emit("action-show-help", "virt-manager-memory-and-cpu")
+        elif page == 7:
+            self.emit("action-show-help", "virt-manager-validation")
+
+            
+            
+        
