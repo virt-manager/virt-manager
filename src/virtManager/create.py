@@ -45,6 +45,16 @@ VM_STORAGE_FILE = 2
 
 DEFAULT_STORAGE_FILE_SIZE = 500
 
+PAGE_INTRO = 0
+PAGE_NAME = 1
+PAGE_TYPE = 2
+PAGE_FVINST = 3
+PAGE_PVINST = 4
+PAGE_DISK = 5
+PAGE_NETWORK = 6
+PAGE_CPUMEM = 7
+PAGE_SUMMARY = 8
+
 class vmmCreateMeter(progress.BaseMeter):
     def __init__(self, asyncjob):
         # progress meter has to run asynchronously, so pass in the
@@ -120,6 +130,7 @@ class vmmCreate(gobject.GObject):
             "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
             "on_storage_file_address_changed": self.toggle_storage_size,
             "on_storage_toggled" : self.change_storage_type,
+            "on_network_toggled" : self.change_network_type,
             "on_media_toggled" : self.change_media_type,
             "on_os_type_changed" : self.change_os_type,
             "on_cpu_architecture_changed": self.change_cpu_arch,
@@ -141,14 +152,9 @@ class vmmCreate(gobject.GObject):
         #XXX I don't think I should have to go through and set a bunch of background colors
         # in code, but apparently I do...
         black = gtk.gdk.color_parse("#000")
-        self.window.get_widget("intro-title").modify_bg(gtk.STATE_NORMAL,black)
-        self.window.get_widget("page1-title").modify_bg(gtk.STATE_NORMAL,black)
-        self.window.get_widget("page2-title").modify_bg(gtk.STATE_NORMAL,black)
-        self.window.get_widget("page3-title").modify_bg(gtk.STATE_NORMAL,black)
-        self.window.get_widget("page3a-title").modify_bg(gtk.STATE_NORMAL,black)
-        self.window.get_widget("page4-title").modify_bg(gtk.STATE_NORMAL,black)
-        self.window.get_widget("page5-title").modify_bg(gtk.STATE_NORMAL,black)
-        self.window.get_widget("page6-title").modify_bg(gtk.STATE_NORMAL,black)
+        for num in range(PAGE_SUMMARY+1):
+            name = "page" + str(num) + "-title"
+            self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL,black)
 
         # set up the list for the cd-path widget
         cd_list = self.window.get_widget("cd-path")
@@ -183,6 +189,21 @@ class vmmCreate(gobject.GObject):
         ks_url_model = gtk.ListStore(str)
         ks_url_list.set_model(ks_url_model)
         ks_url_list.set_text_column(0)
+
+        # set up the lists for the networks
+        network_list = self.window.get_widget("net-network")
+        network_model = gtk.ListStore(str, str)
+        network_list.set_model(network_model)
+        text = gtk.CellRendererText()
+        network_list.pack_start(text, True)
+        network_list.add_attribute(text, 'text', 1)
+
+        device_list = self.window.get_widget("net-device")
+        device_model = gtk.ListStore(str)
+        device_list.set_model(device_model)
+        text = gtk.CellRendererText()
+        device_list.pack_start(text, True)
+        device_list.add_attribute(text, 'text', 0)
 
         # set up the lists for the os-type/os-variant widgets
         os_type_list = self.window.get_widget("os-type")
@@ -251,6 +272,7 @@ class vmmCreate(gobject.GObject):
 
         self.change_media_type()
         self.change_storage_type()
+        self.change_network_type()
         self.window.get_widget("create-vm-name").set_text("")
         self.window.get_widget("media-iso-image").set_active(True)
         self.window.get_widget("fv-iso-location").set_text("")
@@ -270,6 +292,10 @@ class vmmCreate(gobject.GObject):
         os_list = virtinst.FullVirtGuest.OS_TYPES.keys()
         os_list.sort()
         self.populate_os_model(model, os_list)
+        model = self.window.get_widget("net-network").get_model()
+        self.populate_network_model(model)
+        device = self.window.get_widget("net-device").get_model()
+        self.populate_device_model(device)
         # set the default os to Linux
         self.window.get_widget("os-type").set_active(os_list.index("Linux"))
         self.install_error = None
@@ -280,10 +306,12 @@ class vmmCreate(gobject.GObject):
         if(self.validate(notebook.get_current_page()) != True):
             return
 
-        if (notebook.get_current_page() == 2 and self.get_config_method() == VM_PARA_VIRT):
-            notebook.set_current_page(4)
-        elif (notebook.get_current_page() == 3 and self.get_config_method() == VM_FULLY_VIRT):
-            notebook.set_current_page(5)
+        if (notebook.get_current_page() == PAGE_TYPE and self.get_config_method() == VM_PARA_VIRT):
+            notebook.set_current_page(PAGE_PVINST)
+        elif (notebook.get_current_page() == PAGE_FVINST and self.get_config_method() == VM_FULLY_VIRT):
+            notebook.set_current_page(PAGE_DISK)
+        elif (notebook.get_current_page() == PAGE_DISK and os.getuid() != 0):
+            notebook.set_current_page(PAGE_CPUMEM)
         else:
             notebook.next_page()
 
@@ -292,10 +320,12 @@ class vmmCreate(gobject.GObject):
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-finish").hide()
         self.window.get_widget("create-forward").show()
-        if notebook.get_current_page() == 4 and self.get_config_method() == VM_PARA_VIRT:
-            notebook.set_current_page(2)
-        elif notebook.get_current_page() == 5 and self.get_config_method() == VM_FULLY_VIRT:
-            notebook.set_current_page(3)
+        if notebook.get_current_page() == PAGE_PVINST and self.get_config_method() == VM_PARA_VIRT:
+            notebook.set_current_page(PAGE_TYPE)
+        elif notebook.get_current_page() == PAGE_DISK and self.get_config_method() == VM_FULLY_VIRT:
+            notebook.set_current_page(PAGE_FVINST)
+        elif notebook.get_current_page() == PAGE_CPUMEM and os.getuid() != 0:
+            notebook.set_current_page(PAGE_DISK)
         else:
             notebook.prev_page()
 
@@ -348,6 +378,19 @@ class vmmCreate(gobject.GObject):
         else:
             return self.window.get_widget("storage-file-size").get_value()
 
+    def get_config_network(self):
+        if os.getuid() != 0:
+            return ["user"]
+
+        if self.window.get_widget("net-type-network").get_active():
+            net = self.window.get_widget("net-network")
+            model = net.get_model()
+            return ["network", model.get_value(net.get_active_iter(), 0)]
+        else:
+            dev = self.window.get_widget("net-device")
+            model = dev.get_model()
+            return ["bridge", model.get_value(dev.get_active_iter(), 0)]
+
     def get_config_maximum_memory(self):
         return self.window.get_widget("create-memory-max").get_value()
 
@@ -367,29 +410,26 @@ class vmmCreate(gobject.GObject):
     def page_changed(self, notebook, page, page_number):
         # would you like some spaghetti with your salad, sir?
 
-        if page_number == 0:
+        if page_number == PAGE_INTRO:
             self.window.get_widget("create-back").set_sensitive(False)
-        elif page_number == 1:
+        elif page_number == PAGE_NAME:
             name_widget = self.window.get_widget("create-vm-name")
             name_widget.grab_focus()
-        elif page_number == 2:
-            #set up the virt method page
+        elif page_number == PAGE_TYPE:
             pass
-        elif page_number == 3:
-            #set up the fv install media page
+        elif page_number == PAGE_FVINST:
             pass
-        elif page_number == 4:
-            #set up the pv install media page
+        elif page_number == PAGE_PVINST:
             url_widget = self.window.get_widget("pv-media-url")
             url_widget.grab_focus()
-        elif page_number == 5:
-            #set up the storage space page
+        elif page_number == PAGE_DISK:
             partwidget = self.window.get_widget("storage-partition-address")
             filewidget = self.window.get_widget("storage-file-address")
-        elif page_number == 6:
-            # memory stuff
+        elif page_number == PAGE_NETWORK:
             pass
-        elif page_number == 7:
+        elif page_number == PAGE_CPUMEM:
+            pass
+        elif page_number == PAGE_SUMMARY:
             self.window.get_widget("summary-name").set_text(self.get_config_name())
             if self.get_config_method() == VM_PARA_VIRT:
                 self.window.get_widget("summary-method").set_text(_("Paravirtualized"))
@@ -411,6 +451,18 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("summary-max-memory").set_text(str(int(self.get_config_maximum_memory())) + " MB")
             self.window.get_widget("summary-initial-memory").set_text(str(int(self.get_config_initial_memory())) + " MB")
             self.window.get_widget("summary-virtual-cpus").set_text(str(int(self.get_config_virtual_cpus())))
+            net = self.get_config_network()
+            if net[0] == "bridge":
+                self.window.get_widget("summary-net-type").set_text(_("Shared physical device"))
+                self.window.get_widget("summary-net-target").set_text(net[1])
+            elif net[0] == "network":
+                self.window.get_widget("summary-net-type").set_text(_("Virtual network"))
+                self.window.get_widget("summary-net-target").set_text(net[1])
+            elif net[0] == "user":
+                self.window.get_widget("summary-net-type").set_text(_("Usermode networking"))
+                self.window.get_widget("summary-net-target").set_text("-")
+            else:
+                raise ValueError, "Unknown networking type " + net[0]
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
 
@@ -502,8 +554,15 @@ class vmmCreate(gobject.GObject):
         guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
 
         # network
-        n = virtinst.VirtualNetworkInterface(None)
-        guest.nics.append(n)
+        net = self.get_config_network()
+        if net[0] == "bridge":
+            guest.nics.append(virtinst.VirtualNetworkInterface(type=net[0], bridge=net[1]))
+        elif net[0] == "network":
+            guest.nics.append(virtinst.VirtualNetworkInterface(type=net[0], network=net[1]))
+        elif net[0] == "user":
+            guest.nics.append(virtinst.VirtualNetworkInterface(type=net[0]))
+        else:
+            raise ValueError, "Unsupported networking type " + net[0]
 
         # set up the graphics to use SDL
         guest.graphics = "vnc"
@@ -628,21 +687,22 @@ class vmmCreate(gobject.GObject):
             file = fcdialog.get_filename()
         if file != None:
             self.window.get_widget("storage-file-address").set_text(file)
-            
+
     def toggle_storage_size(self, ignore1=None, ignore2=None):
         file = self.get_config_disk_image()
         if file != None and len(file) > 0 and not(os.path.exists(file)):
             self.window.get_widget("storage-file-size").set_sensitive(True)
             self.window.get_widget("non-sparse").set_sensitive(True)
+            self.window.get_widget("storage-file-size").set_value(4000)
         else:
             self.window.get_widget("storage-file-size").set_sensitive(False)
             self.window.get_widget("non-sparse").set_sensitive(False)
-        if file != None and len(file) > 0 and os.path.isfile(file):
-            size = os.path.getsize(file)/(1024*1024)
-            self.window.get_widget("storage-file-size").set_value(size)
-        else:
-            self.window.get_widget("storage-file-size").set_value(0)
-            
+            if os.path.isfile(file):
+                size = os.path.getsize(file)/(1024*1024)
+                self.window.get_widget("storage-file-size").set_value(size)
+            else:
+                self.window.get_widget("storage-file-size").set_value(0)
+
     def confirm_overwrite_callback(self, chooser):
         # Only called when the user has chosen an existing file
         self.window.get_widget("storage-file-size").set_sensitive(False)
@@ -668,6 +728,14 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("storage-file-box").set_sensitive(True)
             self.toggle_storage_size()
 
+    def change_network_type(self, ignore=None):
+        if self.window.get_widget("net-type-network").get_active():
+            self.window.get_widget("net-network").set_sensitive(True)
+            self.window.get_widget("net-device").set_sensitive(False)
+        else:
+            self.window.get_widget("net-network").set_sensitive(False)
+            self.window.get_widget("net-device").set_sensitive(True)
+
     def set_max_memory(self, src):
         max_memory = src.get_adjustment().value
         startup_mem_adjustment = self.window.get_widget("create-memory-startup").get_adjustment()
@@ -676,7 +744,7 @@ class vmmCreate(gobject.GObject):
         startup_mem_adjustment.upper = max_memory
 
     def validate(self, page_num):
-        if page_num == 1: # the system name page
+        if page_num == PAGE_NAME:
             name = self.window.get_widget("create-vm-name").get_text()
             if len(name) > 50 or len(name) == 0:
                 self._validation_error_box(_("Invalid System Name"), \
@@ -688,13 +756,13 @@ class vmmCreate(gobject.GObject):
                 return False
 
 
-        elif page_num == 2: # the virt method page
+        elif page_num == PAGE_TYPE:
             if self.get_config_method() == VM_FULLY_VIRT and not virtinst.util.is_hvm_capable():
                 self._validation_error_box(_("Hardware Support Required"), \
                                            _("Your hardware does not appear to support full virtualization. Only paravirtualized guests will be available on this hardware."))
                 return False
 
-        elif page_num == 3: # the fully virt media page
+        elif page_num == PAGE_FVINST:
             if self.window.get_widget("media-iso-image").get_active():
                 src = self.get_config_install_source()
                 if src == None or len(src) == 0:
@@ -711,14 +779,14 @@ class vmmCreate(gobject.GObject):
                     self._validation_error_box(_("Install media required"), \
                                                _("You must select the CDROM install media for guest installation"))
                     return False
-        elif page_num == 4: # the paravirt media page
+        elif page_num == PAGE_PVINST:
             src = self.get_config_install_source()
             if src == None or len(src) == 0:
                 self._validation_error_box(_("URL Required"), \
                                            _("You must specify a URL for the install image for the guest install"))
                 return False
 
-        elif page_num == 5: # the storage page
+        elif page_num == PAGE_DISK:
             disk = self.get_config_disk_image()
             if disk == None or len(disk) == 0:
                 self._validation_error_box(_("Storage Address Required"), \
@@ -730,6 +798,18 @@ class vmmCreate(gobject.GObject):
                     self._validation_error_box(_("Storage Address Is Directory"), \
                                                _("You chose 'Simple File' storage for your storage method, but chose a directory instead of a file. Please enter a new filename or choose an existing file."))
                     return False
+        elif page_num == PAGE_NETWORK:
+            if self.window.get_widget("net-type-network").get_active():
+                if self.window.get_widget("net-network").get_active() == -1:
+                    self._validation_error_box(_("Virtual Network Required"),
+                                               _("You must select one of the virtual networks"))
+                    return False
+            else:
+                if self.window.get_widget("net-device").get_active() == -1:
+                    self._validation_error_box(_("Physical Device Required"),
+                                               _("You must select one of the physical devices"))
+                    return False
+
 
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-back").set_sensitive(True)
@@ -825,6 +905,17 @@ class vmmCreate(gobject.GObject):
         for os in oses:
             model.append([os])
 
+    def populate_network_model(self, model):
+        model.clear()
+        for uuid in self.connection.list_net_uuids():
+            net = self.connection.get_net(uuid)
+            model.append([net.get_label(), net.get_name()])
+
+    def populate_device_model(self, model):
+        model.clear()
+        br = virtinst.util.default_bridge()
+        model.append([br])
+
     def change_os_type(self, box):
         model = box.get_model()
         os_type = model.get_value(box.get_active_iter(), 0)
@@ -891,23 +982,22 @@ class vmmCreate(gobject.GObject):
     def show_help(self, src):
         # help to show depends on the notebook page, yahoo
         page = self.window.get_widget("create-pages").get_current_page()
-        if page == 0:
+        if page == PAGE_INTRO:
             self.emit("action-show-help", "virt-manager-create-wizard")
-        elif page == 1:
+        elif page == PAGE_NAME:
             self.emit("action-show-help", "virt-manager-system-name")
-        elif page == 2:
+        elif page == PAGE_TYPE:
             self.emit("action-show-help", "virt-manager-virt-method")
-        elif page == 3:
+        elif page == PAGE_FVINST:
             self.emit("action-show-help", "virt-manager-installation-media-full-virt")
-        elif page == 4:
+        elif page == PAGE_PVINST:
             self.emit("action-show-help", "virt-manager-installation-media-paravirt")
-        elif page == 5:
+        elif page == PAGE_DISK:
             self.emit("action-show-help", "virt-manager-storage-space")
-        elif page == 6:
+        elif page == PAGE_NETWORK:
+            self.emit("action-show-help", "virt-manager-network")
+        elif page == PAGE_CPUMEM:
             self.emit("action-show-help", "virt-manager-memory-and-cpu")
-        elif page == 7:
+        elif page == PAGE_SUMMARY:
             self.emit("action-show-help", "virt-manager-validation")
 
-            
-            
-        

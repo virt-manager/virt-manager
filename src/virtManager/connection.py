@@ -26,6 +26,7 @@ import logging
 from socket import gethostbyaddr, gethostname
 
 from virtManager.domain import vmmDomain
+from virtManager.network import vmmNetwork
 
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
@@ -52,6 +53,7 @@ class vmmConnection(gobject.GObject):
         else:
             self.vmm = libvirt.open(openURI)
 
+        self.nets = {}
         self.vms = {}
         self.activeUUIDs = []
 
@@ -98,6 +100,9 @@ class vmmConnection(gobject.GObject):
     def get_vm(self, uuid):
         return self.vms[uuid]
 
+    def get_net(self, uuid):
+        return self.nets[uuid]
+
     def close(self):
         if self.vmm == None:
             return
@@ -108,6 +113,9 @@ class vmmConnection(gobject.GObject):
 
     def list_vm_uuids(self):
         return self.vms.keys()
+
+    def list_net_uuids(self):
+        return self.nets.keys()
 
     def get_host_info(self):
         return self.hostinfo
@@ -139,6 +147,11 @@ class vmmConnection(gobject.GObject):
     def tick(self, noStatsUpdate=False):
         if self.vmm == None:
             return
+
+        for name in self.vmm.listNetworks():
+            net = self.vmm.networkLookupByName(name)
+            uuid = self.uuidstr(net.UUID())
+            self.nets[uuid] = vmmNetwork(self.config, self, net, uuid)
 
         oldActiveIDs = {}
         oldInactiveNames = {}
