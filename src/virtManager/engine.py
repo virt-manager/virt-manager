@@ -22,6 +22,7 @@ import sys
 import libvirt
 import logging
 import gnome
+import traceback
 
 from virtManager.about import vmmAbout
 from virtManager.connect import vmmConnect
@@ -66,7 +67,8 @@ class vmmEngine:
             self.show_manager(uri)
         except:
             logging.error((("Unable to open connection to hypervisor URI '%s'") % str(uri)) + \
-                          ": " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
+                          ": " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]) + "\n" + \
+                          traceback.format_exc(sys.exc_info()[2]))
 
             if uri is None:
                 uri = "xen"
@@ -133,7 +135,9 @@ class vmmEngine:
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
             except:
-                logging.error(("Could not refresh connection %s" % (uri)) + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
+                logging.error(("Could not refresh connection %s" % (uri)) + str(sys.exc_info()[0]) + \
+                              " " + str(sys.exc_info()[1]) + "\n" + \
+                              traceback.format_exc(sys.exc_info()[2]))
         return 1
 
     def count_visible_windows(self):
