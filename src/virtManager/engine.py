@@ -34,6 +34,7 @@ from virtManager.console import vmmConsole
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.create import vmmCreate
 from virtManager.serialcon import vmmSerialConsole
+from virtManager.error import vmmErrorDialog
 
 class vmmEngine:
     def __init__(self, config):
@@ -66,21 +67,32 @@ class vmmEngine:
             conn = self.get_connection(uri, readOnly)
             self.show_manager(uri)
         except:
-            logging.error((("Unable to open connection to hypervisor URI '%s'") % str(uri)) + \
-                          ": " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]) + "\n" + \
-                          traceback.format_exc(sys.exc_info()[2]))
+            (type, value, stacktrace) = sys.exc_info ()
 
+            # Detailed error message, in English so it can be Googled.
+            details = \
+                    ("Unable to open connection to hypervisor URI '%s':\n" %
+                     str(uri)) + \
+                    str(type) + " " + str(value) + "\n" + \
+                    traceback.format_exc (stacktrace)
+            logging.error (details)
+
+            # Error dialog.
             if uri is None:
                 uri = "xen"
             if uri == "xen":
-                dg = gtk.MessageDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                       _("Unable to open a connection to the Xen hypervisor/daemon.\n\n" + \
-                                         "Verify that:\n" + \
-                                         " - A Xen host kernel was booted\n" + \
-                                         " - The Xen service has been started\n"))
+                dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
+                                     gtk.BUTTONS_CLOSE,
+                                     _("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
+                                       "Verify that:\n" +
+                                       " - A Xen host kernel was booted\n" +
+                                       " - The Xen service has been started\n"),
+                                     details)
             else:
-                dg = gtk.MessageDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                       _("Unable to open connection to hypervisor '%s'") % str(uri))
+                dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
+                                     gtk.BUTTONS_CLOSE,
+                                     _("Unable to open connection to hypervisor '%s'") % str(uri),
+                                     details)
             dg.set_title(_("Virtual Machine Manager Connection Failure"))
             dg.run()
             dg.hide()
@@ -135,7 +147,7 @@ class vmmEngine:
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
             except:
-                logging.error(("Could not refresh connection %s" % (uri)) + str(sys.exc_info()[0]) + \
+                logging.error(("Could not refresh connection %s\n" % (uri)) + str(sys.exc_info()[0]) + \
                               " " + str(sys.exc_info()[1]) + "\n" + \
                               traceback.format_exc(sys.exc_info()[2]))
         return 1
