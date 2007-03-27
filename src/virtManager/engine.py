@@ -35,6 +35,7 @@ from virtManager.asyncjob import vmmAsyncJob
 from virtManager.create import vmmCreate
 from virtManager.serialcon import vmmSerialConsole
 from virtManager.error import vmmErrorDialog
+from virtManager.host import vmmHost
 
 class vmmEngine:
     def __init__(self, config):
@@ -158,8 +159,9 @@ class vmmEngine:
             for name in [ "windowDetails", "windowConsole", "windowSerialConsole" ]:
                 for window in conn[name].values():
                     ct += window.is_visible()
-            if conn["windowManager"]:
-                ct += conn["windowManager"].is_visible()
+            for name in [ "windowManager", "windowHost"]:
+                if conn[name] != None and conn[name].is_visible():
+                    ct += 1
         if self.windowCreate:
                 ct += self.windowCreate.is_visible()
         return ct
@@ -175,6 +177,8 @@ class vmmEngine:
         self.show_about()
     def _do_show_preferences(self, src):
         self.show_preferences()
+    def _do_show_host(self, src, uri):
+        self.show_host(uri)
     def _do_show_connect(self, src):
         self.show_connect()
     def _do_show_manager(self, src, uri):
@@ -210,6 +214,15 @@ class vmmEngine:
             self.windowPreferences = vmmPreferences(self.get_config())
             self.windowPreferences.connect("action-show-help", self._do_show_help)
         self.windowPreferences.show()
+
+    def show_host(self, uri):
+        con = self.get_connection(uri)
+
+        if self.connections[uri]["windowHost"] == None:
+            manager = vmmHost(self.get_config(), con)
+            manager.connect("action-show-help", self._do_show_help)
+            self.connections[uri]["windowHost"] = manager
+        self.connections[uri]["windowHost"].show()
 
     def show_connect(self):
         if self.windowConnect == None:
@@ -248,7 +261,7 @@ class vmmEngine:
     def show_details_config(self, uri, uuid):
         win = self.show_details(uri, uuid)
         win.activate_config_page()
-        
+
     def show_details(self, uri, uuid):
         con = self.get_connection(uri)
 
@@ -277,6 +290,7 @@ class vmmEngine:
             manager.connect("action-show-create", self._do_show_create)
             manager.connect("action-show-help", self._do_show_help)
             manager.connect("action-show-about", self._do_show_about)
+            manager.connect("action-show-host", self._do_show_host)
             manager.connect("action-show-connect", self._do_show_connect)
             self.connections[uri]["windowManager"] = manager
         self.connections[uri]["windowManager"].show()
@@ -295,6 +309,7 @@ class vmmEngine:
             self.connections[uri] = {
                 "connection": vmmConnection(self.get_config(), uri, readOnly),
                 "windowManager": None,
+                "windowHost": None,
                 "windowDetails": {},
                 "windowConsole": {},
                 "windowSerialConsole": {},

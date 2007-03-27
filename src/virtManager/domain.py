@@ -220,6 +220,11 @@ class vmmDomain(gobject.GObject):
             return 0
         return self.record[0]["currMemPercent"]
 
+    def get_cputime(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["cpuTime"]
+
     def get_memory_pretty(self):
         mem = self.get_memory()
         if mem > (1024*1024):

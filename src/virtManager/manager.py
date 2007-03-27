@@ -47,6 +47,8 @@ class vmmManager(gobject.GObject):
                                 gobject.TYPE_NONE, (str,str)),
         "action-show-about": (gobject.SIGNAL_RUN_FIRST,
                               gobject.TYPE_NONE, []),
+        "action-show-host": (gobject.SIGNAL_RUN_FIRST,
+                              gobject.TYPE_NONE, [str]),
         "action-show-preferences": (gobject.SIGNAL_RUN_FIRST,
                                     gobject.TYPE_NONE, []),
         "action-show-create": (gobject.SIGNAL_RUN_FIRST,
@@ -95,7 +97,7 @@ class vmmManager(gobject.GObject):
         self.vmmenu_icons["run"] = gtk.Image()
         self.vmmenu_icons["run"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_run.png", 18, 18))
         self.vmmenu_icons["pause"] = gtk.Image()
-        self.vmmenu_icons["pause"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_pause.png", 18, 18))	
+        self.vmmenu_icons["pause"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_pause.png", 18, 18))
         self.vmmenu_icons["resume"] = gtk.Image()
         self.vmmenu_icons["resume"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_pause.png", 18, 18))
         self.vmmenu_icons["shutdown"] = gtk.Image()
@@ -170,6 +172,7 @@ class vmmManager(gobject.GObject):
             "on_vm_new_clicked": self.show_vm_create,
             "on_vm_delete_clicked": self.delete_vm,
             "on_menu_edit_details_activate": self.show_vm_details,
+            "on_menu_host_details_activate": self.show_host,
 
             "on_vm_view_changed": self.vm_view_changed,
             "on_vm_list_row_activated": self.open_vm_console,
@@ -494,6 +497,9 @@ class vmmManager(gobject.GObject):
 
     def show_preferences(self, src):
         self.emit("action-show-preferences")
+
+    def show_host(self, src):
+        self.emit("action-show-host", self.connection.get_uri())
 
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")

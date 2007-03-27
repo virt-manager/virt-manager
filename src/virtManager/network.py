@@ -64,30 +64,54 @@ class vmmNetwork(gobject.GObject):
     def get_uuid(self):
         return self.uuid
 
+    def get_bridge_device(self):
+        return self.net.bridgeName()
+
+    def get_ip4_config(self):
+        doc = self._get_xml_doc()
+        try:
+            addr = self._get_xml_path(doc, "/network/ip/@address")
+            netmask = self._get_xml_path(doc, "/network/ip/@netmask")
+            dhcpstart = self._get_xml_path(doc, "/network/ip/dhcp/range[1]/@start")
+            dhcpend = self._get_xml_path(doc, "/network/ip/dhcp/range[1]/@end")
+            forward = self._get_xml_path(doc, "string(count(/network/forward))")
+            forwardDev = None
+            if forward != None:
+                forwardDev = self._get_xml_path(doc, "string(/network/forward/@dev)")
+
+            return [addr, netmask,dhcpstart,dhcpend,forwardDev]
+        finally:
+            doc.freeDoc()
+
     def is_read_only(self):
         if self.connection.is_read_only():
             return True
         return False
 
-    def get_xml_string(self, path):
+    def _get_xml_doc(self):
         xml = self.net.XMLDesc(0)
         doc = None
         try:
             doc = libxml2.parseDoc(xml)
         except:
             return None
+        return doc
+
+    def _get_xml_path(self, doc, path):
         ctx = doc.xpathNewContext()
         try:
             ret = ctx.xpathEval(path)
-            tty = None
-            if len(ret) == 1:
-                tty = ret[0].content
+            str = None
+            if ret != None:
+                if type(ret) == list:
+                    if len(ret) == 1:
+                        str = ret[0].content
+                else:
+                    str = ret
             ctx.xpathFreeContext()
-            doc.freeDoc()
-            return tty
+            return str
         except:
             ctx.xpathFreeContext()
-            doc.freeDoc()
             return None
 
 gobject.type_register(vmmNetwork)

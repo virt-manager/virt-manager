@@ -36,6 +36,8 @@ class vmmConnection(gobject.GObject):
                      [str, str]),
         "vm-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                        [str, str]),
+        "resources-sampled": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                              []),
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str])
         }
 
@@ -56,6 +58,7 @@ class vmmConnection(gobject.GObject):
         self.nets = {}
         self.vms = {}
         self.activeUUIDs = []
+        self.record = []
 
     def is_read_only(self):
         return self.readOnly
@@ -63,7 +66,7 @@ class vmmConnection(gobject.GObject):
     def get_type(self):
         return self.vmm.getType()
 
-    def get_name(self):
+    def get_hostname(self):
         hostname = "localhost"
         try:
             (host, aliases, ipaddrs) = gethostbyaddr(gethostname())
@@ -71,28 +74,27 @@ class vmmConnection(gobject.GObject):
         except:
             logging.warning("Unable to resolve local hostname for machine")
 
+        if self.get_type()[0:3] == "Xen" and self.uri == "xen" or self.uri == "Xen" or self.uri is None:
+            return hostname
+
+        if self.get_type() == "QEMU" and ( self.uri == "qemu:///session" or self.uri == "qemu://system"):
+            return hostname
+
+        try:
+            urlbits = urlparse(self.uri)
+            return urlbits.netloc
+        except:
+            return hostname
+
+    def get_name(self):
         if self.get_type()[0:3] == "Xen":
-            if self.uri == "xen" or self.uri == "Xen" or self.uri is None:
-                return "Xen: " + hostname
-            else:
-                try:
-                    urlbits = urlparse(self.uri)
-                    return "Xen: " + urlbits.netloc
-                except:
-                    return self.uri
+            return "Xen: " + self.get_hostname()
         elif self.get_type() == "QEMU":
             if self.uri == "qemu:///session":
-                return "QEMU session: " + hostname
-            elif self.uri == "qemu:///system":
-                return "QEMU system: " + hostname
+                return "QEMU session: " + self.get_hostname()
             else:
-                try:
-                    urlbits = urlparse(self.uri)
-                    return "QEMU system: " + urlbits.netloc
-                except:
-                    return self.uri
-        else:
-            return self.uri
+                return "QEMU system: " + self.get_hostname()
+
 
     def get_uri(self):
         return self.uri
@@ -129,8 +131,19 @@ class vmmConnection(gobject.GObject):
 
         return handle_id
 
+    def pretty_host_memory_size(self):
+        mem = self.host_memory_size()
+        if mem > (1024*1024):
+            return "%2.2f GB" % (mem/(1024.0*1024.0))
+        else:
+            return "%2.2f MB" % (mem/1024.0)
+
+
     def host_memory_size(self):
         return self.hostinfo[1]*1024
+
+    def host_architecture(self):
+        return self.hostinfo[0]
 
     def host_active_processor_count(self):
         return self.hostinfo[2]
@@ -169,7 +182,7 @@ class vmmConnection(gobject.GObject):
 
         # Now we can clear the list of actives from the last time through
         self.activeUUIDs = []
-                
+
         newActiveIDs = self.vmm.listDomainsID()
         newInactiveNames = []
         try:
@@ -283,7 +296,108 @@ class vmmConnection(gobject.GObject):
 
         for uuid in updateVMs.keys():
             self.vms[uuid].tick(now)
+
+        if not noStatsUpdate:
+            self.recalculate_stats(now)
+
         return 1
+
+    def recalculate_stats(self, now):
+        expected = self.config.get_stats_history_length()
+        current = len(self.record)
+        if current > expected:
+            del self.record[expected:current]
+
+        mem = 0
+        cpuTime = 0
+
+        for uuid in self.vms:
+            vm = self.vms[uuid]
+            if vm.get_id() != -1:
+                cpuTime = cpuTime + vm.get_cputime()
+                mem = mem + vm.get_memory()
+
+
+        pcentCpuTime = 0
+        if len(self.record) > 0:
+            prevTimestamp = self.record[0]["timestamp"]
+
+            pcentCpuTime = (cpuTime) * 100.0 / ((now - prevTimestamp)*1000.0*1000.0*1000.0*self.host_active_processor_count())
+            # Due to timing diffs between getting wall time & getting
+            # the domain's time, its possible to go a tiny bit over
+            # 100% utilization. This freaks out users of the data, so
+            # we hard limit it.
+            if pcentCpuTime > 100.0:
+                pcentCpuTime = 100.0
+            # Enforce >= 0 just in case
+            if pcentCpuTime < 0.0:
+                pcentCpuTime = 0.0
+
+        pcentMem = mem * 100.0 / self.host_memory_size()
+
+        newStats = {
+            "timestamp": now,
+            "memory": mem,
+            "memoryPercent": pcentMem,
+            "cpuTime": cpuTime,
+            "cpuTimePercent": pcentCpuTime
+        }
+
+        self.record.insert(0, newStats)
+        self.emit("resources-sampled")
+
+    def cpu_time_vector(self):
+        vector = []
+        stats = self.record
+        for i in range(self.config.get_stats_history_length()+1):
+            if i < len(stats):
+                vector.append(stats[i]["cpuTimePercent"]/100.0)
+            else:
+                vector.append(0)
+        return vector
+
+    def cpu_time_vector_limit(self, limit):
+        cpudata = self.cpu_time_vector()
+        if len(cpudata) > limit:
+            cpudata = cpudata[0:limit]
+        return cpudata
+
+    def cpu_time_percentage(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["cpuTimePercent"]
+
+    def current_memory(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["memory"]
+
+    def pretty_current_memory(self):
+        mem = self.current_memory()
+        if mem > (1024*1024):
+            return "%2.2f GB" % (mem/(1024.0*1024.0))
+        else:
+            return "%2.2f MB" % (mem/1024.0)
+
+    def current_memory(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["memory"]
+
+    def current_memory_percentage(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["memoryPercent"]
+
+    def current_memory_vector(self):
+        vector = []
+        stats = self.record
+        for i in range(self.config.get_stats_history_length()+1):
+            if i < len(stats):
+                vector.append(stats[i]["memoryPercent"]/100.0)
+            else:
+                vector.append(0)
+        return vector
 
     def uuidstr(self, rawuuid):
         hex = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
