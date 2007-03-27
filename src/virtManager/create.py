@@ -55,6 +55,8 @@ PAGE_NETWORK = 6
 PAGE_CPUMEM = 7
 PAGE_SUMMARY = 8
 
+KEYBOARD_DIR = "/etc/sysconfig/keyboard"
+
 class vmmCreateMeter(progress.BaseMeter):
     def __init__(self, asyncjob):
         # progress meter has to run asynchronously, so pass in the
@@ -565,7 +567,24 @@ class vmmCreate(gobject.GObject):
             raise ValueError, "Unsupported networking type " + net[0]
 
         # set up the graphics to use SDL
-        guest.graphics = "vnc"
+        import keytable
+        keymap = None
+        vncport = None
+        try:
+            f = open(KEYBOARD_DIR, "r")
+        except IOError, e:
+            logging.debug('Could not open "/etc/sysconfig/keyboard" ' + str(e))
+        else:
+            while 1:
+                s = f.readline()
+                if s == "":
+                    break
+                if re.search("KEYTABLE", s) != None:
+                    kt = s.split('"')[1]
+                    if keytable.keytable.has_key(kt):
+                        keymap = keytable.keytable[kt]
+            f.close
+        guest.graphics = (True, "vnc", vncport, keymap)
 
         logging.debug("Creating a VM " + guest.name + \
                       "\n  Type: " + guest.type + \
