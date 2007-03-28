@@ -612,7 +612,7 @@ class vmmCreate(gobject.GObject):
                               title=_("Creating Virtual Machine"),
                               text=_("The virtual machine is now being created. " + \
                                      "Allocation of disk storage and retrieval of " + \
-                                     "the installation images may a few minutes " + \
+                                     "the installation images may take a few minutes " + \
                                      "to complete."))
         progWin.run()
 
