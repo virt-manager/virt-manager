@@ -776,7 +776,7 @@ class vmmCreate(gobject.GObject):
 
 
         elif page_num == PAGE_TYPE:
-            if self.get_config_method() == VM_FULLY_VIRT and not virtinst.util.is_hvm_capable():
+            if self.get_config_method() == VM_FULLY_VIRT and self.connection.get_type().startswith("Xen") and not virtinst.util.is_hvm_capable():
                 self._validation_error_box(_("Hardware Support Required"), \
                                            _("Your hardware does not appear to support full virtualization. Only paravirtualized guests will be available on this hardware."))
                 return False
