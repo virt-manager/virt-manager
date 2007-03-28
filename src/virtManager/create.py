@@ -817,6 +817,13 @@ class vmmCreate(gobject.GObject):
                     self._validation_error_box(_("Storage Address Is Directory"), \
                                                _("You chose 'Simple File' storage for your storage method, but chose a directory instead of a file. Please enter a new filename or choose an existing file."))
                     return False
+
+            d = virtinst.VirtualDisk(self.get_config_disk_image(), self.get_config_disk_size(), sparse = self.is_sparse_file())
+            if d.is_conflict_disk(self.connection.vmm) is True:
+               res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % disk), \
+                                               _("Do you really want to use the disk ?"))
+               return res
+
         elif page_num == PAGE_NETWORK:
             if self.window.get_widget("net-type-network").get_active():
                 if self.window.get_widget("net-network").get_active() == -1:
@@ -844,6 +851,22 @@ class vmmCreate(gobject.GObject):
             message_box.format_secondary_text(text2)
         message_box.run()
         message_box.destroy()
+
+    def _yes_no_box(self, text1, text2=None):
+        #import pdb; pdb.set_trace()
+        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
+                                                0, \
+                                                gtk.MESSAGE_WARNING, \
+                                                gtk.BUTTONS_YES_NO, \
+                                                text1)
+        if text2 != None:
+            message_box.format_secondary_text(text2)
+        if message_box.run()== gtk.RESPONSE_YES:
+            res = True
+        else:
+            res = False
+        message_box.destroy()
+        return res
 
     def populate_opt_media(self, model):
         # get a list of optical devices with data discs in, for FV installs
