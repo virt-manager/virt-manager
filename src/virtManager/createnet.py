@@ -131,7 +131,6 @@ class vmmCreateNetwork(gobject.GObject):
         black = gtk.gdk.color_parse("#000000")
         src.modify_text(gtk.STATE_NORMAL, black)
         if ip is None or ip.version() != 4:
-            print str(ip)
             src.modify_base(gtk.STATE_NORMAL, red)
             self.window.get_widget("net-info-netmask").set_text("")
             self.window.get_widget("net-info-broadcast").set_text("")
