@@ -73,6 +73,9 @@ class vmmNetwork(gobject.GObject):
     def set_autostart(self, value):
         self.net.setAutostart(value)
 
+    def get_autostart(self):
+        return self.net.autostart()
+
     def get_ip4_config(self):
         try:
             xml = self.net.XMLDesc(0)
@@ -81,12 +84,14 @@ class vmmNetwork(gobject.GObject):
             netmask = self._get_xml_path(doc, "/network/ip/@netmask")
             dhcpstart = self._get_xml_path(doc, "/network/ip/dhcp/range[1]/@start")
             dhcpend = self._get_xml_path(doc, "/network/ip/dhcp/range[1]/@end")
-            forward = self._get_xml_path(doc, "string(count(/network/forward))")
+            fw = self._get_xml_path(doc, "string(count(/network/forward))")
+            forward = False
             forwardDev = None
-            if forward != None:
+            if fw != None and int(fw) != 0:
+                forward = True
                 forwardDev = self._get_xml_path(doc, "string(/network/forward/@dev)")
 
-            return [addr, netmask,dhcpstart,dhcpend,forwardDev]
+            return [addr, netmask,dhcpstart,dhcpend,forward, forwardDev]
         finally:
             if doc is not None:
                 doc.freeDoc()
