@@ -36,6 +36,10 @@ class vmmConnection(gobject.GObject):
                      [str, str]),
         "vm-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                        [str, str]),
+        "net-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                      [str, str]),
+        "net-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                        [str, str]),
         "resources-sampled": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                               []),
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str])
@@ -151,6 +155,15 @@ class vmmConnection(gobject.GObject):
     def host_maximum_processor_count(self):
         return self.hostinfo[4] * self.hostinfo[5] * self.hostinfo[6] * self.hostinfo[7]
 
+    def create_network(self, xml, start=True, autostart=True):
+        net = self.vmm.networkDefineXML(xml)
+        uuid = self.uuidstr(net.UUID())
+        self.nets[uuid] = vmmNetwork(self.config, self, net, uuid)
+        self.nets[uuid].start()
+        self.nets[uuid].set_autostart(True)
+        self.emit("net-added", self.uri, uuid)
+        return self.nets[uuid]
+
     def restore(self, frm):
         status = self.vmm.restore(frm)
         if(status == 0):
@@ -161,10 +174,27 @@ class vmmConnection(gobject.GObject):
         if self.vmm == None:
             return
 
+        oldNets = self.nets
+        self.nets = {}
+        newNets = {}
         for name in self.vmm.listNetworks():
             net = self.vmm.networkLookupByName(name)
             uuid = self.uuidstr(net.UUID())
-            self.nets[uuid] = vmmNetwork(self.config, self, net, uuid)
+            if not oldNets.has_key(uuid):
+                self.nets[uuid] = vmmNetwork(self.config, self, net, uuid)
+                newNets[uuid] = self.nets[uuid]
+            else:
+                self.nets[uuid] = oldNets[uuid]
+                del oldNets[uuid]
+        for name in self.vmm.listDefinedNetworks():
+            net = self.vmm.networkLookupByName(name)
+            uuid = self.uuidstr(net.UUID())
+            if not oldNets.has_key(uuid):
+                self.nets[uuid] = vmmNetwork(self.config, self, net, uuid)
+                newNets[uuid] = self.nets[uuid]
+            else:
+                self.nets[uuid] = oldNets[uuid]
+                del oldNets[uuid]
 
         oldActiveIDs = {}
         oldInactiveNames = {}
@@ -274,17 +304,19 @@ class vmmConnection(gobject.GObject):
 
         # Inform everyone what changed
         for uuid in oldUUIDs:
-            vm = oldUUIDs[uuid]
-            #print "Remove " + vm.get_name() + " " + uuid
             self.emit("vm-removed", self.uri, uuid)
 
         for uuid in newUUIDs:
-            vm = newUUIDs[uuid]
-            #print "Add " + vm.get_name() + " " + uuid
             self.emit("vm-added", self.uri, uuid)
 
         for uuid in startedUUIDs:
             self.emit("vm-started", self.uri, uuid)
+
+        for uuid in oldNets:
+            self.emit("net-removed", self.uri, uuid)
+
+        for uuid in newNets:
+            self.emit("net-added", self.uri, uuid)
 
         # Finally, we sample each domain
         now = time()
