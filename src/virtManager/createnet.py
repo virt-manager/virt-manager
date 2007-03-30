@@ -90,19 +90,10 @@ class vmmCreateNetwork(gobject.GObject):
         fw_list.set_model(fw_model)
         text = gtk.CellRendererText()
         fw_list.pack_start(text, True)
-        fw_list.add_attribute(text, 'text', 1)
-        try:
-            # Get a connection to the SYSTEM bus
-            self.bus = dbus.SystemBus()
-            # Get a handle to the HAL service
-            hal_object = self.bus.get_object('org.freedesktop.Hal', '/org/freedesktop/Hal/Manager')
-            self.hal_iface = dbus.Interface(hal_object, 'org.freedesktop.Hal.Manager')
-            self.populate_opt_media(net_model)
-        except Exception, e:
-            logging.error("Unable to connect to HAL to list cdrom volumes: '%s'", e)
-            self.bus = None
-            self.hal_iface = None
-
+        fw_list.add_attribute(text, 'text', 0)
+        fw_model.append([_("Masquerade via default route"), True, None])
+        for name in self.conn.list_net_device_names():
+            fw_model.append([_("NAT to physical device %s") % (name), True, name])
 
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
@@ -189,7 +180,10 @@ class vmmCreateNetwork(gobject.GObject):
             src.modify_base(gtk.STATE_NORMAL, green)
 
     def change_forward_type(self, src):
-        pass
+        if self.window.get_widget("net-forward-none").get_active():
+            self.window.get_widget("net-forward").set_sensitive(False)
+        else:
+            self.window.get_widget("net-forward").set_sensitive(True)
 
     def get_config_name(self):
         return self.window.get_widget("net-name").get_text()
@@ -216,9 +210,11 @@ class vmmCreateNetwork(gobject.GObject):
         if self.window.get_widget("net-forward-none").get_active():
             return [False, None]
         else:
-            dev = self.window.get_widget("net-forward-dev")
-            # XXX dev
-            return [True, None]
+            dev = self.window.get_widget("net-forward")
+            model = dev.get_model()
+            active = dev.get_active()
+            name = model[active][2]
+            return [True, name]
 
     def page_changed(self, notebook, page, page_number):
         # would you like some spaghetti with your salad, sir?
@@ -255,12 +251,12 @@ class vmmCreateNetwork(gobject.GObject):
 
             fw = self.get_config_forwarding()
             if fw[0]:
-                self.window.get_widget("summary-forwarding").set_text(_("Isolated virtual network"))
-            else:
                 if fw[1] is not None:
                     self.window.get_widget("summary-forwarding").set_text(_("NAT to physical device %s") % (fw[1]))
                 else:
-                    self.window.get_widget("summary-forwarding").set_text(_("Masquerading via default route"))
+                    self.window.get_widget("summary-forwarding").set_text(_("Masquerade via default route"))
+            else:
+                self.window.get_widget("summary-forwarding").set_text(_("Isolated virtual network"))
 
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
@@ -358,7 +354,12 @@ class vmmCreateNetwork(gobject.GObject):
                                            _("The DHCP end address is not with the network %s") % (str(ip)))
                 return False
         elif page_num == PAGE_FORWARDING:
-            pass
+            if self.window.get_widget("net-forward-dev").get_active():
+                dev = self.window.get_widget("net-forward")
+                if dev.get_active() == -1:
+                    self._validation_error_box(_("Invalid forwarding mode"), \
+                                               _("Please select where the traffic should be forwarded"))
+                    return False
 
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-back").set_sensitive(True)
