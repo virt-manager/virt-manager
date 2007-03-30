@@ -24,9 +24,11 @@ import os
 from time import time
 import logging
 from socket import gethostbyaddr, gethostname
+import dbus
 
 from virtManager.domain import vmmDomain
 from virtManager.network import vmmNetwork
+from virtManager.netdev import vmmNetDevice
 
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
@@ -59,10 +61,50 @@ class vmmConnection(gobject.GObject):
         else:
             self.vmm = libvirt.open(openURI)
 
+        self.netdevs = {}
         self.nets = {}
         self.vms = {}
         self.activeUUIDs = []
         self.record = []
+
+        self.detect_network_devices()
+
+    def detect_network_devices(self):
+        try:
+            # Get a connection to the SYSTEM bus
+            self.bus = dbus.SystemBus()
+            # Get a handle to the HAL service
+            hal_object = self.bus.get_object('org.freedesktop.Hal', '/org/freedesktop/Hal/Manager')
+            self.hal_iface = dbus.Interface(hal_object, 'org.freedesktop.Hal.Manager')
+
+            # Track device add/removes so we can detect newly inserted CD media
+            self.hal_iface.connect_to_signal("DeviceAdded", self._device_added)
+            self.hal_iface.connect_to_signal("DeviceRemoved", self._device_removed)
+
+            # Find info about all current present media
+            for path in self.hal_iface.FindDeviceByCapability("net"):
+                self._device_added(path)
+        except Exception, e:
+            logging.error("Unable to connect to HAL to list network devices: '%s'", e)
+            self.bus = None
+            self.hal_iface = None
+
+    def _device_added(self, path):
+        obj = self.bus.get_object("org.freedesktop.Hal", path)
+        if obj.QueryCapability("net"):
+            if not self.netdevs.has_key(path):
+                name = obj.GetPropertyString("net.interface")
+                mac = obj.GetPropertyString("net.address")
+
+                dev = vmmNetDevice(self.config, self, name, mac, False)
+                self.netdevs[path] = dev
+                self.emit("netdev-added", dev.get_name())
+
+    def _device_removed(self, path):
+        if self.netdevs.has_key(path):
+            dev = self.netdevs[path]
+            self.emit("netdev-removed", dev.get_name())
+            del self.netdevs[path]
 
     def is_read_only(self):
         return self.readOnly
@@ -109,6 +151,9 @@ class vmmConnection(gobject.GObject):
     def get_net(self, uuid):
         return self.nets[uuid]
 
+    def get_net_device(self, name):
+        return self.netdevs[name]
+
     def close(self):
         if self.vmm == None:
             return
@@ -122,6 +167,12 @@ class vmmConnection(gobject.GObject):
 
     def list_net_uuids(self):
         return self.nets.keys()
+
+    def list_net_device_names(self):
+        names = []
+        for path in self.netdevs:
+            names.append(self.netdevs[path].get_name())
+        return names
 
     def get_host_info(self):
         return self.hostinfo
