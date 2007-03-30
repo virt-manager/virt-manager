@@ -134,7 +134,24 @@ class vmmHost(gobject.GObject):
                 net = self.conn.get_net(uuid)
                 self.window.get_widget("net-name").set_text(net.get_name())
                 self.window.get_widget("net-uuid").set_text(net.get_uuid())
-                self.window.get_widget("net-device").set_text(net.get_bridge_device())
+
+                if net.get_bridge_device() == None or net.get_bridge_device() == "":
+                    self.window.get_widget("net-device").set_text("")
+                    self.window.get_widget("net-device").set_sensitive(False)
+                    self.window.get_widget("net-state").set_text(_("Inactive"))
+                    self.window.get_widget("net-state-icon").set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_shutoff.png", 18, 18))
+                else:
+                    self.window.get_widget("net-device").set_text(net.get_bridge_device())
+                    self.window.get_widget("net-device").set_sensitive(True)
+                    self.window.get_widget("net-state").set_text(_("Active"))
+                    self.window.get_widget("net-state-icon").set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_running.png", 18, 18))
+
+                if 1: # XXX net.get_autostart():
+                    self.window.get_widget("net-autostart").set_text(_("On boot"))
+                    self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
+                else:
+                    self.window.get_widget("net-autostart").set_text(_("Never"))
+                    self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
 
                 ip4 = net.get_ip4_config()
                 self.window.get_widget("net-ip4-address").set_text(ip4[0])
@@ -142,15 +159,19 @@ class vmmHost(gobject.GObject):
                 self.window.get_widget("net-ip4-dhcp-start").set_text(ip4[2])
                 self.window.get_widget("net-ip4-dhcp-end").set_text(ip4[3])
 
-                if ip4[4] != None and ip4[4] != "":
-                    self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to physical device ") + ip4[4])
+                if ip4[4]:
+                    self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_MENU)
+                    if ip4[5] != None and ip4[5] != "":
+                        self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to physical device %s") % (ip4[5]))
+                    else:
+                        self.window.get_widget("net-ip4-forwarding").set_text(_("Masquerade via default route"))
                 else:
-                    self.window.get_widget("net-ip4-forwarding").set_text(_("Masquerade to default route"))
+                    self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
+                    self.window.get_widget("net-ip4-forwarding").set_text(_("Isolated virtual network"))
         else:
             self.window.get_widget("net-details").set_sensitive(False)
 
     def repopulate_networks(self, src, uri, uuid):
-        print "Repopulate"
         self.populate_networks(self.window.get_widget("net-list").get_model())
 
     def populate_networks(self, model):
