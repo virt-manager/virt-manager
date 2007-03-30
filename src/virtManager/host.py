@@ -24,6 +24,8 @@ import libvirt
 import sparkline
 import logging
 
+from virtManager.createnet import vmmCreateNetwork
+
 class vmmHost(gobject.GObject):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
@@ -69,13 +71,17 @@ class vmmHost(gobject.GObject):
         self.memory_usage_graph.show()
         self.window.get_widget("performance-table").attach(self.memory_usage_graph, 1, 2, 1, 2)
 
-
+        self.add = None
         self.window.get_widget("details-tabs").get_nth_page(2).hide()
+
+        self.conn.connect("net-added", self.repopulate_networks)
+        self.conn.connect("net-removed", self.repopulate_networks)
 
         self.window.signal_autoconnect({
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
             "on_menu_help_about_activate": self.show_help,
+            "on_net_add_clicked": self.add_network,
             })
 
         self.conn.connect("resources-sampled", self.refresh_resources)
@@ -88,6 +94,11 @@ class vmmHost(gobject.GObject):
         if self.window.get_widget("vmm-host").flags() & gtk.VISIBLE:
            return 1
         return 0
+
+    def add_network(self, src):
+        if self.add is None:
+            self.add = vmmCreateNetwork(self.config, self.conn)
+        self.add.show()
 
     def show_help(self, src):
         # From the Details window, show the help document from the Details page
@@ -137,6 +148,10 @@ class vmmHost(gobject.GObject):
                     self.window.get_widget("net-ip4-forwarding").set_text(_("Masquerade to default route"))
         else:
             self.window.get_widget("net-details").set_sensitive(False)
+
+    def repopulate_networks(self, src, uri, uuid):
+        print "Repopulate"
+        self.populate_networks(self.window.get_widget("net-list").get_model())
 
     def populate_networks(self, model):
         model.clear()

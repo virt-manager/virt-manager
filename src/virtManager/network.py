@@ -67,9 +67,16 @@ class vmmNetwork(gobject.GObject):
     def get_bridge_device(self):
         return self.net.bridgeName()
 
+    def start(self):
+        self.net.create()
+
+    def set_autostart(self, value):
+        self.net.setAutostart(value)
+
     def get_ip4_config(self):
-        doc = self._get_xml_doc()
         try:
+            xml = self.net.XMLDesc(0)
+            doc = libxml2.parseDoc(xml)
             addr = self._get_xml_path(doc, "/network/ip/@address")
             netmask = self._get_xml_path(doc, "/network/ip/@netmask")
             dhcpstart = self._get_xml_path(doc, "/network/ip/dhcp/range[1]/@start")
@@ -81,21 +88,13 @@ class vmmNetwork(gobject.GObject):
 
             return [addr, netmask,dhcpstart,dhcpend,forwardDev]
         finally:
-            doc.freeDoc()
+            if doc is not None:
+                doc.freeDoc()
 
     def is_read_only(self):
         if self.connection.is_read_only():
             return True
         return False
-
-    def _get_xml_doc(self):
-        xml = self.net.XMLDesc(0)
-        doc = None
-        try:
-            doc = libxml2.parseDoc(xml)
-        except:
-            return None
-        return doc
 
     def _get_xml_path(self, doc, path):
         ctx = doc.xpathNewContext()
