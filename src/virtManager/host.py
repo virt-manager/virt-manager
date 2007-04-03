@@ -82,9 +82,14 @@ class vmmHost(gobject.GObject):
             "on_vmm_host_delete_event": self.close,
             "on_menu_help_about_activate": self.show_help,
             "on_net_add_clicked": self.add_network,
+            "on_net_delete_clicked": self.delete_network,
+            "on_net_stop_clicked": self.stop_network,
+            "on_net_start_clicked": self.start_network,
             })
 
         self.conn.connect("resources-sampled", self.refresh_resources)
+        self.conn.connect("net-started", self.refresh_network)
+        self.conn.connect("net-stopped", self.refresh_network)
 
     def show(self):
         dialog = self.window.get_widget("vmm-host")
@@ -94,6 +99,21 @@ class vmmHost(gobject.GObject):
         if self.window.get_widget("vmm-host").flags() & gtk.VISIBLE:
            return 1
         return 0
+
+    def delete_network(self, src):
+        net = self.current_network()
+        if net is not None:
+            net.delete()
+
+    def start_network(self, src):
+        net = self.current_network()
+        if net is not None:
+            net.start()
+
+    def stop_network(self, src):
+        net = self.current_network()
+        if net is not None:
+            net.stop()
 
     def add_network(self, src):
         if self.add is None:
@@ -122,6 +142,21 @@ class vmmHost(gobject.GObject):
         memory_vector.reverse()
         self.memory_usage_graph.set_property("data_array", memory_vector)
 
+    def current_network(self):
+        sel = self.window.get_widget("net-list").get_selection()
+        active = sel.get_selected()
+        if active[1] != None:
+            curruuid = active[0].get_value(active[1], 0)
+            return self.conn.get_net(curruuid)
+        return None
+
+    def refresh_network(self, src, uri, uuid):
+        sel = self.window.get_widget("net-list").get_selection()
+        active = sel.get_selected()
+        if active[1] != None:
+            curruuid = active[0].get_value(active[1], 0)
+            if curruuid == uuid:
+                self.net_selected(sel)
 
     def net_selected(self, src):
         active = src.get_selected()
@@ -135,34 +170,48 @@ class vmmHost(gobject.GObject):
                 self.window.get_widget("net-name").set_text(net.get_name())
                 self.window.get_widget("net-uuid").set_text(net.get_uuid())
 
-                if net.get_bridge_device() == None or net.get_bridge_device() == "":
-                    self.window.get_widget("net-device").set_text("")
-                    self.window.get_widget("net-device").set_sensitive(False)
-                    self.window.get_widget("net-state").set_text(_("Inactive"))
-                    self.window.get_widget("net-state-icon").set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_shutoff.png", 18, 18))
-                else:
+                if net.is_active():
                     self.window.get_widget("net-device").set_text(net.get_bridge_device())
                     self.window.get_widget("net-device").set_sensitive(True)
                     self.window.get_widget("net-state").set_text(_("Active"))
                     self.window.get_widget("net-state-icon").set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_running.png", 18, 18))
+                    self.window.get_widget("net-start").set_sensitive(False)
+                    self.window.get_widget("net-stop").set_sensitive(True)
+                    self.window.get_widget("net-delete").set_sensitive(False)
+                else:
+                    self.window.get_widget("net-device").set_text("")
+                    self.window.get_widget("net-device").set_sensitive(False)
+                    self.window.get_widget("net-state").set_text(_("Inactive"))
+                    self.window.get_widget("net-state-icon").set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_shutoff.png", 18, 18))
+                    self.window.get_widget("net-start").set_sensitive(True)
+                    self.window.get_widget("net-stop").set_sensitive(False)
+                    self.window.get_widget("net-delete").set_sensitive(True)
 
-                if 1: # XXX net.get_autostart():
+                autostart = True
+                try:
+                    autostart = net.get_autostart()
+                except:
+                    # Hack, libvirt 0.2.1 is missing python binding for the autostart method
+                    pass
+                if autostart:
                     self.window.get_widget("net-autostart").set_text(_("On boot"))
                     self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
                 else:
                     self.window.get_widget("net-autostart").set_text(_("Never"))
                     self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
 
-                ip4 = net.get_ip4_config()
-                self.window.get_widget("net-ip4-address").set_text(ip4[0])
-                self.window.get_widget("net-ip4-netmask").set_text(ip4[1])
-                self.window.get_widget("net-ip4-dhcp-start").set_text(ip4[2])
-                self.window.get_widget("net-ip4-dhcp-end").set_text(ip4[3])
+                network = net.get_ipv4_network()
+                self.window.get_widget("net-ip4-network").set_text(str(network))
 
-                if ip4[4]:
+                dhcp = net.get_ipv4_dhcp_range()
+                self.window.get_widget("net-ip4-dhcp-start").set_text(str(dhcp[0]))
+                self.window.get_widget("net-ip4-dhcp-end").set_text(str(dhcp[1]))
+
+                (forward, forwardDev) = net.get_ipv4_forward()
+                if forward:
                     self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_MENU)
-                    if ip4[5] != None and ip4[5] != "":
-                        self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to physical device %s") % (ip4[5]))
+                    if forwardDev != None and forwardDev != "":
+                        self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to physical device %s") % (forwardDev))
                     else:
                         self.window.get_widget("net-ip4-forwarding").set_text(_("Masquerade via default route"))
                 else:

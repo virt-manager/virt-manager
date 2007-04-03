@@ -42,6 +42,10 @@ class vmmConnection(gobject.GObject):
                       [str, str]),
         "net-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                         [str, str]),
+        "net-started": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                        [str, str]),
+        "net-stopped": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                        [str, str]),
         "resources-sampled": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                               []),
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str])
@@ -213,6 +217,7 @@ class vmmConnection(gobject.GObject):
         self.nets[uuid].start()
         self.nets[uuid].set_autostart(True)
         self.emit("net-added", self.uri, uuid)
+        self.emit("net-started", self.uri, uuid)
         return self.nets[uuid]
 
     def restore(self, frm):
@@ -226,25 +231,45 @@ class vmmConnection(gobject.GObject):
             return
 
         oldNets = self.nets
+        startNets = {}
+        stopNets = {}
         self.nets = {}
         newNets = {}
-        for name in self.vmm.listNetworks():
+        newActiveNetNames = []
+        newInactiveNetNames = []
+        try:
+            newActiveNetNames = self.vmm.listNetworks()
+        except:
+            logging.warn("Unable to list active networks")
+        try:
+            newInactiveNetNames = self.vmm.listDefinedNetworks()
+        except:
+            logging.warn("Unable to list inactive networks")
+
+        for name in newActiveNetNames:
             net = self.vmm.networkLookupByName(name)
             uuid = self.uuidstr(net.UUID())
             if not oldNets.has_key(uuid):
-                self.nets[uuid] = vmmNetwork(self.config, self, net, uuid)
+                self.nets[uuid] = vmmNetwork(self.config, self, net, uuid, True)
                 newNets[uuid] = self.nets[uuid]
+                startNets[uuid] = newNets[uuid]
             else:
                 self.nets[uuid] = oldNets[uuid]
+                if not self.nets[uuid].is_active():
+                    self.nets[uuid].set_active(True)
+                    startNets[uuid] = self.nets[uuid]
                 del oldNets[uuid]
-        for name in self.vmm.listDefinedNetworks():
+        for name in newInactiveNetNames:
             net = self.vmm.networkLookupByName(name)
             uuid = self.uuidstr(net.UUID())
             if not oldNets.has_key(uuid):
-                self.nets[uuid] = vmmNetwork(self.config, self, net, uuid)
+                self.nets[uuid] = vmmNetwork(self.config, self, net, uuid, False)
                 newNets[uuid] = self.nets[uuid]
             else:
                 self.nets[uuid] = oldNets[uuid]
+                if self.nets[uuid].is_active():
+                    self.nets[uuid].set_active(False)
+                    stopNets[uuid] = self.nets[uuid]
                 del oldNets[uuid]
 
         oldActiveIDs = {}
@@ -368,6 +393,12 @@ class vmmConnection(gobject.GObject):
 
         for uuid in newNets:
             self.emit("net-added", self.uri, uuid)
+
+        for uuid in startNets:
+            self.emit("net-started", self.uri, uuid)
+
+        for uuid in stopNets:
+            self.emit("net-stopped", self.uri, uuid)
 
         # Finally, we sample each domain
         now = time()

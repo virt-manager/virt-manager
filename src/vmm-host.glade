@@ -1143,7 +1143,7 @@
 			    <widget class="GtkTable" id="table3">
 			      <property name="border_width">6</property>
 			      <property name="visible">True</property>
-			      <property name="n_rows">5</property>
+			      <property name="n_rows">4</property>
 			      <property name="n_columns">2</property>
 			      <property name="homogeneous">False</property>
 			      <property name="row_spacing">3</property>
@@ -1152,7 +1152,7 @@
 			      <child>
 				<widget class="GtkLabel" id="label52">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Address:</property>
+				  <property name="label" translatable="yes">Network:</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1172,34 +1172,6 @@
 				  <property name="right_attach">1</property>
 				  <property name="top_attach">0</property>
 				  <property name="bottom_attach">1</property>
-				  <property name="x_options">fill</property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkLabel" id="label53">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Netmask:</property>
-				  <property name="use_underline">False</property>
-				  <property name="use_markup">False</property>
-				  <property name="justify">GTK_JUSTIFY_LEFT</property>
-				  <property name="wrap">False</property>
-				  <property name="selectable">False</property>
-				  <property name="xalign">1</property>
-				  <property name="yalign">0.5</property>
-				  <property name="xpad">0</property>
-				  <property name="ypad">0</property>
-				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				  <property name="width_chars">-1</property>
-				  <property name="single_line_mode">False</property>
-				  <property name="angle">0</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">0</property>
-				  <property name="right_attach">1</property>
-				  <property name="top_attach">1</property>
-				  <property name="bottom_attach">2</property>
 				  <property name="x_options">fill</property>
 				  <property name="y_options"></property>
 				</packing>
@@ -1226,8 +1198,8 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">2</property>
-				  <property name="bottom_attach">3</property>
+				  <property name="top_attach">1</property>
+				  <property name="bottom_attach">2</property>
 				  <property name="x_options">fill</property>
 				  <property name="y_options"></property>
 				</packing>
@@ -1254,15 +1226,15 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">3</property>
-				  <property name="bottom_attach">4</property>
+				  <property name="top_attach">2</property>
+				  <property name="bottom_attach">3</property>
 				  <property name="x_options">fill</property>
 				  <property name="y_options"></property>
 				</packing>
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="net-ip4-address">
+				<widget class="GtkEntry" id="net-ip4-network">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">False</property>
@@ -1283,7 +1255,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="net-ip4-netmask">
+				<widget class="GtkEntry" id="net-ip4-dhcp-start">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">False</property>
@@ -1304,7 +1276,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkEntry" id="net-ip4-dhcp-start">
+				<widget class="GtkEntry" id="net-ip4-dhcp-end">
 				  <property name="visible">True</property>
 				  <property name="can_focus">True</property>
 				  <property name="editable">False</property>
@@ -1320,27 +1292,6 @@
 				  <property name="right_attach">2</property>
 				  <property name="top_attach">2</property>
 				  <property name="bottom_attach">3</property>
-				  <property name="y_options"></property>
-				</packing>
-			      </child>
-
-			      <child>
-				<widget class="GtkEntry" id="net-ip4-dhcp-end">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="editable">False</property>
-				  <property name="visibility">True</property>
-				  <property name="max_length">0</property>
-				  <property name="text" translatable="yes"></property>
-				  <property name="has_frame">True</property>
-				  <property name="invisible_char">•</property>
-				  <property name="activates_default">False</property>
-				</widget>
-				<packing>
-				  <property name="left_attach">1</property>
-				  <property name="right_attach">2</property>
-				  <property name="top_attach">3</property>
-				  <property name="bottom_attach">4</property>
 				  <property name="y_options"></property>
 				</packing>
 			      </child>
@@ -1366,8 +1317,8 @@
 				<packing>
 				  <property name="left_attach">0</property>
 				  <property name="right_attach">1</property>
-				  <property name="top_attach">4</property>
-				  <property name="bottom_attach">5</property>
+				  <property name="top_attach">3</property>
+				  <property name="bottom_attach">4</property>
 				  <property name="x_options">fill</property>
 				  <property name="y_options"></property>
 				</packing>
@@ -1422,8 +1373,8 @@
 				<packing>
 				  <property name="left_attach">1</property>
 				  <property name="right_attach">2</property>
-				  <property name="top_attach">4</property>
-				  <property name="bottom_attach">5</property>
+				  <property name="top_attach">3</property>
+				  <property name="bottom_attach">4</property>
 				  <property name="x_options">fill</property>
 				  <property name="y_options">fill</property>
 				</packing>
@@ -1490,6 +1441,7 @@
 			  <property name="use_stock">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
+			  <signal name="clicked" handler="on_net_delete_clicked" last_modification_time="Tue, 03 Apr 2007 17:05:22 GMT"/>
 			</widget>
 		      </child>
 
@@ -1500,6 +1452,7 @@
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
+			  <signal name="clicked" handler="on_net_start_clicked" last_modification_time="Tue, 03 Apr 2007 17:05:17 GMT"/>
 
 			  <child>
 			    <widget class="GtkAlignment" id="alignment7">
@@ -1576,6 +1529,7 @@
 			  <property name="use_stock">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
+			  <signal name="clicked" handler="on_net_stop_clicked" last_modification_time="Tue, 03 Apr 2007 17:05:12 GMT"/>
 			</widget>
 		      </child>
 		    </widget>

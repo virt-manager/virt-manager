@@ -23,37 +23,30 @@ import libxml2
 import os
 import sys
 import logging
+from virtManager.IPy import IP
 
 class vmmNetwork(gobject.GObject):
     __gsignals__ = { }
 
-    def __init__(self, config, connection, net, uuid):
+    def __init__(self, config, connection, net, uuid, active):
         self.__gobject_init__()
         self.config = config
         self.connection = connection
         self.net = net
         self.uuid = uuid
+        self.active = active
 
     def set_handle(self, net):
         self.net = net
 
+    def set_active(self, state):
+        self.active = state
+
     def is_active(self):
-        if self.net.ID() == -1:
-            return False
-        else:
-            return True
+        return self.active
 
     def get_connection(self):
         return self.connection
-
-    def get_id(self):
-        return self.net.ID()
-
-    def get_id_pretty(self):
-        id = self.get_id()
-        if id < 0:
-            return "-"
-        return str(id)
 
     def get_name(self):
         return self.net.name()
@@ -70,28 +63,62 @@ class vmmNetwork(gobject.GObject):
     def start(self):
         self.net.create()
 
+    def stop(self):
+        name = self.get_name()
+        self.net.destroy()
+        # XXX nasty nasty hack - destroy() kills the virNetworkPtr object
+        # so we have to grab a new one
+        self.net = self.connection.vmm.networkLookupByName(name)
+
+    def delete(self):
+        self.net.undefine()
+        # The virNetworkPtr is dead after this point, so nullify it
+        self.net = None
+
     def set_autostart(self, value):
         self.net.setAutostart(value)
 
     def get_autostart(self):
         return self.net.autostart()
 
-    def get_ip4_config(self):
+    def get_ipv4_network(self):
         try:
             xml = self.net.XMLDesc(0)
             doc = libxml2.parseDoc(xml)
-            addr = self._get_xml_path(doc, "/network/ip/@address")
-            netmask = self._get_xml_path(doc, "/network/ip/@netmask")
+            addrStr = self._get_xml_path(doc, "/network/ip/@address")
+            netmaskStr = self._get_xml_path(doc, "/network/ip/@netmask")
+
+            netmask = IP(netmaskStr)
+            gateway = IP(addrStr)
+
+            network = IP(gateway.int() & netmask.int())
+            return IP(str(network)+ "/" + netmaskStr)
+        finally:
+            if doc is not None:
+                doc.freeDoc()
+
+    def get_ipv4_forward(self):
+        try:
+            xml = self.net.XMLDesc(0)
+            doc = libxml2.parseDoc(xml)
+            fw = self._get_xml_path(doc, "string(count(/network/forward))")
+
+            if fw != None and int(fw) != 0:
+                forwardDev = self._get_xml_path(doc, "string(/network/forward/@dev)")
+                return [True, forwardDev]
+            else:
+                return [False, None]
+        finally:
+            if doc is not None:
+                doc.freeDoc()
+
+    def get_ipv4_dhcp_range(self):
+        try:
+            xml = self.net.XMLDesc(0)
+            doc = libxml2.parseDoc(xml)
             dhcpstart = self._get_xml_path(doc, "/network/ip/dhcp/range[1]/@start")
             dhcpend = self._get_xml_path(doc, "/network/ip/dhcp/range[1]/@end")
-            fw = self._get_xml_path(doc, "string(count(/network/forward))")
-            forward = False
-            forwardDev = None
-            if fw != None and int(fw) != 0:
-                forward = True
-                forwardDev = self._get_xml_path(doc, "string(/network/forward/@dev)")
-
-            return [addr, netmask,dhcpstart,dhcpend,forward, forwardDev]
+            return [IP(dhcpstart), IP(dhcpend)]
         finally:
             if doc is not None:
                 doc.freeDoc()
