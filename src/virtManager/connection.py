@@ -46,6 +46,10 @@ class vmmConnection(gobject.GObject):
                         [str, str]),
         "net-stopped": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                         [str, str]),
+        "netdev-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                         [str]),
+        "netdev-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                           [str]),
         "resources-sampled": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                               []),
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str])
@@ -213,8 +217,9 @@ class vmmConnection(gobject.GObject):
     def create_network(self, xml, start=True, autostart=True):
         net = self.vmm.networkDefineXML(xml)
         uuid = self.uuidstr(net.UUID())
-        self.nets[uuid] = vmmNetwork(self.config, self, net, uuid)
+        self.nets[uuid] = vmmNetwork(self.config, self, net, uuid, False)
         self.nets[uuid].start()
+        self.nets[uuid].set_active(True)
         self.nets[uuid].set_autostart(True)
         self.emit("net-added", self.uri, uuid)
         self.emit("net-started", self.uri, uuid)
