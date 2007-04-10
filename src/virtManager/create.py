@@ -31,8 +31,10 @@ import urlgrabber.progress as progress
 import tempfile
 import logging
 import dbus
+import traceback
 
 from virtManager.asyncjob import vmmAsyncJob
+from virtManager.error import vmmErrorDialog
 
 VM_PARA_VIRT = 1
 VM_FULLY_VIRT = 2
@@ -617,8 +619,12 @@ class vmmCreate(gobject.GObject):
         progWin.run()
 
         if self.install_error != None:
-            logging.error("Async job failed to create VM " + str(self.install_error))
-            self._validation_error_box(_("Guest Install Error"), self.install_error)
+            dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                self.install_error,
+                                self.install_details)
+            dg.run()
+            dg.hide()
+            dg.destroy()
             self.topwin.set_sensitive(True)
             self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
             # Don't close becase we allow user to go back in wizard & correct
@@ -647,13 +653,23 @@ class vmmCreate(gobject.GObject):
             logging.debug("Starting background install process")
             dom = guest.start_install(False, meter = meter)
             if dom == None:
-                self.install_error = "Guest installation failed to complete"
+                self.install_error = _("Guest installation failed to complete")
+                self.install_details = self.install_error
                 logging.error("Guest install did not return a domain")
             else:
                 logging.debug("Install completed")
-        except Exception, e:
-            self.install_error = "ERROR: %s" % e
-            logging.exception("Could not complete install " + str(e))
+        except:
+            (type, value, stacktrace) = sys.exc_info ()
+
+            # Detailed error message, in English so it can be Googled.
+            details = \
+                    "Unable to complete install '%s'" % \
+                    (str(type) + " " + str(value) + "\n" + \
+                     traceback.format_exc (stacktrace))
+
+            self.install_error = _("Unable to complete install: '%s'") % str(value)
+            self.install_details = details
+            logging.error(details)
 
     def browse_iso_location(self, ignore1=None, ignore2=None):
         file = self._browse_file(_("Locate ISO Image"), type="iso")
