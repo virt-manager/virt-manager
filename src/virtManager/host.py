@@ -23,6 +23,7 @@ import gtk.glade
 import libvirt
 import sparkline
 import logging
+import os
 
 from virtManager.createnet import vmmCreateNetwork
 
@@ -76,6 +77,11 @@ class vmmHost(gobject.GObject):
 
         self.conn.connect("net-added", self.repopulate_networks)
         self.conn.connect("net-removed", self.repopulate_networks)
+
+        # XXX not technically correct once we enable remote management
+        if os.getuid() != 0:
+            self.window.get_widget("net-add").set_sensitive(False)
+
 
         self.window.signal_autoconnect({
             "on_menu_file_close_activate": self.close,
