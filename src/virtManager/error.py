@@ -35,7 +35,7 @@ class vmmErrorDialog (gtk.MessageDialog):
             buffer.set_text (message_details)
             sw = gtk.ScrolledWindow ()
             sw.set_shadow_type (gtk.SHADOW_IN)
-            sw.set_size_request (-1, 240)
+            sw.set_size_request (400, 240)
             sw.set_policy (gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
             details = gtk.TextView (buffer)
             details.set_editable (False)
