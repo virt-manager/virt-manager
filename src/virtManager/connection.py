@@ -20,7 +20,8 @@
 import gobject
 import libvirt
 import logging
-import os
+import os, sys
+import traceback
 from time import time
 import logging
 from socket import gethostbyaddr, gethostname
@@ -92,8 +93,11 @@ class vmmConnection(gobject.GObject):
             # Find info about all current present media
             for path in self.hal_iface.FindDeviceByCapability("net"):
                 self._device_added(path)
-        except Exception, e:
-            logging.error("Unable to connect to HAL to list network devices: '%s'", e)
+        except:
+            (type, value, stacktrace) = sys.exc_info ()
+            logging.error("Unable to connect to HAL to list network devices: '%s'" + \
+                          str(type) + " " + str(value) + "\n" + \
+                          traceback.format_exc (stacktrace))
             self.bus = None
             self.hal_iface = None
 
@@ -104,7 +108,28 @@ class vmmConnection(gobject.GObject):
                 name = obj.GetPropertyString("net.interface")
                 mac = obj.GetPropertyString("net.address")
 
-                dev = vmmNetDevice(self.config, self, name, mac, False)
+                # Now magic to determine if the device is part of a bridge
+                shared = False
+                bridge = None
+                try:
+                    # XXX Linux specific - needs porting for other OS - patches
+                    # welcomed...
+                    sysfspath = obj.GetPropertyString("linux.sysfs_path")
+                    brportpath = os.path.join(sysfspath, "brport")
+
+                    if os.path.exists(brportpath):
+                        shared = True
+                        brlinkpath = os.path.join(brportpath, "bridge")
+                        dest = os.readlink(brlinkpath)
+                        (head,tail) = os.path.split(dest)
+                        bridge = tail
+                except:
+                    (type, value, stacktrace) = sys.exc_info ()
+                    logging.error("Unable to determine if device is shared:" +
+                                  str(type) + " " + str(value) + "\n" + \
+                                  traceback.format_exc (stacktrace))
+
+                dev = vmmNetDevice(self.config, self, name, mac, shared, bridge)
                 self.netdevs[path] = dev
                 self.emit("netdev-added", dev.get_name())
 
@@ -159,8 +184,8 @@ class vmmConnection(gobject.GObject):
     def get_net(self, uuid):
         return self.nets[uuid]
 
-    def get_net_device(self, name):
-        return self.netdevs[name]
+    def get_net_device(self, path):
+        return self.netdevs[path]
 
     def close(self):
         if self.vmm == None:
@@ -176,11 +201,8 @@ class vmmConnection(gobject.GObject):
     def list_net_uuids(self):
         return self.nets.keys()
 
-    def list_net_device_names(self):
-        names = []
-        for path in self.netdevs:
-            names.append(self.netdevs[path].get_name())
-        return names
+    def list_net_device_paths(self):
+        return self.netdevs.keys()
 
     def get_host_info(self):
         return self.hostinfo

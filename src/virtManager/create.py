@@ -955,8 +955,10 @@ class vmmCreate(gobject.GObject):
 
     def populate_device_model(self, model):
         model.clear()
-        br = virtinst.util.default_bridge()
-        model.append([br])
+        for name in self.connection.list_net_device_paths():
+            net = self.connection.get_net_device(name)
+            if net.is_shared():
+                model.append([net.get_bridge()])
 
     def change_os_type(self, box):
         model = box.get_model()
