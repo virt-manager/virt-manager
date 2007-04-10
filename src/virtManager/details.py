@@ -23,6 +23,10 @@ import gtk.glade
 import libvirt
 import sparkline
 import logging
+import traceback
+
+from virtManager.error import vmmErrorDialog
+
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
@@ -192,7 +196,24 @@ class vmmDetails(gobject.GObject):
         if status != libvirt.VIR_DOMAIN_SHUTOFF:
             pass
         else:
-            self.vm.startup()
+            try:
+                self.vm.startup()
+            except:
+                (type, value, stacktrace) = sys.exc_info ()
+
+                # Detailed error message, in English so it can be Googled.
+                details = \
+                        "Unable to start virtual machine '%s'" % \
+                        (str(type) + " " + str(value) + "\n" + \
+                         traceback.format_exc (stacktrace))
+
+                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                    str(value),
+                                    details)
+                dg.run()
+                dg.hide()
+                dg.destroy()
+
 
     def control_vm_shutdown(self, src):
         status = self.vm.status()
