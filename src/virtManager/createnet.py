@@ -91,7 +91,7 @@ class vmmCreateNetwork(gobject.GObject):
         text = gtk.CellRendererText()
         fw_list.pack_start(text, True)
         fw_list.add_attribute(text, 'text', 0)
-        fw_model.append([_("Masquerade via default route"), True, None])
+        fw_model.append([_("NAT to any physical device"), True, None])
         for name in self.conn.list_net_device_names():
             fw_model.append([_("NAT to physical device %s") % (name), True, name])
 
@@ -253,7 +253,7 @@ class vmmCreateNetwork(gobject.GObject):
                 if fw[1] is not None:
                     self.window.get_widget("summary-forwarding").set_text(_("NAT to physical device %s") % (fw[1]))
                 else:
-                    self.window.get_widget("summary-forwarding").set_text(_("Masquerade via default route"))
+                    self.window.get_widget("summary-forwarding").set_text(_("NAT to any physical device"))
             else:
                 self.window.get_widget("summary-forwarding").set_text(_("Isolated virtual network"))
 

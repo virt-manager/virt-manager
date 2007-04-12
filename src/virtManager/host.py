@@ -219,7 +219,7 @@ class vmmHost(gobject.GObject):
                     if forwardDev != None and forwardDev != "":
                         self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to physical device %s") % (forwardDev))
                     else:
-                        self.window.get_widget("net-ip4-forwarding").set_text(_("Masquerade via default route"))
+                        self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to any physical device"))
                 else:
                     self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
                     self.window.get_widget("net-ip4-forwarding").set_text(_("Isolated virtual network"))
