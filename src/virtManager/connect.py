@@ -24,7 +24,7 @@ import os
 class vmmConnect(gobject.GObject):
     __gsignals__ = {
         "completed": (gobject.SIGNAL_RUN_FIRST,
-                      gobject.TYPE_NONE, (str,bool)),
+                      gobject.TYPE_NONE, (str,object)),
         "cancelled": (gobject.SIGNAL_RUN_FIRST,
                       gobject.TYPE_NONE, ())
         }
@@ -73,22 +73,13 @@ class vmmConnect(gobject.GObject):
         else:
             self.window.get_widget("remote-host-options").set_sensitive(True)
 
-        if local.get_active() and os.getuid() != 0 and type.get_active() == 0:
-            self.window.get_widget("option-read-only").set_sensitive(False)
-            self.window.get_widget("option-read-only").set_active(True)
-        else:
-            self.window.get_widget("option-read-only").set_active(False)
-            self.window.get_widget("option-read-only").set_sensitive(True)
-
-
     def open_connection(self, src):
         type = self.window.get_widget("type-hypervisor")
         local = self.window.get_widget("type-local-host")
         remote = self.window.get_widget("type-remote-host")
         uri = None
 
-        readOnly = self.window.get_widget("option-read-only").get_active()
-
+        readOnly = None
         if local.get_active():
             if type.get_active() == 0:
                 uri = "xen"

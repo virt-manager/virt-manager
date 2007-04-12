@@ -65,10 +65,19 @@ class vmmConnection(gobject.GObject):
         openURI = uri
         if openURI == "Xen":
             openURI = None
-        if readOnly:
-            self.vmm = libvirt.openReadOnly(openURI)
+
+        if readOnly is None:
+            try:
+                self.vmm = libvirt.open(openURI)
+                self.readOnly = False
+            except:
+                self.vmm = libvirt.openReadOnly(openURI)
+                self.readOnly = True
         else:
-            self.vmm = libvirt.open(openURI)
+            if readOnly:
+                self.vmm = libvirt.openReadOnly(openURI)
+            else:
+                self.vmm = libvirt.open(openURI)
 
         self.netdevs = {}
         self.nets = {}

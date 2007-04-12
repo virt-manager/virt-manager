@@ -304,10 +304,11 @@ class vmmEngine:
         self.windowCreate.reset_state()
         self.windowCreate.show()
 
-    def get_connection(self, uri, readOnly=True):
+    def get_connection(self, uri, readOnly=None):
         if not(self.connections.has_key(uri)):
+            conn = vmmConnection(self.get_config(), uri, readOnly)
             self.connections[uri] = {
-                "connection": vmmConnection(self.get_config(), uri, readOnly),
+                "connection": conn,
                 "windowManager": None,
                 "windowHost": None,
                 "windowDetails": {},
