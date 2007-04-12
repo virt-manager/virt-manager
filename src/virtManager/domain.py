@@ -23,6 +23,7 @@ import libxml2
 import os
 import sys
 import logging
+import virtinst
 
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
@@ -80,6 +81,13 @@ class vmmDomain(gobject.GObject):
 
     def is_management_domain(self):
         if self.vm.ID() == 0:
+            return True
+        return False
+
+    def is_hvm(self):
+        os_type = self.vm.OSType()
+        logging.debug("OS Type: %s" % os_type)
+        if os_type == "hvm":
             return True
         return False
 
@@ -464,6 +472,9 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
         return disks
 
+    def add_disk_device(self, xml):
+        self.vm.attachDevice(xml)
+
     def get_network_devices(self):
         xml = self.vm.XMLDesc(0)
         doc = None
@@ -472,7 +483,7 @@ class vmmDomain(gobject.GObject):
         except:
             return []
         ctx = doc.xpathNewContext()
-        disks = []
+        nics = []
         try:
             ret = ctx.xpathEval("/domain/devices/interface")
 
@@ -480,25 +491,39 @@ class vmmDomain(gobject.GObject):
                 type = node.prop("type")
                 devmac = None
                 source = None
+                target = "Unspecified"
                 for child in node.children:
                     if child.name == "source":
                         if type == "bridge":
-                            source = child.prop("bridge")
+                            if child.prop("bridge") != None:
+                                source = child.prop("bridge")
+                            else:
+                                source = child.prop("dev")
+                        elif type == "network":
+                            source = child.prop("network")
+                        elif type == "user":
+                            source = "SLIRP network"
                     elif child.name == "mac":
                         devmac = child.prop("address")
+                    elif child.name == "target":
+                        target = child.prop("dev")
 
                 if source == None:
                     source = "-"
+                nics.append([type, source, target, devmac])
 
-                devdst = "eth%d" % len(disks)
-
-                disks.append([type, source, devdst, devmac])
         finally:
             if ctx != None:
                 ctx.xpathFreeContext()
             if doc != None:
                 doc.freeDoc()
-        return disks
+        return nics
+
+    def add_network_device(self, macaddr, type="bridge", bridge=None, network=None):
+        vnic = virtinst.VirtualNetworkInterface(macaddr, type, bridge, network)
+        vnic.setup(self.connection.vmm)
+        xml = vnic.get_xml_config()
+        self.vm.attachDevice(xml)
 
     def set_vcpu_count(self, vcpus):
         vcpus = int(vcpus)
