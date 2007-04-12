@@ -23,7 +23,7 @@ import libxml2
 import os
 import sys
 import logging
-import virtinst
+
 
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
@@ -44,6 +44,12 @@ class vmmDomain(gobject.GObject):
         self.lastStatus = None
         self.record = []
         self._update_status()
+        self.xml = None
+
+    def get_xml(self):
+        if self.xml is None:
+            self.xml = self.vm.XMLDesc(0)
+        return self.xml
 
     def set_handle(self, vm):
         self.vm = vm
@@ -65,7 +71,7 @@ class vmmDomain(gobject.GObject):
         if id < 0:
             return "-"
         return str(id)
- 
+
     def get_name(self):
         return self.vm.name()
 
@@ -129,6 +135,8 @@ class vmmDomain(gobject.GObject):
             self.emit("status-changed", status)
 
     def tick(self, now):
+        # Clear cached XML
+        self.xml = None
         hostInfo = self.connection.get_host_info()
         info = self.vm.info()
         expected = self.config.get_stats_history_length()
@@ -390,7 +398,7 @@ class vmmDomain(gobject.GObject):
         return self.config.get_vm_status_icon(self.status())
 
     def get_xml_string(self, path):
-        xml = self.vm.XMLDesc(0)
+        xml = self.get_xml()
         doc = None
         try:
             doc = libxml2.parseDoc(xml)
@@ -432,7 +440,7 @@ class vmmDomain(gobject.GObject):
         return [type, None, None]
 
     def get_disk_devices(self):
-        xml = self.vm.XMLDesc(0)
+        xml = self.get_xml()
         doc = None
         try:
             doc = libxml2.parseDoc(xml)
@@ -476,7 +484,7 @@ class vmmDomain(gobject.GObject):
         self.vm.attachDevice(xml)
 
     def get_network_devices(self):
-        xml = self.vm.XMLDesc(0)
+        xml = self.get_xml()
         doc = None
         try:
             doc = libxml2.parseDoc(xml)
@@ -487,31 +495,29 @@ class vmmDomain(gobject.GObject):
         try:
             ret = ctx.xpathEval("/domain/devices/interface")
 
+            n = 0
             for node in ret:
                 type = node.prop("type")
                 devmac = None
                 source = None
-                target = "Unspecified"
+                target = "eth%d" % n
+                n = n + 1
                 for child in node.children:
                     if child.name == "source":
                         if type == "bridge":
-                            if child.prop("bridge") != None:
-                                source = child.prop("bridge")
-                            else:
-                                source = child.prop("dev")
+                            source = child.prop("bridge")
+                        elif type == "ethernet":
+                            source = child.prop("dev")
                         elif type == "network":
                             source = child.prop("network")
                         elif type == "user":
-                            source = "SLIRP network"
+                            source = None
+                        else:
+                            source = None
                     elif child.name == "mac":
                         devmac = child.prop("address")
-                    elif child.name == "target":
-                        target = child.prop("dev")
 
-                if source == None:
-                    source = "-"
                 nics.append([type, source, target, devmac])
-
         finally:
             if ctx != None:
                 ctx.xpathFreeContext()
@@ -519,11 +525,11 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
         return nics
 
-    def add_network_device(self, macaddr, type="bridge", bridge=None, network=None):
-        vnic = virtinst.VirtualNetworkInterface(macaddr, type, bridge, network)
-        vnic.setup(self.connection.vmm)
-        xml = vnic.get_xml_config()
+    def add_device(self, xml):
         self.vm.attachDevice(xml)
+
+    def remove_device(self, xml):
+        self.vm.detachDevice(xml)
 
     def set_vcpu_count(self, vcpus):
         vcpus = int(vcpus)

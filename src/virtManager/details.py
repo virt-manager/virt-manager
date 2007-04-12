@@ -26,6 +26,7 @@ import logging
 import traceback
 
 from virtManager.error import vmmErrorDialog
+from virtManager.addhardware import vmmAddHardware
 
 import virtinst
 import urlgrabber.progress as progress
@@ -35,7 +36,6 @@ VMM_HW_CPU = 0
 VMM_HW_MEMORY = 1
 VMM_HW_DISK = 2
 VMM_HW_NIC = 3
-VMM_HW_DEVICES = [_("Virtual Disk"), _("Virtual NIC")]
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
@@ -68,13 +68,13 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("hw-panel").set_show_tabs(False)
 
+        self.addhw = None
 
         self.cpu_usage_graph = sparkline.Sparkline()
         self.window.get_widget("graph-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
 
         self.memory_usage_graph = sparkline.Sparkline()
         self.window.get_widget("graph-table").attach(self.memory_usage_graph, 1, 2, 1, 2)
-
 
         self.network_traffic_graph = sparkline.Sparkline()
         self.window.get_widget("graph-table").attach(self.network_traffic_graph, 1, 2, 3, 4)
@@ -111,34 +111,11 @@ class vmmDetails(gobject.GObject):
             "on_storage_file_address_changed": self.toggle_storage_size,
             "on_storage_toggled" : self.change_storage_type,
             "on_add_hardware_button_clicked": self.add_hardware,
-            "on_vnic_apply_clicked": self.add_vnic,
-            "on_vnic_cancel_clicked": self.clean_up_add_hardware,
-            "on_vbd_add_apply_clicked": self.add_vbd,
-            "on_vbd_add_cancel_clicked": self.clean_up_add_hardware,
-            
             })
 
         self.vm.connect("status-changed", self.update_widget_states)
         self.vm.connect("resources-sampled", self.refresh_resources)
         self.window.get_widget("hw-list").get_selection().connect("changed", self.hw_selected)
-
-        # set up the list for new hardware devices
-        hw_type_list = self.window.get_widget("add-hardware-device")
-        hw_type_model = hw_type_list.get_model()
-        for device_name in VMM_HW_DEVICES:
-            hw_type_model.append([device_name])
-        hw_type_list.set_active(0)
-
-        # list for network pulldown
-        network_list = self.window.get_widget("network-name-pulldown")
-        network_model = gtk.ListStore(str, str, str)
-        network_list.set_model(network_model)
-        text = gtk.CellRendererText()
-        network_list.pack_start(text, True)
-        network_list.add_attribute(text, 'text', 0)
-
-        #using this as the flag for whether the network page is in edit mode. Ugh.
-        self.adding_hardware = False
 
         self.update_widget_states(vm, vm.status())
         self.refresh_resources(vm)
@@ -146,10 +123,9 @@ class vmmDetails(gobject.GObject):
         self.pixbuf_processor = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
         self.pixbuf_memory = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
         self.pixbuf_disk =  gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_hdd.png")
-        self.pixbuf_network =  gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_ethernet.png")
+        self.pixbuf_nic =  gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_ethernet.png")
         self.prepare_hw_list()
         self.hw_selected()
-        
 
     def toggle_toolbar(self, src):
         if src.get_active():
@@ -170,8 +146,7 @@ class vmmDetails(gobject.GObject):
 
     def show_help(self, src):
         # From the Details window, show the help document from the Details page
-        self.emit("action-show-help", "virt-manager-details-window") 
-
+        self.emit("action-show-help", "virt-manager-details-window")
 
     def activate_performance_page(self):
         self.window.get_widget("details-pages").set_current_page(0)
@@ -189,14 +164,14 @@ class vmmDetails(gobject.GObject):
         return 0
 
     def hw_selected(self, src=None):
-        self.adding_hardware = False
         vmlist = self.window.get_widget("hw-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
         if active[1] != None:
-            pagetype = active[0].get_value(active[1], 3)
+            pagetype = active[0].get_value(active[1], 2)
             self.window.get_widget("hw-panel").set_sensitive(True)
 
+            pagenum = -1
             if pagetype == VMM_HW_CPU:
                 self.window.get_widget("config-vcpus-apply").set_sensitive(False)
                 self.refresh_config_cpu()
@@ -209,18 +184,13 @@ class vmmDetails(gobject.GObject):
                 self.refresh_disk_page()
                 pagenum = 2
             elif pagetype == VMM_HW_NIC:
-                self.window.get_widget("network-name-pulldown").hide()
-                self.window.get_widget("network-buttons").hide()
-                self.window.get_widget("network-name").set_editable(False)
-                self.window.get_widget("network-mac-address").set_editable(False)
-                self.window.get_widget("net-devlabel-label").show()
-                self.window.get_widget("network-device-name").show()
                 self.refresh_network_page()
                 pagenum = 3
+
             self.window.get_widget("hw-panel").set_current_page(pagenum)
         else:
             logging.debug("In hw_selected with null tree iter")
-            self.window.get_widget("hw-panel").set_sensitive(True)
+            self.window.get_widget("hw-panel").set_sensitive(False)
             selection.select_path(0)
             self.window.get_widget("hw-panel").set_current_page(0)
 
@@ -342,66 +312,34 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("details-menu-serial").set_sensitive(False)
 
     def refresh_resources(self, ignore):
-        self.refresh_summary()
-        if self.window.get_widget("details-pages").get_current_page() == 1:
+        details = self.window.get_widget("details-pages")
+        if details.get_current_page() == 0:
+            self.refresh_summary()
+        else:
             #XXX for this week this only works for active domains, and it's temporary.
             if self.vm.is_active():
                 self.window.get_widget("add-hardware-button").set_sensitive(True)
             else:
                 self.window.get_widget("add-hardware-button").set_sensitive(False)
-                
-            if self.adding_hardware:
-                return
+
             # reload the hw model, go to the correct page, and refresh that page
             hw_list = self.window.get_widget("hw-list")
             hw_panel = self.window.get_widget("hw-panel")
             selection = hw_list.get_selection()
             active = selection.get_selected()
             if active[1] != None:
-                pagetype = active[0].get_value(active[1], 3)
-                device_info = active[0].get_value(active[1], 4)
-                self.populate_hw_list()
+                pagetype = active[0].get_value(active[1], 2)
+                device_info = active[0].get_value(active[1], 3)
+                self.repopulate_hw_list()
                 hw_model = hw_list.get_model()
                 if pagetype == VMM_HW_CPU:
                     self.refresh_config_cpu()
-                    pagenum = 0
-                    selection.select_path(0)
                 elif pagetype == VMM_HW_MEMORY:
                     self.refresh_config_memory()
-                    pagenum = 1
-                    selection.select_path(1)
                 elif pagetype == VMM_HW_DISK:
                     self.refresh_disk_page()
-                    # try to match the old source dev to one of the new source devs
-                    selection.select_path(0)
-                    pagenum = 0
-                    i=0
-                    for hw in hw_model:
-                        if hw[3] == VMM_HW_DISK: 
-                            if device_info[1] == hw[4][1]:
-                                selection.select_path(i)
-                                pagenum = 2
-                                break
-                        i = i + 1
                 elif pagetype == VMM_HW_NIC:
                     self.refresh_network_page()
-                    selection.select_path(0)
-                    pagenum = 0
-                    i=0
-                    for hw in hw_model:
-                        if hw[3] == VMM_HW_NIC: 
-                            if device_info[3] == hw[4][3]:
-                                selection.select_path(i)
-                                pagenum = 3
-                                break
-                        i = i + 1
-                hw_panel.set_current_page(pagenum)
-
-            else:
-                logging.debug("In hw_selected with null tree iter")
-                hw_panel.set_sensitive(True)
-                selection.select_path(0)
-                hw_panel.set_current_page(0)
 
     def refresh_summary(self):
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
@@ -460,32 +398,24 @@ class vmmDetails(gobject.GObject):
         selection = vmlist.get_selection()
         active = selection.get_selected()
         if active[1] != None:
-            diskinfo = active[0].get_value(active[1], 4)
-            # fill the fields on the screen
-            self.window.get_widget("disk-type").set_text(diskinfo[0])
-            self.window.get_widget("storage-source").set_text(diskinfo[1])
-            self.window.get_widget("storage-device").set_text(diskinfo[2])
-            self.window.get_widget("device-label").set_text(diskinfo[3])
+            diskinfo = active[0].get_value(active[1], 3)
+            self.window.get_widget("disk-source-type").set_text(diskinfo[0])
+            self.window.get_widget("disk-source-path").set_text(diskinfo[1])
+            self.window.get_widget("disk-target-type").set_text(diskinfo[2])
+            self.window.get_widget("disk-target-device").set_text(diskinfo[3])
 
     def refresh_network_page(self):
-        # get the line what was clicked
-        if not self.adding_hardware:
-            # viewing net page, not adding a device. If adding, don't try to refresh
-            vmlist = self.window.get_widget("hw-list")
-            selection = vmlist.get_selection()
-            active = selection.get_selected()
-            if active[1] != None:
-                netinfo = active[0].get_value(active[1], 4)
-                if netinfo[1] == "-":
-                    netname = "No network name"
-                else:
-                    netname = netinfo[1]
-                name_widget = self.window.get_widget("network-name")
-                name_widget.set_text(netname)
-                name_widget.show()
-                self.window.get_widget("network-mac-address").set_text(netinfo[3])
-                self.window.get_widget("network-device-name").set_text(netinfo[2])
-            
+        # viewing net page, not adding a device. If adding, don't try to refresh
+        vmlist = self.window.get_widget("hw-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] != None:
+            netinfo = active[0].get_value(active[1], 3)
+            self.window.get_widget("network-source-type").set_text(netinfo[0])
+            self.window.get_widget("network-source-device").set_text(netinfo[1])
+            self.window.get_widget("network-target-device").set_text(netinfo[2])
+            self.window.get_widget("network-mac-address").set_text(netinfo[3])
+
     def config_vcpus_changed(self, src):
         self.window.get_widget("config-vcpus-apply").set_sensitive(True)
 
@@ -576,171 +506,71 @@ class vmmDetails(gobject.GObject):
             self.toggle_storage_size()
 
     def prepare_hw_list(self):
-        hw_list_model = gtk.ListStore(int, str, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
+        hw_list_model = gtk.ListStore(str, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
         self.window.get_widget("hw-list").set_model(hw_list_model)
-        self.populate_hw_list()
 
         hwCol = gtk.TreeViewColumn("Hardware")
         hw_txt = gtk.CellRendererText()
         hw_img = gtk.CellRendererPixbuf()
         hwCol.pack_start(hw_txt, True)
         hwCol.pack_start(hw_img, False)
-        hwCol.add_attribute(hw_txt, 'text', 1)
-        hwCol.add_attribute(hw_img, 'pixbuf', 2)
+        hwCol.add_attribute(hw_txt, 'text', 0)
+        hwCol.add_attribute(hw_img, 'pixbuf', 1)
         self.window.get_widget("hw-list").append_column(hwCol)
+
+        self.populate_hw_list()
 
     def populate_hw_list(self):
         hw_list_model = self.window.get_widget("hw-list").get_model()
         hw_list_model.clear()
-        hw_list_model.append([0, "Processor", self.pixbuf_processor, VMM_HW_CPU, []])
-        hw_list_model.append([1, "Memory", self.pixbuf_memory, VMM_HW_MEMORY, []])
+        hw_list_model.append(["Processor", self.pixbuf_processor, VMM_HW_CPU, []])
+        hw_list_model.append(["Memory", self.pixbuf_memory, VMM_HW_MEMORY, []])
+        self.repopulate_hw_list()
 
-        #all disks
-        disk_list = self.vm.get_disk_devices()
-        for i in range(len(disk_list)):
-            hw_list_model.append([i + 2, "Disk %d" % (i + 1), self.pixbuf_disk, VMM_HW_DISK, disk_list[i]])
+    def repopulate_hw_list(self):
+        hw_list_model = self.window.get_widget("hw-list").get_model()
 
-        #all nics
-        nic_list = self.vm.get_network_devices()
-        offset = len(disk_list) + 2
-        for i in range(len(nic_list)):
-            hw_list_model.append([offset + i, "Network %d" % (i + 1), self.pixbuf_network, VMM_HW_NIC, nic_list[i]])
-        
+        # Populate list of disks
+        for disk in self.vm.get_disk_devices():
+            missing = True
+            insertAt = 0
+            for row in hw_list_model:
+                if row[2] == VMM_HW_DISK and row[3][3] == disk[3]:
+                    # Update metadata
+                    row[3] = disk
+                    missing = False
+                # The insert position must be *before* any NICs
+                if row[2] != VMM_HW_NIC:
+                    insertAt = insertAt + 1
+
+            # Add in row
+            if missing:
+                hw_list_model.insert(insertAt, ["Disk %s" % disk[3], self.pixbuf_disk, VMM_HW_DISK, disk])
+
+        # Populate list of NICs
+        for nic in self.vm.get_network_devices():
+            missing = True
+            insertAt = 0
+            for row in hw_list_model:
+                if row[2] == VMM_HW_NIC and row[3][3] == nic[3]:
+                    # Update metadata
+                    row[3] = nic
+                    missing = False
+
+                # Insert poisition is at end....
+                # XXX until we add support for Mice, etc
+                insertAt = insertAt + 1
+
+            # Add in row
+            if missing:
+                hw_list_model.insert(insertAt, ["NIC %s" % nic[2], self.pixbuf_nic, VMM_HW_NIC, nic])
+
+
     def add_hardware(self, src):
-        self.adding_hardware = True
-        widget = self.window.get_widget("add-hardware-device")
-        iter = widget.get_active_iter()
-        device = widget.get_model().get_value(iter, 0)
-        if VMM_HW_DEVICES.index(device) == 0:
-            # a new virtual disk
-            self.window.get_widget("hw-panel").set_current_page(4)
-        elif VMM_HW_DEVICES.index(device) == 1:
-            # a new vnic
-            network_menu = self.window.get_widget("network-name-pulldown")
-            self.populate_network_model(network_menu.get_model())
-            network_menu.set_active(0)
-            network_menu.show()
-            self.window.get_widget("network-buttons").show()
-            self.window.get_widget("network-name").hide()
-            mac_addr = self.window.get_widget("network-mac-address")
-            mac_addr.set_editable(True)
-            mac_addr.set_text("")
-            self.window.get_widget("net-devlabel-label").hide()
-            self.window.get_widget("network-device-name").hide()
-            self.window.get_widget("hw-panel").set_current_page(3)
-        else:
-            pass
-        
-    def populate_network_model(self, model):
-        model.clear()
-        for uuid in self.vm.get_connection().list_net_uuids():
-            net = self.vm.get_connection().get_net(uuid)
-            model.append([net.get_label(), net.get_name(), "network"])
-        br = virtinst.util.default_bridge()
-        model.append([_("default bridge"), br, "bridge"])
+        if self.addhw is None:
+            self.addhw = vmmAddHardware(self.config, self.vm)
 
-    def add_vnic(self, src):
-        network = None
-        bridge = None
-        net_name_widget = self.window.get_widget("network-name-pulldown")
-        net_name = net_name_widget.get_model().get_value(net_name_widget.get_active_iter(), 1)
-        net_type = net_name_widget.get_model().get_value(net_name_widget.get_active_iter(), 2)
-        mac_addr = self.window.get_widget("network-mac-address").get_text()
-        if mac_addr == "":
-            mac_addr = None
-        if net_type == "network":
-            network = net_name
-        else:
-            bridge = net_name
-        self.vm.add_network_device(mac_addr, net_type, bridge, network)
-        self.clean_up_add_hardware()
+        self.addhw.show()
 
-    def add_vbd(self, src):
-        # disks
-#         filesize = None
-#         if self.vm.is_hvm():
-#             disknode = "hd"
-#         else:
-#             disknode = "xvd"
-#         if self.get_config_disk_size() != None:
-#             filesize = self.get_config_disk_size() / 1024.0
-#         try:
-#             d = virtinst.VirtualDisk(self.get_config_disk_image(), filesize, sparse = self.is_sparse_file())
-#             if d.type == virtinst.VirtualDisk.TYPE_FILE and \
-#                    self.vm.is_hvm() == False \
-#                    and virtinst.util.is_blktap_capable():
-#                 d.driver_name = virtinst.VirtualDisk.DRIVER_TAP
-#             if d.type == virtinst.VirtualDisk.TYPE_FILE and not \
-#                self.is_sparse_file():
-#                 self.non_sparse = True
-#             else:
-#                 self.non_sparse = False
-#         except ValueError, e:
-#             self._validation_error_box(_("Invalid storage address"), e.args[0])
-#             return
-
-#         #XXX add the progress bar in here...
-#         d.setup(progress.BaseMeter)
-#         xml = d.get_xml_config(disknode)
-#         logging.debug("Disk XML: %s" % d)
-#         self.vm.add_disk_device(xml)
-        self.clean_up_add_hardware()
-
-    def get_config_disk_image(self):
-        if self.window.get_widget("storage-partition").get_active():
-            return self.window.get_widget("storage-partition-address").get_text()
-        else:
-            return self.window.get_widget("storage-file-address").get_text()
-
-    def get_config_disk_size(self):
-        if self.window.get_widget("storage-partition").get_active():
-            return None
-        else:
-            return self.window.get_widget("storage-file-size").get_value()
-
-    def is_sparse_file(self):
-        if self.window.get_widget("non-sparse").get_active():
-            return False
-        else:
-            return True
-
-    def clean_up_add_hardware(self, src=None):
-        self.adding_hardware = False
-        self.hw_selected()
-        
-    def _validation_error_box(self, text1, text2=None):
-        message_box = gtk.MessageDialog(self.window.get_widget("vmm-details"), \
-                                                0, \
-                                                gtk.MESSAGE_ERROR, \
-                                                gtk.BUTTONS_OK, \
-                                                text1)
-        if text2 != None:
-            message_box.format_secondary_text(text2)
-        message_box.run()
-        message_box.destroy()
-
-    def _browse_file(self, dialog_name, folder=None, type=None):
-        # user wants to browse for an ISO
-        fcdialog = gtk.FileChooserDialog(dialog_name,
-                                         self.window.get_widget("vmm-details"),
-                                         gtk.FILE_CHOOSER_ACTION_OPEN,
-                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                          gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
-                                         None)
-        if type != None:
-            f = gtk.FileFilter()
-            f.add_pattern("*." + type)
-            fcdialog.set_filter(f)
-        if folder != None:
-            fcdialog.set_current_folder(folder)
-        response = fcdialog.run()
-        fcdialog.hide()
-        if(response == gtk.RESPONSE_ACCEPT):
-            filename = fcdialog.get_filename()
-            fcdialog.destroy()
-            return filename
-        else:
-            fcdialog.destroy()
-            return None
 
 gobject.type_register(vmmDetails)

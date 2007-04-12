@@ -1,0 +1,570 @@
+#
+# Copyright (C) 2006-2007 Red Hat, Inc.
+# Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#
+
+import gobject
+import gtk
+import gtk.gdk
+import gtk.glade
+import pango
+import libvirt
+import virtinst
+import os, sys
+import re
+import subprocess
+import urlgrabber.progress as progress
+import tempfile
+import logging
+import dbus
+import traceback
+
+from virtManager.asyncjob import vmmAsyncJob
+from virtManager.error import vmmErrorDialog
+
+VM_STORAGE_PARTITION = 1
+VM_STORAGE_FILE = 2
+
+DEFAULT_STORAGE_FILE_SIZE = 500
+
+PAGE_INTRO = 0
+PAGE_DISK = 1
+PAGE_NETWORK = 2
+PAGE_SUMMARY = 3
+
+class vmmCreateMeter(progress.BaseMeter):
+    def __init__(self, asyncjob):
+        # progress meter has to run asynchronously, so pass in the
+        # async job to call back to with progress info
+        progress.BaseMeter.__init__(self)
+        self.asyncjob = asyncjob
+
+    def _do_start(self, now):
+        if self.text is not None:
+            text = self.text
+        else:
+            text = self.basename
+        if self.size is None:
+            out = "    %5sB" % (0)
+            self.asyncjob.pulse_pbar(out, text)
+        else:
+            out = "%3i%% %5sB" % (0, 0)
+            self.asyncjob.set_pbar_fraction(0, out, text)
+
+    def _do_update(self, amount_read, now=None):
+        if self.text is not None:
+            text = self.text
+        else:
+            text = self.basename
+        fread = progress.format_number(amount_read)
+        if self.size is None:
+            out = "    %5sB" % (fread)
+            self.asyncjob.pulse_pbar(out, text)
+        else:
+            frac = self.re.fraction_read()
+            out = "%3i%% %5sB" % (frac*100, fread)
+            self.asyncjob.set_pbar_fraction(frac, out, text)
+
+    def _do_end(self, amount_read, now=None):
+        if self.text is not None:
+            text = self.text
+        else:
+            text = self.basename
+        fread = progress.format_number(amount_read)
+        if self.size is None:
+            out = "    %5sB" % (fread)
+            self.asyncjob.pulse_pbar(out, text)
+        else:
+            out = "%3i%% %5sB" % (100, fread)
+            self.asyncjob.set_pbar_done(out, text)
+
+class vmmAddHardware(gobject.GObject):
+    __gsignals__ = {
+        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, [str]),
+        }
+    def __init__(self, config, vm):
+        self.__gobject_init__()
+        self.config = config
+        self.vm = vm
+        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-add-hardware.glade", "vmm-add-hardware", domain="virt-manager")
+        self.topwin = self.window.get_widget("vmm-add-hardware")
+        self.topwin.hide()
+        self.window.signal_autoconnect({
+            "on_create_pages_switch_page" : self.page_changed,
+            "on_create_cancel_clicked" : self.close,
+            "on_vmm_create_delete_event" : self.close,
+            "on_create_back_clicked" : self.back,
+            "on_create_forward_clicked" : self.forward,
+            "on_create_finish_clicked" : self.finish,
+            "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
+            "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
+            "on_storage_file_address_changed": self.toggle_storage_size,
+            "on_storage_toggled" : self.change_storage_type,
+            "on_network_toggled" : self.change_network_type,
+            "on_create_help_clicked": self.show_help,
+            })
+
+        hw_list = self.window.get_widget("hardware-type")
+        model = gtk.ListStore(str, gtk.gdk.Pixbuf, int)
+        hw_list.set_model(model)
+        icon = gtk.CellRendererPixbuf()
+        hw_list.pack_start(icon, False)
+        hw_list.add_attribute(icon, 'pixbuf', 1)
+        text = gtk.CellRendererText()
+        hw_list.pack_start(text, True)
+        hw_list.add_attribute(text, 'text', 0)
+
+        pixbuf_disk =  gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_hdd.png")
+        pixbuf_nic =  gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_ethernet.png")
+
+        model.append(["Storage device", pixbuf_disk, PAGE_DISK])
+        model.append(["Network card", pixbuf_nic, PAGE_NETWORK])
+
+        self.set_initial_state()
+
+    def show(self):
+        self.reset_state()
+        self.topwin.show()
+        self.topwin.present()
+
+    def set_initial_state(self):
+        notebook = self.window.get_widget("create-pages")
+        notebook.set_show_tabs(False)
+
+        #XXX I don't think I should have to go through and set a bunch of background colors
+        # in code, but apparently I do...
+        black = gtk.gdk.color_parse("#000")
+        for num in range(PAGE_SUMMARY+1):
+            name = "page" + str(num) + "-title"
+            self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL,black)
+
+        if os.getuid() != 0:
+            self.window.get_widget("storage-partition").set_sensitive(False)
+
+        # set up the lists for the networks
+        network_list = self.window.get_widget("net-network")
+        network_model = gtk.ListStore(str, str)
+        network_list.set_model(network_model)
+        text = gtk.CellRendererText()
+        network_list.pack_start(text, True)
+        network_list.add_attribute(text, 'text', 1)
+
+        device_list = self.window.get_widget("net-device")
+        device_model = gtk.ListStore(str)
+        device_list.set_model(device_model)
+        text = gtk.CellRendererText()
+        device_list.pack_start(text, True)
+        device_list.add_attribute(text, 'text', 0)
+
+    def reset_state(self):
+        notebook = self.window.get_widget("create-pages")
+        notebook.set_current_page(0)
+        # Hide the "finish" button until the appropriate time
+        self.window.get_widget("create-finish").hide()
+        self.window.get_widget("create-forward").show()
+        self.window.get_widget("create-back").set_sensitive(False)
+        self.window.get_widget("storage-file-size").set_sensitive(False)
+
+        self.change_storage_type()
+        self.change_network_type()
+        if os.getuid() == 0:
+            self.window.get_widget("storage-partition").set_active(True)
+        else:
+            self.window.get_widget("storage-file-backed").set_active(True)
+        self.window.get_widget("storage-partition-address").set_text("")
+        self.window.get_widget("storage-file-address").set_text("")
+        self.window.get_widget("storage-file-size").set_value(2000)
+        self.window.get_widget("non-sparse").set_active(True)
+
+        model = self.window.get_widget("net-network").get_model()
+        self.populate_network_model(model)
+        device = self.window.get_widget("net-device").get_model()
+        self.populate_device_model(device)
+
+
+    def forward(self, ignore=None):
+        notebook = self.window.get_widget("create-pages")
+        if(self.validate(notebook.get_current_page()) != True):
+            return
+
+        if notebook.get_current_page() == PAGE_INTRO:
+            notebook.set_current_page(self.get_config_hardware_type())
+        else:
+            notebook.set_current_page(PAGE_SUMMARY)
+            self.window.get_widget("create-finish").show()
+            self.window.get_widget("create-forward").hide()
+        self.window.get_widget("create-back").set_sensitive(True)
+
+    def back(self, ignore=None):
+        notebook = self.window.get_widget("create-pages")
+
+        if notebook.get_current_page() == PAGE_SUMMARY:
+            notebook.set_current_page(self.get_config_hardware_type())
+            self.window.get_widget("create-finish").hide()
+        else:
+            notebook.set_current_page(PAGE_INTRO)
+            self.window.get_widget("create-back").set_sensitive(False)
+        self.window.get_widget("create-forward").show()
+
+    def get_config_hardware_type(self):
+        type = self.window.get_widget("hardware-type")
+        if type.get_active_iter() == None:
+            return None
+        return type.get_model().get_value(type.get_active_iter(), 2)
+
+    def get_config_disk_image(self):
+        if self.window.get_widget("storage-partition").get_active():
+            return self.window.get_widget("storage-partition-address").get_text()
+        else:
+            return self.window.get_widget("storage-file-address").get_text()
+
+    def get_config_disk_size(self):
+        if self.window.get_widget("storage-partition").get_active():
+            return None
+        else:
+            return self.window.get_widget("storage-file-size").get_value()
+
+    def get_config_network(self):
+        if os.getuid() != 0:
+            return ["user"]
+
+        if self.window.get_widget("net-type-network").get_active():
+            net = self.window.get_widget("net-network")
+            model = net.get_model()
+            return ["network", model.get_value(net.get_active_iter(), 0)]
+        else:
+            dev = self.window.get_widget("net-device")
+            model = dev.get_model()
+            return ["bridge", model.get_value(dev.get_active_iter(), 0)]
+
+    def page_changed(self, notebook, page, page_number):
+        if page_number == PAGE_DISK:
+            pass
+        elif page_number == PAGE_NETWORK:
+            pass
+        elif page_number == PAGE_SUMMARY:
+            hwpage = self.get_config_hardware_type()
+
+            if hwpage == PAGE_DISK:
+                self.window.get_widget("summary-disk").show()
+                self.window.get_widget("summary-network").hide()
+                self.window.get_widget("summary-disk-image").set_text(self.get_config_disk_image())
+                disksize = self.get_config_disk_size()
+                if disksize != None:
+                    self.window.get_widget("summary-disk-size").set_text(str(int(disksize)) + " MB")
+                else:
+                    self.window.get_widget("summary-disk-size").set_text("-")
+            elif hwpage == PAGE_NETWORK:
+                self.window.get_widget("summary-disk").hide()
+                self.window.get_widget("summary-network").show()
+                net = self.get_config_network()
+                if net[0] == "bridge":
+                    self.window.get_widget("summary-net-type").set_text(_("Shared physical device"))
+                    self.window.get_widget("summary-net-target").set_text(net[1])
+                elif net[0] == "network":
+                    self.window.get_widget("summary-net-type").set_text(_("Virtual network"))
+                    self.window.get_widget("summary-net-target").set_text(net[1])
+                elif net[0] == "user":
+                    self.window.get_widget("summary-net-type").set_text(_("Usermode networking"))
+                    self.window.get_widget("summary-net-target").set_text("-")
+                else:
+                    raise ValueError, "Unknown networking type " + net[0]
+
+    def close(self, ignore1=None,ignore2=None):
+        self.topwin.hide()
+        return 1
+
+    def is_visible(self):
+        if self.topwin.flags() & gtk.VISIBLE:
+           return 1
+        return 0
+
+    def finish(self, ignore=None):
+        hw = self.get_config_hardware_type()
+
+        self.install_error = None
+        self.topwin.set_sensitive(False)
+        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+
+        if hw == PAGE_NETWORK:
+            self.add_network()
+        elif hw == PAGE_DISK:
+            self.add_storage()
+
+        if self.install_error is not None:
+            dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                self.install_error,
+                                self.install_details)
+            dg.run()
+            dg.hide()
+            dg.destroy()
+            self.topwin.set_sensitive(True)
+            self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+            # Don't close becase we allow user to go back in wizard & correct
+            # their mistakes
+            #self.close()
+            return
+
+        self.topwin.set_sensitive(True)
+        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+        self.close()
+
+    def add_network(self):
+        net = self.get_config_network()
+        vnic = None
+        if net[0] == "bridge":
+            vnic = virtinst.VirtualNetworkInterface(type=net[0], bridge=net[1])
+        elif net[0] == "network":
+            vnic = virtinst.VirtualNetworkInterface(type=net[0], network=net[1])
+        else:
+            raise ValueError, "Unsupported networking type " + net[0]
+
+        vnic.setup(self.vm.get_connection().vmm)
+        xml = vnic.get_xml_config()
+        logging.debug("Adding network " + xml)
+        self.vm.add_device(xml)
+
+    def add_storage(self):
+        filesize = None
+        disk = None
+        if self.get_config_disk_size() != None:
+            filesize = self.get_config_disk_size() / 1024.0
+        try:
+            disk = virtinst.VirtualDisk(self.get_config_disk_image(), filesize, sparse = self.is_sparse_file())
+            if disk.type == virtinst.VirtualDisk.TYPE_FILE and \
+                   not self.vm.is_hvm() \
+               and virtinst.util.is_blktap_capable():
+                disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
+        except ValueError, e:
+            self._validation_error_box(_("Invalid storage address"), e.args[0])
+            return
+
+        used = {}
+        for d in self.vm.get_disk_devices():
+            dev = d[3]
+            used[dev] = 1
+
+        nodes = []
+        if self.vm.is_hvm():
+            for n in range(4):
+                nodes.append("hd%c" % (ord('a')+n))
+        else:
+            for n in range(26):
+                nodes.append("xvd%c" % (ord('a')+n))
+
+        node = None
+        for n in nodes:
+            if not used.has_key(n):
+                node = n
+                break
+
+        if node is None:
+            self._validation_error_box(_("Too many virtual disks"),
+                                       _("There are no more available virtual disk device nodes"))
+            return
+
+        progWin = vmmAsyncJob(self.config, self.do_file_allocate, [disk],
+                              title=_("Creating Storage File"),
+                              text=_("Allocation of disk storage may take a few minutes " + \
+                                     "to complete."))
+        progWin.run()
+
+        xml = disk.get_xml_config(node)
+        logging.debug("Adding disk " + xml)
+        self.vm.add_device(xml)
+
+    def do_file_allocate(self, disk, asyncjob):
+        meter = vmmCreateMeter(asyncjob)
+        try:
+            logging.debug("Starting background file allocate process")
+            disk.setup(meter)
+            logging.debug("Allocation completed")
+        except:
+            (type, value, stacktrace) = sys.exc_info ()
+
+            # Detailed error message, in English so it can be Googled.
+            details = \
+                    "Unable to complete install '%s'" % \
+                    (str(type) + " " + str(value) + "\n" + \
+                     traceback.format_exc (stacktrace))
+
+            self.install_error = _("Unable to complete install: '%s'") % str(value)
+            self.install_details = details
+            logging.error(details)
+
+    def browse_storage_partition_address(self, src, ignore=None):
+        part = self._browse_file(_("Locate Storage Partition"), "/dev")
+        if part != None:
+            self.window.get_widget("storage-partition-address").set_text(part)
+
+    def browse_storage_file_address(self, src, ignore=None):
+        self.window.get_widget("storage-file-size").set_sensitive(True)
+        fcdialog = gtk.FileChooserDialog(_("Locate or Create New Storage File"),
+                                         self.window.get_widget("vmm-create"),
+                                         gtk.FILE_CHOOSER_ACTION_SAVE,
+                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                          gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
+                                         None)
+
+        fcdialog.set_current_folder(self.config.get_default_image_dir(self.vm.get_connection()))
+        fcdialog.set_do_overwrite_confirmation(True)
+        fcdialog.connect("confirm-overwrite", self.confirm_overwrite_callback)
+        response = fcdialog.run()
+        fcdialog.hide()
+        file = None
+        if(response == gtk.RESPONSE_ACCEPT):
+            file = fcdialog.get_filename()
+        if file != None:
+            self.window.get_widget("storage-file-address").set_text(file)
+
+    def toggle_storage_size(self, ignore1=None, ignore2=None):
+        file = self.get_config_disk_image()
+        if file != None and len(file) > 0 and not(os.path.exists(file)):
+            self.window.get_widget("storage-file-size").set_sensitive(True)
+            self.window.get_widget("non-sparse").set_sensitive(True)
+            self.window.get_widget("storage-file-size").set_value(4000)
+        else:
+            self.window.get_widget("storage-file-size").set_sensitive(False)
+            self.window.get_widget("non-sparse").set_sensitive(False)
+            if os.path.isfile(file):
+                size = os.path.getsize(file)/(1024*1024)
+                self.window.get_widget("storage-file-size").set_value(size)
+            else:
+                self.window.get_widget("storage-file-size").set_value(0)
+
+    def confirm_overwrite_callback(self, chooser):
+        # Only called when the user has chosen an existing file
+        self.window.get_widget("storage-file-size").set_sensitive(False)
+        return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
+
+    def change_storage_type(self, ignore=None):
+        if self.window.get_widget("storage-partition").get_active():
+            self.window.get_widget("storage-partition-box").set_sensitive(True)
+            self.window.get_widget("storage-file-box").set_sensitive(False)
+            self.window.get_widget("storage-file-size").set_sensitive(False)
+            self.window.get_widget("non-sparse").set_sensitive(False)
+        else:
+            self.window.get_widget("storage-partition-box").set_sensitive(False)
+            self.window.get_widget("storage-file-box").set_sensitive(True)
+            self.toggle_storage_size()
+
+    def change_network_type(self, ignore=None):
+        if self.window.get_widget("net-type-network").get_active():
+            self.window.get_widget("net-network").set_sensitive(True)
+            self.window.get_widget("net-device").set_sensitive(False)
+        else:
+            self.window.get_widget("net-network").set_sensitive(False)
+            self.window.get_widget("net-device").set_sensitive(True)
+
+    def validate(self, page_num):
+        if page_num == PAGE_INTRO:
+            if self.get_config_hardware_type() == None:
+                self._validation_error_box(_("Hardware Type Required"), \
+                                           _("You must specify what type of hardware to add"))
+                return False
+
+        elif page_num == PAGE_DISK:
+            disk = self.get_config_disk_image()
+            if disk == None or len(disk) == 0:
+                self._validation_error_box(_("Storage Address Required"), \
+                                           _("You must specify a partition or a file for storage for the guest install"))
+                return False
+
+            if not self.window.get_widget("storage-partition").get_active():
+                if os.path.isdir(disk):
+                    self._validation_error_box(_("Storage Address Is Directory"), \
+                                               _("You chose 'Simple File' storage for your storage method, but chose a directory instead of a file. Please enter a new filename or choose an existing file."))
+                    return False
+
+            d = virtinst.VirtualDisk(self.get_config_disk_image(), self.get_config_disk_size(), sparse = self.is_sparse_file())
+            if d.is_conflict_disk(self.vm.get_connection().vmm) is True:
+               res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % disk), \
+                                               _("Do you really want to use the disk ?"))
+               return res
+
+        elif page_num == PAGE_NETWORK:
+            if self.window.get_widget("net-type-network").get_active():
+                if self.window.get_widget("net-network").get_active() == -1:
+                    self._validation_error_box(_("Virtual Network Required"),
+                                               _("You must select one of the virtual networks"))
+                    return False
+            else:
+                if self.window.get_widget("net-device").get_active() == -1:
+                    self._validation_error_box(_("Physical Device Required"),
+                                               _("You must select one of the physical devices"))
+                    return False
+
+        return True
+
+    def _validation_error_box(self, text1, text2=None):
+        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
+                                                0, \
+                                                gtk.MESSAGE_ERROR, \
+                                                gtk.BUTTONS_OK, \
+                                                text1)
+        if text2 != None:
+            message_box.format_secondary_text(text2)
+        message_box.run()
+        message_box.destroy()
+
+    def _yes_no_box(self, text1, text2=None):
+        #import pdb; pdb.set_trace()
+        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
+                                                0, \
+                                                gtk.MESSAGE_WARNING, \
+                                                gtk.BUTTONS_YES_NO, \
+                                                text1)
+        if text2 != None:
+            message_box.format_secondary_text(text2)
+        if message_box.run()== gtk.RESPONSE_YES:
+            res = True
+        else:
+            res = False
+        message_box.destroy()
+        return res
+
+    def populate_network_model(self, model):
+        model.clear()
+        for uuid in self.vm.get_connection().list_net_uuids():
+            net = self.vm.get_connection().get_net(uuid)
+            model.append([net.get_label(), net.get_name()])
+
+    def populate_device_model(self, model):
+        model.clear()
+        for name in self.vm.get_connection().list_net_device_paths():
+            net = self.vm.get_connection().get_net_device(name)
+            if net.is_shared():
+                model.append([net.get_bridge()])
+
+    def is_sparse_file(self):
+        if self.window.get_widget("non-sparse").get_active():
+            return False
+        else:
+            return True
+
+    def show_help(self, src):
+        # help to show depends on the notebook page, yahoo
+        page = self.window.get_widget("create-pages").get_current_page()
+        if page == PAGE_INTRO:
+            self.emit("action-show-help", "virt-manager-create-wizard")
+        elif page == PAGE_DISK:
+            self.emit("action-show-help", "virt-manager-storage-space")
+        elif page == PAGE_NETWORK:
+            self.emit("action-show-help", "virt-manager-network")
+
+gobject.type_register(vmmAddHardware)
