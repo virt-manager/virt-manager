@@ -254,6 +254,9 @@ class vmmConnection(gobject.GObject):
         self.emit("net-started", self.uri, uuid)
         return self.nets[uuid]
 
+    def define_domain(self, xml):
+        self.vmm.defineXML(xml)
+
     def restore(self, frm):
         status = self.vmm.restore(frm)
         if(status == 0):

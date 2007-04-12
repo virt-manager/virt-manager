@@ -60,6 +60,12 @@ class vmmDetails(gobject.GObject):
         topwin.hide()
         topwin.set_title(self.vm.get_name() + " " + topwin.get_title())
 
+        # Don't allowing changing network/disks for Dom0
+        if self.vm.is_management_domain():
+            self.window.get_widget("add-hardware-button").set_sensitive(False)
+        else:
+            self.window.get_widget("add-hardware-button").set_sensitive(True)
+
         self.window.get_widget("overview-name").set_text(self.vm.get_name())
         self.window.get_widget("overview-uuid").set_text(self.vm.get_uuid())
 
@@ -316,12 +322,6 @@ class vmmDetails(gobject.GObject):
         if details.get_current_page() == 0:
             self.refresh_summary()
         else:
-            #XXX for this week this only works for active domains, and it's temporary.
-            if self.vm.is_active():
-                self.window.get_widget("add-hardware-button").set_sensitive(True)
-            else:
-                self.window.get_widget("add-hardware-button").set_sensitive(False)
-
             # reload the hw model, go to the correct page, and refresh that page
             hw_list = self.window.get_widget("hw-list")
             hw_panel = self.window.get_widget("hw-panel")
@@ -412,7 +412,10 @@ class vmmDetails(gobject.GObject):
         if active[1] != None:
             netinfo = active[0].get_value(active[1], 3)
             self.window.get_widget("network-source-type").set_text(netinfo[0])
-            self.window.get_widget("network-source-device").set_text(netinfo[1])
+            if netinfo[1] is not None:
+                self.window.get_widget("network-source-device").set_text(netinfo[1])
+            else:
+                self.window.get_widget("network-source-device").set_text("-")
             self.window.get_widget("network-target-device").set_text(netinfo[2])
             self.window.get_widget("network-mac-address").set_text(netinfo[3])
 

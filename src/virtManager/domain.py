@@ -91,7 +91,9 @@ class vmmDomain(gobject.GObject):
         return False
 
     def is_hvm(self):
-        os_type = self.vm.OSType()
+        os_type = self.get_xml_string("/domain/os/type")
+        # XXX libvirt bug - doesn't work for inactive guests
+        #os_type = self.vm.OSType()
         logging.debug("OS Type: %s" % os_type)
         if os_type == "hvm":
             return True
@@ -526,10 +528,23 @@ class vmmDomain(gobject.GObject):
         return nics
 
     def add_device(self, xml):
-        self.vm.attachDevice(xml)
+        if self.is_active():
+            self.vm.attachDevice(xml)
+
+        vmxml = self.vm.XMLDesc(0)
+
+        index = vmxml.find("</devices>")
+        newxml = vmxml[0:index] + xml + vmxml[index:]
+
+        logging.debug("Redefine with " + newxml)
+
+        self.get_connection().define_domain(newxml)
 
     def remove_device(self, xml):
-        self.vm.detachDevice(xml)
+        if self.is_active():
+            self.vm.detachDevice(xml)
+
+        # XXX remove from defined XML. Eek !
 
     def set_vcpu_count(self, vcpus):
         vcpus = int(vcpus)
