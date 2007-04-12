@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-20 12:41-0400\n"
+"POT-Creation-Date: 2007-04-12 19:22-0400\n"
 "PO-Revision-Date: 2006-12-08 12:09+0530\n"
 "Last-Translator: Sree Ganesh <sthottem@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -19,6 +19,132 @@ msgstr ""
 #: ../../src/virt-manager.py.in:62
 msgid "Unable to initialize GTK: "
 msgstr "సంస్థాపక GTK సాధ్యమ్ కాదు: "
+
+#: ../../src/virtManager/addhardware.py:277
+#: ../../src/virtManager/create.py:467
+msgid "Shared physical device"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:280
+#: ../../src/virtManager/create.py:470
+#, fuzzy
+msgid "Virtual network"
+msgstr "వాస్తవిక కంప్యూటరి (_M)"
+
+#: ../../src/virtManager/addhardware.py:283
+#: ../../src/virtManager/create.py:473
+msgid "Usermode networking"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:354
+#: ../../src/virtManager/create.py:560
+msgid "Invalid storage address"
+msgstr "సరికాని storage చిరునామా"
+
+#: ../../src/virtManager/addhardware.py:377
+msgid "Too many virtual disks"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:378
+msgid "There are no more available virtual disk device nodes"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:382
+#, fuzzy
+msgid "Creating Storage File"
+msgstr "కొత్త నిల్వల ఫైలును ఉంచు లేదా సృష్టించు"
+
+#: ../../src/virtManager/addhardware.py:383
+msgid "Allocation of disk storage may take a few minutes "
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:384
+#: ../../src/virtManager/create.py:625
+#, fuzzy
+msgid "to complete."
+msgstr "పూర్తి"
+
+#: ../../src/virtManager/addhardware.py:406
+#: ../../src/virtManager/create.py:677
+#, python-format
+msgid "Unable to complete install: '%s'"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:411
+#: ../../src/virtManager/create.py:711
+msgid "Locate Storage Partition"
+msgstr "నిల్వల విభజనను ఉంచు"
+
+#: ../../src/virtManager/addhardware.py:417
+#: ../../src/virtManager/create.py:717
+msgid "Locate or Create New Storage File"
+msgstr "కొత్త నిల్వల ఫైలును ఉంచు లేదా సృష్టించు"
+
+#: ../../src/virtManager/addhardware.py:477
+#, fuzzy
+msgid "Hardware Type Required"
+msgstr "Hardware మద్దతు కావలది ఉంది"
+
+#: ../../src/virtManager/addhardware.py:478
+msgid "You must specify what type of hardware to add"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:484
+#: ../../src/virtManager/create.py:836
+msgid "Storage Address Required"
+msgstr "నిలవల చిరునామా అవసరం"
+
+#: ../../src/virtManager/addhardware.py:485
+#: ../../src/virtManager/create.py:837
+msgid ""
+"You must specify a partition or a file for storage for the guest install"
+msgstr "అతిధి సంస్థాపనల నిల్వలకు మీరు తప్పక ఒక విభజన లేదా ఒక ఫైలును తెలపాలి"
+
+#: ../../src/virtManager/addhardware.py:490
+#: ../../src/virtManager/create.py:842
+#, fuzzy
+msgid "Storage Address Is Directory"
+msgstr "నిలవల చిరునామా అవసరం"
+
+#: ../../src/virtManager/addhardware.py:491
+#: ../../src/virtManager/create.py:843
+msgid ""
+"You chose 'Simple File' storage for your storage method, but chose a "
+"directory instead of a file. Please enter a new filename or choose an "
+"existing file."
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:496
+#: ../../src/virtManager/create.py:848
+#, python-format
+msgid "Disk \"%s\" is already in use by another guest!"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:497
+#: ../../src/virtManager/create.py:849
+msgid "Do you really want to use the disk ?"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:503
+#: ../../src/virtManager/create.py:855
+msgid "Virtual Network Required"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:504
+#: ../../src/virtManager/create.py:856
+msgid "You must select one of the virtual networks"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:508
+#: ../../src/virtManager/create.py:860
+#, fuzzy
+msgid "Physical Device Required"
+msgstr "సంస్థాపక మాధ్యమం కావలసి ఉంది"
+
+#: ../../src/virtManager/addhardware.py:509
+#: ../../src/virtManager/create.py:861
+msgid "You must select one of the physical devices"
+msgstr ""
 
 #: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:2
 #, fuzzy
@@ -40,25 +166,25 @@ msgstr "విధానం"
 msgid "Completed"
 msgstr "పూర్తి"
 
-#: ../../src/virtManager/console.py:130
+#: ../../src/virtManager/console.py:132
 msgid "Pointer grabbed"
 msgstr ""
 
-#: ../../src/virtManager/console.py:131
+#: ../../src/virtManager/console.py:133
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer press the key pair Ctrl+Alt"
 msgstr ""
 
-#: ../../src/virtManager/console.py:140
+#: ../../src/virtManager/console.py:142
 msgid "Press Ctrl+Alt to release pointer."
 msgstr ""
 
-#: ../../src/virtManager/console.py:300
+#: ../../src/virtManager/console.py:302
 msgid "Save Virtual Machine Screenshot"
 msgstr "వాస్తవిక కంప్యూటరు Screenshotని భద్రపరువు"
 
-#: ../../src/virtManager/console.py:333
+#: ../../src/virtManager/console.py:335
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -67,108 +193,209 @@ msgstr ""
 "ఈ screenshot కింది దానికి భద్రపరచబడింది:\n"
 "%s"
 
-#: ../../src/virtManager/console.py:334
+#: ../../src/virtManager/console.py:336
 msgid "Screenshot saved"
 msgstr "Screenshot భద్రపరచబడింది"
 
-#: ../../src/virtManager/console.py:449
+#: ../../src/virtManager/console.py:468
 msgid "paused"
 msgstr "నిలిచింది"
 
-#: ../../src/virtManager/create.py:395
+#: ../../src/virtManager/createnet.py:94
+#: ../../src/virtManager/createnet.py:256 ../../src/virtManager/host.py:222
+#: tmp/vmm-create-net.glade.h:38 tmp/vmm-host.glade.h:23
+msgid "NAT to any physical device"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:96
+#: ../../src/virtManager/createnet.py:254 ../../src/virtManager/host.py:220
+#, python-format
+msgid "NAT to physical device %s"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:151
+#, fuzzy, python-format
+msgid "%d addresses"
+msgstr "MAC చిరునామా"
+
+#: ../../src/virtManager/createnet.py:153
+msgid "Public"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:155 tmp/vmm-create-net.glade.h:47
+msgid "Private"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:157
+msgid "Reserved"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:159
+msgid "Other"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:258 ../../src/virtManager/host.py:225
+#: tmp/vmm-create-net.glade.h:37
+msgid "Isolated virtual network"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:303
+#: ../../src/virtManager/createnet.py:307
+#, fuzzy
+msgid "Invalid Network Name"
+msgstr "చెల్లని కంప్యూటరు పేరు"
+
+#: ../../src/virtManager/createnet.py:304
+#, fuzzy
+msgid "Network name must be non-blank and less than 50 characters"
+msgstr ""
+"కంప్యూరుపేరు తప్పక ఖాళీలు లేనిదై ఉండాలి, 50 అక్షరాలకంటే తక్కువ అక్షరాలు మరియూ ఖాళీలు లేకుండా ఉండాలి"
+
+#: ../../src/virtManager/createnet.py:308
+msgid "Network name may contain alphanumeric and '_' characters only"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:315
+#: ../../src/virtManager/createnet.py:320
+#: ../../src/virtManager/createnet.py:325
+#: ../../src/virtManager/createnet.py:330
+#, fuzzy
+msgid "Invalid Network Address"
+msgstr "సరికాని storage చిరునామా"
+
+#: ../../src/virtManager/createnet.py:316
+msgid "The network address could not be understood"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:321
+msgid "The network must be an IPv4 address"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:326
+msgid "The network prefix must be at least /4 (16 addresses)"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:331
+msgid "The network must be an IPv4 private address"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:339
+#: ../../src/virtManager/createnet.py:343
+#: ../../src/virtManager/createnet.py:348
+#: ../../src/virtManager/createnet.py:352
+#, fuzzy
+msgid "Invalid DHCP Address"
+msgstr "సరికాని PV media చిరునామాలు"
+
+#: ../../src/virtManager/createnet.py:340
+msgid "The DHCP start address could not be understood"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:344
+msgid "The DHCP end address could not be understood"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:349
+#, python-format
+msgid "The DHCP start address is not with the network %s"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:353
+#, python-format
+msgid "The DHCP end address is not with the network %s"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:359
+#, fuzzy
+msgid "Invalid forwarding mode"
+msgstr "సరికాని storage చిరునామా"
+
+#: ../../src/virtManager/createnet.py:360
+msgid "Please select where the traffic should be forwarded"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:405 ../../src/virtManager/create.py:923
+#: ../../src/virtManager/create.py:958
+msgid "No media present"
+msgstr "ఏ మాధ్యమూ లేదు"
+
+#: ../../src/virtManager/create.py:446
 msgid "Paravirtualized"
 msgstr "పాక్షిక వాస్తవీకరణ"
 
-#: ../../src/virtManager/create.py:399
+#: ../../src/virtManager/create.py:450
 msgid "Fully virtualized"
 msgstr "పూర్తి virtualized"
 
-#: ../../src/virtManager/create.py:435
+#: ../../src/virtManager/create.py:498
 msgid "Invalid FV media address"
 msgstr "సరికాని FV media addressచిరునామాలు"
 
-#: ../../src/virtManager/create.py:440
+#: ../../src/virtManager/create.py:503
 #, fuzzy
 msgid "Invalid FV OS Type"
 msgstr "సరికాని FV media addressచిరునామాలు"
 
-#: ../../src/virtManager/create.py:445
+#: ../../src/virtManager/create.py:508
 #, fuzzy
 msgid "Invalid FV OS Variant"
 msgstr "సరికాని FV media addressచిరునామాలు"
 
-#: ../../src/virtManager/create.py:452
+#: ../../src/virtManager/create.py:515
 msgid "Invalid PV media address"
 msgstr "సరికాని PV media చిరునామాలు"
 
-#: ../../src/virtManager/create.py:462
+#: ../../src/virtManager/create.py:525
 msgid "Invalid system name"
 msgstr "సరికాలి కంప్యూటరు పేరు"
 
-#: ../../src/virtManager/create.py:469 ../../src/virtManager/create.py:475
+#: ../../src/virtManager/create.py:532 ../../src/virtManager/create.py:538
 msgid "Invalid memory setting"
 msgstr "సరికాని memory అమర్పు"
 
-#: ../../src/virtManager/create.py:497
-msgid "Invalid storage address"
-msgstr "సరికాని storage చిరునామా"
-
-#: ../../src/virtManager/create.py:534
+#: ../../src/virtManager/create.py:621
 msgid "Creating Virtual Machine"
 msgstr "Virtual Machineకంప్యూటరును సృష్టిస్తోంది"
 
-#: ../../src/virtManager/create.py:535
+#: ../../src/virtManager/create.py:622
 msgid "The virtual machine is now being created. "
 msgstr ""
 
-#: ../../src/virtManager/create.py:536
+#: ../../src/virtManager/create.py:623
 msgid "Allocation of disk storage and retrieval of "
 msgstr ""
 
-#: ../../src/virtManager/create.py:537
-msgid "the installation images may a few minutes "
+#: ../../src/virtManager/create.py:624
+msgid "the installation images may take a few minutes "
 msgstr ""
 
-#: ../../src/virtManager/create.py:538
-#, fuzzy
-msgid "to complete."
-msgstr "పూర్తి"
+#: ../../src/virtManager/create.py:663
+msgid "Guest installation failed to complete"
+msgstr ""
 
-#: ../../src/virtManager/create.py:543
-msgid "Guest Install Error"
-msgstr "ఆతిధేయ సంస్థాపన దోషం"
-
-#: ../../src/virtManager/create.py:581
+#: ../../src/virtManager/create.py:682
 msgid "Locate ISO Image"
 msgstr "ISO చిత్రాన్ని ఉంచు"
 
-#: ../../src/virtManager/create.py:610
-msgid "Locate Storage Partition"
-msgstr "నిల్వల విభజనను ఉంచు"
-
-#: ../../src/virtManager/create.py:616
-msgid "Locate or Create New Storage File"
-msgstr "కొత్త నిల్వల ఫైలును ఉంచు లేదా సృష్టించు"
-
-#: ../../src/virtManager/create.py:682 ../../src/virtManager/create.py:686
+#: ../../src/virtManager/create.py:794 ../../src/virtManager/create.py:798
 msgid "Invalid System Name"
 msgstr "చెల్లని కంప్యూటరు పేరు"
 
-#: ../../src/virtManager/create.py:683
+#: ../../src/virtManager/create.py:795
 #, fuzzy
 msgid "System name must be non-blank and less than 50 characters"
 msgstr ""
 "కంప్యూరుపేరు తప్పక ఖాళీలు లేనిదై ఉండాలి, 50 అక్షరాలకంటే తక్కువ అక్షరాలు మరియూ ఖాళీలు లేకుండా ఉండాలి"
 
-#: ../../src/virtManager/create.py:687
+#: ../../src/virtManager/create.py:799
 msgid "System name may contain alphanumeric and '_' characters only"
 msgstr ""
 
-#: ../../src/virtManager/create.py:693
+#: ../../src/virtManager/create.py:805
 msgid "Hardware Support Required"
 msgstr "Hardware మద్దతు కావలది ఉంది"
 
-#: ../../src/virtManager/create.py:694
+#: ../../src/virtManager/create.py:806
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
@@ -176,97 +403,64 @@ msgstr ""
 "మీ హార్డువేరు పూర్తి virtualizationకి పూర్తి మద్దతిస్తున్నట్లు లేదు. ఈ హార్డువేరులో కేవలం "
 "paravirtualized అతిధులు మాత్రమే అందుబాటులో ఉంటారు."
 
-#: ../../src/virtManager/create.py:701
+#: ../../src/virtManager/create.py:813
 msgid "ISO Path Required"
 msgstr "ISO మార్గం అవసరమైంది"
 
-#: ../../src/virtManager/create.py:702
+#: ../../src/virtManager/create.py:814
 msgid "You must specify an ISO location for the guest installation"
 msgstr "మీరు తప్పక అతిధి సంస్థాపనకు ఒక ISO స్థానాన్ని తెలపాలి"
 
-#: ../../src/virtManager/create.py:705
+#: ../../src/virtManager/create.py:817
 msgid "ISO Path Not Found"
 msgstr "ISO దారి కనుగొనబడలేదు"
 
-#: ../../src/virtManager/create.py:706
+#: ../../src/virtManager/create.py:818
 msgid "You must specify a valid path to the ISO image for guest installation"
 msgstr "మీరు తప్పక అతిధి సంస్థాపనకు ఒక సరైన దారిని ISOకు తెలపాలి"
 
-#: ../../src/virtManager/create.py:711
+#: ../../src/virtManager/create.py:823
 msgid "Install media required"
 msgstr "సంస్థాపక మాధ్యమం కావలసి ఉంది"
 
-#: ../../src/virtManager/create.py:712
+#: ../../src/virtManager/create.py:824
 msgid "You must select the CDROM install media for guest installation"
 msgstr "మీరు తప్పక CDROM సంస్థాపక మాధ్యమాన్ని ఆతిధేయ సంస్థాపనకు ఎన్నుకోవాలి"
 
-#: ../../src/virtManager/create.py:717
+#: ../../src/virtManager/create.py:829
 msgid "URL Required"
 msgstr "URL అవసరం"
 
-#: ../../src/virtManager/create.py:718
+#: ../../src/virtManager/create.py:830
 msgid "You must specify a URL for the install image for the guest install"
 msgstr "మీరు తప్పక URLను సంస్థాపక చిత్రాన్ని ఆతిధి సంస్థాపనకోసం తెలపాలి"
 
-#: ../../src/virtManager/create.py:724
-msgid "Storage Address Required"
-msgstr "నిలవల చిరునామా అవసరం"
-
-#: ../../src/virtManager/create.py:725
-msgid ""
-"You must specify a partition or a file for storage for the guest install"
-msgstr "అతిధి సంస్థాపనల నిల్వలకు మీరు తప్పక ఒక విభజన లేదా ఒక ఫైలును తెలపాలి"
-
-#: ../../src/virtManager/create.py:730
-#, fuzzy
-msgid "Storage Address Is Directory"
-msgstr "నిలవల చిరునామా అవసరం"
-
-#: ../../src/virtManager/create.py:731
-msgid ""
-"You chose 'Simple File' storage for your storage method, but chose a "
-"directory instead of a file. Please enter a new filename or choose an "
-"existing file."
-msgstr ""
-
-#: ../../src/virtManager/create.py:776 ../../src/virtManager/create.py:811
-msgid "No media present"
-msgstr "ఏ మాధ్యమూ లేదు"
-
-#: ../../src/virtManager/details.py:419
-msgid "Destination"
-msgstr "Destination"
-
-#: ../../src/virtManager/details.py:458
-msgid "MAC address"
-msgstr "MAC చిరునామా"
-
-#: ../../src/virtManager/domain.py:364
+#: ../../src/virtManager/domain.py:387 tmp/vmm-host.glade.h:27
 msgid "Running"
 msgstr "నడుస్తోంది"
 
-#: ../../src/virtManager/domain.py:366
+#: ../../src/virtManager/domain.py:389
 msgid "Paused"
 msgstr "Paused"
 
-#: ../../src/virtManager/domain.py:368 tmp/vmm-console.glade.h:10
-#: tmp/vmm-details.glade.h:39
+#: ../../src/virtManager/domain.py:391 tmp/vmm-console.glade.h:10
+#: tmp/vmm-details.glade.h:41
 msgid "Shutdown"
 msgstr "మూయి"
 
-#: ../../src/virtManager/domain.py:370
+#: ../../src/virtManager/domain.py:393
 msgid "Shutoff"
 msgstr "మూయి"
 
-#: ../../src/virtManager/domain.py:372
+#: ../../src/virtManager/domain.py:395
 msgid "Crashed"
 msgstr "క్రాషయ్యింది"
 
-#: ../../src/virtManager/domain.py:374
+#: ../../src/virtManager/domain.py:397
 msgid "Unknown status code"
 msgstr "తెలియని స్థాయి కోడు"
 
-#: ../../src/virtManager/engine.py:75
+#: ../../src/virtManager/engine.py:87
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
@@ -274,93 +468,115 @@ msgstr ""
 "Xen hypervisor/daemonకి అనుసంధానాన్ని తెరవటం కుదరదు.\n"
 "\n"
 
-#: ../../src/virtManager/engine.py:76
+#: ../../src/virtManager/engine.py:88
 msgid "Verify that:\n"
 msgstr "దాన్ని సరి చూడు:\n"
 
-#: ../../src/virtManager/engine.py:77
+#: ../../src/virtManager/engine.py:89
 msgid " - A Xen host kernel was booted\n"
 msgstr " - A Xen host kernel బూటయ్యింది\n"
 
-#: ../../src/virtManager/engine.py:78
+#: ../../src/virtManager/engine.py:90
 msgid " - The Xen service has been started\n"
 msgstr " - Xen సేవలు ప్రారమ్భించబడ్డాయి\n"
 
-#: ../../src/virtManager/engine.py:81
+#: ../../src/virtManager/engine.py:95
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
 msgstr "'%s' అధిప్రతికి అనుసంధానం తెరవటం కుదరదు"
 
-#: ../../src/virtManager/engine.py:82
+#: ../../src/virtManager/engine.py:97
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "వాస్తవిక కంప్యూటరు నిర్వాహక అనుసంధానం విఫలమైంది"
 
-#: ../../src/virtManager/engine.py:302
+#: ../../src/virtManager/engine.py:333
 msgid "Save Virtual Machine"
 msgstr "వాస్తవిక కంప్యూటరుని భద్రపరువు"
 
-#: ../../src/virtManager/engine.py:315
+#: ../../src/virtManager/engine.py:347
 msgid "Saving Virtual Machine"
 msgstr "వాస్తవిక కంప్యూటరును భద్రపరుస్తోంది"
 
-#: ../../src/virtManager/engine.py:331
+#: ../../src/virtManager/engine.py:363
 #, fuzzy, python-format
 msgid "About to destroy virtual machine %s"
 msgstr "వాస్తవిక కంప్యూటరును తిరిగి నిల్వచేయి"
 
-#: ../../src/virtManager/engine.py:332
+#: ../../src/virtManager/engine.py:364
 msgid ""
 "This will immediately destroy the VM and may corrupt its disk image. Are you "
 "sure?"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:237
+#: ../../src/virtManager/error.py:33
+#, fuzzy
+msgid "Details"
+msgstr "వివరాలు (_D)"
+
+#: ../../src/virtManager/host.py:182
+msgid "Active"
+msgstr ""
+
+#: ../../src/virtManager/host.py:190
+msgid "Inactive"
+msgstr ""
+
+#: ../../src/virtManager/host.py:203
+msgid "On boot"
+msgstr ""
+
+#: ../../src/virtManager/host.py:206
+msgid "Never"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:240
 msgid "Restore Virtual Machine"
 msgstr "వాస్తవిక కంప్యూటరును తిరిగి నిల్వచేయి"
 
-#: ../../src/virtManager/manager.py:252
+#: ../../src/virtManager/manager.py:256
 msgid "Restoring Virtual Machine"
 msgstr "వాస్తవిక కంప్యూటరును తిరిగి స్టోరు చేస్తోంది"
 
-#: ../../src/virtManager/manager.py:259
+#: ../../src/virtManager/manager.py:263
 #, python-format
 msgid "The file '%s' does not appear to be a valid saved machine image"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:287
+#: ../../src/virtManager/manager.py:291
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr "'%s' క్షేత్రాన్ని తిరిగి స్టోరు చేయటంలో దోషం. క్షేత్రం ఇప్పటికే నడుస్తున్నదా?"
 
-#: ../../src/virtManager/manager.py:505
+#: ../../src/virtManager/manager.py:512
 msgid "ID"
 msgstr "ఐడి"
 
-#: ../../src/virtManager/manager.py:506 tmp/vmm-create.glade.h:61
+#: ../../src/virtManager/manager.py:513 tmp/vmm-create.glade.h:66
+#: tmp/vmm-create-net.glade.h:39
 msgid "Name"
 msgstr "పేరు"
 
-#: ../../src/virtManager/manager.py:507 tmp/vmm-manager.glade.h:16
+#: ../../src/virtManager/manager.py:514 tmp/vmm-manager.glade.h:17
 msgid "Status"
 msgstr "స్థితి"
 
-#: ../../src/virtManager/manager.py:508 tmp/vmm-manager.glade.h:4
+#: ../../src/virtManager/manager.py:515 tmp/vmm-manager.glade.h:4
 msgid "CPU usage"
 msgstr "CPU వాడుక"
 
-#: ../../src/virtManager/manager.py:509
+#: ../../src/virtManager/manager.py:516
 msgid "VCPUs"
 msgstr "VCPUs"
 
-#: ../../src/virtManager/manager.py:510 tmp/vmm-manager.glade.h:10
+#: ../../src/virtManager/manager.py:517 tmp/vmm-manager.glade.h:11
 msgid "Memory usage"
 msgstr "మెమోరీ వాడుక"
 
-#: ../../src/virtManager/manager.py:511 tmp/vmm-manager.glade.h:7
+#: ../../src/virtManager/manager.py:518 tmp/vmm-manager.glade.h:7
 msgid "Disk usage"
 msgstr "Disk వాడుక"
 
-#: ../../src/virtManager/manager.py:512 tmp/vmm-manager.glade.h:11
+#: ../../src/virtManager/manager.py:519 tmp/vmm-manager.glade.h:12
 msgid "Network traffic"
 msgstr "Network రద్దీ"
 
@@ -376,7 +592,7 @@ msgstr "కాపీ హక్కు (C) 2006 Red Hat Inc."
 msgid "Powered by libvirt"
 msgstr "లిబ్ వర్టు చేత శక్తిని పొందింది"
 
-#: tmp/vmm-about.glade.h:3 tmp/vmm-manager.glade.h:18
+#: tmp/vmm-about.glade.h:3 tmp/vmm-manager.glade.h:19
 msgid "Virtual Machine Manager"
 msgstr "వాస్తవిక కంప్యూటరు నిర్వహణాధికారి"
 
@@ -388,39 +604,219 @@ msgstr "http://virt-manager.et.redhat.com/"
 msgid "translator-credits"
 msgstr "అనువాదకుని-క్రెడిట్లు"
 
-#: tmp/vmm-add-virtual-nic.glade.h:1
-msgid "00:16:3e:"
-msgstr "00:16:3e:"
+#: tmp/vmm-add-hardware.glade.h:1 tmp/vmm-create.glade.h:3
+#: tmp/vmm-create-net.glade.h:2
+msgid "/xen/demo.img"
+msgstr "/xen/demo.img"
 
-#: tmp/vmm-add-virtual-nic.glade.h:2
-msgid ":"
-msgstr ":"
+#: tmp/vmm-add-hardware.glade.h:2 tmp/vmm-create.glade.h:8
+#: tmp/vmm-create-net.glade.h:9
+msgid "5 GB"
+msgstr "5 GB"
 
-#: tmp/vmm-add-virtual-nic.glade.h:3
+#: tmp/vmm-add-hardware.glade.h:3 tmp/vmm-create.glade.h:15
+msgid "<b>Network</b>"
+msgstr "<b>నెట్వర్కు</b>"
+
+#: tmp/vmm-add-hardware.glade.h:4 tmp/vmm-create.glade.h:16
+msgid "<b>Storage</b>"
+msgstr "<b>నిల్వ</b>"
+
+#: tmp/vmm-add-hardware.glade.h:5 tmp/vmm-create.glade.h:19
+msgid "<small><b>Example:</b> /dev/hdc2</small>"
+msgstr "<small><b>ఉదాహరణ:</b> /dev/hdc2</small>"
+
+#: tmp/vmm-add-hardware.glade.h:6 tmp/vmm-create.glade.h:24
 msgid ""
-"<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
-"letters A-F"
-msgstr "<b>సూచన:</b> hex digitsకి ఆమోదకరమైన విలువలు సంఖ్యలు 0-9 మరియూ అక్షరాలు A-F"
+"<small><b>Tip:</b> Choose this option if your host is disconnected, "
+"connected via wireless, or dynamically configured with NetworkManager.</"
+"small>"
+msgstr ""
 
-#: tmp/vmm-add-virtual-nic.glade.h:4
-msgid "Add Virtual NIC"
-msgstr "వాస్తవిక NICను కలుపు"
+#: tmp/vmm-add-hardware.glade.h:7 tmp/vmm-create.glade.h:25
+msgid ""
+"<small><b>Tip:</b> Choose this option if your host is statically connected "
+"to wired ethernet, to gain the ability to migrate the virtual system.</small>"
+msgstr ""
 
-#: tmp/vmm-add-virtual-nic.glade.h:5
-msgid "Add virtual NIC with:"
-msgstr "వాస్తవిక NICని దీనితో కలుపు:"
+#: tmp/vmm-add-hardware.glade.h:8 tmp/vmm-create.glade.h:28
+msgid ""
+"<small><b>Warning:</b> If you do not allocate the entire disk at VM "
+"creation, space will be allocated as needed while the guest is running. If "
+"sufficient free space is not available on the host, this may result in data "
+"corruption on the guest.</small>"
+msgstr ""
 
-#: tmp/vmm-add-virtual-nic.glade.h:6
-msgid "Randomly generated MAC address"
-msgstr "యదేచ్ఛగా నిష్పాదించబడిన MAC చిరునామా"
+#: tmp/vmm-add-hardware.glade.h:9
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding new "
+"virtual hardware </span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ఒక కొత్త వాస్తవిక "
+"విధానాన్ని సృష్టిస్తోంది </span>"
 
-#: tmp/vmm-add-virtual-nic.glade.h:7
-msgid "Specified MAC address:"
-msgstr "తెలుపబడిన MAC చిరునామా:"
+#: tmp/vmm-add-hardware.glade.h:10 tmp/vmm-create.glade.h:30
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
+"storage space</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">నిలవ ఖాళీని "
+"కేటాయిస్తోంది</span>"
 
-#: tmp/vmm-add-virtual-nic.glade.h:8
-msgid "mac-addr-random"
-msgstr "mac-addr-random"
+#: tmp/vmm-add-hardware.glade.h:11 tmp/vmm-create.glade.h:32
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connect to host "
+"network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">నిలవ ఖాళీని "
+"కేటాయిస్తోంది</span>"
+
+#: tmp/vmm-add-hardware.glade.h:12
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to add "
+"hardware</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">సంస్థాపనకు సిద్ధంగా "
+"ఉంది</span>"
+
+#: tmp/vmm-add-hardware.glade.h:13
+msgid "Add new virtual hardware"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:14 tmp/vmm-create.glade.h:38
+msgid "Allocate entire virtual disk now?"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:15 tmp/vmm-create.glade.h:39
+msgid "Browse..."
+msgstr "బ్రౌజు..."
+
+#: tmp/vmm-add-hardware.glade.h:16 tmp/vmm-create.glade.h:42
+#: tmp/vmm-create-net.glade.h:25
+msgid "Complete"
+msgstr "పూర్తి"
+
+#: tmp/vmm-add-hardware.glade.h:17 tmp/vmm-create.glade.h:43
+msgid "Connection type:"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:18 tmp/vmm-create.glade.h:45
+#: tmp/vmm-details.glade.h:22
+msgid "Disk"
+msgstr "డిస్కు"
+
+#: tmp/vmm-add-hardware.glade.h:19 tmp/vmm-create.glade.h:46
+#, fuzzy
+msgid "Disk image:"
+msgstr "డిస్కు వాడుక:"
+
+#: tmp/vmm-add-hardware.glade.h:20 tmp/vmm-create.glade.h:47
+#, fuzzy
+msgid "Disk size:"
+msgstr "డిస్కు వాడుక:"
+
+#: tmp/vmm-add-hardware.glade.h:21 tmp/vmm-create.glade.h:51
+msgid "File _Location:"
+msgstr "ఫైలు స్థానం: (_L)"
+
+#: tmp/vmm-add-hardware.glade.h:22 tmp/vmm-create.glade.h:52
+msgid "File _Size:"
+msgstr "ఫైలు పరిమాణం:"
+
+#: tmp/vmm-add-hardware.glade.h:23
+#, fuzzy
+msgid "Hardware type:"
+msgstr "హార్డువేరు"
+
+#: tmp/vmm-add-hardware.glade.h:24 tmp/vmm-create.glade.h:57
+#: tmp/vmm-create-net.glade.h:36
+msgid "Intro"
+msgstr "Intro"
+
+#: tmp/vmm-add-hardware.glade.h:25 tmp/vmm-create.glade.h:63
+#: tmp/vmm-details.glade.h:28
+msgid "MB"
+msgstr "MB"
+
+#: tmp/vmm-add-hardware.glade.h:26 tmp/vmm-create.glade.h:67
+#: tmp/vmm-details.glade.h:33
+msgid "Network"
+msgstr "నెట్వర్కు"
+
+#: tmp/vmm-add-hardware.glade.h:27 tmp/vmm-create.glade.h:68
+msgid "Normal Disk _Partition:"
+msgstr "సాధారణ డిస్కు విభజన:"
+
+#: tmp/vmm-add-hardware.glade.h:28 tmp/vmm-create.glade.h:73
+msgid "P_artition:"
+msgstr "విభజన:"
+
+#: tmp/vmm-add-hardware.glade.h:29
+#, fuzzy
+msgid ""
+"Please indicate how you'd like to assign space on this physical host system "
+"for your new virtual storage device."
+msgstr ""
+"Please indicate how you'd like to assign space on this physical host system "
+"for your new virtual system. This space will be used to install the virtual "
+"system's operating system."
+
+#: tmp/vmm-add-hardware.glade.h:30
+msgid ""
+"Please indicate how you'd like to connect your new virtual network device to "
+"the host network."
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:31 tmp/vmm-create.glade.h:82
+msgid "Shared Physical Device"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:32 tmp/vmm-create.glade.h:83
+msgid "Simple F_ile:"
+msgstr "సాధారణ ఫైలు:"
+
+#: tmp/vmm-add-hardware.glade.h:33 tmp/vmm-create.glade.h:85
+msgid "Target:"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:34
+#, fuzzy
+msgid ""
+"This assistant will guide you through adding a new piece of virtual "
+"hardware. First select what type of hardware you wish to add:"
+msgstr ""
+"ఈ సహాయం మీకు కొత్త వాస్తవిక విధానాన్ని సృష్టించటానికి సహకరిస్తుంది. మీరి సృష్టించదలచిన వాస్తవిక విధానాల "
+"సమాచారం కోసం అడగండి, కిందివాటి వంటివి:"
+
+#: tmp/vmm-add-hardware.glade.h:35 tmp/vmm-create.glade.h:99
+msgid "_Device:"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:36 tmp/vmm-create.glade.h:100
+#: tmp/vmm-create-net.glade.h:57
+msgid "_Finish"
+msgstr "ముగించు (_F)"
+
+#: tmp/vmm-add-hardware.glade.h:37 tmp/vmm-create.glade.h:102
+#, fuzzy
+msgid "_Network:"
+msgstr "నెట్వర్కు"
+
+#: tmp/vmm-add-hardware.glade.h:38 tmp/vmm-create.glade.h:105
+msgid "_Shared physical device"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:39 tmp/vmm-create.glade.h:107
+#, fuzzy
+msgid "_Virtual network"
+msgstr "వాస్తవిక కంప్యూటరి (_M)"
+
+#: tmp/vmm-add-hardware.glade.h:40 tmp/vmm-create.glade.h:109
+msgid "eth0"
+msgstr ""
 
 #: tmp/vmm-console.glade.h:1
 msgid "<b>The console is currently unavailable</b>"
@@ -438,15 +834,15 @@ msgstr "అవేశం"
 msgid "Password:"
 msgstr "అనుమతిపదం:"
 
-#: tmp/vmm-console.glade.h:5 tmp/vmm-details.glade.h:34
+#: tmp/vmm-console.glade.h:5 tmp/vmm-details.glade.h:36
 msgid "Pause"
 msgstr "Pause"
 
-#: tmp/vmm-console.glade.h:6 tmp/vmm-details.glade.h:36
+#: tmp/vmm-console.glade.h:6 tmp/vmm-details.glade.h:38
 msgid "Run"
 msgstr "ఉపయోగించు"
 
-#: tmp/vmm-console.glade.h:7 tmp/vmm-details.glade.h:37
+#: tmp/vmm-console.glade.h:7 tmp/vmm-details.glade.h:39
 #, fuzzy
 msgid "S_hutdown"
 msgstr "మూయి"
@@ -459,7 +855,7 @@ msgstr "మీ కీరింగులో ఈ అనుమతిపదాన్
 msgid "Screenshot"
 msgstr "స్కీన్ షాట్"
 
-#: tmp/vmm-console.glade.h:11 tmp/vmm-details.glade.h:41
+#: tmp/vmm-console.glade.h:11 tmp/vmm-details.glade.h:48
 msgid "Toolbar"
 msgstr "టూల్ బారు"
 
@@ -475,11 +871,11 @@ msgstr "VNC"
 msgid "Virtual Machine Console"
 msgstr "వాస్తవిక కంప్యూటరు కన్సోలు"
 
-#: tmp/vmm-console.glade.h:15 tmp/vmm-details.glade.h:46
+#: tmp/vmm-console.glade.h:15 tmp/vmm-details.glade.h:53
 msgid "Virtual _Machine"
 msgstr "వాస్తవిక కంప్యూటరి (_M)"
 
-#: tmp/vmm-console.glade.h:16 tmp/vmm-details.glade.h:47
+#: tmp/vmm-console.glade.h:16 tmp/vmm-details.glade.h:54
 msgid "_Destroy"
 msgstr ""
 
@@ -491,24 +887,24 @@ msgstr "వివరాలు (_D)"
 msgid "_FullScreen"
 msgstr "పూర్తిస్క్రీను (_F)"
 
-#: tmp/vmm-console.glade.h:19 tmp/vmm-details.glade.h:49
-#: tmp/vmm-manager.glade.h:21
+#: tmp/vmm-console.glade.h:19 tmp/vmm-details.glade.h:56
+#: tmp/vmm-host.glade.h:35 tmp/vmm-manager.glade.h:22
 msgid "_Help"
 msgstr "సహాయం (_H)"
 
-#: tmp/vmm-console.glade.h:20 tmp/vmm-details.glade.h:50
+#: tmp/vmm-console.glade.h:20 tmp/vmm-details.glade.h:57
 msgid "_Pause"
 msgstr "ఖాళీ"
 
-#: tmp/vmm-console.glade.h:21 tmp/vmm-details.glade.h:51
+#: tmp/vmm-console.glade.h:21 tmp/vmm-details.glade.h:58
 msgid "_Run"
 msgstr "ఉపయోగించు"
 
-#: tmp/vmm-console.glade.h:22 tmp/vmm-details.glade.h:52
+#: tmp/vmm-console.glade.h:22 tmp/vmm-details.glade.h:59
 msgid "_Save"
 msgstr "భద్రపరువు (_S)"
 
-#: tmp/vmm-console.glade.h:23 tmp/vmm-details.glade.h:53
+#: tmp/vmm-console.glade.h:23 tmp/vmm-details.glade.h:60
 msgid "_Serial Console"
 msgstr "క్రమ కన్సోలు (_S)"
 
@@ -516,124 +912,82 @@ msgstr "క్రమ కన్సోలు (_S)"
 msgid "_Take Screenshot"
 msgstr "స్క్రీన్ షాటును తీసుకో (_T)"
 
-#: tmp/vmm-console.glade.h:25 tmp/vmm-details.glade.h:54
-#: tmp/vmm-manager.glade.h:22
+#: tmp/vmm-console.glade.h:25 tmp/vmm-details.glade.h:61
+#: tmp/vmm-manager.glade.h:23
 msgid "_View"
 msgstr "దృశ్యం"
 
-#: tmp/vmm-create.glade.h:1
+#: tmp/vmm-create.glade.h:1 tmp/vmm-create-net.glade.h:1
+#, fuzzy
+msgid "\t"
+msgstr "5\t"
+
+#: tmp/vmm-create.glade.h:2
 msgid " "
 msgstr " "
 
-#: tmp/vmm-create.glade.h:2
-msgid "/xen/demo.img"
-msgstr "/xen/demo.img"
-
-#: tmp/vmm-create.glade.h:3 tmp/vmm-details.glade.h:4
+#: tmp/vmm-create.glade.h:4 tmp/vmm-details.glade.h:4
 msgid "2 GB"
 msgstr "2 GB"
 
-#: tmp/vmm-create.glade.h:4
+#: tmp/vmm-create.glade.h:5
 msgid "256\t"
 msgstr "256\t"
 
-#: tmp/vmm-create.glade.h:5
+#: tmp/vmm-create.glade.h:6
 msgid "400 MB"
 msgstr "400 MB"
 
-#: tmp/vmm-create.glade.h:6
+#: tmp/vmm-create.glade.h:7
 msgid "5\t"
 msgstr "5\t"
 
-#: tmp/vmm-create.glade.h:7
-msgid "5 GB"
-msgstr "5 GB"
-
-#: tmp/vmm-create.glade.h:8
+#: tmp/vmm-create.glade.h:9
 msgid "500 MB"
 msgstr "500 MB"
 
-#: tmp/vmm-create.glade.h:9
+#: tmp/vmm-create.glade.h:10
 msgid "<b>CPUs:</b>"
 msgstr "<b>CPUs:</b>"
 
-#: tmp/vmm-create.glade.h:10
-msgid "<b>Disk image:</b>"
-msgstr "<b>డిస్కు చిత్రం:</b>"
-
 #: tmp/vmm-create.glade.h:11
-msgid "<b>Disk size:</b>"
-msgstr "<b>డిస్కు సైజు:</b>"
-
-#: tmp/vmm-create.glade.h:12
 msgid "<b>Example:</b> system1"
 msgstr "<b>ఉదాహరణ:</b> system1"
 
-#: tmp/vmm-create.glade.h:13
-msgid "<b>Initial memory:</b>"
+#: tmp/vmm-create.glade.h:12
+#, fuzzy
+msgid "<b>Install media</b>"
 msgstr "<b>మెమోరీని సంస్థాపించు:</b>"
 
-#: tmp/vmm-create.glade.h:14
-msgid "<b>Installation source:</b>"
-msgstr "<b>సంస్థాపక ఆకరం:</b>"
-
-#: tmp/vmm-create.glade.h:15
-msgid "<b>Kickstart source:</b>"
-msgstr "<b>Kickstart ఆకరం:</b>"
-
-#: tmp/vmm-create.glade.h:16
-msgid "<b>Machine name:</b>"
-msgstr "<b>కంప్యూటరు పేరు:</b>"
-
-#: tmp/vmm-create.glade.h:17
-msgid "<b>Maximum memory:</b>"
-msgstr "<b>గరిష్ట మెమోరీ:</b>"
-
-#: tmp/vmm-create.glade.h:18
+#: tmp/vmm-create.glade.h:13
 msgid "<b>Memory:</b>"
 msgstr "<b>మెమోరీ:</b>"
 
-#: tmp/vmm-create.glade.h:19
+#: tmp/vmm-create.glade.h:14
 msgid "<b>Memory</b> and <b>CPU</b> allocation"
 msgstr "<b>మెమోరీ</b> మరియూ <b>CPU</b> కేటాయింపు"
 
-#: tmp/vmm-create.glade.h:20
-msgid "<b>Operating System:</b>"
-msgstr ""
-
-#: tmp/vmm-create.glade.h:21
+#: tmp/vmm-create.glade.h:17
 msgid ""
 "<b>Storage</b> details - which disk partitions or files the system should use"
 msgstr "<b>నిల్వ</b> వివరాలు - కంప్యూటరు ఉపయోగించే డిస్కు లేదా ఫైలు విభజనల వివరాలు"
 
-#: tmp/vmm-create.glade.h:22
-msgid "<b>Summary:</b>"
+#: tmp/vmm-create.glade.h:18 tmp/vmm-create-net.glade.h:15
+#, fuzzy
+msgid "<b>Summary</b>"
 msgstr "<b>సంక్షిప్తం:</b>"
 
-#: tmp/vmm-create.glade.h:23
-msgid "<b>Virtual CPUs:</b>"
-msgstr "<b>వాస్తవిక CPUలు:</b>"
-
-#: tmp/vmm-create.glade.h:24
-#, fuzzy
-msgid "<b>Virtualization method:</b>"
-msgstr "rఉ"
-
-#: tmp/vmm-create.glade.h:25
-msgid "<small><b>Example:</b> /dev/hdc2</small>"
-msgstr "<small><b>ఉదాహరణ:</b> /dev/hdc2</small>"
-
-#: tmp/vmm-create.glade.h:26
+#: tmp/vmm-create.glade.h:20
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 msgstr "<small><b>ఉదాహరణ:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 
-#: tmp/vmm-create.glade.h:27
+#: tmp/vmm-create.glade.h:21
 msgid ""
 "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
 msgstr ""
 "<small><b>ఉదాహరణ:</b> http://servername.example.com/distro/i386/tree</small>"
 
-#: tmp/vmm-create.glade.h:28
+#: tmp/vmm-create.glade.h:22
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
@@ -641,7 +995,7 @@ msgstr ""
 "<small><b>సూచన:</b> కంప్యూటరులోని ఆతిధేయి CPU(లు) పూర్తి వాస్తవీకరణకు మద్దతును కలిగిలేవు.</"
 "small>"
 
-#: tmp/vmm-create.glade.h:29
+#: tmp/vmm-create.glade.h:23
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
@@ -649,7 +1003,7 @@ msgstr ""
 "<small><b>సూచన:</b> ఈకంప్యూటరులోని ఆతిధేయ CPU(లు) మద్దతు పూర్తి వాస్తవీకరణ కలది, కానీ ఇది "
 "BIOS చేత సాధ్యం కాదు.</small>"
 
-#: tmp/vmm-create.glade.h:30
+#: tmp/vmm-create.glade.h:26
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
@@ -658,7 +1012,7 @@ msgstr ""
 "<small><b>సూచన:</b> మంచి క్రియాశీలత కోసం, ఆతిధేయ కంప్యూటరులో వాస్తవిక CPUల సంఖ్య తార్కిక CPUల "
 "సంఖ్యకంటే తక్కువ (లేదా సమానం)గా ఉండాలి.</small>"
 
-#: tmp/vmm-create.glade.h:31
+#: tmp/vmm-create.glade.h:27
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
@@ -667,15 +1021,7 @@ msgstr ""
 "<small><b>సూచన:</b> మీరు అదనపు నిల్వను కలపవచ్చు, నెట్వర్కు-మరల్పు నిల్వలతో సహా, అది "
 "సృష్టించబడిన తరువాత అదే సాధనాలను ఉపయోగించండి మీరు భౌతిక కంప్యూటరులో ఉంటారు.</small>"
 
-#: tmp/vmm-create.glade.h:32
-msgid ""
-"<small><b>Warning:</b> If you do not allocate the entire disk at VM "
-"creation, space will be allocated as needed while the guest is running. If "
-"sufficient free space is not available on the host, this may result in data "
-"corruption on the guest.</small>"
-msgstr ""
-
-#: tmp/vmm-create.glade.h:33
+#: tmp/vmm-create.glade.h:29
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocate memory "
 "and CPU</span>"
@@ -683,15 +1029,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">మెమోరీ మరియూ CPUలను "
 "కేటాయించు</span>"
 
-#: tmp/vmm-create.glade.h:34
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
-"storage space</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">నిలవ ఖాళీని "
-"కేటాయిస్తోంది</span>"
-
-#: tmp/vmm-create.glade.h:35
+#: tmp/vmm-create.glade.h:31
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing a "
 "virtualization method</span>"
@@ -699,7 +1037,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ఒక వాస్తవిక వుధానాన్ని "
 "ఎన్నుకుంటోంది</span>"
 
-#: tmp/vmm-create.glade.h:36
+#: tmp/vmm-create.glade.h:33
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual system </span>"
@@ -707,7 +1045,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ఒక కొత్త వాస్తవిక "
 "విధానాన్ని సృష్టిస్తోంది </span>"
 
-#: tmp/vmm-create.glade.h:37
+#: tmp/vmm-create.glade.h:34
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation media</span>"
@@ -715,7 +1053,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">సంస్థాపక మాధ్యమాన్ని "
 "ఉంచుతోంది</span>"
 
-#: tmp/vmm-create.glade.h:38
+#: tmp/vmm-create.glade.h:35
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
@@ -723,7 +1061,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">మీ వాస్తవిక "
 "కంప్యూటరుకు పేరునిస్తోంది </span>"
 
-#: tmp/vmm-create.glade.h:39
+#: tmp/vmm-create.glade.h:36
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to begin "
 "installation</span>"
@@ -731,37 +1069,21 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">సంస్థాపనకు సిద్ధంగా "
 "ఉంది</span>"
 
-#: tmp/vmm-create.glade.h:40
+#: tmp/vmm-create.glade.h:37
 msgid "A <b>name</b> for your new virtual system"
 msgstr "ఒక<b>పేరు</b> మీ కొత్త వాస్తవిక కంప్యూటరుకోసం"
 
-#: tmp/vmm-create.glade.h:41
-msgid "Allocate entire virtual disk now?"
-msgstr ""
-
-#: tmp/vmm-create.glade.h:42
-msgid "Browse..."
-msgstr "బ్రౌజు..."
-
-#: tmp/vmm-create.glade.h:43
+#: tmp/vmm-create.glade.h:40
 msgid "CPU architecture:"
 msgstr ""
 
-#: tmp/vmm-create.glade.h:44
+#: tmp/vmm-create.glade.h:41
 msgid "CPU/memory"
 msgstr "CPU/మెమోరీ"
 
-#: tmp/vmm-create.glade.h:45
-msgid "Complete"
-msgstr "పూర్తి"
-
-#: tmp/vmm-create.glade.h:46
+#: tmp/vmm-create.glade.h:44
 msgid "Create a new virtual system"
 msgstr "కొత్త వాస్తవిక కంప్యూటరును సృష్టించు"
-
-#: tmp/vmm-create.glade.h:47 tmp/vmm-details.glade.h:21
-msgid "Disk"
-msgstr "డిస్కు"
 
 #: tmp/vmm-create.glade.h:48
 msgid "Enable kernel / hardware acceleration"
@@ -775,42 +1097,45 @@ msgstr "FV సంస్థాపన"
 msgid "F_ully Virtualized:"
 msgstr "పూర్తిగా వాస్తవీకరణచెందింది:"
 
-#: tmp/vmm-create.glade.h:51
-msgid "File _Location:"
-msgstr "ఫైలు స్థానం: (_L)"
-
-#: tmp/vmm-create.glade.h:52
-msgid "File _Size:"
-msgstr "ఫైలు పరిమాణం:"
-
 #: tmp/vmm-create.glade.h:53
 msgid "ISO _Location:"
 msgstr "ISO స్థానం:"
 
 #: tmp/vmm-create.glade.h:54
+#, fuzzy
+msgid "Initial memory:"
+msgstr "<b>మెమోరీని సంస్థాపించు:</b>"
+
+#: tmp/vmm-create.glade.h:55
 msgid "Install Media _URL:"
 msgstr "మాధ్యమ URLను సంస్థాపించు:"
 
-#: tmp/vmm-create.glade.h:55
-msgid "Intro"
-msgstr "Intro"
-
 #: tmp/vmm-create.glade.h:56
-msgid ""
-"Involves hardware simulation, allowing for a greater range of operating "
-"systems (does not require OS modification). Slower than paravirtualized "
-"systems."
-msgstr ""
-"Involves hardware simulation, allowing for a greater range of operating "
-"systems (does not require OS modification). Slower than paravirtualized "
-"systems."
-
-#: tmp/vmm-create.glade.h:57
-msgid "Kickstart U_RL:"
-msgstr "కిక్ స్టార్టు URL:"
+#, fuzzy
+msgid "Installation source:"
+msgstr "<b>సంస్థాపక ఆకరం:</b>"
 
 #: tmp/vmm-create.glade.h:58
 msgid ""
+"Involves hardware simulation, allowing for a greater range of operating "
+"systems (does not require OS modification). Slower than paravirtualized "
+"systems."
+msgstr ""
+"Involves hardware simulation, allowing for a greater range of operating "
+"systems (does not require OS modification). Slower than paravirtualized "
+"systems."
+
+#: tmp/vmm-create.glade.h:59
+msgid "Kickstart U_RL:"
+msgstr "కిక్ స్టార్టు URL:"
+
+#: tmp/vmm-create.glade.h:60
+#, fuzzy
+msgid "Kickstart source:"
+msgstr "<b>Kickstart ఆకరం:</b>"
+
+#: tmp/vmm-create.glade.h:61
+msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
 "Better performance than fully virtualized systems."
@@ -819,45 +1144,47 @@ msgstr ""
 "because the OS must be specially modified to support paravirtualization. "
 "Better performance than fully virtualized systems."
 
-#: tmp/vmm-create.glade.h:59
+#: tmp/vmm-create.glade.h:62
 msgid "Logical host CPUs:"
 msgstr "తార్కిక ఆతిధేయ CPUలు:"
 
-#: tmp/vmm-create.glade.h:60 tmp/vmm-details.glade.h:26
-msgid "MB"
-msgstr "MB"
+#: tmp/vmm-create.glade.h:64
+#, fuzzy
+msgid "Machine name:"
+msgstr "<b>కంప్యూటరు పేరు:</b>"
 
-#: tmp/vmm-create.glade.h:62
-msgid "Normal Disk _Partition:"
-msgstr "సాధారణ డిస్కు విభజన:"
+#: tmp/vmm-create.glade.h:65
+#, fuzzy
+msgid "Maximum memory:"
+msgstr "<b>గరిష్ట మెమోరీ:</b>"
 
-#: tmp/vmm-create.glade.h:63
+#: tmp/vmm-create.glade.h:69
 #, fuzzy
 msgid "OS _Type:"
 msgstr "రకం"
 
-#: tmp/vmm-create.glade.h:64
+#: tmp/vmm-create.glade.h:70
 msgid "OS _Variant:"
 msgstr ""
 
-#: tmp/vmm-create.glade.h:65
+#: tmp/vmm-create.glade.h:71
+msgid "Operating System:"
+msgstr ""
+
+#: tmp/vmm-create.glade.h:72
 msgid "PVinstall"
 msgstr "PVసంస్థాపన"
 
-#: tmp/vmm-create.glade.h:66
-msgid "P_artition:"
-msgstr "విభజన:"
-
-#: tmp/vmm-create.glade.h:67
+#: tmp/vmm-create.glade.h:74
 msgid "Please choose a name for your virtual system:"
 msgstr "దయచేసి మీ వాస్తవిక కంప్యూటరుకు ఒక పేరును ఎన్నుకోండి:"
 
-#: tmp/vmm-create.glade.h:68
+#: tmp/vmm-create.glade.h:75
 msgid ""
 "Please choose the type of guest operating system you will be installing:"
 msgstr ""
 
-#: tmp/vmm-create.glade.h:69
+#: tmp/vmm-create.glade.h:76
 #, fuzzy
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
@@ -869,11 +1196,11 @@ msgstr ""
 "maximum amount of memory the VM should be able to use, and optionally a "
 "lower amount to grab on startup."
 
-#: tmp/vmm-create.glade.h:70
+#: tmp/vmm-create.glade.h:77
 msgid "Please enter the number of virtual CPUs this VM should start up with."
 msgstr "Please enter the number of virtual CPUs this VM should start up with."
 
-#: tmp/vmm-create.glade.h:71
+#: tmp/vmm-create.glade.h:78
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
@@ -883,7 +1210,13 @@ msgstr ""
 "for your new virtual system. This space will be used to install the virtual "
 "system's operating system."
 
-#: tmp/vmm-create.glade.h:72
+#: tmp/vmm-create.glade.h:79
+msgid ""
+"Please indicate how you'd like to connect your new virtual system to the "
+"host network."
+msgstr ""
+
+#: tmp/vmm-create.glade.h:80
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
@@ -892,7 +1225,7 @@ msgstr ""
 "దయచేసి మీరు ఈ <b>పూర్తిగా వాస్తవీకరించబడిన</b> వాస్తవిక కంప్యూటరులో సంస్థాపించదలచిన ఆపరేటింగు "
 "విధానంకోసం సంస్థాపక మాధ్యమం ఎక్కడ అందుబాటులో ఉందో సూచించండి:"
 
-#: tmp/vmm-create.glade.h:73
+#: tmp/vmm-create.glade.h:81
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
@@ -903,30 +1236,17 @@ msgstr ""
 "విధానంకోసం సంస్థాపక మాధ్యమం ఎక్కడ అందుబాటులో ఉందో సూచించండి. ఐచ్ఛికంగా మీరు మీ URLను మీ "
 "కంప్యూటరు కోసం సమకూర్చవచ్చు:"
 
-#: tmp/vmm-create.glade.h:74
-#, fuzzy
-msgid ""
-"Press finish to create a new virtual machine with\n"
-"this configuration."
-msgstr ""
-"కొత్త వాస్తవిక కంప్యూటరును \n"
-"ఈ ఆకృతీకరణ & వాస్తవిక కన్సోల్ ప్రదర్శనతో ముగించండి."
-
-#: tmp/vmm-create.glade.h:76
-msgid "Simple F_ile:"
-msgstr "సాధారణ ఫైలు:"
-
-#: tmp/vmm-create.glade.h:77
+#: tmp/vmm-create.glade.h:84
 msgid "System _Name:"
 msgstr "కంప్యూటరు పేరు:"
 
-#: tmp/vmm-create.glade.h:78
+#: tmp/vmm-create.glade.h:86
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
 msgstr "ఈ <b>ఫైళ్ల</b> స్థానం వాస్తవిక కంప్యూటరులో ఆపరేటింగు విధానాన్ని సంస్థాపించటానికి అవసరం"
 
-#: tmp/vmm-create.glade.h:79
+#: tmp/vmm-create.glade.h:87
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
@@ -935,75 +1255,81 @@ msgstr ""
 "ఈ సహాయం మీకు కొత్త వాస్తవిక విధానాన్ని సృష్టించటానికి సహకరిస్తుంది. మీరి సృష్టించదలచిన వాస్తవిక విధానాల "
 "సమాచారం కోసం అడగండి, కిందివాటి వంటివి:"
 
-#: tmp/vmm-create.glade.h:80 tmp/vmm-details.glade.h:43
+#: tmp/vmm-create.glade.h:88 tmp/vmm-details.glade.h:50
 msgid "Total memory on host machine:"
 msgstr "ఆతిధేయ కంప్యూటరులోని మొత్తం ఖాళీ:"
 
-#: tmp/vmm-create.glade.h:81
+#: tmp/vmm-create.glade.h:89
 msgid "Type"
 msgstr "రకం"
 
-#: tmp/vmm-create.glade.h:82
+#: tmp/vmm-create.glade.h:90
 #, fuzzy
 msgid "VM _Max Memory (MB):"
 msgstr "VM _Max మెమోరీ:"
 
-#: tmp/vmm-create.glade.h:83
+#: tmp/vmm-create.glade.h:91
 #, fuzzy
 msgid "VM _Startup Memory (MB):"
 msgstr "VM ప్రారంభపు మెమోరో: (_S)"
 
-#: tmp/vmm-create.glade.h:84
+#: tmp/vmm-create.glade.h:92
 msgid "VMS"
 msgstr ""
 
-#: tmp/vmm-create.glade.h:85
+#: tmp/vmm-create.glade.h:93
+#, fuzzy
+msgid "Virtual CPUs:"
+msgstr "వాస్తవ CPUలు"
+
+#: tmp/vmm-create.glade.h:94
+#, fuzzy
+msgid "Virtualization method:"
+msgstr "rఉ"
+
+#: tmp/vmm-create.glade.h:95
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr "కంప్యూరు <b>పూర్తి వాస్తవీకరణ కలదా</b> లేదా <b>పాక్షిక-వాస్తవీకరణకలదా</b>"
 
-#: tmp/vmm-create.glade.h:86
+#: tmp/vmm-create.glade.h:96
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr "మీరు మీ కొత్త విధానానికి వాస్తవిక విధానాన్ని ఎన్నుకోవలసి ఉంది:"
 
-#: tmp/vmm-create.glade.h:87
+#: tmp/vmm-create.glade.h:97
 msgid "_Browse..."
 msgstr "బ్రౌజు... (_B)"
 
-#: tmp/vmm-create.glade.h:88
+#: tmp/vmm-create.glade.h:98
 msgid "_CD-ROM or DVD:"
 msgstr "CD-ROM లేదా DVD: (_C)"
 
-#: tmp/vmm-create.glade.h:89
-msgid "_Finish"
-msgstr "ముగించు (_F)"
-
-#: tmp/vmm-create.glade.h:90
+#: tmp/vmm-create.glade.h:101
 msgid "_ISO Image Location:"
 msgstr "ISO చిత్ర స్థానం: (_I)"
 
-#: tmp/vmm-create.glade.h:91
+#: tmp/vmm-create.glade.h:103
 msgid "_Paravirtualized:"
 msgstr "బహుళ వాస్తవీకరణ: (_P)"
 
-#: tmp/vmm-create.glade.h:92
+#: tmp/vmm-create.glade.h:104
 msgid "_Path to install media:"
 msgstr "మాధ్యమాన్ని సంస్థాపించటానికి దారి:"
 
-#: tmp/vmm-create.glade.h:93
+#: tmp/vmm-create.glade.h:106
 msgid "_VCPUs:"
 msgstr "VCPUలు: (_V)"
 
-#: tmp/vmm-create.glade.h:94
+#: tmp/vmm-create.glade.h:108 tmp/vmm-create-net.glade.h:58
 msgid "demo"
 msgstr "డెమో"
 
-#: tmp/vmm-create.glade.h:95
+#: tmp/vmm-create.glade.h:110
 msgid "http://"
 msgstr "http://"
 
-#: tmp/vmm-create.glade.h:96
+#: tmp/vmm-create.glade.h:111
 msgid ""
 "i686\n"
 "x86_64\n"
@@ -1013,9 +1339,258 @@ msgid ""
 "mipsel"
 msgstr ""
 
-#: tmp/vmm-create.glade.h:102
+#: tmp/vmm-create.glade.h:117
 msgid "para"
 msgstr "పేరా"
+
+#: tmp/vmm-create-net.glade.h:3
+msgid "192.168.1.1"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:4
+msgid "192.168.1.255"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:5
+msgid "192.168.10.0/24"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:6
+msgid "192.168.10.254"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:7
+msgid "255.255.255.0"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:8
+#, fuzzy
+msgid "256"
+msgstr "256\t"
+
+#: tmp/vmm-create-net.glade.h:10
+#, fuzzy
+msgid "<b>DHCP</b>"
+msgstr "<b>CPUs</b>"
+
+#: tmp/vmm-create-net.glade.h:11
+#, fuzzy
+msgid "<b>Example:</b> network1"
+msgstr "<b>ఉదాహరణ:</b> system1"
+
+#: tmp/vmm-create-net.glade.h:12
+#, fuzzy
+msgid "<b>Forwarding</b>"
+msgstr "<b>నిల్వ</b>"
+
+#: tmp/vmm-create-net.glade.h:13
+msgid ""
+"<b>Hint:</b> The network should be choosen from one of the IPv4 private "
+"address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:14
+#, fuzzy
+msgid "<b>IPv4 network</b>"
+msgstr "<b>నెట్వర్కు</b>"
+
+#: tmp/vmm-create-net.glade.h:16
+msgid ""
+"<b>Tip:</b> Unless you wish to reserve some addresses to allow static "
+"network configuration in virtual machines, these parameters can be left with "
+"their default values."
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:17
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing an "
+"IPv4 address space</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">నిలవ ఖాళీని "
+"కేటాయిస్తోంది</span>"
+
+#: tmp/vmm-create-net.glade.h:18
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting to "
+"physical network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">నిలవ ఖాళీని "
+"కేటాయిస్తోంది</span>"
+
+#: tmp/vmm-create-net.glade.h:19
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
+"virtual network </span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ఒక కొత్త వాస్తవిక "
+"విధానాన్ని సృష్టిస్తోంది </span>"
+
+#: tmp/vmm-create-net.glade.h:20
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
+"virtual network </span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">మీ వాస్తవిక "
+"కంప్యూటరుకు పేరునిస్తోంది </span>"
+
+#: tmp/vmm-create-net.glade.h:21
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create "
+"network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">సంస్థాపనకు సిద్ధంగా "
+"ఉంది</span>"
+
+#: tmp/vmm-create-net.glade.h:22
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Selecting the "
+"DHCP range</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">నిలవ ఖాళీని "
+"కేటాయిస్తోంది</span>"
+
+#: tmp/vmm-create-net.glade.h:23
+#, fuzzy
+msgid "A <b>name</b> for your new virtual network"
+msgstr "ఒక<b>పేరు</b> మీ కొత్త వాస్తవిక కంప్యూటరుకోసం"
+
+#: tmp/vmm-create-net.glade.h:24
+msgid "Broadcast:"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:26
+#, fuzzy
+msgid "Connectivity:"
+msgstr "అనుసంధించు (_n)"
+
+#: tmp/vmm-create-net.glade.h:27
+#, fuzzy
+msgid "Create a new virtual network"
+msgstr "కొత్త వాస్తవిక కంప్యూటరును సృష్టించు"
+
+#: tmp/vmm-create-net.glade.h:28
+msgid "DHCP"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:29
+#, fuzzy
+msgid "Desination:"
+msgstr "Destination"
+
+#: tmp/vmm-create-net.glade.h:30
+#, fuzzy
+msgid "End address:"
+msgstr "MAC చిరునామా"
+
+#: tmp/vmm-create-net.glade.h:31
+msgid "End:"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:32
+msgid "Forwarding"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:33
+msgid "Forwarding to physical network"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:34
+msgid "Gateway:"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:35
+msgid "IPv4"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:40
+msgid "Netmask:"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:41
+#, fuzzy
+msgid "Network _Name:"
+msgstr "నెట్వర్కు వాడుక:"
+
+#: tmp/vmm-create-net.glade.h:42
+#, fuzzy
+msgid "Network name:"
+msgstr "నెట్వర్కు వాడుక:"
+
+#: tmp/vmm-create-net.glade.h:43 tmp/vmm-host.glade.h:25
+#, fuzzy
+msgid "Network:"
+msgstr "నెట్వర్కు"
+
+#: tmp/vmm-create-net.glade.h:44
+#, fuzzy
+msgid "Please choose a name for your virtual network:"
+msgstr "దయచేసి మీ వాస్తవిక కంప్యూటరుకు ఒక పేరును ఎన్నుకోండి:"
+
+#: tmp/vmm-create-net.glade.h:45
+msgid ""
+"Please choose the range of addresses the DHCP server can use to allocate to "
+"guests attached to the virtual network"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:46
+msgid ""
+"Please indicate whether this virtual network should be connected to the "
+"phyiscal network."
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:48
+#, fuzzy
+msgid "Size:"
+msgstr "పరిమాణం: (_S)"
+
+#: tmp/vmm-create-net.glade.h:49
+#, fuzzy
+msgid "Start address:"
+msgstr "MAC చిరునామా"
+
+#: tmp/vmm-create-net.glade.h:50
+#, fuzzy
+msgid "Start:"
+msgstr "స్థితి:"
+
+#: tmp/vmm-create-net.glade.h:51
+msgid ""
+"The <b>address range</b> from which the <b>DHCP</b> server will allocate "
+"addresses for virtual machines"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:52
+msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:53
+#, fuzzy
+msgid ""
+"This assistant will guide you through creating a new virtual network. You "
+"will be asked for some information about the virtual network you'd like to "
+"create, such as:"
+msgstr ""
+"ఈ సహాయం మీకు కొత్త వాస్తవిక విధానాన్ని సృష్టించటానికి సహకరిస్తుంది. మీరి సృష్టించదలచిన వాస్తవిక విధానాల "
+"సమాచారం కోసం అడగండి, కిందివాటి వంటివి:"
+
+#: tmp/vmm-create-net.glade.h:54
+#, fuzzy
+msgid "Type:"
+msgstr "రకం"
+
+#: tmp/vmm-create-net.glade.h:55
+msgid "Whether to <b>forward</b> traffic to the physical network"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:56
+msgid "You will need to choose an IPv4 address space for the virtual network:"
+msgstr ""
 
 #: tmp/vmm-details.glade.h:2
 #, no-c-format
@@ -1046,7 +1621,7 @@ msgstr "8"
 msgid "80 MB of 1 GB"
 msgstr "80 MB of 1 GB"
 
-#: tmp/vmm-details.glade.h:10
+#: tmp/vmm-details.glade.h:10 tmp/vmm-host.glade.h:6
 msgid "<b>Basic details</b>"
 msgstr "<b>ప్రాధమిక వివరాలు</b>"
 
@@ -1058,27 +1633,17 @@ msgstr "<b>CPUs</b>"
 msgid "<b>Memory</b>"
 msgstr "<b>మెమోరీ</b>"
 
-#: tmp/vmm-details.glade.h:13
-msgid "<b>Network</b>"
-msgstr "<b>నెట్వర్కు</b>"
-
-#: tmp/vmm-details.glade.h:14
+#: tmp/vmm-details.glade.h:13 tmp/vmm-host.glade.h:8
 msgid "<b>Performance</b>"
 msgstr "<b>పనితనం</b>"
 
-#: tmp/vmm-details.glade.h:15
-msgid "<b>Storage</b>"
-msgstr "<b>నిల్వ</b>"
-
-#: tmp/vmm-details.glade.h:16
+#: tmp/vmm-details.glade.h:14
 msgid ""
-"<b>Tip:</b> File location paths are as seen from the physical host. Mount "
-"points are as seen from the virtual machine."
+"<b>Tip:</b> 'source' refers to information seen from the host OS, while "
+"'target' refers to information seen from the guest OS"
 msgstr ""
-"<b>సలహా:</b> ఫైలు స్థాన మార్గాలు భౌతిక ఆతిధేయాలనుండీ చూడవచ్చు. మౌంటు కేంద్రాలను వాస్తవిక "
-"కంప్యూటరునుండీ చూడవచ్చు."
 
-#: tmp/vmm-details.glade.h:17
+#: tmp/vmm-details.glade.h:15
 msgid ""
 "<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
 "than (or equal to) the number of physical CPUs on the host system."
@@ -1086,89 +1651,241 @@ msgstr ""
 "<b>సూచన:</b> మంచి క్రియాశీలతకు, ఆతిధేయ కంప్యూటరులో వాస్తవిక CPUల సంఖ్య భౌతిక CPUల సంఖ్య కంటే "
 "తక్కువ (లేదా సమానం)గా ఉండా."
 
+#: tmp/vmm-details.glade.h:16
+#, fuzzy
+msgid "<b>Virtual Disk</b>"
+msgstr "<b>వాస్తవిక CPUలు:</b>"
+
+#: tmp/vmm-details.glade.h:17
+#, fuzzy
+msgid "<b>Virtual Network Interface</b>"
+msgstr "<b>నెట్వర్కు</b>"
+
 #: tmp/vmm-details.glade.h:18
+msgid "Block"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:19 tmp/vmm-host.glade.h:11
 msgid "CPU usage:"
 msgstr "CPU వాడుక:"
 
-#: tmp/vmm-details.glade.h:19
+#: tmp/vmm-details.glade.h:20
 msgid "Change allocation:"
 msgstr "కేటాయింపును మార్చు:"
 
-#: tmp/vmm-details.glade.h:20
+#: tmp/vmm-details.glade.h:21
 msgid "Current allocation:"
 msgstr "ప్రస్తుత కేటాయింపు:"
 
-#: tmp/vmm-details.glade.h:22
+#: tmp/vmm-details.glade.h:23
 msgid "Disk usage:"
 msgstr "డిస్కు వాడుక:"
 
-#: tmp/vmm-details.glade.h:23
+#: tmp/vmm-details.glade.h:24
 msgid "Hardware"
 msgstr "హార్డువేరు"
 
-#: tmp/vmm-details.glade.h:24
+#: tmp/vmm-details.glade.h:25
 msgid "How many virtual CPUs should this machine be allocated?"
 msgstr "ఈకంప్యూటరుకు ఎన్ని వాస్తవిక CPUలు కేటాయించబడ్డాయి?"
 
-#: tmp/vmm-details.glade.h:25
+#: tmp/vmm-details.glade.h:26
 msgid "How much memory should this machine be allocated?"
 msgstr "ఈ కంప్యూటరుకు ఎంత మెమీరీ కేటాయించబడింది?"
 
 #: tmp/vmm-details.glade.h:27
+#, fuzzy
+msgid "MAC address:"
+msgstr "MAC చిరునామా"
+
+#: tmp/vmm-details.glade.h:29
 msgid "Maximum allocation:"
 msgstr "గరిష్ట కేటాయింపులు:"
 
-#: tmp/vmm-details.glade.h:28
+#: tmp/vmm-details.glade.h:30
 msgid "Memory"
 msgstr "మెమోరీ"
 
-#: tmp/vmm-details.glade.h:29
+#: tmp/vmm-details.glade.h:31 tmp/vmm-host.glade.h:21
 msgid "Memory usage:"
 msgstr "మెమోరీ వాడుక:"
 
-#: tmp/vmm-details.glade.h:30
+#: tmp/vmm-details.glade.h:32 tmp/vmm-host.glade.h:24
 msgid "Name:"
 msgstr "పేరు:"
 
-#: tmp/vmm-details.glade.h:31
-msgid "Network"
-msgstr "నెట్వర్కు"
-
-#: tmp/vmm-details.glade.h:32
+#: tmp/vmm-details.glade.h:34
 msgid "Network usage:"
 msgstr "నెట్వర్కు వాడుక:"
 
-#: tmp/vmm-details.glade.h:33
+#: tmp/vmm-details.glade.h:35 tmp/vmm-host.glade.h:26
 msgid "Overview"
 msgstr "మొత్తందృశ్యం"
 
-#: tmp/vmm-details.glade.h:35
+#: tmp/vmm-details.glade.h:37
 msgid "Processor"
 msgstr "విధానం"
 
-#: tmp/vmm-details.glade.h:38
+#: tmp/vmm-details.glade.h:40
 msgid "Shut down"
 msgstr "ముయ్యి"
 
-#: tmp/vmm-details.glade.h:40
+#: tmp/vmm-details.glade.h:42
+msgid "Source device:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:43
+msgid "Source path:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:44
+msgid "Source type:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:45
 msgid "Status:"
 msgstr "స్థితి:"
 
-#: tmp/vmm-details.glade.h:42
+#: tmp/vmm-details.glade.h:46
+msgid "Target device:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:47
+msgid "Target type:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:49
 msgid "Total CPUs on host machine:"
 msgstr "ఆతిధేయ కంప్యూటరులోని మొత్తం CPUలు:"
 
-#: tmp/vmm-details.glade.h:44
+#: tmp/vmm-details.glade.h:51 tmp/vmm-host.glade.h:31
 msgid "UUID:"
 msgstr "UUID:"
 
-#: tmp/vmm-details.glade.h:45
+#: tmp/vmm-details.glade.h:52
 msgid "Virtual Machine Details"
 msgstr "వాస్తవిక కంప్యూటరు వివరాలు"
 
-#: tmp/vmm-details.glade.h:48
+#: tmp/vmm-details.glade.h:55
 msgid "_Graphical Console"
 msgstr "చిత్ర కన్సోలు (_G)"
+
+#: tmp/vmm-details.glade.h:62
+#, fuzzy
+msgid "disk\t"
+msgstr "డిస్కు"
+
+#: tmp/vmm-host.glade.h:1
+#, fuzzy
+msgid "1.59 GB of 2.2 GB"
+msgstr "80 MB of 1 GB"
+
+#: tmp/vmm-host.glade.h:2
+#, fuzzy
+msgid "2000 MB"
+msgstr "200 MB"
+
+#: tmp/vmm-host.glade.h:3
+msgid "4"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:5
+#, no-c-format
+msgid "60%"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:7
+msgid "<b>IPv4 configuration</b>"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:9
+msgid "Architecture:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:10
+msgid "Autostart:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:12
+msgid "DHCP end:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:13
+msgid "DHCP start:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:14
+msgid "Device:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:15
+msgid "Forwarding:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:16
+#, fuzzy
+msgid "Host Details"
+msgstr "వివరాలు (_t)"
+
+#: tmp/vmm-host.glade.h:17
+#, fuzzy
+msgid "Hostname:"
+msgstr "ఆతిధేయి: (_H)"
+
+#: tmp/vmm-host.glade.h:18 tmp/vmm-open-connection.glade.h:2
+#, fuzzy
+msgid "Hypervisor:"
+msgstr "ఇతర అధిప్రతులు (_O)"
+
+#: tmp/vmm-host.glade.h:19
+#, fuzzy
+msgid "Location:"
+msgstr "ISO స్థానం:"
+
+#: tmp/vmm-host.glade.h:20
+#, fuzzy
+msgid "Logical CPUs:"
+msgstr "తార్కిక ఆతిధేయ CPUలు:"
+
+#: tmp/vmm-host.glade.h:22
+#, fuzzy
+msgid "Memory:"
+msgstr "మెమోరీ"
+
+#: tmp/vmm-host.glade.h:28
+#, fuzzy
+msgid "Start"
+msgstr "స్థితి"
+
+#: tmp/vmm-host.glade.h:29
+#, fuzzy
+msgid "State:"
+msgstr "స్థితి:"
+
+#: tmp/vmm-host.glade.h:30
+msgid "Storage Pools"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:32
+#, fuzzy
+msgid "Virtual Networks"
+msgstr "వాస్తవ CPUలు"
+
+#: tmp/vmm-host.glade.h:33
+msgid "Xen"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:34 tmp/vmm-manager.glade.h:21
+msgid "_File"
+msgstr "ఫైలు (_F)"
+
+#: tmp/vmm-host.glade.h:36
+msgid "example.com"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:37
+msgid "x86_64"
+msgstr ""
 
 #: tmp/vmm-manager.glade.h:1
 msgid ""
@@ -1193,38 +1910,39 @@ msgid "Domain ID"
 msgstr "క్షేత్ర ఐడి"
 
 #: tmp/vmm-manager.glade.h:9
+#, fuzzy
+msgid "Host details..."
+msgstr "కంప్యూటరు వివరాలు..."
+
+#: tmp/vmm-manager.glade.h:10
 msgid "Machine details..."
 msgstr "కంప్యూటరు వివరాలు..."
 
-#: tmp/vmm-manager.glade.h:12
+#: tmp/vmm-manager.glade.h:13
 msgid "New machine..."
 msgstr "కొత్త కంప్యూటరు..."
 
-#: tmp/vmm-manager.glade.h:13
+#: tmp/vmm-manager.glade.h:14
 msgid "Open connection..."
 msgstr "అనుసంధానాన్ని తెరువు..."
 
-#: tmp/vmm-manager.glade.h:14
+#: tmp/vmm-manager.glade.h:15
 msgid "Restore a saved machine from a filesystem image"
 msgstr "ఫైలువిధాన చిత్రం నుండీ భద్రపరచున కంప్యూటరును తిరిగి స్టోరుచేయండి"
 
-#: tmp/vmm-manager.glade.h:15
+#: tmp/vmm-manager.glade.h:16
 msgid "Restore saved machine..."
 msgstr "భద్రపరచబడిన కంప్యూటరును తిరిగి స్టోరుచేయి..."
 
-#: tmp/vmm-manager.glade.h:17
+#: tmp/vmm-manager.glade.h:18
 msgid "Virtual CPUs"
 msgstr "వాస్తవ CPUలు"
 
-#: tmp/vmm-manager.glade.h:19
+#: tmp/vmm-manager.glade.h:20
 msgid "_Edit"
 msgstr "కూర్చు (_E)"
 
-#: tmp/vmm-manager.glade.h:20
-msgid "_File"
-msgstr "ఫైలు (_F)"
-
-#: tmp/vmm-manager.glade.h:23
+#: tmp/vmm-manager.glade.h:24
 msgid "_View:"
 msgstr "దృశ్యం: (_V)"
 
@@ -1277,11 +1995,6 @@ msgstr "పరిమాణం: (_S)"
 #: tmp/vmm-open-connection.glade.h:1
 msgid "Co_nnect"
 msgstr "అనుసంధించు (_n)"
-
-#: tmp/vmm-open-connection.glade.h:2
-#, fuzzy
-msgid "Hypervisor:"
-msgstr "ఇతర అధిప్రతులు (_O)"
 
 #: tmp/vmm-open-connection.glade.h:3
 msgid "Open connection"
@@ -1370,6 +2083,56 @@ msgstr "మాదిరి"
 #: tmp/vmm-preferences.glade.h:15
 msgid "seconds"
 msgstr "సెకన్లు"
+
+#~ msgid "Guest Install Error"
+#~ msgstr "ఆతిధేయ సంస్థాపన దోషం"
+
+#~ msgid "00:16:3e:"
+#~ msgstr "00:16:3e:"
+
+#~ msgid ":"
+#~ msgstr ":"
+
+#~ msgid ""
+#~ "<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
+#~ "letters A-F"
+#~ msgstr "<b>సూచన:</b> hex digitsకి ఆమోదకరమైన విలువలు సంఖ్యలు 0-9 మరియూ అక్షరాలు A-F"
+
+#~ msgid "Add Virtual NIC"
+#~ msgstr "వాస్తవిక NICను కలుపు"
+
+#~ msgid "Add virtual NIC with:"
+#~ msgstr "వాస్తవిక NICని దీనితో కలుపు:"
+
+#~ msgid "Randomly generated MAC address"
+#~ msgstr "యదేచ్ఛగా నిష్పాదించబడిన MAC చిరునామా"
+
+#~ msgid "Specified MAC address:"
+#~ msgstr "తెలుపబడిన MAC చిరునామా:"
+
+#~ msgid "mac-addr-random"
+#~ msgstr "mac-addr-random"
+
+#~ msgid "<b>Disk image:</b>"
+#~ msgstr "<b>డిస్కు చిత్రం:</b>"
+
+#~ msgid "<b>Disk size:</b>"
+#~ msgstr "<b>డిస్కు సైజు:</b>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Press finish to create a new virtual machine with\n"
+#~ "this configuration."
+#~ msgstr ""
+#~ "కొత్త వాస్తవిక కంప్యూటరును \n"
+#~ "ఈ ఆకృతీకరణ & వాస్తవిక కన్సోల్ ప్రదర్శనతో ముగించండి."
+
+#~ msgid ""
+#~ "<b>Tip:</b> File location paths are as seen from the physical host. Mount "
+#~ "points are as seen from the virtual machine."
+#~ msgstr ""
+#~ "<b>సలహా:</b> ఫైలు స్థాన మార్గాలు భౌతిక ఆతిధేయాలనుండీ చూడవచ్చు. మౌంటు కేంద్రాలను వాస్తవిక "
+#~ "కంప్యూటరునుండీ చూడవచ్చు."
 
 #~ msgid ""
 #~ "<b>Too Many Virtual CPUs</b>\n"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bn_IN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-20 12:41-0400\n"
+"POT-Creation-Date: 2007-04-12 19:22-0400\n"
 "PO-Revision-Date: 2006-11-22 21:34+0530\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali India\n"
@@ -21,6 +21,132 @@ msgstr ""
 #: ../../src/virt-manager.py.in:62
 msgid "Unable to initialize GTK: "
 msgstr "GTK আরম্ভ করতে ব্যর্থ: "
+
+#: ../../src/virtManager/addhardware.py:277
+#: ../../src/virtManager/create.py:467
+msgid "Shared physical device"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:280
+#: ../../src/virtManager/create.py:470
+#, fuzzy
+msgid "Virtual network"
+msgstr "ভার্চুয়াল মেশিন (_M)"
+
+#: ../../src/virtManager/addhardware.py:283
+#: ../../src/virtManager/create.py:473
+msgid "Usermode networking"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:354
+#: ../../src/virtManager/create.py:560
+msgid "Invalid storage address"
+msgstr "সংগ্রহস্থলের ঠিকানা অবৈধ"
+
+#: ../../src/virtManager/addhardware.py:377
+msgid "Too many virtual disks"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:378
+msgid "There are no more available virtual disk device nodes"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:382
+#, fuzzy
+msgid "Creating Storage File"
+msgstr "নতুন সংগ্রহস্থল ফাইল সনাক্ত অথবা নির্মাণ করুন"
+
+#: ../../src/virtManager/addhardware.py:383
+msgid "Allocation of disk storage may take a few minutes "
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:384
+#: ../../src/virtManager/create.py:625
+#, fuzzy
+msgid "to complete."
+msgstr "সমাপ্ত"
+
+#: ../../src/virtManager/addhardware.py:406
+#: ../../src/virtManager/create.py:677
+#, python-format
+msgid "Unable to complete install: '%s'"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:411
+#: ../../src/virtManager/create.py:711
+msgid "Locate Storage Partition"
+msgstr "সংগ্রহস্থলের পার্টিশান সনাক্ত করুন"
+
+#: ../../src/virtManager/addhardware.py:417
+#: ../../src/virtManager/create.py:717
+msgid "Locate or Create New Storage File"
+msgstr "নতুন সংগ্রহস্থল ফাইল সনাক্ত অথবা নির্মাণ করুন"
+
+#: ../../src/virtManager/addhardware.py:477
+#, fuzzy
+msgid "Hardware Type Required"
+msgstr "হার্ডওয়্যার সমর্থন আবশ্যক"
+
+#: ../../src/virtManager/addhardware.py:478
+msgid "You must specify what type of hardware to add"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:484
+#: ../../src/virtManager/create.py:836
+msgid "Storage Address Required"
+msgstr "সংগ্রহস্থলের ঠিকানা আবশ্যক"
+
+#: ../../src/virtManager/addhardware.py:485
+#: ../../src/virtManager/create.py:837
+msgid ""
+"You must specify a partition or a file for storage for the guest install"
+msgstr "গেস্ট ইনস্টলেশনের জন্য সংগ্রহস্থলের ফাইল অথবা পার্টিশান উল্লেখ করা আবশ্যক।"
+
+#: ../../src/virtManager/addhardware.py:490
+#: ../../src/virtManager/create.py:842
+#, fuzzy
+msgid "Storage Address Is Directory"
+msgstr "সংগ্রহস্থলের ঠিকানা আবশ্যক"
+
+#: ../../src/virtManager/addhardware.py:491
+#: ../../src/virtManager/create.py:843
+msgid ""
+"You chose 'Simple File' storage for your storage method, but chose a "
+"directory instead of a file. Please enter a new filename or choose an "
+"existing file."
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:496
+#: ../../src/virtManager/create.py:848
+#, python-format
+msgid "Disk \"%s\" is already in use by another guest!"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:497
+#: ../../src/virtManager/create.py:849
+msgid "Do you really want to use the disk ?"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:503
+#: ../../src/virtManager/create.py:855
+msgid "Virtual Network Required"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:504
+#: ../../src/virtManager/create.py:856
+msgid "You must select one of the virtual networks"
+msgstr ""
+
+#: ../../src/virtManager/addhardware.py:508
+#: ../../src/virtManager/create.py:860
+#, fuzzy
+msgid "Physical Device Required"
+msgstr "ইনস্টল মিডিয়া আবশ্যক"
+
+#: ../../src/virtManager/addhardware.py:509
+#: ../../src/virtManager/create.py:861
+msgid "You must select one of the physical devices"
+msgstr ""
 
 #: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:2
 #, fuzzy
@@ -42,25 +168,25 @@ msgstr "প্রসেসর"
 msgid "Completed"
 msgstr "সমাপ্ত"
 
-#: ../../src/virtManager/console.py:130
+#: ../../src/virtManager/console.py:132
 msgid "Pointer grabbed"
 msgstr ""
 
-#: ../../src/virtManager/console.py:131
+#: ../../src/virtManager/console.py:133
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer press the key pair Ctrl+Alt"
 msgstr ""
 
-#: ../../src/virtManager/console.py:140
+#: ../../src/virtManager/console.py:142
 msgid "Press Ctrl+Alt to release pointer."
 msgstr ""
 
-#: ../../src/virtManager/console.py:300
+#: ../../src/virtManager/console.py:302
 msgid "Save Virtual Machine Screenshot"
 msgstr "ভার্চুয়াল মেশিনের পর্দার ছবি সংরক্ষণ করুন"
 
-#: ../../src/virtManager/console.py:333
+#: ../../src/virtManager/console.py:335
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -69,109 +195,211 @@ msgstr ""
 "পর্দার ছবি চিহ্নিত স্থানে সংরক্ষিত হয়েছে:\n"
 "%s"
 
-#: ../../src/virtManager/console.py:334
+#: ../../src/virtManager/console.py:336
 msgid "Screenshot saved"
 msgstr "পর্দার ছবি সংরক্ষিত হয়েছে"
 
-#: ../../src/virtManager/console.py:449
+#: ../../src/virtManager/console.py:468
 msgid "paused"
 msgstr "স্থগিত"
 
-#: ../../src/virtManager/create.py:395
+#: ../../src/virtManager/createnet.py:94
+#: ../../src/virtManager/createnet.py:256 ../../src/virtManager/host.py:222
+#: tmp/vmm-create-net.glade.h:38 tmp/vmm-host.glade.h:23
+msgid "NAT to any physical device"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:96
+#: ../../src/virtManager/createnet.py:254 ../../src/virtManager/host.py:220
+#, python-format
+msgid "NAT to physical device %s"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:151
+#, fuzzy, python-format
+msgid "%d addresses"
+msgstr "MAC ঠিকানা"
+
+#: ../../src/virtManager/createnet.py:153
+msgid "Public"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:155 tmp/vmm-create-net.glade.h:47
+msgid "Private"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:157
+msgid "Reserved"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:159
+msgid "Other"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:258 ../../src/virtManager/host.py:225
+#: tmp/vmm-create-net.glade.h:37
+msgid "Isolated virtual network"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:303
+#: ../../src/virtManager/createnet.py:307
+#, fuzzy
+msgid "Invalid Network Name"
+msgstr "সিস্টেমের নাম বৈধ নয়"
+
+#: ../../src/virtManager/createnet.py:304
+#, fuzzy
+msgid "Network name must be non-blank and less than 50 characters"
+msgstr ""
+"সিস্টেমের  নাম ফাঁকা রাখা যাবে না, ৫০ অক্ষরের মধ্যে সীমাবদ্ধ ও কোনো শূণ্যস্থানবিনা "
+"হওয়া আবশ্যক"
+
+#: ../../src/virtManager/createnet.py:308
+msgid "Network name may contain alphanumeric and '_' characters only"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:315
+#: ../../src/virtManager/createnet.py:320
+#: ../../src/virtManager/createnet.py:325
+#: ../../src/virtManager/createnet.py:330
+#, fuzzy
+msgid "Invalid Network Address"
+msgstr "সংগ্রহস্থলের ঠিকানা অবৈধ"
+
+#: ../../src/virtManager/createnet.py:316
+msgid "The network address could not be understood"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:321
+msgid "The network must be an IPv4 address"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:326
+msgid "The network prefix must be at least /4 (16 addresses)"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:331
+msgid "The network must be an IPv4 private address"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:339
+#: ../../src/virtManager/createnet.py:343
+#: ../../src/virtManager/createnet.py:348
+#: ../../src/virtManager/createnet.py:352
+#, fuzzy
+msgid "Invalid DHCP Address"
+msgstr "অবৈধ PV মিডিয়ার ঠিকানা"
+
+#: ../../src/virtManager/createnet.py:340
+msgid "The DHCP start address could not be understood"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:344
+msgid "The DHCP end address could not be understood"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:349
+#, python-format
+msgid "The DHCP start address is not with the network %s"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:353
+#, python-format
+msgid "The DHCP end address is not with the network %s"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:359
+#, fuzzy
+msgid "Invalid forwarding mode"
+msgstr "সংগ্রহস্থলের ঠিকানা অবৈধ"
+
+#: ../../src/virtManager/createnet.py:360
+msgid "Please select where the traffic should be forwarded"
+msgstr ""
+
+#: ../../src/virtManager/createnet.py:405 ../../src/virtManager/create.py:923
+#: ../../src/virtManager/create.py:958
+msgid "No media present"
+msgstr "মিডিয়া অনুপস্থিত"
+
+#: ../../src/virtManager/create.py:446
 msgid "Paravirtualized"
 msgstr "প্যারা-ভার্চুয়ালাইজড"
 
-#: ../../src/virtManager/create.py:399
+#: ../../src/virtManager/create.py:450
 msgid "Fully virtualized"
 msgstr "সম্পূর্ণরূপে ভার্চুয়ালাইজড"
 
-#: ../../src/virtManager/create.py:435
+#: ../../src/virtManager/create.py:498
 msgid "Invalid FV media address"
 msgstr "অবৈধ FV মিডিয়ার ঠিকানা"
 
-#: ../../src/virtManager/create.py:440
+#: ../../src/virtManager/create.py:503
 #, fuzzy
 msgid "Invalid FV OS Type"
 msgstr "অবৈধ FV মিডিয়ার ঠিকানা"
 
-#: ../../src/virtManager/create.py:445
+#: ../../src/virtManager/create.py:508
 #, fuzzy
 msgid "Invalid FV OS Variant"
 msgstr "অবৈধ FV মিডিয়ার ঠিকানা"
 
-#: ../../src/virtManager/create.py:452
+#: ../../src/virtManager/create.py:515
 msgid "Invalid PV media address"
 msgstr "অবৈধ PV মিডিয়ার ঠিকানা"
 
-#: ../../src/virtManager/create.py:462
+#: ../../src/virtManager/create.py:525
 msgid "Invalid system name"
 msgstr "সিস্টেমের নাম বৈধ নয়"
 
-#: ../../src/virtManager/create.py:469 ../../src/virtManager/create.py:475
+#: ../../src/virtManager/create.py:532 ../../src/virtManager/create.py:538
 msgid "Invalid memory setting"
 msgstr "মেমরি সংক্রান্ত মান অবৈধ"
 
-#: ../../src/virtManager/create.py:497
-msgid "Invalid storage address"
-msgstr "সংগ্রহস্থলের ঠিকানা অবৈধ"
-
-#: ../../src/virtManager/create.py:534
+#: ../../src/virtManager/create.py:621
 msgid "Creating Virtual Machine"
 msgstr "ভার্চুয়াল মেশিন নির্মাণ"
 
-#: ../../src/virtManager/create.py:535
+#: ../../src/virtManager/create.py:622
 msgid "The virtual machine is now being created. "
 msgstr ""
 
-#: ../../src/virtManager/create.py:536
+#: ../../src/virtManager/create.py:623
 msgid "Allocation of disk storage and retrieval of "
 msgstr ""
 
-#: ../../src/virtManager/create.py:537
-msgid "the installation images may a few minutes "
+#: ../../src/virtManager/create.py:624
+msgid "the installation images may take a few minutes "
 msgstr ""
 
-#: ../../src/virtManager/create.py:538
-#, fuzzy
-msgid "to complete."
-msgstr "সমাপ্ত"
+#: ../../src/virtManager/create.py:663
+msgid "Guest installation failed to complete"
+msgstr ""
 
-#: ../../src/virtManager/create.py:543
-msgid "Guest Install Error"
-msgstr "গেস্ট ইনস্টল করতে সমস্যা"
-
-#: ../../src/virtManager/create.py:581
+#: ../../src/virtManager/create.py:682
 msgid "Locate ISO Image"
 msgstr "ISO ইমেজের অবস্থান সনাক্ত করুন"
 
-#: ../../src/virtManager/create.py:610
-msgid "Locate Storage Partition"
-msgstr "সংগ্রহস্থলের পার্টিশান সনাক্ত করুন"
-
-#: ../../src/virtManager/create.py:616
-msgid "Locate or Create New Storage File"
-msgstr "নতুন সংগ্রহস্থল ফাইল সনাক্ত অথবা নির্মাণ করুন"
-
-#: ../../src/virtManager/create.py:682 ../../src/virtManager/create.py:686
+#: ../../src/virtManager/create.py:794 ../../src/virtManager/create.py:798
 msgid "Invalid System Name"
 msgstr "সিস্টেমের নাম বৈধ নয়"
 
-#: ../../src/virtManager/create.py:683
+#: ../../src/virtManager/create.py:795
 #, fuzzy
 msgid "System name must be non-blank and less than 50 characters"
 msgstr ""
 "সিস্টেমের  নাম ফাঁকা রাখা যাবে না, ৫০ অক্ষরের মধ্যে সীমাবদ্ধ ও কোনো শূণ্যস্থানবিনা "
 "হওয়া আবশ্যক"
 
-#: ../../src/virtManager/create.py:687
+#: ../../src/virtManager/create.py:799
 msgid "System name may contain alphanumeric and '_' characters only"
 msgstr ""
 
-#: ../../src/virtManager/create.py:693
+#: ../../src/virtManager/create.py:805
 msgid "Hardware Support Required"
 msgstr "হার্ডওয়্যার সমর্থন আবশ্যক"
 
-#: ../../src/virtManager/create.py:694
+#: ../../src/virtManager/create.py:806
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
@@ -179,97 +407,64 @@ msgstr ""
 "সম্ভবত আপনার হার্ডওয়্যার সম্পূর্ণ ভার্চুয়ালাইজেশন সমর্থন করতে সক্ষম নয়। এই হার্ডওয়্যারে "
 "শুধুমাত্র প্যারা-ভার্চুয়ালাইজড গেস্ট উপলব্ধ হবে।"
 
-#: ../../src/virtManager/create.py:701
+#: ../../src/virtManager/create.py:813
 msgid "ISO Path Required"
 msgstr "ISO পাথ আবশ্যক"
 
-#: ../../src/virtManager/create.py:702
+#: ../../src/virtManager/create.py:814
 msgid "You must specify an ISO location for the guest installation"
 msgstr "গেস্ট ইনস্টলেশনের জন্য ISO অবস্থান উল্লেখ করা আবশ্যক"
 
-#: ../../src/virtManager/create.py:705
+#: ../../src/virtManager/create.py:817
 msgid "ISO Path Not Found"
 msgstr "ISO পাথ পাওয়া যায়নি"
 
-#: ../../src/virtManager/create.py:706
+#: ../../src/virtManager/create.py:818
 msgid "You must specify a valid path to the ISO image for guest installation"
 msgstr "গেস্ট ইনস্টলেশনের জন্য ISO ইমেজের বৈধ পাথ উল্লেখ করা আবশ্যক"
 
-#: ../../src/virtManager/create.py:711
+#: ../../src/virtManager/create.py:823
 msgid "Install media required"
 msgstr "ইনস্টল মিডিয়া আবশ্যক"
 
-#: ../../src/virtManager/create.py:712
+#: ../../src/virtManager/create.py:824
 msgid "You must select the CDROM install media for guest installation"
 msgstr "গেস্ট ইনস্টলেশনের জন্য CDROM ইনস্টল মিডিয়া নির্বাচন করা আবশ্যক"
 
-#: ../../src/virtManager/create.py:717
+#: ../../src/virtManager/create.py:829
 msgid "URL Required"
 msgstr "URL আবশ্যক"
 
-#: ../../src/virtManager/create.py:718
+#: ../../src/virtManager/create.py:830
 msgid "You must specify a URL for the install image for the guest install"
 msgstr "গেস্ট ইনস্টলেশনের জন্য ইনস্টল ইমেজের অবস্থানের URL উল্লেখ করা আবশ্যক"
 
-#: ../../src/virtManager/create.py:724
-msgid "Storage Address Required"
-msgstr "সংগ্রহস্থলের ঠিকানা আবশ্যক"
-
-#: ../../src/virtManager/create.py:725
-msgid ""
-"You must specify a partition or a file for storage for the guest install"
-msgstr "গেস্ট ইনস্টলেশনের জন্য সংগ্রহস্থলের ফাইল অথবা পার্টিশান উল্লেখ করা আবশ্যক।"
-
-#: ../../src/virtManager/create.py:730
-#, fuzzy
-msgid "Storage Address Is Directory"
-msgstr "সংগ্রহস্থলের ঠিকানা আবশ্যক"
-
-#: ../../src/virtManager/create.py:731
-msgid ""
-"You chose 'Simple File' storage for your storage method, but chose a "
-"directory instead of a file. Please enter a new filename or choose an "
-"existing file."
-msgstr ""
-
-#: ../../src/virtManager/create.py:776 ../../src/virtManager/create.py:811
-msgid "No media present"
-msgstr "মিডিয়া অনুপস্থিত"
-
-#: ../../src/virtManager/details.py:419
-msgid "Destination"
-msgstr "গন্তব্য"
-
-#: ../../src/virtManager/details.py:458
-msgid "MAC address"
-msgstr "MAC ঠিকানা"
-
-#: ../../src/virtManager/domain.py:364
+#: ../../src/virtManager/domain.py:387 tmp/vmm-host.glade.h:27
 msgid "Running"
 msgstr "চলমান"
 
-#: ../../src/virtManager/domain.py:366
+#: ../../src/virtManager/domain.py:389
 msgid "Paused"
 msgstr "স্থগিত"
 
-#: ../../src/virtManager/domain.py:368 tmp/vmm-console.glade.h:10
-#: tmp/vmm-details.glade.h:39
+#: ../../src/virtManager/domain.py:391 tmp/vmm-console.glade.h:10
+#: tmp/vmm-details.glade.h:41
 msgid "Shutdown"
 msgstr "বন্ধ"
 
-#: ../../src/virtManager/domain.py:370
+#: ../../src/virtManager/domain.py:393
 msgid "Shutoff"
 msgstr "সম্পূর্ণ বন্ধ"
 
-#: ../../src/virtManager/domain.py:372
+#: ../../src/virtManager/domain.py:395
 msgid "Crashed"
 msgstr "বিপর্যস্ত"
 
-#: ../../src/virtManager/domain.py:374
+#: ../../src/virtManager/domain.py:397
 msgid "Unknown status code"
 msgstr "অবস্থার কোড অজানা"
 
-#: ../../src/virtManager/engine.py:75
+#: ../../src/virtManager/engine.py:87
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
@@ -277,93 +472,115 @@ msgstr ""
 "Xen হাইপার-ভাইসর/ডেমনের সাথে সংযোগ স্থাপন করতে ব্যর্থ।\n"
 "\n"
 
-#: ../../src/virtManager/engine.py:76
+#: ../../src/virtManager/engine.py:88
 msgid "Verify that:\n"
 msgstr "পরীক্ষিত হবে:\n"
 
-#: ../../src/virtManager/engine.py:77
+#: ../../src/virtManager/engine.py:89
 msgid " - A Xen host kernel was booted\n"
 msgstr " - Xen হোস্ট কার্নেল বুট করা হয়েছে কি না\n"
 
-#: ../../src/virtManager/engine.py:78
+#: ../../src/virtManager/engine.py:90
 msgid " - The Xen service has been started\n"
 msgstr " - Xen পরিসেবা আরম্ভ করা হয়েছে কি না\n"
 
-#: ../../src/virtManager/engine.py:81
+#: ../../src/virtManager/engine.py:95
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
 msgstr "হাইপারভাইসর '%s'-র সাথে সংযোগ স্থাপন করতে ব্যর্থ"
 
-#: ../../src/virtManager/engine.py:82
+#: ../../src/virtManager/engine.py:97
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "ভার্চুয়াল মেশিন ম্যানেজার সংযোগ বিফল"
 
-#: ../../src/virtManager/engine.py:302
+#: ../../src/virtManager/engine.py:333
 msgid "Save Virtual Machine"
 msgstr "ভার্চুয়াল মেশিন সংরক্ষণ করুন"
 
-#: ../../src/virtManager/engine.py:315
+#: ../../src/virtManager/engine.py:347
 msgid "Saving Virtual Machine"
 msgstr "ভার্চুয়াল মেশিন সংরক্ষণ"
 
-#: ../../src/virtManager/engine.py:331
+#: ../../src/virtManager/engine.py:363
 #, fuzzy, python-format
 msgid "About to destroy virtual machine %s"
 msgstr "ভার্চুয়াল মেশিন পুনরুদ্ধার করুন"
 
-#: ../../src/virtManager/engine.py:332
+#: ../../src/virtManager/engine.py:364
 msgid ""
 "This will immediately destroy the VM and may corrupt its disk image. Are you "
 "sure?"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:237
+#: ../../src/virtManager/error.py:33
+#, fuzzy
+msgid "Details"
+msgstr "বিবরণ (_D)"
+
+#: ../../src/virtManager/host.py:182
+msgid "Active"
+msgstr ""
+
+#: ../../src/virtManager/host.py:190
+msgid "Inactive"
+msgstr ""
+
+#: ../../src/virtManager/host.py:203
+msgid "On boot"
+msgstr ""
+
+#: ../../src/virtManager/host.py:206
+msgid "Never"
+msgstr ""
+
+#: ../../src/virtManager/manager.py:240
 msgid "Restore Virtual Machine"
 msgstr "ভার্চুয়াল মেশিন পুনরুদ্ধার করুন"
 
-#: ../../src/virtManager/manager.py:252
+#: ../../src/virtManager/manager.py:256
 msgid "Restoring Virtual Machine"
 msgstr "ভার্চুয়াল মেশিন পুনরুদ্ধার"
 
-#: ../../src/virtManager/manager.py:259
+#: ../../src/virtManager/manager.py:263
 #, python-format
 msgid "The file '%s' does not appear to be a valid saved machine image"
 msgstr ""
 
-#: ../../src/virtManager/manager.py:287
+#: ../../src/virtManager/manager.py:291
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr "ডোমেইন '%s' পুনরুদ্ধার করতে সমস্যা। এই ডোমেইনটা কি বর্তমানে চলছে?"
 
-#: ../../src/virtManager/manager.py:505
+#: ../../src/virtManager/manager.py:512
 msgid "ID"
 msgstr "ID"
 
-#: ../../src/virtManager/manager.py:506 tmp/vmm-create.glade.h:61
+#: ../../src/virtManager/manager.py:513 tmp/vmm-create.glade.h:66
+#: tmp/vmm-create-net.glade.h:39
 msgid "Name"
 msgstr "নাম"
 
-#: ../../src/virtManager/manager.py:507 tmp/vmm-manager.glade.h:16
+#: ../../src/virtManager/manager.py:514 tmp/vmm-manager.glade.h:17
 msgid "Status"
 msgstr "অবস্থা"
 
-#: ../../src/virtManager/manager.py:508 tmp/vmm-manager.glade.h:4
+#: ../../src/virtManager/manager.py:515 tmp/vmm-manager.glade.h:4
 msgid "CPU usage"
 msgstr "CPU ব্যবহার"
 
-#: ../../src/virtManager/manager.py:509
+#: ../../src/virtManager/manager.py:516
 msgid "VCPUs"
 msgstr "VCPU"
 
-#: ../../src/virtManager/manager.py:510 tmp/vmm-manager.glade.h:10
+#: ../../src/virtManager/manager.py:517 tmp/vmm-manager.glade.h:11
 msgid "Memory usage"
 msgstr "মেমরি ব্যবহার"
 
-#: ../../src/virtManager/manager.py:511 tmp/vmm-manager.glade.h:7
+#: ../../src/virtManager/manager.py:518 tmp/vmm-manager.glade.h:7
 msgid "Disk usage"
 msgstr "ডিস্ক ব্যবহার"
 
-#: ../../src/virtManager/manager.py:512 tmp/vmm-manager.glade.h:11
+#: ../../src/virtManager/manager.py:519 tmp/vmm-manager.glade.h:12
 msgid "Network traffic"
 msgstr "নেটওয়ার্কের ট্রাফিক"
 
@@ -379,7 +596,7 @@ msgstr "স্বত্বাধিকার (C) ২০০৬ Red Hat Inc."
 msgid "Powered by libvirt"
 msgstr "libvirt দ্বারা চালিত"
 
-#: tmp/vmm-about.glade.h:3 tmp/vmm-manager.glade.h:18
+#: tmp/vmm-about.glade.h:3 tmp/vmm-manager.glade.h:19
 msgid "Virtual Machine Manager"
 msgstr "ভার্চুয়াল মেশিন ম্যানেজার"
 
@@ -391,41 +608,219 @@ msgstr "http://virt-manager.et.redhat.com/"
 msgid "translator-credits"
 msgstr "রুণা ভট্টাচার্য্য"
 
-#: tmp/vmm-add-virtual-nic.glade.h:1
-msgid "00:16:3e:"
-msgstr "00:16:3e:"
+#: tmp/vmm-add-hardware.glade.h:1 tmp/vmm-create.glade.h:3
+#: tmp/vmm-create-net.glade.h:2
+msgid "/xen/demo.img"
+msgstr "/xen/demo.img"
 
-#: tmp/vmm-add-virtual-nic.glade.h:2
-msgid ":"
-msgstr ":"
+#: tmp/vmm-add-hardware.glade.h:2 tmp/vmm-create.glade.h:8
+#: tmp/vmm-create-net.glade.h:9
+msgid "5 GB"
+msgstr "৫ গিগাবাইট"
 
-#: tmp/vmm-add-virtual-nic.glade.h:3
+#: tmp/vmm-add-hardware.glade.h:3 tmp/vmm-create.glade.h:15
+msgid "<b>Network</b>"
+msgstr "<b>নেটওয়ার্ক</b>"
+
+#: tmp/vmm-add-hardware.glade.h:4 tmp/vmm-create.glade.h:16
+msgid "<b>Storage</b>"
+msgstr "<b>সংগ্রহস্থল</b>"
+
+#: tmp/vmm-add-hardware.glade.h:5 tmp/vmm-create.glade.h:19
+msgid "<small><b>Example:</b> /dev/hdc2</small>"
+msgstr "<small><b>উদাহরণ:</b> /dev/hdc2</small>"
+
+#: tmp/vmm-add-hardware.glade.h:6 tmp/vmm-create.glade.h:24
 msgid ""
-"<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
-"letters A-F"
+"<small><b>Tip:</b> Choose this option if your host is disconnected, "
+"connected via wireless, or dynamically configured with NetworkManager.</"
+"small>"
 msgstr ""
-"<b>উপদেশ:</b> হেক্স সংখ্যার ক্ষেত্রে গ্রহণযোগ্য মান হল 0-9 সংখ্যা ও A-F'র মধ্যে "
-"অক্ষরগুলি"
 
-#: tmp/vmm-add-virtual-nic.glade.h:4
-msgid "Add Virtual NIC"
-msgstr "ভার্চুয়াল NIC যোগ করুন"
+#: tmp/vmm-add-hardware.glade.h:7 tmp/vmm-create.glade.h:25
+msgid ""
+"<small><b>Tip:</b> Choose this option if your host is statically connected "
+"to wired ethernet, to gain the ability to migrate the virtual system.</small>"
+msgstr ""
 
-#: tmp/vmm-add-virtual-nic.glade.h:5
-msgid "Add virtual NIC with:"
-msgstr "ভার্চুয়াল NIC যোগ করতে ব্যবহৃত হবে:"
+#: tmp/vmm-add-hardware.glade.h:8 tmp/vmm-create.glade.h:28
+msgid ""
+"<small><b>Warning:</b> If you do not allocate the entire disk at VM "
+"creation, space will be allocated as needed while the guest is running. If "
+"sufficient free space is not available on the host, this may result in data "
+"corruption on the guest.</small>"
+msgstr ""
 
-#: tmp/vmm-add-virtual-nic.glade.h:6
-msgid "Randomly generated MAC address"
-msgstr "যথেচ্ছরূপে উৎপন্ন MAC ঠিকানা"
+#: tmp/vmm-add-hardware.glade.h:9
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding new "
+"virtual hardware </span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">নতুন ভার্চুয়াল "
+"সিস্টেম নির্মাণ </span>"
 
-#: tmp/vmm-add-virtual-nic.glade.h:7
-msgid "Specified MAC address:"
-msgstr "উল্লিখিত MAC ঠিকানা:"
+#: tmp/vmm-add-hardware.glade.h:10 tmp/vmm-create.glade.h:30
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
+"storage space</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">সংগ্রহস্থল আরক্ষণ</"
+"span>"
 
-#: tmp/vmm-add-virtual-nic.glade.h:8
-msgid "mac-addr-random"
-msgstr "mac-addr-random"
+#: tmp/vmm-add-hardware.glade.h:11 tmp/vmm-create.glade.h:32
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connect to host "
+"network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">সংগ্রহস্থল আরক্ষণ</"
+"span>"
+
+#: tmp/vmm-add-hardware.glade.h:12
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to add "
+"hardware</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ইনস্টলেশন আরম্ভের "
+"প্রস্থান</span>"
+
+#: tmp/vmm-add-hardware.glade.h:13
+msgid "Add new virtual hardware"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:14 tmp/vmm-create.glade.h:38
+msgid "Allocate entire virtual disk now?"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:15 tmp/vmm-create.glade.h:39
+msgid "Browse..."
+msgstr "ব্রাউজ করুন..."
+
+#: tmp/vmm-add-hardware.glade.h:16 tmp/vmm-create.glade.h:42
+#: tmp/vmm-create-net.glade.h:25
+msgid "Complete"
+msgstr "সমাপ্ত"
+
+#: tmp/vmm-add-hardware.glade.h:17 tmp/vmm-create.glade.h:43
+msgid "Connection type:"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:18 tmp/vmm-create.glade.h:45
+#: tmp/vmm-details.glade.h:22
+msgid "Disk"
+msgstr "ডিস্ক"
+
+#: tmp/vmm-add-hardware.glade.h:19 tmp/vmm-create.glade.h:46
+#, fuzzy
+msgid "Disk image:"
+msgstr "ডিস্কের ব্যবহার:"
+
+#: tmp/vmm-add-hardware.glade.h:20 tmp/vmm-create.glade.h:47
+#, fuzzy
+msgid "Disk size:"
+msgstr "ডিস্কের ব্যবহার:"
+
+#: tmp/vmm-add-hardware.glade.h:21 tmp/vmm-create.glade.h:51
+msgid "File _Location:"
+msgstr "ফাইলের অবস্থা:(_L)"
+
+#: tmp/vmm-add-hardware.glade.h:22 tmp/vmm-create.glade.h:52
+msgid "File _Size:"
+msgstr "ফাইলের মাপ:(_S)"
+
+#: tmp/vmm-add-hardware.glade.h:23
+#, fuzzy
+msgid "Hardware type:"
+msgstr "হার্ডওয়্যার"
+
+#: tmp/vmm-add-hardware.glade.h:24 tmp/vmm-create.glade.h:57
+#: tmp/vmm-create-net.glade.h:36
+msgid "Intro"
+msgstr "ভূমিকা"
+
+#: tmp/vmm-add-hardware.glade.h:25 tmp/vmm-create.glade.h:63
+#: tmp/vmm-details.glade.h:28
+msgid "MB"
+msgstr "MB"
+
+#: tmp/vmm-add-hardware.glade.h:26 tmp/vmm-create.glade.h:67
+#: tmp/vmm-details.glade.h:33
+msgid "Network"
+msgstr "নেটওয়ার্ক"
+
+#: tmp/vmm-add-hardware.glade.h:27 tmp/vmm-create.glade.h:68
+msgid "Normal Disk _Partition:"
+msgstr "স্বাভাবিক ডিস্ক পার্টিশান:(_P)"
+
+#: tmp/vmm-add-hardware.glade.h:28 tmp/vmm-create.glade.h:73
+msgid "P_artition:"
+msgstr "পার্টিশান:(_a)"
+
+#: tmp/vmm-add-hardware.glade.h:29
+#, fuzzy
+msgid ""
+"Please indicate how you'd like to assign space on this physical host system "
+"for your new virtual storage device."
+msgstr ""
+"অনুগ্রহ করে নতুন ভার্চুয়াল সিস্টেমের ব্যবহারের জন্য প্রকৃত হোস্ট সিস্টেমের মধ্যে স্থান "
+"আরক্ষণের বিন্যাস উল্লেখ করুন। এই স্থানে ভার্চুয়াল সিস্টেমের অপারেটিং সিস্টেম ইনস্টল "
+"করা হবে।"
+
+#: tmp/vmm-add-hardware.glade.h:30
+msgid ""
+"Please indicate how you'd like to connect your new virtual network device to "
+"the host network."
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:31 tmp/vmm-create.glade.h:82
+msgid "Shared Physical Device"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:32 tmp/vmm-create.glade.h:83
+msgid "Simple F_ile:"
+msgstr "সাধারণ ফাইল:(_i)"
+
+#: tmp/vmm-add-hardware.glade.h:33 tmp/vmm-create.glade.h:85
+msgid "Target:"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:34
+#, fuzzy
+msgid ""
+"This assistant will guide you through adding a new piece of virtual "
+"hardware. First select what type of hardware you wish to add:"
+msgstr ""
+"এই সহায়তা ব্যবস্থার সাহায্যে আপনি একটি নতুন ভার্চুয়াল সিস্টেম নির্মাণ করতে পারবেন। "
+"নির্মাণযোগ্য ভার্চুয়াল সিস্টেম সম্পর্কে আপনাকে কিছু প্রশ্ন করা হবে যেমন:"
+
+#: tmp/vmm-add-hardware.glade.h:35 tmp/vmm-create.glade.h:99
+msgid "_Device:"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:36 tmp/vmm-create.glade.h:100
+#: tmp/vmm-create-net.glade.h:57
+msgid "_Finish"
+msgstr "সমাপ্তি (_F)"
+
+#: tmp/vmm-add-hardware.glade.h:37 tmp/vmm-create.glade.h:102
+#, fuzzy
+msgid "_Network:"
+msgstr "নেটওয়ার্ক"
+
+#: tmp/vmm-add-hardware.glade.h:38 tmp/vmm-create.glade.h:105
+msgid "_Shared physical device"
+msgstr ""
+
+#: tmp/vmm-add-hardware.glade.h:39 tmp/vmm-create.glade.h:107
+#, fuzzy
+msgid "_Virtual network"
+msgstr "ভার্চুয়াল মেশিন (_M)"
+
+#: tmp/vmm-add-hardware.glade.h:40 tmp/vmm-create.glade.h:109
+msgid "eth0"
+msgstr ""
 
 #: tmp/vmm-console.glade.h:1
 msgid "<b>The console is currently unavailable</b>"
@@ -443,15 +838,15 @@ msgstr "লগ-ইন"
 msgid "Password:"
 msgstr "পাসওয়ার্ড:"
 
-#: tmp/vmm-console.glade.h:5 tmp/vmm-details.glade.h:34
+#: tmp/vmm-console.glade.h:5 tmp/vmm-details.glade.h:36
 msgid "Pause"
 msgstr "স্থগিত"
 
-#: tmp/vmm-console.glade.h:6 tmp/vmm-details.glade.h:36
+#: tmp/vmm-console.glade.h:6 tmp/vmm-details.glade.h:38
 msgid "Run"
 msgstr "সঞ্চালন করুন"
 
-#: tmp/vmm-console.glade.h:7 tmp/vmm-details.glade.h:37
+#: tmp/vmm-console.glade.h:7 tmp/vmm-details.glade.h:39
 #, fuzzy
 msgid "S_hutdown"
 msgstr "বন্ধ"
@@ -464,7 +859,7 @@ msgstr "পাসওয়ার্ড আপনার কি-রিং'র মধ�
 msgid "Screenshot"
 msgstr "পর্দার ছবি"
 
-#: tmp/vmm-console.glade.h:11 tmp/vmm-details.glade.h:41
+#: tmp/vmm-console.glade.h:11 tmp/vmm-details.glade.h:48
 msgid "Toolbar"
 msgstr "টুল-বার"
 
@@ -480,11 +875,11 @@ msgstr "VNC"
 msgid "Virtual Machine Console"
 msgstr "ভার্চুয়াল মেশিন কনসোল"
 
-#: tmp/vmm-console.glade.h:15 tmp/vmm-details.glade.h:46
+#: tmp/vmm-console.glade.h:15 tmp/vmm-details.glade.h:53
 msgid "Virtual _Machine"
 msgstr "ভার্চুয়াল মেশিন (_M)"
 
-#: tmp/vmm-console.glade.h:16 tmp/vmm-details.glade.h:47
+#: tmp/vmm-console.glade.h:16 tmp/vmm-details.glade.h:54
 msgid "_Destroy"
 msgstr ""
 
@@ -496,24 +891,24 @@ msgstr "বিবরণ (_D)"
 msgid "_FullScreen"
 msgstr "সম্পূর্ণ পর্দা জুড়ে প্রদর্শন (_F)"
 
-#: tmp/vmm-console.glade.h:19 tmp/vmm-details.glade.h:49
-#: tmp/vmm-manager.glade.h:21
+#: tmp/vmm-console.glade.h:19 tmp/vmm-details.glade.h:56
+#: tmp/vmm-host.glade.h:35 tmp/vmm-manager.glade.h:22
 msgid "_Help"
 msgstr "সাহায্য (_H)"
 
-#: tmp/vmm-console.glade.h:20 tmp/vmm-details.glade.h:50
+#: tmp/vmm-console.glade.h:20 tmp/vmm-details.glade.h:57
 msgid "_Pause"
 msgstr "স্থগিত (_P)"
 
-#: tmp/vmm-console.glade.h:21 tmp/vmm-details.glade.h:51
+#: tmp/vmm-console.glade.h:21 tmp/vmm-details.glade.h:58
 msgid "_Run"
 msgstr "সঞ্চালন (_R)"
 
-#: tmp/vmm-console.glade.h:22 tmp/vmm-details.glade.h:52
+#: tmp/vmm-console.glade.h:22 tmp/vmm-details.glade.h:59
 msgid "_Save"
 msgstr "সংরক্ষণ (_S)"
 
-#: tmp/vmm-console.glade.h:23 tmp/vmm-details.glade.h:53
+#: tmp/vmm-console.glade.h:23 tmp/vmm-details.glade.h:60
 msgid "_Serial Console"
 msgstr "সিরিয়াল কনসোল (_S)"
 
@@ -521,125 +916,83 @@ msgstr "সিরিয়াল কনসোল (_S)"
 msgid "_Take Screenshot"
 msgstr "পর্দার ছবি সংগ্রহ করুন (_T)"
 
-#: tmp/vmm-console.glade.h:25 tmp/vmm-details.glade.h:54
-#: tmp/vmm-manager.glade.h:22
+#: tmp/vmm-console.glade.h:25 tmp/vmm-details.glade.h:61
+#: tmp/vmm-manager.glade.h:23
 msgid "_View"
 msgstr "প্রদর্শন (_V)"
 
-#: tmp/vmm-create.glade.h:1
+#: tmp/vmm-create.glade.h:1 tmp/vmm-create-net.glade.h:1
+#, fuzzy
+msgid "\t"
+msgstr "৫\t"
+
+#: tmp/vmm-create.glade.h:2
 msgid " "
 msgstr " "
 
-#: tmp/vmm-create.glade.h:2
-msgid "/xen/demo.img"
-msgstr "/xen/demo.img"
-
-#: tmp/vmm-create.glade.h:3 tmp/vmm-details.glade.h:4
+#: tmp/vmm-create.glade.h:4 tmp/vmm-details.glade.h:4
 msgid "2 GB"
 msgstr "২ গিগাবাইট"
 
-#: tmp/vmm-create.glade.h:4
+#: tmp/vmm-create.glade.h:5
 msgid "256\t"
 msgstr "২৫৬\t"
 
-#: tmp/vmm-create.glade.h:5
+#: tmp/vmm-create.glade.h:6
 msgid "400 MB"
 msgstr "৪০০ মেগাবাইট"
 
-#: tmp/vmm-create.glade.h:6
+#: tmp/vmm-create.glade.h:7
 msgid "5\t"
 msgstr "৫\t"
 
-#: tmp/vmm-create.glade.h:7
-msgid "5 GB"
-msgstr "৫ গিগাবাইট"
-
-#: tmp/vmm-create.glade.h:8
+#: tmp/vmm-create.glade.h:9
 msgid "500 MB"
 msgstr "৫০০ মেগাবাইট"
 
-#: tmp/vmm-create.glade.h:9
+#: tmp/vmm-create.glade.h:10
 msgid "<b>CPUs:</b>"
 msgstr "<b>CPU:</b>"
 
-#: tmp/vmm-create.glade.h:10
-msgid "<b>Disk image:</b>"
-msgstr "<b>ডিস্ক ইমেজ:</b>"
-
 #: tmp/vmm-create.glade.h:11
-msgid "<b>Disk size:</b>"
-msgstr "<b>ডিস্কের মাপ:</b>"
-
-#: tmp/vmm-create.glade.h:12
 msgid "<b>Example:</b> system1"
 msgstr "<b>উদাহরণ:</b> system1"
 
-#: tmp/vmm-create.glade.h:13
-msgid "<b>Initial memory:</b>"
+#: tmp/vmm-create.glade.h:12
+#, fuzzy
+msgid "<b>Install media</b>"
 msgstr "<b>প্রারম্ভিক মেমরি:</b>"
 
-#: tmp/vmm-create.glade.h:14
-msgid "<b>Installation source:</b>"
-msgstr "<b>ইনস্টলেশনের উৎস:</b>"
-
-#: tmp/vmm-create.glade.h:15
-msgid "<b>Kickstart source:</b>"
-msgstr "<b>কিকস্টার্টের উৎস:</b>"
-
-#: tmp/vmm-create.glade.h:16
-msgid "<b>Machine name:</b>"
-msgstr "<b>মেশিনের নাম:</b>"
-
-#: tmp/vmm-create.glade.h:17
-msgid "<b>Maximum memory:</b>"
-msgstr "<b>সর্বোচ্চ মেমরি:</b>"
-
-#: tmp/vmm-create.glade.h:18
+#: tmp/vmm-create.glade.h:13
 msgid "<b>Memory:</b>"
 msgstr "<b>মেমরি:</b>"
 
-#: tmp/vmm-create.glade.h:19
+#: tmp/vmm-create.glade.h:14
 msgid "<b>Memory</b> and <b>CPU</b> allocation"
 msgstr "<b>মেমরি</b> ও <b>CPU</b> বরাদ্দকরণ"
 
-#: tmp/vmm-create.glade.h:20
-msgid "<b>Operating System:</b>"
-msgstr ""
-
-#: tmp/vmm-create.glade.h:21
+#: tmp/vmm-create.glade.h:17
 msgid ""
 "<b>Storage</b> details - which disk partitions or files the system should use"
 msgstr ""
 "<b>সংগ্রহস্থল</b>'র বিবরণ - সিস্টেমের দ্বারা কোন ডিস্ক পার্টিশন অথবা ফাইল ব্যবহৃত হবে"
 
-#: tmp/vmm-create.glade.h:22
-msgid "<b>Summary:</b>"
+#: tmp/vmm-create.glade.h:18 tmp/vmm-create-net.glade.h:15
+#, fuzzy
+msgid "<b>Summary</b>"
 msgstr "<b>সারসংক্ষেপ:</b>"
 
-#: tmp/vmm-create.glade.h:23
-msgid "<b>Virtual CPUs:</b>"
-msgstr "<b>ভার্চুয়াল CPU:</b>"
-
-#: tmp/vmm-create.glade.h:24
-#, fuzzy
-msgid "<b>Virtualization method:</b>"
-msgstr "<b>ভার্চুয়ালাইজেশনের প্রণালী:</b>"
-
-#: tmp/vmm-create.glade.h:25
-msgid "<small><b>Example:</b> /dev/hdc2</small>"
-msgstr "<small><b>উদাহরণ:</b> /dev/hdc2</small>"
-
-#: tmp/vmm-create.glade.h:26
+#: tmp/vmm-create.glade.h:20
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 msgstr "<small><b>উদাহরণ:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 
-#: tmp/vmm-create.glade.h:27
+#: tmp/vmm-create.glade.h:21
 msgid ""
 "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
 msgstr ""
 "<small><b>উদাহরণ:</b> http://servername.example.com/distro/i386/tree</small>"
 
-#: tmp/vmm-create.glade.h:28
+#: tmp/vmm-create.glade.h:22
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
@@ -647,7 +1000,7 @@ msgstr ""
 "<small><b>উল্লেখ্য:</b> এই মেশিনের হোস্ট CPU(গুলি) দ্বারা সম্পূর্ণ ভার্চুয়ালাইজেশন "
 "সমর্থন করা সম্ভব নয়।</small>"
 
-#: tmp/vmm-create.glade.h:29
+#: tmp/vmm-create.glade.h:23
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
@@ -655,7 +1008,7 @@ msgstr ""
 "<small><b>উল্লেখ্য:</b> এই মেশিনের হোস্ট CPU(গুলি) দ্বারা সম্পূর্ণ ভার্চুয়ালাইজেশন "
 "সমর্থিত হলেও এই বৈশিষ্ট্য BIOS'র মধ্যে সক্রিয় করা হয়নি।</small>"
 
-#: tmp/vmm-create.glade.h:30
+#: tmp/vmm-create.glade.h:26
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
@@ -664,7 +1017,7 @@ msgstr ""
 "<b>উপদেশ:</b> সর্বোত্তম কর্মক্ষমতার জন্য ভার্চুয়াল CPU'র সংখ্যা হোস্ট সিস্টেমের মধ্যে "
 "উপস্থিত লজিকাল CPU সংখ্যার থেকে কম (অথবা সমান) হওয়া আবশ্যক।"
 
-#: tmp/vmm-create.glade.h:31
+#: tmp/vmm-create.glade.h:27
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
@@ -674,15 +1027,7 @@ msgstr ""
 "সংগ্রহস্থল আপনার ভার্চুয়াল সিস্টেমে যোগ করতে পারবেন। এর জন্য প্রকৃত সিস্টেমে ব্যবহৃত "
 "সামগ্রী প্রয়োগ করা যাবে।</small>"
 
-#: tmp/vmm-create.glade.h:32
-msgid ""
-"<small><b>Warning:</b> If you do not allocate the entire disk at VM "
-"creation, space will be allocated as needed while the guest is running. If "
-"sufficient free space is not available on the host, this may result in data "
-"corruption on the guest.</small>"
-msgstr ""
-
-#: tmp/vmm-create.glade.h:33
+#: tmp/vmm-create.glade.h:29
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocate memory "
 "and CPU</span>"
@@ -690,15 +1035,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">মেমরি ও CPU "
 "বরাদ্দকরণ</span>"
 
-#: tmp/vmm-create.glade.h:34
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
-"storage space</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">সংগ্রহস্থল আরক্ষণ</"
-"span>"
-
-#: tmp/vmm-create.glade.h:35
+#: tmp/vmm-create.glade.h:31
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing a "
 "virtualization method</span>"
@@ -706,7 +1043,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ভার্চুয়ালাইজেশন "
 "প্রণালী নির্বাচন</span>"
 
-#: tmp/vmm-create.glade.h:36
+#: tmp/vmm-create.glade.h:33
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual system </span>"
@@ -714,7 +1051,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">নতুন ভার্চুয়াল "
 "সিস্টেম নির্মাণ </span>"
 
-#: tmp/vmm-create.glade.h:37
+#: tmp/vmm-create.glade.h:34
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation media</span>"
@@ -722,7 +1059,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ইনস্টলেশন "
 "মিডিয়ার অবস্থান সনাক্তকরণ</span>"
 
-#: tmp/vmm-create.glade.h:38
+#: tmp/vmm-create.glade.h:35
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
@@ -730,7 +1067,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ভার্চুয়াল "
 "সিস্টেমের নামকরণ </span>"
 
-#: tmp/vmm-create.glade.h:39
+#: tmp/vmm-create.glade.h:36
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to begin "
 "installation</span>"
@@ -738,37 +1075,21 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ইনস্টলেশন আরম্ভের "
 "প্রস্থান</span>"
 
-#: tmp/vmm-create.glade.h:40
+#: tmp/vmm-create.glade.h:37
 msgid "A <b>name</b> for your new virtual system"
 msgstr "নতুন ভার্চুয়াল সিস্টেমের <b>নাম</b>"
 
-#: tmp/vmm-create.glade.h:41
-msgid "Allocate entire virtual disk now?"
-msgstr ""
-
-#: tmp/vmm-create.glade.h:42
-msgid "Browse..."
-msgstr "ব্রাউজ করুন..."
-
-#: tmp/vmm-create.glade.h:43
+#: tmp/vmm-create.glade.h:40
 msgid "CPU architecture:"
 msgstr ""
 
-#: tmp/vmm-create.glade.h:44
+#: tmp/vmm-create.glade.h:41
 msgid "CPU/memory"
 msgstr "CPU/মেমরি"
 
-#: tmp/vmm-create.glade.h:45
-msgid "Complete"
-msgstr "সমাপ্ত"
-
-#: tmp/vmm-create.glade.h:46
+#: tmp/vmm-create.glade.h:44
 msgid "Create a new virtual system"
 msgstr "নতুন ভার্চুয়াল সিস্টেম নির্মাণ"
-
-#: tmp/vmm-create.glade.h:47 tmp/vmm-details.glade.h:21
-msgid "Disk"
-msgstr "ডিস্ক"
 
 #: tmp/vmm-create.glade.h:48
 msgid "Enable kernel / hardware acceleration"
@@ -782,27 +1103,25 @@ msgstr "FV ইনস্টল"
 msgid "F_ully Virtualized:"
 msgstr "সম্পূর্ণরূপে ভার্চুয়ালাইজ করা:(_u)"
 
-#: tmp/vmm-create.glade.h:51
-msgid "File _Location:"
-msgstr "ফাইলের অবস্থা:(_L)"
-
-#: tmp/vmm-create.glade.h:52
-msgid "File _Size:"
-msgstr "ফাইলের মাপ:(_S)"
-
 #: tmp/vmm-create.glade.h:53
 msgid "ISO _Location:"
 msgstr "ISO'র অবস্থান: (_L)"
 
 #: tmp/vmm-create.glade.h:54
+#, fuzzy
+msgid "Initial memory:"
+msgstr "<b>প্রারম্ভিক মেমরি:</b>"
+
+#: tmp/vmm-create.glade.h:55
 msgid "Install Media _URL:"
 msgstr "ইনস্টল মিডিয়ার URL:(_U)"
 
-#: tmp/vmm-create.glade.h:55
-msgid "Intro"
-msgstr "ভূমিকা"
-
 #: tmp/vmm-create.glade.h:56
+#, fuzzy
+msgid "Installation source:"
+msgstr "<b>ইনস্টলেশনের উৎস:</b>"
+
+#: tmp/vmm-create.glade.h:58
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
@@ -812,11 +1131,16 @@ msgstr ""
 "অন্তর্ভুক্ত করা সম্ভব (OS পরিবর্তন প্রয়োজনীয় নয়)। প্যারা-ভার্চুয়ালাইজড সিস্টেমের তুলনায় "
 "ধীর।"
 
-#: tmp/vmm-create.glade.h:57
+#: tmp/vmm-create.glade.h:59
 msgid "Kickstart U_RL:"
 msgstr "কিকস্টার্টের URL:(_R)"
 
-#: tmp/vmm-create.glade.h:58
+#: tmp/vmm-create.glade.h:60
+#, fuzzy
+msgid "Kickstart source:"
+msgstr "<b>কিকস্টার্টের উৎস:</b>"
+
+#: tmp/vmm-create.glade.h:61
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
@@ -826,45 +1150,47 @@ msgstr ""
 "বিশেষরূপে রূপান্তর করার প্রয়োজনের ফলে অপারেটিং সিস্টেম বাছাইয়ের সূযোগ সীমিত। "
 "সম্পূর্ণরূপে ভার্চুয়ালাইজ করা সিস্টেমের তুলনায় উন্নত কর্মক্ষমতা।"
 
-#: tmp/vmm-create.glade.h:59
+#: tmp/vmm-create.glade.h:62
 msgid "Logical host CPUs:"
 msgstr "লজিকাল হোস্টের CPU:"
 
-#: tmp/vmm-create.glade.h:60 tmp/vmm-details.glade.h:26
-msgid "MB"
-msgstr "MB"
+#: tmp/vmm-create.glade.h:64
+#, fuzzy
+msgid "Machine name:"
+msgstr "<b>মেশিনের নাম:</b>"
 
-#: tmp/vmm-create.glade.h:62
-msgid "Normal Disk _Partition:"
-msgstr "স্বাভাবিক ডিস্ক পার্টিশান:(_P)"
+#: tmp/vmm-create.glade.h:65
+#, fuzzy
+msgid "Maximum memory:"
+msgstr "<b>সর্বোচ্চ মেমরি:</b>"
 
-#: tmp/vmm-create.glade.h:63
+#: tmp/vmm-create.glade.h:69
 #, fuzzy
 msgid "OS _Type:"
 msgstr "ধরন"
 
-#: tmp/vmm-create.glade.h:64
+#: tmp/vmm-create.glade.h:70
 msgid "OS _Variant:"
 msgstr ""
 
-#: tmp/vmm-create.glade.h:65
+#: tmp/vmm-create.glade.h:71
+msgid "Operating System:"
+msgstr ""
+
+#: tmp/vmm-create.glade.h:72
 msgid "PVinstall"
 msgstr "PVinstall"
 
-#: tmp/vmm-create.glade.h:66
-msgid "P_artition:"
-msgstr "পার্টিশান:(_a)"
-
-#: tmp/vmm-create.glade.h:67
+#: tmp/vmm-create.glade.h:74
 msgid "Please choose a name for your virtual system:"
 msgstr "আপনার ভার্চুয়াল সিস্টেমের একটি নাম নির্বাচন করুন:"
 
-#: tmp/vmm-create.glade.h:68
+#: tmp/vmm-create.glade.h:75
 msgid ""
 "Please choose the type of guest operating system you will be installing:"
 msgstr ""
 
-#: tmp/vmm-create.glade.h:69
+#: tmp/vmm-create.glade.h:76
 #, fuzzy
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
@@ -876,12 +1202,12 @@ msgstr ""
 "ব্যবহারযোগ্য মেমরির সর্বাধিক মাপ ও প্রারম্ভকালে ব্যবহৃথ মেমরি'র পরিমাপ উল্লেখ করা "
 "যাবে।"
 
-#: tmp/vmm-create.glade.h:70
+#: tmp/vmm-create.glade.h:77
 msgid "Please enter the number of virtual CPUs this VM should start up with."
 msgstr ""
 "অনুগ্রহ করে এই VM'র দ্বারা প্রারম্ভ কালে ব্যবহৃত ভার্চুয়াল CPU'র সংখ্যা উল্লেখ করুন।"
 
-#: tmp/vmm-create.glade.h:71
+#: tmp/vmm-create.glade.h:78
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
@@ -891,7 +1217,13 @@ msgstr ""
 "আরক্ষণের বিন্যাস উল্লেখ করুন। এই স্থানে ভার্চুয়াল সিস্টেমের অপারেটিং সিস্টেম ইনস্টল "
 "করা হবে।"
 
-#: tmp/vmm-create.glade.h:72
+#: tmp/vmm-create.glade.h:79
+msgid ""
+"Please indicate how you'd like to connect your new virtual system to the "
+"host network."
+msgstr ""
+
+#: tmp/vmm-create.glade.h:80
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
@@ -900,7 +1232,7 @@ msgstr ""
 "<b>সম্পূর্রণরূপে ভার্চুয়ালাইড</b> এই ভার্চুয়াল সিস্টেমের মধ্যে ইনস্টলেশনের জন্য চিহ্নিত "
 "অপারেটিং সিস্টেমের ইনস্টলেশন মিডিয়ার অবস্থান অনুগ্রহ করে উল্লেখ করুন:"
 
-#: tmp/vmm-create.glade.h:73
+#: tmp/vmm-create.glade.h:81
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
@@ -910,24 +1242,11 @@ msgstr ""
 "<b>প্যারা-ভার্চুয়ালাইড</b> এই ভার্চুয়াল সিস্টেমের মধ্যে ইনস্টলেশনের জন্য চিহ্নিত "
 "অপারেটিং সিস্টেমের ইনস্টলেশন মিডিয়ার অবস্থান অনুগ্রহ করে উল্লেখ করুন:"
 
-#: tmp/vmm-create.glade.h:74
-#, fuzzy
-msgid ""
-"Press finish to create a new virtual machine with\n"
-"this configuration."
-msgstr ""
-"উল্লিখিত কনফিগারেশন সহ নতুন ভার্চুয়াল মেশিন নির্মাণ করে\n"
-"ভার্চুয়াল কনসোল প্রদর্শনের জন্য অনুগ্রহ করে সমাপ্ত টিপুন।"
-
-#: tmp/vmm-create.glade.h:76
-msgid "Simple F_ile:"
-msgstr "সাধারণ ফাইল:(_i)"
-
-#: tmp/vmm-create.glade.h:77
+#: tmp/vmm-create.glade.h:84
 msgid "System _Name:"
 msgstr "সিস্টেমের নাম:(_N)"
 
-#: tmp/vmm-create.glade.h:78
+#: tmp/vmm-create.glade.h:86
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
@@ -935,7 +1254,7 @@ msgstr ""
 "ভার্চুয়াল সিস্টেমের মধ্যে অপারেটিং সিস্টেম ইনস্টল করার জন্য আবশ্যক ফাইলের <b>অবস্থান</"
 "b>"
 
-#: tmp/vmm-create.glade.h:79
+#: tmp/vmm-create.glade.h:87
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
@@ -944,75 +1263,81 @@ msgstr ""
 "এই সহায়তা ব্যবস্থার সাহায্যে আপনি একটি নতুন ভার্চুয়াল সিস্টেম নির্মাণ করতে পারবেন। "
 "নির্মাণযোগ্য ভার্চুয়াল সিস্টেম সম্পর্কে আপনাকে কিছু প্রশ্ন করা হবে যেমন:"
 
-#: tmp/vmm-create.glade.h:80 tmp/vmm-details.glade.h:43
+#: tmp/vmm-create.glade.h:88 tmp/vmm-details.glade.h:50
 msgid "Total memory on host machine:"
 msgstr "হোস্ট মেশিনের মধ্যে সর্বমোট মেমরি:"
 
-#: tmp/vmm-create.glade.h:81
+#: tmp/vmm-create.glade.h:89
 msgid "Type"
 msgstr "ধরন"
 
-#: tmp/vmm-create.glade.h:82
+#: tmp/vmm-create.glade.h:90
 #, fuzzy
 msgid "VM _Max Memory (MB):"
 msgstr "VM সর্বাধিক মেমরি: (_M)"
 
-#: tmp/vmm-create.glade.h:83
+#: tmp/vmm-create.glade.h:91
 #, fuzzy
 msgid "VM _Startup Memory (MB):"
 msgstr "VM প্রারম্ভিক মেমরি: (_S)"
 
-#: tmp/vmm-create.glade.h:84
+#: tmp/vmm-create.glade.h:92
 msgid "VMS"
 msgstr ""
 
-#: tmp/vmm-create.glade.h:85
+#: tmp/vmm-create.glade.h:93
+#, fuzzy
+msgid "Virtual CPUs:"
+msgstr "ভার্চুয়াল CPU"
+
+#: tmp/vmm-create.glade.h:94
+#, fuzzy
+msgid "Virtualization method:"
+msgstr "<b>ভার্চুয়ালাইজেশনের প্রণালী:</b>"
+
+#: tmp/vmm-create.glade.h:95
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr "সিস্টেমটি <b>সম্পূর্ণরূপে ভার্চুয়লাইজড</b> অথবা <b>প্যারা-ভার্চুয়ালাইজড</b> হবে"
 
-#: tmp/vmm-create.glade.h:86
+#: tmp/vmm-create.glade.h:96
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr "নতুন সিস্টেমের জন্য ভার্চুয়ালাইজেশনের প্রণালী নির্বাচন করা আবশ্যক:"
 
-#: tmp/vmm-create.glade.h:87
+#: tmp/vmm-create.glade.h:97
 msgid "_Browse..."
 msgstr "ব্রাউজ করুন...(_B)"
 
-#: tmp/vmm-create.glade.h:88
+#: tmp/vmm-create.glade.h:98
 msgid "_CD-ROM or DVD:"
 msgstr "CD-ROM অথবা DVD: (_C)"
 
-#: tmp/vmm-create.glade.h:89
-msgid "_Finish"
-msgstr "সমাপ্তি (_F)"
-
-#: tmp/vmm-create.glade.h:90
+#: tmp/vmm-create.glade.h:101
 msgid "_ISO Image Location:"
 msgstr "ISO ইমেজের অবস্থান:(_I)"
 
-#: tmp/vmm-create.glade.h:91
+#: tmp/vmm-create.glade.h:103
 msgid "_Paravirtualized:"
 msgstr "প্যারা-ভার্চুয়ালাইজড:(_P)"
 
-#: tmp/vmm-create.glade.h:92
+#: tmp/vmm-create.glade.h:104
 msgid "_Path to install media:"
 msgstr "ইনস্টল মিডিয়ার অবস্থানের পাথ:(_P)"
 
-#: tmp/vmm-create.glade.h:93
+#: tmp/vmm-create.glade.h:106
 msgid "_VCPUs:"
 msgstr "_VCPU:"
 
-#: tmp/vmm-create.glade.h:94
+#: tmp/vmm-create.glade.h:108 tmp/vmm-create-net.glade.h:58
 msgid "demo"
 msgstr "ডেমো"
 
-#: tmp/vmm-create.glade.h:95
+#: tmp/vmm-create.glade.h:110
 msgid "http://"
 msgstr "http://"
 
-#: tmp/vmm-create.glade.h:96
+#: tmp/vmm-create.glade.h:111
 msgid ""
 "i686\n"
 "x86_64\n"
@@ -1022,9 +1347,258 @@ msgid ""
 "mipsel"
 msgstr ""
 
-#: tmp/vmm-create.glade.h:102
+#: tmp/vmm-create.glade.h:117
 msgid "para"
 msgstr "para"
+
+#: tmp/vmm-create-net.glade.h:3
+msgid "192.168.1.1"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:4
+msgid "192.168.1.255"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:5
+msgid "192.168.10.0/24"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:6
+msgid "192.168.10.254"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:7
+msgid "255.255.255.0"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:8
+#, fuzzy
+msgid "256"
+msgstr "২৫৬\t"
+
+#: tmp/vmm-create-net.glade.h:10
+#, fuzzy
+msgid "<b>DHCP</b>"
+msgstr "<b>CPU</b>"
+
+#: tmp/vmm-create-net.glade.h:11
+#, fuzzy
+msgid "<b>Example:</b> network1"
+msgstr "<b>উদাহরণ:</b> system1"
+
+#: tmp/vmm-create-net.glade.h:12
+#, fuzzy
+msgid "<b>Forwarding</b>"
+msgstr "<b>সংগ্রহস্থল</b>"
+
+#: tmp/vmm-create-net.glade.h:13
+msgid ""
+"<b>Hint:</b> The network should be choosen from one of the IPv4 private "
+"address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:14
+#, fuzzy
+msgid "<b>IPv4 network</b>"
+msgstr "<b>নেটওয়ার্ক</b>"
+
+#: tmp/vmm-create-net.glade.h:16
+msgid ""
+"<b>Tip:</b> Unless you wish to reserve some addresses to allow static "
+"network configuration in virtual machines, these parameters can be left with "
+"their default values."
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:17
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing an "
+"IPv4 address space</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">সংগ্রহস্থল আরক্ষণ</"
+"span>"
+
+#: tmp/vmm-create-net.glade.h:18
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting to "
+"physical network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">সংগ্রহস্থল আরক্ষণ</"
+"span>"
+
+#: tmp/vmm-create-net.glade.h:19
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
+"virtual network </span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">নতুন ভার্চুয়াল "
+"সিস্টেম নির্মাণ </span>"
+
+#: tmp/vmm-create-net.glade.h:20
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
+"virtual network </span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ভার্চুয়াল "
+"সিস্টেমের নামকরণ </span>"
+
+#: tmp/vmm-create-net.glade.h:21
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create "
+"network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ইনস্টলেশন আরম্ভের "
+"প্রস্থান</span>"
+
+#: tmp/vmm-create-net.glade.h:22
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Selecting the "
+"DHCP range</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">সংগ্রহস্থল আরক্ষণ</"
+"span>"
+
+#: tmp/vmm-create-net.glade.h:23
+#, fuzzy
+msgid "A <b>name</b> for your new virtual network"
+msgstr "নতুন ভার্চুয়াল সিস্টেমের <b>নাম</b>"
+
+#: tmp/vmm-create-net.glade.h:24
+msgid "Broadcast:"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:26
+#, fuzzy
+msgid "Connectivity:"
+msgstr "সংযোগ করুন (_n)"
+
+#: tmp/vmm-create-net.glade.h:27
+#, fuzzy
+msgid "Create a new virtual network"
+msgstr "নতুন ভার্চুয়াল সিস্টেম নির্মাণ"
+
+#: tmp/vmm-create-net.glade.h:28
+msgid "DHCP"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:29
+#, fuzzy
+msgid "Desination:"
+msgstr "গন্তব্য"
+
+#: tmp/vmm-create-net.glade.h:30
+#, fuzzy
+msgid "End address:"
+msgstr "MAC ঠিকানা"
+
+#: tmp/vmm-create-net.glade.h:31
+msgid "End:"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:32
+msgid "Forwarding"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:33
+msgid "Forwarding to physical network"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:34
+msgid "Gateway:"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:35
+msgid "IPv4"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:40
+msgid "Netmask:"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:41
+#, fuzzy
+msgid "Network _Name:"
+msgstr "নেটওয়ার্ক ব্যবহার:"
+
+#: tmp/vmm-create-net.glade.h:42
+#, fuzzy
+msgid "Network name:"
+msgstr "নেটওয়ার্ক ব্যবহার:"
+
+#: tmp/vmm-create-net.glade.h:43 tmp/vmm-host.glade.h:25
+#, fuzzy
+msgid "Network:"
+msgstr "নেটওয়ার্ক"
+
+#: tmp/vmm-create-net.glade.h:44
+#, fuzzy
+msgid "Please choose a name for your virtual network:"
+msgstr "আপনার ভার্চুয়াল সিস্টেমের একটি নাম নির্বাচন করুন:"
+
+#: tmp/vmm-create-net.glade.h:45
+msgid ""
+"Please choose the range of addresses the DHCP server can use to allocate to "
+"guests attached to the virtual network"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:46
+msgid ""
+"Please indicate whether this virtual network should be connected to the "
+"phyiscal network."
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:48
+#, fuzzy
+msgid "Size:"
+msgstr "মাপ:(_S)"
+
+#: tmp/vmm-create-net.glade.h:49
+#, fuzzy
+msgid "Start address:"
+msgstr "MAC ঠিকানা"
+
+#: tmp/vmm-create-net.glade.h:50
+#, fuzzy
+msgid "Start:"
+msgstr "অবস্থা:"
+
+#: tmp/vmm-create-net.glade.h:51
+msgid ""
+"The <b>address range</b> from which the <b>DHCP</b> server will allocate "
+"addresses for virtual machines"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:52
+msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:53
+#, fuzzy
+msgid ""
+"This assistant will guide you through creating a new virtual network. You "
+"will be asked for some information about the virtual network you'd like to "
+"create, such as:"
+msgstr ""
+"এই সহায়তা ব্যবস্থার সাহায্যে আপনি একটি নতুন ভার্চুয়াল সিস্টেম নির্মাণ করতে পারবেন। "
+"নির্মাণযোগ্য ভার্চুয়াল সিস্টেম সম্পর্কে আপনাকে কিছু প্রশ্ন করা হবে যেমন:"
+
+#: tmp/vmm-create-net.glade.h:54
+#, fuzzy
+msgid "Type:"
+msgstr "ধরন"
+
+#: tmp/vmm-create-net.glade.h:55
+msgid "Whether to <b>forward</b> traffic to the physical network"
+msgstr ""
+
+#: tmp/vmm-create-net.glade.h:56
+msgid "You will need to choose an IPv4 address space for the virtual network:"
+msgstr ""
 
 #: tmp/vmm-details.glade.h:2
 #, no-c-format
@@ -1055,7 +1629,7 @@ msgstr "৮"
 msgid "80 MB of 1 GB"
 msgstr "৮০ মেগাবাইট, সর্বমোট ১ গিগাবাইট"
 
-#: tmp/vmm-details.glade.h:10
+#: tmp/vmm-details.glade.h:10 tmp/vmm-host.glade.h:6
 msgid "<b>Basic details</b>"
 msgstr "<b>মৌলিক বিবরণ</b>"
 
@@ -1067,27 +1641,17 @@ msgstr "<b>CPU</b>"
 msgid "<b>Memory</b>"
 msgstr "<b>মেমরি</b>"
 
-#: tmp/vmm-details.glade.h:13
-msgid "<b>Network</b>"
-msgstr "<b>নেটওয়ার্ক</b>"
-
-#: tmp/vmm-details.glade.h:14
+#: tmp/vmm-details.glade.h:13 tmp/vmm-host.glade.h:8
 msgid "<b>Performance</b>"
 msgstr "<b>কর্মক্ষমতা</b>"
 
-#: tmp/vmm-details.glade.h:15
-msgid "<b>Storage</b>"
-msgstr "<b>সংগ্রহস্থল</b>"
-
-#: tmp/vmm-details.glade.h:16
+#: tmp/vmm-details.glade.h:14
 msgid ""
-"<b>Tip:</b> File location paths are as seen from the physical host. Mount "
-"points are as seen from the virtual machine."
+"<b>Tip:</b> 'source' refers to information seen from the host OS, while "
+"'target' refers to information seen from the guest OS"
 msgstr ""
-"<b>উপদেশ:</b> প্রকৃত হোস্ট মেশিন অনুযায়ী ফাইলের অবস্থানের পাথ উল্লিখিত হয়। মাউন্ট-"
-"পয়েন্টগুলি ভার্চুয়াল মেশিনের পাথ অনুযায়ী প্রদর্শিত।"
 
-#: tmp/vmm-details.glade.h:17
+#: tmp/vmm-details.glade.h:15
 msgid ""
 "<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
 "than (or equal to) the number of physical CPUs on the host system."
@@ -1095,89 +1659,241 @@ msgstr ""
 "<b>উপদেশ:</b> সর্বোত্তম কর্মক্ষমতার জন্য ভার্চুয়াল CPU'র সংখ্যা হোস্ট সিস্টেমের মধ্যে "
 "উপস্থিত প্রকৃত CPU সংখ্যার থেকে কম (অথবা সমান) হওয়া আবশ্যক।"
 
+#: tmp/vmm-details.glade.h:16
+#, fuzzy
+msgid "<b>Virtual Disk</b>"
+msgstr "<b>ভার্চুয়াল CPU:</b>"
+
+#: tmp/vmm-details.glade.h:17
+#, fuzzy
+msgid "<b>Virtual Network Interface</b>"
+msgstr "<b>নেটওয়ার্ক</b>"
+
 #: tmp/vmm-details.glade.h:18
+msgid "Block"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:19 tmp/vmm-host.glade.h:11
 msgid "CPU usage:"
 msgstr "CPU ব্যবহার:"
 
-#: tmp/vmm-details.glade.h:19
+#: tmp/vmm-details.glade.h:20
 msgid "Change allocation:"
 msgstr "আরক্ষণ পরিবর্তন:"
 
-#: tmp/vmm-details.glade.h:20
+#: tmp/vmm-details.glade.h:21
 msgid "Current allocation:"
 msgstr "বর্তমানে আরক্ষণ:"
 
-#: tmp/vmm-details.glade.h:22
+#: tmp/vmm-details.glade.h:23
 msgid "Disk usage:"
 msgstr "ডিস্কের ব্যবহার:"
 
-#: tmp/vmm-details.glade.h:23
+#: tmp/vmm-details.glade.h:24
 msgid "Hardware"
 msgstr "হার্ডওয়্যার"
 
-#: tmp/vmm-details.glade.h:24
+#: tmp/vmm-details.glade.h:25
 msgid "How many virtual CPUs should this machine be allocated?"
 msgstr "এই মেশিনের জন্য কয়টি ভার্চুয়াল CPU বরাদ্দ করা হবে?"
 
-#: tmp/vmm-details.glade.h:25
+#: tmp/vmm-details.glade.h:26
 msgid "How much memory should this machine be allocated?"
 msgstr "এই মেশিনের জন্য কত পরিমাণ মেমরি বরাদ্দ করা হবে?"
 
 #: tmp/vmm-details.glade.h:27
+#, fuzzy
+msgid "MAC address:"
+msgstr "MAC ঠিকানা"
+
+#: tmp/vmm-details.glade.h:29
 msgid "Maximum allocation:"
 msgstr "সর্বাধিক আরক্ষণ:"
 
-#: tmp/vmm-details.glade.h:28
+#: tmp/vmm-details.glade.h:30
 msgid "Memory"
 msgstr "মেমরি"
 
-#: tmp/vmm-details.glade.h:29
+#: tmp/vmm-details.glade.h:31 tmp/vmm-host.glade.h:21
 msgid "Memory usage:"
 msgstr "মেমরি ব্যবহার:"
 
-#: tmp/vmm-details.glade.h:30
+#: tmp/vmm-details.glade.h:32 tmp/vmm-host.glade.h:24
 msgid "Name:"
 msgstr "নাম:"
 
-#: tmp/vmm-details.glade.h:31
-msgid "Network"
-msgstr "নেটওয়ার্ক"
-
-#: tmp/vmm-details.glade.h:32
+#: tmp/vmm-details.glade.h:34
 msgid "Network usage:"
 msgstr "নেটওয়ার্ক ব্যবহার:"
 
-#: tmp/vmm-details.glade.h:33
+#: tmp/vmm-details.glade.h:35 tmp/vmm-host.glade.h:26
 msgid "Overview"
 msgstr "সংক্ষিপ্ত তথ্য"
 
-#: tmp/vmm-details.glade.h:35
+#: tmp/vmm-details.glade.h:37
 msgid "Processor"
 msgstr "প্রসেসর"
 
-#: tmp/vmm-details.glade.h:38
+#: tmp/vmm-details.glade.h:40
 msgid "Shut down"
 msgstr "বন্ধ"
 
-#: tmp/vmm-details.glade.h:40
+#: tmp/vmm-details.glade.h:42
+msgid "Source device:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:43
+msgid "Source path:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:44
+msgid "Source type:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:45
 msgid "Status:"
 msgstr "অবস্থা:"
 
-#: tmp/vmm-details.glade.h:42
+#: tmp/vmm-details.glade.h:46
+msgid "Target device:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:47
+msgid "Target type:"
+msgstr ""
+
+#: tmp/vmm-details.glade.h:49
 msgid "Total CPUs on host machine:"
 msgstr "হোস্ট মেশিনের মধ্যে উপস্থিত সর্বমোট CPU সংখ্যা:"
 
-#: tmp/vmm-details.glade.h:44
+#: tmp/vmm-details.glade.h:51 tmp/vmm-host.glade.h:31
 msgid "UUID:"
 msgstr "UUID:"
 
-#: tmp/vmm-details.glade.h:45
+#: tmp/vmm-details.glade.h:52
 msgid "Virtual Machine Details"
 msgstr "ভার্চুয়াল মেশিনের বিবরণ"
 
-#: tmp/vmm-details.glade.h:48
+#: tmp/vmm-details.glade.h:55
 msgid "_Graphical Console"
 msgstr "গ্রাফিকাল কনসোল (_G)"
+
+#: tmp/vmm-details.glade.h:62
+#, fuzzy
+msgid "disk\t"
+msgstr "ডিস্ক"
+
+#: tmp/vmm-host.glade.h:1
+#, fuzzy
+msgid "1.59 GB of 2.2 GB"
+msgstr "৮০ মেগাবাইট, সর্বমোট ১ গিগাবাইট"
+
+#: tmp/vmm-host.glade.h:2
+#, fuzzy
+msgid "2000 MB"
+msgstr "২০০ মেগাবাইট"
+
+#: tmp/vmm-host.glade.h:3
+msgid "4"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:5
+#, no-c-format
+msgid "60%"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:7
+msgid "<b>IPv4 configuration</b>"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:9
+msgid "Architecture:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:10
+msgid "Autostart:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:12
+msgid "DHCP end:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:13
+msgid "DHCP start:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:14
+msgid "Device:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:15
+msgid "Forwarding:"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:16
+#, fuzzy
+msgid "Host Details"
+msgstr "বিবরণ (_t)"
+
+#: tmp/vmm-host.glade.h:17
+#, fuzzy
+msgid "Hostname:"
+msgstr "হোস্ট: (_H)"
+
+#: tmp/vmm-host.glade.h:18 tmp/vmm-open-connection.glade.h:2
+#, fuzzy
+msgid "Hypervisor:"
+msgstr "অন্যান্য হাইপারভাইসর (_O)"
+
+#: tmp/vmm-host.glade.h:19
+#, fuzzy
+msgid "Location:"
+msgstr "ISO'র অবস্থান: (_L)"
+
+#: tmp/vmm-host.glade.h:20
+#, fuzzy
+msgid "Logical CPUs:"
+msgstr "লজিকাল হোস্টের CPU:"
+
+#: tmp/vmm-host.glade.h:22
+#, fuzzy
+msgid "Memory:"
+msgstr "মেমরি"
+
+#: tmp/vmm-host.glade.h:28
+#, fuzzy
+msgid "Start"
+msgstr "অবস্থা"
+
+#: tmp/vmm-host.glade.h:29
+#, fuzzy
+msgid "State:"
+msgstr "অবস্থা:"
+
+#: tmp/vmm-host.glade.h:30
+msgid "Storage Pools"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:32
+#, fuzzy
+msgid "Virtual Networks"
+msgstr "ভার্চুয়াল CPU"
+
+#: tmp/vmm-host.glade.h:33
+msgid "Xen"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:34 tmp/vmm-manager.glade.h:21
+msgid "_File"
+msgstr "ফাইল (_F)"
+
+#: tmp/vmm-host.glade.h:36
+msgid "example.com"
+msgstr ""
+
+#: tmp/vmm-host.glade.h:37
+msgid "x86_64"
+msgstr ""
 
 #: tmp/vmm-manager.glade.h:1
 msgid ""
@@ -1202,38 +1918,39 @@ msgid "Domain ID"
 msgstr "ডোমেইন ID"
 
 #: tmp/vmm-manager.glade.h:9
+#, fuzzy
+msgid "Host details..."
+msgstr "মেশিনের বিবরণ..."
+
+#: tmp/vmm-manager.glade.h:10
 msgid "Machine details..."
 msgstr "মেশিনের বিবরণ..."
 
-#: tmp/vmm-manager.glade.h:12
+#: tmp/vmm-manager.glade.h:13
 msgid "New machine..."
 msgstr "নতুন মেশিন..."
 
-#: tmp/vmm-manager.glade.h:13
+#: tmp/vmm-manager.glade.h:14
 msgid "Open connection..."
 msgstr "সক্রিয় সংযোগ..."
 
-#: tmp/vmm-manager.glade.h:14
+#: tmp/vmm-manager.glade.h:15
 msgid "Restore a saved machine from a filesystem image"
 msgstr "ফাইল-সিস্টেমের ইমেজ থেকে একটি সংরক্ষিত মেশিন পুনরুদ্ধার করুন"
 
-#: tmp/vmm-manager.glade.h:15
+#: tmp/vmm-manager.glade.h:16
 msgid "Restore saved machine..."
 msgstr "সংরক্ষিত মেশিন পুনরুদ্ধার করুন..."
 
-#: tmp/vmm-manager.glade.h:17
+#: tmp/vmm-manager.glade.h:18
 msgid "Virtual CPUs"
 msgstr "ভার্চুয়াল CPU"
 
-#: tmp/vmm-manager.glade.h:19
+#: tmp/vmm-manager.glade.h:20
 msgid "_Edit"
 msgstr "সম্পাদনা (_E)"
 
-#: tmp/vmm-manager.glade.h:20
-msgid "_File"
-msgstr "ফাইল (_F)"
-
-#: tmp/vmm-manager.glade.h:23
+#: tmp/vmm-manager.glade.h:24
 msgid "_View:"
 msgstr "প্রদর্শন:(_V)"
 
@@ -1286,11 +2003,6 @@ msgstr "মাপ:(_S)"
 #: tmp/vmm-open-connection.glade.h:1
 msgid "Co_nnect"
 msgstr "সংযোগ করুন (_n)"
-
-#: tmp/vmm-open-connection.glade.h:2
-#, fuzzy
-msgid "Hypervisor:"
-msgstr "অন্যান্য হাইপারভাইসর (_O)"
 
 #: tmp/vmm-open-connection.glade.h:3
 msgid "Open connection"
@@ -1379,6 +2091,58 @@ msgstr "নমূনা"
 #: tmp/vmm-preferences.glade.h:15
 msgid "seconds"
 msgstr "সেকেন্ড"
+
+#~ msgid "Guest Install Error"
+#~ msgstr "গেস্ট ইনস্টল করতে সমস্যা"
+
+#~ msgid "00:16:3e:"
+#~ msgstr "00:16:3e:"
+
+#~ msgid ":"
+#~ msgstr ":"
+
+#~ msgid ""
+#~ "<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
+#~ "letters A-F"
+#~ msgstr ""
+#~ "<b>উপদেশ:</b> হেক্স সংখ্যার ক্ষেত্রে গ্রহণযোগ্য মান হল 0-9 সংখ্যা ও A-F'র মধ্যে "
+#~ "অক্ষরগুলি"
+
+#~ msgid "Add Virtual NIC"
+#~ msgstr "ভার্চুয়াল NIC যোগ করুন"
+
+#~ msgid "Add virtual NIC with:"
+#~ msgstr "ভার্চুয়াল NIC যোগ করতে ব্যবহৃত হবে:"
+
+#~ msgid "Randomly generated MAC address"
+#~ msgstr "যথেচ্ছরূপে উৎপন্ন MAC ঠিকানা"
+
+#~ msgid "Specified MAC address:"
+#~ msgstr "উল্লিখিত MAC ঠিকানা:"
+
+#~ msgid "mac-addr-random"
+#~ msgstr "mac-addr-random"
+
+#~ msgid "<b>Disk image:</b>"
+#~ msgstr "<b>ডিস্ক ইমেজ:</b>"
+
+#~ msgid "<b>Disk size:</b>"
+#~ msgstr "<b>ডিস্কের মাপ:</b>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Press finish to create a new virtual machine with\n"
+#~ "this configuration."
+#~ msgstr ""
+#~ "উল্লিখিত কনফিগারেশন সহ নতুন ভার্চুয়াল মেশিন নির্মাণ করে\n"
+#~ "ভার্চুয়াল কনসোল প্রদর্শনের জন্য অনুগ্রহ করে সমাপ্ত টিপুন।"
+
+#~ msgid ""
+#~ "<b>Tip:</b> File location paths are as seen from the physical host. Mount "
+#~ "points are as seen from the virtual machine."
+#~ msgstr ""
+#~ "<b>উপদেশ:</b> প্রকৃত হোস্ট মেশিন অনুযায়ী ফাইলের অবস্থানের পাথ উল্লিখিত হয়। "
+#~ "মাউন্ট-পয়েন্টগুলি ভার্চুয়াল মেশিনের পাথ অনুযায়ী প্রদর্শিত।"
 
 #~ msgid ""
 #~ "<b>Too Many Virtual CPUs</b>\n"
