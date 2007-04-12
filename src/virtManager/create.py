@@ -1070,3 +1070,4 @@ class vmmCreate(gobject.GObject):
         elif page == PAGE_SUMMARY:
             self.emit("action-show-help", "virt-manager-validation")
 
+gobject.type_register(vmmCreate)
