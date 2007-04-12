@@ -336,6 +336,7 @@ class vmmEngine:
                                                   (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                                    gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
                                                   None)
+            self.fcdialog.set_current_folder(self.config.get_default_save_dir(con))
             self.fcdialog.set_do_overwrite_confirmation(True)
             response = self.fcdialog.run()
             self.fcdialog.hide()

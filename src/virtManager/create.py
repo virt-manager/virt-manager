@@ -183,6 +183,10 @@ class vmmCreate(gobject.GObject):
             self.bus = None
             self.hal_iface = None
 
+        if os.getuid() != 0:
+            self.window.get_widget("media-physical").set_sensitive(False)
+            self.window.get_widget("storage-partition").set_sensitive(False)
+
         # set up the lists for the url widgets
         media_url_list = self.window.get_widget("pv-media-url")
         media_url_model = gtk.ListStore(str)
@@ -280,7 +284,10 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-vm-name").set_text("")
         self.window.get_widget("media-iso-image").set_active(True)
         self.window.get_widget("fv-iso-location").set_text("")
-        self.window.get_widget("storage-partition").set_active(True)
+        if os.getuid() == 0:
+            self.window.get_widget("storage-partition").set_active(True)
+        else:
+            self.window.get_widget("storage-file-backed").set_active(True)
         self.window.get_widget("storage-partition-address").set_text("")
         self.window.get_widget("storage-file-address").set_text("")
         self.window.get_widget("storage-file-size").set_value(2000)
@@ -713,6 +720,8 @@ class vmmCreate(gobject.GObject):
                                          (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                           gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                          None)
+
+        fcdialog.set_current_folder(self.config.get_default_image_dir(self.connection))
         fcdialog.set_do_overwrite_confirmation(True)
         fcdialog.connect("confirm-overwrite", self.confirm_overwrite_callback)
         response = fcdialog.run()

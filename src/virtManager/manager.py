@@ -243,6 +243,7 @@ class vmmManager(gobject.GObject):
                                               (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                                gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                               None)
+        self.fcdialog.set_current_folder(self.config.get_default_save_dir(self.connection))
         # pop up progress dialog
         response = self.fcdialog.run()
         self.fcdialog.hide()

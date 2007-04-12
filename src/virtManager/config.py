@@ -33,6 +33,9 @@ CONSOLE_KEYGRAB_NEVER = 0
 CONSOLE_KEYGRAB_FULLSCREEN = 1
 CONSOLE_KEYGRAB_MOUSEOVER = 2
 
+DEFAULT_XEN_IMAGE_DIR = "/var/lib/xen/images"
+DEFAULT_XEN_SAVE_DIR = "/var/lib/xen/dump"
+
 class vmmConfig:
     def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir, data_dir):
         self.appname = appname
@@ -241,7 +244,7 @@ class vmmConfig:
                     return ""
                 if secret.get_attribute("uuid") != vm.get_uuid():
                     return ""
-                
+
                 return secret.get_secret()
         return ""
 
@@ -297,5 +300,19 @@ class vmmConfig:
 
     def get_kickstart_urls(self):
         return self.conf.get_list(self.conf_dir + "/urls/kickstart", gconf.VALUE_STRING)
-    
-        
+
+    def get_default_image_dir(self, connection):
+        if connection.get_uri() is None or \
+           connection.get_uri() == "Xen":
+            return DEFAULT_XEN_IMAGE_DIR
+        else:
+            return os.getcwd()
+
+    def get_default_save_dir(self, connection):
+        if connection.get_uri() is None or \
+           connection.get_uri() == "Xen":
+            return DEFAULT_XEN_SAVE_DIR
+        else:
+            return os.getcwd()
+
+
