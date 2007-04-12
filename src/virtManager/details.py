@@ -111,11 +111,8 @@ class vmmDetails(gobject.GObject):
             "on_config_memory_apply_clicked": self.config_memory_apply,
             "on_details_help_activate": self.show_help,
 
-            #for adding vbds. Disgracefully copied from create.py.
-            "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
-            "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
-            "on_storage_file_address_changed": self.toggle_storage_size,
-            "on_storage_toggled" : self.change_storage_type,
+            "on_config_disk_remove_clicked": self.remove_disk,
+            "on_config_network_remove_clicked": self.remove_network,
             "on_add_hardware_button_clicked": self.add_hardware,
             })
 
@@ -322,15 +319,16 @@ class vmmDetails(gobject.GObject):
         if details.get_current_page() == 0:
             self.refresh_summary()
         else:
-            # reload the hw model, go to the correct page, and refresh that page
+            # Add / remove new devices
+            self.repopulate_hw_list()
+
+            # Now refresh desired page
             hw_list = self.window.get_widget("hw-list")
-            hw_panel = self.window.get_widget("hw-panel")
             selection = hw_list.get_selection()
             active = selection.get_selected()
             if active[1] != None:
                 pagetype = active[0].get_value(active[1], 2)
                 device_info = active[0].get_value(active[1], 3)
-                self.repopulate_hw_list()
                 hw_model = hw_list.get_model()
                 if pagetype == VMM_HW_CPU:
                     self.refresh_config_cpu()
@@ -454,59 +452,36 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("config-memory-apply").set_sensitive(False)
 
 
-    def browse_storage_partition_address(self, src, ignore=None):
-        part = self._browse_file(_("Locate Storage Partition"), "/dev")
-        if part != None:
-            self.window.get_widget("storage-partition-address").set_text(part)
+    def remove_disk(self, src):
+        vmlist = self.window.get_widget("hw-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] != None:
+            diskinfo = active[0].get_value(active[1], 3)
 
-    def browse_storage_file_address(self, src, ignore=None):
-        self.window.get_widget("storage-file-size").set_sensitive(True)
-        fcdialog = gtk.FileChooserDialog(_("Locate or Create New Storage File"),
-                                         self.window.get_widget("vmm-create"),
-                                         gtk.FILE_CHOOSER_ACTION_SAVE,
-                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                          gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
-                                         None)
-        fcdialog.set_do_overwrite_confirmation(True)
-        fcdialog.connect("confirm-overwrite", self.confirm_overwrite_callback)
-        response = fcdialog.run()
-        fcdialog.hide()
-        file = None
-        if(response == gtk.RESPONSE_ACCEPT):
-            file = fcdialog.get_filename()
-        if file != None:
-            self.window.get_widget("storage-file-address").set_text(file)
+            vbd = virtinst.VirtualDisk(path=diskinfo[1], type=diskinfo[0], device=diskinfo[2])
+            xml = vbd.get_xml_config(diskinfo[3])
 
-    def toggle_storage_size(self, ignore1=None, ignore2=None):
-        file = self.get_config_disk_image()
-        if file != None and len(file) > 0 and not(os.path.exists(file)):
-            self.window.get_widget("storage-file-size").set_sensitive(True)
-            self.window.get_widget("non-sparse").set_sensitive(True)
-            self.window.get_widget("storage-file-size").set_value(4000)
-        else:
-            self.window.get_widget("storage-file-size").set_sensitive(False)
-            self.window.get_widget("non-sparse").set_sensitive(False)
-            if os.path.isfile(file):
-                size = os.path.getsize(file)/(1024*1024)
-                self.window.get_widget("storage-file-size").set_value(size)
+            self.vm.remove_device(xml)
+
+    def remove_network(self, src):
+        vmlist = self.window.get_widget("hw-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] != None:
+            netinfo = active[0].get_value(active[1], 3)
+
+            vnic = None
+            if netinfo[0] == "bridge":
+                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], bridge=netinfo[1], macaddr=netinfo[3])
+            elif net[0] == "network":
+                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], network=netinfo[1], macaddr=netinfo[3])
             else:
-                self.window.get_widget("storage-file-size").set_value(0)
+                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], macaddr=netinfo[3])
 
-    def confirm_overwrite_callback(self, chooser):
-        # Only called when the user has chosen an existing file
-        self.window.get_widget("storage-file-size").set_sensitive(False)
-        return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
+            xml = vnic.get_xml_config()
+            self.vm.remove_device(xml)
 
-    def change_storage_type(self, ignore=None):
-        if self.window.get_widget("storage-partition").get_active():
-            self.window.get_widget("storage-partition-box").set_sensitive(True)
-            self.window.get_widget("storage-file-box").set_sensitive(False)
-            self.window.get_widget("storage-file-size").set_sensitive(False)
-            self.window.get_widget("non-sparse").set_sensitive(False)
-        else:
-            self.window.get_widget("storage-partition-box").set_sensitive(False)
-            self.window.get_widget("storage-file-box").set_sensitive(True)
-            self.toggle_storage_size()
 
     def prepare_hw_list(self):
         hw_list_model = gtk.ListStore(str, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
@@ -531,12 +506,15 @@ class vmmDetails(gobject.GObject):
         self.repopulate_hw_list()
 
     def repopulate_hw_list(self):
-        hw_list_model = self.window.get_widget("hw-list").get_model()
+        hw_list = self.window.get_widget("hw-list")
+        hw_list_model = hw_list.get_model()
 
         # Populate list of disks
+        currentDisks = {}
         for disk in self.vm.get_disk_devices():
             missing = True
             insertAt = 0
+            currentDisks[disk[3]] = 1
             for row in hw_list_model:
                 if row[2] == VMM_HW_DISK and row[3][3] == disk[3]:
                     # Update metadata
@@ -551,9 +529,11 @@ class vmmDetails(gobject.GObject):
                 hw_list_model.insert(insertAt, ["Disk %s" % disk[3], self.pixbuf_disk, VMM_HW_DISK, disk])
 
         # Populate list of NICs
+        currentNICs = {}
         for nic in self.vm.get_network_devices():
             missing = True
             insertAt = 0
+            currentNICs[nic[3]] = 1
             for row in hw_list_model:
                 if row[2] == VMM_HW_NIC and row[3][3] == nic[3]:
                     # Update metadata
@@ -567,6 +547,31 @@ class vmmDetails(gobject.GObject):
             # Add in row
             if missing:
                 hw_list_model.insert(insertAt, ["NIC %s" % nic[2], self.pixbuf_nic, VMM_HW_NIC, nic])
+
+        # Now remove any no longer current devs
+        devs = range(len(hw_list_model))
+        devs.reverse()
+        for i in devs:
+            iter = hw_list_model.iter_nth_child(None, i)
+            row = hw_list_model[i]
+            removeIt = False
+
+            if row[2] == VMM_HW_DISK and not currentDisks.has_key(row[3][3]):
+                removeIt = True
+            elif row[2] == VMM_HW_NIC and not currentNICs.has_key(row[3][3]):
+                removeIt = True
+
+            if removeIt:
+                # Re-select the first row, if we're viewing the device
+                # we're about to remove
+                (selModel, selIter) = hw_list.get_selection().get_selected()
+                selType = selModel.get_value(selIter, 2)
+                selInfo = selModel.get_value(selIter, 3)
+                if selType == row[2] and selInfo[3] == row[3][3]:
+                    hw_list.get_selection().select_iter(selModel.iter_nth_child(None, 0))
+
+                # Now actually remove it
+                hw_list_model.remove(iter)
 
 
     def add_hardware(self, src):

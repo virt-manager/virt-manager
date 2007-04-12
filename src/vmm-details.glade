@@ -877,7 +877,7 @@
 
 	      <child>
 		<widget class="GtkVBox" id="vbox53">
-		  <property name="border_width">5</property>
+		  <property name="border_width">6</property>
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">6</property>
@@ -937,7 +937,6 @@
 
 	      <child>
 		<widget class="GtkNotebook" id="hw-panel">
-		  <property name="border_width">10</property>
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="show_tabs">True</property>
@@ -1357,6 +1356,7 @@
 
 		      <child>
 			<widget class="GtkHButtonBox" id="hbuttonbox5">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="layout_style">GTK_BUTTONBOX_END</property>
 			  <property name="spacing">5</property>
@@ -1811,6 +1811,7 @@
 
 		      <child>
 			<widget class="GtkHButtonBox" id="hbuttonbox6">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="layout_style">GTK_BUTTONBOX_END</property>
 			  <property name="spacing">5</property>
@@ -2217,7 +2218,7 @@
 				  <property name="wrap">True</property>
 				  <property name="selectable">False</property>
 				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
+				  <property name="yalign">0</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
@@ -2236,8 +2237,8 @@
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
 			</packing>
 		      </child>
 
@@ -2252,6 +2253,33 @@
 			  <property name="expand">False</property>
 			  <property name="fill">False</property>
 			  <property name="pack_type">GTK_PACK_END</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkHButtonBox" id="hbuttonbox10">
+			  <property name="border_width">6</property>
+			  <property name="visible">True</property>
+			  <property name="layout_style">GTK_BUTTONBOX_END</property>
+			  <property name="spacing">0</property>
+
+			  <child>
+			    <widget class="GtkButton" id="config-disk-remove">
+			      <property name="visible">True</property>
+			      <property name="can_default">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label">gtk-remove</property>
+			      <property name="use_stock">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <signal name="clicked" handler="on_config_disk_remove_clicked" last_modification_time="Thu, 12 Apr 2007 21:55:51 GMT"/>
+			    </widget>
+			  </child>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">False</property>
+			  <property name="fill">True</property>
 			</packing>
 		      </child>
 		    </widget>
@@ -2637,7 +2665,7 @@
 				  <property name="wrap">True</property>
 				  <property name="selectable">False</property>
 				  <property name="xalign">0.5</property>
-				  <property name="yalign">0.5</property>
+				  <property name="yalign">0</property>
 				  <property name="xpad">0</property>
 				  <property name="ypad">0</property>
 				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
@@ -2652,6 +2680,33 @@
 			      <property name="expand">False</property>
 			      <property name="fill">False</property>
 			    </packing>
+			  </child>
+			</widget>
+			<packing>
+			  <property name="padding">0</property>
+			  <property name="expand">True</property>
+			  <property name="fill">True</property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkHButtonBox" id="hbuttonbox11">
+			  <property name="border_width">6</property>
+			  <property name="visible">True</property>
+			  <property name="layout_style">GTK_BUTTONBOX_END</property>
+			  <property name="spacing">0</property>
+
+			  <child>
+			    <widget class="GtkButton" id="config-network-remove">
+			      <property name="visible">True</property>
+			      <property name="can_default">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label">gtk-remove</property>
+			      <property name="use_stock">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <signal name="clicked" handler="on_config_network_remove_clicked" last_modification_time="Thu, 12 Apr 2007 21:55:34 GMT"/>
+			    </widget>
 			  </child>
 			</widget>
 			<packing>

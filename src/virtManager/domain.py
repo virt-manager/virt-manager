@@ -519,7 +519,11 @@ class vmmDomain(gobject.GObject):
                     elif child.name == "mac":
                         devmac = child.prop("address")
 
-                nics.append([type, source, target, devmac])
+                # XXX Hack - ignore devs without a MAC, since we
+                # need mac for uniqueness. Some reason XenD doesn't
+                # always complete kill the NIC record
+                if devmac != None:
+                    nics.append([type, source, target, devmac])
         finally:
             if ctx != None:
                 ctx.xpathFreeContext()
@@ -528,6 +532,8 @@ class vmmDomain(gobject.GObject):
         return nics
 
     def add_device(self, xml):
+        logging.debug("Adding device " + xml)
+
         if self.is_active():
             self.vm.attachDevice(xml)
 
@@ -541,6 +547,8 @@ class vmmDomain(gobject.GObject):
         self.get_connection().define_domain(newxml)
 
     def remove_device(self, xml):
+        logging.debug("Removing device " + xml)
+
         if self.is_active():
             self.vm.detachDevice(xml)
 
