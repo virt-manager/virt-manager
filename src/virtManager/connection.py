@@ -115,6 +115,13 @@ class vmmConnection(gobject.GObject):
                     # XXX Linux specific - needs porting for other OS - patches
                     # welcomed...
                     sysfspath = obj.GetPropertyString("linux.sysfs_path")
+
+                    # Sick, disgusting hack for Xen netloop crack which renames
+                    # ethN -> pethN, but which HAL never sees
+                    psysfspath = sysfspath[0:len(sysfspath)-len(name)] + "p" + name
+                    if os.path.exists(psysfspath):
+                        sysfspath = psysfspath
+
                     brportpath = os.path.join(sysfspath, "brport")
 
                     if os.path.exists(brportpath):
