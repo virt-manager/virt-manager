@@ -92,8 +92,9 @@ class vmmCreateNetwork(gobject.GObject):
         fw_list.pack_start(text, True)
         fw_list.add_attribute(text, 'text', 0)
         fw_model.append([_("NAT to any physical device"), True, None])
-        for name in self.conn.list_net_device_names():
-            fw_model.append([_("NAT to physical device %s") % (name), True, name])
+        for path in self.conn.list_net_device_paths():
+            net = self.conn.get_net_device(path)
+            fw_model.append([_("NAT to physical device %s") % (net.get_name()), True, net.get_name()])
 
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
