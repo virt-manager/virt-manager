@@ -215,18 +215,18 @@ class vmmCreate(gobject.GObject):
 
         # set up the lists for the os-type/os-variant widgets
         os_type_list = self.window.get_widget("os-type")
-        os_type_model = gtk.ListStore(str)
+        os_type_model = gtk.ListStore(str, str)
         os_type_list.set_model(os_type_model)
         text = gtk.CellRendererText()
         os_type_list.pack_start(text, True)
-        os_type_list.add_attribute(text, 'text', 0)
+        os_type_list.add_attribute(text, 'text', 1)
 
         os_variant_list = self.window.get_widget("os-variant")
-        os_variant_model = gtk.ListStore(str)
+        os_variant_model = gtk.ListStore(str, str)
         os_variant_list.set_model(os_variant_model)
         text = gtk.CellRendererText()
         os_variant_list.pack_start(text, True)
-        os_variant_list.add_attribute(text, 'text', 0)
+        os_variant_list.add_attribute(text, 'text', 1)
 
         self.window.get_widget("create-cpus-physical").set_text(str(self.connection.host_maximum_processor_count()))
         memory = int(self.connection.host_memory_size())
@@ -299,16 +299,15 @@ class vmmCreate(gobject.GObject):
         self.populate_url_model(model, self.config.get_media_urls())
         model = self.window.get_widget("pv-ks-url").get_model()
         self.populate_url_model(model, self.config.get_kickstart_urls())
-        model = self.window.get_widget("os-type").get_model()
-        os_list = virtinst.FullVirtGuest.OS_TYPES.keys()
-        os_list.sort()
-        self.populate_os_model(model, os_list)
+
+        # Fill list of OS types
+        self.populate_os_type_model()
+        self.window.get_widget("os-type").set_active(-1)
+
         model = self.window.get_widget("net-network").get_model()
         self.populate_network_model(model)
         device = self.window.get_widget("net-device").get_model()
         self.populate_device_model(device)
-        # set the default os to Linux
-        self.window.get_widget("os-type").set_active(os_list.index("Linux"))
         self.install_error = None
 
 
@@ -412,11 +411,26 @@ class vmmCreate(gobject.GObject):
         return self.window.get_widget("create-vcpus").get_value()
 
     def get_config_os_type(self):
-        return self.window.get_widget("os-type").get_active_text()
+        type = self.window.get_widget("os-type")
+        if type.get_active_iter() != None:
+            return type.get_model().get_value(type.get_active_iter(), 0)
+        return None
 
     def get_config_os_variant(self):
-        return self.window.get_widget("os-variant").get_active_text()
+        variant = self.window.get_widget("os-variant")
+        if variant.get_active_iter() != None:
+            return variant.get_model().get_value(variant.get_active_iter(), 0)
+        return None
 
+    def get_config_os_label(self):
+        variant = self.window.get_widget("os-variant")
+        if variant.get_active_iter() != None:
+            return variant.get_model().get_value(variant.get_active_iter(), 1)
+
+        type = self.window.get_widget("os-type")
+        if type.get_active_iter() != None:
+            return type.get_model().get_value(type.get_active_iter(), 1)
+        return "N/A"
 
     def page_changed(self, notebook, page, page_number):
         # would you like some spaghetti with your salad, sir?
@@ -449,7 +463,7 @@ class vmmCreate(gobject.GObject):
             else:
                 self.window.get_widget("summary-method").set_text(_("Fully virtualized"))
                 self.window.get_widget("summary-os-label").show()
-                self.window.get_widget("summary-os").set_text(self.get_config_os_variant())
+                self.window.get_widget("summary-os").set_text(self.get_config_os_label())
                 self.window.get_widget("summary-os").show()
             self.window.get_widget("summary-install-source").set_text(self.get_config_install_source())
             self.window.get_widget("summary-kickstart-source").set_text(self.get_config_kickstart_source())
@@ -497,13 +511,15 @@ class vmmCreate(gobject.GObject):
             except ValueError, e:
                 self._validation_error_box(_("Invalid FV media address"),e.args[0])
             try:
-                logging.debug("OS Type: %s" % self.get_config_os_type())
-                guest.os_type = self.get_config_os_type()
+                if self.get_config_os_type() is not None:
+                    logging.debug("OS Type: %s" % self.get_config_os_type())
+                    guest.os_type = self.get_config_os_type()
             except ValueError, e:
                 self._validation_error_box(_("Invalid FV OS Type"),e.args[0])
             try:
-                logging.debug("OS Variant: %s" % self.get_config_os_variant())
-                guest.os_variant = self.get_config_os_variant()
+                if self.get_config_os_variant() is not None:
+                    logging.debug("OS Variant: %s" % self.get_config_os_variant())
+                    guest.os_variant = self.get_config_os_variant()
             except ValueError, e:
                 self._validation_error_box(_("Invalid FV OS Variant"),e.args[0])
 
@@ -599,7 +615,7 @@ class vmmCreate(gobject.GObject):
                       "\n  Type: " + guest.type + \
                       "\n  UUID: " + guest.uuid + \
                       "\n  Source: " + self.get_config_install_source() + \
-                      "\n  OS: " + self.get_config_os_variant() + \
+                      "\n  OS: " + str(self.get_config_os_label()) + \
                       "\n  Kickstart: " + self.get_config_kickstart_source() + \
                       "\n  Memory: " + str(guest.memory) + \
                       "\n  Max Memory: " + str(guest.maxmemory) + \
@@ -967,10 +983,21 @@ class vmmCreate(gobject.GObject):
         for url in urls:
             model.append([url])
 
-    def populate_os_model(self, model, oses):
+    def populate_os_type_model(self):
+        model = self.window.get_widget("os-type").get_model()
         model.clear()
-        for os in oses:
-            model.append([os])
+        types = virtinst.FullVirtGuest.list_os_types()
+        types.sort()
+        for type in types:
+            model.append([type, virtinst.FullVirtGuest.get_os_type_label(type)])
+
+    def populate_os_variant_model(self, type):
+        model = self.window.get_widget("os-variant").get_model()
+        model.clear()
+        variants = virtinst.FullVirtGuest.list_os_variants(type)
+        variants.sort()
+        for variant in variants:
+            model.append([variant, virtinst.FullVirtGuest.get_os_variant_label(type, variant)])
 
     def populate_network_model(self, model):
         model.clear()
@@ -987,13 +1014,11 @@ class vmmCreate(gobject.GObject):
 
     def change_os_type(self, box):
         model = box.get_model()
-        os_type = model.get_value(box.get_active_iter(), 0)
+        if box.get_active_iter() != None:
+            type = model.get_value(box.get_active_iter(), 0)
+            self.populate_os_variant_model(type)
         variant = self.window.get_widget("os-variant")
-        variant_model = variant.get_model()
-        variant_list = virtinst.FullVirtGuest.OS_TYPES[os_type].keys()
-        variant_list.sort()
-        self.populate_os_model(variant_model, variant_list)
-        variant.set_active(0)
+        variant.set_active(-1)
 
     def change_virt_method(self, ignore=None):
         arch = self.window.get_widget("cpu-architecture")
