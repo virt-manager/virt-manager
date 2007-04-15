@@ -64,32 +64,46 @@ class vmmAsyncJob(gobject.GObject):
         self.topwin.destroy()
 
     def pulse_pbar(self, progress="", stage=None):
-        self.is_pulsing = True
-        self.pbar.set_text(progress)
-        if stage is not None:
-            self.stage.set_text(stage)
-        else:
-            self.stage.set_text(_("Processing..."))
+        gtk.gdk.threads_enter()
+        try:
+            self.is_pulsing = True
+            self.pbar.set_text(progress)
+            if stage is not None:
+                self.stage.set_text(stage)
+            else:
+                self.stage.set_text(_("Processing..."))
+        finally:
+            gtk.gdk.threads_leave()
+            
 
     def set_pbar_fraction(self, frac, progress, stage=None):
         # callback for progress meter when file size is known
-        self.is_pulsing=False
-        if stage is not None:
-            self.stage.set_text(stage)
-        else:
-            self.stage.set_text(_("Processing..."))
-        self.pbar.set_text(progress)
-        self.pbar.set_fraction(frac)
+        gtk.gdk.threads_enter()
+        try:
+            self.is_pulsing=False
+            if stage is not None:
+                self.stage.set_text(stage)
+            else:
+                self.stage.set_text(_("Processing..."))
+            self.pbar.set_text(progress)
+            self.pbar.set_fraction(frac)
+        finally:
+            gtk.gdk.threads_leave()
+
 
     def set_pbar_done(self, progress, stage=None):
         #callback for progress meter when progress is done
-        self.is_pulsing=False
-        if stage is not None:
-            self.stage.set_text(stage)
-        else:
-            self.stage.set_text(_("Completed"))
-        self.pbar.set_text(progress)
-        self.pbar.set_fraction(1)
+        gtk.gdk.threads_enter()
+        try:
+            self.is_pulsing=False
+            if stage is not None:
+                self.stage.set_text(stage)
+            else:
+                self.stage.set_text(_("Completed"))
+            self.pbar.set_text(progress)
+            self.pbar.set_fraction(1)
+        finally:
+            gtk.gdk.threads_leave()
 
     def exit_if_necessary(self):
         gtk.gdk.threads_enter()
