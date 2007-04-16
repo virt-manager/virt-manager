@@ -1,8 +1,270 @@
+2007-04-16  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* NEWS, README, configure.ac, virt-manager.spec.in:
+	Update info for new release
+	[f5e47b053177] [tip]
+
+2007-04-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* Merge heads
+	[f5478160c701]
+
+2007-04-13  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/createnet.py:
+	Fixed use of net device names
+	[2076b36ad38c]
+
+	* src/virtManager/asyncjob.py:
+	Fixed thread locking in async job callback
+	[2c99eaccd271]
+
+2007-04-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/create.py:
+	Update OS type/variant code to deal with API changes in virtinst
+	[3131f3183a97]
+
+2007-04-12  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.py.in, src/virtManager/connect.py,
+	src/virtManager/connection.py, src/virtManager/engine.py, src/vmm-
+	open-connection.glade:
+	Automatically try to open a sensible default hypervisor connection
+	[4b2d0b2fa30e]
+
+	* po/as.po, po/bn_IN.po, po/ca.po, po/da.po, po/de.po, po/es.po,
+	po/fr.po, po/gu.po, po/hi.po, po/hr.po, po/is.po, po/it.po,
+	po/ja.po, po/kn.po, po/ko.po, po/ml.po, po/mr.po, po/ms.po,
+	po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po, po/te.po,
+	po/tr.po, po/virt-manager.pot, po/zh_CN.po, po/zh_TW.po:
+	Refresh POT files
+	[9854494acf7e]
+
+	* src/virtManager/createnet.py, src/virtManager/host.py, src/vmm-
+	create-net.glade, src/vmm-host.glade:
+	Clear up terminology around NAT + virtual networks
+	[d7a5a7b32f34]
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	Added support for device hot-remove
+	[266de79ed851]
+
+	* src/virtManager/connection.py, src/virtManager/details.py,
+	src/virtManager/domain.py:
+	Persist changes to device config when adding devices. Disable
+	hotplug for dom0
+	[8450fc7d0771]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/vmm-add-hardware.glade, src/vmm-add-
+	virtual-nic.glade, src/vmm-details.glade:
+	Pull add hardware functionality out into separate popup window to
+	simplify state management in details window. Implemenet adding of
+	disks
+	[99e840c696be]
+
+	* src/virtManager/create.py:
+	Added missing gobject registration call
+	[646370df05c5]
+
+	* src/virtManager/connection.py:
+	Make shared NIC detection work with Xen netloop crack
+	[ef518850c7c8]
+
+	* src/virtManager/details.py:
+	Merge heads
+	[75e9e36edfd4]
+
+	* src/virtManager/config.py, src/virtManager/create.py,
+	src/virtManager/engine.py, src/virtManager/manager.py:
+	Set sensible default directories for save/restore/create
+	[8cb893311a7b]
+
+2007-04-11  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	First cut at vbd/vnic add/remove. You can now add a vnic, and the
+	screens update every tick(). Adding a vbd almost works, still have
+	to work out the device node naming. Finally, nothing works for
+	inactive guests yet.
+	[07012bf5e73e]
+
+2007-04-10  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py, src/virtManager/details.py:
+	Added error reporting around VM start operation
+	[dd5347e1fcb9]
+
+	* src/virtManager/error.py:
+	Make sure scrolled window requests at least 400 pixels width to
+	avoid line wrapping error message
+	[5cefc1c494f6]
+
+	* src/virtManager/create.py:
+	Friendlier error messages when creating guests
+	[9cb4315b58b2]
+
+	* src/virtManager/host.py:
+	Disable creation of networks for non-root
+	[fb3d6ad20a2a]
+
+	* src/virtManager/connection.py, src/virtManager/create.py,
+	src/virtManager/netdev.py:
+	Added code to detect 'shared' physical NICs
+	[5039fc44e638]
+
+2007-04-04  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py:
+	Added signals for network devices& fix creation of virtual networks
+	from UI
+	[82ebd1bd2476]
+
+2007-04-03  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/host.py,
+	src/virtManager/network.py, src/vmm-host.glade:
+	Hooked up stop/start/delete buttons for networking. Detect & signal
+	start/stop events for network
+	[29759c93f3e1]
+
+2007-03-30  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/createnet.py:
+	Removed print debugging
+	[c51ca104c474]
+
+	* src/vmm-create.glade:
+	Formatting changes to network page
+	[20ccc93cf3f5]
+
+	* src/virtManager/host.py, src/vmm-host.glade:
+	Added some icons for state/autostart/forwarding info
+	[55ca5f6dd579]
+
+	* src/virtManager/createnet.py, src/vmm-create-net.glade:
+	Added support for forwarding options
+	[c2869dbb9e81]
+
+	* src/virtManager/network.py:
+	Fixed extraction of ip forwarding info from XML
+	[2d39c7c06110]
+
+	* src/virtManager/connection.py, src/virtManager/netdev.py:
+	Added API for enumerating network devices
+	[c7d9c5725ecb]
+
+	* src/virtManager/createnet.py:
+	Added module for create network wizard
+	[891f0e62ebf8]
+
+2007-03-29  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/IPy.py, src/virtManager/host.py,
+	src/virtManager/network.py, src/vmm-create-net.glade, src/vmm-
+	host.glade:
+	Added a wizard for creating new virtual networks
+	[7762de645227]
+
+	* src/virtManager/connection.py:
+	Added net-added & net-removed signals. Added API for creating a new
+	network
+	[119d7f3717e5]
+
+2007-03-28  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/create.py:
+	Merge heads
+	[13ae24fc3e1b]
+
+2007-03-28  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py:
+	Warn when a user tries to create a guest that attempts to use a disk
+	already in use by another guest. Thanks to Takahashi Tomohiro
+	<takatom-at-jp-dot-fujitsu-dot-com>.
+	[b917c4a76425]
+
+2007-03-28  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/create.py:
+	Fixed check for HVM support to work on non-Xen
+	[10a90e9becf0]
+
+	* src/virtManager/create.py:
+	Fixed typo
+	[9d80e0ad9ffd]
+
+2007-03-27  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/domain.py,
+	src/virtManager/engine.py, src/virtManager/host.py,
+	src/virtManager/manager.py, src/virtManager/network.py, src/vmm-
+	host.glade, src/vmm-manager.glade:
+	Added dialog for viewing host status & resource config
+	[9b641d9bfa2b]
+
+	* src/vmm-details.glade:
+	Right align all labels
+	[31835160ba01]
+
+2007-03-27  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py, src/virtManager/keytable.py:
+	Automatically choose a keytable from virt-manager based on the
+	locally set keytable. Thanks to Takahashi Tomohiro <takatom-at-jp-
+	dot-fujitsu-dot-com>
+	[88a18060d581]
+
+2007-03-22  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* AUTHORS, src/virtManager/engine.py, src/virtManager/error.py:
+	Added an error dialog with expandable 'details' pane. Use this from
+	connection error code. Patch from Richard Jones
+	[93d7999b9b75]
+
+	* src/virtManager/engine.py:
+	Merge heads
+	[f1254be4fc93]
+
+	* src/virtManager/engine.py:
+	Include stack trace in error logs
+	[7b950d2ff294]
+
+2007-03-21  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/create.py,
+	src/virtManager/network.py, src/vmm-create.glade:
+	Enable selection of networking options
+	[dfffea1edb27]
+
+	* src/vmm-details.glade:
+	Make the VM name field sensitive, but not editable
+	[8f05d032ff8d]
+
 2007-03-20  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.3.1-1 for changeset
+	225ff0619562f046101d6fc4f90371051367f850
+	[9358db7b04b0]
+
+	* .hgtags:
+	Added tag RELEASE-0.3.2-1 for changeset
+	a671c435f0c6cb78ec10980ad5d4fb71adc1a622
+	[48431754047c]
+
+	* ChangeLog, NEWS, configure.ac, virt-manager.spec.in:
+	Update for 0.3.2 release
+	[a671c435f0c6] [RELEASE-0.3.2-1]
 
 	* po/Makefile.am:
 	Fix rule for generating pot files from glade
-	[163288760363] [tip]
+	[163288760363]
 
 	* po/as.po, po/bn_IN.po, po/ca.po, po/da.po, po/de.po, po/es.po,
 	po/fr.po, po/gu.po, po/hi.po, po/hr.po, po/is.po, po/it.po,
@@ -226,7 +488,7 @@
 
 	* ChangeLog, NEWS, README, virt-manager.spec.in:
 	Updated for release 0.3.1
-	[225ff0619562]
+	[225ff0619562] [RELEASE-0.3.1-1]
 
 	* configure.ac:
 	Bump version number
