@@ -1,6 +1,22 @@
  Virtual Machine Manager News
  ============================
 
+Release 0.4.0
+-------------
+
+This release introduces major new functionality. There is new UI for the
+creation & management of virtual networks using the new libvirt networking
+APIs. The guest creation wizard can now attach VMs to a virtual network or
+shared physical devices. The initial connection dialog is no longer shown,
+either a QEMU or Xen connection is automatically opened based on host kernel
+capabilities. For existing guests there is support for the addition and
+removal of both disk & network devices (hot-add/remove too if supported by
+the virtualization platform being used - eg Xen paravirt). The keymap for
+guest VNC server is automatically set based on the local keymap to assist
+people using non-English keyboard layouts. There is improved error reporting
+for a number of critical operations such as starting guests / connecting
+to the hypervisor.
+
 Release 0.3.2
 -------------
 
