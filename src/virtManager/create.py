@@ -302,12 +302,16 @@ class vmmCreate(gobject.GObject):
 
         # Fill list of OS types
         self.populate_os_type_model()
-        self.window.get_widget("os-type").set_active(-1)
+        self.window.get_widget("os-type").set_active(0)
 
-        model = self.window.get_widget("net-network").get_model()
-        self.populate_network_model(model)
-        device = self.window.get_widget("net-device").get_model()
-        self.populate_device_model(device)
+        net_box = self.window.get_widget("net-network")
+        self.populate_network_model(net_box.get_model())
+        net_box.set_active(0)
+        
+        dev_box = self.window.get_widget("net-device")
+        self.populate_device_model(dev_box.get_model())
+        dev_box.set_active(0)
+
         self.install_error = None
 
 
@@ -511,13 +515,13 @@ class vmmCreate(gobject.GObject):
             except ValueError, e:
                 self._validation_error_box(_("Invalid FV media address"),e.args[0])
             try:
-                if self.get_config_os_type() is not None:
+                if self.get_config_os_type() is not None and self.get_config_os_type() != "generic":
                     logging.debug("OS Type: %s" % self.get_config_os_type())
                     guest.os_type = self.get_config_os_type()
             except ValueError, e:
                 self._validation_error_box(_("Invalid FV OS Type"),e.args[0])
             try:
-                if self.get_config_os_variant() is not None:
+                if self.get_config_os_variant() is not None and self.get_config_os_type() != "generic":
                     logging.debug("OS Variant: %s" % self.get_config_os_variant())
                     guest.os_variant = self.get_config_os_variant()
             except ValueError, e:
@@ -986,6 +990,7 @@ class vmmCreate(gobject.GObject):
     def populate_os_type_model(self):
         model = self.window.get_widget("os-type").get_model()
         model.clear()
+        model.append(["generic", "Generic"])
         types = virtinst.FullVirtGuest.list_os_types()
         types.sort()
         for type in types:
@@ -994,6 +999,9 @@ class vmmCreate(gobject.GObject):
     def populate_os_variant_model(self, type):
         model = self.window.get_widget("os-variant").get_model()
         model.clear()
+        if type=="generic":
+            model.append(["generic", "Generic"])
+            return
         variants = virtinst.FullVirtGuest.list_os_variants(type)
         variants.sort()
         for variant in variants:
@@ -1018,7 +1026,7 @@ class vmmCreate(gobject.GObject):
             type = model.get_value(box.get_active_iter(), 0)
             self.populate_os_variant_model(type)
         variant = self.window.get_widget("os-variant")
-        variant.set_active(-1)
+        variant.set_active(0)
 
     def change_virt_method(self, ignore=None):
         arch = self.window.get_widget("cpu-architecture")

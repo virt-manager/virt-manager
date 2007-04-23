@@ -179,6 +179,7 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("create-forward").show()
         self.window.get_widget("create-back").set_sensitive(False)
         self.window.get_widget("storage-file-size").set_sensitive(False)
+        self.window.get_widget("create-help").hide()
 
         self.change_storage_type()
         self.change_network_type()
@@ -190,11 +191,15 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("storage-file-address").set_text("")
         self.window.get_widget("storage-file-size").set_value(2000)
         self.window.get_widget("non-sparse").set_active(True)
+        self.window.get_widget("hardware-type").set_active(0)
 
-        model = self.window.get_widget("net-network").get_model()
-        self.populate_network_model(model)
-        device = self.window.get_widget("net-device").get_model()
-        self.populate_device_model(device)
+        net_box = self.window.get_widget("net-network")
+        self.populate_network_model(net_box.get_model())
+        net_box.set_active(0)
+        
+        dev_box = self.window.get_widget("net-device")
+        self.populate_device_model(dev_box.get_model())
+        dev_box.set_active(0)
 
 
     def forward(self, ignore=None):
@@ -414,23 +419,38 @@ class vmmAddHardware(gobject.GObject):
 
     def browse_storage_file_address(self, src, ignore=None):
         self.window.get_widget("storage-file-size").set_sensitive(True)
-        fcdialog = gtk.FileChooserDialog(_("Locate or Create New Storage File"),
-                                         self.window.get_widget("vmm-create"),
-                                         gtk.FILE_CHOOSER_ACTION_SAVE,
+        folder = self.config.get_default_image_dir(self.vm.get_connection())
+        file = self._browse_file(_("Locate or Create New Storage File"), \
+                                 folder=folder, confirm_overwrite=True)
+        if file != None:
+            self.window.get_widget("storage-file-address").set_text(file)
+
+    def _browse_file(self, dialog_name, folder=None, type=None, confirm_overwrite=False):
+        # user wants to browse for an ISO
+        fcdialog = gtk.FileChooserDialog(dialog_name,
+                                         self.window.get_widget("vmm-add-hardware"),
+                                         gtk.FILE_CHOOSER_ACTION_OPEN,
                                          (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                           gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                          None)
-
-        fcdialog.set_current_folder(self.config.get_default_image_dir(self.vm.get_connection()))
-        fcdialog.set_do_overwrite_confirmation(True)
-        fcdialog.connect("confirm-overwrite", self.confirm_overwrite_callback)
+        if type != None:
+            f = gtk.FileFilter()
+            f.add_pattern("*." + type)
+            fcdialog.set_filter(f)
+        if folder != None:
+            fcdialog.set_current_folder(folder)
+        if confirm_overwrite:
+            fcdialog.set_do_overwrite_confirmation(True)
+            fcdialog.connect("confirm-overwrite", self.confirm_overwrite_callback)
         response = fcdialog.run()
         fcdialog.hide()
-        file = None
         if(response == gtk.RESPONSE_ACCEPT):
-            file = fcdialog.get_filename()
-        if file != None:
-            self.window.get_widget("storage-file-address").set_text(file)
+            filename = fcdialog.get_filename()
+            fcdialog.destroy()
+            return filename
+        else:
+            fcdialog.destroy()
+            return None
 
     def toggle_storage_size(self, ignore1=None, ignore2=None):
         file = self.get_config_disk_image()
