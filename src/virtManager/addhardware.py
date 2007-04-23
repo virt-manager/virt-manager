@@ -35,6 +35,7 @@ import traceback
 
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
+from virtManager.createmeter import vmmCreateMeter
 
 VM_STORAGE_PARTITION = 1
 VM_STORAGE_FILE = 2
@@ -45,52 +46,6 @@ PAGE_INTRO = 0
 PAGE_DISK = 1
 PAGE_NETWORK = 2
 PAGE_SUMMARY = 3
-
-class vmmCreateMeter(progress.BaseMeter):
-    def __init__(self, asyncjob):
-        # progress meter has to run asynchronously, so pass in the
-        # async job to call back to with progress info
-        progress.BaseMeter.__init__(self)
-        self.asyncjob = asyncjob
-
-    def _do_start(self, now):
-        if self.text is not None:
-            text = self.text
-        else:
-            text = self.basename
-        if self.size is None:
-            out = "    %5sB" % (0)
-            self.asyncjob.pulse_pbar(out, text)
-        else:
-            out = "%3i%% %5sB" % (0, 0)
-            self.asyncjob.set_pbar_fraction(0, out, text)
-
-    def _do_update(self, amount_read, now=None):
-        if self.text is not None:
-            text = self.text
-        else:
-            text = self.basename
-        fread = progress.format_number(amount_read)
-        if self.size is None:
-            out = "    %5sB" % (fread)
-            self.asyncjob.pulse_pbar(out, text)
-        else:
-            frac = self.re.fraction_read()
-            out = "%3i%% %5sB" % (frac*100, fread)
-            self.asyncjob.set_pbar_fraction(frac, out, text)
-
-    def _do_end(self, amount_read, now=None):
-        if self.text is not None:
-            text = self.text
-        else:
-            text = self.basename
-        fread = progress.format_number(amount_read)
-        if self.size is None:
-            out = "    %5sB" % (fread)
-            self.asyncjob.pulse_pbar(out, text)
-        else:
-            out = "%3i%% %5sB" % (100, fread)
-            self.asyncjob.set_pbar_done(out, text)
 
 class vmmAddHardware(gobject.GObject):
     __gsignals__ = {
