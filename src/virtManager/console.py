@@ -171,7 +171,6 @@ class vmmConsole(gobject.GObject):
         dialog = self.window.get_widget("vmm-console")
         dialog.show_all()
         dialog.present()
-
         self.try_login()
         self.update_widget_states(self.vm, self.vm.status())
 
@@ -407,6 +406,7 @@ class vmmConsole(gobject.GObject):
         self.emit("action-show-details", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def update_widget_states(self, vm, status):
+        self.toggle_toolbar(self.window.get_widget("menu-view-toolbar"))
         self.ignorePause = True
         if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
             self.window.get_widget("control-run").set_sensitive(True)
@@ -485,5 +485,6 @@ class vmmConsole(gobject.GObject):
                     logging.error("Couldn't open console " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
                     self.ignorePause = False
         self.ignorePause = False
+
 
 gobject.type_register(vmmConsole)
