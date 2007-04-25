@@ -497,13 +497,11 @@ class vmmDomain(gobject.GObject):
         try:
             ret = ctx.xpathEval("/domain/devices/interface")
 
-            n = 0
             for node in ret:
                 type = node.prop("type")
                 devmac = None
                 source = None
-                target = "eth%d" % n
-                n = n + 1
+                target = None
                 for child in node.children:
                     if child.name == "source":
                         if type == "bridge":
@@ -518,7 +516,8 @@ class vmmDomain(gobject.GObject):
                             source = None
                     elif child.name == "mac":
                         devmac = child.prop("address")
-
+                    elif child.name == "target":
+                        target = child.prop("dev")
                 # XXX Hack - ignore devs without a MAC, since we
                 # need mac for uniqueness. Some reason XenD doesn't
                 # always complete kill the NIC record

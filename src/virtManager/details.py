@@ -415,7 +415,6 @@ class vmmDetails(gobject.GObject):
                 self.window.get_widget("network-source-device").set_text(netinfo[1])
             else:
                 self.window.get_widget("network-source-device").set_text("-")
-            self.window.get_widget("network-target-device").set_text(netinfo[2])
             self.window.get_widget("network-mac-address").set_text(netinfo[3])
 
     def config_vcpus_changed(self, src):
@@ -426,8 +425,6 @@ class vmmDetails(gobject.GObject):
         logging.info("Setting vcpus for " + self.vm.get_uuid() + " to " + str(vcpus))
         self.vm.set_vcpu_count(vcpus)
         self.window.get_widget("config-vcpus-apply").set_sensitive(False)
-
-
 
     def config_memory_changed(self, src):
         self.window.get_widget("config-memory-apply").set_sensitive(True)
@@ -541,13 +538,13 @@ class vmmDetails(gobject.GObject):
                     row[3] = nic
                     missing = False
 
-                # Insert poisition is at end....
+                # Insert position is at end....
                 # XXX until we add support for Mice, etc
                 insertAt = insertAt + 1
 
             # Add in row
             if missing:
-                hw_list_model.insert(insertAt, ["NIC %s" % nic[2], self.pixbuf_nic, VMM_HW_NIC, nic])
+                hw_list_model.insert(insertAt, ["NIC #%d" % len(currentNICs), self.pixbuf_nic, VMM_HW_NIC, nic])
 
         # Now remove any no longer current devs
         devs = range(len(hw_list_model))
