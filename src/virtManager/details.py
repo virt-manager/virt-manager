@@ -120,8 +120,8 @@ class vmmDetails(gobject.GObject):
         self.vm.connect("resources-sampled", self.refresh_resources)
         self.window.get_widget("hw-list").get_selection().connect("changed", self.hw_selected)
 
-        self.update_widget_states(vm, vm.status())
-        self.refresh_resources(vm)
+        self.update_widget_states(self.vm, self.vm.status())
+        self.refresh_resources(self.vm)
 
         self.pixbuf_processor = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
         self.pixbuf_memory = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
@@ -146,6 +146,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("overview-disk-usage-label").hide()
         self.network_traffic_graph.hide()
         dialog.present()
+        self.update_widget_states(self.vm, self.vm.status())
 
     def show_help(self, src):
         # From the Details window, show the help document from the Details page
@@ -263,6 +264,7 @@ class vmmDetails(gobject.GObject):
         self.emit("action-destroy-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def update_widget_states(self, vm, status):
+        self.toggle_toolbar(self.window.get_widget("details-menu-view-toolbar"))
         self.ignorePause = True
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ] or vm.is_read_only():
             # apologies for the spaghetti, but the destroy choice is a special case
@@ -403,7 +405,6 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("disk-target-device").set_text(diskinfo[3])
 
     def refresh_network_page(self):
-        # viewing net page, not adding a device. If adding, don't try to refresh
         vmlist = self.window.get_widget("hw-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
