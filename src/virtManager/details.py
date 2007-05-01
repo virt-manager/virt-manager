@@ -528,6 +528,7 @@ class vmmDetails(gobject.GObject):
 
         # Populate list of NICs
         currentNICs = {}
+        nic_number = 0
         for nic in self.vm.get_network_devices():
             missing = True
             insertAt = 0
@@ -544,7 +545,7 @@ class vmmDetails(gobject.GObject):
 
             # Add in row
             if missing:
-                hw_list_model.insert(insertAt, ["NIC #%d" % len(currentNICs), self.pixbuf_nic, VMM_HW_NIC, nic])
+                hw_list_model.insert(insertAt, ["NIC %s" % nic[3][-3:], self.pixbuf_nic, VMM_HW_NIC, nic])
 
         # Now remove any no longer current devs
         devs = range(len(hw_list_model))
