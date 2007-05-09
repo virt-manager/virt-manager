@@ -1,111 +1,105 @@
-# translation of fr.po to Français
-# Copyright (C) 2006 Virt-Manager
-# This file is distributed under the same license as the Virt-Manager package.
+# Finnish translation of virt-manager.
+# This file is distributed under the same license as the virt-manager package.
 #
-# Damien Durand <splinux@fedoraproject.org>, 2006.
-# Thomas Canniot <thomas.canniot@laposte.net>, 2006, 2007.
-# Alain PORTAL <aportal@univ-montp2.fr>, 2006, 2007.
-# Decroux Fabien <fdecroux@redhat.com>, 2006.
+# Ville-Pekka Vainio <vpivaini@cs.helsinki.fi>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: fr\n"
+"Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-09 14:07-0400\n"
-"PO-Revision-Date: 2007-05-06 12:12+0200\n"
-"Last-Translator: Alain PORTAL <aportal@univ-montp2.fr>\n"
-"Language-Team: Français <traduc@traduc.org>\n"
+"PO-Revision-Date: 2007-04-20 19:51+0200\n"
+"Last-Translator: Ville-Pekka Vainio <vpivaini@cs.helsinki.fi>\n"
+"Language-Team: Finnish <laatu@lokalisointi.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../src/virt-manager.py.in:63
 msgid "Unable to initialize GTK: "
-msgstr "Impossible d'initialiser GTK : "
+msgstr "GTK:n alustus ei onnistu:"
 
 #: ../../src/virtManager/addhardware.py:237
 #: ../../src/virtManager/create.py:442
 msgid "Shared physical device"
-msgstr "Périphérique physique partagé"
+msgstr "Jaettu fyysinen laite"
 
 #: ../../src/virtManager/addhardware.py:240
 #: ../../src/virtManager/create.py:445
 msgid "Virtual network"
-msgstr "Réseau virtuel"
+msgstr "Virtuaaliverkko"
 
 #: ../../src/virtManager/addhardware.py:243
 #: ../../src/virtManager/create.py:448
 msgid "Usermode networking"
-msgstr "Réseau en mode utilisateur"
+msgstr "Käyttäjätilan verkotus"
 
 #: ../../src/virtManager/addhardware.py:314
 #: ../../src/virtManager/create.py:537
 msgid "Invalid storage address"
-msgstr "Adresse de stockage invalide"
+msgstr "Virheellinen tallennusosoite"
 
 #: ../../src/virtManager/addhardware.py:337
 msgid "Too many virtual disks"
-msgstr "Trop de disques virtuels"
+msgstr "Liikaa virtuaalilevyjä"
 
 #: ../../src/virtManager/addhardware.py:338
 msgid "There are no more available virtual disk device nodes"
-msgstr "Il n'y a plus de noeud de périphérique disque virtuel disponible"
+msgstr "Virtuaalisia levylaitesolmuja ei ole enää jäljellä"
 
 #: ../../src/virtManager/addhardware.py:342
 msgid "Creating Storage File"
-msgstr "Création d'un fichier de stockage"
+msgstr "Luodaan massamuistitiedosto"
 
 #: ../../src/virtManager/addhardware.py:343
 msgid "Allocation of disk storage may take a few minutes "
-msgstr ""
-"L'allocation de l'espace disque de stockage peut prendre plusieurs minutes "
+msgstr "Levytilan varaaminenvoi viedä muutaman minuutin"
 
 #: ../../src/virtManager/addhardware.py:344
 #: ../../src/virtManager/create.py:602
 msgid "to complete."
-msgstr "quelques minutes."
+msgstr "valmistua."
 
 #: ../../src/virtManager/addhardware.py:366
 #: ../../src/virtManager/create.py:654
 #, python-format
 msgid "Unable to complete install: '%s'"
-msgstr "Impossible de finir l'installation : « %s »"
+msgstr "Asennus ei onnistu: ”%s”"
 
 #: ../../src/virtManager/addhardware.py:371
 #: ../../src/virtManager/create.py:688
 msgid "Locate Storage Partition"
-msgstr "Localiser la partition de stockage"
+msgstr "Etsi tallennusosio"
 
 #: ../../src/virtManager/addhardware.py:378
 #: ../../src/virtManager/create.py:694
 msgid "Locate or Create New Storage File"
-msgstr "Localiser ou créer un nouveau fichier de stockage"
+msgstr "Etsi tai luo uusi tallennustiedosto"
 
 #: ../../src/virtManager/addhardware.py:452
 msgid "Hardware Type Required"
-msgstr "Type de matériel nécessaire"
+msgstr "Laitetyyppi vaaditaan"
 
 #: ../../src/virtManager/addhardware.py:453
 msgid "You must specify what type of hardware to add"
-msgstr "Vous devez indiquer quel type de matériel ajouter"
+msgstr "Lisättävän laitteen tyyppi on määritettävä"
 
 #: ../../src/virtManager/addhardware.py:459
 #: ../../src/virtManager/create.py:813
 msgid "Storage Address Required"
-msgstr "Adresse de stockage nécessaire"
+msgstr "Vaaditaan tallennusosoite"
 
 #: ../../src/virtManager/addhardware.py:460
 #: ../../src/virtManager/create.py:814
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
-msgstr ""
-"Vous devez spécifier une partition ou un fichier de stockage pour "
-"l'installation en mode invité"
+msgstr "On määritettävä osio tai tiedosto tallennustilaksi vierasasennukselle"
 
 #: ../../src/virtManager/addhardware.py:465
 #: ../../src/virtManager/create.py:819
 msgid "Storage Address Is Directory"
-msgstr "L'adresse de stockage est le répertoire"
+msgstr "Tallennusosoite on hakemisto"
 
 #: ../../src/virtManager/addhardware.py:466
 #: ../../src/virtManager/create.py:820
@@ -114,78 +108,77 @@ msgid ""
 "directory instead of a file. Please enter a new filename or choose an "
 "existing file."
 msgstr ""
-"Vous avez choisi « fichier simple » comme méthode de stockage mais avez "
-"choisi un répertoire au lieu d'un fichier. Veuillez entrer un nouveau nom de "
-"fichier ou choisir un fichier existant."
+"”Pelkkä tiedosto” valittu tallennustavaksi, mutta hakemisto valittu "
+"tiedoston sijaan. Syötä uusi tiedostonimi tai valitse olemassa oleva "
+"tiedosto."
 
 #: ../../src/virtManager/addhardware.py:471
 #: ../../src/virtManager/create.py:825
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
-msgstr "Le disque « %s » est déjà utilisé par un autre invité !"
+msgstr "Toinen vieras käyttää jo levyä ”%s”!"
 
 #: ../../src/virtManager/addhardware.py:472
 #: ../../src/virtManager/create.py:826
 msgid "Do you really want to use the disk ?"
-msgstr "Voulez-vous vraiment utiliser le disque ?"
+msgstr "Haluatko käyttää levyä?"
 
 #: ../../src/virtManager/addhardware.py:478
 #: ../../src/virtManager/create.py:832
 msgid "Virtual Network Required"
-msgstr "Réseau virtuel nécessaire"
+msgstr "Virtuaaliverkko vaaditaan"
 
 #: ../../src/virtManager/addhardware.py:479
 #: ../../src/virtManager/create.py:833
 msgid "You must select one of the virtual networks"
-msgstr "Vous devez sélectionner un des réseaux virtuels"
+msgstr "Yksi virtuaaliverkko on valittava"
 
 #: ../../src/virtManager/addhardware.py:483
 #: ../../src/virtManager/create.py:837
 msgid "Physical Device Required"
-msgstr "Périphérique physique nécessaire"
+msgstr "Fyysinen laite vaaditaan"
 
 #: ../../src/virtManager/addhardware.py:484
 #: ../../src/virtManager/create.py:838
 msgid "You must select one of the physical devices"
-msgstr "Vous devez sélectionner un des périphériques physiques"
+msgstr "Yksi fyysinen laite on valittava"
 
 #: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:2
 msgid "Please wait a few moments..."
-msgstr "Veuillez patienter..."
+msgstr "Odota hetki..."
 
 #: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:1
 msgid "Operation in progress"
-msgstr "Opération en cours"
+msgstr "Toiminto käynnissä"
 
 #: ../../src/virtManager/asyncjob.py:74 ../../src/virtManager/asyncjob.py:87
 #: tmp/vmm-progress.glade.h:3
 msgid "Processing..."
-msgstr "Traitement en cours..."
+msgstr "Käsitellään..."
 
 #: ../../src/virtManager/asyncjob.py:102
 msgid "Completed"
-msgstr "Terminé"
+msgstr "Valmis"
 
 #: ../../src/virtManager/console.py:132
 msgid "Pointer grabbed"
-msgstr "Curseur capturé"
+msgstr "Osoitin kaapattu"
 
 #: ../../src/virtManager/console.py:133
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer press the key pair Ctrl+Alt"
 msgstr ""
-"L'utilisation du pointeur de la souris est restreinte à la fenêtre de la "
-"console virtuelle. Pour libérer le pointeur, appuyez simultanément sur Ctrl"
-"+Alt"
+"Hiiriosoitin on rajoitettu virtuaalikonsoli-ikkunaan. Vapauttaaksesi "
+"osoittimen paina näppäinparia Ctrl+Alt"
 
 #: ../../src/virtManager/console.py:142
 msgid "Press Ctrl+Alt to release pointer."
-msgstr "Appuyer simultanément sur Ctrl+Alt pour libérer le pointeur."
+msgstr "Paina Ctrl+Alt osoittimen vapauttamiseksi."
 
 #: ../../src/virtManager/console.py:301
 msgid "Save Virtual Machine Screenshot"
-msgstr "Enregistrer la capture d'écran de la machine virtuelle"
+msgstr "Tallenna virtuaalikoneen kuvankaappaus"
 
 #: ../../src/virtManager/console.py:334
 #, python-format
@@ -193,370 +186,353 @@ msgid ""
 "The screenshot has been saved to:\n"
 "%s"
 msgstr ""
-"La capture d'écran a été enregistrée dans :\n"
+"Kuvakaappaus tallennettiin kohteeseen:\n"
 "%s"
 
 #: ../../src/virtManager/console.py:335
 msgid "Screenshot saved"
-msgstr "Capture d'écran enregistrée"
+msgstr "Kuvakaappaus tallennettu"
 
 #: ../../src/virtManager/console.py:468
 msgid "paused"
-msgstr "arrêté"
+msgstr "pysäytetty"
 
 #: ../../src/virtManager/createnet.py:94
 #: ../../src/virtManager/createnet.py:257 ../../src/virtManager/host.py:222
 #: tmp/vmm-create-net.glade.h:38 tmp/vmm-host.glade.h:23
 msgid "NAT to any physical device"
-msgstr "NAT vers les périphériques physiques"
+msgstr "NAT mihin tahansa fyysiseen laitteeseen"
 
 #: ../../src/virtManager/createnet.py:97
 #: ../../src/virtManager/createnet.py:255 ../../src/virtManager/host.py:220
 #, python-format
 msgid "NAT to physical device %s"
-msgstr "NAT vers le périphérique physique %s"
+msgstr "NAT fyysiseen laitteeseen %s"
 
 #: ../../src/virtManager/createnet.py:152
 #, python-format
 msgid "%d addresses"
-msgstr "Adresses %d"
+msgstr "%d osoitetta"
 
 #: ../../src/virtManager/createnet.py:154
 msgid "Public"
-msgstr "Public"
+msgstr "Julkinen"
 
 #: ../../src/virtManager/createnet.py:156 tmp/vmm-create-net.glade.h:47
 msgid "Private"
-msgstr "Privé"
+msgstr "Yksityinen"
 
 #: ../../src/virtManager/createnet.py:158
 msgid "Reserved"
-msgstr "Réservé"
+msgstr "Varattu"
 
 #: ../../src/virtManager/createnet.py:160
 msgid "Other"
-msgstr "Autre"
+msgstr "Muu"
 
 #: ../../src/virtManager/createnet.py:259 ../../src/virtManager/host.py:225
 #: tmp/vmm-create-net.glade.h:37
 msgid "Isolated virtual network"
-msgstr "Réseau virtuel isolé"
+msgstr "Eristetty virtuaaliverkko"
 
 #: ../../src/virtManager/createnet.py:304
 #: ../../src/virtManager/createnet.py:308
 msgid "Invalid Network Name"
-msgstr "Nom de réseau invalide"
+msgstr "Virheellinen verkon nimi"
 
 #: ../../src/virtManager/createnet.py:305
 msgid "Network name must be non-blank and less than 50 characters"
-msgstr ""
-"Le nom du réseau ne doit pas être vide et ne doit pas contenir plus de 50 "
-"caractères"
+msgstr "Verkon nimi ei saa olla tyhjä ja sen täytyy olla alle 50 merkkiä pitkä"
 
 #: ../../src/virtManager/createnet.py:309
 msgid "Network name may contain alphanumeric and '_' characters only"
-msgstr ""
-"Le nom du réseau ne peut contenir que des caractères alphanumériques ainsi "
-"que des « _ »"
+msgstr "Verkon nimi voi sisältää vain aakkosnumeerisia ja ”_”-merkkejä"
 
 #: ../../src/virtManager/createnet.py:316
 #: ../../src/virtManager/createnet.py:321
 #: ../../src/virtManager/createnet.py:326
 #: ../../src/virtManager/createnet.py:331
 msgid "Invalid Network Address"
-msgstr "Adresse réseau invalide"
+msgstr "Virheellinen verkon osoite"
 
 #: ../../src/virtManager/createnet.py:317
 msgid "The network address could not be understood"
-msgstr "L'adresse réseau n'a pas pu être interprétée"
+msgstr "Verkko-osoitetta ei ymmärretty"
 
 #: ../../src/virtManager/createnet.py:322
 msgid "The network must be an IPv4 address"
-msgstr "Le réseau doit être une adresse IPv4"
+msgstr "Verkon on oltava IPv4-osoite"
 
 #: ../../src/virtManager/createnet.py:327
 msgid "The network prefix must be at least /4 (16 addresses)"
-msgstr "Le préfixe du réseau doit être au moins /4 (16 adresses)"
+msgstr "Verkon etuliite on oltava vähintään /4 (16 osoitetta)"
 
 #: ../../src/virtManager/createnet.py:332
 msgid "The network must be an IPv4 private address"
-msgstr "Le réseau doit être une adresse privée IPv4"
+msgstr "Verkon on oltava yksityinen IPv4-osoite"
 
 #: ../../src/virtManager/createnet.py:340
 #: ../../src/virtManager/createnet.py:344
 #: ../../src/virtManager/createnet.py:349
 #: ../../src/virtManager/createnet.py:353
 msgid "Invalid DHCP Address"
-msgstr "Adresse DHCP invalide"
+msgstr "Virheellinen DHCP-osoite"
 
 #: ../../src/virtManager/createnet.py:341
 msgid "The DHCP start address could not be understood"
-msgstr "L'adresse de départ DHCP n'a pas pu être interprétée"
+msgstr "DHCP-aloitusosoitetta ei ymmärretty"
 
 #: ../../src/virtManager/createnet.py:345
 msgid "The DHCP end address could not be understood"
-msgstr "L'adresse de fin DHCP n'a pas pu être interprétée"
+msgstr "DHCP-lopetusosoitetta ei ymmärretty"
 
 #: ../../src/virtManager/createnet.py:350
 #, python-format
 msgid "The DHCP start address is not with the network %s"
-msgstr "L'adresse de départ DHCP n'est pas dans le réseau %s"
+msgstr "DHCP-aloitusosoite ei ole verkossa %s"
 
 #: ../../src/virtManager/createnet.py:354
 #, python-format
 msgid "The DHCP end address is not with the network %s"
-msgstr "L'adresse de fin DHCP n'est pas dans le réseau %s"
+msgstr "DHCP-lopetusosoite ei ole verkossa %s"
 
 #: ../../src/virtManager/createnet.py:360
 msgid "Invalid forwarding mode"
-msgstr "Mode de réacheminement invalide"
+msgstr "Virheellinen välitystila"
 
 #: ../../src/virtManager/createnet.py:361
 msgid "Please select where the traffic should be forwarded"
-msgstr "Veuillez sélectionner l'endroit vers lequel le trafic sera réacheminé"
+msgstr "Valitse minne liikenne pitäisi välittää"
 
 #: ../../src/virtManager/createnet.py:406 ../../src/virtManager/create.py:900
 #: ../../src/virtManager/create.py:935
 msgid "No media present"
-msgstr "Aucun médium présent"
+msgstr "Ei mediaa"
 
 #: ../../src/virtManager/create.py:421
 msgid "Paravirtualized"
-msgstr "Paravirtualisé"
+msgstr "Paravirtualisoitu"
 
 #: ../../src/virtManager/create.py:425
 msgid "Fully virtualized"
-msgstr "Complètement virtualisé"
+msgstr "Täysin virtualisoitu"
 
 #: ../../src/virtManager/create.py:473
 msgid "Invalid FV media address"
-msgstr "Adresse du médium FV non valide"
+msgstr "Virheellinen TV-mediaosoite"
 
 #: ../../src/virtManager/create.py:479
 msgid "Invalid FV OS Type"
-msgstr "Type FV OS non valide"
+msgstr "Virheellinen täyden virtualisoinnin käyttöjärjestelmän tyyppi"
 
 #: ../../src/virtManager/create.py:485
 msgid "Invalid FV OS Variant"
-msgstr "Variante FV OS non valide"
+msgstr "Virheellinen täyden virtualisoinnin käyttöjärjestelmän malli"
 
 #: ../../src/virtManager/create.py:492
 msgid "Invalid PV media address"
-msgstr "Adresse du médium PV non valide"
+msgstr "Virheellinen PV-mediaosoite"
 
 #: ../../src/virtManager/create.py:502
 msgid "Invalid system name"
-msgstr "Nom du système invalide"
+msgstr "Virheellinen järjestelmänimi"
 
 #: ../../src/virtManager/create.py:509 ../../src/virtManager/create.py:515
 msgid "Invalid memory setting"
-msgstr "Configuration de la mémoire invalide"
+msgstr "Virheellinen muistiasetus"
 
 #: ../../src/virtManager/create.py:598
 msgid "Creating Virtual Machine"
-msgstr "Création d'une machine virtuelle"
+msgstr "Luodaan virtuaalikonetta"
 
 #: ../../src/virtManager/create.py:599
 msgid "The virtual machine is now being created. "
-msgstr "Cette machine virtuelle est sur le point d'être créée."
+msgstr "Virtuaalikonetta luodaan."
 
 #: ../../src/virtManager/create.py:600
 msgid "Allocation of disk storage and retrieval of "
-msgstr "L'allocation de l'espace disque et la récupération"
+msgstr "Levytilan varaaminen ja asennuslevykuvien noutaminen"
 
 #: ../../src/virtManager/create.py:601
 msgid "the installation images may take a few minutes "
-msgstr "l'installation des images peut prendre plusieurs minutes "
+msgstr "voi kestää muutaman minuutin"
 
 #: ../../src/virtManager/create.py:640
 msgid "Guest installation failed to complete"
-msgstr "L'installation de l'invité n'a pas pu être achevée"
+msgstr "Vierasasennus ei onnistunut"
 
 #: ../../src/virtManager/create.py:659
 msgid "Locate ISO Image"
-msgstr "Localiser l'image ISO"
+msgstr "Etsi ISO-levykuva"
 
 #: ../../src/virtManager/create.py:771 ../../src/virtManager/create.py:775
 msgid "Invalid System Name"
-msgstr "Nom du système invalide"
+msgstr "Virheellinen järjestelmänimi"
 
 #: ../../src/virtManager/create.py:772
 msgid "System name must be non-blank and less than 50 characters"
 msgstr ""
-"Le nom du système ne doit pas être vide et ne doit pas contenir plus de 50 "
-"caractères"
+"Järjestelmän nimi ei saa olla tyhjä ja sen täytyy olla alle 50 merkkiä pitkä"
 
 #: ../../src/virtManager/create.py:776
 msgid "System name may contain alphanumeric and '_' characters only"
-msgstr ""
-"Le nom du système ne peut contenir que des caractères alphanumériques ainsi "
-"que des « _ »"
+msgstr "Järjestelmän nimi voi sisältää vain aakkosnumeerisia ja ”_”-merkkejä"
 
 #: ../../src/virtManager/create.py:782
 msgid "Hardware Support Required"
-msgstr "Support matériel nécessaire"
+msgstr "Vaaditaan laitteistotuki"
 
 #: ../../src/virtManager/create.py:783
 msgid ""
 "Your hardware does not appear to support full virtualization. Only "
 "paravirtualized guests will be available on this hardware."
 msgstr ""
-"Votre matériel ne semble pas supporter une virtualisation complète. Seuls "
-"les invités paravirtualisés seront disponibles sur cette machine."
+"Vaikuttaa siltä, että laitteisto ei tue täyttä virtualisointia. Vain "
+"paravirtualisoituja vieraita voi käyttää tällä laitteistolla."
 
 #: ../../src/virtManager/create.py:790
 msgid "ISO Path Required"
-msgstr "Chemin vers l'ISO nécessaire"
+msgstr "Vaaditaan ISO-polku"
 
 #: ../../src/virtManager/create.py:791
 msgid "You must specify an ISO location for the guest installation"
-msgstr ""
-"Vous devez spécifier un emplacement ISO pour une installation en mode invité"
+msgstr "Vierasasennuksen ISO-sijainti on määritettävä"
 
 #: ../../src/virtManager/create.py:794
 msgid "ISO Path Not Found"
-msgstr "Chemin vers l'ISO non trouvé"
+msgstr "ISO-polkua ei löydy"
 
 #: ../../src/virtManager/create.py:795
 msgid "You must specify a valid path to the ISO image for guest installation"
-msgstr ""
-"Vous devez spécifier un chemin valide à l'image ISO pour une installation en "
-"mode invité"
+msgstr "On määritettävä sopiva polku ISO-kuvatiedostoon vierasasennusta varten"
 
 #: ../../src/virtManager/create.py:800
 msgid "Install media required"
-msgstr "Médium d'installation nécessaire"
+msgstr "Vaaditaan asennusmedia"
 
 #: ../../src/virtManager/create.py:801
 msgid "You must select the CDROM install media for guest installation"
-msgstr ""
-"Vous devez sélectionner le CD-ROM d'installation pour une installation en "
-"mode invité"
+msgstr "On valittava CDROM-asennusmedia vierasasennusta varten"
 
 #: ../../src/virtManager/create.py:806
 msgid "URL Required"
-msgstr "URL requise"
+msgstr "Vaaditaan URL"
 
 #: ../../src/virtManager/create.py:807
 msgid "You must specify a URL for the install image for the guest install"
-msgstr ""
-"Vous devez spécifier une URL pour l'installation d'une image en mode invité"
+msgstr "On määritettävä asennuskuvatiedoston osoite vierasasennusta varten"
 
 #: ../../src/virtManager/domain.py:387 tmp/vmm-host.glade.h:27
 msgid "Running"
-msgstr "Lancement"
+msgstr "Käynnissä"
 
 #: ../../src/virtManager/domain.py:389
 msgid "Paused"
-msgstr "Arrêté"
+msgstr "Pysäytetty"
 
 #: ../../src/virtManager/domain.py:391 tmp/vmm-console.glade.h:10
 #: tmp/vmm-details.glade.h:42
 msgid "Shutdown"
-msgstr "Éteindre"
+msgstr "Sammuttaminen"
 
 #: ../../src/virtManager/domain.py:393
 msgid "Shutoff"
-msgstr "Interrompre"
+msgstr "Sammuta"
 
 #: ../../src/virtManager/domain.py:395
 msgid "Crashed"
-msgstr "Planté"
+msgstr "Kaatui"
 
 #: ../../src/virtManager/domain.py:397
 msgid "Unknown status code"
-msgstr "Code d'état inconnu"
+msgstr "Tuntematon tilakoodi"
 
 #: ../../src/virtManager/engine.py:87
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
-msgstr ""
-"Ne peut ouvrir une connexion à l'hyperviseur/démon Xen.\n"
-"\n"
+msgstr "Ei voi avata yhteyttä Xen-hypervisoriin/-taustaprosessiin.\n"
 
 #: ../../src/virtManager/engine.py:88
 msgid "Verify that:\n"
-msgstr "Vérifiez que :\n"
+msgstr "Vahvista se:\n"
 
 #: ../../src/virtManager/engine.py:89
 msgid " - A Xen host kernel was booted\n"
-msgstr "- Un noyau invité Xen a déjà démarré\n"
+msgstr " - Xen-isäntäydin käynnistettiin\n"
 
 #: ../../src/virtManager/engine.py:90
 msgid " - The Xen service has been started\n"
-msgstr "- Le service Xen a déjà été démarré\n"
+msgstr " - Xen-palvelu on käynnistetty\n"
 
 #: ../../src/virtManager/engine.py:95
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
-msgstr "Ne peut ouvrir la connexion à l'hyperviseur « %s »"
+msgstr "Ei voitu muodostaa yhteyttä hypervisoriin ”%s”"
 
 #: ../../src/virtManager/engine.py:97
 msgid "Virtual Machine Manager Connection Failure"
-msgstr "Échec de connexion au gestionnaire de machines virtuelles"
+msgstr "Virtuaalikonehallitsimen yhteysvirhe"
 
 #: ../../src/virtManager/engine.py:334
 msgid "Save Virtual Machine"
-msgstr "Enregistrer la machine virtuelle"
+msgstr "Tallenna virtuaalikone"
 
 #: ../../src/virtManager/engine.py:348
 msgid "Saving Virtual Machine"
-msgstr "Enregistre la machine virtuelle"
+msgstr "Tallennetaan virtuaalikone"
 
 #: ../../src/virtManager/engine.py:364
 #, python-format
 msgid "About to destroy virtual machine %s"
-msgstr "Sur le point de détruire la machine virtuelle %s"
+msgstr "Ollaan tuhoamassa virtuaalikonetta %s"
 
 #: ../../src/virtManager/engine.py:365
 msgid ""
 "This will immediately destroy the VM and may corrupt its disk image. Are you "
 "sure?"
 msgstr ""
-"Cela détruira immédiatement la machine virtuelle et risque de corrompre son "
-"image disque. Êtes-vous certain de vouloir continuer ?"
+"Tämä tuhoaa virtuaalikoneen välittömästi ja voi vioittaa sen levykuvan. "
+"Oletko varma?"
 
 #: ../../src/virtManager/error.py:33
 msgid "Details"
-msgstr "Détails"
+msgstr "Yksityiskohdat"
 
 #: ../../src/virtManager/host.py:182
 msgid "Active"
-msgstr "Actif"
+msgstr "Aktiivinen"
 
 #: ../../src/virtManager/host.py:190
 msgid "Inactive"
-msgstr "Inactif"
+msgstr "Passiivinen"
 
 #: ../../src/virtManager/host.py:203
 msgid "On boot"
-msgstr "Au démarrage"
+msgstr "Käynnistyksessä"
 
 #: ../../src/virtManager/host.py:206
 msgid "Never"
-msgstr "Jamais"
+msgstr "Ei koskaan"
 
 #: ../../src/virtManager/manager.py:240
 msgid "Restore Virtual Machine"
-msgstr "Restaurer la machine virtuelle"
+msgstr "Palauta virtuaalikone"
 
 #: ../../src/virtManager/manager.py:256
 msgid "Restoring Virtual Machine"
-msgstr "Restaure de la machine virtuelle"
+msgstr "Palautetaan virtuaalikone"
 
 #: ../../src/virtManager/manager.py:263
 #, python-format
 msgid "The file '%s' does not appear to be a valid saved machine image"
-msgstr ""
-"Le fichier « %s » ne semble pas être une image valide de machine sauvegardée"
+msgstr "Tiedosto ”%s” ei ole oikein tallennettu koneen levykuva"
 
+# Tarkista, aika erikoinen käännös
 #: ../../src/virtManager/manager.py:291
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
-msgstr ""
-"Erreur lors de la restauration du domaine « %s ». Le domaine est-il déjà "
-"lancé ?"
+msgstr "Virhe toimialueen ”%s” palautuksessa. Onko toimialue jo ajossa?"
 
 #: ../../src/virtManager/manager.py:512
 msgid "ID"
@@ -565,47 +541,47 @@ msgstr "ID"
 #: ../../src/virtManager/manager.py:513 tmp/vmm-create.glade.h:66
 #: tmp/vmm-create-net.glade.h:39
 msgid "Name"
-msgstr "Nom"
+msgstr "Nimi"
 
 #: ../../src/virtManager/manager.py:514 tmp/vmm-manager.glade.h:17
 msgid "Status"
-msgstr "État"
+msgstr "Tila"
 
 #: ../../src/virtManager/manager.py:515 tmp/vmm-manager.glade.h:4
 msgid "CPU usage"
-msgstr "Utilisation CPU"
+msgstr "Suorittimen käyttö:"
 
 #: ../../src/virtManager/manager.py:516
 msgid "VCPUs"
-msgstr "VCPU"
+msgstr "Virtuaalisuorittimet"
 
 #: ../../src/virtManager/manager.py:517 tmp/vmm-manager.glade.h:11
 msgid "Memory usage"
-msgstr "Utilisation mémoire"
+msgstr "Muistin käyttö"
 
 #: ../../src/virtManager/manager.py:518 tmp/vmm-manager.glade.h:7
 msgid "Disk usage"
-msgstr "Utilisation disque"
+msgstr "Levyn käyttö"
 
 #: ../../src/virtManager/manager.py:519 tmp/vmm-manager.glade.h:12
 msgid "Network traffic"
-msgstr "Trafic réseau"
+msgstr "Verkkoliikenne"
 
 #: ../../src/virtManager/serialcon.py:35
 msgid "serial console"
-msgstr "console de série"
+msgstr "sarjakonsoli"
 
 #: tmp/vmm-about.glade.h:1
 msgid "Copyright (C) 2006 Red Hat Inc."
-msgstr "Copyright (C) 2006 Red Hat Inc."
+msgstr "Tekijänoikeus (C) 2006 Red Hat Inc."
 
 #: tmp/vmm-about.glade.h:2
 msgid "Powered by libvirt"
-msgstr "Propulsé par libvirt"
+msgstr "Toimii libvirtillä"
 
 #: tmp/vmm-about.glade.h:3 tmp/vmm-manager.glade.h:19
 msgid "Virtual Machine Manager"
-msgstr "Gestionnaire de machine virtuelle"
+msgstr "Virtuaalikoneiden hallitsin"
 
 #: tmp/vmm-about.glade.h:4
 msgid "http://virt-manager.et.redhat.com/"
@@ -613,11 +589,7 @@ msgstr "http://virt-manager.et.redhat.com/"
 
 #: tmp/vmm-about.glade.h:6
 msgid "translator-credits"
-msgstr ""
-"Damien Durand <splinux@fedoraproject.org>\n"
-"Thomas Canniot <thomas.canniot@laposte.net>\n"
-"Alain PORTAL <aportal@univ-montp2.fr>\n"
-"Decroux Fabien <fdecroux@redhat.com>"
+msgstr "Ville-Pekka Vainio, 2007."
 
 #: tmp/vmm-add-hardware.glade.h:1 tmp/vmm-create.glade.h:3
 #: tmp/vmm-create-net.glade.h:2
@@ -627,19 +599,19 @@ msgstr "/xen/demo.img"
 #: tmp/vmm-add-hardware.glade.h:2 tmp/vmm-create.glade.h:8
 #: tmp/vmm-create-net.glade.h:9
 msgid "5 GB"
-msgstr "5 Go"
+msgstr "5 Gt"
 
 #: tmp/vmm-add-hardware.glade.h:3 tmp/vmm-create.glade.h:15
 msgid "<b>Network</b>"
-msgstr "<b>Réseau</b>"
+msgstr "<b>Verkko</b>"
 
 #: tmp/vmm-add-hardware.glade.h:4 tmp/vmm-create.glade.h:16
 msgid "<b>Storage</b>"
-msgstr "<b>Stockage</b>"
+msgstr "<b>Tallennustila</b>"
 
 #: tmp/vmm-add-hardware.glade.h:5 tmp/vmm-create.glade.h:19
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
-msgstr "<small><b>Exemple :</b> /dev/hdc2</small>"
+msgstr "<small><b>Esimerkki:</b> /dev/hdc2</small>"
 
 #: tmp/vmm-add-hardware.glade.h:6 tmp/vmm-create.glade.h:24
 msgid ""
@@ -647,18 +619,18 @@ msgid ""
 "connected via wireless, or dynamically configured with NetworkManager.</"
 "small>"
 msgstr ""
-"<small><b>Conseil :</b> Choisissez cette option si votre hôte est "
-"déconnecté, connecté par réseau sans fil ou bien configuré dynamiquement "
-"avec NetworkManager.</small>"
+"<small><b>Vinkki:</b> Valitse tämä, jos kone on irti verkosta, yhdistetty "
+"langattomalla yhteydellä tai yhteys asetetaan dynaamisesti "
+"NetworkManagerilla.</small>"
 
 #: tmp/vmm-add-hardware.glade.h:7 tmp/vmm-create.glade.h:25
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is statically connected "
 "to wired ethernet, to gain the ability to migrate the virtual system.</small>"
 msgstr ""
-"<small><b>Conseil :</b> Choisissez cette option si votre hôte est connecté "
-"statiquement à un ethernet cablé afin d'avoir la possibilité de migrer le "
-"système virtuel.</small>"
+"<small><b>Vinkki:</b> Valitse tämä, jos kone on staattisesti kytketty "
+"langalliseen lähiverkkoon, jotta virtuaalijärjestelmä on siirrettävissä.</"
+"small>"
 
 #: tmp/vmm-add-hardware.glade.h:8 tmp/vmm-create.glade.h:28
 msgid ""
@@ -667,168 +639,168 @@ msgid ""
 "sufficient free space is not available on the host, this may result in data "
 "corruption on the guest.</small>"
 msgstr ""
-"<small><b>Avertissement :</b> Si vous n'allouez pas la totalité du disque "
-"pour la création de la machine virtuelle, l'espace sera alloué suivant les "
-"besoins de l'invité. S'il n'y a pas suffisamment d'espace disque sur l'hôte, "
-"cela peut occasionner une corruption des données sur l'invité.</small>"
+"<small><b>Varoitus:</b> Jos koko levyä ei varata virtuaalikoneen luomisen "
+"yhteydessä, tilaa varataan tarvittaessa vierasjärjestelmän ollessa "
+"suorituksessa. Jos isännällä ei ole riittävästi vapaata tilaa, siitä saattaa "
+"seurata vierasjärjestelmän tietojen vioittumista.</small>"
 
 #: tmp/vmm-add-hardware.glade.h:9
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding new "
 "virtual hardware </span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ajout d'un "
-"nouveau matériel virtuel </span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Uuden "
+"virtuaalilaitteen lisäys </span>"
 
 #: tmp/vmm-add-hardware.glade.h:10 tmp/vmm-create.glade.h:30
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
 "storage space</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Affectation de "
-"l'espace de stockage</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Tallennustilan "
+"asettaminen</span>"
 
 #: tmp/vmm-add-hardware.glade.h:11 tmp/vmm-create.glade.h:32
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connect to host "
 "network</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecter au "
-"réseau hôte</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Yhdistä "
+"isäntäverkkoon</span>"
 
 #: tmp/vmm-add-hardware.glade.h:12
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to add "
 "hardware</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Prêt à ajouter "
-"le matériel</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Valmis laitteen "
+"lisäämiseen</span>"
 
 #: tmp/vmm-add-hardware.glade.h:13
 msgid "Add new virtual hardware"
-msgstr "Ajouter un nouveau matériel virtuel"
+msgstr "Lisää uusi virtuaalilaite"
 
 #: tmp/vmm-add-hardware.glade.h:14 tmp/vmm-create.glade.h:38
 msgid "Allocate entire virtual disk now?"
-msgstr "Allouer la totalité du disque virtuel maintenant ?"
+msgstr "Varataanko koko virtuaalilevy nyt?"
 
 #: tmp/vmm-add-hardware.glade.h:15 tmp/vmm-create.glade.h:39
 msgid "Browse..."
-msgstr "Parcourir..."
+msgstr "Selaa..."
 
 #: tmp/vmm-add-hardware.glade.h:16 tmp/vmm-create.glade.h:42
 #: tmp/vmm-create-net.glade.h:25
 msgid "Complete"
-msgstr "Complet"
+msgstr "Valmis"
 
 #: tmp/vmm-add-hardware.glade.h:17 tmp/vmm-create.glade.h:43
 msgid "Connection type:"
-msgstr "Type de connexion :"
+msgstr "Yhteystyyppi:"
 
 #: tmp/vmm-add-hardware.glade.h:18 tmp/vmm-create.glade.h:45
 #: tmp/vmm-details.glade.h:23
 msgid "Disk"
-msgstr "Disque"
+msgstr "Levy"
 
 #: tmp/vmm-add-hardware.glade.h:19 tmp/vmm-create.glade.h:46
 msgid "Disk image:"
-msgstr "Image disque :"
+msgstr "Levykuva:"
 
 #: tmp/vmm-add-hardware.glade.h:20 tmp/vmm-create.glade.h:47
 msgid "Disk size:"
-msgstr "Taille du disque :"
+msgstr "Levyn koko:"
 
 #: tmp/vmm-add-hardware.glade.h:21 tmp/vmm-create.glade.h:51
 msgid "File _Location:"
-msgstr "_Emplacement de fichier :"
+msgstr "Tiedoston _sijainti:"
 
 #: tmp/vmm-add-hardware.glade.h:22 tmp/vmm-create.glade.h:52
 msgid "File _Size:"
-msgstr "_Taille de fichier :"
+msgstr "Tiedosto_koko"
 
 #: tmp/vmm-add-hardware.glade.h:23
 msgid "Hardware type:"
-msgstr "Type de matériel :"
+msgstr "Laitetyyppi:"
 
+# Tarkista
 #: tmp/vmm-add-hardware.glade.h:24 tmp/vmm-create.glade.h:57
 #: tmp/vmm-create-net.glade.h:36
 msgid "Intro"
-msgstr "Intro"
+msgstr "Johdanto"
 
 #: tmp/vmm-add-hardware.glade.h:25 tmp/vmm-create.glade.h:63
 #: tmp/vmm-details.glade.h:29
 msgid "MB"
-msgstr "Mo"
+msgstr "Mt"
 
 #: tmp/vmm-add-hardware.glade.h:26 tmp/vmm-create.glade.h:67
 #: tmp/vmm-details.glade.h:34
 msgid "Network"
-msgstr "Réseau"
+msgstr "Verkko"
 
 #: tmp/vmm-add-hardware.glade.h:27 tmp/vmm-create.glade.h:68
 msgid "Normal Disk _Partition:"
-msgstr "_Partition de disque normale :"
+msgstr "Normaali levyn _osio:"
 
 #: tmp/vmm-add-hardware.glade.h:28 tmp/vmm-create.glade.h:73
 msgid "P_artition:"
-msgstr "P_artition :"
+msgstr "_Osio:"
 
 #: tmp/vmm-add-hardware.glade.h:29
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual storage device."
 msgstr ""
-"Veuillez spécifier la manière dont vous souhaitez répartir l'espace sur ce "
-"système hôte physique pour votre nouveau périphérique de stockage virtuel."
+"Osoita kuinka haluat varata tilaa tältä fyysiseltä isäntäjärjestelmältä "
+"uudelle virtuaaliselle tallennusjärjestelmälle."
 
 #: tmp/vmm-add-hardware.glade.h:30
 msgid ""
 "Please indicate how you'd like to connect your new virtual network device to "
 "the host network."
-msgstr ""
-"Veuillez spécifier la manière dont vous souhaitez connecter votre nouveau "
-"périphérique réseau virtuel au réseau hôte."
+msgstr "Kunka uusi virtuaalinen verkkolaite kytketään isäntäverkkoon?"
 
 #: tmp/vmm-add-hardware.glade.h:31 tmp/vmm-create.glade.h:82
 msgid "Shared Physical Device"
-msgstr "Périphérique physique partagé"
+msgstr "Jaettu fyysinen laite"
 
+# Tarkista
 #: tmp/vmm-add-hardware.glade.h:32 tmp/vmm-create.glade.h:83
 msgid "Simple F_ile:"
-msgstr "Simple _fichier :"
+msgstr "Yksinkertainen _tiedosto:"
 
 #: tmp/vmm-add-hardware.glade.h:33 tmp/vmm-create.glade.h:85
 msgid "Target:"
-msgstr "Cible :"
+msgstr "Kohde:"
 
 #: tmp/vmm-add-hardware.glade.h:34
 msgid ""
 "This assistant will guide you through adding a new piece of virtual "
 "hardware. First select what type of hardware you wish to add:"
 msgstr ""
-"Cet assistant vous guidera lors de l'ajout d'une nouvelle partie du matériel "
-"virtuel. Veuillez sélectionner le type de matériel que vous voulez ajouter :"
+"Tämä avustin opastaa uuden virtuaalilaitteen lisäämisessä. Valitse "
+"ensimmäiseksi lisättävän laitteen tyyppi:"
 
 #: tmp/vmm-add-hardware.glade.h:35 tmp/vmm-create.glade.h:99
 msgid "_Device:"
-msgstr "_Périphérique :"
+msgstr "_Laite:"
 
 #: tmp/vmm-add-hardware.glade.h:36 tmp/vmm-create.glade.h:100
 #: tmp/vmm-create-net.glade.h:57
 msgid "_Finish"
-msgstr "_Terminer"
+msgstr "_Lopeta"
 
 #: tmp/vmm-add-hardware.glade.h:37 tmp/vmm-create.glade.h:102
 msgid "_Network:"
-msgstr "_Réseau :"
+msgstr "_Verkko:"
 
 #: tmp/vmm-add-hardware.glade.h:38 tmp/vmm-create.glade.h:105
 msgid "_Shared physical device"
-msgstr "Périphérique phy_sique partagé"
+msgstr "_Jaettu fyysinen laite"
 
 #: tmp/vmm-add-hardware.glade.h:39 tmp/vmm-create.glade.h:107
 msgid "_Virtual network"
-msgstr "Réseau _virtuel"
+msgstr "Virtuaaliverkko"
 
 #: tmp/vmm-add-hardware.glade.h:40 tmp/vmm-create.glade.h:109
 msgid "eth0"
@@ -836,47 +808,48 @@ msgstr "eth0"
 
 #: tmp/vmm-console.glade.h:1
 msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>La console est actuellement indisponible</b>"
+msgstr "<b>Konsoli ei ole käytettävissä</b>"
 
 #: tmp/vmm-console.glade.h:2
 msgid "Auth"
-msgstr "Authentification"
+msgstr "Valtuutus"
 
 #: tmp/vmm-console.glade.h:3
 msgid "Login"
-msgstr "Identifiant de connexion"
+msgstr "Sisäänkirjautuminen"
 
 #: tmp/vmm-console.glade.h:4
 msgid "Password:"
-msgstr "Mot de passe :"
+msgstr "Salasana:"
 
 #: tmp/vmm-console.glade.h:5 tmp/vmm-details.glade.h:37
 msgid "Pause"
-msgstr "Pause"
+msgstr "Pysäytä"
 
 #: tmp/vmm-console.glade.h:6 tmp/vmm-details.glade.h:39
 msgid "Run"
-msgstr "Démarrer"
+msgstr "Suorita"
 
 #: tmp/vmm-console.glade.h:7 tmp/vmm-details.glade.h:40
 msgid "S_hutdown"
-msgstr "É_teindre"
+msgstr "_Sammuta"
 
 #: tmp/vmm-console.glade.h:8
 msgid "Save this password in your keyring"
-msgstr "Sauvergarder ce mot de passe dans votre trousseau"
+msgstr "Tallenna tämä salasana avainrenkaaseesi"
 
 #: tmp/vmm-console.glade.h:9
 msgid "Screenshot"
-msgstr "Capture d'écran"
+msgstr "Kuvankaappaus"
 
 #: tmp/vmm-console.glade.h:11 tmp/vmm-details.glade.h:49
 msgid "Toolbar"
-msgstr "Barre d'outils"
+msgstr "Työkalurivi"
 
+# Tarkista
 #: tmp/vmm-console.glade.h:12
 msgid "Unavailable"
-msgstr "Non disponible"
+msgstr "Ei saatavilla"
 
 #: tmp/vmm-console.glade.h:13
 msgid "VNC"
@@ -884,53 +857,53 @@ msgstr "VNC"
 
 #: tmp/vmm-console.glade.h:14
 msgid "Virtual Machine Console"
-msgstr "Console de la machine virtuelle"
+msgstr "Virtuaalikoneen konsoli"
 
 #: tmp/vmm-console.glade.h:15 tmp/vmm-details.glade.h:54
 msgid "Virtual _Machine"
-msgstr "_Machine virtuelle"
+msgstr "_Virtuaalikone"
 
 #: tmp/vmm-console.glade.h:16 tmp/vmm-details.glade.h:55
 msgid "_Destroy"
-msgstr "_Détruire"
+msgstr "_Tuhoa"
 
 #: tmp/vmm-console.glade.h:17
 msgid "_Details"
-msgstr "_Détails"
+msgstr "_Yksityiskohdat"
 
 #: tmp/vmm-console.glade.h:18
 msgid "_FullScreen"
-msgstr "_Plein écran"
+msgstr "_Kokoruutu"
 
 #: tmp/vmm-console.glade.h:19 tmp/vmm-details.glade.h:57
 #: tmp/vmm-host.glade.h:35 tmp/vmm-manager.glade.h:22
 msgid "_Help"
-msgstr "_Aide"
+msgstr "O_hje"
 
 #: tmp/vmm-console.glade.h:20 tmp/vmm-details.glade.h:58
 msgid "_Pause"
-msgstr "_Pause"
+msgstr "_Keskeytä"
 
 #: tmp/vmm-console.glade.h:21 tmp/vmm-details.glade.h:59
 msgid "_Run"
-msgstr "_Démarrer"
+msgstr "_Suorita"
 
 #: tmp/vmm-console.glade.h:22 tmp/vmm-details.glade.h:60
 msgid "_Save"
-msgstr "_Sauvegarder"
+msgstr "_Tallenna"
 
 #: tmp/vmm-console.glade.h:23 tmp/vmm-details.glade.h:61
 msgid "_Serial Console"
-msgstr "_Console en mode série"
+msgstr "_Sarjakonsoli"
 
 #: tmp/vmm-console.glade.h:24
 msgid "_Take Screenshot"
-msgstr "_Prendre une capture d'écran"
+msgstr "Ota _kuvakaappaus"
 
 #: tmp/vmm-console.glade.h:25 tmp/vmm-details.glade.h:62
 #: tmp/vmm-manager.glade.h:23
 msgid "_View"
-msgstr "_Afficher"
+msgstr "_Näytä"
 
 #: tmp/vmm-create.glade.h:1 tmp/vmm-create-net.glade.h:1
 msgid "\t"
@@ -942,7 +915,7 @@ msgstr " "
 
 #: tmp/vmm-create.glade.h:4 tmp/vmm-details.glade.h:4
 msgid "2 GB"
-msgstr "2 Go"
+msgstr "2 Gt"
 
 #: tmp/vmm-create.glade.h:5
 msgid "256\t"
@@ -950,7 +923,7 @@ msgstr "256\t"
 
 #: tmp/vmm-create.glade.h:6
 msgid "400 MB"
-msgstr "400 Mo"
+msgstr "400 Mt"
 
 #: tmp/vmm-create.glade.h:7
 msgid "5\t"
@@ -958,48 +931,49 @@ msgstr "5\t"
 
 #: tmp/vmm-create.glade.h:9
 msgid "500 MB"
-msgstr "500 Mo"
+msgstr "500 Mt"
 
 #: tmp/vmm-create.glade.h:10
 msgid "<b>CPUs:</b>"
-msgstr "<b>Unités centrales :</b>"
+msgstr "<b>Suorittimet:</b>"
 
 #: tmp/vmm-create.glade.h:11
 msgid "<b>Example:</b> system1"
-msgstr "<b>Exemple :</b> système1"
+msgstr "<b>Esimerkki:</b> järjestelmä1"
 
 #: tmp/vmm-create.glade.h:12
 msgid "<b>Install media</b>"
-msgstr "<b>Installer media</b>"
+msgstr "<b>Asennusmedia</b>"
 
 #: tmp/vmm-create.glade.h:13
 msgid "<b>Memory:</b>"
-msgstr "<b>Mémoire :</b>"
+msgstr "<b>Muisti:</b>"
 
 #: tmp/vmm-create.glade.h:14
 msgid "<b>Memory</b> and <b>CPU</b> allocation"
-msgstr "Allocation <b>Mémoire</b> et <b>CPU</b>"
+msgstr "<b>Muistin</b> ja <b>prosessorin</b> varaus"
 
 #: tmp/vmm-create.glade.h:17
 msgid ""
 "<b>Storage</b> details - which disk partitions or files the system should use"
 msgstr ""
-"Informations sur le <b>stockage</b> - avec les partitions ou fichiers que le "
-"système devrait utiliser"
+"<b>Tallennustilan</b> tiedot - mitä levyosioita tai tiedostoja järjestelmän "
+"pitäisi käyttää"
 
 #: tmp/vmm-create.glade.h:18 tmp/vmm-create-net.glade.h:15
 msgid "<b>Summary</b>"
-msgstr "<b>Résumé</b>"
+msgstr "<b>Yhteenveto</b>"
 
 #: tmp/vmm-create.glade.h:20
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
-msgstr "<small><b>Exemple :</b> ftp://hostname.example.com/ks/ks.cfg</small>"
+msgstr ""
+"<small><b>Esimerkki:</b> ftp://konenimi.esimerkki.com/ks/ks.cfg</small>"
 
 #: tmp/vmm-create.glade.h:21
 msgid ""
 "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
 msgstr ""
-"<small><b>Exemple :</b> http://servername.example.com/distro/i386/tree</"
+"<small><b>Esimerkki:</b> http://palvelinnimi.esimerkki.com/distro/i386/tree</"
 "small>"
 
 #: tmp/vmm-create.glade.h:22
@@ -1007,17 +981,16 @@ msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
 msgstr ""
-"<small><b>Note : </b>L'(les) unité(s) centrale(s) hôte(s) de cette machine "
-"ne supporte pas la virtualisation complète.</small>"
+"<small><b>Huomaa:</b> Tämän koneen isäntäprosessorit eivät tue täyttä "
+"virtualisointia.</small>"
 
 #: tmp/vmm-create.glade.h:23
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
 msgstr ""
-"<small><b>Note :</b> L'(les) unité(s) centrale(s) hôte(s) de cette machine "
-"supporte la virtualisation complète, mais elle n'est pas activée dans le "
-"BIOS.</small>"
+"<small><b>Huomaa:</b> Tämän koneen isäntäprosessorit tukevat täyttä "
+"virtualisointia, mutta sitä ei ole kytketty toimintaan BIOSista.</small>"
 
 #: tmp/vmm-create.glade.h:26
 msgid ""
@@ -1025,9 +998,9 @@ msgid ""
 "be less than (or equal to) the number of logical CPUs on the host system.</"
 "small>"
 msgstr ""
-"<small><b>Note : </b> Pour de meilleures performances, le nombre d'unités "
-"centrales virtuelles devrait être inférieur (ou égal) au nombre d'unités "
-"centrales physiques hébergées sur le système.</small>"
+"<small><b>Vihje:</b> Parasta suorituskykyä varten virtuaalisten prosessorien "
+"määrän pitäisi olla vähemmän kuin (tai yhtäsuuri kuin) isäntäjärjestelmän "
+"fyysisten prosessorien määrä.</small>"
 
 #: tmp/vmm-create.glade.h:27
 msgid ""
@@ -1035,101 +1008,101 @@ msgid ""
 "storage, to your virtual system after it has been created using the same "
 "tools you would on a physical system.</small>"
 msgstr ""
-"<small><b>Note : </b> Après sa création, vous devriez ajouter à votre "
-"système virtuel un support de stockage supplémentaire incluant un point de "
-"montage réseau, en utilisant vos outils habituels.</small>"
+"<small><b>Vihje:</b> Voit lisätä tallennustilaa, myös verkosta liitettyä, "
+"virtuaalijärjestelmään sen luomisen jälkeen käyttäen samoja työkaluja kuin "
+"käyttäisit fyysisessä järjestelmässä.</small>"
 
 #: tmp/vmm-create.glade.h:29
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocate memory "
 "and CPU</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocation "
-"mémoire et CPU</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Varaa muistia "
+"ja prosessoreita</span>"
 
 #: tmp/vmm-create.glade.h:31
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing a "
 "virtualization method</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choisir une "
-"méthode de virtualisation</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF"
+"\">Virtualisointitavan valinta</span>"
 
 #: tmp/vmm-create.glade.h:33
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual system </span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Créer un "
-"nouveau système virtuel </span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Uuden "
+"virtuaalijärjestelmän luonti</span>"
 
 #: tmp/vmm-create.glade.h:34
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation media</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Localiser le "
-"médium d'installation</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Asennusmedian "
+"paikantaminen</span>"
 
 #: tmp/vmm-create.glade.h:35
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Nommer votre "
-"système virtuel</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF"
+"\">Virtuaalijärjestelmän nimeäminen</span>"
 
 #: tmp/vmm-create.glade.h:36
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to begin "
 "installation</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Prêt à débuter "
-"l'installation</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Valmis "
+"asennuksen aloittamiseen</span>"
 
 #: tmp/vmm-create.glade.h:37
 msgid "A <b>name</b> for your new virtual system"
-msgstr "Un <b>nom</b> pour votre nouveau système virtuel"
+msgstr "<b>Nimi</b> uudelle virtuaaliselle järjestelmälle"
 
 #: tmp/vmm-create.glade.h:40
 msgid "CPU architecture:"
-msgstr "Architecture unité centrale :"
+msgstr "Suoritinarkkitehtuuri:"
 
 #: tmp/vmm-create.glade.h:41
 msgid "CPU/memory"
-msgstr "Mémoire/Unité centrale"
+msgstr "Prosessori/muisti"
 
 #: tmp/vmm-create.glade.h:44
 msgid "Create a new virtual system"
-msgstr "Créer un nouveau système virtuel"
+msgstr "Luo uusi virtuaalijärjestelmä"
 
 #: tmp/vmm-create.glade.h:48
 msgid "Enable kernel / hardware acceleration"
-msgstr "Activer l'accélération noyau / matérielle"
+msgstr "Ota käyttöön ydin- tai laitteistokiihdytys"
 
 #: tmp/vmm-create.glade.h:49
 msgid "FV install"
-msgstr "Installation FV"
+msgstr "Täysin virtualisoitu asennus"
 
 #: tmp/vmm-create.glade.h:50
 msgid "F_ully Virtualized:"
-msgstr "C_omplètement virtualisé :"
+msgstr "Täysin virtualisoitu:"
 
 #: tmp/vmm-create.glade.h:53
 msgid "ISO _Location:"
-msgstr "_Emplacement ISO :"
+msgstr "ISO-_sijainti:"
 
 #: tmp/vmm-create.glade.h:54
 msgid "Initial memory:"
-msgstr "Mémoire initiale :"
+msgstr "Muisti alussa:"
 
 #: tmp/vmm-create.glade.h:55
 msgid "Install Media _URL:"
-msgstr "_URL d'installation de médium :"
+msgstr "Asennusmedian _osoite:"
 
 #: tmp/vmm-create.glade.h:56
 msgid "Installation source:"
-msgstr "Source d'installation"
+msgstr "Asennuslähde:"
 
 #: tmp/vmm-create.glade.h:58
 msgid ""
@@ -1137,17 +1110,17 @@ msgid ""
 "systems (does not require OS modification). Slower than paravirtualized "
 "systems."
 msgstr ""
-"Implique une simulation matérielle permettant de tenir compte d'une large "
-"gamme de systèmes d'exploitation (ne demande pas une modification du SE). "
-"Plus lent que les systèmes paravirtualisés."
+"Sisältää laitteistosimulointia, jolloin käytettävien käyttöjärjestelmien "
+"valikoima on suurempi (ei vaadi käyttöjärjestelmän muokkaamista). Hitaampi "
+"kuin paravirtualisoidut järjestelmät."
 
 #: tmp/vmm-create.glade.h:59
 msgid "Kickstart U_RL:"
-msgstr "Démarrer l'U_RL :"
+msgstr "Kickstart-osoite:"
 
 #: tmp/vmm-create.glade.h:60
 msgid "Kickstart source:"
-msgstr "Source kickstart :"
+msgstr "Kickstart-ähde:"
 
 #: tmp/vmm-create.glade.h:61
 msgid ""
@@ -1155,49 +1128,46 @@ msgid ""
 "because the OS must be specially modified to support paravirtualization. "
 "Better performance than fully virtualized systems."
 msgstr ""
-"Méthode légère de virtualisation de machines. Elle limite le choix des "
-"systèmes d'exploitation car les SE doivent être modifiés pour la gestion de "
-"la paravirtualisation. Cela offre de meilleures performances que les "
-"systèmes complètement virtualisés."
+"Kevyt tapa koneiden virtualisointiin. Rajoittaa käyttöjärjestelmän valintaa, "
+"koska käyttöjärjestelmässä täytyy olla paravirtualisointituki. Parempi "
+"suorituskyky kuin täysin virtualisoiduilla järjestelmillä."
 
 #: tmp/vmm-create.glade.h:62
 msgid "Logical host CPUs:"
-msgstr "Unités centrales logiques hébergées :"
+msgstr "Loogisen isännän prosessorit:"
 
 #: tmp/vmm-create.glade.h:64
 msgid "Machine name:"
-msgstr "Nom de la machine :"
+msgstr "Koneen nimi:"
 
 #: tmp/vmm-create.glade.h:65
 msgid "Maximum memory:"
-msgstr "Mémoire maximum :"
+msgstr "Muistin enimmäismäärä:"
 
 #: tmp/vmm-create.glade.h:69
 msgid "OS _Type:"
-msgstr "Type d'OS :"
+msgstr "Käyttöjärjestelmän _tyyppi:"
 
 #: tmp/vmm-create.glade.h:70
 msgid "OS _Variant:"
-msgstr "_Variante de OS :"
+msgstr "Käyttöjärjestelmän _malli:"
 
 #: tmp/vmm-create.glade.h:71
 msgid "Operating System:"
-msgstr "Système d'exploitation :"
+msgstr "Käyttöjärjestelmä:"
 
 #: tmp/vmm-create.glade.h:72
 msgid "PVinstall"
-msgstr "PVinstall"
+msgstr "PV-asennus"
 
 #: tmp/vmm-create.glade.h:74
 msgid "Please choose a name for your virtual system:"
-msgstr "Veuillez choisir un nom pour votre système virtuel :"
+msgstr "Valitse nimi virtuaalijärjestelmälle:"
 
 #: tmp/vmm-create.glade.h:75
 msgid ""
 "Please choose the type of guest operating system you will be installing:"
-msgstr ""
-"Veuillez choisir le type de système d'exploitation invité que vous allez "
-"installer :"
+msgstr "Valitse asennettavan vieraskäyttöjärjestelmän tyyppi:"
 
 #: tmp/vmm-create.glade.h:76
 msgid ""
@@ -1206,18 +1176,17 @@ msgid ""
 "lower amount to grab on startup. Warning: setting VM memory too high will "
 "cause out-of-memory errors in your host domain!"
 msgstr ""
-"Veuillez entrer la configuration de la mémoire pour cette machine virtuelle. "
-"Vous pouvez spécifier la taille maximale de mémoire que cette machine "
-"virtuelle pourra utiliser et, si vous le désirez, une taille moindre pour le "
-"démarrage. Avertissement : renseigner une quantité de mémoire trop "
-"importante causera des erreurs de dépassement de mémoire sur votre domaine "
-"hôte !"
+"Syötä muistiasetukset tälle virtuaalikoneelle. Voit määrittää "
+"virtuaalikoneelle annettavan muistin enimmäismäärän ja valinnaisesti "
+"pienemmän määrän, joka varataan käynnistyksen aikana. Varoitus: "
+"Virtuaalikoneen muistin määrän asettaminen liian suureksi aiheuttaa "
+"isäntäkoneella muistinloppumisvirheitä!"
 
 #: tmp/vmm-create.glade.h:77
 msgid "Please enter the number of virtual CPUs this VM should start up with."
 msgstr ""
-"Veuillez spécifier le nombre d'unités centrales virtuelles que cette machine "
-"devrait démarrer."
+"Syötä virtuaaliprosessorien määrä, joilla tämän virtuaalikoneen pitäisi "
+"käynnistyä."
 
 #: tmp/vmm-create.glade.h:78
 msgid ""
@@ -1225,17 +1194,15 @@ msgid ""
 "for your new virtual system. This space will be used to install the virtual "
 "system's operating system."
 msgstr ""
-"Merci de spécifier la manière dont vous souhaitez répartir l'espace sur ce "
-"système physique hébergé pour votre nouveau système virtuel. Cet espace sera "
-"utilisé pour installer le système d'exploitation du système virtuel."
+"Osoita, kuinka haluat varata tilaa tältä fyysiseltä isäntäjärjestelmältä "
+"uudelle virtuaalijärjestelmälle. Tilaa käytetään virtuaalijärjestelmän "
+"käyttöjärjestelmän asentamiseen."
 
 #: tmp/vmm-create.glade.h:79
 msgid ""
 "Please indicate how you'd like to connect your new virtual system to the "
 "host network."
-msgstr ""
-"Veuillez indiquer comment vous souhaiteriez connecter votre nouveau système "
-"virtuel au réseau hôte."
+msgstr "Kuinka uusi virtuaalijärjestelmä kytketään isäntäverkkoon?"
 
 #: tmp/vmm-create.glade.h:80
 msgid ""
@@ -1243,9 +1210,8 @@ msgid ""
 "system you would like to install on this <b>fully virtualized</b> virtual "
 "system:"
 msgstr ""
-"Merci d'indiquer l'emplacement du médium d'installation pour le système "
-"d'exploitation que vous souhaitez installer sur ce système virtuel "
-"<b>entièrement virtualisé</b> :"
+"Osoita, missä on asennusmedia käyttöjärjestelmälle, jonka haluat asentaa "
+"tähän <b>täysin virtualisoituun</b> järjestelmään:"
 
 #: tmp/vmm-create.glade.h:81
 msgid ""
@@ -1254,22 +1220,21 @@ msgid ""
 "system. Optionally you can provide the URL for a kickstart file that "
 "describes your system:"
 msgstr ""
-"Merci d'indiquer l'emplacement du médium d'installation pour le système "
-"d'exploitation que vous souhaitez installer sur ce système "
-"<b>paravirtualisé</b>. Optionnellement, vous pouvez fournir une URL pour un "
-"fichier kickstart qui décrit votre système :"
+"Osoita, missä on asennusmedia käyttöjärjestelmälle, jonka haluat asentaa "
+"tähän <b>paravirtualisoituun</b> järjestelmään. Lisäksi voit antaa osoitteen "
+"kickstart-tiedostoon, joka kuvaa järjestelmää:"
 
 #: tmp/vmm-create.glade.h:84
 msgid "System _Name:"
-msgstr "_Nom du système :"
+msgstr "Järjestelmän _nimi:"
 
 #: tmp/vmm-create.glade.h:86
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
 msgstr ""
-"<b>L'emplacement</b> des fichiers nécessaires pour l'installation d'un "
-"système d'exploitation sur la machine virtuelle"
+"Niiden tiedostojen <b>sijainti</b>, joita tarvitaan käyttöjärjestelmän "
+"asentamiseksi tähän virtuaalijärjestelmään"
 
 #: tmp/vmm-create.glade.h:87
 msgid ""
@@ -1277,77 +1242,76 @@ msgid ""
 "will be asked for some information about the virtual system you'd like to "
 "create, such as:"
 msgstr ""
-"Cet assistant vous guidera lors de la création d'une nouvelle machine "
-"virtuelle. Des informations à propos du système que vous souhaitez créer "
-"vous seront demandées, telles que :"
+"Tämä avustin opastaa uuden virtuaalijärjestelmän luomisessa. Sinulta "
+"kysytään luotavasta järjestelmästä tietoja, kuten:"
 
 #: tmp/vmm-create.glade.h:88 tmp/vmm-details.glade.h:51
 msgid "Total memory on host machine:"
-msgstr "Quantité totale de mémoire sur la machine hôte :"
+msgstr "Muistin kokonaismäärä isäntäkoneella:"
 
 #: tmp/vmm-create.glade.h:89
 msgid "Type"
-msgstr "Type"
+msgstr "Tyyppi"
 
 #: tmp/vmm-create.glade.h:90
 msgid "VM _Max Memory (MB):"
-msgstr "Mémoire _maximum pour la machine virtuelle (Mo) :"
+msgstr "Virtuaalikoneen _enimmäismuisti (Mt):"
 
 #: tmp/vmm-create.glade.h:91
 msgid "VM _Startup Memory (MB):"
-msgstr "Mémoire au _démarrage de la machine virtuelle (Mo) :"
+msgstr "Virtuaalikoneen _käynnistysmuisti (Mt):"
 
 #: tmp/vmm-create.glade.h:92
+#, fuzzy
 msgid "VMS"
 msgstr "VMS"
 
 #: tmp/vmm-create.glade.h:93
 msgid "Virtual CPUs:"
-msgstr "Unités centrales virtuelles :"
+msgstr "Virtuaalisuorittimet:"
 
 #: tmp/vmm-create.glade.h:94
 msgid "Virtualization method:"
-msgstr "Méthode de virtualisation :"
+msgstr "Virtualisointimenetelmä"
 
 #: tmp/vmm-create.glade.h:95
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr ""
-"Le système devra être <b>complètement virtualisé</b> ou <b>paravirtualisé</b>"
+"Onko järjestelmä <b>täysin virtualisoitu</b> vai <b>paravirtualisoitu</b>"
 
 #: tmp/vmm-create.glade.h:96
 msgid "You will need to choose a virtualization method for your new system:"
-msgstr ""
-"Vous devrez choisir une méthode de virtualisation pour le nouveau système :"
+msgstr "Uuden järjestelmän virtualisointitapa on valittava:"
 
 #: tmp/vmm-create.glade.h:97
 msgid "_Browse..."
-msgstr "_Parcourir..."
+msgstr "_Selaa..."
 
 #: tmp/vmm-create.glade.h:98
 msgid "_CD-ROM or DVD:"
-msgstr "_CD-ROM ou DVD :"
+msgstr "_CD-ROM tai DVD:"
 
 #: tmp/vmm-create.glade.h:101
 msgid "_ISO Image Location:"
-msgstr "_Emplacement de l'image ISO :"
+msgstr "_ISO-kuvatiedoston sijainti:"
 
 #: tmp/vmm-create.glade.h:103
 msgid "_Paravirtualized:"
-msgstr "_Paravirtualisé :"
+msgstr "_Paravirtualisoitu:"
 
 #: tmp/vmm-create.glade.h:104
 msgid "_Path to install media:"
-msgstr "_Chemin du médium d'installation :"
+msgstr "Asennusmedian _polku:"
 
 #: tmp/vmm-create.glade.h:106
 msgid "_VCPUs:"
-msgstr "_VCPU :"
+msgstr "_Virtuaalisia suorittimia:"
 
 #: tmp/vmm-create.glade.h:108 tmp/vmm-create-net.glade.h:58
 msgid "demo"
-msgstr "démo"
+msgstr "demo"
 
 #: tmp/vmm-create.glade.h:110
 msgid "http://"
@@ -1403,24 +1367,23 @@ msgstr "<b>DHCP</b>"
 
 #: tmp/vmm-create-net.glade.h:11
 msgid "<b>Example:</b> network1"
-msgstr "<b>Exemple :</b> réseau1"
+msgstr "<b>Esimerkki:</b> verkko1"
 
 #: tmp/vmm-create-net.glade.h:12
 msgid "<b>Forwarding</b>"
-msgstr "<b>Réacheminement</b>"
+msgstr "<b>Välitys</b>"
 
 #: tmp/vmm-create-net.glade.h:13
 msgid ""
 "<b>Hint:</b> The network should be choosen from one of the IPv4 private "
 "address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
 msgstr ""
-"<b>Conseil :</b> Le réseau devrait être choisi parmi l'un des intervalles "
-"d'adresses privées IPv4. Par exemple 10.0.0.0/8, 172.16.0.0/12 ou "
-"192.168.0.0/16"
+"<b>Vinkki:</b> Verkko pitäisi valita jostakin yksityisestä IPv4-"
+"osoitealueesta, esim. 10.0.0.0/8,  172.16.0.0/12, tai 192.168.0.0/16"
 
 #: tmp/vmm-create-net.glade.h:14
 msgid "<b>IPv4 network</b>"
-msgstr "<b>Réseau IPv4</b>"
+msgstr "<b>IPv4-verkko</b>"
 
 #: tmp/vmm-create-net.glade.h:16
 msgid ""
@@ -1428,73 +1391,73 @@ msgid ""
 "network configuration in virtual machines, these parameters can be left with "
 "their default values."
 msgstr ""
-"<b>Conseil :</b> À moins que vous ne souhaitiez réserver certaines adresses "
-"pour permettre la configuration d'un réseau statique pour des machines "
-"virtuelles, vous devriez laisser ces paramètres à leurs valeurs par défaut."
+"<b>Vinkki:</b> Ellet halua varata joitakin osoitteita staattisia "
+"verkkoasetuksia varten virtuaalikoneessa, nämä parametrit voi jättää "
+"oletusarvoihinsa."
 
 #: tmp/vmm-create-net.glade.h:17
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing an "
 "IPv4 address space</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choix d'un "
-"espace d'adressage IPv4</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv4-"
+"osoiteavaruuden valinta</span>"
 
 #: tmp/vmm-create-net.glade.h:18
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting to "
 "physical network</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connexion au "
-"réseau physique</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Yhdistäminen "
+"fyysiseen verkkoon</span>"
 
 #: tmp/vmm-create-net.glade.h:19
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual network </span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Création d'un "
-"nouveau réseau virtuel </span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Uuden "
+"virtuaaliverkon luonti</span>"
 
 #: tmp/vmm-create-net.glade.h:20
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual network </span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Nommer votre "
-"réseau virtuel</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Virtuaaliverkon "
+"nimeäminen</span>"
 
 #: tmp/vmm-create-net.glade.h:21
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create "
 "network</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Prêt à créer le "
-"réseau</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Valmis verkon "
+"luomiseen</span>"
 
 #: tmp/vmm-create-net.glade.h:22
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Selecting the "
 "DHCP range</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sélection de "
-"l'intervalle DHCP</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">DHCP-alueen "
+"valitseminen</span>"
 
 #: tmp/vmm-create-net.glade.h:23
 msgid "A <b>name</b> for your new virtual network"
-msgstr "Un <b>nom</b> pour votre nouveau réseau virtuel"
+msgstr "<b>Nimi</b> uudelle virtuaaliverkolle:"
 
 #: tmp/vmm-create-net.glade.h:24
 msgid "Broadcast:"
-msgstr "Diffusion :"
+msgstr "Yleislähetys:"
 
 #: tmp/vmm-create-net.glade.h:26
 msgid "Connectivity:"
-msgstr "Connectivité :"
+msgstr "Liitettävyys:"
 
 #: tmp/vmm-create-net.glade.h:27
 msgid "Create a new virtual network"
-msgstr "Créer un nouveau réseau virtuel"
+msgstr "Luo uusi virtuaaliverkko"
 
 #: tmp/vmm-create-net.glade.h:28
 msgid "DHCP"
@@ -1502,27 +1465,27 @@ msgstr "DHCP"
 
 #: tmp/vmm-create-net.glade.h:29
 msgid "Desination:"
-msgstr "Destination :"
+msgstr "Kohde:"
 
 #: tmp/vmm-create-net.glade.h:30
 msgid "End address:"
-msgstr "Adresse de fin :"
+msgstr "Loppuosoite:"
 
 #: tmp/vmm-create-net.glade.h:31
 msgid "End:"
-msgstr "Fin :"
+msgstr "Loppu:"
 
 #: tmp/vmm-create-net.glade.h:32
 msgid "Forwarding"
-msgstr "Réacheminement"
+msgstr "Välitys"
 
 #: tmp/vmm-create-net.glade.h:33
 msgid "Forwarding to physical network"
-msgstr "Réacheminement vers un réseau physique"
+msgstr "Välitys fyysiseen verkkoon"
 
 #: tmp/vmm-create-net.glade.h:34
 msgid "Gateway:"
-msgstr "Passerelle :"
+msgstr "Yhdyskäytävä:"
 
 #: tmp/vmm-create-net.glade.h:35
 msgid "IPv4"
@@ -1530,63 +1493,62 @@ msgstr "IPv4"
 
 #: tmp/vmm-create-net.glade.h:40
 msgid "Netmask:"
-msgstr "Masque réseau :"
+msgstr "Verkon peite:"
 
 #: tmp/vmm-create-net.glade.h:41
 msgid "Network _Name:"
-msgstr "_Nom du réseau :"
+msgstr "Verkon _nimi:"
 
 #: tmp/vmm-create-net.glade.h:42
 msgid "Network name:"
-msgstr "Nom du réseau :"
+msgstr "Verkon nimi:"
 
 #: tmp/vmm-create-net.glade.h:43 tmp/vmm-host.glade.h:25
 msgid "Network:"
-msgstr "Réseau :"
+msgstr "Verkko:"
 
 #: tmp/vmm-create-net.glade.h:44
 msgid "Please choose a name for your virtual network:"
-msgstr "Veuillez choisir un nom pour votre réseau virtuel :"
+msgstr "Valitse nimi virtuaaliverkolle:"
 
 #: tmp/vmm-create-net.glade.h:45
 msgid ""
 "Please choose the range of addresses the DHCP server can use to allocate to "
 "guests attached to the virtual network"
 msgstr ""
-"Veuillez choisir l'intervalle d'adresses que le serveur DHCP pourra allouer "
-"aux invités attachés au réseau virtuel"
+"Valitse osoitealue, josta DHCP-palvelin voi antaa osoitteita "
+"virtuaaliverkkoon kytketyille laitteille."
 
 #: tmp/vmm-create-net.glade.h:46
 #, fuzzy
 msgid ""
 "Please indicate whether this virtual network should be connected to the "
 "physical network."
-msgstr ""
-"Veuillez indiquer si le réseau virtuel peut être connecté au réseau physique."
+msgstr "Kytketäänkö tämä virtuaaliverkko fyysiseen verkkoon?"
 
 #: tmp/vmm-create-net.glade.h:48
 msgid "Size:"
-msgstr "Taille :"
+msgstr "Koko:"
 
 #: tmp/vmm-create-net.glade.h:49
 msgid "Start address:"
-msgstr "Adresse de début :"
+msgstr "Alkuosoite:"
 
 #: tmp/vmm-create-net.glade.h:50
 msgid "Start:"
-msgstr "Début :"
+msgstr "Alku"
 
 #: tmp/vmm-create-net.glade.h:51
 msgid ""
 "The <b>address range</b> from which the <b>DHCP</b> server will allocate "
 "addresses for virtual machines"
 msgstr ""
-"L'<b>intervalle d'adresses</b> à partir duquel le serveur <b>DHCP</b> "
-"allouera les adresses des machines virtuelles"
+"<b>Osoitealue</b> josta <b>DHCP</b>-palvelin antaa osoitteita "
+"virtuaalikoneille."
 
 #: tmp/vmm-create-net.glade.h:52
 msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
-msgstr "L'<b>adresse</b> IPv4 et le <b>masque de réseau</b> à affecter"
+msgstr "Annettava IPv4-<b>osoite</b> ja <b>verkon peite</b>"
 
 #: tmp/vmm-create-net.glade.h:53
 msgid ""
@@ -1594,27 +1556,25 @@ msgid ""
 "will be asked for some information about the virtual network you'd like to "
 "create, such as:"
 msgstr ""
-"Cet assistant vous guidera lors de la création d'un nouveau réseau virtuel. "
-"Des informations à propos du réseau que vous souhaitez créer vous seront "
-"demandées, telles que :"
+"Tämä avustin opastaa uuden virtuaaliverkon luomisessa. Sinulta kysytään "
+"luotavasta verkosta tietoja, kuten:"
 
 #: tmp/vmm-create-net.glade.h:54
 msgid "Type:"
-msgstr "Type :"
+msgstr "Tyyppi:"
 
 #: tmp/vmm-create-net.glade.h:55
 msgid "Whether to <b>forward</b> traffic to the physical network"
-msgstr "Si vous souhaitez <b>réacheminer</b> le trafic vers le réseau physique"
+msgstr "<b>Välitetäänkö</b> liikennettä fyysiseen verkkoon"
 
 #: tmp/vmm-create-net.glade.h:56
 msgid "You will need to choose an IPv4 address space for the virtual network:"
-msgstr ""
-"Vous devrez choisir un espace d'adressage IPv4 pour le réseau virtuel :"
+msgstr "Virtuaaliverkolle on valittava IPv4-osoiteavaruus:"
 
 #: tmp/vmm-details.glade.h:2
 #, no-c-format
 msgid "18%"
-msgstr "18 %"
+msgstr "18%"
 
 #: tmp/vmm-details.glade.h:3
 msgid "2"
@@ -1622,15 +1582,15 @@ msgstr "2"
 
 #: tmp/vmm-details.glade.h:5
 msgid "20 bits/sec"
-msgstr "20 bits/sec"
+msgstr "20 bittiä sekunnissa"
 
 #: tmp/vmm-details.glade.h:6
 msgid "200 MB"
-msgstr "200 Mo"
+msgstr "200 Mt"
 
 #: tmp/vmm-details.glade.h:7
 msgid "30 MB of 128 MB"
-msgstr "30 Mo sur 128 Mo"
+msgstr "30 Mt 128 Mt:sta"
 
 #: tmp/vmm-details.glade.h:8
 msgid "8"
@@ -1638,23 +1598,23 @@ msgstr "8"
 
 #: tmp/vmm-details.glade.h:9
 msgid "80 MB of 1 GB"
-msgstr "80 Mo sur 1 Go"
+msgstr "80 Mt 1 Gt:sta"
 
 #: tmp/vmm-details.glade.h:10 tmp/vmm-host.glade.h:6
 msgid "<b>Basic details</b>"
-msgstr "<b>Détails de base</b>"
+msgstr "<b>Perustiedot</b>"
 
 #: tmp/vmm-details.glade.h:11
 msgid "<b>CPUs</b>"
-msgstr "<b>Unités centrales</b>"
+msgstr "<b>Suorittimet</b>"
 
 #: tmp/vmm-details.glade.h:12
 msgid "<b>Memory</b>"
-msgstr "<b>Mémoire</b>"
+msgstr "<b>Muisti</b>"
 
 #: tmp/vmm-details.glade.h:13 tmp/vmm-host.glade.h:8
 msgid "<b>Performance</b>"
-msgstr "<b>Performance</b>"
+msgstr "<b>Suorituskyky</b>"
 
 #: tmp/vmm-details.glade.h:14
 #, fuzzy
@@ -1662,156 +1622,153 @@ msgid ""
 "<b>Tip:</b> 'Source device' refers to the name of the device as seen from "
 "the host OS."
 msgstr ""
-"<b>Conseil :</b> « source » fait référence à l'information vue par le "
-"système d'exploitation hôte alors que « cible » fait référence à "
-"l'information vue par le système d'exploitation invité"
+"<b>Vinkki:</b> ”lähde” tarkoittaa isäntäkäyttöjärjestelmän näkemää tietoa, "
+"”kohde” tarkoittaa vierasjärjestelmän näkemää tietoa"
 
 #: tmp/vmm-details.glade.h:15
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
 msgstr ""
-"<b>Conseil :</b> « source » fait référence à l'information vue par le "
-"système d'exploitation hôte alors que « cible » fait référence à "
-"l'information vue par le système d'exploitation invité"
+"<b>Vinkki:</b> ”lähde” tarkoittaa isäntäkäyttöjärjestelmän näkemää tietoa, "
+"”kohde” tarkoittaa vierasjärjestelmän näkemää tietoa"
 
 #: tmp/vmm-details.glade.h:16
 msgid ""
 "<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
 "than (or equal to) the number of physical CPUs on the host system."
 msgstr ""
-"<b>Note : </b> Pour de meilleures performances, le nombre d'unités centrales "
-"virtuelles devrait être inférieur (ou égal) au nombre d'unités centrales "
-"physiques hébergées sur le système."
+"<b>Vihje:</b> Parasta suorituskykyä varten virtuaalisten prosessorien määrän "
+"pitäisi olla vähemmän kuin (tai yhtäsuuri kuin) isäntäjärjestelmän fyysisten "
+"prosessorien määrä."
 
 #: tmp/vmm-details.glade.h:17
 msgid "<b>Virtual Disk</b>"
-msgstr "<b>Disque virtuel</b>"
+msgstr "<b>Virtuaalilevy</b>"
 
 #: tmp/vmm-details.glade.h:18
 msgid "<b>Virtual Network Interface</b>"
-msgstr "<b>Interface réseau virtuel</b>"
+msgstr "<b>Virtuaalinen verkkoliitäntä</b>"
 
 #: tmp/vmm-details.glade.h:19
 msgid "Block"
-msgstr "Bloc"
+msgstr "Lohko"
 
 #: tmp/vmm-details.glade.h:20 tmp/vmm-host.glade.h:11
 msgid "CPU usage:"
-msgstr "Utilisation CPU :"
+msgstr "Prosessorin käyttö: "
 
 #: tmp/vmm-details.glade.h:21
 msgid "Change allocation:"
-msgstr "Modifier l'allocation :"
+msgstr "Vaihda varausta:"
 
 #: tmp/vmm-details.glade.h:22
 msgid "Current allocation:"
-msgstr "Allocation actuelle :"
+msgstr "Nykyinen varaus:"
 
 #: tmp/vmm-details.glade.h:24
 msgid "Disk usage:"
-msgstr "Utilisation du disque :"
+msgstr "Levyn käyttö"
 
 #: tmp/vmm-details.glade.h:25
 msgid "Hardware"
-msgstr "Matériel"
+msgstr "Laitteisto"
 
 #: tmp/vmm-details.glade.h:26
 msgid "How many virtual CPUs should this machine be allocated?"
-msgstr ""
-"Combien d'unités centrales virtuelles voulez-vous allouer à cette machine ?"
+msgstr "Kuinka monta virtuaaliprosessoria pitäisi varata tälle koneelle?"
 
 #: tmp/vmm-details.glade.h:27
 msgid "How much memory should this machine be allocated?"
-msgstr "Combien de mémoire devrait être allouée à cette machine ?"
+msgstr "Kuinka paljon muistia pitäisi varata tälle koneelle?"
 
 #: tmp/vmm-details.glade.h:28
 msgid "MAC address:"
-msgstr "Adresse MAC :"
+msgstr "MAC-osoite:"
 
 #: tmp/vmm-details.glade.h:30
 msgid "Maximum allocation:"
-msgstr "Allocation maximale :"
+msgstr "Enimmäisvaraus:"
 
 #: tmp/vmm-details.glade.h:31
 msgid "Memory"
-msgstr "Mémoire"
+msgstr "Muisti"
 
 #: tmp/vmm-details.glade.h:32 tmp/vmm-host.glade.h:21
 msgid "Memory usage:"
-msgstr "Utilisation mémoire :"
+msgstr "Muistinkulutus:"
 
 #: tmp/vmm-details.glade.h:33 tmp/vmm-host.glade.h:24
 msgid "Name:"
-msgstr "Nom :"
+msgstr "Nimi:"
 
 #: tmp/vmm-details.glade.h:35
 msgid "Network usage:"
-msgstr "Utilisation réseau :"
+msgstr "Verkon käyttö:"
 
 #: tmp/vmm-details.glade.h:36 tmp/vmm-host.glade.h:26
 msgid "Overview"
-msgstr "Aperçu"
+msgstr "Yleistiedot"
 
 #: tmp/vmm-details.glade.h:38
 msgid "Processor"
-msgstr "Processeur"
+msgstr "Prosessori"
 
 #: tmp/vmm-details.glade.h:41
 msgid "Shut down"
-msgstr "Éteindre"
+msgstr "Sammuta"
 
 #: tmp/vmm-details.glade.h:43
 msgid "Source device:"
-msgstr "Périphérique source :"
+msgstr "Lähdelaite:"
 
 #: tmp/vmm-details.glade.h:44
 msgid "Source path:"
-msgstr "Chemin d'accès à la source :"
+msgstr "Lähteen polku:"
 
 #: tmp/vmm-details.glade.h:45
 msgid "Source type:"
-msgstr "Type de la source :"
+msgstr "Lähteen tyyppi:"
 
 #: tmp/vmm-details.glade.h:46
 msgid "Status:"
-msgstr "États :"
+msgstr "Tila:"
 
 #: tmp/vmm-details.glade.h:47
 msgid "Target device:"
-msgstr "Périphérique cible :"
+msgstr "Kohdelaite:"
 
 #: tmp/vmm-details.glade.h:48
 msgid "Target type:"
-msgstr "Type de la cible :"
+msgstr "Kohteen tyyppi:"
 
 #: tmp/vmm-details.glade.h:50
 msgid "Total CPUs on host machine:"
-msgstr "Nombre total d'unités centrales sur la machine hôte :"
+msgstr "Suorittimien kokonaismäärä isäntäkoneella:"
 
 #: tmp/vmm-details.glade.h:52 tmp/vmm-host.glade.h:31
 msgid "UUID:"
-msgstr "UUID :"
+msgstr "UUID;"
 
 #: tmp/vmm-details.glade.h:53
 msgid "Virtual Machine Details"
-msgstr "Détails de la machine virtuelle"
+msgstr "Virtuaalikoneen tiedot"
 
 #: tmp/vmm-details.glade.h:56
 msgid "_Graphical Console"
-msgstr "_Console graphique"
+msgstr "_Graafinen konsoli"
 
 #: tmp/vmm-details.glade.h:63
 msgid "disk\t"
-msgstr "disque\t"
+msgstr "levy\t"
 
 #: tmp/vmm-host.glade.h:1
 msgid "1.59 GB of 2.2 GB"
-msgstr "1,59 Go sur 2,2 Go"
+msgstr "1.59 Gt / 2.2 Gt"
 
 #: tmp/vmm-host.glade.h:2
 msgid "2000 MB"
-msgstr "2000 Mo"
+msgstr "2000 Mt"
 
 #: tmp/vmm-host.glade.h:3
 msgid "4"
@@ -1824,71 +1781,71 @@ msgstr "60%"
 
 #: tmp/vmm-host.glade.h:7
 msgid "<b>IPv4 configuration</b>"
-msgstr "<b>Configuration IPv4</b>"
+msgstr "<b>IPv4-asetukset</b>"
 
 #: tmp/vmm-host.glade.h:9
 msgid "Architecture:"
-msgstr "Architecture :"
+msgstr "Arkkitehtuuri:"
 
 #: tmp/vmm-host.glade.h:10
 msgid "Autostart:"
-msgstr "Démarrage automatique :"
+msgstr "Automaattikäynnistys:"
 
 #: tmp/vmm-host.glade.h:12
 msgid "DHCP end:"
-msgstr "Fin DHCP :"
+msgstr "DHCP loppu:"
 
 #: tmp/vmm-host.glade.h:13
 msgid "DHCP start:"
-msgstr "Début DHCP :"
+msgstr "DHCP alku:"
 
 #: tmp/vmm-host.glade.h:14
 msgid "Device:"
-msgstr "Périphérique :"
+msgstr "Laite:"
 
 #: tmp/vmm-host.glade.h:15
 msgid "Forwarding:"
-msgstr "Réacheminement :"
+msgstr "Välitys:"
 
 #: tmp/vmm-host.glade.h:16
 msgid "Host Details"
-msgstr "Détails de l'hôte"
+msgstr "Koneen tiedot"
 
 #: tmp/vmm-host.glade.h:17
 msgid "Hostname:"
-msgstr "Nom d'hôte :"
+msgstr "Konenimi:"
 
 #: tmp/vmm-host.glade.h:18 tmp/vmm-open-connection.glade.h:2
 msgid "Hypervisor:"
-msgstr "Hyperviseur :"
+msgstr "Hypervisor:"
 
 #: tmp/vmm-host.glade.h:19
 msgid "Location:"
-msgstr "Emplacement :"
+msgstr "Sijainti:"
 
 #: tmp/vmm-host.glade.h:20
 msgid "Logical CPUs:"
-msgstr "Unités centrales logiques :"
+msgstr "Loogisia suorittimia:"
 
 #: tmp/vmm-host.glade.h:22
 msgid "Memory:"
-msgstr "Mémoire :"
+msgstr "Muisti:"
 
 #: tmp/vmm-host.glade.h:28
 msgid "Start"
-msgstr "Début"
+msgstr "Alku"
 
 #: tmp/vmm-host.glade.h:29
 msgid "State:"
-msgstr "État :"
+msgstr "Tila:"
 
 #: tmp/vmm-host.glade.h:30
 msgid "Storage Pools"
-msgstr "Réserves de stockage"
+msgstr "Tallennusvarannot"
 
 #: tmp/vmm-host.glade.h:32
 msgid "Virtual Networks"
-msgstr "Réseaux virtuels"
+msgstr "Virtuaalilaitteet"
 
 #: tmp/vmm-host.glade.h:33
 msgid "Xen"
@@ -1896,15 +1853,15 @@ msgstr "Xen"
 
 #: tmp/vmm-host.glade.h:34 tmp/vmm-manager.glade.h:21
 msgid "_File"
-msgstr "_Fichier"
+msgstr "_Tiedosto"
 
 #: tmp/vmm-host.glade.h:36
 msgid "example.com"
-msgstr "exemple.com"
+msgstr "esimerkki.com"
 
 #: tmp/vmm-host.glade.h:37
 msgid "x86_64"
-msgstr "x86_64"
+msgstr "64 Mt"
 
 #: tmp/vmm-manager.glade.h:1
 msgid ""
@@ -1912,65 +1869,65 @@ msgid ""
 "Active virtual machines\n"
 "Inactive virtual machines"
 msgstr ""
-"Toutes les machines virtuelles\n"
-"Machines virtuelles actives\n"
-"Machines virtuelles inactives"
+"Kaikki virtuaalikoneet\n"
+"Aktiiviset virtuaalikoneet\n"
+"Epäaktiiviset virtuaalikoneet"
 
 #: tmp/vmm-manager.glade.h:5
 msgid "De_tails"
-msgstr "Dé_tails"
+msgstr "_Yksityiskohdat"
 
 #: tmp/vmm-manager.glade.h:6
 msgid "Delete machine"
-msgstr "Supprimer la machine"
+msgstr "Poista kone"
 
 #: tmp/vmm-manager.glade.h:8
 msgid "Domain ID"
-msgstr "ID du domaine"
+msgstr "Toimialueen tunnus (Domain ID)"
 
 #: tmp/vmm-manager.glade.h:9
 msgid "Host details..."
-msgstr "Détails de l'hôte..."
+msgstr "Koneen tiedot..."
 
 #: tmp/vmm-manager.glade.h:10
 msgid "Machine details..."
-msgstr "Détails de la machine..."
+msgstr "Koneen tiedot..."
 
 #: tmp/vmm-manager.glade.h:13
 msgid "New machine..."
-msgstr "Nouvelle machine..."
+msgstr "Uusi kone..."
 
 #: tmp/vmm-manager.glade.h:14
 msgid "Open connection..."
-msgstr "Ouvrir une connexion..."
+msgstr "Avaa yhteys..."
 
 #: tmp/vmm-manager.glade.h:15
 msgid "Restore a saved machine from a filesystem image"
-msgstr "Restaurer une image de fichier système sauvegardée depuis une machine"
+msgstr "Palauta tallennettu kone tiedostojärjestelmäkuvasta"
 
 #: tmp/vmm-manager.glade.h:16
 msgid "Restore saved machine..."
-msgstr "Restaurer une machine enregistrée..."
+msgstr "Palauta tallennettu kone..."
 
 #: tmp/vmm-manager.glade.h:18
 msgid "Virtual CPUs"
-msgstr "Unités centrales virtuelles"
+msgstr "Virtuaaliset prosessorit"
 
 #: tmp/vmm-manager.glade.h:20
 msgid "_Edit"
-msgstr "_Édition"
+msgstr "_Muokkaa"
 
 #: tmp/vmm-manager.glade.h:24
 msgid "_View:"
-msgstr "_Afficher :"
+msgstr "_Näytä:"
 
 #: tmp/vmm-modify-file-storage.glade.h:1
 msgid " free"
-msgstr " libre"
+msgstr "vapaana"
 
 #: tmp/vmm-modify-file-storage.glade.h:2
 msgid " of "
-msgstr " de "
+msgstr " "
 
 #: tmp/vmm-modify-file-storage.glade.h:3
 msgid "/tmp"
@@ -1978,15 +1935,15 @@ msgstr "/tmp"
 
 #: tmp/vmm-modify-file-storage.glade.h:4
 msgid "10 TB"
-msgstr "10 To"
+msgstr "10 Tt"
 
 #: tmp/vmm-modify-file-storage.glade.h:5
 msgid ""
 "<b>Tip:</b> You may only increase the size of file-based storage; you can't "
 "decrease its size."
 msgstr ""
-"<b>Note : </b> Vous devriez uniquement augmenter la taille de l'unité de "
-"stockage des fichiers ; vous ne pouvez pas diminuer cette taille."
+"<b>Vihje:</b> Tiedostopohjaisen tallennustilan kokoa voi vain kasvattaa, ei "
+"pienentää."
 
 #: tmp/vmm-modify-file-storage.glade.h:6
 msgid ""
@@ -1994,29 +1951,30 @@ msgid ""
 "GB\n"
 "TB"
 msgstr ""
-"Mo\n"
-"Go\n"
-"To"
+"Mt\n"
+"Gt\n"
+"Tt"
 
 #: tmp/vmm-modify-file-storage.glade.h:9
 msgid "Modify File Storage"
-msgstr "Modifier le fichier de stockage"
+msgstr "Muokkaa tiedostojen tallennusta"
 
 #: tmp/vmm-modify-file-storage.glade.h:10
 msgid "_Mount Point (on virtual system):"
-msgstr "_Point de montage (sur le système virtuel) :"
+msgstr "_Liitospiste (virtuaalijärjestelmässä):"
 
 #: tmp/vmm-modify-file-storage.glade.h:11
 msgid "_Size:"
-msgstr "_Taille :"
+msgstr "_Koko:"
 
 #: tmp/vmm-open-connection.glade.h:1
 msgid "Co_nnect"
-msgstr "Co_nnecter"
+msgstr "_Yhdistä"
 
+# Vai avoin yhteys?
 #: tmp/vmm-open-connection.glade.h:3
 msgid "Open connection"
-msgstr "Ouvrir une connexion"
+msgstr "Avaa yhteys"
 
 #: tmp/vmm-open-connection.glade.h:4
 msgid ""
@@ -2028,49 +1986,50 @@ msgstr ""
 
 #: tmp/vmm-open-connection.glade.h:6
 msgid "_Host:"
-msgstr "Hôte :"
+msgstr "_Isäntä:"
 
 #: tmp/vmm-open-connection.glade.h:7
 msgid "_Local host"
-msgstr "_Hôte local"
+msgstr "_Paikallinen kone"
 
 #: tmp/vmm-open-connection.glade.h:8
 msgid "_Port:"
-msgstr "_Port :"
+msgstr "_Portti:"
 
 #: tmp/vmm-open-connection.glade.h:9
 msgid "_Remote host"
-msgstr "_Hôte distant"
+msgstr "_Etäkone"
 
 #: tmp/vmm-preferences.glade.h:1
 msgid "<b>Consoles</b>"
-msgstr "<b>Consoles</b>"
+msgstr "<b>Konsolit</b>"
 
 #: tmp/vmm-preferences.glade.h:2
 msgid "<b>Status monitoring</b>"
-msgstr "<b>Surveillance des états</b>"
+msgstr "<b>Tilan tarkkailu</b>"
 
 #: tmp/vmm-preferences.glade.h:3
 msgid "Automatically open consoles:"
-msgstr "Ouvrir des consoles automatiquement :"
+msgstr "Avaa konsolit automaattisesti:"
 
 #: tmp/vmm-preferences.glade.h:4
 msgid "Grab keyboard input:"
-msgstr "Passer l'entrée clavier :"
+msgstr "Sieppaa näppäimistösyöte:"
 
 #: tmp/vmm-preferences.glade.h:5
 msgid "Maintain history of"
-msgstr "Historique principal de"
+msgstr "Säilytä historia"
 
+# Tarkista
 #: tmp/vmm-preferences.glade.h:6
 msgid ""
 "Never\n"
 "For new domains\n"
 "For all domains"
 msgstr ""
-"Jamais\n"
-"Pour les nouveaux domaines\n"
-"Pour tous les domaines"
+"Ei koskaan\n"
+"Uusille toimialueille\n"
+"Kaikille toimialueille"
 
 #: tmp/vmm-preferences.glade.h:9
 msgid ""
@@ -2078,25 +2037,44 @@ msgid ""
 "When fullscreen\n"
 "On mouse over"
 msgstr ""
-"Jamais\n"
-"Quand l'écran est en plein écran\n"
-"Au passage de la souris"
+"Ei koskaan\n"
+"Kun koko näytön tilassa\n"
+"Kun hiiri yllä"
 
 #: tmp/vmm-preferences.glade.h:12
 msgid "Preferences"
-msgstr "Préférences"
+msgstr "Ominaisuudet"
 
 #: tmp/vmm-preferences.glade.h:13
 msgid "Update status every"
-msgstr "Mettre à jour l'état toutes les"
+msgstr "Tilantarkitustiheys"
 
 #: tmp/vmm-preferences.glade.h:14
 msgid "samples"
-msgstr "exemples"
+msgstr "näytettä"
 
 #: tmp/vmm-preferences.glade.h:15
 msgid "seconds"
-msgstr "secondes"
+msgstr "sekuntia"
 
 #~ msgid "_Read only connection"
-#~ msgstr "_Connexion en lecture seule"
+#~ msgstr "Vain _luku -yhteys"
+
+#~ msgid "Guest Install Error"
+#~ msgstr "Vierasasennuksen virhe"
+
+#~ msgid "00:16:3e:"
+#~ msgstr "00:16:3e:"
+
+#~ msgid ":"
+#~ msgstr ":"
+
+#~ msgid ""
+#~ "<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
+#~ "letters A-F"
+#~ msgstr ""
+#~ "<b>Vihje:</b> Heksanumeroiden hyväksyttävät arvot ovat numerot 0-9 ja "
+#~ "kirjaimet A-F"
+
+#~ msgid "Add Virtual NIC"
+#~ msgstr "Lisää virtuaalinen verkkokortti"
