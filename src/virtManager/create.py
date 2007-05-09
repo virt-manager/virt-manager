@@ -53,10 +53,11 @@ PAGE_NAME = 1
 PAGE_TYPE = 2
 PAGE_FVINST = 3
 PAGE_PVINST = 4
-PAGE_DISK = 5
-PAGE_NETWORK = 6
-PAGE_CPUMEM = 7
-PAGE_SUMMARY = 8
+PAGE_KERNEL = 5
+PAGE_DISK = 6
+PAGE_NETWORK = 7
+PAGE_CPUMEM = 8
+PAGE_SUMMARY = 9
 
 KEYBOARD_DIR = "/etc/sysconfig/keyboard"
 
@@ -348,6 +349,9 @@ class vmmCreate(gobject.GObject):
             return None
         else:
             return self.window.get_widget("storage-file-size").get_value()
+    
+    def get_config_kernel_params(self):
+	return self.window.get_widget("kernel-params").get_text()
 
     def get_config_network(self):
         if os.getuid() != 0:
@@ -408,6 +412,9 @@ class vmmCreate(gobject.GObject):
         elif page_number == PAGE_PVINST:
             url_widget = self.window.get_widget("pv-media-url")
             url_widget.grab_focus()
+        elif page_number == PAGE_KERNEL:
+    	    kernel_params_widget = self.window.get_widget("kernel-params")
+    	    kernel_params_widget.grab_focus()
         elif page_number == PAGE_DISK:
             partwidget = self.window.get_widget("storage-partition-address")
             filewidget = self.window.get_widget("storage-file-address")
@@ -494,6 +501,10 @@ class vmmCreate(gobject.GObject):
             ks = self.get_config_kickstart_source()
             if ks != None and len(ks) != 0:
                 guest.extraargs = "ks=%s" % ks
+            
+            kernel_params = self.get_config_kernel_params()
+            if kernel_params != "":
+        	guest.extraargs = "%s %s" % (guest.extraargs, kernel_params)
 
         # set the name
         try:
