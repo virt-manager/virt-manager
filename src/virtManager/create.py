@@ -53,11 +53,10 @@ PAGE_NAME = 1
 PAGE_TYPE = 2
 PAGE_FVINST = 3
 PAGE_PVINST = 4
-PAGE_KERNEL = 5
-PAGE_DISK = 6
-PAGE_NETWORK = 7
-PAGE_CPUMEM = 8
-PAGE_SUMMARY = 9
+PAGE_DISK = 5
+PAGE_NETWORK = 6
+PAGE_CPUMEM = 7
+PAGE_SUMMARY = 8
 
 KEYBOARD_DIR = "/etc/sysconfig/keyboard"
 
@@ -412,9 +411,6 @@ class vmmCreate(gobject.GObject):
         elif page_number == PAGE_PVINST:
             url_widget = self.window.get_widget("pv-media-url")
             url_widget.grab_focus()
-        elif page_number == PAGE_KERNEL:
-    	    kernel_params_widget = self.window.get_widget("kernel-params")
-    	    kernel_params_widget.grab_focus()
         elif page_number == PAGE_DISK:
             partwidget = self.window.get_widget("storage-partition-address")
             filewidget = self.window.get_widget("storage-file-address")
