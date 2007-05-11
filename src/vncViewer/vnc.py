@@ -306,9 +306,7 @@ class GRFBViewer(gtk.DrawingArea):
         return self.fb.get_name()
 
     def connect_to_host(self, host, port, debug=0):
-        if self.client != None:
-            self.disconnect_from_host()
-	    self.client = NOne
+        self.disconnect_from_host()
 
         client = GRFBNetworkClient(host, port, self.fb, debug=debug, preferred_encoding=self.preferred_encoding)
         client.connect("disconnected", self._client_disconnected)
