@@ -25,6 +25,7 @@ import sys
 import locale
 import gettext
 import logging
+import logging.handlers
 import traceback
 
 gettext_app = "virt-manager"
@@ -34,8 +35,16 @@ locale.setlocale(locale.LC_ALL, '')
 gettext.install(gettext_app, gettext_dir)
 gettext.bindtextdomain(gettext_app, gettext_dir)
 
+MAX_LOGSIZE   = 1024 * 1024  # 1MB
+ROTATE_NUM    = 5
+DIR_NAME      = ".virt-manager"
+FILE_NAME     = "virt-manager.log"
+FILE_MODE     = 'a'
+FILE_FORMAT   = "[%(asctime)s virt-manager %(process)d] %(levelname)s (%(module)s:%(lineno)d) %(message)s"
+DATEFMT       = "%a, %d %b %Y %H:%M:%S"
+
 # set up logging
-vm_dir = os.path.expanduser("~/.virt-manager")
+vm_dir = os.path.expanduser("~/%s" % DIR_NAME)
 if not os.access(vm_dir,os.W_OK):
     try:
         os.mkdir(vm_dir)
@@ -43,11 +52,13 @@ if not os.access(vm_dir,os.W_OK):
         raise RuntimeError, "Could not create %d directory: " % vm_dir, e
 
 # XXX should we get logging level from gconf, or command line args ?
-logging.basicConfig(level=logging.DEBUG,
-                    format="%(asctime)s %(levelname)-8s %(message)s",
-                    datefmt="%a, %d %b %Y %H:%M:%S",
-                    filename="%s/virt-manager.log" % vm_dir,
-                    filemode='w')
+filename = "%s/%s" % (vm_dir, FILE_NAME)
+rootLogger = logging.getLogger()
+rootLogger.setLevel(logging.DEBUG)
+fileHandler = logging.handlers.RotatingFileHandler(filename, FILE_MODE, MAX_LOGSIZE, ROTATE_NUM)
+fileHandler.setFormatter(logging.Formatter(FILE_FORMAT, DATEFMT))
+rootLogger.addHandler(fileHandler)
+logging.info("Application startup")
 
 # Urgh, pygtk merely logs a warning when failing to open
 # the X11 display connection, and lets everything carry
@@ -243,4 +254,7 @@ def main():
         gtk.gdk.threads_leave()
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception, e:
+        logging.exception(e)
