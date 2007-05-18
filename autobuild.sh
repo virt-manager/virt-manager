@@ -9,13 +9,8 @@ rm -rf MANIFEST blib
 
 # Make makefiles.
 
-autoreconf -i
-
-rm -rf build
-mkdir build
+./autogen.sh --prefix=$AUTOBUILD_INSTALL_ROOT
 cd build
-../configure --prefix=$AUTOBUILD_INSTALL_ROOT
-
 make
 make install
 

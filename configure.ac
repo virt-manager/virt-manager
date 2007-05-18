@@ -1,6 +1,11 @@
 AC_INIT(virt-manager.spec.in)
 AM_INIT_AUTOMAKE(virt-manager, 0.4.0)
 
+ALL_LINGUAS="bg bn_IN bs ca cs da de es fi fr gu hi hr hu is it ja kn ko ml mr ms nb nl or pa pl pt_BR pt ro ru sr@Latn sr sv ta te tr uk zh_CN zh_TW"
+IT_PROG_INTLTOOL([0.35.0], [no-xml])
+AM_GNU_GETTEXT_VERSION([0.14.1])
+AM_GNU_GETTEXT([external])
+
 AC_PROG_CC
 AC_PROG_LIBTOOL
 
@@ -22,7 +27,7 @@ dnl ====================================
 
 AC_OUTPUT(Makefile
           pixmaps/Makefile
-          po/Makefile
+          po/Makefile.in
           src/Makefile
           src/virtManager/Makefile
           src/vncViewer/Makefile

@@ -15,7 +15,7 @@ gladedir = $(pkgdatadir)
 glade_DATA = $(wildcard $(srcdir)/*.glade)
 
 desktopdir = $(datadir)/applications
-desktop_SOURCES = $(PACKAGE).desktop.in
+desktop_SOURCES = $(PACKAGE).desktop.in.in
 desktop_DATA = $(PACKAGE).desktop
 
 dbusdir = $(datadir)/dbus-1/services
@@ -26,12 +26,13 @@ schemadir = $(sysconfdir)/gconf/schemas
 schema_SOURCES = $(PACKAGE).schemas.in
 schema_DATA = $(PACKAGE).schemas
 
-CLEANFILES = $(bin_SCRIPTS) $(desktop_DATA) $(dbus_DATA) $(python_DATA)  $(libexec_SCRIPTS) $(schema_DATA)
+CLEANFILES = $(bin_SCRIPTS) $(desktop_DATA) $(dbus_DATA) $(python_DATA)  $(libexec_SCRIPTS) $(schema_DATA) $(PACKAGE).desktop.in
 
 EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES) $(glade_DATA) $(libexec_SOURCES) $(schema_SOURCES)
 
+@INTLTOOL_DESKTOP_RULE@
 
-%.desktop: $(srcdir)/%.desktop.in
+%.desktop.in: $(srcdir)/%.desktop.in.in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::ICONDIR::,$(pkgdatadir)/pixmaps," < $< > $@
 
 %.service: $(srcdir)/%.service.in
