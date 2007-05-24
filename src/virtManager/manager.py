@@ -171,6 +171,7 @@ class vmmManager(gobject.GObject):
             "on_vm_open_clicked": self.open_vm_console,
             "on_vm_new_clicked": self.show_vm_create,
             "on_vm_delete_clicked": self.delete_vm,
+            "on_menu_edit_delete_activate" : self.delete_vm,
             "on_menu_edit_details_activate": self.show_vm_details,
             "on_menu_host_details_activate": self.show_host,
 
