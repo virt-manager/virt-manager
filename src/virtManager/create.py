@@ -92,6 +92,7 @@ class vmmCreate(gobject.GObject):
             "on_storage_file_address_changed": self.toggle_storage_size,
             "on_storage_toggled" : self.change_storage_type,
             "on_network_toggled" : self.change_network_type,
+            "on_mac_address_clicked" : self.change_macaddr_use,
             "on_media_toggled" : self.change_media_type,
             "on_os_type_changed" : self.change_os_type,
             "on_cpu_architecture_changed": self.change_cpu_arch,
@@ -238,6 +239,7 @@ class vmmCreate(gobject.GObject):
         self.change_media_type()
         self.change_storage_type()
         self.change_network_type()
+        self.change_macaddr_use()
         self.window.get_widget("create-vm-name").set_text("")
         self.window.get_widget("media-iso-image").set_active(True)
         self.window.get_widget("fv-iso-location").set_text("")
@@ -362,6 +364,12 @@ class vmmCreate(gobject.GObject):
             model = dev.get_model()
             return ["bridge", model.get_value(dev.get_active_iter(), 0)]
 
+    def get_config_macaddr(self):
+        macaddr = None
+        if self.window.get_widget("mac-address").get_active():
+            macaddr = self.window.get_widget("create-mac-address").get_text()
+        return macaddr
+
     def get_config_maximum_memory(self):
         return self.window.get_widget("create-memory-max").get_value()
 
@@ -449,6 +457,12 @@ class vmmCreate(gobject.GObject):
                 self.window.get_widget("summary-net-target").set_text("-")
             else:
                 raise ValueError, "Unknown networking type " + net[0]
+            macaddr = self.get_config_macaddr()
+            if macaddr != None:
+                self.window.get_widget("summary-mac-address").set_text(macaddr)
+            else:
+                self.window.get_widget("summary-mac-address").set_text("-")
+
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
 
@@ -543,12 +557,13 @@ class vmmCreate(gobject.GObject):
 
         # network
         net = self.get_config_network()
+        mac = self.get_config_macaddr()
         if net[0] == "bridge":
-            guest.nics.append(virtinst.VirtualNetworkInterface(type=net[0], bridge=net[1]))
+            guest.nics.append(virtinst.VirtualNetworkInterface(macaddr=mac, type=net[0], bridge=net[1]))
         elif net[0] == "network":
-            guest.nics.append(virtinst.VirtualNetworkInterface(type=net[0], network=net[1]))
+            guest.nics.append(virtinst.VirtualNetworkInterface(macaddr=mac, type=net[0], network=net[1]))
         elif net[0] == "user":
-            guest.nics.append(virtinst.VirtualNetworkInterface(type=net[0]))
+            guest.nics.append(virtinst.VirtualNetworkInterface(macaddr=mac, type=net[0]))
         else:
             raise ValueError, "Unsupported networking type " + net[0]
 
@@ -757,6 +772,12 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("net-network").set_sensitive(False)
             self.window.get_widget("net-device").set_sensitive(True)
 
+    def change_macaddr_use(self, ignore=None):
+        if self.window.get_widget("mac-address").get_active():
+            self.window.get_widget("create-mac-address").set_sensitive(True)
+        else:
+            self.window.get_widget("create-mac-address").set_sensitive(False)
+
     def set_max_memory(self, src):
         max_memory = src.get_adjustment().value
         startup_mem_adjustment = self.window.get_widget("create-memory-startup").get_adjustment()
@@ -771,7 +792,7 @@ class vmmCreate(gobject.GObject):
                 self._validation_error_box(_("Invalid System Name"), \
                                            _("System name must be non-blank and less than 50 characters"))
                 return False
-            if re.match("^[a-zA-Z0-9_]*$", name) == None:
+            if re.match("^[a-zA-Z0-9_-]*$", name) == None:
                 self._validation_error_box(_("Invalid System Name"), \
                                            _("System name may contain alphanumeric and '_' characters only"))
                 return False
@@ -838,6 +859,28 @@ class vmmCreate(gobject.GObject):
                                                _("You must select one of the physical devices"))
                     return False
 
+            if self.window.get_widget("mac-address").get_active():
+                mac = self.window.get_widget("create-mac-address").get_text()
+                if len(mac) != 17:
+                    self._validation_error_box(_("Invalid MAC address"), \
+                                               _("MAC adrress must be 17 characters"))
+                    return False
+                if re.match("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$",mac) == None:
+                    self._validation_error_box(_("Invalid MAC address"), \
+                                               _("MAC address must be a form such as AA:BB:CC:DD:EE:FF, and MAC adrress may contain numeric and alphabet of A-F(a-f) and ':' characters only"))
+                    return False
+                hostdevs = virtinst.util.get_host_network_devices()
+                for hostdev in hostdevs:
+                    if mac.lower() == hostdev[4]:
+                        return self._yes_no_box(_('MAC adress "%s" is already in use by host!' % mac), \
+                                                _("Do you really want to use the MAC address ?"))
+                vms = []
+                for domains in self.connection.vms.values():
+                    vms.append(domains.vm)
+                vnic = virtinst.VirtualNetworkInterface(macaddr=mac)
+                if vnic.countMACaddr(vms) > 0:
+                    return self._yes_no_box(_('MAC adress "%s" is already in use by another guest!' % mac), \
+                                            _("Do you really want to use the MAC address ?"))
 
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-back").set_sensitive(True)
