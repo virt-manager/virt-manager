@@ -456,23 +456,28 @@ class vmmDomain(gobject.GObject):
                 type = node.prop("type")
                 srcpath = None
                 devdst = None
+                devtype = node.prop("device")
+                if devtype == None:
+                    devtype = "disk"
                 for child in node.children:
                     if child.name == "source":
                         if type == "file":
                             srcpath = child.prop("file")
                         elif type == "block":
                             srcpath = child.prop("dev")
+                        elif type == None:
+                            type = "-"
                     elif child.name == "target":
                         devdst = child.prop("dev")
-
                 if srcpath == None:
-                    raise RuntimeError("missing source path")
+                    if devtype == "cdrom":
+                        srcpath = "-"
+                        type = "block"
+                    else:
+                        raise RuntimeError("missing source path")
                 if devdst == None:
                     raise RuntimeError("missing destination device")
 
-                devtype = node.prop("device")
-                if devtype == None:
-                    devtype = "disk"
                 disks.append([type, srcpath, devtype, devdst])
 
         finally:
