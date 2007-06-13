@@ -472,7 +472,7 @@ class vmmDetails(gobject.GObject):
             vnic = None
             if netinfo[0] == "bridge":
                 vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], bridge=netinfo[1], macaddr=netinfo[3])
-            elif net[0] == "network":
+            elif netinfo[0] == "network":
                 vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], network=netinfo[1], macaddr=netinfo[3])
             else:
                 vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], macaddr=netinfo[3])
