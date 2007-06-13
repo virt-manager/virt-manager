@@ -540,15 +540,15 @@ class vmmDomain(gobject.GObject):
 
         if self.is_active():
             self.vm.attachDevice(xml)
-        else:
-            vmxml = self.vm.XMLDesc(0)
 
-            index = vmxml.find("</devices>")
-            newxml = vmxml[0:index] + xml + vmxml[index:]
+        vmxml = self.vm.XMLDesc(0)
 
-            logging.debug("Redefine with " + newxml)
+        index = vmxml.find("</devices>")
+        newxml = vmxml[0:index] + xml + vmxml[index:]
 
-            self.get_connection().define_domain(newxml)
+        logging.debug("Redefine with " + newxml)
+
+        self.get_connection().define_domain(newxml)
 
     def remove_device(self, dev_xml):
         logging.debug("Removing device " + dev_xml)
