@@ -430,6 +430,7 @@ class vmmDomain(gobject.GObject):
         return os.access(tty, os.R_OK | os.W_OK)
 
     def get_graphics_console(self):
+        self.xml = None
         type = self.get_xml_string("/domain/devices/graphics/@type")
         port = None
         if type == "vnc":
