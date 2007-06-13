@@ -794,7 +794,7 @@ class vmmCreate(gobject.GObject):
                 return False
             if re.match("^[a-zA-Z0-9_-]*$", name) == None:
                 self._validation_error_box(_("Invalid System Name"), \
-                                           _("System name may contain alphanumeric and '_' characters only"))
+                                           _("System name may contain alphanumeric, '_' and '-' characters only"))
                 return False
 
 
