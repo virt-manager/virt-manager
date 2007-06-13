@@ -538,10 +538,13 @@ class vmmDomain(gobject.GObject):
     def add_device(self, xml):
         logging.debug("Adding device " + xml)
 
+        # get the XML for the live domain before we attach the device
+        # otherwise the device gets added to the XML twice.
+        vmxml = self.vm.XMLDesc(0)
+
         if self.is_active():
             self.vm.attachDevice(xml)
 
-        vmxml = self.vm.XMLDesc(0)
 
         index = vmxml.find("</devices>")
         newxml = vmxml[0:index] + xml + vmxml[index:]
