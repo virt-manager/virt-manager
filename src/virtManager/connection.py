@@ -189,6 +189,8 @@ class vmmConnection(gobject.GObject):
                 return "QEMU session: " + self.get_hostname()
             else:
                 return "QEMU system: " + self.get_hostname()
+        else:
+            return self.get_type() + ":" + self.get_hostname()
 
 
     def get_uri(self):
