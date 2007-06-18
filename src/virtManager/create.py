@@ -253,6 +253,7 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-memory-max").set_value(500)
         self.window.get_widget("create-memory-startup").set_value(500)
         self.window.get_widget("create-vcpus").set_value(1)
+        self.window.get_widget("create-vcpus").get_adjustment().upper = self.connection.get_max_vcpus()
         self.window.get_widget("non-sparse").set_active(True)
         model = self.window.get_widget("pv-media-url").get_model()
         self.populate_url_model(model, self.config.get_media_urls())
