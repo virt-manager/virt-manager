@@ -209,6 +209,13 @@ class vmmConfig:
     def set_console_keygrab(self, pref):
         self.conf.set_int(self.conf_dir + "/console/keygrab", pref)
 
+    def show_console_grab_notify(self):
+        return self.conf.get_bool(self.conf_dir + "/console/grab-notify")
+
+    def set_console_grab_notify(self, state):
+        self.conf.set_bool(self.conf_dir + "/console/grab-notify", state)
+
+
     def get_secret_name(self, vm):
         return "vm-console-" + vm.get_uuid()
 
