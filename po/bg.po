@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-04 13:10-0400\n"
-"PO-Revision-Date: 2007-04-21 16:57+0300\n"
+"POT-Creation-Date: 2007-07-04 13:15-0400\n"
+"PO-Revision-Date: 2007-05-15 03:00+0300\n"
 "Last-Translator: Doncho N. Gunchev <gunchev@gmail.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -704,18 +704,18 @@ msgid ""
 "connected via wireless, or dynamically configured with NetworkManager.</"
 "small>"
 msgstr ""
-"<small><b>Съвет:</b> Изберете тази опция ако вашата машина не е свързана, "
-"свързана с безжична мрежа или динамично конфигурирана от NetworkManager.</"
-"small>"
+"<small><b>Съвет:</b> Изберете тази възможност, ако вашата машина не е "
+"свързана, свързана е с безжична мрежа или е динамично конфигурирана от "
+"NetworkManager.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:8 ../src/vmm-create.glade.h:26
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is statically connected "
 "to wired ethernet, to gain the ability to migrate the virtual system.</small>"
 msgstr ""
-"<small><b>Съвет:</b> Изберете тази опция ако вашата машина е статично "
-"свързана към ethernet, за да получите способността да мигрирате виртуалната "
-"система.</small>"
+"<small><b>Съвет:</b> Изберете тази възможност, ако вашата машина е статично "
+"свързана към ethernet, за да получите възможността за мигриране на "
+"виртуалната система.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:9 ../src/vmm-create.glade.h:29
 msgid ""
@@ -1040,7 +1040,7 @@ msgstr "<b>Име</b> за новата виртуална система"
 
 #: ../src/vmm-create.glade.h:41
 msgid "CPU architecture:"
-msgstr "Архитектура на ЦП:"
+msgstr "Архитектура на централния процесор (ЦП):"
 
 #: ../src/vmm-create.glade.h:42
 msgid "CPU/memory"
@@ -1084,8 +1084,8 @@ msgid ""
 "systems (does not require OS modification). Slower than paravirtualized "
 "systems."
 msgstr ""
-"Включва емулация на хардуер, позволяваща повече операционни системи (не "
-"изисква модификации в ОС). По-бавна от паравиртуализираните системи."
+"Включва емулация на хардуер, което позволява повече операционни системи (не "
+"се изискват модификации в ОС). По-бавна е от паравиртуализираните системи."
 
 #: ../src/vmm-create.glade.h:60
 msgid "Kickstart U_RL:"
@@ -1093,7 +1093,7 @@ msgstr "Kickstart U_RL:"
 
 #: ../src/vmm-create.glade.h:61
 msgid "Kickstart source:"
-msgstr "Kickstart източник:"
+msgstr "Kickstart адрес:"
 
 #: ../src/vmm-create.glade.h:62
 msgid ""
@@ -1103,7 +1103,7 @@ msgid ""
 msgstr ""
 "Лек метод за виртуализация на машини. Ограничава избора на операционна "
 "система защото тя трябва да бъде специално променена за да поддържа "
-"паравиртуализация. По-добра производителност от пълната виртуализация."
+"паравиртуализация. Има по-добра производителност от пълната виртуализация."
 
 #: ../src/vmm-create.glade.h:63
 msgid "Logical host CPUs:"
@@ -1184,8 +1184,8 @@ msgid ""
 "system you would like to install on this <b>fully virtualized</b> virtual "
 "system:"
 msgstr ""
-"Указване инсталационния носител с операционната система, която ще се "
-"инсталира, на тази <b>изцяло виртуализирана</b> машина:"
+"Указване инсталационния носител на операционната система, която ще се "
+"инсталира, в тази <b>изцяло виртуална</b> машина:"
 
 #: ../src/vmm-create.glade.h:83
 msgid ""
@@ -1194,9 +1194,9 @@ msgid ""
 "system. Optionally you can provide the URL for a kickstart file that "
 "describes your system:"
 msgstr ""
-"Указване инсталационния носител с операционната система, която ще се "
-"инсталира, на тази <b>паравиртуализирана</b> машина. Допълнително може да се "
-"укаже URL за kickstart файл, който описва системата:"
+"Указване инсталационния носител на операционната система, която ще се "
+"инсталира, в тази <b>паравиртуална</b> машина. Допълнително може да се укаже "
+"адрес (URL) на kickstart файл, който описва системата:"
 
 #: ../src/vmm-create.glade.h:84
 #, fuzzy
@@ -1221,9 +1221,9 @@ msgid ""
 "will be asked for some information about the virtual system you'd like to "
 "create, such as:"
 msgstr ""
-"Този асистент ще ви ръководи при създаването на нова виртуална система. Ще "
-"бъдете питани за определена информация за виртуалната система, която искате "
-"да създадете, например като:"
+"Този асистент ще ви ръководи при създаването на новата виртуална система. Ще "
+"трябва да въведете определена информация за новата виртуална система, която "
+"искате да създадете, като:"
 
 #: ../src/vmm-create.glade.h:91 ../src/vmm-details.glade.h:51
 msgid "Total memory on host machine:"
@@ -1288,7 +1288,7 @@ msgstr "_Път до инсталационния носител:"
 
 #: ../src/vmm-create.glade.h:110
 msgid "_VCPUs:"
-msgstr "_ВПроц:"
+msgstr "_Виртуални ЦП:"
 
 #: ../src/vmm-create.glade.h:114
 msgid "http://"
@@ -2236,7 +2236,7 @@ msgstr "В пауза"
 
 #: ../../po/../src/virtManager/domain.py:393
 msgid "Shutoff"
-msgstr "Спиране"
+msgstr "Спряна"
 
 #: ../../po/../src/virtManager/domain.py:395
 msgid "Crashed"
@@ -2272,7 +2272,7 @@ msgstr "ID"
 
 #: ../../po/../src/virtManager/manager.py:520
 msgid "VCPUs"
-msgstr "ВПроц"
+msgstr "В.ЦП"
 
 #~ msgid "Invalid FV media address"
 #~ msgstr "Невалиден адрес на ИВ носител"

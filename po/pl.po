@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-04 13:10-0400\n"
-"PO-Revision-Date: 2007-04-19 18:25+0200\n"
+"POT-Creation-Date: 2007-07-04 13:15-0400\n"
+"PO-Revision-Date: 2007-06-30 22:47+0200\n"
 "Last-Translator: Piotr Drąg <raven@pmail.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -79,7 +79,7 @@ msgstr "Zrzut ekranu"
 #: ../src/vmm-console.glade.h:10 ../src/vmm-details.glade.h:42
 #: ../../po/../src/virtManager/domain.py:391
 msgid "Shutdown"
-msgstr "Wyłączone"
+msgstr "Wyłącz"
 
 #: ../src/vmm-console.glade.h:11 ../src/vmm-details.glade.h:49
 msgid "Toolbar"
@@ -377,7 +377,6 @@ msgstr ""
 "gościom podłączonych do sieci wirtualnej"
 
 #: ../src/vmm-create-net.glade.h:46
-#, fuzzy
 msgid ""
 "Please indicate whether this virtual network should be connected to the "
 "physical network."
@@ -446,7 +445,7 @@ msgstr "demo"
 
 #: ../src/vmm-host.glade.h:1
 msgid "1.59 GB of 2.2 GB"
-msgstr "1.59 GB z 2.2 G"
+msgstr "1.59 GB z 2.2 GB"
 
 #: ../src/vmm-host.glade.h:2
 msgid "2000 MB"
@@ -511,7 +510,7 @@ msgstr "Nazwa host:"
 
 #: ../src/vmm-host.glade.h:18 ../src/vmm-open-connection.glade.h:2
 msgid "Hypervisor:"
-msgstr "Hypervisor:"
+msgstr "Nadzorca:"
 
 #: ../src/vmm-host.glade.h:19
 msgid "Location:"
@@ -629,7 +628,7 @@ msgstr "<b>Konsole</b>"
 
 #: ../src/vmm-preferences.glade.h:2
 msgid "<b>Status monitoring</b>"
-msgstr "<b>Stan monitoringu</b>"
+msgstr "<b>Stan monitorowania</b>"
 
 #: ../src/vmm-preferences.glade.h:3
 msgid "Automatically open consoles:"
@@ -939,14 +938,13 @@ msgstr ""
 
 #: ../src/vmm-create.glade.h:21
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
-msgstr ""
-"<small><b>Przykład:</b> ftp://nazwahosta.przykład.com/ks/ks.cfg</small>"
+msgstr "<small><b>Przykład:</b> ftp://nazwahosta.przykład.pl/ks/ks.cfg</small>"
 
 #: ../src/vmm-create.glade.h:22
 msgid ""
 "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
 msgstr ""
-"<small><b>Przykład:</b> http://nazwaserwera.przykład.com/distro/i386/tree</"
+"<small><b>Przykład:</b> http://nazwaserwera.przykład.pl/distro/i386/tree</"
 "small>"
 
 #: ../src/vmm-create.glade.h:23
@@ -1089,7 +1087,7 @@ msgstr ""
 
 #: ../src/vmm-create.glade.h:60
 msgid "Kickstart U_RL:"
-msgstr "U_RL kickstart:"
+msgstr "U_RL do kickstart:"
 
 #: ../src/vmm-create.glade.h:61
 msgid "Kickstart source:"
@@ -1232,15 +1230,15 @@ msgstr "Typ"
 
 #: ../src/vmm-create.glade.h:93
 msgid "VM _Max Memory (MB):"
-msgstr "_Maksymalna pamięć VM (MB):"
+msgstr "_Maksymalna pamięć maszyny wirtualnej (MB):"
 
 #: ../src/vmm-create.glade.h:94
 msgid "VM _Startup Memory (MB):"
-msgstr "Pamięć _startowa VM (MB):"
+msgstr "Pamięć _startowa maszyny wirtualnej (MB):"
 
 #: ../src/vmm-create.glade.h:95
 msgid "VMS"
-msgstr "VMS"
+msgstr "Maszyny wirtualne"
 
 #: ../src/vmm-create.glade.h:96
 msgid "Virtual CPUs:"
@@ -1267,7 +1265,7 @@ msgstr "_Przeglądaj..."
 
 #: ../src/vmm-create.glade.h:101
 msgid "_CD-ROM or DVD:"
-msgstr "CD-ROM lub DVD:"
+msgstr "_CD-ROM lub DVD:"
 
 #: ../src/vmm-create.glade.h:104
 msgid "_ISO Image Location:"
@@ -1275,7 +1273,7 @@ msgstr "Położenie obrazu _ISO:"
 
 #: ../src/vmm-create.glade.h:107
 msgid "_Paravirtualized:"
-msgstr "_Parawirtualizowane:"
+msgstr "_Parawirtualizacja:"
 
 #: ../src/vmm-create.glade.h:108
 msgid "_Path to install media:"
@@ -1347,13 +1345,12 @@ msgid "<b>Memory</b>"
 msgstr "<b>Pamięć</b>"
 
 #: ../src/vmm-details.glade.h:14
-#, fuzzy
 msgid ""
 "<b>Tip:</b> 'Source device' refers to the name of the device as seen from "
 "the host OS."
 msgstr ""
-"<b>Wskazówka:</b> \"źródło\" odnosi się do informacji o systemie operacyjnym "
-"hosta, a \"cel\" do informacji o systemie operacyjnym gościa"
+"<b>Wskazówka:</b> \"urządzenie źródłowe\" odnosi się do nazwy urządzenia "
+"widzianego z systemu operacyjnego hosta."
 
 #: ../src/vmm-details.glade.h:15
 msgid ""
@@ -1452,7 +1449,7 @@ msgstr "Urządzenie docelowe:"
 
 #: ../src/vmm-details.glade.h:48
 msgid "Target type:"
-msgstr "Typ celu:"
+msgstr "Typ docelowy:"
 
 #: ../src/vmm-details.glade.h:50
 msgid "Total CPUs on host machine:"
@@ -1460,7 +1457,7 @@ msgstr "Całkowita ilość CPU w maszynie hosta:"
 
 #: ../src/vmm-details.glade.h:53
 msgid "Virtual Machine Details"
-msgstr "Szczegóły o maszynie wirtualnej"
+msgstr "Szczegóły maszyny wirtualnej"
 
 #: ../src/vmm-details.glade.h:57
 msgid "_Graphical Console"
@@ -1537,7 +1534,7 @@ msgstr "Ruch sieciowy"
 
 #: ../../po/../src/vmm-manager.glade:369
 msgid "_View:"
-msgstr "_Widok"
+msgstr "_Widok:"
 
 #: ../../po/../src/vmm-manager.glade:394
 msgid ""
@@ -1819,13 +1816,13 @@ msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr ""
-"Nie można otworzyć połączenia z hypervisorem/demonem Xen.\n"
+"Nie można otworzyć połączenia z nadzorcą/demonem Xen.\n"
 "\n"
 
 #: ../../po/../src/virtManager/engine.py:88
 #: ../../po/../src/virtManager/engine.py:96
 msgid "Verify that:\n"
-msgstr "Sprawdź to:\n"
+msgstr "Sprawdź, czy:\n"
 
 #: ../../po/../src/virtManager/engine.py:89
 msgid " - A Xen host kernel was booted\n"
@@ -1841,7 +1838,7 @@ msgid ""
 "Unable to open a connection to the QEMU management daemon.\n"
 "\n"
 msgstr ""
-"Nie można otworzyć połączenia z hypervisorem/demonem Xen.\n"
+"Nie można otworzyć połączenia z nadzorcą/demonem Xen.\n"
 "\n"
 
 #: ../../po/../src/virtManager/engine.py:97
@@ -1852,7 +1849,7 @@ msgstr " - Usługa Xen została uruchomiona\n"
 #: ../../po/../src/virtManager/engine.py:102
 #, python-format
 msgid "Unable to open connection to hypervisor '%s'"
-msgstr "Nie można otworzyć połączenia z hypervisiorem \"%s\""
+msgstr "Nie można otworzyć połączenia z nadzorcą \"%s\""
 
 #: ../../po/../src/virtManager/engine.py:104
 msgid "Virtual Machine Manager Connection Failure"
@@ -2104,7 +2101,7 @@ msgstr ""
 #: ../../po/../src/virtManager/create.py:800
 #, fuzzy
 msgid "Kickstart URL Error"
-msgstr "U_RL kickstart:"
+msgstr "U_RL do kickstart:"
 
 #: ../../po/../src/virtManager/create.py:801
 msgid "Kickstart location must be an NFS, HTTP or FTP source"
@@ -2229,7 +2226,7 @@ msgstr "Wstrzymane"
 
 #: ../../po/../src/virtManager/domain.py:393
 msgid "Shutoff"
-msgstr "Wyłączone"
+msgstr "Wyłącz"
 
 #: ../../po/../src/virtManager/domain.py:395
 msgid "Crashed"
@@ -2316,6 +2313,3 @@ msgstr "VCPU"
 
 #~ msgid "You must specify a URL for the install image for the guest install"
 #~ msgstr "Musisz podać URL do obrazu instalacyjnego dla instalacji gościa"
-
-#~ msgid "_Read only connection"
-#~ msgstr "_Połączenie tylko do odczytu"

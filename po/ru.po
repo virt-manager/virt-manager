@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-04 13:10-0400\n"
-"PO-Revision-Date: 2007-05-05 08:41+0300\n"
+"POT-Creation-Date: 2007-07-04 13:15-0400\n"
+"PO-Revision-Date: 2007-05-09 22:59+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -203,9 +203,8 @@ msgid "<b>Example:</b> network1"
 msgstr "<b>Пример:</b> network1"
 
 #: ../src/vmm-create-net.glade.h:12
-#, fuzzy
 msgid "<b>Forwarding</b>"
-msgstr "<b>Хранилище</b>"
+msgstr "<b>Перенаправление</b>"
 
 #: ../src/vmm-create-net.glade.h:13
 msgid ""
@@ -229,6 +228,9 @@ msgid ""
 "network configuration in virtual machines, these parameters can be left with "
 "their default values."
 msgstr ""
+"<b>Совет:</b> Если только вы не хотите зарезервировать часть адресов для "
+"использования статической конфигурации сети на виртуальных машинах, можете "
+"просто использовать значения параметров по умолчанию."
 
 #: ../src/vmm-create-net.glade.h:17
 msgid ""
@@ -313,7 +315,7 @@ msgstr "Конечный адрес:"
 
 #: ../src/vmm-create-net.glade.h:31
 msgid "End:"
-msgstr ""
+msgstr "Конец:"
 
 #: ../src/vmm-create-net.glade.h:32
 msgid "Forwarding"
@@ -403,9 +405,8 @@ msgid "Start address:"
 msgstr "Начальный адрес:"
 
 #: ../src/vmm-create-net.glade.h:50
-#, fuzzy
 msgid "Start:"
-msgstr "Состояние:"
+msgstr "Начало:"
 
 #: ../src/vmm-create-net.glade.h:51
 msgid ""
@@ -420,15 +421,13 @@ msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
 msgstr "<b>Адрес</b> и <b>маска</b> IPv4"
 
 #: ../src/vmm-create-net.glade.h:53
-#, fuzzy
 msgid ""
 "This assistant will guide you through creating a new virtual network. You "
 "will be asked for some information about the virtual network you'd like to "
 "create, such as:"
 msgstr ""
-"Этот помощник проведет вас сквозь пошаговое создание новой виртуальной "
-"системы. Вам будут заданы вопросы о создаваемой виртуальной системе. "
-"Например:"
+"Этот помощник позволит вам создать новую виртуальную систему. Вам будет "
+"задано несколько вопросов о создаваемой виртуальной системе. Например:"
 
 #: ../src/vmm-create-net.glade.h:54
 msgid "Type:"
@@ -436,7 +435,7 @@ msgstr "Тип:"
 
 #: ../src/vmm-create-net.glade.h:55
 msgid "Whether to <b>forward</b> traffic to the physical network"
-msgstr ""
+msgstr "<b>Перенаправлять</b> ли трафик на физическую сеть"
 
 #: ../src/vmm-create-net.glade.h:56
 msgid "You will need to choose an IPv4 address space for the virtual network:"
@@ -495,11 +494,11 @@ msgstr "Использование CPU:"
 
 #: ../src/vmm-host.glade.h:12
 msgid "DHCP end:"
-msgstr ""
+msgstr "Окончание DHCP:"
 
 #: ../src/vmm-host.glade.h:13
 msgid "DHCP start:"
-msgstr ""
+msgstr "Начало DHCP:"
 
 #: ../src/vmm-host.glade.h:14
 msgid "Device:"
@@ -510,9 +509,8 @@ msgid "Forwarding:"
 msgstr "Перенаправление:"
 
 #: ../src/vmm-host.glade.h:16
-#, fuzzy
 msgid "Host Details"
-msgstr "П_одробности"
+msgstr "Параметры хоста"
 
 #: ../src/vmm-host.glade.h:17
 msgid "Hostname:"
@@ -551,9 +549,8 @@ msgid "Running"
 msgstr "Работает"
 
 #: ../src/vmm-host.glade.h:28
-#, fuzzy
 msgid "Start"
-msgstr "Состояние"
+msgstr "Начать"
 
 #: ../src/vmm-host.glade.h:29
 msgid "State:"
@@ -711,12 +708,18 @@ msgid ""
 "connected via wireless, or dynamically configured with NetworkManager.</"
 "small>"
 msgstr ""
+"<small><b>Совет:</b> Выберите эту опцию, если ваш хост отключен, подключен "
+"по беспроводному каналу или динамически сконфигурирован с помощью "
+"NetworkManager.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:8 ../src/vmm-create.glade.h:26
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is statically connected "
 "to wired ethernet, to gain the ability to migrate the virtual system.</small>"
 msgstr ""
+"<small><b>Совет:</b> Используйте эту опцию, если ваш хост подключен к "
+"проводной сети для обеспечения возможности переноса виртуальной системы.</"
+"small>"
 
 #: ../src/vmm-add-hardware.glade.h:9 ../src/vmm-create.glade.h:29
 msgid ""
@@ -747,13 +750,12 @@ msgstr ""
 "пространства хранения</span>"
 
 #: ../src/vmm-add-hardware.glade.h:12 ../src/vmm-create.glade.h:33
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connect to host "
 "network</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Назначение "
-"пространства хранения</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Подключение к "
+"сети</span>"
 
 #: ../src/vmm-add-hardware.glade.h:13
 msgid ""
@@ -857,7 +859,7 @@ msgstr "Простой _файл:"
 
 #: ../src/vmm-add-hardware.glade.h:36 ../src/vmm-create.glade.h:88
 msgid "Target:"
-msgstr ""
+msgstr "Приемник:"
 
 #: ../src/vmm-add-hardware.glade.h:37
 msgid ""
@@ -1352,16 +1354,21 @@ msgid "<b>Memory</b>"
 msgstr "<b>Память</b>"
 
 #: ../src/vmm-details.glade.h:14
+#, fuzzy
 msgid ""
 "<b>Tip:</b> 'Source device' refers to the name of the device as seen from "
 "the host OS."
 msgstr ""
+"<b>Совет:</b> 'Источник' относится к информации, получаемой с основной ОС, а "
+"'приемник' - к информации гостевой ОС"
 
 #: ../src/vmm-details.glade.h:15
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
 msgstr ""
+"<b>Совет:</b> 'Источник' относится к информации, получаемой с основной ОС, а "
+"'приемник' - к информации гостевой ОС"
 
 #: ../src/vmm-details.glade.h:16
 msgid ""
@@ -1490,9 +1497,8 @@ msgid "_Edit"
 msgstr "_Редактировать"
 
 #: ../../po/../src/vmm-manager.glade:158
-#, fuzzy
 msgid "Host details..."
-msgstr "Подробности о машине..."
+msgstr "Подробности о хосте..."
 
 #: ../../po/../src/vmm-manager.glade:167
 msgid "Machine details..."
