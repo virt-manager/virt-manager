@@ -89,6 +89,13 @@ class vmmEngine:
                                        " - A Xen host kernel was booted\n" +
                                        " - The Xen service has been started\n"),
                                      details)
+            elif uri.startswith("qemu:"):
+                dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
+                                     gtk.BUTTONS_CLOSE,
+                                     _("Unable to open a connection to the QEMU management daemon.\n\n" +
+                                       "Verify that:\n" +
+                                       " - The 'libvirt_qemud' daemon has been started\n"),
+                                     details)
             else:
                 dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
                                      gtk.BUTTONS_CLOSE,
