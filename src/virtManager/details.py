@@ -364,8 +364,9 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("state-host-cpus").set_text("%d" % self.vm.get_connection().host_active_processor_count())
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            self.window.get_widget("config-vcpus").get_adjustment().upper = 32
-            self.window.get_widget("state-vm-maxvcpus").set_text("32")
+            cpu_max = self.vm.get_connection().get_max_vcpus()
+            self.window.get_widget("config-vcpus").get_adjustment().upper = cpu_max
+            self.window.get_widget("state-vm-maxvcpus").set_text(str(cpu_max))
         else:
             self.window.get_widget("config-vcpus").get_adjustment().upper = self.vm.vcpu_max_count()
             self.window.get_widget("state-vm-maxvcpus").set_text("%d" % (self.vm.vcpu_max_count()))
@@ -472,7 +473,7 @@ class vmmDetails(gobject.GObject):
             vnic = None
             if netinfo[0] == "bridge":
                 vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], bridge=netinfo[1], macaddr=netinfo[3])
-            elif net[0] == "network":
+            elif netinfo[0] == "network":
                 vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], network=netinfo[1], macaddr=netinfo[3])
             else:
                 vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], macaddr=netinfo[3])

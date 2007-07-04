@@ -3118,7 +3118,7 @@ mipsel</property>
 		      <child>
 			<widget class="GtkTable" id="table31">
 			  <property name="visible">True</property>
-			  <property name="n_rows">6</property>
+			  <property name="n_rows">8</property>
 			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">6</property>
@@ -3442,6 +3442,79 @@ mipsel</property>
 			      <property name="top_attach">4</property>
 			      <property name="bottom_attach">5</property>
 			      <property name="x_options">fill</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label385">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_MAC address:</property>
+			      <property name="use_underline">True</property>
+			      <property name="use_markup">True</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">1</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			      <property name="mnemonic_widget">create-mac-address</property>
+			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			      <property name="width_chars">-1</property>
+			      <property name="single_line_mode">False</property>
+			      <property name="angle">0</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">1</property>
+			      <property name="top_attach">7</property>
+			      <property name="bottom_attach">8</property>
+			      <property name="x_options">fill</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckButton" id="mac-address">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Set _fixed MAC address for your virtual system?</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			      <signal name="clicked" handler="on_mac_address_clicked" last_modification_time="Tue, 15 May 2007 02:05:47 GMT"/>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">0</property>
+			      <property name="right_attach">2</property>
+			      <property name="top_attach">6</property>
+			      <property name="bottom_attach">7</property>
+			      <property name="x_options">fill</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkEntry" id="create-mac-address">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="editable">True</property>
+			      <property name="visibility">True</property>
+			      <property name="max_length">17</property>
+			      <property name="text" translatable="yes"></property>
+			      <property name="has_frame">True</property>
+			      <property name="invisible_char">•</property>
+			      <property name="activates_default">False</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">1</property>
+			      <property name="right_attach">2</property>
+			      <property name="top_attach">7</property>
+			      <property name="bottom_attach">8</property>
 			      <property name="y_options"></property>
 			    </packing>
 			  </child>
@@ -4225,7 +4298,7 @@ mipsel</property>
 		    <widget class="GtkTable" id="table29">
 		      <property name="border_width">6</property>
 		      <property name="visible">True</property>
-		      <property name="n_rows">16</property>
+		      <property name="n_rows">17</property>
 		      <property name="n_columns">3</property>
 		      <property name="homogeneous">False</property>
 		      <property name="row_spacing">3</property>
@@ -5034,6 +5107,62 @@ mipsel</property>
 			  <property name="right_attach">2</property>
 			  <property name="top_attach">4</property>
 			  <property name="bottom_attach">5</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label386">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">MAC address:</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">True</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">1</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">1</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">16</property>
+			  <property name="bottom_attach">17</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="summary-mac-address">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">-</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">2</property>
+			  <property name="right_attach">3</property>
+			  <property name="top_attach">16</property>
+			  <property name="bottom_attach">17</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>

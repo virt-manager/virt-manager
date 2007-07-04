@@ -71,6 +71,7 @@ class vmmAddHardware(gobject.GObject):
             "on_storage_file_address_changed": self.toggle_storage_size,
             "on_storage_toggled" : self.change_storage_type,
             "on_network_toggled" : self.change_network_type,
+            "on_mac_address_clicked" : self.change_macaddr_use,
             "on_create_help_clicked": self.show_help,
             })
 
@@ -138,6 +139,7 @@ class vmmAddHardware(gobject.GObject):
 
         self.change_storage_type()
         self.change_network_type()
+        self.change_macaddr_use()
         if os.getuid() == 0:
             self.window.get_widget("storage-partition").set_active(True)
         else:
@@ -212,6 +214,12 @@ class vmmAddHardware(gobject.GObject):
             model = dev.get_model()
             return ["bridge", model.get_value(dev.get_active_iter(), 0)]
 
+    def get_config_macaddr(self):
+        macaddr = None
+        if self.window.get_widget("mac-address").get_active():
+            macaddr = self.window.get_widget("create-mac-address").get_text()
+        return macaddr
+
     def page_changed(self, notebook, page, page_number):
         if page_number == PAGE_DISK:
             pass
@@ -244,6 +252,11 @@ class vmmAddHardware(gobject.GObject):
                     self.window.get_widget("summary-net-target").set_text("-")
                 else:
                     raise ValueError, "Unknown networking type " + net[0]
+                macaddr = self.get_config_macaddr()
+                if macaddr != None:
+                    self.window.get_widget("summary-mac-address").set_text(macaddr)
+                else:
+                    self.window.get_widget("summary-mac-address").set_text("-")
 
     def close(self, ignore1=None,ignore2=None):
         self.topwin.hide()
@@ -286,11 +299,12 @@ class vmmAddHardware(gobject.GObject):
 
     def add_network(self):
         net = self.get_config_network()
+        mac = self.get_config_macaddr()
         vnic = None
         if net[0] == "bridge":
-            vnic = virtinst.VirtualNetworkInterface(type=net[0], bridge=net[1])
+            vnic = virtinst.VirtualNetworkInterface(macaddr=mac, type=net[0], bridge=net[1])
         elif net[0] == "network":
-            vnic = virtinst.VirtualNetworkInterface(type=net[0], network=net[1])
+            vnic = virtinst.VirtualNetworkInterface(macaddr=mac, type=net[0], network=net[1])
         else:
             raise ValueError, "Unsupported networking type " + net[0]
 
@@ -446,6 +460,12 @@ class vmmAddHardware(gobject.GObject):
             self.window.get_widget("net-network").set_sensitive(False)
             self.window.get_widget("net-device").set_sensitive(True)
 
+    def change_macaddr_use(self, ignore=None):
+        if self.window.get_widget("mac-address").get_active():
+            self.window.get_widget("create-mac-address").set_sensitive(True)
+        else:
+            self.window.get_widget("create-mac-address").set_sensitive(False)
+
     def validate(self, page_num):
         if page_num == PAGE_INTRO:
             if self.get_config_hardware_type() == None:
@@ -483,6 +503,29 @@ class vmmAddHardware(gobject.GObject):
                     self._validation_error_box(_("Physical Device Required"),
                                                _("You must select one of the physical devices"))
                     return False
+
+            if self.window.get_widget("mac-address").get_active():
+                mac= self.window.get_widget("create-mac-address").get_text()
+                if len(mac) != 17:
+                    self._validation_error_box(_("Invalid MAC address"), \
+                                               _("MAC adrress must be 17 characters"))
+                    return False
+                if re.match("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$",mac) == None:
+                    self._validation_error_box(_("Invalid MAC address"), \
+                                               _("MAC address must be a form such as AA:BB:CC:DD:EE:FF, and MAC adrress may contain numeric and alphabet of A-F(a-f) and ':' characters only"))
+                    return False
+                hostdevs = virtinst.util.get_host_network_devices()
+                for hostdev in hostdevs:
+                    if mac.lower() == hostdev[4]:
+                        return self._yes_no_box(_('MAC adress "%s" is already in use by host!' % mac), \
+                                                _("Do you really want to use the MAC address ?"))
+                vms = []
+                for domains in self.vm.get_connection().vms.values():
+                    vms.append(domains.vm)
+                vnic = virtinst.VirtualNetworkInterface(macaddr=mac)
+                if vnic.countMACaddr(vms) > 0:
+                    return self._yes_no_box(_('MAC adress "%s" is already in use by another guest!' % mac), \
+                                            _("Do you really want to use the MAC address ?"))
 
         return True
 

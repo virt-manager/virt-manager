@@ -156,5 +156,18 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/console/grab-notify</key>
+      <applyto>/apps/::PACKAGE::/console/grab-notify</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>1</default>
+
+      <locale name="C">
+        <short>Whether to show notification when grabbing mouse</short>
+        <long>Whether to show the notification hint when grabbing the mouse in the console</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

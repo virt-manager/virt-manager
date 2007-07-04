@@ -92,6 +92,7 @@ class vmmCreate(gobject.GObject):
             "on_storage_file_address_changed": self.toggle_storage_size,
             "on_storage_toggled" : self.change_storage_type,
             "on_network_toggled" : self.change_network_type,
+            "on_mac_address_clicked" : self.change_macaddr_use,
             "on_media_toggled" : self.change_media_type,
             "on_os_type_changed" : self.change_os_type,
             "on_cpu_architecture_changed": self.change_cpu_arch,
@@ -100,6 +101,11 @@ class vmmCreate(gobject.GObject):
             })
 
         self.set_initial_state()
+
+        # Guest to fill in with values along the way
+        self._guest = virtinst.Guest(type=self.get_domain_type())
+        self._disk = None
+        self._net = None
 
     def show(self):
         self.topwin.show()
@@ -238,6 +244,7 @@ class vmmCreate(gobject.GObject):
         self.change_media_type()
         self.change_storage_type()
         self.change_network_type()
+        self.change_macaddr_use()
         self.window.get_widget("create-vm-name").set_text("")
         self.window.get_widget("media-iso-image").set_active(True)
         self.window.get_widget("fv-iso-location").set_text("")
@@ -251,6 +258,7 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-memory-max").set_value(500)
         self.window.get_widget("create-memory-startup").set_value(500)
         self.window.get_widget("create-vcpus").set_value(1)
+        self.window.get_widget("create-vcpus").get_adjustment().upper = self.connection.get_max_vcpus()
         self.window.get_widget("non-sparse").set_active(True)
         model = self.window.get_widget("pv-media-url").get_model()
         self.populate_url_model(model, self.config.get_media_urls())
@@ -362,6 +370,12 @@ class vmmCreate(gobject.GObject):
             model = dev.get_model()
             return ["bridge", model.get_value(dev.get_active_iter(), 0)]
 
+    def get_config_macaddr(self):
+        macaddr = None
+        if self.window.get_widget("mac-address").get_active():
+            macaddr = self.window.get_widget("create-mac-address").get_text()
+        return macaddr
+
     def get_config_maximum_memory(self):
         return self.window.get_widget("create-memory-max").get_value()
 
@@ -449,6 +463,12 @@ class vmmCreate(gobject.GObject):
                 self.window.get_widget("summary-net-target").set_text("-")
             else:
                 raise ValueError, "Unknown networking type " + net[0]
+            macaddr = self.get_config_macaddr()
+            if macaddr != None:
+                self.window.get_widget("summary-mac-address").set_text(macaddr)
+            else:
+                self.window.get_widget("summary-mac-address").set_text("-")
+
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
 
@@ -462,96 +482,28 @@ class vmmCreate(gobject.GObject):
         return 0
 
     def finish(self, ignore=None):
-        # first things first, are we trying to create a fully virt guest?
-        if self.get_config_method() == VM_FULLY_VIRT:
-            guest = virtinst.FullVirtGuest(type=self.get_domain_type(), \
-                                           hypervisorURI=self.connection.get_uri(), \
-                                           arch=self.get_domain_arch())
-            try:
-                guest.cdrom = self.get_config_install_source()
-            except ValueError, e:
-                self._validation_error_box(_("Invalid FV media address"),e.args[0])
-            try:
-                if self.get_config_os_type() is not None and self.get_config_os_type() != "generic":
-                    logging.debug("OS Type: %s" % self.get_config_os_type())
-                    guest.os_type = self.get_config_os_type()
-            except ValueError, e:
-                self._validation_error_box(_("Invalid FV OS Type"),e.args[0])
-            try:
-                if self.get_config_os_variant() is not None and self.get_config_os_type() != "generic":
-                    logging.debug("OS Variant: %s" % self.get_config_os_variant())
-                    guest.os_variant = self.get_config_os_variant()
-            except ValueError, e:
-                self._validation_error_box(_("Invalid FV OS Variant"),e.args[0])
+        # Validation should have mostly set up out guest. We just need
+        # to take care of a few pieces we didn't touch
 
-        else:
-            guest = virtinst.ParaVirtGuest(type=self.get_domain_type(), hypervisorURI=self.connection.get_uri())
-            try:
-                guest.location = self.get_config_install_source()
-            except ValueError, e:
-                self._validation_error_box(_("Invalid PV media address"), e.args[0])
-                return
-            ks = self.get_config_kickstart_source()
-            if ks != None and len(ks) != 0:
-                guest.extraargs = "ks=%s" % ks
+        guest = self._guest
+        guest.hypervisorURI = self.connection.get_uri()
 
-        # set the name
+        # UUID, append disk and nic
         try:
-            guest.name = self.get_config_name()
+            guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
+        except ValueError, E:
+            self._validation_error_box(_("UUID Error"), str(e))
+
+        try:
+            guest.disks.append(self._disk)
         except ValueError, e:
-            self._validation_error_box(_("Invalid system name"), e.args[0])
-            return
-
-        # set the memory
+            self._validation_error_box(_("Error Setting up Disk"), str(e))
+        
         try:
-            guest.memory = int(self.get_config_initial_memory())
-        except ValueError:
-            self._validation_error_box(_("Invalid memory setting"), e.args[0])
-            return
-
-        try:
-            guest.maxmemory = int(self.get_config_maximum_memory())
-        except ValueError:
-            self._validation_error_box(_("Invalid memory setting"), e.args[0])
-            return
-
-        # set vcpus
-        guest.vcpus = int(self.get_config_virtual_cpus())
-
-        # disks
-        filesize = None
-        if self.get_config_disk_size() != None:
-            filesize = self.get_config_disk_size() / 1024.0
-        try:
-            d = virtinst.VirtualDisk(self.get_config_disk_image(), filesize, sparse = self.is_sparse_file())
-            if d.type == virtinst.VirtualDisk.TYPE_FILE and \
-                   self.get_config_method() == VM_PARA_VIRT \
-                   and virtinst.util.is_blktap_capable():
-                d.driver_name = virtinst.VirtualDisk.DRIVER_TAP
-            if d.type == virtinst.VirtualDisk.TYPE_FILE and not \
-               self.is_sparse_file():
-                self.non_sparse = True
-            else:
-                self.non_sparse = False
+            guest.nics.append(self._net)
         except ValueError, e:
-            self._validation_error_box(_("Invalid storage address"), e.args[0])
-            return
-        guest.disks.append(d)
-
-        # uuid
-        guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
-
-        # network
-        net = self.get_config_network()
-        if net[0] == "bridge":
-            guest.nics.append(virtinst.VirtualNetworkInterface(type=net[0], bridge=net[1]))
-        elif net[0] == "network":
-            guest.nics.append(virtinst.VirtualNetworkInterface(type=net[0], network=net[1]))
-        elif net[0] == "user":
-            guest.nics.append(virtinst.VirtualNetworkInterface(type=net[0]))
-        else:
-            raise ValueError, "Unsupported networking type " + net[0]
-
+            self._validation_error_box(_("Error Setting up Network"), str(e))
+            
         # set up the graphics to use SDL
         import keytable
         keymap = None
@@ -581,7 +533,7 @@ class vmmCreate(gobject.GObject):
                       "\n  Memory: " + str(guest.memory) + \
                       "\n  Max Memory: " + str(guest.maxmemory) + \
                       "\n  # VCPUs: " + str(guest.vcpus) + \
-                      "\n  Filesize: " + str(filesize) + \
+                      "\n  Filesize: " + str(self._disk.size) + \
                       "\n  Disk image: " + str(self.get_config_disk_image()) +\
                       "\n  Non-sparse file: " + str(self.non_sparse))
 
@@ -757,6 +709,12 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("net-network").set_sensitive(False)
             self.window.get_widget("net-device").set_sensitive(True)
 
+    def change_macaddr_use(self, ignore=None):
+        if self.window.get_widget("mac-address").get_active():
+            self.window.get_widget("create-mac-address").set_sensitive(True)
+        else:
+            self.window.get_widget("create-mac-address").set_sensitive(False)
+
     def set_max_memory(self, src):
         max_memory = src.get_adjustment().value
         startup_mem_adjustment = self.window.get_widget("create-memory-startup").get_adjustment()
@@ -765,68 +723,131 @@ class vmmCreate(gobject.GObject):
         startup_mem_adjustment.upper = max_memory
 
     def validate(self, page_num):
+
+        # Setting the values in the Guest/Disk/Network virtinst objects
+        # provides a lot of error checking for free, we just have to catch
+        # the messages
+
         if page_num == PAGE_NAME:
             name = self.window.get_widget("create-vm-name").get_text()
-            if len(name) > 50 or len(name) == 0:
-                self._validation_error_box(_("Invalid System Name"), \
-                                           _("System name must be non-blank and less than 50 characters"))
+            try:
+                self._guest.name = name
+            except ValueError, e:
+                self._validation_error_box(_("Invalid System Name"), str(e))
                 return False
-            if re.match("^[a-zA-Z0-9_]*$", name) == None:
-                self._validation_error_box(_("Invalid System Name"), \
-                                           _("System name may contain alphanumeric and '_' characters only"))
-                return False
-
-
         elif page_num == PAGE_TYPE:
-            if self.get_config_method() == VM_FULLY_VIRT and self.connection.get_type().startswith("Xen") and not virtinst.util.is_hvm_capable():
-                self._validation_error_box(_("Hardware Support Required"), \
-                                           _("Your hardware does not appear to support full virtualization. Only paravirtualized guests will be available on this hardware."))
-                return False
+
+            # Set up appropriate guest object dependent on selected type
+            name = self._guest.name
+            if self.get_config_method() == VM_PARA_VIRT:
+                self._guest = virtinst.ParaVirtGuest(\
+                                        type=self.get_domain_type())
+            else:
+                self._guest = virtinst.FullVirtGuest(\
+                                        type=self.get_domain_type(), \
+                                        arch=self.get_domain_arch())
+            
+            self._guest.name = name # Transfer name over
 
         elif page_num == PAGE_FVINST:
+
             if self.window.get_widget("media-iso-image").get_active():
+
                 src = self.get_config_install_source()
-                if src == None or len(src) == 0:
-                    self._validation_error_box(_("ISO Path Required"), \
-                                               _("You must specify an ISO location for the guest installation"))
-                    return False
-                elif not(os.path.exists(src)):
-                    self._validation_error_box(_("ISO Path Not Found"), \
-                                               _("You must specify a valid path to the ISO image for guest installation"))
+                try:
+                    self._guest.cdrom = src
+                except ValueError, e:
+                    self._validation_error_box(_("ISO Path Not Found"), str(e))
                     return False
             else:
                 cdlist = self.window.get_widget("cd-path")
-                if cdlist.get_active() == -1:
-                    self._validation_error_box(_("Install media required"), \
-                                               _("You must select the CDROM install media for guest installation"))
+                src = self.get_config_install_source()
+                try:
+                    self._guest.cdrom = src
+                except ValueError, e:
+                    self._validation_error_box(_("CD-ROM Path Error"), str(e))
                     return False
+            
+            try:
+                if self.get_config_os_type() is not None \
+                   and self.get_config_os_type() != "generic":
+                    logging.debug("OS Type: %s" % self.get_config_os_type())
+                    self._guest.os_type = self.get_config_os_type()
+            except ValueError, e:
+                self._validation_error_box(_("Invalid FV OS Type"), str(e))
+                return False
+            try:
+                if self.get_config_os_variant() is not None \
+                   and self.get_config_os_type() != "generic":
+                    logging.debug("OS Variant: %s" % self.get_config_os_variant())
+                    self._guest.os_variant = self.get_config_os_variant()
+            except ValueError, e:
+                self._validation_error_box(_("Invalid FV OS Variant"), str(e))
+                return False
         elif page_num == PAGE_PVINST:
+
             src = self.get_config_install_source()
-            if src == None or len(src) == 0:
-                self._validation_error_box(_("URL Required"), \
-                                           _("You must specify a URL for the install image for the guest install"))
+            try:
+                self._guest.location = src
+            except ValueError, e:
+                self._validation_error_box(_("Invalid Install URL"), str(e))
                 return False
 
+            ks = self.get_config_kickstart_source()
+            if ks is not None and len(ks) != 0:
+                if not (ks.startswith("http://") or ks.startswith("ftp://") \
+                        or ks.startswith("nfs:")):
+                    self._validation_error_box(_("Kickstart URL Error"), \
+                                               _("Kickstart location must be an NFS, HTTP or FTP source"))
+                    return False
+                else:
+                    self._guest.extraargs = "ks=%s" % (ks,)
+
         elif page_num == PAGE_DISK:
+            
             disk = self.get_config_disk_image()
             if disk == None or len(disk) == 0:
                 self._validation_error_box(_("Storage Address Required"), \
                                            _("You must specify a partition or a file for storage for the guest install"))
                 return False
+            
+            # Attempt to set disk
+            filesize = None
+            if self.get_config_disk_size() != None:
+                filesize = self.get_config_disk_size() / 1024.0
+            try:
+                if self.window.get_widget("storage-partition").get_active():
+                    type = virtinst.VirtualDisk.TYPE_BLOCK
+                else:
+                    type = virtinst.VirtualDisk.TYPE_FILE
 
-            if not self.window.get_widget("storage-partition").get_active():
-                if os.path.isdir(disk):
-                    self._validation_error_box(_("Storage Address Is Directory"), \
-                                               _("You chose 'Simple File' storage for your storage method, but chose a directory instead of a file. Please enter a new filename or choose an existing file."))
-                    return False
+                self._disk = virtinst.VirtualDisk(\
+                                        self.get_config_disk_image(), \
+                                        filesize, \
+                                        sparse = self.is_sparse_file(), \
+                                        type=type)
 
-            d = virtinst.VirtualDisk(self.get_config_disk_image(), self.get_config_disk_size(), sparse = self.is_sparse_file())
-            if d.is_conflict_disk(self.connection.vmm) is True:
-               res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % disk), \
-                                               _("Do you really want to use the disk ?"))
+                if self._disk.type == virtinst.VirtualDisk.TYPE_FILE and \
+                   self.get_config_method() == VM_PARA_VIRT and \
+                   virtinst.util.is_blktap_capable():
+                    self._disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
+
+                if self._disk.type == virtinst.VirtualDisk.TYPE_FILE and not \
+                   self.is_sparse_file():
+                    self.non_sparse = True
+                else:
+                    self.non_sparse = False
+            except ValueError, e:
+                self._validation_error_box(_("Invalid Storage Address"), \
+                                            str(e))
+                return False
+
+            if self._disk.is_conflict_disk(self.connection.vmm) is True:
+               res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % disk), _("Do you really want to use the disk ?"))
                return res
 
         elif page_num == PAGE_NETWORK:
+
             if self.window.get_widget("net-type-network").get_active():
                 if self.window.get_widget("net-network").get_active() == -1:
                     self._validation_error_box(_("Virtual Network Required"),
@@ -838,7 +859,73 @@ class vmmCreate(gobject.GObject):
                                                _("You must select one of the physical devices"))
                     return False
 
+            net = self.get_config_network()
 
+            if self.window.get_widget("mac-address").get_active():
+                mac = self.window.get_widget("create-mac-address").get_text()
+                if mac is None or len(mac) == 0:
+                    self._validation_error_box(_("Invalid MAC address"), \
+                                               _("No MAC address was entered. Please enter a valid MAC address."))
+                    return False
+                try:
+                    self._guest.mac = mac
+                except ValueError, e:
+                    self._validation_error_box(_("Invalid Mac address"), \
+                                                str(e))
+                    return False
+            
+                hostdevs = virtinst.util.get_host_network_devices()
+                for hostdev in hostdevs:
+                    if mac.lower() == hostdev[4]:
+                        return self._yes_no_box(_('MAC address "%s" is already in use by host!' % mac), _("Do you really want to use the MAC address ?"))
+            else:
+                mac = None
+            try:    
+                if net[0] == "bridge":
+                    self._net = virtinst.VirtualNetworkInterface(macaddr=mac, \
+                                                                 type=net[0], \
+                                                                 bridge=net[1])
+                elif net[0] == "network":
+                    self._net = virtinst.VirtualNetworkInterface(macaddr=mac, \
+                                                                 type=net[0], \
+                                                                 network=net[1])
+                elif net[0] == "user":
+                    self._net = virtinst.VirtualNetworkInterface(macaddr=mac, \
+                                                                 type=net[0])
+            except ValueError, e:
+                self._validation_error_box(_("Network Parameter Error"), \
+                                            str(e))
+                return False
+
+            vms = []
+            for domains in self.connection.vms.values():
+                vms.append(domains.vm)
+            if self._net.countMACaddr(vms) > 0:
+                return self._yes_no_box(_('MAC address "%s" is already in use by another guest!' % mac), _("Do you really want to use the MAC address ?"))
+
+        elif page_num == PAGE_CPUMEM:
+
+            # Set vcpus
+            try:
+                self._guest.vcpus = int(self.get_config_virtual_cpus())
+            except ValueError, e: 
+                self._validation_error_box(_("VCPU Count Error"), \
+                                            str(e))
+                return False
+            # Set Memory
+            try:
+                self._guest.memory = int(self.get_config_initial_memory())
+            except ValueError, e: 
+                self._validation_error_box(_("Memory Amount Error"), \
+                                            str(e))
+                return False
+            # Set Max Memory
+            try:
+                self._guest.maxmemory = int(self.get_config_maximum_memory())
+            except ValueError, e: 
+                self._validation_error_box(_("Max Memory Amount Error"), \
+                                            str(e))
+                return False
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-back").set_sensitive(True)
         return True

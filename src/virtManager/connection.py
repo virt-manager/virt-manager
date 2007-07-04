@@ -189,6 +189,8 @@ class vmmConnection(gobject.GObject):
                 return "QEMU session: " + self.get_hostname()
             else:
                 return "QEMU system: " + self.get_hostname()
+        else:
+            return self.get_type() + ":" + self.get_hostname()
 
 
     def get_uri(self):
@@ -222,6 +224,13 @@ class vmmConnection(gobject.GObject):
 
     def get_host_info(self):
         return self.hostinfo
+
+    def get_max_vcpus(self):
+        try:
+            return self.vmm.getMaxVcpus(self.get_type())
+        except Exception, e:
+            logging.debug('Unable to get max vcpu')
+            return 32;
 
     def connect(self, name, callback):
         handle_id = gobject.GObject.connect(self, name, callback)

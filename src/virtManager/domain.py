@@ -430,6 +430,7 @@ class vmmDomain(gobject.GObject):
         return os.access(tty, os.R_OK | os.W_OK)
 
     def get_graphics_console(self):
+        self.xml = None
         type = self.get_xml_string("/domain/devices/graphics/@type")
         port = None
         if type == "vnc":
@@ -456,23 +457,28 @@ class vmmDomain(gobject.GObject):
                 type = node.prop("type")
                 srcpath = None
                 devdst = None
+                devtype = node.prop("device")
+                if devtype == None:
+                    devtype = "disk"
                 for child in node.children:
                     if child.name == "source":
                         if type == "file":
                             srcpath = child.prop("file")
                         elif type == "block":
                             srcpath = child.prop("dev")
+                        elif type == None:
+                            type = "-"
                     elif child.name == "target":
                         devdst = child.prop("dev")
-
                 if srcpath == None:
-                    raise RuntimeError("missing source path")
+                    if devtype == "cdrom":
+                        srcpath = "-"
+                        type = "block"
+                    else:
+                        raise RuntimeError("missing source path")
                 if devdst == None:
                     raise RuntimeError("missing destination device")
 
-                devtype = node.prop("device")
-                if devtype == None:
-                    devtype = "disk"
                 disks.append([type, srcpath, devtype, devdst])
 
         finally:
@@ -533,10 +539,13 @@ class vmmDomain(gobject.GObject):
     def add_device(self, xml):
         logging.debug("Adding device " + xml)
 
+        # get the XML for the live domain before we attach the device
+        # otherwise the device gets added to the XML twice.
+        vmxml = self.vm.XMLDesc(0)
+
         if self.is_active():
             self.vm.attachDevice(xml)
 
-        vmxml = self.vm.XMLDesc(0)
 
         index = vmxml.find("</devices>")
         newxml = vmxml[0:index] + xml + vmxml[index:]

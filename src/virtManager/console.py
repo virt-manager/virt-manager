@@ -68,6 +68,17 @@ class vmmConsole(gobject.GObject):
         self.vncViewerFailures = 0
         self.vncViewerRetryDelay = 125
 
+        self.notifyID = None
+        try:
+            bus = dbus.SessionBus()
+            self.notifyObject = bus.get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+            self.notifyInterface = dbus.Interface(self.notifyObject, "org.freedesktop.Notifications")
+            self.notifyInterface.connect_to_signal("ActionInvoked", self.notify_action)
+            self.notifyInterface.connect_to_signal("NotificationClosed", self.notify_closed)
+        except Exception, e:
+            logging.error("Cannot initialize notification system" + str(e))
+            pass
+
         self.window.get_widget("console-pages").set_show_tabs(False)
 
         self.config.on_console_keygrab_changed(self.keygrab_changed)
@@ -121,29 +132,40 @@ class vmmConsole(gobject.GObject):
 
     def notify_grabbed(self, src):
         topwin = self.window.get_widget("vmm-console")
-        try:
-            bus = dbus.SessionBus()
-            noteSvr = bus.get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
-            noteObj = dbus.Interface(noteSvr, "org.freedesktop.Notifications")
-            (x, y) = topwin.window.get_origin()
-            noteObj.Notify(topwin.get_title(),
-                           0,
-                           '',
-                           _("Pointer grabbed"),
-                           _("The mouse pointer has been restricted to the virtual " \
-                             "console window. To release the pointer press the key pair " \
-                             "Ctrl+Alt"),
-                           [],
-                           {"desktop-entry": "virt-manager",
-                            "x": x+200, "y": y},
-                           5 * 1000);
-        except Exception, e:
-            pass
         topwin.set_title(_("Press Ctrl+Alt to release pointer.") + " " + self.title)
+
+        if self.config.show_console_grab_notify():
+            try:
+                (x, y) = topwin.window.get_origin()
+                self.notifyID = self.notifyInterface.Notify(topwin.get_title(),
+                                                            0,
+                                                            '',
+                                                            _("Pointer grabbed"),
+                                                            _("The mouse pointer has been restricted to the virtual " \
+                                                            "console window. To release the pointer press the key pair " \
+                                                              "Ctrl+Alt"),
+                                                            ["dismiss", _("Do not show this notification in the future")],
+                                                            {"desktop-entry": "virt-manager",
+                                                             "x": x+200, "y": y},
+                                                            8 * 1000);
+            except Exception, e:
+                logging.error("Cannot popup notification " + str(e))
+                pass
 
     def notify_ungrabbed(self, src):
         topwin = self.window.get_widget("vmm-console")
         topwin.set_title(self.title)
+
+    def notify_closed(self, id, reason=None):
+        if self.notifyID is not None and self.notifyID == id:
+            self.notifyID = None
+
+    def notify_action(self, id, action):
+        if self.notifyID is None or self.notifyID != id:
+            return
+
+        if action == "dismiss":
+            self.config.set_console_grab_notify(False)
 
     def keygrab_changed(self, src, ignore1=None,ignore2=None,ignore3=None):
         if self.config.get_console_keygrab() == 2:
