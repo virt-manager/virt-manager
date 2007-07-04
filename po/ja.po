@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-09 14:07-0400\n"
+"POT-Creation-Date: 2007-07-04 13:10-0400\n"
 "PO-Revision-Date: 2007-05-03 09:16+0900\n"
 "Last-Translator: Hyu_gabaru Ryu_ichi <hyu_gabaru@yahoo.co.jp>\n"
 "Language-Team: Japanese <fedora-trans-ja@redhat.com>\n"
@@ -19,612 +19,689 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 
-#: ../../src/virt-manager.py.in:63
-msgid "Unable to initialize GTK: "
-msgstr "GTK を初期化できません: "
-
-#: ../../src/virtManager/addhardware.py:237
-#: ../../src/virtManager/create.py:442
-msgid "Shared physical device"
-msgstr "共用物理デバイス"
-
-#: ../../src/virtManager/addhardware.py:240
-#: ../../src/virtManager/create.py:445
-msgid "Virtual network"
-msgstr "仮想ネットワーク"
-
-#: ../../src/virtManager/addhardware.py:243
-#: ../../src/virtManager/create.py:448
-msgid "Usermode networking"
-msgstr "ユーザーモードネットワーク"
-
-#: ../../src/virtManager/addhardware.py:314
-#: ../../src/virtManager/create.py:537
-msgid "Invalid storage address"
-msgstr "無効なストレージアドレスです"
-
-#: ../../src/virtManager/addhardware.py:337
-msgid "Too many virtual disks"
-msgstr "仮想ディスクが多すぎる"
-
-#: ../../src/virtManager/addhardware.py:338
-msgid "There are no more available virtual disk device nodes"
-msgstr "もう利用可能な仮想ディスクデバイスノードがありません"
-
-#: ../../src/virtManager/addhardware.py:342
-msgid "Creating Storage File"
-msgstr "ストレージファイルの作成"
-
-#: ../../src/virtManager/addhardware.py:343
-msgid "Allocation of disk storage may take a few minutes "
-msgstr "ディスク領域の割り当てには"
-
-#: ../../src/virtManager/addhardware.py:344
-#: ../../src/virtManager/create.py:602
-msgid "to complete."
-msgstr "数分かかります"
-
-#: ../../src/virtManager/addhardware.py:366
-#: ../../src/virtManager/create.py:654
-#, python-format
-msgid "Unable to complete install: '%s'"
-msgstr "インストールを完了できません: '%s'"
-
-#: ../../src/virtManager/addhardware.py:371
-#: ../../src/virtManager/create.py:688
-msgid "Locate Storage Partition"
-msgstr "ストレージパーティションの検索"
-
-#: ../../src/virtManager/addhardware.py:378
-#: ../../src/virtManager/create.py:694
-msgid "Locate or Create New Storage File"
-msgstr "新しいストレージファイルの検索または作成"
-
-#: ../../src/virtManager/addhardware.py:452
-msgid "Hardware Type Required"
-msgstr "ハードウェアタイプ必要です"
-
-#: ../../src/virtManager/addhardware.py:453
-msgid "You must specify what type of hardware to add"
-msgstr "どんなタイプのハードウェアを追加するのか指定しなければなりません"
-
-#: ../../src/virtManager/addhardware.py:459
-#: ../../src/virtManager/create.py:813
-msgid "Storage Address Required"
-msgstr "ストレージアドレスが必要です"
-
-#: ../../src/virtManager/addhardware.py:460
-#: ../../src/virtManager/create.py:814
-msgid ""
-"You must specify a partition or a file for storage for the guest install"
-msgstr ""
-"ゲストのインストールにはストレージ用のファイルまたはパーティションを指定しな"
-"ければなりません"
-
-#: ../../src/virtManager/addhardware.py:465
-#: ../../src/virtManager/create.py:819
-msgid "Storage Address Is Directory"
-msgstr "ストレージアドレスがディレクトリーです"
-
-#: ../../src/virtManager/addhardware.py:466
-#: ../../src/virtManager/create.py:820
-msgid ""
-"You chose 'Simple File' storage for your storage method, but chose a "
-"directory instead of a file. Please enter a new filename or choose an "
-"existing file."
-msgstr ""
-"あなたはストレージの方法として'シンプルファイル'を選択しましたがファイルでは"
-"なく、ディレクトリーを選びました。新しいファイル名か、既存のファイルを入力し"
-"てください。"
-
-#: ../../src/virtManager/addhardware.py:471
-#: ../../src/virtManager/create.py:825
-#, python-format
-msgid "Disk \"%s\" is already in use by another guest!"
-msgstr "ディスク \"%s\" は既に他のゲストで使われています!"
-
-#: ../../src/virtManager/addhardware.py:472
-#: ../../src/virtManager/create.py:826
-msgid "Do you really want to use the disk ?"
-msgstr "本当にこのディスクを使いたいのですか?"
-
-#: ../../src/virtManager/addhardware.py:478
-#: ../../src/virtManager/create.py:832
-msgid "Virtual Network Required"
-msgstr "仮想ネットワークが必要です"
-
-#: ../../src/virtManager/addhardware.py:479
-#: ../../src/virtManager/create.py:833
-msgid "You must select one of the virtual networks"
-msgstr "仮想ネットワークの一つを選ばなければなりません"
-
-#: ../../src/virtManager/addhardware.py:483
-#: ../../src/virtManager/create.py:837
-msgid "Physical Device Required"
-msgstr "物理デバイスが必要です"
-
-#: ../../src/virtManager/addhardware.py:484
-#: ../../src/virtManager/create.py:838
-msgid "You must select one of the physical devices"
-msgstr "物理デバイスの一つを選ばなければなりません"
-
-#: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:2
-msgid "Please wait a few moments..."
-msgstr "お待ちください..."
-
-#: ../../src/virtManager/asyncjob.py:38 tmp/vmm-progress.glade.h:1
-msgid "Operation in progress"
-msgstr "実行中"
-
-#: ../../src/virtManager/asyncjob.py:74 ../../src/virtManager/asyncjob.py:87
-#: tmp/vmm-progress.glade.h:3
-msgid "Processing..."
-msgstr "処理中..."
-
-#: ../../src/virtManager/asyncjob.py:102
-msgid "Completed"
-msgstr "完了"
-
-#: ../../src/virtManager/console.py:132
-msgid "Pointer grabbed"
-msgstr "ポインターをつかまえました"
-
-#: ../../src/virtManager/console.py:133
-msgid ""
-"The mouse pointer has been restricted to the virtual console window. To "
-"release the pointer press the key pair Ctrl+Alt"
-msgstr ""
-"マウスポインターは仮想コンソールウィンドーに制限されています。ポインターを解"
-"放するには Ctrl+Alt を押してください。"
-
-#: ../../src/virtManager/console.py:142
-msgid "Press Ctrl+Alt to release pointer."
-msgstr "ポインターを解放するために Ctrl+Alt を押してください。"
-
-#: ../../src/virtManager/console.py:301
-msgid "Save Virtual Machine Screenshot"
-msgstr "仮想マシンのスクリーンショットを保存"
-
-#: ../../src/virtManager/console.py:334
-#, python-format
-msgid ""
-"The screenshot has been saved to:\n"
-"%s"
-msgstr ""
-"スクリーンショットは次の場所に保存されています:\n"
-"%s"
-
-#: ../../src/virtManager/console.py:335
-msgid "Screenshot saved"
-msgstr "スクリーンショットが保存されました"
-
-#: ../../src/virtManager/console.py:468
-msgid "paused"
-msgstr "一時停止されました"
-
-#: ../../src/virtManager/createnet.py:94
-#: ../../src/virtManager/createnet.py:257 ../../src/virtManager/host.py:222
-#: tmp/vmm-create-net.glade.h:38 tmp/vmm-host.glade.h:23
-msgid "NAT to any physical device"
-msgstr "どれかの物理デバイスへの NAT"
-
-#: ../../src/virtManager/createnet.py:97
-#: ../../src/virtManager/createnet.py:255 ../../src/virtManager/host.py:220
-#, python-format
-msgid "NAT to physical device %s"
-msgstr "物理デバイス %s への NAT"
-
-#: ../../src/virtManager/createnet.py:152
-#, python-format
-msgid "%d addresses"
-msgstr "%d アドレス"
-
-#: ../../src/virtManager/createnet.py:154
-msgid "Public"
-msgstr "公開"
-
-#: ../../src/virtManager/createnet.py:156 tmp/vmm-create-net.glade.h:47
-msgid "Private"
-msgstr "私用"
-
-#: ../../src/virtManager/createnet.py:158
-msgid "Reserved"
-msgstr "予約"
-
-#: ../../src/virtManager/createnet.py:160
-msgid "Other"
-msgstr "他"
-
-#: ../../src/virtManager/createnet.py:259 ../../src/virtManager/host.py:225
-#: tmp/vmm-create-net.glade.h:37
-msgid "Isolated virtual network"
-msgstr "分離された仮想ネットワーク"
-
-#: ../../src/virtManager/createnet.py:304
-#: ../../src/virtManager/createnet.py:308
-msgid "Invalid Network Name"
-msgstr "無効なネットワーク名です"
-
-#: ../../src/virtManager/createnet.py:305
-msgid "Network name must be non-blank and less than 50 characters"
-msgstr "システム名は50文字以内で空白を含まないようにしてください。"
-
-#: ../../src/virtManager/createnet.py:309
-msgid "Network name may contain alphanumeric and '_' characters only"
-msgstr "ネットワーク名には英数字と '_' だけが使えます。"
-
-#: ../../src/virtManager/createnet.py:316
-#: ../../src/virtManager/createnet.py:321
-#: ../../src/virtManager/createnet.py:326
-#: ../../src/virtManager/createnet.py:331
-msgid "Invalid Network Address"
-msgstr "無効なネットワークアドレスです"
-
-#: ../../src/virtManager/createnet.py:317
-msgid "The network address could not be understood"
-msgstr "ネットワークアドレスを理解できません"
-
-#: ../../src/virtManager/createnet.py:322
-msgid "The network must be an IPv4 address"
-msgstr "ネットワークアドレスは IPv4 アドレスでなければなりません"
-
-#: ../../src/virtManager/createnet.py:327
-msgid "The network prefix must be at least /4 (16 addresses)"
-msgstr "ネットワークプリフィクスは最小で /4 (16 アドレス)"
-
-#: ../../src/virtManager/createnet.py:332
-msgid "The network must be an IPv4 private address"
-msgstr "ネットワークは IPv4 プライベートアドレスでなければなりません"
-
-#: ../../src/virtManager/createnet.py:340
-#: ../../src/virtManager/createnet.py:344
-#: ../../src/virtManager/createnet.py:349
-#: ../../src/virtManager/createnet.py:353
-msgid "Invalid DHCP Address"
-msgstr "無効な DHCP アドレスです"
-
-#: ../../src/virtManager/createnet.py:341
-msgid "The DHCP start address could not be understood"
-msgstr "DHCP 開始アドレスを理解できません"
-
-#: ../../src/virtManager/createnet.py:345
-msgid "The DHCP end address could not be understood"
-msgstr "DHCP 終了アドレスを理解できません"
-
-#: ../../src/virtManager/createnet.py:350
-#, python-format
-msgid "The DHCP start address is not with the network %s"
-msgstr "DHCP 開始アドレスがネットワーク %s にありません"
-
-#: ../../src/virtManager/createnet.py:354
-#, python-format
-msgid "The DHCP end address is not with the network %s"
-msgstr "DHCP 終了アドレスがネットワーク %s にありません"
-
-#: ../../src/virtManager/createnet.py:360
-msgid "Invalid forwarding mode"
-msgstr "無効なフォワードモードです"
-
-#: ../../src/virtManager/createnet.py:361
-msgid "Please select where the traffic should be forwarded"
-msgstr "トラフィックがフォワードされるところを選んで下さい"
-
-#: ../../src/virtManager/createnet.py:406 ../../src/virtManager/create.py:900
-#: ../../src/virtManager/create.py:935
-msgid "No media present"
-msgstr "メディアがありません"
-
-#: ../../src/virtManager/create.py:421
-msgid "Paravirtualized"
-msgstr "準仮想化"
-
-#: ../../src/virtManager/create.py:425
-msgid "Fully virtualized"
-msgstr "完全仮想化"
-
-#: ../../src/virtManager/create.py:473
-msgid "Invalid FV media address"
-msgstr "無効な FV メディアアドレスです"
-
-#: ../../src/virtManager/create.py:479
-msgid "Invalid FV OS Type"
-msgstr "無効な FV OS タイプです"
-
-#: ../../src/virtManager/create.py:485
-msgid "Invalid FV OS Variant"
-msgstr "無効な FV OS 種別です"
-
-#: ../../src/virtManager/create.py:492
-msgid "Invalid PV media address"
-msgstr "無効な PV メディアアドレスです"
-
-#: ../../src/virtManager/create.py:502
-msgid "Invalid system name"
-msgstr "無効なシステム名です"
-
-#: ../../src/virtManager/create.py:509 ../../src/virtManager/create.py:515
-msgid "Invalid memory setting"
-msgstr "無効なメモリ設定です"
-
-#: ../../src/virtManager/create.py:598
-msgid "Creating Virtual Machine"
-msgstr "仮想マシンを作成中"
-
-#: ../../src/virtManager/create.py:599
-msgid "The virtual machine is now being created. "
-msgstr "仮想マシンは今作成中です"
-
-#: ../../src/virtManager/create.py:600
-msgid "Allocation of disk storage and retrieval of "
-msgstr "ディスク領域の割り当てと"
-
-#: ../../src/virtManager/create.py:601
-msgid "the installation images may take a few minutes "
-msgstr "インストールイメージの検索が完了するには数分かかります"
-
-#: ../../src/virtManager/create.py:640
-msgid "Guest installation failed to complete"
-msgstr "ゲストのインストールに失敗しました"
-
-#: ../../src/virtManager/create.py:659
-msgid "Locate ISO Image"
-msgstr "ISO イメージの検索"
-
-#: ../../src/virtManager/create.py:771 ../../src/virtManager/create.py:775
-msgid "Invalid System Name"
-msgstr "無効なシステム名です"
-
-#: ../../src/virtManager/create.py:772
-msgid "System name must be non-blank and less than 50 characters"
-msgstr "システム名には空白を含まないようにして、 50 文字以内にしてください。"
-
-#: ../../src/virtManager/create.py:776
-msgid "System name may contain alphanumeric and '_' characters only"
-msgstr "システム名にはアルファベットと '_' だけが使えます。"
-
-#: ../../src/virtManager/create.py:782
-msgid "Hardware Support Required"
-msgstr "ハードウェアのサポートが必要になります"
-
-#: ../../src/virtManager/create.py:783
-msgid ""
-"Your hardware does not appear to support full virtualization. Only "
-"paravirtualized guests will be available on this hardware."
-msgstr ""
-"ご使用のハードウェアは完全仮想化をサポートしていないようです。 このハードウェ"
-"ア上では準仮想化のゲストしか使用できません。"
-
-#: ../../src/virtManager/create.py:790
-msgid "ISO Path Required"
-msgstr "ISO パスが必要です"
-
-#: ../../src/virtManager/create.py:791
-msgid "You must specify an ISO location for the guest installation"
-msgstr "ゲストのインストールには ISO の場所を指定しなければなりません"
-
-#: ../../src/virtManager/create.py:794
-msgid "ISO Path Not Found"
-msgstr "ISO パスが見つかりません"
-
-#: ../../src/virtManager/create.py:795
-msgid "You must specify a valid path to the ISO image for guest installation"
-msgstr ""
-"ゲストのインストールには ISO イメージへの有効なパスを指定しなければなりません"
-
-#: ../../src/virtManager/create.py:800
-msgid "Install media required"
-msgstr "インストールメディアが必要です"
-
-#: ../../src/virtManager/create.py:801
-msgid "You must select the CDROM install media for guest installation"
-msgstr ""
-"ゲストのインストールには CDROM のインストールメディアを選択しなければなりませ"
-"ん"
-
-#: ../../src/virtManager/create.py:806
-msgid "URL Required"
-msgstr "URL が必要です"
-
-#: ../../src/virtManager/create.py:807
-msgid "You must specify a URL for the install image for the guest install"
-msgstr ""
-"ゲストのインストールにはインストールイメージの URL を指定しなければなりません"
-
-#: ../../src/virtManager/domain.py:387 tmp/vmm-host.glade.h:27
-msgid "Running"
-msgstr "実行中"
-
-#: ../../src/virtManager/domain.py:389
-msgid "Paused"
-msgstr "一時停止"
-
-#: ../../src/virtManager/domain.py:391 tmp/vmm-console.glade.h:10
-#: tmp/vmm-details.glade.h:42
-msgid "Shutdown"
-msgstr "シャットダウン"
-
-#: ../../src/virtManager/domain.py:393
-msgid "Shutoff"
-msgstr "シャットオフ"
-
-#: ../../src/virtManager/domain.py:395
-msgid "Crashed"
-msgstr "クラッシュ"
-
-#: ../../src/virtManager/domain.py:397
-msgid "Unknown status code"
-msgstr "不明な状態コード"
-
-#: ../../src/virtManager/engine.py:87
-msgid ""
-"Unable to open a connection to the Xen hypervisor/daemon.\n"
-"\n"
-msgstr ""
-"Xen ハイパーバイザー/デーモンに対する接続を開けません。\n"
-"\n"
-
-#: ../../src/virtManager/engine.py:88
-msgid "Verify that:\n"
-msgstr "次の検証を行います:\n"
-
-#: ../../src/virtManager/engine.py:89
-msgid " - A Xen host kernel was booted\n"
-msgstr " - Xen ホストカーネルが起動された\n"
-
-#: ../../src/virtManager/engine.py:90
-msgid " - The Xen service has been started\n"
-msgstr " - Xen サービスが起動している\n"
-
-#: ../../src/virtManager/engine.py:95
-#, python-format
-msgid "Unable to open connection to hypervisor '%s'"
-msgstr "ハイパーバイザー '%s に対する接続を開けません"
-
-#: ../../src/virtManager/engine.py:97
-msgid "Virtual Machine Manager Connection Failure"
-msgstr "仮想マシンマネージャの接続障害"
-
-#: ../../src/virtManager/engine.py:334
-msgid "Save Virtual Machine"
-msgstr "仮想マシンの保存"
-
-#: ../../src/virtManager/engine.py:348
-msgid "Saving Virtual Machine"
+#: ../src/virt-manager.desktop.in.in.h:1
+#, fuzzy
+msgid "Manage virtual machines"
 msgstr "仮想マシンの保存中"
 
-#: ../../src/virtManager/engine.py:364
-#, python-format
-msgid "About to destroy virtual machine %s"
-msgstr "仮想マシン %s を強制終了しようとしています"
-
-#: ../../src/virtManager/engine.py:365
-msgid ""
-"This will immediately destroy the VM and may corrupt its disk image. Are you "
-"sure?"
-msgstr ""
-"これは VM をただちに強制終了させるので、ディスクイメージを壊すかもしれませ"
-"ん。実行しますか?"
-
-#: ../../src/virtManager/error.py:33
-msgid "Details"
-msgstr "詳細"
-
-#: ../../src/virtManager/host.py:182
-msgid "Active"
-msgstr "動作中"
-
-#: ../../src/virtManager/host.py:190
-msgid "Inactive"
-msgstr "停止"
-
-#: ../../src/virtManager/host.py:203
-msgid "On boot"
-msgstr "ブート中"
-
-#: ../../src/virtManager/host.py:206
-msgid "Never"
-msgstr "未"
-
-#: ../../src/virtManager/manager.py:240
-msgid "Restore Virtual Machine"
-msgstr "仮想マシンの復元"
-
-#: ../../src/virtManager/manager.py:256
-msgid "Restoring Virtual Machine"
-msgstr "仮想マシンを復元中"
-
-#: ../../src/virtManager/manager.py:263
-#, python-format
-msgid "The file '%s' does not appear to be a valid saved machine image"
-msgstr "ファイル '%s' は正しく保存されたマシンイメージではありません。"
-
-#: ../../src/virtManager/manager.py:291
-#, python-format
-msgid "Error restoring domain '%s'. Is the domain already running?"
-msgstr ""
-"ドメイン「%s」を復元中にエラーが発生しました。 このドメインはすでに実行中では"
-"ないですか?"
-
-#: ../../src/virtManager/manager.py:512
-msgid "ID"
-msgstr "ID"
-
-#: ../../src/virtManager/manager.py:513 tmp/vmm-create.glade.h:66
-#: tmp/vmm-create-net.glade.h:39
-msgid "Name"
-msgstr "名前"
-
-#: ../../src/virtManager/manager.py:514 tmp/vmm-manager.glade.h:17
-msgid "Status"
-msgstr "状態"
-
-#: ../../src/virtManager/manager.py:515 tmp/vmm-manager.glade.h:4
-msgid "CPU usage"
-msgstr "CPU 使用率"
-
-#: ../../src/virtManager/manager.py:516
-msgid "VCPUs"
-msgstr "VCPU"
-
-#: ../../src/virtManager/manager.py:517 tmp/vmm-manager.glade.h:11
-msgid "Memory usage"
-msgstr "メモリ使用率"
-
-#: ../../src/virtManager/manager.py:518 tmp/vmm-manager.glade.h:7
-msgid "Disk usage"
-msgstr "ディスク使用率"
-
-#: ../../src/virtManager/manager.py:519 tmp/vmm-manager.glade.h:12
-msgid "Network traffic"
-msgstr "ネットワーク通信量"
-
-#: ../../src/virtManager/serialcon.py:35
-msgid "serial console"
-msgstr "シリアルコンソール"
-
-#: tmp/vmm-about.glade.h:1
-msgid "Copyright (C) 2006 Red Hat Inc."
-msgstr "Copyright (C) 2006 Red Hat Inc."
-
-#: tmp/vmm-about.glade.h:2
-msgid "Powered by libvirt"
-msgstr "Powered by libvirt"
-
-#: tmp/vmm-about.glade.h:3 tmp/vmm-manager.glade.h:19
+#: ../src/virt-manager.desktop.in.in.h:2 ../src/vmm-about.glade.h:3
+#: ../../po/../src/vmm-manager.glade:8
 msgid "Virtual Machine Manager"
 msgstr "仮想マシンマネージャ"
 
-#: tmp/vmm-about.glade.h:4
+#: ../src/vmm-about.glade.h:1
+msgid "Copyright (C) 2006 Red Hat Inc."
+msgstr "Copyright (C) 2006 Red Hat Inc."
+
+#: ../src/vmm-about.glade.h:2
+msgid "Powered by libvirt"
+msgstr "Powered by libvirt"
+
+#: ../src/vmm-about.glade.h:4
 msgid "http://virt-manager.et.redhat.com/"
 msgstr "http://virt-manager.et.redhat.com/"
 
-#: tmp/vmm-about.glade.h:6
+#. TRANSLATORS: Replace this string with your names, one name per line.
+#: ../src/vmm-about.glade.h:6
 msgid "translator-credits"
 msgstr "Noriko Mizumoto <noriko@redhat.com>, 2006"
 
-#: tmp/vmm-add-hardware.glade.h:1 tmp/vmm-create.glade.h:3
-#: tmp/vmm-create-net.glade.h:2
+#: ../src/vmm-console.glade.h:1
+msgid "<b>The console is currently unavailable</b>"
+msgstr "<b>コンソールは現在使用できません</b>"
+
+#: ../src/vmm-console.glade.h:2
+msgid "Auth"
+msgstr "認証"
+
+#: ../src/vmm-console.glade.h:3
+msgid "Login"
+msgstr "ログイン"
+
+#: ../src/vmm-console.glade.h:4
+msgid "Password:"
+msgstr "パスワード:"
+
+#: ../src/vmm-console.glade.h:5 ../src/vmm-details.glade.h:37
+msgid "Pause"
+msgstr "一時停止"
+
+#: ../src/vmm-console.glade.h:6 ../src/vmm-details.glade.h:39
+msgid "Run"
+msgstr "実行"
+
+#: ../src/vmm-console.glade.h:7 ../src/vmm-details.glade.h:40
+msgid "S_hutdown"
+msgstr "シャットダウン (_h)"
+
+#: ../src/vmm-console.glade.h:8
+msgid "Save this password in your keyring"
+msgstr "キーリングにこのパスワードを保存します"
+
+#: ../src/vmm-console.glade.h:9
+msgid "Screenshot"
+msgstr "スクリーンショット"
+
+#: ../src/vmm-console.glade.h:10 ../src/vmm-details.glade.h:42
+#: ../../po/../src/virtManager/domain.py:391
+msgid "Shutdown"
+msgstr "シャットダウン"
+
+#: ../src/vmm-console.glade.h:11 ../src/vmm-details.glade.h:49
+msgid "Toolbar"
+msgstr "ツールバー"
+
+#: ../src/vmm-console.glade.h:12
+msgid "Unavailable"
+msgstr "使用不可"
+
+#: ../src/vmm-console.glade.h:13
+msgid "VNC"
+msgstr "VNC"
+
+#: ../src/vmm-console.glade.h:14
+msgid "Virtual Machine Console"
+msgstr "仮想マシンコンソール"
+
+#: ../src/vmm-console.glade.h:15 ../src/vmm-details.glade.h:54
+msgid "Virtual _Machine"
+msgstr "仮想マシン (_M)"
+
+#: ../src/vmm-console.glade.h:16 ../src/vmm-details.glade.h:55
+#: ../../po/../src/vmm-manager.glade:320
+msgid "_Contents"
+msgstr ""
+
+#: ../src/vmm-console.glade.h:17 ../src/vmm-details.glade.h:56
+msgid "_Destroy"
+msgstr "強制終了 (_D)"
+
+#: ../src/vmm-console.glade.h:18
+msgid "_Details"
+msgstr "詳細 (_D)"
+
+#: ../src/vmm-console.glade.h:19
+msgid "_FullScreen"
+msgstr "全画面 (_F)"
+
+#: ../src/vmm-console.glade.h:20 ../src/vmm-host.glade.h:35
+#: ../src/vmm-details.glade.h:58 ../../po/../src/vmm-manager.glade:311
+msgid "_Help"
+msgstr "ヘルプ (_H)"
+
+#: ../src/vmm-console.glade.h:21 ../src/vmm-details.glade.h:59
+msgid "_Pause"
+msgstr "一時停止 (_P)"
+
+#: ../src/vmm-console.glade.h:22 ../src/vmm-details.glade.h:60
+msgid "_Run"
+msgstr "実行 (_R)"
+
+#: ../src/vmm-console.glade.h:23 ../src/vmm-details.glade.h:61
+msgid "_Save"
+msgstr "保存 (_S)"
+
+#: ../src/vmm-console.glade.h:24 ../src/vmm-details.glade.h:62
+msgid "_Serial Console"
+msgstr "シリアルコンソール (_S)"
+
+#: ../src/vmm-console.glade.h:25
+msgid "_Take Screenshot"
+msgstr "スクリーンショットの取得 (_T)"
+
+#: ../src/vmm-console.glade.h:26 ../src/vmm-details.glade.h:63
+#: ../../po/../src/vmm-manager.glade:228
+msgid "_View"
+msgstr "表示 (_V)"
+
+#: ../src/vmm-create-net.glade.h:1 ../src/vmm-create.glade.h:1
+msgid "\t"
+msgstr "\t"
+
+#: ../src/vmm-create-net.glade.h:2 ../src/vmm-add-hardware.glade.h:2
+#: ../src/vmm-create.glade.h:4
 msgid "/xen/demo.img"
 msgstr "/xen/demo.img"
 
-#: tmp/vmm-add-hardware.glade.h:2 tmp/vmm-create.glade.h:8
-#: tmp/vmm-create-net.glade.h:9
+#: ../src/vmm-create-net.glade.h:3
+msgid "192.168.1.1"
+msgstr "192.168.1.1"
+
+#: ../src/vmm-create-net.glade.h:4
+msgid "192.168.1.255"
+msgstr "192.168.1.255"
+
+#: ../src/vmm-create-net.glade.h:5
+msgid "192.168.10.0/24"
+msgstr "192.168.10.0/24"
+
+#: ../src/vmm-create-net.glade.h:6
+msgid "192.168.10.254"
+msgstr "192.168.10.254"
+
+#: ../src/vmm-create-net.glade.h:7
+msgid "255.255.255.0"
+msgstr "255.255.255.0"
+
+#: ../src/vmm-create-net.glade.h:8
+msgid "256"
+msgstr "256"
+
+#: ../src/vmm-create-net.glade.h:9 ../src/vmm-add-hardware.glade.h:3
+#: ../src/vmm-create.glade.h:9
 msgid "5 GB"
 msgstr "5 GB"
 
-#: tmp/vmm-add-hardware.glade.h:3 tmp/vmm-create.glade.h:15
+#: ../src/vmm-create-net.glade.h:10
+msgid "<b>DHCP</b>"
+msgstr "<b>DHCP</b>"
+
+#: ../src/vmm-create-net.glade.h:11
+msgid "<b>Example:</b> network1"
+msgstr "<b>例:</b> ネットワーク1"
+
+#: ../src/vmm-create-net.glade.h:12
+msgid "<b>Forwarding</b>"
+msgstr "<b>フォワーディング</b>"
+
+#: ../src/vmm-create-net.glade.h:13
+msgid ""
+"<b>Hint:</b> The network should be choosen from one of the IPv4 private "
+"address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
+msgstr ""
+"<b>ヒント:</b> ネットワークは 10.0.0.0/8 や、172.16.0.0/12、192.168.0.0/16 の"
+"ような IPv4 プライベートアドレス範囲から選ばなければなりません。"
+
+#: ../src/vmm-create-net.glade.h:14
+msgid "<b>IPv4 network</b>"
+msgstr "<b>IPv4 ネットワーク</b>"
+
+#: ../src/vmm-create-net.glade.h:15 ../src/vmm-create.glade.h:19
+msgid "<b>Summary</b>"
+msgstr "<b>要約</b>"
+
+#: ../src/vmm-create-net.glade.h:16
+msgid ""
+"<b>Tip:</b> Unless you wish to reserve some addresses to allow static "
+"network configuration in virtual machines, these parameters can be left with "
+"their default values."
+msgstr ""
+"<b>ヒント:</b>仮想マシンの中で静的ネットワーク構成を認めるためにいくつかのア"
+"ドレスを予約しておきたい場合を除き、これらのパラメーターは省略値のままにする"
+"ことができます。"
+
+#: ../src/vmm-create-net.glade.h:17
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing an "
+"IPv4 address space</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv4 アドレス領"
+"域を選択中</span>"
+
+#: ../src/vmm-create-net.glade.h:18
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting to "
+"physical network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">物理ネットワーク"
+"に接続中</span>"
+
+#: ../src/vmm-create-net.glade.h:19
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
+"virtual network </span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">新しい仮想ネット"
+"ワークを作成中</span>"
+
+#: ../src/vmm-create-net.glade.h:20
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
+"virtual network </span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">仮想ネットワーク"
+"の名前を指定中</span>"
+
+#: ../src/vmm-create-net.glade.h:21
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create "
+"network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ネットワーク作成"
+"準備完了</span>"
+
+#: ../src/vmm-create-net.glade.h:22
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Selecting the "
+"DHCP range</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">DHCP 範囲を選択"
+"中</span>"
+
+#: ../src/vmm-create-net.glade.h:23
+msgid "A <b>name</b> for your new virtual network"
+msgstr "新しい仮想ネットワークの<b>名前</b>です"
+
+#: ../src/vmm-create-net.glade.h:24
+msgid "Broadcast:"
+msgstr "ブロードキャスト:"
+
+#: ../src/vmm-create-net.glade.h:25 ../src/vmm-add-hardware.glade.h:17
+#: ../src/vmm-create.glade.h:43
+msgid "Complete"
+msgstr "完了"
+
+#: ../src/vmm-create-net.glade.h:26
+msgid "Connectivity:"
+msgstr "接続:"
+
+#: ../src/vmm-create-net.glade.h:27
+msgid "Create a new virtual network"
+msgstr "新規の仮想ネットワークを作成"
+
+#: ../src/vmm-create-net.glade.h:28
+msgid "DHCP"
+msgstr "DHCP"
+
+#: ../src/vmm-create-net.glade.h:29
+msgid "Desination:"
+msgstr "目的地:"
+
+#: ../src/vmm-create-net.glade.h:30
+msgid "End address:"
+msgstr "終了アドレス:"
+
+#: ../src/vmm-create-net.glade.h:31
+msgid "End:"
+msgstr "終了:"
+
+#: ../src/vmm-create-net.glade.h:32
+msgid "Forwarding"
+msgstr "フォワーディング"
+
+#: ../src/vmm-create-net.glade.h:33
+msgid "Forwarding to physical network"
+msgstr "物理ネットワークにフォワーディング"
+
+#: ../src/vmm-create-net.glade.h:34
+msgid "Gateway:"
+msgstr "ゲートウェイ:"
+
+#: ../src/vmm-create-net.glade.h:35
+msgid "IPv4"
+msgstr "IPv4"
+
+#: ../src/vmm-create-net.glade.h:36 ../src/vmm-add-hardware.glade.h:25
+#: ../src/vmm-create.glade.h:58
+msgid "Intro"
+msgstr "はじめに"
+
+#: ../src/vmm-create-net.glade.h:37
+#: ../../po/../src/virtManager/createnet.py:259
+#: ../../po/../src/virtManager/host.py:225
+msgid "Isolated virtual network"
+msgstr "分離された仮想ネットワーク"
+
+#: ../src/vmm-create-net.glade.h:38 ../src/vmm-host.glade.h:23
+#: ../../po/../src/virtManager/createnet.py:94
+#: ../../po/../src/virtManager/createnet.py:257
+#: ../../po/../src/virtManager/host.py:222
+msgid "NAT to any physical device"
+msgstr "どれかの物理デバイスへの NAT"
+
+#: ../src/vmm-create-net.glade.h:39 ../src/vmm-create.glade.h:68
+#: ../../po/../src/virtManager/manager.py:517
+msgid "Name"
+msgstr "名前"
+
+#: ../src/vmm-create-net.glade.h:40
+msgid "Netmask:"
+msgstr "ネットマスク:"
+
+#: ../src/vmm-create-net.glade.h:41
+msgid "Network _Name:"
+msgstr "ネットワーク名 (_N):"
+
+#: ../src/vmm-create-net.glade.h:42
+msgid "Network name:"
+msgstr "ネットワーク名:"
+
+#: ../src/vmm-create-net.glade.h:43 ../src/vmm-host.glade.h:25
+msgid "Network:"
+msgstr "ネットワーク:"
+
+#: ../src/vmm-create-net.glade.h:44
+msgid "Please choose a name for your virtual network:"
+msgstr "ご使用の仮想ネットワークの名前を選択してください:"
+
+#: ../src/vmm-create-net.glade.h:45
+msgid ""
+"Please choose the range of addresses the DHCP server can use to allocate to "
+"guests attached to the virtual network"
+msgstr ""
+"仮想ネットワークに接続されたゲストに割り当てに DHCP サーバーが使用することが"
+"できるアドレスの範囲を選んでください"
+
+#: ../src/vmm-create-net.glade.h:46
+#, fuzzy
+msgid ""
+"Please indicate whether this virtual network should be connected to the "
+"physical network."
+msgstr ""
+"この仮想ネットワークが物理ネットワークに接続されるべきかどうかを選んでくださ"
+"い。"
+
+#: ../src/vmm-create-net.glade.h:47
+#: ../../po/../src/virtManager/createnet.py:156
+msgid "Private"
+msgstr "私用"
+
+#: ../src/vmm-create-net.glade.h:48
+msgid "Size:"
+msgstr "サイズ:"
+
+#: ../src/vmm-create-net.glade.h:49
+msgid "Start address:"
+msgstr "開始アドレス"
+
+#: ../src/vmm-create-net.glade.h:50
+msgid "Start:"
+msgstr "開始:"
+
+#: ../src/vmm-create-net.glade.h:51
+msgid ""
+"The <b>address range</b> from which the <b>DHCP</b> server will allocate "
+"addresses for virtual machines"
+msgstr ""
+"<b>DHCP</b>サーバーが仮想マシンのために割り当てることができる<b>アドレス範囲"
+"</b>"
+
+#: ../src/vmm-create-net.glade.h:52
+msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
+msgstr "割り当てる IPv4 <b>アドレス</b>と<b>ネットマスク</b>"
+
+#: ../src/vmm-create-net.glade.h:53
+msgid ""
+"This assistant will guide you through creating a new virtual network. You "
+"will be asked for some information about the virtual network you'd like to "
+"create, such as:"
+msgstr ""
+"このアシスタントは仮想ネットワークを追加することを案内します。あなたが作ろう"
+"としている仮想ネットワーク２ついての情報をいくつか尋ねます。例えば:"
+
+#: ../src/vmm-create-net.glade.h:54
+msgid "Type:"
+msgstr "タイプ:"
+
+#: ../src/vmm-create-net.glade.h:55
+msgid "Whether to <b>forward</b> traffic to the physical network"
+msgstr "どの物理ネットワークにトラフィックを<b>フォワード</b>しますか"
+
+#: ../src/vmm-create-net.glade.h:56
+msgid "You will need to choose an IPv4 address space for the virtual network:"
+msgstr "仮想ネットワークのための IPv4 アドレス範囲を選択する必要があります:"
+
+#: ../src/vmm-create-net.glade.h:57 ../src/vmm-add-hardware.glade.h:39
+#: ../src/vmm-create.glade.h:103
+msgid "_Finish"
+msgstr "完了 (_F)"
+
+#: ../src/vmm-create-net.glade.h:58 ../src/vmm-create.glade.h:112
+msgid "demo"
+msgstr "デモ"
+
+#: ../src/vmm-host.glade.h:1
+msgid "1.59 GB of 2.2 GB"
+msgstr "2.2 GB のうちの 1.59 MB"
+
+#: ../src/vmm-host.glade.h:2
+msgid "2000 MB"
+msgstr "2000 MB"
+
+#: ../src/vmm-host.glade.h:3
+msgid "4"
+msgstr "4"
+
+#: ../src/vmm-host.glade.h:5
+#, no-c-format
+msgid "60%"
+msgstr "60%"
+
+#: ../src/vmm-host.glade.h:6 ../src/vmm-details.glade.h:10
+msgid "<b>Basic details</b>"
+msgstr "<b>基本詳細</b>"
+
+#: ../src/vmm-host.glade.h:7
+msgid "<b>IPv4 configuration</b>"
+msgstr "<b>IPv4 構成 </b>"
+
+#: ../src/vmm-host.glade.h:8 ../src/vmm-details.glade.h:13
+msgid "<b>Performance</b>"
+msgstr "<b>パフォーマンス</b>"
+
+#: ../src/vmm-host.glade.h:9
+msgid "Architecture:"
+msgstr "アーキテクチャー:"
+
+#: ../src/vmm-host.glade.h:10
+msgid "Autostart:"
+msgstr "自動起動:"
+
+#: ../src/vmm-host.glade.h:11 ../src/vmm-details.glade.h:20
+msgid "CPU usage:"
+msgstr "CPU 使用量:"
+
+#: ../src/vmm-host.glade.h:12
+msgid "DHCP end:"
+msgstr "DHCP 終了:"
+
+#: ../src/vmm-host.glade.h:13
+msgid "DHCP start:"
+msgstr "DHCP 開始:"
+
+#: ../src/vmm-host.glade.h:14
+msgid "Device:"
+msgstr "装置:"
+
+#: ../src/vmm-host.glade.h:15
+msgid "Forwarding:"
+msgstr "フォワーディング:"
+
+#: ../src/vmm-host.glade.h:16
+msgid "Host Details"
+msgstr "ホスト詳細"
+
+#: ../src/vmm-host.glade.h:17
+msgid "Hostname:"
+msgstr "ホスト名:"
+
+#: ../src/vmm-host.glade.h:18 ../src/vmm-open-connection.glade.h:2
+msgid "Hypervisor:"
+msgstr "ハイパーバイザー :"
+
+#: ../src/vmm-host.glade.h:19
+msgid "Location:"
+msgstr "場所:"
+
+#: ../src/vmm-host.glade.h:20
+msgid "Logical CPUs:"
+msgstr "論理 CPU:"
+
+#: ../src/vmm-host.glade.h:21 ../src/vmm-details.glade.h:32
+msgid "Memory usage:"
+msgstr "メモリの使用量:"
+
+#: ../src/vmm-host.glade.h:22
+msgid "Memory:"
+msgstr "メモリ:"
+
+#: ../src/vmm-host.glade.h:24 ../src/vmm-details.glade.h:33
+msgid "Name:"
+msgstr "名前"
+
+#: ../src/vmm-host.glade.h:26 ../src/vmm-details.glade.h:36
+msgid "Overview"
+msgstr "概要"
+
+#: ../src/vmm-host.glade.h:27 ../../po/../src/virtManager/domain.py:387
+msgid "Running"
+msgstr "実行中"
+
+#: ../src/vmm-host.glade.h:28
+msgid "Start"
+msgstr "開始"
+
+#: ../src/vmm-host.glade.h:29
+msgid "State:"
+msgstr "状態:"
+
+#: ../src/vmm-host.glade.h:30
+msgid "Storage Pools"
+msgstr "ストレージプール"
+
+#: ../src/vmm-host.glade.h:31 ../src/vmm-details.glade.h:52
+msgid "UUID:"
+msgstr "UUID:"
+
+#: ../src/vmm-host.glade.h:32
+msgid "Virtual Networks"
+msgstr "仮想ネットワーク"
+
+#: ../src/vmm-host.glade.h:33
+msgid "Xen"
+msgstr "Xen"
+
+#: ../src/vmm-host.glade.h:34 ../../po/../src/vmm-manager.glade:40
+msgid "_File"
+msgstr "ファイル (_F)"
+
+#: ../src/vmm-host.glade.h:36
+msgid "example.com"
+msgstr "example.com"
+
+#: ../src/vmm-host.glade.h:37
+msgid "x86_64"
+msgstr "x86_64"
+
+#: ../src/vmm-modify-file-storage.glade.h:1
+msgid " free"
+msgstr " 空き容量"
+
+#: ../src/vmm-modify-file-storage.glade.h:2
+msgid " of "
+msgstr " の "
+
+#: ../src/vmm-modify-file-storage.glade.h:3
+msgid "/tmp"
+msgstr "/tmp"
+
+#: ../src/vmm-modify-file-storage.glade.h:4
+msgid "10 TB"
+msgstr "10 TB"
+
+#: ../src/vmm-modify-file-storage.glade.h:5
+msgid ""
+"<b>Tip:</b> You may only increase the size of file-based storage; you can't "
+"decrease its size."
+msgstr ""
+"<b>ヒント:</b> ファイルベースのストレージサイズは増量しかできません。 サイズ"
+"を減らすことはできません。"
+
+#: ../src/vmm-modify-file-storage.glade.h:6
+msgid ""
+"MB\n"
+"GB\n"
+"TB"
+msgstr ""
+"MB\n"
+"GB\n"
+"TB"
+
+#: ../src/vmm-modify-file-storage.glade.h:9
+msgid "Modify File Storage"
+msgstr "ファイルストレージの変更"
+
+#: ../src/vmm-modify-file-storage.glade.h:10
+msgid "_Mount Point (on virtual system):"
+msgstr "マウントポイント(仮想システム上の) (_M):"
+
+#: ../src/vmm-modify-file-storage.glade.h:11
+msgid "_Size:"
+msgstr "サイズ (_S):"
+
+#: ../src/vmm-preferences.glade.h:1
+msgid "<b>Consoles</b>"
+msgstr "<b>コンソール</b>"
+
+#: ../src/vmm-preferences.glade.h:2
+msgid "<b>Status monitoring</b>"
+msgstr "<b>状態のモニタリング</b>"
+
+#: ../src/vmm-preferences.glade.h:3
+msgid "Automatically open consoles:"
+msgstr "自動的に開くコンソール:"
+
+#: ../src/vmm-preferences.glade.h:4
+msgid "Grab keyboard input:"
+msgstr "キーボード入力を取得:"
+
+#: ../src/vmm-preferences.glade.h:5
+msgid "Maintain history of"
+msgstr "履歴の管理"
+
+#: ../src/vmm-preferences.glade.h:6
+msgid ""
+"Never\n"
+"For new domains\n"
+"For all domains"
+msgstr ""
+"なし\n"
+"新しいドメインに対して\n"
+"すべてのドメインに対して"
+
+#: ../src/vmm-preferences.glade.h:9
+msgid ""
+"Never\n"
+"When fullscreen\n"
+"On mouse over"
+msgstr ""
+"なし\n"
+"全画面の場合\n"
+"マウスが通過したとき"
+
+#: ../src/vmm-preferences.glade.h:12
+msgid "Preferences"
+msgstr "選好"
+
+#: ../src/vmm-preferences.glade.h:13
+msgid "Update status every"
+msgstr "状態の更新間隔"
+
+#: ../src/vmm-preferences.glade.h:14
+msgid "samples"
+msgstr "サンプル"
+
+#: ../src/vmm-preferences.glade.h:15
+msgid "seconds"
+msgstr "秒"
+
+#: ../src/vmm-add-hardware.glade.h:1 ../src/vmm-create.glade.h:3
+msgid "-"
+msgstr ""
+
+#: ../src/vmm-add-hardware.glade.h:4 ../src/vmm-create.glade.h:16
 msgid "<b>Network</b>"
 msgstr "<b>ネットワーク</b>"
 
-#: tmp/vmm-add-hardware.glade.h:4 tmp/vmm-create.glade.h:16
+#: ../src/vmm-add-hardware.glade.h:5 ../src/vmm-create.glade.h:17
 msgid "<b>Storage</b>"
 msgstr "<b>ストレージ</b>"
 
-#: tmp/vmm-add-hardware.glade.h:5 tmp/vmm-create.glade.h:19
+#: ../src/vmm-add-hardware.glade.h:6 ../src/vmm-create.glade.h:20
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
 msgstr "<small><b>例:</b> /dev/hdc2</small>"
 
-#: tmp/vmm-add-hardware.glade.h:6 tmp/vmm-create.glade.h:24
+#: ../src/vmm-add-hardware.glade.h:7 ../src/vmm-create.glade.h:25
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is disconnected, "
 "connected via wireless, or dynamically configured with NetworkManager.</"
@@ -634,7 +711,7 @@ msgstr ""
 "NetworkManager　で動的に構成されているのならば、このオプションを選びなさい.</"
 "small>"
 
-#: tmp/vmm-add-hardware.glade.h:7 tmp/vmm-create.glade.h:25
+#: ../src/vmm-add-hardware.glade.h:8 ../src/vmm-create.glade.h:26
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is statically connected "
 "to wired ethernet, to gain the ability to migrate the virtual system.</small>"
@@ -643,7 +720,7 @@ msgstr ""
 "うに、有線のネットワークに接続されているのならば、このオプションを選びなさい."
 "</small>"
 
-#: tmp/vmm-add-hardware.glade.h:8 tmp/vmm-create.glade.h:28
+#: ../src/vmm-add-hardware.glade.h:9 ../src/vmm-create.glade.h:29
 msgid ""
 "<small><b>Warning:</b> If you do not allocate the entire disk at VM "
 "creation, space will be allocated as needed while the guest is running. If "
@@ -654,7 +731,7 @@ msgstr ""
 "中に必要に応じて領域が割り当てられます。ホストに十分な空き領域がなければ、ゲ"
 "ストでデータ破損となるかもしれません。</small>"
 
-#: tmp/vmm-add-hardware.glade.h:9
+#: ../src/vmm-add-hardware.glade.h:10
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding new "
 "virtual hardware </span>"
@@ -662,7 +739,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">新しい仮想ハード"
 "ウェアを追加中</span>"
 
-#: tmp/vmm-add-hardware.glade.h:10 tmp/vmm-create.glade.h:30
+#: ../src/vmm-add-hardware.glade.h:11 ../src/vmm-create.glade.h:31
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
 "storage space</span>"
@@ -670,7 +747,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ストレージ領域を"
 "割り当て中</span>"
 
-#: tmp/vmm-add-hardware.glade.h:11 tmp/vmm-create.glade.h:32
+#: ../src/vmm-add-hardware.glade.h:12 ../src/vmm-create.glade.h:33
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connect to host "
 "network</span>"
@@ -678,7 +755,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ホストネットワー"
 "クに接続</span>"
 
-#: tmp/vmm-add-hardware.glade.h:12
+#: ../src/vmm-add-hardware.glade.h:13
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to add "
 "hardware</span>"
@@ -686,76 +763,71 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ハードウェア追加"
 "準備完了</span>"
 
-#: tmp/vmm-add-hardware.glade.h:13
+#: ../src/vmm-add-hardware.glade.h:14
 msgid "Add new virtual hardware"
 msgstr "新しい仮想ハードウェアを追加"
 
-#: tmp/vmm-add-hardware.glade.h:14 tmp/vmm-create.glade.h:38
+#: ../src/vmm-add-hardware.glade.h:15 ../src/vmm-create.glade.h:39
 msgid "Allocate entire virtual disk now?"
 msgstr "今、仮想ディスク全体を割り当てますか?"
 
-#: tmp/vmm-add-hardware.glade.h:15 tmp/vmm-create.glade.h:39
+#: ../src/vmm-add-hardware.glade.h:16 ../src/vmm-create.glade.h:40
 msgid "Browse..."
 msgstr "閲覧..."
 
-#: tmp/vmm-add-hardware.glade.h:16 tmp/vmm-create.glade.h:42
-#: tmp/vmm-create-net.glade.h:25
-msgid "Complete"
-msgstr "完了"
-
-#: tmp/vmm-add-hardware.glade.h:17 tmp/vmm-create.glade.h:43
+#: ../src/vmm-add-hardware.glade.h:18 ../src/vmm-create.glade.h:44
 msgid "Connection type:"
 msgstr "接続タイプ:"
 
-#: tmp/vmm-add-hardware.glade.h:18 tmp/vmm-create.glade.h:45
-#: tmp/vmm-details.glade.h:23
+#: ../src/vmm-add-hardware.glade.h:19 ../src/vmm-create.glade.h:46
+#: ../src/vmm-details.glade.h:23
 msgid "Disk"
 msgstr "ディスク"
 
-#: tmp/vmm-add-hardware.glade.h:19 tmp/vmm-create.glade.h:46
+#: ../src/vmm-add-hardware.glade.h:20 ../src/vmm-create.glade.h:47
 msgid "Disk image:"
 msgstr "ディスクイメージ:"
 
-#: tmp/vmm-add-hardware.glade.h:20 tmp/vmm-create.glade.h:47
+#: ../src/vmm-add-hardware.glade.h:21 ../src/vmm-create.glade.h:48
 msgid "Disk size:"
 msgstr "ディスクサイズ:"
 
-#: tmp/vmm-add-hardware.glade.h:21 tmp/vmm-create.glade.h:51
+#: ../src/vmm-add-hardware.glade.h:22 ../src/vmm-create.glade.h:52
 msgid "File _Location:"
 msgstr "ファイルの場所 (_L):"
 
-#: tmp/vmm-add-hardware.glade.h:22 tmp/vmm-create.glade.h:52
+#: ../src/vmm-add-hardware.glade.h:23 ../src/vmm-create.glade.h:53
 msgid "File _Size:"
 msgstr "ファイルサイズ (_S):"
 
-#: tmp/vmm-add-hardware.glade.h:23
+#: ../src/vmm-add-hardware.glade.h:24
 msgid "Hardware type:"
 msgstr "ハードウェアタイプ:"
 
-#: tmp/vmm-add-hardware.glade.h:24 tmp/vmm-create.glade.h:57
-#: tmp/vmm-create-net.glade.h:36
-msgid "Intro"
-msgstr "はじめに"
+#: ../src/vmm-add-hardware.glade.h:26 ../src/vmm-create.glade.h:64
+#: ../src/vmm-details.glade.h:28
+msgid "MAC address:"
+msgstr "MAC アドレス:"
 
-#: tmp/vmm-add-hardware.glade.h:25 tmp/vmm-create.glade.h:63
-#: tmp/vmm-details.glade.h:29
+#: ../src/vmm-add-hardware.glade.h:27 ../src/vmm-create.glade.h:65
+#: ../src/vmm-details.glade.h:29
 msgid "MB"
 msgstr "MB"
 
-#: tmp/vmm-add-hardware.glade.h:26 tmp/vmm-create.glade.h:67
-#: tmp/vmm-details.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:28 ../src/vmm-create.glade.h:69
+#: ../src/vmm-details.glade.h:34
 msgid "Network"
 msgstr "ネットワーク"
 
-#: tmp/vmm-add-hardware.glade.h:27 tmp/vmm-create.glade.h:68
+#: ../src/vmm-add-hardware.glade.h:29 ../src/vmm-create.glade.h:70
 msgid "Normal Disk _Partition:"
 msgstr "通常のディスクパーティション (_P):"
 
-#: tmp/vmm-add-hardware.glade.h:28 tmp/vmm-create.glade.h:73
+#: ../src/vmm-add-hardware.glade.h:30 ../src/vmm-create.glade.h:75
 msgid "P_artition:"
 msgstr "パーティション (_A):"
 
-#: tmp/vmm-add-hardware.glade.h:29
+#: ../src/vmm-add-hardware.glade.h:31
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual storage device."
@@ -763,7 +835,7 @@ msgstr ""
 "この物理ホストシステム上の領域を、新しい仮想ストレージデバイスにどのように割"
 "り当てたいのかを示してください。"
 
-#: tmp/vmm-add-hardware.glade.h:30
+#: ../src/vmm-add-hardware.glade.h:32
 msgid ""
 "Please indicate how you'd like to connect your new virtual network device to "
 "the host network."
@@ -771,19 +843,24 @@ msgstr ""
 "あなたの新しい仮想ネットワーク装置をホストネットワークにどのように接続したい"
 "のかを示してください。"
 
-#: tmp/vmm-add-hardware.glade.h:31 tmp/vmm-create.glade.h:82
+#: ../src/vmm-add-hardware.glade.h:33
+#, fuzzy
+msgid "Set _fixed MAC address for this NIC?"
+msgstr "指定 MAC アドレス:"
+
+#: ../src/vmm-add-hardware.glade.h:34 ../src/vmm-create.glade.h:85
 msgid "Shared Physical Device"
 msgstr "共有物理デバイス"
 
-#: tmp/vmm-add-hardware.glade.h:32 tmp/vmm-create.glade.h:83
+#: ../src/vmm-add-hardware.glade.h:35 ../src/vmm-create.glade.h:86
 msgid "Simple F_ile:"
 msgstr "シンプルファイル (_I):"
 
-#: tmp/vmm-add-hardware.glade.h:33 tmp/vmm-create.glade.h:85
+#: ../src/vmm-add-hardware.glade.h:36 ../src/vmm-create.glade.h:88
 msgid "Target:"
 msgstr "ターゲット:"
 
-#: tmp/vmm-add-hardware.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:37
 msgid ""
 "This assistant will guide you through adding a new piece of virtual "
 "hardware. First select what type of hardware you wish to add:"
@@ -791,199 +868,93 @@ msgstr ""
 "このアシスタントは個々の仮想ハードウェアを追加することを案内します。どんなタ"
 "イプのハードウェアを追加したいか、最初に選択してください:"
 
-#: tmp/vmm-add-hardware.glade.h:35 tmp/vmm-create.glade.h:99
+#: ../src/vmm-add-hardware.glade.h:38 ../src/vmm-create.glade.h:102
 msgid "_Device:"
 msgstr "デバイス:"
 
-#: tmp/vmm-add-hardware.glade.h:36 tmp/vmm-create.glade.h:100
-#: tmp/vmm-create-net.glade.h:57
-msgid "_Finish"
-msgstr "完了 (_F)"
+#: ../src/vmm-add-hardware.glade.h:40 ../src/vmm-create.glade.h:105
+#, fuzzy
+msgid "_MAC address:"
+msgstr "MAC アドレス:"
 
-#: tmp/vmm-add-hardware.glade.h:37 tmp/vmm-create.glade.h:102
+#: ../src/vmm-add-hardware.glade.h:41 ../src/vmm-create.glade.h:106
 msgid "_Network:"
 msgstr "ネットワーク:"
 
-#: tmp/vmm-add-hardware.glade.h:38 tmp/vmm-create.glade.h:105
+#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-create.glade.h:109
 msgid "_Shared physical device"
 msgstr "共有物理デバイス"
 
-#: tmp/vmm-add-hardware.glade.h:39 tmp/vmm-create.glade.h:107
+#: ../src/vmm-add-hardware.glade.h:43 ../src/vmm-create.glade.h:111
 msgid "_Virtual network"
 msgstr "仮想ネットワーク (_V)"
 
-#: tmp/vmm-add-hardware.glade.h:40 tmp/vmm-create.glade.h:109
+#: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-create.glade.h:113
 msgid "eth0"
 msgstr "eth0"
 
-#: tmp/vmm-console.glade.h:1
-msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>コンソールは現在使用できません</b>"
-
-#: tmp/vmm-console.glade.h:2
-msgid "Auth"
-msgstr "認証"
-
-#: tmp/vmm-console.glade.h:3
-msgid "Login"
-msgstr "ログイン"
-
-#: tmp/vmm-console.glade.h:4
-msgid "Password:"
-msgstr "パスワード:"
-
-#: tmp/vmm-console.glade.h:5 tmp/vmm-details.glade.h:37
-msgid "Pause"
-msgstr "一時停止"
-
-#: tmp/vmm-console.glade.h:6 tmp/vmm-details.glade.h:39
-msgid "Run"
-msgstr "実行"
-
-#: tmp/vmm-console.glade.h:7 tmp/vmm-details.glade.h:40
-msgid "S_hutdown"
-msgstr "シャットダウン (_h)"
-
-#: tmp/vmm-console.glade.h:8
-msgid "Save this password in your keyring"
-msgstr "キーリングにこのパスワードを保存します"
-
-#: tmp/vmm-console.glade.h:9
-msgid "Screenshot"
-msgstr "スクリーンショット"
-
-#: tmp/vmm-console.glade.h:11 tmp/vmm-details.glade.h:49
-msgid "Toolbar"
-msgstr "ツールバー"
-
-#: tmp/vmm-console.glade.h:12
-msgid "Unavailable"
-msgstr "使用不可"
-
-#: tmp/vmm-console.glade.h:13
-msgid "VNC"
-msgstr "VNC"
-
-#: tmp/vmm-console.glade.h:14
-msgid "Virtual Machine Console"
-msgstr "仮想マシンコンソール"
-
-#: tmp/vmm-console.glade.h:15 tmp/vmm-details.glade.h:54
-msgid "Virtual _Machine"
-msgstr "仮想マシン (_M)"
-
-#: tmp/vmm-console.glade.h:16 tmp/vmm-details.glade.h:55
-msgid "_Destroy"
-msgstr "強制終了 (_D)"
-
-#: tmp/vmm-console.glade.h:17
-msgid "_Details"
-msgstr "詳細 (_D)"
-
-#: tmp/vmm-console.glade.h:18
-msgid "_FullScreen"
-msgstr "全画面 (_F)"
-
-#: tmp/vmm-console.glade.h:19 tmp/vmm-details.glade.h:57
-#: tmp/vmm-host.glade.h:35 tmp/vmm-manager.glade.h:22
-msgid "_Help"
-msgstr "ヘルプ (_H)"
-
-#: tmp/vmm-console.glade.h:20 tmp/vmm-details.glade.h:58
-msgid "_Pause"
-msgstr "一時停止 (_P)"
-
-#: tmp/vmm-console.glade.h:21 tmp/vmm-details.glade.h:59
-msgid "_Run"
-msgstr "実行 (_R)"
-
-#: tmp/vmm-console.glade.h:22 tmp/vmm-details.glade.h:60
-msgid "_Save"
-msgstr "保存 (_S)"
-
-#: tmp/vmm-console.glade.h:23 tmp/vmm-details.glade.h:61
-msgid "_Serial Console"
-msgstr "シリアルコンソール (_S)"
-
-#: tmp/vmm-console.glade.h:24
-msgid "_Take Screenshot"
-msgstr "スクリーンショットの取得 (_T)"
-
-#: tmp/vmm-console.glade.h:25 tmp/vmm-details.glade.h:62
-#: tmp/vmm-manager.glade.h:23
-msgid "_View"
-msgstr "表示 (_V)"
-
-#: tmp/vmm-create.glade.h:1 tmp/vmm-create-net.glade.h:1
-msgid "\t"
-msgstr "\t"
-
-#: tmp/vmm-create.glade.h:2
+#: ../src/vmm-create.glade.h:2
 msgid " "
 msgstr " "
 
-#: tmp/vmm-create.glade.h:4 tmp/vmm-details.glade.h:4
+#: ../src/vmm-create.glade.h:5 ../src/vmm-details.glade.h:4
 msgid "2 GB"
 msgstr "2 GB"
 
-#: tmp/vmm-create.glade.h:5
+#: ../src/vmm-create.glade.h:6
 msgid "256\t"
 msgstr "256\t"
 
-#: tmp/vmm-create.glade.h:6
+#: ../src/vmm-create.glade.h:7
 msgid "400 MB"
 msgstr "400 MB"
 
-#: tmp/vmm-create.glade.h:7
+#: ../src/vmm-create.glade.h:8
 msgid "5\t"
 msgstr "5\t"
 
-#: tmp/vmm-create.glade.h:9
+#: ../src/vmm-create.glade.h:10
 msgid "500 MB"
 msgstr "500 MB"
 
-#: tmp/vmm-create.glade.h:10
+#: ../src/vmm-create.glade.h:11
 msgid "<b>CPUs:</b>"
 msgstr "<b>CPU:</b>"
 
-#: tmp/vmm-create.glade.h:11
+#: ../src/vmm-create.glade.h:12
 msgid "<b>Example:</b> system1"
 msgstr "<b>例:</b> system1"
 
-#: tmp/vmm-create.glade.h:12
+#: ../src/vmm-create.glade.h:13
 msgid "<b>Install media</b>"
 msgstr "<b>インストール媒体</b>"
 
-#: tmp/vmm-create.glade.h:13
+#: ../src/vmm-create.glade.h:14
 msgid "<b>Memory:</b>"
 msgstr "<b>メモリ:</b>"
 
-#: tmp/vmm-create.glade.h:14
+#: ../src/vmm-create.glade.h:15
 msgid "<b>Memory</b> and <b>CPU</b> allocation"
 msgstr "<b>メモリ</b> と <b>CPU</b> の割り当て"
 
-#: tmp/vmm-create.glade.h:17
+#: ../src/vmm-create.glade.h:18
 msgid ""
 "<b>Storage</b> details - which disk partitions or files the system should use"
 msgstr ""
 "<b>ストレージ</b>詳細 - システムが使用するべきディスクパーティションまたは"
 "ファイル"
 
-#: tmp/vmm-create.glade.h:18 tmp/vmm-create-net.glade.h:15
-msgid "<b>Summary</b>"
-msgstr "<b>要約</b>"
-
-#: tmp/vmm-create.glade.h:20
+#: ../src/vmm-create.glade.h:21
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 msgstr "<small><b>例:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 
-#: tmp/vmm-create.glade.h:21
+#: ../src/vmm-create.glade.h:22
 msgid ""
 "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
 msgstr ""
 "<small><b>例:</b> http://servername.example.com/distro/i386/tree</small>"
 
-#: tmp/vmm-create.glade.h:22
+#: ../src/vmm-create.glade.h:23
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
@@ -991,7 +962,7 @@ msgstr ""
 "<small><b>注記:</b> このマシンのホスト CPU には完全仮想化のサポートはありませ"
 "ん。</small>"
 
-#: tmp/vmm-create.glade.h:23
+#: ../src/vmm-create.glade.h:24
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
@@ -999,7 +970,7 @@ msgstr ""
 "<small><b>注記:</b>このマシンのホスト CPU は完全仮想化をサポートしています"
 "が、BIOS で有効にされてません。</small>"
 
-#: tmp/vmm-create.glade.h:26
+#: ../src/vmm-create.glade.h:27
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
@@ -1008,7 +979,7 @@ msgstr ""
 "<small><b>ヒント:</b> 最大のパフォーマンスを得るには、 仮想 CPU の数をホスト"
 "システム上の物理 CPU 数より少く(または同数に)する必要があります。</small>"
 
-#: tmp/vmm-create.glade.h:27
+#: ../src/vmm-create.glade.h:28
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
@@ -1018,7 +989,7 @@ msgstr ""
 "のストレージの作成に使用した同様のツールを使ってそのストレージを追加で仮想シ"
 "ステムに加えることができます。</small>"
 
-#: tmp/vmm-create.glade.h:29
+#: ../src/vmm-create.glade.h:30
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocate memory "
 "and CPU</span>"
@@ -1026,7 +997,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">メモリと CPU の"
 "割り当て</span>"
 
-#: tmp/vmm-create.glade.h:31
+#: ../src/vmm-create.glade.h:32
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing a "
 "virtualization method</span>"
@@ -1034,7 +1005,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">仮想化の方法を選"
 "択中</span>"
 
-#: tmp/vmm-create.glade.h:33
+#: ../src/vmm-create.glade.h:34
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual system </span>"
@@ -1042,7 +1013,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">新しい仮想システ"
 "ムを作成中</span>"
 
-#: tmp/vmm-create.glade.h:34
+#: ../src/vmm-create.glade.h:35
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation media</span>"
@@ -1050,7 +1021,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">インストールメ"
 "ディアの検索中</span>"
 
-#: tmp/vmm-create.glade.h:35
+#: ../src/vmm-create.glade.h:36
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
@@ -1058,7 +1029,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">仮想システムの名"
 "前を指定中</span>"
 
-#: tmp/vmm-create.glade.h:36
+#: ../src/vmm-create.glade.h:37
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to begin "
 "installation</span>"
@@ -1066,51 +1037,51 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">インストール準備"
 "完了</span>"
 
-#: tmp/vmm-create.glade.h:37
+#: ../src/vmm-create.glade.h:38
 msgid "A <b>name</b> for your new virtual system"
 msgstr "新しい仮想システムの<b>名前</b>です"
 
-#: tmp/vmm-create.glade.h:40
+#: ../src/vmm-create.glade.h:41
 msgid "CPU architecture:"
 msgstr "CPU アーキテクチャー:"
 
-#: tmp/vmm-create.glade.h:41
+#: ../src/vmm-create.glade.h:42
 msgid "CPU/memory"
 msgstr "CPU/メモリ"
 
-#: tmp/vmm-create.glade.h:44
+#: ../src/vmm-create.glade.h:45
 msgid "Create a new virtual system"
 msgstr "新規の仮想システムを作成"
 
-#: tmp/vmm-create.glade.h:48
+#: ../src/vmm-create.glade.h:49
 msgid "Enable kernel / hardware acceleration"
 msgstr "カーネル/ハードウェア加速を有効にする"
 
-#: tmp/vmm-create.glade.h:49
+#: ../src/vmm-create.glade.h:50
 msgid "FV install"
 msgstr "FV インストール"
 
-#: tmp/vmm-create.glade.h:50
+#: ../src/vmm-create.glade.h:51
 msgid "F_ully Virtualized:"
 msgstr "完全仮想化 (_U):"
 
-#: tmp/vmm-create.glade.h:53
+#: ../src/vmm-create.glade.h:54
 msgid "ISO _Location:"
 msgstr "ISO の場所 (_L):"
 
-#: tmp/vmm-create.glade.h:54
+#: ../src/vmm-create.glade.h:55
 msgid "Initial memory:"
 msgstr "初期メモリ:"
 
-#: tmp/vmm-create.glade.h:55
+#: ../src/vmm-create.glade.h:56
 msgid "Install Media _URL:"
 msgstr "インストールメディアの URL (_U):"
 
-#: tmp/vmm-create.glade.h:56
+#: ../src/vmm-create.glade.h:57
 msgid "Installation source:"
 msgstr "インストールソース:"
 
-#: tmp/vmm-create.glade.h:58
+#: ../src/vmm-create.glade.h:59
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
@@ -1120,15 +1091,15 @@ msgstr ""
 "を使用できるようにします (OS の修正を不要とする)。 準仮想化のシステムより速度"
 "は低下します。"
 
-#: tmp/vmm-create.glade.h:59
+#: ../src/vmm-create.glade.h:60
 msgid "Kickstart U_RL:"
 msgstr "キックスタート URL (_R):"
 
-#: tmp/vmm-create.glade.h:60
+#: ../src/vmm-create.glade.h:61
 msgid "Kickstart source:"
 msgstr "キックスタートソース:"
 
-#: tmp/vmm-create.glade.h:61
+#: ../src/vmm-create.glade.h:62
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
@@ -1138,46 +1109,46 @@ msgstr ""
 "OS に対して特別に変更を加える必要があるためオペレーティングシステムの種類は限"
 "られます。 完全仮想化システムに比べパフォーマンスがよくなります。"
 
-#: tmp/vmm-create.glade.h:62
+#: ../src/vmm-create.glade.h:63
 msgid "Logical host CPUs:"
 msgstr "論理ホストの CPU:"
 
-#: tmp/vmm-create.glade.h:64
+#: ../src/vmm-create.glade.h:66
 msgid "Machine name:"
 msgstr "マシン名:"
 
-#: tmp/vmm-create.glade.h:65
+#: ../src/vmm-create.glade.h:67
 msgid "Maximum memory:"
 msgstr "最大メモリ:"
 
-#: tmp/vmm-create.glade.h:69
+#: ../src/vmm-create.glade.h:71
 msgid "OS _Type:"
 msgstr "OS タイプ (_T) "
 
-#: tmp/vmm-create.glade.h:70
+#: ../src/vmm-create.glade.h:72
 msgid "OS _Variant:"
 msgstr "OS 種別 (_V)"
 
-#: tmp/vmm-create.glade.h:71
+#: ../src/vmm-create.glade.h:73
 msgid "Operating System:"
 msgstr "オペレーティングシステム:"
 
-#: tmp/vmm-create.glade.h:72
+#: ../src/vmm-create.glade.h:74
 msgid "PVinstall"
 msgstr "PV インストール"
 
-#: tmp/vmm-create.glade.h:74
+#: ../src/vmm-create.glade.h:76
 msgid "Please choose a name for your virtual system:"
 msgstr "ご使用の仮想システムの名前を選択してください:"
 
-#: tmp/vmm-create.glade.h:75
+#: ../src/vmm-create.glade.h:77
 msgid ""
 "Please choose the type of guest operating system you will be installing:"
 msgstr ""
 "インストールしようとするゲストオペレーティングシステムのタイプを選んでくださ"
 "い:"
 
-#: tmp/vmm-create.glade.h:76
+#: ../src/vmm-create.glade.h:78
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
 "maximum amount of memory the VM should be able to use, and optionally a "
@@ -1188,11 +1159,11 @@ msgstr ""
 "ションで起動時に取得する低めのメモリ量を指定できます。警告: VM メモリ量を大き"
 "くしすぎると、ホストドメインでメモリ不足となることがあります。"
 
-#: tmp/vmm-create.glade.h:77
+#: ../src/vmm-create.glade.h:79
 msgid "Please enter the number of virtual CPUs this VM should start up with."
 msgstr "この VM の起動時における仮想 CPU 数を入力してください。"
 
-#: tmp/vmm-create.glade.h:78
+#: ../src/vmm-create.glade.h:80
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
@@ -1202,7 +1173,7 @@ msgstr ""
 "てください。 この領域は仮想システムのオペレーティングシステムのインストールに"
 "使用されます。"
 
-#: tmp/vmm-create.glade.h:79
+#: ../src/vmm-create.glade.h:81
 msgid ""
 "Please indicate how you'd like to connect your new virtual system to the "
 "host network."
@@ -1210,7 +1181,7 @@ msgstr ""
 "新しい仮想システムをホストネットワークにどのように接続したいかを示してくださ"
 "い。"
 
-#: tmp/vmm-create.glade.h:80
+#: ../src/vmm-create.glade.h:82
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>fully virtualized</b> virtual "
@@ -1219,7 +1190,7 @@ msgstr ""
 "この<b>完全仮想化する</b>の仮想マシン上にインストールするオペレーティングシス"
 "テムのインストールメディアを取得できる場所を入力してください。"
 
-#: tmp/vmm-create.glade.h:81
+#: ../src/vmm-create.glade.h:83
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this <b>paravirtualized</b> virtual "
@@ -1230,11 +1201,16 @@ msgstr ""
 "のインストールメディアを取得できる場所を入力してください。 オプションでシステ"
 "ムを記述するキックスタートファイルの URL を入力できます。"
 
-#: tmp/vmm-create.glade.h:84
+#: ../src/vmm-create.glade.h:84
+#, fuzzy
+msgid "Set _fixed MAC address for your virtual system?"
+msgstr "ご使用の仮想システムの名前を選択してください:"
+
+#: ../src/vmm-create.glade.h:87
 msgid "System _Name:"
 msgstr "システム名 (_N):"
 
-#: tmp/vmm-create.glade.h:86
+#: ../src/vmm-create.glade.h:89
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
@@ -1242,7 +1218,7 @@ msgstr ""
 "仮想システムにオペレーティングシステムをインストールするために必要となるファ"
 "イルの<b>場所</b>です。"
 
-#: tmp/vmm-create.glade.h:87
+#: ../src/vmm-create.glade.h:90
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
@@ -1251,77 +1227,73 @@ msgstr ""
 "このプログラムで新しい仮想システムの作成を案内していきます。作成する仮想マシ"
 "ンに関して、次のような情報の入力が求められます。"
 
-#: tmp/vmm-create.glade.h:88 tmp/vmm-details.glade.h:51
+#: ../src/vmm-create.glade.h:91 ../src/vmm-details.glade.h:51
 msgid "Total memory on host machine:"
 msgstr "ホストマシン上のメモリ合計:"
 
-#: tmp/vmm-create.glade.h:89
+#: ../src/vmm-create.glade.h:92
 msgid "Type"
 msgstr "タイプ"
 
-#: tmp/vmm-create.glade.h:90
+#: ../src/vmm-create.glade.h:93
 msgid "VM _Max Memory (MB):"
 msgstr "VM の最大メモリ (MB) (_M):"
 
-#: tmp/vmm-create.glade.h:91
+#: ../src/vmm-create.glade.h:94
 msgid "VM _Startup Memory (MB):"
 msgstr "VM の起動時メモリ (MB):"
 
-#: tmp/vmm-create.glade.h:92
+#: ../src/vmm-create.glade.h:95
 msgid "VMS"
 msgstr "VMS"
 
-#: tmp/vmm-create.glade.h:93
+#: ../src/vmm-create.glade.h:96
 msgid "Virtual CPUs:"
 msgstr "仮想 CPU:"
 
-#: tmp/vmm-create.glade.h:94
+#: ../src/vmm-create.glade.h:97
 msgid "Virtualization method:"
 msgstr "仮想化の方法:"
 
-#: tmp/vmm-create.glade.h:95
+#: ../src/vmm-create.glade.h:98
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr "システムの<b>完全仮想化</b>または<b>準仮想化</b>"
 
-#: tmp/vmm-create.glade.h:96
+#: ../src/vmm-create.glade.h:99
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr "新しいシステムに対して仮想化のメソッドを選択する必要があります:"
 
-#: tmp/vmm-create.glade.h:97
+#: ../src/vmm-create.glade.h:100
 msgid "_Browse..."
 msgstr "ブラウズ (_B)..."
 
-#: tmp/vmm-create.glade.h:98
+#: ../src/vmm-create.glade.h:101
 msgid "_CD-ROM or DVD:"
 msgstr "CD-ROM または DVD (_C):"
 
-#: tmp/vmm-create.glade.h:101
+#: ../src/vmm-create.glade.h:104
 msgid "_ISO Image Location:"
 msgstr "ISO イメージの場所 (_I):"
 
-#: tmp/vmm-create.glade.h:103
+#: ../src/vmm-create.glade.h:107
 msgid "_Paravirtualized:"
 msgstr "準仮想化 (_P):"
 
-#: tmp/vmm-create.glade.h:104
+#: ../src/vmm-create.glade.h:108
 msgid "_Path to install media:"
 msgstr "インストールメディアへのパス (_P):"
 
-#: tmp/vmm-create.glade.h:106
+#: ../src/vmm-create.glade.h:110
 msgid "_VCPUs:"
 msgstr "VCPU (_V):"
 
-#: tmp/vmm-create.glade.h:108 tmp/vmm-create-net.glade.h:58
-msgid "demo"
-msgstr "デモ"
-
-#: tmp/vmm-create.glade.h:110
+#: ../src/vmm-create.glade.h:114
 msgid "http://"
 msgstr "http://"
 
-#: tmp/vmm-create.glade.h:111
+#: ../src/vmm-create.glade.h:115
 msgid ""
 "i686\n"
 "x86_64\n"
@@ -1337,292 +1309,48 @@ msgstr ""
 "mips\n"
 "mipsel"
 
-#: tmp/vmm-create.glade.h:117
+#: ../src/vmm-create.glade.h:121
 msgid "para"
 msgstr "para"
 
-#: tmp/vmm-create-net.glade.h:3
-msgid "192.168.1.1"
-msgstr "192.168.1.1"
-
-#: tmp/vmm-create-net.glade.h:4
-msgid "192.168.1.255"
-msgstr "192.168.1.255"
-
-#: tmp/vmm-create-net.glade.h:5
-msgid "192.168.10.0/24"
-msgstr "192.168.10.0/24"
-
-#: tmp/vmm-create-net.glade.h:6
-msgid "192.168.10.254"
-msgstr "192.168.10.254"
-
-#: tmp/vmm-create-net.glade.h:7
-msgid "255.255.255.0"
-msgstr "255.255.255.0"
-
-#: tmp/vmm-create-net.glade.h:8
-msgid "256"
-msgstr "256"
-
-#: tmp/vmm-create-net.glade.h:10
-msgid "<b>DHCP</b>"
-msgstr "<b>DHCP</b>"
-
-#: tmp/vmm-create-net.glade.h:11
-msgid "<b>Example:</b> network1"
-msgstr "<b>例:</b> ネットワーク1"
-
-#: tmp/vmm-create-net.glade.h:12
-msgid "<b>Forwarding</b>"
-msgstr "<b>フォワーディング</b>"
-
-#: tmp/vmm-create-net.glade.h:13
-msgid ""
-"<b>Hint:</b> The network should be choosen from one of the IPv4 private "
-"address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
-msgstr ""
-"<b>ヒント:</b> ネットワークは 10.0.0.0/8 や、172.16.0.0/12、192.168.0.0/16 の"
-"ような IPv4 プライベートアドレス範囲から選ばなければなりません。"
-
-#: tmp/vmm-create-net.glade.h:14
-msgid "<b>IPv4 network</b>"
-msgstr "<b>IPv4 ネットワーク</b>"
-
-#: tmp/vmm-create-net.glade.h:16
-msgid ""
-"<b>Tip:</b> Unless you wish to reserve some addresses to allow static "
-"network configuration in virtual machines, these parameters can be left with "
-"their default values."
-msgstr ""
-"<b>ヒント:</b>仮想マシンの中で静的ネットワーク構成を認めるためにいくつかのア"
-"ドレスを予約しておきたい場合を除き、これらのパラメーターは省略値のままにする"
-"ことができます。"
-
-#: tmp/vmm-create-net.glade.h:17
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing an "
-"IPv4 address space</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv4 アドレス領"
-"域を選択中</span>"
-
-#: tmp/vmm-create-net.glade.h:18
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting to "
-"physical network</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">物理ネットワーク"
-"に接続中</span>"
-
-#: tmp/vmm-create-net.glade.h:19
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
-"virtual network </span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">新しい仮想ネット"
-"ワークを作成中</span>"
-
-#: tmp/vmm-create-net.glade.h:20
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
-"virtual network </span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">仮想ネットワーク"
-"の名前を指定中</span>"
-
-#: tmp/vmm-create-net.glade.h:21
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create "
-"network</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ネットワーク作成"
-"準備完了</span>"
-
-#: tmp/vmm-create-net.glade.h:22
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Selecting the "
-"DHCP range</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">DHCP 範囲を選択"
-"中</span>"
-
-#: tmp/vmm-create-net.glade.h:23
-msgid "A <b>name</b> for your new virtual network"
-msgstr "新しい仮想ネットワークの<b>名前</b>です"
-
-#: tmp/vmm-create-net.glade.h:24
-msgid "Broadcast:"
-msgstr "ブロードキャスト:"
-
-#: tmp/vmm-create-net.glade.h:26
-msgid "Connectivity:"
-msgstr "接続:"
-
-#: tmp/vmm-create-net.glade.h:27
-msgid "Create a new virtual network"
-msgstr "新規の仮想ネットワークを作成"
-
-#: tmp/vmm-create-net.glade.h:28
-msgid "DHCP"
-msgstr "DHCP"
-
-#: tmp/vmm-create-net.glade.h:29
-msgid "Desination:"
-msgstr "目的地:"
-
-#: tmp/vmm-create-net.glade.h:30
-msgid "End address:"
-msgstr "終了アドレス:"
-
-#: tmp/vmm-create-net.glade.h:31
-msgid "End:"
-msgstr "終了:"
-
-#: tmp/vmm-create-net.glade.h:32
-msgid "Forwarding"
-msgstr "フォワーディング"
-
-#: tmp/vmm-create-net.glade.h:33
-msgid "Forwarding to physical network"
-msgstr "物理ネットワークにフォワーディング"
-
-#: tmp/vmm-create-net.glade.h:34
-msgid "Gateway:"
-msgstr "ゲートウェイ:"
-
-#: tmp/vmm-create-net.glade.h:35
-msgid "IPv4"
-msgstr "IPv4"
-
-#: tmp/vmm-create-net.glade.h:40
-msgid "Netmask:"
-msgstr "ネットマスク:"
-
-#: tmp/vmm-create-net.glade.h:41
-msgid "Network _Name:"
-msgstr "ネットワーク名 (_N):"
-
-#: tmp/vmm-create-net.glade.h:42
-msgid "Network name:"
-msgstr "ネットワーク名:"
-
-#: tmp/vmm-create-net.glade.h:43 tmp/vmm-host.glade.h:25
-msgid "Network:"
-msgstr "ネットワーク:"
-
-#: tmp/vmm-create-net.glade.h:44
-msgid "Please choose a name for your virtual network:"
-msgstr "ご使用の仮想ネットワークの名前を選択してください:"
-
-#: tmp/vmm-create-net.glade.h:45
-msgid ""
-"Please choose the range of addresses the DHCP server can use to allocate to "
-"guests attached to the virtual network"
-msgstr ""
-"仮想ネットワークに接続されたゲストに割り当てに DHCP サーバーが使用することが"
-"できるアドレスの範囲を選んでください"
-
-#: tmp/vmm-create-net.glade.h:46
-#, fuzzy
-msgid ""
-"Please indicate whether this virtual network should be connected to the "
-"physical network."
-msgstr ""
-"この仮想ネットワークが物理ネットワークに接続されるべきかどうかを選んでくださ"
-"い。"
-
-#: tmp/vmm-create-net.glade.h:48
-msgid "Size:"
-msgstr "サイズ:"
-
-#: tmp/vmm-create-net.glade.h:49
-msgid "Start address:"
-msgstr "開始アドレス"
-
-#: tmp/vmm-create-net.glade.h:50
-msgid "Start:"
-msgstr "開始:"
-
-#: tmp/vmm-create-net.glade.h:51
-msgid ""
-"The <b>address range</b> from which the <b>DHCP</b> server will allocate "
-"addresses for virtual machines"
-msgstr ""
-"<b>DHCP</b>サーバーが仮想マシンのために割り当てることができる<b>アドレス範囲"
-"</b>"
-
-#: tmp/vmm-create-net.glade.h:52
-msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
-msgstr "割り当てる IPv4 <b>アドレス</b>と<b>ネットマスク</b>"
-
-#: tmp/vmm-create-net.glade.h:53
-msgid ""
-"This assistant will guide you through creating a new virtual network. You "
-"will be asked for some information about the virtual network you'd like to "
-"create, such as:"
-msgstr ""
-"このアシスタントは仮想ネットワークを追加することを案内します。あなたが作ろう"
-"としている仮想ネットワーク２ついての情報をいくつか尋ねます。例えば:"
-
-#: tmp/vmm-create-net.glade.h:54
-msgid "Type:"
-msgstr "タイプ:"
-
-#: tmp/vmm-create-net.glade.h:55
-msgid "Whether to <b>forward</b> traffic to the physical network"
-msgstr "どの物理ネットワークにトラフィックを<b>フォワード</b>しますか"
-
-#: tmp/vmm-create-net.glade.h:56
-msgid "You will need to choose an IPv4 address space for the virtual network:"
-msgstr "仮想ネットワークのための IPv4 アドレス範囲を選択する必要があります:"
-
-#: tmp/vmm-details.glade.h:2
+#: ../src/vmm-details.glade.h:2
 #, no-c-format
 msgid "18%"
 msgstr "18%"
 
-#: tmp/vmm-details.glade.h:3
+#: ../src/vmm-details.glade.h:3
 msgid "2"
 msgstr "2"
 
-#: tmp/vmm-details.glade.h:5
+#: ../src/vmm-details.glade.h:5
 msgid "20 bits/sec"
 msgstr "20 ビット/秒"
 
-#: tmp/vmm-details.glade.h:6
+#: ../src/vmm-details.glade.h:6
 msgid "200 MB"
 msgstr "200 MB"
 
-#: tmp/vmm-details.glade.h:7
+#: ../src/vmm-details.glade.h:7
 msgid "30 MB of 128 MB"
 msgstr "128 MB のうちの 30 MB"
 
-#: tmp/vmm-details.glade.h:8
+#: ../src/vmm-details.glade.h:8
 msgid "8"
 msgstr "8"
 
-#: tmp/vmm-details.glade.h:9
+#: ../src/vmm-details.glade.h:9
 msgid "80 MB of 1 GB"
 msgstr "1 GB のうちの 80 MB"
 
-#: tmp/vmm-details.glade.h:10 tmp/vmm-host.glade.h:6
-msgid "<b>Basic details</b>"
-msgstr "<b>基本詳細</b>"
-
-#: tmp/vmm-details.glade.h:11
+#: ../src/vmm-details.glade.h:11
 msgid "<b>CPUs</b>"
 msgstr "<b>CPU</b>"
 
-#: tmp/vmm-details.glade.h:12
+#: ../src/vmm-details.glade.h:12
 msgid "<b>Memory</b>"
 msgstr "<b>メモリ</b>"
 
-#: tmp/vmm-details.glade.h:13 tmp/vmm-host.glade.h:8
-msgid "<b>Performance</b>"
-msgstr "<b>パフォーマンス</b>"
-
-#: tmp/vmm-details.glade.h:14
+#: ../src/vmm-details.glade.h:14
 #, fuzzy
 msgid ""
 "<b>Tip:</b> 'Source device' refers to the name of the device as seen from "
@@ -1631,7 +1359,7 @@ msgstr ""
 "<b>ヒント:</b> 'ソース' はホスト OS から見える情報を意味し、一方'ターゲット' "
 "はゲスト OS から見える情報を意味します。"
 
-#: tmp/vmm-details.glade.h:15
+#: ../src/vmm-details.glade.h:15
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
@@ -1639,7 +1367,7 @@ msgstr ""
 "<b>ヒント:</b> 'ソース' はホスト OS から見える情報を意味し、一方'ターゲット' "
 "はゲスト OS から見える情報を意味します。"
 
-#: tmp/vmm-details.glade.h:16
+#: ../src/vmm-details.glade.h:16
 msgid ""
 "<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
 "than (or equal to) the number of physical CPUs on the host system."
@@ -1647,228 +1375,174 @@ msgstr ""
 "<b>ヒント:</b> 最大のパフォーマンスを得るには、 仮想 CPU の数をホストシステム"
 "上の物理 CPU 数より少く(または同数に)してください。"
 
-#: tmp/vmm-details.glade.h:17
+#: ../src/vmm-details.glade.h:17
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>仮想ディスク</b>"
 
-#: tmp/vmm-details.glade.h:18
+#: ../src/vmm-details.glade.h:18
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>仮想ネットワークインターフェース</b>"
 
-#: tmp/vmm-details.glade.h:19
+#: ../src/vmm-details.glade.h:19
 msgid "Block"
 msgstr "ブロック"
 
-#: tmp/vmm-details.glade.h:20 tmp/vmm-host.glade.h:11
-msgid "CPU usage:"
-msgstr "CPU 使用量:"
-
-#: tmp/vmm-details.glade.h:21
+#: ../src/vmm-details.glade.h:21
 msgid "Change allocation:"
 msgstr "割り当て変更:"
 
-#: tmp/vmm-details.glade.h:22
+#: ../src/vmm-details.glade.h:22
 msgid "Current allocation:"
 msgstr "現在の場所:"
 
-#: tmp/vmm-details.glade.h:24
+#: ../src/vmm-details.glade.h:24
 msgid "Disk usage:"
 msgstr "ディスクの使用量:"
 
-#: tmp/vmm-details.glade.h:25
+#: ../src/vmm-details.glade.h:25
 msgid "Hardware"
 msgstr "ハードウェア"
 
-#: tmp/vmm-details.glade.h:26
-msgid "How many virtual CPUs should this machine be allocated?"
+#: ../src/vmm-details.glade.h:26
+#, fuzzy
+msgid "How many virtual CPUs should be allocated for this machine?"
 msgstr "このマシンに割り当てる仮想 CPU 数を入力してください。"
 
-#: tmp/vmm-details.glade.h:27
-msgid "How much memory should this machine be allocated?"
+#: ../src/vmm-details.glade.h:27
+#, fuzzy
+msgid "How much memory should be allocated for this machine?"
 msgstr "このマシンに割り当てるメモリ量を入力してください。"
 
-#: tmp/vmm-details.glade.h:28
-msgid "MAC address:"
-msgstr "MAC アドレス:"
-
-#: tmp/vmm-details.glade.h:30
+#: ../src/vmm-details.glade.h:30
 msgid "Maximum allocation:"
 msgstr "最大割り当て:"
 
-#: tmp/vmm-details.glade.h:31
+#: ../src/vmm-details.glade.h:31
 msgid "Memory"
 msgstr "メモリ"
 
-#: tmp/vmm-details.glade.h:32 tmp/vmm-host.glade.h:21
-msgid "Memory usage:"
-msgstr "メモリの使用量:"
-
-#: tmp/vmm-details.glade.h:33 tmp/vmm-host.glade.h:24
-msgid "Name:"
-msgstr "名前"
-
-#: tmp/vmm-details.glade.h:35
+#: ../src/vmm-details.glade.h:35
 msgid "Network usage:"
 msgstr "ネットワークの使用量:"
 
-#: tmp/vmm-details.glade.h:36 tmp/vmm-host.glade.h:26
-msgid "Overview"
-msgstr "概要"
-
-#: tmp/vmm-details.glade.h:38
+#: ../src/vmm-details.glade.h:38
 msgid "Processor"
 msgstr "プロセッサ"
 
-#: tmp/vmm-details.glade.h:41
+#: ../src/vmm-details.glade.h:41
 msgid "Shut down"
 msgstr "シャットダウン"
 
-#: tmp/vmm-details.glade.h:43
+#: ../src/vmm-details.glade.h:43
 msgid "Source device:"
 msgstr "ソース装置:"
 
-#: tmp/vmm-details.glade.h:44
+#: ../src/vmm-details.glade.h:44
 msgid "Source path:"
 msgstr "ソースパス:"
 
-#: tmp/vmm-details.glade.h:45
+#: ../src/vmm-details.glade.h:45
 msgid "Source type:"
 msgstr "ソースタイプ:"
 
-#: tmp/vmm-details.glade.h:46
+#: ../src/vmm-details.glade.h:46
 msgid "Status:"
 msgstr "状態:"
 
-#: tmp/vmm-details.glade.h:47
+#: ../src/vmm-details.glade.h:47
 msgid "Target device:"
 msgstr "ターゲット装置:"
 
-#: tmp/vmm-details.glade.h:48
+#: ../src/vmm-details.glade.h:48
 msgid "Target type:"
 msgstr "ターゲットタイプ:"
 
-#: tmp/vmm-details.glade.h:50
+#: ../src/vmm-details.glade.h:50
 msgid "Total CPUs on host machine:"
 msgstr "ホストマシン上の CPU 合計:"
 
-#: tmp/vmm-details.glade.h:52 tmp/vmm-host.glade.h:31
-msgid "UUID:"
-msgstr "UUID:"
-
-#: tmp/vmm-details.glade.h:53
+#: ../src/vmm-details.glade.h:53
 msgid "Virtual Machine Details"
 msgstr "仮想マシンの詳細"
 
-#: tmp/vmm-details.glade.h:56
+#: ../src/vmm-details.glade.h:57
 msgid "_Graphical Console"
 msgstr "グラフィカルコンソール (_G)"
 
-#: tmp/vmm-details.glade.h:63
+#: ../src/vmm-details.glade.h:64
 msgid "disk\t"
 msgstr "ディスク\t"
 
-#: tmp/vmm-host.glade.h:1
-msgid "1.59 GB of 2.2 GB"
-msgstr "2.2 GB のうちの 1.59 MB"
+#: ../../po/../src/vmm-manager.glade:49
+msgid "New machine..."
+msgstr "新規のマシン..."
 
-#: tmp/vmm-host.glade.h:2
-msgid "2000 MB"
-msgstr "2000 MB"
+#: ../../po/../src/vmm-manager.glade:71
+msgid "Restore a saved machine from a filesystem image"
+msgstr "ファイルシステムのイメージから保存したマシンを復元します"
 
-#: tmp/vmm-host.glade.h:3
-msgid "4"
-msgstr "4"
+#: ../../po/../src/vmm-manager.glade:72
+msgid "Restore saved machine..."
+msgstr "保存したマシンの復元..."
 
-#: tmp/vmm-host.glade.h:5
-#, no-c-format
-msgid "60%"
-msgstr "60%"
+#: ../../po/../src/vmm-manager.glade:100
+msgid "Open connection..."
+msgstr "接続を開く..."
 
-#: tmp/vmm-host.glade.h:7
-msgid "<b>IPv4 configuration</b>"
-msgstr "<b>IPv4 構成 </b>"
+#: ../../po/../src/vmm-manager.glade:149
+msgid "_Edit"
+msgstr "編集 (_E)"
 
-#: tmp/vmm-host.glade.h:9
-msgid "Architecture:"
-msgstr "アーキテクチャー:"
+#: ../../po/../src/vmm-manager.glade:158
+msgid "Host details..."
+msgstr "ホストの詳細..."
 
-#: tmp/vmm-host.glade.h:10
-msgid "Autostart:"
-msgstr "自動起動:"
+#: ../../po/../src/vmm-manager.glade:167
+msgid "Machine details..."
+msgstr "マシンの詳細..."
 
-#: tmp/vmm-host.glade.h:12
-msgid "DHCP end:"
-msgstr "DHCP 終了:"
+#: ../../po/../src/vmm-manager.glade:188
+msgid "Delete machine"
+msgstr "マシンの削除"
 
-#: tmp/vmm-host.glade.h:13
-msgid "DHCP start:"
-msgstr "DHCP 開始:"
+#: ../../po/../src/vmm-manager.glade:237
+msgid "Domain ID"
+msgstr "ドメイン ID"
 
-#: tmp/vmm-host.glade.h:14
-msgid "Device:"
-msgstr "装置:"
+#: ../../po/../src/vmm-manager.glade:247
+#: ../../po/../src/virtManager/manager.py:518
+msgid "Status"
+msgstr "状態"
 
-#: tmp/vmm-host.glade.h:15
-msgid "Forwarding:"
-msgstr "フォワーディング:"
+#: ../../po/../src/vmm-manager.glade:257
+#: ../../po/../src/virtManager/manager.py:519
+msgid "CPU usage"
+msgstr "CPU 使用率"
 
-#: tmp/vmm-host.glade.h:16
-msgid "Host Details"
-msgstr "ホスト詳細"
+#: ../../po/../src/vmm-manager.glade:267
+msgid "Virtual CPUs"
+msgstr "仮想 CPU"
 
-#: tmp/vmm-host.glade.h:17
-msgid "Hostname:"
-msgstr "ホスト名:"
+#: ../../po/../src/vmm-manager.glade:277
+#: ../../po/../src/virtManager/manager.py:521
+msgid "Memory usage"
+msgstr "メモリ使用率"
 
-#: tmp/vmm-host.glade.h:18 tmp/vmm-open-connection.glade.h:2
-msgid "Hypervisor:"
-msgstr "ハイパーバイザー :"
+#: ../../po/../src/vmm-manager.glade:287
+#: ../../po/../src/virtManager/manager.py:522
+msgid "Disk usage"
+msgstr "ディスク使用率"
 
-#: tmp/vmm-host.glade.h:19
-msgid "Location:"
-msgstr "場所:"
+#: ../../po/../src/vmm-manager.glade:297
+#: ../../po/../src/virtManager/manager.py:523
+msgid "Network traffic"
+msgstr "ネットワーク通信量"
 
-#: tmp/vmm-host.glade.h:20
-msgid "Logical CPUs:"
-msgstr "論理 CPU:"
+#: ../../po/../src/vmm-manager.glade:369
+msgid "_View:"
+msgstr "表示 (_V):"
 
-#: tmp/vmm-host.glade.h:22
-msgid "Memory:"
-msgstr "メモリ:"
-
-#: tmp/vmm-host.glade.h:28
-msgid "Start"
-msgstr "開始"
-
-#: tmp/vmm-host.glade.h:29
-msgid "State:"
-msgstr "状態:"
-
-#: tmp/vmm-host.glade.h:30
-msgid "Storage Pools"
-msgstr "ストレージプール"
-
-#: tmp/vmm-host.glade.h:32
-msgid "Virtual Networks"
-msgstr "仮想ネットワーク"
-
-#: tmp/vmm-host.glade.h:33
-msgid "Xen"
-msgstr "Xen"
-
-#: tmp/vmm-host.glade.h:34 tmp/vmm-manager.glade.h:21
-msgid "_File"
-msgstr "ファイル (_F)"
-
-#: tmp/vmm-host.glade.h:36
-msgid "example.com"
-msgstr "example.com"
-
-#: tmp/vmm-host.glade.h:37
-msgid "x86_64"
-msgstr "x86_64"
-
-#: tmp/vmm-manager.glade.h:1
+#: ../../po/../src/vmm-manager.glade:394
 msgid ""
 "All virtual machines\n"
 "Active virtual machines\n"
@@ -1878,109 +1552,19 @@ msgstr ""
 "アクティブな仮想マシン\n"
 "非アクティブな仮想マシン"
 
-#: tmp/vmm-manager.glade.h:5
+#: ../../po/../src/vmm-manager.glade:528
 msgid "De_tails"
 msgstr "詳細 (_T)"
 
-#: tmp/vmm-manager.glade.h:6
-msgid "Delete machine"
-msgstr "マシンの削除"
-
-#: tmp/vmm-manager.glade.h:8
-msgid "Domain ID"
-msgstr "ドメイン ID"
-
-#: tmp/vmm-manager.glade.h:9
-msgid "Host details..."
-msgstr "ホストの詳細..."
-
-#: tmp/vmm-manager.glade.h:10
-msgid "Machine details..."
-msgstr "マシンの詳細..."
-
-#: tmp/vmm-manager.glade.h:13
-msgid "New machine..."
-msgstr "新規のマシン..."
-
-#: tmp/vmm-manager.glade.h:14
-msgid "Open connection..."
-msgstr "接続を開く..."
-
-#: tmp/vmm-manager.glade.h:15
-msgid "Restore a saved machine from a filesystem image"
-msgstr "ファイルシステムのイメージから保存したマシンを復元します"
-
-#: tmp/vmm-manager.glade.h:16
-msgid "Restore saved machine..."
-msgstr "保存したマシンの復元..."
-
-#: tmp/vmm-manager.glade.h:18
-msgid "Virtual CPUs"
-msgstr "仮想 CPU"
-
-#: tmp/vmm-manager.glade.h:20
-msgid "_Edit"
-msgstr "編集 (_E)"
-
-#: tmp/vmm-manager.glade.h:24
-msgid "_View:"
-msgstr "表示 (_V):"
-
-#: tmp/vmm-modify-file-storage.glade.h:1
-msgid " free"
-msgstr " 空き容量"
-
-#: tmp/vmm-modify-file-storage.glade.h:2
-msgid " of "
-msgstr " の "
-
-#: tmp/vmm-modify-file-storage.glade.h:3
-msgid "/tmp"
-msgstr "/tmp"
-
-#: tmp/vmm-modify-file-storage.glade.h:4
-msgid "10 TB"
-msgstr "10 TB"
-
-#: tmp/vmm-modify-file-storage.glade.h:5
-msgid ""
-"<b>Tip:</b> You may only increase the size of file-based storage; you can't "
-"decrease its size."
-msgstr ""
-"<b>ヒント:</b> ファイルベースのストレージサイズは増量しかできません。 サイズ"
-"を減らすことはできません。"
-
-#: tmp/vmm-modify-file-storage.glade.h:6
-msgid ""
-"MB\n"
-"GB\n"
-"TB"
-msgstr ""
-"MB\n"
-"GB\n"
-"TB"
-
-#: tmp/vmm-modify-file-storage.glade.h:9
-msgid "Modify File Storage"
-msgstr "ファイルストレージの変更"
-
-#: tmp/vmm-modify-file-storage.glade.h:10
-msgid "_Mount Point (on virtual system):"
-msgstr "マウントポイント(仮想システム上の) (_M):"
-
-#: tmp/vmm-modify-file-storage.glade.h:11
-msgid "_Size:"
-msgstr "サイズ (_S):"
-
-#: tmp/vmm-open-connection.glade.h:1
+#: ../src/vmm-open-connection.glade.h:1
 msgid "Co_nnect"
 msgstr "接続 (_N)"
 
-#: tmp/vmm-open-connection.glade.h:3
+#: ../src/vmm-open-connection.glade.h:3
 msgid "Open connection"
 msgstr "接続を開く"
 
-#: tmp/vmm-open-connection.glade.h:4
+#: ../src/vmm-open-connection.glade.h:4
 msgid ""
 "Xen\n"
 "QEMU"
@@ -1988,77 +1572,764 @@ msgstr ""
 "Xen\n"
 "QEMU"
 
-#: tmp/vmm-open-connection.glade.h:6
+#: ../src/vmm-open-connection.glade.h:6
 msgid "_Host:"
 msgstr "ホスト (_H):"
 
-#: tmp/vmm-open-connection.glade.h:7
+#: ../src/vmm-open-connection.glade.h:7
 msgid "_Local host"
 msgstr "ローカルホスト (_L)"
 
-#: tmp/vmm-open-connection.glade.h:8
+#: ../src/vmm-open-connection.glade.h:8
 msgid "_Port:"
 msgstr "ポート (_P):"
 
-#: tmp/vmm-open-connection.glade.h:9
+#: ../src/vmm-open-connection.glade.h:9
 msgid "_Remote host"
 msgstr "リモートホスト (_R)"
 
-#: tmp/vmm-preferences.glade.h:1
-msgid "<b>Consoles</b>"
-msgstr "<b>コンソール</b>"
+#: ../src/vmm-progress.glade.h:1 ../../po/../src/virtManager/asyncjob.py:38
+msgid "Operation in progress"
+msgstr "実行中"
 
-#: tmp/vmm-preferences.glade.h:2
-msgid "<b>Status monitoring</b>"
-msgstr "<b>状態のモニタリング</b>"
+#: ../src/vmm-progress.glade.h:2 ../../po/../src/virtManager/asyncjob.py:38
+msgid "Please wait a few moments..."
+msgstr "お待ちください..."
 
-#: tmp/vmm-preferences.glade.h:3
-msgid "Automatically open consoles:"
-msgstr "自動的に開くコンソール:"
+#: ../src/vmm-progress.glade.h:3 ../../po/../src/virtManager/asyncjob.py:74
+#: ../../po/../src/virtManager/asyncjob.py:87
+msgid "Processing..."
+msgstr "処理中..."
 
-#: tmp/vmm-preferences.glade.h:4
-msgid "Grab keyboard input:"
-msgstr "キーボード入力を取得:"
+#. ...the risk is we catch too much though
+#. Damned if we do, damned if we dont :-)(
+#: ../../po/../src/virt-manager.py.in:74
+msgid "Unable to initialize GTK: "
+msgstr "GTK を初期化できません: "
 
-#: tmp/vmm-preferences.glade.h:5
-msgid "Maintain history of"
-msgstr "履歴の管理"
-
-#: tmp/vmm-preferences.glade.h:6
-msgid ""
-"Never\n"
-"For new domains\n"
-"For all domains"
+#: ../src/virt-manager.schemas.in.h:1
+msgid "Show VCPU count in summary"
 msgstr ""
-"なし\n"
-"新しいドメインに対して\n"
-"すべてのドメインに対して"
 
-#: tmp/vmm-preferences.glade.h:9
-msgid ""
-"Never\n"
-"When fullscreen\n"
-"On mouse over"
+#: ../src/virt-manager.schemas.in.h:2
+msgid "Show cpu usage in summary"
 msgstr ""
-"なし\n"
-"全画面の場合\n"
-"マウスが通過したとき"
 
-#: tmp/vmm-preferences.glade.h:12
-msgid "Preferences"
-msgstr "選好"
+#: ../src/virt-manager.schemas.in.h:3
+msgid "Show disk usage in summary"
+msgstr ""
 
-#: tmp/vmm-preferences.glade.h:13
-msgid "Update status every"
-msgstr "状態の更新間隔"
+#: ../src/virt-manager.schemas.in.h:4
+msgid "Show domain id in summary"
+msgstr ""
 
-#: tmp/vmm-preferences.glade.h:14
-msgid "samples"
-msgstr "サンプル"
+#: ../src/virt-manager.schemas.in.h:5
+msgid "Show memory usage in summary"
+msgstr ""
 
-#: tmp/vmm-preferences.glade.h:15
-msgid "seconds"
-msgstr "秒"
+#: ../src/virt-manager.schemas.in.h:6
+#, fuzzy
+msgid "Show network traffic in summary"
+msgstr "ネットワーク通信量"
+
+#: ../src/virt-manager.schemas.in.h:7
+msgid "Show run state in summary"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:8
+msgid "Show the cpu usage field in the domain list summary view"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:9
+msgid "Show the disk usage field in the domain list summary view"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:10
+msgid "Show the domain id field in the domain list summary view"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:11
+msgid "Show the memory usage field in the domain list summary view"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:12
+msgid "Show the network traffic field in the domain list summary view"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:13
+msgid "Show the run state field in the domain list summary view"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:14
+msgid "Show the virtual CPU count field in the domain list summary view"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:15
+msgid "The length of the list of URLs"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:16
+msgid "The number of samples to keep in the statistics history"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:17
+msgid ""
+"The number of urls to keep in the history for the install media address page."
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:18
+msgid "The statistics history length"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:19
+msgid "The statistics update interval"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:20
+msgid "The statistics update interval in seconds"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:21
+msgid "When to grab keyboard input for the console"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:22
+msgid "When to pop up a console for a guest"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:23
+msgid ""
+"Whether to grab keyboard input for a guest console. 0 = never, 1 = only when "
+"in full screen mode, 2 = when mouse is over console"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:24
+msgid ""
+"Whether to pop up a console for a guest. 0 = never, 1 = only on creation of "
+"a new guest, 2 = On creation of any guest"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:25
+msgid "Whether to show notification when grabbing mouse"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:26
+msgid ""
+"Whether to show the notification hint when grabbing the mouse in the console"
+msgstr ""
+
+#: ../../po/../src/virtManager/createnet.py:97
+#: ../../po/../src/virtManager/createnet.py:255
+#: ../../po/../src/virtManager/host.py:220
+#, python-format
+msgid "NAT to physical device %s"
+msgstr "物理デバイス %s への NAT"
+
+#: ../../po/../src/virtManager/createnet.py:152
+#, python-format
+msgid "%d addresses"
+msgstr "%d アドレス"
+
+#: ../../po/../src/virtManager/createnet.py:154
+msgid "Public"
+msgstr "公開"
+
+#: ../../po/../src/virtManager/createnet.py:158
+msgid "Reserved"
+msgstr "予約"
+
+#: ../../po/../src/virtManager/createnet.py:160
+msgid "Other"
+msgstr "他"
+
+#: ../../po/../src/virtManager/createnet.py:304
+#: ../../po/../src/virtManager/createnet.py:308
+msgid "Invalid Network Name"
+msgstr "無効なネットワーク名です"
+
+#: ../../po/../src/virtManager/createnet.py:305
+msgid "Network name must be non-blank and less than 50 characters"
+msgstr "システム名は50文字以内で空白を含まないようにしてください。"
+
+#: ../../po/../src/virtManager/createnet.py:309
+msgid "Network name may contain alphanumeric and '_' characters only"
+msgstr "ネットワーク名には英数字と '_' だけが使えます。"
+
+#: ../../po/../src/virtManager/createnet.py:316
+#: ../../po/../src/virtManager/createnet.py:321
+#: ../../po/../src/virtManager/createnet.py:326
+#: ../../po/../src/virtManager/createnet.py:331
+msgid "Invalid Network Address"
+msgstr "無効なネットワークアドレスです"
+
+#: ../../po/../src/virtManager/createnet.py:317
+msgid "The network address could not be understood"
+msgstr "ネットワークアドレスを理解できません"
+
+#: ../../po/../src/virtManager/createnet.py:322
+msgid "The network must be an IPv4 address"
+msgstr "ネットワークアドレスは IPv4 アドレスでなければなりません"
+
+#: ../../po/../src/virtManager/createnet.py:327
+msgid "The network prefix must be at least /4 (16 addresses)"
+msgstr "ネットワークプリフィクスは最小で /4 (16 アドレス)"
+
+#: ../../po/../src/virtManager/createnet.py:332
+msgid "The network must be an IPv4 private address"
+msgstr "ネットワークは IPv4 プライベートアドレスでなければなりません"
+
+#: ../../po/../src/virtManager/createnet.py:340
+#: ../../po/../src/virtManager/createnet.py:344
+#: ../../po/../src/virtManager/createnet.py:349
+#: ../../po/../src/virtManager/createnet.py:353
+msgid "Invalid DHCP Address"
+msgstr "無効な DHCP アドレスです"
+
+#: ../../po/../src/virtManager/createnet.py:341
+msgid "The DHCP start address could not be understood"
+msgstr "DHCP 開始アドレスを理解できません"
+
+#: ../../po/../src/virtManager/createnet.py:345
+msgid "The DHCP end address could not be understood"
+msgstr "DHCP 終了アドレスを理解できません"
+
+#: ../../po/../src/virtManager/createnet.py:350
+#, python-format
+msgid "The DHCP start address is not with the network %s"
+msgstr "DHCP 開始アドレスがネットワーク %s にありません"
+
+#: ../../po/../src/virtManager/createnet.py:354
+#, python-format
+msgid "The DHCP end address is not with the network %s"
+msgstr "DHCP 終了アドレスがネットワーク %s にありません"
+
+#: ../../po/../src/virtManager/createnet.py:360
+msgid "Invalid forwarding mode"
+msgstr "無効なフォワードモードです"
+
+#: ../../po/../src/virtManager/createnet.py:361
+msgid "Please select where the traffic should be forwarded"
+msgstr "トラフィックがフォワードされるところを選んで下さい"
+
+#: ../../po/../src/virtManager/createnet.py:406
+#: ../../po/../src/virtManager/create.py:987
+#: ../../po/../src/virtManager/create.py:1022
+msgid "No media present"
+msgstr "メディアがありません"
+
+#: ../../po/../src/virtManager/engine.py:87
+msgid ""
+"Unable to open a connection to the Xen hypervisor/daemon.\n"
+"\n"
+msgstr ""
+"Xen ハイパーバイザー/デーモンに対する接続を開けません。\n"
+"\n"
+
+#: ../../po/../src/virtManager/engine.py:88
+#: ../../po/../src/virtManager/engine.py:96
+msgid "Verify that:\n"
+msgstr "次の検証を行います:\n"
+
+#: ../../po/../src/virtManager/engine.py:89
+msgid " - A Xen host kernel was booted\n"
+msgstr " - Xen ホストカーネルが起動された\n"
+
+#: ../../po/../src/virtManager/engine.py:90
+msgid " - The Xen service has been started\n"
+msgstr " - Xen サービスが起動している\n"
+
+#: ../../po/../src/virtManager/engine.py:95
+#, fuzzy
+msgid ""
+"Unable to open a connection to the QEMU management daemon.\n"
+"\n"
+msgstr ""
+"Xen ハイパーバイザー/デーモンに対する接続を開けません。\n"
+"\n"
+
+#: ../../po/../src/virtManager/engine.py:97
+#, fuzzy
+msgid " - The 'libvirt_qemud' daemon has been started\n"
+msgstr " - Xen サービスが起動している\n"
+
+#: ../../po/../src/virtManager/engine.py:102
+#, python-format
+msgid "Unable to open connection to hypervisor '%s'"
+msgstr "ハイパーバイザー '%s に対する接続を開けません"
+
+#: ../../po/../src/virtManager/engine.py:104
+msgid "Virtual Machine Manager Connection Failure"
+msgstr "仮想マシンマネージャの接続障害"
+
+#: ../../po/../src/virtManager/engine.py:341
+msgid "Save Virtual Machine"
+msgstr "仮想マシンの保存"
+
+#: ../../po/../src/virtManager/engine.py:355
+msgid "Saving Virtual Machine"
+msgstr "仮想マシンの保存中"
+
+#: ../../po/../src/virtManager/engine.py:371
+#, python-format
+msgid "About to destroy virtual machine %s"
+msgstr "仮想マシン %s を強制終了しようとしています"
+
+#: ../../po/../src/virtManager/engine.py:372
+msgid ""
+"This will immediately destroy the VM and may corrupt its disk image. Are you "
+"sure?"
+msgstr ""
+"これは VM をただちに強制終了させるので、ディスクイメージを壊すかもしれませ"
+"ん。実行しますか?"
+
+#: ../../po/../src/virtManager/addhardware.py:245
+#: ../../po/../src/virtManager/create.py:456
+msgid "Shared physical device"
+msgstr "共用物理デバイス"
+
+#: ../../po/../src/virtManager/addhardware.py:248
+#: ../../po/../src/virtManager/create.py:459
+msgid "Virtual network"
+msgstr "仮想ネットワーク"
+
+#: ../../po/../src/virtManager/addhardware.py:251
+#: ../../po/../src/virtManager/create.py:462
+msgid "Usermode networking"
+msgstr "ユーザーモードネットワーク"
+
+#: ../../po/../src/virtManager/addhardware.py:328
+msgid "Invalid storage address"
+msgstr "無効なストレージアドレスです"
+
+#: ../../po/../src/virtManager/addhardware.py:351
+msgid "Too many virtual disks"
+msgstr "仮想ディスクが多すぎる"
+
+#: ../../po/../src/virtManager/addhardware.py:352
+msgid "There are no more available virtual disk device nodes"
+msgstr "もう利用可能な仮想ディスクデバイスノードがありません"
+
+#: ../../po/../src/virtManager/addhardware.py:356
+msgid "Creating Storage File"
+msgstr "ストレージファイルの作成"
+
+#: ../../po/../src/virtManager/addhardware.py:357
+msgid "Allocation of disk storage may take a few minutes "
+msgstr "ディスク領域の割り当てには"
+
+#: ../../po/../src/virtManager/addhardware.py:358
+#: ../../po/../src/virtManager/create.py:554
+msgid "to complete."
+msgstr "数分かかります"
+
+#: ../../po/../src/virtManager/addhardware.py:380
+#: ../../po/../src/virtManager/create.py:606
+#, python-format
+msgid "Unable to complete install: '%s'"
+msgstr "インストールを完了できません: '%s'"
+
+#: ../../po/../src/virtManager/addhardware.py:385
+#: ../../po/../src/virtManager/create.py:640
+msgid "Locate Storage Partition"
+msgstr "ストレージパーティションの検索"
+
+#: ../../po/../src/virtManager/addhardware.py:392
+#: ../../po/../src/virtManager/create.py:646
+msgid "Locate or Create New Storage File"
+msgstr "新しいストレージファイルの検索または作成"
+
+#: ../../po/../src/virtManager/addhardware.py:472
+msgid "Hardware Type Required"
+msgstr "ハードウェアタイプ必要です"
+
+#: ../../po/../src/virtManager/addhardware.py:473
+msgid "You must specify what type of hardware to add"
+msgstr "どんなタイプのハードウェアを追加するのか指定しなければなりません"
+
+#: ../../po/../src/virtManager/addhardware.py:479
+#: ../../po/../src/virtManager/create.py:810
+msgid "Storage Address Required"
+msgstr "ストレージアドレスが必要です"
+
+#: ../../po/../src/virtManager/addhardware.py:480
+#: ../../po/../src/virtManager/create.py:811
+msgid ""
+"You must specify a partition or a file for storage for the guest install"
+msgstr ""
+"ゲストのインストールにはストレージ用のファイルまたはパーティションを指定しな"
+"ければなりません"
+
+#: ../../po/../src/virtManager/addhardware.py:485
+msgid "Storage Address Is Directory"
+msgstr "ストレージアドレスがディレクトリーです"
+
+#: ../../po/../src/virtManager/addhardware.py:486
+msgid ""
+"You chose 'Simple File' storage for your storage method, but chose a "
+"directory instead of a file. Please enter a new filename or choose an "
+"existing file."
+msgstr ""
+"あなたはストレージの方法として'シンプルファイル'を選択しましたがファイルでは"
+"なく、ディレクトリーを選びました。新しいファイル名か、既存のファイルを入力し"
+"てください。"
+
+#: ../../po/../src/virtManager/addhardware.py:491
+#: ../../po/../src/virtManager/create.py:846
+#, python-format
+msgid "Disk \"%s\" is already in use by another guest!"
+msgstr "ディスク \"%s\" は既に他のゲストで使われています!"
+
+#: ../../po/../src/virtManager/addhardware.py:492
+#: ../../po/../src/virtManager/create.py:846
+msgid "Do you really want to use the disk ?"
+msgstr "本当にこのディスクを使いたいのですか?"
+
+#: ../../po/../src/virtManager/addhardware.py:498
+#: ../../po/../src/virtManager/create.py:853
+msgid "Virtual Network Required"
+msgstr "仮想ネットワークが必要です"
+
+#: ../../po/../src/virtManager/addhardware.py:499
+#: ../../po/../src/virtManager/create.py:854
+msgid "You must select one of the virtual networks"
+msgstr "仮想ネットワークの一つを選ばなければなりません"
+
+#: ../../po/../src/virtManager/addhardware.py:503
+#: ../../po/../src/virtManager/create.py:858
+msgid "Physical Device Required"
+msgstr "物理デバイスが必要です"
+
+#: ../../po/../src/virtManager/addhardware.py:504
+#: ../../po/../src/virtManager/create.py:859
+msgid "You must select one of the physical devices"
+msgstr "物理デバイスの一つを選ばなければなりません"
+
+#: ../../po/../src/virtManager/addhardware.py:510
+#: ../../po/../src/virtManager/addhardware.py:514
+#: ../../po/../src/virtManager/create.py:867
+#, fuzzy
+msgid "Invalid MAC address"
+msgstr "無効な DHCP アドレスです"
+
+#: ../../po/../src/virtManager/addhardware.py:511
+msgid "MAC adrress must be 17 characters"
+msgstr ""
+
+#: ../../po/../src/virtManager/addhardware.py:515
+msgid ""
+"MAC address must be a form such as AA:BB:CC:DD:EE:FF, and MAC adrress may "
+"contain numeric and alphabet of A-F(a-f) and ':' characters only"
+msgstr ""
+
+#: ../../po/../src/virtManager/addhardware.py:520
+#, fuzzy, python-format
+msgid "MAC adress \"%s\" is already in use by host!"
+msgstr "ディスク \"%s\" は既に他のゲストで使われています!"
+
+#: ../../po/../src/virtManager/addhardware.py:521
+#: ../../po/../src/virtManager/addhardware.py:528
+#: ../../po/../src/virtManager/create.py:880
+#: ../../po/../src/virtManager/create.py:904
+#, fuzzy
+msgid "Do you really want to use the MAC address ?"
+msgstr "本当にこのディスクを使いたいのですか?"
+
+#: ../../po/../src/virtManager/addhardware.py:527
+#, fuzzy, python-format
+msgid "MAC adress \"%s\" is already in use by another guest!"
+msgstr "ディスク \"%s\" は既に他のゲストで使われています!"
+
+#: ../../po/../src/virtManager/create.py:435
+msgid "Paravirtualized"
+msgstr "準仮想化"
+
+#: ../../po/../src/virtManager/create.py:439
+msgid "Fully virtualized"
+msgstr "完全仮想化"
+
+#: ../../po/../src/virtManager/create.py:495
+msgid "UUID Error"
+msgstr ""
+
+#: ../../po/../src/virtManager/create.py:500
+msgid "Error Setting up Disk"
+msgstr ""
+
+#: ../../po/../src/virtManager/create.py:505
+msgid "Error Setting up Network"
+msgstr ""
+
+#: ../../po/../src/virtManager/create.py:550
+msgid "Creating Virtual Machine"
+msgstr "仮想マシンを作成中"
+
+#: ../../po/../src/virtManager/create.py:551
+msgid "The virtual machine is now being created. "
+msgstr "仮想マシンは今作成中です"
+
+#: ../../po/../src/virtManager/create.py:552
+msgid "Allocation of disk storage and retrieval of "
+msgstr "ディスク領域の割り当てと"
+
+#: ../../po/../src/virtManager/create.py:553
+msgid "the installation images may take a few minutes "
+msgstr "インストールイメージの検索が完了するには数分かかります"
+
+#: ../../po/../src/virtManager/create.py:592
+msgid "Guest installation failed to complete"
+msgstr "ゲストのインストールに失敗しました"
+
+#: ../../po/../src/virtManager/create.py:611
+msgid "Locate ISO Image"
+msgstr "ISO イメージの検索"
+
+#: ../../po/../src/virtManager/create.py:736
+msgid "Invalid System Name"
+msgstr "無効なシステム名です"
+
+#: ../../po/../src/virtManager/create.py:760
+msgid "ISO Path Not Found"
+msgstr "ISO パスが見つかりません"
+
+#: ../../po/../src/virtManager/create.py:768
+msgid "CD-ROM Path Error"
+msgstr ""
+
+#: ../../po/../src/virtManager/create.py:777
+msgid "Invalid FV OS Type"
+msgstr "無効な FV OS タイプです"
+
+#: ../../po/../src/virtManager/create.py:785
+msgid "Invalid FV OS Variant"
+msgstr "無効な FV OS 種別です"
+
+#: ../../po/../src/virtManager/create.py:793
+msgid "Invalid Install URL"
+msgstr ""
+
+#: ../../po/../src/virtManager/create.py:800
+#, fuzzy
+msgid "Kickstart URL Error"
+msgstr "キックスタート URL (_R):"
+
+#: ../../po/../src/virtManager/create.py:801
+msgid "Kickstart location must be an NFS, HTTP or FTP source"
+msgstr ""
+
+#: ../../po/../src/virtManager/create.py:841
+#, fuzzy
+msgid "Invalid Storage Address"
+msgstr "無効なストレージアドレスです"
+
+#: ../../po/../src/virtManager/create.py:868
+msgid "No MAC address was entered. Please enter a valid MAC address."
+msgstr ""
+
+#: ../../po/../src/virtManager/create.py:873
+#, fuzzy
+msgid "Invalid Mac address"
+msgstr "無効なストレージアドレスです"
+
+#: ../../po/../src/virtManager/create.py:880
+#, fuzzy, python-format
+msgid "MAC address \"%s\" is already in use by host!"
+msgstr "ディスク \"%s\" は既に他のゲストで使われています!"
+
+#: ../../po/../src/virtManager/create.py:896
+#, fuzzy
+msgid "Network Parameter Error"
+msgstr "ネットワーク名:"
+
+#: ../../po/../src/virtManager/create.py:904
+#, fuzzy, python-format
+msgid "MAC address \"%s\" is already in use by another guest!"
+msgstr "ディスク \"%s\" は既に他のゲストで使われています!"
+
+#: ../../po/../src/virtManager/create.py:912
+msgid "VCPU Count Error"
+msgstr ""
+
+#: ../../po/../src/virtManager/create.py:919
+msgid "Memory Amount Error"
+msgstr ""
+
+#: ../../po/../src/virtManager/create.py:926
+msgid "Max Memory Amount Error"
+msgstr ""
+
+#. Expander section with details.
+#: ../../po/../src/virtManager/error.py:33
+msgid "Details"
+msgstr "詳細"
+
+#: ../../po/../src/virtManager/serialcon.py:35
+msgid "serial console"
+msgstr "シリアルコンソール"
+
+#: ../../po/../src/virtManager/asyncjob.py:102
+msgid "Completed"
+msgstr "完了"
+
+#: ../../po/../src/virtManager/console.py:135
+msgid "Press Ctrl+Alt to release pointer."
+msgstr "ポインターを解放するために Ctrl+Alt を押してください。"
+
+#: ../../po/../src/virtManager/console.py:143
+msgid "Pointer grabbed"
+msgstr "ポインターをつかまえました"
+
+#: ../../po/../src/virtManager/console.py:144
+msgid ""
+"The mouse pointer has been restricted to the virtual console window. To "
+"release the pointer press the key pair Ctrl+Alt"
+msgstr ""
+"マウスポインターは仮想コンソールウィンドーに制限されています。ポインターを解"
+"放するには Ctrl+Alt を押してください。"
+
+#: ../../po/../src/virtManager/console.py:147
+msgid "Do not show this notification in the future"
+msgstr ""
+
+#. If someone feels kind they could extend this code to allow
+#. user to choose what image format they'd like to save in....
+#: ../../po/../src/virtManager/console.py:323
+msgid "Save Virtual Machine Screenshot"
+msgstr "仮想マシンのスクリーンショットを保存"
+
+#: ../../po/../src/virtManager/console.py:356
+#, python-format
+msgid ""
+"The screenshot has been saved to:\n"
+"%s"
+msgstr ""
+"スクリーンショットは次の場所に保存されています:\n"
+"%s"
+
+#: ../../po/../src/virtManager/console.py:357
+msgid "Screenshot saved"
+msgstr "スクリーンショットが保存されました"
+
+#: ../../po/../src/virtManager/console.py:490
+msgid "paused"
+msgstr "一時停止されました"
+
+#: ../../po/../src/virtManager/host.py:182
+msgid "Active"
+msgstr "動作中"
+
+#: ../../po/../src/virtManager/host.py:190
+msgid "Inactive"
+msgstr "停止"
+
+#: ../../po/../src/virtManager/host.py:203
+msgid "On boot"
+msgstr "ブート中"
+
+#: ../../po/../src/virtManager/host.py:206
+msgid "Never"
+msgstr "未"
+
+#: ../../po/../src/virtManager/domain.py:389
+msgid "Paused"
+msgstr "一時停止"
+
+#: ../../po/../src/virtManager/domain.py:393
+msgid "Shutoff"
+msgstr "シャットオフ"
+
+#: ../../po/../src/virtManager/domain.py:395
+msgid "Crashed"
+msgstr "クラッシュ"
+
+#: ../../po/../src/virtManager/domain.py:397
+msgid "Unknown status code"
+msgstr "不明な状態コード"
+
+#. get filename
+#: ../../po/../src/virtManager/manager.py:241
+msgid "Restore Virtual Machine"
+msgstr "仮想マシンの復元"
+
+#: ../../po/../src/virtManager/manager.py:257
+msgid "Restoring Virtual Machine"
+msgstr "仮想マシンを復元中"
+
+#: ../../po/../src/virtManager/manager.py:264
+#, python-format
+msgid "The file '%s' does not appear to be a valid saved machine image"
+msgstr "ファイル '%s' は正しく保存されたマシンイメージではありません。"
+
+#: ../../po/../src/virtManager/manager.py:292
+#, python-format
+msgid "Error restoring domain '%s'. Is the domain already running?"
+msgstr ""
+"ドメイン「%s」を復元中にエラーが発生しました。 このドメインはすでに実行中では"
+"ないですか?"
+
+#: ../../po/../src/virtManager/manager.py:516
+msgid "ID"
+msgstr "ID"
+
+#: ../../po/../src/virtManager/manager.py:520
+msgid "VCPUs"
+msgstr "VCPU"
+
+#~ msgid "Invalid FV media address"
+#~ msgstr "無効な FV メディアアドレスです"
+
+#~ msgid "Invalid PV media address"
+#~ msgstr "無効な PV メディアアドレスです"
+
+#~ msgid "Invalid system name"
+#~ msgstr "無効なシステム名です"
+
+#~ msgid "Invalid memory setting"
+#~ msgstr "無効なメモリ設定です"
+
+#~ msgid "System name must be non-blank and less than 50 characters"
+#~ msgstr ""
+#~ "システム名には空白を含まないようにして、 50 文字以内にしてください。"
+
+#~ msgid "System name may contain alphanumeric and '_' characters only"
+#~ msgstr "システム名にはアルファベットと '_' だけが使えます。"
+
+#~ msgid "Hardware Support Required"
+#~ msgstr "ハードウェアのサポートが必要になります"
+
+#~ msgid ""
+#~ "Your hardware does not appear to support full virtualization. Only "
+#~ "paravirtualized guests will be available on this hardware."
+#~ msgstr ""
+#~ "ご使用のハードウェアは完全仮想化をサポートしていないようです。 このハード"
+#~ "ウェア上では準仮想化のゲストしか使用できません。"
+
+#~ msgid "ISO Path Required"
+#~ msgstr "ISO パスが必要です"
+
+#~ msgid "You must specify an ISO location for the guest installation"
+#~ msgstr "ゲストのインストールには ISO の場所を指定しなければなりません"
+
+#~ msgid ""
+#~ "You must specify a valid path to the ISO image for guest installation"
+#~ msgstr ""
+#~ "ゲストのインストールには ISO イメージへの有効なパスを指定しなければなりま"
+#~ "せん"
+
+#~ msgid "Install media required"
+#~ msgstr "インストールメディアが必要です"
+
+#~ msgid "You must select the CDROM install media for guest installation"
+#~ msgstr ""
+#~ "ゲストのインストールには CDROM のインストールメディアを選択しなければなり"
+#~ "ません"
+
+#~ msgid "URL Required"
+#~ msgstr "URL が必要です"
+
+#~ msgid "You must specify a URL for the install image for the guest install"
+#~ msgstr ""
+#~ "ゲストのインストールにはインストールイメージの URL を指定しなければなりま"
+#~ "せん"
 
 #~ msgid "_Read only connection"
 #~ msgstr "読み込み専用接続 (_R)"
@@ -2087,9 +2358,6 @@ msgstr "秒"
 
 #~ msgid "Randomly generated MAC address"
 #~ msgstr "MAC アドレスがランダムに生成されました"
-
-#~ msgid "Specified MAC address:"
-#~ msgstr "指定 MAC アドレス:"
 
 #~ msgid "mac-addr-random"
 #~ msgstr "mac-addr-random"
