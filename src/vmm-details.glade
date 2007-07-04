@@ -170,9 +170,22 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="details_help">
 		      <property name="visible">True</property>
-		      <property name="label">gtk-help</property>
-		      <property name="use_stock">True</property>
+		      <property name="label" translatable="yes">_Contents</property>
+		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_details_help_activate" last_modification_time="Fri, 16 Mar 2007 19:22:15 GMT"/>
+		      <accelerator key="F1" modifiers="0" signal="activate"/>
+
+		      <child internal-child="image">
+			<widget class="GtkImage" id="image76">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-help</property>
+			  <property name="icon_size">1</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
 		    </widget>
 		  </child>
 		</widget>

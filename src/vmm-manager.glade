@@ -52,7 +52,7 @@
 		      <accelerator key="n" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image106">
+			<widget class="GtkImage" id="image118">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -75,7 +75,7 @@
 		      <accelerator key="r" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image107">
+			<widget class="GtkImage" id="image119">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -102,7 +102,7 @@
 		      <signal name="activate" handler="on_menu_file_open_connection_activate" last_modification_time="Mon, 12 Jun 2006 20:34:47 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image108">
+			<widget class="GtkImage" id="image120">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>
@@ -169,7 +169,7 @@
 		      <signal name="activate" handler="on_menu_edit_details_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image109">
+			<widget class="GtkImage" id="image121">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-properties</property>
 			  <property name="icon_size">1</property>
@@ -190,7 +190,7 @@
 		      <signal name="activate" handler="on_menu_edit_delete_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image110">
+			<widget class="GtkImage" id="image122">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-delete</property>
 			  <property name="icon_size">1</property>
@@ -317,9 +317,22 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_help">
 		      <property name="visible">True</property>
-		      <property name="label">gtk-help</property>
-		      <property name="use_stock">True</property>
+		      <property name="label" translatable="yes">_Contents</property>
+		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_menu_help_activate" last_modification_time="Thu, 08 Mar 2007 17:55:25 GMT"/>
+		      <accelerator key="F1" modifiers="0" signal="activate"/>
+
+		      <child internal-child="image">
+			<widget class="GtkImage" id="image123">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-help</property>
+			  <property name="icon_size">1</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
 		    </widget>
 		  </child>
 
