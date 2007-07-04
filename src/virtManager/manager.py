@@ -462,6 +462,7 @@ class vmmManager(gobject.GObject):
             if vm.is_read_only() == True:
                 self.vmmenu_items["run"].set_sensitive(False)
                 self.vmmenu_items["pause"].set_sensitive(False)
+                self.vmmenu_items["pause"].show()
                 self.vmmenu_items["resume"].hide()
                 self.vmmenu_items["resume"].set_sensitive(False)
                 self.vmmenu_items["shutdown"].set_sensitive(False)
@@ -469,12 +470,14 @@ class vmmManager(gobject.GObject):
                 if vm.status() == libvirt.VIR_DOMAIN_SHUTOFF:
                     self.vmmenu_items["run"].set_sensitive(True)
                     self.vmmenu_items["pause"].set_sensitive(False)
+                    self.vmmenu_items["pause"].show()
                     self.vmmenu_items["resume"].hide()
                     self.vmmenu_items["resume"].set_sensitive(False)
                     self.vmmenu_items["shutdown"].set_sensitive(False)
                 elif vm.status() == libvirt.VIR_DOMAIN_RUNNING:
                     self.vmmenu_items["run"].set_sensitive(False)
                     self.vmmenu_items["pause"].set_sensitive(True)
+                    self.vmmenu_items["pause"].show()
                     self.vmmenu_items["resume"].hide()
                     self.vmmenu_items["resume"].set_sensitive(False)
                     self.vmmenu_items["shutdown"].set_sensitive(True)
