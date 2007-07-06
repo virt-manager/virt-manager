@@ -1,5 +1,5 @@
 
-SUBDIRS = vncViewer graphWidgets virtManager
+SUBDIRS = graphWidgets virtManager
 
 bin_SOURCES = virt-manager.in
 bin_SCRIPTS = virt-manager

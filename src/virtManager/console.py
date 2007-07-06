@@ -25,9 +25,14 @@ import sys
 import logging
 import dbus
 import traceback
+import gtkvnc
 
 from virtManager.error import vmmErrorDialog
-from vncViewer.vnc import GRFBViewer
+
+PAGE_UNAVAILABLE = 0
+PAGE_SCREENSHOT = 1
+PAGE_AUTHENTICATE = 2
+PAGE_VNCVIEWER = 3
 
 class vmmConsole(gobject.GObject):
     __gsignals__ = {
@@ -55,15 +60,19 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
+        self.vncViewer = gtkvnc.Display()
         if self.config.get_console_keygrab() == 2:
-            self.vncViewer = GRFBViewer(topwin, autograbkey=True)
-        else:
-            self.vncViewer = GRFBViewer(topwin, autograbkey=False)
-        self.vncViewer.connect("pointer-grabbed", self.notify_grabbed)
-        self.vncViewer.connect("pointer-ungrabbed", self.notify_ungrabbed)
+            self.vncViewer.set_keyboard_grab(True)
+
+        self.vncViewer.set_pointer_grab(True)
+        self.vncViewer.set_sticky_modifiers(True)
+
+        self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
+        self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
 
         self.window.get_widget("console-vnc-align").add(self.vncViewer)
         self.vncViewer.connect("size-request", self.autosize)
+        self.vncViewer.realize()
         self.vncViewer.show()
         self.vncViewerFailures = 0
         self.vncViewerRetryDelay = 125
@@ -106,13 +115,15 @@ class vmmConsole(gobject.GObject):
 
             "on_menu_vm_close_activate": self.close,
 
-            "on_console_auth_login_clicked": self.try_login,
+            "on_console_auth_login_clicked": self.set_password,
             "on_console_help_activate": self.show_help,
             })
 
         self.vm.connect("status-changed", self.update_widget_states)
 
-        self.vncViewer.connect("disconnected", self._vnc_disconnected)
+        self.vncViewer.connect("vnc-auth-credential", self._vnc_auth_credential)
+        self.vncViewer.connect("vnc-initialized", self._vnc_initialized)
+        self.vncViewer.connect("vnc-disconnected", self._vnc_disconnected)
 
     # Auto-increase the window size to fit the console - within reason
     # though, cos we don't want a min window size greater than the screen
@@ -169,18 +180,18 @@ class vmmConsole(gobject.GObject):
 
     def keygrab_changed(self, src, ignore1=None,ignore2=None,ignore3=None):
         if self.config.get_console_keygrab() == 2:
-            self.vncViewer.set_autograb_keyboard(True)
+            self.vncViewer.set_keyboard_grab(True)
         else:
-            self.vncViewer.set_autograb_keyboard(False)
+            self.vncViewer.set_keyboard_grab(False)
 
     def toggle_fullscreen(self, src):
         if src.get_active():
             self.window.get_widget("vmm-console").fullscreen()
-            if self.config.get_console_keygrab() == 1:
-                self.vncViewer.grab_keyboard()
+            #if self.config.get_console_keygrab() == 1:
+            #    self.vncViewer.grab_keyboard()
         else:
-            if self.config.get_console_keygrab() == 1:
-                self.vncViewer.ungrab_keyboard()
+            #if self.config.get_console_keygrab() == 1:
+            #    self.vncViewer.ungrab_keyboard()
             self.window.get_widget("vmm-console").unfullscreen()
 
     def toggle_toolbar(self, src):
@@ -193,7 +204,6 @@ class vmmConsole(gobject.GObject):
         dialog = self.window.get_widget("vmm-console")
         dialog.show_all()
         dialog.present()
-        self.try_login()
         self.update_widget_states(self.vm, self.vm.status())
 
     def show_help(self, src):
@@ -207,9 +217,9 @@ class vmmConsole(gobject.GObject):
             fs.set_active(False)
 
         self.window.get_widget("vmm-console").hide()
-        if self.vncViewer.is_connected():
+        if self.vncViewer.flags() & gtk.VISIBLE:
 	    try:
-                self.vncViewer.disconnect_from_host()
+                self.vncViewer.close()
 	    except:
 		logging.error("Failure when disconnecting from VNC server")
         return 1
@@ -220,21 +230,45 @@ class vmmConsole(gobject.GObject):
         return 0
 
     def _vnc_disconnected(self, src):
-        if self.is_visible():
-            self.try_login()
+        logging.debug("VNC disconnected")
+        self.vncViewerFailures = self.vncViewerFailures + 1
+        self.activate_unavailable_page()
+        if not self.is_visible():
+            return
+
+        if self.vncViewerFailures < 10:
+            self.schedule_retry()
+        else:
+            logging.error("Too many connection failures, not retrying again")
+
+    def _vnc_initialized(self, src):
+        logging.debug("VNC initialized")
+        self.activate_viewer_page()
+
+        # Had a succesfull connect, so reset counters now
+        self.vncViewerFailures = 0
+        self.vncViewerRetryDelay = 125
+
+    def schedule_retry(self):
+        logging.warn("Retrying connection in %d ms", self.vncViewerRetryDelay)
+        gobject.timeout_add(self.vncViewerRetryDelay, self.retry_login)
+        if self.vncViewerRetryDelay < 2000:
+            self.vncViewerRetryDelay = self.vncViewerRetryDelay * 2
 
     def retry_login(self):
         gtk.gdk.threads_enter()
         try:
+            logging.debug("Got timed retry")
             self.try_login()
             return False
         finally:
             gtk.gdk.threads_leave()
 
     def try_login(self, src=None):
-        if self.vm.get_id() == 0:
+        if self.vm.get_id() <= 0:
             return
 
+        logging.debug("Trying console login")
         password = self.window.get_widget("console-auth-password").get_text()
         protocol, host, port = self.vm.get_graphics_console()
 
@@ -245,56 +279,47 @@ class vmmConsole(gobject.GObject):
         uri = str(protocol) + "://" + str(host) + ":" + str(port)
         logging.debug("Graphics console configured at " + uri)
 
+        if int(port) == -1:
+            self.schedule_retry()
+            return
+
         if protocol != "vnc":
+            logging.debug("Not a VNC console, disabling")
             self.activate_unavailable_page()
             return
 
-        if not(self.vncViewer.is_connected()):
-	    try:
-                self.vncViewer.connect_to_host(host, port)
-	    except:
-                self.vncViewerFailures = self.vncViewerFailures + 1
-                logging.warn("Unable to activate console " + uri + ": " + str((sys.exc_info())[0]) + " " + str((sys.exc_info())[1]))
-                self.activate_unavailable_page()
-                if self.vncViewerFailures < 10:
-                    logging.warn("Retrying connection in %d ms", self.vncViewerRetryDelay)
-                    gobject.timeout_add(self.vncViewerRetryDelay, self.retry_login)
-                    if self.vncViewerRetryDelay < 2000:
-                        self.vncViewerRetryDelay = self.vncViewerRetryDelay * 2
-                else:
-                    logging.error("Too many connection failures, not retrying again")
-		return
+        logging.debug("Starting connect process for %s %s" % (host, str(port)))
+        try:
+            self.vncViewer.open_name(host, str(port))
+        except:
+            (type, value, stacktrace) = sys.exc_info ()
+            details = \
+                    "Unable to start virtual machine '%s'" % \
+                    (str(type) + " " + str(value) + "\n" + \
+                     traceback.format_exc (stacktrace))
+            logging.error(details)
 
-        # Had a succesfull connect, so reset counters now
-        self.vncViewerFailures = 0
-        self.vncViewerRetryDelay = 125
+    def set_password(self, src=None):
+        logging.debug("Setting a password to " . str(src.get_text()))
 
-        if self.vncViewer.is_authenticated():
-            self.activate_viewer_page()
-        elif password or not(self.vncViewer.needs_password()):
-            if self.vncViewer.authenticate(password) == 1:
-                if self.window.get_widget("console-auth-remember").get_active():
-                    self.config.set_console_password(self.vm, password)
-                else:
-                    self.config.clear_console_password(self.vm)
-                self.activate_viewer_page()
-                self.vncViewer.activate()
-            else:
-                # Our VNC console doesn't like it when password is
-                # wrong and gets out of sync in its state machine
-                # So we force disconnect
-                self.vncViewer.disconnect_from_host()
-                self.activate_auth_page()
-        else:
-            self.activate_auth_page()
+        self.vncViewer.set_credential(gtkvnc.CREDENTIAL_PASSWORD, src.get_text())
 
+    def _vnc_auth_credential(self, src, type):
+        logging.debug("Got credential request %d", type)
+        if type != gtkvnc.CREDENTIAL_PASSWORD:
+            # Force it to stop re-trying
+            self.vncViewerFailures = 10
+            self.vncViewer.close()
+            return
+
+        self.activate_auth_page()
 
     def activate_unavailable_page(self):
-        self.window.get_widget("console-pages").set_current_page(0)
+        self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
         self.window.get_widget("menu-vm-screenshot").set_sensitive(False)
 
     def activate_screenshot_page(self):
-        self.window.get_widget("console-pages").set_current_page(1)
+        self.window.get_widget("console-pages").set_current_page(PAGE_SCREENSHOT)
         self.window.get_widget("menu-vm-screenshot").set_sensitive(True)
 
     def activate_auth_page(self):
@@ -310,10 +335,10 @@ class vmmConsole(gobject.GObject):
                 self.window.get_widget("console-auth-remember").set_active(False)
         else:
             self.window.get_widget("console-auth-remember").set_sensitive(False)
-        self.window.get_widget("console-pages").set_current_page(2)
+        self.window.get_widget("console-pages").set_current_page(PAGE_AUTHENTICATE)
 
     def activate_viewer_page(self):
-        self.window.get_widget("console-pages").set_current_page(3)
+        self.window.get_widget("console-pages").set_current_page(PAGE_VNCVIEWER)
         self.window.get_widget("menu-vm-screenshot").set_sensitive(True)
         self.vncViewer.grab_focus()
 
@@ -468,13 +493,14 @@ class vmmConsole(gobject.GObject):
                 self.window.get_widget("menu-vm-pause").set_active(False)
 
         if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_management_domain():
-            self.window.get_widget("console-pages").set_current_page(0)
+            if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
+                self.vncViewer.close()
+                self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
         else:
             if status == libvirt.VIR_DOMAIN_PAUSED:
                 screenshot = None
-                if self.vncViewer.is_authenticated():
+                if self.window.get_widget("console-pages").get_current_page() == PAGE_VNCVIEWER:
                     screenshot = self.vncViewer.take_screenshot()
-                if screenshot != None:
                     cr = screenshot.cairo_create()
                     width, height = screenshot.get_size()
 
@@ -496,15 +522,14 @@ class vmmConsole(gobject.GObject):
                     self.window.get_widget("console-screenshot").set_from_pixmap(screenshot, None)
                     self.activate_screenshot_page()
                 else:
+                    if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
+                        self.vncViewer.close()
                     self.activate_unavailable_page()
             else:
-                # State changed, so better let it try connecting again
-                self.vncViewerFailures = 0
-                self.vncViewerRetryDelay = 125
-                try:
+                if self.window.get_widget("console-pages").get_current_page() == PAGE_UNAVAILABLE:
+                    self.vncViewerFailures = 0
+                    self.vncViewerRetryDelay = 125
                     self.try_login()
-                except:
-                    logging.error("Couldn't open console " + str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
                     self.ignorePause = False
         self.ignorePause = False
 
