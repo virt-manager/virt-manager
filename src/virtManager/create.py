@@ -103,7 +103,8 @@ class vmmCreate(gobject.GObject):
         self.set_initial_state()
 
         # Guest to fill in with values along the way
-        self._guest = virtinst.Guest(type=self.get_domain_type())
+        self._guest = virtinst.Guest(type=self.get_domain_type(),
+                                     hypervisorURI=self.connection.get_uri())
         self._disk = None
         self._net = None
 
@@ -217,7 +218,7 @@ class vmmCreate(gobject.GObject):
 
         # If we don't have full-virt support disable the choice, and
         # display a message telling the user why it is not working
-        if self.connection.get_type() == "QEMU":
+        if self.connection.get_type().lower() == "qemu":
             self.window.get_widget("virt-method-pv").set_sensitive(False)
             self.window.get_widget("virt-method-fv").set_active(True)
             self.window.get_widget("virt-method-fv-unsupported").hide()
@@ -740,12 +741,12 @@ class vmmCreate(gobject.GObject):
             # Set up appropriate guest object dependent on selected type
             name = self._guest.name
             if self.get_config_method() == VM_PARA_VIRT:
-                self._guest = virtinst.ParaVirtGuest(\
-                                        type=self.get_domain_type())
+                self._guest = virtinst.ParaVirtGuest(type=self.get_domain_type(),
+                                                     hypervisorURI=self.connection.get_uri())
             else:
-                self._guest = virtinst.FullVirtGuest(\
-                                        type=self.get_domain_type(), \
-                                        arch=self.get_domain_arch())
+                self._guest = virtinst.FullVirtGuest(type=self.get_domain_type(),
+                                                     arch=self.get_domain_arch(),
+                                                     hypervisorURI=self.connection.get_uri())
             
             self._guest.name = name # Transfer name over
 
