@@ -150,6 +150,11 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("non-sparse").set_active(True)
         self.window.get_widget("hardware-type").set_active(0)
 
+        self.window.get_widget("net-type-network").set_active(True)
+        self.window.get_widget("net-type-device").set_active(False)
+        self.window.get_widget("mac-address").set_active(False)
+        self.window.get_widget("create-mac-address").set_text("")
+
         net_box = self.window.get_widget("net-network")
         self.populate_network_model(net_box.get_model())
         net_box.set_active(0)
@@ -517,14 +522,25 @@ class vmmAddHardware(gobject.GObject):
                 hostdevs = virtinst.util.get_host_network_devices()
                 for hostdev in hostdevs:
                     if mac.lower() == hostdev[4]:
-                        return self._yes_no_box(_('MAC adress "%s" is already in use by host!' % mac), \
-                                                _("Do you really want to use the MAC address ?"))
+                        return self._validation_error_box(_('MAC address "%s" is already in use by the host') % mac, \
+                                                          _("Please enter a different MAC address or select no fixed MAC address"))
                 vms = []
                 for domains in self.vm.get_connection().vms.values():
                     vms.append(domains.vm)
+
+                # get inactive Domains
+                inactive_vm = []
+                names = self.vm.get_connection().vmm.listDefinedDomains()
+                for name in names:
+                    vm = self.vm.get_connection().vmm.lookupByName(name)
+                    inactive_vm.append(vm)
+
                 vnic = virtinst.VirtualNetworkInterface(macaddr=mac)
-                if vnic.countMACaddr(vms) > 0:
-                    return self._yes_no_box(_('MAC adress "%s" is already in use by another guest!' % mac), \
+                if (vnic.countMACaddr(vms) - vnic.countMACaddr(inactive_vm)) > 0:
+                    return self._validation_error_box(_('MAC address "%s" is already in use by an active guest') % mac, \
+                                                      _("Please enter a different MAC address or select no fixed MAC address"))
+                elif vnic.countMACaddr(inactive_vm) > 0:
+                    return self._yes_no_box(_('MAC address "%s" is already in use by another inactive guest!') % mac, \
                                             _("Do you really want to use the MAC address ?"))
 
         return True
