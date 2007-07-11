@@ -161,37 +161,47 @@ class vmmConnection(gobject.GObject):
     def get_type(self):
         return self.vmm.getType()
 
-    def get_hostname(self):
-        hostname = "localhost"
+    def get_local_hostname(self):
         try:
             (host, aliases, ipaddrs) = gethostbyaddr(gethostname())
-            hostname = host
+            return host
         except:
             logging.warning("Unable to resolve local hostname for machine")
-
-        if self.get_type()[0:3] == "Xen" and self.uri == "xen" or self.uri == "Xen" or self.uri is None:
-            return hostname
-
-        if self.get_type() == "QEMU" and ( self.uri == "qemu:///session" or self.uri == "qemu://system"):
-            return hostname
-
-        try:
-            urlbits = urlparse(self.uri)
-            return urlbits.netloc
-        except:
-            return hostname
+            return "localhost"
 
     def get_name(self):
-        if self.get_type()[0:3] == "Xen":
-            return "Xen: " + self.get_hostname()
-        elif self.get_type() == "QEMU":
-            if self.uri == "qemu:///session":
-                return "QEMU session: " + self.get_hostname()
-            else:
-                return "QEMU system: " + self.get_hostname()
-        else:
-            return self.get_type() + ":" + self.get_hostname()
+        try:
+            (scheme, netloc, path, query, fragment) = self.uri_split()
 
+            i = scheme.find("+")
+            if i > 0:
+                scheme = scheme[0:i]
+
+            if netloc == "":
+                netloc = self.get_local_hostname()
+
+            if scheme == "xen":
+                return "Xen on %s" % netloc
+            elif scheme == "qemu":
+                if path == "/session":
+                    return "QEMU session on %s" % netloc
+                else:
+                    return "QEMU system on %s" % netloc
+            elif scheme == "test":
+                return "Test on %s" % netloc
+        except Exception, e:
+            logging.warning("Cannot parse URI %s: %s" % (self.uri, str(e)))
+
+        return self.uri
+
+    def is_remote(self):
+        try:
+            (scheme, netloc, path, query, fragment) = self.uri_split()
+            if netloc == "":
+                return False
+            return True
+        except:
+            return True
 
     def get_uri(self):
         return self.uri
@@ -577,6 +587,37 @@ class vmmConnection(gobject.GObject):
             if i == 3 or i == 5 or i == 7 or i == 9:
                 uuid.append('-')
         return "".join(uuid)
+
+
+    # Standard python urlparse is utterly braindead - refusing to parse URIs
+    # in any useful fashion unless the 'scheme' is in some pre-defined white
+    # list. Theis functions is a hacked version of urlparse
+
+    def uri_split(self):
+        uri = self.uri
+        netloc = query = fragment = ''
+        i = uri.find(":")
+        if i > 0:
+            scheme, uri = uri[:i].lower(), uri[i+1:]
+            if uri[:2] == '//':
+                netloc, uri = self._splitnetloc(uri, 2)
+            if '#' in uri:
+                uri, fragment = uri.split('#', 1)
+            if '?' in uri:
+                uri, query = uri.split('?', 1)
+        else:
+            scheme = uri.lower()
+
+        return scheme, netloc, uri, query, fragment
+
+    def _splitnetloc(self, url, start=0):
+        for c in '/?#': # the order is important!
+            delim = url.find(c, start)
+            if delim >= 0:
+                break
+        else:
+            delim = len(url)
+        return url[start:delim], url[delim:]
 
 gobject.type_register(vmmConnection)
 
