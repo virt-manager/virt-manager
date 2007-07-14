@@ -31,11 +31,19 @@ from virtManager.addhardware import vmmAddHardware
 import virtinst
 import urlgrabber.progress as progress
 
-# HW types for the hw list model
-VMM_HW_CPU = 0
-VMM_HW_MEMORY = 1
-VMM_HW_DISK = 2
-VMM_HW_NIC = 3
+# Columns in hw list model
+HW_LIST_COL_LABEL = 0
+HW_LIST_COL_STOCK_ID = 1
+HW_LIST_COL_STOCK_SIZE = 2
+HW_LIST_COL_PIXBUF = 3
+HW_LIST_COL_TYPE = 4
+HW_LIST_COL_DEVICE = 5
+
+# Types for the hw list model
+HW_LIST_TYPE_CPU = 0
+HW_LIST_TYPE_MEMORY = 1
+HW_LIST_TYPE_DISK = 2
+HW_LIST_TYPE_NIC = 3
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
@@ -50,6 +58,8 @@ class vmmDetails(gobject.GObject):
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),
         }
+
+
     def __init__(self, config, vm):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-details.glade", "vmm-details", domain="virt-manager")
@@ -124,8 +134,6 @@ class vmmDetails(gobject.GObject):
 
         self.pixbuf_processor = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
         self.pixbuf_memory = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
-        self.pixbuf_disk =  gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_hdd.png")
-        self.pixbuf_nic =  gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_ethernet.png")
         self.prepare_hw_list()
         self.hw_selected()
 
@@ -171,22 +179,22 @@ class vmmDetails(gobject.GObject):
         selection = vmlist.get_selection()
         active = selection.get_selected()
         if active[1] != None:
-            pagetype = active[0].get_value(active[1], 2)
+            pagetype = active[0].get_value(active[1], HW_LIST_COL_TYPE)
             self.window.get_widget("hw-panel").set_sensitive(True)
 
             pagenum = -1
-            if pagetype == VMM_HW_CPU:
+            if pagetype == HW_LIST_TYPE_CPU:
                 self.window.get_widget("config-vcpus-apply").set_sensitive(False)
                 self.refresh_config_cpu()
                 pagenum = 0
-            elif pagetype == VMM_HW_MEMORY:
+            elif pagetype == HW_LIST_TYPE_MEMORY:
                 self.window.get_widget("config-memory-apply").set_sensitive(False)
                 self.refresh_config_memory()
                 pagenum = 1
-            elif pagetype == VMM_HW_DISK:
+            elif pagetype == HW_LIST_TYPE_DISK:
                 self.refresh_disk_page()
                 pagenum = 2
-            elif pagetype == VMM_HW_NIC:
+            elif pagetype == HW_LIST_TYPE_NIC:
                 self.refresh_network_page()
                 pagenum = 3
 
@@ -328,16 +336,16 @@ class vmmDetails(gobject.GObject):
             selection = hw_list.get_selection()
             active = selection.get_selected()
             if active[1] != None:
-                pagetype = active[0].get_value(active[1], 2)
-                device_info = active[0].get_value(active[1], 3)
+                pagetype = active[0].get_value(active[1], HW_LIST_COL_TYPE)
+                device_info = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
                 hw_model = hw_list.get_model()
-                if pagetype == VMM_HW_CPU:
+                if pagetype == HW_LIST_TYPE_CPU:
                     self.refresh_config_cpu()
-                elif pagetype == VMM_HW_MEMORY:
+                elif pagetype == HW_LIST_TYPE_MEMORY:
                     self.refresh_config_memory()
-                elif pagetype == VMM_HW_DISK:
+                elif pagetype == HW_LIST_TYPE_DISK:
                     self.refresh_disk_page()
-                elif pagetype == VMM_HW_NIC:
+                elif pagetype == HW_LIST_TYPE_NIC:
                     self.refresh_network_page()
 
     def refresh_summary(self):
@@ -398,7 +406,7 @@ class vmmDetails(gobject.GObject):
         selection = vmlist.get_selection()
         active = selection.get_selected()
         if active[1] != None:
-            diskinfo = active[0].get_value(active[1], 3)
+            diskinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
             self.window.get_widget("disk-source-type").set_text(diskinfo[0])
             self.window.get_widget("disk-source-path").set_text(diskinfo[1])
             self.window.get_widget("disk-target-type").set_text(diskinfo[2])
@@ -409,7 +417,7 @@ class vmmDetails(gobject.GObject):
         selection = vmlist.get_selection()
         active = selection.get_selected()
         if active[1] != None:
-            netinfo = active[0].get_value(active[1], 3)
+            netinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
             self.window.get_widget("network-source-type").set_text(netinfo[0])
             if netinfo[1] is not None:
                 self.window.get_widget("network-source-device").set_text(netinfo[1])
@@ -455,7 +463,7 @@ class vmmDetails(gobject.GObject):
         selection = vmlist.get_selection()
         active = selection.get_selected()
         if active[1] != None:
-            diskinfo = active[0].get_value(active[1], 3)
+            diskinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
 
             vbd = virtinst.VirtualDisk(path=diskinfo[1], type=diskinfo[0], device=diskinfo[2])
             xml = vbd.get_xml_config(diskinfo[3])
@@ -467,7 +475,7 @@ class vmmDetails(gobject.GObject):
         selection = vmlist.get_selection()
         active = selection.get_selected()
         if active[1] != None:
-            netinfo = active[0].get_value(active[1], 3)
+            netinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
 
             vnic = None
             if netinfo[0] == "bridge":
@@ -482,7 +490,7 @@ class vmmDetails(gobject.GObject):
 
 
     def prepare_hw_list(self):
-        hw_list_model = gtk.ListStore(str, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
+        hw_list_model = gtk.ListStore(str, str, int, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
         self.window.get_widget("hw-list").set_model(hw_list_model)
 
         hwCol = gtk.TreeViewColumn("Hardware")
@@ -490,8 +498,10 @@ class vmmDetails(gobject.GObject):
         hw_img = gtk.CellRendererPixbuf()
         hwCol.pack_start(hw_txt, True)
         hwCol.pack_start(hw_img, False)
-        hwCol.add_attribute(hw_txt, 'text', 0)
-        hwCol.add_attribute(hw_img, 'pixbuf', 1)
+        hwCol.add_attribute(hw_txt, 'text', HW_LIST_COL_LABEL)
+        hwCol.add_attribute(hw_img, 'stock-id', HW_LIST_COL_STOCK_ID)
+        hwCol.add_attribute(hw_img, 'stock-size', HW_LIST_COL_STOCK_SIZE)
+        hwCol.add_attribute(hw_img, 'pixbuf', HW_LIST_COL_PIXBUF)
         self.window.get_widget("hw-list").append_column(hwCol)
 
         self.populate_hw_list()
@@ -499,8 +509,8 @@ class vmmDetails(gobject.GObject):
     def populate_hw_list(self):
         hw_list_model = self.window.get_widget("hw-list").get_model()
         hw_list_model.clear()
-        hw_list_model.append(["Processor", self.pixbuf_processor, VMM_HW_CPU, []])
-        hw_list_model.append(["Memory", self.pixbuf_memory, VMM_HW_MEMORY, []])
+        hw_list_model.append(["Processor", None, 0, self.pixbuf_processor, HW_LIST_TYPE_CPU, []])
+        hw_list_model.append(["Memory", None, 0, self.pixbuf_memory, HW_LIST_TYPE_MEMORY, []])
         self.repopulate_hw_list()
 
     def repopulate_hw_list(self):
@@ -514,17 +524,22 @@ class vmmDetails(gobject.GObject):
             insertAt = 0
             currentDisks[disk[3]] = 1
             for row in hw_list_model:
-                if row[2] == VMM_HW_DISK and row[3][3] == disk[3]:
+                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and row[HW_LIST_COL_DEVICE][3] == disk[3]:
                     # Update metadata
-                    row[3] = disk
+                    row[HW_LIST_COL_DEVICE] = disk
                     missing = False
                 # The insert position must be *before* any NICs
-                if row[2] != VMM_HW_NIC:
+                if row[HW_LIST_COL_TYPE] != HW_LIST_TYPE_NIC:
                     insertAt = insertAt + 1
 
             # Add in row
             if missing:
-                hw_list_model.insert(insertAt, ["Disk %s" % disk[3], self.pixbuf_disk, VMM_HW_DISK, disk])
+                stock = gtk.STOCK_HARDDISK
+                if disk[2] == "cdrom":
+                    stock = gtk.STOCK_CDROM
+                elif disk[2] == "floppy":
+                    stock = gtk.STOCK_FLOPPY
+                hw_list_model.insert(insertAt, ["Disk %s" % disk[3], stock, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_DISK, disk])
 
         # Populate list of NICs
         currentNICs = {}
@@ -534,9 +549,9 @@ class vmmDetails(gobject.GObject):
             insertAt = 0
             currentNICs[nic[3]] = 1
             for row in hw_list_model:
-                if row[2] == VMM_HW_NIC and row[3][3] == nic[3]:
+                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and row[HW_LIST_COL_DEVICE][3] == nic[3]:
                     # Update metadata
-                    row[3] = nic
+                    row[HW_LIST_COL_DEVICE] = nic
                     missing = False
 
                 # Insert position is at end....
@@ -545,7 +560,7 @@ class vmmDetails(gobject.GObject):
 
             # Add in row
             if missing:
-                hw_list_model.insert(insertAt, ["NIC %s" % nic[3][-3:], self.pixbuf_nic, VMM_HW_NIC, nic])
+                hw_list_model.insert(insertAt, ["NIC %s" % nic[3][-9:], gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_NIC, nic])
 
         # Now remove any no longer current devs
         devs = range(len(hw_list_model))
@@ -555,18 +570,18 @@ class vmmDetails(gobject.GObject):
             row = hw_list_model[i]
             removeIt = False
 
-            if row[2] == VMM_HW_DISK and not currentDisks.has_key(row[3][3]):
+            if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and not currentDisks.has_key(row[HW_LIST_COL_DEVICE][3]):
                 removeIt = True
-            elif row[2] == VMM_HW_NIC and not currentNICs.has_key(row[3][3]):
+            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and not currentNICs.has_key(row[HW_LIST_COL_DEVICE][3]):
                 removeIt = True
 
             if removeIt:
                 # Re-select the first row, if we're viewing the device
                 # we're about to remove
                 (selModel, selIter) = hw_list.get_selection().get_selected()
-                selType = selModel.get_value(selIter, 2)
-                selInfo = selModel.get_value(selIter, 3)
-                if selType == row[2] and selInfo[3] == row[3][3]:
+                selType = selModel.get_value(selIter, HW_LIST_COL_TYPE)
+                selInfo = selModel.get_value(selIter, HW_LIST_COL_DEVICE)
+                if selType == row[HW_LIST_COL_TYPE] and selInfo[3] == row[HW_LIST_COL_DEVICE][3]:
                     hw_list.get_selection().select_iter(selModel.iter_nth_child(None, 0))
 
                 # Now actually remove it

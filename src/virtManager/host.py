@@ -47,7 +47,7 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("overview-cpus").set_text(str(self.conn.host_active_processor_count()))
         self.window.get_widget("overview-arch").set_text(self.conn.host_architecture())
 
-        netListModel = gtk.ListStore(str, str, gtk.gdk.Pixbuf)
+        netListModel = gtk.ListStore(str, str, str)
         self.window.get_widget("net-list").set_model(netListModel)
         self.populate_networks(netListModel)
 
@@ -59,7 +59,7 @@ class vmmHost(gobject.GObject):
         netCol.pack_start(net_txt, True)
         netCol.pack_start(net_img, False)
         netCol.add_attribute(net_txt, 'text', 1)
-        netCol.add_attribute(net_img, 'pixbuf', 2)
+        netCol.add_attribute(net_img, 'stock-id', 2)
 
         self.window.get_widget("net-list").append_column(netCol)
         self.window.get_widget("net-details").set_sensitive(False)
@@ -233,9 +233,7 @@ class vmmHost(gobject.GObject):
         model.clear()
         for uuid in self.conn.list_net_uuids():
             net = self.conn.get_net(uuid)
-            model.append([uuid, net.get_name(), gtk.gdk.pixbuf_new_from_file(self.config.get_icon_dir() + "/icon_ethernet.png")])
-
-        #model.append([None, "Add network", gtk.gdk.pixbuf_new_from_file(self.config.get_icon_dir() + "/icon_addnew.png")])
+            model.append([uuid, net.get_name(), gtk.STOCK_NETWORK])
 
 
 gobject.type_register(vmmHost)
