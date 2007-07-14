@@ -169,6 +169,17 @@ class vmmConnection(gobject.GObject):
             logging.warning("Unable to resolve local hostname for machine")
             return "localhost"
 
+    def get_hostname(self):
+        try:
+            (scheme, netloc, path, query, fragment) = self.uri_split()
+
+            if netloc != "":
+                return netloc
+        except Exception, e:
+            logging.warning("Cannot parse URI %s: %s" % (self.uri, str(e)))
+
+        return self.get_local_hostname()
+
     def get_name(self):
         try:
             (scheme, netloc, path, query, fragment) = self.uri_split()
