@@ -433,8 +433,7 @@ class vmmCreate(gobject.GObject):
             url_widget = self.window.get_widget("pv-media-url")
             url_widget.grab_focus()
         elif page_number == PAGE_DISK:
-            partwidget = self.window.get_widget("storage-partition-address")
-            filewidget = self.window.get_widget("storage-file-address")
+            self.change_storage_type()
         elif page_number == PAGE_NETWORK:
             pass
         elif page_number == PAGE_CPUMEM:
@@ -709,6 +708,16 @@ class vmmCreate(gobject.GObject):
         else:
             self.window.get_widget("storage-partition-box").set_sensitive(False)
             self.window.get_widget("storage-file-box").set_sensitive(True)
+            file = self.window.get_widget("storage-file-address").get_text()
+            if file is None or file == "":
+                dir = self.config.get_default_image_dir(self.connection)
+                file = os.path.join(dir, self.get_config_name() + ".img")
+                n = 1
+                while os.path.exists(file) and n < 100:
+                    file = os.path.join(dir, self.get_config_name() + "-" + str(n) + ".img")
+                    n = n + 1
+                if not os.path.exists(file):
+                    self.window.get_widget("storage-file-address").set_text(file)
             self.toggle_storage_size()
 
     def change_network_type(self, ignore=None):
