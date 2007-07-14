@@ -32,6 +32,7 @@ import tempfile
 import logging
 import dbus
 import traceback
+import statvfs
 
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
@@ -248,8 +249,9 @@ class vmmAddHardware(gobject.GObject):
 
     def page_changed(self, notebook, page, page_number):
         if page_number == PAGE_DISK:
-            target = self.window.get_widget("target-device").get_model()
-            self.populate_target_device_model(target)
+            target = self.window.get_widget("target-device")
+            if target.get_active() == -1:
+                self.populate_target_device_model(target.get_model())
         elif page_number == PAGE_NETWORK:
             pass
         elif page_number == PAGE_SUMMARY:
@@ -522,7 +524,6 @@ class vmmAddHardware(gobject.GObject):
                 self._validation_error_box(_("Hardware Type Required"), \
                                            _("You must specify what type of hardware to add"))
                 return False
-
         elif page_num == PAGE_DISK:
             disk = self.get_config_disk_image()
             if disk == None or len(disk) == 0:
@@ -536,17 +537,50 @@ class vmmAddHardware(gobject.GObject):
                                                _("You chose 'Simple File' storage for your storage method, but chose a directory instead of a file. Please enter a new filename or choose an existing file."))
                     return False
 
-            d = virtinst.VirtualDisk(self.get_config_disk_image(), self.get_config_disk_size(), sparse = self.is_sparse_file())
-            if d.is_conflict_disk(self.vm.get_connection().vmm) is True:
-               res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % disk), \
-                                               _("Do you really want to use the disk ?"))
-               return res
-           
             if self.window.get_widget("target-device").get_active() == -1:
-               self._validation_error_box(_("Target Device Required"),
-                                          _("You must select a target device for the disk"))
-               return False
+                self._validation_error_box(_("Target Device Required"),
+                                           _("You must select a target device for the disk"))
+                return False
 
+            if not self.window.get_widget("storage-partition").get_active():
+                disk = self.get_config_disk_image()
+                size = self.get_config_disk_size()
+                if not os.path.exists(disk):
+                    dir = os.path.dirname(os.path.abspath(disk))
+                    if not os.path.exists(dir):
+                        self._validation_error_box(_("Storage Path Does not exist"),
+                                                   _("The directory %s containing the disk image does not exist") % dir)
+                        return False
+                    else:
+                        vfs = os.statvfs(dir)
+                        avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
+                        need = size * 1024 * 1024
+                        if need > avail:
+                            if self.is_sparse_file():
+                                res = self._yes_no_box(_("Not Enough Free Space"),
+                                                       _("The filesystem will not have enough free space to fully allocate the sparse file when the guest is running. Use this path anyway?"))
+                                if not res:
+                                    return False
+                            else:
+                                self._validation_error_box(_("Not Enough Free Space"),
+                                                           _("There is not enough free space to create the disk"))
+                                return False
+
+            node, nodemax, device = self.get_config_disk_target()
+            if self.window.get_widget("storage-partition").get_active():
+                type = virtinst.VirtualDisk.TYPE_BLOCK
+            else:
+                type = virtinst.VirtualDisk.TYPE_FILE
+
+            d = virtinst.VirtualDisk(self.get_config_disk_image(),
+                                     self.get_config_disk_size(),
+                                     type = type,
+                                     sparse = self.is_sparse_file(),
+                                     device=device)
+            if d.is_conflict_disk(self.vm.get_connection().vmm) is True:
+                res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % disk), \
+                                       _("Do you really want to use the disk ?"))
+                return res
         elif page_num == PAGE_NETWORK:
             if self.window.get_widget("net-type-network").get_active():
                 if self.window.get_widget("net-network").get_active() == -1:
@@ -596,7 +630,7 @@ class vmmAddHardware(gobject.GObject):
         return True
 
     def _validation_error_box(self, text1, text2=None):
-        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
+        message_box = gtk.MessageDialog(self.window.get_widget("vmm-add-hardware"), \
                                                 0, \
                                                 gtk.MESSAGE_ERROR, \
                                                 gtk.BUTTONS_OK, \
@@ -607,8 +641,7 @@ class vmmAddHardware(gobject.GObject):
         message_box.destroy()
 
     def _yes_no_box(self, text1, text2=None):
-        #import pdb; pdb.set_trace()
-        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
+        message_box = gtk.MessageDialog(self.window.get_widget("vmm-add-hardware"), \
                                                 0, \
                                                 gtk.MESSAGE_WARNING, \
                                                 gtk.BUTTONS_YES_NO, \

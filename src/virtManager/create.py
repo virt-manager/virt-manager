@@ -25,6 +25,7 @@ import pango
 import libvirt
 import virtinst
 import os, sys
+import statvfs
 import re
 import subprocess
 import urlgrabber.progress as progress
@@ -819,7 +820,31 @@ class vmmCreate(gobject.GObject):
                 self._validation_error_box(_("Storage Address Required"), \
                                            _("You must specify a partition or a file for storage for the guest install"))
                 return False
-            
+
+            if not self.window.get_widget("storage-partition").get_active():
+                disk = self.get_config_disk_image()
+                size = self.get_config_disk_size()
+                if not os.path.exists(disk):
+                    dir = os.path.dirname(os.path.abspath(disk))
+                    if not os.path.exists(dir):
+                        self._validation_error_box(_("Storage Path Does not exist"),
+                                                   _("The directory %s containing the disk image does not exist") % dir)
+                        return False
+                    else:
+                        vfs = os.statvfs(dir)
+                        avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
+                        need = size * 1024 * 1024
+                        if need > avail:
+                            if self.is_sparse_file():
+                                res = self._yes_no_box(_("Not Enough Free Space"),
+                                                       _("The filesystem will not have enough free space to fully allocate the sparse file when the guest is running. Use this path anyway?"))
+                                if not res:
+                                    return False
+                            else:
+                                self._validation_error_box(_("Not Enough Free Space"),
+                                                           _("There is not enough free space to create the disk"))
+                                return False
+
             # Attempt to set disk
             filesize = None
             if self.get_config_disk_size() != None:
@@ -830,11 +855,11 @@ class vmmCreate(gobject.GObject):
                 else:
                     type = virtinst.VirtualDisk.TYPE_FILE
 
-                self._disk = virtinst.VirtualDisk(\
-                                        self.get_config_disk_image(), \
-                                        filesize, \
-                                        sparse = self.is_sparse_file(), \
-                                        type=type)
+                self._disk = virtinst.VirtualDisk(self.get_config_disk_image(),
+                                                  filesize,
+                                                  sparse = self.is_sparse_file(),
+                                                  device = virtinst.VirtualDisk.DEVICE_DISK,
+                                                  type = type)
 
                 if self._disk.type == virtinst.VirtualDisk.TYPE_FILE and \
                    self.get_config_method() == VM_PARA_VIRT and \
