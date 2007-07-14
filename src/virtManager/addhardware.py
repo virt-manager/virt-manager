@@ -127,6 +127,16 @@ class vmmAddHardware(gobject.GObject):
         device_list.pack_start(text, True)
         device_list.add_attribute(text, 'text', 0)
 
+        target_list = self.window.get_widget("target-device")
+        target_model = gtk.ListStore(str, int, str, str, str)
+        target_list.set_model(target_model)
+        icon = gtk.CellRendererPixbuf()
+        target_list.pack_start(icon, False)
+        target_list.add_attribute(icon, 'stock-id', 3)
+        text = gtk.CellRendererText()
+        target_list.pack_start(text, True)
+        target_list.add_attribute(text, 'text', 4)
+
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
@@ -158,10 +168,13 @@ class vmmAddHardware(gobject.GObject):
         net_box = self.window.get_widget("net-network")
         self.populate_network_model(net_box.get_model())
         net_box.set_active(0)
-        
+
         dev_box = self.window.get_widget("net-device")
         self.populate_device_model(dev_box.get_model())
         dev_box.set_active(0)
+
+        target_list = self.window.get_widget("target-device")
+        target_list.set_active(-1)
 
 
     def forward(self, ignore=None):
@@ -206,6 +219,13 @@ class vmmAddHardware(gobject.GObject):
         else:
             return self.window.get_widget("storage-file-size").get_value()
 
+    def get_config_disk_target(self):
+        target = self.window.get_widget("target-device")
+        node = target.get_model().get_value(target.get_active_iter(), 0)
+        maxnode = target.get_model().get_value(target.get_active_iter(), 1)
+        device = target.get_model().get_value(target.get_active_iter(), 2)
+        return node, maxnode, device
+
     def get_config_network(self):
         if os.getuid() != 0:
             return ["user"]
@@ -227,7 +247,8 @@ class vmmAddHardware(gobject.GObject):
 
     def page_changed(self, notebook, page, page_number):
         if page_number == PAGE_DISK:
-            pass
+            target = self.window.get_widget("target-device").get_model()
+            self.populate_target_device_model(target)
         elif page_number == PAGE_NETWORK:
             pass
         elif page_number == PAGE_SUMMARY:
@@ -314,17 +335,19 @@ class vmmAddHardware(gobject.GObject):
             raise ValueError, "Unsupported networking type " + net[0]
 
         vnic.setup(self.vm.get_connection().vmm)
-        xml = vnic.get_xml_config()
-        logging.debug("Adding network " + xml)
-        self.vm.add_device(xml)
+        self.add_device(vnic.get_xml_config())
 
     def add_storage(self):
+        node, maxnode, device = self.get_config_disk_target()
         filesize = None
         disk = None
         if self.get_config_disk_size() != None:
             filesize = self.get_config_disk_size() / 1024.0
         try:
-            disk = virtinst.VirtualDisk(self.get_config_disk_image(), filesize, sparse = self.is_sparse_file())
+            disk = virtinst.VirtualDisk(self.get_config_disk_image(),
+                                        filesize,
+                                        device = device,
+                                        sparse = self.is_sparse_file())
             if disk.type == virtinst.VirtualDisk.TYPE_FILE and \
                    not self.vm.is_hvm() \
                and virtinst.util.is_blktap_capable():
@@ -340,11 +363,16 @@ class vmmAddHardware(gobject.GObject):
 
         nodes = []
         if self.vm.is_hvm():
-            for n in range(4):
-                nodes.append("hd%c" % (ord('a')+n))
+            # QEMU, only hdc can be a CDROM
+            if self.vm.get_connection().get_type().lower() == "qemu" and \
+                   device == virtinst.VirtualDisk.DEVICE_CDROM:
+                nodes.append(node + "c")
+            else:
+                for n in range(maxnode):
+                    nodes.append("%s%c" % (node, ord('a')+n))
         else:
-            for n in range(26):
-                nodes.append("xvd%c" % (ord('a')+n))
+            for n in range(maxnode):
+                nodes.append("%s%c" % (node, ord('a')+n))
 
         node = None
         for n in nodes:
@@ -363,9 +391,25 @@ class vmmAddHardware(gobject.GObject):
                                      "to complete."))
         progWin.run()
 
-        xml = disk.get_xml_config(node)
-        logging.debug("Adding disk " + xml)
-        self.vm.add_device(xml)
+        if self.install_error == None:
+            self.add_device(disk.get_xml_config(node))
+
+    def add_device(self, xml):
+        logging.debug("Adding device " + xml)
+        try:
+            self.vm.add_device(xml)
+        except:
+            (type, value, stacktrace) = sys.exc_info ()
+
+            # Detailed error message, in English so it can be Googled.
+            details = \
+                    "Unable to complete install '%s'" % \
+                    (str(type) + " " + str(value) + "\n" + \
+                     traceback.format_exc (stacktrace))
+
+            self.install_error = _("Unable to complete install: '%s'") % str(value)
+            self.install_details = details
+            logging.error(details)
 
     def do_file_allocate(self, disk, asyncjob):
         meter = vmmCreateMeter(asyncjob)
@@ -496,6 +540,11 @@ class vmmAddHardware(gobject.GObject):
                res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % disk), \
                                                _("Do you really want to use the disk ?"))
                return res
+           
+            if self.window.get_widget("target-device").get_active() == -1:
+               self._validation_error_box(_("Target Device Required"),
+                                          _("You must select a target device for the disk"))
+               return False
 
         elif page_num == PAGE_NETWORK:
             if self.window.get_widget("net-type-network").get_active():
@@ -584,6 +633,20 @@ class vmmAddHardware(gobject.GObject):
             net = self.vm.get_connection().get_net_device(name)
             if net.is_shared():
                 model.append([net.get_bridge()])
+
+
+    def populate_target_device_model(self, model):
+        model.clear()
+        if self.vm.is_hvm():
+            model.append(["hd", 4, virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "IDE disk"])
+            model.append(["hd", 4, virtinst.VirtualDisk.DEVICE_CDROM, gtk.STOCK_CDROM, "IDE cdrom"])
+            model.append(["fd", 2, virtinst.VirtualDisk.DEVICE_FLOPPY, gtk.STOCK_FLOPPY, "Floppy disk"])
+            model.append(["sd", 7, virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "SCSI disk"])
+            if self.vm.get_connection().get_type().lower() == "xen":
+                model.append(["xvd", 26, virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "Virtual disk"])
+            #model.append(["usb", virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "USB disk"])
+        else:
+            model.append(["xvd", 26, virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "Virtual disk"])
 
     def is_sparse_file(self):
         if self.window.get_widget("non-sparse").get_active():
