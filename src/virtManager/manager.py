@@ -404,6 +404,15 @@ class vmmManager(gobject.GObject):
         row[8] = vm.current_memory_percentage()
         model.row_changed(row.path, row.iter)
 
+        if vm == self.current_vm():
+            if vm.is_active():
+                self.window.get_widget("vm-delete").set_sensitive(False)
+                self.window.get_widget("menu_edit_delete").set_sensitive(False)
+            else:
+                self.window.get_widget("vm-delete").set_sensitive(True)
+                self.window.get_widget("menu_edit_delete").set_sensitive(True)
+
+
     def current_vm(self):
         vmlist = self.window.get_widget("vm-list")
         selection = vmlist.get_selection()
