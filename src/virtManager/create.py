@@ -171,11 +171,12 @@ class vmmCreate(gobject.GObject):
         network_list.add_attribute(text, 'text', 1)
 
         device_list = self.window.get_widget("net-device")
-        device_model = gtk.ListStore(str)
+        device_model = gtk.ListStore(str, bool)
         device_list.set_model(device_model)
         text = gtk.CellRendererText()
         device_list.pack_start(text, True)
         device_list.add_attribute(text, 'text', 0)
+        device_list.add_attribute(text, 'sensitive', 1)
 
         # set up the lists for the os-type/os-variant widgets
         os_type_list = self.window.get_widget("os-type")
@@ -278,10 +279,12 @@ class vmmCreate(gobject.GObject):
         net_box = self.window.get_widget("net-network")
         self.populate_network_model(net_box.get_model())
         net_box.set_active(0)
-        
+
         dev_box = self.window.get_widget("net-device")
-        self.populate_device_model(dev_box.get_model())
-        dev_box.set_active(0)
+        if self.populate_device_model(dev_box.get_model()):
+            dev_box.set_active(0)
+        else:
+            dev_box.set_active(-1)
 
         self.install_error = None
 
@@ -1078,10 +1081,15 @@ class vmmCreate(gobject.GObject):
 
     def populate_device_model(self, model):
         model.clear()
+        hasShared = False
         for name in self.connection.list_net_device_paths():
             net = self.connection.get_net_device(name)
             if net.is_shared():
-                model.append([net.get_bridge()])
+                hasShared = True
+                model.append(["%s (%s %s)" % (net.get_name(), _("Bridge"), net.get_bridge()), True])
+            else:
+                model.append(["%s (%s)" % (net.get_name(), _("Not bridged")), False])
+        return hasShared
 
     def change_os_type(self, box):
         model = box.get_model()

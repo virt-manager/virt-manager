@@ -76,20 +76,18 @@ class vmmAddHardware(gobject.GObject):
             })
 
         hw_list = self.window.get_widget("hardware-type")
-        model = gtk.ListStore(str, gtk.gdk.Pixbuf, int)
+        model = gtk.ListStore(str, str, int)
         hw_list.set_model(model)
         icon = gtk.CellRendererPixbuf()
         hw_list.pack_start(icon, False)
-        hw_list.add_attribute(icon, 'pixbuf', 1)
+        hw_list.add_attribute(icon, 'stock-id', 1)
         text = gtk.CellRendererText()
         hw_list.pack_start(text, True)
         hw_list.add_attribute(text, 'text', 0)
-
-        pixbuf_disk =  gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_hdd.png")
-        pixbuf_nic =  gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_ethernet.png")
-
-        model.append(["Storage device", pixbuf_disk, PAGE_DISK])
-        model.append(["Network card", pixbuf_nic, PAGE_NETWORK])
+        model.append(["Storage device", gtk.STOCK_HARDDISK, PAGE_DISK])
+        # User mode networking only allows a single card for now
+        if self.vm.get_connection().get_type().lower() == "qemu" and os.getuid() == 0:
+            model.append(["Network card", gtk.STOCK_NETWORK, PAGE_NETWORK])
 
         self.set_initial_state()
 
@@ -121,11 +119,12 @@ class vmmAddHardware(gobject.GObject):
         network_list.add_attribute(text, 'text', 1)
 
         device_list = self.window.get_widget("net-device")
-        device_model = gtk.ListStore(str)
+        device_model = gtk.ListStore(str, bool)
         device_list.set_model(device_model)
         text = gtk.CellRendererText()
         device_list.pack_start(text, True)
         device_list.add_attribute(text, 'text', 0)
+        device_list.add_attribute(text, 'sensitive', 1)
 
         target_list = self.window.get_widget("target-device")
         target_model = gtk.ListStore(str, int, str, str, str)
@@ -170,8 +169,10 @@ class vmmAddHardware(gobject.GObject):
         net_box.set_active(0)
 
         dev_box = self.window.get_widget("net-device")
-        self.populate_device_model(dev_box.get_model())
-        dev_box.set_active(0)
+        if self.populate_device_model(dev_box.get_model()):
+            dev_box.set_active(0)
+        else:
+            dev_box.set_active(-1)
 
         target_list = self.window.get_widget("target-device")
         target_list.set_active(-1)
@@ -629,10 +630,15 @@ class vmmAddHardware(gobject.GObject):
 
     def populate_device_model(self, model):
         model.clear()
+        hasShared = False
         for name in self.vm.get_connection().list_net_device_paths():
             net = self.vm.get_connection().get_net_device(name)
             if net.is_shared():
-                model.append([net.get_bridge()])
+                hasShared = True
+                model.append(["%s (%s %s)" % (net.get_name(), _("Bridge"), net.get_bridge()), True])
+            else:
+                model.append(["%s (%s)" % (net.get_name(), _("Not bridged")), False])
+        return hasShared
 
 
     def populate_target_device_model(self, model):
