@@ -200,7 +200,10 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-memory-max").set_range(50, memory/1024)
 
         if self.connection.get_type() == "QEMU":
-            self.window.get_widget("cpu-architecture").set_active(0)
+            if os.uname()[4] == "x86_64":
+                self.window.get_widget("cpu-architecture").set_active(1)
+            else:
+                self.window.get_widget("cpu-architecture").set_active(0)
         else:
             self.window.get_widget("cpu-architecture").set_active(-1)
 
