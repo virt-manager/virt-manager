@@ -65,7 +65,7 @@ class vmmConsole(gobject.GObject):
             self.vncViewer.set_keyboard_grab(True)
 
         self.vncViewer.set_pointer_grab(True)
-        self.vncViewer.set_sticky_modifiers(True)
+        #self.vncViewer.set_sticky_modifiers(True)
 
         self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
         self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
@@ -290,7 +290,7 @@ class vmmConsole(gobject.GObject):
 
         logging.debug("Starting connect process for %s %s" % (host, str(port)))
         try:
-            self.vncViewer.open_name(host, str(port))
+            self.vncViewer.open_host(host, str(port))
         except:
             (type, value, stacktrace) = sys.exc_info ()
             details = \
