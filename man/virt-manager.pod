@@ -1,0 +1,82 @@
+
+=head1 NAME
+
+virt-manager - display the virtual machine desktop management tool
+
+=head1 SYNOPSIS
+
+B<virt-viewer> [OPTIONS]
+
+=head1 DESCRIPTION
+
+B<virt-manager> is a desktop tool for managing virtual machines. It
+provides the ability to control the lifecycle of existing machines 
+(bootup/shutdown,pause/resume,suspend/restore), provision new virtual
+machines, manage virtual networks, access the graphical console of
+virtual machines, and view performance statistics.
+
+=head1 OPTIONS
+
+The following options are accepted when running C<virt-manager>:
+
+=over 4
+
+=item -h, -help
+
+Display command line help summary
+
+=item -c URI, --connect=URI
+
+Specify the hypervisor connection URI
+
+=item --no-dbus
+
+Disable the DBus API used for remote control of the C<virt-manager> UI
+
+=item --show-domain-creator
+
+Display the wizard for creating new virtual machines
+
+=item --show-domain-editor=UUID
+
+Display the dialog for editing properties of the virtual machine with
+unique ID matching C<UUID>
+
+=item --show-domain-performance=UUID
+
+Display the dialog for monitoring performance of the virtual machine with
+unique ID matching C<UUID>
+
+=item --show-domain-console=UUID
+
+Display the virtual console of the virtual machine with
+unique ID matching C<UUID>
+
+=item --show-host-summary
+
+Display the main window summarizing performance for all virtual machines
+on the host.
+
+=back
+
+=head1 AUTHOR
+
+Writen by Daniel P. Berrange.
+
+=head1 BUGS
+
+Report bugs to the mailing list C<http://www.redhat.com/mailman/listinfo/et-mgmt-tools>
+
+=head1 COPYRIGHT
+
+Copright (C) 2006-2007 Red Hat, Inc, and various contributors.
+This is free software. You may redistribute copies of it under the terms of the GNU General
+Public License C<http://www.gnu.org/licenses/gpl.html>. There is NO WARRANTY, to the extent
+permitted by law.
+
+=head1 SEE ALSO
+
+C<virsh(1)>, C<virt-viewer(1)>, the project website C<http://virt-manager.org>
+
+=cut
+
