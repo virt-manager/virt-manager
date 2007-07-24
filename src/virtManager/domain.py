@@ -51,6 +51,20 @@ class vmmDomain(gobject.GObject):
             self.xml = self.vm.XMLDesc(0)
         return self.xml
 
+    def release_handle(self):
+        # HACK: Force free the virtDomainPtr C object since we
+        # can't rely on timely GC. Use try...except block to
+        # protect in case internals of libvirt python change
+        # in the future
+        try:
+            import libvirtmod
+            if self.vm._o is not None:
+                libvirtmod.virDomainFree(self.vm._o)
+                self.vm._o = None
+        except:
+            pass
+        self.vm = None
+
     def set_handle(self, vm):
         self.vm = vm
 

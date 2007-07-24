@@ -437,8 +437,7 @@ class vmmConnection(gobject.GObject):
                 curUUIDs[uuid] = vm
             else:
                 vm = self.vms[uuid]
-                # HACK: Try & force python to GC the old handle
-                vm.set_handle(None)
+                vm.release_handle()
                 vm.set_handle(rawvm)
                 curUUIDs[uuid] = vm
                 #print "Mere state change " + str(vm)
@@ -459,8 +458,7 @@ class vmmConnection(gobject.GObject):
         # Inform everyone what changed
         for uuid in oldUUIDs:
             self.emit("vm-removed", self.uri, uuid)
-            # HACK: Try and force python to GC the old handle
-            oldUUIDs[uuid].set_handle(None)
+            oldUUIDs[uuid].release_handle()
 
         for uuid in newUUIDs:
             self.emit("vm-added", self.uri, uuid)
