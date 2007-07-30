@@ -32,6 +32,7 @@ AC_OUTPUT(Makefile
           src/virtManager/Makefile
           src/vncViewer/Makefile
           src/graphWidgets/Makefile
+          man/Makefile
           virt-manager.spec
 	  help/Makefile
 	  help/virt-manager/Makefile
