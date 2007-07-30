@@ -113,41 +113,45 @@ class vmmConnection(gobject.GObject):
     def _device_added(self, path):
         obj = self.bus.get_object("org.freedesktop.Hal", path)
         if obj.QueryCapability("net"):
-            if not self.netdevs.has_key(path):
-                name = obj.GetPropertyString("net.interface")
-                mac = obj.GetPropertyString("net.address")
+            name = obj.GetPropertyString("net.interface")
+            mac = obj.GetPropertyString("net.address")
 
-                # Now magic to determine if the device is part of a bridge
-                shared = False
-                bridge = None
-                try:
-                    # XXX Linux specific - needs porting for other OS - patches
-                    # welcomed...
-                    sysfspath = obj.GetPropertyString("linux.sysfs_path")
+            # Now magic to determine if the device is part of a bridge
+            shared = False
+            bridge = None
+            try:
+                # XXX Linux specific - needs porting for other OS - patches
+                # welcomed...
+                sysfspath = obj.GetPropertyString("linux.sysfs_path")
 
-                    # Sick, disgusting hack for Xen netloop crack which renames
-                    # ethN -> pethN, but which HAL never sees
-                    psysfspath = sysfspath[0:len(sysfspath)-len(name)] + "p" + name
-                    if os.path.exists(psysfspath):
-                        sysfspath = psysfspath
+                # Sick, disgusting hack for Xen netloop crack which renames
+                # ethN -> pethN, but which HAL never sees
+                psysfspath = sysfspath[0:len(sysfspath)-len(name)] + "p" + name
+                if os.path.exists(psysfspath):
+                    sysfspath = psysfspath
 
-                    brportpath = os.path.join(sysfspath, "brport")
+                brportpath = os.path.join(sysfspath, "brport")
 
-                    if os.path.exists(brportpath):
-                        shared = True
-                        brlinkpath = os.path.join(brportpath, "bridge")
-                        dest = os.readlink(brlinkpath)
-                        (head,tail) = os.path.split(dest)
-                        bridge = tail
-                except:
-                    (type, value, stacktrace) = sys.exc_info ()
-                    logging.error("Unable to determine if device is shared:" +
-                                  str(type) + " " + str(value) + "\n" + \
-                                  traceback.format_exc (stacktrace))
+                if os.path.exists(brportpath):
+                    shared = True
+                    brlinkpath = os.path.join(brportpath, "bridge")
+                    dest = os.readlink(brlinkpath)
+                    (head,tail) = os.path.split(dest)
+                    bridge = tail
+            except:
+                (type, value, stacktrace) = sys.exc_info ()
+                logging.error("Unable to determine if device is shared:" +
+                              str(type) + " " + str(value) + "\n" + \
+                              traceback.format_exc (stacktrace))
 
-                dev = vmmNetDevice(self.config, self, name, mac, shared, bridge)
-                self.netdevs[path] = dev
-                self.emit("netdev-added", dev.get_name())
+            if self.netdevs.has_key(path):
+                currDev = self.netdevs[path]
+                if currDev.get_info() == (name, mac, shared, bridge):
+                    return
+                del self.netdevs[path]
+            dev = vmmNetDevice(self.config, self, name, mac, shared, bridge)
+            self.netdevs[path] = dev
+            self.emit("netdev-added", dev.get_name())
 
     def _device_removed(self, path):
         if self.netdevs.has_key(path):
@@ -321,6 +325,11 @@ class vmmConnection(gobject.GObject):
             newInactiveNetNames = self.vmm.listDefinedNetworks()
         except:
             logging.warn("Unable to list inactive networks")
+
+        # check of net devices
+        newPaths = self.hal_iface.FindDeviceByCapability("net")
+        for newPath in newPaths:
+            self._device_added(newPath)
 
         for name in newActiveNetNames:
             net = self.vmm.networkLookupByName(name)
