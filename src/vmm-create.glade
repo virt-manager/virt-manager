@@ -671,6 +671,9 @@
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">•</property>
 			      <property name="activates_default">False</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Name Field</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1008,6 +1011,9 @@ mips
 mipsel</property>
 					  <property name="add_tearoffs">False</property>
 					  <property name="focus_on_click">True</property>
+					  <accessibility>
+					    <atkproperty name="AtkObject::accessible_name" translatable="yes">Architecture Select</atkproperty>
+					  </accessibility>
 					  <signal name="changed" handler="on_cpu_architecture_changed" last_modification_time="Tue, 20 Feb 2007 03:29:44 GMT"/>
 					</widget>
 					<packing>
@@ -1487,6 +1493,9 @@ mipsel</property>
 				  <property name="has_frame">True</property>
 				  <property name="invisible_char">•</property>
 				  <property name="activates_default">False</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">ISO Location Field</atkproperty>
+				  </accessibility>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -1615,6 +1624,9 @@ mipsel</property>
 				  <property name="visible">True</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="focus_on_click">True</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">Media Path Select</atkproperty>
+				  </accessibility>
 				  <signal name="changed" handler="on_cd_path_changed" last_modification_time="Wed, 23 Aug 2006 20:46:09 GMT"/>
 				</widget>
 				<packing>
@@ -1724,6 +1736,9 @@ mipsel</property>
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">OS Type Select</atkproperty>
+			      </accessibility>
 			      <signal name="changed" handler="on_os_type_changed"/>
 			    </widget>
 			    <packing>
@@ -1740,6 +1755,9 @@ mipsel</property>
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">OS Variant Select</atkproperty>
+			      </accessibility>
 			      <signal name="changed" handler="on_os_variant_changed"/>
 			    </widget>
 			    <packing>
@@ -2200,6 +2218,9 @@ mipsel</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="has_frame">True</property>
 				  <property name="focus_on_click">True</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">Install URL Field</atkproperty>
+				  </accessibility>
 				</widget>
 			      </child>
 			    </widget>
@@ -2231,6 +2252,9 @@ mipsel</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="has_frame">True</property>
 				  <property name="focus_on_click">True</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">Kickstart Field</atkproperty>
+				  </accessibility>
 				</widget>
 			      </child>
 			    </widget>
@@ -2752,6 +2776,9 @@ mipsel</property>
 				  <property name="has_frame">True</property>
 				  <property name="invisible_char">•</property>
 				  <property name="activates_default">False</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">Partition Field</atkproperty>
+				  </accessibility>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -2804,6 +2831,9 @@ mipsel</property>
 				  <property name="has_frame">True</property>
 				  <property name="invisible_char">•</property>
 				  <property name="activates_default">False</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">File Location Field</atkproperty>
+				  </accessibility>
 				  <signal name="changed" handler="on_storage_file_address_changed" last_modification_time="Tue, 12 Sep 2006 21:28:45 GMT"/>
 				</widget>
 				<packing>
@@ -2899,6 +2929,9 @@ mipsel</property>
 				      <property name="snap_to_ticks">True</property>
 				      <property name="wrap">False</property>
 				      <property name="adjustment">500 0 4000000 100 500 500</property>
+				      <accessibility>
+					<atkproperty name="AtkObject::accessible_name" translatable="yes">File Size Select</atkproperty>
+				      </accessibility>
 				      <signal name="changed" handler="on_storage_file_size_changed" last_modification_time="Thu, 10 Aug 2006 19:19:04 GMT"/>
 				    </widget>
 				  </child>
@@ -3239,6 +3272,9 @@ mipsel</property>
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Network Device Select</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -3444,6 +3480,9 @@ mipsel</property>
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Network Select</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -3619,6 +3658,9 @@ mipsel</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">•</property>
 			      <property name="activates_default">False</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">MAC Field</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -4216,6 +4258,9 @@ mipsel</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">249 50 32000 5 10 10</property>
+			  <accessibility>
+			    <atkproperty name="AtkObject::accessible_name" translatable="yes">Max Mem Select</atkproperty>
+			  </accessibility>
 			  <signal name="value_changed" handler="on_create_memory_max_value_changed" last_modification_time="Tue, 12 Sep 2006 21:11:37 GMT"/>
 			</widget>
 		      </child>
@@ -4253,6 +4298,9 @@ mipsel</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">244 50 32000 5 10 10</property>
+			  <accessibility>
+			    <atkproperty name="AtkObject::accessible_name" translatable="yes">Startup Mem Select</atkproperty>
+			  </accessibility>
 			</widget>
 		      </child>
 		    </widget>
@@ -4289,6 +4337,9 @@ mipsel</property>
 			  <property name="snap_to_ticks">True</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">1 1 32 1 2 2</property>
+			  <accessibility>
+			    <atkproperty name="AtkObject::accessible_name" translatable="yes">VCPU Select</atkproperty>
+			  </accessibility>
 			</widget>
 		      </child>
 		    </widget>

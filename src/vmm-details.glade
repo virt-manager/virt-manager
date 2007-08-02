@@ -338,6 +338,9 @@
 				      <property name="has_frame">True</property>
 				      <property name="invisible_char">•</property>
 				      <property name="activates_default">False</property>
+				      <accessibility>
+					<atkproperty name="AtkObject::accessible_name" translatable="yes">Name Field</atkproperty>
+				      </accessibility>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>
@@ -500,6 +503,9 @@
 				      <property name="has_frame">True</property>
 				      <property name="invisible_char">•</property>
 				      <property name="activates_default">False</property>
+				      <accessibility>
+					<atkproperty name="AtkObject::accessible_name" translatable="yes">UUID Field</atkproperty>
+				      </accessibility>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>
@@ -1175,6 +1181,9 @@
 					  <property name="snap_to_ticks">False</property>
 					  <property name="wrap">False</property>
 					  <property name="adjustment">1 1 32 1 2 2</property>
+					  <accessibility>
+					    <atkproperty name="AtkObject::accessible_name" translatable="yes">VCPU Select</atkproperty>
+					  </accessibility>
 					  <signal name="changed" handler="on_config_vcpus_changed" last_modification_time="Fri, 22 Sep 2006 15:41:27 GMT"/>
 					</widget>
 					<packing>
@@ -1592,6 +1601,9 @@
 					      <property name="snap_to_ticks">False</property>
 					      <property name="wrap">False</property>
 					      <property name="adjustment">50 50 32000 5 10 10</property>
+					      <accessibility>
+						<atkproperty name="AtkObject::accessible_name" translatable="yes">Max Memory Select</atkproperty>
+					      </accessibility>
 					      <signal name="changed" handler="on_config_maxmem_changed" last_modification_time="Mon, 13 Nov 2006 17:34:48 GMT"/>
 					    </widget>
 					    <packing>
@@ -1737,6 +1749,9 @@
 					      <property name="snap_to_ticks">False</property>
 					      <property name="wrap">False</property>
 					      <property name="adjustment">50 50 32000 5 10 10</property>
+					      <accessibility>
+						<atkproperty name="AtkObject::accessible_name" translatable="yes">Memory Select</atkproperty>
+					      </accessibility>
 					      <signal name="changed" handler="on_config_memory_changed" last_modification_time="Fri, 01 Sep 2006 19:08:14 GMT"/>
 					    </widget>
 					    <packing>
@@ -2512,6 +2527,9 @@
 				      <property name="has_frame">True</property>
 				      <property name="invisible_char">•</property>
 				      <property name="activates_default">False</property>
+				      <accessibility>
+					<atkproperty name="AtkObject::accessible_name" translatable="yes">MAC Address Field</atkproperty>
+				      </accessibility>
 				    </widget>
 				    <packing>
 				      <property name="left_attach">1</property>

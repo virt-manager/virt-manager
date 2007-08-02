@@ -396,6 +396,9 @@ Active virtual machines
 Inactive virtual machines</property>
 	      <property name="add_tearoffs">False</property>
 	      <property name="focus_on_click">True</property>
+	      <accessibility>
+		<atkproperty name="AtkObject::accessible_name" translatable="yes">View Select</atkproperty>
+	      </accessibility>
 	      <signal name="changed" handler="on_vm_view_changed" last_modification_time="Tue, 10 Oct 2006 20:44:44 GMT"/>
 	    </widget>
 	    <packing>

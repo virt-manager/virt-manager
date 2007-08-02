@@ -174,6 +174,9 @@
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">5 1 60 1 5 5</property>
+			  <accessibility>
+			    <atkproperty name="AtkObject::accessible_name" translatable="yes">Status Interval</atkproperty>
+			  </accessibility>
 			  <signal name="value_changed" handler="on_stats_update_interval_changed" last_modification_time="Mon, 03 Apr 2006 15:27:12 GMT"/>
 			</widget>
 			<packing>
@@ -250,6 +253,9 @@
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">10 10 300 1 5 5</property>
+			  <accessibility>
+			    <atkproperty name="AtkObject::accessible_name" translatable="yes">History Samples</atkproperty>
+			  </accessibility>
 			  <signal name="value_changed" handler="on_stats_history_length_changed" last_modification_time="Mon, 03 Apr 2006 15:27:39 GMT"/>
 			</widget>
 			<packing>
@@ -391,6 +397,9 @@ When fullscreen
 On mouse over</property>
 			  <property name="add_tearoffs">False</property>
 			  <property name="focus_on_click">True</property>
+			  <accessibility>
+			    <atkproperty name="AtkObject::accessible_name" translatable="yes">Grab Keyboard</atkproperty>
+			  </accessibility>
 			  <signal name="changed" handler="on_console_keygrab_changed" last_modification_time="Mon, 06 Nov 2006 19:31:31 GMT"/>
 			</widget>
 			<packing>
@@ -411,6 +420,9 @@ For new domains
 For all domains</property>
 			  <property name="add_tearoffs">False</property>
 			  <property name="focus_on_click">True</property>
+			  <accessibility>
+			    <atkproperty name="AtkObject::accessible_name" translatable="yes">Auto Console</atkproperty>
+			  </accessibility>
 			  <signal name="changed" handler="on_console_popup_changed" last_modification_time="Mon, 06 Nov 2006 19:41:11 GMT"/>
 			</widget>
 			<packing>

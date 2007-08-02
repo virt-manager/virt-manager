@@ -615,6 +615,9 @@
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">•</property>
 			      <property name="activates_default">False</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Net Name Field</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -817,6 +820,9 @@
 			      <property name="invisible_char">•</property>
 			      <property name="activates_default">False</property>
 			      <property name="width_chars">20</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Network Range</atkproperty>
+			      </accessibility>
 			      <signal name="changed" handler="on_net_network_changed" last_modification_time="Wed, 28 Mar 2007 21:49:47 GMT"/>
 			    </widget>
 			    <packing>
@@ -1418,6 +1424,9 @@
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">•</property>
 			      <property name="activates_default">False</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Start Address</atkproperty>
+			      </accessibility>
 			      <signal name="changed" handler="on_net_dhcp_start_changed" last_modification_time="Thu, 29 Mar 2007 22:51:47 GMT"/>
 			    </widget>
 			    <packing>
@@ -1440,6 +1449,9 @@
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">•</property>
 			      <property name="activates_default">False</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">End Address</atkproperty>
+			      </accessibility>
 			      <signal name="changed" handler="on_net_dhcp_end_changed" last_modification_time="Thu, 29 Mar 2007 22:51:53 GMT"/>
 			    </widget>
 			    <packing>
@@ -1664,6 +1676,9 @@
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Physical Network</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
