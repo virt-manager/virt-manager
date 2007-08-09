@@ -56,11 +56,11 @@ class vmmManager(gobject.GObject):
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),}
 
-    def __init__(self, config, connection):
+    def __init__(self, config):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-manager.glade", "vmm-manager", domain="virt-manager")
         self.config = config
-        self.connection = connection
+        self.connections = {}
         self.prepare_vmlist()
 
         self.config.on_vmlist_domain_id_visible_changed(self.toggle_domain_id_visible_widget)
@@ -81,15 +81,7 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("menu_view_disk_usage").set_sensitive(False)
         self.window.get_widget("menu_view_network_traffic").set_sensitive(False)
 
-
-        if self.connection.is_read_only():
-            self.window.get_widget("menu_file_new").set_sensitive(False)
-            self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
-            self.window.get_widget("vm-new").set_sensitive(False)
-        else:
-            self.window.get_widget("menu_file_new").set_sensitive(True)
-            self.window.get_widget("vm-new").set_sensitive(True)
-            self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
+        self.set_menu_visibility(None)
 
         self.window.get_widget("vm-view").set_active(0)
 
@@ -187,19 +179,10 @@ class vmmManager(gobject.GObject):
 
         self.vm_selected(None)
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
-        self.connection.connect("disconnected", self.close)
-
-        self.connection.connect("vm-added", self.vm_added)
-        self.connection.connect("vm-removed", self.vm_removed)
-
-        win = self.window.get_widget("vmm-manager")
-        win.set_title(win.get_title() + " (" + self.connection.get_name() + ")")
 
         # store any error message from the restore-domain callback
         self.domain_restore_error = ""
 
-        # Do useful things when a vm starts
-        self.connection.connect("vm-started", self.vm_started)
 
     def show(self):
         win = self.window.get_widget("vmm-manager")
@@ -207,7 +190,8 @@ class vmmManager(gobject.GObject):
         win.present()
 
     def close(self, src=None, src2=None):
-        self.connection.close()
+        for uri in self.connections:
+            self.connections[uri].close()
         win = self.window.get_widget("vmm-manager")
         win.hide()
         return 1
@@ -237,6 +221,9 @@ class vmmManager(gobject.GObject):
 
 
     def restore_saved(self, src=None):
+        # XXX save/restore with multiple connection UI not yet supported
+        return
+
         # get filename
         self.fcdialog = gtk.FileChooserDialog(_("Restore Virtual Machine"),
                                               self.window.get_widget("vmm-manager"),
@@ -296,21 +283,23 @@ class vmmManager(gobject.GObject):
         model = vmlist.get_model()
         model.clear()
         self.rows = {}
-
-        uuids = self.connection.list_vm_uuids()
-        for vmuuid in uuids:
-            vm = self.connection.get_vm(vmuuid)
-            if vm.is_active():
-                if not(self.is_showing_active()):
-                    continue
-            else:
-                if not(self.is_showing_inactive()):
-                    continue
-
-            self._append_vm(model, vm)
+        
+        for uri in self.connections:
+            conn = self.connections[uri]
+            self._append_connection(model, conn)
+            uuids = conn.list_vm_uuids()
+            for vmuuid in uuids:
+                vm = conn.get_vm(vmuuid)
+                if vm.is_active():
+                    if not(self.is_showing_active()):
+                        continue
+                else:
+                    if not(self.is_showing_inactive()):
+                        continue
+                self._append_vm(model, vm, conn)
 
     def vm_added(self, connection, uri, vmuuid):
-        vm = self.connection.get_vm(vmuuid)
+        vm = connection.get_vm(vmuuid)
         vm.connect("status-changed", self.vm_status_changed)
         vm.connect("resources-sampled", self.vm_resources_sampled)
 
@@ -324,10 +313,10 @@ class vmmManager(gobject.GObject):
             if not(self.is_showing_inactive()):
                 return
 
-        self._append_vm(model, vm)
+        self._append_vm(model, vm, connection)
 
     def vm_started(self, connection, uri, vmuuid):
-        vm = self.connection.get_vm(vmuuid)
+        vm = connection.get_vm(vmuuid)
         logging.debug("VM %s started" % vm.get_name())
         if self.config.get_console_popup() == 2 and not vm.is_management_domain():
             # user has requested consoles on all vms
@@ -337,26 +326,40 @@ class vmmManager(gobject.GObject):
             else:
                 self.emit("action-show-terminal", uri, vmuuid)
                 
-    def _append_vm(self, model, vm):
-        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar
-        iter = model.append([vm, vm.get_name(), vm.get_id_pretty(), vm.run_status(), \
+    def _append_vm(self, model, vm, conn):
+        logging.debug("About to append vm: %s" % vm.get_name())
+        parent = self.rows[conn.get_uri()].iter
+        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid
+        iter = model.append(parent, [vm, vm.get_name(), vm.get_id_pretty(), vm.run_status(), \
                              vm.run_status_icon(), vm.cpu_time_pretty(), vm.vcpu_count(), \
-                             vm.get_memory_pretty(), vm.current_memory_percentage()])
+                             vm.get_memory_pretty(), vm.current_memory_percentage(), vm.get_uuid()])
         path = model.get_path(iter)
         self.rows[vm.get_uuid()] = model[path]
+
+    def _append_connection(self, model, conn):
+        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid
+        # Connections are top-level rows, so append with parent None
+        logging.debug("About to append connection: %s" % conn.get_name())
+        iter = model.append(None, [conn, conn.get_name(), conn.get_uri(), "connected", \
+                             self.config.get_vm_status_icon(libvirt.VIR_DOMAIN_RUNNING), "0", 0, \
+                             "0", 0, "0"])
+        path = model.get_path(iter)
+        self.rows[conn.get_uri()] = model[path]
 
     def vm_removed(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
-        for row in range(model.iter_n_children(None)):
-            vm = model.get_value(model.iter_nth_child(None, row), 0)
+        parent = self.rows[connection.get_uri()].iter
+        for row in range(model.iter_n_children(parent)):
+            vm = model.get_value(model.iter_nth_child(parent, row), 0)
             if vm.get_uuid() == vmuuid:
-                model.remove(model.iter_nth_child(None, row))
+                model.remove(model.iter_nth_child(parent, row))
                 del self.rows[vmuuid]
                 break
 
     def vm_status_changed(self, vm, status):
+        parent = self.rows[vm.get_connection().get_uri()].iter
         wanted = False
         if vm.is_active():
             if self.is_showing_active():
@@ -369,18 +372,18 @@ class vmmManager(gobject.GObject):
         model = vmlist.get_model()
 
         missing = True
-        for row in range(model.iter_n_children(None)):
-            iter = model.iter_nth_child(None, row)
+        for row in range(model.iter_n_children(parent)):
+            iter = model.iter_nth_child(parent, row)
             if model.get_value(iter, 0).get_uuid() == vm.get_uuid():
                 if wanted:
                     missing = False
                 else:
-                    model.remove(model.iter_nth_child(None, row))
+                    model.remove(model.iter_nth_child(parent, row))
                     del self.rows[vm.get_uuid()]
                 break
 
         if missing and wanted:
-            self._append_vm(model, vm)
+            self._append_vm(model, vm, vm.get_connection())
 
 
     def vm_resources_sampled(self, vm):
@@ -417,8 +420,23 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
-        if active[1] != None:
+        # check that something is selected and that it is a vm, not a connection
+        if active[1] != None and active[0].iter_parent(active[1]) != None:
             return active[0].get_value(active[1], 0)
+        return None
+
+    def current_connection(self):
+        vmlist = self.window.get_widget("vm-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] != None:
+            parent = active[0].iter_parent(active[1])
+            # return the connection of the currently selected vm, or the
+            # currently selected connection
+            if parent is not None:
+                return active[0].get_value(parent, 0)
+            else:
+                return active[0].get_value(active[1], 0)
         return None
 
     def current_vmuuid(self):
@@ -431,29 +449,33 @@ class vmmManager(gobject.GObject):
         vm = self.current_vm()
         if vm is None or vm.is_active():
             return
-
+        conn = vm.get_connection()
         vm.delete()
-        self.connection.tick(noStatsUpdate=True)
+        conn.tick(noStatsUpdate=True)
 
     def show_vm_details(self,ignore):
-        self.emit("action-show-details", self.connection.get_uri(), self.current_vmuuid())
+        vm = self.current_vm()
+        if vm is None:
+            return
+        conn = vm.get_connection()
+        self.emit("action-show-details", conn.get_uri(), self.current_vmuuid())
 
     def show_vm_create(self,ignore):
-        self.emit("action-show-create", self.connection.get_uri())
+        self.emit("action-show-create", self.connections)
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
         self.emit("action-show-console", self.connection.get_uri(), self.current_vmuuid())
 
 
     def vm_selected(self, selection):
+        vm = self.current_vm()
         if selection == None or selection.count_selected_rows() == 0:
             self.window.get_widget("vm-delete").set_sensitive(False)
             self.window.get_widget("vm-details").set_sensitive(False)
             self.window.get_widget("vm-open").set_sensitive(False)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
-        else:
-            vm = self.current_vm()
+        elif vm is not None:
             if vm.is_active():
                 self.window.get_widget("vm-delete").set_sensitive(False)
                 self.window.get_widget("menu_edit_delete").set_sensitive(False)
@@ -463,9 +485,19 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(True)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
-
+        else:
+            connection = self.current_connection()
+            self.set_menu_visibility(connection)
+            self.window.get_widget("vm-delete").set_sensitive(False)
+            self.window.get_widget("vm-details").set_sensitive(False)
+            self.window.get_widget("vm-open").set_sensitive(False)
+            self.window.get_widget("menu_edit_delete").set_sensitive(False)
+            self.window.get_widget("menu_edit_details").set_sensitive(False)
+            self.window.get_widget("vm-delete").set_sensitive(False)
+            self.window.get_widget("menu_edit_delete").set_sensitive(False)
     def popup_vm_menu(self, widget, event):
         vm = self.current_vm()
+        connection = self.current_connection()
         if vm != None:
 
             # Update popup menu based upon vm status
@@ -498,9 +530,13 @@ class vmmManager(gobject.GObject):
                     self.vmmenu_items["resume"].show()
                     self.vmmenu_items["resume"].set_sensitive(True)
                     self.vmmenu_items["shutdown"].set_sensitive(True)              
-
             if event.button == 3:
                 self.vmmenu.popup(None, None, None, 0, event.time)
+        elif connection is not None:
+            # later, add "disconnect" item
+            if event.button == 3:
+                self.vmmenu.popup(None, None, None, 0, event.time)
+
 
     def show_about(self, src):
         self.emit("action-show-about")
@@ -519,7 +555,7 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
 
         # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar
-        model = gtk.ListStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int)
+        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str)
         vmlist.set_model(model)
 
         idCol = gtk.TreeViewColumn(_("ID"))
@@ -703,19 +739,55 @@ class vmmManager(gobject.GObject):
 
     def start_vm(self, ignore):
         vm = self.current_vm()
-        vm.startup()
+        if vm is not None:
+            vm.startup()
 
     def stop_vm(self, ignore):
         vm = self.current_vm()
-        vm.shutdown()
+        if vm is not None:
+            vm.shutdown()
 
     def pause_vm(self, ignore):
         vm = self.current_vm()
-        vm.suspend()
+        if vm is not None:
+            vm.suspend()
 
     def resume_vm(self, ignore):
         vm = self.current_vm()
-        vm.resume()
+        if vm is not None:
+            vm.resume()
+        
+    def add_connection(self, connection):
+        # connection.connect("disconnected", self.close)
+        connection.connect("vm-added", self.vm_added)
+        connection.connect("vm-removed", self.vm_removed)
+        # Do useful things when a vm starts
+        connection.connect("vm-started", self.vm_started)
+        # add the connection to the treeModel
+        vmlist = self.window.get_widget("vm-list")
+        self.connections[connection.uri] = connection
+        self._append_connection(vmlist.get_model(), connection)
 
+    def remove_connection(self, uri):
+        model = self.window.get_widget("vm-list").get_model()
+        parent = self.rows[uri].iter
+        if parent is not None:
+            child = model.iter_children(parent)
+            while child is not None:
+                del self.rows[model.get_value(child, 9)]
+                model.remove(child)
+                child = model.iter_children(parent)
+            model.remove(parent)
+            del self.rows[uri]
+
+    def set_menu_visibility(self, connection):
+        if  connection is None or connection.is_read_only():
+            self.window.get_widget("menu_file_new").set_sensitive(False)
+            self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
+            self.window.get_widget("vm-new").set_sensitive(False)
+        else:
+            self.window.get_widget("menu_file_new").set_sensitive(True)
+            self.window.get_widget("vm-new").set_sensitive(True)
+            self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
 
 gobject.type_register(vmmManager)

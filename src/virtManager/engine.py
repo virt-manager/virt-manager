@@ -43,6 +43,7 @@ class vmmEngine:
         self.windowPreferences = None
         self.windowAbout = None
         self.windowCreate = None
+        self.windowManager = None
         self.connections = {}
 
         self.timer = None
@@ -57,16 +58,20 @@ class vmmEngine:
 
     def _do_connection_disconnected(self, connection, hvuri):
         del self.connections[hvuri]
-
         if len(self.connections.keys()) == 0 and self.windowConnect == None:
             gtk.main_quit()
+        if self.windowManager is not None:
+            self.windowManager.remove_connection(hvuri)
+
+    def connect_to_uri(self, uri, readOnly=None):
+        self._connect_to_uri(None, uri, readOnly)
 
     def _connect_to_uri(self, connect, uri, readOnly):
         self.windowConnect = None
 
         try:
             conn = self.get_connection(uri, readOnly)
-            self.show_manager(uri)
+            self.show_manager()
         except:
             (type, value, stacktrace) = sys.exc_info ()
 
@@ -166,11 +171,12 @@ class vmmEngine:
             for name in [ "windowDetails", "windowConsole", "windowSerialConsole" ]:
                 for window in conn[name].values():
                     ct += window.is_visible()
-            for name in [ "windowManager", "windowHost"]:
-                if conn[name] != None and conn[name].is_visible():
-                    ct += 1
+            if conn["windowHost"] != None and conn[name].is_visible():
+                ct += 1
         if self.windowCreate:
                 ct += self.windowCreate.is_visible()
+        if self.windowManager:
+                ct += self.windowManager.is_visible()
         return ct
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
@@ -188,12 +194,10 @@ class vmmEngine:
         self.show_host(uri)
     def _do_show_connect(self, src):
         self.show_connect()
-    def _do_show_manager(self, src, uri):
-        self.show_manager(uri)
     def _do_show_details(self, src, uri, uuid):
         self.show_details(uri, uuid)
-    def _do_show_create(self, src, uri):
-        self.show_create(uri)
+    def _do_show_create(self, src):
+        self.show_create()
     def _do_show_help(self, src, index):
         self.show_help(index)
     def _do_show_console(self, src, uri, uuid):
@@ -284,27 +288,26 @@ class vmmEngine:
         self.connections[uri]["windowDetails"][uuid].show()
         return self.connections[uri]["windowDetails"][uuid]
 
-    def show_manager(self, uri):
-        con = self.get_connection(uri)
+    def get_manager(self):
+        if self.windowManager == None:
+            self.windowManager = vmmManager(self.get_config())
+            self.windowManager.connect("action-show-console", self._do_show_console)
+            self.windowManager.connect("action-show-terminal", self._do_show_terminal)
+            self.windowManager.connect("action-show-details", self._do_show_details)
+            self.windowManager.connect("action-show-preferences", self._do_show_preferences)
+            self.windowManager.connect("action-show-create", self._do_show_create)
+            self.windowManager.connect("action-show-help", self._do_show_help)
+            self.windowManager.connect("action-show-about", self._do_show_about)
+            self.windowManager.connect("action-show-host", self._do_show_host)
+            self.windowManager.connect("action-show-connect", self._do_show_connect)
+        return self.windowManager
 
-        if self.connections[uri]["windowManager"] == None:
-            manager = vmmManager(self.get_config(),
-                                 con)
-            manager.connect("action-show-console", self._do_show_console)
-            manager.connect("action-show-terminal", self._do_show_terminal)
-            manager.connect("action-show-details", self._do_show_details)
-            manager.connect("action-show-preferences", self._do_show_preferences)
-            manager.connect("action-show-create", self._do_show_create)
-            manager.connect("action-show-help", self._do_show_help)
-            manager.connect("action-show-about", self._do_show_about)
-            manager.connect("action-show-host", self._do_show_host)
-            manager.connect("action-show-connect", self._do_show_connect)
-            self.connections[uri]["windowManager"] = manager
-        self.connections[uri]["windowManager"].show()
+    def show_manager(self):
+        self.get_manager().show()
 
-    def show_create(self, uri):
+    def show_create(self):
         if self.windowCreate == None:
-            self.windowCreate = vmmCreate(self.get_config(), self.get_connection(uri, False))
+            self.windowCreate = vmmCreate(self.get_config(), self.connections)
         self.windowCreate.connect("action-show-console", self._do_show_console)
         self.windowCreate.connect("action-show-terminal", self._do_show_terminal)
         self.windowCreate.connect("action-show-help", self._do_show_help)
@@ -316,7 +319,6 @@ class vmmEngine:
             conn = vmmConnection(self.get_config(), uri, readOnly)
             self.connections[uri] = {
                 "connection": conn,
-                "windowManager": None,
                 "windowHost": None,
                 "windowDetails": {},
                 "windowConsole": {},
@@ -324,6 +326,7 @@ class vmmEngine:
                 }
             self.connections[uri]["connection"].connect("disconnected", self._do_connection_disconnected)
             self.connections[uri]["connection"].connect("vm-removed", self._do_vm_removed)
+            self.get_manager().add_connection(self.connections[uri]["connection"])
             self.connections[uri]["connection"].tick()
 
         return self.connections[uri]["connection"]

@@ -56,11 +56,12 @@ class vmmConnection(gobject.GObject):
         "disconnected": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [str])
         }
 
-    def __init__(self, config, uri, readOnly):
+    def __init__(self, config, uri, readOnly, active=True):
         self.__gobject_init__()
         self.config = config
         self.uri = uri
         self.readOnly = readOnly
+        self._active = active
 
         openURI = uri
         if openURI == "Xen":
@@ -308,6 +309,9 @@ class vmmConnection(gobject.GObject):
 
     def tick(self, noStatsUpdate=False):
         if self.vmm == None:
+            return
+
+        if not self.is_active:
             return
 
         oldNets = self.nets
@@ -640,6 +644,14 @@ class vmmConnection(gobject.GObject):
         else:
             delim = len(url)
         return url[start:delim], url[delim:]
+
+
+    def is_active(self):
+        return self._active
+    def set_active(self, val):
+        self._active = val
+    active = property(is_active, set_active)
+
 
 gobject.type_register(vmmConnection)
 
