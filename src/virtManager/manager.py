@@ -143,6 +143,20 @@ class vmmManager(gobject.GObject):
         # allow O(1) access instead of O(n)
         self.rows = {}
 
+        self.connmenu = gtk.Menu()
+        self.connmenu_items = {}
+
+        self.connmenu_items["create"] = gtk.ImageMenuItem(gtk.STOCK_NEW)
+        self.connmenu_items["create"].show()
+        self.connmenu_items["create"].connect("activate", self.show_vm_create)
+        self.connmenu.add(self.connmenu_items["create"])
+
+        self.connmenu_items["disconnect"] = gtk.ImageMenuItem(gtk.STOCK_DISCONNECT)
+        self.connmenu_items["disconnect"].show()
+        self.connmenu_items["disconnect"].connect("activate", self.destroy_connection)
+        self.connmenu.add(self.connmenu_items["disconnect"])
+        self.connmenu.show()
+
         self.window.signal_autoconnect({
             "on_menu_view_domain_id_activate" : self.toggle_domain_id_visible_conf,
             "on_menu_view_status_activate" : self.toggle_status_visible_conf,
@@ -154,14 +168,12 @@ class vmmManager(gobject.GObject):
 
             "on_vm_manager_delete_event": self.close,
             "on_menu_file_open_connection_activate": self.open_connection,
-            "on_menu_file_new_activate": self.show_vm_create,
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
             "on_menu_restore_saved_activate": self.restore_saved,
             "on_vmm_close_clicked": self.close,
             "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
-            "on_vm_new_clicked": self.show_vm_create,
             "on_vm_delete_clicked": self.delete_vm,
             "on_menu_edit_delete_activate" : self.delete_vm,
             "on_menu_edit_details_activate": self.show_vm_details,
@@ -425,7 +437,7 @@ class vmmManager(gobject.GObject):
             return active[0].get_value(active[1], 0)
         return None
 
-    def current_connection(self):
+    def get_current_connection(self):
         vmlist = self.window.get_widget("vm-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
@@ -461,7 +473,10 @@ class vmmManager(gobject.GObject):
         self.emit("action-show-details", conn.get_uri(), self.current_vmuuid())
 
     def show_vm_create(self,ignore):
-        self.emit("action-show-create", self.connections)
+        self.emit("action-show-create", self.get_current_connection().get_uri())
+
+    def destroy_connection(self, ignore):
+        self.get_current_connection().close()
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
         self.emit("action-show-console", self.connection.get_uri(), self.current_vmuuid())
@@ -486,7 +501,7 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("vm-open").set_sensitive(True)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
         else:
-            connection = self.current_connection()
+            connection = self.get_current_connection()
             self.set_menu_visibility(connection)
             self.window.get_widget("vm-delete").set_sensitive(False)
             self.window.get_widget("vm-details").set_sensitive(False)
@@ -495,9 +510,10 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("menu_edit_details").set_sensitive(False)
             self.window.get_widget("vm-delete").set_sensitive(False)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
+
     def popup_vm_menu(self, widget, event):
         vm = self.current_vm()
-        connection = self.current_connection()
+        connection = self.get_current_connection()
         if vm != None:
 
             # Update popup menu based upon vm status
@@ -533,9 +549,8 @@ class vmmManager(gobject.GObject):
             if event.button == 3:
                 self.vmmenu.popup(None, None, None, 0, event.time)
         elif connection is not None:
-            # later, add "disconnect" item
             if event.button == 3:
-                self.vmmenu.popup(None, None, None, 0, event.time)
+                self.connmenu.popup(None, None, None, 0, event.time)
 
 
     def show_about(self, src):
@@ -782,12 +797,10 @@ class vmmManager(gobject.GObject):
 
     def set_menu_visibility(self, connection):
         if  connection is None or connection.is_read_only():
-            self.window.get_widget("menu_file_new").set_sensitive(False)
             self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
-            self.window.get_widget("vm-new").set_sensitive(False)
         else:
-            self.window.get_widget("menu_file_new").set_sensitive(True)
-            self.window.get_widget("vm-new").set_sensitive(True)
-            self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
+            # XXX setting this false because save/restore is broken until
+            # XXX we deal with multiple connections properly
+            self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
 
 gobject.type_register(vmmManager)

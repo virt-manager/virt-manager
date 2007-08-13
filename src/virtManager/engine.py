@@ -196,8 +196,8 @@ class vmmEngine:
         self.show_connect()
     def _do_show_details(self, src, uri, uuid):
         self.show_details(uri, uuid)
-    def _do_show_create(self, src):
-        self.show_create()
+    def _do_show_create(self, src, uri):
+        self.show_create(uri)
     def _do_show_help(self, src, index):
         self.show_help(index)
     def _do_show_console(self, src, uri, uuid):
@@ -305,12 +305,15 @@ class vmmEngine:
     def show_manager(self):
         self.get_manager().show()
 
-    def show_create(self):
+    def show_create(self, uri):
         if self.windowCreate == None:
-            self.windowCreate = vmmCreate(self.get_config(), self.connections)
-        self.windowCreate.connect("action-show-console", self._do_show_console)
-        self.windowCreate.connect("action-show-terminal", self._do_show_terminal)
-        self.windowCreate.connect("action-show-help", self._do_show_help)
+            self.windowCreate = vmmCreate(self.get_config(), self.get_connection(uri, False))
+            self.windowCreate.connect("action-show-console", self._do_show_console)
+            self.windowCreate.connect("action-show-terminal", self._do_show_terminal)
+            self.windowCreate.connect("action-show-help", self._do_show_help)
+            self.windowCreate.reset_state()
+        else:
+            self.windowCreate.connection = self.get_connection(uri, False)
         self.windowCreate.reset_state()
         self.windowCreate.show()
 
