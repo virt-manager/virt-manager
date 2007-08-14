@@ -53,6 +53,8 @@ class vmmManager(gobject.GObject):
                                     gobject.TYPE_NONE, []),
         "action-show-create": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),
+        "action-connect": (gobject.SIGNAL_RUN_FIRST,
+                           gobject.TYPE_NONE, [str]),
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),}
 
@@ -80,8 +82,6 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("menu_view_network_traffic").set_active(self.config.is_vmlist_network_traffic_visible())
         self.window.get_widget("menu_view_disk_usage").set_sensitive(False)
         self.window.get_widget("menu_view_network_traffic").set_sensitive(False)
-
-        self.set_menu_visibility(None)
 
         self.window.get_widget("vm-view").set_active(0)
 
@@ -151,6 +151,11 @@ class vmmManager(gobject.GObject):
         self.connmenu_items["create"].connect("activate", self.show_vm_create)
         self.connmenu.add(self.connmenu_items["create"])
 
+        self.connmenu_items["connect"] = gtk.ImageMenuItem(gtk.STOCK_CONNECT)
+        self.connmenu_items["connect"].show()
+        self.connmenu_items["connect"].connect("activate", self.create_connection)
+        self.connmenu.add(self.connmenu_items["connect"])
+
         self.connmenu_items["disconnect"] = gtk.ImageMenuItem(gtk.STOCK_DISCONNECT)
         self.connmenu_items["disconnect"].show()
         self.connmenu_items["disconnect"].connect("activate", self.destroy_connection)
@@ -196,6 +201,7 @@ class vmmManager(gobject.GObject):
         # store any error message from the restore-domain callback
         self.domain_restore_error = ""
 
+        self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
 
     def show(self):
         win = self.window.get_widget("vmm-manager")
@@ -353,8 +359,6 @@ class vmmManager(gobject.GObject):
 
     def _append_connection(self, model, conn):
         # Handle, name, ID, status, status icon, cpu, [cpu graph], cpus, mem, mem bar, unused
-        # Connections are top-level rows, so append with parent None
-        logging.debug("About to append connection: %s" % conn.get_name())
         iter = model.append(None, [conn, conn.get_name(), conn.get_uri(), \
                                    "", None, "", 0, "", 0, ""])
         path = model.get_path(iter)
@@ -454,6 +458,7 @@ class vmmManager(gobject.GObject):
         return None
 
     def get_current_connection(self):
+        # returns a uri
         vmlist = self.window.get_widget("vm-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
@@ -462,9 +467,9 @@ class vmmManager(gobject.GObject):
             # return the connection of the currently selected vm, or the
             # currently selected connection
             if parent is not None:
-                return active[0].get_value(parent, 0)
+                return active[0].get_value(parent, 2)
             else:
-                return active[0].get_value(active[1], 0)
+                return active[0].get_value(active[1], 2)
         return None
 
     def current_vmuuid(self):
@@ -489,10 +494,18 @@ class vmmManager(gobject.GObject):
         self.emit("action-show-details", conn.get_uri(), self.current_vmuuid())
 
     def show_vm_create(self,ignore):
-        self.emit("action-show-create", self.get_current_connection().get_uri())
+        self.emit("action-show-create", self.get_current_connection())
 
     def destroy_connection(self, ignore):
-        self.get_current_connection().close()
+        current_uri = self.get_current_connection()
+        if self.connections.has_key(current_uri):
+            self.connections[current_uri].close()
+            del self.connections[current_uri]
+
+    def create_connection(self, ignore):
+        current_uri = self.get_current_connection()
+        if not self.connections.has_key(current_uri):
+            self.emit("action-connect", current_uri)
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
         self.emit("action-show-console", self.connection.get_uri(), self.current_vmuuid())
@@ -517,19 +530,22 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("vm-open").set_sensitive(True)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
         else:
-            connection = self.get_current_connection()
-            self.set_menu_visibility(connection)
-            self.window.get_widget("vm-delete").set_sensitive(False)
             self.window.get_widget("vm-details").set_sensitive(False)
             self.window.get_widget("vm-open").set_sensitive(False)
-            self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
-            self.window.get_widget("vm-delete").set_sensitive(False)
-            self.window.get_widget("menu_edit_delete").set_sensitive(False)
+            uri = self.get_current_connection()
+            if self.connections.has_key(uri):
+                # Connection is live
+                self.window.get_widget("vm-delete").set_sensitive(False)
+                self.window.get_widget("menu_edit_delete").set_sensitive(False)
+            else:
+                # Connection is disconnected, therefore deleteable
+                self.window.get_widget("vm-delete").set_sensitive(True)
+                self.window.get_widget("menu_edit_delete").set_sensitive(True)
 
     def popup_vm_menu(self, widget, event):
         vm = self.current_vm()
-        connection = self.get_current_connection()
+        uri = self.get_current_connection()
         if vm != None:
 
             # Update popup menu based upon vm status
@@ -564,7 +580,15 @@ class vmmManager(gobject.GObject):
                     self.vmmenu_items["shutdown"].set_sensitive(True)              
             if event.button == 3:
                 self.vmmenu.popup(None, None, None, 0, event.time)
-        elif connection is not None:
+        elif uri is not None:
+            if self.connections.has_key(uri):
+                self.connmenu_items["create"].set_sensitive(True)
+                self.connmenu_items["disconnect"].set_sensitive(True)
+                self.connmenu_items["connect"].set_sensitive(False)
+            else:
+                self.connmenu_items["create"].set_sensitive(False)
+                self.connmenu_items["disconnect"].set_sensitive(False)
+                self.connmenu_items["connect"].set_sensitive(True)
             if event.button == 3:
                 self.connmenu.popup(None, None, None, 0, event.time)
 
@@ -580,7 +604,7 @@ class vmmManager(gobject.GObject):
         self.emit("action-show-preferences")
 
     def show_host(self, src):
-        self.emit("action-show-host", self.connection.get_uri())
+        self.emit("action-show-host", self.get_current_connection())
 
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
@@ -764,6 +788,8 @@ class vmmManager(gobject.GObject):
         col.set_visible(self.config.is_vmlist_network_traffic_visible())
 
     def cpu_usage_img(self,  column, cell, model, iter, data):
+        if model.get_value(iter, 0) is None:
+            return
         data = model.get_value(iter, 0).cpu_time_vector_limit(40)
         data.reverse()
         cell.set_property('data_array', data)
@@ -798,11 +824,37 @@ class vmmManager(gobject.GObject):
         # add the connection to the treeModel
         vmlist = self.window.get_widget("vm-list")
         self.connections[connection.uri] = connection
-        self._append_connection(vmlist.get_model(), connection)
+        if self.rows.has_key(connection.uri):
+            self.rows[connection.uri][0] = connection
+        else:        
+            self._append_connection(vmlist.get_model(), connection)
 
-    def remove_connection(self, uri):
+    def disconnect_connection(self, uri):
+        treeview = self.window.get_widget("vm-list")
+        model = treeview.get_model()
+        parent = self.rows[uri].iter
+        if parent is not None:
+            child = model.iter_children(parent)
+            while child is not None:
+                del self.rows[model.get_value(child, 9)]
+                model.remove(child)
+                child = model.iter_children(parent)
+        row = self.rows[uri]
+        row[0] = None
+        # keep uri and name for connection, so we can reconnect if needed
+        row[3] = _("Disconnected")
+        row[5] = ""
+        row[6] = 0
+        row[7] = ""
+        row[8] = 0
+        treeview.get_model().row_changed(row.path, row.iter)
+
+    def delete_connection(self, uri):
         model = self.window.get_widget("vm-list").get_model()
         parent = self.rows[uri].iter
+        if self.rows[uri][0] is not None:
+            # connection is still connected, don't delete it
+            return
         if parent is not None:
             child = model.iter_children(parent)
             while child is not None:
@@ -811,17 +863,14 @@ class vmmManager(gobject.GObject):
                 child = model.iter_children(parent)
             model.remove(parent)
             del self.rows[uri]
-
-    def set_menu_visibility(self, connection):
-        if  connection is None or connection.is_read_only():
-            self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
-        else:
-            # XXX setting this false because save/restore is broken until
-            # XXX we deal with multiple connections properly
-            self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
+        # XXX remove the connection from gconf as well so it
+        # doesn't turn up again
 
     def row_expanded(self, treeview, iter, path):
         conn = treeview.get_model().get_value(iter,0)
+        if conn is None:
+            treeview.collapse_row(path, false)
+            return
         logging.debug("Activating connection %s" % conn.get_name())
         conn.active = True
         

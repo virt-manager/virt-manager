@@ -58,10 +58,11 @@ class vmmEngine:
 
     def _do_connection_disconnected(self, connection, hvuri):
         del self.connections[hvuri]
-        if len(self.connections.keys()) == 0 and self.windowConnect == None:
+        if len(self.connections.keys()) == 0 and self.windowConnect == None \
+               and self.windowManager == None:
             gtk.main_quit()
         if self.windowManager is not None:
-            self.windowManager.remove_connection(hvuri)
+            self.windowManager.disconnect_connection(hvuri)
 
     def connect_to_uri(self, uri, readOnly=None):
         self._connect_to_uri(None, uri, readOnly)
@@ -194,6 +195,8 @@ class vmmEngine:
         self.show_host(uri)
     def _do_show_connect(self, src):
         self.show_connect()
+    def _do_connect(self, src, uri):
+        self.connect_to_uri(uri)
     def _do_show_details(self, src, uri, uuid):
         self.show_details(uri, uuid)
     def _do_show_create(self, src, uri):
@@ -300,6 +303,7 @@ class vmmEngine:
             self.windowManager.connect("action-show-about", self._do_show_about)
             self.windowManager.connect("action-show-host", self._do_show_host)
             self.windowManager.connect("action-show-connect", self._do_show_connect)
+            self.windowManager.connect("action-connect", self._do_connect)
         return self.windowManager
 
     def show_manager(self):
