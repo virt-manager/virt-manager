@@ -94,7 +94,7 @@ class vmmConnect(gobject.GObject):
             pass
         elif hv == HV_XEN:
             if conn == CONN_LOCAL:
-                uri = "xen://"
+                uri = "xen"
                 if os.getuid() != 0:
                     readOnly = True
             elif conn == CONN_TLS:

@@ -240,8 +240,6 @@ class vmmManager(gobject.GObject):
 
 
     def restore_saved(self, src=None):
-        # XXX save/restore with multiple connection UI not yet supported
-        return
 
         # get filename
         self.fcdialog = gtk.FileChooserDialog(_("Restore Virtual Machine"),
@@ -250,7 +248,7 @@ class vmmManager(gobject.GObject):
                                               (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                                gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                               None)
-        self.fcdialog.set_current_folder(self.config.get_default_save_dir(self.connection))
+        self.fcdialog.set_current_folder(self.config.get_default_save_dir(self.connections[self.get_current_connection()]))
         # pop up progress dialog
         response = self.fcdialog.run()
         self.fcdialog.hide()
@@ -293,7 +291,7 @@ class vmmManager(gobject.GObject):
             return False
 
     def restore_saved_callback(self, file_to_load, ignore1=None):
-        status = self.connection.restore(file_to_load)
+        status = self.connections[self.get_current_connection()].restore(file_to_load)
         if(status != 0):
             self.domain_restore_error = _("Error restoring domain '%s'. Is the domain already running?") % file_to_load
 
@@ -480,7 +478,13 @@ class vmmManager(gobject.GObject):
 
     def delete_vm(self, src=None):
         vm = self.current_vm()
-        if vm is None or vm.is_active():
+        if vm is None:
+            uri = self.get_current_connection()
+            if self.connections.has_key(uri):
+                return
+            self.delete_connection(uri)
+            return
+        elif vm.is_active():
             return
         conn = vm.get_connection()
         vm.delete()
@@ -500,7 +504,6 @@ class vmmManager(gobject.GObject):
         current_uri = self.get_current_connection()
         if self.connections.has_key(current_uri):
             self.connections[current_uri].close()
-            del self.connections[current_uri]
 
     def create_connection(self, ignore):
         current_uri = self.get_current_connection()
@@ -508,7 +511,7 @@ class vmmManager(gobject.GObject):
             self.emit("action-connect", current_uri)
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
-        self.emit("action-show-console", self.connection.get_uri(), self.current_vmuuid())
+        self.emit("action-show-console", self.get_current_connection(), self.current_vmuuid())
 
 
     def vm_selected(self, selection):
@@ -848,6 +851,7 @@ class vmmManager(gobject.GObject):
         row[7] = ""
         row[8] = 0
         treeview.get_model().row_changed(row.path, row.iter)
+        del self.connections[uri]
 
     def delete_connection(self, uri):
         model = self.window.get_widget("vm-list").get_model()

@@ -169,11 +169,11 @@ class vmmEngine:
     def count_visible_windows(self):
         ct = 0
         for conn in self.connections.values():
-            for name in [ "windowDetails", "windowConsole", "windowSerialConsole" ]:
-                for window in conn[name].values():
+            for winname in [ "windowDetails", "windowConsole", "windowSerialConsole" ]:
+                for window in conn[winname].values():
                     ct += window.is_visible()
-            if conn["windowHost"] != None and conn[name].is_visible():
-                ct += 1
+            if conn["windowHost"] != None and conn["windowHost"].is_visible():
+                    ct += 1
         if self.windowCreate:
                 ct += self.windowCreate.is_visible()
         if self.windowManager:
