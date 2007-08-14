@@ -311,7 +311,7 @@ class vmmConnection(gobject.GObject):
         if self.vmm == None:
             return
 
-        if not self.is_active:
+        if not self.active:
             return
 
         oldNets = self.nets

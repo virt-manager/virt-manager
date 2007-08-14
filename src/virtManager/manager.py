@@ -181,7 +181,8 @@ class vmmManager(gobject.GObject):
 
             "on_vm_view_changed": self.vm_view_changed,
             "on_vm_list_row_activated": self.open_vm_console,
-
+            "on_vm_list_row_expanded": self.row_expanded,
+            "on_vm_list_row_collapsed": self.row_collapsed,
             "on_vm_list_button_press_event": self.popup_vm_menu,
 
             "on_menu_edit_preferences_activate": self.show_preferences,
@@ -347,14 +348,15 @@ class vmmManager(gobject.GObject):
                              vm.get_memory_pretty(), vm.current_memory_percentage(), vm.get_uuid()])
         path = model.get_path(iter)
         self.rows[vm.get_uuid()] = model[path]
+        # Expand a connection when adding a vm to it
+        self.window.get_widget("vm-list").expand_row(model.get_path(parent), False)
 
     def _append_connection(self, model, conn):
-        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid
+        # Handle, name, ID, status, status icon, cpu, [cpu graph], cpus, mem, mem bar, unused
         # Connections are top-level rows, so append with parent None
         logging.debug("About to append connection: %s" % conn.get_name())
-        iter = model.append(None, [conn, conn.get_name(), conn.get_uri(), "connected", \
-                             self.config.get_vm_status_icon(libvirt.VIR_DOMAIN_RUNNING), "0", 0, \
-                             "0", 0, "0"])
+        iter = model.append(None, [conn, conn.get_name(), conn.get_uri(), \
+                                   "", None, "", 0, "", 0, ""])
         path = model.get_path(iter)
         self.rows[conn.get_uri()] = model[path]
 
@@ -427,6 +429,20 @@ class vmmManager(gobject.GObject):
                 self.window.get_widget("vm-delete").set_sensitive(True)
                 self.window.get_widget("menu_edit_delete").set_sensitive(True)
 
+    def conn_refresh_resources(self, connection):
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
+
+        if not(self.rows.has_key(connection.get_uri())):
+            return
+        
+        row = self.rows[connection.get_uri()]
+        row[3] = _("Active")
+        row[5] = "%2.2f %%" % connection.cpu_time_percentage()
+        row[6] = connection.host_active_processor_count()
+        row[7] = connection.pretty_current_memory()
+        row[8] = connection.current_memory_percentage()
+        model.row_changed(row.path, row.iter)
 
     def current_vm(self):
         vmlist = self.window.get_widget("vm-list")
@@ -776,6 +792,7 @@ class vmmManager(gobject.GObject):
         # connection.connect("disconnected", self.close)
         connection.connect("vm-added", self.vm_added)
         connection.connect("vm-removed", self.vm_removed)
+        connection.connect("resources-sampled", self.conn_refresh_resources)
         # Do useful things when a vm starts
         connection.connect("vm-started", self.vm_started)
         # add the connection to the treeModel
@@ -802,5 +819,22 @@ class vmmManager(gobject.GObject):
             # XXX setting this false because save/restore is broken until
             # XXX we deal with multiple connections properly
             self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
+
+    def row_expanded(self, treeview, iter, path):
+        conn = treeview.get_model().get_value(iter,0)
+        logging.debug("Activating connection %s" % conn.get_name())
+        conn.active = True
+        
+    def row_collapsed(self, treeview, iter, path):
+        conn = treeview.get_model().get_value(iter,0)
+        logging.debug("Deactivating connection %s" % conn.get_name())
+        conn.active = False
+        row = self.rows[conn.get_uri()]
+        row[3] = _("Inactive")
+        row[5] = ""
+        row[6] = 0
+        row[7] = ""
+        row[8] = 0
+        treeview.get_model().row_changed(row.path, row.iter)
 
 gobject.type_register(vmmManager)
