@@ -44,6 +44,8 @@ Requires: librsvg2
 Requires: vte >= 0.12.2
 # For online help
 Requires: scrollkeeper
+# For console widget
+Requires: gtk-vnc
 
 ExclusiveArch: %{ix86} x86_64 ia64
 
@@ -128,10 +130,6 @@ fi
 %{_datadir}/%{name}/virtManager/*.py
 %{_datadir}/%{name}/virtManager/*.pyc
 %{_datadir}/%{name}/virtManager/*.pyo
-
-%{_datadir}/%{name}/vncViewer/*.py
-%{_datadir}/%{name}/vncViewer/*.pyc
-%{_datadir}/%{name}/vncViewer/*.pyo
 
 %{_datadir}/omf/%{name}
 %{_datadir}/gnome/help
