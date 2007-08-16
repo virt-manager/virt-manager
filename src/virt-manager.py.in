@@ -140,19 +140,8 @@ def show_engine(engine, show, uri, uuid):
             else:
                 tryuri = "qemu:///session"
         if tryuri is not None:
-            try:
-                engine.connect_to_uri(tryuri)
-            except:
-                (type, value, stacktrace) = sys.exc_info ()
-
-                # Detailed error message, in English so it can be Googled.
-                details = \
-                        ("Unable to open auto-open connection to hypervisor URI '%s':\n" %
-                         str(tryuri)) + \
-                         str(type) + " " + str(value) + "\n" + \
-                         traceback.format_exc (stacktrace)
-                logging.warning(details)
-
+            conn = engine.connect_to_uri(tryuri)
+            if conn is None:
                 tryuri = None
         if tryuri is None:
             engine.show_connect()
@@ -239,17 +228,17 @@ def main():
                             str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
 
     # Finally start the app for real
-    show_engine(engine, options.show, options.uri, options.uuid)
-    if options.profile != None:
-        import hotshot
-        prof = hotshot.Profile(options.profile)
-        gtk.gdk.threads_enter()
-        prof.runcall(gtk.main)
-        gtk.gdk.threads_leave()
-        prof.close()
-    else:
-        gtk.gdk.threads_enter()
-        gtk.main()
+    gtk.gdk.threads_enter()
+    try:
+        show_engine(engine, options.show, options.uri, options.uuid)
+        if options.profile != None:
+            import hotshot
+            prof = hotshot.Profile(options.profile)
+            prof.runcall(gtk.main)
+            prof.close()
+        else:
+            gtk.main()
+    finally:
         gtk.gdk.threads_leave()
 
 if __name__ == "__main__":

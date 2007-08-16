@@ -65,7 +65,7 @@ class vmmEngine:
             self.windowManager.disconnect_connection(hvuri)
 
     def connect_to_uri(self, uri, readOnly=None):
-        self._connect_to_uri(None, uri, readOnly)
+        return self._connect_to_uri(None, uri, readOnly)
 
     def _connect_to_uri(self, connect, uri, readOnly):
         self.windowConnect = None
@@ -73,6 +73,7 @@ class vmmEngine:
         try:
             conn = self.get_connection(uri, readOnly)
             self.show_manager()
+            return conn
         except:
             (type, value, stacktrace) = sys.exc_info ()
 
@@ -111,9 +112,7 @@ class vmmEngine:
             dg.run()
             dg.hide()
             dg.destroy()
-
-        if len(self.connections.keys()) == 0:
-            gtk.main_quit()
+            return None
 
     def _connect_cancelled(self, connect):
         self.windowConnect = None
