@@ -11,6 +11,8 @@ aclocal -I m4
 libtoolize
 automake -a
 autoconf
+# Hack around autoconf wierdness. Need to figure out what's really wrong
+touch config.rpath
 
 test -d build && rm -rf build
 mkdir build
