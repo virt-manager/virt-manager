@@ -671,6 +671,9 @@
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">•</property>
 			      <property name="activates_default">False</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Name Field</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1008,6 +1011,9 @@ mips
 mipsel</property>
 					  <property name="add_tearoffs">False</property>
 					  <property name="focus_on_click">True</property>
+					  <accessibility>
+					    <atkproperty name="AtkObject::accessible_name" translatable="yes">Architecture Select</atkproperty>
+					  </accessibility>
 					  <signal name="changed" handler="on_cpu_architecture_changed" last_modification_time="Tue, 20 Feb 2007 03:29:44 GMT"/>
 					</widget>
 					<packing>
@@ -1487,6 +1493,9 @@ mipsel</property>
 				  <property name="has_frame">True</property>
 				  <property name="invisible_char">•</property>
 				  <property name="activates_default">False</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">ISO Location Field</atkproperty>
+				  </accessibility>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -1615,6 +1624,9 @@ mipsel</property>
 				  <property name="visible">True</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="focus_on_click">True</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">Media Path Select</atkproperty>
+				  </accessibility>
 				  <signal name="changed" handler="on_cd_path_changed" last_modification_time="Wed, 23 Aug 2006 20:46:09 GMT"/>
 				</widget>
 				<packing>
@@ -1724,6 +1736,9 @@ mipsel</property>
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">OS Type Select</atkproperty>
+			      </accessibility>
 			      <signal name="changed" handler="on_os_type_changed"/>
 			    </widget>
 			    <packing>
@@ -1740,6 +1755,9 @@ mipsel</property>
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">OS Variant Select</atkproperty>
+			      </accessibility>
 			      <signal name="changed" handler="on_os_variant_changed"/>
 			    </widget>
 			    <packing>
@@ -1952,7 +1970,7 @@ mipsel</property>
 		      <child>
 			<widget class="GtkTable" id="table21">
 			  <property name="visible">True</property>
-			  <property name="n_rows">5</property>
+			  <property name="n_rows">8</property>
 			  <property name="n_columns">3</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">2</property>
@@ -2200,6 +2218,9 @@ mipsel</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="has_frame">True</property>
 				  <property name="focus_on_click">True</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">Install URL Field</atkproperty>
+				  </accessibility>
 				</widget>
 			      </child>
 			    </widget>
@@ -2231,6 +2252,9 @@ mipsel</property>
 				  <property name="add_tearoffs">False</property>
 				  <property name="has_frame">True</property>
 				  <property name="focus_on_click">True</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">Kickstart Field</atkproperty>
+				  </accessibility>
 				</widget>
 			      </child>
 			    </widget>
@@ -2241,6 +2265,116 @@ mipsel</property>
 			      <property name="bottom_attach">4</property>
 			      <property name="x_options">fill</property>
 			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label388">
+			      <property name="visible">True</property>
+			      <property name="label" translatable="yes">_Kernel parameters:</property>
+			      <property name="use_underline">True</property>
+			      <property name="use_markup">True</property>
+			      <property name="justify">GTK_JUSTIFY_LEFT</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">4</property>
+			      <property name="ypad">0</property>
+			      <property name="mnemonic_widget">pv-media-url</property>
+			      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			      <property name="width_chars">-1</property>
+			      <property name="single_line_mode">False</property>
+			      <property name="angle">0</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">1</property>
+			      <property name="right_attach">2</property>
+			      <property name="top_attach">6</property>
+			      <property name="bottom_attach">7</property>
+			      <property name="x_options">fill</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkEntry" id="kernel-params">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="editable">True</property>
+			      <property name="visibility">True</property>
+			      <property name="max_length">0</property>
+			      <property name="text" translatable="yes"></property>
+			      <property name="has_frame">True</property>
+			      <property name="invisible_char">•</property>
+			      <property name="activates_default">False</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">kernel-params</atkproperty>
+			      </accessibility>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">2</property>
+			      <property name="right_attach">3</property>
+			      <property name="top_attach">6</property>
+			      <property name="bottom_attach">7</property>
+			      <property name="y_options"></property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox65">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">0</property>
+
+			      <child>
+				<widget class="GtkImage" id="image105">
+				  <property name="visible">True</property>
+				  <property name="icon_size">4</property>
+				  <property name="icon_name">gtk-info</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkLabel" id="label389">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Example:&lt;/b&gt; updates=http://hostname.example.com/updates.img&lt;/small&gt;</property>
+				  <property name="use_underline">False</property>
+				  <property name="use_markup">True</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0.5</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">7</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">2</property>
+			      <property name="right_attach">3</property>
+			      <property name="top_attach">7</property>
+			      <property name="bottom_attach">8</property>
+			      <property name="x_options">fill</property>
 			    </packing>
 			  </child>
 			</widget>
@@ -2642,6 +2776,9 @@ mipsel</property>
 				  <property name="has_frame">True</property>
 				  <property name="invisible_char">•</property>
 				  <property name="activates_default">False</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">Partition Field</atkproperty>
+				  </accessibility>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>
@@ -2694,6 +2831,9 @@ mipsel</property>
 				  <property name="has_frame">True</property>
 				  <property name="invisible_char">•</property>
 				  <property name="activates_default">False</property>
+				  <accessibility>
+				    <atkproperty name="AtkObject::accessible_name" translatable="yes">File Location Field</atkproperty>
+				  </accessibility>
 				  <signal name="changed" handler="on_storage_file_address_changed" last_modification_time="Tue, 12 Sep 2006 21:28:45 GMT"/>
 				</widget>
 				<packing>
@@ -2789,6 +2929,9 @@ mipsel</property>
 				      <property name="snap_to_ticks">True</property>
 				      <property name="wrap">False</property>
 				      <property name="adjustment">500 0 4000000 100 500 500</property>
+				      <accessibility>
+					<atkproperty name="AtkObject::accessible_name" translatable="yes">File Size Select</atkproperty>
+				      </accessibility>
 				      <signal name="changed" handler="on_storage_file_size_changed" last_modification_time="Thu, 10 Aug 2006 19:19:04 GMT"/>
 				    </widget>
 				  </child>
@@ -3129,6 +3272,9 @@ mipsel</property>
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Network Device Select</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -3334,6 +3480,9 @@ mipsel</property>
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Network Select</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -3509,6 +3658,9 @@ mipsel</property>
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">•</property>
 			      <property name="activates_default">False</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">MAC Field</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -4106,6 +4258,9 @@ mipsel</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">249 50 32000 5 10 10</property>
+			  <accessibility>
+			    <atkproperty name="AtkObject::accessible_name" translatable="yes">Max Mem Select</atkproperty>
+			  </accessibility>
 			  <signal name="value_changed" handler="on_create_memory_max_value_changed" last_modification_time="Tue, 12 Sep 2006 21:11:37 GMT"/>
 			</widget>
 		      </child>
@@ -4143,6 +4298,9 @@ mipsel</property>
 			  <property name="snap_to_ticks">False</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">244 50 32000 5 10 10</property>
+			  <accessibility>
+			    <atkproperty name="AtkObject::accessible_name" translatable="yes">Startup Mem Select</atkproperty>
+			  </accessibility>
 			</widget>
 		      </child>
 		    </widget>
@@ -4179,6 +4337,9 @@ mipsel</property>
 			  <property name="snap_to_ticks">True</property>
 			  <property name="wrap">False</property>
 			  <property name="adjustment">1 1 32 1 2 2</property>
+			  <accessibility>
+			    <atkproperty name="AtkObject::accessible_name" translatable="yes">VCPU Select</atkproperty>
+			  </accessibility>
 			</widget>
 		      </child>
 		    </widget>
@@ -4298,7 +4459,7 @@ mipsel</property>
 		    <widget class="GtkTable" id="table29">
 		      <property name="border_width">6</property>
 		      <property name="visible">True</property>
-		      <property name="n_rows">17</property>
+		      <property name="n_rows">18</property>
 		      <property name="n_columns">3</property>
 		      <property name="homogeneous">False</property>
 		      <property name="row_spacing">3</property>
@@ -4434,8 +4595,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">2</property>
 			  <property name="right_attach">3</property>
-			  <property name="top_attach">12</property>
-			  <property name="bottom_attach">13</property>
+			  <property name="top_attach">13</property>
+			  <property name="bottom_attach">14</property>
 			  <property name="y_options"></property>
 			</packing>
 		      </child>
@@ -4517,8 +4678,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">2</property>
 			  <property name="right_attach">3</property>
-			  <property name="top_attach">11</property>
-			  <property name="bottom_attach">12</property>
+			  <property name="top_attach">12</property>
+			  <property name="bottom_attach">13</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -4685,8 +4846,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">1</property>
 			  <property name="right_attach">2</property>
-			  <property name="top_attach">11</property>
-			  <property name="bottom_attach">12</property>
+			  <property name="top_attach">12</property>
+			  <property name="bottom_attach">13</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -4713,8 +4874,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">1</property>
 			  <property name="right_attach">2</property>
-			  <property name="top_attach">12</property>
-			  <property name="bottom_attach">13</property>
+			  <property name="top_attach">13</property>
+			  <property name="bottom_attach">14</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -4741,8 +4902,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">0</property>
 			  <property name="right_attach">3</property>
-			  <property name="top_attach">13</property>
-			  <property name="bottom_attach">14</property>
+			  <property name="top_attach">14</property>
+			  <property name="bottom_attach">15</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -4769,8 +4930,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">0</property>
 			  <property name="right_attach">3</property>
-			  <property name="top_attach">10</property>
-			  <property name="bottom_attach">11</property>
+			  <property name="top_attach">11</property>
+			  <property name="bottom_attach">12</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -4909,8 +5070,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">1</property>
 			  <property name="right_attach">2</property>
-			  <property name="top_attach">14</property>
-			  <property name="bottom_attach">15</property>
+			  <property name="top_attach">15</property>
+			  <property name="bottom_attach">16</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -4937,8 +5098,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">1</property>
 			  <property name="right_attach">2</property>
-			  <property name="top_attach">15</property>
-			  <property name="bottom_attach">16</property>
+			  <property name="top_attach">16</property>
+			  <property name="bottom_attach">17</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -4965,8 +5126,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">2</property>
 			  <property name="right_attach">3</property>
-			  <property name="top_attach">14</property>
-			  <property name="bottom_attach">15</property>
+			  <property name="top_attach">15</property>
+			  <property name="bottom_attach">16</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -4993,8 +5154,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">2</property>
 			  <property name="right_attach">3</property>
-			  <property name="top_attach">15</property>
-			  <property name="bottom_attach">16</property>
+			  <property name="top_attach">16</property>
+			  <property name="bottom_attach">17</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -5133,8 +5294,8 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">1</property>
 			  <property name="right_attach">2</property>
-			  <property name="top_attach">16</property>
-			  <property name="bottom_attach">17</property>
+			  <property name="top_attach">17</property>
+			  <property name="bottom_attach">18</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>
@@ -5161,8 +5322,64 @@ mipsel</property>
 			<packing>
 			  <property name="left_attach">2</property>
 			  <property name="right_attach">3</property>
-			  <property name="top_attach">16</property>
-			  <property name="bottom_attach">17</property>
+			  <property name="top_attach">17</property>
+			  <property name="bottom_attach">18</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="summary-kernel-args-label">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Kernel arguments:</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_RIGHT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">1</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">1</property>
+			  <property name="right_attach">2</property>
+			  <property name="top_attach">10</property>
+			  <property name="bottom_attach">11</property>
+			  <property name="x_options">fill</property>
+			  <property name="y_options"></property>
+			</packing>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="summary-kernel-args">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">ip=192.168.1.1</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_LEFT</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+			  <property name="width_chars">-1</property>
+			  <property name="single_line_mode">False</property>
+			  <property name="angle">0</property>
+			</widget>
+			<packing>
+			  <property name="left_attach">2</property>
+			  <property name="right_attach">3</property>
+			  <property name="top_attach">10</property>
+			  <property name="bottom_attach">11</property>
 			  <property name="x_options">fill</property>
 			  <property name="y_options"></property>
 			</packing>

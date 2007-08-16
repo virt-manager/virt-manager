@@ -369,6 +369,9 @@ class vmmCreate(gobject.GObject):
             return None
         else:
             return self.window.get_widget("storage-file-size").get_value()
+    
+    def get_config_kernel_params(self):
+	return self.window.get_widget("kernel-params").get_text()
 
     def get_config_network(self):
         if os.getuid() != 0:
@@ -454,6 +457,13 @@ class vmmCreate(gobject.GObject):
                 self.window.get_widget("summary-os").show()
             self.window.get_widget("summary-install-source").set_text(self.get_config_install_source())
             self.window.get_widget("summary-kickstart-source").set_text(self.get_config_kickstart_source())
+            if self._guest.extraargs is None:
+                self.window.get_widget("summary-kernel-args-label").hide()
+                self.window.get_widget("summary-kernel-args").hide()
+            else:
+                self.window.get_widget("summary-kernel-args-label").show()
+                self.window.get_widget("summary-kernel-args").show()
+                self.window.get_widget("summary-kernel-args").set_text(self._guest.extraargs)
             self.window.get_widget("summary-disk-image").set_text(self.get_config_disk_image())
             disksize = self.get_config_disk_size()
             if disksize != None:
@@ -824,6 +834,14 @@ class vmmCreate(gobject.GObject):
                     return False
                 else:
                     self._guest.extraargs = "ks=%s" % (ks,)
+
+            kernel_params = self.get_config_kernel_params()
+            if kernel_params != "":
+                if self._guest.extraargs is None:
+                    self._guest.extraargs = kernel_params
+                else:
+                    self._guest.extraargs = "%s %s" % (self._guest.extraargs, kernel_params)
+		self._guest.extraargs = self._guest.extraargs.strip()
 
         elif page_num == PAGE_DISK:
             

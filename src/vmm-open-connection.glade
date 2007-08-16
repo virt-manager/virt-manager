@@ -163,6 +163,9 @@
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char">•</property>
 	      <property name="activates_default">False</property>
+	      <accessibility>
+		<atkproperty name="AtkObject::accessible_name" translatable="yes">Hostname Field</atkproperty>
+	      </accessibility>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
@@ -181,6 +184,9 @@ Remote SSL/TLS with x509 certificate
 Remote tunnel over SSH</property>
 	      <property name="add_tearoffs">False</property>
 	      <property name="focus_on_click">True</property>
+	      <accessibility>
+		<atkproperty name="AtkObject::accessible_name" translatable="yes">Connection Select</atkproperty>
+	      </accessibility>
 	      <signal name="changed" handler="on_connection_changed" last_modification_time="Wed, 11 Jul 2007 22:34:03 GMT"/>
 	    </widget>
 	    <packing>
@@ -284,6 +290,9 @@ Remote tunnel over SSH</property>
 QEMU</property>
 	      <property name="add_tearoffs">False</property>
 	      <property name="focus_on_click">True</property>
+	      <accessibility>
+		<atkproperty name="AtkObject::accessible_name" translatable="yes">Hypervisor Select</atkproperty>
+	      </accessibility>
 	      <signal name="changed" handler="on_type_hypervisor_changed" last_modification_time="Mon, 19 Feb 2007 22:04:06 GMT"/>
 	    </widget>
 	    <packing>

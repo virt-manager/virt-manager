@@ -177,6 +177,9 @@
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Hardware Type Select</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -604,6 +607,9 @@
 					  <property name="has_frame">True</property>
 					  <property name="invisible_char">•</property>
 					  <property name="activates_default">False</property>
+					  <accessibility>
+					    <atkproperty name="AtkObject::accessible_name" translatable="yes">Partition Location Field</atkproperty>
+					  </accessibility>
 					</widget>
 					<packing>
 					  <property name="padding">0</property>
@@ -656,6 +662,9 @@
 					  <property name="has_frame">True</property>
 					  <property name="invisible_char">•</property>
 					  <property name="activates_default">False</property>
+					  <accessibility>
+					    <atkproperty name="AtkObject::accessible_name" translatable="yes">File Location Field</atkproperty>
+					  </accessibility>
 					  <signal name="changed" handler="on_storage_file_address_changed" last_modification_time="Tue, 12 Sep 2006 21:28:45 GMT"/>
 					</widget>
 					<packing>
@@ -751,6 +760,9 @@
 					      <property name="snap_to_ticks">True</property>
 					      <property name="wrap">False</property>
 					      <property name="adjustment">500 0 4000000 100 500 500</property>
+					      <accessibility>
+						<atkproperty name="AtkObject::accessible_name" translatable="yes">File Size Field</atkproperty>
+					      </accessibility>
 					      <signal name="changed" handler="on_storage_file_size_changed" last_modification_time="Thu, 10 Aug 2006 19:19:04 GMT"/>
 					    </widget>
 					  </child>
@@ -983,6 +995,9 @@
 				      <property name="visible">True</property>
 				      <property name="add_tearoffs">False</property>
 				      <property name="focus_on_click">True</property>
+				      <accessibility>
+					<atkproperty name="AtkObject::accessible_name" translatable="yes">Device Type Field</atkproperty>
+				      </accessibility>
 				      <signal name="changed" handler="on_target_device_changed" last_modification_time="Sat, 14 Jul 2007 17:06:51 GMT"/>
 				    </widget>
 				    <packing>
@@ -1161,6 +1176,9 @@
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Network Device Select</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1366,6 +1384,9 @@
 			      <property name="visible">True</property>
 			      <property name="add_tearoffs">False</property>
 			      <property name="focus_on_click">True</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">Virtual Network Select</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1541,6 +1562,9 @@
 			      <property name="has_frame">True</property>
 			      <property name="invisible_char">•</property>
 			      <property name="activates_default">False</property>
+			      <accessibility>
+				<atkproperty name="AtkObject::accessible_name" translatable="yes">MAC Address Field</atkproperty>
+			      </accessibility>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>

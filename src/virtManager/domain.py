@@ -151,6 +151,8 @@ class vmmDomain(gobject.GObject):
             self.emit("status-changed", status)
 
     def tick(self, now):
+        if not self.connection.active:
+            return
         # Clear cached XML
         self.xml = None
         hostInfo = self.connection.get_host_info()

@@ -44,28 +44,6 @@
 		<widget class="GtkMenu" id="menuitem4_menu">
 
 		  <child>
-		    <widget class="GtkImageMenuItem" id="menu_file_new">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">New machine...</property>
-		      <property name="use_underline">True</property>
-		      <signal name="activate" handler="on_menu_file_new_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
-		      <accelerator key="n" modifiers="GDK_MOD1_MASK" signal="activate"/>
-
-		      <child internal-child="image">
-			<widget class="GtkImage" id="image118">
-			  <property name="visible">True</property>
-			  <property name="stock">gtk-new</property>
-			  <property name="icon_size">1</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-
-		  <child>
 		    <widget class="GtkImageMenuItem" id="menu_file_restore_saved">
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Restore a saved machine from a filesystem image</property>
@@ -75,7 +53,7 @@
 		      <accelerator key="r" modifiers="GDK_MOD1_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image119">
+			<widget class="GtkImage" id="image123">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-open</property>
 			  <property name="icon_size">1</property>
@@ -102,7 +80,7 @@
 		      <signal name="activate" handler="on_menu_file_open_connection_activate" last_modification_time="Mon, 12 Jun 2006 20:34:47 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image120">
+			<widget class="GtkImage" id="image124">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-connect</property>
 			  <property name="icon_size">1</property>
@@ -169,7 +147,7 @@
 		      <signal name="activate" handler="on_menu_edit_details_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image121">
+			<widget class="GtkImage" id="image125">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-properties</property>
 			  <property name="icon_size">1</property>
@@ -190,7 +168,7 @@
 		      <signal name="activate" handler="on_menu_edit_delete_activate" last_modification_time="Tue, 28 Mar 2006 17:06:34 GMT"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image122">
+			<widget class="GtkImage" id="image126">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-delete</property>
 			  <property name="icon_size">1</property>
@@ -323,7 +301,7 @@
 		      <accelerator key="F1" modifiers="0" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image123">
+			<widget class="GtkImage" id="image127">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-help</property>
 			  <property name="icon_size">1</property>
@@ -396,6 +374,9 @@ Active virtual machines
 Inactive virtual machines</property>
 	      <property name="add_tearoffs">False</property>
 	      <property name="focus_on_click">True</property>
+	      <accessibility>
+		<atkproperty name="AtkObject::accessible_name" translatable="yes">View Select</atkproperty>
+	      </accessibility>
 	      <signal name="changed" handler="on_vm_view_changed" last_modification_time="Tue, 10 Oct 2006 20:44:44 GMT"/>
 	    </widget>
 	    <packing>
@@ -434,6 +415,8 @@ Inactive virtual machines</property>
 	      <property name="hover_expand">False</property>
 	      <signal name="row_activated" handler="on_vm_list_row_activated" last_modification_time="Mon, 03 Apr 2006 13:43:20 GMT"/>
 	      <signal name="button_press_event" handler="on_vm_list_button_press_event" last_modification_time="Mon, 03 Apr 2006 14:14:43 GMT"/>
+	      <signal name="row_expanded" handler="on_vm_list_row_expanded" last_modification_time="Tue, 14 Aug 2007 15:19:41 GMT"/>
+	      <signal name="row_collapsed" handler="on_vm_list_row_collapsed" last_modification_time="Tue, 14 Aug 2007 15:19:50 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -461,19 +444,6 @@ Inactive virtual machines</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	      <signal name="clicked" handler="on_vm_delete_clicked" last_modification_time="Tue, 28 Mar 2006 17:03:36 GMT"/>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkButton" id="vm-new">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-new</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <signal name="clicked" handler="on_vm_new_clicked" last_modification_time="Tue, 28 Mar 2006 17:03:39 GMT"/>
 	    </widget>
 	  </child>
 
