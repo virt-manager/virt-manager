@@ -209,8 +209,9 @@ class vmmManager(gobject.GObject):
         win.present()
 
     def close(self, src=None, src2=None):
-        for uri in self.connections:
-            self.connections[uri].close()
+        conns = self.connections.values()
+        for conn in conns:
+            conn.close()
         win = self.window.get_widget("vmm-manager")
         win.hide()
         return 1
