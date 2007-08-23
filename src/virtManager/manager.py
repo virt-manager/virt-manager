@@ -179,8 +179,6 @@ class vmmManager(gobject.GObject):
             "on_vmm_close_clicked": self.close,
             "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
-            "on_vm_delete_clicked": self.delete_vm,
-            "on_menu_edit_delete_activate" : self.delete_vm,
             "on_menu_edit_details_activate": self.show_vm_details,
             "on_menu_host_details_activate": self.show_host,
 
@@ -350,16 +348,16 @@ class vmmManager(gobject.GObject):
         # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid
         iter = model.append(parent, [vm, vm.get_name(), vm.get_id_pretty(), vm.run_status(), \
                              vm.run_status_icon(), vm.cpu_time_pretty(), vm.vcpu_count(), \
-                             vm.get_memory_pretty(), vm.current_memory_percentage(), vm.get_uuid()])
+                             vm.get_memory_pretty(), vm.current_memory_percentage(), vm.get_uuid(), ""])
         path = model.get_path(iter)
         self.rows[vm.get_uuid()] = model[path]
         # Expand a connection when adding a vm to it
         self.window.get_widget("vm-list").expand_row(model.get_path(parent), False)
 
     def _append_connection(self, model, conn):
-        # Handle, name, ID, status, status icon, cpu, [cpu graph], cpus, mem, mem bar, unused
+        # Handle, name, ID, status, status icon, cpu, [cpu graph], cpus, mem, mem bar, unused, stock item name
         iter = model.append(None, [conn, conn.get_name(), conn.get_uri(), \
-                                   "", None, "", 0, "", 0, ""])
+                                   "", None, "", 0, "", 0, "", ""])
         path = model.get_path(iter)
         self.rows[conn.get_uri()] = model[path]
 
@@ -422,21 +420,18 @@ class vmmManager(gobject.GObject):
         row[6] = vm.vcpu_count()
         row[7] = vm.get_memory_pretty()
         row[8] = vm.current_memory_percentage()
+        if vm.is_active():
+            row[10] = None
+        else:
+            row[10] = gtk.STOCK_DELETE
         model.row_changed(row.path, row.iter)
-
-        if vm == self.current_vm():
-            if vm.is_active():
-                self.window.get_widget("vm-delete").set_sensitive(False)
-                self.window.get_widget("menu_edit_delete").set_sensitive(False)
-            else:
-                self.window.get_widget("vm-delete").set_sensitive(True)
-                self.window.get_widget("menu_edit_delete").set_sensitive(True)
 
     def conn_refresh_resources(self, connection):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
         if not(self.rows.has_key(connection.get_uri())):
+            row[10] = gtk.STOCK_DELETE
             return
         
         row = self.rows[connection.get_uri()]
@@ -445,6 +440,7 @@ class vmmManager(gobject.GObject):
         row[6] = connection.host_active_processor_count()
         row[7] = connection.pretty_current_memory()
         row[8] = connection.current_memory_percentage()
+        row[10] = gtk.STOCK_NEW
         model.row_changed(row.path, row.iter)
 
     def current_vm(self):
@@ -518,18 +514,13 @@ class vmmManager(gobject.GObject):
     def vm_selected(self, selection):
         vm = self.current_vm()
         if selection == None or selection.count_selected_rows() == 0:
-            self.window.get_widget("vm-delete").set_sensitive(False)
             self.window.get_widget("vm-details").set_sensitive(False)
             self.window.get_widget("vm-open").set_sensitive(False)
-            self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
         elif vm is not None:
-            if vm.is_active():
-                self.window.get_widget("vm-delete").set_sensitive(False)
-                self.window.get_widget("menu_edit_delete").set_sensitive(False)
-            else:
-                self.window.get_widget("vm-delete").set_sensitive(True)
-                self.window.get_widget("menu_edit_delete").set_sensitive(True)
+            # this is strange to call this here, but it simplifies the code
+            # updating the treeview
+            self.vm_resources_sampled(vm)
             self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(True)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
@@ -537,65 +528,81 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("vm-details").set_sensitive(False)
             self.window.get_widget("vm-open").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
-            uri = self.get_current_connection()
-            if self.connections.has_key(uri):
-                # Connection is live
-                self.window.get_widget("vm-delete").set_sensitive(False)
-                self.window.get_widget("menu_edit_delete").set_sensitive(False)
-            else:
-                # Connection is disconnected, therefore deleteable
-                self.window.get_widget("vm-delete").set_sensitive(True)
-                self.window.get_widget("menu_edit_delete").set_sensitive(True)
 
     def popup_vm_menu(self, widget, event):
-        vm = self.current_vm()
-        uri = self.get_current_connection()
-        if vm != None:
-
-            # Update popup menu based upon vm status
-            if vm.is_read_only() == True:
-                self.vmmenu_items["run"].set_sensitive(False)
-                self.vmmenu_items["pause"].set_sensitive(False)
-                self.vmmenu_items["pause"].show()
-                self.vmmenu_items["resume"].hide()
-                self.vmmenu_items["resume"].set_sensitive(False)
-                self.vmmenu_items["shutdown"].set_sensitive(False)
-            else:
-                if vm.status() == libvirt.VIR_DOMAIN_SHUTOFF:
-                    self.vmmenu_items["run"].set_sensitive(True)
+        tuple = widget.get_path_at_pos(int(event.x), int(event.y))
+        if tuple == None:
+            return False
+        path = tuple[0]
+        model = widget.get_model()
+        iter = model.get_iter(path)
+        if model.iter_parent(iter) != None:
+            # a vm is selected, retrieve it from the first column of the model
+            vm = model.get_value(iter, 0)
+            if event.button == 3:
+                # Update popup menu based upon vm status
+                if vm.is_read_only() == True:
+                    self.vmmenu_items["run"].set_sensitive(False)
                     self.vmmenu_items["pause"].set_sensitive(False)
                     self.vmmenu_items["pause"].show()
                     self.vmmenu_items["resume"].hide()
                     self.vmmenu_items["resume"].set_sensitive(False)
                     self.vmmenu_items["shutdown"].set_sensitive(False)
-                elif vm.status() == libvirt.VIR_DOMAIN_RUNNING:
-                    self.vmmenu_items["run"].set_sensitive(False)
-                    self.vmmenu_items["pause"].set_sensitive(True)
-                    self.vmmenu_items["pause"].show()
-                    self.vmmenu_items["resume"].hide()
-                    self.vmmenu_items["resume"].set_sensitive(False)
-                    self.vmmenu_items["shutdown"].set_sensitive(True)
-                elif vm.status() == libvirt.VIR_DOMAIN_PAUSED:
-                    self.vmmenu_items["run"].set_sensitive(False)
-                    self.vmmenu_items["pause"].hide()
-                    self.vmmenu_items["pause"].set_sensitive(False)
-                    self.vmmenu_items["resume"].show()
-                    self.vmmenu_items["resume"].set_sensitive(True)
-                    self.vmmenu_items["shutdown"].set_sensitive(True)              
-            if event.button == 3:
+                else:
+                    if vm.status() == libvirt.VIR_DOMAIN_SHUTOFF:
+                        self.vmmenu_items["run"].set_sensitive(True)
+                        self.vmmenu_items["pause"].set_sensitive(False)
+                        self.vmmenu_items["pause"].show()
+                        self.vmmenu_items["resume"].hide()
+                        self.vmmenu_items["resume"].set_sensitive(False)
+                        self.vmmenu_items["shutdown"].set_sensitive(False)
+                    elif vm.status() == libvirt.VIR_DOMAIN_RUNNING:
+                        self.vmmenu_items["run"].set_sensitive(False)
+                        self.vmmenu_items["pause"].set_sensitive(True)
+                        self.vmmenu_items["pause"].show()
+                        self.vmmenu_items["resume"].hide()
+                        self.vmmenu_items["resume"].set_sensitive(False)
+                        self.vmmenu_items["shutdown"].set_sensitive(True)
+                    elif vm.status() == libvirt.VIR_DOMAIN_PAUSED:
+                        self.vmmenu_items["run"].set_sensitive(False)
+                        self.vmmenu_items["pause"].hide()
+                        self.vmmenu_items["pause"].set_sensitive(False)
+                        self.vmmenu_items["resume"].show()
+                        self.vmmenu_items["resume"].set_sensitive(True)
+                        self.vmmenu_items["shutdown"].set_sensitive(True)              
                 self.vmmenu.popup(None, None, None, 0, event.time)
-        elif uri is not None:
-            if self.connections.has_key(uri):
-                self.connmenu_items["create"].set_sensitive(True)
-                self.connmenu_items["disconnect"].set_sensitive(True)
-                self.connmenu_items["connect"].set_sensitive(False)
-            else:
-                self.connmenu_items["create"].set_sensitive(False)
-                self.connmenu_items["disconnect"].set_sensitive(False)
-                self.connmenu_items["connect"].set_sensitive(True)
+            elif event.button == 1:
+                # check if the "delete" icon was clicked and act accordingly
+                logging.debug("Clicked a VM row")
+                area = widget.get_cell_area(path, widget.get_column(3))
+                if int(event.x) > area.x and int(event.x) < area.x + area.width \
+                       and not vm.is_active():
+                    conn = vm.get_connection()
+                    vm.delete()
+                    conn.tick(noStatsUpdate=True)
+            return False
+        else:
+            uri = model.get_value(iter, 2)
             if event.button == 3:
+                if self.connections.has_key(uri):
+                    self.connmenu_items["create"].set_sensitive(True)
+                    self.connmenu_items["disconnect"].set_sensitive(True)
+                    self.connmenu_items["connect"].set_sensitive(False)
+                else:
+                    self.connmenu_items["create"].set_sensitive(False)
+                    self.connmenu_items["disconnect"].set_sensitive(False)
+                    self.connmenu_items["connect"].set_sensitive(True)
                 self.connmenu.popup(None, None, None, 0, event.time)
-
+            elif event.button == 1:
+                logging.debug("Clicked a connection row")
+                area = widget.get_cell_area(path, widget.get_column(3))
+                if int(event.x) > area.x and int(event.x) < area.x + area.width:
+                    # clicked the action column
+                    if self.connections.has_key(uri):
+                        self.emit("action-show-create", uri)
+                    else:
+                        self.delete_connection(uri)
+            return False 
 
     def show_about(self, src):
         self.emit("action-show-about")
@@ -613,13 +620,14 @@ class vmmManager(gobject.GObject):
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
-        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar
-        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str)
+        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid, action icon
+        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str, str)
         vmlist.set_model(model)
 
         idCol = gtk.TreeViewColumn(_("ID"))
         nameCol = gtk.TreeViewColumn(_("Name"))
         statusCol = gtk.TreeViewColumn(_("Status"))
+        actionCol = gtk.TreeViewColumn(_("Action"))
         cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
         virtualCPUsCol = gtk.TreeViewColumn(_("VCPUs"))
         memoryUsageCol = gtk.TreeViewColumn(_("Memory usage"))
@@ -629,13 +637,14 @@ class vmmManager(gobject.GObject):
         vmlist.append_column(idCol)
         vmlist.append_column(nameCol)
         vmlist.append_column(statusCol)
+        vmlist.append_column(actionCol)
         vmlist.append_column(cpuUsageCol)
         vmlist.append_column(virtualCPUsCol)
         vmlist.append_column(memoryUsageCol)
         vmlist.append_column(diskUsageCol)
         vmlist.append_column(networkTrafficCol)
 
-        # For the columsn which follow, we delibrately bind columns
+        # For the columns which follow, we deliberately bind columns
         # to fields in the list store & on each update copy the info
         # out of the vmmDomain object into the store. Although this
         # sounds foolish, empirically this is faster than using the
@@ -662,6 +671,12 @@ class vmmManager(gobject.GObject):
         statusCol.add_attribute(status_txt, 'text', 3)
         statusCol.add_attribute(status_icon, 'pixbuf', 4)
         statusCol.set_visible(self.config.is_vmlist_status_visible())
+
+        action_icon = gtk.CellRendererPixbuf()
+        action_icon.set_property('stock-size', gtk.ICON_SIZE_MENU)
+        actionCol.pack_start(action_icon, True)
+        actionCol.add_attribute(action_icon, 'stock-id', 10) 
+        actionCol.set_visible(True)
 
         cpuUsage_txt = gtk.CellRendererText()
         cpuUsage_img = sparkline.CellRendererSparkline()
@@ -851,6 +866,7 @@ class vmmManager(gobject.GObject):
         row[6] = 0
         row[7] = ""
         row[8] = 0
+        row[10] = gtk.STOCK_DELETE
         treeview.get_model().row_changed(row.path, row.iter)
         del self.connections[uri]
 
