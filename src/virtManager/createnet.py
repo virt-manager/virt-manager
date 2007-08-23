@@ -328,9 +328,10 @@ class vmmCreateNetwork(gobject.GObject):
                 return False
 
             if ip.iptype() != "PRIVATE":
-                self._validation_error_box(_("Invalid Network Address"), \
-                                           _("The network must be an IPv4 private address"))
-                return False
+                res = self._yes_no_box(_("Check Network Address"), \
+                                       _("The network should normally use a private IPv4 address. Use this non-private address anyway?"))
+                if not res:
+                    return False
         elif page_num == PAGE_DHCP:
             ip = self.get_config_ip4()
             start = self.get_config_dhcp_start()
@@ -375,6 +376,21 @@ class vmmCreateNetwork(gobject.GObject):
             message_box.format_secondary_text(text2)
         message_box.run()
         message_box.destroy()
+
+    def _yes_no_box(self, text1, text2=None):
+        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create-net"), \
+                                                0, \
+                                                gtk.MESSAGE_WARNING, \
+                                                gtk.BUTTONS_YES_NO, \
+                                                text1)
+        if text2 != None:
+            message_box.format_secondary_text(text2)
+        if message_box.run()== gtk.RESPONSE_YES:
+            res = True
+        else:
+            res = False
+        message_box.destroy()
+        return res
 
     def populate_opt_media(self, model):
         # get a list of optical devices with data discs in, for FV installs
