@@ -473,20 +473,6 @@ class vmmManager(gobject.GObject):
             return None
         return vm.get_uuid()
 
-    def delete_vm(self, src=None):
-        vm = self.current_vm()
-        if vm is None:
-            uri = self.get_current_connection()
-            if self.connections.has_key(uri):
-                return
-            self.delete_connection(uri)
-            return
-        elif vm.is_active():
-            return
-        conn = vm.get_connection()
-        vm.delete()
-        conn.tick(noStatsUpdate=True)
-
     def show_vm_details(self,ignore):
         vm = self.current_vm()
         if vm is None:
@@ -577,6 +563,16 @@ class vmmManager(gobject.GObject):
                 area = widget.get_cell_area(path, widget.get_column(3))
                 if int(event.x) > area.x and int(event.x) < area.x + area.width \
                        and not vm.is_active():
+                    # are you sure you want to delete this VM?
+                    warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                             gtk.DIALOG_DESTROY_WITH_PARENT,
+                                             gtk.MESSAGE_WARNING,
+                                             gtk.BUTTONS_YES_NO,
+                                             _("This will permanently delete the vm \"%s,\" are you sure?") % vm.get_name())
+                    result = warn.run()
+                    warn.destroy()
+                    if result == gtk.RESPONSE_NO:
+                        return
                     conn = vm.get_connection()
                     vm.delete()
                     conn.tick(noStatsUpdate=True)
@@ -601,6 +597,15 @@ class vmmManager(gobject.GObject):
                     if self.connections.has_key(uri):
                         self.emit("action-show-create", uri)
                     else:
+                        warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                                 gtk.DIALOG_DESTROY_WITH_PARENT,
+                                                 gtk.MESSAGE_WARNING,
+                                                 gtk.BUTTONS_YES_NO,
+                                                 _("This will permanently delete the connection \"%s,\" are you sure?") % self.rows[uri][2])
+                        result = warn.run()
+                        warn.destroy()
+                        if result == gtk.RESPONSE_NO:
+                            return
                         self.delete_connection(uri)
             return False 
 
