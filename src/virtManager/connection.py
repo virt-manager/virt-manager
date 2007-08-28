@@ -174,6 +174,13 @@ class vmmConnection(gobject.GObject):
             logging.warning("Unable to resolve local hostname for machine")
             return "localhost"
 
+    def get_short_hostname(self):
+        hostname = self.get_hostname()
+        offset = hostname.find(".")
+        if offset > 0 and not hostname[0].isdigit():
+            return hostname[0:offset]
+        return hostname
+
     def get_hostname(self):
         try:
             (scheme, username, netloc, path, query, fragment) = self.uri_split()

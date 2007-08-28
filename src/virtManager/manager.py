@@ -35,6 +35,30 @@ VMLIST_SORT_MEMORY_USAGE = 4
 VMLIST_SORT_DISK_USAGE = 5
 VMLIST_SORT_NETWORK_USAGE = 6
 
+# Rows in the tree model data set
+ROW_HANDLE = 0
+ROW_NAME = 1
+ROW_ID = 2
+ROW_STATUS = 3
+ROW_STATUS_ICON = 4
+ROW_CPU = 5
+ROW_VCPUS = 6
+ROW_MEM = 7
+ROW_MEM_USAGE = 8
+ROW_KEY = 9
+ROW_ACTION = 10
+
+# Columns in the tree view
+COL_NAME = 0
+COL_ID = 1
+COL_STATUS = 2
+COL_CPU = 3
+COL_VCPU = 4
+COL_MEM = 5
+COL_DISK = 6
+COL_NETWORK = 7
+COL_ACTION = 8
+
 class vmmManager(gobject.GObject):
     __gsignals__ = {
         "action-show-connect":(gobject.SIGNAL_RUN_FIRST,
@@ -345,19 +369,38 @@ class vmmManager(gobject.GObject):
     def _append_vm(self, model, vm, conn):
         logging.debug("About to append vm: %s" % vm.get_name())
         parent = self.rows[conn.get_uri()].iter
-        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid
-        iter = model.append(parent, [vm, vm.get_name(), vm.get_id_pretty(), vm.run_status(), \
-                             vm.run_status_icon(), vm.cpu_time_pretty(), vm.vcpu_count(), \
-                             vm.get_memory_pretty(), vm.current_memory_percentage(), vm.get_uuid(), ""])
+        row = []
+        row.insert(ROW_HANDLE, vm)
+        row.insert(ROW_NAME, vm.get_name())
+        row.insert(ROW_ID, vm.get_id_pretty())
+        row.insert(ROW_STATUS, vm.run_status())
+        row.insert(ROW_STATUS_ICON, vm.run_status_icon())
+        row.insert(ROW_CPU, vm.cpu_time_pretty())
+        row.insert(ROW_VCPUS, vm.vcpu_count())
+        row.insert(ROW_MEM, vm.get_memory_pretty())
+        row.insert(ROW_MEM_USAGE, vm.current_memory_percentage())
+        row.insert(ROW_KEY, vm.get_uuid())
+        row.insert(ROW_ACTION, "")
+        iter = model.append(parent, row)
         path = model.get_path(iter)
         self.rows[vm.get_uuid()] = model[path]
         # Expand a connection when adding a vm to it
         self.window.get_widget("vm-list").expand_row(model.get_path(parent), False)
 
     def _append_connection(self, model, conn):
-        # Handle, name, ID, status, status icon, cpu, [cpu graph], cpus, mem, mem bar, unused, stock item name
-        iter = model.append(None, [conn, conn.get_name(), conn.get_uri(), \
-                                   "", None, "", 0, "", 0, "", ""])
+        row = []
+        row.insert(ROW_HANDLE, conn)
+        row.insert(ROW_NAME, conn.get_short_hostname())
+        row.insert(ROW_ID, "")
+        row.insert(ROW_STATUS, "")
+        row.insert(ROW_STATUS_ICON, None)
+        row.insert(ROW_CPU, "")
+        row.insert(ROW_VCPUS, 0)
+        row.insert(ROW_MEM, "")
+        row.insert(ROW_MEM_USAGE, 0)
+        row.insert(ROW_KEY, conn.get_uri())
+        row.insert(ROW_ACTION, "")
+        iter = model.append(None, row)
         path = model.get_path(iter)
         self.rows[conn.get_uri()] = model[path]
 
@@ -367,7 +410,7 @@ class vmmManager(gobject.GObject):
 
         parent = self.rows[connection.get_uri()].iter
         for row in range(model.iter_n_children(parent)):
-            vm = model.get_value(model.iter_nth_child(parent, row), 0)
+            vm = model.get_value(model.iter_nth_child(parent, row), ROW_HANDLE)
             if vm.get_uuid() == vmuuid:
                 model.remove(model.iter_nth_child(parent, row))
                 del self.rows[vmuuid]
@@ -389,7 +432,7 @@ class vmmManager(gobject.GObject):
         missing = True
         for row in range(model.iter_n_children(parent)):
             iter = model.iter_nth_child(parent, row)
-            if model.get_value(iter, 0).get_uuid() == vm.get_uuid():
+            if model.get_value(iter, ROW_KEY) == vm.get_uuid():
                 if wanted:
                     missing = False
                 else:
@@ -411,19 +454,19 @@ class vmmManager(gobject.GObject):
         row = self.rows[vm.get_uuid()]
         # Handle, name, ID, status, status icon, cpu, cpu graph, vcpus, mem, mem bar
         if vm.get_id() == -1:
-            row[2] = "-"
+            row[ROW_ID] = "-"
         else:
-            row[2] = vm.get_id()
-        row[3] = vm.run_status()
-        row[4] = vm.run_status_icon()
-        row[5] = vm.cpu_time_pretty()
-        row[6] = vm.vcpu_count()
-        row[7] = vm.get_memory_pretty()
-        row[8] = vm.current_memory_percentage()
+            row[ROW_ID] = vm.get_id()
+        row[ROW_STATUS] = vm.run_status()
+        row[ROW_STATUS_ICON] = vm.run_status_icon()
+        row[ROW_CPU] = vm.cpu_time_pretty()
+        row[ROW_VCPUS] = vm.vcpu_count()
+        row[ROW_MEM] = vm.get_memory_pretty()
+        row[ROW_MEM_USAGE] = vm.current_memory_percentage()
         if vm.is_active():
-            row[10] = None
+            row[ROW_ACTION] = None
         else:
-            row[10] = gtk.STOCK_DELETE
+            row[ROW_ACTION] = gtk.STOCK_DELETE
         model.row_changed(row.path, row.iter)
 
     def conn_refresh_resources(self, connection):
@@ -431,16 +474,16 @@ class vmmManager(gobject.GObject):
         model = vmlist.get_model()
 
         if not(self.rows.has_key(connection.get_uri())):
-            row[10] = gtk.STOCK_DELETE
+            row[ROW_ACTION] = gtk.STOCK_DELETE
             return
         
         row = self.rows[connection.get_uri()]
-        row[3] = _("Active")
-        row[5] = "%2.2f %%" % connection.cpu_time_percentage()
-        row[6] = connection.host_active_processor_count()
-        row[7] = connection.pretty_current_memory()
-        row[8] = connection.current_memory_percentage()
-        row[10] = gtk.STOCK_NEW
+        row[ROW_STATUS] = _("Active")
+        row[ROW_CPU] = "%2.2f %%" % connection.cpu_time_percentage()
+        row[ROW_VCPUS] = connection.host_active_processor_count()
+        row[ROW_MEM] = connection.pretty_current_memory()
+        row[ROW_MEM_USAGE] = connection.current_memory_percentage()
+        row[ROW_ACTION] = gtk.STOCK_NEW
         model.row_changed(row.path, row.iter)
 
     def current_vm(self):
@@ -449,7 +492,7 @@ class vmmManager(gobject.GObject):
         active = selection.get_selected()
         # check that something is selected and that it is a vm, not a connection
         if active[1] != None and active[0].iter_parent(active[1]) != None:
-            return active[0].get_value(active[1], 0)
+            return active[0].get_value(active[1], ROW_HANDLE)
         return None
 
     def get_current_connection(self):
@@ -462,9 +505,9 @@ class vmmManager(gobject.GObject):
             # return the connection of the currently selected vm, or the
             # currently selected connection
             if parent is not None:
-                return active[0].get_value(parent, 2)
+                return active[0].get_value(parent, ROW_KEY)
             else:
-                return active[0].get_value(active[1], 2)
+                return active[0].get_value(active[1], ROW_KEY)
         return None
 
     def current_vmuuid(self):
@@ -524,7 +567,7 @@ class vmmManager(gobject.GObject):
         iter = model.get_iter(path)
         if model.iter_parent(iter) != None:
             # a vm is selected, retrieve it from the first column of the model
-            vm = model.get_value(iter, 0)
+            vm = model.get_value(iter, ROW_HANDLE)
             if event.button == 3:
                 # Update popup menu based upon vm status
                 if vm.is_read_only() == True:
@@ -560,7 +603,7 @@ class vmmManager(gobject.GObject):
             elif event.button == 1:
                 # check if the "delete" icon was clicked and act accordingly
                 logging.debug("Clicked a VM row")
-                area = widget.get_cell_area(path, widget.get_column(3))
+                area = widget.get_cell_area(path, widget.get_column(COL_ACTION))
                 if int(event.x) > area.x and int(event.x) < area.x + area.width \
                        and not vm.is_active():
                     # are you sure you want to delete this VM?
@@ -578,7 +621,7 @@ class vmmManager(gobject.GObject):
                     conn.tick(noStatsUpdate=True)
             return False
         else:
-            uri = model.get_value(iter, 2)
+            uri = model.get_value(iter, ROW_KEY)
             if event.button == 3:
                 if self.connections.has_key(uri):
                     self.connmenu_items["create"].set_sensitive(True)
@@ -591,7 +634,7 @@ class vmmManager(gobject.GObject):
                 self.connmenu.popup(None, None, None, 0, event.time)
             elif event.button == 1:
                 logging.debug("Clicked a connection row")
-                area = widget.get_cell_area(path, widget.get_column(3))
+                area = widget.get_cell_area(path, widget.get_column(COL_ACTION))
                 if int(event.x) > area.x and int(event.x) < area.x + area.width:
                     # clicked the action column
                     if self.connections.has_key(uri):
@@ -601,7 +644,7 @@ class vmmManager(gobject.GObject):
                                                  gtk.DIALOG_DESTROY_WITH_PARENT,
                                                  gtk.MESSAGE_WARNING,
                                                  gtk.BUTTONS_YES_NO,
-                                                 _("This will permanently delete the connection \"%s,\" are you sure?") % self.rows[uri][2])
+                                                 _("This will permanently delete the connection \"%s\", are you sure?") % self.rows[uri][ROW_NAME])
                         result = warn.run()
                         warn.destroy()
                         if result == gtk.RESPONSE_NO:
@@ -629,25 +672,26 @@ class vmmManager(gobject.GObject):
         model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str, str)
         vmlist.set_model(model)
 
-        idCol = gtk.TreeViewColumn(_("ID"))
         nameCol = gtk.TreeViewColumn(_("Name"))
+        idCol = gtk.TreeViewColumn(_("ID"))
         statusCol = gtk.TreeViewColumn(_("Status"))
-        actionCol = gtk.TreeViewColumn(_("Action"))
         cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
         virtualCPUsCol = gtk.TreeViewColumn(_("VCPUs"))
         memoryUsageCol = gtk.TreeViewColumn(_("Memory usage"))
         diskUsageCol = gtk.TreeViewColumn(_("Disk usage"))
         networkTrafficCol = gtk.TreeViewColumn(_("Network traffic"))
+        #actionCol = gtk.TreeViewColumn(_("Action"))
+        actionCol = gtk.TreeViewColumn("")
 
-        vmlist.append_column(idCol)
         vmlist.append_column(nameCol)
+        vmlist.append_column(idCol)
         vmlist.append_column(statusCol)
-        vmlist.append_column(actionCol)
         vmlist.append_column(cpuUsageCol)
         vmlist.append_column(virtualCPUsCol)
         vmlist.append_column(memoryUsageCol)
         vmlist.append_column(diskUsageCol)
         vmlist.append_column(networkTrafficCol)
+        vmlist.append_column(actionCol)
 
         # For the columns which follow, we deliberately bind columns
         # to fields in the list store & on each update copy the info
@@ -658,16 +702,16 @@ class vmmManager(gobject.GObject):
         # needs to do many transitions  C<->Python for callbacks
         # which are relatively slow.
 
+        name_txt = gtk.CellRendererText()
+        nameCol.pack_start(name_txt, True)
+        nameCol.add_attribute(name_txt, 'text', 1)
+        nameCol.set_sort_column_id(VMLIST_SORT_NAME)
+
         id_txt = gtk.CellRendererText()
         idCol.pack_start(id_txt, True)
         idCol.add_attribute(id_txt, 'text', 2)
         idCol.set_visible(self.config.is_vmlist_domain_id_visible())
         idCol.set_sort_column_id(VMLIST_SORT_ID)
-
-        name_txt = gtk.CellRendererText()
-        nameCol.pack_start(name_txt, True)
-        nameCol.add_attribute(name_txt, 'text', 1)
-        nameCol.set_sort_column_id(VMLIST_SORT_NAME)
 
         status_txt = gtk.CellRendererText()
         status_icon = gtk.CellRendererPixbuf()
@@ -676,12 +720,6 @@ class vmmManager(gobject.GObject):
         statusCol.add_attribute(status_txt, 'text', 3)
         statusCol.add_attribute(status_icon, 'pixbuf', 4)
         statusCol.set_visible(self.config.is_vmlist_status_visible())
-
-        action_icon = gtk.CellRendererPixbuf()
-        action_icon.set_property('stock-size', gtk.ICON_SIZE_MENU)
-        actionCol.pack_start(action_icon, True)
-        actionCol.add_attribute(action_icon, 'stock-id', 10) 
-        actionCol.set_visible(True)
 
         cpuUsage_txt = gtk.CellRendererText()
         cpuUsage_img = sparkline.CellRendererSparkline()
@@ -720,6 +758,12 @@ class vmmManager(gobject.GObject):
         networkTrafficCol.set_visible(self.config.is_vmlist_network_traffic_visible())
         networkTrafficCol.set_sort_column_id(VMLIST_SORT_NETWORK_USAGE)
 
+        action_icon = gtk.CellRendererPixbuf()
+        action_icon.set_property('stock-size', gtk.ICON_SIZE_MENU)
+        actionCol.pack_start(action_icon, False)
+        actionCol.add_attribute(action_icon, 'stock-id', 10)
+        actionCol.set_visible(True)
+
         model.set_sort_func(VMLIST_SORT_ID, self.vmlist_domain_id_sorter)
         model.set_sort_func(VMLIST_SORT_NAME, self.vmlist_name_sorter)
         model.set_sort_func(VMLIST_SORT_CPU_USAGE, self.vmlist_cpu_usage_sorter)
@@ -731,22 +775,22 @@ class vmmManager(gobject.GObject):
 
 
     def vmlist_domain_id_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, 0).get_id(), model.get_value(iter2, 0).get_id())
+        return cmp(model.get_value(iter1, ROW_HANDLE).get_id(), model.get_value(iter2, ROW_HANDLE).get_id())
 
     def vmlist_name_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, 1), model.get_value(iter2, 1))
+        return cmp(model.get_value(iter1, ROW_NAME), model.get_value(iter2, ROW_NAME))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, 0).cpu_time(), model.get_value(iter2, 0).cpu_time())
+        return cmp(model.get_value(iter1, ROW_HANDLE).cpu_time(), model.get_value(iter2, ROW_HANDLE).cpu_time())
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, 0).get_memory(), model.get_value(iter2, 0).get_memory())
+        return cmp(model.get_value(iter1, ROW_HANDLE).get_memory(), model.get_value(iter2, ROW_HANDLE).get_memory())
 
     def vmlist_disk_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, 0).disk_usage(), model.get_value(iter2, 0).disk_usage())
+        return cmp(model.get_value(iter1, ROW_HANDLE).disk_usage(), model.get_value(iter2, ROW_HANDLE).disk_usage())
 
     def vmlist_network_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, 0).network_traffic(), model.get_value(iter2, 0).network_traffic())
+        return cmp(model.get_value(iter1, ROW_HANDLE).network_traffic(), model.get_value(iter2, ROW_HANDLE).network_traffic())
 
     def toggle_domain_id_visible_conf(self, menu):
         self.config.set_vmlist_domain_id_visible(menu.get_active())
@@ -754,7 +798,7 @@ class vmmManager(gobject.GObject):
     def toggle_domain_id_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_domain_id")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(0)
+        col = vmlist.get_column(COL_ID)
         col.set_visible(self.config.is_vmlist_domain_id_visible())
 
     def toggle_status_visible_conf(self, menu):
@@ -763,7 +807,7 @@ class vmmManager(gobject.GObject):
     def toggle_status_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_status")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(2)
+        col = vmlist.get_column(COL_STATUS)
         col.set_visible(self.config.is_vmlist_status_visible())
 
     def toggle_cpu_usage_visible_conf(self, menu):
@@ -772,7 +816,7 @@ class vmmManager(gobject.GObject):
     def toggle_cpu_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_cpu_usage")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(3)
+        col = vmlist.get_column(COL_CPU)
         col.set_visible(self.config.is_vmlist_cpu_usage_visible())
 
     def toggle_virtual_cpus_visible_conf(self, menu):
@@ -781,7 +825,7 @@ class vmmManager(gobject.GObject):
     def toggle_virtual_cpus_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_virtual_cpus")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(4)
+        col = vmlist.get_column(COL_VCPU)
         col.set_visible(self.config.is_vmlist_virtual_cpus_visible())
 
     def toggle_memory_usage_visible_conf(self, menu):
@@ -790,7 +834,7 @@ class vmmManager(gobject.GObject):
     def toggle_memory_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_memory_usage")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(5)
+        col = vmlist.get_column(COL_MEM)
         col.set_visible(self.config.is_vmlist_memory_usage_visible())
 
     def toggle_disk_usage_visible_conf(self, menu):
@@ -799,7 +843,7 @@ class vmmManager(gobject.GObject):
     def toggle_disk_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_disk_usage")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(6)
+        col = vmlist.get_column(COL_DISK)
         col.set_visible(self.config.is_vmlist_disk_usage_visible())
 
     def toggle_network_traffic_visible_conf(self, menu):
@@ -808,13 +852,13 @@ class vmmManager(gobject.GObject):
     def toggle_network_traffic_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
         menu = self.window.get_widget("menu_view_network_traffic")
         vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(7)
+        col = vmlist.get_column(COL_NETWORK)
         col.set_visible(self.config.is_vmlist_network_traffic_visible())
 
     def cpu_usage_img(self,  column, cell, model, iter, data):
-        if model.get_value(iter, 0) is None:
+        if model.get_value(iter, ROW_HANDLE) is None:
             return
-        data = model.get_value(iter, 0).cpu_time_vector_limit(40)
+        data = model.get_value(iter, ROW_HANDLE).cpu_time_vector_limit(40)
         data.reverse()
         cell.set_property('data_array', data)
 
@@ -849,8 +893,8 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
         self.connections[connection.uri] = connection
         if self.rows.has_key(connection.uri):
-            self.rows[connection.uri][0] = connection
-        else:        
+            self.rows[connection.uri][ROW_HANDLE] = connection
+        else:
             self._append_connection(vmlist.get_model(), connection)
 
     def disconnect_connection(self, uri):
@@ -860,7 +904,7 @@ class vmmManager(gobject.GObject):
         if parent is not None:
             child = model.iter_children(parent)
             while child is not None:
-                del self.rows[model.get_value(child, 9)]
+                del self.rows[model.get_value(child, ROW_KEY)]
                 model.remove(child)
                 child = model.iter_children(parent)
         row = self.rows[uri]
@@ -878,13 +922,13 @@ class vmmManager(gobject.GObject):
     def delete_connection(self, uri):
         model = self.window.get_widget("vm-list").get_model()
         parent = self.rows[uri].iter
-        if self.rows[uri][0] is not None:
+        if self.rows[uri][ROW_HANDLE] is not None:
             # connection is still connected, don't delete it
             return
         if parent is not None:
             child = model.iter_children(parent)
             while child is not None:
-                del self.rows[model.get_value(child, 9)]
+                del self.rows[model.get_value(child, ROW_KEY)]
                 model.remove(child)
                 child = model.iter_children(parent)
             model.remove(parent)
@@ -893,7 +937,7 @@ class vmmManager(gobject.GObject):
         # doesn't turn up again
 
     def row_expanded(self, treeview, iter, path):
-        conn = treeview.get_model().get_value(iter,0)
+        conn = treeview.get_model().get_value(iter,ROW_HANDLE)
         if conn is None:
             treeview.collapse_row(path, false)
             return
@@ -901,7 +945,7 @@ class vmmManager(gobject.GObject):
         conn.active = True
         
     def row_collapsed(self, treeview, iter, path):
-        conn = treeview.get_model().get_value(iter,0)
+        conn = treeview.get_model().get_value(iter,ROW_HANDLE)
         logging.debug("Deactivating connection %s" % conn.get_name())
         conn.active = False
         row = self.rows[conn.get_uri()]
