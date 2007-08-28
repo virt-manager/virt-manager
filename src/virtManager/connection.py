@@ -235,7 +235,7 @@ class vmmConnection(gobject.GObject):
                     return [scheme[offset:], username]
         except:
             pass
-        return None
+        return [None, None]
 
     def get_uri(self):
         return self.uri
