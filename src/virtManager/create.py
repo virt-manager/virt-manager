@@ -598,7 +598,7 @@ class vmmCreate(gobject.GObject):
         if self.config.get_console_popup() == 1:
             # user has requested console on new created vms only
             vm = self.connection.get_vm(guest.uuid)
-            (gtype, host, port) = vm.get_graphics_console()
+            (gtype, host, port, transport) = vm.get_graphics_console()
             if gtype == "vnc":
                 self.emit("action-show-console", self.connection.get_uri(), guest.uuid)
             else:

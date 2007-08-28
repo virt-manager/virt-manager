@@ -64,6 +64,15 @@ class vmmEngine:
         if self.windowManager is not None:
             self.windowManager.disconnect_connection(hvuri)
 
+    def load_stored_uris(self):
+        uris = self.config.get_connections()
+        if uris != None:
+            logging.debug("About to connect to uris %s" % uris)
+            manager = self.get_manager()
+            for uri in uris:
+                manager.add_connection(uri)
+        self.show_manager()
+
     def connect_to_uri(self, uri, readOnly=None):
         return self._connect_to_uri(None, uri, readOnly)
 
@@ -332,7 +341,7 @@ class vmmEngine:
                 }
             self.connections[uri]["connection"].connect("disconnected", self._do_connection_disconnected)
             self.connections[uri]["connection"].connect("vm-removed", self._do_vm_removed)
-            self.get_manager().add_connection(self.connections[uri]["connection"])
+            self.get_manager().connect_connection(self.connections[uri]["connection"])
             self.connections[uri]["connection"].tick()
 
         return self.connections[uri]["connection"]

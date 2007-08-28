@@ -302,11 +302,31 @@ class vmmConfig:
                 del urls[len(urls) -1]
             self.conf.set_list(self.conf_dir + "/urls/kickstart", gconf.VALUE_STRING, urls)
 
+    def add_connection(self, uri):
+        uris = self.conf.get_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING)
+        if uris == None:
+            uris = []
+        if uris.count(uri) == 0:
+            # the url isn't already in the list, so add it
+            uris.insert(len(uris) - 1,uri)
+            self.conf.set_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING, uris)
+        
+    def remove_connection(self, uri):
+        uris = self.conf.get_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING)
+        if uris == None:
+            return
+        if uris.count(uri) != 0:
+            uris.remove(uri)
+            self.conf.set_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING, uris)
+
     def get_media_urls(self):
         return self.conf.get_list(self.conf_dir + "/urls/media", gconf.VALUE_STRING)
 
     def get_kickstart_urls(self):
         return self.conf.get_list(self.conf_dir + "/urls/kickstart", gconf.VALUE_STRING)
+    def get_connections(self):
+        return self.conf.get_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING)
+
 
     def get_default_image_dir(self, connection):
         if connection.get_uri() is None or \

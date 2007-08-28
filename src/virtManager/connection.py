@@ -31,6 +31,86 @@ from virtManager.domain import vmmDomain
 from virtManager.network import vmmNetwork
 from virtManager.netdev import vmmNetDevice
 
+# static methods for getting various bits out of the URI
+def get_local_hostname():
+    try:
+        (host, aliases, ipaddrs) = gethostbyaddr(gethostname())
+        return host
+    except:
+        logging.warning("Unable to resolve local hostname for machine")
+        return "localhost"
+    
+def get_short_hostname(uri):
+    hostname = get_hostname(uri)
+    offset = hostname.find(".")
+    if offset > 0 and not hostname[0].isdigit():
+        return hostname[0:offset]
+    return hostname
+
+def get_hostname(uri):
+    try:
+        (scheme, username, netloc, path, query, fragment) = uri_split(uri)
+        
+        if netloc != "":
+            return netloc
+    except Exception, e:
+        logging.warning("Cannot parse URI %s: %s" % (uri, str(e)))
+            
+    return get_local_hostname()
+    
+def is_remote(uri):
+    try:
+        (scheme, username, netloc, path, query, fragment) = uri_split(uri)
+        if netloc == "":
+            return False
+        return True
+    except:
+        return True
+
+def get_transport(uri):
+    try:
+        (scheme, username, netloc, path, query, fragment) = uri_split(uri)
+        if scheme:
+            offset = scheme.index("+")
+            if offset > 0:
+                return [scheme[offset:], username]
+    except:
+        pass
+    return [None, None]
+
+# Standard python urlparse is utterly braindead - refusing to parse URIs
+# in any useful fashion unless the 'scheme' is in some pre-defined white
+# list. Theis functions is a hacked version of urlparse
+
+def uri_split(uri):
+    username = netloc = query = fragment = ''
+    i = uri.find(":")
+    if i > 0:
+        scheme, uri = uri[:i].lower(), uri[i+1:]
+        if uri[:2] == '//':
+            netloc, uri = _splitnetloc(uri, 2)
+            offset = netloc.find("@")
+            if offset > 0:
+                username = netloc[0:offset]
+                netloc = netloc[offset+1:]
+        if '#' in uri:
+            uri, fragment = uri.split('#', 1)
+        if '?' in uri:
+            uri, query = uri.split('?', 1)
+    else:
+        scheme = uri.lower()
+
+    return scheme, username, netloc, uri, query, fragment
+
+def _splitnetloc(url, start=0):
+    for c in '/?#': # the order is important!
+        delim = url.find(c, start)
+        if delim >= 0:
+            break
+    else:
+        delim = len(url)
+    return url[start:delim], url[delim:]
+
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
         "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -166,35 +246,9 @@ class vmmConnection(gobject.GObject):
     def get_type(self):
         return self.vmm.getType()
 
-    def get_local_hostname(self):
-        try:
-            (host, aliases, ipaddrs) = gethostbyaddr(gethostname())
-            return host
-        except:
-            logging.warning("Unable to resolve local hostname for machine")
-            return "localhost"
-
-    def get_short_hostname(self):
-        hostname = self.get_hostname()
-        offset = hostname.find(".")
-        if offset > 0 and not hostname[0].isdigit():
-            return hostname[0:offset]
-        return hostname
-
-    def get_hostname(self):
-        try:
-            (scheme, username, netloc, path, query, fragment) = self.uri_split()
-
-            if netloc != "":
-                return netloc
-        except Exception, e:
-            logging.warning("Cannot parse URI %s: %s" % (self.uri, str(e)))
-
-        return self.get_local_hostname()
-
     def get_name(self):
         try:
-            (scheme, username, netloc, path, query, fragment) = self.uri_split()
+            (scheme, username, netloc, path, query, fragment) = self.uri_split(self.uri)
 
             i = scheme.find("+")
             if i > 0:
@@ -217,25 +271,20 @@ class vmmConnection(gobject.GObject):
 
         return self.uri
 
-    def is_remote(self):
-        try:
-            (scheme, username, netloc, path, query, fragment) = self.uri_split()
-            if netloc == "":
-                return False
-            return True
-        except:
-            return True
+    def get_local_hostname(self):
+        return get_local_hostname()
+
+    def get_short_hostname(self):
+        return get_short_hostname(self.uri)
+
+    def get_hostname(self):
+        return get_hostname(self.uri)
 
     def get_transport(self):
-        try:
-            (scheme, username, netloc, path, query, fragment) = self.uri_split()
-            if scheme:
-                offset = scheme.index("+")
-                if offset > 0:
-                    return [scheme[offset:], username]
-        except:
-            pass
-        return [None, None]
+        return get_transport(self.uri)
+
+    def is_remote(self):
+        return is_remote(self.uri)
 
     def get_uri(self):
         return self.uri

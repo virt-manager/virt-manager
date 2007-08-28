@@ -26,7 +26,10 @@ import logging
 import sparkline
 import libvirt
 
+import virtManager.connection as static_conn
 from virtManager.asyncjob import vmmAsyncJob
+        
+
 
 VMLIST_SORT_ID = 1
 VMLIST_SORT_NAME = 2
@@ -35,7 +38,7 @@ VMLIST_SORT_MEMORY_USAGE = 4
 VMLIST_SORT_DISK_USAGE = 5
 VMLIST_SORT_NETWORK_USAGE = 6
 
-# Rows in the tree model data set
+# fields in the tree model data set
 ROW_HANDLE = 0
 ROW_NAME = 1
 ROW_ID = 2
@@ -326,7 +329,7 @@ class vmmManager(gobject.GObject):
         
         for uri in self.connections:
             conn = self.connections[uri]
-            self._append_connection(model, conn)
+            self._append_connection(model, uri)
             uuids = conn.list_vm_uuids()
             for vmuuid in uuids:
                 vm = conn.get_vm(vmuuid)
@@ -387,22 +390,27 @@ class vmmManager(gobject.GObject):
         # Expand a connection when adding a vm to it
         self.window.get_widget("vm-list").expand_row(model.get_path(parent), False)
 
-    def _append_connection(self, model, conn):
+    def _append_connection(self, model, uri):
         row = []
-        row.insert(ROW_HANDLE, conn)
-        row.insert(ROW_NAME, conn.get_short_hostname())
+        if self.connections.has_key(uri):
+            row.insert(ROW_HANDLE, self.connections[uri])
+            row.insert(ROW_STATUS, _("Connected"))
+            row.insert(ROW_ACTION, "")
+        else:
+            row.insert(ROW_HANDLE, None)
+            row.insert(ROW_STATUS, _("Disconnected"))
+            row.insert(ROW_ACTION, gtk.STOCK_DELETE)
+        row.insert(ROW_NAME, static_conn.get_short_hostname(uri))
         row.insert(ROW_ID, "")
-        row.insert(ROW_STATUS, "")
         row.insert(ROW_STATUS_ICON, None)
         row.insert(ROW_CPU, "")
         row.insert(ROW_VCPUS, 0)
         row.insert(ROW_MEM, "")
         row.insert(ROW_MEM_USAGE, 0)
-        row.insert(ROW_KEY, conn.get_uri())
-        row.insert(ROW_ACTION, "")
+        row.insert(ROW_KEY, uri)
         iter = model.append(None, row)
         path = model.get_path(iter)
-        self.rows[conn.get_uri()] = model[path]
+        self.rows[uri] = model[path]
 
     def vm_removed(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
@@ -472,11 +480,9 @@ class vmmManager(gobject.GObject):
     def conn_refresh_resources(self, connection):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
-
         if not(self.rows.has_key(connection.get_uri())):
-            row[ROW_ACTION] = gtk.STOCK_DELETE
             return
-        
+
         row = self.rows[connection.get_uri()]
         row[ROW_STATUS] = _("Active")
         row[ROW_CPU] = "%2.2f %%" % connection.cpu_time_percentage()
@@ -882,21 +888,24 @@ class vmmManager(gobject.GObject):
         if vm is not None:
             vm.resume()
         
-    def add_connection(self, connection):
-        # connection.connect("disconnected", self.close)
+    def connect_connection(self, connection):
         connection.connect("vm-added", self.vm_added)
         connection.connect("vm-removed", self.vm_removed)
         connection.connect("resources-sampled", self.conn_refresh_resources)
-        # Do useful things when a vm starts
         connection.connect("vm-started", self.vm_started)
+        self.connections[connection.uri] = connection
+        self.add_connection(connection.uri)
+
+    def add_connection(self, uri):
         # add the connection to the treeModel
         vmlist = self.window.get_widget("vm-list")
-        self.connections[connection.uri] = connection
-        if self.rows.has_key(connection.uri):
-            self.rows[connection.uri][ROW_HANDLE] = connection
+        if self.rows.has_key(uri):
+            if self.connections.has_key(uri):
+                self.rows[uri][ROW_HANDLE] = self.connections[uri]
         else:
-            self._append_connection(vmlist.get_model(), connection)
-
+            self._append_connection(vmlist.get_model(), uri)
+            self.config.add_connection(uri)
+                
     def disconnect_connection(self, uri):
         treeview = self.window.get_widget("vm-list")
         model = treeview.get_model()
@@ -908,14 +917,13 @@ class vmmManager(gobject.GObject):
                 model.remove(child)
                 child = model.iter_children(parent)
         row = self.rows[uri]
-        row[0] = None
+        row[ROW_HANDLE] = None
         # keep uri and name for connection, so we can reconnect if needed
-        row[3] = _("Disconnected")
-        row[5] = ""
-        row[6] = 0
-        row[7] = ""
-        row[8] = 0
-        row[10] = gtk.STOCK_DELETE
+        row[ROW_STATUS] = _("Disconnected")
+        row[ROW_VCPUS] = 0
+        row[ROW_MEM] = ""
+        row[ROW_MEM_USAGE] = 0
+        row[ROW_ACTION] = gtk.STOCK_DELETE
         treeview.get_model().row_changed(row.path, row.iter)
         del self.connections[uri]
 
@@ -933,8 +941,7 @@ class vmmManager(gobject.GObject):
                 child = model.iter_children(parent)
             model.remove(parent)
             del self.rows[uri]
-        # XXX remove the connection from gconf as well so it
-        # doesn't turn up again
+        self.config.remove_connection(uri)
 
     def row_expanded(self, treeview, iter, path):
         conn = treeview.get_model().get_value(iter,ROW_HANDLE)
@@ -949,11 +956,11 @@ class vmmManager(gobject.GObject):
         logging.debug("Deactivating connection %s" % conn.get_name())
         conn.active = False
         row = self.rows[conn.get_uri()]
-        row[3] = _("Inactive")
-        row[5] = ""
-        row[6] = 0
-        row[7] = ""
-        row[8] = 0
+        row[ROW_STATUS] = _("Inactive")
+        row[ROW_CPU] = ""
+        row[ROW_VCPUS] = 0
+        row[ROW_MEM] = ""
+        row[ROW_MEM_USAGE] = 0
         treeview.get_model().row_changed(row.path, row.iter)
 
 gobject.type_register(vmmManager)
