@@ -452,8 +452,12 @@ class vmmDomain(gobject.GObject):
         if type == "vnc":
             port = self.get_xml_string("/domain/devices/graphics[@type='vnc']/@port")
             if port is not None:
-                return [type, "127.0.0.1", int(port)]
-        return [type, None, None]
+                port = int(port)
+
+        transport, username = self.connection.get_transport()
+
+        return [type, self.connection.get_hostname(), int(port), transport]
+
 
     def get_disk_devices(self):
         xml = self.get_xml()

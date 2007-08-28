@@ -231,7 +231,7 @@ class vmmConsole(gobject.GObject):
     def _vnc_disconnected(self, src):
         logging.debug("VNC disconnected")
         self.vncViewerFailures = self.vncViewerFailures + 1
-        self.activate_unavailable_page()
+        self.activate_unavailable_page(_("Console was disconnected from guest"))
         if not self.is_visible():
             return
 
@@ -265,28 +265,32 @@ class vmmConsole(gobject.GObject):
 
     def try_login(self, src=None):
         if self.vm.get_id() <= 0:
+            self.activate_unavailable_page(_("Console not available for inactive guest"))
             return
 
         logging.debug("Trying console login")
         password = self.window.get_widget("console-auth-password").get_text()
-        protocol, host, port = self.vm.get_graphics_console()
+        protocol, host, port, trans = self.vm.get_graphics_console()
 
         if protocol is None:
             logging.debug("No graphics configured in guest")
+            self.activate_unavailable_page(_("Console not configured for guest"))
             return
 
         uri = str(protocol) + "://" + str(host) + ":" + str(port)
         logging.debug("Graphics console configured at " + uri)
 
+        if protocol != "vnc":
+            logging.debug("Not a VNC console, disabling")
+            self.activate_unavailable_page(_("Console not supported for guest"))
+            return
+
         if int(port) == -1:
+            self.activate_unavailable_page(_("Console is not yet active for guest"))
             self.schedule_retry()
             return
 
-        if protocol != "vnc":
-            logging.debug("Not a VNC console, disabling")
-            self.activate_unavailable_page()
-            return
-
+        self.activate_unavailable_page(_("Connecting to console for guest"))
         logging.debug("Starting connect process for %s %s" % (host, str(port)))
         try:
             self.vncViewer.open_host(host, str(port))
@@ -313,9 +317,10 @@ class vmmConsole(gobject.GObject):
 
         self.activate_auth_page()
 
-    def activate_unavailable_page(self):
+    def activate_unavailable_page(self, msg):
         self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
         self.window.get_widget("menu-vm-screenshot").set_sensitive(False)
+        self.window.get_widget("console-unavailable").set_label("<b>" + msg + "</b>")
 
     def activate_screenshot_page(self):
         self.window.get_widget("console-pages").set_current_page(PAGE_SCREENSHOT)
@@ -495,9 +500,9 @@ class vmmConsole(gobject.GObject):
             if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
                 self.vncViewer.close()
                 self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
+            self.activate_unavailable_page(_("Console not available for inactive guest"))
         else:
             if status == libvirt.VIR_DOMAIN_PAUSED:
-                screenshot = None
                 if self.window.get_widget("console-pages").get_current_page() == PAGE_VNCVIEWER:
                     screenshot = self.vncViewer.take_screenshot()
                     cr = screenshot.cairo_create()
@@ -523,7 +528,7 @@ class vmmConsole(gobject.GObject):
                 else:
                     if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
                         self.vncViewer.close()
-                    self.activate_unavailable_page()
+                    self.activate_unavailable_page(_("Console not available while paused"))
             else:
                 if self.window.get_widget("console-pages").get_current_page() == PAGE_UNAVAILABLE:
                     self.vncViewerFailures = 0

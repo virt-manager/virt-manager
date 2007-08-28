@@ -336,12 +336,12 @@ class vmmManager(gobject.GObject):
         logging.debug("VM %s started" % vm.get_name())
         if self.config.get_console_popup() == 2 and not vm.is_management_domain():
             # user has requested consoles on all vms
-            (gtype, host, port) = vm.get_graphics_console()
+            (gtype, host, port, transport) = vm.get_graphics_console()
             if gtype == "vnc":
                 self.emit("action-show-console", uri, vmuuid)
-            else:
+            elif not connect.is_remote():
                 self.emit("action-show-terminal", uri, vmuuid)
-                
+
     def _append_vm(self, model, vm, conn):
         logging.debug("About to append vm: %s" % vm.get_name())
         parent = self.rows[conn.get_uri()].iter

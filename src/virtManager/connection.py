@@ -176,7 +176,7 @@ class vmmConnection(gobject.GObject):
 
     def get_hostname(self):
         try:
-            (scheme, netloc, path, query, fragment) = self.uri_split()
+            (scheme, username, netloc, path, query, fragment) = self.uri_split()
 
             if netloc != "":
                 return netloc
@@ -187,7 +187,7 @@ class vmmConnection(gobject.GObject):
 
     def get_name(self):
         try:
-            (scheme, netloc, path, query, fragment) = self.uri_split()
+            (scheme, username, netloc, path, query, fragment) = self.uri_split()
 
             i = scheme.find("+")
             if i > 0:
@@ -212,12 +212,23 @@ class vmmConnection(gobject.GObject):
 
     def is_remote(self):
         try:
-            (scheme, netloc, path, query, fragment) = self.uri_split()
+            (scheme, username, netloc, path, query, fragment) = self.uri_split()
             if netloc == "":
                 return False
             return True
         except:
             return True
+
+    def get_transport(self):
+        try:
+            (scheme, username, netloc, path, query, fragment) = self.uri_split()
+            if scheme:
+                offset = scheme.index("+")
+                if offset > 0:
+                    return [scheme[offset:], username]
+        except:
+            pass
+        return None
 
     def get_uri(self):
         return self.uri
@@ -621,12 +632,16 @@ class vmmConnection(gobject.GObject):
 
     def uri_split(self):
         uri = self.uri
-        netloc = query = fragment = ''
+        username = netloc = query = fragment = ''
         i = uri.find(":")
         if i > 0:
             scheme, uri = uri[:i].lower(), uri[i+1:]
             if uri[:2] == '//':
                 netloc, uri = self._splitnetloc(uri, 2)
+                offset = netloc.find("@")
+                if offset > 0:
+                    username = netloc[0:offset]
+                    netloc = netloc[offset+1:]
             if '#' in uri:
                 uri, fragment = uri.split('#', 1)
             if '?' in uri:
@@ -634,7 +649,7 @@ class vmmConnection(gobject.GObject):
         else:
             scheme = uri.lower()
 
-        return scheme, netloc, uri, query, fragment
+        return scheme, username, netloc, uri, query, fragment
 
     def _splitnetloc(self, url, start=0):
         for c in '/?#': # the order is important!
