@@ -248,7 +248,7 @@ class vmmConnection(gobject.GObject):
 
     def get_name(self):
         try:
-            (scheme, username, netloc, path, query, fragment) = self.uri_split(self.uri)
+            (scheme, username, netloc, path, query, fragment) = uri_split(self.uri)
 
             i = scheme.find("+")
             if i > 0:
