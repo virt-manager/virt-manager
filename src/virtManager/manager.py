@@ -543,7 +543,8 @@ class vmmManager(gobject.GObject):
             self.emit("action-connect", current_uri)
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
-        self.emit("action-show-console", self.get_current_connection(), self.current_vmuuid())
+        if self.current_vmuuid():
+            self.emit("action-show-console", self.get_current_connection(), self.current_vmuuid())
 
 
     def vm_selected(self, selection):
