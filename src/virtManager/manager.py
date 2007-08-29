@@ -550,7 +550,7 @@ class vmmManager(gobject.GObject):
         if self.connections.has_key(current_uri):
             self.connections[current_uri].close()
 
-    def create_connection(self, ignore):
+    def create_connection(self, ignore = None):
         current_uri = self.get_current_connection()
         if not self.connections.has_key(current_uri):
             self.emit("action-connect", current_uri)
@@ -558,6 +558,8 @@ class vmmManager(gobject.GObject):
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
         if self.current_vmuuid():
             self.emit("action-show-console", self.get_current_connection(), self.current_vmuuid())
+        elif self.get_current_connection():
+            self.create_connection()
 
 
     def vm_selected(self, selection):
