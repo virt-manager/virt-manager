@@ -329,15 +329,13 @@ class vmmConfig:
 
 
     def get_default_image_dir(self, connection):
-        if connection.get_uri() is None or \
-           connection.get_uri() == "Xen":
+        if connection.get_type() == "Xen":
             return DEFAULT_XEN_IMAGE_DIR
         else:
             return os.getcwd()
 
     def get_default_save_dir(self, connection):
-        if connection.get_uri() is None or \
-           connection.get_uri() == "Xen":
+        if connection.get_type() == "Xen":
             return DEFAULT_XEN_SAVE_DIR
         else:
             return os.getcwd()
