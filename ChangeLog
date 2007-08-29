@@ -1,13 +1,709 @@
+2007-08-29  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* NEWS, configure.ac, virt-manager.spec.in:
+	Prep for 0.5.0 release
+	[db62e9295c03] [tip]
+
+	* README:
+	Update README to match latest reality
+	[af4dc1ef2f40]
+
+	* po/fr.po, po/pl.po:
+	Imported latest french & polish updates from Fedora translators
+	[99a07bbb4deb]
+
+	* po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po, po/hi.po,
+	po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po, po/kn.po,
+	po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po, po/nl.po,
+	po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po, po/te.po,
+	po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po, po/zh_TW.po:
+	Re-generate pot file & auto-merge
+	[d383d730f712]
+
+	* po/POTFILES.in:
+	Fixed list of source files due to removed VNC code
+	[bd9a44eb91e9]
+
+	* src/virtManager/console.py, src/virtManager/domain.py:
+	Fixed console message for domain-0
+	[b30c4cfe33f4]
+
+	* src/virtManager/console.py, src/vmm-console.glade:
+	Remove redundant scrollbars from console
+	[2b37d811e304]
+
+	* src/virtManager/manager.py:
+	Auto-connect to HV when double clicking on a connection
+	[e0c56f906f5e]
+
+	* src/virtManager/config.py:
+	Fixed checking of HV type for default save/image dirs
+	[dba8669fda76]
+
+	* src/virt-manager.py.in:
+	Fix check for whether we've got any existing connections on startup
+	[5a4ff53abc28]
+
+	* virt-manager.spec.in:
+	Fix dep on gtk-vnc to use python sub-rpm
+	[70b5258e7d83]
+
+2007-08-28  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py:
+	Fixed password auth & added TLS/x509 credential
+	[3f485b58cd0a]
+
+	* src/virtManager/manager.py:
+	Fixed toggling of active/inactive VM display
+	[4d8bd0bf3a07]
+
+	* src/virtManager/details.py, src/virtManager/host.py,
+	src/virtManager/manager.py:
+	Disable creating guests & networks and adding devices on remote
+	connections
+	[686a43c1c0e7]
+
+	* src/virtManager/console.py:
+	Show local pointer in VNC console when not grabbed
+	[882718a6459d]
+
+	* src/virtManager/console.py:
+	Fixed screenshot code, and pause rendering
+	[85af82c939a4]
+
+	* src/virtManager/manager.py:
+	Don't try to show console if double-clicking on a host
+	[1644d5f92a93]
+
+	* src/virtManager/connection.py:
+	Fixed typo in calling uri_split
+	[151d0ef63c79]
+
+2007-08-28  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.py.in, src/virtManager/config.py,
+	src/virtManager/connection.py, src/virtManager/create.py,
+	src/virtManager/engine.py, src/virtManager/manager.py:
+	Store connection URIs in gconf so that the app will remember them.
+	If any connections are in gconf, load them rather than auto-
+	connecting to Xen. Continue Dan's noble code clean-up efforts.
+	[421de5da5ab4]
+
+2007-08-27  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py:
+	Fixed get_transport return value for local connections
+	[f919140ba85a]
+
+	* src/virtManager/connection.py, src/virtManager/manager.py:
+	Re-order columns to move action to right & name to left. Use short
+	hostname to avoid overly wide columns. Use constants for row &
+	column data indexes
+	[f8d148dc57b3]
+
+	* src/virtManager/connection.py, src/virtManager/console.py,
+	src/virtManager/domain.py, src/virtManager/manager.py:
+	Improved user feedback on console access. Initial support for
+	connecting to remote guest consoles
+	[b748eeb06d3d]
+
+2007-08-27  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/manager.py:
+	Warn before deleting vms and connections
+	[ed604406c01a]
+
+2007-08-23  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/manager.py, src/vmm-manager.glade:
+	Remove delete button and delete menu item, add create and delete
+	icons where appropriate. Clean up event handling quite a bit.
+	[98a7a478b57e]
+
+2007-08-22  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/createnet.py:
+	Allow non-private addresses for virtual networks, using a
+	confirmation
+	[af3dcc2d8e57]
+
+2007-08-16  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.py.in, src/virtManager/engine.py:
+	Fix a nasty thread locking problem during startup if an error dialog
+	needs to be shown
+	[c1111c29a25c]
+
+	* Merge heads
+	[3cf62cd2e3bd]
+
+	* autogen.sh:
+	Hack around autoconf wierdness
+	[b71be73678da]
+
+	* README, src/virtManager/manager.py, src/vncViewer/Makefile.am,
+	src/vncViewer/__init__.py, src/vncViewer/crippled_des.py,
+	src/vncViewer/rfb.py, src/vncViewer/vnc.py, virt-manager.spec.in:
+	Merge heads
+	[1bc43bf346a8]
+
+2007-08-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* configure.ac, src/vncViewer/Makefile.am, src/vncViewer/__init__.py,
+	src/vncViewer/crippled_des.py, src/vncViewer/rfb.py,
+	src/vncViewer/vnc.py, virt-manager.spec.in:
+	Merge heads
+	[b2f17cab33bf]
+
+2007-07-20  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* pixmaps/icon_addnew.png, pixmaps/icon_ethernet.png,
+	pixmaps/icon_hdd.png, pixmaps/icon_ipaddy.png,
+	pixmaps/icon_launch_term.png, pixmaps/icon_save.png,
+	pixmaps/icon_screenshot.png, pixmaps/icon_snapshot.png,
+	src/virtManager/console.py, virt-manager.spec.in:
+	Merge heads
+	[2960a0671fe9]
+
+	* src/virtManager/console.py:
+	Updated for changes in GTK-VNC api
+	[51fb007abf5a]
+
+2007-07-06  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* README, configure.ac, src/Makefile.am, src/virtManager/console.py,
+	src/vncViewer/Makefile.am, src/vncViewer/__init__.py,
+	src/vncViewer/crippled_des.py, src/vncViewer/rfb.py,
+	src/vncViewer/vnc.py, virt-manager.spec.in:
+	Initial prototype switching code over to using GTK VNC
+	[3a93f110fb4c]
+
+2007-08-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* README, TODO, docs/dbus-remote-control.txt, help/virt-manager/C/fdl-
+	appendix.xml, help/virt-manager/C/virt-manager.xml, man/virt-
+	manager.pod:
+	Fixed a number of typos in manual page & documentation (Atsushi
+	SAKAI)
+	[d665d55a303c]
+
+2007-08-14  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/connect.py, src/virtManager/engine.py,
+	src/virtManager/manager.py:
+	Hook up the delete button for connections. Fix a fairly long-
+	standing bug where the default Xen URI from the connect dialog was
+	'xen://', which is invalid (valid uris are 'xen' or 'xen:///'). Fix
+	a couple of other minor issues.
+	[057f80a1854c]
+
+	* src/virtManager/engine.py, src/virtManager/manager.py:
+	Keep connections around after they are disconnected. Add a connect
+	item to the popup menus for connections.
+	[1732f41c3eea]
+
+	* src/virtManager/connection.py, src/virtManager/manager.py, src/vmm-
+	manager.glade:
+	Hook up active/inactive widget and make connection display resource
+	graphs.
+	[afa397cafefa]
+
+2007-08-13  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/engine.py, src/virtManager/manager.py, src/vmm-
+	manager.glade:
+	Add new popup menu for connection line. Remove 'create' button from
+	bottom row since it is now in the connection line. Hook up the
+	'disconnect' action from the popup menu as well.
+	[d11d4eb7485f]
+
+2007-08-09  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virt-manager.py.in, src/virtManager/connection.py,
+	src/virtManager/domain.py, src/virtManager/engine.py,
+	src/virtManager/manager.py:
+	First crack at multiple connections UI. Basic idea is there but
+	popup menus, buttons, create wizard still not right.
+	[f14cb3be0654]
+
+2007-08-02  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/vmm-add-hardware.glade, src/vmm-console.glade, src/vmm-create-
+	net.glade, src/vmm-create.glade, src/vmm-details.glade, src/vmm-
+	host.glade, src/vmm-manager.glade, src/vmm-modify-file-
+	storage.glade, src/vmm-open-connection.glade, src/vmm-
+	preferences.glade:
+	Add accessibility names to the various text widgets, so that we can
+	exercise them with Dogtail. Thanks to Cole Robinson.
+	[6f7c131a0a72]
+
+2007-08-01  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* AUTHORS:
+	Allow for passing arbitrary kernel args to paravirt guests -- thanks
+	Alexander Todorov
+	[a52478052b5c]
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	Allow for passing arbitrary kernel args to paravirt guests.
+	[b5113666a739]
+
+2007-07-31  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	Merge heads
+	[ee744eb4cf5d]
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	Revert my reversion so I can import A. Todorov's patch to his
+	original patch
+	[bd9c0ebe9cc2]
+
+2007-05-10  alexx  <alexx@redbull.brq.redhat.com>
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	removed new page, moved widgets to PVInstall page
+	[345de2ae3172]
+
+2007-07-31  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	revert changes from A. Todorov in favor of a later changeset
+	[af3ec8edb1d3]
+
+2007-07-31  "Alexander Todorov  <atodorov@redhat.com>
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	GUI for additional kernel parameters
+	[84e72d7cf2b1]
+
+2007-05-09  alexx  <alexx@redbull.brq.redhat.com>
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	added GUI support for specifying additional kernel parameters
+	[8df612e91599]
+
+2007-07-30  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* virt-manager.spec.in:
+	Back out unintentional commit to virt-manager.spec.in
+	[9a984728fe4b]
+
+	* virt-manager.spec.in:
+	Merge heads
+	[5fc6186be3f3]
+
+	* src/virtManager/connection.py, src/virtManager/netdev.py, virt-
+	manager.spec.in:
+	Refresh the network device menu automatically. Thanks to Masayuki
+	Sonou
+	[c255137f718e]
+
+2007-07-24  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* Makefile.am, configure.ac, man/Makefile.am, man/virt-manager.pod,
+	virt-manager.spec.in:
+	Added basic manual page
+	[4d3e7d9176c8]
+
+	* src/virtManager/connection.py, src/virtManager/domain.py:
+	Second attempt at forcing release of virDomainPtr objects
+	[6136f72ead7f]
+
+	* src/virtManager/connection.py:
+	Try and force GC of domain objects
+	[cacaaa5968ce]
+
+2007-07-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/create.py:
+	Default to x86_64 on x86_64 hosts.
+	[8bd1b2ab7296]
+
+	* src/virtManager/domain.py:
+	Don't try to hardcode port 5900+domid - this is obsolete
+	[dccb2162152f]
+
+2007-07-14  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py:
+	Re-add get_hostname method - needed for host details page
+	[6319216a0886]
+
+	* src/virtManager/create.py:
+	Suggest a filename for new VM disk images
+	[c99cc15dc21a]
+
+	* src/virtManager/manager.py:
+	Toggle delete button sensitivity when vm changes state
+	[a24ee931e579]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Added checking of host filesystem disk space when defining new disks
+	[7028a61fcc0b]
+
+	* pixmaps/icon_addnew.png, pixmaps/icon_cpu.png,
+	pixmaps/icon_ethernet.png, pixmaps/icon_hdd.png,
+	pixmaps/icon_ipaddy.png, pixmaps/icon_launch_term.png,
+	pixmaps/icon_save.png, pixmaps/icon_screenshot.png,
+	pixmaps/icon_snapshot.png:
+	Remove unused icons
+	[6e30df2b3369]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Display, but disable non-bridged NICs
+	[e475807b2cd3]
+
+	* src/virtManager/details.py, src/virtManager/host.py:
+	Use stock icons for network/cdrom/disk/floppy devices
+	[cf077aa77ef2]
+
+	* src/virtManager/addhardware.py, src/vmm-add-hardware.glade:
+	Allow choice between IDE disk, IDE cdrom, SCSI disk, floppy disk,
+	paravirt disk, usb disk, when adding storage
+	[a5c97c24f079]
+
+2007-07-11  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connect.py, src/virtManager/connection.py, src/vmm-
+	open-connection.glade, virt-manager.spec.in:
+	Re-work connection dialog to support remote connections
+	[f2a0b7149af5]
+
+	* src/virtManager/console.py, src/virtManager/details.py:
+	Fixed double invocation of suspend (Richard Jones)
+	[4fe6ebbc86a7]
+
+2007-07-09  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Stricter checking for MAC addresses to prevent conflict with active
+	guest/host Signed-off-by: Shigeki Sakamoto
+	<fj0588di@aa.jp.fujitsu.com>
+	[4c67e5fdd0e1]
+
+	* src/virtManager/create.py:
+	Fix use of virtinst.Guest to pass in HV uri, rather than hardcode
+	Xen
+	[1e7541c230d8]
+
+2007-07-04  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po, po/hi.po,
+	po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po, po/kn.po,
+	po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po, po/nl.po,
+	po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po, po/te.po,
+	po/tr.po, po/uk.po, po/zh_CN.po, po/zh_TW.po:
+	Imported latest translations from Fedora i18n repo
+	[4b3c8817404e]
+
+	* po/POTFILES.in, po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po,
+	po/da.po, po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po,
+	po/hi.po, po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po,
+	po/kn.po, po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po,
+	po/nl.po, po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po,
+	po/te.po, po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po,
+	po/zh_TW.po:
+	Re-genererate .pot & .po files for latest sources
+	[92b837e95e75]
+
+	* AUTHORS, src/virtManager/manager.py:
+	Merge heads
+	[446dd8532237]
+
+	* AUTHORS, src/virtManager/engine.py:
+	Improve error message if QEMU daemon isn't running (Ville Skytta)
+	[089cff18fee2]
+
+	* AUTHORS, src/virtManager/manager.py:
+	Fixed pause menu item state (Cole Robinson)
+	[9501aed0a245]
+
+	* src/virt-manager.desktop.in.in:
+	Make application menu comment GNOME HIG compliant (bz 246195)
+	[06f345efd6d8]
+
+	* src/vmm-console.glade, src/vmm-details.glade, src/vmm-manager.glade:
+	Make help menu item GNOME HIG compliant (bz 246195)
+	[eba56a06e7b7]
+
+2007-06-22  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* AUTHORS, src/virtManager/create.py:
+	Refactor virt-manager validation to use validation in virtinst.
+	Eliminates regexes in two places, among other things. Thanks to Cole
+	Robinson.
+	[216f03a53d2b]
+
+2007-06-19  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.schemas.in, src/virtManager/config.py,
+	src/virtManager/console.py:
+	Allow user to dismiss the cursor grab notification permanently (rhbz
+	244347)
+	[4df620fc9133]
+
+2007-06-18  Masayuki Sunou  <fj1826dm@aa.jp.fujitsu.com>
+
+	* src/virtManager/connection.py, src/virtManager/create.py,
+	src/virtManager/details.py:
+	Re: [et-mgmt-tools] [PATCH] Fix the maximum number of VCPUin virt-
+	manager Hi Hugh
+
+	Thank you for reviewing. I remake this patch.
+
+	> Hmm, this is good, but I'm inclined to think it would be better to
+	put a > getMaxVcpus() call in connection.py and isolate the "check
+	the > connection type and either call getMaxVcpus or arbitrarily
+	return '32'" > there (so we don't repeat the code in two places).
+	Also, it looks to me > like "Xen" is the default in xen_unified.c,
+	at least in current libvirt > code, so you shouldn't need to supply
+	"Xen" to the getMaxVcpus call. Can > you redo the patch along these
+	lines? > This patch changes as follows. 1. getMaxVcpus() is
+	executed from connection.py. 2. getMaxVcpus() is called with the
+	result of get_type() not "Xen"
+
+	Thanks, Masayuki Sunou.
+
+	====================================================================
+	===========
+	[b99ac3eb0141]
+
+2007-06-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* AUTHORS, src/virtManager/connection.py:
+	Fixed connection name with test:///default (Mark Johnson)
+	[aff40fece870]
+
+2007-06-13  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py:
+	Fix up system-name error message... hopefully for the last time...
+	[24729fe72d52]
+
+	* src/virtManager/domain.py:
+	I thought that the following is the problem.
+
+	--------------------------------------------------------------------
+	-- In finish() of "create.py", the port number of VNC become -1.
+	When "Status monitoring" is short, the port number of VNC is updated
+	in a short time, but, when "Status monitoring" is long, the port
+	number of VNC is not updated for a long time. Because the XML data
+	cached in "domain.py" is updated only in tick().
+	---------------------------------------------------------------------
+	-
+
+	And, I forgot retrying in "console.py". Therefore, I adopted
+	updating the port number of VNC in "cerate.py".
+
+	I remake the patch. This patch only clears XML in
+	get_graphics_console(), and the connection to the console is not
+	retried in "create.py". So, by applying this patch, the XML data is
+	cleared by retrying in "console.py" even when "Status monitoring" is
+	long, and the port number of VNC is updated. (Because retrying in
+	"console.py" calls get_graphics_console())
+
+	Thanks, Masayuki Sunou.
+
+	--------------------------------------------------------------------
+	--
+	[3372e369ec3a]
+
+	* src/virtManager/domain.py:
+	Fix BZ 239763 -- we shouldn't add a disk twice when we add it to a
+	live domain on Xen 3.1.
+	[643e8d92e3cf]
+
+	* src/virtManager/domain.py:
+	Backed out changeset ebd54b0c882ae581fc020b87df8583417b8b9e97
+	Applied this patch in error -- the correct fix is already in.
+	[f629da0083a6]
+
+2007-06-13  Masayuki Sunou  <fj1826dm@aa.jp.fujitsu.com>
+
+	* src/virtManager/domain.py:
+	[et-mgmt-tools] [PATCH] In virt-manager GUI, when the disk is
+	added, VM cannot be started. Hi
+
+	When the disk is added to active VM by virt-manager, VM cannot be
+	restarted after VM is stopped.
+	--> Bugzilla Bug 239763
+	https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=239763
+
+	This patch fixes it.
+
+	When the device is attached to active VM, virt-manager adds the
+	device twice in add_device() of "domain.py". 1. Call attachDevice()
+	2. Call define_domain() after the XML is updated Therefore, the same
+	device is doubly attached. (So, when the device is disk, VM cannot
+	be started)
+
+	This patch fixes "domain.py" as follows so that the same device is
+	not doubly attached. VM is active : Call attachDevice() only
+	VM is inactive : Call define_domain() after the XML is updated
+
+	 Signed-off-by: Masayuki Sunou <fj1826dm@aa.jp.fujitsu.com>
+
+	Thanks, Masayuki Sunou.
+
+	--------------------------------------------------------------------
+	--
+	[ebd54b0c882a]
+
+2007-06-13  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/details.py:
+	Fixes 242900, thanks to David Robinson
+	[24f00545253e]
+
+2007-05-24  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/domain.py:
+	Handle the case where the source device and source type are null --
+	for example, if a cdrom device exists in the guest config but is not
+	mapped to a backend device.
+	[27ad8c7fbc3e]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py, src/vmm-
+	add-hardware.glade, src/vmm-create.glade:
+	Allow user to set mac addresses for new guests and new guest nics.
+	Also fixes some validation bugs. Thanks to Masayuki Sunou
+	<fj1826dm@aa.jp.fujitsu.com>
+	[a84ede106782]
+
+2007-05-24  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/manager.py:
+	Hook up delete VM menu item (Charles Coffing)
+	[e9678b9eeb41]
+
+2007-05-18  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgignore, ABOUT-NLS, Makefile.am, autobuild.sh, autogen.sh,
+	configure.ac, po/ChangeLog, po/Makefile.am, po/Makevars,
+	po/Makevars.template, po/POTFILES.in, po/POTFILES.skip,
+	src/Makefile.am, src/virt-manager.desktop.in, src/virt-
+	manager.desktop.in.in, virt-manager.spec.in:
+	Major rework of i18n build integration to deal with bz 229324
+	[c60eab8f4ac6]
+
+	* AUTHORS, src/virt-manager.py.in:
+	Use a rolling file appender for logs (from Nobuhiro Itou)
+	[69da9fd8d530]
+
+2007-05-11  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/vmm-create.glade.orig:
+	Merge heads
+	[1538611b315d]
+
+	* src/vncViewer/vnc.py:
+	Fix typo / remove redundant check for vnc disconnect (Charles
+	Coffing)
+	[718b68621933]
+
+	* src/vmm-create.glade.orig:
+	Remove bogus backup file
+	[a971aa8db8cd]
+
+2007-05-10  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/vmm-details.glade:
+	Fixes bz 235914, which is a minor grammar nit but probably valid
+	[71e2c042c80f]
+
+2007-05-09  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/as.po, po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po,
+	po/da.po, po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po,
+	po/hi.po, po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po,
+	po/kn.po, po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po,
+	po/nl.po, po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po,
+	po/te.po, po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po,
+	po/zh_TW.po:
+	Refresh po files from Fedora i18n community
+	[95ca7c8f3261]
+
+2007-05-01  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/details.py:
+	Make NIC numbering in the details pane show something useful (in
+	this case, the tail end of the MAC address)
+	[47cbae77d41b]
+
+	* src/virtManager/domain.py:
+	Allow removal of devices from inactive domains. Requires rewriting
+	the XML and redefining the domain. To work on xen 3.0.3 userland,
+	also requires libvirt patch to xm_internal.c.
+	[900bee6f2cc8]
+
+2007-04-25  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	Fix NIC naming, make MAC address copy-and-pastable again
+	[fddee0787dde]
+
+	* src/virtManager/details.py:
+	Fix toolbar check/uncheck in details window as well
+	[1c74c953592e]
+
+	* src/virtManager/console.py:
+	initial fix for 236777: make the toolbar show/hide button reflect
+	reality. Next up, persist the value.
+	[92e90dd89dd5]
+
+2007-04-23  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py,
+	src/virtManager/createmeter.py:
+	Pull createmeter out into its own class
+	[58c0f8ae6fb8]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Fix up empty combo boxes, non-working file dialogs, and a few other
+	bugs.
+	[7263412862de]
+
 2007-04-16  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/as.po, po/bn_IN.po, po/ca.po, po/da.po, po/de.po, po/es.po,
+	po/fr.po, po/gu.po, po/hi.po, po/hr.po, po/is.po, po/it.po,
+	po/ja.po, po/kn.po, po/ko.po, po/ml.po, po/mr.po, po/ms.po,
+	po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po, po/te.po,
+	po/tr.po, po/virt-manager.pot, po/zh_CN.po, po/zh_TW.po, src/vmm-
+	create-net.glade:
+	Fixed typo in network wizard
+	[053429952481]
+
+	* .hgtags:
+	Added tag RELEASE-0.4.0-1 for changeset bee4afe144ec
+	[a8c61f45ef42]
+
+	* ChangeLog:
+	Re-generate changelog
+	[bee4afe144ec] [RELEASE-0.4.0-1]
 
 	* NEWS, README, configure.ac, virt-manager.spec.in:
 	Update info for new release
-	[f5e47b053177] [tip]
+	[f5e47b053177]
 
 2007-04-15  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* Merge heads
 	[f5478160c701]
+
+	* src/virtManager/create.py:
+	Update OS type/variant code to deal with API changes in virtinst
+	[3131f3183a97]
 
 2007-04-13  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -18,12 +714,6 @@
 	* src/virtManager/asyncjob.py:
 	Fixed thread locking in async job callback
 	[2c99eaccd271]
-
-2007-04-15  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* src/virtManager/create.py:
-	Update OS type/variant code to deal with API changes in virtinst
-	[3131f3183a97]
 
 2007-04-12  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -83,16 +773,6 @@
 	Set sensible default directories for save/restore/create
 	[8cb893311a7b]
 
-2007-04-11  "Hugh O. Brock  <hbrock@redhat.com>
-
-	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
-	details.glade:
-	First cut at vbd/vnic add/remove. You can now add a vnic, and the
-	screens update every tick(). Adding a vbd almost works, still have
-	to work out the device node naming. Finally, nothing works for
-	inactive guests yet.
-	[07012bf5e73e]
-
 2007-04-10  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* src/virtManager/console.py, src/virtManager/details.py:
@@ -116,6 +796,16 @@
 	src/virtManager/netdev.py:
 	Added code to detect 'shared' physical NICs
 	[5039fc44e638]
+
+2007-04-11  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	First cut at vbd/vnic add/remove. You can now add a vnic, and the
+	screens update every tick(). Adding a vbd almost works, still have
+	to work out the device node naming. Finally, nothing works for
+	inactive guests yet.
+	[07012bf5e73e]
 
 2007-04-04  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -181,16 +871,6 @@
 	Merge heads
 	[13ae24fc3e1b]
 
-2007-03-28  "Hugh O. Brock  <hbrock@redhat.com>
-
-	* src/virtManager/create.py:
-	Warn when a user tries to create a guest that attempts to use a disk
-	already in use by another guest. Thanks to Takahashi Tomohiro
-	<takatom-at-jp-dot-fujitsu-dot-com>.
-	[b917c4a76425]
-
-2007-03-28  "Daniel P. Berrange  <berrange@redhat.com>
-
 	* src/virtManager/create.py:
 	Fixed check for HVM support to work on non-Xen
 	[10a90e9becf0]
@@ -198,6 +878,14 @@
 	* src/virtManager/create.py:
 	Fixed typo
 	[9d80e0ad9ffd]
+
+2007-03-28  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/create.py:
+	Warn when a user tries to create a guest that attempts to use a disk
+	already in use by another guest. Thanks to Takahashi Tomohiro
+	<takatom-at-jp-dot-fujitsu-dot-com>.
+	[b917c4a76425]
 
 2007-03-27  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -345,6 +1033,13 @@
 	* Merge heads
 	[6174ce850f12]
 
+	* Merge heads
+	[5c099456c884]
+
+	* src/virtManager/console.py:
+	Don't try to reconnect if we're closing the console window
+	[9c2072c6faa3]
+
 2007-03-13  "Hugh O. Brock  <hbrock@redhat.com>
 
 	* src/vmm-details.glade:
@@ -354,16 +1049,13 @@
 
 2007-03-13  "Daniel P. Berrange  <berrange@redhat.com>
 
-	* Merge heads
-	[5c099456c884]
-
-	* src/virtManager/console.py:
-	Don't try to reconnect if we're closing the console window
-	[9c2072c6faa3]
-
 	* src/virtManager/engine.py:
 	merge heads
 	[b7f4957fe604]
+
+	* src/virtManager/asyncjob.py, src/virtManager/engine.py:
+	Fixed timer ticks
+	[ae1e52df4ff7]
 
 2007-03-09  "Hugh O. Brock  <hbrock@redhat.com>
 
@@ -386,17 +1078,19 @@
 	Clean up help code just a bit
 	[a66e42abec57]
 
-2007-03-13  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* src/virtManager/asyncjob.py, src/virtManager/engine.py:
-	Fixed timer ticks
-	[ae1e52df4ff7]
-
 2007-03-09  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* src/vncViewer/vnc.py:
 	Merge heads
 	[c428538c6dd7]
+
+2007-03-02  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/vncViewer/vnc.py:
+	Fixed key ungrab in vnc viewer
+	[ff646711a024]
+
+2007-03-09  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* src/virt-manager.py.in, src/virtManager/engine.py:
 	Merge heads
@@ -478,12 +1172,6 @@
 	says nothing. Now we can start filling in content.
 	[c36465241502]
 
-2007-03-02  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* src/vncViewer/vnc.py:
-	Fixed key ungrab in vnc viewer
-	[ff646711a024]
-
 2007-02-20  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* ChangeLog, NEWS, README, virt-manager.spec.in:
@@ -553,6 +1241,10 @@
 	Merge heads
 	[74dee2f86c10]
 
+	* AUTHORS, src/vncViewer/vnc.py:
+	Fixed keyboard grab
+	[24514e244a7a]
+
 2007-02-15  "Hugh O. Brock  <hbrock@redhat.com>
 
 	* src/Makefile.am, src/virt-manager.glade, src/virtManager/about.py,
@@ -568,12 +1260,6 @@
 	merges easier. This changes the makefile, so you'll need to rerun
 	autogen.sh
 	[4aff59f5c1b2]
-
-2007-02-15  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* AUTHORS, src/vncViewer/vnc.py:
-	Fixed keyboard grab
-	[24514e244a7a]
 
 2007-02-12  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -717,6 +1403,13 @@
 	Merge heads
 	[90df913df2d0]
 
+2006-11-22  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/domain.py, src/virtManager/manager.py:
+	Differentiate memory allocated, from that actually used on host.
+	Helps visualization of inactive guests
+	[75d791ba22a1]
+
 2006-11-15  "Hugh O. Brock  <hbrock@redhat.com>
 
 	* src/virtManager/create.py:
@@ -732,13 +1425,6 @@
 	src/virtManager/domain.py, src/virtManager/engine.py:
 	Add destroy option to details and console menus
 	[9c6d46c2f6ad]
-
-2006-11-22  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* src/virtManager/domain.py, src/virtManager/manager.py:
-	Differentiate memory allocated, from that actually used on host.
-	Helps visualization of inactive guests
-	[75d791ba22a1]
 
 2006-11-15  "Daniel P. Berrange  <berrange@redhat.com>
 
