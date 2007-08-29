@@ -267,7 +267,7 @@ class vmmConsole(gobject.GObject):
             gtk.gdk.threads_leave()
 
     def try_login(self, src=None):
-        if self.vm.get_id() <= 0:
+        if self.vm.get_id() < 0:
             self.activate_unavailable_page(_("Console not available for inactive guest"))
             return
 
@@ -499,7 +499,7 @@ class vmmConsole(gobject.GObject):
                 self.window.get_widget("control-pause").set_active(False)
                 self.window.get_widget("menu-vm-pause").set_active(False)
 
-        if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ] or vm.is_management_domain():
+        if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
             if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
                 self.vncViewer.close()
                 self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)

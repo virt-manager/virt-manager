@@ -456,7 +456,7 @@ class vmmDomain(gobject.GObject):
 
         transport, username = self.connection.get_transport()
 
-        return [type, self.connection.get_hostname(), int(port), transport]
+        return [type, self.connection.get_hostname(), port, transport]
 
 
     def get_disk_devices(self):
