@@ -79,7 +79,7 @@ class vmmHost(gobject.GObject):
         self.conn.connect("net-removed", self.repopulate_networks)
 
         # XXX not technically correct once we enable remote management
-        if os.getuid() != 0:
+        if os.getuid() != 0 and not self.conn.is_remote():
             self.window.get_widget("net-add").set_sensitive(False)
 
 
@@ -122,6 +122,16 @@ class vmmHost(gobject.GObject):
             net.stop()
 
     def add_network(self, src):
+        if self.conn.is_remote():
+            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                     gtk.DIALOG_DESTROY_WITH_PARENT,
+                                     gtk.MESSAGE_WARNING,
+                                     gtk.BUTTONS_OK,
+                                     _("Creating new networks on remote connections is not yet supported"))
+            result = warn.run()
+            warn.destroy()
+            return
+
         if self.add is None:
             self.add = vmmCreateNetwork(self.config, self.conn)
         self.add.show()

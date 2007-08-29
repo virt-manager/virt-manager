@@ -71,7 +71,8 @@ class vmmDetails(gobject.GObject):
         topwin.set_title(self.vm.get_name() + " " + topwin.get_title())
 
         # Don't allowing changing network/disks for Dom0
-        if self.vm.is_management_domain():
+        # XXX also disable for remote connections for now
+        if self.vm.is_management_domain() or self.vm.get_connection().is_remote():
             self.window.get_widget("add-hardware-button").set_sensitive(False)
         else:
             self.window.get_widget("add-hardware-button").set_sensitive(True)

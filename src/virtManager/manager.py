@@ -553,6 +553,8 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("vm-details").set_sensitive(False)
             self.window.get_widget("vm-open").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
+            self.window.get_widget("menu_edit_delete").set_sensitive(False)
+            self.window.get_widget("menu_host_details").set_sensitive(False)
         elif vm is not None:
             # this is strange to call this here, but it simplifies the code
             # updating the treeview
@@ -560,10 +562,14 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(True)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
+            self.window.get_widget("menu_edit_delete").set_sensitive(True)
+            self.window.get_widget("menu_host_details").set_sensitive(True)
         else:
             self.window.get_widget("vm-details").set_sensitive(False)
             self.window.get_widget("vm-open").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
+            self.window.get_widget("menu_edit_delete").set_sensitive(False)
+            self.window.get_widget("menu_host_details").set_sensitive(True)
 
     def popup_vm_menu(self, widget, event):
         tuple = widget.get_path_at_pos(int(event.x), int(event.y))
@@ -645,7 +651,16 @@ class vmmManager(gobject.GObject):
                 if int(event.x) > area.x and int(event.x) < area.x + area.width:
                     # clicked the action column
                     if self.connections.has_key(uri):
-                        self.emit("action-show-create", uri)
+                        if self.connections[uri].is_remote():
+                            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                                     gtk.DIALOG_DESTROY_WITH_PARENT,
+                                                     gtk.MESSAGE_WARNING,
+                                                     gtk.BUTTONS_OK,
+                                                     _("Creating new guests on remote connections is not yet supported"))
+                            result = warn.run()
+                            warn.destroy()
+                        else:
+                            self.emit("action-show-create", uri)
                     else:
                         warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
                                                  gtk.DIALOG_DESTROY_WITH_PARENT,
