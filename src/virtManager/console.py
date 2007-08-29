@@ -305,19 +305,23 @@ class vmmConsole(gobject.GObject):
             logging.error(details)
 
     def set_password(self, src=None):
-        logging.debug("Setting a password to " . str(src.get_text()))
+        txt = self.window.get_widget("console-auth-password")
+        logging.debug("Setting a password to " + str(txt.get_text()))
 
-        self.vncViewer.set_credential(gtkvnc.CREDENTIAL_PASSWORD, src.get_text())
+        self.vncViewer.set_credential(gtkvnc.CREDENTIAL_PASSWORD, txt.get_text())
 
-    def _vnc_auth_credential(self, src, type):
-        logging.debug("Got credential request %d", type)
-        if type != gtkvnc.CREDENTIAL_PASSWORD:
-            # Force it to stop re-trying
-            self.vncViewerFailures = 10
-            self.vncViewer.close()
-            return
-
-        self.activate_auth_page()
+    def _vnc_auth_credential(self, src, credList):
+        for i in range(len(credList)):
+            logging.debug("Got credential request %s", str(credList[i]))
+            if credList[i] == gtkvnc.CREDENTIAL_PASSWORD:
+                self.activate_auth_page()
+            elif credList[i] == gtkvnc.CREDENTIAL_CLIENTNAME:
+                self.vncViewer.set_credential(credList[i], "libvirt")
+            else:
+                # Force it to stop re-trying
+                self.vncViewerFailures = 10
+                self.vncViewer.close()
+                self.activate_unavailable_page(_("Unsupported console authentication type"))
 
     def activate_unavailable_page(self, msg):
         self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
