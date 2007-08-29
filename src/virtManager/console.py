@@ -71,8 +71,7 @@ class vmmConsole(gobject.GObject):
         self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
         self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
 
-        self.window.get_widget("console-vnc-align").add(self.vncViewer)
-        self.vncViewer.connect("size-request", self.autosize)
+        self.window.get_widget("console-pages").append_page(self.vncViewer)
         self.vncViewer.realize()
         self.vncViewer.show()
         self.vncViewerFailures = 0
@@ -90,6 +89,8 @@ class vmmConsole(gobject.GObject):
             pass
 
         self.window.get_widget("console-pages").set_show_tabs(False)
+        self.window.get_widget("console-unavailable").set_size_request(640, 480)
+        self.window.get_widget("console-auth").set_size_request(640, 480)
 
         self.config.on_console_keygrab_changed(self.keygrab_changed)
 
