@@ -324,22 +324,32 @@ class vmmManager(gobject.GObject):
     def vm_view_changed(self, src):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
-        model.clear()
-        self.rows = {}
-        
-        for uri in self.connections:
-            conn = self.connections[uri]
-            self._append_connection(model, uri)
-            uuids = conn.list_vm_uuids()
-            for vmuuid in uuids:
-                vm = conn.get_vm(vmuuid)
-                if vm.is_active():
-                    if not(self.is_showing_active()):
-                        continue
-                else:
-                    if not(self.is_showing_inactive()):
-                        continue
-                self._append_vm(model, vm, conn)
+
+        iter = model.get_iter_first()
+        while iter is not None:
+            conn = model.get_value(iter, ROW_HANDLE)
+
+            children = model.iter_children(iter)
+            while children is not None:
+                uuid = model.get_value(children, ROW_KEY)
+                del self.rows[uuid]
+                model.remove(children)
+                children = model.iter_children(iter)
+
+            if conn:
+                uuids = conn.list_vm_uuids()
+                for vmuuid in uuids:
+                    vm = conn.get_vm(vmuuid)
+                    if vm.is_active():
+                        if not(self.is_showing_active()):
+                            continue
+                    else:
+                        if not(self.is_showing_inactive()):
+                            continue
+                    self._append_vm(model, vm, conn)
+
+            iter = model.iter_next(iter)
+
 
     def vm_added(self, connection, uri, vmuuid):
         vm = connection.get_vm(vmuuid)
@@ -383,7 +393,10 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_MEM, vm.get_memory_pretty())
         row.insert(ROW_MEM_USAGE, vm.current_memory_percentage())
         row.insert(ROW_KEY, vm.get_uuid())
-        row.insert(ROW_ACTION, "")
+        if vm.is_active():
+            row.insert(ROW_ACTION, None)
+        else:
+            row.insert(ROW_ACTION, gtk.STOCK_DELETE)
         iter = model.append(parent, row)
         path = model.get_path(iter)
         self.rows[vm.get_uuid()] = model[path]
