@@ -365,13 +365,9 @@ class vmmConsole(gobject.GObject):
             file = fcdialog.get_filename()
             if not(file.endswith(".png")):
                 file = file + ".png"
-            screenshot = self.vncViewer.take_screenshot()
-            width, height = screenshot.get_size()
-            image = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8,
-                                   width, height)
-            image.get_from_drawable(screenshot,
-                                    gtk.gdk.colormap_get_system(),
-                                    0, 0, 0, 0, width, height)
+            image = self.vncViewer.get_pixbuf()
+            width = image.get_width()
+            height = image.get_height()
 
             # Save along with a little metadata about us & the domain
             image.save(file, 'png', { 'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
@@ -504,9 +500,15 @@ class vmmConsole(gobject.GObject):
         else:
             if status == libvirt.VIR_DOMAIN_PAUSED:
                 if self.window.get_widget("console-pages").get_current_page() == PAGE_VNCVIEWER:
-                    screenshot = self.vncViewer.take_screenshot()
-                    cr = screenshot.cairo_create()
-                    width, height = screenshot.get_size()
+                    screenshot = self.window.get_widget("console-screenshot")
+                    image = self.vncViewer.get_pixbuf()
+                    width = image.get_width()
+                    height = image.get_height()
+                    pixmap = gtk.gdk.Pixmap(screenshot.get_root_window(), width, height)
+                    cr = pixmap.cairo_create()
+                    cr.set_source_pixbuf(image, 0, 0)
+                    cr.rectangle(0, 0, width, height)
+                    cr.fill()
 
                     # Set 50% gray overlayed
                     cr.set_source_rgba(0, 0, 0, 0.5)
@@ -523,18 +525,21 @@ class vmmConsole(gobject.GObject):
                     y = height/2 - (extents[3]/2)
                     cr.move_to(x, y)
                     cr.show_text(overlay)
-                    self.window.get_widget("console-screenshot").set_from_pixmap(screenshot, None)
+                    screenshot.set_from_pixmap(pixmap, None)
                     self.activate_screenshot_page()
                 else:
                     if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
                         self.vncViewer.close()
                     self.activate_unavailable_page(_("Console not available while paused"))
             else:
-                if self.window.get_widget("console-pages").get_current_page() == PAGE_UNAVAILABLE:
-                    self.vncViewerFailures = 0
-                    self.vncViewerRetryDelay = 125
-                    self.try_login()
-                    self.ignorePause = False
+                if self.window.get_widget("console-pages").get_current_page() in (PAGE_UNAVAILABLE, PAGE_SCREENSHOT):
+                    if self.vncViewer.is_open():
+                        self.activate_viewer_page()
+                    else:
+                        self.vncViewerFailures = 0
+                        self.vncViewerRetryDelay = 125
+                        self.try_login()
+                        self.ignorePause = False
         self.ignorePause = False
 
 
