@@ -1,6 +1,19 @@
  Virtual Machine Manager News
  ============================
 
+Release 0.5.0
+-------------
+
+This release introduces the ability to manage multiple remote machines,
+using either SSH+public keys, or TLS+x509 certificates to connect and
+authenticate. The main user interface is re-worked to show multiple
+hosts in a tree view, remebering connections across restarts. It is
+not currently possible to create new guests with a remote host connection.
+This capability will be added in a future release. The guest VNC console
+implementation has been replaced with the GTK-VNC widget for greatly
+improved performance and increased feature set. Other miscellaneous bug
+fixes and feature enhancements are also included.
+
 Release 0.4.0
 -------------
 
