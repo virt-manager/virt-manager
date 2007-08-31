@@ -257,7 +257,7 @@ class vmmConnection(gobject.GObject):
                 scheme = scheme[0:i]
 
             if netloc == "":
-                netloc = self.get_local_hostname()
+                netloc = get_local_hostname()
 
             if scheme == "xen":
                 return "Xen on %s" % netloc
