@@ -74,8 +74,9 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("console-pages").append_page(self.vncViewer)
         self.vncViewer.realize()
         self.vncViewer.show()
-        self.vncViewerFailures = 0
+        self.vncViewerRetriesScheduled = 0
         self.vncViewerRetryDelay = 125
+        self.connected = 0
 
         self.notifyID = None
         try:
@@ -231,44 +232,61 @@ class vmmConsole(gobject.GObject):
            return 1
         return 0
 
+    def view_vm_status(self):
+        status = self.vm.status()
+        if status == libvirt.VIR_DOMAIN_SHUTOFF:
+            self.activate_unavailable_page(_("Guest not running"))
+        else:
+            if status == libvirt.VIR_DOMAIN_CRASHED:
+                self.activate_unavailable_page(_("Guest has crashed"))
+
     def _vnc_disconnected(self, src):
+        self.connected = 0
         logging.debug("VNC disconnected")
-        self.vncViewerFailures = self.vncViewerFailures + 1
-        self.activate_unavailable_page(_("Console was disconnected from guest"))
         if not self.is_visible():
             return
 
-        if self.vncViewerFailures < 10:
-            self.schedule_retry()
-        else:
-            logging.error("Too many connection failures, not retrying again")
+        if self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+            self.view_vm_status()
+            return
+
+        self.activate_unavailable_page(_("TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"))
+        self.schedule_retry()
 
     def _vnc_initialized(self, src):
+        self.connected = 1
         logging.debug("VNC initialized")
         self.activate_viewer_page()
 
         # Had a succesfull connect, so reset counters now
-        self.vncViewerFailures = 0
+        self.vncViewerRetriesScheduled = 0
         self.vncViewerRetryDelay = 125
 
     def schedule_retry(self):
+        self.vncViewerRetriesScheduled = self.vncViewerRetriesScheduled + 1
+        if self.vncViewerRetriesScheduled >= 10:
+            logging.error("Too many connection failures, not retrying again")
+            return
         logging.warn("Retrying connection in %d ms", self.vncViewerRetryDelay)
         gobject.timeout_add(self.vncViewerRetryDelay, self.retry_login)
         if self.vncViewerRetryDelay < 2000:
             self.vncViewerRetryDelay = self.vncViewerRetryDelay * 2
 
     def retry_login(self):
+        if self.connected:
+            return
         gtk.gdk.threads_enter()
         try:
             logging.debug("Got timed retry")
             self.try_login()
-            return False
+            return
         finally:
             gtk.gdk.threads_leave()
 
     def try_login(self, src=None):
         if self.vm.get_id() < 0:
-            self.activate_unavailable_page(_("Console not available for inactive guest"))
+            self.activate_unavailable_page(_("Guest not running"))
+            self.schedule_retry()
             return
 
         logging.debug("Trying console login")
@@ -320,7 +338,7 @@ class vmmConsole(gobject.GObject):
                 self.vncViewer.set_credential(credList[i], "libvirt")
             else:
                 # Force it to stop re-trying
-                self.vncViewerFailures = 10
+                self.vncViewerRetriesScheduled = 10
                 self.vncViewer.close()
                 self.activate_unavailable_page(_("Unsupported console authentication type"))
 
@@ -503,7 +521,7 @@ class vmmConsole(gobject.GObject):
             if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
                 self.vncViewer.close()
                 self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
-            self.activate_unavailable_page(_("Console not available for inactive guest"))
+            self.view_vm_status()
         else:
             if status == libvirt.VIR_DOMAIN_PAUSED:
                 if self.window.get_widget("console-pages").get_current_page() == PAGE_VNCVIEWER:
@@ -543,7 +561,7 @@ class vmmConsole(gobject.GObject):
                     if self.vncViewer.is_open():
                         self.activate_viewer_page()
                     else:
-                        self.vncViewerFailures = 0
+                        self.vncViewerRetriesScheduled = 0
                         self.vncViewerRetryDelay = 125
                         self.try_login()
                         self.ignorePause = False
