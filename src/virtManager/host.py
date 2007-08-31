@@ -41,7 +41,7 @@ class vmmHost(gobject.GObject):
         topwin = self.window.get_widget("vmm-host")
         topwin.hide()
 
-        self.window.get_widget("overview-hostname").set_text(self.conn.get_hostname())
+        self.window.get_widget("overview-hostname").set_text(self.conn.get_hostname(True))
         self.window.get_widget("overview-hypervisor").set_text(self.conn.get_type())
         self.window.get_widget("overview-memory").set_text(self.conn.pretty_host_memory_size())
         self.window.get_widget("overview-cpus").set_text(str(self.conn.host_active_processor_count()))

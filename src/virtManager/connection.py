@@ -47,7 +47,7 @@ def get_short_hostname(uri):
         return hostname[0:offset]
     return hostname
 
-def get_hostname(uri):
+def get_hostname(uri, resolveLocal=False):
     try:
         (scheme, username, netloc, path, query, fragment) = uri_split(uri)
         
@@ -55,8 +55,10 @@ def get_hostname(uri):
             return netloc
     except Exception, e:
         logging.warning("Cannot parse URI %s: %s" % (uri, str(e)))
-            
-    return get_local_hostname()
+
+    if resolveLocal:
+        return get_local_hostname()
+    return "localhost"
     
 def is_remote(uri):
     try:
@@ -271,14 +273,11 @@ class vmmConnection(gobject.GObject):
 
         return self.uri
 
-    def get_local_hostname(self):
-        return get_local_hostname()
-
     def get_short_hostname(self):
         return get_short_hostname(self.uri)
 
-    def get_hostname(self):
-        return get_hostname(self.uri)
+    def get_hostname(self, resolveLocal=False):
+        return get_hostname(self.uri, resolveLocal)
 
     def get_transport(self):
         return get_transport(self.uri)
