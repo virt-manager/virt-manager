@@ -4,6 +4,7 @@
 <glade-interface>
 
 <widget class="GtkWindow" id="vmm-create">
+  <property name="border_width">6</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Create a new virtual system</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
@@ -24,7 +25,7 @@
     <widget class="GtkVBox" id="vbox23">
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkNotebook" id="create-pages">
@@ -566,12 +567,13 @@
 
 		      <child>
 			<widget class="GtkTable" id="table13">
+			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="n_rows">2</property>
 			  <property name="n_columns">2</property>
 			  <property name="homogeneous">False</property>
 			  <property name="row_spacing">3</property>
-			  <property name="column_spacing">4</property>
+			  <property name="column_spacing">3</property>
 
 			  <child>
 			    <widget class="GtkLabel" id="label173">
