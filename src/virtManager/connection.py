@@ -73,12 +73,24 @@ def get_transport(uri):
     try:
         (scheme, username, netloc, path, query, fragment) = uri_split(uri)
         if scheme:
-            offset = scheme.index("+")
+            offset = scheme.find("+")
             if offset > 0:
                 return [scheme[offset:], username]
     except:
         pass
     return [None, None]
+
+def get_driver(uri):
+    try:
+        (scheme, username, netloc, path, query, fragment) = uri_split(uri)
+        if scheme:
+            offset = scheme.find("+")
+            if offset > 0:
+                return scheme[:offset]
+            return scheme
+    except Exception, e:
+        pass
+    return None
 
 # Standard python urlparse is utterly braindead - refusing to parse URIs
 # in any useful fashion unless the 'scheme' is in some pre-defined white
@@ -207,10 +219,12 @@ class vmmConnection(gobject.GObject):
                 # welcomed...
                 sysfspath = obj.GetPropertyString("linux.sysfs_path")
 
-                # Sick, disgusting hack for Xen netloop crack which renames
-                # ethN -> pethN, but which HAL never sees
+                # If running a device in bridged mode, there's a reasonable
+                # chance that the actual ethernet device has been renamed to
+                # something else. ethN -> pethN
                 psysfspath = sysfspath[0:len(sysfspath)-len(name)] + "p" + name
                 if os.path.exists(psysfspath):
+                    name = "p" + name
                     sysfspath = psysfspath
 
                 brportpath = os.path.join(sysfspath, "brport")

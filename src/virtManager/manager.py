@@ -414,7 +414,10 @@ class vmmManager(gobject.GObject):
             row.insert(ROW_STATUS, _("Disconnected"))
             row.insert(ROW_ACTION, gtk.STOCK_DELETE)
         row.insert(ROW_NAME, static_conn.get_short_hostname(uri))
-        row.insert(ROW_ID, "")
+        drv = static_conn.get_driver(uri)
+        if drv is None:
+            drv = "xen"
+        row.insert(ROW_ID, drv)
         row.insert(ROW_STATUS_ICON, None)
         row.insert(ROW_CPU, "")
         row.insert(ROW_VCPUS, 0)
