@@ -130,23 +130,19 @@ def show_engine(engine, show, uri, uuid):
         engine.show_console(uri, uuid)
     elif show=='summary' or uri:
         engine.connect_to_uri(uri)
-    elif engine.config.get_connections() != None and len(engine.config.get_connections()) > 0:
-        engine.load_stored_uris()
     else:
-        tryuri = None
-        if os.path.exists("/var/lib/xend") and os.path.exists("/proc/xen"):
-            tryuri = "xen"
-        elif os.path.exists("/usr/bin/qemu"):
-            if os.getuid() == 0:
-                tryuri = "qemu:///system"
-            else:
-                tryuri = "qemu:///session"
-        if tryuri is not None:
-            conn = engine.connect_to_uri(tryuri)
-            if conn is None:
-                tryuri = None
-        if tryuri is None:
-            engine.show_connect()
+        if engine.config.get_connections() is None or len(engine.config.get_connections()) == 0:
+            tryuri = None
+            if os.path.exists("/var/lib/xend") and os.path.exists("/proc/xen"):
+                tryuri = "xen"
+            elif os.path.exists("/usr/bin/qemu"):
+                if os.getuid() == 0:
+                    tryuri = "qemu:///system"
+                else:
+                    tryuri = "qemu:///session"
+            if tryuri is not None:
+                conn = engine.add_connection(tryuri)
+        engine.show_manager()
 
 # maps --show-* to remote manager (ie dbus call) methods
 def show_remote(managerObj, show, uri, uuid):

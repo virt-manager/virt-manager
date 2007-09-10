@@ -37,8 +37,16 @@ from virtManager.serialcon import vmmSerialConsole
 from virtManager.error import vmmErrorDialog
 from virtManager.host import vmmHost
 
-class vmmEngine:
+class vmmEngine(gobject.GObject):
+    __gsignals__ = {
+        "connection-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                             [object]),
+        "connection-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                               [object])
+        }
+
     def __init__(self, config):
+        self.__gobject_init__()
         self.windowConnect = None
         self.windowPreferences = None
         self.windowAbout = None
@@ -53,25 +61,15 @@ class vmmEngine:
         self.config.on_stats_update_interval_changed(self.reschedule_timer)
 
         self.schedule_timer()
+        self.load_stored_uris()
         self.tick()
-
-
-    def _do_connection_disconnected(self, connection, hvuri):
-        del self.connections[hvuri]
-        if len(self.connections.keys()) == 0 and self.windowConnect == None \
-               and self.windowManager == None:
-            gtk.main_quit()
-        if self.windowManager is not None:
-            self.windowManager.disconnect_connection(hvuri)
 
     def load_stored_uris(self):
         uris = self.config.get_connections()
         if uris != None:
             logging.debug("About to connect to uris %s" % uris)
-            manager = self.get_manager()
             for uri in uris:
-                manager.add_connection(uri)
-        self.show_manager()
+                self.add_connection(uri)
 
     def connect_to_uri(self, uri, readOnly=None):
         return self._connect_to_uri(None, uri, readOnly)
@@ -301,7 +299,7 @@ class vmmEngine:
 
     def get_manager(self):
         if self.windowManager == None:
-            self.windowManager = vmmManager(self.get_config())
+            self.windowManager = vmmManager(self.get_config(), self)
             self.windowManager.connect("action-show-console", self._do_show_console)
             self.windowManager.connect("action-show-terminal", self._do_show_terminal)
             self.windowManager.connect("action-show-details", self._do_show_details)
@@ -329,20 +327,39 @@ class vmmEngine:
         self.windowCreate.reset_state()
         self.windowCreate.show()
 
+    def add_connection(self, uri, readOnly=None):
+        conn = vmmConnection(self.get_config(), uri, readOnly)
+        self.connections[uri] = {
+            "connection": conn,
+            "windowHost": None,
+            "windowDetails": {},
+            "windowConsole": {},
+            "windowSerialConsole": {},
+            }
+        self.connections[uri]["connection"].connect("vm-removed", self._do_vm_removed)
+        self.connections[uri]["connection"].tick()
+        self.emit("connection-added", conn)
+        self.config.add_connection(conn.get_uri())
+
+    def remove_connection(self, uri):
+        conn = self.connections[uri]["connection"]
+        conn.close()
+        self.emit("connection-removed", conn)
+        del self.connections[uri]
+        self.config.remove_connection(conn.get_uri())
+
+    def connect(self, name, callback):
+        handle_id = gobject.GObject.connect(self, name, callback)
+
+        if name == "connection-added":
+            for uri in self.connections.keys():
+                self.emit("connection-added", self.connections[uri]["connection"])
+
+        return handle_id
+
     def get_connection(self, uri, readOnly=None):
         if not(self.connections.has_key(uri)):
-            conn = vmmConnection(self.get_config(), uri, readOnly)
-            self.connections[uri] = {
-                "connection": conn,
-                "windowHost": None,
-                "windowDetails": {},
-                "windowConsole": {},
-                "windowSerialConsole": {},
-                }
-            self.connections[uri]["connection"].connect("disconnected", self._do_connection_disconnected)
-            self.connections[uri]["connection"].connect("vm-removed", self._do_vm_removed)
-            self.get_manager().connect_connection(self.connections[uri]["connection"])
-            self.connections[uri]["connection"].tick()
+            self.add_connection(uri, readOnly)
 
         return self.connections[uri]["connection"]
 
@@ -394,3 +411,5 @@ class vmmEngine:
                 vm.destroy()
             else:
                 return
+
+gobject.type_register(vmmEngine)
