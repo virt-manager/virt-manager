@@ -34,7 +34,6 @@ from virtManager.console import vmmConsole
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.create import vmmCreate
 from virtManager.serialcon import vmmSerialConsole
-from virtManager.error import vmmErrorDialog
 from virtManager.host import vmmHost
 
 class vmmEngine(gobject.GObject):
@@ -82,43 +81,6 @@ class vmmEngine(gobject.GObject):
             self.show_manager()
             return conn
         except:
-            (type, value, stacktrace) = sys.exc_info ()
-
-            # Detailed error message, in English so it can be Googled.
-            details = \
-                    ("Unable to open connection to hypervisor URI '%s':\n" %
-                     str(uri)) + \
-                    str(type) + " " + str(value) + "\n" + \
-                    traceback.format_exc (stacktrace)
-            logging.error (details)
-
-            # Error dialog.
-            if uri is None:
-                uri = "xen"
-            if uri == "xen":
-                dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
-                                     gtk.BUTTONS_CLOSE,
-                                     _("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
-                                       "Verify that:\n" +
-                                       " - A Xen host kernel was booted\n" +
-                                       " - The Xen service has been started\n"),
-                                     details)
-            elif uri.startswith("qemu:"):
-                dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
-                                     gtk.BUTTONS_CLOSE,
-                                     _("Unable to open a connection to the QEMU management daemon.\n\n" +
-                                       "Verify that:\n" +
-                                       " - The 'libvirt_qemud' daemon has been started\n"),
-                                     details)
-            else:
-                dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
-                                     gtk.BUTTONS_CLOSE,
-                                     _("Unable to open connection to hypervisor '%s'") % str(uri),
-                                     details)
-            dg.set_title(_("Virtual Machine Manager Connection Failure"))
-            dg.run()
-            dg.hide()
-            dg.destroy()
             return None
 
     def _connect_cancelled(self, connect):

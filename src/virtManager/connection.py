@@ -26,6 +26,8 @@ from time import time
 import logging
 from socket import gethostbyaddr, gethostname
 import dbus
+import threading
+import gtk
 
 from virtManager.domain import vmmDomain
 from virtManager.network import vmmNetwork
@@ -96,6 +98,8 @@ class vmmConnection(gobject.GObject):
                               []),
         "state-changed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                           []),
+        "connect-error": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                          [str]),
         }
 
     STATE_DISCONNECTED = 0
@@ -108,6 +112,8 @@ class vmmConnection(gobject.GObject):
         self.config = config
         self.readOnly = readOnly
 
+        self.connectThread = None
+        self.connectError = None
         self.uri = uri
         if self.uri is None or self.uri.lower() == "xen":
             self.uri = "xen:///"
@@ -279,6 +285,15 @@ class vmmConnection(gobject.GObject):
 
         self.state = self.STATE_CONNECTING
         self.emit("state-changed")
+
+        logging.debug("Scheduling background open thread for " + self.uri)
+        self.connectThread = threading.Thread(target = self._open_thread, name="Connect " + self.uri)
+        self.connectThread.setDaemon(True)
+        self.connectThread.start()
+
+
+    def _open_thread(self):
+        logging.debug("Background thread is running")
         try:
             if self.readOnly is None:
                 try:
@@ -293,12 +308,42 @@ class vmmConnection(gobject.GObject):
                 else:
                     self.vmm = libvirt.open(self.uri)
             self.state = self.STATE_ACTIVE
-            self.tick()
-            self.emit("state-changed")
         except:
             self.state = self.STATE_DISCONNECTED
+
+            (type, value, stacktrace) = sys.exc_info ()
+            # Detailed error message, in English so it can be Googled.
+            self.connectError = \
+                    ("Unable to open connection to hypervisor URI '%s':\n" %
+                     str(self.uri)) + \
+                    str(type) + " " + str(value) + "\n" + \
+                    traceback.format_exc (stacktrace)
+            logging.error(self.connectError)
+
+        # We want to kill off this thread asap, so schedule a gobject
+        # idle even to inform the UI of result
+        logging.debug("Background open thread complete, scheduling notify")
+        gtk.gdk.threads_enter()
+        try:
+            gobject.idle_add(self._open_notify)
+        finally:
+            gtk.gdk.threads_leave()
+        self.connectThread = None
+
+    def _open_notify(self):
+        logging.debug("Notifying open result")
+        gtk.gdk.threads_enter()
+        try:
+            if self.state == self.STATE_ACTIVE:
+                self.tick()
             self.emit("state-changed")
-            raise
+
+            if self.state == self.STATE_DISCONNECTED:
+                self.emit("connect-error", self.connectError)
+                self.connectError = None
+        finally:
+            gtk.gdk.threads_leave()
+
 
     def pause(self):
         if self.state != self.STATE_ACTIVE:

@@ -22,13 +22,14 @@ import gtk
 import gtk.glade
 import threading
 import logging
+import sys
 
 import sparkline
 import libvirt
 
 from virtManager.connection import vmmConnection
 from virtManager.asyncjob import vmmAsyncJob
-
+from virtManager.error import vmmErrorDialog
 
 VMLIST_SORT_ID = 1
 VMLIST_SORT_NAME = 2
@@ -503,7 +504,7 @@ class vmmManager(gobject.GObject):
         row[ROW_VCPUS] = conn.host_active_processor_count()
         row[ROW_MEM] = conn.pretty_current_memory()
         row[ROW_MEM_USAGE] = conn.current_memory_percentage()
-        if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
+        if conn.get_state() in [vmmConnection.STATE_DISCONNECTED, vmmConnection.STATE_CONNECTING]:
             row[ROW_ACTION] = gtk.STOCK_DELETE
             parent = self.rows[conn.get_uri()].iter
             if parent is not None:
@@ -942,6 +943,7 @@ class vmmManager(gobject.GObject):
         conn.connect("vm-removed", self.vm_removed)
         conn.connect("resources-sampled", self.conn_refresh_resources)
         conn.connect("state-changed", self.conn_state_changed)
+        conn.connect("connect-error", self._connect_error)
         conn.connect("vm-started", self.vm_started)
         # add the connection to the treeModel
         vmlist = self.window.get_widget("vm-list")
@@ -969,5 +971,27 @@ class vmmManager(gobject.GObject):
         conn = treeview.get_model().get_value(iter,ROW_HANDLE)
         logging.debug("Deactivating connection %s" % conn.get_uri())
         conn.pause()
+
+    def _connect_error(self, conn, details):
+        if conn.get_driver() == "xen" and not conn.is_remote():
+            dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
+                                 gtk.BUTTONS_CLOSE,
+                                 _("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
+                                   "Verify that:\n" +
+                                   " - A Xen host kernel was booted\n" +
+                                   " - The Xen service has been started\n"),
+                                 details)
+        else:
+            dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
+                                 gtk.BUTTONS_CLOSE,
+                                 _("Unable to open a connection to the libvirt management daemon.\n\n" +
+                                   "Verify that:\n" +
+                                   " - The 'libvirtd' daemon has been started\n"),
+                                 details)
+        dg.set_title(_("Virtual Machine Manager Connection Failure"))
+        dg.run()
+        dg.hide()
+        dg.destroy()
+
 
 gobject.type_register(vmmManager)
