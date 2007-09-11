@@ -50,6 +50,7 @@ def setup_i18n():
     gettext.bindtextdomain(gettext_app, gettext_dir)
 
 def setup_pypath():
+    global glade_dir, icon_dir, data_dir
     # Hacks for find assets in local dir for dev purposes
     if os.path.exists(os.getcwd() + "/src/vmm-about.glade"):
         glade_dir = os.getcwd() + "/src"
