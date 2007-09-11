@@ -79,6 +79,7 @@ class vmmEngine(gobject.GObject):
         try:
             conn = self.get_connection(uri, readOnly)
             self.show_manager()
+            conn.open()
             return conn
         except:
             return None
