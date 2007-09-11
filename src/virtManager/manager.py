@@ -492,10 +492,6 @@ class vmmManager(gobject.GObject):
         model.row_changed(row.path, row.iter)
 
     def conn_state_changed(self, conn):
-        if conn.get_state() in [conn.STATE_ACTIVE, conn.STATE_INACTIVE]:
-            self.window.get_widget("menu_host_details").set_sensitive(True)
-        else:
-            self.window.get_widget("menu_host_details").set_sensitive(False)
         self.conn_refresh_resources(conn)
 
     def conn_refresh_resources(self, conn):
@@ -606,10 +602,7 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("menu_edit_details").set_sensitive(False)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             conn = self.current_connection()
-            if conn is None or conn.get_state() in [conn.STATE_ACTIVE, conn.STATE_INACTIVE]:
-                self.window.get_widget("menu_host_details").set_sensitive(True)
-            else:
-                self.window.get_widget("menu_host_details").set_sensitive(False)
+            self.window.get_widget("menu_host_details").set_sensitive(True)
 
     def popup_vm_menu(self, widget, event):
         tuple = widget.get_path_at_pos(int(event.x), int(event.y))
