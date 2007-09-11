@@ -18,7 +18,7 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 
-from os import getcwd
+import os
 import os.path
 import sys
 
@@ -27,66 +27,14 @@ import gettext
 import logging
 import logging.handlers
 import traceback
+from optparse import OptionParser, OptionValueError
 
+# These are substituted into code based on --prefix given to configure
+appname = "::PACKAGE::"
+appversion = "::VERSION::"
 gettext_app = "virt-manager"
 gettext_dir = "::GETTEXTDIR::"
 
-locale.setlocale(locale.LC_ALL, '')
-gettext.install(gettext_app, gettext_dir)
-gettext.bindtextdomain(gettext_app, gettext_dir)
-
-MAX_LOGSIZE   = 1024 * 1024  # 1MB
-ROTATE_NUM    = 5
-DIR_NAME      = ".virt-manager"
-FILE_NAME     = "virt-manager.log"
-FILE_MODE     = 'a'
-FILE_FORMAT   = "[%(asctime)s virt-manager %(process)d] %(levelname)s (%(module)s:%(lineno)d) %(message)s"
-DATEFMT       = "%a, %d %b %Y %H:%M:%S"
-
-# set up logging
-vm_dir = os.path.expanduser("~/%s" % DIR_NAME)
-if not os.access(vm_dir,os.W_OK):
-    try:
-        os.mkdir(vm_dir)
-    except IOError, e:
-        raise RuntimeError, "Could not create %d directory: " % vm_dir, e
-
-# XXX should we get logging level from gconf, or command line args ?
-filename = "%s/%s" % (vm_dir, FILE_NAME)
-rootLogger = logging.getLogger()
-rootLogger.setLevel(logging.DEBUG)
-fileHandler = logging.handlers.RotatingFileHandler(filename, FILE_MODE, MAX_LOGSIZE, ROTATE_NUM)
-fileHandler.setFormatter(logging.Formatter(FILE_FORMAT, DATEFMT))
-rootLogger.addHandler(fileHandler)
-logging.info("Application startup")
-
-# Urgh, pygtk merely logs a warning when failing to open
-# the X11 display connection, and lets everything carry
-# on as if all were fine. Ultimately bad stuff happens,
-# so lets catch it here & get the hell out...
-import warnings
-warnings.filterwarnings('error', module='gtk')
-try:
-    import gtk
-except Warning, e:
-    # ...the risk is we catch too much though
-    # Damned if we do, damned if we dont :-)(
-    print _("Unable to initialize GTK: ") + str(e)
-    sys.exit(1)
-warnings.resetwarnings()
-
-import gtk
-gtk.gdk.threads_init()
-
-import dbus
-import dbus.glib
-dbus.glib.threads_init()
-import dbus.service
-
-from optparse import OptionParser, OptionValueError
-
-appname = "::PACKAGE::"
-appversion = "::VERSION::"
 gconf_dir = "/apps/" + appname
 asset_dir = "::ASSETDIR::"
 glade_dir = asset_dir
@@ -95,28 +43,106 @@ pylib_dir = "::PYLIBDIR::"
 pyarchlib_dir = "::PYARCHLIBDIR::"
 data_dir = "::DATADIR::"
 
-# Hack for dev purposes
-if os.path.exists(os.getcwd() + "/src/vmm-about.glade"):
-    glade_dir = os.getcwd() + "/src"
-if os.path.exists(os.getcwd() + "/pixmaps/icon_run.png"):
-    icon_dir = os.getcwd() + "/pixmaps"
-if os.path.exists(os.getcwd() + "../gnome/help/virt-manager/C/virt-manager.xml"):
-    data_dir = os.getcwd() + "../"
 
-if os.path.exists(os.getcwd() + "/src/virt-manager.py"):
-    sys.path.insert(0, os.getcwd() + "/src/graphWidgets/.libs")
-elif os.path.exists(os.getcwd() + "/build/src/virt-manager.py"):
-    sys.path.insert(0, os.getcwd() + "/src")
-    sys.path.insert(0, os.getcwd() + "/build/src/graphWidgets/.libs")
-else:
-    sys.path.insert(0, pylib_dir)
-    sys.path.insert(0, pyarchlib_dir)
+def setup_i18n():
+    locale.setlocale(locale.LC_ALL, '')
+    gettext.install(gettext_app, gettext_dir)
+    gettext.bindtextdomain(gettext_app, gettext_dir)
 
-from virtManager.config import vmmConfig
-from virtManager.engine import vmmEngine
-from virtManager.remote import vmmRemote
+def setup_pypath():
+    # Hacks for find assets in local dir for dev purposes
+    if os.path.exists(os.getcwd() + "/src/vmm-about.glade"):
+        glade_dir = os.getcwd() + "/src"
+    if os.path.exists(os.getcwd() + "/pixmaps/icon_run.png"):
+        icon_dir = os.getcwd() + "/pixmaps"
+    if os.path.exists(os.getcwd() + "../gnome/help/virt-manager/C/virt-manager.xml"):
+        data_dir = os.getcwd() + "../"
 
-gtk.window_set_default_icon_from_file(icon_dir + "/" + appname + "-icon.svg")
+    # First two are hacks to point python to local dir for source files
+    # in dev, the third is the main path if you have  normal install
+    if os.path.exists(os.getcwd() + "/src/virt-manager.py"):
+        sys.path.insert(0, os.getcwd() + "/src/graphWidgets/.libs")
+    elif os.path.exists(os.getcwd() + "/build/src/virt-manager.py"):
+        sys.path.insert(0, os.getcwd() + "/src")
+        sys.path.insert(0, os.getcwd() + "/build/src/graphWidgets/.libs")
+    else:
+        sys.path.insert(0, pylib_dir)
+        sys.path.insert(0, pyarchlib_dir)
+
+def drop_tty():
+    # We fork and setsid so that we drop the controlling
+    # tty. This prevents libvirt's SSH tunnels from prompting
+    # for user input if SSH keys/agent aren't configured.
+    if os.fork() != 0:
+        os._exit(0)
+
+    os.setsid()
+
+def drop_stdio():
+    # We close STDIN/OUT/ERR since they're generally spewing
+    # junk to console when domains are in process of shutting
+    # down. Real errors will (hopefully) all be logged to the
+    # main log file. This is also again to stop SSH prompting
+    # for input
+    for fd in range(0, 2):
+        try:
+            os.close(fd)
+        except OSError:
+            pass
+
+    os.open(os.devnull, os.O_RDWR)
+    os.dup2(0, 1)
+    os.dup2(0, 2)
+
+def setup_logging():
+    # Configure python logging to capture all logs we generate
+    # to $HOME/.virt-manager/virt-manager.log This file has
+    # proved invaluable for debugging
+    MAX_LOGSIZE   = 1024 * 1024  # 1MB
+    ROTATE_NUM    = 5
+    DIR_NAME      = ".virt-manager"
+    FILE_NAME     = "virt-manager.log"
+    FILE_MODE     = 'a'
+    FILE_FORMAT   = "[%(asctime)s virt-manager %(process)d] %(levelname)s (%(module)s:%(lineno)d) %(message)s"
+    DATEFMT       = "%a, %d %b %Y %H:%M:%S"
+
+    # set up logging
+    vm_dir = os.path.expanduser("~/%s" % DIR_NAME)
+    if not os.access(vm_dir,os.W_OK):
+        try:
+            os.mkdir(vm_dir)
+        except IOError, e:
+            raise RuntimeError, "Could not create %d directory: " % vm_dir, e
+
+    # XXX should we get logging level from gconf, or command line args ?
+    filename = "%s/%s" % (vm_dir, FILE_NAME)
+    rootLogger = logging.getLogger()
+    rootLogger.setLevel(logging.DEBUG)
+    fileHandler = logging.handlers.RotatingFileHandler(filename, FILE_MODE, MAX_LOGSIZE, ROTATE_NUM)
+    fileHandler.setFormatter(logging.Formatter(FILE_FORMAT, DATEFMT))
+    rootLogger.addHandler(fileHandler)
+    logging.info("Application startup")
+
+def parse_commandline():
+    optParser = OptionParser()
+    optParser.add_option("--profile", dest="profile", help="Generate runtime performance profile stats", metavar="FILE")
+    optParser.set_defaults(uuid=None)
+    optParser.add_option("-c", "--connect", dest="uri",
+        help="Connect to hypervisor at URI", metavar="URI")
+    optParser.add_option("--no-dbus", action="store_true", dest="nodbus",
+        help="Disable DBus service for controlling UI")
+    optParser.add_option("--show-domain-creator", action="callback",
+        callback=opt_show_cb, dest="show", help="Create a new virtual machine")
+    optParser.add_option("--show-domain-editor",  type="string", metavar="UUID",
+        action="callback", callback=opt_show_cb, help="Edit a domain configuration")
+    optParser.add_option("--show-domain-performance", type="string", metavar="UUID",
+        action="callback", callback=opt_show_cb, help="Show a domain performance")
+    optParser.add_option("--show-domain-console", type="string", metavar="UUID",
+        action="callback", callback=opt_show_cb, help="Show a domain console")
+    optParser.add_option("--show-host-summary", action="callback",
+       callback=opt_show_cb, help="Show a host summary")
+
+    return optParser.parse_args()
 
 # maps --show-* to engine (ie local instance) methods
 def show_engine(engine, show, uri, uuid):
@@ -171,25 +197,43 @@ def opt_show_cb(option, opt_str, value, parser):
 
 # Run me!
 def main():
-    optParser = OptionParser()
-    optParser.add_option("--profile", dest="profile", help="Generate runtime performance profile stats", metavar="FILE")
-    optParser.set_defaults(uuid=None)
-    optParser.add_option("-c", "--connect", dest="uri", 
-        help="Connect to hypervisor at URI", metavar="URI")
-    optParser.add_option("--no-dbus", action="store_true", dest="nodbus", 
-        help="Disable DBus service for controlling UI")
-    optParser.add_option("--show-domain-creator", action="callback", 
-        callback=opt_show_cb, dest="show", help="Create a new virtual machine")
-    optParser.add_option("--show-domain-editor",  type="string", metavar="UUID",
-        action="callback", callback=opt_show_cb, help="Edit a domain configuration")
-    optParser.add_option("--show-domain-performance", type="string", metavar="UUID", 
-        action="callback", callback=opt_show_cb, help="Show a domain performance")
-    optParser.add_option("--show-domain-console", type="string", metavar="UUID",
-        action="callback", callback=opt_show_cb, help="Show a domain console")
-    optParser.add_option("--show-host-summary", action="callback", 
-       callback=opt_show_cb, help="Show a host summary")
+    setup_i18n()
+    setup_logging()
+    setup_pypath()
+    (options, args) = parse_commandline()
 
-    (options, args) = optParser.parse_args()
+    # Urgh, pygtk merely logs a warning when failing to open
+    # the X11 display connection, and lets everything carry
+    # on as if all were fine. Ultimately bad stuff happens,
+    # so lets catch it here & get the hell out...
+    import warnings
+    warnings.filterwarnings('error', module='gtk')
+    try:
+        import gtk
+    except Warning, e:
+        # ...the risk is we catch too much though
+        # Damned if we do, damned if we dont :-)(
+        print _("Unable to initialize GTK: ") + str(e)
+        sys.exit(1)
+    warnings.resetwarnings()
+
+    import gtk
+    gtk.gdk.threads_init()
+
+    import dbus
+    import dbus.glib
+    dbus.glib.threads_init()
+    import dbus.service
+
+    # Now we've got basic environment up & running we can fork
+    drop_tty()
+    drop_stdio()
+
+    from virtManager.config import vmmConfig
+    from virtManager.engine import vmmEngine
+    from virtManager.remote import vmmRemote
+
+    gtk.window_set_default_icon_from_file(icon_dir + "/" + appname + "-icon.svg")
 
     if options.show and options.uri==None:
         raise OptionValueError("can't use --show-* options without --connect")
@@ -221,9 +265,12 @@ def main():
                 name = dbus.service.BusName("com.redhat.virt.manager", bus=bus)
                 remote = vmmRemote(engine, name)
         except:
-            # Something went wrong doing dbus setup, just ignor & carry on
+            # Something went wrong doing dbus setup, just ignore & carry on
             logging.warning("Could not get connection to session bus, disabling DBus service " + \
                             str(sys.exc_info()[0]) + " " + str(sys.exc_info()[1]))
+
+    # At this point we're either starting a brand new controlling instance,
+    # or the dbus comms to existing instance has failed
 
     # Finally start the app for real
     gtk.gdk.threads_enter()
