@@ -42,7 +42,7 @@ class vmmHost(gobject.GObject):
         topwin.hide()
 
         self.window.get_widget("overview-hostname").set_text(self.conn.get_hostname(True))
-        self.window.get_widget("overview-hypervisor").set_text(self.conn.get_type())
+        self.window.get_widget("overview-hypervisor").set_text(self.conn.get_driver())
         self.window.get_widget("overview-memory").set_text(self.conn.pretty_host_memory_size())
         self.window.get_widget("overview-cpus").set_text(str(self.conn.host_active_processor_count()))
         self.window.get_widget("overview-arch").set_text(self.conn.host_architecture())
@@ -96,6 +96,7 @@ class vmmHost(gobject.GObject):
         self.conn.connect("resources-sampled", self.refresh_resources)
         self.conn.connect("net-started", self.refresh_network)
         self.conn.connect("net-stopped", self.refresh_network)
+        self.refresh_resources()
 
     def show(self):
         dialog = self.window.get_widget("vmm-host")
