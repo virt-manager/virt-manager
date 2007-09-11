@@ -43,7 +43,11 @@ class vmmRemote(dbus.service.Object):
 
     @dbus.service.method("com.redhat.virt.manager", in_signature="s")
     def show_host_summary(self, uri):
-        self.engine.show_manager(uri)
+        self.engine.show_host(uri)
+
+    @dbus.service.method("com.redhat.virt.manager", in_signature="")
+    def show_manager(self):
+        self.engine.show_manager()
 
     @dbus.service.method("com.redhat.virt.manager")
     def show_connect(self):
