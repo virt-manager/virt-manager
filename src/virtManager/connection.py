@@ -172,10 +172,12 @@ class vmmConnection(gobject.GObject):
                 # welcomed...
                 sysfspath = obj.GetPropertyString("linux.sysfs_path")
 
-                # Sick, disgusting hack for Xen netloop crack which renames
-                # ethN -> pethN, but which HAL never sees
+                # If running a device in bridged mode, there's a reasonable
+                # chance that the actual ethernet device has been renamed to
+                # something else. ethN -> pethN
                 psysfspath = sysfspath[0:len(sysfspath)-len(name)] + "p" + name
                 if os.path.exists(psysfspath):
+                    name = "p" + name
                     sysfspath = psysfspath
 
                 brportpath = os.path.join(sysfspath, "brport")
