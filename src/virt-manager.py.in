@@ -132,6 +132,8 @@ def parse_commandline():
         help="Connect to hypervisor at URI", metavar="URI")
     optParser.add_option("--no-dbus", action="store_true", dest="nodbus",
         help="Disable DBus service for controlling UI")
+    optParser.add_option("--no-fork", action="store_true", dest="nofork",
+        help="Don't fork into background on startup")
     optParser.add_option("--show-domain-creator", action="callback",
         callback=opt_show_cb, dest="show", help="Create a new virtual machine")
     optParser.add_option("--show-domain-editor",  type="string", metavar="UUID",
@@ -227,8 +229,9 @@ def main():
     import dbus.service
 
     # Now we've got basic environment up & running we can fork
-    drop_tty()
-    drop_stdio()
+    if not options.nofork:
+        drop_tty()
+        drop_stdio()
 
     from virtManager.config import vmmConfig
     from virtManager.engine import vmmEngine
