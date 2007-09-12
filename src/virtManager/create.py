@@ -343,10 +343,18 @@ class vmmCreate(gobject.GObject):
         else:
             if self.window.get_widget("media-iso-image").get_active():
                 return self.window.get_widget("fv-iso-location").get_text()
-            else:
+            elif self.window.get_widget("media-physical").get_active():
                 cd = self.window.get_widget("cd-path")
                 model = cd.get_model()
                 return model.get_value(cd.get_active_iter(), 0)
+            else:
+                return "PXE"
+
+    def get_config_installer(self, type):
+        if self.get_config_method() == VM_FULLY_VIRT and self.window.get_widget("media-network").get_active():
+            return virtinst.PXEInstaller(type = type)
+        else:
+            return virtinst.DistroInstaller(type = type)
 
     def get_config_kickstart_source(self):
         if self.get_config_method() == VM_PARA_VIRT:
@@ -707,10 +715,13 @@ class vmmCreate(gobject.GObject):
         if self.window.get_widget("media-iso-image").get_active():
             self.window.get_widget("fv-iso-location-box").set_sensitive(True)
             self.window.get_widget("cd-path").set_sensitive(False)
-        else:
+        elif self.window.get_widget("media-physical").get_active():
             self.window.get_widget("fv-iso-location-box").set_sensitive(False)
             self.window.get_widget("cd-path").set_sensitive(True)
             self.window.get_widget("cd-path").set_active(-1)
+        else:
+            self.window.get_widget("fv-iso-location-box").set_sensitive(False)
+            self.window.get_widget("cd-path").set_sensitive(False)
 
     def change_storage_type(self, ignore=None):
         if self.window.get_widget("storage-partition").get_active():
@@ -782,6 +793,7 @@ class vmmCreate(gobject.GObject):
             self._guest.name = name # Transfer name over
 
         elif page_num == PAGE_FVINST:
+            self._guest.installer = self.get_config_installer(self.get_domain_type())
 
             if self.window.get_widget("media-iso-image").get_active():
 
@@ -791,7 +803,7 @@ class vmmCreate(gobject.GObject):
                 except ValueError, e:
                     self._validation_error_box(_("ISO Path Not Found"), str(e))
                     return False
-            else:
+            elif  self.window.get_widget("media-physical").get_active():
                 cdlist = self.window.get_widget("cd-path")
                 src = self.get_config_install_source()
                 try:
@@ -799,6 +811,8 @@ class vmmCreate(gobject.GObject):
                 except ValueError, e:
                     self._validation_error_box(_("CD-ROM Path Error"), str(e))
                     return False
+            else:
+                pass # No checks for PXE
             
             try:
                 if self.get_config_os_type() is not None \
