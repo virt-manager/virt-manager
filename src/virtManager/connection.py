@@ -243,7 +243,7 @@ class vmmConnection(gobject.GObject):
             if scheme:
                 offset = scheme.index("+")
                 if offset > 0:
-                    return [scheme[offset:], username]
+                    return [scheme[offset+1:], username]
         except:
             pass
         return [None, None]

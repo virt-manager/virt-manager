@@ -26,6 +26,8 @@ import logging
 import dbus
 import traceback
 import gtkvnc
+import os
+import socket
 
 from virtManager.error import vmmErrorDialog
 
@@ -61,6 +63,7 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
         self.vncViewer = gtkvnc.Display()
+        self.vncTunnel = None
         if self.config.get_console_keygrab() == 2:
             self.vncViewer.set_keyboard_grab(True)
 
@@ -241,6 +244,8 @@ class vmmConsole(gobject.GObject):
                 self.activate_unavailable_page(_("Guest has crashed"))
 
     def _vnc_disconnected(self, src):
+        if self.vncTunnel is not None:
+            self.close_tunnel()
         self.connected = 0
         logging.debug("VNC disconnected")
         if not self.is_visible():
@@ -283,6 +288,39 @@ class vmmConsole(gobject.GObject):
         finally:
             gtk.gdk.threads_leave()
 
+    def open_tunnel(self, server, vncaddr ,vncport):
+        if self.vncTunnel is not None:
+            return
+
+        logging.debug("Spawning SSH tunnel to %s, for %s:%d" %(server, vncaddr, vncport))
+
+        fds = socket.socketpair()
+        print str(fds)
+        pid = os.fork()
+        if pid == 0:
+            fds[0].close()
+            os.close(0)
+            os.close(1)
+            os.dup(fds[1].fileno())
+            os.dup(fds[1].fileno())
+            os.execlp("ssh", "ssh", "-p", "22", "-l", "root", server, "nc", vncaddr, str(vncport))
+            os._exit(1)
+        else:
+            fds[1].close()
+
+        logging.debug("Tunnel PID %d FD %d" % (fds[0].fileno(), pid))
+        self.vncTunnel = [fds[0], pid]
+        return fds[0].fileno()
+
+    def close_tunnel(self):
+        if self.vncTunnel is None:
+            return
+
+        logging.debug("Shutting down tunnel PID %d FD %d" % (self.vncTunnel[1], self.vncTunnel[0].fileno()))
+        self.vncTunnel[0].close()
+        os.waitpid(self.vncTunnel[1], 0)
+        self.vncTunnel = None
+
     def try_login(self, src=None):
         if self.vm.get_id() < 0:
             self.activate_unavailable_page(_("Guest not running"))
@@ -314,7 +352,11 @@ class vmmConsole(gobject.GObject):
         self.activate_unavailable_page(_("Connecting to console for guest"))
         logging.debug("Starting connect process for %s %s" % (host, str(port)))
         try:
-            self.vncViewer.open_host(host, str(port))
+            if trans is not None and trans in ("ssh", "ext"):
+                fd = self.open_tunnel(host, "127.0.0.1", port)
+                self.vncViewer.open_fd(fd)
+            else:
+                self.vncViewer.open_host(host, str(port))
         except:
             (type, value, stacktrace) = sys.exc_info ()
             details = \
