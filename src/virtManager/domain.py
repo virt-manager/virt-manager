@@ -455,8 +455,14 @@ class vmmDomain(gobject.GObject):
                 port = int(port)
 
         transport, username = self.connection.get_transport()
-
-        return [type, self.connection.get_hostname(), port, transport]
+        if transport is None:
+            # Force use of 127.0.0.1, because some (broken) systems don't 
+            # reliably resolve 'localhost' into 127.0.0.1, either returning
+            # the public IP, or an IPv6 addr. Neither work since QEMU only
+            # listens on 127.0.0.1 for VNC.
+            return [type, "127.0.0.1", port, None]
+        else:
+            return [type, self.connection.get_hostname(), port, transport]
 
 
     def get_disk_devices(self):
