@@ -37,6 +37,7 @@ import traceback
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
 from virtManager.createmeter import vmmCreateMeter
+from virtManager.opticalhelper import vmmOpticalDriveHelper
 
 VM_PARA_VIRT = 1
 VM_FULLY_VIRT = 2
@@ -136,17 +137,12 @@ class vmmCreate(gobject.GObject):
         cd_list.add_attribute(text, 'text', 1)
         cd_list.add_attribute(text, 'sensitive', 2)
         try:
-            # Get a connection to the SYSTEM bus
-            self.bus = dbus.SystemBus()
-            # Get a handle to the HAL service
-            hal_object = self.bus.get_object('org.freedesktop.Hal', '/org/freedesktop/Hal/Manager')
-            self.hal_iface = dbus.Interface(hal_object, 'org.freedesktop.Hal.Manager')
-            self.populate_opt_media(cd_model)
+            self.optical_helper = vmmOpticalDriveHelper(self.window.get_widget("cd-path"))
+            self.optical_helper.populate_opt_media()
+            self.window.get_widget("media-physical").set_sensitive(True)
         except Exception, e:
-            logging.error("Unable to connect to HAL to list cdrom volumes: '%s'", e)
+            logging.error("Unable to create optical-helper widget: '%s'", e)
             self.window.get_widget("media-physical").set_sensitive(False)
-            self.bus = None
-            self.hal_iface = None
 
         if os.getuid() != 0:
             self.window.get_widget("media-physical").set_sensitive(False)
@@ -1047,75 +1043,6 @@ class vmmCreate(gobject.GObject):
             res = False
         message_box.destroy()
         return res
-
-    def populate_opt_media(self, model):
-        # get a list of optical devices with data discs in, for FV installs
-        vollabel = {}
-        volpath = {}
-        # Track device add/removes so we can detect newly inserted CD media
-        self.hal_iface.connect_to_signal("DeviceAdded", self._device_added)
-        self.hal_iface.connect_to_signal("DeviceRemoved", self._device_removed)
-
-        # Find info about all current present media
-        for d in self.hal_iface.FindDeviceByCapability("volume"):
-            vol = self.bus.get_object("org.freedesktop.Hal", d)
-            if vol.GetPropertyBoolean("volume.is_disc") and \
-                   vol.GetPropertyBoolean("volume.disc.has_data"):
-                devnode = vol.GetProperty("block.device")
-                label = vol.GetProperty("volume.label")
-                if label == None or len(label) == 0:
-                    label = devnode
-                vollabel[devnode] = label
-                volpath[devnode] = d
-
-
-        for d in self.hal_iface.FindDeviceByCapability("storage.cdrom"):
-            dev = self.bus.get_object("org.freedesktop.Hal", d)
-            devnode = dev.GetProperty("block.device")
-            if vollabel.has_key(devnode):
-                model.append([devnode, vollabel[devnode], True, volpath[devnode]])
-            else:
-                model.append([devnode, _("No media present"), False, None])
-
-    def _device_added(self, path):
-        vol = self.bus.get_object("org.freedesktop.Hal", path)
-        if vol.QueryCapability("volume"):
-            if vol.GetPropertyBoolean("volume.is_disc") and \
-                   vol.GetPropertyBoolean("volume.disc.has_data"):
-                devnode = vol.GetProperty("block.device")
-                label = vol.GetProperty("volume.label")
-                if label == None or len(label) == 0:
-                    label = devnode
-
-                cdlist = self.window.get_widget("cd-path")
-                model = cdlist.get_model()
-
-                # Search for the row with matching device node and
-                # fill in info about inserted media
-                for row in model:
-                    if row[0] == devnode:
-                        row[1] = label
-                        row[2] = True
-                        row[3] = path
-
-    def _device_removed(self, path):
-        vol = self.bus.get_object("org.freedesktop.Hal", path)
-        cdlist = self.window.get_widget("cd-path")
-        model = cdlist.get_model()
-
-        active = cdlist.get_active()
-        idx = 0
-        # Search for the row containing matching HAL volume path
-        # and update (clear) it, de-activating it if its currently
-        # selected
-        for row in model:
-            if row[3] == path:
-                row[1] = _("No media present")
-                row[2] = False
-                row[3] = None
-                if idx == active:
-                    cdlist.set_active(-1)
-            idx = idx + 1
 
     def populate_url_model(self, model, urls):
         model.clear()

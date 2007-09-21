@@ -1924,7 +1924,7 @@
 				  <property name="border_width">3</property>
 				  <property name="visible">True</property>
 				  <property name="n_rows">4</property>
-				  <property name="n_columns">2</property>
+				  <property name="n_columns">3</property>
 				  <property name="homogeneous">False</property>
 				  <property name="row_spacing">3</property>
 				  <property name="column_spacing">3</property>
@@ -2146,6 +2146,27 @@
 				    <packing>
 				      <property name="left_attach">1</property>
 				      <property name="right_attach">2</property>
+				      <property name="top_attach">1</property>
+				      <property name="bottom_attach">2</property>
+				      <property name="x_options">fill</property>
+				      <property name="y_options"></property>
+				    </packing>
+				  </child>
+
+				  <child>
+				    <widget class="GtkButton" id="config-cdrom-connect">
+				      <property name="visible">True</property>
+				      <property name="can_default">True</property>
+				      <property name="can_focus">True</property>
+				      <property name="label">gtk-connect</property>
+				      <property name="use_stock">True</property>
+				      <property name="relief">GTK_RELIEF_NORMAL</property>
+				      <property name="focus_on_click">True</property>
+				      <signal name="clicked" handler="on_config_cdrom_connect_clicked" last_modification_time="Wed, 12 Sep 2007 18:54:06 GMT"/>
+				    </widget>
+				    <packing>
+				      <property name="left_attach">2</property>
+				      <property name="right_attach">3</property>
 				      <property name="top_attach">1</property>
 				      <property name="bottom_attach">2</property>
 				      <property name="x_options">fill</property>

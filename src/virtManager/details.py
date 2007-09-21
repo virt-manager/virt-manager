@@ -27,6 +27,7 @@ import traceback
 
 from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
+from virtManager.choosecd import vmmChooseCD
 
 import virtinst
 import urlgrabber.progress as progress
@@ -86,7 +87,8 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("hw-panel").set_show_tabs(False)
 
         self.addhw = None
-
+        self.choose_cd = None
+        
         self.cpu_usage_graph = sparkline.Sparkline()
         self.window.get_widget("graph-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
 
@@ -121,6 +123,7 @@ class vmmDetails(gobject.GObject):
             "on_config_memory_apply_clicked": self.config_memory_apply,
             "on_details_help_activate": self.show_help,
 
+            "on_config_cdrom_connect_clicked": self.toggle_cdrom,
             "on_config_disk_remove_clicked": self.remove_disk,
             "on_config_network_remove_clicked": self.remove_network,
             "on_add_hardware_button_clicked": self.add_hardware,
@@ -412,6 +415,16 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("disk-source-path").set_text(diskinfo[1])
             self.window.get_widget("disk-target-type").set_text(diskinfo[2])
             self.window.get_widget("disk-target-device").set_text(diskinfo[3])
+            button = self.window.get_widget("config-cdrom-connect")
+            if diskinfo[2] == "cdrom":
+                if diskinfo[1] == "-":
+                    # source device not connected
+                    button.set_label(gtk.STOCK_CONNECT)
+                else:
+                    button.set_label(gtk.STOCK_DISCONNECT)
+                button.show()
+            else:
+                button.hide()
 
     def refresh_network_page(self):
         vmlist = self.window.get_widget("hw-list")
@@ -595,5 +608,20 @@ class vmmDetails(gobject.GObject):
 
         self.addhw.show()
 
+    def toggle_cdrom(self, src):
+        if src.get_label() == gtk.STOCK_DISCONNECT:
+            #disconnect the cdrom
+            self.vm.disconnect_cdrom_device(self.window.get_widget("disk-target-device").get_text())
+        else:
+            # connect a new cdrom
+            if self.choose_cd is None:
+                self.choose_cd = vmmChooseCD(self.config, self.window.get_widget("disk-target-device").get_text())
+                self.choose_cd.connect("cdrom-chosen", self.connect_cdrom)
+            else:
+                self.choose_cd.set_target(self.window.get_widget("disk-target-device").get_text())
+            self.choose_cd.show()
+
+    def connect_cdrom(self, src, type, source, target):
+        self.vm.connect_cdrom_device(type, source, target)
 
 gobject.type_register(vmmDetails)

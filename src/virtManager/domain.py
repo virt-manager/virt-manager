@@ -514,6 +514,67 @@ class vmmDomain(gobject.GObject):
     def add_disk_device(self, xml):
         self.vm.attachDevice(xml)
 
+    def connect_cdrom_device(self, type, source, target):
+        xml = self.get_xml()
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return []
+        ctx = doc.xpathNewContext()
+        try:
+            disk_fragment = ctx.xpathEval("/domain/devices/disk[@device='cdrom' and target/@dev='%s']" % target)
+            if len(disk_fragment) == 0:
+                raise RuntimeError("Attmpted to connect cdrom device to %s, but %s does not exist" % (target,target))
+            if len(disk_fragment) > 1:
+                raise RuntimeError("Found multiple cdrom devices named %s. This domain's XML is malformed." % target)
+            disk_fragment[0].setProp("type", type)
+            elem = disk_fragment[0].newChild(None, "source", None)
+            if type == "file":
+                elem.setProp("file", source)
+            else:
+                elem.setProp("dev", source)
+            result = disk_fragment[0].serialize()
+            logging.debug("connect_cdrom_device produced the following XML: %s" % result)
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+        self.add_disk_device(result)
+
+    def disconnect_cdrom_device(self, target):
+        xml = self.get_xml()
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return []
+        ctx = doc.xpathNewContext()
+        try:
+            disk_fragment = ctx.xpathEval("/domain/devices/disk[@device='cdrom' and target/@dev='%s']" % target)
+            if len(disk_fragment) == 0:
+                raise RuntimeError("Attmpted to disconnect cdrom device from %s, but %s does not exist" % (target,target))
+            if len(disk_fragment) > 1:
+                raise RuntimeError("Found multiple cdrom devices named %s. This domain's XML is malformed." % target)
+            sourcenode = None
+            for child in disk_fragment[0].children:
+                if child.name == "source":
+                    sourcenode = child
+                    break
+                else:
+                    continue
+            sourcenode.unlinkNode()
+            sourcenode.freeNode()
+            result = disk_fragment[0].serialize()
+            logging.debug("disconnect_cdrom_device produced the following XML: %s" % result)
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+        self.add_disk_device(result)
+
     def get_network_devices(self):
         xml = self.get_xml()
         doc = None
