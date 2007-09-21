@@ -478,8 +478,11 @@ class vmmDetails(gobject.GObject):
         active = selection.get_selected()
         if active[1] != None:
             diskinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
-
-            vbd = virtinst.VirtualDisk(path=diskinfo[1], type=diskinfo[0], device=diskinfo[2])
+            if diskinfo[1] == "-":
+                path = None
+            else:
+                path = diskinfo[1]
+            vbd = virtinst.VirtualDisk(path=path, type=diskinfo[0], device=diskinfo[2])
             xml = vbd.get_xml_config(diskinfo[3])
 
             self.vm.remove_device(xml)
