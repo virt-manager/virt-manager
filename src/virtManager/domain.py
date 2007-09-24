@@ -627,10 +627,6 @@ class vmmDomain(gobject.GObject):
         # otherwise the device gets added to the XML twice.
         vmxml = self.vm.XMLDesc(0)
 
-        if self.is_active():
-            self.vm.attachDevice(xml)
-
-
         index = vmxml.find("</devices>")
         newxml = vmxml[0:index] + xml + vmxml[index:]
 
@@ -638,69 +634,76 @@ class vmmDomain(gobject.GObject):
 
         self.get_connection().define_domain(newxml)
 
+        try:
+            if self.is_active():
+                self.vm.attachDevice(xml)
+        except libvirtError, e:
+            raise RuntimeError, "Unable to attach device to live guest, libvirt reported error:\n" + str(e) 
+        
     def remove_device(self, dev_xml):
         logging.debug("Removing device " + dev_xml)
+        xml = self.get_xml()
 
-        if self.is_active():
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return
+        ctx = doc.xpathNewContext()
+        try:
+            dev_doc = libxml2.parseDoc(dev_xml)
+        except:
+            raise RuntimeError("Device XML would not parse")
+        dev_ctx = dev_doc.xpathNewContext()
+        ret = None
+        try:
+            dev = dev_ctx.xpathEval("//*")
+            dev_type = dev[0].name
+            if dev_type=="interface":
+                address = dev_ctx.xpathEval("/interface/mac/@address")
+                if len(address) > 0 and address[0].content != None:
+                    logging.debug("The mac address appears to be %s" % address[0].content)
+                    ret = ctx.xpathEval("/domain/devices/interface[mac/@address='%s']" % address[0].content)
+                if len(ret) >0:
+                    ret[0].unlinkNode()
+                    ret[0].freeNode()
+                    newxml=doc.serialize()
+                    logging.debug("Redefine with " + newxml)
+                    self.get_connection().define_domain(newxml)
+            elif dev_type=="disk":
+                disk_type_node = dev_ctx.xpathEval("/disk/@type")
+                disk_type = None
+                if len(disk_type_node) > 0 and disk_type_node[0].content != None:
+                    disk_type = disk_type_node[0].content
+                logging.debug("Looking for disk type %s" % disk_type)
+                if disk_type == "block":
+                    path = dev_ctx.xpathEval("/disk/source/@dev")
+                    if len(path) > 0 and path[0].content != None:
+                        logging.debug("Looking for path %s" % path[0].content)
+                        ret = ctx.xpathEval("/domain/devices/disk[source/@dev='%s']" % path[0].content)
+                elif disk_type == "file":
+                    path = dev_ctx.xpathEval("/disk/source/@file")
+                    if len(path) > 0 and path[0].content != None:
+                        ret = ctx.xpathEval("/domain/devices/disk[source/@file='%s']" % path[0].content)
+                if len(ret) > 0:
+                    ret[0].unlinkNode()
+                    ret[0].freeNode()
+                    newxml=doc.serialize()
+                    logging.debug("Redefine with " + newxml)
+                    self.get_connection().define_domain(newxml)
+
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+            if dev_doc != None:
+                dev_doc.freeDoc()
+        # now do the live guest
+        try:
             self.vm.detachDevice(dev_xml)
-        else:
-            # XXX remove from defined XML. Eek !
-            xml = self.get_xml()
-            doc = None
-            try:
-                doc = libxml2.parseDoc(xml)
-            except:
-                return
-            ctx = doc.xpathNewContext()
-            try:
-                dev_doc = libxml2.parseDoc(dev_xml)
-            except:
-                raise RuntimeError("Device XML would not parse")
-            dev_ctx = dev_doc.xpathNewContext()
-            ret = None
-            try:
-                dev = dev_ctx.xpathEval("//*")
-                dev_type = dev[0].name
-                if dev_type=="interface":
-                    address = dev_ctx.xpathEval("/interface/mac/@address")
-                    if len(address) > 0 and address[0].content != None:
-                        logging.debug("The mac address appears to be %s" % address[0].content)
-                        ret = ctx.xpathEval("/domain/devices/interface[mac/@address='%s']" % address[0].content)
-                    if len(ret) >0:
-                        ret[0].unlinkNode()
-                        ret[0].freeNode()
-                        newxml=doc.serialize()
-                        logging.debug("Redefine with " + newxml)
-                        self.get_connection().define_domain(newxml)
-                elif dev_type=="disk":
-                    disk_type_node = dev_ctx.xpathEval("/disk/@type")
-                    disk_type = None
-                    if len(disk_type_node) > 0 and disk_type_node[0].content != None:
-                        disk_type = disk_type_node[0].content
-                    logging.debug("Looking for disk type %s" % disk_type)
-                    if disk_type == "block":
-                        path = dev_ctx.xpathEval("/disk/source/@dev")
-                        if len(path) > 0 and path[0].content != None:
-                            logging.debug("Looking for path %s" % path[0].content)
-                            ret = ctx.xpathEval("/domain/devices/disk[source/@dev='%s']" % path[0].content)
-                    elif disk_type == "file":
-                        path = dev_ctx.xpathEval("/disk/source/@file")
-                        if len(path) > 0 and path[0].content != None:
-                            ret = ctx.xpathEval("/domain/devices/disk[source/@file='%s']" % path[0].content)
-                    if len(ret) > 0:
-                        ret[0].unlinkNode()
-                        ret[0].freeNode()
-                        newxml=doc.serialize()
-                        logging.debug("Redefine with " + newxml)
-                        self.get_connection().define_domain(newxml)
-
-            finally:
-                if ctx != None:
-                    ctx.xpathFreeContext()
-                if doc != None:
-                    doc.freeDoc()
-                if dev_doc != None:
-                    dev_doc.freeDoc()
+        except libvirtError, e:
+            raise RuntimeError, "Libvirt complained: " + str(e)
 
     def set_vcpu_count(self, vcpus):
         vcpus = int(vcpus)
