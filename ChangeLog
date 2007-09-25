@@ -1,8 +1,167 @@
+2007-09-25  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* NEWS, configure.ac, virt-manager.spec.in:
+	Prep for 0.5.1 release
+	[ba3d8fdc5349] [tip]
+
+2007-09-25  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/domain.py:
+	Fix an order-of-operations bug; also, look for the target dev when
+	removing a disk, not the source, since source may not actually be
+	there.
+	[75d421097ad7]
+
+2007-09-24  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/domain.py:
+	Also remove devices from the defined XML when removing a device from
+	an active guest. Also, catch the errors that libvirt will someday
+	throw when attempting to attach or detach a device from a live guest
+	that does not support that option.
+	[96452f76bcfb]
+
+2007-09-21  "Hugh O. Brock  <hbrock@redhat.com>
+
+	* src/virtManager/details.py:
+	Don't barf at the user when attempting to remove a cdrom device with
+	a null Source.
+	[faaa775bb40d]
+
+	* src/virtManager/choosecd.py, src/virtManager/create.py,
+	src/virtManager/details.py, src/virtManager/domain.py,
+	src/virtManager/opticalhelper.py, src/vmm-choose-cd.glade, src/vmm-
+	details.glade:
+	Add button to connect and disconnect cdrom source device for full
+	virt guests.
+	[5cc5a5850071]
+
+2007-09-20  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/domain.py:
+	Force VNC to connect to 127.0.0.1
+	[61a0aeedab34]
+
+2007-09-19  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/console.py:
+	Allow connection to a VNC console via an SSH tunnel
+	[5396a0727967]
+
+2007-09-12  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	Added support for PXE with HVM
+	[2fd519cdd3cd]
+
+	* src/virtManager/connection.py:
+	Fix physical device name (again)
+	[8c66c56a12b8]
+
+	* src/virt-manager.py.in:
+	Added a --nofork flag for debug use
+	[0c9ca2bac5e8]
+
+2007-09-10  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virt-manager.py.in:
+	Fixed paths override
+	[63683c3a0e5c]
+
+	* src/virtManager/engine.py:
+	Autoconnect to new connections
+	[3aca8fe43fcd]
+
+	* src/virtManager/connection.py, src/virtManager/engine.py,
+	src/virtManager/manager.py:
+	Move opening of connections into a background thread to avoid
+	locking the UI
+	[22317e8baafb]
+
+	* src/virt-manager.py.in:
+	Refactor startup to drop controlling TTY, avoiding annoying SSH
+	prompts
+	[8cabc7987a78]
+
+	* src/virtManager/host.py:
+	Fix host labels when disconnected
+	[5aba3d4fd268]
+
+	* src/virtManager/manager.py:
+	Allow showing of host window even for disconnected VMs
+	[6de3c14e57cd]
+
+	* src/virtManager/remote.py:
+	Allow start of manager vs opening of host window with DBus
+	[aa5068a2bd66]
+
+2007-09-09  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* AUTHORS, src/virt-manager.py.in, src/virtManager/connection.py,
+	src/virtManager/domain.py, src/virtManager/engine.py,
+	src/virtManager/manager.py:
+	Move connection state management into vmmConnection class so there
+	is always a vmmConnection object even for disconnected connections.
+	The vmmManager class listens for signals in vmmEngine and
+	vmmConnection to see when new connections are added, existing ones
+	removed, and the connection state changes
+	[b20f4ab88478]
+
+2007-09-06  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* merge heads
+	[07ea2294577b]
+
+	* src/vmm-console.glade, src/vmm-create.glade, src/vmm-details.glade,
+	src/vmm-host.glade, src/vmm-manager.glade:
+	Tweak padding in UI to be closer to GNOME guidelines
+	[13ef182c8f5e]
+
+	* AUTHORS, src/virtManager/create.py:
+	Fixed population of bridge network devices to separate label from
+	device name (Eduardo Habkost)
+	[a5b0353ac6e1]
+
+	* src/virtManager/connection.py, src/virtManager/manager.py:
+	Include driver name in ID colun for connection rows & fix physical
+	ethernet device name
+	[3ce37ba1419a]
+
+2007-09-05  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/pl.po:
+	Refresh polish translation again (Piotr Drąg)
+	[7290c5aab410]
+
+2007-08-31  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* AUTHORS, src/virtManager/console.py:
+	Change console connection retries to be a little more robust
+	(Bernhard Kaindl)
+	[6e055c5f5e19]
+
+	* src/virtManager/connection.py:
+	Fixed call to get_local_hostname
+	[96492df15460]
+
+	* src/virtManager/connection.py, src/virtManager/host.py:
+	Ensure VNC widget always trys to connect to localhost for local
+	connections
+	[4ee6526c32cd]
+
 2007-08-29  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.5.0-1 for changeset 380af83bb51b
+	[333d2c50ad51]
+
+	* ChangeLog:
+	Refresh changelog
+	[380af83bb51b] [RELEASE-0.5.0-1]
 
 	* NEWS, configure.ac, virt-manager.spec.in:
 	Prep for 0.5.0 release
-	[db62e9295c03] [tip]
+	[db62e9295c03]
 
 	* README:
 	Update README to match latest reality
