@@ -46,7 +46,8 @@ DEFAULT_STORAGE_FILE_SIZE = 500
 PAGE_INTRO = 0
 PAGE_DISK = 1
 PAGE_NETWORK = 2
-PAGE_SUMMARY = 3
+PAGE_INPUT = 3
+PAGE_SUMMARY = 4
 
 class vmmAddHardware(gobject.GObject):
     __gsignals__ = {
@@ -89,6 +90,8 @@ class vmmAddHardware(gobject.GObject):
         # User mode networking only allows a single card for now
         if self.vm.get_connection().get_type().lower() == "qemu" and os.getuid() == 0:
             model.append(["Network card", gtk.STOCK_NETWORK, PAGE_NETWORK])
+
+        model.append(["Input device", gtk.STOCK_INDEX, PAGE_INPUT])
 
         self.set_initial_state()
 
@@ -137,6 +140,14 @@ class vmmAddHardware(gobject.GObject):
         target_list.pack_start(text, True)
         target_list.add_attribute(text, 'text', 4)
 
+        input_list = self.window.get_widget("input-type")
+        input_model = gtk.ListStore(str, str, str, bool)
+        input_list.set_model(input_model)
+        text = gtk.CellRendererText()
+        input_list.pack_start(text, True)
+        input_list.add_attribute(text, 'text', 0)
+        input_list.add_attribute(text, 'sensitive', 3)
+
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
@@ -177,6 +188,10 @@ class vmmAddHardware(gobject.GObject):
 
         target_list = self.window.get_widget("target-device")
         target_list.set_active(-1)
+
+        input_box = self.window.get_widget("input-type")
+        self.populate_input_model(input_box.get_model())
+        input_box.set_active(0)
 
 
     def forward(self, ignore=None):
@@ -228,6 +243,13 @@ class vmmAddHardware(gobject.GObject):
         device = target.get_model().get_value(target.get_active_iter(), 2)
         return node, maxnode, device
 
+    def get_config_input(self):
+        target = self.window.get_widget("input-type")
+        label = target.get_model().get_value(target.get_active_iter(), 0)
+        type = target.get_model().get_value(target.get_active_iter(), 1)
+        bus = target.get_model().get_value(target.get_active_iter(), 2)
+        return label, type, bus
+
     def get_config_network(self):
         if os.getuid() != 0:
             return ["user"]
@@ -260,6 +282,7 @@ class vmmAddHardware(gobject.GObject):
             if hwpage == PAGE_DISK:
                 self.window.get_widget("summary-disk").show()
                 self.window.get_widget("summary-network").hide()
+                self.window.get_widget("summary-input").hide()
                 self.window.get_widget("summary-disk-image").set_text(self.get_config_disk_image())
                 disksize = self.get_config_disk_size()
                 if disksize != None:
@@ -269,6 +292,7 @@ class vmmAddHardware(gobject.GObject):
             elif hwpage == PAGE_NETWORK:
                 self.window.get_widget("summary-disk").hide()
                 self.window.get_widget("summary-network").show()
+                self.window.get_widget("summary-input").hide()
                 net = self.get_config_network()
                 if net[0] == "bridge":
                     self.window.get_widget("summary-net-type").set_text(_("Shared physical device"))
@@ -286,6 +310,16 @@ class vmmAddHardware(gobject.GObject):
                     self.window.get_widget("summary-mac-address").set_text(macaddr)
                 else:
                     self.window.get_widget("summary-mac-address").set_text("-")
+            elif hwpage == PAGE_INPUT:
+                self.window.get_widget("summary-disk").hide()
+                self.window.get_widget("summary-network").hide()
+                self.window.get_widget("summary-input").show()
+                input = self.get_config_input()
+                self.window.get_widget("summary-input-type").set_text(input[0])
+                if input[1] == "tablet":
+                    self.window.get_widget("summary-input-mode").set_text(_("Absolute movement"))
+                else:
+                    self.window.get_widget("summary-input-mode").set_text(_("Relative movement"))
 
     def close(self, ignore1=None,ignore2=None):
         self.topwin.hide()
@@ -307,6 +341,8 @@ class vmmAddHardware(gobject.GObject):
             self.add_network()
         elif hw == PAGE_DISK:
             self.add_storage()
+        elif hw == PAGE_INPUT:
+            self.add_input()
 
         if self.install_error is not None:
             dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
@@ -339,6 +375,11 @@ class vmmAddHardware(gobject.GObject):
 
         vnic.setup(self.vm.get_connection().vmm)
         self.add_device(vnic.get_xml_config())
+
+    def add_input(self):
+        input = self.get_config_input()
+        xml = "<input type='%s' bus='%s'/>\n" % (input[1], input[2])
+        self.add_device(xml)
 
     def add_storage(self):
         node, maxnode, device = self.get_config_disk_target()
@@ -686,6 +727,14 @@ class vmmAddHardware(gobject.GObject):
             #model.append(["usb", virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "USB disk"])
         else:
             model.append(["xvd", 26, virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "Virtual disk"])
+
+    def populate_input_model(self, model):
+        model.clear()
+        model.append([_("EvTouch USB Graphics Tablet"), "tablet", "usb", True])
+        # XXX libvirt needs to support 'model' for input devices to distinguish
+        # wacom from evtouch tablets
+        #model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
+        model.append([_("Generic USB Mouse"), "mouse", "usb", True])
 
     def is_sparse_file(self):
         if self.window.get_widget("non-sparse").get_active():

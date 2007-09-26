@@ -45,6 +45,7 @@ HW_LIST_TYPE_CPU = 0
 HW_LIST_TYPE_MEMORY = 1
 HW_LIST_TYPE_DISK = 2
 HW_LIST_TYPE_NIC = 3
+HW_LIST_TYPE_INPUT = 4
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
@@ -126,6 +127,7 @@ class vmmDetails(gobject.GObject):
             "on_config_cdrom_connect_clicked": self.toggle_cdrom,
             "on_config_disk_remove_clicked": self.remove_disk,
             "on_config_network_remove_clicked": self.remove_network,
+            "on_config_input_remove_clicked": self.remove_input,
             "on_add_hardware_button_clicked": self.add_hardware,
             })
 
@@ -201,6 +203,9 @@ class vmmDetails(gobject.GObject):
             elif pagetype == HW_LIST_TYPE_NIC:
                 self.refresh_network_page()
                 pagenum = 3
+            elif pagetype == HW_LIST_TYPE_INPUT:
+                self.refresh_input_page()
+                pagenum = 4
 
             self.window.get_widget("hw-panel").set_current_page(pagenum)
         else:
@@ -351,6 +356,8 @@ class vmmDetails(gobject.GObject):
                     self.refresh_disk_page()
                 elif pagetype == HW_LIST_TYPE_NIC:
                     self.refresh_network_page()
+                elif pagetype == HW_LIST_TYPE_INPUT:
+                    self.refresh_input_page()
 
     def refresh_summary(self):
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
@@ -439,6 +446,34 @@ class vmmDetails(gobject.GObject):
                 self.window.get_widget("network-source-device").set_text("-")
             self.window.get_widget("network-mac-address").set_text(netinfo[3])
 
+    def refresh_input_page(self):
+        vmlist = self.window.get_widget("hw-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] != None:
+            inputinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
+            if inputinfo[3] == "tablet:usb":
+                self.window.get_widget("input-dev-type").set_text(_("EvTouch USB Graphics Tablet"))
+            elif inputinfo[3] == "mouse:usb":
+                self.window.get_widget("input-dev-type").set_text(_("Generic USB Mouse"))
+            elif inputinfo[3] == "mouse:xen":
+                self.window.get_widget("input-dev-type").set_text(_("Xen Mouse"))
+            elif inputinfo[3] == "mouse:ps2":
+                self.window.get_widget("input-dev-type").set_text(_("PS/2 Mouse"))
+            else:
+                self.window.get_widget("input-dev-type").set_text(inputinfo[0] + " " + inputinfo[1])
+
+            if inputinfo[0] == "tablet":
+                self.window.get_widget("input-dev-mode").set_text(_("Absolute Movement"))
+            else:
+                self.window.get_widget("input-dev-mode").set_text(_("Relative Movement"))
+
+            # Can't remove primary Xen or PS/2 mice
+            if inputinfo[0] == "mouse" and inputinfo[1] in ("xen", "ps2"):
+                self.window.get_widget("config-input-remove").set_sensitive(False)
+            else:
+                self.window.get_widget("config-input-remove").set_sensitive(True)
+
     def config_vcpus_changed(self, src):
         self.window.get_widget("config-vcpus-apply").set_sensitive(True)
 
@@ -505,6 +540,16 @@ class vmmDetails(gobject.GObject):
             xml = vnic.get_xml_config()
             self.vm.remove_device(xml)
 
+    def remove_input(self, src):
+        vmlist = self.window.get_widget("hw-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] != None:
+            inputinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
+
+            xml = "<input type='%s' bus='%s'/>" % (inputinfo[0], inputinfo[1])
+            self.vm.remove_device(xml)
+
 
     def prepare_hw_list(self):
         hw_list_model = gtk.ListStore(str, str, int, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
@@ -545,8 +590,8 @@ class vmmDetails(gobject.GObject):
                     # Update metadata
                     row[HW_LIST_COL_DEVICE] = disk
                     missing = False
-                # The insert position must be *before* any NICs
-                if row[HW_LIST_COL_TYPE] != HW_LIST_TYPE_NIC:
+
+                if row[HW_LIST_COL_TYPE] not in (HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT):
                     insertAt = insertAt + 1
 
             # Add in row
@@ -571,13 +616,36 @@ class vmmDetails(gobject.GObject):
                     row[HW_LIST_COL_DEVICE] = nic
                     missing = False
 
-                # Insert position is at end....
-                # XXX until we add support for Mice, etc
-                insertAt = insertAt + 1
+                if row[HW_LIST_COL_TYPE] not in (HW_LIST_TYPE_INPUT,):
+                    insertAt = insertAt + 1
 
             # Add in row
             if missing:
                 hw_list_model.insert(insertAt, ["NIC %s" % nic[3][-9:], gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_NIC, nic])
+
+        # Populate list of input devices
+        currentInputs = {}
+        input_number = 0
+        for input in self.vm.get_input_devices():
+            missing = True
+            insertAt = 0
+            currentInputs[input[3]] = 1
+            for row in hw_list_model:
+                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and row[HW_LIST_COL_DEVICE][3] == input[3]:
+                    # Update metadata
+                    row[HW_LIST_COL_DEVICE] = input
+                    missing = False
+
+                insertAt = insertAt + 1
+
+            # Add in row
+            if missing:
+                if input[0] == "tablet":
+                    hw_list_model.insert(insertAt, [_("Tablet"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, input])
+                elif input[0] == "mouse":
+                    hw_list_model.insert(insertAt, [_("Mouse"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, input])
+                else:
+                    hw_list_model.insert(insertAt, [_("Input"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, input])
 
         # Now remove any no longer current devs
         devs = range(len(hw_list_model))
@@ -590,6 +658,8 @@ class vmmDetails(gobject.GObject):
             if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and not currentDisks.has_key(row[HW_LIST_COL_DEVICE][3]):
                 removeIt = True
             elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and not currentNICs.has_key(row[HW_LIST_COL_DEVICE][3]):
+                removeIt = True
+            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and not currentInputs.has_key(row[HW_LIST_COL_DEVICE][3]):
                 removeIt = True
 
             if removeIt:

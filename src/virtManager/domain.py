@@ -620,6 +620,30 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
         return nics
 
+    def get_input_devices(self):
+        xml = self.get_xml()
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return []
+        ctx = doc.xpathNewContext()
+        inputs = []
+        try:
+            ret = ctx.xpathEval("/domain/devices/input")
+
+            for node in ret:
+                type = node.prop("type")
+                bus = node.prop("bus")
+                # XXX Replace 'None' with device model when libvirt supports that
+                inputs.append([type, bus, None, type + ":" + bus])
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+        return inputs
+
     def add_device(self, xml):
         logging.debug("Adding device " + xml)
 
@@ -641,7 +665,7 @@ class vmmDomain(gobject.GObject):
 
         if device_exception:
             raise RuntimeError, "Unable to attach device to live guest, libvirt reported error:\n" + device_exception 
-        
+
     def remove_device(self, dev_xml):
         logging.debug("Removing device " + dev_xml)
         xml = self.get_xml()
@@ -686,6 +710,18 @@ class vmmDomain(gobject.GObject):
                 if len(path) > 0 and path[0].content != None:
                     logging.debug("Looking for path %s" % path[0].content)
                     ret = ctx.xpathEval("/domain/devices/disk[target/@dev='%s']" % path[0].content)
+                if len(ret) > 0:
+                    ret[0].unlinkNode()
+                    ret[0].freeNode()
+                    newxml=doc.serialize()
+                    logging.debug("Redefine with " + newxml)
+                    self.get_connection().define_domain(newxml)
+            elif dev_type=="input":
+                type = dev_ctx.xpathEval("/input/@type")
+                bus = dev_ctx.xpathEval("/input/@bus")
+                if len(type) > 0 and type[0].content != None and len(bus) > 0 and bus[0].content != None:
+                    logging.debug("Looking for type %s bus %s" % (type[0].content, bus[0].content))
+                    ret = ctx.xpathEval("/domain/devices/input[@type='%s' and @bus='%s']" % (type[0].content, bus[0].content))
                 if len(ret) > 0:
                     ret[0].unlinkNode()
                     ret[0].freeNode()
