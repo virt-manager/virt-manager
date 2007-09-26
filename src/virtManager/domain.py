@@ -644,6 +644,32 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
         return inputs
 
+    def get_graphics_devices(self):
+        xml = self.get_xml()
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return []
+        ctx = doc.xpathNewContext()
+        graphics = []
+        try:
+            ret = ctx.xpathEval("/domain/devices/graphics[1]")
+            for node in ret:
+                type = node.prop("type")
+                if type == "vnc":
+                    listen = node.prop("listen")
+                    port = node.prop("port")
+                    graphics.append([type, listen, port, type])
+                else:
+                    graphics.append([type, None, None, type])
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+        return graphics
+
     def add_device(self, xml):
         logging.debug("Adding device " + xml)
 
@@ -722,6 +748,17 @@ class vmmDomain(gobject.GObject):
                 if len(type) > 0 and type[0].content != None and len(bus) > 0 and bus[0].content != None:
                     logging.debug("Looking for type %s bus %s" % (type[0].content, bus[0].content))
                     ret = ctx.xpathEval("/domain/devices/input[@type='%s' and @bus='%s']" % (type[0].content, bus[0].content))
+                if len(ret) > 0:
+                    ret[0].unlinkNode()
+                    ret[0].freeNode()
+                    newxml=doc.serialize()
+                    logging.debug("Redefine with " + newxml)
+                    self.get_connection().define_domain(newxml)
+            elif dev_type=="graphics":
+                type = dev_ctx.xpathEval("/graphics/@type")
+                if len(type) > 0 and type[0].content != None:
+                    logging.debug("Looking for type %s" % type[0].content)
+                    ret = ctx.xpathEval("/domain/devices/graphics[@type='%s']" % type[0].content)
                 if len(ret) > 0:
                     ret[0].unlinkNode()
                     ret[0].freeNode()

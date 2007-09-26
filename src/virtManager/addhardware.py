@@ -47,7 +47,8 @@ PAGE_INTRO = 0
 PAGE_DISK = 1
 PAGE_NETWORK = 2
 PAGE_INPUT = 3
-PAGE_SUMMARY = 4
+PAGE_GRAPHICS = 4
+PAGE_SUMMARY = 5
 
 class vmmAddHardware(gobject.GObject):
     __gsignals__ = {
@@ -74,6 +75,8 @@ class vmmAddHardware(gobject.GObject):
             "on_storage_toggled" : self.change_storage_type,
             "on_network_toggled" : self.change_network_type,
             "on_mac_address_clicked" : self.change_macaddr_use,
+            "on_graphics_type_changed": self.change_graphics_type,
+            "on_graphics_port_auto_toggled": self.change_port_auto,
             "on_create_help_clicked": self.show_help,
             })
 
@@ -92,6 +95,7 @@ class vmmAddHardware(gobject.GObject):
             model.append(["Network card", gtk.STOCK_NETWORK, PAGE_NETWORK])
 
         model.append(["Input device", gtk.STOCK_INDEX, PAGE_INPUT])
+        model.append(["Graphics device", gtk.STOCK_SELECT_COLOR, PAGE_GRAPHICS])
 
         self.set_initial_state()
 
@@ -148,6 +152,13 @@ class vmmAddHardware(gobject.GObject):
         input_list.add_attribute(text, 'text', 0)
         input_list.add_attribute(text, 'sensitive', 3)
 
+        graphics_list = self.window.get_widget("graphics-type")
+        graphics_model = gtk.ListStore(str,str)
+        graphics_list.set_model(graphics_model)
+        text = gtk.CellRendererText()
+        graphics_list.pack_start(text, True)
+        graphics_list.add_attribute(text, 'text', 0)
+
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
@@ -161,6 +172,7 @@ class vmmAddHardware(gobject.GObject):
         self.change_storage_type()
         self.change_network_type()
         self.change_macaddr_use()
+        self.change_port_auto()
         if os.getuid() == 0:
             self.window.get_widget("storage-partition").set_active(True)
         else:
@@ -192,6 +204,10 @@ class vmmAddHardware(gobject.GObject):
         input_box = self.window.get_widget("input-type")
         self.populate_input_model(input_box.get_model())
         input_box.set_active(0)
+
+        graphics_box = self.window.get_widget("graphics-type")
+        self.populate_graphics_model(graphics_box.get_model())
+        graphics_box.set_active(0)
 
 
     def forward(self, ignore=None):
@@ -250,6 +266,25 @@ class vmmAddHardware(gobject.GObject):
         bus = target.get_model().get_value(target.get_active_iter(), 2)
         return label, type, bus
 
+    def get_config_graphics(self):
+        type = self.window.get_widget("graphics-type")
+        return type.get_model().get_value(type.get_active_iter(), 1)
+
+    def get_config_vnc_port(self):
+        port = self.window.get_widget("graphics-port")
+        portAuto = self.window.get_widget("graphics-port-auto")
+        if portAuto.get_active():
+            return -1
+        return int(port.get_value())
+
+    def get_config_vnc_address(self):
+        addr = self.window.get_widget("graphics-address")
+        return addr.get_text()
+
+    def get_config_vnc_password(self):
+        pw = self.window.get_widget("graphics-password")
+        return pw.get_text()
+
     def get_config_network(self):
         if os.getuid() != 0:
             return ["user"]
@@ -278,11 +313,13 @@ class vmmAddHardware(gobject.GObject):
             pass
         elif page_number == PAGE_SUMMARY:
             hwpage = self.get_config_hardware_type()
+            self.window.get_widget("summary-disk").hide()
+            self.window.get_widget("summary-network").hide()
+            self.window.get_widget("summary-input").hide()
+            self.window.get_widget("summary-graphics").hide()
 
             if hwpage == PAGE_DISK:
                 self.window.get_widget("summary-disk").show()
-                self.window.get_widget("summary-network").hide()
-                self.window.get_widget("summary-input").hide()
                 self.window.get_widget("summary-disk-image").set_text(self.get_config_disk_image())
                 disksize = self.get_config_disk_size()
                 if disksize != None:
@@ -290,9 +327,7 @@ class vmmAddHardware(gobject.GObject):
                 else:
                     self.window.get_widget("summary-disk-size").set_text("-")
             elif hwpage == PAGE_NETWORK:
-                self.window.get_widget("summary-disk").hide()
                 self.window.get_widget("summary-network").show()
-                self.window.get_widget("summary-input").hide()
                 net = self.get_config_network()
                 if net[0] == "bridge":
                     self.window.get_widget("summary-net-type").set_text(_("Shared physical device"))
@@ -311,8 +346,6 @@ class vmmAddHardware(gobject.GObject):
                 else:
                     self.window.get_widget("summary-mac-address").set_text("-")
             elif hwpage == PAGE_INPUT:
-                self.window.get_widget("summary-disk").hide()
-                self.window.get_widget("summary-network").hide()
                 self.window.get_widget("summary-input").show()
                 input = self.get_config_input()
                 self.window.get_widget("summary-input-type").set_text(input[0])
@@ -320,6 +353,24 @@ class vmmAddHardware(gobject.GObject):
                     self.window.get_widget("summary-input-mode").set_text(_("Absolute movement"))
                 else:
                     self.window.get_widget("summary-input-mode").set_text(_("Relative movement"))
+            elif hwpage == PAGE_GRAPHICS:
+                self.window.get_widget("summary-graphics").show()
+                graphics = self.get_config_graphics()
+                if graphics == "vnc":
+                    self.window.get_widget("summary-graphics-type").set_text("VNC server")
+                else:
+                    self.window.get_widget("summary-graphics-type").set_text("Local SDL window")
+                if graphics == "vnc":
+                    self.window.get_widget("summary-graphics-address").set_text(self.get_config_vnc_address())
+                    if self.get_config_vnc_port() == -1:
+                        self.window.get_widget("summary-graphics-port").set_text(_("Automatically allocated"))
+                    else:
+                        self.window.get_widget("summary-graphics-port").set_text(str(self.get_config_vnc_port()))
+                    self.window.get_widget("summary-graphics-password").set_text(self.get_config_vnc_password())
+                else:
+                    self.window.get_widget("summary-graphics-address").set_text(_("N/A"))
+                    self.window.get_widget("summary-graphics-port").set_text(_("N/A"))
+                    self.window.get_widget("summary-graphics-password").set_text(_("N/A"))
 
     def close(self, ignore1=None,ignore2=None):
         self.topwin.hide()
@@ -343,6 +394,8 @@ class vmmAddHardware(gobject.GObject):
             self.add_storage()
         elif hw == PAGE_INPUT:
             self.add_input()
+        elif hw == PAGE_GRAPHICS:
+            self.add_graphics()
 
         if self.install_error is not None:
             dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
@@ -379,6 +432,26 @@ class vmmAddHardware(gobject.GObject):
     def add_input(self):
         input = self.get_config_input()
         xml = "<input type='%s' bus='%s'/>\n" % (input[1], input[2])
+        self.add_device(xml)
+
+    def add_graphics(self):
+        graphics = self.get_config_graphics()
+        if graphics == "vnc":
+            port = self.get_config_vnc_port()
+            pw = self.get_config_vnc_password()
+            addr = self.get_config_vnc_address()
+            if addr is None or addr == "":
+                if pw is None or pw == "":
+                    xml = "<graphics type='vnc' port='%d'/>" % (port,)
+                else:
+                    xml = "<graphics type='vnc' port='%d' passwd='%s'/>" % (port,pw)
+            else:
+                if pw is None or pw == "":
+                    xml = "<graphics type='vnc' listen='%s' port='%d'/>" % (addr,port)
+                else:
+                    xml = "<graphics type='vnc' listen='%s' port='%d' passwd='%s'/>" % (addr,port,pw)
+        else:
+            xml = "<graphics type='sdl'/>"
         self.add_device(xml)
 
     def add_storage(self):
@@ -559,6 +632,25 @@ class vmmAddHardware(gobject.GObject):
         else:
             self.window.get_widget("create-mac-address").set_sensitive(False)
 
+    def change_graphics_type(self,ignore=None):
+        graphics = self.get_config_graphics()
+        if graphics == "vnc":
+            self.window.get_widget("graphics-port-auto").set_sensitive(True)
+            self.window.get_widget("graphics-address").set_sensitive(True)
+            self.window.get_widget("graphics-password").set_sensitive(True)
+            self.change_port_auto()
+        else:
+            self.window.get_widget("graphics-port").set_sensitive(False)
+            self.window.get_widget("graphics-port-auto").set_sensitive(False)
+            self.window.get_widget("graphics-address").set_sensitive(False)
+            self.window.get_widget("graphics-password").set_sensitive(False)
+
+    def change_port_auto(self,ignore=None):
+        if self.window.get_widget("graphics-port-auto").get_active():
+            self.window.get_widget("graphics-port").set_sensitive(False)
+        else:
+            self.window.get_widget("graphics-port").set_sensitive(True)
+
     def validate(self, page_num):
         if page_num == PAGE_INTRO:
             if self.get_config_hardware_type() == None:
@@ -735,6 +827,12 @@ class vmmAddHardware(gobject.GObject):
         # wacom from evtouch tablets
         #model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
         model.append([_("Generic USB Mouse"), "mouse", "usb", True])
+
+    def populate_graphics_model(self, model):
+        model.clear()
+        model.append([_("VNC server"), "vnc"])
+        # XXX inclined to just not give this choice at all
+        model.append([_("Local SDL window"), "sdl"])
 
     def is_sparse_file(self):
         if self.window.get_widget("non-sparse").get_active():
