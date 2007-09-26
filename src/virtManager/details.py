@@ -333,7 +333,7 @@ class vmmDetails(gobject.GObject):
         else:
             self.window.get_widget("details-menu-serial").set_sensitive(False)
 
-    def refresh_resources(self, ignore):
+    def refresh_resources(self, ignore=None):
         details = self.window.get_widget("details-pages")
         if details.get_current_page() == 0:
             self.refresh_summary()
@@ -558,6 +558,7 @@ class vmmDetails(gobject.GObject):
             xml = vbd.get_xml_config(diskinfo[3])
 
             self.vm.remove_device(xml)
+            self.refresh_resources()
 
     def remove_network(self, src):
         vmlist = self.window.get_widget("hw-list")
@@ -576,6 +577,7 @@ class vmmDetails(gobject.GObject):
 
             xml = vnic.get_xml_config()
             self.vm.remove_device(xml)
+            self.refresh_resources()
 
     def remove_input(self, src):
         vmlist = self.window.get_widget("hw-list")
@@ -586,6 +588,7 @@ class vmmDetails(gobject.GObject):
 
             xml = "<input type='%s' bus='%s'/>" % (inputinfo[0], inputinfo[1])
             self.vm.remove_device(xml)
+            self.refresh_resources()
 
     def remove_graphics(self, src):
         vmlist = self.window.get_widget("hw-list")
@@ -596,7 +599,7 @@ class vmmDetails(gobject.GObject):
 
             xml = "<graphics type='%s'/>" % inputinfo[0]
             self.vm.remove_device(xml)
-
+            self.refresh_resources()
 
     def prepare_hw_list(self):
         hw_list_model = gtk.ListStore(str, str, int, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
@@ -744,8 +747,12 @@ class vmmDetails(gobject.GObject):
     def add_hardware(self, src):
         if self.addhw is None:
             self.addhw = vmmAddHardware(self.config, self.vm)
+            self.addhw.topwin.connect("hide", self.add_hardware_done)
 
         self.addhw.show()
+
+    def add_hardware_done(self, ignore=None):
+        self.refresh_resources()
 
     def toggle_cdrom(self, src):
         if src.get_label() == gtk.STOCK_DISCONNECT:

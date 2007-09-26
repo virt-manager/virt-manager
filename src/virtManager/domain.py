@@ -689,12 +689,14 @@ class vmmDomain(gobject.GObject):
         logging.debug("Redefine with " + newxml)
         self.get_connection().define_domain(newxml)
 
+        # Invalidate cached XML
+        self.xml = None
         if device_exception:
             raise RuntimeError, "Unable to attach device to live guest, libvirt reported error:\n" + device_exception 
 
     def remove_device(self, dev_xml):
         logging.debug("Removing device " + dev_xml)
-        xml = self.get_xml()
+        xml = self.vm.XMLDesc(0)
 
         # do the live guest first
         device_exception = None
@@ -773,6 +775,9 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
             if dev_doc != None:
                 dev_doc.freeDoc()
+
+        # Invalidate cached XML
+        self.xml = None
 
         # if we had a problem with the live guest, complain here
         if device_exception:
