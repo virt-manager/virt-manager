@@ -74,11 +74,12 @@ class vmmConsole(gobject.GObject):
         self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
         self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
 
-        self.window.get_widget("console-pages").append_page(self.vncViewer)
+        self.window.get_widget("console-vnc-align").add(self.vncViewer)
         self.vncViewer.realize()
         self.vncViewer.show()
         self.vncViewerRetriesScheduled = 0
         self.vncViewerRetryDelay = 125
+        self.vncViewer.connect("size-request", self._force_resize)
         self.connected = 0
 
         self.notifyID = None
@@ -93,8 +94,6 @@ class vmmConsole(gobject.GObject):
             pass
 
         self.window.get_widget("console-pages").set_show_tabs(False)
-        self.window.get_widget("console-unavailable").set_size_request(640, 480)
-        self.window.get_widget("console-auth").set_size_request(640, 480)
 
         self.config.on_console_keygrab_changed(self.keygrab_changed)
 
@@ -129,6 +128,36 @@ class vmmConsole(gobject.GObject):
         self.vncViewer.connect("vnc-auth-credential", self._vnc_auth_credential)
         self.vncViewer.connect("vnc-initialized", self._vnc_initialized)
         self.vncViewer.connect("vnc-disconnected", self._vnc_disconnected)
+
+    # Black magic todo with scrolled windows. Basically the behaviour we want
+    # is that if it possible to resize the window to show entire guest desktop
+    # then we should do that and never show scrollbars. If the local screen is
+    # too small then we can turn on scrolling. You would think the 'Automatic'
+    # policy would work, but even if viewport is identical sized to the VNC
+    # widget it still seems to show scrollbars. So we do evil stuff here
+    def _force_resize(self, src, size):
+        w,h = src.get_size_request()
+        self.window.get_widget("console-screenshot").set_size_request(w, h)
+        self.window.get_widget("console-vnc-scroll").set_size_request(w, h)
+        topw,toph = self.window.get_widget("vmm-console").size_request()
+
+        padx = topw-w
+        pady = toph-h
+        rootw = src.get_screen().get_width()
+        rooth = src.get_screen().get_height()
+
+        maxw = rootw - 100 - padx
+        maxh = rooth - 100 - pady
+        if w > maxw or h > maxh:
+            self.window.get_widget("console-vnc-viewport").set_size_request(maxw, maxh)
+            self.window.get_widget("console-screenshot-viewport").set_size_request(maxw, maxh)
+            self.window.get_widget("console-vnc-scroll").set_policy(gtk.POLICY_ALWAYS, gtk.POLICY_ALWAYS)
+            self.window.get_widget("console-screenshot-scroll").set_policy(gtk.POLICY_ALWAYS, gtk.POLICY_ALWAYS)
+        else:
+            self.window.get_widget("console-vnc-viewport").set_size_request(w, h)
+            self.window.get_widget("console-screenshot-viewport").set_size_request(w, h)
+            self.window.get_widget("console-vnc-scroll").set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+            self.window.get_widget("console-screenshot-scroll").set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
 
     # Auto-increase the window size to fit the console - within reason
     # though, cos we don't want a min window size greater than the screen
