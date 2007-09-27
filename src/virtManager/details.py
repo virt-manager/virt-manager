@@ -366,7 +366,9 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
         vm_memory = self.vm.current_memory()
         host_memory = self.vm.get_connection().host_memory_size()
-        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % (vm_memory/1024, host_memory/1024))
+        self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % \
+                                                                      (int(round(vm_memory/1024.0)), \
+                                                                       int(round(host_memory/1024.0))))
 
         history_len = self.config.get_stats_history_length()
         cpu_vector = self.vm.cpu_time_vector()
@@ -401,18 +403,18 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("state-vm-vcpus").set_text("%d" % (self.vm.vcpu_count()))
 
     def refresh_config_memory(self):
-        self.window.get_widget("state-host-memory").set_text("%d MB" % (self.vm.get_connection().host_memory_size()/1024))
+        self.window.get_widget("state-host-memory").set_text("%d MB" % (int(round(self.vm.get_connection().host_memory_size()/1024))))
         if self.window.get_widget("config-memory-apply").get_property("sensitive"):
             self.window.get_widget("config-memory").get_adjustment().upper = self.window.get_widget("config-maxmem").get_adjustment().value
         else:
-            self.window.get_widget("config-memory").get_adjustment().value = self.vm.get_memory()/1024
-            self.window.get_widget("config-maxmem").get_adjustment().value = self.vm.maximum_memory()/1024
+            self.window.get_widget("config-memory").get_adjustment().value = int(round(self.vm.get_memory()/1024.0))
+            self.window.get_widget("config-maxmem").get_adjustment().value = int(round(self.vm.maximum_memory()/1024.0))
             # XXX hack - changing the value above will have just re-triggered
             # the callback making apply button sensitive again. So we have to
             # turn it off again....
             self.window.get_widget("config-memory-apply").set_sensitive(False)
 
-        self.window.get_widget("state-vm-memory").set_text("%d MB" % (self.vm.get_memory()/1024))
+        self.window.get_widget("state-vm-memory").set_text("%d MB" % int(round(self.vm.get_memory()/1024.0)))
 
     def refresh_disk_page(self):
         # get the currently selected line
