@@ -113,6 +113,7 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_shutdown_activate": self.control_vm_shutdown,
             "on_details_menu_save_activate": self.control_vm_save_domain,
             "on_details_menu_destroy_activate": self.control_vm_destroy,
+            "on_details_menu_pause_activate": self.control_vm_pause,
 
             "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_serial_activate": self.control_vm_terminal,

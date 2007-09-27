@@ -115,6 +115,7 @@ class vmmConsole(gobject.GObject):
             "on_menu_vm_save_activate": self.control_vm_save_domain,
             "on_menu_vm_destroy_activate": self.control_vm_destroy,
             "on_menu_vm_screenshot_activate": self.control_vm_screenshot,
+            "on_menu_vm_pause_activate": self.control_vm_pause,
 
             "on_menu_view_serial_activate": self.control_vm_terminal,
             "on_menu_view_details_activate": self.control_vm_details,
