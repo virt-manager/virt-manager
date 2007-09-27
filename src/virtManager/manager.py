@@ -208,6 +208,7 @@ class vmmManager(gobject.GObject):
             "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
             "on_menu_edit_details_activate": self.show_vm_details,
+            "on_menu_edit_delete_activate": self.delete_vm,
             "on_menu_host_details_activate": self.show_host,
 
             "on_vm_view_changed": self.vm_view_changed,
@@ -649,23 +650,9 @@ class vmmManager(gobject.GObject):
                 self.vmmenu.popup(None, None, None, 0, event.time)
             elif event.button == 1:
                 # check if the "delete" icon was clicked and act accordingly
-                logging.debug("Clicked a VM row")
                 area = widget.get_cell_area(path, widget.get_column(COL_ACTION))
-                if int(event.x) > area.x and int(event.x) < area.x + area.width \
-                       and not vm.is_active():
-                    # are you sure you want to delete this VM?
-                    warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                             gtk.DIALOG_DESTROY_WITH_PARENT,
-                                             gtk.MESSAGE_WARNING,
-                                             gtk.BUTTONS_YES_NO,
-                                             _("This will permanently delete the vm \"%s,\" are you sure?") % vm.get_name())
-                    result = warn.run()
-                    warn.destroy()
-                    if result == gtk.RESPONSE_NO:
-                        return
-                    conn = vm.get_connection()
-                    vm.delete()
-                    conn.tick(noStatsUpdate=True)
+                if int(event.x) > area.x and int(event.x) < area.x + area.width:
+                    self.delete_vm()
             return False
         else:
             conn = model.get_value(iter, ROW_HANDLE)
@@ -707,6 +694,26 @@ class vmmManager(gobject.GObject):
                             return
                         self.engine.remove_connection(conn.get_uri())
             return False
+
+    def delete_vm(self, ignore=None):
+        vm = self.current_vm()
+        if vm.is_active():
+            return
+
+        # are you sure you want to delete this VM?
+        warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                 gtk.DIALOG_DESTROY_WITH_PARENT,
+                                 gtk.MESSAGE_WARNING,
+                                 gtk.BUTTONS_YES_NO,
+                                 _("This will permanently delete the vm \"%s,\" are you sure?") % vm.get_name())
+        result = warn.run()
+        warn.destroy()
+        if result == gtk.RESPONSE_NO:
+            return
+        conn = vm.get_connection()
+        vm.delete()
+        conn.tick(noStatsUpdate=True)
+
 
     def show_about(self, src):
         self.emit("action-show-about")
