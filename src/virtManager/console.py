@@ -62,14 +62,18 @@ class vmmConsole(gobject.GObject):
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
+        self.accel_groups = gtk.accel_groups_from_object(topwin)
+        self.gtk_settings_accel = None
+
         self.vncViewer = gtkvnc.Display()
         self.vncTunnel = None
         if self.config.get_console_keygrab() == 2:
             self.vncViewer.set_keyboard_grab(True)
-
-        self.vncViewer.set_pointer_grab(True)
+            self.vncViewer.set_pointer_grab(True)
+        else:
+            self.vncViewer.set_keyboard_grab(False)
+            self.vncViewer.set_pointer_grab(False)
         self.vncViewer.set_pointer_local(True)
-        #self.vncViewer.set_sticky_modifiers(True)
 
         self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
         self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
@@ -128,6 +132,8 @@ class vmmConsole(gobject.GObject):
         self.vncViewer.connect("vnc-auth-credential", self._vnc_auth_credential)
         self.vncViewer.connect("vnc-initialized", self._vnc_initialized)
         self.vncViewer.connect("vnc-disconnected", self._vnc_disconnected)
+        self.vncViewer.connect("vnc-keyboard-grab", self._disable_modifiers)
+        self.vncViewer.connect("vnc-keyboard-ungrab", self._enable_modifiers)
 
     # Black magic todo with scrolled windows. Basically the behaviour we want
     # is that if it possible to resize the window to show entire guest desktop
@@ -175,6 +181,25 @@ class vmmConsole(gobject.GObject):
 
         self.window.get_widget("console-vnc-vp").set_size_request(vncWidth+2, vncHeight+2)
 
+
+    def _disable_modifiers(self, ignore=None):
+        topwin = self.window.get_widget("vmm-console")
+        for g in self.accel_groups:
+            topwin.remove_accel_group(g)
+        settings = gtk.settings_get_default()
+        self.gtk_settings_accel = settings.get_property('gtk-menu-bar-accel')
+        settings.set_property('gtk-menu-bar-accel', None)
+
+    def _enable_modifiers(self, ignore=None):
+        topwin = self.window.get_widget("vmm-console")
+        if self.gtk_settings_accel is None:
+            return
+        settings = gtk.settings_get_default()
+        settings.set_property('gtk-menu-bar-accel', self.gtk_settings_accel)
+        self.gtk_settings_accel = None
+        for g in self.accel_groups:
+            topwin.add_accel_group(g)
+
     def notify_grabbed(self, src):
         topwin = self.window.get_widget("vmm-console")
         topwin.set_title(_("Press Ctrl+Alt to release pointer.") + " " + self.title)
@@ -215,18 +240,21 @@ class vmmConsole(gobject.GObject):
     def keygrab_changed(self, src, ignore1=None,ignore2=None,ignore3=None):
         if self.config.get_console_keygrab() == 2:
             self.vncViewer.set_keyboard_grab(True)
+            self.vncViewer.set_pointer_grab(True)
         else:
             self.vncViewer.set_keyboard_grab(False)
+            self.vncViewer.set_pointer_grab(False)
 
     def toggle_fullscreen(self, src):
         if src.get_active():
             self.window.get_widget("vmm-console").fullscreen()
-            # XXX re-instate
-            #if self.config.get_console_keygrab() == 1:
-            #    self.vncViewer.grab_keyboard()
+            if self.config.get_console_keygrab() == 1:
+                gtk.gdk.keyboard_grab(self.vncViewer.window, False, 0L)
+                self._disable_modifiers()
         else:
-            #if self.config.get_console_keygrab() == 1:
-            #    self.vncViewer.ungrab_keyboard()
+            if self.config.get_console_keygrab() == 1:
+                self._enable_modifiers()
+                gtk.gdk.keyboard_ungrab(0L)
             self.window.get_widget("vmm-console").unfullscreen()
 
     def toggle_toolbar(self, src):
@@ -277,14 +305,15 @@ class vmmConsole(gobject.GObject):
             self.close_tunnel()
         self.connected = 0
         logging.debug("VNC disconnected")
-        if not self.is_visible():
-            return
-
         if self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
             self.view_vm_status()
             return
 
         self.activate_unavailable_page(_("TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"))
+
+        if not self.is_visible():
+            return
+
         self.schedule_retry()
 
     def _vnc_initialized(self, src):
@@ -324,7 +353,6 @@ class vmmConsole(gobject.GObject):
         logging.debug("Spawning SSH tunnel to %s, for %s:%d" %(server, vncaddr, vncport))
 
         fds = socket.socketpair()
-        print str(fds)
         pid = os.fork()
         if pid == 0:
             fds[0].close()
