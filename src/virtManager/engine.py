@@ -101,6 +101,27 @@ class vmmEngine(gobject.GObject):
             self.connections[hvuri]["windowSerialConsole"][vmuuid].close()
             del self.connections[hvuri]["windowSerialConsole"][vmuuid]
 
+    def _do_connection_changed(self, connection):
+        if connection.get_state() == connection.STATE_ACTIVE:
+            return
+
+        hvuri = connection.get_uri()
+        for vmuuid in self.connections[hvuri]["windowDetails"].keys():
+            self.connections[hvuri]["windowDetails"][vmuuid].close()
+            del self.connections[hvuri]["windowDetails"][vmuuid]
+        for vmuuid in self.connections[hvuri]["windowConsole"].keys():
+            self.connections[hvuri]["windowConsole"][vmuuid].close()
+            del self.connections[hvuri]["windowConsole"][vmuuid]
+        for vmuuid in self.connections[hvuri]["windowSerialConsole"].keys():
+            self.connections[hvuri]["windowSerialConsole"][vmuuid].close()
+            del self.connections[hvuri]["windowSerialConsole"][vmuuid]
+        if self.connections[hvuri]["windowHost"] is not None:
+            self.connections[hvuri]["windowHost"].close()
+            self.connections[hvuri]["windowHost"] = None
+        if self.connections[hvuri]["windowCreate"] is not None:
+            self.connections[hvuri]["windowCreate"].close()
+            self.connections[hvuri]["windowCreate"] = None
+
     def reschedule_timer(self, ignore1,ignore2,ignore3,ignore4):
         self.schedule_timer()
 
@@ -121,9 +142,6 @@ class vmmEngine(gobject.GObject):
             gtk.gdk.threads_leave()
 
     def _tick(self):
-        if self.windowConnect == None and gtk.main_level() > 0 and self.count_visible_windows() == 0:
-            gtk.main_quit()
-
         for uri in self.connections.keys():
             try:
                 self.connections[uri]["connection"].tick()
@@ -134,20 +152,6 @@ class vmmEngine(gobject.GObject):
                               " " + str(sys.exc_info()[1]) + "\n" + \
                               traceback.format_exc(sys.exc_info()[2]))
         return 1
-
-    def count_visible_windows(self):
-        ct = 0
-        for conn in self.connections.values():
-            for winname in [ "windowDetails", "windowConsole", "windowSerialConsole" ]:
-                for window in conn[winname].values():
-                    ct += window.is_visible()
-            if conn["windowHost"] != None and conn["windowHost"].is_visible():
-                    ct += 1
-        if self.windowCreate:
-                ct += self.windowCreate.is_visible()
-        if self.windowManager:
-                ct += self.windowManager.is_visible()
-        return ct
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
         gobject.source_remove(self.timer)
@@ -279,27 +283,28 @@ class vmmEngine(gobject.GObject):
         self.get_manager().show()
 
     def show_create(self, uri):
-        if self.windowCreate == None:
-            self.windowCreate = vmmCreate(self.get_config(), self.get_connection(uri, False))
-            self.windowCreate.connect("action-show-console", self._do_show_console)
-            self.windowCreate.connect("action-show-terminal", self._do_show_terminal)
-            self.windowCreate.connect("action-show-help", self._do_show_help)
-            self.windowCreate.reset_state()
-        else:
-            self.windowCreate.connection = self.get_connection(uri, False)
-        self.windowCreate.reset_state()
-        self.windowCreate.show()
+        con = self.get_connection(uri)
+
+        if self.connections[uri]["windowCreate"] == None:
+            create = vmmCreate(self.get_config(), con)
+            create.connect("action-show-console", self._do_show_console)
+            create.connect("action-show-terminal", self._do_show_terminal)
+            create.connect("action-show-help", self._do_show_help)
+            self.connections[uri]["windowCreate"] = create
+        self.connections[uri]["windowCreate"].show()
 
     def add_connection(self, uri, readOnly=None):
         conn = vmmConnection(self.get_config(), uri, readOnly)
         self.connections[uri] = {
             "connection": conn,
             "windowHost": None,
+            "windowCreate": None,
             "windowDetails": {},
             "windowConsole": {},
             "windowSerialConsole": {},
             }
         self.connections[uri]["connection"].connect("vm-removed", self._do_vm_removed)
+        self.connections[uri]["connection"].connect("state-changed", self._do_connection_changed)
         self.connections[uri]["connection"].tick()
         self.emit("connection-added", conn)
         self.config.add_connection(conn.get_uri())
