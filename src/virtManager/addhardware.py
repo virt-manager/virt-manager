@@ -208,6 +208,9 @@ class vmmAddHardware(gobject.GObject):
         graphics_box = self.window.get_widget("graphics-type")
         self.populate_graphics_model(graphics_box.get_model())
         graphics_box.set_active(0)
+        self.window.get_widget("graphics-address").set_active(False)
+        self.window.get_widget("graphics-port-auto").set_active(True)
+        self.window.get_widget("graphics-password").set_text("")
 
 
     def forward(self, ignore=None):
@@ -279,7 +282,9 @@ class vmmAddHardware(gobject.GObject):
 
     def get_config_vnc_address(self):
         addr = self.window.get_widget("graphics-address")
-        return addr.get_text()
+        if addr.get_active():
+            return "0.0.0.0"
+        return "127.0.0.1"
 
     def get_config_vnc_password(self):
         pw = self.window.get_widget("graphics-password")
@@ -366,7 +371,10 @@ class vmmAddHardware(gobject.GObject):
                         self.window.get_widget("summary-graphics-port").set_text(_("Automatically allocated"))
                     else:
                         self.window.get_widget("summary-graphics-port").set_text(str(self.get_config_vnc_port()))
-                    self.window.get_widget("summary-graphics-password").set_text(self.get_config_vnc_password())
+                    if self.get_config_vnc_password() is not None and self.get_config_vnc_password() != "":
+                        self.window.get_widget("summary-graphics-password").set_text(_("Yes"))
+                    else:
+                        self.window.get_widget("summary-graphics-password").set_text(_("Yes"))
                 else:
                     self.window.get_widget("summary-graphics-address").set_text(_("N/A"))
                     self.window.get_widget("summary-graphics-port").set_text(_("N/A"))
