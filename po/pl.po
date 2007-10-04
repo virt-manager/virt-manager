@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-27 20:10-0400\n"
-"PO-Revision-Date: 2007-09-27 10:00+0200\n"
+"PO-Revision-Date: 2007-09-28 13:17+0200\n"
 "Last-Translator: Piotr Drąg <raven@pmail.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -95,7 +95,7 @@ msgstr "Niedostępne"
 
 #: ../src/vmm-console.glade.h:14 ../src/vmm-add-hardware.glade.h:72
 msgid "VNC"
-msgstr ""
+msgstr "VNC"
 
 #: ../src/vmm-console.glade.h:15
 msgid "Virtual Machine Console"
@@ -756,23 +756,20 @@ msgid "-"
 msgstr "-"
 
 #: ../src/vmm-add-hardware.glade.h:3
-#, fuzzy
 msgid "127.0.0.1"
-msgstr "192.168.1.1"
+msgstr "127.0.0.1"
 
 #: ../src/vmm-add-hardware.glade.h:5
-#, fuzzy
 msgid "<b>Display</b>"
-msgstr "<b>Podsumowanie</b>"
+msgstr "<b>Ekran</b>"
 
 #: ../src/vmm-add-hardware.glade.h:6 ../src/vmm-create.glade.h:16
 msgid "<b>Network</b>"
 msgstr "<b>Sieć</b>"
 
 #: ../src/vmm-add-hardware.glade.h:7
-#, fuzzy
 msgid "<b>Pointer</b>"
-msgstr "<b>Konsole</b>"
+msgstr "<b>Wskaźnik</b>"
 
 #: ../src/vmm-add-hardware.glade.h:8
 msgid "<b>Source:</b>"
@@ -787,14 +784,12 @@ msgid "<b>Target:</b>"
 msgstr "<b>Cel:</b>"
 
 #: ../src/vmm-add-hardware.glade.h:11
-#, fuzzy
 msgid "<b>Virtual display</b>"
-msgstr "<b>Dysk wirtualny</b>"
+msgstr "<b>Ekran wirtualny</b>"
 
 #: ../src/vmm-add-hardware.glade.h:12
-#, fuzzy
 msgid "<b>Virtual pointer</b>"
-msgstr "<b>Dysk wirtualny</b>"
+msgstr "<b>Wskaźnik wirtualny</b>"
 
 #: ../src/vmm-add-hardware.glade.h:13 ../src/vmm-create.glade.h:20
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
@@ -806,6 +801,10 @@ msgid ""
 "default pointer in the guest OS will ensure the virtual cursor moves in sync "
 "with the local desktop cursor .</small>"
 msgstr ""
+"<small><b>Wskazówka:</b> dodawanie graficznego tabletu i konfigurowanie go "
+"jako domyślnego wskaźnika i systemie operacyjnym gościa upewni, że wirtualny "
+"kursor będzie poruszał się zsynchronizowany z lokalnym kursorem pulpitu."
+"</small>"
 
 #: ../src/vmm-add-hardware.glade.h:15
 msgid ""
@@ -813,6 +812,9 @@ msgid ""
 "virtual machine uses a different port. If two machines try to use the same "
 "port one of them will fail to start.</small>"
 msgstr ""
+"<small><b>Wskazówka:</b> automatycznie przydzielony port upewnia, że "
+"wszystkie maszyny wirtualne używają różnych portów. Jeśli dwie maszyny "
+"próbują używać tych samych portów, jedna z nich nie uruchomi się.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:16 ../src/vmm-create.glade.h:26
 msgid ""
@@ -839,6 +841,9 @@ msgid ""
 "the guest console window to be embedded inside this application. It may also "
 "be used to allow access to the guest console from a remote host</small>"
 msgstr ""
+"<small><b>Wskazówka:</b> serwer VNC jest bardzo zalecany, ponieważ pozwala "
+"on oknie konsoli gościa na zagnieżdżenie w tej aplikacji. Może być także "
+"użyty, aby umożliwić dostęp do konsoli gościa ze zdalnego hosta.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:19 ../src/vmm-create.glade.h:30
 msgid ""
@@ -853,13 +858,12 @@ msgstr ""
 "dostępna na hoście, może to spowodować uszkodzeniem danych na gościu.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:20
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Access the "
 "guest display</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Przypisywanie "
-"przestrzeni dla pamięci masowej</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Dostęp do "
+"ekranu gościa</span>"
 
 #: ../src/vmm-add-hardware.glade.h:21
 msgid ""
@@ -886,13 +890,12 @@ msgstr ""
 "siecią hosta</span>"
 
 #: ../src/vmm-add-hardware.glade.h:24
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Interacting "
 "with the guest</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Wybieranie "
-"zakresu DHCP</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Praca z gościem"
+"</span>"
 
 #: ../src/vmm-add-hardware.glade.h:25
 msgid ""
@@ -904,16 +907,15 @@ msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:26
 msgid "Absolute"
-msgstr ""
+msgstr "Absolutnie"
 
 #: ../src/vmm-add-hardware.glade.h:27
 msgid "Add new virtual hardware"
 msgstr "Dodaj nowy sprzęt wirtualny"
 
 #: ../src/vmm-add-hardware.glade.h:28 ../src/vmm-details.glade.h:22
-#, fuzzy
 msgid "Address:"
-msgstr "Adres MAC:"
+msgstr "Adres:"
 
 #: ../src/vmm-add-hardware.glade.h:29 ../src/vmm-create.glade.h:40
 msgid "Allocate entire virtual disk now?"
@@ -922,9 +924,8 @@ msgstr "Przydzielić cały dysk wirtualny?"
 #: ../src/vmm-add-hardware.glade.h:30
 #: ../../po/../src/virtManager/addhardware.py:371
 #: ../../po/../src/virtManager/details.py:502
-#, fuzzy
 msgid "Automatically allocated"
-msgstr "Automatycznie otwórz konsole:"
+msgstr "Automatycznie przydzielone"
 
 #: ../src/vmm-add-hardware.glade.h:31 ../src/vmm-create.glade.h:42
 msgid "Browse..."
@@ -958,11 +959,11 @@ msgstr "Rozmiar dysku:"
 #: ../src/vmm-add-hardware.glade.h:39
 #: ../../po/../src/virtManager/details.py:718
 msgid "Display"
-msgstr ""
+msgstr "Ekran"
 
 #: ../src/vmm-add-hardware.glade.h:40
 msgid "EvTouch Tablet"
-msgstr ""
+msgstr "Tablet EvTouch"
 
 #: ../src/vmm-add-hardware.glade.h:41 ../src/vmm-create.glade.h:54
 msgid "File Location Field"
@@ -990,13 +991,12 @@ msgstr "Typ sprzętu:"
 
 #: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-details.glade.h:32
 #: ../../po/../src/virtManager/details.py:700
-#, fuzzy
 msgid "Input"
-msgstr "Wstęp"
+msgstr "Wejście"
 
 #: ../src/vmm-add-hardware.glade.h:49
 msgid "Listen on all public network interfaces "
-msgstr ""
+msgstr "Nasłuchuj na wszystkich publicznych interfejsach sieciowych "
 
 #: ../src/vmm-add-hardware.glade.h:50 ../src/vmm-details.glade.h:33
 msgid "MAC Address Field"
@@ -1014,7 +1014,7 @@ msgstr "MB"
 
 #: ../src/vmm-add-hardware.glade.h:53 ../src/vmm-details.glade.h:41
 msgid "Mode:"
-msgstr ""
+msgstr "Tryb:"
 
 #: ../src/vmm-add-hardware.glade.h:54 ../src/vmm-create.glade.h:81
 #: ../src/vmm-details.glade.h:44
@@ -1027,7 +1027,7 @@ msgstr "Wybór urządzenia sieciowego"
 
 #: ../src/vmm-add-hardware.glade.h:56
 msgid "No"
-msgstr ""
+msgstr "Nie"
 
 #: ../src/vmm-add-hardware.glade.h:57 ../src/vmm-create.glade.h:84
 msgid "Normal Disk _Partition:"
@@ -1042,9 +1042,8 @@ msgid "Partition Location Field"
 msgstr "Pole położenia partycji"
 
 #: ../src/vmm-add-hardware.glade.h:61
-#, fuzzy
 msgid "Please indicate how you would like to view the guest display."
-msgstr "Wskaż, jak chcesz połączyć nowy system wirtualny do sieci hosta."
+msgstr "Wskaż, jak chcesz wyświetlać ekran gościa."
 
 #: ../src/vmm-add-hardware.glade.h:62
 msgid ""
@@ -1062,14 +1061,12 @@ msgstr ""
 "Wskaż, jak chcesz połączyć nowe wirtualne urządzenie sieciowe do sieci hosta."
 
 #: ../src/vmm-add-hardware.glade.h:64
-#, fuzzy
 msgid "Please indicate what kind of pointer device to connect to the guest."
-msgstr ""
-"Wskaż, czy ta sieć wirtualna powinna zostać połączona z siecią fizyczną."
+msgstr "Wskaż, jakim urządzeniem wskaźnika połączyć się z gościem."
 
 #: ../src/vmm-add-hardware.glade.h:65 ../src/vmm-details.glade.h:49
 msgid "Port:"
-msgstr ""
+msgstr "Port:"
 
 #: ../src/vmm-add-hardware.glade.h:66
 msgid "Set _fixed MAC address for this NIC?"
@@ -1691,6 +1688,9 @@ msgid ""
 "OS will ensure that the virtual cursor moves in sync with the local desktop "
 "cursor."
 msgstr ""
+"<b>Wskazówka:</b> graficzny tablet skonfigurowany jako domyślny wskaźnik w "
+"systemie operacyjnym gościa upewni, że wirtualny kursor będzie poruszał się "
+"zsynchronizowany z lokalnym kursorem pulpitu."
 
 #: ../src/vmm-details.glade.h:17
 msgid ""
@@ -1706,18 +1706,16 @@ msgid "<b>Virtual Disk</b>"
 msgstr "<b>Dysk wirtualny</b>"
 
 #: ../src/vmm-details.glade.h:19
-#, fuzzy
 msgid "<b>Virtual Display</b>"
-msgstr "<b>Dysk wirtualny</b>"
+msgstr "<b>Ekran wirtualny</b>"
 
 #: ../src/vmm-details.glade.h:20
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Wirtualny interfejs sieciowy</b>"
 
 #: ../src/vmm-details.glade.h:21
-#, fuzzy
 msgid "<b>Virtual Pointer</b>"
-msgstr "<b>Dysk wirtualny</b>"
+msgstr "<b>Wskaźnik wirtualny</b>"
 
 #: ../src/vmm-details.glade.h:23
 msgid "Block"
@@ -2235,16 +2233,16 @@ msgstr "Sieć w trybie użytkownika"
 
 #: ../../po/../src/virtManager/addhardware.py:358
 msgid "Absolute movement"
-msgstr ""
+msgstr "Ruch absolutny"
 
 #: ../../po/../src/virtManager/addhardware.py:360
 msgid "Relative movement"
-msgstr ""
+msgstr "Ruch relatywny"
 
 #: ../../po/../src/virtManager/addhardware.py:375
 #: ../../po/../src/virtManager/addhardware.py:377
 msgid "Yes"
-msgstr ""
+msgstr "Tak"
 
 #: ../../po/../src/virtManager/addhardware.py:379
 #: ../../po/../src/virtManager/addhardware.py:380
@@ -2252,7 +2250,7 @@ msgstr ""
 #: ../../po/../src/virtManager/details.py:507
 #: ../../po/../src/virtManager/details.py:508
 msgid "N/A"
-msgstr ""
+msgstr "Nie dotyczy"
 
 #: ../../po/../src/virtManager/addhardware.py:481
 msgid "Invalid storage address"
@@ -2461,7 +2459,7 @@ msgstr "Nie mostkowane"
 #: ../../po/../src/virtManager/addhardware.py:833
 #: ../../po/../src/virtManager/details.py:462
 msgid "EvTouch USB Graphics Tablet"
-msgstr ""
+msgstr "Tablet graficzny USB EvTouch"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
@@ -2469,19 +2467,18 @@ msgstr ""
 #: ../../po/../src/virtManager/addhardware.py:837
 #: ../../po/../src/virtManager/details.py:464
 msgid "Generic USB Mouse"
-msgstr ""
+msgstr "Ogólna mysz USB"
 
 #: ../../po/../src/virtManager/addhardware.py:841
 #: ../../po/../src/virtManager/details.py:490
-#, fuzzy
 msgid "VNC server"
-msgstr "Nigdy"
+msgstr "Serwer VNC"
 
 #. XXX inclined to just not give this choice at all
 #: ../../po/../src/virtManager/addhardware.py:843
 #: ../../po/../src/virtManager/details.py:492
 msgid "Local SDL window"
-msgstr ""
+msgstr "Lokalne okno SDL"
 
 #: ../../po/../src/virtManager/create.py:454
 msgid "Paravirtualized"
@@ -2690,29 +2687,27 @@ msgstr "Konsola nie jest dostępna podczas pauzy"
 
 #: ../../po/../src/virtManager/details.py:466
 msgid "Xen Mouse"
-msgstr ""
+msgstr "Mysz Xena"
 
 #: ../../po/../src/virtManager/details.py:468
 msgid "PS/2 Mouse"
-msgstr ""
+msgstr "Mysz PS/2"
 
 #: ../../po/../src/virtManager/details.py:473
 msgid "Absolute Movement"
-msgstr ""
+msgstr "Ruch absolutny"
 
 #: ../../po/../src/virtManager/details.py:475
 msgid "Relative Movement"
-msgstr ""
+msgstr "Ruch relatywny"
 
 #: ../../po/../src/virtManager/details.py:696
-#, fuzzy
 msgid "Tablet"
-msgstr "Cel:"
+msgstr "Tablet"
 
 #: ../../po/../src/virtManager/details.py:698
-#, fuzzy
 msgid "Mouse"
-msgstr "Wstrzymaj"
+msgstr "Mysz"
 
 #: ../../po/../src/virtManager/host.py:132
 msgid "Creating new networks on remote connections is not yet supported"
