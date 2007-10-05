@@ -89,14 +89,6 @@ class vmmAddHardware(gobject.GObject):
         text = gtk.CellRendererText()
         hw_list.pack_start(text, True)
         hw_list.add_attribute(text, 'text', 0)
-        model.append(["Storage device", gtk.STOCK_HARDDISK, PAGE_DISK])
-        # User mode networking only allows a single card for now
-        if self.vm.get_connection().get_type().lower() == "qemu" and os.getuid() == 0:
-            model.append(["Network card", gtk.STOCK_NETWORK, PAGE_NETWORK])
-
-        model.append(["Input device", gtk.STOCK_INDEX, PAGE_INPUT])
-        model.append(["Graphics device", gtk.STOCK_SELECT_COLOR, PAGE_GRAPHICS])
-
         self.set_initial_state()
 
     def show(self):
@@ -211,6 +203,19 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("graphics-address").set_active(False)
         self.window.get_widget("graphics-port-auto").set_active(True)
         self.window.get_widget("graphics-password").set_text("")
+
+        model = self.window.get_widget("hardware-type").get_model()
+        model.clear()
+        model.append(["Storage device", gtk.STOCK_HARDDISK, PAGE_DISK])
+        # User mode networking only allows a single card for now
+        if self.vm.get_connection().get_type().lower() == "qemu" and os.getuid() == 0:
+            model.append(["Network card", gtk.STOCK_NETWORK, PAGE_NETWORK])
+
+        # Can only customize HVM guests, no Xen PV
+        if self.vm.is_hvm():
+            model.append(["Input device", gtk.STOCK_INDEX, PAGE_INPUT])
+        model.append(["Graphics device", gtk.STOCK_SELECT_COLOR, PAGE_GRAPHICS])
+
 
 
     def forward(self, ignore=None):
