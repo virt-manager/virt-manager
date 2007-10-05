@@ -1,8 +1,118 @@
+2007-10-04  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/addhardware.py:
+	Populate hardware options based on VM type
+	[6cf93e00e4d8] [tip]
+
+	* po/pl.po:
+	Refresh polish translation again
+	[5f541f79b37b]
+
+2007-09-27  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po, po/hi.po,
+	po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po, po/kn.po,
+	po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po, po/nl.po,
+	po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po, po/te.po,
+	po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po, po/zh_TW.po:
+	Refresh translations
+	[a48d0a547dff]
+
+	* po/pl.po:
+	Update from Polish translator
+	[e7f9b760fc52]
+
+	* src/virtManager/addhardware.py, src/vmm-add-hardware.glade:
+	Choose address between localhost ,or all interfaces. Hide passwords
+	[030926b1a289]
+
+	* src/virtManager/manager.py:
+	Hook up delete menn again
+	[162b61427e37]
+
+	* src/virtManager/console.py, src/virtManager/details.py:
+	Fixed pause menu
+	[8d5752fbdc61]
+
+	* src/virtManager/host.py, src/vmm-host.glade:
+	Show URI in host details page
+	[d266d7869c46]
+
+	* src/vmm-manager.glade:
+	Make padding consistent
+	[f410c7028f16]
+
+	* src/vmm-choose-cd.glade:
+	Fix padding a little
+	[c0755974d9ef]
+
+	* src/virtManager/details.py:
+	Round memory values instead of truncating (rhbz #212450)
+	[92b2fc9f9201]
+
+2007-09-26  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py:
+	Fix re-connecting to VNC widget when re-opening window. Re-introduce
+	blocking of accelerators
+	[ef716036ca7f]
+
+	* src/virtManager/console.py, src/vmm-console.glade:
+	Another go at making scrollbars work nicely for VNC widgets. Also
+	fixes fullscreen mode
+	[fd3ce799a87e]
+
+	* src/virtManager/engine.py:
+	Ensure there is one create wizard per connection. Close all windows
+	when a connection de-activates
+	[95073b4cb5b7]
+
+	* src/virt-manager.py.in:
+	Re-throw exception at top level
+	[bdfcfde23590]
+
+	* src/virtManager/details.py, src/virtManager/domain.py:
+	Immediately refresh details page when adding/removing hardware
+	devices
+	[14a7417d5488]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/vmm-add-hardware.glade, src/vmm-
+	details.glade:
+	Added ability to add/remove graphic display devices
+	[bd282b353072]
+
 2007-09-25  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/vmm-add-hardware.glade, src/vmm-
+	details.glade:
+	Support addition & removal of mouse & tablet input devices
+	[ed0e3d80bfca]
+
+	* .hgtags:
+	Added tag RELEASE-0.5.1-1 for changeset 038ba1ea0e33
+	[68a2ebd7b478]
+
+	* po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po, po/hi.po,
+	po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po, po/kn.po,
+	po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po, po/nl.po,
+	po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po, po/te.po,
+	po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po, po/zh_TW.po:
+	Refresh translations to match source
+	[038ba1ea0e33] [RELEASE-0.5.1-1]
+
+	* ChangeLog:
+	Refresh changelog
+	[1e8b93d15271]
 
 	* NEWS, configure.ac, virt-manager.spec.in:
 	Prep for 0.5.1 release
-	[ba3d8fdc5349] [tip]
+	[ba3d8fdc5349]
 
 2007-09-25  "Hugh O. Brock  <hbrock@redhat.com>
 
