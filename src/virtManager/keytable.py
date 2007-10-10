@@ -28,6 +28,7 @@ keytable = {
     "pl":"pl",
     "pt":"pt",
     "br":"pt-br",
+    "br-abnt2":"pt-br",
     "ru":"ru",
     "sl":"sl",
     "":"sv",
