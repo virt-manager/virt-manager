@@ -681,7 +681,7 @@ class vmmDomain(gobject.GObject):
         try:
             if self.is_active():
                 self.vm.attachDevice(xml)
-        except libvirtError, e:
+        except libvirt.libvirtError, e:
             device_exception = str(e)
 
         index = vmxml.find("</devices>")
@@ -703,7 +703,7 @@ class vmmDomain(gobject.GObject):
         if self.is_active():
             try:
                 self.vm.detachDevice(dev_xml)
-            except libvirtError, e:
+            except libvirt.libvirtError, e:
                 device_exception = str(e)
 
         # then the stored XML
