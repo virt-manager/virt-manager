@@ -435,7 +435,7 @@ class vmmConsole(gobject.GObject):
             if credList[i] == gtkvnc.CREDENTIAL_PASSWORD:
                 self.activate_auth_page()
             elif credList[i] == gtkvnc.CREDENTIAL_CLIENTNAME:
-                self.vncViewer.set_credential(credList[i], "libvirt")
+                self.vncViewer.set_credential(credList[i], "libvirt-vnc")
             else:
                 # Force it to stop re-trying
                 self.vncViewerRetriesScheduled = 10
