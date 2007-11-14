@@ -124,6 +124,14 @@ def setup_logging():
     rootLogger.addHandler(fileHandler)
     logging.info("Application startup")
 
+    # Log uncaught exceptions
+    def exception_log(type, val, tb):
+        import traceback
+        str = traceback.format_exception(type, val, tb)
+        logging.exception("".join(str))
+        sys.__excepthook__(type, val, tb)
+    sys.excepthook = exception_log
+
 def parse_commandline():
     optParser = OptionParser()
     optParser.add_option("--profile", dest="profile", help="Generate runtime performance profile stats", metavar="FILE")
