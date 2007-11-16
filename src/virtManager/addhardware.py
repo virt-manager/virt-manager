@@ -279,6 +279,8 @@ class vmmAddHardware(gobject.GObject):
 
     def get_config_graphics(self):
         type = self.window.get_widget("graphics-type")
+        if type.get_active_iter() is None:
+            return None
         return type.get_model().get_value(type.get_active_iter(), 1)
 
     def get_config_vnc_port(self):
