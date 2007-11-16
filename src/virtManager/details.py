@@ -24,6 +24,7 @@ import libvirt
 import sparkline
 import logging
 import traceback
+import sys
 
 from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
@@ -557,10 +558,23 @@ class vmmDetails(gobject.GObject):
                 path = None
             else:
                 path = diskinfo[1]
-            vbd = virtinst.VirtualDisk(path=path, type=diskinfo[0], device=diskinfo[2])
-            xml = vbd.get_xml_config(diskinfo[3])
 
-            self.vm.remove_device(xml)
+            try:
+                vbd = virtinst.VirtualDisk(path=path, 
+                                           type=diskinfo[0], 
+                                           device=diskinfo[2])
+            except Exception, e:
+                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
+                                    gtk.BUTTONS_CLOSE,
+                                    _("Error Removing Disk: %s" % str(e)),
+                                    "".join(traceback.format_exc()))
+                dg.run()
+                dg.hide()
+                dg.destroy()
+                return
+
+            xml = vbd.get_xml_config(diskinfo[3])
+            self.remove_device(xml)
             self.refresh_resources()
 
     def remove_network(self, src):
@@ -571,15 +585,25 @@ class vmmDetails(gobject.GObject):
             netinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
 
             vnic = None
-            if netinfo[0] == "bridge":
-                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], bridge=netinfo[1], macaddr=netinfo[3])
-            elif netinfo[0] == "network":
-                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], network=netinfo[1], macaddr=netinfo[3])
-            else:
-                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], macaddr=netinfo[3])
+            try:
+                if netinfo[0] == "bridge":
+                    vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], bridge=netinfo[1], macaddr=netinfo[3])
+                elif netinfo[0] == "network":
+                    vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], network=netinfo[1], macaddr=netinfo[3])
+                else:
+                    vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], macaddr=netinfo[3])
+            except ValueError, e:
+                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
+                                    gtk.BUTTONS_CLOSE,
+                                    _("Error Removing Network: %s" % str(e)),
+                                    "".join(traceback.format_exc()))
+                dg.run()
+                dg.hide()
+                dg.destroy()
+                return
 
             xml = vnic.get_xml_config()
-            self.vm.remove_device(xml)
+            self.remove_device(xml)
             self.refresh_resources()
 
     def remove_input(self, src):
@@ -590,7 +614,7 @@ class vmmDetails(gobject.GObject):
             inputinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
 
             xml = "<input type='%s' bus='%s'/>" % (inputinfo[0], inputinfo[1])
-            self.vm.remove_device(xml)
+            self.remove_device(xml)
             self.refresh_resources()
 
     def remove_graphics(self, src):
@@ -601,7 +625,7 @@ class vmmDetails(gobject.GObject):
             inputinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
 
             xml = "<graphics type='%s'/>" % inputinfo[0]
-            self.vm.remove_device(xml)
+            self.remove_device(xml)
             self.refresh_resources()
 
     def prepare_hw_list(self):
@@ -760,12 +784,33 @@ class vmmDetails(gobject.GObject):
     def toggle_cdrom(self, src):
         if src.get_label() == gtk.STOCK_DISCONNECT:
             #disconnect the cdrom
-            self.vm.disconnect_cdrom_device(self.window.get_widget("disk-target-device").get_text())
+            try:
+                self.vm.disconnect_cdrom_device(self.window.get_widget("disk-target-device").get_text())
+            except Exception, e:
+                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
+                                    gtk.BUTTONS_CLOSE,
+                                    _("Error Removing CDROM: %s" % str(e)),
+                                    "".join(traceback.format_exc()))
+                dg.run()
+                dg.hide()
+                dg.destroy()
+                return
+                
         else:
             # connect a new cdrom
             if self.choose_cd is None:
                 self.choose_cd = vmmChooseCD(self.config, self.window.get_widget("disk-target-device").get_text())
+            try:
                 self.choose_cd.connect("cdrom-chosen", self.connect_cdrom)
+            except Exception, e:            
+                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
+                                    gtk.BUTTONS_CLOSE,
+                                    _("Error Connecting CDROM: %s" % str(e)),
+                                    "".join(traceback.format_exc()))
+                dg.run()
+                dg.hide()
+                dg.destroy()
+                return
             else:
                 self.choose_cd.set_target(self.window.get_widget("disk-target-device").get_text())
             self.choose_cd.show()
@@ -773,4 +818,17 @@ class vmmDetails(gobject.GObject):
     def connect_cdrom(self, src, type, source, target):
         self.vm.connect_cdrom_device(type, source, target)
 
+    def remove_device(self, xml):
+        try:
+            self.vm.remove_device(xml)
+        except Exception, e:
+            dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
+                                gtk.BUTTONS_CLOSE,
+                                _("Error Removing Device: %s" % str(e)),
+                                "".join(traceback.format_exc()))
+            dg.run()
+            dg.hide()
+            dg.destroy()
+            
+    
 gobject.type_register(vmmDetails)

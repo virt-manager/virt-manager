@@ -934,12 +934,6 @@ class vmmCreate(gobject.GObject):
                     self._validation_error_box(_("Invalid MAC address"), \
                                                _("No MAC address was entered. Please enter a valid MAC address."))
                     return False
-                try:
-                    self._guest.mac = mac
-                except ValueError, e:
-                    self._validation_error_box(_("Invalid Mac address"), \
-                                                str(e))
-                    return False
             
                 hostdevs = virtinst.util.get_host_network_devices()
                 for hostdev in hostdevs:
