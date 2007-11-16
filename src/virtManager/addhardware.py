@@ -211,7 +211,9 @@ class vmmAddHardware(gobject.GObject):
         model.clear()
         model.append(["Storage device", gtk.STOCK_HARDDISK, PAGE_DISK])
         # User mode networking only allows a single card for now
-        if self.vm.get_connection().get_type().lower() == "qemu" and os.getuid() == 0:
+        if (self.vm.get_connection().get_type().lower() == "qemu" and \
+            os.getuid() == 0) or \
+            self.vm.get_connection().get_type().lower() == "xen":
             model.append(["Network card", gtk.STOCK_NETWORK, PAGE_NETWORK])
 
         # Can only customize HVM guests, no Xen PV
