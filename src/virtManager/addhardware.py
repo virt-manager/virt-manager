@@ -258,7 +258,7 @@ class vmmAddHardware(gobject.GObject):
             return self.window.get_widget("storage-file-address").get_text()
 
     def get_config_disk_size(self):
-        if self.window.get_widget("storage-file-size").get_editable():
+        if not self.window.get_widget("storage-file-size").get_editable():
             return None
         else:
             return self.window.get_widget("storage-file-size").get_value()
