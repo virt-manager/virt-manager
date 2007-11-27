@@ -537,7 +537,7 @@ class vmmDetails(gobject.GObject):
                                            type=diskinfo[0], 
                                            device=diskinfo[2])
             except Exception, e:
-                _err_dialog(_("Error Removing Disk: %s" % str(e)),
+                self._err_dialog(_("Error Removing Disk: %s" % str(e)),
                             "".join(traceback.format_exc()))
                 return
 
@@ -561,7 +561,7 @@ class vmmDetails(gobject.GObject):
                 else:
                     vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], macaddr=netinfo[3])
             except ValueError, e:
-                _err_dialog(_("Error Removing Network: %s" % str(e)),
+                self.err_dialog(_("Error Removing Network: %s" % str(e)),
                             "".join(traceback.format_exc()))
                 return
 
