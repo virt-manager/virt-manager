@@ -60,6 +60,14 @@ class vmmDetails(gobject.GObject):
                                  gobject.TYPE_NONE, (str,str)),
         "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str)),
+        "action-suspend-domain": (gobject.SIGNAL_RUN_FIRST,
+                                  gobject.TYPE_NONE, (str, str)),
+        "action-resume-domain": (gobject.SIGNAL_RUN_FIRST,
+                                 gobject.TYPE_NONE, (str, str)),
+        "action-run-domain": (gobject.SIGNAL_RUN_FIRST,
+                              gobject.TYPE_NONE, (str, str)),
+        "action-shutdown-domain": (gobject.SIGNAL_RUN_FIRST,
+                                   gobject.TYPE_NONE, (str, str)),
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),
         }
@@ -218,58 +226,22 @@ class vmmDetails(gobject.GObject):
             selection.select_path(0)
             self.window.get_widget("hw-panel").set_current_page(0)
 
-    def control_vm_run(self, src):
-        status = self.vm.status()
-        if status != libvirt.VIR_DOMAIN_SHUTOFF:
-            pass
-        else:
-            try:
-                self.vm.startup()
-            except:
-                (type, value, stacktrace) = sys.exc_info ()
-
-                # Detailed error message, in English so it can be Googled.
-                details = \
-                        "Unable to start virtual machine '%s'" % \
-                        (str(type) + " " + str(value) + "\n" + \
-                         traceback.format_exc (stacktrace))
-
-                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                    str(value),
-                                    details)
-                dg.run()
-                dg.hide()
-                dg.destroy()
-
-
-    def control_vm_shutdown(self, src):
-        status = self.vm.status()
-        if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
-            self.vm.shutdown()
-        else:
-            logging.warning("Shutdown requested, but machine is already shutting down / shutoff")
-
     def control_vm_pause(self, src):
         if self.ignorePause:
             return
 
-        status = self.vm.status()
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            logging.warning("Pause/resume requested, but machine is shutdown / shutoff")
+        if src.get_active():
+            self.emit("action-suspend-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
         else:
-            if status in [ libvirt.VIR_DOMAIN_PAUSED ]:
-                if not src.get_active():
-                    self.vm.resume()
-                else:
-                    logging.warning("Pause requested, but machine is already paused")
-            else:
-                if src.get_active():
-                    self.vm.suspend()
-                else:
-                    logging.warning("Resume requested, but machine is already running")
+            self.emit("action-resume-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-        self.window.get_widget("control-pause").set_active(src.get_active())
-        self.window.get_widget("details-menu-pause").set_active(src.get_active())
+        self.update_widget_states(self.vm, self.vm.status())
+
+    def control_vm_run(self, src):
+        self.emit("action-run-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+
+    def control_vm_shutdown(self, src):
+        self.emit("action-shutdown-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())     
 
     def control_vm_terminal(self, src):
         self.emit("action-show-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
@@ -565,13 +537,8 @@ class vmmDetails(gobject.GObject):
                                            type=diskinfo[0], 
                                            device=diskinfo[2])
             except Exception, e:
-                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
-                                    gtk.BUTTONS_CLOSE,
-                                    _("Error Removing Disk: %s" % str(e)),
-                                    "".join(traceback.format_exc()))
-                dg.run()
-                dg.hide()
-                dg.destroy()
+                _err_dialog(_("Error Removing Disk: %s" % str(e)),
+                            "".join(traceback.format_exc()))
                 return
 
             xml = vbd.get_xml_config(diskinfo[3])
@@ -594,13 +561,8 @@ class vmmDetails(gobject.GObject):
                 else:
                     vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], macaddr=netinfo[3])
             except ValueError, e:
-                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
-                                    gtk.BUTTONS_CLOSE,
-                                    _("Error Removing Network: %s" % str(e)),
-                                    "".join(traceback.format_exc()))
-                dg.run()
-                dg.hide()
-                dg.destroy()
+                _err_dialog(_("Error Removing Network: %s" % str(e)),
+                            "".join(traceback.format_exc()))
                 return
 
             xml = vnic.get_xml_config()
@@ -788,30 +750,20 @@ class vmmDetails(gobject.GObject):
             try:
                 self.vm.disconnect_cdrom_device(self.window.get_widget("disk-target-device").get_text())
             except Exception, e:
-                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
-                                    gtk.BUTTONS_CLOSE,
-                                    _("Error Removing CDROM: %s" % str(e)),
-                                    "".join(traceback.format_exc()))
-                dg.run()
-                dg.hide()
-                dg.destroy()
+                self._err_dialog(_("Error Removing CDROM: %s" % str(e)),
+                                 "".join(traceback.format_exc()))
                 return
                 
         else:
             # connect a new cdrom
             if self.choose_cd is None:
                 self.choose_cd = vmmChooseCD(self.config, self.window.get_widget("disk-target-device").get_text())
-            try:
-                self.choose_cd.connect("cdrom-chosen", self.connect_cdrom)
-            except Exception, e:            
-                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
-                                    gtk.BUTTONS_CLOSE,
-                                    _("Error Connecting CDROM: %s" % str(e)),
-                                    "".join(traceback.format_exc()))
-                dg.run()
-                dg.hide()
-                dg.destroy()
-                return
+                try:
+                    self.choose_cd.connect("cdrom-chosen", self.connect_cdrom)
+                except Exception, e:            
+                    self._err_dialog(_("Error Connecting CDROM: %s" % str(e)),
+                                     "".join(traceback.format_exc()))
+                    return
             else:
                 self.choose_cd.set_target(self.window.get_widget("disk-target-device").get_text())
             self.choose_cd.show()
@@ -823,13 +775,14 @@ class vmmDetails(gobject.GObject):
         try:
             self.vm.remove_device(xml)
         except Exception, e:
-            dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
-                                gtk.BUTTONS_CLOSE,
-                                _("Error Removing Device: %s" % str(e)),
-                                "".join(traceback.format_exc()))
-            dg.run()
-            dg.hide()
-            dg.destroy()
-            
+            self._err_dialog(_("Error Removing Device: %s" % str(e)),
+                             "".join(traceback.format_exc()))
+
+    def _err_dialog(self, summary, details):
+        dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
+                            gtk.BUTTONS_CLOSE, summary, details)
+        dg.run()
+        dg.hide()
+        dg.destroy()
     
 gobject.type_register(vmmDetails)

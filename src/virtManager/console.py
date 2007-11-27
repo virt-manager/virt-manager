@@ -48,7 +48,15 @@ class vmmConsole(gobject.GObject):
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),
         "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str,str))
+                                 gobject.TYPE_NONE, (str,str)),
+        "action-suspend-domain": (gobject.SIGNAL_RUN_FIRST,
+                                  gobject.TYPE_NONE, (str, str)),
+        "action-resume-domain": (gobject.SIGNAL_RUN_FIRST,
+                                 gobject.TYPE_NONE, (str, str)),
+        "action-run-domain": (gobject.SIGNAL_RUN_FIRST,
+                              gobject.TYPE_NONE, (str, str)),
+        "action-shutdown-domain": (gobject.SIGNAL_RUN_FIRST,
+                                   gobject.TYPE_NONE, (str, str)),
         }
     def __init__(self, config, vm):
         self.__gobject_init__()
@@ -512,59 +520,22 @@ class vmmConsole(gobject.GObject):
             fcdialog.hide()
         fcdialog.destroy()
 
-    def control_vm_run(self, src):
-        status = self.vm.status()
-        if status != libvirt.VIR_DOMAIN_SHUTOFF:
-            pass
-        else:
-            try:
-                self.vm.startup()
-            except:
-                (type, value, stacktrace) = sys.exc_info ()
-
-                # Detailed error message, in English so it can be Googled.
-                details = \
-                        "Unable to start virtual machine '%s'" % \
-                        (str(type) + " " + str(value) + "\n" + \
-                         traceback.format_exc (stacktrace))
-
-                dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                    str(value),
-                                    details)
-                dg.run()
-                dg.hide()
-                dg.destroy()
-
-
-
-    def control_vm_shutdown(self, src):
-        status = self.vm.status()
-        if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]):
-            self.vm.shutdown()
-        else:
-            logging.warning("Shutdown requested, but machine is already shutting down / shutoff")
-
     def control_vm_pause(self, src):
         if self.ignorePause:
             return
 
-        status = self.vm.status()
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            logging.warning("Pause/resume requested, but machine is shutdown / shutoff")
+        if src.get_active():
+            self.emit("action-suspend-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
         else:
-            if status in [ libvirt.VIR_DOMAIN_PAUSED ]:
-                if not src.get_active():
-                    self.vm.resume()
-                else:
-                    logging.warning("Pause requested, but machine is already paused")
-            else:
-                if src.get_active():
-                    self.vm.suspend()
-                else:
-                    logging.warning("Resume requested, but machine is already running")
+            self.emit("action-resume-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-        self.window.get_widget("control-pause").set_active(src.get_active())
-        self.window.get_widget("menu-vm-pause").set_active(src.get_active())
+        self.update_widget_states(self.vm, self.vm.status())
+
+    def control_vm_run(self, src):
+        self.emit("action-run-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+
+    def control_vm_shutdown(self, src):
+        self.emit("action-shutdown-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_terminal(self, src):
         self.emit("action-show-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
