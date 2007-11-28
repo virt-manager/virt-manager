@@ -238,7 +238,7 @@ class vmmManager(gobject.GObject):
         # store any error message from the restore-domain callback
         self.domain_restore_error = ""
 
-        #self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
+        self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
 
         self.engine.connect("connection-added", self._add_connection)
         self.engine.connect("connection-removed", self._remove_connection)
