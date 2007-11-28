@@ -553,7 +553,6 @@ class vmmDomain(gobject.GObject):
             self.add_device(result)
 
     def disconnect_cdrom_device(self, target):
-        print "target = %s" % target
         xml = self.get_xml()
         doc = None
         ctx = None
