@@ -758,18 +758,17 @@ class vmmDetails(gobject.GObject):
             # connect a new cdrom
             if self.choose_cd is None:
                 self.choose_cd = vmmChooseCD(self.config, self.window.get_widget("disk-target-device").get_text())
-                try:
-                    self.choose_cd.connect("cdrom-chosen", self.connect_cdrom)
-                except Exception, e:            
-                    self._err_dialog(_("Error Connecting CDROM: %s" % str(e)),
-                                     "".join(traceback.format_exc()))
-                    return
+                self.choose_cd.connect("cdrom-chosen", self.connect_cdrom)
             else:
                 self.choose_cd.set_target(self.window.get_widget("disk-target-device").get_text())
             self.choose_cd.show()
 
     def connect_cdrom(self, src, type, source, target):
-        self.vm.connect_cdrom_device(type, source, target)
+        try:
+            self.vm.connect_cdrom_device(type, source, target)
+        except Exception, e:            
+            self._err_dialog(_("Error Connecting CDROM: %s" % str(e)),
+                               "".join(traceback.format_exc()))
 
     def remove_device(self, xml):
         try:

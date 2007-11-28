@@ -686,11 +686,16 @@ class vmmAddHardware(gobject.GObject):
             filesize = self.get_config_disk_size()
             if self.get_config_disk_size() != None:
                 filesize = self.get_config_disk_size() / 1024.0
+            readonly = False
+            if device == virtinst.VirtualDisk.DEVICE_CDROM:
+                readonly=True
+                
             try:    
                 self._disk = virtinst.VirtualDisk(self.get_config_disk_image(),
                                                   filesize,
                                                   type = type,
                                                   sparse = self.is_sparse_file(),
+                                                  readOnly=readonly,
                                                   device=device)
                 if self._disk.type == virtinst.VirtualDisk.TYPE_FILE and \
                    not self.vm.is_hvm() and virtinst.util.is_blktap_capable():

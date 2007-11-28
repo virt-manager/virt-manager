@@ -512,23 +512,19 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
         return disks
 
-    def add_disk_device(self, xml):
-        self.vm.attachDevice(xml)
-
     def connect_cdrom_device(self, type, source, target):
         xml = self.get_xml()
         doc = None
+        ctx = None
         try:
             doc = libxml2.parseDoc(xml)
-        except:
-            return []
-        ctx = doc.xpathNewContext()
-        try:
+            ctx = doc.xpathNewContext()
             disk_fragment = ctx.xpathEval("/domain/devices/disk[@device='cdrom' and target/@dev='%s']" % target)
             if len(disk_fragment) == 0:
                 raise RuntimeError("Attmpted to connect cdrom device to %s, but %s does not exist" % (target,target))
             if len(disk_fragment) > 1:
                 raise RuntimeError("Found multiple cdrom devices named %s. This domain's XML is malformed." % target)
+            origdisk = disk_fragment[0].serialize()
             disk_fragment[0].setProp("type", type)
             elem = disk_fragment[0].newChild(None, "source", None)
             if type == "file":
@@ -542,22 +538,34 @@ class vmmDomain(gobject.GObject):
                 ctx.xpathFreeContext()
             if doc != None:
                 doc.freeDoc()
-        self.add_disk_device(result)
+      
+        # If vm is shutoff, remove device, and redefine without media
+        if not self.is_active():
+            self.remove_device(origdisk)
+            try:
+                self.add_device(result)
+            except Exception, e1:
+                try:
+                    self.add_device(origdisk) # Try to re-add original
+                except:
+                    raise e1
+        else:
+            self.add_device(result)
 
     def disconnect_cdrom_device(self, target):
+        print "target = %s" % target
         xml = self.get_xml()
         doc = None
+        ctx = None
         try:
             doc = libxml2.parseDoc(xml)
-        except:
-            return []
-        ctx = doc.xpathNewContext()
-        try:
+            ctx = doc.xpathNewContext()
             disk_fragment = ctx.xpathEval("/domain/devices/disk[@device='cdrom' and target/@dev='%s']" % target)
             if len(disk_fragment) == 0:
                 raise RuntimeError("Attmpted to disconnect cdrom device from %s, but %s does not exist" % (target,target))
             if len(disk_fragment) > 1:
                 raise RuntimeError("Found multiple cdrom devices named %s. This domain's XML is malformed." % target)
+            origdisk = disk_fragment[0].serialize()
             sourcenode = None
             for child in disk_fragment[0].children:
                 if child.name == "source":
@@ -574,7 +582,19 @@ class vmmDomain(gobject.GObject):
                 ctx.xpathFreeContext()
             if doc != None:
                 doc.freeDoc()
-        self.add_disk_device(result)
+        
+        # If vm is shutoff, remove device, and redefine with media
+        if not self.is_active():
+            self.remove_device(origdisk)
+            try:
+                self.add_device(result)
+            except Exception, e1:
+                try:
+                    self.add_device(origdisk) # Try to re-add original
+                except:
+                    raise e1
+        else:
+            self.add_device(result)
 
     def get_network_devices(self):
         xml = self.get_xml()
