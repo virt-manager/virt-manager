@@ -646,8 +646,8 @@ class vmmAddHardware(gobject.GObject):
         elif page_num == PAGE_DISK:
             path = self.get_config_disk_image()
             if path == None or len(path) == 0:
-                self._validation_error_box(_("Storage Address Required"), \
-                                           _("You must specify a partition or a file for storage for the guest install"))
+                self._validation_error_box(_("Storage Path Required"), \
+                                           _("You must specify a partition or a file for disk storage."))
                 return False
             
             if self.window.get_widget("target-device").get_active() == -1:
