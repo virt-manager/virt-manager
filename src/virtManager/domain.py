@@ -512,6 +512,22 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
         return disks
 
+    def _change_cdrom(self, newxml, origxml):
+        # If vm is shutoff, remove device, and redefine with media
+        if not self.is_active():
+            self.remove_device(origxml)
+            try:
+                self.add_device(newxml)
+            except Exception, e1:
+                try:
+                    self.add_device(origxml) # Try to re-add original
+                except:
+                    raise e1
+        else:
+            self.vm.attachDevice(newxml)
+            vmxml = self.vm.XMLDesc(0)
+            self.get_connection().define_domain(vmxml)
+
     def connect_cdrom_device(self, type, source, target):
         xml = self.get_xml()
         doc = None
@@ -539,18 +555,7 @@ class vmmDomain(gobject.GObject):
             if doc != None:
                 doc.freeDoc()
       
-        # If vm is shutoff, remove device, and redefine without media
-        if not self.is_active():
-            self.remove_device(origdisk)
-            try:
-                self.add_device(result)
-            except Exception, e1:
-                try:
-                    self.add_device(origdisk) # Try to re-add original
-                except:
-                    raise e1
-        else:
-            self.add_device(result)
+        self._change_cdrom(result, origdisk)
 
     def disconnect_cdrom_device(self, target):
         xml = self.get_xml()
@@ -582,18 +587,7 @@ class vmmDomain(gobject.GObject):
             if doc != None:
                 doc.freeDoc()
         
-        # If vm is shutoff, remove device, and redefine with media
-        if not self.is_active():
-            self.remove_device(origdisk)
-            try:
-                self.add_device(result)
-            except Exception, e1:
-                try:
-                    self.add_device(origdisk) # Try to re-add original
-                except:
-                    raise e1
-        else:
-            self.add_device(result)
+        self._change_cdrom(result, origdisk)
 
     def get_network_devices(self):
         xml = self.get_xml()
