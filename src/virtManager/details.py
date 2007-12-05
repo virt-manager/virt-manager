@@ -527,22 +527,7 @@ class vmmDetails(gobject.GObject):
         active = selection.get_selected()
         if active[1] != None:
             diskinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
-            if diskinfo[1] == "-":
-                path = None
-            else:
-                path = diskinfo[1]
-
-            try:
-                vbd = virtinst.VirtualDisk(path=path, 
-                                           type=diskinfo[0], 
-                                           device=diskinfo[2])
-            except Exception, e:
-                self._err_dialog(_("Error Removing Disk: %s" % str(e)),
-                            "".join(traceback.format_exc()))
-                return
-
-            xml = vbd.get_xml_config(diskinfo[3])
-            self.remove_device(xml)
+            self.remove_device(self.vm.get_disk_xml(diskinfo[3]))
             self.refresh_resources()
 
     def remove_network(self, src):
