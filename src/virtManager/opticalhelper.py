@@ -19,6 +19,7 @@
 
 import gobject
 import dbus
+import logging
 
 class vmmOpticalDriveHelper(gobject.GObject):
     __gsignals__ = {}
