@@ -402,6 +402,13 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("disk-source-path").set_text(diskinfo[1])
             self.window.get_widget("disk-target-type").set_text(diskinfo[2])
             self.window.get_widget("disk-target-device").set_text(diskinfo[3])
+            if diskinfo[4] == True:
+                perms = "Readonly"
+            else:
+                perms = "Read/Write"
+            if diskinfo[5] == True:
+                perms += ", Sharable"
+            self.window.get_widget("disk-permissions").set_text(perms)
             button = self.window.get_widget("config-cdrom-connect")
             if diskinfo[2] == "cdrom":
                 if diskinfo[1] == "-":

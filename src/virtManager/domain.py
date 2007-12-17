@@ -482,6 +482,8 @@ class vmmDomain(gobject.GObject):
                 type = node.prop("type")
                 srcpath = None
                 devdst = None
+                readonly = False
+                sharable = False
                 devtype = node.prop("device")
                 if devtype == None:
                     devtype = "disk"
@@ -495,6 +497,11 @@ class vmmDomain(gobject.GObject):
                             type = "-"
                     elif child.name == "target":
                         devdst = child.prop("dev")
+                    elif child.name == "readonly":
+                        readonly = True
+                    elif child.name == "sharable":
+                        sharable = True
+                        
                 if srcpath == None:
                     if devtype == "cdrom":
                         srcpath = "-"
@@ -504,7 +511,8 @@ class vmmDomain(gobject.GObject):
                 if devdst == None:
                     raise RuntimeError("missing destination device")
 
-                disks.append([type, srcpath, devtype, devdst])
+                disks.append([type, srcpath, devtype, devdst, readonly, \
+                              sharable])
 
         finally:
             if ctx != None:
