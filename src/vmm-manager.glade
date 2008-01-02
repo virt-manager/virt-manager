@@ -437,17 +437,44 @@ Inactive virtual machines</property>
 	      <property name="spacing">3</property>
 
 	      <child>
-		<widget class="GtkButton" id="vm-details">
+		<widget class="GtkButton" id="vm-delete">
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>
 		  <property name="can_default">True</property>
 		  <property name="can_focus">True</property>
+		  <property name="label">gtk-delete</property>
+		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_vm_details_clicked" last_modification_time="Tue, 28 Mar 2006 17:04:34 GMT"/>
+		  <signal name="clicked" handler="on_vm_delete_clicked" last_modification_time="Wed, 02 Jan 2008 18:49:13 GMT"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkButton" id="vm-new">
+		  <property name="visible">True</property>
+		  <property name="sensitive">False</property>
+		  <property name="can_default">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label">gtk-new</property>
+		  <property name="use_stock">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="on_vm_new_clicked" last_modification_time="Wed, 02 Jan 2008 18:49:20 GMT"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkButton" id="vm-details">
+		  <property name="visible">True</property>
+		  <property name="can_default">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="on_vm_details_clicked" last_modification_time="Wed, 02 Jan 2008 18:47:03 GMT"/>
 
 		  <child>
-		    <widget class="GtkAlignment" id="alignment1">
+		    <widget class="GtkAlignment" id="alignment2">
 		      <property name="visible">True</property>
 		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
@@ -459,13 +486,13 @@ Inactive virtual machines</property>
 		      <property name="right_padding">0</property>
 
 		      <child>
-			<widget class="GtkHBox" id="hbox7">
+			<widget class="GtkHBox" id="hbox8">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">2</property>
 
 			  <child>
-			    <widget class="GtkImage" id="image5">
+			    <widget class="GtkImage" id="image128">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-properties</property>
 			      <property name="icon_size">4</property>
@@ -482,7 +509,7 @@ Inactive virtual machines</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="label34">
+			    <widget class="GtkLabel" id="label35">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">De_tails</property>
 			      <property name="use_underline">True</property>
@@ -515,14 +542,13 @@ Inactive virtual machines</property>
 	      <child>
 		<widget class="GtkButton" id="vm-open">
 		  <property name="visible">True</property>
-		  <property name="sensitive">False</property>
 		  <property name="can_default">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label">gtk-open</property>
 		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
-		  <signal name="clicked" handler="on_vm_open_clicked" last_modification_time="Mon, 03 Apr 2006 09:52:21 GMT"/>
+		  <signal name="clicked" handler="on_vm_open_clicked" last_modification_time="Wed, 02 Jan 2008 18:46:09 GMT"/>
 		</widget>
 	      </child>
 	    </widget>

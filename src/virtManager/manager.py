@@ -51,7 +51,6 @@ ROW_VCPUS = 6
 ROW_MEM = 7
 ROW_MEM_USAGE = 8
 ROW_KEY = 9
-ROW_ACTION = 10
 
 # Columns in the tree view
 COL_NAME = 0
@@ -62,7 +61,6 @@ COL_VCPU = 4
 COL_MEM = 5
 COL_DISK = 6
 COL_NETWORK = 7
-COL_ACTION = 8
 
 class vmmManager(gobject.GObject):
     __gsignals__ = {
@@ -217,6 +215,8 @@ class vmmManager(gobject.GObject):
             "on_vmm_close_clicked": self.close,
             "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
+            "on_vm_delete_clicked": self.delete_vm,
+            "on_vm_new_clicked": self.new_vm,
             "on_menu_edit_details_activate": self.show_vm_details,
             "on_menu_edit_delete_activate": self.delete_vm,
             "on_menu_host_details_activate": self.show_host,
@@ -408,10 +408,6 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_MEM, vm.get_memory_pretty())
         row.insert(ROW_MEM_USAGE, vm.current_memory_percentage())
         row.insert(ROW_KEY, vm.get_uuid())
-        if vm.is_active():
-            row.insert(ROW_ACTION, None)
-        else:
-            row.insert(ROW_ACTION, gtk.STOCK_DELETE)
         iter = model.append(parent, row)
         path = model.get_path(iter)
         self.rows[vm.get_uuid()] = model[path]
@@ -422,10 +418,6 @@ class vmmManager(gobject.GObject):
         row = []
         row.insert(ROW_HANDLE, conn)
         row.insert(ROW_STATUS, conn.get_state_text())
-        if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
-            row.insert(ROW_ACTION, gtk.STOCK_DELETE)
-        else:
-            row.insert(ROW_ACTION, "")
         row.insert(ROW_NAME, conn.get_short_hostname())
         row.insert(ROW_ID, conn.get_driver())
         row.insert(ROW_STATUS_ICON, None)
@@ -497,14 +489,18 @@ class vmmManager(gobject.GObject):
         row[ROW_VCPUS] = vm.vcpu_count()
         row[ROW_MEM] = vm.get_memory_pretty()
         row[ROW_MEM_USAGE] = vm.current_memory_percentage()
-        if vm.is_active():
-            row[ROW_ACTION] = None
-        else:
-            row[ROW_ACTION] = gtk.STOCK_DELETE
         model.row_changed(row.path, row.iter)
 
     def conn_state_changed(self, conn):
         self.conn_refresh_resources(conn)
+
+        thisconn = self.current_connection()
+        if thisconn == conn:
+            if conn.get_state() == vmmConnection.STATE_ACTIVE:
+                self.window.get_widget("vm-new").set_sensitive(True)
+            else:
+                self.window.get_widget("vm-new").set_sensitive(False)
+
 
     def conn_refresh_resources(self, conn):
         vmlist = self.window.get_widget("vm-list")
@@ -516,7 +512,7 @@ class vmmManager(gobject.GObject):
         row[ROW_MEM] = conn.pretty_current_memory()
         row[ROW_MEM_USAGE] = conn.current_memory_percentage()
         if conn.get_state() in [vmmConnection.STATE_DISCONNECTED, vmmConnection.STATE_CONNECTING]:
-            row[ROW_ACTION] = gtk.STOCK_DELETE
+            # Connection went inactive, delete any VM child nodes
             parent = self.rows[conn.get_uri()].iter
             if parent is not None:
                 child = model.iter_children(parent)
@@ -524,8 +520,6 @@ class vmmManager(gobject.GObject):
                     del self.rows[model.get_value(child, ROW_KEY)]
                     model.remove(child)
                     child = model.iter_children(parent)
-        else:
-            row[ROW_ACTION] = gtk.STOCK_NEW
         model.row_changed(row.path, row.iter)
 
     def current_vm(self):
@@ -565,11 +559,14 @@ class vmmManager(gobject.GObject):
         return conn.get_uri()
 
     def show_vm_details(self,ignore):
+        conn = self.current_connection()
+        if conn is None:
+            return
         vm = self.current_vm()
         if vm is None:
-            return
-        conn = vm.get_connection()
-        self.emit("action-show-details", conn.get_uri(), self.current_vmuuid())
+            self.emit("action-show-host", conn.get_uri())
+        else:
+            self.emit("action-show-details", conn.get_uri(), self.current_vmuuid())
 
     def show_vm_create(self,ignore):
         self.emit("action-show-create", self.current_connection_uri())
@@ -592,28 +589,40 @@ class vmmManager(gobject.GObject):
 
 
     def vm_selected(self, selection):
+        conn = self.current_connection()
         vm = self.current_vm()
         if selection == None or selection.count_selected_rows() == 0:
+            # Nothing is selected
             self.window.get_widget("vm-details").set_sensitive(False)
             self.window.get_widget("vm-open").set_sensitive(False)
+            self.window.get_widget("vm-delete").set_sensitive(False)
+            self.window.get_widget("vm-new").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_host_details").set_sensitive(False)
         elif vm is not None:
+            # A VM is selected
             # this is strange to call this here, but it simplifies the code
             # updating the treeview
             self.vm_resources_sampled(vm)
             self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(True)
+            self.window.get_widget("vm-delete").set_sensitive(True)
+            self.window.get_widget("vm-new").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
             self.window.get_widget("menu_edit_delete").set_sensitive(True)
             self.window.get_widget("menu_host_details").set_sensitive(True)
         else:
-            self.window.get_widget("vm-details").set_sensitive(False)
+            # A connection is selected
+            self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(False)
+            self.window.get_widget("vm-delete").set_sensitive(True)
+            if conn.get_state() == vmmConnection.STATE_ACTIVE:
+                self.window.get_widget("vm-new").set_sensitive(True)
+            else:
+                self.window.get_widget("vm-new").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
-            conn = self.current_connection()
             self.window.get_widget("menu_host_details").set_sensitive(True)
 
     def popup_vm_menu(self, widget, event):
@@ -658,11 +667,6 @@ class vmmManager(gobject.GObject):
                         self.vmmenu_items["resume"].set_sensitive(True)
                         self.vmmenu_items["shutdown"].set_sensitive(True)              
                 self.vmmenu.popup(None, None, None, 0, event.time)
-            elif event.button == 1:
-                # check if the "delete" icon was clicked and act accordingly
-                area = widget.get_cell_area(path, widget.get_column(COL_ACTION))
-                if int(event.x) > area.x and int(event.x) < area.x + area.width:
-                    self.delete_vm()
             return False
         else:
             conn = model.get_value(iter, ROW_HANDLE)
@@ -676,57 +680,62 @@ class vmmManager(gobject.GObject):
                     self.connmenu_items["disconnect"].set_sensitive(False)
                     self.connmenu_items["connect"].set_sensitive(True)
                 self.connmenu.popup(None, None, None, 0, event.time)
-            elif event.button == 1:
-                logging.debug("Clicked a connection row")
-                area = widget.get_cell_area(path, widget.get_column(COL_ACTION))
-                if int(event.x) > area.x and int(event.x) < area.x + area.width:
-                    # clicked the action column
-                    if conn.get_state() != vmmConnection.STATE_DISCONNECTED:
-                        if conn.is_remote():
-                            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                                     gtk.MESSAGE_WARNING,
-                                                     gtk.BUTTONS_OK,
-                                                     _("Creating new guests on remote connections is not yet supported"))
-                            result = warn.run()
-                            warn.destroy()
-                        else:
-                            self.emit("action-show-create", conn.get_uri())
-                    else:
-                        warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                                 gtk.DIALOG_DESTROY_WITH_PARENT,
-                                                 gtk.MESSAGE_WARNING,
-                                                 gtk.BUTTONS_YES_NO,
-                                                 _("This will permanently delete the connection \"%s\", are you sure?") % self.rows[conn.get_uri()][ROW_NAME])
-                        result = warn.run()
-                        warn.destroy()
-                        if result == gtk.RESPONSE_NO:
-                            return
-                        self.engine.remove_connection(conn.get_uri())
             return False
 
-    def delete_vm(self, ignore=None):
-        vm = self.current_vm()
-        if vm.is_active():
-            return
+    def new_vm(self, ignore=None):
+        conn = self.current_connection()
+        if conn.is_remote():
+            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                     gtk.DIALOG_DESTROY_WITH_PARENT,
+                                     gtk.MESSAGE_WARNING,
+                                     gtk.BUTTONS_OK,
+                                     _("Creating new guests on remote connections is not yet supported"))
+            result = warn.run()
+            warn.destroy()
+        else:
+            self.emit("action-show-create", conn.get_uri())
 
-        # are you sure you want to delete this VM?
-        warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                 gtk.DIALOG_DESTROY_WITH_PARENT,
-                                 gtk.MESSAGE_WARNING,
-                                 gtk.BUTTONS_YES_NO,
-                                 _("This will permanently delete the vm \"%s,\" are you sure?") % vm.get_name())
-        result = warn.run()
-        warn.destroy()
-        if result == gtk.RESPONSE_NO:
-            return
-        conn = vm.get_connection()
-        try:
-            vm.delete()
-        except Exception, e:
-            self._err_dialog(_("Error deleting domain: %s" % str(e)),\
-                        "".join(traceback.format_exc()))
-        conn.tick(noStatsUpdate=True)
+    def delete_vm(self, ignore=None):
+        conn = self.current_connection()
+        vm = self.current_vm()
+        if vm is None:
+            # Delete the connection handle
+            if conn is None:
+                return
+
+            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                     gtk.DIALOG_DESTROY_WITH_PARENT,
+                                     gtk.MESSAGE_WARNING,
+                                     gtk.BUTTONS_YES_NO,
+                                     _("This will permanently delete the connection \"%s\", are you sure?") % self.rows[conn.get_uri()][ROW_NAME])
+            result = warn.run()
+            warn.destroy()
+            if result == gtk.RESPONSE_NO:
+                return
+            self.engine.remove_connection(conn.get_uri())
+        else:
+            # Delete the VM itself
+
+            if vm.is_active():
+                return
+
+            # are you sure you want to delete this VM?
+            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                     gtk.DIALOG_DESTROY_WITH_PARENT,
+                                     gtk.MESSAGE_WARNING,
+                                     gtk.BUTTONS_YES_NO,
+                                     _("This will permanently delete the vm \"%s,\" are you sure?") % vm.get_name())
+            result = warn.run()
+            warn.destroy()
+            if result == gtk.RESPONSE_NO:
+                return
+            conn = vm.get_connection()
+            try:
+                vm.delete()
+            except Exception, e:
+                self._err_dialog(_("Error deleting domain: %s" % str(e)),\
+                                     "".join(traceback.format_exc()))
+            conn.tick(noStatsUpdate=True)
 
     def show_about(self, src):
         self.emit("action-show-about")
@@ -744,8 +753,8 @@ class vmmManager(gobject.GObject):
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
-        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid, action icon
-        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str, str)
+        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid
+        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str)
         vmlist.set_model(model)
 
         nameCol = gtk.TreeViewColumn(_("Name"))
@@ -756,8 +765,6 @@ class vmmManager(gobject.GObject):
         memoryUsageCol = gtk.TreeViewColumn(_("Memory usage"))
         diskUsageCol = gtk.TreeViewColumn(_("Disk usage"))
         networkTrafficCol = gtk.TreeViewColumn(_("Network traffic"))
-        #actionCol = gtk.TreeViewColumn(_("Action"))
-        actionCol = gtk.TreeViewColumn("")
 
         vmlist.append_column(nameCol)
         vmlist.append_column(idCol)
@@ -767,7 +774,6 @@ class vmmManager(gobject.GObject):
         vmlist.append_column(memoryUsageCol)
         vmlist.append_column(diskUsageCol)
         vmlist.append_column(networkTrafficCol)
-        vmlist.append_column(actionCol)
 
         # For the columns which follow, we deliberately bind columns
         # to fields in the list store & on each update copy the info
@@ -833,12 +839,6 @@ class vmmManager(gobject.GObject):
         networkTrafficCol.pack_start(networkTraffic_img, False)
         networkTrafficCol.set_visible(self.config.is_vmlist_network_traffic_visible())
         networkTrafficCol.set_sort_column_id(VMLIST_SORT_NETWORK_USAGE)
-
-        action_icon = gtk.CellRendererPixbuf()
-        action_icon.set_property('stock-size', gtk.ICON_SIZE_MENU)
-        actionCol.pack_start(action_icon, False)
-        actionCol.add_attribute(action_icon, 'stock-id', 10)
-        actionCol.set_visible(True)
 
         model.set_sort_func(VMLIST_SORT_ID, self.vmlist_domain_id_sorter)
         model.set_sort_func(VMLIST_SORT_NAME, self.vmlist_name_sorter)
