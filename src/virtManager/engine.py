@@ -358,6 +358,16 @@ class vmmEngine(gobject.GObject):
 
     def save_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)
+        if con.is_remote():
+            warn = gtk.MessageDialog(src.window.get_widget("vmm-details"),
+                                     gtk.DIALOG_DESTROY_WITH_PARENT,
+                                     gtk.MESSAGE_WARNING,
+                                     gtk.BUTTONS_OK,
+                                     _("Saving virtual machines over remote connections is not yet supported."))
+            result = warn.run()
+            warn.destroy()
+            return
+        
         vm = con.get_vm(uuid)
         status = vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
