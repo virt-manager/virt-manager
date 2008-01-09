@@ -281,6 +281,17 @@ class vmmManager(gobject.GObject):
 
 
     def restore_saved(self, src=None):
+        
+        conn = self.current_connection()
+        if conn.is_remote():
+            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
+                                     gtk.DIALOG_DESTROY_WITH_PARENT,
+                                     gtk.MESSAGE_WARNING,
+                                     gtk.BUTTONS_OK,
+                                     _("Restoring virtual machines over remote connections is not yet supported"))
+            result = warn.run()
+            warn.destroy()
+            return
 
         # get filename
         self.fcdialog = gtk.FileChooserDialog(_("Restore Virtual Machine"),
@@ -289,7 +300,7 @@ class vmmManager(gobject.GObject):
                                               (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                                gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                               None)
-        self.fcdialog.set_current_folder(self.config.get_default_save_dir(self.get_current_connection()))
+        self.fcdialog.set_current_folder(self.config.get_default_save_dir(self.current_connection()))
         # pop up progress dialog
         response = self.fcdialog.run()
         self.fcdialog.hide()
@@ -332,7 +343,7 @@ class vmmManager(gobject.GObject):
             return False
 
     def restore_saved_callback(self, file_to_load, ignore1=None):
-        status = self.get_current_connection().restore(file_to_load)
+        status = self.current_connection().restore(file_to_load)
         if(status != 0):
             self.domain_restore_error = _("Error restoring domain '%s'. Is the domain already running?") % file_to_load
 
@@ -497,9 +508,11 @@ class vmmManager(gobject.GObject):
         thisconn = self.current_connection()
         if thisconn == conn:
             if conn.get_state() == vmmConnection.STATE_ACTIVE:
+                self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
                 self.window.get_widget("vm-new").set_sensitive(True)
             else:
                 self.window.get_widget("vm-new").set_sensitive(False)
+                self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
 
 
     def conn_refresh_resources(self, conn):
@@ -600,6 +613,7 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("menu_edit_details").set_sensitive(False)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_host_details").set_sensitive(False)
+            self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
         elif vm is not None:
             # A VM is selected
             # this is strange to call this here, but it simplifies the code
@@ -612,6 +626,7 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("menu_edit_details").set_sensitive(True)
             self.window.get_widget("menu_edit_delete").set_sensitive(True)
             self.window.get_widget("menu_host_details").set_sensitive(True)
+            self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
         else:
             # A connection is selected
             self.window.get_widget("vm-details").set_sensitive(True)
@@ -619,8 +634,10 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("vm-delete").set_sensitive(True)
             if conn.get_state() == vmmConnection.STATE_ACTIVE:
                 self.window.get_widget("vm-new").set_sensitive(True)
+                self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
             else:
                 self.window.get_widget("vm-new").set_sensitive(False)
+                self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_host_details").set_sensitive(True)
