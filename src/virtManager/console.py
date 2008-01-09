@@ -75,6 +75,8 @@ class vmmConsole(gobject.GObject):
         self.gtk_settings_accel = None
 
         self.vncViewer = gtkvnc.Display()
+        self.window.get_widget("console-vnc-align").add(self.vncViewer)
+        self.vncViewer.realize()
         self.vncTunnel = None
         if self.config.get_console_keygrab() == 2:
             self.vncViewer.set_keyboard_grab(True)
@@ -87,8 +89,6 @@ class vmmConsole(gobject.GObject):
         self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
         self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
 
-        self.window.get_widget("console-vnc-align").add(self.vncViewer)
-        self.vncViewer.realize()
         self.vncViewer.show()
         self.vncViewerRetriesScheduled = 0
         self.vncViewerRetryDelay = 125
