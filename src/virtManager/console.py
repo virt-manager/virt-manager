@@ -176,14 +176,12 @@ class vmmConsole(gobject.GObject):
 
         maxw = rootw - 100 - padx
         maxh = rooth - 100 - pady
+        self.window.get_widget("console-vnc-viewport").set_size_request(w, h)
+        self.window.get_widget("console-screenshot-viewport").set_size_request(w, h)
         if w > maxw or h > maxh:
-            self.window.get_widget("console-vnc-viewport").set_size_request(maxw, maxh)
-            self.window.get_widget("console-screenshot-viewport").set_size_request(maxw, maxh)
             self.window.get_widget("console-vnc-scroll").set_policy(gtk.POLICY_ALWAYS, gtk.POLICY_ALWAYS)
             self.window.get_widget("console-screenshot-scroll").set_policy(gtk.POLICY_ALWAYS, gtk.POLICY_ALWAYS)
         else:
-            self.window.get_widget("console-vnc-viewport").set_size_request(w, h)
-            self.window.get_widget("console-screenshot-viewport").set_size_request(w, h)
             self.window.get_widget("console-vnc-scroll").set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
             self.window.get_widget("console-screenshot-scroll").set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
 
