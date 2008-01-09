@@ -181,6 +181,131 @@
 	  </child>
 
 	  <child>
+	    <widget class="GtkMenuItem" id="menu-send-key">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Send key</property>
+	      <property name="use_underline">True</property>
+	      <signal name="activate" handler="on_menu_send_key_activate" last_modification_time="Wed, 09 Jan 2008 19:18:47 GMT"/>
+
+	      <child>
+		<widget class="GtkMenu" id="menu-send-key_menu">
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-cad">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ctrl+Alt+_Del</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_cad_activate" last_modification_time="Wed, 09 Jan 2008 19:20:40 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-cab">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ctrl+Alt+_Backspace</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_cab_activate" last_modification_time="Wed, 09 Jan 2008 19:20:40 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="separator7">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-caf1">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ctrl+Alt+F_1</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_caf1_activate" last_modification_time="Wed, 09 Jan 2008 19:18:47 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-caf2">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ctrl+Alt+F_2</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_caf2_activate" last_modification_time="Wed, 09 Jan 2008 19:18:47 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-caf3">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ctrl+Alt+F_3</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_caf3_activate" last_modification_time="Wed, 09 Jan 2008 19:20:40 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-caf4">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ctrl+Alt+F_4</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_caf4_activate" last_modification_time="Wed, 09 Jan 2008 19:20:40 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-caf5">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ctrl+Alt+F_5</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_caf5_activate" last_modification_time="Wed, 09 Jan 2008 19:20:40 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-caf6">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ctrl+Alt+F_6</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_caf6_activate" last_modification_time="Wed, 09 Jan 2008 19:20:40 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-caf7">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ctrl+Alt+F_7</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_caf7_activate" last_modification_time="Wed, 09 Jan 2008 19:20:40 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-caf8">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ctrl+Alt+F_8</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_caf8_activate" last_modification_time="Wed, 09 Jan 2008 19:20:40 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="separator8">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="menu-send-printscreen">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Printscreen</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_menu_send_printscreen_activate" last_modification_time="Wed, 09 Jan 2008 19:18:47 GMT"/>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
 	    <widget class="GtkMenuItem" id="help1">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_Help</property>

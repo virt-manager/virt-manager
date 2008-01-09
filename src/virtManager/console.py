@@ -135,6 +135,18 @@ class vmmConsole(gobject.GObject):
 
             "on_console_auth_login_clicked": self.set_password,
             "on_console_help_activate": self.show_help,
+
+            "on_menu_send_cad_activate": self.send_key,
+            "on_menu_send_cab_activate": self.send_key,
+            "on_menu_send_caf1_activate": self.send_key,
+            "on_menu_send_caf2_activate": self.send_key,
+            "on_menu_send_caf3_activate": self.send_key,
+            "on_menu_send_caf4_activate": self.send_key,
+            "on_menu_send_caf5_activate": self.send_key,
+            "on_menu_send_caf6_activate": self.send_key,
+            "on_menu_send_caf7_activate": self.send_key,
+            "on_menu_send_caf8_activate": self.send_key,
+            "on_menu_send_printscreen_activate": self.send_key,
             })
 
         self.vm.connect("status-changed", self.update_widget_states)
@@ -191,6 +203,33 @@ class vmmConsole(gobject.GObject):
 
         self.window.get_widget("console-vnc-vp").set_size_request(vncWidth+2, vncHeight+2)
 
+    def send_key(self, src):
+        keys = None
+        if src.get_name() == "menu-send-cad":
+            keys = ["Control_L", "Alt_L", "Del"]
+        elif src.get_name() == "menu-send-cab":
+            keys = ["Control_L", "Alt_L", "BackSpace"]
+        elif src.get_name() == "menu-send-caf1":
+            keys = ["Control_L", "Alt_L", "F1"]
+        elif src.get_name() == "menu-send-caf2":
+            keys = ["Control_L", "Alt_L", "F2"]
+        elif src.get_name() == "menu-send-caf3":
+            keys = ["Control_L", "Alt_L", "F3"]
+        elif src.get_name() == "menu-send-caf4":
+            keys = ["Control_L", "Alt_L", "F4"]
+        elif src.get_name() == "menu-send-caf5":
+            keys = ["Control_L", "Alt_L", "F5"]
+        elif src.get_name() == "menu-send-caf6":
+            keys = ["Control_L", "Alt_L", "F6"]
+        elif src.get_name() == "menu-send-caf7":
+            keys = ["Control_L", "Alt_L", "F7"]
+        elif src.get_name() == "menu-send-caf8":
+            keys = ["Control_L", "Alt_L", "F8"]
+        elif src.get_name() == "menu-send-printscreen":
+            keys = ["PrintScreen"]
+
+        if keys != None:
+            self.vncViewer.send_keys(keys)
 
     def _disable_modifiers(self, ignore=None):
         topwin = self.window.get_widget("vmm-console")
