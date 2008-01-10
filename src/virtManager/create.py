@@ -521,8 +521,10 @@ class vmmCreate(gobject.GObject):
         except ValueError, E:
             self._validation_error_box(_("UUID Error"), str(e))
 
-        guest.disks = [self._disk]
-        guest.nics = [self._net]
+        if self._disk is not None:
+            guest.disks = [self._disk]
+        if self._net is not None:
+            guest.nics = [self._net]
             
         # set up the graphics to use SDL
         import keytable
