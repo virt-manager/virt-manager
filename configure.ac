@@ -1,5 +1,5 @@
 AC_INIT(virt-manager.spec.in)
-AM_INIT_AUTOMAKE(virt-manager, 0.5.2)
+AM_INIT_AUTOMAKE(virt-manager, 0.5.3)
 
 ALL_LINGUAS="bg bn_IN bs ca cs da de es fi fr gu hi hr hu is it ja kn ko ml mr ms nb nl or pa pl pt_BR pt ro ru sr@Latn sr sv ta te tr uk zh_CN zh_TW"
 IT_PROG_INTLTOOL([0.35.0], [no-xml])
