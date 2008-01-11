@@ -281,7 +281,6 @@ class vmmManager(gobject.GObject):
 
 
     def restore_saved(self, src=None):
-        
         conn = self.current_connection()
         if conn.is_remote():
             warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
@@ -507,6 +506,10 @@ class vmmManager(gobject.GObject):
 
         thisconn = self.current_connection()
         if thisconn == conn:
+            if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
+                self.window.get_widget("vm-delete").set_sensitive(True)
+            else:
+                self.window.get_widget("vm-delete").set_sensitive(False)
             if conn.get_state() == vmmConnection.STATE_ACTIVE:
                 self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
                 self.window.get_widget("vm-new").set_sensitive(True)
@@ -621,7 +624,10 @@ class vmmManager(gobject.GObject):
             self.vm_resources_sampled(vm)
             self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(True)
-            self.window.get_widget("vm-delete").set_sensitive(True)
+            if vm.status() == libvirt.VIR_DOMAIN_SHUTOFF:
+                self.window.get_widget("vm-delete").set_sensitive(True)
+            else:
+                self.window.get_widget("vm-delete").set_sensitive(False)
             self.window.get_widget("vm-new").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
             self.window.get_widget("menu_edit_delete").set_sensitive(True)
@@ -631,7 +637,10 @@ class vmmManager(gobject.GObject):
             # A connection is selected
             self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(False)
-            self.window.get_widget("vm-delete").set_sensitive(True)
+            if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
+                self.window.get_widget("vm-delete").set_sensitive(True)
+            else:
+                self.window.get_widget("vm-delete").set_sensitive(False)
             if conn.get_state() == vmmConnection.STATE_ACTIVE:
                 self.window.get_widget("vm-new").set_sensitive(True)
                 self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
@@ -682,7 +691,7 @@ class vmmManager(gobject.GObject):
                         self.vmmenu_items["pause"].set_sensitive(False)
                         self.vmmenu_items["resume"].show()
                         self.vmmenu_items["resume"].set_sensitive(True)
-                        self.vmmenu_items["shutdown"].set_sensitive(True)              
+                        self.vmmenu_items["shutdown"].set_sensitive(True)
                 self.vmmenu.popup(None, None, None, 0, event.time)
             return False
         else:
@@ -1001,12 +1010,12 @@ class vmmManager(gobject.GObject):
 
     def row_expanded(self, treeview, iter, path):
         conn = treeview.get_model().get_value(iter,ROW_HANDLE)
-        logging.debug("Activating connection %s" % conn.get_uri())
+        #logging.debug("Activating connection %s" % conn.get_uri())
         conn.resume()
 
     def row_collapsed(self, treeview, iter, path):
         conn = treeview.get_model().get_value(iter,ROW_HANDLE)
-        logging.debug("Deactivating connection %s" % conn.get_uri())
+        #logging.debug("Deactivating connection %s" % conn.get_uri())
         conn.pause()
 
     def _connect_error(self, conn, details):
@@ -1031,7 +1040,7 @@ class vmmManager(gobject.GObject):
         dg.destroy()
 
     def _err_dialog(self, summary, details):
-        dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
+        dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR,
                             gtk.BUTTONS_CLOSE, summary, details)
         dg.run()
         dg.hide()
