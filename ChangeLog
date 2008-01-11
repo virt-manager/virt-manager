@@ -1,8 +1,264 @@
+2008-01-10  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po, po/hi.po,
+	po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po, po/kn.po,
+	po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po, po/nl.po,
+	po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po, po/te.po,
+	po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po, po/zh_TW.po:
+	Refresh po files
+	[c95c688762cf] [tip]
+
+	* configure.ac, virt-manager.spec.in:
+	Update in prep for new release
+	[25b17c225e15]
+
+	* src/virtManager/manager.py:
+	Fix delete button sensitivity
+	[8beadee56a19]
+
+2008-01-10  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	Don't send empty disk/nic lists to virtinst. Fixes usermode
+	installs, rhbz #378991
+	[f11ccb3e5264]
+
+2008-01-09  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/engine.py:
+	Show error if trying to save machine over remote connection.
+	[bcebfff9c3cb]
+
+	* src/virtManager/manager.py:
+	Hook up 'restore saved machine', show error if trying to restore
+	over remote connection.
+	[7c9a757ba5af]
+
+2008-01-09  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py:
+	Don't set crazy window size if guest is larger than screen
+	[a788538bf93a]
+
+	* src/virtManager/console.py:
+	Must realize widget before setting hooks
+	[8ab75129d00c]
+
+	* src/virtManager/console.py, src/vmm-console.glade:
+	Added menu to send Ctrl+Alt+XXXX special sequences
+	[d8845136ae00]
+
+2008-01-02  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/manager.py, src/vmm-manager.glade:
+	Reinstate new & delete buttons in UI
+	[2376b77d5778]
+
+2007-12-17  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	Add 'permissions' field to details section for a disk.
+	[594dbf22bc89]
+
+2007-12-11  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* Merge heads
+	[e96a36605e70]
+
+2007-12-05  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py:
+	Remove disks by directly parsing guest xml, rather than recreate the
+	disk with virtinst. Fixes bug 371621.
+	[e6aa376bc327]
+
+	* src/virtManager/opticalhelper.py:
+	Import logging in opticalhelper
+	[543d6031d963]
+
+	* src/virtManager/domain.py:
+	Fix for cdrom connect/disconnect to not readd disk to xml on
+	restart.
+	[54a06a584e7a]
+
+2007-11-30  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py:
+	Fixed validation message in Add Hardware wizard.
+	[ebdfc8e3e06e]
+
+2007-12-11  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* AUTHORS, src/vmm-create.glade:
+	Fix label alignment (Dan Hork)
+	[e1f8d926c4a9]
+
+2007-11-28  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/choosecd.py, src/virtManager/domain.py:
+	Add error catching and reporting to the choosecd dialog.
+	[562150b337ba]
+
+	* src/vmm-details.glade:
+	Set disk path to fully expand in 'details' section to prevent a long
+	cdrom path from pushing the connect/disconnect button off the
+	screen.
+	[32bf73070872]
+
+2007-11-16  root  <root@crobinso1.boston.redhat.com>
+
+	* src/virtManager/addhardware.py:
+	Enable adding nics for xen guests.
+	[12122301b60d]
+
+2007-11-28  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py:
+	Fix cdrom connect/disconnect. Fixes an error catching issue for
+	connect as well.
+	[110464ed517a]
+
+	* src/virtManager/manager.py:
+	Revert accidentally enabling domain restore.
+	[9dca17b2868f]
+
+2007-11-27  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Fix my obviously busted disksize change.
+	[42a959f20ab2]
+
+	* src/virtManager/details.py:
+	Fix a few broken error catching calls.
+	[91d8674224d1]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Return disksize = None if creating a disk from an already existing
+	file.
+	[b8ea95b4841a]
+
+2007-11-16  root  <root@crobinso1.boston.redhat.com>
+
+	* src/virtManager/addhardware.py:
+	Fix harmless TypeError exceptions from being raised while opening
+	the addhardware wizard.
+	[b7b55eb30fb6]
+
+2007-11-27  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py, src/virtManager/details.py,
+	src/virtManager/engine.py, src/virtManager/manager.py:
+	Rework shutdown, pause, unpause, and run commands to call central
+	routine. Add error catching and reporting for these, as well as save
+	and destory.
+	[a52007787308]
+
+2007-11-20  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* COPYING, src/virt-manager.py.in, src/virtManager/__init__.py,
+	src/virtManager/about.py, src/virtManager/addhardware.py,
+	src/virtManager/asyncjob.py, src/virtManager/choosecd.py,
+	src/virtManager/config.py, src/virtManager/connect.py,
+	src/virtManager/connection.py, src/virtManager/console.py,
+	src/virtManager/create.py, src/virtManager/createmeter.py,
+	src/virtManager/createnet.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/virtManager/engine.py,
+	src/virtManager/error.py, src/virtManager/host.py,
+	src/virtManager/keyring.py, src/virtManager/manager.py,
+	src/virtManager/netdev.py, src/virtManager/network.py,
+	src/virtManager/opticalhelper.py, src/virtManager/preferences.py,
+	src/virtManager/remote.py, src/virtManager/secret.py,
+	src/virtManager/serialcon.py, virt-manager.spec.in:
+	Refresh GPL text with latest FSF address & fix spec file license tag
+	[30260e2c3a37]
+
+2007-11-16  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py,
+	src/virtManager/details.py:
+	Add better error catching and reporting for add/remove hardware.
+
+	The particulars:
+
+	1) Build virtinst VirtualDisk and VirtualNics as we go through
+	creation wizards to reuse present validation. 2) Added a few cases
+	of using the "install_error" infrastructure if we fail when at the
+	end of the wizard. 3) Added error checking for removing hardware in
+	the 'details' screen. 4) A small cleanup in create.py
+	[632472746706]
+
+2007-11-14  "Cole Robinson  <crobinso@redhat.com>
+
+	* autogen.sh:
+	Build fix that allows autogen.sh to work right out of the repo.
+	[b2718c0c023c]
+
+	* src/virt-manager.py.in:
+	Log all uncaught exceptions.
+	[9da820df4011]
+
+2007-11-12  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	Overwrite, do not append, to guest device lists before create. Also
+	no need to catch exception as virtinst doesn't throw one in this
+	case.
+	[27780aa800d5]
+
+2007-11-07  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* merge heads
+	[9ba899abb73f]
+
+	* src/virtManager/console.py:
+	Switch TLS credential to libvirt-vnc
+	[0938dbeac0d7]
+
+2007-10-17  Andy Grover  <andy.grover@oracle.com>
+
+	* src/virtManager/domain.py:
+	virt-manager: small exception handling fix Hi,
+
+	This patch fixes exception handling slightly in virt-manager.
+
+	Thanks -- Andy
+	[58c46220f2df]
+
+2007-11-07  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	Switch to 512 MB default memory to keep jeremy happy
+	[19a82a3c5b8a]
+
+2007-10-10  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/keytable.py:
+	Added mapping for br-abnt2 keyboard
+	[4983533b800c]
+
+2007-10-06  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/ja.po:
+	Update ja translation from Hyu_gabaru Ryu_ichi
+	[334e563e54c9]
+
 2007-10-04  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.5.2-1 for changeset a0902e8de8d1
+	[813f640bb5a8]
+
+	* ChangeLog, NEWS, configure.ac, virt-manager.spec.in:
+	Update for 0.5.2 release
+	[a0902e8de8d1] [RELEASE-0.5.2-1]
 
 	* src/virtManager/addhardware.py:
 	Populate hardware options based on VM type
-	[6cf93e00e4d8] [tip]
+	[6cf93e00e4d8]
 
 	* po/pl.po:
 	Refresh polish translation again
