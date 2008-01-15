@@ -393,7 +393,7 @@ class vmmConsole(gobject.GObject):
         finally:
             gtk.gdk.threads_leave()
 
-    def open_tunnel(self, server, vncaddr ,vncport):
+    def open_tunnel(self, server, vncaddr, vncport, username):
         if self.vncTunnel is not None:
             return
 
@@ -407,7 +407,11 @@ class vmmConsole(gobject.GObject):
             os.close(1)
             os.dup(fds[1].fileno())
             os.dup(fds[1].fileno())
-            os.execlp("ssh", "ssh", "-p", "22", "-l", "root", server, "nc", vncaddr, str(vncport))
+            argv = ["ssh", "ssh", "-p", "22"] 
+            if username:
+                argv += ['-l', username]
+            argv += [ server, "nc", vncaddr, str(vncport) ]
+            os.execlp(*argv)
             os._exit(1)
         else:
             fds[1].close()
@@ -433,14 +437,18 @@ class vmmConsole(gobject.GObject):
 
         logging.debug("Trying console login")
         password = self.window.get_widget("console-auth-password").get_text()
-        protocol, host, port, trans = self.vm.get_graphics_console()
+        protocol, host, port, trans, username = self.vm.get_graphics_console()
 
         if protocol is None:
             logging.debug("No graphics configured in guest")
             self.activate_unavailable_page(_("Console not configured for guest"))
             return
 
-        uri = str(protocol) + "://" + str(host) + ":" + str(port)
+        uri = str(protocol) + "://"
+        if username:
+            uri = uri + str(username) + '@'
+        uri = uri + str(host) + ":" + str(port)
+
         logging.debug("Graphics console configured at " + uri)
 
         if protocol != "vnc":
@@ -457,7 +465,7 @@ class vmmConsole(gobject.GObject):
         logging.debug("Starting connect process for %s %s" % (host, str(port)))
         try:
             if trans is not None and trans in ("ssh", "ext"):
-                fd = self.open_tunnel(host, "127.0.0.1", port)
+                fd = self.open_tunnel(host, "127.0.0.1", port, username)
                 self.vncViewer.open_fd(fd)
             else:
                 self.vncViewer.open_host(host, str(port))

@@ -462,9 +462,9 @@ class vmmDomain(gobject.GObject):
             # reliably resolve 'localhost' into 127.0.0.1, either returning
             # the public IP, or an IPv6 addr. Neither work since QEMU only
             # listens on 127.0.0.1 for VNC.
-            return [type, "127.0.0.1", port, None]
+            return [type, "127.0.0.1", port, None, None]
         else:
-            return [type, self.connection.get_hostname(), port, transport]
+            return [type, self.connection.get_hostname(), port, transport, username]
 
 
     def get_disk_devices(self):
