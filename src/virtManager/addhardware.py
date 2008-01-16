@@ -122,12 +122,12 @@ class vmmAddHardware(gobject.GObject):
         network_list.add_attribute(text, 'text', 1)
 
         device_list = self.window.get_widget("net-device")
-        device_model = gtk.ListStore(str, bool)
+        device_model = gtk.ListStore(str, str, bool)
         device_list.set_model(device_model)
         text = gtk.CellRendererText()
         device_list.pack_start(text, True)
-        device_list.add_attribute(text, 'text', 0)
-        device_list.add_attribute(text, 'sensitive', 1)
+        device_list.add_attribute(text, 'text', 1)
+        device_list.add_attribute(text, 'sensitive', 2)
 
         target_list = self.window.get_widget("target-device")
         target_model = gtk.ListStore(str, int, str, str, str)
@@ -820,9 +820,9 @@ class vmmAddHardware(gobject.GObject):
             net = self.vm.get_connection().get_net_device(name)
             if net.is_shared():
                 hasShared = True
-                model.append(["%s (%s %s)" % (net.get_name(), _("Bridge"), net.get_bridge()), True])
+                model.append([net.get_bridge(), "%s (%s %s)" % (net.get_name(), _("Bridge"), net.get_bridge()), True])
             else:
-                model.append(["%s (%s)" % (net.get_name(), _("Not bridged")), False])
+                model.append([net.get_bridge(), "%s (%s)" % (net.get_name(), _("Not bridged")), False])
         return hasShared
 
     def populate_target_device_model(self, model):
