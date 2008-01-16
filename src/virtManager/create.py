@@ -664,7 +664,6 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("storage-partition-address").set_text(part)
 
     def browse_storage_file_address(self, src, ignore=None):
-        self.window.get_widget("storage-file-size").set_sensitive(True)
         fcdialog = gtk.FileChooserDialog(_("Locate or Create New Storage File"),
                                          self.window.get_widget("vmm-create"),
                                          gtk.FILE_CHOOSER_ACTION_SAVE,

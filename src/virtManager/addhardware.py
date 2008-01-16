@@ -539,7 +539,6 @@ class vmmAddHardware(gobject.GObject):
             self.window.get_widget("storage-partition-address").set_text(part)
 
     def browse_storage_file_address(self, src, ignore=None):
-        self.window.get_widget("storage-file-size").set_sensitive(True)
         folder = self.config.get_default_image_dir(self.vm.get_connection())
         file = self._browse_file(_("Locate or Create New Storage File"), \
                                  folder=folder, confirm_overwrite=True)
