@@ -700,7 +700,7 @@ class vmmAddHardware(gobject.GObject):
                                                   device=device)
                 if self._disk.type == virtinst.VirtualDisk.TYPE_FILE and \
                    not self.vm.is_hvm() and virtinst.util.is_blktap_capable():
-                        disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
+                    self._disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
             except ValueError, e:
                 self._validation_error_box(_("Invalid Storage Parameters"), \
                                             str(e))
