@@ -294,22 +294,97 @@ class vmmConnection(gobject.GObject):
         self.connectThread.setDaemon(True)
         self.connectThread.start()
 
+    def _do_creds_polkit(self, action):
+        logging.debug("Doing policykit for %s" % action)
+        bus = dbus.SessionBus()
+        obj = bus.get_object("org.gnome.PolicyKit", "/org/gnome/PolicyKit/Manager")
+        pkit = dbus.Interface(obj, "org.gnome.PolicyKit.Manager")
+        pkit.ShowDialog(action, 0)
+        return 0
+
+    def _do_creds_dialog(self, creds):
+        try:
+            gtk.gdk.threads_enter()
+            return self._do_creds_dialog_main(creds)
+        finally:
+            gtk.gdk.threads_leave()
+
+    def _do_creds_dialog_main(self, creds):
+        dialog = gtk.Dialog("Authentication required", None, 0, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
+        label = []
+        entry = []
+
+        box = gtk.Table(2, len(creds))
+
+        row = 0
+        for cred in creds:
+            if cred[0] == libvirt.VIR_CRED_AUTHNAME or cred[0] == libvirt.VIR_CRED_PASSPHRASE:
+                label.append(gtk.Label(cred[1]))
+            else:
+                return -1
+
+            ent = gtk.Entry()
+            if cred[0] == libvirt.VIR_CRED_PASSPHRASE:
+                ent.set_visibility(False)
+            entry.append(ent)
+
+            box.attach(label[row], 0, 1, row, row+1, 0, 0, 3, 3)
+            box.attach(entry[row], 1, 2, row, row+1, 0, 0, 3, 3)
+            row = row + 1
+
+        vbox = dialog.get_child()
+        vbox.add(box)
+
+        dialog.show_all()
+        res = dialog.run()
+        dialog.hide()
+
+        if res == gtk.RESPONSE_OK:
+            row = 0
+            for cred in creds:
+                cred[4] = entry[row].get_text()
+                row = row + 1
+            dialog.destroy()
+            return 0
+        else:
+            dialog.destroy()
+            return -1
+
+    def _do_creds(self, creds, cbdata):
+        try:
+            if len(creds) == 1 and creds[0][0] == libvirt.VIR_CRED_EXTERNAL and creds[0][2] == "PolicyKit":
+                return self._do_creds_polkit(creds[0][1])
+
+            for cred in creds:
+                if creds[0] == libvirt.VIR_CRED_EXTERNAL:
+                    return -1
+
+            return self._do_creds_dialog(creds)
+        except:
+            (type, value, stacktrace) = sys.exc_info ()
+            # Detailed error message, in English so it can be Googled.
+            self.connectError = \
+                ("Failed to get credentials '%s':\n" %
+                 str(self.uri)) + \
+                 str(type) + " " + str(value) + "\n" + \
+                 traceback.format_exc (stacktrace)
+            logging.error(self.connectError)
+            return -1
 
     def _open_thread(self):
         logging.debug("Background thread is running")
         try:
-            if self.readOnly is None:
-                try:
-                    self.vmm = libvirt.open(self.uri)
-                    self.readOnly = False
-                except:
-                    self.vmm = libvirt.openReadOnly(self.uri)
-                    self.readOnly = True
-            else:
-                if self.readOnly:
-                    self.vmm = libvirt.openReadOnly(self.uri)
-                else:
-                    self.vmm = libvirt.open(self.uri)
+            flags = 0
+            if self.readOnly:
+                flags = libvirt.VIR_CONNECT_RO
+
+            self.vmm = libvirt.openAuth(self.uri,
+                                        [[libvirt.VIR_CRED_AUTHNAME,
+                                          libvirt.VIR_CRED_PASSPHRASE,
+                                          libvirt.VIR_CRED_EXTERNAL],
+                                         self._do_creds,
+                                         None], flags)
+
             self.state = self.STATE_ACTIVE
         except:
             self.state = self.STATE_DISCONNECTED

@@ -28,8 +28,9 @@ HV_XEN = 0
 HV_QEMU = 1
 
 CONN_LOCAL = 0
-CONN_TLS = 1
-CONN_SSH = 2
+CONN_TCP = 1
+CONN_TLS = 2
+CONN_SSH = 3
 
 class vmmConnect(gobject.GObject):
     __gsignals__ = {
@@ -95,23 +96,22 @@ class vmmConnect(gobject.GObject):
             pass
         elif hv == HV_XEN:
             if conn == CONN_LOCAL:
-                uri = "xen"
-                if os.getuid() != 0:
-                    readOnly = True
+                uri = "xen:///"
             elif conn == CONN_TLS:
                 uri = "xen+tls://" + host + "/"
             elif conn == CONN_SSH:
                 uri = "xen+ssh://root@" + host + "/"
+            elif conn == CONN_TCP:
+                uri = "xen+tcp://" + host + "/"
         else:
             if conn == CONN_LOCAL:
-                if os.getuid() == 0:
-                    uri = "qemu:///system"
-                else:
-                    uri = "qemu:///session"
+                uri = "qemu:///system"
             elif conn == CONN_TLS:
                 uri = "qemu+tls://" + host + "/system"
             elif conn == CONN_SSH:
                 uri = "qemu+ssh://root@" + host + "/system"
+            elif conn == CONN_TCP:
+                uri = "qemu+tcp://" + host + "/system"
 
         logging.debug("Connection to open is %s" % uri)
         self.close()
