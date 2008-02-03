@@ -24,6 +24,7 @@ import os
 import gobject
 import termios
 import tty
+import pty
 
 class vmmSerialConsole:
     def __init__(self, config, vm):
@@ -83,11 +84,11 @@ class vmmSerialConsole:
     def opentty(self):
         if self.ptyio != None:
             self.closetty()
-        pty = self.vm.get_serial_console_tty()
+        ipty = self.vm.get_serial_console_tty()
 
-        if pty == None:
+        if ipty == None:
             return
-        self.ptyio = os.open(pty, os.O_RDWR | os.O_NONBLOCK | os.O_NOCTTY)
+        self.ptyio = pty.slave_open(ipty)
         self.ptysrc = gobject.io_add_watch(self.ptyio, gobject.IO_IN | gobject.IO_ERR | gobject.IO_HUP, self.display_data)
 
         # Save term settings & set to raw mode
