@@ -210,10 +210,11 @@ class vmmAddHardware(gobject.GObject):
         model = self.window.get_widget("hardware-type").get_model()
         model.clear()
         model.append(["Storage device", gtk.STOCK_HARDDISK, PAGE_DISK])
-        # User mode networking only allows a single card for now
-        if (self.vm.get_connection().get_type().lower() == "qemu" and \
-            os.getuid() == 0) or \
-            self.vm.get_connection().get_type().lower() == "xen":
+        # Can't use shared or virtual networking as regular user
+        # Can only have one usermode network device
+        if (os.getuid() == 0 or
+            (self.vm.get_connection().get_type().lower() == "qemu" and
+             len(self.vm.get_network_devices()) == 0)):
             model.append(["Network card", gtk.STOCK_NETWORK, PAGE_NETWORK])
 
         # Can only customize HVM guests, no Xen PV
@@ -222,14 +223,15 @@ class vmmAddHardware(gobject.GObject):
         model.append(["Graphics device", gtk.STOCK_SELECT_COLOR, PAGE_GRAPHICS])
 
 
-
     def forward(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
         if(self.validate(notebook.get_current_page()) != True):
             return
 
-        if notebook.get_current_page() == PAGE_INTRO:
-            notebook.set_current_page(self.get_config_hardware_type())
+        hwtype = self.get_config_hardware_type()
+        if notebook.get_current_page() == PAGE_INTRO and \
+           (hwtype != PAGE_NETWORK or os.getuid() == 0):
+            notebook.set_current_page(hwtype)
         else:
             notebook.set_current_page(PAGE_SUMMARY)
             self.window.get_widget("create-finish").show()
@@ -240,7 +242,11 @@ class vmmAddHardware(gobject.GObject):
         notebook = self.window.get_widget("create-pages")
 
         if notebook.get_current_page() == PAGE_SUMMARY:
-            notebook.set_current_page(self.get_config_hardware_type())
+            hwtype = self.get_config_hardware_type()
+            if hwtype == PAGE_NETWORK and os.getuid() != 0:
+                notebook.set_current_page(PAGE_INTRO)
+            else:
+                notebook.set_current_page(hwtype)
             self.window.get_widget("create-finish").hide()
         else:
             notebook.set_current_page(PAGE_INTRO)
@@ -436,6 +442,8 @@ class vmmAddHardware(gobject.GObject):
         self.close()
 
     def add_network(self):
+        if self._net is None and os.getuid() != 0:
+            self._net = virtinst.VirtualNetworkInterface(type="user")
         self._net.setup(self.vm.get_connection().vmm)
         self.add_device(self._net.get_xml_config())
 
