@@ -220,7 +220,7 @@ class vmmEngine(gobject.GObject):
 
         if self.connections[uri]["windowHost"] == None:
             manager = vmmHost(self.get_config(), con)
-            manager.connect("action-show-help", self._do_show_help)
+            manager.connect("action-show-about", self._do_show_about)
             self.connections[uri]["windowHost"] = manager
         self.connections[uri]["windowHost"].show()
 
