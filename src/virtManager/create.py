@@ -521,11 +521,22 @@ class vmmCreate(gobject.GObject):
         except ValueError, E:
             self._validation_error_box(_("UUID Error"), str(e))
 
+        # HACK: If usermode, and no nic is setup, use usermode networking
+        if os.getuid() != 0:
+            try:
+                self._net = virtinst.VirtualNetworkInterface(type="user")
+            except ValueError, e:
+                self._validation_error_box(_("Failed to set up usermode networking"), str(e))
+
         if self._disk is not None:
             guest.disks = [self._disk]
+        else:
+            logging.debug('No guest disks found in install phase.')
         if self._net is not None:
             guest.nics = [self._net]
-            
+        else:
+            logging.debug('No guest nics found in install phase.')
+
         # set up the graphics to use SDL
         import keytable
         keymap = None
