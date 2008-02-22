@@ -31,6 +31,7 @@ import dbus
 import threading
 import gtk
 import string
+import virtinst
 
 from virtManager.domain import vmmDomain
 from virtManager.network import vmmNetwork
@@ -496,11 +497,7 @@ class vmmConnection(gobject.GObject):
         return self.hostinfo
 
     def get_max_vcpus(self):
-        try:
-            return self.vmm.getMaxVcpus(self.get_type())
-        except Exception, e:
-            logging.debug('Unable to get max vcpu')
-            return 32;
+        return virtinst.util.get_max_vcpus(self.vmm)
 
     def connect(self, name, callback):
         handle_id = gobject.GObject.connect(self, name, callback)
