@@ -823,7 +823,10 @@ class vmmDomain(gobject.GObject):
 
     def set_memory(self, memory):
         memory = int(memory)
-        if (memory > self.maximum_memory()):
+        # capture updated information due to failing to get proper maxmem setting
+        # if both current & max allocation are set simultaneously
+        maxmem = self.vm.info()
+        if (memory > maxmem[1]):
             logging.warning("Requested memory " + str(memory) + " over maximum " + str(self.maximum_memory()))
             memory = self.maximum_memory()
         self.vm.setMemory(memory)
