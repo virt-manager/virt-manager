@@ -49,17 +49,22 @@ VM_INSTALL_FROM_CD = 2
 VM_STORAGE_PARTITION = 1
 VM_STORAGE_FILE = 2
 
+VM_INST_LOCAL = 1
+VM_INST_TREE = 2
+VM_INST_PXE = 3
+
 DEFAULT_STORAGE_FILE_SIZE = 500
 
 PAGE_INTRO = 0
 PAGE_NAME = 1
 PAGE_TYPE = 2
-PAGE_FVINST = 3
-PAGE_PVINST = 4
-PAGE_DISK = 5
-PAGE_NETWORK = 6
-PAGE_CPUMEM = 7
-PAGE_SUMMARY = 8
+PAGE_INST = 3
+PAGE_INST_LOCAL = 4
+PAGE_INST_TREE = 5
+PAGE_DISK = 6
+PAGE_NETWORK = 7
+PAGE_CPUMEM = 8
+PAGE_SUMMARY = 9
 
 KEYBOARD_DIR = "/etc/sysconfig/keyboard"
 
@@ -295,11 +300,18 @@ class vmmCreate(gobject.GObject):
         if(self.validate(notebook.get_current_page()) != True):
             return
 
-        if (notebook.get_current_page() == PAGE_TYPE and self.get_config_method() == VM_PARA_VIRT):
-            notebook.set_current_page(PAGE_PVINST)
-        elif (notebook.get_current_page() == PAGE_FVINST and self.get_config_method() == VM_FULLY_VIRT):
+        if notebook.get_current_page() == PAGE_INST:
+            if self.get_config_install_method() == VM_INST_LOCAL:
+                notebook.set_current_page(PAGE_INST_LOCAL)
+            elif self.get_config_install_method() == VM_INST_TREE:
+                notebook.set_current_page(PAGE_INST_TREE)
+            else:
+                # No config for PXE needed (yet)
+                notebook.set_current_page(PAGE_DISK)
+        elif notebook.get_current_page() in [PAGE_INST_TREE, PAGE_INST_LOCAL]:
             notebook.set_current_page(PAGE_DISK)
         elif (notebook.get_current_page() == PAGE_DISK and os.getuid() != 0):
+            # Skip network for non-root
             notebook.set_current_page(PAGE_CPUMEM)
         else:
             notebook.next_page()
@@ -309,11 +321,18 @@ class vmmCreate(gobject.GObject):
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-finish").hide()
         self.window.get_widget("create-forward").show()
-        if notebook.get_current_page() == PAGE_PVINST and self.get_config_method() == VM_PARA_VIRT:
-            notebook.set_current_page(PAGE_TYPE)
-        elif notebook.get_current_page() == PAGE_DISK and self.get_config_method() == VM_FULLY_VIRT:
-            notebook.set_current_page(PAGE_FVINST)
+        if notebook.get_current_page() in [PAGE_INST_TREE, PAGE_INST_LOCAL]:
+            notebook.set_current_page(PAGE_INST)
+        elif notebook.get_current_page() == PAGE_DISK:
+            if self.get_config_install_method() == VM_INST_LOCAL:
+                notebook.set_current_page(PAGE_INST_LOCAL)
+            elif self.get_config_install_method() == VM_INST_TREE:
+                notebook.set_current_page(PAGE_INST_TREE)
+            else:
+                # No config for PXE needed (yet)
+                notebook.set_current_page(PAGE_INST)
         elif notebook.get_current_page() == PAGE_CPUMEM and os.getuid() != 0:
+            # Skip network for non-root
             notebook.set_current_page(PAGE_DISK)
         else:
             notebook.prev_page()
@@ -330,31 +349,31 @@ class vmmCreate(gobject.GObject):
             return VM_PARA_VIRT
 
     def get_config_install_source(self):
-        if self.get_config_method() == VM_PARA_VIRT:
+        if self.get_config_install_method() == VM_INST_TREE:
             widget = self.window.get_widget("pv-media-url")
             url= widget.child.get_text()
             # Add the URL to the list, if it's different
             self.config.add_media_url(url)
             self.populate_url_model(widget.get_model(), self.config.get_media_urls())
             return url
-        else:
+        elif self.get_config_install_method() == VM_INST_LOCAL:
             if self.window.get_widget("media-iso-image").get_active():
                 return self.window.get_widget("fv-iso-location").get_text()
-            elif self.window.get_widget("media-physical").get_active():
+            else:
                 cd = self.window.get_widget("cd-path")
                 model = cd.get_model()
                 return model.get_value(cd.get_active_iter(), 0)
-            else:
-                return "PXE"
+        else:
+            return "PXE"
 
     def get_config_installer(self, type):
-        if self.get_config_method() == VM_FULLY_VIRT and self.window.get_widget("media-network").get_active():
+        if self.get_config_install_method() == VM_INST_PXE:
             return virtinst.PXEInstaller(type = type)
         else:
             return virtinst.DistroInstaller(type = type)
 
     def get_config_kickstart_source(self):
-        if self.get_config_method() == VM_PARA_VIRT:
+        if self.get_config_install_method() == VM_INST_TREE:
             widget = self.window.get_widget("pv-ks-url")
             url = widget.child.get_text()
             self.config.add_kickstart_url(url)
@@ -406,6 +425,14 @@ class vmmCreate(gobject.GObject):
     def get_config_virtual_cpus(self):
         return self.window.get_widget("create-vcpus").get_value()
 
+    def get_config_install_method(self):
+        if self.window.get_widget("method-local").get_active():
+            return VM_INST_LOCAL
+        elif self.window.get_widget("method-tree").get_active():
+            return VM_INST_TREE
+        else:
+            return VM_INST_PXE
+
     def get_config_os_type(self):
         type = self.window.get_widget("os-type")
         if type.get_active_iter() != None:
@@ -438,9 +465,19 @@ class vmmCreate(gobject.GObject):
             name_widget.grab_focus()
         elif page_number == PAGE_TYPE:
             pass
-        elif page_number == PAGE_FVINST:
-            pass
-        elif page_number == PAGE_PVINST:
+        elif page_number == PAGE_INST:
+            if self.get_config_method() == VM_PARA_VIRT:
+                # Xen can't PXE or CDROM install :-(
+                self.window.get_widget("method-local").set_sensitive(False)
+                self.window.get_widget("method-pxe").set_sensitive(False)
+                self.window.get_widget("method-tree").set_active(True)
+            else:
+                self.window.get_widget("method-local").set_sensitive(True)
+                self.window.get_widget("method-pxe").set_sensitive(True)
+        elif page_number == PAGE_INST_TREE:
+            url_widget = self.window.get_widget("pv-media-url")
+            url_widget.grab_focus()
+        elif page_number == PAGE_INST_LOCAL:
             url_widget = self.window.get_widget("pv-media-url")
             url_widget.grab_focus()
         elif page_number == PAGE_DISK:
@@ -794,28 +831,7 @@ class vmmCreate(gobject.GObject):
             
             self._guest.name = name # Transfer name over
 
-        elif page_num == PAGE_FVINST:
-            self._guest.installer = self.get_config_installer(self.get_domain_type())
-
-            if self.window.get_widget("media-iso-image").get_active():
-
-                src = self.get_config_install_source()
-                try:
-                    self._guest.cdrom = src
-                except ValueError, e:
-                    self._validation_error_box(_("ISO Path Not Found"), str(e))
-                    return False
-            elif  self.window.get_widget("media-physical").get_active():
-                cdlist = self.window.get_widget("cd-path")
-                src = self.get_config_install_source()
-                try:
-                    self._guest.cdrom = src
-                except ValueError, e:
-                    self._validation_error_box(_("CD-ROM Path Error"), str(e))
-                    return False
-            else:
-                pass # No checks for PXE
-            
+        elif page_num == PAGE_INST:
             try:
                 if self.get_config_os_type() is not None \
                    and self.get_config_os_type() != "generic":
@@ -832,7 +848,26 @@ class vmmCreate(gobject.GObject):
             except ValueError, e:
                 self._validation_error_box(_("Invalid FV OS Variant"), str(e))
                 return False
-        elif page_num == PAGE_PVINST:
+        elif page_num == PAGE_INST_LOCAL:
+            self._guest.installer = self.get_config_installer(self.get_domain_type())
+
+            if self.window.get_widget("media-iso-image").get_active():
+
+                src = self.get_config_install_source()
+                try:
+                    self._guest.cdrom = src
+                except ValueError, e:
+                    self._validation_error_box(_("ISO Path Not Found"), str(e))
+                    return False
+            else:
+                cdlist = self.window.get_widget("cd-path")
+                src = self.get_config_install_source()
+                try:
+                    self._guest.cdrom = src
+                except ValueError, e:
+                    self._validation_error_box(_("CD-ROM Path Error"), str(e))
+                    return False
+        elif page_num == PAGE_INST_TREE:
 
             src = self.get_config_install_source()
             try:
@@ -1157,10 +1192,12 @@ class vmmCreate(gobject.GObject):
             self.emit("action-show-help", "virt-manager-system-name")
         elif page == PAGE_TYPE:
             self.emit("action-show-help", "virt-manager-virt-method")
-        elif page == PAGE_FVINST:
-            self.emit("action-show-help", "virt-manager-installation-media-full-virt")
-        elif page == PAGE_PVINST:
-            self.emit("action-show-help", "virt-manager-installation-media-paravirt")
+        elif page == PAGE_INST:
+            self.emit("action-show-help", "virt-manager-installation-media")
+        elif page == PAGE_INST_LOCAL:
+            self.emit("action-show-help", "virt-manager-installation-media-local")
+        elif page == PAGE_INST_TREE:
+            self.emit("action-show-help", "virt-manager-installation-media-tree")
         elif page == PAGE_DISK:
             self.emit("action-show-help", "virt-manager-storage-space")
         elif page == PAGE_NETWORK:
