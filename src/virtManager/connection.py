@@ -36,6 +36,8 @@ from virtManager.domain import vmmDomain
 from virtManager.network import vmmNetwork
 from virtManager.netdev import vmmNetDevice
 
+LIBVIRT_POLICY_FILE = "/usr/share/PolicyKit/policy/libvirtd.policy"
+
 def get_local_hostname():
     try:
         (host, aliases, ipaddrs) = gethostbyaddr(gethostname())
@@ -113,13 +115,17 @@ class vmmConnection(gobject.GObject):
     def __init__(self, config, uri, readOnly = None):
         self.__gobject_init__()
         self.config = config
-        self.readOnly = readOnly
 
         self.connectThread = None
         self.connectError = None
         self.uri = uri
         if self.uri is None or self.uri.lower() == "xen":
             self.uri = "xen:///"
+
+        self.readOnly = readOnly
+        if not self.is_remote() and os.getuid() != 0 and self.uri != "qemu:///session":
+            if not os.path.exists(LIBVIRT_POLICY_FILE):
+                self.readOnly = True
 
         self.state = self.STATE_DISCONNECTED
         self.vmm = None
