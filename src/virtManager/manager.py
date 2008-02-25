@@ -501,6 +501,15 @@ class vmmManager(gobject.GObject):
         row[ROW_MEM_USAGE] = vm.current_memory_percentage()
         model.row_changed(row.path, row.iter)
 
+        if vm == self.current_vm():
+            if vm.is_active():
+                self.window.get_widget("vm-delete").set_sensitive(False)
+                self.window.get_widget("menu_edit_delete").set_sensitive(False)
+            else:
+                self.window.get_widget("vm-delete").set_sensitive(True)
+                self.window.get_widget("menu_edit_delete").set_sensitive(True)
+
+
     def conn_state_changed(self, conn):
         self.conn_refresh_resources(conn)
 
