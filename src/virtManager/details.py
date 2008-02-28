@@ -298,6 +298,7 @@ class vmmDetails(gobject.GObject):
                     self.window.get_widget("details-menu-pause").set_active(False)
         except:
             self.ignorePause = False
+            raise
         self.ignorePause = False
 
         self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
