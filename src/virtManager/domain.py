@@ -551,7 +551,8 @@ class vmmDomain(gobject.GObject):
             except Exception, e1:
                 try:
                     self.add_device(origxml) # Try to re-add original
-                except:
+                except Exception, e2:
+                    raise RuntimeError(_("Failed to change cdrom and re-add original device. Exceptions were: \n%s\n%s") % (str(e1), str(e2)))
                     raise e1
         else:
             self.vm.attachDevice(newxml)
