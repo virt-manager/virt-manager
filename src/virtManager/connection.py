@@ -392,7 +392,7 @@ class vmmConnection(gobject.GObject):
                 return self._do_creds_polkit(creds[0][1])
 
             for cred in creds:
-                if creds[0] == libvirt.VIR_CRED_EXTERNAL:
+                if cred[0] == libvirt.VIR_CRED_EXTERNAL:
                     return -1
 
             return self._do_creds_dialog(creds)
