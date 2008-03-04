@@ -81,7 +81,8 @@ class vmmHost(gobject.GObject):
         self.conn.connect("net-removed", self.repopulate_networks)
 
         # XXX not technically correct once we enable remote management
-        if os.getuid() != 0 and not self.conn.is_remote():
+        if (os.getuid() != 0 and not self.conn.is_remote()) \
+           or self.conn.get_state() is self.conn.STATE_DISCONNECTED:
             self.window.get_widget("net-add").set_sensitive(False)
 
 
