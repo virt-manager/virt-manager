@@ -545,15 +545,18 @@ class vmmDomain(gobject.GObject):
     def _change_cdrom(self, newxml, origxml):
         # If vm is shutoff, remove device, and redefine with media
         if not self.is_active():
+            logging.debug("_change_cdrom: removing original xml")
             self.remove_device(origxml)
             try:
+                logging.debug("_change_cdrom: adding new xml")
                 self.add_device(newxml)
             except Exception, e1:
+                logging.debug("_change_cdrom: adding new xml failed. attempting to readd original device")
                 try:
                     self.add_device(origxml) # Try to re-add original
                 except Exception, e2:
                     raise RuntimeError(_("Failed to change cdrom and re-add original device. Exceptions were: \n%s\n%s") % (str(e1), str(e2)))
-                    raise e1
+                raise e1
         else:
             self.vm.attachDevice(newxml)
             vmxml = self.vm.XMLDesc(0)
