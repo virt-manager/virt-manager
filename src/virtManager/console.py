@@ -80,11 +80,9 @@ class vmmConsole(gobject.GObject):
         self.vncTunnel = None
         if self.config.get_console_keygrab() == 2:
             self.vncViewer.set_keyboard_grab(True)
-            self.vncViewer.set_pointer_grab(True)
         else:
             self.vncViewer.set_keyboard_grab(False)
-            self.vncViewer.set_pointer_grab(False)
-        self.vncViewer.set_pointer_local(True)
+        self.vncViewer.set_pointer_grab(True)
 
         self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
         self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
@@ -287,10 +285,8 @@ class vmmConsole(gobject.GObject):
     def keygrab_changed(self, src, ignore1=None,ignore2=None,ignore3=None):
         if self.config.get_console_keygrab() == 2:
             self.vncViewer.set_keyboard_grab(True)
-            self.vncViewer.set_pointer_grab(True)
         else:
             self.vncViewer.set_keyboard_grab(False)
-            self.vncViewer.set_pointer_grab(False)
 
     def toggle_fullscreen(self, src):
         if src.get_active():
