@@ -180,10 +180,11 @@ class vmmConnection(gobject.GObject):
     def _net_phys_device_added(self, path):
         logging.debug("Got physical device %s" % path)
         obj = self.bus.get_object("org.freedesktop.Hal", path)
-        if obj.QueryCapability("net"):
-            name = obj.GetPropertyString("net.interface")
+        objif = dbus.Interface(obj, "org.freedesktop.Hal.Device")
+        if objif.QueryCapability("net"):
+            name = objif.GetPropertyString("net.interface")
             # XXX ...but this is Linux specific again - patches welcomed
-            #sysfspath = obj.GetPropertyString("linux.sysfs_path")
+            #sysfspath = objif.GetPropertyString("linux.sysfs_path")
             # XXX hal gives back paths to /sys/devices/pci0000:00/0000:00:1e.0/0000:01:00.0/net/eth0
             # which doesnt' work so well - we want this:
             sysfspath = "/sys/class/net/" + name
@@ -202,7 +203,7 @@ class vmmConnection(gobject.GObject):
                 logging.debug("Skipping device %s in bonding slave" % name)
                 return
 
-            mac = obj.GetPropertyString("net.address")
+            mac = objif.GetPropertyString("net.address")
 
             # Add the main NIC
             self._net_device_added(name, mac, sysfspath)
@@ -237,8 +238,9 @@ class vmmConnection(gobject.GObject):
 
     def _net_phys_device_removed(self, path):
         obj = self.bus.get_object("org.freedesktop.Hal", path)
-        if obj.QueryCapability("net"):
-            name = obj.GetPropertyString("net.interface")
+        objif = dbus.Interface(obj, "org.freedesktop.Hal.Device")
+        if objif.QueryCapability("net"):
+            name = objif.GetPropertyString("net.interface")
 
         if self.netdevs.has_key(name):
             dev = self.netdevs[name]

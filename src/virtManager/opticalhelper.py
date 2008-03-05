@@ -52,10 +52,11 @@ class vmmOpticalDriveHelper(gobject.GObject):
         # Find info about all current present media
         for d in self.hal_iface.FindDeviceByCapability("volume"):
             vol = self.bus.get_object("org.freedesktop.Hal", d)
-            if vol.GetPropertyBoolean("volume.is_disc") and \
-                   vol.GetPropertyBoolean("volume.disc.has_data"):
-                devnode = vol.GetProperty("block.device")
-                label = vol.GetProperty("volume.label")
+            volif = dbus.Interface(vol, "org.freedesktop.Hal.Device")
+            if volif.GetPropertyBoolean("volume.is_disc") and \
+                   volif.GetPropertyBoolean("volume.disc.has_data"):
+                devnode = volif.GetProperty("block.device")
+                label = volif.GetProperty("volume.label")
                 if label == None or len(label) == 0:
                     label = devnode
                 vollabel[devnode] = label
@@ -63,19 +64,21 @@ class vmmOpticalDriveHelper(gobject.GObject):
 
         for d in self.hal_iface.FindDeviceByCapability("storage.cdrom"):
             dev = self.bus.get_object("org.freedesktop.Hal", d)
-            devnode = dev.GetProperty("block.device")
+            devif = dbus.Interface(dev, "org.freedesktop.Hal.Device")
+            devnode = devif.GetProperty("block.device")
             if vollabel.has_key(devnode):
-                self.model.append([devnode, vollabel[devnode], True, volpath[devnode]])
+                self.model.append([devnode, "%s (%s)" % (vollabel[devnode], devnode), True, volpath[devnode]])
             else:
-                self.model.append([devnode, _("No media present"), False, None])
+                self.model.append([devnode, "%s (%s)" % (_("No media present"), devnode), False, None])
 
     def _device_added(self, path):
         vol = self.bus.get_object("org.freedesktop.Hal", path)
-        if vol.QueryCapability("volume"):
-            if vol.GetPropertyBoolean("volume.is_disc") and \
-                   vol.GetPropertyBoolean("volume.disc.has_data"):
-                devnode = vol.GetProperty("block.device")
-                label = vol.GetProperty("volume.label")
+        volif = dbus.Interface(vol, "org.freedesktop.Hal.Device")
+        if volif.QueryCapability("volume"):
+            if volif.GetPropertyBoolean("volume.is_disc") and \
+                   volif.GetPropertyBoolean("volume.disc.has_data"):
+                devnode = volif.GetProperty("block.device")
+                label = volif.GetProperty("volume.label")
                 if label == None or len(label) == 0:
                     label = devnode
 
@@ -88,8 +91,6 @@ class vmmOpticalDriveHelper(gobject.GObject):
                         row[3] = path
 
     def _device_removed(self, path):
-        vol = self.bus.get_object("org.freedesktop.Hal", path)
-
         active = self.widget.get_active()
         idx = 0
         # Search for the row containing matching HAL volume path
