@@ -839,4 +839,64 @@ class vmmDomain(gobject.GObject):
         memory = int(memory)
         self.vm.setMaxMemory(memory)
 
+    def get_autostart(self):
+        return self.vm.autostart()
+
+    def set_autostart(self, val):
+        if self.get_autostart() != val:
+            self.vm.setAutostart(val)
+
+    def get_boot_device(self):
+        xml = self.get_xml()
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return []
+        ctx = doc.xpathNewContext()
+        graphics = []
+        dev = None
+        try:
+            ret = ctx.xpathEval("/domain/os/boot[1]")
+            for node in ret:
+                dev = node.prop("dev")
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+        return dev
+
+    def set_boot_device(self, boot_type):
+        logging.debug("Setting boot device to type: %s" % boot_type)
+        xml = self.get_xml()
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return []
+        ctx = doc.xpathNewContext()
+        graphics = []
+        dev = None
+        try:
+            ret = ctx.xpathEval("/domain/os/boot[1]")
+            if len(ret) > 0:
+                ret[0].unlinkNode()
+                ret[0].freeNode()
+            emptyxml=doc.serialize()
+            index = emptyxml.find("</os>")
+            newxml = emptyxml[0:index] + \
+                     "<boot dev=\"" + boot_type + "\"/>\n" + \
+                     emptyxml[index:]
+            logging.debug("New boot device, redefining with: " + newxml)
+            self.get_connection().define_domain(newxml)
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+
+        # Invalidate cached xml
+        self.xml = None
+
 gobject.type_register(vmmDomain)
