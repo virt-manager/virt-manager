@@ -560,12 +560,20 @@ class vmmDetails(gobject.GObject):
     def config_memory_apply(self, src):
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            memory = self.window.get_widget("config-maxmem").get_adjustment().value
-            logging.info("Setting max memory for " + self.vm.get_uuid() + " to " + str(memory))
-            self.vm.set_max_memory(memory*1024)
-        memory = self.window.get_widget("config-memory").get_adjustment().value
-        logging.info("Setting memory for " + self.vm.get_uuid() + " to " + str(memory))
-        self.vm.set_memory(memory*1024)
+            maxmem = self.window.get_widget("config-maxmem").get_adjustment()
+        curmem = self.window.get_widget("config-memory").get_adjustment()
+        if maxmem.value < curmem.value:
+            logging.error("Failed to set max memory " + str(maxmem.value) + \
+                          " below current memory " + str(curmem.value))
+            maxmem.value = curmem.value
+        # set max memory allocated for domain
+        self.vm.set_max_memory(maxmem.value*1024)
+        # set currently allocated memory
+        self.vm.set_memory(curmem.value*1024)
+        logging.info("Setting max-memory for " + self.vm.get_uuid() + \
+                     " to " + str(maxmem.value))
+        logging.info("Setting memory for " + self.vm.get_uuid() + \
+                     " to " + str(curmem.value))
 
         self.window.get_widget("config-memory-apply").set_sensitive(False)
 
