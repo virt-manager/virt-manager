@@ -152,6 +152,16 @@
 		  </child>
 
 		  <child>
+		    <widget class="GtkCheckMenuItem" id="menu-view-scale-display">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Scale display</property>
+		      <property name="use_underline">True</property>
+		      <property name="active">False</property>
+		      <signal name="activate" handler="on_menu_view_scale_display_activate" last_modification_time="Fri, 07 Mar 2008 23:45:52 GMT"/>
+		    </widget>
+		  </child>
+
+		  <child>
 		    <widget class="GtkMenuItem" id="menu-view-serial">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Serial Console</property>
@@ -749,21 +759,7 @@
 		  <property name="shadow_type">GTK_SHADOW_NONE</property>
 
 		  <child>
-		    <widget class="GtkAlignment" id="console-vnc-align">
-		      <property name="visible">True</property>
-		      <property name="xalign">0.5</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xscale">0</property>
-		      <property name="yscale">0</property>
-		      <property name="top_padding">0</property>
-		      <property name="bottom_padding">0</property>
-		      <property name="left_padding">0</property>
-		      <property name="right_padding">0</property>
-
-		      <child>
-			<placeholder/>
-		      </child>
-		    </widget>
+		    <placeholder/>
 		  </child>
 		</widget>
 	      </child>
