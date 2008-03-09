@@ -299,6 +299,9 @@ class vmmConnection(gobject.GObject):
             pass
         return "xen"
 
+    def get_capabilities(self):
+        return virtinst.CapabilitiesParser.parse(self.vmm.getCapabilities())
+
     def is_remote(self):
         try:
             (scheme, username, netloc, path, query, fragment) = uri_split(self.uri)

@@ -108,6 +108,7 @@ class vmmCreate(gobject.GObject):
             "on_create_help_clicked": self.show_help,
             })
 
+        self.caps = self.connection.get_capabilities()
         self.set_initial_state()
 
         # Guest to fill in with values along the way
@@ -149,9 +150,8 @@ class vmmCreate(gobject.GObject):
             logging.error("Unable to create optical-helper widget: '%s'", e)
             self.window.get_widget("media-physical").set_sensitive(False)
 
-        if os.getuid() != 0:
-            self.window.get_widget("media-physical").set_sensitive(False)
-            self.window.get_widget("storage-partition").set_sensitive(False)
+        self.window.get_widget("media-physical").set_sensitive(False)
+        self.window.get_widget("storage-partition").set_sensitive(False)
 
         # set up the lists for the url widgets
         media_url_list = self.window.get_widget("pv-media-url")
@@ -200,18 +200,13 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-host-memory").set_text(self.pretty_memory(memory))
         self.window.get_widget("create-memory-max").set_range(50, memory/1024)
 
-        if self.connection.get_type() == "QEMU":
-            if os.uname()[4] == "x86_64":
-                self.window.get_widget("cpu-architecture").set_active(1)
-            else:
-                self.window.get_widget("cpu-architecture").set_active(0)
-        else:
-            self.window.get_widget("cpu-architecture").set_active(-1)
+        archModel = gtk.ListStore(str)
+        archList = self.window.get_widget("cpu-architecture")
+        archList.set_model(archModel)
 
-        self.window.get_widget("cpu-architecture").set_sensitive(False)
-        self.window.get_widget("cpu-accelerate").set_sensitive(False)
-        self.change_virt_method()
-
+        hyperModel = gtk.ListStore(str)
+        hyperList = self.window.get_widget("hypervisor")
+        hyperList.set_model(hyperModel)
 
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
@@ -224,29 +219,29 @@ class vmmCreate(gobject.GObject):
 
         # If we don't have full-virt support disable the choice, and
         # display a message telling the user why it is not working
-        if self.connection.get_type().lower() == "qemu":
-            self.window.get_widget("virt-method-pv").set_sensitive(False)
-            self.window.get_widget("virt-method-fv").set_active(True)
+        has_pv = False
+        has_fv = False
+
+        for guest in self.caps.guests:
+            if guest.os_type in ["xen", "linux"]:
+                has_pv = True
+            elif guest.os_type == "hvm":
+                has_fv = True
+
+        self.window.get_widget("virt-method-pv").set_sensitive(has_pv)
+        self.window.get_widget("virt-method-fv").set_active(has_fv)
+
+        if has_fv:
             self.window.get_widget("virt-method-fv-unsupported").hide()
             self.window.get_widget("virt-method-fv-disabled").hide()
         else:
-            self.window.get_widget("virt-method-pv").set_sensitive(True)
-            self.window.get_widget("virt-method-pv").set_active(True)
-            if virtinst.util.is_hvm_capable():
-                self.window.get_widget("virt-method-fv").set_sensitive(True)
-                self.window.get_widget("virt-method-fv-unsupported").hide()
-                self.window.get_widget("virt-method-fv-disabled").hide()
+            self.window.get_widget("virt-method-fv-unsupported").show()
+            flags = self.caps.host.features.names()
+            if "vmx" in flags or "svm" in flags:
+                self.window.get_widget("virt-method-fv-disabled").show()
             else:
-                self.window.get_widget("virt-method-fv").set_sensitive(False)
-                flags = virtinst.util.get_cpu_flags()
-                if "vmx" in flags or "svm" in flags:
-                    # Host has support, but disabled in bios
-                    self.window.get_widget("virt-method-fv-unsupported").hide()
-                    self.window.get_widget("virt-method-fv-disabled").show()
-                else:
-                    # Host has no support
-                    self.window.get_widget("virt-method-fv-unsupported").show()
-                    self.window.get_widget("virt-method-fv-disabled").hide()
+                self.window.get_widget("virt-method-fv-disabled").hide()
+
 
         self.change_media_type()
         self.change_storage_type()
@@ -255,10 +250,7 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-vm-name").set_text("")
         self.window.get_widget("media-iso-image").set_active(True)
         self.window.get_widget("fv-iso-location").set_text("")
-        if os.getuid() == 0:
-            self.window.get_widget("storage-partition").set_active(True)
-        else:
-            self.window.get_widget("storage-file-backed").set_active(True)
+        self.window.get_widget("storage-file-backed").set_active(True)
         self.window.get_widget("storage-partition-address").set_text("")
         self.window.get_widget("storage-file-address").set_text("")
         self.window.get_widget("storage-file-size").set_value(2000)
@@ -309,7 +301,7 @@ class vmmCreate(gobject.GObject):
                 notebook.set_current_page(PAGE_DISK)
         elif notebook.get_current_page() in [PAGE_INST_TREE, PAGE_INST_LOCAL]:
             notebook.set_current_page(PAGE_DISK)
-        elif (notebook.get_current_page() == PAGE_DISK and os.getuid() != 0):
+        elif notebook.get_current_page() == PAGE_DISK and self.connection.get_uri() == "qemu:///session":
             # Skip network for non-root
             notebook.set_current_page(PAGE_CPUMEM)
         else:
@@ -330,7 +322,7 @@ class vmmCreate(gobject.GObject):
             else:
                 # No config for PXE needed (yet)
                 notebook.set_current_page(PAGE_INST)
-        elif notebook.get_current_page() == PAGE_CPUMEM and os.getuid() != 0:
+        elif notebook.get_current_page() == PAGE_CPUMEM and self.connection.get_uri() == "qemu:///session":
             # Skip network for non-root
             notebook.set_current_page(PAGE_DISK)
         else:
@@ -365,11 +357,11 @@ class vmmCreate(gobject.GObject):
         else:
             return "PXE"
 
-    def get_config_installer(self, type):
+    def get_config_installer(self, type, os_type):
         if self.get_config_install_method() == VM_INST_PXE:
-            return virtinst.PXEInstaller(type = type)
+            return virtinst.PXEInstaller(type = type, os_type = os_type)
         else:
-            return virtinst.DistroInstaller(type = type)
+            return virtinst.DistroInstaller(type = type, os_type = os_type)
 
     def get_config_kickstart_source(self):
         if self.get_config_install_method() == VM_INST_TREE:
@@ -397,7 +389,7 @@ class vmmCreate(gobject.GObject):
 	return self.window.get_widget("kernel-params").get_text()
 
     def get_config_network(self):
-        if os.getuid() != 0:
+        if self.connection.get_uri() == "qemu:///session":
             return ["user"]
 
         if self.window.get_widget("net-type-network").get_active():
@@ -558,7 +550,7 @@ class vmmCreate(gobject.GObject):
             self._validation_error_box(_("UUID Error"), str(e))
 
         # HACK: If usermode, and no nic is setup, use usermode networking
-        if os.getuid() != 0:
+        if self.connection.get_uri() == "qemu:///session":
             try:
                 self._net = virtinst.VirtualNetworkInterface(type="user")
             except ValueError, e:
@@ -827,10 +819,16 @@ class vmmCreate(gobject.GObject):
                 self._guest = virtinst.FullVirtGuest(type=self.get_domain_type(),
                                                      arch=self.get_domain_arch(),
                                                      hypervisorURI=self.connection.get_uri())
-            
+
             self._guest.name = name # Transfer name over
 
         elif page_num == PAGE_INST:
+            if self.get_config_method() == VM_PARA_VIRT:
+                os_type = "xen"
+            else:
+                os_type = "hvm"
+            self._guest.installer = self.get_config_installer(self.get_domain_type(), os_type)
+
             try:
                 if self.get_config_os_type() is not None \
                    and self.get_config_os_type() != "generic":
@@ -848,7 +846,11 @@ class vmmCreate(gobject.GObject):
                 self._validation_error_box(_("Invalid FV OS Variant"), str(e))
                 return False
         elif page_num == PAGE_INST_LOCAL:
-            self._guest.installer = self.get_config_installer(self.get_domain_type())
+            if self.get_config_method() == VM_PARA_VIRT:
+                os_type = "xen"
+            else:
+                os_type = "hvm"
+            self._guest.installer = self.get_config_installer(self.get_domain_type(), os_type)
 
             if self.window.get_widget("media-iso-image").get_active():
 
@@ -1131,29 +1133,31 @@ class vmmCreate(gobject.GObject):
 
     def change_virt_method(self, ignore=None):
         arch = self.window.get_widget("cpu-architecture")
-        if self.connection.get_type() != "QEMU" or self.window.get_widget("virt-method-pv").get_active():
-            arch.set_sensitive(False)
+
+        if self.get_config_method() == VM_PARA_VIRT:
+            nativeArch = self.repopulate_cpu_arch(arch.get_model(), ["xen", "linux"])
         else:
-            arch.set_sensitive(True)
-        self.change_cpu_arch(arch)
+            nativeArch = self.repopulate_cpu_arch(arch.get_model(), ["hvm"])
+        arch.set_active(nativeArch)
+        self.change_cpu_arch()
 
-    def change_cpu_arch(self, src):
-        model = src.get_model()
-        active = src.get_active()
-        canAccel = False
-        if active != -1 and src.get_property("sensitive") and \
-               (virtinst.util.is_kvm_capable() or virtinst.util.is_kqemu_capable()):
-            if os.uname()[4] == "i686" and model[active][0] == "i686":
-                canAccel = True
-            elif os.uname()[4] == "x86_64" and model[active][0] in ("i686", "x86_64"):
-                canAccel = True
+    def change_cpu_arch(self, ignore=None):
+        hypervisor = self.window.get_widget("hypervisor")
+        arch = self.get_domain_arch()
 
-        self.window.get_widget("cpu-accelerate").set_sensitive(canAccel)
-        self.window.get_widget("cpu-accelerate").set_active(canAccel)
+        if arch is None:
+            hypervisor.set_active(-1)
+            hypervisor.set_sensitive(False)
+            return
+
+        hypervisor.set_sensitive(True)
+        if self.get_config_method() == VM_PARA_VIRT:
+            bestHyper = self.repopulate_hypervisor(hypervisor.get_model(), ["xen", "linux"], arch)
+        else:
+            bestHyper = self.repopulate_hypervisor(hypervisor.get_model(), ["hvm"], arch)
+        hypervisor.set_active(bestHyper)
 
     def get_domain_arch(self):
-        if self.connection.get_type() != "QEMU":
-            return None
         arch = self.window.get_widget("cpu-architecture")
         if arch.get_active() == -1:
             return None
@@ -1172,15 +1176,41 @@ class vmmCreate(gobject.GObject):
             return True
 
     def get_domain_type(self):
-        if self.connection.get_type() == "QEMU":
-            if self.window.get_widget("cpu-accelerate").get_active():
-                if virtinst.util.is_kvm_capable():
-                    return "kvm"
-                elif virtinst.util.is_kqemu_capable():
-                    return "kqemu"
-            return "qemu"
-        else:
-            return "xen"
+        hypervisor = self.window.get_widget("hypervisor")
+
+        if hypervisor.get_active() == -1:
+            return None
+
+        return hypervisor.get_model()[hypervisor.get_active()][0]
+
+    def repopulate_cpu_arch(self, model, ostype):
+        model.clear()
+        i = 0
+        native = -1
+        for guest in self.caps.guests:
+            if guest.os_type not in ostype:
+                continue
+
+            model.append([guest.arch])
+            if guest.arch == self.caps.host.arch:
+                native = i
+            i = i + 1
+
+        return native
+
+
+    def repopulate_hypervisor(self, model, ostype, arch):
+        model.clear()
+        i = -1
+        for guest in self.caps.guests:
+            if guest.os_type not in ostype or guest.arch != arch:
+                continue
+
+            for domain in guest.domains:
+                model.append([domain.hypervisor_type])
+                i = i + 1
+
+        return i
 
     def show_help(self, src):
         # help to show depends on the notebook page, yahoo
