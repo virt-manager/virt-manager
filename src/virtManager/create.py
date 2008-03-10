@@ -150,8 +150,8 @@ class vmmCreate(gobject.GObject):
             logging.error("Unable to create optical-helper widget: '%s'", e)
             self.window.get_widget("media-physical").set_sensitive(False)
 
-        self.window.get_widget("media-physical").set_sensitive(False)
-        self.window.get_widget("storage-partition").set_sensitive(False)
+        self.window.get_widget("media-physical").set_sensitive(True)
+        self.window.get_widget("storage-partition").set_sensitive(True)
 
         # set up the lists for the url widgets
         media_url_list = self.window.get_widget("pv-media-url")
