@@ -1,4 +1,224 @@
+2008-03-10  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* NEWS, configure.ac, virt-manager.spec.in:
+	Update for new release
+	[81d87628fd7b] [tip]
+
+	* src/virtManager/create.py:
+	Fix disk field visibility
+	[2ccd1c5ccd1a]
+
+2008-03-09  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/create.py, src/vmm-
+	create.glade, virt-manager.spec.in:
+	Control create wizard state based on capabilities info
+	[215779fe46c6]
+
+2008-03-07  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py, src/vmm-console.glade:
+	Enable VNC window scaling
+	[9ef26db66b0b]
+
+2008-03-06  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py:
+	Have max memory consider current mem allocation when altered
+	directly (Adam Stokes)
+	[1f1ee216fcef]
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	Add autostart and boot device selection support.
+	[4770f435ab01]
+
+2008-03-05  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py:
+	Merge heads
+	[0b213f9406fd]
+
+2008-03-04  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	Actually fix cdrom connect/disconnect error reporting
+	[4d2416cd81ec]
+
+	* src/virtManager/host.py:
+	Don't allow adding virtual networks is we are disconnected.
+	[35372d4a6ffa]
+
+2008-03-03  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	Fix typo in creds scanning.
+	[7fcbb49d9add]
+
+2008-02-28  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	Raise cdrom connect/disconnect failures.
+	[191b7b0e2f21]
+
+	* src/virtManager/details.py:
+	Raise previously ignored exceptions in widget update function.
+	[49bba0b0389d]
+
+2008-02-25  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virt-manager.py.in:
+	Add custom libvirt error handler.
+
+	The handler will ignore all libvirt _errors_, as these should be
+	dealt with as exceptions. This will also prevent libvirt errors from
+	being printed to the console when an exception is deliberately
+	ignored. All other libvirt messages (warnings) will be logged.
+	[bc4b197cdc1f]
+
+	* src/virtManager/manager.py:
+	Fix delete button sensitivity if selected guest is shutdown.
+	[dc9c723e13ff]
+
+2008-02-22  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	Check vm maxmem directly before we set current mem value. (Thanks
+	Adam Stokes)
+
+	Prevents a race when we set maxmem and current mem to new values at
+	the same time. Maxmem isn't updated in time, so we check the vm info
+	directly when setting the current mem to get the most up to date
+	value.
+	[8a68171fe280]
+
+2008-02-21  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py:
+	Only offer SCSI disk option for xen hvm: qemu doesn't like sd*
+	disks.
+	[1eeb1546b21b]
+
+2008-02-22  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	Reuse virtinst.util.get_max_vcpus
+	[f46dcf034d35]
+
+2008-03-05  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/console.py,
+	src/virtManager/create.py, src/virtManager/createnet.py,
+	src/virtManager/opticalhelper.py:
+	Fix use of DBus objects to always go via an explicit interface
+	[43d82ba67ffa]
+
+2008-02-23  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py:
+	Force connection to readonly if non-root and local HV uri and no
+	policykit (Saori Fukuta)
+	[d1c6390bbea9]
+
+	* Merge heads
+	[01c1acc34b1c]
+
+2008-02-21  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py:
+	Skip bonding if /sys/class/net/bonding_masters doesn't exist
+	(Shigeki Sakamoto)
+	[5c86a029ee3a]
+
+2008-02-23  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	Allow choice between local CDROM & kernel/initrd network install for
+	fullvirt guests
+	[ea6903353938]
+
+2008-02-18  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* Merge heads
+	[07ff9bffe54d]
+
+	* src/virtManager/connection.py:
+	Support bonding & VLAN devices for attaching guest NICs (S.Sakamoto)
+	[6a155cfe437c]
+
+2008-02-16  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/engine.py, src/virtManager/host.py:
+	Wire up hosts dialog about menu entry (Henry Zhang)
+	[4a5c3994af32]
+
+2008-02-14  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Auto add usermode nic during create and addhardware when
+	appropriate: everything was in place but it was broken.
+	[402283b6aa0a]
+
+2008-02-03  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/serialcon.py:
+	Use pty.slave_open for Solaris portability (Henry Zhang)
+	[a623336112b9]
+
+2008-01-31  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* po/fr.po:
+	Refresh French translation from Gauthier Ancelin
+	[7bcfffba3a97]
+
+	* README, TODO, src/virt-manager.py.in, src/virtManager/connect.py,
+	src/virtManager/connection.py, src/vmm-open-connection.glade, virt-
+	manager.spec.in:
+	Added support for libvirt authentication
+	[1892867ca5c7]
+
+2008-01-30  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-modify-file-storage.glade:
+	Remove unused vmm-modify-file-storage
+	[28067b47f82c]
+
+	* src/virtManager/addhardware.py:
+	Fix adding virtual blktap disk to pv guest via addhardware wizard.
+	rhbz 430926
+	[90dd30034ebc]
+
+2008-01-16  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Fix disk size sensitivity: opening and closing the file chooser
+	would make the disk size field sensitive even if nothing was
+	selected.
+	[384724cb14e0]
+
+	* src/virtManager/addhardware.py:
+	Adding a bridged network device was broken, adding the display name
+	and not the interface name. Fix similar to cset 597. Fixes bug
+	392881.
+	[dbd25721f588]
+
+2008-01-15  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* AUTHORS, src/virtManager/console.py, src/virtManager/create.py,
+	src/virtManager/domain.py, src/virtManager/manager.py:
+	Pass libvirt connection username through to VNC console instead of
+	hardcoding root (Soren Hansen)
+	[49c55daf788d]
+
 2008-01-10  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.5.3-1 for changeset 49f8c16f0acc
+	[d99010f79088]
+
+	* ChangeLog:
+	Refresh changelog
+	[49f8c16f0acc] [RELEASE-0.5.3-1]
 
 	* po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po, po/da.po,
 	po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po, po/hi.po,
@@ -8,7 +228,7 @@
 	po/ru.po, po/sr.po, po/sr@Latn.po, po/sv.po, po/ta.po, po/te.po,
 	po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po, po/zh_TW.po:
 	Refresh po files
-	[c95c688762cf] [tip]
+	[c95c688762cf]
 
 	* configure.ac, virt-manager.spec.in:
 	Update in prep for new release
