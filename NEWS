@@ -1,6 +1,32 @@
  Virtual Machine Manager News
  ============================
 
+Release 0.5.4
+-------------
+
+This release focuses on minor feature enhancement and bug fixes. Using
+the new GTK-VNC accelerated scaling support, the guest console window
+can be smoothly resized to fill the screen. The SSH username is passed
+through to the VNC console when tunnelling. Adding bridged network
+devices is fixed. Support for all libvirt authentication methods is
+enabled including Kerberos and PolicyKit. Solaris portability fix for
+the text console. Support for detecting bonding and VLAN devices for
+attaching guest NICs. Allow fullvirt guests to install off kernel and
+initrd as well as existing CDROM methods. Fix invocation of DBus methods
+to use an interface. Allow setting of autostart flag, and changing boot
+device ordering. Control the new VM wizard based on declared hypervisor
+capabilities.
+
+Release 0.5.3
+-------------
+
+This is a bug fix release. The sizing of the VNC window is fixed for
+screens where the physical size is less than the guest screen size.
+The 'new vm' button is switched back to its old (more obvious style/
+placement). Restore of VMs is working again for local connections. A
+menu for sending special key sequences to the guest is added. Lots of
+other misc bug fixes
+
 Release 0.5.2
 -------------
 
