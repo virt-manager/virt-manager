@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 Red Hat, Inc.
+# Copyright (C) 2006, 2008 Red Hat, Inc.
 # Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -726,7 +726,10 @@ class vmmCreate(gobject.GObject):
         if file != None and len(file) > 0 and not(os.path.exists(file)):
             self.window.get_widget("storage-file-size").set_sensitive(True)
             self.window.get_widget("non-sparse").set_sensitive(True)
-            self.window.get_widget("storage-file-size").set_value(4000)
+            size = self.get_config_disk_size()
+            if size == None:
+                size = 4000
+            self.window.get_widget("storage-file-size").set_value(size)
         else:
             self.window.get_widget("storage-file-size").set_sensitive(False)
             self.window.get_widget("non-sparse").set_sensitive(False)
