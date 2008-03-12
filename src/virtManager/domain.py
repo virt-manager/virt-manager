@@ -570,13 +570,18 @@ class vmmDomain(gobject.GObject):
             doc = libxml2.parseDoc(xml)
             ctx = doc.xpathNewContext()
             disk_fragment = ctx.xpathEval("/disk")
+            driver_fragment = ctx.xpathEval("/disk/driver")
             origdisk = disk_fragment[0].serialize()
             disk_fragment[0].setProp("type", type)
             elem = disk_fragment[0].newChild(None, "source", None)
             if type == "file":
                 elem.setProp("file", source)
+                if driver_fragment:
+                    driver_fragment.setProp("name", type)
             else:
                 elem.setProp("dev", source)
+                if driver_fragment:
+                    driver_fragment.setProp("name", "phy")
             result = disk_fragment[0].serialize()
             logging.debug("connect_cdrom_device produced the following XML: %s" % result)
         finally:
