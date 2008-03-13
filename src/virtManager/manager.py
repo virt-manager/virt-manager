@@ -70,6 +70,10 @@ class vmmManager(gobject.GObject):
                                 gobject.TYPE_NONE, (str,str)),
         "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
+        "action-refresh-console": (gobject.SIGNAL_RUN_FIRST,
+                                   gobject.TYPE_NONE, (str,str)),
+        "action-refresh-terminal": (gobject.SIGNAL_RUN_FIRST,
+                                    gobject.TYPE_NONE, (str,str)),
         "action-show-details": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
         "action-show-about": (gobject.SIGNAL_RUN_FIRST,
@@ -403,6 +407,9 @@ class vmmManager(gobject.GObject):
                 self.emit("action-show-console", uri, vmuuid)
             elif not connect.is_remote():
                 self.emit("action-show-terminal", uri, vmuuid)
+        else:
+            self.emit("action-refresh-console", uri, vmuuid)
+            self.emit("action-refresh-terminal", uri, vmuuid)
 
     def _append_vm(self, model, vm, conn):
         logging.debug("About to append vm: %s" % vm.get_name())

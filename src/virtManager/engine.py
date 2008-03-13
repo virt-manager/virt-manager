@@ -185,6 +185,10 @@ class vmmEngine(gobject.GObject):
         self.show_console(uri, uuid)
     def _do_show_terminal(self, src, uri, uuid):
         self.show_serial_console(uri, uuid)
+    def _do_refresh_console(self, src, uri, uuid):
+        self.refresh_console(uri, uuid)
+    def _do_refresh_terminal(self, src, uri, uuid):
+        self.refresh_serial_console(uri, uuid)
     def _do_save_domain(self, src, uri, uuid):
         self.save_domain(src, uri, uuid)
     def _do_destroy_domain(self, src, uri, uuid):
@@ -258,6 +262,30 @@ class vmmEngine(gobject.GObject):
             self.connections[uri]["windowSerialConsole"][uuid] = console
         self.connections[uri]["windowSerialConsole"][uuid].show()
 
+    def refresh_console(self, uri, uuid):
+        con = self.get_connection(uri)
+
+        if not(self.connections[uri]["windowConsole"].has_key(uuid)):
+            return
+
+        console = self.connections[uri]["windowConsole"][uuid]
+        if not(console.is_visible()):
+            return
+
+        console.show()
+
+    def refresh_serial_console(self, uri, uuid):
+        con = self.get_connection(uri)
+
+        if not(self.connections[uri]["windowSerialConsole"].has_key(uuid)):
+            return
+
+        console = self.connections[uri]["windowSerialConsole"][uuid]
+        if not(console.is_visible()):
+            return
+
+        console.show()
+
     def show_details_performance(self, uri, uuid):
         win = self.show_details(uri, uuid)
         win.activate_performance_page()
@@ -302,6 +330,8 @@ class vmmEngine(gobject.GObject):
             self.windowManager.connect("action-show-host", self._do_show_host)
             self.windowManager.connect("action-show-connect", self._do_show_connect)
             self.windowManager.connect("action-connect", self._do_connect)
+            self.windowManager.connect("action-refresh-console", self._do_refresh_console)
+            self.windowManager.connect("action-refresh-terminal", self._do_refresh_terminal)
         return self.windowManager
 
     def show_manager(self):
