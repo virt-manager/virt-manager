@@ -1844,7 +1844,7 @@
                                   <widget class="GtkTable" id="table34">
                                     <property name="visible">True</property>
                                     <property name="border_width">3</property>
-                                    <property name="n_rows">4</property>
+                                    <property name="n_rows">5</property>
                                     <property name="n_columns">2</property>
                                     <property name="column_spacing">3</property>
                                     <property name="row_spacing">3</property>
@@ -1859,6 +1859,8 @@
                                         <property name="bottom_attach">4</property>
                                         <property name="x_options">GTK_FILL</property>
                                         <property name="y_options"></property>
+                                        <property name="x_padding">5</property>
+                                        <property name="y_padding">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1872,6 +1874,8 @@
                                         <property name="bottom_attach">3</property>
                                         <property name="x_options">GTK_FILL</property>
                                         <property name="y_options"></property>
+                                        <property name="x_padding">5</property>
+                                        <property name="y_padding">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1887,6 +1891,7 @@
                                         <property name="bottom_attach">4</property>
                                         <property name="x_options">GTK_FILL</property>
                                         <property name="y_options"></property>
+                                        <property name="y_padding">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1902,6 +1907,7 @@
                                         <property name="bottom_attach">3</property>
                                         <property name="x_options">GTK_FILL</property>
                                         <property name="y_options"></property>
+                                        <property name="y_padding">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1917,6 +1923,7 @@
                                         <property name="bottom_attach">2</property>
                                         <property name="x_options">GTK_FILL</property>
                                         <property name="y_options"></property>
+                                        <property name="y_padding">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1930,6 +1937,8 @@
                                         <property name="bottom_attach">2</property>
                                         <property name="x_options">GTK_FILL</property>
                                         <property name="y_options"></property>
+                                        <property name="x_padding">5</property>
+                                        <property name="y_padding">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1943,6 +1952,7 @@
                                         <property name="right_attach">2</property>
                                         <property name="x_options">GTK_FILL</property>
                                         <property name="y_options"></property>
+                                        <property name="y_padding">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1953,6 +1963,40 @@
                                         <property name="use_underline">True</property>
                                       </widget>
                                       <packing>
+                                        <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options"></property>
+                                        <property name="x_padding">5</property>
+                                        <property name="y_padding">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="label5">
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Keymap:</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="top_attach">4</property>
+                                        <property name="bottom_attach">5</property>
+                                        <property name="x_options">GTK_FILL</property>
+                                        <property name="y_options"></property>
+                                        <property name="x_padding">5</property>
+                                        <property name="y_padding">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="graphics-keymap">
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label">keylabel</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">4</property>
+                                        <property name="bottom_attach">5</property>
                                         <property name="x_options">GTK_FILL</property>
                                         <property name="y_options"></property>
                                       </packing>
@@ -2006,7 +2050,7 @@
                     <child>
                       <widget class="GtkLabel" id="config-graphics-remove">
                         <property name="visible">True</property>
-                        <property name="label">label409</property>
+                        <property name="label">Graphics</property>
                       </widget>
                       <packing>
                         <property name="type">tab</property>

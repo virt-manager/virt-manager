@@ -703,7 +703,8 @@ class vmmDomain(gobject.GObject):
                 if type == "vnc":
                     listen = node.prop("listen")
                     port = node.prop("port")
-                    graphics.append([type, listen, port, type])
+                    keymap = node.prop("keymap")
+                    graphics.append([type, listen, port, type, keymap])
                 else:
                     graphics.append([type, None, None, type])
         finally:
