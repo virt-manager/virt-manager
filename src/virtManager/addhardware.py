@@ -63,6 +63,10 @@ class vmmAddHardware(gobject.GObject):
         self._dev = None
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-add-hardware.glade", "vmm-add-hardware", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-add-hardware")
+        self.err = vmmErrorDialog(self.topwin,
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
         self.topwin.hide()
         self.window.signal_autoconnect({
             "on_create_pages_switch_page" : self.page_changed,
@@ -224,7 +228,12 @@ class vmmAddHardware(gobject.GObject):
 
     def forward(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
-        if(self.validate(notebook.get_current_page()) != True):
+        try:
+            if(self.validate(notebook.get_current_page()) != True):
+                return
+        except Exception, e:
+            self.err.show_err(_("Uncaught error validating hardware input: %s") % str(e),
+                              "".join(traceback.format_exc()))
             return
 
         hwtype = self.get_config_hardware_type()
@@ -423,12 +432,7 @@ class vmmAddHardware(gobject.GObject):
             self.add_graphics()
 
         if self.install_error is not None:
-            dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                self.install_error,
-                                self.install_details)
-            dg.run()
-            dg.hide()
-            dg.destroy()
+            self.err.show_err(self.install_error, self.install_details)
             self.topwin.set_sensitive(True)
             self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
             # Don't close becase we allow user to go back in wizard & correct
@@ -646,20 +650,17 @@ class vmmAddHardware(gobject.GObject):
     def validate(self, page_num):
         if page_num == PAGE_INTRO:
             if self.get_config_hardware_type() == None:
-                self._validation_error_box(_("Hardware Type Required"), \
-                                           _("You must specify what type of hardware to add"))
-                return False
+                return self.err.val_err(_("Hardware Type Required"), \
+                                        _("You must specify what type of hardware to add"))
         elif page_num == PAGE_DISK:
             path = self.get_config_disk_image()
             if path == None or len(path) == 0:
-                self._validation_error_box(_("Storage Path Required"), \
-                                           _("You must specify a partition or a file for disk storage."))
-                return False
+                return self.err.val_err(_("Storage Path Required"), \
+                                        _("You must specify a partition or a file for disk storage."))
             
             if self.window.get_widget("target-device").get_active() == -1:
-                self._validation_error_box(_("Target Device Required"),
-                                           _("You must select a target device for the disk"))
-                return False
+                return self.err.val_err(_("Target Device Required"),
+                                        _("You must select a target device for the disk"))
 
             node, nodemax, device = self.get_config_disk_target()
             if self.window.get_widget("storage-partition").get_active():
@@ -672,8 +673,8 @@ class vmmAddHardware(gobject.GObject):
                 if not os.path.exists(path):
                     dir = os.path.dirname(os.path.abspath(path))
                     if not os.path.exists(dir):
-                        self._validation_error_box(_("Storage Path Does not exist"),
-                                                   _("The directory %s containing the disk image does not exist") % dir)
+                        self.err.val_err(_("Storage Path Does not exist"),
+                                         _("The directory %s containing the disk image does not exist") % dir)
                         return False
                     else:
                         vfs = os.statvfs(dir)
@@ -681,14 +682,12 @@ class vmmAddHardware(gobject.GObject):
                         need = size * 1024 * 1024
                         if need > avail:
                             if self.is_sparse_file():
-                                res = self._yes_no_box(_("Not Enough Free Space"),
-                                                       _("The filesystem will not have enough free space to fully allocate the sparse file when the guest is running. Use this path anyway?"))
-                                if not res:
+                                if not self.err.yes_no(_("Not Enough Free Space"),
+                                                       _("The filesystem will not have enough free space to fully allocate the sparse file when the guest is running. Use this path anyway?")):
                                     return False
                             else:
-                                self._validation_error_box(_("Not Enough Free Space"),
-                                                           _("There is not enough free space to create the disk"))
-                                return False
+                                return self.err.val_err(_("Not Enough Free Space"),
+                                                        _("There is not enough free space to create the disk"))
 
             # Build disk object
             filesize = self.get_config_disk_size()
@@ -709,41 +708,35 @@ class vmmAddHardware(gobject.GObject):
                    not self.vm.is_hvm() and virtinst.util.is_blktap_capable():
                     self._dev.driver_name = virtinst.VirtualDisk.DRIVER_TAP
             except ValueError, e:
-                self._validation_error_box(_("Invalid Storage Parameters"), \
-                                            str(e))
-                return False
-            
+                return self.err.val_err(_("Invalid Storage Parameters"), str(e))
+ 
             if self._dev.is_conflict_disk(self.vm.get_connection().vmm) is True:
-                res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % self._dev), \
-                                       _("Do you really want to use the disk ?"))
+                res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % self._dev), \
+                                      _("Do you really want to use the disk ?"))
                 return res
         elif page_num == PAGE_NETWORK:
             net = self.get_config_network()
             if self.window.get_widget("net-type-network").get_active():
                 if self.window.get_widget("net-network").get_active() == -1:
-                    self._validation_error_box(_("Virtual Network Required"),
-                                               _("You must select one of the virtual networks"))
-                    return False
+                    return self.err.val_err(_("Virtual Network Required"),
+                                            _("You must select one of the virtual networks"))
             else:
                 if self.window.get_widget("net-device").get_active() == -1:
-                    self._validation_error_box(_("Physical Device Required"),
-                                               _("You must select one of the physical devices"))
-                    return False
+                    return self.err.val_err(_("Physical Device Required"),
+                                            _("You must select one of the physical devices"))
 
             mac = self.get_config_macaddr()
             if self.window.get_widget("mac-address").get_active():
 
                 if mac is None or len(mac) == 0:
-                    self._validation_error_box(_("Invalid MAC address"), \
-                                               _("No MAC address was entered. Please enter a valid MAC address."))
-                    return False
-                
+                    return self.err.val_err(_("Invalid MAC address"), \
+                                            _("No MAC address was entered. Please enter a valid MAC address."))
+
                 try:     
                     self._dev = virtinst.VirtualNetworkInterface(macaddr=mac)
                 except ValueError, e:
-                    self._validation_error_box(_("Invalid MAC address"), \
-                                               str(e))
-                    return False
+                    return self.err.val_err(_("Invalid MAC address"), str(e))
+                    
 
             try:
                 if net[0] == "bridge":
@@ -757,45 +750,18 @@ class vmmAddHardware(gobject.GObject):
                 else:
                     raise ValueError, _("Unsupported networking type") + net[0]
             except ValueError, e:
-                self._validation_error_box(_("Invalid Network Parameter"), \
-                                           str(e))
-                return False
+                return self.err.val_err(_("Invalid Network Parameter"), \
+                                        str(e))
 
             conflict = self._dev.is_conflict_net(self.vm.get_connection().vmm)
             if conflict[0]:
-                return self._validation_error_box(_("Mac address collision"),\
-                                                  conflict[1])
+                return self.err.val_err(_("Mac address collision"),\
+                                        conflict[1])
             elif conflict[1] is not None:
-                return self._yes_no_box(_("Mac address collision"),\
-                                        conflict[1] + " " + _("Are you sure you want to use this address?"))
+                return self.err.yes_no(_("Mac address collision"),\
+                                       conflict[1] + " " + _("Are you sure you want to use this address?"))
 
         return True
-
-    def _validation_error_box(self, text1, text2=None):
-        message_box = gtk.MessageDialog(self.window.get_widget("vmm-add-hardware"), \
-                                                0, \
-                                                gtk.MESSAGE_ERROR, \
-                                                gtk.BUTTONS_OK, \
-                                                text1)
-        if text2 != None:
-            message_box.format_secondary_text(text2)
-        message_box.run()
-        message_box.destroy()
-
-    def _yes_no_box(self, text1, text2=None):
-        message_box = gtk.MessageDialog(self.window.get_widget("vmm-add-hardware"), \
-                                                0, \
-                                                gtk.MESSAGE_WARNING, \
-                                                gtk.BUTTONS_YES_NO, \
-                                                text1)
-        if text2 != None:
-            message_box.format_secondary_text(text2)
-        if message_box.run()== gtk.RESPONSE_YES:
-            res = True
-        else:
-            res = False
-        message_box.destroy()
-        return res
 
     def populate_network_model(self, model):
         model.clear()

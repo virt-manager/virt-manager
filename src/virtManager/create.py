@@ -85,6 +85,10 @@ class vmmCreate(gobject.GObject):
         self.connection = connection
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-create.glade", "vmm-create", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-create")
+        self.err = vmmErrorDialog(self.topwin,
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
         self.topwin.hide()
         self.window.signal_autoconnect({
             "on_create_pages_switch_page" : self.page_changed,
@@ -288,7 +292,12 @@ class vmmCreate(gobject.GObject):
 
     def forward(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
-        if(self.validate(notebook.get_current_page()) != True):
+        try:
+            if(self.validate(notebook.get_current_page()) != True):
+                return
+        except Exception, e:
+            self.err.show_err(_("Uncaught error validating input: %s") % str(e),
+                              "".join(traceback.format_exc()))
             return
 
         if notebook.get_current_page() == PAGE_INST:
@@ -547,14 +556,14 @@ class vmmCreate(gobject.GObject):
         try:
             guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
         except ValueError, E:
-            self._validation_error_box(_("UUID Error"), str(e))
+            return self.err.val_err(_("UUID Error"), str(e))
 
         # HACK: If usermode, and no nic is setup, use usermode networking
         if self.connection.get_uri() == "qemu:///session":
             try:
                 self._net = virtinst.VirtualNetworkInterface(type="user")
             except ValueError, e:
-                self._validation_error_box(_("Failed to set up usermode networking"), str(e))
+                return self.err.val_err(_("Failed to set up usermode networking"), str(e))
 
         if self._disk is not None:
             guest.disks = [self._disk]
@@ -809,8 +818,7 @@ class vmmCreate(gobject.GObject):
             try:
                 self._guest.name = name
             except ValueError, e:
-                self._validation_error_box(_("Invalid System Name"), str(e))
-                return False
+                return self.err.val_err(_("Invalid System Name"), str(e))
         elif page_num == PAGE_TYPE:
 
             # Set up appropriate guest object dependent on selected type
@@ -838,16 +846,14 @@ class vmmCreate(gobject.GObject):
                     logging.debug("OS Type: %s" % self.get_config_os_type())
                     self._guest.os_type = self.get_config_os_type()
             except ValueError, e:
-                self._validation_error_box(_("Invalid FV OS Type"), str(e))
-                return False
+                return self.err.val_err(_("Invalid FV OS Type"), str(e))
             try:
                 if self.get_config_os_variant() is not None \
                    and self.get_config_os_type() != "generic":
                     logging.debug("OS Variant: %s" % self.get_config_os_variant())
                     self._guest.os_variant = self.get_config_os_variant()
             except ValueError, e:
-                self._validation_error_box(_("Invalid FV OS Variant"), str(e))
-                return False
+                return self.err.val_err(_("Invalid FV OS Variant"), str(e))
         elif page_num == PAGE_INST_LOCAL:
             if self.get_config_method() == VM_PARA_VIRT:
                 os_type = "xen"
@@ -861,32 +867,28 @@ class vmmCreate(gobject.GObject):
                 try:
                     self._guest.cdrom = src
                 except ValueError, e:
-                    self._validation_error_box(_("ISO Path Not Found"), str(e))
-                    return False
+                    return self.err.val_err(_("ISO Path Not Found"), str(e))
             else:
                 cdlist = self.window.get_widget("cd-path")
                 src = self.get_config_install_source()
                 try:
                     self._guest.cdrom = src
                 except ValueError, e:
-                    self._validation_error_box(_("CD-ROM Path Error"), str(e))
-                    return False
+                    return self.err.val_err(_("CD-ROM Path Error"), str(e))
         elif page_num == PAGE_INST_TREE:
 
             src = self.get_config_install_source()
             try:
                 self._guest.location = src
             except ValueError, e:
-                self._validation_error_box(_("Invalid Install URL"), str(e))
-                return False
+                return self.err.val_err(_("Invalid Install URL"), str(e))
 
             ks = self.get_config_kickstart_source()
             if ks is not None and len(ks) != 0:
                 if not (ks.startswith("http://") or ks.startswith("ftp://") \
                         or ks.startswith("nfs:")):
-                    self._validation_error_box(_("Kickstart URL Error"), \
-                                               _("Kickstart location must be an NFS, HTTP or FTP source"))
-                    return False
+                    return self.err.val_err(_("Kickstart URL Error"), \
+                                            _("Kickstart location must be an NFS, HTTP or FTP source"))
                 else:
                     self._guest.extraargs = "ks=%s" % (ks,)
 
@@ -902,9 +904,8 @@ class vmmCreate(gobject.GObject):
             
             disk = self.get_config_disk_image()
             if disk == None or len(disk) == 0:
-                self._validation_error_box(_("Storage Address Required"), \
-                                           _("You must specify a partition or a file for storage for the guest install"))
-                return False
+                return self.err.val_err(_("Storage Address Required"), \
+                                        _("You must specify a partition or a file for storage for the guest install"))
 
             if not self.window.get_widget("storage-partition").get_active():
                 disk = self.get_config_disk_image()
@@ -912,23 +913,21 @@ class vmmCreate(gobject.GObject):
                 if not os.path.exists(disk):
                     dir = os.path.dirname(os.path.abspath(disk))
                     if not os.path.exists(dir):
-                        self._validation_error_box(_("Storage Path Does not exist"),
-                                                   _("The directory %s containing the disk image does not exist") % dir)
-                        return False
+                        return self.err.val_err(_("Storage Path Does not exist"),
+                                                _("The directory %s containing the disk image does not exist") % dir)
                     else:
                         vfs = os.statvfs(dir)
                         avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
                         need = size * 1024 * 1024
                         if need > avail:
                             if self.is_sparse_file():
-                                res = self._yes_no_box(_("Not Enough Free Space"),
-                                                       _("The filesystem will not have enough free space to fully allocate the sparse file when the guest is running. Use this path anyway?"))
+                                res = self.err.yes_no(_("Not Enough Free Space"),
+                                                      _("The filesystem will not have enough free space to fully allocate the sparse file when the guest is running. Use this path anyway?"))
                                 if not res:
                                     return False
                             else:
-                                self._validation_error_box(_("Not Enough Free Space"),
-                                                           _("There is not enough free space to create the disk"))
-                                return False
+                                return self.err.val_err(_("Not Enough Free Space"),
+                                                        _("There is not enough free space to create the disk"))
 
             # Attempt to set disk
             filesize = None
@@ -957,35 +956,30 @@ class vmmCreate(gobject.GObject):
                 else:
                     self.non_sparse = False
             except ValueError, e:
-                self._validation_error_box(_("Invalid Storage Address"), \
-                                            str(e))
-                return False
+                return self.err.val_err(_("Invalid Storage Address"), str(e))
 
             if self._disk.is_conflict_disk(self.connection.vmm) is True:
-               res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % disk), _("Do you really want to use the disk ?"))
+               res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % disk), _("Do you really want to use the disk ?"))
                return res
 
         elif page_num == PAGE_NETWORK:
 
             if self.window.get_widget("net-type-network").get_active():
                 if self.window.get_widget("net-network").get_active() == -1:
-                    self._validation_error_box(_("Virtual Network Required"),
-                                               _("You must select one of the virtual networks"))
-                    return False
+                    return self.err.val_err(_("Virtual Network Required"),
+                                            _("You must select one of the virtual networks"))
             else:
                 if self.window.get_widget("net-device").get_active() == -1:
-                    self._validation_error_box(_("Physical Device Required"),
-                                               _("You must select one of the physical devices"))
-                    return False
+                    return self.err.val_err(_("Physical Device Required"),
+                                            _("You must select one of the physical devices"))
 
             net = self.get_config_network()
 
             if self.window.get_widget("mac-address").get_active():
                 mac = self.window.get_widget("create-mac-address").get_text()
                 if mac is None or len(mac) == 0:
-                    self._validation_error_box(_("Invalid MAC address"), \
-                                               _("No MAC address was entered. Please enter a valid MAC address."))
-                    return False
+                    return self.err.val_err(_("Invalid MAC address"), \
+                                            _("No MAC address was entered. Please enter a valid MAC address."))
 
             else:
                 mac = None
@@ -1002,16 +996,13 @@ class vmmCreate(gobject.GObject):
                     self._net = virtinst.VirtualNetworkInterface(macaddr=mac, \
                                                                  type=net[0])
             except ValueError, e:
-                self._validation_error_box(_("Network Parameter Error"), \
-                                            str(e))
-                return False
+                return self.err.val_err(_("Network Parameter Error"), str(e))
 
             conflict = self._net.is_conflict_net(self.connection.vmm)
             if conflict[0]:
-                return self._validation_error_box(_("Mac address collision"),\
-                                                  conflict[1])
+                return self.err.val_err(_("Mac address collision"), conflict[1])
             elif conflict[1] is not None:
-                return self._yes_no_box(_("Mac address collision"),\
+                return self.err.yes_no(_("Mac address collision"),\
                                         conflict[1] + " " + _("Are you sure you want to use this address?"))
 
         elif page_num == PAGE_CPUMEM:
@@ -1020,53 +1011,21 @@ class vmmCreate(gobject.GObject):
             try:
                 self._guest.vcpus = int(self.get_config_virtual_cpus())
             except ValueError, e: 
-                self._validation_error_box(_("VCPU Count Error"), \
-                                            str(e))
-                return False
+                return self.err.val_err(_("VCPU Count Error"), str(e))
             # Set Memory
             try:
                 self._guest.memory = int(self.get_config_initial_memory())
             except ValueError, e: 
-                self._validation_error_box(_("Memory Amount Error"), \
-                                            str(e))
-                return False
+                return self.err.val_err(_("Memory Amount Error"), str(e))
             # Set Max Memory
             try:
                 self._guest.maxmemory = int(self.get_config_maximum_memory())
             except ValueError, e: 
-                self._validation_error_box(_("Max Memory Amount Error"), \
-                                            str(e))
-                return False
+                return self.err.val_err(_("Max Memory Amount Error"), str(e))
+
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-back").set_sensitive(True)
         return True
-
-    def _validation_error_box(self, text1, text2=None):
-        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
-                                                0, \
-                                                gtk.MESSAGE_ERROR, \
-                                                gtk.BUTTONS_OK, \
-                                                text1)
-        if text2 != None:
-            message_box.format_secondary_text(text2)
-        message_box.run()
-        message_box.destroy()
-
-    def _yes_no_box(self, text1, text2=None):
-        #import pdb; pdb.set_trace()
-        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create"), \
-                                                0, \
-                                                gtk.MESSAGE_WARNING, \
-                                                gtk.BUTTONS_YES_NO, \
-                                                text1)
-        if text2 != None:
-            message_box.format_secondary_text(text2)
-        if message_box.run()== gtk.RESPONSE_YES:
-            res = True
-        else:
-            res = False
-        message_box.destroy()
-        return res
 
     def populate_url_model(self, model, urls):
         model.clear()

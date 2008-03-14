@@ -100,6 +100,10 @@ class vmmManager(gobject.GObject):
     def __init__(self, config, engine):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-manager.glade", "vmm-manager", domain="virt-manager")
+        self.err = vmmErrorDialog(self.window.get_widget("vmm-manager"),
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
         self.config = config
         self.engine = engine
         self.connections = {}
@@ -775,8 +779,8 @@ class vmmManager(gobject.GObject):
             try:
                 vm.delete()
             except Exception, e:
-                self._err_dialog(_("Error deleting domain: %s" % str(e)),\
-                                     "".join(traceback.format_exc()))
+                self.err.show_err(_("Error deleting domain: %s" % str(e)),\
+                                  "".join(traceback.format_exc()))
             conn.tick(noStatsUpdate=True)
 
     def show_about(self, src):
@@ -1036,30 +1040,17 @@ class vmmManager(gobject.GObject):
 
     def _connect_error(self, conn, details):
         if conn.get_driver() == "xen" and not conn.is_remote():
-            dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
-                                 gtk.BUTTONS_CLOSE,
-                                 _("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
-                                   "Verify that:\n" +
-                                   " - A Xen host kernel was booted\n" +
-                                   " - The Xen service has been started\n"),
-                                 details)
+            self.err.show_err(_("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
+                              "Verify that:\n" +
+                              " - A Xen host kernel was booted\n" +
+                              " - The Xen service has been started\n"),
+                              details,
+                              title=_("Virtual Machine Manager Connection Failure"))
         else:
-            dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
-                                 gtk.BUTTONS_CLOSE,
-                                 _("Unable to open a connection to the libvirt management daemon.\n\n" +
-                                   "Verify that:\n" +
-                                   " - The 'libvirtd' daemon has been started\n"),
-                                 details)
-        dg.set_title(_("Virtual Machine Manager Connection Failure"))
-        dg.run()
-        dg.hide()
-        dg.destroy()
-
-    def _err_dialog(self, summary, details):
-        dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR,
-                            gtk.BUTTONS_CLOSE, summary, details)
-        dg.run()
-        dg.hide()
-        dg.destroy()
+            self.err.show_err(_("Unable to open a connection to the libvirt management daemon.\n\n" +
+                              "Verify that:\n" +
+                              " - The 'libvirtd' daemon has been started\n"),
+                              details,
+                              title=_("Virtual Machine Manager Connection Failure"))
 
 gobject.type_register(vmmManager)

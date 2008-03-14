@@ -81,6 +81,10 @@ class vmmDetails(gobject.GObject):
         self.vm = vm
 
         topwin = self.window.get_widget("vmm-details")
+        self.err = vmmErrorDialog(topwin,
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
         topwin.hide()
         topwin.set_title(self.vm.get_name() + " " + topwin.get_title())
 
@@ -587,16 +591,16 @@ class vmmDetails(gobject.GObject):
             try:
                 self.vm.set_autostart(auto.get_active())
             except Exception, e:
-                self._err_dialog(_("Error changing autostart value: %s") % \
-                                 str(e), "".join(traceback.format_exc()))
+                self.err.show_err(_("Error changing autostart value: %s") % \
+                                  str(e), "".join(traceback.format_exc()))
 
         if boot.get_property("sensitive"):
             try:
                 self.vm.set_boot_device(boot.get_model()[boot.get_active()][2])
                 self.window.get_widget("config-boot-options-apply").set_sensitive(False)
             except Exception, e:
-                self._err_dialog(_("Error changing boot device: %s" % str(e)),
-                                 "".join(traceback.format_exc()))
+                self.err.show_err(_("Error changing boot device: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
                 return
 
     def remove_disk(self, src):
@@ -624,9 +628,9 @@ class vmmDetails(gobject.GObject):
                 else:
                     vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], macaddr=netinfo[3])
             except ValueError, e:
-                self.err_dialog(_("Error Removing Network: %s" % str(e)),
-                            "".join(traceback.format_exc()))
-                return
+                self.err.show_err(_("Error Removing Network: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
+                return False
 
             xml = vnic.get_xml_config()
             self.remove_device(xml)
@@ -859,8 +863,8 @@ class vmmDetails(gobject.GObject):
             try:
                 self.vm.disconnect_cdrom_device(self.window.get_widget("disk-target-device").get_text())
             except Exception, e:
-                self._err_dialog(_("Error Removing CDROM: %s" % str(e)),
-                                 "".join(traceback.format_exc()))
+                self.err.show_err(_("Error Removing CDROM: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
                 return
                 
         else:
@@ -876,21 +880,14 @@ class vmmDetails(gobject.GObject):
         try:
             self.vm.connect_cdrom_device(type, source, target)
         except Exception, e:            
-            self._err_dialog(_("Error Connecting CDROM: %s" % str(e)),
-                               "".join(traceback.format_exc()))
+            self.err.show_err(_("Error Connecting CDROM: %s" % str(e)),
+                              "".join(traceback.format_exc()))
 
     def remove_device(self, xml):
         try:
             self.vm.remove_device(xml)
         except Exception, e:
-            self._err_dialog(_("Error Removing Device: %s" % str(e)),
-                             "".join(traceback.format_exc()))
+            self.err.show_err(_("Error Removing Device: %s" % str(e)),
+                              "".join(traceback.format_exc()))
 
-    def _err_dialog(self, summary, details):
-        dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
-                            gtk.BUTTONS_CLOSE, summary, details)
-        dg.run()
-        dg.hide()
-        dg.destroy()
-    
 gobject.type_register(vmmDetails)

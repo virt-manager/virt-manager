@@ -55,6 +55,10 @@ class vmmEngine(gobject.GObject):
         self.windowCreate = None
         self.windowManager = None
         self.connections = {}
+        self.err = vmmErrorDialog(None,
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
 
         self.timer = None
         self.last_timeout = 0
@@ -298,17 +302,21 @@ class vmmEngine(gobject.GObject):
         con = self.get_connection(uri)
 
         if not(self.connections[uri]["windowDetails"].has_key(uuid)):
-            details = vmmDetails(self.get_config(),
-                                 con.get_vm(uuid))
-            details.connect("action-show-console", self._do_show_console)
-            details.connect("action-show-terminal", self._do_show_terminal)
-            details.connect("action-save-domain", self._do_save_domain)
-            details.connect("action-destroy-domain", self._do_destroy_domain)
-            details.connect("action-show-help", self._do_show_help)
-            details.connect("action-suspend-domain", self._do_suspend_domain)
-            details.connect("action-resume-domain", self._do_resume_domain)
-            details.connect("action-run-domain", self._do_run_domain)
-            details.connect("action-shutdown-domain", self._do_shutdown_domain)
+            try:
+                details = vmmDetails(self.get_config(),
+                                     con.get_vm(uuid))
+                details.connect("action-show-console", self._do_show_console)
+                details.connect("action-show-terminal", self._do_show_terminal)
+                details.connect("action-save-domain", self._do_save_domain)
+                details.connect("action-destroy-domain", self._do_destroy_domain)
+                details.connect("action-show-help", self._do_show_help)
+                details.connect("action-suspend-domain", self._do_suspend_domain)
+                details.connect("action-resume-domain", self._do_resume_domain)
+                details.connect("action-run-domain", self._do_run_domain)
+                details.connect("action-shutdown-domain", self._do_shutdown_domain)
+            except Exception, e:
+                self.err.show_err(_("Error bringing up domain details: %s") % str(e),
+                                  "".join(traceback.format_exc()))
             self.connections[uri]["windowDetails"][uuid] = details
         self.connections[uri]["windowDetails"][uuid].show()
         return self.connections[uri]["windowDetails"][uuid]
@@ -425,7 +433,7 @@ class vmmEngine(gobject.GObject):
                 self.fcdialog.destroy()
 
             if self._save_callback_info != []:
-                self._err_dialog(_("Error saving domain: %s" % self._save_callback_info[0]), self._save_callback_info[1])
+                self.err.show_err(_("Error saving domain: %s" % self._save_callback_info[0]), self._save_callback_info[1])
                 self._save_callback_info = []
 
     def _save_callback(self, vm, file_to_save, ignore1=None):
@@ -455,7 +463,7 @@ class vmmEngine(gobject.GObject):
                 try:
                     vm.destroy()
                 except Exception, e:
-                   self._err_dialog(_("Error shutting down domain: %s" % str(e)), "".join(traceback.format_exc()))
+                   self.err.show_err(_("Error shutting down domain: %s" % str(e)), "".join(traceback.format_exc()))
 
     def suspend_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)
@@ -471,8 +479,8 @@ class vmmEngine(gobject.GObject):
             try:
                 vm.suspend()
             except Exception, e:
-                self._err_dialog(_("Error pausing domain: %s" % str(e)),
-                            "".join(traceback.format_exc()))
+                self.err.show_err(_("Error pausing domain: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
     
     def resume_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)
@@ -486,8 +494,8 @@ class vmmEngine(gobject.GObject):
             try:
                 vm.resume()
             except Exception, e:
-                self._err_dialog(_("Error unpausing domain: %s" % str(e)),
-                            "".join(traceback.format_exc()))
+                self.err.show_err(_("Error unpausing domain: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
         else:
             logging.warning("Resume requested, but machine is already running")
     
@@ -501,8 +509,8 @@ class vmmEngine(gobject.GObject):
             try:
                 vm.startup()
             except Exception, e:
-                self._err_dialog(_("Error starting domain: %s" % str(e)),
-                            "".join(traceback.format_exc()))
+                self.err.show_err(_("Error starting domain: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
             
     def shutdown_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)
@@ -514,16 +522,9 @@ class vmmEngine(gobject.GObject):
             try:
                 vm.shutdown()
             except Exception, e:
-                self._err_dialog(_("Error shutting down domain: %s" % str(e)),
-                            "".join(traceback.format_exc()))
+                self.err.show_err(_("Error shutting down domain: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
         else:
             logging.warning("Shutdown requested, but machine is already shutting down / shutoff")
-
-    def _err_dialog(self, summary, details):
-        dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
-                            gtk.BUTTONS_CLOSE, summary, details)
-        dg.run()
-        dg.hide()
-        dg.destroy()
 
 gobject.type_register(vmmEngine)

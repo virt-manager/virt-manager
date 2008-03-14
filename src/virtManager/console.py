@@ -30,8 +30,6 @@ import gtkvnc
 import os
 import socket
 
-from virtManager.error import vmmErrorDialog
-
 PAGE_UNAVAILABLE = 0
 PAGE_SCREENSHOT = 1
 PAGE_AUTHENTICATE = 2
