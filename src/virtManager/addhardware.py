@@ -746,30 +746,6 @@ class vmmAddHardware(gobject.GObject):
                                                str(e))
                     return False
 
-                hostdevs = virtinst.util.get_host_network_devices()
-                for hostdev in hostdevs:
-                    if mac.lower() == hostdev[4]:
-                        return self._validation_error_box(_('MAC address "%s" is already in use by the host') % mac, \
-                                                          _("Please enter a different MAC address or select no fixed MAC address"))
-                vms = []
-                for domains in self.vm.get_connection().vms.values():
-                    vms.append(domains.vm)
-
-                # get inactive Domains
-                inactive_vm = []
-                names = self.vm.get_connection().vmm.listDefinedDomains()
-                for name in names:
-                    vm = self.vm.get_connection().vmm.lookupByName(name)
-                    inactive_vm.append(vm)
-
-                if (self._net.countMACaddr(vms) - self._net.countMACaddr(inactive_vm)) > 0:
-                    return self._validation_error_box(_('MAC address "%s" is already in use by an active guest') % mac, \
-                                                      _("Please enter a different MAC address or select no fixed MAC address"))
-                elif self._net.countMACaddr(inactive_vm) > 0:
-                    return self._yes_no_box(_('MAC address "%s" is already in use by another inactive guest!') % mac, \
-                                            _("Do you really want to use the MAC address ?"))
-
-            
             try:
                 if net[0] == "bridge":
                     self._net = virtinst.VirtualNetworkInterface(macaddr=mac, 
@@ -785,6 +761,14 @@ class vmmAddHardware(gobject.GObject):
                 self._validation_error_box(_("Invalid Network Parameter"), \
                                            str(e))
                 return False
+
+            conflict = self._net.is_conflict_net(self.vm.get_connection().vmm)
+            if conflict[0]:
+                return self._validation_error_box(_("Mac address collision"),\
+                                                  conflict[1])
+            elif conflict[1] is not None:
+                return self._yes_no_box(_("Mac address collision"),\
+                                        conflict[1] + " " + _("Are you sure you want to use this address?"))
 
         return True
 
