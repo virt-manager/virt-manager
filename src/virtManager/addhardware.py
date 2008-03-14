@@ -60,8 +60,7 @@ class vmmAddHardware(gobject.GObject):
         self.__gobject_init__()
         self.config = config
         self.vm = vm
-        self._net = None
-        self._disk = None
+        self._dev = None
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-add-hardware.glade", "vmm-add-hardware", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-add-hardware")
         self.topwin.hide()
@@ -442,10 +441,10 @@ class vmmAddHardware(gobject.GObject):
         self.close()
 
     def add_network(self):
-        if self._net is None and os.getuid() != 0:
-            self._net = virtinst.VirtualNetworkInterface(type="user")
-        self._net.setup(self.vm.get_connection().vmm)
-        self.add_device(self._net.get_xml_config())
+        if self._dev is None and os.getuid() != 0:
+            self._dev = virtinst.VirtualNetworkInterface(type="user")
+        self._dev.setup(self.vm.get_connection().vmm)
+        self.add_device(self._dev.get_xml_config())
 
     def add_input(self):
         input = self.get_config_input()
@@ -506,14 +505,14 @@ class vmmAddHardware(gobject.GObject):
             self.install_details = details
             return
 
-        progWin = vmmAsyncJob(self.config, self.do_file_allocate, [self._disk],
+        progWin = vmmAsyncJob(self.config, self.do_file_allocate, [self._dev],
                               title=_("Creating Storage File"),
                               text=_("Allocation of disk storage may take a few minutes " + \
                                      "to complete."))
         progWin.run()
 
         if self.install_error == None:
-            self.add_device(self._disk.get_xml_config(node))
+            self.add_device(self._dev.get_xml_config(node))
 
     def add_device(self, xml):
         logging.debug("Adding device " + xml)
@@ -700,22 +699,22 @@ class vmmAddHardware(gobject.GObject):
                 readonly=True
                 
             try:    
-                self._disk = virtinst.VirtualDisk(self.get_config_disk_image(),
+                self._dev = virtinst.VirtualDisk(self.get_config_disk_image(),
                                                   filesize,
                                                   type = type,
                                                   sparse = self.is_sparse_file(),
                                                   readOnly=readonly,
                                                   device=device)
-                if self._disk.type == virtinst.VirtualDisk.TYPE_FILE and \
+                if self._dev.type == virtinst.VirtualDisk.TYPE_FILE and \
                    not self.vm.is_hvm() and virtinst.util.is_blktap_capable():
-                    self._disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
+                    self._dev.driver_name = virtinst.VirtualDisk.DRIVER_TAP
             except ValueError, e:
                 self._validation_error_box(_("Invalid Storage Parameters"), \
                                             str(e))
                 return False
             
-            if self._disk.is_conflict_disk(self.vm.get_connection().vmm) is True:
-                res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % self._disk), \
+            if self._dev.is_conflict_disk(self.vm.get_connection().vmm) is True:
+                res = self._yes_no_box(_('Disk "%s" is already in use by another guest!' % self._dev), \
                                        _("Do you really want to use the disk ?"))
                 return res
         elif page_num == PAGE_NETWORK:
@@ -740,7 +739,7 @@ class vmmAddHardware(gobject.GObject):
                     return False
                 
                 try:     
-                    self._net = virtinst.VirtualNetworkInterface(macaddr=mac)
+                    self._dev = virtinst.VirtualNetworkInterface(macaddr=mac)
                 except ValueError, e:
                     self._validation_error_box(_("Invalid MAC address"), \
                                                str(e))
@@ -748,11 +747,11 @@ class vmmAddHardware(gobject.GObject):
 
             try:
                 if net[0] == "bridge":
-                    self._net = virtinst.VirtualNetworkInterface(macaddr=mac, 
+                    self._dev = virtinst.VirtualNetworkInterface(macaddr=mac, 
                                                                  type=net[0], 
                                                                  bridge=net[1])
                 elif net[0] == "network":
-                    self._net = virtinst.VirtualNetworkInterface(macaddr=mac, 
+                    self._dev = virtinst.VirtualNetworkInterface(macaddr=mac, 
                                                                  type=net[0], 
                                                                  network=net[1])
                 else:
@@ -762,7 +761,7 @@ class vmmAddHardware(gobject.GObject):
                                            str(e))
                 return False
 
-            conflict = self._net.is_conflict_net(self.vm.get_connection().vmm)
+            conflict = self._dev.is_conflict_net(self.vm.get_connection().vmm)
             if conflict[0]:
                 return self._validation_error_box(_("Mac address collision"),\
                                                   conflict[1])
