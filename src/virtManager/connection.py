@@ -584,30 +584,37 @@ class vmmConnection(gobject.GObject):
             logging.warn("Unable to list inactive networks")
 
         for name in newActiveNetNames:
-            net = self.vmm.networkLookupByName(name)
-            uuid = self.uuidstr(net.UUID())
-            if not oldNets.has_key(uuid):
-                self.nets[uuid] = vmmNetwork(self.config, self, net, uuid, True)
-                newNets[uuid] = self.nets[uuid]
-                startNets[uuid] = newNets[uuid]
-            else:
-                self.nets[uuid] = oldNets[uuid]
-                if not self.nets[uuid].is_active():
-                    self.nets[uuid].set_active(True)
-                    startNets[uuid] = self.nets[uuid]
-                del oldNets[uuid]
+            try:
+                net = self.vmm.networkLookupByName(name)
+                uuid = self.uuidstr(net.UUID())
+                if not oldNets.has_key(uuid):
+                    self.nets[uuid] = vmmNetwork(self.config, self, net, uuid, True)
+                    newNets[uuid] = self.nets[uuid]
+                    startNets[uuid] = newNets[uuid]
+                else:
+                    self.nets[uuid] = oldNets[uuid]
+                    if not self.nets[uuid].is_active():
+                        self.nets[uuid].set_active(True)
+                        startNets[uuid] = self.nets[uuid]
+                    del oldNets[uuid]
+            except libvirt.libvirtError:
+                logging.warn("Couldn't fetch active network name '" + name + "'")
+
         for name in newInactiveNetNames:
-            net = self.vmm.networkLookupByName(name)
-            uuid = self.uuidstr(net.UUID())
-            if not oldNets.has_key(uuid):
-                self.nets[uuid] = vmmNetwork(self.config, self, net, uuid, False)
-                newNets[uuid] = self.nets[uuid]
-            else:
-                self.nets[uuid] = oldNets[uuid]
-                if self.nets[uuid].is_active():
-                    self.nets[uuid].set_active(False)
-                    stopNets[uuid] = self.nets[uuid]
-                del oldNets[uuid]
+            try:
+                net = self.vmm.networkLookupByName(name)
+                uuid = self.uuidstr(net.UUID())
+                if not oldNets.has_key(uuid):
+                    self.nets[uuid] = vmmNetwork(self.config, self, net, uuid, False)
+                    newNets[uuid] = self.nets[uuid]
+                else:
+                    self.nets[uuid] = oldNets[uuid]
+                    if self.nets[uuid].is_active():
+                        self.nets[uuid].set_active(False)
+                        stopNets[uuid] = self.nets[uuid]
+                    del oldNets[uuid]
+            except libvirt.libvirtError:
+                logging.warn("Couldn't fetch inactive network name '" + name + "'")
 
         oldActiveIDs = {}
         oldInactiveNames = {}
@@ -626,7 +633,12 @@ class vmmConnection(gobject.GObject):
         # Now we can clear the list of actives from the last time through
         self.activeUUIDs = []
 
-        newActiveIDs = self.vmm.listDomainsID()
+        newActiveIDs = []
+        try:
+            newActiveIDs = self.vmm.listDomainsID()
+        except:
+            logging.warn("Unable to list active domains")
+
         newInactiveNames = []
         try:
             newInactiveNames = self.vmm.listDefinedDomains()
@@ -656,13 +668,16 @@ class vmmConnection(gobject.GObject):
                     # May be a new VM, we have no choice but
                     # to create the wrapper so we can see
                     # if its a previously inactive domain.
-                    vm = self.vmm.lookupByID(id)
-                    uuid = self.uuidstr(vm.UUID())
-                    maybeNewUUIDs[uuid] = vm
-                    # also add the new or newly started VM to the "started" list
-                    startedUUIDs.append(uuid)
-                    #print "Maybe new active " + str(maybeNewUUIDs[uuid].get_name()) + " " + uuid
-                    self.activeUUIDs.append(uuid)
+                    try:
+                        vm = self.vmm.lookupByID(id)
+                        uuid = self.uuidstr(vm.UUID())
+                        maybeNewUUIDs[uuid] = vm
+                        # also add the new or newly started VM to the "started" list
+                        startedUUIDs.append(uuid)
+                        #print "Maybe new active " + str(maybeNewUUIDs[uuid].get_name()) + " " + uuid
+                        self.activeUUIDs.append(uuid)
+                    except libvirt.libvirtError:
+                        logging.debug("Couldn't fetch domain id " + str(id) + "; it probably went away")
 
         # Filter out inactive domains which haven't changed
         if newInactiveNames != None:
@@ -741,7 +756,10 @@ class vmmConnection(gobject.GObject):
 
         # Finally, we sample each domain
         now = time()
-        self.hostinfo = self.vmm.getInfo()
+        try:
+            self.hostinfo = self.vmm.getInfo()
+        except:
+            logging.warn("Unable to get host information")
 
         updateVMs = self.vms
         if noStatsUpdate:
