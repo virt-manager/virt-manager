@@ -51,6 +51,8 @@ PAGE_INPUT = 3
 PAGE_GRAPHICS = 4
 PAGE_SUMMARY = 5
 
+KEYBOARD_DIR = "/etc/sysconfig/keyboard"
+
 class vmmAddHardware(gobject.GObject):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
@@ -324,7 +326,24 @@ class vmmAddHardware(gobject.GObject):
             and self.window.get_widget("graphics-keymap").get_text() != "":
             return self.window.get_widget("graphics-keymap").get_text()
         else:
-            return None
+            # Set keymap to same as hosts
+            import keytable
+            keymap = None
+            try:
+                f = open(KEYBOARD_DIR, "r")
+            except IOError, e:
+                logging.debug('addhardware: Could not open "/etc/sysconfig/keyboard" ' + str(e))
+            else:
+                while 1:
+                    s = f.readline()
+                    if s == "":
+                        break
+                    if re.search("KEYTABLE", s) != None:
+                        kt = s.split('"')[1]
+                        if keytable.keytable.has_key(kt):
+                            keymap = keytable.keytable[kt]
+                f.close
+            return keymap
 
     def get_config_network(self):
         if os.getuid() != 0:

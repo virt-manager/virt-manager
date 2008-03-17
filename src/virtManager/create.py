@@ -574,7 +574,7 @@ class vmmCreate(gobject.GObject):
         else:
             logging.debug('No guest nics found in install phase.')
 
-        # set up the graphics to use SDL
+        # Set vnc display to use same keymap as host
         import keytable
         keymap = None
         vncport = None
@@ -592,7 +592,14 @@ class vmmCreate(gobject.GObject):
                     if keytable.keytable.has_key(kt):
                         keymap = keytable.keytable[kt]
             f.close
-        guest.graphics = (True, "vnc", vncport, keymap)
+        try:
+            guest._graphics_dev = virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC,
+                                                           port=vncport,
+                                                           keymap=keymap)
+        except Exception, e:
+            self.err.show_err(_("Error setting up graphics device:") + str(e),
+                              "".join(traceback.format_exc()))
+            return False
 
         logging.debug("Creating a VM " + guest.name + \
                       "\n  Type: " + guest.type + \
