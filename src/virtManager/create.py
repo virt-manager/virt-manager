@@ -591,6 +591,8 @@ class vmmCreate(gobject.GObject):
                     kt = s.split('"')[1]
                     if keytable.keytable.has_key(kt):
                         keymap = keytable.keytable[kt]
+                    else:
+                        logging.debug("Didn't find keymap '%s' in keytable!" % kt)
             f.close
         try:
             guest._graphics_dev = virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC,

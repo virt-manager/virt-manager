@@ -342,6 +342,8 @@ class vmmAddHardware(gobject.GObject):
                         kt = s.split('"')[1]
                         if keytable.keytable.has_key(kt):
                             keymap = keytable.keytable[kt]
+                        else:
+                            logging.debug("addhardware: Didn't find keymap '%s' in keytable!" % kt)
                 f.close
             return keymap
 
