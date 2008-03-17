@@ -501,8 +501,8 @@ class vmmConnection(gobject.GObject):
     def get_host_info(self):
         return self.hostinfo
 
-    def get_max_vcpus(self):
-        return virtinst.util.get_max_vcpus(self.vmm)
+    def get_max_vcpus(self, type=None):
+        return virtinst.util.get_max_vcpus(self.vmm, type)
 
     def connect(self, name, callback):
         handle_id = gobject.GObject.connect(self, name, callback)

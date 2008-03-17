@@ -115,6 +115,9 @@ class vmmDomain(gobject.GObject):
             return True
         return False
 
+    def get_type(self):
+        return self.get_xml_string("/domain/@type")
+
     def is_vcpu_hotplug_capable(self):
         # Read only connections aren't allowed to change it
         if self.connection.is_read_only():
