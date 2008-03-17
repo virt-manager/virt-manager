@@ -83,6 +83,7 @@ class vmmAddHardware(gobject.GObject):
             "on_mac_address_clicked" : self.change_macaddr_use,
             "on_graphics_type_changed": self.change_graphics_type,
             "on_graphics_port_auto_toggled": self.change_port_auto,
+            "on_graphics_keymap_toggled": self.change_keymap,
             "on_create_help_clicked": self.show_help,
             })
 
@@ -209,6 +210,8 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("graphics-address").set_active(False)
         self.window.get_widget("graphics-port-auto").set_active(True)
         self.window.get_widget("graphics-password").set_text("")
+        self.window.get_widget("graphics-keymap").set_text("")
+        self.window.get_widget("graphics-keymap-chk").set_active(True)
 
         model = self.window.get_widget("hardware-type").get_model()
         model.clear()
@@ -316,6 +319,13 @@ class vmmAddHardware(gobject.GObject):
         pw = self.window.get_widget("graphics-password")
         return pw.get_text()
 
+    def get_config_keymap(self):
+        if self.window.get_widget("graphics-keymap").get_property("sensitive") \
+            and self.window.get_widget("graphics-keymap").get_text() != "":
+            return self.window.get_widget("graphics-keymap").get_text()
+        else:
+            return None
+
     def get_config_network(self):
         if os.getuid() != 0:
             return ["user"]
@@ -388,9 +398,9 @@ class vmmAddHardware(gobject.GObject):
                 self.window.get_widget("summary-graphics").show()
                 graphics = self.get_config_graphics()
                 if graphics == "vnc":
-                    self.window.get_widget("summary-graphics-type").set_text("VNC server")
+                    self.window.get_widget("summary-graphics-type").set_text(_("VNC server"))
                 else:
-                    self.window.get_widget("summary-graphics-type").set_text("Local SDL window")
+                    self.window.get_widget("summary-graphics-type").set_text(_("Local SDL window"))
                 if graphics == "vnc":
                     self.window.get_widget("summary-graphics-address").set_text(self.get_config_vnc_address())
                     if self.get_config_vnc_port() == -1:
@@ -400,11 +410,17 @@ class vmmAddHardware(gobject.GObject):
                     if self.get_config_vnc_password() is not None and self.get_config_vnc_password() != "":
                         self.window.get_widget("summary-graphics-password").set_text(_("Yes"))
                     else:
-                        self.window.get_widget("summary-graphics-password").set_text(_("Yes"))
+                        self.window.get_widget("summary-graphics-password").set_text(_("No"))
+                    if self.get_config_keymap() != "":
+                        self.window.get_widget("summary-graphics-keymap").set_text(str(self.get_config_keymap()))
+                    else:
+                        self.window.get_widget("summary-graphics-keymap").set_text(_("Same as host"))
+
                 else:
                     self.window.get_widget("summary-graphics-address").set_text(_("N/A"))
                     self.window.get_widget("summary-graphics-port").set_text(_("N/A"))
                     self.window.get_widget("summary-graphics-password").set_text(_("N/A"))
+                    self.window.get_widget("summary-graphics-keymap").set_text(_("N/A"))
 
     def close(self, ignore1=None,ignore2=None):
         self.topwin.hide()
@@ -456,24 +472,7 @@ class vmmAddHardware(gobject.GObject):
         self.add_device(xml)
 
     def add_graphics(self):
-        graphics = self.get_config_graphics()
-        if graphics == "vnc":
-            port = self.get_config_vnc_port()
-            pw = self.get_config_vnc_password()
-            addr = self.get_config_vnc_address()
-            if addr is None or addr == "":
-                if pw is None or pw == "":
-                    xml = "<graphics type='vnc' port='%d'/>" % (port,)
-                else:
-                    xml = "<graphics type='vnc' port='%d' passwd='%s'/>" % (port,pw)
-            else:
-                if pw is None or pw == "":
-                    xml = "<graphics type='vnc' listen='%s' port='%d'/>" % (addr,port)
-                else:
-                    xml = "<graphics type='vnc' listen='%s' port='%d' passwd='%s'/>" % (addr,port,pw)
-        else:
-            xml = "<graphics type='sdl'/>"
-        self.add_device(xml)
+        self.add_device(self._dev.get_xml_config())
 
     def add_storage(self):
         node, maxnode, device = self.get_config_disk_target()
@@ -634,12 +633,15 @@ class vmmAddHardware(gobject.GObject):
             self.window.get_widget("graphics-port-auto").set_sensitive(True)
             self.window.get_widget("graphics-address").set_sensitive(True)
             self.window.get_widget("graphics-password").set_sensitive(True)
+            self.window.get_widget("graphics-keymap-chk").set_sensitive(True)
             self.change_port_auto()
         else:
             self.window.get_widget("graphics-port").set_sensitive(False)
             self.window.get_widget("graphics-port-auto").set_sensitive(False)
             self.window.get_widget("graphics-address").set_sensitive(False)
             self.window.get_widget("graphics-password").set_sensitive(False)
+            self.window.get_widget("graphics-keymap-chk").set_sensitive(False)
+            self.window.get_widget("graphics-keymap").set_sensitive(False)
 
     def change_port_auto(self,ignore=None):
         if self.window.get_widget("graphics-port-auto").get_active():
@@ -647,11 +649,18 @@ class vmmAddHardware(gobject.GObject):
         else:
             self.window.get_widget("graphics-port").set_sensitive(True)
 
+    def change_keymap(self, ignore=None):
+        if self.window.get_widget("graphics-keymap-chk").get_active():
+            self.window.get_widget("graphics-keymap").set_sensitive(False)
+        else:
+            self.window.get_widget("graphics-keymap").set_sensitive(True)
+
     def validate(self, page_num):
         if page_num == PAGE_INTRO:
             if self.get_config_hardware_type() == None:
                 return self.err.val_err(_("Hardware Type Required"), \
                                         _("You must specify what type of hardware to add"))
+            self._dev = None
         elif page_num == PAGE_DISK:
             path = self.get_config_disk_image()
             if path == None or len(path) == 0:
@@ -760,6 +769,21 @@ class vmmAddHardware(gobject.GObject):
             elif conflict[1] is not None:
                 return self.err.yes_no(_("Mac address collision"),\
                                        conflict[1] + " " + _("Are you sure you want to use this address?"))
+
+        elif page_num == PAGE_GRAPHICS:
+            graphics = self.get_config_graphics()
+            if graphics == "vnc":
+                type = virtinst.VirtualGraphics.TYPE_VNC
+            else:
+                type = virtinst.VirtualGraphics.TYPE_SDL
+            self._dev = virtinst.VirtualGraphics(type=type)
+            try:
+                self._dev.port   = self.get_config_vnc_port()
+                self._dev.passwd = self.get_config_vnc_password()
+                self._dev.listen = self.get_config_vnc_address()
+                self._dev.keymap = self.get_config_keymap()
+            except ValueError, e:
+                self.err.val_err(_("Graphics device parameter error"), str(e))
 
         return True
 
