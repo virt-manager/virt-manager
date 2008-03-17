@@ -233,7 +233,12 @@ class vmmCreate(gobject.GObject):
                 has_fv = True
 
         self.window.get_widget("virt-method-pv").set_sensitive(has_pv)
+        self.window.get_widget("virt-method-fv").set_sensitive(has_fv)
+
+        # prioritize pv if the option is available?
         self.window.get_widget("virt-method-fv").set_active(has_fv)
+        self.window.get_widget("virt-method-pv").set_active(has_pv)
+        self.change_virt_method() # repopulate arch and hypervisor lists
 
         if has_fv:
             self.window.get_widget("virt-method-fv-unsupported").hide()
