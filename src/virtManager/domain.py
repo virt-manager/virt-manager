@@ -123,7 +123,9 @@ class vmmDomain(gobject.GObject):
         if self.connection.is_read_only():
             return False
         # Running paravirt guests can change it, or any inactive guest
-        if self.vm.OSType() == "linux" or self.get_id() < 0:
+        if self.vm.OSType() == "linux" \
+           or self.status() not in [libvirt.VIR_DOMAIN_RUNNING,\
+                                    libvirt.VIR_DOMAIN_PAUSED]:
             return True
         # Everyone else is out of luck
         return False
@@ -133,7 +135,9 @@ class vmmDomain(gobject.GObject):
         if self.connection.is_read_only():
             return False
         # Running paravirt guests can change it, or any inactive guest
-        if self.vm.OSType() == "linux" or self.get_id() < 0:
+        if self.vm.OSType() == "linux" \
+           or self.status() not in [libvirt.VIR_DOMAIN_RUNNING,\
+                                    libvirt.VIR_DOMAIN_PAUSED]:
             return True
         # Everyone else is out of luck
         return False

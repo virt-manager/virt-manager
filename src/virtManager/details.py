@@ -286,7 +286,7 @@ class vmmDetails(gobject.GObject):
                 self.window.get_widget("details-menu-run").set_sensitive(False)
                 self.window.get_widget("config-vcpus").set_sensitive(self.vm.is_vcpu_hotplug_capable())
                 self.window.get_widget("config-memory").set_sensitive(self.vm.is_memory_hotplug_capable())
-                self.window.get_widget("config-maxmem").set_sensitive(False)
+                self.window.get_widget("config-maxmem").set_sensitive(True)
 
             if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
                 self.window.get_widget("control-pause").set_sensitive(False)
@@ -391,16 +391,25 @@ class vmmDetails(gobject.GObject):
 
     def refresh_config_memory(self):
         self.window.get_widget("state-host-memory").set_text("%d MB" % (int(round(self.vm.get_connection().host_memory_size()/1024))))
+
+        curmem = self.window.get_widget("config-memory").get_adjustment()
+        maxmem = self.window.get_widget("config-maxmem").get_adjustment()
+
+
         if self.window.get_widget("config-memory-apply").get_property("sensitive"):
-            self.window.get_widget("config-memory").get_adjustment().upper = self.window.get_widget("config-maxmem").get_adjustment().value
+            if curmem.value > maxmem.value:
+                curmem.value = maxmem.value
+            curmem.upper = maxmem.value
         else:
-            self.window.get_widget("config-memory").get_adjustment().value = int(round(self.vm.get_memory()/1024.0))
-            self.window.get_widget("config-maxmem").get_adjustment().value = int(round(self.vm.maximum_memory()/1024.0))
+            curmem.value = int(round(self.vm.get_memory()/1024.0))
+            maxmem.value = int(round(self.vm.maximum_memory()/1024.0))
             # XXX hack - changing the value above will have just re-triggered
             # the callback making apply button sensitive again. So we have to
             # turn it off again....
             self.window.get_widget("config-memory-apply").set_sensitive(False)
 
+        if not self.window.get_widget("config-memory").get_property("sensitive"):
+            maxmem.lower = curmem.value
         self.window.get_widget("state-vm-memory").set_text("%d MB" % int(round(self.vm.get_memory()/1024.0)))
 
     def refresh_disk_page(self):
@@ -565,23 +574,45 @@ class vmmDetails(gobject.GObject):
 
     def config_memory_apply(self, src):
         status = self.vm.status()
-        if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            maxmem = self.window.get_widget("config-maxmem").get_adjustment()
-        curmem = self.window.get_widget("config-memory").get_adjustment()
-        if maxmem.value < curmem.value:
-            logging.error("Failed to set max memory " + str(maxmem.value) + \
-                          " below current memory " + str(curmem.value))
-            maxmem.value = curmem.value
-        # set max memory allocated for domain
-        self.vm.set_max_memory(maxmem.value*1024)
-        # set currently allocated memory
-        self.vm.set_memory(curmem.value*1024)
-        logging.info("Setting max-memory for " + self.vm.get_uuid() + \
-                     " to " + str(maxmem.value))
-        logging.info("Setting memory for " + self.vm.get_uuid() + \
-                     " to " + str(curmem.value))
+        self.refresh_config_memory()
+        exc = None
+        curmem = None
+        maxmem = self.window.get_widget("config-maxmem").get_adjustment()
+        if self.window.get_widget("config-memory").get_property("sensitive"):
+            curmem = self.window.get_widget("config-memory").get_adjustment()
 
-        self.window.get_widget("config-memory-apply").set_sensitive(False)
+        logging.info("Setting max-memory for " + self.vm.get_name() + \
+                     " to " + str(maxmem.value))
+
+        actual_cur = self.vm.get_memory()
+        if curmem is not None:
+            logging.info("Setting memory for " + self.vm.get_name() + \
+                         " to " + str(curmem.value))
+            if (maxmem.value * 1024) < actual_cur:
+                # Set current first to avoid error
+                try:
+                    self.vm.set_memory(curmem.value * 1024)
+                    self.vm.set_max_memory(maxmem.value * 1024)
+                except Exception, e:
+                    exc = e
+            else:
+                try:
+                    self.vm.set_max_memory(maxmem.value * 1024)
+                    self.vm.set_memory(curmem.value * 1024)
+                except Exception, e:
+                    exc = e
+
+        else:
+            try:
+                self.vm.set_max_memory(maxmem.value * 1024)
+            except Exception, e:
+                exc = e
+
+        if exc:
+            self.err.show_err(_("Error changing memory values: %s" % str(e)),\
+                              "".join(traceback.format_exc()))
+        else:
+            self.window.get_widget("config-memory-apply").set_sensitive(False)
 
     def config_boot_options_changed(self, src):
         self.window.get_widget("config-boot-options-apply").set_sensitive(True)
