@@ -639,12 +639,7 @@ class vmmCreate(gobject.GObject):
         progWin.run()
 
         if self.install_error != None:
-            dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                self.install_error,
-                                self.install_details)
-            dg.run()
-            dg.hide()
-            dg.destroy()
+            self.err.show_err(self.install_error, self.install_details)
             self.topwin.set_sensitive(True)
             self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
             # Don't close becase we allow user to go back in wizard & correct
