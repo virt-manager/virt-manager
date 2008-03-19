@@ -291,13 +291,7 @@ class vmmManager(gobject.GObject):
     def restore_saved(self, src=None):
         conn = self.current_connection()
         if conn.is_remote():
-            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_OK,
-                                     _("Restoring virtual machines over remote connections is not yet supported"))
-            result = warn.run()
-            warn.destroy()
+            self.err.val_err(_("Restoring virtual machines over remote connections is not yet supported"))
             return
 
         # get filename
@@ -320,23 +314,12 @@ class vmmManager(gobject.GObject):
                                       _("Restoring Virtual Machine"))
                 progWin.run()
             else:
-                err = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                        gtk.DIALOG_DESTROY_WITH_PARENT,
-                                        gtk.MESSAGE_ERROR,
-                                        gtk.BUTTONS_OK,
-                                        _("The file '%s' does not appear to be a valid saved machine image") % file_to_load)
-                err.run()
-                err.destroy()
+                self.err.val_err(_("The file '%s' does not appear to be a valid saved machine image") % file_to_load)
+                return
 
         self.fcdialog.destroy()
         if(self.domain_restore_error != ""):
-            self.error_msg = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                               gtk.DIALOG_DESTROY_WITH_PARENT,
-                                               gtk.MESSAGE_ERROR,
-                                               gtk.BUTTONS_OK,
-                                               self.domain_restore_error)
-            self.error_msg.run()
-            self.error_msg.destroy()
+            self.err.val_err(self.domain_restore_error)
             self.domain_restore_error = ""
 
     def is_valid_saved_image(self, file):
@@ -731,13 +714,7 @@ class vmmManager(gobject.GObject):
     def new_vm(self, ignore=None):
         conn = self.current_connection()
         if conn.is_remote():
-            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_OK,
-                                     _("Creating new guests on remote connections is not yet supported"))
-            result = warn.run()
-            warn.destroy()
+            self.err.val_err(_("Creating new guests on remote connections is not yet supported"))
         else:
             self.emit("action-show-create", conn.get_uri())
 
@@ -749,14 +726,8 @@ class vmmManager(gobject.GObject):
             if conn is None:
                 return
 
-            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_YES_NO,
-                                     _("This will permanently delete the connection \"%s\", are you sure?") % self.rows[conn.get_uri()][ROW_NAME])
-            result = warn.run()
-            warn.destroy()
-            if result == gtk.RESPONSE_NO:
+            result = self.err.yes_no(_("This will permanently delete the connection \"%s\", are you sure?") % self.rows[conn.get_uri()][ROW_NAME])
+            if not result:
                 return
             self.engine.remove_connection(conn.get_uri())
         else:
@@ -766,14 +737,8 @@ class vmmManager(gobject.GObject):
                 return
 
             # are you sure you want to delete this VM?
-            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_YES_NO,
-                                     _("This will permanently delete the vm \"%s,\" are you sure?") % vm.get_name())
-            result = warn.run()
-            warn.destroy()
-            if result == gtk.RESPONSE_NO:
+            result = self.err.yes_no(_("This will permanently delete the vm \"%s,\" are you sure?") % vm.get_name())
+            if not result:
                 return
             conn = vm.get_connection()
             try:

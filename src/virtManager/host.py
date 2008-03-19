@@ -27,6 +27,7 @@ import logging
 import os
 
 from virtManager.createnet import vmmCreateNetwork
+from virtManager.error import vmmErrorDialog
 
 class vmmHost(gobject.GObject):
     __gsignals__ = {
@@ -41,6 +42,11 @@ class vmmHost(gobject.GObject):
 
         topwin = self.window.get_widget("vmm-host")
         topwin.hide()
+
+        self.err = vmmErrorDialog(topwin,
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
 
         self.window.get_widget("overview-uri").set_text(self.conn.get_uri())
         self.window.get_widget("overview-hostname").set_text(self.conn.get_hostname(True))
@@ -127,13 +133,7 @@ class vmmHost(gobject.GObject):
 
     def add_network(self, src):
         if self.conn.is_remote():
-            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_OK,
-                                     _("Creating new networks on remote connections is not yet supported"))
-            result = warn.run()
-            warn.destroy()
+            self.err.val_err(_("Creating new networks on remote connections is not yet supported"))
             return
 
         if self.add is None:

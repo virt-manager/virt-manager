@@ -66,7 +66,9 @@ class vmmErrorDialog (gtk.MessageDialog):
         self.hide()
 
     def val_err(self, text1, text2=None, title=None):
-        message_box = gtk.MessageDialog(self.parent, 0, gtk.MESSAGE_ERROR,\
+        message_box = gtk.MessageDialog(self.parent, \
+                                        gtk.DIALOG_DESTROY_WITH_PARENT, \
+                                        gtk.MESSAGE_ERROR,\
                                         gtk.BUTTONS_OK, text1)
         if title is None:
             title = _("Input Error")
@@ -78,7 +80,9 @@ class vmmErrorDialog (gtk.MessageDialog):
         return False
 
     def yes_no(self, text1, text2=None):
-        message_box = gtk.MessageDialog(self.parent, 0, gtk.MESSAGE_WARNING, \
+        message_box = gtk.MessageDialog(self.parent, \
+                                        gtk.DIALOG_DESTROY_WITH_PARENT, \
+                                        gtk.MESSAGE_WARNING, \
                                         gtk.BUTTONS_YES_NO, text1)
         if text2 != None:
             message_box.format_secondary_text(text2)

@@ -397,13 +397,7 @@ class vmmEngine(gobject.GObject):
     def save_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)
         if con.is_remote():
-            warn = gtk.MessageDialog(src.window.get_widget("vmm-details"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_OK,
-                                     _("Saving virtual machines over remote connections is not yet supported."))
-            result = warn.run()
-            warn.destroy()
+            self.err.val_err(_("Saving virtual machines over remote connections is not yet supported."))
             return
         
         vm = con.get_vm(uuid)
@@ -451,15 +445,8 @@ class vmmEngine(gobject.GObject):
                        libvirt.VIR_DOMAIN_SHUTOFF ]:
             logging.warning("Destroy requested, but machine is shutdown / shutoff")
         else:
-            message_box = gtk.MessageDialog(None, \
-                                            gtk.DIALOG_MODAL, \
-                                            gtk.MESSAGE_WARNING, \
-                                            gtk.BUTTONS_OK_CANCEL, \
-                                            _("About to destroy virtual machine %s" % vm.get_name()))
-            message_box.format_secondary_text(_("This will immediately destroy the VM and may corrupt its disk image. Are you sure?"))
-            response_id = message_box.run()
-            message_box.destroy()
-            if response_id == gtk.RESPONSE_OK:
+            resp = self.err.yes_no(text1=_("About to destroy virtual machine %s" % vm.get_name()), text2=_("This will immediately destroy the VM and may corrupt its disk image. Are you sure?"))
+            if resp:
                 try:
                     vm.destroy()
                 except Exception, e:
