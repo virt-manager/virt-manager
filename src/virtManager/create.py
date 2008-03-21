@@ -365,9 +365,7 @@ class vmmCreate(gobject.GObject):
             if self.window.get_widget("media-iso-image").get_active():
                 return self.window.get_widget("fv-iso-location").get_text()
             else:
-                cd = self.window.get_widget("cd-path")
-                model = cd.get_model()
-                return model.get_value(cd.get_active_iter(), 0)
+                return self.window.get_widget("cd-path").get_active_text()
         else:
             return "PXE"
 
