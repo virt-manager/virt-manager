@@ -142,6 +142,7 @@ class vmmConnection(gobject.GObject):
         # Resource utilization statistics
         self.record = []
         self.hostinfo = None
+        self.autoconnect = self.config.get_conn_autoconnect(self.get_uri())
 
         # Probe for network devices
         try:
@@ -503,6 +504,17 @@ class vmmConnection(gobject.GObject):
 
     def get_max_vcpus(self, type=None):
         return virtinst.util.get_max_vcpus(self.vmm, type)
+
+    def get_autoconnect(self):
+        # Use a local variable to cache autoconnect so we don't repeatedly
+        # have to poll gconf
+        return self.autoconnect
+
+    def toggle_autoconnect(self):
+        if self.is_remote():
+            return
+        self.config.toggle_conn_autoconnect(self.get_uri())
+        self.autoconnect = (not self.autoconnect)
 
     def connect(self, name, callback):
         handle_id = gobject.GObject.connect(self, name, callback)

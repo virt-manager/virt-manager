@@ -70,6 +70,7 @@ class vmmEngine(gobject.GObject):
 
         self.schedule_timer()
         self.load_stored_uris()
+        self.autostart_connections()
         self.tick()
 
     def load_stored_uris(self):
@@ -78,6 +79,12 @@ class vmmEngine(gobject.GObject):
             logging.debug("About to connect to uris %s" % uris)
             for uri in uris:
                 self.add_connection(uri)
+
+    def autostart_connections(self):
+        for uri in self.connections:
+            conn = self.connections[uri]["connection"]
+            if conn.get_autoconnect():
+                self.connect_to_uri(uri)
 
     def connect_to_uri(self, uri, readOnly=None):
         return self._connect_to_uri(None, uri, readOnly)

@@ -54,6 +54,7 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("overview-memory").set_text(self.conn.pretty_host_memory_size())
         self.window.get_widget("overview-cpus").set_text(str(self.conn.host_active_processor_count()))
         self.window.get_widget("overview-arch").set_text(self.conn.host_architecture())
+        self.window.get_widget("config-autoconnect").set_active(conn.get_autoconnect())
 
         netListModel = gtk.ListStore(str, str, str)
         self.window.get_widget("net-list").set_model(netListModel)
@@ -100,6 +101,7 @@ class vmmHost(gobject.GObject):
             "on_net_delete_clicked": self.delete_network,
             "on_net_stop_clicked": self.stop_network,
             "on_net_start_clicked": self.start_network,
+            "on_config_autoconnect_toggled": self.toggle_autoconnect,
             })
 
         self.conn.connect("resources-sampled", self.refresh_resources)
@@ -108,6 +110,8 @@ class vmmHost(gobject.GObject):
         self.refresh_resources()
 
     def show(self):
+        # Update autostart value
+        self.window.get_widget("config-autoconnect").set_active(self.conn.get_autoconnect())
         dialog = self.window.get_widget("vmm-host")
         dialog.present()
 
@@ -139,6 +143,11 @@ class vmmHost(gobject.GObject):
         if self.add is None:
             self.add = vmmCreateNetwork(self.config, self.conn)
         self.add.show()
+
+    def toggle_autoconnect(self, ignore=None):
+        if self.conn.get_autoconnect() != \
+           self.window.get_widget("config-autoconnect").get_active():
+            self.conn.toggle_autoconnect()
 
     def show_help(self, src):
         # From the Details window, show the help document from the Details page
