@@ -326,7 +326,7 @@ class vmmManager(gobject.GObject):
         try:
             f = open(file, "r")
             magic = f.read(16)
-            if magic != "LinuxGuestRecord":
+            if magic != "LinuxGuestRecord" and magic != "LibvirtQemudSave":
                 return False
             return True
         except:
