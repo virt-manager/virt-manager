@@ -51,6 +51,7 @@ ROW_VCPUS = 6
 ROW_MEM = 7
 ROW_MEM_USAGE = 8
 ROW_KEY = 9
+ROW_HINT = 10
 
 # Columns in the tree view
 COL_NAME = 0
@@ -412,6 +413,8 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_MEM, vm.get_memory_pretty())
         row.insert(ROW_MEM_USAGE, vm.current_memory_percentage())
         row.insert(ROW_KEY, vm.get_uuid())
+        row.insert(ROW_HINT, None)
+
         iter = model.append(parent, row)
         path = model.get_path(iter)
         self.rows[vm.get_uuid()] = model[path]
@@ -430,6 +433,8 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_MEM, conn.pretty_current_memory())
         row.insert(ROW_MEM_USAGE, conn.current_memory_percentage())
         row.insert(ROW_KEY, conn.get_uri())
+        row.insert(ROW_HINT, conn.get_uri())
+
         iter = model.append(None, row)
         path = model.get_path(iter)
         self.rows[conn.get_uri()] = model[path]
@@ -765,8 +770,14 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
 
         # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid
-        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str)
+        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str, str)
         vmlist.set_model(model)
+        try:
+            vmlist.set_tooltip_column(ROW_HINT)
+        except:
+            # Catch & ignore errors - set_tooltip_column is in gtk >= 2.12
+            # and we can easily work with lower versions
+            pass
 
         nameCol = gtk.TreeViewColumn(_("Name"))
         idCol = gtk.TreeViewColumn(_("ID"))
