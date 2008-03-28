@@ -397,8 +397,14 @@ class vmmDomain(gobject.GObject):
         self.vm.resume()
         self._update_status()
 
-    def save(self, file, ignore1=None):
-        self.vm.save(file)
+    def save(self, file, ignore1=None, background=True):
+        if background:
+            conn = libvirt.open(self.connection.uri)
+            vm = conn.lookupByID(self.get_id())
+        else:
+            vm = self.vm
+
+        vm.save(file)
         self._update_status()
 
     def destroy(self):
