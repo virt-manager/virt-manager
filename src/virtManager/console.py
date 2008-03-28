@@ -192,7 +192,7 @@ class vmmConsole(gobject.GObject):
     def send_key(self, src):
         keys = None
         if src.get_name() == "menu-send-cad":
-            keys = ["Control_L", "Alt_L", "Del"]
+            keys = ["Control_L", "Alt_L", "Delete"]
         elif src.get_name() == "menu-send-cab":
             keys = ["Control_L", "Alt_L", "BackSpace"]
         elif src.get_name() == "menu-send-caf1":
