@@ -49,6 +49,7 @@ HW_LIST_TYPE_DISK = 2
 HW_LIST_TYPE_NIC = 3
 HW_LIST_TYPE_INPUT = 4
 HW_LIST_TYPE_GRAPHICS = 5
+HW_LIST_TYPE_BOOT = 6
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
@@ -80,6 +81,10 @@ class vmmDetails(gobject.GObject):
         self.vm = vm
 
         topwin = self.window.get_widget("vmm-details")
+        self.err = vmmErrorDialog(topwin,
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
         topwin.hide()
         topwin.set_title(self.vm.get_name() + " " + topwin.get_title())
 
@@ -134,6 +139,9 @@ class vmmDetails(gobject.GObject):
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
             "on_config_memory_apply_clicked": self.config_memory_apply,
+            "on_config_boot_device_changed": self.config_boot_options_changed,
+            "on_config_autostart_changed": self.config_boot_options_changed,
+            "on_config_boot_apply_clicked": self.config_boot_options_apply,
             "on_details_help_activate": self.show_help,
 
             "on_config_cdrom_connect_clicked": self.toggle_cdrom,
@@ -216,6 +224,9 @@ class vmmDetails(gobject.GObject):
                 self.refresh_input_page()
             elif pagetype == HW_LIST_TYPE_GRAPHICS:
                 self.refresh_graphics_page()
+            elif pagetype == HW_LIST_TYPE_BOOT:
+                self.refresh_boot_page()
+                self.window.get_widget("config-boot-options-apply").set_sensitive(False)
             else:
                 pagenum = -1
 
@@ -275,7 +286,7 @@ class vmmDetails(gobject.GObject):
                 self.window.get_widget("details-menu-run").set_sensitive(False)
                 self.window.get_widget("config-vcpus").set_sensitive(self.vm.is_vcpu_hotplug_capable())
                 self.window.get_widget("config-memory").set_sensitive(self.vm.is_memory_hotplug_capable())
-                self.window.get_widget("config-maxmem").set_sensitive(False)
+                self.window.get_widget("config-maxmem").set_sensitive(True)
 
             if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
                 self.window.get_widget("control-pause").set_sensitive(False)
@@ -298,6 +309,7 @@ class vmmDetails(gobject.GObject):
                     self.window.get_widget("details-menu-pause").set_active(False)
         except:
             self.ignorePause = False
+            raise
         self.ignorePause = False
 
         self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
@@ -362,7 +374,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("state-host-cpus").set_text("%d" % self.vm.get_connection().host_active_processor_count())
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            cpu_max = self.vm.get_connection().get_max_vcpus()
+            cpu_max = self.vm.get_connection().get_max_vcpus(self.vm.get_type())
             self.window.get_widget("config-vcpus").get_adjustment().upper = cpu_max
             self.window.get_widget("state-vm-maxvcpus").set_text(str(cpu_max))
         else:
@@ -379,16 +391,25 @@ class vmmDetails(gobject.GObject):
 
     def refresh_config_memory(self):
         self.window.get_widget("state-host-memory").set_text("%d MB" % (int(round(self.vm.get_connection().host_memory_size()/1024))))
+
+        curmem = self.window.get_widget("config-memory").get_adjustment()
+        maxmem = self.window.get_widget("config-maxmem").get_adjustment()
+
+
         if self.window.get_widget("config-memory-apply").get_property("sensitive"):
-            self.window.get_widget("config-memory").get_adjustment().upper = self.window.get_widget("config-maxmem").get_adjustment().value
+            if curmem.value > maxmem.value:
+                curmem.value = maxmem.value
+            curmem.upper = maxmem.value
         else:
-            self.window.get_widget("config-memory").get_adjustment().value = int(round(self.vm.get_memory()/1024.0))
-            self.window.get_widget("config-maxmem").get_adjustment().value = int(round(self.vm.maximum_memory()/1024.0))
+            curmem.value = int(round(self.vm.get_memory()/1024.0))
+            maxmem.value = int(round(self.vm.maximum_memory()/1024.0))
             # XXX hack - changing the value above will have just re-triggered
             # the callback making apply button sensitive again. So we have to
             # turn it off again....
             self.window.get_widget("config-memory-apply").set_sensitive(False)
 
+        if not self.window.get_widget("config-memory").get_property("sensitive"):
+            maxmem.lower = curmem.value
         self.window.get_widget("state-vm-memory").set_text("%d MB" % int(round(self.vm.get_memory()/1024.0)))
 
     def refresh_disk_page(self):
@@ -483,17 +504,53 @@ class vmmDetails(gobject.GObject):
                     self.window.get_widget("graphics-port").set_text(_("Automatically allocated"))
                 else:
                     self.window.get_widget("graphics-port").set_text(inputinfo[2])
-                self.window.get_widget("graphics-password").set_text("")
+                self.window.get_widget("graphics-password").set_text("-")
+                self.window.get_widget("graphics-keymap").set_text(inputinfo[4] or _("Same as host"))
             else:
                 self.window.get_widget("graphics-address").set_text(_("N/A"))
                 self.window.get_widget("graphics-port").set_text(_("N/A"))
                 self.window.get_widget("graphics-password").set_text("N/A")
+                self.window.get_widget("graphics-keymap").set_text("N/A")
 
             # Can't remove display from live guest
             if self.vm.is_active():
                 self.window.get_widget("config-input-remove").set_sensitive(False)
             else:
                 self.window.get_widget("config-input-remove").set_sensitive(True)
+
+    def refresh_boot_page(self):
+        # Refresh autostart
+        try:
+            autoval = self.vm.get_autostart()
+            self.window.get_widget("config-autostart").set_active(autoval)
+            self.window.get_widget("config-autostart").set_sensitive(True)
+        except libvirt.libvirtError, e:
+            # Autostart isn't supported
+            self.window.get_widget("config-autostart").set_active(False)
+            self.window.get_widget("config-autostart").set_sensitive(False)
+
+        # Refresh Boot Device list and correct selection
+        boot_combo = self.window.get_widget("config-boot-device")
+        if not self.vm.is_hvm():
+            # Boot dev selection not supported for PV guest
+            boot_combo.set_sensitive(False)
+            boot_combo.set_active(-1)
+            return
+
+        self.repopulate_boot_list()
+        bootdev = self.vm.get_boot_device()
+        boot_combo = self.window.get_widget("config-boot-device")
+        boot_model = boot_combo.get_model()
+        for i in range(0, len(boot_model)):
+            if bootdev == boot_model[i][2]:
+                boot_combo.set_active(i)
+                break
+
+        if boot_model[0][2] == None:
+            # If no boot devices, select the 'No Device' entry
+            boot_combo.set_active(0)
+
+        # TODO: if nothing selected, what to select? auto change device?
 
     def config_vcpus_changed(self, src):
         self.window.get_widget("config-vcpus-apply").set_sensitive(True)
@@ -517,16 +574,67 @@ class vmmDetails(gobject.GObject):
 
     def config_memory_apply(self, src):
         status = self.vm.status()
-        if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            memory = self.window.get_widget("config-maxmem").get_adjustment().value
-            logging.info("Setting max memory for " + self.vm.get_uuid() + " to " + str(memory))
-            self.vm.set_max_memory(memory*1024)
-        memory = self.window.get_widget("config-memory").get_adjustment().value
-        logging.info("Setting memory for " + self.vm.get_uuid() + " to " + str(memory))
-        self.vm.set_memory(memory*1024)
+        self.refresh_config_memory()
+        exc = None
+        curmem = None
+        maxmem = self.window.get_widget("config-maxmem").get_adjustment()
+        if self.window.get_widget("config-memory").get_property("sensitive"):
+            curmem = self.window.get_widget("config-memory").get_adjustment()
 
-        self.window.get_widget("config-memory-apply").set_sensitive(False)
+        logging.info("Setting max-memory for " + self.vm.get_name() + \
+                     " to " + str(maxmem.value))
 
+        actual_cur = self.vm.get_memory()
+        if curmem is not None:
+            logging.info("Setting memory for " + self.vm.get_name() + \
+                         " to " + str(curmem.value))
+            if (maxmem.value * 1024) < actual_cur:
+                # Set current first to avoid error
+                try:
+                    self.vm.set_memory(curmem.value * 1024)
+                    self.vm.set_max_memory(maxmem.value * 1024)
+                except Exception, e:
+                    exc = e
+            else:
+                try:
+                    self.vm.set_max_memory(maxmem.value * 1024)
+                    self.vm.set_memory(curmem.value * 1024)
+                except Exception, e:
+                    exc = e
+
+        else:
+            try:
+                self.vm.set_max_memory(maxmem.value * 1024)
+            except Exception, e:
+                exc = e
+
+        if exc:
+            self.err.show_err(_("Error changing memory values: %s" % str(e)),\
+                              "".join(traceback.format_exc()))
+        else:
+            self.window.get_widget("config-memory-apply").set_sensitive(False)
+
+    def config_boot_options_changed(self, src):
+        self.window.get_widget("config-boot-options-apply").set_sensitive(True)
+
+    def config_boot_options_apply(self, src):
+        boot = self.window.get_widget("config-boot-device")
+        auto = self.window.get_widget("config-autostart")
+        if auto.get_property("sensitive"):
+            try:
+                self.vm.set_autostart(auto.get_active())
+            except Exception, e:
+                self.err.show_err(_("Error changing autostart value: %s") % \
+                                  str(e), "".join(traceback.format_exc()))
+
+        if boot.get_property("sensitive"):
+            try:
+                self.vm.set_boot_device(boot.get_model()[boot.get_active()][2])
+                self.window.get_widget("config-boot-options-apply").set_sensitive(False)
+            except Exception, e:
+                self.err.show_err(_("Error changing boot device: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
+                return
 
     def remove_disk(self, src):
         vmlist = self.window.get_widget("hw-list")
@@ -553,9 +661,9 @@ class vmmDetails(gobject.GObject):
                 else:
                     vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], macaddr=netinfo[3])
             except ValueError, e:
-                self.err_dialog(_("Error Removing Network: %s" % str(e)),
-                            "".join(traceback.format_exc()))
-                return
+                self.err.show_err(_("Error Removing Network: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
+                return False
 
             xml = vnic.get_xml_config()
             self.remove_device(xml)
@@ -597,14 +705,30 @@ class vmmDetails(gobject.GObject):
         hwCol.add_attribute(hw_img, 'stock-size', HW_LIST_COL_STOCK_SIZE)
         hwCol.add_attribute(hw_img, 'pixbuf', HW_LIST_COL_PIXBUF)
         self.window.get_widget("hw-list").append_column(hwCol)
+        self.prepare_boot_list()
 
         self.populate_hw_list()
+        self.repopulate_boot_list()
+
+    def prepare_boot_list(self):
+        boot_list = self.window.get_widget("config-boot-device")
+        # model = [ display name, icon name, boot type (hd, fd, etc) ]
+        boot_list_model = gtk.ListStore(str, str, str)
+        boot_list.set_model(boot_list_model)
+
+        icon = gtk.CellRendererPixbuf()
+        boot_list.pack_start(icon, False)
+        boot_list.add_attribute(icon, 'stock-id', 1)
+        text = gtk.CellRendererText()
+        boot_list.pack_start(text, True)
+        boot_list.add_attribute(text, 'text', 0)
 
     def populate_hw_list(self):
         hw_list_model = self.window.get_widget("hw-list").get_model()
         hw_list_model.clear()
         hw_list_model.append(["Processor", None, 0, self.pixbuf_processor, HW_LIST_TYPE_CPU, []])
         hw_list_model.append(["Memory", None, 0, self.pixbuf_memory, HW_LIST_TYPE_MEMORY, []])
+        hw_list_model.append(["Boot Options", None, 0, self.pixbuf_memory, HW_LIST_TYPE_BOOT, []])
         self.repopulate_hw_list()
 
     def repopulate_hw_list(self):
@@ -725,6 +849,36 @@ class vmmDetails(gobject.GObject):
                 # Now actually remove it
                 hw_list_model.remove(iter)
 
+    def repopulate_boot_list(self):
+        hw_list_model = self.window.get_widget("hw-list").get_model()
+        boot_combo = self.window.get_widget("config-boot-device")
+        boot_model = boot_combo.get_model()
+        boot_model.clear()
+        found_dev = {}
+        for row in hw_list_model:
+            if row[4] == HW_LIST_TYPE_DISK:
+                disk = row[5]
+                if disk[2] == virtinst.VirtualDisk.DEVICE_DISK and not \
+                   found_dev.get(virtinst.VirtualDisk.DEVICE_DISK, False):
+                    boot_model.append(["Hard Disk", gtk.STOCK_HARDDISK, "hd"])
+                    found_dev[virtinst.VirtualDisk.DEVICE_DISK] = True
+                elif disk[2] == virtinst.VirtualDisk.DEVICE_CDROM and not \
+                     found_dev.get(virtinst.VirtualDisk.DEVICE_CDROM, False):
+                    boot_model.append(["CDROM", gtk.STOCK_CDROM, "cdrom"])
+                    found_dev[virtinst.VirtualDisk.DEVICE_CDROM] = True
+                elif disk[2] == virtinst.VirtualDisk.DEVICE_FLOPPY and not \
+                     found_dev.get(virtinst.VirtualDisk.DEVICE_FLOPPY, False):
+                    boot_model.append(["Floppy", gtk.STOCK_FLOPPY, "fd"])
+                    found_dev[virtinst.VirtualDisk.DEVICE_FLOPPY] = True
+            elif row[4] == HW_LIST_TYPE_NIC and not \
+                 found_dev.get(HW_LIST_TYPE_NIC, False):
+                boot_model.append(["Network (PXE)", gtk.STOCK_NETWORK, "network"])
+                found_dev[HW_LIST_TYPE_NIC] = True
+
+        if len(boot_model) <= 0:
+            boot_model.append([_("No Boot Device"), None, None])
+
+        boot_combo.set_model(boot_model)
 
     def add_hardware(self, src):
         if self.addhw is None:
@@ -742,8 +896,8 @@ class vmmDetails(gobject.GObject):
             try:
                 self.vm.disconnect_cdrom_device(self.window.get_widget("disk-target-device").get_text())
             except Exception, e:
-                self._err_dialog(_("Error Removing CDROM: %s" % str(e)),
-                                 "".join(traceback.format_exc()))
+                self.err.show_err(_("Error Removing CDROM: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
                 return
                 
         else:
@@ -759,21 +913,14 @@ class vmmDetails(gobject.GObject):
         try:
             self.vm.connect_cdrom_device(type, source, target)
         except Exception, e:            
-            self._err_dialog(_("Error Connecting CDROM: %s" % str(e)),
-                               "".join(traceback.format_exc()))
+            self.err.show_err(_("Error Connecting CDROM: %s" % str(e)),
+                              "".join(traceback.format_exc()))
 
     def remove_device(self, xml):
         try:
             self.vm.remove_device(xml)
         except Exception, e:
-            self._err_dialog(_("Error Removing Device: %s" % str(e)),
-                             "".join(traceback.format_exc()))
+            self.err.show_err(_("Error Removing Device: %s" % str(e)),
+                              "".join(traceback.format_exc()))
 
-    def _err_dialog(self, summary, details):
-        dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, 
-                            gtk.BUTTONS_CLOSE, summary, details)
-        dg.run()
-        dg.hide()
-        dg.destroy()
-    
 gobject.type_register(vmmDetails)

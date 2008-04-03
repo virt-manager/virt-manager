@@ -27,11 +27,12 @@ import logging
 import os
 
 from virtManager.createnet import vmmCreateNetwork
+from virtManager.error import vmmErrorDialog
 
 class vmmHost(gobject.GObject):
     __gsignals__ = {
-        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                               gobject.TYPE_NONE, [str]),
+        "action-show-about": (gobject.SIGNAL_RUN_FIRST,
+                               gobject.TYPE_NONE, []),
         }
     def __init__(self, config, conn):
         self.__gobject_init__()
@@ -42,12 +43,18 @@ class vmmHost(gobject.GObject):
         topwin = self.window.get_widget("vmm-host")
         topwin.hide()
 
+        self.err = vmmErrorDialog(topwin,
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
+
         self.window.get_widget("overview-uri").set_text(self.conn.get_uri())
         self.window.get_widget("overview-hostname").set_text(self.conn.get_hostname(True))
         self.window.get_widget("overview-hypervisor").set_text(self.conn.get_driver())
         self.window.get_widget("overview-memory").set_text(self.conn.pretty_host_memory_size())
         self.window.get_widget("overview-cpus").set_text(str(self.conn.host_active_processor_count()))
         self.window.get_widget("overview-arch").set_text(self.conn.host_architecture())
+        self.window.get_widget("config-autoconnect").set_active(conn.get_autoconnect())
 
         netListModel = gtk.ListStore(str, str, str)
         self.window.get_widget("net-list").set_model(netListModel)
@@ -81,18 +88,20 @@ class vmmHost(gobject.GObject):
         self.conn.connect("net-removed", self.repopulate_networks)
 
         # XXX not technically correct once we enable remote management
-        if os.getuid() != 0 and not self.conn.is_remote():
+        if (os.getuid() != 0 and not self.conn.is_remote()) \
+           or self.conn.get_state() is self.conn.STATE_DISCONNECTED:
             self.window.get_widget("net-add").set_sensitive(False)
 
 
         self.window.signal_autoconnect({
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
-            "on_menu_help_about_activate": self.show_help,
+            "on_menu_help_about_activate": self.show_about,
             "on_net_add_clicked": self.add_network,
             "on_net_delete_clicked": self.delete_network,
             "on_net_stop_clicked": self.stop_network,
             "on_net_start_clicked": self.start_network,
+            "on_config_autoconnect_toggled": self.toggle_autoconnect,
             })
 
         self.conn.connect("resources-sampled", self.refresh_resources)
@@ -101,6 +110,8 @@ class vmmHost(gobject.GObject):
         self.refresh_resources()
 
     def show(self):
+        # Update autostart value
+        self.window.get_widget("config-autoconnect").set_active(self.conn.get_autoconnect())
         dialog = self.window.get_widget("vmm-host")
         dialog.present()
 
@@ -126,22 +137,24 @@ class vmmHost(gobject.GObject):
 
     def add_network(self, src):
         if self.conn.is_remote():
-            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_OK,
-                                     _("Creating new networks on remote connections is not yet supported"))
-            result = warn.run()
-            warn.destroy()
+            self.err.val_err(_("Creating new networks on remote connections is not yet supported"))
             return
 
         if self.add is None:
             self.add = vmmCreateNetwork(self.config, self.conn)
         self.add.show()
 
+    def toggle_autoconnect(self, ignore=None):
+        if self.conn.get_autoconnect() != \
+           self.window.get_widget("config-autoconnect").get_active():
+            self.conn.toggle_autoconnect()
+
     def show_help(self, src):
         # From the Details window, show the help document from the Details page
         self.emit("action-show-help", "virt-manager-host-window")
+
+    def show_about(self, src):
+        self.emit("action-show-about")
 
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-host").hide()

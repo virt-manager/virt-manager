@@ -311,7 +311,7 @@ class vmmConfig:
             # the url isn't already in the list, so add it
             uris.insert(len(uris) - 1,uri)
             self.conf.set_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING, uris)
-        
+
     def remove_connection(self, uri):
         uris = self.conf.get_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING)
         if uris == None:
@@ -319,6 +319,31 @@ class vmmConfig:
         if uris.count(uri) != 0:
             uris.remove(uri)
             self.conf.set_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING, uris)
+        if self.get_conn_autoconnect(uri):
+            uris = self.conf.get_list(self.conf_dir + \
+                                      "/connections/autoconnect",\
+                                      gconf.VALUE_STRING)
+            uris.remove(uri)
+            self.conf.set_list(self.conf_dir + "/connections/autoconnect", \
+                               gconf.VALUE_STRING, uris)
+
+
+    def get_conn_autoconnect(self, uri):
+        uris = self.conf.get_list(self.conf_dir + "/connections/autoconnect",\
+                                  gconf.VALUE_STRING)
+        return ((uris is not None) and (uri in uris))
+
+    def toggle_conn_autoconnect(self, uri):
+        uris = self.conf.get_list(self.conf_dir + "/connections/autoconnect",\
+                                  gconf.VALUE_STRING)
+        if uris is None:
+            uris = []
+        if uri in uris:
+            uris.remove(uri)
+        else:
+            uris.append(uri)
+        self.conf.set_list(self.conf_dir + "/connections/autoconnect", \
+                           gconf.VALUE_STRING, uris)
 
     def get_media_urls(self):
         return self.conf.get_list(self.conf_dir + "/urls/media", gconf.VALUE_STRING)

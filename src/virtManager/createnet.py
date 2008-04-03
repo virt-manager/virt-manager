@@ -28,8 +28,10 @@ import os, sys
 import logging
 import dbus
 import re
+import traceback
 
 from virtManager.IPy import IP
+from virtManager.error import vmmErrorDialog
 
 PAGE_INTRO = 0
 PAGE_NAME = 1
@@ -50,6 +52,10 @@ class vmmCreateNetwork(gobject.GObject):
         self.conn = conn
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-create-net.glade", "vmm-create-net", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-create-net")
+        self.err = vmmErrorDialog(self.topwin,
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
         self.topwin.hide()
         self.window.signal_autoconnect({
             "on_create_pages_switch_page" : self.page_changed,
@@ -295,41 +301,40 @@ class vmmCreateNetwork(gobject.GObject):
 
         logging.debug("About to create network " + xml)
 
-        self.conn.create_network(xml)
+        try:
+            self.conn.create_network(xml)
+        except Exception, e:
+            self.err.show_err(_("Error creating virtual network: %s" % str(e)),
+                              "".join(traceback.format_exc()))
         self.close()
 
     def validate(self, page_num):
         if page_num == PAGE_NAME:
             name = self.window.get_widget("net-name").get_text()
             if len(name) > 50 or len(name) == 0:
-                self._validation_error_box(_("Invalid Network Name"), \
-                                           _("Network name must be non-blank and less than 50 characters"))
-                return False
+                return self.err.val_err(_("Invalid Network Name"), \
+                                        _("Network name must be non-blank and less than 50 characters"))
             if re.match("^[a-zA-Z0-9_]*$", name) == None:
-                self._validation_error_box(_("Invalid Network Name"), \
-                                           _("Network name may contain alphanumeric and '_' characters only"))
-                return False
+                return self.err.val_err(_("Invalid Network Name"), \
+                                        _("Network name may contain alphanumeric and '_' characters only"))
 
 
         elif page_num == PAGE_IPV4:
             ip = self.get_config_ip4()
             if ip is None:
-                self._validation_error_box(_("Invalid Network Address"), \
-                                           _("The network address could not be understood"))
-                return False
+                return self.err.val_err(_("Invalid Network Address"), \
+                                        _("The network address could not be understood"))
 
             if ip.version() != 4:
-                self._validation_error_box(_("Invalid Network Address"), \
-                                           _("The network must be an IPv4 address"))
-                return False
+                return self.err.val_err(_("Invalid Network Address"), \
+                                        _("The network must be an IPv4 address"))
 
             if ip.len() < 16:
-                self._validation_error_box(_("Invalid Network Address"), \
-                                           _("The network prefix must be at least /4 (16 addresses)"))
-                return False
+                return self.err.val_err(_("Invalid Network Address"), \
+                                        _("The network prefix must be at least /4 (16 addresses)"))
 
             if ip.iptype() != "PRIVATE":
-                res = self._yes_no_box(_("Check Network Address"), \
+                res = self.err.yes_no(_("Check Network Address"), \
                                        _("The network should normally use a private IPv4 address. Use this non-private address anyway?"))
                 if not res:
                     return False
@@ -339,59 +344,28 @@ class vmmCreateNetwork(gobject.GObject):
             end = self.get_config_dhcp_end()
 
             if start is None:
-                self._validation_error_box(_("Invalid DHCP Address"), \
-                                           _("The DHCP start address could not be understood"))
-                return False
+                return self.err.val_err(_("Invalid DHCP Address"), \
+                                        _("The DHCP start address could not be understood"))
             if end is None:
-                self._validation_error_box(_("Invalid DHCP Address"), \
-                                           _("The DHCP end address could not be understood"))
-                return False
+                return self.err.val_err(_("Invalid DHCP Address"), \
+                                        _("The DHCP end address could not be understood"))
 
             if not ip.overlaps(start):
-                self._validation_error_box(_("Invalid DHCP Address"), \
-                                           _("The DHCP start address is not with the network %s") % (str(ip)))
-                return False
+                return self.err.val_err(_("Invalid DHCP Address"), \
+                                        _("The DHCP start address is not with the network %s") % (str(ip)))
             if not ip.overlaps(end):
-                self._validation_error_box(_("Invalid DHCP Address"), \
-                                           _("The DHCP end address is not with the network %s") % (str(ip)))
-                return False
+                return self.err.val_err(_("Invalid DHCP Address"), \
+                                        _("The DHCP end address is not with the network %s") % (str(ip)))
         elif page_num == PAGE_FORWARDING:
             if self.window.get_widget("net-forward-dev").get_active():
                 dev = self.window.get_widget("net-forward")
                 if dev.get_active() == -1:
-                    self._validation_error_box(_("Invalid forwarding mode"), \
-                                               _("Please select where the traffic should be forwarded"))
-                    return False
+                    return self.err.val_err(_("Invalid forwarding mode"), \
+                                            _("Please select where the traffic should be forwarded"))
 
         # do this always, since there's no "leaving a notebook page" event.
         self.window.get_widget("create-back").set_sensitive(True)
         return True
-
-    def _validation_error_box(self, text1, text2=None):
-        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create-net"), \
-                                                0, \
-                                                gtk.MESSAGE_ERROR, \
-                                                gtk.BUTTONS_OK, \
-                                                text1)
-        if text2 != None:
-            message_box.format_secondary_text(text2)
-        message_box.run()
-        message_box.destroy()
-
-    def _yes_no_box(self, text1, text2=None):
-        message_box = gtk.MessageDialog(self.window.get_widget("vmm-create-net"), \
-                                                0, \
-                                                gtk.MESSAGE_WARNING, \
-                                                gtk.BUTTONS_YES_NO, \
-                                                text1)
-        if text2 != None:
-            message_box.format_secondary_text(text2)
-        if message_box.run()== gtk.RESPONSE_YES:
-            res = True
-        else:
-            res = False
-        message_box.destroy()
-        return res
 
     def populate_opt_media(self, model):
         # get a list of optical devices with data discs in, for FV installs
@@ -404,10 +378,11 @@ class vmmCreateNetwork(gobject.GObject):
         # Find info about all current present media
         for d in self.hal_iface.FindDeviceByCapability("volume"):
             vol = self.bus.get_object("org.freedesktop.Hal", d)
-            if vol.GetPropertyBoolean("volume.is_disc") and \
-                   vol.GetPropertyBoolean("volume.disc.has_data"):
-                devnode = vol.GetProperty("block.device")
-                label = vol.GetProperty("volume.label")
+            volif = dbus.Interface(vol, "org.freedesktop.Hal.Device")
+            if volif.GetPropertyBoolean("volume.is_disc") and \
+                   volif.GetPropertyBoolean("volume.disc.has_data"):
+                devnode = volif.GetProperty("block.device")
+                label = volif.GetProperty("volume.label")
                 if label == None or len(label) == 0:
                     label = devnode
                 vollabel[devnode] = label
@@ -416,7 +391,8 @@ class vmmCreateNetwork(gobject.GObject):
 
         for d in self.hal_iface.FindDeviceByCapability("storage.cdrom"):
             dev = self.bus.get_object("org.freedesktop.Hal", d)
-            devnode = dev.GetProperty("block.device")
+            devif = dbus.Interface(dev, "org.freedesktop.Hal.Device")
+            devnode = devif.GetProperty("block.device")
             if vollabel.has_key(devnode):
                 model.append([devnode, vollabel[devnode], True, volpath[devnode]])
             else:

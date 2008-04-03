@@ -23,6 +23,8 @@ import os
 import os.path
 import sys
 
+import libvirt
+
 import locale
 import gettext
 import logging
@@ -124,6 +126,13 @@ def setup_logging():
     fileHandler.setFormatter(logging.Formatter(FILE_FORMAT, DATEFMT))
     rootLogger.addHandler(fileHandler)
     logging.info("Application startup")
+
+    # Register libvirt handler
+    def libvirt_callback(ctx, err):
+        if err[3] != libvirt.VIR_ERR_ERROR:
+            # Don't log libvirt errors: global error handler will do that
+            logging.warn("Non-error from libvirt: '%s'" % err[2])
+    libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
 
     # Log uncaught exceptions
     def exception_log(type, val, tb):

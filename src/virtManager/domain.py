@@ -115,12 +115,17 @@ class vmmDomain(gobject.GObject):
             return True
         return False
 
+    def get_type(self):
+        return self.get_xml_string("/domain/@type")
+
     def is_vcpu_hotplug_capable(self):
         # Read only connections aren't allowed to change it
         if self.connection.is_read_only():
             return False
         # Running paravirt guests can change it, or any inactive guest
-        if self.vm.OSType() == "linux" or self.get_id() < 0:
+        if self.vm.OSType() == "linux" \
+           or self.status() not in [libvirt.VIR_DOMAIN_RUNNING,\
+                                    libvirt.VIR_DOMAIN_PAUSED]:
             return True
         # Everyone else is out of luck
         return False
@@ -130,7 +135,9 @@ class vmmDomain(gobject.GObject):
         if self.connection.is_read_only():
             return False
         # Running paravirt guests can change it, or any inactive guest
-        if self.vm.OSType() == "linux" or self.get_id() < 0:
+        if self.vm.OSType() == "linux" \
+           or self.status() not in [libvirt.VIR_DOMAIN_RUNNING,\
+                                    libvirt.VIR_DOMAIN_PAUSED]:
             return True
         # Everyone else is out of luck
         return False
@@ -390,8 +397,14 @@ class vmmDomain(gobject.GObject):
         self.vm.resume()
         self._update_status()
 
-    def save(self, file, ignore1=None):
-        self.vm.save(file)
+    def save(self, file, ignore1=None, background=True):
+        if background:
+            conn = libvirt.open(self.connection.uri)
+            vm = conn.lookupByID(self.get_id())
+        else:
+            vm = self.vm
+
+        vm.save(file)
         self._update_status()
 
     def destroy(self):
@@ -545,14 +558,18 @@ class vmmDomain(gobject.GObject):
     def _change_cdrom(self, newxml, origxml):
         # If vm is shutoff, remove device, and redefine with media
         if not self.is_active():
+            logging.debug("_change_cdrom: removing original xml")
             self.remove_device(origxml)
             try:
+                logging.debug("_change_cdrom: adding new xml")
                 self.add_device(newxml)
             except Exception, e1:
+                logging.debug("_change_cdrom: adding new xml failed. attempting to readd original device")
                 try:
                     self.add_device(origxml) # Try to re-add original
-                except:
-                    raise e1
+                except Exception, e2:
+                    raise RuntimeError(_("Failed to change cdrom and re-add original device. Exceptions were: \n%s\n%s") % (str(e1), str(e2)))
+                raise e1
         else:
             self.vm.attachDevice(newxml)
             vmxml = self.vm.XMLDesc(0)
@@ -566,13 +583,18 @@ class vmmDomain(gobject.GObject):
             doc = libxml2.parseDoc(xml)
             ctx = doc.xpathNewContext()
             disk_fragment = ctx.xpathEval("/disk")
+            driver_fragment = ctx.xpathEval("/disk/driver")
             origdisk = disk_fragment[0].serialize()
             disk_fragment[0].setProp("type", type)
             elem = disk_fragment[0].newChild(None, "source", None)
             if type == "file":
                 elem.setProp("file", source)
+                if driver_fragment:
+                    driver_fragment.setProp("name", type)
             else:
                 elem.setProp("dev", source)
+                if driver_fragment:
+                    driver_fragment.setProp("name", "phy")
             result = disk_fragment[0].serialize()
             logging.debug("connect_cdrom_device produced the following XML: %s" % result)
         finally:
@@ -694,7 +716,8 @@ class vmmDomain(gobject.GObject):
                 if type == "vnc":
                     listen = node.prop("listen")
                     port = node.prop("port")
-                    graphics.append([type, listen, port, type])
+                    keymap = node.prop("keymap")
+                    graphics.append([type, listen, port, type, keymap])
                 else:
                     graphics.append([type, None, None, type])
         finally:
@@ -823,7 +846,10 @@ class vmmDomain(gobject.GObject):
 
     def set_memory(self, memory):
         memory = int(memory)
-        if (memory > self.maximum_memory()):
+        # capture updated information due to failing to get proper maxmem setting
+        # if both current & max allocation are set simultaneously
+        maxmem = self.vm.info()
+        if (memory > maxmem[1]):
             logging.warning("Requested memory " + str(memory) + " over maximum " + str(self.maximum_memory()))
             memory = self.maximum_memory()
         self.vm.setMemory(memory)
@@ -831,5 +857,65 @@ class vmmDomain(gobject.GObject):
     def set_max_memory(self, memory):
         memory = int(memory)
         self.vm.setMaxMemory(memory)
+
+    def get_autostart(self):
+        return self.vm.autostart()
+
+    def set_autostart(self, val):
+        if self.get_autostart() != val:
+            self.vm.setAutostart(val)
+
+    def get_boot_device(self):
+        xml = self.get_xml()
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return []
+        ctx = doc.xpathNewContext()
+        graphics = []
+        dev = None
+        try:
+            ret = ctx.xpathEval("/domain/os/boot[1]")
+            for node in ret:
+                dev = node.prop("dev")
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+        return dev
+
+    def set_boot_device(self, boot_type):
+        logging.debug("Setting boot device to type: %s" % boot_type)
+        xml = self.get_xml()
+        doc = None
+        try:
+            doc = libxml2.parseDoc(xml)
+        except:
+            return []
+        ctx = doc.xpathNewContext()
+        graphics = []
+        dev = None
+        try:
+            ret = ctx.xpathEval("/domain/os/boot[1]")
+            if len(ret) > 0:
+                ret[0].unlinkNode()
+                ret[0].freeNode()
+            emptyxml=doc.serialize()
+            index = emptyxml.find("</os>")
+            newxml = emptyxml[0:index] + \
+                     "<boot dev=\"" + boot_type + "\"/>\n" + \
+                     emptyxml[index:]
+            logging.debug("New boot device, redefining with: " + newxml)
+            self.get_connection().define_domain(newxml)
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+
+        # Invalidate cached xml
+        self.xml = None
 
 gobject.type_register(vmmDomain)

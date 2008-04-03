@@ -30,8 +30,6 @@ import gtkvnc
 import os
 import socket
 
-from virtManager.error import vmmErrorDialog
-
 PAGE_UNAVAILABLE = 0
 PAGE_SCREENSHOT = 1
 PAGE_AUTHENTICATE = 2
@@ -75,16 +73,17 @@ class vmmConsole(gobject.GObject):
         self.gtk_settings_accel = None
 
         self.vncViewer = gtkvnc.Display()
-        self.window.get_widget("console-vnc-align").add(self.vncViewer)
+        self.window.get_widget("console-vnc-viewport").add(self.vncViewer)
         self.vncViewer.realize()
         self.vncTunnel = None
         if self.config.get_console_keygrab() == 2:
             self.vncViewer.set_keyboard_grab(True)
-            self.vncViewer.set_pointer_grab(True)
         else:
             self.vncViewer.set_keyboard_grab(False)
-            self.vncViewer.set_pointer_grab(False)
-        self.vncViewer.set_pointer_local(True)
+        self.vncViewer.set_pointer_grab(True)
+        if not topwin.is_composited():
+            self.vncViewer.set_scaling(True)
+            self.window.get_widget("menu-view-scale-display").set_active(True)
 
         self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
         self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
@@ -147,6 +146,8 @@ class vmmConsole(gobject.GObject):
             "on_menu_send_caf7_activate": self.send_key,
             "on_menu_send_caf8_activate": self.send_key,
             "on_menu_send_printscreen_activate": self.send_key,
+
+            "on_menu_view_scale_display_activate": self.scale_display,
             })
 
         self.vm.connect("status-changed", self.update_widget_states)
@@ -165,8 +166,10 @@ class vmmConsole(gobject.GObject):
     # widget it still seems to show scrollbars. So we do evil stuff here
     def _force_resize(self, src, size):
         w,h = src.get_size_request()
+        if w == -1 or h == -1:
+            return
+
         self.window.get_widget("console-screenshot").set_size_request(w, h)
-        self.window.get_widget("console-vnc-scroll").set_size_request(w, h)
         topw,toph = self.window.get_widget("vmm-console").size_request()
 
         padx = topw-w
@@ -178,6 +181,7 @@ class vmmConsole(gobject.GObject):
         maxh = rooth - 100 - pady
         self.window.get_widget("console-vnc-viewport").set_size_request(w, h)
         self.window.get_widget("console-screenshot-viewport").set_size_request(w, h)
+        self.window.get_widget("console-vnc-scroll").set_size_request(w, h)
         if w > maxw or h > maxh:
             self.window.get_widget("console-vnc-scroll").set_policy(gtk.POLICY_ALWAYS, gtk.POLICY_ALWAYS)
             self.window.get_widget("console-screenshot-scroll").set_policy(gtk.POLICY_ALWAYS, gtk.POLICY_ALWAYS)
@@ -185,26 +189,10 @@ class vmmConsole(gobject.GObject):
             self.window.get_widget("console-vnc-scroll").set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
             self.window.get_widget("console-screenshot-scroll").set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
 
-    # Auto-increase the window size to fit the console - within reason
-    # though, cos we don't want a min window size greater than the screen
-    # the user has scrollbars anyway if they want it smaller / it can't fit
-    def autosize(self, src, size):
-        rootWidth = gtk.gdk.screen_width()
-        rootHeight = gtk.gdk.screen_height()
-
-        vncWidth, vncHeight = src.get_size_request()
-
-        if vncWidth > (rootWidth-200):
-            vncWidth = rootWidth - 200
-        if vncHeight > (rootHeight-200):
-            vncHeight = rootHeight - 200
-
-        self.window.get_widget("console-vnc-vp").set_size_request(vncWidth+2, vncHeight+2)
-
     def send_key(self, src):
         keys = None
         if src.get_name() == "menu-send-cad":
-            keys = ["Control_L", "Alt_L", "Del"]
+            keys = ["Control_L", "Alt_L", "Delete"]
         elif src.get_name() == "menu-send-cab":
             keys = ["Control_L", "Alt_L", "BackSpace"]
         elif src.get_name() == "menu-send-caf1":
@@ -287,10 +275,14 @@ class vmmConsole(gobject.GObject):
     def keygrab_changed(self, src, ignore1=None,ignore2=None,ignore3=None):
         if self.config.get_console_keygrab() == 2:
             self.vncViewer.set_keyboard_grab(True)
-            self.vncViewer.set_pointer_grab(True)
         else:
             self.vncViewer.set_keyboard_grab(False)
-            self.vncViewer.set_pointer_grab(False)
+
+    def scale_display(self, src):
+        if src.get_active():
+            self.vncViewer.set_scaling(True)
+        else:
+            self.vncViewer.set_scaling(False)
 
     def toggle_fullscreen(self, src):
         if src.get_active():
@@ -669,6 +661,8 @@ class vmmConsole(gobject.GObject):
                     cr.show_text(overlay)
                     screenshot.set_from_pixmap(pixmap, None)
                     self.activate_screenshot_page()
+                elif self.window.get_widget("console-pages").get_current_page() == PAGE_SCREENSHOT:
+                    pass
                 else:
                     if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
                         self.vncViewer.close()

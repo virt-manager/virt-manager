@@ -51,6 +51,7 @@ ROW_VCPUS = 6
 ROW_MEM = 7
 ROW_MEM_USAGE = 8
 ROW_KEY = 9
+ROW_HINT = 10
 
 # Columns in the tree view
 COL_NAME = 0
@@ -70,6 +71,10 @@ class vmmManager(gobject.GObject):
                                 gobject.TYPE_NONE, (str,str)),
         "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
+        "action-refresh-console": (gobject.SIGNAL_RUN_FIRST,
+                                   gobject.TYPE_NONE, (str,str)),
+        "action-refresh-terminal": (gobject.SIGNAL_RUN_FIRST,
+                                    gobject.TYPE_NONE, (str,str)),
         "action-show-details": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
         "action-show-about": (gobject.SIGNAL_RUN_FIRST,
@@ -96,6 +101,10 @@ class vmmManager(gobject.GObject):
     def __init__(self, config, engine):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-manager.glade", "vmm-manager", domain="virt-manager")
+        self.err = vmmErrorDialog(self.window.get_widget("vmm-manager"),
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
         self.config = config
         self.engine = engine
         self.connections = {}
@@ -283,13 +292,7 @@ class vmmManager(gobject.GObject):
     def restore_saved(self, src=None):
         conn = self.current_connection()
         if conn.is_remote():
-            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_OK,
-                                     _("Restoring virtual machines over remote connections is not yet supported"))
-            result = warn.run()
-            warn.destroy()
+            self.err.val_err(_("Restoring virtual machines over remote connections is not yet supported"))
             return
 
         # get filename
@@ -312,30 +315,19 @@ class vmmManager(gobject.GObject):
                                       _("Restoring Virtual Machine"))
                 progWin.run()
             else:
-                err = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                        gtk.DIALOG_DESTROY_WITH_PARENT,
-                                        gtk.MESSAGE_ERROR,
-                                        gtk.BUTTONS_OK,
-                                        _("The file '%s' does not appear to be a valid saved machine image") % file_to_load)
-                err.run()
-                err.destroy()
+                self.err.val_err(_("The file '%s' does not appear to be a valid saved machine image") % file_to_load)
+                return
 
         self.fcdialog.destroy()
         if(self.domain_restore_error != ""):
-            self.error_msg = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                               gtk.DIALOG_DESTROY_WITH_PARENT,
-                                               gtk.MESSAGE_ERROR,
-                                               gtk.BUTTONS_OK,
-                                               self.domain_restore_error)
-            self.error_msg.run()
-            self.error_msg.destroy()
+            self.err.val_err(self.domain_restore_error)
             self.domain_restore_error = ""
 
     def is_valid_saved_image(self, file):
         try:
             f = open(file, "r")
             magic = f.read(16)
-            if magic != "LinuxGuestRecord":
+            if magic != "LinuxGuestRecord" and magic != "LibvirtQemudSave":
                 return False
             return True
         except:
@@ -403,6 +395,9 @@ class vmmManager(gobject.GObject):
                 self.emit("action-show-console", uri, vmuuid)
             elif not connect.is_remote():
                 self.emit("action-show-terminal", uri, vmuuid)
+        else:
+            self.emit("action-refresh-console", uri, vmuuid)
+            self.emit("action-refresh-terminal", uri, vmuuid)
 
     def _append_vm(self, model, vm, conn):
         logging.debug("About to append vm: %s" % vm.get_name())
@@ -418,6 +413,8 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_MEM, vm.get_memory_pretty())
         row.insert(ROW_MEM_USAGE, vm.current_memory_percentage())
         row.insert(ROW_KEY, vm.get_uuid())
+        row.insert(ROW_HINT, None)
+
         iter = model.append(parent, row)
         path = model.get_path(iter)
         self.rows[vm.get_uuid()] = model[path]
@@ -436,6 +433,8 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_MEM, conn.pretty_current_memory())
         row.insert(ROW_MEM_USAGE, conn.current_memory_percentage())
         row.insert(ROW_KEY, conn.get_uri())
+        row.insert(ROW_HINT, conn.get_uri())
+
         iter = model.append(None, row)
         path = model.get_path(iter)
         self.rows[conn.get_uri()] = model[path]
@@ -500,6 +499,15 @@ class vmmManager(gobject.GObject):
         row[ROW_MEM] = vm.get_memory_pretty()
         row[ROW_MEM_USAGE] = vm.current_memory_percentage()
         model.row_changed(row.path, row.iter)
+
+        if vm == self.current_vm():
+            if vm.is_active():
+                self.window.get_widget("vm-delete").set_sensitive(False)
+                self.window.get_widget("menu_edit_delete").set_sensitive(False)
+            else:
+                self.window.get_widget("vm-delete").set_sensitive(True)
+                self.window.get_widget("menu_edit_delete").set_sensitive(True)
+
 
     def conn_state_changed(self, conn):
         self.conn_refresh_resources(conn)
@@ -711,13 +719,7 @@ class vmmManager(gobject.GObject):
     def new_vm(self, ignore=None):
         conn = self.current_connection()
         if conn.is_remote():
-            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_OK,
-                                     _("Creating new guests on remote connections is not yet supported"))
-            result = warn.run()
-            warn.destroy()
+            self.err.val_err(_("Creating new guests on remote connections is not yet supported"))
         else:
             self.emit("action-show-create", conn.get_uri())
 
@@ -729,14 +731,8 @@ class vmmManager(gobject.GObject):
             if conn is None:
                 return
 
-            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_YES_NO,
-                                     _("This will permanently delete the connection \"%s\", are you sure?") % self.rows[conn.get_uri()][ROW_NAME])
-            result = warn.run()
-            warn.destroy()
-            if result == gtk.RESPONSE_NO:
+            result = self.err.yes_no(_("This will permanently delete the connection \"%s\", are you sure?") % self.rows[conn.get_uri()][ROW_NAME])
+            if not result:
                 return
             self.engine.remove_connection(conn.get_uri())
         else:
@@ -746,21 +742,15 @@ class vmmManager(gobject.GObject):
                 return
 
             # are you sure you want to delete this VM?
-            warn = gtk.MessageDialog(self.window.get_widget("vmm-manager"),
-                                     gtk.DIALOG_DESTROY_WITH_PARENT,
-                                     gtk.MESSAGE_WARNING,
-                                     gtk.BUTTONS_YES_NO,
-                                     _("This will permanently delete the vm \"%s,\" are you sure?") % vm.get_name())
-            result = warn.run()
-            warn.destroy()
-            if result == gtk.RESPONSE_NO:
+            result = self.err.yes_no(_("This will permanently delete the vm \"%s,\" are you sure?") % vm.get_name())
+            if not result:
                 return
             conn = vm.get_connection()
             try:
                 vm.delete()
             except Exception, e:
-                self._err_dialog(_("Error deleting domain: %s" % str(e)),\
-                                     "".join(traceback.format_exc()))
+                self.err.show_err(_("Error deleting domain: %s" % str(e)),\
+                                  "".join(traceback.format_exc()))
             conn.tick(noStatsUpdate=True)
 
     def show_about(self, src):
@@ -780,8 +770,14 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
 
         # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid
-        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str)
+        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str, str)
         vmlist.set_model(model)
+        try:
+            vmlist.set_tooltip_column(ROW_HINT)
+        except:
+            # Catch & ignore errors - set_tooltip_column is in gtk >= 2.12
+            # and we can easily work with lower versions
+            pass
 
         nameCol = gtk.TreeViewColumn(_("Name"))
         idCol = gtk.TreeViewColumn(_("ID"))
@@ -1020,30 +1016,17 @@ class vmmManager(gobject.GObject):
 
     def _connect_error(self, conn, details):
         if conn.get_driver() == "xen" and not conn.is_remote():
-            dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
-                                 gtk.BUTTONS_CLOSE,
-                                 _("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
-                                   "Verify that:\n" +
-                                   " - A Xen host kernel was booted\n" +
-                                   " - The Xen service has been started\n"),
-                                 details)
+            self.err.show_err(_("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
+                              "Verify that:\n" +
+                              " - A Xen host kernel was booted\n" +
+                              " - The Xen service has been started\n"),
+                              details,
+                              title=_("Virtual Machine Manager Connection Failure"))
         else:
-            dg = vmmErrorDialog (None, 0, gtk.MESSAGE_ERROR,
-                                 gtk.BUTTONS_CLOSE,
-                                 _("Unable to open a connection to the libvirt management daemon.\n\n" +
-                                   "Verify that:\n" +
-                                   " - The 'libvirtd' daemon has been started\n"),
-                                 details)
-        dg.set_title(_("Virtual Machine Manager Connection Failure"))
-        dg.run()
-        dg.hide()
-        dg.destroy()
-
-    def _err_dialog(self, summary, details):
-        dg = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR,
-                            gtk.BUTTONS_CLOSE, summary, details)
-        dg.run()
-        dg.hide()
-        dg.destroy()
+            self.err.show_err(_("Unable to open a connection to the libvirt management daemon.\n\n" +
+                              "Verify that:\n" +
+                              " - The 'libvirtd' daemon has been started\n"),
+                              details,
+                              title=_("Virtual Machine Manager Connection Failure"))
 
 gobject.type_register(vmmManager)
