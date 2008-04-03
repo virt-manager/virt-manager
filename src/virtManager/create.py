@@ -392,6 +392,8 @@ class vmmCreate(gobject.GObject):
             return self.window.get_widget("storage-file-address").get_text()
 
     def get_config_disk_size(self):
+        if not self.window.get_widget("storage-file-backed").get_active():
+            return None
         if not self.window.get_widget("storage-file-size").get_editable():
             return None
         else:
