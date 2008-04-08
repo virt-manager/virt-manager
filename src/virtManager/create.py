@@ -887,6 +887,8 @@ class vmmCreate(gobject.GObject):
         elif page_num == PAGE_INST_TREE:
 
             src = self.get_config_install_source()
+            if not src:
+                return self.err.val_err(_("An install url is required."))
             try:
                 self._guest.location = src
             except ValueError, e:
