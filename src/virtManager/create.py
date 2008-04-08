@@ -970,12 +970,6 @@ class vmmCreate(gobject.GObject):
                    self.get_config_method() == VM_PARA_VIRT and \
                    virtinst.util.is_blktap_capable():
                     self._disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
-
-                if self._disk.type == virtinst.VirtualDisk.TYPE_FILE and not \
-                   self.is_sparse_file():
-                    self.non_sparse = True
-                else:
-                    self.non_sparse = False
             except ValueError, e:
                 return self.err.val_err(_("Invalid Storage Address"), str(e))
 
