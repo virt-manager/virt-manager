@@ -356,7 +356,7 @@ class vmmCreate(gobject.GObject):
     def get_config_install_source(self):
         if self.get_config_install_method() == VM_INST_TREE:
             widget = self.window.get_widget("pv-media-url")
-            url= widget.child.get_text()
+            url= widget.child.get_text().strip()
             # Add the URL to the list, if it's different
             self.config.add_media_url(url)
             self.populate_url_model(widget.get_model(), self.config.get_media_urls())
@@ -378,7 +378,7 @@ class vmmCreate(gobject.GObject):
     def get_config_kickstart_source(self):
         if self.get_config_install_method() == VM_INST_TREE:
             widget = self.window.get_widget("pv-ks-url")
-            url = widget.child.get_text()
+            url = widget.child.get_text().strip()
             self.config.add_kickstart_url(url)
             self.populate_url_model(widget.get_model(), self.config.get_kickstart_urls())
             return url
