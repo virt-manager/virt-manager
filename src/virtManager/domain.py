@@ -382,6 +382,10 @@ class vmmDomain(gobject.GObject):
         self.vm.shutdown()
         self._update_status()
 
+    def reboot(self):
+        self.vm.reboot(0)
+        self._update_status()
+
     def startup(self):
         self.vm.create()
         self._update_status()

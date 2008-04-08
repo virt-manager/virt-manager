@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 Red Hat, Inc.
+# Copyright (C) 2006-2008 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -93,6 +93,10 @@ class vmmManager(gobject.GObject):
                               gobject.TYPE_NONE, (str, str)),
         "action-shutdown-domain": (gobject.SIGNAL_RUN_FIRST,
                                    gobject.TYPE_NONE, (str, str)),
+        "action-reboot-domain": (gobject.SIGNAL_RUN_FIRST,
+                                 gobject.TYPE_NONE, (str, str)),
+        "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
+                                  gobject.TYPE_NONE, (str, str)),
         "action-connect": (gobject.SIGNAL_RUN_FIRST,
                            gobject.TYPE_NONE, [str]),
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
@@ -172,11 +176,6 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["hsep"].show();
         self.vmmenu.add(self.vmmenu_items["hsep"])
 
-        self.vmmenu_items["details"] = gtk.ImageMenuItem("_Details")
-        self.vmmenu_items["details"].connect("activate", self.show_vm_details)
-        self.vmmenu_items["details"].show()
-        self.vmmenu.add(self.vmmenu_items["details"])
-
         self.vmmenu_items["open"] = gtk.ImageMenuItem(gtk.STOCK_OPEN)
         self.vmmenu_items["open"].connect("activate", self.open_vm_console)
         self.vmmenu_items["open"].show()
@@ -222,11 +221,10 @@ class vmmManager(gobject.GObject):
             "on_menu_file_close_activate": self.close,
             "on_menu_restore_saved_activate": self.restore_saved,
             "on_vmm_close_clicked": self.close,
-            "on_vm_details_clicked": self.show_vm_details,
             "on_vm_open_clicked": self.open_vm_console,
             "on_vm_delete_clicked": self.delete_vm,
             "on_vm_new_clicked": self.new_vm,
-            "on_menu_edit_details_activate": self.show_vm_details,
+            "on_menu_edit_details_activate": self.open_vm_console,
             "on_menu_edit_delete_activate": self.delete_vm,
             "on_menu_host_details_activate": self.show_host,
 
@@ -590,7 +588,7 @@ class vmmManager(gobject.GObject):
         if vm is None:
             self.emit("action-show-host", conn.get_uri())
         else:
-            self.emit("action-show-details", conn.get_uri(), self.current_vmuuid())
+            self.emit("action-show-console", conn.get_uri(), self.current_vmuuid())
 
     def show_vm_create(self,ignore):
         self.emit("action-show-create", self.current_connection_uri())
@@ -617,7 +615,6 @@ class vmmManager(gobject.GObject):
         vm = self.current_vm()
         if selection == None or selection.count_selected_rows() == 0:
             # Nothing is selected
-            self.window.get_widget("vm-details").set_sensitive(False)
             self.window.get_widget("vm-open").set_sensitive(False)
             self.window.get_widget("vm-delete").set_sensitive(False)
             self.window.get_widget("vm-new").set_sensitive(False)
@@ -630,7 +627,6 @@ class vmmManager(gobject.GObject):
             # this is strange to call this here, but it simplifies the code
             # updating the treeview
             self.vm_resources_sampled(vm)
-            self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(True)
             if vm.status() == libvirt.VIR_DOMAIN_SHUTOFF:
                 self.window.get_widget("vm-delete").set_sensitive(True)
@@ -643,7 +639,6 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
         else:
             # A connection is selected
-            self.window.get_widget("vm-details").set_sensitive(True)
             self.window.get_widget("vm-open").set_sensitive(False)
             if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
                 self.window.get_widget("vm-delete").set_sensitive(True)
