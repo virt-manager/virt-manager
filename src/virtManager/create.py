@@ -816,6 +816,10 @@ class vmmCreate(gobject.GObject):
             startup_mem_adjustment.value = max_memory
         startup_mem_adjustment.upper = max_memory
 
+    def set_max_vcpus(self, type):
+        self.window.get_widget("create-vcpus").get_adjustment().upper = self.connection.get_max_vcpus(type)
+        self.window.get_widget("config-max-vcpus").set_text(str(self.connection.get_max_vcpus(type)))
+
     def validate(self, page_num):
 
         # Setting the values in the Guest/Disk/Network virtinst objects
@@ -841,6 +845,12 @@ class vmmCreate(gobject.GObject):
                                                      hypervisorURI=self.connection.get_uri())
 
             self._guest.name = name # Transfer name over
+
+            # Set vcpu limits based on guest type
+            try:
+                self.set_max_vcpus(self.get_domain_type())
+            except Exception, e:
+                logging.exception(e)
 
         elif page_num == PAGE_INST:
             if self.get_config_method() == VM_PARA_VIRT:
