@@ -590,11 +590,11 @@ class vmmDomain(gobject.GObject):
             if type == "file":
                 elem.setProp("file", source)
                 if driver_fragment:
-                    driver_fragment.setProp("name", type)
+                    driver_fragment[0].setProp("name", type)
             else:
                 elem.setProp("dev", source)
                 if driver_fragment:
-                    driver_fragment.setProp("name", "phy")
+                    driver_fragment[0].setProp("name", "phy")
             result = disk_fragment[0].serialize()
             logging.debug("connect_cdrom_device produced the following XML: %s" % result)
         finally:
