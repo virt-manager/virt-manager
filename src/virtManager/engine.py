@@ -220,6 +220,7 @@ class vmmEngine(gobject.GObject):
 
     def show_help(self, index):
         try:
+            logging.debug("Showing help for %s" % index)
             gnome.help_display(self.config.get_appname(), index)
         except gobject.GError, e:
             logging.error(("Unable to display documentation:\n%s") % e)

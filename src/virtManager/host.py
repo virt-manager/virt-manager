@@ -96,7 +96,7 @@ class vmmHost(gobject.GObject):
         self.window.signal_autoconnect({
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
-            "on_menu_help_about_activate": self.show_help,
+            "on_menu_help_contents_activate": self.show_help,
             "on_net_add_clicked": self.add_network,
             "on_net_delete_clicked": self.delete_network,
             "on_net_stop_clicked": self.stop_network,
@@ -150,11 +150,6 @@ class vmmHost(gobject.GObject):
             self.conn.toggle_autoconnect()
 
     def show_help(self, src):
-        # From the Details window, show the help document from the Details page
-        self.emit("action-show-help", "virt-manager-host-window")
-
-    def show_help(self, src):
-        # From the Details window, show the help document from the Details page
         self.emit("action-show-help", "virt-manager-host-window")
 
     def close(self,ignore1=None,ignore2=None):
