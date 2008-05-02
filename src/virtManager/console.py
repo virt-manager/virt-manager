@@ -212,7 +212,7 @@ class vmmConsole(gobject.GObject):
         elif src.get_name() == "menu-send-caf8":
             keys = ["Control_L", "Alt_L", "F8"]
         elif src.get_name() == "menu-send-printscreen":
-            keys = ["PrintScreen"]
+            keys = ["Print"]
 
         if keys != None:
             self.vncViewer.send_keys(keys)
