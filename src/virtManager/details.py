@@ -481,7 +481,7 @@ class vmmDetails(gobject.GObject):
         elif src.get_name() == "details-menu-send-caf12":
             keys = ["Control_L", "Alt_L", "F12"]
         elif src.get_name() == "details-menu-send-printscreen":
-            keys = ["PrintScreen"]
+            keys = ["Print"]
 
         if keys != None:
             self.vncViewer.send_keys(keys)
