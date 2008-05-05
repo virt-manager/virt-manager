@@ -1,34 +1,34 @@
 
 SUBDIRS = graphWidgets virtManager
 
-bin_SOURCES = virt-manager.in
+bin_SCRIPTS_IN = virt-manager.in
 bin_SCRIPTS = virt-manager
 
 pythondir = $(pkgdatadir)
-python_SOURCES = $(PACKAGE).py.in
+python_DATA_IN = $(PACKAGE).py.in
 python_DATA = $(PACKAGE).py
 
-libexec_SOURCES = $(PACKAGE)-launch.in
+libexec_DATA_IN = $(PACKAGE)-launch.in
 libexec_SCRIPTS = $(PACKAGE)-launch
 
 gladedir = $(pkgdatadir)
 glade_DATA = $(wildcard $(srcdir)/*.glade)
 
 desktopdir = $(datadir)/applications
-desktop_SOURCES = $(PACKAGE).desktop.in.in
+desktop_DATA_IN = $(PACKAGE).desktop.in.in
 desktop_DATA = $(PACKAGE).desktop
 
 dbusdir = $(datadir)/dbus-1/services
-dbus_SOURCES = $(PACKAGE).service.in
+dbus_DATA_IN = $(PACKAGE).service.in
 dbus_DATA = $(PACKAGE).service
 
 schemadir = $(sysconfdir)/gconf/schemas
-schema_SOURCES = $(PACKAGE).schemas.in
+schema_DATA_IN = $(PACKAGE).schemas.in
 schema_DATA = $(PACKAGE).schemas
 
 CLEANFILES = $(bin_SCRIPTS) $(desktop_DATA) $(dbus_DATA) $(python_DATA)  $(libexec_SCRIPTS) $(schema_DATA) $(PACKAGE).desktop.in
 
-EXTRA_DIST = $(bin_SOURCES) $(desktop_SOURCES) $(dbus_SOURCES) $(python_SOURCES) $(glade_DATA) $(libexec_SOURCES) $(schema_SOURCES)
+EXTRA_DIST = $(bin_SCRIPTS_IN) $(desktop_DATA_IN) $(dbus_DATA_IN) $(python_DATA_IN) $(glade_DATA) $(libexec_DATA_IN) $(schema_DATA_IN)
 
 @INTLTOOL_DESKTOP_RULE@
 
