@@ -80,6 +80,7 @@ def _splitnetloc(url, start=0):
         delim = len(url)
     return url[start:delim], url[delim:]
 
+
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
         "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -946,6 +947,48 @@ class vmmConnection(gobject.GObject):
             return masters
         else:
             return None
+
+    def _net_is_bonding_slave(self, name, sysfspath):
+        masterpath = sysfspath + "/master"
+        if os.path.exists(masterpath):
+            return True
+        return False
+
+    def _net_get_bridge_owner(self, name, sysfspath):
+        # Now magic to determine if the device is part of a bridge
+        brportpath = os.path.join(sysfspath, "brport")
+        try:
+            if os.path.exists(brportpath):
+                brlinkpath = os.path.join(brportpath, "bridge")
+                dest = os.readlink(brlinkpath)
+                (ignore,bridge) = os.path.split(dest)
+                return bridge
+        except:
+            (type, value, stacktrace) = sys.exc_info ()
+            logging.error("Unable to determine if device is shared:" +
+                            str(type) + " " + str(value) + "\n" + \
+                            traceback.format_exc (stacktrace))
+
+        return None
+
+    def _net_get_mac_address(self, name, sysfspath):
+        mac = None
+        addrpath = sysfspath + "/address"
+        if os.path.exists(addrpath):
+            df = open(addrpath, 'r')
+            mac = df.readline()
+            df.close()
+        return mac.strip(" \n\t")
+
+    def _net_get_bonding_masters(self):
+        masters = []
+        f = open("/sys/class/net/bonding_masters")
+        while True:
+            rline = f.readline()
+            if not rline: break
+            if rline == "\x00": continue
+            masters.append(rline.strip(" \n\t"))
+        return masters
 
     def _net_is_bonding_slave(self, name, sysfspath):
         masterpath = sysfspath + "/master"
