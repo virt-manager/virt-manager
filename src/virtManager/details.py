@@ -293,7 +293,7 @@ class vmmDetails(gobject.GObject):
 
         maxw = rootw - 100 - padx
         maxh = rooth - 100 - pady
-        print "Set %d %d" % (w, h)
+
         self.window.get_widget("console-vnc-viewport").set_size_request(w, h)
         self.window.get_widget("console-screenshot").set_size_request(w, h)
         self.window.get_widget("console-screenshot-viewport").set_size_request(w, h)
