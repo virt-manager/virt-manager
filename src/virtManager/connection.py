@@ -339,9 +339,17 @@ class vmmConnection(gobject.GObject):
     def _do_creds_polkit(self, action):
         logging.debug("Doing policykit for %s" % action)
         bus = dbus.SessionBus()
-        obj = bus.get_object("org.gnome.PolicyKit", "/org/gnome/PolicyKit/Manager")
-        pkit = dbus.Interface(obj, "org.gnome.PolicyKit.Manager")
-        pkit.ShowDialog(action, 0)
+
+        try:
+            # First try to use org.freedesktop.PolicyKit.AuthenticationAgent which is introduced with PolicyKit-0.7
+            obj = bus.get_object("org.freedesktop.PolicyKit.AuthenticationAgent", "/")
+            pkit = dbus.Interface(obj, "org.freedesktop.PolicyKit.AuthenticationAgent")
+            pkit.ObtainAuthorization(action, 0, os.getpid())
+        except org.freedesktop.DBus.Error.ServiceUnknown:
+            # If PolicyKit < 0.7, fallback to org.gnome.PolicyKit
+            obj = bus.get_object("org.gnome.PolicyKit", "/org/gnome/PolicyKit/Manager")
+            pkit = dbus.Interface(obj, "org.gnome.PolicyKit.Manager")
+            pkit.ShowDialog(action, 0)
         return 0
 
     def _do_creds_dialog(self, creds):
