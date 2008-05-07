@@ -418,7 +418,7 @@ class vmmEngine(gobject.GObject):
                        libvirt.VIR_DOMAIN_SHUTOFF ]:
             logging.warning("Destroy requested, but machine is shutdown / shutoff")
         else:
-            resp = self.err.yes_no(text1=_("About to destroy virtual machine %s" % vm.get_name()), text2=_("This will immediately destroy the VM and may corrupt its disk image. Are you sure?"))
+            resp = self.err.yes_no(text1=_("About to poweroff virtual machine %s" % vm.get_name()), text2=_("This will immediately poweroff the VM without shutting down the OS and may cause data loss. Are you sure?"))
             if resp:
                 try:
                     vm.destroy()
