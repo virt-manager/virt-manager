@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006 Red Hat, Inc.
+# Copyright (C) 2006-2008 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,11 @@ import sparkline
 import logging
 import traceback
 import sys
+import dbus
+import traceback
+import gtkvnc
+import os
+import socket
 
 from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
@@ -51,6 +56,12 @@ HW_LIST_TYPE_INPUT = 4
 HW_LIST_TYPE_GRAPHICS = 5
 HW_LIST_TYPE_BOOT = 6
 
+# Console pages
+PAGE_UNAVAILABLE = 0
+PAGE_SCREENSHOT = 1
+PAGE_AUTHENTICATE = 2
+PAGE_VNCVIEWER = 3
+
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
@@ -69,6 +80,8 @@ class vmmDetails(gobject.GObject):
                               gobject.TYPE_NONE, (str, str)),
         "action-shutdown-domain": (gobject.SIGNAL_RUN_FIRST,
                                    gobject.TYPE_NONE, (str, str)),
+        "action-reboot-domain": (gobject.SIGNAL_RUN_FIRST,
+                                 gobject.TYPE_NONE, (str, str)),
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),
         }
@@ -86,7 +99,8 @@ class vmmDetails(gobject.GObject):
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
         topwin.hide()
-        topwin.set_title(self.vm.get_name() + " " + topwin.get_title())
+        self.title = vm.get_name() + " " + topwin.get_title()
+        topwin.set_title(self.title)
 
         # Don't allowing changing network/disks for Dom0
         # XXX also disable for remote connections for now
@@ -100,6 +114,35 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
+
+        menu = gtk.Menu()
+        self.window.get_widget("control-shutdown").set_menu(menu)
+        
+        rebootimg = gtk.Image()
+        rebootimg.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
+        shutdownimg = gtk.Image()
+        shutdownimg.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
+        destroyimg = gtk.Image()
+        destroyimg.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
+
+        reboot = gtk.ImageMenuItem("_Reboot")
+        reboot.set_image(rebootimg)
+        reboot.show()
+        reboot.connect("activate", self.control_vm_reboot)
+        menu.add(reboot)
+
+        shutdown = gtk.ImageMenuItem("_Poweroff")
+        shutdown.set_image(shutdownimg)
+        shutdown.show()
+        shutdown.connect("activate", self.control_vm_shutdown)
+        menu.add(shutdown)
+
+        destroy = gtk.ImageMenuItem("_Force poweroff")
+        destroy.set_image(destroyimg)
+        destroy.show()
+        destroy.connect("activate", self.control_vm_destroy)
+        menu.add(destroy)
+
 
         self.window.get_widget("hw-panel").set_show_tabs(False)
 
@@ -115,6 +158,50 @@ class vmmDetails(gobject.GObject):
         self.network_traffic_graph = sparkline.Sparkline()
         self.window.get_widget("graph-table").attach(self.network_traffic_graph, 1, 2, 3, 4)
 
+
+        self.accel_groups = gtk.accel_groups_from_object(topwin)
+        self.gtk_settings_accel = None
+
+        self.vncViewer = gtkvnc.Display()
+        self.window.get_widget("console-vnc-viewport").add(self.vncViewer)
+        self.vncViewer.realize()
+        self.vncTunnel = None
+        if self.config.get_console_keygrab() == 2:
+            self.vncViewer.set_keyboard_grab(True)
+        else:
+            self.vncViewer.set_keyboard_grab(False)
+        self.vncViewer.set_pointer_grab(True)
+        if not topwin.is_composited():
+            self.vncViewer.set_scaling(True)
+            self.window.get_widget("details-menu-view-scale-display").set_active(True)
+
+        self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
+        self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
+
+        self.vncViewer.show()
+        self.vncViewerRetriesScheduled = 0
+        self.vncViewerRetryDelay = 125
+        self.vncViewer.connect("size-request", self._force_resize)
+        self.vncViewer.connect("vnc-auth-credential", self._vnc_auth_credential)
+        self.vncViewer.connect("vnc-initialized", self._vnc_initialized)
+        self.vncViewer.connect("vnc-disconnected", self._vnc_disconnected)
+        self.vncViewer.connect("vnc-keyboard-grab", self._disable_modifiers)
+        self.vncViewer.connect("vnc-keyboard-ungrab", self._enable_modifiers)
+        self.connected = 0
+
+        self.notifyID = None
+        try:
+            bus = dbus.SessionBus()
+            self.notifyObject = bus.get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+            self.notifyInterface = dbus.Interface(self.notifyObject, "org.freedesktop.Notifications")
+            self.notifyInterface.connect_to_signal("ActionInvoked", self.notify_action)
+            self.notifyInterface.connect_to_signal("NotificationClosed", self.notify_closed)
+        except Exception, e:
+            logging.error("Cannot initialize notification system" + str(e))
+            pass
+
+        self.window.get_widget("console-pages").set_show_tabs(False)
+
         self.window.signal_autoconnect({
             "on_close_details_clicked": self.close,
             "on_details_menu_close_activate": self.close,
@@ -123,15 +210,16 @@ class vmmDetails(gobject.GObject):
             "on_control_run_clicked": self.control_vm_run,
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
+            "on_control_fullscreen_toggled": self.control_fullscreen,
 
             "on_details_menu_run_activate": self.control_vm_run,
-            "on_details_menu_shutdown_activate": self.control_vm_shutdown,
+            "on_details_menu_poweroff_activate": self.control_vm_shutdown,
+            "on_details_menu_reboot_activate": self.control_vm_reboot,
             "on_details_menu_save_activate": self.control_vm_save_domain,
             "on_details_menu_destroy_activate": self.control_vm_destroy,
             "on_details_menu_pause_activate": self.control_vm_pause,
 
             "on_details_menu_graphics_activate": self.control_vm_console,
-            "on_details_menu_serial_activate": self.control_vm_terminal,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
 
             "on_config_vcpus_apply_clicked": self.config_vcpus_apply,
@@ -150,6 +238,26 @@ class vmmDetails(gobject.GObject):
             "on_config_input_remove_clicked": self.remove_input,
             "on_config_graphics_remove_clicked": self.remove_graphics,
             "on_add_hardware_button_clicked": self.add_hardware,
+
+            "on_details_menu_view_fullscreen_activate": self.toggle_fullscreen,
+            "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
+            "on_details_menu_view_scale_display_activate": self.scale_display,
+
+            "on_details_menu_send_cad_activate": self.send_key,
+            "on_details_menu_send_cab_activate": self.send_key,
+            "on_details_menu_send_caf1_activate": self.send_key,
+            "on_details_menu_send_caf2_activate": self.send_key,
+            "on_details_menu_send_caf3_activate": self.send_key,
+            "on_details_menu_send_caf4_activate": self.send_key,
+            "on_details_menu_send_caf5_activate": self.send_key,
+            "on_details_menu_send_caf6_activate": self.send_key,
+            "on_details_menu_send_caf7_activate": self.send_key,
+            "on_details_menu_send_caf8_activate": self.send_key,
+            "on_details_menu_send_caf9_activate": self.send_key,
+            "on_details_menu_send_caf10_activate": self.send_key,
+            "on_details_menu_send_caf11_activate": self.send_key,
+            "on_details_menu_send_caf12_activate": self.send_key,
+            "on_details_menu_send_printscreen_activate": self.send_key,
             })
 
         self.vm.connect("status-changed", self.update_widget_states)
@@ -164,8 +272,137 @@ class vmmDetails(gobject.GObject):
         self.prepare_hw_list()
         self.hw_selected()
 
-    def toggle_toolbar(self, src):
+
+    # Black magic todo with scrolled windows. Basically the behaviour we want
+    # is that if it possible to resize the window to show entire guest desktop
+    # then we should do that and never show scrollbars. If the local screen is
+    # too small then we can turn on scrolling. You would think the 'Automatic'
+    # policy would work, but even if viewport is identical sized to the VNC
+    # widget it still seems to show scrollbars. So we do evil stuff here
+    def _force_resize(self, src, size):
+        w,h = src.get_size_request()
+        if w == -1 or h == -1:
+            return
+
+        topw,toph = self.window.get_widget("vmm-details").size_request()
+
+        padx = topw-w
+        pady = toph-h
+        rootw = src.get_screen().get_width()
+        rooth = src.get_screen().get_height()
+
+        maxw = rootw - 100 - padx
+        maxh = rooth - 100 - pady
+
+        self.window.get_widget("console-vnc-viewport").set_size_request(w, h)
+        self.window.get_widget("console-screenshot").set_size_request(w, h)
+        self.window.get_widget("console-screenshot-viewport").set_size_request(w, h)
+        self.window.get_widget("console-vnc-scroll").set_size_request(w, h)
+        if w > maxw or h > maxh:
+            self.window.get_widget("console-vnc-scroll").set_policy(gtk.POLICY_ALWAYS, gtk.POLICY_ALWAYS)
+            self.window.get_widget("console-screenshot-scroll").set_policy(gtk.POLICY_ALWAYS, gtk.POLICY_ALWAYS)
+        else:
+            self.window.get_widget("console-vnc-scroll").set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+            self.window.get_widget("console-screenshot-scroll").set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
+
+    def _disable_modifiers(self, ignore=None):
+        topwin = self.window.get_widget("vmm-details")
+        for g in self.accel_groups:
+            topwin.remove_accel_group(g)
+        settings = gtk.settings_get_default()
+        self.gtk_settings_accel = settings.get_property('gtk-menu-bar-accel')
+        settings.set_property('gtk-menu-bar-accel', None)
+
+    def _enable_modifiers(self, ignore=None):
+        topwin = self.window.get_widget("vmm-details")
+        if self.gtk_settings_accel is None:
+            return
+        settings = gtk.settings_get_default()
+        settings.set_property('gtk-menu-bar-accel', self.gtk_settings_accel)
+        self.gtk_settings_accel = None
+        for g in self.accel_groups:
+            topwin.add_accel_group(g)
+
+    def notify_grabbed(self, src):
+        topwin = self.window.get_widget("vmm-details")
+        topwin.set_title(_("Press Ctrl+Alt to release pointer.") + " " + self.title)
+
+        if self.config.show_console_grab_notify():
+            try:
+                (x, y) = topwin.window.get_origin()
+                self.notifyID = self.notifyInterface.Notify(topwin.get_title(),
+                                                            0,
+                                                            '',
+                                                            _("Pointer grabbed"),
+                                                            _("The mouse pointer has been restricted to the virtual " \
+                                                            "console window. To release the pointer press the key pair " \
+                                                              "Ctrl+Alt"),
+                                                            ["dismiss", _("Do not show this notification in the future")],
+                                                            {"desktop-entry": "virt-manager",
+                                                             "x": x+200, "y": y},
+                                                            8 * 1000);
+            except Exception, e:
+                logging.error("Cannot popup notification " + str(e))
+                pass
+
+    def notify_ungrabbed(self, src):
+        topwin = self.window.get_widget("vmm-details")
+        topwin.set_title(self.title)
+
+    def notify_closed(self, id, reason=None):
+        if self.notifyID is not None and self.notifyID == id:
+            self.notifyID = None
+
+    def notify_action(self, id, action):
+        if self.notifyID is None or self.notifyID != id:
+            return
+
+        if action == "dismiss":
+            self.config.set_console_grab_notify(False)
+
+    def keygrab_changed(self, src, ignore1=None,ignore2=None,ignore3=None):
+        if self.config.get_console_keygrab() == 2:
+            self.vncViewer.set_keyboard_grab(True)
+        else:
+            self.vncViewer.set_keyboard_grab(False)
+
+    def scale_display(self, src):
         if src.get_active():
+            self.vncViewer.set_scaling(True)
+        else:
+            self.vncViewer.set_scaling(False)
+
+    def control_fullscreen(self, src):
+        menu = self.window.get_widget("details-menu-view-fullscreen")
+        if src.get_active() != menu.get_active():
+            menu.set_active(src.get_active())
+
+    def toggle_fullscreen(self, src):
+        self.window.get_widget("control-fullscreen").set_active(src.get_active())
+        if src.get_active():
+            self.window.get_widget("vmm-details").fullscreen()
+            if self.config.get_console_keygrab() == 1:
+                gtk.gdk.keyboard_grab(self.vncViewer.window, False, 0L)
+                self._disable_modifiers()
+
+            tabs = self.window.get_widget("details-pages")
+            tabs.set_show_tabs(False)
+            tabs.set_border_width(0)
+            self.window.get_widget("details-toolbar").hide()
+        else:
+            if self.config.get_console_keygrab() == 1:
+                self._enable_modifiers()
+                gtk.gdk.keyboard_ungrab(0L)
+            self.window.get_widget("vmm-details").unfullscreen()
+
+            tabs = self.window.get_widget("details-pages")
+            tabs.set_show_tabs(True)
+            tabs.set_border_width(6)
+            if self.window.get_widget("details-menu-view-toolbar").get_active():
+                self.window.get_widget("details-toolbar").show()
+
+    def toggle_toolbar(self, src):
+        if src.get_active() and not self.window.get_widget("details-menu-view-fullscreen").get_active():
             self.window.get_widget("details-toolbar").show()
         else:
             self.window.get_widget("details-toolbar").hide()
@@ -186,20 +423,69 @@ class vmmDetails(gobject.GObject):
         # From the Details window, show the help document from the Details page
         self.emit("action-show-help", "virt-manager-details-window")
 
-    def activate_performance_page(self):
+    def activate_console_page(self):
         self.window.get_widget("details-pages").set_current_page(0)
 
-    def activate_config_page(self):
+    def activate_performance_page(self):
         self.window.get_widget("details-pages").set_current_page(1)
 
+    def activate_config_page(self):
+        self.window.get_widget("details-pages").set_current_page(2)
+
     def close(self,ignore1=None,ignore2=None):
+        fs = self.window.get_widget("details-menu-view-fullscreen")
+        if fs.get_active():
+            fs.set_active(False)
+
         self.window.get_widget("vmm-details").hide()
+        if self.vncViewer.flags() & gtk.VISIBLE:
+	    try:
+                self.vncViewer.close()
+	    except:
+		logging.error("Failure when disconnecting from VNC server")
         return 1
 
     def is_visible(self):
         if self.window.get_widget("vmm-details").flags() & gtk.VISIBLE:
            return 1
         return 0
+
+    def send_key(self, src):
+        keys = None
+        if src.get_name() == "details-menu-send-cad":
+            keys = ["Control_L", "Alt_L", "Delete"]
+        elif src.get_name() == "details-menu-send-cab":
+            keys = ["Control_L", "Alt_L", "BackSpace"]
+        elif src.get_name() == "details-menu-send-caf1":
+            keys = ["Control_L", "Alt_L", "F1"]
+        elif src.get_name() == "details-menu-send-caf2":
+            keys = ["Control_L", "Alt_L", "F2"]
+        elif src.get_name() == "details-menu-send-caf3":
+            keys = ["Control_L", "Alt_L", "F3"]
+        elif src.get_name() == "details-menu-send-caf4":
+            keys = ["Control_L", "Alt_L", "F4"]
+        elif src.get_name() == "details-menu-send-caf5":
+            keys = ["Control_L", "Alt_L", "F5"]
+        elif src.get_name() == "details-menu-send-caf6":
+            keys = ["Control_L", "Alt_L", "F6"]
+        elif src.get_name() == "details-menu-send-caf7":
+            keys = ["Control_L", "Alt_L", "F7"]
+        elif src.get_name() == "details-menu-send-caf8":
+            keys = ["Control_L", "Alt_L", "F8"]
+        elif src.get_name() == "details-menu-send-caf9":
+            keys = ["Control_L", "Alt_L", "F9"]
+        elif src.get_name() == "details-menu-send-caf10":
+            keys = ["Control_L", "Alt_L", "F10"]
+        elif src.get_name() == "details-menu-send-caf11":
+            keys = ["Control_L", "Alt_L", "F11"]
+        elif src.get_name() == "details-menu-send-caf12":
+            keys = ["Control_L", "Alt_L", "F12"]
+        elif src.get_name() == "details-menu-send-printscreen":
+            keys = ["Print"]
+
+        if keys != None:
+            self.vncViewer.send_keys(keys)
+
 
     def hw_selected(self, src=None):
         vmlist = self.window.get_widget("hw-list")
@@ -253,6 +539,9 @@ class vmmDetails(gobject.GObject):
 
     def control_vm_shutdown(self, src):
         self.emit("action-shutdown-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())     
+
+    def control_vm_reboot(self, src):
+        self.emit("action-reboot-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())     
 
     def control_vm_terminal(self, src):
         self.emit("action-show-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
@@ -310,15 +599,65 @@ class vmmDetails(gobject.GObject):
         except:
             self.ignorePause = False
             raise
+
+        if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
+            if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
+                self.vncViewer.close()
+                self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
+            self.view_vm_status()
+        else:
+            # Disabled screenshot when paused - doesn't work when scaled
+            # and you can connect to VNC when paused already, it'll simply
+            # not respond to input.
+            if status == libvirt.VIR_DOMAIN_PAUSED and 0 == 1:
+                if self.window.get_widget("console-pages").get_current_page() == PAGE_VNCVIEWER:
+                    screenshot = self.window.get_widget("console-screenshot")
+                    image = self.vncViewer.get_pixbuf()
+                    width = image.get_width()
+                    height = image.get_height()
+                    pixmap = gtk.gdk.Pixmap(screenshot.get_root_window(), width, height)
+                    cr = pixmap.cairo_create()
+                    cr.set_source_pixbuf(image, 0, 0)
+                    cr.rectangle(0, 0, width, height)
+                    cr.fill()
+
+                    # Set 50% gray overlayed
+                    cr.set_source_rgba(0, 0, 0, 0.5)
+                    cr.rectangle(0, 0, width, height)
+                    cr.fill()
+
+                    # Render a big text 'paused' across it
+                    cr.set_source_rgba(1, 1,1, 1)
+                    cr.set_font_size(80)
+                    cr.select_font_face("Sans", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+                    overlay = _("paused")
+                    extents = cr.text_extents(overlay)
+                    x = width/2 - (extents[2]/2)
+                    y = height/2 - (extents[3]/2)
+                    cr.move_to(x, y)
+                    cr.show_text(overlay)
+                    screenshot.set_from_pixmap(pixmap, None)
+                    self.activate_screenshot_page()
+                elif self.window.get_widget("console-pages").get_current_page() == PAGE_SCREENSHOT:
+                    pass
+                else:
+                    if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
+                        self.vncViewer.close()
+                    self.activate_unavailable_page(_("Console not available while paused"))
+            else:
+                if self.window.get_widget("console-pages").get_current_page() in (PAGE_UNAVAILABLE, PAGE_SCREENSHOT):
+                    if self.vncViewer.is_open():
+                        self.activate_viewer_page()
+                    else:
+                        self.vncViewerRetriesScheduled = 0
+                        self.vncViewerRetryDelay = 125
+                        self.try_login()
+                        self.ignorePause = False
+
         self.ignorePause = False
 
         self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
         self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())
-
-        if vm.is_serial_console_tty_accessible():
-            self.window.get_widget("details-menu-serial").set_sensitive(True)
-        else:
-            self.window.get_widget("details-menu-serial").set_sensitive(False)
 
     def refresh_resources(self, ignore=None):
         details = self.window.get_widget("details-pages")
@@ -551,6 +890,234 @@ class vmmDetails(gobject.GObject):
             boot_combo.set_active(0)
 
         # TODO: if nothing selected, what to select? auto change device?
+
+
+
+    def view_vm_status(self):
+        status = self.vm.status()
+        if status == libvirt.VIR_DOMAIN_SHUTOFF:
+            self.activate_unavailable_page(_("Guest not running"))
+        else:
+            if status == libvirt.VIR_DOMAIN_CRASHED:
+                self.activate_unavailable_page(_("Guest has crashed"))
+
+    def _vnc_disconnected(self, src):
+        if self.vncTunnel is not None:
+            self.close_tunnel()
+        self.connected = 0
+        logging.debug("VNC disconnected")
+        if self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+            self.view_vm_status()
+            return
+
+        self.activate_unavailable_page(_("TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"))
+
+        if not self.is_visible():
+            return
+
+        self.schedule_retry()
+
+    def _vnc_initialized(self, src):
+        self.connected = 1
+        logging.debug("VNC initialized")
+        self.activate_viewer_page()
+
+        # Had a succesfull connect, so reset counters now
+        self.vncViewerRetriesScheduled = 0
+        self.vncViewerRetryDelay = 125
+
+    def schedule_retry(self):
+        self.vncViewerRetriesScheduled = self.vncViewerRetriesScheduled + 1
+        if self.vncViewerRetriesScheduled >= 10:
+            logging.error("Too many connection failures, not retrying again")
+            return
+        logging.warn("Retrying connection in %d ms", self.vncViewerRetryDelay)
+        gobject.timeout_add(self.vncViewerRetryDelay, self.retry_login)
+        if self.vncViewerRetryDelay < 2000:
+            self.vncViewerRetryDelay = self.vncViewerRetryDelay * 2
+
+    def retry_login(self):
+        if self.connected:
+            return
+        gtk.gdk.threads_enter()
+        try:
+            logging.debug("Got timed retry")
+            self.try_login()
+            return
+        finally:
+            gtk.gdk.threads_leave()
+
+    def open_tunnel(self, server, vncaddr, vncport, username):
+        if self.vncTunnel is not None:
+            return
+
+        logging.debug("Spawning SSH tunnel to %s, for %s:%d" %(server, vncaddr, vncport))
+
+        fds = socket.socketpair()
+        pid = os.fork()
+        if pid == 0:
+            fds[0].close()
+            os.close(0)
+            os.close(1)
+            os.dup(fds[1].fileno())
+            os.dup(fds[1].fileno())
+            argv = ["ssh", "ssh", "-p", "22"] 
+            if username:
+                argv += ['-l', username]
+            argv += [ server, "nc", vncaddr, str(vncport) ]
+            os.execlp(*argv)
+            os._exit(1)
+        else:
+            fds[1].close()
+
+        logging.debug("Tunnel PID %d FD %d" % (fds[0].fileno(), pid))
+        self.vncTunnel = [fds[0], pid]
+        return fds[0].fileno()
+
+    def close_tunnel(self):
+        if self.vncTunnel is None:
+            return
+
+        logging.debug("Shutting down tunnel PID %d FD %d" % (self.vncTunnel[1], self.vncTunnel[0].fileno()))
+        self.vncTunnel[0].close()
+        os.waitpid(self.vncTunnel[1], 0)
+        self.vncTunnel = None
+
+    def try_login(self, src=None):
+        if self.vm.get_id() < 0:
+            self.activate_unavailable_page(_("Guest not running"))
+            self.schedule_retry()
+            return
+
+        logging.debug("Trying console login")
+        password = self.window.get_widget("console-auth-password").get_text()
+        protocol, host, port, trans, username = self.vm.get_graphics_console()
+
+        if protocol is None:
+            logging.debug("No graphics configured in guest")
+            self.activate_unavailable_page(_("Console not configured for guest"))
+            return
+
+        uri = str(protocol) + "://"
+        if username:
+            uri = uri + str(username) + '@'
+        uri = uri + str(host) + ":" + str(port)
+
+        logging.debug("Graphics console configured at " + uri)
+
+        if protocol != "vnc":
+            logging.debug("Not a VNC console, disabling")
+            self.activate_unavailable_page(_("Console not supported for guest"))
+            return
+
+        if int(port) == -1:
+            self.activate_unavailable_page(_("Console is not yet active for guest"))
+            self.schedule_retry()
+            return
+
+        self.activate_unavailable_page(_("Connecting to console for guest"))
+        logging.debug("Starting connect process for %s %s" % (host, str(port)))
+        try:
+            if trans is not None and trans in ("ssh", "ext"):
+                fd = self.open_tunnel(host, "127.0.0.1", port, username)
+                self.vncViewer.open_fd(fd)
+            else:
+                self.vncViewer.open_host(host, str(port))
+        except:
+            (type, value, stacktrace) = sys.exc_info ()
+            details = \
+                    "Unable to start virtual machine '%s'" % \
+                    (str(type) + " " + str(value) + "\n" + \
+                     traceback.format_exc (stacktrace))
+            logging.error(details)
+
+    def set_password(self, src=None):
+        txt = self.window.get_widget("console-auth-password")
+        logging.debug("Setting a password to " + str(txt.get_text()))
+
+        self.vncViewer.set_credential(gtkvnc.CREDENTIAL_PASSWORD, txt.get_text())
+
+    def _vnc_auth_credential(self, src, credList):
+        for i in range(len(credList)):
+            logging.debug("Got credential request %s", str(credList[i]))
+            if credList[i] == gtkvnc.CREDENTIAL_PASSWORD:
+                self.activate_auth_page()
+            elif credList[i] == gtkvnc.CREDENTIAL_CLIENTNAME:
+                self.vncViewer.set_credential(credList[i], "libvirt-vnc")
+            else:
+                # Force it to stop re-trying
+                self.vncViewerRetriesScheduled = 10
+                self.vncViewer.close()
+                self.activate_unavailable_page(_("Unsupported console authentication type"))
+
+    def activate_unavailable_page(self, msg):
+        self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
+        self.window.get_widget("details-menu-vm-screenshot").set_sensitive(False)
+        self.window.get_widget("console-unavailable").set_label("<b>" + msg + "</b>")
+
+    def activate_screenshot_page(self):
+        self.window.get_widget("console-pages").set_current_page(PAGE_SCREENSHOT)
+        self.window.get_widget("details-menu-vm-screenshot").set_sensitive(True)
+
+    def activate_auth_page(self):
+        pw = self.config.get_console_password(self.vm)
+        self.window.get_widget("details-menu-vm-screenshot").set_sensitive(False)
+        self.window.get_widget("console-auth-password").set_text(pw)
+        self.window.get_widget("console-auth-password").grab_focus()
+        if self.config.has_keyring():
+            self.window.get_widget("console-auth-remember").set_sensitive(True)
+            if pw != None and pw != "":
+                self.window.get_widget("console-auth-remember").set_active(True)
+            else:
+                self.window.get_widget("console-auth-remember").set_active(False)
+        else:
+            self.window.get_widget("console-auth-remember").set_sensitive(False)
+        self.window.get_widget("console-pages").set_current_page(PAGE_AUTHENTICATE)
+
+    def activate_viewer_page(self):
+        self.window.get_widget("console-pages").set_current_page(PAGE_VNCVIEWER)
+        self.window.get_widget("details-menu-vm-screenshot").set_sensitive(True)
+        self.vncViewer.grab_focus()
+
+    def control_vm_screenshot(self, src):
+        # If someone feels kind they could extend this code to allow
+        # user to choose what image format they'd like to save in....
+        fcdialog = gtk.FileChooserDialog(_("Save Virtual Machine Screenshot"),
+                                         self.window.get_widget("vmm-details"),
+                                         gtk.FILE_CHOOSER_ACTION_SAVE,
+                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                          gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
+                                         None)
+        png = gtk.FileFilter()
+        png.set_name("PNG files")
+        png.add_pattern("*.png")
+        fcdialog.add_filter(png)
+        fcdialog.set_do_overwrite_confirmation(True)
+        if fcdialog.run() == gtk.RESPONSE_ACCEPT:
+            fcdialog.hide()
+            file = fcdialog.get_filename()
+            if not(file.endswith(".png")):
+                file = file + ".png"
+            image = self.vncViewer.get_pixbuf()
+            width = image.get_width()
+            height = image.get_height()
+
+            # Save along with a little metadata about us & the domain
+            image.save(file, 'png', { 'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
+                                      'tEXt::Domain Name': self.vm.get_name(),
+                                      'tEXt::Domain UUID': self.vm.get_uuid(),
+                                      'tEXt::Generator App': self.config.get_appname(),
+                                      'tEXt::Generator Version': self.config.get_appversion() })
+            msg = gtk.MessageDialog(self.window.get_widget("vmm-details"),
+                                    gtk.DIALOG_MODAL,
+                                    gtk.MESSAGE_INFO,
+                                    gtk.BUTTONS_OK,_("The screenshot has been saved to:\n%s") % file)
+            msg.set_title(_("Screenshot saved"))
+            msg.run()
+            msg.destroy()
+        else:
+            fcdialog.hide()
+        fcdialog.destroy()
 
     def config_vcpus_changed(self, src):
         self.window.get_widget("config-vcpus-apply").set_sensitive(True)

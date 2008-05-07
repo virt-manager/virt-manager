@@ -32,10 +32,8 @@ from virtManager.connection import vmmConnection
 from virtManager.preferences import vmmPreferences
 from virtManager.manager import vmmManager
 from virtManager.details import vmmDetails
-from virtManager.console import vmmConsole
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.create import vmmCreate
-from virtManager.serialcon import vmmSerialConsole
 from virtManager.host import vmmHost
 from virtManager.error import vmmErrorDialog
 
@@ -110,12 +108,6 @@ class vmmEngine(gobject.GObject):
         if self.connections[hvuri]["windowDetails"].has_key(vmuuid):
             self.connections[hvuri]["windowDetails"][vmuuid].close()
             del self.connections[hvuri]["windowDetails"][vmuuid]
-        if self.connections[hvuri]["windowConsole"].has_key(vmuuid):
-            self.connections[hvuri]["windowConsole"][vmuuid].close()
-            del self.connections[hvuri]["windowConsole"][vmuuid]
-        if self.connections[hvuri]["windowSerialConsole"].has_key(vmuuid):
-            self.connections[hvuri]["windowSerialConsole"][vmuuid].close()
-            del self.connections[hvuri]["windowSerialConsole"][vmuuid]
 
     def _do_connection_changed(self, connection):
         if connection.get_state() == connection.STATE_ACTIVE:
@@ -125,12 +117,6 @@ class vmmEngine(gobject.GObject):
         for vmuuid in self.connections[hvuri]["windowDetails"].keys():
             self.connections[hvuri]["windowDetails"][vmuuid].close()
             del self.connections[hvuri]["windowDetails"][vmuuid]
-        for vmuuid in self.connections[hvuri]["windowConsole"].keys():
-            self.connections[hvuri]["windowConsole"][vmuuid].close()
-            del self.connections[hvuri]["windowConsole"][vmuuid]
-        for vmuuid in self.connections[hvuri]["windowSerialConsole"].keys():
-            self.connections[hvuri]["windowSerialConsole"][vmuuid].close()
-            del self.connections[hvuri]["windowSerialConsole"][vmuuid]
         if self.connections[hvuri]["windowHost"] is not None:
             self.connections[hvuri]["windowHost"].close()
             self.connections[hvuri]["windowHost"] = None
@@ -212,6 +198,8 @@ class vmmEngine(gobject.GObject):
         self.run_domain(src, uri, uuid)
     def _do_shutdown_domain(self, src, uri, uuid):
         self.shutdown_domain(src, uri, uuid)
+    def _do_reboot_domain(self, src, uri, uuid):
+        self.reboot_domain(src, uri, uuid)
 
     def show_about(self):
         if self.windowAbout == None:
@@ -248,31 +236,8 @@ class vmmEngine(gobject.GObject):
         self.windowConnect.show()
 
     def show_console(self, uri, uuid):
-        con = self.get_connection(uri)
-
-        if not(self.connections[uri]["windowConsole"].has_key(uuid)):
-            console = vmmConsole(self.get_config(),
-                                 con.get_vm(uuid))
-            console.connect("action-show-details", self._do_show_details)
-            console.connect("action-show-terminal", self._do_show_terminal)
-            console.connect("action-save-domain", self._do_save_domain)
-            console.connect("action-destroy-domain", self._do_destroy_domain)
-            console.connect("action-show-help", self._do_show_help)
-            console.connect("action-suspend-domain", self._do_suspend_domain)
-            console.connect("action-resume-domain", self._do_resume_domain)
-            console.connect("action-run-domain", self._do_run_domain)
-            console.connect("action-shutdown-domain", self._do_shutdown_domain)
-            self.connections[uri]["windowConsole"][uuid] = console
-        self.connections[uri]["windowConsole"][uuid].show()
-
-    def show_serial_console(self, uri, uuid):
-        con = self.get_connection(uri)
-
-        if not(self.connections[uri]["windowSerialConsole"].has_key(uuid)):
-            console = vmmSerialConsole(self.get_config(),
-                                       con.get_vm(uuid))
-            self.connections[uri]["windowSerialConsole"][uuid] = console
-        self.connections[uri]["windowSerialConsole"][uuid].show()
+        win = self.show_details(uri, uuid)
+        win.activate_console_page()
 
     def refresh_console(self, uri, uuid):
         con = self.get_connection(uri)
@@ -313,8 +278,6 @@ class vmmEngine(gobject.GObject):
             try:
                 details = vmmDetails(self.get_config(),
                                      con.get_vm(uuid))
-                details.connect("action-show-console", self._do_show_console)
-                details.connect("action-show-terminal", self._do_show_terminal)
                 details.connect("action-save-domain", self._do_save_domain)
                 details.connect("action-destroy-domain", self._do_destroy_domain)
                 details.connect("action-show-help", self._do_show_help)
@@ -322,6 +285,7 @@ class vmmEngine(gobject.GObject):
                 details.connect("action-resume-domain", self._do_resume_domain)
                 details.connect("action-run-domain", self._do_run_domain)
                 details.connect("action-shutdown-domain", self._do_shutdown_domain)
+                details.connect("action-reboot-domain", self._do_reboot_domain)
             except Exception, e:
                 self.err.show_err(_("Error bringing up domain details: %s") % str(e),
                                   "".join(traceback.format_exc()))
@@ -336,8 +300,9 @@ class vmmEngine(gobject.GObject):
             self.windowManager.connect("action-resume-domain", self._do_resume_domain)
             self.windowManager.connect("action-run-domain", self._do_run_domain)
             self.windowManager.connect("action-shutdown-domain", self._do_shutdown_domain)
+            self.windowManager.connect("action-reboot-domain", self._do_reboot_domain)
+            self.windowManager.connect("action-destroy-domain", self._do_destroy_domain)
             self.windowManager.connect("action-show-console", self._do_show_console)
-            self.windowManager.connect("action-show-terminal", self._do_show_terminal)
             self.windowManager.connect("action-show-details", self._do_show_details)
             self.windowManager.connect("action-show-preferences", self._do_show_preferences)
             self.windowManager.connect("action-show-create", self._do_show_create)
@@ -521,5 +486,22 @@ class vmmEngine(gobject.GObject):
                                   "".join(traceback.format_exc()))
         else:
             logging.warning("Shutdown requested, but machine is already shutting down / shutoff")
+
+    def reboot_domain(self, src, uri, uuid):
+        con = self.get_connection(uri, False)
+        vm = con.get_vm(uuid)
+        status = vm.status()
+        if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, \
+                           libvirt.VIR_DOMAIN_SHUTOFF, \
+                           libvirt.VIR_DOMAIN_CRASHED ]):
+            try:
+                vm.reboot()
+            except Exception, e:
+                self._err_dialog(_("Error shutting down domain: %s" % str(e)),
+                            "".join(traceback.format_exc()))
+        else:
+            logging.warning("Reboot requested, but machine is already shutting down / shutoff")
+
+
 
 gobject.type_register(vmmEngine)
