@@ -227,6 +227,8 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
 
+            "on_details_pages_switch_page": self.switch_page,
+
             "on_config_vcpus_apply_clicked": self.config_vcpus_apply,
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_memory_changed": self.config_memory_changed,
@@ -664,11 +666,18 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
         self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())
 
+    def switch_page(self, ignore1=None, ignore2=None,newpage=None):
+        details = self.window.get_widget("details-pages")
+        self.page_refresh(newpage)
+
     def refresh_resources(self, ignore=None):
         details = self.window.get_widget("details-pages")
-        if details.get_current_page() == PAGE_OVERVIEW:
+        self.page_refresh(details.get_current_page())
+
+    def page_refresh(self, page):
+        if page == PAGE_OVERVIEW:
             self.refresh_summary()
-        elif details.get_current_page() == PAGE_DETAILS:
+        elif page == PAGE_DETAILS:
             # Add / remove new devices
             self.repopulate_hw_list()
 
