@@ -526,6 +526,7 @@ class vmmConsole(gobject.GObject):
                                          (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                           gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
                                          None)
+        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
         png = gtk.FileFilter()
         png.set_name("PNG files")
         png.add_pattern("*.png")

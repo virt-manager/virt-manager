@@ -699,6 +699,7 @@ class vmmCreate(gobject.GObject):
                                          (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                           gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                          None)
+        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
         if type != None:
             f = gtk.FileFilter()
             f.add_pattern("*." + type)
@@ -727,7 +728,7 @@ class vmmCreate(gobject.GObject):
                                          (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                           gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                          None)
-
+        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
         fcdialog.set_current_folder(self.config.get_default_image_dir(self.connection))
         fcdialog.set_do_overwrite_confirmation(True)
         fcdialog.connect("confirm-overwrite", self.confirm_overwrite_callback)
