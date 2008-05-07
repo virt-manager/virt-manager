@@ -223,7 +223,7 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_save_activate": self.control_vm_save_domain,
             "on_details_menu_destroy_activate": self.control_vm_destroy,
             "on_details_menu_pause_activate": self.control_vm_pause,
-
+            "on_details_menu_screenshot_activate": self.control_vm_screenshot,
             "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
 
