@@ -62,6 +62,11 @@ PAGE_SCREENSHOT = 1
 PAGE_AUTHENTICATE = 2
 PAGE_VNCVIEWER = 3
 
+PAGE_CONSOLE = 0
+PAGE_OVERVIEW = 1
+PAGE_DETAILS = 2
+PAGE_FIRST_CHAR = 3
+
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
@@ -424,13 +429,13 @@ class vmmDetails(gobject.GObject):
         self.emit("action-show-help", "virt-manager-details-window")
 
     def activate_console_page(self):
-        self.window.get_widget("details-pages").set_current_page(0)
+        self.window.get_widget("details-pages").set_current_page(PAGE_CONSOLE)
 
     def activate_performance_page(self):
-        self.window.get_widget("details-pages").set_current_page(1)
+        self.window.get_widget("details-pages").set_current_page(PAGE_OVERVIEW)
 
     def activate_config_page(self):
-        self.window.get_widget("details-pages").set_current_page(2)
+        self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
 
     def close(self,ignore1=None,ignore2=None):
         fs = self.window.get_widget("details-menu-view-fullscreen")
@@ -661,9 +666,9 @@ class vmmDetails(gobject.GObject):
 
     def refresh_resources(self, ignore=None):
         details = self.window.get_widget("details-pages")
-        if details.get_current_page() == 0:
+        if details.get_current_page() == PAGE_OVERVIEW:
             self.refresh_summary()
-        else:
+        elif details.get_current_page() == PAGE_DETAILS:
             # Add / remove new devices
             self.repopulate_hw_list()
 
