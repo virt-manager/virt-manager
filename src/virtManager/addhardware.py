@@ -279,6 +279,8 @@ class vmmAddHardware(gobject.GObject):
             return self.window.get_widget("storage-file-address").get_text()
 
     def get_config_disk_size(self):
+        if not self.window.get_widget("storage-file-backed").get_active():
+            return None
         if not self.window.get_widget("storage-file-size").get_editable():
             return None
         else:
@@ -584,6 +586,7 @@ class vmmAddHardware(gobject.GObject):
                                          (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                           gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                          None)
+        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
         if type != None:
             f = gtk.FileFilter()
             f.add_pattern("*." + type)
