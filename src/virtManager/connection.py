@@ -343,11 +343,15 @@ class vmmConnection(gobject.GObject):
         bus = dbus.SessionBus()
 
         try:
-            # First try to use org.freedesktop.PolicyKit.AuthenticationAgent which is introduced with PolicyKit-0.7
+            # First try to use org.freedesktop.PolicyKit.AuthenticationAgent
+            # which is introduced with PolicyKit-0.7
             obj = bus.get_object("org.freedesktop.PolicyKit.AuthenticationAgent", "/")
             pkit = dbus.Interface(obj, "org.freedesktop.PolicyKit.AuthenticationAgent")
             pkit.ObtainAuthorization(action, 0, os.getpid())
-        except org.freedesktop.DBus.Error.ServiceUnknown:
+        except dbus.exceptions.DBusException, e:
+            if e.get_dbus_name() != "org.freedesktop.DBus.Error.ServiceUnknown":
+                raise e
+            logging.debug("Falling back to org.gnome.PolicyKit")
             # If PolicyKit < 0.7, fallback to org.gnome.PolicyKit
             obj = bus.get_object("org.gnome.PolicyKit", "/org/gnome/PolicyKit/Manager")
             pkit = dbus.Interface(obj, "org.gnome.PolicyKit.Manager")
