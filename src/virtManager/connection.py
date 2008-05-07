@@ -233,7 +233,7 @@ class vmmConnection(gobject.GObject):
         if bridge is not None:
             shared = True
 
-        logging.debug("Adding net device %s %s %s bridge %s" % (name, mac, sysfspath, str(bridge)))
+        logging.debug("Adding net device %s %s %s (bridge: %s)" % (name, mac, sysfspath, str(bridge)))
 
         dev = vmmNetDevice(self.config, self, name, mac, shared, bridge)
         self.netdevs[name] = dev
@@ -246,6 +246,7 @@ class vmmConnection(gobject.GObject):
             name = objif.GetPropertyString("net.interface")
 
         if self.netdevs.has_key(name):
+            logging.debug("Removing physical net device %s from list." % name)
             dev = self.netdevs[name]
             self.emit("netdev-removed", dev.get_name())
             del self.netdevs[name]
@@ -961,23 +962,6 @@ class vmmConnection(gobject.GObject):
         if os.path.exists(masterpath):
             return True
         return False
-
-    def _net_get_bridge_owner(self, name, sysfspath):
-        # Now magic to determine if the device is part of a bridge
-        brportpath = os.path.join(sysfspath, "brport")
-        try:
-            if os.path.exists(brportpath):
-                brlinkpath = os.path.join(brportpath, "bridge")
-                dest = os.readlink(brlinkpath)
-                (ignore,bridge) = os.path.split(dest)
-                return bridge
-        except:
-            (type, value, stacktrace) = sys.exc_info ()
-            logging.error("Unable to determine if device is shared:" +
-                            str(type) + " " + str(value) + "\n" + \
-                            traceback.format_exc (stacktrace))
-
-        return None
 
     def _net_get_mac_address(self, name, sysfspath):
         mac = None
