@@ -606,7 +606,10 @@ class vmmDetails(gobject.GObject):
                 self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
             self.view_vm_status()
         else:
-            if status == libvirt.VIR_DOMAIN_PAUSED:
+            # Disabled screenshot when paused - doesn't work when scaled
+            # and you can connect to VNC when paused already, it'll simply
+            # not respond to input.
+            if status == libvirt.VIR_DOMAIN_PAUSED and 0 == 1:
                 if self.window.get_widget("console-pages").get_current_page() == PAGE_VNCVIEWER:
                     screenshot = self.window.get_widget("console-screenshot")
                     image = self.vncViewer.get_pixbuf()
