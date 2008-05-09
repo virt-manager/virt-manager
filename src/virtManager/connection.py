@@ -245,11 +245,11 @@ class vmmConnection(gobject.GObject):
         if objif.QueryCapability("net"):
             name = objif.GetPropertyString("net.interface")
 
-        if self.netdevs.has_key(name):
-            logging.debug("Removing physical net device %s from list." % name)
-            dev = self.netdevs[name]
-            self.emit("netdev-removed", dev.get_name())
-            del self.netdevs[name]
+            if self.netdevs.has_key(name):
+                logging.debug("Removing physical net device %s from list." % name)
+                dev = self.netdevs[name]
+                self.emit("netdev-removed", dev.get_name())
+                del self.netdevs[name]
 
     def is_read_only(self):
         return self.readOnly
