@@ -37,6 +37,9 @@ CONSOLE_KEYGRAB_MOUSEOVER = 2
 DEFAULT_XEN_IMAGE_DIR = "/var/lib/xen/images"
 DEFAULT_XEN_SAVE_DIR = "/var/lib/xen/dump"
 
+DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
+DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
+
 class vmmConfig:
     def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir, data_dir):
         self.appname = appname
@@ -357,12 +360,16 @@ class vmmConfig:
     def get_default_image_dir(self, connection):
         if connection.get_type() == "Xen":
             return DEFAULT_XEN_IMAGE_DIR
+        elif os.access(DEFAULT_VIRT_IMAGE_DIR, os.W_OK):
+            return DEFAULT_VIRT_IMAGE_DIR
         else:
             return os.getcwd()
 
     def get_default_save_dir(self, connection):
         if connection.get_type() == "Xen":
             return DEFAULT_XEN_SAVE_DIR
+        elif os.access(DEFAULT_VIRT_SAVE_DIR, os.W_OK):
+            return DEFAULT_VIRT_SAVE_DIR
         else:
             return os.getcwd()
 
