@@ -141,11 +141,17 @@ class vmmManager(gobject.GObject):
         self.vmmenu_icons["pause"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_pause.png", 18, 18))
         self.vmmenu_icons["resume"] = gtk.Image()
         self.vmmenu_icons["resume"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_pause.png", 18, 18))
-        self.vmmenu_icons["shutdown"] = gtk.Image()
-        self.vmmenu_icons["shutdown"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
+        self.vmmenu_icons["reboot"] = gtk.Image()
+        self.vmmenu_icons["reboot"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
+        self.vmmenu_icons["poweroff"] = gtk.Image()
+        self.vmmenu_icons["poweroff"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
+        self.vmmenu_icons["forcepoweroff"] = gtk.Image()
+        self.vmmenu_icons["forcepoweroff"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
 
         self.vmmenu = gtk.Menu()
+        self.vmmenushutdown = gtk.Menu()
         self.vmmenu_items = {}
+        self.vmmenushutdown_items = {}
 
         self.vmmenu_items["run"] = gtk.ImageMenuItem("_Run")
         self.vmmenu_items["run"].set_image(self.vmmenu_icons["run"])
@@ -166,11 +172,29 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["resume"].connect("activate", self.resume_vm)
         self.vmmenu.add(self.vmmenu_items["resume"])
 
-        self.vmmenu_items["shutdown"] = gtk.ImageMenuItem("_Shutdown")
-        self.vmmenu_items["shutdown"].set_image(self.vmmenu_icons["shutdown"])
+
+        self.vmmenu_items["shutdown"] = gtk.MenuItem("_Shutdown")
+        self.vmmenu_items["shutdown"].set_submenu(self.vmmenushutdown)
         self.vmmenu_items["shutdown"].show()
-        self.vmmenu_items["shutdown"].connect("activate", self.stop_vm)
         self.vmmenu.add(self.vmmenu_items["shutdown"])
+
+        self.vmmenushutdown_items["reboot"] = gtk.ImageMenuItem("_Reboot")
+        self.vmmenushutdown_items["reboot"].set_image(self.vmmenu_icons["reboot"])
+        self.vmmenushutdown_items["reboot"].show()
+        self.vmmenushutdown_items["reboot"].connect("activate", self.reboot_vm)
+        self.vmmenushutdown.add(self.vmmenushutdown_items["reboot"])
+
+        self.vmmenushutdown_items["poweroff"] = gtk.ImageMenuItem("_Poweroff")
+        self.vmmenushutdown_items["poweroff"].set_image(self.vmmenu_icons["poweroff"])
+        self.vmmenushutdown_items["poweroff"].show()
+        self.vmmenushutdown_items["poweroff"].connect("activate", self.poweroff_vm)
+        self.vmmenushutdown.add(self.vmmenushutdown_items["poweroff"])
+
+        self.vmmenushutdown_items["forcepoweroff"] = gtk.ImageMenuItem("_Force poweroff")
+        self.vmmenushutdown_items["forcepoweroff"].set_image(self.vmmenu_icons["forcepoweroff"])
+        self.vmmenushutdown_items["forcepoweroff"].show()
+        self.vmmenushutdown_items["forcepoweroff"].connect("activate", self.destroy_vm)
+        self.vmmenushutdown.add(self.vmmenushutdown_items["forcepoweroff"])
 
         self.vmmenu_items["hsep"] = gtk.SeparatorMenuItem()
         self.vmmenu_items["hsep"].show();
@@ -961,10 +985,20 @@ class vmmManager(gobject.GObject):
         if vm is not None:
             self.emit("action-run-domain", vm.get_connection().get_uri(), vm.get_uuid())
 
-    def stop_vm(self, ignore):
+    def reboot_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-reboot-domain", vm.get_connection().get_uri(), vm.get_uuid())
+
+    def poweroff_vm(self, ignore):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-shutdown-domain", vm.get_connection().get_uri(), vm.get_uuid())
+
+    def destroy_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-destroy-domain", vm.get_connection().get_uri(), vm.get_uuid())
 
     def pause_vm(self, ignore):
         vm = self.current_vm()
