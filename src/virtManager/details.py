@@ -975,7 +975,11 @@ class vmmDetails(gobject.GObject):
             os.close(1)
             os.dup(fds[1].fileno())
             os.dup(fds[1].fileno())
-            argv = ["ssh", "ssh", "-p", "22"] 
+            if not server.count(":"):
+                sshport = 22
+            else:
+                (server, sshport) = server.split(":")
+            argv = ["ssh", "ssh", "-p", sshport]
             if username:
                 argv += ['-l', username]
             argv += [ server, "nc", vncaddr, str(vncport) ]
