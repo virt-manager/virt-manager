@@ -160,13 +160,12 @@ class vmmConnection(gobject.GObject):
             # find all bonding master devices and register them
             # XXX bonding stuff is linux specific
             bondMasters = self._net_get_bonding_masters()
-            if bondMasters is not None:
-                for bond in bondMasters:
-                    sysfspath = "/sys/class/net/" + bond
-                    mac = self._net_get_mac_address(bond, sysfspath)
-                    self._net_device_added(bond, mac, sysfspath)
-                    # Add any associated VLANs
-                    self._net_tag_device_added(bond, sysfspath)
+            for bond in bondMasters:
+                sysfspath = "/sys/class/net/" + bond
+                mac = self._net_get_mac_address(bond, sysfspath)
+                self._net_device_added(bond, mac, sysfspath)
+                # Add any associated VLANs
+                self._net_tag_device_added(bond, sysfspath)
 
             # Find info about all current present physical net devices
             # This is OS portable...
@@ -957,15 +956,7 @@ class vmmConnection(gobject.GObject):
                 if rline == "\x00": continue
                 rline = rline.strip("\n\t")
                 masters = rline[:-1].split(' ')
-            return masters
-        else:
-            return None
-
-    def _net_is_bonding_slave(self, name, sysfspath):
-        masterpath = sysfspath + "/master"
-        if os.path.exists(masterpath):
-            return True
-        return False
+        return masters
 
     def _net_get_mac_address(self, name, sysfspath):
         mac = None
@@ -975,16 +966,6 @@ class vmmConnection(gobject.GObject):
             mac = df.readline()
             df.close()
         return mac.strip(" \n\t")
-
-    def _net_get_bonding_masters(self):
-        masters = []
-        f = open("/sys/class/net/bonding_masters")
-        while True:
-            rline = f.readline()
-            if not rline: break
-            if rline == "\x00": continue
-            masters.append(rline.strip(" \n\t"))
-        return masters
 
     def _net_is_bonding_slave(self, name, sysfspath):
         masterpath = sysfspath + "/master"
