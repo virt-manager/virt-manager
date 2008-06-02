@@ -498,8 +498,8 @@ class vmmEngine(gobject.GObject):
             try:
                 vm.reboot()
             except Exception, e:
-                self._err_dialog(_("Error shutting down domain: %s" % str(e)),
-                            "".join(traceback.format_exc()))
+                self.err.show_err(_("Error shutting down domain: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
         else:
             logging.warning("Reboot requested, but machine is already shutting down / shutoff")
 
