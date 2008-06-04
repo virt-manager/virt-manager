@@ -117,6 +117,7 @@ class vmmCreate(gobject.GObject):
 
         # Guest to fill in with values along the way
         self._guest = virtinst.Guest(type=self.get_domain_type(),
+                                     connection=self.connection,
                                      hypervisorURI=self.connection.get_uri())
         self._disk = None
         self._net = None
@@ -839,11 +840,13 @@ class vmmCreate(gobject.GObject):
             name = self._guest.name
             if self.get_config_method() == VM_PARA_VIRT:
                 self._guest = virtinst.ParaVirtGuest(type=self.get_domain_type(),
-                                                     hypervisorURI=self.connection.get_uri())
+                                                     hypervisorURI=self.connection.get_uri(),
+                                                     connection=self.connection)
             else:
                 self._guest = virtinst.FullVirtGuest(type=self.get_domain_type(),
                                                      arch=self.get_domain_arch(),
-                                                     hypervisorURI=self.connection.get_uri())
+                                                     hypervisorURI=self.connection.get_uri(),
+                                                     connection=self.connection)
 
             self._guest.name = name # Transfer name over
 
