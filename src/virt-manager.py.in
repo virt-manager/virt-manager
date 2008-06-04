@@ -153,6 +153,9 @@ def parse_commandline():
         help="Disable DBus service for controlling UI")
     optParser.add_option("--no-fork", action="store_true", dest="nofork",
         help="Don't fork into background on startup")
+    optParser.add_option("--no-conn-autostart", action="store_true",
+                         dest="no_conn_auto",
+                         help="Do not autostart connections")
     optParser.add_option("--show-domain-creator", action="callback",
         callback=opt_show_cb, dest="show", help="Create a new virtual machine")
     optParser.add_option("--show-domain-editor",  type="string", metavar="UUID",
@@ -274,6 +277,10 @@ def main():
 
     config = vmmConfig(appname, appversion, gconf_dir, glade_dir, icon_dir, data_dir)
     engine = vmmEngine(config)
+
+    if not options.no_conn_auto:
+        engine.autostart_connections()
+
     if not(options.nodbus) and not( (os.getenv("DBUS_SESSION_BUS_ADDRESS") is None ) and ( os.getenv("DBUS_STARTER_ADDRESS") is None ) ):
         try:
             bus = None

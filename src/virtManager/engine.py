@@ -68,7 +68,6 @@ class vmmEngine(gobject.GObject):
 
         self.schedule_timer()
         self.load_stored_uris()
-        self.autostart_connections()
         self.tick()
 
     def load_stored_uris(self):
