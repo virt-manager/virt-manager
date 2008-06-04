@@ -318,6 +318,15 @@ class vmmEngine(gobject.GObject):
     def show_manager(self):
         self.get_manager().show()
 
+    def wait_for_open(self, uri):
+        # Used to ensure connection fully starts before running
+        # ONLY CALL FROM WITHIN A THREAD
+        conn = self.connect_to_uri(uri)
+        conn.connectThreadEvent.wait()
+        if conn.state != conn.STATE_ACTIVE:
+            return False
+        return True
+
     def show_create(self, uri):
         con = self.get_connection(uri)
 

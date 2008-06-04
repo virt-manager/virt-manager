@@ -29,6 +29,7 @@ import locale
 import gettext
 import logging
 import logging.handlers
+import threading
 import traceback
 from optparse import OptionParser, OptionValueError
 
@@ -165,8 +166,10 @@ def parse_commandline():
 
     return optParser.parse_args()
 
-# maps --show-* to engine (ie local instance) methods
-def show_engine(engine, show, uri, uuid):
+def launch_specific_window(engine, show, uri, uuid):
+    if not engine.wait_for_open(uri):
+        # Connection failed, don't attempt to continue
+        return
     if show=='creator':
         engine.show_create(uri)
     elif show=='editor':
@@ -175,10 +178,22 @@ def show_engine(engine, show, uri, uuid):
         engine.show_details_performance(uri, uuid)
     elif show=='console':
         engine.show_console(uri, uuid)
+
+# maps --show-* to engine (ie local instance) methods
+def show_engine(engine, show, uri, uuid):
+    if show=='creator' or show=='editor' \
+       or show=='performance' or show=='console':
+        # Create a thread so to block on connection _fully_ starting so that
+        #   a non-manager window to prevent races accessing uninit'd vars
+        thread = threading.Thread(target=launch_specific_window,
+                                  args=(engine, show, uri, uuid),
+                                  name="Launching '%s' window" % show)
+        thread.start()
     elif show=='summary' or uri:
         engine.connect_to_uri(uri)
     else:
-        if engine.config.get_connections() is None or len(engine.config.get_connections()) == 0:
+        if engine.config.get_connections() is None \
+           or len(engine.config.get_connections()) == 0:
             tryuri = None
             if os.path.exists("/var/lib/xend") and os.path.exists("/proc/xen"):
                 tryuri = "xen:///"
@@ -190,14 +205,14 @@ def show_engine(engine, show, uri, uuid):
 
 # maps --show-* to remote manager (ie dbus call) methods
 def show_remote(managerObj, show, uri, uuid):
-    if show=='creator':
-        managerObj.show_domain_creator(uri)
-    elif show=='editor':
-        managerObj.show_domain_editor(uri, uuid)
-    elif show=='performance':
-        managerObj.show_domain_performance(uri, uuid)
-    elif show=='console':
-        managerObj.show_domain_console(uri, uuid)
+    if show=='creator' or show=='editor' \
+       or show=='performance' or show=='console':
+        # Create a thread so to block on connection _fully_ starting so that
+        #   a non-manager window to prevent races accessing uninit'd vars
+        thread = threading.Thread(target=launch_specific_window,
+                                  args=(managerObj, show, uri, uuid),
+                                  name="Launching '%s' window" % show)
+        thread.start()
     elif show=='summary' or uri:
         managerObj.show_host_summary(uri)
     else:

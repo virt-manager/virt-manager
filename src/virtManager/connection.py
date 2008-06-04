@@ -119,6 +119,8 @@ class vmmConnection(gobject.GObject):
         self.config = config
 
         self.connectThread = None
+        self.connectThreadEvent = threading.Event()
+        self.connectThreadEvent.set()
         self.connectError = None
         self.uri = uri
         if self.uri is None or self.uri.lower() == "xen":
@@ -333,6 +335,7 @@ class vmmConnection(gobject.GObject):
         self.emit("state-changed")
 
         logging.debug("Scheduling background open thread for " + self.uri)
+        self.connectThreadEvent.clear()
         self.connectThread = threading.Thread(target = self._open_thread, name="Connect " + self.uri)
         self.connectThread.setDaemon(True)
         self.connectThread.start()
@@ -475,6 +478,7 @@ class vmmConnection(gobject.GObject):
                 self.emit("connect-error", self.connectError)
                 self.connectError = None
         finally:
+            self.connectThreadEvent.set()
             gtk.gdk.threads_leave()
 
 
