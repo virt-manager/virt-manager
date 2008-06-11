@@ -337,7 +337,7 @@ class vmmEngine(gobject.GObject):
             self.connections[uri]["windowCreate"] = create
         self.connections[uri]["windowCreate"].show()
 
-    def add_connection(self, uri, readOnly=None):
+    def add_connection(self, uri, readOnly=None, autoconnect=False):
         conn = vmmConnection(self.get_config(), uri, readOnly)
         self.connections[uri] = {
             "connection": conn,
@@ -352,6 +352,8 @@ class vmmEngine(gobject.GObject):
         self.connections[uri]["connection"].tick()
         self.emit("connection-added", conn)
         self.config.add_connection(conn.get_uri())
+        if autoconnect:
+            conn.toggle_autoconnect()
 
     def remove_connection(self, uri):
         conn = self.connections[uri]["connection"]

@@ -183,7 +183,7 @@ def launch_specific_window(engine, show, uri, uuid):
         engine.show_console(uri, uuid)
 
 # maps --show-* to engine (ie local instance) methods
-def show_engine(engine, show, uri, uuid):
+def show_engine(engine, show, uri, uuid, no_conn_auto):
     if show=='creator' or show=='editor' \
        or show=='performance' or show=='console':
         # Create a thread so to block on connection _fully_ starting so that
@@ -203,8 +203,12 @@ def show_engine(engine, show, uri, uuid):
             elif os.path.exists("/usr/bin/qemu"):
                 tryuri = "qemu:///system"
             if tryuri is not None:
-                conn = engine.add_connection(tryuri)
-        engine.show_manager()
+                engine.add_connection(tryuri, autoconnect=True)
+
+    if not no_conn_auto:
+        engine.autostart_connections()
+
+    engine.show_manager()
 
 # maps --show-* to remote manager (ie dbus call) methods
 def show_remote(managerObj, show, uri, uuid):
@@ -278,9 +282,6 @@ def main():
     config = vmmConfig(appname, appversion, gconf_dir, glade_dir, icon_dir, data_dir)
     engine = vmmEngine(config)
 
-    if not options.no_conn_auto:
-        engine.autostart_connections()
-
     if not(options.nodbus) and not( (os.getenv("DBUS_SESSION_BUS_ADDRESS") is None ) and ( os.getenv("DBUS_STARTER_ADDRESS") is None ) ):
         try:
             bus = None
@@ -316,7 +317,8 @@ def main():
     # Finally start the app for real
     gtk.gdk.threads_enter()
     try:
-        show_engine(engine, options.show, options.uri, options.uuid)
+        show_engine(engine, options.show, options.uri, options.uuid,
+                    options.no_conn_auto)
         if options.profile != None:
             import hotshot
             prof = hotshot.Profile(options.profile)
