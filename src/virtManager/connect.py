@@ -35,7 +35,7 @@ CONN_SSH = 3
 class vmmConnect(gobject.GObject):
     __gsignals__ = {
         "completed": (gobject.SIGNAL_RUN_FIRST,
-                      gobject.TYPE_NONE, (str,object)),
+                      gobject.TYPE_NONE, (str,object,object)),
         "cancelled": (gobject.SIGNAL_RUN_FIRST,
                       gobject.TYPE_NONE, ())
         }
@@ -63,6 +63,7 @@ class vmmConnect(gobject.GObject):
 
         self.window.get_widget("connection").set_active(0)
         self.window.get_widget("connect").grab_default()
+        self.window.get_widget("autoconnect").set_active(True)
 
 
 
@@ -82,13 +83,19 @@ class vmmConnect(gobject.GObject):
     def update_widget_states(self, src):
         if src.get_active() > 0:
             self.window.get_widget("hostname").set_sensitive(True)
+            self.window.get_widget("autoconnect").set_active(False)
+            self.window.get_widget("autoconnect").set_sensitive(False)
         else:
             self.window.get_widget("hostname").set_sensitive(False)
+            self.window.get_widget("autoconnect").set_sensitive(True)
+            self.window.get_widget("autoconnect").set_active(True)
 
     def open_connection(self, src):
         hv = self.window.get_widget("hypervisor").get_active()
         conn = self.window.get_widget("connection").get_active()
         host = self.window.get_widget("hostname").get_text()
+        if self.window.get_widget("autoconnect").get_sensitive():
+            auto = self.window.get_widget("autoconnect").get_active()
         uri = None
 
         readOnly = None
@@ -115,6 +122,6 @@ class vmmConnect(gobject.GObject):
 
         logging.debug("Connection to open is %s" % uri)
         self.close()
-        self.emit("completed", uri, readOnly)
+        self.emit("completed", uri, readOnly, auto)
 
 gobject.type_register(vmmConnect)

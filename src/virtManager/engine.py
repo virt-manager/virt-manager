@@ -83,14 +83,14 @@ class vmmEngine(gobject.GObject):
             if conn.get_autoconnect():
                 self.connect_to_uri(uri)
 
-    def connect_to_uri(self, uri, readOnly=None):
-        return self._connect_to_uri(None, uri, readOnly)
+    def connect_to_uri(self, uri, readOnly=None, autoconnect=False):
+        return self._connect_to_uri(None, uri, readOnly, autoconnect)
 
-    def _connect_to_uri(self, connect, uri, readOnly):
+    def _connect_to_uri(self, connect, uri, readOnly, autoconnect):
         self.windowConnect = None
 
         try:
-            conn = self.get_connection(uri, readOnly)
+            conn = self.get_connection(uri, readOnly, autoconnect)
             self.show_manager()
             conn.open()
             return conn
@@ -371,9 +371,9 @@ class vmmEngine(gobject.GObject):
 
         return handle_id
 
-    def get_connection(self, uri, readOnly=None):
+    def get_connection(self, uri, readOnly=None, autoconnect=False):
         if not(self.connections.has_key(uri)):
-            self.add_connection(uri, readOnly)
+            self.add_connection(uri, readOnly, autoconnect)
 
         return self.connections[uri]["connection"]
 
