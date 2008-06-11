@@ -240,7 +240,7 @@ class vmmManager(gobject.GObject):
             "on_menu_view_network_traffic_activate" : self.toggle_network_traffic_visible_conf,
 
             "on_vm_manager_delete_event": self.close,
-            "on_menu_file_open_connection_activate": self.new_connection,
+            "on_menu_file_add_connection_activate": self.new_connection,
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
             "on_menu_restore_saved_activate": self.restore_saved,
