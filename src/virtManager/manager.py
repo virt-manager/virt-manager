@@ -228,6 +228,16 @@ class vmmManager(gobject.GObject):
         self.connmenu_items["disconnect"].show()
         self.connmenu_items["disconnect"].connect("activate", self.close_connection)
         self.connmenu.add(self.connmenu_items["disconnect"])
+
+        self.connmenu_items["hsep"] = gtk.SeparatorMenuItem()
+        self.connmenu_items["hsep"].show();
+        self.connmenu.add(self.connmenu_items["hsep"])
+
+        self.connmenu_items["details"] = gtk.ImageMenuItem("_Details")
+        self.connmenu_items["details"].connect("activate", self.show_host)
+        self.connmenu_items["details"].show()
+        self.connmenu.add(self.connmenu_items["details"])
+
         self.connmenu.show()
 
         self.window.signal_autoconnect({
