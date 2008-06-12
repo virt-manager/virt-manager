@@ -288,8 +288,9 @@ class vmmCreate(gobject.GObject):
         net_box.set_active(0)
 
         dev_box = self.window.get_widget("net-device")
-        if self.populate_device_model(dev_box.get_model()):
-            dev_box.set_active(0)
+        res = self.populate_device_model(dev_box.get_model())
+        if res[0]:
+            dev_box.set_active(res[1])
         else:
             dev_box.set_active(-1)
 
@@ -999,6 +1000,9 @@ class vmmCreate(gobject.GObject):
                                             _("You must select one of the physical devices"))
 
             net = self.get_config_network()
+            if net[1] is None:
+                return self.err.val_err(_("Invalid Physical Device"),
+                                        _("The selected physical device must be bridged."))
 
             if self.window.get_widget("mac-address").get_active():
                 mac = self.window.get_widget("create-mac-address").get_text()
@@ -1086,14 +1090,17 @@ class vmmCreate(gobject.GObject):
     def populate_device_model(self, model):
         model.clear()
         hasShared = False
+        brIndex = -1
         for name in self.connection.list_net_device_paths():
             net = self.connection.get_net_device(name)
             if net.is_shared():
                 hasShared = True
+                if brIndex < 0:
+                    brIndex = len(model)
                 model.append([net.get_bridge(), "%s (%s %s)" % (net.get_name(), _("Bridge"), net.get_bridge()), True])
             else:
                 model.append([net.get_bridge(), "%s (%s)" % (net.get_name(), _("Not bridged")), False])
-        return hasShared
+        return (hasShared, brIndex)
 
     def change_os_type(self, box):
         model = box.get_model()
