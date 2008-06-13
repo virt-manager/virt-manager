@@ -61,6 +61,10 @@ class vmmEngine(gobject.GObject):
         self.timer = None
         self.last_timeout = 0
 
+        # Counter keeping track of how many manager and details windows
+        # are open. When it is decremented to 0, close the app
+        self.windows = 0
+
         self._save_callback_info = []
 
         self.config = config
@@ -275,8 +279,7 @@ class vmmEngine(gobject.GObject):
 
         if not(self.connections[uri]["windowDetails"].has_key(uuid)):
             try:
-                details = vmmDetails(self.get_config(),
-                                     con.get_vm(uuid))
+                details = vmmDetails(self.get_config(), con.get_vm(uuid), self)
                 details.connect("action-save-domain", self._do_save_domain)
                 details.connect("action-destroy-domain", self._do_destroy_domain)
                 details.connect("action-show-help", self._do_show_help)
@@ -316,6 +319,20 @@ class vmmEngine(gobject.GObject):
 
     def show_manager(self):
         self.get_manager().show()
+
+    def increment_window_counter(self):
+        self.windows += 1
+        logging.debug("window counter incremented to %s" % self.windows)
+
+    def decrement_window_counter(self):
+        self.windows -= 1
+        logging.debug("window counter decremented to %s" % self.windows)
+        if self.windows <= 0:
+            conns = self.connections.values()
+            for conn in conns:
+                conn["connection"].close()
+            gtk.main_quit()
+
 
     def wait_for_open(self, uri):
         # Used to ensure connection fully starts before running

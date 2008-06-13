@@ -92,20 +92,22 @@ class vmmDetails(gobject.GObject):
         }
 
 
-    def __init__(self, config, vm):
+    def __init__(self, config, vm, engine):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-details.glade", "vmm-details", domain="virt-manager")
         self.config = config
         self.vm = vm
 
         topwin = self.window.get_widget("vmm-details")
+        topwin.hide_all()
         self.err = vmmErrorDialog(topwin,
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
-        topwin.hide()
         self.title = vm.get_name() + " " + topwin.get_title()
         topwin.set_title(self.title)
+
+        self.engine = engine
 
         # Don't allowing changing network/disks for Dom0
         # XXX also disable for remote connections for now
@@ -272,12 +274,12 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("hw-list").get_selection().connect("changed", self.hw_selected)
 
         self.update_widget_states(self.vm, self.vm.status())
-        self.refresh_resources(self.vm)
 
         self.pixbuf_processor = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
         self.pixbuf_memory = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
         self.prepare_hw_list()
         self.hw_selected()
+        self.refresh_resources(self.vm)
 
 
     # Black magic todo with scrolled windows. Basically the behaviour we want
@@ -415,6 +417,8 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("details-toolbar").hide()
 
     def show(self):
+        if self.is_visible():
+            return
         dialog = self.window.get_widget("vmm-details")
         dialog.show_all()
         self.window.get_widget("overview-network-traffic-text").hide()
@@ -424,6 +428,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("overview-disk-usage-label").hide()
         self.network_traffic_graph.hide()
         dialog.present()
+        self.engine.increment_window_counter()
         self.update_widget_states(self.vm, self.vm.status())
 
     def show_help(self, src):
@@ -446,10 +451,11 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("vmm-details").hide()
         if self.vncViewer.flags() & gtk.VISIBLE:
-	    try:
+            try:
                 self.vncViewer.close()
-	    except:
-		logging.error("Failure when disconnecting from VNC server")
+            except:
+                logging.error("Failure when disconnecting from VNC server")
+        self.engine.decrement_window_counter()
         return 1
 
     def is_visible(self):

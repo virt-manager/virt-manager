@@ -105,13 +105,13 @@ class vmmManager(gobject.GObject):
     def __init__(self, config, engine):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-manager.glade", "vmm-manager", domain="virt-manager")
+        self.window.get_widget("vmm-manager").hide_all()
         self.err = vmmErrorDialog(self.window.get_widget("vmm-manager"),
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
         self.config = config
         self.engine = engine
-        self.connections = {}
         self.prepare_vmlist()
 
         self.config.on_vmlist_domain_id_visible_changed(self.toggle_domain_id_visible_widget)
@@ -285,17 +285,18 @@ class vmmManager(gobject.GObject):
         self.engine.connect("connection-removed", self._remove_connection)
 
     def show(self):
-        win = self.window.get_widget("vmm-manager")
-        win.show_all()
-        win.present()
+        if not self.is_visible():
+            win = self.window.get_widget("vmm-manager")
+            win.show_all()
+            win.present()
+            self.engine.increment_window_counter()
 
     def close(self, src=None, src2=None):
-        conns = self.connections.values()
-        for conn in conns:
-            conn.close()
-        win = self.window.get_widget("vmm-manager")
-        win.hide()
-        gtk.main_quit()
+        if self.is_visible():
+            win = self.window.get_widget("vmm-manager")
+            win.hide()
+            self.engine.decrement_window_counter()
+            return 1
 
     def is_visible(self):
         if self.window.get_widget("vmm-manager").flags() & gtk.VISIBLE:
