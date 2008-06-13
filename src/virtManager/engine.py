@@ -104,7 +104,7 @@ class vmmEngine(gobject.GObject):
     def _connect_cancelled(self, connect):
         self.windowConnect = None
         if len(self.connections.keys()) == 0:
-            gtk.main_quit()
+            self.exit_app()
 
 
     def _do_vm_removed(self, connection, hvuri, vmuuid):
@@ -185,6 +185,8 @@ class vmmEngine(gobject.GObject):
         self.show_console(uri, uuid)
     def _do_show_terminal(self, src, uri, uuid):
         self.show_serial_console(uri, uuid)
+    def _do_show_manager(self, src):
+        self.show_manager()
     def _do_refresh_console(self, src, uri, uuid):
         self.refresh_console(uri, uuid)
     def _do_refresh_terminal(self, src, uri, uuid):
@@ -203,6 +205,8 @@ class vmmEngine(gobject.GObject):
         self.shutdown_domain(src, uri, uuid)
     def _do_reboot_domain(self, src, uri, uuid):
         self.reboot_domain(src, uri, uuid)
+    def _do_exit_app(self, src):
+        self.exit_app()
 
     def show_about(self):
         if self.windowAbout == None:
@@ -237,6 +241,9 @@ class vmmEngine(gobject.GObject):
             self.windowConnect.connect("completed", self._connect_to_uri)
             self.windowConnect.connect("cancelled", self._connect_cancelled)
         self.windowConnect.show()
+
+    def show_manager(self):
+        self.windowManager.show()
 
     def show_console(self, uri, uuid):
         win = self.show_details(uri, uuid)
@@ -288,6 +295,8 @@ class vmmEngine(gobject.GObject):
                 details.connect("action-run-domain", self._do_run_domain)
                 details.connect("action-shutdown-domain", self._do_shutdown_domain)
                 details.connect("action-reboot-domain", self._do_reboot_domain)
+                details.connect("action-exit-app", self._do_exit_app)
+                details.connect("action-view-manager", self._do_show_manager)
             except Exception, e:
                 self.err.show_err(_("Error bringing up domain details: %s") % str(e),
                                   "".join(traceback.format_exc()))
@@ -315,6 +324,7 @@ class vmmEngine(gobject.GObject):
             self.windowManager.connect("action-connect", self._do_connect)
             self.windowManager.connect("action-refresh-console", self._do_refresh_console)
             self.windowManager.connect("action-refresh-terminal", self._do_refresh_terminal)
+            self.windowManager.connect("action-exit-app", self._do_exit_app)
         return self.windowManager
 
     def show_manager(self):
@@ -328,11 +338,13 @@ class vmmEngine(gobject.GObject):
         self.windows -= 1
         logging.debug("window counter decremented to %s" % self.windows)
         if self.windows <= 0:
-            conns = self.connections.values()
-            for conn in conns:
-                conn["connection"].close()
-            gtk.main_quit()
+            self.exit_app()
 
+    def exit_app(self):
+        conns = self.connections.values()
+        for conn in conns:
+            conn["connection"].close()
+        gtk.main_quit()
 
     def wait_for_open(self, uri):
         # Used to ensure connection fully starts before running

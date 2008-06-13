@@ -89,6 +89,10 @@ class vmmDetails(gobject.GObject):
                                  gobject.TYPE_NONE, (str, str)),
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),
+        "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
+                            gobject.TYPE_NONE, []),
+        "action-view-manager": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, []),
         }
 
 
@@ -213,6 +217,7 @@ class vmmDetails(gobject.GObject):
             "on_close_details_clicked": self.close,
             "on_details_menu_close_activate": self.close,
             "on_vmm_details_delete_event": self.close,
+            "on_details_menu_quit_activate": self.exit_app,
 
             "on_control_run_clicked": self.control_vm_run,
             "on_control_shutdown_clicked": self.control_vm_shutdown,
@@ -228,6 +233,7 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_screenshot_activate": self.control_vm_screenshot,
             "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
+            "on_details_menu_view_manager_activate": self.view_manager,
 
             "on_details_pages_switch_page": self.switch_page,
 
@@ -417,9 +423,10 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("details-toolbar").hide()
 
     def show(self):
-        if self.is_visible():
-            return
         dialog = self.window.get_widget("vmm-details")
+        if self.is_visible():
+            dialog.present()
+            return
         dialog.show_all()
         self.window.get_widget("overview-network-traffic-text").hide()
         self.window.get_widget("overview-network-traffic-label").hide()
@@ -458,10 +465,16 @@ class vmmDetails(gobject.GObject):
         self.engine.decrement_window_counter()
         return 1
 
+    def exit_app(self, src):
+        self.emit("action-exit-app")
+
     def is_visible(self):
         if self.window.get_widget("vmm-details").flags() & gtk.VISIBLE:
            return 1
         return 0
+
+    def view_manager(self, src):
+        self.emit("action-view-manager")
 
     def send_key(self, src):
         keys = None

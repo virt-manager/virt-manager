@@ -100,7 +100,9 @@ class vmmManager(gobject.GObject):
         "action-connect": (gobject.SIGNAL_RUN_FIRST,
                            gobject.TYPE_NONE, [str]),
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                               gobject.TYPE_NONE, [str]),}
+                               gobject.TYPE_NONE, [str]),
+        "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
+                            gobject.TYPE_NONE, []),}
 
     def __init__(self, config, engine):
         self.__gobject_init__()
@@ -285,11 +287,12 @@ class vmmManager(gobject.GObject):
         self.engine.connect("connection-removed", self._remove_connection)
 
     def show(self):
-        if not self.is_visible():
-            win = self.window.get_widget("vmm-manager")
-            win.show_all()
+        win = self.window.get_widget("vmm-manager")
+        if self.is_visible():
             win.present()
-            self.engine.increment_window_counter()
+            return
+        win.show_all()
+        self.engine.increment_window_counter()
 
     def close(self, src=None, src2=None):
         if self.is_visible():
@@ -304,7 +307,7 @@ class vmmManager(gobject.GObject):
         return 0
 
     def exit_app(self, src=None, src2=None):
-        gtk.main_quit()
+        self.emit("action-exit-app")
 
     def new_connection(self, src=None):
         self.emit("action-show-connect")
