@@ -204,11 +204,11 @@ def show_engine(engine, show, uri, uuid, no_conn_auto):
                 tryuri = "qemu:///system"
             if tryuri is not None:
                 engine.add_connection(tryuri, autoconnect=True)
+        engine.show_manager()
 
     if not no_conn_auto:
         engine.autostart_connections()
 
-    engine.show_manager()
 
 # maps --show-* to remote manager (ie dbus call) methods
 def show_remote(managerObj, show, uri, uuid):
@@ -223,7 +223,7 @@ def show_remote(managerObj, show, uri, uuid):
     elif show=='summary' or uri:
         managerObj.show_host_summary(uri)
     else:
-        managerObj.show_connect()
+        managerObj.show_manager()
 
 # Generic OptionParser callback for all --show-* options
 # This routine stores UUID to options.uuid for all --show-* options 
