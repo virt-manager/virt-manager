@@ -877,7 +877,7 @@ class vmmDetails(gobject.GObject):
                 else:
                     self.window.get_widget("graphics-port").set_text(inputinfo[2])
                 self.window.get_widget("graphics-password").set_text("-")
-                self.window.get_widget("graphics-keymap").set_text(inputinfo[4] or _("Same as host"))
+                self.window.get_widget("graphics-keymap").set_text(inputinfo[4] or "en-us")
             else:
                 self.window.get_widget("graphics-address").set_text(_("N/A"))
                 self.window.get_widget("graphics-port").set_text(_("N/A"))
