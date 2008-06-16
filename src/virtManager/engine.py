@@ -242,9 +242,6 @@ class vmmEngine(gobject.GObject):
             self.windowConnect.connect("cancelled", self._connect_cancelled)
         self.windowConnect.show()
 
-    def show_manager(self):
-        self.windowManager.show()
-
     def show_console(self, uri, uuid):
         win = self.show_details(uri, uuid)
         win.activate_console_page()
