@@ -94,7 +94,7 @@ class vmmConnect(gobject.GObject):
         hv = self.window.get_widget("hypervisor").get_active()
         conn = self.window.get_widget("connection").get_active()
         host = self.window.get_widget("hostname").get_text()
-        if self.window.get_widget("autoconnect").get_sensitive():
+        if self.window.get_widget("autoconnect").get_property("sensitive"):
             auto = self.window.get_widget("autoconnect").get_active()
         uri = None
 
