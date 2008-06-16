@@ -66,10 +66,6 @@ PAGE_NETWORK = 7
 PAGE_CPUMEM = 8
 PAGE_SUMMARY = 9
 
-KEYBOARD_DIR = "/etc/sysconfig/keyboard"
-
-
-
 class vmmCreate(gobject.GObject):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
@@ -581,30 +577,8 @@ class vmmCreate(gobject.GObject):
         else:
             logging.debug('No guest nics found in install phase.')
 
-        # Set vnc display to use same keymap as host
-        import keytable
-        keymap = None
-        vncport = None
         try:
-            f = open(KEYBOARD_DIR, "r")
-        except IOError, e:
-            logging.debug('Could not open "/etc/sysconfig/keyboard" ' + str(e))
-        else:
-            while 1:
-                s = f.readline()
-                if s == "":
-                    break
-                if re.search("KEYTABLE", s) != None:
-                    kt = s.split('"')[1]
-                    if keytable.keytable.has_key(kt):
-                        keymap = keytable.keytable[kt]
-                    else:
-                        logging.debug("Didn't find keymap '%s' in keytable!" % kt)
-            f.close
-        try:
-            guest._graphics_dev = virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC,
-                                                           port=vncport,
-                                                           keymap=keymap)
+            guest._graphics_dev = virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC)
         except Exception, e:
             self.err.show_err(_("Error setting up graphics device:") + str(e),
                               "".join(traceback.format_exc()))
