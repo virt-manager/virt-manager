@@ -258,7 +258,7 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("storage-file-backed").set_active(True)
         self.window.get_widget("storage-partition-address").set_text("")
         self.window.get_widget("storage-file-address").set_text("")
-        self.window.get_widget("storage-file-size").set_value(2000)
+        self.window.get_widget("storage-file-size").set_value(4000)
         self.window.get_widget("create-memory-max").set_value(512)
         self.window.get_widget("create-memory-startup").set_value(512)
         self.window.get_widget("create-vcpus").set_value(1)
