@@ -162,12 +162,14 @@ class vmmConnection(gobject.GObject):
             # find all bonding master devices and register them
             # XXX bonding stuff is linux specific
             bondMasters = self._net_get_bonding_masters()
+            logging.debug("Bonding masters are: %s" % bondMasters)
             for bond in bondMasters:
                 sysfspath = "/sys/class/net/" + bond
                 mac = self._net_get_mac_address(bond, sysfspath)
-                self._net_device_added(bond, mac, sysfspath)
-                # Add any associated VLANs
-                self._net_tag_device_added(bond, sysfspath)
+                if mac:
+                    self._net_device_added(bond, mac, sysfspath)
+                    # Add any associated VLANs
+                    self._net_tag_device_added(bond, sysfspath)
 
             # Find info about all current present physical net devices
             # This is OS portable...
@@ -221,8 +223,9 @@ class vmmConnection(gobject.GObject):
             if os.path.exists(vlanpath):
                 logging.debug("Process VLAN %s" % vlanpath)
                 vlanmac = self._net_get_mac_address(name, vlanpath)
-                (ignore,vlanname) = os.path.split(vlanpath)
-                self._net_device_added(vlanname, vlanmac, vlanpath)
+                if vlanmac:
+                    (ignore,vlanname) = os.path.split(vlanpath)
+                    self._net_device_added(vlanname, vlanmac, vlanpath)
 
     def _net_device_added(self, name, mac, sysfspath):
         # Race conditions mean we can occassionally see device twice
@@ -946,9 +949,9 @@ class vmmConnection(gobject.GObject):
         addrpath = sysfspath + "/address"
         if os.path.exists(addrpath):
             df = open(addrpath, 'r')
-            mac = df.readline()
+            mac = df.readline().strip(" \n\t")
             df.close()
-        return mac.strip(" \n\t")
+        return mac
 
     def _net_get_bonding_masters(self):
         masters = []
