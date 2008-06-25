@@ -962,15 +962,6 @@ class vmmConnection(gobject.GObject):
                 masters = rline[:-1].split(' ')
         return masters
 
-    def _net_get_mac_address(self, name, sysfspath):
-        mac = None
-        addrpath = sysfspath + "/address"
-        if os.path.exists(addrpath):
-            df = open(addrpath, 'r')
-            mac = df.readline()
-            df.close()
-        return mac.strip(" \n\t")
-
     def _net_is_bonding_slave(self, name, sysfspath):
         masterpath = sysfspath + "/master"
         if os.path.exists(masterpath):
