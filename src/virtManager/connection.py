@@ -963,7 +963,7 @@ class vmmConnection(gobject.GObject):
                 if not rline: break
                 if rline == "\x00": continue
                 rline = rline.strip("\n\t")
-                masters = rline[:-1].split(' ')
+                masters = rline[:].split(' ')
         return masters
 
     def _net_is_bonding_slave(self, name, sysfspath):
