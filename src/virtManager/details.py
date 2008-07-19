@@ -522,6 +522,7 @@ class vmmDetails(gobject.GObject):
         if active[1] != None:
             pagetype = active[0].get_value(active[1], HW_LIST_COL_TYPE)
             self.window.get_widget("hw-panel").set_sensitive(True)
+            self.window.get_widget("hw-panel").show_all()
 
             pagenum = pagetype
             if pagetype == HW_LIST_TYPE_CPU:
