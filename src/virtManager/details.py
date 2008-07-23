@@ -47,14 +47,14 @@ HW_LIST_COL_PIXBUF = 3
 HW_LIST_COL_TYPE = 4
 HW_LIST_COL_DEVICE = 5
 
-# Types for the hw list model
+# Types for the hw list model: numbers specify what order they will be listed
 HW_LIST_TYPE_CPU = 0
 HW_LIST_TYPE_MEMORY = 1
-HW_LIST_TYPE_DISK = 2
-HW_LIST_TYPE_NIC = 3
-HW_LIST_TYPE_INPUT = 4
-HW_LIST_TYPE_GRAPHICS = 5
-HW_LIST_TYPE_BOOT = 6
+HW_LIST_TYPE_BOOT = 2
+HW_LIST_TYPE_DISK = 3
+HW_LIST_TYPE_NIC = 4
+HW_LIST_TYPE_INPUT = 5
+HW_LIST_TYPE_GRAPHICS = 6
 
 # Console pages
 PAGE_UNAVAILABLE = 0
@@ -1352,7 +1352,7 @@ class vmmDetails(gobject.GObject):
                     row[HW_LIST_COL_DEVICE] = disk
                     missing = False
 
-                if row[HW_LIST_COL_TYPE] not in (HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT, HW_LIST_TYPE_GRAPHICS):
+                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_DISK:
                     insertAt = insertAt + 1
 
             # Add in row
@@ -1376,7 +1376,7 @@ class vmmDetails(gobject.GObject):
                     row[HW_LIST_COL_DEVICE] = nic
                     missing = False
 
-                if row[HW_LIST_COL_TYPE] not in (HW_LIST_TYPE_INPUT,HW_LIST_TYPE_GRAPHICS):
+                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_NIC:
                     insertAt = insertAt + 1
 
             # Add in row
@@ -1395,7 +1395,7 @@ class vmmDetails(gobject.GObject):
                     row[HW_LIST_COL_DEVICE] = input
                     missing = False
 
-                if row[HW_LIST_COL_TYPE] not in (HW_LIST_TYPE_GRAPHICS,):
+                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_INPUT:
                     insertAt = insertAt + 1
 
             # Add in row
@@ -1419,7 +1419,8 @@ class vmmDetails(gobject.GObject):
                     row[HW_LIST_COL_DEVICE] = graphic
                     missing = False
 
-                insertAt = insertAt + 1
+                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_GRAPHICS:
+                    insertAt = insertAt + 1
 
             # Add in row
             if missing:
