@@ -892,9 +892,9 @@ class vmmDetails(gobject.GObject):
 
             # Can't remove display from live guest
             if self.vm.is_active():
-                self.window.get_widget("config-input-remove").set_sensitive(False)
+                self.window.get_widget("config-graphics-remove").set_sensitive(False)
             else:
-                self.window.get_widget("config-input-remove").set_sensitive(True)
+                self.window.get_widget("config-graphics-remove").set_sensitive(True)
 
     def refresh_sound_page(self):
         vmlist = self.window.get_widget("hw-list")
