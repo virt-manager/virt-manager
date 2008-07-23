@@ -485,15 +485,8 @@ class vmmDomain(gobject.GObject):
 
 
     def get_disk_devices(self):
-        xml = self.get_xml()
-        doc = None
-        try:
-            doc = libxml2.parseDoc(xml)
-        except:
-            return []
-        ctx = doc.xpathNewContext()
-        disks = []
-        try:
+        def _parse_disk_devs(ctx):
+            disks = []
             ret = ctx.xpathEval("/domain/devices/disk")
             for node in ret:
                 type = node.prop("type")
@@ -518,7 +511,7 @@ class vmmDomain(gobject.GObject):
                         readonly = True
                     elif child.name == "sharable":
                         sharable = True
-                        
+
                 if srcpath == None:
                     if devtype == "cdrom":
                         srcpath = "-"
@@ -531,13 +524,10 @@ class vmmDomain(gobject.GObject):
                 disks.append([type, srcpath, devtype, devdst, readonly, \
                               sharable])
 
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
-        return disks
-    
+            return disks
+
+        return self._parse_device_xml(_parse_disk_devs)
+
     def get_disk_xml(self, target):
         """Returns device xml in string form for passed disk target"""
         xml = self.get_xml()
@@ -636,15 +626,8 @@ class vmmDomain(gobject.GObject):
         self._change_cdrom(result, origdisk)
 
     def get_network_devices(self):
-        xml = self.get_xml()
-        doc = None
-        try:
-            doc = libxml2.parseDoc(xml)
-        except:
-            return []
-        ctx = doc.xpathNewContext()
-        nics = []
-        try:
+        def _parse_network_devs(ctx):
+            nics = []
             ret = ctx.xpathEval("/domain/devices/interface")
 
             for node in ret:
@@ -673,47 +656,28 @@ class vmmDomain(gobject.GObject):
                 # always complete kill the NIC record
                 if devmac != None:
                     nics.append([type, source, target, devmac])
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
-        return nics
+            return nics
+
+        return self._parse_device_xml(_parse_network_devs)
 
     def get_input_devices(self):
-        xml = self.get_xml()
-        doc = None
-        try:
-            doc = libxml2.parseDoc(xml)
-        except:
-            return []
-        ctx = doc.xpathNewContext()
-        inputs = []
-        try:
+        def _parse_input_devs(ctx):
+            inputs = []
             ret = ctx.xpathEval("/domain/devices/input")
 
             for node in ret:
                 type = node.prop("type")
                 bus = node.prop("bus")
-                # XXX Replace 'None' with device model when libvirt supports that
+                # XXX Replace 'None' with device model when libvirt supports
+                # that
                 inputs.append([type, bus, None, type + ":" + bus])
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
-        return inputs
+            return inputs
+
+        return self._parse_device_xml(_parse_input_devs)
 
     def get_graphics_devices(self):
-        xml = self.get_xml()
-        doc = None
-        try:
-            doc = libxml2.parseDoc(xml)
-        except:
-            return []
-        ctx = doc.xpathNewContext()
-        graphics = []
-        try:
+        def _parse_graphics_devs(ctx):
+            graphics = []
             ret = ctx.xpathEval("/domain/devices/graphics[1]")
             for node in ret:
                 type = node.prop("type")
@@ -724,12 +688,27 @@ class vmmDomain(gobject.GObject):
                     graphics.append([type, listen, port, type, keymap])
                 else:
                     graphics.append([type, None, None, type])
+            return graphics
+
+        return self._parse_device_xml(_parse_graphics_devs)
+
+    def _parse_device_xml(self, parse_function):
+        doc = None
+        ctx = None
+        ret = []
+        try:
+            doc = libxml2.parseDoc(self.get_xml())
+            ctx = doc.xpathNewContext()
+            ret = parse_function(ctx)
+        except Exception, e:
+            logging.debug("Error parsing domain xml: %s" % str(e))
         finally:
-            if ctx != None:
+            if ctx:
                 ctx.xpathFreeContext()
-            if doc != None:
+            if doc:
                 doc.freeDoc()
-        return graphics
+        return ret
+
 
     def add_device(self, xml):
         logging.debug("Adding device " + xml)
