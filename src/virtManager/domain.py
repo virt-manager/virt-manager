@@ -769,6 +769,7 @@ class vmmDomain(gobject.GObject):
             raise RuntimeError("Device XML would not parse")
         dev_ctx = dev_doc.xpathNewContext()
         ret = None
+
         try:
             dev = dev_ctx.xpathEval("//*")
             dev_type = dev[0].name
@@ -777,62 +778,46 @@ class vmmDomain(gobject.GObject):
                 if len(address) > 0 and address[0].content != None:
                     logging.debug("The mac address appears to be %s" % address[0].content)
                     ret = ctx.xpathEval("/domain/devices/interface[mac/@address='%s']" % address[0].content)
-                if len(ret) >0:
-                    ret[0].unlinkNode()
-                    ret[0].freeNode()
-                    newxml=doc.serialize()
-                    logging.debug("Redefine with " + newxml)
-                    self.get_connection().define_domain(newxml)
+
             elif dev_type=="disk":
                 path = dev_ctx.xpathEval("/disk/target/@dev")
                 if len(path) > 0 and path[0].content != None:
                     logging.debug("Looking for path %s" % path[0].content)
                     ret = ctx.xpathEval("/domain/devices/disk[target/@dev='%s']" % path[0].content)
-                if len(ret) > 0:
-                    ret[0].unlinkNode()
-                    ret[0].freeNode()
-                    newxml=doc.serialize()
-                    logging.debug("Redefine with " + newxml)
-                    self.get_connection().define_domain(newxml)
+
             elif dev_type=="input":
                 type = dev_ctx.xpathEval("/input/@type")
                 bus = dev_ctx.xpathEval("/input/@bus")
                 if len(type) > 0 and type[0].content != None and len(bus) > 0 and bus[0].content != None:
                     logging.debug("Looking for type %s bus %s" % (type[0].content, bus[0].content))
                     ret = ctx.xpathEval("/domain/devices/input[@type='%s' and @bus='%s']" % (type[0].content, bus[0].content))
-                if len(ret) > 0:
-                    ret[0].unlinkNode()
-                    ret[0].freeNode()
-                    newxml=doc.serialize()
-                    logging.debug("Redefine with " + newxml)
-                    self.get_connection().define_domain(newxml)
+
             elif dev_type=="graphics":
                 type = dev_ctx.xpathEval("/graphics/@type")
                 if len(type) > 0 and type[0].content != None:
                     logging.debug("Looking for type %s" % type[0].content)
                     ret = ctx.xpathEval("/domain/devices/graphics[@type='%s']" % type[0].content)
-                if len(ret) > 0:
-                    ret[0].unlinkNode()
-                    ret[0].freeNode()
-                    newxml=doc.serialize()
-                    logging.debug("Redefine with " + newxml)
-                    self.get_connection().define_domain(newxml)
 
             elif dev_type == "sound":
                 model = dev_ctx.xpathEval("/sound/@model")
                 if len(model) > 0 and model[0].content != None:
                     logging.debug("Looking for type %s" % model[0].content)
                     ret = ctx.xpathEval("/domain/devices/sound[@model='%s']" % model[0].content)
-                if len(ret) > 0:
-                    ret[0].unlinkNode()
-                    ret[0].freeNode()
-                    newxml=doc.serialize()
-                    logging.debug("Redefine with " + newxml)
-                    self.get_connection().define_domain(newxml)
 
             else:
                 raise RuntimeError, _("Unknown device type '%s'" %
                                       dev_type)
+
+            # Take variable 'ret', unlink it, and define the altered xml
+            if ret and len(ret) > 0:
+                ret[0].unlinkNode()
+                ret[0].freeNode()
+                newxml = doc.serialize()
+                logging.debug("Redefine with " + newxml)
+                self.get_connection().define_domain(newxml)
+            else:
+                logging.debug("Didn't find the specified device to remove. "
+                              "Passed xml was: %s" % dev_xml)
 
         finally:
             if ctx != None:
