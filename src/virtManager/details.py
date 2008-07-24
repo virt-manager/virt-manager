@@ -236,6 +236,7 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
             "on_details_menu_view_manager_activate": self.view_manager,
+            "on_details_menu_view_serial_activate": self.control_vm_terminal,
 
             "on_details_pages_switch_page": self.switch_page,
 
@@ -593,6 +594,12 @@ class vmmDetails(gobject.GObject):
     def update_widget_states(self, vm, status):
         self.toggle_toolbar(self.window.get_widget("details-menu-view-toolbar"))
         self.ignorePause = True
+
+        if vm.is_serial_console_tty_accessible():
+            self.window.get_widget("details-menu-view-serial").set_sensitive(True)
+        else:
+            self.window.get_widget("details-menu-view-serial").set_sensitive(False)
+
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ] or vm.is_read_only():
             # apologies for the spaghetti, but the destroy choice is a special case
             self.window.get_widget("details-menu-destroy").set_sensitive(False)
@@ -605,6 +612,7 @@ class vmmDetails(gobject.GObject):
                 self.window.get_widget("config-vcpus").set_sensitive(True)
                 self.window.get_widget("config-memory").set_sensitive(True)
                 self.window.get_widget("config-maxmem").set_sensitive(True)
+                self.window.get_widget("details-menu-view-serial").set_sensitive(False)
             else:
                 self.window.get_widget("control-run").set_sensitive(False)
                 self.window.get_widget("details-menu-run").set_sensitive(False)

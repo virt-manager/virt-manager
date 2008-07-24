@@ -459,6 +459,9 @@ class vmmDomain(gobject.GObject):
         return self.get_xml_string("/domain/devices/console/@tty")
 
     def is_serial_console_tty_accessible(self):
+        # pty serial scheme doesn't work over remote
+        if self.connection.is_remote():
+            return False
         tty = self.get_serial_console_tty()
         if tty == None:
             return False

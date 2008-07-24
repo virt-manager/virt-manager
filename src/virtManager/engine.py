@@ -36,6 +36,7 @@ from virtManager.asyncjob import vmmAsyncJob
 from virtManager.create import vmmCreate
 from virtManager.host import vmmHost
 from virtManager.error import vmmErrorDialog
+from virtManager.serialcon import vmmSerialConsole
 
 class vmmEngine(gobject.GObject):
     __gsignals__ = {
@@ -111,6 +112,10 @@ class vmmEngine(gobject.GObject):
         if self.connections[hvuri]["windowDetails"].has_key(vmuuid):
             self.connections[hvuri]["windowDetails"][vmuuid].close()
             del self.connections[hvuri]["windowDetails"][vmuuid]
+        if self.connections[hvuri]["windowSerialConsole"].has_key(vmuuid):
+            self.connections[hvuri]["windowSerialConsole"][vmuuid].close()
+            del self.connections[hvuri]["windowSerialConsole"][vmuuid]
+
 
     def _do_connection_changed(self, connection):
         if connection.get_state() == connection.STATE_ACTIVE:
@@ -120,6 +125,9 @@ class vmmEngine(gobject.GObject):
         for vmuuid in self.connections[hvuri]["windowDetails"].keys():
             self.connections[hvuri]["windowDetails"][vmuuid].close()
             del self.connections[hvuri]["windowDetails"][vmuuid]
+        for vmuuid in self.connections[hvuri]["windowSerialConsole"].keys():
+            self.connections[hvuri]["windowSerialConsole"][vmuuid].close()
+            del self.connections[hvuri]["windowSerialConsole"][vmuuid]
         if self.connections[hvuri]["windowHost"] is not None:
             self.connections[hvuri]["windowHost"].close()
             self.connections[hvuri]["windowHost"] = None
@@ -246,6 +254,16 @@ class vmmEngine(gobject.GObject):
         win = self.show_details(uri, uuid)
         win.activate_console_page()
 
+    def show_serial_console(self, uri, uuid):
+        con = self.get_connection(uri)
+
+        if not(self.connections[uri]["windowSerialConsole"].has_key(uuid)):
+            console = vmmSerialConsole(self.get_config(),
+                                       con.get_vm(uuid))
+            self.connections[uri]["windowSerialConsole"][uuid] = console
+        self.connections[uri]["windowSerialConsole"][uuid].show()
+
+
     def refresh_console(self, uri, uuid):
         con = self.get_connection(uri)
 
@@ -294,6 +312,8 @@ class vmmEngine(gobject.GObject):
                 details.connect("action-reboot-domain", self._do_reboot_domain)
                 details.connect("action-exit-app", self._do_exit_app)
                 details.connect("action-view-manager", self._do_show_manager)
+                details.connect("action-show-terminal", self._do_show_terminal)
+
             except Exception, e:
                 self.err.show_err(_("Error bringing up domain details: %s") % str(e),
                                   "".join(traceback.format_exc()))
