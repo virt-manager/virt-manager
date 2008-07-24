@@ -93,14 +93,14 @@ class vmmSerialConsole:
 
         # Save term settings & set to raw mode
         self.ptytermios = termios.tcgetattr(self.ptyio)
-        tty.setraw(self.ptyio)
+        tty.setraw(self.ptyio, termios.TCSANOW)
 
     def closetty(self):
         if self.ptyio == None:
             return
         # Restore term settings
         try:
-            termios.tcsetattr(self.ptyio, termios.TCSADRAIN, self.ptytermios)
+            termios.tcsetattr(self.ptyio, termios.TCSANOW, self.ptytermios)
         except:
             # The domain may already have exited, destroying the pty, so ignore
             pass
