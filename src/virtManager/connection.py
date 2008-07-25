@@ -225,6 +225,15 @@ class vmmConnection(gobject.GObject):
                 vlanmac = self._net_get_mac_address(name, vlanpath)
                 if vlanmac:
                     (ignore,vlanname) = os.path.split(vlanpath)
+
+                    # If running a device in bridged mode, there's areasonable
+                    # chance that the actual ethernet device has beenrenamed to
+                    # something else. ethN -> pethN
+                    pvlanpath = vlanpath[0:len(vlanpath)-len(vlanname)] + "p" + vlanname
+                    if os.path.exists(pvlanpath):
+                        logging.debug("Device %s named to p%s" % (vlanname, vlanname))
+                        vlanname = "p" + vlanname
+                        vlanpath = pvlanpath
                     self._net_device_added(vlanname, vlanmac, vlanpath)
 
     def _net_device_added(self, name, mac, sysfspath):
