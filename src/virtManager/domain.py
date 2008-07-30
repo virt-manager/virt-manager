@@ -692,6 +692,16 @@ class vmmDomain(gobject.GObject):
 
         return self._parse_device_xml(_parse_graphics_devs)
 
+    def get_sound_devices(self):
+        def _parse_sound_devs(ctx):
+            sound = []
+            ret = ctx.xpathEval("/domain/devices/sound")
+            for node in ret:
+                sound.append([None, None, None, node.prop("model")])
+            return sound
+
+        return self._parse_device_xml(_parse_sound_devs)
+
     def _parse_device_xml(self, parse_function):
         doc = None
         ctx = None
@@ -807,6 +817,22 @@ class vmmDomain(gobject.GObject):
                     newxml=doc.serialize()
                     logging.debug("Redefine with " + newxml)
                     self.get_connection().define_domain(newxml)
+
+            elif dev_type == "sound":
+                model = dev_ctx.xpathEval("/sound/@model")
+                if len(model) > 0 and model[0].content != None:
+                    logging.debug("Looking for type %s" % model[0].content)
+                    ret = ctx.xpathEval("/domain/devices/sound[@model='%s']" % model[0].content)
+                if len(ret) > 0:
+                    ret[0].unlinkNode()
+                    ret[0].freeNode()
+                    newxml=doc.serialize()
+                    logging.debug("Redefine with " + newxml)
+                    self.get_connection().define_domain(newxml)
+
+            else:
+                raise RuntimeError, _("Unknown device type '%s'" %
+                                      dev_type)
 
         finally:
             if ctx != None:

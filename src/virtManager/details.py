@@ -55,6 +55,7 @@ HW_LIST_TYPE_DISK = 3
 HW_LIST_TYPE_NIC = 4
 HW_LIST_TYPE_INPUT = 5
 HW_LIST_TYPE_GRAPHICS = 6
+HW_LIST_TYPE_SOUND = 7
 
 # Console pages
 PAGE_UNAVAILABLE = 0
@@ -252,6 +253,7 @@ class vmmDetails(gobject.GObject):
             "on_config_network_remove_clicked": self.remove_network,
             "on_config_input_remove_clicked": self.remove_input,
             "on_config_graphics_remove_clicked": self.remove_graphics,
+            "on_config_sound_remove_clicked": self.remove_sound,
             "on_add_hardware_button_clicked": self.add_hardware,
 
             "on_details_menu_view_fullscreen_activate": self.toggle_fullscreen,
@@ -536,6 +538,8 @@ class vmmDetails(gobject.GObject):
                 self.refresh_input_page()
             elif pagetype == HW_LIST_TYPE_GRAPHICS:
                 self.refresh_graphics_page()
+            elif pagetype == HW_LIST_TYPE_SOUND:
+                self.refresh_sound_page()
             elif pagetype == HW_LIST_TYPE_BOOT:
                 self.refresh_boot_page()
                 self.window.get_widget("config-boot-options-apply").set_sensitive(False)
@@ -720,6 +724,8 @@ class vmmDetails(gobject.GObject):
                     self.refresh_input_page()
                 elif pagetype == HW_LIST_TYPE_GRAPHICS:
                     self.refresh_graphics_page()
+                elif pagetype == HW_LIST_TYPE_SOUND:
+                    self.refresh_sound_page()
 
     def refresh_summary(self):
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
@@ -889,6 +895,21 @@ class vmmDetails(gobject.GObject):
                 self.window.get_widget("config-input-remove").set_sensitive(False)
             else:
                 self.window.get_widget("config-input-remove").set_sensitive(True)
+
+    def refresh_sound_page(self):
+        vmlist = self.window.get_widget("hw-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] is None:
+            return
+        sound = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
+        self.window.get_widget("sound-model").set_text(sound[3])
+
+        # Can't remove sound dev from live guest
+        if self.vm.is_active():
+            self.window.get_widget("config-sound-remove").set_sensitive(False)
+        else:
+            self.window.get_widget("config-sound-remove").set_sensitive(True)
 
     def refresh_boot_page(self):
         # Refresh autostart
@@ -1296,6 +1317,18 @@ class vmmDetails(gobject.GObject):
             self.remove_device(xml)
             self.refresh_resources()
 
+    def remove_sound(self, src):
+        vmlist = self.window.get_widget("hw-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] is None:
+            return
+        sound = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
+
+        xml = "<sound model='%s'/>" % sound[3]
+        self.remove_device(xml)
+        self.refresh_resources()
+
     def prepare_hw_list(self):
         hw_list_model = gtk.ListStore(str, str, int, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
         self.window.get_widget("hw-list").set_model(hw_list_model)
@@ -1426,6 +1459,25 @@ class vmmDetails(gobject.GObject):
             if missing:
                 hw_list_model.insert(insertAt, [_("Display"), gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_GRAPHICS, graphic])
 
+        # Populate list of sound devices
+        currentSounds = {}
+        for sound in self.vm.get_sound_devices():
+            missing = True
+            insertAt = 0
+            currentSounds[sound[3]] = 1
+            for row in hw_list_model:
+                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_SOUND and \
+                   row[HW_LIST_COL_DEVICE][3] == sound[3]:
+                    # Update metadata
+                    row[HW_LIST_COL_DEVICE] = sound
+                    missing = False
+
+                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_SOUND:
+                    insertAt = insertAt + 1
+            # Add in row
+            if missing:
+                hw_list_model.insert(insertAt, [_("Sound: %s" % sound[3]), gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_SOUND, sound])
+
         # Now remove any no longer current devs
         devs = range(len(hw_list_model))
         devs.reverse()
@@ -1434,13 +1486,20 @@ class vmmDetails(gobject.GObject):
             row = hw_list_model[i]
             removeIt = False
 
-            if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and not currentDisks.has_key(row[HW_LIST_COL_DEVICE][3]):
+            if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and not \
+               currentDisks.has_key(row[HW_LIST_COL_DEVICE][3]):
                 removeIt = True
-            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and not currentNICs.has_key(row[HW_LIST_COL_DEVICE][3]):
+            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and not \
+                 currentNICs.has_key(row[HW_LIST_COL_DEVICE][3]):
                 removeIt = True
-            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and not currentInputs.has_key(row[HW_LIST_COL_DEVICE][3]):
+            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and not \
+                 currentInputs.has_key(row[HW_LIST_COL_DEVICE][3]):
                 removeIt = True
-            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_GRAPHICS and not currentGraphics.has_key(row[HW_LIST_COL_DEVICE][3]):
+            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_GRAPHICS and not \
+                 currentGraphics.has_key(row[HW_LIST_COL_DEVICE][3]):
+                removeIt = True
+            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_SOUND and not \
+                 currentSounds.has_key(row[HW_LIST_COL_DEVICE][3]):
                 removeIt = True
 
             if removeIt:
