@@ -702,6 +702,57 @@ class vmmDomain(gobject.GObject):
 
         return self._parse_device_xml(_parse_sound_devs)
 
+    def get_char_devices(self):
+        def _parse_char_devs(ctx):
+            chars = []
+            devs  = []
+            devs = ctx.xpathEval("/domain/devices/console")
+            devs.extend(ctx.xpathEval("/domain/devices/parallel"))
+            devs.extend(ctx.xpathEval("/domain/devices/serial"))
+
+            # Since there is only one 'console' device ever in the xml
+            # find its port (if present) and path
+            cons_port = None
+            cons_dev = None
+            list_cons = True
+
+            for node in devs:
+                char_type = node.name
+                dev_type = node.prop("type")
+                target_port = None
+                source_path = None
+
+                for child in node.children:
+                    if child.name == "target":
+                        target_port = child.prop("port")
+                    if child.name == "source":
+                        source_path = child.prop("path")
+
+                if not source_path:
+                    source_path = node.prop("tty")
+
+                dev = [char_type, dev_type, target_port,
+                       "%s:%s" % (char_type, target_port), source_path, False]
+
+                if node.name == "console":
+                    cons_port = target_port
+                    cons_dev = dev
+                    continue
+                elif node.name == "serial" and cons_port \
+                   and target_port == cons_port:
+                    # Console is just a dupe of this serial device
+                    dev[5] = True
+                    list_cons = False
+
+                chars.append(dev)
+
+            if cons_dev and list_cons:
+                chars.append(cons_dev)
+
+            return chars
+
+        return self._parse_device_xml(_parse_char_devs)
+
     def _parse_device_xml(self, parse_function):
         doc = None
         ctx = None
@@ -804,9 +855,32 @@ class vmmDomain(gobject.GObject):
                     logging.debug("Looking for type %s" % model[0].content)
                     ret = ctx.xpathEval("/domain/devices/sound[@model='%s']" % model[0].content)
 
+            elif dev_type == "parallel" or dev_type == "console" or \
+                 dev_type == "serial":
+                 port = dev_ctx.xpathEval("/%s/target/@port" % dev_type)
+                 if port and len(port) > 0 and port[0].content != None:
+                    logging.debug("Looking for %s w/ port %s" % (dev_type,
+                                                                 port))
+                    ret = ctx.xpathEval("/domain/devices/%s[target/@port='%s']" % (dev_type, port[0].content))
+
+                    # If serial and console are both present, console is
+                    # probably (always?) just a dup of the 'primary' serial
+                    # device. Try and find an associated console device with
+                    # the same port and remove that as well, otherwise the
+                    # removal doesn't go through on libvirt <= 0.4.4
+                    if dev_type == "serial":
+                        cons_ret = ctx.xpathEval("/domain/devices/console[target/@port='%s']" % port[0].content)
+                        if cons_ret and len(cons_ret) > 0:
+                            logging.debug("Also removing console device "
+                                          "associated with serial dev.")
+                            cons_ret[0].unlinkNode()
+                            cons_ret[0].freeNode()
+                        else:
+                            logging.debug("No console device found associated "
+                                          "with passed serial devices")
+
             else:
-                raise RuntimeError, _("Unknown device type '%s'" %
-                                      dev_type)
+                raise RuntimeError, _("Unknown device type '%s'" % dev_type)
 
             # Take variable 'ret', unlink it, and define the altered xml
             if ret and len(ret) > 0:
