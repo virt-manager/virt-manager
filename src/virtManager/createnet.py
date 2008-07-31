@@ -367,37 +367,6 @@ class vmmCreateNetwork(gobject.GObject):
         self.window.get_widget("create-back").set_sensitive(True)
         return True
 
-    def populate_opt_media(self, model):
-        # get a list of optical devices with data discs in, for FV installs
-        vollabel = {}
-        volpath = {}
-        # Track device add/removes so we can detect newly inserted CD media
-        self.hal_iface.connect_to_signal("DeviceAdded", self._device_added)
-        self.hal_iface.connect_to_signal("DeviceRemoved", self._device_removed)
-
-        # Find info about all current present media
-        for d in self.hal_iface.FindDeviceByCapability("volume"):
-            vol = self.bus.get_object("org.freedesktop.Hal", d)
-            volif = dbus.Interface(vol, "org.freedesktop.Hal.Device")
-            if volif.GetPropertyBoolean("volume.is_disc") and \
-                   volif.GetPropertyBoolean("volume.disc.has_data"):
-                devnode = volif.GetProperty("block.device")
-                label = volif.GetProperty("volume.label")
-                if label == None or len(label) == 0:
-                    label = devnode
-                vollabel[devnode] = label
-                volpath[devnode] = d
-
-
-        for d in self.hal_iface.FindDeviceByCapability("storage.cdrom"):
-            dev = self.bus.get_object("org.freedesktop.Hal", d)
-            devif = dbus.Interface(dev, "org.freedesktop.Hal.Device")
-            devnode = devif.GetProperty("block.device")
-            if vollabel.has_key(devnode):
-                model.append([devnode, vollabel[devnode], True, volpath[devnode]])
-            else:
-                model.append([devnode, _("No media present"), False, None])
-
     def show_help(self, src):
         # help to show depends on the notebook page, yahoo
         page = self.window.get_widget("create-pages").get_current_page()
