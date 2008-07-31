@@ -650,7 +650,7 @@ class vmmConnection(gobject.GObject):
                 if not origNets.has_key(uuid):
                     currentNets[uuid] = vmmNetwork(self.config, self, net,
                                                  uuid, False)
-                    newNets[uuid] = currentNets[uuid]
+                    newNets.append(uuid)
                 else:
                     currentNets[uuid] = origNets[uuid]
                     if currentNets[uuid].is_active():
