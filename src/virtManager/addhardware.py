@@ -276,7 +276,22 @@ class vmmAddHardware(gobject.GObject):
         else:
             return self.window.get_widget("storage-file-address").get_text()
 
+    def get_config_partition_size(self):
+        try:
+            partition_address = self.get_config_disk_image()
+            fd = open(partition_address,"rb")
+            fd.seek(0,2)
+            block_size = fd.tell() / 1024 / 1024
+            return block_size
+        except Exception, e:
+            details = "Unable to verify partition size: '%s'" % \
+                      "".join(traceback.format_exc())
+            logging.error(details)
+            return None
+        
     def get_config_disk_size(self):
+        if self.window.get_widget("storage-partition").get_active():
+            return self.get_config_partition_size()
         if not self.window.get_widget("storage-file-backed").get_active():
             return None
         if not self.window.get_widget("storage-file-size").get_editable():
