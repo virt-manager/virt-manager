@@ -47,7 +47,7 @@ class vmmStorageVolume(gobject.GObject):
         return self.vol.path()
 
     def delete(self):
-        self.vol.undefine()
+        self.vol.delete(0)
         del(self.vol)
 
     def get_xml(self):

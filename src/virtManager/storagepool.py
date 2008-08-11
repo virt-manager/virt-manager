@@ -72,8 +72,11 @@ class vmmStoragePool(gobject.GObject):
         self.pool.destroy()
         self._update_xml()
 
-    def delete(self):
-        self.pool.undefine()
+    def delete(self, nodelete=True):
+        if nodelete:
+            self.pool.undefine()
+        else:
+            self.pool.delete(0)
         del(self.pool)
 
     def _update_xml(self):
