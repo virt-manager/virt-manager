@@ -24,6 +24,8 @@ import libxml2
 import os
 import sys
 import logging
+import virtinst.util as util
+
 from virtManager.IPy import IP
 
 class vmmNetwork(gobject.GObject):
@@ -36,12 +38,21 @@ class vmmNetwork(gobject.GObject):
         self.net = net
         self.uuid = uuid
         self.active = active
+        self._xml = self.net.XMLDesc(0)
 
     def set_handle(self, net):
         self.net = net
 
     def set_active(self, state):
         self.active = state
+
+    def get_xml(self):
+        if not self._xml:
+            self._update_xml()
+        return self._xml
+
+    def _update_xml(self):
+        self._xml = self.new.XMLDesc(0)
 
     def is_active(self):
         return self.active
@@ -65,15 +76,11 @@ class vmmNetwork(gobject.GObject):
         self.net.create()
 
     def stop(self):
-        name = self.get_name()
         self.net.destroy()
-        # XXX nasty nasty hack - destroy() kills the virNetworkPtr object
-        # so we have to grab a new one
-        self.net = self.connection.vmm.networkLookupByName(name)
 
     def delete(self):
         self.net.undefine()
-        # The virNetworkPtr is dead after this point, so nullify it
+        del(self.net)
         self.net = None
 
     def set_autostart(self, value):
@@ -83,67 +90,35 @@ class vmmNetwork(gobject.GObject):
         return self.net.autostart()
 
     def get_ipv4_network(self):
-        try:
-            xml = self.net.XMLDesc(0)
-            doc = libxml2.parseDoc(xml)
-            addrStr = self._get_xml_path(doc, "/network/ip/@address")
-            netmaskStr = self._get_xml_path(doc, "/network/ip/@netmask")
+        xml = self.get_xml()
+        addrStr = util.get_xml_path(xml, "/network/ip/@address")
+        netmaskStr = util.get_xml_path(xml, "/network/ip/@netmask")
 
-            netmask = IP(netmaskStr)
-            gateway = IP(addrStr)
+        netmask = IP(netmaskStr)
+        gateway = IP(addrStr)
 
-            network = IP(gateway.int() & netmask.int())
-            return IP(str(network)+ "/" + netmaskStr)
-        finally:
-            if doc is not None:
-                doc.freeDoc()
+        network = IP(gateway.int() & netmask.int())
+        return IP(str(network)+ "/" + netmaskStr)
 
     def get_ipv4_forward(self):
-        try:
-            xml = self.net.XMLDesc(0)
-            doc = libxml2.parseDoc(xml)
-            fw = self._get_xml_path(doc, "string(count(/network/forward))")
+        xml = self.get_xml()
+        fw = util.get_xml_path(xml, "string(count(/network/forward))")
 
-            if fw != None and int(fw) != 0:
-                forwardDev = self._get_xml_path(doc, "string(/network/forward/@dev)")
-                return [True, forwardDev]
-            else:
-                return [False, None]
-        finally:
-            if doc is not None:
-                doc.freeDoc()
+        if fw != None and int(fw) != 0:
+            forwardDev = util.get_xml_path(xml, "string(/network/forward/@dev)")
+            return [True, forwardDev]
+        else:
+            return [False, None]
 
     def get_ipv4_dhcp_range(self):
-        try:
-            xml = self.net.XMLDesc(0)
-            doc = libxml2.parseDoc(xml)
-            dhcpstart = self._get_xml_path(doc, "/network/ip/dhcp/range[1]/@start")
-            dhcpend = self._get_xml_path(doc, "/network/ip/dhcp/range[1]/@end")
-            return [IP(dhcpstart), IP(dhcpend)]
-        finally:
-            if doc is not None:
-                doc.freeDoc()
+        xml = self.get_xml()
+        dhcpstart = util.get_xml_path(xml, "/network/ip/dhcp/range[1]/@start")
+        dhcpend = util.get_xml_path(xml, "/network/ip/dhcp/range[1]/@end")
+        return [IP(dhcpstart), IP(dhcpend)]
 
     def is_read_only(self):
         if self.connection.is_read_only():
             return True
         return False
-
-    def _get_xml_path(self, doc, path):
-        ctx = doc.xpathNewContext()
-        try:
-            ret = ctx.xpathEval(path)
-            str = None
-            if ret != None:
-                if type(ret) == list:
-                    if len(ret) == 1:
-                        str = ret[0].content
-                else:
-                    str = ret
-            ctx.xpathFreeContext()
-            return str
-        except:
-            ctx.xpathFreeContext()
-            return None
 
 gobject.type_register(vmmNetwork)

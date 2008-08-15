@@ -25,7 +25,7 @@ import os
 import sys
 import logging
 import copy
-
+import virtinst.util as util
 
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
@@ -54,17 +54,7 @@ class vmmDomain(gobject.GObject):
         return self.xml
 
     def release_handle(self):
-        # HACK: Force free the virtDomainPtr C object since we
-        # can't rely on timely GC. Use try...except block to
-        # protect in case internals of libvirt python change
-        # in the future
-        try:
-            import libvirtmod
-            if self.vm._o is not None:
-                libvirtmod.virDomainFree(self.vm._o)
-                self.vm._o = None
-        except:
-            pass
+        del(self.vm)
         self.vm = None
 
     def set_handle(self, vm):
@@ -107,7 +97,7 @@ class vmmDomain(gobject.GObject):
         return False
 
     def is_hvm(self):
-        os_type = self.get_xml_string("/domain/os/type")
+        os_type = util.get_xml_path(self.get_xml(), "/domain/os/type")
         # XXX libvirt bug - doesn't work for inactive guests
         #os_type = self.vm.OSType()
         logging.debug("OS Type: %s" % os_type)
@@ -116,7 +106,7 @@ class vmmDomain(gobject.GObject):
         return False
 
     def get_type(self):
-        return self.get_xml_string("/domain/@type")
+        return util.get_xml_path(self.get_xml(), "/domain/@type")
 
     def is_vcpu_hotplug_capable(self):
         # Read only connections aren't allowed to change it
@@ -325,7 +315,7 @@ class vmmDomain(gobject.GObject):
         return self.record[0]["vcpuCount"]
 
     def vcpu_max_count(self):
-        cpus = self.get_xml_string("/domain/vcpu")
+        cpus = util.get_xml_path(self.get_xml(), "/domain/vcpu")
         return int(cpus)
 
     def cpu_time_vector(self):
@@ -434,29 +424,8 @@ class vmmDomain(gobject.GObject):
     def run_status_icon(self):
         return self.config.get_vm_status_icon(self.status())
 
-    def get_xml_string(self, path):
-        xml = self.get_xml()
-        doc = None
-        try:
-            doc = libxml2.parseDoc(xml)
-        except:
-            return None
-        ctx = doc.xpathNewContext()
-        try:
-            ret = ctx.xpathEval(path)
-            tty = None
-            if len(ret) == 1:
-                tty = ret[0].content
-            ctx.xpathFreeContext()
-            doc.freeDoc()
-            return tty
-        except:
-            ctx.xpathFreeContext()
-            doc.freeDoc()
-            return None
-
     def get_serial_console_tty(self):
-        return self.get_xml_string("/domain/devices/console/@tty")
+        return util.get_xml_path(self.get_xml(), "/domain/devices/console/@tty")
 
     def is_serial_console_tty_accessible(self):
         # pty serial scheme doesn't work over remote
@@ -469,10 +438,12 @@ class vmmDomain(gobject.GObject):
 
     def get_graphics_console(self):
         self.xml = None
-        type = self.get_xml_string("/domain/devices/graphics/@type")
+        type = util.get_xml_path(self.get_xml(),
+                                 "/domain/devices/graphics/@type")
         port = None
         if type == "vnc":
-            port = self.get_xml_string("/domain/devices/graphics[@type='vnc']/@port")
+            port = util.get_xml_path(self.get_xml(),
+                                     "/domain/devices/graphics[@type='vnc']/@port")
             if port is not None:
                 port = int(port)
 

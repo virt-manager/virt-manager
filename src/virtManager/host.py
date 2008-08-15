@@ -383,12 +383,16 @@ class vmmHost(gobject.GObject):
         pool = self.current_pool()
         if pool is None:
             return
-        if self.addvol is None:
-            self.addvol = vmmCreateVolume(self.config, self.conn, pool)
-            self.addvol.connect("vol-created", self.refresh_current_pool)
-        else:
-            self.addvol.set_parent_pool(pool)
-        self.addvol.show()
+        try:
+            if self.addvol is None:
+                self.addvol = vmmCreateVolume(self.config, self.conn, pool)
+                self.addvol.connect("vol-created", self.refresh_current_pool)
+            else:
+                self.addvol.set_parent_pool(pool)
+            self.addvol.show()
+        except Exception, e:
+            self.err.show_err(_("Error launching volume wizard: %s") % str(e),
+                              "".join(traceback.format_exc()))
 
     def refresh_current_pool(self, ignore1=None):
         cp = self.current_pool()
