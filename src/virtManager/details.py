@@ -823,6 +823,9 @@ class vmmDetails(gobject.GObject):
             if diskinfo[5] == True:
                 perms += ", Sharable"
             self.window.get_widget("disk-permissions").set_text(perms)
+            bus = diskinfo[6] or _("Unknown")
+            self.window.get_widget("disk-bus").set_text(bus)
+
             button = self.window.get_widget("config-cdrom-connect")
             if diskinfo[2] == "cdrom":
                 if diskinfo[1] == "-":
@@ -846,6 +849,8 @@ class vmmDetails(gobject.GObject):
             else:
                 self.window.get_widget("network-source-device").set_text("-")
             self.window.get_widget("network-mac-address").set_text(netinfo[3])
+            model = netinfo[4] or _("Hypervisor Default")
+            self.window.get_widget("network-source-model").set_text(model)
 
     def refresh_input_page(self):
         vmlist = self.window.get_widget("hw-list")

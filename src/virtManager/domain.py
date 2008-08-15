@@ -466,6 +466,7 @@ class vmmDomain(gobject.GObject):
                 type = node.prop("type")
                 srcpath = None
                 devdst = None
+                bus = None
                 readonly = False
                 sharable = False
                 devtype = node.prop("device")
@@ -481,6 +482,7 @@ class vmmDomain(gobject.GObject):
                             type = "-"
                     elif child.name == "target":
                         devdst = child.prop("dev")
+                        bus = child.prop("bus")
                     elif child.name == "readonly":
                         readonly = True
                     elif child.name == "sharable":
@@ -496,7 +498,7 @@ class vmmDomain(gobject.GObject):
                     raise RuntimeError("missing destination device")
 
                 disks.append([type, srcpath, devtype, devdst, readonly, \
-                              sharable])
+                              sharable, bus])
 
             return disks
 
@@ -609,6 +611,7 @@ class vmmDomain(gobject.GObject):
                 devmac = None
                 source = None
                 target = None
+                model = None
                 for child in node.children:
                     if child.name == "source":
                         if type == "bridge":
@@ -625,11 +628,13 @@ class vmmDomain(gobject.GObject):
                         devmac = child.prop("address")
                     elif child.name == "target":
                         target = child.prop("dev")
+                    elif child.name == "model":
+                        model = child.prop("type")
                 # XXX Hack - ignore devs without a MAC, since we
                 # need mac for uniqueness. Some reason XenD doesn't
                 # always complete kill the NIC record
                 if devmac != None:
-                    nics.append([type, source, target, devmac])
+                    nics.append([type, source, target, devmac, model])
             return nics
 
         return self._parse_device_xml(_parse_network_devs)
