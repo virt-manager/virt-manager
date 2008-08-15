@@ -25,8 +25,13 @@ import libvirt
 import sparkline
 import logging
 import os
+import traceback
+
+from virtinst import Storage
 
 from virtManager.createnet import vmmCreateNetwork
+from virtManager.createpool import vmmCreatePool
+from virtManager.createvol import vmmCreateVolume
 from virtManager.error import vmmErrorDialog
 
 class vmmHost(gobject.GObject):
@@ -39,6 +44,9 @@ class vmmHost(gobject.GObject):
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-host.glade", "vmm-host", domain="virt-manager")
         self.config = config
         self.conn = conn
+
+        self.PIXBUF_STATE_RUNNING = gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_running.png", 18, 18)
+        self.PIXBUF_STATE_SHUTOFF = gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_shutoff.png", 18, 18)
 
         topwin = self.window.get_widget("vmm-host")
         topwin.hide()
@@ -60,7 +68,16 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("net-list").set_model(netListModel)
         self.populate_networks(netListModel)
 
+        poolListModel = gtk.ListStore(str, str, float)
+        self.window.get_widget("pool-list").set_model(poolListModel)
+        self.populate_storage_pools(poolListModel)
+
+        volListModel = gtk.ListStore(str, str, str, str)
+        self.window.get_widget("vol-list").set_model(volListModel)
+
         self.window.get_widget("net-list").get_selection().connect("changed", self.net_selected)
+        self.window.get_widget("pool-list").get_selection().connect("changed", self.pool_selected)
+        self.window.get_widget("vol-list").get_selection().connect("changed", self.vol_selected)
 
         netCol = gtk.TreeViewColumn("Networks")
         net_txt = gtk.CellRendererText()
@@ -73,6 +90,33 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("net-list").append_column(netCol)
         self.window.get_widget("net-details").set_sensitive(False)
 
+        poolCol = gtk.TreeViewColumn("Pools")
+        pool_txt = gtk.CellRendererText()
+        pool_prg = gtk.CellRendererProgress()
+        poolCol.pack_start(pool_txt, True)
+        poolCol.pack_start(pool_prg, False)
+        poolCol.add_attribute(pool_txt, 'text', 1)
+        poolCol.add_attribute(pool_prg, 'value', 2)
+        self.window.get_widget("pool-list").append_column(poolCol)
+
+        volCol = gtk.TreeViewColumn("Volumes")
+        vol_txt1 = gtk.CellRendererText()
+        volCol.pack_start(vol_txt1, True)
+        volCol.add_attribute(vol_txt1, 'text', 1)
+        self.window.get_widget("vol-list").append_column(volCol)
+
+        volSizeCol = gtk.TreeViewColumn("Size")
+        vol_txt2 = gtk.CellRendererText()
+        volSizeCol.pack_start(vol_txt2, False)
+        volSizeCol.add_attribute(vol_txt2, 'text', 2)
+        self.window.get_widget("vol-list").append_column(volSizeCol)
+
+        volFormatCol = gtk.TreeViewColumn("Format")
+        vol_txt3 = gtk.CellRendererText()
+        volFormatCol.pack_start(vol_txt3, False)
+        volFormatCol.add_attribute(vol_txt3, 'text', 3)
+        self.window.get_widget("vol-list").append_column(volFormatCol)
+
         self.cpu_usage_graph = sparkline.Sparkline()
         self.cpu_usage_graph.show()
         self.window.get_widget("performance-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
@@ -81,11 +125,19 @@ class vmmHost(gobject.GObject):
         self.memory_usage_graph.show()
         self.window.get_widget("performance-table").attach(self.memory_usage_graph, 1, 2, 1, 2)
 
-        self.add = None
-        self.window.get_widget("details-tabs").get_nth_page(2).hide()
+        self.addnet = None
+        self.addpool = None
+        self.addvol = None
 
         self.conn.connect("net-added", self.repopulate_networks)
         self.conn.connect("net-removed", self.repopulate_networks)
+        self.conn.connect("net-started", self.refresh_network)
+        self.conn.connect("net-stopped", self.refresh_network)
+
+        self.conn.connect("pool-added", self.repopulate_storage_pools)
+        self.conn.connect("pool-removed", self.repopulate_storage_pools)
+        self.conn.connect("pool-started", self.refresh_storage_pool)
+        self.conn.connect("pool-stopped", self.refresh_storage_pool)
 
         # XXX not technically correct once we enable remote management
         if (os.getuid() != 0 and not self.conn.is_remote()) \
@@ -101,13 +153,20 @@ class vmmHost(gobject.GObject):
             "on_net_delete_clicked": self.delete_network,
             "on_net_stop_clicked": self.stop_network,
             "on_net_start_clicked": self.start_network,
+            "on_pool_add_clicked" : self.add_pool,
+            "on_vol_add_clicked" : self.add_vol,
+            "on_pool_stop_clicked": self.stop_pool,
+            "on_pool_start_clicked": self.start_pool,
+            "on_pool_delete_clicked": self.delete_pool,
+            "on_pool_autostart_toggled": self.pool_autostart_changed,
+            "on_vol_delete_clicked": self.delete_vol,
+            "on_pool_apply_clicked": self.pool_apply,
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
             })
 
         self.conn.connect("resources-sampled", self.refresh_resources)
-        self.conn.connect("net-started", self.refresh_network)
-        self.conn.connect("net-stopped", self.refresh_network)
         self.refresh_resources()
+        self.reset_pool_state()
 
     def show(self):
         # Update autostart value
@@ -119,6 +178,36 @@ class vmmHost(gobject.GObject):
         if self.window.get_widget("vmm-host").flags() & gtk.VISIBLE:
            return 1
         return 0
+
+    def close(self,ignore1=None,ignore2=None):
+        self.window.get_widget("vmm-host").hide()
+        return 1
+
+    def show_help(self, src):
+        self.emit("action-show-help", "virt-manager-host-window")
+
+    def toggle_autoconnect(self, ignore=None):
+        if self.conn.get_autoconnect() != \
+           self.window.get_widget("config-autoconnect").get_active():
+            self.conn.toggle_autoconnect()
+
+    def refresh_resources(self, ignore=None):
+        self.window.get_widget("performance-cpu").set_text("%d %%" % self.conn.cpu_time_percentage())
+        vm_memory = self.conn.pretty_current_memory()
+        host_memory = self.conn.pretty_host_memory_size()
+        self.window.get_widget("performance-memory").set_text("%s of %s" % (vm_memory, host_memory))
+
+        cpu_vector = self.conn.cpu_time_vector()
+        cpu_vector.reverse()
+        self.cpu_usage_graph.set_property("data_array", cpu_vector)
+
+        memory_vector = self.conn.current_memory_vector()
+        memory_vector.reverse()
+        self.memory_usage_graph.set_property("data_array", memory_vector)
+
+    # -------------------------
+    # Virtual Network functions
+    # -------------------------
 
     def delete_network(self, src):
         net = self.current_network()
@@ -140,35 +229,9 @@ class vmmHost(gobject.GObject):
             self.err.val_err(_("Creating new networks on remote connections is not yet supported"))
             return
 
-        if self.add is None:
-            self.add = vmmCreateNetwork(self.config, self.conn)
-        self.add.show()
-
-    def toggle_autoconnect(self, ignore=None):
-        if self.conn.get_autoconnect() != \
-           self.window.get_widget("config-autoconnect").get_active():
-            self.conn.toggle_autoconnect()
-
-    def show_help(self, src):
-        self.emit("action-show-help", "virt-manager-host-window")
-
-    def close(self,ignore1=None,ignore2=None):
-        self.window.get_widget("vmm-host").hide()
-        return 1
-
-    def refresh_resources(self, ignore=None):
-        self.window.get_widget("performance-cpu").set_text("%d %%" % self.conn.cpu_time_percentage())
-        vm_memory = self.conn.pretty_current_memory()
-        host_memory = self.conn.pretty_host_memory_size()
-        self.window.get_widget("performance-memory").set_text("%s of %s" % (vm_memory, host_memory))
-
-        cpu_vector = self.conn.cpu_time_vector()
-        cpu_vector.reverse()
-        self.cpu_usage_graph.set_property("data_array", cpu_vector)
-
-        memory_vector = self.conn.current_memory_vector()
-        memory_vector.reverse()
-        self.memory_usage_graph.set_property("data_array", memory_vector)
+        if self.addnet is None:
+            self.addnet = vmmCreateNetwork(self.config, self.conn)
+        self.addnet.show()
 
     def current_network(self):
         sel = self.window.get_widget("net-list").get_selection()
@@ -202,7 +265,7 @@ class vmmHost(gobject.GObject):
                     self.window.get_widget("net-device").set_text(net.get_bridge_device())
                     self.window.get_widget("net-device").set_sensitive(True)
                     self.window.get_widget("net-state").set_text(_("Active"))
-                    self.window.get_widget("net-state-icon").set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_running.png", 18, 18))
+                    self.window.get_widget("net-state-icon").set_from_pixbuf(self.PIXBUF_STATE_RUNNING)
                     self.window.get_widget("net-start").set_sensitive(False)
                     self.window.get_widget("net-stop").set_sensitive(True)
                     self.window.get_widget("net-delete").set_sensitive(False)
@@ -210,17 +273,12 @@ class vmmHost(gobject.GObject):
                     self.window.get_widget("net-device").set_text("")
                     self.window.get_widget("net-device").set_sensitive(False)
                     self.window.get_widget("net-state").set_text(_("Inactive"))
-                    self.window.get_widget("net-state-icon").set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_shutoff.png", 18, 18))
+                    self.window.get_widget("net-state-icon").set_from_pixbuf(self.PIXBUF_STATE_SHUTOFF)
                     self.window.get_widget("net-start").set_sensitive(True)
                     self.window.get_widget("net-stop").set_sensitive(False)
                     self.window.get_widget("net-delete").set_sensitive(True)
 
-                autostart = True
-                try:
-                    autostart = net.get_autostart()
-                except:
-                    # Hack, libvirt 0.2.1 is missing python binding for the autostart method
-                    pass
+                autostart = net.get_autostart()
                 if autostart:
                     self.window.get_widget("net-autostart").set_text(_("On boot"))
                     self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
@@ -257,5 +315,220 @@ class vmmHost(gobject.GObject):
             net = self.conn.get_net(uuid)
             model.append([uuid, net.get_name(), gtk.STOCK_NETWORK])
 
+
+    # ------------------------------
+    # Storage Manager methods
+    # ------------------------------
+
+
+    def stop_pool(self, src):
+        pool = self.current_pool()
+        if pool is not None:
+            try:
+                pool.stop()
+            except Exception, e:
+                self.err.show_err(_("Error starting pool '%s': %s") % \
+                                    (pool.get_name(), str(e)),
+                                  "".join(traceback.format_exc()))
+
+    def start_pool(self, src):
+        pool = self.current_pool()
+        if pool is not None:
+            try:
+                pool.start()
+            except Exception, e:
+                self.err.show_err(_("Error starting pool '%s': %s") % \
+                                    (pool.get_name(), str(e)),
+                                  "".join(traceback.format_exc()))
+
+    def delete_pool(self, src):
+        pool = self.current_pool()
+        if pool is None:
+            return
+
+        result = self.err.yes_no(_("This will permanently delete the volume "
+                                   "'%s,' are you sure?") % pool.get_name())
+        if not result:
+            return
+        try:
+            pool.delete()
+        except Exception, e:
+            self.err.show_err(_("Error deleting pool: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+    def delete_vol(self, src):
+        vol = self.current_vol()
+        if vol is None:
+            return
+
+        result = self.err.yes_no(_("This will permanently delete the volume "
+                                   "'%s,' are you sure?") % vol.get_name())
+        if not result:
+            return
+
+        try:
+            vol.delete()
+        except Exception, e:
+            self.err.show_err(_("Error deleting volume: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return
+        self.populate_storage_volumes()
+
+    def add_pool(self, src):
+        if self.addpool is None:
+            self.addpool = vmmCreatePool(self.config, self.conn)
+        self.addpool.show()
+
+    def add_vol(self, src):
+        pool = self.current_pool()
+        if pool is None:
+            return
+        if self.addvol is None:
+            self.addvol = vmmCreateVolume(self.config, self.conn, pool)
+            self.addvol.connect("vol-created", self.refresh_current_pool)
+        else:
+            self.addvol.set_parent_pool(pool)
+        self.addvol.show()
+
+    def refresh_current_pool(self, ignore1=None):
+        cp = self.current_pool()
+        if cp is None:
+            return
+        self.refresh_storage_pool(None, None, cp.get_uuid())
+
+    def current_pool(self):
+        sel = self.window.get_widget("pool-list").get_selection()
+        active = sel.get_selected()
+        if active[1] != None:
+            curruuid = active[0].get_value(active[1], 0)
+            return self.conn.get_pool(curruuid)
+        return None
+
+    def current_vol(self):
+        pool = self.current_pool()
+        if not pool:
+            return None
+        sel = self.window.get_widget("vol-list").get_selection()
+        active = sel.get_selected()
+        if active[1] != None:
+            curruuid = active[0].get_value(active[1], 0)
+            return pool.get_volume(curruuid)
+        return None
+
+    def pool_apply(self, src):
+        pool = self.current_pool()
+        if pool is None:
+            return
+
+        try:
+            pool.set_autostart(self.window.get_widget("pool-autostart").get_active())
+        except Exception, e:
+            self.err.show_err(_("Error setting pool autostart: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return
+        self.window.get_widget("pool-apply").set_sensitive(False)
+
+    def pool_autostart_changed(self, src):
+        auto = self.window.get_widget("pool-autostart").get_active()
+        self.window.get_widget("pool-autostart").set_label(auto and \
+                                                           _("On Boot") or \
+                                                           _("Never"))
+        self.window.get_widget("pool-apply").set_sensitive(True)
+
+    def pool_selected(self, src):
+        selected = src.get_selected()
+        if selected[1] is None or \
+           selected[0].get_value(selected[1], 0) is None:
+            self.reset_pool_state()
+            return
+
+        uuid = selected[0].get_value(selected[1], 0)
+        pool = self.conn.get_pool(uuid)
+        auto = pool.get_autostart()
+        active = pool.is_active()
+
+        # Set pool details state
+        self.window.get_widget("pool-details").set_sensitive(True)
+        self.window.get_widget("pool-name").set_markup("<b>%s:</b>" % \
+                                                       pool.get_name())
+        self.window.get_widget("pool-sizes").set_markup("""<span size="large">%s Free</span> / <i>%s In Use</i>""" % (pool.get_pretty_available(), pool.get_pretty_allocation()))
+        self.window.get_widget("pool-type").set_text(Storage.StoragePool.get_pool_type_desc(pool.get_type()))
+        self.window.get_widget("pool-location").set_text(pool.get_target_path())
+        self.window.get_widget("pool-state-icon").set_from_pixbuf((active and self.PIXBUF_STATE_RUNNING) or self.PIXBUF_STATE_SHUTOFF)
+        self.window.get_widget("pool-state").set_text((active and _("Active")) or _("Inactive"))
+        self.window.get_widget("pool-autostart").set_label((auto and _("On boot")) or _("Never"))
+        self.window.get_widget("pool-autostart").set_active(auto)
+
+        self.window.get_widget("vol-list").set_sensitive(active)
+        self.populate_storage_volumes()
+
+        self.window.get_widget("pool-delete").set_sensitive(not active)
+        self.window.get_widget("pool-stop").set_sensitive(active)
+        self.window.get_widget("pool-start").set_sensitive(not active)
+        self.window.get_widget("pool-apply").set_sensitive(False)
+        self.window.get_widget("vol-add").set_sensitive(active)
+        self.window.get_widget("vol-delete").set_sensitive(False)
+
+    def refresh_storage_pool(self, src, uri, uuid):
+        sel = self.window.get_widget("pool-list").get_selection()
+        active = sel.get_selected()
+        if active[1] != None:
+            curruuid = active[0].get_value(active[1], 0)
+            if curruuid == uuid:
+                self.pool_selected(sel)
+
+    def reset_pool_state(self):
+        self.window.get_widget("pool-details").set_sensitive(False)
+        self.window.get_widget("pool-name").set_text("")
+        self.window.get_widget("pool-sizes").set_text("")
+        self.window.get_widget("pool-type").set_text("")
+        self.window.get_widget("pool-location").set_text("")
+        self.window.get_widget("pool-state-icon").set_from_pixbuf(self.PIXBUF_STATE_SHUTOFF)
+        self.window.get_widget("pool-state").set_text(_("Inactive"))
+        self.window.get_widget("vol-list").get_model().clear()
+        self.window.get_widget("pool-autostart").set_label(_("Never"))
+        self.window.get_widget("pool-autostart").set_active(False)
+
+        self.window.get_widget("pool-delete").set_sensitive(False)
+        self.window.get_widget("pool-stop").set_sensitive(False)
+        self.window.get_widget("pool-start").set_sensitive(False)
+        self.window.get_widget("pool-apply").set_sensitive(False)
+        self.window.get_widget("vol-add").set_sensitive(False)
+        self.window.get_widget("vol-delete").set_sensitive(False)
+        self.window.get_widget("vol-list").set_sensitive(False)
+
+    def vol_selected(self, src):
+        selected = src.get_selected()
+        if selected[1] is None or \
+           selected[0].get_value(selected[1], 0) is None:
+            self.window.get_widget("vol-delete").set_sensitive(False)
+            return
+
+        self.window.get_widget("vol-delete").set_sensitive(True)
+
+    def repopulate_storage_pools(self, src, uri, uuid):
+        self.populate_storage_pools(self.window.get_widget("pool-list").get_model())
+
+    def populate_storage_pools(self, model):
+        model.clear()
+        for uuid in self.conn.list_pool_uuids():
+            pool = self.conn.get_pool(uuid)
+            cap = pool.get_capacity()
+            all = pool.get_allocation()
+            if not cap or all is None:
+                per = 0
+            else:
+                per = int(((float(all) / float(cap)) * 100))
+            model.append([uuid, pool.get_name(), per])
+
+    def populate_storage_volumes(self):
+        pool = self.current_pool()
+        model = self.window.get_widget("vol-list").get_model()
+        model.clear()
+        vols = pool.get_volumes()
+        for key in vols.keys():
+            vol = vols[key]
+            model.append([key, vol.get_name(), vol.get_pretty_capacity(),
+                          vol.get_format() or ""])
 
 gobject.type_register(vmmHost)
