@@ -113,7 +113,7 @@ class vmmCreate(gobject.GObject):
 
         # Guest to fill in with values along the way
         self._guest = virtinst.Guest(type=self.get_domain_type(),
-                                     hypervisorURI=self.connection.get_uri())
+                                     connection=self.connection.vmm)
         self._disk = None
         self._net = None
 
@@ -611,6 +611,7 @@ class vmmCreate(gobject.GObject):
                       "\n  Disk image: " + str(self.get_config_disk_image()) +\
                       "\n  Non-sparse file: " + str(self.non_sparse))
 
+
         #let's go
         self.install_error = None
         self.topwin.set_sensitive(False)
@@ -656,6 +657,12 @@ class vmmCreate(gobject.GObject):
         meter = vmmCreateMeter(asyncjob)
         try:
             logging.debug("Starting background install process")
+
+            # Stop using virt-manager's connection and open a new one for
+            # the async install.
+            logging.debug("Opening separate connection for the install.")
+            guest.conn = libvirt.open(self.connection.get_uri())
+
             dom = guest.start_install(False, meter = meter)
             if dom == None:
                 self.install_error = _("Guest installation failed to complete")
@@ -829,11 +836,11 @@ class vmmCreate(gobject.GObject):
             name = self._guest.name
             if self.get_config_method() == VM_PARA_VIRT:
                 self._guest = virtinst.ParaVirtGuest(type=self.get_domain_type(),
-                                                     hypervisorURI=self.connection.get_uri())
+                                                     connection=self.connection.vmm)
             else:
                 self._guest = virtinst.FullVirtGuest(type=self.get_domain_type(),
                                                      arch=self.get_domain_arch(),
-                                                     hypervisorURI=self.connection.get_uri())
+                                                     connection=self.connection.vmm)
 
             self._guest.name = name # Transfer name over
 

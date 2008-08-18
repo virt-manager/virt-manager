@@ -753,10 +753,7 @@ class vmmManager(gobject.GObject):
 
     def new_vm(self, ignore=None):
         conn = self.current_connection()
-        if conn.is_remote():
-            self.err.val_err(_("Creating new guests on remote connections is not yet supported"))
-        else:
-            self.emit("action-show-create", conn.get_uri())
+        self.emit("action-show-create", conn.get_uri())
 
     def delete_vm(self, ignore=None):
         conn = self.current_connection()
