@@ -1068,10 +1068,13 @@ class vmmManager(gobject.GObject):
                               details,
                               title=_("Virtual Machine Manager Connection Failure"))
         else:
-            self.err.show_err(_("Unable to open a connection to the libvirt management daemon.\n\n" +
-                              "Verify that:\n" +
-                              " - The 'libvirtd' daemon has been started\n"),
+            self.err.show_err(_("Unable to open a connection to the libvirt "
+                                "management daemon.\n\n" +
+                                "Libvirt URI is: %s\n\n" % conn.get_uri() +
+                                "Verify that:\n" +
+                                " - The 'libvirtd' daemon has been started\n"),
                               details,
-                              title=_("Virtual Machine Manager Connection Failure"))
+                              title=_("Virtual Machine Manager Connection "
+                                      "Failure"))
 
 gobject.type_register(vmmManager)
