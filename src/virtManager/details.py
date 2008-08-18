@@ -461,6 +461,9 @@ class vmmDetails(gobject.GObject):
         if fs.get_active():
             fs.set_active(False)
 
+        if not self.is_visible():
+            return
+
         self.window.get_widget("vmm-details").hide()
         if self.vncViewer.flags() & gtk.VISIBLE:
             try:
