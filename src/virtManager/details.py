@@ -687,7 +687,8 @@ class vmmDetails(gobject.GObject):
                         self.vncViewer.close()
                     self.activate_unavailable_page(_("Console not available while paused"))
             else:
-                if self.window.get_widget("console-pages").get_current_page() in (PAGE_UNAVAILABLE, PAGE_SCREENSHOT):
+                page = self.window.get_widget("console-pages").get_current_page()
+                if page in [PAGE_UNAVAILABLE, PAGE_SCREENSHOT, PAGE_VNCVIEWER]:
                     if self.vncViewer.is_open():
                         self.activate_viewer_page()
                     else:
