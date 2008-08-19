@@ -554,7 +554,6 @@ class vmmDetails(gobject.GObject):
 
             self.window.get_widget("hw-panel").set_current_page(pagenum)
         else:
-            logging.debug("In hw_selected with null tree iter")
             self.window.get_widget("hw-panel").set_sensitive(False)
             selection.select_path(0)
             self.window.get_widget("hw-panel").set_current_page(0)
@@ -591,57 +590,57 @@ class vmmDetails(gobject.GObject):
     def control_vm_destroy(self, src):
         self.emit("action-destroy-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
+    def set_pause_widget_states(self, state):
+        try:
+            self.ignorePause = True
+            self.window.get_widget("control-pause").set_active(state)
+            self.window.get_widget("details-menu-pause").set_active(state)
+        finally:
+            self.ignorePause = False
+
     def update_widget_states(self, vm, status):
         self.toggle_toolbar(self.window.get_widget("details-menu-view-toolbar"))
-        self.ignorePause = True
 
         if vm.is_serial_console_tty_accessible():
             self.window.get_widget("details-menu-view-serial").set_sensitive(True)
         else:
             self.window.get_widget("details-menu-view-serial").set_sensitive(False)
 
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF ] or vm.is_read_only():
-            # apologies for the spaghetti, but the destroy choice is a special case
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
+                       libvirt.VIR_DOMAIN_SHUTOFF ] or vm.is_read_only():
             self.window.get_widget("details-menu-destroy").set_sensitive(False)
         else:
             self.window.get_widget("details-menu-destroy").set_sensitive(True)
-        try:
-            if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-                self.window.get_widget("control-run").set_sensitive(True)
-                self.window.get_widget("details-menu-run").set_sensitive(True)
-                self.window.get_widget("config-vcpus").set_sensitive(True)
-                self.window.get_widget("config-memory").set_sensitive(True)
-                self.window.get_widget("config-maxmem").set_sensitive(True)
-                self.window.get_widget("details-menu-view-serial").set_sensitive(False)
-            else:
-                self.window.get_widget("control-run").set_sensitive(False)
-                self.window.get_widget("details-menu-run").set_sensitive(False)
-                self.window.get_widget("config-vcpus").set_sensitive(self.vm.is_vcpu_hotplug_capable())
-                self.window.get_widget("config-memory").set_sensitive(self.vm.is_memory_hotplug_capable())
-                self.window.get_widget("config-maxmem").set_sensitive(True)
 
-            if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
-                self.window.get_widget("control-pause").set_sensitive(False)
-                self.window.get_widget("control-shutdown").set_sensitive(False)
-                self.window.get_widget("details-menu-pause").set_sensitive(False)
-                self.window.get_widget("details-menu-shutdown").set_sensitive(False)
-                self.window.get_widget("details-menu-save").set_sensitive(False)
-            else:
-                self.window.get_widget("control-pause").set_sensitive(True)
-                self.window.get_widget("control-shutdown").set_sensitive(True)
-                self.window.get_widget("details-menu-pause").set_sensitive(True)
-                self.window.get_widget("details-menu-shutdown").set_sensitive(True)
-                self.window.get_widget("details-menu-save").set_sensitive(True)
+        if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+            self.window.get_widget("control-run").set_sensitive(True)
+            self.window.get_widget("details-menu-run").set_sensitive(True)
+            self.window.get_widget("config-vcpus").set_sensitive(True)
+            self.window.get_widget("config-memory").set_sensitive(True)
+            self.window.get_widget("config-maxmem").set_sensitive(True)
+            self.window.get_widget("details-menu-view-serial").set_sensitive(False)
+        else:
+            self.window.get_widget("control-run").set_sensitive(False)
+            self.window.get_widget("details-menu-run").set_sensitive(False)
+            self.window.get_widget("config-vcpus").set_sensitive(self.vm.is_vcpu_hotplug_capable())
+            self.window.get_widget("config-memory").set_sensitive(self.vm.is_memory_hotplug_capable())
+            self.window.get_widget("config-maxmem").set_sensitive(True)
 
-                if status == libvirt.VIR_DOMAIN_PAUSED:
-                    self.window.get_widget("control-pause").set_active(True)
-                    self.window.get_widget("details-menu-pause").set_active(True)
-                else:
-                    self.window.get_widget("control-pause").set_active(False)
-                    self.window.get_widget("details-menu-pause").set_active(False)
-        except:
-            self.ignorePause = False
-            raise
+        if status in [libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF,
+                      libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
+            self.set_pause_widget_states(False)
+            self.window.get_widget("control-shutdown").set_sensitive(False)
+            self.window.get_widget("details-menu-shutdown").set_sensitive(False)
+            self.window.get_widget("details-menu-save").set_sensitive(False)
+            self.window.get_widget("control-pause").set_sensitive(False)
+            self.window.get_widget("details-menu-pause").set_sensitive(False)
+        else:
+            self.window.get_widget("control-pause").set_sensitive(True)
+            self.window.get_widget("details-menu-pause").set_sensitive(True)
+            self.set_pause_widget_states(status == libvirt.VIR_DOMAIN_PAUSED)
+            self.window.get_widget("control-shutdown").set_sensitive(True)
+            self.window.get_widget("details-menu-shutdown").set_sensitive(True)
+            self.window.get_widget("details-menu-save").set_sensitive(True)
 
         if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
             if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
@@ -695,9 +694,6 @@ class vmmDetails(gobject.GObject):
                         self.vncViewerRetriesScheduled = 0
                         self.vncViewerRetryDelay = 125
                         self.try_login()
-                        self.ignorePause = False
-
-        self.ignorePause = False
 
         self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
         self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())

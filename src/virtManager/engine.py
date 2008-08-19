@@ -477,6 +477,7 @@ class vmmEngine(gobject.GObject):
         else:
             resp = self.err.yes_no(text1=_("About to poweroff virtual machine %s" % vm.get_name()), text2=_("This will immediately poweroff the VM without shutting down the OS and may cause data loss. Are you sure?"))
             if resp:
+                logging.debug("Destroying vm '%s'." % vm.get_name())
                 try:
                     vm.destroy()
                 except Exception, e:
@@ -493,6 +494,7 @@ class vmmEngine(gobject.GObject):
         elif status in [ libvirt.VIR_DOMAIN_PAUSED ]:
             logging.warning("Pause requested, but machine is already paused")
         else:
+            logging.debug("Pausing vm '%s'." % vm.get_name())
             try:
                 vm.suspend()
             except Exception, e:
@@ -508,6 +510,7 @@ class vmmEngine(gobject.GObject):
                        libvirt.VIR_DOMAIN_CRASHED ]:
             logging.warning("Resume requested, but machine is shutdown / shutoff")
         elif status in [ libvirt.VIR_DOMAIN_PAUSED ]:
+            logging.debug("Unpausing vm '%s'." % vm.get_name())
             try:
                 vm.resume()
             except Exception, e:
@@ -523,6 +526,7 @@ class vmmEngine(gobject.GObject):
         if status != libvirt.VIR_DOMAIN_SHUTOFF:
             logging.warning("Run requested, but domain isn't shutoff.")
         else:
+            logging.debug("Starting vm '%s'." % vm.get_name())
             try:
                 vm.startup()
             except Exception, e:
@@ -536,6 +540,7 @@ class vmmEngine(gobject.GObject):
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, \
                            libvirt.VIR_DOMAIN_SHUTOFF, \
                            libvirt.VIR_DOMAIN_CRASHED ]):
+            logging.debug("Shutting down vm '%s'." % vm.get_name())
             try:
                 vm.shutdown()
             except Exception, e:
@@ -551,6 +556,7 @@ class vmmEngine(gobject.GObject):
         if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, \
                            libvirt.VIR_DOMAIN_SHUTOFF, \
                            libvirt.VIR_DOMAIN_CRASHED ]):
+            logging.debug("Rebooting vm '%s'." % vm.get_name())
             try:
                 vm.reboot()
             except Exception, e:
