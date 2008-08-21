@@ -525,82 +525,6 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
         return result
 
-    def _change_cdrom(self, newxml, origxml):
-        # If vm is shutoff, remove device, and redefine with media
-        if not self.is_active():
-            logging.debug("_change_cdrom: removing original xml")
-            self.remove_device(origxml)
-            try:
-                logging.debug("_change_cdrom: adding new xml")
-                self.add_device(newxml)
-            except Exception, e1:
-                logging.debug("_change_cdrom: adding new xml failed. attempting to readd original device")
-                try:
-                    self.add_device(origxml) # Try to re-add original
-                except Exception, e2:
-                    raise RuntimeError(_("Failed to change cdrom and re-add original device. Exceptions were: \n%s\n%s") % (str(e1), str(e2)))
-                raise e1
-        else:
-            self.vm.attachDevice(newxml)
-            vmxml = self.vm.XMLDesc(0)
-            self.get_connection().define_domain(vmxml)
-
-    def connect_cdrom_device(self, type, source, target): 
-        xml = self.get_disk_xml(target)
-        doc = None
-        ctx = None
-        try:
-            doc = libxml2.parseDoc(xml)
-            ctx = doc.xpathNewContext()
-            disk_fragment = ctx.xpathEval("/disk")
-            driver_fragment = ctx.xpathEval("/disk/driver")
-            origdisk = disk_fragment[0].serialize()
-            disk_fragment[0].setProp("type", type)
-            elem = disk_fragment[0].newChild(None, "source", None)
-            if type == "file":
-                elem.setProp("file", source)
-                if driver_fragment:
-                    driver_fragment[0].setProp("name", type)
-            else:
-                elem.setProp("dev", source)
-                if driver_fragment:
-                    driver_fragment[0].setProp("name", "phy")
-            result = disk_fragment[0].serialize()
-            logging.debug("connect_cdrom_device produced the following XML: %s" % result)
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
-        self._change_cdrom(result, origdisk)
-
-    def disconnect_cdrom_device(self, target):
-        xml = self.get_disk_xml(target)
-        doc = None
-        ctx = None
-        try:
-            doc = libxml2.parseDoc(xml)
-            ctx = doc.xpathNewContext()
-            disk_fragment = ctx.xpathEval("/disk")
-            origdisk = disk_fragment[0].serialize()
-            sourcenode = None
-            for child in disk_fragment[0].children:
-                if child.name == "source":
-                    sourcenode = child
-                    break
-                else:
-                    continue
-            sourcenode.unlinkNode()
-            sourcenode.freeNode()
-            result = disk_fragment[0].serialize()
-            logging.debug("disconnect_cdrom_device produced the following XML: %s" % result)
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
-        self._change_cdrom(result, origdisk)
-
     def get_network_devices(self):
         def _parse_network_devs(ctx):
             nics = []
@@ -749,31 +673,14 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
         return ret
 
-    def attach_device(self, xml):
-        """Hotplug device to running guest"""
-        if self.is_active():
-            self.vm.attachDevice(xml)
+    def _add_xml_device(self, xml, devxml):
+        """Add device 'devxml' to devices section of 'xml', return result"""
+        index = xml.find("</devices>")
+        return xml[0:index] + devxml + xml[index:]
 
-    def detach_device(self, xml):
-        """Hotunplug device from running guest"""
-        if self.is_active():
-            self.vm.detachDevice(xml)
-
-    def add_device(self, xml):
-        """Redefine guest with appended device"""
-        vmxml = self.vm.XMLDesc(0)
-
-        index = vmxml.find("</devices>")
-        newxml = vmxml[0:index] + xml + vmxml[index:]
-        logging.debug("Redefine with " + newxml)
-        self.get_connection().define_domain(newxml)
-
-        # Invalidate cached XML
-        self.xml = None
-
-    def remove_device(self, dev_xml):
-        xml = self.vm.XMLDesc(0)
-
+    def _remove_xml_device(self, xml, devxml):
+        """Remove device 'devxml' from devices section of 'xml, return
+           result"""
         doc = None
         try:
             doc = libxml2.parseDoc(xml)
@@ -781,7 +688,7 @@ class vmmDomain(gobject.GObject):
             return
         ctx = doc.xpathNewContext()
         try:
-            dev_doc = libxml2.parseDoc(dev_xml)
+            dev_doc = libxml2.parseDoc(devxml)
         except:
             raise RuntimeError("Device XML would not parse")
         dev_ctx = dev_doc.xpathNewContext()
@@ -853,12 +760,10 @@ class vmmDomain(gobject.GObject):
                 ret[0].unlinkNode()
                 ret[0].freeNode()
                 newxml = doc.serialize()
-                logging.debug("Redefine with " + newxml)
-                self.get_connection().define_domain(newxml)
+                return newxml
             else:
                 logging.debug("Didn't find the specified device to remove. "
-                              "Passed xml was: %s" % dev_xml)
-
+                              "Passed xml was: %s" % devxml)
         finally:
             if ctx != None:
                 ctx.xpathFreeContext()
@@ -867,8 +772,105 @@ class vmmDomain(gobject.GObject):
             if dev_doc != None:
                 dev_doc.freeDoc()
 
+    def attach_device(self, xml):
+        """Hotplug device to running guest"""
+        if self.is_active():
+            self.vm.attachDevice(xml)
+
+    def detach_device(self, xml):
+        """Hotunplug device from running guest"""
+        if self.is_active():
+            self.vm.detachDevice(xml)
+
+    def add_device(self, xml):
+        """Redefine guest with appended device"""
+        vmxml = self.vm.XMLDesc(0)
+
+        newxml = self._add_xml_device(vmxml, xml)
+
+        logging.debug("Redefine with " + newxml)
+        self.get_connection().define_domain(newxml)
+
         # Invalidate cached XML
         self.xml = None
+
+    def remove_device(self, devxml):
+        xml = self.vm.XMLDesc(0)
+
+        newxml = self._remove_xml_device(xml, devxml)
+
+        logging.debug("Redefine with " + newxml)
+        self.get_connection().define_domain(newxml)
+
+        # Invalidate cached XML
+        self.xml = None
+
+    def _change_cdrom(self, newdev, origdev):
+        # If vm is shutoff, remove device, and redefine with media
+        vmxml = self.vm.XMLDesc(0)
+        if not self.is_active():
+            tmpxml = self._remove_xml_device(vmxml, origdev)
+            finalxml = self._add_xml_device(tmpxml, newdev)
+            logging.debug("change cdrom: redefining xml with:\n%s" % finalxml)
+            self.get_connection().define_domain(finalxml)
+        else:
+            self.attach_device(newdev)
+
+    def connect_cdrom_device(self, type, source, target):
+        xml = self.get_disk_xml(target)
+        doc = None
+        ctx = None
+        try:
+            doc = libxml2.parseDoc(xml)
+            ctx = doc.xpathNewContext()
+            disk_fragment = ctx.xpathEval("/disk")
+            driver_fragment = ctx.xpathEval("/disk/driver")
+            origdisk = disk_fragment[0].serialize()
+            disk_fragment[0].setProp("type", type)
+            elem = disk_fragment[0].newChild(None, "source", None)
+            if type == "file":
+                elem.setProp("file", source)
+                if driver_fragment:
+                    driver_fragment[0].setProp("name", type)
+            else:
+                elem.setProp("dev", source)
+                if driver_fragment:
+                    driver_fragment[0].setProp("name", "phy")
+            result = disk_fragment[0].serialize()
+            logging.debug("connect_cdrom_device produced the following XML: %s" % result)
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+        self._change_cdrom(result, origdisk)
+
+    def disconnect_cdrom_device(self, target):
+        xml = self.get_disk_xml(target)
+        doc = None
+        ctx = None
+        try:
+            doc = libxml2.parseDoc(xml)
+            ctx = doc.xpathNewContext()
+            disk_fragment = ctx.xpathEval("/disk")
+            origdisk = disk_fragment[0].serialize()
+            sourcenode = None
+            for child in disk_fragment[0].children:
+                if child.name == "source":
+                    sourcenode = child
+                    break
+                else:
+                    continue
+            sourcenode.unlinkNode()
+            sourcenode.freeNode()
+            result = disk_fragment[0].serialize()
+            logging.debug("disconnect_cdrom_device produced the following XML: %s" % result)
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
+        self._change_cdrom(result, origdisk)
 
     def set_vcpu_count(self, vcpus):
         vcpus = int(vcpus)
