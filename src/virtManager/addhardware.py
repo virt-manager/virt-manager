@@ -511,17 +511,36 @@ class vmmAddHardware(gobject.GObject):
         progWin.run()
 
         if self.install_error == None:
-            self.add_device(self._dev.get_xml_config(node))
+            self.add_device(self._dev.get_xml_config())
 
     def add_device(self, xml):
-        logging.debug("Adding device " + xml)
+        logging.debug("Adding device:\n" + xml)
+
+        attach_err = False
+        try:
+            self.vm.attach_device(xml)
+        except Exception, e:
+            logging.debug("Device could not be hotplugged: %s" % str(e))
+            attach_err = True
+
+        if attach_err:
+            if not self.err.yes_no(_("Are you sure you want to add this "
+                                     "device?"),
+                                   _("This device could not be attached to "
+                                     "the running machine. Would you like to "
+                                     "make the device available after the "
+                                     "next VM shutdown?\n\n"
+                                     "Warning: this will overwrite any "
+                                     "other changes that require a VM "
+                                     "reboot.")):
+                return
+
         try:
             self.vm.add_device(xml)
         except Exception, e:
-            details = "Unable to complete install: '%s'" % \
-                      "".join(traceback.format_exc())
-            self.install_error = _("Unable to complete install: '%s'") \
-                                 % str(e)
+            details = _("Unable to complete install: '%s'") % \
+                        "".join(traceback.format_exc())
+            self.install_error = _("Unable to complete install: '%s'") % str(e)
             self.install_details = details
             logging.error(details)
 

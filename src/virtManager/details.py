@@ -1642,7 +1642,7 @@ class vmmDetails(gobject.GObject):
                 self.err.show_err(_("Error Removing CDROM: %s" % str(e)),
                                   "".join(traceback.format_exc()))
                 return
-                
+
         else:
             # connect a new cdrom
             if self.choose_cd is None:
@@ -1655,11 +1655,32 @@ class vmmDetails(gobject.GObject):
     def connect_cdrom(self, src, type, source, target):
         try:
             self.vm.connect_cdrom_device(type, source, target)
-        except Exception, e:            
+        except Exception, e:
             self.err.show_err(_("Error Connecting CDROM: %s" % str(e)),
                               "".join(traceback.format_exc()))
 
     def remove_device(self, xml):
+        logging.debug("Removing device:\n%s" % xml)
+
+        detach_err = False
+        try:
+            self.vm.detach_device(xml)
+        except Exception, e:
+            logging.debug("Device could not be hotUNplugged: %s" % str(e))
+            detach_err = True
+
+        if detach_err:
+            if not self.err.yes_no(_("Are you sure you want to remove this "
+                                     "device?"),
+                                   _("This device could not be removed from "
+                                     "the running machine. Would you like to "
+                                     "remove the device after the next VM "
+                                     "shutdown? \n\n"
+                                     "Warning: this will overwrite any "
+                                     "other changes that require a VM "
+                                     "reboot.")):
+                return
+
         try:
             self.vm.remove_device(xml)
         except Exception, e:

@@ -749,20 +749,19 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
         return ret
 
+    def attach_device(self, xml):
+        """Hotplug device to running guest"""
+        if self.is_active():
+            self.vm.attachDevice(xml)
+
+    def detach_device(self, xml):
+        """Hotunplug device from running guest"""
+        if self.is_active():
+            self.vm.detachDevice(xml)
 
     def add_device(self, xml):
-        logging.debug("Adding device " + xml)
-
-        # get the XML for the live domain before we attach the device
-        # otherwise the device gets added to the XML twice.
+        """Redefine guest with appended device"""
         vmxml = self.vm.XMLDesc(0)
-
-        device_exception = None
-        try:
-            if self.is_active():
-                self.vm.attachDevice(xml)
-        except libvirt.libvirtError, e:
-            device_exception = str(e)
 
         index = vmxml.find("</devices>")
         newxml = vmxml[0:index] + xml + vmxml[index:]
@@ -771,22 +770,10 @@ class vmmDomain(gobject.GObject):
 
         # Invalidate cached XML
         self.xml = None
-        if device_exception:
-            raise RuntimeError, "Unable to attach device to live guest, libvirt reported error:\n" + device_exception 
 
     def remove_device(self, dev_xml):
-        logging.debug("Removing device " + dev_xml)
         xml = self.vm.XMLDesc(0)
 
-        # do the live guest first
-        device_exception = None
-        if self.is_active():
-            try:
-                self.vm.detachDevice(dev_xml)
-            except libvirt.libvirtError, e:
-                device_exception = str(e)
-
-        # then the stored XML
         doc = None
         try:
             doc = libxml2.parseDoc(xml)
@@ -882,10 +869,6 @@ class vmmDomain(gobject.GObject):
 
         # Invalidate cached XML
         self.xml = None
-
-        # if we had a problem with the live guest, complain here
-        if device_exception:
-            raise RuntimeError, "Unable to detach device from live guest, libvirt reported: \n" + device_exception
 
     def set_vcpu_count(self, vcpus):
         vcpus = int(vcpus)
