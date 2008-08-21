@@ -9,8 +9,8 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_width">650</property>
-  <property name="default_height">450</property>
+  <property name="default_width">750</property>
+  <property name="default_height">500</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
@@ -1725,6 +1725,7 @@
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
+		  <property name="position">200</property>
 
 		  <child>
 		    <widget class="GtkTreeView" id="pool-list">
@@ -1792,7 +1793,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="pool-type">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Pool Type</property>
+			      <property name="label">Pool Type</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1820,7 +1821,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="pool-name">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">&lt;b&gt;Poolname:&lt;/b&gt;</property>
+			      <property name="label">&lt;b&gt;Poolname:&lt;/b&gt;</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">True</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1848,7 +1849,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="pool-sizes">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">&lt;span size=&quot;large&quot;&gt;1234 GB Free&lt;/span&gt; / &lt;i&gt;6000 GB In Use&lt;/i&gt;</property>
+			      <property name="label">&lt;span size=&quot;large&quot;&gt;1234 GB Free&lt;/span&gt; / &lt;i&gt;6000 GB In Use&lt;/i&gt;</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">True</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2038,7 +2039,7 @@
 			    <widget class="GtkCheckButton" id="pool-autostart">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Some label</property>
+			      <property name="label">Some label</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -2161,6 +2162,7 @@
 		      <child>
 			<widget class="GtkButton" id="pool-add">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Add Pool</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -2188,6 +2190,7 @@
 		      <child>
 			<widget class="GtkButton" id="pool-start">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Start Pool</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -2215,6 +2218,7 @@
 		      <child>
 			<widget class="GtkButton" id="pool-stop">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Stop Pool</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -2242,6 +2246,7 @@
 		      <child>
 			<widget class="GtkButton" id="pool-delete">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Delete Pool</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
