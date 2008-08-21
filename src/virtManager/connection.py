@@ -1016,7 +1016,10 @@ class vmmConnection(gobject.GObject):
         elif self.state == self.STATE_CONNECTING:
             return _("Connecting")
         elif self.state == self.STATE_ACTIVE:
-            return _("Active")
+            if self.is_read_only():
+                return _("Active (RO)")
+            else:
+                return _("Active")
         elif self.state == self.STATE_INACTIVE:
             return _("Inactive")
         else:
