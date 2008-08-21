@@ -134,14 +134,14 @@ class vmmAddHardware(gobject.GObject):
         device_list.add_attribute(text, 'sensitive', 2)
 
         target_list = self.window.get_widget("target-device")
-        target_model = gtk.ListStore(str, int, str, str, str)
+        target_model = gtk.ListStore(str, str, str, str)
         target_list.set_model(target_model)
         icon = gtk.CellRendererPixbuf()
         target_list.pack_start(icon, False)
-        target_list.add_attribute(icon, 'stock-id', 3)
+        target_list.add_attribute(icon, 'stock-id', 2)
         text = gtk.CellRendererText()
         target_list.pack_start(text, True)
-        target_list.add_attribute(text, 'text', 4)
+        target_list.add_attribute(text, 'text', 3)
 
         input_list = self.window.get_widget("input-type")
         input_model = gtk.ListStore(str, str, str, bool)
@@ -301,10 +301,9 @@ class vmmAddHardware(gobject.GObject):
 
     def get_config_disk_target(self):
         target = self.window.get_widget("target-device")
-        node = target.get_model().get_value(target.get_active_iter(), 0)
-        maxnode = target.get_model().get_value(target.get_active_iter(), 1)
-        device = target.get_model().get_value(target.get_active_iter(), 2)
-        return node, maxnode, device
+        bus = target.get_model().get_value(target.get_active_iter(), 0)
+        device = target.get_model().get_value(target.get_active_iter(), 1)
+        return bus, device
 
     def get_config_input(self):
         target = self.window.get_widget("input-type")
@@ -492,36 +491,16 @@ class vmmAddHardware(gobject.GObject):
         self.add_device(self._dev.get_xml_config())
 
     def add_storage(self):
-        node, maxnode, device = self.get_config_disk_target()
-
-        used = {}
+        used = []
         for d in self.vm.get_disk_devices():
-            dev = d[3]
-            used[dev] = 1
+            used.append(d[3])
 
-        nodes = []
-        if self.vm.is_hvm():
-            # QEMU, only hdc can be a CDROM
-            if self.vm.get_connection().get_type().lower() == "qemu" and \
-                   device == virtinst.VirtualDisk.DEVICE_CDROM:
-                nodes.append(node + "c")
-            else:
-                for n in range(maxnode):
-                    nodes.append("%s%c" % (node, ord('a')+n))
-        else:
-            for n in range(maxnode):
-                nodes.append("%s%c" % (node, ord('a')+n))
-
-        node = None
-        for n in nodes:
-            if not used.has_key(n):
-                node = n
-                break
-
-        if node is None:
-            value =  _("There are no more available virtual disk device nodes")
-            details = "Unable to complete install: '%s'" % value
-            self.install_error = _("Unable to complete install: '%s'") % value
+        try:
+            t = self._dev.generate_target(used)
+        except Exception, e:
+            details = _("Unable to complete install: ") + \
+                      "".join(traceback.format_exc())
+            self.install_error = _("Unable to complete install: '%s'") % str(e)
             self.install_details = details
             return
 
@@ -687,17 +666,17 @@ class vmmAddHardware(gobject.GObject):
             if path == None or len(path) == 0:
                 return self.err.val_err(_("Storage Path Required"), \
                                         _("You must specify a partition or a file for disk storage."))
-            
+
             if self.window.get_widget("target-device").get_active() == -1:
                 return self.err.val_err(_("Target Device Required"),
                                         _("You must select a target device for the disk"))
 
-            node, nodemax, device = self.get_config_disk_target()
+            bus, device = self.get_config_disk_target()
             if self.window.get_widget("storage-partition").get_active():
                 type = virtinst.VirtualDisk.TYPE_BLOCK
             else:
                 type = virtinst.VirtualDisk.TYPE_FILE
-                   
+
             if not self.window.get_widget("storage-partition").get_active():
                 size = self.get_config_disk_size()
                 if not os.path.exists(path):
@@ -733,7 +712,8 @@ class vmmAddHardware(gobject.GObject):
                                                   type = type,
                                                   sparse = self.is_sparse_file(),
                                                   readOnly=readonly,
-                                                  device=device)
+                                                  device=device,
+                                                  bus=bus)
                 if self._dev.type == virtinst.VirtualDisk.TYPE_FILE and \
                    not self.vm.is_hvm() and virtinst.util.is_blktap_capable():
                     self._dev.driver_name = virtinst.VirtualDisk.DRIVER_TAP
@@ -828,16 +808,24 @@ class vmmAddHardware(gobject.GObject):
 
     def populate_target_device_model(self, model):
         model.clear()
+        #[bus, device, icon, desc]
         if self.vm.is_hvm():
-            model.append(["hd", 4, virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "IDE disk"])
-            model.append(["hd", 4, virtinst.VirtualDisk.DEVICE_CDROM, gtk.STOCK_CDROM, "IDE cdrom"])
-            model.append(["fd", 2, virtinst.VirtualDisk.DEVICE_FLOPPY, gtk.STOCK_FLOPPY, "Floppy disk"])
-            if self.vm.get_connection().get_type().lower() == "xen":
-                model.append(["sd", 7, virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "SCSI disk"])
-                model.append(["xvd", 26, virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "Virtual disk"])
-            #model.append(["usb", virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "USB disk"])
-        else:
-            model.append(["xvd", 26, virtinst.VirtualDisk.DEVICE_DISK, gtk.STOCK_HARDDISK, "Virtual disk"])
+            model.append(["ide", virtinst.VirtualDisk.DEVICE_DISK,
+                          gtk.STOCK_HARDDISK, "IDE disk"])
+            model.append(["ide", virtinst.VirtualDisk.DEVICE_CDROM,
+                          gtk.STOCK_CDROM, "IDE cdrom"])
+            model.append(["fdc", virtinst.VirtualDisk.DEVICE_FLOPPY,
+                          gtk.STOCK_FLOPPY, "Floppy disk"])
+            model.append(["scsi",virtinst.VirtualDisk.DEVICE_DISK,
+                          gtk.STOCK_HARDDISK, "SCSI disk"])
+            model.append(["usb", virtinst.VirtualDisk.DEVICE_DISK,
+                          gtk.STOCK_HARDDISK, "USB disk"])
+        if self.vm.get_type().lower() == "kvm":
+            model.append(["virtio", virtinst.VirtualDisk.DEVICE_DISK,
+                          gtk.STOCK_HARDDISK, "Virtio Disk"])
+        if self.vm.get_connection().get_type().lower() == "xen":
+            model.append(["xen", virtinst.VirtualDisk.DEVICE_DISK,
+                          gtk.STOCK_HARDDISK, "Virtual disk"])
 
     def populate_input_model(self, model):
         model.clear()
