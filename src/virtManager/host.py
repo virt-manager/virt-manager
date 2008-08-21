@@ -139,12 +139,6 @@ class vmmHost(gobject.GObject):
         self.conn.connect("pool-started", self.refresh_storage_pool)
         self.conn.connect("pool-stopped", self.refresh_storage_pool)
 
-        # XXX not technically correct once we enable remote management
-        if (os.getuid() != 0 and not self.conn.is_remote()) \
-           or self.conn.get_state() is self.conn.STATE_DISCONNECTED:
-            self.window.get_widget("net-add").set_sensitive(False)
-
-
         self.window.signal_autoconnect({
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
