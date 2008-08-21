@@ -38,7 +38,10 @@ from virtManager.network import vmmNetwork
 from virtManager.netdev import vmmNetDevice
 from virtManager.storagepool import vmmStoragePool
 
-LIBVIRT_POLICY_FILE = "/usr/share/PolicyKit/policy/libvirtd.policy"
+LIBVIRT_POLICY_FILES = [
+    "/usr/share/PolicyKit/policy/libvirtd.policy",
+    "/usr/share/PolicyKit/policy/org.libvirt.unix.policy"
+]
 
 def get_local_hostname():
     try:
@@ -137,7 +140,12 @@ class vmmConnection(gobject.GObject):
 
         self.readOnly = readOnly
         if not self.is_remote() and os.getuid() != 0 and self.uri != "qemu:///session":
-            if not os.path.exists(LIBVIRT_POLICY_FILE):
+            hasPolkit = False
+            for f in LIBVIRT_POLICY_FILES:
+                if os.path.exists(f):
+                    hasPolkit = True
+
+            if not hasPolkit:
                 self.readOnly = True
 
         self.state = self.STATE_DISCONNECTED
@@ -460,6 +468,7 @@ class vmmConnection(gobject.GObject):
         try:
             flags = 0
             if self.readOnly:
+                logging.info("Caller requested read only connection")
                 flags = libvirt.VIR_CONNECT_RO
 
             self.vmm = libvirt.openAuth(self.uri,
