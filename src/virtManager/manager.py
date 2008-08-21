@@ -681,8 +681,10 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("vm-open").set_sensitive(False)
             if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
                 self.window.get_widget("vm-delete").set_sensitive(True)
+                self.window.get_widget("menu_host_details").set_sensitive(False)
             else:
                 self.window.get_widget("vm-delete").set_sensitive(False)
+                self.window.get_widget("menu_host_details").set_sensitive(True)
             if conn.get_state() == vmmConnection.STATE_ACTIVE:
                 self.window.get_widget("vm-new").set_sensitive(True)
                 self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
@@ -691,7 +693,6 @@ class vmmManager(gobject.GObject):
                 self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
-            self.window.get_widget("menu_host_details").set_sensitive(True)
 
     def popup_vm_menu(self, widget, event):
         tuple = widget.get_path_at_pos(int(event.x), int(event.y))
