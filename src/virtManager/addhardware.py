@@ -535,6 +535,10 @@ class vmmAddHardware(gobject.GObject):
                                      "reboot.")):
                 return
 
+        if self.vm.is_active() and not attach_err:
+            # Attach device should alter xml for us
+            return
+
         try:
             self.vm.add_device(xml)
         except Exception, e:

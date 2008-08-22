@@ -1684,6 +1684,9 @@ class vmmDetails(gobject.GObject):
                                      "reboot.")):
                 return
 
+        if self.vm.is_active() and not detach_err:
+            return
+
         try:
             self.vm.remove_device(xml)
         except Exception, e:
