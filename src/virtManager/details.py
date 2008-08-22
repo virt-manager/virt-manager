@@ -615,7 +615,7 @@ class vmmDetails(gobject.GObject):
         else:
             self.window.get_widget("details-menu-destroy").set_sensitive(True)
 
-        if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+        if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ] and not self.vm.is_read_only():
             self.window.get_widget("control-run").set_sensitive(True)
             self.window.get_widget("details-menu-run").set_sensitive(True)
             self.window.get_widget("config-vcpus").set_sensitive(True)
