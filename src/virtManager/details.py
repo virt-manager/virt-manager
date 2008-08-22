@@ -1056,7 +1056,7 @@ class vmmDetails(gobject.GObject):
             os.dup(fds[1].fileno())
             os.dup(fds[1].fileno())
             if not server.count(":"):
-                sshport = 22
+                sshport = "22"
             else:
                 (server, sshport) = server.split(":")
             argv = ["ssh", "ssh", "-p", sshport]
