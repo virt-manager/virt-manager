@@ -220,19 +220,24 @@ class vmmCreate(gobject.GObject):
         # display a message telling the user why it is not working
         has_pv = False
         has_fv = False
+        use_pv = False
 
         for guest in self.caps.guests:
             if guest.os_type in ["xen", "linux"]:
                 has_pv = True
+                for d in guest.domains:
+                    if d.hypervisor_type in ["xen", "linux"]:
+                        use_pv = True
             elif guest.os_type == "hvm":
                 has_fv = True
 
         self.window.get_widget("virt-method-pv").set_sensitive(has_pv)
         self.window.get_widget("virt-method-fv").set_sensitive(has_fv)
 
-        # prioritize pv if the option is available?
+        # prioritize xen pv, but not xenner pv
         self.window.get_widget("virt-method-fv").set_active(has_fv)
-        self.window.get_widget("virt-method-pv").set_active(has_pv)
+        self.window.get_widget("virt-method-pv").set_active(not has_fv or
+                                                            has_pv and use_pv)
         self.change_virt_method() # repopulate arch and hypervisor lists
 
         if has_fv:
