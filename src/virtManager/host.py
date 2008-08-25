@@ -340,7 +340,7 @@ class vmmHost(gobject.GObject):
         if pool is None:
             return
 
-        result = self.err.yes_no(_("This will permanently delete the volume "
+        result = self.err.yes_no(_("This will permanently delete the pool "
                                    "'%s,' are you sure?") % pool.get_name())
         if not result:
             return
