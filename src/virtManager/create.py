@@ -26,7 +26,6 @@ import pango
 import libvirt
 import virtinst
 import os, sys
-import statvfs
 import re
 import subprocess
 import urlgrabber.progress as progress
@@ -926,28 +925,6 @@ class vmmCreate(gobject.GObject):
                 return self.err.val_err(_("Storage Address Required"), \
                                         _("You must specify a partition or a file for storage for the guest install"))
 
-            if not self.window.get_widget("storage-partition").get_active():
-                disk = self.get_config_disk_image()
-                size = self.get_config_disk_size()
-                if not os.path.exists(disk):
-                    dir = os.path.dirname(os.path.abspath(disk))
-                    if not os.path.exists(dir):
-                        return self.err.val_err(_("Storage Path Does not exist"),
-                                                _("The directory %s containing the disk image does not exist") % dir)
-                    else:
-                        vfs = os.statvfs(dir)
-                        avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
-                        need = size * 1024 * 1024
-                        if need > avail:
-                            if self.is_sparse_file():
-                                res = self.err.yes_no(_("Not Enough Free Space"),
-                                                      _("The filesystem will not have enough free space to fully allocate the sparse file when the guest is running. Use this path anyway?"))
-                                if not res:
-                                    return False
-                            else:
-                                return self.err.val_err(_("Not Enough Free Space"),
-                                                        _("There is not enough free space to create the disk"))
-
             # Attempt to set disk
             filesize = None
             if self.get_config_disk_size() != None:
@@ -976,6 +953,12 @@ class vmmCreate(gobject.GObject):
                     self.non_sparse = False
             except ValueError, e:
                 return self.err.val_err(_("Invalid Storage Address"), str(e))
+
+            ret = self._disk.is_size_conflict()
+            if not ret[0] and ret[1]:
+                res = self.err.yes_no(_("Not Enough Free Space"), ret[1])
+                if not res:
+                    return False
 
             if self._disk.is_conflict_disk(self.connection.vmm) is True:
                res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % disk), _("Do you really want to use the disk ?"))

@@ -33,7 +33,6 @@ import tempfile
 import logging
 import dbus
 import traceback
-import statvfs
 
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
@@ -700,27 +699,6 @@ class vmmAddHardware(gobject.GObject):
             else:
                 type = virtinst.VirtualDisk.TYPE_FILE
 
-            if not self.window.get_widget("storage-partition").get_active():
-                size = self.get_config_disk_size()
-                if not os.path.exists(path):
-                    dir = os.path.dirname(os.path.abspath(path))
-                    if not os.path.exists(dir):
-                        self.err.val_err(_("Storage Path Does not exist"),
-                                         _("The directory %s containing the disk image does not exist") % dir)
-                        return False
-                    else:
-                        vfs = os.statvfs(dir)
-                        avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
-                        need = size * 1024 * 1024
-                        if need > avail:
-                            if self.is_sparse_file():
-                                if not self.err.yes_no(_("Not Enough Free Space"),
-                                                       _("The filesystem will not have enough free space to fully allocate the sparse file when the guest is running. Use this path anyway?")):
-                                    return False
-                            else:
-                                return self.err.val_err(_("Not Enough Free Space"),
-                                                        _("There is not enough free space to create the disk"))
-
             # Build disk object
             filesize = self.get_config_disk_size()
             if self.get_config_disk_size() != None:
@@ -728,8 +706,8 @@ class vmmAddHardware(gobject.GObject):
             readonly = False
             if device == virtinst.VirtualDisk.DEVICE_CDROM:
                 readonly=True
-                
-            try:    
+
+            try:
                 self._dev = virtinst.VirtualDisk(self.get_config_disk_image(),
                                                   filesize,
                                                   type = type,
@@ -742,11 +720,18 @@ class vmmAddHardware(gobject.GObject):
                     self._dev.driver_name = virtinst.VirtualDisk.DRIVER_TAP
             except ValueError, e:
                 return self.err.val_err(_("Invalid Storage Parameters"), str(e))
- 
+
+            ret = self._dev.is_size_conflict()
+            if not ret[0] and ret[1]:
+                res = self.err.yes_no(_("Not Enough Free Space"), ret[1])
+                if not res:
+                    return False
+
             if self._dev.is_conflict_disk(self.vm.get_connection().vmm) is True:
                 res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % self._dev), \
                                       _("Do you really want to use the disk ?"))
                 return res
+
         elif page_num == PAGE_NETWORK:
             net = self.get_config_network()
             if self.window.get_widget("net-type-network").get_active():
