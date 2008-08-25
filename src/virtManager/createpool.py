@@ -113,6 +113,7 @@ class vmmCreatePool(gobject.GObject):
         self.window.get_widget("pool-source-path").set_text("")
         self.window.get_widget("pool-hostname").set_text("")
         self.window.get_widget("pool-format").set_active(-1)
+        self.window.get_widget("pool-build").set_sensitive(True)
         self.window.get_widget("pool-build").set_active(False)
 
 
@@ -195,6 +196,25 @@ class vmmCreatePool(gobject.GObject):
             return model.get_value(format_combo.get_active_iter(), 0)
         return None
 
+    def get_build_default(self):
+        """ Return (default value, whether build option can be changed)"""
+        if not self._pool:
+            return (False, False)
+        if self._pool.type in [Storage.StoragePool.TYPE_DIR,
+                               Storage.StoragePool.TYPE_FS,
+                               Storage.StoragePool.TYPE_NETFS ]:
+            # Building for these simply entails creating a directory
+            return (True, False)
+        elif self._pool.type in [Storage.StoragePool.TYPE_LOGICAL]:
+            # Build not yet implemented in virtinst
+            return (False, False)
+        elif self._pool.type in [Storage.StoragePool.TYPE_DISK]:
+            # This is a dangerous operation, anything (False, True)
+            # should be assumed to be one.
+            return (False, True)
+        else:
+            return (False, False)
+
 
     def browse_source_path(self, ignore1=None):
         source = self._browse_file(_("Choose source path"),
@@ -265,6 +285,7 @@ class vmmCreatePool(gobject.GObject):
 
             logging.debug("Starting backround pool creation.")
             build = self.window.get_widget("pool-build").get_active()
+            print "build = %s" % build
             poolobj = self._pool.install(create=True, meter=meter, build=build)
             logging.debug("Pool creating succeeded.")
         except Exception, e:
@@ -284,6 +305,9 @@ class vmmCreatePool(gobject.GObject):
             self.show_options_by_pool()
             self.window.get_widget("pool-target-path").set_text(self._pool.target_path)
             self.window.get_widget("pool-back").set_sensitive(True)
+            buildret = self.get_build_default()
+            self.window.get_widget("pool-build").set_sensitive(buildret[1])
+            self.window.get_widget("pool-build").set_active(buildret[0])
             self.window.get_widget("pool-finish").show()
             self.window.get_widget("pool-forward").hide()
 
@@ -317,6 +341,13 @@ class vmmCreatePool(gobject.GObject):
                     self._pool.format = format
             except ValueError, e:
                 return self.err.val_err(_("Pool Parameter Error"), str(e))
+
+            buildval = self.window.get_widget("pool-build").get_active()
+            buildsen = self.window.get_widget("pool-build").get_property("sensitive")
+            if buildsen and buildval:
+                return self.err.yes_no(_("Building a pool of this type will "
+                                         "format the source device. Are you "
+                                         "sure you want to 'build' this pool?"))
             return True
 
 
