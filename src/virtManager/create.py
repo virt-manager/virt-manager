@@ -571,7 +571,7 @@ class vmmCreate(gobject.GObject):
         # UUID, append disk and nic
         try:
             guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
-        except ValueError, E:
+        except ValueError, e:
             return self.err.val_err(_("UUID Error"), str(e))
 
         # HACK: If usermode, and no nic is setup, use usermode networking
