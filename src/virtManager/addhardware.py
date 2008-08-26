@@ -365,6 +365,7 @@ class vmmAddHardware(gobject.GObject):
             target = self.window.get_widget("target-device")
             if target.get_active() == -1:
                 self.populate_target_device_model(target.get_model())
+                target.set_active(0)
         elif page_number == PAGE_NETWORK:
             pass
         elif page_number == PAGE_SUMMARY:
