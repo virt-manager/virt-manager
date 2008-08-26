@@ -548,20 +548,7 @@ class vmmManager(gobject.GObject):
 
     def conn_state_changed(self, conn):
         self.conn_refresh_resources(conn)
-
-        thisconn = self.current_connection()
-        if thisconn == conn:
-            if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
-                self.window.get_widget("vm-delete").set_sensitive(True)
-            else:
-                self.window.get_widget("vm-delete").set_sensitive(False)
-            if conn.get_state() == vmmConnection.STATE_ACTIVE:
-                self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
-                self.window.get_widget("vm-new").set_sensitive(True)
-            else:
-                self.window.get_widget("vm-new").set_sensitive(False)
-                self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
-
+        self.vm_selected(self.window.get_widget("vm-list").get_selection())
 
     def conn_refresh_resources(self, conn):
         vmlist = self.window.get_widget("vm-list")
