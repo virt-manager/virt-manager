@@ -253,7 +253,6 @@ class vmmHost(gobject.GObject):
                 self.window.get_widget("net-details").set_sensitive(True)
                 net = self.conn.get_net(uuid)
                 self.window.get_widget("net-name").set_text(net.get_name())
-                self.window.get_widget("net-uuid").set_text(net.get_uuid())
 
                 if net.is_active():
                     self.window.get_widget("net-device").set_text(net.get_bridge_device())
