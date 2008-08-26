@@ -213,27 +213,49 @@ class vmmHost(gobject.GObject):
 
     def delete_network(self, src):
         net = self.current_network()
-        if net is not None:
+        if net is None:
+            return
+
+        result = self.err.yes_no(_("This will permanently delete the network "
+                                   "'%s,' are you sure?") % net.get_name())
+        if not result:
+            return
+        try:
             net.delete()
+        except Exception, e:
+            self.err.show_err(_("Error deleting network: %s") % str(e),
+                              "".join(traceback.format_exc()))
 
     def start_network(self, src):
         net = self.current_network()
-        if net is not None:
+        if net is None:
+            return
+
+        try:
             net.start()
+        except Exception, e:
+            self.err.show_err(_("Error starting network: %s") % str(e),
+                              "".join(traceback.format_exc()))
 
     def stop_network(self, src):
         net = self.current_network()
-        if net is not None:
-            net.stop()
-
-    def add_network(self, src):
-        if self.conn.is_remote():
-            self.err.val_err(_("Creating new networks on remote connections is not yet supported"))
+        if net is None:
             return
 
-        if self.addnet is None:
-            self.addnet = vmmCreateNetwork(self.config, self.conn)
-        self.addnet.show()
+        try:
+            net.stop()
+        except Exception, e:
+            self.err.show_err(_("Error stopping network: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+    def add_network(self, src):
+        try:
+            if self.addnet is None:
+                self.addnet = vmmCreateNetwork(self.config, self.conn)
+            self.addnet.show()
+        except Exception, e:
+            self.err.show_err(_("Error launching network wizard: %s") % str(e),
+                              "".join(traceback.format_exc()))
 
     def net_apply(self, src):
         net = self.current_network()
@@ -413,9 +435,13 @@ class vmmHost(gobject.GObject):
         self.populate_storage_volumes()
 
     def add_pool(self, src):
-        if self.addpool is None:
-            self.addpool = vmmCreatePool(self.config, self.conn)
-        self.addpool.show()
+        try:
+            if self.addpool is None:
+                self.addpool = vmmCreatePool(self.config, self.conn)
+            self.addpool.show()
+        except Exception, e:
+            self.err.show_err(_("Error launching pool wizard: %s") % str(e),
+                              "".join(traceback.format_exc()))
 
     def add_vol(self, src):
         pool = self.current_pool()
