@@ -539,11 +539,17 @@ class vmmHost(gobject.GObject):
 
     def refresh_storage_pool(self, src, uri, uuid):
         sel = self.window.get_widget("pool-list").get_selection()
+        model = self.window.get_widget("pool-list").get_model()
         active = sel.get_selected()
         if active[1] != None:
             curruuid = active[0].get_value(active[1], 0)
-            if curruuid == uuid:
-                self.pool_selected(sel)
+            if curruuid != uuid:
+                return
+        self.pool_selected(sel)
+        for row in model:
+            if row[0] == curruuid:
+                row[2] = self.get_pool_size_percent(uuid)
+                break
 
     def reset_pool_state(self):
         self.window.get_widget("pool-details").set_sensitive(False)
@@ -577,16 +583,21 @@ class vmmHost(gobject.GObject):
     def repopulate_storage_pools(self, src, uri, uuid):
         self.populate_storage_pools(self.window.get_widget("pool-list").get_model())
 
+    def get_pool_size_percent(self, uuid):
+        pool = self.conn.get_pool(uuid)
+        cap = pool.get_capacity()
+        all = pool.get_allocation()
+        if not cap or all is None:
+            per = 0
+        else:
+            per = int(((float(all) / float(cap)) * 100))
+        return per
+
     def populate_storage_pools(self, model):
         model.clear()
         for uuid in self.conn.list_pool_uuids():
+            per = self.get_pool_size_percent(uuid)
             pool = self.conn.get_pool(uuid)
-            cap = pool.get_capacity()
-            all = pool.get_allocation()
-            if not cap or all is None:
-                per = 0
-            else:
-                per = int(((float(all) / float(cap)) * 100))
             model.append([uuid, pool.get_name(), per])
 
     def populate_storage_volumes(self):
