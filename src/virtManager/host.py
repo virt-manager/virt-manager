@@ -152,6 +152,8 @@ class vmmHost(gobject.GObject):
             "on_net_delete_clicked": self.delete_network,
             "on_net_stop_clicked": self.stop_network,
             "on_net_start_clicked": self.start_network,
+            "on_net_autostart_toggled": self.net_autostart_changed,
+            "on_net_apply_clicked": self.net_apply,
             "on_pool_add_clicked" : self.add_pool,
             "on_vol_add_clicked" : self.add_vol,
             "on_pool_stop_clicked": self.stop_pool,
@@ -233,6 +235,26 @@ class vmmHost(gobject.GObject):
             self.addnet = vmmCreateNetwork(self.config, self.conn)
         self.addnet.show()
 
+    def net_apply(self, src):
+        net = self.current_network()
+        if net is None:
+            return
+
+        try:
+            net.set_autostart(self.window.get_widget("net-autostart").get_active())
+        except Exception, e:
+            self.err.show_err(_("Error setting net autostart: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return
+        self.window.get_widget("net-apply").set_sensitive(False)
+
+    def net_autostart_changed(self, src):
+        auto = self.window.get_widget("net-autostart").get_active()
+        self.window.get_widget("net-autostart").set_label(auto and \
+                                                          _("On Boot") or \
+                                                          _("Never"))
+        self.window.get_widget("net-apply").set_sensitive(True)
+
     def current_network(self):
         sel = self.window.get_widget("net-list").get_selection()
         active = sel.get_selected()
@@ -277,12 +299,11 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("net-delete").set_sensitive(not active)
 
         autostart = net.get_autostart()
+        self.window.get_widget("net-autostart").set_active(autostart)
         if autostart:
-            self.window.get_widget("net-autostart").set_text(_("On boot"))
-            self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
+            self.window.get_widget("net-autostart").set_label(_("On Boot"))
         else:
-            self.window.get_widget("net-autostart").set_text(_("Never"))
-            self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
+            self.window.get_widget("net-autostart").set_label(_("Never"))
 
         network = net.get_ipv4_network()
         self.window.get_widget("net-ip4-network").set_text(str(network))
@@ -302,6 +323,8 @@ class vmmHost(gobject.GObject):
             self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
             self.window.get_widget("net-ip4-forwarding").set_text(_("Isolated virtual network"))
 
+        self.window.get_widget("net-apply").set_sensitive(False)
+
     def reset_net_state(self):
         self.window.get_widget("net-details").set_sensitive(False)
         self.window.get_widget("net-name").set_text("")
@@ -312,13 +335,14 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("net-start").set_sensitive(False)
         self.window.get_widget("net-stop").set_sensitive(False)
         self.window.get_widget("net-delete").set_sensitive(False)
-        self.window.get_widget("net-autostart").set_text(_("Never"))
-        self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
+        self.window.get_widget("net-autostart").set_label(_("Never"))
+        self.window.get_widget("net-autostart").set_active(False)
         self.window.get_widget("net-ip4-network").set_text("")
         self.window.get_widget("net-ip4-dhcp-start").set_text("")
         self.window.get_widget("net-ip4-dhcp-end").set_text("")
         self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
         self.window.get_widget("net-ip4-forwarding").set_text(_("Isolated virtual network"))
+        self.window.get_widget("net-apply").set_sensitive(False)
 
     def repopulate_networks(self, src, uri, uuid):
         self.populate_networks(self.window.get_widget("net-list").get_model())
@@ -474,7 +498,7 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("pool-location").set_text(pool.get_target_path())
         self.window.get_widget("pool-state-icon").set_from_pixbuf((active and self.PIXBUF_STATE_RUNNING) or self.PIXBUF_STATE_SHUTOFF)
         self.window.get_widget("pool-state").set_text((active and _("Active")) or _("Inactive"))
-        self.window.get_widget("pool-autostart").set_label((auto and _("On boot")) or _("Never"))
+        self.window.get_widget("pool-autostart").set_label((auto and _("On Boot")) or _("Never"))
         self.window.get_widget("pool-autostart").set_active(auto)
 
         self.window.get_widget("vol-list").set_sensitive(active)
