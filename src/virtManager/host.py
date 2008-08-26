@@ -86,9 +86,8 @@ class vmmHost(gobject.GObject):
         netCol.pack_start(net_img, False)
         netCol.add_attribute(net_txt, 'text', 1)
         netCol.add_attribute(net_img, 'stock-id', 2)
-
         self.window.get_widget("net-list").append_column(netCol)
-        self.window.get_widget("net-details").set_sensitive(False)
+        netListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
         poolCol = gtk.TreeViewColumn("Pools")
         pool_txt = gtk.CellRendererText()
@@ -98,24 +97,30 @@ class vmmHost(gobject.GObject):
         poolCol.add_attribute(pool_txt, 'text', 1)
         poolCol.add_attribute(pool_prg, 'value', 2)
         self.window.get_widget("pool-list").append_column(poolCol)
+        poolListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
         volCol = gtk.TreeViewColumn("Volumes")
         vol_txt1 = gtk.CellRendererText()
         volCol.pack_start(vol_txt1, True)
         volCol.add_attribute(vol_txt1, 'text', 1)
+        volCol.set_sort_column_id(1)
+        self.window.get_widget("net-details").set_sensitive(False)
         self.window.get_widget("vol-list").append_column(volCol)
 
         volSizeCol = gtk.TreeViewColumn("Size")
         vol_txt2 = gtk.CellRendererText()
         volSizeCol.pack_start(vol_txt2, False)
         volSizeCol.add_attribute(vol_txt2, 'text', 2)
+        volSizeCol.set_sort_column_id(2)
         self.window.get_widget("vol-list").append_column(volSizeCol)
 
         volFormatCol = gtk.TreeViewColumn("Format")
         vol_txt3 = gtk.CellRendererText()
         volFormatCol.pack_start(vol_txt3, False)
         volFormatCol.add_attribute(vol_txt3, 'text', 3)
+        volFormatCol.set_sort_column_id(3)
         self.window.get_widget("vol-list").append_column(volFormatCol)
+        volListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
         self.cpu_usage_graph = sparkline.Sparkline()
         self.cpu_usage_graph.show()
@@ -161,6 +166,7 @@ class vmmHost(gobject.GObject):
         self.conn.connect("resources-sampled", self.refresh_resources)
         self.refresh_resources()
         self.reset_pool_state()
+        self.reset_net_state()
 
     def show(self):
         # Update autostart value
@@ -244,60 +250,75 @@ class vmmHost(gobject.GObject):
                 self.net_selected(sel)
 
     def net_selected(self, src):
-        active = src.get_selected()
-        if active[1] != None:
-            uuid = active[0].get_value(active[1], 0)
-            if uuid is None:
-                self.window.get_widget("net-details").set_sensitive(False)
-            else:
-                self.window.get_widget("net-details").set_sensitive(True)
-                net = self.conn.get_net(uuid)
-                self.window.get_widget("net-name").set_text(net.get_name())
+        selected = src.get_selected()
+        if selected[1] == None or \
+           selected[0].get_value(selected[1], 0) == None:
+            self.reset_net_state()
+            return
+        net = self.conn.get_net(selected[0].get_value(selected[1], 0))
+        active = net.is_active()
 
-                if net.is_active():
-                    self.window.get_widget("net-device").set_text(net.get_bridge_device())
-                    self.window.get_widget("net-device").set_sensitive(True)
-                    self.window.get_widget("net-state").set_text(_("Active"))
-                    self.window.get_widget("net-state-icon").set_from_pixbuf(self.PIXBUF_STATE_RUNNING)
-                    self.window.get_widget("net-start").set_sensitive(False)
-                    self.window.get_widget("net-stop").set_sensitive(True)
-                    self.window.get_widget("net-delete").set_sensitive(False)
-                else:
-                    self.window.get_widget("net-device").set_text("")
-                    self.window.get_widget("net-device").set_sensitive(False)
-                    self.window.get_widget("net-state").set_text(_("Inactive"))
-                    self.window.get_widget("net-state-icon").set_from_pixbuf(self.PIXBUF_STATE_SHUTOFF)
-                    self.window.get_widget("net-start").set_sensitive(True)
-                    self.window.get_widget("net-stop").set_sensitive(False)
-                    self.window.get_widget("net-delete").set_sensitive(True)
+        self.window.get_widget("net-details").set_sensitive(True)
+        self.window.get_widget("net-name").set_text(net.get_name())
 
-                autostart = net.get_autostart()
-                if autostart:
-                    self.window.get_widget("net-autostart").set_text(_("On boot"))
-                    self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
-                else:
-                    self.window.get_widget("net-autostart").set_text(_("Never"))
-                    self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
-
-                network = net.get_ipv4_network()
-                self.window.get_widget("net-ip4-network").set_text(str(network))
-
-                dhcp = net.get_ipv4_dhcp_range()
-                self.window.get_widget("net-ip4-dhcp-start").set_text(str(dhcp[0]))
-                self.window.get_widget("net-ip4-dhcp-end").set_text(str(dhcp[1]))
-
-                (forward, forwardDev) = net.get_ipv4_forward()
-                if forward:
-                    self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_MENU)
-                    if forwardDev != None and forwardDev != "":
-                        self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to physical device %s") % (forwardDev))
-                    else:
-                        self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to any physical device"))
-                else:
-                    self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
-                    self.window.get_widget("net-ip4-forwarding").set_text(_("Isolated virtual network"))
+        if active:
+            self.window.get_widget("net-device").set_text(net.get_bridge_device())
+            self.window.get_widget("net-device").set_sensitive(True)
+            self.window.get_widget("net-state").set_text(_("Active"))
+            self.window.get_widget("net-state-icon").set_from_pixbuf(self.PIXBUF_STATE_RUNNING)
         else:
-            self.window.get_widget("net-details").set_sensitive(False)
+            self.window.get_widget("net-device").set_text("")
+            self.window.get_widget("net-device").set_sensitive(False)
+            self.window.get_widget("net-state").set_text(_("Inactive"))
+            self.window.get_widget("net-state-icon").set_from_pixbuf(self.PIXBUF_STATE_SHUTOFF)
+
+        self.window.get_widget("net-start").set_sensitive(not active)
+        self.window.get_widget("net-stop").set_sensitive(active)
+        self.window.get_widget("net-delete").set_sensitive(not active)
+
+        autostart = net.get_autostart()
+        if autostart:
+            self.window.get_widget("net-autostart").set_text(_("On boot"))
+            self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_YES, gtk.ICON_SIZE_MENU)
+        else:
+            self.window.get_widget("net-autostart").set_text(_("Never"))
+            self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
+
+        network = net.get_ipv4_network()
+        self.window.get_widget("net-ip4-network").set_text(str(network))
+
+        dhcp = net.get_ipv4_dhcp_range()
+        self.window.get_widget("net-ip4-dhcp-start").set_text(str(dhcp[0]))
+        self.window.get_widget("net-ip4-dhcp-end").set_text(str(dhcp[1]))
+
+        (forward, forwardDev) = net.get_ipv4_forward()
+        if forward:
+            self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_MENU)
+            if forwardDev != None and forwardDev != "":
+                self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to physical device %s") % (forwardDev))
+            else:
+                self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to any physical device"))
+        else:
+            self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
+            self.window.get_widget("net-ip4-forwarding").set_text(_("Isolated virtual network"))
+
+    def reset_net_state(self):
+        self.window.get_widget("net-details").set_sensitive(False)
+        self.window.get_widget("net-name").set_text("")
+        self.window.get_widget("net-device").set_text("")
+        self.window.get_widget("net-device").set_sensitive(False)
+        self.window.get_widget("net-state").set_text(_("Inactive"))
+        self.window.get_widget("net-state-icon").set_from_pixbuf(self.PIXBUF_STATE_SHUTOFF)
+        self.window.get_widget("net-start").set_sensitive(False)
+        self.window.get_widget("net-stop").set_sensitive(False)
+        self.window.get_widget("net-delete").set_sensitive(False)
+        self.window.get_widget("net-autostart").set_text(_("Never"))
+        self.window.get_widget("net-autostart-icon").set_from_stock(gtk.STOCK_NO, gtk.ICON_SIZE_MENU)
+        self.window.get_widget("net-ip4-network").set_text("")
+        self.window.get_widget("net-ip4-dhcp-start").set_text("")
+        self.window.get_widget("net-ip4-dhcp-end").set_text("")
+        self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
+        self.window.get_widget("net-ip4-forwarding").set_text(_("Isolated virtual network"))
 
     def repopulate_networks(self, src, uri, uuid):
         self.populate_networks(self.window.get_widget("net-list").get_model())
@@ -477,7 +498,7 @@ class vmmHost(gobject.GObject):
     def reset_pool_state(self):
         self.window.get_widget("pool-details").set_sensitive(False)
         self.window.get_widget("pool-name").set_text("")
-        self.window.get_widget("pool-sizes").set_text("")
+        self.window.get_widget("pool-sizes").set_markup("""<span size="large"> </span>""")
         self.window.get_widget("pool-type").set_text("")
         self.window.get_widget("pool-location").set_text("")
         self.window.get_widget("pool-state-icon").set_from_pixbuf(self.PIXBUF_STATE_SHUTOFF)
