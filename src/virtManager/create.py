@@ -476,6 +476,11 @@ class vmmCreate(gobject.GObject):
             return type.get_model().get_value(type.get_active_iter(), 1)
         return "N/A"
 
+    def get_config_sound(self):
+        if self.connection.is_remote():
+            return self.config.get_remote_sound()
+        return self.config.get_local_sound()
+
     def page_changed(self, notebook, page, page_number):
         # would you like some spaghetti with your salad, sir?
 
@@ -553,6 +558,7 @@ class vmmCreate(gobject.GObject):
                 self.window.get_widget("summary-mac-address").set_text(macaddr)
             else:
                 self.window.get_widget("summary-mac-address").set_text("-")
+            self.window.get_widget("summary-audio").set_text(str(self.get_config_sound()))
 
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
@@ -602,6 +608,14 @@ class vmmCreate(gobject.GObject):
                               "".join(traceback.format_exc()))
             return False
 
+        try:
+            if self.get_config_sound():
+                guest.sound_devs.append(virtinst.VirtualAudio(model="es1370"))
+        except Exception, e:
+            self.err.show_err(_("Error setting up sound device:") + str(e),
+                              "".join(traceback.format_exc()))
+            return False
+
         logging.debug("Creating a VM " + guest.name + \
                       "\n  Type: " + guest.type + \
                       "\n  UUID: " + guest.uuid + \
@@ -613,7 +627,8 @@ class vmmCreate(gobject.GObject):
                       "\n  # VCPUs: " + str(guest.vcpus) + \
                       "\n  Filesize: " + str(self._disk.size) + \
                       "\n  Disk image: " + str(self.get_config_disk_image()) +\
-                      "\n  Non-sparse file: " + str(self.non_sparse))
+                      "\n  Non-sparse file: " + str(self.non_sparse) + \
+                      "\n  Audio?: " + self.config_get_sound())
 
 
         #let's go

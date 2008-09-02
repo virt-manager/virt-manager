@@ -169,5 +169,30 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/new-vm/local-sound</key>
+      <applyto>/apps/::PACKAGE::/new-vm/local-sound</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>1</default>
+
+      <locale name="C">
+        <short>Install sound device for local VM</short>
+        <long>Whether to install a sound device for local VMs or not</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/new-vm/remote-sound</key>
+      <applyto>/apps/::PACKAGE::/new-vm/remote-sound</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>0</default>
+
+      <locale name="C">
+        <short>Install sound device for remote VM</short>
+        <long>Whether to install a sound device for remote VMs or not</long>
+      </locale>
+    </schema>
   </schemalist>
 </gconfschemafile>

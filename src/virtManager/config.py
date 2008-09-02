@@ -219,6 +219,17 @@ class vmmConfig:
     def set_console_grab_notify(self, state):
         self.conf.set_bool(self.conf_dir + "/console/grab-notify", state)
 
+    def get_local_sound(self):
+        return self.conf.get_bool(self.conf_dir + "/new-vm/local-sound")
+
+    def get_remote_sound(self):
+        return self.conf.get_bool(self.conf_dir + "/new-vm/remote-sound")
+
+    def set_local_sound(self, state):
+        self.conf.set_bool(self.conf_dir + "/new-vm/local-sound", state)
+
+    def set_remote_sound(self, state):
+        self.conf.set_bool(self.conf_dir + "/new-vm/remote-sound", state)
 
     def get_secret_name(self, vm):
         return "vm-console-" + vm.get_uuid()

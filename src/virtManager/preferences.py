@@ -41,6 +41,7 @@ class vmmPreferences(gobject.GObject):
         self.refresh_history_length()
         self.refresh_console_popup()
         self.refresh_console_keygrab()
+        self.refresh_sound_options()
 
         self.window.signal_autoconnect({
             "on_stats_update_interval_changed": self.change_update_interval,
@@ -50,6 +51,8 @@ class vmmPreferences(gobject.GObject):
             "on_close_clicked": self.close,
             "on_vmm_preferences_delete_event": self.close,
             "on_preferences_help_clicked": self.show_help,
+            "on_local_sound_toggled": self.change_local_sound,
+            "on_remote_sound_toggled": self.change_remote_sound,
             })
 
     def close(self,ignore1=None,ignore2=None):
@@ -73,6 +76,11 @@ class vmmPreferences(gobject.GObject):
     def refresh_console_keygrab(self,ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.window.get_widget("console-keygrab").set_active(self.config.get_console_keygrab())
 
+    def refresh_sound_options(self, ignore1=None, ignore2=None, ignore=None,
+                              ignore4=None):
+        self.window.get_widget("local-sound").set_active(self.config.get_local_sound())
+        self.window.get_widget("remote-sound").set_active(self.config.get_remote_sound())
+
     def change_update_interval(self, src):
         self.config.set_stats_update_interval(src.get_value_as_int())
 
@@ -84,6 +92,12 @@ class vmmPreferences(gobject.GObject):
 
     def change_console_keygrab(self, box):
         self.config.set_console_keygrab(box.get_active())
+
+    def change_local_sound(self, src):
+        self.config.set_local_sound(not self.config.get_local_sound())
+
+    def change_remote_sound(self, src):
+        self.config.set_remote_sound(not self.config.get_remote_sound())
 
     def show_help(self, src):
         # From the Preferences window, show the help document from the Preferences page
