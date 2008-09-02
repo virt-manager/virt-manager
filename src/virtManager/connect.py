@@ -23,6 +23,7 @@ import gtk.glade
 import os
 import virtinst
 import logging
+import dbus
 
 HV_XEN = 0
 HV_QEMU = 1
@@ -53,6 +54,9 @@ class vmmConnect(gobject.GObject):
             "on_vmm_open_connection_delete_event": self.cancel,
             })
 
+        self.browser = None
+        self.can_browse = False
+
         default = virtinst.util.default_connection()
         if default is None:
             self.window.get_widget("hypervisor").set_active(-1)
@@ -65,6 +69,29 @@ class vmmConnect(gobject.GObject):
         self.window.get_widget("connect").grab_default()
         self.window.get_widget("autoconnect").set_active(True)
 
+        connListModel = gtk.ListStore(str, str, str)
+        self.window.get_widget("conn-list").set_model(connListModel)
+
+        nameCol = gtk.TreeViewColumn(_("Name"))
+        name_txt = gtk.CellRendererText()
+        nameCol.pack_start(name_txt, True)
+        nameCol.add_attribute(name_txt, "text", 2)
+        nameCol.set_sort_column_id(2)
+        self.window.get_widget("conn-list").append_column(nameCol)
+        connListModel.set_sort_column_id(2, gtk.SORT_ASCENDING)
+
+        self.window.get_widget("conn-list").get_selection().connect("changed", self.conn_selected)
+
+        self.bus = dbus.SystemBus()
+        try:
+            self.server = dbus.Interface(self.bus.get_object("org.freedesktop.Avahi", "/"), "org.freedesktop.Avahi.Server")
+            self.can_browse = True
+        except Exception, e:
+            logging.debug("Couldn't contact avahi: %s" % str(e))
+            self.server = None
+            self.can_browse = False
+
+        self.reset_state()
 
 
     def cancel(self,ignore1=None,ignore2=None):
@@ -74,21 +101,112 @@ class vmmConnect(gobject.GObject):
 
     def close(self):
         self.window.get_widget("vmm-open-connection").hide()
+        self.stop_browse()
 
     def show(self):
         win = self.window.get_widget("vmm-open-connection")
         win.show_all()
         win.present()
+        self.reset_state()
+
+    def reset_state(self):
+        self.window.get_widget("hypervisor").set_active(0)
+        self.window.get_widget("autoconnect").set_sensitive(True)
+        self.window.get_widget("autoconnect").set_active(True)
+        self.window.get_widget("conn-list").set_sensitive(False)
+        self.window.get_widget("conn-list").get_model().clear()
+        self.window.get_widget("hostname").set_text("")
+        self.stop_browse()
 
     def update_widget_states(self, src):
         if src.get_active() > 0:
             self.window.get_widget("hostname").set_sensitive(True)
             self.window.get_widget("autoconnect").set_active(False)
-            self.window.get_widget("autoconnect").set_sensitive(False)
+            self.window.get_widget("autoconnect").set_sensitive(True)
+            if self.can_browse:
+                self.window.get_widget("conn-list").set_sensitive(True)
+                self.start_browse()
         else:
+            self.window.get_widget("conn-list").set_sensitive(False)
             self.window.get_widget("hostname").set_sensitive(False)
+            self.window.get_widget("hostname").set_text("")
             self.window.get_widget("autoconnect").set_sensitive(True)
             self.window.get_widget("autoconnect").set_active(True)
+            self.stop_browse()
+
+    def add_service(self, interface, protocol, name, type, domain, flags):
+        try:
+            # Async service resolving
+            res = self.server.ServiceResolverNew(interface, protocol, name,
+                                                 type, domain, -1, 0)
+            resint = dbus.Interface(self.bus.get_object("org.freedesktop.Avahi",
+                                                        res),
+                                    "org.freedesktop.Avahi.ServiceResolver")
+            resint.connect_to_signal("Found", self.add_conn_to_list)
+            # Synchronous service resolving
+            #self.server.ResolveService(interface, protocol, name, type,
+            #                           domain, -1, 0)
+        except Exception, e:
+            logging.exception(e)
+
+    def remove_service(self, interface, protocol, name, type, domain, flags):
+        try:
+            model = self.window.get_widget("conn-list").get_model()
+            name = str(name)
+            for row in model:
+                if row[0] == name:
+                    model.remove(row.iter)
+        except Exception, e:
+            logging.exception(e)
+
+    def add_conn_to_list(self, interface, protocol, name, type, domain,
+                         host, aprotocol, address, port, text, flags):
+        try:
+            model = self.window.get_widget("conn-list").get_model()
+            for row in model:
+                if row[2] == str(name):
+                    return
+            model.append([str(address), self.sanitize_hostname(str(host)),
+                          str(name)])
+        except Exception, e:
+            logging.exception(e)
+
+    def start_browse(self):
+        if self.browser or not self.can_browse:
+            return
+        # Call method to create new browser, and get back an object path for it.
+        interface = -1              # physical interface to use? -1 is unspec
+        protocol  = 0               # 0 = IPv4, 1 = IPv6, -1 = Unspecified
+        service   = '_libvirt._tcp' # Service name to poll for
+        flags     = 0               # Extra option flags
+        domain    = ""              # Domain to browse in. NULL uses default
+        bpath = self.server.ServiceBrowserNew(interface, protocol, service,
+                                              domain, flags)
+
+        # Create browser interface for the new object
+        self.browser = dbus.Interface(self.bus.get_object("org.freedesktop.Avahi",
+                                                          bpath),
+                                      "org.freedesktop.Avahi.ServiceBrowser")
+
+        self.browser.connect_to_signal("ItemNew", self.add_service)
+        self.browser.connect_to_signal("ItemRemove", self.remove_service)
+
+    def stop_browse(self):
+        if self.browser:
+            del(self.browser)
+            self.browser = None
+
+    def conn_selected(self, src):
+        active = src.get_selected()
+        if active[1] == None:
+            return
+        ip = active[0].get_value(active[1], 0)
+        host = active[0].get_value(active[1], 1)
+        host = self.sanitize_hostname(host)
+        entry = host
+        if not entry:
+            entry = ip
+        self.window.get_widget("hostname").set_text(entry)
 
     def open_connection(self, src):
         hv = self.window.get_widget("hypervisor").get_active()
@@ -124,5 +242,19 @@ class vmmConnect(gobject.GObject):
         logging.debug("Connection to open is %s" % uri)
         self.close()
         self.emit("completed", uri, readOnly, auto)
+
+    def sanitize_hostname(self, host):
+        if host.endswith(".local"):
+            host = host[:-6]
+        if host == "linux" or host == "localhost":
+            host = ""
+        if host.startswith("linux-"):
+            tmphost = host[6:]
+            try:
+                tmp = long(tmphost)
+                host = ""
+            except ValueError:
+                pass
+        return host
 
 gobject.type_register(vmmConnect)
