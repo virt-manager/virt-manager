@@ -628,7 +628,7 @@ class vmmCreate(gobject.GObject):
                       "\n  Filesize: " + str(self._disk.size) + \
                       "\n  Disk image: " + str(self.get_config_disk_image()) +\
                       "\n  Non-sparse file: " + str(self.non_sparse) + \
-                      "\n  Audio?: " + self.config_get_sound())
+                      "\n  Audio?: " + self.get_config_sound())
 
 
         #let's go
