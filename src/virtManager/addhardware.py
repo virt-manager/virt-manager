@@ -191,8 +191,9 @@ class vmmAddHardware(gobject.GObject):
         net_box.set_active(0)
 
         dev_box = self.window.get_widget("net-device")
-        if self.populate_device_model(dev_box.get_model()):
-            dev_box.set_active(0)
+        res = self.populate_device_model(dev_box.get_model())
+        if res[0]:
+            dev_box.set_active(res[1])
         else:
             dev_box.set_active(-1)
 
@@ -361,13 +362,30 @@ class vmmAddHardware(gobject.GObject):
         return macaddr
 
     def page_changed(self, notebook, page, page_number):
+        remote = self.vm.get_connection().is_remote()
         if page_number == PAGE_DISK:
+            self.change_storage_type()
             target = self.window.get_widget("target-device")
             if target.get_active() == -1:
                 self.populate_target_device_model(target.get_model())
                 target.set_active(0)
+
+            self.window.get_widget("storage-partition-address-browse").set_sensitive(not remote)
+            self.window.get_widget("storage-file-address-browse").set_sensitive(not remote)
+            self.window.get_widget("storage-partition-address").set_sensitive(not remote)
+            self.window.get_widget("storage-partition").set_sensitive(not remote)
+            if remote:
+                self.window.get_widget("storage-file-backed").set_active(True)
+
         elif page_number == PAGE_NETWORK:
-            pass
+            if remote:
+                self.window.get_widget("net-type-network").set_active(True)
+                self.window.get_widget("net-type-device").set_active(False)
+                self.window.get_widget("net-type-device").set_sensitive(False)
+                self.window.get_widget("net-device").set_active(-1)
+            else:
+                self.window.get_widget("net-type-device").set_sensitive(True)
+            self.change_network_type()
         elif page_number == PAGE_SUMMARY:
             hwpage = self.get_config_hardware_type()
             self.window.get_widget("summary-disk").hide()
@@ -550,7 +568,13 @@ class vmmAddHardware(gobject.GObject):
 
     def do_file_allocate(self, disk, asyncjob):
         meter = vmmCreateMeter(asyncjob)
+        newconn = None
         try:
+            # If creating disk via storage API, we need to thread
+            # off a new connection
+            if disk.vol_install:
+                newconn = libvirt.open(disk.conn.getURI())
+                disk.conn = newconn
             logging.debug("Starting background file allocate process")
             disk.setup(meter)
             logging.debug("Allocation completed")
@@ -561,6 +585,10 @@ class vmmAddHardware(gobject.GObject):
                                  % str(e)
             self.install_details = details
             logging.error(details)
+        finally:
+            if newconn:
+                newconn.close()
+
 
     def browse_storage_partition_address(self, src, ignore=None):
         part = self._browse_file(_("Locate Storage Partition"), "/dev")
@@ -604,7 +632,8 @@ class vmmAddHardware(gobject.GObject):
 
     def toggle_storage_size(self, ignore1=None, ignore2=None):
         file = self.get_config_disk_image()
-        if file != None and len(file) > 0 and not(os.path.exists(file)):
+        if file != None and len(file) > 0 and \
+           (self.vm.get_connection().is_remote() or not os.path.exists(file)):
             self.window.get_widget("storage-file-size").set_sensitive(True)
             self.window.get_widget("non-sparse").set_sensitive(True)
             size = self.get_config_disk_size()
@@ -710,12 +739,13 @@ class vmmAddHardware(gobject.GObject):
 
             try:
                 self._dev = virtinst.VirtualDisk(self.get_config_disk_image(),
-                                                  filesize,
-                                                  type = type,
-                                                  sparse = self.is_sparse_file(),
-                                                  readOnly=readonly,
-                                                  device=device,
-                                                  bus=bus)
+                                                 filesize,
+                                                 type = type,
+                                                 sparse=self.is_sparse_file(),
+                                                 readOnly=readonly,
+                                                 device=device,
+                                                 bus=bus,
+                                                 conn=self.vm.get_connection().vmm)
                 if self._dev.type == virtinst.VirtualDisk.TYPE_FILE and \
                    not self.vm.is_hvm() and virtinst.util.is_blktap_capable():
                     self._dev.driver_name = virtinst.VirtualDisk.DRIVER_TAP
@@ -806,14 +836,17 @@ class vmmAddHardware(gobject.GObject):
     def populate_device_model(self, model):
         model.clear()
         hasShared = False
+        brIndex = -1
         for name in self.vm.get_connection().list_net_device_paths():
             net = self.vm.get_connection().get_net_device(name)
             if net.is_shared():
                 hasShared = True
+                if brIndex < 0:
+                    brIndex = len(model)
                 model.append([net.get_bridge(), "%s (%s %s)" % (net.get_name(), _("Bridge"), net.get_bridge()), True])
             else:
                 model.append([net.get_bridge(), "%s (%s)" % (net.get_name(), _("Not bridged")), False])
-        return hasShared
+        return (hasShared, brIndex)
 
     def populate_target_device_model(self, model):
         model.clear()

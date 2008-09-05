@@ -116,8 +116,7 @@ class vmmDetails(gobject.GObject):
         self.engine = engine
 
         # Don't allowing changing network/disks for Dom0
-        # XXX also disable for remote connections for now
-        if self.vm.is_management_domain() or self.vm.get_connection().is_remote():
+        if self.vm.is_management_domain():
             self.window.get_widget("add-hardware-button").set_sensitive(False)
         else:
             self.window.get_widget("add-hardware-button").set_sensitive(True)
