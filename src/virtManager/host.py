@@ -543,7 +543,7 @@ class vmmHost(gobject.GObject):
         active = sel.get_selected()
         if active[1] != None:
             curruuid = active[0].get_value(active[1], 0)
-            if curruuid != uuid:
+            if curruuid and curruuid != uuid:
                 return
         self.pool_selected(sel)
         for row in model:
