@@ -213,6 +213,7 @@ class vmmDetails(gobject.GObject):
             pass
 
         self.window.get_widget("console-pages").set_show_tabs(False)
+        self.window.get_widget("details-menu-view-toolbar").set_active(self.config.get_details_show_toolbar())
 
         self.window.signal_autoconnect({
             "on_close_details_clicked": self.close,
@@ -421,7 +422,10 @@ class vmmDetails(gobject.GObject):
                 self.window.get_widget("details-toolbar").show()
 
     def toggle_toolbar(self, src):
-        if src.get_active() and not self.window.get_widget("details-menu-view-fullscreen").get_active():
+        active = src.get_active()
+        self.config.set_details_show_toolbar(active)
+        if active and not \
+           self.window.get_widget("details-menu-view-fullscreen").get_active():
             self.window.get_widget("details-toolbar").show()
         else:
             self.window.get_widget("details-toolbar").hide()

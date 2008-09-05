@@ -170,6 +170,19 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/::PACKAGE::/details/show-toolbar</key>
+      <applyto>/apps/::PACKAGE::/details/show-toolbar</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>1</default>
+
+      <locale name="C">
+        <short>Whether to show VM button toolbar in Details display</short>
+        <long>Whether to show toolbar containing Virtual Machine action buttons (such as Run, Pause, Shutdown) in the details display</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/::PACKAGE::/new-vm/local-sound</key>
       <applyto>/apps/::PACKAGE::/new-vm/local-sound</applyto>
       <owner>::PACKAGE::</owner>

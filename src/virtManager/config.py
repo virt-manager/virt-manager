@@ -219,6 +219,12 @@ class vmmConfig:
     def set_console_grab_notify(self, state):
         self.conf.set_bool(self.conf_dir + "/console/grab-notify", state)
 
+    def get_details_show_toolbar(self):
+        return self.conf.get_bool(self.conf_dir + "/details/show-toolbar")
+
+    def set_details_show_toolbar(self, state):
+        self.conf.set_bool(self.conf_dir + "/details/show-toolbar", state)
+
     def get_local_sound(self):
         return self.conf.get_bool(self.conf_dir + "/new-vm/local-sound")
 
