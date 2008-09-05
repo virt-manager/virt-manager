@@ -372,9 +372,11 @@ class vmmCreate(gobject.GObject):
 
     def get_config_installer(self, type, os_type):
         if self.get_config_install_method() == VM_INST_PXE:
-            return virtinst.PXEInstaller(type = type, os_type = os_type)
+            return virtinst.PXEInstaller(type=type, os_type=os_type,
+                                         conn=self._guest.conn)
         else:
-            return virtinst.DistroInstaller(type = type, os_type = os_type)
+            return virtinst.DistroInstaller(type=type, os_type=os_type,
+                                            conn=self._guest.conn)
 
     def get_config_kickstart_source(self):
         if self.get_config_install_method() == VM_INST_TREE:
@@ -493,23 +495,55 @@ class vmmCreate(gobject.GObject):
             pass
         elif page_number == PAGE_INST:
             if self.get_config_method() == VM_PARA_VIRT:
-                # Xen can't PXE or CDROM install :-(
+                # Xen PV can't PXE or CDROM install :-(
                 self.window.get_widget("method-local").set_sensitive(False)
                 self.window.get_widget("method-pxe").set_sensitive(False)
                 self.window.get_widget("method-tree").set_active(True)
             else:
                 self.window.get_widget("method-local").set_sensitive(True)
                 self.window.get_widget("method-pxe").set_sensitive(True)
+
+            if self.connection.is_remote():
+                self.window.get_widget("method-tree").set_sensitive(False)
+            else:
+                self.window.get_widget("method-tree").set_sensitive(True)
         elif page_number == PAGE_INST_TREE:
             url_widget = self.window.get_widget("pv-media-url")
             url_widget.grab_focus()
         elif page_number == PAGE_INST_LOCAL:
-            url_widget = self.window.get_widget("pv-media-url")
+            self.change_media_type()
+            url_widget = self.window.get_widget("fv-iso-location")
             url_widget.grab_focus()
+
+            if self.connection.is_remote():
+                self.window.get_widget("fv-iso-location-browse").set_sensitive(False)
+                self.window.get_widget("media-physical").set_sensitive(False)
+            else:
+                self.window.get_widget("fv-iso-location-browse").set_sensitive(True)
+                self.window.get_widget("media-physical").set_sensitive(True)
+
         elif page_number == PAGE_DISK:
             self.change_storage_type()
+            if self.connection.is_remote():
+                self.window.get_widget("storage-partition").set_sensitive(False)
+                self.window.get_widget("storage-partition-address").set_sensitive(False)
+                self.window.get_widget("storage-partition-address-browse").set_sensitive(False)
+                self.window.get_widget("storage-file-address-browse").set_sensitive(False)
+            else:
+                self.window.get_widget("storage-partition").set_sensitive(True)
+                self.window.get_widget("storage-partition-address").set_sensitive(True)
+                self.window.get_widget("storage-partition-address-browse").set_sensitive(True)
+                self.window.get_widget("storage-file-address-browse").set_sensitive(True)
+
         elif page_number == PAGE_NETWORK:
-            pass
+            if self.connection.is_remote():
+                self.window.get_widget("net-type-network").set_active(True)
+                self.window.get_widget("net-type-device").set_active(False)
+                self.window.get_widget("net-type-device").set_sensitive(False)
+                self.window.get_widget("net-device").set_active(-1)
+            else:
+                self.window.get_widget("net-type-device").set_sensitive(True)
+            self.change_network_type()
         elif page_number == PAGE_CPUMEM:
             pass
         elif page_number == PAGE_SUMMARY:
@@ -628,7 +662,7 @@ class vmmCreate(gobject.GObject):
                       "\n  Filesize: " + str(self._disk.size) + \
                       "\n  Disk image: " + str(self.get_config_disk_image()) +\
                       "\n  Non-sparse file: " + str(self.non_sparse) + \
-                      "\n  Audio?: " + self.get_config_sound())
+                      "\n  Audio?: " + str(self.get_config_sound()))
 
 
         #let's go
@@ -758,7 +792,8 @@ class vmmCreate(gobject.GObject):
 
     def toggle_storage_size(self, ignore1=None, ignore2=None):
         file = self.get_config_disk_image()
-        if file != None and len(file) > 0 and not(os.path.exists(file)):
+        if file != None and len(file) > 0 and \
+           (self.connection.is_remote() or not os.path.exists(file)):
             self.window.get_widget("storage-file-size").set_sensitive(True)
             self.window.get_widget("non-sparse").set_sensitive(True)
             size = self.get_config_disk_size()
@@ -804,12 +839,15 @@ class vmmCreate(gobject.GObject):
             if file is None or file == "":
                 dir = self.config.get_default_image_dir(self.connection)
                 file = os.path.join(dir, self.get_config_name() + ".img")
-                n = 1
-                while os.path.exists(file) and n < 100:
-                    file = os.path.join(dir, self.get_config_name() + "-" + str(n) + ".img")
-                    n = n + 1
-                if not os.path.exists(file):
-                    self.window.get_widget("storage-file-address").set_text(file)
+                if not self.connection.is_remote():
+                    n = 1
+                    while os.path.exists(file) and n < 100:
+                        file = os.path.join(dir, self.get_config_name() + \
+                                                 "-" + str(n) + ".img")
+                        n = n + 1
+                    if os.path.exists(file):
+                        file = ""
+                self.window.get_widget("storage-file-address").set_text(file)
             self.toggle_storage_size()
 
     def change_network_type(self, ignore=None):
@@ -901,14 +939,16 @@ class vmmCreate(gobject.GObject):
 
                 src = self.get_config_install_source()
                 try:
-                    self._guest.cdrom = src
+                    self._guest.installer.location = src
+                    self._guest.installer.cdrom = True
                 except ValueError, e:
                     return self.err.val_err(_("ISO Path Not Found"), str(e))
             else:
                 cdlist = self.window.get_widget("cd-path")
                 src = self.get_config_install_source()
                 try:
-                    self._guest.cdrom = src
+                    self._guest.installer.location = src
+                    self._guest.installer.cdrom = True
                 except ValueError, e:
                     return self.err.val_err(_("CD-ROM Path Error"), str(e))
         elif page_num == PAGE_INST_TREE:
@@ -959,7 +999,8 @@ class vmmCreate(gobject.GObject):
                                                   filesize,
                                                   sparse = self.is_sparse_file(),
                                                   device = virtinst.VirtualDisk.DEVICE_DISK,
-                                                  type = type)
+                                                  type = type,
+                                                  conn=self._guest.conn)
 
                 if self._disk.type == virtinst.VirtualDisk.TYPE_FILE and \
                    self.get_config_method() == VM_PARA_VIRT and \
@@ -980,7 +1021,7 @@ class vmmCreate(gobject.GObject):
                 if not res:
                     return False
 
-            if self._disk.is_conflict_disk(self.connection.vmm) is True:
+            if self._disk.is_conflict_disk(self._guest.conn) is True:
                res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % disk), _("Do you really want to use the disk ?"))
                return res
 
@@ -1023,7 +1064,7 @@ class vmmCreate(gobject.GObject):
             except ValueError, e:
                 return self.err.val_err(_("Network Parameter Error"), str(e))
 
-            conflict = self._net.is_conflict_net(self.connection.vmm)
+            conflict = self._net.is_conflict_net(self._guest.conn)
             if conflict[0]:
                 return self.err.val_err(_("Mac address collision"), conflict[1])
             elif conflict[1] is not None:
