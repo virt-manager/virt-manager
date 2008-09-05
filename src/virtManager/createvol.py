@@ -24,6 +24,8 @@ import gtk.glade
 import traceback
 import logging
 
+import libvirt
+
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
@@ -162,17 +164,18 @@ class vmmCreateVolume(gobject.GObject):
         self.close()
 
     def _async_vol_create(self, asyncjob):
-        vmmconn = None
+        newconn = None
         try:
             # Open a seperate connection to install on since this is async
             logging.debug("Threading off connection to create vol.")
-            vmmconn = vmmConnection(self.config, self.conn.get_uri(),
-                                    self.conn.is_read_only())
-            vmmconn.open()
-            vmmconn.connectThreadEvent.wait()
+            #newconn = vmmConnection(self.config, self.conn.get_uri(),
+            #                        self.conn.is_read_only())
+            #newconn.open()
+            #newconn.connectThreadEvent.wait()
+            newconn = libvirt.open(self.conn.get_uri())
 
             # Lookup different pool obj
-            newpool = vmmconn.vmm.storagePoolLookupByName(self.parent_pool.get_name())
+            newpool = newconn.storagePoolLookupByName(self.parent_pool.get_name())
             self.vol.pool = newpool
 
             meter = vmmCreateMeter(asyncjob)
@@ -183,8 +186,8 @@ class vmmCreateVolume(gobject.GObject):
             self.error_details = "".join(traceback.format_exc())
             logging.error(self.error_msg + "\n" + self.error_details)
         finally:
-            if vmmconn:
-                vmmconn.close()
+            if newconn:
+                newconn.close()
 
     def validate(self):
         name = self.window.get_widget("vol-name").get_text()

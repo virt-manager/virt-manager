@@ -24,6 +24,8 @@ import gtk.glade
 import traceback
 import logging
 
+import libvirt
+
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
@@ -272,16 +274,17 @@ class vmmCreatePool(gobject.GObject):
         self.close()
 
     def _async_pool_create(self, asyncjob):
-        vmmconn = None
+        newconn = None
         try:
             # Open a seperate connection to install on since this is async
             logging.debug("Threading off connection to create pool.")
-            vmmconn = vmmConnection(self.config, self.conn.get_uri(),
-                                    self.conn.is_read_only())
-            vmmconn.open()
-            vmmconn.connectThreadEvent.wait()
+            #newconn = vmmConnection(self.config, self.conn.get_uri(),
+            #                        self.conn.is_read_only())
+            #newconn.open()
+            #newconn.connectThreadEvent.wait()
+            newconn = libvirt.open(self._pool.conn.getURI())
             meter = vmmCreateMeter(asyncjob)
-            self._pool.conn = vmmconn.vmm
+            self._pool.conn = newconn
 
             logging.debug("Starting backround pool creation.")
             build = self.window.get_widget("pool-build").get_active()
@@ -293,8 +296,8 @@ class vmmCreatePool(gobject.GObject):
             self.error_details = "".join(traceback.format_exc())
             logging.error(self.error_msg + "\n" + self.error_details)
         finally:
-            if vmmconn:
-                vmmconn.close()
+            if newconn:
+                newconn.close()
 
     def page_changed(self, notebook, page, page_number):
         if page_number == PAGE_NAME:
