@@ -21,6 +21,8 @@ import gtk
 import gtk.glade
 import pango
 
+import logging
+
 class vmmErrorDialog (gtk.MessageDialog):
     def __init__ (self, parent=None, flags=0, type=gtk.MESSAGE_INFO,
                   buttons=gtk.BUTTONS_NONE, message_format=None,
@@ -62,6 +64,7 @@ class vmmErrorDialog (gtk.MessageDialog):
         self.set_title(title)
         self.set_property("text", summary)
         self.buffer.set_text(details)
+        logging.debug("Uncaught Error: %s : %s" % (summary, details))
         self.run()
         self.hide()
 
@@ -72,6 +75,7 @@ class vmmErrorDialog (gtk.MessageDialog):
                                         gtk.BUTTONS_OK, text1)
         if title is None:
             title = _("Input Error")
+        logging.debug("Validation Error: %s" % text1)
         message_box.set_title(title)
         if text2 is not None:
             message_box.format_secondary_text(text2)
