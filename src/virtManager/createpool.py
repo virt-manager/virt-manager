@@ -295,9 +295,6 @@ class vmmCreatePool(gobject.GObject):
             self.error_msg = _("Error creating pool: %s") % str(e)
             self.error_details = "".join(traceback.format_exc())
             logging.error(self.error_msg + "\n" + self.error_details)
-        finally:
-            if newconn:
-                newconn.close()
 
     def page_changed(self, notebook, page, page_number):
         if page_number == PAGE_NAME:

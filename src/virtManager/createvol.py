@@ -193,9 +193,6 @@ class vmmCreateVolume(gobject.GObject):
             self.error_msg = _("Error creating vol: %s") % str(e)
             self.error_details = "".join(traceback.format_exc())
             logging.error(self.error_msg + "\n" + self.error_details)
-        finally:
-            if newconn:
-                newconn.close()
 
     def validate(self):
         name = self.window.get_widget("vol-name").get_text()
