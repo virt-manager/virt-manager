@@ -83,8 +83,8 @@ class vmmCreateVolume(gobject.GObject):
 
     def show(self):
         self.topwin.show()
-        self.reset_state()
         self.topwin.present()
+        self.reset_state()
 
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
@@ -98,6 +98,7 @@ class vmmCreateVolume(gobject.GObject):
     def reset_state(self):
         self.window.get_widget("vol-name").set_text("")
         self.populate_vol_format()
+        self.populate_vol_suffix()
 
         if len(self.vol_class.formats):
             self.window.get_widget("vol-format").set_sensitive(True)
@@ -128,6 +129,12 @@ class vmmCreateVolume(gobject.GObject):
         formats = self.vol_class.formats
         for f in formats:
             model.append([f, f])
+
+    def populate_vol_suffix(self):
+        suffix = ""
+        if self.vol_class == Storage.FileVolume:
+            suffix = ".img"
+        self.window.get_widget("vol-name-suffix").set_text(suffix)
 
     def finish(self, src):
         # validate input
@@ -192,12 +199,14 @@ class vmmCreateVolume(gobject.GObject):
 
     def validate(self):
         name = self.window.get_widget("vol-name").get_text()
+        suffix = self.window.get_widget("vol-name-suffix").get_text()
+        volname = name + suffix
         format = self.get_config_format()
         alloc = self.window.get_widget("vol-allocation").get_value()
         cap = self.window.get_widget("vol-capacity").get_value()
 
         try:
-            self.vol = self.vol_class(name=name,
+            self.vol = self.vol_class(name=volname,
                                       allocation=(alloc * 1024 * 1024),
                                       capacity=(cap * 1024 * 1024),
                                       pool=self.parent_pool.pool)
