@@ -541,10 +541,11 @@ class vmmHost(gobject.GObject):
         sel = self.window.get_widget("pool-list").get_selection()
         model = self.window.get_widget("pool-list").get_model()
         active = sel.get_selected()
-        if active[1] != None:
-            curruuid = active[0].get_value(active[1], 0)
-            if curruuid and curruuid != uuid:
-                return
+        if active[1] == None:
+            return
+        curruuid = active[0].get_value(active[1], 0)
+        if curruuid != uuid:
+            return
         self.pool_selected(sel)
         for row in model:
             if row[0] == curruuid:
