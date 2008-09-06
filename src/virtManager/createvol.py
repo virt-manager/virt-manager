@@ -65,6 +65,7 @@ class vmmCreateVolume(gobject.GObject):
         self.error_details = None
 
         self.window.signal_autoconnect({
+            "on_vmm_create_vol_delete_event" : self.close,
             "on_vol_cancel_clicked"  : self.close,
             "on_vol_create_clicked"  : self.finish,
         })
