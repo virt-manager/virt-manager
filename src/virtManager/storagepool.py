@@ -120,12 +120,14 @@ class vmmStoragePool(gobject.GObject):
     def get_volume(self, uuid):
         return self._volumes[uuid]
 
+    def refresh(self):
+        self.pool.refresh(0)
+
     def update_volumes(self):
         if not self.is_active():
             self._volumes = {}
             return
 
-        self.pool.refresh(0)
         vols = self.pool.listVolumes()
         new_vol_list = {}
 
@@ -138,6 +140,7 @@ class vmmStoragePool(gobject.GObject):
                                                          self.pool.storageVolLookupByName(volname),
                                                          volname)
         self._volumes = new_vol_list
+
 
     def _prettyify(self, val):
         if val > (1024*1024*1024):
