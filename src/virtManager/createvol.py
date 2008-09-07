@@ -33,8 +33,8 @@ from virtManager.connection import vmmConnection
 
 from virtinst import Storage
 
-DEFAULT_ALLOC = 6000
-DEFAULT_CAP   = 6000
+DEFAULT_ALLOC = 0
+DEFAULT_CAP   = 1000
 
 class vmmCreateVolume(gobject.GObject):
     __gsignals__ = {
