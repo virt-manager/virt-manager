@@ -220,7 +220,10 @@ class vmmConfig:
         self.conf.set_bool(self.conf_dir + "/console/grab-notify", state)
 
     def get_details_show_toolbar(self):
-        return self.conf.get_bool(self.conf_dir + "/details/show-toolbar")
+        res = self.conf.get_bool(self.conf_dir + "/details/show-toolbar")
+        if res == None:
+            res = True
+        return res
 
     def set_details_show_toolbar(self, state):
         self.conf.set_bool(self.conf_dir + "/details/show-toolbar", state)
