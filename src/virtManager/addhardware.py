@@ -585,9 +585,6 @@ class vmmAddHardware(gobject.GObject):
                                  % str(e)
             self.install_details = details
             logging.error(details)
-        finally:
-            if newconn:
-                newconn.close()
 
 
     def browse_storage_partition_address(self, src, ignore=None):
