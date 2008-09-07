@@ -122,6 +122,7 @@ class vmmStoragePool(gobject.GObject):
 
     def refresh(self):
         self.pool.refresh(0)
+        self._update_xml()
 
     def update_volumes(self):
         if not self.is_active():

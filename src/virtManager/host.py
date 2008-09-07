@@ -428,6 +428,7 @@ class vmmHost(gobject.GObject):
 
         try:
             vol.delete()
+            self.refresh_current_pool()
         except Exception, e:
             self.err.show_err(_("Error deleting volume: %s") % str(e),
                               "".join(traceback.format_exc()))
@@ -462,6 +463,7 @@ class vmmHost(gobject.GObject):
         cp = self.current_pool()
         if cp is None:
             return
+        cp.refresh()
         self.refresh_storage_pool(None, None, cp.get_uuid())
 
     def current_pool(self):
