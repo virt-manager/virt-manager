@@ -34,6 +34,7 @@ import logging
 import dbus
 import traceback
 
+import virtManager.util as vmmutil
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
 from virtManager.createmeter import vmmCreateMeter
@@ -735,6 +736,9 @@ class vmmAddHardware(gobject.GObject):
                 readonly=True
 
             try:
+                if os.path.dirname(os.path.abspath(path)) == \
+                   vmmutil.DEFAULT_POOL_PATH:
+                    vmmutil.build_default_pool(self.vm.get_connection().vmm)
                 self._dev = virtinst.VirtualDisk(self.get_config_disk_image(),
                                                  filesize,
                                                  type = type,

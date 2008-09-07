@@ -34,6 +34,7 @@ import logging
 import dbus
 import traceback
 
+import virtManager.util as vmmutil
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
 from virtManager.createmeter import vmmCreateMeter
@@ -976,12 +977,11 @@ class vmmCreate(gobject.GObject):
                     self._guest.extraargs = kernel_params
                 else:
                     self._guest.extraargs = "%s %s" % (self._guest.extraargs, kernel_params)
-		self._guest.extraargs = self._guest.extraargs.strip()
+                self._guest.extraargs = self._guest.extraargs.strip()
 
         elif page_num == PAGE_DISK:
-            
-            disk = self.get_config_disk_image()
-            if disk == None or len(disk) == 0:
+            path = self.get_config_disk_image()
+            if path == None or len(path) == 0:
                 return self.err.val_err(_("Storage Address Required"), \
                                         _("You must specify a partition or a file for storage for the guest install"))
 
@@ -995,7 +995,11 @@ class vmmCreate(gobject.GObject):
                 else:
                     type = virtinst.VirtualDisk.TYPE_FILE
 
-                self._disk = virtinst.VirtualDisk(self.get_config_disk_image(),
+                if (os.path.dirname(os.path.abspath(path)) == \
+                    vmmutil.DEFAULT_POOL_PATH):
+                    vmmutil.build_default_pool(self._guest.conn)
+
+                self._disk = virtinst.VirtualDisk(path,
                                                   filesize,
                                                   sparse = self.is_sparse_file(),
                                                   device = virtinst.VirtualDisk.DEVICE_DISK,
@@ -1022,7 +1026,7 @@ class vmmCreate(gobject.GObject):
                     return False
 
             if self._disk.is_conflict_disk(self._guest.conn) is True:
-               res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % disk), _("Do you really want to use the disk ?"))
+               res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % self._disk.path), _("Do you really want to use the disk ?"))
                return res
 
         elif page_num == PAGE_NETWORK:
