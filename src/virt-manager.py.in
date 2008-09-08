@@ -47,6 +47,12 @@ pylib_dir = "::PYLIBDIR::"
 pyarchlib_dir = "::PYARCHLIBDIR::"
 data_dir = "::DATADIR::"
 
+def _show_startup_error(msg, details):
+    import gtk
+    from virtManager.error import vmmErrorDialog
+    err = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE, "", "")
+    title = _("Error starting Virtual Machine Manager")
+    err.show_err(title + ": " +  msg, details, title)
 
 def setup_i18n():
     locale.setlocale(locale.LC_ALL, '')
@@ -186,8 +192,9 @@ def launch_specific_window(engine, show, uri, uuid):
 def show_engine(engine, show, uri, uuid, no_conn_auto):
     if show=='creator' or show=='editor' \
        or show=='performance' or show=='console':
-        # Create a thread so to block on connection _fully_ starting so that
-        #   a non-manager window to prevent races accessing uninit'd vars
+        # Create a thread so we can wait for connection to _fully_ start,
+        # to prevent races accessing uninit'd vars for ex. the create wizard
+        # which expects the connection to be active.
         thread = threading.Thread(target=launch_specific_window,
                                   args=(engine, show, uri, uuid),
                                   name="Launching '%s' window" % show)
@@ -334,4 +341,4 @@ if __name__ == "__main__":
         main()
     except Exception, e:
         logging.exception(e)
-        raise
+        _show_startup_error(str(e), "".join(traceback.format_exc()))
