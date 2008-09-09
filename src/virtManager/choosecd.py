@@ -62,13 +62,8 @@ class vmmChooseCD(gobject.GObject):
         cd_list.pack_start(text, True)
         cd_list.add_attribute(text, 'text', 1)
         cd_list.add_attribute(text, 'sensitive', 2)
-        try:
-            self.optical_helper = vmmOpticalDriveHelper(self.window.get_widget("cd-path"))
-            self.optical_helper.populate_opt_media()
-            self.window.get_widget("physical-media").set_sensitive(True)
-        except Exception, e:
-            logging.error("Unable to create optical-helper widget: '%s'", e)
-            self.window.get_widget("physical-media").set_sensitive(False)
+
+        self.reset_state()
 
     def set_target(self, target):
         self.target=target
@@ -78,11 +73,22 @@ class vmmChooseCD(gobject.GObject):
         return 1
 
     def cancel(self,ignore1=None,ignore2=None):
-        self.close()
+        self.window.get_widget("vmm-choose-cd").hide()
 
     def show(self):
         win = self.window.get_widget("vmm-choose-cd")
+        self.reset_state()
         win.show()
+
+    def reset_state(self):
+        if self.conn.is_remote():
+            self.window.get_widget("physical-media").set_sensitive(False)
+            self.window.get_widget("iso-image").set_active(True)
+            self.window.get_widget("cd-path").set_active(-1)
+            self.window.get_widget("iso-file-chooser").set_sensitive(False)
+        else:
+            self.window.get_widget("physical-media").set_sensitive(True)
+            self.window.get_widget("iso-file-chooser").set_sensitive(True)
 
     def ok(self,ignore1=None, ignore2=None):
         if self.window.get_widget("iso-image").get_active():
@@ -104,7 +110,7 @@ class vmmChooseCD(gobject.GObject):
         except Exception, e:
            return self.err.val_err(_("Invalid Media Path"), str(e))
         self.emit("cdrom-chosen", disk.type, disk.path, self.target)
-        self.close()
+        self.cancel()
 
     def media_toggled(self, ignore1=None, ignore2=None):
         if self.window.get_widget("physical-media").get_active():
@@ -115,6 +121,7 @@ class vmmChooseCD(gobject.GObject):
             self.window.get_widget("cd-path").set_sensitive(False)
             self.window.get_widget("iso-path").set_sensitive(True)
             self.window.get_widget("iso-file-chooser").set_sensitive(True)
+            self.populate_opt_media()
 
     def change_cd_path(self, ignore1=None, ignore2=None):
         pass
@@ -123,6 +130,15 @@ class vmmChooseCD(gobject.GObject):
         file = self._browse_file(_("Locate ISO Image"), type="iso")
         if file != None:
             self.window.get_widget("iso-path").set_text(file)
+
+    def populate_opt_media(self):
+        try:
+            self.optical_helper = vmmOpticalDriveHelper(self.window.get_widget("cd-path"))
+            self.optical_helper.populate_opt_media()
+            self.window.get_widget("physical-media").set_sensitive(True)
+        except Exception, e:
+            logging.error("Unable to create optical-helper widget: '%s'", e)
+            self.window.get_widget("physical-media").set_sensitive(False)
 
     def _browse_file(self, dialog_name, folder=None, type=None):
         # user wants to browse for an ISO
