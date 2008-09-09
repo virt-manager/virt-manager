@@ -567,8 +567,6 @@ class vmmConnection(gobject.GObject):
         return self.autoconnect
 
     def toggle_autoconnect(self):
-        if self.is_remote():
-            return
         self.config.toggle_conn_autoconnect(self.get_uri())
         self.autoconnect = (not self.autoconnect)
 
