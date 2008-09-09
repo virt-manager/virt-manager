@@ -272,12 +272,18 @@ def main():
     dbus.glib.threads_init()
     import dbus.service
 
+    # Specifically init config/gconf before the fork, so that pam
+    # doesn't think we closed the app, therefor robbing us of
+    # display access
+    from virtManager.config import vmmConfig
+    config = vmmConfig(appname, appversion, gconf_dir, glade_dir,
+                       icon_dir, data_dir)
+
     # Now we've got basic environment up & running we can fork
     if not options.nofork:
         drop_tty()
         drop_stdio()
 
-    from virtManager.config import vmmConfig
     from virtManager.engine import vmmEngine
     from virtManager.remote import vmmRemote
 
@@ -286,7 +292,6 @@ def main():
     if options.show and options.uri==None:
         raise OptionValueError("can't use --show-* options without --connect")
 
-    config = vmmConfig(appname, appversion, gconf_dir, glade_dir, icon_dir, data_dir)
     engine = vmmEngine(config)
 
     if not(options.nodbus) and not( (os.getenv("DBUS_SESSION_BUS_ADDRESS") is None ) and ( os.getenv("DBUS_STARTER_ADDRESS") is None ) ):
