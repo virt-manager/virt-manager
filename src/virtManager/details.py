@@ -31,6 +31,7 @@ import traceback
 import gtkvnc
 import os
 import socket
+import cairo
 
 from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
