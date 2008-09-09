@@ -289,6 +289,7 @@ class vmmCreatePool(gobject.GObject):
             logging.debug("Starting backround pool creation.")
             build = self.window.get_widget("pool-build").get_active()
             poolobj = self._pool.install(create=True, meter=meter, build=build)
+            poolobj.setAutostart(True)
             logging.debug("Pool creating succeeded.")
         except Exception, e:
             self.error_msg = _("Error creating pool: %s") % str(e)
