@@ -716,6 +716,8 @@ class vmmCreate(gobject.GObject):
             # the async install.
             logging.debug("Opening separate connection for the install.")
             guest.conn = libvirt.open(self.connection.get_uri())
+            for disk in guest.disks:
+                disk.conn = guest.conn
 
             dom = guest.start_install(False, meter = meter)
             if dom == None:
