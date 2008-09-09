@@ -1652,7 +1652,7 @@ class vmmDetails(gobject.GObject):
         else:
             # connect a new cdrom
             if self.choose_cd is None:
-                self.choose_cd = vmmChooseCD(self.config, self.window.get_widget("disk-target-device").get_text())
+                self.choose_cd = vmmChooseCD(self.config, self.window.get_widget("disk-target-device").get_text(), self.vm.get_connection())
                 self.choose_cd.connect("cdrom-chosen", self.connect_cdrom)
             else:
                 self.choose_cd.set_target(self.window.get_widget("disk-target-device").get_text())
