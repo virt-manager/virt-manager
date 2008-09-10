@@ -150,6 +150,7 @@ class vmmConnection(gobject.GObject):
 
         self.state = self.STATE_DISCONNECTED
         self.vmm = None
+        self.storage_capable = None
 
         # Connection Storage pools: UUID -> vmmStoragePool
         self.pools = {}
@@ -695,6 +696,12 @@ class vmmConnection(gobject.GObject):
         newPools = []
         newActivePoolNames = []
         newInactivePoolNames = []
+
+        if self.storage_capable == None:
+            self.storage_capable = virtinst.util.is_storage_capable(self.vmm)
+
+        if not self.storage_capable:
+            return (stopPools, startPools, origPools, newPools, currentPools)
 
         try:
             newActivePoolNames = self.vmm.listStoragePools()
