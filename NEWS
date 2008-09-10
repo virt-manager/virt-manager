@@ -1,6 +1,29 @@
  Virtual Machine Manager News
  ============================
 
+Release 0.6.0 (September 10th, 2008)
+------------------------------------
+
+This release includes:
+
+  - Remote storage management and provisioning: View, add, remove, and
+      provision libvirt managed storage. Attach managed storage to a
+      remote VM.
+  - Remote VM installation support: Install from managed media (cdrom)
+      or PXE. Simple install time storage provisioning.
+  - VM details and console windows merged: each VM is now represented by a
+      single tabbed window.
+  - Use Avahi to list libvirtd instances on network
+  - Hypervisor Autoconnect: Option to connect to hypervisor at virt-manager
+      start up.
+  - Option to add sound device emulation when creating new guests.
+  - Virtio and USB options when adding a disk device.
+  - Allow viewing and removing VM sound, serial, parallel, and console devices.
+  - Specifying a specific keymap when adding display device.
+  - Keep app running if manager window is closed by VM window is still open.
+  - Allow limiting amount of stored stats history
+  - Numerous bug fixes and minor improvements.
+
 Release 0.5.4
 -------------
 

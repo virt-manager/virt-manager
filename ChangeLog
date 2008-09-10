@@ -1,8 +1,1020 @@
+2008-09-10  "Cole Robinson  <crobinso@redhat.com>
+
+	* po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po, po/hi.po,
+	po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po, po/kn.po,
+	po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po, po/nl.po,
+	po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sr.po, po/sr@latin.po, po/sv.po, po/ta.po, po/te.po,
+	po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po, po/zh_TW.po:
+	Update translation files.
+	[eb38aa06f781] [tip]
+
+	* virt-manager.spec.in:
+	Bump python-virtinst dependency
+	[f50bedb03cb9]
+
+	* virt-manager.spec.in:
+	Update spec file description.
+	[ba15c51d03fc]
+
+	* src/virtManager/host.py, src/vmm-host.glade:
+	Add right click option to copy a volume target path to the
+	clipboard.
+	[f072d9584267]
+
+	* src/virtManager/host.py:
+	Show full volume path in volume list.
+	[93d9c84bccf8]
+
+2008-09-09  "Cole Robinson  <crobinso@redhat.com>
+
+	* po/pl.po:
+	Update polish translation.
+	[6f72571cd70b]
+
+	* src/virtManager/connection.py:
+	Allow setting remote connection autostart.
+	[63d185a97afb]
+
+	* src/virtManager/choosecd.py:
+	Fix ChooseCD interaction to accomodate remote case.
+	[976fd2eab835]
+
+	* src/virtManager/details.py:
+	Include missing library
+	[2db06ab9d559]
+
+	* src/virtManager/choosecd.py, src/virtManager/details.py:
+	Allow connecting managed storage cdrom.
+	[051fb26995ad]
+
+2008-09-08  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	Make sure to switch disk connection over to new connection when
+	creating guest
+	[a5cebde41685]
+
+	* src/virtManager/createpool.py:
+	Autostart pool after creation
+	[358a47c770ba]
+
+	* man/virt-manager.pod:
+	Add more info on bug reporting to man page.
+	[c51d204e66cd]
+
+	* src/virt-manager.py.in:
+	Move gconf initialization before fork, to prevent losing access to
+	the display and bombing out (bz 454624)
+	[ac6da22acd6a]
+
+	* virt-manager.spec.in:
+	Add rpm dependency on latest libvirt.
+	[4b7833f16f26]
+
+	* src/virt-manager.py.in:
+	Raise an error dialog before gtk main loop if app fails to start
+	[a8035c3aa206]
+
+2008-09-07  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/createvol.py:
+	Default volume allocation to 0, since nonsparse creation blocks the
+	whole app.
+	[de4198a6c01b]
+
+	* po/POTFILES.in, src/virtManager/addhardware.py,
+	src/virtManager/create.py, src/virtManager/util.py:
+	Create the default pool if user requests '/var/lib/libvirt/images'
+	as a storage dir.
+	[c2347e8fc199]
+
+	* src/virtManager/config.py:
+	Default toolbar to show if there is no gconf entry.
+	[85b7421809c1]
+
+	* src/virtManager/addhardware.py:
+	Fix another small connection threading bug in addhardware.
+	[2540625c337b]
+
+	* src/virtManager/host.py, src/virtManager/storagepool.py:
+	Make sure we are updating pool listings after vol create or delete
+	[f97d1b7e2ceb]
+
+2008-09-05  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/storagepool.py:
+	Don't 'refresh' pool every time we want to list volumes.
+	[ed506801bfa2]
+
+	* src/virtManager/createpool.py:
+	Remove some debug output
+	[db06cb5c52f3]
+
+	* src/virtManager/host.py:
+	Really fix typo in host.py
+	[e6a556b65c88]
+
+	* src/virtManager/createpool.py, src/virtManager/createvol.py:
+	Fix bug introduced with simplified connection forking.
+	[3f76715f0c30]
+
+2008-09-06  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/createvol.py, src/vmm-create-vol.glade:
+	Append volume name suffix depending on parent pool type.
+	[003292902ae3]
+
+	* src/virtManager/error.py:
+	Log errors passed to popup dialogs.
+	[22c4a29d10a6]
+
+	* src/virtManager/createvol.py:
+	Hook up volume create window delete event to close function.
+	[24e931b843fe]
+
+2008-09-05  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virt-manager.schemas.in, src/virtManager/config.py,
+	src/virtManager/details.py:
+	Store 'Show Toolbar' value in gconf.
+	[f3fa83f25a83]
+
+	* src/virtManager/config.py, src/virtManager/create.py:
+	Multiple fixes to enable remote vm creation.
+	[1ed891619065]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py:
+	Fix adding storage and network devices to accomodate remote guests.
+	[802c7e037c5d]
+
+	* src/virtManager/createpool.py, src/virtManager/createvol.py:
+	Change how we thread off connection when creating new pool or vol.
+	[996b2a5b2989]
+
+	* src/virtManager/host.py:
+	Small typo in host.py when populating pool list.
+	[f202cbe4fce6]
+
+2008-09-04  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	Sound summary typo.
+	[464ca161aaa2]
+
+2008-09-03  "Cole Robinson  <crobinso@redhat.com>
+
+	* po/nl.po:
+	Update dutch translation.
+	[c81aab3cfb06]
+
+	* po/pt_BR.po:
+	Update brazilian portugese translation.
+	[3f30550fc6ca]
+
+	* po/POTFILES.in:
+	Update POTFILES.in to fix .pot generation.
+	[8db847cdf720]
+
+2008-09-02  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virt-manager.schemas.in, src/virtManager/config.py,
+	src/virtManager/create.py, src/virtManager/preferences.py, src/vmm-
+	create.glade, src/vmm-preferences.glade:
+	Add support for adding audio devices when creating guests.
+
+	Preferences are global, not per install. Can be seen via
+	edit->preferences
+	[138ad06915c4]
+
+	* src/virtManager/connect.py, src/vmm-open-connection.glade:
+	Add support for avahi libvirtd advertisement.
+
+	In the 'New Connection' dialog, poll for remote connections and
+	allow selecting the results from a list.
+	[d4e006ee6227]
+
+	* virt-manager.spec.in:
+	Make .spec BuildRequires a bit more thorough.
+	[18936c25f9c9]
+
+2008-08-26  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/host.py:
+	Update pool size meter when state changes.
+	[876c1849feff]
+
+	* src/virtManager/addhardware.py:
+	Default to selecting first disk target entry when adding storage.
+	[13b2f95e89c3]
+
+	* src/virtManager/host.py:
+	Prompt if deleting virtual network. Add exception catching for
+	start/stop/add net.
+	[68905a628386]
+
+	* src/virtManager/manager.py:
+	Fix connection option sensitivity when conn is selected and changes
+	state.
+	[f7377315ab34]
+
+	* src/virtManager/host.py, src/vmm-host.glade:
+	Add option to change network autostart. Use consistent button scheme
+	across storage/net managers.
+	[f18ead304cf2]
+
+	* src/virtManager/host.py, src/vmm-host.glade:
+	Make unselected net look similar to unselected pool in connection
+	details.
+	[2caf808386c2]
+
+	* src/virtManager/host.py, src/vmm-host.glade:
+	Clean up network manager UI.
+	[e897e9048cfc]
+
+2008-08-25  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/createpool.py:
+	Change build option defaults, warn if operation will be destructive.
+	[68a924ce7f6a]
+
+	* src/virtManager/host.py:
+	Fix small typo when deleting pool.
+	[f35ec4498eb9]
+
+	* src/virtManager/create.py:
+	Only default to PV guest if it is xen pv, not xenner
+	[577dea8a4a56]
+
+	* src/virtManager/create.py:
+	Fix small variable name bug.
+	[93167405e0d3]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Use VirtualDisk is_size_conflict rather than duplicating code.
+	[9750f649c572]
+
+2008-08-22  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py:
+	Don't try to redefine xml if hotplug/hotunplug succeeds
+	[e0038219090f]
+
+	* docs/design/1_Applet.png, docs/design/2_Manager.png,
+	docs/design/3_Run_VM.png, docs/design/4_Viewer.png,
+	docs/design/5_Machine_Details.png,
+	docs/design/6_Machine_Details.png, src/virtManager/details.py:
+	Merge heads
+	[0c2ab6040585]
+
+	* src/virtManager/details.py:
+	Fix remote connection opening bug for vnc consoles.
+	[63e36ef8d4df]
+
+2008-08-18  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py, src/virtManager/manager.py:
+	Use seperate connection for create wizard validation, only fork conn
+	at end (so we don't prompt for password at the beginning of a remote
+	install)
+	[3b931c65913c]
+
+	* src/virtManager/details.py:
+	Fix window ref counting bug when deleting a vm.
+	[766265dc7fc5]
+
+	* src/virtManager/manager.py:
+	Add uri to connection failure dialog.
+	[ad656597275c]
+
+2008-08-21  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/manager.py:
+	Disable seeing connection/host details for a disconnected
+	connection.
+	[0cfad550212c]
+
+	* src/virtManager/host.py:
+	Don't disable adding networks if on a remote connection.
+	[d7f8c862ae0f]
+
+	* src/vmm-host.glade:
+	Add tooltips to pool action buttons.
+	[2825bad3dc3e]
+
+	* docs/design/1_Applet.png, docs/design/2_Manager.png,
+	docs/design/3_Run_VM.png, docs/design/4_Viewer.png,
+	docs/design/5_Machine_Details.png,
+	docs/design/6_Machine_Details.png:
+	Remove large design images (they are already archived on the
+	website).
+	[b59269f4ebe1]
+
+	* src/virtManager/domain.py:
+	Split out different xml altering functions in domain.py so cdrom
+	connect/eject isn't such a hack.
+	[201f4a0a915e]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py:
+	Provide much better user interaction and error reporting for device
+	hotplug.
+
+	If hotplug fails, provide a yes/no box saying that change will be
+	instituted after next shutdown, but will overwrite any other xml
+	changes waiting on a shutdown. Not a very pretty situation, but
+	that's the way things have always been but we didn't think to inform
+	the user.
+	[935f3b243a91]
+
+	* src/virtManager/addhardware.py:
+	Add usb and virtio options for disks. Use virtinst to generate
+	available disk targets.
+	[0240dcdfef74]
+
+2008-08-19  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py:
+	Fix showing vnc console for already running domains.
+	[4443a5f8a970]
+
+	* src/virtManager/details.py, src/virtManager/engine.py:
+	Remove lots of ignorePause mess in details widget updating, add some
+	logging.
+	[796bd2e891e5]
+
+2008-08-21  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py:
+	Fix check for policykit
+	[2893744f29b0]
+
+	* src/virtManager/details.py:
+	Disable run option for read only VMs
+	[043e6981cb84]
+
+	* src/virtManager/connection.py:
+	Add (RO) postfix to connection state if read only
+	[3968592c6fdc]
+
+2008-08-15  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	Add disk bus and network model info to hardware details section.
+	[6736957c3681]
+
+	* src/virtManager/domain.py, src/virtManager/host.py,
+	src/virtManager/network.py:
+	Use virtinst.util.get_xml_path in virt-manager.
+	[c404717c3764]
+
+	* src/virtManager/createvol.py, src/vmm-create-vol.glade:
+	Add storage volume creation wizard.
+	[68d9d731ba52]
+
+	* src/virtManager/createpool.py, src/vmm-create-pool.glade:
+	Add storage pool creation wizard.
+	[baf4972f1732]
+
+	* src/virtManager/host.py, src/vmm-host.glade:
+	Add storage manager to connection details section.
+	[7136bf40694b]
+
+2008-08-10  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/storagepool.py, src/virtManager/storagevol.py:
+	Fix a few issues with deleting storage objects.
+	[cae15335fd61]
+
+2008-08-07  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/storagepool.py,
+	src/virtManager/storagevol.py:
+	Add vmmStorage{Pool,Vol}, poll for these devices in connection tick
+	function.
+	[68223bf84eec]
+
+2008-08-04  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-add-hardware.glade, src/vmm-create.glade:
+	Fix mac address mnemonic collision (Adam Stokes)
+	[f31200001da2]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Show correct size for block device storage (Adam Stokes)
+	[7a0eb7f2ab10]
+
+2008-07-31  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/createnet.py:
+	Remove some unused code from network creator.
+	[bacecda4ad18]
+
+	* src/virtManager/connection.py:
+	Small bug in virtual network population.
+	[6815a5f94048]
+
+2008-07-24  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/serialcon.py:
+	Force tty opening and closing, not waiting for output to flush. This
+	prevents the app from freezing if the tty is hosed (say if we boot
+	with an improper emulator)
+	[66bddd644b82]
+
+	* src/virtManager/details.py, src/virtManager/domain.py,
+	src/virtManager/engine.py, src/vmm-details.glade:
+	Re-add serial console support.
+	[dc227d734b8d]
+
+2008-07-30  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	List char devices in VM details section
+	[66ace61933db]
+
+2008-07-18  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py:
+	Fix a small bug where the wrong screen was shown in the initial
+	details.
+	[da341fefa7ef]
+
+	* src/vmm-details.glade:
+	Fix a widget name collision
+	[2d3ebe490475]
+
+2008-07-23  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	Fix graphics removal sensitivity for running guest.
+	[31a5e52dadd1]
+
+	* src/virtManager/domain.py:
+	Clean up domain remove_device function
+	[c6dfed4cc1f6]
+
+2008-07-30  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	Allow viewing and removing sound devices
+	[99c9beca2a3c]
+
+2008-07-23  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	Clean up device listing a bit in details section
+	[5ce6bc7d51eb]
+
+	* src/virtManager/domain.py:
+	Clean up get_*_device methods in domain.py
+	[6c2eb97296ab]
+
+2008-07-25  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	Search for renamed vlan devices using the typical convention p+name
+	(Saori Fukuta)
+	[0cc0f75c75ca]
+
+2008-07-15  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	Fix bonding_masters parsing.
+	[fd443f167c88]
+
+2008-07-09  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	Clean up tick function: split network and vm polling into seperate
+	functions.
+	[65e4e2ab109f]
+
+	* src/vmm-preferences.glade:
+	Enable stats history limiting in preferences dialog (was present but
+	strangely not visible).
+	[ae295078845b]
+
+2008-06-25  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	Handle mac address resolution failures when populating networks.
+	[3efe685a9a64]
+
+	* src/virtManager/connection.py:
+	Remove another duplicate net populating function
+	[9606944b28f7]
+
+2008-06-23  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connect.py:
+	Fix bug when setting autoconnect for new connection.
+	[3b28e47695fa]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Re-use disk size field in add hardware wizard.
+	[5e5c99cf3562]
+
+	* src/virtManager/create.py:
+	Fix stupid syntax error.
+	[ab00a0d3a126]
+
+	* src/virtManager/create.py:
+	Revert 778: since create process is threaded off, we need to open a
+	seperate connection otherwise we cause a race condition.
+	[e6159610529a]
+
+2008-06-16  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virt-manager.py.in:
+	Fix dbus invocation of virt-manager to show manager window, not
+	connect dialog
+	[e42db676930e]
+
+	* src/virtManager/engine.py:
+	Remove duplicate function from vmmEngine
+	[96763b843381]
+
+	* src/virtManager/connect.py:
+	Fix small sensitivity bug in 'connect' dialog
+	[ca20743040b6]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py,
+	src/virtManager/keytable.py:
+	Move keytable from virt-manager to virtinst
+	[b78b17e1d632]
+
+	* src/virtManager/details.py:
+	If no keymap present in xml, list value as en-us not 'Same as host'
+	[c26f4ae542ce]
+
+2008-06-13  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/engine.py,
+	src/virtManager/manager.py, src/vmm-details.glade:
+	Add menu options to 'view manager' and 'quit' from the details
+	window.
+	[348d20f30a13]
+
+	* src/virtManager/details.py, src/virtManager/engine.py,
+	src/virtManager/manager.py:
+	Allow application to remain running if manager window is closed, but
+	a 'Details' window is still present.
+	[04b09c47f918]
+
+2008-06-12  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	Init guests with actual libvirt connections, not virt-manager
+	connection objects.
+	[09e13c500a97]
+
+	* src/virtManager/create.py:
+	Error if invalid bridge device is selected. Have default bridge
+	selection be a valid bridge if one exists.
+	[7bc37ab455dd]
+
+2008-06-11  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-open-connection.glade:
+	Change 'open connection' title to 'add connection'
+	[4239ebd977ec]
+
+	* src/virtManager/manager.py:
+	Add details option to connection right click menu
+	[81db3722a9af]
+
+	* src/vmm-manager.glade:
+	Change 'Host Details' to 'Connection Details' in manager, few small
+	other text changes
+	[f66dd9107c1a]
+
+	* src/virtManager/manager.py, src/vmm-manager.glade:
+	Change 'Open Connection' to 'Add Connection' in manager menu
+	[2ba9993ea043]
+
+	* src/virtManager/connect.py, src/virtManager/engine.py, src/vmm-open-
+	connection.glade:
+	Add 'autoconnect' option to 'Open Connection' dialog
+	[5fb650ed5291]
+
+	* src/virt-manager.py.in, src/virtManager/engine.py:
+	Set autoconnect flags for default populated connections
+	[9c4667772c91]
+
+2008-06-06  "Cole Robinson  <crobinso@redhat.com>
+
+	* AUTHORS, src/vmm-about.glade:
+	Fix app name in 'About' screen (Mike MacCana)
+	[8083ab66e4d2]
+
+2008-06-04  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virt-manager.py.in, src/virtManager/engine.py:
+	Add command line option --no-conn-auto: prevents autostarting of
+	connections
+	[dd1aaf193920]
+
+	* src/virt-manager.py.in, src/virtManager/connection.py,
+	src/virtManager/engine.py:
+	Fix command line --show-* options. (bz 435264)
+	[fdacfd833874]
+
+	* src/virtManager/create.py:
+	Explictly pass conn object to guests, so virtinst doesn't open a
+	seperate connection.
+	[957c84f1f73a]
+
+2008-06-02  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/engine.py:
+	Fix reboot command error reporting
+	[f3108312bbb3]
+
+2008-05-21  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	Remove some duplicate functions.
+	[31978f51485e]
+
+2008-05-20  "Cole Robinson  <crobinso@redhat.com>
+
+	* AUTHORS:
+	Retroactive AUTHORS update!
+	[fe7ddb617eb6]
+
+	* src/virtManager/details.py:
+	Allow specifying ssh port (Claes Strom)
+	[57ff06da8a73]
+
+2008-05-13  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/manager.py:
+	Wire up shutdown/reboot/destroy menu options for domain context
+	menu
+	[9d56bbe43eef]
+
+2008-05-09  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py:
+	Fix code block indentation
+	[7e379e549ee0]
+
+	* src/virtManager/config.py:
+	Default to /var/lib/libvirt/images for disks
+	[cb1a79cc42f7]
+
+2008-05-07  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	Fix < PolicyKit-0.7 auth fallback.
+	[abc288644261]
+
+	* src/virtManager/connection.py:
+	Remove duplicate code, tidy up a couple log messages.
+	[f5eed96b56fc]
+
+2008-05-07  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	Wire up screenshot menu
+	[74ee1d17a478]
+
+	* src/virtManager/details.py, src/virtManager/engine.py,
+	src/virtManager/manager.py:
+	Merge heads
+	[c5eb3a5d80fb]
+
+	* src/virtManager/engine.py:
+	Clarify message for VM destroy
+	[ec340ad8b94a]
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	Force immediate refresh when changing tab pages
+	[a0db2036cc48]
+
+	* src/virtManager/details.py:
+	Fix page refresh / activation
+	[c1a1b3e3b2a3]
+
+	* src/vmm-details.glade:
+	Fix label alignment
+	[9c5a5ff0ea07]
+
+	* src/virtManager/connection.py:
+	Merge heads
+	[786ff93a329b]
+
+	* src/virtManager/details.py:
+	Disable special paused console state since it crashes & doesn't get
+	scaled
+	[4dc0d0079094]
+
+2008-05-05  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/details.py:
+	Remove debug output
+	[52bba3109316]
+
+	* src/virtManager/details.py:
+	Fix printscreen menu
+	[d92b2606ef87]
+
+	* Merge heads
+	[a3b21bdaaaf3]
+
+	* src/virtManager/domain.py, src/virtManager/engine.py:
+	Merge heads
+	[e952a58975b9]
+
+2008-04-08  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/console.py,
+	src/virtManager/details.py, src/virtManager/domain.py,
+	src/virtManager/engine.py, src/virtManager/manager.py, src/vmm-
+	console.glade, src/vmm-details.glade, src/vmm-manager.glade:
+	Merge console window into details window
+	[436cc1415193]
+
+2008-04-04  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/vmm-details.glade:
+	Convert back to glade-2 format
+	[772e1ceb6ccf]
+
+2008-05-07  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py:
+	Don't show bogus disk size in summary when adding block backed disk.
+	(bz 435257)
+	[0443e2c85e97]
+
+	* src/virtManager/addhardware.py, src/virtManager/choosecd.py,
+	src/virtManager/console.py, src/virtManager/create.py,
+	src/virtManager/engine.py, src/virtManager/manager.py:
+	Pressing 'Enter' should select a manually entered path in a
+	FileChooser (bz 426196)
+	[a84c65b35e4a]
+
+2008-05-05  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* AUTHORS, src/virtManager/connection.py:
+	Support new polkit dbus API (S.Caglar Onur)
+	[82f09173d4f2]
+
+	* configure.ac, src/Makefile.am:
+	Make automake STFU about makefile non-portability / gnu-isms
+	[f96e2cb31801]
+
+2008-05-02  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py:
+	Fix printscreen menu (Tomohiro Takahashi)
+	[5142197392f2]
+
+2008-04-22  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/engine.py, src/virtManager/host.py, src/vmm-
+	host.glade:
+	Fix help menu text, and event name
+	[99a4efef52ec]
+
+	* src/virtManager/engine.py, src/virtManager/host.py:
+	Fix help menu in host details window
+	[862cc4d20e09]
+
+2008-04-21  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	Fix cdrom connect for guest with driver xml tag.
+	[20d34a60e9a5]
+
+2008-04-08  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	Remove leading and trailing whitespace from url and ks fields. (Paul
+	Batkowski)
+	[4469eb7b8f26]
+
+	* src/virtManager/create.py:
+	Revert previous cset: code is used and not worth replacing
+	[658fe57b198e]
+
+	* src/virtManager/create.py:
+	Small cleanup of unused code in create wizard
+	[16079308ed4d]
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	Show max vcpus in create wizard, set to accurate value based on
+	specified guest type.
+	[27adf2ecf11c]
+
+	* src/virtManager/create.py:
+	Catch error when install location is empty
+	[4f53f0727530]
+
+2008-04-03  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* help/virt-manager/C/virt-manager-C.omf:
+	Fix bogus URL attribute
+	[6f4d63090a01]
+
+	* configure.ac:
+	Update configure for renamed po file
+	[fc2a8677b0eb]
+
+	* po/sr@Latn.po, po/sr@latin.po:
+	Rename sr translation
+	[e87c4369fab7]
+
+	* po/de.po, po/it.po, po/pl.po:
+	Import latest de, it, and pl translations
+	[68d4129ec42b]
+
+	* merge heads
+	[80238ca5f800]
+
+2008-02-05  Ville-Pekka Vainio  <vpivaini AT cs DOT helsinki DOT fi>
+
+	* po/fi.po:
+	Updated Finnish translation
+	[c31b94ad7624]
+
+2008-04-03  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	Show - as disk size for block device in create summary (Hiroyuki
+	Kaguchi)
+	[c12adf726fd1]
+
+2008-03-28  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/domain.py:
+	Run save job in a separate connection to allow use in background
+	thread (Soren Hansen)
+	[2ea7f77b0339]
+
+2008-03-27  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/console.py:
+	Fix C-A-D menu entry (Takahashi Tomohiro)
+	[3c6c0fc321e6]
+
+2008-03-24  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/manager.py:
+	Add popup hint for full hypervisor URI in list view
+	[f128dfa4172b]
+
+2008-03-24  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/config.py, src/virtManager/connection.py,
+	src/virtManager/engine.py, src/virtManager/host.py, src/vmm-
+	host.glade:
+	Add autoconnect option for hypervisor connections.
+	[1247450edcfa]
+
+2008-03-23  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/manager.py:
+	Add check for QEMU saved image magic (Soren Hansen)
+	[05b779963f12]
+
+2008-03-21  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* src/virtManager/create.py:
+	Fix CD install handling (Hiroyuki Kaguchi)
+	[e6972a659499]
+
+2008-03-19  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/engine.py, src/virtManager/error.py,
+	src/virtManager/host.py, src/virtManager/manager.py:
+	Remove MessageDialog instances in favor of convenience functions in
+	error.py
+	[569fbd93ef88]
+
+2008-03-18  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py:
+	Add error catching to memory changing. Rework the code to correctly
+	enable and disable the fields pending guest state.
+	[4bb3320bda08]
+
+	* src/virtManager/create.py:
+	Use new error message functions to catch create errors
+	[b2cc71f208a6]
+
+2008-03-17  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	Fix small bug in populating arch and hypervisor type.
+	[72096495abcf]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py,
+	src/virtManager/keytable.py:
+	Fill out some more keytable values. Add logging if we don't find a
+	keymap in the keytable.
+	[98cd7845a3b5]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Use VirtualGraphics during domain creation. Lookup default keymap
+	during addhardware.
+	[a03e3d40dad9]
+
+	* src/virtManager/connection.py, src/virtManager/details.py,
+	src/virtManager/domain.py:
+	Add a get_type methon to domain object to facilitate getting a
+	correct max_vcpus value.
+	[8214130c7669]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py, src/vmm-
+	add-hardware.glade:
+	Allow adding keymap when creating a display device.
+	[3bc189057b4c]
+
+2008-03-14  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-about.glade:
+	Re-mark message as translatable
+	[e6d2bd613aec]
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	Show keymap value for graphics device in details section.
+	[7fa5ad2d6920]
+
+	* src/virtManager/addhardware.py, src/virtManager/choosecd.py,
+	src/virtManager/console.py, src/virtManager/create.py,
+	src/virtManager/createnet.py, src/virtManager/details.py,
+	src/virtManager/engine.py, src/virtManager/error.py,
+	src/virtManager/manager.py:
+	Centralize all generic error raising routines to vmmError. Add some
+	error catching cases.
+	[1bac91cdaedc]
+
+	* src/virtManager/addhardware.py:
+	Use only one variable to point to device to add.
+	[a5329b675602]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Use virtinst is_conflict_net when building net devices.
+	[380477345ebd]
+
+	* src/virtManager/connection.py:
+	Catch network lookup errors if a domain is dying. (Hiroyuki Kaguchi)
+	[45c2fe244c4d]
+
+2008-03-13  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/engine.py, src/virtManager/manager.py:
+	Show console for running guest if info refresh rate is > 20 sec.
+	(Hiroyuki Kaguchi)
+	[0a51ac391b20]
+
+2008-03-12  "Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	Fix changing cdrom device if <driver> present.
+	[f4107609ab7d]
+
+	* src/vmm-about.glade, src/vmm-add-hardware.glade, src/vmm-create-
+	net.glade, src/vmm-create.glade, src/vmm-details.glade, src/vmm-
+	host.glade:
+	Unmark untranslatable strings in glade files.
+	[cec4f3d4edbb]
+
+2008-03-12  Jim Meyering  <meyering@redhat.com>
+
+	* src/virtManager/create.py:
+	Reuse user-specified "storage-file-size" upon "Back" button.
+
+	In the VM creation dialog, the "Assigning storage space" panel
+	requires a "File Size:" (when "Simple file:" is selected). It
+	defaults to 4000MB. If I specify a different number, click
+	"Forward", and then "Back", rather than seeing the size *I* chose, I
+	get the default of 4000 again.
+
+	This change makes it use the value I selected, instead.
+	[523f2f7501c6]
+
 2008-03-10  "Daniel P. Berrange  <berrange@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.5.4-1 for changeset a3345d837a88
+	[cdc70a3398ea]
+
+	* ChangeLog:
+	Regnerate changelog
+	[a3345d837a88] [RELEASE-0.5.4-1]
 
 	* NEWS, configure.ac, virt-manager.spec.in:
 	Update for new release
-	[81d87628fd7b] [tip]
+	[81d87628fd7b]
 
 	* src/virtManager/create.py:
 	Fix disk field visibility
@@ -38,6 +1050,12 @@
 	* src/virtManager/connection.py:
 	Merge heads
 	[0b213f9406fd]
+
+	* src/virtManager/connection.py, src/virtManager/console.py,
+	src/virtManager/create.py, src/virtManager/createnet.py,
+	src/virtManager/opticalhelper.py:
+	Fix use of DBus objects to always go via an explicit interface
+	[43d82ba67ffa]
 
 2008-03-04  "Cole Robinson  <crobinso@redhat.com>
 
@@ -105,14 +1123,6 @@
 	Reuse virtinst.util.get_max_vcpus
 	[f46dcf034d35]
 
-2008-03-05  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* src/virtManager/connection.py, src/virtManager/console.py,
-	src/virtManager/create.py, src/virtManager/createnet.py,
-	src/virtManager/opticalhelper.py:
-	Fix use of DBus objects to always go via an explicit interface
-	[43d82ba67ffa]
-
 2008-02-23  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* src/virtManager/connection.py:
@@ -123,19 +1133,17 @@
 	* Merge heads
 	[01c1acc34b1c]
 
+	* src/virtManager/create.py, src/vmm-create.glade:
+	Allow choice between local CDROM & kernel/initrd network install for
+	fullvirt guests
+	[ea6903353938]
+
 2008-02-21  "Daniel P. Berrange  <berrange@redhat.com>
 
 	* src/virtManager/connection.py:
 	Skip bonding if /sys/class/net/bonding_masters doesn't exist
 	(Shigeki Sakamoto)
 	[5c86a029ee3a]
-
-2008-02-23  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* src/virtManager/create.py, src/vmm-create.glade:
-	Allow choice between local CDROM & kernel/initrd network install for
-	fullvirt guests
-	[ea6903353938]
 
 2008-02-18  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -288,6 +1296,10 @@
 	* Merge heads
 	[e96a36605e70]
 
+	* AUTHORS, src/vmm-create.glade:
+	Fix label alignment (Dan Hork)
+	[e1f8d926c4a9]
+
 2007-12-05  "Cole Robinson  <crobinso@redhat.com>
 
 	* src/virtManager/details.py, src/virtManager/domain.py:
@@ -309,12 +1321,6 @@
 	* src/virtManager/addhardware.py:
 	Fixed validation message in Add Hardware wizard.
 	[ebdfc8e3e06e]
-
-2007-12-11  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* AUTHORS, src/vmm-create.glade:
-	Fix label alignment (Dan Hork)
-	[e1f8d926c4a9]
 
 2007-11-28  "Cole Robinson  <crobinso@redhat.com>
 
@@ -438,6 +1444,10 @@
 	Switch TLS credential to libvirt-vnc
 	[0938dbeac0d7]
 
+	* src/virtManager/create.py, src/vmm-create.glade:
+	Switch to 512 MB default memory to keep jeremy happy
+	[19a82a3c5b8a]
+
 2007-10-17  Andy Grover  <andy.grover@oracle.com>
 
 	* src/virtManager/domain.py:
@@ -447,12 +1457,6 @@
 
 	Thanks -- Andy
 	[58c46220f2df]
-
-2007-11-07  "Daniel P. Berrange  <berrange@redhat.com>
-
-	* src/virtManager/create.py, src/vmm-create.glade:
-	Switch to 512 MB default memory to keep jeremy happy
-	[19a82a3c5b8a]
 
 2007-10-10  "Daniel P. Berrange  <berrange@redhat.com>
 
