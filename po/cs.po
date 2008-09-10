@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-10 20:12-0500\n"
+"POT-Creation-Date: 2008-09-10 13:45-0400\n"
 "PO-Revision-Date: 2007-05-06 16:54+0100\n"
 "Last-Translator: Milan Kerslager <kerslage@linux.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -21,7 +21,7 @@ msgid "Manage virtual machines"
 msgstr "Ukládání virtuálního stroje"
 
 #: ../src/virt-manager.desktop.in.in.h:2 ../src/vmm-about.glade.h:3
-#: ../../po/../src/vmm-manager.glade:8
+#: ../src/vmm-manager.glade.h:17
 msgid "Virtual Machine Manager"
 msgstr "Správce virtuálních strojů"
 
@@ -33,900 +33,616 @@ msgstr "Copyright (C) 2006 Red Hat Inc."
 msgid "Powered by libvirt"
 msgstr "Provozovaný pomocí libvirt"
 
-#: ../src/vmm-about.glade.h:4
-msgid "http://virt-manager.et.redhat.com/"
-msgstr "http://virt-manager.et.redhat.com/"
-
 #. TRANSLATORS: Replace this string with your names, one name per line.
-#: ../src/vmm-about.glade.h:6
+#: ../src/vmm-about.glade.h:5
 msgid "translator-credits"
 msgstr "Kredit-překladatelům"
 
-#: ../src/vmm-console.glade.h:1
+#: ../src/vmm-details.glade.h:1
+msgid "20 bits/sec"
+msgstr "20 bits/sec"
+
+#: ../src/vmm-details.glade.h:2
+#, fuzzy
+msgid "<b>Autostart</b>"
+msgstr "<b>Souhrn:</b>"
+
+#: ../src/vmm-details.glade.h:3 ../src/vmm-host.glade.h:1
+msgid "<b>Basic details</b>"
+msgstr "<b>Základní detaily</b>"
+
+#: ../src/vmm-details.glade.h:4
+#, fuzzy
+msgid "<b>Boot Device</b>"
+msgstr "<b>Konzole</b>"
+
+#: ../src/vmm-details.glade.h:5
+msgid "<b>CPUs</b>"
+msgstr "<b>CPU</b>"
+
+#: ../src/vmm-details.glade.h:6
+msgid "<b>Memory</b>"
+msgstr "<b>Paměť</b>"
+
+#: ../src/vmm-details.glade.h:7 ../src/vmm-host.glade.h:3
+msgid "<b>Performance</b>"
+msgstr "<b>Výkon</b>"
+
+#: ../src/vmm-details.glade.h:8
+#, fuzzy
+msgid "<b>Sound Device</b>"
+msgstr "<b>Úložný prostor</b>"
+
+#: ../src/vmm-details.glade.h:9
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>Konzole není nyní k dispozici</b>"
 
-#: ../src/vmm-console.glade.h:2
+#: ../src/vmm-details.glade.h:10
+msgid ""
+"<b>Tip:</b> 'Source device' refers to the name of the device as seen from "
+"the host OS."
+msgstr ""
+
+#: ../src/vmm-details.glade.h:11
+msgid ""
+"<b>Tip:</b> 'source' refers to information seen from the host OS, while "
+"'target' refers to information seen from the guest OS"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:12
+msgid ""
+"<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
+"OS will ensure that the virtual cursor moves in sync with the local desktop "
+"cursor."
+msgstr ""
+
+#: ../src/vmm-details.glade.h:13
+msgid ""
+"<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
+"than (or equal to) the number of physical CPUs on the host system."
+msgstr ""
+"<b>Tip:</b> Pro nejvyšší výkon musí být počet virtuálních CPU menší (nebo "
+"roven) počtu fyzických CPU v hostitelském systému."
+
+#: ../src/vmm-details.glade.h:14
+#, fuzzy
+msgid "<b>Virtual Disk</b>"
+msgstr "<b>Virtuální CPU:</b>"
+
+#: ../src/vmm-details.glade.h:15
+#, fuzzy
+msgid "<b>Virtual Display</b>"
+msgstr "<b>Virtuální CPU:</b>"
+
+#: ../src/vmm-details.glade.h:16
+#, fuzzy
+msgid "<b>Virtual Network Interface</b>"
+msgstr "<b>Síť</b>"
+
+#: ../src/vmm-details.glade.h:17
+#, fuzzy
+msgid "<b>Virtual Pointer</b>"
+msgstr "<b>Virtuální CPU:</b>"
+
+#: ../src/vmm-details.glade.h:18
+#, fuzzy
+msgid "<b>insert type</b>"
+msgstr "<b>Konzole</b>"
+
+#: ../src/vmm-details.glade.h:19 ../src/vmm-add-hardware.glade.h:24
+#, fuzzy
+msgid "Address:"
+msgstr "MAC adresa"
+
+#: ../src/vmm-details.glade.h:20
 msgid "Auth"
 msgstr "Autorizace"
 
-#: ../src/vmm-console.glade.h:3
-msgid "Ctrl+Alt+F_1"
+#: ../src/vmm-details.glade.h:21
+msgid "Autostart VM"
 msgstr ""
 
-#: ../src/vmm-console.glade.h:4
-msgid "Ctrl+Alt+F_2"
+#: ../src/vmm-details.glade.h:22
+msgid "Block"
 msgstr ""
 
-#: ../src/vmm-console.glade.h:5
-msgid "Ctrl+Alt+F_3"
+#: ../src/vmm-details.glade.h:23
+msgid "Boot Options"
 msgstr ""
 
-#: ../src/vmm-console.glade.h:6
-msgid "Ctrl+Alt+F_4"
+#: ../src/vmm-details.glade.h:24 ../src/vmm-host.glade.h:12
+msgid "CPU usage:"
+msgstr "Využití CPU:"
+
+#: ../src/vmm-details.glade.h:25
+msgid "Change allocation:"
+msgstr "Změna alokace"
+
+#: ../src/vmm-details.glade.h:26
+msgid "Char"
 msgstr ""
 
-#: ../src/vmm-console.glade.h:7
-msgid "Ctrl+Alt+F_5"
+#: ../src/vmm-details.glade.h:27
+#, fuzzy
+msgid "Console"
+msgstr "_Sériová konzole"
+
+#: ../src/vmm-details.glade.h:28
+msgid "Ctrl+Alt+Backspace"
 msgstr ""
 
-#: ../src/vmm-console.glade.h:8
-msgid "Ctrl+Alt+F_6"
+#: ../src/vmm-details.glade.h:29
+msgid "Ctrl+Alt+Delete"
 msgstr ""
 
-#: ../src/vmm-console.glade.h:9
-msgid "Ctrl+Alt+F_7"
+#: ../src/vmm-details.glade.h:30
+msgid "Ctrl+Alt+F1"
 msgstr ""
 
-#: ../src/vmm-console.glade.h:10
-msgid "Ctrl+Alt+F_8"
+#: ../src/vmm-details.glade.h:31
+msgid "Ctrl+Alt+F10"
 msgstr ""
 
-#: ../src/vmm-console.glade.h:11
-msgid "Ctrl+Alt+_Backspace"
+#: ../src/vmm-details.glade.h:32
+msgid "Ctrl+Alt+F11"
 msgstr ""
 
-#: ../src/vmm-console.glade.h:12
-msgid "Ctrl+Alt+_Del"
+#: ../src/vmm-details.glade.h:33
+msgid "Ctrl+Alt+F12"
 msgstr ""
 
-#: ../src/vmm-console.glade.h:13
+#: ../src/vmm-details.glade.h:34
+msgid "Ctrl+Alt+F2"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:35
+msgid "Ctrl+Alt+F3"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:36
+msgid "Ctrl+Alt+F4"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:37
+msgid "Ctrl+Alt+F5"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:38
+msgid "Ctrl+Alt+F6"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:39
+msgid "Ctrl+Alt+F7"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:40
+msgid "Ctrl+Alt+F8"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:41
+msgid "Ctrl+Alt+F9"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:42
+msgid "Current allocation:"
+msgstr "Aktivní alokace:"
+
+#: ../src/vmm-details.glade.h:43
+msgid "Device Model:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:44
+#, fuzzy
+msgid "Device Type:"
+msgstr "Typ OS:"
+
+#: ../src/vmm-details.glade.h:45
+msgid "Device virtual machine will boot from:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:46 ../src/vmm-add-hardware.glade.h:32
+#: ../src/vmm-create.glade.h:41
+msgid "Disk"
+msgstr "Disk"
+
+#: ../src/vmm-details.glade.h:47
+msgid "Disk usage:"
+msgstr "Využití disku:"
+
+#: ../src/vmm-details.glade.h:48
+msgid "Force poweroff"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:49
+#, fuzzy
+msgid "Full Screen"
+msgstr "_Celá obrazovka"
+
+#: ../src/vmm-details.glade.h:50
+msgid "Hardware"
+msgstr "Hardware"
+
+#: ../src/vmm-details.glade.h:51
+#, fuzzy
+msgid "How many virtual CPUs should be allocated for this machine?"
+msgstr "Kolik virtuálních CPU má mít virtální stroj přiděleno?"
+
+#: ../src/vmm-details.glade.h:52
+#, fuzzy
+msgid "How much memory should be allocated for this machine?"
+msgstr "Kolik paměti má být tomuto stroji přiděleno?"
+
+#: ../src/vmm-details.glade.h:53 ../src/vmm-add-hardware.glade.h:43
+#: ../src/virtManager/details.py:1499
+#, fuzzy
+msgid "Input"
+msgstr "Úvod"
+
+#: ../src/vmm-details.glade.h:54 ../src/vmm-add-hardware.glade.h:45
+msgid "Keymap:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:55
 msgid "Login"
 msgstr "Přihlášení"
 
-#: ../src/vmm-console.glade.h:14
+#: ../src/vmm-details.glade.h:56 ../src/vmm-add-hardware.glade.h:47
 #, fuzzy
-msgid "Password Field"
-msgstr "Heslo:"
+msgid "MAC Address Field"
+msgstr "MAC adresa"
 
-#: ../src/vmm-console.glade.h:15 ../src/vmm-add-hardware.glade.h:60
-#: ../src/vmm-details.glade.h:47
+#: ../src/vmm-details.glade.h:57 ../src/vmm-add-hardware.glade.h:48
+#: ../src/vmm-create.glade.h:68
+#, fuzzy
+msgid "MAC address:"
+msgstr "MAC adresa"
+
+#: ../src/vmm-details.glade.h:58 ../src/vmm-add-hardware.glade.h:49
+#: ../src/vmm-create.glade.h:69 ../src/vmm-create-vol.glade.h:24
+msgid "MB"
+msgstr "MB"
+
+#: ../src/vmm-details.glade.h:59
+msgid "Max Memory Select"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:60
+msgid "Maximum allocation:"
+msgstr "Maximální alokace:"
+
+#: ../src/vmm-details.glade.h:61
+msgid "Memory"
+msgstr "Paměť"
+
+#: ../src/vmm-details.glade.h:62
+#, fuzzy
+msgid "Memory Select"
+msgstr "Využití paměti"
+
+#: ../src/vmm-details.glade.h:63 ../src/vmm-host.glade.h:26
+msgid "Memory usage:"
+msgstr "Používaná paměť"
+
+#: ../src/vmm-details.glade.h:64 ../src/vmm-add-hardware.glade.h:50
+msgid "Mode:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:65 ../src/vmm-create.glade.h:76
+msgid "Name Field"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:66 ../src/vmm-host.glade.h:29
+#: ../src/vmm-create-pool.glade.h:12 ../src/vmm-create-vol.glade.h:26
+msgid "Name:"
+msgstr "Jméno:"
+
+#: ../src/vmm-details.glade.h:67 ../src/vmm-add-hardware.glade.h:51
+#: ../src/vmm-create.glade.h:78
+msgid "Network"
+msgstr "Síť"
+
+#: ../src/vmm-details.glade.h:68
+msgid "Network usage:"
+msgstr "Využití sítě:"
+
+#: ../src/vmm-details.glade.h:69 ../src/vmm-host.glade.h:32
+msgid "Overview"
+msgstr "Souhrn"
+
+#: ../src/vmm-details.glade.h:70 ../src/vmm-add-hardware.glade.h:58
 msgid "Password:"
 msgstr "Heslo:"
 
-#: ../src/vmm-console.glade.h:16 ../src/vmm-details.glade.h:48
+#: ../src/vmm-details.glade.h:71
 msgid "Pause"
 msgstr "Zastavit"
 
-#: ../src/vmm-console.glade.h:17 ../src/vmm-details.glade.h:52
+#: ../src/vmm-details.glade.h:72
+#, fuzzy
+msgid "Permissions:"
+msgstr "_Oddíly"
+
+#: ../src/vmm-details.glade.h:73 ../src/vmm-add-hardware.glade.h:63
+#, fuzzy
+msgid "Port:"
+msgstr "_Port:"
+
+#: ../src/vmm-details.glade.h:74
+msgid "Poweroff"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:75
+msgid "PrintScreen"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:76
+msgid "Processor"
+msgstr "Procesor"
+
+#: ../src/vmm-details.glade.h:77
+#, fuzzy
+msgid "Reboot"
+msgstr "Při startu"
+
+#: ../src/vmm-details.glade.h:78
 msgid "Run"
 msgstr "Spustit"
 
-#: ../src/vmm-console.glade.h:18 ../src/vmm-details.glade.h:53
+#: ../src/vmm-details.glade.h:79
 msgid "S_hutdown"
 msgstr "_Ukončit"
 
-#: ../src/vmm-console.glade.h:19
+#: ../src/vmm-details.glade.h:80
 msgid "Save this password in your keyring"
 msgstr "Uložit heslo mezi klíče (keyring)"
 
-#: ../src/vmm-console.glade.h:20
+#: ../src/vmm-details.glade.h:81
+msgid "Scale display"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:82
 msgid "Screenshot"
 msgstr "Snímek obrazovky"
 
-#: ../src/vmm-console.glade.h:21 ../src/vmm-details.glade.h:55
-#: ../../po/../src/virtManager/domain.py:409
+#: ../src/vmm-details.glade.h:83
+msgid "Send key"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:84
+#, fuzzy
+msgid "Serial Console..."
+msgstr "_Sériová konzole"
+
+#: ../src/vmm-details.glade.h:85
+msgid "Shut down"
+msgstr "Ukončit"
+
+#: ../src/vmm-details.glade.h:86 ../src/virtManager/domain.py:416
 msgid "Shutdown"
 msgstr "Ukončit"
 
-#: ../src/vmm-console.glade.h:22 ../src/vmm-details.glade.h:62
+#: ../src/vmm-details.glade.h:87
+msgid "Sound"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:88 ../src/vmm-create-pool.glade.h:13
+msgid "Source Path:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:89
+msgid "Source device:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:90
+msgid "Source model:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:91
+msgid "Source path:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:92
+msgid "Source type:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:93
+#, fuzzy
+msgid "Start virtual machine on host boot up?"
+msgstr "Uložit snímek obrazovky virtuálního stroje"
+
+#: ../src/vmm-details.glade.h:94
+msgid "Status:"
+msgstr "Stav:"
+
+#: ../src/vmm-details.glade.h:95
+msgid "Target Port:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:96
+msgid "Target bus:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:97
+msgid "Target device:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:98
+msgid "Target type:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:99
 msgid "Toolbar"
 msgstr "Nástrojová lišta"
 
-#: ../src/vmm-console.glade.h:23
-msgid "Unavailable"
-msgstr "Nedostupný"
-
-#: ../src/vmm-console.glade.h:24 ../src/vmm-add-hardware.glade.h:72
-msgid "VNC"
-msgstr "VNC"
-
-#: ../src/vmm-console.glade.h:25
-msgid "Virtual Machine Console"
-msgstr "Konzole virtuálního stroje"
-
-#: ../src/vmm-console.glade.h:26 ../src/vmm-details.glade.h:70
-msgid "Virtual _Machine"
-msgstr "_Virtuální stroj"
-
-#: ../src/vmm-console.glade.h:27 ../src/vmm-details.glade.h:71
-#: ../../po/../src/vmm-manager.glade:298
-msgid "_Contents"
-msgstr ""
-
-#: ../src/vmm-console.glade.h:28 ../src/vmm-details.glade.h:72
-msgid "_Destroy"
-msgstr "_Zničit"
-
-#: ../src/vmm-console.glade.h:29
-msgid "_Details"
-msgstr "_Detaily"
-
-#: ../src/vmm-console.glade.h:30
-msgid "_FullScreen"
-msgstr "_Celá obrazovka"
-
-#: ../src/vmm-console.glade.h:31 ../src/vmm-host.glade.h:44
-#: ../src/vmm-details.glade.h:74 ../../po/../src/vmm-manager.glade:289
-msgid "_Help"
-msgstr "_Nápověda"
-
-#: ../src/vmm-console.glade.h:32 ../src/vmm-details.glade.h:75
-msgid "_Pause"
-msgstr "_Zastavit"
-
-#: ../src/vmm-console.glade.h:33
-msgid "_Printscreen"
-msgstr ""
-
-#: ../src/vmm-console.glade.h:34 ../src/vmm-details.glade.h:76
-msgid "_Run"
-msgstr "_Spustit"
-
-#: ../src/vmm-console.glade.h:35 ../src/vmm-details.glade.h:77
-msgid "_Save"
-msgstr "_Uložit"
-
-#: ../src/vmm-console.glade.h:36
-msgid "_Send key"
-msgstr ""
-
-#: ../src/vmm-console.glade.h:37 ../src/vmm-details.glade.h:78
-msgid "_Serial Console"
-msgstr "_Sériová konzole"
-
-#: ../src/vmm-console.glade.h:38
-msgid "_Take Screenshot"
-msgstr "Snímek _obrazovky"
-
-#: ../src/vmm-console.glade.h:39 ../src/vmm-details.glade.h:79
-#: ../../po/../src/vmm-manager.glade:206
-msgid "_View"
-msgstr "_Zobrazit"
-
-#: ../src/vmm-create-net.glade.h:1 ../src/vmm-create.glade.h:1
-#, fuzzy
-msgid "\t"
-msgstr "5\t"
-
-#: ../src/vmm-create-net.glade.h:2 ../src/vmm-add-hardware.glade.h:2
-#: ../src/vmm-create.glade.h:4
-msgid "/xen/demo.img"
-msgstr "/xen/demo.img"
-
-#: ../src/vmm-create-net.glade.h:3
-msgid "192.168.1.1"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:4
-msgid "192.168.1.255"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:5
-msgid "192.168.10.0/24"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:6
-msgid "192.168.10.254"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:7
-msgid "255.255.255.0"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:8
-#, fuzzy
-msgid "256"
-msgstr "256\t"
-
-#: ../src/vmm-create-net.glade.h:9 ../src/vmm-add-hardware.glade.h:4
-#: ../src/vmm-create.glade.h:9
-msgid "5 GB"
-msgstr "5 GB"
-
-#: ../src/vmm-create-net.glade.h:10
-#, fuzzy
-msgid "<b>DHCP</b>"
-msgstr "<b>CPU</b>"
-
-#: ../src/vmm-create-net.glade.h:11
-#, fuzzy
-msgid "<b>Example:</b> network1"
-msgstr "<b>Příklad:</b> system1"
-
-#: ../src/vmm-create-net.glade.h:12
-#, fuzzy
-msgid "<b>Forwarding</b>"
-msgstr "<b>Úložný prostor</b>"
-
-#: ../src/vmm-create-net.glade.h:13
-msgid ""
-"<b>Hint:</b> The network should be choosen from one of the IPv4 private "
-"address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:14
-#, fuzzy
-msgid "<b>IPv4 network</b>"
-msgstr "<b>Síť</b>"
-
-#: ../src/vmm-create-net.glade.h:15 ../src/vmm-create.glade.h:19
-#, fuzzy
-msgid "<b>Summary</b>"
-msgstr "<b>Souhrn:</b>"
-
-#: ../src/vmm-create-net.glade.h:16
-msgid ""
-"<b>Tip:</b> Unless you wish to reserve some addresses to allow static "
-"network configuration in virtual machines, these parameters can be left with "
-"their default values."
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:17
-#, fuzzy
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing an "
-"IPv4 address space</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
-"prostor</span>"
-
-#: ../src/vmm-create-net.glade.h:18
-#, fuzzy
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting to "
-"physical network</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
-"prostor</span>"
-
-#: ../src/vmm-create-net.glade.h:19
-#, fuzzy
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
-"virtual network </span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Vytvořit nový "
-"virtální systém</span>"
-
-#: ../src/vmm-create-net.glade.h:20
-#, fuzzy
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
-"virtual network </span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Pojmenování "
-"virtuálního systému</span>"
-
-#: ../src/vmm-create-net.glade.h:21
-#, fuzzy
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create "
-"network</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Připraven k "
-"instalaci</span>"
-
-#: ../src/vmm-create-net.glade.h:22
-#, fuzzy
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Selecting the "
-"DHCP range</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
-"prostor</span>"
-
-#: ../src/vmm-create-net.glade.h:23
-#, fuzzy
-msgid "A <b>name</b> for your new virtual network"
-msgstr "<b>Jméno</b> pro nový virtuální systém"
-
-#: ../src/vmm-create-net.glade.h:24
-msgid "Broadcast:"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:25 ../src/vmm-add-hardware.glade.h:32
-#: ../src/vmm-create.glade.h:45
-msgid "Complete"
-msgstr "Dokončeno"
-
-#: ../src/vmm-create-net.glade.h:26
-#, fuzzy
-msgid "Connectivity:"
-msgstr "_Připojit"
-
-#: ../src/vmm-create-net.glade.h:27
-#, fuzzy
-msgid "Create a new virtual network"
-msgstr "Vytvořit nový virtuální systém"
-
-#: ../src/vmm-create-net.glade.h:28
-msgid "DHCP"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:29
-#, fuzzy
-msgid "Desination:"
-msgstr "Cíl"
-
-#: ../src/vmm-create-net.glade.h:30 ../src/vmm-host.glade.h:16
-#, fuzzy
-msgid "End Address"
-msgstr "MAC adresa"
-
-#: ../src/vmm-create-net.glade.h:31
-#, fuzzy
-msgid "End address:"
-msgstr "MAC adresa"
-
-#: ../src/vmm-create-net.glade.h:32
-msgid "End:"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:33
-msgid "Forwarding"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:34
-msgid "Forwarding to physical network"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:35
-msgid "Gateway:"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:36
-msgid "IPv4"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:37 ../src/vmm-add-hardware.glade.h:48
-#: ../src/vmm-create.glade.h:64
-msgid "Intro"
-msgstr "Úvod"
-
-#: ../src/vmm-create-net.glade.h:38
-#: ../../po/../src/virtManager/createnet.py:260
-#: ../../po/../src/virtManager/host.py:238
-msgid "Isolated virtual network"
-msgstr "Izolovaná virtuální síť"
-
-#: ../src/vmm-create-net.glade.h:39 ../src/vmm-host.glade.h:25
-#: ../../po/../src/virtManager/createnet.py:95
-#: ../../po/../src/virtManager/createnet.py:258
-#: ../../po/../src/virtManager/host.py:235
-msgid "NAT to any physical device"
-msgstr "NAT do nějakého fyzického zařízení"
-
-#: ../src/vmm-create-net.glade.h:40 ../src/vmm-create.glade.h:79
-#: ../../po/../src/virtManager/manager.py:786
-msgid "Name"
-msgstr "Jméno"
-
-#: ../src/vmm-create-net.glade.h:41
-msgid "Net Name Field"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:42
-msgid "Netmask:"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:43 ../src/vmm-host.glade.h:30
-#, fuzzy
-msgid "Network Range"
-msgstr "Využití sítě:"
-
-#: ../src/vmm-create-net.glade.h:44
-#, fuzzy
-msgid "Network _Name:"
-msgstr "Využití sítě:"
-
-#: ../src/vmm-create-net.glade.h:45
-#, fuzzy
-msgid "Network name:"
-msgstr "Využití sítě:"
-
-#: ../src/vmm-create-net.glade.h:46 ../src/vmm-host.glade.h:31
-#, fuzzy
-msgid "Network:"
-msgstr "Síť"
-
-#: ../src/vmm-create-net.glade.h:47
-#, fuzzy
-msgid "Physical Network"
-msgstr "Virtuální CPU"
-
-#: ../src/vmm-create-net.glade.h:48
-#, fuzzy
-msgid "Please choose a name for your virtual network:"
-msgstr "Vložte prosím jméno virtuálního systému:"
-
-#: ../src/vmm-create-net.glade.h:49
-msgid ""
-"Please choose the range of addresses the DHCP server can use to allocate to "
-"guests attached to the virtual network"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:50
-msgid ""
-"Please indicate whether this virtual network should be connected to the "
-"physical network."
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:51
-#: ../../po/../src/virtManager/createnet.py:157
-msgid "Private"
-msgstr "Privátní"
-
-#: ../src/vmm-create-net.glade.h:52
-#, fuzzy
-msgid "Size:"
-msgstr "_Velikost:"
-
-#: ../src/vmm-create-net.glade.h:53 ../src/vmm-host.glade.h:35
-#, fuzzy
-msgid "Start Address"
-msgstr "MAC adresa"
-
-#: ../src/vmm-create-net.glade.h:54
-#, fuzzy
-msgid "Start address:"
-msgstr "MAC adresa"
-
-#: ../src/vmm-create-net.glade.h:55
-#, fuzzy
-msgid "Start:"
-msgstr "Stav:"
-
-#: ../src/vmm-create-net.glade.h:56
-msgid ""
-"The <b>address range</b> from which the <b>DHCP</b> server will allocate "
-"addresses for virtual machines"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:57
-msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:58
-#, fuzzy
-msgid ""
-"This assistant will guide you through creating a new virtual network. You "
-"will be asked for some information about the virtual network you'd like to "
-"create, such as:"
-msgstr ""
-"Průvodce vás provede vytvořením nového virtuálního systému. Budete dotázáni "
-"na několik informací o tom, jak bude virtuální systém vytvořen:"
-
-#: ../src/vmm-create-net.glade.h:59 ../src/vmm-add-hardware.glade.h:71
-#: ../src/vmm-details.glade.h:65
+#: ../src/vmm-details.glade.h:100
+msgid "Total CPUs on host machine:"
+msgstr "Celkem CPU v hostovaném systému:"
+
+#: ../src/vmm-details.glade.h:101 ../src/vmm-create.glade.h:105
+msgid "Total memory on host machine:"
+msgstr "Celkem paměti v hostovaném systému:"
+
+#: ../src/vmm-details.glade.h:102 ../src/vmm-add-hardware.glade.h:70
+#: ../src/vmm-create-net.glade.h:50 ../src/vmm-create-pool.glade.h:18
 #, fuzzy
 msgid "Type:"
 msgstr "Typ"
 
-#: ../src/vmm-create-net.glade.h:60
-msgid "Whether to <b>forward</b> traffic to the physical network"
+#: ../src/vmm-details.glade.h:103
+msgid "UUID Field"
 msgstr ""
 
-#: ../src/vmm-create-net.glade.h:61
-msgid "You will need to choose an IPv4 address space for the virtual network:"
-msgstr ""
-
-#: ../src/vmm-create-net.glade.h:62 ../src/vmm-add-hardware.glade.h:75
-#: ../src/vmm-create.glade.h:122
-msgid "_Finish"
-msgstr "_Dokončit"
-
-#: ../src/vmm-create-net.glade.h:63 ../src/vmm-create.glade.h:133
-msgid "demo"
-msgstr "demo"
-
-#: ../src/vmm-host.glade.h:1
-#, fuzzy
-msgid "1.59 GB of 2.2 GB"
-msgstr "80 MB of 1 GB"
-
-#: ../src/vmm-host.glade.h:2
-#, fuzzy
-msgid "2000 MB"
-msgstr "200 MB"
-
-#: ../src/vmm-host.glade.h:3
-msgid "4"
-msgstr ""
-
-#: ../src/vmm-host.glade.h:5
-#, no-c-format
-msgid "60%"
-msgstr ""
-
-#: ../src/vmm-host.glade.h:6 ../src/vmm-details.glade.h:10
-msgid "<b>Basic details</b>"
-msgstr "<b>Základní detaily</b>"
-
-#: ../src/vmm-host.glade.h:7
-msgid "<b>IPv4 configuration</b>"
-msgstr ""
-
-#: ../src/vmm-host.glade.h:8 ../src/vmm-details.glade.h:13
-msgid "<b>Performance</b>"
-msgstr "<b>Výkon</b>"
-
-#: ../src/vmm-host.glade.h:9
-#, fuzzy
-msgid "Architecture:"
-msgstr "Architektura CPU:"
-
-#: ../src/vmm-host.glade.h:10
-msgid "Autostart:"
-msgstr ""
-
-#: ../src/vmm-host.glade.h:11 ../src/vmm-details.glade.h:24
-msgid "CPU usage:"
-msgstr "Využití CPU:"
-
-#: ../src/vmm-host.glade.h:12 ../src/vmm-open-connection.glade.h:3
-#, fuzzy
-msgid "Connection:"
-msgstr "Typ připojení"
-
-#: ../src/vmm-host.glade.h:13
-msgid "DHCP end:"
-msgstr ""
-
-#: ../src/vmm-host.glade.h:14
-msgid "DHCP start:"
-msgstr ""
-
-#: ../src/vmm-host.glade.h:15
-msgid "Device:"
-msgstr ""
-
-#: ../src/vmm-host.glade.h:17
-msgid "Forwarding:"
-msgstr ""
-
-#: ../src/vmm-host.glade.h:18
-#, fuzzy
-msgid "Host Details"
-msgstr "_Detaily"
-
-#: ../src/vmm-host.glade.h:19 ../src/vmm-open-connection.glade.h:5
-#, fuzzy
-msgid "Hostname:"
-msgstr "_Host:"
-
-#: ../src/vmm-host.glade.h:20 ../src/vmm-open-connection.glade.h:7
-msgid "Hypervisor:"
-msgstr "Hypervisor:"
-
-#: ../src/vmm-host.glade.h:21
-#, fuzzy
-msgid "Location:"
-msgstr "Umístění _ISO:"
-
-#: ../src/vmm-host.glade.h:22
-#, fuzzy
-msgid "Logical CPUs:"
-msgstr "Logické CPU:"
-
-#: ../src/vmm-host.glade.h:23 ../src/vmm-details.glade.h:40
-msgid "Memory usage:"
-msgstr "Používaná paměť"
-
-#: ../src/vmm-host.glade.h:24
-#, fuzzy
-msgid "Memory:"
-msgstr "Paměť"
-
-#: ../src/vmm-host.glade.h:26 ../src/vmm-details.glade.h:43
-msgid "Name:"
-msgstr "Jméno:"
-
-#: ../src/vmm-host.glade.h:27
-msgid "Net Device"
-msgstr ""
-
-#: ../src/vmm-host.glade.h:28
-#, fuzzy
-msgid "Net Name"
-msgstr "Využití sítě:"
-
-#: ../src/vmm-host.glade.h:29
-#, fuzzy
-msgid "Net UUID"
-msgstr "UUID:"
-
-#: ../src/vmm-host.glade.h:32 ../src/vmm-details.glade.h:46
-msgid "Overview"
-msgstr "Souhrn"
-
-#: ../src/vmm-host.glade.h:33 ../../po/../src/virtManager/domain.py:405
-msgid "Running"
-msgstr "Spuštený"
-
-#: ../src/vmm-host.glade.h:34
-#, fuzzy
-msgid "Start"
-msgstr "Stav"
-
-#: ../src/vmm-host.glade.h:36
-#, fuzzy
-msgid "State:"
-msgstr "Stav:"
-
-#: ../src/vmm-host.glade.h:37
-#, fuzzy
-msgid "Storage Location"
-msgstr "Umístění _ISO obrazu:"
-
-#: ../src/vmm-host.glade.h:38
-#, fuzzy
-msgid "Storage Name"
-msgstr "Jméno _systému:"
-
-#: ../src/vmm-host.glade.h:39
-msgid "Storage Pools"
-msgstr ""
-
-#: ../src/vmm-host.glade.h:40 ../src/vmm-details.glade.h:67
+#: ../src/vmm-details.glade.h:104
 msgid "UUID:"
 msgstr "UUID:"
 
-#: ../src/vmm-host.glade.h:41
-#, fuzzy
-msgid "Virtual Networks"
-msgstr "Virtuální CPU"
+#: ../src/vmm-details.glade.h:105
+msgid "Unavailable"
+msgstr "Nedostupný"
 
-#: ../src/vmm-host.glade.h:42
-msgid "Xen"
+#: ../src/vmm-details.glade.h:106 ../src/vmm-create.glade.h:107
+msgid "VCPU Select"
 msgstr ""
 
-#: ../src/vmm-host.glade.h:43 ../../po/../src/vmm-manager.glade:40
+#: ../src/vmm-details.glade.h:107 ../src/vmm-add-hardware.glade.h:71
+msgid "VNC"
+msgstr "VNC"
+
+#: ../src/vmm-details.glade.h:108
+#, fuzzy
+msgid "View Manager"
+msgstr "Správce virtuálních strojů"
+
+#: ../src/vmm-details.glade.h:109
+#, fuzzy
+msgid "Virtual Machine"
+msgstr "_Virtuální stroj"
+
+#: ../src/vmm-details.glade.h:110
+msgid "Virtual _Machine"
+msgstr "_Virtuální stroj"
+
+#: ../src/vmm-details.glade.h:111 ../src/vmm-host.glade.h:42
+#: ../src/vmm-manager.glade.h:18
+msgid "_Contents"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:112 ../src/vmm-host.glade.h:43
+#: ../src/vmm-manager.glade.h:20
 msgid "_File"
 msgstr "_Soubor"
 
-#: ../src/vmm-host.glade.h:45
-msgid "example.com"
-msgstr ""
+#: ../src/vmm-details.glade.h:113 ../src/vmm-host.glade.h:44
+#: ../src/vmm-manager.glade.h:21
+msgid "_Help"
+msgstr "_Nápověda"
 
-#: ../src/vmm-host.glade.h:46
-msgid "x86_64"
-msgstr ""
+#: ../src/vmm-details.glade.h:114
+msgid "_Pause"
+msgstr "_Zastavit"
 
-#: ../src/vmm-modify-file-storage.glade.h:1
-msgid " free"
-msgstr " volno"
+#: ../src/vmm-details.glade.h:115
+msgid "_Run"
+msgstr "_Spustit"
 
-#: ../src/vmm-modify-file-storage.glade.h:2
-msgid " of "
-msgstr " z "
+#: ../src/vmm-details.glade.h:116
+msgid "_Save"
+msgstr "_Uložit"
 
-#: ../src/vmm-modify-file-storage.glade.h:3
-msgid "/tmp"
-msgstr "/tmp"
+#: ../src/vmm-details.glade.h:117
+msgid "_Take Screenshot"
+msgstr "Snímek _obrazovky"
 
-#: ../src/vmm-modify-file-storage.glade.h:4
-msgid "10 TB"
-msgstr "10 TB"
+#: ../src/vmm-details.glade.h:118 ../src/vmm-manager.glade.h:22
+msgid "_View"
+msgstr "_Zobrazit"
 
-#: ../src/vmm-modify-file-storage.glade.h:5
-msgid ""
-"<b>Tip:</b> You may only increase the size of file-based storage; you can't "
-"decrease its size."
-msgstr ""
-"<b>Tip:</b> Velikost úložného prostoru v souborech lze pouze zvětšit, nelze "
-"ho zmenšit."
-
-#: ../src/vmm-modify-file-storage.glade.h:6
-msgid ""
-"MB\n"
-"GB\n"
-"TB"
-msgstr ""
-"MB\n"
-"GB\n"
-"TB"
-
-#: ../src/vmm-modify-file-storage.glade.h:9
-msgid "Modify File Storage"
-msgstr "Změnit úložný prostor"
-
-#: ../src/vmm-modify-file-storage.glade.h:10
+#: ../src/vmm-details.glade.h:119
 #, fuzzy
-msgid "Size Type"
-msgstr "Typ OS:"
+msgid "disk\t"
+msgstr "Disk"
 
-#: ../src/vmm-modify-file-storage.glade.h:11
-msgid "Storage Size Select"
+#: ../src/vmm-details.glade.h:120
+msgid "insert sound model"
 msgstr ""
 
-#: ../src/vmm-modify-file-storage.glade.h:12
-msgid "_Mount Point (on virtual system):"
-msgstr "Přípojný bod (ve virtuálním systému):"
-
-#: ../src/vmm-modify-file-storage.glade.h:13
-msgid "_Size:"
-msgstr "_Velikost:"
-
-#: ../src/vmm-preferences.glade.h:1
-msgid "<b>Consoles</b>"
-msgstr "<b>Konzole</b>"
-
-#: ../src/vmm-preferences.glade.h:2
-msgid "<b>Status monitoring</b>"
-msgstr "<b>Monitorování stavu</b>"
-
-#: ../src/vmm-preferences.glade.h:3
-msgid "Auto Console"
-msgstr ""
-
-#: ../src/vmm-preferences.glade.h:4
-msgid "Automatically open consoles:"
-msgstr "Automaticky otenřít konzole:"
-
-#: ../src/vmm-preferences.glade.h:5
-#, fuzzy
-msgid "Grab Keyboard"
-msgstr "Zachytit vstup z klávesnice:"
-
-#: ../src/vmm-preferences.glade.h:6
-msgid "Grab keyboard input:"
-msgstr "Zachytit vstup z klávesnice:"
-
-#: ../src/vmm-preferences.glade.h:7
-#, fuzzy
-msgid "History Samples"
-msgstr "ukázky"
-
-#: ../src/vmm-preferences.glade.h:8
-msgid "Maintain history of"
-msgstr "Udržovat historii"
-
-#: ../src/vmm-preferences.glade.h:9
-msgid ""
-"Never\n"
-"For new domains\n"
-"For all domains"
-msgstr ""
-"Nikdy\n"
-"Pro nové domény\n"
-"Pro všechny domény"
-
-#: ../src/vmm-preferences.glade.h:12
-msgid ""
-"Never\n"
-"When fullscreen\n"
-"On mouse over"
-msgstr ""
-"Nikdy\n"
-"Při plné obrazovce\n"
-"Po najetí myší"
-
-#: ../src/vmm-preferences.glade.h:15
-msgid "Preferences"
-msgstr "Nastavení"
-
-#: ../src/vmm-preferences.glade.h:16
-msgid "Status Interval"
-msgstr ""
-
-#: ../src/vmm-preferences.glade.h:17
-msgid "Update status every"
-msgstr "Aktualizovat stav každých"
-
-#: ../src/vmm-preferences.glade.h:18
-msgid "samples"
-msgstr "ukázky"
-
-#: ../src/vmm-preferences.glade.h:19
-msgid "seconds"
-msgstr "sekund"
-
-#: ../src/vmm-add-hardware.glade.h:1 ../src/vmm-create.glade.h:3
-msgid "-"
-msgstr ""
-
-#: ../src/vmm-add-hardware.glade.h:3
-msgid "127.0.0.1"
-msgstr ""
-
-#: ../src/vmm-add-hardware.glade.h:5
+#: ../src/vmm-add-hardware.glade.h:1
 #, fuzzy
 msgid "<b>Display</b>"
 msgstr "<b>Obraz disku:</b>"
 
-#: ../src/vmm-add-hardware.glade.h:6 ../src/vmm-create.glade.h:16
+#: ../src/vmm-add-hardware.glade.h:2 ../src/vmm-create.glade.h:7
 msgid "<b>Network</b>"
 msgstr "<b>Síť</b>"
 
-#: ../src/vmm-add-hardware.glade.h:7
+#: ../src/vmm-add-hardware.glade.h:3
 #, fuzzy
 msgid "<b>Pointer</b>"
 msgstr "<b>Konzole</b>"
 
-#: ../src/vmm-add-hardware.glade.h:8
+#: ../src/vmm-add-hardware.glade.h:4
 #, fuzzy
 msgid "<b>Source:</b>"
 msgstr "<b>Úložný prostor</b>"
 
-#: ../src/vmm-add-hardware.glade.h:9 ../src/vmm-create.glade.h:17
+#: ../src/vmm-add-hardware.glade.h:5 ../src/vmm-create.glade.h:9
 msgid "<b>Storage</b>"
 msgstr "<b>Úložný prostor</b>"
 
-#: ../src/vmm-add-hardware.glade.h:10
+#: ../src/vmm-add-hardware.glade.h:6
 #, fuzzy
 msgid "<b>Target:</b>"
 msgstr "<b>Úložný prostor</b>"
 
-#: ../src/vmm-add-hardware.glade.h:11
+#: ../src/vmm-add-hardware.glade.h:7
 #, fuzzy
 msgid "<b>Virtual display</b>"
 msgstr "<b>Virtuální CPU:</b>"
 
-#: ../src/vmm-add-hardware.glade.h:12
+#: ../src/vmm-add-hardware.glade.h:8
 #, fuzzy
 msgid "<b>Virtual pointer</b>"
 msgstr "<b>Virtuální CPU:</b>"
 
-#: ../src/vmm-add-hardware.glade.h:13 ../src/vmm-create.glade.h:20
+#: ../src/vmm-add-hardware.glade.h:9 ../src/vmm-create.glade.h:12
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
 msgstr "<small><b>Příklad:</b> /dev/hdc2</small>"
 
-#: ../src/vmm-add-hardware.glade.h:14
+#: ../src/vmm-add-hardware.glade.h:10
 msgid ""
 "<small><b>Tip:</b> Adding a graphics tablet and configuring it as the "
 "default pointer in the guest OS will ensure the virtual cursor moves in sync "
 "with the local desktop cursor .</small>"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:15
+#: ../src/vmm-add-hardware.glade.h:11
 msgid ""
 "<small><b>Tip:</b> Automatically allocated the port ensures that every "
 "virtual machine uses a different port. If two machines try to use the same "
 "port one of them will fail to start.</small>"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:16 ../src/vmm-create.glade.h:26
+#: ../src/vmm-add-hardware.glade.h:12 ../src/vmm-create.glade.h:18
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is disconnected, "
 "connected via wireless, or dynamically configured with NetworkManager.</"
 "small>"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:17 ../src/vmm-create.glade.h:27
+#: ../src/vmm-add-hardware.glade.h:13 ../src/vmm-create.glade.h:19
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is statically connected "
 "to wired ethernet, to gain the ability to migrate the virtual system.</small>"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:18
+#: ../src/vmm-add-hardware.glade.h:14
 msgid ""
 "<small><b>Tip:</b> The VNC server is strongly recommended because it allows "
 "the guest console window to be embedded inside this application. It may also "
 "be used to allow access to the guest console from a remote host</small>"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:19 ../src/vmm-create.glade.h:30
+#: ../src/vmm-add-hardware.glade.h:15 ../src/vmm-create.glade.h:22
 msgid ""
 "<small><b>Warning:</b> If you do not allocate the entire disk at VM "
 "creation, space will be allocated as needed while the guest is running. If "
@@ -938,7 +654,7 @@ msgstr ""
 "v hostitelském systému dostatečné místo, povede to k poškození dat uvnitř "
 "hostovaného systému.</small>"
 
-#: ../src/vmm-add-hardware.glade.h:20
+#: ../src/vmm-add-hardware.glade.h:16
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Access the "
@@ -947,7 +663,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
 "prostor</span>"
 
-#: ../src/vmm-add-hardware.glade.h:21
+#: ../src/vmm-add-hardware.glade.h:17
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding new "
 "virtual hardware </span>"
@@ -955,7 +671,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přidání nového "
 "virtuálního hardware</span>"
 
-#: ../src/vmm-add-hardware.glade.h:22 ../src/vmm-create.glade.h:32
+#: ../src/vmm-add-hardware.glade.h:18 ../src/vmm-create.glade.h:24
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
 "storage space</span>"
@@ -963,7 +679,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
 "prostor</span>"
 
-#: ../src/vmm-add-hardware.glade.h:23 ../src/vmm-create.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:19 ../src/vmm-create.glade.h:27
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connect to host "
 "network</span>"
@@ -971,7 +687,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přpojit k síti "
 "hosta</span>"
 
-#: ../src/vmm-add-hardware.glade.h:24
+#: ../src/vmm-add-hardware.glade.h:20
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Interacting "
@@ -980,7 +696,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
 "prostor</span>"
 
-#: ../src/vmm-add-hardware.glade.h:25
+#: ../src/vmm-add-hardware.glade.h:21
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to add "
 "hardware</span>"
@@ -988,155 +704,127 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Připraven k "
 "přidání hardware</span>"
 
-#: ../src/vmm-add-hardware.glade.h:26
+#: ../src/vmm-add-hardware.glade.h:22
 msgid "Absolute"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:27
+#: ../src/vmm-add-hardware.glade.h:23
 msgid "Add new virtual hardware"
 msgstr "Přidat nový virtuální hardware"
 
-#: ../src/vmm-add-hardware.glade.h:28 ../src/vmm-details.glade.h:22
-#, fuzzy
-msgid "Address:"
-msgstr "MAC adresa"
-
-#: ../src/vmm-add-hardware.glade.h:29 ../src/vmm-create.glade.h:40
+#: ../src/vmm-add-hardware.glade.h:25 ../src/vmm-create.glade.h:34
 msgid "Allocate entire virtual disk now?"
 msgstr "Alokovat virtuální disk ihned?"
 
-#: ../src/vmm-add-hardware.glade.h:30
-#: ../../po/../src/virtManager/addhardware.py:383
-#: ../../po/../src/virtManager/details.py:483
+#: ../src/vmm-add-hardware.glade.h:26 ../src/virtManager/addhardware.py:442
+#: ../src/virtManager/details.py:906
 #, fuzzy
 msgid "Automatically allocated"
 msgstr "Automaticky otenřít konzole:"
 
-#: ../src/vmm-add-hardware.glade.h:31 ../src/vmm-create.glade.h:42
+#: ../src/vmm-add-hardware.glade.h:27 ../src/vmm-create.glade.h:35
 msgid "Browse..."
 msgstr "Zobrazit..."
 
-#: ../src/vmm-add-hardware.glade.h:33 ../src/vmm-create.glade.h:46
+#: ../src/vmm-add-hardware.glade.h:28 ../src/vmm-create.glade.h:38
+#: ../src/vmm-create-net.glade.h:16
+msgid "Complete"
+msgstr "Dokončeno"
+
+#: ../src/vmm-add-hardware.glade.h:29 ../src/vmm-create.glade.h:39
 msgid "Connection type:"
 msgstr "Typ připojení"
 
-#: ../src/vmm-add-hardware.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:30
 msgid "Device Type Field"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:35
+#: ../src/vmm-add-hardware.glade.h:31
 msgid "Device type:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:36 ../src/vmm-create.glade.h:48
-#: ../src/vmm-details.glade.h:27
-msgid "Disk"
-msgstr "Disk"
-
-#: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:49
+#: ../src/vmm-add-hardware.glade.h:33 ../src/vmm-create.glade.h:42
 msgid "Disk image:"
 msgstr "Obraz disku:"
 
-#: ../src/vmm-add-hardware.glade.h:38 ../src/vmm-create.glade.h:50
+#: ../src/vmm-add-hardware.glade.h:34 ../src/vmm-create.glade.h:43
 msgid "Disk size:"
 msgstr "Velikost disku:"
 
-#: ../src/vmm-add-hardware.glade.h:39
-#: ../../po/../src/virtManager/details.py:697
+#: ../src/vmm-add-hardware.glade.h:35 ../src/virtManager/details.py:1518
 msgid "Display"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:40
+#: ../src/vmm-add-hardware.glade.h:36
 msgid "EvTouch Tablet"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:41 ../src/vmm-create.glade.h:54
+#: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:46
 #, fuzzy
 msgid "File Location Field"
 msgstr "_Umístění souboru:"
 
-#: ../src/vmm-add-hardware.glade.h:42
+#: ../src/vmm-add-hardware.glade.h:38
 #, fuzzy
 msgid "File Size Field"
 msgstr "_Velikost souboru:"
 
-#: ../src/vmm-add-hardware.glade.h:43 ../src/vmm-create.glade.h:56
+#: ../src/vmm-add-hardware.glade.h:39 ../src/vmm-create.glade.h:48
 msgid "File _Location:"
 msgstr "_Umístění souboru:"
 
-#: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-create.glade.h:57
+#: ../src/vmm-add-hardware.glade.h:40 ../src/vmm-create.glade.h:49
 msgid "File _Size:"
 msgstr "_Velikost souboru:"
 
-#: ../src/vmm-add-hardware.glade.h:45
+#: ../src/vmm-add-hardware.glade.h:41
 #, fuzzy
 msgid "Hardware Type Select"
 msgstr "Vyžadován typ hardware"
 
-#: ../src/vmm-add-hardware.glade.h:46
+#: ../src/vmm-add-hardware.glade.h:42
 msgid "Hardware type:"
 msgstr "Tzp hardware"
 
-#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-details.glade.h:32
-#: ../../po/../src/virtManager/details.py:679
-#, fuzzy
-msgid "Input"
+#: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-create.glade.h:58
+#: ../src/vmm-create-net.glade.h:28
+msgid "Intro"
 msgstr "Úvod"
 
-#: ../src/vmm-add-hardware.glade.h:49
+#: ../src/vmm-add-hardware.glade.h:46
 msgid "Listen on all public network interfaces "
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:50 ../src/vmm-details.glade.h:33
-#, fuzzy
-msgid "MAC Address Field"
-msgstr "MAC adresa"
-
-#: ../src/vmm-add-hardware.glade.h:51 ../src/vmm-create.glade.h:73
-#: ../src/vmm-details.glade.h:34
-#, fuzzy
-msgid "MAC address:"
-msgstr "MAC adresa"
-
-#: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create.glade.h:74
-#: ../src/vmm-details.glade.h:35
-msgid "MB"
-msgstr "MB"
-
-#: ../src/vmm-add-hardware.glade.h:53 ../src/vmm-details.glade.h:41
-msgid "Mode:"
-msgstr ""
-
-#: ../src/vmm-add-hardware.glade.h:54 ../src/vmm-create.glade.h:81
-#: ../src/vmm-details.glade.h:44
-msgid "Network"
-msgstr "Síť"
-
-#: ../src/vmm-add-hardware.glade.h:55 ../src/vmm-create.glade.h:82
+#: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create.glade.h:79
 msgid "Network Device Select"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:56
+#: ../src/vmm-add-hardware.glade.h:53 ../src/virtManager/addhardware.py:448
 msgid "No"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:57 ../src/vmm-create.glade.h:84
+#: ../src/vmm-add-hardware.glade.h:54 ../src/vmm-create.glade.h:82
 msgid "Normal Disk _Partition:"
 msgstr "Normální diskové _oddíly:"
 
-#: ../src/vmm-add-hardware.glade.h:58 ../src/vmm-create.glade.h:91
+#: ../src/vmm-add-hardware.glade.h:55
+#, fuzzy
+msgid "Other:"
+msgstr "Ostatní"
+
+#: ../src/vmm-add-hardware.glade.h:56 ../src/vmm-create.glade.h:86
 msgid "P_artition:"
 msgstr "_Oddíly"
 
-#: ../src/vmm-add-hardware.glade.h:59
+#: ../src/vmm-add-hardware.glade.h:57
 msgid "Partition Location Field"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:61
+#: ../src/vmm-add-hardware.glade.h:59
 msgid "Please indicate how you would like to view the guest display."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:62
+#: ../src/vmm-add-hardware.glade.h:60
 #, fuzzy
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
@@ -1146,39 +834,38 @@ msgstr ""
 "prostor. Toto místo bude využito pro instalaci operačního systému do "
 "virtuálního stroje."
 
-#: ../src/vmm-add-hardware.glade.h:63
+#: ../src/vmm-add-hardware.glade.h:61
 msgid ""
 "Please indicate how you'd like to connect your new virtual network device to "
 "the host network."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:64
+#: ../src/vmm-add-hardware.glade.h:62
 msgid "Please indicate what kind of pointer device to connect to the guest."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:65 ../src/vmm-details.glade.h:50
-#, fuzzy
-msgid "Port:"
-msgstr "_Port:"
+#: ../src/vmm-add-hardware.glade.h:64 ../src/virtManager/addhardware.py:452
+msgid "Same as host"
+msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:66
+#: ../src/vmm-add-hardware.glade.h:65
 #, fuzzy
-msgid "Set _fixed MAC address for this NIC?"
+msgid "Set fixed MAC _address for this NIC?"
 msgstr "Definovaná MAC adresa:"
 
-#: ../src/vmm-add-hardware.glade.h:67 ../src/vmm-create.glade.h:102
+#: ../src/vmm-add-hardware.glade.h:66 ../src/vmm-create.glade.h:98
 msgid "Shared Physical Device"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:68 ../src/vmm-create.glade.h:103
+#: ../src/vmm-add-hardware.glade.h:67 ../src/vmm-create.glade.h:99
 msgid "Simple F_ile:"
 msgstr "_Jednoduchý soubor"
 
-#: ../src/vmm-add-hardware.glade.h:69 ../src/vmm-create.glade.h:106
+#: ../src/vmm-add-hardware.glade.h:68 ../src/vmm-create.glade.h:102
 msgid "Target:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:70
+#: ../src/vmm-add-hardware.glade.h:69
 #, fuzzy
 msgid ""
 "This assistant will guide you through adding a new piece of virtual "
@@ -1187,108 +874,368 @@ msgstr ""
 "Průvodce vás provede vytvořením nového virtuálního systému. Budete dotázáni "
 "na několik informací o tom, jak bude virtuální systém vytvořen:"
 
-#: ../src/vmm-add-hardware.glade.h:73
+#: ../src/vmm-add-hardware.glade.h:72
 #, fuzzy
 msgid "Virtual Network Select"
 msgstr "Virtuální CPU"
 
-#: ../src/vmm-add-hardware.glade.h:74 ../src/vmm-create.glade.h:121
+#: ../src/vmm-add-hardware.glade.h:73 ../src/vmm-create.glade.h:117
 msgid "_Device:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:76 ../src/vmm-create.glade.h:125
+#: ../src/vmm-add-hardware.glade.h:74 ../src/vmm-create.glade.h:118
+#: ../src/vmm-create-net.glade.h:53
+msgid "_Finish"
+msgstr "_Dokončit"
+
+#: ../src/vmm-add-hardware.glade.h:75 ../src/vmm-create.glade.h:122
 #, fuzzy
 msgid "_MAC address:"
 msgstr "MAC adresa"
 
-#: ../src/vmm-add-hardware.glade.h:77 ../src/vmm-create.glade.h:127
+#: ../src/vmm-add-hardware.glade.h:76 ../src/vmm-create.glade.h:124
 #, fuzzy
 msgid "_Network:"
 msgstr "Síť"
 
-#: ../src/vmm-add-hardware.glade.h:78 ../src/vmm-create.glade.h:130
+#: ../src/vmm-add-hardware.glade.h:77 ../src/vmm-create.glade.h:127
 msgid "_Shared physical device"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:79 ../src/vmm-create.glade.h:132
+#: ../src/vmm-add-hardware.glade.h:78 ../src/vmm-create.glade.h:129
 #, fuzzy
 msgid "_Virtual network"
 msgstr "_Virtuální stroj"
 
-#: ../src/vmm-add-hardware.glade.h:80 ../src/vmm-create.glade.h:134
-msgid "eth0"
+#: ../src/vmm-add-hardware.glade.h:79
+msgid "keylabel"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:2
-msgid " "
-msgstr " "
+#: ../src/vmm-host.glade.h:2
+msgid "<b>IPv4 configuration</b>"
+msgstr ""
 
-#: ../src/vmm-create.glade.h:5 ../src/vmm-details.glade.h:4
-msgid "2 GB"
-msgstr "2 GB"
-
-#: ../src/vmm-create.glade.h:6
-msgid "256\t"
-msgstr "256\t"
-
-#: ../src/vmm-create.glade.h:7
-msgid "400 MB"
-msgstr "400 MB"
-
-#: ../src/vmm-create.glade.h:8
-msgid "5\t"
-msgstr "5\t"
-
-#: ../src/vmm-create.glade.h:10
+#: ../src/vmm-host.glade.h:4
 #, fuzzy
-msgid "512 MB"
-msgstr "500 MB"
+msgid "<b>Volumes</b>"
+msgstr "<b>Konzole</b>"
 
-#: ../src/vmm-create.glade.h:11
+#: ../src/vmm-host.glade.h:5 ../src/virtManager/connection.py:1029
+#: ../src/virtManager/host.py:326 ../src/virtManager/host.py:543
+msgid "Active"
+msgstr "Aktivní"
+
+#: ../src/vmm-host.glade.h:6
+#, fuzzy
+msgid "Add Network"
+msgstr "Síť"
+
+#: ../src/vmm-host.glade.h:7
+msgid "Add Pool"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:8
+msgid "Apply"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:9
+#, fuzzy
+msgid "Architecture:"
+msgstr "Architektura CPU:"
+
+#: ../src/vmm-host.glade.h:10
+#, fuzzy
+msgid "Autoconnect:"
+msgstr "Typ připojení"
+
+#: ../src/vmm-host.glade.h:11
+msgid "Autostart:"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:13 ../src/vmm-open-connection.glade.h:6
+#, fuzzy
+msgid "Connection:"
+msgstr "Typ připojení"
+
+#: ../src/vmm-host.glade.h:14
+msgid "DHCP end:"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:15
+msgid "DHCP start:"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:16
+#, fuzzy
+msgid "Delete Network"
+msgstr "Síť"
+
+#: ../src/vmm-host.glade.h:17
+msgid "Delete Pool"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:18
+#, fuzzy
+msgid "Delete Volume"
+msgstr "Smazat stroj"
+
+#: ../src/vmm-host.glade.h:19
+msgid "Device:"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:20
+msgid "Forwarding:"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:21
+#, fuzzy
+msgid "Host Details"
+msgstr "_Detaily"
+
+#: ../src/vmm-host.glade.h:22 ../src/vmm-open-connection.glade.h:8
+#, fuzzy
+msgid "Hostname:"
+msgstr "_Host:"
+
+#: ../src/vmm-host.glade.h:23 ../src/vmm-create.glade.h:50
+#: ../src/vmm-open-connection.glade.h:10
+msgid "Hypervisor:"
+msgstr "Hypervisor:"
+
+#: ../src/vmm-host.glade.h:24
+#, fuzzy
+msgid "Location:"
+msgstr "Umístění _ISO:"
+
+#: ../src/vmm-host.glade.h:25
+#, fuzzy
+msgid "Logical CPUs:"
+msgstr "Logické CPU:"
+
+#: ../src/vmm-host.glade.h:27
+#, fuzzy
+msgid "Memory:"
+msgstr "Paměť"
+
+#: ../src/vmm-host.glade.h:28 ../src/vmm-create-net.glade.h:30
+#: ../src/virtManager/createnet.py:101 ../src/virtManager/createnet.py:264
+#: ../src/virtManager/host.py:358
+msgid "NAT to any physical device"
+msgstr "NAT do nějakého fyzického zařízení"
+
+#: ../src/vmm-host.glade.h:30 ../src/vmm-create-net.glade.h:37
+#, fuzzy
+msgid "Network:"
+msgstr "Síť"
+
+#: ../src/vmm-host.glade.h:31
+msgid "New Volume"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:33
+#, fuzzy
+msgid "Pool Type:"
+msgstr "Typ"
+
+#: ../src/vmm-host.glade.h:34
+#, fuzzy
+msgid "Start Network"
+msgstr "Síť"
+
+#: ../src/vmm-host.glade.h:35
+#, fuzzy
+msgid "Start Pool"
+msgstr "Stav"
+
+#: ../src/vmm-host.glade.h:36
+#, fuzzy
+msgid "State:"
+msgstr "Stav:"
+
+#: ../src/vmm-host.glade.h:37
+#, fuzzy
+msgid "Stop Network"
+msgstr "Síť"
+
+#: ../src/vmm-host.glade.h:38
+msgid "Stop Pool"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:39
+msgid "Storage Pools"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:40
+#, fuzzy
+msgid "Virtual Networks"
+msgstr "Virtuální CPU"
+
+#: ../src/vmm-host.glade.h:41
+msgid "Xen"
+msgstr ""
+
+#: ../src/vmm-choose-cd.glade.h:1
+msgid "<b>CD Source Device Or File</b>"
+msgstr ""
+
+#: ../src/vmm-choose-cd.glade.h:2
+msgid "Choose A CD Source Device"
+msgstr ""
+
+#: ../src/vmm-choose-cd.glade.h:3 ../src/vmm-create.glade.h:52
+msgid "ISO _Location:"
+msgstr "Umístění _ISO:"
+
+#: ../src/vmm-choose-cd.glade.h:4 ../src/vmm-create.glade.h:115
+msgid "_Browse..."
+msgstr "Zo_brazit:"
+
+#: ../src/vmm-choose-cd.glade.h:5 ../src/vmm-create.glade.h:116
+msgid "_CD-ROM or DVD:"
+msgstr "_CD-ROM nebo DVD:"
+
+#: ../src/vmm-choose-cd.glade.h:6 ../src/vmm-create.glade.h:119
+msgid "_ISO Image Location:"
+msgstr "Umístění _ISO obrazu:"
+
+#: ../src/vmm-choose-cd.glade.h:7 ../src/vmm-create.glade.h:126
+msgid "_Path to install media:"
+msgstr "_Cesta k instalčním médiím:"
+
+#: ../src/vmm-manager.glade.h:1
+#, fuzzy
+msgid "Add Connection..."
+msgstr "Navázat spojení..."
+
+#: ../src/vmm-manager.glade.h:2
+msgid ""
+"All virtual machines\n"
+"Active virtual machines\n"
+"Inactive virtual machines"
+msgstr ""
+"Všechny virtuální stroje\n"
+"Aktivní virtuální stroje\n"
+"Neaktivní virtuální stroje"
+
+#: ../src/vmm-manager.glade.h:5 ../src/virtManager/manager.py:804
+msgid "CPU usage"
+msgstr "Využití CPU"
+
+#: ../src/vmm-manager.glade.h:6
+#, fuzzy
+msgid "Connection Details..."
+msgstr "Typ připojení"
+
+#: ../src/vmm-manager.glade.h:7
+#, fuzzy
+msgid "Delete Machine"
+msgstr "Smazat stroj"
+
+#: ../src/vmm-manager.glade.h:8 ../src/virtManager/manager.py:807
+msgid "Disk usage"
+msgstr "Využití disku"
+
+#: ../src/vmm-manager.glade.h:9
+msgid "Domain ID"
+msgstr "ID domény"
+
+#: ../src/vmm-manager.glade.h:10
+#, fuzzy
+msgid "Machine Details..."
+msgstr "Detaily stroje..."
+
+#: ../src/vmm-manager.glade.h:11 ../src/virtManager/manager.py:806
+msgid "Memory usage"
+msgstr "Využití paměti"
+
+#: ../src/vmm-manager.glade.h:12 ../src/virtManager/manager.py:808
+msgid "Network traffic"
+msgstr "Síťový provoz"
+
+#: ../src/vmm-manager.glade.h:13
+msgid "Restore a saved machine from a filesystem image"
+msgstr "Obnovit virtuální stroj z uloženého obrazu"
+
+#: ../src/vmm-manager.glade.h:14
+msgid "Restore saved machine..."
+msgstr "Obnovit uložený stroj..."
+
+#: ../src/vmm-manager.glade.h:15 ../src/virtManager/manager.py:803
+msgid "Status"
+msgstr "Stav"
+
+#: ../src/vmm-manager.glade.h:16
+msgid "Virtual CPUs"
+msgstr "Virtuální CPU"
+
+#: ../src/vmm-manager.glade.h:19
+msgid "_Edit"
+msgstr "_Změnit"
+
+#: ../src/vmm-manager.glade.h:23
+msgid "_View:"
+msgstr "_Zobrazit:"
+
+#: ../src/vmm-create.glade.h:1
+#, fuzzy
+msgid "32"
+msgstr "2"
+
+#: ../src/vmm-create.glade.h:2
 msgid "<b>CPUs:</b>"
 msgstr "<b>CPU:</b>"
 
-#: ../src/vmm-create.glade.h:12
+#: ../src/vmm-create.glade.h:3
 msgid "<b>Example:</b> system1"
 msgstr "<b>Příklad:</b> system1"
 
-#: ../src/vmm-create.glade.h:13
+#: ../src/vmm-create.glade.h:4
 #, fuzzy
 msgid "<b>Install media</b>"
 msgstr "<b>Původně paměti:</b>"
 
-#: ../src/vmm-create.glade.h:14
+#: ../src/vmm-create.glade.h:5
 msgid "<b>Memory:</b>"
 msgstr "<b>Paměť:</b>"
 
-#: ../src/vmm-create.glade.h:15
+#: ../src/vmm-create.glade.h:6
 msgid "<b>Memory</b> and <b>CPU</b> allocation"
 msgstr "Alokace <b>paměti</b> a <b>CPU</b>"
 
-#: ../src/vmm-create.glade.h:18
+#: ../src/vmm-create.glade.h:8
+#, fuzzy
+msgid "<b>Sound</b>"
+msgstr "<b>Úložný prostor</b>"
+
+#: ../src/vmm-create.glade.h:10
 msgid ""
 "<b>Storage</b> details - which disk partitions or files the system should use"
 msgstr ""
 "Detaily <b>úložného prostoru</b> - které oddíly nebo soubory systém má "
 "používat"
 
-#: ../src/vmm-create.glade.h:21
+#: ../src/vmm-create.glade.h:11 ../src/vmm-create-net.glade.h:6
+#, fuzzy
+msgid "<b>Summary</b>"
+msgstr "<b>Souhrn:</b>"
+
+#: ../src/vmm-create.glade.h:13
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 msgstr "<small><b>Příklad:</b> ftp://jmeno.domena.cz/ks/ks.cfg</small>"
 
-#: ../src/vmm-create.glade.h:22
+#: ../src/vmm-create.glade.h:14
 msgid ""
 "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
 msgstr "<small><b>Příklad:</b> http://jmeno.domena.cz/distro/i386/os</small>"
 
-#: ../src/vmm-create.glade.h:23
+#: ../src/vmm-create.glade.h:15
 #, fuzzy
 msgid ""
 "<small><b>Example:</b> updates=http://hostname.example.com/updates.img</"
 "small>"
 msgstr "<small><b>Příklad:</b> ftp://jmeno.domena.cz/ks/ks.cfg</small>"
 
-#: ../src/vmm-create.glade.h:24
+#: ../src/vmm-create.glade.h:16
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
@@ -1296,7 +1243,7 @@ msgstr ""
 "<small><b>Poznámka:</b>CPU hostitelského systému nemají podporu pro plnou "
 "virtualizaci.</small>"
 
-#: ../src/vmm-create.glade.h:25
+#: ../src/vmm-create.glade.h:17
 msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
@@ -1304,7 +1251,7 @@ msgstr ""
 "<small><b>Poznámka:</b> CPU v hostitelském počítači podporuje plnou "
 "virtualizaci, avšak ta je v nastavení BIOSu vypnutá.</small>"
 
-#: ../src/vmm-create.glade.h:28
+#: ../src/vmm-create.glade.h:20
 msgid ""
 "<small><b>Tip:</b> For best performance, the number of virtual CPUs should "
 "be less than (or equal to) the number of logical CPUs on the host system.</"
@@ -1313,7 +1260,7 @@ msgstr ""
 "<small><b>Tip:</b> Pro nejvyšší výkon musí být počet virtuálních CPU menší "
 "(nebo roven) počtu fyzických CPU v hostitelském systému.</small>"
 
-#: ../src/vmm-create.glade.h:29
+#: ../src/vmm-create.glade.h:21
 msgid ""
 "<small><b>Tip:</b> You may add additional storage, including network-mounted "
 "storage, to your virtual system after it has been created using the same "
@@ -1322,7 +1269,7 @@ msgstr ""
 "<small><b>Tip:</b> Doplňující úložný prostor můžete do virtuálního stroje po "
 "jeho vytvoření přidat stejným způsobem, jako na fyzickém systému.</small>"
 
-#: ../src/vmm-create.glade.h:31
+#: ../src/vmm-create.glade.h:23
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Allocate memory "
 "and CPU</span>"
@@ -1330,7 +1277,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Alokovat paměť "
 "a CPU</span>"
 
-#: ../src/vmm-create.glade.h:33
+#: ../src/vmm-create.glade.h:25
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing a "
 "virtualization method</span>"
@@ -1338,7 +1285,16 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Zvolit "
 "virtualizační metodu</span>"
 
-#: ../src/vmm-create.glade.h:35
+#: ../src/vmm-create.glade.h:26
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing "
+"installation method</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Zvolit "
+"virtualizační metodu</span>"
+
+#: ../src/vmm-create.glade.h:28
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual system </span>"
@@ -1346,7 +1302,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Vytvořit nový "
 "virtální systém</span>"
 
-#: ../src/vmm-create.glade.h:36
+#: ../src/vmm-create.glade.h:29
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation media</span>"
@@ -1354,7 +1310,16 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Určení "
 "instalačního média</span>"
 
-#: ../src/vmm-create.glade.h:37
+#: ../src/vmm-create.glade.h:30
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
+"installation source</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Určení "
+"instalačního média</span>"
+
+#: ../src/vmm-create.glade.h:31
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual system </span>"
@@ -1362,7 +1327,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Pojmenování "
 "virtuálního systému</span>"
 
-#: ../src/vmm-create.glade.h:38
+#: ../src/vmm-create.glade.h:32
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to begin "
 "installation</span>"
@@ -1370,73 +1335,65 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Připraven k "
 "instalaci</span>"
 
-#: ../src/vmm-create.glade.h:39
+#: ../src/vmm-create.glade.h:33
 msgid "A <b>name</b> for your new virtual system"
 msgstr "<b>Jméno</b> pro nový virtuální systém"
 
-#: ../src/vmm-create.glade.h:41
-#, fuzzy
-msgid "Architecture Select"
-msgstr "Architektura CPU:"
-
-#: ../src/vmm-create.glade.h:43
+#: ../src/vmm-create.glade.h:36
 msgid "CPU architecture:"
 msgstr "Architektura CPU:"
 
-#: ../src/vmm-create.glade.h:44
+#: ../src/vmm-create.glade.h:37
 msgid "CPU/memory"
 msgstr "CPU/paměť"
 
-#: ../src/vmm-create.glade.h:47
+#: ../src/vmm-create.glade.h:40
 msgid "Create a new virtual system"
 msgstr "Vytvořit nový virtuální systém"
 
-#: ../src/vmm-create.glade.h:51
-msgid "Enable kernel / hardware acceleration"
-msgstr "Povolit jadernou / hardwarovou akceleraci"
+#: ../src/vmm-create.glade.h:44
+msgid "Enable Audio:"
+msgstr ""
 
-#: ../src/vmm-create.glade.h:52
-msgid "FV install"
-msgstr "Instalace FV"
-
-#: ../src/vmm-create.glade.h:53
+#: ../src/vmm-create.glade.h:45
 msgid "F_ully Virtualized:"
 msgstr "_Plně virtualizované:"
 
-#: ../src/vmm-create.glade.h:55
+#: ../src/vmm-create.glade.h:47
 #, fuzzy
 msgid "File Size Select"
 msgstr "_Velikost souboru:"
 
-#: ../src/vmm-create.glade.h:58
+#: ../src/vmm-create.glade.h:51
 #, fuzzy
 msgid "ISO Location Field"
 msgstr "Umístění _ISO:"
 
-#: ../src/vmm-create.glade.h:59
-msgid "ISO _Location:"
-msgstr "Umístění _ISO:"
-
-#: ../src/vmm-create.glade.h:60
+#: ../src/vmm-create.glade.h:53
 #, fuzzy
 msgid "Initial memory:"
 msgstr "<b>Původně paměti:</b>"
 
-#: ../src/vmm-create.glade.h:61
+#: ../src/vmm-create.glade.h:54
 msgid "Install Media _URL:"
 msgstr "Instalační _URL:"
 
-#: ../src/vmm-create.glade.h:62
+#: ../src/vmm-create.glade.h:55
 #, fuzzy
 msgid "Install URL Field"
 msgstr "Vyžadováno instalační médium"
 
-#: ../src/vmm-create.glade.h:63
+#: ../src/vmm-create.glade.h:56
+#, fuzzy
+msgid "Install type"
+msgstr "Vyžadováno instalační médium"
+
+#: ../src/vmm-create.glade.h:57
 #, fuzzy
 msgid "Installation source:"
 msgstr "<b>Zdroj instalace:</b>"
 
-#: ../src/vmm-create.glade.h:65
+#: ../src/vmm-create.glade.h:59
 msgid ""
 "Involves hardware simulation, allowing for a greater range of operating "
 "systems (does not require OS modification). Slower than paravirtualized "
@@ -1446,25 +1403,25 @@ msgstr ""
 "systémů, protože nevyžaduje jejich modifikaci. Je pomalejší, než "
 "paravirtualizované systémy."
 
-#: ../src/vmm-create.glade.h:66
+#: ../src/vmm-create.glade.h:60
 msgid "Kernel arguments:"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:67
+#: ../src/vmm-create.glade.h:61
 #, fuzzy
 msgid "Kickstart Field"
 msgstr "<b>Zdroj pro kickstart:</b>"
 
-#: ../src/vmm-create.glade.h:68
+#: ../src/vmm-create.glade.h:62
 msgid "Kickstart U_RL:"
 msgstr "URL _kickstaru:"
 
-#: ../src/vmm-create.glade.h:69
+#: ../src/vmm-create.glade.h:63
 #, fuzzy
 msgid "Kickstart source:"
 msgstr "<b>Zdroj pro kickstart:</b>"
 
-#: ../src/vmm-create.glade.h:70
+#: ../src/vmm-create.glade.h:64
 msgid ""
 "Lightweight method of virtualizing machines. Limits operating system choices "
 "because the OS must be specially modified to support paravirtualization. "
@@ -1475,83 +1432,88 @@ msgstr ""
 "aby paravirtualizaci podporoval. Dosahuje vyššího výkonu, než plně "
 "virtualizované systémy."
 
-#: ../src/vmm-create.glade.h:71
+#: ../src/vmm-create.glade.h:65
+#, fuzzy
+msgid "Local inst"
+msgstr "_Místní host:"
+
+#: ../src/vmm-create.glade.h:66
 msgid "Logical host CPUs:"
 msgstr "Logické CPU:"
 
-#: ../src/vmm-create.glade.h:72
+#: ../src/vmm-create.glade.h:67
 msgid "MAC Field"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:75
+#: ../src/vmm-create.glade.h:70
 #, fuzzy
 msgid "Machine name:"
 msgstr "<b>Jméno stroje:</b>"
 
-#: ../src/vmm-create.glade.h:76
+#: ../src/vmm-create.glade.h:71
 msgid "Max Mem Select"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:77
+#: ../src/vmm-create.glade.h:72
+msgid "Maximum VM type VCPUs:"
+msgstr ""
+
+#: ../src/vmm-create.glade.h:73
 #, fuzzy
 msgid "Maximum memory:"
 msgstr "<b>Maximálně paměti:</b>"
 
-#: ../src/vmm-create.glade.h:78
+#: ../src/vmm-create.glade.h:74
 msgid "Media Path Select"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:80 ../src/vmm-details.glade.h:42
-msgid "Name Field"
+#: ../src/vmm-create.glade.h:75 ../src/vmm-create-net.glade.h:31
+#: ../src/vmm-create-pool.glade.h:11 ../src/virtManager/connect.py:75
+#: ../src/virtManager/manager.py:801
+msgid "Name"
+msgstr "Jméno"
+
+#: ../src/vmm-create.glade.h:77
+msgid "Netinst"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:83
+#: ../src/vmm-create.glade.h:80
 #, fuzzy
 msgid "Network Select"
 msgstr "Síť"
 
-#: ../src/vmm-create.glade.h:85
-#, fuzzy
-msgid "OS Type Select"
-msgstr "Typ OS:"
+#: ../src/vmm-create.glade.h:81
+msgid "Network install t_ree (HTTP, FTP, or NFS)"
+msgstr ""
 
-#: ../src/vmm-create.glade.h:86
-#, fuzzy
-msgid "OS Variant Select"
-msgstr "Varianta OS:"
-
-#: ../src/vmm-create.glade.h:87
+#: ../src/vmm-create.glade.h:83
 msgid "OS _Type:"
 msgstr "Typ OS:"
 
-#: ../src/vmm-create.glade.h:88
+#: ../src/vmm-create.glade.h:84
 msgid "OS _Variant:"
 msgstr "Varianta OS:"
 
-#: ../src/vmm-create.glade.h:89
+#: ../src/vmm-create.glade.h:85
 #, fuzzy
 msgid "Operating System:"
 msgstr "<b>Operační systém:</b>"
 
-#: ../src/vmm-create.glade.h:90
-msgid "PVinstall"
-msgstr "PV instalace"
-
-#: ../src/vmm-create.glade.h:92
+#: ../src/vmm-create.glade.h:87
 #, fuzzy
 msgid "Partition Field"
 msgstr "_Oddíly"
 
-#: ../src/vmm-create.glade.h:93
+#: ../src/vmm-create.glade.h:88
 msgid "Please choose a name for your virtual system:"
 msgstr "Vložte prosím jméno virtuálního systému:"
 
-#: ../src/vmm-create.glade.h:94
+#: ../src/vmm-create.glade.h:89
 msgid ""
 "Please choose the type of guest operating system you will be installing:"
 msgstr "Zvolte typ operačního systému, který budete instalovat:"
 
-#: ../src/vmm-create.glade.h:95
+#: ../src/vmm-create.glade.h:90
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
 "maximum amount of memory the VM should be able to use, and optionally a "
@@ -1563,11 +1525,11 @@ msgstr ""
 "startu. Varování: nastavení příliš vysoké hranice může způsobit chyby "
 "nedostatku paměti v hostitelském systému!"
 
-#: ../src/vmm-create.glade.h:96
+#: ../src/vmm-create.glade.h:91
 msgid "Please enter the number of virtual CPUs this VM should start up with."
 msgstr "Zadejte prosím počet virtuálních CPU, se kterými VM nastartuje."
 
-#: ../src/vmm-create.glade.h:97
+#: ../src/vmm-create.glade.h:92
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual system. This space will be used to install the virtual "
@@ -1577,46 +1539,56 @@ msgstr ""
 "prostor. Toto místo bude využito pro instalaci operačního systému do "
 "virtuálního stroje."
 
-#: ../src/vmm-create.glade.h:98
+#: ../src/vmm-create.glade.h:93
 msgid ""
 "Please indicate how you'd like to connect your new virtual system to the "
 "host network."
 msgstr ""
 
-#: ../src/vmm-create.glade.h:99
+#: ../src/vmm-create.glade.h:94
+#, fuzzy
 msgid ""
 "Please indicate where installation media is available for the operating "
-"system you would like to install on this <b>fully virtualized</b> virtual "
+"system you would like to install on this virtual operating system. "
+"Optionally you can provide the URL for a kickstart file that describes your "
 "system:"
-msgstr ""
-"Zvolte prosím, kde jsou k dispozici instalační média pro tento <b>plně "
-"virtualizovaný</b> virtuální stroj."
-
-#: ../src/vmm-create.glade.h:100
-msgid ""
-"Please indicate where installation media is available for the operating "
-"system you would like to install on this <b>paravirtualized</b> virtual "
-"system. Optionally you can provide the URL for a kickstart file that "
-"describes your system:"
 msgstr ""
 "Zvolte prosím, kde jsou k dispozici instalační média pro tento "
 "<b>paravirtualizovaný</b> virtuální stroj. Volitelně můžete určit URL pro "
 "kickstart soubor, který bude řídit instalaci:"
 
-#: ../src/vmm-create.glade.h:101
+#: ../src/vmm-create.glade.h:95
 #, fuzzy
-msgid "Set _fixed MAC address for your virtual system?"
+msgid ""
+"Please indicate where installation media is available for the operating "
+"system you would like to install on this virtual operating system:"
+msgstr ""
+"Zvolte prosím, kde jsou k dispozici instalační média pro tento <b>plně "
+"virtualizovaný</b> virtuální stroj."
+
+#: ../src/vmm-create.glade.h:96
+#, fuzzy
+msgid ""
+"Please indicate where installation media is available for the operating "
+"system you would like to install on this virtual system:"
+msgstr ""
+"Zvolte prosím, kde jsou k dispozici instalační média pro tento <b>plně "
+"virtualizovaný</b> virtuální stroj."
+
+#: ../src/vmm-create.glade.h:97
+#, fuzzy
+msgid "Set fixed MAC _address for your virtual system?"
 msgstr "Vložte prosím jméno virtuálního systému:"
 
-#: ../src/vmm-create.glade.h:104
+#: ../src/vmm-create.glade.h:100
 msgid "Startup Mem Select"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:105
+#: ../src/vmm-create.glade.h:101
 msgid "System _Name:"
 msgstr "Jméno _systému:"
 
-#: ../src/vmm-create.glade.h:107
+#: ../src/vmm-create.glade.h:103
 msgid ""
 "The <b>location</b> of the files necessary for installing an operating "
 "system on the virtual system"
@@ -1624,7 +1596,7 @@ msgstr ""
 "<b>Umístění</b> souborů. které jsou potřeba pro instalaci operačního systému "
 "do virtuálního stroje"
 
-#: ../src/vmm-create.glade.h:108
+#: ../src/vmm-create.glade.h:104
 msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
@@ -1633,419 +1605,102 @@ msgstr ""
 "Průvodce vás provede vytvořením nového virtuálního systému. Budete dotázáni "
 "na několik informací o tom, jak bude virtuální systém vytvořen:"
 
-#: ../src/vmm-create.glade.h:109 ../src/vmm-details.glade.h:64
-msgid "Total memory on host machine:"
-msgstr "Celkem paměti v hostovaném systému:"
-
-#: ../src/vmm-create.glade.h:110
+#: ../src/vmm-create.glade.h:106
 msgid "Type"
 msgstr "Typ"
 
-#: ../src/vmm-create.glade.h:111 ../src/vmm-details.glade.h:68
-msgid "VCPU Select"
-msgstr ""
-
-#: ../src/vmm-create.glade.h:112
+#: ../src/vmm-create.glade.h:108
 msgid "VM _Max Memory (MB):"
 msgstr "_Maximální paměť VM (MB):"
 
-#: ../src/vmm-create.glade.h:113
+#: ../src/vmm-create.glade.h:109
 msgid "VM _Startup Memory (MB):"
 msgstr "_Startovací paměť VM (MB):"
 
-#: ../src/vmm-create.glade.h:114
+#: ../src/vmm-create.glade.h:110
 msgid "VMS"
 msgstr "VMS"
 
-#: ../src/vmm-create.glade.h:115
+#: ../src/vmm-create.glade.h:111
 #, fuzzy
 msgid "Virtual CPUs:"
 msgstr "Virtuální CPU"
 
-#: ../src/vmm-create.glade.h:116
+#: ../src/vmm-create.glade.h:112
 #, fuzzy
 msgid "Virtualization method:"
 msgstr "<b>Virtualizační metoda:</b>"
 
-#: ../src/vmm-create.glade.h:117
+#: ../src/vmm-create.glade.h:113
 msgid ""
 "Whether the system will be <b>fully virtualized</b> or <b>para-virtualized</"
 "b>"
 msgstr "Bude systém <b>plně virtualizován</b> nebo <b>paravirtualizován</b>"
 
-#: ../src/vmm-create.glade.h:118
+#: ../src/vmm-create.glade.h:114
 msgid "You will need to choose a virtualization method for your new system:"
 msgstr "Určíte virtualizační metodu pro nový systém:"
 
-#: ../src/vmm-create.glade.h:119
-msgid "_Browse..."
-msgstr "Zo_brazit:"
-
 #: ../src/vmm-create.glade.h:120
-msgid "_CD-ROM or DVD:"
-msgstr "_CD-ROM nebo DVD:"
-
-#: ../src/vmm-create.glade.h:123
-msgid "_ISO Image Location:"
-msgstr "Umístění _ISO obrazu:"
-
-#: ../src/vmm-create.glade.h:124
 msgid "_Kernel parameters:"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:126
+#: ../src/vmm-create.glade.h:121
+msgid "_Local install media (ISO image or CDROM)"
+msgstr ""
+
+#: ../src/vmm-create.glade.h:123
 #, fuzzy
-msgid "_Network PXE boot"
+msgid "_Network boot (PXE)"
 msgstr "Síť"
 
-#: ../src/vmm-create.glade.h:128
+#: ../src/vmm-create.glade.h:125
 msgid "_Paravirtualized:"
 msgstr "_Paravirtualizován:"
 
-#: ../src/vmm-create.glade.h:129
-msgid "_Path to install media:"
-msgstr "_Cesta k instalčním médiím:"
-
-#: ../src/vmm-create.glade.h:131
+#: ../src/vmm-create.glade.h:128
 msgid "_VCPUs:"
 msgstr "_VCPU:"
 
-#: ../src/vmm-create.glade.h:135
-msgid "http://"
-msgstr "http://"
-
-#: ../src/vmm-create.glade.h:136
-msgid ""
-"i686\n"
-"x86_64\n"
-"ppc\n"
-"sparc\n"
-"mips\n"
-"mipsel"
-msgstr ""
-"i686\n"
-"x86_64\n"
-"ppc\n"
-"sparc\n"
-"mips\n"
-"mipsel"
-
-#: ../src/vmm-create.glade.h:142
-msgid "ip=192.168.1.1"
-msgstr ""
-
-#: ../src/vmm-create.glade.h:143
-msgid "kernel-params"
-msgstr ""
-
-#: ../src/vmm-create.glade.h:144
-msgid "para"
-msgstr "para"
-
-#: ../src/vmm-details.glade.h:2
-#, no-c-format
-msgid "18%"
-msgstr "18%"
-
-#: ../src/vmm-details.glade.h:3
-msgid "2"
-msgstr "2"
-
-#: ../src/vmm-details.glade.h:5
-msgid "20 bits/sec"
-msgstr "20 bits/sec"
-
-#: ../src/vmm-details.glade.h:6
-msgid "200 MB"
-msgstr "200 MB"
-
-#: ../src/vmm-details.glade.h:7
-msgid "30 MB of 128 MB"
-msgstr "30 MB of 128 MB"
-
-#: ../src/vmm-details.glade.h:8
-msgid "8"
-msgstr "8"
-
-#: ../src/vmm-details.glade.h:9
-msgid "80 MB of 1 GB"
-msgstr "80 MB of 1 GB"
-
-#: ../src/vmm-details.glade.h:11
-msgid "<b>CPUs</b>"
-msgstr "<b>CPU</b>"
-
-#: ../src/vmm-details.glade.h:12
-msgid "<b>Memory</b>"
-msgstr "<b>Paměť</b>"
-
-#: ../src/vmm-details.glade.h:14
-msgid ""
-"<b>Tip:</b> 'Source device' refers to the name of the device as seen from "
-"the host OS."
-msgstr ""
-
-#: ../src/vmm-details.glade.h:15
-msgid ""
-"<b>Tip:</b> 'source' refers to information seen from the host OS, while "
-"'target' refers to information seen from the guest OS"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:16
-msgid ""
-"<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
-"OS will ensure that the virtual cursor moves in sync with the local desktop "
-"cursor."
-msgstr ""
-
-#: ../src/vmm-details.glade.h:17
-msgid ""
-"<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
-"than (or equal to) the number of physical CPUs on the host system."
-msgstr ""
-"<b>Tip:</b> Pro nejvyšší výkon musí být počet virtuálních CPU menší (nebo "
-"roven) počtu fyzických CPU v hostitelském systému."
-
-#: ../src/vmm-details.glade.h:18
-#, fuzzy
-msgid "<b>Virtual Disk</b>"
-msgstr "<b>Virtuální CPU:</b>"
-
-#: ../src/vmm-details.glade.h:19
-#, fuzzy
-msgid "<b>Virtual Display</b>"
-msgstr "<b>Virtuální CPU:</b>"
-
-#: ../src/vmm-details.glade.h:20
-#, fuzzy
-msgid "<b>Virtual Network Interface</b>"
-msgstr "<b>Síť</b>"
-
-#: ../src/vmm-details.glade.h:21
-#, fuzzy
-msgid "<b>Virtual Pointer</b>"
-msgstr "<b>Virtuální CPU:</b>"
-
-#: ../src/vmm-details.glade.h:23
-msgid "Block"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:25
-msgid "Change allocation:"
-msgstr "Změna alokace"
-
-#: ../src/vmm-details.glade.h:26
-msgid "Current allocation:"
-msgstr "Aktivní alokace:"
-
-#: ../src/vmm-details.glade.h:28
-msgid "Disk usage:"
-msgstr "Využití disku:"
-
-#: ../src/vmm-details.glade.h:29
-msgid "Hardware"
-msgstr "Hardware"
-
-#: ../src/vmm-details.glade.h:30
-#, fuzzy
-msgid "How many virtual CPUs should be allocated for this machine?"
-msgstr "Kolik virtuálních CPU má mít virtální stroj přiděleno?"
-
-#: ../src/vmm-details.glade.h:31
-#, fuzzy
-msgid "How much memory should be allocated for this machine?"
-msgstr "Kolik paměti má být tomuto stroji přiděleno?"
-
-#: ../src/vmm-details.glade.h:36
-msgid "Max Memory Select"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:37
-msgid "Maximum allocation:"
-msgstr "Maximální alokace:"
-
-#: ../src/vmm-details.glade.h:38
-msgid "Memory"
-msgstr "Paměť"
-
-#: ../src/vmm-details.glade.h:39
-#, fuzzy
-msgid "Memory Select"
-msgstr "Využití paměti"
-
-#: ../src/vmm-details.glade.h:45
-msgid "Network usage:"
-msgstr "Využití sítě:"
-
-#: ../src/vmm-details.glade.h:49
-#, fuzzy
-msgid "Permissions:"
-msgstr "_Oddíly"
-
-#: ../src/vmm-details.glade.h:51
-msgid "Processor"
-msgstr "Procesor"
-
-#: ../src/vmm-details.glade.h:54
-msgid "Shut down"
-msgstr "Ukončit"
-
-#: ../src/vmm-details.glade.h:56
-msgid "Source device:"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:57
-msgid "Source path:"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:58
-msgid "Source type:"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:59
-msgid "Status:"
-msgstr "Stav:"
-
-#: ../src/vmm-details.glade.h:60
-msgid "Target device:"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:61
-msgid "Target type:"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:63
-msgid "Total CPUs on host machine:"
-msgstr "Celkem CPU v hostovaném systému:"
-
-#: ../src/vmm-details.glade.h:66
-msgid "UUID Field"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:69
-msgid "Virtual Machine Details"
-msgstr "Detaily virtuálního stroje"
-
-#: ../src/vmm-details.glade.h:73
-msgid "_Graphical Console"
-msgstr "_Grafická konzole"
-
-#: ../src/vmm-details.glade.h:80
-#, fuzzy
-msgid "disk\t"
-msgstr "Disk"
-
-#: ../../po/../src/vmm-manager.glade:49
-msgid "Restore a saved machine from a filesystem image"
-msgstr "Obnovit virtuální stroj z uloženého obrazu"
-
-#: ../../po/../src/vmm-manager.glade:50
-msgid "Restore saved machine..."
-msgstr "Obnovit uložený stroj..."
-
-#: ../../po/../src/vmm-manager.glade:78
-msgid "Open connection..."
-msgstr "Navázat spojení..."
-
-#: ../../po/../src/vmm-manager.glade:127
-msgid "_Edit"
-msgstr "_Změnit"
-
-#: ../../po/../src/vmm-manager.glade:136
-#, fuzzy
-msgid "Host details..."
-msgstr "Detaily stroje..."
-
-#: ../../po/../src/vmm-manager.glade:145
-msgid "Machine details..."
-msgstr "Detaily stroje..."
-
-#: ../../po/../src/vmm-manager.glade:166
-msgid "Delete machine"
-msgstr "Smazat stroj"
-
-#: ../../po/../src/vmm-manager.glade:215
-msgid "Domain ID"
-msgstr "ID domény"
-
-#: ../../po/../src/vmm-manager.glade:225
-#: ../../po/../src/virtManager/manager.py:788
-msgid "Status"
-msgstr "Stav"
-
-#: ../../po/../src/vmm-manager.glade:235
-#: ../../po/../src/virtManager/manager.py:789
-msgid "CPU usage"
-msgstr "Využití CPU"
-
-#: ../../po/../src/vmm-manager.glade:245
-msgid "Virtual CPUs"
-msgstr "Virtuální CPU"
-
-#: ../../po/../src/vmm-manager.glade:255
-#: ../../po/../src/virtManager/manager.py:791
-msgid "Memory usage"
-msgstr "Využití paměti"
-
-#: ../../po/../src/vmm-manager.glade:265
-#: ../../po/../src/virtManager/manager.py:792
-msgid "Disk usage"
-msgstr "Využití disku"
-
-#: ../../po/../src/vmm-manager.glade:275
-#: ../../po/../src/virtManager/manager.py:793
-msgid "Network traffic"
-msgstr "Síťový provoz"
-
-#: ../../po/../src/vmm-manager.glade:353
-msgid "_View:"
-msgstr "_Zobrazit:"
-
-#: ../../po/../src/vmm-manager.glade:378
-msgid ""
-"All virtual machines\n"
-"Active virtual machines\n"
-"Inactive virtual machines"
-msgstr ""
-"Všechny virtuální stroje\n"
-"Aktivní virtuální stroje\n"
-"Neaktivní virtuální stroje"
-
-#: ../../po/../src/vmm-manager.glade:514
-msgid "De_tails"
-msgstr "_Detaily"
-
 #: ../src/vmm-open-connection.glade.h:1
+#, fuzzy
+msgid "Add Connection"
+msgstr "Typ připojení"
+
+#: ../src/vmm-open-connection.glade.h:2
+msgid ""
+"Autoconnect\n"
+"   at Startup:"
+msgstr ""
+
+#: ../src/vmm-open-connection.glade.h:4
 msgid "Co_nnect"
 msgstr "_Připojit"
 
-#: ../src/vmm-open-connection.glade.h:2
+#: ../src/vmm-open-connection.glade.h:5
 #, fuzzy
 msgid "Connection Select"
 msgstr "Typ připojení"
 
-#: ../src/vmm-open-connection.glade.h:4
+#: ../src/vmm-open-connection.glade.h:7
 #, fuzzy
 msgid "Hostname Field"
 msgstr "_Host:"
 
-#: ../src/vmm-open-connection.glade.h:6
+#: ../src/vmm-open-connection.glade.h:9
 #, fuzzy
 msgid "Hypervisor Select"
 msgstr "Hypervisor:"
 
-#: ../src/vmm-open-connection.glade.h:8
+#: ../src/vmm-open-connection.glade.h:11
 msgid ""
 "Local\n"
+"Remote Password or Kerberos\n"
 "Remote SSL/TLS with x509 certificate\n"
 "Remote tunnel over SSH"
 msgstr ""
 
-#: ../src/vmm-open-connection.glade.h:11
-msgid "Open connection"
-msgstr "Navázat spojení"
-
-#: ../src/vmm-open-connection.glade.h:12
+#: ../src/vmm-open-connection.glade.h:15
 msgid ""
 "Xen\n"
 "QEMU"
@@ -2053,682 +1708,1235 @@ msgstr ""
 "Xen\n"
 "QEMU"
 
-#: ../src/vmm-progress.glade.h:1 ../../po/../src/virtManager/asyncjob.py:39
+#: ../src/vmm-create-net.glade.h:1
+#, fuzzy
+msgid "<b>DHCP</b>"
+msgstr "<b>CPU</b>"
+
+#: ../src/vmm-create-net.glade.h:2
+#, fuzzy
+msgid "<b>Example:</b> network1"
+msgstr "<b>Příklad:</b> system1"
+
+#: ../src/vmm-create-net.glade.h:3
+#, fuzzy
+msgid "<b>Forwarding</b>"
+msgstr "<b>Úložný prostor</b>"
+
+#: ../src/vmm-create-net.glade.h:4
+msgid ""
+"<b>Hint:</b> The network should be choosen from one of the IPv4 private "
+"address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:5
+#, fuzzy
+msgid "<b>IPv4 network</b>"
+msgstr "<b>Síť</b>"
+
+#: ../src/vmm-create-net.glade.h:7
+msgid ""
+"<b>Tip:</b> Unless you wish to reserve some addresses to allow static "
+"network configuration in virtual machines, these parameters can be left with "
+"their default values."
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:8
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing an "
+"IPv4 address space</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
+"prostor</span>"
+
+#: ../src/vmm-create-net.glade.h:9
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting to "
+"physical network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
+"prostor</span>"
+
+#: ../src/vmm-create-net.glade.h:10
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
+"virtual network </span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Vytvořit nový "
+"virtální systém</span>"
+
+#: ../src/vmm-create-net.glade.h:11
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
+"virtual network </span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Pojmenování "
+"virtuálního systému</span>"
+
+#: ../src/vmm-create-net.glade.h:12
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create "
+"network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Připraven k "
+"instalaci</span>"
+
+#: ../src/vmm-create-net.glade.h:13
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Selecting the "
+"DHCP range</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
+"prostor</span>"
+
+#: ../src/vmm-create-net.glade.h:14
+#, fuzzy
+msgid "A <b>name</b> for your new virtual network"
+msgstr "<b>Jméno</b> pro nový virtuální systém"
+
+#: ../src/vmm-create-net.glade.h:15
+msgid "Broadcast:"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:17
+#, fuzzy
+msgid "Connectivity:"
+msgstr "_Připojit"
+
+#: ../src/vmm-create-net.glade.h:18
+#, fuzzy
+msgid "Create a new virtual network"
+msgstr "Vytvořit nový virtuální systém"
+
+#: ../src/vmm-create-net.glade.h:19
+msgid "DHCP"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:20
+#, fuzzy
+msgid "Desination:"
+msgstr "Cíl"
+
+#: ../src/vmm-create-net.glade.h:21
+#, fuzzy
+msgid "End Address"
+msgstr "MAC adresa"
+
+#: ../src/vmm-create-net.glade.h:22
+#, fuzzy
+msgid "End address:"
+msgstr "MAC adresa"
+
+#: ../src/vmm-create-net.glade.h:23
+msgid "End:"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:24
+msgid "Forwarding"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:25
+msgid "Forwarding to physical network"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:26
+msgid "Gateway:"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:27
+msgid "IPv4"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:29 ../src/virtManager/createnet.py:266
+#: ../src/virtManager/host.py:361 ../src/virtManager/host.py:381
+msgid "Isolated virtual network"
+msgstr "Izolovaná virtuální síť"
+
+#: ../src/vmm-create-net.glade.h:32
+msgid "Net Name Field"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:33
+msgid "Netmask:"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:34
+#, fuzzy
+msgid "Network Range"
+msgstr "Využití sítě:"
+
+#: ../src/vmm-create-net.glade.h:35
+#, fuzzy
+msgid "Network _Name:"
+msgstr "Využití sítě:"
+
+#: ../src/vmm-create-net.glade.h:36
+#, fuzzy
+msgid "Network name:"
+msgstr "Využití sítě:"
+
+#: ../src/vmm-create-net.glade.h:38
+#, fuzzy
+msgid "Physical Network"
+msgstr "Virtuální CPU"
+
+#: ../src/vmm-create-net.glade.h:39
+#, fuzzy
+msgid "Please choose a name for your virtual network:"
+msgstr "Vložte prosím jméno virtuálního systému:"
+
+#: ../src/vmm-create-net.glade.h:40
+msgid ""
+"Please choose the range of addresses the DHCP server can use to allocate to "
+"guests attached to the virtual network"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:41
+msgid ""
+"Please indicate whether this virtual network should be connected to the "
+"physical network."
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:42 ../src/virtManager/createnet.py:163
+msgid "Private"
+msgstr "Privátní"
+
+#: ../src/vmm-create-net.glade.h:43
+#, fuzzy
+msgid "Size:"
+msgstr "_Velikost:"
+
+#: ../src/vmm-create-net.glade.h:44
+#, fuzzy
+msgid "Start Address"
+msgstr "MAC adresa"
+
+#: ../src/vmm-create-net.glade.h:45
+#, fuzzy
+msgid "Start address:"
+msgstr "MAC adresa"
+
+#: ../src/vmm-create-net.glade.h:46
+#, fuzzy
+msgid "Start:"
+msgstr "Stav:"
+
+#: ../src/vmm-create-net.glade.h:47
+msgid ""
+"The <b>address range</b> from which the <b>DHCP</b> server will allocate "
+"addresses for virtual machines"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:48
+msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:49
+#, fuzzy
+msgid ""
+"This assistant will guide you through creating a new virtual network. You "
+"will be asked for some information about the virtual network you'd like to "
+"create, such as:"
+msgstr ""
+"Průvodce vás provede vytvořením nového virtuálního systému. Budete dotázáni "
+"na několik informací o tom, jak bude virtuální systém vytvořen:"
+
+#: ../src/vmm-create-net.glade.h:51
+msgid "Whether to <b>forward</b> traffic to the physical network"
+msgstr ""
+
+#: ../src/vmm-create-net.glade.h:52
+msgid "You will need to choose an IPv4 address space for the virtual network:"
+msgstr ""
+
+#: ../src/vmm-preferences.glade.h:1
+msgid "<b>Consoles</b>"
+msgstr "<b>Konzole</b>"
+
+#: ../src/vmm-preferences.glade.h:2
+#, fuzzy
+msgid "<b>New VM Preferences</b>"
+msgstr "<b>Výkon</b>"
+
+#: ../src/vmm-preferences.glade.h:3
+msgid "<b>Status monitoring</b>"
+msgstr "<b>Monitorování stavu</b>"
+
+#: ../src/vmm-preferences.glade.h:4
+msgid "Auto Console"
+msgstr ""
+
+#: ../src/vmm-preferences.glade.h:5
+msgid "Automatically open consoles:"
+msgstr "Automaticky otenřít konzole:"
+
+#: ../src/vmm-preferences.glade.h:6
+#, fuzzy
+msgid "Grab Keyboard"
+msgstr "Zachytit vstup z klávesnice:"
+
+#: ../src/vmm-preferences.glade.h:7
+msgid "Grab keyboard input:"
+msgstr "Zachytit vstup z klávesnice:"
+
+#: ../src/vmm-preferences.glade.h:8
+#, fuzzy
+msgid "History Samples"
+msgstr "ukázky"
+
+#: ../src/vmm-preferences.glade.h:9
+#, fuzzy
+msgid "Install Audio Device:"
+msgstr "<b>Zdroj instalace:</b>"
+
+#: ../src/vmm-preferences.glade.h:10
+#, fuzzy
+msgid "Local VM"
+msgstr "_Místní host:"
+
+#: ../src/vmm-preferences.glade.h:11
+msgid "Maintain history of"
+msgstr "Udržovat historii"
+
+#: ../src/vmm-preferences.glade.h:12
+msgid ""
+"Never\n"
+"For new domains\n"
+"For all domains"
+msgstr ""
+"Nikdy\n"
+"Pro nové domény\n"
+"Pro všechny domény"
+
+#: ../src/vmm-preferences.glade.h:15
+msgid ""
+"Never\n"
+"When fullscreen\n"
+"On mouse over"
+msgstr ""
+"Nikdy\n"
+"Při plné obrazovce\n"
+"Po najetí myší"
+
+#: ../src/vmm-preferences.glade.h:18
+msgid "Preferences"
+msgstr "Nastavení"
+
+#: ../src/vmm-preferences.glade.h:19
+#, fuzzy
+msgid "Remote VM"
+msgstr "Vzdálený host"
+
+#: ../src/vmm-preferences.glade.h:20
+msgid "Status Interval"
+msgstr ""
+
+#: ../src/vmm-preferences.glade.h:21
+msgid "Update status every"
+msgstr "Aktualizovat stav každých"
+
+#: ../src/vmm-preferences.glade.h:22
+msgid "samples"
+msgstr "ukázky"
+
+#: ../src/vmm-preferences.glade.h:23
+msgid "seconds"
+msgstr "sekund"
+
+#: ../src/vmm-create-pool.glade.h:1
+msgid "                                  \n"
+msgstr ""
+
+#: ../src/vmm-create-pool.glade.h:3
+msgid "<span size='x-large'>Add Storage Pool</span>"
+msgstr ""
+
+#: ../src/vmm-create-pool.glade.h:4
+msgid "Add a New Storage Pool"
+msgstr ""
+
+#: ../src/vmm-create-pool.glade.h:5
+#, fuzzy
+msgid "Browse"
+msgstr "Zobrazit..."
+
+#: ../src/vmm-create-pool.glade.h:6
+msgid "Build Pool:"
+msgstr ""
+
+#: ../src/vmm-create-pool.glade.h:7
+#, fuzzy
+msgid "Finish"
+msgstr "_Dokončit"
+
+#: ../src/vmm-create-pool.glade.h:8
+msgid "Format"
+msgstr ""
+
+#: ../src/vmm-create-pool.glade.h:9 ../src/vmm-create-vol.glade.h:23
+#, fuzzy
+msgid "Format:"
+msgstr "_Port:"
+
+#: ../src/vmm-create-pool.glade.h:10
+#, fuzzy
+msgid "Host Name:"
+msgstr "_Host:"
+
+#: ../src/vmm-create-pool.glade.h:14
+msgid "Specify a storage location to be later split into VM storage."
+msgstr ""
+
+#: ../src/vmm-create-pool.glade.h:15
+msgid "Step 1 of 2"
+msgstr ""
+
+#: ../src/vmm-create-pool.glade.h:16
+msgid "Step 2 of 2"
+msgstr ""
+
+#: ../src/vmm-create-pool.glade.h:17
+msgid "Target Path:"
+msgstr ""
+
+#: ../src/vmm-progress.glade.h:1 ../src/virtManager/asyncjob.py:39
 msgid "Operation in progress"
 msgstr "Provádím požadovanou operaci"
 
-#: ../src/vmm-progress.glade.h:2 ../../po/../src/virtManager/asyncjob.py:39
+#: ../src/vmm-progress.glade.h:2 ../src/virtManager/asyncjob.py:39
 msgid "Please wait a few moments..."
 msgstr "Počekejte prosím chviličku..."
 
-#: ../src/vmm-progress.glade.h:3 ../../po/../src/virtManager/asyncjob.py:75
-#: ../../po/../src/virtManager/asyncjob.py:88
+#: ../src/vmm-progress.glade.h:3 ../src/virtManager/asyncjob.py:75
+#: ../src/virtManager/asyncjob.py:88
 msgid "Processing..."
 msgstr "Provádím..."
 
+#: ../src/vmm-create-vol.glade.h:1
+msgid "(parent-name)"
+msgstr ""
+
+#: ../src/vmm-create-vol.glade.h:2
+msgid "(space)"
+msgstr ""
+
+#: ../src/vmm-create-vol.glade.h:3
+msgid "<span size='large'>Storage Volume Quota</span>"
+msgstr ""
+
+#: ../src/vmm-create-vol.glade.h:4
+msgid ""
+"<span size='small'><i><u>Name</u>: Name of the\n"
+"  volume to create. File\n"
+"  extension may be\n"
+"  appended\n"
+"\n"
+"<u>Format</u>: File/Partition\n"
+"  format of the volume\n"
+"\n"
+"<u>Capacity</u>: Maximum\n"
+"  size of the volume.\n"
+"\n"
+"<u>Allocation</u>: Actual size\n"
+"  allocated to volume\n"
+"  at this time.</i></span>"
+msgstr ""
+
+#: ../src/vmm-create-vol.glade.h:18
+msgid "<span size='x-large'>New Storage Volume</span>"
+msgstr ""
+
+#: ../src/vmm-create-vol.glade.h:19
+#, fuzzy
+msgid "Add a Storage Volume"
+msgstr "Jméno _systému:"
+
+#: ../src/vmm-create-vol.glade.h:20
+#, fuzzy
+msgid "Allocation:"
+msgstr "Umístění _ISO:"
+
+#: ../src/vmm-create-vol.glade.h:21
+msgid "Create _Volume"
+msgstr ""
+
+#: ../src/vmm-create-vol.glade.h:22
+msgid "Create a storage unit that can be used directly by a VM."
+msgstr ""
+
+#: ../src/vmm-create-vol.glade.h:25
+msgid "Max Capacity:"
+msgstr ""
+
+#: ../src/vmm-create-vol.glade.h:27
+#, fuzzy
+msgid "available space:"
+msgstr "Nedostupný"
+
+#: ../src/virt-manager.py.in:54
+#, fuzzy
+msgid "Error starting Virtual Machine Manager"
+msgstr "Správce virtuálních strojů"
+
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../../po/../src/virt-manager.py.in:228
+#: ../src/virt-manager.py.in:263
 msgid "Unable to initialize GTK: "
 msgstr "Nelze inicializovat GTK: "
 
 #: ../src/virt-manager.schemas.in.h:1
-msgid "Show VCPU count in summary"
+msgid "Install sound device for local VM"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:2
-msgid "Show cpu usage in summary"
+msgid "Install sound device for remote VM"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:3
-msgid "Show disk usage in summary"
+msgid "Show VCPU count in summary"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:4
-msgid "Show domain id in summary"
+msgid "Show cpu usage in summary"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:5
-msgid "Show memory usage in summary"
+msgid "Show disk usage in summary"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:6
+msgid "Show domain id in summary"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:7
+msgid "Show memory usage in summary"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:8
 #, fuzzy
 msgid "Show network traffic in summary"
 msgstr "Síťový provoz"
 
-#: ../src/virt-manager.schemas.in.h:7
+#: ../src/virt-manager.schemas.in.h:9
 msgid "Show run state in summary"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:8
+#: ../src/virt-manager.schemas.in.h:10
 msgid "Show the cpu usage field in the domain list summary view"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:9
+#: ../src/virt-manager.schemas.in.h:11
 msgid "Show the disk usage field in the domain list summary view"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:10
+#: ../src/virt-manager.schemas.in.h:12
 msgid "Show the domain id field in the domain list summary view"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:11
+#: ../src/virt-manager.schemas.in.h:13
 msgid "Show the memory usage field in the domain list summary view"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:12
+#: ../src/virt-manager.schemas.in.h:14
 msgid "Show the network traffic field in the domain list summary view"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:13
+#: ../src/virt-manager.schemas.in.h:15
 msgid "Show the run state field in the domain list summary view"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:14
+#: ../src/virt-manager.schemas.in.h:16
 msgid "Show the virtual CPU count field in the domain list summary view"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:15
+#: ../src/virt-manager.schemas.in.h:17
 msgid "The length of the list of URLs"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:16
+#: ../src/virt-manager.schemas.in.h:18
 msgid "The number of samples to keep in the statistics history"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:17
+#: ../src/virt-manager.schemas.in.h:19
 msgid ""
 "The number of urls to keep in the history for the install media address page."
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:18
+#: ../src/virt-manager.schemas.in.h:20
 msgid "The statistics history length"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:19
+#: ../src/virt-manager.schemas.in.h:21
 msgid "The statistics update interval"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:20
+#: ../src/virt-manager.schemas.in.h:22
 msgid "The statistics update interval in seconds"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:21
+#: ../src/virt-manager.schemas.in.h:23
 msgid "When to grab keyboard input for the console"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:22
+#: ../src/virt-manager.schemas.in.h:24
 msgid "When to pop up a console for a guest"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:23
+#: ../src/virt-manager.schemas.in.h:25
 msgid ""
 "Whether to grab keyboard input for a guest console. 0 = never, 1 = only when "
 "in full screen mode, 2 = when mouse is over console"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:24
+#: ../src/virt-manager.schemas.in.h:26
+msgid "Whether to install a sound device for local VMs or not"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:27
+msgid "Whether to install a sound device for remote VMs or not"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:28
 msgid ""
 "Whether to pop up a console for a guest. 0 = never, 1 = only on creation of "
 "a new guest, 2 = On creation of any guest"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:25
+#: ../src/virt-manager.schemas.in.h:29
+msgid "Whether to show VM button toolbar in Details display"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:30
 msgid "Whether to show notification when grabbing mouse"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:26
+#: ../src/virt-manager.schemas.in.h:31
 msgid ""
 "Whether to show the notification hint when grabbing the mouse in the console"
 msgstr ""
 
-#: ../../po/../src/virtManager/connection.py:765
+#: ../src/virt-manager.schemas.in.h:32
+msgid ""
+"Whether to show toolbar containing Virtual Machine action buttons (such as "
+"Run, Pause, Shutdown) in the details display"
+msgstr ""
+
+#: ../src/virtManager/connection.py:1022
 #, fuzzy
 msgid "Disconnected"
 msgstr "_Připojit"
 
-#: ../../po/../src/virtManager/connection.py:767
+#: ../src/virtManager/connection.py:1024
 #, fuzzy
 msgid "Connecting"
 msgstr "Typ připojení"
 
-#: ../../po/../src/virtManager/connection.py:769
-#: ../../po/../src/virtManager/host.py:195
-msgid "Active"
+#: ../src/virtManager/connection.py:1027
+#, fuzzy
+msgid "Active (RO)"
 msgstr "Aktivní"
 
-#: ../../po/../src/virtManager/connection.py:771
-#: ../../po/../src/virtManager/host.py:203
+#: ../src/virtManager/connection.py:1031 ../src/virtManager/host.py:331
+#: ../src/virtManager/host.py:370 ../src/virtManager/host.py:543
+#: ../src/virtManager/host.py:579
 msgid "Inactive"
 msgstr "Neaktivní"
 
-#: ../../po/../src/virtManager/connection.py:773
+#: ../src/virtManager/connection.py:1033 ../src/virtManager/details.py:830
 msgid "Unknown"
 msgstr ""
 
-#: ../../po/../src/virtManager/createnet.py:98
-#: ../../po/../src/virtManager/createnet.py:256
-#: ../../po/../src/virtManager/host.py:233
+#: ../src/virtManager/createnet.py:57 ../src/virtManager/engine.py:59
+#: ../src/virtManager/addhardware.py:68 ../src/virtManager/create.py:86
+#: ../src/virtManager/createvol.py:56 ../src/virtManager/createpool.py:54
+#: ../src/virtManager/details.py:112 ../src/virtManager/host.py:56
+#: ../src/virtManager/manager.py:113
+msgid "Unexpected Error"
+msgstr ""
+
+#: ../src/virtManager/createnet.py:58 ../src/virtManager/engine.py:60
+#: ../src/virtManager/addhardware.py:69 ../src/virtManager/create.py:87
+#: ../src/virtManager/createvol.py:57 ../src/virtManager/createpool.py:55
+#: ../src/virtManager/details.py:113 ../src/virtManager/host.py:57
+#: ../src/virtManager/manager.py:114
+msgid "An unexpected error occurred"
+msgstr ""
+
+#: ../src/virtManager/createnet.py:104 ../src/virtManager/createnet.py:262
+#: ../src/virtManager/host.py:356
 #, python-format
 msgid "NAT to physical device %s"
 msgstr "NAT do fyzického zařízení %s"
 
-#: ../../po/../src/virtManager/createnet.py:153
+#: ../src/virtManager/createnet.py:159
 #, python-format
 msgid "%d addresses"
 msgstr "%d adresy"
 
-#: ../../po/../src/virtManager/createnet.py:155
+#: ../src/virtManager/createnet.py:161
 msgid "Public"
 msgstr "Veřejná"
 
-#: ../../po/../src/virtManager/createnet.py:159
+#: ../src/virtManager/createnet.py:165
 msgid "Reserved"
 msgstr "Reservovaná"
 
-#: ../../po/../src/virtManager/createnet.py:161
+#: ../src/virtManager/createnet.py:167
 msgid "Other"
 msgstr "Ostatní"
 
-#: ../../po/../src/virtManager/createnet.py:305
-#: ../../po/../src/virtManager/createnet.py:309
+#: ../src/virtManager/createnet.py:307
+#, fuzzy, python-format
+msgid "Error creating virtual network: %s"
+msgstr "Vytvořit nový virtuální systém"
+
+#: ../src/virtManager/createnet.py:315 ../src/virtManager/createnet.py:318
 msgid "Invalid Network Name"
 msgstr "Neplatné jméno sítě"
 
-#: ../../po/../src/virtManager/createnet.py:306
+#: ../src/virtManager/createnet.py:316
 msgid "Network name must be non-blank and less than 50 characters"
 msgstr "Jméno sítě nesmí být prázdné a může mít maximálně 50 znaků"
 
-#: ../../po/../src/virtManager/createnet.py:310
+#: ../src/virtManager/createnet.py:319
 msgid "Network name may contain alphanumeric and '_' characters only"
 msgstr "Jméno sítě může obsahovat pouze písmena, číslice a znak '_'"
 
-#: ../../po/../src/virtManager/createnet.py:317
-#: ../../po/../src/virtManager/createnet.py:322
-#: ../../po/../src/virtManager/createnet.py:327
+#: ../src/virtManager/createnet.py:325 ../src/virtManager/createnet.py:329
+#: ../src/virtManager/createnet.py:333
 msgid "Invalid Network Address"
 msgstr "Neplatná síťová adresa"
 
-#: ../../po/../src/virtManager/createnet.py:318
+#: ../src/virtManager/createnet.py:326
 msgid "The network address could not be understood"
 msgstr "Nečitelná síťová adresa"
 
-#: ../../po/../src/virtManager/createnet.py:323
+#: ../src/virtManager/createnet.py:330
 msgid "The network must be an IPv4 address"
 msgstr "Síť musí být IPv4 adresa"
 
-#: ../../po/../src/virtManager/createnet.py:328
+#: ../src/virtManager/createnet.py:334
 msgid "The network prefix must be at least /4 (16 addresses)"
 msgstr "Síťový prefix musí být alespoň /4 (16 adres)"
 
-#: ../../po/../src/virtManager/createnet.py:332
+#: ../src/virtManager/createnet.py:337
 #, fuzzy
 msgid "Check Network Address"
 msgstr "Neplatná síťová adresa"
 
-#: ../../po/../src/virtManager/createnet.py:333
+#: ../src/virtManager/createnet.py:338
 msgid ""
 "The network should normally use a private IPv4 address. Use this non-private "
 "address anyway?"
 msgstr ""
 
-#: ../../po/../src/virtManager/createnet.py:342
-#: ../../po/../src/virtManager/createnet.py:346
-#: ../../po/../src/virtManager/createnet.py:351
-#: ../../po/../src/virtManager/createnet.py:355
+#: ../src/virtManager/createnet.py:347 ../src/virtManager/createnet.py:350
+#: ../src/virtManager/createnet.py:354 ../src/virtManager/createnet.py:357
 msgid "Invalid DHCP Address"
 msgstr "Neplatná DHCP adresa"
 
-#: ../../po/../src/virtManager/createnet.py:343
+#: ../src/virtManager/createnet.py:348
 msgid "The DHCP start address could not be understood"
 msgstr "Nečitelná počáteční DHCP adresa"
 
-#: ../../po/../src/virtManager/createnet.py:347
+#: ../src/virtManager/createnet.py:351
 msgid "The DHCP end address could not be understood"
 msgstr "Nečitelná koncová DHCP adresa"
 
-#: ../../po/../src/virtManager/createnet.py:352
+#: ../src/virtManager/createnet.py:355
 #, python-format
 msgid "The DHCP start address is not with the network %s"
 msgstr "Počáteční DHCP adresa není v síti %s"
 
-#: ../../po/../src/virtManager/createnet.py:356
+#: ../src/virtManager/createnet.py:358
 #, python-format
 msgid "The DHCP end address is not with the network %s"
 msgstr "Koncová DHCP adresa není v síti %s"
 
-#: ../../po/../src/virtManager/createnet.py:362
+#: ../src/virtManager/createnet.py:363
 msgid "Invalid forwarding mode"
 msgstr "Neplatný předávací (forwarding) režim"
 
-#: ../../po/../src/virtManager/createnet.py:363
+#: ../src/virtManager/createnet.py:364
 msgid "Please select where the traffic should be forwarded"
 msgstr "Určete, kam má být provoz předáván (fowardován)"
 
-#: ../../po/../src/virtManager/createnet.py:423
-msgid "No media present"
-msgstr "Médium není k dispozici"
+#: ../src/virtManager/engine.py:318
+#, python-format
+msgid "Error bringing up domain details: %s"
+msgstr ""
 
-#: ../../po/../src/virtManager/engine.py:366
+#: ../src/virtManager/engine.py:429
 msgid "Saving virtual machines over remote connections is not yet supported."
 msgstr ""
 
-#: ../../po/../src/virtManager/engine.py:379
+#: ../src/virtManager/engine.py:440
 msgid "Save Virtual Machine"
 msgstr "Uložit virtuální stroj"
 
-#: ../../po/../src/virtManager/engine.py:393
+#: ../src/virtManager/engine.py:455
 msgid "Saving Virtual Machine"
 msgstr "Ukládání virtuálního stroje"
 
-#: ../../po/../src/virtManager/engine.py:398
+#: ../src/virtManager/engine.py:460
 #, python-format
 msgid "Error saving domain: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/engine.py:420
-#, python-format
-msgid "About to destroy virtual machine %s"
+#: ../src/virtManager/engine.py:478
+#, fuzzy, python-format
+msgid "About to poweroff virtual machine %s"
 msgstr "Odstranění virtuálního stroje %s"
 
-#: ../../po/../src/virtManager/engine.py:421
+#: ../src/virtManager/engine.py:478
+#, fuzzy
 msgid ""
-"This will immediately destroy the VM and may corrupt its disk image. Are you "
-"sure?"
+"This will immediately poweroff the VM without shutting down the OS and may "
+"cause data loss. Are you sure?"
 msgstr ""
 "Tato volba kompletně odstraní virtuální stroj (VM) a může tak poškodit jeho "
 "obraz na disku. Jste si jisti?"
 
-#: ../../po/../src/virtManager/engine.py:428
-#: ../../po/../src/virtManager/engine.py:487
+#: ../src/virtManager/engine.py:484 ../src/virtManager/engine.py:547
+#: ../src/virtManager/engine.py:563
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/engine.py:444
+#: ../src/virtManager/engine.py:501
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/engine.py:459
+#: ../src/virtManager/engine.py:517
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/engine.py:474
+#: ../src/virtManager/engine.py:533
 #, python-format
 msgid "Error starting domain: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/addhardware.py:350
-#: ../../po/../src/virtManager/create.py:483
+#: ../src/virtManager/addhardware.py:239
+#, python-format
+msgid "Uncaught error validating hardware input: %s"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:409 ../src/virtManager/create.py:581
 msgid "Shared physical device"
 msgstr "Sdílená fyzická zařízení"
 
-#: ../../po/../src/virtManager/addhardware.py:353
-#: ../../po/../src/virtManager/create.py:486
+#: ../src/virtManager/addhardware.py:412 ../src/virtManager/create.py:584
 msgid "Virtual network"
 msgstr "Virtuální síť"
 
-#: ../../po/../src/virtManager/addhardware.py:356
-#: ../../po/../src/virtManager/create.py:489
+#: ../src/virtManager/addhardware.py:415 ../src/virtManager/create.py:587
 msgid "Usermode networking"
 msgstr "Uživatelské síťování"
 
-#: ../../po/../src/virtManager/addhardware.py:370
+#: ../src/virtManager/addhardware.py:429
 msgid "Absolute movement"
 msgstr ""
 
-#: ../../po/../src/virtManager/addhardware.py:372
+#: ../src/virtManager/addhardware.py:431
 msgid "Relative movement"
 msgstr ""
 
-#: ../../po/../src/virtManager/addhardware.py:387
-#: ../../po/../src/virtManager/addhardware.py:389
+#: ../src/virtManager/addhardware.py:436 ../src/virtManager/addhardware.py:883
+#: ../src/virtManager/details.py:894
+#, fuzzy
+msgid "VNC server"
+msgstr "Nikdy"
+
+#. XXX inclined to just not give this choice at all
+#: ../src/virtManager/addhardware.py:438 ../src/virtManager/addhardware.py:885
+#: ../src/virtManager/details.py:896
+msgid "Local SDL window"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:446
 msgid "Yes"
 msgstr ""
 
-#: ../../po/../src/virtManager/addhardware.py:391
-#: ../../po/../src/virtManager/addhardware.py:392
-#: ../../po/../src/virtManager/addhardware.py:393
-#: ../../po/../src/virtManager/details.py:488
-#: ../../po/../src/virtManager/details.py:489
+#: ../src/virtManager/addhardware.py:455 ../src/virtManager/addhardware.py:456
+#: ../src/virtManager/addhardware.py:457 ../src/virtManager/addhardware.py:458
+#: ../src/virtManager/details.py:912 ../src/virtManager/details.py:913
 msgid "N/A"
 msgstr ""
 
-#: ../../po/../src/virtManager/addhardware.py:495
-msgid "There are no more available virtual disk device nodes"
-msgstr "Nejsou již další nody (speciální soubory) pro virtuální disky"
+#: ../src/virtManager/addhardware.py:520
+#, fuzzy
+msgid "Unable to complete install: "
+msgstr "Nelze dokončit instalaci: '%s'"
 
-#: ../../po/../src/virtManager/addhardware.py:497
-#: ../../po/../src/virtManager/addhardware.py:517
-#: ../../po/../src/virtManager/addhardware.py:531
-#: ../../po/../src/virtManager/create.py:628
+#: ../src/virtManager/addhardware.py:522 ../src/virtManager/addhardware.py:564
+#: ../src/virtManager/addhardware.py:566 ../src/virtManager/addhardware.py:585
+#: ../src/virtManager/create.py:738
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Nelze dokončit instalaci: '%s'"
 
-#: ../../po/../src/virtManager/addhardware.py:502
+#: ../src/virtManager/addhardware.py:527
 msgid "Creating Storage File"
 msgstr "Vytváření úložného souboru"
 
-#: ../../po/../src/virtManager/addhardware.py:503
+#: ../src/virtManager/addhardware.py:528
 msgid "Allocation of disk storage may take a few minutes "
 msgstr "Alokace diskového úložného prostoru může chvíli "
 
-#: ../../po/../src/virtManager/addhardware.py:537
-#: ../../po/../src/virtManager/create.py:662
+#: ../src/virtManager/addhardware.py:546
+#, fuzzy
+msgid "Are you sure you want to add this device?"
+msgstr "Skutečně chcete disk použít?"
+
+#: ../src/virtManager/addhardware.py:548
+msgid ""
+"This device could not be attached to the running machine. Would you like to "
+"make the device available after the next VM shutdown?\n"
+"\n"
+"Warning: this will overwrite any other changes that require a VM reboot."
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:592 ../src/virtManager/create.py:773
 msgid "Locate Storage Partition"
 msgstr "Určete oddíl pro ukládání"
 
-#: ../../po/../src/virtManager/addhardware.py:544
-#: ../../po/../src/virtManager/create.py:668
+#: ../src/virtManager/addhardware.py:598 ../src/virtManager/create.py:778
 msgid "Locate or Create New Storage File"
 msgstr "Najděte nebo vytvořte nový soubor pro ukládání"
 
-#: ../../po/../src/virtManager/addhardware.py:643
+#: ../src/virtManager/addhardware.py:711
 msgid "Hardware Type Required"
 msgstr "Vyžadován typ hardware"
 
-#: ../../po/../src/virtManager/addhardware.py:644
+#: ../src/virtManager/addhardware.py:712
 msgid "You must specify what type of hardware to add"
 msgstr "Musíte určit typ zařízení, které chcete přidat"
 
-#: ../../po/../src/virtManager/addhardware.py:649
+#: ../src/virtManager/addhardware.py:717
 #, fuzzy
 msgid "Storage Path Required"
 msgstr "Vyžadována cesta k ISO"
 
-#: ../../po/../src/virtManager/addhardware.py:650
+#: ../src/virtManager/addhardware.py:718
 #, fuzzy
 msgid "You must specify a partition or a file for disk storage."
 msgstr ""
 "Musíte zadat oddíl nebo soubor pro uložení instalace hostovaného systému"
 
-#: ../../po/../src/virtManager/addhardware.py:654
+#: ../src/virtManager/addhardware.py:721
 #, fuzzy
 msgid "Target Device Required"
 msgstr "Vyžadováno fyzické zařízení"
 
-#: ../../po/../src/virtManager/addhardware.py:655
+#: ../src/virtManager/addhardware.py:722
 #, fuzzy
 msgid "You must select a target device for the disk"
 msgstr "Musíte vybrat jedno z fizických zařízení"
 
-#: ../../po/../src/virtManager/addhardware.py:669
-#: ../../po/../src/virtManager/create.py:866
-msgid "Storage Path Does not exist"
-msgstr ""
-
-#: ../../po/../src/virtManager/addhardware.py:670
-#: ../../po/../src/virtManager/create.py:867
-#, python-format
-msgid "The directory %s containing the disk image does not exist"
-msgstr ""
-
-#: ../../po/../src/virtManager/addhardware.py:678
-#: ../../po/../src/virtManager/addhardware.py:683
-#: ../../po/../src/virtManager/create.py:875
-#: ../../po/../src/virtManager/create.py:880
-msgid "Not Enough Free Space"
-msgstr ""
-
-#: ../../po/../src/virtManager/addhardware.py:679
-#: ../../po/../src/virtManager/create.py:876
-msgid ""
-"The filesystem will not have enough free space to fully allocate the sparse "
-"file when the guest is running. Use this path anyway?"
-msgstr ""
-
-#: ../../po/../src/virtManager/addhardware.py:684
-#: ../../po/../src/virtManager/create.py:881
-msgid "There is not enough free space to create the disk"
-msgstr ""
-
-#: ../../po/../src/virtManager/addhardware.py:706
+#: ../src/virtManager/addhardware.py:754
 #, fuzzy
 msgid "Invalid Storage Parameters"
 msgstr "Nesprávná adresa úložného prostoru"
 
-#: ../../po/../src/virtManager/addhardware.py:711
-#: ../../po/../src/virtManager/create.py:916
+#: ../src/virtManager/addhardware.py:758 ../src/virtManager/create.py:1026
+msgid "Not Enough Free Space"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:763 ../src/virtManager/create.py:1031
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "Disk '%s' již používá jiný host!"
 
-#: ../../po/../src/virtManager/addhardware.py:712
-#: ../../po/../src/virtManager/create.py:916
+#: ../src/virtManager/addhardware.py:764 ../src/virtManager/create.py:1031
 msgid "Do you really want to use the disk ?"
 msgstr "Skutečně chcete disk použít?"
 
-#: ../../po/../src/virtManager/addhardware.py:718
-#: ../../po/../src/virtManager/create.py:923
+#: ../src/virtManager/addhardware.py:771 ../src/virtManager/create.py:1038
 msgid "Virtual Network Required"
 msgstr "Vyžadována virtuální síť"
 
-#: ../../po/../src/virtManager/addhardware.py:719
-#: ../../po/../src/virtManager/create.py:924
+#: ../src/virtManager/addhardware.py:772 ../src/virtManager/create.py:1039
 msgid "You must select one of the virtual networks"
 msgstr "Musíte vybrat jednu z virtuálních sítí"
 
-#: ../../po/../src/virtManager/addhardware.py:723
-#: ../../po/../src/virtManager/create.py:928
+#: ../src/virtManager/addhardware.py:775 ../src/virtManager/create.py:1042
 msgid "Physical Device Required"
 msgstr "Vyžadováno fyzické zařízení"
 
-#: ../../po/../src/virtManager/addhardware.py:724
-#: ../../po/../src/virtManager/create.py:929
+#: ../src/virtManager/addhardware.py:776 ../src/virtManager/create.py:1043
 msgid "You must select one of the physical devices"
 msgstr "Musíte vybrat jedno z fizických zařízení"
 
-#: ../../po/../src/virtManager/addhardware.py:731
-#: ../../po/../src/virtManager/addhardware.py:738
-#: ../../po/../src/virtManager/create.py:937
+#: ../src/virtManager/addhardware.py:782 ../src/virtManager/addhardware.py:788
+#: ../src/virtManager/create.py:1053
 #, fuzzy
 msgid "Invalid MAC address"
 msgstr "Neplatná DHCP adresa"
 
-#: ../../po/../src/virtManager/addhardware.py:732
-#: ../../po/../src/virtManager/create.py:938
+#: ../src/virtManager/addhardware.py:783 ../src/virtManager/create.py:1054
 msgid "No MAC address was entered. Please enter a valid MAC address."
 msgstr ""
 
-#: ../../po/../src/virtManager/addhardware.py:745
-#: ../../po/../src/virtManager/create.py:944
-#, fuzzy, python-format
-msgid "MAC address \"%s\" is already in use by the host"
-msgstr "Disk '%s' již používá jiný host!"
-
-#: ../../po/../src/virtManager/addhardware.py:746
-#: ../../po/../src/virtManager/addhardware.py:760
-#: ../../po/../src/virtManager/create.py:945
-#: ../../po/../src/virtManager/create.py:978
-msgid "Please enter a different MAC address or select no fixed MAC address"
-msgstr ""
-
-#: ../../po/../src/virtManager/addhardware.py:759
-#, fuzzy, python-format
-msgid "MAC address \"%s\" is already in use by an active guest"
-msgstr "Disk '%s' již používá jiný host!"
-
-#: ../../po/../src/virtManager/addhardware.py:762
-#: ../../po/../src/virtManager/create.py:980
-#, fuzzy, python-format
-msgid "MAC address \"%s\" is already in use by another inactive guest!"
-msgstr "Disk '%s' již používá jiný host!"
-
-#: ../../po/../src/virtManager/addhardware.py:763
-#: ../../po/../src/virtManager/create.py:981
-#, fuzzy
-msgid "Do you really want to use the MAC address ?"
-msgstr "Skutečně chcete disk použít?"
-
-#: ../../po/../src/virtManager/addhardware.py:776
+#: ../src/virtManager/addhardware.py:801
 #, fuzzy
 msgid "Unsupported networking type"
 msgstr "Uživatelské síťování"
 
-#: ../../po/../src/virtManager/addhardware.py:778
+#: ../src/virtManager/addhardware.py:803
 #, fuzzy
 msgid "Invalid Network Parameter"
 msgstr "Neplatné jméno sítě"
 
-#: ../../po/../src/virtManager/addhardware.py:823
-#: ../../po/../src/virtManager/create.py:1075
+#: ../src/virtManager/addhardware.py:808 ../src/virtManager/addhardware.py:811
+#: ../src/virtManager/create.py:1075 ../src/virtManager/create.py:1077
+msgid "Mac address collision"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:812 ../src/virtManager/create.py:1078
+#, fuzzy
+msgid "Are you sure you want to use this address?"
+msgstr "Skutečně chcete disk použít?"
+
+#: ../src/virtManager/addhardware.py:827
+msgid "Graphics device parameter error"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:847 ../src/virtManager/create.py:1143
 msgid "Bridge"
 msgstr ""
 
-#: ../../po/../src/virtManager/addhardware.py:825
-#: ../../po/../src/virtManager/create.py:1077
+#: ../src/virtManager/addhardware.py:849 ../src/virtManager/create.py:1145
 msgid "Not bridged"
 msgstr ""
 
-#: ../../po/../src/virtManager/addhardware.py:843
-#: ../../po/../src/virtManager/details.py:443
+#: ../src/virtManager/addhardware.py:875 ../src/virtManager/details.py:866
 msgid "EvTouch USB Graphics Tablet"
 msgstr ""
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../../po/../src/virtManager/addhardware.py:847
-#: ../../po/../src/virtManager/details.py:445
+#: ../src/virtManager/addhardware.py:879 ../src/virtManager/details.py:868
 msgid "Generic USB Mouse"
 msgstr ""
 
-#: ../../po/../src/virtManager/addhardware.py:851
-#: ../../po/../src/virtManager/details.py:471
-#, fuzzy
-msgid "VNC server"
-msgstr "Nikdy"
-
-#. XXX inclined to just not give this choice at all
-#: ../../po/../src/virtManager/addhardware.py:853
-#: ../../po/../src/virtManager/details.py:473
-msgid "Local SDL window"
+#: ../src/virtManager/create.py:306 ../src/virtManager/createvol.py:145
+#: ../src/virtManager/createpool.py:245
+#, python-format
+msgid "Uncaught error validating input: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/create.py:455
+#: ../src/virtManager/create.py:553
 msgid "Paravirtualized"
 msgstr "Paravirtualizován"
 
-#: ../../po/../src/virtManager/create.py:459
+#: ../src/virtManager/create.py:557
 msgid "Fully virtualized"
 msgstr "Plně virtualizován"
 
-#: ../../po/../src/virtManager/create.py:522
+#: ../src/virtManager/create.py:621
 msgid "UUID Error"
 msgstr ""
 
-#: ../../po/../src/virtManager/create.py:572
+#: ../src/virtManager/create.py:628
+#, fuzzy
+msgid "Failed to set up usermode networking"
+msgstr "Uživatelské síťování"
+
+#: ../src/virtManager/create.py:642
+msgid "Error setting up graphics device:"
+msgstr ""
+
+#: ../src/virtManager/create.py:650
+msgid "Error setting up sound device:"
+msgstr ""
+
+#: ../src/virtManager/create.py:679
 msgid "Creating Virtual Machine"
 msgstr "Vytváření virtuálního stroje"
 
-#: ../../po/../src/virtManager/create.py:573
+#: ../src/virtManager/create.py:680
 msgid "The virtual machine is now being created. "
 msgstr "Virtuální stroj je nyní vytvářen. "
 
-#: ../../po/../src/virtManager/create.py:614
+#: ../src/virtManager/create.py:724
 msgid "Guest installation failed to complete"
 msgstr "Instalace hosta nemohla být dokončena"
 
-#: ../../po/../src/virtManager/create.py:633
+#: ../src/virtManager/create.py:743
 msgid "Locate ISO Image"
 msgstr "Najděte ISO obraz"
 
-#: ../../po/../src/virtManager/create.py:771
+#: ../src/virtManager/create.py:892
 msgid "Invalid System Name"
 msgstr "Nesprávné jméno systému"
 
-#: ../../po/../src/virtManager/create.py:796
-msgid "ISO Path Not Found"
-msgstr "Cesta k ISO nenalezena"
-
-#: ../../po/../src/virtManager/create.py:804
-msgid "CD-ROM Path Error"
-msgstr ""
-
-#: ../../po/../src/virtManager/create.py:815
+#: ../src/virtManager/create.py:926
 msgid "Invalid FV OS Type"
 msgstr "Nesprávný typ FV OS"
 
-#: ../../po/../src/virtManager/create.py:823
+#: ../src/virtManager/create.py:933
 msgid "Invalid FV OS Variant"
 msgstr "Nesprávná varianta FV OS"
 
-#: ../../po/../src/virtManager/create.py:831
+#: ../src/virtManager/create.py:948
+msgid "ISO Path Not Found"
+msgstr "Cesta k ISO nenalezena"
+
+#: ../src/virtManager/create.py:956
+msgid "CD-ROM Path Error"
+msgstr ""
+
+#: ../src/virtManager/create.py:961
+msgid "An install url is required."
+msgstr ""
+
+#: ../src/virtManager/create.py:965
 msgid "Invalid Install URL"
 msgstr ""
 
-#: ../../po/../src/virtManager/create.py:838
+#: ../src/virtManager/create.py:971
 #, fuzzy
 msgid "Kickstart URL Error"
 msgstr "URL _kickstaru:"
 
-#: ../../po/../src/virtManager/create.py:839
+#: ../src/virtManager/create.py:972
 msgid "Kickstart location must be an NFS, HTTP or FTP source"
 msgstr ""
 
-#: ../../po/../src/virtManager/create.py:856
+#: ../src/virtManager/create.py:987
 msgid "Storage Address Required"
 msgstr "Vyžadována adresa pro ukládání"
 
-#: ../../po/../src/virtManager/create.py:857
+#: ../src/virtManager/create.py:988
 msgid ""
 "You must specify a partition or a file for storage for the guest install"
 msgstr ""
 "Musíte zadat oddíl nebo soubor pro uložení instalace hostovaného systému"
 
-#: ../../po/../src/virtManager/create.py:911
+#: ../src/virtManager/create.py:1022
 #, fuzzy
 msgid "Invalid Storage Address"
 msgstr "Nesprávná adresa úložného prostoru"
 
-#: ../../po/../src/virtManager/create.py:961
+#: ../src/virtManager/create.py:1047
+#, fuzzy
+msgid "Invalid Physical Device"
+msgstr "Sdílená fyzická zařízení"
+
+#: ../src/virtManager/create.py:1048
+#, fuzzy
+msgid "The selected physical device must be bridged."
+msgstr "NAT do fyzického zařízení %s"
+
+#: ../src/virtManager/create.py:1071
 #, fuzzy
 msgid "Network Parameter Error"
 msgstr "Využití sítě:"
 
-#: ../../po/../src/virtManager/create.py:977
-#, fuzzy, python-format
-msgid "MAC address \"%s\" is already in use by a active guest"
-msgstr "Disk '%s' již používá jiný host!"
-
-#: ../../po/../src/virtManager/create.py:989
+#: ../src/virtManager/create.py:1086
 msgid "VCPU Count Error"
 msgstr ""
 
-#: ../../po/../src/virtManager/create.py:996
+#: ../src/virtManager/create.py:1091
 msgid "Memory Amount Error"
 msgstr ""
 
-#: ../../po/../src/virtManager/create.py:1003
+#: ../src/virtManager/create.py:1096
 msgid "Max Memory Amount Error"
 msgstr ""
 
+#: ../src/virtManager/createvol.py:158
+#, fuzzy
+msgid "Creating storage volume..."
+msgstr "Vytváření úložného souboru"
+
+#: ../src/virtManager/createvol.py:159
+msgid "Creating the storage volume may take a while..."
+msgstr ""
+
+#: ../src/virtManager/createvol.py:193
+#, python-format
+msgid "Error creating vol: %s"
+msgstr ""
+
+#: ../src/virtManager/createvol.py:213
+#, fuzzy
+msgid "Volume Parameter Error"
+msgstr "Využití sítě:"
+
+#: ../src/virtManager/createpool.py:222
+msgid "Choose source path"
+msgstr ""
+
+#: ../src/virtManager/createpool.py:228
+msgid "Choose target directory"
+msgstr ""
+
+#: ../src/virtManager/createpool.py:261
+#, fuzzy
+msgid "Creating storage pool..."
+msgstr "Vytváření úložného souboru"
+
+#: ../src/virtManager/createpool.py:262
+msgid "Creating the storage pool may take a while..."
+msgstr ""
+
+#: ../src/virtManager/createpool.py:295
+#, python-format
+msgid "Error creating pool: %s"
+msgstr ""
+
+#: ../src/virtManager/createpool.py:324 ../src/virtManager/createpool.py:343
+#, fuzzy
+msgid "Pool Parameter Error"
+msgstr "Využití sítě:"
+
+#: ../src/virtManager/createpool.py:348
+msgid ""
+"Building a pool of this type will format the source device. Are you sure you "
+"want to 'build' this pool?"
+msgstr ""
+
+#: ../src/virtManager/error.py:29
+msgid "Error"
+msgstr ""
+
 #. Expander section with details.
-#: ../../po/../src/virtManager/error.py:34
+#: ../src/virtManager/error.py:42
 msgid "Details"
 msgstr "Detaily"
 
-#: ../../po/../src/virtManager/serialcon.py:36
+#: ../src/virtManager/error.py:77
+#, fuzzy
+msgid "Input Error"
+msgstr "Úvod"
+
+#: ../src/virtManager/serialcon.py:37
 msgid "serial console"
 msgstr "sériová konzole"
 
-#: ../../po/../src/virtManager/asyncjob.py:103
+#: ../src/virtManager/asyncjob.py:103
 msgid "Completed"
 msgstr "Dokončeno"
 
-#: ../../po/../src/virtManager/console.py:252
+#: ../src/virtManager/details.py:349
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "Stiskněte Ctrl+Alt pro uvolnění ukazatele myši."
 
-#: ../../po/../src/virtManager/console.py:260
+#: ../src/virtManager/details.py:357
 msgid "Pointer grabbed"
 msgstr "Myš zachycena"
 
-#: ../../po/../src/virtManager/console.py:261
+#: ../src/virtManager/details.py:358
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer press the key pair Ctrl+Alt"
@@ -2736,51 +2944,84 @@ msgstr ""
 "Ukazatel myši je omezen na okno virtuální konzole. Pro její uvolnění "
 "stiskněte klávesy Ctrl+Alt"
 
-#: ../../po/../src/virtManager/console.py:264
+#: ../src/virtManager/details.py:361
 msgid "Do not show this notification in the future"
 msgstr ""
 
-#: ../../po/../src/virtManager/console.py:345
-#: ../../po/../src/virtManager/console.py:430
+#: ../src/virtManager/details.py:682
+msgid "paused"
+msgstr "pozastaven"
+
+#: ../src/virtManager/details.py:695
+msgid "Console not available while paused"
+msgstr ""
+
+#: ../src/virtManager/details.py:856
+#, fuzzy
+msgid "Hypervisor Default"
+msgstr "Hypervisor:"
+
+#: ../src/virtManager/details.py:870
+msgid "Xen Mouse"
+msgstr ""
+
+#: ../src/virtManager/details.py:872
+msgid "PS/2 Mouse"
+msgstr ""
+
+#: ../src/virtManager/details.py:877
+msgid "Absolute Movement"
+msgstr ""
+
+#: ../src/virtManager/details.py:879
+msgid "Relative Movement"
+msgstr ""
+
+#: ../src/virtManager/details.py:946
+#, fuzzy
+msgid "(Primary Console)"
+msgstr "_Sériová konzole"
+
+#: ../src/virtManager/details.py:997 ../src/virtManager/details.py:1090
 msgid "Guest not running"
 msgstr ""
 
-#: ../../po/../src/virtManager/console.py:348
+#: ../src/virtManager/details.py:1000
 msgid "Guest has crashed"
 msgstr ""
 
-#: ../../po/../src/virtManager/console.py:359
+#: ../src/virtManager/details.py:1011
 msgid ""
 "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 
-#: ../../po/../src/virtManager/console.py:440
+#: ../src/virtManager/details.py:1100
 msgid "Console not configured for guest"
 msgstr ""
 
-#: ../../po/../src/virtManager/console.py:448
+#: ../src/virtManager/details.py:1112
 msgid "Console not supported for guest"
 msgstr ""
 
-#: ../../po/../src/virtManager/console.py:452
+#: ../src/virtManager/details.py:1116
 msgid "Console is not yet active for guest"
 msgstr ""
 
-#: ../../po/../src/virtManager/console.py:456
+#: ../src/virtManager/details.py:1120
 msgid "Connecting to console for guest"
 msgstr ""
 
-#: ../../po/../src/virtManager/console.py:489
+#: ../src/virtManager/details.py:1153
 msgid "Unsupported console authentication type"
 msgstr ""
 
 #. If someone feels kind they could extend this code to allow
 #. user to choose what image format they'd like to save in....
-#: ../../po/../src/virtManager/console.py:523
+#: ../src/virtManager/details.py:1187
 msgid "Save Virtual Machine Screenshot"
 msgstr "Uložit snímek obrazovky virtuálního stroje"
 
-#: ../../po/../src/virtManager/console.py:552
+#: ../src/virtManager/details.py:1217
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -2789,144 +3030,239 @@ msgstr ""
 "Snímek obrazovky byl uložen do:\n"
 "%s"
 
-#: ../../po/../src/virtManager/console.py:553
+#: ../src/virtManager/details.py:1218
 msgid "Screenshot saved"
 msgstr "Snímek obrazovky uložen"
 
-#: ../../po/../src/virtManager/console.py:656
-msgid "paused"
-msgstr "pozastaven"
-
-#: ../../po/../src/virtManager/console.py:667
-msgid "Console not available while paused"
+#: ../src/virtManager/details.py:1282
+#, python-format
+msgid "Error changing memory values: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/details.py:447
-msgid "Xen Mouse"
+#: ../src/virtManager/details.py:1297
+#, python-format
+msgid "Error changing autostart value: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/details.py:449
-msgid "PS/2 Mouse"
+#: ../src/virtManager/details.py:1305
+#, python-format
+msgid "Error changing boot device: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/details.py:454
-msgid "Absolute Movement"
-msgstr ""
-
-#: ../../po/../src/virtManager/details.py:456
-msgid "Relative Movement"
-msgstr ""
-
-#: ../../po/../src/virtManager/details.py:556
+#: ../src/virtManager/details.py:1334
 #, python-format
 msgid "Error Removing Network: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/details.py:675
+#: ../src/virtManager/details.py:1495
 msgid "Tablet"
 msgstr ""
 
-#: ../../po/../src/virtManager/details.py:677
+#: ../src/virtManager/details.py:1497
 #, fuzzy
 msgid "Mouse"
 msgstr "Zastavit"
 
-#: ../../po/../src/virtManager/details.py:745
+#: ../src/virtManager/details.py:1537
+#, python-format
+msgid "Sound: %s"
+msgstr ""
+
+#: ../src/virtManager/details.py:1629
+msgid "No Boot Device"
+msgstr ""
+
+#: ../src/virtManager/details.py:1649
 #, python-format
 msgid "Error Removing CDROM: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/details.py:762
+#: ../src/virtManager/details.py:1666
 #, python-format
 msgid "Error Connecting CDROM: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/details.py:769
+#: ../src/virtManager/details.py:1680
+#, fuzzy
+msgid "Are you sure you want to remove this device?"
+msgstr "Skutečně chcete disk použít?"
+
+#: ../src/virtManager/details.py:1682
+msgid ""
+"This device could not be removed from the running machine. Would you like to "
+"remove the device after the next VM shutdown? \n"
+"\n"
+"Warning: this will overwrite any other changes that require a VM reboot."
+msgstr ""
+
+#: ../src/virtManager/details.py:1697
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/host.py:133
-msgid "Creating new networks on remote connections is not yet supported"
+#: ../src/virtManager/host.py:234
+#, fuzzy, python-format
+msgid "This will permanently delete the network '%s,' are you sure?"
+msgstr ""
+"Tato volba kompletně odstraní virtuální stroj (VM) a může tak poškodit jeho "
+"obraz na disku. Jste si jisti?"
+
+#: ../src/virtManager/host.py:241
+#, python-format
+msgid "Error deleting network: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/host.py:216
-msgid "On boot"
+#: ../src/virtManager/host.py:252
+#, python-format
+msgid "Error starting network: %s"
+msgstr ""
+
+#: ../src/virtManager/host.py:263
+#, python-format
+msgid "Error stopping network: %s"
+msgstr ""
+
+#: ../src/virtManager/host.py:272
+#, python-format
+msgid "Error launching network wizard: %s"
+msgstr ""
+
+#: ../src/virtManager/host.py:283
+#, python-format
+msgid "Error setting net autostart: %s"
+msgstr ""
+
+#: ../src/virtManager/host.py:291 ../src/virtManager/host.py:341
+#: ../src/virtManager/host.py:519 ../src/virtManager/host.py:544
+#, fuzzy
+msgid "On Boot"
 msgstr "Při startu"
 
-#: ../../po/../src/virtManager/host.py:219
+#: ../src/virtManager/host.py:292 ../src/virtManager/host.py:343
+#: ../src/virtManager/host.py:375 ../src/virtManager/host.py:520
+#: ../src/virtManager/host.py:544 ../src/virtManager/host.py:581
 msgid "Never"
 msgstr "Nikdy"
 
-#: ../../po/../src/virtManager/domain.py:407
+#: ../src/virtManager/host.py:405 ../src/virtManager/host.py:415
+#, python-format
+msgid "Error starting pool '%s': %s"
+msgstr ""
+
+#: ../src/virtManager/host.py:424
+#, fuzzy, python-format
+msgid "This will permanently delete the pool '%s,' are you sure?"
+msgstr ""
+"Tato volba kompletně odstraní virtuální stroj (VM) a může tak poškodit jeho "
+"obraz na disku. Jste si jisti?"
+
+#: ../src/virtManager/host.py:431
+#, python-format
+msgid "Error deleting pool: %s"
+msgstr ""
+
+#: ../src/virtManager/host.py:439
+#, fuzzy, python-format
+msgid "This will permanently delete the volume '%s,' are you sure?"
+msgstr ""
+"Tato volba kompletně odstraní virtuální stroj (VM) a může tak poškodit jeho "
+"obraz na disku. Jste si jisti?"
+
+#: ../src/virtManager/host.py:448
+#, python-format
+msgid "Error deleting volume: %s"
+msgstr ""
+
+#: ../src/virtManager/host.py:459
+#, python-format
+msgid "Error launching pool wizard: %s"
+msgstr ""
+
+#: ../src/virtManager/host.py:474
+#, python-format
+msgid "Error launching volume wizard: %s"
+msgstr ""
+
+#: ../src/virtManager/host.py:511
+#, python-format
+msgid "Error setting pool autostart: %s"
+msgstr ""
+
+#: ../src/virtManager/domain.py:412
+msgid "Running"
+msgstr "Spuštený"
+
+#: ../src/virtManager/domain.py:414
 msgid "Paused"
 msgstr "Zastavený"
 
-#: ../../po/../src/virtManager/domain.py:411
+#: ../src/virtManager/domain.py:418
 msgid "Shutoff"
 msgstr "Vypnout"
 
-#: ../../po/../src/virtManager/domain.py:413
+#: ../src/virtManager/domain.py:420
 msgid "Crashed"
 msgstr "Selhalo (crashed)"
 
-#: ../../po/../src/virtManager/domain.py:415
+#: ../src/virtManager/domain.py:422
 msgid "Unknown status code"
 msgstr "Neznámý stavový kód"
 
-#: ../../po/../src/virtManager/manager.py:290
+#: ../src/virtManager/domain.py:756
+#, python-format
+msgid "Unknown device type '%s'"
+msgstr ""
+
+#: ../src/virtManager/manager.py:331
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr ""
 
 #. get filename
-#: ../../po/../src/virtManager/manager.py:296
+#: ../src/virtManager/manager.py:335
 msgid "Restore Virtual Machine"
 msgstr "Obnovení virtuálního stroje"
 
-#: ../../po/../src/virtManager/manager.py:312
+#: ../src/virtManager/manager.py:352
 msgid "Restoring Virtual Machine"
 msgstr "Obnovování virtuálního stroje"
 
-#: ../../po/../src/virtManager/manager.py:319
+#: ../src/virtManager/manager.py:355
 #, python-format
 msgid "The file '%s' does not appear to be a valid saved machine image"
 msgstr "Soubor '%s' nevypadá jako obraz uloženého stroje"
 
-#: ../../po/../src/virtManager/manager.py:347
+#: ../src/virtManager/manager.py:376
 #, python-format
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
 
-#: ../../po/../src/virtManager/manager.py:718
-msgid "Creating new guests on remote connections is not yet supported"
-msgstr ""
-
-#: ../../po/../src/virtManager/manager.py:736
+#: ../src/virtManager/manager.py:753
 #, fuzzy, python-format
 msgid "This will permanently delete the connection \"%s\", are you sure?"
 msgstr ""
 "Tato volba kompletně odstraní virtuální stroj (VM) a může tak poškodit jeho "
 "obraz na disku. Jste si jisti?"
 
-#: ../../po/../src/virtManager/manager.py:753
+#. are you sure you want to delete this VM?
+#: ../src/virtManager/manager.py:764
 #, python-format
 msgid "This will permanently delete the vm \"%s,\" are you sure?"
 msgstr ""
 
-#: ../../po/../src/virtManager/manager.py:762
+#: ../src/virtManager/manager.py:771
 #, python-format
 msgid "Error deleting domain: %s"
 msgstr ""
 
-#: ../../po/../src/virtManager/manager.py:787
+#: ../src/virtManager/manager.py:802
 msgid "ID"
 msgstr "ID"
 
-#: ../../po/../src/virtManager/manager.py:790
+#: ../src/virtManager/manager.py:805
 msgid "VCPUs"
 msgstr "VCPU"
 
-#: ../../po/../src/virtManager/manager.py:1025
+#: ../src/virtManager/manager.py:1048
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
@@ -2934,7 +3270,11 @@ msgstr ""
 "Nemohu navázat spojení s Xen hypervisorem/démonem.\n"
 "\n"
 
-#: ../../po/../src/virtManager/manager.py:1033
+#: ../src/virtManager/manager.py:1053 ../src/virtManager/manager.py:1061
+msgid "Virtual Machine Manager Connection Failure"
+msgstr "Selhalo spojení manažera virtuálních strojů"
+
+#: ../src/virtManager/manager.py:1055
 #, fuzzy
 msgid ""
 "Unable to open a connection to the libvirt management daemon.\n"
@@ -2943,9 +3283,214 @@ msgstr ""
 "Nemohu navázat spojení s Xen hypervisorem/démonem.\n"
 "\n"
 
-#: ../../po/../src/virtManager/manager.py:1037
-msgid "Virtual Machine Manager Connection Failure"
-msgstr "Selhalo spojení manažera virtuálních strojů"
+#: ../src/virtManager/util.py:53
+#, python-format
+msgid "Couldn't create default storage pool '%s': %s"
+msgstr ""
+
+#~ msgid "http://virt-manager.et.redhat.com/"
+#~ msgstr "http://virt-manager.et.redhat.com/"
+
+#, fuzzy
+#~ msgid "Password Field"
+#~ msgstr "Heslo:"
+
+#~ msgid "Virtual Machine Console"
+#~ msgstr "Konzole virtuálního stroje"
+
+#~ msgid "_Destroy"
+#~ msgstr "_Zničit"
+
+#~ msgid "_Details"
+#~ msgstr "_Detaily"
+
+#, fuzzy
+#~ msgid "\t"
+#~ msgstr "5\t"
+
+#~ msgid "/xen/demo.img"
+#~ msgstr "/xen/demo.img"
+
+#, fuzzy
+#~ msgid "256"
+#~ msgstr "256\t"
+
+#~ msgid "5 GB"
+#~ msgstr "5 GB"
+
+#~ msgid "demo"
+#~ msgstr "demo"
+
+#, fuzzy
+#~ msgid "1.59 GB of 2.2 GB"
+#~ msgstr "80 MB of 1 GB"
+
+#, fuzzy
+#~ msgid "2000 MB"
+#~ msgstr "200 MB"
+
+#, fuzzy
+#~ msgid "Net Name"
+#~ msgstr "Využití sítě:"
+
+#, fuzzy
+#~ msgid "Net UUID"
+#~ msgstr "UUID:"
+
+#, fuzzy
+#~ msgid "Storage Location"
+#~ msgstr "Umístění _ISO obrazu:"
+
+#~ msgid " free"
+#~ msgstr " volno"
+
+#~ msgid " of "
+#~ msgstr " z "
+
+#~ msgid "/tmp"
+#~ msgstr "/tmp"
+
+#~ msgid "10 TB"
+#~ msgstr "10 TB"
+
+#~ msgid ""
+#~ "<b>Tip:</b> You may only increase the size of file-based storage; you "
+#~ "can't decrease its size."
+#~ msgstr ""
+#~ "<b>Tip:</b> Velikost úložného prostoru v souborech lze pouze zvětšit, "
+#~ "nelze ho zmenšit."
+
+#~ msgid ""
+#~ "MB\n"
+#~ "GB\n"
+#~ "TB"
+#~ msgstr ""
+#~ "MB\n"
+#~ "GB\n"
+#~ "TB"
+
+#~ msgid "Modify File Storage"
+#~ msgstr "Změnit úložný prostor"
+
+#~ msgid "_Mount Point (on virtual system):"
+#~ msgstr "Přípojný bod (ve virtuálním systému):"
+
+#~ msgid "_Size:"
+#~ msgstr "_Velikost:"
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid "2 GB"
+#~ msgstr "2 GB"
+
+#~ msgid "256\t"
+#~ msgstr "256\t"
+
+#~ msgid "400 MB"
+#~ msgstr "400 MB"
+
+#~ msgid "5\t"
+#~ msgstr "5\t"
+
+#, fuzzy
+#~ msgid "512 MB"
+#~ msgstr "500 MB"
+
+#, fuzzy
+#~ msgid "Architecture Select"
+#~ msgstr "Architektura CPU:"
+
+#~ msgid "Enable kernel / hardware acceleration"
+#~ msgstr "Povolit jadernou / hardwarovou akceleraci"
+
+#~ msgid "FV install"
+#~ msgstr "Instalace FV"
+
+#, fuzzy
+#~ msgid "OS Type Select"
+#~ msgstr "Typ OS:"
+
+#, fuzzy
+#~ msgid "OS Variant Select"
+#~ msgstr "Varianta OS:"
+
+#~ msgid "PVinstall"
+#~ msgstr "PV instalace"
+
+#~ msgid "http://"
+#~ msgstr "http://"
+
+#~ msgid ""
+#~ "i686\n"
+#~ "x86_64\n"
+#~ "ppc\n"
+#~ "sparc\n"
+#~ "mips\n"
+#~ "mipsel"
+#~ msgstr ""
+#~ "i686\n"
+#~ "x86_64\n"
+#~ "ppc\n"
+#~ "sparc\n"
+#~ "mips\n"
+#~ "mipsel"
+
+#~ msgid "para"
+#~ msgstr "para"
+
+#~ msgid "18%"
+#~ msgstr "18%"
+
+#~ msgid "200 MB"
+#~ msgstr "200 MB"
+
+#~ msgid "30 MB of 128 MB"
+#~ msgstr "30 MB of 128 MB"
+
+#~ msgid "8"
+#~ msgstr "8"
+
+#~ msgid "80 MB of 1 GB"
+#~ msgstr "80 MB of 1 GB"
+
+#~ msgid "Virtual Machine Details"
+#~ msgstr "Detaily virtuálního stroje"
+
+#~ msgid "_Graphical Console"
+#~ msgstr "_Grafická konzole"
+
+#, fuzzy
+#~ msgid "Host details..."
+#~ msgstr "Detaily stroje..."
+
+#~ msgid "De_tails"
+#~ msgstr "_Detaily"
+
+#~ msgid "Open connection"
+#~ msgstr "Navázat spojení"
+
+#~ msgid "No media present"
+#~ msgstr "Médium není k dispozici"
+
+#~ msgid "There are no more available virtual disk device nodes"
+#~ msgstr "Nejsou již další nody (speciální soubory) pro virtuální disky"
+
+#, fuzzy
+#~ msgid "MAC address \"%s\" is already in use by the host"
+#~ msgstr "Disk '%s' již používá jiný host!"
+
+#, fuzzy
+#~ msgid "MAC address \"%s\" is already in use by an active guest"
+#~ msgstr "Disk '%s' již používá jiný host!"
+
+#, fuzzy
+#~ msgid "MAC address \"%s\" is already in use by another inactive guest!"
+#~ msgstr "Disk '%s' již používá jiný host!"
+
+#, fuzzy
+#~ msgid "MAC address \"%s\" is already in use by a active guest"
+#~ msgstr "Disk '%s' již používá jiný host!"
 
 #~ msgid "Too many virtual disks"
 #~ msgstr "Příliš mnoho virtuálních disků"
@@ -2999,12 +3544,6 @@ msgstr "Selhalo spojení manažera virtuálních strojů"
 
 #~ msgid "_Host:"
 #~ msgstr "_Host:"
-
-#~ msgid "_Local host"
-#~ msgstr "_Místní host:"
-
-#~ msgid "_Remote host"
-#~ msgstr "Vzdálený host"
 
 #~ msgid "The network must be an IPv4 private address"
 #~ msgstr "Síť musí být privátní adresa IPv4"

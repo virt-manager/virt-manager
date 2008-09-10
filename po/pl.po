@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 17:05+0200\n"
+"POT-Creation-Date: 2008-09-10 13:45-0400\n"
 "PO-Revision-Date: 2008-09-09 18:18+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -891,12 +891,11 @@ msgid "<b>IPv4 configuration</b>"
 msgstr "<b>Konfiguracja IPv4</b>"
 
 #: ../src/vmm-host.glade.h:4
-
 msgid "<b>Volumes</b>"
 msgstr "<b>Woluminy</b>"
 
 #: ../src/vmm-host.glade.h:5 ../src/virtManager/connection.py:1029
-#: ../src/virtManager/host.py:311 ../src/virtManager/host.py:528
+#: ../src/virtManager/host.py:326 ../src/virtManager/host.py:543
 msgid "Active"
 msgstr "Aktywuj"
 
@@ -983,7 +982,7 @@ msgstr "Pamięć:"
 
 #: ../src/vmm-host.glade.h:28 ../src/vmm-create-net.glade.h:30
 #: ../src/virtManager/createnet.py:101 ../src/virtManager/createnet.py:264
-#: ../src/virtManager/host.py:343
+#: ../src/virtManager/host.py:358
 msgid "NAT to any physical device"
 msgstr "NAT do dowolnego urządzenia fizycznego"
 
@@ -1781,7 +1780,7 @@ msgid "IPv4"
 msgstr "IPv4"
 
 #: ../src/vmm-create-net.glade.h:29 ../src/virtManager/createnet.py:266
-#: ../src/virtManager/host.py:346 ../src/virtManager/host.py:366
+#: ../src/virtManager/host.py:361 ../src/virtManager/host.py:381
 msgid "Isolated virtual network"
 msgstr "Wyizolowana sieć wirtualna"
 
@@ -2276,9 +2275,9 @@ msgstr "Łączenie"
 msgid "Active (RO)"
 msgstr "Aktywuj (tylko do odczytu)"
 
-#: ../src/virtManager/connection.py:1031 ../src/virtManager/host.py:316
-#: ../src/virtManager/host.py:355 ../src/virtManager/host.py:528
-#: ../src/virtManager/host.py:564
+#: ../src/virtManager/connection.py:1031 ../src/virtManager/host.py:331
+#: ../src/virtManager/host.py:370 ../src/virtManager/host.py:543
+#: ../src/virtManager/host.py:579
 msgid "Inactive"
 msgstr "Deaktywuj"
 
@@ -2303,7 +2302,7 @@ msgid "An unexpected error occurred"
 msgstr "Wystąpił nieoczekiwany błąd"
 
 #: ../src/virtManager/createnet.py:104 ../src/virtManager/createnet.py:262
-#: ../src/virtManager/host.py:341
+#: ../src/virtManager/host.py:356
 #, python-format
 msgid "NAT to physical device %s"
 msgstr "NAT urządzenia fizycznego %s"
@@ -3022,83 +3021,83 @@ msgstr ""
 msgid "Error Removing Device: %s"
 msgstr "Błąd podczas usuwania urządzenia: %s"
 
-#: ../src/virtManager/host.py:219
+#: ../src/virtManager/host.py:234
 #, python-format
 msgid "This will permanently delete the network '%s,' are you sure?"
 msgstr "To na stałe usunie sieć \"%s\". Jesteś pewny?"
 
-#: ../src/virtManager/host.py:226
+#: ../src/virtManager/host.py:241
 #, python-format
 msgid "Error deleting network: %s"
 msgstr "Błąd podczas usuwania sieci: %s"
 
-#: ../src/virtManager/host.py:237
+#: ../src/virtManager/host.py:252
 #, python-format
 msgid "Error starting network: %s"
 msgstr "Błąd podczas uruchamiania sieci: %s"
 
-#: ../src/virtManager/host.py:248
+#: ../src/virtManager/host.py:263
 #, python-format
 msgid "Error stopping network: %s"
 msgstr "Błąd podczas zatrzymywania sieci: %s"
 
-#: ../src/virtManager/host.py:257
+#: ../src/virtManager/host.py:272
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Błąd podczas uruchamiania kreatora sieci: %s"
 
-#: ../src/virtManager/host.py:268
+#: ../src/virtManager/host.py:283
 #, python-format
 msgid "Error setting net autostart: %s"
 msgstr "Błąd podczas ustawiania automatycznego uruchamiania sieci: %s"
 
-#: ../src/virtManager/host.py:276 ../src/virtManager/host.py:326
-#: ../src/virtManager/host.py:504 ../src/virtManager/host.py:529
+#: ../src/virtManager/host.py:291 ../src/virtManager/host.py:341
+#: ../src/virtManager/host.py:519 ../src/virtManager/host.py:544
 msgid "On Boot"
 msgstr "Podczas uruchamiania"
 
-#: ../src/virtManager/host.py:277 ../src/virtManager/host.py:328
-#: ../src/virtManager/host.py:360 ../src/virtManager/host.py:505
-#: ../src/virtManager/host.py:529 ../src/virtManager/host.py:566
+#: ../src/virtManager/host.py:292 ../src/virtManager/host.py:343
+#: ../src/virtManager/host.py:375 ../src/virtManager/host.py:520
+#: ../src/virtManager/host.py:544 ../src/virtManager/host.py:581
 msgid "Never"
 msgstr "Nigdy"
 
-#: ../src/virtManager/host.py:390 ../src/virtManager/host.py:400
+#: ../src/virtManager/host.py:405 ../src/virtManager/host.py:415
 #, python-format
 msgid "Error starting pool '%s': %s"
 msgstr "Błąd podczas uruchamiania puli \"%s\": %s"
 
-#: ../src/virtManager/host.py:409
+#: ../src/virtManager/host.py:424
 #, python-format
 msgid "This will permanently delete the pool '%s,' are you sure?"
 msgstr "To na stałe usunie pulę \"%s\". Jesteś pewny?"
 
-#: ../src/virtManager/host.py:416
+#: ../src/virtManager/host.py:431
 #, python-format
 msgid "Error deleting pool: %s"
 msgstr "Błąd podczas usuwania puli: %s"
 
-#: ../src/virtManager/host.py:424
+#: ../src/virtManager/host.py:439
 #, python-format
 msgid "This will permanently delete the volume '%s,' are you sure?"
 msgstr "To na stałe usunie wolumin \"%s\". Jesteś pewny?"
 
-#: ../src/virtManager/host.py:433
+#: ../src/virtManager/host.py:448
 #, python-format
 msgid "Error deleting volume: %s"
 msgstr "Błąd podczas usuwania woluminu: %s"
 
-#: ../src/virtManager/host.py:444
+#: ../src/virtManager/host.py:459
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Błąd podczas uruchamiania kreatora puli: %s"
 
-#: ../src/virtManager/host.py:459
+#: ../src/virtManager/host.py:474
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Błąd podczas uruchamiania kreatora woluminu: %s"
 
-#: ../src/virtManager/host.py:496
+#: ../src/virtManager/host.py:511
 #, python-format
 msgid "Error setting pool autostart: %s"
 msgstr "Błąd podczas ustawiania automatycznego uruchamiania puli: %s"
