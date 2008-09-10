@@ -75,6 +75,12 @@ class vmmHost(gobject.GObject):
         volListModel = gtk.ListStore(str, str, str, str, str)
         self.window.get_widget("vol-list").set_model(volListModel)
 
+        self.volmenu = gtk.Menu()
+        volCopyPath = gtk.MenuItem("Copy Volume Path")
+        volCopyPath.show()
+        volCopyPath.connect("activate", self.copy_vol_path)
+        self.volmenu.add(volCopyPath)
+
         self.window.get_widget("net-list").get_selection().connect("changed", self.net_selected)
         self.window.get_widget("pool-list").get_selection().connect("changed", self.pool_selected)
         self.window.get_widget("vol-list").get_selection().connect("changed", self.vol_selected)
@@ -169,6 +175,7 @@ class vmmHost(gobject.GObject):
             "on_pool_delete_clicked": self.delete_pool,
             "on_pool_autostart_toggled": self.pool_autostart_changed,
             "on_vol_delete_clicked": self.delete_vol,
+            "on_vol_list_button_press_event": self.popup_vol_menu,
             "on_pool_apply_clicked": self.pool_apply,
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
             })
@@ -590,6 +597,26 @@ class vmmHost(gobject.GObject):
             return
 
         self.window.get_widget("vol-delete").set_sensitive(True)
+
+    def popup_vol_menu(self, widget, event):
+        tup = widget.get_path_at_pos(int(event.x), int(event.y))
+        if tup == None:
+            return False
+        path = tup[0]
+        model = widget.get_model()
+        iter = model.get_iter(path)
+        vol = model.get_value(iter, 0)
+        self.volmenu.popup(None, None, None, 0, event.time)
+
+    def copy_vol_path(self, ignore=None):
+        vol = self.current_vol()
+        if not vol:
+            return
+        clipboard = gtk.Clipboard()
+        target_path = vol.get_target_path()
+        if target_path:
+            clipboard.set_text(target_path)
+
 
     def repopulate_storage_pools(self, src, uri, uuid):
         self.populate_storage_pools(self.window.get_widget("pool-list").get_model())
