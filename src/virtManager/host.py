@@ -72,7 +72,7 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("pool-list").set_model(poolListModel)
         self.populate_storage_pools(poolListModel)
 
-        volListModel = gtk.ListStore(str, str, str, str)
+        volListModel = gtk.ListStore(str, str, str, str, str)
         self.window.get_widget("vol-list").set_model(volListModel)
 
         self.window.get_widget("net-list").get_selection().connect("changed", self.net_selected)
@@ -120,6 +120,14 @@ class vmmHost(gobject.GObject):
         volFormatCol.add_attribute(vol_txt3, 'text', 3)
         volFormatCol.set_sort_column_id(3)
         self.window.get_widget("vol-list").append_column(volFormatCol)
+
+        volPathCol = gtk.TreeViewColumn("Path")
+        vol_txt4 = gtk.CellRendererText()
+        volPathCol.pack_start(vol_txt4, False)
+        volPathCol.add_attribute(vol_txt4, 'text', 4)
+        volPathCol.set_sort_column_id(4)
+        self.window.get_widget("vol-list").append_column(volPathCol)
+
         volListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
         self.cpu_usage_graph = sparkline.Sparkline()
@@ -611,6 +619,6 @@ class vmmHost(gobject.GObject):
         for key in vols.keys():
             vol = vols[key]
             model.append([key, vol.get_name(), vol.get_pretty_capacity(),
-                          vol.get_format() or ""])
+                          vol.get_format() or "", vol.get_target_path() or ""])
 
 gobject.type_register(vmmHost)
