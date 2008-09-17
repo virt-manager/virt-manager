@@ -1043,10 +1043,6 @@ class vmmCreate(gobject.GObject):
                                             _("You must select one of the physical devices"))
 
             net = self.get_config_network()
-            if net[1] is None:
-                return self.err.val_err(_("Invalid Physical Device"),
-                                        _("The selected physical device must be bridged."))
-
             if self.window.get_widget("mac-address").get_active():
                 mac = self.window.get_widget("create-mac-address").get_text()
                 if mac is None or len(mac) == 0:
