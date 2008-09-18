@@ -221,8 +221,9 @@ def show_engine(engine, show, uri, uuid, no_conn_auto):
 def show_remote(managerObj, show, uri, uuid):
     if show=='creator' or show=='editor' \
        or show=='performance' or show=='console':
-        # Create a thread so to block on connection _fully_ starting so that
-        #   a non-manager window to prevent races accessing uninit'd vars
+        # Create a thread so we can wait for connection to _fully_ start,
+        # to prevent races accessing uninit'd vars for ex. the create wizard
+        # which expects the connection to be active.
         thread = threading.Thread(target=launch_specific_window,
                                   args=(managerObj, show, uri, uuid),
                                   name="Launching '%s' window" % show)
