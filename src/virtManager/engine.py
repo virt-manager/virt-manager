@@ -118,7 +118,8 @@ class vmmEngine(gobject.GObject):
 
 
     def _do_connection_changed(self, connection):
-        if connection.get_state() == connection.STATE_ACTIVE:
+        if connection.get_state() == connection.STATE_ACTIVE or \
+           connection.get_state() == connection.STATE_CONNECTING:
             return
 
         hvuri = connection.get_uri()

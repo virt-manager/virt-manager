@@ -29,6 +29,7 @@ import traceback
 
 from virtinst import Storage
 
+from virtManager.connection import vmmConnection
 from virtManager.createnet import vmmCreateNetwork
 from virtManager.createpool import vmmCreatePool
 from virtManager.createvol import vmmCreateVolume
@@ -158,6 +159,8 @@ class vmmHost(gobject.GObject):
         self.conn.connect("pool-started", self.refresh_storage_pool)
         self.conn.connect("pool-stopped", self.refresh_storage_pool)
 
+        self.conn.connect("state-changed", self.conn_state_changed)
+
         self.window.signal_autoconnect({
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
@@ -181,9 +184,7 @@ class vmmHost(gobject.GObject):
             })
 
         self.conn.connect("resources-sampled", self.refresh_resources)
-        self.refresh_resources()
-        self.reset_pool_state()
-        self.reset_net_state()
+        self.reset_state()
 
     def show(self):
         # Update autostart value
@@ -208,6 +209,12 @@ class vmmHost(gobject.GObject):
            self.window.get_widget("config-autoconnect").get_active():
             self.conn.toggle_autoconnect()
 
+    def reset_state(self):
+        self.refresh_resources()
+        self.reset_pool_state()
+        self.reset_net_state()
+        self.conn_state_changed()
+
     def refresh_resources(self, ignore=None):
         self.window.get_widget("performance-cpu").set_text("%d %%" % self.conn.cpu_time_percentage())
         vm_memory = self.conn.pretty_current_memory()
@@ -221,6 +228,11 @@ class vmmHost(gobject.GObject):
         memory_vector = self.conn.current_memory_vector()
         memory_vector.reverse()
         self.memory_usage_graph.set_property("data_array", memory_vector)
+
+    def conn_state_changed(self, ignore1=None):
+        state = (self.conn.get_state() == vmmConnection.STATE_ACTIVE)
+        self.window.get_widget("net-add").set_sensitive(state)
+        self.window.get_widget("pool-add").set_sensitive(state)
 
     # -------------------------
     # Virtual Network functions
