@@ -36,28 +36,28 @@ class vmmSerialConsole:
         self.window.hide()
         self.window.set_title(vm.get_name() + " " + _("serial console"))
 
-	self.terminal = vte.Terminal()
-	self.terminal.set_cursor_blinks(True)
-	self.terminal.set_emulation("xterm")
-	self.terminal.set_font_from_string("fixed 10")
-	self.terminal.set_scrollback_lines(1000)
-	self.terminal.set_audible_bell(False)
-	self.terminal.set_visible_bell(True)
+        self.terminal = vte.Terminal()
+        self.terminal.set_cursor_blinks(True)
+        self.terminal.set_emulation("xterm")
+        self.terminal.set_font_from_string("fixed 10")
+        self.terminal.set_scrollback_lines(1000)
+        self.terminal.set_audible_bell(False)
+        self.terminal.set_visible_bell(True)
         # XXX python VTE binding has bug failing to register constants
         #self.terminal.set_backspace_binding(vte.ERASE_ASCII_BACKSPACE)
         self.terminal.set_backspace_binding(1)
 
         self.terminal.connect("commit", self.send_data)
-	self.terminal.show()
+        self.terminal.show()
 
-	scrollbar = gtk.VScrollbar()
-	scrollbar.set_adjustment(self.terminal.get_adjustment())
+        scrollbar = gtk.VScrollbar()
+        scrollbar.set_adjustment(self.terminal.get_adjustment())
 
-	box = gtk.HBox()
-	box.pack_start(self.terminal)
-	box.pack_start(scrollbar)
+        box = gtk.HBox()
+        box.pack_start(self.terminal)
+        box.pack_start(scrollbar)
 
-	self.window.add(box)
+        self.window.add(box)
 
         self.ptyio = None
         self.ptysrc = None
