@@ -347,6 +347,12 @@ class vmmConnection(gobject.GObject):
         except:
             return True
 
+    def is_qemu_session(self):
+        (scheme, username, netloc, path, query, fragment) = uri_split(self.uri)
+        if path == "/session" and scheme.startswith("qemu"):
+            return True
+        return False
+
     def get_uri(self):
         return self.uri
 

@@ -217,11 +217,10 @@ class vmmAddHardware(gobject.GObject):
         model = self.window.get_widget("hardware-type").get_model()
         model.clear()
         model.append(["Storage device", gtk.STOCK_HARDDISK, PAGE_DISK])
-        # Can't use shared or virtual networking as regular user
+        # Can't use shared or virtual networking in qemu:///session
         # Can only have one usermode network device
-        if (os.getuid() == 0 or
-            (self.vm.get_connection().get_type().lower() == "qemu" and
-             len(self.vm.get_network_devices()) == 0)):
+        if not self.vm.get_connection().is_qemu_session() or \
+           len(self.vm.get_network_devices()) == 0:
             model.append(["Network card", gtk.STOCK_NETWORK, PAGE_NETWORK])
 
         # Can only customize HVM guests, no Xen PV
@@ -242,7 +241,8 @@ class vmmAddHardware(gobject.GObject):
 
         hwtype = self.get_config_hardware_type()
         if notebook.get_current_page() == PAGE_INTRO and \
-           (hwtype != PAGE_NETWORK or os.getuid() == 0):
+           (hwtype != PAGE_NETWORK or \
+            not self.vm.get_connection().is_qemu_session()):
             notebook.set_current_page(hwtype)
         else:
             notebook.set_current_page(PAGE_SUMMARY)
@@ -255,7 +255,8 @@ class vmmAddHardware(gobject.GObject):
 
         if notebook.get_current_page() == PAGE_SUMMARY:
             hwtype = self.get_config_hardware_type()
-            if hwtype == PAGE_NETWORK and os.getuid() != 0:
+            if hwtype == PAGE_NETWORK and \
+               self.vm.get_connection().is_qemu_session():
                 notebook.set_current_page(PAGE_INTRO)
             else:
                 notebook.set_current_page(hwtype)
@@ -344,7 +345,7 @@ class vmmAddHardware(gobject.GObject):
             return None
 
     def get_config_network(self):
-        if os.getuid() != 0:
+        if self.vm.get_connection().is_qemu_session():
             return ["user"]
 
         if self.window.get_widget("net-type-network").get_active():
@@ -496,7 +497,7 @@ class vmmAddHardware(gobject.GObject):
         self.close()
 
     def add_network(self):
-        if self._dev is None and os.getuid() != 0:
+        if self._dev is None and self.vm.get_connection().is_qemu_session():
             self._dev = virtinst.VirtualNetworkInterface(type="user")
         self._dev.setup(self.vm.get_connection().vmm)
         self.add_device(self._dev.get_xml_config())
