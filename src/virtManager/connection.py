@@ -382,6 +382,9 @@ class vmmConnection(gobject.GObject):
         self.connectThread.start()
 
     def _do_creds_polkit(self, action):
+        if os.getuid() == 0:
+            logging.debug("Skipping policykit check as root")
+            return 0
         logging.debug("Doing policykit for %s" % action)
         bus = dbus.SessionBus()
 
