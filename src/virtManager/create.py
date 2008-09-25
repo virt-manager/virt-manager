@@ -317,7 +317,7 @@ class vmmCreate(gobject.GObject):
                 notebook.set_current_page(PAGE_DISK)
         elif notebook.get_current_page() in [PAGE_INST_TREE, PAGE_INST_LOCAL]:
             notebook.set_current_page(PAGE_DISK)
-        elif notebook.get_current_page() == PAGE_DISK and self.connection.get_uri() == "qemu:///session":
+        elif notebook.get_current_page() == PAGE_DISK and self.connection.is_qemu_session():
             # Skip network for non-root
             notebook.set_current_page(PAGE_CPUMEM)
         else:
@@ -338,7 +338,7 @@ class vmmCreate(gobject.GObject):
             else:
                 # No config for PXE needed (yet)
                 notebook.set_current_page(PAGE_INST)
-        elif notebook.get_current_page() == PAGE_CPUMEM and self.connection.get_uri() == "qemu:///session":
+        elif notebook.get_current_page() == PAGE_CPUMEM and self.connection.is_qemu_session():
             # Skip network for non-root
             notebook.set_current_page(PAGE_DISK)
         else:
@@ -422,7 +422,7 @@ class vmmCreate(gobject.GObject):
 	return self.window.get_widget("kernel-params").get_text()
 
     def get_config_network(self):
-        if self.connection.get_uri() == "qemu:///session":
+        if self.connection.is_qemu_session():
             return ["user"]
 
         if self.window.get_widget("net-type-network").get_active():
@@ -621,7 +621,7 @@ class vmmCreate(gobject.GObject):
             return self.err.val_err(_("UUID Error"), str(e))
 
         # HACK: If usermode, and no nic is setup, use usermode networking
-        if self.connection.get_uri() == "qemu:///session":
+        if self.connection.is_qemu_session():
             try:
                 self._net = virtinst.VirtualNetworkInterface(type="user")
             except ValueError, e:
