@@ -666,7 +666,7 @@ class vmmDomain(gobject.GObject):
                 ctx = doc.xpathNewContext()
                 ret = parse_function(ctx)
             except Exception, e:
-                logging.debug("Error parsing domain xml: %s" % str(e))
+                raise RuntimeError(_("Error parsing domain xml: %s") % str(e))
         finally:
             if ctx:
                 ctx.xpathFreeContext()
