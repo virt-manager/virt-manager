@@ -77,7 +77,10 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("vol-list").set_model(volListModel)
 
         self.volmenu = gtk.Menu()
-        volCopyPath = gtk.MenuItem("Copy Volume Path")
+        volCopyPath = gtk.ImageMenuItem(_("Copy Volume Path"))
+        volCopyImage = gtk.Image()
+        volCopyImage.set_from_stock(gtk.STOCK_COPY, gtk.ICON_SIZE_MENU)
+        volCopyPath.set_image(volCopyImage)
         volCopyPath.show()
         volCopyPath.connect("activate", self.copy_vol_path)
         self.volmenu.add(volCopyPath)
