@@ -45,6 +45,7 @@ class vmmOpticalDriveHelper(gobject.GObject):
         # get a list of optical devices with data discs in, for FV installs
         vollabel = {}
         volpath = {}
+        self.model.clear()
         # Track device add/removes so we can detect newly inserted CD media
         self.hal_iface.connect_to_signal("DeviceAdded", self._device_added)
         self.hal_iface.connect_to_signal("DeviceRemoved", self._device_removed)
