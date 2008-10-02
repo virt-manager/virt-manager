@@ -896,10 +896,10 @@ class vmmManager(gobject.GObject):
         return cmp(model.get_value(iter1, ROW_NAME), model.get_value(iter2, ROW_NAME))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, ROW_HANDLE).cpu_time(), model.get_value(iter2, ROW_HANDLE).cpu_time())
+        return cmp(model.get_value(iter1, ROW_HANDLE).cpu_time_percentage(), model.get_value(iter2, ROW_HANDLE).cpu_time_percentage())
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, ROW_HANDLE).get_memory(), model.get_value(iter2, ROW_HANDLE).get_memory())
+        return cmp(model.get_value(iter1, ROW_HANDLE).current_memory_percentage(), model.get_value(iter2, ROW_HANDLE).current_memory_percentage())
 
     def vmlist_disk_usage_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, ROW_HANDLE).disk_usage(), model.get_value(iter2, ROW_HANDLE).disk_usage())
