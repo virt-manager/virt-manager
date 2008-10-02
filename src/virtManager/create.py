@@ -1066,6 +1066,18 @@ class vmmCreate(gobject.GObject):
             except ValueError, e:
                 return self.err.val_err(_("Network Parameter Error"), str(e))
 
+            if self._net.type == "network":
+                if self._net.network not in self.connection.vmm.listNetworks():
+                    res = self.err.yes_no(_("Virtual Network is Inactive"),
+                                          _("Virtual Network '%s' is not active. Would you like to start the network now?") % 
+                                          self._net.network)
+                    if res:
+                        net = self.connection.vmm.networkLookupByName(self._net.network)
+                        net.create()
+                        logging.info("Started network '%s'." % self._net.network)
+                    else:
+                        return False
+
             conflict = self._net.is_conflict_net(self._guest.conn)
             if conflict[0]:
                 return self.err.val_err(_("Mac address collision"), conflict[1])
@@ -1124,7 +1136,10 @@ class vmmCreate(gobject.GObject):
         model.clear()
         for uuid in self.connection.list_net_uuids():
             net = self.connection.get_net(uuid)
-            model.append([net.get_label(), net.get_name()])
+            if net.get_name() in self.connection.vmm.listNetworks():
+                model.append([net.get_label(), net.get_name()])
+            else:
+                model.append([net.get_label(), "%s (%s)" % (net.get_name(), _("Inactive"))])
 
     def populate_device_model(self, model):
         model.clear()
