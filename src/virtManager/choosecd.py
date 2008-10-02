@@ -89,6 +89,8 @@ class vmmChooseCD(gobject.GObject):
         else:
             self.window.get_widget("physical-media").set_sensitive(True)
             self.window.get_widget("iso-file-chooser").set_sensitive(True)
+            self.populate_opt_media()
+            self.window.get_widget("cd-path").set_active(0)
 
     def ok(self,ignore1=None, ignore2=None):
         if self.window.get_widget("iso-image").get_active():
