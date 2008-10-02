@@ -36,6 +36,7 @@ import cairo
 from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
+from virtManager.serialcon import vmmSerialConsole
 
 import virtinst
 import urlgrabber.progress as progress
@@ -68,14 +69,12 @@ PAGE_VNCVIEWER = 3
 PAGE_CONSOLE = 0
 PAGE_OVERVIEW = 1
 PAGE_DETAILS = 2
-PAGE_FIRST_CHAR = 3
+PAGE_DYNAMIC_OFFSET = 3
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
-        "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
-                                   gobject.TYPE_NONE, (str,str)),
         "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
                                  gobject.TYPE_NONE, (str,str)),
         "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
@@ -115,6 +114,7 @@ class vmmDetails(gobject.GObject):
         topwin.set_title(self.title)
 
         self.engine = engine
+        self.dynamic_tabs = []
 
         # Don't allowing changing network/disks for Dom0
         if self.vm.is_management_domain():
@@ -156,6 +156,25 @@ class vmmDetails(gobject.GObject):
         destroy.connect("activate", self.control_vm_destroy)
         menu.add(destroy)
 
+        smenu = gtk.Menu()
+        smenu.connect("show", self.populate_serial_menu)
+        self.window.get_widget("details-menu-view-serial-list").set_submenu(smenu)
+
+        self.serial_popup = gtk.Menu()
+
+        self.serial_copy = gtk.ImageMenuItem(gtk.STOCK_COPY)
+        self.serial_popup.add(self.serial_copy)
+
+        self.serial_paste = gtk.ImageMenuItem(gtk.STOCK_PASTE)
+        self.serial_popup.add(self.serial_paste)
+
+        self.serial_popup.add(gtk.SeparatorMenuItem())
+
+        self.serial_close = gtk.ImageMenuItem(_("Close tab"))
+        close_image = gtk.Image()
+        close_image.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU)
+        self.serial_close.set_image(close_image)
+        self.serial_popup.add(self.serial_close)
 
         self.window.get_widget("hw-panel").set_show_tabs(False)
 
@@ -237,7 +256,6 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
             "on_details_menu_view_manager_activate": self.view_manager,
-            "on_details_menu_view_serial_activate": self.control_vm_terminal,
 
             "on_details_pages_switch_page": self.switch_page,
 
@@ -431,6 +449,47 @@ class vmmDetails(gobject.GObject):
         else:
             self.window.get_widget("details-toolbar").hide()
 
+    def populate_serial_menu(self, src):
+        for ent in src:
+            src.remove(ent)
+
+        devs = self.vm.get_serial_devs()
+        if len(devs) == 0:
+            item = gtk.CheckMenuItem(_("No serial devices found"))
+            item.set_sensitive(False)
+            src.add(item)
+
+        usable_types = [ "pty" ]
+        for dev in devs:
+            sensitive = False
+            msg = ""
+            item = gtk.CheckMenuItem(dev[0])
+
+            if self.vm.get_connection().is_remote():
+                msg = _("Serial console not yet supported over remote "
+                        "connection.")
+            elif not self.vm.is_active():
+                msg = _("Serial console not available for inactive guest.")
+            elif not dev[1] in usable_types:
+                msg = _("Console for device type '%s' not yet supported.") % \
+                        dev[1]
+            elif dev[2] and not os.access(dev[2], os.R_OK | os.W_OK):
+                msg = _("Can not access console path '%s'.") % str(dev[2])
+            else:
+                sensitive = True
+
+            if not sensitive:
+                item.set_tooltip_text(msg)
+            item.set_sensitive(sensitive)
+
+            if sensitive and self.dynamic_tabs.count(dev[0]):
+                # Tab is already open, make sure marked as such
+                item.set_active(True)
+            item.connect("activate", self.control_serial_tab, dev[0], dev[2])
+            src.add(item)
+
+        src.show_all()
+
     def show(self):
         dialog = self.window.get_widget("vmm-details")
         if self.is_visible():
@@ -585,9 +644,6 @@ class vmmDetails(gobject.GObject):
     def control_vm_reboot(self, src):
         self.emit("action-reboot-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())     
 
-    def control_vm_terminal(self, src):
-        self.emit("action-show-terminal", self.vm.get_connection().get_uri(), self.vm.get_uuid())
-
     def control_vm_console(self, src):
         self.emit("action-show-console", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
@@ -608,11 +664,6 @@ class vmmDetails(gobject.GObject):
     def update_widget_states(self, vm, status):
         self.toggle_toolbar(self.window.get_widget("details-menu-view-toolbar"))
 
-        if vm.is_serial_console_tty_accessible():
-            self.window.get_widget("details-menu-view-serial").set_sensitive(True)
-        else:
-            self.window.get_widget("details-menu-view-serial").set_sensitive(False)
-
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
                        libvirt.VIR_DOMAIN_SHUTOFF ] or vm.is_read_only():
             self.window.get_widget("details-menu-destroy").set_sensitive(False)
@@ -625,7 +676,6 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("config-vcpus").set_sensitive(True)
             self.window.get_widget("config-memory").set_sensitive(True)
             self.window.get_widget("config-maxmem").set_sensitive(True)
-            self.window.get_widget("details-menu-view-serial").set_sensitive(False)
         else:
             self.window.get_widget("control-run").set_sensitive(False)
             self.window.get_widget("details-menu-run").set_sensitive(False)
@@ -1221,6 +1271,70 @@ class vmmDetails(gobject.GObject):
         else:
             fcdialog.hide()
         fcdialog.destroy()
+
+
+    # ------------------------------
+    # Serial Console pieces
+    # ------------------------------
+
+    def control_serial_tab(self, src, name, ttypath):
+        if src.get_active():
+            self._show_serial_tab(name, ttypath)
+        else:
+            self._close_serial_tab(name)
+
+    def show_serial_rcpopup(self, src, event):
+        if event.button != 3:
+            return
+
+        self.serial_popup.show_all()
+        self.serial_copy.connect("activate", self.serial_copy_text, src)
+        self.serial_paste.connect("activate", self.serial_paste_text, src)
+        self.serial_close.connect("activate", self.serial_close_tab,
+                                  self.window.get_widget("details-pages").get_current_page())
+
+        if src.get_has_selection():
+            self.serial_copy.set_sensitive(True)
+        else:
+            self.serial_copy.set_sensitive(False)
+        self.serial_popup.popup(None, None, None, 0, event.time)
+
+    def serial_close_tab(self, src, pagenum):
+        tab_idx = (pagenum - PAGE_DYNAMIC_OFFSET)
+        if (tab_idx < 0) or (tab_idx > len(self.dynamic_tabs)-1):
+            return
+        return self._close_serial_tab(self.dynamic_tabs[tab_idx])
+
+    def serial_copy_text(self, src, terminal):
+        terminal.copy_clipboard()
+
+    def serial_paste_text(self, src, terminal):
+        terminal.paste_clipboard()
+
+    def _show_serial_tab(self, name, ttypath):
+        if not self.dynamic_tabs.count(name):
+            child = vmmSerialConsole(self.vm, ttypath)
+            child.terminal.connect("button-press-event",
+                                   self.show_serial_rcpopup)
+            title = gtk.Label(name)
+            child.show_all()
+            self.window.get_widget("details-pages").append_page(child, title)
+            self.dynamic_tabs.append(name)
+
+        page_idx = self.dynamic_tabs.index(name) + PAGE_DYNAMIC_OFFSET
+        self.window.get_widget("details-pages").set_current_page(page_idx)
+
+    def _close_serial_tab(self, name):
+        if not self.dynamic_tabs.count(name):
+            return
+
+        page_idx = self.dynamic_tabs.index(name) + PAGE_DYNAMIC_OFFSET
+        self.window.get_widget("details-pages").remove_page(page_idx)
+        self.dynamic_tabs.remove(name)
+
+    # -----------------------
+    # Hardware Section Pieces
+    # -----------------------
 
     def config_vcpus_changed(self, src):
         self.window.get_widget("config-vcpus-apply").set_sensitive(True)

@@ -434,7 +434,6 @@ class vmmManager(gobject.GObject):
                 self.emit("action-show-terminal", uri, vmuuid)
         else:
             self.emit("action-refresh-console", uri, vmuuid)
-            self.emit("action-refresh-terminal", uri, vmuuid)
 
     def _append_vm(self, model, vm, conn):
         logging.debug("About to append vm: %s" % vm.get_name())

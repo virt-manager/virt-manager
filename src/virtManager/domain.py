@@ -424,17 +424,38 @@ class vmmDomain(gobject.GObject):
     def run_status_icon(self):
         return self.config.get_vm_status_icon(self.status())
 
-    def get_serial_console_tty(self):
-        return util.get_xml_path(self.get_xml(), "/domain/devices/console/@tty")
-
-    def is_serial_console_tty_accessible(self):
+    def _is_serial_console_tty_accessible(self, path):
         # pty serial scheme doesn't work over remote
         if self.connection.is_remote():
             return False
-        tty = self.get_serial_console_tty()
-        if tty == None:
+
+        if path == None:
             return False
-        return os.access(tty, os.R_OK | os.W_OK)
+        return os.access(path, os.R_OK | os.W_OK)
+
+    def get_serial_devs(self):
+        def _parse_serial_consoles(ctx):
+            # [ Name, device type, source path
+            serial_list = []
+            devs = ctx.xpathEval("/domain/devices/serial")
+            for node in devs:
+                name = "Serial "
+                usable = False
+                dev_type = node.prop("type")
+                source_path = None
+
+                for child in node.children:
+                    if child.name == "target":
+                        target_port = child.prop("port")
+                        if target_port:
+                            name += str(target_port)
+                    if child.name == "source":
+                        source_path = child.prop("path")
+
+                serial_list.append([name, dev_type, source_path])
+
+            return serial_list
+        return self._parse_device_xml(_parse_serial_consoles)
 
     def get_graphics_console(self):
         self.xml = None

@@ -25,16 +25,16 @@ import gobject
 import termios
 import tty
 import pty
+import fcntl
 
-class vmmSerialConsole:
-    def __init__(self, config, vm):
+import libvirt
+
+class vmmSerialConsole(gtk.HBox):
+    def __init__(self, vm, ttypath):
+        gtk.HBox.__init__(self)
 
         self.vm = vm
-        self.config = config
-
-        self.window = gtk.Window()
-        self.window.hide()
-        self.window.set_title(vm.get_name() + " " + _("serial console"))
+        self.ttypath = ttypath
 
         self.terminal = vte.Terminal()
         self.terminal.set_cursor_blinks(True)
@@ -53,42 +53,38 @@ class vmmSerialConsole:
         scrollbar = gtk.VScrollbar()
         scrollbar.set_adjustment(self.terminal.get_adjustment())
 
-        box = gtk.HBox()
-        box.pack_start(self.terminal)
-        box.pack_start(scrollbar)
-
-        self.window.add(box)
+        self.pack_start(self.terminal)
+        self.pack_start(scrollbar, expand=False, fill=False)
 
         self.ptyio = None
         self.ptysrc = None
         self.ptytermios = None
 
-        self.window.connect("delete-event", self.close)
+        self.connect("realize", self.handle_realize)
+        self.connect("unrealize", self.handle_unrealize)
+        self.vm.connect("status-changed", self.vm_status_changed)
 
-
-    def show(self):
+    def handle_realize(self, ignore=None):
         self.opentty()
-        self.window.show_all()
-        self.window.present()
 
-    def close(self, src=None, ignore=None):
+    def handle_unrealize(self, src=None, ignore=None):
         self.closetty()
-        self.window.hide()
-        return True
 
-    def is_visible(self):
-        if self.window.flags() & gtk.VISIBLE:
-           return 1
-        return 0
+    def vm_status_changed(self, src, status):
+        if status in [ libvirt.VIR_DOMAIN_RUNNING ]:
+            self.opentty()
+        else:
+            self.closetty()
 
     def opentty(self):
         if self.ptyio != None:
             self.closetty()
-        ipty = self.vm.get_serial_console_tty()
+        ipty = self.ttypath
 
         if ipty == None:
             return
         self.ptyio = pty.slave_open(ipty)
+        fcntl.fcntl(self.ptyio, fcntl.F_SETFL, os.O_NONBLOCK)
         self.ptysrc = gobject.io_add_watch(self.ptyio, gobject.IO_IN | gobject.IO_ERR | gobject.IO_HUP, self.display_data)
 
         # Save term settings & set to raw mode

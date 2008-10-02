@@ -36,7 +36,6 @@ from virtManager.asyncjob import vmmAsyncJob
 from virtManager.create import vmmCreate
 from virtManager.host import vmmHost
 from virtManager.error import vmmErrorDialog
-from virtManager.serialcon import vmmSerialConsole
 
 class vmmEngine(gobject.GObject):
     __gsignals__ = {
@@ -112,10 +111,6 @@ class vmmEngine(gobject.GObject):
         if self.connections[hvuri]["windowDetails"].has_key(vmuuid):
             self.connections[hvuri]["windowDetails"][vmuuid].close()
             del self.connections[hvuri]["windowDetails"][vmuuid]
-        if self.connections[hvuri]["windowSerialConsole"].has_key(vmuuid):
-            self.connections[hvuri]["windowSerialConsole"][vmuuid].close()
-            del self.connections[hvuri]["windowSerialConsole"][vmuuid]
-
 
     def _do_connection_changed(self, connection):
         if connection.get_state() == connection.STATE_ACTIVE or \
@@ -126,9 +121,6 @@ class vmmEngine(gobject.GObject):
         for vmuuid in self.connections[hvuri]["windowDetails"].keys():
             self.connections[hvuri]["windowDetails"][vmuuid].close()
             del self.connections[hvuri]["windowDetails"][vmuuid]
-        for vmuuid in self.connections[hvuri]["windowSerialConsole"].keys():
-            self.connections[hvuri]["windowSerialConsole"][vmuuid].close()
-            del self.connections[hvuri]["windowSerialConsole"][vmuuid]
         if self.connections[hvuri]["windowHost"] is not None:
             self.connections[hvuri]["windowHost"].close()
             self.connections[hvuri]["windowHost"] = None
@@ -192,14 +184,10 @@ class vmmEngine(gobject.GObject):
         self.show_help(index)
     def _do_show_console(self, src, uri, uuid):
         self.show_console(uri, uuid)
-    def _do_show_terminal(self, src, uri, uuid):
-        self.show_serial_console(uri, uuid)
     def _do_show_manager(self, src):
         self.show_manager()
     def _do_refresh_console(self, src, uri, uuid):
         self.refresh_console(uri, uuid)
-    def _do_refresh_terminal(self, src, uri, uuid):
-        self.refresh_serial_console(uri, uuid)
     def _do_save_domain(self, src, uri, uuid):
         self.save_domain(src, uri, uuid)
     def _do_destroy_domain(self, src, uri, uuid):
@@ -255,16 +243,6 @@ class vmmEngine(gobject.GObject):
         win = self.show_details(uri, uuid)
         win.activate_console_page()
 
-    def show_serial_console(self, uri, uuid):
-        con = self.get_connection(uri)
-
-        if not(self.connections[uri]["windowSerialConsole"].has_key(uuid)):
-            console = vmmSerialConsole(self.get_config(),
-                                       con.get_vm(uuid))
-            self.connections[uri]["windowSerialConsole"][uuid] = console
-        self.connections[uri]["windowSerialConsole"][uuid].show()
-
-
     def refresh_console(self, uri, uuid):
         con = self.get_connection(uri)
 
@@ -272,18 +250,6 @@ class vmmEngine(gobject.GObject):
             return
 
         console = self.connections[uri]["windowConsole"][uuid]
-        if not(console.is_visible()):
-            return
-
-        console.show()
-
-    def refresh_serial_console(self, uri, uuid):
-        con = self.get_connection(uri)
-
-        if not(self.connections[uri]["windowSerialConsole"].has_key(uuid)):
-            return
-
-        console = self.connections[uri]["windowSerialConsole"][uuid]
         if not(console.is_visible()):
             return
 
@@ -313,7 +279,6 @@ class vmmEngine(gobject.GObject):
                 details.connect("action-reboot-domain", self._do_reboot_domain)
                 details.connect("action-exit-app", self._do_exit_app)
                 details.connect("action-view-manager", self._do_show_manager)
-                details.connect("action-show-terminal", self._do_show_terminal)
 
             except Exception, e:
                 self.err.show_err(_("Error bringing up domain details: %s") % str(e),
@@ -341,7 +306,6 @@ class vmmEngine(gobject.GObject):
             self.windowManager.connect("action-show-connect", self._do_show_connect)
             self.windowManager.connect("action-connect", self._do_connect)
             self.windowManager.connect("action-refresh-console", self._do_refresh_console)
-            self.windowManager.connect("action-refresh-terminal", self._do_refresh_terminal)
             self.windowManager.connect("action-exit-app", self._do_exit_app)
         return self.windowManager
 
@@ -379,7 +343,6 @@ class vmmEngine(gobject.GObject):
         if self.connections[uri]["windowCreate"] == None:
             create = vmmCreate(self.get_config(), con)
             create.connect("action-show-console", self._do_show_console)
-            create.connect("action-show-terminal", self._do_show_terminal)
             create.connect("action-show-help", self._do_show_help)
             self.connections[uri]["windowCreate"] = create
         self.connections[uri]["windowCreate"].show()
@@ -392,7 +355,6 @@ class vmmEngine(gobject.GObject):
             "windowCreate": None,
             "windowDetails": {},
             "windowConsole": {},
-            "windowSerialConsole": {},
             }
         self.connections[uri]["connection"].connect("vm-removed", self._do_vm_removed)
         self.connections[uri]["connection"].connect("state-changed", self._do_connection_changed)
