@@ -41,7 +41,8 @@ static gboolean gtk_sparkline_expose(GtkWidget *widget,
 
 enum {
   PROP_0,
-  PROP_DATAARRAY
+  PROP_DATAARRAY,
+  PROP_FILLED,
 };
 
 static gpointer parent_class;
@@ -88,7 +89,6 @@ static void gtk_sparkline_init (GtkSparkline *sparkline)
   priv = GTK_SPARKLINE_GET_PRIVATE (sparkline);
 
   priv->filled = TRUE;
-  //  priv->filled = FALSE;
   priv->data_array = g_value_array_new(0);
 
   g_signal_connect (G_OBJECT (sparkline), "expose_event",
@@ -124,6 +124,13 @@ static void gtk_sparkline_class_init (GtkSparklineClass *class)
 										 0,
 										 G_PARAM_READABLE | G_PARAM_WRITABLE),
 							     G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (object_class,
+				   PROP_FILLED,
+				   g_param_spec_boolean ("filled",
+							 "Filled",
+							 "fill space under sparcline",
+							 TRUE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_type_class_add_private (object_class, sizeof (GtkSparklinePrivate));
 }
@@ -151,6 +158,10 @@ static void gtk_sparkline_get_property (GObject *object,
       g_value_set_boxed(value, priv->data_array);
       break;
 
+    case PROP_FILLED:
+      g_value_set_boolean(value, priv->filled);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -173,6 +184,10 @@ gtk_sparkline_set_property (GObject      *object,
       g_value_array_free(priv->data_array);
       priv->data_array = g_value_array_copy(g_value_get_boxed(value));
       gtk_widget_queue_draw(GTK_WIDGET(object));
+      break;
+
+    case PROP_FILLED:
+      priv->filled = g_value_get_boolean(value);
       break;
 
     default:
