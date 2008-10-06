@@ -869,6 +869,8 @@ class vmmConnection(gobject.GObject):
         if self.state != self.STATE_ACTIVE:
             return
 
+        self.hostinfo = self.vmm.getInfo()
+
         # Poll for new virtual network objects
         (startNets, stopNets, newNets,
          oldNets, self.nets) = self._update_nets()
@@ -911,10 +913,6 @@ class vmmConnection(gobject.GObject):
 
         # Finally, we sample each domain
         now = time()
-        try:
-            self.hostinfo = self.vmm.getInfo()
-        except:
-            logging.warn("Unable to get host information")
 
         updateVMs = self.vms
         if noStatsUpdate:
