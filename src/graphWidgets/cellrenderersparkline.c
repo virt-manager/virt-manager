@@ -142,7 +142,6 @@ static void gtk_cell_renderer_sparkline_class_init (GtkCellRendererSparklineClas
 
 static void gtk_cell_renderer_sparkline_finalize (GObject *object)
 {
-  GtkCellRendererSparkline *cellsparkline = GTK_CELL_RENDERER_SPARKLINE (object);
   GtkCellRendererSparklinePrivate *priv;
 
   priv = GTK_CELL_RENDERER_SPARKLINE_GET_PRIVATE (object);
@@ -156,7 +155,6 @@ static void gtk_cell_renderer_sparkline_get_property (GObject *object,
 						      GValue *value,
 						      GParamSpec *pspec)
 {
-  GtkCellRendererSparkline *cellsparkline = GTK_CELL_RENDERER_SPARKLINE (object);
   GtkCellRendererSparklinePrivate *priv;
 
   priv = GTK_CELL_RENDERER_SPARKLINE_GET_PRIVATE (object);
@@ -179,7 +177,6 @@ gtk_cell_renderer_sparkline_set_property (GObject      *object,
 					  const GValue *value,
 					  GParamSpec   *pspec)
 {
-  GtkCellRendererSparkline *cellsparkline = GTK_CELL_RENDERER_SPARKLINE (object);
   GtkCellRendererSparklinePrivate *priv;
 
   priv = GTK_CELL_RENDERER_SPARKLINE_GET_PRIVATE (object);
@@ -205,7 +202,6 @@ static void gtk_cell_renderer_sparkline_get_size (GtkCellRenderer *cell,
 						  gint *width,
 						  gint *height)
 {
-  GtkCellRendererSparkline *cellsparkline = (GtkCellRendererSparkline *) cell;
   GtkCellRendererSparklinePrivate *priv;
   GValueArray *data;
 

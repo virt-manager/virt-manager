@@ -130,12 +130,9 @@ static void gtk_sparkline_class_init (GtkSparklineClass *class)
 
 static void gtk_sparkline_finalize (GObject *object)
 {
-  GtkSparkline *cellsparkline = GTK_SPARKLINE (object);
   GtkSparklinePrivate *priv;
 
   priv = GTK_SPARKLINE_GET_PRIVATE (object);
-
-
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
@@ -144,7 +141,6 @@ static void gtk_sparkline_get_property (GObject *object,
 					GValue *value,
 					GParamSpec *pspec)
 {
-  GtkSparkline *cellsparkline = GTK_SPARKLINE (object);
   GtkSparklinePrivate *priv;
 
   priv = GTK_SPARKLINE_GET_PRIVATE (object);
@@ -167,7 +163,6 @@ gtk_sparkline_set_property (GObject      *object,
 			    const GValue *value,
 			    GParamSpec   *pspec)
 {
-  GtkSparkline *cellsparkline = GTK_SPARKLINE (object);
   GtkSparklinePrivate *priv;
 
   priv = GTK_SPARKLINE_GET_PRIVATE (object);
@@ -189,7 +184,6 @@ gtk_sparkline_set_property (GObject      *object,
 static void gtk_sparkline_size_request(GtkWidget *widget,
 				       GtkRequisition *area)
 {
-  GtkSparkline *sparkline = (GtkSparkline *) widget;
   GtkSparklinePrivate *priv;
   GValueArray *data;
 
