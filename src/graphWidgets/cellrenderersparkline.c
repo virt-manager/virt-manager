@@ -55,8 +55,8 @@ enum {
 
 enum {
   PROP_0,
-  PROP_NUMDATAPOINTS,
-  PROP_DATAARRAY
+  PROP_DATAARRAY,
+  PROP_REVERSED,
 };
 
 static gpointer parent_class;
@@ -68,6 +68,7 @@ typedef struct _GtkCellRendererSparklinePrivate GtkCellRendererSparklinePrivate;
 struct _GtkCellRendererSparklinePrivate
 {
   gboolean filled;
+  gboolean reversed;
   GValueArray *data_array;
 };
 
@@ -137,6 +138,14 @@ static void gtk_cell_renderer_sparkline_class_init (GtkCellRendererSparklineClas
 										 G_PARAM_READABLE | G_PARAM_WRITABLE),
 							     G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+  g_object_class_install_property (object_class,
+				   PROP_REVERSED,
+				   g_param_spec_boolean ("reversed",
+						         "Reversed",
+						         "process data from back to front",
+						         FALSE,
+						         G_PARAM_READABLE | G_PARAM_WRITABLE));
+
   g_type_class_add_private (object_class, sizeof (GtkCellRendererSparklinePrivate));
 }
 
@@ -165,6 +174,10 @@ static void gtk_cell_renderer_sparkline_get_property (GObject *object,
       g_value_set_boxed(value, priv->data_array);
       break;
 
+    case PROP_REVERSED:
+      g_value_set_boolean(value, priv->reversed);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -186,6 +199,10 @@ gtk_cell_renderer_sparkline_set_property (GObject      *object,
     case PROP_DATAARRAY:
       g_value_array_free(priv->data_array);
       priv->data_array = g_value_array_copy(g_value_get_boxed(value));
+      break;
+
+    case PROP_REVERSED:
+      priv->reversed = g_value_get_boolean(value);
       break;
 
     default:
@@ -225,12 +242,21 @@ static void gtk_cell_renderer_sparkline_get_size (GtkCellRenderer *cell,
   }
 }
 
-static double get_y (GdkRectangle *cell_area,
+static double get_y (GtkCellRendererSparklinePrivate *priv,
+		     GdkRectangle *cell_area,
 		     GValueArray *data,
 		     int index)
 {
+  int n;
   double baseline_y = cell_area->y + cell_area->height;
-  GValue *val = g_value_array_get_nth(data, index);
+  GValue *val;
+
+  if (priv->reversed) 
+    n = data->n_values - 1 - index;
+  else
+    n = index;
+
+  val = g_value_array_get_nth(data, n);
   return baseline_y - (cell_area->height * g_value_get_double(val));
 }
 
@@ -261,7 +287,7 @@ gtk_cell_renderer_sparkline_render (GtkCellRenderer *cell,
   points = g_new(GdkPoint, data->n_values);
   for (index=0;index<data->n_values;index++) {
     double cx = ((double)index * pixels_per_point);
-    double cy = get_y (cell_area, data, index);
+    double cy = get_y (priv, cell_area, data, index);
     
     points[index].x = cx + cell_area->x;
     points[index].y = cy;

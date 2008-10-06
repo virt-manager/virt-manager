@@ -182,12 +182,15 @@ class vmmDetails(gobject.GObject):
         self.choose_cd = None
         
         self.cpu_usage_graph = sparkline.Sparkline()
+        self.cpu_usage_graph.set_property("reversed", True)
         self.window.get_widget("graph-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
 
         self.memory_usage_graph = sparkline.Sparkline()
+        self.memory_usage_graph.set_property("reversed", True)
         self.window.get_widget("graph-table").attach(self.memory_usage_graph, 1, 2, 1, 2)
 
         self.network_traffic_graph = sparkline.Sparkline()
+        self.network_traffic_graph.set_property("reversed", True)
         self.window.get_widget("graph-table").attach(self.network_traffic_graph, 1, 2, 3, 4)
 
 
@@ -806,15 +809,12 @@ class vmmDetails(gobject.GObject):
 
         history_len = self.config.get_stats_history_length()
         cpu_vector = self.vm.cpu_time_vector()
-        cpu_vector.reverse()
         self.cpu_usage_graph.set_property("data_array", cpu_vector)
 
         memory_vector = self.vm.current_memory_vector()
-        memory_vector.reverse()
         self.memory_usage_graph.set_property("data_array", memory_vector)
 
         network_vector = self.vm.network_traffic_vector()
-        network_vector.reverse()
         self.network_traffic_graph.set_property("data_array", network_vector)
 
     def refresh_config_cpu(self):

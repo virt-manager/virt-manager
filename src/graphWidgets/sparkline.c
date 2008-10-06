@@ -43,6 +43,7 @@ enum {
   PROP_0,
   PROP_DATAARRAY,
   PROP_FILLED,
+  PROP_REVERSED,
 };
 
 static gpointer parent_class;
@@ -53,6 +54,7 @@ typedef struct _GtkSparklinePrivate GtkSparklinePrivate;
 struct _GtkSparklinePrivate
 {
   gboolean filled;
+  gboolean reversed;
   GValueArray *data_array;
 };
 
@@ -89,6 +91,7 @@ static void gtk_sparkline_init (GtkSparkline *sparkline)
   priv = GTK_SPARKLINE_GET_PRIVATE (sparkline);
 
   priv->filled = TRUE;
+  priv->reversed = FALSE;
   priv->data_array = g_value_array_new(0);
 
   g_signal_connect (G_OBJECT (sparkline), "expose_event",
@@ -131,6 +134,13 @@ static void gtk_sparkline_class_init (GtkSparklineClass *class)
 							 "fill space under sparcline",
 							 TRUE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (object_class,
+				   PROP_REVERSED,
+				   g_param_spec_boolean ("reversed",
+						         "Reversed",
+						         "process data from back to front",
+						         FALSE,
+						         G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_type_class_add_private (object_class, sizeof (GtkSparklinePrivate));
 }
@@ -162,6 +172,10 @@ static void gtk_sparkline_get_property (GObject *object,
       g_value_set_boolean(value, priv->filled);
       break;
 
+    case PROP_REVERSED:
+      g_value_set_boolean(value, priv->reversed);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -190,6 +204,10 @@ gtk_sparkline_set_property (GObject      *object,
       priv->filled = g_value_get_boolean(value);
       break;
 
+    case PROP_REVERSED:
+      priv->reversed = g_value_get_boolean(value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -214,10 +232,17 @@ static void gtk_sparkline_size_request(GtkWidget *widget,
 
 static double get_y (GtkAllocation *cell_area,
 		     GValueArray *data,
-		     int index)
+		     int index, int reversed)
 {
   double baseline_y = cell_area->height;
-  GValue *val = g_value_array_get_nth(data, index);
+  int n;
+
+  if (reversed) 
+    n = data->n_values - 1 - index;
+  else
+    n = index;
+
+  GValue *val = g_value_array_get_nth(data, n);
   return baseline_y - ((cell_area->height-1) * g_value_get_double(val));
 }
 
@@ -245,7 +270,7 @@ gtk_sparkline_expose (GtkWidget *widget,
   points = g_new(GdkPoint, data->n_values);
   for (index=0;index<data->n_values;index++) {
     double cx = ((double)index * pixels_per_point);
-    double cy = get_y (cell_area, data, index);
+    double cy = get_y (cell_area, data, index, priv->reversed);
     points[index].x = cx;
     points[index].y = cy;
   }
