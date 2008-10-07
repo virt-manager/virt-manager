@@ -45,6 +45,7 @@ enum {
   PROP_FILLED,
   PROP_REVERSED,
   PROP_NUMSETS,
+  PROP_RGB_ARRAY,
 };
 
 static gpointer parent_class;
@@ -59,6 +60,7 @@ struct _GtkSparklinePrivate
   gint num_sets;
   gint points_per_set;
   GValueArray *data_array;
+  GValueArray *rgb_array;
 };
 
 
@@ -96,6 +98,7 @@ static void gtk_sparkline_init (GtkSparkline *sparkline)
   priv->filled = TRUE;
   priv->reversed = FALSE;
   priv->data_array = g_value_array_new(0);
+  priv->rgb_array = g_value_array_new(0);
   priv->num_sets = 1;
   priv->points_per_set = 0;
 
@@ -156,6 +159,13 @@ static void gtk_sparkline_class_init (GtkSparklineClass *class)
 						         "process data from back to front",
 						         FALSE,
 						         G_PARAM_READABLE | G_PARAM_WRITABLE));
+  g_object_class_install_property (object_class,
+				   PROP_RGB_ARRAY,
+				   g_param_spec_value_array ("rgb",
+							     "RGB Array",
+							     "GValueArray of rgb values",
+							     data_array_spec,
+							     G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_type_class_add_private (object_class, sizeof (GtkSparklinePrivate));
 }
@@ -218,6 +228,11 @@ gtk_sparkline_set_property (GObject      *object,
       priv->data_array = g_value_array_copy(g_value_get_boxed(value));
       priv->points_per_set = priv->data_array->n_values / priv->num_sets;
       gtk_widget_queue_draw(GTK_WIDGET(object));
+      break;
+
+    case PROP_RGB_ARRAY:
+      g_value_array_free(priv->rgb_array);
+      priv->rgb_array = g_value_array_copy(g_value_get_boxed(value));
       break;
 
     case PROP_FILLED:
@@ -323,11 +338,12 @@ gtk_sparkline_expose (GtkWidget *widget,
   cairo_set_line_width (cr, (double)0.5);
 
   for (set=0; set < priv->num_sets; set++) {
-    /* FIXME: add property to add line color */
-    if (set)
-    	cairo_set_source_rgb (cr, 0.25, 0.25, 0.25);
-    else
-    	cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+    if (priv->rgb_array->n_values == priv->num_sets * 3) {
+    	cairo_set_source_rgb (cr, 
+	    g_value_get_double(g_value_array_get_nth(priv->rgb_array, set*3)),
+	    g_value_get_double(g_value_array_get_nth(priv->rgb_array, set*3+1)),
+	    g_value_get_double(g_value_array_get_nth(priv->rgb_array, set*3+2)));
+    }
     for (index=0; index < priv->points_per_set; index++) {
       double cx = ((double)index * pixels_per_point);
       double cy = get_y (priv, cell_area, data, set, index);
