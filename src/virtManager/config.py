@@ -380,11 +380,10 @@ class vmmConfig:
     def get_default_image_dir(self, connection):
         if connection.get_type() == "Xen":
             return DEFAULT_XEN_IMAGE_DIR
-        #elif os.access(DEFAULT_VIRT_IMAGE_DIR, os.W_OK):
-        #    return DEFAULT_VIRT_IMAGE_DIR
-        #else:
-        #    return os.getcwd()
 
+        if connection.is_qemu_session():
+            return os.getcwd()
+        
         # Just return the default dir since the intention is that it
         # is a managed pool and the user will be able to install to it.
         return DEFAULT_VIRT_IMAGE_DIR
