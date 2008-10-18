@@ -423,6 +423,14 @@ class vmmDomain(gobject.GObject):
                 vector.append(0)
         return vector
 
+    def in_out_vector_limit(self, data, limit):
+        l = len(data)/2
+        end = [l, limit][l > limit]
+        if l > limit:
+            data = data[0:end] + data[l:l+end]
+        d = map(lambda x,y: (x + y)/2, data[0:end], data[end:end*2]) 
+        return d
+
     def network_traffic_vector(self):
         vector = []
         stats = self.record
@@ -435,6 +443,9 @@ class vmmDomain(gobject.GObject):
                     vector.append(0.0)
         return vector
 
+    def network_traffic_vector_limit(self, limit):
+        return self.in_out_vector_limit(self.network_traffic_vector(), limit)
+
     def disk_io_vector(self):
         vector = []
         stats = self.record
@@ -446,6 +457,9 @@ class vmmDomain(gobject.GObject):
                 else:
                     vector.append(0.0)
         return vector
+
+    def disk_io_vector_limit(self, limit):
+        return self.in_out_vector_limit(self.disk_io_vector(), limit)
 
     def shutdown(self):
         self.vm.shutdown()

@@ -1054,6 +1054,14 @@ class vmmConnection(gobject.GObject):
 
     def disk_io_rate(self):
         return self.disk_read_rate() + self.disk_write_rate()
+       
+    def disk_io_vector_limit(self, dummy):
+        """No point to accumulate unnormalized I/O for a conenction"""
+        return [ 0.0 ]
+
+    def network_traffic_vector_limit(self, dummy):
+        """No point to accumulate unnormalized Rx/Tx for a conenction"""
+        return [ 0.0 ]
 
     def uuidstr(self, rawuuid):
         hex = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']

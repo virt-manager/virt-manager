@@ -863,6 +863,7 @@ class vmmManager(gobject.GObject):
 
         cpuUsage_txt = gtk.CellRendererText()
         cpuUsage_img = sparkline.CellRendererSparkline()
+        cpuUsage_img.set_property("reversed", True)
         cpuUsageCol.pack_start(cpuUsage_txt, False)
         cpuUsageCol.pack_start(cpuUsage_img, False)
         cpuUsageCol.add_attribute(cpuUsage_txt, 'text', ROW_CPU)
@@ -886,19 +887,27 @@ class vmmManager(gobject.GObject):
 
         diskIOIn_txt = gtk.CellRendererText()
         diskIOOut_txt = gtk.CellRendererText()
+        diskIO_img = sparkline.CellRendererSparkline()
+        diskIO_img.set_property("reversed", True)
         diskIOCol.pack_start(diskIOIn_txt, False)
         diskIOCol.pack_start(diskIOOut_txt, False)
+        diskIOCol.pack_start(diskIO_img, False)
         diskIOCol.add_attribute(diskIOIn_txt, 'text', ROW_DISK_RD)
         diskIOCol.add_attribute(diskIOOut_txt, 'text', ROW_DISK_WR)
+        diskIOCol.set_cell_data_func(diskIO_img, self.disk_io_img, None)
         diskIOCol.set_visible(self.config.is_vmlist_disk_io_visible())
         diskIOCol.set_sort_column_id(VMLIST_SORT_DISK_IO)
 
         networkTrafficIn_txt = gtk.CellRendererText()
         networkTrafficOut_txt = gtk.CellRendererText()
+        networkTraffic_img = sparkline.CellRendererSparkline()
+        networkTraffic_img.set_property("reversed", True)
         networkTrafficCol.pack_start(networkTrafficIn_txt, False)
         networkTrafficCol.pack_start(networkTrafficOut_txt, False)
+        networkTrafficCol.pack_start(networkTraffic_img, False)
         networkTrafficCol.add_attribute(networkTrafficIn_txt, 'text', ROW_NET_RX)
         networkTrafficCol.add_attribute(networkTrafficOut_txt, 'text', ROW_NET_TX)
+        networkTrafficCol.set_cell_data_func(networkTraffic_img, self.network_traffic_img, None)
         networkTrafficCol.set_visible(self.config.is_vmlist_network_traffic_visible())
         networkTrafficCol.set_sort_column_id(VMLIST_SORT_NETWORK_USAGE)
 
@@ -997,7 +1006,18 @@ class vmmManager(gobject.GObject):
         if model.get_value(iter, ROW_HANDLE) is None:
             return
         data = model.get_value(iter, ROW_HANDLE).cpu_time_vector_limit(40)
-        data.reverse()
+        cell.set_property('data_array', data)
+
+    def disk_io_img(self,  column, cell, model, iter, data):
+        if model.get_value(iter, ROW_HANDLE) is None:
+            return
+        data = model.get_value(iter, ROW_HANDLE).disk_io_vector_limit(40)
+        cell.set_property('data_array', data)
+
+    def network_traffic_img(self,  column, cell, model, iter, data):
+        if model.get_value(iter, ROW_HANDLE) is None:
+            return
+        data = model.get_value(iter, ROW_HANDLE).network_traffic_vector_limit(40)
         cell.set_property('data_array', data)
 
     def start_vm(self, ignore):
