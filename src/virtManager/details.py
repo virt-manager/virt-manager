@@ -193,12 +193,16 @@ class vmmDetails(gobject.GObject):
         self.disk_io_graph.set_property("reversed", True)
         self.disk_io_graph.set_property("filled", False)
         self.disk_io_graph.set_property("num_sets", 2)
+        self.disk_io_graph.set_property("rgb", map(lambda x: x/255.0,
+                                        [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]))
         self.window.get_widget("graph-table").attach(self.disk_io_graph, 1, 2, 2, 3)
  
         self.network_traffic_graph = sparkline.Sparkline()
         self.network_traffic_graph.set_property("reversed", True)
         self.network_traffic_graph.set_property("filled", False)
         self.network_traffic_graph.set_property("num_sets", 2)
+        self.network_traffic_graph.set_property("rgb", map(lambda x: x/255.0,
+                                                [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]))
         self.window.get_widget("graph-table").attach(self.network_traffic_graph, 1, 2, 3, 4)
 
         self.accel_groups = gtk.accel_groups_from_object(topwin)
@@ -801,16 +805,23 @@ class vmmDetails(gobject.GObject):
                     self.refresh_char_page()
 
     def refresh_summary(self):
+        def _rx_tx_text(rx, tx, unit):
+            return '<span color="#82003B">%(rx)d %(unit)s in</span>\n<span color="#295C45">%(tx)d %(unit)s out</span>' % locals()
+
         self.window.get_widget("overview-cpu-usage-text").set_text("%d %%" % self.vm.cpu_time_percentage())
         vm_memory = self.vm.current_memory()
         host_memory = self.vm.get_connection().host_memory_size()
         self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % \
                                                                       (int(round(vm_memory/1024.0)), \
                                                                        int(round(host_memory/1024.0))))
-        self.window.get_widget("overview-network-traffic-text").set_text("%d KBytes/s in\n%d KBytes/s out" %
-                                                                   (self.vm.network_rx_rate(), self.vm.network_tx_rate()))
-        self.window.get_widget("overview-disk-usage-text").set_text("%d KBytes/s in\n%d KBytes/s out" %
-                                                                   (self.vm.disk_read_rate(), self.vm.disk_write_rate()))
+        self.window.get_widget("overview-network-traffic-text").set_markup(_rx_tx_text(
+                                                                    self.vm.network_rx_rate(), 
+                                                                    self.vm.network_tx_rate(), 
+                                                                    "KBytes/s"))
+        self.window.get_widget("overview-disk-usage-text").set_markup(_rx_tx_text(
+                                                                   self.vm.disk_read_rate(),
+                                                                   self.vm.disk_write_rate(),
+                                                                   "KBytes/s"))
 
         history_len = self.config.get_stats_history_length()
         self.cpu_usage_graph.set_property("data_array", self.vm.cpu_time_vector())
