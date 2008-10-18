@@ -426,23 +426,25 @@ class vmmDomain(gobject.GObject):
     def network_traffic_vector(self):
         vector = []
         stats = self.record
-        for i in range(self.config.get_stats_history_length()+1):
-            if i < len(stats):
-                vector.append(float(stats[i]["netRxRate"])/
-                              float(self.maxRecord["netRxRate"]))
-            else:
-                vector.append(0.0)
+        ceil = float(max(self.maxRecord["netRxRate"], self.maxRecord["netTxRate"]))
+        for n in [ "netRxRate", "netTxRate" ]:
+            for i in range(self.config.get_stats_history_length()+1):
+                if i < len(stats):
+                    vector.append(float(stats[i][n])/ceil)
+                else:
+                    vector.append(0.0)
         return vector
 
     def disk_io_vector(self):
         vector = []
         stats = self.record
-        for i in range(self.config.get_stats_history_length()+1):
-            if i < len(stats):
-                vector.append(float(stats[i]["diskRdRate"])/
-                              float(self.maxRecord["diskRdRate"]))
-            else:
-                vector.append(0.0)
+        ceil = float(max(self.maxRecord["diskRdRate"], self.maxRecord["diskWrRate"]))
+        for n in [ "diskRdRate", "diskWrRate" ]:
+            for i in range(self.config.get_stats_history_length()+1):
+                if i < len(stats):
+                    vector.append(float(stats[i][n])/ceil)
+                else:
+                    vector.append(0.0)
         return vector
 
     def shutdown(self):

@@ -191,10 +191,14 @@ class vmmDetails(gobject.GObject):
 
         self.disk_io_graph = sparkline.Sparkline()
         self.disk_io_graph.set_property("reversed", True)
+        self.disk_io_graph.set_property("filled", False)
+        self.disk_io_graph.set_property("num_sets", 2)
         self.window.get_widget("graph-table").attach(self.disk_io_graph, 1, 2, 2, 3)
  
         self.network_traffic_graph = sparkline.Sparkline()
         self.network_traffic_graph.set_property("reversed", True)
+        self.network_traffic_graph.set_property("filled", False)
+        self.network_traffic_graph.set_property("num_sets", 2)
         self.window.get_widget("graph-table").attach(self.network_traffic_graph, 1, 2, 3, 4)
 
         self.accel_groups = gtk.accel_groups_from_object(topwin)
