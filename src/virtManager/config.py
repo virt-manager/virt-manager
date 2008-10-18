@@ -109,7 +109,7 @@ class vmmConfig:
     def is_vmlist_memory_usage_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/memory_usage")
 
-    def is_vmlist_disk_usage_visible(self):
+    def is_vmlist_disk_io_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/disk_usage")
 
     def is_vmlist_network_traffic_visible(self):
@@ -132,7 +132,7 @@ class vmmConfig:
     def set_vmlist_memory_usage_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/memory_usage", state)
 
-    def set_vmlist_disk_usage_visible(self, state):
+    def set_vmlist_disk_io_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/disk_usage", state)
 
     def set_vmlist_network_traffic_visible(self, state):
@@ -155,7 +155,7 @@ class vmmConfig:
     def on_vmlist_memory_usage_visible_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/memory_usage", callback)
 
-    def on_vmlist_disk_usage_visible_changed(self, callback):
+    def on_vmlist_disk_io_visible_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/disk_usage", callback)
 
     def on_vmlist_network_traffic_visible_changed(self, callback):

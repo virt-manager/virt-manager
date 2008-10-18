@@ -37,7 +37,7 @@ VMLIST_SORT_ID = 1
 VMLIST_SORT_NAME = 2
 VMLIST_SORT_CPU_USAGE = 3
 VMLIST_SORT_MEMORY_USAGE = 4
-VMLIST_SORT_DISK_USAGE = 5
+VMLIST_SORT_DISK_IO = 5
 VMLIST_SORT_NETWORK_USAGE = 6
 
 # fields in the tree model data set
@@ -52,6 +52,10 @@ ROW_MEM = 7
 ROW_MEM_USAGE = 8
 ROW_KEY = 9
 ROW_HINT = 10
+ROW_DISK_RD = 11
+ROW_DISK_WR = 12
+ROW_NET_RX = 13
+ROW_NET_TX = 14
 
 # Columns in the tree view
 COL_NAME = 0
@@ -121,7 +125,7 @@ class vmmManager(gobject.GObject):
         self.config.on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
         self.config.on_vmlist_virtual_cpus_visible_changed(self.toggle_virtual_cpus_visible_widget)
         self.config.on_vmlist_memory_usage_visible_changed(self.toggle_memory_usage_visible_widget)
-        self.config.on_vmlist_disk_usage_visible_changed(self.toggle_disk_usage_visible_widget)
+        self.config.on_vmlist_disk_io_visible_changed(self.toggle_disk_io_visible_widget)
         self.config.on_vmlist_network_traffic_visible_changed(self.toggle_network_traffic_visible_widget)
 
         self.window.get_widget("menu_view_domain_id").set_active(self.config.is_vmlist_domain_id_visible())
@@ -129,10 +133,8 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("menu_view_cpu_usage").set_active(self.config.is_vmlist_cpu_usage_visible())
         self.window.get_widget("menu_view_virtual_cpus").set_active(self.config.is_vmlist_virtual_cpus_visible())
         self.window.get_widget("menu_view_memory_usage").set_active(self.config.is_vmlist_memory_usage_visible())
-        self.window.get_widget("menu_view_disk_usage").set_active(self.config.is_vmlist_disk_usage_visible())
+        self.window.get_widget("menu_view_disk_io").set_active(self.config.is_vmlist_disk_io_visible())
         self.window.get_widget("menu_view_network_traffic").set_active(self.config.is_vmlist_network_traffic_visible())
-        self.window.get_widget("menu_view_disk_usage").set_sensitive(False)
-        self.window.get_widget("menu_view_network_traffic").set_sensitive(False)
 
         self.window.get_widget("vm-view").set_active(0)
 
@@ -248,7 +250,7 @@ class vmmManager(gobject.GObject):
             "on_menu_view_cpu_usage_activate" : self.toggle_cpu_usage_visible_conf,
             "on_menu_view_virtual_cpus_activate" : self.toggle_virtual_cpus_visible_conf,
             "on_menu_view_memory_usage_activate" : self.toggle_memory_usage_visible_conf,
-            "on_menu_view_disk_usage_activate" : self.toggle_disk_usage_visible_conf,
+            "on_menu_view_disk_io_activate" : self.toggle_disk_io_visible_conf,
             "on_menu_view_network_traffic_activate" : self.toggle_network_traffic_visible_conf,
 
             "on_vm_manager_delete_event": self.close,
@@ -449,6 +451,10 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_MEM, vm.get_memory_pretty())
         row.insert(ROW_MEM_USAGE, vm.current_memory_percentage())
         row.insert(ROW_KEY, vm.get_uuid())
+        row.insert(ROW_DISK_RD, vm.disk_read_rate())
+        row.insert(ROW_DISK_WR, vm.disk_write_rate())
+        row.insert(ROW_NET_RX, vm.network_rx_rate())
+        row.insert(ROW_NET_TX, vm.network_tx_rate())
         row.insert(ROW_HINT, None)
 
         iter = model.append(parent, row)
@@ -470,6 +476,10 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_MEM_USAGE, conn.current_memory_percentage())
         row.insert(ROW_KEY, conn.get_uri())
         row.insert(ROW_HINT, conn.get_uri())
+        row.insert(ROW_DISK_RD, conn.disk_read_rate())
+        row.insert(ROW_DISK_WR, conn.disk_write_rate())
+        row.insert(ROW_NET_RX, conn.network_rx_rate())
+        row.insert(ROW_NET_TX, conn.network_tx_rate())
 
         iter = model.append(None, row)
         path = model.get_path(iter)
@@ -523,7 +533,7 @@ class vmmManager(gobject.GObject):
             return
 
         row = self.rows[vm.get_uuid()]
-        # Handle, name, ID, status, status icon, cpu, cpu graph, vcpus, mem, mem bar
+        # Handle, name, ID, status, status icon, cpu, cpu graph, vcpus, mem, mem bar, diskRead, diskWrite, netRx, netTx
         if vm.get_id() == -1:
             row[ROW_ID] = "-"
         else:
@@ -534,6 +544,10 @@ class vmmManager(gobject.GObject):
         row[ROW_VCPUS] = vm.vcpu_count()
         row[ROW_MEM] = vm.get_memory_pretty()
         row[ROW_MEM_USAGE] = vm.current_memory_percentage()
+        row[ROW_DISK_RD] = vm.disk_read_rate()
+        row[ROW_DISK_WR] = vm.disk_write_rate()
+        row[ROW_NET_RX] = vm.network_rx_rate()
+        row[ROW_NET_TX] = vm.network_tx_rate()
         model.row_changed(row.path, row.iter)
 
         if vm == self.current_vm():
@@ -558,6 +572,10 @@ class vmmManager(gobject.GObject):
         row[ROW_VCPUS] = conn.host_active_processor_count()
         row[ROW_MEM] = conn.pretty_current_memory()
         row[ROW_MEM_USAGE] = conn.current_memory_percentage()
+        row[ROW_DISK_RD] = conn.disk_read_rate()
+        row[ROW_DISK_WR] = conn.disk_write_rate()
+        row[ROW_NET_RX] = conn.network_rx_rate()
+        row[ROW_NET_TX] = conn.network_tx_rate()
         if conn.get_state() in [vmmConnection.STATE_DISCONNECTED, vmmConnection.STATE_CONNECTING]:
             # Connection went inactive, delete any VM child nodes
             parent = self.rows[conn.get_uri()].iter
@@ -786,8 +804,8 @@ class vmmManager(gobject.GObject):
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
-        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid
-        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str, str)
+        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid, diskRead, diskWrite, netRx, netTx
+        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str, str, int, int, int, int)
         vmlist.set_model(model)
         try:
             vmlist.set_tooltip_column(ROW_HINT)
@@ -802,8 +820,9 @@ class vmmManager(gobject.GObject):
         cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
         virtualCPUsCol = gtk.TreeViewColumn(_("VCPUs"))
         memoryUsageCol = gtk.TreeViewColumn(_("Memory usage"))
-        diskUsageCol = gtk.TreeViewColumn(_("Disk usage"))
-        networkTrafficCol = gtk.TreeViewColumn(_("Network traffic"))
+        # FIXME: add KBytes/s tooltip
+        diskIOCol = gtk.TreeViewColumn(_("Disk I/O"))
+        networkTrafficCol = gtk.TreeViewColumn(_("Network I/O"))
 
         vmlist.append_column(nameCol)
         vmlist.append_column(idCol)
@@ -811,7 +830,7 @@ class vmmManager(gobject.GObject):
         vmlist.append_column(cpuUsageCol)
         vmlist.append_column(virtualCPUsCol)
         vmlist.append_column(memoryUsageCol)
-        vmlist.append_column(diskUsageCol)
+        vmlist.append_column(diskIOCol)
         vmlist.append_column(networkTrafficCol)
 
         # For the columns which follow, we deliberately bind columns
@@ -825,12 +844,12 @@ class vmmManager(gobject.GObject):
 
         name_txt = gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
-        nameCol.add_attribute(name_txt, 'text', 1)
+        nameCol.add_attribute(name_txt, 'text', ROW_NAME)
         nameCol.set_sort_column_id(VMLIST_SORT_NAME)
 
         id_txt = gtk.CellRendererText()
         idCol.pack_start(id_txt, True)
-        idCol.add_attribute(id_txt, 'text', 2)
+        idCol.add_attribute(id_txt, 'text', ROW_ID)
         idCol.set_visible(self.config.is_vmlist_domain_id_visible())
         idCol.set_sort_column_id(VMLIST_SORT_ID)
 
@@ -838,44 +857,48 @@ class vmmManager(gobject.GObject):
         status_icon = gtk.CellRendererPixbuf()
         statusCol.pack_start(status_icon, False)
         statusCol.pack_start(status_txt, False)
-        statusCol.add_attribute(status_txt, 'text', 3)
-        statusCol.add_attribute(status_icon, 'pixbuf', 4)
+        statusCol.add_attribute(status_txt, 'text', ROW_STATUS)
+        statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
         statusCol.set_visible(self.config.is_vmlist_status_visible())
 
         cpuUsage_txt = gtk.CellRendererText()
         cpuUsage_img = sparkline.CellRendererSparkline()
         cpuUsageCol.pack_start(cpuUsage_txt, False)
         cpuUsageCol.pack_start(cpuUsage_img, False)
-        cpuUsageCol.add_attribute(cpuUsage_txt, 'text', 5)
+        cpuUsageCol.add_attribute(cpuUsage_txt, 'text', ROW_CPU)
         cpuUsageCol.set_cell_data_func(cpuUsage_img, self.cpu_usage_img, None)
         cpuUsageCol.set_visible(self.config.is_vmlist_cpu_usage_visible())
         cpuUsageCol.set_sort_column_id(VMLIST_SORT_CPU_USAGE)
 
         virtualCPUs_txt = gtk.CellRendererText()
         virtualCPUsCol.pack_start(virtualCPUs_txt, False)
-        virtualCPUsCol.add_attribute(virtualCPUs_txt, 'text', 6)
+        virtualCPUsCol.add_attribute(virtualCPUs_txt, 'text', ROW_VCPUS)
         virtualCPUsCol.set_visible(self.config.is_vmlist_virtual_cpus_visible())
 
         memoryUsage_txt = gtk.CellRendererText()
         memoryUsage_img = gtk.CellRendererProgress()
         memoryUsageCol.pack_start(memoryUsage_txt, False)
         memoryUsageCol.pack_start(memoryUsage_img, False)
-        memoryUsageCol.add_attribute(memoryUsage_txt, 'text', 7)
-        memoryUsageCol.add_attribute(memoryUsage_img, 'value', 8)
+        memoryUsageCol.add_attribute(memoryUsage_txt, 'text', ROW_MEM)
+        memoryUsageCol.add_attribute(memoryUsage_img, 'value', ROW_MEM_USAGE)
         memoryUsageCol.set_visible(self.config.is_vmlist_memory_usage_visible())
         memoryUsageCol.set_sort_column_id(VMLIST_SORT_MEMORY_USAGE)
 
-        diskUsage_txt = gtk.CellRendererText()
-        diskUsage_img = gtk.CellRendererProgress()
-        diskUsageCol.pack_start(diskUsage_txt, False)
-        diskUsageCol.pack_start(diskUsage_img, False)
-        diskUsageCol.set_visible(self.config.is_vmlist_disk_usage_visible())
-        diskUsageCol.set_sort_column_id(VMLIST_SORT_DISK_USAGE)
+        diskIOIn_txt = gtk.CellRendererText()
+        diskIOOut_txt = gtk.CellRendererText()
+        diskIOCol.pack_start(diskIOIn_txt, False)
+        diskIOCol.pack_start(diskIOOut_txt, False)
+        diskIOCol.add_attribute(diskIOIn_txt, 'text', ROW_DISK_RD)
+        diskIOCol.add_attribute(diskIOOut_txt, 'text', ROW_DISK_WR)
+        diskIOCol.set_visible(self.config.is_vmlist_disk_io_visible())
+        diskIOCol.set_sort_column_id(VMLIST_SORT_DISK_IO)
 
-        networkTraffic_txt = gtk.CellRendererText()
-        networkTraffic_img = gtk.CellRendererProgress()
-        networkTrafficCol.pack_start(networkTraffic_txt, False)
-        networkTrafficCol.pack_start(networkTraffic_img, False)
+        networkTrafficIn_txt = gtk.CellRendererText()
+        networkTrafficOut_txt = gtk.CellRendererText()
+        networkTrafficCol.pack_start(networkTrafficIn_txt, False)
+        networkTrafficCol.pack_start(networkTrafficOut_txt, False)
+        networkTrafficCol.add_attribute(networkTrafficIn_txt, 'text', ROW_NET_RX)
+        networkTrafficCol.add_attribute(networkTrafficOut_txt, 'text', ROW_NET_TX)
         networkTrafficCol.set_visible(self.config.is_vmlist_network_traffic_visible())
         networkTrafficCol.set_sort_column_id(VMLIST_SORT_NETWORK_USAGE)
 
@@ -883,7 +906,7 @@ class vmmManager(gobject.GObject):
         model.set_sort_func(VMLIST_SORT_NAME, self.vmlist_name_sorter)
         model.set_sort_func(VMLIST_SORT_CPU_USAGE, self.vmlist_cpu_usage_sorter)
         model.set_sort_func(VMLIST_SORT_MEMORY_USAGE, self.vmlist_memory_usage_sorter)
-        model.set_sort_func(VMLIST_SORT_DISK_USAGE, self.vmlist_disk_usage_sorter)
+        model.set_sort_func(VMLIST_SORT_DISK_IO, self.vmlist_disk_io_sorter)
         model.set_sort_func(VMLIST_SORT_NETWORK_USAGE, self.vmlist_network_usage_sorter)
 
         model.set_sort_column_id(VMLIST_SORT_NAME, gtk.SORT_ASCENDING)
@@ -901,11 +924,11 @@ class vmmManager(gobject.GObject):
     def vmlist_memory_usage_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, ROW_HANDLE).current_memory_percentage(), model.get_value(iter2, ROW_HANDLE).current_memory_percentage())
 
-    def vmlist_disk_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, ROW_HANDLE).disk_usage(), model.get_value(iter2, ROW_HANDLE).disk_usage())
+    def vmlist_disk_io_sorter(self, model, iter1, iter2):
+        return cmp(model.get_value(iter1, ROW_HANDLE).disk_io_rate(), model.get_value(iter2, ROW_HANDLE).disk_io_rate())
 
     def vmlist_network_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, ROW_HANDLE).network_traffic(), model.get_value(iter2, ROW_HANDLE).network_traffic())
+        return cmp(model.get_value(iter1, ROW_HANDLE).network_traffic_rate(), model.get_value(iter2, ROW_HANDLE).network_traffic_rate())
 
     def toggle_domain_id_visible_conf(self, menu):
         self.config.set_vmlist_domain_id_visible(menu.get_active())
@@ -952,14 +975,14 @@ class vmmManager(gobject.GObject):
         col = vmlist.get_column(COL_MEM)
         col.set_visible(self.config.is_vmlist_memory_usage_visible())
 
-    def toggle_disk_usage_visible_conf(self, menu):
-        self.config.set_vmlist_disk_usage_visible(menu.get_active())
+    def toggle_disk_io_visible_conf(self, menu):
+        self.config.set_vmlist_disk_io_visible(menu.get_active())
 
-    def toggle_disk_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        menu = self.window.get_widget("menu_view_disk_usage")
+    def toggle_disk_io_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
+        menu = self.window.get_widget("menu_view_disk_io")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(COL_DISK)
-        col.set_visible(self.config.is_vmlist_disk_usage_visible())
+        col.set_visible(self.config.is_vmlist_disk_io_visible())
 
     def toggle_network_traffic_visible_conf(self, menu):
         self.config.set_vmlist_network_traffic_visible(menu.get_active())

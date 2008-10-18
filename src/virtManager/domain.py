@@ -45,6 +45,12 @@ class vmmDomain(gobject.GObject):
         self.uuid = uuid
         self.lastStatus = None
         self.record = []
+        self.maxRecord = { "diskRdRate" : 10.0,
+                           "diskWrRate" : 10.0,
+                           "netTxRate"  : 10.0,
+                           "netRxRate"  : 10.0,
+                         }
+
         self._update_status()
         self.xml = None
 
@@ -149,6 +155,44 @@ class vmmDomain(gobject.GObject):
             self.lastStatus = status
             self.emit("status-changed", status)
 
+    def _network_traffic(self):
+        rx = 0
+        tx = 0
+        for netdev in self.get_network_devices():
+            try:
+                io = self.vm.interfaceStats(netdev[2])
+                if io:
+                    rx += io[0]
+                    tx += io[4]
+            except libvirt.libvirtError, err:
+                    logging.error("Error reading interface stats %s" % err)
+        return rx, tx
+
+    def _disk_io(self):
+        rd = 0
+        wr = 0
+        for disk in self.get_disk_devices():
+            try:
+                io = self.vm.blockStats(disk[3])
+                if io:
+                    rd += io[1]
+                    wr += io[3]
+            except libvirt.libvirtError, err:
+                    logging.error("Error reading block stats %s" % err)
+        return rd, wr
+
+    def _get_cur_rate(self, what):
+        if len(self.record) > 1:
+            ret = float(self.record[0][what] - self.record[1][what]) / \
+                      float(self.record[0]["timestamp"] - self.record[1]["timestamp"])
+        else:
+            ret = 0.0
+        return max(ret, 0,0) # avoid negative values at poweroff
+
+    def _set_max_rate(self, what):
+        if self.record[0][what] > self.maxRecord[what]:
+            self.maxRecord[what] = self.record[0][what]
+
     def tick(self, now):
         if self.connection.get_state() != self.connection.STATE_ACTIVE:
             return
@@ -196,6 +240,9 @@ class vmmDomain(gobject.GObject):
         pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
         pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
 
+        rdBytes, wrBytes = self._disk_io()
+        rxBytes, txBytes = self._network_traffic()
+
         newStats = { "timestamp": now,
                      "cpuTime": cpuTime,
                      "cpuTimeAbs": cpuTimeAbs,
@@ -205,6 +252,10 @@ class vmmDomain(gobject.GObject):
                      "vcpuCount": info[3],
                      "maxMem": info[1],
                      "maxMemPercent": pcentMaxMem,
+                     "diskRdKB": rdBytes / 1024,
+                     "diskWrKB": wrBytes / 1024,
+                     "netRxKB": rxBytes / 1024,
+                     "netTxKB": txBytes / 1024,
                      }
 
         self.record.insert(0, newStats)
@@ -222,6 +273,10 @@ class vmmDomain(gobject.GObject):
         else:
             self.record[0]["cpuTimeMovingAvg"] = (self.record[0]["cpuTimeAbs"]-startCpuTime) / nSamples
             self.record[0]["cpuTimeMovingAvgPercent"] = (self.record[0]["cpuTimeAbs"]-startCpuTime) * 100.0 / ((now-startTimestamp)*1000.0*1000.0*1000.0 * self.connection.host_active_processor_count())
+
+        for r in [ "diskRd", "diskWr", "netRx", "netTx" ]:
+            self.record[0][r + "Rate"] = self._get_cur_rate(r + "KB")
+            self._set_max_rate(r + "Rate")
 
         self._update_status(info[0])
         self.emit("resources-sampled")
@@ -297,17 +352,31 @@ class vmmDomain(gobject.GObject):
     def cpu_time_pretty(self):
         return "%2.2f %%" % self.cpu_time_percentage()
 
-    def network_traffic(self):
-        return 1
+    def network_rx_rate(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["netRxRate"]
 
-    def network_traffic_percentage(self):
-        return 1
+    def network_tx_rate(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["netTxRate"]
 
-    def disk_usage(self):
-        return 1
+    def network_traffic_rate(self):
+        return self.network_tx_rate() + self.network_rx_rate()
 
-    def disk_usage_percentage(self):
-        return 1
+    def disk_read_rate(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["diskRdRate"]
+
+    def disk_write_rate(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["diskWrRate"]
+
+    def disk_io_rate(self):
+        return self.disk_read_rate() + self.disk_write_rate()
 
     def vcpu_count(self):
         if len(self.record) == 0:
@@ -358,14 +427,22 @@ class vmmDomain(gobject.GObject):
         vector = []
         stats = self.record
         for i in range(self.config.get_stats_history_length()+1):
-            vector.append(0)
+            if i < len(stats):
+                vector.append(float(stats[i]["netRxRate"])/
+                              float(self.maxRecord["netRxRate"]))
+            else:
+                vector.append(0.0)
         return vector
 
-    def disk_usage_vector(self):
+    def disk_io_vector(self):
         vector = []
         stats = self.record
         for i in range(self.config.get_stats_history_length()+1):
-            vector.append(0)
+            if i < len(stats):
+                vector.append(float(stats[i]["diskRdRate"])/
+                              float(self.maxRecord["diskRdRate"]))
+            else:
+                vector.append(0.0)
         return vector
 
     def shutdown(self):

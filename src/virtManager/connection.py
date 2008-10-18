@@ -934,13 +934,20 @@ class vmmConnection(gobject.GObject):
 
         mem = 0
         cpuTime = 0
+        rdRate = 0
+        wrRate = 0
+        rxRate = 0
+        txRate = 0
 
         for uuid in self.vms:
             vm = self.vms[uuid]
             if vm.get_id() != -1:
                 cpuTime = cpuTime + vm.get_cputime()
                 mem = mem + vm.get_memory()
-
+                rdRate += vm.disk_read_rate()
+                wrRate += vm.disk_write_rate()
+                rxRate += vm.network_rx_rate()
+                txRate += vm.network_tx_rate()
 
         pcentCpuTime = 0
         if len(self.record) > 0:
@@ -964,7 +971,11 @@ class vmmConnection(gobject.GObject):
             "memory": mem,
             "memoryPercent": pcentMem,
             "cpuTime": cpuTime,
-            "cpuTimePercent": pcentCpuTime
+            "cpuTimePercent": pcentCpuTime,
+            "diskRdRate" : rdRate,
+            "diskWrRate" : wrRate,
+            "netRxRate" : rxRate,
+            "netTxRate" : txRate,
         }
 
         self.record.insert(0, newStats)
@@ -1017,6 +1028,32 @@ class vmmConnection(gobject.GObject):
             else:
                 vector.append(0)
         return vector
+
+    def network_rx_rate(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["netRxRate"]
+
+    def network_tx_rate(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["netTxRate"]
+
+    def network_traffic_rate(self):
+        return self.network_tx_rate() + self.network_rx_rate()
+
+    def disk_read_rate(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["diskRdRate"]
+
+    def disk_write_rate(self):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0]["diskWrRate"]
+
+    def disk_io_rate(self):
+        return self.disk_read_rate() + self.disk_write_rate()
 
     def uuidstr(self, rawuuid):
         hex = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']

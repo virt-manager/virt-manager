@@ -1248,23 +1248,6 @@
 				  <property name="column_spacing">3</property>
 
 				  <child>
-				    <widget class="GtkProgressBar" id="overview-disk-usage-bar">
-				      <property name="visible">True</property>
-				      <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
-				      <property name="fraction">0.119999997318</property>
-				      <property name="pulse_step">0.10000000149</property>
-				      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-				    </widget>
-				    <packing>
-				      <property name="left_attach">1</property>
-				      <property name="right_attach">2</property>
-				      <property name="top_attach">2</property>
-				      <property name="bottom_attach">3</property>
-				      <property name="y_options"></property>
-				    </packing>
-				  </child>
-
-				  <child>
 				    <widget class="GtkLabel" id="label45">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">CPU usage:</property>
@@ -1323,7 +1306,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="overview-disk-usage-label">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Disk usage:</property>
+				      <property name="label" translatable="yes">Disk I/O:</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1351,7 +1334,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="overview-network-traffic-label">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Network usage:</property>
+				      <property name="label" translatable="yes">Network I/O:</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1435,7 +1418,7 @@
 				  <child>
 				    <widget class="GtkLabel" id="overview-disk-usage-text">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">20 bits/sec</property>
+				      <property name="label" translatable="yes">20 KBytes/s</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
