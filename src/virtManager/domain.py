@@ -54,6 +54,11 @@ class vmmDomain(gobject.GObject):
         self._update_status()
         self.xml = None
 
+        self.config.on_vmlist_network_traffic_visible_changed(self.toggle_sample_network_traffic)
+        self.toggle_sample_network_traffic()
+        self.config.on_vmlist_disk_io_visible_changed(self.toggle_sample_disk_io)
+        self.toggle_sample_disk_io()
+
     def get_xml(self):
         if self.xml is None:
             self.xml = self.vm.XMLDesc(0)
@@ -155,7 +160,10 @@ class vmmDomain(gobject.GObject):
             self.lastStatus = status
             self.emit("status-changed", status)
 
-    def _network_traffic(self):
+    def _sample_network_traffic_dummy(self):
+        return 0, 0
+
+    def _sample_network_traffic(self):
         rx = 0
         tx = 0
         for netdev in self.get_network_devices():
@@ -168,7 +176,10 @@ class vmmDomain(gobject.GObject):
                     logging.error("Error reading interface stats %s" % err)
         return rx, tx
 
-    def _disk_io(self):
+    def _sample_disk_io_dummy(self):
+        return 0, 0
+
+    def _sample_disk_io(self):
         rd = 0
         wr = 0
         for disk in self.get_disk_devices():
@@ -1064,5 +1075,32 @@ class vmmDomain(gobject.GObject):
 
         # Invalidate cached xml
         self.xml = None
+
+    def toggle_sample_network_traffic(self, ignore1=None, ignore2=None, ignore3=None, ignore4=None):
+        if self.config.is_vmlist_network_traffic_visible():
+            if len(self.record) > 1:
+                # resample the current value before calculating the rate in
+                # self.tick() otherwise we'd get a huge spike when switching
+                # from 0 to bytes_transfered_so_far
+                rxBytes, txBytes = self._sample_network_traffic()
+                self.record[0]["netRxKB"] = rxBytes / 1024
+                self.record[0]["netTxKB"] = txBytes / 1024
+            self._network_traffic = self._sample_network_traffic
+        else:
+            self._network_traffic = self._sample_network_traffic_dummy
+
+    def toggle_sample_disk_io(self, ignore1=None, ignore2=None, ignore3=None, ignore4=None):
+        if self.config.is_vmlist_disk_io_visible():
+            if len(self.record) > 1:
+                # resample the current value before calculating the rate in
+                # self.tick() otherwise we'd get a huge spike when switching
+                # from 0 to bytes_transfered_so_far
+                rdBytes, wrBytes = self._sample_disk_io()
+                self.record[0]["diskRdKB"] = rdBytes / 1024
+                self.record[0]["diskWrKB"] = wrBytes / 1024
+            self._disk_io = self._sample_disk_io
+        else:
+            self._disk_io = self._sample_disk_io_dummy
+
 
 gobject.type_register(vmmDomain)

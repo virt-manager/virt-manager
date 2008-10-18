@@ -814,20 +814,24 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("overview-memory-usage-text").set_text("%d MB of %d MB" % \
                                                                       (int(round(vm_memory/1024.0)), \
                                                                        int(round(host_memory/1024.0))))
-        self.window.get_widget("overview-network-traffic-text").set_markup(_rx_tx_text(
-                                                                    self.vm.network_rx_rate(), 
-                                                                    self.vm.network_tx_rate(), 
-                                                                    "KBytes/s"))
-        self.window.get_widget("overview-disk-usage-text").set_markup(_rx_tx_text(
-                                                                   self.vm.disk_read_rate(),
-                                                                   self.vm.disk_write_rate(),
-                                                                   "KBytes/s"))
 
         history_len = self.config.get_stats_history_length()
         self.cpu_usage_graph.set_property("data_array", self.vm.cpu_time_vector())
         self.memory_usage_graph.set_property("data_array", self.vm.current_memory_vector())
-        self.network_traffic_graph.set_property("data_array", self.vm.network_traffic_vector())
-        self.disk_io_graph.set_property("data_array", self.vm.disk_io_vector())
+
+        if self.config.is_vmlist_network_traffic_visible():
+            text = _rx_tx_text(self.vm.network_rx_rate(), self.vm.network_tx_rate(), "KBytes/s")
+            self.network_traffic_graph.set_property("data_array", self.vm.network_traffic_vector())
+        else:
+            text = "sampling\ndisabled"
+        self.window.get_widget("overview-network-traffic-text").set_markup(text)
+
+        if self.config.is_vmlist_disk_io_visible():
+            text = _rx_tx_text(self.vm.disk_read_rate(), self.vm.disk_write_rate(), "KBytes/s")
+            self.disk_io_graph.set_property("data_array", self.vm.disk_io_vector())
+        else:
+            text = "sampling\ndisabled"
+        self.window.get_widget("overview-disk-usage-text").set_markup(text)
 
     def refresh_config_cpu(self):
         self.window.get_widget("state-host-cpus").set_text("%d" % self.vm.get_connection().host_active_processor_count())
