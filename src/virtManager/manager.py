@@ -430,7 +430,7 @@ class vmmManager(gobject.GObject):
             (gtype, host, port, transport, username) = vm.get_graphics_console()
             if gtype == "vnc":
                 self.emit("action-show-console", uri, vmuuid)
-            elif not connect.is_remote():
+            elif not connection.is_remote():
                 self.emit("action-show-terminal", uri, vmuuid)
         else:
             self.emit("action-refresh-console", uri, vmuuid)
