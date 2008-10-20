@@ -453,7 +453,7 @@ class vmmManager(gobject.GObject):
 
         iter = model.append(parent, row)
         path = model.get_path(iter)
-        self.rows[vm.get_uuid()] = model[path]
+        self.rows[vm.get_uuid()+":"+conn.get_uri()] = model[path]
         # Expand a connection when adding a vm to it
         self.window.get_widget("vm-list").expand_row(model.get_path(parent), False)
 
@@ -564,7 +564,7 @@ class vmmManager(gobject.GObject):
             if parent is not None:
                 child = model.iter_children(parent)
                 while child is not None:
-                    del self.rows[model.get_value(child, ROW_KEY)]
+                    del self.rows[model.get_value(child, ROW_KEY)+":"+conn.get_uri()]
                     model.remove(child)
                     child = model.iter_children(parent)
         model.row_changed(row.path, row.iter)
