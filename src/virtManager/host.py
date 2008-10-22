@@ -614,6 +614,9 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("vol-delete").set_sensitive(True)
 
     def popup_vol_menu(self, widget, event):
+        if event.button != 3:
+            return
+
         tup = widget.get_path_at_pos(int(event.x), int(event.y))
         if tup == None:
             return False
