@@ -1,25 +1,25 @@
-# translation of zh_TW.po to Traditional Chinese
+# translation of virt-manager.tip.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 #
 # Chester Cheng <ccheng@redhat.com>, 2006, 2007.
+# Terry Chuang <tchuang@redhat.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: zh_TW\n"
+"Project-Id-Version: virt-manager.tip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-10 13:45-0400\n"
-"PO-Revision-Date: 2007-04-10 17:16+1000\n"
-"Last-Translator: Chester Cheng <ccheng@redhat.com>\n"
-"Language-Team: Traditional Chinese <zh_TW@li.org>\n"
+"POT-Creation-Date: 2008-10-03 09:20+0000\n"
+"PO-Revision-Date: 2008-10-10 16:09+1000\n"
+"Last-Translator: Terry Chuang <tchuang@redhat.com>\n"
+"Language-Team:  <zh@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
 #: ../src/virt-manager.desktop.in.in.h:1
-#, fuzzy
 msgid "Manage virtual machines"
-msgstr "虛擬機器儲存中"
+msgstr "管理虛擬機器"
 
 #: ../src/virt-manager.desktop.in.in.h:2 ../src/vmm-about.glade.h:3
 #: ../src/vmm-manager.glade.h:17
@@ -37,25 +37,23 @@ msgstr "Powered by libvirt"
 #. TRANSLATORS: Replace this string with your names, one name per line.
 #: ../src/vmm-about.glade.h:5
 msgid "translator-credits"
-msgstr "翻譯團隊"
+msgstr "譯者姓名：莊佳儒（tchuang@redhat.com）"
 
 #: ../src/vmm-details.glade.h:1
 msgid "20 bits/sec"
 msgstr "20 bits/sec"
 
 #: ../src/vmm-details.glade.h:2
-#, fuzzy
 msgid "<b>Autostart</b>"
-msgstr "<b>摘要：</b>"
+msgstr "<b>自動啟用</b>"
 
 #: ../src/vmm-details.glade.h:3 ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
 msgstr "<b>基本的詳細資料</b>"
 
 #: ../src/vmm-details.glade.h:4
-#, fuzzy
 msgid "<b>Boot Device</b>"
-msgstr "<b>主控台</b>"
+msgstr "<b>開機裝置</b>"
 
 #: ../src/vmm-details.glade.h:5
 msgid "<b>CPUs</b>"
@@ -70,9 +68,8 @@ msgid "<b>Performance</b>"
 msgstr "<b>效能</b>"
 
 #: ../src/vmm-details.glade.h:8
-#, fuzzy
 msgid "<b>Sound Device</b>"
-msgstr "<b>儲存</b>"
+msgstr "<b>音效裝置</b>"
 
 #: ../src/vmm-details.glade.h:9
 msgid "<b>The console is currently unavailable</b>"
@@ -82,20 +79,20 @@ msgstr "<b>該主控台目前無法使用</b>"
 msgid ""
 "<b>Tip:</b> 'Source device' refers to the name of the device as seen from "
 "the host OS."
-msgstr ""
+msgstr "<b>提示：</b>「來源裝置」代表由主機 OS 所看見的裝置名稱。"
 
 #: ../src/vmm-details.glade.h:11
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
-msgstr ""
+msgstr "<b>提示：</b>「來源」代表由主機 OS 所看見的資訊，而「target」則代表由客座端 OS 所看見的資訊。"
 
 #: ../src/vmm-details.glade.h:12
 msgid ""
 "<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
 "OS will ensure that the virtual cursor moves in sync with the local desktop "
 "cursor."
-msgstr ""
+msgstr "<b>提示：</b>一個在客座端 OS 中被配置為預設指標的圖形化面板可使虛擬游標與本機桌面的游標同步移動。"
 
 #: ../src/vmm-details.glade.h:13
 msgid ""
@@ -106,34 +103,28 @@ msgstr ""
 "器數目。"
 
 #: ../src/vmm-details.glade.h:14
-#, fuzzy
 msgid "<b>Virtual Disk</b>"
-msgstr "<b>虛擬處理器：</b>"
+msgstr "<b>虛擬磁碟</b>"
 
 #: ../src/vmm-details.glade.h:15
-#, fuzzy
 msgid "<b>Virtual Display</b>"
-msgstr "<b>虛擬處理器：</b>"
+msgstr "<b>虛擬顯示器</b>"
 
 #: ../src/vmm-details.glade.h:16
-#, fuzzy
 msgid "<b>Virtual Network Interface</b>"
-msgstr "<b>網路</b>"
+msgstr "<b>虛擬網路介面</b>"
 
 #: ../src/vmm-details.glade.h:17
-#, fuzzy
 msgid "<b>Virtual Pointer</b>"
-msgstr "<b>虛擬處理器：</b>"
+msgstr "<b>虛擬指標</b>"
 
 #: ../src/vmm-details.glade.h:18
-#, fuzzy
 msgid "<b>insert type</b>"
-msgstr "<b>主控台</b>"
+msgstr "<b>插入類型</b>"
 
 #: ../src/vmm-details.glade.h:19 ../src/vmm-add-hardware.glade.h:24
-#, fuzzy
 msgid "Address:"
-msgstr "MAC 位址"
+msgstr "位址："
 
 #: ../src/vmm-details.glade.h:20
 msgid "Auth"
@@ -141,15 +132,15 @@ msgstr "身份認證"
 
 #: ../src/vmm-details.glade.h:21
 msgid "Autostart VM"
-msgstr ""
+msgstr "自動啟動 VM"
 
 #: ../src/vmm-details.glade.h:22
 msgid "Block"
-msgstr ""
+msgstr "區塊"
 
 #: ../src/vmm-details.glade.h:23
 msgid "Boot Options"
-msgstr ""
+msgstr "開機選項"
 
 #: ../src/vmm-details.glade.h:24 ../src/vmm-host.glade.h:12
 msgid "CPU usage:"
@@ -161,68 +152,67 @@ msgstr "改變分配："
 
 #: ../src/vmm-details.glade.h:26
 msgid "Char"
-msgstr ""
+msgstr "Char"
 
 #: ../src/vmm-details.glade.h:27
-#, fuzzy
 msgid "Console"
-msgstr "序列埠主控台(_S)"
+msgstr "主控台"
 
 #: ../src/vmm-details.glade.h:28
 msgid "Ctrl+Alt+Backspace"
-msgstr ""
+msgstr "Ctrl+Alt+Backspace"
 
 #: ../src/vmm-details.glade.h:29
 msgid "Ctrl+Alt+Delete"
-msgstr ""
+msgstr "Ctrl+Alt+Delete"
 
 #: ../src/vmm-details.glade.h:30
 msgid "Ctrl+Alt+F1"
-msgstr ""
+msgstr "Ctrl+Alt+F1"
 
 #: ../src/vmm-details.glade.h:31
 msgid "Ctrl+Alt+F10"
-msgstr ""
+msgstr "Ctrl+Alt+F10"
 
 #: ../src/vmm-details.glade.h:32
 msgid "Ctrl+Alt+F11"
-msgstr ""
+msgstr "Ctrl+Alt+F11"
 
 #: ../src/vmm-details.glade.h:33
 msgid "Ctrl+Alt+F12"
-msgstr ""
+msgstr "Ctrl+Alt+F12"
 
 #: ../src/vmm-details.glade.h:34
 msgid "Ctrl+Alt+F2"
-msgstr ""
+msgstr "Ctrl+Alt+F2"
 
 #: ../src/vmm-details.glade.h:35
 msgid "Ctrl+Alt+F3"
-msgstr ""
+msgstr "Ctrl+Alt+F3"
 
 #: ../src/vmm-details.glade.h:36
 msgid "Ctrl+Alt+F4"
-msgstr ""
+msgstr "Ctrl+Alt+F4"
 
 #: ../src/vmm-details.glade.h:37
 msgid "Ctrl+Alt+F5"
-msgstr ""
+msgstr "Ctrl+Alt+F5"
 
 #: ../src/vmm-details.glade.h:38
 msgid "Ctrl+Alt+F6"
-msgstr ""
+msgstr "Ctrl+Alt+F6"
 
 #: ../src/vmm-details.glade.h:39
 msgid "Ctrl+Alt+F7"
-msgstr ""
+msgstr "Ctrl+Alt+F7"
 
 #: ../src/vmm-details.glade.h:40
 msgid "Ctrl+Alt+F8"
-msgstr ""
+msgstr "Ctrl+Alt+F8"
 
 #: ../src/vmm-details.glade.h:41
 msgid "Ctrl+Alt+F9"
-msgstr ""
+msgstr "Ctrl+Alt+F9"
 
 #: ../src/vmm-details.glade.h:42
 msgid "Current allocation:"
@@ -230,16 +220,15 @@ msgstr "目前的分配："
 
 #: ../src/vmm-details.glade.h:43
 msgid "Device Model:"
-msgstr ""
+msgstr "裝置型號："
 
 #: ../src/vmm-details.glade.h:44
-#, fuzzy
 msgid "Device Type:"
-msgstr "作業系統類型(_T)："
+msgstr "裝置類型："
 
 #: ../src/vmm-details.glade.h:45
 msgid "Device virtual machine will boot from:"
-msgstr ""
+msgstr "虛擬機器將由哪個裝置啟動："
 
 #: ../src/vmm-details.glade.h:46 ../src/vmm-add-hardware.glade.h:32
 #: ../src/vmm-create.glade.h:41
@@ -252,51 +241,45 @@ msgstr "磁碟用量："
 
 #: ../src/vmm-details.glade.h:48
 msgid "Force poweroff"
-msgstr ""
+msgstr "強制關閉"
 
 #: ../src/vmm-details.glade.h:49
-#, fuzzy
 msgid "Full Screen"
-msgstr "全螢幕(_F)"
+msgstr "全螢幕"
 
 #: ../src/vmm-details.glade.h:50
 msgid "Hardware"
 msgstr "硬體"
 
 #: ../src/vmm-details.glade.h:51
-#, fuzzy
 msgid "How many virtual CPUs should be allocated for this machine?"
-msgstr "要分配幾個虛擬處理器給這台機器使用？"
+msgstr "要分配多少虛擬處理器給這部機器使用？"
 
 #: ../src/vmm-details.glade.h:52
-#, fuzzy
 msgid "How much memory should be allocated for this machine?"
-msgstr "要分配多少記憶體給這台機器使用？"
+msgstr "要分配多少記憶體給這部機器使用？"
 
 #: ../src/vmm-details.glade.h:53 ../src/vmm-add-hardware.glade.h:43
-#: ../src/virtManager/details.py:1499
-#, fuzzy
+#: ../src/virtManager/details.py:1613
 msgid "Input"
-msgstr "簡介"
+msgstr "輸入"
 
 #: ../src/vmm-details.glade.h:54 ../src/vmm-add-hardware.glade.h:45
 msgid "Keymap:"
-msgstr ""
+msgstr "Keymap："
 
 #: ../src/vmm-details.glade.h:55
 msgid "Login"
 msgstr "登入"
 
 #: ../src/vmm-details.glade.h:56 ../src/vmm-add-hardware.glade.h:47
-#, fuzzy
 msgid "MAC Address Field"
-msgstr "MAC 位址"
+msgstr "MAC 位址欄位"
 
 #: ../src/vmm-details.glade.h:57 ../src/vmm-add-hardware.glade.h:48
 #: ../src/vmm-create.glade.h:68
-#, fuzzy
 msgid "MAC address:"
-msgstr "MAC 位址"
+msgstr "MAC 位址："
 
 #: ../src/vmm-details.glade.h:58 ../src/vmm-add-hardware.glade.h:49
 #: ../src/vmm-create.glade.h:69 ../src/vmm-create-vol.glade.h:24
@@ -305,7 +288,7 @@ msgstr "MB"
 
 #: ../src/vmm-details.glade.h:59
 msgid "Max Memory Select"
-msgstr ""
+msgstr "選擇最大記憶體數量"
 
 #: ../src/vmm-details.glade.h:60
 msgid "Maximum allocation:"
@@ -316,9 +299,8 @@ msgid "Memory"
 msgstr "記憶體"
 
 #: ../src/vmm-details.glade.h:62
-#, fuzzy
 msgid "Memory Select"
-msgstr "記憶體用量"
+msgstr "選擇記憶體用量"
 
 #: ../src/vmm-details.glade.h:63 ../src/vmm-host.glade.h:26
 msgid "Memory usage:"
@@ -326,11 +308,11 @@ msgstr "記憶體用量："
 
 #: ../src/vmm-details.glade.h:64 ../src/vmm-add-hardware.glade.h:50
 msgid "Mode:"
-msgstr ""
+msgstr "模式："
 
 #: ../src/vmm-details.glade.h:65 ../src/vmm-create.glade.h:76
 msgid "Name Field"
-msgstr ""
+msgstr "名稱欄位"
 
 #: ../src/vmm-details.glade.h:66 ../src/vmm-host.glade.h:29
 #: ../src/vmm-create-pool.glade.h:12 ../src/vmm-create-vol.glade.h:26
@@ -359,22 +341,20 @@ msgid "Pause"
 msgstr "暫停"
 
 #: ../src/vmm-details.glade.h:72
-#, fuzzy
 msgid "Permissions:"
-msgstr "分割區(_a)："
+msgstr "權限："
 
 #: ../src/vmm-details.glade.h:73 ../src/vmm-add-hardware.glade.h:63
-#, fuzzy
 msgid "Port:"
-msgstr "連接埠(_P)："
+msgstr "連接埠："
 
 #: ../src/vmm-details.glade.h:74
 msgid "Poweroff"
-msgstr ""
+msgstr "關閉"
 
 #: ../src/vmm-details.glade.h:75
 msgid "PrintScreen"
-msgstr ""
+msgstr "截取抓圖"
 
 #: ../src/vmm-details.glade.h:76
 msgid "Processor"
@@ -382,7 +362,7 @@ msgstr "處理器"
 
 #: ../src/vmm-details.glade.h:77
 msgid "Reboot"
-msgstr ""
+msgstr "重新啟動"
 
 #: ../src/vmm-details.glade.h:78
 msgid "Run"
@@ -394,11 +374,11 @@ msgstr "關機(_h)"
 
 #: ../src/vmm-details.glade.h:80
 msgid "Save this password in your keyring"
-msgstr "在金鑰環中儲存這密碼"
+msgstr "在金鑰環中儲存此密碼"
 
 #: ../src/vmm-details.glade.h:81
 msgid "Scale display"
-msgstr ""
+msgstr "比例顯示"
 
 #: ../src/vmm-details.glade.h:82
 msgid "Screenshot"
@@ -406,12 +386,11 @@ msgstr "快照"
 
 #: ../src/vmm-details.glade.h:83
 msgid "Send key"
-msgstr ""
+msgstr "傳送金鑰"
 
 #: ../src/vmm-details.glade.h:84
-#, fuzzy
-msgid "Serial Console..."
-msgstr "序列埠主控台(_S)"
+msgid "Serial Consoles"
+msgstr "序列主控台"
 
 #: ../src/vmm-details.glade.h:85
 msgid "Shut down"
@@ -423,32 +402,31 @@ msgstr "關機"
 
 #: ../src/vmm-details.glade.h:87
 msgid "Sound"
-msgstr ""
+msgstr "音效"
 
 #: ../src/vmm-details.glade.h:88 ../src/vmm-create-pool.glade.h:13
 msgid "Source Path:"
-msgstr ""
+msgstr "來源路徑："
 
 #: ../src/vmm-details.glade.h:89
 msgid "Source device:"
-msgstr ""
+msgstr "來源裝置："
 
 #: ../src/vmm-details.glade.h:90
 msgid "Source model:"
-msgstr ""
+msgstr "來源型號："
 
 #: ../src/vmm-details.glade.h:91
 msgid "Source path:"
-msgstr ""
+msgstr "來源路徑："
 
 #: ../src/vmm-details.glade.h:92
 msgid "Source type:"
-msgstr ""
+msgstr "來源類型："
 
 #: ../src/vmm-details.glade.h:93
-#, fuzzy
 msgid "Start virtual machine on host boot up?"
-msgstr "儲存虛擬機器的畫面"
+msgstr "是否在主機開機時啟動虛擬機器？"
 
 #: ../src/vmm-details.glade.h:94
 msgid "Status:"
@@ -456,19 +434,19 @@ msgstr "狀態："
 
 #: ../src/vmm-details.glade.h:95
 msgid "Target Port:"
-msgstr ""
+msgstr "目標通訊埠："
 
 #: ../src/vmm-details.glade.h:96
 msgid "Target bus:"
-msgstr ""
+msgstr "目標 bus："
 
 #: ../src/vmm-details.glade.h:97
 msgid "Target device:"
-msgstr ""
+msgstr "目標裝置："
 
 #: ../src/vmm-details.glade.h:98
 msgid "Target type:"
-msgstr ""
+msgstr "目標類型："
 
 #: ../src/vmm-details.glade.h:99
 msgid "Toolbar"
@@ -484,17 +462,16 @@ msgstr "主系統的總記憶體數："
 
 #: ../src/vmm-details.glade.h:102 ../src/vmm-add-hardware.glade.h:70
 #: ../src/vmm-create-net.glade.h:50 ../src/vmm-create-pool.glade.h:18
-#, fuzzy
 msgid "Type:"
-msgstr "類型"
+msgstr "類型："
 
 #: ../src/vmm-details.glade.h:103
 msgid "UUID Field"
-msgstr ""
+msgstr "UUID 欄位"
 
 #: ../src/vmm-details.glade.h:104
 msgid "UUID:"
-msgstr "UUID:"
+msgstr "UUID："
 
 #: ../src/vmm-details.glade.h:105
 msgid "Unavailable"
@@ -502,21 +479,19 @@ msgstr "無法使用"
 
 #: ../src/vmm-details.glade.h:106 ../src/vmm-create.glade.h:107
 msgid "VCPU Select"
-msgstr ""
+msgstr "選擇 VCPU"
 
 #: ../src/vmm-details.glade.h:107 ../src/vmm-add-hardware.glade.h:71
 msgid "VNC"
 msgstr "VNC"
 
 #: ../src/vmm-details.glade.h:108
-#, fuzzy
 msgid "View Manager"
-msgstr "虛擬機器管理員"
+msgstr "檢視管理員"
 
 #: ../src/vmm-details.glade.h:109
-#, fuzzy
 msgid "Virtual Machine"
-msgstr "虛擬機器(_M)"
+msgstr "虛擬機器"
 
 #: ../src/vmm-details.glade.h:110
 msgid "Virtual _Machine"
@@ -525,7 +500,7 @@ msgstr "虛擬機器(_M)"
 #: ../src/vmm-details.glade.h:111 ../src/vmm-host.glade.h:42
 #: ../src/vmm-manager.glade.h:18
 msgid "_Contents"
-msgstr ""
+msgstr "內容(_C)"
 
 #: ../src/vmm-details.glade.h:112 ../src/vmm-host.glade.h:43
 #: ../src/vmm-manager.glade.h:20
@@ -558,51 +533,44 @@ msgid "_View"
 msgstr "檢視(_V)"
 
 #: ../src/vmm-details.glade.h:119
-#, fuzzy
 msgid "disk\t"
-msgstr "磁碟"
+msgstr "磁碟\t"
 
 #: ../src/vmm-details.glade.h:120
 msgid "insert sound model"
-msgstr ""
+msgstr "插入音效型號"
 
 #: ../src/vmm-add-hardware.glade.h:1
-#, fuzzy
 msgid "<b>Display</b>"
-msgstr "<b>磁碟映像檔：</b>"
+msgstr "<b>顯示</b>"
 
 #: ../src/vmm-add-hardware.glade.h:2 ../src/vmm-create.glade.h:7
 msgid "<b>Network</b>"
 msgstr "<b>網路</b>"
 
 #: ../src/vmm-add-hardware.glade.h:3
-#, fuzzy
 msgid "<b>Pointer</b>"
-msgstr "<b>主控台</b>"
+msgstr "<b>指標</b>"
 
 #: ../src/vmm-add-hardware.glade.h:4
-#, fuzzy
 msgid "<b>Source:</b>"
-msgstr "<b>儲存</b>"
+msgstr "<b>來源：</b>"
 
 #: ../src/vmm-add-hardware.glade.h:5 ../src/vmm-create.glade.h:9
 msgid "<b>Storage</b>"
 msgstr "<b>儲存</b>"
 
 #: ../src/vmm-add-hardware.glade.h:6
-#, fuzzy
 msgid "<b>Target:</b>"
-msgstr "<b>儲存</b>"
+msgstr "<b>目標：</b>"
 
 #: ../src/vmm-add-hardware.glade.h:7
-#, fuzzy
 msgid "<b>Virtual display</b>"
-msgstr "<b>虛擬處理器：</b>"
+msgstr "<b>虛擬顯示器</b>"
 
 #: ../src/vmm-add-hardware.glade.h:8
-#, fuzzy
 msgid "<b>Virtual pointer</b>"
-msgstr "<b>虛擬處理器：</b>"
+msgstr "<b>虛擬指標</b>"
 
 #: ../src/vmm-add-hardware.glade.h:9 ../src/vmm-create.glade.h:12
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
@@ -613,34 +581,34 @@ msgid ""
 "<small><b>Tip:</b> Adding a graphics tablet and configuring it as the "
 "default pointer in the guest OS will ensure the virtual cursor moves in sync "
 "with the local desktop cursor .</small>"
-msgstr ""
+msgstr "<small><b>提示：</b>一個新增於客座端 OS 中並被配置為預設指標的圖形化面板可使虛擬游標與本機桌面的游標同步移動。</small>"
 
 #: ../src/vmm-add-hardware.glade.h:11
 msgid ""
 "<small><b>Tip:</b> Automatically allocated the port ensures that every "
 "virtual machine uses a different port. If two machines try to use the same "
 "port one of them will fail to start.</small>"
-msgstr ""
+msgstr "<small><b>提示：</b>自動地分配通訊埠能確保所有虛擬機器都使用不同的通訊埠。若有兩部機器嘗試使用相同的通訊埠，有其中一部將會無法啟動。</small>"
 
 #: ../src/vmm-add-hardware.glade.h:12 ../src/vmm-create.glade.h:18
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is disconnected, "
 "connected via wireless, or dynamically configured with NetworkManager.</"
 "small>"
-msgstr ""
+msgstr "<small><b>提示：</b>若您的主機已斷線、透過無線網路連線，或是透過 NetworkManager 來動態式地配置的話，請選擇此選項。</small>"
 
 #: ../src/vmm-add-hardware.glade.h:13 ../src/vmm-create.glade.h:19
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is statically connected "
 "to wired ethernet, to gain the ability to migrate the virtual system.</small>"
-msgstr ""
+msgstr "<small><b>提示：</b>若您的主機靜態式地連至有線的乙太網路的話，請選擇此選項來取得遷移虛擬系統的能力。</small>"
 
 #: ../src/vmm-add-hardware.glade.h:14
 msgid ""
 "<small><b>Tip:</b> The VNC server is strongly recommended because it allows "
 "the guest console window to be embedded inside this application. It may also "
 "be used to allow access to the guest console from a remote host</small>"
-msgstr ""
+msgstr "<small><b>提示：</b>強烈建議使用 VNC 伺服器，因為它允許客座端主控台視窗被崁入此應用程式中。它也能被使用來允許由遠端主機存取客座端主控台</small>"
 
 #: ../src/vmm-add-hardware.glade.h:15 ../src/vmm-create.glade.h:22
 msgid ""
@@ -654,75 +622,57 @@ msgstr ""
 "料損毀。</small>"
 
 #: ../src/vmm-add-hardware.glade.h:16
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Access the "
 "guest display</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">指定儲存空間</"
-"span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">存取客座端顯示器</span>"
 
 #: ../src/vmm-add-hardware.glade.h:17
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding new "
 "virtual hardware </span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">建立新的虛擬系統"
-"</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">新增虛擬硬體</span>"
 
 #: ../src/vmm-add-hardware.glade.h:18 ../src/vmm-create.glade.h:24
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Assigning "
 "storage space</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">指定儲存空間</"
-"span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">指定儲存空間</span>"
 
 #: ../src/vmm-add-hardware.glade.h:19 ../src/vmm-create.glade.h:27
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connect to host "
 "network</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">指定儲存空間</"
-"span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">連至主機網路</span>"
 
 #: ../src/vmm-add-hardware.glade.h:20
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Interacting "
 "with the guest</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">指定儲存空間</"
-"span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">和客座端進行互動</span>"
 
 #: ../src/vmm-add-hardware.glade.h:21
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to add "
 "hardware</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">已準備好開始安裝"
-"</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">已準備好新增硬體</span>"
 
 #: ../src/vmm-add-hardware.glade.h:22
 msgid "Absolute"
-msgstr ""
+msgstr "絕對"
 
 #: ../src/vmm-add-hardware.glade.h:23
 msgid "Add new virtual hardware"
-msgstr ""
+msgstr "新增虛擬硬體"
 
 #: ../src/vmm-add-hardware.glade.h:25 ../src/vmm-create.glade.h:34
 msgid "Allocate entire virtual disk now?"
 msgstr "現在就分配整個虛擬磁碟嗎？"
 
-#: ../src/vmm-add-hardware.glade.h:26 ../src/virtManager/addhardware.py:442
-#: ../src/virtManager/details.py:906
-#, fuzzy
+#: ../src/vmm-add-hardware.glade.h:26 ../src/virtManager/addhardware.py:443
+#: ../src/virtManager/details.py:956
 msgid "Automatically allocated"
-msgstr "自動開啟主控台："
+msgstr "自動分配"
 
 #: ../src/vmm-add-hardware.glade.h:27 ../src/vmm-create.glade.h:35
 msgid "Browse..."
@@ -735,43 +685,39 @@ msgstr "完成"
 
 #: ../src/vmm-add-hardware.glade.h:29 ../src/vmm-create.glade.h:39
 msgid "Connection type:"
-msgstr ""
+msgstr "連線類型："
 
 #: ../src/vmm-add-hardware.glade.h:30
 msgid "Device Type Field"
-msgstr ""
+msgstr "裝置類型欄位"
 
 #: ../src/vmm-add-hardware.glade.h:31
 msgid "Device type:"
-msgstr ""
+msgstr "裝置類型："
 
 #: ../src/vmm-add-hardware.glade.h:33 ../src/vmm-create.glade.h:42
-#, fuzzy
 msgid "Disk image:"
-msgstr "磁碟用量："
+msgstr "磁碟映像："
 
 #: ../src/vmm-add-hardware.glade.h:34 ../src/vmm-create.glade.h:43
-#, fuzzy
 msgid "Disk size:"
-msgstr "磁碟用量："
+msgstr "磁碟大小："
 
-#: ../src/vmm-add-hardware.glade.h:35 ../src/virtManager/details.py:1518
+#: ../src/vmm-add-hardware.glade.h:35 ../src/virtManager/details.py:1632
 msgid "Display"
-msgstr ""
+msgstr "顯示"
 
 #: ../src/vmm-add-hardware.glade.h:36
 msgid "EvTouch Tablet"
-msgstr ""
+msgstr "EvTouch 面板"
 
 #: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:46
-#, fuzzy
 msgid "File Location Field"
-msgstr "檔案位置(_L)："
+msgstr "檔案位置欄位"
 
 #: ../src/vmm-add-hardware.glade.h:38
-#, fuzzy
 msgid "File Size Field"
-msgstr "檔案大小(_S)："
+msgstr "檔案大小欄位"
 
 #: ../src/vmm-add-hardware.glade.h:39 ../src/vmm-create.glade.h:48
 msgid "File _Location:"
@@ -782,14 +728,12 @@ msgid "File _Size:"
 msgstr "檔案大小(_S)："
 
 #: ../src/vmm-add-hardware.glade.h:41
-#, fuzzy
 msgid "Hardware Type Select"
-msgstr "所需之硬體支援"
+msgstr "選擇硬體類型"
 
 #: ../src/vmm-add-hardware.glade.h:42
-#, fuzzy
 msgid "Hardware type:"
-msgstr "硬體"
+msgstr "硬體類型："
 
 #: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-create.glade.h:58
 #: ../src/vmm-create-net.glade.h:28
@@ -798,15 +742,15 @@ msgstr "簡介"
 
 #: ../src/vmm-add-hardware.glade.h:46
 msgid "Listen on all public network interfaces "
-msgstr ""
+msgstr "監聽所有公用網路介面"
 
 #: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create.glade.h:79
 msgid "Network Device Select"
-msgstr ""
+msgstr "選擇網路裝置"
 
-#: ../src/vmm-add-hardware.glade.h:53 ../src/virtManager/addhardware.py:448
+#: ../src/vmm-add-hardware.glade.h:53 ../src/virtManager/addhardware.py:449
 msgid "No"
-msgstr ""
+msgstr "否"
 
 #: ../src/vmm-add-hardware.glade.h:54 ../src/vmm-create.glade.h:82
 msgid "Normal Disk _Partition:"
@@ -814,7 +758,7 @@ msgstr "正常磁碟分割區(_P)："
 
 #: ../src/vmm-add-hardware.glade.h:55
 msgid "Other:"
-msgstr ""
+msgstr "其它："
 
 #: ../src/vmm-add-hardware.glade.h:56 ../src/vmm-create.glade.h:86
 msgid "P_artition:"
@@ -822,43 +766,39 @@ msgstr "分割區(_a)："
 
 #: ../src/vmm-add-hardware.glade.h:57
 msgid "Partition Location Field"
-msgstr ""
+msgstr "分割區位置欄位"
 
 #: ../src/vmm-add-hardware.glade.h:59
 msgid "Please indicate how you would like to view the guest display."
-msgstr ""
+msgstr "請指定您希望如何檢視客座端畫面。"
 
 #: ../src/vmm-add-hardware.glade.h:60
-#, fuzzy
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual storage device."
-msgstr ""
-"請指定您將如何在這實際主系統上，為您新的虛擬機器分配空間。這空間將會用來安裝"
-"虛擬機器的作業系統。"
+msgstr "請指定您將如何在這實際主機系統上，為您新的虛擬儲存裝置分配空間。"
 
 #: ../src/vmm-add-hardware.glade.h:61
 msgid ""
 "Please indicate how you'd like to connect your new virtual network device to "
 "the host network."
-msgstr ""
+msgstr "請指定您希望如何將您新的虛擬網路裝置連至主機網路。"
 
 #: ../src/vmm-add-hardware.glade.h:62
 msgid "Please indicate what kind of pointer device to connect to the guest."
-msgstr ""
+msgstr "請指定連至客座端的指標裝置類型。"
 
-#: ../src/vmm-add-hardware.glade.h:64 ../src/virtManager/addhardware.py:452
+#: ../src/vmm-add-hardware.glade.h:64 ../src/virtManager/addhardware.py:453
 msgid "Same as host"
-msgstr ""
+msgstr "和主機相同"
 
 #: ../src/vmm-add-hardware.glade.h:65
-#, fuzzy
 msgid "Set fixed MAC _address for this NIC?"
-msgstr "指定的 MAC 位址："
+msgstr "是否為此 NIC 設定固定的 MAC 位址(_a)？"
 
 #: ../src/vmm-add-hardware.glade.h:66 ../src/vmm-create.glade.h:98
 msgid "Shared Physical Device"
-msgstr ""
+msgstr "共享的實體裝置"
 
 #: ../src/vmm-add-hardware.glade.h:67 ../src/vmm-create.glade.h:99
 msgid "Simple F_ile:"
@@ -866,24 +806,21 @@ msgstr "簡單的檔案(_i)："
 
 #: ../src/vmm-add-hardware.glade.h:68 ../src/vmm-create.glade.h:102
 msgid "Target:"
-msgstr ""
+msgstr "目標："
 
 #: ../src/vmm-add-hardware.glade.h:69
-#, fuzzy
 msgid ""
 "This assistant will guide you through adding a new piece of virtual "
 "hardware. First select what type of hardware you wish to add:"
-msgstr ""
-"這程式會幫助您建立新的虛擬系統。程式會問您一些關於虛擬系統的資訊，例如："
+msgstr "此協助程式會幫助您新增虛擬硬體。首先請選擇您所希望新增的硬體類型："
 
 #: ../src/vmm-add-hardware.glade.h:72
-#, fuzzy
 msgid "Virtual Network Select"
-msgstr "虛擬處理器"
+msgstr "選擇虛擬網路"
 
 #: ../src/vmm-add-hardware.glade.h:73 ../src/vmm-create.glade.h:117
 msgid "_Device:"
-msgstr ""
+msgstr "裝置(_D)："
 
 #: ../src/vmm-add-hardware.glade.h:74 ../src/vmm-create.glade.h:118
 #: ../src/vmm-create-net.glade.h:53
@@ -891,199 +828,176 @@ msgid "_Finish"
 msgstr "完成(_F)"
 
 #: ../src/vmm-add-hardware.glade.h:75 ../src/vmm-create.glade.h:122
-#, fuzzy
 msgid "_MAC address:"
-msgstr "MAC 位址"
+msgstr "MAC 位址(_M)："
 
 #: ../src/vmm-add-hardware.glade.h:76 ../src/vmm-create.glade.h:124
-#, fuzzy
 msgid "_Network:"
-msgstr "網路"
+msgstr "網路(_N)"
 
 #: ../src/vmm-add-hardware.glade.h:77 ../src/vmm-create.glade.h:127
 msgid "_Shared physical device"
-msgstr ""
+msgstr "共享的實體裝置(_S)"
 
 #: ../src/vmm-add-hardware.glade.h:78 ../src/vmm-create.glade.h:129
-#, fuzzy
 msgid "_Virtual network"
-msgstr "虛擬機器(_M)"
+msgstr "虛擬網路(_V)"
 
 #: ../src/vmm-add-hardware.glade.h:79
 msgid "keylabel"
-msgstr ""
+msgstr "keylabel"
 
 #: ../src/vmm-host.glade.h:2
 msgid "<b>IPv4 configuration</b>"
-msgstr ""
+msgstr "<b>IPv4 配置</b>"
 
 #: ../src/vmm-host.glade.h:4
-#, fuzzy
 msgid "<b>Volumes</b>"
-msgstr "<b>主控台</b>"
+msgstr "<b>卷冊</b>"
 
-#: ../src/vmm-host.glade.h:5 ../src/virtManager/connection.py:1029
-#: ../src/virtManager/host.py:326 ../src/virtManager/host.py:543
+#: ../src/vmm-host.glade.h:5 ../src/virtManager/connection.py:1045
+#: ../src/virtManager/host.py:341 ../src/virtManager/host.py:558
 msgid "Active"
-msgstr ""
+msgstr "啟用"
 
 #: ../src/vmm-host.glade.h:6
-#, fuzzy
 msgid "Add Network"
-msgstr "網路"
+msgstr "新增網路"
 
 #: ../src/vmm-host.glade.h:7
 msgid "Add Pool"
-msgstr ""
+msgstr "新增 Pool"
 
 #: ../src/vmm-host.glade.h:8
 msgid "Apply"
-msgstr ""
+msgstr "套用"
 
 #: ../src/vmm-host.glade.h:9
-#, fuzzy
 msgid "Architecture:"
-msgstr "CPU 架構："
+msgstr "架構："
 
 #: ../src/vmm-host.glade.h:10
-#, fuzzy
 msgid "Autoconnect:"
-msgstr "連接(_n)"
+msgstr "自動連接："
 
 #: ../src/vmm-host.glade.h:11
 msgid "Autostart:"
-msgstr ""
+msgstr "自動啟動："
 
 #: ../src/vmm-host.glade.h:13 ../src/vmm-open-connection.glade.h:6
-#, fuzzy
 msgid "Connection:"
-msgstr "連接(_n)"
+msgstr "連線："
 
 #: ../src/vmm-host.glade.h:14
 msgid "DHCP end:"
-msgstr ""
+msgstr "DHCP 結束："
 
 #: ../src/vmm-host.glade.h:15
 msgid "DHCP start:"
-msgstr ""
+msgstr "DHCP 啟用："
 
 #: ../src/vmm-host.glade.h:16
-#, fuzzy
 msgid "Delete Network"
-msgstr "網路"
+msgstr "刪除網路"
 
 #: ../src/vmm-host.glade.h:17
 msgid "Delete Pool"
-msgstr ""
+msgstr "刪除 Pool"
 
 #: ../src/vmm-host.glade.h:18
-#, fuzzy
 msgid "Delete Volume"
-msgstr "刪除機器"
+msgstr "刪除卷冊"
 
 #: ../src/vmm-host.glade.h:19
 msgid "Device:"
-msgstr ""
+msgstr "裝置："
 
 #: ../src/vmm-host.glade.h:20
 msgid "Forwarding:"
-msgstr ""
+msgstr "轉發："
 
 #: ../src/vmm-host.glade.h:21
-#, fuzzy
 msgid "Host Details"
-msgstr "詳細資料(_t)"
+msgstr "主機詳細資料"
 
 #: ../src/vmm-host.glade.h:22 ../src/vmm-open-connection.glade.h:8
-#, fuzzy
 msgid "Hostname:"
-msgstr "主系統(_H)："
+msgstr "主機名稱："
 
 #: ../src/vmm-host.glade.h:23 ../src/vmm-create.glade.h:50
 #: ../src/vmm-open-connection.glade.h:10
-#, fuzzy
 msgid "Hypervisor:"
-msgstr "其他 hypervisor(_O)"
+msgstr "Hypervisor："
 
 #: ../src/vmm-host.glade.h:24
-#, fuzzy
 msgid "Location:"
-msgstr "ISO 映像檔的位置(_L)："
+msgstr "位置："
 
 #: ../src/vmm-host.glade.h:25
-#, fuzzy
 msgid "Logical CPUs:"
-msgstr "邏輯主處理器："
+msgstr "邏輯處理器："
 
 #: ../src/vmm-host.glade.h:27
-#, fuzzy
 msgid "Memory:"
-msgstr "記憶體"
+msgstr "記憶體："
 
 #: ../src/vmm-host.glade.h:28 ../src/vmm-create-net.glade.h:30
 #: ../src/virtManager/createnet.py:101 ../src/virtManager/createnet.py:264
-#: ../src/virtManager/host.py:358
+#: ../src/virtManager/host.py:373
 msgid "NAT to any physical device"
-msgstr ""
+msgstr "NAT 至任何實體裝置"
 
 #: ../src/vmm-host.glade.h:30 ../src/vmm-create-net.glade.h:37
-#, fuzzy
 msgid "Network:"
-msgstr "網路"
+msgstr "網路："
 
 #: ../src/vmm-host.glade.h:31
 msgid "New Volume"
-msgstr ""
+msgstr "新卷冊"
 
 #: ../src/vmm-host.glade.h:33
-#, fuzzy
 msgid "Pool Type:"
-msgstr "類型"
+msgstr "Pool 類型："
 
 #: ../src/vmm-host.glade.h:34
-#, fuzzy
 msgid "Start Network"
-msgstr "網路"
+msgstr "啟用網路"
 
 #: ../src/vmm-host.glade.h:35
-#, fuzzy
 msgid "Start Pool"
-msgstr "狀態"
+msgstr "啟用 Pool"
 
 #: ../src/vmm-host.glade.h:36
-#, fuzzy
 msgid "State:"
 msgstr "狀態："
 
 #: ../src/vmm-host.glade.h:37
-#, fuzzy
 msgid "Stop Network"
-msgstr "網路"
+msgstr "停止網路"
 
 #: ../src/vmm-host.glade.h:38
 msgid "Stop Pool"
-msgstr ""
+msgstr "停止 Pool"
 
 #: ../src/vmm-host.glade.h:39
 msgid "Storage Pools"
-msgstr ""
+msgstr "儲存 Pool"
 
 #: ../src/vmm-host.glade.h:40
-#, fuzzy
 msgid "Virtual Networks"
-msgstr "虛擬處理器"
+msgstr "虛擬網路"
 
 #: ../src/vmm-host.glade.h:41
 msgid "Xen"
-msgstr ""
+msgstr "Xen"
 
 #: ../src/vmm-choose-cd.glade.h:1
 msgid "<b>CD Source Device Or File</b>"
-msgstr ""
+msgstr "<b>光碟來源裝置或檔案</b>"
 
 #: ../src/vmm-choose-cd.glade.h:2
 msgid "Choose A CD Source Device"
-msgstr ""
+msgstr "選擇一個光碟來源裝置"
 
 #: ../src/vmm-choose-cd.glade.h:3 ../src/vmm-create.glade.h:52
 msgid "ISO _Location:"
@@ -1106,9 +1020,8 @@ msgid "_Path to install media:"
 msgstr "安裝媒體的路徑(_P)："
 
 #: ../src/vmm-manager.glade.h:1
-#, fuzzy
 msgid "Add Connection..."
-msgstr "開啟連線..."
+msgstr "新增連線..."
 
 #: ../src/vmm-manager.glade.h:2
 msgid ""
@@ -1120,21 +1033,19 @@ msgstr ""
 "啟動中的虛擬機器\n"
 "停用中的虛擬機器"
 
-#: ../src/vmm-manager.glade.h:5 ../src/virtManager/manager.py:804
+#: ../src/vmm-manager.glade.h:5 ../src/virtManager/manager.py:802
 msgid "CPU usage"
 msgstr "CPU 用量"
 
 #: ../src/vmm-manager.glade.h:6
-#, fuzzy
 msgid "Connection Details..."
-msgstr "連接(_n)"
+msgstr "連線詳情..."
 
 #: ../src/vmm-manager.glade.h:7
-#, fuzzy
 msgid "Delete Machine"
 msgstr "刪除機器"
 
-#: ../src/vmm-manager.glade.h:8 ../src/virtManager/manager.py:807
+#: ../src/vmm-manager.glade.h:8 ../src/virtManager/manager.py:805
 msgid "Disk usage"
 msgstr "磁碟使用量"
 
@@ -1143,15 +1054,14 @@ msgid "Domain ID"
 msgstr "區域 ID"
 
 #: ../src/vmm-manager.glade.h:10
-#, fuzzy
 msgid "Machine Details..."
 msgstr "機器的詳細資料..."
 
-#: ../src/vmm-manager.glade.h:11 ../src/virtManager/manager.py:806
+#: ../src/vmm-manager.glade.h:11 ../src/virtManager/manager.py:804
 msgid "Memory usage"
 msgstr "記憶體用量"
 
-#: ../src/vmm-manager.glade.h:12 ../src/virtManager/manager.py:808
+#: ../src/vmm-manager.glade.h:12 ../src/virtManager/manager.py:806
 msgid "Network traffic"
 msgstr "網路流量"
 
@@ -1163,7 +1073,7 @@ msgstr "從檔案系統的映像檔中，回復已儲存的機器"
 msgid "Restore saved machine..."
 msgstr "回復已儲存的機器..."
 
-#: ../src/vmm-manager.glade.h:15 ../src/virtManager/manager.py:803
+#: ../src/vmm-manager.glade.h:15 ../src/virtManager/manager.py:801
 msgid "Status"
 msgstr "狀態"
 
@@ -1180,9 +1090,8 @@ msgid "_View:"
 msgstr "檢視(_V)："
 
 #: ../src/vmm-create.glade.h:1
-#, fuzzy
 msgid "32"
-msgstr "2"
+msgstr "32"
 
 #: ../src/vmm-create.glade.h:2
 msgid "<b>CPUs:</b>"
@@ -1193,9 +1102,8 @@ msgid "<b>Example:</b> system1"
 msgstr "<b>例如：</b>system1"
 
 #: ../src/vmm-create.glade.h:4
-#, fuzzy
 msgid "<b>Install media</b>"
-msgstr "<b>初始記憶體：</b>"
+msgstr "<b>安裝媒介</b>"
 
 #: ../src/vmm-create.glade.h:5
 msgid "<b>Memory:</b>"
@@ -1206,36 +1114,30 @@ msgid "<b>Memory</b> and <b>CPU</b> allocation"
 msgstr "<b>記憶體</b>與<b>處理器</b>的分配"
 
 #: ../src/vmm-create.glade.h:8
-#, fuzzy
 msgid "<b>Sound</b>"
-msgstr "<b>儲存</b>"
+msgstr "<b>音效</b>"
 
 #: ../src/vmm-create.glade.h:10
-msgid ""
-"<b>Storage</b> details - which disk partitions or files the system should use"
+msgid "<b>Storage</b> details - which disk partitions or files the system should use"
 msgstr "<b>儲存</b>的詳細資料 - 系統該使用哪些磁碟分割區或檔案"
 
 #: ../src/vmm-create.glade.h:11 ../src/vmm-create-net.glade.h:6
-#, fuzzy
 msgid "<b>Summary</b>"
-msgstr "<b>摘要：</b>"
+msgstr "<b>摘要</b>"
 
 #: ../src/vmm-create.glade.h:13
 msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
 msgstr "<small><b>例如：</b>ftp://hostname.example.com/ks/ks.cfg</small>"
 
 #: ../src/vmm-create.glade.h:14
-msgid ""
-"<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
-msgstr ""
-"<small><b>例如：</b>http://servername.example.com/distro/i386/tree</small>"
+msgid "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</small>"
+msgstr "<small><b>例如：</b>http://servername.example.com/distro/i386/tree</small>"
 
 #: ../src/vmm-create.glade.h:15
-#, fuzzy
 msgid ""
 "<small><b>Example:</b> updates=http://hostname.example.com/updates.img</"
 "small>"
-msgstr "<small><b>例如：</b>ftp://hostname.example.com/ks/ks.cfg</small>"
+msgstr "<small><b>例如：</b>updates=http://hostname.example.com/updates.img</small>"
 
 #: ../src/vmm-create.glade.h:16
 msgid ""
@@ -1287,13 +1189,10 @@ msgstr ""
 "</span>"
 
 #: ../src/vmm-create.glade.h:26
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing "
 "installation method</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">選擇虛擬化的方法"
-"</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">選擇安裝方式</span>"
 
 #: ../src/vmm-create.glade.h:28
 msgid ""
@@ -1312,13 +1211,10 @@ msgstr ""
 "span>"
 
 #: ../src/vmm-create.glade.h:30
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Locating "
 "installation source</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">安裝媒體的位置</"
-"span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">安裝來源的位置</span>"
 
 #: ../src/vmm-create.glade.h:31
 msgid ""
@@ -1354,45 +1250,39 @@ msgstr "建立新的虛擬系統"
 
 #: ../src/vmm-create.glade.h:44
 msgid "Enable Audio:"
-msgstr ""
+msgstr "啟用音效："
 
 #: ../src/vmm-create.glade.h:45
 msgid "F_ully Virtualized:"
 msgstr "完整虛擬化(_u)："
 
 #: ../src/vmm-create.glade.h:47
-#, fuzzy
 msgid "File Size Select"
-msgstr "檔案大小(_S)："
+msgstr "選擇檔案大小"
 
 #: ../src/vmm-create.glade.h:51
-#, fuzzy
 msgid "ISO Location Field"
-msgstr "ISO 映像檔的位置(_L)："
+msgstr "ISO 映像檔欄位"
 
 #: ../src/vmm-create.glade.h:53
-#, fuzzy
 msgid "Initial memory:"
-msgstr "<b>初始記憶體：</b>"
+msgstr "初始記憶體："
 
 #: ../src/vmm-create.glade.h:54
 msgid "Install Media _URL:"
 msgstr "安裝媒體的網址(_U)："
 
 #: ../src/vmm-create.glade.h:55
-#, fuzzy
 msgid "Install URL Field"
-msgstr "需要安裝媒體"
+msgstr "安裝 URL 欄位"
 
 #: ../src/vmm-create.glade.h:56
-#, fuzzy
 msgid "Install type"
-msgstr "需要安裝媒體"
+msgstr "安裝類型"
 
 #: ../src/vmm-create.glade.h:57
-#, fuzzy
 msgid "Installation source:"
-msgstr "<b>安裝來源：</b>"
+msgstr "安裝來源："
 
 #: ../src/vmm-create.glade.h:59
 msgid ""
@@ -1405,21 +1295,19 @@ msgstr ""
 
 #: ../src/vmm-create.glade.h:60
 msgid "Kernel arguments:"
-msgstr ""
+msgstr "Kernel 引數："
 
 #: ../src/vmm-create.glade.h:61
-#, fuzzy
 msgid "Kickstart Field"
-msgstr "<b>Kickstart 來源：</b>"
+msgstr "Kickstart 欄位"
 
 #: ../src/vmm-create.glade.h:62
 msgid "Kickstart U_RL:"
 msgstr "Kickstart 的網址(_R)："
 
 #: ../src/vmm-create.glade.h:63
-#, fuzzy
 msgid "Kickstart source:"
-msgstr "<b>Kickstart 來源：</b>"
+msgstr "Kickstart 來源："
 
 #: ../src/vmm-create.glade.h:64
 msgid ""
@@ -1431,9 +1319,8 @@ msgstr ""
 "虛擬化。這效能會比全虛擬化的系統要佳。"
 
 #: ../src/vmm-create.glade.h:65
-#, fuzzy
 msgid "Local inst"
-msgstr "Xen 主系統位置(_L)"
+msgstr "本機安裝"
 
 #: ../src/vmm-create.glade.h:66
 msgid "Logical host CPUs:"
@@ -1441,48 +1328,45 @@ msgstr "邏輯主處理器："
 
 #: ../src/vmm-create.glade.h:67
 msgid "MAC Field"
-msgstr ""
+msgstr "MAC 欄位"
 
 #: ../src/vmm-create.glade.h:70
-#, fuzzy
 msgid "Machine name:"
-msgstr "<b>機器名稱：</b>"
+msgstr "機器名稱："
 
 #: ../src/vmm-create.glade.h:71
 msgid "Max Mem Select"
-msgstr ""
+msgstr "選擇最大記憶體"
 
 #: ../src/vmm-create.glade.h:72
 msgid "Maximum VM type VCPUs:"
-msgstr ""
+msgstr "最大 VM 類型的 VCPU："
 
 #: ../src/vmm-create.glade.h:73
-#, fuzzy
 msgid "Maximum memory:"
-msgstr "<b>最大記憶體：</b>"
+msgstr "最大記憶體："
 
 #: ../src/vmm-create.glade.h:74
 msgid "Media Path Select"
-msgstr ""
+msgstr "選擇媒體路徑"
 
 #: ../src/vmm-create.glade.h:75 ../src/vmm-create-net.glade.h:31
 #: ../src/vmm-create-pool.glade.h:11 ../src/virtManager/connect.py:75
-#: ../src/virtManager/manager.py:801
+#: ../src/virtManager/manager.py:799
 msgid "Name"
 msgstr "名稱"
 
 #: ../src/vmm-create.glade.h:77
 msgid "Netinst"
-msgstr ""
+msgstr "Netinst"
 
 #: ../src/vmm-create.glade.h:80
-#, fuzzy
 msgid "Network Select"
-msgstr "網路"
+msgstr "選擇網路"
 
 #: ../src/vmm-create.glade.h:81
 msgid "Network install t_ree (HTTP, FTP, or NFS)"
-msgstr ""
+msgstr "網路安裝樹(_r)（HTTP、FTP 或 NFS）"
 
 #: ../src/vmm-create.glade.h:83
 msgid "OS _Type:"
@@ -1493,34 +1377,28 @@ msgid "OS _Variant:"
 msgstr "作業系統版本(_V)："
 
 #: ../src/vmm-create.glade.h:85
-#, fuzzy
 msgid "Operating System:"
-msgstr "<b>作業系統：</b>"
+msgstr "作業系統："
 
 #: ../src/vmm-create.glade.h:87
-#, fuzzy
 msgid "Partition Field"
-msgstr "分割區(_a)："
+msgstr "分割區欄位"
 
 #: ../src/vmm-create.glade.h:88
 msgid "Please choose a name for your virtual system:"
 msgstr "請為您的虛擬機器選擇名稱："
 
 #: ../src/vmm-create.glade.h:89
-msgid ""
-"Please choose the type of guest operating system you will be installing:"
+msgid "Please choose the type of guest operating system you will be installing:"
 msgstr "請選擇您打算安裝的客座端作業系統類型："
 
 #: ../src/vmm-create.glade.h:90
-#, fuzzy
 msgid ""
 "Please enter the memory configuration for this VM. You can specify the "
 "maximum amount of memory the VM should be able to use, and optionally a "
 "lower amount to grab on startup. Warning: setting VM memory too high will "
 "cause out-of-memory errors in your host domain!"
-msgstr ""
-"請輸入這虛擬機器的記憶體設定。您可以指定這虛擬機器將使用的最大數量，並選擇啟"
-"動時取得的較低數量（選用）。"
+msgstr "請輸入此虛擬機器的記憶體設定。您可以指定此虛擬機器將可使用的最大記憶體數量，並選擇啟動時取用較低的數量（選用）警告：倘若 VM 記憶體設得過高，這將會在您的主機網域中造成記憶體不足的錯誤。"
 
 #: ../src/vmm-create.glade.h:91
 msgid "Please enter the number of virtual CPUs this VM should start up with."
@@ -1539,41 +1417,35 @@ msgstr ""
 msgid ""
 "Please indicate how you'd like to connect your new virtual system to the "
 "host network."
-msgstr ""
+msgstr "請指定您希望如何將您新的虛擬系統連至主機網路。"
 
 #: ../src/vmm-create.glade.h:94
-#, fuzzy
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this virtual operating system. "
 "Optionally you can provide the URL for a kickstart file that describes your "
 "system:"
-msgstr ""
-"請指明您想要安裝至這<b>次虛擬</b>的虛擬系統之作業系統的安裝媒體。您可選擇提"
-"供 kickstart 檔案的網址，用以描述您的系統："
+msgstr "請指明您想要安裝在此虛擬作業系統上的可用作業系統安裝媒體為何。另外，您也可提供描述您系統的 kickstart 檔案網址："
 
 #: ../src/vmm-create.glade.h:95
-#, fuzzy
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this virtual operating system:"
-msgstr "請指明您想要安裝至這<b>全虛擬</b>的虛擬系統之作業系統的安裝媒體："
+msgstr "請指明您想要安裝在此虛擬作業系統上的可用作業系統安裝媒體為何。"
 
 #: ../src/vmm-create.glade.h:96
-#, fuzzy
 msgid ""
 "Please indicate where installation media is available for the operating "
 "system you would like to install on this virtual system:"
-msgstr "請指明您想要安裝至這<b>全虛擬</b>的虛擬系統之作業系統的安裝媒體："
+msgstr "請指明您想要安裝在此虛擬系統上的可用作業系統安裝媒體為何。"
 
 #: ../src/vmm-create.glade.h:97
-#, fuzzy
 msgid "Set fixed MAC _address for your virtual system?"
-msgstr "請為您的虛擬機器選擇名稱："
+msgstr "是否要為您的虛擬系統設置固定的 MAC 位址(_a)？"
 
 #: ../src/vmm-create.glade.h:100
 msgid "Startup Mem Select"
-msgstr ""
+msgstr "選擇初始記憶體"
 
 #: ../src/vmm-create.glade.h:101
 msgid "System _Name:"
@@ -1590,36 +1462,31 @@ msgid ""
 "This assistant will guide you through creating a new virtual system. You "
 "will be asked for some information about the virtual system you'd like to "
 "create, such as:"
-msgstr ""
-"這程式會幫助您建立新的虛擬系統。程式會問您一些關於虛擬系統的資訊，例如："
+msgstr "這程式會幫助您建立新的虛擬系統。程式會問您一些關於虛擬系統的資訊，例如："
 
 #: ../src/vmm-create.glade.h:106
 msgid "Type"
 msgstr "類型"
 
 #: ../src/vmm-create.glade.h:108
-#, fuzzy
 msgid "VM _Max Memory (MB):"
-msgstr "虛擬機器的最大記憶體(_M)："
+msgstr "虛擬機器的最大記憶體(_M)（MB）："
 
 #: ../src/vmm-create.glade.h:109
-#, fuzzy
 msgid "VM _Startup Memory (MB):"
-msgstr "虛擬機器的初使記憶體(_S)："
+msgstr "虛擬機器的初始記憶體（MB）(_S)："
 
 #: ../src/vmm-create.glade.h:110
 msgid "VMS"
 msgstr "VMS"
 
 #: ../src/vmm-create.glade.h:111
-#, fuzzy
 msgid "Virtual CPUs:"
-msgstr "虛擬處理器"
+msgstr "虛擬處理器："
 
 #: ../src/vmm-create.glade.h:112
-#, fuzzy
 msgid "Virtualization method:"
-msgstr "<b>虛擬化方法：</b>"
+msgstr "虛擬化方式："
 
 #: ../src/vmm-create.glade.h:113
 msgid ""
@@ -1633,16 +1500,15 @@ msgstr "您需要為新系統選擇虛擬方式："
 
 #: ../src/vmm-create.glade.h:120
 msgid "_Kernel parameters:"
-msgstr ""
+msgstr "Kernel 參數（_K）："
 
 #: ../src/vmm-create.glade.h:121
 msgid "_Local install media (ISO image or CDROM)"
-msgstr ""
+msgstr "本機安裝媒體（ISO 映像檔或光碟）"
 
 #: ../src/vmm-create.glade.h:123
-#, fuzzy
 msgid "_Network boot (PXE)"
-msgstr "網路"
+msgstr "網路開機（PXE）(_N)"
 
 #: ../src/vmm-create.glade.h:125
 msgid "_Paravirtualized:"
@@ -1653,34 +1519,32 @@ msgid "_VCPUs:"
 msgstr "虛擬處理器(_V)："
 
 #: ../src/vmm-open-connection.glade.h:1
-#, fuzzy
 msgid "Add Connection"
-msgstr "連接(_n)"
+msgstr "新增連線"
 
 #: ../src/vmm-open-connection.glade.h:2
 msgid ""
 "Autoconnect\n"
 "   at Startup:"
 msgstr ""
+"自動連線\n"
+"   於開機時："
 
 #: ../src/vmm-open-connection.glade.h:4
 msgid "Co_nnect"
 msgstr "連接(_n)"
 
 #: ../src/vmm-open-connection.glade.h:5
-#, fuzzy
 msgid "Connection Select"
-msgstr "連接(_n)"
+msgstr "選擇連線"
 
 #: ../src/vmm-open-connection.glade.h:7
-#, fuzzy
 msgid "Hostname Field"
-msgstr "主系統(_H)："
+msgstr "主機名稱欄位"
 
 #: ../src/vmm-open-connection.glade.h:9
-#, fuzzy
 msgid "Hypervisor Select"
-msgstr "其他 hypervisor(_O)"
+msgstr "選擇 Hypervisor"
 
 #: ../src/vmm-open-connection.glade.h:11
 msgid ""
@@ -1689,6 +1553,10 @@ msgid ""
 "Remote SSL/TLS with x509 certificate\n"
 "Remote tunnel over SSH"
 msgstr ""
+"本機\n"
+"遠端密碼或是 kerberos\n"
+"遠端 SSL/TLS 與 x509 認證\n"
+"透過 SSH 的遠端通道"
 
 #: ../src/vmm-open-connection.glade.h:15
 msgid ""
@@ -1699,259 +1567,219 @@ msgstr ""
 "QEMU"
 
 #: ../src/vmm-create-net.glade.h:1
-#, fuzzy
 msgid "<b>DHCP</b>"
-msgstr "<b>CPU 數量</b>"
+msgstr "<b>DHCP</b>"
 
 #: ../src/vmm-create-net.glade.h:2
-#, fuzzy
 msgid "<b>Example:</b> network1"
-msgstr "<b>例如：</b>system1"
+msgstr "<b>例如：</b>network1"
 
 #: ../src/vmm-create-net.glade.h:3
-#, fuzzy
 msgid "<b>Forwarding</b>"
-msgstr "<b>儲存</b>"
+msgstr "<b>轉發</b>"
 
 #: ../src/vmm-create-net.glade.h:4
 msgid ""
 "<b>Hint:</b> The network should be choosen from one of the IPv4 private "
 "address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
-msgstr ""
+msgstr "<b>提示：</b>網路應由 IPv4 私密位址範圍（比方說 10.0.0.0/8、172.16.0.0/12 或 192.168.0.0/16）中的其中之一作選擇"
 
 #: ../src/vmm-create-net.glade.h:5
-#, fuzzy
 msgid "<b>IPv4 network</b>"
-msgstr "<b>網路</b>"
+msgstr "<b>IPv4 網路</b>"
 
 #: ../src/vmm-create-net.glade.h:7
 msgid ""
 "<b>Tip:</b> Unless you wish to reserve some addresses to allow static "
 "network configuration in virtual machines, these parameters can be left with "
 "their default values."
-msgstr ""
+msgstr "<b>提示：</b>除非您希望解析一些位址來允許在虛擬機器中進行靜態式的網路配置，否則這些參數將可被保留為預設值。"
 
 #: ../src/vmm-create-net.glade.h:8
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing an "
 "IPv4 address space</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">指定儲存空間</"
-"span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">指定一個 IPv4 位址空間</span>"
 
 #: ../src/vmm-create-net.glade.h:9
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting to "
 "physical network</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">指定儲存空間</"
-"span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">連至實體的網路</span>"
 
 #: ../src/vmm-create-net.glade.h:10
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual network </span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">建立新的虛擬系統"
-"</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">建立新的虛擬網路</span>"
 
 #: ../src/vmm-create-net.glade.h:11
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual network </span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">為您的虛擬系統命"
-"名</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">為您的虛擬網路命名</span>"
 
 #: ../src/vmm-create-net.glade.h:12
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create "
 "network</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">已準備好開始安裝"
-"</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">已準備好建立網路</span>"
 
 #: ../src/vmm-create-net.glade.h:13
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Selecting the "
 "DHCP range</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">指定儲存空間</"
-"span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">指定 DHCP 範圍</span>"
 
 #: ../src/vmm-create-net.glade.h:14
-#, fuzzy
 msgid "A <b>name</b> for your new virtual network"
-msgstr "您的新虛擬系統之<b>名稱</b>"
+msgstr "您新虛擬網路的<b>名稱</b>"
 
 #: ../src/vmm-create-net.glade.h:15
 msgid "Broadcast:"
-msgstr ""
+msgstr "廣播："
 
 #: ../src/vmm-create-net.glade.h:17
-#, fuzzy
 msgid "Connectivity:"
-msgstr "連接(_n)"
+msgstr "連接性："
 
 #: ../src/vmm-create-net.glade.h:18
-#, fuzzy
 msgid "Create a new virtual network"
-msgstr "建立新的虛擬系統"
+msgstr "建立新的虛擬網路"
 
 #: ../src/vmm-create-net.glade.h:19
 msgid "DHCP"
-msgstr ""
+msgstr "DHCP"
 
 #: ../src/vmm-create-net.glade.h:20
-#, fuzzy
 msgid "Desination:"
-msgstr "目的地"
+msgstr "目的地："
 
 #: ../src/vmm-create-net.glade.h:21
-#, fuzzy
 msgid "End Address"
-msgstr "MAC 位址"
+msgstr "結束位址"
 
 #: ../src/vmm-create-net.glade.h:22
-#, fuzzy
 msgid "End address:"
-msgstr "MAC 位址"
+msgstr "結束位址"
 
 #: ../src/vmm-create-net.glade.h:23
 msgid "End:"
-msgstr ""
+msgstr "結束："
 
 #: ../src/vmm-create-net.glade.h:24
 msgid "Forwarding"
-msgstr ""
+msgstr "轉發"
 
 #: ../src/vmm-create-net.glade.h:25
 msgid "Forwarding to physical network"
-msgstr ""
+msgstr "轉發至實體網路"
 
 #: ../src/vmm-create-net.glade.h:26
 msgid "Gateway:"
-msgstr ""
+msgstr "閘道："
 
 #: ../src/vmm-create-net.glade.h:27
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: ../src/vmm-create-net.glade.h:29 ../src/virtManager/createnet.py:266
-#: ../src/virtManager/host.py:361 ../src/virtManager/host.py:381
+#: ../src/virtManager/host.py:376 ../src/virtManager/host.py:396
 msgid "Isolated virtual network"
-msgstr ""
+msgstr "孤立的虛擬網路"
 
 #: ../src/vmm-create-net.glade.h:32
 msgid "Net Name Field"
-msgstr ""
+msgstr "網路名稱欄位"
 
 #: ../src/vmm-create-net.glade.h:33
 msgid "Netmask:"
-msgstr ""
+msgstr "網路遮罩："
 
 #: ../src/vmm-create-net.glade.h:34
-#, fuzzy
 msgid "Network Range"
-msgstr "網路用量："
+msgstr "網路範圍"
 
 #: ../src/vmm-create-net.glade.h:35
-#, fuzzy
 msgid "Network _Name:"
-msgstr "網路用量："
+msgstr "網路名稱(_N)："
 
 #: ../src/vmm-create-net.glade.h:36
-#, fuzzy
 msgid "Network name:"
-msgstr "網路用量："
+msgstr "網路名稱："
 
 #: ../src/vmm-create-net.glade.h:38
-#, fuzzy
 msgid "Physical Network"
-msgstr "虛擬處理器"
+msgstr "實體網路"
 
 #: ../src/vmm-create-net.glade.h:39
-#, fuzzy
 msgid "Please choose a name for your virtual network:"
-msgstr "請為您的虛擬機器選擇名稱："
+msgstr "請為您的虛擬網路選擇名稱："
 
 #: ../src/vmm-create-net.glade.h:40
 msgid ""
 "Please choose the range of addresses the DHCP server can use to allocate to "
 "guests attached to the virtual network"
-msgstr ""
+msgstr "請選擇 DHCP 所能使用來分配給連至虛擬網路的客座端的位址範圍"
 
 #: ../src/vmm-create-net.glade.h:41
 msgid ""
 "Please indicate whether this virtual network should be connected to the "
 "physical network."
-msgstr ""
+msgstr "請指定此虛擬網路是否應該連至實體網路。"
 
 #: ../src/vmm-create-net.glade.h:42 ../src/virtManager/createnet.py:163
 msgid "Private"
-msgstr ""
+msgstr "私密"
 
 #: ../src/vmm-create-net.glade.h:43
-#, fuzzy
 msgid "Size:"
-msgstr "大小(_S)："
+msgstr "大小："
 
 #: ../src/vmm-create-net.glade.h:44
-#, fuzzy
 msgid "Start Address"
-msgstr "MAC 位址"
+msgstr "起始位址"
 
 #: ../src/vmm-create-net.glade.h:45
-#, fuzzy
 msgid "Start address:"
-msgstr "MAC 位址"
+msgstr "起始位址："
 
 #: ../src/vmm-create-net.glade.h:46
-#, fuzzy
 msgid "Start:"
-msgstr "狀態："
+msgstr "起始："
 
 #: ../src/vmm-create-net.glade.h:47
 msgid ""
 "The <b>address range</b> from which the <b>DHCP</b> server will allocate "
 "addresses for virtual machines"
-msgstr ""
+msgstr "<b>DHCP</b> 伺服器將會由哪些<b>位址範圍</b>來為虛擬機器分配位址"
 
 #: ../src/vmm-create-net.glade.h:48
 msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
-msgstr ""
+msgstr "需分配的 IPv4 <b>位址</b>與<b>網路遮罩</b>"
 
 #: ../src/vmm-create-net.glade.h:49
-#, fuzzy
 msgid ""
 "This assistant will guide you through creating a new virtual network. You "
 "will be asked for some information about the virtual network you'd like to "
 "create, such as:"
-msgstr ""
-"這程式會幫助您建立新的虛擬系統。程式會問您一些關於虛擬系統的資訊，例如："
+msgstr "此協助程式會幫助您建立新的虛擬網路。該程式會詢問您一些有關於您欲建立的虛擬網路的相關資訊，例如："
 
 #: ../src/vmm-create-net.glade.h:51
 msgid "Whether to <b>forward</b> traffic to the physical network"
-msgstr ""
+msgstr "是否要將流量<b>轉發</b>至實體網路"
 
 #: ../src/vmm-create-net.glade.h:52
 msgid "You will need to choose an IPv4 address space for the virtual network:"
-msgstr ""
+msgstr "您將需要為虛擬網路選擇一個 IPv4 位址空間："
 
 #: ../src/vmm-preferences.glade.h:1
 msgid "<b>Consoles</b>"
 msgstr "<b>主控台</b>"
 
 #: ../src/vmm-preferences.glade.h:2
-#, fuzzy
 msgid "<b>New VM Preferences</b>"
-msgstr "<b>效能</b>"
+msgstr "<b>新的虛擬機器偏好設定</b>"
 
 #: ../src/vmm-preferences.glade.h:3
 msgid "<b>Status monitoring</b>"
@@ -1959,35 +1787,31 @@ msgstr "<b>狀態監控</b>"
 
 #: ../src/vmm-preferences.glade.h:4
 msgid "Auto Console"
-msgstr ""
+msgstr "自動主控台"
 
 #: ../src/vmm-preferences.glade.h:5
 msgid "Automatically open consoles:"
 msgstr "自動開啟主控台："
 
 #: ../src/vmm-preferences.glade.h:6
-#, fuzzy
 msgid "Grab Keyboard"
-msgstr "擷取鍵盤輸入："
+msgstr "擷取鍵盤"
 
 #: ../src/vmm-preferences.glade.h:7
 msgid "Grab keyboard input:"
 msgstr "擷取鍵盤輸入："
 
 #: ../src/vmm-preferences.glade.h:8
-#, fuzzy
 msgid "History Samples"
-msgstr "範例"
+msgstr "歷史範例"
 
 #: ../src/vmm-preferences.glade.h:9
-#, fuzzy
 msgid "Install Audio Device:"
-msgstr "<b>安裝來源：</b>"
+msgstr "安裝音效裝置："
 
 #: ../src/vmm-preferences.glade.h:10
-#, fuzzy
 msgid "Local VM"
-msgstr "Xen 主系統位置(_L)"
+msgstr "本地 VM"
 
 #: ../src/vmm-preferences.glade.h:11
 msgid "Maintain history of"
@@ -2018,13 +1842,12 @@ msgid "Preferences"
 msgstr "偏好設定"
 
 #: ../src/vmm-preferences.glade.h:19
-#, fuzzy
 msgid "Remote VM"
-msgstr "遠端 Xen 主機(_R)"
+msgstr "遠端 VM"
 
 #: ../src/vmm-preferences.glade.h:20
 msgid "Status Interval"
-msgstr ""
+msgstr "狀態間隔"
 
 #: ../src/vmm-preferences.glade.h:21
 msgid "Update status every"
@@ -2040,86 +1863,80 @@ msgstr "秒"
 
 #: ../src/vmm-create-pool.glade.h:1
 msgid "                                  \n"
-msgstr ""
+msgstr "                                  \n"
 
 #: ../src/vmm-create-pool.glade.h:3
 msgid "<span size='x-large'>Add Storage Pool</span>"
-msgstr ""
+msgstr "<span size='x-large'>新增儲存 Pool</span>"
 
 #: ../src/vmm-create-pool.glade.h:4
 msgid "Add a New Storage Pool"
-msgstr ""
+msgstr "新增儲存 Pool"
 
 #: ../src/vmm-create-pool.glade.h:5
-#, fuzzy
 msgid "Browse"
-msgstr "瀏覽..."
+msgstr "瀏覽"
 
 #: ../src/vmm-create-pool.glade.h:6
 msgid "Build Pool:"
-msgstr ""
+msgstr "建置 Pool："
 
 #: ../src/vmm-create-pool.glade.h:7
-#, fuzzy
 msgid "Finish"
-msgstr "完成(_F)"
+msgstr "完成"
 
 #: ../src/vmm-create-pool.glade.h:8
 msgid "Format"
-msgstr ""
+msgstr "格式"
 
 #: ../src/vmm-create-pool.glade.h:9 ../src/vmm-create-vol.glade.h:23
-#, fuzzy
 msgid "Format:"
-msgstr "連接埠(_P)："
+msgstr "格式："
 
 #: ../src/vmm-create-pool.glade.h:10
-#, fuzzy
 msgid "Host Name:"
-msgstr "主系統(_H)："
+msgstr "主機名稱："
 
 #: ../src/vmm-create-pool.glade.h:14
 msgid "Specify a storage location to be later split into VM storage."
-msgstr ""
+msgstr "指定一個之後將會被劃分為 VM 儲存空間的儲存位置。"
 
 #: ../src/vmm-create-pool.glade.h:15
 msgid "Step 1 of 2"
-msgstr ""
+msgstr "步驟 1"
 
 #: ../src/vmm-create-pool.glade.h:16
 msgid "Step 2 of 2"
-msgstr ""
+msgstr "步驟 2"
 
 #: ../src/vmm-create-pool.glade.h:17
 msgid "Target Path:"
-msgstr ""
+msgstr "目標路徑："
 
 #: ../src/vmm-progress.glade.h:1 ../src/virtManager/asyncjob.py:39
 msgid "Operation in progress"
 msgstr "作業正在進行中"
 
 #: ../src/vmm-progress.glade.h:2 ../src/virtManager/asyncjob.py:39
-#, fuzzy
 msgid "Please wait a few moments..."
-msgstr "請稍待..."
+msgstr "請稍待片刻..."
 
 #: ../src/vmm-progress.glade.h:3 ../src/virtManager/asyncjob.py:75
 #: ../src/virtManager/asyncjob.py:88
-#, fuzzy
 msgid "Processing..."
-msgstr "處理器"
+msgstr "處理中..."
 
 #: ../src/vmm-create-vol.glade.h:1
 msgid "(parent-name)"
-msgstr ""
+msgstr "（父名稱）"
 
 #: ../src/vmm-create-vol.glade.h:2
 msgid "(space)"
-msgstr ""
+msgstr "（空格）"
 
 #: ../src/vmm-create-vol.glade.h:3
 msgid "<span size='large'>Storage Volume Quota</span>"
-msgstr ""
+msgstr "<span size='large'>儲存卷冊配額</span>"
 
 #: ../src/vmm-create-vol.glade.h:4
 msgid ""
@@ -2138,594 +1955,586 @@ msgid ""
 "  allocated to volume\n"
 "  at this time.</i></span>"
 msgstr ""
+"<span size='small'><i><u>名稱</u>：欲建立之卷冊\n"
+"  的名稱。可附加\n"
+"  檔案的\n"
+"  副檔名\n"
+"\n"
+"<u>格式</u>：卷冊的\n"
+"  檔案/分割區格式\n"
+"\n"
+"<u>容量</u>：卷冊的\n"
+"  最大容量。\n"
+"\n"
+"<u>分配</u>：此時\n"
+"  分配給卷冊的\n"
+"  實際大小。</i></span>"
 
 #: ../src/vmm-create-vol.glade.h:18
 msgid "<span size='x-large'>New Storage Volume</span>"
-msgstr ""
+msgstr "<span size='x-large'>新增儲存卷冊</span>"
 
 #: ../src/vmm-create-vol.glade.h:19
-#, fuzzy
 msgid "Add a Storage Volume"
-msgstr "系統名稱(_N)："
+msgstr "新增儲存卷冊"
 
 #: ../src/vmm-create-vol.glade.h:20
-#, fuzzy
 msgid "Allocation:"
-msgstr "ISO 映像檔的位置(_L)："
+msgstr "分配："
 
 #: ../src/vmm-create-vol.glade.h:21
 msgid "Create _Volume"
-msgstr ""
+msgstr "建立卷冊(_V)"
 
 #: ../src/vmm-create-vol.glade.h:22
 msgid "Create a storage unit that can be used directly by a VM."
-msgstr ""
+msgstr "建立一個能直接被 VM 使用的儲存單位。"
 
 #: ../src/vmm-create-vol.glade.h:25
 msgid "Max Capacity:"
-msgstr ""
+msgstr "最大容量："
 
 #: ../src/vmm-create-vol.glade.h:27
-#, fuzzy
 msgid "available space:"
-msgstr "無法使用"
+msgstr "可用空間："
 
 #: ../src/virt-manager.py.in:54
-#, fuzzy
 msgid "Error starting Virtual Machine Manager"
-msgstr "虛擬機器管理員"
+msgstr "啟用虛擬機器管理員時發生錯誤"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:263
+#: ../src/virt-manager.py.in:264
 msgid "Unable to initialize GTK: "
 msgstr "無法啟動 GTK："
 
 #: ../src/virt-manager.schemas.in.h:1
 msgid "Install sound device for local VM"
-msgstr ""
+msgstr "安裝本地 VM 的音效裝置"
 
 #: ../src/virt-manager.schemas.in.h:2
 msgid "Install sound device for remote VM"
-msgstr ""
+msgstr "安裝遠端 VM 的音效裝置"
 
 #: ../src/virt-manager.schemas.in.h:3
 msgid "Show VCPU count in summary"
-msgstr ""
+msgstr "在摘要中顯示 VCPU 計數"
 
 #: ../src/virt-manager.schemas.in.h:4
 msgid "Show cpu usage in summary"
-msgstr ""
+msgstr "在摘要中顯示 cpu 使用量"
 
 #: ../src/virt-manager.schemas.in.h:5
 msgid "Show disk usage in summary"
-msgstr ""
+msgstr "在摘要中顯示磁碟使用量"
 
 #: ../src/virt-manager.schemas.in.h:6
 msgid "Show domain id in summary"
-msgstr ""
+msgstr "在摘要中顯示網域 ID"
 
 #: ../src/virt-manager.schemas.in.h:7
 msgid "Show memory usage in summary"
-msgstr ""
+msgstr "在摘要中顯示記憶體使用量"
 
 #: ../src/virt-manager.schemas.in.h:8
-#, fuzzy
 msgid "Show network traffic in summary"
-msgstr "網路流量"
+msgstr "在摘要中顯示網路流量"
 
 #: ../src/virt-manager.schemas.in.h:9
 msgid "Show run state in summary"
-msgstr ""
+msgstr "在摘要中顯示執行狀態"
 
 #: ../src/virt-manager.schemas.in.h:10
 msgid "Show the cpu usage field in the domain list summary view"
-msgstr ""
+msgstr "在網域清單摘要中顯示 cpu 使用量的欄位"
 
 #: ../src/virt-manager.schemas.in.h:11
 msgid "Show the disk usage field in the domain list summary view"
-msgstr ""
+msgstr "在網域清單摘要中顯示磁碟使用量的欄位"
 
 #: ../src/virt-manager.schemas.in.h:12
 msgid "Show the domain id field in the domain list summary view"
-msgstr ""
+msgstr "在網域清單摘要中顯示網域 id 的欄位"
 
 #: ../src/virt-manager.schemas.in.h:13
 msgid "Show the memory usage field in the domain list summary view"
-msgstr ""
+msgstr "在網域清單摘要中顯示記憶體使用量的欄位"
 
 #: ../src/virt-manager.schemas.in.h:14
 msgid "Show the network traffic field in the domain list summary view"
-msgstr ""
+msgstr "在網域清單摘要中顯示網路流量的欄位"
 
 #: ../src/virt-manager.schemas.in.h:15
 msgid "Show the run state field in the domain list summary view"
-msgstr ""
+msgstr "在網域清單摘要中顯示執行狀態的欄位"
 
 #: ../src/virt-manager.schemas.in.h:16
 msgid "Show the virtual CPU count field in the domain list summary view"
-msgstr ""
+msgstr "在網域清單摘要中顯示虛擬 CPU 計數的欄位"
 
 #: ../src/virt-manager.schemas.in.h:17
 msgid "The length of the list of URLs"
-msgstr ""
+msgstr "清單中的網址的長度"
 
 #: ../src/virt-manager.schemas.in.h:18
 msgid "The number of samples to keep in the statistics history"
-msgstr ""
+msgstr "數據歷史中所能保留的範例數量"
 
 #: ../src/virt-manager.schemas.in.h:19
-msgid ""
-"The number of urls to keep in the history for the install media address page."
-msgstr ""
+msgid "The number of urls to keep in the history for the install media address page."
+msgstr "能保留在歷史中的安裝媒介位址頁面網址數量"
 
 #: ../src/virt-manager.schemas.in.h:20
 msgid "The statistics history length"
-msgstr ""
+msgstr "數據歷史長度"
 
 #: ../src/virt-manager.schemas.in.h:21
 msgid "The statistics update interval"
-msgstr ""
+msgstr "數據更新間隔"
 
 #: ../src/virt-manager.schemas.in.h:22
 msgid "The statistics update interval in seconds"
-msgstr ""
+msgstr "數據更新間隔（秒）"
 
 #: ../src/virt-manager.schemas.in.h:23
 msgid "When to grab keyboard input for the console"
-msgstr ""
+msgstr "何時擷取主控台的鍵盤輸入"
 
 #: ../src/virt-manager.schemas.in.h:24
 msgid "When to pop up a console for a guest"
-msgstr ""
+msgstr "客座端的主控台何時跳出"
 
 #: ../src/virt-manager.schemas.in.h:25
 msgid ""
 "Whether to grab keyboard input for a guest console. 0 = never, 1 = only when "
 "in full screen mode, 2 = when mouse is over console"
-msgstr ""
+msgstr "是否擷取客座端主控台的鍵盤輸入。0 = 永不、1 = 只有當處於全螢幕模式中、2 = 當滑鼠位於主控台上時"
 
 #: ../src/virt-manager.schemas.in.h:26
 msgid "Whether to install a sound device for local VMs or not"
-msgstr ""
+msgstr "是否為本地 VM 安裝音效裝置"
 
 #: ../src/virt-manager.schemas.in.h:27
 msgid "Whether to install a sound device for remote VMs or not"
-msgstr ""
+msgstr "是否為遠端 VM 安裝音效裝置"
 
 #: ../src/virt-manager.schemas.in.h:28
 msgid ""
 "Whether to pop up a console for a guest. 0 = never, 1 = only on creation of "
 "a new guest, 2 = On creation of any guest"
-msgstr ""
+msgstr "是否在客座端上跳出一個主控台。0 = 永不、1 = 只有當建立新客座端時、2 = 當建立任何客座端時"
 
 #: ../src/virt-manager.schemas.in.h:29
 msgid "Whether to show VM button toolbar in Details display"
-msgstr ""
+msgstr "是否在詳細顯示模式中顯示 VM 按鈕工具列"
 
 #: ../src/virt-manager.schemas.in.h:30
 msgid "Whether to show notification when grabbing mouse"
-msgstr ""
+msgstr "是否在擷取滑鼠時顯示通知"
 
 #: ../src/virt-manager.schemas.in.h:31
-msgid ""
-"Whether to show the notification hint when grabbing the mouse in the console"
-msgstr ""
+msgid "Whether to show the notification hint when grabbing the mouse in the console"
+msgstr "是否在擷取滑鼠時顯示通知提示訊息於主控台中"
 
 #: ../src/virt-manager.schemas.in.h:32
 msgid ""
 "Whether to show toolbar containing Virtual Machine action buttons (such as "
 "Run, Pause, Shutdown) in the details display"
-msgstr ""
+msgstr "是否在詳細顯示模式中顯示包含著虛擬機器動作按鈕（例如執行、暫停、關閉）的工具列"
 
-#: ../src/virtManager/connection.py:1022
-#, fuzzy
+#: ../src/virtManager/connection.py:1038
 msgid "Disconnected"
-msgstr "連接(_n)"
+msgstr "已斷線"
 
-#: ../src/virtManager/connection.py:1024
-#, fuzzy
+#: ../src/virtManager/connection.py:1040
 msgid "Connecting"
-msgstr "連接(_n)"
+msgstr "連接中"
 
-#: ../src/virtManager/connection.py:1027
+#: ../src/virtManager/connection.py:1043
 msgid "Active (RO)"
-msgstr ""
+msgstr "啟用（RO）"
 
-#: ../src/virtManager/connection.py:1031 ../src/virtManager/host.py:331
-#: ../src/virtManager/host.py:370 ../src/virtManager/host.py:543
-#: ../src/virtManager/host.py:579
+#: ../src/virtManager/connection.py:1047 ../src/virtManager/create.py:1142
+#: ../src/virtManager/host.py:346 ../src/virtManager/host.py:385
+#: ../src/virtManager/host.py:558 ../src/virtManager/host.py:594
 msgid "Inactive"
-msgstr ""
+msgstr "未啟用"
 
-#: ../src/virtManager/connection.py:1033 ../src/virtManager/details.py:830
+#: ../src/virtManager/connection.py:1049 ../src/virtManager/details.py:880
 msgid "Unknown"
-msgstr ""
+msgstr "不明"
 
-#: ../src/virtManager/createnet.py:57 ../src/virtManager/engine.py:59
+#: ../src/virtManager/createnet.py:57 ../src/virtManager/engine.py:58
 #: ../src/virtManager/addhardware.py:68 ../src/virtManager/create.py:86
 #: ../src/virtManager/createvol.py:56 ../src/virtManager/createpool.py:54
-#: ../src/virtManager/details.py:112 ../src/virtManager/host.py:56
+#: ../src/virtManager/details.py:111 ../src/virtManager/host.py:57
 #: ../src/virtManager/manager.py:113
 msgid "Unexpected Error"
-msgstr ""
+msgstr "非預期的錯誤"
 
-#: ../src/virtManager/createnet.py:58 ../src/virtManager/engine.py:60
+#: ../src/virtManager/createnet.py:58 ../src/virtManager/engine.py:59
 #: ../src/virtManager/addhardware.py:69 ../src/virtManager/create.py:87
 #: ../src/virtManager/createvol.py:57 ../src/virtManager/createpool.py:55
-#: ../src/virtManager/details.py:113 ../src/virtManager/host.py:57
+#: ../src/virtManager/details.py:112 ../src/virtManager/host.py:58
 #: ../src/virtManager/manager.py:114
 msgid "An unexpected error occurred"
-msgstr ""
+msgstr "發生了非預期的錯誤"
 
 #: ../src/virtManager/createnet.py:104 ../src/virtManager/createnet.py:262
-#: ../src/virtManager/host.py:356
+#: ../src/virtManager/host.py:371
 #, python-format
 msgid "NAT to physical device %s"
-msgstr ""
+msgstr "NAT 至實體裝置 %s"
 
 #: ../src/virtManager/createnet.py:159
-#, fuzzy, python-format
+#, python-format
 msgid "%d addresses"
-msgstr "MAC 位址"
+msgstr "%d 位址"
 
 #: ../src/virtManager/createnet.py:161
 msgid "Public"
-msgstr ""
+msgstr "公用"
 
 #: ../src/virtManager/createnet.py:165
 msgid "Reserved"
-msgstr ""
+msgstr "預留"
 
 #: ../src/virtManager/createnet.py:167
 msgid "Other"
-msgstr ""
+msgstr "其它"
 
 #: ../src/virtManager/createnet.py:307
-#, fuzzy, python-format
+#, python-format
 msgid "Error creating virtual network: %s"
-msgstr "建立新的虛擬系統"
+msgstr "建立新的虛擬網路時發生錯誤：%s"
 
 #: ../src/virtManager/createnet.py:315 ../src/virtManager/createnet.py:318
-#, fuzzy
 msgid "Invalid Network Name"
-msgstr "無效的系統名稱"
+msgstr "無效的網路名稱"
 
 #: ../src/virtManager/createnet.py:316
-#, fuzzy
 msgid "Network name must be non-blank and less than 50 characters"
-msgstr "系統名稱不可留白，但必須小於 50 個字元，並不包括空白字元。"
+msgstr "網路名稱不可留白，並且必須小於 50 個字元"
 
 #: ../src/virtManager/createnet.py:319
-#, fuzzy
 msgid "Network name may contain alphanumeric and '_' characters only"
-msgstr "系統名稱只能包括文數字與底線"
+msgstr "網路名稱只能包含文數字與「_」字元"
 
 #: ../src/virtManager/createnet.py:325 ../src/virtManager/createnet.py:329
 #: ../src/virtManager/createnet.py:333
-#, fuzzy
 msgid "Invalid Network Address"
-msgstr "無效的儲存位址"
+msgstr "無效的網路位址"
 
 #: ../src/virtManager/createnet.py:326
 msgid "The network address could not be understood"
-msgstr ""
+msgstr "無法理解網路位址"
 
 #: ../src/virtManager/createnet.py:330
 msgid "The network must be an IPv4 address"
-msgstr ""
+msgstr "網路必須為一組 IPv4 位址"
 
 #: ../src/virtManager/createnet.py:334
 msgid "The network prefix must be at least /4 (16 addresses)"
-msgstr ""
+msgstr "網路前綴字元必須至少含有 /4（16 個位址）"
 
 #: ../src/virtManager/createnet.py:337
-#, fuzzy
 msgid "Check Network Address"
-msgstr "無效的儲存位址"
+msgstr "檢查網路位址"
 
 #: ../src/virtManager/createnet.py:338
 msgid ""
 "The network should normally use a private IPv4 address. Use this non-private "
 "address anyway?"
-msgstr ""
+msgstr "網路一般應使用私密的 IPv4 位址。您是否還是希望使用這組非私密的位址？"
 
 #: ../src/virtManager/createnet.py:347 ../src/virtManager/createnet.py:350
 #: ../src/virtManager/createnet.py:354 ../src/virtManager/createnet.py:357
-#, fuzzy
 msgid "Invalid DHCP Address"
-msgstr "無效的 PV 媒體位址"
+msgstr "無效的 DHCP 位址"
 
 #: ../src/virtManager/createnet.py:348
 msgid "The DHCP start address could not be understood"
-msgstr ""
+msgstr "無法理解 DHCP 的起始位址"
 
 #: ../src/virtManager/createnet.py:351
 msgid "The DHCP end address could not be understood"
-msgstr ""
+msgstr "無法理解 DHCP 的結束位址"
 
 #: ../src/virtManager/createnet.py:355
 #, python-format
 msgid "The DHCP start address is not with the network %s"
-msgstr ""
+msgstr "DHCP 的起始位址不屬於網路 %s"
 
 #: ../src/virtManager/createnet.py:358
 #, python-format
 msgid "The DHCP end address is not with the network %s"
-msgstr ""
+msgstr "DHCP 的結束位址不屬於網路 %s"
 
 #: ../src/virtManager/createnet.py:363
-#, fuzzy
 msgid "Invalid forwarding mode"
-msgstr "無效的儲存位址"
+msgstr "無效的轉發模式"
 
 #: ../src/virtManager/createnet.py:364
 msgid "Please select where the traffic should be forwarded"
-msgstr ""
+msgstr "請選擇流量應該被轉發至何處"
 
-#: ../src/virtManager/engine.py:318
+#: ../src/virtManager/engine.py:284
 #, python-format
 msgid "Error bringing up domain details: %s"
-msgstr ""
+msgstr "開啟網域詳細資料時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:429
+#: ../src/virtManager/engine.py:392
 msgid "Saving virtual machines over remote connections is not yet supported."
-msgstr ""
+msgstr "還未支援透過遠端連線來儲存虛擬機器。"
 
-#: ../src/virtManager/engine.py:440
+#: ../src/virtManager/engine.py:403
 msgid "Save Virtual Machine"
 msgstr "儲存虛擬機器"
 
-#: ../src/virtManager/engine.py:455
+#: ../src/virtManager/engine.py:418
 msgid "Saving Virtual Machine"
 msgstr "虛擬機器儲存中"
 
-#: ../src/virtManager/engine.py:460
+#: ../src/virtManager/engine.py:423
 #, python-format
 msgid "Error saving domain: %s"
-msgstr ""
+msgstr "儲存網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:478
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:441
+#, python-format
 msgid "About to poweroff virtual machine %s"
-msgstr "即將刪除虛擬機器 %s"
+msgstr "即將關閉虛擬機器 %s"
 
-#: ../src/virtManager/engine.py:478
-#, fuzzy
+#: ../src/virtManager/engine.py:441
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss. Are you sure?"
-msgstr "這會立即刪除虛擬機器，並造成其磁碟映像檔損毀。您確定要這樣做嗎？"
+msgstr "這將會立即在不關閉作業系統的情況下關閉虛擬機器，這可能會造成資料遺失，您確定要這樣做嗎？"
 
-#: ../src/virtManager/engine.py:484 ../src/virtManager/engine.py:547
-#: ../src/virtManager/engine.py:563
+#: ../src/virtManager/engine.py:447 ../src/virtManager/engine.py:510
+#: ../src/virtManager/engine.py:526
 #, python-format
 msgid "Error shutting down domain: %s"
-msgstr ""
+msgstr "關閉網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:501
+#: ../src/virtManager/engine.py:464
 #, python-format
 msgid "Error pausing domain: %s"
-msgstr ""
+msgstr "暫停網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:517
+#: ../src/virtManager/engine.py:480
 #, python-format
 msgid "Error unpausing domain: %s"
-msgstr ""
+msgstr "再次啟用網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:533
+#: ../src/virtManager/engine.py:496
 #, python-format
 msgid "Error starting domain: %s"
-msgstr ""
+msgstr "啟動網域時發生錯誤：%s"
 
-#: ../src/virtManager/addhardware.py:239
+#: ../src/virtManager/addhardware.py:238
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
-msgstr ""
+msgstr "驗證硬體輸入時發生了 Uncaught error：%s"
 
-#: ../src/virtManager/addhardware.py:409 ../src/virtManager/create.py:581
+#: ../src/virtManager/addhardware.py:410 ../src/virtManager/create.py:581
 msgid "Shared physical device"
-msgstr ""
+msgstr "共享的實體裝置"
 
-#: ../src/virtManager/addhardware.py:412 ../src/virtManager/create.py:584
-#, fuzzy
+#: ../src/virtManager/addhardware.py:413 ../src/virtManager/create.py:584
 msgid "Virtual network"
-msgstr "虛擬機器(_M)"
+msgstr "虛擬網路"
 
-#: ../src/virtManager/addhardware.py:415 ../src/virtManager/create.py:587
+#: ../src/virtManager/addhardware.py:416 ../src/virtManager/create.py:587
 msgid "Usermode networking"
-msgstr ""
+msgstr "用戶模式的網路作業"
 
-#: ../src/virtManager/addhardware.py:429
+#: ../src/virtManager/addhardware.py:430
 msgid "Absolute movement"
-msgstr ""
+msgstr "絕對動作"
 
-#: ../src/virtManager/addhardware.py:431
+#: ../src/virtManager/addhardware.py:432
 msgid "Relative movement"
-msgstr ""
+msgstr "相對動作"
 
-#: ../src/virtManager/addhardware.py:436 ../src/virtManager/addhardware.py:883
-#: ../src/virtManager/details.py:894
+#: ../src/virtManager/addhardware.py:437 ../src/virtManager/addhardware.py:884
+#: ../src/virtManager/details.py:944
 msgid "VNC server"
-msgstr ""
+msgstr "VNC 伺服器"
 
 #. XXX inclined to just not give this choice at all
-#: ../src/virtManager/addhardware.py:438 ../src/virtManager/addhardware.py:885
-#: ../src/virtManager/details.py:896
+#: ../src/virtManager/addhardware.py:439 ../src/virtManager/addhardware.py:886
+#: ../src/virtManager/details.py:946
 msgid "Local SDL window"
-msgstr ""
+msgstr "本地 SDL 視窗"
 
-#: ../src/virtManager/addhardware.py:446
+#: ../src/virtManager/addhardware.py:447
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
-#: ../src/virtManager/addhardware.py:455 ../src/virtManager/addhardware.py:456
-#: ../src/virtManager/addhardware.py:457 ../src/virtManager/addhardware.py:458
-#: ../src/virtManager/details.py:912 ../src/virtManager/details.py:913
+#: ../src/virtManager/addhardware.py:456 ../src/virtManager/addhardware.py:457
+#: ../src/virtManager/addhardware.py:458 ../src/virtManager/addhardware.py:459
+#: ../src/virtManager/details.py:962 ../src/virtManager/details.py:963
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
-#: ../src/virtManager/addhardware.py:520
-#, fuzzy
+#: ../src/virtManager/addhardware.py:521
 msgid "Unable to complete install: "
-msgstr "無法啟動 GTK："
+msgstr "無法完成安裝："
 
-#: ../src/virtManager/addhardware.py:522 ../src/virtManager/addhardware.py:564
-#: ../src/virtManager/addhardware.py:566 ../src/virtManager/addhardware.py:585
+#: ../src/virtManager/addhardware.py:523 ../src/virtManager/addhardware.py:565
+#: ../src/virtManager/addhardware.py:567 ../src/virtManager/addhardware.py:586
 #: ../src/virtManager/create.py:738
 #, python-format
 msgid "Unable to complete install: '%s'"
-msgstr ""
-
-#: ../src/virtManager/addhardware.py:527
-#, fuzzy
-msgid "Creating Storage File"
-msgstr "指定或建立新的儲存檔案"
+msgstr "無法完成安裝：「%s」"
 
 #: ../src/virtManager/addhardware.py:528
-#, fuzzy
+msgid "Creating Storage File"
+msgstr "建立儲存檔案"
+
+#: ../src/virtManager/addhardware.py:529
 msgid "Allocation of disk storage may take a few minutes "
-msgstr "分配磁碟空間、"
+msgstr "分配磁碟空間可能會花上幾分鐘的時間"
 
-#: ../src/virtManager/addhardware.py:546
+#: ../src/virtManager/addhardware.py:530 ../src/virtManager/create.py:683
+msgid "to complete."
+msgstr "才能完成。"
+
+#: ../src/virtManager/addhardware.py:547
 msgid "Are you sure you want to add this device?"
-msgstr ""
+msgstr "您是否確定要新增此裝置？"
 
-#: ../src/virtManager/addhardware.py:548
+#: ../src/virtManager/addhardware.py:549
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next VM shutdown?\n"
 "\n"
 "Warning: this will overwrite any other changes that require a VM reboot."
 msgstr ""
+"此裝置無法連至執行中的機器。您是否希望此裝置在下次關閉 VM 時可使用？\n"
+"\n"
+"警告：這會將任何需要 VM 重新啟動的變更給覆寫過去。"
 
-#: ../src/virtManager/addhardware.py:592 ../src/virtManager/create.py:773
+#: ../src/virtManager/addhardware.py:593 ../src/virtManager/create.py:773
 msgid "Locate Storage Partition"
 msgstr "指定儲存分割區"
 
-#: ../src/virtManager/addhardware.py:598 ../src/virtManager/create.py:778
+#: ../src/virtManager/addhardware.py:599 ../src/virtManager/create.py:778
 msgid "Locate or Create New Storage File"
 msgstr "指定或建立新的儲存檔案"
 
-#: ../src/virtManager/addhardware.py:711
-#, fuzzy
-msgid "Hardware Type Required"
-msgstr "所需之硬體支援"
-
 #: ../src/virtManager/addhardware.py:712
-msgid "You must specify what type of hardware to add"
-msgstr ""
+msgid "Hardware Type Required"
+msgstr "所需之硬體類型"
 
-#: ../src/virtManager/addhardware.py:717
-#, fuzzy
-msgid "Storage Path Required"
-msgstr "需要 ISO 映像檔的路徑"
+#: ../src/virtManager/addhardware.py:713
+msgid "You must specify what type of hardware to add"
+msgstr "您必須指定所要新增的硬體類型為何"
 
 #: ../src/virtManager/addhardware.py:718
-#, fuzzy
-msgid "You must specify a partition or a file for disk storage."
-msgstr "您必須指定一個分割區或檔案，以供儲存客座端安裝之用"
+msgid "Storage Path Required"
+msgstr "需要儲存路徑"
 
-#: ../src/virtManager/addhardware.py:721
-#, fuzzy
-msgid "Target Device Required"
-msgstr "需要安裝媒體"
+#: ../src/virtManager/addhardware.py:719
+msgid "You must specify a partition or a file for disk storage."
+msgstr "您必須指定一個分割區或檔案，以供磁碟儲存之用。"
 
 #: ../src/virtManager/addhardware.py:722
+msgid "Target Device Required"
+msgstr "需要目標裝置"
+
+#: ../src/virtManager/addhardware.py:723
 msgid "You must select a target device for the disk"
-msgstr ""
+msgstr "您必須為磁碟選擇一個目標裝置"
 
-#: ../src/virtManager/addhardware.py:754
-#, fuzzy
+#: ../src/virtManager/addhardware.py:755
 msgid "Invalid Storage Parameters"
-msgstr "無效的儲存位址"
+msgstr "無效的儲存參數"
 
-#: ../src/virtManager/addhardware.py:758 ../src/virtManager/create.py:1026
+#: ../src/virtManager/addhardware.py:759 ../src/virtManager/create.py:1026
 msgid "Not Enough Free Space"
-msgstr ""
-
-#: ../src/virtManager/addhardware.py:763 ../src/virtManager/create.py:1031
-#, python-format
-msgid "Disk \"%s\" is already in use by another guest!"
-msgstr ""
+msgstr "可用空間不足"
 
 #: ../src/virtManager/addhardware.py:764 ../src/virtManager/create.py:1031
+#, python-format
+msgid "Disk \"%s\" is already in use by another guest!"
+msgstr "磁碟「%s」已被其它客座端使用！"
+
+#: ../src/virtManager/addhardware.py:765 ../src/virtManager/create.py:1031
 msgid "Do you really want to use the disk ?"
-msgstr ""
+msgstr "您是否希望使用該磁碟？"
 
-#: ../src/virtManager/addhardware.py:771 ../src/virtManager/create.py:1038
+#: ../src/virtManager/addhardware.py:772 ../src/virtManager/create.py:1038
 msgid "Virtual Network Required"
-msgstr ""
+msgstr "需要虛擬網路"
 
-#: ../src/virtManager/addhardware.py:772 ../src/virtManager/create.py:1039
+#: ../src/virtManager/addhardware.py:773 ../src/virtManager/create.py:1039
 msgid "You must select one of the virtual networks"
-msgstr ""
+msgstr "您必須選擇其中一個虛擬網路"
 
-#: ../src/virtManager/addhardware.py:775 ../src/virtManager/create.py:1042
-#, fuzzy
+#: ../src/virtManager/addhardware.py:776 ../src/virtManager/create.py:1042
 msgid "Physical Device Required"
-msgstr "需要安裝媒體"
+msgstr "需要實體裝置"
 
-#: ../src/virtManager/addhardware.py:776 ../src/virtManager/create.py:1043
+#: ../src/virtManager/addhardware.py:777 ../src/virtManager/create.py:1043
 msgid "You must select one of the physical devices"
-msgstr ""
+msgstr "您必須選擇其中一個實體裝置"
 
-#: ../src/virtManager/addhardware.py:782 ../src/virtManager/addhardware.py:788
-#: ../src/virtManager/create.py:1053
-#, fuzzy
+#: ../src/virtManager/addhardware.py:783 ../src/virtManager/addhardware.py:789
+#: ../src/virtManager/create.py:1049
 msgid "Invalid MAC address"
-msgstr "無效的 PV 媒體位址"
+msgstr "無效的 MAC 位址"
 
-#: ../src/virtManager/addhardware.py:783 ../src/virtManager/create.py:1054
+#: ../src/virtManager/addhardware.py:784 ../src/virtManager/create.py:1050
 msgid "No MAC address was entered. Please enter a valid MAC address."
-msgstr ""
+msgstr "未輸入任何 MAC 位址。請輸入一組有效的 MAC 位址。"
 
-#: ../src/virtManager/addhardware.py:801
+#: ../src/virtManager/addhardware.py:802
 msgid "Unsupported networking type"
-msgstr ""
+msgstr "不被支援的網路作業類型"
 
-#: ../src/virtManager/addhardware.py:803
-#, fuzzy
+#: ../src/virtManager/addhardware.py:804
 msgid "Invalid Network Parameter"
-msgstr "無效的系統名稱"
+msgstr "無效的網路參數"
 
-#: ../src/virtManager/addhardware.py:808 ../src/virtManager/addhardware.py:811
-#: ../src/virtManager/create.py:1075 ../src/virtManager/create.py:1077
+#: ../src/virtManager/addhardware.py:809 ../src/virtManager/addhardware.py:812
+#: ../src/virtManager/create.py:1083 ../src/virtManager/create.py:1085
 msgid "Mac address collision"
-msgstr ""
+msgstr "MAC 位址衝突"
 
-#: ../src/virtManager/addhardware.py:812 ../src/virtManager/create.py:1078
+#: ../src/virtManager/addhardware.py:813 ../src/virtManager/create.py:1086
 msgid "Are you sure you want to use this address?"
-msgstr ""
+msgstr "您確定要使用此位址？"
 
-#: ../src/virtManager/addhardware.py:827
+#: ../src/virtManager/addhardware.py:828
 msgid "Graphics device parameter error"
-msgstr ""
+msgstr "圖形裝置參數發生錯誤"
 
-#: ../src/virtManager/addhardware.py:847 ../src/virtManager/create.py:1143
+#: ../src/virtManager/addhardware.py:848 ../src/virtManager/create.py:1154
 msgid "Bridge"
-msgstr ""
+msgstr "橋接"
 
-#: ../src/virtManager/addhardware.py:849 ../src/virtManager/create.py:1145
+#: ../src/virtManager/addhardware.py:850 ../src/virtManager/create.py:1156
 msgid "Not bridged"
-msgstr ""
+msgstr "未橋接"
 
-#: ../src/virtManager/addhardware.py:875 ../src/virtManager/details.py:866
+#: ../src/virtManager/addhardware.py:876 ../src/virtManager/details.py:916
 msgid "EvTouch USB Graphics Tablet"
-msgstr ""
+msgstr "EvTouch USB 圖形面板"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:879 ../src/virtManager/details.py:868
+#: ../src/virtManager/addhardware.py:880 ../src/virtManager/details.py:918
 msgid "Generic USB Mouse"
-msgstr ""
+msgstr "一般 USB 滑鼠"
 
 #: ../src/virtManager/create.py:306 ../src/virtManager/createvol.py:145
 #: ../src/virtManager/createpool.py:245
 #, python-format
 msgid "Uncaught error validating input: %s"
-msgstr ""
+msgstr "驗證輸入時發生了 uncaught error：%s"
 
 #: ../src/virtManager/create.py:553
 msgid "Paravirtualized"
@@ -2737,19 +2546,19 @@ msgstr "完全虛擬化"
 
 #: ../src/virtManager/create.py:621
 msgid "UUID Error"
-msgstr ""
+msgstr "UUID 錯誤"
 
 #: ../src/virtManager/create.py:628
 msgid "Failed to set up usermode networking"
-msgstr ""
+msgstr "無法設定用戶模式網路作業"
 
 #: ../src/virtManager/create.py:642
 msgid "Error setting up graphics device:"
-msgstr ""
+msgstr "設定圖形裝置時發生了錯誤："
 
 #: ../src/virtManager/create.py:650
 msgid "Error setting up sound device:"
-msgstr ""
+msgstr "設定音效裝置時發生了錯誤："
 
 #: ../src/virtManager/create.py:679
 msgid "Creating Virtual Machine"
@@ -2759,9 +2568,17 @@ msgstr "建立虛擬機器"
 msgid "The virtual machine is now being created. "
 msgstr "正在建立虛擬機器。"
 
+#: ../src/virtManager/create.py:681
+msgid "Allocation of disk storage and retrieval of "
+msgstr "分配磁碟空間以及"
+
+#: ../src/virtManager/create.py:682
+msgid "the installation images may take a few minutes "
+msgstr "取得安裝映像檔可能會花上幾分鐘"
+
 #: ../src/virtManager/create.py:724
 msgid "Guest installation failed to complete"
-msgstr ""
+msgstr "客座端安裝並未完成"
 
 #: ../src/virtManager/create.py:743
 msgid "Locate ISO Image"
@@ -2772,14 +2589,12 @@ msgid "Invalid System Name"
 msgstr "無效的系統名稱"
 
 #: ../src/virtManager/create.py:926
-#, fuzzy
 msgid "Invalid FV OS Type"
-msgstr "無效的 FV 媒體位址"
+msgstr "無效的 FV OS 類型"
 
 #: ../src/virtManager/create.py:933
-#, fuzzy
 msgid "Invalid FV OS Variant"
-msgstr "無效的 FV 媒體位址"
+msgstr "無效的 FV OS 格式"
 
 #: ../src/virtManager/create.py:948
 msgid "ISO Path Not Found"
@@ -2787,234 +2602,241 @@ msgstr "找不到 ISO 映像檔的路徑"
 
 #: ../src/virtManager/create.py:956
 msgid "CD-ROM Path Error"
-msgstr ""
+msgstr "光碟路徑錯誤"
 
 #: ../src/virtManager/create.py:961
 msgid "An install url is required."
-msgstr ""
+msgstr "需要一個安裝網址。"
 
 #: ../src/virtManager/create.py:965
 msgid "Invalid Install URL"
-msgstr ""
+msgstr "無效的安裝網址"
 
 #: ../src/virtManager/create.py:971
-#, fuzzy
 msgid "Kickstart URL Error"
-msgstr "Kickstart 的網址(_R)："
+msgstr "Kickstart 網址錯誤"
 
 #: ../src/virtManager/create.py:972
 msgid "Kickstart location must be an NFS, HTTP or FTP source"
-msgstr ""
+msgstr "Kickstart 的位置必須是個 NFS、HTTP 或是 FTP 來源"
 
 #: ../src/virtManager/create.py:987
 msgid "Storage Address Required"
 msgstr "需要儲存位址"
 
 #: ../src/virtManager/create.py:988
-msgid ""
-"You must specify a partition or a file for storage for the guest install"
+msgid "You must specify a partition or a file for storage for the guest install"
 msgstr "您必須指定一個分割區或檔案，以供儲存客座端安裝之用"
 
 #: ../src/virtManager/create.py:1022
-#, fuzzy
 msgid "Invalid Storage Address"
 msgstr "無效的儲存位址"
 
-#: ../src/virtManager/create.py:1047
-#, fuzzy
-msgid "Invalid Physical Device"
-msgstr "需要安裝媒體"
-
-#: ../src/virtManager/create.py:1048
-msgid "The selected physical device must be bridged."
-msgstr ""
+#: ../src/virtManager/create.py:1067
+msgid "Network Parameter Error"
+msgstr "網路參數錯誤"
 
 #: ../src/virtManager/create.py:1071
-#, fuzzy
-msgid "Network Parameter Error"
-msgstr "網路用量："
+msgid "Virtual Network is Inactive"
+msgstr "虛擬網路未啟用"
 
-#: ../src/virtManager/create.py:1086
+#: ../src/virtManager/create.py:1072
+#, python-format
+msgid "Virtual Network '%s' is not active. Would you like to start the network now?"
+msgstr "虛擬網路「%s」未啟用。您是否希望現在啟用網路？"
+
+#: ../src/virtManager/create.py:1094
 msgid "VCPU Count Error"
-msgstr ""
+msgstr "VCPU 計數錯誤"
 
-#: ../src/virtManager/create.py:1091
+#: ../src/virtManager/create.py:1099
 msgid "Memory Amount Error"
-msgstr ""
+msgstr "記憶體數量錯誤"
 
-#: ../src/virtManager/create.py:1096
+#: ../src/virtManager/create.py:1104
 msgid "Max Memory Amount Error"
-msgstr ""
+msgstr "最大記憶體數量錯誤"
 
 #: ../src/virtManager/createvol.py:158
-#, fuzzy
 msgid "Creating storage volume..."
-msgstr "指定或建立新的儲存檔案"
+msgstr "建立儲存卷冊..."
 
 #: ../src/virtManager/createvol.py:159
 msgid "Creating the storage volume may take a while..."
-msgstr ""
+msgstr "建立儲存卷冊可能會花上一段時間..."
 
 #: ../src/virtManager/createvol.py:193
 #, python-format
 msgid "Error creating vol: %s"
-msgstr ""
+msgstr "建立 vol 時發生錯誤：%s"
 
 #: ../src/virtManager/createvol.py:213
-#, fuzzy
 msgid "Volume Parameter Error"
-msgstr "網路用量："
+msgstr "卷冊參數錯誤"
 
 #: ../src/virtManager/createpool.py:222
 msgid "Choose source path"
-msgstr ""
+msgstr "選擇來源路徑"
 
 #: ../src/virtManager/createpool.py:228
 msgid "Choose target directory"
-msgstr ""
+msgstr "選擇目標目錄"
 
 #: ../src/virtManager/createpool.py:261
-#, fuzzy
 msgid "Creating storage pool..."
-msgstr "指定或建立新的儲存檔案"
+msgstr "建立儲存 pool..."
 
 #: ../src/virtManager/createpool.py:262
 msgid "Creating the storage pool may take a while..."
-msgstr ""
+msgstr "建立儲存 pool 可能會花上一段時間..."
 
 #: ../src/virtManager/createpool.py:295
 #, python-format
 msgid "Error creating pool: %s"
-msgstr ""
+msgstr "建立 pool 時發生了錯誤：%s"
 
 #: ../src/virtManager/createpool.py:324 ../src/virtManager/createpool.py:343
-#, fuzzy
 msgid "Pool Parameter Error"
-msgstr "網路用量："
+msgstr "Pool 參數錯誤"
 
 #: ../src/virtManager/createpool.py:348
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
-msgstr ""
+msgstr "建置一個此類型的 pool 會將來源裝置格式化。您是否希望「建置」這個 pool？"
 
 #: ../src/virtManager/error.py:29
 msgid "Error"
-msgstr ""
+msgstr "錯誤"
 
 #. Expander section with details.
 #: ../src/virtManager/error.py:42
-#, fuzzy
 msgid "Details"
-msgstr "詳細資料(_D)"
+msgstr "詳細資料"
 
 #: ../src/virtManager/error.py:77
-#, fuzzy
 msgid "Input Error"
-msgstr "簡介"
-
-#: ../src/virtManager/serialcon.py:37
-msgid "serial console"
-msgstr "序列埠主控台"
+msgstr "輸入錯誤"
 
 #: ../src/virtManager/asyncjob.py:103
-#, fuzzy
 msgid "Completed"
-msgstr "完成"
+msgstr "已完成"
 
-#: ../src/virtManager/details.py:349
+#: ../src/virtManager/details.py:173
+msgid "Close tab"
+msgstr "關閉分頁"
+
+#: ../src/virtManager/details.py:367
 msgid "Press Ctrl+Alt to release pointer."
-msgstr "按下 Ctrl+Alt 釋放指標。"
+msgstr "按下 Ctrl+Alt 來釋放指標。"
 
-#: ../src/virtManager/details.py:357
+#: ../src/virtManager/details.py:375
 msgid "Pointer grabbed"
 msgstr "已取得指標"
 
-#: ../src/virtManager/details.py:358
+#: ../src/virtManager/details.py:376
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer press the key pair Ctrl+Alt"
-msgstr ""
-"滑鼠指標已經限制在虛擬主控台的視窗裡。要讓指標回到正常模式，請按 Ctrl+Alt"
+msgstr "滑鼠指標已經限制在虛擬主控台的視窗裡。若要讓指標回到正常模式，請按下 Ctrl+Alt 組合鍵"
 
-#: ../src/virtManager/details.py:361
+#: ../src/virtManager/details.py:379
 msgid "Do not show this notification in the future"
-msgstr ""
+msgstr "以後不顯示此通知"
 
-#: ../src/virtManager/details.py:682
+#: ../src/virtManager/details.py:458
+msgid "No serial devices found"
+msgstr "未發現任何序列裝置"
+
+#: ../src/virtManager/details.py:469
+msgid "Serial console not yet supported over remote connection."
+msgstr "不支援透過遠端連線來使用序列主控台。"
+
+#: ../src/virtManager/details.py:472
+msgid "Serial console not available for inactive guest."
+msgstr "序列主控台無法使用於未啟用的客座端。"
+
+#: ../src/virtManager/details.py:474
+#, python-format
+msgid "Console for device type '%s' not yet supported."
+msgstr "裝置類型「%s」的主控台還未被支援。"
+
+#: ../src/virtManager/details.py:477
+#, python-format
+msgid "Can not access console path '%s'."
+msgstr "無法存取主控台路徑「%s」。"
+
+#: ../src/virtManager/details.py:732
 msgid "paused"
 msgstr "已暫停"
 
-#: ../src/virtManager/details.py:695
+#: ../src/virtManager/details.py:745
 msgid "Console not available while paused"
-msgstr ""
+msgstr "無法在暫停時使用主控台"
 
-#: ../src/virtManager/details.py:856
-#, fuzzy
+#: ../src/virtManager/details.py:906
 msgid "Hypervisor Default"
-msgstr "其他 hypervisor(_O)"
+msgstr "Hypervisor 預設值"
 
-#: ../src/virtManager/details.py:870
+#: ../src/virtManager/details.py:920
 msgid "Xen Mouse"
-msgstr ""
+msgstr "Xen 滑鼠"
 
-#: ../src/virtManager/details.py:872
+#: ../src/virtManager/details.py:922
 msgid "PS/2 Mouse"
-msgstr ""
+msgstr "PS/2 滑鼠"
 
-#: ../src/virtManager/details.py:877
+#: ../src/virtManager/details.py:927
 msgid "Absolute Movement"
-msgstr ""
+msgstr "絕對動作"
 
-#: ../src/virtManager/details.py:879
+#: ../src/virtManager/details.py:929
 msgid "Relative Movement"
-msgstr ""
+msgstr "相對動作"
 
-#: ../src/virtManager/details.py:946
-#, fuzzy
+#: ../src/virtManager/details.py:996
 msgid "(Primary Console)"
-msgstr "序列埠主控台(_S)"
+msgstr "（主要主控台）"
 
-#: ../src/virtManager/details.py:997 ../src/virtManager/details.py:1090
+#: ../src/virtManager/details.py:1047 ../src/virtManager/details.py:1140
 msgid "Guest not running"
-msgstr ""
+msgstr "客座端沒有在運作"
 
-#: ../src/virtManager/details.py:1000
+#: ../src/virtManager/details.py:1050
 msgid "Guest has crashed"
-msgstr ""
+msgstr "客座端當機"
 
-#: ../src/virtManager/details.py:1011
-msgid ""
-"TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
-msgstr ""
+#: ../src/virtManager/details.py:1061
+msgid "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
+msgstr "TCP/IP 錯誤：連至 hypervisor 主機的 VNC 連線被拒絕或是斷線了！"
 
-#: ../src/virtManager/details.py:1100
+#: ../src/virtManager/details.py:1150
 msgid "Console not configured for guest"
-msgstr ""
+msgstr "主控台尚未針對於客座端進行配置"
 
-#: ../src/virtManager/details.py:1112
+#: ../src/virtManager/details.py:1162
 msgid "Console not supported for guest"
-msgstr ""
+msgstr "客座端不支援主控台"
 
-#: ../src/virtManager/details.py:1116
+#: ../src/virtManager/details.py:1166
 msgid "Console is not yet active for guest"
-msgstr ""
+msgstr "客座端還無法啟用主控台"
 
-#: ../src/virtManager/details.py:1120
+#: ../src/virtManager/details.py:1170
 msgid "Connecting to console for guest"
-msgstr ""
+msgstr "連至客座端的主控台"
 
-#: ../src/virtManager/details.py:1153
+#: ../src/virtManager/details.py:1203
 msgid "Unsupported console authentication type"
-msgstr ""
+msgstr "未支援的主控台驗證類型"
 
 #. If someone feels kind they could extend this code to allow
 #. user to choose what image format they'd like to save in....
-#: ../src/virtManager/details.py:1187
+#: ../src/virtManager/details.py:1237
 msgid "Save Virtual Machine Screenshot"
 msgstr "儲存虛擬機器的畫面"
 
-#: ../src/virtManager/details.py:1217
+#: ../src/virtManager/details.py:1267
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -3023,155 +2845,161 @@ msgstr ""
 "擷取畫面已存至：\n"
 "%s"
 
-#: ../src/virtManager/details.py:1218
+#: ../src/virtManager/details.py:1268
 msgid "Screenshot saved"
 msgstr "擷取畫面已存檔"
 
-#: ../src/virtManager/details.py:1282
+#: ../src/virtManager/details.py:1396
 #, python-format
 msgid "Error changing memory values: %s"
-msgstr ""
+msgstr "更改記憶體數值時發生錯誤：%s"
 
-#: ../src/virtManager/details.py:1297
+#: ../src/virtManager/details.py:1411
 #, python-format
 msgid "Error changing autostart value: %s"
-msgstr ""
+msgstr "更改 autostart 值的時候發生錯誤：%s"
 
-#: ../src/virtManager/details.py:1305
+#: ../src/virtManager/details.py:1419
 #, python-format
 msgid "Error changing boot device: %s"
-msgstr ""
+msgstr "更改 boot 裝置時發生錯誤：%s"
 
-#: ../src/virtManager/details.py:1334
+#: ../src/virtManager/details.py:1448
 #, python-format
 msgid "Error Removing Network: %s"
-msgstr ""
+msgstr "移除網路時發生錯誤：%s"
 
-#: ../src/virtManager/details.py:1495
+#: ../src/virtManager/details.py:1609
 msgid "Tablet"
-msgstr ""
+msgstr "面板"
 
-#: ../src/virtManager/details.py:1497
-#, fuzzy
+#: ../src/virtManager/details.py:1611
 msgid "Mouse"
-msgstr "暫停"
+msgstr "滑鼠"
 
-#: ../src/virtManager/details.py:1537
+#: ../src/virtManager/details.py:1651
 #, python-format
 msgid "Sound: %s"
-msgstr ""
+msgstr "音效：%s"
 
-#: ../src/virtManager/details.py:1629
+#: ../src/virtManager/details.py:1743
 msgid "No Boot Device"
-msgstr ""
+msgstr "沒有開機裝置"
 
-#: ../src/virtManager/details.py:1649
+#: ../src/virtManager/details.py:1763
 #, python-format
 msgid "Error Removing CDROM: %s"
-msgstr ""
+msgstr "移除光碟時發生錯誤：%s"
 
-#: ../src/virtManager/details.py:1666
+#: ../src/virtManager/details.py:1780
 #, python-format
 msgid "Error Connecting CDROM: %s"
-msgstr ""
+msgstr "連結光碟時發生錯誤：%s"
 
-#: ../src/virtManager/details.py:1680
+#: ../src/virtManager/details.py:1794
 msgid "Are you sure you want to remove this device?"
-msgstr ""
+msgstr "您是否確定要移除此裝置？"
 
-#: ../src/virtManager/details.py:1682
+#: ../src/virtManager/details.py:1796
 msgid ""
 "This device could not be removed from the running machine. Would you like to "
 "remove the device after the next VM shutdown? \n"
 "\n"
 "Warning: this will overwrite any other changes that require a VM reboot."
 msgstr ""
+"此裝置無法由運作中的機器上移除。您是否希望在下次 VM 關機時移除此裝置？\n"
+"\n"
+"警告：這會將所有其它需要 VM 重新啟動的變更給覆寫過去。"
 
-#: ../src/virtManager/details.py:1697
+#: ../src/virtManager/details.py:1811
 #, python-format
 msgid "Error Removing Device: %s"
-msgstr ""
+msgstr "移除裝置時發生錯誤：%s"
 
-#: ../src/virtManager/host.py:234
-#, fuzzy, python-format
+#: ../src/virtManager/host.py:80
+msgid "Copy Volume Path"
+msgstr "複製卷冊路徑"
+
+#: ../src/virtManager/host.py:249
+#, python-format
 msgid "This will permanently delete the network '%s,' are you sure?"
-msgstr "這會立即刪除虛擬機器，並造成其磁碟映像檔損毀。您確定要這樣做嗎？"
+msgstr "這會立即將網路「%s」刪除，您確定要這樣做嗎？"
 
-#: ../src/virtManager/host.py:241
+#: ../src/virtManager/host.py:256
 #, python-format
 msgid "Error deleting network: %s"
-msgstr ""
+msgstr "刪除網路時發生錯誤：%s"
 
-#: ../src/virtManager/host.py:252
+#: ../src/virtManager/host.py:267
 #, python-format
 msgid "Error starting network: %s"
-msgstr ""
+msgstr "啟用網路時發生錯誤：%s"
 
-#: ../src/virtManager/host.py:263
+#: ../src/virtManager/host.py:278
 #, python-format
 msgid "Error stopping network: %s"
-msgstr ""
+msgstr "停止網路時發生錯誤：%s"
 
-#: ../src/virtManager/host.py:272
+#: ../src/virtManager/host.py:287
 #, python-format
 msgid "Error launching network wizard: %s"
-msgstr ""
+msgstr "啟動網路精靈時發生錯誤：%s"
 
-#: ../src/virtManager/host.py:283
+#: ../src/virtManager/host.py:298
 #, python-format
 msgid "Error setting net autostart: %s"
-msgstr ""
+msgstr "設定 net autostart 時發生錯誤：%s"
 
-#: ../src/virtManager/host.py:291 ../src/virtManager/host.py:341
-#: ../src/virtManager/host.py:519 ../src/virtManager/host.py:544
+#: ../src/virtManager/host.py:306 ../src/virtManager/host.py:356
+#: ../src/virtManager/host.py:534 ../src/virtManager/host.py:559
 msgid "On Boot"
-msgstr ""
+msgstr "開機時"
 
-#: ../src/virtManager/host.py:292 ../src/virtManager/host.py:343
-#: ../src/virtManager/host.py:375 ../src/virtManager/host.py:520
-#: ../src/virtManager/host.py:544 ../src/virtManager/host.py:581
+#: ../src/virtManager/host.py:307 ../src/virtManager/host.py:358
+#: ../src/virtManager/host.py:390 ../src/virtManager/host.py:535
+#: ../src/virtManager/host.py:559 ../src/virtManager/host.py:596
 msgid "Never"
-msgstr ""
+msgstr "永不"
 
-#: ../src/virtManager/host.py:405 ../src/virtManager/host.py:415
+#: ../src/virtManager/host.py:420 ../src/virtManager/host.py:430
 #, python-format
 msgid "Error starting pool '%s': %s"
-msgstr ""
-
-#: ../src/virtManager/host.py:424
-#, fuzzy, python-format
-msgid "This will permanently delete the pool '%s,' are you sure?"
-msgstr "這會立即刪除虛擬機器，並造成其磁碟映像檔損毀。您確定要這樣做嗎？"
-
-#: ../src/virtManager/host.py:431
-#, python-format
-msgid "Error deleting pool: %s"
-msgstr ""
+msgstr "啟用 pool「%s」時發生錯誤：%s"
 
 #: ../src/virtManager/host.py:439
-#, fuzzy, python-format
-msgid "This will permanently delete the volume '%s,' are you sure?"
-msgstr "這會立即刪除虛擬機器，並造成其磁碟映像檔損毀。您確定要這樣做嗎？"
+#, python-format
+msgid "This will permanently delete the pool '%s,' are you sure?"
+msgstr "這會將 pool「%s」永久刪除，您確定要這樣做嗎？"
 
-#: ../src/virtManager/host.py:448
+#: ../src/virtManager/host.py:446
+#, python-format
+msgid "Error deleting pool: %s"
+msgstr "刪除 pool 時發生錯誤：%s"
+
+#: ../src/virtManager/host.py:454
+#, python-format
+msgid "This will permanently delete the volume '%s,' are you sure?"
+msgstr "這會將卷冊「%s」永久刪除，您確定要這樣做嗎？"
+
+#: ../src/virtManager/host.py:463
 #, python-format
 msgid "Error deleting volume: %s"
-msgstr ""
-
-#: ../src/virtManager/host.py:459
-#, python-format
-msgid "Error launching pool wizard: %s"
-msgstr ""
+msgstr "刪除卷冊時發生錯誤：%s"
 
 #: ../src/virtManager/host.py:474
 #, python-format
-msgid "Error launching volume wizard: %s"
-msgstr ""
+msgid "Error launching pool wizard: %s"
+msgstr "啟動 pool 精靈時發生錯誤：%s"
 
-#: ../src/virtManager/host.py:511
+#: ../src/virtManager/host.py:489
+#, python-format
+msgid "Error launching volume wizard: %s"
+msgstr "啟動卷冊精靈時發生錯誤：%s"
+
+#: ../src/virtManager/host.py:526
 #, python-format
 msgid "Error setting pool autostart: %s"
-msgstr ""
+msgstr "設定 pool autostart 時發生錯誤：%s"
 
 #: ../src/virtManager/domain.py:412
 msgid "Running"
@@ -3193,14 +3021,19 @@ msgstr "已當機"
 msgid "Unknown status code"
 msgstr "未知的狀態代碼"
 
-#: ../src/virtManager/domain.py:756
+#: ../src/virtManager/domain.py:690
+#, python-format
+msgid "Error parsing domain xml: %s"
+msgstr "剖析網域 xml 時發生錯誤：%s"
+
+#: ../src/virtManager/domain.py:778
 #, python-format
 msgid "Unknown device type '%s'"
-msgstr ""
+msgstr "不明的裝置類型「%s」"
 
 #: ../src/virtManager/manager.py:331
 msgid "Restoring virtual machines over remote connections is not yet supported"
-msgstr ""
+msgstr "還未支援透過遠端連線回復虛擬機器"
 
 #. get filename
 #: ../src/virtManager/manager.py:335
@@ -3221,31 +3054,31 @@ msgstr "檔案「%s」並不是合於儲存規定的映像檔"
 msgid "Error restoring domain '%s'. Is the domain already running?"
 msgstr "回復「%s」區域失敗。該區域正在執行中嗎？"
 
-#: ../src/virtManager/manager.py:753
-#, fuzzy, python-format
+#: ../src/virtManager/manager.py:751
+#, python-format
 msgid "This will permanently delete the connection \"%s\", are you sure?"
-msgstr "這會立即刪除虛擬機器，並造成其磁碟映像檔損毀。您確定要這樣做嗎？"
+msgstr "這會將連線「%s」永久刪除，您確定要這樣做嗎？"
 
 #. are you sure you want to delete this VM?
-#: ../src/virtManager/manager.py:764
+#: ../src/virtManager/manager.py:762
 #, python-format
 msgid "This will permanently delete the vm \"%s,\" are you sure?"
-msgstr ""
+msgstr "這會將 vm「%s」永久刪除，您確定要這樣做嗎？"
 
-#: ../src/virtManager/manager.py:771
+#: ../src/virtManager/manager.py:769
 #, python-format
 msgid "Error deleting domain: %s"
-msgstr ""
+msgstr "刪除網域時發生錯誤：%s"
 
-#: ../src/virtManager/manager.py:802
+#: ../src/virtManager/manager.py:800
 msgid "ID"
 msgstr "ID"
 
-#: ../src/virtManager/manager.py:805
+#: ../src/virtManager/manager.py:803
 msgid "VCPUs"
 msgstr "VCPU"
 
-#: ../src/virtManager/manager.py:1048
+#: ../src/virtManager/manager.py:1046
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
@@ -3253,347 +3086,45 @@ msgstr ""
 "無法連上 Xen hypervisor/系統程式。\n"
 "\n"
 
-#: ../src/virtManager/manager.py:1053 ../src/virtManager/manager.py:1061
+#: ../src/virtManager/manager.py:1047 ../src/virtManager/manager.py:1056
+msgid "Verify that:\n"
+msgstr "請檢查：\n"
+
+#: ../src/virtManager/manager.py:1048
+msgid " - A Xen host kernel was booted\n"
+msgstr " - 已使用 Xen 的主機核心開機\n"
+
+#: ../src/virtManager/manager.py:1049
+msgid " - The Xen service has been started\n"
+msgstr " - Xen 服務已經啟動\n"
+
+#: ../src/virtManager/manager.py:1051 ../src/virtManager/manager.py:1059
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "連接虛擬機器管理員失敗"
 
-#: ../src/virtManager/manager.py:1055
-#, fuzzy
+#: ../src/virtManager/manager.py:1053
 msgid ""
 "Unable to open a connection to the libvirt management daemon.\n"
 "\n"
 msgstr ""
-"無法連上 Xen hypervisor/系統程式。\n"
+"無法連上 libvirt 管理員的系統程式。\n"
 "\n"
+
+#: ../src/virtManager/manager.py:1055
+#, python-format
+msgid ""
+"Libvirt URI is: %s\n"
+"\n"
+msgstr ""
+"Libvirt URI 為：%s\n"
+"\n"
+
+#: ../src/virtManager/manager.py:1057
+msgid " - The 'libvirtd' daemon has been started\n"
+msgstr " -「libvirtd」daemon 已經啟動\n"
 
 #: ../src/virtManager/util.py:53
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
-msgstr ""
+msgstr "無法建立預設的儲存 pool「%s」：%s"
 
-#~ msgid "http://virt-manager.et.redhat.com/"
-#~ msgstr "http://virt-manager.et.redhat.com/"
-
-#, fuzzy
-#~ msgid "Password Field"
-#~ msgstr "密碼："
-
-#~ msgid "Virtual Machine Console"
-#~ msgstr "虛擬機器主控台"
-
-#~ msgid "_Destroy"
-#~ msgstr "刪除(_D)"
-
-#~ msgid "_Details"
-#~ msgstr "詳細資料(_D)"
-
-#, fuzzy
-#~ msgid "\t"
-#~ msgstr "5\t"
-
-#~ msgid "/xen/demo.img"
-#~ msgstr "/xen/demo.img"
-
-#, fuzzy
-#~ msgid "256"
-#~ msgstr "256\t"
-
-#~ msgid "5 GB"
-#~ msgstr "5 GB"
-
-#~ msgid "demo"
-#~ msgstr "示範"
-
-#, fuzzy
-#~ msgid "1.59 GB of 2.2 GB"
-#~ msgstr "1GB 的 80 MB"
-
-#, fuzzy
-#~ msgid "2000 MB"
-#~ msgstr "200 MB"
-
-#, fuzzy
-#~ msgid "Net Name"
-#~ msgstr "網路用量："
-
-#, fuzzy
-#~ msgid "Net UUID"
-#~ msgstr "UUID:"
-
-#, fuzzy
-#~ msgid "Storage Location"
-#~ msgstr "_ISO 映像檔的位置："
-
-#~ msgid " free"
-#~ msgstr " free"
-
-#~ msgid " of "
-#~ msgstr " of "
-
-#~ msgid "/tmp"
-#~ msgstr "/tmp"
-
-#~ msgid "10 TB"
-#~ msgstr "10 TB"
-
-#~ msgid ""
-#~ "<b>Tip:</b> You may only increase the size of file-based storage; you "
-#~ "can't decrease its size."
-#~ msgstr "<b>提示：</b>您只能增加以檔案為基礎的儲存大小；您不能降低其大小。"
-
-#~ msgid ""
-#~ "MB\n"
-#~ "GB\n"
-#~ "TB"
-#~ msgstr ""
-#~ "MB\n"
-#~ "GB\n"
-#~ "TB"
-
-#~ msgid "Modify File Storage"
-#~ msgstr "修改檔案儲存"
-
-#~ msgid "_Mount Point (on virtual system):"
-#~ msgstr "（虛擬系統上的）掛載點(_M)："
-
-#~ msgid "_Size:"
-#~ msgstr "大小(_S)："
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid "2 GB"
-#~ msgstr "2 GB"
-
-#~ msgid "256\t"
-#~ msgstr "256\t"
-
-#~ msgid "400 MB"
-#~ msgstr "400 MB"
-
-#~ msgid "5\t"
-#~ msgstr "5\t"
-
-#, fuzzy
-#~ msgid "512 MB"
-#~ msgstr "500 MB"
-
-#, fuzzy
-#~ msgid "Architecture Select"
-#~ msgstr "CPU 架構："
-
-#~ msgid "Enable kernel / hardware acceleration"
-#~ msgstr "啟用核心 / 硬體加速"
-
-#~ msgid "FV install"
-#~ msgstr "FV 安裝"
-
-#, fuzzy
-#~ msgid "OS Type Select"
-#~ msgstr "作業系統類型(_T)："
-
-#, fuzzy
-#~ msgid "OS Variant Select"
-#~ msgstr "作業系統版本(_V)："
-
-#~ msgid "PVinstall"
-#~ msgstr "PVinstall"
-
-#~ msgid "http://"
-#~ msgstr "http://"
-
-#~ msgid ""
-#~ "i686\n"
-#~ "x86_64\n"
-#~ "ppc\n"
-#~ "sparc\n"
-#~ "mips\n"
-#~ "mipsel"
-#~ msgstr ""
-#~ "i686\n"
-#~ "x86_64\n"
-#~ "ppc\n"
-#~ "sparc\n"
-#~ "mips\n"
-#~ "mipsel"
-
-#~ msgid "para"
-#~ msgstr "次"
-
-#~ msgid "18%"
-#~ msgstr "18%"
-
-#~ msgid "200 MB"
-#~ msgstr "200 MB"
-
-#~ msgid "30 MB of 128 MB"
-#~ msgstr "128 MB 的 30 MB"
-
-#~ msgid "8"
-#~ msgstr "8"
-
-#~ msgid "80 MB of 1 GB"
-#~ msgstr "1GB 的 80 MB"
-
-#~ msgid "Virtual Machine Details"
-#~ msgstr "虛擬機器的詳細資料"
-
-#~ msgid "_Graphical Console"
-#~ msgstr "圖形化主控台(_G)"
-
-#, fuzzy
-#~ msgid "Host details..."
-#~ msgstr "機器的詳細資料..."
-
-#~ msgid "De_tails"
-#~ msgstr "詳細資料(_t)"
-
-#~ msgid "Open connection"
-#~ msgstr "開啟連線"
-
-#~ msgid "No media present"
-#~ msgstr "沒有現存的媒體"
-
-#~ msgid "to complete."
-#~ msgstr "可能需要幾分鐘的時間。"
-
-#, fuzzy
-#~ msgid "Storage Address Is Directory"
-#~ msgstr "需要儲存位址"
-
-#~ msgid ""
-#~ "You chose 'Simple File' storage for your storage method, but chose a "
-#~ "directory instead of a file. Please enter a new filename or choose an "
-#~ "existing file."
-#~ msgstr ""
-#~ "您的儲存方法選得是「簡單的檔案」；但選取的卻是目錄，而非檔案。請輸入新的檔"
-#~ "名，或選擇現有的檔案。"
-
-#~ msgid "Allocation of disk storage and retrieval of "
-#~ msgstr "分配磁碟空間、"
-
-#, fuzzy
-#~ msgid "the installation images may take a few minutes "
-#~ msgstr "取得安裝映像檔"
-
-#, fuzzy
-#~ msgid "Invalid Mac address"
-#~ msgstr "無效的儲存位址"
-
-#~ msgid "Verify that:\n"
-#~ msgstr "請檢查：\n"
-
-#~ msgid " - A Xen host kernel was booted\n"
-#~ msgstr " - 已使用 Xen 的主機核心開機\n"
-
-#~ msgid " - The Xen service has been started\n"
-#~ msgstr " - Xen 服務已經啟動\n"
-
-#, fuzzy
-#~ msgid " - The 'libvirtd' daemon has been started\n"
-#~ msgstr " - Xen 服務已經啟動\n"
-
-#~ msgid "Unable to open connection to hypervisor '%s'"
-#~ msgstr "無法連上 hypervisor「%s」"
-
-#, fuzzy
-#~ msgid "Connected"
-#~ msgstr "連接(_n)"
-
-#~ msgid "New machine..."
-#~ msgstr "新機器..."
-
-#~ msgid "_Host:"
-#~ msgstr "主系統(_H)："
-
-#~ msgid "Invalid FV media address"
-#~ msgstr "無效的 FV 媒體位址"
-
-#~ msgid "Invalid PV media address"
-#~ msgstr "無效的 PV 媒體位址"
-
-#~ msgid "Invalid system name"
-#~ msgstr "無效的系統名稱"
-
-#~ msgid "Invalid memory setting"
-#~ msgstr "無效的記憶體設定"
-
-#, fuzzy
-#~ msgid "System name must be non-blank and less than 50 characters"
-#~ msgstr "系統名稱不可留白，但必須小於 50 個字元，並不包括空白字元。"
-
-#~ msgid "System name may contain alphanumeric and '_' characters only"
-#~ msgstr "系統名稱只能包括文數字與底線"
-
-#~ msgid "Hardware Support Required"
-#~ msgstr "所需之硬體支援"
-
-#~ msgid ""
-#~ "Your hardware does not appear to support full virtualization. Only "
-#~ "paravirtualized guests will be available on this hardware."
-#~ msgstr ""
-#~ "您的硬體似乎並不支援完整的虛擬化功能。本硬體只支援次虛擬"
-#~ "（paravirtualized）客座端。"
-
-#~ msgid "You must specify an ISO location for the guest installation"
-#~ msgstr "您必須為客座端的安裝指定 ISO 映像檔的位置"
-
-#~ msgid ""
-#~ "You must specify a valid path to the ISO image for guest installation"
-#~ msgstr "您必須為安裝客座端，指定合於規定的 ISO 映像檔路徑。"
-
-#~ msgid "You must select the CDROM install media for guest installation"
-#~ msgstr "您必須為安裝客座端選擇透過光碟機安裝。"
-
-#~ msgid "URL Required"
-#~ msgstr "需要網址"
-
-#~ msgid "You must specify a URL for the install image for the guest install"
-#~ msgstr "要安裝客座端，您必須指定安裝映像檔的網址"
-
-#~ msgid "_Read only connection"
-#~ msgstr "唯讀的連線(_R)"
-
-#~ msgid "Guest Install Error"
-#~ msgstr "客座端安裝錯誤"
-
-#~ msgid "00:16:3e:"
-#~ msgstr "00:16:3e:"
-
-#~ msgid ":"
-#~ msgstr ":"
-
-#~ msgid ""
-#~ "<b>Tip:</b> Acceptable values for hex digits are the numbers 0-9 and the "
-#~ "letters A-F"
-#~ msgstr "<b>提示：</b>十六位元的可接受值為數字 0-9 與字母 A-F"
-
-#~ msgid "Add Virtual NIC"
-#~ msgstr "新增虛擬網路卡"
-
-#~ msgid "Add virtual NIC with:"
-#~ msgstr "新增虛擬網路卡，加上："
-
-#~ msgid "Randomly generated MAC address"
-#~ msgstr "隨機產生 MAC 位址"
-
-#~ msgid "mac-addr-random"
-#~ msgstr "mac-addr-random"
-
-#~ msgid "<b>Disk size:</b>"
-#~ msgstr "<b>磁碟大小：</b>"
-
-#, fuzzy
-#~ msgid ""
-#~ "Press finish to create a new virtual machine with\n"
-#~ "this configuration."
-#~ msgstr ""
-#~ "請以這設定建立新虛擬機器，並顯示\n"
-#~ "虛擬主控台。"
-
-#~ msgid ""
-#~ "<b>Tip:</b> File location paths are as seen from the physical host. Mount "
-#~ "points are as seen from the virtual machine."
-#~ msgstr ""
-#~ "<b>提示：</b>檔案位置的路徑是以主系統上的實際位置而言。掛載點則是以虛擬機"
-#~ "器的角度來看。"
