@@ -326,6 +326,8 @@ class vmmManager(gobject.GObject):
             return True
         return False
 
+    def vm_row_key(self, vm):
+        return vm.get_uuid() + ":" + vm.get_connection().get_uri()
 
     def restore_saved(self, src=None):
         conn = self.current_connection()
@@ -387,8 +389,8 @@ class vmmManager(gobject.GObject):
 
             children = model.iter_children(iter)
             while children is not None:
-                uuid = model.get_value(children, ROW_KEY)
-                del self.rows[uuid]
+                vm = model.get_value(children, ROW_HANDLE)
+                del self.rows[self.vm_row_key(vm)]
                 model.remove(children)
                 children = model.iter_children(iter)
 
@@ -459,7 +461,7 @@ class vmmManager(gobject.GObject):
 
         iter = model.append(parent, row)
         path = model.get_path(iter)
-        self.rows[vm.get_uuid()+":"+conn.get_uri()] = model[path]
+        self.rows[self.vm_row_key(vm)] = model[path]
         # Expand a connection when adding a vm to it
         self.window.get_widget("vm-list").expand_row(model.get_path(parent), False)
 
@@ -494,7 +496,7 @@ class vmmManager(gobject.GObject):
             vm = model.get_value(model.iter_nth_child(parent, row), ROW_HANDLE)
             if vm.get_uuid() == vmuuid:
                 model.remove(model.iter_nth_child(parent, row))
-                del self.rows[vmuuid]
+                del self.rows[self.vm_row_key(vm)]
                 break
 
     def vm_status_changed(self, vm, status):
@@ -518,7 +520,7 @@ class vmmManager(gobject.GObject):
                     missing = False
                 else:
                     model.remove(model.iter_nth_child(parent, row))
-                    del self.rows[vm.get_uuid()]
+                    del self.rows[self.vm_row_key(vm)]
                 break
 
         if missing and wanted:
@@ -529,10 +531,10 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
-        if not(self.rows.has_key(vm.get_uuid())):
+        if not self.rows.has_key(self.vm_row_key(vm)):
             return
 
-        row = self.rows[vm.get_uuid()]
+        row = self.rows[self.vm_row_key(vm)]
         # Handle, name, ID, status, status icon, cpu, cpu graph, vcpus, mem, mem bar, diskRead, diskWrite, netRx, netTx
         if vm.get_id() == -1:
             row[ROW_ID] = "-"
@@ -582,7 +584,7 @@ class vmmManager(gobject.GObject):
             if parent is not None:
                 child = model.iter_children(parent)
                 while child is not None:
-                    del self.rows[model.get_value(child, ROW_KEY)+":"+conn.get_uri()]
+                    del self.rows[self.vm_row_key(model.get_value(child, ROW_HANDLE))]
                     model.remove(child)
                     child = model.iter_children(parent)
         model.row_changed(row.path, row.iter)
@@ -1068,7 +1070,7 @@ class vmmManager(gobject.GObject):
         if parent is not None:
             child = model.iter_children(parent)
             while child is not None:
-                del self.rows[model.get_value(child, ROW_KEY)]
+                del self.rows[self.vm_row_key(model.get_value(child, ROW_HANDLE))]
                 model.remove(child)
                 child = model.iter_children(parent)
             model.remove(parent)
