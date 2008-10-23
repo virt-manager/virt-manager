@@ -643,6 +643,7 @@ class vmmCreate(gobject.GObject):
                               "".join(traceback.format_exc()))
             return False
 
+        guest.sound_devs = []
         try:
             if self.get_config_sound():
                 guest.sound_devs.append(virtinst.VirtualAudio(model="es1370"))
