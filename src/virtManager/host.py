@@ -247,7 +247,7 @@ class vmmHost(gobject.GObject):
             return
 
         result = self.err.yes_no(_("This will permanently delete the network "
-                                   "'%s,' are you sure?") % net.get_name())
+                                   "'%s', are you sure?") % net.get_name())
         if not result:
             return
         try:
