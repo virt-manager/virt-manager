@@ -326,6 +326,7 @@ class vmmEngine(gobject.GObject):
         conns = self.connections.values()
         for conn in conns:
             conn["connection"].close()
+        logging.debug("Exiting app normally.")
         gtk.main_quit()
 
     def wait_for_open(self, uri):
