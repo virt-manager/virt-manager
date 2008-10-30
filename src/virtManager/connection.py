@@ -51,40 +51,6 @@ def get_local_hostname():
         logging.warning("Unable to resolve local hostname for machine")
         return "localhost"
 
-# Standard python urlparse is utterly braindead - refusing to parse URIs
-# in any useful fashion unless the 'scheme' is in some pre-defined white
-# list. Theis functions is a hacked version of urlparse
-
-def uri_split(uri):
-    username = netloc = query = fragment = ''
-    i = uri.find(":")
-    if i > 0:
-        scheme, uri = uri[:i].lower(), uri[i+1:]
-        if uri[:2] == '//':
-            netloc, uri = _splitnetloc(uri, 2)
-            offset = netloc.find("@")
-            if offset > 0:
-                username = netloc[0:offset]
-                netloc = netloc[offset+1:]
-        if '#' in uri:
-            uri, fragment = uri.split('#', 1)
-        if '?' in uri:
-            uri, query = uri.split('?', 1)
-    else:
-        scheme = uri.lower()
-
-    return scheme, username, netloc, uri, query, fragment
-
-def _splitnetloc(url, start=0):
-    for c in '/?#': # the order is important!
-        delim = url.find(c, start)
-        if delim >= 0:
-            break
-    else:
-        delim = len(url)
-    return url[start:delim], url[delim:]
-
-
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
         "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -300,55 +266,23 @@ class vmmConnection(gobject.GObject):
         return hostname
 
     def get_hostname(self, resolveLocal=False):
-        try:
-            (scheme, username, netloc, path, query, fragment) = uri_split(self.uri)
-
-            if netloc != "":
-                return netloc
-        except Exception, e:
-            logging.warning("Cannot parse URI %s: %s" % (self.uri, str(e)))
-
-        if resolveLocal:
-            return get_local_hostname()
-        return "localhost"
+        return virtinst.util.get_uri_hostname(self.uri)
 
     def get_transport(self):
-        try:
-            (scheme, username, netloc, path, query, fragment) = uri_split(self.uri)
-            if scheme:
-                offset = scheme.index("+")
-                if offset > 0:
-                    return [scheme[offset+1:], username]
-        except:
-            pass
-        return [None, None]
+        return virtinst.util.get_uri_transport(self.uri)
 
     def get_driver(self):
-        try:
-            (scheme, username, netloc, path, query, fragment) = uri_split(self.uri)
-            if scheme:
-                offset = scheme.find("+")
-                if offset > 0:
-                    return scheme[:offset]
-                return scheme
-        except Exception, e:
-            pass
-        return "xen"
+        return virtinst.util.get_uri_driver(self.uri)
 
     def get_capabilities(self):
         return virtinst.CapabilitiesParser.parse(self.vmm.getCapabilities())
 
     def is_remote(self):
-        try:
-            (scheme, username, netloc, path, query, fragment) = uri_split(self.uri)
-            if netloc == "":
-                return False
-            return True
-        except:
-            return True
+        return virtinst.util.is_uri_remote(self.uri)
 
     def is_qemu_session(self):
-        (scheme, username, netloc, path, query, fragment) = uri_split(self.uri)
+        (scheme, username, netloc, \
+         path, query, fragment) = virtinst.util.uri_split(self.uri)
         if path == "/session" and scheme.startswith("qemu"):
             return True
         return False
