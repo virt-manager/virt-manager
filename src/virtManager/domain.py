@@ -1103,4 +1103,10 @@ class vmmDomain(gobject.GObject):
             self._disk_io = self._sample_disk_io_dummy
 
 
+    def migrate(self, dictcon):
+        flags = 0
+        if self.lastStatus == libvirt.VIR_DOMAIN_RUNNING:
+            flags = libvirt.VIR_MIGRATE_LIVE
+        self.vm.migrate(self.connection.vmm, flags, None, dictcon.get_short_hostname(), 0)
+
 gobject.type_register(vmmDomain)

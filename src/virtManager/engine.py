@@ -202,6 +202,8 @@ class vmmEngine(gobject.GObject):
         self.shutdown_domain(src, uri, uuid)
     def _do_reboot_domain(self, src, uri, uuid):
         self.reboot_domain(src, uri, uuid)
+    def _do_migrate_domain(self, src, uri, uuid, desturi):
+        self.migrate_domain(uri, uuid, desturi)
     def _do_exit_app(self, src):
         self.exit_app()
 
@@ -279,6 +281,7 @@ class vmmEngine(gobject.GObject):
                 details.connect("action-reboot-domain", self._do_reboot_domain)
                 details.connect("action-exit-app", self._do_exit_app)
                 details.connect("action-view-manager", self._do_show_manager)
+                details.connect("action-migrate-domain", self._do_migrate_domain)
 
             except Exception, e:
                 self.err.show_err(_("Error bringing up domain details: %s") % str(e),
@@ -296,6 +299,7 @@ class vmmEngine(gobject.GObject):
             self.windowManager.connect("action-shutdown-domain", self._do_shutdown_domain)
             self.windowManager.connect("action-reboot-domain", self._do_reboot_domain)
             self.windowManager.connect("action-destroy-domain", self._do_destroy_domain)
+            self.windowManager.connect("action-migrate-domain", self._do_migrate_domain)
             self.windowManager.connect("action-show-console", self._do_show_console)
             self.windowManager.connect("action-show-details", self._do_show_details)
             self.windowManager.connect("action-show-preferences", self._do_show_preferences)
@@ -529,6 +533,64 @@ class vmmEngine(gobject.GObject):
         else:
             logging.warning("Reboot requested, but machine is already shutting down / shutoff")
 
+    def migrate_domain(self, uri, uuid, desturi):
+        conn = self.get_connection(uri, False)
+        vm = conn.get_vm(uuid)
+        destconn = self.get_connection(desturi, False)
+        resp = self.err.yes_no(_("%s will be migrated from %s to %s, are you sure?") % \
+                    (vm.get_name(), conn.get_hostname(), destconn.get_hostname()))
+        if resp:
+            migrate_progress = None
+            try:
+                # show progress dialog
+                migrate_progress = self.get_migrate_progress(vm.get_name(), conn.get_short_hostname(), destconn.get_short_hostname())
+                migrate_progress.show()
+                while gtk.events_pending():
+                    gtk.main_iteration()
+                # call virDomainMigrate
+                vm.migrate(destconn)
+                # close progress dialog
+                migrate_progress.destroy()
+            except Exception, e:
+                migrate_progress.destroy()
+                self.err.show_err(_("Error migrating domain: %s") % str(e),
+                                  "".join(traceback.format_exc()))
+            self.windowManager.conn_refresh_resources(conn)
+            self.windowManager.conn_refresh_resources(destconn)
+
+    def get_migrate_progress(self, vmname, hostname, desthostname):
+        migrate_progress = None
+        migrate_progress = gtk.MessageDialog(None, \
+                                            gtk.DIALOG_DESTROY_WITH_PARENT, \
+                                            gtk.MESSAGE_INFO, \
+                                            gtk.BUTTONS_NONE, \
+                                            _("%s will be migrated from %s to %s." % \
+                                            (vmname, hostname, desthostname)))
+        migrate_progress.set_title(" ")
+        return migrate_progress
+
+    def get_available_migrate_hostnames(self):
+        hostname = self.windowManager.current_connection().get_hostname()
+        driver = self.windowManager.current_connection().get_driver()
+        available_migrate_hostnames = {}
+
+        # 1. connected(ACTIVE, INACTIVE) host
+        for key in self.connections.keys():
+            if self.connections[key].has_key("connection") is True \
+            and (self.get_connection(key).get_state() == vmmConnection.STATE_ACTIVE or self.get_connection(key).get_state() == vmmConnection.STATE_INACTIVE):
+                available_migrate_hostnames[key] = self.get_connection(key).get_hostname()
+
+        # 2. remove source host
+        for key in available_migrate_hostnames.keys():
+            if available_migrate_hostnames[key] == hostname:
+                del available_migrate_hostnames[key]
+
+        # 3. remove a different host of hypervisor
+        for key in available_migrate_hostnames.keys():
+            if self.get_connection(key).get_driver() != driver:
+                del available_migrate_hostnames[key]
+
+        return available_migrate_hostnames
 
 
 gobject.type_register(vmmEngine)

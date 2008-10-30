@@ -95,6 +95,8 @@ class vmmDetails(gobject.GObject):
                             gobject.TYPE_NONE, []),
         "action-view-manager": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, []),
+        "action-migrate-domain": (gobject.SIGNAL_RUN_FIRST,
+                                  gobject.TYPE_NONE, (str,str,str)),
         }
 
 
@@ -131,6 +133,13 @@ class vmmDetails(gobject.GObject):
         menu = gtk.Menu()
         self.window.get_widget("control-shutdown").set_menu(menu)
         
+        self.migrate_menu_items = {}
+
+        self.migrate_menu_items["(None)"] = gtk.ImageMenuItem(_("(None)"))
+        self.migrate_menu_items["(None)"].show()
+        self.migrate_menu_items["(None)"].set_sensitive(False)
+        self.window.get_widget("details-menu-migrate_menu").add(self.migrate_menu_items["(None)"])
+
         rebootimg = gtk.Image()
         rebootimg.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
         shutdownimg = gtk.Image()
@@ -661,6 +670,32 @@ class vmmDetails(gobject.GObject):
     def control_vm_destroy(self, src):
         self.emit("action-destroy-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
+    def control_vm_migrate(self, src):
+        # get selected submenu(destination hostname)
+        hostname = self.window.get_widget("details-menu-migrate_menu").get_active().get_image().get_stock()[0]
+        for key in self.engine.connections.keys():
+            if self.engine.get_connection(key).get_hostname() == hostname:
+                host_uri = key
+                break
+        self.emit("action-migrate-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid(), host_uri)
+
+    def set_migrate_menu(self):
+        menu = self.window.get_widget("details-menu-migrate_menu")
+        # clear migrate-submenu
+        for submenu_item in menu.get_children():
+            submenu_item_name = submenu_item.get_image().get_stock()[0]
+            menu.remove(self.migrate_menu_items[submenu_item_name])
+
+        available_migrate_hostnames = self.engine.get_available_migrate_hostnames()
+        if len(available_migrate_hostnames) == 0:
+            menu.add(self.migrate_menu_items["(None)"])
+        else:
+            for hostname in available_migrate_hostnames.values():
+                self.migrate_menu_items[hostname] = gtk.ImageMenuItem(hostname)
+                self.migrate_menu_items[hostname].show()
+                self.migrate_menu_items[hostname].connect("activate", self.control_vm_migrate)
+                menu.add(self.migrate_menu_items[hostname])
+
     def set_pause_widget_states(self, state):
         try:
             self.ignorePause = True
@@ -706,6 +741,13 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("control-shutdown").set_sensitive(True)
             self.window.get_widget("details-menu-shutdown").set_sensitive(True)
             self.window.get_widget("details-menu-save").set_sensitive(True)
+
+        # Currently, the condition that "Migrate" become insensitive is only "readonly".
+        if vm.is_read_only():
+            self.window.get_widget("details-menu-migrate").set_sensitive(False)
+        else:
+            self.window.get_widget("details-menu-migrate").set_sensitive(True)
+            self.set_migrate_menu()
 
         if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
             if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
