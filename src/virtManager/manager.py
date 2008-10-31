@@ -159,7 +159,6 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items = {}
         self.vmmenushutdown_items = {}
         self.vmmenumigrate = gtk.Menu()
-        self.vmmenumigrate_items = {}
 
         self.vmmenu_items["run"] = gtk.ImageMenuItem("_Run")
         self.vmmenu_items["run"].set_image(self.vmmenu_icons["run"])
@@ -211,12 +210,9 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["migrate"] = gtk.ImageMenuItem("_Migrate")
         self.vmmenu_items["migrate"].set_submenu(self.vmmenumigrate)
         self.vmmenu_items["migrate"].show()
+        self.vmmenu_items["migrate"].connect("activate",
+                                             self.set_migrate_submenu)
         self.vmmenu.add(self.vmmenu_items["migrate"])
-
-        self.vmmenumigrate_items["(None)"] = gtk.ImageMenuItem(_("(None)"))
-        self.vmmenumigrate_items["(None)"].show()
-        self.vmmenumigrate_items["(None)"].set_sensitive(False)
-        self.vmmenumigrate.add(self.vmmenumigrate_items["(None)"])
 
         self.vmmenu_items["hsep2"] = gtk.SeparatorMenuItem()
         self.vmmenu_items["hsep2"].show();
@@ -746,7 +742,6 @@ class vmmManager(gobject.GObject):
                         self.vmmenu_items["resume"].set_sensitive(False)
                         self.vmmenu_items["shutdown"].set_sensitive(False)
                         self.vmmenu_items["migrate"].set_sensitive(True)
-                        self.set_migrate_submenu()
                     elif vm.status() == libvirt.VIR_DOMAIN_RUNNING:
                         self.vmmenu_items["run"].set_sensitive(False)
                         self.vmmenu_items["pause"].set_sensitive(True)
@@ -755,7 +750,6 @@ class vmmManager(gobject.GObject):
                         self.vmmenu_items["resume"].set_sensitive(False)
                         self.vmmenu_items["shutdown"].set_sensitive(True)
                         self.vmmenu_items["migrate"].set_sensitive(True)
-                        self.set_migrate_submenu()
                     elif vm.status() == libvirt.VIR_DOMAIN_PAUSED:
                         self.vmmenu_items["run"].set_sensitive(False)
                         self.vmmenu_items["pause"].hide()
@@ -764,7 +758,6 @@ class vmmManager(gobject.GObject):
                         self.vmmenu_items["resume"].set_sensitive(True)
                         self.vmmenu_items["shutdown"].set_sensitive(True)
                         self.vmmenu_items["migrate"].set_sensitive(True)
-                        self.set_migrate_submenu()
                 self.vmmenu.popup(None, None, None, 0, event.time)
             return False
         else:
@@ -1088,21 +1081,8 @@ class vmmManager(gobject.GObject):
         if vm is not None:
             self.emit("action-migrate-domain", vm.get_connection().get_uri(), vm.get_uuid(), host_uri)
 
-    def set_migrate_submenu(self):
-        # clear migrate-submenu
-        for submenu_item in self.vmmenumigrate.get_children():
-            submenu_item_name = submenu_item.get_image().get_stock()[0]
-            self.vmmenumigrate.remove(self.vmmenumigrate_items[submenu_item_name])
-
-        available_migrate_hostnames = self.engine.get_available_migrate_hostnames()
-        if len(available_migrate_hostnames) == 0:
-            self.vmmenumigrate.add(self.vmmenumigrate_items["(None)"])
-        else:
-            for hostname in available_migrate_hostnames.values():
-                self.vmmenumigrate_items[hostname] = gtk.ImageMenuItem(hostname)
-                self.vmmenumigrate_items[hostname].show()
-                self.vmmenumigrate_items[hostname].connect("activate", self.migrate)
-                self.vmmenumigrate.add(self.vmmenumigrate_items[hostname])
+    def set_migrate_submenu(self, src):
+        self.engine.populate_migrate_menu(self.vmmenumigrate, self.migrate)
 
     def _add_connection(self, engine, conn):
         conn.connect("vm-added", self.vm_added)

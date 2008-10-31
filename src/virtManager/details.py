@@ -132,13 +132,8 @@ class vmmDetails(gobject.GObject):
 
         menu = gtk.Menu()
         self.window.get_widget("control-shutdown").set_menu(menu)
-        
-        self.migrate_menu_items = {}
 
-        self.migrate_menu_items["(None)"] = gtk.ImageMenuItem(_("(None)"))
-        self.migrate_menu_items["(None)"].show()
-        self.migrate_menu_items["(None)"].set_sensitive(False)
-        self.window.get_widget("details-menu-migrate_menu").add(self.migrate_menu_items["(None)"])
+        self.migrate_menu_items = {}
 
         rebootimg = gtk.Image()
         rebootimg.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
@@ -681,20 +676,7 @@ class vmmDetails(gobject.GObject):
 
     def set_migrate_menu(self):
         menu = self.window.get_widget("details-menu-migrate_menu")
-        # clear migrate-submenu
-        for submenu_item in menu.get_children():
-            submenu_item_name = submenu_item.get_image().get_stock()[0]
-            menu.remove(self.migrate_menu_items[submenu_item_name])
-
-        available_migrate_hostnames = self.engine.get_available_migrate_hostnames()
-        if len(available_migrate_hostnames) == 0:
-            menu.add(self.migrate_menu_items["(None)"])
-        else:
-            for hostname in available_migrate_hostnames.values():
-                self.migrate_menu_items[hostname] = gtk.ImageMenuItem(hostname)
-                self.migrate_menu_items[hostname].show()
-                self.migrate_menu_items[hostname].connect("activate", self.control_vm_migrate)
-                menu.add(self.migrate_menu_items[hostname])
+        self.engine.populate_migrate_menu(menu, self.control_vm_migrate)
 
     def set_pause_widget_states(self, state):
         try:

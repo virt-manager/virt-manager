@@ -569,26 +569,65 @@ class vmmEngine(gobject.GObject):
         migrate_progress.set_title(" ")
         return migrate_progress
 
+    def populate_migrate_menu(self, menu, migrate_func):
+        conns = self.get_available_migrate_hostnames()
+
+        # Clear menu
+        for item in menu:
+            menu.remove(item)
+
+        for key, val_list in conns.items():
+            can_migrate, label, tooltip = val_list
+            mitem = gtk.ImageMenuItem(label)
+            mitem.set_sensitive(can_migrate)
+            mitem.connect("activate", migrate_func)
+            if tooltip:
+                mitem.set_tooltip_text(tooltip)
+            mitem.show()
+
+            menu.add(mitem)
+
+        if len(menu) == 0:
+            mitem = gtk.ImageMenuItem(_("No connections available."))
+            mitem.show()
+            menu.add(mitem)
+
     def get_available_migrate_hostnames(self):
         hostname = self.windowManager.current_connection().get_hostname()
         driver = self.windowManager.current_connection().get_driver()
+        uri = self.windowManager.current_connection().get_uri()
         available_migrate_hostnames = {}
 
+        # Returns list of lists of the form
+        #   [ Can we migrate to this connection?,
+        #     String to use as list entry,
+        #     Tooltip reason ]
+
         # 1. connected(ACTIVE, INACTIVE) host
-        for key in self.connections.keys():
-            if self.connections[key].has_key("connection") is True \
-            and (self.get_connection(key).get_state() == vmmConnection.STATE_ACTIVE or self.get_connection(key).get_state() == vmmConnection.STATE_INACTIVE):
-                available_migrate_hostnames[key] = self.get_connection(key).get_hostname()
+        for key, value in self.connections.items():
+            if not value.has_key("connection"):
+                continue
+            conn = value["connection"]
 
-        # 2. remove source host
-        for key in available_migrate_hostnames.keys():
-            if available_migrate_hostnames[key] == hostname:
-                del available_migrate_hostnames[key]
+            can_migrate = False
+            desc = "%s (%s)" % (conn.get_hostname(), conn.get_driver())
+            reason = ""
 
-        # 3. remove a different host of hypervisor
-        for key in available_migrate_hostnames.keys():
-            if self.get_connection(key).get_driver() != driver:
-                del available_migrate_hostnames[key]
+            if conn.get_driver() != driver:
+                reason = _("Connection hypervisors do not match.")
+            elif conn.get_state() == vmmConnection.STATE_DISCONNECTED:
+                reason = _("Connection is disconnected.")
+            elif key == uri:
+                reason = _("Cannot migrate to same connection.")
+
+                # Explicitly don't include this in the list
+                continue;
+            elif conn.get_state() == vmmConnection.STATE_ACTIVE:
+                # Assumably we can migrate to this connection
+                can_migrate = True
+
+
+            available_migrate_hostnames[key] = [can_migrate, desc, reason]
 
         return available_migrate_hostnames
 
