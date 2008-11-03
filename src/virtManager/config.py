@@ -24,7 +24,8 @@ import gnome
 import gtk.gdk
 import libvirt
 
-from virtManager.keyring import *
+from virtManager.keyring import vmmKeyring
+from virtManager.secret import vmmSecret
 
 CONSOLE_POPUP_NEVER = 0
 CONSOLE_POPUP_NEW_ONLY = 1

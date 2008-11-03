@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 #
-from virtManager.secret import *
+from virtManager.secret import vmmSecret
 
 import sys
 import logging
