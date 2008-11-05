@@ -22,12 +22,12 @@ import gtk.glade
 import gnomevfs
 
 def on_email(about, mail):
-        gnomevfs.url_show("mailto:%s" % mail)
+    gnomevfs.url_show("mailto:%s" % mail)
 
 gtk.about_dialog_set_email_hook(on_email)
 
 def on_url(about, link):
-        gnomevfs.url_show(link)
+    gnomevfs.url_show(link)
 
 gtk.about_dialog_set_url_hook(on_url)
 

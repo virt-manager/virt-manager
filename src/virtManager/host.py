@@ -194,7 +194,7 @@ class vmmHost(gobject.GObject):
 
     def is_visible(self):
         if self.window.get_widget("vmm-host").flags() & gtk.VISIBLE:
-           return 1
+            return 1
         return 0
 
     def close(self,ignore1=None,ignore2=None):

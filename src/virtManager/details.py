@@ -552,7 +552,7 @@ class vmmDetails(gobject.GObject):
 
     def is_visible(self):
         if self.window.get_widget("vmm-details").flags() & gtk.VISIBLE:
-           return 1
+            return 1
         return 0
 
     def view_manager(self, src):

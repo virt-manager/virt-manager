@@ -171,7 +171,7 @@ class vmmDomain(gobject.GObject):
                     rx += io[0]
                     tx += io[4]
             except libvirt.libvirtError, err:
-                    logging.error("Error reading interface stats %s" % err)
+                logging.error("Error reading interface stats %s" % err)
         return rx, tx
 
     def _sample_disk_io_dummy(self):
@@ -187,7 +187,7 @@ class vmmDomain(gobject.GObject):
                     rd += io[1]
                     wr += io[3]
             except libvirt.libvirtError, err:
-                    logging.error("Error reading block stats %s" % err)
+                logging.error("Error reading block stats %s" % err)
         return rd, wr
 
     def _get_cur_rate(self, what):
@@ -854,8 +854,8 @@ class vmmDomain(gobject.GObject):
 
             elif dev_type == "parallel" or dev_type == "console" or \
                  dev_type == "serial":
-                 port = dev_ctx.xpathEval("/%s/target/@port" % dev_type)
-                 if port and len(port) > 0 and port[0].content != None:
+                port = dev_ctx.xpathEval("/%s/target/@port" % dev_type)
+                if port and len(port) > 0 and port[0].content != None:
                     logging.debug("Looking for %s w/ port %s" % (dev_type,
                                                                  port))
                     ret = ctx.xpathEval("/domain/devices/%s[target/@port='%s']" % (dev_type, port[0].content))

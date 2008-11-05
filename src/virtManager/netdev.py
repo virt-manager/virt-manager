@@ -44,9 +44,9 @@ class vmmNetDevice(gobject.GObject):
         return self.bridge
 
     def get_mac(self):
-           return self.mac
+        return self.mac
 
     def get_info(self):
-           return (self.name, self.mac, self.shared, self.bridge)
+        return (self.name, self.mac, self.shared, self.bridge)
 
 gobject.type_register(vmmNetDevice)

@@ -413,7 +413,7 @@ class vmmCreate(gobject.GObject):
             return self.window.get_widget("storage-file-size").get_value()
     
     def get_config_kernel_params(self):
-	return self.window.get_widget("kernel-params").get_text()
+        return self.window.get_widget("kernel-params").get_text()
 
     def get_config_network(self):
         if self.connection.is_qemu_session():
@@ -598,7 +598,7 @@ class vmmCreate(gobject.GObject):
 
     def is_visible(self):
         if self.topwin.flags() & gtk.VISIBLE:
-           return 1
+            return 1
         return 0
 
     def finish(self, ignore=None):
@@ -1023,8 +1023,8 @@ class vmmCreate(gobject.GObject):
                     return False
 
             if self._disk.is_conflict_disk(self._guest.conn) is True:
-               res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % self._disk.path), _("Do you really want to use the disk ?"))
-               return res
+                res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % self._disk.path), _("Do you really want to use the disk ?"))
+                return res
 
         elif page_num == PAGE_NETWORK:
 

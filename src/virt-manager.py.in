@@ -299,9 +299,9 @@ def main():
         try:
             bus = None
             if os.getenv("DBUS_STARTER_ADDRESS") is None:
-            	bus = dbus.SessionBus()
-  	    else:
-		bus = dbus.StarterBus()
+                bus = dbus.SessionBus()
+            else:
+                bus = dbus.StarterBus()
 
             dbusProxy = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
             dbusObj = dbus.Interface(dbusProxy, "org.freedesktop.DBus")

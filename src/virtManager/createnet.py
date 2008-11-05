@@ -270,7 +270,7 @@ class vmmCreateNetwork(gobject.GObject):
 
     def is_visible(self):
         if self.topwin.flags() & gtk.VISIBLE:
-           return 1
+            return 1
         return 0
 
     def finish(self, ignore=None):

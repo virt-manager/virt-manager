@@ -449,7 +449,7 @@ class vmmEngine(gobject.GObject):
                 try:
                     vm.destroy()
                 except Exception, e:
-                   self.err.show_err(_("Error shutting down domain: %s" % str(e)), "".join(traceback.format_exc()))
+                    self.err.show_err(_("Error shutting down domain: %s" % str(e)), "".join(traceback.format_exc()))
 
     def suspend_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)

@@ -110,7 +110,7 @@ class vmmChooseCD(gobject.GObject):
                                         readOnly=True,
                                         conn=self.conn.vmm)
         except Exception, e:
-           return self.err.val_err(_("Invalid Media Path"), str(e))
+            return self.err.val_err(_("Invalid Media Path"), str(e))
         self.emit("cdrom-chosen", disk.type, disk.path, self.target)
         self.cancel()
 
