@@ -20,7 +20,6 @@
 
 import gobject
 import gtk.glade
-import os
 import virtinst
 import logging
 import dbus

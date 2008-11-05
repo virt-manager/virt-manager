@@ -22,9 +22,7 @@ import gobject
 import libvirt
 import libxml2
 import os
-import sys
 import logging
-import copy
 import virtinst.util as util
 
 class vmmDomain(gobject.GObject):

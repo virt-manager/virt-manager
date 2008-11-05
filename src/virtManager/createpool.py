@@ -29,7 +29,6 @@ import libvirt
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
-from virtManager.connection import vmmConnection
 
 from virtinst import Storage
 

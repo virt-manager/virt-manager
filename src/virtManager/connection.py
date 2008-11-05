@@ -30,7 +30,6 @@ from socket import gethostbyaddr, gethostname
 import dbus
 import threading
 import gtk
-import string
 import virtinst
 
 from virtManager.domain import vmmDomain

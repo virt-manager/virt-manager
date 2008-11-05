@@ -22,16 +22,10 @@ import gobject
 import gtk
 import gtk.gdk
 import gtk.glade
-import pango
 import libvirt
 import virtinst
 import os, sys
-import re
-import subprocess
-import urlgrabber.progress as progress
-import tempfile
 import logging
-import dbus
 import traceback
 
 import virtManager.util as vmmutil

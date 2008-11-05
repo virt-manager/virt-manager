@@ -39,7 +39,6 @@ from virtManager.choosecd import vmmChooseCD
 from virtManager.serialcon import vmmSerialConsole
 
 import virtinst
-import urlgrabber.progress as progress
 
 # Columns in hw list model
 HW_LIST_COL_LABEL = 0

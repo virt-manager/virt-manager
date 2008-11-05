@@ -19,11 +19,6 @@
 #
 
 import gobject
-import libvirt
-import libxml2
-import os
-import sys
-import logging
 import virtinst.util as util
 
 from virtManager.IPy import IP

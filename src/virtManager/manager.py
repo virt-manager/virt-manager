@@ -21,9 +21,7 @@
 import gobject
 import gtk
 import gtk.glade
-import threading
 import logging
-import sys
 import traceback
 
 import sparkline

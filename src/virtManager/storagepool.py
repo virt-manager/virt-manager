@@ -19,9 +19,6 @@
 #
 
 import gobject
-import libvirt
-import libxml2
-import logging
 import virtinst
 import virtinst.util as util
 

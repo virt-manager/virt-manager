@@ -21,10 +21,7 @@
 import gobject
 import gtk
 import gtk.glade
-import libvirt
 import sparkline
-import logging
-import os
 import traceback
 
 from virtinst import Storage

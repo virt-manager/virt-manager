@@ -22,11 +22,7 @@ import gobject
 import gtk
 import gtk.gdk
 import gtk.glade
-import libvirt
-import virtinst
-import os, sys
 import logging
-import dbus
 import re
 import traceback
 
