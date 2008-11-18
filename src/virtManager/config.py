@@ -250,23 +250,23 @@ class vmmConfig:
         return self.keyring.is_available()
 
     def clear_console_password(self, vm):
-        id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
+        _id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
 
-        if id != None:
+        if _id != None:
             if not(self.has_keyring()):
                 return
 
-            if self.keyring.clear_secret(id):
+            if self.keyring.clear_secret(_id):
                 self.conf.unset(self.conf_dir + "/console/passwords/" + vm.get_uuid())
 
     def get_console_password(self, vm):
-        id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
+        _id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
 
-        if id != None:
+        if _id != None:
             if not(self.has_keyring()):
                 return ""
 
-            secret = self.keyring.get_secret(id)
+            secret = self.keyring.get_secret(_id)
             if secret != None and secret.get_name() == self.get_secret_name(vm):
                 if not(secret.has_attribute("hvuri")):
                     return ""
@@ -290,9 +290,9 @@ class vmmConfig:
         # is our unique key
 
         secret = vmmSecret(self.get_secret_name(vm), password, { "uuid" : vm.get_uuid(), "hvuri": vm.get_connection().get_uri() })
-        id = self.keyring.add_secret(secret)
-        if id != None:
-            self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), id)
+        _id = self.keyring.add_secret(secret)
+        if _id != None:
+            self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), _id)
 
     def get_url_list_length(self):
         length = self.conf.get_int(self.conf_dir + "/urls/url-list-length")

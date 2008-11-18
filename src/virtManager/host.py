@@ -632,11 +632,11 @@ class vmmHost(gobject.GObject):
     def get_pool_size_percent(self, uuid):
         pool = self.conn.get_pool(uuid)
         cap = pool.get_capacity()
-        all = pool.get_allocation()
-        if not cap or all is None:
+        alloc = pool.get_allocation()
+        if not cap or alloc is None:
             per = 0
         else:
-            per = int(((float(all) / float(cap)) * 100))
+            per = int(((float(alloc) / float(cap)) * 100))
         return per
 
     def populate_storage_pools(self, model):

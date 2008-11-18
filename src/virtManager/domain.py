@@ -82,10 +82,10 @@ class vmmDomain(gobject.GObject):
         return self.vm.ID()
 
     def get_id_pretty(self):
-        id = self.get_id()
-        if id < 0:
+        i = self.get_id()
+        if i < 0:
             return "-"
-        return str(id)
+        return str(i)
 
     def get_name(self):
         return self.vm.name()
@@ -492,14 +492,14 @@ class vmmDomain(gobject.GObject):
         self.vm.resume()
         self._update_status()
 
-    def save(self, file, ignore1=None, background=True):
+    def save(self, filename, ignore1=None, background=True):
         if background:
             conn = libvirt.open(self.connection.uri)
             vm = conn.lookupByID(self.get_id())
         else:
             vm = self.vm
 
-        vm.save(file)
+        vm.save(filename)
         self._update_status()
 
     def destroy(self):
@@ -559,10 +559,10 @@ class vmmDomain(gobject.GObject):
 
     def get_graphics_console(self):
         self.xml = None
-        type = util.get_xml_path(self.get_xml(),
-                                 "/domain/devices/graphics/@type")
+        typ = util.get_xml_path(self.get_xml(),
+                                "/domain/devices/graphics/@type")
         port = None
-        if type == "vnc":
+        if typ == "vnc":
             port = util.get_xml_path(self.get_xml(),
                                      "/domain/devices/graphics[@type='vnc']/@port")
             if port is not None:
@@ -574,9 +574,9 @@ class vmmDomain(gobject.GObject):
             # reliably resolve 'localhost' into 127.0.0.1, either returning
             # the public IP, or an IPv6 addr. Neither work since QEMU only
             # listens on 127.0.0.1 for VNC.
-            return [type, "127.0.0.1", port, None, None]
+            return [typ, "127.0.0.1", port, None, None]
         else:
-            return [type, self.connection.get_hostname(), port, transport, username]
+            return [typ, self.connection.get_hostname(), port, transport, username]
 
 
     def get_disk_devices(self):
@@ -584,7 +584,7 @@ class vmmDomain(gobject.GObject):
             disks = []
             ret = ctx.xpathEval("/domain/devices/disk")
             for node in ret:
-                type = node.prop("type")
+                typ = node.prop("type")
                 srcpath = None
                 devdst = None
                 bus = None
@@ -595,12 +595,12 @@ class vmmDomain(gobject.GObject):
                     devtype = "disk"
                 for child in node.children:
                     if child.name == "source":
-                        if type == "file":
+                        if typ == "file":
                             srcpath = child.prop("file")
-                        elif type == "block":
+                        elif typ == "block":
                             srcpath = child.prop("dev")
-                        elif type == None:
-                            type = "-"
+                        elif typ == None:
+                            typ = "-"
                     elif child.name == "target":
                         devdst = child.prop("dev")
                         bus = child.prop("bus")
@@ -612,13 +612,13 @@ class vmmDomain(gobject.GObject):
                 if srcpath == None:
                     if devtype == "cdrom":
                         srcpath = "-"
-                        type = "block"
+                        typ = "block"
                     else:
                         raise RuntimeError("missing source path")
                 if devdst == None:
                     raise RuntimeError("missing destination device")
 
-                disks.append([type, srcpath, devtype, devdst, readonly, \
+                disks.append([typ, srcpath, devtype, devdst, readonly, \
                               sharable, bus])
 
             return disks
@@ -652,20 +652,20 @@ class vmmDomain(gobject.GObject):
             ret = ctx.xpathEval("/domain/devices/interface")
 
             for node in ret:
-                type = node.prop("type")
+                typ = node.prop("type")
                 devmac = None
                 source = None
                 target = None
                 model = None
                 for child in node.children:
                     if child.name == "source":
-                        if type == "bridge":
+                        if typ == "bridge":
                             source = child.prop("bridge")
-                        elif type == "ethernet":
+                        elif typ == "ethernet":
                             source = child.prop("dev")
-                        elif type == "network":
+                        elif typ == "network":
                             source = child.prop("network")
-                        elif type == "user":
+                        elif typ == "user":
                             source = None
                         else:
                             source = None
@@ -679,7 +679,7 @@ class vmmDomain(gobject.GObject):
                 # need mac for uniqueness. Some reason XenD doesn't
                 # always complete kill the NIC record
                 if devmac != None:
-                    nics.append([type, source, target, devmac, model])
+                    nics.append([typ, source, target, devmac, model])
             return nics
 
         return self._parse_device_xml(_parse_network_devs)
@@ -690,11 +690,11 @@ class vmmDomain(gobject.GObject):
             ret = ctx.xpathEval("/domain/devices/input")
 
             for node in ret:
-                type = node.prop("type")
+                typ = node.prop("type")
                 bus = node.prop("bus")
                 # XXX Replace 'None' with device model when libvirt supports
                 # that
-                inputs.append([type, bus, None, type + ":" + bus])
+                inputs.append([typ, bus, None, typ + ":" + bus])
             return inputs
 
         return self._parse_device_xml(_parse_input_devs)
@@ -704,14 +704,14 @@ class vmmDomain(gobject.GObject):
             graphics = []
             ret = ctx.xpathEval("/domain/devices/graphics[1]")
             for node in ret:
-                type = node.prop("type")
-                if type == "vnc":
+                typ = node.prop("type")
+                if typ == "vnc":
                     listen = node.prop("listen")
                     port = node.prop("port")
                     keymap = node.prop("keymap")
-                    graphics.append([type, listen, port, type, keymap])
+                    graphics.append([typ, listen, port, typ, keymap])
                 else:
-                    graphics.append([type, None, None, type])
+                    graphics.append([typ, None, None, typ, None])
             return graphics
 
         return self._parse_device_xml(_parse_graphics_devs)
@@ -832,17 +832,18 @@ class vmmDomain(gobject.GObject):
                     ret = ctx.xpathEval("/domain/devices/disk[target/@dev='%s']" % path[0].content)
 
             elif dev_type=="input":
-                type = dev_ctx.xpathEval("/input/@type")
+                typ = dev_ctx.xpathEval("/input/@type")
                 bus = dev_ctx.xpathEval("/input/@bus")
-                if len(type) > 0 and type[0].content != None and len(bus) > 0 and bus[0].content != None:
-                    logging.debug("Looking for type %s bus %s" % (type[0].content, bus[0].content))
-                    ret = ctx.xpathEval("/domain/devices/input[@type='%s' and @bus='%s']" % (type[0].content, bus[0].content))
+                if (len(typ) > 0 and typ[0].content != None and
+                    len(bus) > 0 and bus[0].content != None):
+                    logging.debug("Looking for type %s bus %s" % (typ[0].content, bus[0].content))
+                    ret = ctx.xpathEval("/domain/devices/input[@type='%s' and @bus='%s']" % (typ[0].content, bus[0].content))
 
             elif dev_type=="graphics":
-                type = dev_ctx.xpathEval("/graphics/@type")
-                if len(type) > 0 and type[0].content != None:
-                    logging.debug("Looking for type %s" % type[0].content)
-                    ret = ctx.xpathEval("/domain/devices/graphics[@type='%s']" % type[0].content)
+                typ = dev_ctx.xpathEval("/graphics/@type")
+                if len(typ) > 0 and typ[0].content != None:
+                    logging.debug("Looking for type %s" % typ[0].content)
+                    ret = ctx.xpathEval("/domain/devices/graphics[@type='%s']" % typ[0].content)
 
             elif dev_type == "sound":
                 model = dev_ctx.xpathEval("/sound/@model")
@@ -938,7 +939,7 @@ class vmmDomain(gobject.GObject):
         else:
             self.attach_device(newdev)
 
-    def connect_cdrom_device(self, type, source, target):
+    def connect_cdrom_device(self, _type, source, target):
         xml = self.get_disk_xml(target)
         doc = None
         ctx = None
@@ -948,12 +949,12 @@ class vmmDomain(gobject.GObject):
             disk_fragment = ctx.xpathEval("/disk")
             driver_fragment = ctx.xpathEval("/disk/driver")
             origdisk = disk_fragment[0].serialize()
-            disk_fragment[0].setProp("type", type)
+            disk_fragment[0].setProp("type", _type)
             elem = disk_fragment[0].newChild(None, "source", None)
-            if type == "file":
+            if _type == "file":
                 elem.setProp("file", source)
                 if driver_fragment:
-                    driver_fragment[0].setProp("name", type)
+                    driver_fragment[0].setProp("name", _type)
             else:
                 elem.setProp("dev", source)
                 if driver_fragment:

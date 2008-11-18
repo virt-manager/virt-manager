@@ -142,11 +142,11 @@ def setup_logging():
     libvirt.registerErrorHandler(f=libvirt_callback, ctx=None)
 
     # Log uncaught exceptions
-    def exception_log(type, val, tb):
+    def exception_log(typ, val, tb):
         import traceback
-        str = traceback.format_exception(type, val, tb)
-        logging.exception("".join(str))
-        sys.__excepthook__(type, val, tb)
+        s = traceback.format_exception(typ, val, tb)
+        logging.exception("".join(s))
+        sys.__excepthook__(typ, val, tb)
     sys.excepthook = exception_log
 
 def parse_commandline():

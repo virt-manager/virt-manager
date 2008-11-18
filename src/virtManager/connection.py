@@ -160,9 +160,9 @@ class vmmConnection(gobject.GObject):
             for path in self.hal_iface.FindDeviceByCapability("net"):
                 self._net_phys_device_added(path)
         except:
-            (type, value, stacktrace) = sys.exc_info ()
+            (_type, value, stacktrace) = sys.exc_info ()
             logging.error("Unable to connect to HAL to list network devices: '%s'" + \
-                          str(type) + " " + str(value) + "\n" + \
+                          str(_type) + " " + str(value) + "\n" + \
                           traceback.format_exc (stacktrace))
             self.bus = None
             self.hal_iface = None
@@ -395,12 +395,12 @@ class vmmConnection(gobject.GObject):
 
             return self._do_creds_dialog(creds)
         except:
-            (type, value, stacktrace) = sys.exc_info ()
+            (_type, value, stacktrace) = sys.exc_info ()
             # Detailed error message, in English so it can be Googled.
             self.connectError = \
                 ("Failed to get credentials '%s':\n" %
                  str(self.uri)) + \
-                 str(type) + " " + str(value) + "\n" + \
+                 str(_type) + " " + str(value) + "\n" + \
                  traceback.format_exc (stacktrace)
             logging.error(self.connectError)
             return -1
@@ -424,12 +424,12 @@ class vmmConnection(gobject.GObject):
         except:
             self.state = self.STATE_DISCONNECTED
 
-            (type, value, stacktrace) = sys.exc_info ()
+            (_type, value, stacktrace) = sys.exc_info ()
             # Detailed error message, in English so it can be Googled.
             self.connectError = \
                     ("Unable to open connection to hypervisor URI '%s':\n" %
                      str(self.uri)) + \
-                    str(type) + " " + str(value) + "\n" + \
+                    str(_type) + " " + str(value) + "\n" + \
                     traceback.format_exc (stacktrace)
             logging.error(self.connectError)
 
@@ -500,8 +500,8 @@ class vmmConnection(gobject.GObject):
     def get_host_info(self):
         return self.hostinfo
 
-    def get_max_vcpus(self, type=None):
-        return virtinst.util.get_max_vcpus(self.vmm, type)
+    def get_max_vcpus(self, _type=None):
+        return virtinst.util.get_max_vcpus(self.vmm, _type)
 
     def get_autoconnect(self):
         # Use a local variable to cache autoconnect so we don't repeatedly
@@ -732,10 +732,10 @@ class vmmConnection(gobject.GObject):
 
         # Filter out active domains which haven't changed
         if newActiveIDs != None:
-            for id in newActiveIDs:
-                if oldActiveIDs.has_key(id):
+            for _id in newActiveIDs:
+                if oldActiveIDs.has_key(_id):
                     # No change, copy across existing VM object
-                    vm = oldActiveIDs[id]
+                    vm = oldActiveIDs[_id]
                     curUUIDs[vm.get_uuid()] = vm
                     activeUUIDs.append(vm.get_uuid())
                 else:
@@ -743,13 +743,13 @@ class vmmConnection(gobject.GObject):
                     # to create the wrapper so we can see
                     # if its a previously inactive domain.
                     try:
-                        vm = self.vmm.lookupByID(id)
+                        vm = self.vmm.lookupByID(_id)
                         uuid = self.uuidstr(vm.UUID())
                         maybeNewUUIDs[uuid] = vm
                         startedUUIDs.append(uuid)
                         activeUUIDs.append(uuid)
                     except libvirt.libvirtError:
-                        logging.debug("Couldn't fetch domain id '%s'" % str(id)
+                        logging.debug("Couldn't fetch domain id '%s'" % str(_id)
                                       + ": it probably went away")
 
         # Filter out inactive domains which haven't changed
@@ -996,11 +996,11 @@ class vmmConnection(gobject.GObject):
         return [ 0.0 ]
 
     def uuidstr(self, rawuuid):
-        hex = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+        hx = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
         uuid = []
         for i in range(16):
-            uuid.append(hex[((ord(rawuuid[i]) >> 4) & 0xf)])
-            uuid.append(hex[(ord(rawuuid[i]) & 0xf)])
+            uuid.append(hx[((ord(rawuuid[i]) >> 4) & 0xf)])
+            uuid.append(hx[(ord(rawuuid[i]) & 0xf)])
             if i == 3 or i == 5 or i == 7 or i == 9:
                 uuid.append('-')
         return "".join(uuid)
@@ -1033,9 +1033,9 @@ class vmmConnection(gobject.GObject):
                 (ignore,bridge) = os.path.split(dest)
                 return bridge
         except:
-            (type, value, stacktrace) = sys.exc_info ()
+            (_type, value, stacktrace) = sys.exc_info ()
             logging.error("Unable to determine if device is shared:" +
-                            str(type) + " " + str(value) + "\n" + \
+                            str(_type) + " " + str(value) + "\n" + \
                             traceback.format_exc (stacktrace))
 
         return None

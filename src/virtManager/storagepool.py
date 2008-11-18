@@ -49,8 +49,8 @@ class vmmStoragePool(gobject.GObject):
         return self.active
 
     def can_change_alloc(self):
-        type = self.get_type()
-        return (type in [virtinst.Storage.StoragePool.TYPE_LOGICAL])
+        typ = self.get_type()
+        return (typ in [virtinst.Storage.StoragePool.TYPE_LOGICAL])
 
     def get_connection(self):
         return self.connection

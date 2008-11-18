@@ -376,9 +376,9 @@ class vmmManager(gobject.GObject):
             self.err.val_err(self.domain_restore_error)
             self.domain_restore_error = ""
 
-    def is_valid_saved_image(self, file):
+    def is_valid_saved_image(self, savfile):
         try:
-            f = open(file, "r")
+            f = open(savfile, "r")
             magic = f.read(16)
             if magic != "LinuxGuestRecord" and magic != "LibvirtQemudSave":
                 return False
@@ -395,16 +395,16 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
-        iter = model.get_iter_first()
-        while iter is not None:
-            conn = model.get_value(iter, ROW_HANDLE)
+        _iter = model.get_iter_first()
+        while _iter is not None:
+            conn = model.get_value(_iter, ROW_HANDLE)
 
-            children = model.iter_children(iter)
+            children = model.iter_children(_iter)
             while children is not None:
                 vm = model.get_value(children, ROW_HANDLE)
                 del self.rows[self.vm_row_key(vm)]
                 model.remove(children)
-                children = model.iter_children(iter)
+                children = model.iter_children(_iter)
 
             if conn:
                 uuids = conn.list_vm_uuids()
@@ -418,7 +418,7 @@ class vmmManager(gobject.GObject):
                             continue
                     self._append_vm(model, vm, conn)
 
-            iter = model.iter_next(iter)
+            _iter = model.iter_next(_iter)
 
 
     def vm_added(self, connection, uri, vmuuid):
@@ -471,8 +471,8 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_NET_TX, vm.network_tx_rate())
         row.insert(ROW_HINT, None)
 
-        iter = model.append(parent, row)
-        path = model.get_path(iter)
+        _iter = model.append(parent, row)
+        path = model.get_path(_iter)
         self.rows[self.vm_row_key(vm)] = model[path]
         # Expand a connection when adding a vm to it
         self.window.get_widget("vm-list").expand_row(model.get_path(parent), False)
@@ -495,8 +495,8 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_NET_RX, conn.network_rx_rate())
         row.insert(ROW_NET_TX, conn.network_tx_rate())
 
-        iter = model.append(None, row)
-        path = model.get_path(iter)
+        _iter = model.append(None, row)
+        path = model.get_path(_iter)
         self.rows[conn.get_uri()] = model[path]
 
     def vm_removed(self, connection, uri, vmuuid):
@@ -526,8 +526,8 @@ class vmmManager(gobject.GObject):
 
         missing = True
         for row in range(model.iter_n_children(parent)):
-            iter = model.iter_nth_child(parent, row)
-            if model.get_value(iter, ROW_KEY) == vm.get_uuid():
+            _iter = model.iter_nth_child(parent, row)
+            if model.get_value(_iter, ROW_KEY) == vm.get_uuid():
                 if wanted:
                     missing = False
                 else:
@@ -712,15 +712,15 @@ class vmmManager(gobject.GObject):
             self.window.get_widget("menu_host_details").set_sensitive(True)
 
     def popup_vm_menu(self, widget, event):
-        tuple = widget.get_path_at_pos(int(event.x), int(event.y))
-        if tuple == None:
+        tup = widget.get_path_at_pos(int(event.x), int(event.y))
+        if tup == None:
             return False
-        path = tuple[0]
+        path = tup[0]
         model = widget.get_model()
-        iter = model.get_iter(path)
-        if model.iter_parent(iter) != None:
+        _iter = model.get_iter(path)
+        if model.iter_parent(_iter) != None:
             # a vm is selected, retrieve it from the first column of the model
-            vm = model.get_value(iter, ROW_HANDLE)
+            vm = model.get_value(_iter, ROW_HANDLE)
             if event.button == 3:
                 # Update popup menu based upon vm status
                 if vm.is_read_only() == True:
@@ -759,7 +759,7 @@ class vmmManager(gobject.GObject):
                 self.vmmenu.popup(None, None, None, 0, event.time)
             return False
         else:
-            conn = model.get_value(iter, ROW_HANDLE)
+            conn = model.get_value(_iter, ROW_HANDLE)
             if event.button == 3:
                 if conn.get_state() != vmmConnection.STATE_DISCONNECTED:
                     self.connmenu_items["create"].set_sensitive(True)
@@ -1013,22 +1013,22 @@ class vmmManager(gobject.GObject):
         col = vmlist.get_column(COL_NETWORK)
         col.set_visible(self.config.is_vmlist_network_traffic_visible())
 
-    def cpu_usage_img(self,  column, cell, model, iter, data):
-        if model.get_value(iter, ROW_HANDLE) is None:
+    def cpu_usage_img(self,  column, cell, model, _iter, data):
+        if model.get_value(_iter, ROW_HANDLE) is None:
             return
-        data = model.get_value(iter, ROW_HANDLE).cpu_time_vector_limit(40)
+        data = model.get_value(_iter, ROW_HANDLE).cpu_time_vector_limit(40)
         cell.set_property('data_array', data)
 
-    def disk_io_img(self,  column, cell, model, iter, data):
-        if model.get_value(iter, ROW_HANDLE) is None:
+    def disk_io_img(self,  column, cell, model, _iter, data):
+        if model.get_value(_iter, ROW_HANDLE) is None:
             return
-        data = model.get_value(iter, ROW_HANDLE).disk_io_vector_limit(40)
+        data = model.get_value(_iter, ROW_HANDLE).disk_io_vector_limit(40)
         cell.set_property('data_array', data)
 
-    def network_traffic_img(self,  column, cell, model, iter, data):
-        if model.get_value(iter, ROW_HANDLE) is None:
+    def network_traffic_img(self,  column, cell, model, _iter, data):
+        if model.get_value(_iter, ROW_HANDLE) is None:
             return
-        data = model.get_value(iter, ROW_HANDLE).network_traffic_vector_limit(40)
+        data = model.get_value(_iter, ROW_HANDLE).network_traffic_vector_limit(40)
         cell.set_property('data_array', data)
 
     def start_vm(self, ignore):
@@ -1099,14 +1099,12 @@ class vmmManager(gobject.GObject):
             model.remove(parent)
             del self.rows[conn.get_uri()]
 
-    def row_expanded(self, treeview, iter, path):
-        conn = treeview.get_model().get_value(iter,ROW_HANDLE)
-        #logging.debug("Activating connection %s" % conn.get_uri())
+    def row_expanded(self, treeview, _iter, path):
+        conn = treeview.get_model().get_value(_iter, ROW_HANDLE)
         conn.resume()
 
-    def row_collapsed(self, treeview, iter, path):
-        conn = treeview.get_model().get_value(iter,ROW_HANDLE)
-        #logging.debug("Deactivating connection %s" % conn.get_uri())
+    def row_collapsed(self, treeview, _iter, path):
+        conn = treeview.get_model().get_value(_iter, ROW_HANDLE)
         conn.pause()
 
     def _connect_error(self, conn, details):

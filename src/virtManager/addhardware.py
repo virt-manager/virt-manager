@@ -261,10 +261,10 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("create-forward").show()
 
     def get_config_hardware_type(self):
-        type = self.window.get_widget("hardware-type")
-        if type.get_active_iter() == None:
+        _type = self.window.get_widget("hardware-type")
+        if _type.get_active_iter() == None:
             return None
-        return type.get_model().get_value(type.get_active_iter(), 2)
+        return _type.get_model().get_value(_type.get_active_iter(), 2)
 
     def get_config_disk_image(self):
         if self.window.get_widget("storage-partition").get_active():
@@ -304,15 +304,15 @@ class vmmAddHardware(gobject.GObject):
     def get_config_input(self):
         target = self.window.get_widget("input-type")
         label = target.get_model().get_value(target.get_active_iter(), 0)
-        type = target.get_model().get_value(target.get_active_iter(), 1)
+        _type = target.get_model().get_value(target.get_active_iter(), 1)
         bus = target.get_model().get_value(target.get_active_iter(), 2)
-        return label, type, bus
+        return label, _type, bus
 
     def get_config_graphics(self):
-        type = self.window.get_widget("graphics-type")
-        if type.get_active_iter() is None:
+        _type = self.window.get_widget("graphics-type")
+        if _type.get_active_iter() is None:
             return None
-        return type.get_model().get_value(type.get_active_iter(), 1)
+        return _type.get_model().get_value(_type.get_active_iter(), 1)
 
     def get_config_vnc_port(self):
         port = self.window.get_widget("graphics-port")
@@ -418,9 +418,9 @@ class vmmAddHardware(gobject.GObject):
                     self.window.get_widget("summary-mac-address").set_text("-")
             elif hwpage == PAGE_INPUT:
                 self.window.get_widget("summary-input").show()
-                input = self.get_config_input()
-                self.window.get_widget("summary-input-type").set_text(input[0])
-                if input[1] == "tablet":
+                inp = self.get_config_input()
+                self.window.get_widget("summary-input-type").set_text(inp[0])
+                if inp[1] == "tablet":
                     self.window.get_widget("summary-input-mode").set_text(_("Absolute movement"))
                 else:
                     self.window.get_widget("summary-input-mode").set_text(_("Relative movement"))
@@ -497,8 +497,8 @@ class vmmAddHardware(gobject.GObject):
         self.add_device(self._dev.get_xml_config())
 
     def add_input(self):
-        input = self.get_config_input()
-        xml = "<input type='%s' bus='%s'/>\n" % (input[1], input[2])
+        inp = self.get_config_input()
+        xml = "<input type='%s' bus='%s'/>\n" % (inp[1], inp[2])
         self.add_device(xml)
 
     def add_graphics(self):
@@ -590,12 +590,13 @@ class vmmAddHardware(gobject.GObject):
 
     def browse_storage_file_address(self, src, ignore=None):
         folder = self.config.get_default_image_dir(self.vm.get_connection())
-        file = self._browse_file(_("Locate or Create New Storage File"), \
-                                 folder=folder, confirm_overwrite=True)
-        if file != None:
-            self.window.get_widget("storage-file-address").set_text(file)
+        filename = self._browse_file(_("Locate or Create New Storage File"), \
+                                       folder=folder, confirm_overwrite=True)
+        if filename != None:
+            self.window.get_widget("storage-file-address").set_text(filename)
 
-    def _browse_file(self, dialog_name, folder=None, type=None, confirm_overwrite=False):
+    def _browse_file(self, dialog_name, folder=None, _type=None,
+                     confirm_overwrite=False):
         # user wants to browse for an ISO
         fcdialog = gtk.FileChooserDialog(dialog_name,
                                          self.window.get_widget("vmm-add-hardware"),
@@ -604,9 +605,9 @@ class vmmAddHardware(gobject.GObject):
                                           gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                          None)
         fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-        if type != None:
+        if _type != None:
             f = gtk.FileFilter()
-            f.add_pattern("*." + type)
+            f.add_pattern("*." + _type)
             fcdialog.set_filter(f)
         if folder != None:
             fcdialog.set_current_folder(folder)
@@ -624,9 +625,10 @@ class vmmAddHardware(gobject.GObject):
             return None
 
     def toggle_storage_size(self, ignore1=None, ignore2=None):
-        file = self.get_config_disk_image()
-        if file != None and len(file) > 0 and \
-           (self.vm.get_connection().is_remote() or not os.path.exists(file)):
+        filename = self.get_config_disk_image()
+        if filename != None and len(filename) > 0 and \
+           (self.vm.get_connection().is_remote() or
+            not os.path.exists(filename)):
             self.window.get_widget("storage-file-size").set_sensitive(True)
             self.window.get_widget("non-sparse").set_sensitive(True)
             size = self.get_config_disk_size()
@@ -636,8 +638,8 @@ class vmmAddHardware(gobject.GObject):
         else:
             self.window.get_widget("storage-file-size").set_sensitive(False)
             self.window.get_widget("non-sparse").set_sensitive(False)
-            if os.path.isfile(file):
-                size = os.path.getsize(file)/(1024*1024)
+            if os.path.isfile(filename):
+                size = os.path.getsize(filename)/(1024*1024)
                 self.window.get_widget("storage-file-size").set_value(size)
             else:
                 self.window.get_widget("storage-file-size").set_value(0)
@@ -718,9 +720,9 @@ class vmmAddHardware(gobject.GObject):
 
             bus, device = self.get_config_disk_target()
             if self.window.get_widget("storage-partition").get_active():
-                type = virtinst.VirtualDisk.TYPE_BLOCK
+                _type = virtinst.VirtualDisk.TYPE_BLOCK
             else:
-                type = virtinst.VirtualDisk.TYPE_FILE
+                _type = virtinst.VirtualDisk.TYPE_FILE
 
             # Build disk object
             filesize = self.get_config_disk_size()
@@ -736,7 +738,7 @@ class vmmAddHardware(gobject.GObject):
                     vmmutil.build_default_pool(self.vm.get_connection().vmm)
                 self._dev = virtinst.VirtualDisk(self.get_config_disk_image(),
                                                  filesize,
-                                                 type = type,
+                                                 type = _type,
                                                  sparse=self.is_sparse_file(),
                                                  readOnly=readonly,
                                                  device=device,
@@ -809,10 +811,10 @@ class vmmAddHardware(gobject.GObject):
         elif page_num == PAGE_GRAPHICS:
             graphics = self.get_config_graphics()
             if graphics == "vnc":
-                type = virtinst.VirtualGraphics.TYPE_VNC
+                _type = virtinst.VirtualGraphics.TYPE_VNC
             else:
-                type = virtinst.VirtualGraphics.TYPE_SDL
-            self._dev = virtinst.VirtualGraphics(type=type)
+                _type = virtinst.VirtualGraphics.TYPE_SDL
+            self._dev = virtinst.VirtualGraphics(type=_type)
             try:
                 self._dev.port   = self.get_config_vnc_port()
                 self._dev.passwd = self.get_config_vnc_password()

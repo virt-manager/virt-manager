@@ -123,8 +123,8 @@ class vmmCreatePool(gobject.GObject):
         model.clear()
         types = Storage.StoragePool.get_pool_types()
         types.sort()
-        for type in types:
-            model.append([type, "%s: %s" % (type, Storage.StoragePool.get_pool_type_desc(type))])
+        for typ in types:
+            model.append([typ, "%s: %s" % (typ, Storage.StoragePool.get_pool_type_desc(typ))])
 
     def populate_pool_format(self):
         model = self.window.get_widget("pool-format").get_model()
@@ -166,9 +166,9 @@ class vmmCreatePool(gobject.GObject):
 
 
     def get_config_type(self):
-        type = self.window.get_widget("pool-type")
-        if type.get_active_iter() != None:
-            return type.get_model().get_value(type.get_active_iter(), 0)
+        typ = self.window.get_widget("pool-type")
+        if typ.get_active_iter() != None:
+            return typ.get_model().get_value(typ.get_active_iter(), 0)
         return None
 
     def get_config_name(self):
@@ -312,13 +312,13 @@ class vmmCreatePool(gobject.GObject):
 
     def validate(self, page):
         if page == PAGE_NAME:
-            type = self.get_config_type()
+            typ  = self.get_config_type()
             name = self.get_config_name()
             conn = self.conn.vmm
 
             try:
-                pool_class = Storage.StoragePool.get_pool_class(type)
-                self._pool = pool_class(name=name,conn=conn)
+                pool_class = Storage.StoragePool.get_pool_class(typ)
+                self._pool = pool_class(name=name, conn=conn)
             except ValueError, e:
                 return self.err.val_err(_("Pool Parameter Error"), str(e))
 

@@ -405,12 +405,12 @@ class vmmDetails(gobject.GObject):
         topwin = self.window.get_widget("vmm-details")
         topwin.set_title(self.title)
 
-    def notify_closed(self, id, reason=None):
-        if self.notifyID is not None and self.notifyID == id:
+    def notify_closed(self, i, reason=None):
+        if self.notifyID is not None and self.notifyID == i:
             self.notifyID = None
 
-    def notify_action(self, id, action):
-        if self.notifyID is None or self.notifyID != id:
+    def notify_action(self, i, action):
+        if self.notifyID is None or self.notifyID != i:
             return
 
         if action == "dismiss":
@@ -1210,10 +1210,10 @@ class vmmDetails(gobject.GObject):
             else:
                 self.vncViewer.open_host(host, str(port))
         except:
-            (type, value, stacktrace) = sys.exc_info ()
+            (typ, value, stacktrace) = sys.exc_info ()
             details = \
                     "Unable to start virtual machine '%s'" % \
-                    (str(type) + " " + str(value) + "\n" + \
+                    (str(typ) + " " + str(value) + "\n" + \
                      traceback.format_exc (stacktrace))
             logging.error(details)
 
@@ -1282,13 +1282,14 @@ class vmmDetails(gobject.GObject):
         fcdialog.set_do_overwrite_confirmation(True)
         if fcdialog.run() == gtk.RESPONSE_ACCEPT:
             fcdialog.hide()
-            file = fcdialog.get_filename()
-            if not(file.endswith(".png")):
-                file = file + ".png"
+            filename = fcdialog.get_filename()
+            if not(filename.endswith(".png")):
+                filename += ".png"
             image = self.vncViewer.get_pixbuf()
 
             # Save along with a little metadata about us & the domain
-            image.save(file, 'png', { 'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
+            image.save(filename, 'png',
+                                    { 'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
                                       'tEXt::Domain Name': self.vm.get_name(),
                                       'tEXt::Domain UUID': self.vm.get_uuid(),
                                       'tEXt::Generator App': self.config.get_appname(),
@@ -1621,14 +1622,15 @@ class vmmDetails(gobject.GObject):
 
         # Populate list of input devices
         currentInputs = {}
-        for input in self.vm.get_input_devices():
+        for inp in self.vm.get_input_devices():
             missing = True
             insertAt = 0
-            currentInputs[input[3]] = 1
+            currentInputs[inp[3]] = 1
             for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and row[HW_LIST_COL_DEVICE][3] == input[3]:
+                if (row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and
+                    row[HW_LIST_COL_DEVICE][3] == inp[3]):
                     # Update metadata
-                    row[HW_LIST_COL_DEVICE] = input
+                    row[HW_LIST_COL_DEVICE] = inp
                     missing = False
 
                 if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_INPUT:
@@ -1636,12 +1638,12 @@ class vmmDetails(gobject.GObject):
 
             # Add in row
             if missing:
-                if input[0] == "tablet":
-                    hw_list_model.insert(insertAt, [_("Tablet"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, input])
-                elif input[0] == "mouse":
-                    hw_list_model.insert(insertAt, [_("Mouse"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, input])
+                if inp[0] == "tablet":
+                    hw_list_model.insert(insertAt, [_("Tablet"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, inp])
+                elif inp[0] == "mouse":
+                    hw_list_model.insert(insertAt, [_("Mouse"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, inp])
                 else:
-                    hw_list_model.insert(insertAt, [_("Input"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, input])
+                    hw_list_model.insert(insertAt, [_("Inp"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, inp])
 
         # Populate list of graphics devices
         currentGraphics = {}
@@ -1804,9 +1806,9 @@ class vmmDetails(gobject.GObject):
                 self.choose_cd.set_target(self.window.get_widget("disk-target-device").get_text())
             self.choose_cd.show()
 
-    def connect_cdrom(self, src, type, source, target):
+    def connect_cdrom(self, src, typ, source, target):
         try:
-            self.vm.connect_cdrom_device(type, source, target)
+            self.vm.connect_cdrom_device(typ, source, target)
         except Exception, e:
             self.err.show_err(_("Error Connecting CDROM: %s" % str(e)),
                               "".join(traceback.format_exc()))

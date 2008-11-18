@@ -23,11 +23,11 @@ import gtk.glade
 import logging
 
 class vmmErrorDialog (gtk.MessageDialog):
-    def __init__ (self, parent=None, flags=0, type=gtk.MESSAGE_INFO,
+    def __init__ (self, parent=None, flags=0, typ=gtk.MESSAGE_INFO,
                   buttons=gtk.BUTTONS_NONE, message_format=None,
                   message_details=None, default_title=_("Error")):
         gtk.MessageDialog.__init__ (self,
-                                    parent, flags, type, buttons,
+                                    parent, flags, typ, buttons,
                                     message_format)
         self.message_format = message_format
         self.message_details = message_details

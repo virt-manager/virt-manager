@@ -130,9 +130,9 @@ class vmmChooseCD(gobject.GObject):
         pass
 
     def browse_fv_iso_location(self, ignore1=None, ignore2=None):
-        file = self._browse_file(_("Locate ISO Image"), type="iso")
-        if file != None:
-            self.window.get_widget("iso-path").set_text(file)
+        filename = self._browse_file(_("Locate ISO Image"), _type="iso")
+        if filename != None:
+            self.window.get_widget("iso-path").set_text(filename)
 
     def populate_opt_media(self):
         try:
@@ -143,7 +143,7 @@ class vmmChooseCD(gobject.GObject):
             logging.error("Unable to create optical-helper widget: '%s'", e)
             self.window.get_widget("physical-media").set_sensitive(False)
 
-    def _browse_file(self, dialog_name, folder=None, type=None):
+    def _browse_file(self, dialog_name, folder=None, _type=None):
         # user wants to browse for an ISO
         fcdialog = gtk.FileChooserDialog(dialog_name,
                                          self.window.get_widget("vmm-choose-cd"),
@@ -152,9 +152,9 @@ class vmmChooseCD(gobject.GObject):
                                           gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                          None)
         fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-        if type != None:
+        if _type != None:
             f = gtk.FileFilter()
-            f.add_pattern("*." + type)
+            f.add_pattern("*." + _type)
             fcdialog.set_filter(f)
         if folder != None:
             fcdialog.set_current_folder(folder)
