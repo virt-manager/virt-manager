@@ -396,7 +396,7 @@ class vmmCreate(gobject.GObject):
             fd.seek(0,2)
             block_size = fd.tell() / 1024 / 1024
             return block_size
-        except Exception, e:
+        except Exception:
             details = "Unable to verify partition size: '%s'" % \
                       "".join(traceback.format_exc())
             logging.error(details)
@@ -695,7 +695,7 @@ class vmmCreate(gobject.GObject):
         if self.config.get_console_popup() == 1:
             # user has requested console on new created vms only
             vm = self.connection.get_vm(guest.uuid)
-            (gtype, host, port, transport, username) = vm.get_graphics_console()
+            (gtype, ignore, ignore, ignore, ignore) = vm.get_graphics_console()
             if gtype == "vnc":
                 self.emit("action-show-console", self.connection.get_uri(), guest.uuid)
             else:
@@ -942,7 +942,6 @@ class vmmCreate(gobject.GObject):
                 except ValueError, e:
                     return self.err.val_err(_("ISO Path Not Found"), str(e))
             else:
-                cdlist = self.window.get_widget("cd-path")
                 src = self.get_config_install_source()
                 try:
                     self._guest.installer.location = src

@@ -248,7 +248,7 @@ def main():
     setup_i18n()
     setup_logging()
     setup_pypath()
-    (options, args) = parse_commandline()
+    (options, ignore) = parse_commandline()
 
     # Urgh, pygtk merely logs a warning when failing to open
     # the X11 display connection, and lets everything carry
@@ -318,7 +318,7 @@ def main():
             else:
                 # Grab the service to allow others to talk to us later
                 name = dbus.service.BusName("com.redhat.virt.manager", bus=bus)
-                remote = vmmRemote(engine, name)
+                vmmRemote(engine, name)
         except:
             # Something went wrong doing dbus setup, just ignore & carry on
             logging.warning("Could not get connection to session bus, disabling DBus service " + \

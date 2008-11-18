@@ -246,8 +246,6 @@ class vmmEngine(gobject.GObject):
         win.activate_console_page()
 
     def refresh_console(self, uri, uuid):
-        con = self.get_connection(uri)
-
         if not(self.connections[uri]["windowConsole"].has_key(uuid)):
             return
 
@@ -576,7 +574,7 @@ class vmmEngine(gobject.GObject):
         for item in menu:
             menu.remove(item)
 
-        for key, val_list in conns.items():
+        for ignore, val_list in conns.items():
             can_migrate, label, tooltip = val_list
             mitem = gtk.ImageMenuItem(label)
             mitem.set_sensitive(can_migrate)
@@ -593,7 +591,6 @@ class vmmEngine(gobject.GObject):
             menu.add(mitem)
 
     def get_available_migrate_hostnames(self):
-        hostname = self.windowManager.current_connection().get_hostname()
         driver = self.windowManager.current_connection().get_driver()
         uri = self.windowManager.current_connection().get_uri()
         available_migrate_hostnames = {}

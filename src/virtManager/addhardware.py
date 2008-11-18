@@ -279,7 +279,7 @@ class vmmAddHardware(gobject.GObject):
             fd.seek(0,2)
             block_size = fd.tell() / 1024 / 1024
             return block_size
-        except Exception, e:
+        except Exception:
             details = "Unable to verify partition size: '%s'" % \
                       "".join(traceback.format_exc())
             logging.error(details)
@@ -510,7 +510,7 @@ class vmmAddHardware(gobject.GObject):
             used.append(d[3])
 
         try:
-            t = self._dev.generate_target(used)
+            self._dev.generate_target(used)
         except Exception, e:
             details = _("Unable to complete install: ") + \
                       "".join(traceback.format_exc())

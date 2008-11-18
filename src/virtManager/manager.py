@@ -443,7 +443,7 @@ class vmmManager(gobject.GObject):
         logging.debug("VM %s started" % vm.get_name())
         if self.config.get_console_popup() == 2 and not vm.is_management_domain():
             # user has requested consoles on all vms
-            (gtype, host, port, transport, username) = vm.get_graphics_console()
+            (gtype, ignore, ignore, ignore, ignore) = vm.get_graphics_console()
             if gtype == "vnc":
                 self.emit("action-show-console", uri, vmuuid)
             elif not connection.is_remote():
@@ -961,7 +961,6 @@ class vmmManager(gobject.GObject):
         self.config.set_vmlist_domain_id_visible(menu.get_active())
 
     def toggle_domain_id_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        menu = self.window.get_widget("menu_view_domain_id")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(COL_ID)
         col.set_visible(self.config.is_vmlist_domain_id_visible())
@@ -970,7 +969,6 @@ class vmmManager(gobject.GObject):
         self.config.set_vmlist_status_visible(menu.get_active())
 
     def toggle_status_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        menu = self.window.get_widget("menu_view_status")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(COL_STATUS)
         col.set_visible(self.config.is_vmlist_status_visible())
@@ -979,7 +977,6 @@ class vmmManager(gobject.GObject):
         self.config.set_vmlist_cpu_usage_visible(menu.get_active())
 
     def toggle_cpu_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        menu = self.window.get_widget("menu_view_cpu_usage")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(COL_CPU)
         col.set_visible(self.config.is_vmlist_cpu_usage_visible())
@@ -988,7 +985,6 @@ class vmmManager(gobject.GObject):
         self.config.set_vmlist_virtual_cpus_visible(menu.get_active())
 
     def toggle_virtual_cpus_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        menu = self.window.get_widget("menu_view_virtual_cpus")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(COL_VCPU)
         col.set_visible(self.config.is_vmlist_virtual_cpus_visible())
@@ -997,7 +993,6 @@ class vmmManager(gobject.GObject):
         self.config.set_vmlist_memory_usage_visible(menu.get_active())
 
     def toggle_memory_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        menu = self.window.get_widget("menu_view_memory_usage")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(COL_MEM)
         col.set_visible(self.config.is_vmlist_memory_usage_visible())
@@ -1006,7 +1001,6 @@ class vmmManager(gobject.GObject):
         self.config.set_vmlist_disk_io_visible(menu.get_active())
 
     def toggle_disk_io_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        menu = self.window.get_widget("menu_view_disk_io")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(COL_DISK)
         col.set_visible(self.config.is_vmlist_disk_io_visible())
@@ -1015,7 +1009,6 @@ class vmmManager(gobject.GObject):
         self.config.set_vmlist_network_traffic_visible(menu.get_active())
 
     def toggle_network_traffic_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        menu = self.window.get_widget("menu_view_network_traffic")
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(COL_NETWORK)
         col.set_visible(self.config.is_vmlist_network_traffic_visible())

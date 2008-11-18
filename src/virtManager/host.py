@@ -614,13 +614,6 @@ class vmmHost(gobject.GObject):
         if event.button != 3:
             return
 
-        tup = widget.get_path_at_pos(int(event.x), int(event.y))
-        if tup == None:
-            return False
-        path = tup[0]
-        model = widget.get_model()
-        iter = model.get_iter(path)
-        vol = model.get_value(iter, 0)
         self.volmenu.popup(None, None, None, 0, event.time)
 
     def copy_vol_path(self, ignore=None):

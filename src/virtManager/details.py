@@ -787,8 +787,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
         self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())
 
-    def switch_page(self, ignore1=None, ignore2=None,newpage=None):
-        details = self.window.get_widget("details-pages")
+    def switch_page(self, ignore1=None, ignore2=None, newpage=None):
         self.page_refresh(newpage)
 
     def refresh_resources(self, ignore=None):
@@ -808,8 +807,6 @@ class vmmDetails(gobject.GObject):
             active = selection.get_selected()
             if active[1] != None:
                 pagetype = active[0].get_value(active[1], HW_LIST_COL_TYPE)
-                device_info = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
-                hw_model = hw_list.get_model()
                 if pagetype == HW_LIST_TYPE_CPU:
                     self.refresh_config_cpu()
                 elif pagetype == HW_LIST_TYPE_MEMORY:
@@ -838,7 +835,6 @@ class vmmDetails(gobject.GObject):
                                                                       (int(round(vm_memory/1024.0)), \
                                                                        int(round(host_memory/1024.0))))
 
-        history_len = self.config.get_stats_history_length()
         self.cpu_usage_graph.set_property("data_array", self.vm.cpu_time_vector())
         self.memory_usage_graph.set_property("data_array", self.vm.current_memory_vector())
 
@@ -1050,7 +1046,7 @@ class vmmDetails(gobject.GObject):
             autoval = self.vm.get_autostart()
             self.window.get_widget("config-autostart").set_active(autoval)
             self.window.get_widget("config-autostart").set_sensitive(True)
-        except libvirt.libvirtError, e:
+        except libvirt.libvirtError:
             # Autostart isn't supported
             self.window.get_widget("config-autostart").set_active(False)
             self.window.get_widget("config-autostart").set_sensitive(False)
@@ -1181,7 +1177,6 @@ class vmmDetails(gobject.GObject):
             return
 
         logging.debug("Trying console login")
-        password = self.window.get_widget("console-auth-password").get_text()
         protocol, host, port, trans, username = self.vm.get_graphics_console()
 
         if protocol is None:
@@ -1291,8 +1286,6 @@ class vmmDetails(gobject.GObject):
             if not(file.endswith(".png")):
                 file = file + ".png"
             image = self.vncViewer.get_pixbuf()
-            width = image.get_width()
-            height = image.get_height()
 
             # Save along with a little metadata about us & the domain
             image.save(file, 'png', { 'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
@@ -1396,7 +1389,6 @@ class vmmDetails(gobject.GObject):
             memadj.value = memory
 
     def config_memory_apply(self, src):
-        status = self.vm.status()
         self.refresh_config_memory()
         exc = None
         curmem = None

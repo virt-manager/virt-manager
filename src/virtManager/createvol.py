@@ -187,7 +187,7 @@ class vmmCreateVolume(gobject.GObject):
 
             meter = vmmCreateMeter(asyncjob)
             logging.debug("Starting backround vol creation.")
-            poolobj = self.vol.install(meter=meter)
+            self.vol.install(meter=meter)
         except Exception, e:
             self.error_msg = _("Error creating vol: %s") % str(e)
             self.error_details = "".join(traceback.format_exc())

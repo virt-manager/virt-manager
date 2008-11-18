@@ -207,7 +207,6 @@ class vmmDomain(gobject.GObject):
             return
         # Clear cached XML
         self.xml = None
-        hostInfo = self.connection.get_host_info()
         info = self.vm.info()
         expected = self.config.get_stats_history_length()
         current = len(self.record)
@@ -542,7 +541,6 @@ class vmmDomain(gobject.GObject):
             devs = ctx.xpathEval("/domain/devices/serial")
             for node in devs:
                 name = "Serial "
-                usable = False
                 dev_type = node.prop("type")
                 source_path = None
 
@@ -1029,7 +1027,6 @@ class vmmDomain(gobject.GObject):
         except:
             return []
         ctx = doc.xpathNewContext()
-        graphics = []
         dev = None
         try:
             ret = ctx.xpathEval("/domain/os/boot[1]")
@@ -1051,8 +1048,6 @@ class vmmDomain(gobject.GObject):
         except:
             return []
         ctx = doc.xpathNewContext()
-        graphics = []
-        dev = None
         try:
             ret = ctx.xpathEval("/domain/os/boot[1]")
             if len(ret) > 0:

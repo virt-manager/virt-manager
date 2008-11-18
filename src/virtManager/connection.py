@@ -44,8 +44,7 @@ LIBVIRT_POLICY_FILES = [
 
 def get_local_hostname():
     try:
-        (host, aliases, ipaddrs) = gethostbyaddr(gethostname())
-        return host
+        return gethostbyaddr(gethostname())[0]
     except:
         logging.warning("Unable to resolve local hostname for machine")
         return "localhost"
@@ -280,8 +279,8 @@ class vmmConnection(gobject.GObject):
         return virtinst.util.is_uri_remote(self.uri)
 
     def is_qemu_session(self):
-        (scheme, username, netloc, \
-         path, query, fragment) = virtinst.util.uri_split(self.uri)
+        (scheme, ignore, ignore, \
+         path, ignore, ignore) = virtinst.util.uri_split(self.uri)
         if path == "/session" and scheme.startswith("qemu"):
             return True
         return False

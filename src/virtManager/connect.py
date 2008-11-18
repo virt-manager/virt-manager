@@ -250,7 +250,7 @@ class vmmConnect(gobject.GObject):
         if host.startswith("linux-"):
             tmphost = host[6:]
             try:
-                tmp = long(tmphost)
+                long(tmphost)
                 host = ""
             except ValueError:
                 pass
