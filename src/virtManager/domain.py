@@ -52,8 +52,11 @@ class vmmDomain(gobject.GObject):
         self._update_status()
         self.xml = None
 
+        self._network_traffic = None
         self.config.on_vmlist_network_traffic_visible_changed(self.toggle_sample_network_traffic)
         self.toggle_sample_network_traffic()
+
+        self._disk_io = None
         self.config.on_vmlist_disk_io_visible_changed(self.toggle_sample_disk_io)
         self.toggle_sample_disk_io()
 

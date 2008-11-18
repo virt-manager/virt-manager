@@ -29,7 +29,6 @@ try:
     haveKeyring = True
 except:
     logging.warning("No support for gnome-keyring")
-    pass
 
 class vmmKeyring:
 

@@ -202,7 +202,7 @@ class vmmManager(gobject.GObject):
         self.vmmenushutdown.add(self.vmmenushutdown_items["forcepoweroff"])
 
         self.vmmenu_items["hsep1"] = gtk.SeparatorMenuItem()
-        self.vmmenu_items["hsep1"].show();
+        self.vmmenu_items["hsep1"].show()
         self.vmmenu.add(self.vmmenu_items["hsep1"])
 
         self.vmmenu_items["migrate"] = gtk.ImageMenuItem("_Migrate")
@@ -213,7 +213,7 @@ class vmmManager(gobject.GObject):
         self.vmmenu.add(self.vmmenu_items["migrate"])
 
         self.vmmenu_items["hsep2"] = gtk.SeparatorMenuItem()
-        self.vmmenu_items["hsep2"].show();
+        self.vmmenu_items["hsep2"].show()
         self.vmmenu.add(self.vmmenu_items["hsep2"])
 
         self.vmmenu_items["open"] = gtk.ImageMenuItem(gtk.STOCK_OPEN)
@@ -246,7 +246,7 @@ class vmmManager(gobject.GObject):
         self.connmenu.add(self.connmenu_items["disconnect"])
 
         self.connmenu_items["hsep"] = gtk.SeparatorMenuItem()
-        self.connmenu_items["hsep"].show();
+        self.connmenu_items["hsep"].show()
         self.connmenu.add(self.connmenu_items["hsep"])
 
         self.connmenu_items["details"] = gtk.ImageMenuItem("_Details")
@@ -348,19 +348,19 @@ class vmmManager(gobject.GObject):
             return
 
         # get filename
-        self.fcdialog = gtk.FileChooserDialog(_("Restore Virtual Machine"),
+        fcdialog = gtk.FileChooserDialog(_("Restore Virtual Machine"),
                                               self.window.get_widget("vmm-manager"),
                                               gtk.FILE_CHOOSER_ACTION_OPEN,
                                               (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                                gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
                                               None)
-        self.fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-        self.fcdialog.set_current_folder(self.config.get_default_save_dir(self.current_connection()))
+        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
+        fcdialog.set_current_folder(self.config.get_default_save_dir(self.current_connection()))
         # pop up progress dialog
-        response = self.fcdialog.run()
-        self.fcdialog.hide()
+        response = fcdialog.run()
+        fcdialog.hide()
         if(response == gtk.RESPONSE_ACCEPT):
-            file_to_load = self.fcdialog.get_filename()
+            file_to_load = fcdialog.get_filename()
             if self.is_valid_saved_image(file_to_load):
                 progWin = vmmAsyncJob(self.config,
                                       self.restore_saved_callback,
@@ -371,7 +371,7 @@ class vmmManager(gobject.GObject):
                 self.err.val_err(_("The file '%s' does not appear to be a valid saved machine image") % file_to_load)
                 return
 
-        self.fcdialog.destroy()
+        fcdialog.destroy()
         if(self.domain_restore_error != ""):
             self.err.val_err(self.domain_restore_error)
             self.domain_restore_error = ""

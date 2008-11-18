@@ -25,7 +25,6 @@ import os, sys
 import glob
 import traceback
 from time import time
-import logging
 from socket import gethostbyaddr, gethostname
 import dbus
 import threading
@@ -1055,8 +1054,10 @@ class vmmConnection(gobject.GObject):
             f = open("/sys/class/net/bonding_masters")
             while True:
                 rline = f.readline()
-                if not rline: break
-                if rline == "\x00": continue
+                if not rline:
+                    break
+                if rline == "\x00":
+                    continue
                 rline = rline.strip("\n\t")
                 masters = rline[:].split(' ')
         return masters

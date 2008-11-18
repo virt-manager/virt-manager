@@ -55,13 +55,13 @@ class vmmAsyncJob(gobject.GObject):
         self.is_pulsing = True
 
     def run(self):
-        self.timer = gobject.timeout_add (100, self.exit_if_necessary)
+        timer = gobject.timeout_add (100, self.exit_if_necessary)
         self.topwin.present()
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
         self.bg_thread.start()
         gtk.main()
-        gobject.source_remove(self.timer)
-        self.timer = 0
+        gobject.source_remove(timer)
+        timer = 0
         self.topwin.destroy()
 
     def pulse_pbar(self, progress="", stage=None):

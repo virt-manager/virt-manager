@@ -79,6 +79,10 @@ class vmmCreate(gobject.GObject):
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
+        self.install_error = ""
+        self.install_details = ""
+        self.non_sparse = True
+
         self.topwin.hide()
         self.window.signal_autoconnect({
             "on_create_pages_switch_page" : self.page_changed,
@@ -138,7 +142,7 @@ class vmmCreate(gobject.GObject):
         cd_list.add_attribute(text, 'text', 1)
         cd_list.add_attribute(text, 'sensitive', 2)
         try:
-            self.optical_helper = vmmOpticalDriveHelper(self.window.get_widget("cd-path"))
+            vmmOpticalDriveHelper(self.window.get_widget("cd-path"))
             self.window.get_widget("media-physical").set_sensitive(True)
         except Exception, e:
             logging.error("Unable to create optical-helper widget: '%s'", e)
@@ -840,8 +844,8 @@ class vmmCreate(gobject.GObject):
                 if not self.connection.is_remote():
                     n = 1
                     while os.path.exists(_file) and n < 100:
-                        file = os.path.join(_dir, self.get_config_name() + \
-                                                  "-" + str(n) + ".img")
+                        _file = os.path.join(_dir, self.get_config_name() + \
+                                                   "-" + str(n) + ".img")
                         n = n + 1
                     if os.path.exists(_file):
                         _file = ""

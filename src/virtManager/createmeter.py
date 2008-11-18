@@ -27,7 +27,7 @@ class vmmCreateMeter(progress.BaseMeter):
         progress.BaseMeter.__init__(self)
         self.asyncjob = asyncjob
 
-    def _do_start(self, now):
+    def _do_start(self, now=None):
         if self.text is not None:
             text = self.text
         else:

@@ -143,7 +143,6 @@ def setup_logging():
 
     # Log uncaught exceptions
     def exception_log(typ, val, tb):
-        import traceback
         s = traceback.format_exception(typ, val, tb)
         logging.exception("".join(s))
         sys.__excepthook__(typ, val, tb)
@@ -261,11 +260,9 @@ def main():
     except Warning, e:
         # ...the risk is we catch too much though
         # Damned if we do, damned if we dont :-)(
-        print _("Unable to initialize GTK: ") + str(e)
-        sys.exit(1)
+        raise RuntimeError(_("Unable to initialize GTK: %s") % str(e))
     warnings.resetwarnings()
 
-    import gtk
     gtk.gdk.threads_init()
 
     import dbus
@@ -345,6 +342,6 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except Exception, e:
-        logging.exception(e)
-        _show_startup_error(str(e), "".join(traceback.format_exc()))
+    except Exception, run_e:
+        logging.exception(run_e)
+        _show_startup_error(str(run_e), "".join(traceback.format_exc()))

@@ -27,7 +27,6 @@ import logging
 import traceback
 import sys
 import dbus
-import traceback
 import gtkvnc
 import os
 import socket
@@ -116,6 +115,7 @@ class vmmDetails(gobject.GObject):
 
         self.engine = engine
         self.dynamic_tabs = []
+        self.ignorePause = False
 
         # Don't allowing changing network/disks for Dom0
         if self.vm.is_management_domain():
@@ -247,7 +247,6 @@ class vmmDetails(gobject.GObject):
             self.notifyInterface.connect_to_signal("NotificationClosed", self.notify_closed)
         except Exception, e:
             logging.error("Cannot initialize notification system" + str(e))
-            pass
 
         self.window.get_widget("console-pages").set_show_tabs(False)
         self.window.get_widget("details-menu-view-toolbar").set_active(self.config.get_details_show_toolbar())
@@ -396,10 +395,9 @@ class vmmDetails(gobject.GObject):
                                                             ["dismiss", _("Do not show this notification in the future")],
                                                             {"desktop-entry": "virt-manager",
                                                              "x": x+200, "y": y},
-                                                            8 * 1000);
+                                                            8 * 1000)
             except Exception, e:
                 logging.error("Cannot popup notification " + str(e))
-                pass
 
     def notify_ungrabbed(self, src):
         topwin = self.window.get_widget("vmm-details")
@@ -1711,7 +1709,7 @@ class vmmDetails(gobject.GObject):
         devs = range(len(hw_list_model))
         devs.reverse()
         for i in devs:
-            iter = hw_list_model.iter_nth_child(None, i)
+            _iter = hw_list_model.iter_nth_child(None, i)
             row = hw_list_model[i]
             removeIt = False
 
@@ -1744,7 +1742,7 @@ class vmmDetails(gobject.GObject):
                     hw_list.get_selection().select_iter(selModel.iter_nth_child(None, 0))
 
                 # Now actually remove it
-                hw_list_model.remove(iter)
+                hw_list_model.remove(_iter)
 
     def repopulate_boot_list(self):
         hw_list_model = self.window.get_widget("hw-list").get_model()

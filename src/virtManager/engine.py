@@ -152,7 +152,7 @@ class vmmEngine(gobject.GObject):
             try:
                 self.connections[uri]["connection"].tick()
             except KeyboardInterrupt:
-                raise KeyboardInterrupt
+                raise
             except:
                 logging.error(("Could not refresh connection %s\n" % (uri)) + str(sys.exc_info()[0]) + \
                               " " + str(sys.exc_info()[1]) + "\n" + \
@@ -403,24 +403,24 @@ class vmmEngine(gobject.GObject):
                        libvirt.VIR_DOMAIN_PAUSED ]:
             logging.warning("Save requested, but machine is shutdown / shutoff / paused")
         else:
-            self.fcdialog = gtk.FileChooserDialog(_("Save Virtual Machine"),
-                                                  src.window.get_widget("vmm-details"),
-                                                  gtk.FILE_CHOOSER_ACTION_SAVE,
-                                                  (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                                   gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
-                                                  None)
-            self.fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-            self.fcdialog.set_current_folder(self.config.get_default_save_dir(con))
-            self.fcdialog.set_do_overwrite_confirmation(True)
-            response = self.fcdialog.run()
-            self.fcdialog.hide()
+            fcdialog = gtk.FileChooserDialog(_("Save Virtual Machine"),
+                                             src.window.get_widget("vmm-details"),
+                                             gtk.FILE_CHOOSER_ACTION_SAVE,
+                                             (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                              gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
+                                              None)
+            fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
+            fcdialog.set_current_folder(self.config.get_default_save_dir(con))
+            fcdialog.set_do_overwrite_confirmation(True)
+            response = fcdialog.run()
+            fcdialog.hide()
             if(response == gtk.RESPONSE_ACCEPT):
-                file_to_save = self.fcdialog.get_filename()
+                file_to_save = fcdialog.get_filename()
                 progWin = vmmAsyncJob(self.config, self._save_callback,
                                       [vm, file_to_save],
                                       _("Saving Virtual Machine"))
                 progWin.run()
-                self.fcdialog.destroy()
+                fcdialog.destroy()
 
             if self._save_callback_info != []:
                 self.err.show_err(_("Error saving domain: %s" % self._save_callback_info[0]), self._save_callback_info[1])
@@ -618,7 +618,7 @@ class vmmEngine(gobject.GObject):
                 reason = _("Cannot migrate to same connection.")
 
                 # Explicitly don't include this in the list
-                continue;
+                continue
             elif conn.get_state() == vmmConnection.STATE_ACTIVE:
                 # Assumably we can migrate to this connection
                 can_migrate = True

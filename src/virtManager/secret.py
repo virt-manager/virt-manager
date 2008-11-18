@@ -21,10 +21,12 @@
 
 class vmmSecret:
 
-    def __init__(self, name, secret=None, attributes={}):
+    def __init__(self, name, secret=None, attributes=None):
 
         self.name = name
         self.secret = secret
+        if attributes == None:
+            attributes = {}
         self.attributes = attributes
 
     def set_secret(self, data):

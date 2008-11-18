@@ -136,8 +136,8 @@ class vmmChooseCD(gobject.GObject):
 
     def populate_opt_media(self):
         try:
-            self.optical_helper = vmmOpticalDriveHelper(self.window.get_widget("cd-path"))
-            self.optical_helper.populate_opt_media()
+            optical_helper = vmmOpticalDriveHelper(self.window.get_widget("cd-path"))
+            optical_helper.populate_opt_media()
             self.window.get_widget("physical-media").set_sensitive(True)
         except Exception, e:
             logging.error("Unable to create optical-helper widget: '%s'", e)
