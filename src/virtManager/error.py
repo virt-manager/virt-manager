@@ -55,7 +55,7 @@ class vmmErrorDialog (gtk.MessageDialog):
             details.show ()
             expander.add (sw)
             sw.show ()
-            self.pack_start (expander)
+            self.vbox.pack_start (expander)
             expander.show ()
 
     def show_err(self, summary, details, title=None):
