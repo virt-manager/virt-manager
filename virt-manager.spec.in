@@ -20,7 +20,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # These two are just the oldest version tested
 Requires: pygtk2 >= 1.99.12-6
 Requires: gnome-python2-gconf >= 1.99.11-7
+%if "%{fedora}" == "9" || "%{fedora}" >= "10"
 Requires: gnome-python2-gnome
+%else
+Requires: gnome-python2
+%endif
 # Absolutely require this version or newer
 Requires: libvirt-python >= 0.4.5
 # Definitely does not work with earlier due to python API changes
