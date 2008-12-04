@@ -613,7 +613,7 @@ class vmmDomain(gobject.GObject):
                         sharable = True
 
                 if srcpath == None:
-                    if devtype == "cdrom":
+                    if devtype == "cdrom" or devtype == "floppy":
                         srcpath = "-"
                         typ = "block"
                     else:
