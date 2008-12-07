@@ -216,6 +216,11 @@ class vmmConnect(gobject.GObject):
             auto = self.window.get_widget("autoconnect").get_active()
         uri = None
 
+        if conn == CONN_SSH and '@' in host:
+            user, host = host.split('@',1)
+        else:
+            user = "root"
+
         readOnly = None
         if hv == -1:
             pass
@@ -225,7 +230,8 @@ class vmmConnect(gobject.GObject):
             elif conn == CONN_TLS:
                 uri = "xen+tls://" + host + "/"
             elif conn == CONN_SSH:
-                uri = "xen+ssh://root@" + host + "/"
+
+                uri = "xen+ssh://" + user + "@" + host + "/"
             elif conn == CONN_TCP:
                 uri = "xen+tcp://" + host + "/"
         else:
@@ -234,7 +240,7 @@ class vmmConnect(gobject.GObject):
             elif conn == CONN_TLS:
                 uri = "qemu+tls://" + host + "/system"
             elif conn == CONN_SSH:
-                uri = "qemu+ssh://root@" + host + "/system"
+                uri = "qemu+ssh://" + user + "@" + host + "/system"
             elif conn == CONN_TCP:
                 uri = "qemu+tcp://" + host + "/system"
 
