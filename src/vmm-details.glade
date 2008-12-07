@@ -388,10 +388,10 @@
         <child>
           <widget class="GtkToolbar" id="details-toolbar">
             <property name="visible">True</property>
-            <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
             <child>
               <widget class="GtkToolButton" id="control-run">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="label" translatable="yes">Run</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-play</property>
@@ -404,6 +404,7 @@
             <child>
               <widget class="GtkToggleToolButton" id="control-pause">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="label" translatable="yes">Pause</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-media-pause</property>
@@ -416,6 +417,7 @@
             <child>
               <widget class="GtkMenuToolButton" id="control-shutdown">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="label" translatable="yes">Shutdown</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_control_shutdown_clicked"/>
