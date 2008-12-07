@@ -1115,7 +1115,6 @@ class vmmCreate(gobject.GObject):
         model.clear()
         model.append(["generic", "Generic"])
         types = virtinst.FullVirtGuest.list_os_types()
-        types.sort()
         for _type in types:
             model.append([_type,
                           virtinst.FullVirtGuest.get_os_type_label(_type)])
@@ -1127,7 +1126,6 @@ class vmmCreate(gobject.GObject):
             model.append(["generic", "Generic"])
             return
         variants = virtinst.FullVirtGuest.list_os_variants(_type)
-        variants.sort()
         for variant in variants:
             model.append([variant,
                           virtinst.FullVirtGuest.get_os_variant_label(_type,
