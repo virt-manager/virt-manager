@@ -31,6 +31,7 @@ import logging
 import logging.handlers
 import threading
 import traceback
+import signal
 from optparse import OptionParser, OptionValueError
 
 # These are substituted into code based on --prefix given to configure
@@ -281,6 +282,9 @@ def main():
     if not options.nofork:
         drop_tty()
         drop_stdio()
+
+        # Ignore SIGHUP, otherwise a serial console closing drops the whole app
+        signal.signal(signal.SIGHUP, signal.SIG_IGN)
 
     from virtManager.engine import vmmEngine
     from virtManager.remote import vmmRemote
