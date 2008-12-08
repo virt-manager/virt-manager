@@ -239,10 +239,11 @@ class vmmDetails(gobject.GObject):
         self.connected = 0
 
         self.notifyID = None
+        self.notifyInterface = None
         try:
             bus = dbus.SessionBus()
-            self.notifyObject = bus.get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
-            self.notifyInterface = dbus.Interface(self.notifyObject, "org.freedesktop.Notifications")
+            notifyObject = bus.get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+            self.notifyInterface = dbus.Interface(notifyObject, "org.freedesktop.Notifications")
             self.notifyInterface.connect_to_signal("ActionInvoked", self.notify_action)
             self.notifyInterface.connect_to_signal("NotificationClosed", self.notify_closed)
         except Exception, e:
@@ -382,7 +383,7 @@ class vmmDetails(gobject.GObject):
         topwin = self.window.get_widget("vmm-details")
         topwin.set_title(_("Press Ctrl+Alt to release pointer.") + " " + self.title)
 
-        if self.config.show_console_grab_notify():
+        if self.config.show_console_grab_notify() and self.notifyInterface:
             try:
                 (x, y) = topwin.window.get_origin()
                 self.notifyID = self.notifyInterface.Notify(topwin.get_title(),
