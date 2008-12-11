@@ -111,9 +111,6 @@ class vmmAddHardware(gobject.GObject):
             name = "page" + str(num) + "-title"
             self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL,black)
 
-        if os.getuid() != 0:
-            self.window.get_widget("storage-partition").set_sensitive(False)
-
         # set up the lists for the networks
         network_list = self.window.get_widget("net-network")
         network_model = gtk.ListStore(str, str)
@@ -371,10 +368,6 @@ class vmmAddHardware(gobject.GObject):
 
             self.window.get_widget("storage-partition-address-browse").set_sensitive(not remote)
             self.window.get_widget("storage-file-address-browse").set_sensitive(not remote)
-            self.window.get_widget("storage-partition-address").set_sensitive(not remote)
-            self.window.get_widget("storage-partition").set_sensitive(not remote)
-            if remote:
-                self.window.get_widget("storage-file-backed").set_active(True)
 
         elif page_number == PAGE_NETWORK:
             if remote:

@@ -524,13 +524,9 @@ class vmmCreate(gobject.GObject):
         elif page_number == PAGE_DISK:
             self.change_storage_type()
             if self.connection.is_remote():
-                self.window.get_widget("storage-partition").set_sensitive(False)
-                self.window.get_widget("storage-partition-address").set_sensitive(False)
                 self.window.get_widget("storage-partition-address-browse").set_sensitive(False)
                 self.window.get_widget("storage-file-address-browse").set_sensitive(False)
             else:
-                self.window.get_widget("storage-partition").set_sensitive(True)
-                self.window.get_widget("storage-partition-address").set_sensitive(True)
                 self.window.get_widget("storage-partition-address-browse").set_sensitive(True)
                 self.window.get_widget("storage-file-address-browse").set_sensitive(True)
 
