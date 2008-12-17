@@ -190,6 +190,40 @@ class vmmConfig:
     def on_stats_history_length_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/stats/history-length", callback)
 
+
+    # Disable/Enable different stats polling
+    def get_stats_enable_disk_poll(self):
+        return self.conf.get_bool(self.conf_dir + "/stats/enable-disk-poll")
+    def get_stats_enable_net_poll(self):
+        return self.conf.get_bool(self.conf_dir + "/stats/enable-net-poll")
+    def get_stats_enable_mem_poll(self):
+        return self.conf.get_bool(self.conf_dir + "/stats/enable-mem-poll")
+    def get_stats_enable_cpu_poll(self):
+        return self.conf.get_bool(self.conf_dir + "/stats/enable-cpu-poll")
+
+    def set_stats_enable_disk_poll(self, val):
+        self.conf.set_bool(self.conf_dir + "/stats/enable-disk-poll", val)
+    def set_stats_enable_net_poll(self, val):
+        self.conf.set_bool(self.conf_dir + "/stats/enable-net-poll", val)
+    def set_stats_enable_mem_poll(self, val):
+        self.conf.set_bool(self.conf_dir + "/stats/enable-mem-poll", val)
+    def set_stats_enable_cpu_poll(self, val):
+        self.conf.set_bool(self.conf_dir + "/stats/enable-cpu-poll", val)
+
+    def on_stats_enable_disk_poll_changed(self, cb, userdata=None):
+        self.conf.notify_add(self.conf_dir + "/stats/enable-disk-poll", cb,
+                             userdata)
+    def on_stats_enable_net_poll_changed(self, cb, userdata=None):
+        self.conf.notify_add(self.conf_dir + "/stats/enable-net-poll", cb,
+                             userdata)
+    def on_stats_enable_mem_poll_changed(self, cb, userdata=None):
+        self.conf.notify_add(self.conf_dir + "/stats/enable-mem-poll", cb,
+                             userdata)
+    def on_stats_enable_cpu_poll_changed(self, cb, userdata=None):
+        self.conf.notify_add(self.conf_dir + "/stats/enable-cpu-poll", cb,
+                             userdata)
+
+    # VM Console preferences
     def on_console_popup_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/console/popup", callback)
 
