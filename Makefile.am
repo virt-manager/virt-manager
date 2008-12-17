@@ -9,3 +9,6 @@ DISTCLEAN_FILES = @PACKAGE@.spec intltool-extract intltool-merge intltool-update
 
 rpm: clean
 	$(MAKE) dist && rpmbuild -ta $(distdir).tar.gz
+
+check-pylint:
+	tests/pylint-virt-manager.sh
