@@ -136,6 +136,17 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("menu_view_disk_io").set_active(self.config.is_vmlist_disk_io_visible())
         self.window.get_widget("menu_view_network_traffic").set_active(self.config.is_vmlist_network_traffic_visible())
 
+        # Register callbacks with the global stats enable/disable values
+        # that disable the associated vmlist widgets if reporting is disabled
+        self.config.on_stats_enable_disk_poll_changed(self.enable_polling,
+                                                      VMLIST_SORT_DISK_IO)
+        self.config.on_stats_enable_net_poll_changed(self.enable_polling,
+                                                     VMLIST_SORT_NETWORK_USAGE)
+        self.config.on_stats_enable_cpu_poll_changed(self.enable_polling,
+                                                     VMLIST_SORT_CPU_USAGE)
+        self.config.on_stats_enable_mem_poll_changed(self.enable_polling,
+                                                     VMLIST_SORT_MEMORY_USAGE)
+
         self.window.get_widget("vm-view").set_active(0)
 
         self.vmmenu_icons = {}
@@ -291,6 +302,19 @@ class vmmManager(gobject.GObject):
 
         self.vm_selected(None)
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
+
+        # Initialize stat polling columns based on global polling
+        # preferences (we want signal handlers for this)
+        for typ, init_val in \
+            [ (VMLIST_SORT_DISK_IO,
+               self.config.get_stats_enable_disk_poll()),
+              (VMLIST_SORT_NETWORK_USAGE,
+               self.config.get_stats_enable_net_poll()),
+              (VMLIST_SORT_CPU_USAGE,
+               self.config.get_stats_enable_cpu_poll()),
+              (VMLIST_SORT_MEMORY_USAGE,
+               self.config.get_stats_enable_mem_poll())]:
+            self.enable_polling(None, None, init_val, typ)
 
         # store any error message from the restore-domain callback
         self.domain_restore_error = ""
@@ -980,6 +1004,27 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
         col = vmlist.get_column(COL_CPU)
         col.set_visible(self.config.is_vmlist_cpu_usage_visible())
+
+    def enable_polling(self, ignore1, ignore2, conf_entry, userdata):
+        if userdata == VMLIST_SORT_CPU_USAGE:
+            widgn = "menu_view_cpu_usage"
+        elif userdata == VMLIST_SORT_MEMORY_USAGE:
+            widgn = "menu_view_memory_usage"
+        elif userdata == VMLIST_SORT_DISK_IO:
+            widgn = "menu_view_disk_io"
+        elif userdata == VMLIST_SORT_NETWORK_USAGE:
+            widgn = "menu_view_network_traffic"
+        widget = self.window.get_widget(widgn)
+
+        if conf_entry and (conf_entry == True or \
+                           conf_entry.get_value().get_bool()):
+            widget.set_sensitive(True)
+            widget.set_tooltip_text("")
+        else:
+            if widget.get_active():
+                widget.set_active(False)
+            widget.set_sensitive(False)
+            widget.set_tooltip_text(_("Disabled in preferences dialog."))
 
     def toggle_virtual_cpus_visible_conf(self, menu):
         self.config.set_vmlist_virtual_cpus_visible(menu.get_active())

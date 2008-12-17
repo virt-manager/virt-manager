@@ -52,13 +52,21 @@ class vmmDomain(gobject.GObject):
         self._update_status()
         self.xml = None
 
+        self._mem_stats = None
+        self._cpu_stats = None
         self._network_traffic = None
-        self.config.on_vmlist_network_traffic_visible_changed(self.toggle_sample_network_traffic)
-        self.toggle_sample_network_traffic()
-
         self._disk_io = None
-        self.config.on_vmlist_disk_io_visible_changed(self.toggle_sample_disk_io)
+
+        self.config.on_stats_enable_mem_poll_changed(self.toggle_sample_mem_stats)
+        self.config.on_stats_enable_cpu_poll_changed(self.toggle_sample_cpu_stats)
+        self.config.on_stats_enable_net_poll_changed(self.toggle_sample_network_traffic)
+        self.config.on_stats_enable_disk_poll_changed(self.toggle_sample_disk_io)
+
+        self.toggle_sample_mem_stats()
+        self.toggle_sample_cpu_stats()
+        self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
+
 
     def get_xml(self):
         if self.xml is None:
@@ -161,6 +169,47 @@ class vmmDomain(gobject.GObject):
             self.lastStatus = status
             self.emit("status-changed", status)
 
+    def _sample_mem_stats_dummy(self, ignore):
+        return 0, 0
+
+    def _sample_mem_stats(self, info):
+        pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
+        pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
+        return pcentCurrMem, pcentMaxMem
+
+    def _sample_cpu_stats_dummy(self, ignore, ignore1):
+        return 0, 0, 0
+
+    def _sample_cpu_stats(self, info, now):
+        prevCpuTime = 0
+        prevTimestamp = 0
+        if len(self.record) > 0:
+            prevTimestamp = self.record[0]["timestamp"]
+            prevCpuTime = self.record[0]["cpuTimeAbs"]
+
+        cpuTime = 0
+        cpuTimeAbs = 0
+        pcentCpuTime = 0
+        if not (info[0] in [libvirt.VIR_DOMAIN_SHUTOFF,
+                            libvirt.VIR_DOMAIN_CRASHED]):
+            cpuTime = info[4] - prevCpuTime
+            cpuTimeAbs = info[4]
+
+            pcentCpuTime = ((cpuTime) * 100.0 /
+                            (((now - prevTimestamp)*1000.0*1000.0*1000.0) *
+                               self.connection.host_active_processor_count()))
+            # Due to timing diffs between getting wall time & getting
+            # the domain's time, its possible to go a tiny bit over
+            # 100% utilization. This freaks out users of the data, so
+            # we hard limit it.
+            if pcentCpuTime > 100.0:
+                pcentCpuTime = 100.0
+            # Enforce >= 0 just in case
+            if pcentCpuTime < 0.0:
+                pcentCpuTime = 0.0
+
+        return cpuTime, cpuTimeAbs, pcentCpuTime
+
     def _sample_network_traffic_dummy(self):
         return 0, 0
 
@@ -208,6 +257,7 @@ class vmmDomain(gobject.GObject):
     def tick(self, now):
         if self.connection.get_state() != self.connection.STATE_ACTIVE:
             return
+
         # Clear cached XML
         self.xml = None
         info = self.vm.info()
@@ -215,30 +265,6 @@ class vmmDomain(gobject.GObject):
         current = len(self.record)
         if current > expected:
             del self.record[expected:current]
-
-        prevCpuTime = 0
-        prevTimestamp = 0
-        if len(self.record) > 0:
-            prevTimestamp = self.record[0]["timestamp"]
-            prevCpuTime = self.record[0]["cpuTimeAbs"]
-
-        cpuTime = 0
-        cpuTimeAbs = 0
-        pcentCpuTime = 0
-        if not(info[0] in [libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED]):
-            cpuTime = info[4] - prevCpuTime
-            cpuTimeAbs = info[4]
-
-            pcentCpuTime = (cpuTime) * 100.0 / ((now - prevTimestamp)*1000.0*1000.0*1000.0*self.connection.host_active_processor_count())
-            # Due to timing diffs between getting wall time & getting
-            # the domain's time, its possible to go a tiny bit over
-            # 100% utilization. This freaks out users of the data, so
-            # we hard limit it.
-            if pcentCpuTime > 100.0:
-                pcentCpuTime = 100.0
-            # Enforce >= 0 just in case
-            if pcentCpuTime < 0.0:
-                pcentCpuTime = 0.0
 
         # Xen reports complete crap for Dom0 max memory
         # (ie MAX_LONG) so lets clamp it to the actual
@@ -248,9 +274,8 @@ class vmmDomain(gobject.GObject):
         if self.get_id() == 0:
             info[1] = self.connection.host_memory_size()
 
-        pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
-        pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
-
+        cpuTime, cpuTimeAbs, pcentCpuTime = self._cpu_stats(info, now)
+        pcentCurrMem, pcentMaxMem = self._mem_stats(info)
         rdBytes, wrBytes = self._disk_io()
         rxBytes, txBytes = self._network_traffic()
 
@@ -271,7 +296,6 @@ class vmmDomain(gobject.GObject):
 
         self.record.insert(0, newStats)
         nSamples = 5
-        #nSamples = len(self.record)
         if nSamples > len(self.record):
             nSamples = len(self.record)
 
@@ -1073,8 +1097,23 @@ class vmmDomain(gobject.GObject):
         # Invalidate cached xml
         self.xml = None
 
-    def toggle_sample_network_traffic(self, ignore1=None, ignore2=None, ignore3=None, ignore4=None):
-        if self.config.is_vmlist_network_traffic_visible():
+    def toggle_sample_cpu_stats(self, ignore1=None, ignore2=None,
+                                ignore3=None, ignore4=None):
+        if self.config.get_stats_enable_cpu_poll():
+            self._cpu_stats = self._sample_cpu_stats
+        else:
+            self._cpu_stats = self._sample_cpu_stats_dummy
+
+    def toggle_sample_mem_stats(self, ignore1=None, ignore2=None,
+                                ignore3=None, ignore4=None):
+        if self.config.get_stats_enable_mem_poll():
+            self._mem_stats = self._sample_mem_stats
+        else:
+            self._mem_stats = self._sample_mem_stats_dummy
+
+    def toggle_sample_network_traffic(self, ignore1=None, ignore2=None,
+                                      ignore3=None, ignore4=None):
+        if self.config.get_stats_enable_net_poll():
             if len(self.record) > 1:
                 # resample the current value before calculating the rate in
                 # self.tick() otherwise we'd get a huge spike when switching
@@ -1086,8 +1125,9 @@ class vmmDomain(gobject.GObject):
         else:
             self._network_traffic = self._sample_network_traffic_dummy
 
-    def toggle_sample_disk_io(self, ignore1=None, ignore2=None, ignore3=None, ignore4=None):
-        if self.config.is_vmlist_disk_io_visible():
+    def toggle_sample_disk_io(self, ignore1=None, ignore2=None,
+                              ignore3=None, ignore4=None):
+        if self.config.get_stats_enable_disk_poll():
             if len(self.record) > 1:
                 # resample the current value before calculating the rate in
                 # self.tick() otherwise we'd get a huge spike when switching
