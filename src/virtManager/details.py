@@ -1142,7 +1142,7 @@ class vmmDetails(gobject.GObject):
 
     def open_tunnel(self, server, vncaddr, vncport, username):
         if self.vncTunnel is not None:
-            return
+            return -1
 
         logging.debug("Spawning SSH tunnel to %s, for %s:%d" %(server, vncaddr, vncport))
 
@@ -1215,8 +1215,13 @@ class vmmDetails(gobject.GObject):
         logging.debug("Starting connect process for %s %s" % (host, str(port)))
         try:
             if trans is not None and trans in ("ssh", "ext"):
+                if self.vncTunnel:
+                    logging.debug("Tunnel already open, skipping open_tunnel.")
+                    return
+
                 fd = self.open_tunnel(host, "127.0.0.1", port, username)
-                self.vncViewer.open_fd(fd)
+                if fd >= 0:
+                    self.vncViewer.open_fd(fd)
             else:
                 self.vncViewer.open_host(host, str(port))
         except:
