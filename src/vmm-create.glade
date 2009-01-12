@@ -5,7 +5,7 @@
   <widget class="GtkWindow" id="vmm-create">
     <property name="visible">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Create a new virtual system</property>
+    <property name="title" translatable="yes">Create a new virtual machine</property>
     <signal name="delete_event" handler="on_vmm_create_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox23">
@@ -33,7 +33,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Creating a new virtual system &lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Virtual Machine Creation &lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -54,7 +54,7 @@
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">This assistant will guide you through creating a new virtual system. You will be asked for some information about the virtual system you'd like to create, such as:</property>
+                        <property name="label" translatable="yes">This assistant will guide you through creating a new virtual machine. You will be asked for some information about the virtual machine you'd like to create, such as:</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -147,7 +147,7 @@
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
                                 <property name="xpad">6</property>
-                                <property name="label" translatable="yes">Whether the system will be &lt;b&gt;fully virtualized&lt;/b&gt; or &lt;b&gt;para-virtualized&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">Whether the virtual machine will be &lt;b&gt;fully virtualized&lt;/b&gt; or &lt;b&gt;para-virtualized&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
                               </widget>
@@ -183,7 +183,7 @@
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
                                 <property name="xpad">6</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Storage&lt;/b&gt; details - which disk partitions or files the system should use</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Storage&lt;/b&gt; details - which disk partitions or files the virtual machine should use</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
                               </widget>
@@ -201,7 +201,7 @@
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
                                 <property name="xpad">6</property>
-                                <property name="label" translatable="yes">The &lt;b&gt;location&lt;/b&gt; of the files necessary for installing an operating system on the virtual system</property>
+                                <property name="label" translatable="yes">The &lt;b&gt;location&lt;/b&gt; of the files necessary for installing an operating system on the virtual machine</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
                               </widget>
@@ -219,7 +219,7 @@
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
                                 <property name="xpad">6</property>
-                                <property name="label" translatable="yes">A &lt;b&gt;name&lt;/b&gt; for your new virtual system</property>
+                                <property name="label" translatable="yes">A &lt;b&gt;name&lt;/b&gt; for your new virtual machine</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
                               </widget>
@@ -246,7 +246,7 @@
             <child>
               <widget class="GtkLabel" id="label141">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Intro</property>
+                <property name="label" translatable="no">Intro</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -270,7 +270,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Naming your virtual system &lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Virtual Machine Name &lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -291,7 +291,7 @@
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">Please choose a name for your virtual system:</property>
+                        <property name="label" translatable="yes">Please choose a name for your virtual machine:</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -369,7 +369,7 @@
                               <widget class="GtkLabel" id="label173">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">System _Name:</property>
+                                <property name="label" translatable="yes">_Name:</property>
                                 <property name="use_markup">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="justify">GTK_JUSTIFY_RIGHT</property>
@@ -400,7 +400,7 @@
             <child>
               <widget class="GtkLabel" id="label142">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Name</property>
+                <property name="label" translatable="no">Name</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -425,7 +425,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Choosing a virtualization method&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Virtualization Method&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -446,7 +446,7 @@
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">You will need to choose a virtualization method for your new system:</property>
+                        <property name="label" translatable="yes">You will need to choose a virtualization method for your new virtual machine:</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -486,7 +486,7 @@
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
                                 <property name="xpad">21</property>
-                                <property name="label" translatable="yes">Lightweight method of virtualizing machines. Limits operating system choices because the OS must be specially modified to support paravirtualization, but yields better performance than fully virtualized systems.</property>
+                                <property name="label" translatable="yes">Lightweight method of virtualizing machines. Limits operating system choices because the OS must be specially modified to support paravirtualization, but performs better than fully virtualized.</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
                               </widget>
@@ -506,7 +506,7 @@
                                   <widget class="GtkRadioButton" id="virt-method-fv">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="label" translatable="yes">F_ully Virtualized:</property>
+                                    <property name="label" translatable="yes">F_ully virtualized:</property>
                                     <property name="use_underline">True</property>
                                     <property name="response_id">0</property>
                                     <property name="draw_indicator">True</property>
@@ -729,7 +729,7 @@
             <child>
               <widget class="GtkLabel" id="label143">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Type</property>
+                <property name="label" translatable="yes">Method</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -754,7 +754,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Choosing installation method&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Installation Method&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -775,7 +775,7 @@
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">Please indicate where installation media is available for the operating system you would like to install on this virtual system:</property>
+                        <property name="label" translatable="yes">Please indicate where installation media is available for the operating system you would like to install on this virtual machine:</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -942,7 +942,7 @@
                               <widget class="GtkLabel" id="label350">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Please choose the type of guest operating system you will be installing:</property>
+                                <property name="label" translatable="yes">Please choose the operating system you will be installing on the virtual machine:</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
                               </widget>
@@ -971,7 +971,7 @@
             <child>
               <widget class="GtkLabel" id="label394">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Install type</property>
+                <property name="label" translatable="no">Install</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -996,7 +996,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Locating installation media&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Installation Media&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -1017,7 +1017,7 @@
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">Please indicate where installation media is available for the operating system you would like to install on this virtual operating system:</property>
+                        <property name="label" translatable="yes">Please indicate where installation media is available for the operating system you would like to install on this virtual machine:</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -1111,7 +1111,7 @@
                               <widget class="GtkLabel" id="label189">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">ISO _Location:</property>
+                                <property name="label" translatable="yes">ISO _location:</property>
                                 <property name="use_underline">True</property>
                               </widget>
                               <packing>
@@ -1196,7 +1196,7 @@
                                   <widget class="GtkRadioButton" id="media-iso-image">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="label" translatable="yes">_ISO Image Location:</property>
+                                    <property name="label" translatable="yes">_ISO image location:</property>
                                     <property name="use_underline">True</property>
                                     <property name="response_id">0</property>
                                     <property name="active">True</property>
@@ -1248,7 +1248,7 @@
             <child>
               <widget class="GtkLabel" id="label144">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Local inst</property>
+                <property name="label" translatable="no">Media</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -1273,7 +1273,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Locating installation source&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Installation Source&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -1294,7 +1294,7 @@
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">Please indicate where installation media is available for the operating system you would like to install on this virtual operating system. Optionally you can provide the URL for a kickstart file that describes your system:</property>
+                        <property name="label" translatable="yes">Please indicate where installation media is available for the operating system you would like to install on this virtual machine. Optionally you can provide the URL for a kickstart file:</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -1575,7 +1575,7 @@
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
                                 <property name="xpad">4</property>
-                                <property name="label" translatable="yes">Install Media _URL:</property>
+                                <property name="label" translatable="yes">Installation media _URL:</property>
                                 <property name="use_markup">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">pv-media-url</property>
@@ -1622,7 +1622,7 @@
             <child>
               <widget class="GtkLabel" id="step3a">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Netinst</property>
+                <property name="label" translatable="no">Netinst</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -1644,7 +1644,7 @@
                         <property name="yalign">0</property>
                         <property name="xpad">5</property>
                         <property name="ypad">6</property>
-                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Assigning storage space&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Storage&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="justify">GTK_JUSTIFY_FILL</property>
                       </widget>
@@ -1663,7 +1663,7 @@
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">Please indicate how you'd like to assign space on this physical host system for your new virtual system. This space will be used to install the virtual system's operating system.</property>
+                        <property name="label" translatable="yes">Please indicate how you'd like to assign space from the host for your new virtual machine. This space will be used to install the virtual machine's operating system.</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -1747,7 +1747,7 @@
                               <widget class="GtkCheckButton" id="non-sparse">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">Allocate entire virtual disk now?</property>
+                                <property name="label" translatable="yes">Allocate entire virtual disk now</property>
                                 <property name="use_underline">True</property>
                                 <property name="response_id">0</property>
                                 <property name="active">True</property>
@@ -1779,7 +1779,7 @@
                                   <widget class="GtkLabel" id="label349">
                                     <property name="visible">True</property>
                                     <property name="xpad">7</property>
-                                    <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Warning:&lt;/b&gt; If you do not allocate the entire disk at VM creation, space will be allocated as needed while the guest is running. If sufficient free space is not available on the host, this may result in data corruption on the guest.&lt;/small&gt;</property>
+                                    <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Warning:&lt;/b&gt; If you do not allocate the entire disk now, space will be allocated as needed while the virtual machine is running. If sufficient free space is not available on the host, this may result in data corruption on the virtual machine.&lt;/small&gt;</property>
                                     <property name="use_markup">True</property>
                                     <property name="wrap">True</property>
                                   </widget>
@@ -1856,7 +1856,7 @@
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
                                 <property name="xpad">4</property>
-                                <property name="label" translatable="yes">File _Size:</property>
+                                <property name="label" translatable="yes">_Size:</property>
                                 <property name="use_markup">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">storage-file-size</property>
@@ -1954,7 +1954,7 @@
                                   <widget class="GtkRadioButton" id="storage-file-backed">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="label" translatable="yes">Simple F_ile:</property>
+                                    <property name="label" translatable="yes">F_ile (disk image):</property>
                                     <property name="use_underline">True</property>
                                     <property name="response_id">0</property>
                                     <property name="draw_indicator">True</property>
@@ -1980,7 +1980,7 @@
                                   <widget class="GtkRadioButton" id="storage-partition">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="label" translatable="yes">Normal Disk _Partition:</property>
+                                    <property name="label" translatable="yes">_Block device (partition):</property>
                                     <property name="use_underline">True</property>
                                     <property name="response_id">0</property>
                                     <property name="active">True</property>
@@ -2014,7 +2014,7 @@
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
                                 <property name="xpad">4</property>
-                                <property name="label" translatable="yes">File _Location:</property>
+                                <property name="label" translatable="yes">_Location:</property>
                                 <property name="use_markup">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">storage-file-address</property>
@@ -2067,7 +2067,7 @@
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
                                 <property name="xpad">4</property>
-                                <property name="label" translatable="yes">P_artition:</property>
+                                <property name="label" translatable="yes">Loc_ation:</property>
                                 <property name="use_markup">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">storage-partition-address</property>
@@ -2128,7 +2128,7 @@
                               <widget class="GtkLabel" id="label223">
                                 <property name="visible">True</property>
                                 <property name="xpad">7</property>
-                                <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; You may add additional storage, including network-mounted storage, to your virtual system after it has been created using the same tools you would on a physical system.&lt;/small&gt;</property>
+                                <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; You may add additional storage, including network-mounted storage, to your virtual machine after it has been created using the same tools you would on a physical system.&lt;/small&gt;</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
                               </widget>
@@ -2159,7 +2159,7 @@
             <child>
               <widget class="GtkLabel" id="label146">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Disk</property>
+                <property name="label" translatable="yes">Storage</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -2181,7 +2181,7 @@
                         <property name="yalign">0</property>
                         <property name="xpad">5</property>
                         <property name="ypad">6</property>
-                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Connect to host network&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Network&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="justify">GTK_JUSTIFY_FILL</property>
                       </widget>
@@ -2200,7 +2200,7 @@
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">Please indicate how you'd like to connect your new virtual system to the host network.</property>
+                        <property name="label" translatable="yes">Please indicate how you'd like to connect your new virtual machine to the host network.</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -2241,7 +2241,7 @@
                               <widget class="GtkCheckButton" id="mac-address">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">Set fixed MAC _address for your virtual system?</property>
+                                <property name="label" translatable="yes">Set fixed MAC _address for your virtual machine?</property>
                                 <property name="use_underline">True</property>
                                 <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
@@ -2361,7 +2361,7 @@
                                       <widget class="GtkLabel" id="label372">
                                         <property name="visible">True</property>
                                         <property name="xpad">7</property>
-                                        <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; Choose this option if your host is statically connected to wired ethernet, to gain the ability to migrate the virtual system.&lt;/small&gt;</property>
+                                        <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; Choose this option if your host is statically connected to wired ethernet, to gain the ability to migrate the virtual machine.&lt;/small&gt;</property>
                                         <property name="use_markup">True</property>
                                         <property name="wrap">True</property>
                                       </widget>
@@ -2520,7 +2520,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Allocate memory and CPU&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Memory and CPU Allocation&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -2596,7 +2596,7 @@
                         <property name="xalign">1</property>
                         <property name="xpad">3</property>
                         <property name="ypad">2</property>
-                        <property name="label" translatable="yes">Maximum VM type VCPUs:</property>
+                        <property name="label" translatable="yes">Maximum virtual CPUs:</property>
                         <property name="justify">GTK_JUSTIFY_RIGHT</property>
                       </widget>
                       <packing>
@@ -2612,7 +2612,7 @@
                       <widget class="GtkLabel" id="label339">
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">_VCPUs:</property>
+                        <property name="label" translatable="yes">_Virtual CPUs:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">create-vcpus</property>
                       </widget>
@@ -2642,7 +2642,7 @@
                             <property name="numeric">True</property>
                             <property name="update_policy">GTK_UPDATE_IF_VALID</property>
                             <accessibility>
-                              <atkproperty name="AtkObject::accessible_name" translatable="yes">VCPU Select</atkproperty>
+                              <atkproperty name="AtkObject::accessible_name" translatable="yes">Virtual CPU Select</atkproperty>
                             </accessibility>
                           </widget>
                         </child>
@@ -2798,7 +2798,7 @@
                         <property name="xalign">0</property>
                         <property name="yalign">1</property>
                         <property name="xpad">5</property>
-                        <property name="label" translatable="yes">Please enter the number of virtual CPUs this VM should start up with.</property>
+                        <property name="label" translatable="yes">Please enter the number of virtual CPUs this virtual machine should start up with.</property>
                         <property name="use_markup">True</property>
                         <property name="use_underline">True</property>
                         <property name="wrap">True</property>
@@ -2833,7 +2833,7 @@
                       <widget class="GtkLabel" id="label272">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Please enter the memory configuration for this VM. You can specify the maximum amount of memory the VM should be able to use, and optionally a lower amount to grab on startup. Warning: setting VM memory too high will cause out-of-memory errors in your host domain!</property>
+                        <property name="label" translatable="yes">Please enter the memory configuration for this virtual machine. You can specify the maximum amount of memory the virtual machine should be able to use, and optionally a lower amount to grab on startup. Warning: setting virtual machine memory too high will cause out-of-memory errors in your host domain!</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -2887,7 +2887,7 @@
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
                         <property name="xpad">3</property>
-                        <property name="label" translatable="yes">VM _Max Memory (MB):</property>
+                        <property name="label" translatable="yes">_Max memory (MB):</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">create-memory-max</property>
                       </widget>
@@ -2905,7 +2905,7 @@
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
                         <property name="xpad">3</property>
-                        <property name="label" translatable="yes">VM _Startup Memory (MB):</property>
+                        <property name="label" translatable="yes">_Startup memory (MB):</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">create-memory-startup</property>
                       </widget>
@@ -2974,7 +2974,7 @@
             <child>
               <widget class="GtkLabel" id="label259">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">CPU/memory</property>
+                <property name="label" translatable="no">Mem/CPU</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -2999,7 +2999,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Ready to begin installation&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Finish Virtual Machine Creation&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -3089,7 +3089,7 @@
                           <widget class="GtkLabel" id="label402">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Enable Audio:</property>
+                            <property name="label" translatable="yes">Enable audio:</property>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
@@ -3461,7 +3461,7 @@
                           <widget class="GtkLabel" id="summary-os-label">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Operating System:</property>
+                            <property name="label" translatable="yes">Operating system:</property>
                             <property name="use_markup">True</property>
                           </widget>
                           <packing>
@@ -3571,7 +3571,7 @@
                           <widget class="GtkLabel" id="summary-os">
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">VMS</property>
+                            <property name="label" translatable="no">VMS</property>
                           </widget>
                           <packing>
                             <property name="left_attach">2</property>
@@ -3638,7 +3638,7 @@
             <child>
               <widget class="GtkLabel" id="step6">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Complete</property>
+                <property name="label" translatable="no">Finish</property>
               </widget>
               <packing>
                 <property name="type">tab</property>

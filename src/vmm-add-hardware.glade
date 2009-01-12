@@ -31,7 +31,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Adding new virtual hardware &lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Adding Virtual Hardware&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -114,7 +114,7 @@
             <child>
               <widget class="GtkLabel" id="label141">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Intro</property>
+                <property name="label" translatable="no">Intro</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -135,7 +135,7 @@
                         <property name="yalign">0</property>
                         <property name="xpad">5</property>
                         <property name="ypad">6</property>
-                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Assigning storage space&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Storage&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="justify">GTK_JUSTIFY_FILL</property>
                       </widget>
@@ -248,7 +248,7 @@
                                       <widget class="GtkCheckButton" id="non-sparse">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Allocate entire virtual disk now?</property>
+                                        <property name="label" translatable="yes">Allocate entire virtual disk now</property>
                                         <property name="use_underline">True</property>
                                         <property name="response_id">0</property>
                                         <property name="active">True</property>
@@ -280,7 +280,7 @@
                                           <widget class="GtkLabel" id="label349">
                                             <property name="visible">True</property>
                                             <property name="xpad">7</property>
-                                            <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Warning:&lt;/b&gt; If you do not allocate the entire disk at VM creation, space will be allocated as needed while the guest is running. If sufficient free space is not available on the host, this may result in data corruption on the guest.&lt;/small&gt;</property>
+                                    <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Warning:&lt;/b&gt;If you do not allocate the entire disk now, space will be allocated as needed while the virtual machine is running. If sufficient free space is not available on the host, this may result in data corruption on the virtual machine.&lt;/small&gt;</property>
                                             <property name="use_markup">True</property>
                                             <property name="wrap">True</property>
                                           </widget>
@@ -357,7 +357,7 @@
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
                                         <property name="xpad">4</property>
-                                        <property name="label" translatable="yes">File _Size:</property>
+                                        <property name="label" translatable="yes">_Size:</property>
                                         <property name="use_markup">True</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">storage-file-size</property>
@@ -455,7 +455,7 @@
                                           <widget class="GtkRadioButton" id="storage-file-backed">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="label" translatable="yes">Simple F_ile:</property>
+                                            <property name="label" translatable="yes">F_ile (disk image):</property>
                                             <property name="use_underline">True</property>
                                             <property name="response_id">0</property>
                                             <property name="draw_indicator">True</property>
@@ -481,7 +481,7 @@
                                           <widget class="GtkRadioButton" id="storage-partition">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="label" translatable="yes">Normal Disk _Partition:</property>
+                                            <property name="label" translatable="yes">_Block device (partition):</property>
                                             <property name="use_underline">True</property>
                                             <property name="response_id">0</property>
                                             <property name="active">True</property>
@@ -515,7 +515,7 @@
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
                                         <property name="xpad">4</property>
-                                        <property name="label" translatable="yes">File _Location:</property>
+                                        <property name="label" translatable="yes">_Location:</property>
                                         <property name="use_markup">True</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">storage-file-address</property>
@@ -568,7 +568,7 @@
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
                                         <property name="xpad">4</property>
-                                        <property name="label" translatable="yes">P_artition:</property>
+                                        <property name="label" translatable="yes">Loc_ation:</property>
                                         <property name="use_markup">True</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">storage-partition-address</property>
@@ -695,7 +695,7 @@
             <child>
               <widget class="GtkLabel" id="label146">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Disk</property>
+                <property name="label" translatable="yes">Storage</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -717,7 +717,7 @@
                         <property name="yalign">0</property>
                         <property name="xpad">5</property>
                         <property name="ypad">6</property>
-                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Connect to host network&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Network&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="justify">GTK_JUSTIFY_FILL</property>
                       </widget>
@@ -899,7 +899,7 @@
                                       <widget class="GtkLabel" id="label372">
                                         <property name="visible">True</property>
                                         <property name="xpad">7</property>
-                                        <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; Choose this option if your host is statically connected to wired ethernet, to gain the ability to migrate the virtual system.&lt;/small&gt;</property>
+                                        <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; Choose this option if your host is statically connected to wired ethernet, to gain the ability to migrate the virtual machine.&lt;/small&gt;</property>
                                         <property name="use_markup">True</property>
                                         <property name="wrap">True</property>
                                       </widget>
@@ -1055,7 +1055,7 @@
                         <property name="yalign">0</property>
                         <property name="xpad">5</property>
                         <property name="ypad">6</property>
-                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Interacting with the guest&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Input&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="justify">GTK_JUSTIFY_FILL</property>
                       </widget>
@@ -1074,7 +1074,7 @@
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">Please indicate what kind of pointer device to connect to the guest.</property>
+                        <property name="label" translatable="yes">Please indicate what kind of pointer device to connect to the virtual machine.</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -1147,7 +1147,7 @@
                                               <widget class="GtkLabel" id="label394">
                                                 <property name="visible">True</property>
                                                 <property name="xpad">7</property>
-                                                <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; Adding a graphics tablet and configuring it as the default pointer in the guest OS will ensure the virtual cursor moves in sync with the local desktop cursor .&lt;/small&gt;</property>
+                                                <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt;Adding a graphics tablet (and configuring it as the default pointer in the virtual machine) will ensure the virtual cursor moves in sync with the local desktop cursor.&lt;/small&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="wrap">True</property>
                                               </widget>
@@ -1227,7 +1227,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Access the guest display&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Graphics&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -1248,7 +1248,7 @@
                         <property name="xalign">0</property>
                         <property name="xpad">20</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">Please indicate how you would like to view the guest display.</property>
+                        <property name="label" translatable="yes">Please indicate how you would like to view the virtual display.</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
                       </widget>
@@ -1407,7 +1407,7 @@
                                               <widget class="GtkLabel" id="label433">
                                                 <property name="visible">True</property>
                                                 <property name="xpad">7</property>
-                                                <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; Automatically allocated the port ensures that every virtual machine uses a different port. If two machines try to use the same port one of them will fail to start.&lt;/small&gt;</property>
+                                                <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; Automatically allocating the port ensures that every virtual machine uses a unique port. If two machines try to use the same port, one of them will fail to start.&lt;/small&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="wrap">True</property>
                                               </widget>
@@ -1450,7 +1450,7 @@
                                               <widget class="GtkLabel" id="label428">
                                                 <property name="visible">True</property>
                                                 <property name="xpad">7</property>
-                                                <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; The VNC server is strongly recommended because it allows the guest console window to be embedded inside this application. It may also be used to allow access to the guest console from a remote host&lt;/small&gt;</property>
+                                                <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; VNC server is strongly recommended because it allows the virtual display to be embedded inside this application. It may also be used to allow access to the virtual display from a remote system.&lt;/small&gt;</property>
                                                 <property name="use_markup">True</property>
                                                 <property name="wrap">True</property>
                                               </widget>
@@ -1624,7 +1624,7 @@
             <child>
               <widget class="GtkLabel" id="label401">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Display</property>
+                <property name="label" translatable="yes">Graphics</property>
               </widget>
               <packing>
                 <property name="type">tab</property>
@@ -1649,7 +1649,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">5</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Ready to add hardware&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Finish Adding Virtual Hardware&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">GTK_JUSTIFY_FILL</property>
                           </widget>
@@ -2172,7 +2172,7 @@
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
                                 <property name="ypad">5</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Display&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Graphics&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </widget>
                               <packing>
@@ -2201,7 +2201,7 @@
             <child>
               <widget class="GtkLabel" id="step6">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Complete</property>
+                <property name="label" translatable="no">Finish</property>
               </widget>
               <packing>
                 <property name="type">tab</property>

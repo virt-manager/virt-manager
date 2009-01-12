@@ -170,7 +170,7 @@
                     <child>
                       <widget class="GtkCheckMenuItem" id="details-menu-view-fullscreen">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Full Screen</property>
+                        <property name="label" translatable="yes">Fullscreen</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_view_fullscreen_activate"/>
                       </widget>
@@ -1151,7 +1151,7 @@
                                             <property name="numeric">True</property>
                                             <property name="update_policy">GTK_UPDATE_IF_VALID</property>
                                             <accessibility>
-                                              <atkproperty name="AtkObject::accessible_name" translatable="yes">VCPU Select</atkproperty>
+                                              <atkproperty name="AtkObject::accessible_name" translatable="yes">Virtual CPU Select</atkproperty>
                                             </accessibility>
                                             <signal name="changed" handler="on_config_vcpus_changed"/>
                                           </widget>

@@ -860,7 +860,7 @@ class vmmManager(gobject.GObject):
         idCol = gtk.TreeViewColumn(_("ID"))
         statusCol = gtk.TreeViewColumn(_("Status"))
         cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
-        virtualCPUsCol = gtk.TreeViewColumn(_("VCPUs"))
+        virtualCPUsCol = gtk.TreeViewColumn(_("CPUs"))
         memoryUsageCol = gtk.TreeViewColumn(_("Memory usage"))
         # FIXME: add KBytes/s tooltip
         diskIOCol = gtk.TreeViewColumn(_("Disk I/O"))

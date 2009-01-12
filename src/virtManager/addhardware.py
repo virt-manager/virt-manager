@@ -210,17 +210,17 @@ class vmmAddHardware(gobject.GObject):
 
         model = self.window.get_widget("hardware-type").get_model()
         model.clear()
-        model.append(["Storage device", gtk.STOCK_HARDDISK, PAGE_DISK])
+        model.append(["Storage", gtk.STOCK_HARDDISK, PAGE_DISK])
         # Can't use shared or virtual networking in qemu:///session
         # Can only have one usermode network device
         if not self.vm.get_connection().is_qemu_session() or \
            len(self.vm.get_network_devices()) == 0:
-            model.append(["Network card", gtk.STOCK_NETWORK, PAGE_NETWORK])
+            model.append(["Network", gtk.STOCK_NETWORK, PAGE_NETWORK])
 
         # Can only customize HVM guests, no Xen PV
         if self.vm.is_hvm():
-            model.append(["Input device", gtk.STOCK_INDEX, PAGE_INPUT])
-        model.append(["Graphics device", gtk.STOCK_SELECT_COLOR, PAGE_GRAPHICS])
+            model.append(["Input", gtk.STOCK_INDEX, PAGE_INPUT])
+        model.append(["Graphics", gtk.STOCK_SELECT_COLOR, PAGE_GRAPHICS])
 
 
     def forward(self, ignore=None):

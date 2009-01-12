@@ -96,7 +96,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="menu_host_details">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Connection Details...</property>
+                        <property name="label" translatable="yes">Host Details</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_menu_host_details_activate"/>
                       </widget>
@@ -104,7 +104,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_edit_details">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Machine Details...</property>
+                        <property name="label" translatable="yes">Virtual Machine Details</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_menu_edit_details_activate"/>
                         <child internal-child="image">
@@ -119,7 +119,7 @@
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_edit_delete">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Delete Machine</property>
+                        <property name="label" translatable="yes">Delete Virtual Machine</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_menu_edit_delete_activate"/>
                         <child internal-child="image">
@@ -177,7 +177,7 @@
                     <child>
                       <widget class="GtkCheckMenuItem" id="menu_view_virtual_cpus">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Virtual CPUs</property>
+                        <property name="label" translatable="yes">CPUs</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <signal name="activate" handler="on_menu_view_virtual_cpus_activate"/>
@@ -186,7 +186,7 @@
                     <child>
                       <widget class="GtkCheckMenuItem" id="menu_view_cpu_usage">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">CPU usage</property>
+                        <property name="label" translatable="yes">CPU Usage</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <signal name="activate" handler="on_menu_view_cpu_usage_activate"/>
@@ -195,7 +195,7 @@
                     <child>
                       <widget class="GtkCheckMenuItem" id="menu_view_memory_usage">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Memory usage</property>
+                        <property name="label" translatable="yes">Memory Usage</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <signal name="activate" handler="on_menu_view_memory_usage_activate"/>
