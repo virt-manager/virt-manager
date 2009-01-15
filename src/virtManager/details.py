@@ -919,23 +919,23 @@ class vmmDetails(gobject.GObject):
         if not diskinfo:
             return
 
-        self.window.get_widget("disk-source-type").set_text(diskinfo[0])
-        self.window.get_widget("disk-source-path").set_text(diskinfo[1])
-        self.window.get_widget("disk-target-type").set_text(diskinfo[2])
-        self.window.get_widget("disk-target-device").set_text(diskinfo[3])
-        if diskinfo[4] == True:
+        self.window.get_widget("disk-source-type").set_text(diskinfo[5])
+        self.window.get_widget("disk-source-path").set_text(diskinfo[3])
+        self.window.get_widget("disk-target-type").set_text(diskinfo[4])
+        self.window.get_widget("disk-target-device").set_text(diskinfo[2])
+        if diskinfo[6] == True:
             perms = "Readonly"
         else:
             perms = "Read/Write"
-        if diskinfo[5] == True:
+        if diskinfo[7] == True:
             perms += ", Sharable"
         self.window.get_widget("disk-permissions").set_text(perms)
-        bus = diskinfo[6] or _("Unknown")
+        bus = diskinfo[8] or _("Unknown")
         self.window.get_widget("disk-bus").set_text(bus)
 
         button = self.window.get_widget("config-cdrom-connect")
-        if diskinfo[2] == "cdrom":
-            if diskinfo[1] == "-":
+        if diskinfo[4] == "cdrom":
+            if diskinfo[3] == "-":
                 # source device not connected
                 button.set_label(gtk.STOCK_CONNECT)
             else:
@@ -949,14 +949,14 @@ class vmmDetails(gobject.GObject):
         if not netinfo:
             return
 
-        self.window.get_widget("network-source-type").set_text(netinfo[0])
-        if netinfo[1] is not None:
-            self.window.get_widget("network-source-device").set_text(netinfo[1])
+        self.window.get_widget("network-source-type").set_text(netinfo[5])
+        if netinfo[3] is not None:
+            self.window.get_widget("network-source-device").set_text(netinfo[3])
         else:
             self.window.get_widget("network-source-device").set_text("-")
-        self.window.get_widget("network-mac-address").set_text(netinfo[3])
+        self.window.get_widget("network-mac-address").set_text(netinfo[2])
 
-        model = netinfo[4] or _("Hypervisor Default")
+        model = netinfo[6] or _("Hypervisor Default")
         self.window.get_widget("network-source-model").set_text(model)
 
     def refresh_input_page(self):
@@ -964,24 +964,26 @@ class vmmDetails(gobject.GObject):
         if not inputinfo:
             return
 
-        if inputinfo[3] == "tablet:usb":
+        if inputinfo[2] == "tablet:usb":
             self.window.get_widget("input-dev-type").set_text(_("EvTouch USB Graphics Tablet"))
-        elif inputinfo[3] == "mouse:usb":
+        elif inputinfo[2] == "mouse:usb":
             self.window.get_widget("input-dev-type").set_text(_("Generic USB Mouse"))
-        elif inputinfo[3] == "mouse:xen":
+        elif inputinfo[2] == "mouse:xen":
             self.window.get_widget("input-dev-type").set_text(_("Xen Mouse"))
-        elif inputinfo[3] == "mouse:ps2":
+        elif inputinfo[2] == "mouse:ps2":
             self.window.get_widget("input-dev-type").set_text(_("PS/2 Mouse"))
         else:
-            self.window.get_widget("input-dev-type").set_text(inputinfo[0] + " " + inputinfo[1])
+            self.window.get_widget("input-dev-type").set_text(inputinfo[4] + \
+                                                              " " \
+                                                              + inputinfo[3])
 
-        if inputinfo[0] == "tablet":
+        if inputinfo[4] == "tablet":
             self.window.get_widget("input-dev-mode").set_text(_("Absolute Movement"))
         else:
             self.window.get_widget("input-dev-mode").set_text(_("Relative Movement"))
 
         # Can't remove primary Xen or PS/2 mice
-        if inputinfo[0] == "mouse" and inputinfo[1] in ("xen", "ps2"):
+        if inputinfo[4] == "mouse" and inputinfo[3] in ("xen", "ps2"):
             self.window.get_widget("config-input-remove").set_sensitive(False)
         else:
             self.window.get_widget("config-input-remove").set_sensitive(True)
@@ -991,24 +993,24 @@ class vmmDetails(gobject.GObject):
         if not gfxinfo:
             return
 
-        if gfxinfo[0] == "vnc":
+        if gfxinfo[2] == "vnc":
             self.window.get_widget("graphics-type").set_text(_("VNC server"))
-        elif gfxinfo[0] == "sdl":
+        elif gfxinfo[2] == "sdl":
             self.window.get_widget("graphics-type").set_text(_("Local SDL window"))
         else:
-            self.window.get_widget("graphics-type").set_text(gfxinfo[0])
+            self.window.get_widget("graphics-type").set_text(gfxinfo[2])
 
-        if gfxinfo[0] == "vnc":
-            if gfxinfo[1] == None:
+        if gfxinfo[2] == "vnc":
+            if gfxinfo[3] == None:
                 self.window.get_widget("graphics-address").set_text("127.0.0.1")
             else:
-                self.window.get_widget("graphics-address").set_text(gfxinfo[1])
-            if int(gfxinfo[2]) == -1:
+                self.window.get_widget("graphics-address").set_text(gfxinfo[3])
+            if int(gfxinfo[4]) == -1:
                 self.window.get_widget("graphics-port").set_text(_("Automatically allocated"))
             else:
-                self.window.get_widget("graphics-port").set_text(gfxinfo[2])
+                self.window.get_widget("graphics-port").set_text(gfxinfo[4])
             self.window.get_widget("graphics-password").set_text("-")
-            self.window.get_widget("graphics-keymap").set_text(gfxinfo[4] or "en-us")
+            self.window.get_widget("graphics-keymap").set_text(gfxinfo[5] or "en-us")
         else:
             self.window.get_widget("graphics-address").set_text(_("N/A"))
             self.window.get_widget("graphics-port").set_text(_("N/A"))
@@ -1020,7 +1022,7 @@ class vmmDetails(gobject.GObject):
         if not soundinfo:
             return
 
-        self.window.get_widget("sound-model").set_text(soundinfo[3])
+        self.window.get_widget("sound-model").set_text(soundinfo[2])
 
     def refresh_char_page(self):
         charinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -1028,12 +1030,12 @@ class vmmDetails(gobject.GObject):
             return
 
         typelabel = "<b>%s Device %s</b>" % (charinfo[0].capitalize(),
-                                             charinfo[5] and
+                                             charinfo[6] and \
                                              _("(Primary Console)") or "")
         self.window.get_widget("char-type").set_markup(typelabel)
-        self.window.get_widget("char-dev-type").set_text(charinfo[1] or "-")
-        self.window.get_widget("char-target-port").set_text(charinfo[2])
-        self.window.get_widget("char-source-path").set_text(charinfo[4] or "-")
+        self.window.get_widget("char-dev-type").set_text(charinfo[4] or "-")
+        self.window.get_widget("char-target-port").set_text(charinfo[3])
+        self.window.get_widget("char-source-path").set_text(charinfo[5] or "-")
 
     def refresh_boot_page(self):
         # Refresh autostart
@@ -1452,12 +1454,13 @@ class vmmDetails(gobject.GObject):
                                   "".join(traceback.format_exc()))
                 return
 
+
     def remove_disk(self, src):
         diskinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not diskinfo:
             return
 
-        self.remove_device(self.vm.get_disk_xml(diskinfo[3]))
+        self.remove_device(self.vm.get_disk_xml(diskinfo[2]))
         self.refresh_resources()
 
     def remove_network(self, src):
@@ -1467,17 +1470,17 @@ class vmmDetails(gobject.GObject):
 
         vnic = None
         try:
-            if netinfo[0] == "bridge":
-                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0],
-                                                        bridge=netinfo[1],
-                                                        macaddr=netinfo[3])
-            elif netinfo[0] == "network":
-                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0],
-                                                        network=netinfo[1],
-                                                        macaddr=netinfo[3])
+            if netinfo[5] == "bridge":
+                vnic = virtinst.VirtualNetworkInterface(type=netinfo[5],
+                                                        bridge=netinfo[3],
+                                                        macaddr=netinfo[2])
+            elif netinfo[5] == "network":
+                vnic = virtinst.VirtualNetworkInterface(type=netinfo[5],
+                                                        network=netinfo[3],
+                                                        macaddr=netinfo[2])
             else:
-                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0],
-                                                        macaddr=netinfo[3])
+                vnic = virtinst.VirtualNetworkInterface(type=netinfo[5],
+                                                        macaddr=netinfo[2])
         except ValueError, e:
             self.err.show_err(_("Error Removing Network: %s" % str(e)),
                                 "".join(traceback.format_exc()))
@@ -1492,7 +1495,7 @@ class vmmDetails(gobject.GObject):
         if not inputinfo:
             return
 
-        xml = "<input type='%s' bus='%s'/>" % (inputinfo[0], inputinfo[1])
+        xml = "<input type='%s' bus='%s'/>" % (inputinfo[4], inputinfo[3])
         self.remove_device(xml)
         self.refresh_resources()
 
@@ -1501,7 +1504,7 @@ class vmmDetails(gobject.GObject):
         if not gfxinfo:
             return
 
-        xml = "<graphics type='%s'/>" % gfxinfo[0]
+        xml = "<graphics type='%s'/>" % gfxinfo[2]
         self.remove_device(xml)
         self.refresh_resources()
 
@@ -1520,7 +1523,7 @@ class vmmDetails(gobject.GObject):
             return
 
         xml = "<%s>\n" % charinfo[0] + \
-              "  <target port='%s'/>\n" % charinfo[2] + \
+              "  <target port='%s'/>\n" % charinfo[3] + \
               "</%s>" % charinfo[0]
         self.remove_device(xml)
         self.refresh_resources()
@@ -1574,10 +1577,10 @@ class vmmDetails(gobject.GObject):
         for diskinfo in self.vm.get_disk_devices():
             missing = True
             insertAt = 0
-            currentDisks[diskinfo[3]] = 1
+            currentDisks[diskinfo[2]] = 1
             for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and row[HW_LIST_COL_DEVICE][3] == diskinfo[3]:
-                    # Update metadata
+                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and \
+                   row[HW_LIST_COL_DEVICE][2] == diskinfo[2]:
                     row[HW_LIST_COL_DEVICE] = diskinfo
                     missing = False
 
@@ -1587,21 +1590,21 @@ class vmmDetails(gobject.GObject):
             # Add in row
             if missing:
                 stock = gtk.STOCK_HARDDISK
-                if diskinfo[2] == "cdrom":
+                if diskinfo[4] == "cdrom":
                     stock = gtk.STOCK_CDROM
-                elif diskinfo[2] == "floppy":
+                elif diskinfo[4] == "floppy":
                     stock = gtk.STOCK_FLOPPY
-                hw_list_model.insert(insertAt, ["Disk %s" % diskinfo[3], stock, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_DISK, diskinfo])
+                hw_list_model.insert(insertAt, ["Disk %s" % diskinfo[2], stock, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_DISK, diskinfo])
 
         # Populate list of NICs
         currentNICs = {}
         for netinfo in self.vm.get_network_devices():
             missing = True
             insertAt = 0
-            currentNICs[netinfo[3]] = 1
+            currentNICs[netinfo[2]] = 1
             for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and row[HW_LIST_COL_DEVICE][3] == netinfo[3]:
-                    # Update metadata
+                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and \
+                   row[HW_LIST_COL_DEVICE][3] == netinfo[3]:
                     row[HW_LIST_COL_DEVICE] = netinfo
                     missing = False
 
@@ -1610,18 +1613,17 @@ class vmmDetails(gobject.GObject):
 
             # Add in row
             if missing:
-                hw_list_model.insert(insertAt, ["NIC %s" % netinfo[3][-9:], gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_NIC, netinfo])
+                hw_list_model.insert(insertAt, ["NIC %s" % netinfo[2][-9:], gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_NIC, netinfo])
 
         # Populate list of input devices
         currentInputs = {}
         for inputinfo in self.vm.get_input_devices():
             missing = True
             insertAt = 0
-            currentInputs[inputinfo[3]] = 1
+            currentInputs[inputinfo[2]] = 1
             for row in hw_list_model:
                 if (row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and
-                    row[HW_LIST_COL_DEVICE][3] == inputinfo[3]):
-                    # Update metadata
+                    row[HW_LIST_COL_DEVICE][2] == inputinfo[2]):
                     row[HW_LIST_COL_DEVICE] = inputinfo
                     missing = False
 
@@ -1630,9 +1632,9 @@ class vmmDetails(gobject.GObject):
 
             # Add in row
             if missing:
-                if inputinfo[0] == "tablet":
+                if inputinfo[4] == "tablet":
                     label = _("Tablet")
-                elif inputinfo[0] == "mouse":
+                elif inputinfo[4] == "mouse":
                     label = _("Mouse")
                 else:
                     label = _("Input")
@@ -1643,9 +1645,10 @@ class vmmDetails(gobject.GObject):
         for gfxinfo in self.vm.get_graphics_devices():
             missing = True
             insertAt = 0
-            currentGraphics[gfxinfo[3]] = 1
+            currentGraphics[gfxinfo[2]] = 1
             for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_GRAPHICS and row[HW_LIST_COL_DEVICE][3] == gfxinfo[3]:
+                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_GRAPHICS and \
+                   row[HW_LIST_COL_DEVICE][2] == gfxinfo[2]:
                     # Update metadata
                     row[HW_LIST_COL_DEVICE] = gfxinfo
                     missing = False
@@ -1662,10 +1665,10 @@ class vmmDetails(gobject.GObject):
         for soundinfo in self.vm.get_sound_devices():
             missing = True
             insertAt = 0
-            currentSounds[soundinfo[3]] = 1
+            currentSounds[soundinfo[2]] = 1
             for row in hw_list_model:
                 if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_SOUND and \
-                   row[HW_LIST_COL_DEVICE][3] == soundinfo[3]:
+                   row[HW_LIST_COL_DEVICE][2] == soundinfo[2]:
                     # Update metadata
                     row[HW_LIST_COL_DEVICE] = soundinfo
                     missing = False
@@ -1674,7 +1677,7 @@ class vmmDetails(gobject.GObject):
                     insertAt = insertAt + 1
             # Add in row
             if missing:
-                hw_list_model.insert(insertAt, [_("Sound: %s" % soundinfo[3]), gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_SOUND, soundinfo])
+                hw_list_model.insert(insertAt, [_("Sound: %s" % soundinfo[2]), gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_SOUND, soundinfo])
 
 
         # Populate list of char devices
@@ -1682,10 +1685,10 @@ class vmmDetails(gobject.GObject):
         for charinfo in self.vm.get_char_devices():
             missing = True
             insertAt = 0
-            currentChars[charinfo[3]] = 1
+            currentChars[charinfo[2]] = 1
             for row in hw_list_model:
                 if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_CHAR and \
-                   row[HW_LIST_COL_DEVICE][3] == charinfo[3]:
+                   row[HW_LIST_COL_DEVICE][2] == charinfo[2]:
                     # Update metadata
                     row[HW_LIST_COL_DEVICE] = charinfo
                     missing = False
@@ -1696,7 +1699,7 @@ class vmmDetails(gobject.GObject):
             if missing:
                 l = charinfo[0].capitalize()
                 if charinfo[0] != "console":
-                    l += " %s" % charinfo[2] # Don't show port for console
+                    l += " %s" % charinfo[3] # Don't show port for console
                 hw_list_model.insert(insertAt, [l, gtk.STOCK_CONNECT, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_CHAR, charinfo])
 
 
@@ -1709,22 +1712,22 @@ class vmmDetails(gobject.GObject):
             removeIt = False
 
             if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and not \
-               currentDisks.has_key(row[HW_LIST_COL_DEVICE][3]):
+               currentDisks.has_key(row[HW_LIST_COL_DEVICE][2]):
                 removeIt = True
             elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and not \
-                 currentNICs.has_key(row[HW_LIST_COL_DEVICE][3]):
+                 currentNICs.has_key(row[HW_LIST_COL_DEVICE][2]):
                 removeIt = True
             elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and not \
-                 currentInputs.has_key(row[HW_LIST_COL_DEVICE][3]):
+                 currentInputs.has_key(row[HW_LIST_COL_DEVICE][2]):
                 removeIt = True
             elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_GRAPHICS and not \
-                 currentGraphics.has_key(row[HW_LIST_COL_DEVICE][3]):
+                 currentGraphics.has_key(row[HW_LIST_COL_DEVICE][2]):
                 removeIt = True
             elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_SOUND and not \
-                 currentSounds.has_key(row[HW_LIST_COL_DEVICE][3]):
+                 currentSounds.has_key(row[HW_LIST_COL_DEVICE][2]):
                 removeIt = True
             elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_CHAR and not \
-                 currentChars.has_key(row[HW_LIST_COL_DEVICE][3]):
+                 currentChars.has_key(row[HW_LIST_COL_DEVICE][2]):
                 removeIt = True
 
             if removeIt:
@@ -1733,7 +1736,7 @@ class vmmDetails(gobject.GObject):
                 (selModel, selIter) = hw_list.get_selection().get_selected()
                 selType = selModel.get_value(selIter, HW_LIST_COL_TYPE)
                 selInfo = selModel.get_value(selIter, HW_LIST_COL_DEVICE)
-                if selType == row[HW_LIST_COL_TYPE] and selInfo[3] == row[HW_LIST_COL_DEVICE][3]:
+                if selType == row[HW_LIST_COL_TYPE] and selInfo[2] == row[HW_LIST_COL_DEVICE][2]:
                     hw_list.get_selection().select_iter(selModel.iter_nth_child(None, 0))
 
                 # Now actually remove it

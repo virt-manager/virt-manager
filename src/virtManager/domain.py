@@ -606,6 +606,12 @@ class vmmDomain(gobject.GObject):
             return [typ, self.connection.get_hostname(), port, transport, username]
 
 
+    # ----------------
+    # get_X_devices functions: return a list of lists. Each sublist represents
+    # a device, of the format:
+    # [ device_type, unique_attribute(s), hw column label, attr1, attr2, ... ]
+    # ----------------
+
     def get_disk_devices(self):
         def _parse_disk_devs(ctx):
             disks = []
@@ -645,8 +651,11 @@ class vmmDomain(gobject.GObject):
                 if devdst == None:
                     raise RuntimeError("missing destination device")
 
-                disks.append([typ, srcpath, devtype, devdst, readonly, \
-                              sharable, bus])
+                # [ devicetype, unique, device target, source path,
+                #   disk device type, disk type, readonly?, sharable?,
+                #   bus type ]
+                disks.append(["disk", devdst, devdst, srcpath, devtype, typ,
+                              readonly, sharable, bus])
 
             return disks
 
@@ -706,7 +715,10 @@ class vmmDomain(gobject.GObject):
                 # need mac for uniqueness. Some reason XenD doesn't
                 # always complete kill the NIC record
                 if devmac != None:
-                    nics.append([typ, source, target, devmac, model])
+                    # [device type, unique, mac addr, source, target dev,
+                    #  net type, net model]
+                    nics.append(["interface", devmac, devmac, source, target,
+                                 typ, model])
             return nics
 
         return self._parse_device_xml(_parse_network_devs)
@@ -719,9 +731,9 @@ class vmmDomain(gobject.GObject):
             for node in ret:
                 typ = node.prop("type")
                 bus = node.prop("bus")
-                # XXX Replace 'None' with device model when libvirt supports
-                # that
-                inputs.append([typ, bus, None, typ + ":" + bus])
+
+                # [device type, unique, display string, bus type, input type]
+                inputs.append(["input", (typ, bus), typ + ":" + bus, bus, typ])
             return inputs
 
         return self._parse_device_xml(_parse_input_devs)
@@ -732,13 +744,17 @@ class vmmDomain(gobject.GObject):
             ret = ctx.xpathEval("/domain/devices/graphics[1]")
             for node in ret:
                 typ = node.prop("type")
+                listen = None
+                port = None
+                keymap = None
                 if typ == "vnc":
                     listen = node.prop("listen")
                     port = node.prop("port")
                     keymap = node.prop("keymap")
-                    graphics.append([typ, listen, port, typ, keymap])
-                else:
-                    graphics.append([typ, None, None, typ, None])
+
+                # [device type, unique, graphics type, listen addr, port,
+                #  keymap ]
+                graphics.append(["graphics", typ, typ, listen, port, keymap])
             return graphics
 
         return self._parse_device_xml(_parse_graphics_devs)
@@ -748,7 +764,10 @@ class vmmDomain(gobject.GObject):
             sound = []
             ret = ctx.xpathEval("/domain/devices/sound")
             for node in ret:
-                sound.append([None, None, None, node.prop("model")])
+                model = node.prop("model")
+
+                # [device type, unique, sound model]
+                sound.append(["sound", model, model])
             return sound
 
         return self._parse_device_xml(_parse_sound_devs)
@@ -782,8 +801,11 @@ class vmmDomain(gobject.GObject):
                 if not source_path:
                     source_path = node.prop("tty")
 
-                dev = [char_type, dev_type, target_port,
-                       "%s:%s" % (char_type, target_port), source_path, False]
+                # [device type, unique, display string, target_port,
+                #  char device type, source_path, is_console_dup_of_serial?
+                dev = [char_type, (char_type, target_port),
+                       "%s:%s" % (char_type, target_port), target_port,
+                       dev_type, source_path, False]
 
                 if node.name == "console":
                     cons_port = target_port
@@ -792,7 +814,7 @@ class vmmDomain(gobject.GObject):
                 elif node.name == "serial" and cons_port \
                    and target_port == cons_port:
                     # Console is just a dupe of this serial device
-                    dev[5] = True
+                    dev[6] = True
                     list_cons = False
 
                 chars.append(dev)
