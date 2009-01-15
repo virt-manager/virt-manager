@@ -1015,24 +1015,12 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("graphics-password").set_text("N/A")
             self.window.get_widget("graphics-keymap").set_text("N/A")
 
-        # Can't remove display from live guest
-        if self.vm.is_active():
-            self.window.get_widget("config-graphics-remove").set_sensitive(False)
-        else:
-            self.window.get_widget("config-graphics-remove").set_sensitive(True)
-
     def refresh_sound_page(self):
         soundinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not soundinfo:
             return
 
         self.window.get_widget("sound-model").set_text(soundinfo[3])
-
-        # Can't remove sound dev from live guest
-        if self.vm.is_active():
-            self.window.get_widget("config-sound-remove").set_sensitive(False)
-        else:
-            self.window.get_widget("config-sound-remove").set_sensitive(True)
 
     def refresh_char_page(self):
         charinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -1046,12 +1034,6 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("char-dev-type").set_text(charinfo[1] or "-")
         self.window.get_widget("char-target-port").set_text(charinfo[2])
         self.window.get_widget("char-source-path").set_text(charinfo[4] or "-")
-
-        # Can't remove char dev from live guest
-        if self.vm.is_active() or charinfo[0] == "console":
-            self.window.get_widget("config-char-remove").set_sensitive(False)
-        else:
-            self.window.get_widget("config-char-remove").set_sensitive(True)
 
     def refresh_boot_page(self):
         # Refresh autostart
