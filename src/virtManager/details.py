@@ -236,7 +236,7 @@ class vmmDetails(gobject.GObject):
         self.vncViewer.connect("vnc-disconnected", self._vnc_disconnected)
         self.vncViewer.connect("vnc-keyboard-grab", self._disable_modifiers)
         self.vncViewer.connect("vnc-keyboard-ungrab", self._enable_modifiers)
-        self.connected = 0
+        self.vnc_connected = True
 
         self.notifyID = None
         self.notifyInterface = None
@@ -1097,7 +1097,7 @@ class vmmDetails(gobject.GObject):
     def _vnc_disconnected(self, src):
         if self.vncTunnel is not None:
             self.close_tunnel()
-        self.connected = 0
+        self.vnc_connected = False
         logging.debug("VNC disconnected")
         if self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
             self.view_vm_status()
@@ -1111,7 +1111,7 @@ class vmmDetails(gobject.GObject):
         self.schedule_retry()
 
     def _vnc_initialized(self, src):
-        self.connected = 1
+        self.vnc_connected = True
         logging.debug("VNC initialized")
         self.activate_viewer_page()
 
@@ -1130,7 +1130,7 @@ class vmmDetails(gobject.GObject):
             self.vncViewerRetryDelay = self.vncViewerRetryDelay * 2
 
     def retry_login(self):
-        if self.connected:
+        if self.vnc_connected:
             return
         gtk.gdk.threads_enter()
         try:
