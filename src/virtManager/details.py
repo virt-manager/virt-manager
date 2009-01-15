@@ -1506,20 +1506,34 @@ class vmmDetails(gobject.GObject):
         hw_list = self.window.get_widget("hw-list")
         hw_list_model = hw_list.get_model()
 
-        # Populate list of disks
         currentDisks = {}
-        for diskinfo in self.vm.get_disk_devices():
-            missing = True
-            insertAt = 0
-            currentDisks[diskinfo[2]] = 1
-            for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and \
-                   row[HW_LIST_COL_DEVICE][2] == diskinfo[2]:
-                    row[HW_LIST_COL_DEVICE] = diskinfo
-                    missing = False
+        currentNICs = {}
+        currentInputs = {}
+        currentGraphics = {}
+        currentSounds = {}
+        currentChars = {}
 
-                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_DISK:
-                    insertAt = insertAt + 1
+        def update_hwlist(hwtype, info):
+            """Return (true if we updated an entry,
+                       index to insert at if we didn't update an entry)
+            """
+            insertAt = 0
+            for row in hw_list_model:
+                if row[HW_LIST_COL_TYPE] == hwtype and \
+                   row[HW_LIST_COL_DEVICE][2] == info[2]:
+                    row[HW_LIST_COL_DEVICE] = info
+                    return (False, insertAt)
+
+                if row[HW_LIST_COL_TYPE] <= hwtype:
+                    insertAt += 1
+
+            return (True, insertAt)
+
+        # Populate list of disks
+        for diskinfo in self.vm.get_disk_devices():
+            currentDisks[diskinfo[2]] = 1
+            missing, insertAt = update_hwlist(HW_LIST_TYPE_DISK,
+                                              diskinfo)
 
             # Add in row
             if missing:
@@ -1531,38 +1545,20 @@ class vmmDetails(gobject.GObject):
                 hw_list_model.insert(insertAt, ["Disk %s" % diskinfo[2], stock, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_DISK, diskinfo])
 
         # Populate list of NICs
-        currentNICs = {}
         for netinfo in self.vm.get_network_devices():
-            missing = True
-            insertAt = 0
             currentNICs[netinfo[2]] = 1
-            for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and \
-                   row[HW_LIST_COL_DEVICE][2] == netinfo[2]:
-                    row[HW_LIST_COL_DEVICE] = netinfo
-                    missing = False
-
-                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_NIC:
-                    insertAt = insertAt + 1
+            missing, insertAt = update_hwlist(HW_LIST_TYPE_NIC,
+                                              netinfo)
 
             # Add in row
             if missing:
                 hw_list_model.insert(insertAt, ["NIC %s" % netinfo[2][-9:], gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_NIC, netinfo])
 
         # Populate list of input devices
-        currentInputs = {}
         for inputinfo in self.vm.get_input_devices():
-            missing = True
-            insertAt = 0
             currentInputs[inputinfo[2]] = 1
-            for row in hw_list_model:
-                if (row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and
-                    row[HW_LIST_COL_DEVICE][2] == inputinfo[2]):
-                    row[HW_LIST_COL_DEVICE] = inputinfo
-                    missing = False
-
-                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_INPUT:
-                    insertAt = insertAt + 1
+            missing, insertAt = update_hwlist(HW_LIST_TYPE_INPUT,
+                                              inputinfo)
 
             # Add in row
             if missing:
@@ -1575,60 +1571,32 @@ class vmmDetails(gobject.GObject):
                 hw_list_model.insert(insertAt, [label, gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, inputinfo])
 
         # Populate list of graphics devices
-        currentGraphics = {}
         for gfxinfo in self.vm.get_graphics_devices():
-            missing = True
-            insertAt = 0
             currentGraphics[gfxinfo[2]] = 1
-            for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_GRAPHICS and \
-                   row[HW_LIST_COL_DEVICE][2] == gfxinfo[2]:
-                    # Update metadata
-                    row[HW_LIST_COL_DEVICE] = gfxinfo
-                    missing = False
-
-                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_GRAPHICS:
-                    insertAt = insertAt + 1
+            missing, insertAt = update_hwlist(HW_LIST_TYPE_GRAPHICS,
+                                              gfxinfo)
 
             # Add in row
             if missing:
                 hw_list_model.insert(insertAt, [_("Display"), gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_GRAPHICS, gfxinfo])
 
         # Populate list of sound devices
-        currentSounds = {}
         for soundinfo in self.vm.get_sound_devices():
-            missing = True
-            insertAt = 0
             currentSounds[soundinfo[2]] = 1
-            for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_SOUND and \
-                   row[HW_LIST_COL_DEVICE][2] == soundinfo[2]:
-                    # Update metadata
-                    row[HW_LIST_COL_DEVICE] = soundinfo
-                    missing = False
+            missing, insertAt = update_hwlist(HW_LIST_TYPE_SOUND,
+                                              soundinfo)
 
-                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_SOUND:
-                    insertAt = insertAt + 1
             # Add in row
             if missing:
                 hw_list_model.insert(insertAt, [_("Sound: %s" % soundinfo[2]), gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_SOUND, soundinfo])
 
 
         # Populate list of char devices
-        currentChars = {}
         for charinfo in self.vm.get_char_devices():
-            missing = True
-            insertAt = 0
             currentChars[charinfo[2]] = 1
-            for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_CHAR and \
-                   row[HW_LIST_COL_DEVICE][2] == charinfo[2]:
-                    # Update metadata
-                    row[HW_LIST_COL_DEVICE] = charinfo
-                    missing = False
+            missing, insertAt = update_hwlist(HW_LIST_TYPE_CHAR,
+                                              charinfo)
 
-                if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_CHAR:
-                    insertAt = insertAt + 1
             # Add in row
             if missing:
                 l = charinfo[0].capitalize()
