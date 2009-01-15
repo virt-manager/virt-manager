@@ -904,125 +904,129 @@ class vmmDetails(gobject.GObject):
             maxmem.lower = curmem.value
         self.window.get_widget("state-vm-memory").set_text("%d MB" % int(round(self.vm.get_memory()/1024.0)))
 
-    def refresh_disk_page(self):
-        # get the currently selected line
+    def get_hw_selection(self, field):
         vmlist = self.window.get_widget("hw-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
-        if active[1] != None:
-            diskinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
-            self.window.get_widget("disk-source-type").set_text(diskinfo[0])
-            self.window.get_widget("disk-source-path").set_text(diskinfo[1])
-            self.window.get_widget("disk-target-type").set_text(diskinfo[2])
-            self.window.get_widget("disk-target-device").set_text(diskinfo[3])
-            if diskinfo[4] == True:
-                perms = "Readonly"
-            else:
-                perms = "Read/Write"
-            if diskinfo[5] == True:
-                perms += ", Sharable"
-            self.window.get_widget("disk-permissions").set_text(perms)
-            bus = diskinfo[6] or _("Unknown")
-            self.window.get_widget("disk-bus").set_text(bus)
+        if active[1] == None:
+            logging.debug("Nothing selected.")
+            return None
+        else:
+            return active[0].get_value(active[1], field)
 
-            button = self.window.get_widget("config-cdrom-connect")
-            if diskinfo[2] == "cdrom":
-                if diskinfo[1] == "-":
-                    # source device not connected
-                    button.set_label(gtk.STOCK_CONNECT)
-                else:
-                    button.set_label(gtk.STOCK_DISCONNECT)
-                button.show()
+    def refresh_disk_page(self):
+        diskinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not diskinfo:
+            return
+
+        self.window.get_widget("disk-source-type").set_text(diskinfo[0])
+        self.window.get_widget("disk-source-path").set_text(diskinfo[1])
+        self.window.get_widget("disk-target-type").set_text(diskinfo[2])
+        self.window.get_widget("disk-target-device").set_text(diskinfo[3])
+        if diskinfo[4] == True:
+            perms = "Readonly"
+        else:
+            perms = "Read/Write"
+        if diskinfo[5] == True:
+            perms += ", Sharable"
+        self.window.get_widget("disk-permissions").set_text(perms)
+        bus = diskinfo[6] or _("Unknown")
+        self.window.get_widget("disk-bus").set_text(bus)
+
+        button = self.window.get_widget("config-cdrom-connect")
+        if diskinfo[2] == "cdrom":
+            if diskinfo[1] == "-":
+                # source device not connected
+                button.set_label(gtk.STOCK_CONNECT)
             else:
-                button.hide()
+                button.set_label(gtk.STOCK_DISCONNECT)
+            button.show()
+        else:
+            button.hide()
 
     def refresh_network_page(self):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] != None:
-            netinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
-            self.window.get_widget("network-source-type").set_text(netinfo[0])
-            if netinfo[1] is not None:
-                self.window.get_widget("network-source-device").set_text(netinfo[1])
-            else:
-                self.window.get_widget("network-source-device").set_text("-")
-            self.window.get_widget("network-mac-address").set_text(netinfo[3])
-            model = netinfo[4] or _("Hypervisor Default")
-            self.window.get_widget("network-source-model").set_text(model)
+        netinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not netinfo:
+            return
+
+        self.window.get_widget("network-source-type").set_text(netinfo[0])
+        if netinfo[1] is not None:
+            self.window.get_widget("network-source-device").set_text(netinfo[1])
+        else:
+            self.window.get_widget("network-source-device").set_text("-")
+        self.window.get_widget("network-mac-address").set_text(netinfo[3])
+
+        model = netinfo[4] or _("Hypervisor Default")
+        self.window.get_widget("network-source-model").set_text(model)
 
     def refresh_input_page(self):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] != None:
-            inputinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
-            if inputinfo[3] == "tablet:usb":
-                self.window.get_widget("input-dev-type").set_text(_("EvTouch USB Graphics Tablet"))
-            elif inputinfo[3] == "mouse:usb":
-                self.window.get_widget("input-dev-type").set_text(_("Generic USB Mouse"))
-            elif inputinfo[3] == "mouse:xen":
-                self.window.get_widget("input-dev-type").set_text(_("Xen Mouse"))
-            elif inputinfo[3] == "mouse:ps2":
-                self.window.get_widget("input-dev-type").set_text(_("PS/2 Mouse"))
-            else:
-                self.window.get_widget("input-dev-type").set_text(inputinfo[0] + " " + inputinfo[1])
+        inputinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not inputinfo:
+            return
 
-            if inputinfo[0] == "tablet":
-                self.window.get_widget("input-dev-mode").set_text(_("Absolute Movement"))
-            else:
-                self.window.get_widget("input-dev-mode").set_text(_("Relative Movement"))
+        if inputinfo[3] == "tablet:usb":
+            self.window.get_widget("input-dev-type").set_text(_("EvTouch USB Graphics Tablet"))
+        elif inputinfo[3] == "mouse:usb":
+            self.window.get_widget("input-dev-type").set_text(_("Generic USB Mouse"))
+        elif inputinfo[3] == "mouse:xen":
+            self.window.get_widget("input-dev-type").set_text(_("Xen Mouse"))
+        elif inputinfo[3] == "mouse:ps2":
+            self.window.get_widget("input-dev-type").set_text(_("PS/2 Mouse"))
+        else:
+            self.window.get_widget("input-dev-type").set_text(inputinfo[0] + " " + inputinfo[1])
 
-            # Can't remove primary Xen or PS/2 mice
-            if inputinfo[0] == "mouse" and inputinfo[1] in ("xen", "ps2"):
-                self.window.get_widget("config-input-remove").set_sensitive(False)
-            else:
-                self.window.get_widget("config-input-remove").set_sensitive(True)
+        if inputinfo[0] == "tablet":
+            self.window.get_widget("input-dev-mode").set_text(_("Absolute Movement"))
+        else:
+            self.window.get_widget("input-dev-mode").set_text(_("Relative Movement"))
+
+        # Can't remove primary Xen or PS/2 mice
+        if inputinfo[0] == "mouse" and inputinfo[1] in ("xen", "ps2"):
+            self.window.get_widget("config-input-remove").set_sensitive(False)
+        else:
+            self.window.get_widget("config-input-remove").set_sensitive(True)
 
     def refresh_graphics_page(self):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] != None:
-            inputinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
-            if inputinfo[0] == "vnc":
-                self.window.get_widget("graphics-type").set_text(_("VNC server"))
-            elif inputinfo[0] == "sdl":
-                self.window.get_widget("graphics-type").set_text(_("Local SDL window"))
-            else:
-                self.window.get_widget("graphics-type").set_text(inputinfo[0])
+        gfxinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not gfxinfo:
+            return
 
-            if inputinfo[0] == "vnc":
-                if inputinfo[1] == None:
-                    self.window.get_widget("graphics-address").set_text("127.0.0.1")
-                else:
-                    self.window.get_widget("graphics-address").set_text(inputinfo[1])
-                if int(inputinfo[2]) == -1:
-                    self.window.get_widget("graphics-port").set_text(_("Automatically allocated"))
-                else:
-                    self.window.get_widget("graphics-port").set_text(inputinfo[2])
-                self.window.get_widget("graphics-password").set_text("-")
-                self.window.get_widget("graphics-keymap").set_text(inputinfo[4] or "en-us")
-            else:
-                self.window.get_widget("graphics-address").set_text(_("N/A"))
-                self.window.get_widget("graphics-port").set_text(_("N/A"))
-                self.window.get_widget("graphics-password").set_text("N/A")
-                self.window.get_widget("graphics-keymap").set_text("N/A")
+        if gfxinfo[0] == "vnc":
+            self.window.get_widget("graphics-type").set_text(_("VNC server"))
+        elif gfxinfo[0] == "sdl":
+            self.window.get_widget("graphics-type").set_text(_("Local SDL window"))
+        else:
+            self.window.get_widget("graphics-type").set_text(gfxinfo[0])
 
-            # Can't remove display from live guest
-            if self.vm.is_active():
-                self.window.get_widget("config-graphics-remove").set_sensitive(False)
+        if gfxinfo[0] == "vnc":
+            if gfxinfo[1] == None:
+                self.window.get_widget("graphics-address").set_text("127.0.0.1")
             else:
-                self.window.get_widget("config-graphics-remove").set_sensitive(True)
+                self.window.get_widget("graphics-address").set_text(gfxinfo[1])
+            if int(gfxinfo[2]) == -1:
+                self.window.get_widget("graphics-port").set_text(_("Automatically allocated"))
+            else:
+                self.window.get_widget("graphics-port").set_text(gfxinfo[2])
+            self.window.get_widget("graphics-password").set_text("-")
+            self.window.get_widget("graphics-keymap").set_text(gfxinfo[4] or "en-us")
+        else:
+            self.window.get_widget("graphics-address").set_text(_("N/A"))
+            self.window.get_widget("graphics-port").set_text(_("N/A"))
+            self.window.get_widget("graphics-password").set_text("N/A")
+            self.window.get_widget("graphics-keymap").set_text("N/A")
+
+        # Can't remove display from live guest
+        if self.vm.is_active():
+            self.window.get_widget("config-graphics-remove").set_sensitive(False)
+        else:
+            self.window.get_widget("config-graphics-remove").set_sensitive(True)
 
     def refresh_sound_page(self):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] is None:
+        soundinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not soundinfo:
             return
-        sound = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
-        self.window.get_widget("sound-model").set_text(sound[3])
+
+        self.window.get_widget("sound-model").set_text(soundinfo[3])
 
         # Can't remove sound dev from live guest
         if self.vm.is_active():
@@ -1031,21 +1035,20 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("config-sound-remove").set_sensitive(True)
 
     def refresh_char_page(self):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] is None:
+        charinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not charinfo:
             return
-        char = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
-        typelabel = "<b>%s Device %s</b>" % (char[0].capitalize(),
-                                             char[5] and _("(Primary Console)") or "")
+
+        typelabel = "<b>%s Device %s</b>" % (charinfo[0].capitalize(),
+                                             charinfo[5] and
+                                             _("(Primary Console)") or "")
         self.window.get_widget("char-type").set_markup(typelabel)
-        self.window.get_widget("char-dev-type").set_text(char[1] or "-")
-        self.window.get_widget("char-target-port").set_text(char[2])
-        self.window.get_widget("char-source-path").set_text(char[4] or "-")
+        self.window.get_widget("char-dev-type").set_text(charinfo[1] or "-")
+        self.window.get_widget("char-target-port").set_text(charinfo[2])
+        self.window.get_widget("char-source-path").set_text(charinfo[4] or "-")
 
         # Can't remove char dev from live guest
-        if self.vm.is_active() or char[0] == "console":
+        if self.vm.is_active() or charinfo[0] == "console":
             self.window.get_widget("config-char-remove").set_sensitive(False)
         else:
             self.window.get_widget("config-char-remove").set_sensitive(True)
@@ -1468,83 +1471,75 @@ class vmmDetails(gobject.GObject):
                 return
 
     def remove_disk(self, src):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] != None:
-            diskinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
-            self.remove_device(self.vm.get_disk_xml(diskinfo[3]))
-            self.refresh_resources()
+        diskinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not diskinfo:
+            return
+
+        self.remove_device(self.vm.get_disk_xml(diskinfo[3]))
+        self.refresh_resources()
 
     def remove_network(self, src):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] != None:
-            netinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
+        netinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not netinfo:
+            return
 
-            vnic = None
-            try:
-                if netinfo[0] == "bridge":
-                    vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], bridge=netinfo[1], macaddr=netinfo[3])
-                elif netinfo[0] == "network":
-                    vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], network=netinfo[1], macaddr=netinfo[3])
-                else:
-                    vnic = virtinst.VirtualNetworkInterface(type=netinfo[0], macaddr=netinfo[3])
-            except ValueError, e:
-                self.err.show_err(_("Error Removing Network: %s" % str(e)),
-                                  "".join(traceback.format_exc()))
-                return False
+        vnic = None
+        try:
+            if netinfo[0] == "bridge":
+                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0],
+                                                        bridge=netinfo[1],
+                                                        macaddr=netinfo[3])
+            elif netinfo[0] == "network":
+                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0],
+                                                        network=netinfo[1],
+                                                        macaddr=netinfo[3])
+            else:
+                vnic = virtinst.VirtualNetworkInterface(type=netinfo[0],
+                                                        macaddr=netinfo[3])
+        except ValueError, e:
+            self.err.show_err(_("Error Removing Network: %s" % str(e)),
+                                "".join(traceback.format_exc()))
+            return False
 
-            xml = vnic.get_xml_config()
-            self.remove_device(xml)
-            self.refresh_resources()
+        xml = vnic.get_xml_config()
+        self.remove_device(xml)
+        self.refresh_resources()
 
     def remove_input(self, src):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] != None:
-            inputinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
+        inputinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not inputinfo:
+            return
 
-            xml = "<input type='%s' bus='%s'/>" % (inputinfo[0], inputinfo[1])
-            self.remove_device(xml)
-            self.refresh_resources()
+        xml = "<input type='%s' bus='%s'/>" % (inputinfo[0], inputinfo[1])
+        self.remove_device(xml)
+        self.refresh_resources()
 
     def remove_graphics(self, src):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] != None:
-            inputinfo = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
+        gfxinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not gfxinfo:
+            return
 
-            xml = "<graphics type='%s'/>" % inputinfo[0]
-            self.remove_device(xml)
-            self.refresh_resources()
+        xml = "<graphics type='%s'/>" % gfxinfo[0]
+        self.remove_device(xml)
+        self.refresh_resources()
 
     def remove_sound(self, src):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] is None:
+        soundinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not soundinfo:
             return
-        sound = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
 
-        xml = "<sound model='%s'/>" % sound[3]
+        xml = "<sound model='%s'/>" % soundinfo[3]
         self.remove_device(xml)
         self.refresh_resources()
 
     def remove_char(self, src):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] is None:
+        charinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not charinfo:
             return
-        char = active[0].get_value(active[1], HW_LIST_COL_DEVICE)
 
-        xml = "<%s>\n" % char[0] + \
-              "  <target port='%s'/>\n" % char[2] + \
-              "</%s>" % char[0]
+        xml = "<%s>\n" % charinfo[0] + \
+              "  <target port='%s'/>\n" % charinfo[2] + \
+              "</%s>" % charinfo[0]
         self.remove_device(xml)
         self.refresh_resources()
 
@@ -1594,14 +1589,14 @@ class vmmDetails(gobject.GObject):
 
         # Populate list of disks
         currentDisks = {}
-        for disk in self.vm.get_disk_devices():
+        for diskinfo in self.vm.get_disk_devices():
             missing = True
             insertAt = 0
-            currentDisks[disk[3]] = 1
+            currentDisks[diskinfo[3]] = 1
             for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and row[HW_LIST_COL_DEVICE][3] == disk[3]:
+                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and row[HW_LIST_COL_DEVICE][3] == diskinfo[3]:
                     # Update metadata
-                    row[HW_LIST_COL_DEVICE] = disk
+                    row[HW_LIST_COL_DEVICE] = diskinfo
                     missing = False
 
                 if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_DISK:
@@ -1610,22 +1605,22 @@ class vmmDetails(gobject.GObject):
             # Add in row
             if missing:
                 stock = gtk.STOCK_HARDDISK
-                if disk[2] == "cdrom":
+                if diskinfo[2] == "cdrom":
                     stock = gtk.STOCK_CDROM
-                elif disk[2] == "floppy":
+                elif diskinfo[2] == "floppy":
                     stock = gtk.STOCK_FLOPPY
-                hw_list_model.insert(insertAt, ["Disk %s" % disk[3], stock, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_DISK, disk])
+                hw_list_model.insert(insertAt, ["Disk %s" % diskinfo[3], stock, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_DISK, diskinfo])
 
         # Populate list of NICs
         currentNICs = {}
-        for nic in self.vm.get_network_devices():
+        for netinfo in self.vm.get_network_devices():
             missing = True
             insertAt = 0
-            currentNICs[nic[3]] = 1
+            currentNICs[netinfo[3]] = 1
             for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and row[HW_LIST_COL_DEVICE][3] == nic[3]:
+                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and row[HW_LIST_COL_DEVICE][3] == netinfo[3]:
                     # Update metadata
-                    row[HW_LIST_COL_DEVICE] = nic
+                    row[HW_LIST_COL_DEVICE] = netinfo
                     missing = False
 
                 if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_NIC:
@@ -1633,19 +1628,19 @@ class vmmDetails(gobject.GObject):
 
             # Add in row
             if missing:
-                hw_list_model.insert(insertAt, ["NIC %s" % nic[3][-9:], gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_NIC, nic])
+                hw_list_model.insert(insertAt, ["NIC %s" % netinfo[3][-9:], gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_NIC, netinfo])
 
         # Populate list of input devices
         currentInputs = {}
-        for inp in self.vm.get_input_devices():
+        for inputinfo in self.vm.get_input_devices():
             missing = True
             insertAt = 0
-            currentInputs[inp[3]] = 1
+            currentInputs[inputinfo[3]] = 1
             for row in hw_list_model:
                 if (row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and
-                    row[HW_LIST_COL_DEVICE][3] == inp[3]):
+                    row[HW_LIST_COL_DEVICE][3] == inputinfo[3]):
                     # Update metadata
-                    row[HW_LIST_COL_DEVICE] = inp
+                    row[HW_LIST_COL_DEVICE] = inputinfo
                     missing = False
 
                 if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_INPUT:
@@ -1653,23 +1648,24 @@ class vmmDetails(gobject.GObject):
 
             # Add in row
             if missing:
-                if inp[0] == "tablet":
-                    hw_list_model.insert(insertAt, [_("Tablet"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, inp])
-                elif inp[0] == "mouse":
-                    hw_list_model.insert(insertAt, [_("Mouse"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, inp])
+                if inputinfo[0] == "tablet":
+                    label = _("Tablet")
+                elif inputinfo[0] == "mouse":
+                    label = _("Mouse")
                 else:
-                    hw_list_model.insert(insertAt, [_("Inp"), gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, inp])
+                    label = _("Input")
+                hw_list_model.insert(insertAt, [label, gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, inputinfo])
 
         # Populate list of graphics devices
         currentGraphics = {}
-        for graphic in self.vm.get_graphics_devices():
+        for gfxinfo in self.vm.get_graphics_devices():
             missing = True
             insertAt = 0
-            currentGraphics[graphic[3]] = 1
+            currentGraphics[gfxinfo[3]] = 1
             for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_GRAPHICS and row[HW_LIST_COL_DEVICE][3] == graphic[3]:
+                if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_GRAPHICS and row[HW_LIST_COL_DEVICE][3] == gfxinfo[3]:
                     # Update metadata
-                    row[HW_LIST_COL_DEVICE] = graphic
+                    row[HW_LIST_COL_DEVICE] = gfxinfo
                     missing = False
 
                 if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_GRAPHICS:
@@ -1677,49 +1673,49 @@ class vmmDetails(gobject.GObject):
 
             # Add in row
             if missing:
-                hw_list_model.insert(insertAt, [_("Display"), gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_GRAPHICS, graphic])
+                hw_list_model.insert(insertAt, [_("Display"), gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_GRAPHICS, gfxinfo])
 
         # Populate list of sound devices
         currentSounds = {}
-        for sound in self.vm.get_sound_devices():
+        for soundinfo in self.vm.get_sound_devices():
             missing = True
             insertAt = 0
-            currentSounds[sound[3]] = 1
+            currentSounds[soundinfo[3]] = 1
             for row in hw_list_model:
                 if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_SOUND and \
-                   row[HW_LIST_COL_DEVICE][3] == sound[3]:
+                   row[HW_LIST_COL_DEVICE][3] == soundinfo[3]:
                     # Update metadata
-                    row[HW_LIST_COL_DEVICE] = sound
+                    row[HW_LIST_COL_DEVICE] = soundinfo
                     missing = False
 
                 if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_SOUND:
                     insertAt = insertAt + 1
             # Add in row
             if missing:
-                hw_list_model.insert(insertAt, [_("Sound: %s" % sound[3]), gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_SOUND, sound])
+                hw_list_model.insert(insertAt, [_("Sound: %s" % soundinfo[3]), gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_SOUND, soundinfo])
 
 
         # Populate list of char devices
         currentChars = {}
-        for char in self.vm.get_char_devices():
+        for charinfo in self.vm.get_char_devices():
             missing = True
             insertAt = 0
-            currentChars[char[3]] = 1
+            currentChars[charinfo[3]] = 1
             for row in hw_list_model:
                 if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_CHAR and \
-                   row[HW_LIST_COL_DEVICE][3] == char[3]:
+                   row[HW_LIST_COL_DEVICE][3] == charinfo[3]:
                     # Update metadata
-                    row[HW_LIST_COL_DEVICE] = char
+                    row[HW_LIST_COL_DEVICE] = charinfo
                     missing = False
 
                 if row[HW_LIST_COL_TYPE] <= HW_LIST_TYPE_CHAR:
                     insertAt = insertAt + 1
             # Add in row
             if missing:
-                l = char[0].capitalize()
-                if char[0] != "console":
-                    l += " %s" % char[2] # Don't show port for console
-                hw_list_model.insert(insertAt, [l, gtk.STOCK_CONNECT, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_CHAR, char])
+                l = charinfo[0].capitalize()
+                if charinfo[0] != "console":
+                    l += " %s" % charinfo[2] # Don't show port for console
+                hw_list_model.insert(insertAt, [l, gtk.STOCK_CONNECT, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_CHAR, charinfo])
 
 
         # Now remove any no longer current devs
