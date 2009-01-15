@@ -661,27 +661,6 @@ class vmmDomain(gobject.GObject):
 
         return self._parse_device_xml(_parse_disk_devs)
 
-    def get_disk_xml(self, target):
-        """Returns device xml in string form for passed disk target"""
-        xml = self.get_xml()
-        doc = None
-        ctx = None
-        try:
-            doc = libxml2.parseDoc(xml)
-            ctx = doc.xpathNewContext()
-            disk_fragment = ctx.xpathEval("/domain/devices/disk[target/@dev='%s']" % target)
-            if len(disk_fragment) == 0:
-                raise RuntimeError("Attmpted to parse disk device %s, but %s does not exist" % (target,target))
-            if len(disk_fragment) > 1:
-                raise RuntimeError("Found multiple disk devices named %s. This domain's XML is malformed." % target)
-            result = disk_fragment[0].serialize()
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
-        return result
-
     def get_network_devices(self):
         def _parse_network_devs(ctx):
             nics = []
@@ -803,7 +782,7 @@ class vmmDomain(gobject.GObject):
 
                 # [device type, unique, display string, target_port,
                 #  char device type, source_path, is_console_dup_of_serial?
-                dev = [char_type, (char_type, target_port),
+                dev = [char_type, target_port,
                        "%s:%s" % (char_type, target_port), target_port,
                        dev_type, source_path, False]
 
@@ -849,100 +828,96 @@ class vmmDomain(gobject.GObject):
         index = xml.find("</devices>")
         return xml[0:index] + devxml + xml[index:]
 
-    def _remove_xml_device(self, xml, devxml):
-        """Remove device 'devxml' from devices section of 'xml, return
-           result"""
+    def get_device_xml(self, dev_type, dev_id_info):
+        vmxml = self.vm.XMLDesc(0)
         doc = None
-        try:
-            doc = libxml2.parseDoc(xml)
-        except:
-            return
-        ctx = doc.xpathNewContext()
-        try:
-            dev_doc = libxml2.parseDoc(devxml)
-        except:
-            raise RuntimeError("Device XML would not parse")
-        dev_ctx = dev_doc.xpathNewContext()
-        ret = None
+        ctx = None
 
         try:
-            dev = dev_ctx.xpathEval("//*")
-            dev_type = dev[0].name
-            if dev_type=="interface":
-                address = dev_ctx.xpathEval("/interface/mac/@address")
-                if len(address) > 0 and address[0].content != None:
-                    logging.debug("The mac address appears to be %s" % address[0].content)
-                    ret = ctx.xpathEval("/domain/devices/interface[mac/@address='%s']" % address[0].content)
+            doc = libxml2.parseDoc(vmxml)
+            ctx = doc.xpathNewContext()
+            nodes = self._get_device_xml_helper(ctx, dev_type, dev_id_info)
 
-            elif dev_type=="disk":
-                path = dev_ctx.xpathEval("/disk/target/@dev")
-                if len(path) > 0 and path[0].content != None:
-                    logging.debug("Looking for path %s" % path[0].content)
-                    ret = ctx.xpathEval("/domain/devices/disk[target/@dev='%s']" % path[0].content)
+            if nodes:
+                return nodes[0].serialize()
 
-            elif dev_type=="input":
-                typ = dev_ctx.xpathEval("/input/@type")
-                bus = dev_ctx.xpathEval("/input/@bus")
-                if (len(typ) > 0 and typ[0].content != None and
-                    len(bus) > 0 and bus[0].content != None):
-                    logging.debug("Looking for type %s bus %s" % (typ[0].content, bus[0].content))
-                    ret = ctx.xpathEval("/domain/devices/input[@type='%s' and @bus='%s']" % (typ[0].content, bus[0].content))
-
-            elif dev_type=="graphics":
-                typ = dev_ctx.xpathEval("/graphics/@type")
-                if len(typ) > 0 and typ[0].content != None:
-                    logging.debug("Looking for type %s" % typ[0].content)
-                    ret = ctx.xpathEval("/domain/devices/graphics[@type='%s']" % typ[0].content)
-
-            elif dev_type == "sound":
-                model = dev_ctx.xpathEval("/sound/@model")
-                if len(model) > 0 and model[0].content != None:
-                    logging.debug("Looking for type %s" % model[0].content)
-                    ret = ctx.xpathEval("/domain/devices/sound[@model='%s']" % model[0].content)
-
-            elif dev_type == "parallel" or dev_type == "console" or \
-                 dev_type == "serial":
-                port = dev_ctx.xpathEval("/%s/target/@port" % dev_type)
-                if port and len(port) > 0 and port[0].content != None:
-                    logging.debug("Looking for %s w/ port %s" % (dev_type,
-                                                                 port))
-                    ret = ctx.xpathEval("/domain/devices/%s[target/@port='%s']" % (dev_type, port[0].content))
-
-                    # If serial and console are both present, console is
-                    # probably (always?) just a dup of the 'primary' serial
-                    # device. Try and find an associated console device with
-                    # the same port and remove that as well, otherwise the
-                    # removal doesn't go through on libvirt <= 0.4.4
-                    if dev_type == "serial":
-                        cons_ret = ctx.xpathEval("/domain/devices/console[target/@port='%s']" % port[0].content)
-                        if cons_ret and len(cons_ret) > 0:
-                            logging.debug("Also removing console device "
-                                          "associated with serial dev.")
-                            cons_ret[0].unlinkNode()
-                            cons_ret[0].freeNode()
-                        else:
-                            logging.debug("No console device found associated "
-                                          "with passed serial devices")
-
-            else:
-                raise RuntimeError, _("Unknown device type '%s'" % dev_type)
-
-            # Take variable 'ret', unlink it, and define the altered xml
-            if ret and len(ret) > 0:
-                ret[0].unlinkNode()
-                ret[0].freeNode()
-                newxml = doc.serialize()
-                return newxml
-            else:
-                logging.debug("Didn't find the specified device to remove. "
-                              "Passed xml was: %s" % devxml)
         finally:
             if ctx != None:
                 ctx.xpathFreeContext()
             if doc != None:
                 doc.freeDoc()
-            if dev_doc != None:
-                dev_doc.freeDoc()
+
+
+    def _get_device_xml_helper(self, ctx, dev_type, dev_id_info):
+        """Does all the work of looking up the device in the VM xml"""
+
+        if dev_type=="interface":
+            ret = ctx.xpathEval("/domain/devices/interface[mac/@address='%s']" % dev_id_info)
+
+        elif dev_type=="disk":
+            ret = ctx.xpathEval("/domain/devices/disk[target/@dev='%s']" % \
+                                dev_id_info)
+
+        elif dev_type=="input":
+            typ, bus = dev_id_info
+            ret = ctx.xpathEval("/domain/devices/input[@type='%s' and @bus='%s']" % (typ, bus))
+
+        elif dev_type=="graphics":
+            ret = ctx.xpathEval("/domain/devices/graphics[@type='%s']" % \
+                                dev_id_info)
+
+        elif dev_type == "sound":
+            ret = ctx.xpathEval("/domain/devices/sound[@model='%s']" % \
+                                dev_id_info)
+
+        elif dev_type == "parallel" or dev_type == "console" or \
+             dev_type == "serial":
+            ret = ctx.xpathEval("/domain/devices/%s[target/@port='%s']" % (dev_type, dev_id_info))
+
+            # If serial and console are both present, console is
+            # probably (always?) just a dup of the 'primary' serial
+            # device. Try and find an associated console device with
+            # the same port and remove that as well, otherwise the
+            # removal doesn't go through on libvirt <= 0.4.4
+            if dev_type == "serial":
+                cons_ret = ctx.xpathEval("/domain/devices/console[target/@port='%s']" % dev_id_info)
+                if cons_ret and len(cons_ret) > 0:
+                    ret.append(cons_ret[0])
+        else:
+            raise RuntimeError, _("Unknown device type '%s'" % dev_type)
+
+        return ret
+
+    def _remove_xml_device(self, dev_type, dev_id_info):
+        """Remove device 'devxml' from devices section of 'xml, return
+           result"""
+        vmxml = self.vm.XMLDesc(0)
+        doc = libxml2.parseDoc(vmxml)
+        ctx = None
+
+        try:
+            ctx = doc.xpathNewContext()
+            ret = self._get_device_xml_helper(ctx, dev_type, dev_id_info)
+
+            if ret and len(ret) > 0:
+                if len(ret) > 1 and ret[0].name == "serial" and \
+                   ret[1].name == "console":
+                    ret[1].unlinkNode()
+                    ret[1].freeNode()
+
+                ret[0].unlinkNode()
+                ret[0].freeNode()
+                newxml = doc.serialize()
+                return newxml
+            else:
+                raise ValueError(_("Didn't find the specified device to "
+                                   "remove. Device was: %s %s" % \
+                                   (dev_type, str(dev_id_info))))
+        finally:
+            if ctx != None:
+                ctx.xpathFreeContext()
+            if doc != None:
+                doc.freeDoc()
 
     def attach_device(self, xml):
         """Hotplug device to running guest"""
@@ -966,10 +941,8 @@ class vmmDomain(gobject.GObject):
         # Invalidate cached XML
         self.xml = None
 
-    def remove_device(self, devxml):
-        xml = self.vm.XMLDesc(0)
-
-        newxml = self._remove_xml_device(xml, devxml)
+    def remove_device(self, dev_type, dev_id_info):
+        newxml = self._remove_xml_device(dev_type, dev_id_info)
 
         logging.debug("Redefine with " + newxml)
         self.get_connection().define_domain(newxml)
@@ -977,19 +950,19 @@ class vmmDomain(gobject.GObject):
         # Invalidate cached XML
         self.xml = None
 
-    def _change_cdrom(self, newdev, origdev):
+    def _change_cdrom(self, newdev, dev_id_info):
         # If vm is shutoff, remove device, and redefine with media
-        vmxml = self.vm.XMLDesc(0)
         if not self.is_active():
-            tmpxml = self._remove_xml_device(vmxml, origdev)
+            tmpxml = self._remove_xml_device("disk", dev_id_info)
             finalxml = self._add_xml_device(tmpxml, newdev)
+
             logging.debug("change cdrom: redefining xml with:\n%s" % finalxml)
             self.get_connection().define_domain(finalxml)
         else:
             self.attach_device(newdev)
 
-    def connect_cdrom_device(self, _type, source, target):
-        xml = self.get_disk_xml(target)
+    def connect_cdrom_device(self, _type, source, dev_id_info):
+        xml = self.get_device_xml("disk", dev_id_info)
         doc = None
         ctx = None
         try:
@@ -997,7 +970,6 @@ class vmmDomain(gobject.GObject):
             ctx = doc.xpathNewContext()
             disk_fragment = ctx.xpathEval("/disk")
             driver_fragment = ctx.xpathEval("/disk/driver")
-            origdisk = disk_fragment[0].serialize()
             disk_fragment[0].setProp("type", _type)
             elem = disk_fragment[0].newChild(None, "source", None)
             if _type == "file":
@@ -1009,23 +981,22 @@ class vmmDomain(gobject.GObject):
                 if driver_fragment:
                     driver_fragment[0].setProp("name", "phy")
             result = disk_fragment[0].serialize()
-            logging.debug("connect_cdrom_device produced the following XML: %s" % result)
+            logging.debug("connect_cdrom produced: %s" % result)
         finally:
             if ctx != None:
                 ctx.xpathFreeContext()
             if doc != None:
                 doc.freeDoc()
-        self._change_cdrom(result, origdisk)
+        self._change_cdrom(result, dev_id_info)
 
-    def disconnect_cdrom_device(self, target):
-        xml = self.get_disk_xml(target)
+    def disconnect_cdrom_device(self, dev_id_info):
+        xml = self.get_device_xml("disk", dev_id_info)
         doc = None
         ctx = None
         try:
             doc = libxml2.parseDoc(xml)
             ctx = doc.xpathNewContext()
             disk_fragment = ctx.xpathEval("/disk")
-            origdisk = disk_fragment[0].serialize()
             sourcenode = None
             for child in disk_fragment[0].children:
                 if child.name == "source":
@@ -1036,13 +1007,13 @@ class vmmDomain(gobject.GObject):
             sourcenode.unlinkNode()
             sourcenode.freeNode()
             result = disk_fragment[0].serialize()
-            logging.debug("disconnect_cdrom_device produced the following XML: %s" % result)
+            logging.debug("eject_cdrom produced: %s" % result)
         finally:
             if ctx != None:
                 ctx.xpathFreeContext()
             if doc != None:
                 doc.freeDoc()
-        self._change_cdrom(result, origdisk)
+        self._change_cdrom(result, dev_id_info)
 
     def set_vcpu_count(self, vcpus):
         vcpus = int(vcpus)

@@ -287,12 +287,12 @@ class vmmDetails(gobject.GObject):
             "on_details_help_activate": self.show_help,
 
             "on_config_cdrom_connect_clicked": self.toggle_cdrom,
-            "on_config_disk_remove_clicked": self.remove_disk,
-            "on_config_network_remove_clicked": self.remove_network,
-            "on_config_input_remove_clicked": self.remove_input,
-            "on_config_graphics_remove_clicked": self.remove_graphics,
-            "on_config_sound_remove_clicked": self.remove_sound,
-            "on_config_char_remove_clicked": self.remove_char,
+            "on_config_disk_remove_clicked": self.remove_xml_dev,
+            "on_config_network_remove_clicked": self.remove_xml_dev,
+            "on_config_input_remove_clicked": self.remove_xml_dev,
+            "on_config_graphics_remove_clicked": self.remove_xml_dev,
+            "on_config_sound_remove_clicked": self.remove_xml_dev,
+            "on_config_char_remove_clicked": self.remove_xml_dev,
             "on_add_hardware_button_clicked": self.add_hardware,
 
             "on_details_menu_view_fullscreen_activate": self.toggle_fullscreen,
@@ -1454,78 +1454,12 @@ class vmmDetails(gobject.GObject):
                                   "".join(traceback.format_exc()))
                 return
 
-
-    def remove_disk(self, src):
-        diskinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not diskinfo:
+    def remove_xml_dev(self, src):
+        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not info:
             return
 
-        self.remove_device(self.vm.get_disk_xml(diskinfo[2]))
-        self.refresh_resources()
-
-    def remove_network(self, src):
-        netinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not netinfo:
-            return
-
-        vnic = None
-        try:
-            if netinfo[5] == "bridge":
-                vnic = virtinst.VirtualNetworkInterface(type=netinfo[5],
-                                                        bridge=netinfo[3],
-                                                        macaddr=netinfo[2])
-            elif netinfo[5] == "network":
-                vnic = virtinst.VirtualNetworkInterface(type=netinfo[5],
-                                                        network=netinfo[3],
-                                                        macaddr=netinfo[2])
-            else:
-                vnic = virtinst.VirtualNetworkInterface(type=netinfo[5],
-                                                        macaddr=netinfo[2])
-        except ValueError, e:
-            self.err.show_err(_("Error Removing Network: %s" % str(e)),
-                                "".join(traceback.format_exc()))
-            return False
-
-        xml = vnic.get_xml_config()
-        self.remove_device(xml)
-        self.refresh_resources()
-
-    def remove_input(self, src):
-        inputinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not inputinfo:
-            return
-
-        xml = "<input type='%s' bus='%s'/>" % (inputinfo[4], inputinfo[3])
-        self.remove_device(xml)
-        self.refresh_resources()
-
-    def remove_graphics(self, src):
-        gfxinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not gfxinfo:
-            return
-
-        xml = "<graphics type='%s'/>" % gfxinfo[2]
-        self.remove_device(xml)
-        self.refresh_resources()
-
-    def remove_sound(self, src):
-        soundinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not soundinfo:
-            return
-
-        xml = "<sound model='%s'/>" % soundinfo[3]
-        self.remove_device(xml)
-        self.refresh_resources()
-
-    def remove_char(self, src):
-        charinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not charinfo:
-            return
-
-        xml = "<%s>\n" % charinfo[0] + \
-              "  <target port='%s'/>\n" % charinfo[3] + \
-              "</%s>" % charinfo[0]
-        self.remove_device(xml)
+        self.remove_device(info[0], info[1])
         self.refresh_resources()
 
     def prepare_hw_list(self):
@@ -1604,7 +1538,7 @@ class vmmDetails(gobject.GObject):
             currentNICs[netinfo[2]] = 1
             for row in hw_list_model:
                 if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and \
-                   row[HW_LIST_COL_DEVICE][3] == netinfo[3]:
+                   row[HW_LIST_COL_DEVICE][2] == netinfo[2]:
                     row[HW_LIST_COL_DEVICE] = netinfo
                     missing = False
 
@@ -1750,16 +1684,16 @@ class vmmDetails(gobject.GObject):
         found_dev = {}
         for row in hw_list_model:
             if row[4] == HW_LIST_TYPE_DISK:
-                disk = row[5]
-                if disk[2] == virtinst.VirtualDisk.DEVICE_DISK and not \
+                diskinfo = row[5]
+                if diskinfo[4] == virtinst.VirtualDisk.DEVICE_DISK and not \
                    found_dev.get(virtinst.VirtualDisk.DEVICE_DISK, False):
                     boot_model.append(["Hard Disk", gtk.STOCK_HARDDISK, "hd"])
                     found_dev[virtinst.VirtualDisk.DEVICE_DISK] = True
-                elif disk[2] == virtinst.VirtualDisk.DEVICE_CDROM and not \
+                elif diskinfo[4] == virtinst.VirtualDisk.DEVICE_CDROM and not \
                      found_dev.get(virtinst.VirtualDisk.DEVICE_CDROM, False):
                     boot_model.append(["CDROM", gtk.STOCK_CDROM, "cdrom"])
                     found_dev[virtinst.VirtualDisk.DEVICE_CDROM] = True
-                elif disk[2] == virtinst.VirtualDisk.DEVICE_FLOPPY and not \
+                elif diskinfo[4] == virtinst.VirtualDisk.DEVICE_FLOPPY and not \
                      found_dev.get(virtinst.VirtualDisk.DEVICE_FLOPPY, False):
                     boot_model.append(["Floppy", gtk.STOCK_FLOPPY, "fd"])
                     found_dev[virtinst.VirtualDisk.DEVICE_FLOPPY] = True
@@ -1784,10 +1718,14 @@ class vmmDetails(gobject.GObject):
         self.refresh_resources()
 
     def toggle_cdrom(self, src):
+        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not info:
+            return
+
         if src.get_label() == gtk.STOCK_DISCONNECT:
             #disconnect the cdrom
             try:
-                self.vm.disconnect_cdrom_device(self.window.get_widget("disk-target-device").get_text())
+                self.vm.disconnect_cdrom_device(info[1])
             except Exception, e:
                 self.err.show_err(_("Error Removing CDROM: %s" % str(e)),
                                   "".join(traceback.format_exc()))
@@ -1799,22 +1737,25 @@ class vmmDetails(gobject.GObject):
                 self.choose_cd = vmmChooseCD(self.config, self.window.get_widget("disk-target-device").get_text(), self.vm.get_connection())
                 self.choose_cd.connect("cdrom-chosen", self.connect_cdrom)
             else:
-                self.choose_cd.set_target(self.window.get_widget("disk-target-device").get_text())
+                self.choose_cd.dev_id_info = info[1]
             self.choose_cd.show()
 
-    def connect_cdrom(self, src, typ, source, target):
+    def connect_cdrom(self, src, typ, source, dev_id_info):
         try:
-            self.vm.connect_cdrom_device(typ, source, target)
+            self.vm.connect_cdrom_device(typ, source, dev_id_info)
         except Exception, e:
             self.err.show_err(_("Error Connecting CDROM: %s" % str(e)),
                               "".join(traceback.format_exc()))
 
-    def remove_device(self, xml):
-        logging.debug("Removing device:\n%s" % xml)
+    def remove_device(self, dev_type, dev_id_info):
+        logging.debug("Removing device: %s %s" % (dev_type, dev_id_info))
 
         detach_err = False
+        devxml = self.vm.get_device_xml(dev_type, dev_id_info)
         try:
-            self.vm.detach_device(xml)
+            if self.vm.is_active():
+                self.vm.detach_device(devxml)
+                return
         except Exception, e:
             logging.debug("Device could not be hotUNplugged: %s" % str(e))
             detach_err = True
@@ -1831,11 +1772,8 @@ class vmmDetails(gobject.GObject):
                                      "reboot.")):
                 return
 
-        if self.vm.is_active() and not detach_err:
-            return
-
         try:
-            self.vm.remove_device(xml)
+            self.vm.remove_device(dev_type, dev_id_info)
         except Exception, e:
             self.err.show_err(_("Error Removing Device: %s" % str(e)),
                               "".join(traceback.format_exc()))

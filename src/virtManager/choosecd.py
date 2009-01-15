@@ -29,7 +29,7 @@ class vmmChooseCD(gobject.GObject):
                            gobject.TYPE_NONE,
                            (str, str, str)), # type, source, target
 }
-    def __init__(self, config, target, connection):
+    def __init__(self, config, dev_id_info, connection):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-choose-cd.glade", "vmm-choose-cd", domain="virt-manager")
         self.err = vmmErrorDialog(self.window.get_widget("vmm-choose-cd"),
@@ -38,7 +38,7 @@ class vmmChooseCD(gobject.GObject):
                                   _("An unexpected error occurred"))
         self.config = config
         self.window.get_widget("vmm-choose-cd").hide()
-        self.target = target
+        self.dev_id_info = dev_id_info
         self.conn = connection
 
         self.window.signal_autoconnect({
@@ -64,9 +64,6 @@ class vmmChooseCD(gobject.GObject):
         cd_list.add_attribute(text, 'sensitive', 2)
 
         self.reset_state()
-
-    def set_target(self, target):
-        self.target=target
 
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-choose-cd").hide()
@@ -111,7 +108,7 @@ class vmmChooseCD(gobject.GObject):
                                         conn=self.conn.vmm)
         except Exception, e:
             return self.err.val_err(_("Invalid Media Path"), str(e))
-        self.emit("cdrom-chosen", disk.type, disk.path, self.target)
+        self.emit("cdrom-chosen", disk.type, disk.path, self.dev_id_info)
         self.cancel()
 
     def media_toggled(self, ignore1=None, ignore2=None):
