@@ -106,7 +106,7 @@ def drop_stdio():
     os.dup2(0, 1)
     os.dup2(0, 2)
 
-def setup_logging():
+def setup_logging(debug_stdout):
     # Configure python logging to capture all logs we generate
     # to $HOME/.virt-manager/virt-manager.log This file has
     # proved invaluable for debugging
@@ -133,6 +133,14 @@ def setup_logging():
     fileHandler = logging.handlers.RotatingFileHandler(filename, FILE_MODE, MAX_LOGSIZE, ROTATE_NUM)
     fileHandler.setFormatter(logging.Formatter(FILE_FORMAT, DATEFMT))
     rootLogger.addHandler(fileHandler)
+
+    if debug_stdout:
+        streamHandler = logging.StreamHandler(sys.stderr)
+        streamHandler.setLevel(logging.DEBUG)
+        streamHandler.setFormatter(logging.Formatter("%(asctime)s %(levelname)-8s %(message)s"))
+        rootLogger.addHandler(streamHandler)
+
+
     logging.info("Application startup")
 
     # Register libvirt handler
@@ -155,6 +163,9 @@ def parse_commandline():
     optParser.set_defaults(uuid=None)
     optParser.add_option("-c", "--connect", dest="uri",
         help="Connect to hypervisor at URI", metavar="URI")
+    optParser.add_option("--debug", action="store_true", dest="debug",
+        help="Print debug output to stdout (requires --no-fork)",
+        default=False)
     optParser.add_option("--no-dbus", action="store_true", dest="nodbus",
         help="Disable DBus service for controlling UI")
     optParser.add_option("--no-fork", action="store_true", dest="nofork",
@@ -246,9 +257,10 @@ def opt_show_cb(option, opt_str, value, parser):
 # Run me!
 def main():
     setup_i18n()
-    setup_logging()
     setup_pypath()
+
     (options, ignore) = parse_commandline()
+    setup_logging(options.debug)
 
     # Urgh, pygtk merely logs a warning when failing to open
     # the X11 display connection, and lets everything carry
