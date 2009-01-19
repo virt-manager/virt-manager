@@ -236,7 +236,7 @@ class vmmDetails(gobject.GObject):
         self.vncViewer.connect("vnc-disconnected", self._vnc_disconnected)
         self.vncViewer.connect("vnc-keyboard-grab", self._disable_modifiers)
         self.vncViewer.connect("vnc-keyboard-ungrab", self._enable_modifiers)
-        self.vnc_connected = True
+        self.vnc_connected = False
 
         self.notifyID = None
         self.notifyInterface = None
