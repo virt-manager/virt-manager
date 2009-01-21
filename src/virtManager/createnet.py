@@ -302,6 +302,7 @@ class vmmCreateNetwork(gobject.GObject):
         except Exception, e:
             self.err.show_err(_("Error creating virtual network: %s" % str(e)),
                               "".join(traceback.format_exc()))
+            return
         self.close()
 
     def validate(self, page_num):

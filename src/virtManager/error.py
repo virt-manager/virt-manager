@@ -29,12 +29,17 @@ class vmmErrorDialog (gtk.MessageDialog):
         gtk.MessageDialog.__init__ (self,
                                     parent, flags, typ, buttons,
                                     message_format)
+
+        self.val_err_box = None
+
         self.message_format = message_format
         self.message_details = message_details
         self.buffer = None
         self.default_title = default_title
         self.set_title(self.default_title)
         self.set_property("text", self.message_format)
+        self.connect("response", self.response_cb)
+        self.connect("delete-event", self.hide_on_delete)
 
         if not message_details is None:
             # Expander section with details.
@@ -57,29 +62,42 @@ class vmmErrorDialog (gtk.MessageDialog):
             self.vbox.pack_start (expander)
             expander.show ()
 
+    def response_cb(self, src, ignore):
+        src.hide()
+
     def show_err(self, summary, details, title=None):
+        self.hide()
+
         if title is None:
             title = self.default_title
         self.set_title(title)
         self.set_property("text", summary)
         self.buffer.set_text(details)
         logging.debug("Uncaught Error: %s : %s" % (summary, details))
-        self.run()
-        self.hide()
+
+        self.show()
 
     def val_err(self, text1, text2=None, title=None):
-        message_box = gtk.MessageDialog(self.parent, \
-                                        gtk.DIALOG_DESTROY_WITH_PARENT, \
-                                        gtk.MESSAGE_ERROR,\
-                                        gtk.BUTTONS_OK, text1)
+        def response_destroy(src, ignore):
+            src.destroy()
+
+        if self.val_err_box:
+            self.val_err_box.destroy()
+
+        self.val_err_box = gtk.MessageDialog(self.parent,
+                                             gtk.DIALOG_DESTROY_WITH_PARENT,
+                                             gtk.MESSAGE_ERROR,
+                                             gtk.BUTTONS_OK, text1)
+
         if title is None:
             title = _("Input Error")
         logging.debug("Validation Error: %s" % text1)
-        message_box.set_title(title)
+        self.val_err_box.set_title(title)
         if text2 is not None:
-            message_box.format_secondary_text(text2)
-        message_box.run()
-        message_box.destroy()
+            self.val_err_box.format_secondary_text(text2)
+
+        self.val_err_box.show()
+        self.val_err_box.connect("response", response_destroy)
         return False
 
     def yes_no(self, text1, text2=None):

@@ -828,6 +828,7 @@ class vmmManager(gobject.GObject):
             except Exception, e:
                 self.err.show_err(_("Error deleting domain: %s" % str(e)),\
                                   "".join(traceback.format_exc()))
+                return
             conn.tick(noStatsUpdate=True)
 
     def show_about(self, src):
