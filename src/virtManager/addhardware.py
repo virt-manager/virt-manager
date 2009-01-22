@@ -127,6 +127,13 @@ class vmmAddHardware(gobject.GObject):
         device_list.add_attribute(text, 'text', 1)
         device_list.add_attribute(text, 'sensitive', 2)
 
+        netmodel_list  = self.window.get_widget("net-model")
+        netmodel_model = gtk.ListStore(str, str)
+        netmodel_list.set_model(netmodel_model)
+        text = gtk.CellRendererText()
+        netmodel_list.pack_start(text, True)
+        netmodel_list.add_attribute(text, 'text', 1)
+
         target_list = self.window.get_widget("target-device")
         target_model = gtk.ListStore(str, str, str, str)
         target_list.set_model(target_model)
@@ -191,6 +198,8 @@ class vmmAddHardware(gobject.GObject):
             dev_box.set_active(res[1])
         else:
             dev_box.set_active(-1)
+
+        self.window.get_widget("net-model").set_active(0)
 
         target_list = self.window.get_widget("target-device")
         target_list.set_active(-1)
@@ -351,6 +360,12 @@ class vmmAddHardware(gobject.GObject):
             model = dev.get_model()
             return ["bridge", model.get_value(dev.get_active_iter(), 0)]
 
+    def get_config_net_model(self):
+        model = self.window.get_widget("net-model")
+        modelxml = model.get_model().get_value(model.get_active_iter(), 0)
+        modelstr = model.get_model().get_value(model.get_active_iter(), 1)
+        return modelxml, modelstr
+
     def get_config_macaddr(self):
         macaddr = None
         if self.window.get_widget("mac-address").get_active():
@@ -370,6 +385,11 @@ class vmmAddHardware(gobject.GObject):
             self.window.get_widget("storage-file-address-browse").set_sensitive(not remote)
 
         elif page_number == PAGE_NETWORK:
+            netmodel = self.window.get_widget("net-model")
+            if netmodel.get_active() == -1:
+                self.populate_network_model_model(netmodel.get_model())
+                netmodel.set_active(0)
+
             if remote:
                 self.window.get_widget("net-type-network").set_active(True)
                 self.window.get_widget("net-type-device").set_active(False)
@@ -412,6 +432,8 @@ class vmmAddHardware(gobject.GObject):
                     self.window.get_widget("summary-mac-address").set_text(macaddr)
                 else:
                     self.window.get_widget("summary-mac-address").set_text("-")
+                model = self.get_config_net_model()[1]
+                self.window.get_widget("summary-net-model").set_text(model)
             elif hwpage == PAGE_INPUT:
                 self.window.get_widget("summary-input").show()
                 inp = self.get_config_input()
@@ -775,23 +797,25 @@ class vmmAddHardware(gobject.GObject):
                     return self.err.val_err(_("Invalid MAC address"), \
                                             _("No MAC address was entered. Please enter a valid MAC address."))
 
-                try:     
+                try:
                     self._dev = virtinst.VirtualNetworkInterface(macaddr=mac)
                 except ValueError, e:
                     return self.err.val_err(_("Invalid MAC address"), str(e))
-                    
 
+            model = self.get_config_net_model()[0]
             try:
                 if net[0] == "bridge":
-                    self._dev = virtinst.VirtualNetworkInterface(macaddr=mac, 
-                                                                 type=net[0], 
+                    self._dev = virtinst.VirtualNetworkInterface(macaddr=mac,
+                                                                 type=net[0],
                                                                  bridge=net[1])
                 elif net[0] == "network":
-                    self._dev = virtinst.VirtualNetworkInterface(macaddr=mac, 
-                                                                 type=net[0], 
+                    self._dev = virtinst.VirtualNetworkInterface(macaddr=mac,
+                                                                 type=net[0],
                                                                  network=net[1])
                 else:
                     raise ValueError, _("Unsupported networking type") + net[0]
+
+                self._dev.model = model
             except ValueError, e:
                 return self.err.val_err(_("Invalid Network Parameter"), \
                                         str(e))
@@ -841,6 +865,21 @@ class vmmAddHardware(gobject.GObject):
             else:
                 model.append([net.get_bridge(), "%s (%s)" % (net.get_name(), _("Not bridged")), False])
         return (hasShared, brIndex)
+
+    def populate_network_model_model(self, model):
+        model.clear()
+
+        # [xml value, label]
+        model.append([None, _("Hypervisor default")])
+        if self.vm.is_hvm():
+            mod_list = [ "rtl8139", "ne2k_pci", "pcnet" ]
+            if self.vm.get_type().lower() == "kvm":
+                mod_list.append("e1000")
+                mod_list.append("virtio")
+            mod_list.sort()
+
+            for m in mod_list:
+                model.append([m, m])
 
     def populate_target_device_model(self, model):
         model.clear()
