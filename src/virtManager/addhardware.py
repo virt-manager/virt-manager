@@ -43,7 +43,8 @@ PAGE_DISK = 1
 PAGE_NETWORK = 2
 PAGE_INPUT = 3
 PAGE_GRAPHICS = 4
-PAGE_SUMMARY = 5
+PAGE_SOUND = 5
+PAGE_SUMMARY = 6
 
 class vmmAddHardware(gobject.GObject):
     __gsignals__ = {
@@ -159,6 +160,13 @@ class vmmAddHardware(gobject.GObject):
         graphics_list.pack_start(text, True)
         graphics_list.add_attribute(text, 'text', 0)
 
+        sound_list = self.window.get_widget("sound-model")
+        sound_lmodel = gtk.ListStore(str)
+        sound_list.set_model(sound_lmodel)
+        text = gtk.CellRendererText()
+        sound_list.pack_start(text, True)
+        sound_list.add_attribute(text, 'text', 0)
+
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
@@ -217,6 +225,10 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("graphics-keymap").set_text("")
         self.window.get_widget("graphics-keymap-chk").set_active(True)
 
+        sound_box = self.window.get_widget("sound-model")
+        self.populate_sound_model_model(sound_box.get_model())
+        sound_box.set_active(0)
+
         model = self.window.get_widget("hardware-type").get_model()
         model.clear()
         model.append(["Storage", gtk.STOCK_HARDDISK, PAGE_DISK])
@@ -226,10 +238,14 @@ class vmmAddHardware(gobject.GObject):
            len(self.vm.get_network_devices()) == 0:
             model.append(["Network", gtk.STOCK_NETWORK, PAGE_NETWORK])
 
-        # Can only customize HVM guests, no Xen PV
+        # Can only customize add certain devices for HVM, no PV
+        # XXX: Is this correct wrt xenner?
         if self.vm.is_hvm():
             model.append(["Input", gtk.STOCK_INDEX, PAGE_INPUT])
         model.append(["Graphics", gtk.STOCK_SELECT_COLOR, PAGE_GRAPHICS])
+
+        if self.vm.is_hvm():
+            model.append(["Sound", gtk.STOCK_MEDIA_PLAY, PAGE_SOUND])
 
 
     def forward(self, ignore=None):
@@ -372,6 +388,11 @@ class vmmAddHardware(gobject.GObject):
             macaddr = self.window.get_widget("create-mac-address").get_text()
         return macaddr
 
+    def get_config_sound_model(self):
+        model = self.window.get_widget("sound-model")
+        modelstr = model.get_model().get_value(model.get_active_iter(), 0)
+        return modelstr
+
     def page_changed(self, notebook, page, page_number):
         remote = self.vm.get_connection().is_remote()
         if page_number == PAGE_DISK:
@@ -404,6 +425,7 @@ class vmmAddHardware(gobject.GObject):
             self.window.get_widget("summary-network").hide()
             self.window.get_widget("summary-input").hide()
             self.window.get_widget("summary-graphics").hide()
+            self.window.get_widget("summary-sound").hide()
 
             if hwpage == PAGE_DISK:
                 self.window.get_widget("summary-disk").show()
@@ -469,6 +491,9 @@ class vmmAddHardware(gobject.GObject):
                     self.window.get_widget("summary-graphics-port").set_text(_("N/A"))
                     self.window.get_widget("summary-graphics-password").set_text(_("N/A"))
                     self.window.get_widget("summary-graphics-keymap").set_text(_("N/A"))
+            elif hwpage == PAGE_SOUND:
+                self.window.get_widget("summary-sound").show()
+                self.window.get_widget("summary-sound-model").set_text(self._dev.model)
 
     def close(self, ignore1=None,ignore2=None):
         self.topwin.hide()
@@ -494,6 +519,8 @@ class vmmAddHardware(gobject.GObject):
             self.add_input()
         elif hw == PAGE_GRAPHICS:
             self.add_graphics()
+        elif hw == PAGE_SOUND:
+            self.add_sound()
 
         if self.install_error is not None:
             self.err.show_err(self.install_error, self.install_details)
@@ -520,6 +547,9 @@ class vmmAddHardware(gobject.GObject):
         self.add_device(xml)
 
     def add_graphics(self):
+        self.add_device(self._dev.get_xml_config())
+
+    def add_sound(self):
         self.add_device(self._dev.get_xml_config())
 
     def add_storage(self):
@@ -843,6 +873,13 @@ class vmmAddHardware(gobject.GObject):
             except ValueError, e:
                 self.err.val_err(_("Graphics device parameter error"), str(e))
 
+        elif page_num == PAGE_SOUND:
+            smodel = self.get_config_sound_model()
+            try:
+                self._dev = virtinst.VirtualAudio(model=smodel)
+            except Exception, e:
+                self.err.val_err(_("Sound device parameter error"), str(e))
+
         return True
 
     def populate_network_model(self, model):
@@ -915,6 +952,13 @@ class vmmAddHardware(gobject.GObject):
         model.append([_("VNC server"), "vnc"])
         # XXX inclined to just not give this choice at all
         model.append([_("Local SDL window"), "sdl"])
+
+    def populate_sound_model_model(self, model):
+        model.clear()
+        lst = virtinst.VirtualAudio.MODELS
+        lst.sort()
+        for m in lst:
+            model.append([m])
 
     def is_sparse_file(self):
         if self.window.get_widget("non-sparse").get_active():
