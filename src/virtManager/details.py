@@ -57,6 +57,7 @@ HW_LIST_TYPE_INPUT = 5
 HW_LIST_TYPE_GRAPHICS = 6
 HW_LIST_TYPE_SOUND = 7
 HW_LIST_TYPE_CHAR = 8
+HW_LIST_TYPE_HOSTDEV = 9
 
 # Console pages
 PAGE_UNAVAILABLE = 0
@@ -293,6 +294,7 @@ class vmmDetails(gobject.GObject):
             "on_config_graphics_remove_clicked": self.remove_xml_dev,
             "on_config_sound_remove_clicked": self.remove_xml_dev,
             "on_config_char_remove_clicked": self.remove_xml_dev,
+            "on_config_hostdev_remove_clicked": self.remove_xml_dev,
             "on_add_hardware_button_clicked": self.add_hardware,
 
             "on_details_menu_view_fullscreen_activate": self.toggle_fullscreen,
@@ -610,6 +612,9 @@ class vmmDetails(gobject.GObject):
             elif pagetype == HW_LIST_TYPE_MEMORY:
                 self.window.get_widget("config-memory-apply").set_sensitive(False)
                 self.refresh_config_memory()
+            elif pagetype == HW_LIST_TYPE_BOOT:
+                self.refresh_boot_page()
+                self.window.get_widget("config-boot-options-apply").set_sensitive(False)
             elif pagetype == HW_LIST_TYPE_DISK:
                 self.refresh_disk_page()
             elif pagetype == HW_LIST_TYPE_NIC:
@@ -622,9 +627,8 @@ class vmmDetails(gobject.GObject):
                 self.refresh_sound_page()
             elif pagetype == HW_LIST_TYPE_CHAR:
                 self.refresh_char_page()
-            elif pagetype == HW_LIST_TYPE_BOOT:
-                self.refresh_boot_page()
-                self.window.get_widget("config-boot-options-apply").set_sensitive(False)
+            elif pagetype == HW_LIST_TYPE_HOSTDEV:
+                self.refresh_hostdev_page()
             else:
                 pagenum = -1
 
@@ -822,6 +826,8 @@ class vmmDetails(gobject.GObject):
                     self.refresh_sound_page()
                 elif pagetype == HW_LIST_TYPE_CHAR:
                     self.refresh_char_page()
+                elif pagetype == HW_LIST_TYPE_HOSTDEV:
+                    self.refresh_hostdev_page()
 
     def refresh_summary(self):
         def _rx_tx_text(rx, tx, unit):
@@ -1036,6 +1042,19 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("char-dev-type").set_text(charinfo[4] or "-")
         self.window.get_widget("char-target-port").set_text(charinfo[3])
         self.window.get_widget("char-source-path").set_text(charinfo[5] or "-")
+
+    def refresh_hostdev_page(self):
+        hostdevinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not hostdevinfo:
+            return
+
+        devlabel = "<b>Physical %s Device</b>" % hostdevinfo[4].upper()
+
+        self.window.get_widget("hostdev-title").set_markup(devlabel)
+        self.window.get_widget("hostdev-type").set_text(hostdevinfo[4])
+        self.window.get_widget("hostdev-mode").set_text(hostdevinfo[3])
+        self.window.get_widget("hostdev-source").set_text(hostdevinfo[5])
+
 
     def refresh_boot_page(self):
         # Refresh autostart
@@ -1512,6 +1531,7 @@ class vmmDetails(gobject.GObject):
         currentGraphics = {}
         currentSounds = {}
         currentChars = {}
+        currentHostdevs = {}
 
         def update_hwlist(hwtype, info):
             """Return (true if we updated an entry,
@@ -1590,7 +1610,6 @@ class vmmDetails(gobject.GObject):
             if missing:
                 hw_list_model.insert(insertAt, [_("Sound: %s" % soundinfo[2]), gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_SOUND, soundinfo])
 
-
         # Populate list of char devices
         for charinfo in self.vm.get_char_devices():
             currentChars[charinfo[2]] = 1
@@ -1603,6 +1622,15 @@ class vmmDetails(gobject.GObject):
                 if charinfo[0] != "console":
                     l += " %s" % charinfo[3] # Don't show port for console
                 hw_list_model.insert(insertAt, [l, gtk.STOCK_CONNECT, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_CHAR, charinfo])
+
+        # Populate host devices
+        for hostdevinfo in self.vm.get_hostdev_devices():
+            currentHostdevs[hostdevinfo[2]] = 1
+            missing, insertAt = update_hwlist(HW_LIST_TYPE_HOSTDEV,
+                                              hostdevinfo)
+
+            if missing:
+                hw_list_model.insert(insertAt, [hostdevinfo[2], None, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_HOSTDEV, hostdevinfo])
 
 
         # Now remove any no longer current devs
@@ -1630,6 +1658,9 @@ class vmmDetails(gobject.GObject):
                 removeIt = True
             elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_CHAR and not \
                  currentChars.has_key(row[HW_LIST_COL_DEVICE][2]):
+                removeIt = True
+            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_HOSTDEV and not \
+                 currentHostdevs.has_key(row[HW_LIST_COL_DEVICE][2]):
                 removeIt = True
 
             if removeIt:

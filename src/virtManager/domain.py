@@ -805,6 +805,101 @@ class vmmDomain(gobject.GObject):
 
         return self._parse_device_xml(_parse_char_devs)
 
+    def get_hostdev_devices(self):
+        def _parse_hostdev_devs(ctx):
+            hostdevs = []
+            devs = ctx.xpathEval("/domain/devices/hostdev")
+
+            for dev in devs:
+                vendor  = None
+                product = None
+                addrbus = None
+                addrdev = None
+                unique = {}
+
+                # String shown in the devices details section
+                srclabel = ""
+                # String shown in the VMs hardware list
+                hwlabel = ""
+
+                def dehex(val):
+                    if val.startswith("0x"):
+                        val = val[2:]
+                    return val
+
+                def safeint(val, fmt="%.3d"):
+                    try:
+                        int(val)
+                    except:
+                        return str(val)
+                    return fmt % int(val)
+
+                def set_uniq(baseent, propname, node):
+                    val = node.prop(propname)
+                    if not unique.has_key(baseent):
+                        unique[baseent] = {}
+                    unique[baseent][propname] = val
+                    return val
+
+                mode = dev.prop("mode")
+                typ  = dev.prop("type")
+                unique["type"] = typ
+
+                hwlabel = typ.upper()
+                srclabel = typ.upper()
+
+                for node in dev.children:
+                    if node.name == "source":
+                        for child in node.children:
+                            if child.name == "address":
+                                addrbus = set_uniq("address", "bus", child)
+
+                                # For USB
+                                addrdev = set_uniq("address", "device", child)
+
+                                # For PCI
+                                addrdom = set_uniq("address", "domain", child)
+                                addrslt = set_uniq("address", "slot", child)
+                                addrfun = set_uniq("address", "function", child)
+                            elif child.name == "vendor":
+                                vendor = set_uniq("vendor", "id", child)
+                            elif child.name == "product":
+                                product = set_uniq("product", "id", child)
+
+                if vendor and product:
+                    # USB by vendor + product
+                    devstr = " %s:%s" % (dehex(vendor), dehex(product))
+                    srclabel += devstr
+                    hwlabel += devstr
+
+                elif addrbus and addrdev:
+                    # USB by bus + dev
+                    srclabel += " Bus %s Device %s" % \
+                                (safeint(addrbus), safeint(addrdev))
+                    hwlabel += " %s:%s" % (safeint(addrbus), safeint(addrdev))
+
+                elif addrbus and addrslt and addrfun and addrdom:
+                    # PCI by bus:slot:function
+                    devstr = " %s:%s:%s.%s" % \
+                              (dehex(addrdom), dehex(addrbus),
+                               dehex(addrslt), dehex(addrfun))
+                    srclabel += devstr
+                    hwlabel += devstr
+
+                else:
+                    # If we can't determine source info, skip these
+                    # device since we have no way to determine uniqueness
+                    continue
+
+                # [device type, unique, hwlist label, hostdev mode,
+                #  hostdev type, source desc label]
+                hostdevs.append(["hostdev", unique, hwlabel, mode, typ,
+                                 srclabel])
+
+            return hostdevs
+        return self._parse_device_xml(_parse_hostdev_devs)
+
+
     def _parse_device_xml(self, parse_function):
         doc = None
         ctx = None
@@ -883,6 +978,51 @@ class vmmDomain(gobject.GObject):
                 cons_ret = ctx.xpathEval("/domain/devices/console[target/@port='%s']" % dev_id_info)
                 if cons_ret and len(cons_ret) > 0:
                     ret.append(cons_ret[0])
+
+        elif dev_type == "hostdev":
+            # This whole process is a little funky, since we need a decent
+            # amount of info to determine which specific hostdev to remove
+
+            xmlbase = "/domain/devices/hostdev[@type='%s' and " % \
+                      dev_id_info["type"]
+            xpath = ""
+            ret = []
+
+            addr = dev_id_info.get("address")
+            vend = dev_id_info.get("vendor")
+            prod = dev_id_info.get("product")
+            if addr:
+                bus = addr.get("bus")
+                dev = addr.get("device")
+                slot = addr.get("slot")
+                funct = addr.get("function")
+                dom = addr.get("domain")
+
+                if bus and dev:
+                    # USB by bus and dev
+                    xpath = (xmlbase + "source/address/@bus='%s' and "
+                                       "source/address/@device='%s']" %
+                                       (bus, dev))
+                elif bus and slot and funct and dom:
+                    # PCI by bus,slot,funct,dom
+                    xpath = (xmlbase + "source/address/@bus='%s' and "
+                                       "source/address/@slot='%s' and "
+                                       "source/address/@function='%s' and "
+                                       "source/address/@domain='%s']" %
+                                       (bus, slot, funct, dom))
+
+            elif vend.get("id") and prod.get("id"):
+                # USB by vendor and product
+                xpath = (xmlbase + "source/vendor/@id='%s' and "
+                                   "source/product/@id='%s']" %
+                                   (vend.get("id"), prod.get("id")))
+
+            if xpath:
+                # Log this, since we could hit issues with unexpected
+                # xml parameters in the future
+                logging.debug("Hostdev xpath string: %s" % xpath)
+                ret = ctx.xpathEval(xpath)
+
         else:
             raise RuntimeError, _("Unknown device type '%s'" % dev_type)
 
