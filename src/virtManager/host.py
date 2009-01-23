@@ -219,7 +219,7 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("performance-cpu").set_text("%d %%" % self.conn.cpu_time_percentage())
         vm_memory = self.conn.pretty_current_memory()
         host_memory = self.conn.pretty_host_memory_size()
-        self.window.get_widget("performance-memory").set_text("%s of %s" % (vm_memory, host_memory))
+        self.window.get_widget("performance-memory").set_text(_("%(currentmem)s of %(maxmem)s") % {'currentmem': vm_memory, 'maxmem': host_memory})
 
         cpu_vector = self.conn.cpu_time_vector()
         cpu_vector.reverse()
