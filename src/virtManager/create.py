@@ -936,6 +936,8 @@ class vmmCreate(gobject.GObject):
             if self.window.get_widget("media-iso-image").get_active():
 
                 src = self.get_config_install_source()
+                if not src:
+                    return self.err.val_err(_("An ISO path is required."))
                 try:
                     self._guest.installer.location = src
                     self._guest.installer.cdrom = True
