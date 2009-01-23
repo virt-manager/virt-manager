@@ -127,7 +127,7 @@ class vmmChooseCD(gobject.GObject):
         pass
 
     def browse_fv_iso_location(self, ignore1=None, ignore2=None):
-        filename = self._browse_file(_("Locate ISO Image"), _type="iso")
+        filename = self._browse_file(_("Locate ISO Image"))
         if filename != None:
             self.window.get_widget("iso-path").set_text(filename)
 

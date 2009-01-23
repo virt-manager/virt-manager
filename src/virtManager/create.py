@@ -735,7 +735,7 @@ class vmmCreate(gobject.GObject):
             logging.error(details)
 
     def browse_iso_location(self, ignore1=None, ignore2=None):
-        f = self._browse_file(_("Locate ISO Image"), _type="iso")
+        f = self._browse_file(_("Locate ISO Image"))
         if f != None:
             self.window.get_widget("fv-iso-location").set_text(f)
 
