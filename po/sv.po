@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-01 01:25+0000\n"
-"PO-Revision-Date: 2008-12-19 13:53+0100\n"
+"PO-Revision-Date: 2009-01-02 18:23+0100\n"
 "Last-Translator: Magnus Glantz <mg@hacka.net>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -50,7 +50,7 @@ msgstr "Visa antal VCPU i översikt"
 
 #: ../src/virt-manager.schemas.in.h:4
 msgid "Show cpu usage in summary"
-msgstr "Visa cpu-användning i översikt"
+msgstr "Visa processoranvändning i översikt"
 
 #: ../src/virt-manager.schemas.in.h:5
 msgid "Show disk I/O in summary"
@@ -74,11 +74,11 @@ msgstr "Visa körstatus i översikt"
 
 #: ../src/virt-manager.schemas.in.h:10
 msgid "Show the cpu usage field in the domain list summary view"
-msgstr "Visa cpuanvändning i domänlistans översiktsvy"
+msgstr "Visa processoranvändning i domänlistans översiktsvy"
 
 #: ../src/virt-manager.schemas.in.h:11
 msgid "Show the disk I/O field in the domain list summary view"
-msgstr "Visa disk I/O i domänlistans översiktsvy"
+msgstr "Visa disk-I/O i domänlistans översiktsvy"
 
 #: ../src/virt-manager.schemas.in.h:12
 msgid "Show the domain id field in the domain list summary view"
@@ -98,7 +98,7 @@ msgstr "Visa körstatus i domänlistans översiktsvy"
 
 #: ../src/virt-manager.schemas.in.h:16
 msgid "Show the virtual CPU count field in the domain list summary view"
-msgstr "Visa antal virtuella CPU:er i domänlistans översiktsvy"
+msgstr "Visa antal virtuella processorer i domänlistans översiktsvy"
 
 #: ../src/virt-manager.schemas.in.h:17
 msgid "The length of the list of URLs"
@@ -159,7 +159,7 @@ msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:30
 msgid "Whether to show notification when grabbing mouse"
-msgstr "Om notifikation skall visas när mus fångas"
+msgstr "Om notifiering skall visas när mus fångas"
 
 #: ../src/virt-manager.schemas.in.h:31
 msgid ""
@@ -178,7 +178,7 @@ msgstr ""
 #: ../src/virtManager/details.py:113 ../src/virtManager/engine.py:58
 #: ../src/virtManager/host.py:57 ../src/virtManager/manager.py:119
 msgid "Unexpected Error"
-msgstr "Okänt Fel"
+msgstr "Oväntat fel"
 
 #: ../src/virtManager/addhardware.py:69 ../src/virtManager/choosecd.py:38
 #: ../src/virtManager/create.py:87 ../src/virtManager/createnet.py:58
@@ -216,7 +216,7 @@ msgstr "Relativ rörelse"
 #: ../src/virtManager/addhardware.py:437 ../src/virtManager/addhardware.py:884
 #: ../src/virtManager/details.py:984
 msgid "VNC server"
-msgstr "VNC server"
+msgstr "VNCserver"
 
 #. XXX inclined to just not give this choice at all
 #: ../src/virtManager/addhardware.py:439 ../src/virtManager/addhardware.py:886
@@ -245,7 +245,7 @@ msgstr "Samma som värd"
 #: ../src/virtManager/addhardware.py:458 ../src/virtManager/addhardware.py:459
 #: ../src/virtManager/details.py:1002 ../src/virtManager/details.py:1003
 msgid "N/A"
-msgstr "N/A"
+msgstr "Inte tillgänglig(t)"
 
 #: ../src/virtManager/addhardware.py:521
 msgid "Unable to complete install: "
@@ -320,7 +320,7 @@ msgstr "Du måste välja en av de fysiska enheterna"
 
 #: ../src/virtManager/addhardware.py:755
 msgid "Invalid Storage Parameters"
-msgstr "Ogiltig lagringsparameter"
+msgstr "Ogiltig lagringsparametrar"
 
 #: ../src/virtManager/addhardware.py:759 ../src/virtManager/create.py:1027
 msgid "Not Enough Free Space"
@@ -372,7 +372,7 @@ msgstr "Ogiltig nätverksparameter"
 #: ../src/virtManager/addhardware.py:809 ../src/virtManager/addhardware.py:812
 #: ../src/virtManager/create.py:1084 ../src/virtManager/create.py:1086
 msgid "Mac address collision"
-msgstr "Mac-adress kollision"
+msgstr "Mac-adresskollision"
 
 #: ../src/virtManager/addhardware.py:813 ../src/virtManager/create.py:1087
 msgid "Are you sure you want to use this address?"
@@ -420,7 +420,7 @@ msgstr "Klar"
 
 #: ../src/virtManager/choosecd.py:104 ../src/virtManager/choosecd.py:113
 msgid "Invalid Media Path"
-msgstr "Ogiltig sökväg till media"
+msgstr "Ogiltig mediasökväg"
 
 #: ../src/virtManager/choosecd.py:105
 msgid "A media path must be specified."
@@ -479,11 +479,11 @@ msgstr "Fullt virtualiserad"
 
 #: ../src/virtManager/create.py:621
 msgid "UUID Error"
-msgstr "UUID Fel"
+msgstr "UUID-fel"
 
 #: ../src/virtManager/create.py:628
 msgid "Failed to set up usermode networking"
-msgstr "Kunde inte konfigurera nätverk i användarläge"
+msgstr "Misslyckades med konfiguration av nätverk i användarläge"
 
 #: ../src/virtManager/create.py:642
 msgid "Error setting up graphics device:"
@@ -531,7 +531,7 @@ msgstr "ISO-sökväg hittades inte"
 
 #: ../src/virtManager/create.py:957
 msgid "CD-ROM Path Error"
-msgstr "CD-ROM sökvägfel"
+msgstr "Fel i CD-ROM-sökväg"
 
 #: ../src/virtManager/create.py:962
 msgid "An install url is required."
@@ -755,11 +755,11 @@ msgstr ""
 
 #: ../src/virtManager/createvol.py:213
 msgid "Volume Parameter Error"
-msgstr ""
+msgstr "Fel i volymparameter"
 
 #: ../src/virtManager/details.py:177
 msgid "Close tab"
-msgstr "Stäng tab"
+msgstr "Stäng flik"
 
 #: ../src/virtManager/details.py:385
 msgid "Press Ctrl+Alt to release pointer."
@@ -806,7 +806,7 @@ msgstr ""
 
 #: ../src/virtManager/details.py:764
 msgid "paused"
-msgstr "stoppad"
+msgstr "pausad"
 
 #: ../src/virtManager/details.py:777
 msgid "Console not available while paused"
@@ -970,7 +970,7 @@ msgstr "Kör"
 
 #: ../src/virtManager/domain.py:518
 msgid "Paused"
-msgstr "Stoppad"
+msgstr "Pausad"
 
 #: ../src/virtManager/domain.py:520 ../src/vmm-details.glade.h:86
 msgid "Shutdown"
@@ -978,7 +978,7 @@ msgstr "Avstängd"
 
 #: ../src/virtManager/domain.py:522
 msgid "Shutoff"
-msgstr "Stäng av"
+msgstr "Avstängd"
 
 #: ../src/virtManager/domain.py:524
 msgid "Crashed"
@@ -1023,14 +1023,14 @@ msgstr ""
 #: ../src/virtManager/engine.py:446
 #, python-format
 msgid "About to poweroff virtual machine %s"
-msgstr "Håller på att stänga av virtuell maskin %s"
+msgstr "Håller på att stänga av den virtuell maskinen %s"
 
 #: ../src/virtManager/engine.py:446
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss. Are you sure?"
 msgstr ""
-"Detta kommer omedelbart stänga av VM  utan att stänga av OS och kan orsaka dataförlust. Är du säker?"
+"Detta kommer omedelbart stänga av VM  utan att stänga av operativsystem och kan orsaka dataförlust. Är du säker?"
 
 #: ../src/virtManager/engine.py:452 ../src/virtManager/engine.py:515
 #: ../src/virtManager/engine.py:531
@@ -1248,11 +1248,11 @@ msgstr "Status"
 
 #: ../src/virtManager/manager.py:840 ../src/vmm-manager.glade.h:5
 msgid "CPU usage"
-msgstr "CPU-användning"
+msgstr "Processoranvändning"
 
 #: ../src/virtManager/manager.py:841
 msgid "VCPUs"
-msgstr "VCPU:er"
+msgstr "Virtuella processorer"
 
 #: ../src/virtManager/manager.py:842 ../src/vmm-manager.glade.h:11
 msgid "Memory usage"
@@ -1708,7 +1708,7 @@ msgstr "_Avsluta"
 
 #: ../src/vmm-add-hardware.glade.h:75 ../src/vmm-create.glade.h:122
 msgid "_MAC address:"
-msgstr "_MAC adress:"
+msgstr "_MAC-adress:"
 
 #: ../src/vmm-add-hardware.glade.h:76 ../src/vmm-create.glade.h:124
 msgid "_Network:"
@@ -2113,7 +2113,7 @@ msgstr ""
 
 #: ../src/vmm-create-vol.glade.h:25
 msgid "Max Capacity:"
-msgstr "Max Kapacitet"
+msgstr "Maxkapacitet:"
 
 #: ../src/vmm-create-vol.glade.h:27
 #, fuzzy
@@ -2127,7 +2127,7 @@ msgstr "2"
 
 #: ../src/vmm-create.glade.h:2
 msgid "<b>CPUs:</b>"
-msgstr "<b>CPUer:</b>"
+msgstr "<b>processorer:</b>"
 
 #: ../src/vmm-create.glade.h:3
 msgid "<b>Example:</b> system1"
@@ -2143,7 +2143,7 @@ msgstr "<b>Minne:</b>"
 
 #: ../src/vmm-create.glade.h:6
 msgid "<b>Memory</b> and <b>CPU</b> allocation"
-msgstr "<b>Minne</b> och <b>CPU</b>-allokering"
+msgstr "<b>Minne</b> och <b>processor</b>-allokering"
 
 #: ../src/vmm-create.glade.h:8
 #, fuzzy
@@ -2179,7 +2179,7 @@ msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine do not have support for "
 "full virtualization.</small>"
 msgstr ""
-"<small><b>Notis:</b> Värd-CPU(erna) i denna maskin har inte stöd för full "
+"<small><b>Notis:</b> Värd-processor(erna) i denna maskin har inte stöd för full "
 "virtualisering.</small>"
 
 #: ../src/vmm-create.glade.h:17
@@ -2187,7 +2187,7 @@ msgid ""
 "<small><b>Note:</b> The host CPU(s) in this machine support full "
 "virtualization, but it is not enabled by the BIOS.</small>"
 msgstr ""
-"<small><b>Notis:</b> Värd-CPU(er) i denna maskin stöder full virtualisering, "
+"<small><b>Notis:</b> Värd-processor(erna) i denna maskin stöder full virtualisering, "
 "men den är inte aktiverad i BIOS.</small>"
 
 #: ../src/vmm-create.glade.h:20
@@ -2196,8 +2196,8 @@ msgid ""
 "be less than (or equal to) the number of logical CPUs on the host system.</"
 "small>"
 msgstr ""
-"<small><b>Tips:</b> För bästa prestanda, antal virtuella CPU:er ska vara "
-"färre (eller lika med) antalet logiska CPU:er på värdsystemet.</small>"
+"<small><b>Tips:</b> För bästa prestanda, antal virtuella processorer ska vara "
+"färre (eller lika med) antalet logiska processorer på värdsystemet.</small>"
 
 #: ../src/vmm-create.glade.h:21
 msgid ""
@@ -2281,11 +2281,11 @@ msgstr "Ett <b>namn</b> för ditt nya virtuella system"
 
 #: ../src/vmm-create.glade.h:36
 msgid "CPU architecture:"
-msgstr "CPU-arkitektur:"
+msgstr "Processor-arkitektur:"
 
 #: ../src/vmm-create.glade.h:37
 msgid "CPU/memory"
-msgstr "CPU/minne"
+msgstr "Processor/minne"
 
 #: ../src/vmm-create.glade.h:40
 msgid "Create a new virtual system"
@@ -2293,7 +2293,7 @@ msgstr "Skapa ett nytt virtuellt system"
 
 #: ../src/vmm-create.glade.h:44
 msgid "Enable Audio:"
-msgstr "Aktivera Ljud:"
+msgstr "Aktivera ljud:"
 
 #: ../src/vmm-create.glade.h:45
 msgid "F_ully Virtualized:"
@@ -2379,7 +2379,7 @@ msgstr "_Lokal värd"
 
 #: ../src/vmm-create.glade.h:66
 msgid "Logical host CPUs:"
-msgstr "Logisk värds CPU-antal:"
+msgstr "Logisk värds processorantal:"
 
 #: ../src/vmm-create.glade.h:67
 msgid "MAC Field"
@@ -2461,7 +2461,7 @@ msgstr ""
 
 #: ../src/vmm-create.glade.h:91
 msgid "Please enter the number of virtual CPUs this VM should start up with."
-msgstr "Vänligen ange antal virtuella CPUer denna VM ska startas med."
+msgstr "Vänligen ange antal virtuella processorer denna VM ska startas med."
 
 #: ../src/vmm-create.glade.h:92
 msgid ""
@@ -2566,7 +2566,7 @@ msgstr "VMS"
 
 #: ../src/vmm-create.glade.h:111
 msgid "Virtual CPUs:"
-msgstr "Virtuella CPU:er:"
+msgstr "Virtuella processorer:"
 
 #: ../src/vmm-create.glade.h:112
 msgid "Virtualization method:"
@@ -2626,7 +2626,7 @@ msgstr "<b>Konsoler</b>"
 
 #: ../src/vmm-details.glade.h:5
 msgid "<b>CPUs</b>"
-msgstr "<b>CPU:er</b>"
+msgstr "<b>processorer</b>"
 
 #: ../src/vmm-details.glade.h:6
 msgid "<b>Memory</b>"
@@ -2673,8 +2673,8 @@ msgid ""
 "<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
 "than (or equal to) the number of physical CPUs on the host system."
 msgstr ""
-"<b>Tips:</b> För bästa prestanda, antal virtuella CPU:er ska vara mindre "
-"(eller lika med) antalet fysiska CPU:er på värdsystemet."
+"<b>Tips:</b> För bästa prestanda, antal virtuella processorer ska vara mindre "
+"(eller lika med) antalet fysiska processorer på värdsystemet."
 
 #: ../src/vmm-details.glade.h:14
 msgid "<b>Virtual Disk</b>"
@@ -2682,7 +2682,7 @@ msgstr "<b>Virtuell disk</b>"
 
 #: ../src/vmm-details.glade.h:15
 msgid "<b>Virtual Display</b>"
-msgstr "<b>Virtuell Display</b>"
+msgstr "<b>Virtuell display</b>"
 
 #: ../src/vmm-details.glade.h:16
 msgid "<b>Virtual Network Interface</b>"
@@ -2717,7 +2717,7 @@ msgstr ""
 
 #: ../src/vmm-details.glade.h:24 ../src/vmm-host.glade.h:12
 msgid "CPU usage:"
-msgstr "CPU-användning:"
+msgstr "Processoranvändning:"
 
 #: ../src/vmm-details.glade.h:25
 msgid "Change allocation:"
@@ -2867,11 +2867,11 @@ msgstr "Översikt"
 
 #: ../src/vmm-details.glade.h:71
 msgid "Pause"
-msgstr "Stoppa"
+msgstr "Pausa"
 
 #: ../src/vmm-details.glade.h:72
 msgid "Permissions:"
-msgstr "Behörigheter:"
+msgstr "Rättigheter:"
 
 #: ../src/vmm-details.glade.h:74
 msgid "Poweroff"
@@ -2887,7 +2887,7 @@ msgstr "Processor"
 
 #: ../src/vmm-details.glade.h:77
 msgid "Reboot"
-msgstr "Omstart"
+msgstr "Starta om"
 
 #: ../src/vmm-details.glade.h:78
 msgid "Run"
@@ -2952,11 +2952,11 @@ msgstr "Status:"
 
 #: ../src/vmm-details.glade.h:95
 msgid "Target Port:"
-msgstr "Mål-port:"
+msgstr "Målport:"
 
 #: ../src/vmm-details.glade.h:96
 msgid "Target bus:"
-msgstr "Mål-port:"
+msgstr "Målport:"
 
 #: ../src/vmm-details.glade.h:97
 msgid "Target device:"
@@ -2972,7 +2972,7 @@ msgstr "Verktygsrad"
 
 #: ../src/vmm-details.glade.h:100
 msgid "Total CPUs on host machine:"
-msgstr "Totalt antal CPU:er på värdmaskin:"
+msgstr "Totalt antal processorer på värdmaskin:"
 
 #: ../src/vmm-details.glade.h:103
 msgid "UUID Field"
@@ -2993,11 +2993,11 @@ msgstr "Administration för virtuell maskin"
 
 #: ../src/vmm-details.glade.h:109
 msgid "Virtual Machine"
-msgstr "Virtuell Maskin"
+msgstr "Virtuell maskin"
 
 #: ../src/vmm-details.glade.h:110
 msgid "Virtual _Machine"
-msgstr "Virtuell _Maskin"
+msgstr "Virtuell _maskin"
 
 #: ../src/vmm-details.glade.h:111 ../src/vmm-host.glade.h:42
 #: ../src/vmm-manager.glade.h:18
@@ -3020,7 +3020,7 @@ msgstr "_Migrera"
 
 #: ../src/vmm-details.glade.h:115
 msgid "_Pause"
-msgstr "_Stoppa"
+msgstr "_Pausa"
 
 #: ../src/vmm-details.glade.h:116
 msgid "_Run"
@@ -3129,7 +3129,7 @@ msgstr "Plats:"
 
 #: ../src/vmm-host.glade.h:25
 msgid "Logical CPUs:"
-msgstr "Logiska CPU:er:"
+msgstr "Logiska processorer"
 
 #: ../src/vmm-host.glade.h:27
 msgid "Memory:"
@@ -3224,7 +3224,7 @@ msgstr "Återställ sparad maskin..."
 
 #: ../src/vmm-manager.glade.h:16
 msgid "Virtual CPUs"
-msgstr "Virtuella CPU:er"
+msgstr "Virtuella processorer"
 
 #: ../src/vmm-manager.glade.h:19
 msgid "_Edit"
