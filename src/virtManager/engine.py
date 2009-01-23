@@ -513,7 +513,7 @@ class vmmEngine(gobject.GObject):
                 self.err.show_err(_("Error shutting down domain: %s" % str(e)),
                                   "".join(traceback.format_exc()))
         else:
-            logging.warning("Shutdown requested, but machine is already shutting down / shutoff")
+            logging.warning("Shut down requested, but the virtual machine is already shutting down / powered off")
 
     def reboot_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)
@@ -535,7 +535,7 @@ class vmmEngine(gobject.GObject):
         conn = self.get_connection(uri, False)
         vm = conn.get_vm(uuid)
         destconn = self.get_connection(desturi, False)
-        resp = self.err.yes_no(_("%s will be migrated from %s to %s, are you sure?") % \
+        resp = self.err.yes_no(_("Are you sure you want to migrate %s from %s to %s?") % \
                     (vm.get_name(), conn.get_hostname(), destconn.get_hostname()))
         if resp:
             migrate_progress = None

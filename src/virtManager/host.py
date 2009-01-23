@@ -243,8 +243,8 @@ class vmmHost(gobject.GObject):
         if net is None:
             return
 
-        result = self.err.yes_no(_("This will permanently delete the network "
-                                   "'%s', are you sure?") % net.get_name())
+        result = self.err.yes_no(_("Are you sure you want to permanently "
+                                   "delete the network %s?") % net.get_name())
         if not result:
             return
         try:
@@ -433,8 +433,8 @@ class vmmHost(gobject.GObject):
         if pool is None:
             return
 
-        result = self.err.yes_no(_("This will permanently delete the pool "
-                                   "'%s,' are you sure?") % pool.get_name())
+        result = self.err.yes_no(_("Are you sure you want to permanently "
+                                   "delete the pool %s?") % pool.get_name())
         if not result:
             return
         try:
@@ -448,8 +448,8 @@ class vmmHost(gobject.GObject):
         if vol is None:
             return
 
-        result = self.err.yes_no(_("This will permanently delete the volume "
-                                   "'%s,' are you sure?") % vol.get_name())
+        result = self.err.yes_no(_("Are you sure you want to permanently "
+                                   "delete the volume %s?") % vol.get_name())
         if not result:
             return
 

@@ -981,7 +981,7 @@ class vmmCreate(gobject.GObject):
             path = self.get_config_disk_image()
             if path == None or len(path) == 0:
                 return self.err.val_err(_("Storage Address Required"), \
-                                        _("You must specify a partition or a file for storage for the guest install"))
+                                        _("You must specify a partition or a file for storage for the guest install."))
 
             # Attempt to set disk
             filesize = None
@@ -1024,7 +1024,7 @@ class vmmCreate(gobject.GObject):
                     return False
 
             if self._disk.is_conflict_disk(self._guest.conn) is True:
-                res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % self._disk.path), _("Do you really want to use the disk ?"))
+                res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % self._disk.path), _("Do you really want to use the disk?"))
                 return res
 
         elif page_num == PAGE_NETWORK:
@@ -1032,11 +1032,11 @@ class vmmCreate(gobject.GObject):
             if self.window.get_widget("net-type-network").get_active():
                 if self.window.get_widget("net-network").get_active() == -1:
                     return self.err.val_err(_("Virtual Network Required"),
-                                            _("You must select one of the virtual networks"))
+                                            _("You must select one of the virtual networks."))
             else:
                 if self.window.get_widget("net-device").get_active() == -1:
                     return self.err.val_err(_("Physical Device Required"),
-                                            _("You must select one of the physical devices"))
+                                            _("You must select a physical device."))
 
             net = self.get_config_network()
             if self.window.get_widget("mac-address").get_active():

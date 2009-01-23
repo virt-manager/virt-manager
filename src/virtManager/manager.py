@@ -189,7 +189,7 @@ class vmmManager(gobject.GObject):
         self.vmmenu.add(self.vmmenu_items["resume"])
 
 
-        self.vmmenu_items["shutdown"] = gtk.MenuItem("_Shutdown")
+        self.vmmenu_items["shutdown"] = gtk.MenuItem("_Shut Down")
         self.vmmenu_items["shutdown"].set_submenu(self.vmmenushutdown)
         self.vmmenu_items["shutdown"].show()
         self.vmmenu.add(self.vmmenu_items["shutdown"])
@@ -200,13 +200,13 @@ class vmmManager(gobject.GObject):
         self.vmmenushutdown_items["reboot"].connect("activate", self.reboot_vm)
         self.vmmenushutdown.add(self.vmmenushutdown_items["reboot"])
 
-        self.vmmenushutdown_items["poweroff"] = gtk.ImageMenuItem("_Poweroff")
+        self.vmmenushutdown_items["poweroff"] = gtk.ImageMenuItem("_Shut Down")
         self.vmmenushutdown_items["poweroff"].set_image(self.vmmenu_icons["poweroff"])
         self.vmmenushutdown_items["poweroff"].show()
         self.vmmenushutdown_items["poweroff"].connect("activate", self.poweroff_vm)
         self.vmmenushutdown.add(self.vmmenushutdown_items["poweroff"])
 
-        self.vmmenushutdown_items["forcepoweroff"] = gtk.ImageMenuItem("_Force poweroff")
+        self.vmmenushutdown_items["forcepoweroff"] = gtk.ImageMenuItem("_Force Off")
         self.vmmenushutdown_items["forcepoweroff"].set_image(self.vmmenu_icons["forcepoweroff"])
         self.vmmenushutdown_items["forcepoweroff"].show()
         self.vmmenushutdown_items["forcepoweroff"].connect("activate", self.destroy_vm)
@@ -808,7 +808,7 @@ class vmmManager(gobject.GObject):
             if conn is None:
                 return
 
-            result = self.err.yes_no(_("This will permanently delete the connection \"%s\", are you sure?") % self.rows[conn.get_uri()][ROW_NAME])
+            result = self.err.yes_no(_("Are you sure you want to permanently delete the connection %s?") % self.rows[conn.get_uri()][ROW_NAME])
             if not result:
                 return
             self.engine.remove_connection(conn.get_uri())
@@ -819,7 +819,7 @@ class vmmManager(gobject.GObject):
                 return
 
             # are you sure you want to delete this VM?
-            result = self.err.yes_no(_("This will permanently delete the vm \"%s,\" are you sure?") % vm.get_name())
+            result = self.err.yes_no(_("Are you sure you want to permanently delete the virtual machine %s?") % vm.get_name())
             if not result:
                 return
             conn = vm.get_connection()

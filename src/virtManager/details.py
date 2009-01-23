@@ -148,13 +148,13 @@ class vmmDetails(gobject.GObject):
         reboot.connect("activate", self.control_vm_reboot)
         menu.add(reboot)
 
-        shutdown = gtk.ImageMenuItem("_Poweroff")
+        shutdown = gtk.ImageMenuItem("_Shut Down")
         shutdown.set_image(shutdownimg)
         shutdown.show()
         shutdown.connect("activate", self.control_vm_shutdown)
         menu.add(shutdown)
 
-        destroy = gtk.ImageMenuItem("_Force poweroff")
+        destroy = gtk.ImageMenuItem("_Force Off")
         destroy.set_image(destroyimg)
         destroy.show()
         destroy.connect("activate", self.control_vm_destroy)

@@ -541,7 +541,7 @@ class vmmDomain(gobject.GObject):
         elif self.lastStatus == libvirt.VIR_DOMAIN_PAUSED:
             return _("Paused")
         elif self.lastStatus == libvirt.VIR_DOMAIN_SHUTDOWN:
-            return _("Shutdown")
+            return _("Shuting Down")
         elif self.lastStatus == libvirt.VIR_DOMAIN_SHUTOFF:
             return _("Shutoff")
         elif self.lastStatus == libvirt.VIR_DOMAIN_CRASHED:

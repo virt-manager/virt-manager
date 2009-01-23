@@ -754,7 +754,7 @@ class vmmAddHardware(gobject.GObject):
         if page_num == PAGE_INTRO:
             if self.get_config_hardware_type() == None:
                 return self.err.val_err(_("Hardware Type Required"), \
-                                        _("You must specify what type of hardware to add"))
+                                        _("You must specify what type of hardware to add."))
             self._dev = None
         elif page_num == PAGE_DISK:
             path = self.get_config_disk_image()
@@ -764,7 +764,7 @@ class vmmAddHardware(gobject.GObject):
 
             if self.window.get_widget("target-device").get_active() == -1:
                 return self.err.val_err(_("Target Device Required"),
-                                        _("You must select a target device for the disk"))
+                                        _("You must select a target device for the disk."))
 
             bus, device = self.get_config_disk_target()
             if self.window.get_widget("storage-partition").get_active():
@@ -806,7 +806,7 @@ class vmmAddHardware(gobject.GObject):
 
             if self._dev.is_conflict_disk(self.vm.get_connection().vmm) is True:
                 res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % self._dev), \
-                                      _("Do you really want to use the disk ?"))
+                                      _("Do you really want to use the disk?"))
                 return res
 
         elif page_num == PAGE_NETWORK:
@@ -814,11 +814,11 @@ class vmmAddHardware(gobject.GObject):
             if self.window.get_widget("net-type-network").get_active():
                 if self.window.get_widget("net-network").get_active() == -1:
                     return self.err.val_err(_("Virtual Network Required"),
-                                            _("You must select one of the virtual networks"))
+                                            _("You must select one of the virtual networks."))
             else:
                 if self.window.get_widget("net-device").get_active() == -1:
                     return self.err.val_err(_("Physical Device Required"),
-                                            _("You must select one of the physical devices"))
+                                            _("You must select a physical device."))
 
             mac = self.get_config_macaddr()
             if self.window.get_widget("mac-address").get_active():
