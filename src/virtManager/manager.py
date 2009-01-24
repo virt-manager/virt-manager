@@ -151,11 +151,14 @@ class vmmManager(gobject.GObject):
 
         self.vmmenu_icons = {}
         self.vmmenu_icons["run"] = gtk.Image()
-        self.vmmenu_icons["run"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_run.png", 18, 18))
+        self.vmmenu_icons["run"].set_from_stock(gtk.STOCK_MEDIA_PLAY,
+                                                gtk.ICON_SIZE_MENU)
         self.vmmenu_icons["pause"] = gtk.Image()
-        self.vmmenu_icons["pause"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_pause.png", 18, 18))
+        self.vmmenu_icons["pause"].set_from_stock(gtk.STOCK_MEDIA_PAUSE,
+                                                  gtk.ICON_SIZE_MENU)
         self.vmmenu_icons["resume"] = gtk.Image()
-        self.vmmenu_icons["resume"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_pause.png", 18, 18))
+        self.vmmenu_icons["resume"].set_from_stock(gtk.STOCK_MEDIA_PAUSE,
+                                                   gtk.ICON_SIZE_MENU)
         self.vmmenu_icons["reboot"] = gtk.Image()
         self.vmmenu_icons["reboot"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
         self.vmmenu_icons["poweroff"] = gtk.Image()
