@@ -53,7 +53,7 @@ def _show_startup_error(msg, details):
     from virtManager.error import vmmErrorDialog
     err = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE, "", "")
     title = _("Error starting Virtual Machine Manager")
-    err.show_err(title + ": " +  msg, details, title)
+    err.show_err(title + ": " +  msg, details, title, async=False)
 
 def setup_i18n():
     locale.setlocale(locale.LC_ALL, '')

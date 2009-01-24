@@ -65,7 +65,7 @@ class vmmErrorDialog (gtk.MessageDialog):
     def response_cb(self, src, ignore):
         src.hide()
 
-    def show_err(self, summary, details, title=None):
+    def show_err(self, summary, details, title=None, async=True):
         self.hide()
 
         if title is None:
@@ -75,7 +75,10 @@ class vmmErrorDialog (gtk.MessageDialog):
         self.buffer.set_text(details)
         logging.debug("Uncaught Error: %s : %s" % (summary, details))
 
-        self.show()
+        if async:
+            self.show()
+        else:
+            self.run()
 
     def val_err(self, text1, text2=None, title=None):
         def response_destroy(src, ignore):
