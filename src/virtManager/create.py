@@ -933,18 +933,17 @@ class vmmCreate(gobject.GObject):
                 os_type = "hvm"
             self._guest.installer = self.get_config_installer(self.get_domain_type(), os_type)
 
-            if self.window.get_widget("media-iso-image").get_active():
+            src = self.get_config_install_source()
+            if not src:
+                return self.err.val_err(_("An install media path is required."))
 
-                src = self.get_config_install_source()
-                if not src:
-                    return self.err.val_err(_("An ISO path is required."))
+            if self.window.get_widget("media-iso-image").get_active():
                 try:
                     self._guest.installer.location = src
                     self._guest.installer.cdrom = True
                 except ValueError, e:
                     return self.err.val_err(_("ISO Path Not Found"), str(e))
             else:
-                src = self.get_config_install_source()
                 try:
                     self._guest.installer.location = src
                     self._guest.installer.cdrom = True
