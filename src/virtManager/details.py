@@ -392,10 +392,8 @@ class vmmDetails(gobject.GObject):
                                                             0,
                                                             '',
                                                             _("Pointer grabbed"),
-                                                            _("The mouse pointer has been restricted to the virtual " \
-                                                            "console window. To release the pointer press the key pair " \
-                                                              "Ctrl+Alt"),
-                                                            ["dismiss", _("Do not show this notification in the future")],
+                                                            _("The mouse pointer has been restricted to the virtual console window. To release the pointer, press the key pair: Ctrl+Alt"),
+                                                            ["dismiss", _("Do not show this notification in the future.")],
                                                             {"desktop-entry": "virt-manager",
                                                              "x": x+200, "y": y},
                                                             8 * 1000)
