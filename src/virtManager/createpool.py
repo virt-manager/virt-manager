@@ -55,6 +55,7 @@ class vmmCreatePool(gobject.GObject):
         self.topwin.hide()
 
         self._pool = None
+        self._pool_class = Storage.StoragePool
         self.error_msg = None
         self.error_details = None
 
@@ -67,9 +68,33 @@ class vmmCreatePool(gobject.GObject):
             "on_pool_pages_change_page" : self.page_changed,
             "on_pool_source_button_clicked" : self.browse_source_path,
             "on_pool_target_button_clicked" : self.browse_target_path,
+
+            "on_pool_name_focus_in_event": (self.update_doc, "name",
+                                            "pool-info1"),
+            # I cannot for the life of me get a combobox to abide
+            # focus-in, button-pressed, motion-over, etc.
+            "on_pool_type_focus": (self.update_doc, "type", "pool-info1"),
+            "on_pool_type_changed": (self.update_doc_changed, "type",
+                                     "pool-info1"),
+
+            "on_pool_format_focus": (self.update_doc, "format", "pool-info2"),
+            "on_pool_format_changed": (self.update_doc_changed, "format",
+                                       "pool-info2"),
+            "on_pool_target_path_focus_in_event": (self.update_doc,
+                                                   "target_path",
+                                                   "pool-info2"),
+            "on_pool_source_path_focus_in_event": (self.update_doc,
+                                                   "source_path",
+                                                   "pool-info2"),
+            "on_pool_hostname_focus_in_event": (self.update_doc, "host",
+                                                "pool-info2"),
+            "on_pool_build_focus_in_event": (self.update_build_doc)
         })
 
         self.set_initial_state()
+
+    def test(self, ignore1, ignore2=None):
+        print "test"
 
     def show(self):
         self.topwin.show()
@@ -99,8 +124,8 @@ class vmmCreatePool(gobject.GObject):
 
         self.populate_pool_type()
 
-        self.window.get_widget("pool-info1").modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse("grey"))
-        self.window.get_widget("pool-info2").modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse("grey"))
+        self.window.get_widget("pool-info-box1").modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("grey"))
+        self.window.get_widget("pool-info-box2").modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("grey"))
 
     def reset_state(self):
         self.window.get_widget("pool-pages").set_current_page(0)
@@ -317,8 +342,8 @@ class vmmCreatePool(gobject.GObject):
             conn = self.conn.vmm
 
             try:
-                pool_class = Storage.StoragePool.get_pool_class(typ)
-                self._pool = pool_class(name=name, conn=conn)
+                self._pool_class = Storage.StoragePool.get_pool_class(typ)
+                self._pool = self._pool_class(name=name, conn=conn)
             except ValueError, e:
                 return self.err.val_err(_("Pool Parameter Error"), str(e))
 
@@ -349,6 +374,34 @@ class vmmCreatePool(gobject.GObject):
                                          "sure you want to 'build' this pool?"))
             return True
 
+    def update_doc(self, ignore1, ignore2, param, infobox):
+        doc = self._build_doc_str(param)
+        self.window.get_widget(infobox).set_markup(doc)
+
+    def update_build_doc(self, ignore1, ignore2):
+        doc = ""
+        if self._pool.type == Storage.StoragePool.TYPE_DISK:
+            docstr = _("Format the source device.")
+            doc = self._build_doc_str("build", docstr)
+
+        self.window.get_widget("pool-info2").set_markup(doc)
+
+    def update_doc_changed(self, ignore1, param, infobox):
+        # Wrapper for update_doc and 'changed' signal
+        self.update_doc(None, None, param, infobox)
+
+    def _build_doc_str(self, param, docstr=None):
+        doc = ""
+        doctmpl = "<i><u>%s</u>: %s</i>"
+        prettyname = param.replace("_", " ").capitalize()
+
+        if docstr:
+            doc = doctmpl % (prettyname, docstr)
+        elif hasattr(self._pool_class, param):
+            doc = doctmpl % (prettyname,
+                             getattr(self._pool_class, param).__doc__)
+
+        return doc
 
     def _browse_file(self, dialog_name, startfolder=None, foldermode=False):
         mode = gtk.FILE_CHOOSER_ACTION_OPEN

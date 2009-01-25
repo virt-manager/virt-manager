@@ -98,7 +98,7 @@
                 <child>
                   <widget class="GtkHBox" id="hbox4">
                     <property name="visible">True</property>
-                    <property name="spacing">20</property>
+                    <property name="spacing">12</property>
                     <child>
                       <widget class="GtkTable" id="table1">
                         <property name="visible">True</property>
@@ -106,19 +106,6 @@
                         <property name="n_columns">2</property>
                         <property name="column_spacing">6</property>
                         <property name="row_spacing">5</property>
-                        <child>
-                          <widget class="GtkComboBox" id="pool-type">
-                            <property name="visible">True</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
                         <child>
                           <widget class="GtkLabel" id="label9">
                             <property name="visible">True</property>
@@ -147,6 +134,7 @@
                           <widget class="GtkEntry" id="pool-name">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <signal name="focus_in_event" handler="on_pool_name_focus_in_event"/>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
@@ -154,27 +142,43 @@
                             <property name="y_options"></property>
                           </packing>
                         </child>
+                        <child>
+                          <widget class="GtkComboBox" id="pool-type">
+                            <property name="visible">True</property>
+                            <signal name="button_press_event" handler="on_pool_type_button_press_event"/>
+                            <signal name="changed" handler="on_pool_type_changed"/>
+                            <signal name="motion_notify_event" handler="on_pool_type_motion_notify_event"/>
+                            <signal name="focus_in_event" handler="on_pool_type_focus_in_event"/>
+                            <signal name="focus" handler="on_pool_type_focus"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                      <widget class="GtkEventBox" id="pool-info-box1">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
-                        <property name="vscrollbar_policy">GTK_POLICY_NEVER</property>
                         <child>
-                          <widget class="GtkTextView" id="pool-info1">
+                          <widget class="GtkLabel" id="pool-info1">
+                            <property name="width_request">150</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="editable">False</property>
-                            <property name="text" translatable="yes">                                  
-</property>
+                            <property name="xalign">0</property>
+                            <property name="yalign">0</property>
+                            <property name="xpad">3</property>
+                            <property name="ypad">6</property>
+                            <property name="label" translatable="yes">label</property>
+                            <property name="wrap">True</property>
                           </widget>
                         </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -277,7 +281,7 @@
                 <child>
                   <widget class="GtkHBox" id="hbox12">
                     <property name="visible">True</property>
-                    <property name="spacing">20</property>
+                    <property name="spacing">12</property>
                     <child>
                       <widget class="GtkTable" id="table2">
                         <property name="visible">True</property>
@@ -286,12 +290,30 @@
                         <property name="column_spacing">6</property>
                         <property name="row_spacing">4</property>
                         <child>
+                          <widget class="GtkComboBox" id="pool-format">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="events">GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
+                            <signal name="changed" handler="on_pool_format_changed"/>
+                            <signal name="focus" handler="on_pool_format_focus"/>
+                          </widget>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                            <property name="x_options">GTK_FILL</property>
+                            <property name="y_options">GTK_FILL</property>
+                          </packing>
+                        </child>
+                        <child>
                           <widget class="GtkCheckButton" id="pool-build">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="use_underline">True</property>
                             <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="focus_in_event" handler="on_pool_build_focus_in_event"/>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
@@ -322,6 +344,7 @@
                               <widget class="GtkEntry" id="pool-source-path">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <signal name="focus_in_event" handler="on_pool_source_path_focus_in_event"/>
                               </widget>
                             </child>
                             <child>
@@ -356,6 +379,7 @@
                               <widget class="GtkEntry" id="pool-target-path">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <signal name="focus_in_event" handler="on_pool_target_path_focus_in_event"/>
                               </widget>
                             </child>
                             <child>
@@ -406,19 +430,6 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkComboBox" id="pool-format">
-                            <property name="visible">True</property>
-                          </widget>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
-                            <property name="top_attach">1</property>
-                            <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_FILL</property>
-                            <property name="y_options">GTK_FILL</property>
-                          </packing>
-                        </child>
-                        <child>
                           <widget class="GtkLabel" id="label16">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
@@ -435,6 +446,7 @@
                           <widget class="GtkEntry" id="pool-hostname">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <signal name="focus_in_event" handler="on_pool_hostname_focus_in_event"/>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
@@ -460,24 +472,23 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkScrolledWindow" id="scrolledwindow2">
+                      <widget class="GtkEventBox" id="pool-info-box2">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
-                        <property name="vscrollbar_policy">GTK_POLICY_NEVER</property>
                         <child>
-                          <widget class="GtkTextView" id="pool-info2">
+                          <widget class="GtkLabel" id="pool-info2">
+                            <property name="width_request">150</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="editable">False</property>
-                            <property name="text" translatable="yes">                                  
-</property>
+                            <property name="xalign">0</property>
+                            <property name="yalign">0</property>
+                            <property name="xpad">3</property>
+                            <property name="ypad">6</property>
+                            <property name="label" translatable="yes">label</property>
+                            <property name="wrap">True</property>
                           </widget>
                         </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
