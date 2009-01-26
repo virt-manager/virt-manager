@@ -1,5 +1,5 @@
 
-AC_INIT(virt-manager, 0.6.0)
+AC_INIT(virt-manager, 0.6.1)
 AC_CONFIG_SRCDIR(src/virt-manager.py.in)
 dnl Make automake keep quiet about wildcards & other GNUmake-isms
 AM_INIT_AUTOMAKE([-Wno-portability])
