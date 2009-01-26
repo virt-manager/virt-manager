@@ -30,6 +30,7 @@ import libvirt
 from virtManager.connection import vmmConnection
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
+from virtManager import util as util
 
 VMLIST_SORT_ID = 1
 VMLIST_SORT_NAME = 2
@@ -853,12 +854,7 @@ class vmmManager(gobject.GObject):
         # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid, diskRead, diskWrite, netRx, netTx
         model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str, str, int, int, int, int)
         vmlist.set_model(model)
-        try:
-            vmlist.set_tooltip_column(ROW_HINT)
-        except:
-            # Catch & ignore errors - set_tooltip_column is in gtk >= 2.12
-            # and we can easily work with lower versions
-            pass
+        util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
 
         nameCol = gtk.TreeViewColumn(_("Name"))
         idCol = gtk.TreeViewColumn(_("ID"))
@@ -1020,15 +1016,17 @@ class vmmManager(gobject.GObject):
             widgn = "menu_view_network_traffic"
         widget = self.window.get_widget(widgn)
 
+        tool_text = ""
         if conf_entry and (conf_entry == True or \
                            conf_entry.get_value().get_bool()):
             widget.set_sensitive(True)
-            widget.set_tooltip_text("")
         else:
             if widget.get_active():
                 widget.set_active(False)
             widget.set_sensitive(False)
-            widget.set_tooltip_text(_("Disabled in preferences dialog."))
+            tool_text = _("Disabled in preferences dialog.")
+
+        util.tooltip_wrapper(widget, tool_text)
 
     def toggle_virtual_cpus_visible_conf(self, menu):
         self.config.set_vmlist_virtual_cpus_visible(menu.get_active())

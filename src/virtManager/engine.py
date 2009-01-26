@@ -36,6 +36,7 @@ from virtManager.asyncjob import vmmAsyncJob
 from virtManager.create import vmmCreate
 from virtManager.host import vmmHost
 from virtManager.error import vmmErrorDialog
+import virtManager.util as util
 
 class vmmEngine(gobject.GObject):
     __gsignals__ = {
@@ -580,7 +581,7 @@ class vmmEngine(gobject.GObject):
             mitem.set_sensitive(can_migrate)
             mitem.connect("activate", migrate_func)
             if tooltip:
-                mitem.set_tooltip_text(tooltip)
+                util.tooltip_wrapper(mitem, tooltip)
             mitem.show()
 
             menu.add(mitem)

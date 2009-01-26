@@ -36,6 +36,7 @@ from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
 from virtManager.serialcon import vmmSerialConsole
+from virtManager import util as util
 
 import virtinst
 
@@ -501,7 +502,7 @@ class vmmDetails(gobject.GObject):
                 sensitive = True
 
             if not sensitive:
-                item.set_tooltip_text(msg)
+                util.tooltip_wrapper(item, msg)
             item.set_sensitive(sensitive)
 
             if sensitive and self.dynamic_tabs.count(dev[0]):

@@ -52,3 +52,13 @@ def build_default_pool(conn):
     except Exception, e:
         raise RuntimeError(_("Couldn't create default storage pool '%s': %s") %
                              (DEFAULT_POOL_PATH, str(e)))
+
+def tooltip_wrapper(obj, txt, func="set_tooltip_text"):
+    # Catch & ignore errors - set_tooltip_* is in gtk >= 2.12
+    # and we can easily work with lower versions
+    try:
+        funcptr = getattr(obj, func)
+        funcptr(txt)
+    except:
+        # XXX: Catch a specific error here
+        pass
