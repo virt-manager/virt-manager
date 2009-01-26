@@ -316,6 +316,8 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_send_caf11_activate": self.send_key,
             "on_details_menu_send_caf12_activate": self.send_key,
             "on_details_menu_send_printscreen_activate": self.send_key,
+
+            "on_console_auth_login_clicked": self.auth_login,
             })
 
         self.vm.connect("status-changed", self.update_widget_states)
@@ -455,6 +457,10 @@ class vmmDetails(gobject.GObject):
             tabs.set_border_width(6)
             if self.window.get_widget("details-menu-view-toolbar").get_active():
                 self.window.get_widget("details-toolbar").show()
+
+    def auth_login(self, ignore):
+        self.set_password()
+        self.activate_viewer_page()
 
     def toggle_toolbar(self, src):
         active = src.get_active()
@@ -1238,9 +1244,8 @@ class vmmDetails(gobject.GObject):
 
     def set_password(self, src=None):
         txt = self.window.get_widget("console-auth-password")
-        logging.debug("Setting a password to " + str(txt.get_text()))
-
-        self.vncViewer.set_credential(gtkvnc.CREDENTIAL_PASSWORD, txt.get_text())
+        self.vncViewer.set_credential(gtkvnc.CREDENTIAL_PASSWORD,
+                                      txt.get_text())
 
     def _vnc_auth_credential(self, src, credList):
         for i in range(len(credList)):
