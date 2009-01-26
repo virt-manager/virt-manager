@@ -36,11 +36,6 @@ from virtManager.network import vmmNetwork
 from virtManager.netdev import vmmNetDevice
 from virtManager.storagepool import vmmStoragePool
 
-LIBVIRT_POLICY_FILES = [
-    "/usr/share/PolicyKit/policy/libvirtd.policy",
-    "/usr/share/PolicyKit/policy/org.libvirt.unix.policy"
-]
-
 def get_local_hostname():
     try:
         return gethostbyaddr(gethostname())[0]
@@ -102,15 +97,6 @@ class vmmConnection(gobject.GObject):
             self.uri = "xen:///"
 
         self.readOnly = readOnly
-        if not self.is_remote() and os.getuid() != 0 and self.uri != "qemu:///session":
-            hasPolkit = False
-            for f in LIBVIRT_POLICY_FILES:
-                if os.path.exists(f):
-                    hasPolkit = True
-
-            if not hasPolkit:
-                self.readOnly = True
-
         self.state = self.STATE_DISCONNECTED
         self.vmm = None
         self.storage_capable = None
@@ -404,8 +390,7 @@ class vmmConnection(gobject.GObject):
             logging.error(self.connectError)
             return -1
 
-    def _open_thread(self):
-        logging.debug("Background thread is running")
+    def _try_open(self):
         try:
             flags = 0
             if self.readOnly:
@@ -418,12 +403,35 @@ class vmmConnection(gobject.GObject):
                                           libvirt.VIR_CRED_EXTERNAL],
                                          self._do_creds,
                                          None], flags)
-
-            self.state = self.STATE_ACTIVE
         except:
+            exc_info = sys.exc_info()
+
+            # If the previous attempt was read/write try to fall back
+            # on read-only connection, otherwise report the error.
+            if not self.readOnly:
+                try:
+                    self.vmm = libvirt.openReadOnly(self.uri)
+                    self.readOnly = True
+                    logging.info("Read/write connection failed to %s,"
+                            "falling back on read-only." % self.uri)
+                    return
+                except:
+                    pass
+
+            return exc_info
+
+
+    def _open_thread(self):
+        logging.debug("Background thread is running")
+
+        open_error = self._try_open()
+
+        if not open_error:
+            self.state = self.STATE_ACTIVE
+        else:
             self.state = self.STATE_DISCONNECTED
 
-            (_type, value, stacktrace) = sys.exc_info ()
+            (_type, value, stacktrace) = open_error
             # Detailed error message, in English so it can be Googled.
             self.connectError = \
                     ("Unable to open connection to hypervisor URI '%s':\n" %
