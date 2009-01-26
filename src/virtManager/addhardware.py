@@ -555,7 +555,7 @@ class vmmAddHardware(gobject.GObject):
     def add_storage(self):
         used = []
         for d in self.vm.get_disk_devices():
-            used.append(d[3])
+            used.append(d[2])
 
         try:
             self._dev.generate_target(used)

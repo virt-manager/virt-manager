@@ -218,7 +218,7 @@ class vmmDomain(gobject.GObject):
         tx = 0
         for netdev in self.get_network_devices():
             try:
-                io = self.vm.interfaceStats(netdev[2])
+                io = self.vm.interfaceStats(netdev[4])
                 if io:
                     rx += io[0]
                     tx += io[4]
@@ -234,7 +234,7 @@ class vmmDomain(gobject.GObject):
         wr = 0
         for disk in self.get_disk_devices():
             try:
-                io = self.vm.blockStats(disk[3])
+                io = self.vm.blockStats(disk[2])
                 if io:
                     rd += io[1]
                     wr += io[3]
