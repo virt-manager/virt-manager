@@ -112,7 +112,6 @@ class vmmManager(gobject.GObject):
     def __init__(self, config, engine):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-manager.glade", "vmm-manager", domain="virt-manager")
-        self.window.get_widget("vmm-manager").hide_all()
         self.err = vmmErrorDialog(self.window.get_widget("vmm-manager"),
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),

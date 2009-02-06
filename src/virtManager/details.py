@@ -107,7 +107,6 @@ class vmmDetails(gobject.GObject):
         self.vm = vm
 
         topwin = self.window.get_widget("vmm-details")
-        topwin.hide_all()
         self.err = vmmErrorDialog(topwin,
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
