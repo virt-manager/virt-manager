@@ -49,16 +49,18 @@ HW_LIST_COL_TYPE = 4
 HW_LIST_COL_DEVICE = 5
 
 # Types for the hw list model: numbers specify what order they will be listed
-HW_LIST_TYPE_CPU = 0
-HW_LIST_TYPE_MEMORY = 1
-HW_LIST_TYPE_BOOT = 2
-HW_LIST_TYPE_DISK = 3
-HW_LIST_TYPE_NIC = 4
-HW_LIST_TYPE_INPUT = 5
-HW_LIST_TYPE_GRAPHICS = 6
-HW_LIST_TYPE_SOUND = 7
-HW_LIST_TYPE_CHAR = 8
-HW_LIST_TYPE_HOSTDEV = 9
+HW_LIST_TYPE_GENERAL = 0
+HW_LIST_TYPE_STATS = 1
+HW_LIST_TYPE_CPU = 2
+HW_LIST_TYPE_MEMORY = 3
+HW_LIST_TYPE_BOOT = 4
+HW_LIST_TYPE_DISK = 5
+HW_LIST_TYPE_NIC = 6
+HW_LIST_TYPE_INPUT = 7
+HW_LIST_TYPE_GRAPHICS = 8
+HW_LIST_TYPE_SOUND = 9
+HW_LIST_TYPE_CHAR = 10
+HW_LIST_TYPE_HOSTDEV = 11
 
 # Console pages
 PAGE_UNAVAILABLE = 0
@@ -67,9 +69,8 @@ PAGE_AUTHENTICATE = 2
 PAGE_VNCVIEWER = 3
 
 PAGE_CONSOLE = 0
-PAGE_OVERVIEW = 1
-PAGE_DETAILS = 2
-PAGE_DYNAMIC_OFFSET = 3
+PAGE_DETAILS = 1
+PAGE_DYNAMIC_OFFSET = 2
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
@@ -530,7 +531,8 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("details-pages").set_current_page(PAGE_CONSOLE)
 
     def activate_performance_page(self):
-        self.window.get_widget("details-pages").set_current_page(PAGE_OVERVIEW)
+        self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
+        self.window.get_widget("hw-panel").set_current_page(HW_LIST_TYPE_STATS)
 
     def activate_config_page(self):
         self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
@@ -610,7 +612,11 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("hw-panel").show_all()
 
             pagenum = pagetype
-            if pagetype == HW_LIST_TYPE_CPU:
+            if pagetype == HW_LIST_TYPE_GENERAL:
+                pass
+            elif pagetype == HW_LIST_TYPE_STATS:
+                self.refresh_stats_page()
+            elif pagetype == HW_LIST_TYPE_CPU:
                 self.window.get_widget("config-vcpus-apply").set_sensitive(False)
                 self.refresh_config_cpu()
             elif pagetype == HW_LIST_TYPE_MEMORY:
@@ -802,9 +808,7 @@ class vmmDetails(gobject.GObject):
         self.page_refresh(details.get_current_page())
 
     def page_refresh(self, page):
-        if page == PAGE_OVERVIEW:
-            self.refresh_summary()
-        elif page == PAGE_DETAILS:
+        if page == PAGE_DETAILS:
             # Add / remove new devices
             self.repopulate_hw_list()
 
@@ -814,7 +818,12 @@ class vmmDetails(gobject.GObject):
             active = selection.get_selected()
             if active[1] != None:
                 pagetype = active[0].get_value(active[1], HW_LIST_COL_TYPE)
-                if pagetype == HW_LIST_TYPE_CPU:
+                if pagetype == HW_LIST_TYPE_GENERAL:
+                    # Nothing to refresh at this point
+                    pass
+                elif pagetype == HW_LIST_TYPE_STATS:
+                    self.refresh_stats_page()
+                elif pagetype == HW_LIST_TYPE_CPU:
                     self.refresh_config_cpu()
                 elif pagetype == HW_LIST_TYPE_MEMORY:
                     self.refresh_config_memory()
@@ -833,7 +842,7 @@ class vmmDetails(gobject.GObject):
                 elif pagetype == HW_LIST_TYPE_HOSTDEV:
                     self.refresh_hostdev_page()
 
-    def refresh_summary(self):
+    def refresh_stats_page(self):
         def _rx_tx_text(rx, tx, unit):
             return '<span color="#82003B">%(rx)d %(unit)s in</span>\n<span color="#295C45">%(tx)d %(unit)s out</span>' % locals()
 
@@ -852,11 +861,11 @@ class vmmDetails(gobject.GObject):
                                           int(round(host_memory/1024.0)))
         if self.config.get_stats_enable_disk_poll():
             dsk_txt = _rx_tx_text(self.vm.disk_read_rate(),
-                                  self.vm.disk_write_rate(), "KBytes/s")
+                                  self.vm.disk_write_rate(), "KB/s")
 
         if self.config.get_stats_enable_net_poll():
             net_txt = _rx_tx_text(self.vm.network_rx_rate(),
-                                  self.vm.network_tx_rate(), "KBytes/s")
+                                  self.vm.network_tx_rate(), "KB/s")
 
         self.window.get_widget("overview-cpu-usage-text").set_text(cpu_txt)
         self.window.get_widget("overview-memory-usage-text").set_text(mem_txt)
@@ -1519,6 +1528,10 @@ class vmmDetails(gobject.GObject):
     def populate_hw_list(self):
         hw_list_model = self.window.get_widget("hw-list").get_model()
         hw_list_model.clear()
+        hw_list_model.append(["Overview", None, 0, self.pixbuf_processor,
+                              HW_LIST_TYPE_GENERAL, []])
+        hw_list_model.append(["Performance", None, 0, self.pixbuf_memory,
+                              HW_LIST_TYPE_STATS, []])
         hw_list_model.append(["Processor", None, 0, self.pixbuf_processor, HW_LIST_TYPE_CPU, []])
         hw_list_model.append(["Memory", None, 0, self.pixbuf_memory, HW_LIST_TYPE_MEMORY, []])
         hw_list_model.append(["Boot Options", None, 0, self.pixbuf_memory, HW_LIST_TYPE_BOOT, []])
