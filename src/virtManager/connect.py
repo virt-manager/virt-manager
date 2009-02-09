@@ -249,8 +249,6 @@ class vmmConnect(gobject.GObject):
         self.emit("completed", uri, readOnly, auto)
 
     def sanitize_hostname(self, host):
-        if host.endswith(".local"):
-            host = host[:-6]
         if host == "linux" or host == "localhost":
             host = ""
         if host.startswith("linux-"):
