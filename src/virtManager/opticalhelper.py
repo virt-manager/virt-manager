@@ -78,7 +78,28 @@ class vmmOpticalDriveHelper(gobject.GObject):
             self.model.append([devnode, self._display_label(devnode, label),
                                present, path])
 
+        self.set_default_selection()
+
+    def set_default_selection(self):
+        # Set the first active cdrom device as selected, otherwise none
+        idx = 0
+        active = self.widget.get_active()
+
+        if active != -1:
+            # already a selection, don't change it
+            return
+
+        for row in self.model:
+            if row[2] == True:
+                self.widget.set_active(idx)
+                return
+            idx += 1
+
+        self.widget.set_active(-1)
+
     def _device_added(self, path):
+        active = self.widget.get_active()
+        idx = 0
         label, devnode = self._fetch_device_info(path)
 
         if not devnode:
@@ -86,12 +107,16 @@ class vmmOpticalDriveHelper(gobject.GObject):
             return
 
         # Search for the row with matching device node and
-        # fill in info about inserted media
+        # fill in info about inserted media. If model has no current
+        # selection, select the new media.
         for row in self.model:
             if row[0] == devnode:
                 row[1] = self._display_label(devnode, label)
                 row[2] = True
                 row[3] = path
+                if active == -1:
+                    self.widget.set_active(idx)
+            idx = idx + 1
 
     def _device_removed(self, path):
         active = self.widget.get_active()
@@ -107,6 +132,8 @@ class vmmOpticalDriveHelper(gobject.GObject):
                 if idx == active:
                     self.widget.set_active(-1)
             idx = idx + 1
+
+        self.set_default_selection()
 
     def _display_label(self, devnode, label):
         if not label:
