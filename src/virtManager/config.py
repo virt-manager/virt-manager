@@ -275,6 +275,14 @@ class vmmConfig:
     def set_remote_sound(self, state):
         self.conf.set_bool(self.conf_dir + "/new-vm/remote-sound", state)
 
+    def on_sound_local_changed(self, cb, userdata=None):
+        self.conf.notify_add(self.conf_dir + "/new-vm/local-sound", cb,
+                             userdata)
+
+    def on_sound_remote_changed(self, cb, userdata=None):
+        self.conf.notify_add(self.conf_dir + "/new-vm/remote-sound", cb,
+                             userdata)
+
     def get_secret_name(self, vm):
         return "vm-console-" + vm.get_uuid()
 

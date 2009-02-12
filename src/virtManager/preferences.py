@@ -41,7 +41,8 @@ class vmmPreferences(gobject.GObject):
         self.config.on_console_keygrab_changed(self.refresh_console_keygrab)
         self.config.on_stats_update_interval_changed(self.refresh_update_interval)
         self.config.on_stats_history_length_changed(self.refresh_history_length)
-
+        self.config.on_sound_local_changed(self.refresh_sound_local)
+        self.config.on_sound_remote_changed(self.refresh_sound_remote)
         self.config.on_stats_enable_disk_poll_changed(self.refresh_disk_poll)
         self.config.on_stats_enable_net_poll_changed(self.refresh_net_poll)
         self.config.on_stats_enable_mem_poll_changed(self.refresh_mem_poll)
@@ -51,7 +52,8 @@ class vmmPreferences(gobject.GObject):
         self.refresh_history_length()
         self.refresh_console_popup()
         self.refresh_console_keygrab()
-        self.refresh_sound_options()
+        self.refresh_sound_local()
+        self.refresh_sound_remote()
         self.refresh_disk_poll()
         self.refresh_net_poll()
         self.refresh_mem_poll()
@@ -87,19 +89,19 @@ class vmmPreferences(gobject.GObject):
 
     def refresh_update_interval(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.window.get_widget("prefs-stats-update-interval").set_value(self.config.get_stats_update_interval())
-
     def refresh_history_length(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.window.get_widget("prefs-stats-history-len").set_value(self.config.get_stats_history_length())
 
     def refresh_console_popup(self,ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.window.get_widget("prefs-console-popup").set_active(self.config.get_console_popup())
-
     def refresh_console_keygrab(self,ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.window.get_widget("prefs-console-keygrab").set_active(self.config.get_console_keygrab())
 
-    def refresh_sound_options(self, ignore1=None, ignore2=None, ignore=None,
-                              ignore4=None):
+    def refresh_sound_local(self, ignore1=None, ignore2=None, ignore=None,
+                            ignore4=None):
         self.window.get_widget("prefs-sound-local").set_active(self.config.get_local_sound())
+    def refresh_sound_remote(self, ignore1=None, ignore2=None, ignore=None,
+                             ignore4=None):
         self.window.get_widget("prefs-sound-remote").set_active(self.config.get_remote_sound())
 
     def refresh_disk_poll(self, ignore1=None, ignore2=None, ignore3=None,
@@ -117,21 +119,18 @@ class vmmPreferences(gobject.GObject):
 
     def change_update_interval(self, src):
         self.config.set_stats_update_interval(src.get_value_as_int())
-
     def change_history_length(self, src):
         self.config.set_stats_history_length(src.get_value_as_int())
 
     def change_console_popup(self, box):
         self.config.set_console_popup(box.get_active())
-
     def change_console_keygrab(self, box):
         self.config.set_console_keygrab(box.get_active())
 
     def change_local_sound(self, src):
-        self.config.set_local_sound(not self.config.get_local_sound())
-
+        self.config.set_local_sound(src.get_active())
     def change_remote_sound(self, src):
-        self.config.set_remote_sound(not self.config.get_remote_sound())
+        self.config.set_remote_sound(src.get_active())
 
     def change_disk_poll(self, src):
         self.config.set_stats_enable_disk_poll(src.get_active())
