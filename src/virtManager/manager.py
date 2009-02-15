@@ -326,6 +326,9 @@ class vmmManager(gobject.GObject):
 
         self.engine.connect("connection-added", self._add_connection)
         self.engine.connect("connection-removed", self._remove_connection)
+        # Select first list entry
+        vmlist = self.window.get_widget("vm-list")
+        vmlist.get_selection().select_iter(vmlist.get_model().get_iter_first())
 
     def show(self):
         win = self.window.get_widget("vmm-manager")
