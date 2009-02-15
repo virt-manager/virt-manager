@@ -525,6 +525,7 @@ class vmmManager(gobject.GObject):
         _iter = model.append(None, row)
         path = model.get_path(_iter)
         self.rows[conn.get_uri()] = model[path]
+        return _iter
 
     def vm_removed(self, connection, uri, vmuuid):
         vmlist = self.window.get_widget("vm-list")
@@ -1131,7 +1132,8 @@ class vmmManager(gobject.GObject):
         # add the connection to the treeModel
         vmlist = self.window.get_widget("vm-list")
         if not self.rows.has_key(conn.get_uri()):
-            self._append_connection(vmlist.get_model(), conn)
+            row = self._append_connection(vmlist.get_model(), conn)
+            vmlist.get_selection().select_iter(row)
 
     def _remove_connection(self, engine, conn):
         model = self.window.get_widget("vm-list").get_model()
