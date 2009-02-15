@@ -3,7 +3,6 @@
 <!--*- mode: xml -*-->
 <glade-interface>
   <widget class="GtkWindow" id="vmm-manager">
-    <property name="visible">False</property>
     <property name="title" translatable="yes">Virtual Machine Manager</property>
     <property name="default_width">700</property>
     <property name="default_height">500</property>
@@ -312,6 +311,7 @@ Inactive virtual machines</property>
                   <widget class="GtkTreeView" id="vm-list">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="has_focus">True</property>
                     <property name="rules_hint">True</property>
                     <signal name="button_press_event" handler="on_vm_list_button_press_event"/>
                     <signal name="row_collapsed" handler="on_vm_list_row_collapsed"/>
