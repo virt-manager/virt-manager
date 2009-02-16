@@ -800,7 +800,7 @@ class vmmAddHardware(gobject.GObject):
 
             ret = self._dev.is_size_conflict()
             if not ret[0] and ret[1]:
-                res = self.err.yes_no(_("Not Enough Free Space"), ret[1])
+                res = self.err.ok_cancel(_("Not Enough Free Space"), ret[1])
                 if not res:
                     return False
 

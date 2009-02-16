@@ -103,17 +103,24 @@ class vmmErrorDialog (gtk.MessageDialog):
         self.val_err_box.connect("response", response_destroy)
         return False
 
-    def yes_no(self, text1, text2=None):
+
+    def _show_warning(self, buttons, text1, text2):
         message_box = gtk.MessageDialog(self.parent, \
                                         gtk.DIALOG_DESTROY_WITH_PARENT, \
                                         gtk.MESSAGE_WARNING, \
-                                        gtk.BUTTONS_YES_NO, text1)
+                                        buttons, text1)
         if text2 != None:
             message_box.format_secondary_text(text2)
-        if message_box.run()== gtk.RESPONSE_YES:
+        if message_box.run() in [ gtk.RESPONSE_YES, gtk.RESPONSE_OK ]:
             res = True
         else:
             res = False
         message_box.destroy()
         return res
+
+    def yes_no(self, text1, text2=None):
+        return self._show_warning(gtk.BUTTONS_YES_NO, text1, text2)
+
+    def ok_cancel(self, text1, text2=None):
+        return self._show_warning(gtk.BUTTONS_OK_CANCEL, text1, text2)
 
