@@ -3,6 +3,8 @@
 <!--*- mode: xml -*-->
 <glade-interface>
   <widget class="GtkWindow" id="vmm-details">
+    <property name="width_request">800</property>
+    <property name="height_request">600</property>
     <property name="title" translatable="yes">Virtual Machine</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
@@ -175,11 +177,44 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkCheckMenuItem" id="details-menu-view-scale-display">
+                      <widget class="GtkMenuItem" id="menuitem1">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Scale Display</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="on_details_menu_view_scale_display_activate"/>
+                        <child>
+                          <widget class="GtkMenu" id="menu1">
+                            <property name="visible">True</property>
+                            <child>
+                              <widget class="GtkRadioMenuItem" id="details-menu-view-scale-always">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Always</property>
+                                <property name="use_underline">True</property>
+                                <property name="active">True</property>
+                                <signal name="toggled" handler="on_details_menu_view_scale_always_toggled"/>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkRadioMenuItem" id="details-menu-view-scale-fullscreen">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Only when Fullscreen</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_as_radio">True</property>
+                                <property name="group">details-menu-view-scale-always</property>
+                                <signal name="toggled" handler="on_details_menu_view_scale_fullscreen_toggled"/>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkRadioMenuItem" id="details-menu-view-scale-never">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Never</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_as_radio">True</property>
+                                <property name="group">details-menu-view-scale-always</property>
+                                <signal name="toggled" handler="on_details_menu_view_scale_never_toggled"/>
+                              </widget>
+                            </child>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>

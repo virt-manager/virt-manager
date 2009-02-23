@@ -40,6 +40,11 @@ from virtManager import util as util
 
 import virtinst
 
+# Different scaling values
+SCALE_ALWAYS = 0
+SCALE_FULLSCREEN = 1
+SCALE_NEVER = 2
+
 # Columns in hw list model
 HW_LIST_COL_LABEL = 0
 HW_LIST_COL_STOCK_ID = 1
@@ -68,6 +73,7 @@ PAGE_SCREENSHOT = 1
 PAGE_AUTHENTICATE = 2
 PAGE_VNCVIEWER = 3
 
+# Main tab pages
 PAGE_CONSOLE = 0
 PAGE_DETAILS = 1
 PAGE_DYNAMIC_OFFSET = 2
@@ -223,8 +229,15 @@ class vmmDetails(gobject.GObject):
             self.vncViewer.set_keyboard_grab(False)
         self.vncViewer.set_pointer_grab(True)
         if not topwin.is_composited():
-            self.vncViewer.set_scaling(True)
-            self.window.get_widget("details-menu-view-scale-display").set_active(True)
+            # XXX: When we have per VM prefs, this will need to be smarter
+            self.scale_type = SCALE_ALWAYS
+        else:
+            self.scale_type = SCALE_NEVER
+
+        self.window.get_widget("details-menu-view-scale-always").set_active(self.scale_type == SCALE_ALWAYS)
+        self.window.get_widget("details-menu-view-scale-never").set_active(self.scale_type == SCALE_NEVER)
+        self.window.get_widget("details-menu-view-scale-fullscreen").set_active(self.scale_type == SCALE_FULLSCREEN)
+        self.update_scaling()
 
         self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
         self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
@@ -300,7 +313,9 @@ class vmmDetails(gobject.GObject):
 
             "on_details_menu_view_fullscreen_activate": self.toggle_fullscreen,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
-            "on_details_menu_view_scale_display_activate": self.scale_display,
+            "on_details_menu_view_scale_always_toggled": self.set_scale_type,
+            "on_details_menu_view_scale_fullscreen_toggled": self.set_scale_type,
+            "on_details_menu_view_scale_never_toggled": self.set_scale_type,
 
             "on_details_menu_send_cad_activate": self.send_key,
             "on_details_menu_send_cab_activate": self.send_key,
@@ -424,11 +439,29 @@ class vmmDetails(gobject.GObject):
         else:
             self.vncViewer.set_keyboard_grab(False)
 
-    def scale_display(self, src):
-        if src.get_active():
-            self.vncViewer.set_scaling(True)
-        else:
+    def set_scale_type(self, src):
+        if not src.get_active():
+            return
+
+        if src == self.window.get_widget("details-menu-view-scale-always"):
+            self.scale_type = SCALE_ALWAYS
+        elif src == self.window.get_widget("details-menu-view-scale-fullscreen"):
+            self.scale_type = SCALE_FULLSCREEN
+        elif src == self.window.get_widget("details-menu-view-scale-never"):
+            self.scale_type = SCALE_NEVER
+
+        self.update_scaling()
+
+    def update_scaling(self):
+        curscale = self.vncViewer.get_scaling()
+        fs = self.window.get_widget("control-fullscreen").get_active()
+
+        if self.scale_type == SCALE_NEVER and curscale == True:
             self.vncViewer.set_scaling(False)
+        elif self.scale_type == SCALE_ALWAYS and curscale == False:
+            self.vncViewer.set_scaling(True)
+        elif self.scale_type == SCALE_FULLSCREEN and curscale != fs:
+            self.vncViewer.set_scaling(fs)
 
     def control_fullscreen(self, src):
         menu = self.window.get_widget("details-menu-view-fullscreen")
@@ -458,6 +491,7 @@ class vmmDetails(gobject.GObject):
             tabs.set_border_width(6)
             if self.window.get_widget("details-menu-view-toolbar").get_active():
                 self.window.get_widget("details-toolbar").show()
+        self.update_scaling()
 
     def auth_login(self, ignore):
         self.set_password()
