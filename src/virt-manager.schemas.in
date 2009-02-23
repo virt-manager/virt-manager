@@ -222,6 +222,19 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/::PACKAGE::/console/scaling</key>
+      <applyto>/apps/::PACKAGE::/console/scaling</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>int</type>
+      <default>1</default>
+
+      <locale name="C">
+        <short>When to scale the VM graphical console</short>
+        <long>When to scale the VM graphical console. 0 = never, 1 = only when in full screen mode, 2 = Always</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/::PACKAGE::/details/show-toolbar</key>
       <applyto>/apps/::PACKAGE::/details/show-toolbar</applyto>
       <owner>::PACKAGE::</owner>

@@ -42,7 +42,13 @@ DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
 DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
 
 class vmmConfig:
-    def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir, data_dir):
+
+    CONSOLE_SCALE_NEVER = 0
+    CONSOLE_SCALE_FULLSCREEN = 1
+    CONSOLE_SCALE_ALWAYS = 2
+
+    def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir,
+                 data_dir):
         self.appname = appname
         self.appversion = appversion
         self.conf_dir = gconf_dir
@@ -226,31 +232,36 @@ class vmmConfig:
     # VM Console preferences
     def on_console_popup_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/console/popup", callback)
-
     def get_console_popup(self):
         console_pref = self.conf.get_int(self.conf_dir + "/console/popup")
         if console_pref == None:
             console_pref = 0
         return console_pref
-
     def set_console_popup(self, pref):
         self.conf.set_int(self.conf_dir + "/console/popup", pref)
 
     def on_console_keygrab_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/console/keygrab", callback)
-
     def get_console_keygrab(self):
         console_pref = self.conf.get_int(self.conf_dir + "/console/keygrab")
         if console_pref == None:
             console_pref = 0
         return console_pref
-
     def set_console_keygrab(self, pref):
         self.conf.set_int(self.conf_dir + "/console/keygrab", pref)
 
+    def on_console_scaling_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/console/scaling", callback)
+    def get_console_scaling(self):
+        console_pref = self.conf.get_int(self.conf_dir + "/console/scaling")
+        if console_pref == None:
+            console_pref = 0
+        return console_pref
+    def set_console_scaling(self, pref):
+        self.conf.set_int(self.conf_dir + "/console/scaling", pref)
+
     def show_console_grab_notify(self):
         return self.conf.get_bool(self.conf_dir + "/console/grab-notify")
-
     def set_console_grab_notify(self, state):
         self.conf.set_bool(self.conf_dir + "/console/grab-notify", state)
 

@@ -39,6 +39,7 @@ class vmmPreferences(gobject.GObject):
 
         self.config.on_console_popup_changed(self.refresh_console_popup)
         self.config.on_console_keygrab_changed(self.refresh_console_keygrab)
+        self.config.on_console_scaling_changed(self.refresh_console_scaling)
         self.config.on_stats_update_interval_changed(self.refresh_update_interval)
         self.config.on_stats_history_length_changed(self.refresh_history_length)
         self.config.on_sound_local_changed(self.refresh_sound_local)
@@ -52,6 +53,7 @@ class vmmPreferences(gobject.GObject):
         self.refresh_history_length()
         self.refresh_console_popup()
         self.refresh_console_keygrab()
+        self.refresh_console_scaling()
         self.refresh_sound_local()
         self.refresh_sound_remote()
         self.refresh_disk_poll()
@@ -64,6 +66,7 @@ class vmmPreferences(gobject.GObject):
             "on_prefs_stats_history_length_changed": self.change_history_length,
             "on_prefs_console_popup_changed": self.change_console_popup,
             "on_prefs_console_keygrab_changed": self.change_console_keygrab,
+            "on_prefs_console_scaling_changed": self.change_console_scaling,
             "on_prefs_close_clicked": self.close,
             "on_vmm_preferences_delete_event": self.close,
             "on_prefs_help_clicked": self.show_help,
@@ -92,10 +95,15 @@ class vmmPreferences(gobject.GObject):
     def refresh_history_length(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.window.get_widget("prefs-stats-history-len").set_value(self.config.get_stats_history_length())
 
-    def refresh_console_popup(self,ignore1=None,ignore2=None,ignore3=None,ignore4=None):
+    def refresh_console_popup(self,ignore1=None,ignore2=None,ignore3=None,
+                              ignore4=None):
         self.window.get_widget("prefs-console-popup").set_active(self.config.get_console_popup())
-    def refresh_console_keygrab(self,ignore1=None,ignore2=None,ignore3=None,ignore4=None):
+    def refresh_console_keygrab(self,ignore1=None,ignore2=None,ignore3=None,
+                                ignore4=None):
         self.window.get_widget("prefs-console-keygrab").set_active(self.config.get_console_keygrab())
+    def refresh_console_scaling(self,ignore1=None,ignore2=None,ignore3=None,
+                                ignore4=None):
+        self.window.get_widget("prefs-console-scaling").set_active(self.config.get_console_scaling())
 
     def refresh_sound_local(self, ignore1=None, ignore2=None, ignore=None,
                             ignore4=None):
@@ -126,6 +134,8 @@ class vmmPreferences(gobject.GObject):
         self.config.set_console_popup(box.get_active())
     def change_console_keygrab(self, box):
         self.config.set_console_keygrab(box.get_active())
+    def change_console_scaling(self, box):
+        self.config.set_console_scaling(box.get_active())
 
     def change_local_sound(self, src):
         self.config.set_local_sound(src.get_active())

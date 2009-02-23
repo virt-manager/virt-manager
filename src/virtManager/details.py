@@ -40,11 +40,6 @@ from virtManager import util as util
 
 import virtinst
 
-# Different scaling values
-SCALE_ALWAYS = 0
-SCALE_FULLSCREEN = 1
-SCALE_NEVER = 2
-
 # Columns in hw list model
 HW_LIST_COL_LABEL = 0
 HW_LIST_COL_STOCK_ID = 1
@@ -228,15 +223,12 @@ class vmmDetails(gobject.GObject):
         else:
             self.vncViewer.set_keyboard_grab(False)
         self.vncViewer.set_pointer_grab(True)
-        if not topwin.is_composited():
-            # XXX: When we have per VM prefs, this will need to be smarter
-            self.scale_type = SCALE_ALWAYS
-        else:
-            self.scale_type = SCALE_NEVER
 
-        self.window.get_widget("details-menu-view-scale-always").set_active(self.scale_type == SCALE_ALWAYS)
-        self.window.get_widget("details-menu-view-scale-never").set_active(self.scale_type == SCALE_NEVER)
-        self.window.get_widget("details-menu-view-scale-fullscreen").set_active(self.scale_type == SCALE_FULLSCREEN)
+        self.scale_type = self.config.get_console_scaling()
+
+        self.window.get_widget("details-menu-view-scale-always").set_active(self.scale_type == self.config.CONSOLE_SCALE_ALWAYS)
+        self.window.get_widget("details-menu-view-scale-never").set_active(self.scale_type == self.config.CONSOLE_SCALE_NEVER)
+        self.window.get_widget("details-menu-view-scale-fullscreen").set_active(self.scale_type == self.config.CONSOLE_SCALE_FULLSCREEN)
         self.update_scaling()
 
         self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
@@ -444,11 +436,11 @@ class vmmDetails(gobject.GObject):
             return
 
         if src == self.window.get_widget("details-menu-view-scale-always"):
-            self.scale_type = SCALE_ALWAYS
+            self.scale_type = self.config.CONSOLE_SCALE_ALWAYS
         elif src == self.window.get_widget("details-menu-view-scale-fullscreen"):
-            self.scale_type = SCALE_FULLSCREEN
+            self.scale_type = self.config.CONSOLE_SCALE_FULLSCREEN
         elif src == self.window.get_widget("details-menu-view-scale-never"):
-            self.scale_type = SCALE_NEVER
+            self.scale_type = self.config.CONSOLE_SCALE_NEVER
 
         self.update_scaling()
 
@@ -456,11 +448,14 @@ class vmmDetails(gobject.GObject):
         curscale = self.vncViewer.get_scaling()
         fs = self.window.get_widget("control-fullscreen").get_active()
 
-        if self.scale_type == SCALE_NEVER and curscale == True:
+        if (self.scale_type == self.config.CONSOLE_SCALE_NEVER
+            and curscale == True):
             self.vncViewer.set_scaling(False)
-        elif self.scale_type == SCALE_ALWAYS and curscale == False:
+        elif (self.scale_type == self.config.CONSOLE_SCALE_ALWAYS
+              and curscale == False):
             self.vncViewer.set_scaling(True)
-        elif self.scale_type == SCALE_FULLSCREEN and curscale != fs:
+        elif (self.scale_type == self.config.CONSOLE_SCALE_FULLSCREEN
+              and curscale != fs):
             self.vncViewer.set_scaling(fs)
 
     def control_fullscreen(self, src):
