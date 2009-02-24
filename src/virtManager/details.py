@@ -466,6 +466,16 @@ class vmmDetails(gobject.GObject):
     def toggle_fullscreen(self, src):
         self.window.get_widget("control-fullscreen").set_active(src.get_active())
         if src.get_active():
+
+            # if scaling is enabled make sure we fit onto the root window
+            if self.vncViewer.get_scaling():
+                ignore, h = self.window.get_widget("menubar3").size_request()
+                rootw = src.get_screen().get_width()
+                rooth = src.get_screen().get_height() - h
+                self.vncViewer.set_size_request(rootw, rooth)
+            else:
+                self.vncViewer.set_size_request(-1, -1)
+
             self.window.get_widget("vmm-details").fullscreen()
             if self.config.get_console_keygrab() == 1:
                 gtk.gdk.keyboard_grab(self.vncViewer.window, False, 0L)
