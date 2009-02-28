@@ -325,6 +325,7 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_send_caf12_activate": self.send_key,
             "on_details_menu_send_printscreen_activate": self.send_key,
 
+            "on_console_auth_password_activate": self.auth_login,
             "on_console_auth_login_clicked": self.auth_login,
             })
 
