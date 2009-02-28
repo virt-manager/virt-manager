@@ -70,8 +70,11 @@ class vmmDomain(gobject.GObject):
 
     def get_xml(self):
         if self.xml is None:
-            self.xml = self.vm.XMLDesc(0)
+            self.update_xml()
         return self.xml
+
+    def update_xml(self):
+        self.xml = self.vm.XMLDesc(libvirt.VIR_DOMAIN_XML_SECURE)
 
     def release_handle(self):
         del(self.vm)
@@ -924,7 +927,8 @@ class vmmDomain(gobject.GObject):
         return xml[0:index] + devxml + xml[index:]
 
     def get_device_xml(self, dev_type, dev_id_info):
-        vmxml = self.vm.XMLDesc(0)
+        self.update_xml()
+        vmxml = self.get_xml()
         doc = None
         ctx = None
 
@@ -1031,7 +1035,8 @@ class vmmDomain(gobject.GObject):
     def _remove_xml_device(self, dev_type, dev_id_info):
         """Remove device 'devxml' from devices section of 'xml, return
            result"""
-        vmxml = self.vm.XMLDesc(0)
+        self.update_xml()
+        vmxml = self.get_xml()
         doc = libxml2.parseDoc(vmxml)
         ctx = None
 
@@ -1071,7 +1076,8 @@ class vmmDomain(gobject.GObject):
 
     def add_device(self, xml):
         """Redefine guest with appended device"""
-        vmxml = self.vm.XMLDesc(0)
+        self.update_xml()
+        vmxml = self.get_xml()
 
         newxml = self._add_xml_device(vmxml, xml)
 
