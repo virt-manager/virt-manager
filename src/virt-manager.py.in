@@ -137,7 +137,7 @@ def setup_logging(debug_stdout):
     if debug_stdout:
         streamHandler = logging.StreamHandler(sys.stderr)
         streamHandler.setLevel(logging.DEBUG)
-        streamHandler.setFormatter(logging.Formatter("%(asctime)s %(levelname)-8s %(message)s"))
+        streamHandler.setFormatter(logging.Formatter("%(asctime)s (%(module)s:%(lineno)d): %(message)s"))
         rootLogger.addHandler(streamHandler)
 
 
