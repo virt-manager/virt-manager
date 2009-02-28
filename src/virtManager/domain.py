@@ -639,7 +639,7 @@ class vmmDomain(gobject.GObject):
                         bus = child.prop("bus")
                     elif child.name == "readonly":
                         readonly = True
-                    elif child.name == "sharable":
+                    elif child.name == "shareable":
                         sharable = True
 
                 if srcpath == None:
