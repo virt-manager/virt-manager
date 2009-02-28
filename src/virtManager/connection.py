@@ -105,6 +105,8 @@ class vmmConnection(gobject.GObject):
         self.pools = {}
         # Host network devices. name -> vmmNetDevice object
         self.netdevs = {}
+        # Mapping of hal IDs to net names
+        self.hal_to_netdev = {}
         # Virtual networks UUUID -> vmmNetwork object
         self.nets = {}
         # Virtual machines. UUID -> vmmDomain object
@@ -121,12 +123,16 @@ class vmmConnection(gobject.GObject):
             # Get a connection to the SYSTEM bus
             self.bus = dbus.SystemBus()
             # Get a handle to the HAL service
-            hal_object = self.bus.get_object('org.freedesktop.Hal', '/org/freedesktop/Hal/Manager')
-            self.hal_iface = dbus.Interface(hal_object, 'org.freedesktop.Hal.Manager')
+            hal_object = self.bus.get_object('org.freedesktop.Hal',
+                                             '/org/freedesktop/Hal/Manager')
+            self.hal_iface = dbus.Interface(hal_object,
+                                            'org.freedesktop.Hal.Manager')
 
             # Track device add/removes so we can detect newly inserted CD media
-            self.hal_iface.connect_to_signal("DeviceAdded", self._net_phys_device_added)
-            self.hal_iface.connect_to_signal("DeviceRemoved", self._net_phys_device_removed)
+            self.hal_iface.connect_to_signal("DeviceAdded",
+                                             self._net_phys_device_added)
+            self.hal_iface.connect_to_signal("DeviceRemoved",
+                                             self._net_phys_device_removed)
 
             # find all bonding master devices and register them
             # XXX bonding stuff is linux specific
@@ -153,14 +159,16 @@ class vmmConnection(gobject.GObject):
             self.hal_iface = None
 
     def _net_phys_device_added(self, path):
-        logging.debug("Got physical device %s" % path)
         obj = self.bus.get_object("org.freedesktop.Hal", path)
         objif = dbus.Interface(obj, "org.freedesktop.Hal.Device")
+
         if objif.QueryCapability("net"):
+            logging.debug("Got physical net device %s" % path)
             name = objif.GetPropertyString("net.interface")
             # XXX ...but this is Linux specific again - patches welcomed
             #sysfspath = objif.GetPropertyString("linux.sysfs_path")
-            # XXX hal gives back paths to /sys/devices/pci0000:00/0000:00:1e.0/0000:01:00.0/net/eth0
+            # XXX hal gives back paths to like:
+            # /sys/devices/pci0000:00/0000:00:1e.0/0000:01:00.0/net/eth0
             # which doesnt' work so well - we want this:
             sysfspath = "/sys/class/net/" + name
 
@@ -181,7 +189,7 @@ class vmmConnection(gobject.GObject):
             mac = objif.GetPropertyString("net.address")
 
             # Add the main NIC
-            self._net_device_added(name, mac, sysfspath)
+            self._net_device_added(name, mac, sysfspath, path)
 
             # Add any associated VLANs
             self._net_tag_device_added(name, sysfspath)
@@ -205,7 +213,7 @@ class vmmConnection(gobject.GObject):
                         vlanpath = pvlanpath
                     self._net_device_added(vlanname, vlanmac, vlanpath)
 
-    def _net_device_added(self, name, mac, sysfspath):
+    def _net_device_added(self, name, mac, sysfspath, halpath=None):
         # Race conditions mean we can occassionally see device twice
         if self.netdevs.has_key(name):
             return
@@ -218,20 +226,23 @@ class vmmConnection(gobject.GObject):
         logging.debug("Adding net device %s %s %s (bridge: %s)" % (name, mac, sysfspath, str(bridge)))
 
         dev = vmmNetDevice(self.config, self, name, mac, shared, bridge)
+        self._add_net_dev(name, halpath, dev)
+
+    def _add_net_dev(self, name, halpath, dev):
+        if halpath:
+            self.hal_to_netdev[halpath] = name
         self.netdevs[name] = dev
         self.emit("netdev-added", dev.get_name())
 
     def _net_phys_device_removed(self, path):
-        obj = self.bus.get_object("org.freedesktop.Hal", path)
-        objif = dbus.Interface(obj, "org.freedesktop.Hal.Device")
-        if objif.QueryCapability("net"):
-            name = objif.GetPropertyString("net.interface")
+        if self.hal_to_netdev.has_key(path):
+            name = self.hal_to_netdev[path]
+            logging.debug("Removing physical net device %s from list." % name)
 
-            if self.netdevs.has_key(name):
-                logging.debug("Removing physical net device %s from list." % name)
-                dev = self.netdevs[name]
-                self.emit("netdev-removed", dev.get_name())
-                del self.netdevs[name]
+            dev = self.netdevs[name]
+            self.emit("netdev-removed", dev.get_name())
+            del self.netdevs[name]
+            del self.hal_to_netdev[path]
 
     def is_read_only(self):
         return self.readOnly
