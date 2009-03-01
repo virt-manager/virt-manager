@@ -186,7 +186,7 @@ class vmmDetails(gobject.GObject):
 
         self.addhw = None
         self.choose_cd = None
-        
+
         self.cpu_usage_graph = sparkline.Sparkline()
         self.cpu_usage_graph.set_property("reversed", True)
         self.window.get_widget("graph-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
@@ -202,7 +202,7 @@ class vmmDetails(gobject.GObject):
         self.disk_io_graph.set_property("rgb", map(lambda x: x/255.0,
                                         [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]))
         self.window.get_widget("graph-table").attach(self.disk_io_graph, 1, 2, 2, 3)
- 
+
         self.network_traffic_graph = sparkline.Sparkline()
         self.network_traffic_graph.set_property("reversed", True)
         self.network_traffic_graph.set_property("filled", False)
@@ -331,6 +331,7 @@ class vmmDetails(gobject.GObject):
 
         self.vm.connect("status-changed", self.update_widget_states)
         self.vm.connect("resources-sampled", self.refresh_resources)
+        self.vm.connect("config-changed", self.refresh_vm_info)
         self.window.get_widget("hw-list").get_selection().connect("changed", self.hw_selected)
 
         self.update_widget_states(self.vm, self.vm.status())
@@ -339,7 +340,7 @@ class vmmDetails(gobject.GObject):
         self.pixbuf_memory = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
         self.prepare_hw_list()
         self.hw_selected()
-        self.refresh_resources(self.vm)
+        self.refresh_vm_info()
 
 
     # Black magic todo with scrolled windows. Basically the behaviour we want
@@ -560,8 +561,10 @@ class vmmDetails(gobject.GObject):
             return
         dialog.show_all()
         dialog.present()
+
         self.engine.increment_window_counter()
         self.update_widget_states(self.vm, self.vm.status())
+        self.vm.update_xml()
 
     def show_help(self, src):
         # From the Details window, show the help document from the Details page
@@ -643,50 +646,47 @@ class vmmDetails(gobject.GObject):
 
 
     def hw_selected(self, src=None):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] != None:
-            pagetype = active[0].get_value(active[1], HW_LIST_COL_TYPE)
+        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+        if not pagetype:
             self.window.get_widget("hw-panel").set_sensitive(True)
-            self.window.get_widget("hw-panel").show_all()
-
-            pagenum = pagetype
-            if pagetype == HW_LIST_TYPE_GENERAL:
-                pass
-            elif pagetype == HW_LIST_TYPE_STATS:
-                self.refresh_stats_page()
-            elif pagetype == HW_LIST_TYPE_CPU:
-                self.window.get_widget("config-vcpus-apply").set_sensitive(False)
-                self.refresh_config_cpu()
-            elif pagetype == HW_LIST_TYPE_MEMORY:
-                self.window.get_widget("config-memory-apply").set_sensitive(False)
-                self.refresh_config_memory()
-            elif pagetype == HW_LIST_TYPE_BOOT:
-                self.refresh_boot_page()
-                self.window.get_widget("config-boot-options-apply").set_sensitive(False)
-            elif pagetype == HW_LIST_TYPE_DISK:
-                self.refresh_disk_page()
-            elif pagetype == HW_LIST_TYPE_NIC:
-                self.refresh_network_page()
-            elif pagetype == HW_LIST_TYPE_INPUT:
-                self.refresh_input_page()
-            elif pagetype == HW_LIST_TYPE_GRAPHICS:
-                self.refresh_graphics_page()
-            elif pagetype == HW_LIST_TYPE_SOUND:
-                self.refresh_sound_page()
-            elif pagetype == HW_LIST_TYPE_CHAR:
-                self.refresh_char_page()
-            elif pagetype == HW_LIST_TYPE_HOSTDEV:
-                self.refresh_hostdev_page()
-            else:
-                pagenum = -1
-
-            self.window.get_widget("hw-panel").set_current_page(pagenum)
-        else:
-            self.window.get_widget("hw-panel").set_sensitive(False)
-            selection.select_path(0)
+            self.window.get_widget("hw-list").get_selection().select_path(0)
             self.window.get_widget("hw-panel").set_current_page(0)
+            return
+
+        self.window.get_widget("hw-panel").set_sensitive(True)
+        self.window.get_widget("hw-panel").show_all()
+
+        if pagetype == HW_LIST_TYPE_GENERAL:
+            pass
+        elif pagetype == HW_LIST_TYPE_STATS:
+            self.refresh_stats_page()
+        elif pagetype == HW_LIST_TYPE_CPU:
+            self.window.get_widget("config-vcpus-apply").set_sensitive(False)
+            self.refresh_config_cpu()
+        elif pagetype == HW_LIST_TYPE_MEMORY:
+            self.window.get_widget("config-memory-apply").set_sensitive(False)
+            self.refresh_config_memory()
+        elif pagetype == HW_LIST_TYPE_BOOT:
+            self.refresh_boot_page()
+            self.window.get_widget("config-boot-options-apply").set_sensitive(False)
+        elif pagetype == HW_LIST_TYPE_DISK:
+            self.refresh_disk_page()
+        elif pagetype == HW_LIST_TYPE_NIC:
+            self.refresh_network_page()
+        elif pagetype == HW_LIST_TYPE_INPUT:
+            self.refresh_input_page()
+        elif pagetype == HW_LIST_TYPE_GRAPHICS:
+            self.refresh_graphics_page()
+        elif pagetype == HW_LIST_TYPE_SOUND:
+            self.refresh_sound_page()
+        elif pagetype == HW_LIST_TYPE_CHAR:
+            self.refresh_char_page()
+        elif pagetype == HW_LIST_TYPE_HOSTDEV:
+            self.refresh_hostdev_page()
+        else:
+            pagetype = -1
+
+        self.window.get_widget("hw-panel").set_current_page(pagetype)
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -843,44 +843,58 @@ class vmmDetails(gobject.GObject):
     def switch_page(self, ignore1=None, ignore2=None, newpage=None):
         self.page_refresh(newpage)
 
-    def refresh_resources(self, ignore=None):
+    def refresh_resources(self, ignore):
+        details = self.window.get_widget("details-pages")
+        page = details.get_current_page()
+
+        if self.is_visible():
+            # Force an xml update, so we check for changed xml on every tick
+            self.vm.update_xml()
+
+        if (page == PAGE_DETAILS and
+            self.get_hw_selection(HW_LIST_COL_TYPE) == HW_LIST_TYPE_STATS):
+            self.refresh_stats_page()
+
+    def refresh_vm_info(self, ignore=None):
         details = self.window.get_widget("details-pages")
         self.page_refresh(details.get_current_page())
 
     def page_refresh(self, page):
-        if page == PAGE_DETAILS:
-            # Add / remove new devices
-            self.repopulate_hw_list()
+        if page != PAGE_DETAILS:
+            return
 
-            # Now refresh desired page
-            hw_list = self.window.get_widget("hw-list")
-            selection = hw_list.get_selection()
-            active = selection.get_selected()
-            if active[1] != None:
-                pagetype = active[0].get_value(active[1], HW_LIST_COL_TYPE)
-                if pagetype == HW_LIST_TYPE_GENERAL:
-                    # Nothing to refresh at this point
-                    pass
-                elif pagetype == HW_LIST_TYPE_STATS:
-                    self.refresh_stats_page()
-                elif pagetype == HW_LIST_TYPE_CPU:
-                    self.refresh_config_cpu()
-                elif pagetype == HW_LIST_TYPE_MEMORY:
-                    self.refresh_config_memory()
-                elif pagetype == HW_LIST_TYPE_DISK:
-                    self.refresh_disk_page()
-                elif pagetype == HW_LIST_TYPE_NIC:
-                    self.refresh_network_page()
-                elif pagetype == HW_LIST_TYPE_INPUT:
-                    self.refresh_input_page()
-                elif pagetype == HW_LIST_TYPE_GRAPHICS:
-                    self.refresh_graphics_page()
-                elif pagetype == HW_LIST_TYPE_SOUND:
-                    self.refresh_sound_page()
-                elif pagetype == HW_LIST_TYPE_CHAR:
-                    self.refresh_char_page()
-                elif pagetype == HW_LIST_TYPE_HOSTDEV:
-                    self.refresh_hostdev_page()
+        # This function should only be called when the VM xml actually
+        # changes (not everytime it is refreshed). This saves us from blindly
+        # parsing the xml every tick
+
+        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+
+        # Add / remove new devices
+        self.repopulate_hw_list()
+
+        if pagetype == HW_LIST_TYPE_GENERAL:
+            # Nothing to refresh at this point
+            pass
+        elif pagetype == HW_LIST_TYPE_STATS:
+            self.refresh_stats_page()
+        elif pagetype == HW_LIST_TYPE_CPU:
+            self.refresh_config_cpu()
+        elif pagetype == HW_LIST_TYPE_MEMORY:
+            self.refresh_config_memory()
+        elif pagetype == HW_LIST_TYPE_DISK:
+            self.refresh_disk_page()
+        elif pagetype == HW_LIST_TYPE_NIC:
+            self.refresh_network_page()
+        elif pagetype == HW_LIST_TYPE_INPUT:
+            self.refresh_input_page()
+        elif pagetype == HW_LIST_TYPE_GRAPHICS:
+            self.refresh_graphics_page()
+        elif pagetype == HW_LIST_TYPE_SOUND:
+            self.refresh_sound_page()
+        elif pagetype == HW_LIST_TYPE_CHAR:
+            self.refresh_char_page()
+        elif pagetype == HW_LIST_TYPE_HOSTDEV:
+            self.refresh_hostdev_page()
 
     def refresh_stats_page(self):
         def _rx_tx_text(rx, tx, unit):
@@ -987,7 +1001,7 @@ class vmmDetails(gobject.GObject):
         else:
             perms = "Read/Write"
         if diskinfo[7] == True:
-            perms += ", Sharable"
+            perms += ", Shareable"
         self.window.get_widget("disk-permissions").set_text(perms)
         bus = diskinfo[8] or _("Unknown")
         self.window.get_widget("disk-bus").set_text(bus)
@@ -1531,7 +1545,7 @@ class vmmDetails(gobject.GObject):
             return
 
         self.remove_device(info[0], info[1])
-        self.refresh_resources()
+        self.vm.update_xml()
 
     def prepare_hw_list(self):
         hw_list_model = gtk.ListStore(str, str, int, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
@@ -1770,7 +1784,7 @@ class vmmDetails(gobject.GObject):
         self.addhw.show()
 
     def add_hardware_done(self, ignore=None):
-        self.refresh_resources()
+        self.vm.update_xml()
 
     def toggle_cdrom(self, src):
         info = self.get_hw_selection(HW_LIST_COL_DEVICE)

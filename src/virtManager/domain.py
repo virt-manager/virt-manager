@@ -33,6 +33,9 @@ class vmmDomain(gobject.GObject):
         "resources-sampled": (gobject.SIGNAL_RUN_FIRST,
                               gobject.TYPE_NONE,
                               []),
+        "config-changed": (gobject.SIGNAL_RUN_FIRST,
+                           gobject.TYPE_NONE,
+                           []),
         }
 
     def __init__(self, config, connection, vm, uuid):
@@ -49,13 +52,15 @@ class vmmDomain(gobject.GObject):
                            "netRxRate"  : 10.0,
                          }
 
-        self._update_status()
-        self.xml = None
+        self._xml = None
+        self._valid_xml = False
 
         self._mem_stats = None
         self._cpu_stats = None
         self._network_traffic = None
         self._disk_io = None
+
+        self._update_status()
 
         self.config.on_stats_enable_mem_poll_changed(self.toggle_sample_mem_stats)
         self.config.on_stats_enable_cpu_poll_changed(self.toggle_sample_cpu_stats)
@@ -67,14 +72,26 @@ class vmmDomain(gobject.GObject):
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
 
-
     def get_xml(self):
-        if self.xml is None:
+        # Get domain xml. If cached xml is invalid, update.
+        if self._xml is None or not self._valid_xml:
             self.update_xml()
-        return self.xml
+        return self._xml
 
     def update_xml(self):
-        self.xml = self.vm.XMLDesc(libvirt.VIR_DOMAIN_XML_SECURE)
+        # Force an xml update. Signal 'config-changed' if domain xml has
+        # changed since last refresh
+
+        origxml = self._xml
+        self._xml = self.vm.XMLDesc(libvirt.VIR_DOMAIN_XML_SECURE)
+        self._valid_xml = True
+
+        if origxml != self._xml:
+            self.emit("config-changed")
+
+    def invalidate_xml(self):
+        # Mark cached xml as invalid
+        self._valid_xml = False
 
     def release_handle(self):
         del(self.vm)
@@ -121,6 +138,7 @@ class vmmDomain(gobject.GObject):
 
     def is_hvm(self):
         os_type = util.get_xml_path(self.get_xml(), "/domain/os/type")
+        # FIXME: This should be static, not parse xml everytime
         # XXX libvirt bug - doesn't work for inactive guests
         #os_type = self.vm.OSType()
         logging.debug("OS Type: %s" % os_type)
@@ -129,6 +147,7 @@ class vmmDomain(gobject.GObject):
         return False
 
     def get_type(self):
+        # FIXME: This should be static, not parse xml everytime
         return util.get_xml_path(self.get_xml(), "/domain/@type")
 
     def is_vcpu_hotplug_capable(self):
@@ -261,8 +280,9 @@ class vmmDomain(gobject.GObject):
         if self.connection.get_state() != self.connection.STATE_ACTIVE:
             return
 
-        # Clear cached XML
-        self.xml = None
+        # Invalidate cached xml
+        self.invalidate_xml()
+
         info = self.vm.info()
         expected = self.config.get_stats_history_length()
         current = len(self.record)
@@ -588,7 +608,8 @@ class vmmDomain(gobject.GObject):
         return self._parse_device_xml(_parse_serial_consoles)
 
     def get_graphics_console(self):
-        self.xml = None
+        self.update_xml()
+
         typ = util.get_xml_path(self.get_xml(),
                                 "/domain/devices/graphics/@type")
         port = None
@@ -1085,7 +1106,7 @@ class vmmDomain(gobject.GObject):
         self.get_connection().define_domain(newxml)
 
         # Invalidate cached XML
-        self.xml = None
+        self.invalidate_xml()
 
     def remove_device(self, dev_type, dev_id_info):
         newxml = self._remove_xml_device(dev_type, dev_id_info)
@@ -1094,7 +1115,7 @@ class vmmDomain(gobject.GObject):
         self.get_connection().define_domain(newxml)
 
         # Invalidate cached XML
-        self.xml = None
+        self.invalidate_xml()
 
     def _change_cdrom(self, newdev, dev_id_info):
         # If vm is shutoff, remove device, and redefine with media
@@ -1234,7 +1255,7 @@ class vmmDomain(gobject.GObject):
                 doc.freeDoc()
 
         # Invalidate cached xml
-        self.xml = None
+        self.invalidate_xml()
 
     def toggle_sample_cpu_stats(self, ignore1=None, ignore2=None,
                                 ignore3=None, ignore4=None):
