@@ -52,8 +52,10 @@ Requires: vte >= 0.12.2
 Requires: scrollkeeper
 # For console widget
 Requires: gtk-vnc-python >= 0.3.8
-%if 0%{?fedora} >= 9
 # For local authentication against PolicyKit
+%if 0%{?fedora} >= 11
+Requires: PolicyKit-authentication-agent
+%elif 0%{?fedora} >= 9
 Requires: PolicyKit-gnome
 %endif
 
