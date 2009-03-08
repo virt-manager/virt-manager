@@ -26,6 +26,7 @@ import logging
 
 import libvirt
 
+from virtManager import util
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
@@ -407,20 +408,9 @@ class vmmCreatePool(gobject.GObject):
         mode = gtk.FILE_CHOOSER_ACTION_OPEN
         if foldermode:
             mode = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER
-        fcdialog = gtk.FileChooserDialog(dialog_name, self.topwin, mode,
-                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                          gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
-                                         None)
-        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-        if startfolder != None:
-            fcdialog.set_current_folder(startfolder)
 
-        response = fcdialog.run()
-        fcdialog.hide()
-        ret = None
-        if(response == gtk.RESPONSE_ACCEPT):
-            ret = fcdialog.get_filename()
-        fcdialog.destroy()
-        return ret
+        return util.browse_local(self.topwin, dialog_name, dialog_type=mode,
+                                 start_folder=startfolder,
+                                 foldermode=foldermode)
 
 gobject.type_register(vmmCreatePool)

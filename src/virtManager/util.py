@@ -19,6 +19,7 @@
 #
 
 import logging
+import gtk
 
 import libvirt
 
@@ -62,3 +63,52 @@ def tooltip_wrapper(obj, txt, func="set_tooltip_text"):
     except:
         # XXX: Catch a specific error here
         pass
+
+def browse_local(parent, dialog_name, start_folder=None, _type=None,
+                 dialog_type=gtk.FILE_CHOOSER_ACTION_OPEN,
+                 foldermode=False, confirm_func=None):
+
+    overwrite_confirm = False
+    choose_button = gtk.STOCK_OPEN
+    if dialog_type == gtk.FILE_CHOOSER_ACTION_SAVE:
+        choose_button = gtk.STOCK_SAVE
+        overwrite_confirm = True
+
+    fcdialog = gtk.FileChooserDialog(dialog_name, parent,
+                                     dialog_type,
+                                     (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                      choose_button, gtk.RESPONSE_ACCEPT),
+                                      None)
+    fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
+
+    if confirm_func:
+        overwrite_confirm = True
+        fcdialog.connect("confirm-overwrite", confirm_func)
+    fcdialog.set_do_overwrite_confirmation(overwrite_confirm)
+
+    if _type != None:
+        pattern = _type
+        name = None
+        if type(_type) is tuple:
+            pattern = _type[0]
+            name = _type[1]
+
+        f = gtk.FileFilter()
+        f.add_pattern("*." + pattern)
+        if name:
+            f.set_name(name)
+        fcdialog.set_filter(f)
+
+    if start_folder != None:
+        fcdialog.set_current_folder(start_folder)
+
+    response = fcdialog.run()
+    fcdialog.hide()
+    if(response == gtk.RESPONSE_ACCEPT):
+        filename = fcdialog.get_filename()
+        fcdialog.destroy()
+        return filename
+    else:
+        fcdialog.destroy()
+        return None
+

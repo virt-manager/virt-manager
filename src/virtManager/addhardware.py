@@ -645,32 +645,12 @@ class vmmAddHardware(gobject.GObject):
 
     def _browse_file(self, dialog_name, folder=None, _type=None,
                      confirm_overwrite=False):
-        # user wants to browse for an ISO
-        fcdialog = gtk.FileChooserDialog(dialog_name,
-                                         self.window.get_widget("vmm-add-hardware"),
-                                         gtk.FILE_CHOOSER_ACTION_OPEN,
-                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                          gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
-                                         None)
-        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-        if _type != None:
-            f = gtk.FileFilter()
-            f.add_pattern("*." + _type)
-            fcdialog.set_filter(f)
-        if folder != None:
-            fcdialog.set_current_folder(folder)
+
+        confirm_func = None
         if confirm_overwrite:
-            fcdialog.set_do_overwrite_confirmation(True)
-            fcdialog.connect("confirm-overwrite", self.confirm_overwrite_callback)
-        response = fcdialog.run()
-        fcdialog.hide()
-        if(response == gtk.RESPONSE_ACCEPT):
-            filename = fcdialog.get_filename()
-            fcdialog.destroy()
-            return filename
-        else:
-            fcdialog.destroy()
-            return None
+            confirm_func = self.confirm_overwrite_callback
+        return vmmutil.browse_local(self.topwin, dialog_name, folder, _type,
+                                    confirm_func=confirm_func)
 
     def toggle_storage_size(self, ignore1=None, ignore2=None):
         filename = self.get_config_disk_image()

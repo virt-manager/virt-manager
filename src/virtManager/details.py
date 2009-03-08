@@ -1359,42 +1359,35 @@ class vmmDetails(gobject.GObject):
     def control_vm_screenshot(self, src):
         # If someone feels kind they could extend this code to allow
         # user to choose what image format they'd like to save in....
-        fcdialog = gtk.FileChooserDialog(_("Save Virtual Machine Screenshot"),
-                                         self.window.get_widget("vmm-details"),
-                                         gtk.FILE_CHOOSER_ACTION_SAVE,
-                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                          gtk.STOCK_SAVE, gtk.RESPONSE_ACCEPT),
-                                         None)
-        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-        png = gtk.FileFilter()
-        png.set_name("PNG files")
-        png.add_pattern("*.png")
-        fcdialog.add_filter(png)
-        fcdialog.set_do_overwrite_confirmation(True)
-        if fcdialog.run() == gtk.RESPONSE_ACCEPT:
-            fcdialog.hide()
-            filename = fcdialog.get_filename()
-            if not(filename.endswith(".png")):
-                filename += ".png"
-            image = self.vncViewer.get_pixbuf()
+        path = util.browse_local(self.window.get_widget("vmm-details"),
+                                 _("Save Virtual Machine Screenshot"),
+                                 _type = ("*.png", "PNG files"),
+                                 dialog_type = gtk.FILE_CHOOSER_ACTION_SAVE)
+        if not path:
+            return
 
-            # Save along with a little metadata about us & the domain
-            image.save(filename, 'png',
-                                    { 'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
-                                      'tEXt::Domain Name': self.vm.get_name(),
-                                      'tEXt::Domain UUID': self.vm.get_uuid(),
-                                      'tEXt::Generator App': self.config.get_appname(),
-                                      'tEXt::Generator Version': self.config.get_appversion() })
-            msg = gtk.MessageDialog(self.window.get_widget("vmm-details"),
-                                    gtk.DIALOG_MODAL,
-                                    gtk.MESSAGE_INFO,
-                                    gtk.BUTTONS_OK,_("The screenshot has been saved to:\n%s") % file)
-            msg.set_title(_("Screenshot saved"))
-            msg.run()
-            msg.destroy()
-        else:
-            fcdialog.hide()
-        fcdialog.destroy()
+        filename = path
+        if not(filename.endswith(".png")):
+            filename += ".png"
+        image = self.vncViewer.get_pixbuf()
+
+        # Save along with a little metadata about us & the domain
+        image.save(filename, 'png',
+                   { 'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
+                     'tEXt::Domain Name': self.vm.get_name(),
+                     'tEXt::Domain UUID': self.vm.get_uuid(),
+                     'tEXt::Generator App': self.config.get_appname(),
+                     'tEXt::Generator Version': self.config.get_appversion() })
+
+        msg = gtk.MessageDialog(self.window.get_widget("vmm-details"),
+                                gtk.DIALOG_MODAL,
+                                gtk.MESSAGE_INFO,
+                                gtk.BUTTONS_OK,
+                                (_("The screenshot has been saved to:\n%s") %
+                                 filename))
+        msg.set_title(_("Screenshot saved"))
+        msg.run()
+        msg.destroy()
 
 
     # ------------------------------

@@ -374,35 +374,27 @@ class vmmManager(gobject.GObject):
     def restore_saved(self, src=None):
         conn = self.current_connection()
         if conn.is_remote():
-            self.err.val_err(_("Restoring virtual machines over remote connections is not yet supported"))
+            self.err.val_err(_("Restoring virtual machines over remote "
+                               "connections is not yet supported"))
             return
 
-        # get filename
-        fcdialog = gtk.FileChooserDialog(_("Restore Virtual Machine"),
-                                              self.window.get_widget("vmm-manager"),
-                                              gtk.FILE_CHOOSER_ACTION_OPEN,
-                                              (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                               gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
-                                              None)
-        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-        fcdialog.set_current_folder(self.config.get_default_save_dir(self.current_connection()))
-        # pop up progress dialog
-        response = fcdialog.run()
-        fcdialog.hide()
-        if(response == gtk.RESPONSE_ACCEPT):
-            file_to_load = fcdialog.get_filename()
-            if self.is_valid_saved_image(file_to_load):
+        path = util.browse_local(self.window.get_widget("vmm-manager"),
+                                 _("Restore Virtual Machine"),
+                                 self.config.get_default_save_dir(conn))
+
+        if path:
+            if self.is_valid_saved_image(path):
                 progWin = vmmAsyncJob(self.config,
                                       self.restore_saved_callback,
-                                      [file_to_load],
+                                      [path],
                                       _("Restoring Virtual Machine"))
                 progWin.run()
             else:
-                self.err.val_err(_("The file '%s' does not appear to be a valid saved machine image") % file_to_load)
+                self.err.val_err(_("The file '%s' does not appear to be a "
+                                   "valid saved machine image") % path)
                 return
 
-        fcdialog.destroy()
-        if(self.domain_restore_error != ""):
+        if self.domain_restore_error != "":
             self.err.val_err(self.domain_restore_error)
             self.domain_restore_error = ""
 

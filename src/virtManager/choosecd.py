@@ -20,7 +20,10 @@
 import gtk.glade
 import gobject
 import logging
+
 import virtinst
+
+from virtManager import util
 from virtManager.opticalhelper import vmmOpticalDriveHelper
 from virtManager.error import vmmErrorDialog
 
@@ -141,28 +144,8 @@ class vmmChooseCD(gobject.GObject):
             self.window.get_widget("physical-media").set_sensitive(False)
 
     def _browse_file(self, dialog_name, folder=None, _type=None):
-        # user wants to browse for an ISO
-        fcdialog = gtk.FileChooserDialog(dialog_name,
-                                         self.window.get_widget("vmm-choose-cd"),
-                                         gtk.FILE_CHOOSER_ACTION_OPEN,
-                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                          gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
-                                         None)
-        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-        if _type != None:
-            f = gtk.FileFilter()
-            f.add_pattern("*." + _type)
-            fcdialog.set_filter(f)
-        if folder != None:
-            fcdialog.set_current_folder(folder)
-        response = fcdialog.run()
-        fcdialog.hide()
-        if(response == gtk.RESPONSE_ACCEPT):
-            filename = fcdialog.get_filename()
-            fcdialog.destroy()
-            return filename
-        else:
-            fcdialog.destroy()
-            return None
+        return util.browse_local(self.window.get_widget("vmm-choose-cd"),
+                                 dialog_name, folder, _type)
+
 
 gobject.type_register(vmmChooseCD)
