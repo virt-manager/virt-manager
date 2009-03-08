@@ -81,13 +81,17 @@ class vmmCreateVolume(gobject.GObject):
 
 
     def show(self):
+        self.reset_state()
         self.topwin.show()
         self.topwin.present()
-        self.reset_state()
 
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
+        self.set_modal(False)
         return 1
+
+    def set_modal(self, modal):
+        self.topwin.set_modal(bool(modal))
 
     def set_parent_pool(self, pool):
         self.parent_pool = pool
@@ -141,8 +145,8 @@ class vmmCreateVolume(gobject.GObject):
             if not self.validate():
                 return
         except Exception, e:
-            self.err.show_err(_("Uncaught error validating input: %s") % str(e),
-                                "".join(traceback.format_exc()))
+            self.show_err(_("Uncaught error validating input: %s") % str(e),
+                            "".join(traceback.format_exc()))
             return
 
         logging.debug("Creating volume with xml:\n%s" %
@@ -160,7 +164,7 @@ class vmmCreateVolume(gobject.GObject):
         progWin.run()
 
         if self.error_msg is not None:
-            self.err.show_err(self.error_msg, self.error_details)
+            self.show_err(self.error_msg, self.error_details)
             self.topwin.set_sensitive(True)
             self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
             return
@@ -211,5 +215,9 @@ class vmmCreateVolume(gobject.GObject):
         except ValueError, e:
             return self.err.val_err(_("Volume Parameter Error"), str(e))
         return True
+
+    def show_err(self, info, details):
+        async = not self.topwin.get_modal()
+        self.err.show_err(info, details, async=async)
 
 gobject.type_register(vmmCreateVolume)
