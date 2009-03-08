@@ -64,11 +64,6 @@ class vmmHost(gobject.GObject):
 
         netListModel = gtk.ListStore(str, str, str)
         self.window.get_widget("net-list").set_model(netListModel)
-        self.populate_networks(netListModel)
-
-        poolListModel = gtk.ListStore(str, str, float)
-        self.window.get_widget("pool-list").set_model(poolListModel)
-        self.populate_storage_pools(poolListModel)
 
         volListModel = gtk.ListStore(str, str, str, str, str)
         self.window.get_widget("vol-list").set_model(volListModel)
@@ -83,7 +78,6 @@ class vmmHost(gobject.GObject):
         self.volmenu.add(volCopyPath)
 
         self.window.get_widget("net-list").get_selection().connect("changed", self.net_selected)
-        self.window.get_widget("pool-list").get_selection().connect("changed", self.pool_selected)
         self.window.get_widget("vol-list").get_selection().connect("changed", self.vol_selected)
 
         netCol = gtk.TreeViewColumn("Networks")
@@ -95,16 +89,6 @@ class vmmHost(gobject.GObject):
         netCol.add_attribute(net_img, 'stock-id', 2)
         self.window.get_widget("net-list").append_column(netCol)
         netListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
-
-        poolCol = gtk.TreeViewColumn("Pools")
-        pool_txt = gtk.CellRendererText()
-        pool_prg = gtk.CellRendererProgress()
-        poolCol.pack_start(pool_txt, True)
-        poolCol.pack_start(pool_prg, False)
-        poolCol.add_attribute(pool_txt, 'text', 1)
-        poolCol.add_attribute(pool_prg, 'value', 2)
-        self.window.get_widget("pool-list").append_column(poolCol)
-        poolListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
         volCol = gtk.TreeViewColumn("Volumes")
         vol_txt1 = gtk.CellRendererText()
@@ -136,6 +120,13 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("vol-list").append_column(volPathCol)
 
         volListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
+
+        self.populate_networks(netListModel)
+        init_pool_list(self.window.get_widget("pool-list"),
+                       self.pool_selected)
+        populate_storage_pools(self.window.get_widget("pool-list"),
+                               self.conn)
+
 
         self.cpu_usage_graph = sparkline.Sparkline()
         self.cpu_usage_graph.show()
@@ -186,6 +177,7 @@ class vmmHost(gobject.GObject):
         self.conn.connect("resources-sampled", self.refresh_resources)
         self.reset_state()
 
+
     def show(self):
         # Update autostart value
         self.window.get_widget("config-autoconnect").set_active(self.conn.get_autoconnect())
@@ -211,8 +203,6 @@ class vmmHost(gobject.GObject):
 
     def reset_state(self):
         self.refresh_resources()
-        self.reset_pool_state()
-        self.reset_net_state()
         self.conn_state_changed()
 
     def refresh_resources(self, ignore=None):
@@ -326,6 +316,7 @@ class vmmHost(gobject.GObject):
            selected[0].get_value(selected[1], 0) == None:
             self.reset_net_state()
             return
+
         net = self.conn.get_net(selected[0].get_value(selected[1], 0))
         active = net.is_active()
 
@@ -397,10 +388,16 @@ class vmmHost(gobject.GObject):
         self.populate_networks(self.window.get_widget("net-list").get_model())
 
     def populate_networks(self, model):
+        net_list = self.window.get_widget("net-list")
         model.clear()
         for uuid in self.conn.list_net_uuids():
             net = self.conn.get_net(uuid)
             model.append([uuid, net.get_name(), gtk.STOCK_NETWORK])
+
+        _iter = model.get_iter_first()
+        if _iter:
+            net_list.get_selection().select_iter(_iter)
+        net_list.get_selection().emit("changed")
 
 
     # ------------------------------
@@ -567,19 +564,15 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("vol-delete").set_sensitive(False)
 
     def refresh_storage_pool(self, src, uri, uuid):
-        sel = self.window.get_widget("pool-list").get_selection()
-        model = self.window.get_widget("pool-list").get_model()
-        active = sel.get_selected()
-        if active[1] == None:
+        refresh_pool_in_list(self.window.get_widget("pool-list"),
+                             self.conn, uuid)
+        curpool = self.current_pool()
+        if curpool.uuid != uuid:
             return
-        curruuid = active[0].get_value(active[1], 0)
-        if curruuid != uuid:
-            return
-        self.pool_selected(sel)
-        for row in model:
-            if row[0] == curruuid:
-                row[2] = self.get_pool_size_percent(uuid)
-                break
+
+        # Currently selected pool changed state: force a 'pool_selected' to
+        # update vol list
+        self.pool_selected(self.window.get_widget("pool-list").get_selection())
 
     def reset_pool_state(self):
         self.window.get_widget("pool-details").set_sensitive(False)
@@ -627,24 +620,8 @@ class vmmHost(gobject.GObject):
 
 
     def repopulate_storage_pools(self, src, uri, uuid):
-        self.populate_storage_pools(self.window.get_widget("pool-list").get_model())
-
-    def get_pool_size_percent(self, uuid):
-        pool = self.conn.get_pool(uuid)
-        cap = pool.get_capacity()
-        alloc = pool.get_allocation()
-        if not cap or alloc is None:
-            per = 0
-        else:
-            per = int(((float(alloc) / float(cap)) * 100))
-        return per
-
-    def populate_storage_pools(self, model):
-        model.clear()
-        for uuid in self.conn.list_pool_uuids():
-            per = self.get_pool_size_percent(uuid)
-            pool = self.conn.get_pool(uuid)
-            model.append([uuid, pool.get_name(), per])
+        pool_list = self.window.get_widget("pool-list")
+        populate_storage_pools(pool_list, self.conn)
 
     def populate_storage_volumes(self):
         pool = self.current_pool()
@@ -655,5 +632,62 @@ class vmmHost(gobject.GObject):
             vol = vols[key]
             model.append([key, vol.get_name(), vol.get_pretty_capacity(),
                           vol.get_format() or "", vol.get_target_path() or ""])
+
+
+# These functions are broken out, since they are used by storage browser
+# dialog.
+
+def init_pool_list(pool_list, changed_func):
+    poolListModel = gtk.ListStore(str, str, bool, str)
+    pool_list.set_model(poolListModel)
+
+    pool_list.get_selection().connect("changed", changed_func)
+
+    poolCol = gtk.TreeViewColumn("Storage Pools")
+    pool_txt = gtk.CellRendererText()
+    pool_per = gtk.CellRendererText()
+    poolCol.pack_start(pool_per, False)
+    poolCol.pack_start(pool_txt, True)
+    poolCol.add_attribute(pool_txt, 'markup', 1)
+    poolCol.add_attribute(pool_txt, 'sensitive', 2)
+    poolCol.add_attribute(pool_per, 'markup', 3)
+    pool_list.append_column(poolCol)
+    poolListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
+
+def refresh_pool_in_list(pool_list, conn, uuid):
+    for row in pool_list.get_model():
+        if row[0] == uuid:
+            # Update active sensitivity and percent available for passed uuid
+            row[3] = get_pool_size_percent(conn, uuid)
+            row[2] = conn.get_pool(uuid).is_active()
+            return
+
+def populate_storage_pools(pool_list, conn):
+    model = pool_list.get_model()
+    model.clear()
+    for uuid in conn.list_pool_uuids():
+        per = get_pool_size_percent(conn, uuid)
+        pool = conn.get_pool(uuid)
+
+        name = pool.get_name()
+        typ = Storage.StoragePool.get_pool_type_desc(pool.get_type())
+        label = "%s\n<span size='small'>%s</span>" % (name, typ)
+
+        model.append([uuid, label, pool.is_active(), per])
+
+    _iter = model.get_iter_first()
+    if _iter:
+        pool_list.get_selection().select_iter(_iter)
+    pool_list.get_selection().emit("changed")
+
+def get_pool_size_percent(conn, uuid):
+    pool = conn.get_pool(uuid)
+    cap = pool.get_capacity()
+    alloc = pool.get_allocation()
+    if not cap or alloc is None:
+        per = 0
+    else:
+        per = int(((float(alloc) / float(cap)) * 100))
+    return "<span size='small' color='#484848'>%s%%</span>" % int(per)
 
 gobject.type_register(vmmHost)
