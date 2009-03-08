@@ -320,7 +320,8 @@ class vmmManager(gobject.GObject):
             self.enable_polling(None, None, init_val, typ)
 
         # store any error message from the restore-domain callback
-        self.domain_restore_error = ""
+        self.restore_err = ""
+        self.restore_err_details = ""
 
         self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
 
@@ -383,7 +384,7 @@ class vmmManager(gobject.GObject):
                                  self.config.get_default_save_dir(conn))
 
         if path:
-            if self.is_valid_saved_image(path):
+            if conn.is_valid_saved_image(path):
                 progWin = vmmAsyncJob(self.config,
                                       self.restore_saved_callback,
                                       [path],
@@ -394,24 +395,21 @@ class vmmManager(gobject.GObject):
                                    "valid saved machine image") % path)
                 return
 
-        if self.domain_restore_error != "":
-            self.err.val_err(self.domain_restore_error)
-            self.domain_restore_error = ""
-
-    def is_valid_saved_image(self, savfile):
-        try:
-            f = open(savfile, "r")
-            magic = f.read(16)
-            if magic != "LinuxGuestRecord" and magic != "LibvirtQemudSave":
-                return False
-            return True
-        except:
-            return False
+        if self.restore_err != "":
+            self.err.show_err(self.restore_err, self.restore_err_details,
+                              title=_("Error restoring domain"))
+            self.restore_err = ""
+            self.restore_details = ""
 
     def restore_saved_callback(self, file_to_load, ignore1=None):
-        status = self.current_connection().restore(file_to_load)
-        if(status != 0):
-            self.domain_restore_error = _("Error restoring domain '%s'. Is the domain already running?") % file_to_load
+        try:
+            self.current_connection().restore(file_to_load)
+        except Exception, e:
+            self.restore_err = (_("Error restoring domain '%s': %s") %
+                                  (file_to_load, str(e)))
+            self.restore_err_details = "".join(traceback.format_exc())
+            return
+
 
     def vm_view_changed(self, src):
         vmlist = self.window.get_widget("vm-list")

@@ -36,6 +36,10 @@ from virtManager.network import vmmNetwork
 from virtManager.netdev import vmmNetDevice
 from virtManager.storagepool import vmmStoragePool
 
+XEN_SAVE_MAGIC = "LinuxGuestRecord"
+QEMU_SAVE_MAGIC = "LibvirtQemudSave"
+TEST_SAVE_MAGIC = "TestGuestMagic"
+
 def get_local_hostname():
     try:
         return gethostbyaddr(gethostname())[0]
@@ -295,6 +299,32 @@ class vmmConnection(gobject.GObject):
 
     def get_pool(self, uuid):
         return self.pools[uuid]
+
+    def is_valid_saved_image(self, path):
+        # FIXME: Not really sure why we are even doing this check? If libvirt
+        # isn't exporting this information, seems like we shouldn't be duping
+        # the validation. Maintain existing behavior until someone insists
+        # otherwise I suppose.
+        magic = ""
+
+        # If running on PolKit or remote, we may not be able to access
+        if not self.is_remote() and os.access(path, os.R_OK):
+            try:
+                f = open(path, "r")
+                magic = f.read(16)
+            except:
+                logging.exception("Reading save image file header failed.")
+                return False
+        else:
+            return True
+
+        driver = self.get_driver()
+        if driver == "xen" and not magic.startswith(XEN_SAVE_MAGIC):
+            return False
+
+        # Libvirt should validate the magic for other drivers
+        return True
+
 
     def open(self):
         if self.state != self.STATE_DISCONNECTED:
@@ -584,10 +614,15 @@ class vmmConnection(gobject.GObject):
         self.vmm.defineXML(xml)
 
     def restore(self, frm):
-        status = self.vmm.restore(frm)
-        if(status == 0):
+        self.vmm.restore(frm)
+        try:
+            # FIXME: This isn't correct in the remote case. Why do we even
+            #        do this? Seems like we should provide an option for this
+            #        to the user.
             os.remove(frm)
-        return status
+        except:
+            logging.debug("Couldn't remove save file '%s'used for restore." %
+                          frm)
 
     def _update_nets(self):
         """Return lists of start/stopped/new networks"""
