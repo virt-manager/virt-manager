@@ -1254,6 +1254,10 @@ class vmmDetails(gobject.GObject):
         self.vncTunnel = None
 
     def try_login(self, src=None):
+        if not self.vm.vm:
+            # VM was removed, skip login attempt
+            return
+
         if self.vm.get_id() < 0:
             self.activate_unavailable_page(_("Guest not running"))
             self.schedule_retry()
