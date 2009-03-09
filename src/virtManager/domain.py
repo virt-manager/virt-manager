@@ -238,6 +238,9 @@ class vmmDomain(gobject.GObject):
     def _sample_network_traffic(self):
         rx = 0
         tx = 0
+        if not self.is_active():
+            return rx, tx
+
         for netdev in self.get_network_devices():
             try:
                 io = self.vm.interfaceStats(netdev[4])
@@ -254,6 +257,9 @@ class vmmDomain(gobject.GObject):
     def _sample_disk_io(self):
         rd = 0
         wr = 0
+        if not self.is_active():
+            return rd, wr
+
         for disk in self.get_disk_devices():
             try:
                 io = self.vm.blockStats(disk[2])
