@@ -453,10 +453,11 @@ class vmmConnection(gobject.GObject):
                 try:
                     self.vmm = libvirt.openReadOnly(self.uri)
                     self.readOnly = True
-                    logging.info("Read/write connection failed to %s,"
-                            "falling back on read-only." % self.uri)
+                    logging.exception("Read/write connection failed for %s,"
+                            " falling back on read-only." % self.uri)
                     return
                 except:
+                    logging.exception("Readonly connection failed.")
                     pass
 
             return exc_info
