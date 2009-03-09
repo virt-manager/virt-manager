@@ -120,6 +120,7 @@ class vmmManager(gobject.GObject):
         self.engine = engine
 
         self.delete_dialog = None
+        self.startup_error = None
 
         self.prepare_vmlist()
 
@@ -330,9 +331,19 @@ class vmmManager(gobject.GObject):
 
         self.engine.connect("connection-added", self._add_connection)
         self.engine.connect("connection-removed", self._remove_connection)
+
         # Select first list entry
         vmlist = self.window.get_widget("vm-list")
-        vmlist.get_selection().select_iter(vmlist.get_model().get_iter_first())
+        if len(vmlist.get_model()) == 0:
+            self.startup_error = _("Could not populate a default connection. "
+                                   "Make sure the appropriate virtualization "
+                                   "packages are installed (kvm, qemu, etc.) "
+                                   "and that libvirtd has been restarted to "
+                                   "notice the changes.\n\n"
+                                   "A hypervisor connection can be manually "
+                                   "added via \nFile->Add Connection")
+        else:
+            vmlist.get_selection().select_iter(vmlist.get_model().get_iter_first())
 
     def show(self):
         win = self.window.get_widget("vmm-manager")
@@ -341,6 +352,11 @@ class vmmManager(gobject.GObject):
             return
         win.show_all()
         self.engine.increment_window_counter()
+
+        if self.startup_error:
+            self.err.val_err(_("Error determining default hypervisor."),
+                             self.startup_error, _("Startup Error"))
+            self.startup_error = None
 
     def close(self, src=None, src2=None):
         if self.is_visible():
