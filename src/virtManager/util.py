@@ -31,6 +31,8 @@ DEFAULT_POOL_PATH = "/var/lib/libvirt/images"
 
 def build_default_pool(conn):
     """Helper to build the 'default' storage pool"""
+    # FIXME: This should use config.get_default_image_path ?
+
     if not virtinst.util.is_storage_capable(conn):
         # VirtualDisk will raise an error for us
         return

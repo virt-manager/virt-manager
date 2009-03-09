@@ -36,6 +36,7 @@ from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
 from virtManager.opticalhelper import vmmOpticalDriveHelper
+from virtManager.storagebrowse import vmmStorageBrowser
 
 OS_GENERIC = "generic"
 
@@ -381,7 +382,6 @@ class vmmCreate(gobject.GObject):
 
         # Install local
         self.window.get_widget("install-local-cdrom-box").set_sensitive(is_local)
-        self.window.get_widget("install-local-browse").set_sensitive(is_local)
         if not is_local:
             self.window.get_widget("install-local-iso").set_active(True)
 
@@ -434,7 +434,6 @@ class vmmCreate(gobject.GObject):
 
         use_storage = self.window.get_widget("config-storage-select")
         storage_area = self.window.get_widget("config-storage-area")
-        self.window.get_widget("config-storage-browse").set_sensitive(is_local)
 
         storage_area.set_sensitive(have_storage)
         if not have_storage:
@@ -971,7 +970,7 @@ class vmmCreate(gobject.GObject):
             nodetect_label.show()
 
     def browse_iso(self, ignore1=None, ignore2=None):
-        f = self._browse_file(_("Locate ISO Image"))
+        f = self._browse_file(_("Locate ISO Image"), is_media=True)
         if f != None:
             self.window.get_widget("install-local-entry").set_text(f)
         self.window.get_widget("install-local-entry").activate()
@@ -980,7 +979,7 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("config-storage-box").set_sensitive(src.get_active())
 
     def browse_storage(self, ignore1):
-        f = self._browse_file(_("Locate existing storage."))
+        f = self._browse_file(_("Locate existing storage"))
         if f != None:
             self.window.get_widget("config-storage-entry").set_text(f)
 
@@ -992,7 +991,12 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("config-macaddr").set_sensitive(src.get_active())
 
     def set_storage_path(self, src, path):
-        self.window.get_widget("config-storage-entry").set_text(path)
+        notebook = self.window.get_widget("create-pages")
+        curpage = notebook.get_current_page()
+        if curpage == PAGE_INSTALL:
+            self.window.get_widget("install-local-entry").set_text(path)
+        elif curpage == PAGE_STORAGE:
+            self.window.get_widget("config-storage-entry").set_text(path)
 
     # Navigation methods
     def set_install_page(self):
@@ -1624,14 +1628,20 @@ class vmmCreate(gobject.GObject):
             logging.exception("Error detecting distro.")
             self.detectedDistro = (None, None)
 
-    def _browse_file(self, dialog_name, folder=None, _type=None):
+    def _browse_file(self, dialog_name, folder=None, is_media=False):
 
-        if self.conn.is_remote() or True:
-            # FIXME: This will eventually call a special storage browser
-            pass
+        if self.conn.is_remote() or not is_media:
+            if self.storage_browser == None:
+                self.storage_browser = vmmStorageBrowser(self.config,
+                                                         self.conn)
+                self.storage_browser.connect("storage-browse-finish",
+                                             self.set_storage_path)
+            self.storage_browser.local_args = { "dialog_name": dialog_name,
+                                                "start_folder": folder}
+            self.storage_browser.show(self.conn)
+            return None
 
-        # FIXME: Pass local browse fun to storage_browser
-        return util.browse_local(self.topwin, dialog_name, folder, _type)
+        return util.browse_local(self.topwin, dialog_name, folder)
 
     def show_help(self, ignore):
         # No help available yet.

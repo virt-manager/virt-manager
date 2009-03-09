@@ -21,6 +21,7 @@ EMIT_VAR="has no 'emit' member"
 ERROR_VBOX="vmmErrorDialog.__init__.*Class 'vbox' has no 'pack_start' member"
 EXCEPTHOOK="no '__excepthook__' member"
 CONNECT_VAR="no 'connect' member"
+DISCONNECT_VAR="no 'disconnect' member"
 
 # os._exit is needed for forked processes.
 OS_EXIT="protected member _exit of a client class"
@@ -84,6 +85,7 @@ pylint --ignore=IPy.py $FILES \
         -ve "$GOBJECT_VAR" \
         -ve "$EMIT_VAR" \
         -ve "$CONNECT_VAR" \
+        -ve "$DISCONNECT_VAR" \
         -ve "$GETTEXT_VAR" \
         -ve "$OS_EXIT" \
         -ve "$BUILTIN_TYPE" \

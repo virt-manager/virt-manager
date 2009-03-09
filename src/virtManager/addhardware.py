@@ -31,6 +31,7 @@ import virtManager.util as vmmutil
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
 from virtManager.createmeter import vmmCreateMeter
+from virtManager.storagebrowse import vmmStorageBrowser
 
 VM_STORAGE_PARTITION = 1
 VM_STORAGE_FILE = 2
@@ -63,6 +64,9 @@ class vmmAddHardware(gobject.GObject):
                                   _("An unexpected error occurred"))
         self.install_error = ""
         self.install_details = ""
+
+        self.storage_browser = None
+        self._browse_cb_id = None
 
         self.topwin.hide()
         self.window.signal_autoconnect({
@@ -401,8 +405,6 @@ class vmmAddHardware(gobject.GObject):
                 self.populate_target_device_model(target.get_model())
                 target.set_active(0)
 
-            self.window.get_widget("storage-partition-address-browse").set_sensitive(not remote)
-            self.window.get_widget("storage-file-address-browse").set_sensitive(not remote)
 
         elif page_number == PAGE_NETWORK:
             netmodel = self.window.get_widget("net-model")
@@ -631,25 +633,47 @@ class vmmAddHardware(gobject.GObject):
 
 
     def browse_storage_partition_address(self, src, ignore=None):
-        part = self._browse_file(_("Locate Storage Partition"), "/dev")
+        textent = self.window.get_widget("storage-partition-address")
+        part = self._browse_file(_("Locate Storage Partition"), textent,
+                                 "/dev")
         if part != None:
-            self.window.get_widget("storage-partition-address").set_text(part)
+            textent.set_text(part)
 
     def browse_storage_file_address(self, src, ignore=None):
+        textent = self.window.get_widget("storage-file-address")
         folder = self.config.get_default_image_dir(self.vm.get_connection())
-        filename = self._browse_file(_("Locate or Create New Storage File"), \
-                                       folder=folder, confirm_overwrite=True)
+        filename = self._browse_file(_("Locate or Create New Storage File"),
+                                     textent, folder=folder,
+                                     confirm_overwrite=True)
         if filename != None:
-            self.window.get_widget("storage-file-address").set_text(filename)
+            textent.set_text(filename)
 
-    def _browse_file(self, dialog_name, folder=None, _type=None,
+    def _browse_file(self, dialog_name, textent, folder=None,
                      confirm_overwrite=False):
 
         confirm_func = None
         if confirm_overwrite:
             confirm_func = self.confirm_overwrite_callback
-        return vmmutil.browse_local(self.topwin, dialog_name, folder, _type,
-                                    confirm_func=confirm_func)
+
+        if folder and not os.access(folder, os.R_OK):
+            folder = None
+
+        def set_storage_cb(src, path):
+            if path:
+                textent.set_text(path)
+
+        conn = self.vm.get_connection()
+        if self.storage_browser == None:
+            self.storage_browser = vmmStorageBrowser(self.config, conn)
+        if self._browse_cb_id:
+            self.storage_browser.disconnect(self._browse_cb_id)
+
+        self._browse_cb_id = self.storage_browser.connect("storage-browse-finish", set_storage_cb)
+        self.storage_browser.local_args = { "dialog_name": dialog_name,
+                                            "start_folder": folder,
+                                            "confirm_func": confirm_func, }
+        self.storage_browser.show(conn)
+        return None
 
     def toggle_storage_size(self, ignore1=None, ignore2=None):
         filename = self.get_config_disk_image()
