@@ -169,6 +169,14 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-header").modify_bg(gtk.STATE_NORMAL,
                                                           blue)
 
+        box = self.window.get_widget("create-vm-icon-box")
+        iconfile = self.config.get_icon_dir() + "/virt-manager-icon.svg"
+        icon_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(iconfile, 48, 48)
+        image = gtk.Image()
+        image.set_from_pixbuf(icon_pixbuf)
+        image.show()
+        box.pack_end(image, False)
+
         # Connection list
         conn_list = self.window.get_widget("create-conn")
         conn_model = gtk.ListStore(str, str)
