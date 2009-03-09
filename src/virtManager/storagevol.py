@@ -42,6 +42,10 @@ class vmmStorageVolume(gobject.GObject):
     def get_path(self):
         return self.vol.path()
 
+    def get_pool(self):
+        pobj = self.vol.storagePoolLookupByVolume()
+        return self.connection.get_pool_by_name(pobj.name())
+
     def delete(self):
         self.vol.delete(0)
         del(self.vol)

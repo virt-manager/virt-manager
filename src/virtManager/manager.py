@@ -22,7 +22,6 @@ import gobject
 import gtk
 import gtk.glade
 import logging
-import traceback
 
 import sparkline
 import libvirt
@@ -30,6 +29,7 @@ import libvirt
 from virtManager.connection import vmmConnection
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
+from virtManager.delete import vmmDeleteDialog
 from virtManager import util as util
 
 VMLIST_SORT_ID = 1
@@ -118,6 +118,9 @@ class vmmManager(gobject.GObject):
                                   _("An unexpected error occurred"))
         self.config = config
         self.engine = engine
+
+        self.delete_dialog = None
+
         self.prepare_vmlist()
 
         self.config.on_vmlist_domain_id_visible_changed(self.toggle_domain_id_visible_widget)
@@ -796,32 +799,31 @@ class vmmManager(gobject.GObject):
         conn = self.current_connection()
         vm = self.current_vm()
         if vm is None:
-            # Delete the connection handle
-            if conn is None:
-                return
-
-            result = self.err.yes_no(_("Are you sure you want to permanently delete the connection %s?") % self.rows[conn.get_uri()][ROW_NAME])
-            if not result:
-                return
-            self.engine.remove_connection(conn.get_uri())
+            self._do_delete_connection(conn)
         else:
-            # Delete the VM itself
+            self._do_delete_vm(vm)
 
-            if vm.is_active():
-                return
+    def _do_delete_connection(self, conn):
+        if conn is None:
+            return
 
-            # are you sure you want to delete this VM?
-            result = self.err.yes_no(_("Are you sure you want to permanently delete the virtual machine %s?") % vm.get_name())
-            if not result:
-                return
-            conn = vm.get_connection()
-            try:
-                vm.delete()
-            except Exception, e:
-                self.err.show_err(_("Error deleting domain: %s" % str(e)),\
-                                  "".join(traceback.format_exc()))
-                return
-            conn.tick(noStatsUpdate=True)
+        result = self.err.yes_no(_("This will remove the connection \"%s\","
+                                   "are you sure?") %
+                                   self.rows[conn.get_uri()][ROW_NAME])
+        if not result:
+            return
+        self.engine.remove_connection(conn.get_uri())
+
+    def _do_delete_vm(self, vm):
+        if vm.is_active():
+            return
+
+        if not self.delete_dialog:
+            self.delete_dialog = vmmDeleteDialog(self.config, vm)
+        else:
+            self.delete_dialog.set_vm(vm)
+
+        self.delete_dialog.show()
 
     def show_about(self, src):
         self.emit("action-show-about")

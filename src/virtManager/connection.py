@@ -375,6 +375,19 @@ class vmmConnection(gobject.GObject):
                 return pool
         return None
 
+    def get_pool_by_name(self, name):
+        for p in self.pools.values():
+            if p.get_name() == name:
+                return p
+        return None
+
+    def get_vol_by_path(self, path):
+        for pool in self.pools.values():
+            for vol in pool.get_volumes().values():
+                if vol.get_path() == path:
+                    return vol
+        return None
+
     def open(self):
         if self.state != self.STATE_DISCONNECTED:
             return
