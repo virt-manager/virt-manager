@@ -22,7 +22,6 @@ import gobject
 import gtk
 import gtk.gdk
 import gtk.glade
-import libvirt
 import virtinst
 import os
 import logging
@@ -617,7 +616,7 @@ class vmmAddHardware(gobject.GObject):
             # If creating disk via storage API, we need to thread
             # off a new connection
             if disk.vol_install:
-                newconn = libvirt.open(disk.conn.getURI())
+                newconn = vmmutil.dup_conn(self.config, None, disk.conn)
                 disk.conn = newconn
             logging.debug("Starting background file allocate process")
             disk.setup(meter)

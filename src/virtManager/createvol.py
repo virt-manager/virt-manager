@@ -24,8 +24,7 @@ import gtk.glade
 import traceback
 import logging
 
-import libvirt
-
+from virtManager import util
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
@@ -177,13 +176,7 @@ class vmmCreateVolume(gobject.GObject):
     def _async_vol_create(self, asyncjob):
         newconn = None
         try:
-            # Open a seperate connection to install on since this is async
-            logging.debug("Threading off connection to create vol.")
-            #newconn = vmmConnection(self.config, self.conn.get_uri(),
-            #                        self.conn.is_read_only())
-            #newconn.open()
-            #newconn.connectThreadEvent.wait()
-            newconn = libvirt.open(self.conn.get_uri())
+            newconn = util.dup_conn(self.config, self.conn)
 
             # Lookup different pool obj
             newpool = newconn.storagePoolLookupByName(self.parent_pool.get_name())

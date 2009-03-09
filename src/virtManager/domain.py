@@ -23,7 +23,9 @@ import libvirt
 import libxml2
 import os
 import logging
-import virtinst.util as util
+
+from virtManager import util
+import virtinst.util as vutil
 
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
@@ -151,7 +153,7 @@ class vmmDomain(gobject.GObject):
         return False
 
     def is_hvm(self):
-        os_type = util.get_xml_path(self.get_xml(), "/domain/os/type")
+        os_type = vutil.get_xml_path(self.get_xml(), "/domain/os/type")
         # FIXME: This should be static, not parse xml everytime
         # XXX libvirt bug - doesn't work for inactive guests
         #os_type = self.vm.OSType()
@@ -162,7 +164,7 @@ class vmmDomain(gobject.GObject):
 
     def get_type(self):
         # FIXME: This should be static, not parse xml everytime
-        return util.get_xml_path(self.get_xml(), "/domain/@type")
+        return vutil.get_xml_path(self.get_xml(), "/domain/@type")
 
     def is_vcpu_hotplug_capable(self):
         # Read only connections aren't allowed to change it
@@ -241,7 +243,7 @@ class vmmDomain(gobject.GObject):
                                self.connection.host_active_processor_count()))
             # Due to timing diffs between getting wall time & getting
             # the domain's time, its possible to go a tiny bit over
-            # 100% utilization. This freaks out users of the data, so
+            # 100% vutilization. This freaks out users of the data, so
             # we hard limit it.
             if pcentCpuTime > 100.0:
                 pcentCpuTime = 100.0
@@ -467,7 +469,7 @@ class vmmDomain(gobject.GObject):
         return self.record[0]["vcpuCount"]
 
     def vcpu_max_count(self):
-        cpus = util.get_xml_path(self.get_xml(), "/domain/vcpu")
+        cpus = vutil.get_xml_path(self.get_xml(), "/domain/vcpu")
         return int(cpus)
 
     def cpu_time_vector(self):
@@ -569,7 +571,7 @@ class vmmDomain(gobject.GObject):
 
     def save(self, filename, ignore1=None, background=True):
         if background:
-            conn = libvirt.open(self.connection.uri)
+            conn = util.dup_conn(self.config, self.connection)
             vm = conn.lookupByID(self.get_id())
         else:
             vm = self.vm
@@ -635,11 +637,11 @@ class vmmDomain(gobject.GObject):
     def get_graphics_console(self):
         self.update_xml()
 
-        typ = util.get_xml_path(self.get_xml(),
+        typ = vutil.get_xml_path(self.get_xml(),
                                 "/domain/devices/graphics/@type")
         port = None
         if typ == "vnc":
-            port = util.get_xml_path(self.get_xml(),
+            port = vutil.get_xml_path(self.get_xml(),
                                      "/domain/devices/graphics[@type='vnc']/@port")
             if port is not None:
                 port = int(port)

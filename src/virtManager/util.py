@@ -23,6 +23,7 @@ import gtk
 
 import libvirt
 
+import virtManager
 import virtinst
 
 DEFAULT_POOL_NAME = "default"
@@ -112,3 +113,28 @@ def browse_local(parent, dialog_name, start_folder=None, _type=None,
         fcdialog.destroy()
         return None
 
+def dup_conn(config, conn, libconn=None):
+
+    is_readonly = False
+
+    if libconn:
+        uri = libconn.getURI()
+        is_test = uri.startswith("test")
+        vmm = libconn
+    else:
+        is_test = conn.is_test_conn()
+        is_readonly = conn.is_read_only()
+        uri = conn.get_uri()
+        vmm = conn.vmm
+
+    if is_test:
+        # Skip duplicating a test conn, since it doesn't maintain state
+        # between instances
+        return vmm
+
+    logging.debug("Duplicating connection for async operation.")
+    newconn = virtManager.connection.vmmConnection(config, uri, is_readonly)
+    newconn.open()
+    newconn.connectThreadEvent.wait()
+
+    return newconn.vmm

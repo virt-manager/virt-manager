@@ -24,8 +24,6 @@ import gtk.glade
 import traceback
 import logging
 
-import libvirt
-
 from virtManager import util
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
@@ -302,12 +300,7 @@ class vmmCreatePool(gobject.GObject):
         newconn = None
         try:
             # Open a seperate connection to install on since this is async
-            logging.debug("Threading off connection to create pool.")
-            #newconn = vmmConnection(self.config, self.conn.get_uri(),
-            #                        self.conn.is_read_only())
-            #newconn.open()
-            #newconn.connectThreadEvent.wait()
-            newconn = libvirt.open(self._pool.conn.getURI())
+            newconn = util.dup_conn(self.config, None, self._pool.conn)
             meter = vmmCreateMeter(asyncjob)
             self._pool.conn = newconn
 
