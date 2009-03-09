@@ -719,12 +719,11 @@ class vmmDetails(gobject.GObject):
 
     def control_vm_migrate(self, src):
         # get selected submenu(destination hostname)
-        hostname = self.window.get_widget("details-menu-migrate_menu").get_active().get_image().get_stock()[0]
-        for key in self.engine.connections.keys():
-            if self.engine.get_connection(key).get_hostname() == hostname:
-                host_uri = key
-                break
-        self.emit("action-migrate-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid(), host_uri)
+        info = self.window.get_widget("details-menu-migrate_menu").get_active().get_image().get_stock()[0]
+        hostname = info.split(" ")[0]
+
+        self.emit("action-migrate-domain", self.vm.get_connection().get_uri(),
+                  self.vm.get_uuid(), hostname)
 
     def set_migrate_menu(self):
         menu = self.window.get_widget("details-menu-migrate_menu")

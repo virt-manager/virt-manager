@@ -1100,14 +1100,11 @@ class vmmManager(gobject.GObject):
 
     def migrate(self, ignore):
         vm = self.current_vm()
-        # get selected submenu(destination hostname)
-        hostname = self.vmmenumigrate.get_active().get_image().get_stock()[0]
-        for key in self.engine.connections.keys():
-            if self.engine.get_connection(key).get_hostname() == hostname:
-                host_uri = key
-                break
+        label = self.vmmenumigrate.get_active().get_image().get_stock()[0]
+        hostname = label.split(" ")[0]
         if vm is not None:
-            self.emit("action-migrate-domain", vm.get_connection().get_uri(), vm.get_uuid(), host_uri)
+            self.emit("action-migrate-domain", vm.get_connection().get_uri(),
+                      vm.get_uuid(), hostname)
 
     def set_migrate_submenu(self, src):
         self.engine.populate_migrate_menu(self.vmmenumigrate, self.migrate)

@@ -527,7 +527,18 @@ class vmmEngine(gobject.GObject):
         else:
             logging.warning("Reboot requested, but machine is already shutting down / shutoff")
 
-    def migrate_domain(self, uri, uuid, desturi):
+    def migrate_domain(self, uri, uuid, desthost):
+        desturi = None
+        for key in self.connections.keys():
+            if self.get_connection(key).get_hostname() == desthost:
+                desturi = key
+                break
+
+        if desturi == None:
+            logging.debug("Could not find dest uri for migrate hostname: %s"
+                          % desthost)
+            return
+
         conn = self.get_connection(uri, False)
         vm = conn.get_vm(uuid)
         destconn = self.get_connection(desturi, False)
