@@ -23,6 +23,7 @@ import gtk.glade
 import virtinst
 import logging
 import dbus
+import socket
 
 HV_XEN = 0
 HV_QEMU = 1
@@ -55,6 +56,13 @@ class vmmConnect(gobject.GObject):
 
         self.browser = None
         self.can_browse = False
+
+        # Set this if we can't resolve 'hostname.local': means avahi
+        # prob isn't configured correctly, and we should strip .local
+        self.can_resolve_local = None
+
+        # Plain hostname resolve failed, means we should just use IP addr
+        self.can_resolve_hostname = None
 
         default = virtinst.util.default_connection()
         if default is None:
@@ -164,7 +172,9 @@ class vmmConnect(gobject.GObject):
             model = self.window.get_widget("conn-list").get_model()
             for row in model:
                 if row[2] == str(name):
+                    # Already present in list
                     return
+            host = self.sanitize_hostname(str(host))
             model.append([str(address), self.sanitize_hostname(str(host)),
                           str(name)])
         except Exception, e:
@@ -258,6 +268,47 @@ class vmmConnect(gobject.GObject):
                 host = ""
             except ValueError:
                 pass
+
+        if host:
+            host = self.check_resolve_host(host)
         return host
+
+    def check_resolve_host(self, host):
+        # Try to resolve hostname
+        # XXX: Avahi always uses 'hostname.local', but for some reason
+        #      fedora out of the box can't resolve '.local' names
+        #      Attempt to resolve the name. If it fails, remove .local
+        #      if present, and try again
+        if host.endswith(".local"):
+            if self.can_resolve_local == False:
+                host = host[:-6]
+
+            elif self.can_resolve_local == None:
+                try:
+                    socket.getaddrinfo(host, None)
+                except:
+                    logging.debug("Couldn't resolve host '%s'. Stripping "
+                                  "'.local' and retrying." % host)
+                    self.can_resolve_local = False
+                    host = self.check_resolve_host(host[:-6])
+                else:
+                    self.can_resolve_local = True
+
+        else:
+            if self.can_resolve_hostname == False:
+                host = ""
+            elif self.can_resolve_hostname == None:
+                try:
+                    socket.getaddrinfo(host, None)
+                except:
+                    logging.debug("Couldn't resolve host '%s'. Disabling "
+                                  "host name resolution, only using IP addr" %
+                                  host)
+                    self.can_resolve_hostname = False
+                else:
+                    self.can_resolve_hostname = True
+
+        return host
+
 
 gobject.type_register(vmmConnect)

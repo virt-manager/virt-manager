@@ -541,7 +541,6 @@ class vmmConnection(gobject.GObject):
                     return
                 except:
                     logging.exception("Readonly connection failed.")
-                    pass
 
             return exc_info
 
