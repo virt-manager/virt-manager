@@ -53,6 +53,7 @@ class vmmDomain(gobject.GObject):
                          }
 
         self._xml = None
+        self._orig_inactive_xml = None
         self._valid_xml = False
 
         self._mem_stats = None
@@ -92,6 +93,19 @@ class vmmDomain(gobject.GObject):
     def invalidate_xml(self):
         # Mark cached xml as invalid
         self._valid_xml = False
+
+    def get_inactive_xml(self):
+        # FIXME: We only allow the user to change the inactive xml once.
+        #        We should eventually allow them to continually change it,
+        #        possibly see the inactive config? and not choke if they try
+        #        to remove a device twice.
+        if self._orig_inactive_xml is None:
+            self.refresh_inactive_xml()
+        return self._orig_inactive_xml
+
+    def refresh_inactive_xml(self):
+        self._orig_inactive_xml = self.vm.XMLDesc(libvirt.VIR_DOMAIN_XML_INACTIVE | libvirt.VIR_DOMAIN_XML_SECURE)
+        print "xml refresh to: %s" % self._orig_inactive_xml
 
     def release_handle(self):
         del(self.vm)
@@ -188,6 +202,11 @@ class vmmDomain(gobject.GObject):
         status = self._normalize_status(status)
 
         if status != self.lastStatus:
+            if self.lastStatus in [ libvirt.VIR_DOMAIN_SHUTDOWN,
+                                    libvirt.VIR_DOMAIN_SHUTOFF,
+                                    libvirt.VIR_DOMAIN_CRASHED ]:
+                # Domain just started. Invalidate inactive xml
+                self._orig_inactive_xml = None
             self.lastStatus = status
             self.emit("status-changed", status)
 
@@ -1062,8 +1081,7 @@ class vmmDomain(gobject.GObject):
     def _remove_xml_device(self, dev_type, dev_id_info):
         """Remove device 'devxml' from devices section of 'xml, return
            result"""
-        self.update_xml()
-        vmxml = self.get_xml()
+        vmxml = self.get_xml_to_define()
         doc = libxml2.parseDoc(vmxml)
         ctx = None
 
@@ -1091,6 +1109,16 @@ class vmmDomain(gobject.GObject):
             if doc != None:
                 doc.freeDoc()
 
+    def get_xml_to_define(self):
+        # FIXME: This isn't sufficient, since we pull stuff like disk targets
+        #        from the active XML. This all needs proper fixing in the long
+        #        term.
+        if self.is_active():
+            return self.get_inactive_xml()
+        else:
+            self.update_xml()
+            return self.get_xml()
+
     def attach_device(self, xml):
         """Hotplug device to running guest"""
         if self.is_active():
@@ -1103,8 +1131,7 @@ class vmmDomain(gobject.GObject):
 
     def add_device(self, xml):
         """Redefine guest with appended device"""
-        self.update_xml()
-        vmxml = self.get_xml()
+        vmxml = self.get_xml_to_define()
 
         newxml = self._add_xml_device(vmxml, xml)
 
@@ -1235,7 +1262,7 @@ class vmmDomain(gobject.GObject):
 
     def set_boot_device(self, boot_type):
         logging.debug("Setting boot device to type: %s" % boot_type)
-        xml = self.get_xml()
+        xml = self.get_xml_to_define()
         doc = None
         try:
             doc = libxml2.parseDoc(xml)
