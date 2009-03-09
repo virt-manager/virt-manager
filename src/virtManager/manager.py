@@ -22,6 +22,7 @@ import gobject
 import gtk
 import gtk.glade
 import logging
+import traceback
 
 import sparkline
 import libvirt
