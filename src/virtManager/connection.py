@@ -248,6 +248,18 @@ class vmmConnection(gobject.GObject):
             del self.netdevs[name]
             del self.hal_to_netdev[path]
 
+    def _acquire_tgt(self):
+        logging.debug("In acquire tgt.")
+        try:
+            bus = dbus.SessionBus()
+            ka = bus.get_object('org.gnome.KrbAuthDialog',
+                                '/org/gnome/KrbAuthDialog')
+            ret = ka.acquireTgt("", dbus_interface='org.gnome.KrbAuthDialog')
+        except Exception, e:
+            logging.info("Cannot acquire tgt" + str(e))
+            ret = False
+        return ret
+
     def is_read_only(self):
         return self.readOnly
 
@@ -548,21 +560,39 @@ class vmmConnection(gobject.GObject):
     def _open_thread(self):
         logging.debug("Background thread is running")
 
-        open_error = self._try_open()
+        done = False
+        while not done:
+            open_error = self._try_open()
+            done = True
 
-        if not open_error:
-            self.state = self.STATE_ACTIVE
-        else:
-            self.state = self.STATE_DISCONNECTED
+            if not open_error:
+                self.state = self.STATE_ACTIVE
+            else:
+                self.state = self.STATE_DISCONNECTED
 
-            (_type, value, stacktrace) = open_error
-            # Detailed error message, in English so it can be Googled.
-            self.connectError = \
-                    ("Unable to open connection to hypervisor URI '%s':\n" %
-                     str(self.uri)) + \
-                    str(_type) + " " + str(value) + "\n" + \
-                    traceback.format_exc (stacktrace)
-            logging.error(self.connectError)
+                if self.uri.find("+ssh://") > 0:
+                    hint = "\nMaybe you need to install ssh-askpass " + \
+                           "in order to authenticate."
+                else:
+                    hint = ""
+
+                (_type, value, stacktrace) = open_error
+
+                if (type(_type) == type(libvirt.libvirtError) and
+                    value.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
+                    "GSSAPI Error" in value.get_error_message() and
+                    "No credentials cache found" in value.get_error_message()):
+                    if self._acquire_tgt():
+                        done = False
+                        continue
+
+                # Detailed error message, in English so it can be Googled.
+                self.connectError = (("Unable to open connection to hypervisor"
+                                      " URI '%s':\n" % str(self.uri)) +
+                                      str(_type) + " " + str(value) + "\n" +
+                                      traceback.format_exc (stacktrace) + hint)
+                logging.error(self.connectError)
+
 
         # We want to kill off this thread asap, so schedule a gobject
         # idle even to inform the UI of result
