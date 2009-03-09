@@ -44,7 +44,8 @@ PAGE_NETWORK = 2
 PAGE_INPUT = 3
 PAGE_GRAPHICS = 4
 PAGE_SOUND = 5
-PAGE_SUMMARY = 6
+PAGE_HOSTDEV = 6
+PAGE_SUMMARY = 7
 
 class vmmAddHardware(gobject.GObject):
     __gsignals__ = {
@@ -85,6 +86,7 @@ class vmmAddHardware(gobject.GObject):
             "on_graphics_type_changed": self.change_graphics_type,
             "on_graphics_port_auto_toggled": self.change_port_auto,
             "on_graphics_keymap_toggled": self.change_keymap,
+            "on_host_device_type_changed": self.change_host_device_type,
             "on_create_help_clicked": self.show_help,
             })
 
@@ -170,6 +172,24 @@ class vmmAddHardware(gobject.GObject):
         sound_list.pack_start(text, True)
         sound_list.add_attribute(text, 'text', 0)
 
+        host_devtype = self.window.get_widget("host-device-type")
+        # Description, nodedev type, specific type capability, sub type,
+        # sub cap
+        host_devtype_model = gtk.ListStore(str, str, str, str, str)
+        host_devtype.set_model(host_devtype_model)
+        text = gtk.CellRendererText()
+        host_devtype.pack_start(text, True)
+        host_devtype.add_attribute(text, 'text', 0)
+
+        host_dev = self.window.get_widget("host-device")
+        # Description, nodedev name
+        host_dev_model = gtk.ListStore(str, str)
+        host_dev.set_model(host_dev_model)
+        text = gtk.CellRendererText()
+        host_dev.pack_start(text, True)
+        host_dev.add_attribute(text, 'text', 0)
+        host_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
@@ -232,6 +252,13 @@ class vmmAddHardware(gobject.GObject):
         self.populate_sound_model_model(sound_box.get_model())
         sound_box.set_active(0)
 
+        host_devtype = self.window.get_widget("host-device-type")
+        self.populate_host_device_type_model(host_devtype.get_model())
+        host_devtype.set_active(0)
+
+        # FIXME: All of these needs to have better transparency.
+        # All options should be listed, but disabled with a tooltip if
+        # it can't be used.
         model = self.window.get_widget("hardware-type").get_model()
         model.clear()
         model.append(["Storage", gtk.STOCK_HARDDISK, PAGE_DISK])
@@ -250,6 +277,10 @@ class vmmAddHardware(gobject.GObject):
         if self.vm.is_hvm():
             model.append(["Sound", gtk.STOCK_MEDIA_PLAY, PAGE_SOUND])
 
+        if (self.vm.get_connection().get_driver().lower() != "xen" or
+            not self.vm.get_connection().is_nodedev_capable()):
+            # Libvirt doesn't support this for xen yet
+            model.append(["Physical Host Device", None, PAGE_HOSTDEV])
 
     def forward(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
@@ -396,6 +427,14 @@ class vmmAddHardware(gobject.GObject):
         modelstr = model.get_model().get_value(model.get_active_iter(), 0)
         return modelstr
 
+    def get_config_host_device_type_info(self):
+        devbox = self.window.get_widget("host-device-type")
+        return devbox.get_model()[devbox.get_active()]
+
+    def get_config_host_device_info(self):
+        devbox = self.window.get_widget("host-device")
+        return devbox.get_model()[devbox.get_active()]
+
     def page_changed(self, notebook, page, page_number):
         remote = self.vm.get_connection().is_remote()
         if page_number == PAGE_DISK:
@@ -427,6 +466,7 @@ class vmmAddHardware(gobject.GObject):
             self.window.get_widget("summary-input").hide()
             self.window.get_widget("summary-graphics").hide()
             self.window.get_widget("summary-sound").hide()
+            self.window.get_widget("summary-hostdev").hide()
 
             if hwpage == PAGE_DISK:
                 self.window.get_widget("summary-disk").show()
@@ -495,6 +535,10 @@ class vmmAddHardware(gobject.GObject):
             elif hwpage == PAGE_SOUND:
                 self.window.get_widget("summary-sound").show()
                 self.window.get_widget("summary-sound-model").set_text(self._dev.model)
+            elif hwpage == PAGE_HOSTDEV:
+                self.window.get_widget("summary-hostdev").show()
+                self.window.get_widget("summary-host-device-type").set_text(self.get_config_host_device_type_info()[0])
+                self.window.get_widget("summary-host-device").set_text(self.get_config_host_device_info()[0])
 
     def close(self, ignore1=None,ignore2=None):
         self.topwin.hide()
@@ -512,16 +556,22 @@ class vmmAddHardware(gobject.GObject):
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
-        if hw == PAGE_NETWORK:
-            self.add_network()
-        elif hw == PAGE_DISK:
-            self.add_storage()
-        elif hw == PAGE_INPUT:
-            self.add_input()
-        elif hw == PAGE_GRAPHICS:
-            self.add_graphics()
-        elif hw == PAGE_SOUND:
-            self.add_sound()
+        try:
+            if hw == PAGE_NETWORK:
+                self.add_network()
+            elif hw == PAGE_DISK:
+                self.add_storage()
+            elif hw == PAGE_INPUT:
+                self.add_input()
+            elif hw == PAGE_GRAPHICS:
+                self.add_graphics()
+            elif hw == PAGE_SOUND:
+                self.add_sound()
+            elif hw == PAGE_HOSTDEV:
+                self.add_hostdev()
+        except Exception, e:
+            self.err.show_err(_("Uncaught error adding device: %s") % str(e),
+                              "".join(traceback.format_exc()))
 
         if self.install_error is not None:
             self.err.show_err(self.install_error, self.install_details)
@@ -551,6 +601,10 @@ class vmmAddHardware(gobject.GObject):
         self.add_device(self._dev.get_xml_config())
 
     def add_sound(self):
+        self.add_device(self._dev.get_xml_config())
+
+    def add_hostdev(self):
+        self._dev.setup()
         self.add_device(self._dev.get_xml_config())
 
     def add_storage(self):
@@ -753,6 +807,18 @@ class vmmAddHardware(gobject.GObject):
         else:
             self.window.get_widget("graphics-keymap").set_sensitive(True)
 
+    def change_host_device_type(self, src):
+        devbox = self.window.get_widget("host-device")
+        if src.get_active() < 0:
+            devbox.get_model().clear()
+            return
+
+        (ignore, devtype, devcap,
+         subtype, subcap) = src.get_model()[src.get_active()]
+        self.populate_host_device_model(devbox.get_model(), devtype, devcap,
+                                        subtype, subcap)
+        devbox.set_active(0)
+
     def validate(self, page_num):
         if page_num == PAGE_INTRO:
             if self.get_config_hardware_type() == None:
@@ -881,7 +947,23 @@ class vmmAddHardware(gobject.GObject):
             try:
                 self._dev = virtinst.VirtualAudio(model=smodel)
             except Exception, e:
-                self.err.val_err(_("Sound device parameter error"), str(e))
+                return self.err.val_err(_("Sound device parameter error"),
+                                        str(e))
+
+        elif page_num == PAGE_HOSTDEV:
+            ignore, nodedev_name = self.get_config_host_device_info()
+
+            if nodedev_name == None:
+                return self.err.val_err(_("Physical Device Requried"),
+                                        _("A device must be selected."))
+
+            try:
+                self._dev = virtinst.VirtualHostDevice.device_from_node(
+                    conn = self.vm.get_connection().vmm,
+                    name = nodedev_name)
+            except Exception, e:
+                return self.err.val_err(_("Host device parameter error",
+                                        str(e)))
 
         return True
 
@@ -962,6 +1044,33 @@ class vmmAddHardware(gobject.GObject):
         lst.sort()
         for m in lst:
             model.append([m])
+
+    def populate_host_device_type_model(self, model):
+        model.clear()
+        for m in [ ["PCI Device", "pci", None, "net", "80203"],
+                   ["USB Device", "usb_device", None, None, None]]:
+            model.append(m)
+
+    def populate_host_device_model(self, model, devtype, devcap, subtype,
+                                   subcap):
+        model.clear()
+        subdevs = []
+
+        if subtype:
+            subdevs = self.vm.get_connection().get_devices(subtype, subcap)
+
+        devs = self.vm.get_connection().get_devices(devtype, devcap)
+        for dev in devs:
+            prettyname = dev.pretty_name()
+
+            for subdev in subdevs:
+                if dev.name == subdev.parent:
+                    prettyname = dev.pretty_name(subdev)
+
+            model.append([prettyname, dev.name])
+
+        if len(model) == 0:
+            model.append([_("No Devices Available"), None])
 
     def is_sparse_file(self):
         if self.window.get_widget("non-sparse").get_active():

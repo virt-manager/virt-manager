@@ -295,6 +295,9 @@ class vmmConnection(gobject.GObject):
     def is_storage_capable(self):
         return virtinst.util.is_storage_capable(self.vmm)
 
+    def is_nodedev_capable(self):
+        return virtinst.NodeDeviceParser.is_nodedev_capable(self.vmm)
+
     def is_qemu_session(self):
         (scheme, ignore, ignore,
          path, ignore, ignore) = virtinst.util.uri_split(self.uri)
@@ -342,6 +345,24 @@ class vmmConnection(gobject.GObject):
 
     def get_pool(self, uuid):
         return self.pools[uuid]
+
+    def get_devices(self, devtype=None, devcap=None):
+        if not self.is_nodedev_capable():
+            return []
+
+        devs = self.vmm.listDevices(devtype, 0)
+        retdevs = []
+
+        for name in devs:
+            dev = self.vmm.nodeDeviceLookupByName(name)
+            vdev = virtinst.NodeDeviceParser.parse(dev.XMLDesc(0))
+
+            if devcap and vdev.capability_type != devcap:
+                continue
+
+            retdevs.append(vdev)
+
+        return retdevs
 
     def is_valid_saved_image(self, path):
         # FIXME: Not really sure why we are even doing this check? If libvirt
