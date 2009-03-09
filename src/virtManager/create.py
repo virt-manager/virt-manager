@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2006, 2008 Red Hat, Inc.
-# Copyright (C) 2006 Hugh O. Brock <hbrock@redhat.com>
+# Copyright (C) 2008 Red Hat, Inc.
+# Copyright (C) 2008 Cole Robinson <crobinso@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,119 +20,191 @@
 
 import gobject
 import gtk
-import gtk.gdk
 import gtk.glade
-import libvirt
-import virtinst
-import os, sys
-import logging
-import traceback
 
-import virtManager.util as vmmutil
-from virtManager.asyncjob import vmmAsyncJob
+import os, sys, statvfs
+import time
+import traceback
+import threading
+import logging
+
+import virtinst
+from virtinst import VirtualNetworkInterface
+
+from virtManager import util
 from virtManager.error import vmmErrorDialog
+from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
 from virtManager.opticalhelper import vmmOpticalDriveHelper
 
-VM_PARA_VIRT = 1
-VM_FULLY_VIRT = 2
+OS_GENERIC = "generic"
 
-VM_INSTALL_FROM_ISO = 1
-VM_INSTALL_FROM_CD = 2
+# Number of seconds to wait for media detection
+DETECT_TIMEOUT = 20
 
-VM_STORAGE_PARTITION = 1
-VM_STORAGE_FILE = 2
+PAGE_NAME = 0
+PAGE_INSTALL = 1
+PAGE_MEM = 2
+PAGE_STORAGE = 3
+PAGE_FINISH = 4
 
-VM_INST_LOCAL = 1
-VM_INST_TREE = 2
-VM_INST_PXE = 3
-
-DEFAULT_STORAGE_FILE_SIZE = 500
-
-PAGE_INTRO = 0
-PAGE_NAME = 1
-PAGE_TYPE = 2
-PAGE_INST = 3
-PAGE_INST_LOCAL = 4
-PAGE_INST_TREE = 5
-PAGE_DISK = 6
-PAGE_NETWORK = 7
-PAGE_CPUMEM = 8
-PAGE_SUMMARY = 9
+INSTALL_PAGE_ISO = 0
+INSTALL_PAGE_URL = 1
+INSTALL_PAGE_PXE = 2
 
 class vmmCreate(gobject.GObject):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
         "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),
+                                 gobject.TYPE_NONE, (str,str)),
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, [str]),
-        }
-    def __init__(self, config, connection):
+                             gobject.TYPE_NONE, [str]),
+    }
+
+    def __init__(self, config, engine):
         self.__gobject_init__()
+        self.window = gtk.glade.XML(config.get_glade_dir() + \
+                                    "/vmm-create.glade",
+                                    "vmm-create", domain="virt-manager")
         self.config = config
-        self.connection = connection
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-create.glade", "vmm-create", domain="virt-manager")
+        self.engine = engine
+
+        self.conn = None
+        self.caps = None
+        self.capsguest = None
+        self.capsdomain = None
+        self.guest = None
+        self.usepool = False
+        self.storage_browser = None
+
         self.topwin = self.window.get_widget("vmm-create")
         self.err = vmmErrorDialog(self.topwin,
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
-        self.install_error = ""
-        self.install_details = ""
-        self.non_sparse = True
 
-        self.topwin.hide()
+        # Distro detection state variables
+        self.detectThread = None
+        self.detectedDistro = None
+        self.detectThreadLock = threading.Lock()
+
+        # Async install state
+        self.install_error = None
+        self.install_details = None
+
         self.window.signal_autoconnect({
-            "on_create_pages_switch_page" : self.page_changed,
-            "on_create_cancel_clicked" : self.close,
-            "on_vmm_create_delete_event" : self.close,
+            "on_vmm_newcreate_delete_event" : self.close,
+
+            "on_create_cancel_clicked": self.close,
             "on_create_back_clicked" : self.back,
             "on_create_forward_clicked" : self.forward,
             "on_create_finish_clicked" : self.finish,
-            "on_fv_iso_location_browse_clicked" : self.browse_iso_location,
-            "on_create_memory_max_value_changed": self.set_max_memory,
-            "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
-            "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
-            "on_storage_file_address_changed": self.toggle_storage_size,
-            "on_storage_toggled" : self.change_storage_type,
-            "on_network_toggled" : self.change_network_type,
-            "on_mac_address_clicked" : self.change_macaddr_use,
-            "on_media_toggled" : self.change_media_type,
-            "on_os_type_changed" : self.change_os_type,
-            "on_cpu_architecture_changed": self.change_cpu_arch,
-            "on_virt_method_toggled": self.change_virt_method,
             "on_create_help_clicked": self.show_help,
-            })
+            "on_create_pages_switch_page": self.page_changed,
 
-        self.caps = self.connection.get_capabilities()
+            "on_create_conn_changed": self.conn_changed,
+
+            "on_install_url_entry_activate": self.detect_media_os,
+            "on_install_url_box_changed": self.url_box_changed,
+            "on_install_local_cdrom_toggled": self.local_cdrom_toggled,
+            "on_install_local_cdrom_combo_changed": self.detect_media_os,
+            "on_install_local_entry_activate": self.detect_media_os,
+            "on_install_local_browse_clicked": self.browse_iso,
+
+            "on_install_detect_os_toggled": self.toggle_detect_os,
+            "on_install_os_type_changed": self.change_os_type,
+            "on_install_local_iso_toggled": self.toggle_local_iso,
+            "on_install_detect_os_box_show": self.detect_visibility_changed,
+            "on_install_detect_os_box_hide": self.detect_visibility_changed,
+
+            "on_enable_storage_toggled": self.toggle_enable_storage,
+            "on_config_storage_browse_clicked": self.browse_storage,
+            "on_config_storage_select_toggled": self.toggle_storage_select,
+
+            "on_config_set_macaddr_toggled": self.toggle_macaddr,
+
+            "on_config_hv_changed": self.hv_changed,
+            "on_config_arch_changed": self.arch_changed,
+        })
+
         self.set_initial_state()
 
-        # Guest to fill in with values along the way
-        self._guest = virtinst.Guest(type=self.get_domain_type(),
-                                     connection=self.connection.vmm)
-        self._disk = None
-        self._net = None
-
-    def show(self):
+    def show(self, uri=None):
+        self.reset_state(uri)
         self.topwin.show()
-        self.reset_state()
         self.topwin.present()
 
+    def close(self, ignore1=None, ignore2=None):
+        self.topwin.hide()
+        return 1
+
+    def set_conn(self, newconn):
+        if self.conn == newconn:
+            return
+
+        self.conn = newconn
+        if self.conn:
+            self.set_conn_state()
+
+
+    # State init methods
+    def startup_error(self, error):
+        self.window.get_widget("create-forward").set_sensitive(False)
+        self.window.get_widget("install-box").set_sensitive(False)
+        util.tooltip_wrapper(self.window.get_widget("install-box"),
+                             error)
+        return False
+
     def set_initial_state(self):
-        notebook = self.window.get_widget("create-pages")
-        notebook.set_show_tabs(False)
 
-        #XXX I don't think I should have to go through and set a bunch of background colors
-        # in code, but apparently I do...
-        black = gtk.gdk.color_parse("#000")
-        for num in range(PAGE_SUMMARY+1):
-            name = "page" + str(num) + "-title"
-            self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL,black)
+        self.window.get_widget("create-pages").set_show_tabs(False)
+        self.window.get_widget("install-method-pages").set_show_tabs(False)
 
-        # set up the list for the cd-path widget
-        cd_list = self.window.get_widget("cd-path")
+        # FIXME: Unhide this when we make some documentation
+        self.window.get_widget("create-help").hide()
+
+        blue = gtk.gdk.color_parse("#0072A8")
+        self.window.get_widget("create-header").modify_bg(gtk.STATE_NORMAL,
+                                                          blue)
+
+        # Connection list
+        conn_list = self.window.get_widget("create-conn")
+        conn_model = gtk.ListStore(str, str)
+        conn_list.set_model(conn_model)
+        text = gtk.CellRendererText()
+        conn_list.pack_start(text, True)
+        conn_list.add_attribute(text, 'text', 1)
+
+        # Lists for the install urls
+        media_url_list = self.window.get_widget("install-url-box")
+        media_url_model = gtk.ListStore(str)
+        media_url_list.set_model(media_url_model)
+        media_url_list.set_text_column(0)
+
+        ks_url_list = self.window.get_widget("install-ks-box")
+        ks_url_model = gtk.ListStore(str)
+        ks_url_list.set_model(ks_url_model)
+        ks_url_list.set_text_column(0)
+
+        # Lists for distro type + variant
+        os_type_list = self.window.get_widget("install-os-type")
+        os_type_model = gtk.ListStore(str, str)
+        os_type_list.set_model(os_type_model)
+        text = gtk.CellRendererText()
+        os_type_list.pack_start(text, True)
+        os_type_list.add_attribute(text, 'text', 1)
+
+        os_variant_list = self.window.get_widget("install-os-version")
+        os_variant_model = gtk.ListStore(str, str)
+        os_variant_list.set_model(os_variant_model)
+        text = gtk.CellRendererText()
+        os_variant_list.pack_start(text, True)
+        os_variant_list.add_attribute(text, 'text', 1)
+
+        # Physical CD-ROM model
+        cd_list = self.window.get_widget("install-local-cdrom-combo")
+        cd_radio = self.window.get_widget("install-local-cdrom")
         # Fields are raw device path, volume label, flag indicating
         # whether volume is present or not, and HAL path
         cd_model = gtk.ListStore(str, str, bool, str)
@@ -141,495 +213,1173 @@ class vmmCreate(gobject.GObject):
         cd_list.pack_start(text, True)
         cd_list.add_attribute(text, 'text', 1)
         cd_list.add_attribute(text, 'sensitive', 2)
+        # FIXME: We should disable all this if on a remote connection
         try:
-            vmmOpticalDriveHelper(self.window.get_widget("cd-path"))
-            self.window.get_widget("media-physical").set_sensitive(True)
+            vmmOpticalDriveHelper(cd_list)
         except Exception, e:
             logging.error("Unable to create optical-helper widget: '%s'", e)
-            self.window.get_widget("media-physical").set_sensitive(False)
+            cd_radio.set_sensitive(False)
+            cd_list.set_sensitive(False)
+            util.tooltip_wrapper(self.window.get_widget("install-local-cdrom-box"), _("Error listing CD-ROM devices."))
 
-        self.window.get_widget("media-physical").set_sensitive(True)
-        self.window.get_widget("storage-partition").set_sensitive(True)
-
-        # set up the lists for the url widgets
-        media_url_list = self.window.get_widget("pv-media-url")
-        media_url_model = gtk.ListStore(str)
-        media_url_list.set_model(media_url_model)
-        media_url_list.set_text_column(0)
-
-        ks_url_list = self.window.get_widget("pv-ks-url")
-        ks_url_model = gtk.ListStore(str)
-        ks_url_list.set_model(ks_url_model)
-        ks_url_list.set_text_column(0)
-
-        # set up the lists for the networks
-        network_list = self.window.get_widget("net-network")
-        network_model = gtk.ListStore(str, str)
-        network_list.set_model(network_model)
+        # Networking
+        # [ interface type, device name, label, sensitive ]
+        net_list = self.window.get_widget("config-netdev")
+        net_model = gtk.ListStore(str, str, str, bool)
+        net_list.set_model(net_model)
         text = gtk.CellRendererText()
-        network_list.pack_start(text, True)
-        network_list.add_attribute(text, 'text', 1)
+        net_list.pack_start(text, True)
+        net_list.add_attribute(text, 'text', 2)
+        net_list.add_attribute(text, 'sensitive', 3)
 
-        device_list = self.window.get_widget("net-device")
-        device_model = gtk.ListStore(str, str, bool)
-        device_list.set_model(device_model)
-        text = gtk.CellRendererText()
-        device_list.pack_start(text, True)
-        device_list.add_attribute(text, 'text', 1)
-        device_list.add_attribute(text, 'sensitive', 2)
-
-        # set up the lists for the os-type/os-variant widgets
-        os_type_list = self.window.get_widget("os-type")
-        os_type_model = gtk.ListStore(str, str)
-        os_type_list.set_model(os_type_model)
-        text = gtk.CellRendererText()
-        os_type_list.pack_start(text, True)
-        os_type_list.add_attribute(text, 'text', 1)
-
-        os_variant_list = self.window.get_widget("os-variant")
-        os_variant_model = gtk.ListStore(str, str)
-        os_variant_list.set_model(os_variant_model)
-        text = gtk.CellRendererText()
-        os_variant_list.pack_start(text, True)
-        os_variant_list.add_attribute(text, 'text', 1)
-
-        self.window.get_widget("create-cpus-physical").set_text(str(self.connection.host_maximum_processor_count()))
-        memory = int(self.connection.host_memory_size())
-        self.window.get_widget("create-host-memory").set_text(self.pretty_memory(memory))
-        self.window.get_widget("create-memory-max").set_range(50, memory/1024)
-
+        # Archtecture
         archModel = gtk.ListStore(str)
-        archList = self.window.get_widget("cpu-architecture")
+        archList = self.window.get_widget("config-arch")
+        text = gtk.CellRendererText()
+        archList.pack_start(text, True)
+        archList.add_attribute(text, 'text', 0)
         archList.set_model(archModel)
 
-        hyperModel = gtk.ListStore(str)
-        hyperList = self.window.get_widget("hypervisor")
+        hyperModel = gtk.ListStore(str, str, str, bool)
+        hyperList = self.window.get_widget("config-hv")
+        text = gtk.CellRendererText()
+        hyperList.pack_start(text, True)
+        hyperList.add_attribute(text, 'text', 0)
+        hyperList.add_attribute(text, 'sensitive', 3)
         hyperList.set_model(hyperModel)
 
-    def reset_state(self):
-        notebook = self.window.get_widget("create-pages")
-        notebook.set_current_page(0)
-        # Hide the "finish" button until the appropriate time
-        self.window.get_widget("create-finish").hide()
-        self.window.get_widget("create-forward").show()
-        self.window.get_widget("create-back").set_sensitive(False)
-        self.window.get_widget("storage-file-size").set_sensitive(False)
+        sparse_info = self.window.get_widget("config-storage-nosparse-info")
+        sparse_str = _("Fully allocating storage will take longer now, "
+                       "but the OS install phase will be quicker. \n\n"
+                       "Skipping allocation can also cause space issues on "
+                       "the host machine, if the maximum image size exceeds "
+                       "available storage space.")
+        util.tooltip_wrapper(sparse_info, sparse_str)
 
-        # If we don't have full-virt support disable the choice, and
-        # display a message telling the user why it is not working
-        has_pv = False
-        has_fv = False
-        use_pv = False
+    def reset_state(self, urihint=None):
 
-        for guest in self.caps.guests:
-            if guest.os_type in ["xen", "linux"]:
-                has_pv = True
-                for d in guest.domains:
-                    if d.hypervisor_type in ["xen", "linux"]:
-                        use_pv = True
-            elif guest.os_type == "hvm":
-                has_fv = True
+        self.window.get_widget("create-pages").set_current_page(PAGE_NAME)
+        self.page_changed(None, None, PAGE_NAME)
 
-        self.window.get_widget("virt-method-pv").set_sensitive(has_pv)
-        self.window.get_widget("virt-method-fv").set_sensitive(has_fv)
-
-        # prioritize xen pv, but not xenner pv
-        self.window.get_widget("virt-method-fv").set_active(has_fv)
-        self.window.get_widget("virt-method-pv").set_active(not has_fv or
-                                                            has_pv and use_pv)
-        self.change_virt_method() # repopulate arch and hypervisor lists
-
-        if has_fv:
-            self.window.get_widget("virt-method-fv-unsupported").hide()
-            self.window.get_widget("virt-method-fv-disabled").hide()
-        else:
-            self.window.get_widget("virt-method-fv-unsupported").show()
-            flags = self.caps.host.features.names()
-            if "vmx" in flags or "svm" in flags:
-                self.window.get_widget("virt-method-fv-disabled").show()
-            else:
-                self.window.get_widget("virt-method-fv-disabled").hide()
-
-
-        self.change_media_type()
-        self.change_storage_type()
-        self.change_network_type()
-        self.change_macaddr_use()
+        # Name page state
         self.window.get_widget("create-vm-name").set_text("")
-        self.window.get_widget("media-iso-image").set_active(True)
-        self.window.get_widget("fv-iso-location").set_text("")
-        self.window.get_widget("storage-file-backed").set_active(True)
-        self.window.get_widget("storage-partition-address").set_text("")
-        self.window.get_widget("storage-file-address").set_text("")
-        self.window.get_widget("storage-file-size").set_value(4000)
-        self.window.get_widget("create-memory-max").set_value(512)
-        self.window.get_widget("create-memory-startup").set_value(512)
-        self.window.get_widget("create-vcpus").set_value(1)
-        self.window.get_widget("create-vcpus").get_adjustment().upper = self.connection.get_max_vcpus()
-        self.window.get_widget("non-sparse").set_active(True)
-        model = self.window.get_widget("pv-media-url").get_model()
-        self.populate_url_model(model, self.config.get_media_urls())
-        model = self.window.get_widget("pv-ks-url").get_model()
-        self.populate_url_model(model, self.config.get_kickstart_urls())
+        self.window.get_widget("method-local").set_active(True)
+        self.window.get_widget("create-conn").set_active(-1)
+        activeconn = self.populate_conn_list(urihint)
+        self.set_conn(activeconn)
+        if not activeconn:
+            return self.startup_error(_("No active connection to install on."))
 
-        # Fill list of OS types
+        # Everything from this point forward should be connection independent
+
+        # Distro/Variant
+        self.toggle_detect_os(self.window.get_widget("install-detect-os"))
         self.populate_os_type_model()
-        self.window.get_widget("os-type").set_active(0)
+        self.window.get_widget("install-os-type").set_active(0)
 
-        self.window.get_widget("net-type-network").set_active(True)
-        self.window.get_widget("net-type-device").set_active(False)
-        self.window.get_widget("mac-address").set_active(False)
-        self.window.get_widget("create-mac-address").set_text("")
+        # Install local/iso
+        self.window.get_widget("install-local-entry").set_text("")
 
-        net_box = self.window.get_widget("net-network")
-        self.populate_network_model(net_box.get_model())
-        net_box.set_active(0)
+        # Install URL
+        self.window.get_widget("install-urlopts-entry").set_text("")
+        self.window.get_widget("install-ks-entry").set_text("")
+        self.window.get_widget("install-url-entry").set_text("")
+        urlmodel = self.window.get_widget("install-url-box").get_model()
+        ksmodel  = self.window.get_widget("install-ks-box").get_model()
+        self.populate_url_model(urlmodel, self.config.get_media_urls())
+        self.populate_url_model(ksmodel, self.config.get_kickstart_urls())
 
-        dev_box = self.window.get_widget("net-device")
-        res = self.populate_device_model(dev_box.get_model())
-        if res[0]:
-            dev_box.set_active(res[1])
-        else:
-            dev_box.set_active(-1)
+        # Mem / CPUs
+        self.window.get_widget("config-mem").set_value(512)
+        self.window.get_widget("config-cpus").set_value(1)
 
-        self.install_error = None
+        # Storage
+        self.window.get_widget("enable-storage").set_active(True)
+        self.window.get_widget("config-storage-create").set_active(True)
+        # FIXME: Make sure this doesn't exceed host?
+        self.window.get_widget("config-storage-size").set_value(8)
+        self.window.get_widget("config-storage-entry").set_text("")
+        self.window.get_widget("config-storage-nosparse").set_active(True)
 
+        # Final page
+        self.window.get_widget("config-advanced-expander").set_expanded(False)
 
-    def forward(self, ignore=None):
-        notebook = self.window.get_widget("create-pages")
+    def set_conn_state(self):
+        # Update all state that has some dependency on the current connection
+
+        self.window.get_widget("create-forward").set_sensitive(True)
+        self.window.get_widget("install-box").set_sensitive(True)
+
+        if self.conn.is_read_only():
+            return self.startup_error(_("Connection is read only."))
+
+        # A bit out of order, but populate arch + hv lists so we can
+        # determine a default
+        self.caps = self.conn.get_capabilities()
+
         try:
-            if(self.validate(notebook.get_current_page()) != True):
-                return
+            self.change_caps()
         except Exception, e:
-            self.err.show_err(_("Uncaught error validating input: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            logging.exception("Error determining default hypervisor")
+            return self.startup_error(_("No guests are supported for this"
+                                        " connection."))
+        self.populate_hv()
+
+        is_local = not self.conn.is_remote()
+        is_storage_capable = self.conn.is_storage_capable()
+        is_pv = (self.capsguest.os_type == "xen")
+
+        # Install Options
+        method_tree = self.window.get_widget("method-tree")
+        method_pxe = self.window.get_widget("method-pxe")
+        method_local = self.window.get_widget("method-local")
+
+        method_tree.set_sensitive(is_local)
+        method_local.set_sensitive(not is_pv)
+        method_pxe.set_sensitive(not is_pv)
+
+        pxe_tt = None
+        local_tt = None
+        tree_tt = None
+
+        if is_pv:
+            base = _("%s installs not available for paravirt guests.")
+            pxe_tt = base % "PXE"
+            local_tt = base % "CDROM/ISO"
+        if not is_local:
+            tree_tt = _("URL installs not available for remote connections.")
+            if not is_storage_capable and not local_tt:
+                local_tt = _("Connection does not support storage management.")
+
+        if not is_local and not is_storage_capable:
+            method_local.set_sensitive(False)
+        if method_tree.get_active() and not is_local:
+            method_local.set_active(True)
+        elif is_pv:
+            method_tree.set_active(True)
+
+        if not (method_tree.get_property("sensitive") or
+                method_local.get_property("sensitive") or
+                method_pxe.get_property("sensitive")):
+            self.startup_error(_("No install options available for this "
+                                 "connection."))
+
+        util.tooltip_wrapper(method_tree, tree_tt)
+        util.tooltip_wrapper(method_local, local_tt)
+        util.tooltip_wrapper(method_pxe, pxe_tt)
+
+        # Attempt to create the default pool
+        self.usepool = False
+        try:
+            if is_storage_capable:
+                # FIXME: Emit 'pool-added' or something?
+                util.build_default_pool(self.conn.vmm)
+                self.usepool = True
+        except Exception, e:
+            logging.debug("Building default pool failed: %s" % str(e))
+
+
+        # Install local
+        self.window.get_widget("install-local-cdrom-box").set_sensitive(is_local)
+        self.window.get_widget("install-local-browse").set_sensitive(is_local)
+        if not is_local:
+            self.window.get_widget("install-local-iso").set_active(True)
+
+        # Don't select physical CDROM if no valid media is present
+        use_cd = (self.window.get_widget("install-local-cdrom-combo").get_active() >= 0)
+        if use_cd:
+            self.window.get_widget("install-local-cdrom").set_active(True)
+        else:
+            self.window.get_widget("install-local-iso").set_active(True)
+
+
+        # Memory
+        memory = int(self.conn.host_memory_size())
+        mem_label = _("Up to %(maxmem)s available on the host") % {'maxmem': \
+                    self.pretty_memory(memory) }
+        mem_label = ("<span size='small' color='#484848'>%s</span>" %
+                     mem_label)
+        self.window.get_widget("config-mem").set_range(50, memory/1024)
+        self.window.get_widget("phys-mem-label").set_markup(mem_label)
+
+        # CPU
+        phys_cpus = self.conn.host_active_processor_count()
+
+        max_v = self.conn.get_max_vcpus(_type=self.capsdomain.hypervisor_type)
+        cmax = phys_cpus
+        if int(max_v) < int(phys_cpus):
+            cmax = max_v
+            cpu_tooltip = (_("Hypervisor only supports %d virtual CPUs.") %
+                           max_v)
+        else:
+            cpu_tooltip = None
+        util.tooltip_wrapper(self.window.get_widget("config-cpus"),
+                             cpu_tooltip)
+
+        cpu_label = _("Up to %(numcpus)d available") % { 'numcpus': \
+                                                            int(phys_cpus)}
+        cpu_label = ("<span size='small' color='#484848'>%s</span>" %
+                     cpu_label)
+        self.window.get_widget("config-cpus").set_range(.1, int(cmax) or 1)
+        self.window.get_widget("phys-cpu-label").set_markup(cpu_label)
+
+        # Storage
+        have_storage = (is_local or is_storage_capable)
+        storage_tooltip = None
+        max_storage = self.host_disk_space()
+        hd_label = "%s available on the host" % self.pretty_storage(max_storage)
+        hd_label = ("<span color='#484848'>%s</span>" % hd_label)
+        self.window.get_widget("phys-hd-label").set_markup(hd_label)
+        self.window.get_widget("config-storage-size").set_range(1, max_storage)
+
+        use_storage = self.window.get_widget("config-storage-select")
+        storage_area = self.window.get_widget("config-storage-area")
+        self.window.get_widget("config-storage-browse").set_sensitive(is_local)
+
+        storage_area.set_sensitive(have_storage)
+        if not have_storage:
+            storage_tooltip = _("Connection does not support storage"
+                                " management.")
+            use_storage.set_sensitive(True)
+        util.tooltip_wrapper(storage_area, storage_tooltip)
+
+        # Networking
+        # This function will take care of all the remote stuff for us
+        self.populate_network_model()
+        self.window.get_widget("config-set-macaddr").set_active(True)
+        newmac = ""
+        try:
+            net = VirtualNetworkInterface(conn=self.conn.vmm)
+            net.setup(self.conn.vmm)
+            newmac = net.macaddr
+        except Exception, e:
+            logging.exception("Generating macaddr failed: %s" % str(e))
+        self.window.get_widget("config-macaddr").set_text(newmac)
+
+    def populate_hv(self):
+        hv_list = self.window.get_widget("config-hv")
+        model = hv_list.get_model()
+        model.clear()
+
+        default = 0
+        tooltip = None
+        instmethod = self.get_config_install_page()
+        for guest in self.caps.guests:
+            gtype = guest.os_type
+            for dom in guest.domains:
+                domtype = dom.hypervisor_type
+                label = domtype
+
+                if domtype == "kvm":
+                    if gtype == "xen":
+                        label = "xenner"
+                elif domtype == "xen":
+                    if gtype == "xen":
+                        label = "xen (paravirt)"
+                    elif gtype == "hvm":
+                        label = "xen (fullvirt)"
+                elif domtype == "test":
+                    if gtype == "xen":
+                        label = "test (xen)"
+                    elif gtype == "hvm":
+                        label = "test (hvm)"
+
+                # Don't add multiple rows for each arch
+                for m in model:
+                    if m[0] == label:
+                        label = None
+                        break
+                if label == None:
+                    continue
+
+                # Determine if this is the default given by guest_lookup
+                if (gtype == self.capsguest.os_type and
+                    self.capsdomain.hypervisor_type == domtype):
+                    default = len(model)
+
+                if gtype == "xen":
+                    if (instmethod == INSTALL_PAGE_PXE or
+                        instmethod == INSTALL_PAGE_ISO):
+                        tooltip = _("Only URL installs are supported for "
+                                    "paravirt.")
+
+                model.append([label, gtype, domtype, not bool(tooltip)])
+
+        hv_info = self.window.get_widget("config-hv-info")
+        if tooltip:
+            hv_info.show()
+            util.tooltip_wrapper(hv_info, tooltip)
+        else:
+            hv_info.hide()
+
+        hv_list.set_active(default)
+
+    def populate_arch(self):
+        arch_list = self.window.get_widget("config-arch")
+        model = arch_list.get_model()
+        model.clear()
+
+        default = 0
+        for guest in self.caps.guests:
+            for dom in guest.domains:
+                if (guest.os_type == self.capsguest.os_type and
+                    dom.hypervisor_type == self.capsdomain.hypervisor_type):
+
+                    arch = guest.arch
+                    if arch == self.capsguest.arch:
+                        default = len(model)
+                    model.append([guest.arch])
+
+        arch_list.set_active(default)
+
+    def populate_conn_list(self, urihint = None):
+        conn_list = self.window.get_widget("create-conn")
+        model = conn_list.get_model()
+        model.clear()
+
+        default = -1
+        for c in self.engine.connections.values():
+            connobj = c["connection"]
+            if not connobj.is_active():
+                continue
+
+            if connobj.get_uri() == urihint:
+                default = len(model)
+            elif default < 0 and not connobj.is_remote():
+                # Favor local connections over remote connections
+                default = len(model)
+
+            model.append([connobj.get_uri(), connobj.get_pretty_desc()])
+
+        no_conns = (len(model) == 0)
+
+        if default < 0 and not no_conns:
+            default = 0
+
+        activeuri = ""
+        activedesc = ""
+        activeconn = None
+        if not no_conns:
+            conn_list.set_active(default)
+            activeuri, activedesc = model[default]
+            activeconn = self.engine.connections[activeuri]["connection"]
+
+        self.window.get_widget("create-conn-label").set_text(activedesc)
+        if len(model) <= 1:
+            self.window.get_widget("create-conn").hide()
+            self.window.get_widget("create-conn-label").show()
+        else:
+            self.window.get_widget("create-conn").show()
+            self.window.get_widget("create-conn-label").hide()
+
+        return activeconn
+
+    def populate_os_type_model(self):
+        model = self.window.get_widget("install-os-type").get_model()
+        model.clear()
+        model.append([OS_GENERIC, _("Generic")])
+        types = virtinst.FullVirtGuest.list_os_types()
+        for t in types:
+            model.append([t, virtinst.FullVirtGuest.get_os_type_label(t)])
+
+    def populate_os_variant_model(self, _type):
+        model = self.window.get_widget("install-os-version").get_model()
+        model.clear()
+        if _type == OS_GENERIC:
+            model.append([OS_GENERIC, _("Generic")])
             return
 
-        if notebook.get_current_page() == PAGE_INST:
-            if self.get_config_install_method() == VM_INST_LOCAL:
-                notebook.set_current_page(PAGE_INST_LOCAL)
-            elif self.get_config_install_method() == VM_INST_TREE:
-                notebook.set_current_page(PAGE_INST_TREE)
-            else:
-                # No config for PXE needed (yet)
-                notebook.set_current_page(PAGE_DISK)
-        elif notebook.get_current_page() in [PAGE_INST_TREE, PAGE_INST_LOCAL]:
-            notebook.set_current_page(PAGE_DISK)
-        elif notebook.get_current_page() == PAGE_DISK and self.connection.is_qemu_session():
-            # Skip network for non-root
-            notebook.set_current_page(PAGE_CPUMEM)
-        else:
-            notebook.next_page()
+        variants = virtinst.FullVirtGuest.list_os_variants(_type)
+        for variant in variants:
+            model.append([variant,
+                          virtinst.FullVirtGuest.get_os_variant_label(_type,
+                                                                      variant)])
+    def populate_url_model(self, model, urls):
+        model.clear()
+        for url in urls:
+            model.append([url])
 
-    def back(self, ignore=None):
-        notebook = self.window.get_widget("create-pages")
-        # do this always, since there's no "leaving a notebook page" event.
-        self.window.get_widget("create-finish").hide()
-        self.window.get_widget("create-forward").show()
-        if notebook.get_current_page() in [PAGE_INST_TREE, PAGE_INST_LOCAL]:
-            notebook.set_current_page(PAGE_INST)
-        elif notebook.get_current_page() == PAGE_DISK:
-            if self.get_config_install_method() == VM_INST_LOCAL:
-                notebook.set_current_page(PAGE_INST_LOCAL)
-            elif self.get_config_install_method() == VM_INST_TREE:
-                notebook.set_current_page(PAGE_INST_TREE)
-            else:
-                # No config for PXE needed (yet)
-                notebook.set_current_page(PAGE_INST)
-        elif notebook.get_current_page() == PAGE_CPUMEM and self.connection.is_qemu_session():
-            # Skip network for non-root
-            notebook.set_current_page(PAGE_DISK)
-        else:
-            notebook.prev_page()
+    def populate_network_model(self):
+        net_list = self.window.get_widget("config-netdev")
+        model = net_list.get_model()
+        model.clear()
 
+        # For qemu:///session
+        if self.conn.is_qemu_session():
+            model.append([VirtualNetworkInterface.TYPE_USER, None,
+                          _("Usermode Networking"), True])
+            net_list.set_active(0)
+            return
+
+        hasNet = False
+        netIdx = 0
+        # Virtual Networks
+        for uuid in self.conn.list_net_uuids():
+            net = self.conn.get_net(uuid)
+
+            # FIXME: Should we use 'default' even if it's inactive?
+            label = _("Virtual network") + " '%s'" % net.get_name()
+            if not net.is_active():
+                label +=  " (%s)" % _("Inactive")
+
+            use_nat, host_dev = net.get_ipv4_forward()
+            if not use_nat:
+                desc = _("Isolated network")
+            elif host_dev:
+                desc = _("NAT to %s") % host_dev
+            else:
+                desc = _("NAT to any device")
+            label += ": %s" % desc
+
+            model.append([ VirtualNetworkInterface.TYPE_VIRTUAL,
+                           net.get_name(), label, True])
+            hasNet = True
+            # FIXME: This preference should be configurable
+            if net.get_name() == "default":
+                netIdx = len(model) - 1
+
+        if not hasNet:
+            model.append([None, None, _("No virtual networks available"),
+                          False])
+
+        # Physical devices
+        hasShared = False
+        brIndex = -1
+        if not self.conn.is_remote():
+            for name in self.conn.list_net_device_paths():
+                br = self.conn.get_net_device(name)
+
+                if br.is_shared():
+                    hasShared = True
+                    if brIndex < 0:
+                        brIndex = len(model)
+
+                    brlabel =  "(%s %s)" % (_("Bridge"), br.get_bridge())
+                    sensitive = True
+                else:
+                    brlabel = "(%s)" %  _("Not bridged")
+                    sensitive = False
+
+                model.append([VirtualNetworkInterface.TYPE_BRIDGE,
+                              br.get_bridge(),
+                              _("Host device %s %s") % (br.get_name(), brlabel),
+                              sensitive])
+
+        # If there is a bridge device, default to that
+        # If not, use 'default' network
+        # If not present, use first list entry
+        # If list empty, use no network devices
+        if hasShared:
+            default = brIndex
+        elif hasNet:
+            default = netIdx
+        else:
+            model.insert(0, [None, None, _("No networking."), True])
+            default = 0
+
+        net_list.set_active(default)
+
+    def change_caps(self, gtype=None, dtype=None):
+        (newg,
+         newdom) = virtinst.CapabilitiesParser.guest_lookup(conn=self.conn.vmm,
+                                                            caps=self.caps,
+                                                            os_type = gtype,
+                                                            type = dtype,
+                                                            accelerated=True)
+
+        if (self.capsguest and self.capsdomain and
+            (newg.arch == self.capsguest.arch and
+            newg.os_type == self.capsguest.os_type and
+            newdom.hypervisor_type == self.capsdomain.hypervisor_type)):
+            # No change
+            return
+
+        self.capsguest = newg
+        self.capsdomain = newdom
+        logging.debug("Guest type set to os_type=%s, arch=%s, dom_type=%s" %
+                      (self.capsguest.os_type, self.capsguest.arch,
+                       self.capsdomain.hypervisor_type))
+
+    def populate_summary(self):
+        ignore, ignore, dlabel, vlabel = self.get_config_os_info()
+        mem = self.pretty_memory(int(self.guest.memory) * 1024)
+        cpu = str(int(self.guest.vcpus))
+
+        instmethod = self.get_config_install_page()
+        install = ""
+        if instmethod == INSTALL_PAGE_ISO:
+            install = _("Local CDROM/ISO")
+        elif instmethod == INSTALL_PAGE_URL:
+            install = _("URL Install Tree")
+        elif instmethod == INSTALL_PAGE_PXE:
+            install = _("PXE Install")
+
+        if len(self.guest.disks) == 0:
+            storage = _("None")
+        else:
+            disk = self.guest.disks[0]
+            storage = "%s" % self.pretty_storage(disk.size)
+            storage += (" <span size='small' color='#484848'>%s</span>" %
+                         disk.path)
+
+        osstr = ""
+        if not dlabel:
+            osstr = _("Generic")
+        elif not vlabel:
+            osstr = _("Generic") + " " + dlabel
+        else:
+            osstr = vlabel
+
+        title = "Ready to begin installation of <b>%s</b>" % self.guest.name
+
+        self.window.get_widget("summary-title").set_markup(title)
+        self.window.get_widget("summary-os").set_text(osstr)
+        self.window.get_widget("summary-install").set_text(install)
+        self.window.get_widget("summary-mem").set_text(mem)
+        self.window.get_widget("summary-cpu").set_text(cpu)
+        self.window.get_widget("summary-storage").set_markup(storage)
+
+
+    # get_* methods
     def get_config_name(self):
         return self.window.get_widget("create-vm-name").get_text()
 
-    def get_config_method(self):
-        if self.window.get_widget("virt-method-pv").get_active():
-            return VM_PARA_VIRT
-        elif self.window.get_widget("virt-method-fv").get_active():
-            return VM_FULLY_VIRT
-        else:
-            return VM_PARA_VIRT
-
-    def get_config_install_source(self):
-        if self.get_config_install_method() == VM_INST_TREE:
-            widget = self.window.get_widget("pv-media-url")
-            url= widget.child.get_text().strip()
-            # Add the URL to the list, if it's different
-            self.config.add_media_url(url)
-            self.populate_url_model(widget.get_model(), self.config.get_media_urls())
-            return url
-        elif self.get_config_install_method() == VM_INST_LOCAL:
-            if self.window.get_widget("media-iso-image").get_active():
-                return self.window.get_widget("fv-iso-location").get_text()
-            else:
-                return self.window.get_widget("cd-path").get_active_text()
-        else:
-            return "PXE"
-
-    def get_config_installer(self, _type, os_type):
-        if self.get_config_install_method() == VM_INST_PXE:
-            return virtinst.PXEInstaller(type=_type, os_type=os_type,
-                                         conn=self._guest.conn)
-        else:
-            return virtinst.DistroInstaller(type=_type, os_type=os_type,
-                                            conn=self._guest.conn)
-
-    def get_config_kickstart_source(self):
-        if self.get_config_install_method() == VM_INST_TREE:
-            widget = self.window.get_widget("pv-ks-url")
-            url = widget.child.get_text().strip()
-            self.config.add_kickstart_url(url)
-            self.populate_url_model(widget.get_model(), self.config.get_kickstart_urls())
-            return url
-        else:
-            return ""
-
-    def get_config_disk_image(self):
-        if self.window.get_widget("storage-partition").get_active():
-            return self.window.get_widget("storage-partition-address").get_text()
-        else:
-            return self.window.get_widget("storage-file-address").get_text()
-
-    def get_config_partition_size(self):
-        try:
-            partition_address = self.get_config_disk_image()
-            fd = open(partition_address,"rb")
-            fd.seek(0,2)
-            block_size = fd.tell() / 1024 / 1024
-            return block_size
-        except Exception:
-            details = "Unable to verify partition size: '%s'" % \
-                      "".join(traceback.format_exc())
-            logging.error(details)
-            return None
-        
-    def get_config_disk_size(self):
-        if self.window.get_widget("storage-partition").get_active():
-            return self.get_config_partition_size()
-        if not self.window.get_widget("storage-file-backed").get_active():
-            return None
-        if not self.window.get_widget("storage-file-size").get_editable():
-            return None
-        else:
-            return self.window.get_widget("storage-file-size").get_value()
-    
-    def get_config_kernel_params(self):
-        return self.window.get_widget("kernel-params").get_text()
-
-    def get_config_network(self):
-        if self.connection.is_qemu_session():
-            return ["user"]
-
-        if self.window.get_widget("net-type-network").get_active():
-            net = self.window.get_widget("net-network")
-            model = net.get_model()
-            return ["network", model.get_value(net.get_active_iter(), 0)]
-        else:
-            dev = self.window.get_widget("net-device")
-            model = dev.get_model()
-            return ["bridge", model.get_value(dev.get_active_iter(), 0)]
-
-    def get_config_macaddr(self):
-        macaddr = None
-        if self.window.get_widget("mac-address").get_active():
-            macaddr = self.window.get_widget("create-mac-address").get_text()
-        return macaddr
-
-    def get_config_maximum_memory(self):
-        return self.window.get_widget("create-memory-max").get_value()
-
-    def get_config_initial_memory(self):
-        return self.window.get_widget("create-memory-startup").get_value()
-
-    def get_config_virtual_cpus(self):
-        return self.window.get_widget("create-vcpus").get_value()
-
-    def get_config_install_method(self):
+    def get_config_install_page(self):
         if self.window.get_widget("method-local").get_active():
-            return VM_INST_LOCAL
+            return INSTALL_PAGE_ISO
         elif self.window.get_widget("method-tree").get_active():
-            return VM_INST_TREE
+            return INSTALL_PAGE_URL
+        elif self.window.get_widget("method-pxe").get_active():
+            return INSTALL_PAGE_PXE
+
+    def get_config_os_info(self):
+        d_list = self.window.get_widget("install-os-type")
+        d_idx = d_list.get_active()
+        v_list = self.window.get_widget("install-os-version")
+        v_idx = v_list.get_active()
+        distro = None
+        dlabel = None
+        variant = None
+        vlabel = None
+
+        if d_idx >= 0:
+            distro, dlabel = d_list.get_model()[d_idx]
+        if v_idx >= 0:
+            variant, vlabel = v_list.get_model()[v_idx]
+
+        return (distro, variant, dlabel, vlabel)
+
+    def get_config_local_media(self):
+        if self.window.get_widget("install-local-cdrom").get_active():
+            return self.window.get_widget("install-local-cdrom-combo").get_active_text()
         else:
-            return VM_INST_PXE
+            return self.window.get_widget("install-local-entry").get_text()
 
-    def get_config_os_type(self):
-        _type = self.window.get_widget("os-type")
-        if _type.get_active_iter() != None:
-            return _type.get_model().get_value(_type.get_active_iter(), 0)
-        return None
+    def get_config_detectable_media(self):
+        instpage = self.get_config_install_page()
+        media = ""
 
-    def get_config_os_variant(self):
-        variant = self.window.get_widget("os-variant")
-        if variant.get_active_iter() != None:
-            return variant.get_model().get_value(variant.get_active_iter(), 0)
-        return None
+        if instpage == INSTALL_PAGE_ISO:
+            media = self.get_config_local_media()
+        elif instpage == INSTALL_PAGE_URL:
+            media = self.window.get_widget("install-url-entry").get_text()
 
-    def get_config_os_label(self):
-        variant = self.window.get_widget("os-variant")
-        if variant.get_active_iter() != None:
-            return variant.get_model().get_value(variant.get_active_iter(), 1)
+        return media
 
-        _type = self.window.get_widget("os-type")
-        if _type.get_active_iter() != None:
-            return _type.get_model().get_value(_type.get_active_iter(), 1)
-        return "N/A"
+    def get_config_url_info(self):
+        media = self.window.get_widget("install-url-entry").get_text().strip()
+        extra = self.window.get_widget("install-urlopts-entry").get_text().strip()
+        ks = self.window.get_widget("install-ks-entry").get_text().strip()
+
+        if media:
+            self.config.add_media_url(media)
+        if ks:
+            self.config.add_kickstart_url(ks)
+
+        return (media.strip(), extra.strip(), ks.strip())
+
+    def get_storage_info(self):
+        path = None
+        size = self.window.get_widget("config-storage-size").get_value()
+        nosparse = self.window.get_widget("config-storage-nosparse").get_active()
+        if self.window.get_widget("config-storage-create").get_active():
+            path = self.get_default_path(self.guest.name)
+            logging.debug("Default storage path is: %s" % path)
+        else:
+            path = self.window.get_widget("config-storage-entry").get_text()
+
+        return (path, size, nosparse)
+
+    def get_default_path(self, name):
+        path = ""
+
+        # Don't generate a new path if the install failed
+        if self.install_error:
+            if self.guest and len(self.guest.disks) > 0:
+                return self.guest.disks[0].path
+
+        if not self.usepool:
+
+            # Use old generating method
+            d = self.config.get_default_image_dir(self.conn)
+            origf = os.path.join(d, name + ".img")
+            f = origf
+
+            n = 1
+            while os.path.exists(f) and n < 100:
+                f = os.path.join(d, self.get_config_name() +
+                                    "-" + str(n) + ".img")
+                n += 1
+            if os.path.exists(f):
+                f = origf
+
+            path = f
+        else:
+            pool = self.conn.vmm.storagePoolLookupByName(util.DEFAULT_POOL_NAME)
+            path = virtinst.Storage.StorageVolume.find_free_name(name,
+                            pool_object=pool, suffix=".img")
+
+            path = os.path.join(util.DEFAULT_POOL_PATH, path)
+
+        return path
+
+    def host_disk_space(self, path=None):
+        if not path:
+            path = util.DEFAULT_POOL_PATH
+
+        avail = 0
+        if self.usepool:
+            # FIXME: make sure not inactive?
+            # FIXME: use a conn specific function after we send pool-added
+            pool = virtinst.util.lookup_pool_by_path(self.conn.vmm, path)
+            if pool:
+                avail = int(virtinst.util.get_xml_path(pool.XMLDesc(0),
+                                                       "/pool/available"))
+
+        if not avail and not self.conn.is_remote():
+            vfs = os.statvfs(os.path.dirname(path))
+            avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
+
+        return int(avail / 1024.0 / 1024.0 / 1024.0)
+
+    def get_config_network_info(self):
+        netidx = self.window.get_widget("config-netdev").get_active()
+        netinfo = self.window.get_widget("config-netdev").get_model()[netidx]
+        macaddr = self.window.get_widget("config-macaddr").get_text()
+
+        return netinfo[0], netinfo[1], macaddr.strip()
 
     def get_config_sound(self):
-        if self.connection.is_remote():
+        if self.conn.is_remote():
             return self.config.get_remote_sound()
         return self.config.get_local_sound()
 
-    def page_changed(self, notebook, page, page_number):
-        # would you like some spaghetti with your salad, sir?
+    def is_detect_active(self):
+        return self.window.get_widget("install-detect-os").get_active()
 
-        if page_number == PAGE_INTRO:
+
+    # Listeners
+    def conn_changed(self, src):
+        idx = src.get_active()
+        model = src.get_model()
+
+        if idx < 0:
+            self.set_conn(None)
+            return
+
+        uri = model[idx][0]
+        conn = self.engine.connections[uri]["connection"]
+        self.set_conn(conn)
+
+    def hv_changed(self, src):
+        idx = src.get_active()
+        if idx < 0:
+            return
+
+        row = src.get_model()[idx]
+
+        self.change_caps(row[1], row[2])
+        self.populate_arch()
+
+    def arch_changed(self, src):
+        idx = src.get_active()
+        if idx < 0:
+            return
+
+    def url_box_changed(self, ignore):
+        # If the url_entry has focus, don't fire detect_media_os, it means
+        # the user is probably typing
+        if self.window.get_widget("install-url-entry").flags() & gtk.HAS_FOCUS:
+            return
+        self.detect_media_os()
+
+    def detect_media_os(self, ignore1=None):
+        curpage = self.window.get_widget("create-pages").get_current_page()
+        if self.is_detect_active() and curpage == PAGE_INSTALL:
+            self.detect_os_distro()
+
+    def toggle_detect_os(self, src):
+        dodetect = src.get_active()
+
+        if dodetect:
+            self.window.get_widget("install-os-type-label").show()
+            self.window.get_widget("install-os-version-label").show()
+            self.window.get_widget("install-os-type").hide()
+            self.window.get_widget("install-os-version").hide()
+            self.detect_media_os() # Run detection
+        else:
+            self.window.get_widget("install-os-type-label").hide()
+            self.window.get_widget("install-os-version-label").hide()
+            self.window.get_widget("install-os-type").show()
+            self.window.get_widget("install-os-version").show()
+
+    def change_os_type(self, box):
+        model = box.get_model()
+        if box.get_active_iter() != None:
+            _type = model.get_value(box.get_active_iter(), 0)
+            self.populate_os_variant_model(_type)
+
+        variant = self.window.get_widget("install-os-version")
+        variant.set_active(0)
+
+    def local_cdrom_toggled(self, src):
+        combo = self.window.get_widget("install-local-cdrom-combo")
+        is_active = src.get_active()
+        if is_active:
+            if combo.get_active() != -1:
+                # Local CDROM was selected with media preset, detect distro
+                self.detect_media_os()
+
+        self.window.get_widget("install-local-cdrom-combo").set_sensitive(is_active)
+
+    def toggle_local_iso(self, src):
+        uselocal = src.get_active()
+        self.window.get_widget("install-local-entry").set_sensitive(uselocal)
+        self.window.get_widget("install-local-browse").set_sensitive(uselocal)
+
+    def detect_visibility_changed(self, src, ignore=None):
+        is_visible = src.get_property("visible")
+        detect_chkbox = self.window.get_widget("install-detect-os")
+        nodetect_label = self.window.get_widget("install-nodetect-label")
+
+        detect_chkbox.set_active(is_visible)
+        detect_chkbox.toggled()
+
+        if is_visible:
+            nodetect_label.hide()
+        else:
+            nodetect_label.show()
+
+    def browse_iso(self, ignore1=None, ignore2=None):
+        f = self._browse_file(_("Locate ISO Image"))
+        if f != None:
+            self.window.get_widget("install-local-entry").set_text(f)
+        self.window.get_widget("install-local-entry").activate()
+
+    def toggle_enable_storage(self, src):
+        self.window.get_widget("config-storage-box").set_sensitive(src.get_active())
+
+    def browse_storage(self, ignore1):
+        f = self._browse_file(_("Locate existing storage."))
+        if f != None:
+            self.window.get_widget("config-storage-entry").set_text(f)
+
+    def toggle_storage_select(self, src):
+        act = src.get_active()
+        self.window.get_widget("config-storage-browse-box").set_sensitive(act)
+
+    def toggle_macaddr(self, src):
+        self.window.get_widget("config-macaddr").set_sensitive(src.get_active())
+
+    def set_storage_path(self, src, path):
+        self.window.get_widget("config-storage-entry").set_text(path)
+
+    # Navigation methods
+    def set_install_page(self):
+        instnotebook = self.window.get_widget("install-method-pages")
+        detectbox = self.window.get_widget("install-detect-os-box")
+        instpage = self.get_config_install_page()
+
+        # Detection only works/ is valid for URL,
+        # FIXME: Also works for CDROM if running as root (since we need to
+        # mount the iso/cdrom), but we should probably make this work for
+        # more distros (like windows) before we enable it
+        if (instpage == INSTALL_PAGE_URL):
+            detectbox.show()
+        else:
+            detectbox.hide()
+
+        if instpage == INSTALL_PAGE_PXE:
+            # Hide the install notebook for pxe, since there isn't anything
+            # to ask for
+            instnotebook.hide()
+        else:
+            instnotebook.show()
+
+        instnotebook.set_current_page(instpage)
+
+    def back(self, src):
+        notebook = self.window.get_widget("create-pages")
+        curpage = notebook.get_current_page()
+
+        if curpage == PAGE_INSTALL:
+            self.reset_guest_type()
+
+        notebook.set_current_page(curpage - 1)
+
+    def forward(self, src):
+        notebook = self.window.get_widget("create-pages")
+        curpage = notebook.get_current_page()
+
+        if self.validate(notebook.get_current_page()) != True:
+            return
+
+        if curpage == PAGE_NAME:
+            self.set_install_page()
+            # See if we need to alter our default HV based on install method
+            # FIXME: URL installs also come into play with whether we want
+            # PV or FV
+            self.guest_from_install_type()
+
+
+        notebook.set_current_page(curpage + 1)
+
+    def page_changed(self, ignore1, ignore2, pagenum):
+
+        # Update page number
+        page_lbl = ("<span color='#59B0E2'>%s</span>" %
+                    _("Step %(current_page)d of %(max_page)d") %
+                    {'current_page': pagenum+1, 'max_page': PAGE_FINISH+1})
+
+        self.window.get_widget("config-pagenum").set_markup(page_lbl)
+
+        if pagenum == PAGE_NAME:
             self.window.get_widget("create-back").set_sensitive(False)
-        elif page_number == PAGE_NAME:
-            name_widget = self.window.get_widget("create-vm-name")
-            name_widget.grab_focus()
-        elif page_number == PAGE_TYPE:
-            pass
-        elif page_number == PAGE_INST:
-            if self.get_config_method() == VM_PARA_VIRT:
-                # Xen PV can't PXE or CDROM install :-(
-                self.window.get_widget("method-local").set_sensitive(False)
-                self.window.get_widget("method-pxe").set_sensitive(False)
-                self.window.get_widget("method-tree").set_active(True)
-            else:
-                self.window.get_widget("method-local").set_sensitive(True)
-                self.window.get_widget("method-pxe").set_sensitive(True)
+        else:
+            self.window.get_widget("create-back").set_sensitive(True)
 
-            if self.connection.is_remote():
-                self.window.get_widget("method-tree").set_sensitive(False)
-            else:
-                self.window.get_widget("method-tree").set_sensitive(True)
-        elif page_number == PAGE_INST_TREE:
-            url_widget = self.window.get_widget("pv-media-url")
-            url_widget.grab_focus()
-        elif page_number == PAGE_INST_LOCAL:
-            self.change_media_type()
-            url_widget = self.window.get_widget("fv-iso-location")
-            url_widget.grab_focus()
+        if pagenum == PAGE_INSTALL:
+            self.detect_media_os()
 
-            if self.connection.is_remote():
-                self.window.get_widget("fv-iso-location-browse").set_sensitive(False)
-                self.window.get_widget("media-physical").set_sensitive(False)
-            else:
-                self.window.get_widget("fv-iso-location-browse").set_sensitive(True)
-                self.window.get_widget("media-physical").set_sensitive(True)
-
-        elif page_number == PAGE_DISK:
-            self.change_storage_type()
-            if self.connection.is_remote():
-                self.window.get_widget("storage-partition-address-browse").set_sensitive(False)
-                self.window.get_widget("storage-file-address-browse").set_sensitive(False)
-            else:
-                self.window.get_widget("storage-partition-address-browse").set_sensitive(True)
-                self.window.get_widget("storage-file-address-browse").set_sensitive(True)
-
-        elif page_number == PAGE_NETWORK:
-            if self.connection.is_remote():
-                self.window.get_widget("net-type-network").set_active(True)
-                self.window.get_widget("net-type-device").set_active(False)
-                self.window.get_widget("net-type-device").set_sensitive(False)
-                self.window.get_widget("net-device").set_active(-1)
-            else:
-                self.window.get_widget("net-type-device").set_sensitive(True)
-            self.change_network_type()
-        elif page_number == PAGE_CPUMEM:
-            pass
-        elif page_number == PAGE_SUMMARY:
-            self.window.get_widget("summary-name").set_text(self.get_config_name())
-            if self.get_config_method() == VM_PARA_VIRT:
-                self.window.get_widget("summary-method").set_text(_("Paravirtualized"))
-                self.window.get_widget("summary-os-label").hide()
-                self.window.get_widget("summary-os").hide()
-            else:
-                self.window.get_widget("summary-method").set_text(_("Fully virtualized"))
-                self.window.get_widget("summary-os-label").show()
-                self.window.get_widget("summary-os").set_text(self.get_config_os_label())
-                self.window.get_widget("summary-os").show()
-            self.window.get_widget("summary-install-source").set_text(self.get_config_install_source())
-            self.window.get_widget("summary-kickstart-source").set_text(self.get_config_kickstart_source())
-            if self._guest.extraargs is None:
-                self.window.get_widget("summary-kernel-args-label").hide()
-                self.window.get_widget("summary-kernel-args").hide()
-            else:
-                self.window.get_widget("summary-kernel-args-label").show()
-                self.window.get_widget("summary-kernel-args").show()
-                self.window.get_widget("summary-kernel-args").set_text(self._guest.extraargs)
-            self.window.get_widget("summary-disk-image").set_text(self.get_config_disk_image())
-            disksize = self.get_config_disk_size()
-            if disksize != None:
-                self.window.get_widget("summary-disk-size").set_text(str(int(disksize)) + " MB")
-            else:
-                self.window.get_widget("summary-disk-size").set_text("-")
-            self.window.get_widget("summary-max-memory").set_text(str(int(self.get_config_maximum_memory())) + " MB")
-            self.window.get_widget("summary-initial-memory").set_text(str(int(self.get_config_initial_memory())) + " MB")
-            self.window.get_widget("summary-virtual-cpus").set_text(str(int(self.get_config_virtual_cpus())))
-            net = self.get_config_network()
-            if net[0] == "bridge":
-                self.window.get_widget("summary-net-type").set_text(_("Shared physical device"))
-                self.window.get_widget("summary-net-target").set_text(net[1])
-            elif net[0] == "network":
-                self.window.get_widget("summary-net-type").set_text(_("Virtual network"))
-                self.window.get_widget("summary-net-target").set_text(net[1])
-            elif net[0] == "user":
-                self.window.get_widget("summary-net-type").set_text(_("Usermode networking"))
-                self.window.get_widget("summary-net-target").set_text("-")
-            else:
-                raise ValueError, "Unknown networking type " + net[0]
-            macaddr = self.get_config_macaddr()
-            if macaddr != None:
-                self.window.get_widget("summary-mac-address").set_text(macaddr)
-            else:
-                self.window.get_widget("summary-mac-address").set_text("-")
-            self.window.get_widget("summary-audio").set_text(str(self.get_config_sound()))
-
+        if pagenum == PAGE_FINISH:
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
+            self.populate_summary()
 
-    def close(self, ignore1=None,ignore2=None):
-        self.topwin.hide()
-        return 1
+            # Repopulate the HV list, so we can make install method relevant
+            # changes
+            self.populate_hv()
+        else:
+            self.window.get_widget("create-forward").show()
+            self.window.get_widget("create-finish").hide()
 
-    def is_visible(self):
-        if self.topwin.flags() & gtk.VISIBLE:
-            return 1
-        return 0
+    def validate(self, pagenum):
+        try:
+            if pagenum == PAGE_NAME:
+                return self.validate_name_page()
+            elif pagenum == PAGE_INSTALL:
+                return self.validate_install_page()
+            elif pagenum == PAGE_MEM:
+                return self.validate_mem_page()
+            elif pagenum == PAGE_STORAGE:
+                # If the user selects 'no storage' and they used cd/iso install
+                # media, we want to go back and change the installer to
+                # LiveCDInstaller, which means re-validate everything
+                if not self.validate_name_page():
+                    return False
+                elif not self.validate_install_page():
+                    return False
+                elif not self.validate_mem_page():
+                    return False
+                return self.validate_storage_page()
 
-    def finish(self, ignore=None):
-        # Validation should have mostly set up out guest. We just need
-        # to take care of a few pieces we didn't touch
+            elif pagenum == PAGE_FINISH:
+                # Since we allow the user to change to change HV type + arch
+                # on the last page, we need to revalidate everything
+                if not self.validate_name_page():
+                    return False
+                elif not self.validate_install_page():
+                    return False
+                elif not self.validate_mem_page():
+                    return False
+                elif not self.validate_storage_page():
+                    return False
+                return self.validate_final_page()
 
-        guest = self._guest
-        guest.hypervisorURI = self.connection.get_uri()
+        except Exception, e:
+            self.err.show_err(_("Uncaught error validating install "
+                                "parameters: %s") % str(e),
+                                "".join(traceback.format_exc()))
+            return
 
-        # UUID, append disk and nic
+    def validate_name_page(self):
+        name = self.get_config_name()
+
+        self.guest = None
+
+        try:
+            g = virtinst.Guest(connection=self.conn.vmm)
+            g.name = name
+        except Exception, e:
+            return self.verr(_("Invalid System Name"), str(e))
+
+        return True
+
+    def validate_install_page(self):
+        instmethod = self.get_config_install_page()
+        installer = None
+        location = None
+        extra = None
+        ks = None
+        cdrom = False
+        distro, variant, ignore1, ignore2 = self.get_config_os_info()
+
+
+        if instmethod == INSTALL_PAGE_ISO:
+            if self.window.get_widget("enable-storage").get_active():
+                instclass = virtinst.DistroInstaller
+            else:
+                # CD/ISO install and no disks implies LiveCD
+                instclass = virtinst.LiveCDInstaller
+
+            media = self.get_config_local_media()
+
+            if not media:
+                return self.verr(_("An install media selection is required."))
+
+            location = media
+            cdrom = True
+
+        elif instmethod == INSTALL_PAGE_URL:
+            instclass = virtinst.DistroInstaller
+            media, extra, ks = self.get_config_url_info()
+
+            if not media:
+                return self.verr(_("An install tree is required."))
+
+            location = media
+
+        elif instmethod == INSTALL_PAGE_PXE:
+            instclass = virtinst.PXEInstaller
+
+
+        # Build the installer and Guest instance
+        try:
+            installer = self.build_installer(instclass)
+
+            self.guest = installer.guest_from_installer()
+            self.guest.name = self.get_config_name()
+        except Exception, e:
+            return self.verr(_("Error setting installer parameters."), str(e))
+
+        # Validate media location
+        try:
+            if location is not None:
+                self.guest.installer.location = location
+            if cdrom:
+                self.guest.installer.cdrom = True
+
+            extraargs = ""
+            if extra:
+                extraargs += extra
+            if ks:
+                extraargs += " ks=%s" % ks
+
+            if extraargs:
+                self.guest.installer.extraargs = extraargs
+        except Exception, e:
+            return self.verr(_("Error setting install media location."),
+                             str(e))
+
+        # OS distro/variant validation
+        try:
+            if distro and distro != OS_GENERIC:
+                self.guest.os_type = distro
+            if variant and variant != OS_GENERIC:
+                self.guest.os_variant = variant
+        except ValueError, e:
+            return self.err.val_err(_("Error setting OS information."),
+                                    str(e))
+        return True
+
+    def validate_mem_page(self):
+        cpus = self.window.get_widget("config-cpus").get_value()
+        mem  = self.window.get_widget("config-mem").get_value()
+
+        # VCPUS
+        try:
+            self.guest.vcpus = int(cpus)
+        except Exception, e:
+            return self.verr(_("Error setting CPUs."), str(e))
+
+        # Memory
+        try:
+            self.guest.memory = int(mem)
+            self.guest.maxmemory = int(mem)
+        except Exception, e:
+            return self.verr(_("Error setting guest memory."), str(e))
+
+        return True
+
+    def validate_storage_page(self):
+        use_storage = self.window.get_widget("enable-storage").get_active()
+
+        self.guest.disks = []
+
+        # Validate storage
+        if not use_storage:
+            return True
+
+        try:
+            # This can error out
+            diskpath, disksize, sparse = self.get_storage_info()
+
+            if not diskpath:
+                return self.verr(_("A storage path must be specified."))
+
+            disk = virtinst.VirtualDisk(conn = self.conn.vmm,
+                                        path = diskpath,
+                                        size = disksize,
+                                        sparse = sparse)
+
+            if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
+                self.guest.type == "xen" and
+                virtinst.util.is_blktap_capable()):
+                disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
+
+            self.guest.disks.append(disk)
+        except Exception, e:
+            return self.verr(_("Storage parameter error."), str(e))
+
+        isfatal, errmsg = disk.is_size_conflict()
+        if not isfatal and errmsg:
+            # Fatal errors are reported when setting 'size'
+            res = self.err.ok_cancel(_("Not Enough Free Space"), errmsg)
+            if not res:
+                return False
+
+        # Disk collision
+        if disk.is_conflict_disk(self.guest.conn):
+            return self.err.yes_no(_('Disk "%s" is already in use by another '
+                                     'guest!' % disk.path),
+                                   _("Do you really want to use the disk?"))
+        else:
+            return True
+
+    def validate_final_page(self):
+        nettype, devname, macaddr = self.get_config_network_info()
+
+        self.guest.nics = []
+
+        # Make sure VirtualNetwork is running
+        if (nettype == VirtualNetworkInterface.TYPE_VIRTUAL and
+            devname not in self.conn.vmm.listNetworks()):
+
+            res = self.err.yes_no(_("Virtual Network is not active."),
+                                  _("Virtual Network '%s' is not active. "
+                                    "Would you like to start the network "
+                                    "now?") % devname)
+            if not res:
+                return False
+
+            # Try to start the network
+            try:
+                net = self.conn.vmm.networkLookupByName(devname)
+                net.create()
+                logging.info("Started network '%s'." % devname)
+            except Exception, e:
+                return self.err.show_err(_("Could not start virtual network "
+                                           "'%s': %s") % (devname, str(e)),
+                                         "".join(traceback.format_exc()))
+
+        if nettype is None:
+            # No network device available
+            instmethod = self.get_config_install_page()
+            methname = None
+            if instmethod == INSTALL_PAGE_PXE:
+                methname  = "PXE"
+            elif instmethod == INSTALL_PAGE_URL:
+                methname = "URL"
+
+            if methname:
+                return self.verr(_("Network device required for %s install.") %
+                                 methname)
+            return True
+
+        # Create network device
+        try:
+            bridge = None
+            netname = None
+            if nettype == VirtualNetworkInterface.TYPE_VIRTUAL:
+                netname = devname
+            elif nettype == VirtualNetworkInterface.TYPE_BRIDGE:
+                bridge = devname
+            elif nettype == VirtualNetworkInterface.TYPE_USER:
+                pass
+
+            net = VirtualNetworkInterface(type = nettype,
+                                          bridge = bridge,
+                                          network = netname,
+                                          macaddr = macaddr)
+
+            self.guest.nics.append(net)
+        except Exception, e:
+            return self.verr(_("Error with network parameters."), str(e))
+
+        # Make sure there is no mac address collision
+        isfatal, errmsg = net.is_conflict_net(self.guest.conn)
+        if isfatal:
+            return self.err.val_err(_("Mac address collision."), errmsg)
+        elif errmsg is not None:
+            return self.err.yes_no(_("Mac address collision."),
+                                   _("%s Are you sure you want to use this "
+                                     "address?") % errmsg)
+        return True
+
+
+    # Interesting methods
+    def build_installer(self, instclass):
+        installer = instclass(conn = self.conn.vmm,
+                              type = self.capsdomain.hypervisor_type,
+                              os_type = self.capsguest.os_type)
+        installer.arch = self.capsguest.arch
+
+        return installer
+
+    def guest_from_install_type(self):
+        instmeth = self.get_config_install_page()
+
+        conntype = self.conn.get_type().lower()
+        if conntype not in ["xen", "test"]:
+            return
+
+        # FIXME: some things are dependent on domain type (vcpu max)
+        if instmeth == INSTALL_PAGE_URL:
+            self.change_caps(gtype = "xen", dtype = conntype)
+        else:
+            self.change_caps(gtype = "hvm", dtype = conntype)
+
+    def reset_guest_type(self):
+        self.change_caps()
+
+    def finish(self, src):
+
+        # Validate the final page
+        if self.validate(self.window.get_widget("create-pages").get_current_page()) != True:
+            return False
+
+        guest = self.guest
+        disk = len(guest.disks) and guest.disks[0]
+
+        # Generate UUID
         try:
             guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
-        except ValueError, e:
-            return self.err.val_err(_("UUID Error"), str(e))
+        except Exception, e:
+            self.err.show_err(_("Error setting UUID: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return False
 
-        # HACK: If usermode, and no nic is setup, use usermode networking
-        if self.connection.is_qemu_session():
-            try:
-                self._net = virtinst.VirtualNetworkInterface(type="user")
-            except ValueError, e:
-                return self.err.val_err(_("Failed to set up usermode networking"), str(e))
-
-        if self._disk is not None:
-            guest.disks = [self._disk]
-        else:
-            logging.debug('No guest disks found in install phase.')
-        if self._net is not None:
-            guest.nics = [self._net]
-        else:
-            logging.debug('No guest nics found in install phase.')
-
+        # Set up graphics device
         try:
             guest._graphics_dev = virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC)
         except Exception, e:
@@ -637,6 +1387,7 @@ class vmmCreate(gobject.GObject):
                               "".join(traceback.format_exc()))
             return False
 
+        # Set up sound device (if present)
         guest.sound_devs = []
         try:
             if self.get_config_sound():
@@ -646,36 +1397,33 @@ class vmmCreate(gobject.GObject):
                               "".join(traceback.format_exc()))
             return False
 
-        logging.debug("Creating a VM " + guest.name + \
-                      "\n  Type: " + guest.type + \
-                      "\n  UUID: " + guest.uuid + \
-                      "\n  Source: " + self.get_config_install_source() + \
-                      "\n  OS: " + str(self.get_config_os_label()) + \
-                      "\n  Kickstart: " + self.get_config_kickstart_source() + \
-                      "\n  Memory: " + str(guest.memory) + \
-                      "\n  Max Memory: " + str(guest.maxmemory) + \
-                      "\n  # VCPUs: " + str(guest.vcpus) + \
-                      "\n  Filesize: " + str(self._disk.size) + \
-                      "\n  Disk image: " + str(self.get_config_disk_image()) +\
-                      "\n  Non-sparse file: " + str(self.non_sparse) + \
-                      "\n  Audio?: " + str(self.get_config_sound()))
 
+        logging.debug("Creating a VM %s" % guest.name +
+                      "\n  Type: %s,%s" % (guest.type,
+                                           guest.installer.os_type) +
+                      "\n  UUID: %s" % guest.uuid +
+                      "\n  Install Source: %s" % guest.location +
+                      "\n  OS: %s:%s" % (guest.os_type, guest.os_variant) +
+                      "\n  Kernel args: %s" % guest.extraargs +
+                      "\n  Memory: %s" % guest.memory +
+                      "\n  Max Memory: %s" % guest.maxmemory +
+                      "\n  # VCPUs: %s" % str(guest.vcpus) +
+                      "\n  Filesize: %s" % (disk and disk.size) or "None" +
+                      "\n  Disk image: %s" % (disk and disk.path) or "None" +
+                      "\n  Audio?: %s" % str(self.get_config_sound()))
 
-        #let's go
+        # Start the install
         self.install_error = None
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
-        if not self.non_sparse:
-            logging.debug("Sparse file or partition selected")
-        else:
-            logging.debug("Non-sparse file selected")
 
         progWin = vmmAsyncJob(self.config, self.do_install, [guest],
                               title=_("Creating Virtual Machine"),
-                              text=_("The virtual machine is now being created. " + \
-                                     "Allocation of disk storage and retrieval of " + \
-                                     "the installation images may take a few minutes " + \
-                                     "to complete."))
+                              text=_("The virtual machine is now being "
+                                     "created. Allocation of disk storage "
+                                     "and retrieval of the installation "
+                                     "images may take a few minutes to "
+                                     "complete."))
         progWin.run()
 
         if self.install_error != None:
@@ -684,33 +1432,38 @@ class vmmCreate(gobject.GObject):
             self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
             # Don't close becase we allow user to go back in wizard & correct
             # their mistakes
-            #self.close()
             return
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
         # Ensure new VM is loaded
-        self.connection.tick(noStatsUpdate=True)
+        # FIXME: Hmm, shouldn't we emit a signal here rather than do this?
+        self.conn.tick(noStatsUpdate=True)
 
         if self.config.get_console_popup() == 1:
             # user has requested console on new created vms only
-            vm = self.connection.get_vm(guest.uuid)
+            vm = self.conn.get_vm(guest.uuid)
             (gtype, ignore, ignore, ignore, ignore) = vm.get_graphics_console()
             if gtype == "vnc":
-                self.emit("action-show-console", self.connection.get_uri(), guest.uuid)
+                self.emit("action-show-console", self.conn.get_uri(),
+                          guest.uuid)
             else:
-                self.emit("action-show-terminal", self.connection.get_uri(), guest.uuid)
+                self.emit("action-show-terminal", self.conn.get_uri(),
+                          guest.uuid)
         self.close()
+
 
     def do_install(self, guest, asyncjob):
         meter = vmmCreateMeter(asyncjob)
+
         try:
             logging.debug("Starting background install process")
 
-            # Stop using virt-manager's connection and open a new one for
-            # the async install.
-            logging.debug("Opening separate connection for the install.")
-            guest.conn = libvirt.open(self.connection.get_uri())
+            guest.conn = util.dup_conn(self.config, self.conn)
+            # FIXME: This is why we need a more unified virtinst device API: so
+            #        we can do things like swap out the connection on all
+            #        devices for a forked one. At least we should get a helper
+            #        method in the Guest API.
             for disk in guest.disks:
                 disk.conn = guest.conn
 
@@ -725,544 +1478,166 @@ class vmmCreate(gobject.GObject):
             (_type, value, stacktrace) = sys.exc_info ()
 
             # Detailed error message, in English so it can be Googled.
-            details = \
-                    "Unable to complete install '%s'" % \
-                    (str(_type) + " " + str(value) + "\n" + \
-                     traceback.format_exc (stacktrace))
+            details = ("Unable to complete install '%s'" %
+                       (str(_type) + " " + str(value) + "\n" +
+                       traceback.format_exc (stacktrace)))
 
-            self.install_error = _("Unable to complete install: '%s'") % str(value)
+            self.install_error = (_("Unable to complete install: '%s'") %
+                                  str(value))
             self.install_details = details
             logging.error(details)
 
-    def browse_iso_location(self, ignore1=None, ignore2=None):
-        f = self._browse_file(_("Locate ISO Image"))
-        if f != None:
-            self.window.get_widget("fv-iso-location").set_text(f)
 
-    def _browse_file(self, dialog_name, folder=None, _type=None):
-        # user wants to browse for an ISO
-        fcdialog = gtk.FileChooserDialog(dialog_name,
-                                         self.window.get_widget("vmm-create"),
-                                         gtk.FILE_CHOOSER_ACTION_OPEN,
-                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                          gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
-                                         None)
-        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-        if _type != None:
-            f = gtk.FileFilter()
-            f.add_pattern("*." + _type)
-            fcdialog.set_filter(f)
-        if folder != None:
-            fcdialog.set_current_folder(folder)
-        response = fcdialog.run()
-        fcdialog.hide()
-        if(response == gtk.RESPONSE_ACCEPT):
-            filename = fcdialog.get_filename()
-            fcdialog.destroy()
-            return filename
-        else:
-            fcdialog.destroy()
-            return None
-
-    def browse_storage_partition_address(self, src, ignore=None):
-        part = self._browse_file(_("Locate Storage Partition"), "/dev")
-        if part != None:
-            self.window.get_widget("storage-partition-address").set_text(part)
-
-    def browse_storage_file_address(self, src, ignore=None):
-        fcdialog = gtk.FileChooserDialog(_("Locate or Create New Storage File"),
-                                         self.window.get_widget("vmm-create"),
-                                         gtk.FILE_CHOOSER_ACTION_SAVE,
-                                         (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-                                          gtk.STOCK_OPEN, gtk.RESPONSE_ACCEPT),
-                                         None)
-        fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
-        fcdialog.set_current_folder(self.config.get_default_image_dir(self.connection))
-        fcdialog.set_do_overwrite_confirmation(True)
-        fcdialog.connect("confirm-overwrite", self.confirm_overwrite_callback)
-        response = fcdialog.run()
-        fcdialog.hide()
-        f = None
-        if(response == gtk.RESPONSE_ACCEPT):
-            f = fcdialog.get_filename()
-        if f != None:
-            self.window.get_widget("storage-file-address").set_text(f)
-
-    def toggle_storage_size(self, ignore1=None, ignore2=None):
-        f = self.get_config_disk_image()
-        if f != None and len(f) > 0 and \
-           (self.connection.is_remote() or not os.path.exists(f)):
-            self.window.get_widget("storage-file-size").set_sensitive(True)
-            self.window.get_widget("non-sparse").set_sensitive(True)
-            size = self.get_config_disk_size()
-            if size == None:
-                size = 4000
-            self.window.get_widget("storage-file-size").set_value(size)
-        else:
-            self.window.get_widget("storage-file-size").set_sensitive(False)
-            self.window.get_widget("non-sparse").set_sensitive(False)
-            if os.path.isfile(f):
-                size = os.path.getsize(f)/(1024*1024)
-                self.window.get_widget("storage-file-size").set_value(size)
-            else:
-                self.window.get_widget("storage-file-size").set_value(0)
-
-    def confirm_overwrite_callback(self, chooser):
-        # Only called when the user has chosen an existing file
-        self.window.get_widget("storage-file-size").set_sensitive(False)
-        return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
-
-    def change_media_type(self, ignore=None):
-        if self.window.get_widget("media-iso-image").get_active():
-            self.window.get_widget("fv-iso-location-box").set_sensitive(True)
-            self.window.get_widget("cd-path").set_sensitive(False)
-        elif self.window.get_widget("media-physical").get_active():
-            self.window.get_widget("fv-iso-location-box").set_sensitive(False)
-            self.window.get_widget("cd-path").set_sensitive(True)
-            self.window.get_widget("cd-path").set_active(-1)
-        else:
-            self.window.get_widget("fv-iso-location-box").set_sensitive(False)
-            self.window.get_widget("cd-path").set_sensitive(False)
-
-    def change_storage_type(self, ignore=None):
-        if self.window.get_widget("storage-partition").get_active():
-            self.window.get_widget("storage-partition-box").set_sensitive(True)
-            self.window.get_widget("storage-file-box").set_sensitive(False)
-            self.window.get_widget("storage-file-size").set_sensitive(False)
-            self.window.get_widget("non-sparse").set_sensitive(False)
-        else:
-            self.window.get_widget("storage-partition-box").set_sensitive(False)
-            self.window.get_widget("storage-file-box").set_sensitive(True)
-            _file = self.window.get_widget("storage-file-address").get_text()
-            if _file is None or _file == "":
-                _dir = self.config.get_default_image_dir(self.connection)
-                _file = os.path.join(_dir, self.get_config_name() + ".img")
-                if not self.connection.is_remote():
-                    n = 1
-                    while os.path.exists(_file) and n < 100:
-                        _file = os.path.join(_dir, self.get_config_name() + \
-                                                   "-" + str(n) + ".img")
-                        n = n + 1
-                    if os.path.exists(_file):
-                        _file = ""
-                self.window.get_widget("storage-file-address").set_text(_file)
-            self.toggle_storage_size()
-
-    def change_network_type(self, ignore=None):
-        if self.window.get_widget("net-type-network").get_active():
-            self.window.get_widget("net-network").set_sensitive(True)
-            self.window.get_widget("net-device").set_sensitive(False)
-        else:
-            self.window.get_widget("net-network").set_sensitive(False)
-            self.window.get_widget("net-device").set_sensitive(True)
-
-    def change_macaddr_use(self, ignore=None):
-        if self.window.get_widget("mac-address").get_active():
-            self.window.get_widget("create-mac-address").set_sensitive(True)
-        else:
-            self.window.get_widget("create-mac-address").set_sensitive(False)
-
-    def set_max_memory(self, src):
-        max_memory = src.get_adjustment().value
-        startup_mem_adjustment = self.window.get_widget("create-memory-startup").get_adjustment()
-        if startup_mem_adjustment.value > max_memory:
-            startup_mem_adjustment.value = max_memory
-        startup_mem_adjustment.upper = max_memory
-
-    def set_max_vcpus(self, _type):
-        self.window.get_widget("create-vcpus").get_adjustment().upper = self.connection.get_max_vcpus(_type)
-        self.window.get_widget("config-max-vcpus").set_text(str(self.connection.get_max_vcpus(_type)))
-
-    def validate(self, page_num):
-
-        # Setting the values in the Guest/Disk/Network virtinst objects
-        # provides a lot of error checking for free, we just have to catch
-        # the messages
-
-        if page_num == PAGE_NAME:
-            name = self.window.get_widget("create-vm-name").get_text()
-            try:
-                self._guest.name = name
-            except ValueError, e:
-                return self.err.val_err(_("Invalid System Name"), str(e))
-        elif page_num == PAGE_TYPE:
-
-            # Set up appropriate guest object dependent on selected type
-            name = self._guest.name
-            if self.get_config_method() == VM_PARA_VIRT:
-                self._guest = virtinst.ParaVirtGuest(type=self.get_domain_type(),
-                                                     connection=self.connection.vmm)
-            else:
-                self._guest = virtinst.FullVirtGuest(type=self.get_domain_type(),
-                                                     arch=self.get_domain_arch(),
-                                                     connection=self.connection.vmm)
-
-            self._guest.name = name # Transfer name over
-
-            # Set vcpu limits based on guest type
-            try:
-                self.set_max_vcpus(self.get_domain_type())
-            except Exception, e:
-                logging.exception(e)
-
-        elif page_num == PAGE_INST:
-            if self.get_config_method() == VM_PARA_VIRT:
-                os_type = "xen"
-            else:
-                os_type = "hvm"
-            self._guest.installer = self.get_config_installer(self.get_domain_type(), os_type)
-
-            try:
-                if self.get_config_os_type() is not None \
-                   and self.get_config_os_type() != "generic":
-                    logging.debug("OS Type: %s" % self.get_config_os_type())
-                    self._guest.os_type = self.get_config_os_type()
-            except ValueError, e:
-                return self.err.val_err(_("Invalid FV OS Type"), str(e))
-            try:
-                if self.get_config_os_variant() is not None \
-                   and self.get_config_os_type() != "generic":
-                    logging.debug("OS Variant: %s" % self.get_config_os_variant())
-                    self._guest.os_variant = self.get_config_os_variant()
-            except ValueError, e:
-                return self.err.val_err(_("Invalid FV OS Variant"), str(e))
-        elif page_num == PAGE_INST_LOCAL:
-            if self.get_config_method() == VM_PARA_VIRT:
-                os_type = "xen"
-            else:
-                os_type = "hvm"
-            self._guest.installer = self.get_config_installer(self.get_domain_type(), os_type)
-
-            src = self.get_config_install_source()
-            if not src:
-                return self.err.val_err(_("An install media path is required."))
-
-            if self.window.get_widget("media-iso-image").get_active():
-                try:
-                    self._guest.installer.location = src
-                    self._guest.installer.cdrom = True
-                except ValueError, e:
-                    return self.err.val_err(_("ISO Path Not Found"), str(e))
-            else:
-                try:
-                    self._guest.installer.location = src
-                    self._guest.installer.cdrom = True
-                except ValueError, e:
-                    return self.err.val_err(_("CD-ROM Path Error"), str(e))
-        elif page_num == PAGE_INST_TREE:
-
-            src = self.get_config_install_source()
-            if not src:
-                return self.err.val_err(_("An install url is required."))
-            try:
-                self._guest.location = src
-            except ValueError, e:
-                return self.err.val_err(_("Invalid Install URL"), str(e))
-
-            ks = self.get_config_kickstart_source()
-            if ks is not None and len(ks) != 0:
-                if not (ks.startswith("http://") or ks.startswith("ftp://") \
-                        or ks.startswith("nfs:")):
-                    return self.err.val_err(_("Kickstart URL Error"), \
-                                            _("Kickstart location must be an NFS, HTTP or FTP source"))
-                else:
-                    self._guest.extraargs = "ks=%s" % (ks,)
-
-            kernel_params = self.get_config_kernel_params()
-            if kernel_params != "":
-                if self._guest.extraargs is None:
-                    self._guest.extraargs = kernel_params
-                else:
-                    self._guest.extraargs = "%s %s" % (self._guest.extraargs, kernel_params)
-                self._guest.extraargs = self._guest.extraargs.strip()
-
-        elif page_num == PAGE_DISK:
-            path = self.get_config_disk_image()
-            if path == None or len(path) == 0:
-                return self.err.val_err(_("Storage Address Required"), \
-                                        _("You must specify a partition or a file for storage for the guest install."))
-
-            # Attempt to set disk
-            filesize = None
-            if self.get_config_disk_size() != None:
-                filesize = self.get_config_disk_size() / 1024.0
-            try:
-                if self.window.get_widget("storage-partition").get_active():
-                    _type = virtinst.VirtualDisk.TYPE_BLOCK
-                else:
-                    _type = virtinst.VirtualDisk.TYPE_FILE
-
-                if (os.path.dirname(os.path.abspath(path)) == \
-                    vmmutil.DEFAULT_POOL_PATH):
-                    vmmutil.build_default_pool(self._guest.conn)
-
-                self._disk = virtinst.VirtualDisk(path,
-                                                  filesize,
-                                                  sparse = self.is_sparse_file(),
-                                                  device = virtinst.VirtualDisk.DEVICE_DISK,
-                                                  type = _type,
-                                                  conn=self._guest.conn)
-
-                if self._disk.type == virtinst.VirtualDisk.TYPE_FILE and \
-                   self.get_config_method() == VM_PARA_VIRT and \
-                   virtinst.util.is_blktap_capable():
-                    self._disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
-
-                if self._disk.type == virtinst.VirtualDisk.TYPE_FILE and not \
-                   self.is_sparse_file():
-                    self.non_sparse = True
-                else:
-                    self.non_sparse = False
-            except ValueError, e:
-                return self.err.val_err(_("Invalid Storage Address"), str(e))
-
-            ret = self._disk.is_size_conflict()
-            if not ret[0] and ret[1]:
-                res = self.err.ok_cancel(_("Not Enough Free Space"), ret[1])
-                if not res:
-                    return False
-
-            if self._disk.is_conflict_disk(self._guest.conn) is True:
-                res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % self._disk.path), _("Do you really want to use the disk?"))
-                return res
-
-        elif page_num == PAGE_NETWORK:
-
-            if self.window.get_widget("net-type-network").get_active():
-                if self.window.get_widget("net-network").get_active() == -1:
-                    return self.err.val_err(_("Virtual Network Required"),
-                                            _("You must select one of the virtual networks."))
-            else:
-                if self.window.get_widget("net-device").get_active() == -1:
-                    return self.err.val_err(_("Physical Device Required"),
-                                            _("You must select a physical device."))
-
-            net = self.get_config_network()
-            if self.window.get_widget("mac-address").get_active():
-                mac = self.window.get_widget("create-mac-address").get_text()
-                if mac is None or len(mac) == 0:
-                    return self.err.val_err(_("Invalid MAC address"), \
-                                            _("No MAC address was entered. Please enter a valid MAC address."))
-
-            else:
-                mac = None
-            try:    
-                if net[0] == "bridge":
-                    self._net = virtinst.VirtualNetworkInterface(macaddr=mac, \
-                                                                 type=net[0], \
-                                                                 bridge=net[1])
-                elif net[0] == "network":
-                    self._net = virtinst.VirtualNetworkInterface(macaddr=mac, \
-                                                                 type=net[0], \
-                                                                 network=net[1])
-                elif net[0] == "user":
-                    self._net = virtinst.VirtualNetworkInterface(macaddr=mac, \
-                                                                 type=net[0])
-            except ValueError, e:
-                return self.err.val_err(_("Network Parameter Error"), str(e))
-
-            if self._net.type == "network":
-                if self._net.network not in self.connection.vmm.listNetworks():
-                    res = self.err.yes_no(_("Virtual Network is Inactive"),
-                                          _("Virtual Network '%s' is not active. Would you like to start the network now?") % 
-                                          self._net.network)
-                    if res:
-                        net = self.connection.vmm.networkLookupByName(self._net.network)
-                        net.create()
-                        logging.info("Started network '%s'." % self._net.network)
-                    else:
-                        return False
-
-            conflict = self._net.is_conflict_net(self._guest.conn)
-            if conflict[0]:
-                return self.err.val_err(_("Mac address collision"), conflict[1])
-            elif conflict[1] is not None:
-                return self.err.yes_no(_("Mac address collision"),\
-                                        conflict[1] + " " + _("Are you sure you want to use this address?"))
-
-        elif page_num == PAGE_CPUMEM:
-
-            # Set vcpus
-            try:
-                self._guest.vcpus = int(self.get_config_virtual_cpus())
-            except ValueError, e: 
-                return self.err.val_err(_("VCPU Count Error"), str(e))
-            # Set Memory
-            try:
-                self._guest.memory = int(self.get_config_initial_memory())
-            except ValueError, e: 
-                return self.err.val_err(_("Memory Amount Error"), str(e))
-            # Set Max Memory
-            try:
-                self._guest.maxmemory = int(self.get_config_maximum_memory())
-            except ValueError, e: 
-                return self.err.val_err(_("Max Memory Amount Error"), str(e))
-
-        # do this always, since there's no "leaving a notebook page" event.
-        self.window.get_widget("create-back").set_sensitive(True)
-        return True
-
-    def populate_url_model(self, model, urls):
-        model.clear()
-        for url in urls:
-            model.append([url])
-
-    def populate_os_type_model(self):
-        model = self.window.get_widget("os-type").get_model()
-        model.clear()
-        model.append(["generic", "Generic"])
-        types = virtinst.FullVirtGuest.list_os_types()
-        for _type in types:
-            model.append([_type,
-                          virtinst.FullVirtGuest.get_os_type_label(_type)])
-
-    def populate_os_variant_model(self, _type):
-        model = self.window.get_widget("os-variant").get_model()
-        model.clear()
-        if _type == "generic":
-            model.append(["generic", "Generic"])
-            return
-        variants = virtinst.FullVirtGuest.list_os_variants(_type)
-        for variant in variants:
-            model.append([variant,
-                          virtinst.FullVirtGuest.get_os_variant_label(_type,
-                                                                      variant)])
-
-    def populate_network_model(self, model):
-        model.clear()
-        for uuid in self.connection.list_net_uuids():
-            net = self.connection.get_net(uuid)
-            if net.get_name() in self.connection.vmm.listNetworks():
-                model.append([net.get_label(), net.get_name()])
-            else:
-                model.append([net.get_label(), "%s (%s)" % (net.get_name(), _("Inactive"))])
-
-    def populate_device_model(self, model):
-        model.clear()
-        hasShared = False
-        brIndex = -1
-        for name in self.connection.list_net_device_paths():
-            net = self.connection.get_net_device(name)
-            if net.is_shared():
-                hasShared = True
-                if brIndex < 0:
-                    brIndex = len(model)
-                model.append([net.get_bridge(), "%s (%s %s)" % (net.get_name(), _("Bridge"), net.get_bridge()), True])
-            else:
-                model.append([net.get_bridge(), "%s (%s)" % (net.get_name(), _("Not bridged")), False])
-        return (hasShared, brIndex)
-
-    def change_os_type(self, box):
-        model = box.get_model()
-        if box.get_active_iter() != None:
-            _type = model.get_value(box.get_active_iter(), 0)
-            self.populate_os_variant_model(_type)
-        variant = self.window.get_widget("os-variant")
-        variant.set_active(0)
-
-    def change_virt_method(self, ignore=None):
-        arch = self.window.get_widget("cpu-architecture")
-
-        if self.get_config_method() == VM_PARA_VIRT:
-            nativeArch = self.repopulate_cpu_arch(arch.get_model(), ["xen", "linux"])
-        else:
-            nativeArch = self.repopulate_cpu_arch(arch.get_model(), ["hvm"])
-        arch.set_active(nativeArch)
-        self.change_cpu_arch()
-
-    def change_cpu_arch(self, ignore=None):
-        hypervisor = self.window.get_widget("hypervisor")
-        arch = self.get_domain_arch()
-
-        if arch is None:
-            hypervisor.set_active(-1)
-            hypervisor.set_sensitive(False)
-            return
-
-        hypervisor.set_sensitive(True)
-        if self.get_config_method() == VM_PARA_VIRT:
-            bestHyper = self.repopulate_hypervisor(hypervisor.get_model(), ["xen", "linux"], arch)
-        else:
-            bestHyper = self.repopulate_hypervisor(hypervisor.get_model(), ["hvm"], arch)
-        hypervisor.set_active(bestHyper)
-
-    def get_domain_arch(self):
-        arch = self.window.get_widget("cpu-architecture")
-        if arch.get_active() == -1:
-            return None
-        return arch.get_model()[arch.get_active()][0]
+    def pretty_storage(self, size):
+        return "%.1f Gb" % float(size)
 
     def pretty_memory(self, mem):
-        if mem > (1024*1024):
-            return "%2.2f GB" % (mem/(1024.0*1024.0))
+        return "%d MB" % (mem/1024.0)
+
+    # Distro detection methods
+
+    # Clear global detection thread state
+    def _clear_detect_thread(self):
+        self.detectThreadLock.acquire()
+        self.detectThread = None
+        self.detectThreadLock.release()
+
+    # Create and launch a detection thread (if no detection already running)
+    def detect_os_distro(self):
+        self.detectThreadLock.acquire()
+        if self.detectThread is not None:
+            # We are already checking (some) media, so let that continue
+            self.detectThreadLock.release()
+            return
+
+        self.detectThread = threading.Thread(target=self.do_detect,
+                                             name="Detect OS")
+        self.detectThread.setDaemon(True)
+        self.detectThreadLock.release()
+
+        self.detectThread.start()
+
+    def set_distro_labels(self, distro, ver):
+        # Helper to set auto detect result labels
+        if not self.is_detect_active():
+            return
+
+        self.window.get_widget("install-os-type-label").set_text(distro)
+        self.window.get_widget("install-os-version-label").set_text(ver)
+
+    def set_os_val(self, os_widget, value):
+        # Helper method to set the OS Type/Variant selections to the passed
+        # values, or -1 if not present.
+        model = os_widget.get_model()
+        idx = 0
+
+        for idx in range(0, len(model)):
+            row = model[idx]
+            if row[0] == value:
+                break
+
+            if idx == len(os_widget.get_model()) - 1:
+                idx = -1
+
+        os_widget.set_active(idx)
+
+        if idx >= 0:
+            return row[1]
         else:
-            return "%2.2f MB" % (mem/1024.0)
+            return value
 
-    def is_sparse_file(self):
-        if self.window.get_widget("non-sparse").get_active():
-            return False
-        else:
-            return True
+    def set_distro_selection(self, distro, ver):
+        # Wrapper to change OS Type/Variant values, and update the distro
+        # detection labels
+        if not self.is_detect_active():
+            return
 
-    def get_domain_type(self):
-        hypervisor = self.window.get_widget("hypervisor")
+        if not distro:
+            distro = _("Unknown")
+            ver = _("Unknown")
+        elif not ver:
+            ver = _("Unknown")
 
-        if hypervisor.get_active() == -1:
-            return None
+        dl = self.set_os_val(self.window.get_widget("install-os-type"),
+                             distro)
+        vl = self.set_os_val(self.window.get_widget("install-os-version"),
+                             ver)
+        self.set_distro_labels(dl, vl)
 
-        return hypervisor.get_model()[hypervisor.get_active()][0]
+    def _safe_wrapper(self, func, args):
+        gtk.gdk.threads_enter()
+        try:
+            return func(*args)
+        finally:
+            gtk.gdk.threads_leave()
 
-    def repopulate_cpu_arch(self, model, ostype):
-        model.clear()
-        i = 0
-        native = -1
-        for guest in self.caps.guests:
-            if guest.os_type not in ostype:
-                continue
+    def _set_forward_sensitive(self, val):
+        self.window.get_widget("create-forward").set_sensitive(val)
 
-            model.append([guest.arch])
-            if guest.arch == self.caps.host.arch:
-                native = i
-            i = i + 1
+    # The actual detection routine
+    def do_detect(self):
+        try:
+            media = self._safe_wrapper(self.get_config_detectable_media, ())
+            if not media:
+                return
 
-        return native
+            self.detectedDistro = None
 
+            logging.debug("Starting OS detection thread for media=%s" % media)
+            self._safe_wrapper(self._set_forward_sensitive, (False,))
 
-    def repopulate_hypervisor(self, model, ostype, arch):
-        model.clear()
-        i = -1
-        for guest in self.caps.guests:
-            if guest.os_type not in ostype or guest.arch != arch:
-                continue
+            detectThread = threading.Thread(target=self.actually_detect,
+                                            name="Actual media detection",
+                                            args=(media,))
+            detectThread.setDaemon(True)
+            detectThread.start()
 
-            for domain in guest.domains:
-                model.append([domain.hypervisor_type])
-                i = i + 1
+            base = _("Detecting")
+            for i in range(1, DETECT_TIMEOUT * 2):
+                if self.detectedDistro != None:
+                    break
+                detect_str = base + ("." * (((i + 2) % 3) + 1))
+                self._safe_wrapper(self.set_distro_labels,
+                                   (detect_str, detect_str))
+                time.sleep(.5)
 
-        return i
+            results = self.detectedDistro
+            if results == None:
+                results = (None, None)
 
-    def show_help(self, src):
-        # help to show depends on the notebook page, yahoo
-        page = self.window.get_widget("create-pages").get_current_page()
-        if page == PAGE_INTRO:
-            self.emit("action-show-help", "virt-manager-create-wizard")
-        elif page == PAGE_NAME:
-            self.emit("action-show-help", "virt-manager-system-name")
-        elif page == PAGE_TYPE:
-            self.emit("action-show-help", "virt-manager-virt-method")
-        elif page == PAGE_INST:
-            self.emit("action-show-help", "virt-manager-installation-media")
-        elif page == PAGE_INST_LOCAL:
-            self.emit("action-show-help", "virt-manager-installation-media-local")
-        elif page == PAGE_INST_TREE:
-            self.emit("action-show-help", "virt-manager-installation-media-tree")
-        elif page == PAGE_DISK:
-            self.emit("action-show-help", "virt-manager-storage-space")
-        elif page == PAGE_NETWORK:
-            self.emit("action-show-help", "virt-manager-network")
-        elif page == PAGE_CPUMEM:
-            self.emit("action-show-help", "virt-manager-memory-and-cpu")
-        elif page == PAGE_SUMMARY:
-            self.emit("action-show-help", "virt-manager-validation")
+            self._safe_wrapper(self.set_distro_selection, results)
+        finally:
+            self.detectDistro = None
+            self._clear_detect_thread()
+            self._safe_wrapper(self._set_forward_sensitive, (True,))
+            logging.debug("Leaving OS detection thread.")
+
+        return
+
+    def actually_detect(self, media):
+        try:
+            installer = self.build_installer(virtinst.DistroInstaller)
+            installer.location = media
+
+            self.detectedDistro = installer.detect_distro()
+        except:
+            logging.exception("Error detecting distro.")
+            self.detectedDistro = (None, None)
+
+    def _browse_file(self, dialog_name, folder=None, _type=None):
+
+        if self.conn.is_remote() or True:
+            # FIXME: This will eventually call a special storage browser
+            pass
+
+        # FIXME: Pass local browse fun to storage_browser
+        return util.browse_local(self.topwin, dialog_name, folder, _type)
+
+    def show_help(self, ignore):
+        # No help available yet.
+        pass
+
+    def verr(self, msg, extra=None):
+        return self.err.val_err(msg, extra)
 
 gobject.type_register(vmmCreate)

@@ -695,7 +695,6 @@ class vmmManager(gobject.GObject):
             # Nothing is selected
             self.window.get_widget("vm-open").set_sensitive(False)
             self.window.get_widget("vm-delete").set_sensitive(False)
-            self.window.get_widget("vm-new").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
             self.window.get_widget("menu_host_details").set_sensitive(False)
@@ -710,7 +709,6 @@ class vmmManager(gobject.GObject):
                 self.window.get_widget("vm-delete").set_sensitive(True)
             else:
                 self.window.get_widget("vm-delete").set_sensitive(False)
-            self.window.get_widget("vm-new").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(True)
             self.window.get_widget("menu_edit_delete").set_sensitive(True)
             self.window.get_widget("menu_host_details").set_sensitive(True)
@@ -723,10 +721,8 @@ class vmmManager(gobject.GObject):
             else:
                 self.window.get_widget("vm-delete").set_sensitive(False)
             if conn.get_state() == vmmConnection.STATE_ACTIVE:
-                self.window.get_widget("vm-new").set_sensitive(True)
                 self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
             else:
-                self.window.get_widget("vm-new").set_sensitive(False)
                 self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
             self.window.get_widget("menu_edit_details").set_sensitive(False)
             self.window.get_widget("menu_edit_delete").set_sensitive(False)
@@ -794,8 +790,7 @@ class vmmManager(gobject.GObject):
             return False
 
     def new_vm(self, ignore=None):
-        conn = self.current_connection()
-        self.emit("action-show-create", conn.get_uri())
+        self.emit("action-show-create", self.current_connection_uri())
 
     def delete_vm(self, ignore=None):
         conn = self.current_connection()

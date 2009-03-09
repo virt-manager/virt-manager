@@ -125,9 +125,9 @@ class vmmEngine(gobject.GObject):
         if self.connections[hvuri]["windowHost"] is not None:
             self.connections[hvuri]["windowHost"].close()
             self.connections[hvuri]["windowHost"] = None
-        if self.connections[hvuri]["windowCreate"] is not None:
-            self.connections[hvuri]["windowCreate"].close()
-            self.connections[hvuri]["windowCreate"] = None
+        if (self.windowCreate and self.windowCreate.conn and
+            self.windowCreate.conn.get_uri() == hvuri):
+            self.windowCreate.close()
 
     def reschedule_timer(self, ignore1,ignore2,ignore3,ignore4):
         self.schedule_timer()
@@ -342,21 +342,18 @@ class vmmEngine(gobject.GObject):
         return True
 
     def show_create(self, uri):
-        con = self.get_connection(uri)
-
-        if self.connections[uri]["windowCreate"] == None:
-            create = vmmCreate(self.get_config(), con)
+        if self.windowCreate == None:
+            create = vmmCreate(self.get_config(), self)
             create.connect("action-show-console", self._do_show_console)
             create.connect("action-show-help", self._do_show_help)
-            self.connections[uri]["windowCreate"] = create
-        self.connections[uri]["windowCreate"].show()
+            self.windowCreate = create
+        self.windowCreate.show(uri)
 
     def add_connection(self, uri, readOnly=None, autoconnect=False):
         conn = vmmConnection(self.get_config(), uri, readOnly)
         self.connections[uri] = {
             "connection": conn,
             "windowHost": None,
-            "windowCreate": None,
             "windowDetails": {},
             "windowConsole": {},
             }

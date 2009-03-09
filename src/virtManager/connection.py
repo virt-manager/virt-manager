@@ -251,6 +251,9 @@ class vmmConnection(gobject.GObject):
     def is_read_only(self):
         return self.readOnly
 
+    def is_active(self):
+        return self.state == self.STATE_ACTIVE
+
     def get_type(self):
         if self.vmm is None:
             return None
@@ -275,15 +278,55 @@ class vmmConnection(gobject.GObject):
     def get_capabilities(self):
         return virtinst.CapabilitiesParser.parse(self.vmm.getCapabilities())
 
+    def is_kvm_supported(self):
+        if self.is_qemu_session():
+            return False
+
+        caps = self.get_capabilities()
+        for guest in caps.guests:
+            for dom in guest.domains:
+                if dom.hypervisor_type == "kvm":
+                    return True
+        return False
+
     def is_remote(self):
         return virtinst.util.is_uri_remote(self.uri)
 
+    def is_storage_capable(self):
+        return virtinst.util.is_storage_capable(self.vmm)
+
     def is_qemu_session(self):
-        (scheme, ignore, ignore, \
+        (scheme, ignore, ignore,
          path, ignore, ignore) = virtinst.util.uri_split(self.uri)
         if path == "/session" and scheme.startswith("qemu"):
             return True
         return False
+
+    def is_test_conn(self):
+        (scheme, ignore, ignore,
+         ignore, ignore, ignore) = virtinst.util.uri_split(self.uri)
+        if scheme.startswith("test"):
+            return True
+        return False
+
+    def get_pretty_desc(self):
+        (scheme, ignore, hostname,
+         path, ignore, ignore) = virtinst.util.uri_split(self.uri)
+
+        scheme = scheme.split("+")[0]
+
+        if scheme == "qemu":
+            desc = "QEMU"
+            if self.is_kvm_supported():
+                desc += "/KVM"
+        else:
+            desc = scheme.capitalize()
+
+        if path == "/session":
+            desc += " Usermode"
+        if hostname:
+            desc += " (%s)" % hostname
+        return desc
 
     def get_uri(self):
         return self.uri
@@ -325,6 +368,12 @@ class vmmConnection(gobject.GObject):
         # Libvirt should validate the magic for other drivers
         return True
 
+
+    def get_pool_by_path(self, path):
+        for pool in self.pools.values():
+            if pool.get_target_path() == path:
+                return pool
+        return None
 
     def open(self):
         if self.state != self.STATE_DISCONNECTED:
