@@ -64,14 +64,6 @@ class vmmConnect(gobject.GObject):
         # Plain hostname resolve failed, means we should just use IP addr
         self.can_resolve_hostname = None
 
-        default = virtinst.util.default_connection()
-        if default is None:
-            self.window.get_widget("hypervisor").set_active(-1)
-        elif default[0:3] == "xen":
-            self.window.get_widget("hypervisor").set_active(0)
-        elif default[0:4] == "qemu":
-            self.window.get_widget("hypervisor").set_active(1)
-
         self.window.get_widget("connection").set_active(0)
         self.window.get_widget("connect").grab_default()
         self.window.get_widget("autoconnect").set_active(True)
@@ -117,13 +109,22 @@ class vmmConnect(gobject.GObject):
         self.reset_state()
 
     def reset_state(self):
-        self.window.get_widget("hypervisor").set_active(0)
+        self.set_default_hypervisor()
         self.window.get_widget("autoconnect").set_sensitive(True)
         self.window.get_widget("autoconnect").set_active(True)
         self.window.get_widget("conn-list").set_sensitive(False)
         self.window.get_widget("conn-list").get_model().clear()
         self.window.get_widget("hostname").set_text("")
         self.stop_browse()
+
+    def set_default_hypervisor(self):
+        default = virtinst.util.default_connection()
+        if default is None:
+            self.window.get_widget("hypervisor").set_active(-1)
+        elif default.startswith("xen"):
+            self.window.get_widget("hypervisor").set_active(0)
+        elif default.startswith("qemu"):
+            self.window.get_widget("hypervisor").set_active(1)
 
     def update_widget_states(self, src):
         if src.get_active() > 0:
