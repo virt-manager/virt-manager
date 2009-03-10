@@ -424,11 +424,14 @@ class vmmCreate(gobject.GObject):
         util.tooltip_wrapper(self.window.get_widget("config-cpus"),
                              cpu_tooltip)
 
+        cmax = int(cmax)
+        if cmax <= 0:
+            cmax = 1
         cpu_label = _("Up to %(numcpus)d available") % { 'numcpus': \
                                                             int(phys_cpus)}
         cpu_label = ("<span size='small' color='#484848'>%s</span>" %
                      cpu_label)
-        self.window.get_widget("config-cpus").set_range(.1, int(cmax) or 1)
+        self.window.get_widget("config-cpus").set_range(1, cmax)
         self.window.get_widget("phys-cpu-label").set_markup(cpu_label)
 
         # Storage
