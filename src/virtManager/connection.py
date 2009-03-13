@@ -830,6 +830,9 @@ class vmmConnection(gobject.GObject):
 
         if self.storage_capable == None:
             self.storage_capable = virtinst.util.is_storage_capable(self.vmm)
+            if self.storage_capable is False:
+                logging.debug("Connection doesn't seem to support storage "
+                              "APIs. Skipping all storage polling.")
 
         if not self.storage_capable:
             return (stopPools, startPools, origPools, newPools, currentPools)
