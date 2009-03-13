@@ -606,8 +606,9 @@ class vmmDomain(gobject.GObject):
         def _parse_serial_consoles(ctx):
             # [ Name, device type, source path
             serial_list = []
-            devs = ctx.xpathEval("/domain/devices/serial")
-            for node in devs:
+            sdevs = ctx.xpathEval("/domain/devices/serial")
+            cdevs = ctx.xpathEval("/domain/devices/console")
+            for node in sdevs:
                 name = "Serial "
                 dev_type = node.prop("type")
                 source_path = None
@@ -621,6 +622,26 @@ class vmmDomain(gobject.GObject):
                         source_path = child.prop("path")
 
                 serial_list.append([name, dev_type, source_path])
+
+            for node in cdevs:
+                name = "Serial Console"
+                dev_type = "pty"
+                source_path = None
+                inuse = False
+
+                for child in node.children:
+                    if child.name == "source":
+                        source_path = child.prop("path")
+                        break
+
+                if source_path:
+                    for dev in serial_list:
+                        if source_path == dev[2]:
+                            inuse = True
+                            break
+
+                if not inuse:
+                    serial_list.append([name, dev_type, source_path])
 
             return serial_list
         return self._parse_device_xml(_parse_serial_consoles)
