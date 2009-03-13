@@ -366,6 +366,8 @@ def main():
 if __name__ == "__main__":
     try:
         main()
+    except KeyboardInterrupt:
+        logging.debug("Received KeyboardInterrupt. Exiting application.")
     except Exception, run_e:
         logging.exception(run_e)
         _show_startup_error(str(run_e), "".join(traceback.format_exc()))
