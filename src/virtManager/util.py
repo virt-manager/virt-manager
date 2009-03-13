@@ -64,8 +64,10 @@ def tooltip_wrapper(obj, txt, func="set_tooltip_text"):
         funcptr = getattr(obj, func)
         funcptr(txt)
     except:
-        # XXX: Catch a specific error here
-        pass
+        ver = gtk.gtk_version
+        if ver[0] >= 2 and ver[1] >= 12:
+            logging.exception("Couldn't set tooltip.")
+
 
 def browse_local(parent, dialog_name, start_folder=None, _type=None,
                  dialog_type=gtk.FILE_CHOOSER_ACTION_OPEN,
