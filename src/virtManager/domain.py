@@ -806,7 +806,7 @@ class vmmDomain(gobject.GObject):
         def _parse_char_devs(ctx):
             chars = []
             devs  = []
-            devs = ctx.xpathEval("/domain/devices/console")
+            devs.extend(ctx.xpathEval("/domain/devices/console"))
             devs.extend(ctx.xpathEval("/domain/devices/parallel"))
             devs.extend(ctx.xpathEval("/domain/devices/serial"))
 
@@ -822,7 +822,7 @@ class vmmDomain(gobject.GObject):
                 target_port = None
                 source_path = None
 
-                for child in node.children:
+                for child in node.children or []:
                     if child.name == "target":
                         target_port = child.prop("port")
                     if child.name == "source":

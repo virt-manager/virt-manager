@@ -1106,7 +1106,7 @@ class vmmDetails(gobject.GObject):
                                              _("(Primary Console)") or "")
         self.window.get_widget("char-type").set_markup(typelabel)
         self.window.get_widget("char-dev-type").set_text(charinfo[4] or "-")
-        self.window.get_widget("char-target-port").set_text(charinfo[3])
+        self.window.get_widget("char-target-port").set_text(charinfo[3] or "")
         self.window.get_widget("char-source-path").set_text(charinfo[5] or "-")
 
     def refresh_hostdev_page(self):
