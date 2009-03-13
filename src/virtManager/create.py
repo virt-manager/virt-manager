@@ -690,6 +690,16 @@ class vmmCreate(gobject.GObject):
         net_list.set_active(default)
 
     def change_caps(self, gtype=None, dtype=None):
+
+        if gtype == None:
+            # If none specified, prefer HVM. This way, the default install
+            # options won't be limited because we default to PV. If hvm not
+            # supported, differ to guest_lookup
+            for g in self.caps.guests:
+                if g.os_type == "hvm":
+                    gtype = "hvm"
+                    break
+
         (newg,
          newdom) = virtinst.CapabilitiesParser.guest_lookup(conn=self.conn.vmm,
                                                             caps=self.caps,
