@@ -104,6 +104,7 @@ class vmmConnection(gobject.GObject):
         self.state = self.STATE_DISCONNECTED
         self.vmm = None
         self.storage_capable = None
+        self.dom_xml_flags = None
 
         # Connection Storage pools: UUID -> vmmStoragePool
         self.pools = {}
@@ -289,6 +290,29 @@ class vmmConnection(gobject.GObject):
 
     def get_capabilities(self):
         return virtinst.CapabilitiesParser.parse(self.vmm.getCapabilities())
+
+    def set_dom_flags(self, vm):
+        if self.dom_xml_flags != None:
+            # Already set
+            return
+
+        self.dom_xml_flags = []
+        for flags in [libvirt.VIR_DOMAIN_XML_SECURE,
+                      libvirt.VIR_DOMAIN_XML_INACTIVE,
+                      (libvirt.VIR_DOMAIN_XML_SECURE |
+                       libvirt.VIR_DOMAIN_XML_INACTIVE )]:
+            try:
+                vm.XMLDesc(flags)
+                self.dom_xml_flags.append(flags)
+            except libvirt.libvirtError, e:
+                logging.debug("%s does not support flags=%d : %s" %
+                              (self.get_uri(), flags, str(e)))
+
+    def has_dom_flags(self, flags):
+        if self.dom_xml_flags == None:
+            return False
+
+        return bool(self.dom_xml_flags.count(flags))
 
     def is_kvm_supported(self):
         if self.is_qemu_session():

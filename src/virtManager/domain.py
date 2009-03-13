@@ -75,6 +75,10 @@ class vmmDomain(gobject.GObject):
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
 
+        # Determine available XML flags (older libvirt versions will error
+        # out if passed SECURE_XML, INACTIVE_XML, etc)
+        self.connection.set_dom_flags(vm)
+
     def get_xml(self):
         # Get domain xml. If cached xml is invalid, update.
         if self._xml is None or not self._valid_xml:
@@ -85,8 +89,12 @@ class vmmDomain(gobject.GObject):
         # Force an xml update. Signal 'config-changed' if domain xml has
         # changed since last refresh
 
+        flags = libvirt.VIR_DOMAIN_XML_SECURE
+        if not self.connection.has_dom_flags(flags):
+            flags = 0
+
         origxml = self._xml
-        self._xml = self.vm.XMLDesc(libvirt.VIR_DOMAIN_XML_SECURE)
+        self._xml = self.vm.XMLDesc(flags)
         self._valid_xml = True
 
         if origxml != self._xml:
@@ -106,8 +114,15 @@ class vmmDomain(gobject.GObject):
         return self._orig_inactive_xml
 
     def refresh_inactive_xml(self):
-        self._orig_inactive_xml = self.vm.XMLDesc(libvirt.VIR_DOMAIN_XML_INACTIVE | libvirt.VIR_DOMAIN_XML_SECURE)
-        print "xml refresh to: %s" % self._orig_inactive_xml
+        flags = (libvirt.VIR_DOMAIN_XML_INACTIVE |
+                 libvirt.VIR_DOMAIN_XML_SECURE)
+        if not self.connection.has_dom_flags(flags):
+            flags = libvirt.VIR_DOMAIN_XML_INACTIVE
+
+            if not self.connection.has_dom_flags:
+                flags = 0
+
+        self._orig_inactive_xml = self.vm.XMLDesc(flags)
 
     def release_handle(self):
         del(self.vm)
