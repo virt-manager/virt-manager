@@ -181,30 +181,6 @@ class vmmDomain(gobject.GObject):
         # FIXME: This should be static, not parse xml everytime
         return vutil.get_xml_path(self.get_xml(), "/domain/@type")
 
-    def is_vcpu_hotplug_capable(self):
-        # Read only connections aren't allowed to change it
-        if self.connection.is_read_only():
-            return False
-        # Running paravirt guests can change it, or any inactive guest
-        if self.vm.OSType() == "linux" \
-           or self.status() not in [libvirt.VIR_DOMAIN_RUNNING,\
-                                    libvirt.VIR_DOMAIN_PAUSED]:
-            return True
-        # Everyone else is out of luck
-        return False
-
-    def is_memory_hotplug_capable(self):
-        # Read only connections aren't allowed to change it
-        if self.connection.is_read_only():
-            return False
-        # Running paravirt guests can change it, or any inactive guest
-        if self.vm.OSType() == "linux" \
-           or self.status() not in [libvirt.VIR_DOMAIN_RUNNING,\
-                                    libvirt.VIR_DOMAIN_PAUSED]:
-            return True
-        # Everyone else is out of luck
-        return False
-
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:
             return libvirt.VIR_DOMAIN_RUNNING

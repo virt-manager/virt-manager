@@ -749,15 +749,9 @@ class vmmDetails(gobject.GObject):
         if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ] and not self.vm.is_read_only():
             self.window.get_widget("control-run").set_sensitive(True)
             self.window.get_widget("details-menu-run").set_sensitive(True)
-            self.window.get_widget("config-vcpus").set_sensitive(True)
-            self.window.get_widget("config-memory").set_sensitive(True)
-            self.window.get_widget("config-maxmem").set_sensitive(True)
         else:
             self.window.get_widget("control-run").set_sensitive(False)
             self.window.get_widget("details-menu-run").set_sensitive(False)
-            self.window.get_widget("config-vcpus").set_sensitive(self.vm.is_vcpu_hotplug_capable())
-            self.window.get_widget("config-memory").set_sensitive(self.vm.is_memory_hotplug_capable())
-            self.window.get_widget("config-maxmem").set_sensitive(True)
 
         if status in [libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF,
                       libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
@@ -775,11 +769,12 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("details-menu-shutdown").set_sensitive(True)
             self.window.get_widget("details-menu-save").set_sensitive(True)
 
-        # Currently, the condition that "Migrate" become insensitive is only "readonly".
-        if vm.is_read_only():
-            self.window.get_widget("details-menu-migrate").set_sensitive(False)
-        else:
-            self.window.get_widget("details-menu-migrate").set_sensitive(True)
+        ro = vm.is_read_only()
+        self.window.get_widget("config-vcpus").set_sensitive(not ro)
+        self.window.get_widget("config-memory").set_sensitive(not ro)
+        self.window.get_widget("config-maxmem").set_sensitive(not ro)
+        self.window.get_widget("details-menu-migrate").set_sensitive(not ro)
+        if not ro:
             self.set_migrate_menu()
 
         if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
