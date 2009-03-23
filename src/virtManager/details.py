@@ -727,7 +727,8 @@ class vmmDetails(gobject.GObject):
 
     def set_migrate_menu(self):
         menu = self.window.get_widget("details-menu-migrate_menu")
-        self.engine.populate_migrate_menu(menu, self.control_vm_migrate)
+        self.engine.populate_migrate_menu(menu, self.control_vm_migrate,
+                                          self.vm)
 
     def set_pause_widget_states(self, state):
         try:

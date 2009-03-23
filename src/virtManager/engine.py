@@ -574,8 +574,8 @@ class vmmEngine(gobject.GObject):
         migrate_progress.set_title(" ")
         return migrate_progress
 
-    def populate_migrate_menu(self, menu, migrate_func):
-        conns = self.get_available_migrate_hostnames()
+    def populate_migrate_menu(self, menu, migrate_func, vm):
+        conns = self.get_available_migrate_hostnames(vm)
 
         # Clear menu
         for item in menu:
@@ -597,9 +597,9 @@ class vmmEngine(gobject.GObject):
             mitem.show()
             menu.add(mitem)
 
-    def get_available_migrate_hostnames(self):
-        driver = self.windowManager.current_connection().get_driver()
-        uri = self.windowManager.current_connection().get_uri()
+    def get_available_migrate_hostnames(self, vm):
+        driver = vm.get_connection().get_driver()
+        uri = vm.get_connection().get_uri()
         available_migrate_hostnames = {}
 
         # Returns list of lists of the form

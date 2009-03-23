@@ -1124,7 +1124,12 @@ class vmmManager(gobject.GObject):
                       vm.get_uuid(), hostname)
 
     def set_migrate_submenu(self, src):
-        self.engine.populate_migrate_menu(self.vmmenumigrate, self.migrate)
+        vm = self.current_vm()
+        if not vm:
+            return
+
+        self.engine.populate_migrate_menu(self.vmmenumigrate, self.migrate,
+                                          vm)
 
     def _add_connection(self, engine, conn):
         conn.connect("vm-added", self.vm_added)
