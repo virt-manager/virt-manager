@@ -25,9 +25,9 @@ import os, stat
 import traceback
 import logging
 
-import libvirt
 import virtinst
 
+from virtManager import util
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
@@ -159,11 +159,7 @@ class vmmDeleteDialog(gobject.GObject):
         try:
             # Open a seperate connection to install on since this is async
             logging.debug("Threading off connection to delete vol.")
-            #newconn = vmmConnection(self.config, self.conn.get_uri(),
-            #                        self.conn.is_read_only())
-            #newconn.open()
-            #newconn.connectThreadEvent.wait()
-            newconn = libvirt.open(self.conn.get_uri())
+            newconn = util.dup_conn(self.config, self.conn)
             meter = vmmCreateMeter(asyncjob)
 
             for path in paths:
