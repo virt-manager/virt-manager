@@ -18,6 +18,7 @@
 # MA 02110-1301 USA.
 #
 
+import logging
 import threading
 import gtk
 import gtk.gdk
@@ -36,7 +37,9 @@ class vmmAsyncJob(gobject.GObject):
         def run(self):
             threading.Thread.run(self)
 
-    def __init__(self, config, callback, args=None, text=_("Please wait a few moments..."), title=_("Operation in progress")):
+    def __init__(self, config, callback, args=None,
+                 text=_("Please wait a few moments..."),
+                 title=_("Operation in progress")):
         self.__gobject_init__()
         self.config = config
 
@@ -52,6 +55,7 @@ class vmmAsyncJob(gobject.GObject):
 
         args.append(self)
         self.bg_thread = vmmAsyncJob.asyncJobWorker(callback, args)
+        self.bg_thread.setDaemon(True)
         self.is_pulsing = True
 
     def run(self):
@@ -62,6 +66,14 @@ class vmmAsyncJob(gobject.GObject):
         gtk.main()
         gobject.source_remove(timer)
         timer = 0
+
+        if self.bg_thread.isAlive():
+            # This can happen if the user closes the whole app while the
+            # async dialog is running. This forces us to clean up properly
+            # and not leave a dead process around.
+            logging.debug("Forcing main_quit from async job.")
+            self._exit_if_necessary(force_exit=True)
+
         self.topwin.destroy()
 
     def pulse_pbar(self, progress="", stage=None):
@@ -75,7 +87,7 @@ class vmmAsyncJob(gobject.GObject):
                 self.stage.set_text(_("Processing..."))
         finally:
             gtk.gdk.threads_leave()
-            
+
 
     def set_pbar_fraction(self, frac, progress, stage=None):
         # callback for progress meter when file size is known
@@ -109,12 +121,12 @@ class vmmAsyncJob(gobject.GObject):
     def exit_if_necessary(self):
         gtk.gdk.threads_enter()
         try:
-            return self._exit_if_necessary(self)
+            return self._exit_if_necessary()
         finally:
             gtk.gdk.threads_leave()
 
-    def _exit_if_necessary(self, unused=None):
-        if self.bg_thread.isAlive():
+    def _exit_if_necessary(self, force_exit=False):
+        if self.bg_thread.isAlive() and not force_exit:
             if(self.is_pulsing):
                 self.pbar.pulse()
             return True
