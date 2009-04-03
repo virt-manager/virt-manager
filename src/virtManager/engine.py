@@ -29,6 +29,8 @@ import traceback
 from virtManager.about import vmmAbout
 from virtManager.connect import vmmConnect
 from virtManager.connection import vmmConnection
+from virtManager.createmeter import vmmCreateMeter
+from virtManager.domain import vmmDomain
 from virtManager.preferences import vmmPreferences
 from virtManager.manager import vmmManager
 from virtManager.details import vmmDetails
@@ -490,7 +492,7 @@ class vmmEngine(gobject.GObject):
             except Exception, e:
                 self.err.show_err(_("Error starting domain: %s" % str(e)),
                                   "".join(traceback.format_exc()))
-            
+
     def shutdown_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)
         vm = con.get_vm(uuid)
@@ -538,37 +540,54 @@ class vmmEngine(gobject.GObject):
         conn = self.get_connection(uri, False)
         vm = conn.get_vm(uuid)
         destconn = self.get_connection(desturi, False)
-        resp = self.err.yes_no(_("Are you sure you want to migrate %s from %s to %s?") % \
-                    (vm.get_name(), conn.get_hostname(), destconn.get_hostname()))
-        if resp:
-            migrate_progress = None
-            try:
-                # show progress dialog
-                migrate_progress = self.get_migrate_progress(vm.get_name(), conn.get_short_hostname(), destconn.get_short_hostname())
-                migrate_progress.show()
-                while gtk.events_pending():
-                    gtk.main_iteration()
-                # call virDomainMigrate
-                vm.migrate(destconn)
-                # close progress dialog
-                migrate_progress.destroy()
-            except Exception, e:
-                migrate_progress.destroy()
-                self.err.show_err(_("Error migrating domain: %s") % str(e),
-                                  "".join(traceback.format_exc()))
-            self.windowManager.conn_refresh_resources(conn)
-            self.windowManager.conn_refresh_resources(destconn)
+        resp = self.err.yes_no(_("Are you sure you want to migrate %s from "
+                                 "%s to %s?") %
+                                (vm.get_name(), conn.get_hostname(),
+                                 destconn.get_hostname()))
+        if not resp:
+            return
 
-    def get_migrate_progress(self, vmname, hostname, desthostname):
-        migrate_progress = None
-        migrate_progress = gtk.MessageDialog(None, \
-                                            gtk.DIALOG_DESTROY_WITH_PARENT, \
-                                            gtk.MESSAGE_INFO, \
-                                            gtk.BUTTONS_NONE, \
-                                            _("%s will be migrated from %s to %s." % \
-                                            (vmname, hostname, desthostname)))
-        migrate_progress.set_title(" ")
-        return migrate_progress
+        progWin = vmmAsyncJob(self.config, self._async_migrate, [vm, destconn],
+                              title=_("Migrating VM '%s'" % vm.get_name()),
+                              text=(_("Migrating VM '%s' from %s to %s. "
+                                      "This may take awhile.") %
+                                      (vm.get_name(), conn.get_hostname(),
+                                       destconn.get_hostname())))
+        progWin.run()
+        error, details = progWin.get_error()
+
+        if error:
+            self.err.show_err(error, details)
+
+        self.windowManager.conn_refresh_resources(vm.get_connection())
+        self.windowManager.conn_refresh_resources(destconn)
+
+    def _async_migrate(self, origvm, origdconn, asyncjob):
+        errinfo = None
+        try:
+            try:
+                ignore = vmmCreateMeter(asyncjob)
+
+                srcconn = util.dup_conn(self.config, origvm.get_connection(),
+                                        return_conn_class=True)
+                dstconn = util.dup_conn(self.config, origdconn,
+                                        return_conn_class=True)
+
+                vminst = srcconn.vmm.lookupByName(origvm.get_name())
+                vm = vmmDomain(self.config, srcconn, vminst, vminst.UUID())
+
+                logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
+                              srcconn.get_uri(), dstconn.get_uri())
+                #vm.migrate(dstconn)
+                import time
+                time.sleep(5)
+            except Exception, e:
+                errinfo = (str(e), ("Unable to migrate guest:\n %s" %
+                                    "".join(traceback.format_exc())))
+        finally:
+            if errinfo:
+                asyncjob.set_error(errinfo[0], errinfo[1])
+
 
     def populate_migrate_menu(self, menu, migrate_func, vm):
         conns = self.get_available_migrate_hostnames(vm)
