@@ -531,7 +531,9 @@ class vmmConnection(gobject.GObject):
 
     def _do_creds(self, creds, cbdata):
         try:
-            if len(creds) == 1 and creds[0][0] == libvirt.VIR_CRED_EXTERNAL and creds[0][2] == "PolicyKit":
+            if (len(creds) == 1 and
+                creds[0][0] == libvirt.VIR_CRED_EXTERNAL and
+                creds[0][2] == "PolicyKit"):
                 return self._do_creds_polkit(creds[0][1])
 
             for cred in creds:
@@ -539,15 +541,12 @@ class vmmConnection(gobject.GObject):
                     return -1
 
             return self._do_creds_dialog(creds)
-        except:
-            (_type, value, stacktrace) = sys.exc_info ()
+        except Exception, e:
             # Detailed error message, in English so it can be Googled.
-            self.connectError = \
-                ("Failed to get credentials '%s':\n" %
-                 str(self.uri)) + \
-                 str(_type) + " " + str(value) + "\n" + \
-                 traceback.format_exc (stacktrace)
-            logging.error(self.connectError)
+            self.connectError = ("Failed to get credentials for '%s':\n%s\n%s"
+                                 % (str(self.uri), str(e),
+                                    "".join(traceback.format_exc())))
+            logging.debug(self.connectError)
             return -1
 
     def _try_open(self):
@@ -610,11 +609,13 @@ class vmmConnection(gobject.GObject):
                         done = False
                         continue
 
+                tb = "".join(traceback.format_exception(_type, value,
+                                                        stacktrace))
+
                 # Detailed error message, in English so it can be Googled.
                 self.connectError = (("Unable to open connection to hypervisor"
-                                      " URI '%s':\n" % str(self.uri)) +
-                                      str(_type) + " " + str(value) + "\n" +
-                                      traceback.format_exc (stacktrace) + hint)
+                                      " URI '%s':\n%s\n%s"
+                                      % (str(self.uri), value, tb + hint)))
                 logging.error(self.connectError)
 
 
