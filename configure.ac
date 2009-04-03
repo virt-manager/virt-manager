@@ -35,7 +35,8 @@ AC_OUTPUT(Makefile
           src/virtManager/Makefile
           src/graphWidgets/Makefile
           man/Makefile
+          tests/Makefile
           virt-manager.spec
-	  help/Makefile
-	  help/virt-manager/Makefile
-	  help/virt-manager/C/Makefile)
+          help/Makefile
+          help/virt-manager/Makefile
+          help/virt-manager/C/Makefile)
