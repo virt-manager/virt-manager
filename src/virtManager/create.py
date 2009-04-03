@@ -90,9 +90,8 @@ class vmmCreate(gobject.GObject):
         self.detectedDistro = None
         self.detectThreadLock = threading.Lock()
 
-        # Async install state
-        self.install_error = None
-        self.install_details = None
+        # Marker that we have failed an install
+        self.install_failed = False
 
         self.window.signal_autoconnect({
             "on_vmm_newcreate_delete_event" : self.close,
@@ -267,6 +266,7 @@ class vmmCreate(gobject.GObject):
 
     def reset_state(self, urihint=None):
 
+        self.install_failed = False
         self.window.get_widget("create-pages").set_current_page(PAGE_NAME)
         self.page_changed(None, None, PAGE_NAME)
 
@@ -834,7 +834,7 @@ class vmmCreate(gobject.GObject):
         path = ""
 
         # Don't generate a new path if the install failed
-        if self.install_error:
+        if self.install_failed:
             if self.guest and len(self.guest.disks) > 0:
                 return self.guest.disks[0].path
 
@@ -1438,7 +1438,7 @@ class vmmCreate(gobject.GObject):
                       "\n  Audio?: %s" % str(self.get_config_sound()))
 
         # Start the install
-        self.install_error = None
+        self.install_failed = False
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
@@ -1450,17 +1450,18 @@ class vmmCreate(gobject.GObject):
                                      "images may take a few minutes to "
                                      "complete."))
         progWin.run()
+        error, details = progWin.get_error()
 
-        if self.install_error != None:
-            self.err.show_err(self.install_error, self.install_details)
-            self.topwin.set_sensitive(True)
-            self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
-            # Don't close becase we allow user to go back in wizard & correct
-            # their mistakes
-            return
+        if error != None:
+            self.err.show_err(error, details)
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
+
+        if error:
+            self.install_failed = True
+            return
+
         # Ensure new VM is loaded
         # FIXME: Hmm, shouldn't we emit a signal here rather than do this?
         self.conn.tick(noStatsUpdate=True)
@@ -1480,7 +1481,8 @@ class vmmCreate(gobject.GObject):
 
     def do_install(self, guest, asyncjob):
         meter = vmmCreateMeter(asyncjob)
-
+        error = None
+        details = None
         try:
             logging.debug("Starting background install process")
 
@@ -1494,8 +1496,8 @@ class vmmCreate(gobject.GObject):
 
             dom = guest.start_install(False, meter = meter)
             if dom == None:
-                self.install_error = _("Guest installation failed to complete")
-                self.install_details = self.install_error
+                error = _("Guest installation failed to complete")
+                details = error
                 logging.error("Guest install did not return a domain")
             else:
                 logging.debug("Install completed")
@@ -1506,12 +1508,10 @@ class vmmCreate(gobject.GObject):
             details = ("Unable to complete install '%s'" %
                        (str(_type) + " " + str(value) + "\n" +
                        traceback.format_exc (stacktrace)))
+            error = (_("Unable to complete install: '%s'") % str(value))
 
-            self.install_error = (_("Unable to complete install: '%s'") %
-                                  str(value))
-            self.install_details = details
-            logging.error(details)
-
+        if error:
+            asyncjob.set_error(error, details)
 
     def pretty_storage(self, size):
         return "%.1f Gb" % float(size)

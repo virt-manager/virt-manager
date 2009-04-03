@@ -324,10 +324,6 @@ class vmmManager(gobject.GObject):
                self.config.get_stats_enable_mem_poll())]:
             self.enable_polling(None, None, init_val, typ)
 
-        # store any error message from the restore-domain callback
-        self.restore_err = ""
-        self.restore_err_details = ""
-
         self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
 
         self.engine.connect("connection-added", self._add_connection)
@@ -403,32 +399,31 @@ class vmmManager(gobject.GObject):
                                  _("Restore Virtual Machine"),
                                  self.config.get_default_save_dir(conn))
 
-        if path:
-            if conn.is_valid_saved_image(path):
-                progWin = vmmAsyncJob(self.config,
-                                      self.restore_saved_callback,
-                                      [path],
-                                      _("Restoring Virtual Machine"))
-                progWin.run()
-            else:
-                self.err.val_err(_("The file '%s' does not appear to be a "
-                                   "valid saved machine image") % path)
-                return
+        if not path:
+            return
 
-        if self.restore_err != "":
-            self.err.show_err(self.restore_err, self.restore_err_details,
+        if not conn.is_valid_saved_image(path):
+            self.err.val_err(_("The file '%s' does not appear to be a "
+                               "valid saved machine image") % path)
+            return
+
+        progWin = vmmAsyncJob(self.config, self.restore_saved_callback,
+                              [path], _("Restoring Virtual Machine"))
+        progWin.run()
+        error, details = progWin.get_error()
+
+        if error is not None:
+            self.err.show_err(error, details,
                               title=_("Error restoring domain"))
-            self.restore_err = ""
-            self.restore_details = ""
 
-    def restore_saved_callback(self, file_to_load, ignore1=None):
+    def restore_saved_callback(self, file_to_load, asyncjob):
         try:
             self.current_connection().restore(file_to_load)
         except Exception, e:
-            self.restore_err = (_("Error restoring domain '%s': %s") %
+            err = (_("Error restoring domain '%s': %s") %
                                   (file_to_load, str(e)))
-            self.restore_err_details = "".join(traceback.format_exc())
-            return
+            details = "".join(traceback.format_exc())
+            asyncjob.set_error(err, details)
 
 
     def vm_view_changed(self, src):

@@ -127,8 +127,6 @@ class vmmDeleteDialog(gobject.GObject):
     def finish(self, src):
         devs = self.get_paths_to_delete()
 
-        self.error_msg = None
-        self.error_details = None
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
@@ -140,13 +138,14 @@ class vmmDeleteDialog(gobject.GObject):
         progWin = vmmAsyncJob(self.config, self._async_delete, [devs],
                               title=title, text=text)
         progWin.run()
+        error, details = progWin.get_error()
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
         self.close()
 
-        if self.error_msg is not None:
-            self.err.show_err(self.error_msg, self.error_details)
+        if error is not None:
+            self.err.show_err(error, details)
 
         self.conn.tick(noStatsUpdate=True)
 
@@ -154,6 +153,8 @@ class vmmDeleteDialog(gobject.GObject):
     def _async_delete(self, paths, asyncjob):
         newconn = None
         storage_errors = []
+        error = None
+        details = None
 
         try:
             # Open a seperate connection to install on since this is async
@@ -179,10 +180,10 @@ class vmmDeleteDialog(gobject.GObject):
             self.vm.delete()
 
         except Exception, e:
-            self.error_msg = (_("Error deleting virtual machine '%s': %s") %
-                              (self.vm.get_name(), str(e)))
-            self.error_details = "".join(traceback.format_exc())
-            logging.error(self.error_msg + "\n" + self.error_details)
+            error = (_("Error deleting virtual machine '%s': %s") %
+                      (self.vm.get_name(), str(e)))
+            details = "".join(traceback.format_exc())
+
 
         storage_errstr = ""
         for errinfo in storage_errors:
@@ -193,15 +194,18 @@ class vmmDeleteDialog(gobject.GObject):
 
         # We had extra storage errors. If there was another error message,
         # errors to it. Otherwise, build the main error around them.
-        if self.error_details:
-            self.error_details += "\n\n"
-            self.error_details += _("Additionally, there were errors removing"
+        if details:
+            details += "\n\n"
+            details += _("Additionally, there were errors removing"
                                     " certain storage devices: \n")
-            self.error_details += storage_errstr
+            details += storage_errstr
         else:
-            self.error_msg = _("Errors encountered while removing certain "
+            error = _("Errors encountered while removing certain "
                                "storage devices.")
-            self.error_details = storage_errstr
+            details = storage_errstr
+
+        if error:
+            asyncjob.set_error(error, details)
 
     def _async_delete_path(self, conn, path, ignore):
         vol = None

@@ -58,10 +58,6 @@ class vmmCreateVolume(gobject.GObject):
         self.vol = None
         self.vol_class = Storage.StoragePool.get_volume_for_pool(parent_pool.get_type())
 
-        # Async pool creation error storage
-        self.error_msg = None
-        self.error_details = None
-
         self.window.signal_autoconnect({
             "on_vmm_create_vol_delete_event" : self.close,
             "on_vol_cancel_clicked"  : self.close,
@@ -151,8 +147,6 @@ class vmmCreateVolume(gobject.GObject):
         logging.debug("Creating volume with xml:\n%s" %
                       self.vol.get_xml_config())
 
-        self.error_msg = None
-        self.error_details = None
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
@@ -161,17 +155,17 @@ class vmmCreateVolume(gobject.GObject):
                               text=_("Creating the storage volume may take a "
                                      "while..."))
         progWin.run()
+        error, details = progWin.get_error()
 
-        if self.error_msg is not None:
-            self.show_err(self.error_msg, self.error_details)
-            self.topwin.set_sensitive(True)
-            self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
-            return
+        if error is not None:
+            self.show_err(error, details)
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
-        self.emit("vol-created")
-        self.close()
+
+        if not error:
+            self.emit("vol-created")
+            self.close()
 
     def _async_vol_create(self, asyncjob):
         newconn = None
@@ -186,9 +180,9 @@ class vmmCreateVolume(gobject.GObject):
             logging.debug("Starting backround vol creation.")
             self.vol.install(meter=meter)
         except Exception, e:
-            self.error_msg = _("Error creating vol: %s") % str(e)
-            self.error_details = "".join(traceback.format_exc())
-            logging.error(self.error_msg + "\n" + self.error_details)
+            error = _("Error creating vol: %s") % str(e)
+            details = "".join(traceback.format_exc())
+            asyncjob.set_error(error, details)
 
     def validate(self):
         name = self.window.get_widget("vol-name").get_text()

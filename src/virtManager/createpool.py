@@ -55,8 +55,6 @@ class vmmCreatePool(gobject.GObject):
 
         self._pool = None
         self._pool_class = Storage.StoragePool
-        self.error_msg = None
-        self.error_details = None
 
         self.window.signal_autoconnect({
             "on_pool_forward_clicked" : self.forward,
@@ -275,8 +273,6 @@ class vmmCreatePool(gobject.GObject):
         self.window.get_widget("pool-pages").prev_page()
 
     def finish(self):
-        self.error_msg = None
-        self.error_details = None
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
@@ -285,16 +281,16 @@ class vmmCreatePool(gobject.GObject):
                               text=_("Creating the storage pool may take a "
                                      "while..."))
         progWin.run()
+        error, details = progWin.get_error()
 
-        if self.error_msg is not None:
-            self.err.show_err(self.error_msg, self.error_details)
-            self.topwin.set_sensitive(True)
-            self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
-            return
+        if error is not None:
+            self.err.show_err(error, details)
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
-        self.close()
+
+        if not error:
+            self.close()
 
     def _async_pool_create(self, asyncjob):
         newconn = None
@@ -310,9 +306,9 @@ class vmmCreatePool(gobject.GObject):
             poolobj.setAutostart(True)
             logging.debug("Pool creating succeeded.")
         except Exception, e:
-            self.error_msg = _("Error creating pool: %s") % str(e)
-            self.error_details = "".join(traceback.format_exc())
-            logging.error(self.error_msg + "\n" + self.error_details)
+            error = _("Error creating pool: %s") % str(e)
+            details = "".join(traceback.format_exc())
+            asyncjob.set_error(error, details)
 
     def page_changed(self, notebook, page, page_number):
         if page_number == PAGE_NAME:

@@ -63,8 +63,6 @@ class vmmAddHardware(gobject.GObject):
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
-        self.install_error = ""
-        self.install_details = ""
 
         self.storage_browser = None
         self._browse_cb_id = None
@@ -552,39 +550,33 @@ class vmmAddHardware(gobject.GObject):
     def finish(self, ignore=None):
         hw = self.get_config_hardware_type()
 
-        self.install_error = None
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
-        try:
-            if hw == PAGE_NETWORK:
-                self.add_network()
-            elif hw == PAGE_DISK:
-                self.add_storage()
-            elif hw == PAGE_INPUT:
-                self.add_input()
-            elif hw == PAGE_GRAPHICS:
-                self.add_graphics()
-            elif hw == PAGE_SOUND:
-                self.add_sound()
-            elif hw == PAGE_HOSTDEV:
-                self.add_hostdev()
-        except Exception, e:
-            self.err.show_err(_("Uncaught error adding device: %s") % str(e),
-                              "".join(traceback.format_exc()))
+        func_dict = { PAGE_NETWORK: self.add_network,
+                      PAGE_DISK: self.add_storage,
+                      PAGE_INPUT: self.add_input,
+                      PAGE_GRAPHICS: self.add_graphics,
+                      PAGE_SOUND: self.add_sound,
+                      PAGE_HOSTDEV: self.add_hostdev }
 
-        if self.install_error is not None:
-            self.err.show_err(self.install_error, self.install_details)
-            self.topwin.set_sensitive(True)
-            self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
-            # Don't close becase we allow user to go back in wizard & correct
-            # their mistakes
-            #self.close()
-            return
+        try:
+            func = func_dict[hw]
+            errinfo = func()
+            error, details = errinfo or (None, None)
+        except Exception, e:
+            error = _("Unable to add device: %s") % str(e)
+            details = "".join(traceback.format_exc())
+
+        if error is not None:
+            self.err.show_err(error, details)
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
-        self.close()
+
+        if not error:
+            # Leave window open if there was an error, so user can retry
+            self.close()
 
     def add_network(self):
         if self._dev is None and self.vm.get_connection().is_qemu_session():
@@ -612,23 +604,19 @@ class vmmAddHardware(gobject.GObject):
         for d in self.vm.get_disk_devices():
             used.append(d[2])
 
-        try:
-            self._dev.generate_target(used)
-        except Exception, e:
-            details = _("Unable to complete install: ") + \
-                      "".join(traceback.format_exc())
-            self.install_error = _("Unable to complete install: '%s'") % str(e)
-            self.install_details = details
-            return
+        self._dev.generate_target(used)
 
         progWin = vmmAsyncJob(self.config, self.do_file_allocate, [self._dev],
                               title=_("Creating Storage File"),
-                              text=_("Allocation of disk storage may take a few minutes " + \
-                                     "to complete."))
+                              text=_("Allocation of disk storage may take "
+                                     "a few minutes to complete."))
         progWin.run()
 
-        if self.install_error == None:
+        error, details = progWin.get_error()
+        if error == None:
             self.add_device(self._dev.get_xml_config())
+        else:
+            return (error, details)
 
     def add_device(self, xml):
         logging.debug("Adding device:\n" + xml)
@@ -656,14 +644,7 @@ class vmmAddHardware(gobject.GObject):
             # Attach device should alter xml for us
             return
 
-        try:
-            self.vm.add_device(xml)
-        except Exception, e:
-            details = _("Unable to complete install: '%s'") % \
-                        "".join(traceback.format_exc())
-            self.install_error = _("Unable to complete install: '%s'") % str(e)
-            self.install_details = details
-            logging.error(details)
+        self.vm.add_device(xml)
 
     def do_file_allocate(self, disk, asyncjob):
         meter = vmmCreateMeter(asyncjob)
@@ -678,12 +659,10 @@ class vmmAddHardware(gobject.GObject):
             disk.setup(meter)
             logging.debug("Allocation completed")
         except Exception, e:
-            details = "Unable to complete install: '%s'" % \
-                      "".join(traceback.format_exc())
-            self.install_error = _("Unable to complete install: '%s'") \
-                                 % str(e)
-            self.install_details = details
-            logging.error(details)
+            details = (_("Unable to complete install: '%s'") %
+                         "".join(traceback.format_exc()))
+            error = _("Unable to complete install: '%s'") % str(e)
+            asyncjob.set_error(error, details)
 
 
     def browse_storage_partition_address(self, src, ignore=None):

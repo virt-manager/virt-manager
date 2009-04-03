@@ -50,6 +50,8 @@ class vmmAsyncJob(gobject.GObject):
         self.topwin.set_title(title)
         self.topwin.hide()
 
+        # Callback sets this if there is an error
+        self._error_info = None
         self.stage = self.window.get_widget("pbar-stage")
         self.pbar = self.window.get_widget("pbar")
 
@@ -117,6 +119,14 @@ class vmmAsyncJob(gobject.GObject):
             self.pbar.set_fraction(1)
         finally:
             gtk.gdk.threads_leave()
+
+    def set_error(self, error, details):
+        self._error_info = (error, details)
+
+    def get_error(self):
+        if not self._error_info:
+            return (None, None)
+        return self._error_info
 
     def exit_if_necessary(self):
         gtk.gdk.threads_enter()

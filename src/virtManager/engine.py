@@ -66,8 +66,6 @@ class vmmEngine(gobject.GObject):
         # are open. When it is decremented to 0, close the app
         self.windows = 0
 
-        self._save_callback_info = []
-
         self.config = config
         self.config.on_stats_update_interval_changed(self.reschedule_timer)
 
@@ -410,24 +408,22 @@ class vmmEngine(gobject.GObject):
                                  self.config.get_default_save_dir(con),
                                  dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE)
 
-        if path:
-            progWin = vmmAsyncJob(self.config, self._save_callback,
-                                  [vm, path],
-                                  _("Saving Virtual Machine"))
-            progWin.run()
+        if not path:
+            return
 
-        if self._save_callback_info != []:
-            self.err.show_err(_("Error saving domain: %s") %
-                                self._save_callback_info[0],
-                                self._save_callback_info[1])
-            self._save_callback_info = []
+        progWin = vmmAsyncJob(self.config, self._save_callback, [vm, path],
+                              _("Saving Virtual Machine"))
+        progWin.run()
+        error, details = progWin.get_error()
 
-    def _save_callback(self, vm, file_to_save, ignore1=None):
+        if error is not None:
+            self.err.show_err(_("Error saving domain: %s") % error, details)
+
+    def _save_callback(self, vm, file_to_save, asyncjob):
         try:
             vm.save(file_to_save)
         except Exception, e:
-            self._save_callback_info = [str(e), \
-                                        "".join(traceback.format_exc())]
+            asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
     def destroy_domain(self, src, uri, uuid):
         con = self.get_connection(uri, False)
