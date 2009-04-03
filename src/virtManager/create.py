@@ -1632,7 +1632,6 @@ class vmmCreate(gobject.GObject):
 
             self._safe_wrapper(self.set_distro_selection, results)
         finally:
-            self.detectDistro = None
             self._clear_detect_thread()
             self._safe_wrapper(self._set_forward_sensitive, (True,))
             logging.debug("Leaving OS detection thread.")

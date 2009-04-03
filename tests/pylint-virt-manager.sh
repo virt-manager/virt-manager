@@ -60,7 +60,6 @@ addmsg "W0704"      # W0704: Exception doesn't do anything
 # Potentially useful messages, disabled for now
 addmsg "C0322"      # C0322: *Operator not preceded by a space*
 addmsg "C0323"      # C0323: *Operator not followed by a space*
-addmsg "W0201"      # W0201: Defined outside __init__
 addmsg "W0511"      # W0511: FIXME and XXX: messages
 addmsg "W0613"      # W0613: Unused arguments
 
