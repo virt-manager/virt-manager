@@ -117,7 +117,7 @@ def browse_local(parent, dialog_name, start_folder=None, _type=None,
         fcdialog.destroy()
         return None
 
-def dup_conn(config, conn, libconn=None):
+def dup_conn(config, conn, libconn=None, return_conn_class=False):
 
     is_readonly = False
 
@@ -141,4 +141,7 @@ def dup_conn(config, conn, libconn=None):
     newconn.open()
     newconn.connectThreadEvent.wait()
 
-    return newconn.vmm
+    if return_conn_class:
+        return newconn
+    else:
+        return newconn.vmm

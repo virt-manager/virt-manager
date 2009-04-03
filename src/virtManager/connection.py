@@ -758,7 +758,7 @@ class vmmConnection(gobject.GObject):
             #        to the user.
             os.remove(frm)
         except:
-            logging.debug("Couldn't remove save file '%s'used for restore." %
+            logging.debug("Couldn't remove save file '%s' used for restore." %
                           frm)
 
     def _update_nets(self):

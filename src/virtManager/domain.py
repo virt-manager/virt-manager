@@ -560,7 +560,7 @@ class vmmDomain(gobject.GObject):
         self.vm.resume()
         self._update_status()
 
-    def save(self, filename, ignore1=None, background=True):
+    def save(self, filename, background=True):
         if background:
             conn = util.dup_conn(self.config, self.connection)
             vm = conn.lookupByID(self.get_id())

@@ -418,7 +418,9 @@ class vmmManager(gobject.GObject):
 
     def restore_saved_callback(self, file_to_load, asyncjob):
         try:
-            self.current_connection().restore(file_to_load)
+            newconn = util.dup_conn(self.config, self.current_connection(),
+                                    return_conn_class=True)
+            newconn.restore(file_to_load)
         except Exception, e:
             err = (_("Error restoring domain '%s': %s") %
                                   (file_to_load, str(e)))
