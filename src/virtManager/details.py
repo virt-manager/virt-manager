@@ -135,8 +135,6 @@ class vmmDetails(gobject.GObject):
         menu = gtk.Menu()
         self.window.get_widget("control-shutdown").set_menu(menu)
 
-        self.migrate_menu_items = {}
-
         rebootimg = gtk.Image()
         rebootimg.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
         shutdownimg = gtk.Image()
@@ -276,6 +274,7 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_save_activate": self.control_vm_save_domain,
             "on_details_menu_destroy_activate": self.control_vm_destroy,
             "on_details_menu_pause_activate": self.control_vm_pause,
+            "on_details_menu_migrate_activate": self.populate_migrate_menu,
             "on_details_menu_screenshot_activate": self.control_vm_screenshot,
             "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
@@ -725,7 +724,7 @@ class vmmDetails(gobject.GObject):
         self.emit("action-migrate-domain", self.vm.get_connection().get_uri(),
                   self.vm.get_uuid(), hostname)
 
-    def set_migrate_menu(self):
+    def populate_migrate_menu(self, ignore1=None):
         menu = self.window.get_widget("details-menu-migrate_menu")
         self.engine.populate_migrate_menu(menu, self.control_vm_migrate,
                                           self.vm)
@@ -775,10 +774,9 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("config-memory").set_sensitive(not ro)
         self.window.get_widget("config-maxmem").set_sensitive(not ro)
         self.window.get_widget("details-menu-migrate").set_sensitive(not ro)
-        if not ro:
-            self.set_migrate_menu()
 
-        if status in [ libvirt.VIR_DOMAIN_SHUTOFF ,libvirt.VIR_DOMAIN_CRASHED ]:
+        if status in [ libvirt.VIR_DOMAIN_SHUTOFF,
+                       libvirt.VIR_DOMAIN_CRASHED ]:
             if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
                 self.vncViewer.close()
                 self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)

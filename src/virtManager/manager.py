@@ -228,7 +228,7 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["migrate"].set_submenu(self.vmmenumigrate)
         self.vmmenu_items["migrate"].show()
         self.vmmenu_items["migrate"].connect("activate",
-                                             self.set_migrate_submenu)
+                                             self.populate_migrate_submenu)
         self.vmmenu.add(self.vmmenu_items["migrate"])
 
         self.vmmenu_items["hsep2"] = gtk.SeparatorMenuItem()
@@ -1120,7 +1120,7 @@ class vmmManager(gobject.GObject):
             self.emit("action-migrate-domain", vm.get_connection().get_uri(),
                       vm.get_uuid(), hostname)
 
-    def set_migrate_submenu(self, src):
+    def populate_migrate_submenu(self, src):
         vm = self.current_vm()
         if not vm:
             return
