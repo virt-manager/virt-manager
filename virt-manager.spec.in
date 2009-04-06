@@ -55,7 +55,8 @@ Requires: gtk-vnc-python >= 0.3.8
 # For local authentication against PolicyKit
 %if 0%{?fedora} >= 11
 Requires: PolicyKit-authentication-agent
-%elif 0%{?fedora} >= 9
+%endif
+%if 0%{?fedora} >= 9 && 0%{?fedora} < 11
 Requires: PolicyKit-gnome
 %endif
 
