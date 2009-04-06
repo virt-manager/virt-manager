@@ -144,9 +144,7 @@ fi
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/*.glade
 
-%{_datadir}/%{name}/*.py
-%{_datadir}/%{name}/*.pyc
-%{_datadir}/%{name}/*.pyo
+%{_datadir}/%{name}/*.py*
 
 %dir %{_datadir}/%{name}/pixmaps/
 %{_datadir}/%{name}/pixmaps/*.png
@@ -154,9 +152,7 @@ fi
 
 %dir %{_datadir}/%{name}/virtManager/
 
-%{_datadir}/%{name}/virtManager/*.py
-%{_datadir}/%{name}/virtManager/*.pyc
-%{_datadir}/%{name}/virtManager/*.pyo
+%{_datadir}/%{name}/virtManager/*.py*
 
 %{_datadir}/omf/%{name}/
 %{_datadir}/gnome/help/%{name}
