@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-04-09 12:29-0400\n"
-"PO-Revision-Date: 2009-03-25 22:16+0100\n"
+"PO-Revision-Date: 2009-04-11 19:11+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -116,7 +116,7 @@ msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:21
 msgid "The length of the list of URLs"
-msgstr "Długość listy URL-i"
+msgstr "Długość listy adresów URL"
 
 #: ../src/virt-manager.schemas.in.h:22
 msgid "The number of samples to keep in the statistics history"
@@ -126,7 +126,7 @@ msgstr "Liczba przykładów przechowywanych w historii statystyk"
 msgid ""
 "The number of urls to keep in the history for the install media address page."
 msgstr ""
-"Liczba URL-i przechowywanych w historii strony adresowej nośnika "
+"Liczba adresów URL przechowywanych w historii strony adresowej nośnika "
 "instalacyjnego."
 
 #: ../src/virt-manager.schemas.in.h:24
@@ -308,18 +308,18 @@ msgid "N/A"
 msgstr "Nie dotyczy"
 
 #: ../src/virtManager/addhardware.py:568
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to add device: %s"
-msgstr "Nie można zainicjować GTK: %s"
+msgstr "Nie można dodać urządzenia: %s"
 
 #: ../src/virtManager/addhardware.py:610
 msgid "Creating Storage File"
 msgstr "Tworzenie pliku pamięci masowej"
 
 #: ../src/virtManager/addhardware.py:611
-#, fuzzy
 msgid "Allocation of disk storage may take a few minutes to complete."
-msgstr "Przydzielanie dysku może zająć "
+msgstr ""
+"Zakończenia przydzielania pamięci masowej dysku może zająć kilka minut."
 
 #: ../src/virtManager/addhardware.py:632
 msgid "Are you sure you want to add this device?"
@@ -443,19 +443,16 @@ msgid "Sound device parameter error"
 msgstr "Błąd parametru urządzenia dźwiękowego"
 
 #: ../src/virtManager/addhardware.py:936
-#, fuzzy
 msgid "Physical Device Requried"
 msgstr "Wymagane jest urządzenie fizyczne"
 
 #: ../src/virtManager/addhardware.py:937
-#, fuzzy
 msgid "A device must be selected."
-msgstr "Należy podać ścieżkę do nośnika."
+msgstr "Należy wybrać urządzenie."
 
 #: ../src/virtManager/addhardware.py:944
-#, fuzzy
 msgid "Host device parameter error"
-msgstr "Błąd parametru urządzenia dźwiękowego"
+msgstr "Błąd parametru urządzenia hosta"
 
 #: ../src/virtManager/addhardware.py:965 ../src/virtManager/create.py:667
 msgid "Bridge"
@@ -482,9 +479,8 @@ msgid "Generic USB Mouse"
 msgstr "Ogólna mysz USB"
 
 #: ../src/virtManager/addhardware.py:1052
-#, fuzzy
 msgid "No Devices Available"
-msgstr "Brak dostępnych połączeń."
+msgstr "Brak dostępnych urządzeń"
 
 #: ../src/virtManager/asyncjob.py:41 ../src/vmm-progress.glade.h:2
 msgid "Please wait a few moments..."
@@ -551,9 +547,8 @@ msgid "Unknown"
 msgstr "Nieznane"
 
 #: ../src/virtManager/create.py:231
-#, fuzzy
 msgid "Error listing CD-ROM devices."
-msgstr "Błąd podczas łączenia do CD-ROM-a: %s"
+msgstr "Błąd podczas wyświetlania listy urządzeń CD-ROM."
 
 #: ../src/virtManager/create.py:260
 msgid ""
@@ -563,186 +558,169 @@ msgid ""
 "Skipping allocation can also cause space issues on the host machine, if the "
 "maximum image size exceeds available storage space."
 msgstr ""
+"Pełne przydzielenie pamięci masowej zajmie więcej czasu, ale faza instalacji "
+"systemu operacyjnego będzie krótsza. \n"
+"\n"
+"Pominięcie przydzielenie spowoduje także problemy z przestrzenią na maszynie "
+"hosta, jeśli maksymalny rozmiar obrazu przekracza dostępną przestrzeń "
+"pamięci masowej."
 
 #: ../src/virtManager/create.py:280
-#, fuzzy
 msgid "No active connection to install on."
-msgstr "Brak dostępnych połączeń."
+msgstr "Brak dostępnych połączeń do zainstalowania."
 
 #: ../src/virtManager/create.py:323
-#, fuzzy
 msgid "Connection is read only."
-msgstr "Połączenie jest rozłączone."
+msgstr "Połączenie jest tylko do odczytu."
 
 #: ../src/virtManager/create.py:333
-#, fuzzy
 msgid "No guests are supported for this connection."
-msgstr ""
-"Konsola szeregowa nie jest jeszcze obsługiwana przez zdalne połączenie."
+msgstr "Brak gości obsługiwanych przez te połączenie."
 
 #: ../src/virtManager/create.py:355
-#, fuzzy, python-format
+#, python-format
 msgid "%s installs not available for paravirt guests."
-msgstr "Konsola szeregowa nie jest dostępna dla nieaktywnych gości."
+msgstr "Instalacje %s nie są dostępne dla parawirtualizowanych gości."
 
 #: ../src/virtManager/create.py:359
-#, fuzzy
 msgid "URL installs not available for remote connections."
-msgstr ""
-"Konsola szeregowa nie jest jeszcze obsługiwana przez zdalne połączenie."
+msgstr "Instalacje z adresu URL nie są dostępne dla zdalnych połączeń."
 
 #: ../src/virtManager/create.py:361 ../src/virtManager/create.py:451
-#, fuzzy
 msgid "Connection does not support storage management."
-msgstr "Konsola nie jest obsługiwana dla gościa"
+msgstr "Połączenie nie obsługuje zarządzania pamięcią masową."
 
 #: ../src/virtManager/create.py:373
 msgid "No install options available for this connection."
-msgstr ""
+msgstr "Brak opcji instalacji dostępnych dla tego połączenia."
 
 #: ../src/virtManager/create.py:406
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
-msgstr ""
+msgstr "Do %(maxmem)s dostępnej na hoście"
 
 #: ../src/virtManager/create.py:420
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
-msgstr ""
+msgstr "Nadzorca obsługuje tylko %d wirtualnych procesorów."
 
 #: ../src/virtManager/create.py:430
 #, python-format
 msgid "Up to %(numcpus)d available"
-msgstr ""
+msgstr "Do %(numcpus)d dostępnych"
 
 #: ../src/virtManager/create.py:513
 msgid "Only URL installs are supported for paravirt."
-msgstr ""
+msgstr "Tylko instalacje z adresu URL są obsługiwane dla parawirtualizacji."
 
 #: ../src/virtManager/create.py:590 ../src/virtManager/create.py:599
 #: ../src/virtManager/create.py:747 ../src/virtManager/create.py:749
 msgid "Generic"
-msgstr ""
+msgstr "Ogólne"
 
 #: ../src/virtManager/create.py:620
-#, fuzzy
 msgid "Usermode Networking"
 msgstr "Sieć w trybie użytkownika"
 
 #: ../src/virtManager/create.py:637
-#, fuzzy
 msgid "Isolated network"
-msgstr "Wyizolowana sieć wirtualna"
+msgstr "Odosobniona sieć"
 
 #: ../src/virtManager/create.py:639
 #, python-format
 msgid "NAT to %s"
-msgstr ""
+msgstr "NAT do %s"
 
 #: ../src/virtManager/create.py:641
-#, fuzzy
 msgid "NAT to any device"
-msgstr "NAT do dowolnego urządzenia fizycznego"
+msgstr "NAT do dowolnego urządzenia"
 
 #: ../src/virtManager/create.py:652
-#, fuzzy
 msgid "No virtual networks available"
-msgstr "Brak dostępnych połączeń."
+msgstr "Brak dostępnych sieci wirtualnych"
 
 #: ../src/virtManager/create.py:675
 #, python-format
 msgid "Host device %s %s"
-msgstr ""
+msgstr "Urządzenie hosta %s %s"
 
 #: ../src/virtManager/create.py:687
-#, fuzzy
 msgid "No networking."
-msgstr "Sieć w trybie użytkownika"
+msgstr "Brak sieci."
 
 #: ../src/virtManager/create.py:731
 msgid "Local CDROM/ISO"
-msgstr ""
+msgstr "Lokalny CD-ROM/ISO"
 
 #: ../src/virtManager/create.py:733
 msgid "URL Install Tree"
-msgstr ""
+msgstr "Adres URL drzewa instalacji"
 
 #: ../src/virtManager/create.py:735
 msgid "PXE Install"
-msgstr ""
+msgstr "Instalacja PXE"
 
 #: ../src/virtManager/create.py:738
-#, fuzzy
 msgid "None"
-msgstr "Nie"
+msgstr "Brak"
 
 #: ../src/virtManager/create.py:1003
 msgid "Locate existing storage"
-msgstr ""
+msgstr "Ustal położenie istniejącej pamięci masowej"
 
 #: ../src/virtManager/create.py:1076
-#, fuzzy, python-format
+#, python-format
 msgid "Step %(current_page)d of %(max_page)d"
-msgstr "%(currentmem)s z %(maxmem)s"
+msgstr "Krok %(current_page)d z %(max_page)d"
 
 #: ../src/virtManager/create.py:1135
-#, fuzzy, python-format
+#, python-format
 msgid "Uncaught error validating install parameters: %s"
-msgstr "Nieprzechwycony błąd podczas sprawdzania wejścia: %s"
+msgstr "Nieprzechwycony błąd podczas sprawdzania parametrów instalacji: %s"
 
 #: ../src/virtManager/create.py:1149
 msgid "Invalid System Name"
 msgstr "Nieprawidłowa nazwa systemu"
 
 #: ../src/virtManager/create.py:1173
-#, fuzzy
 msgid "An install media selection is required."
-msgstr "Wymagana jest ścieżka do nośnika instalacji."
+msgstr "Wymagany jest wybór nośnika instalacji."
 
 #: ../src/virtManager/create.py:1183
-#, fuzzy
 msgid "An install tree is required."
-msgstr "Wymagany jest URL instalacji."
+msgstr "Wymagane jest drzewo instalacji."
 
 #: ../src/virtManager/create.py:1198
-#, fuzzy
 msgid "Error setting installer parameters."
-msgstr "Błąd podczas ustawiania automatycznego uruchamiania sieci: %s"
+msgstr "Błąd podczas ustawiania parametrów instalatora."
 
 #: ../src/virtManager/create.py:1216
-#, fuzzy
 msgid "Error setting install media location."
-msgstr "Błąd podczas ustawiania automatycznego uruchamiania sieci: %s"
+msgstr "Błąd podczas ustawiania położenia nośnika instalacji."
 
 #: ../src/virtManager/create.py:1226
-#, fuzzy
 msgid "Error setting OS information."
-msgstr "Błąd podczas uruchamiania domeny: %s"
+msgstr "Błąd podczas ustawiania informacji o systemie operacyjnym."
 
 #: ../src/virtManager/create.py:1238
-#, fuzzy
 msgid "Error setting CPUs."
-msgstr "Błąd podczas uruchamiania domeny: %s"
+msgstr "Błąd podczas ustawiania procesorów."
 
 #: ../src/virtManager/create.py:1245
-#, fuzzy
 msgid "Error setting guest memory."
-msgstr "Błąd podczas ustawiania automatycznego uruchamiania sieci: %s"
+msgstr "Błąd podczas ustawiania pamięci gościa."
 
 #: ../src/virtManager/create.py:1263
-#, fuzzy
 msgid "A storage path must be specified."
-msgstr "Należy podać ścieżkę do nośnika."
+msgstr "Należy podać ścieżkę do pamięci masowej."
 
 #: ../src/virtManager/create.py:1277
-#, fuzzy
 msgid "Storage parameter error."
-msgstr "Błąd parametru urządzenia dźwiękowego"
+msgstr "Błąd parametru pamięci masowej."
 
 #: ../src/virtManager/create.py:1303
-#, fuzzy
 msgid "Virtual Network is not active."
-msgstr "Sieć wirtualna jest nieaktywna"
+msgstr "Sieć wirtualna jest nieaktywna."
 
 #: ../src/virtManager/create.py:1304
 #, python-format
@@ -752,34 +730,32 @@ msgstr ""
 "Sieć wirtualna \"%s\" jest nieaktywna. Czy chcesz teraz uruchomić sieć?"
 
 #: ../src/virtManager/create.py:1316
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start virtual network '%s': %s"
-msgstr "Błąd podczas tworzenia sieci wirtualnej: %s"
+msgstr "Nie można uruchomić sieci wirtualnej \"%s\": %s"
 
 #: ../src/virtManager/create.py:1330
 #, python-format
 msgid "Network device required for %s install."
-msgstr ""
+msgstr "Dla instalacji %s wymagane jest urządzenie sieciowe."
 
 #: ../src/virtManager/create.py:1352
-#, fuzzy
 msgid "Error with network parameters."
-msgstr "Nieprawidłowy parametr sieci"
+msgstr "Błąd parametrów sieci."
 
 #: ../src/virtManager/create.py:1357 ../src/virtManager/create.py:1359
-#, fuzzy
 msgid "Mac address collision."
-msgstr "Kolizja adresów MAC"
+msgstr "Kolizja adresów MAC."
 
 #: ../src/virtManager/create.py:1360
-#, fuzzy, python-format
+#, python-format
 msgid "%s Are you sure you want to use this address?"
-msgstr "Na pewno chcesz użyć tego adresu?"
+msgstr "%s Na pewno chcesz użyć tego adresu?"
 
 #: ../src/virtManager/create.py:1403
-#, fuzzy, python-format
+#, python-format
 msgid "Error setting UUID: %s"
-msgstr "Błąd podczas tworzenia woluminu: %s"
+msgstr "Błąd podczas ustawiania UUID: %s"
 
 #: ../src/virtManager/create.py:1411
 msgid "Error setting up graphics device:"
@@ -798,15 +774,16 @@ msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
+"Maszyna wirtualna jest teraz tworzona. Przydzielenie pamięci masowej dysku i "
+"pobranie obrazów instalacji może zająć kilka minut."
 
 #: ../src/virtManager/create.py:1499
 msgid "Guest installation failed to complete"
 msgstr "Instalacja gościa nie powiodła się"
 
 #: ../src/virtManager/create.py:1620
-#, fuzzy
 msgid "Detecting"
-msgstr "Łączenie"
+msgstr "Wykrywanie"
 
 #: ../src/virtManager/createnet.py:97 ../src/virtManager/createnet.py:260
 #: ../src/virtManager/host.py:361 ../src/vmm-create-net.glade.h:30
@@ -844,7 +821,7 @@ msgstr "Inne"
 #: ../src/virtManager/createnet.py:262 ../src/virtManager/host.py:364
 #: ../src/virtManager/host.py:384 ../src/vmm-create-net.glade.h:29
 msgid "Isolated virtual network"
-msgstr "Wyizolowana sieć wirtualna"
+msgstr "Odosobniona sieć wirtualna"
 
 #: ../src/virtManager/createnet.py:303
 #, python-format
@@ -1161,12 +1138,12 @@ msgstr "Brak urządzenia startowego"
 #: ../src/virtManager/details.py:1789
 #, python-format
 msgid "Error Removing CDROM: %s"
-msgstr "Błąd podczas usuwania CD-ROM-a: %s"
+msgstr "Błąd podczas usuwania CD-ROM: %s"
 
 #: ../src/virtManager/details.py:1806
 #, python-format
 msgid "Error Connecting CDROM: %s"
-msgstr "Błąd podczas łączenia do CD-ROM-a: %s"
+msgstr "Błąd podczas łączenia do CD-ROM: %s"
 
 #: ../src/virtManager/details.py:1823
 msgid "Are you sure you want to remove this device?"
@@ -1296,12 +1273,12 @@ msgstr "Na pewno chcesz migrować %s z %s do %s?"
 #: ../src/virtManager/engine.py:551
 #, python-format
 msgid "Migrating VM '%s'"
-msgstr ""
+msgstr "Migrowanie maszyny wirtualnej \"%s\""
 
 #: ../src/virtManager/engine.py:552
 #, python-format
 msgid "Migrating VM '%s' from %s to %s. This may take awhile."
-msgstr ""
+msgstr "Migrowanie maszyny wirtualnej \"%s\" z %s do %s. To może chwilę zająć."
 
 #: ../src/virtManager/engine.py:611
 msgid "No connections available."
@@ -1432,15 +1409,20 @@ msgid ""
 "A hypervisor connection can be manually added via \n"
 "File->Add Connection"
 msgstr ""
+"Nie można rozprowadzić domyślnego połączenia. Upewnij się, że odpowiednie "
+"pakiety wirtualizacji są zainstalowane (kvm, qemu itp.), a libvirtd został "
+"ponownie uruchomiony, aby uwzględnić zmiany.\n"
+"\n"
+"Można ręcznie dodać połączenie do nadzorcy przez \n"
+"Plik->Dodaj połączenie"
 
 #: ../src/virtManager/manager.py:354
 msgid "Error determining default hypervisor."
-msgstr ""
+msgstr "Błąd podczas ustalania domyślnego nadzorcy."
 
 #: ../src/virtManager/manager.py:355
-#, fuzzy
 msgid "Startup Error"
-msgstr "Błąd URL kickstart"
+msgstr "Błąd podczas uruchamiania"
 
 #: ../src/virtManager/manager.py:394
 msgid "Restoring virtual machines over remote connections is not yet supported"
@@ -1473,7 +1455,7 @@ msgstr "Błąd podczas przywracania domeny \"%s\": %s"
 #: ../src/virtManager/manager.py:824
 #, python-format
 msgid "This will remove the connection \"%s\",are you sure?"
-msgstr ""
+msgstr "To usunie połączenie \"%s\", jesteś pewny?"
 
 #: ../src/virtManager/manager.py:864
 msgid "ID"
@@ -1561,9 +1543,8 @@ msgid "<b>Network</b>"
 msgstr "<b>Sieć</b>"
 
 #: ../src/vmm-add-hardware.glade.h:3
-#, fuzzy
 msgid "<b>Physical Host Device</b>"
-msgstr "<b>Urządzenie startowe</b>"
+msgstr "<b>Fizyczne urządzenie hosta</b>"
 
 #: ../src/vmm-add-hardware.glade.h:4
 msgid "<b>Pointer</b>"
@@ -1688,13 +1669,12 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Grafika</span>"
 
 #: ../src/vmm-add-hardware.glade.h:22
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Host Device</"
 "span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Pamięć masowa</"
-"span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Urządzenie "
+"hosta</span>"
 
 #: ../src/vmm-add-hardware.glade.h:23
 msgid ""
@@ -1873,21 +1853,18 @@ msgstr ""
 "Wskaż, jakim typem urządzenia wskaźnika połączyć się z maszyną wirtualną."
 
 #: ../src/vmm-add-hardware.glade.h:64
-#, fuzzy
 msgid ""
 "Please indicate what physical device\n"
 "to connect to the virtual machine."
 msgstr ""
-"Wskaż, jakim typem urządzenia dźwiękowego\n"
-"połączyć się z maszyną wirtualną."
+"Wskaż, które urządzenie fizyczne\n"
+"połączyć z maszyną wirtualną."
 
 #: ../src/vmm-add-hardware.glade.h:66
-#, fuzzy
 msgid ""
 "Please indicate what sound device type to connect to the virtual machine."
 msgstr ""
-"Wskaż, jakim typem urządzenia dźwiękowego\n"
-"połączyć się z maszyną wirtualną."
+"Wskaż, jakim typem urządzenia dźwiękowego połączyć się z maszyną wirtualną."
 
 #: ../src/vmm-add-hardware.glade.h:67 ../src/vmm-details.glade.h:66
 msgid "Port:"
@@ -1965,7 +1942,7 @@ msgstr "Sieć _wirtualna"
 
 #: ../src/vmm-add-hardware.glade.h:85
 msgid "summary-host-device"
-msgstr ""
+msgstr "podsumowanie-host-urządzenie"
 
 #: ../src/vmm-choose-cd.glade.h:1
 msgid "<b>CD Source Device Or File</b>"
@@ -2366,44 +2343,39 @@ msgstr "dostępna przestrzeń:"
 
 #: ../src/vmm-create.glade.h:1
 msgid "(Insert host mem)"
-msgstr ""
+msgstr "(Podaj pamięć hosta)"
 
 #: ../src/vmm-create.glade.h:2
 msgid "<span color='#484848'>CPUs:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Procesory:</span>"
 
 #: ../src/vmm-create.glade.h:3
 msgid "<span color='#484848'>Install:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Instalacja:</span>"
 
 #: ../src/vmm-create.glade.h:4
 msgid "<span color='#484848'>Memory:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Pamięć:</span>"
 
 #: ../src/vmm-create.glade.h:5
 msgid "<span color='#484848'>OS:</span>"
-msgstr ""
+msgstr "<span color='#484848'>System operacyjny:</span>"
 
 #: ../src/vmm-create.glade.h:6
 msgid "<span color='#484848'>Storage:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Pamięć masowa:</span>"
 
 #: ../src/vmm-create.glade.h:7
-#, fuzzy
 msgid "<span size='large' color='white'>Create a new virtual machine</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Tworzenie nowej "
-"sieci wirtualnej </span>"
+msgstr "<span size='large' color='white'>Utwórz nową maszynę wirtualną</span>"
 
 #: ../src/vmm-create.glade.h:8
-#, fuzzy
 msgid "Advanced options"
-msgstr "Dodaj połączenie"
+msgstr "Zaawansowane opcje"
 
 #: ../src/vmm-create.glade.h:9
-#, fuzzy
 msgid "Allocate entire disk now"
-msgstr "Przydziel cały dysk wirtualny"
+msgstr "Przydziel teraz cały dysk"
 
 #: ../src/vmm-create.glade.h:10 ../src/vmm-host.glade.h:9
 msgid "Architecture:"
@@ -2411,25 +2383,23 @@ msgstr "Architektura:"
 
 #: ../src/vmm-create.glade.h:11
 msgid "Automatically detect operating system based on install media"
-msgstr ""
+msgstr "Automatycznie wykryj system operacyjny, w oparciu o nośnik instalacji"
 
 #: ../src/vmm-create.glade.h:13
-#, fuzzy
 msgid "CPUs:"
-msgstr "Procesory"
+msgstr "Procesory:"
 
 #: ../src/vmm-create.glade.h:14
 msgid "Choose Memory and CPU settings"
-msgstr ""
+msgstr "Wybierz ustawienia pamięci i procesora"
 
 #: ../src/vmm-create.glade.h:15
 msgid "Choose an operating systen type and version"
-msgstr ""
+msgstr "Wybierz typ i wersję systemu operacyjnego"
 
 #: ../src/vmm-create.glade.h:16
-#, fuzzy
 msgid "Choose how you would like to install the opertaing system"
-msgstr "Wskaż, jak chcesz wyświetlać ekran wirtualny."
+msgstr "Wskaż, jak chcesz zainstalować system operacyjny"
 
 #: ../src/vmm-create.glade.h:17 ../src/vmm-host.glade.h:13
 #: ../src/vmm-open-connection.glade.h:6
@@ -2438,97 +2408,83 @@ msgstr "Połączenie:"
 
 #: ../src/vmm-create.glade.h:18
 msgid "Create a disk image on the computer's hard drive"
-msgstr ""
+msgstr "Utwórz obraz dysku na dysku twardym komputera"
 
 #: ../src/vmm-create.glade.h:19
-#, fuzzy
 msgid "Enable storage for this virtual machine"
-msgstr "Zarządzanie maszynami wirtualnymi"
+msgstr "Włącz pamięć masową dla tej maszyny wirtualnej"
 
 #: ../src/vmm-create.glade.h:20
-#, fuzzy
 msgid "Enter your virtual machine details"
-msgstr "Szczegóły maszyny wirtualnej"
+msgstr "Podaj szczegóły maszyny wirtualnej"
 
 #: ../src/vmm-create.glade.h:22
 msgid "GB"
-msgstr ""
+msgstr "GB"
 
 #: ../src/vmm-create.glade.h:23
 msgid "ISO"
-msgstr ""
+msgstr "ISO"
 
 #: ../src/vmm-create.glade.h:24
 msgid "Install"
-msgstr ""
+msgstr "Zainstaluj"
 
 #: ../src/vmm-create.glade.h:25
-#, fuzzy
 msgid "Kernel Options:"
-msgstr "_Parametry jądra:"
+msgstr "Opcje jądra:"
 
 #: ../src/vmm-create.glade.h:26
-#, fuzzy
 msgid "Kickstart URL:"
-msgstr "U_RL do kickstart:"
+msgstr "Adres URL do kickstart:"
 
 #: ../src/vmm-create.glade.h:27
-#, fuzzy
 msgid "Local install media (ISO image or CDROM)"
-msgstr "_Lokalny nośnik instalacji (obraz ISO lub CD-ROM)"
+msgstr "Lokalny nośnik instalacji (obraz ISO lub CD-ROM)"
 
 #: ../src/vmm-create.glade.h:28
-#, fuzzy
 msgid "Locate your install media"
-msgstr "Ś_cieżka do nośnika instalacyjnego:"
+msgstr "Ustal położenie nośnika instalacyjnego"
 
 #: ../src/vmm-create.glade.h:30
-#, fuzzy
 msgid "Memory"
-msgstr "Pamięć:"
+msgstr "Pamięć"
 
 #: ../src/vmm-create.glade.h:31
-#, fuzzy
 msgid "Memory (RAM):"
-msgstr "_Maksymalna pamięć (MB):"
+msgstr "Pamięć (RAM):"
 
 #: ../src/vmm-create.glade.h:34
-#, fuzzy
 msgid "Network Boot (PXE)"
-msgstr "Uruchamia_nie sieciowe (PXE)"
+msgstr "Uruchamianie sieciowe (PXE)"
 
 #: ../src/vmm-create.glade.h:35
-#, fuzzy
 msgid "Network Install (HTTP, FTP, or NFS)"
-msgstr "D_rzewo instalacji sieciowej (HTTP, FTP lub NFS)"
+msgstr "Instalacja sieciowa (HTTP, FTP lub NFS)"
 
 #: ../src/vmm-create.glade.h:36
-#, fuzzy
 msgid "New VM"
-msgstr "<b>Nowa maszyna wirtualna</b>"
+msgstr "Nowa maszyna wirtualna"
 
 #: ../src/vmm-create.glade.h:37
-#, fuzzy
 msgid "OS Type:"
-msgstr "_Typ systemu operacyjnego:"
+msgstr "Typ systemu operacyjnego:"
 
 #: ../src/vmm-create.glade.h:38
 msgid "PXE"
-msgstr ""
+msgstr "PXE"
 
 #: ../src/vmm-create.glade.h:39
-#, fuzzy
 msgid "Provide the operating system URL"
-msgstr "System operacyjny:"
+msgstr "Podaj URL do systemu operacyjnego"
 
 #: ../src/vmm-create.glade.h:40
 msgid "Select managed or other existing storage"
-msgstr ""
+msgstr "Wybierz zarządzaną lub inną istniejącą pamięć masową"
 
 #: ../src/vmm-create.glade.h:41
-#, fuzzy
 msgid "Set a fixed mac address"
-msgstr "Ustawić stały _adres MAC dla tego NIC?"
+msgstr "Ustaw stały adres MAC"
 
 #: ../src/vmm-create.glade.h:42 ../src/vmm-host.glade.h:39
 msgid "Storage"
@@ -2536,31 +2492,27 @@ msgstr "Pamięć masowa"
 
 #: ../src/vmm-create.glade.h:43
 msgid "URL"
-msgstr ""
+msgstr "Adres URL"
 
 #: ../src/vmm-create.glade.h:44
 msgid "URL:"
-msgstr ""
+msgstr "Adres URL:"
 
 #: ../src/vmm-create.glade.h:45
-#, fuzzy
 msgid "Use CDROM or DVD"
-msgstr "_CD-ROM lub DVD:"
+msgstr "Użyj CD-ROM lub DVD"
 
 #: ../src/vmm-create.glade.h:46
-#, fuzzy
 msgid "Use ISO image:"
-msgstr "Ustal położenie obrazu ISO"
+msgstr "Użyj obrazu ISO:"
 
 #: ../src/vmm-create.glade.h:47
-#, fuzzy
 msgid "Version:"
-msgstr "Uprawnienia:"
+msgstr "Wersja:"
 
 #: ../src/vmm-create.glade.h:48
-#, fuzzy
 msgid "Virt Type:"
-msgstr "Typ:"
+msgstr "Typ wirtualizacji:"
 
 #: ../src/vmm-details.glade.h:1
 msgid ""
@@ -3163,13 +3115,12 @@ msgstr ""
 "Zdalny tunel przez SSH"
 
 #: ../src/vmm-open-connection.glade.h:15
-#, fuzzy
 msgid ""
 "Xen\n"
 "QEMU/KVM"
 msgstr ""
 "Xen\n"
-"QEMU"
+"QEMU/KVM"
 
 #: ../src/vmm-preferences.glade.h:1
 msgid "<b>Consoles</b>"
@@ -3264,447 +3215,3 @@ msgstr "przykłady"
 #: ../src/vmm-preferences.glade.h:30
 msgid "seconds"
 msgstr "sekundy"
-
-#~ msgid "Unable to complete install: "
-#~ msgstr "Nie można zakończyć instalacji: "
-
-#~ msgid "Paravirtualized"
-#~ msgstr "Parawirtualizacja"
-
-#~ msgid "Fully virtualized"
-#~ msgstr "Pełna wirtualizacja"
-
-#~ msgid "UUID Error"
-#~ msgstr "Błąd UUID"
-
-#~ msgid "Failed to set up usermode networking"
-#~ msgstr "Ustawienie sieci w trybie użytkownika nie powiodło się"
-
-#~ msgid "The virtual machine is now being created. "
-#~ msgstr "Maszyna wirtualna jest teraz tworzona. "
-
-#~ msgid "Invalid FV OS Type"
-#~ msgstr "Nieprawidłowy typ FV systemu operacyjnego"
-
-#~ msgid "Invalid FV OS Variant"
-#~ msgstr "Nieprawidłowy wariant FV systemu operacyjnego"
-
-#~ msgid "ISO Path Not Found"
-#~ msgstr "Nie znaleziono ścieżki do pliku ISO"
-
-#~ msgid "CD-ROM Path Error"
-#~ msgstr "Błąd ścieżki do CD-ROM-u"
-
-#~ msgid "Invalid Install URL"
-#~ msgstr "Nieprawidłowy URL instalacji"
-
-#~ msgid "Kickstart location must be an NFS, HTTP or FTP source"
-#~ msgstr "Położenie kickstart musi być źródłem NFS, HTTP lub FTP"
-
-#~ msgid "Storage Address Required"
-#~ msgstr "Wymagany jest adres pamięci masowej"
-
-#~ msgid ""
-#~ "You must specify a partition or a file for storage for the guest install."
-#~ msgstr ""
-#~ "Musisz podać partycję lub plik dla pamięci masowej dla instalacji gościa."
-
-#~ msgid "Invalid Storage Address"
-#~ msgstr "Nieprawidłowy adres pamięci masowej"
-
-#~ msgid "Network Parameter Error"
-#~ msgstr "Błąd parametru sieci"
-
-#~ msgid "VCPU Count Error"
-#~ msgstr "Błąd licznika wirtualnych procesorów"
-
-#~ msgid "Memory Amount Error"
-#~ msgstr "Błąd ilości pamięci"
-
-#~ msgid "Max Memory Amount Error"
-#~ msgstr "Błąd maksymalnej ilości pamięci"
-
-#~ msgid "Error migrating domain: %s"
-#~ msgstr "Błąd podczas migrowania domeny: %s"
-
-#~ msgid "%s will be migrated from %s to %s."
-#~ msgstr "%s zostanie migrowane z %s do %s."
-
-#~ msgid "Are you sure you want to permanently delete the connection %s?"
-#~ msgstr "Na pewno chcesz na trwałe usunąć połączenie %s?"
-
-#~ msgid "Are you sure you want to permanently delete the virtual machine %s?"
-#~ msgstr "Na pewno chcesz na trwałe usunąć maszynę wirtualną %s?"
-
-#~ msgid "Error deleting domain: %s"
-#~ msgstr "Błąd podczas usuwania domeny: %s"
-
-#~ msgid "Graphics"
-#~ msgstr "Grafika"
-
-#~ msgid "Network"
-#~ msgstr "Sieć"
-
-#~ msgid "<b>CPUs:</b>"
-#~ msgstr "<b>Procesor:</b>"
-
-#~ msgid "<b>Example:</b> system1"
-#~ msgstr "<b>Przykład:</b> system1"
-
-#~ msgid "<b>Install media</b>"
-#~ msgstr "<b>Nośnik instalacyjny</b>"
-
-#~ msgid "<b>Memory:</b>"
-#~ msgstr "<b>Pamięć:</b>"
-
-#~ msgid "<b>Memory</b> and <b>CPU</b> allocation"
-#~ msgstr "Przydział <b>pamięci</b> i <b>procesora</b>"
-
-#~ msgid ""
-#~ "<b>Storage</b> details - which disk partitions or files the virtual "
-#~ "machine should use"
-#~ msgstr ""
-#~ "Szczegóły o <b>pamięci masowej</b> - które partycje dysku lub pliki "
-#~ "maszyna wirtualna powinna używać"
-
-#~ msgid "<small><b>Example:</b> ftp://hostname.example.com/ks/ks.cfg</small>"
-#~ msgstr ""
-#~ "<small><b>Przykład:</b> ftp://nazwahosta.przykład.pl/ks/ks.cfg</small>"
-
-#~ msgid ""
-#~ "<small><b>Example:</b> http://servername.example.com/distro/i386/tree</"
-#~ "small>"
-#~ msgstr ""
-#~ "<small><b>Przykład:</b> http://nazwaserwera.przykład.pl/distro/i386/tree</"
-#~ "small>"
-
-#~ msgid ""
-#~ "<small><b>Example:</b> updates=http://hostname.example.com/updates.img</"
-#~ "small>"
-#~ msgstr ""
-#~ "<small><b>Przykład:</b> updates=http://nazwahosta.przykład.pl/updates."
-#~ "img</small>"
-
-#~ msgid ""
-#~ "<small><b>Note:</b> The host CPU(s) in this machine do not have support "
-#~ "for full virtualization.</small>"
-#~ msgstr ""
-#~ "<small><b>Uwaga:</b> procesor hosta w tej maszynie nie posiada obsługi "
-#~ "pełnej wirtualizacji.</small>"
-
-#~ msgid ""
-#~ "<small><b>Note:</b> The host CPU(s) in this machine support full "
-#~ "virtualization, but it is not enabled by the BIOS.</small>"
-#~ msgstr ""
-#~ "<small><b>Uwaga:</b> procesor hosta w tej maszynie obsługuje pełną "
-#~ "wirtualizację, ale nie jest włączona w BIOS-ie.</small>"
-
-#~ msgid ""
-#~ "<small><b>Tip:</b> Choose this option if your host is statically "
-#~ "connected to wired ethernet, to gain the ability to migrate the virtual "
-#~ "system. (To share a physical device, configure it as a bridge.)</small>"
-#~ msgstr ""
-#~ "<small><b>Wskazówka:</b> wybierz tę opcję, jeśli host jest statycznie "
-#~ "połączony z przewodowym ethernetem, aby uzyskać możliwość migrowania "
-#~ "maszyny wirtualnej (aby współdzielić urządzenie fizyczne, skonfiguruj je "
-#~ "jako mostek).</small>"
-
-#~ msgid ""
-#~ "<small><b>Tip:</b> For best performance, the number of virtual CPUs "
-#~ "should be less than (or equal to) the number of physical CPUs on the host "
-#~ "system.</small>"
-#~ msgstr ""
-#~ "<small><b>Wskazówka:</b> w celu uzyskania najlepszej wydajności liczba "
-#~ "procesorów wirtualnych powinna być mniejsza (lub równa) liczbie "
-#~ "fizycznych procesorów w systemie hosta.</small>"
-
-#~ msgid ""
-#~ "<small><b>Tip:</b> You may add additional storage, including network-"
-#~ "mounted storage, to your virtual machine after it has been created using "
-#~ "the same tools you would on a physical system.</small>"
-#~ msgstr ""
-#~ "<small><b>Wskazówka:</b> można dodać dodatkowe pamięci masowe, w tym te "
-#~ "zamontowane przez sieć, aby maszyna wirtualna po utworzeniu używała tych "
-#~ "samych narzędzi co fizyczny system.</small>"
-
-#~ msgid ""
-#~ "<small><b>Warning:</b> If you do not allocate the entire disk now, space "
-#~ "will be allocated as needed while the virtual machine is running. If "
-#~ "sufficient free space is not available on the host, this may result in "
-#~ "data corruption on the virtual machine.</small>"
-#~ msgstr ""
-#~ "<small><b>Ostrzeżenie:</b> jeśli nie przydzielisz całego dysku teraz, "
-#~ "przestrzeń będzie przydzielana w miarę potrzeb wtedy, gdy maszyna "
-#~ "wirtualna będzie uruchomiona. Jeśli wystarczająca ilość wolnego miejsca "
-#~ "nie będzie dostępna na hoście, może to spowodować uszkodzeniem danych na "
-#~ "maszynie wirtualnej.</small>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Finish "
-#~ "Virtual Machine Creation</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Zakończono "
-#~ "tworzenie maszyny wirtualnej</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Installation "
-#~ "Media</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Nośnik "
-#~ "instalacyjny</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Installation "
-#~ "Method</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Metoda "
-#~ "instalacji</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Installation "
-#~ "Source</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Źródło "
-#~ "instalacji</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Memory and "
-#~ "CPU Allocation</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF"
-#~ "\">Przydzielenie pamięci i procesora</span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Virtual "
-#~ "Machine Creation </span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Tworzenie "
-#~ "maszyny wirtualnej </span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Virtual "
-#~ "Machine Name </span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Nazwa "
-#~ "maszyny wirtualnej </span>"
-
-#~ msgid ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF"
-#~ "\">Virtualization Method</span>"
-#~ msgstr ""
-#~ "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Metoda "
-#~ "wirtualizacji</span>"
-
-#~ msgid "A <b>name</b> for your new virtual machine"
-#~ msgstr "<b>Nazwa</b> nowej maszyny wirtualnej"
-
-#~ msgid "CPU architecture:"
-#~ msgstr "Architektura procesora:"
-
-#~ msgid "Create a new virtual machine"
-#~ msgstr "Utwórz nową maszynę wirtualną"
-
-#~ msgid "Enable audio:"
-#~ msgstr "Włącz dźwięk:"
-
-#~ msgid "F_ully virtualized:"
-#~ msgstr "_Pełna wirtualizacja:"
-
-#~ msgid "File Size Select"
-#~ msgstr "Wybór rozmiaru pliku"
-
-#~ msgid "ISO Location Field"
-#~ msgstr "Pole położenia pliku ISO"
-
-#~ msgid "ISO _location:"
-#~ msgstr "_Położenie pliku ISO:"
-
-#~ msgid "Initial memory:"
-#~ msgstr "Pamięć początkowa:"
-
-#~ msgid "Install URL Field"
-#~ msgstr "Pole URL instalacji"
-
-#~ msgid "Installation media _URL:"
-#~ msgstr "_URL nośnika instalacji:"
-
-#~ msgid "Installation source:"
-#~ msgstr "Źródło instalacji:"
-
-#~ msgid ""
-#~ "Involves hardware simulation, allowing for a greater range of virtual "
-#~ "devices and operating systems (does not require OS modification)."
-#~ msgstr ""
-#~ "Używa symulacji sprzętowej, pozwala na używanie większej ilości urządzeń "
-#~ "wirtualnych i systemów operacyjnych (nie wymaga modyfikacji systemu "
-#~ "operacyjnego)."
-
-#~ msgid "Kernel arguments:"
-#~ msgstr "Parametry jądra:"
-
-#~ msgid "Kickstart Field"
-#~ msgstr "Pole kickstart"
-
-#~ msgid "Kickstart source:"
-#~ msgstr "Źródło kickstart:"
-
-#~ msgid ""
-#~ "Lightweight method of virtualizing machines. Limits operating system "
-#~ "choices because the OS must be specially modified to support "
-#~ "paravirtualization, but performs better than fully virtualized."
-#~ msgstr ""
-#~ "Lekka metoda wirtualizowania maszyn. Ogranicza wybór systemów "
-#~ "operacyjnych, ponieważ system musi być odpowiednio zmodyfikowany, aby "
-#~ "obsługiwał parawirtualizację. Jest bardziej wydajne niż systemy w pełni "
-#~ "wirtualizowane."
-
-#~ msgid "Logical host CPUs:"
-#~ msgstr "Logiczne procesory hosta:"
-
-#~ msgid "MAC Field"
-#~ msgstr "Pole MAC"
-
-#~ msgid "Machine name:"
-#~ msgstr "Nazwa maszyny:"
-
-#~ msgid "Max Mem Select"
-#~ msgstr "Wybór maksymalnej ilości pamięci"
-
-#~ msgid "Maximum memory:"
-#~ msgstr "Maksymalna pamięć:"
-
-#~ msgid "Maximum virtual CPUs:"
-#~ msgstr "Maksymalna liczba wirtualnych procesorów:"
-
-#~ msgid "Media Path Select"
-#~ msgstr "Wybór ścieżki do nośnika"
-
-#~ msgid "Method"
-#~ msgstr "Metoda"
-
-#~ msgid "Name Field"
-#~ msgstr "Pole nazwy"
-
-#~ msgid "Network Select"
-#~ msgstr "Wybór sieci"
-
-#~ msgid "OS _Variant:"
-#~ msgstr "_Wariant systemu operacyjnego:"
-
-#~ msgid "Partition Field"
-#~ msgstr "Pole partycji"
-
-#~ msgid "Please choose a name for your virtual machine:"
-#~ msgstr "Wybierz nazwę maszyny wirtualnej:"
-
-#~ msgid ""
-#~ "Please choose the operating system you will be installing on the virtual "
-#~ "machine:"
-#~ msgstr ""
-#~ "Wybierz typ systemu operacyjnego, który będziesz instalował na maszynie "
-#~ "wirtualnej:"
-
-#~ msgid ""
-#~ "Please enter the memory configuration for this virtual machine. You can "
-#~ "specify the maximum amount of memory the virtual machine should be able "
-#~ "to use, and optionally a lower amount to grab on startup. Warning: "
-#~ "setting virtual machine memory too high will cause out-of-memory errors "
-#~ "in your host domain!"
-#~ msgstr ""
-#~ "Podaj konfigurację pamięci dla tej maszyny wirtualnej. Można podać "
-#~ "maksymalną ilość pamięci, którą maszyna wirtualna może używać oraz "
-#~ "opcjonalnie mniejszą ilość do przechwycenia podczas uruchomienia. "
-#~ "Ostrzeżenie: ustawienie za dużej pamięci maszyny wirtualnej spowoduje "
-#~ "błędy braku pamięci w domenie hosta!"
-
-#~ msgid ""
-#~ "Please enter the number of virtual CPUs this virtual machine should start "
-#~ "up with."
-#~ msgstr ""
-#~ "Podaj liczbę wirtualnych procesorów, z którą ta maszyna wirtualna powinna "
-#~ "być uruchamiana."
-
-#~ msgid ""
-#~ "Please indicate how you'd like to assign space from the host for your new "
-#~ "virtual machine. This space will be used to install the virtual machine's "
-#~ "operating system."
-#~ msgstr ""
-#~ "Wskaż, jak chcesz przydzielić przestrzeń z hosta dla nowej maszyny "
-#~ "wirtualnej. Ta przestrzeń zostanie użyta do zainstalowania systemu "
-#~ "operacyjnego w maszynie wirtualnej."
-
-#~ msgid ""
-#~ "Please indicate how you'd like to connect your new virtual machine to the "
-#~ "host network."
-#~ msgstr "Wskaż, jak chcesz połączyć nową maszynę wirtualną do sieci hosta."
-
-#~ msgid ""
-#~ "Please indicate where installation media is available for the operating "
-#~ "system you would like to install on this virtual machine. Optionally you "
-#~ "can provide the URL for a kickstart file:"
-#~ msgstr ""
-#~ "Wskaż, gdzie jest dostępny nośnik instalacyjny systemu operacyjnego, "
-#~ "który chcesz zainstalować na tej maszynie wirtualnej. Opcjonalnie można "
-#~ "podać adres URL do pliku kickstart:"
-
-#~ msgid ""
-#~ "Please indicate where installation media is available for the operating "
-#~ "system you would like to install on this virtual machine:"
-#~ msgstr ""
-#~ "Wskaż, gdzie jest dostępny nośnik instalacyjny systemu operacyjnego, "
-#~ "który chcesz zainstalować na tej maszynie wirtualnej:"
-
-#~ msgid "Set fixed MAC _address for your virtual machine?"
-#~ msgstr "Ustawić stały _adres MAC dla maszyny wirtualnej?"
-
-#~ msgid "Startup Mem Select"
-#~ msgstr "Wybór pamięci początkowej"
-
-#~ msgid ""
-#~ "The <b>location</b> of the files necessary for installing an operating "
-#~ "system on the virtual machine"
-#~ msgstr ""
-#~ "<b>Położenie</b> plików wymagane do zainstalowania systemu operacyjnego "
-#~ "na maszynie wirtualnej"
-
-#~ msgid ""
-#~ "This assistant will guide you through creating a new virtual machine. You "
-#~ "will be asked for some information about the virtual machine you'd like "
-#~ "to create, such as:"
-#~ msgstr ""
-#~ "Ten asystent przeprowadzi cię przez tworzenie nowej maszyny wirtualnej. "
-#~ "Zastaniesz poproszony o kilka informacji o maszynie wirtualnej, którą "
-#~ "chcesz utworzyć, takich jak:"
-
-#~ msgid "Virtual CPUs:"
-#~ msgstr "Wirtualne procesory:"
-
-#~ msgid "Virtualization method:"
-#~ msgstr "Metoda wirtualizacji:"
-
-#~ msgid ""
-#~ "Whether the virtual machine will be <b>fully virtualized</b> or <b>para-"
-#~ "virtualized</b>"
-#~ msgstr ""
-#~ "Czy maszyna wirtualna będzie <b>w pełni wirtualizowana</b>, czy "
-#~ "<b>parawirtualizowana</b>"
-
-#~ msgid ""
-#~ "You will need to choose a virtualization method for your new virtual "
-#~ "machine:"
-#~ msgstr "Musisz wybrać metodę wirtualizacji dla nowej maszyny wirtualnej:"
-
-#~ msgid "_ISO image location:"
-#~ msgstr "Położenie obrazu _ISO:"
-
-#~ msgid "_Name:"
-#~ msgstr "_Nazwa:"
-
-#~ msgid "_Paravirtualized:"
-#~ msgstr "_Parawirtualizacja:"
-
-#~ msgid "_Startup memory (MB):"
-#~ msgstr "_Pamięć początkowa (MB):"
-
-#~ msgid "_Virtual CPUs:"
-#~ msgstr "_Wirtualne procesory:"
