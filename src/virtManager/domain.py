@@ -234,7 +234,7 @@ class vmmDomain(gobject.GObject):
                                self.connection.host_active_processor_count()))
             # Due to timing diffs between getting wall time & getting
             # the domain's time, its possible to go a tiny bit over
-            # 100% vutilization. This freaks out users of the data, so
+            # 100% utilization. This freaks out users of the data, so
             # we hard limit it.
             if pcentCpuTime > 100.0:
                 pcentCpuTime = 100.0
