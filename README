@@ -7,8 +7,8 @@ via the libvirt library.
 The front end of the application uses the PyGTK / Glade libraries for
 all user interaction components. The back end uses libvirt for managing
 Xen, QEMU & KVM virtual machines. The UI is primarily tested with Xen
-and QEMU, but is intended to be portable to any virtualization backend 
-libvirt supports. So when libvirt is ported to UML / VmWare / etc the 
+and QEMU, but is intended to be portable to any virtualization backend
+libvirt supports. So when libvirt is ported to UML / VmWare / etc the
 UI should not require any significant changes to deal with these drivers.
 
 Terminology
@@ -23,7 +23,7 @@ Pre-requisite software
 
 Where versions are noted below these are the versions tested to definitely
 work. For some of them you may be able to run with earlier releases, so
-please report any success to the mailing lists 
+please report any success to the mailing lists
 
  python  >= 2.4
  pygtk2 >= 1.99.12-6
@@ -45,10 +45,20 @@ http://hg.et.redhat.com/virt/applications/virtinst--devel
 Contact
 -------
 
-All comments / suggestions / patches should be directed to the fedora-xen
+All comments / suggestions / patches should be directed to the et-mgmt-tools
 mailing list:
 
-  http://www.redhat.com/mailman/listinfo/fedora-xen
+  http://www.redhat.com/mailman/listinfo/et-mgmt-tools
+
+Bugs should be reported at bugzilla.redhat.com, against the 'virt-manager'
+component.
+
+If you built from source, use Product: 'Virtualization Tools'.
+
+If you are using a package provided by Fedora, use Product: 'Fedora'.
+
+If you are using another distros package, either file a bug with them,
+or use the 'Virtualization Tools' product as above.
 
 There are further project details on the website:
 
@@ -62,7 +72,7 @@ Patches should be submitted either as unified diffs:
    tar zxvf virt-manager-X.Y.Z.tar.gz
    cp -a virt-manager-X.Y.Z virt-manager-X.Y.Z-myfeature
    cd virt-manager-X.Y.Z-myfeature
-   ... make some changes .. 
+   ... make some changes ..
    cd ..
    diff -ruN virt-manager-X.Y.Z virt-manager-X.Y.Z-myfeature \
       > myfeature.patch
@@ -73,11 +83,10 @@ the main source repository:
    hg clone  http://hg.et.redhat.com/virt/applications/virt-manager--devel
    cd virt-manager--devel
    ... make some changes & commit them locally...
-   hg bundle myfeature.hg http://hg.et.redhat.com/virt/applications/virt-manager--devel
+   hg export -r my_feature_revision > my_feature.patch
 
-Then mail the 'myfeature.hg' file to fedora-xen list. This approach is
-preferred to plain patches, because the Mercurial bundle preserves all
-your local commit messages & history.
+Then mail the 'myfeature.patch' file to et-mgmt-tools list, with [PATCH]
+and a brief description in the subject.
 
 Related software
 ----------------
@@ -85,6 +94,7 @@ Related software
 Links which are relevant:
 
   http://libvirt.org
+  http://www.linux-kvm.org
   http://xensource.com/xen/
   http://pygtk.org/
   http://gtk.org/
