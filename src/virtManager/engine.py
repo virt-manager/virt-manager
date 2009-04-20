@@ -155,9 +155,9 @@ class vmmEngine(gobject.GObject):
             except KeyboardInterrupt:
                 raise
             except:
-                logging.error(("Could not refresh connection %s\n" % (uri)) + str(sys.exc_info()[0]) + \
-                              " " + str(sys.exc_info()[1]) + "\n" + \
-                              traceback.format_exc(sys.exc_info()[2]))
+                logging.exception("Could not refresh connection %s." % uri)
+                logging.debug("Closing connection since refresh failed.")
+                self.connections[uri]["connection"].close()
         return 1
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
