@@ -711,10 +711,10 @@ class vmmConnection(gobject.GObject):
         if self.vmm is None:
             return ""
         mem = self.host_memory_size()
-        if mem > (1024*1024):
+        if mem > (10*1024*1024):
             return "%2.2f GB" % (mem/(1024.0*1024.0))
         else:
-            return "%2.2f MB" % (mem/1024.0)
+            return "%2.0f MB" % (mem/1024.0)
 
 
     def host_memory_size(self):
@@ -1135,10 +1135,10 @@ class vmmConnection(gobject.GObject):
 
     def pretty_current_memory(self):
         mem = self.current_memory()
-        if mem > (1024*1024):
+        if mem > (10*1024*1024):
             return "%2.2f GB" % (mem/(1024.0*1024.0))
         else:
-            return "%2.2f MB" % (mem/1024.0)
+            return "%2.0f MB" % (mem/1024.0)
 
     def current_memory_percentage(self):
         if len(self.record) == 0:

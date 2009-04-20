@@ -370,7 +370,7 @@ class vmmDomain(gobject.GObject):
 
     def current_memory_pretty(self):
         if self.get_id() == -1:
-            return "0.00 MB"
+            return "0 MB"
         return self.get_memory_pretty()
 
 
@@ -391,10 +391,10 @@ class vmmDomain(gobject.GObject):
 
     def get_memory_pretty(self):
         mem = self.get_memory()
-        if mem > (1024*1024):
+        if mem > (10*1024*1024):
             return "%2.2f GB" % (mem/(1024.0*1024.0))
         else:
-            return "%2.2f MB" % (mem/1024.0)
+            return "%2.0f MB" % (mem/1024.0)
 
 
     def maximum_memory(self):
@@ -409,10 +409,10 @@ class vmmDomain(gobject.GObject):
 
     def maximum_memory_pretty(self):
         mem = self.maximum_memory()
-        if mem > (1024*1024):
+        if mem > (10*1024*1024):
             return "%2.2f GB" % (mem/(1024.0*1024.0))
         else:
-            return "%2.2f MB" % (mem/1024.0)
+            return "%2.0f MB" % (mem/1024.0)
 
 
     def cpu_time(self):
