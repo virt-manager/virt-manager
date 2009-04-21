@@ -578,9 +578,7 @@ class vmmEngine(gobject.GObject):
 
                 logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
                               srcconn.get_uri(), dstconn.get_uri())
-                #vm.migrate(dstconn)
-                import time
-                time.sleep(5)
+                vm.migrate(dstconn)
             except Exception, e:
                 errinfo = (str(e), ("Unable to migrate guest:\n %s" %
                                     "".join(traceback.format_exc())))
