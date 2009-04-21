@@ -1359,6 +1359,9 @@ class vmmDomain(gobject.GObject):
         else:
             conn = destcon.vmm
             uri = None
-        self.vm.migrate(conn, flags, None, uri, 0)
+
+        newxml = self.get_xml()
+        newvm = self.vm.migrate(conn, flags, None, uri, 0)
+        conn.defineXML(newxml)
 
 gobject.type_register(vmmDomain)
