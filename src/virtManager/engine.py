@@ -20,7 +20,6 @@
 
 import gobject
 import gtk
-import sys
 import libvirt
 import logging
 import gnome
