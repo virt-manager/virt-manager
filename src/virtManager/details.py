@@ -1227,7 +1227,7 @@ class vmmDetails(gobject.GObject):
             argv = ["ssh", "ssh", "-p", sshport]
             if username:
                 argv += ['-l', username]
-            argv += [ server, "nc", "-q", "0", vncaddr, str(vncport) ]
+            argv += [ server, "nc", vncaddr, str(vncport) ]
             os.execlp(*argv)
             os._exit(1)
         else:
