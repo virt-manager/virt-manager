@@ -65,7 +65,7 @@ def setup_pypath():
     # Hacks for find assets in local dir for dev purposes
     if os.path.exists(os.getcwd() + "/src/vmm-about.glade"):
         glade_dir = os.getcwd() + "/src"
-    if os.path.exists(os.getcwd() + "/pixmaps/icon_run.png"):
+    if os.path.exists(os.getcwd() + "/pixmaps/state_running.png"):
         icon_dir = os.getcwd() + "/pixmaps"
     if os.path.exists(os.getcwd() + "../gnome/help/virt-manager/C/virt-manager.xml"):
         data_dir = os.getcwd() + "../"
