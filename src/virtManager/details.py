@@ -500,7 +500,7 @@ class vmmDetails(gobject.GObject):
         self.update_scaling()
 
     def auth_login(self, ignore):
-        self.set_password()
+        self.set_credentials()
         self.activate_viewer_page()
 
     def toggle_toolbar(self, src):
@@ -1302,23 +1302,44 @@ class vmmDetails(gobject.GObject):
                      traceback.format_exc (stacktrace))
             logging.error(details)
 
-    def set_password(self, src=None):
-        txt = self.window.get_widget("console-auth-password")
-        self.vncViewer.set_credential(gtkvnc.CREDENTIAL_PASSWORD,
-                                      txt.get_text())
+    def set_credentials(self, src=None):
+        passwd = self.window.get_widget("console-auth-password")
+        if passwd.flags() & gtk.VISIBLE:
+            self.vncViewer.set_credential(gtkvnc.CREDENTIAL_PASSWORD,
+                                          passwd.get_text())
+        username = self.window.get_widget("console-auth-username")
+        if username.flags() & gtk.VISIBLE:
+            self.vncViewer.set_credential(gtkvnc.CREDENTIAL_USERNAME,
+                                          username.get_text())
+
+        if self.window.get_widget("console-auth-remember").get_active():
+            self.config.set_console_password(self.vm, passwd.get_text(), username.get_text())
 
     def _vnc_auth_credential(self, src, credList):
         for i in range(len(credList)):
-            logging.debug("Got credential request %s", str(credList[i]))
-            if credList[i] == gtkvnc.CREDENTIAL_PASSWORD:
-                self.activate_auth_page()
-            elif credList[i] == gtkvnc.CREDENTIAL_CLIENTNAME:
-                self.vncViewer.set_credential(credList[i], "libvirt-vnc")
-            else:
-                # Force it to stop re-trying
+            if credList[i] not in (gtkvnc.CREDENTIAL_PASSWORD, gtkvnc.CREDENTIAL_USERNAME, gtkvnc.CREDENTIAL_CLIENTNAME):
+                self.err.show_err(summary=_("Unable to provide requested credentials to the VNC server"),
+                                  details=_("The credential type %s is not supported") % (str(credList[i])),
+                                  title=_("Unable to authenticate"),
+                                  async=True)
                 self.vncViewerRetriesScheduled = 10
                 self.vncViewer.close()
                 self.activate_unavailable_page(_("Unsupported console authentication type"))
+                return
+
+        withUsername = False
+        withPassword = False
+        for i in range(len(credList)):
+            logging.debug("Got credential request %s", str(credList[i]))
+            if credList[i] == gtkvnc.CREDENTIAL_PASSWORD:
+                withPassword = True
+            elif credList[i] == gtkvnc.CREDENTIAL_USERNAME:
+                withUsername = True
+            elif credList[i] == gtkvnc.CREDENTIAL_CLIENTNAME:
+                self.vncViewer.set_credential(credList[i], "libvirt-vnc")
+
+        if withUsername or withPassword:
+            self.activate_auth_page(withPassword, withUsername)
 
     def activate_unavailable_page(self, msg):
         self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
@@ -1329,20 +1350,41 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("console-pages").set_current_page(PAGE_SCREENSHOT)
         self.window.get_widget("details-menu-vm-screenshot").set_sensitive(True)
 
-    def activate_auth_page(self):
-        pw = self.config.get_console_password(self.vm)
+    def activate_auth_page(self, withPassword=True, withUsername=False):
+        (pw, username) = self.config.get_console_password(self.vm)
         self.window.get_widget("details-menu-vm-screenshot").set_sensitive(False)
+
+        if withPassword:
+            self.window.get_widget("console-auth-password").show()
+            self.window.get_widget("label-auth-password").show()
+        else:
+            self.window.get_widget("console-auth-password").hide()
+            self.window.get_widget("label-auth-password").hide()
+
+        if withUsername:
+            self.window.get_widget("console-auth-username").show()
+            self.window.get_widget("label-auth-username").show()
+        else:
+            self.window.get_widget("console-auth-username").hide()
+            self.window.get_widget("label-auth-username").hide()
+
+        self.window.get_widget("console-auth-username").set_text(username)
         self.window.get_widget("console-auth-password").set_text(pw)
-        self.window.get_widget("console-auth-password").grab_focus()
+
         if self.config.has_keyring():
             self.window.get_widget("console-auth-remember").set_sensitive(True)
-            if pw != None and pw != "":
+            if pw != "" or username != "":
                 self.window.get_widget("console-auth-remember").set_active(True)
             else:
                 self.window.get_widget("console-auth-remember").set_active(False)
         else:
             self.window.get_widget("console-auth-remember").set_sensitive(False)
         self.window.get_widget("console-pages").set_current_page(PAGE_AUTHENTICATE)
+        if withUsername:
+            self.window.get_widget("console-auth-username").grab_focus()
+        else:
+            self.window.get_widget("console-auth-password").grab_focus()
+
 
     def activate_viewer_page(self):
         self.window.get_widget("console-pages").set_current_page(PAGE_VNCVIEWER)

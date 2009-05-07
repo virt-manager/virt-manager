@@ -23,6 +23,7 @@ import gnome
 
 import gtk.gdk
 import libvirt
+import logging
 
 from virtManager.keyring import vmmKeyring
 from virtManager.secret import vmmSecret
@@ -299,6 +300,7 @@ class vmmConfig:
 
     def has_keyring(self):
         if self.keyring == None:
+            logging.warning("Initializing keyring")
             self.keyring = vmmKeyring()
         return self.keyring.is_available()
 
@@ -314,26 +316,30 @@ class vmmConfig:
 
     def get_console_password(self, vm):
         _id = self.conf.get_int(self.conf_dir + "/console/passwords/" + vm.get_uuid())
+        username = self.conf.get_string(self.conf_dir + "/console/usernames/" + vm.get_uuid())
+
+        if username is None:
+            username = ""
 
         if _id != None:
             if not(self.has_keyring()):
-                return ""
+                return ("", "")
 
             secret = self.keyring.get_secret(_id)
             if secret != None and secret.get_name() == self.get_secret_name(vm):
                 if not(secret.has_attribute("hvuri")):
-                    return ""
+                    return ("", "")
                 if secret.get_attribute("hvuri") != vm.get_connection().get_uri():
-                    return ""
+                    return ("", "")
                 if not(secret.has_attribute("uuid")):
-                    return ""
+                    return ("", "")
                 if secret.get_attribute("uuid") != vm.get_uuid():
-                    return ""
+                    return ("", "")
 
-                return secret.get_secret()
-        return ""
+                return (secret.get_secret(), username)
+        return ("", username)
 
-    def set_console_password(self, vm, password):
+    def set_console_password(self, vm, password, username=""):
         if not(self.has_keyring()):
             return
 
@@ -346,6 +352,7 @@ class vmmConfig:
         _id = self.keyring.add_secret(secret)
         if _id != None:
             self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), _id)
+            self.conf.set_string(self.conf_dir + "/console/usernames/" + vm.get_uuid(), username)
 
     def get_url_list_length(self):
         length = self.conf.get_int(self.conf_dir + "/urls/url-list-length")

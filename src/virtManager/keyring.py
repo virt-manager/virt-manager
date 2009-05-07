@@ -38,6 +38,8 @@ class vmmKeyring:
                 if not("default" in gnomekeyring.list_keyring_names_sync()):
                     gnomekeyring.create_sync("default", None)
                 self.keyring = gnomekeyring.get_default_keyring_sync()
+                if self.keyring == None:
+                    logging.warning("Failed to create default keyring")
             except:
                 logging.warning(("Keyring unavailable: '%s'") % (str((sys.exc_info())[0]) + " "  + str((sys.exc_info())[1])))
                 self.keyring = None
@@ -61,6 +63,7 @@ class vmmKeyring:
 
             return _id
         except:
+            logging.warning(("Failed to add secret: '%s'") % (str((sys.exc_info())[0]) + " "  + str((sys.exc_info())[1])))
             return None
 
     def get_secret(self, _id):
