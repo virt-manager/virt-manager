@@ -105,7 +105,6 @@ class vmmCreate(gobject.GObject):
 
             "on_create_conn_changed": self.conn_changed,
 
-            "on_install_url_entry_activate": self.detect_media_os,
             "on_install_url_box_changed": self.url_box_changed,
             "on_install_local_cdrom_toggled": self.local_cdrom_toggled,
             "on_install_local_cdrom_combo_changed": self.detect_media_os,
@@ -189,6 +188,7 @@ class vmmCreate(gobject.GObject):
         media_url_model = gtk.ListStore(str)
         media_url_list.set_model(media_url_model)
         media_url_list.set_text_column(0)
+        self.window.get_widget("install-url-box").child.connect("activate", self.detect_media_os)
 
         ks_url_list = self.window.get_widget("install-ks-box")
         ks_url_model = gtk.ListStore(str)
@@ -291,8 +291,8 @@ class vmmCreate(gobject.GObject):
 
         # Install URL
         self.window.get_widget("install-urlopts-entry").set_text("")
-        self.window.get_widget("install-ks-entry").set_text("")
-        self.window.get_widget("install-url-entry").set_text("")
+        self.window.get_widget("install-ks-box").child.set_text("")
+        self.window.get_widget("install-url-box").child.set_text("")
         urlmodel = self.window.get_widget("install-url-box").get_model()
         ksmodel  = self.window.get_widget("install-ks-box").get_model()
         self.populate_url_model(urlmodel, self.config.get_media_urls())
@@ -802,14 +802,14 @@ class vmmCreate(gobject.GObject):
         if instpage == INSTALL_PAGE_ISO:
             media = self.get_config_local_media()
         elif instpage == INSTALL_PAGE_URL:
-            media = self.window.get_widget("install-url-entry").get_text()
+            media = self.window.get_widget("install-url-box").get_active_text()
 
         return media
 
     def get_config_url_info(self):
-        media = self.window.get_widget("install-url-entry").get_text().strip()
+        media = self.window.get_widget("install-url-box").get_active_text().strip()
         extra = self.window.get_widget("install-urlopts-entry").get_text().strip()
-        ks = self.window.get_widget("install-ks-entry").get_text().strip()
+        ks = self.window.get_widget("install-ks-box").get_active_text().strip()
 
         if media:
             self.config.add_media_url(media)
@@ -929,7 +929,7 @@ class vmmCreate(gobject.GObject):
     def url_box_changed(self, ignore):
         # If the url_entry has focus, don't fire detect_media_os, it means
         # the user is probably typing
-        if self.window.get_widget("install-url-entry").flags() & gtk.HAS_FOCUS:
+        if self.window.get_widget("install-url-box").child.flags() & gtk.HAS_FOCUS:
             return
         self.detect_media_os()
 

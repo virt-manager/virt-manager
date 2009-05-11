@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Mar  9 16:57:27 2009 -->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="vmm-create">
     <property name="title" translatable="yes">New VM</property>
     <signal name="delete_event" handler="on_vmm_newcreate_delete_event"/>
@@ -11,7 +11,7 @@
         <child>
           <widget class="GtkViewport" id="create-header">
             <property name="visible">True</property>
-            <property name="resize_mode">GTK_RESIZE_QUEUE</property>
+            <property name="resize_mode">queue</property>
             <child>
               <widget class="GtkHBox" id="hbox77">
                 <property name="visible">True</property>
@@ -26,6 +26,7 @@
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -43,6 +44,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -57,6 +59,9 @@
                           </packing>
                         </child>
                       </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                   </widget>
                   <packing>
@@ -68,6 +73,7 @@
           </widget>
           <packing>
             <property name="expand">False</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -102,6 +108,7 @@
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -115,9 +122,6 @@
                                     <property name="n_columns">3</property>
                                     <property name="column_spacing">6</property>
                                     <property name="row_spacing">4</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
                                     <child>
                                       <widget class="GtkEntry" id="create-vm-name">
                                         <property name="visible">True</property>
@@ -161,6 +165,7 @@
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
+                                            <property name="position">0</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -182,6 +187,9 @@
                                         <property name="bottom_attach">2</property>
                                       </packing>
                                     </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
                                   </widget>
                                 </child>
                               </widget>
@@ -192,6 +200,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -206,6 +215,7 @@
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -218,23 +228,24 @@
                                     <property name="spacing">3</property>
                                     <child>
                                       <widget class="GtkRadioButton" id="method-local">
+                                        <property name="label" translatable="yes">Local install media (ISO image or CDROM)</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Local install media (ISO image or CDROM)</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <widget class="GtkRadioButton" id="method-tree">
+                                        <property name="label" translatable="yes">Network Install (HTTP, FTP, or NFS)</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Network Install (HTTP, FTP, or NFS)</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">method-local</property>
                                       </widget>
@@ -245,10 +256,10 @@
                                     </child>
                                     <child>
                                       <widget class="GtkRadioButton" id="method-pxe">
+                                        <property name="label" translatable="yes">Network Boot (PXE)</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Network Boot (PXE)</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">method-local</property>
                                       </widget>
@@ -278,8 +289,8 @@
                         <property name="label" translatable="yes">Name</property>
                       </widget>
                       <packing>
-                        <property name="type">tab</property>
                         <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
                       </packing>
                     </child>
                     <child>
@@ -307,6 +318,7 @@
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -323,16 +335,17 @@
                                                 <property name="spacing">4</property>
                                                 <child>
                                                   <widget class="GtkRadioButton" id="install-local-cdrom">
+                                                    <property name="label" translatable="yes">Use CDROM or DVD</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
-                                                    <property name="label" translatable="yes">Use CDROM or DVD</property>
-                                                    <property name="response_id">0</property>
+                                                    <property name="receives_default">False</property>
                                                     <property name="active">True</property>
                                                     <property name="draw_indicator">True</property>
                                                     <signal name="toggled" handler="on_install_local_cdrom_toggled"/>
                                                   </widget>
                                                   <packing>
                                                     <property name="expand">False</property>
+                                                    <property name="position">0</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -350,6 +363,7 @@
                                                           <packing>
                                                             <property name="expand">False</property>
                                                             <property name="fill">False</property>
+                                                            <property name="position">0</property>
                                                           </packing>
                                                         </child>
                                                         <child>
@@ -368,14 +382,15 @@
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">False</property>
+                                                <property name="position">0</property>
                                               </packing>
                                             </child>
                                             <child>
                                               <widget class="GtkRadioButton" id="install-local-iso">
+                                                <property name="label" translatable="yes">Use ISO image:</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
-                                                <property name="label" translatable="yes">Use ISO image:</property>
-                                                <property name="response_id">0</property>
+                                                <property name="receives_default">False</property>
                                                 <property name="active">True</property>
                                                 <property name="draw_indicator">True</property>
                                                 <property name="group">install-local-cdrom</property>
@@ -403,15 +418,17 @@
                                                       </widget>
                                                     </child>
                                                   </widget>
+                                                  <packing>
+                                                    <property name="position">0</property>
+                                                  </packing>
                                                 </child>
                                                 <child>
                                                   <widget class="GtkButton" id="install-local-browse">
+                                                    <property name="label" translatable="yes">Browse...</property>
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <property name="label" translatable="yes">Browse...</property>
-                                                    <property name="response_id">0</property>
                                                     <signal name="clicked" handler="on_install_local_browse_clicked"/>
                                                   </widget>
                                                   <packing>
@@ -442,8 +459,8 @@
                                 <property name="label" translatable="yes">ISO</property>
                               </widget>
                               <packing>
-                                <property name="type">tab</property>
                                 <property name="tab_fill">False</property>
+                                <property name="type">tab</property>
                               </packing>
                             </child>
                             <child>
@@ -458,6 +475,7 @@
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -524,12 +542,6 @@
                                         <child>
                                           <widget class="GtkComboBoxEntry" id="install-ks-box">
                                             <property name="visible">True</property>
-                                            <child internal-child="entry">
-                                              <widget class="GtkEntry" id="install-ks-entry">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                              </widget>
-                                            </child>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -543,13 +555,6 @@
                                           <widget class="GtkComboBoxEntry" id="install-url-box">
                                             <property name="visible">True</property>
                                             <signal name="changed" handler="on_install_url_box_changed"/>
-                                            <child internal-child="entry">
-                                              <widget class="GtkEntry" id="install-url-entry">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <signal name="activate" handler="on_install_url_entry_activate"/>
-                                              </widget>
-                                            </child>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -576,9 +581,9 @@
                                 <property name="label" translatable="yes">URL</property>
                               </widget>
                               <packing>
-                                <property name="type">tab</property>
                                 <property name="position">1</property>
                                 <property name="tab_fill">False</property>
+                                <property name="type">tab</property>
                               </packing>
                             </child>
                             <child>
@@ -589,6 +594,9 @@
                                     <property name="label">No input needed for pxe.
 User shouldn't see this.</property>
                                   </widget>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                               </widget>
                               <packing>
@@ -601,15 +609,16 @@ User shouldn't see this.</property>
                                 <property name="label" translatable="yes">PXE</property>
                               </widget>
                               <packing>
-                                <property name="type">tab</property>
                                 <property name="position">2</property>
                                 <property name="tab_fill">False</property>
+                                <property name="type">tab</property>
                               </packing>
                             </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -623,21 +632,23 @@ User shouldn't see this.</property>
                                 <signal name="show" handler="on_install_detect_os_box_show"/>
                                 <child>
                                   <widget class="GtkCheckButton" id="install-detect-os">
+                                    <property name="label" translatable="yes">Automatically detect operating system based on install media</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="label" translatable="yes">Automatically detect operating system based on install media</property>
-                                    <property name="response_id">0</property>
+                                    <property name="receives_default">False</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="on_install_detect_os_toggled"/>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -760,9 +771,9 @@ User shouldn't see this.</property>
                         <property name="label" translatable="yes">Install</property>
                       </widget>
                       <packing>
-                        <property name="type">tab</property>
                         <property name="position">1</property>
                         <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
                       </packing>
                     </child>
                     <child>
@@ -772,7 +783,7 @@ User shouldn't see this.</property>
                         <child>
                           <widget class="GtkVBox" id="vbox12">
                             <property name="visible">True</property>
-                            <property name="extension_events">GDK_EXTENSION_EVENTS_CURSOR</property>
+                            <property name="extension_events">cursor</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkLabel" id="label15">
@@ -782,6 +793,7 @@ User shouldn't see this.</property>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -917,6 +929,9 @@ User shouldn't see this.</property>
                                                 <property name="xalign">0</property>
                                                 <property name="label" translatable="yes">(Insert host mem)</property>
                                               </widget>
+                                              <packing>
+                                                <property name="position">0</property>
+                                              </packing>
                                             </child>
                                           </widget>
                                           <packing>
@@ -927,6 +942,9 @@ User shouldn't see this.</property>
                                           </packing>
                                         </child>
                                       </widget>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
                                     </child>
                                   </widget>
                                 </child>
@@ -938,6 +956,7 @@ User shouldn't see this.</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                       </widget>
@@ -951,9 +970,9 @@ User shouldn't see this.</property>
                         <property name="label" translatable="yes">Memory</property>
                       </widget>
                       <packing>
-                        <property name="type">tab</property>
                         <property name="position">2</property>
                         <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
                       </packing>
                     </child>
                     <child>
@@ -962,16 +981,17 @@ User shouldn't see this.</property>
                         <property name="spacing">6</property>
                         <child>
                           <widget class="GtkCheckButton" id="enable-storage">
+                            <property name="label" translatable="yes">Enable storage for this virtual machine</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Enable storage for this virtual machine</property>
-                            <property name="response_id">0</property>
+                            <property name="receives_default">False</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_enable_storage_toggled"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -990,7 +1010,7 @@ User shouldn't see this.</property>
                                       <widget class="GtkRadioButton" id="config-storage-create">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <child>
@@ -1003,12 +1023,16 @@ User shouldn't see this.</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                   </widget>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkAlignment" id="alignment3">
+                                  <widget class="GtkAlignment" id="alignment4">
                                     <property name="visible">True</property>
                                     <property name="bottom_padding">6</property>
                                     <property name="left_padding">22</property>
@@ -1031,6 +1055,7 @@ User shouldn't see this.</property>
                                               </widget>
                                               <packing>
                                                 <property name="expand">False</property>
+                                                <property name="position">0</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1044,6 +1069,9 @@ User shouldn't see this.</property>
                                               </packing>
                                             </child>
                                           </widget>
+                                          <packing>
+                                            <property name="position">0</property>
+                                          </packing>
                                         </child>
                                         <child>
                                           <widget class="GtkLabel" id="phys-hd-label">
@@ -1063,14 +1091,15 @@ User shouldn't see this.</property>
                                             <property name="spacing">6</property>
                                             <child>
                                               <widget class="GtkCheckButton" id="config-storage-nosparse">
+                                                <property name="label" translatable="yes">Allocate entire disk now</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
-                                                <property name="label" translatable="yes">Allocate entire disk now</property>
-                                                <property name="response_id">0</property>
+                                                <property name="receives_default">False</property>
                                                 <property name="draw_indicator">True</property>
                                               </widget>
                                               <packing>
                                                 <property name="expand">False</property>
+                                                <property name="position">0</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1103,7 +1132,7 @@ User shouldn't see this.</property>
                                       <widget class="GtkRadioButton" id="config-storage-select">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">config-storage-create</property>
@@ -1118,6 +1147,7 @@ User shouldn't see this.</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                   </widget>
@@ -1132,15 +1162,15 @@ User shouldn't see this.</property>
                                     <property name="spacing">6</property>
                                     <child>
                                       <widget class="GtkButton" id="config-storage-browse">
+                                        <property name="label" translatable="yes">Browse...</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
-                                        <property name="label" translatable="yes">Browse...</property>
-                                        <property name="response_id">0</property>
                                         <signal name="clicked" handler="on_config_storage_browse_clicked"/>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1176,9 +1206,9 @@ User shouldn't see this.</property>
                         <property name="label" translatable="yes">Storage</property>
                       </widget>
                       <packing>
-                        <property name="type">tab</property>
                         <property name="position">3</property>
                         <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
                       </packing>
                     </child>
                     <child>
@@ -1198,10 +1228,11 @@ User shouldn't see this.</property>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkAlignment" id="alignment4">
+                              <widget class="GtkAlignment" id="alignment5">
                                 <property name="visible">True</property>
                                 <property name="left_padding">15</property>
                                 <child>
@@ -1363,6 +1394,7 @@ User shouldn't see this.</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -1371,7 +1403,7 @@ User shouldn't see this.</property>
                             <property name="can_focus">True</property>
                             <property name="spacing">6</property>
                             <child>
-                              <widget class="GtkAlignment" id="alignment5">
+                              <widget class="GtkAlignment" id="alignment14">
                                 <property name="visible">True</property>
                                 <property name="left_padding">20</property>
                                 <child>
@@ -1392,20 +1424,22 @@ User shouldn't see this.</property>
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">False</property>
+                                                <property name="position">0</property>
                                               </packing>
                                             </child>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
                                             <property name="fill">False</property>
+                                            <property name="position">0</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <widget class="GtkCheckButton" id="config-set-macaddr">
+                                            <property name="label" translatable="yes">Set a fixed mac address</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="label" translatable="yes">Set a fixed mac address</property>
-                                            <property name="response_id">0</property>
+                                            <property name="receives_default">False</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_config_set_macaddr_toggled"/>
                                           </widget>
@@ -1425,10 +1459,11 @@ User shouldn't see this.</property>
                                               </widget>
                                               <packing>
                                                 <property name="expand">False</property>
+                                                <property name="position">0</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkAlignment" id="alignment14">
+                                              <widget class="GtkAlignment" id="alignment15">
                                                 <property name="visible">True</property>
                                                 <child>
                                                   <placeholder/>
@@ -1446,6 +1481,7 @@ User shouldn't see this.</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1564,14 +1600,17 @@ User shouldn't see this.</property>
                         <property name="label" translatable="yes">Finish</property>
                       </widget>
                       <packing>
-                        <property name="type">tab</property>
                         <property name="position">4</property>
                         <property name="tab_fill">False</property>
+                        <property name="type">tab</property>
                       </packing>
                     </child>
                   </widget>
                 </child>
               </widget>
+              <packing>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkHBox" id="hbox51">
@@ -1582,17 +1621,18 @@ User shouldn't see this.</property>
                     <property name="xalign">0</property>
                     <child>
                       <widget class="GtkButton" id="create-help">
+                        <property name="label">gtk-help</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label">gtk-help</property>
+                        <property name="receives_default">False</property>
                         <property name="use_stock">True</property>
-                        <property name="response_id">0</property>
                         <signal name="clicked" handler="on_create_help_clicked"/>
                       </widget>
                     </child>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -1605,26 +1645,27 @@ User shouldn't see this.</property>
                         <property name="spacing">10</property>
                         <child>
                           <widget class="GtkButton" id="create-cancel">
+                            <property name="label">gtk-cancel</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label">gtk-cancel</property>
+                            <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
-                            <property name="response_id">0</property>
                             <signal name="clicked" handler="on_create_cancel_clicked"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
                           <widget class="GtkButton" id="create-back">
+                            <property name="label">gtk-go-back</property>
                             <property name="visible">True</property>
                             <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
-                            <property name="label">gtk-go-back</property>
+                            <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
-                            <property name="response_id">0</property>
                             <signal name="clicked" handler="on_create_back_clicked"/>
                           </widget>
                           <packing>
@@ -1635,11 +1676,11 @@ User shouldn't see this.</property>
                         </child>
                         <child>
                           <widget class="GtkButton" id="create-forward">
+                            <property name="label">gtk-go-forward</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label">gtk-go-forward</property>
+                            <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
-                            <property name="response_id">0</property>
                             <signal name="clicked" handler="on_create_forward_clicked"/>
                           </widget>
                           <packing>
@@ -1651,7 +1692,7 @@ User shouldn't see this.</property>
                         <child>
                           <widget class="GtkButton" id="create-finish">
                             <property name="can_focus">True</property>
-                            <property name="response_id">0</property>
+                            <property name="receives_default">False</property>
                             <signal name="clicked" handler="on_create_finish_clicked"/>
                             <child>
                               <widget class="GtkAlignment" id="alignment119">
@@ -1670,6 +1711,7 @@ User shouldn't see this.</property>
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1701,7 +1743,7 @@ User shouldn't see this.</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="pack_type">GTK_PACK_END</property>
+                    <property name="pack_type">end</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
