@@ -60,6 +60,11 @@ def setup_i18n():
     gettext.install(gettext_app, gettext_dir)
     gettext.bindtextdomain(gettext_app, gettext_dir)
 
+def setup_glade_i18n():
+    import gtk.glade
+    gtk.glade.bindtextdomain(gettext_app, gettext_dir)
+    gtk.glade.textdomain(gettext_app)
+
 def setup_pypath():
     global glade_dir, icon_dir, data_dir
     # Hacks for find assets in local dir for dev purposes
@@ -285,6 +290,7 @@ def main():
     warnings.resetwarnings()
 
     gtk.gdk.threads_init()
+    setup_glade_i18n()
 
     import dbus
     import dbus.glib
