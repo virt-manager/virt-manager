@@ -188,7 +188,7 @@ class vmmCreateVolume(gobject.GObject):
         name = self.window.get_widget("vol-name").get_text()
         suffix = self.window.get_widget("vol-name-suffix").get_text()
         volname = name + suffix
-        format = self.get_config_format()
+        fmt = self.get_config_format()
         alloc = self.window.get_widget("vol-allocation").get_value()
         cap = self.window.get_widget("vol-capacity").get_value()
 
@@ -197,8 +197,8 @@ class vmmCreateVolume(gobject.GObject):
                                       allocation=(alloc * 1024 * 1024),
                                       capacity=(cap * 1024 * 1024),
                                       pool=self.parent_pool.pool)
-            if format:
-                self.vol.format = format
+            if fmt:
+                self.vol.format = fmt
         except ValueError, e:
             return self.err.val_err(_("Volume Parameter Error"), str(e))
         return True

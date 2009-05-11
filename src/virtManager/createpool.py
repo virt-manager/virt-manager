@@ -343,7 +343,7 @@ class vmmCreatePool(gobject.GObject):
             target = self.get_config_target_path()
             host   = self.get_config_host()
             source = self.get_config_source_path()
-            format = self.get_config_format()
+            fmt    = self.get_config_format()
 
             try:
                 self._pool.target_path = target
@@ -351,8 +351,8 @@ class vmmCreatePool(gobject.GObject):
                     self._pool.host = host
                 if source is not None:
                     self._pool.source_path = source
-                if format is not None:
-                    self._pool.format = format
+                if fmt is not None:
+                    self._pool.format = fmt
             except ValueError, e:
                 return self.err.val_err(_("Pool Parameter Error"), str(e))
 

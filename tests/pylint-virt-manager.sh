@@ -17,11 +17,13 @@ GETTEXT_VAR="Undefined variable '_'"
 
 # These all work fine and are legit, just false positives
 GOBJECT_VAR="has no '__gobject_init__' member"
+GOBJECT_INIT="__init__ method from base class 'GObject' is not called"
 EMIT_VAR="has no 'emit' member"
 ERROR_VBOX="vmmErrorDialog.__init__.*Class 'vbox' has no 'pack_start' member"
 EXCEPTHOOK="no '__excepthook__' member"
 CONNECT_VAR="no 'connect' member"
 DISCONNECT_VAR="no 'disconnect' member"
+UNABLE_IMPORT="Unable to import 'gtk.gdk.*|Unable to import 'sparkline"
 
 # os._exit is needed for forked processes.
 OS_EXIT="protected member _exit of a client class"
@@ -30,6 +32,8 @@ OS_EXIT="protected member _exit of a client class"
 # warnings
 BTYPE_LIST="(vmmConnect.add_service|vmmConnect.remove_service|vmmConnect.add_conn_to_list)"
 BUILTIN_TYPE="${BTYPE_LIST}.*Redefining built-in 'type'"
+
+# Bogus 'unable to import' warnings
 
 
 DMSG=""
@@ -82,6 +86,7 @@ pylint --ignore=IPy.py $FILES \
   --disable-checker=${DCHECKERS} 2>&1 | \
   egrep -ve "$NO_PYL_CONFIG" \
         -ve "$GOBJECT_VAR" \
+        -ve "$GOBJECT_INIT" \
         -ve "$EMIT_VAR" \
         -ve "$CONNECT_VAR" \
         -ve "$DISCONNECT_VAR" \
@@ -89,6 +94,7 @@ pylint --ignore=IPy.py $FILES \
         -ve "$OS_EXIT" \
         -ve "$BUILTIN_TYPE" \
         -ve "$ERROR_VBOX" \
+        -ve "$UNABLE_IMPORT" \
         -ve "$EXCEPTHOOK" | \
 $AWK '\
 # Strip out any "*** Module name" lines if we dont list any errors for them
