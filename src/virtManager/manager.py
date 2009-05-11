@@ -177,44 +177,44 @@ class vmmManager(gobject.GObject):
         self.vmmenushutdown_items = {}
         self.vmmenumigrate = gtk.Menu()
 
-        self.vmmenu_items["run"] = gtk.ImageMenuItem("_Run")
+        self.vmmenu_items["run"] = gtk.ImageMenuItem(_("_Run"))
         self.vmmenu_items["run"].set_image(self.vmmenu_icons["run"])
         self.vmmenu_items["run"].show()
         self.vmmenu_items["run"].connect("activate", self.start_vm)
         self.vmmenu.add(self.vmmenu_items["run"])
 
-        self.vmmenu_items["pause"] = gtk.ImageMenuItem("_Pause")
+        self.vmmenu_items["pause"] = gtk.ImageMenuItem(_("_Pause"))
         self.vmmenu_items["pause"].set_image(self.vmmenu_icons["pause"])
         self.vmmenu_items["pause"].set_sensitive(False)
         self.vmmenu_items["pause"].show()
         self.vmmenu_items["pause"].connect("activate", self.pause_vm)
         self.vmmenu.add(self.vmmenu_items["pause"])
 
-        self.vmmenu_items["resume"] = gtk.ImageMenuItem("_Resume")
+        self.vmmenu_items["resume"] = gtk.ImageMenuItem(_("_Resume"))
         self.vmmenu_items["resume"].set_image(self.vmmenu_icons["resume"])
         self.vmmenu_items["resume"].show()
         self.vmmenu_items["resume"].connect("activate", self.resume_vm)
         self.vmmenu.add(self.vmmenu_items["resume"])
 
 
-        self.vmmenu_items["shutdown"] = gtk.MenuItem("_Shut Down")
+        self.vmmenu_items["shutdown"] = gtk.MenuItem(_("_Shut Down"))
         self.vmmenu_items["shutdown"].set_submenu(self.vmmenushutdown)
         self.vmmenu_items["shutdown"].show()
         self.vmmenu.add(self.vmmenu_items["shutdown"])
 
-        self.vmmenushutdown_items["reboot"] = gtk.ImageMenuItem("_Reboot")
+        self.vmmenushutdown_items["reboot"] = gtk.ImageMenuItem(_("_Reboot"))
         self.vmmenushutdown_items["reboot"].set_image(self.vmmenu_icons["reboot"])
         self.vmmenushutdown_items["reboot"].show()
         self.vmmenushutdown_items["reboot"].connect("activate", self.reboot_vm)
         self.vmmenushutdown.add(self.vmmenushutdown_items["reboot"])
 
-        self.vmmenushutdown_items["poweroff"] = gtk.ImageMenuItem("_Shut Down")
+        self.vmmenushutdown_items["poweroff"] = gtk.ImageMenuItem(_("_Shut Down"))
         self.vmmenushutdown_items["poweroff"].set_image(self.vmmenu_icons["poweroff"])
         self.vmmenushutdown_items["poweroff"].show()
         self.vmmenushutdown_items["poweroff"].connect("activate", self.poweroff_vm)
         self.vmmenushutdown.add(self.vmmenushutdown_items["poweroff"])
 
-        self.vmmenushutdown_items["forcepoweroff"] = gtk.ImageMenuItem("_Force Off")
+        self.vmmenushutdown_items["forcepoweroff"] = gtk.ImageMenuItem(_("_Force Off"))
         self.vmmenushutdown_items["forcepoweroff"].set_image(self.vmmenu_icons["forcepoweroff"])
         self.vmmenushutdown_items["forcepoweroff"].show()
         self.vmmenushutdown_items["forcepoweroff"].connect("activate", self.destroy_vm)
@@ -224,7 +224,7 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["hsep1"].show()
         self.vmmenu.add(self.vmmenu_items["hsep1"])
 
-        self.vmmenu_items["migrate"] = gtk.ImageMenuItem("_Migrate")
+        self.vmmenu_items["migrate"] = gtk.ImageMenuItem(_("_Migrate"))
         self.vmmenu_items["migrate"].set_submenu(self.vmmenumigrate)
         self.vmmenu_items["migrate"].show()
         self.vmmenu_items["migrate"].connect("activate",
@@ -268,7 +268,7 @@ class vmmManager(gobject.GObject):
         self.connmenu_items["hsep"].show()
         self.connmenu.add(self.connmenu_items["hsep"])
 
-        self.connmenu_items["details"] = gtk.ImageMenuItem("_Details")
+        self.connmenu_items["details"] = gtk.ImageMenuItem(_("_Details"))
         self.connmenu_items["details"].connect("activate", self.show_host)
         self.connmenu_items["details"].show()
         self.connmenu.add(self.connmenu_items["details"])

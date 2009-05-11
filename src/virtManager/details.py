@@ -142,19 +142,19 @@ class vmmDetails(gobject.GObject):
         destroyimg = gtk.Image()
         destroyimg.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
 
-        reboot = gtk.ImageMenuItem("_Reboot")
+        reboot = gtk.ImageMenuItem(_("_Reboot"))
         reboot.set_image(rebootimg)
         reboot.show()
         reboot.connect("activate", self.control_vm_reboot)
         menu.add(reboot)
 
-        shutdown = gtk.ImageMenuItem("_Shut Down")
+        shutdown = gtk.ImageMenuItem(_("_Shut Down"))
         shutdown.set_image(shutdownimg)
         shutdown.show()
         shutdown.connect("activate", self.control_vm_shutdown)
         menu.add(shutdown)
 
-        destroy = gtk.ImageMenuItem("_Force Off")
+        destroy = gtk.ImageMenuItem(_("_Force Off"))
         destroy.set_image(destroyimg)
         destroy.show()
         destroy.connect("activate", self.control_vm_destroy)
@@ -1621,13 +1621,13 @@ class vmmDetails(gobject.GObject):
     def populate_hw_list(self):
         hw_list_model = self.window.get_widget("hw-list").get_model()
         hw_list_model.clear()
-        hw_list_model.append(["Overview", None, 0, self.pixbuf_processor,
+        hw_list_model.append([_("Overview"), None, 0, self.pixbuf_processor,
                               HW_LIST_TYPE_GENERAL, []])
-        hw_list_model.append(["Performance", None, 0, self.pixbuf_memory,
+        hw_list_model.append([_("Performance"), None, 0, self.pixbuf_memory,
                               HW_LIST_TYPE_STATS, []])
-        hw_list_model.append(["Processor", None, 0, self.pixbuf_processor, HW_LIST_TYPE_CPU, []])
-        hw_list_model.append(["Memory", None, 0, self.pixbuf_memory, HW_LIST_TYPE_MEMORY, []])
-        hw_list_model.append(["Boot Options", None, 0, self.pixbuf_memory, HW_LIST_TYPE_BOOT, []])
+        hw_list_model.append([_("Processor"), None, 0, self.pixbuf_processor, HW_LIST_TYPE_CPU, []])
+        hw_list_model.append([_("Memory"), None, 0, self.pixbuf_memory, HW_LIST_TYPE_MEMORY, []])
+        hw_list_model.append([_("Boot Options"), None, 0, self.pixbuf_memory, HW_LIST_TYPE_BOOT, []])
         self.repopulate_hw_list()
 
     def repopulate_hw_list(self):
