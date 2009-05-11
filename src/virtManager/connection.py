@@ -635,6 +635,11 @@ class vmmConnection(gobject.GObject):
         try:
             if self.state == self.STATE_ACTIVE:
                 self.tick()
+                # If VMs disappeared since the last time we connected to
+                # this uri, remove their gconf entries so we don't pollute
+                # the database
+                self.config.reconcile_vm_entries(self.get_uri(),
+                                                 self.vms.keys())
             self.emit("state-changed")
 
             if self.state == self.STATE_DISCONNECTED:

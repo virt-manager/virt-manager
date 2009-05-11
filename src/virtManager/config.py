@@ -195,6 +195,26 @@ class vmmConfig:
     def listen_perhost(self, uri, pref_func, cb):
         self._perhost_helper(uri, pref_func, self._PEROBJ_FUNC_LISTEN, cb)
 
+    def reconcile_vm_entries(self, uri, current_vms):
+        """
+        Remove any old VM preference entries for the passed URI
+        """
+        uri = uri.replace("/", "-")
+        key = self.conf_dir + "/connection_prefs/%s/vms" % uri
+        kill_vms = []
+        gconf_vms = map(lambda inp: inp.split("/")[-1],
+                        self.conf.all_dirs(key))
+
+        for uuid in gconf_vms:
+            if len(uuid) == 36 and not uuid in current_vms:
+                kill_vms.append(uuid)
+
+        for uuid in kill_vms:
+            self.conf.recursive_unset(key + "/%s" % uuid, 0)
+
+        if kill_vms:
+            # Suggest gconf syncs, so that the unset dirs are fully removed
+            self.conf.suggest_sync()
 
     def is_vmlist_domain_id_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/domain_id")
@@ -554,5 +574,4 @@ class vmmConfig:
             return DEFAULT_VIRT_SAVE_DIR
         else:
             return os.getcwd()
-
 
