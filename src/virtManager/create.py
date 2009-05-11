@@ -108,7 +108,7 @@ class vmmCreate(gobject.GObject):
             "on_install_url_box_changed": self.url_box_changed,
             "on_install_local_cdrom_toggled": self.local_cdrom_toggled,
             "on_install_local_cdrom_combo_changed": self.detect_media_os,
-            "on_install_local_entry_activate": self.detect_media_os,
+            "on_install_local_box_changed": self.detect_media_os,
             "on_install_local_browse_clicked": self.browse_iso,
 
             "on_install_detect_os_toggled": self.toggle_detect_os,
@@ -182,6 +182,13 @@ class vmmCreate(gobject.GObject):
         text = gtk.CellRendererText()
         conn_list.pack_start(text, True)
         conn_list.add_attribute(text, 'text', 1)
+
+        # ISO media list
+        iso_list = self.window.get_widget("install-local-box")
+        iso_model = gtk.ListStore(str)
+        iso_list.set_model(iso_model)
+        iso_list.set_text_column(0)
+        self.window.get_widget("install-local-box").child.connect("activate", self.detect_media_os)
 
         # Lists for the install urls
         media_url_list = self.window.get_widget("install-url-box")
@@ -287,7 +294,9 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("install-os-type").set_active(0)
 
         # Install local/iso
-        self.window.get_widget("install-local-entry").set_text("")
+        self.window.get_widget("install-local-box").child.set_text("")
+        iso_model = self.window.get_widget("install-local-box").get_model()
+        self.populate_media_model(iso_model, self.conn.config_get_iso_paths())
 
         # Install URL
         self.window.get_widget("install-urlopts-entry").set_text("")
@@ -295,8 +304,8 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("install-url-box").child.set_text("")
         urlmodel = self.window.get_widget("install-url-box").get_model()
         ksmodel  = self.window.get_widget("install-ks-box").get_model()
-        self.populate_url_model(urlmodel, self.config.get_media_urls())
-        self.populate_url_model(ksmodel, self.config.get_kickstart_urls())
+        self.populate_media_model(urlmodel, self.config.get_media_urls())
+        self.populate_media_model(ksmodel, self.config.get_kickstart_urls())
 
         # Mem / CPUs
         self.window.get_widget("config-mem").set_value(512)
@@ -604,7 +613,7 @@ class vmmCreate(gobject.GObject):
             model.append([variant,
                           virtinst.FullVirtGuest.get_os_variant_label(_type,
                                                                       variant)])
-    def populate_url_model(self, model, urls):
+    def populate_media_model(self, model, urls):
         model.clear()
         for url in urls:
             model.append([url])
@@ -789,11 +798,14 @@ class vmmCreate(gobject.GObject):
 
         return (distro, variant, dlabel, vlabel)
 
-    def get_config_local_media(self):
+    def get_config_local_media(self, store_media=False):
         if self.window.get_widget("install-local-cdrom").get_active():
             return self.window.get_widget("install-local-cdrom-combo").get_active_text()
         else:
-            return self.window.get_widget("install-local-entry").get_text()
+            ret = self.window.get_widget("install-local-box").child.get_text()
+            if ret and store_media:
+                self.conn.config_add_iso_path(ret)
+            return ret
 
     def get_config_detectable_media(self):
         instpage = self.get_config_install_page()
@@ -806,14 +818,14 @@ class vmmCreate(gobject.GObject):
 
         return media
 
-    def get_config_url_info(self):
+    def get_config_url_info(self, store_media=False):
         media = self.window.get_widget("install-url-box").get_active_text().strip()
         extra = self.window.get_widget("install-urlopts-entry").get_text().strip()
         ks = self.window.get_widget("install-ks-box").get_active_text().strip()
 
-        if media:
+        if media and store_media:
             self.config.add_media_url(media)
-        if ks:
+        if ks and store_media:
             self.config.add_kickstart_url(ks)
 
         return (media.strip(), extra.strip(), ks.strip())
@@ -974,7 +986,7 @@ class vmmCreate(gobject.GObject):
 
     def toggle_local_iso(self, src):
         uselocal = src.get_active()
-        self.window.get_widget("install-local-entry").set_sensitive(uselocal)
+        self.window.get_widget("install-local-box").set_sensitive(uselocal)
         self.window.get_widget("install-local-browse").set_sensitive(uselocal)
 
     def detect_visibility_changed(self, src, ignore=None):
@@ -993,8 +1005,8 @@ class vmmCreate(gobject.GObject):
     def browse_iso(self, ignore1=None, ignore2=None):
         f = self._browse_file(_("Locate ISO Image"), is_media=True)
         if f != None:
-            self.window.get_widget("install-local-entry").set_text(f)
-        self.window.get_widget("install-local-entry").activate()
+            self.window.get_widget("install-local-box").child.set_text(f)
+        self.window.get_widget("install-local-box").activate()
 
     def toggle_enable_storage(self, src):
         self.window.get_widget("config-storage-box").set_sensitive(src.get_active())
@@ -1015,7 +1027,7 @@ class vmmCreate(gobject.GObject):
         notebook = self.window.get_widget("create-pages")
         curpage = notebook.get_current_page()
         if curpage == PAGE_INSTALL:
-            self.window.get_widget("install-local-entry").set_text(path)
+            self.window.get_widget("install-local-box").child.set_text(path)
         elif curpage == PAGE_STORAGE:
             self.window.get_widget("config-storage-entry").set_text(path)
 
@@ -1225,6 +1237,11 @@ class vmmCreate(gobject.GObject):
         except ValueError, e:
             return self.err.val_err(_("Error setting OS information."),
                                     str(e))
+
+        # Validation passed, store the install path (if there is one) in
+        # gconf
+        self.get_config_local_media(store_media=True)
+        self.get_config_url_info(store_media=True)
         return True
 
     def validate_mem_page(self):

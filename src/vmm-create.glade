@@ -410,11 +410,9 @@
                                                     <property name="visible">True</property>
                                                     <property name="left_padding">20</property>
                                                     <child>
-                                                      <widget class="GtkEntry" id="install-local-entry">
+                                                      <widget class="GtkComboBoxEntry" id="install-local-box">
                                                         <property name="visible">True</property>
-                                                        <property name="sensitive">False</property>
-                                                        <property name="can_focus">True</property>
-                                                        <signal name="activate" handler="on_install_local_entry_activate"/>
+                                                        <signal name="changed" handler="on_install_local_box_changed"/>
                                                       </widget>
                                                     </child>
                                                   </widget>

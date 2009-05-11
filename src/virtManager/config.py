@@ -457,29 +457,27 @@ class vmmConfig:
     def set_url_list_length(self, length):
         self.conf.set_int(self.conf_dir + "/urls/url-list-length", length)
 
-    def add_media_url(self, url):
-        urls = self.conf.get_list(self.conf_dir + "/urls/media", gconf.VALUE_STRING)
+    def _url_add_helper(self, gconf_path, url):
+        urls = self.conf.get_list(gconf_path, gconf.VALUE_STRING)
         if urls == None:
             urls = []
-        if urls.count(url) == 0 and len(url)>0 and not url.isspace():
-            #the url isn't already in the list, so add it
+
+        if urls.count(url) == 0 and len(url) > 0 and not url.isspace():
+            # The url isn't already in the list, so add it
             urls.insert(0,url)
             length = self.get_url_list_length()
             if len(urls) > length:
                 del urls[len(urls) -1]
-            self.conf.set_list(self.conf_dir + "/urls/media", gconf.VALUE_STRING, urls)
+            self.conf.set_list(gconf_path, gconf.VALUE_STRING, urls)
+
+    def add_media_url(self, url):
+        self._url_add_helper(self.conf_dir + "/urls/media", url)
 
     def add_kickstart_url(self, url):
-        urls = self.conf.get_list(self.conf_dir + "/urls/kickstart", gconf.VALUE_STRING)
-        if urls == None:
-            urls = []
-        if urls.count(url) == 0:
-            # the url isn't already in the list, so add it
-            urls.insert(0,url)
-            length = self.get_url_list_length()
-            if len(urls) > length:
-                del urls[len(urls) -1]
-            self.conf.set_list(self.conf_dir + "/urls/kickstart", gconf.VALUE_STRING, urls)
+        self._url_add_helper(self.conf_dir + "/urls/kickstart", url)
+
+    def add_iso_path(self, path):
+        self._url_add_helper(self.conf_dir + "/urls/local_media", path)
 
     def add_connection(self, uri):
         uris = self.conf.get_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING)
@@ -524,10 +522,15 @@ class vmmConfig:
                            gconf.VALUE_STRING, uris)
 
     def get_media_urls(self):
-        return self.conf.get_list(self.conf_dir + "/urls/media", gconf.VALUE_STRING)
-
+        return self.conf.get_list(self.conf_dir + "/urls/media",
+                                  gconf.VALUE_STRING)
     def get_kickstart_urls(self):
-        return self.conf.get_list(self.conf_dir + "/urls/kickstart", gconf.VALUE_STRING)
+        return self.conf.get_list(self.conf_dir + "/urls/kickstart",
+                                  gconf.VALUE_STRING)
+    def get_iso_paths(self):
+        return self.conf.get_list(self.conf_dir + "/urls/local_media",
+                                 gconf.VALUE_STRING)
+
     def get_connections(self):
         return self.conf.get_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING)
 

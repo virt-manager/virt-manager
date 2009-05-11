@@ -1263,5 +1263,12 @@ class vmmConnection(gobject.GObject):
             return True
         return False
 
+    # Per-Connection preferences
+    def config_add_iso_path(self, path):
+        self.config.set_perhost(self.get_uri(), self.config.add_iso_path, path)
+    def config_get_iso_paths(self):
+        return self.config.get_perhost(self.get_uri(),
+                                       self.config.get_iso_paths)
+
 gobject.type_register(vmmConnection)
 
