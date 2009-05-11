@@ -698,7 +698,7 @@ class vmmCreate(gobject.GObject):
 
         net_list.set_active(default)
 
-    def change_caps(self, gtype=None, dtype=None):
+    def change_caps(self, gtype=None, dtype=None, arch=None):
 
         if gtype == None:
             # If none specified, prefer HVM. This way, the default install
@@ -714,7 +714,8 @@ class vmmCreate(gobject.GObject):
                                                             caps=self.caps,
                                                             os_type = gtype,
                                                             type = dtype,
-                                                            accelerated=True)
+                                                            accelerated=True,
+                                                            arch=arch)
 
         if (self.capsguest and self.capsdomain and
             (newg.arch == self.capsguest.arch and
@@ -937,6 +938,11 @@ class vmmCreate(gobject.GObject):
         idx = src.get_active()
         if idx < 0:
             return
+
+        arch = src.get_model()[idx][0]
+        self.change_caps(self.capsguest.os_type,
+                         self.capsdomain.hypervisor_type,
+                         arch)
 
     def url_box_changed(self, ignore):
         # If the url_entry has focus, don't fire detect_media_os, it means
