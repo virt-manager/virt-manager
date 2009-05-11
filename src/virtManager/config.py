@@ -23,6 +23,7 @@ import gnome
 
 import gtk.gdk
 import libvirt
+import virtinst
 import logging
 
 from virtManager.keyring import vmmKeyring
@@ -47,6 +48,10 @@ class vmmConfig:
     CONSOLE_SCALE_NEVER = 0
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2
+
+    _PEROBJ_FUNC_SET    = 0
+    _PEROBJ_FUNC_GET    = 1
+    _PEROBJ_FUNC_LISTEN = 2
 
     def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir,
                  data_dir):
@@ -101,6 +106,95 @@ class vmmConfig:
 
     def get_data_dir(self):
         return self.data_dir
+
+    # Per-VM/Connection/Connection Host Option dealings
+    def _perconn_helper(self, uri, pref_func, func_type, value=None):
+        suffix = "connection_prefs/%s" % uri.replace("/", "-")
+        return self._perobj_helper(suffix, pref_func, func_type, value)
+    def _perhost_helper(self, uri, pref_func, func_type, value=None):
+        host = virtinst.util.get_uri_hostname(uri)
+        if not host:
+            host = "localhost"
+        suffix = "connection_prefs/hosts/%s" % host
+        return self._perobj_helper(suffix, pref_func, func_type, value)
+    def _pervm_helper(self, uri, uuid, pref_func, func_type, value=None):
+        suffix = "connection_prefs/%s/vms/%s" % (uri.replace("/", "-"),
+                                              uuid)
+        return self._perobj_helper(suffix, pref_func, func_type, value)
+
+    def _perobj_helper(self, suffix, pref_func, func_type, value=None):
+        # This function wraps the regular preference setting functions,
+        # replacing conf_dir with a connection, host, or vm specific path. For
+        # VMs, the path is:
+        #
+        # conf_dir/connection_prefs/{CONN_URI}/vms/{VM_UUID}
+        #
+        # So a per-VM pref will look like
+        # /apps/virt-manager/connection_prefs/qemu:---system/vms/1234.../console/scaling
+        #
+        # Yeah this is evil but it's also nice and easy :)
+
+        oldconf = self.conf_dir
+        newconf = oldconf
+
+        # Don't make a bogus gconf path if this is called nested.
+        if not oldconf.count(suffix):
+            newconf = "%s/%s" % (oldconf, suffix)
+
+        ret = None
+        try:
+            self.conf_dir = newconf
+            if func_type == self._PEROBJ_FUNC_SET:
+                pref_func(value)
+            elif func_type == self._PEROBJ_FUNC_GET:
+                ret = pref_func()
+            elif func_type == self._PEROBJ_FUNC_LISTEN:
+                pref_func(value)
+        finally:
+            self.conf_dir = oldconf
+
+        return ret
+
+    def set_pervm(self, uri, uuid, pref_func, value):
+        """
+        @param uri: VM connection URI
+        @param uuid: VM UUID
+        @param value: Set value or listener callback function
+        @param pref_func: Global preference get/set/listen func that the
+                          pervm instance will overshadow
+        """
+        self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_SET, value)
+    def get_pervm(self, uri, uuid, pref_func):
+        ret = self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_GET)
+        if ret == None:
+            # If the GConf value is unset, return the global default.
+            ret = pref_func()
+        return ret
+    def listen_pervm(self, uri, uuid, pref_func, cb):
+        self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_LISTEN, cb)
+
+    def set_perconn(self, uri, pref_func, value):
+        self._perconn_helper(uri, pref_func, self._PEROBJ_FUNC_SET, value)
+    def get_perconn(self, uri, pref_func):
+        ret = self._perconn_helper(uri, pref_func, self._PEROBJ_FUNC_GET)
+        if ret == None:
+            # If the GConf value is unset, return the global default.
+            ret = pref_func()
+        return ret
+    def listen_perconn(self, uri, pref_func, cb):
+        self._perconn_helper(uri, pref_func, self._PEROBJ_FUNC_LISTEN, cb)
+
+    def set_perhost(self, uri, pref_func, value):
+        self._perhost_helper(uri, pref_func, self._PEROBJ_FUNC_SET, value)
+    def get_perhost(self, uri, pref_func):
+        ret = self._perhost_helper(uri, pref_func, self._PEROBJ_FUNC_GET)
+        if ret == None:
+            # If the GConf value is unset, return the global default.
+            ret = pref_func()
+        return ret
+    def listen_perhost(self, uri, pref_func, cb):
+        self._perhost_helper(uri, pref_func, self._PEROBJ_FUNC_LISTEN, cb)
+
 
     def is_vmlist_domain_id_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/domain_id")
