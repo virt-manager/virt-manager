@@ -203,6 +203,18 @@ class vmmDomain(gobject.GObject):
             self.lastStatus = status
             self.emit("status-changed", status)
 
+    # GConf specific wranglings
+    def set_console_scaling(self, value):
+        self.config.set_pervm(self.connection.get_uri(), self.uuid,
+                              self.config.set_console_scaling, value)
+    def get_console_scaling(self):
+        return self.config.get_pervm(self.connection.get_uri(), self.uuid,
+                                     self.config.get_console_scaling)
+    def on_console_scaling_changed(self, cb):
+        self.config.listen_pervm(self.connection.get_uri(), self.uuid,
+                                 self.config.on_console_scaling_changed, cb)
+
+
     def _sample_mem_stats_dummy(self, ignore):
         return 0, 0
 

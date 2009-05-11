@@ -348,10 +348,10 @@ class vmmConfig:
     def on_console_scaling_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/console/scaling", callback)
     def get_console_scaling(self):
-        console_pref = self.conf.get_int(self.conf_dir + "/console/scaling")
-        if console_pref == None:
-            console_pref = 0
-        return console_pref
+        ret = self.conf.get(self.conf_dir + "/console/scaling")
+        if ret != None:
+            ret = ret.get_int()
+        return ret
     def set_console_scaling(self, pref):
         self.conf.set_int(self.conf_dir + "/console/scaling", pref)
 

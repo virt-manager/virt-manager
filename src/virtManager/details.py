@@ -222,12 +222,9 @@ class vmmDetails(gobject.GObject):
             self.vncViewer.set_keyboard_grab(False)
         self.vncViewer.set_pointer_grab(True)
 
-        self.scale_type = self.config.get_console_scaling()
-
-        self.window.get_widget("details-menu-view-scale-always").set_active(self.scale_type == self.config.CONSOLE_SCALE_ALWAYS)
-        self.window.get_widget("details-menu-view-scale-never").set_active(self.scale_type == self.config.CONSOLE_SCALE_NEVER)
-        self.window.get_widget("details-menu-view-scale-fullscreen").set_active(self.scale_type == self.config.CONSOLE_SCALE_FULLSCREEN)
-        self.update_scaling()
+        self.scale_type = self.vm.get_console_scaling()
+        self.vm.on_console_scaling_changed(self.refresh_scaling)
+        self.refresh_scaling()
 
         self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
         self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
@@ -432,6 +429,15 @@ class vmmDetails(gobject.GObject):
         else:
             self.vncViewer.set_keyboard_grab(False)
 
+    def refresh_scaling(self,ignore1=None, ignore2=None, ignore3=None,
+                        ignore4=None):
+        self.scale_type = self.vm.get_console_scaling()
+        self.window.get_widget("details-menu-view-scale-always").set_active(self.scale_type == self.config.CONSOLE_SCALE_ALWAYS)
+        self.window.get_widget("details-menu-view-scale-never").set_active(self.scale_type == self.config.CONSOLE_SCALE_NEVER)
+        self.window.get_widget("details-menu-view-scale-fullscreen").set_active(self.scale_type == self.config.CONSOLE_SCALE_FULLSCREEN)
+
+        self.update_scaling()
+
     def set_scale_type(self, src):
         if not src.get_active():
             return
@@ -443,6 +449,7 @@ class vmmDetails(gobject.GObject):
         elif src == self.window.get_widget("details-menu-view-scale-never"):
             self.scale_type = self.config.CONSOLE_SCALE_NEVER
 
+        self.vm.set_console_scaling(self.scale_type)
         self.update_scaling()
 
     def update_scaling(self):

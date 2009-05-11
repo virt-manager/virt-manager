@@ -103,7 +103,10 @@ class vmmPreferences(gobject.GObject):
         self.window.get_widget("prefs-console-keygrab").set_active(self.config.get_console_keygrab())
     def refresh_console_scaling(self,ignore1=None,ignore2=None,ignore3=None,
                                 ignore4=None):
-        self.window.get_widget("prefs-console-scaling").set_active(self.config.get_console_scaling())
+        val = self.config.get_console_scaling()
+        if val == None:
+            val = 0
+        self.window.get_widget("prefs-console-scaling").set_active(val)
 
     def refresh_sound_local(self, ignore1=None, ignore2=None, ignore=None,
                             ignore4=None):
