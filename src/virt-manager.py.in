@@ -169,7 +169,7 @@ def parse_commandline():
     optParser.add_option("-c", "--connect", dest="uri",
         help="Connect to hypervisor at URI", metavar="URI")
     optParser.add_option("--debug", action="store_true", dest="debug",
-        help="Print debug output to stdout (requires --no-fork)",
+        help="Print debug output to stdout (implies --no-fork)",
         default=False)
     optParser.add_option("--no-dbus", action="store_true", dest="nodbus",
         help="Disable DBus service for controlling UI")
@@ -305,7 +305,7 @@ def main():
                        icon_dir, data_dir)
 
     # Now we've got basic environment up & running we can fork
-    if not options.nofork:
+    if not options.nofork and not options.debug:
         drop_tty()
         drop_stdio()
 
