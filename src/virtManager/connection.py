@@ -634,6 +634,8 @@ class vmmConnection(gobject.GObject):
         gtk.gdk.threads_enter()
         try:
             if self.state == self.STATE_ACTIVE:
+                logging.debug("%s capabilities:\n%s" %
+                              (self.get_uri(), self.vmm.getCapabilities()))
                 self.tick()
                 # If VMs disappeared since the last time we connected to
                 # this uri, remove their gconf entries so we don't pollute
