@@ -145,3 +145,29 @@ def dup_conn(config, conn, libconn=None, return_conn_class=False):
         return newconn
     else:
         return newconn.vmm
+
+def pretty_hv(gtype, domtype):
+    """
+    Convert XML <domain type='foo'> and <os><type>bar</type>
+    into a more human relevant string.
+    """
+
+    gtype = gtype.lower()
+    domtype = domtype.lower()
+
+    label = domtype
+    if domtype == "kvm":
+        if gtype == "xen":
+            label = "xenner"
+    elif domtype == "xen":
+        if gtype == "xen":
+            label = "xen (paravirt)"
+        elif gtype == "hvm":
+            label = "xen (fullvirt)"
+    elif domtype == "test":
+        if gtype == "xen":
+            label = "test (xen)"
+        elif gtype == "hvm":
+            label = "test (hvm)"
+
+    return label

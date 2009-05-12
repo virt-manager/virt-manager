@@ -487,21 +487,7 @@ class vmmCreate(gobject.GObject):
             gtype = guest.os_type
             for dom in guest.domains:
                 domtype = dom.hypervisor_type
-                label = domtype
-
-                if domtype == "kvm":
-                    if gtype == "xen":
-                        label = "xenner"
-                elif domtype == "xen":
-                    if gtype == "xen":
-                        label = "xen (paravirt)"
-                    elif gtype == "hvm":
-                        label = "xen (fullvirt)"
-                elif domtype == "test":
-                    if gtype == "xen":
-                        label = "test (xen)"
-                    elif gtype == "hvm":
-                        label = "test (hvm)"
+                label = util.pretty_hv(gtype, domtype)
 
                 # Don't add multiple rows for each arch
                 for m in model:

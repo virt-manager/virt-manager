@@ -168,15 +168,27 @@ class vmmDomain(gobject.GObject):
         return False
 
     def is_hvm(self):
-        os_type = vutil.get_xml_path(self.get_xml(), "/domain/os/type")
-        # FIXME: This should be static, not parse xml everytime
-        if os_type == "hvm":
+        if self.get_abi_type() == "hvm":
             return True
         return False
 
+    def get_abi_type(self):
+        # FIXME: This should be static, not parse xml everytime
+        return str(vutil.get_xml_path(self.get_xml(),
+                                      "/domain/os/type")).lower()
+
     def get_hv_type(self):
         # FIXME: This should be static, not parse xml everytime
-        return vutil.get_xml_path(self.get_xml(), "/domain/@type").lower()
+        return str(vutil.get_xml_path(self.get_xml(), "/domain/@type")).lower()
+
+    def get_pretty_hv_type(self):
+        return util.pretty_hv(self.get_abi_type(), self.get_hv_type())
+
+    def get_arch(self):
+        return vutil.get_xml_path(self.get_xml(), "/domain/os/type/@arch")
+
+    def get_emulator(self):
+        return vutil.get_xml_path(self.get_xml(), "/domain/devices/emulator")
 
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:

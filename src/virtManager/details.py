@@ -126,9 +126,6 @@ class vmmDetails(gobject.GObject):
         else:
             self.window.get_widget("add-hardware-button").set_sensitive(True)
 
-        self.window.get_widget("overview-name").set_text(self.vm.get_name())
-        self.window.get_widget("overview-uuid").set_text(self.vm.get_uuid())
-
         self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
         self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
 
@@ -663,7 +660,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("hw-panel").show_all()
 
         if pagetype == HW_LIST_TYPE_GENERAL:
-            pass
+            self.refresh_overview_page()
         elif pagetype == HW_LIST_TYPE_STATS:
             self.refresh_stats_page()
         elif pagetype == HW_LIST_TYPE_CPU:
@@ -873,8 +870,7 @@ class vmmDetails(gobject.GObject):
         self.repopulate_hw_list()
 
         if pagetype == HW_LIST_TYPE_GENERAL:
-            # Nothing to refresh at this point
-            pass
+            self.refresh_overview_page()
         elif pagetype == HW_LIST_TYPE_STATS:
             self.refresh_stats_page()
         elif pagetype == HW_LIST_TYPE_CPU:
@@ -895,6 +891,16 @@ class vmmDetails(gobject.GObject):
             self.refresh_char_page()
         elif pagetype == HW_LIST_TYPE_HOSTDEV:
             self.refresh_hostdev_page()
+
+    def refresh_overview_page(self):
+        self.window.get_widget("overview-name").set_text(self.vm.get_name())
+        self.window.get_widget("overview-uuid").set_text(self.vm.get_uuid())
+
+        self.window.get_widget("overview-hv").set_text(self.vm.get_pretty_hv_type())
+        arch = self.vm.get_arch() or _("Unknown")
+        emu = self.vm.get_emulator() or _("None")
+        self.window.get_widget("overview-arch").set_text(arch)
+        self.window.get_widget("overview-emulator").set_text(emu)
 
     def refresh_stats_page(self):
         def _rx_tx_text(rx, tx, unit):
