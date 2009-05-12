@@ -170,16 +170,13 @@ class vmmDomain(gobject.GObject):
     def is_hvm(self):
         os_type = vutil.get_xml_path(self.get_xml(), "/domain/os/type")
         # FIXME: This should be static, not parse xml everytime
-        # XXX libvirt bug - doesn't work for inactive guests
-        #os_type = self.vm.OSType()
-        logging.debug("OS Type: %s" % os_type)
         if os_type == "hvm":
             return True
         return False
 
-    def get_type(self):
+    def get_hv_type(self):
         # FIXME: This should be static, not parse xml everytime
-        return vutil.get_xml_path(self.get_xml(), "/domain/@type")
+        return vutil.get_xml_path(self.get_xml(), "/domain/@type").lower()
 
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:

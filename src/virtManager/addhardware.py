@@ -974,7 +974,7 @@ class vmmAddHardware(gobject.GObject):
         model.append([None, _("Hypervisor default")])
         if self.vm.is_hvm():
             mod_list = [ "rtl8139", "ne2k_pci", "pcnet" ]
-            if self.vm.get_type().lower() == "kvm":
+            if self.vm.get_hv_type() == "kvm":
                 mod_list.append("e1000")
                 mod_list.append("virtio")
             mod_list.sort()
@@ -996,7 +996,7 @@ class vmmAddHardware(gobject.GObject):
                           gtk.STOCK_HARDDISK, "SCSI disk"])
             model.append(["usb", virtinst.VirtualDisk.DEVICE_DISK,
                           gtk.STOCK_HARDDISK, "USB disk"])
-        if self.vm.get_type().lower() == "kvm":
+        if self.vm.get_hv_type().lower() == "kvm":
             model.append(["virtio", virtinst.VirtualDisk.DEVICE_DISK,
                           gtk.STOCK_HARDDISK, "Virtio Disk"])
         if self.vm.get_connection().get_type().lower() == "xen":
