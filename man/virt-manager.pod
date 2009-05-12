@@ -10,10 +10,11 @@ B<virt-manager> [OPTIONS]
 =head1 DESCRIPTION
 
 B<virt-manager> is a desktop tool for managing virtual machines. It
-provides the ability to control the lifecycle of existing machines 
+provides the ability to control the lifecycle of existing machines
 (bootup/shutdown,pause/resume,suspend/restore), provision new virtual
-machines, manage virtual networks, access the graphical console of
-virtual machines, and view performance statistics.
+machines and various types of store, manage virtual networks,
+access the graphical console of virtual machines, and view performance
+statistics, all done locally or remotely.
 
 =head1 OPTIONS
 
@@ -29,9 +30,23 @@ Display command line help summary
 
 Specify the hypervisor connection URI
 
+=item --debug
+
+List debugging output to the console (normally this is only logged in
+~/.virt-manager/virt-manager.log). This function implies --no-fork.
+
+=item --no-fork
+
+Don't fork C<virt-manager> off into the backround: run it blocking the
+current terminal. Useful for seeing possible errors dumped to stdout/stderr.
+
 =item --no-dbus
 
 Disable the DBus API used for remote control of the C<virt-manager> UI
+
+=item --no-conn-autostart
+
+Don't autostart any libvirt connections when launching C<virt-manager>.
 
 =item --show-domain-creator
 
@@ -65,9 +80,7 @@ Written by Daniel P. Berrange.
 
 =head1 BUGS
 
-Report bugs to the mailing list C<http://www.redhat.com/mailman/listinfo/et-mgmt-tools>.
-
-Debugging output can be found in $HOME/.virt-manager/virt-manager.log. Optionally you can run the app from the command line with the --no-fork option to see any uncaught errors (these will also be logged).
+Please see L<http://virt-manager.org/page/BugReporting>
 
 =head1 COPYRIGHT
 
