@@ -1276,11 +1276,6 @@ class vmmCreate(gobject.GObject):
                                         size = disksize,
                                         sparse = sparse)
 
-            if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
-                self.guest.type == "xen" and
-                virtinst.util.is_blktap_capable()):
-                disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
-
             self.guest.disks.append(disk)
         except Exception, e:
             return self.verr(_("Storage parameter error."), str(e))
