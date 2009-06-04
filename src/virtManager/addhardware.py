@@ -520,7 +520,7 @@ class vmmAddHardware(gobject.GObject):
                         self.window.get_widget("summary-graphics-password").set_text(_("Yes"))
                     else:
                         self.window.get_widget("summary-graphics-password").set_text(_("No"))
-                    if self.get_config_keymap() != "":
+                    if self.get_config_keymap() is not None:
                         self.window.get_widget("summary-graphics-keymap").set_text(str(self.get_config_keymap()))
                     else:
                         self.window.get_widget("summary-graphics-keymap").set_text(_("Same as host"))
