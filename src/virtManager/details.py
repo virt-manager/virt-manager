@@ -966,11 +966,12 @@ class vmmDetails(gobject.GObject):
         curmem = self.window.get_widget("config-memory").get_adjustment()
         maxmem = self.window.get_widget("config-maxmem").get_adjustment()
 
-
         if self.window.get_widget("config-memory-apply").get_property("sensitive"):
-            if curmem.value > maxmem.value:
-                curmem.value = maxmem.value
-            curmem.upper = maxmem.value
+            memval = self.config_get_memory()
+            maxval = self.config_get_maxmem()
+            if maxval < memval:
+                maxmem.value = memval
+            maxmem.lower = memval
         else:
             curmem.value = int(round(self.vm.get_memory()/1024.0))
             maxmem.value = int(round(self.vm.maximum_memory()/1024.0))
@@ -1510,54 +1511,74 @@ class vmmDetails(gobject.GObject):
         self.vm.set_vcpu_count(vcpus)
         self.window.get_widget("config-vcpus-apply").set_sensitive(False)
 
-    def config_memory_changed(self, src):
-        self.window.get_widget("config-memory-apply").set_sensitive(True)
+    def config_get_maxmem(self):
+        maxadj = self.window.get_widget("config-maxmem").get_adjustment()
+        txtmax = self.window.get_widget("config-maxmem").get_text()
+        try:
+            maxmem = int(txtmax)
+        except:
+            maxmem = maxadj.value
+        return maxmem
+
+    def config_get_memory(self):
+        memadj = self.window.get_widget("config-memory").get_adjustment()
+        txtmem = self.window.get_widget("config-memory").get_text()
+        try:
+            mem = int(txtmem)
+        except:
+            mem = memadj.value
+        return mem
 
     def config_maxmem_changed(self, src):
         self.window.get_widget("config-memory-apply").set_sensitive(True)
-        memory = self.window.get_widget("config-maxmem").get_adjustment().value
-        memadj = self.window.get_widget("config-memory").get_adjustment()
-        memadj.upper = memory
-        if memadj.value > memory:
-            memadj.value = memory
+
+    def config_memory_changed(self, src):
+        self.window.get_widget("config-memory-apply").set_sensitive(True)
+
+        maxadj = self.window.get_widget("config-maxmem").get_adjustment()
+
+        mem = self.config_get_memory()
+        if maxadj.value < mem:
+            maxadj.value = mem
+        maxadj.lower = mem
 
     def config_memory_apply(self, src):
         self.refresh_config_memory()
         exc = None
         curmem = None
-        maxmem = self.window.get_widget("config-maxmem").get_adjustment()
+        maxmem = self.config_get_maxmem()
         if self.window.get_widget("config-memory").get_property("sensitive"):
-            curmem = self.window.get_widget("config-memory").get_adjustment()
+            curmem = self.config_get_memory()
 
-        logging.info("Setting max-memory for " + self.vm.get_name() + \
-                     " to " + str(maxmem.value))
+        logging.info("Setting max-memory for " + self.vm.get_name() +
+                     " to " + str(maxmem))
 
         actual_cur = self.vm.get_memory()
         if curmem is not None:
-            logging.info("Setting memory for " + self.vm.get_name() + \
-                         " to " + str(curmem.value))
-            if (maxmem.value * 1024) < actual_cur:
+            logging.info("Setting memory for " + self.vm.get_name() +
+                         " to " + str(curmem))
+            if (maxmem * 1024) < actual_cur:
                 # Set current first to avoid error
                 try:
-                    self.vm.set_memory(curmem.value * 1024)
-                    self.vm.set_max_memory(maxmem.value * 1024)
+                    self.vm.set_memory(curmem * 1024)
+                    self.vm.set_max_memory(maxmem * 1024)
                 except Exception, e:
                     exc = e
             else:
                 try:
-                    self.vm.set_max_memory(maxmem.value * 1024)
-                    self.vm.set_memory(curmem.value * 1024)
+                    self.vm.set_max_memory(maxmem * 1024)
+                    self.vm.set_memory(curmem * 1024)
                 except Exception, e:
                     exc = e
 
         else:
             try:
-                self.vm.set_max_memory(maxmem.value * 1024)
+                self.vm.set_max_memory(maxmem * 1024)
             except Exception, e:
                 exc = e
 
         if exc:
-            self.err.show_err(_("Error changing memory values: %s" % str(e)),\
+            self.err.show_err(_("Error changing memory values: %s" % str(e)),
                               "".join(traceback.format_exc()))
         else:
             self.window.get_widget("config-memory-apply").set_sensitive(False)
