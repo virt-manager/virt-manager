@@ -820,14 +820,14 @@ class vmmCreate(gobject.GObject):
     def get_storage_info(self):
         path = None
         size = self.window.get_widget("config-storage-size").get_value()
-        nosparse = self.window.get_widget("config-storage-nosparse").get_active()
+        sparse = not self.window.get_widget("config-storage-nosparse").get_active()
         if self.window.get_widget("config-storage-create").get_active():
             path = self.get_default_path(self.guest.name)
             logging.debug("Default storage path is: %s" % path)
         else:
             path = self.window.get_widget("config-storage-entry").get_text()
 
-        return (path, size, nosparse)
+        return (path, size, sparse)
 
     def get_default_path(self, name):
         path = ""
