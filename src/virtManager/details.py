@@ -945,7 +945,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("state-host-cpus").set_text("%d" % self.vm.get_connection().host_active_processor_count())
         status = self.vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            cpu_max = self.vm.get_connection().get_max_vcpus(self.vm.get_type())
+            cpu_max = self.vm.get_connection().get_max_vcpus(self.vm.get_hv_type())
             self.window.get_widget("config-vcpus").get_adjustment().upper = cpu_max
             self.window.get_widget("state-vm-maxvcpus").set_text(str(cpu_max))
         else:
