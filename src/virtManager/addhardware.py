@@ -410,8 +410,11 @@ class vmmAddHardware(gobject.GObject):
 
     def get_config_net_model(self):
         model = self.window.get_widget("net-model")
-        modelxml = model.get_model().get_value(model.get_active_iter(), 0)
-        modelstr = model.get_model().get_value(model.get_active_iter(), 1)
+        if model.get_active_iter():
+            modelxml = model.get_model().get_value(model.get_active_iter(), 0)
+            modelstr = model.get_model().get_value(model.get_active_iter(), 1)
+        else:
+            modelxml = modelstr = None
         return modelxml, modelstr
 
     def get_config_macaddr(self):
@@ -494,7 +497,8 @@ class vmmAddHardware(gobject.GObject):
                 else:
                     self.window.get_widget("summary-mac-address").set_text("-")
                 model = self.get_config_net_model()[1]
-                self.window.get_widget("summary-net-model").set_text(model)
+                self.window.get_widget("summary-net-model").set_text(model or
+                                                                     "-")
             elif hwpage == PAGE_INPUT:
                 self.window.get_widget("summary-input").show()
                 inp = self.get_config_input()
