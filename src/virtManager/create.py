@@ -995,18 +995,16 @@ class vmmCreate(gobject.GObject):
             nodetect_label.show()
 
     def browse_iso(self, ignore1=None, ignore2=None):
-        f = self._browse_file(_("Locate ISO Image"), is_media=True)
-        if f != None:
-            self.window.get_widget("install-local-box").child.set_text(f)
+        self._browse_file(_("Locate ISO Image"),
+                          self.set_iso_storage_path)
         self.window.get_widget("install-local-box").activate()
 
     def toggle_enable_storage(self, src):
         self.window.get_widget("config-storage-box").set_sensitive(src.get_active())
 
     def browse_storage(self, ignore1):
-        f = self._browse_file(_("Locate existing storage"))
-        if f != None:
-            self.window.get_widget("config-storage-entry").set_text(f)
+        self._browse_file(_("Locate existing storage"),
+                          self.set_disk_storage_path)
 
     def toggle_storage_select(self, src):
         act = src.get_active()
@@ -1015,13 +1013,11 @@ class vmmCreate(gobject.GObject):
     def toggle_macaddr(self, src):
         self.window.get_widget("config-macaddr").set_sensitive(src.get_active())
 
-    def set_storage_path(self, src, path):
-        notebook = self.window.get_widget("create-pages")
-        curpage = notebook.get_current_page()
-        if curpage == PAGE_INSTALL:
-            self.window.get_widget("install-local-box").child.set_text(path)
-        elif curpage == PAGE_STORAGE:
-            self.window.get_widget("config-storage-entry").set_text(path)
+    def set_iso_storage_path(self, ignore, path):
+        self.window.get_widget("install-local-box").child.set_text(path)
+
+    def set_disk_storage_path(self, ignore, path):
+        self.window.get_widget("config-storage-entry").set_text(path)
 
     # Navigation methods
     def set_install_page(self):
@@ -1652,20 +1648,14 @@ class vmmCreate(gobject.GObject):
             logging.exception("Error detecting distro.")
             self.detectedDistro = (None, None)
 
-    def _browse_file(self, dialog_name, folder=None, is_media=False):
-
-        if self.conn.is_remote() or not is_media:
-            if self.storage_browser == None:
-                self.storage_browser = vmmStorageBrowser(self.config,
-                                                         self.conn)
-                self.storage_browser.connect("storage-browse-finish",
-                                             self.set_storage_path)
-            self.storage_browser.local_args = { "dialog_name": dialog_name,
-                                                "start_folder": folder}
-            self.storage_browser.show(self.conn)
-            return None
-
-        return util.browse_local(self.topwin, dialog_name, folder)
+    def _browse_file(self, dialog_name, callback, folder=None):
+        if self.storage_browser == None:
+            self.storage_browser = vmmStorageBrowser(self.config, self.conn)
+            self.storage_browser.connect("storage-browse-finish",
+                                         callback)
+        self.storage_browser.local_args = { "dialog_name": dialog_name,
+                                            "start_folder": folder}
+        self.storage_browser.show(self.conn)
 
     def show_help(self, ignore):
         # No help available yet.

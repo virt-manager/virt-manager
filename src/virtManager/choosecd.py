@@ -23,8 +23,8 @@ import logging
 
 import virtinst
 
-from virtManager import util
 from virtManager.opticalhelper import vmmOpticalDriveHelper
+from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.error import vmmErrorDialog
 
 class vmmChooseCD(gobject.GObject):
@@ -39,10 +39,13 @@ class vmmChooseCD(gobject.GObject):
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
+        self.topwin = self.window.get_widget("vmm-choose-cd")
+        self.topwin.hide()
+
         self.config = config
-        self.window.get_widget("vmm-choose-cd").hide()
         self.dev_id_info = dev_id_info
         self.conn = connection
+        self.storage_browser = None
 
         self.window.signal_autoconnect({
             "on_media_toggled": self.media_toggled,
@@ -130,9 +133,7 @@ class vmmChooseCD(gobject.GObject):
         pass
 
     def browse_fv_iso_location(self, ignore1=None, ignore2=None):
-        filename = self._browse_file(_("Locate ISO Image"))
-        if filename != None:
-            self.window.get_widget("iso-path").set_text(filename)
+        self._browse_file(_("Locate ISO Image"))
 
     def populate_opt_media(self):
         try:
@@ -143,9 +144,17 @@ class vmmChooseCD(gobject.GObject):
             logging.error("Unable to create optical-helper widget: '%s'", e)
             self.window.get_widget("physical-media").set_sensitive(False)
 
-    def _browse_file(self, dialog_name, folder=None, _type=None):
-        return util.browse_local(self.window.get_widget("vmm-choose-cd"),
-                                 dialog_name, folder, _type)
+    def set_storage_path(self, src, path):
+        self.window.get_widget("iso-path").set_text(path)
 
+    def _browse_file(self, dialog_name):
+        if self.storage_browser == None:
+            self.storage_browser = vmmStorageBrowser(self.config, self.conn)
+                                                     #self.topwin)
+            self.storage_browser.connect("storage-browse-finish",
+                                         self.set_storage_path)
+        self.storage_browser.local_args = { "dialog_name": dialog_name }
+        self.storage_browser.show(self.conn)
+        return None
 
 gobject.type_register(vmmChooseCD)
