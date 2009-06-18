@@ -1,0 +1,13 @@
+HACKING
+-------
+
+virt-manager is tied very closely with both libvirt and virtinst. If building
+virt-manager from source, it is recommended that you have at least the latest
+libvirt release, and an upstream virtinst checkout.
+
+We use glade-3 for building virt-manager's UI. It is recommended you have
+a fairly recent version of glade-3: if a small UI change seems to rewrite the
+entire glade file, you likely have a too old (or too new :) glade version.
+
+Before submitting any patches, please run 'make check-pylint' to check for
+basic syntax errors/warnings. This command requires the pylint package.
