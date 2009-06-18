@@ -20,7 +20,6 @@
 
 import gobject
 import libvirt
-import libxml2
 import os
 import logging
 
@@ -985,21 +984,14 @@ class vmmDomain(gobject.GObject):
 
 
     def _parse_device_xml(self, parse_function):
-        doc = None
-        ctx = None
         ret = []
+        def parse_wrap_func(doc, ctx):
+            return parse_function(ctx)
+
         try:
-            try:
-                doc = libxml2.parseDoc(self.get_xml())
-                ctx = doc.xpathNewContext()
-                ret = parse_function(ctx)
-            except Exception, e:
-                raise RuntimeError(_("Error parsing domain xml: %s") % str(e))
-        finally:
-            if ctx:
-                ctx.xpathFreeContext()
-            if doc:
-                doc.freeDoc()
+            ret = util.xml_parse_wrapper(self.get_xml(), parse_wrap_func)
+        except Exception, e:
+            raise RuntimeError(_("Error parsing domain xml: %s") % str(e))
         return ret
 
     def _add_xml_device(self, xml, devxml):
@@ -1010,23 +1002,13 @@ class vmmDomain(gobject.GObject):
     def get_device_xml(self, dev_type, dev_id_info):
         self.update_xml()
         vmxml = self.get_xml()
-        doc = None
-        ctx = None
 
-        try:
-            doc = libxml2.parseDoc(vmxml)
-            ctx = doc.xpathNewContext()
+        def dev_xml_serialize(doc, ctx):
             nodes = self._get_device_xml_helper(ctx, dev_type, dev_id_info)
-
             if nodes:
                 return nodes[0].serialize()
 
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
-
+        return util.xml_parse_wrapper(vmxml, dev_xml_serialize)
 
     def _get_device_xml_helper(self, ctx, dev_type, dev_id_info):
         """Does all the work of looking up the device in the VM xml"""
@@ -1117,11 +1099,8 @@ class vmmDomain(gobject.GObject):
         """Remove device 'devxml' from devices section of 'xml, return
            result"""
         vmxml = self.get_xml_to_define()
-        doc = libxml2.parseDoc(vmxml)
-        ctx = None
 
-        try:
-            ctx = doc.xpathNewContext()
+        def unlink_dev_node(doc, ctx):
             ret = self._get_device_xml_helper(ctx, dev_type, dev_id_info)
 
             if ret and len(ret) > 0:
@@ -1138,11 +1117,8 @@ class vmmDomain(gobject.GObject):
                 raise ValueError(_("Didn't find the specified device to "
                                    "remove. Device was: %s %s" % \
                                    (dev_type, str(dev_id_info))))
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
+
+        return util.xml_parse_wrapper(vmxml, unlink_dev_node)
 
     def get_xml_to_define(self):
         # FIXME: This isn't sufficient, since we pull stuff like disk targets
@@ -1198,11 +1174,8 @@ class vmmDomain(gobject.GObject):
 
     def connect_cdrom_device(self, _type, source, dev_id_info):
         xml = self.get_device_xml("disk", dev_id_info)
-        doc = None
-        ctx = None
-        try:
-            doc = libxml2.parseDoc(xml)
-            ctx = doc.xpathNewContext()
+
+        def cdrom_xml_connect(doc, ctx):
             disk_fragment = ctx.xpathEval("/disk")
             driver_fragment = ctx.xpathEval("/disk/driver")
             disk_fragment[0].setProp("type", _type)
@@ -1215,22 +1188,16 @@ class vmmDomain(gobject.GObject):
                 elem.setProp("dev", source)
                 if driver_fragment:
                     driver_fragment[0].setProp("name", "phy")
-            result = disk_fragment[0].serialize()
-            logging.debug("connect_cdrom produced: %s" % result)
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
+            return disk_fragment[0].serialize()
+
+        result = util.xml_parse_wrapper(xml, cdrom_xml_connect)
+        logging.debug("connect_cdrom produced: %s" % result)
         self._change_cdrom(result, dev_id_info)
 
     def disconnect_cdrom_device(self, dev_id_info):
         xml = self.get_device_xml("disk", dev_id_info)
-        doc = None
-        ctx = None
-        try:
-            doc = libxml2.parseDoc(xml)
-            ctx = doc.xpathNewContext()
+
+        def cdrom_xml_disconnect(doc, ctx):
             disk_fragment = ctx.xpathEval("/disk")
             sourcenode = None
             for child in disk_fragment[0].children:
@@ -1241,13 +1208,10 @@ class vmmDomain(gobject.GObject):
                     continue
             sourcenode.unlinkNode()
             sourcenode.freeNode()
-            result = disk_fragment[0].serialize()
-            logging.debug("eject_cdrom produced: %s" % result)
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
+            return disk_fragment[0].serialize()
+
+        result = util.xml_parse_wrapper(xml, cdrom_xml_disconnect)
+        logging.debug("eject_cdrom produced: %s" % result)
         self._change_cdrom(result, dev_id_info)
 
     def set_vcpu_count(self, vcpus):
@@ -1277,34 +1241,20 @@ class vmmDomain(gobject.GObject):
 
     def get_boot_device(self):
         xml = self.get_xml()
-        doc = None
-        try:
-            doc = libxml2.parseDoc(xml)
-        except:
-            return []
-        ctx = doc.xpathNewContext()
-        dev = None
-        try:
+
+        def get_boot_xml(doc, ctx):
             ret = ctx.xpathEval("/domain/os/boot[1]")
             for node in ret:
                 dev = node.prop("dev")
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
-        return dev
+            return dev
+
+        return util.xml_parse_wrapper(xml, get_boot_xml)
 
     def set_boot_device(self, boot_type):
         logging.debug("Setting boot device to type: %s" % boot_type)
         xml = self.get_xml_to_define()
-        doc = None
-        try:
-            doc = libxml2.parseDoc(xml)
-        except:
-            return []
-        ctx = doc.xpathNewContext()
-        try:
+
+        def set_boot_xml(doc, ctx):
             ret = ctx.xpathEval("/domain/os/boot[1]")
             if len(ret) > 0:
                 ret[0].unlinkNode()
@@ -1314,13 +1264,11 @@ class vmmDomain(gobject.GObject):
             newxml = emptyxml[0:index] + \
                      "<boot dev=\"" + boot_type + "\"/>\n" + \
                      emptyxml[index:]
-            logging.debug("New boot device, redefining with: " + newxml)
-            self.get_connection().define_domain(newxml)
-        finally:
-            if ctx != None:
-                ctx.xpathFreeContext()
-            if doc != None:
-                doc.freeDoc()
+            return newxml
+
+        newxml = util.xml_parse_wrapper(xml, set_boot_xml)
+        logging.debug("New boot device, redefining with: " + newxml)
+        self.get_connection().define_domain(newxml)
 
         # Invalidate cached xml
         self.invalidate_xml()

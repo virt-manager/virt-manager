@@ -20,6 +20,7 @@
 
 import logging
 import gtk
+import libxml2
 
 import libvirt
 
@@ -67,6 +68,26 @@ def tooltip_wrapper(obj, txt, func="set_tooltip_text"):
         ver = gtk.gtk_version
         if ver[0] >= 2 and ver[1] >= 12:
             logging.exception("Couldn't set tooltip.")
+
+def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
+    """
+    Parse the passed xml string into an xpath context, which is passed
+    to parse_func, along with any extra arguments.
+    """
+
+    doc = None
+    ctx = None
+    ret = None
+    try:
+        doc = libxml2.parseDoc(xml)
+        ctx = doc.xpathNewContext()
+        ret = parse_func(doc, ctx, *args, **kwargs)
+    finally:
+        if ctx != None:
+            ctx.xpathFreeContext()
+        if doc != None:
+            doc.freeDoc()
+    return ret
 
 
 def browse_local(parent, dialog_name, start_folder=None, _type=None,
