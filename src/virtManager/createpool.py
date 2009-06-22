@@ -399,7 +399,6 @@ class vmmCreatePool(gobject.GObject):
             mode = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER
 
         return util.browse_local(self.topwin, dialog_name, dialog_type=mode,
-                                 start_folder=startfolder,
-                                 foldermode=foldermode)
+                                 start_folder=startfolder)
 
 gobject.type_register(vmmCreatePool)

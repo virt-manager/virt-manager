@@ -91,8 +91,17 @@ def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
 
 
 def browse_local(parent, dialog_name, start_folder=None, _type=None,
-                 dialog_type=gtk.FILE_CHOOSER_ACTION_OPEN,
-                 foldermode=False, confirm_func=None):
+                 dialog_type=gtk.FILE_CHOOSER_ACTION_OPEN, confirm_func=None):
+    """
+    Helper function for launching a filechooser
+
+    @param parent: Parent window for the filechooser
+    @param dialog_name: String to use in the title bar of the filechooser.
+    @param start_folder: Folder the filechooser is viewing at startup
+    @param _type: File extension to filter by (e.g. "iso", "png")
+    @param dialog_type: Maps to FileChooserDialog 'action'
+    @param confirm_func: Optional callback function if file is chosen.
+    """
 
     overwrite_confirm = False
     choose_button = gtk.STOCK_OPEN
