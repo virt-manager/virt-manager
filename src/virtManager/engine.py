@@ -406,8 +406,9 @@ class vmmEngine(gobject.GObject):
 
         path = util.browse_local(src.window.get_widget("vmm-details"),
                                  _("Save Virtual Machine"),
-                                 self.config.get_default_save_dir(con),
-                                 dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE)
+                                 self.config, self.get_connection(uri),
+                                 dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE,
+                                 browse_reason=self.config.CONFIG_DIR_SAVE)
 
         if not path:
             return

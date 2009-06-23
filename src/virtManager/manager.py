@@ -397,7 +397,8 @@ class vmmManager(gobject.GObject):
 
         path = util.browse_local(self.window.get_widget("vmm-manager"),
                                  _("Restore Virtual Machine"),
-                                 self.config.get_default_save_dir(conn))
+                                 self.config, conn,
+                                 browse_reason=self.config.CONFIG_DIR_RESTORE)
 
         if not path:
             return

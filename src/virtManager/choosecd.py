@@ -149,11 +149,13 @@ class vmmChooseCD(gobject.GObject):
 
     def _browse_file(self, dialog_name):
         if self.storage_browser == None:
-            self.storage_browser = vmmStorageBrowser(self.config, self.conn)
-                                                     #self.topwin)
+            self.storage_browser = vmmStorageBrowser(self.config, self.conn,
+                                                     True)
             self.storage_browser.connect("storage-browse-finish",
                                          self.set_storage_path)
-        self.storage_browser.local_args = { "dialog_name": dialog_name }
+        self.storage_browser.local_args = { "dialog_name": dialog_name,
+                                            "browse_reason":
+                                                 self.config.CONFIG_DIR_MEDIA }
         self.storage_browser.show(self.conn)
         return None
 

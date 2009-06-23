@@ -1410,8 +1410,10 @@ class vmmDetails(gobject.GObject):
         # user to choose what image format they'd like to save in....
         path = util.browse_local(self.window.get_widget("vmm-details"),
                                  _("Save Virtual Machine Screenshot"),
-                                 _type = ("*.png", "PNG files"),
-                                 dialog_type = gtk.FILE_CHOOSER_ACTION_SAVE)
+                                 self.config, self.vm.get_connection(),
+                                 _type = ("png", "PNG files"),
+                                 dialog_type = gtk.FILE_CHOOSER_ACTION_SAVE,
+                                 browse_reason=self.config.CONFIG_DIR_SCREENSHOT)
         if not path:
             return
 

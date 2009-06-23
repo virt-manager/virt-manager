@@ -45,6 +45,13 @@ DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
 
 class vmmConfig:
 
+    # GConf directory names for saving last used paths
+    CONFIG_DIR_IMAGE = "image"
+    CONFIG_DIR_MEDIA = "media"
+    CONFIG_DIR_SAVE = "save"
+    CONFIG_DIR_RESTORE = "restore"
+    CONFIG_DIR_SCREENSHOT = "screenshot"
+
     CONSOLE_SCALE_NEVER = 0
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2
@@ -261,6 +268,36 @@ class vmmConfig:
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/network_traffic", state)
 
 
+    def get_default_directory(self, conn, _type):
+        if not _type:
+            logging.error("Unknown type for get_default_directory")
+            return
+
+        try:
+            path = self.conf.get_value(self.conf_dir + "/paths/default-%s-path"
+                                                                       % _type)
+        except:
+            path = None
+
+        if not path:
+            if (_type == self.CONFIG_DIR_IMAGE or
+                _type == self.CONFIG_DIR_MEDIA):
+                path = self.get_default_image_dir(conn)
+            if (_type == self.CONFIG_DIR_SAVE or
+                _type == self.CONFIG_DIR_RESTORE):
+                path = self.get_default_save_dir(conn)
+
+        logging.debug("get_default_directory(%s): returning %s" % (_type, path))
+        return path
+
+    def set_default_directory(self, folder, _type):
+        if not _type:
+            logging.error("Unknown type for set_default_directory")
+            return
+
+        logging.debug("set_default_directory(%s): saving %s" % (_type, folder))
+        self.conf.set_value(self.conf_dir + "/paths/default-%s-path" % _type,
+                                                                      folder)
 
     def on_vmlist_domain_id_visible_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/domain_id", callback)

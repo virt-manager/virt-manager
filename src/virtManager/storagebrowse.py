@@ -38,7 +38,7 @@ class vmmStorageBrowser(gobject.GObject):
                                   gobject.TYPE_NONE, [str]),
     }
 
-    def __init__(self, config, conn):
+    def __init__(self, config, conn, is_media=False):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + \
                                     "/vmm-storage-browse.glade",
@@ -58,8 +58,14 @@ class vmmStorageBrowser(gobject.GObject):
         # Add Volume wizard
         self.addvol = None
 
+        if is_media:
+            reason = self.config.CONFIG_DIR_MEDIA
+        else:
+            reason = self.config.CONFIG_DIR_IMAGE
+
         # Arguments to pass to util.browse_local for local storage
-        self.local_args = {"dialog_name": _("Choose local storage")}
+        self.local_args = {"dialog_name": _("Choose local storage"),
+                           "browse_reason": reason, }
 
         self.window.signal_autoconnect({
             "on_vmm_storage_browse_delete_event" : self.close,
@@ -232,7 +238,8 @@ class vmmStorageBrowser(gobject.GObject):
                           "".join(traceback.format_exc()))
 
     def browse_local(self, src):
-        filename = util.browse_local(parent=self.topwin, **self.local_args)
+        filename = util.browse_local(parent=self.topwin, config=self.config,
+                                     conn=self.conn, **self.local_args)
         if filename:
             self._do_finish(path=filename)
 

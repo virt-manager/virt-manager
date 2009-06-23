@@ -701,14 +701,15 @@ class vmmAddHardware(gobject.GObject):
 
         conn = self.vm.get_connection()
         if self.storage_browser == None:
-            self.storage_browser = vmmStorageBrowser(self.config, conn)
+            self.storage_browser = vmmStorageBrowser(self.config, conn, False)
         if self._browse_cb_id:
             self.storage_browser.disconnect(self._browse_cb_id)
 
         self._browse_cb_id = self.storage_browser.connect("storage-browse-finish", set_storage_cb)
         self.storage_browser.local_args = { "dialog_name": dialog_name,
-                                            "start_folder": folder,
-                                            "confirm_func": confirm_func, }
+                                            "confirm_func": confirm_func,
+                                            "browse_reason":
+                                                  self.config.CONFIG_DIR_IMAGE }
         self.storage_browser.show(conn)
         return None
 
