@@ -158,7 +158,7 @@ def browse_local(parent, dialog_name, config, conn, start_folder=None,
         fcdialog.destroy()
         ret = None
 
-    if ret and browse_reason and not ret.startwith("/dev"):
+    if ret and browse_reason and not ret.startswith("/dev"):
         config.set_default_directory(os.path.dirname(ret), browse_reason)
 
     return ret
