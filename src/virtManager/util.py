@@ -182,6 +182,11 @@ def dup_conn(config, conn, libconn=None, return_conn_class=False):
         # between instances
         return vmm
 
+    if int(libvirt.getVersion()) >= 6000:
+        # Libvirt 0.6.0 implemented client side request threading: this
+        # removes the need to actually duplicate the connection.
+        return vmm
+
     logging.debug("Duplicating connection for async operation.")
     newconn = virtManager.connection.vmmConnection(config, uri, is_readonly)
     newconn.open()
