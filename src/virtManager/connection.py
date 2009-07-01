@@ -22,7 +22,6 @@ import gobject
 import libvirt
 import logging
 import os, sys
-import glob
 import traceback
 from time import time
 from socket import gethostbyaddr, gethostname
@@ -33,7 +32,6 @@ import virtinst
 
 from virtManager.domain import vmmDomain
 from virtManager.network import vmmNetwork
-from virtManager.netdev import vmmNetDevice
 from virtManager.storagepool import vmmStoragePool
 
 XEN_SAVE_MAGIC = "LinuxGuestRecord"
@@ -71,10 +69,6 @@ class vmmConnection(gobject.GObject):
                          [str, str]),
         "pool-stopped": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                          [str, str]),
-        "netdev-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         [str]),
-        "netdev-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                           [str]),
         "resources-sampled": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                               []),
         "state-changed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -88,9 +82,11 @@ class vmmConnection(gobject.GObject):
     STATE_ACTIVE = 2
     STATE_INACTIVE = 3
 
-    def __init__(self, config, uri, readOnly = None):
+    def __init__(self, config, uri, readOnly=None, netdev_helper=None):
         self.__gobject_init__()
+
         self.config = config
+        self.netdev_helper = netdev_helper
 
         self.connectThread = None
         self.connectThreadEvent = threading.Event()
@@ -108,10 +104,6 @@ class vmmConnection(gobject.GObject):
 
         # Connection Storage pools: UUID -> vmmStoragePool
         self.pools = {}
-        # Host network devices. name -> vmmNetDevice object
-        self.netdevs = {}
-        # Mapping of hal IDs to net names
-        self.hal_to_netdev = {}
         # Virtual networks UUUID -> vmmNetwork object
         self.nets = {}
         # Virtual machines. UUID -> vmmDomain object
@@ -122,132 +114,6 @@ class vmmConnection(gobject.GObject):
         self.record = []
         self.hostinfo = None
         self.autoconnect = self.config.get_conn_autoconnect(self.get_uri())
-
-        # Probe for network devices
-        try:
-            # Get a connection to the SYSTEM bus
-            self.bus = dbus.SystemBus()
-            # Get a handle to the HAL service
-            hal_object = self.bus.get_object('org.freedesktop.Hal',
-                                             '/org/freedesktop/Hal/Manager')
-            self.hal_iface = dbus.Interface(hal_object,
-                                            'org.freedesktop.Hal.Manager')
-
-            # Track device add/removes so we can detect newly inserted CD media
-            self.hal_iface.connect_to_signal("DeviceAdded",
-                                             self._net_phys_device_added)
-            self.hal_iface.connect_to_signal("DeviceRemoved",
-                                             self._net_phys_device_removed)
-
-            # find all bonding master devices and register them
-            # XXX bonding stuff is linux specific
-            bondMasters = self._net_get_bonding_masters()
-            logging.debug("Bonding masters are: %s" % bondMasters)
-            for bond in bondMasters:
-                sysfspath = "/sys/class/net/" + bond
-                mac = self._net_get_mac_address(bond, sysfspath)
-                if mac:
-                    self._net_device_added(bond, mac, sysfspath)
-                    # Add any associated VLANs
-                    self._net_tag_device_added(bond, sysfspath)
-
-            # Find info about all current present physical net devices
-            # This is OS portable...
-            for path in self.hal_iface.FindDeviceByCapability("net"):
-                self._net_phys_device_added(path)
-        except:
-            (_type, value, stacktrace) = sys.exc_info ()
-            logging.error("Unable to connect to HAL to list network devices: '%s'" + \
-                          str(_type) + " " + str(value) + "\n" + \
-                          traceback.format_exc (stacktrace))
-            self.bus = None
-            self.hal_iface = None
-
-    def _net_phys_device_added(self, path):
-        obj = self.bus.get_object("org.freedesktop.Hal", path)
-        objif = dbus.Interface(obj, "org.freedesktop.Hal.Device")
-
-        if objif.QueryCapability("net"):
-            logging.debug("Got physical net device %s" % path)
-            name = objif.GetPropertyString("net.interface")
-            # XXX ...but this is Linux specific again - patches welcomed
-            #sysfspath = objif.GetPropertyString("linux.sysfs_path")
-            # XXX hal gives back paths to like:
-            # /sys/devices/pci0000:00/0000:00:1e.0/0000:01:00.0/net/eth0
-            # which doesnt' work so well - we want this:
-            sysfspath = "/sys/class/net/" + name
-
-            # If running a device in bridged mode, there's a reasonable
-            # chance that the actual ethernet device has been renamed to
-            # something else. ethN -> pethN
-            psysfspath = sysfspath[0:len(sysfspath)-len(name)] + "p" + name
-            if os.path.exists(psysfspath):
-                logging.debug("Device %s named to p%s" % (name, name))
-                name = "p" + name
-                sysfspath = psysfspath
-
-            # Ignore devices that are slaves of a bond
-            if self._net_is_bonding_slave(name, sysfspath):
-                logging.debug("Skipping device %s in bonding slave" % name)
-                return
-
-            mac = objif.GetPropertyString("net.address")
-
-            # Add the main NIC
-            self._net_device_added(name, mac, sysfspath, path)
-
-            # Add any associated VLANs
-            self._net_tag_device_added(name, sysfspath)
-
-    def _net_tag_device_added(self, name, sysfspath):
-        logging.debug("Checking for VLANs on %s" % sysfspath)
-        for vlanpath in glob.glob(sysfspath + ".*"):
-            if os.path.exists(vlanpath):
-                logging.debug("Process VLAN %s" % vlanpath)
-                vlanmac = self._net_get_mac_address(name, vlanpath)
-                if vlanmac:
-                    (ignore,vlanname) = os.path.split(vlanpath)
-
-                    # If running a device in bridged mode, there's areasonable
-                    # chance that the actual ethernet device has beenrenamed to
-                    # something else. ethN -> pethN
-                    pvlanpath = vlanpath[0:len(vlanpath)-len(vlanname)] + "p" + vlanname
-                    if os.path.exists(pvlanpath):
-                        logging.debug("Device %s named to p%s" % (vlanname, vlanname))
-                        vlanname = "p" + vlanname
-                        vlanpath = pvlanpath
-                    self._net_device_added(vlanname, vlanmac, vlanpath)
-
-    def _net_device_added(self, name, mac, sysfspath, halpath=None):
-        # Race conditions mean we can occassionally see device twice
-        if self.netdevs.has_key(name):
-            return
-
-        bridge = self._net_get_bridge_owner(name, sysfspath)
-        shared = False
-        if bridge is not None:
-            shared = True
-
-        logging.debug("Adding net device %s %s %s (bridge: %s)" % (name, mac, sysfspath, str(bridge)))
-
-        dev = vmmNetDevice(self.config, self, name, mac, shared, bridge)
-        self._add_net_dev(name, halpath, dev)
-
-    def _add_net_dev(self, name, halpath, dev):
-        if halpath:
-            self.hal_to_netdev[halpath] = name
-        self.netdevs[name] = dev
-        self.emit("netdev-added", dev.get_name())
-
-    def _net_phys_device_removed(self, path):
-        if self.hal_to_netdev.has_key(path):
-            name = self.hal_to_netdev[path]
-            logging.debug("Removing physical net device %s from list." % name)
-
-            dev = self.netdevs[name]
-            self.emit("netdev-removed", dev.get_name())
-            del self.netdevs[name]
-            del self.hal_to_netdev[path]
 
     def _acquire_tgt(self):
         logging.debug("In acquire tgt.")
@@ -377,7 +243,9 @@ class vmmConnection(gobject.GObject):
         return self.nets[uuid]
 
     def get_net_device(self, path):
-        return self.netdevs[path]
+        if not self.netdev_helper:
+            raise ValueError("No netdev helper specified.")
+        return self.netdev_helper.get_net_device(path)
 
     def get_pool(self, uuid):
         return self.pools[uuid]
@@ -670,7 +538,11 @@ class vmmConnection(gobject.GObject):
         return self.nets.keys()
 
     def list_net_device_paths(self):
-        return self.netdevs.keys()
+        if not self.netdev_helper:
+            return []
+        if self.is_remote():
+            return []
+        return self.netdev_helper.list_net_device_paths()
 
     def list_pool_uuids(self):
         return self.pools.keys()
@@ -1208,52 +1080,6 @@ class vmmConnection(gobject.GObject):
             return _("Inactive")
         else:
             return _("Unknown")
-
-    def _net_get_bridge_owner(self, name, sysfspath):
-        # Now magic to determine if the device is part of a bridge
-        brportpath = os.path.join(sysfspath, "brport")
-        try:
-            if os.path.exists(brportpath):
-                brlinkpath = os.path.join(brportpath, "bridge")
-                dest = os.readlink(brlinkpath)
-                (ignore,bridge) = os.path.split(dest)
-                return bridge
-        except:
-            (_type, value, stacktrace) = sys.exc_info ()
-            logging.error("Unable to determine if device is shared:" +
-                            str(_type) + " " + str(value) + "\n" + \
-                            traceback.format_exc (stacktrace))
-
-        return None
-
-    def _net_get_mac_address(self, name, sysfspath):
-        mac = None
-        addrpath = sysfspath + "/address"
-        if os.path.exists(addrpath):
-            df = open(addrpath, 'r')
-            mac = df.readline().strip(" \n\t")
-            df.close()
-        return mac
-
-    def _net_get_bonding_masters(self):
-        masters = []
-        if os.path.exists("/sys/class/net/bonding_masters"):
-            f = open("/sys/class/net/bonding_masters")
-            while True:
-                rline = f.readline()
-                if not rline:
-                    break
-                if rline == "\x00":
-                    continue
-                rline = rline.strip("\n\t")
-                masters = rline[:].split(' ')
-        return masters
-
-    def _net_is_bonding_slave(self, name, sysfspath):
-        masterpath = sysfspath + "/master"
-        if os.path.exists(masterpath):
-            return True
-        return False
 
     # Per-Connection preferences
     def config_add_iso_path(self, path):

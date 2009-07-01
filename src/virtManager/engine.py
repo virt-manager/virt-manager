@@ -26,6 +26,7 @@ import gnome
 import traceback
 
 from virtManager.about import vmmAbout
+from virtManager.netdevhelper import vmmNetDevHelper
 from virtManager.connect import vmmConnect
 from virtManager.connection import vmmConnection
 from virtManager.createmeter import vmmCreateMeter
@@ -49,6 +50,8 @@ class vmmEngine(gobject.GObject):
 
     def __init__(self, config):
         self.__gobject_init__()
+
+        self.config = config
         self.windowConnect = None
         self.windowPreferences = None
         self.windowAbout = None
@@ -67,7 +70,8 @@ class vmmEngine(gobject.GObject):
         # are open. When it is decremented to 0, close the app
         self.windows = 0
 
-        self.config = config
+        self.netdevHelper = vmmNetDevHelper(self.config)
+
         self.config.on_stats_update_interval_changed(self.reschedule_timer)
 
         self.schedule_timer()
@@ -349,7 +353,8 @@ class vmmEngine(gobject.GObject):
         self.windowCreate.show(uri)
 
     def add_connection(self, uri, readOnly=None, autoconnect=False):
-        conn = vmmConnection(self.get_config(), uri, readOnly)
+        conn = vmmConnection(self.get_config(), uri, readOnly,
+                             self.netdevHelper)
         self.connections[uri] = {
             "connection": conn,
             "windowHost": None,
