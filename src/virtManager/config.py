@@ -116,7 +116,7 @@ class vmmConfig:
 
     # Per-VM/Connection/Connection Host Option dealings
     def _perconn_helper(self, uri, pref_func, func_type, value=None):
-        suffix = "connection_prefs/%s" % uri.replace("/", "-")
+        suffix = "connection_prefs/%s" % gconf.escape_key(uri, len(uri))
         return self._perobj_helper(suffix, pref_func, func_type, value)
     def _perhost_helper(self, uri, pref_func, func_type, value=None):
         host = virtinst.util.get_uri_hostname(uri)
@@ -125,8 +125,8 @@ class vmmConfig:
         suffix = "connection_prefs/hosts/%s" % host
         return self._perobj_helper(suffix, pref_func, func_type, value)
     def _pervm_helper(self, uri, uuid, pref_func, func_type, value=None):
-        suffix = "connection_prefs/%s/vms/%s" % (uri.replace("/", "-"),
-                                              uuid)
+        suffix = ("connection_prefs/%s/vms/%s" %
+                  (gconf.escape_key(uri, len(uri)), uuid))
         return self._perobj_helper(suffix, pref_func, func_type, value)
 
     def _perobj_helper(self, suffix, pref_func, func_type, value=None):
@@ -206,7 +206,7 @@ class vmmConfig:
         """
         Remove any old VM preference entries for the passed URI
         """
-        uri = uri.replace("/", "-")
+        uri = gconf.escape_key(uri, len(uri))
         key = self.conf_dir + "/connection_prefs/%s/vms" % uri
         kill_vms = []
         gconf_vms = map(lambda inp: inp.split("/")[-1],
