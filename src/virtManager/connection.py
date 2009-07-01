@@ -563,22 +563,7 @@ class vmmConnection(gobject.GObject):
                                          self._do_creds,
                                          None], flags)
         except:
-            exc_info = sys.exc_info()
-
-            # If the previous attempt was read/write try to fall back
-            # on read-only connection, otherwise report the error.
-            if not self.readOnly:
-                try:
-                    self.vmm = libvirt.openReadOnly(self.uri)
-                    self.readOnly = True
-                    logging.exception("Read/write connection failed for %s,"
-                            " falling back on read-only." % self.uri)
-                    return
-                except:
-                    logging.exception("Readonly connection failed.")
-
-            return exc_info
-
+            return sys.exc_info()
 
     def _open_thread(self):
         logging.debug("Background thread is running")
