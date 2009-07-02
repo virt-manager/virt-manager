@@ -225,10 +225,8 @@ class vmmCreatePool(gobject.GObject):
                                Storage.StoragePool.TYPE_NETFS ]:
             # Building for these simply entails creating a directory
             return (True, False)
-        elif self._pool.type in [Storage.StoragePool.TYPE_LOGICAL]:
-            # Build not yet implemented in virtinst
-            return (False, False)
-        elif self._pool.type in [Storage.StoragePool.TYPE_DISK]:
+        elif self._pool.type in [Storage.StoragePool.TYPE_LOGICAL,
+                                 Storage.StoragePool.TYPE_DISK]:
             # This is a dangerous operation, anything (False, True)
             # should be assumed to be one.
             return (False, True)
@@ -344,12 +342,14 @@ class vmmCreatePool(gobject.GObject):
 
             try:
                 self._pool.target_path = target
-                if host is not None:
+                if host:
                     self._pool.host = host
-                if source is not None:
+                if source:
                     self._pool.source_path = source
-                if fmt is not None:
+                if fmt:
                     self._pool.format = fmt
+
+                self._pool.get_xml_config()
             except ValueError, e:
                 return self.err.val_err(_("Pool Parameter Error"), str(e))
 
@@ -367,10 +367,14 @@ class vmmCreatePool(gobject.GObject):
 
     def update_build_doc(self, ignore1, ignore2):
         doc = ""
+        docstr = ""
         if self._pool.type == Storage.StoragePool.TYPE_DISK:
             docstr = _("Format the source device.")
-            doc = self._build_doc_str("build", docstr)
+        elif self._pool.type == Storage.StoragePool.TYPE_LOGICAL:
+            docstr = _("Create a logical volume group from the source device.")
 
+        if docstr:
+            doc = self._build_doc_str("build", docstr)
         self.window.get_widget("pool-info2").set_markup(doc)
 
     def update_doc_changed(self, ignore1, param, infobox):
@@ -395,7 +399,9 @@ class vmmCreatePool(gobject.GObject):
         if foldermode:
             mode = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER
 
-        return util.browse_local(self.topwin, dialog_name, dialog_type=mode,
+        return util.browse_local(self.topwin, dialog_name,
+                                 self.config, self.conn,
+                                 dialog_type=mode,
                                  start_folder=startfolder)
 
 gobject.type_register(vmmCreatePool)
