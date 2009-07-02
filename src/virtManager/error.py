@@ -80,7 +80,7 @@ class vmmErrorDialog (gtk.MessageDialog):
         else:
             self.run()
 
-    def val_err(self, text1, text2=None, title=None):
+    def _show_ok(self, dialog_type, text1, text2, title):
         def response_destroy(src, ignore):
             src.destroy()
 
@@ -89,12 +89,9 @@ class vmmErrorDialog (gtk.MessageDialog):
 
         self.val_err_box = gtk.MessageDialog(self.parent,
                                              gtk.DIALOG_DESTROY_WITH_PARENT,
-                                             gtk.MESSAGE_ERROR,
+                                             dialog_type,
                                              gtk.BUTTONS_OK, text1)
 
-        if title is None:
-            title = _("Input Error")
-        logging.debug("Validation Error: %s" % text1)
         self.val_err_box.set_title(title)
         if text2 is not None:
             self.val_err_box.format_secondary_text(text2)
@@ -103,11 +100,21 @@ class vmmErrorDialog (gtk.MessageDialog):
         self.val_err_box.connect("response", response_destroy)
         return False
 
+    def val_err(self, text1, text2=None, title=None):
+        logging.debug("Validation Error: %s" % text1)
+        if title is None:
+            title = _("Input Error")
+        return self._show_ok(gtk.MESSAGE_ERROR, text1, text2, title)
+
+    def show_info(self, text1, text2=None, title=None):
+        if title is None:
+            title = ""
+        return self._show_ok(gtk.MESSAGE_INFO, text1, text2, title)
 
     def _show_warning(self, buttons, text1, text2):
-        message_box = gtk.MessageDialog(self.parent, \
-                                        gtk.DIALOG_DESTROY_WITH_PARENT, \
-                                        gtk.MESSAGE_WARNING, \
+        message_box = gtk.MessageDialog(self.parent,
+                                        gtk.DIALOG_DESTROY_WITH_PARENT,
+                                        gtk.MESSAGE_WARNING,
                                         buttons, text1)
         if text2 != None:
             message_box.format_secondary_text(text2)
