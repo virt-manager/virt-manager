@@ -31,11 +31,11 @@ import logging
 import virtinst
 from virtinst import VirtualNetworkInterface
 
+import virtManager.opticalhelper
 from virtManager import util
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
-from virtManager.opticalhelper import vmmOpticalDriveHelper
 from virtManager.storagebrowse import vmmStorageBrowser
 
 OS_GENERIC = "generic"
@@ -220,17 +220,10 @@ class vmmCreate(gobject.GObject):
         # Physical CD-ROM model
         cd_list = self.window.get_widget("install-local-cdrom-combo")
         cd_radio = self.window.get_widget("install-local-cdrom")
-        # Fields are raw device path, volume label, flag indicating
-        # whether volume is present or not, and HAL path
-        cd_model = gtk.ListStore(str, str, bool, str)
-        cd_list.set_model(cd_model)
-        text = gtk.CellRendererText()
-        cd_list.pack_start(text, True)
-        cd_list.add_attribute(text, 'text', 1)
-        cd_list.add_attribute(text, 'sensitive', 2)
+
         # FIXME: We should disable all this if on a remote connection
         try:
-            vmmOpticalDriveHelper(cd_list)
+            virtManager.opticalhelper.init_optical_combo(cd_list)
         except Exception, e:
             logging.error("Unable to create optical-helper widget: '%s'", e)
             cd_radio.set_sensitive(False)

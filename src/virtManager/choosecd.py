@@ -23,7 +23,7 @@ import logging
 
 import virtinst
 
-from virtManager.opticalhelper import vmmOpticalDriveHelper
+import virtManager.opticalhelper
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.error import vmmErrorDialog
 
@@ -58,17 +58,7 @@ class vmmChooseCD(gobject.GObject):
 
         self.window.get_widget("iso-image").set_active(True)
 
-        # set up the list for the cd-path widget
-        cd_list = self.window.get_widget("cd-path")
-        # Fields are raw device path, volume label, flag indicating
-        # whether volume is present or not, and HAL path
-        cd_model = gtk.ListStore(str, str, bool, str)
-        cd_list.set_model(cd_model)
-        text = gtk.CellRendererText()
-        cd_list.pack_start(text, True)
-        cd_list.add_attribute(text, 'text', 1)
-        cd_list.add_attribute(text, 'sensitive', 2)
-
+        self.initialize_opt_media()
         self.reset_state()
 
     def close(self,ignore1=None,ignore2=None):
@@ -92,35 +82,37 @@ class vmmChooseCD(gobject.GObject):
         else:
             self.window.get_widget("physical-media").set_sensitive(True)
             self.window.get_widget("iso-file-chooser").set_sensitive(True)
-            self.populate_opt_media()
-            self.window.get_widget("cd-path").set_active(0)
 
     def ok(self,ignore1=None, ignore2=None):
+        path = None
+
         if self.window.get_widget("iso-image").get_active():
             path = self.window.get_widget("iso-path").get_text()
         else:
             cd = self.window.get_widget("cd-path")
+            idx = cd.get_active()
             model = cd.get_model()
-            path = model.get_value(cd.get_active_iter(), 0)
+            if idx != -1:
+                path = model[idx][virtManager.opticalhelper.OPTICAL_PATH]
 
-        if path == "" or path == None: 
-            return self.err.val_err(_("Invalid Media Path"), \
+        if path == "" or path == None:
+            return self.err.val_err(_("Invalid Media Path"),
                                     _("A media path must be specified."))
 
         try:
+            dev=virtinst.VirtualDisk.DEVICE_CDROM
             disk = virtinst.VirtualDisk(path=path,
-                                        device=virtinst.VirtualDisk.DEVICE_CDROM, 
+                                        device=dev,
                                         readOnly=True,
                                         conn=self.conn.vmm)
         except Exception, e:
             return self.err.val_err(_("Invalid Media Path"), str(e))
+
         self.emit("cdrom-chosen", disk.type, disk.path, self.dev_id_info)
         self.cancel()
 
     def media_toggled(self, ignore1=None, ignore2=None):
         if self.window.get_widget("physical-media").get_active():
-            self.populate_opt_media()
-            self.window.get_widget("cd-path").set_active(0)
             self.window.get_widget("cd-path").set_sensitive(True)
             self.window.get_widget("iso-path").set_sensitive(False)
             self.window.get_widget("iso-file-chooser").set_sensitive(False)
@@ -135,10 +127,10 @@ class vmmChooseCD(gobject.GObject):
     def browse_fv_iso_location(self, ignore1=None, ignore2=None):
         self._browse_file(_("Locate ISO Image"))
 
-    def populate_opt_media(self):
+    def initialize_opt_media(self):
         try:
-            optical_helper = vmmOpticalDriveHelper(self.window.get_widget("cd-path"))
-            optical_helper.populate_opt_media()
+            widget = self.window.get_widget("cd-path")
+            virtManager.opticalhelper.init_optical_combo(widget)
             self.window.get_widget("physical-media").set_sensitive(True)
         except Exception, e:
             logging.error("Unable to create optical-helper widget: '%s'", e)
