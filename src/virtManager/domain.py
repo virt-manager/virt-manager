@@ -22,6 +22,7 @@ import gobject
 import libvirt
 import os
 import logging
+import time
 
 from virtManager import util
 import virtinst.util as vutil
@@ -97,6 +98,8 @@ class vmmDomain(gobject.GObject):
         self._valid_xml = True
 
         if origxml != self._xml:
+            # 'tick' to make sure we have the latest time
+            self.tick(time.time())
             self.emit("config-changed")
 
     def invalidate_xml(self):
