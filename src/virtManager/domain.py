@@ -23,6 +23,7 @@ import libvirt
 import os
 import logging
 import time
+import difflib
 
 from virtManager import util
 import virtinst.util as vutil
@@ -115,6 +116,16 @@ class vmmDomain(gobject.GObject):
             self.refresh_inactive_xml()
         return self._orig_inactive_xml
 
+    def get_xml_to_define(self):
+        # FIXME: This isn't sufficient, since we pull stuff like disk targets
+        #        from the active XML. This all needs proper fixing in the long
+        #        term.
+        if self.is_active():
+            return self.get_inactive_xml()
+        else:
+            self.update_xml()
+            return self.get_xml()
+
     def refresh_inactive_xml(self):
         flags = (libvirt.VIR_DOMAIN_XML_INACTIVE |
                  libvirt.VIR_DOMAIN_XML_SECURE)
@@ -125,6 +136,36 @@ class vmmDomain(gobject.GObject):
                 flags = 0
 
         self._orig_inactive_xml = self.vm.XMLDesc(flags)
+
+    def redefine(self, xml_func, *args):
+        """
+        Helper function for altering a redefining VM xml
+
+        @param xml_func: Function to alter the running XML. Takes the
+                         original XML as its first argument.
+        @param args: Extra arguments to pass to xml_func
+        """
+        origxml = self.get_xml_to_define()
+        # Sanitize origxml to be similar to what we will get back
+        origxml = util.xml_parse_wrapper(origxml, lambda d, c: d.serialize())
+
+        newxml = xml_func(origxml, *args)
+
+        if origxml == newxml:
+            logging.debug("Redefinition requested, but new xml was not"
+                          " different")
+            return
+
+        diff = "".join(difflib.unified_diff(origxml.splitlines(1),
+                                            newxml.splitlines(1),
+                                            fromfile="Original XML",
+                                            tofile="New XML"))
+        logging.debug("Redefining '%s' with XML diff:\n%s",
+                      self.get_name(), diff)
+        self.get_connection().define_domain(newxml)
+
+        # Invalidate cached XML
+        self.invalidate_xml()
 
     def release_handle(self):
         del(self.vm)
@@ -998,7 +1039,9 @@ class vmmDomain(gobject.GObject):
         return ret
 
     def _add_xml_device(self, xml, devxml):
-        """Add device 'devxml' to devices section of 'xml', return result"""
+        """
+        Add device 'devxml' to devices section of 'xml', return result
+        """
         index = xml.find("</devices>")
         return xml[0:index] + devxml + xml[index:]
 
@@ -1098,10 +1141,10 @@ class vmmDomain(gobject.GObject):
 
         return ret
 
-    def _remove_xml_device(self, dev_type, dev_id_info):
-        """Remove device 'devxml' from devices section of 'xml, return
-           result"""
-        vmxml = self.get_xml_to_define()
+    def _remove_xml_device(self, vmxml, dev_type, dev_id_info):
+        """
+        Remove device 'devxml' from devices section of 'xml, return result
+        """
 
         def unlink_dev_node(doc, ctx):
             ret = self._get_device_xml_helper(ctx, dev_type, dev_id_info)
@@ -1123,16 +1166,6 @@ class vmmDomain(gobject.GObject):
 
         return util.xml_parse_wrapper(vmxml, unlink_dev_node)
 
-    def get_xml_to_define(self):
-        # FIXME: This isn't sufficient, since we pull stuff like disk targets
-        #        from the active XML. This all needs proper fixing in the long
-        #        term.
-        if self.is_active():
-            return self.get_inactive_xml()
-        else:
-            self.update_xml()
-            return self.get_xml()
-
     def attach_device(self, xml):
         """Hotplug device to running guest"""
         if self.is_active():
@@ -1143,35 +1176,21 @@ class vmmDomain(gobject.GObject):
         if self.is_active():
             self.vm.detachDevice(xml)
 
-    def add_device(self, xml):
+    def add_device(self, devxml):
         """Redefine guest with appended device"""
-        vmxml = self.get_xml_to_define()
-
-        newxml = self._add_xml_device(vmxml, xml)
-
-        logging.debug("Redefine with " + newxml)
-        self.get_connection().define_domain(newxml)
-
-        # Invalidate cached XML
-        self.invalidate_xml()
+        self.redefine(self._add_xml_device, devxml)
 
     def remove_device(self, dev_type, dev_id_info):
-        newxml = self._remove_xml_device(dev_type, dev_id_info)
-
-        logging.debug("Redefine with " + newxml)
-        self.get_connection().define_domain(newxml)
-
-        # Invalidate cached XML
-        self.invalidate_xml()
+        self.redefine(self._remove_xml_device, dev_type, dev_id_info)
 
     def _change_cdrom(self, newdev, dev_id_info):
         # If vm is shutoff, remove device, and redefine with media
         if not self.is_active():
-            tmpxml = self._remove_xml_device("disk", dev_id_info)
-            finalxml = self._add_xml_device(tmpxml, newdev)
+            def change_cdrom_helper(origxml, newdev, dev_id_info):
+                tmpxml = self._remove_xml_device(origxml, "disk", dev_id_info)
+                return self._add_xml_device(tmpxml, newdev)
 
-            logging.debug("change cdrom: redefining xml with:\n%s" % finalxml)
-            self.get_connection().define_domain(finalxml)
+            self.redefine(change_cdrom_helper, newdev, dev_id_info)
         else:
             self.attach_device(newdev)
 
@@ -1255,7 +1274,6 @@ class vmmDomain(gobject.GObject):
 
     def set_boot_device(self, boot_type):
         logging.debug("Setting boot device to type: %s" % boot_type)
-        xml = self.get_xml_to_define()
 
         def set_boot_xml(doc, ctx):
             ret = ctx.xpathEval("/domain/os/boot[1]")
@@ -1269,12 +1287,7 @@ class vmmDomain(gobject.GObject):
                      emptyxml[index:]
             return newxml
 
-        newxml = util.xml_parse_wrapper(xml, set_boot_xml)
-        logging.debug("New boot device, redefining with: " + newxml)
-        self.get_connection().define_domain(newxml)
-
-        # Invalidate cached xml
-        self.invalidate_xml()
+        self.redefine(util.xml_parse_wrapper, set_boot_xml)
 
     def toggle_sample_cpu_stats(self, ignore1=None, ignore2=None,
                                 ignore3=None, ignore4=None):
