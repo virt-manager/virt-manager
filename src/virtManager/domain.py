@@ -1240,19 +1240,55 @@ class vmmDomain(gobject.GObject):
         vcpus = int(vcpus)
         self.vm.setVcpus(vcpus)
 
-    def set_memory(self, memory):
-        memory = int(memory)
-        # capture updated information due to failing to get proper maxmem setting
-        # if both current & max allocation are set simultaneously
-        maxmem = self.vm.info()
-        if (memory > maxmem[1]):
-            logging.warning("Requested memory " + str(memory) + " over maximum " + str(self.maximum_memory()))
-            memory = self.maximum_memory()
-        self.vm.setMemory(memory)
+    def hotplug_memory(self, memory):
+        if memory != self.get_memory():
+            self.vm.setMemory(memory)
 
-    def set_max_memory(self, memory):
-        memory = int(memory)
-        self.vm.setMaxMemory(memory)
+    def hotplug_maxmem(self, maxmem):
+        if maxmem != self.maximum_memory():
+            self.vm.setMaxMemory(maxmem)
+
+    def hotplug_both_mem(self, memory, maxmem):
+        logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'" %
+                     (memory, maxmem, self.get_name()))
+
+        if self.is_active():
+            actual_cur = self.get_memory()
+            if memory:
+                if maxmem < actual_cur:
+                    # Set current first to avoid error
+                    self.hotplug_memory(memory)
+                    self.hotplug_maxmem(maxmem)
+                else:
+                    self.hotplug_maxmem(maxmem)
+                    self.hotplug_memory(memory)
+            else:
+                self.hotplug_maxmem(maxmem)
+
+    def define_both_mem(self, memory, maxmem):
+        # Make sure we correctly define the XML with new values, since
+        # setMem and setMaxMem don't (or, aren't supposed to) affect
+        # the persistent config
+        self.invalidate_xml()
+
+        def set_mem_node(doc, ctx, memval, xpath):
+            node = ctx.xpathEval(xpath)
+            node = (node and node[0] or None)
+
+            if node:
+                node.setContent(str(memval))
+            return doc.serialize()
+
+        def change_mem_xml(xml, memory, maxmem):
+            if memory:
+                xml = util.xml_parse_wrapper(xml, set_mem_node, memory,
+                                             "/domain/currentMemory[1]")
+            if maxmem:
+                xml = util.xml_parse_wrapper(xml, set_mem_node, maxmem,
+                                             "/domain/memory[1]")
+            return xml
+
+        self.redefine(change_mem_xml, memory, maxmem)
 
     def get_autostart(self):
         return self.vm.autostart()

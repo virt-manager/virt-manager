@@ -1545,44 +1545,38 @@ class vmmDetails(gobject.GObject):
 
     def config_memory_apply(self, src):
         self.refresh_config_memory()
-        exc = None
+        hotplug_err = False
+
         curmem = None
         maxmem = self.config_get_maxmem()
         if self.window.get_widget("config-memory").get_property("sensitive"):
             curmem = self.config_get_memory()
 
-        logging.info("Setting max-memory for " + self.vm.get_name() +
-                     " to " + str(maxmem))
+        if curmem:
+            curmem = int(curmem) * 1024
+        if maxmem:
+            maxmem = int(maxmem) * 1024
 
-        actual_cur = self.vm.get_memory()
-        if curmem is not None:
-            logging.info("Setting memory for " + self.vm.get_name() +
-                         " to " + str(curmem))
-            if (maxmem * 1024) < actual_cur:
-                # Set current first to avoid error
-                try:
-                    self.vm.set_memory(curmem * 1024)
-                    self.vm.set_max_memory(maxmem * 1024)
-                except Exception, e:
-                    exc = e
-            else:
-                try:
-                    self.vm.set_max_memory(maxmem * 1024)
-                    self.vm.set_memory(curmem * 1024)
-                except Exception, e:
-                    exc = e
+        try:
+            if self.vm.is_active():
+                self.vm.hotplug_both_mem(curmem, maxmem)
+        except Exception, e:
+            logging.debug("Memory hotplug failed: %s" % str(e))
+            hotplug_err = True
 
-        else:
-            try:
-                self.vm.set_max_memory(maxmem * 1024)
-            except Exception, e:
-                exc = e
-
-        if exc:
+        # Change persisten config
+        try:
+            self.vm.define_both_mem(curmem, maxmem)
+        except Exception, e:
             self.err.show_err(_("Error changing memory values: %s" % str(e)),
                               "".join(traceback.format_exc()))
-        else:
-            self.window.get_widget("config-memory-apply").set_sensitive(False)
+            return
+
+        if hotplug_err:
+            self.err.show_info(_("These changes will take effect after the "
+                                 "next guest reboot. "))
+
+        self.window.get_widget("config-memory-apply").set_sensitive(False)
 
     def config_boot_options_changed(self, src):
         self.window.get_widget("config-boot-options-apply").set_sensitive(True)
