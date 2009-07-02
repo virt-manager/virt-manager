@@ -90,9 +90,6 @@ class vmmCreatePool(gobject.GObject):
 
         self.set_initial_state()
 
-    def test(self, ignore1, ignore2=None):
-        print "test"
-
     def show(self):
         self.topwin.show()
         self.reset_state()

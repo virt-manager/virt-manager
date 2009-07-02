@@ -989,7 +989,6 @@ class vmmDetails(gobject.GObject):
         selection = vmlist.get_selection()
         active = selection.get_selected()
         if active[1] == None:
-            logging.debug("Nothing selected.")
             return None
         else:
             return active[0].get_value(active[1], field)

@@ -490,7 +490,6 @@ class vmmManager(gobject.GObject):
             self.emit("action-refresh-console", uri, vmuuid)
 
     def _append_vm(self, model, vm, conn):
-        logging.debug("About to append vm: %s" % vm.get_name())
         parent = self.rows[conn.get_uri()].iter
         row = []
         row.insert(ROW_HANDLE, vm)
