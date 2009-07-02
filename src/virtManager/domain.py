@@ -1312,16 +1312,13 @@ class vmmDomain(gobject.GObject):
         logging.debug("Setting boot device to type: %s" % boot_type)
 
         def set_boot_xml(doc, ctx):
-            ret = ctx.xpathEval("/domain/os/boot[1]")
-            if len(ret) > 0:
-                ret[0].unlinkNode()
-                ret[0].freeNode()
-            emptyxml=doc.serialize()
-            index = emptyxml.find("</os>")
-            newxml = emptyxml[0:index] + \
-                     "<boot dev=\"" + boot_type + "\"/>\n" + \
-                     emptyxml[index:]
-            return newxml
+            node = ctx.xpathEval("/domain/os/boot[1]")
+            node = (node and node[0] or None)
+
+            if node and node.prop("dev"):
+                node.setProp("dev", boot_type)
+
+            return doc.serialize()
 
         self.redefine(util.xml_parse_wrapper, set_boot_xml)
 
