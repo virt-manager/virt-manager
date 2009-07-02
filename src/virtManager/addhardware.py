@@ -275,9 +275,7 @@ class vmmAddHardware(gobject.GObject):
         if self.vm.is_hvm():
             model.append(["Sound", gtk.STOCK_MEDIA_PLAY, PAGE_SOUND])
 
-        if (self.vm.get_connection().get_driver().lower() != "xen" or
-            not self.vm.get_connection().is_nodedev_capable()):
-            # Libvirt doesn't support this for xen yet
+        if self.vm.get_connection().is_nodedev_capable():
             model.append(["Physical Host Device", None, PAGE_HOSTDEV])
 
     def forward(self, ignore=None):
