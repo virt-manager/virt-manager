@@ -90,8 +90,8 @@ class vmmCreate(gobject.GObject):
         self.detectedDistro = None
         self.detectThreadLock = threading.Lock()
 
-        # Marker that we have failed an install
-        self.install_failed = False
+        # 'Guest' class from the previous failed install
+        self.failed_guest = None
 
         self.window.signal_autoconnect({
             "on_vmm_newcreate_delete_event" : self.close,
@@ -266,7 +266,7 @@ class vmmCreate(gobject.GObject):
 
     def reset_state(self, urihint=None):
 
-        self.install_failed = False
+        self.failed_guest = None
         self.window.get_widget("create-pages").set_current_page(PAGE_NAME)
         self.page_changed(None, None, PAGE_NAME)
 
@@ -826,9 +826,9 @@ class vmmCreate(gobject.GObject):
         path = ""
 
         # Don't generate a new path if the install failed
-        if self.install_failed:
-            if self.guest and len(self.guest.disks) > 0:
-                return self.guest.disks[0].path
+        if self.failed_guest:
+            if len(self.failed_guest.disks) > 0:
+                return self.failed_guest.disks[0].path
 
         if not self.usepool:
 
@@ -1417,7 +1417,6 @@ class vmmCreate(gobject.GObject):
                               "".join(traceback.format_exc()))
             return False
 
-
         logging.debug("Creating a VM %s" % guest.name +
                       "\n  Type: %s,%s" % (guest.type,
                                            guest.installer.os_type) +
@@ -1433,7 +1432,7 @@ class vmmCreate(gobject.GObject):
                       "\n  Audio?: %s" % str(self.get_config_sound()))
 
         # Start the install
-        self.install_failed = False
+        self.failed_guest = None
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
@@ -1454,7 +1453,7 @@ class vmmCreate(gobject.GObject):
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
         if error:
-            self.install_failed = True
+            self.failed_guest = self.guest
             return
 
         # Ensure new VM is loaded
