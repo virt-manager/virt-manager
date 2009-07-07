@@ -1423,6 +1423,6 @@ class vmmDomain(gobject.GObject):
 
         newxml = self.get_xml()
         self.vm.migrate(conn, flags, None, uri, 0)
-        conn.defineXML(newxml)
+        destcon.define_domain(newxml)
 
 gobject.type_register(vmmDomain)
