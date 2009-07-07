@@ -1322,6 +1322,49 @@ class vmmDomain(gobject.GObject):
 
         self.redefine(util.xml_parse_wrapper, set_boot_xml)
 
+    def get_seclabel(self):
+        xml = self.get_xml()
+        model = vutil.get_xml_path(xml, "/domain/seclabel/@model")
+        t     = vutil.get_xml_path(self.get_xml(), "/domain/seclabel/@type")
+        label = vutil.get_xml_path(self.get_xml(), "/domain/seclabel/label")
+
+        return [model, t or "dynamic", label or ""]
+
+    def define_seclabel(self, model, t, label):
+        logging.debug("Changing seclabel with model=%s t=%s label=%s" %
+                      (model, t, label))
+
+        def change_label(doc, ctx):
+            secnode = ctx.xpathEval("/domain/seclabel")
+            secnode = (secnode and secnode[0] or None)
+
+            if not model:
+                if secnode:
+                    secnode.unlinkNode()
+
+            elif not secnode:
+                # Need to create new node
+                domain = ctx.xpathEval("/domain")[0]
+                seclabel = domain.newChild(None, "seclabel", None)
+                seclabel.setProp("model", model)
+                seclabel.setProp("type", t)
+                seclabel.newChild(None, "label", label)
+
+            else:
+                # Change existing label info
+                secnode.setProp("model", model)
+                secnode.setProp("type", t)
+                l = ctx.xpathEval("/domain/seclabel/label")
+                if len(l) > 0:
+                    l[0].setContent(label)
+                else:
+                    secnode.newChild(None, "label", label)
+
+            return doc.serialize()
+
+        self.redefine(util.xml_parse_wrapper,
+                      change_label)
+
     def toggle_sample_cpu_stats(self, ignore1=None, ignore2=None,
                                 ignore3=None, ignore4=None):
         if self.config.get_stats_enable_cpu_poll():

@@ -182,6 +182,12 @@ class vmmDetails(gobject.GObject):
         self.addhw = None
         self.choose_cd = None
 
+        # Security info tooltips
+        util.tooltip_wrapper(self.window.get_widget("security-static-info"),
+            _("Static SELinux security type tells libvirt to always start the guest process with the specified label. The administrator is responsible for making sure the images are labeled corectly on disk."))
+        util.tooltip_wrapper(self.window.get_widget("security-dynamic-info"),
+            _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
+
         self.cpu_usage_graph = sparkline.Sparkline()
         self.cpu_usage_graph.set_property("reversed", True)
         self.window.get_widget("graph-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
@@ -276,6 +282,7 @@ class vmmDetails(gobject.GObject):
 
             "on_details_pages_switch_page": self.switch_page,
 
+            "on_config_security_apply_clicked": self.config_security_apply,
             "on_config_vcpus_apply_clicked": self.config_vcpus_apply,
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_memory_changed": self.config_memory_changed,
@@ -320,6 +327,9 @@ class vmmDetails(gobject.GObject):
 
             "on_console_auth_password_activate": self.auth_login,
             "on_console_auth_login_clicked": self.auth_login,
+            "on_security_label_changed": self.security_label_changed,
+            "on_security_type_changed": self.security_type_changed,
+            "on_security_model_changed": self.security_model_changed,
             })
 
         self.vm.connect("status-changed", self.update_widget_states)
@@ -650,7 +660,7 @@ class vmmDetails(gobject.GObject):
 
     def hw_selected(self, src=None):
         pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
-        if not pagetype:
+        if pagetype is None:
             self.window.get_widget("hw-panel").set_sensitive(True)
             self.window.get_widget("hw-list").get_selection().select_path(0)
             self.window.get_widget("hw-panel").set_current_page(0)
@@ -901,6 +911,32 @@ class vmmDetails(gobject.GObject):
         emu = self.vm.get_emulator() or _("None")
         self.window.get_widget("overview-arch").set_text(arch)
         self.window.get_widget("overview-emulator").set_text(emu)
+
+        vmmodel, ignore, vmlabel = self.vm.get_seclabel()
+        semodel_combo = self.window.get_widget("security-model")
+        semodel_model = semodel_combo.get_model()
+        caps = self.vm.get_connection().get_capabilities()
+
+        semodel_model.clear()
+        semodel_model.append(["None"])
+        if caps.host.secmodel and caps.host.secmodel.model:
+            semodel_model.append([caps.host.secmodel.model])
+
+        active = 0
+        for i in range(0, len(semodel_model)):
+            if vmmodel and vmmodel == semodel_model[i][0]:
+                active = i
+                break
+        semodel_combo.set_active(active)
+
+        if self.vm.get_seclabel()[1] == "static":
+            self.window.get_widget("security-static").set_active(True)
+        else:
+            self.window.get_widget("security-dynamic").set_active(True)
+
+        self.window.get_widget("security-label").set_text(vmlabel)
+        semodel_combo.emit("changed")
+        self.window.get_widget("config-security-apply").set_sensitive(False)
 
     def refresh_stats_page(self):
         def _rx_tx_text(rx, tx, unit):
@@ -1498,6 +1534,50 @@ class vmmDetails(gobject.GObject):
         page_idx = self.dynamic_tabs.index(name) + PAGE_DYNAMIC_OFFSET
         self.window.get_widget("details-pages").remove_page(page_idx)
         self.dynamic_tabs.remove(name)
+
+    # -----------------------
+    # Overview -> Security
+    # -----------------------
+    def security_model_changed(self, combo):
+        model = combo.get_model()
+        idx = combo.get_active()
+        if idx < 0:
+            return
+
+        self.window.get_widget("config-security-apply").set_sensitive(True)
+        val = model[idx][0]
+        show_type = (val == "selinux")
+        self.window.get_widget("security-type-box").set_sensitive(show_type)
+
+    def security_label_changed(self, label):
+        self.window.get_widget("config-security-apply").set_sensitive(True)
+
+    def security_type_changed(self, button, sensitive = True):
+        self.window.get_widget("config-security-apply").set_sensitive(True)
+        self.window.get_widget("security-label").set_sensitive(not button.get_active())
+
+    def config_security_apply(self, src):
+        combo = self.window.get_widget("security-model")
+        model = combo.get_model()
+        semodel = model[combo.get_active()][0]
+
+        if not semodel or str(semodel).lower() == "none":
+            semodel = None
+
+        if self.window.get_widget("security-dynamic").get_active():
+            setype = "dynamic"
+        else:
+            setype = "static"
+
+        selabel = self.window.get_widget("security-label").get_text()
+        try:
+            self.vm.define_seclabel(semodel, setype, selabel)
+        except Exception, e:
+            self.err.show_err(_("Error Setting Security data: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return
+
+        self.window.get_widget("config-security-apply").set_sensitive(False)
 
     # -----------------------
     # Hardware Section Pieces
