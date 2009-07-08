@@ -88,15 +88,6 @@ class vmmAddHardware(gobject.GObject):
             "on_create_help_clicked": self.show_help,
             })
 
-        hw_list = self.window.get_widget("hardware-type")
-        model = gtk.ListStore(str, str, int)
-        hw_list.set_model(model)
-        icon = gtk.CellRendererPixbuf()
-        hw_list.pack_start(icon, False)
-        hw_list.add_attribute(icon, 'stock-id', 1)
-        text = gtk.CellRendererText()
-        hw_list.pack_start(text, True)
-        hw_list.add_attribute(text, 'text', 0)
         self.set_initial_state()
 
     def show(self):
@@ -108,14 +99,23 @@ class vmmAddHardware(gobject.GObject):
         notebook = self.window.get_widget("create-pages")
         notebook.set_show_tabs(False)
 
-        #XXX I don't think I should have to go through and set a bunch of background colors
-        # in code, but apparently I do...
         black = gtk.gdk.color_parse("#000")
         for num in range(PAGE_SUMMARY+1):
             name = "page" + str(num) + "-title"
             self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL,black)
 
-        # set up the lists for the networks
+        # Main HW list
+        hw_list = self.window.get_widget("hardware-type")
+        model = gtk.ListStore(str, str, int)
+        hw_list.set_model(model)
+        icon = gtk.CellRendererPixbuf()
+        hw_list.pack_start(icon, False)
+        hw_list.add_attribute(icon, 'stock-id', 1)
+        text = gtk.CellRendererText()
+        hw_list.pack_start(text, True)
+        hw_list.add_attribute(text, 'text', 0)
+
+        # Virtual network list
         network_list = self.window.get_widget("net-network")
         network_model = gtk.ListStore(str, str)
         network_list.set_model(network_model)
@@ -123,6 +123,7 @@ class vmmAddHardware(gobject.GObject):
         network_list.pack_start(text, True)
         network_list.add_attribute(text, 'text', 1)
 
+        # Physical network list
         device_list = self.window.get_widget("net-device")
         device_model = gtk.ListStore(str, str, bool)
         device_list.set_model(device_model)
@@ -131,6 +132,7 @@ class vmmAddHardware(gobject.GObject):
         device_list.add_attribute(text, 'text', 1)
         device_list.add_attribute(text, 'sensitive', 2)
 
+        # Network model list
         netmodel_list  = self.window.get_widget("net-model")
         netmodel_model = gtk.ListStore(str, str)
         netmodel_list.set_model(netmodel_model)
@@ -138,6 +140,7 @@ class vmmAddHardware(gobject.GObject):
         netmodel_list.pack_start(text, True)
         netmodel_list.add_attribute(text, 'text', 1)
 
+        # Disk device type / bus
         target_list = self.window.get_widget("target-device")
         target_model = gtk.ListStore(str, str, str, str)
         target_list.set_model(target_model)
@@ -148,6 +151,7 @@ class vmmAddHardware(gobject.GObject):
         target_list.pack_start(text, True)
         target_list.add_attribute(text, 'text', 3)
 
+        # Input device type
         input_list = self.window.get_widget("input-type")
         input_model = gtk.ListStore(str, str, str, bool)
         input_list.set_model(input_model)
@@ -156,6 +160,7 @@ class vmmAddHardware(gobject.GObject):
         input_list.add_attribute(text, 'text', 0)
         input_list.add_attribute(text, 'sensitive', 3)
 
+        # Graphics type
         graphics_list = self.window.get_widget("graphics-type")
         graphics_model = gtk.ListStore(str,str)
         graphics_list.set_model(graphics_model)
@@ -163,6 +168,7 @@ class vmmAddHardware(gobject.GObject):
         graphics_list.pack_start(text, True)
         graphics_list.add_attribute(text, 'text', 0)
 
+        # Sound model list
         sound_list = self.window.get_widget("sound-model")
         sound_lmodel = gtk.ListStore(str)
         sound_list.set_model(sound_lmodel)
@@ -188,9 +194,12 @@ class vmmAddHardware(gobject.GObject):
         host_dev.add_attribute(text, 'text', 0)
         host_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
+
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
+        is_remote = self.vm.get_connection().is_remote()
+
         # Hide the "finish" button until the appropriate time
         self.window.get_widget("create-finish").hide()
         self.window.get_widget("create-forward").show()
@@ -198,10 +207,8 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("storage-file-size").set_sensitive(False)
         self.window.get_widget("create-help").hide()
 
+        # Storage init
         self.change_storage_type()
-        self.change_network_type()
-        self.change_macaddr_use()
-        self.change_port_auto()
         if os.getuid() == 0:
             self.window.get_widget("storage-partition").set_active(True)
         else:
@@ -210,12 +217,19 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("storage-file-address").set_text("")
         self.window.get_widget("storage-file-size").set_value(4000)
         self.window.get_widget("non-sparse").set_active(True)
-        self.window.get_widget("hardware-type").set_active(0)
+        target_list = self.window.get_widget("target-device")
+        self.populate_target_device_model(target_list.get_model())
+        if len(target_list.get_model()) > 0:
+            target_list.set_active(0)
 
+        # Network init
+        self.change_network_type()
+        self.change_macaddr_use()
         self.window.get_widget("net-type-network").set_active(True)
         self.window.get_widget("net-type-device").set_active(False)
         self.window.get_widget("mac-address").set_active(False)
         self.window.get_widget("create-mac-address").set_text("")
+        self.window.get_widget("net-model").set_active(0)
 
         net_box = self.window.get_widget("net-network")
         self.populate_network_model(net_box.get_model())
@@ -228,15 +242,26 @@ class vmmAddHardware(gobject.GObject):
         else:
             dev_box.set_active(-1)
 
-        self.window.get_widget("net-model").set_active(0)
+        netmodel = self.window.get_widget("net-model")
+        self.populate_network_model_model(netmodel.get_model())
+        if len(netmodel.get_model()) > 0:
+            netmodel.set_active(0)
 
-        target_list = self.window.get_widget("target-device")
-        target_list.set_active(-1)
+        if is_remote:
+            self.window.get_widget("net-type-network").set_active(True)
+            self.window.get_widget("net-type-device").set_active(False)
+            self.window.get_widget("net-type-device").set_sensitive(False)
+            self.window.get_widget("net-device").set_active(-1)
+        else:
+            self.window.get_widget("net-type-device").set_sensitive(True)
 
+        # Input device init
         input_box = self.window.get_widget("input-type")
         self.populate_input_model(input_box.get_model())
         input_box.set_active(0)
 
+        # Graphics init
+        self.change_port_auto()
         graphics_box = self.window.get_widget("graphics-type")
         self.populate_graphics_model(graphics_box.get_model())
         graphics_box.set_active(0)
@@ -246,13 +271,17 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("graphics-keymap").set_text("")
         self.window.get_widget("graphics-keymap-chk").set_active(True)
 
+        # Sound init
         sound_box = self.window.get_widget("sound-model")
         self.populate_sound_model_model(sound_box.get_model())
         sound_box.set_active(0)
 
+        # Hostdev init
         host_devtype = self.window.get_widget("host-device-type")
         self.populate_host_device_type_model(host_devtype.get_model())
         host_devtype.set_active(0)
+
+        # Set available HW options
 
         # FIXME: All of these needs to have better transparency.
         # All options should be listed, but disabled with a tooltip if
@@ -278,13 +307,16 @@ class vmmAddHardware(gobject.GObject):
         if self.vm.get_connection().is_nodedev_capable():
             model.append(["Physical Host Device", None, PAGE_HOSTDEV])
 
+        self.window.get_widget("hardware-type").set_active(0)
+
     def forward(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
         try:
             if(self.validate(notebook.get_current_page()) != True):
                 return
         except Exception, e:
-            self.err.show_err(_("Uncaught error validating hardware input: %s") % str(e),
+            self.err.show_err(_("Uncaught error validating hardware "
+                                "input: %s") % str(e),
                               "".join(traceback.format_exc()))
             return
 
@@ -435,110 +467,93 @@ class vmmAddHardware(gobject.GObject):
         return devbox.get_model()[devbox.get_active()]
 
     def page_changed(self, notebook, page, page_number):
-        remote = self.vm.get_connection().is_remote()
-        if page_number == PAGE_DISK:
-            self.change_storage_type()
-            target = self.window.get_widget("target-device")
-            if target.get_active() == -1:
-                self.populate_target_device_model(target.get_model())
-                target.set_active(0)
+        if page_number != PAGE_SUMMARY:
+            return
 
+        hwpage = self.get_config_hardware_type()
+        self.window.get_widget("summary-disk").hide()
+        self.window.get_widget("summary-network").hide()
+        self.window.get_widget("summary-input").hide()
+        self.window.get_widget("summary-graphics").hide()
+        self.window.get_widget("summary-sound").hide()
+        self.window.get_widget("summary-hostdev").hide()
 
-        elif page_number == PAGE_NETWORK:
-            netmodel = self.window.get_widget("net-model")
-            if netmodel.get_active() == -1:
-                self.populate_network_model_model(netmodel.get_model())
-                netmodel.set_active(0)
-
-            if remote:
-                self.window.get_widget("net-type-network").set_active(True)
-                self.window.get_widget("net-type-device").set_active(False)
-                self.window.get_widget("net-type-device").set_sensitive(False)
-                self.window.get_widget("net-device").set_active(-1)
+        if hwpage == PAGE_DISK:
+            self.window.get_widget("summary-disk").show()
+            self.window.get_widget("summary-disk-image").set_text(self.get_config_disk_image())
+            disksize = self.get_config_disk_size()
+            if disksize != None:
+                self.window.get_widget("summary-disk-size").set_text(str(int(disksize)) + " MB")
             else:
-                self.window.get_widget("net-type-device").set_sensitive(True)
-            self.change_network_type()
-        elif page_number == PAGE_SUMMARY:
-            hwpage = self.get_config_hardware_type()
-            self.window.get_widget("summary-disk").hide()
-            self.window.get_widget("summary-network").hide()
-            self.window.get_widget("summary-input").hide()
-            self.window.get_widget("summary-graphics").hide()
-            self.window.get_widget("summary-sound").hide()
-            self.window.get_widget("summary-hostdev").hide()
+                self.window.get_widget("summary-disk-size").set_text("-")
 
-            if hwpage == PAGE_DISK:
-                self.window.get_widget("summary-disk").show()
-                self.window.get_widget("summary-disk-image").set_text(self.get_config_disk_image())
-                disksize = self.get_config_disk_size()
-                if disksize != None:
-                    self.window.get_widget("summary-disk-size").set_text(str(int(disksize)) + " MB")
-                else:
-                    self.window.get_widget("summary-disk-size").set_text("-")
-            elif hwpage == PAGE_NETWORK:
-                self.window.get_widget("summary-network").show()
-                net = self.get_config_network()
-                if net[0] == "bridge":
-                    self.window.get_widget("summary-net-type").set_text(_("Shared physical device"))
-                    self.window.get_widget("summary-net-target").set_text(net[1])
-                elif net[0] == "network":
-                    self.window.get_widget("summary-net-type").set_text(_("Virtual network"))
-                    self.window.get_widget("summary-net-target").set_text(net[1])
-                elif net[0] == "user":
-                    self.window.get_widget("summary-net-type").set_text(_("Usermode networking"))
-                    self.window.get_widget("summary-net-target").set_text("-")
-                else:
-                    raise ValueError, "Unknown networking type " + net[0]
-                macaddr = self.get_config_macaddr()
-                if macaddr != None:
-                    self.window.get_widget("summary-mac-address").set_text(macaddr)
-                else:
-                    self.window.get_widget("summary-mac-address").set_text("-")
-                model = self.get_config_net_model()[1]
-                self.window.get_widget("summary-net-model").set_text(model or
-                                                                     "-")
-            elif hwpage == PAGE_INPUT:
-                self.window.get_widget("summary-input").show()
-                inp = self.get_config_input()
-                self.window.get_widget("summary-input-type").set_text(inp[0])
-                if inp[1] == "tablet":
-                    self.window.get_widget("summary-input-mode").set_text(_("Absolute movement"))
-                else:
-                    self.window.get_widget("summary-input-mode").set_text(_("Relative movement"))
-            elif hwpage == PAGE_GRAPHICS:
-                self.window.get_widget("summary-graphics").show()
-                graphics = self.get_config_graphics()
-                if graphics == "vnc":
-                    self.window.get_widget("summary-graphics-type").set_text(_("VNC server"))
-                else:
-                    self.window.get_widget("summary-graphics-type").set_text(_("Local SDL window"))
-                if graphics == "vnc":
-                    self.window.get_widget("summary-graphics-address").set_text(self.get_config_vnc_address())
-                    if self.get_config_vnc_port() == -1:
-                        self.window.get_widget("summary-graphics-port").set_text(_("Automatically allocated"))
-                    else:
-                        self.window.get_widget("summary-graphics-port").set_text(str(self.get_config_vnc_port()))
-                    if self.get_config_vnc_password() is not None and self.get_config_vnc_password() != "":
-                        self.window.get_widget("summary-graphics-password").set_text(_("Yes"))
-                    else:
-                        self.window.get_widget("summary-graphics-password").set_text(_("No"))
-                    if self.get_config_keymap() is not None:
-                        self.window.get_widget("summary-graphics-keymap").set_text(str(self.get_config_keymap()))
-                    else:
-                        self.window.get_widget("summary-graphics-keymap").set_text(_("Same as host"))
+        elif hwpage == PAGE_NETWORK:
+            self.window.get_widget("summary-network").show()
+            net = self.get_config_network()
+            if net[0] == "bridge":
+                self.window.get_widget("summary-net-type").set_text(_("Shared physical device"))
+                self.window.get_widget("summary-net-target").set_text(net[1])
+            elif net[0] == "network":
+                self.window.get_widget("summary-net-type").set_text(_("Virtual network"))
+                self.window.get_widget("summary-net-target").set_text(net[1])
+            elif net[0] == "user":
+                self.window.get_widget("summary-net-type").set_text(_("Usermode networking"))
+                self.window.get_widget("summary-net-target").set_text("-")
+            else:
+                raise ValueError, "Unknown networking type " + net[0]
+            macaddr = self.get_config_macaddr()
+            if macaddr != None:
+                self.window.get_widget("summary-mac-address").set_text(macaddr)
+            else:
+                self.window.get_widget("summary-mac-address").set_text("-")
+            model = self.get_config_net_model()[1]
+            self.window.get_widget("summary-net-model").set_text(model or "-")
 
+        elif hwpage == PAGE_INPUT:
+            self.window.get_widget("summary-input").show()
+            inp = self.get_config_input()
+            self.window.get_widget("summary-input-type").set_text(inp[0])
+            if inp[1] == "tablet":
+                self.window.get_widget("summary-input-mode").set_text(_("Absolute movement"))
+            else:
+                self.window.get_widget("summary-input-mode").set_text(_("Relative movement"))
+
+        elif hwpage == PAGE_GRAPHICS:
+            self.window.get_widget("summary-graphics").show()
+            graphics = self.get_config_graphics()
+            if graphics == "vnc":
+                self.window.get_widget("summary-graphics-type").set_text(_("VNC server"))
+            else:
+                self.window.get_widget("summary-graphics-type").set_text(_("Local SDL window"))
+            if graphics == "vnc":
+                self.window.get_widget("summary-graphics-address").set_text(self.get_config_vnc_address())
+                if self.get_config_vnc_port() == -1:
+                    self.window.get_widget("summary-graphics-port").set_text(_("Automatically allocated"))
                 else:
-                    self.window.get_widget("summary-graphics-address").set_text(_("N/A"))
-                    self.window.get_widget("summary-graphics-port").set_text(_("N/A"))
-                    self.window.get_widget("summary-graphics-password").set_text(_("N/A"))
-                    self.window.get_widget("summary-graphics-keymap").set_text(_("N/A"))
-            elif hwpage == PAGE_SOUND:
-                self.window.get_widget("summary-sound").show()
-                self.window.get_widget("summary-sound-model").set_text(self._dev.model)
-            elif hwpage == PAGE_HOSTDEV:
-                self.window.get_widget("summary-hostdev").show()
-                self.window.get_widget("summary-host-device-type").set_text(self.get_config_host_device_type_info()[0])
-                self.window.get_widget("summary-host-device").set_text(self.get_config_host_device_info()[0])
+                    self.window.get_widget("summary-graphics-port").set_text(str(self.get_config_vnc_port()))
+                if self.get_config_vnc_password() is not None and self.get_config_vnc_password() != "":
+                    self.window.get_widget("summary-graphics-password").set_text(_("Yes"))
+                else:
+                    self.window.get_widget("summary-graphics-password").set_text(_("No"))
+                if self.get_config_keymap() is not None:
+                    self.window.get_widget("summary-graphics-keymap").set_text(str(self.get_config_keymap()))
+                else:
+                    self.window.get_widget("summary-graphics-keymap").set_text(_("Same as host"))
+
+            else:
+                self.window.get_widget("summary-graphics-address").set_text(_("N/A"))
+                self.window.get_widget("summary-graphics-port").set_text(_("N/A"))
+                self.window.get_widget("summary-graphics-password").set_text(_("N/A"))
+                self.window.get_widget("summary-graphics-keymap").set_text(_("N/A"))
+
+        elif hwpage == PAGE_SOUND:
+            self.window.get_widget("summary-sound").show()
+            self.window.get_widget("summary-sound-model").set_text(self._dev.model)
+
+        elif hwpage == PAGE_HOSTDEV:
+            self.window.get_widget("summary-hostdev").show()
+            self.window.get_widget("summary-host-device-type").set_text(self.get_config_host_device_type_info()[0])
+            self.window.get_widget("summary-host-device").set_text(self.get_config_host_device_info()[0])
 
     def close(self, ignore1=None,ignore2=None):
         self.topwin.hide()
