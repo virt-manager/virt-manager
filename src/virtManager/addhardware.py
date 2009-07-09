@@ -427,7 +427,7 @@ class vmmAddHardware(gobject.GObject):
 
     def get_config_network(self):
         if self.vm.get_connection().is_qemu_session():
-            return ["user"]
+            return ["user", None]
 
         if self.window.get_widget("net-type-network").get_active():
             net = self.window.get_widget("net-network")
@@ -471,89 +471,114 @@ class vmmAddHardware(gobject.GObject):
             return
 
         hwpage = self.get_config_hardware_type()
-        self.window.get_widget("summary-disk").hide()
-        self.window.get_widget("summary-network").hide()
-        self.window.get_widget("summary-input").hide()
-        self.window.get_widget("summary-graphics").hide()
-        self.window.get_widget("summary-sound").hide()
-        self.window.get_widget("summary-hostdev").hide()
+
+        summary_table = self.window.get_widget("summary-table")
+        for c in summary_table.get_children():
+            summary_table.remove(c)
+
+        def set_table(title, info_list):
+            self.window.get_widget("summary-title").set_markup("<b>%s</b>" %
+                                                               title)
+            row = 0
+            for label, value in info_list:
+                label = gtk.Label(label)
+                label.set_alignment(1, .5)
+                value = gtk.Label(value)
+                value.set_alignment(0, .5)
+
+                summary_table.attach(label, 0, 1, row, row+1, gtk.FILL, 0)
+                summary_table.attach(value, 1, 2, row, row+1, gtk.FILL, 0)
+
+                row += 1
+                if row == 10:
+                    return
+
+            summary_table.show_all()
 
         if hwpage == PAGE_DISK:
-            self.window.get_widget("summary-disk").show()
-            self.window.get_widget("summary-disk-image").set_text(self.get_config_disk_image())
-            disksize = self.get_config_disk_size()
-            if disksize != None:
-                self.window.get_widget("summary-disk-size").set_text(str(int(disksize)) + " MB")
-            else:
-                self.window.get_widget("summary-disk-size").set_text("-")
+            size = self.get_config_disk_size()
+            bus, target = self.get_config_disk_target()
+
+            info_list = [
+                (_("Disk image:"),  self.get_config_disk_image()),
+                (_("Disk size:"),   size != None and "%s MB" % size or "-"),
+                (_("Device type:"), target),
+                (_("Bus type:"),    bus),
+            ]
+            title = _("Storage")
 
         elif hwpage == PAGE_NETWORK:
-            self.window.get_widget("summary-network").show()
-            net = self.get_config_network()
-            if net[0] == "bridge":
-                self.window.get_widget("summary-net-type").set_text(_("Shared physical device"))
-                self.window.get_widget("summary-net-target").set_text(net[1])
-            elif net[0] == "network":
-                self.window.get_widget("summary-net-type").set_text(_("Virtual network"))
-                self.window.get_widget("summary-net-target").set_text(net[1])
-            elif net[0] == "user":
-                self.window.get_widget("summary-net-type").set_text(_("Usermode networking"))
-                self.window.get_widget("summary-net-target").set_text("-")
-            else:
-                raise ValueError, "Unknown networking type " + net[0]
+            net_type, net_target = self.get_config_network()
             macaddr = self.get_config_macaddr()
-            if macaddr != None:
-                self.window.get_widget("summary-mac-address").set_text(macaddr)
-            else:
-                self.window.get_widget("summary-mac-address").set_text("-")
             model = self.get_config_net_model()[1]
-            self.window.get_widget("summary-net-model").set_text(model or "-")
+            net_label = virtinst.VirtualNetworkInterface.get_network_type_desc(net_type)
+            net_target = net_target or "-"
+
+            info_list = [
+                (_("Network type:"),     net_label),
+                (_("Target:"),          net_target),
+                (_("MAC address:"),     macaddr or "-"),
+                (_("Model:"),           model or "-"),
+            ]
+            title = _("Network")
 
         elif hwpage == PAGE_INPUT:
-            self.window.get_widget("summary-input").show()
-            inp = self.get_config_input()
-            self.window.get_widget("summary-input-type").set_text(inp[0])
-            if inp[1] == "tablet":
-                self.window.get_widget("summary-input-mode").set_text(_("Absolute movement"))
+            ignore, typ, model = self.get_config_input()
+            if typ == virtinst.VirtualInputDevice.INPUT_TYPE_TABLET:
+                mode_label = _("Absolute movement")
             else:
-                self.window.get_widget("summary-input-mode").set_text(_("Relative movement"))
+                mode_label = _("Relative movement")
+
+            info_list = [
+                (_("Type:"), typ),
+                (_("Mode:"), mode_label),
+            ]
+            title = _("Pointer")
 
         elif hwpage == PAGE_GRAPHICS:
-            self.window.get_widget("summary-graphics").show()
             graphics = self.get_config_graphics()
-            if graphics == "vnc":
-                self.window.get_widget("summary-graphics-type").set_text(_("VNC server"))
-            else:
-                self.window.get_widget("summary-graphics-type").set_text(_("Local SDL window"))
-            if graphics == "vnc":
-                self.window.get_widget("summary-graphics-address").set_text(self.get_config_vnc_address())
-                if self.get_config_vnc_port() == -1:
-                    self.window.get_widget("summary-graphics-port").set_text(_("Automatically allocated"))
-                else:
-                    self.window.get_widget("summary-graphics-port").set_text(str(self.get_config_vnc_port()))
-                if self.get_config_vnc_password() is not None and self.get_config_vnc_password() != "":
-                    self.window.get_widget("summary-graphics-password").set_text(_("Yes"))
-                else:
-                    self.window.get_widget("summary-graphics-password").set_text(_("No"))
-                if self.get_config_keymap() is not None:
-                    self.window.get_widget("summary-graphics-keymap").set_text(str(self.get_config_keymap()))
-                else:
-                    self.window.get_widget("summary-graphics-keymap").set_text(_("Same as host"))
+            is_vnc = (graphics == virtinst.VirtualGraphics.TYPE_VNC)
 
-            else:
-                self.window.get_widget("summary-graphics-address").set_text(_("N/A"))
-                self.window.get_widget("summary-graphics-port").set_text(_("N/A"))
-                self.window.get_widget("summary-graphics-password").set_text(_("N/A"))
-                self.window.get_widget("summary-graphics-keymap").set_text(_("N/A"))
+            type_label = is_vnc and _("VNC server") or _("Local SDL window")
+            addr = is_vnc and self.get_config_vnc_address() or _("N/A")
+            port_label = _("N/A")
+            passwd_label = _("N/A")
+            keymap_label = _("N/A")
+
+            if is_vnc:
+                port = self.get_config_vnc_port()
+                passwd = self.get_config_vnc_password()
+                keymap = self.get_config_keymap()
+
+                port_label = ((port == -1) and ("Automatically allocated")
+                                           or port)
+                passwd_label = passwd and _("Yes") or _("No")
+                keymap_label = keymap and keymap or _("Same as host")
+
+            info_list = [
+                (_("Type:"),    type_label),
+                (_("Address:"), addr),
+                (_("Port:"),    port_label),
+                (_("Password:"), passwd_label),
+                (_("Keymap:"),  keymap_label),
+            ]
+            title = _("Graphics")
 
         elif hwpage == PAGE_SOUND:
-            self.window.get_widget("summary-sound").show()
-            self.window.get_widget("summary-sound-model").set_text(self._dev.model)
+            info_list = [
+                (_("Model:"),   self._dev.model),
+            ]
+            title = _("Sound")
 
         elif hwpage == PAGE_HOSTDEV:
-            self.window.get_widget("summary-hostdev").show()
-            self.window.get_widget("summary-host-device-type").set_text(self.get_config_host_device_type_info()[0])
-            self.window.get_widget("summary-host-device").set_text(self.get_config_host_device_info()[0])
+            info_list = [
+                (_("Type:"),    self.get_config_host_device_type_info()[0]),
+                (_("Device:"),  self.get_config_host_device_info()[0]),
+            ]
+            title = _("Physical Host Device")
+
+        set_table(title, info_list)
+
 
     def close(self, ignore1=None,ignore2=None):
         self.topwin.hide()
