@@ -1214,7 +1214,8 @@ class vmmDetails(gobject.GObject):
             self.close_tunnel()
         self.vnc_connected = False
         logging.debug("VNC disconnected")
-        if self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
+        if self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF,
+                                 libvirt.VIR_DOMAIN_CRASHED ]:
             self.view_vm_status()
             return
 
@@ -1247,6 +1248,11 @@ class vmmDetails(gobject.GObject):
     def retry_login(self):
         if self.vnc_connected:
             return
+
+        if self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF,
+                                 libvirt.VIR_DOMAIN_CRASHED ]:
+            return
+
         gtk.gdk.threads_enter()
         try:
             logging.debug("Got timed retry")
