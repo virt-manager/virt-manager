@@ -341,7 +341,7 @@ class vmmDetails(gobject.GObject):
         self.pixbuf_processor = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
         self.pixbuf_memory = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
         self.prepare_hw_list()
-        self.hw_selected()
+        self.hw_selected(page=0)
         self.refresh_vm_info()
 
 
@@ -657,12 +657,14 @@ class vmmDetails(gobject.GObject):
             self.vncViewer.send_keys(keys)
 
 
-    def hw_selected(self, src=None):
-        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+    def hw_selected(self, src=None, page=None, selected=True):
+        pagetype = page
         if pagetype is None:
+            pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+
+        if pagetype is None:
+            pagetype = HW_LIST_TYPE_GENERAL
             self.window.get_widget("hw-list").get_selection().select_path(0)
-            self.window.get_widget("hw-panel").set_current_page(0)
-            pagetype = 0
 
         self.window.get_widget("hw-panel").set_sensitive(True)
         self.window.get_widget("hw-panel").show_all()
@@ -672,14 +674,11 @@ class vmmDetails(gobject.GObject):
         elif pagetype == HW_LIST_TYPE_STATS:
             self.refresh_stats_page()
         elif pagetype == HW_LIST_TYPE_CPU:
-            self.window.get_widget("config-apply").set_sensitive(False)
             self.refresh_config_cpu()
         elif pagetype == HW_LIST_TYPE_MEMORY:
-            self.window.get_widget("config-apply").set_sensitive(False)
             self.refresh_config_memory()
         elif pagetype == HW_LIST_TYPE_BOOT:
             self.refresh_boot_page()
-            self.window.get_widget("config-apply").set_sensitive(False)
         elif pagetype == HW_LIST_TYPE_DISK:
             self.refresh_disk_page()
         elif pagetype == HW_LIST_TYPE_NIC:
@@ -698,8 +697,12 @@ class vmmDetails(gobject.GObject):
             pagetype = -1
 
 
-        self.window.get_widget("config-apply").set_property("visible", pagetype in apply_pages)
-        self.window.get_widget("config-remove").set_property("visible", pagetype in remove_pages)
+        app = pagetype in apply_pages
+        rem = pagetype in remove_pages
+        if selected:
+            self.window.get_widget("config-apply").set_sensitive(False)
+        self.window.get_widget("config-apply").set_property("visible", app)
+        self.window.get_widget("config-remove").set_property("visible", rem)
 
         self.window.get_widget("hw-panel").set_current_page(pagetype)
 
@@ -876,33 +879,15 @@ class vmmDetails(gobject.GObject):
         # changes (not everytime it is refreshed). This saves us from blindly
         # parsing the xml every tick
 
-        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
-
         # Add / remove new devices
         self.repopulate_hw_list()
 
-        if pagetype == HW_LIST_TYPE_GENERAL:
-            self.refresh_overview_page()
-        elif pagetype == HW_LIST_TYPE_STATS:
-            self.refresh_stats_page()
-        elif pagetype == HW_LIST_TYPE_CPU:
-            self.refresh_config_cpu()
-        elif pagetype == HW_LIST_TYPE_MEMORY:
-            self.refresh_config_memory()
-        elif pagetype == HW_LIST_TYPE_DISK:
-            self.refresh_disk_page()
-        elif pagetype == HW_LIST_TYPE_NIC:
-            self.refresh_network_page()
-        elif pagetype == HW_LIST_TYPE_INPUT:
-            self.refresh_input_page()
-        elif pagetype == HW_LIST_TYPE_GRAPHICS:
-            self.refresh_graphics_page()
-        elif pagetype == HW_LIST_TYPE_SOUND:
-            self.refresh_sound_page()
-        elif pagetype == HW_LIST_TYPE_CHAR:
-            self.refresh_char_page()
-        elif pagetype == HW_LIST_TYPE_HOSTDEV:
-            self.refresh_hostdev_page()
+        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+        if pagetype is None:
+            return
+
+        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+        self.hw_selected(page=pagetype)
 
     def refresh_overview_page(self):
         self.window.get_widget("overview-name").set_text(self.vm.get_name())
@@ -938,7 +923,6 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("security-label").set_text(vmlabel)
         semodel_combo.emit("changed")
-        self.window.get_widget("config-apply").set_sensitive(False)
 
     def refresh_stats_page(self):
         def _rx_tx_text(rx, tx, unit):
@@ -992,10 +976,6 @@ class vmmDetails(gobject.GObject):
 
         if not(self.window.get_widget("config-apply").get_property("sensitive")):
             self.window.get_widget("config-vcpus").get_adjustment().value = self.vm.vcpu_count()
-            # XXX hack - changing the value above will have just re-triggered
-            # the callback making apply button sensitive again. So we have to
-            # turn it off again....
-            self.window.get_widget("config-apply").set_sensitive(False)
         self.window.get_widget("state-vm-vcpus").set_text("%d" % (self.vm.vcpu_count()))
 
     def refresh_config_memory(self):
@@ -1013,10 +993,6 @@ class vmmDetails(gobject.GObject):
         else:
             curmem.value = int(round(self.vm.get_memory()/1024.0))
             maxmem.value = int(round(self.vm.maximum_memory()/1024.0))
-            # XXX hack - changing the value above will have just re-triggered
-            # the callback making apply button sensitive again. So we have to
-            # turn it off again....
-            self.window.get_widget("config-apply").set_sensitive(False)
 
         if not self.window.get_widget("config-memory").get_property("sensitive"):
             maxmem.lower = curmem.value
@@ -1583,9 +1559,7 @@ class vmmDetails(gobject.GObject):
         except Exception, e:
             self.err.show_err(_("Error Setting Security data: %s") % str(e),
                               "".join(traceback.format_exc()))
-            return
-
-        self.window.get_widget("config-apply").set_sensitive(False)
+            return False
 
     # -----------------------
     # Hardware Section Pieces
@@ -1593,24 +1567,30 @@ class vmmDetails(gobject.GObject):
 
     def config_apply(self, ignore):
         pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+        ret = False
 
         if pagetype is HW_LIST_TYPE_GENERAL:
-            self.config_security_apply()
+            ret = self.config_security_apply()
         elif pagetype is HW_LIST_TYPE_CPU:
-            self.config_vcpus_apply()
+            ret = self.config_vcpus_apply()
         elif pagetype is HW_LIST_TYPE_MEMORY:
-            self.config_memory_apply()
+            ret = self.config_memory_apply()
         elif pagetype is HW_LIST_TYPE_BOOT:
-            self.config_boot_options_apply()
+            ret = self.config_boot_options_apply()
+        else:
+            ret = False
+
+        if ret is not False:
+            self.window.get_widget("config-apply").set_sensitive(False)
 
     def config_vcpus_changed(self, src):
         self.window.get_widget("config-apply").set_sensitive(True)
 
     def config_vcpus_apply(self):
         vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
-        logging.info("Setting vcpus for " + self.vm.get_uuid() + " to " + str(vcpus))
+        logging.info("Setting vcpus for %s to %s" % (self.vm.get_name(),
+                                                     str(vcpus)))
         self.vm.set_vcpu_count(vcpus)
-        self.window.get_widget("config-apply").set_sensitive(False)
 
     def config_get_maxmem(self):
         maxadj = self.window.get_widget("config-maxmem").get_adjustment()
@@ -1670,13 +1650,11 @@ class vmmDetails(gobject.GObject):
         except Exception, e:
             self.err.show_err(_("Error changing memory values: %s" % str(e)),
                               "".join(traceback.format_exc()))
-            return
+            return False
 
         if hotplug_err:
             self.err.show_info(_("These changes will take effect after the "
                                  "next guest reboot. "))
-
-        self.window.get_widget("config-apply").set_sensitive(False)
 
     def config_boot_options_changed(self, src):
         self.window.get_widget("config-apply").set_sensitive(True)
@@ -1694,11 +1672,10 @@ class vmmDetails(gobject.GObject):
         if boot.get_property("sensitive"):
             try:
                 self.vm.set_boot_device(boot.get_model()[boot.get_active()][2])
-                self.window.get_widget("config-apply").set_sensitive(False)
             except Exception, e:
                 self.err.show_err(_("Error changing boot device: %s" % str(e)),
                                   "".join(traceback.format_exc()))
-                return
+                return False
 
     def remove_xml_dev(self, src):
         info = self.get_hw_selection(HW_LIST_COL_DEVICE)
