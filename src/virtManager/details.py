@@ -61,12 +61,13 @@ HW_LIST_TYPE_GRAPHICS = 8
 HW_LIST_TYPE_SOUND = 9
 HW_LIST_TYPE_CHAR = 10
 HW_LIST_TYPE_HOSTDEV = 11
+HW_LIST_TYPE_VIDEO = 12
 
 apply_pages  = [ HW_LIST_TYPE_GENERAL, HW_LIST_TYPE_CPU, HW_LIST_TYPE_MEMORY,
                  HW_LIST_TYPE_BOOT]
 remove_pages = [ HW_LIST_TYPE_DISK, HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                  HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
-                 HW_LIST_TYPE_HOSTDEV ]
+                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_VIDEO ]
 
 # Console pages
 PAGE_UNAVAILABLE = 0
@@ -693,6 +694,8 @@ class vmmDetails(gobject.GObject):
             self.refresh_char_page()
         elif pagetype == HW_LIST_TYPE_HOSTDEV:
             self.refresh_hostdev_page()
+        elif pagetype == HW_LIST_TYPE_VIDEO:
+            self.refresh_video_page()
         else:
             pagetype = -1
 
@@ -1142,6 +1145,20 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("hostdev-mode").set_text(hostdevinfo[3])
         self.window.get_widget("hostdev-source").set_text(hostdevinfo[5])
 
+    def refresh_video_page(self):
+        vidinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not vidinfo:
+            return
+
+        ignore, ignore, model, ram, heads = vidinfo
+        try:
+            ramlabel = ram and "%d MB" % (int(ram) / 1024) or "-"
+        except:
+            ramlabel = "-"
+
+        self.window.get_widget("video-model").set_text(model)
+        self.window.get_widget("video-ram").set_text(ramlabel)
+        self.window.get_widget("video-heads").set_text(heads and heads or "-")
 
     def refresh_boot_page(self):
         # Refresh autostart
@@ -1743,6 +1760,7 @@ class vmmDetails(gobject.GObject):
         currentSounds = {}
         currentChars = {}
         currentHostdevs = {}
+        currentVids = {}
 
         def update_hwlist(hwtype, info):
             """Return (true if we updated an entry,
@@ -1843,6 +1861,17 @@ class vmmDetails(gobject.GObject):
             if missing:
                 hw_list_model.insert(insertAt, [hostdevinfo[2], None, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_HOSTDEV, hostdevinfo])
 
+        # Populate video devices
+        for vidinfo in self.vm.get_video_devices():
+            currentVids[vidinfo[2]] = 1
+            missing, insertAt = update_hwlist(HW_LIST_TYPE_VIDEO,
+                                              vidinfo)
+
+            if missing:
+                hw_list_model.insert(insertAt,
+                                     [_("Video"), gtk.STOCK_SELECT_COLOR,
+                                      gtk.ICON_SIZE_LARGE_TOOLBAR,
+                                      None, HW_LIST_TYPE_VIDEO, vidinfo])
 
         # Now remove any no longer current devs
         devs = range(len(hw_list_model))
@@ -1852,26 +1881,21 @@ class vmmDetails(gobject.GObject):
             row = hw_list_model[i]
             removeIt = False
 
-            if row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_DISK and not \
-               currentDisks.has_key(row[HW_LIST_COL_DEVICE][2]):
-                removeIt = True
-            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_NIC and not \
-                 currentNICs.has_key(row[HW_LIST_COL_DEVICE][2]):
-                removeIt = True
-            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_INPUT and not \
-                 currentInputs.has_key(row[HW_LIST_COL_DEVICE][2]):
-                removeIt = True
-            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_GRAPHICS and not \
-                 currentGraphics.has_key(row[HW_LIST_COL_DEVICE][2]):
-                removeIt = True
-            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_SOUND and not \
-                 currentSounds.has_key(row[HW_LIST_COL_DEVICE][2]):
-                removeIt = True
-            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_CHAR and not \
-                 currentChars.has_key(row[HW_LIST_COL_DEVICE][2]):
-                removeIt = True
-            elif row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_HOSTDEV and not \
-                 currentHostdevs.has_key(row[HW_LIST_COL_DEVICE][2]):
+            mapping = {
+                HW_LIST_TYPE_DISK       : currentDisks,
+                HW_LIST_TYPE_NIC        : currentNICs,
+                HW_LIST_TYPE_INPUT      : currentInputs,
+                HW_LIST_TYPE_GRAPHICS   : currentGraphics,
+                HW_LIST_TYPE_SOUND      : currentSounds,
+                HW_LIST_TYPE_CHAR       : currentChars,
+                HW_LIST_TYPE_HOSTDEV    : currentHostdevs,
+                HW_LIST_TYPE_VIDEO      : currentVids,
+            }
+
+
+            hwtype   = row[HW_LIST_COL_TYPE]
+            if (mapping.has_key(hwtype) and not
+                mapping[hwtype].has_key(row[HW_LIST_COL_DEVICE][2])):
                 removeIt = True
 
             if removeIt:
@@ -1880,7 +1904,8 @@ class vmmDetails(gobject.GObject):
                 (selModel, selIter) = hw_list.get_selection().get_selected()
                 selType = selModel.get_value(selIter, HW_LIST_COL_TYPE)
                 selInfo = selModel.get_value(selIter, HW_LIST_COL_DEVICE)
-                if selType == row[HW_LIST_COL_TYPE] and selInfo[2] == row[HW_LIST_COL_DEVICE][2]:
+                if (selType == row[HW_LIST_COL_TYPE] and
+                    selInfo[2] == row[HW_LIST_COL_DEVICE][2]):
                     hw_list.get_selection().select_iter(selModel.iter_nth_child(None, 0))
 
                 # Now actually remove it

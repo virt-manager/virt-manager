@@ -28,6 +28,13 @@ import difflib
 from virtManager import util
 import virtinst.util as vutil
 
+def safeint(val, fmt="%.3d"):
+    try:
+        int(val)
+    except:
+        return str(val)
+    return fmt % int(val)
+
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
         "status-changed": (gobject.SIGNAL_RUN_FIRST,
@@ -932,6 +939,32 @@ class vmmDomain(gobject.GObject):
 
         return self._parse_device_xml(_parse_char_devs)
 
+    def get_video_devices(self):
+        def _parse_video_devs(ctx):
+            vids = []
+            devs = ctx.xpathEval("/domain/devices/video")
+
+            for dev in devs:
+                model = None
+                ram   = None
+                heads = None
+
+                for node in dev.children or []:
+                    if node.name == "model":
+                        model = node.prop("type")
+                        ram = node.prop("vram")
+                        heads = node.prop("heads")
+
+                        if ram:
+                            ram = safeint(ram, "%d")
+
+                unique = [model, ram, heads]
+                row = ["video", unique, model, ram, heads]
+                vids.append(row)
+
+            return vids
+        return self._parse_device_xml(_parse_video_devs)
+
     def get_hostdev_devices(self):
         def _parse_hostdev_devs(ctx):
             hostdevs = []
@@ -953,13 +986,6 @@ class vmmDomain(gobject.GObject):
                     if val.startswith("0x"):
                         val = val[2:]
                     return val
-
-                def safeint(val, fmt="%.3d"):
-                    try:
-                        int(val)
-                    except:
-                        return str(val)
-                    return fmt % int(val)
 
                 def set_uniq(baseent, propname, node):
                     val = node.prop(propname)
@@ -1028,15 +1054,10 @@ class vmmDomain(gobject.GObject):
 
 
     def _parse_device_xml(self, parse_function):
-        ret = []
         def parse_wrap_func(doc, ctx):
             return parse_function(ctx)
 
-        try:
-            ret = util.xml_parse_wrapper(self.get_xml(), parse_wrap_func)
-        except Exception, e:
-            raise RuntimeError(_("Error parsing domain xml: %s") % str(e))
-        return ret
+        return util.xml_parse_wrapper(self.get_xml(), parse_wrap_func)
 
     def _add_xml_device(self, xml, devxml):
         """
@@ -1135,6 +1156,19 @@ class vmmDomain(gobject.GObject):
                 # xml parameters in the future
                 logging.debug("Hostdev xpath string: %s" % xpath)
                 ret = ctx.xpathEval(xpath)
+
+        elif dev_type == "video":
+            model, ram, heads = dev_id_info
+            xpath = "/domain/devices/video"
+
+            xpath += "[model/@type='%s'" % model
+            if ram:
+                xpath += " and model/@vram='%s'" % ram
+            if heads:
+                xpath += " and model/@heads='%s'" % heads
+            xpath += "][1]"
+
+            ret = ctx.xpathEval(xpath)
 
         else:
             raise RuntimeError, _("Unknown device type '%s'" % dev_type)
