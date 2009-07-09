@@ -62,6 +62,12 @@ HW_LIST_TYPE_SOUND = 9
 HW_LIST_TYPE_CHAR = 10
 HW_LIST_TYPE_HOSTDEV = 11
 
+apply_pages  = [ HW_LIST_TYPE_GENERAL, HW_LIST_TYPE_CPU, HW_LIST_TYPE_MEMORY,
+                 HW_LIST_TYPE_BOOT]
+remove_pages = [ HW_LIST_TYPE_DISK, HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
+                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
+                 HW_LIST_TYPE_HOSTDEV ]
+
 # Console pages
 PAGE_UNAVAILABLE = 0
 PAGE_SCREENSHOT = 1
@@ -282,25 +288,18 @@ class vmmDetails(gobject.GObject):
 
             "on_details_pages_switch_page": self.switch_page,
 
-            "on_config_security_apply_clicked": self.config_security_apply,
-            "on_config_vcpus_apply_clicked": self.config_vcpus_apply,
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
-            "on_config_memory_apply_clicked": self.config_memory_apply,
             "on_config_boot_device_changed": self.config_boot_options_changed,
             "on_config_autostart_changed": self.config_boot_options_changed,
-            "on_config_boot_apply_clicked": self.config_boot_options_apply,
+
+            "on_config_apply_clicked": self.config_apply,
+
             "on_details_help_activate": self.show_help,
 
             "on_config_cdrom_connect_clicked": self.toggle_cdrom,
-            "on_config_disk_remove_clicked": self.remove_xml_dev,
-            "on_config_network_remove_clicked": self.remove_xml_dev,
-            "on_config_input_remove_clicked": self.remove_xml_dev,
-            "on_config_graphics_remove_clicked": self.remove_xml_dev,
-            "on_config_sound_remove_clicked": self.remove_xml_dev,
-            "on_config_char_remove_clicked": self.remove_xml_dev,
-            "on_config_hostdev_remove_clicked": self.remove_xml_dev,
+            "on_config_remove_clicked": self.remove_xml_dev,
             "on_add_hardware_button_clicked": self.add_hardware,
 
             "on_details_menu_view_fullscreen_activate": self.toggle_fullscreen,
@@ -661,10 +660,9 @@ class vmmDetails(gobject.GObject):
     def hw_selected(self, src=None):
         pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
         if pagetype is None:
-            self.window.get_widget("hw-panel").set_sensitive(True)
             self.window.get_widget("hw-list").get_selection().select_path(0)
             self.window.get_widget("hw-panel").set_current_page(0)
-            return
+            pagetype = 0
 
         self.window.get_widget("hw-panel").set_sensitive(True)
         self.window.get_widget("hw-panel").show_all()
@@ -674,14 +672,14 @@ class vmmDetails(gobject.GObject):
         elif pagetype == HW_LIST_TYPE_STATS:
             self.refresh_stats_page()
         elif pagetype == HW_LIST_TYPE_CPU:
-            self.window.get_widget("config-vcpus-apply").set_sensitive(False)
+            self.window.get_widget("config-apply").set_sensitive(False)
             self.refresh_config_cpu()
         elif pagetype == HW_LIST_TYPE_MEMORY:
-            self.window.get_widget("config-memory-apply").set_sensitive(False)
+            self.window.get_widget("config-apply").set_sensitive(False)
             self.refresh_config_memory()
         elif pagetype == HW_LIST_TYPE_BOOT:
             self.refresh_boot_page()
-            self.window.get_widget("config-boot-options-apply").set_sensitive(False)
+            self.window.get_widget("config-apply").set_sensitive(False)
         elif pagetype == HW_LIST_TYPE_DISK:
             self.refresh_disk_page()
         elif pagetype == HW_LIST_TYPE_NIC:
@@ -698,6 +696,10 @@ class vmmDetails(gobject.GObject):
             self.refresh_hostdev_page()
         else:
             pagetype = -1
+
+
+        self.window.get_widget("config-apply").set_property("visible", pagetype in apply_pages)
+        self.window.get_widget("config-remove").set_property("visible", pagetype in remove_pages)
 
         self.window.get_widget("hw-panel").set_current_page(pagetype)
 
@@ -936,7 +938,7 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("security-label").set_text(vmlabel)
         semodel_combo.emit("changed")
-        self.window.get_widget("config-security-apply").set_sensitive(False)
+        self.window.get_widget("config-apply").set_sensitive(False)
 
     def refresh_stats_page(self):
         def _rx_tx_text(rx, tx, unit):
@@ -988,12 +990,12 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("config-vcpus").get_adjustment().upper = self.vm.vcpu_max_count()
             self.window.get_widget("state-vm-maxvcpus").set_text("%d" % (self.vm.vcpu_max_count()))
 
-        if not(self.window.get_widget("config-vcpus-apply").get_property("sensitive")):
+        if not(self.window.get_widget("config-apply").get_property("sensitive")):
             self.window.get_widget("config-vcpus").get_adjustment().value = self.vm.vcpu_count()
             # XXX hack - changing the value above will have just re-triggered
             # the callback making apply button sensitive again. So we have to
             # turn it off again....
-            self.window.get_widget("config-vcpus-apply").set_sensitive(False)
+            self.window.get_widget("config-apply").set_sensitive(False)
         self.window.get_widget("state-vm-vcpus").set_text("%d" % (self.vm.vcpu_count()))
 
     def refresh_config_memory(self):
@@ -1002,7 +1004,7 @@ class vmmDetails(gobject.GObject):
         curmem = self.window.get_widget("config-memory").get_adjustment()
         maxmem = self.window.get_widget("config-maxmem").get_adjustment()
 
-        if self.window.get_widget("config-memory-apply").get_property("sensitive"):
+        if self.window.get_widget("config-apply").get_property("sensitive"):
             memval = self.config_get_memory()
             maxval = self.config_get_maxmem()
             if maxval < memval:
@@ -1014,7 +1016,7 @@ class vmmDetails(gobject.GObject):
             # XXX hack - changing the value above will have just re-triggered
             # the callback making apply button sensitive again. So we have to
             # turn it off again....
-            self.window.get_widget("config-memory-apply").set_sensitive(False)
+            self.window.get_widget("config-apply").set_sensitive(False)
 
         if not self.window.get_widget("config-memory").get_property("sensitive"):
             maxmem.lower = curmem.value
@@ -1099,9 +1101,9 @@ class vmmDetails(gobject.GObject):
 
         # Can't remove primary Xen or PS/2 mice
         if inputinfo[4] == "mouse" and inputinfo[3] in ("xen", "ps2"):
-            self.window.get_widget("config-input-remove").set_sensitive(False)
+            self.window.get_widget("config-remove").set_sensitive(False)
         else:
-            self.window.get_widget("config-input-remove").set_sensitive(True)
+            self.window.get_widget("config-remove").set_sensitive(True)
 
     def refresh_graphics_page(self):
         gfxinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -1550,19 +1552,19 @@ class vmmDetails(gobject.GObject):
         if idx < 0:
             return
 
-        self.window.get_widget("config-security-apply").set_sensitive(True)
+        self.window.get_widget("config-apply").set_sensitive(True)
         val = model[idx][0]
         show_type = (val == "selinux")
         self.window.get_widget("security-type-box").set_sensitive(show_type)
 
     def security_label_changed(self, label):
-        self.window.get_widget("config-security-apply").set_sensitive(True)
+        self.window.get_widget("config-apply").set_sensitive(True)
 
     def security_type_changed(self, button, sensitive = True):
-        self.window.get_widget("config-security-apply").set_sensitive(True)
+        self.window.get_widget("config-apply").set_sensitive(True)
         self.window.get_widget("security-label").set_sensitive(not button.get_active())
 
-    def config_security_apply(self, src):
+    def config_security_apply(self):
         combo = self.window.get_widget("security-model")
         model = combo.get_model()
         semodel = model[combo.get_active()][0]
@@ -1583,20 +1585,32 @@ class vmmDetails(gobject.GObject):
                               "".join(traceback.format_exc()))
             return
 
-        self.window.get_widget("config-security-apply").set_sensitive(False)
+        self.window.get_widget("config-apply").set_sensitive(False)
 
     # -----------------------
     # Hardware Section Pieces
     # -----------------------
 
-    def config_vcpus_changed(self, src):
-        self.window.get_widget("config-vcpus-apply").set_sensitive(True)
+    def config_apply(self, ignore):
+        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
 
-    def config_vcpus_apply(self, src):
+        if pagetype is HW_LIST_TYPE_GENERAL:
+            self.config_security_apply()
+        elif pagetype is HW_LIST_TYPE_CPU:
+            self.config_vcpus_apply()
+        elif pagetype is HW_LIST_TYPE_MEMORY:
+            self.config_memory_apply()
+        elif pagetype is HW_LIST_TYPE_BOOT:
+            self.config_boot_options_apply()
+
+    def config_vcpus_changed(self, src):
+        self.window.get_widget("config-apply").set_sensitive(True)
+
+    def config_vcpus_apply(self):
         vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
         logging.info("Setting vcpus for " + self.vm.get_uuid() + " to " + str(vcpus))
         self.vm.set_vcpu_count(vcpus)
-        self.window.get_widget("config-vcpus-apply").set_sensitive(False)
+        self.window.get_widget("config-apply").set_sensitive(False)
 
     def config_get_maxmem(self):
         maxadj = self.window.get_widget("config-maxmem").get_adjustment()
@@ -1617,10 +1631,10 @@ class vmmDetails(gobject.GObject):
         return mem
 
     def config_maxmem_changed(self, src):
-        self.window.get_widget("config-memory-apply").set_sensitive(True)
+        self.window.get_widget("config-apply").set_sensitive(True)
 
     def config_memory_changed(self, src):
-        self.window.get_widget("config-memory-apply").set_sensitive(True)
+        self.window.get_widget("config-apply").set_sensitive(True)
 
         maxadj = self.window.get_widget("config-maxmem").get_adjustment()
 
@@ -1629,7 +1643,7 @@ class vmmDetails(gobject.GObject):
             maxadj.value = mem
         maxadj.lower = mem
 
-    def config_memory_apply(self, src):
+    def config_memory_apply(self):
         self.refresh_config_memory()
         hotplug_err = False
 
@@ -1662,12 +1676,12 @@ class vmmDetails(gobject.GObject):
             self.err.show_info(_("These changes will take effect after the "
                                  "next guest reboot. "))
 
-        self.window.get_widget("config-memory-apply").set_sensitive(False)
+        self.window.get_widget("config-apply").set_sensitive(False)
 
     def config_boot_options_changed(self, src):
-        self.window.get_widget("config-boot-options-apply").set_sensitive(True)
+        self.window.get_widget("config-apply").set_sensitive(True)
 
-    def config_boot_options_apply(self, src):
+    def config_boot_options_apply(self):
         boot = self.window.get_widget("config-boot-device")
         auto = self.window.get_widget("config-autostart")
         if auto.get_property("sensitive"):
@@ -1680,7 +1694,7 @@ class vmmDetails(gobject.GObject):
         if boot.get_property("sensitive"):
             try:
                 self.vm.set_boot_device(boot.get_model()[boot.get_active()][2])
-                self.window.get_widget("config-boot-options-apply").set_sensitive(False)
+                self.window.get_widget("config-apply").set_sensitive(False)
             except Exception, e:
                 self.err.show_err(_("Error changing boot device: %s" % str(e)),
                                   "".join(traceback.format_exc()))
@@ -1699,8 +1713,11 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("hw-list").set_model(hw_list_model)
 
         hwCol = gtk.TreeViewColumn("Hardware")
+        hwCol.set_spacing(24)
         hw_txt = gtk.CellRendererText()
+        hw_txt.set_property("xpad", 2)
         hw_img = gtk.CellRendererPixbuf()
+        hw_img.set_property("xpad", 4)
         hwCol.pack_start(hw_txt, True)
         hwCol.pack_start(hw_img, False)
         hwCol.add_attribute(hw_txt, 'text', HW_LIST_COL_LABEL)
