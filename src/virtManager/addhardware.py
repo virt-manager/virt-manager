@@ -858,10 +858,6 @@ class vmmAddHardware(gobject.GObject):
                                         _("You must select a target device for the disk."))
 
             bus, device = self.get_config_disk_target()
-            if self.window.get_widget("storage-partition").get_active():
-                _type = virtinst.VirtualDisk.TYPE_BLOCK
-            else:
-                _type = virtinst.VirtualDisk.TYPE_FILE
 
             # Build disk object
             filesize = self.get_config_disk_size()
@@ -877,7 +873,6 @@ class vmmAddHardware(gobject.GObject):
                     vmmutil.build_default_pool(self.vm.get_connection().vmm)
                 self._dev = virtinst.VirtualDisk(self.get_config_disk_image(),
                                                  filesize,
-                                                 type = _type,
                                                  sparse=self.is_sparse_file(),
                                                  readOnly=readonly,
                                                  device=device,
