@@ -577,7 +577,6 @@ class vmmDetails(gobject.GObject):
 
         self.engine.increment_window_counter()
         self.update_widget_states(self.vm, self.vm.status())
-        self.vm.update_xml()
 
     def show_help(self, src):
         # From the Details window, show the help document from the Details page
@@ -861,10 +860,6 @@ class vmmDetails(gobject.GObject):
     def refresh_resources(self, ignore):
         details = self.window.get_widget("details-pages")
         page = details.get_current_page()
-
-        if self.is_visible():
-            # Force an xml update, so we check for changed xml on every tick
-            self.vm.update_xml()
 
         if (page == PAGE_DETAILS and
             self.get_hw_selection(HW_LIST_COL_TYPE) == HW_LIST_TYPE_STATS):
@@ -1700,7 +1695,6 @@ class vmmDetails(gobject.GObject):
             return
 
         self.remove_device(info[0], info[1])
-        self.vm.update_xml()
 
     def prepare_hw_list(self):
         hw_list_model = gtk.ListStore(str, str, int, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
@@ -1945,12 +1939,8 @@ class vmmDetails(gobject.GObject):
     def add_hardware(self, src):
         if self.addhw is None:
             self.addhw = vmmAddHardware(self.config, self.vm)
-            self.addhw.topwin.connect("hide", self.add_hardware_done)
 
         self.addhw.show()
-
-    def add_hardware_done(self, ignore=None):
-        self.vm.update_xml()
 
     def toggle_cdrom(self, src):
         info = self.get_hw_selection(HW_LIST_COL_DEVICE)

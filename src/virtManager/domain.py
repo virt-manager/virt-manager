@@ -90,10 +90,20 @@ class vmmDomain(gobject.GObject):
     def get_xml(self):
         # Get domain xml. If cached xml is invalid, update.
         if self._xml is None or not self._valid_xml:
-            self.update_xml()
+            self._update_xml()
         return self._xml
 
-    def update_xml(self):
+    def get_xml_to_define(self):
+        # FIXME: This isn't sufficient, since we pull stuff like disk targets
+        #        from the active XML. This all needs proper fixing in the long
+        #        term.
+        if self.is_active():
+            return self._get_inactive_xml()
+        else:
+            self._invalidate_xml()
+            return self.get_xml()
+
+    def _update_xml(self):
         # Force an xml update. Signal 'config-changed' if domain xml has
         # changed since last refresh
 
@@ -110,30 +120,20 @@ class vmmDomain(gobject.GObject):
             self.tick(time.time())
             self.emit("config-changed")
 
-    def invalidate_xml(self):
+    def _invalidate_xml(self):
         # Mark cached xml as invalid
         self._valid_xml = False
 
-    def get_inactive_xml(self):
+    def _get_inactive_xml(self):
         # FIXME: We only allow the user to change the inactive xml once.
         #        We should eventually allow them to continually change it,
         #        possibly see the inactive config? and not choke if they try
         #        to remove a device twice.
         if self._orig_inactive_xml is None:
-            self.refresh_inactive_xml()
+            self._refresh_inactive_xml()
         return self._orig_inactive_xml
 
-    def get_xml_to_define(self):
-        # FIXME: This isn't sufficient, since we pull stuff like disk targets
-        #        from the active XML. This all needs proper fixing in the long
-        #        term.
-        if self.is_active():
-            return self.get_inactive_xml()
-        else:
-            self.update_xml()
-            return self.get_xml()
-
-    def refresh_inactive_xml(self):
+    def _refresh_inactive_xml(self):
         flags = (libvirt.VIR_DOMAIN_XML_INACTIVE |
                  libvirt.VIR_DOMAIN_XML_SECURE)
         if not self.connection.has_dom_flags(flags):
@@ -172,7 +172,7 @@ class vmmDomain(gobject.GObject):
         self.get_connection().define_domain(newxml)
 
         # Invalidate cached XML
-        self.invalidate_xml()
+        self._invalidate_xml()
 
     def release_handle(self):
         del(self.vm)
@@ -370,7 +370,7 @@ class vmmDomain(gobject.GObject):
             return
 
         # Invalidate cached xml
-        self.invalidate_xml()
+        self._invalidate_xml()
 
         info = self.vm.info()
         expected = self.config.get_stats_history_length()
@@ -718,8 +718,6 @@ class vmmDomain(gobject.GObject):
         return self._parse_device_xml(_parse_serial_consoles)
 
     def get_graphics_console(self):
-        self.update_xml()
-
         typ = vutil.get_xml_path(self.get_xml(),
                                 "/domain/devices/graphics/@type")
         port = None
@@ -1067,7 +1065,6 @@ class vmmDomain(gobject.GObject):
         return xml[0:index] + devxml + xml[index:]
 
     def get_device_xml(self, dev_type, dev_id_info):
-        self.update_xml()
         vmxml = self.get_xml()
 
         def dev_xml_serialize(doc, ctx):
@@ -1300,11 +1297,6 @@ class vmmDomain(gobject.GObject):
                 self.hotplug_maxmem(maxmem)
 
     def define_both_mem(self, memory, maxmem):
-        # Make sure we correctly define the XML with new values, since
-        # setMem and setMaxMem don't (or, aren't supposed to) affect
-        # the persistent config
-        self.invalidate_xml()
-
         def set_mem_node(doc, ctx, memval, xpath):
             node = ctx.xpathEval(xpath)
             node = (node and node[0] or None)
