@@ -88,10 +88,17 @@ class vmmDomain(gobject.GObject):
         self.connection.set_dom_flags(vm)
 
     def get_xml(self):
-        # Get domain xml. If cached xml is invalid, update.
-        if self._xml is None or not self._valid_xml:
-            self._update_xml()
-        return self._xml
+        """
+        Get domain xml. If cached xml is invalid, update.
+        """
+        return self._xml_fetch_helper(refresh_if_necc=True)
+
+    def get_xml_no_refresh(self):
+        """
+        Fetch XML, but don't force a refresh. Useful to prevent updating
+        xml in the tick loop when it's not that important (disk/net stats)
+        """
+        return self._xml_fetch_helper(refresh_if_necc=False)
 
     def get_xml_to_define(self):
         # FIXME: This isn't sufficient, since we pull stuff like disk targets
@@ -102,6 +109,15 @@ class vmmDomain(gobject.GObject):
         else:
             self._invalidate_xml()
             return self.get_xml()
+
+    def _xml_fetch_helper(self, refresh_if_necc):
+        # Helper to fetch xml with various options
+        if self._xml is None:
+            self._update_xml()
+        elif refresh_if_necc and self._valid_xml:
+            self._update_xml()
+
+        return self._xml
 
     def _update_xml(self):
         # Force an xml update. Signal 'config-changed' if domain xml has
@@ -324,7 +340,7 @@ class vmmDomain(gobject.GObject):
         if not self.is_active():
             return rx, tx
 
-        for netdev in self.get_network_devices():
+        for netdev in self.get_network_devices(refresh_if_necc=False):
             try:
                 io = self.vm.interfaceStats(netdev[4])
                 if io:
@@ -343,7 +359,7 @@ class vmmDomain(gobject.GObject):
         if not self.is_active():
             return rd, wr
 
-        for disk in self.get_disk_devices():
+        for disk in self.get_disk_devices(refresh_if_necc=False):
             try:
                 io = self.vm.blockStats(disk[2])
                 if io:
@@ -744,7 +760,7 @@ class vmmDomain(gobject.GObject):
     # [ device_type, unique_attribute(s), hw column label, attr1, attr2, ... ]
     # ----------------
 
-    def get_disk_devices(self):
+    def get_disk_devices(self, refresh_if_necc=True):
         def _parse_disk_devs(ctx):
             disks = []
             ret = ctx.xpathEval("/domain/devices/disk")
@@ -791,9 +807,9 @@ class vmmDomain(gobject.GObject):
 
             return disks
 
-        return self._parse_device_xml(_parse_disk_devs)
+        return self._parse_device_xml(_parse_disk_devs, refresh_if_necc)
 
-    def get_network_devices(self):
+    def get_network_devices(self, refresh_if_necc=True):
         def _parse_network_devs(ctx):
             nics = []
             ret = ctx.xpathEval("/domain/devices/interface")
@@ -832,7 +848,7 @@ class vmmDomain(gobject.GObject):
                                  typ, model])
             return nics
 
-        return self._parse_device_xml(_parse_network_devs)
+        return self._parse_device_xml(_parse_network_devs, refresh_if_necc)
 
     def get_input_devices(self):
         def _parse_input_devs(ctx):
@@ -1051,11 +1067,16 @@ class vmmDomain(gobject.GObject):
         return self._parse_device_xml(_parse_hostdev_devs)
 
 
-    def _parse_device_xml(self, parse_function):
+    def _parse_device_xml(self, parse_function, refresh_if_necc=True):
         def parse_wrap_func(doc, ctx):
             return parse_function(ctx)
 
-        return util.xml_parse_wrapper(self.get_xml(), parse_wrap_func)
+        if refresh_if_necc:
+            xml = self.get_xml()
+        else:
+            xml = self.get_xml_no_refresh()
+
+        return util.xml_parse_wrapper(xml, parse_wrap_func)
 
     def _add_xml_device(self, xml, devxml):
         """
