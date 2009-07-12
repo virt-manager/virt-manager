@@ -134,7 +134,7 @@ class vmmDomain(gobject.GObject):
         if origxml != self._xml:
             # 'tick' to make sure we have the latest time
             self.tick(time.time())
-            self.emit("config-changed")
+            gobject.idle_add(util.idle_emit, self, "config-changed")
 
     def _invalidate_xml(self):
         # Mark cached xml as invalid
@@ -276,7 +276,7 @@ class vmmDomain(gobject.GObject):
                 # Domain just started. Invalidate inactive xml
                 self._orig_inactive_xml = None
             self.lastStatus = status
-            self.emit("status-changed", status)
+            gobject.idle_add(util.idle_emit, self, "status-changed", status)
 
     # GConf specific wranglings
     def set_console_scaling(self, value):
@@ -442,7 +442,7 @@ class vmmDomain(gobject.GObject):
             self._set_max_rate(r + "Rate")
 
         self._update_status(info[0])
-        self.emit("resources-sampled")
+        gobject.idle_add(util.idle_emit, self, "resources-sampled")
 
 
     def current_memory(self):

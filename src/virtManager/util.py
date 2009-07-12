@@ -227,3 +227,10 @@ def pretty_hv(gtype, domtype):
             label = "test (hvm)"
 
     return label
+
+def idle_emit(self, signal, *args):
+    """
+    Safe wrapper for using 'self.emit' with gobject.idle_add
+    """
+    self.emit(signal, *args)
+    return False

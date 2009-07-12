@@ -24,6 +24,7 @@ import libvirt
 import logging
 import gnome
 import traceback
+import threading
 
 from virtManager.about import vmmAbout
 from virtManager.netdevhelper import vmmNetDevHelper
@@ -65,6 +66,12 @@ class vmmEngine(gobject.GObject):
 
         self.timer = None
         self.last_timeout = 0
+
+        self._tick_thread = None
+        self._tick_thread_slow = False
+        self._libvirt_support_threading = (libvirt.getVersion() >= 6000)
+        if not self._libvirt_support_threading:
+            logging.debug("Libvirt doesn't support threading, skipping.")
 
         # Counter keeping track of how many manager and details windows
         # are open. When it is decremented to 0, close the app
@@ -145,11 +152,19 @@ class vmmEngine(gobject.GObject):
         self.timer = gobject.timeout_add(interval, self.tick)
 
     def tick(self):
-        gtk.gdk.threads_enter()
-        try:
+        if not self._libvirt_support_threading:
             return self._tick()
-        finally:
-            gtk.gdk.threads_leave()
+
+        if self._tick_thread and self._tick_thread.isAlive():
+            if not self._tick_is_slow:
+                logging.debug("Tick is slow, not running at requested rate.")
+            return 1
+
+        self._tick_thread = threading.Thread(name="Tick thread",
+                                            target=self._tick, args=())
+        self._tick_thread.daemon = False
+        self._tick_thread.start()
+        return 1
 
     def _tick(self):
         for uri in self.connections.keys():
