@@ -737,13 +737,9 @@ class vmmDetails(gobject.GObject):
     def control_vm_destroy(self, src):
         self.emit("action-destroy-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_migrate(self, src):
-        # get selected submenu(destination hostname)
-        info = self.window.get_widget("details-menu-migrate_menu").get_active().get_image().get_stock()[0]
-        hostname = info.split(" ")[0]
-
+    def control_vm_migrate(self, src, uri):
         self.emit("action-migrate-domain", self.vm.get_connection().get_uri(),
-                  self.vm.get_uuid(), hostname)
+                  self.vm.get_uuid(), uri)
 
     def populate_migrate_menu(self, ignore1=None):
         menu = self.window.get_widget("details-menu-migrate_menu")

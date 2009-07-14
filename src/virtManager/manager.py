@@ -1112,13 +1112,11 @@ class vmmManager(gobject.GObject):
         if vm is not None:
             self.emit("action-resume-domain", vm.get_connection().get_uri(), vm.get_uuid())
 
-    def migrate(self, ignore):
+    def migrate(self, ignore, uri):
         vm = self.current_vm()
-        label = self.vmmenumigrate.get_active().get_image().get_stock()[0]
-        hostname = label.split(" ")[0]
         if vm is not None:
             self.emit("action-migrate-domain", vm.get_connection().get_uri(),
-                      vm.get_uuid(), hostname)
+                      vm.get_uuid(), uri)
 
     def populate_migrate_submenu(self, src):
         vm = self.current_vm()

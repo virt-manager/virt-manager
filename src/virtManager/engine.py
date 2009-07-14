@@ -581,21 +581,11 @@ class vmmEngine(gobject.GObject):
             self.err.show_err(_("Error shutting down domain: %s" % str(e)),
                               "".join(traceback.format_exc()))
 
-    def migrate_domain(self, uri, uuid, desthost):
-        desturi = None
-        for key in self.connections.keys():
-            if self._lookup_connection(key).get_hostname() == desthost:
-                desturi = key
-                break
-
-        if desturi == None:
-            logging.debug("Could not find dest uri for migrate hostname: %s"
-                          % desthost)
-            return
-
+    def migrate_domain(self, uri, uuid, desturi):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
-        destconn = self._lookup_connection(desturi, False)
+        destconn = self._lookup_connection(desturi)
+
         resp = self.err.yes_no(_("Are you sure you want to migrate %s from "
                                  "%s to %s?") %
                                 (vm.get_name(), conn.get_hostname(),
@@ -651,10 +641,10 @@ class vmmEngine(gobject.GObject):
             menu.remove(item)
 
         for ignore, val_list in conns.items():
-            can_migrate, label, tooltip = val_list
+            can_migrate, label, tooltip, uri = val_list
             mitem = gtk.ImageMenuItem(label)
             mitem.set_sensitive(can_migrate)
-            mitem.connect("activate", migrate_func)
+            mitem.connect("activate", migrate_func, uri)
             if tooltip:
                 util.tooltip_wrapper(mitem, tooltip)
             mitem.show()
@@ -668,13 +658,14 @@ class vmmEngine(gobject.GObject):
 
     def get_available_migrate_hostnames(self, vm):
         driver = vm.get_connection().get_driver()
-        uri = vm.get_connection().get_uri()
+        origuri = vm.get_connection().get_uri()
         available_migrate_hostnames = {}
 
         # Returns list of lists of the form
         #   [ Can we migrate to this connection?,
         #     String to use as list entry,
-        #     Tooltip reason ]
+        #     Tooltip reason,
+        #     Conn URI ]
 
         # 1. connected(ACTIVE, INACTIVE) host
         for key, value in self.connections.items():
@@ -685,12 +676,13 @@ class vmmEngine(gobject.GObject):
             can_migrate = False
             desc = "%s (%s)" % (conn.get_hostname(), conn.get_driver())
             reason = ""
+            desturi = conn.get_uri()
 
             if conn.get_driver() != driver:
                 reason = _("Connection hypervisors do not match.")
             elif conn.get_state() == vmmConnection.STATE_DISCONNECTED:
                 reason = _("Connection is disconnected.")
-            elif key == uri:
+            elif key == origuri:
                 reason = _("Cannot migrate to same connection.")
 
                 # Explicitly don't include this in the list
@@ -698,9 +690,11 @@ class vmmEngine(gobject.GObject):
             elif conn.get_state() == vmmConnection.STATE_ACTIVE:
                 # Assumably we can migrate to this connection
                 can_migrate = True
+                reason = desturi
 
 
-            available_migrate_hostnames[key] = [can_migrate, desc, reason]
+            available_migrate_hostnames[key] = [can_migrate, desc, reason,
+                                                desturi]
 
         return available_migrate_hostnames
 

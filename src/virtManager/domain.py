@@ -1455,21 +1455,15 @@ class vmmDomain(gobject.GObject):
             self._disk_io = self._sample_disk_io_dummy
 
 
-    def migrate(self, destcon):
+    def migrate(self, destconn):
         flags = 0
         if self.lastStatus == libvirt.VIR_DOMAIN_RUNNING:
             flags = libvirt.VIR_MIGRATE_LIVE
 
-        if self.get_connection().get_driver().lower() == "xen":
-            # FIXME: these required? need to test this
-            uri = destcon.get_short_hostname()
-            conn = self.get_connection().vmm
-        else:
-            conn = destcon.vmm
-            uri = None
-
         newxml = self.get_xml()
-        self.vm.migrate(conn, flags, None, uri, 0)
-        destcon.define_domain(newxml)
+
+        self.vm.migrate(destconn.vmm, flags, None, None, 0)
+
+        destconn.define_domain(newxml)
 
 gobject.type_register(vmmDomain)
