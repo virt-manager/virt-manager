@@ -821,9 +821,8 @@ class vmmManager(gobject.GObject):
         if conn is None:
             return
 
-        result = self.err.yes_no(_("This will remove the connection \"%s\","
-                                   "are you sure?") %
-                                   self.rows[conn.get_uri()][ROW_NAME])
+        result = self.err.yes_no(_("This will remove the connection:\n\n%s\n\n"
+                                   "Are you sure?") % conn.get_uri())
         if not result:
             return
         self.engine.remove_connection(conn.get_uri())
