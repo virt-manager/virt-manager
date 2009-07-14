@@ -133,7 +133,7 @@ class vmmDeleteDialog(gobject.GObject):
         title = _("Deleting virtual machine '%s'") % self.vm.get_name()
         text = title
         if devs:
-            text = title + _(" and selected storage (this may take a while")
+            text = title + _(" and selected storage (this may take a while)")
 
         progWin = vmmAsyncJob(self.config, self._async_delete, [devs],
                               title=title, text=text)
