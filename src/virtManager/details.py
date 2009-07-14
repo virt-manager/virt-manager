@@ -562,7 +562,7 @@ class vmmDetails(gobject.GObject):
             if sensitive and self.dynamic_tabs.count(dev[0]):
                 # Tab is already open, make sure marked as such
                 item.set_active(True)
-            item.connect("activate", self.control_serial_tab, dev[0], dev[2])
+            item.connect("activate", self.control_serial_tab, dev[0], dev[3])
             src.add(item)
 
         src.show_all()
@@ -1477,9 +1477,9 @@ class vmmDetails(gobject.GObject):
     # Serial Console pieces
     # ------------------------------
 
-    def control_serial_tab(self, src, name, ttypath):
+    def control_serial_tab(self, src, name, target_port):
         if src.get_active():
-            self._show_serial_tab(name, ttypath)
+            self._show_serial_tab(name, target_port)
         else:
             self._close_serial_tab(name)
 
@@ -1511,9 +1511,9 @@ class vmmDetails(gobject.GObject):
     def serial_paste_text(self, src, terminal):
         terminal.paste_clipboard()
 
-    def _show_serial_tab(self, name, ttypath):
+    def _show_serial_tab(self, name, target_port):
         if not self.dynamic_tabs.count(name):
-            child = vmmSerialConsole(self.vm, ttypath)
+            child = vmmSerialConsole(self.vm, target_port)
             child.terminal.connect("button-press-event",
                                    self.show_serial_rcpopup)
             title = gtk.Label(name)

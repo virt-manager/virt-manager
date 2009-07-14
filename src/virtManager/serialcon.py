@@ -26,15 +26,17 @@ import termios
 import tty
 import pty
 import fcntl
+import logging
 
 import libvirt
 
 class vmmSerialConsole(gtk.HBox):
-    def __init__(self, vm, ttypath):
+    def __init__(self, vm, target_port):
         gtk.HBox.__init__(self)
 
         self.vm = vm
-        self.ttypath = ttypath
+        self.target_port = target_port
+        self.ttypath = None
 
         self.terminal = vte.Terminal()
         self.terminal.set_cursor_blinks(True)
@@ -76,9 +78,26 @@ class vmmSerialConsole(gtk.HBox):
         else:
             self.closetty()
 
+    def get_tty_path(self):
+        serials = self.vm.get_serial_devs()
+        for s in serials:
+            port = s[3]
+            path = s[2]
+            if port == self.target_port:
+                if path != self.ttypath:
+                    logging.debug("Serial console '%s' path changed to %s."
+                                   % (self.target_port, self.ttypath))
+                    return path
+
+        logging.debug("No serial devices found for serial console '%s'." %
+                      self.target_port)
+        return None
+
     def opentty(self):
         if self.ptyio != None:
             self.closetty()
+
+        self.ttypath = self.get_tty_path()
         ipty = self.ttypath
 
         if ipty == None:
