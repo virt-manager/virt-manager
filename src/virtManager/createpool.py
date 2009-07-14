@@ -291,7 +291,7 @@ class vmmCreatePool(gobject.GObject):
         newconn = None
         try:
             # Open a seperate connection to install on since this is async
-            newconn = util.dup_conn(self.config, None, self._pool.conn)
+            newconn = util.dup_lib_conn(self.config, self._pool.conn)
             meter = vmmCreateMeter(asyncjob)
             self._pool.conn = newconn
 

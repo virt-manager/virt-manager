@@ -846,7 +846,7 @@ class vmmAddHardware(gobject.GObject):
             # If creating disk via storage API, we need to thread
             # off a new connection
             if disk.vol_install:
-                newconn = vmmutil.dup_conn(self.config, None, disk.conn)
+                newconn = vmmutil.dup_lib_conn(self.config, disk.conn)
                 disk.conn = newconn
             logging.debug("Starting background file allocate process")
             disk.setup(meter)
