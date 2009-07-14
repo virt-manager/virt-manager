@@ -156,7 +156,7 @@ class vmmEngine(gobject.GObject):
             return self._tick()
 
         if self._tick_thread and self._tick_thread.isAlive():
-            if not self._tick_is_slow:
+            if not self._tick_thread_slow:
                 logging.debug("Tick is slow, not running at requested rate.")
             return 1
 
