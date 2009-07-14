@@ -483,6 +483,8 @@ class vmmConnection(gobject.GObject):
         logging.debug("Notifying open result")
 
         try:
+            gobject.idle_add(util.idle_emit, self, "state-changed")
+
             if self.state == self.STATE_ACTIVE:
                 logging.debug("%s capabilities:\n%s" %
                               (self.get_uri(), self.vmm.getCapabilities()))
@@ -493,8 +495,6 @@ class vmmConnection(gobject.GObject):
                 # the database
                 self.config.reconcile_vm_entries(self.get_uri(),
                                                  self.vms.keys())
-
-                gobject.idle_add(util.idle_emit, self, "state-changed")
 
             if self.state == self.STATE_DISCONNECTED:
                 gobject.idle_add(util.idle_emit, self, "connect-error",
