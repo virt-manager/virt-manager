@@ -105,11 +105,17 @@ class vmmEngine(gobject.GObject):
         self.windowConnect = None
 
         try:
-            conn = self.get_connection(uri, readOnly, autoconnect)
+            try:
+                conn = self._lookup_connection(uri)
+            except Exception, e:
+                print e
+                conn = self.add_connection(uri, readOnly, autoconnect)
+
             self.show_manager()
             conn.open()
             return conn
-        except:
+        except Exception, e:
+            print e
             return None
 
     def _connect_cancelled(self, connect):
@@ -245,7 +251,7 @@ class vmmEngine(gobject.GObject):
         self.windowPreferences.show()
 
     def show_host(self, uri):
-        con = self.get_connection(uri)
+        con = self._lookup_connection(uri)
 
         if self.connections[uri]["windowHost"] == None:
             manager = vmmHost(self.get_config(), con)
@@ -283,7 +289,7 @@ class vmmEngine(gobject.GObject):
         win.activate_config_page()
 
     def show_details(self, uri, uuid):
-        con = self.get_connection(uri)
+        con = self._lookup_connection(uri)
 
         if not(self.connections[uri]["windowDetails"].has_key(uuid)):
             try:
@@ -384,6 +390,8 @@ class vmmEngine(gobject.GObject):
         if autoconnect:
             conn.toggle_autoconnect()
 
+        return conn
+
     def remove_connection(self, uri):
         conn = self.connections[uri]["connection"]
         conn.close()
@@ -400,21 +408,22 @@ class vmmEngine(gobject.GObject):
 
         return handle_id
 
-    def get_connection(self, uri, readOnly=None, autoconnect=False):
-        if not(self.connections.has_key(uri)):
-            self.add_connection(uri, readOnly, autoconnect)
+    def _lookup_connection(self, uri):
+        conn = self.connections.get(uri)
+        if not conn:
+            raise RuntimeError(_("Unknown connection URI %s") % uri)
 
-        return self.connections[uri]["connection"]
+        return conn["connection"]
 
     def save_domain(self, src, uri, uuid):
-        con = self.get_connection(uri, False)
-        if con.is_remote():
+        conn = self._lookup_connection(uri)
+        if conn.is_remote():
             # FIXME: This should work with remote storage stuff
             self.err.val_err(_("Saving virtual machines over remote "
                                "connections is not yet supported."))
             return
 
-        vm = con.get_vm(uuid)
+        vm = conn.get_vm(uuid)
         status = vm.status()
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
                        libvirt.VIR_DOMAIN_SHUTOFF,
@@ -426,7 +435,7 @@ class vmmEngine(gobject.GObject):
 
         path = util.browse_local(src.window.get_widget("vmm-details"),
                                  _("Save Virtual Machine"),
-                                 self.config, self.get_connection(uri),
+                                 self.config, conn,
                                  dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE,
                                  browse_reason=self.config.CONFIG_DIR_SAVE)
 
@@ -448,107 +457,134 @@ class vmmEngine(gobject.GObject):
             asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
     def destroy_domain(self, src, uri, uuid):
-        con = self.get_connection(uri, False)
-        vm = con.get_vm(uuid)
+        conn = self._lookup_connection(uri)
+        vm = conn.get_vm(uuid)
         status = vm.status()
+
         if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
                        libvirt.VIR_DOMAIN_SHUTOFF ]:
-            logging.warning("Destroy requested, but machine is shutdown / shutoff")
-        else:
-            resp = self.err.yes_no(text1=_("About to poweroff virtual machine %s" % vm.get_name()), text2=_("This will immediately poweroff the VM without shutting down the OS and may cause data loss. Are you sure?"))
-            if resp:
-                logging.debug("Destroying vm '%s'." % vm.get_name())
-                try:
-                    vm.destroy()
-                except Exception, e:
-                    self.err.show_err(_("Error shutting down domain: %s" % str(e)), "".join(traceback.format_exc()))
+            logging.warning("Destroy requested, but machine is "
+                            "shutdown/shutoff")
+            return
+
+        resp = self.err.yes_no(text1=_("About to poweroff virtual "
+                                         "machine %s" % vm.get_name()),
+                               text2=_("This will immediately poweroff the VM "
+                                       "without shutting down the OS and may "
+                                       "cause data loss. Are you sure?"))
+        if not resp:
+            return
+
+        logging.debug("Destroying vm '%s'." % vm.get_name())
+        try:
+            vm.destroy()
+        except Exception, e:
+            self.err.show_err(_("Error shutting down domain: %s" % str(e)),
+                              "".join(traceback.format_exc()))
 
     def suspend_domain(self, src, uri, uuid):
-        con = self.get_connection(uri, False)
-        vm = con.get_vm(uuid)
+        conn = self._lookup_connection(uri)
+        vm = conn.get_vm(uuid)
         status = vm.status()
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, \
-                       libvirt.VIR_DOMAIN_SHUTOFF, \
+
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
+                       libvirt.VIR_DOMAIN_SHUTOFF,
                        libvirt.VIR_DOMAIN_CRASHED ]:
-            logging.warning("Pause requested, but machine is shutdown / shutoff")
+            logging.warning("Pause requested, but machine is shutdown/shutoff")
+            return
+
         elif status in [ libvirt.VIR_DOMAIN_PAUSED ]:
             logging.warning("Pause requested, but machine is already paused")
-        else:
-            logging.debug("Pausing vm '%s'." % vm.get_name())
-            try:
-                vm.suspend()
-            except Exception, e:
-                self.err.show_err(_("Error pausing domain: %s" % str(e)),
-                                  "".join(traceback.format_exc()))
-    
+            return
+
+        logging.debug("Pausing vm '%s'." % vm.get_name())
+        try:
+            vm.suspend()
+        except Exception, e:
+            self.err.show_err(_("Error pausing domain: %s" % str(e)),
+                              "".join(traceback.format_exc()))
+
     def resume_domain(self, src, uri, uuid):
-        con = self.get_connection(uri, False)
-        vm = con.get_vm(uuid)
+        conn = self._lookup_connection(uri)
+        vm = conn.get_vm(uuid)
         status = vm.status()
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN, \
-                       libvirt.VIR_DOMAIN_SHUTOFF, \
+
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
+                       libvirt.VIR_DOMAIN_SHUTOFF,
                        libvirt.VIR_DOMAIN_CRASHED ]:
-            logging.warning("Resume requested, but machine is shutdown / shutoff")
-        elif status in [ libvirt.VIR_DOMAIN_PAUSED ]:
-            logging.debug("Unpausing vm '%s'." % vm.get_name())
-            try:
-                vm.resume()
-            except Exception, e:
-                self.err.show_err(_("Error unpausing domain: %s" % str(e)),
-                                  "".join(traceback.format_exc()))
-        else:
-            logging.warning("Resume requested, but machine is already running")
-    
+            logging.warning("Resume requested, but machine is "
+                            "shutdown/shutoff")
+            return
+
+        elif status not in [ libvirt.VIR_DOMAIN_PAUSED ]:
+            logging.warning("Unpause requested, but machine is not paused.")
+            return
+
+        logging.debug("Unpausing vm '%s'." % vm.get_name())
+        try:
+            vm.resume()
+        except Exception, e:
+            self.err.show_err(_("Error unpausing domain: %s" % str(e)),
+                              "".join(traceback.format_exc()))
+
     def run_domain(self, src, uri, uuid):
-        con = self.get_connection(uri, False)
-        vm = con.get_vm(uuid)
+        conn = self._lookup_connection(uri)
+        vm = conn.get_vm(uuid)
         status = vm.status()
+
         if status != libvirt.VIR_DOMAIN_SHUTOFF:
             logging.warning("Run requested, but domain isn't shutoff.")
-        else:
-            logging.debug("Starting vm '%s'." % vm.get_name())
-            try:
-                vm.startup()
-            except Exception, e:
-                self.err.show_err(_("Error starting domain: %s" % str(e)),
-                                  "".join(traceback.format_exc()))
+            return
+
+        logging.debug("Starting vm '%s'." % vm.get_name())
+        try:
+            vm.startup()
+        except Exception, e:
+            self.err.show_err(_("Error starting domain: %s" % str(e)),
+                              "".join(traceback.format_exc()))
 
     def shutdown_domain(self, src, uri, uuid):
-        con = self.get_connection(uri, False)
-        vm = con.get_vm(uuid)
+        conn = self._lookup_connection(uri)
+        vm = conn.get_vm(uuid)
         status = vm.status()
-        if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, \
-                           libvirt.VIR_DOMAIN_SHUTOFF, \
-                           libvirt.VIR_DOMAIN_CRASHED ]):
-            logging.debug("Shutting down vm '%s'." % vm.get_name())
-            try:
-                vm.shutdown()
-            except Exception, e:
-                self.err.show_err(_("Error shutting down domain: %s" % str(e)),
-                                  "".join(traceback.format_exc()))
-        else:
-            logging.warning("Shut down requested, but the virtual machine is already shutting down / powered off")
+
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
+                       libvirt.VIR_DOMAIN_SHUTOFF,
+                       libvirt.VIR_DOMAIN_CRASHED ]:
+            logging.warning("Shut down requested, but the virtual machine is "
+                            "already shutting down / powered off")
+            return
+
+        logging.debug("Shutting down vm '%s'." % vm.get_name())
+        try:
+            vm.shutdown()
+        except Exception, e:
+            self.err.show_err(_("Error shutting down domain: %s" % str(e)),
+                              "".join(traceback.format_exc()))
 
     def reboot_domain(self, src, uri, uuid):
-        con = self.get_connection(uri, False)
-        vm = con.get_vm(uuid)
+        conn = self._lookup_connection(uri)
+        vm = conn.get_vm(uuid)
         status = vm.status()
-        if not(status in [ libvirt.VIR_DOMAIN_SHUTDOWN, \
-                           libvirt.VIR_DOMAIN_SHUTOFF, \
-                           libvirt.VIR_DOMAIN_CRASHED ]):
-            logging.debug("Rebooting vm '%s'." % vm.get_name())
-            try:
-                vm.reboot()
-            except Exception, e:
-                self.err.show_err(_("Error shutting down domain: %s" % str(e)),
-                                  "".join(traceback.format_exc()))
-        else:
-            logging.warning("Reboot requested, but machine is already shutting down / shutoff")
+
+        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
+                       libvirt.VIR_DOMAIN_SHUTOFF,
+                       libvirt.VIR_DOMAIN_CRASHED ]:
+            logging.warning("Reboot requested, but machine is already "
+                            "shutting down / shutoff")
+            return
+
+        logging.debug("Rebooting vm '%s'." % vm.get_name())
+        try:
+            vm.reboot()
+        except Exception, e:
+            self.err.show_err(_("Error shutting down domain: %s" % str(e)),
+                              "".join(traceback.format_exc()))
 
     def migrate_domain(self, uri, uuid, desthost):
         desturi = None
         for key in self.connections.keys():
-            if self.get_connection(key).get_hostname() == desthost:
+            if self._lookup_connection(key).get_hostname() == desthost:
                 desturi = key
                 break
 
@@ -557,9 +593,9 @@ class vmmEngine(gobject.GObject):
                           % desthost)
             return
 
-        conn = self.get_connection(uri, False)
+        conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
-        destconn = self.get_connection(desturi, False)
+        destconn = self._lookup_connection(desturi, False)
         resp = self.err.yes_no(_("Are you sure you want to migrate %s from "
                                  "%s to %s?") %
                                 (vm.get_name(), conn.get_hostname(),
