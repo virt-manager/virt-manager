@@ -857,6 +857,11 @@ class vmmDetails(gobject.GObject):
         details = self.window.get_widget("details-pages")
         page = details.get_current_page()
 
+        # If the dialog is visible, we want to make sure the XML is always
+        # up to date
+        if self.is_visible():
+           self.vm.refresh_xml()
+
         if (page == PAGE_DETAILS and
             self.get_hw_selection(HW_LIST_COL_TYPE) == HW_LIST_TYPE_STATS):
             self.refresh_stats_page()

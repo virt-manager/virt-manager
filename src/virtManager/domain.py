@@ -110,6 +110,9 @@ class vmmDomain(gobject.GObject):
             self._invalidate_xml()
             return self.get_xml()
 
+    def refresh_xml(self):
+        self._update_xml()
+
     def _xml_fetch_helper(self, refresh_if_necc):
         # Helper to fetch xml with various options
         if self._xml is None:
