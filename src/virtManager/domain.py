@@ -711,27 +711,31 @@ class vmmDomain(gobject.GObject):
                     if child.name == "source":
                         source_path = child.prop("path")
 
-                serial_list.append([name, dev_type, source_path])
+                serial_list.append([name, dev_type, source_path, target_port])
 
             for node in cdevs:
                 name = "Serial Console"
                 dev_type = "pty"
                 source_path = None
+                target_port = -1
                 inuse = False
 
                 for child in node.children:
                     if child.name == "source":
                         source_path = child.prop("path")
-                        break
 
-                if source_path:
+                    if child.name == "target":
+                        target_port = child.prop("port")
+
+                if target_port != -1:
                     for dev in serial_list:
-                        if source_path == dev[2]:
+                        if target_port == dev[3]:
                             inuse = True
                             break
 
                 if not inuse:
-                    serial_list.append([name, dev_type, source_path])
+                    serial_list.append([name, dev_type, source_path,
+                                       target_port])
 
             return serial_list
         return self._parse_device_xml(_parse_serial_consoles)
