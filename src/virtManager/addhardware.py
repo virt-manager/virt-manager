@@ -28,7 +28,7 @@ import gtk.gdk
 import gtk.glade
 
 import virtinst
-from virtinst import VirtualCharDevice, VirtualDevice
+from virtinst import VirtualCharDevice, VirtualDevice, VirtualVideoDevice
 
 import virtManager.util as vmmutil
 from virtManager.asyncjob import vmmAsyncJob
@@ -49,7 +49,8 @@ PAGE_GRAPHICS = 4
 PAGE_SOUND = 5
 PAGE_HOSTDEV = 6
 PAGE_CHAR = 7
-PAGE_SUMMARY = 8
+PAGE_VIDEO = 8
+PAGE_SUMMARY = 9
 
 char_widget_mappings = {
     "source_path" : "char-path",
@@ -240,6 +241,18 @@ class vmmAddHardware(gobject.GObject):
         host_dev.add_attribute(text, 'text', 0)
         host_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
+        # Video device
+        video_dev = self.window.get_widget("video-model")
+        video_dev_model = gtk.ListStore(str)
+        video_dev.set_model(video_dev_model)
+        text = gtk.CellRendererText()
+        video_dev.pack_start(text, True)
+        video_dev.add_attribute(text, 'text', 0)
+        video_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        for m in VirtualVideoDevice(self.vm.get_connection().vmm).model_types:
+            video_dev_model.append([m])
+        if len(video_dev_model) > 0:
+            video_dev.set_active(0)
 
         char_devtype = self.window.get_widget("char-device-type")
         # Type name, desc
@@ -393,6 +406,8 @@ class vmmAddHardware(gobject.GObject):
 
         if self.vm.get_connection().is_nodedev_capable():
             model.append(["Physical Host Device", None, PAGE_HOSTDEV])
+
+        model.append(["Video", gtk.STOCK_SELECT_COLOR, PAGE_VIDEO])
 
         self.window.get_widget("hardware-type").set_active(0)
 
@@ -553,6 +568,10 @@ class vmmAddHardware(gobject.GObject):
         devbox = self.window.get_widget("host-device")
         return devbox.get_model()[devbox.get_active()]
 
+    def get_config_video_model(self):
+        modbox = self.window.get_widget("video-model")
+        return modbox.get_model()[modbox.get_active()][0]
+
     def page_changed(self, notebook, page, page_number):
         if page_number == PAGE_CHAR:
             devtype = self.window.get_widget("char-device-type")
@@ -698,6 +717,12 @@ class vmmAddHardware(gobject.GObject):
             ]
             title = _("Physical Host Device")
 
+        elif hwpage == PAGE_VIDEO:
+            info_list = [
+                (_("Model:"), self._dev.model_type),
+            ]
+            title = _("Video")
+
         set_table(title, info_list)
 
 
@@ -722,7 +747,8 @@ class vmmAddHardware(gobject.GObject):
                       PAGE_GRAPHICS: self.add_graphics,
                       PAGE_SOUND: self.add_sound,
                       PAGE_HOSTDEV: self.add_hostdev,
-                      PAGE_CHAR: self.add_device}
+                      PAGE_CHAR: self.add_device,
+                      PAGE_VIDEO: self.add_device}
 
         try:
             func = func_dict[hw]
@@ -1184,6 +1210,17 @@ class vmmAddHardware(gobject.GObject):
             except Exception, e:
                 return self.err.val_err(_("%s device parameter error.") %
                                         chartype.capitalize(), str(e))
+
+        elif page_num == PAGE_VIDEO:
+            conn = self.vm.get_connection().vmm
+            model = self.get_config_video_model()
+
+            try:
+                self._dev = VirtualVideoDevice(conn=conn)
+                self._dev.model_type = model
+            except Exception, e:
+                return self.err.val_err(_("Video device parameter error.") %
+                                        str(e))
 
         return True
 
