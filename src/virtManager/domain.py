@@ -875,7 +875,7 @@ class vmmDomain(gobject.GObject):
     def get_graphics_devices(self):
         def _parse_graphics_devs(ctx):
             graphics = []
-            ret = ctx.xpathEval("/domain/devices/graphics[1]")
+            ret = ctx.xpathEval("/domain/devices/graphics")
             for node in ret:
                 typ = node.prop("type")
                 listen = None

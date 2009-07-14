@@ -1822,7 +1822,7 @@ class vmmDetails(gobject.GObject):
 
             # Add in row
             if missing:
-                hw_list_model.insert(insertAt, [_("Display"), gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_GRAPHICS, gfxinfo])
+                hw_list_model.insert(insertAt, [_("Display %s") % gfxinfo[1].upper(), gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_GRAPHICS, gfxinfo])
 
         # Populate list of sound devices
         for soundinfo in self.vm.get_sound_devices():
