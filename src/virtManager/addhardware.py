@@ -18,14 +18,17 @@
 # MA 02110-1301 USA.
 #
 
+import os
+import logging
+import traceback
+
 import gobject
 import gtk
 import gtk.gdk
 import gtk.glade
+
 import virtinst
-import os
-import logging
-import traceback
+from virtinst import VirtualCharDevice, VirtualDevice
 
 import virtManager.util as vmmutil
 from virtManager.asyncjob import vmmAsyncJob
@@ -45,7 +48,18 @@ PAGE_INPUT = 3
 PAGE_GRAPHICS = 4
 PAGE_SOUND = 5
 PAGE_HOSTDEV = 6
-PAGE_SUMMARY = 7
+PAGE_CHAR = 7
+PAGE_SUMMARY = 8
+
+char_widget_mappings = {
+    "source_path" : "char-path",
+    "source_mode" : "char-mode",
+    "source_host" : "char-host",
+    "source_port" : "char-port",
+    "bind_port": "char-bind-port",
+    "bind_host": "char-bind-host",
+    "protocol" : "char-use-telnet",
+}
 
 class vmmAddHardware(gobject.GObject):
     __gsignals__ = {
@@ -56,7 +70,6 @@ class vmmAddHardware(gobject.GObject):
         self.__gobject_init__()
         self.config = config
         self.vm = vm
-        self._dev = None
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-add-hardware.glade", "vmm-add-hardware", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-add-hardware")
         self.err = vmmErrorDialog(self.topwin,
@@ -66,6 +79,8 @@ class vmmAddHardware(gobject.GObject):
 
         self.storage_browser = None
         self._browse_cb_id = None
+
+        self._dev = None
 
         self.topwin.hide()
         self.window.signal_autoconnect({
@@ -85,10 +100,41 @@ class vmmAddHardware(gobject.GObject):
             "on_graphics_port_auto_toggled": self.change_port_auto,
             "on_graphics_keymap_toggled": self.change_keymap,
             "on_host_device_type_changed": self.change_host_device_type,
+            "on_char_device_type_changed": self.change_char_device_type,
             "on_create_help_clicked": self.show_help,
+
+            # Char dev info signals
+            "char_device_type_focus": (self.update_doc, "char_type"),
+            "char_path_focus_in": (self.update_doc, "source_path"),
+            "char_mode_changed": (self.update_doc_changed, "source_mode"),
+            "char_mode_focus"  : (self.update_doc, "source_mode"),
+            "char_host_focus_in": (self.update_doc, "source_host"),
+            "char_bind_host_focus_in": (self.update_doc, "bind_host"),
+            "char_telnet_focus_in": (self.update_doc, "protocol"),
             })
 
         self.set_initial_state()
+
+    def update_doc(self, ignore1, ignore2, param):
+        doc = self._build_doc_str(param)
+        self.window.get_widget("char-info").set_markup(doc)
+
+    def update_doc_changed(self, ignore1, param):
+        # Wrapper for update_doc and 'changed' signal
+        self.update_doc(None, None, param)
+
+    def _build_doc_str(self, param, docstr=None):
+        doc = ""
+        doctmpl = "<i>%s</i>"
+
+        if docstr:
+            doc = doctmpl % (docstr)
+        elif self._dev:
+            devclass = self._dev.__class__
+            if hasattr(devclass, param):
+                doc = doctmpl % (getattr(devclass, param).__doc__)
+
+        return doc
 
     def show(self):
         self.reset_state()
@@ -195,6 +241,32 @@ class vmmAddHardware(gobject.GObject):
         host_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
 
+        char_devtype = self.window.get_widget("char-device-type")
+        # Type name, desc
+        char_devtype_model = gtk.ListStore(str, str)
+        char_devtype.set_model(char_devtype_model)
+        text = gtk.CellRendererText()
+        char_devtype.pack_start(text, True)
+        char_devtype.add_attribute(text, 'text', 1)
+        char_devtype_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        for t in VirtualCharDevice.char_types:
+            desc = VirtualCharDevice.get_char_type_desc(t)
+            char_devtype_model.append([t, desc + " (%s)" % t])
+
+        char_mode = self.window.get_widget("char-mode")
+        # Mode name, desc
+        char_mode_model = gtk.ListStore(str, str)
+        char_mode.set_model(char_mode_model)
+        text = gtk.CellRendererText()
+        char_mode.pack_start(text, True)
+        char_mode.add_attribute(text, 'text', 1)
+        char_mode_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        for t in VirtualCharDevice.char_modes:
+            desc = VirtualCharDevice.get_char_mode_desc(t)
+            char_mode_model.append([t, desc + " (%s)" % t])
+
+        self.window.get_widget("char-info-box").modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("grey"))
+
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
@@ -283,6 +355,17 @@ class vmmAddHardware(gobject.GObject):
 
         # Set available HW options
 
+        # Char parameters
+        self.window.get_widget("char-device-type").set_active(0)
+        self.window.get_widget("char-path").set_text("")
+        self.window.get_widget("char-host").set_text("127.0.0.1")
+        self.window.get_widget("char-port").get_adjustment().value = 4555
+        self.window.get_widget("char-bind-host").set_text("127.0.0.1")
+        self.window.get_widget("char-bind-port").get_adjustment().value = 4556
+        self.window.get_widget("char-use-telnet").set_active(False)
+
+        # Available HW options
+
         # FIXME: All of these needs to have better transparency.
         # All options should be listed, but disabled with a tooltip if
         # it can't be used.
@@ -303,6 +386,10 @@ class vmmAddHardware(gobject.GObject):
 
         if self.vm.is_hvm():
             model.append(["Sound", gtk.STOCK_MEDIA_PLAY, PAGE_SOUND])
+
+        if self.vm.is_hvm():
+            model.append(["Serial", gtk.STOCK_CONNECT, PAGE_CHAR])
+            model.append(["Parallel", gtk.STOCK_CONNECT, PAGE_CHAR])
 
         if self.vm.get_connection().is_nodedev_capable():
             model.append(["Physical Host Device", None, PAGE_HOSTDEV])
@@ -467,6 +554,11 @@ class vmmAddHardware(gobject.GObject):
         return devbox.get_model()[devbox.get_active()]
 
     def page_changed(self, notebook, page, page_number):
+        if page_number == PAGE_CHAR:
+            devtype = self.window.get_widget("char-device-type")
+            self.change_char_device_type(devtype)
+            self.set_page_char_type()
+
         if page_number != PAGE_SUMMARY:
             return
 
@@ -570,6 +662,35 @@ class vmmAddHardware(gobject.GObject):
             ]
             title = _("Sound")
 
+        elif hwpage == PAGE_CHAR:
+            mode = None
+
+            info_list = [
+                (_("Type:"), VirtualCharDevice.get_char_type_desc(self._dev.char_type)),
+            ]
+
+            if hasattr(self._dev, "source_mode"):
+                mode = self._dev.source_mode.capitalize()
+            if hasattr(self._dev, "source_path"):
+                path = self._dev.source_path
+                label = "%sPath:" % (mode and mode + " " or "")
+                info_list.append((label, path))
+
+            if hasattr(self._dev, "source_host"):
+                host = "%s:%s" % (self._dev.source_host, self._dev.source_port)
+                label = "%sHost:" % (mode and mode + " " or "")
+                info_list.append((label, host))
+
+            if hasattr(self._dev, "bind_host"):
+                bind_host = "%s:%s" % (self._dev.bind_host,
+                                       self._dev.bind_port)
+                info_list.append(("Bind Host:", bind_host))
+            if hasattr(self._dev, "protocol"):
+                proto = self._dev.protocol
+                info_list.append((_("Protocol:"), proto))
+
+            title = self.get_char_type().capitalize()
+
         elif hwpage == PAGE_HOSTDEV:
             info_list = [
                 (_("Type:"),    self.get_config_host_device_type_info()[0]),
@@ -600,7 +721,8 @@ class vmmAddHardware(gobject.GObject):
                       PAGE_INPUT: self.add_input,
                       PAGE_GRAPHICS: self.add_graphics,
                       PAGE_SOUND: self.add_sound,
-                      PAGE_HOSTDEV: self.add_hostdev }
+                      PAGE_HOSTDEV: self.add_hostdev,
+                      PAGE_CHAR: self.add_device}
 
         try:
             func = func_dict[hw]
@@ -660,7 +782,10 @@ class vmmAddHardware(gobject.GObject):
         else:
             return (error, details)
 
-    def add_device(self, xml):
+    def add_device(self, xml=None):
+        if not xml:
+            xml = self._dev.get_xml_config()
+
         logging.debug("Adding device:\n" + xml)
 
         attach_err = False
@@ -841,6 +966,42 @@ class vmmAddHardware(gobject.GObject):
                                         subtype, subcap)
         devbox.set_active(0)
 
+    def get_char_type(self):
+        hw_list = self.window.get_widget("hardware-type")
+        if hw_list.get_active() < 0:
+            label = "serial"
+        else:
+            label = hw_list.get_model()[hw_list.get_active()][0]
+
+        if label.lower() == "parallel":
+            return VirtualDevice.VIRTUAL_DEV_PARALLEL
+        return VirtualDevice.VIRTUAL_DEV_SERIAL
+
+    def set_page_char_type(self):
+        char_type = self.get_char_type().capitalize()
+        self.window.get_widget("char-title-label").set_markup(
+            """<span weight="heavy" size="xx-large" foreground="#FFF">%s Device</span>""" % char_type)
+
+    def change_char_device_type(self, src):
+        self.update_doc(None, None, "char_type")
+
+        chartype = self.get_char_type()
+        devtype = src.get_model()[src.get_active()][0]
+        conn = self.vm.get_connection().vmm
+
+        self._dev = VirtualCharDevice.get_dev_instance(conn,
+                                                       chartype,
+                                                       devtype)
+
+        for param_name, widget_name in char_widget_mappings.items():
+            make_visible = hasattr(self._dev, param_name)
+            self.window.get_widget(widget_name).set_sensitive(make_visible)
+
+        has_mode = hasattr(self._dev, "source_mode")
+
+        if has_mode and self.window.get_widget("char-mode").get_active() == -1:
+            self.window.get_widget("char-mode").set_active(0)
+
     def validate(self, page_num):
         if page_num == PAGE_INTRO:
             if self.get_config_hardware_type() == None:
@@ -981,6 +1142,48 @@ class vmmAddHardware(gobject.GObject):
             except Exception, e:
                 return self.err.val_err(_("Host device parameter error",
                                         str(e)))
+
+        elif page_num == PAGE_CHAR:
+            chartype = self.get_char_type()
+            devbox = self.window.get_widget("char-device-type")
+            devtype = devbox.get_model()[devbox.get_active()][0]
+            conn = self.vm.get_connection().vmm
+
+            devclass = VirtualCharDevice.get_dev_instance(conn, chartype,
+                                                          devtype)
+
+            source_path = self.window.get_widget("char-path").get_text()
+            source_host = self.window.get_widget("char-host").get_text()
+            bind_host = self.window.get_widget("char-bind-host").get_text()
+            source_port = self.window.get_widget("char-port").get_adjustment().value
+            bind_port = self.window.get_widget("char-bind-port").get_adjustment().value
+
+            if self.window.get_widget("char-use-telnet").get_active():
+                protocol = VirtualCharDevice.CHAR_PROTOCOL_TELNET
+            else:
+                protocol = VirtualCharDevice.CHAR_PROTOCOL_RAW
+
+            value_mappings = {
+                "source_path" : source_path,
+                "source_host" : source_host,
+                "source_port" : source_port,
+                "bind_port": bind_port,
+                "bind_host": bind_host,
+                "protocol": protocol,
+            }
+
+            try:
+                self._dev = devclass
+
+                for param_name, val in value_mappings.items():
+                    if hasattr(self._dev, param_name):
+                        setattr(self._dev, param_name, val)
+
+                # Dump XML for sanity checking
+                self._dev.get_xml_config()
+            except Exception, e:
+                return self.err.val_err(_("%s device parameter error.") %
+                                        chartype.capitalize(), str(e))
 
         return True
 
