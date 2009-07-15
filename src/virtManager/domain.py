@@ -180,14 +180,15 @@ class vmmDomain(gobject.GObject):
         if origxml == newxml:
             logging.debug("Redefinition requested, but new xml was not"
                           " different")
-            return
 
-        diff = "".join(difflib.unified_diff(origxml.splitlines(1),
-                                            newxml.splitlines(1),
-                                            fromfile="Original XML",
-                                            tofile="New XML"))
-        logging.debug("Redefining '%s' with XML diff:\n%s",
-                      self.get_name(), diff)
+        else:
+            diff = "".join(difflib.unified_diff(origxml.splitlines(1),
+                                                newxml.splitlines(1),
+                                                fromfile="Original XML",
+                                                tofile="New XML"))
+            logging.debug("Redefining '%s' with XML diff:\n%s",
+                          self.get_name(), diff)
+
         self.get_connection().define_domain(newxml)
 
         # Invalidate cached XML
@@ -1295,9 +1296,30 @@ class vmmDomain(gobject.GObject):
         logging.debug("eject_cdrom produced: %s" % result)
         self._change_cdrom(result, dev_id_info)
 
-    def set_vcpu_count(self, vcpus):
+    def hotplug_vcpu(self, vcpus):
+        self.vm.setVcpus()
+
+    def hotplug_vcpus(self, vcpus):
         vcpus = int(vcpus)
-        self.vm.setVcpus(vcpus)
+        if vcpus != self.vcpu_count():
+            self.vm.setVcpus(vcpus)
+
+    def define_vcpus(self, vcpus):
+        vcpus = int(vcpus)
+
+        def set_node(doc, ctx, val, xpath):
+            node = ctx.xpathEval(xpath)
+            node = (node and node[0] or None)
+
+            if node:
+                node.setContent(str(val))
+            return doc.serialize()
+
+        def change_vcpu_xml(xml, vcpus):
+            return util.xml_parse_wrapper(xml, set_node, vcpus,
+                                          "/domain/vcpu[1]")
+
+        self.redefine(change_vcpu_xml, vcpus)
 
     def hotplug_memory(self, memory):
         if memory != self.get_memory():

@@ -1603,7 +1603,26 @@ class vmmDetails(gobject.GObject):
         vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
         logging.info("Setting vcpus for %s to %s" % (self.vm.get_name(),
                                                      str(vcpus)))
-        self.vm.set_vcpu_count(vcpus)
+        hotplug_err = False
+
+        try:
+            if self.vm.is_active():
+                self.vm.hotplug_vcpus(vcpus)
+        except Exception, e:
+            logging.debug("VCPU hotplug failed: %s" % str(e))
+            hotplug_err = True
+
+        # Change persistent config
+        try:
+            self.vm.define_vcpus(vcpus)
+        except Exception, e:
+            self.err.show_err(_("Error changing vcpu value: %s" % str(e)),
+                              "".join(traceback.format_exc()))
+            return False
+
+        if hotplug_err:
+            self.err.show_info(_("These changes will take effect after the "
+                                 "next guest reboot. "))
 
     def config_get_maxmem(self):
         maxadj = self.window.get_widget("config-maxmem").get_adjustment()
@@ -1657,7 +1676,7 @@ class vmmDetails(gobject.GObject):
             logging.debug("Memory hotplug failed: %s" % str(e))
             hotplug_err = True
 
-        # Change persisten config
+        # Change persistent config
         try:
             self.vm.define_both_mem(curmem, maxmem)
         except Exception, e:
