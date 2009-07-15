@@ -187,12 +187,12 @@ def _dup_all_conn(config, conn, libconn, return_conn_class):
     if is_test:
         # Skip duplicating a test conn, since it doesn't maintain state
         # between instances
-        return conn or vmm
+        return return_conn_class and conn or vmm
 
     if int(libvirt.getVersion()) >= 6000:
         # Libvirt 0.6.0 implemented client side request threading: this
         # removes the need to actually duplicate the connection.
-        return conn or vmm
+        return return_conn_class and conn or vmm
 
     logging.debug("Duplicating connection for async operation.")
     newconn = virtManager.connection.vmmConnection(config, uri, is_readonly)
