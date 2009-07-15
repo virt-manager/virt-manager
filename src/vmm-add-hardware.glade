@@ -74,9 +74,42 @@
                           <widget class="GtkTable" id="table32">
                             <property name="visible">True</property>
                             <property name="border_width">6</property>
+                            <property name="n_rows">2</property>
                             <property name="n_columns">2</property>
-                            <property name="column_spacing">3</property>
-                            <property name="row_spacing">3</property>
+                            <property name="column_spacing">6</property>
+                            <property name="row_spacing">6</property>
+                            <child>
+                              <widget class="GtkHBox" id="hardware-info-box">
+                                <property name="spacing">6</property>
+                                <child>
+                                  <widget class="GtkImage" id="image1">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="stock">gtk-dialog-warning</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkLabel" id="hardware-info">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label">label</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
                             <child>
                               <widget class="GtkLabel" id="label385">
                                 <property name="visible">True</property>
@@ -94,6 +127,7 @@
                                 <accessibility>
                                   <atkproperty name="AtkObject::accessible_name" translatable="yes">Hardware Type Select</atkproperty>
                                 </accessibility>
+                                <signal name="changed" handler="on_hardware_type_changed"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>

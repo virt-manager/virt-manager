@@ -27,6 +27,7 @@ import gtk
 import gtk.gdk
 import gtk.glade
 
+import libvirt
 import virtinst
 from virtinst import VirtualCharDevice, VirtualDevice, VirtualVideoDevice
 
@@ -85,6 +86,7 @@ class vmmAddHardware(gobject.GObject):
 
         self.topwin.hide()
         self.window.signal_autoconnect({
+            "on_hardware_type_changed"  : self.hardware_type_changed,
             "on_create_pages_switch_page" : self.page_changed,
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,
@@ -153,7 +155,8 @@ class vmmAddHardware(gobject.GObject):
 
         # Main HW list
         hw_list = self.window.get_widget("hardware-type")
-        model = gtk.ListStore(str, str, int)
+        # Name, icon name, page number, is sensitive, tooltip
+        model = gtk.ListStore(str, str, int, bool, str)
         hw_list.set_model(model)
         icon = gtk.CellRendererPixbuf()
         hw_list.pack_start(icon, False)
@@ -161,6 +164,7 @@ class vmmAddHardware(gobject.GObject):
         text = gtk.CellRendererText()
         hw_list.pack_start(text, True)
         hw_list.add_attribute(text, 'text', 0)
+        hw_list.add_attribute(text, 'sensitive', 3)
 
         # Virtual network list
         network_list = self.window.get_widget("net-network")
@@ -378,38 +382,47 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("char-use-telnet").set_active(False)
 
         # Available HW options
-
-        # FIXME: All of these needs to have better transparency.
-        # All options should be listed, but disabled with a tooltip if
-        # it can't be used.
         model = self.window.get_widget("hardware-type").get_model()
         model.clear()
-        model.append(["Storage", gtk.STOCK_HARDDISK, PAGE_DISK])
-        # Can't use shared or virtual networking in qemu:///session
-        # Can only have one usermode network device
-        if not self.vm.get_connection().is_qemu_session() or \
-           len(self.vm.get_network_devices()) == 0:
-            model.append(["Network", gtk.STOCK_NETWORK, PAGE_NETWORK])
 
-        # Can only customize add certain devices for HVM, no PV
-        # XXX: Is this correct wrt xenner?
-        if self.vm.is_hvm():
-            model.append(["Input", gtk.STOCK_INDEX, PAGE_INPUT])
-        model.append(["Graphics", gtk.STOCK_SELECT_COLOR, PAGE_GRAPHICS])
+        def add_hw_option(name, icon, page, sensitive, tooltip):
+            model.append([name, icon, page, sensitive, tooltip])
 
-        if self.vm.is_hvm():
-            model.append(["Sound", gtk.STOCK_MEDIA_PLAY, PAGE_SOUND])
-
-        if self.vm.is_hvm():
-            model.append(["Serial", gtk.STOCK_CONNECT, PAGE_CHAR])
-            model.append(["Parallel", gtk.STOCK_CONNECT, PAGE_CHAR])
-
-        if self.vm.get_connection().is_nodedev_capable():
-            model.append(["Physical Host Device", None, PAGE_HOSTDEV])
-
-        model.append(["Video", gtk.STOCK_SELECT_COLOR, PAGE_VIDEO])
+        add_hw_option("Storage", gtk.STOCK_HARDDISK, PAGE_DISK, True, None)
+        add_hw_option("Network", gtk.STOCK_NETWORK, PAGE_NETWORK, True, None)
+        add_hw_option("Input", gtk.STOCK_INDEX, PAGE_INPUT, self.vm.is_hvm(),
+                      _("Not supported for this guest type."))
+        add_hw_option("Graphics", gtk.STOCK_SELECT_COLOR, PAGE_GRAPHICS,
+                      True, None)
+        add_hw_option("Sound", gtk.STOCK_MEDIA_PLAY, PAGE_SOUND,
+                      self.vm.is_hvm(),
+                      _("Not supported for this guest type."))
+        add_hw_option("Serial", gtk.STOCK_CONNECT, PAGE_CHAR,
+                      self.vm.is_hvm(),
+                      _("Not supported for this guest type."))
+        add_hw_option("Parallel", gtk.STOCK_CONNECT, PAGE_CHAR,
+                      self.vm.is_hvm(),
+                      _("Not supported for this guest type."))
+        add_hw_option("Physical Host Device", None, PAGE_HOSTDEV,
+                      self.vm.get_connection().is_nodedev_capable(),
+                      _("Connection does not support host device "
+                      "enumeration"))
+        add_hw_option("Video", gtk.STOCK_SELECT_COLOR, PAGE_VIDEO,
+                      libvirt.getVersion() > 6005,
+                      _("Libvirt version does not support video devices."))
 
         self.window.get_widget("hardware-type").set_active(0)
+
+    def hardware_type_changed(self, src):
+        row = src.get_model()[src.get_active()]
+
+        sens = row[3]
+        msg = row[4] or ""
+
+        self.window.get_widget("create-forward").set_sensitive(sens)
+        self.window.get_widget("hardware-info-box").set_property("visible",
+                                                                 (not sens))
+        self.window.get_widget("hardware-info").set_text(msg)
 
     def forward(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
@@ -473,7 +486,7 @@ class vmmAddHardware(gobject.GObject):
                       "".join(traceback.format_exc())
             logging.error(details)
             return None
-        
+
     def get_config_disk_size(self):
         if self.window.get_widget("storage-partition").get_active():
             return self.get_config_partition_size()
