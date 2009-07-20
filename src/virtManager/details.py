@@ -42,11 +42,10 @@ import virtinst
 
 # Columns in hw list model
 HW_LIST_COL_LABEL = 0
-HW_LIST_COL_STOCK_ID = 1
-HW_LIST_COL_STOCK_SIZE = 2
-HW_LIST_COL_PIXBUF = 3
-HW_LIST_COL_TYPE = 4
-HW_LIST_COL_DEVICE = 5
+HW_LIST_COL_ICON_NAME = 1
+HW_LIST_COL_ICON_SIZE = 2
+HW_LIST_COL_TYPE = 3
+HW_LIST_COL_DEVICE = 4
 
 # Types for the hw list model: numbers specify what order they will be listed
 HW_LIST_TYPE_GENERAL = 0
@@ -133,18 +132,17 @@ class vmmDetails(gobject.GObject):
         else:
             self.window.get_widget("add-hardware-button").set_sensitive(True)
 
-        self.window.get_widget("control-shutdown").set_icon_widget(gtk.Image())
-        self.window.get_widget("control-shutdown").get_icon_widget().set_from_file(config.get_icon_dir() + "/icon_shutdown.png")
-
+        icon_name = self.config.get_shutdown_icon_name()
+        self.window.get_widget("control-shutdown").set_icon_name(icon_name)
         menu = gtk.Menu()
         self.window.get_widget("control-shutdown").set_menu(menu)
 
-        rebootimg = gtk.Image()
-        rebootimg.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
-        shutdownimg = gtk.Image()
-        shutdownimg.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
-        destroyimg = gtk.Image()
-        destroyimg.set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
+        rebootimg = gtk.image_new_from_icon_name(icon_name,
+                                                 gtk.ICON_SIZE_MENU)
+        shutdownimg = gtk.image_new_from_icon_name(icon_name,
+                                                   gtk.ICON_SIZE_MENU)
+        destroyimg = gtk.image_new_from_icon_name(icon_name,
+                                                  gtk.ICON_SIZE_MENU)
 
         reboot = gtk.ImageMenuItem(_("_Reboot"))
         reboot.set_image(rebootimg)
@@ -1712,21 +1710,21 @@ class vmmDetails(gobject.GObject):
         self.remove_device(info[0], info[1])
 
     def prepare_hw_list(self):
-        hw_list_model = gtk.ListStore(str, str, int, gtk.gdk.Pixbuf, int, gobject.TYPE_PYOBJECT)
+        # [ label, icon name, icon size, hw type, hw data ]
+        hw_list_model = gtk.ListStore(str, str, int, int,
+                                      gobject.TYPE_PYOBJECT)
         self.window.get_widget("hw-list").set_model(hw_list_model)
 
         hwCol = gtk.TreeViewColumn("Hardware")
-        hwCol.set_spacing(24)
+        hwCol.set_spacing(6)
+        hwCol.set_min_width(165)
         hw_txt = gtk.CellRendererText()
-        hw_txt.set_property("xpad", 2)
         hw_img = gtk.CellRendererPixbuf()
-        hw_img.set_property("xpad", 4)
-        hwCol.pack_start(hw_txt, True)
         hwCol.pack_start(hw_img, False)
+        hwCol.pack_start(hw_txt, True)
         hwCol.add_attribute(hw_txt, 'text', HW_LIST_COL_LABEL)
-        hwCol.add_attribute(hw_img, 'stock-id', HW_LIST_COL_STOCK_ID)
-        hwCol.add_attribute(hw_img, 'stock-size', HW_LIST_COL_STOCK_SIZE)
-        hwCol.add_attribute(hw_img, 'pixbuf', HW_LIST_COL_PIXBUF)
+        hwCol.add_attribute(hw_img, 'stock-size', HW_LIST_COL_ICON_SIZE)
+        hwCol.add_attribute(hw_img, 'icon-name', HW_LIST_COL_ICON_NAME)
         self.window.get_widget("hw-list").append_column(hwCol)
         self.prepare_boot_list()
 
@@ -1741,22 +1739,31 @@ class vmmDetails(gobject.GObject):
 
         icon = gtk.CellRendererPixbuf()
         boot_list.pack_start(icon, False)
-        boot_list.add_attribute(icon, 'stock-id', 1)
+        boot_list.add_attribute(icon, 'icon-name', 1)
         text = gtk.CellRendererText()
         boot_list.pack_start(text, True)
         boot_list.add_attribute(text, 'text', 0)
 
+    def add_hw_list_option(self, title, page_id, data, icon_name):
+        model = self.window.get_widget("hw-list").get_model()
+        model.append([title, icon_name, gtk.ICON_SIZE_LARGE_TOOLBAR,
+                      page_id, data])
+
     def populate_hw_list(self):
         hw_list_model = self.window.get_widget("hw-list").get_model()
         hw_list_model.clear()
-        hw_list_model.append([_("Overview"), None, 0, self.pixbuf_processor,
-                              HW_LIST_TYPE_GENERAL, []])
-        hw_list_model.append([_("Performance"), None, 0, self.pixbuf_memory,
-                              HW_LIST_TYPE_STATS, []])
-        hw_list_model.append([_("Processor"), None, 0, self.pixbuf_processor, HW_LIST_TYPE_CPU, []])
-        hw_list_model.append([_("Memory"), None, 0, self.pixbuf_memory, HW_LIST_TYPE_MEMORY, []])
-        hw_list_model.append([_("Boot Options"), None, 0, self.pixbuf_memory, HW_LIST_TYPE_BOOT, []])
+
+        self.add_hw_list_option("Overview", HW_LIST_TYPE_GENERAL, [],
+                                "computer")
+        self.add_hw_list_option("Performance", HW_LIST_TYPE_STATS, [],
+                                "utilities-system-monitor")
+        self.add_hw_list_option("Processor", HW_LIST_TYPE_CPU, [], "icon_cpu")
+        self.add_hw_list_option("Memory", HW_LIST_TYPE_MEMORY, [], "icon_cpu")
+        self.add_hw_list_option("Boot Options", HW_LIST_TYPE_BOOT, [],
+                                "icon_cpu")
+
         self.repopulate_hw_list()
+
 
     def repopulate_hw_list(self):
         hw_list = self.window.get_widget("hw-list")
@@ -1771,116 +1778,96 @@ class vmmDetails(gobject.GObject):
         currentHostdevs = {}
         currentVids = {}
 
-        def update_hwlist(hwtype, info):
-            """Return (true if we updated an entry,
-                       index to insert at if we didn't update an entry)
+        def add_hw_list_option(idx, name, page_id, info, icon_name):
+            hw_list_model.insert(idx, [name, icon_name,
+                                       gtk.ICON_SIZE_LARGE_TOOLBAR,
+                                       page_id, info])
+
+        def update_hwlist(hwtype, info, name, icon_name):
+            """
+            See if passed hw is already in list, and if so, update info.
+            If not in list, add it!
             """
             insertAt = 0
             for row in hw_list_model:
-                if row[HW_LIST_COL_TYPE] == hwtype and \
-                   row[HW_LIST_COL_DEVICE][2] == info[2]:
+                if (row[HW_LIST_COL_TYPE] == hwtype and
+                    row[HW_LIST_COL_DEVICE][2] == info[2]):
+                    # Update existing HW info
                     row[HW_LIST_COL_DEVICE] = info
-                    return (False, insertAt)
+                    return
 
                 if row[HW_LIST_COL_TYPE] <= hwtype:
                     insertAt += 1
 
-            return (True, insertAt)
+            # Add the new HW row
+            add_hw_list_option(insertAt, name, hwtype, info, icon_name)
 
         # Populate list of disks
         for diskinfo in self.vm.get_disk_devices():
             currentDisks[diskinfo[2]] = 1
-            missing, insertAt = update_hwlist(HW_LIST_TYPE_DISK,
-                                              diskinfo)
+            icon = "drive-harddisk"
+            if diskinfo[4] == "cdrom":
+                icon = "media-optical"
+            elif diskinfo[4] == "floppy":
+                icon = "media-floppy"
 
-            # Add in row
-            if missing:
-                stock = gtk.STOCK_HARDDISK
-                if diskinfo[4] == "cdrom":
-                    stock = gtk.STOCK_CDROM
-                elif diskinfo[4] == "floppy":
-                    stock = gtk.STOCK_FLOPPY
-                hw_list_model.insert(insertAt, ["Disk %s" % diskinfo[2], stock, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_DISK, diskinfo])
+            update_hwlist(HW_LIST_TYPE_DISK, diskinfo, "Disk %s" % diskinfo[2],
+                          icon)
 
         # Populate list of NICs
         for netinfo in self.vm.get_network_devices():
             currentNICs[netinfo[2]] = 1
-            missing, insertAt = update_hwlist(HW_LIST_TYPE_NIC,
-                                              netinfo)
-
-            # Add in row
-            if missing:
-                hw_list_model.insert(insertAt, ["NIC %s" % netinfo[2][-9:], gtk.STOCK_NETWORK, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_NIC, netinfo])
+            update_hwlist(HW_LIST_TYPE_NIC, netinfo,
+                          "NIC %s" % netinfo[2][-9:], "network-idle")
 
         # Populate list of input devices
         for inputinfo in self.vm.get_input_devices():
             currentInputs[inputinfo[2]] = 1
-            missing, insertAt = update_hwlist(HW_LIST_TYPE_INPUT,
-                                              inputinfo)
+            icon = "input-mouse"
+            if inputinfo[4] == "tablet":
+                label = _("Tablet")
+                icon = "input-tablet"
+            elif inputinfo[4] == "mouse":
+                label = _("Mouse")
+            else:
+                label = _("Input")
 
-            # Add in row
-            if missing:
-                if inputinfo[4] == "tablet":
-                    label = _("Tablet")
-                elif inputinfo[4] == "mouse":
-                    label = _("Mouse")
-                else:
-                    label = _("Input")
-                hw_list_model.insert(insertAt, [label, gtk.STOCK_INDEX, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_INPUT, inputinfo])
+            update_hwlist(HW_LIST_TYPE_INPUT, inputinfo, label, icon)
 
         # Populate list of graphics devices
         for gfxinfo in self.vm.get_graphics_devices():
             currentGraphics[gfxinfo[2]] = 1
-            missing, insertAt = update_hwlist(HW_LIST_TYPE_GRAPHICS,
-                                              gfxinfo)
-
-            # Add in row
-            if missing:
-                hw_list_model.insert(insertAt, [_("Display %s") % gfxinfo[1].upper(), gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_GRAPHICS, gfxinfo])
+            update_hwlist(HW_LIST_TYPE_GRAPHICS, gfxinfo,
+                          _("Display %s") % gfxinfo[1],
+                          "video-display")
 
         # Populate list of sound devices
         for soundinfo in self.vm.get_sound_devices():
             currentSounds[soundinfo[2]] = 1
-            missing, insertAt = update_hwlist(HW_LIST_TYPE_SOUND,
-                                              soundinfo)
-
-            # Add in row
-            if missing:
-                hw_list_model.insert(insertAt, [_("Sound: %s" % soundinfo[2]), gtk.STOCK_MEDIA_PLAY, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_SOUND, soundinfo])
+            update_hwlist(HW_LIST_TYPE_SOUND, soundinfo,
+                          _("Sound: %s" % soundinfo[2]), "audio-card")
 
         # Populate list of char devices
         for charinfo in self.vm.get_char_devices():
             currentChars[charinfo[2]] = 1
-            missing, insertAt = update_hwlist(HW_LIST_TYPE_CHAR,
-                                              charinfo)
+            label = charinfo[0].capitalize()
+            if charinfo[0] != "console":
+                label += " %s" % charinfo[3] # Don't show port for console
 
-            # Add in row
-            if missing:
-                l = charinfo[0].capitalize()
-                if charinfo[0] != "console":
-                    l += " %s" % charinfo[3] # Don't show port for console
-                hw_list_model.insert(insertAt, [l, gtk.STOCK_CONNECT, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_CHAR, charinfo])
+            update_hwlist(HW_LIST_TYPE_CHAR, charinfo, label,
+                          gtk.STOCK_CONNECT)
 
         # Populate host devices
         for hostdevinfo in self.vm.get_hostdev_devices():
             currentHostdevs[hostdevinfo[2]] = 1
-            missing, insertAt = update_hwlist(HW_LIST_TYPE_HOSTDEV,
-                                              hostdevinfo)
-
-            if missing:
-                hw_list_model.insert(insertAt, [hostdevinfo[2], None, gtk.ICON_SIZE_LARGE_TOOLBAR, None, HW_LIST_TYPE_HOSTDEV, hostdevinfo])
+            update_hwlist(HW_LIST_TYPE_HOSTDEV, hostdevinfo, hostdevinfo[2],
+                          "system-run")
 
         # Populate video devices
         for vidinfo in self.vm.get_video_devices():
             currentVids[vidinfo[2]] = 1
-            missing, insertAt = update_hwlist(HW_LIST_TYPE_VIDEO,
-                                              vidinfo)
-
-            if missing:
-                hw_list_model.insert(insertAt,
-                                     [_("Video"), gtk.STOCK_SELECT_COLOR,
-                                      gtk.ICON_SIZE_LARGE_TOOLBAR,
-                                      None, HW_LIST_TYPE_VIDEO, vidinfo])
+            update_hwlist(HW_LIST_TYPE_VIDEO, vidinfo, _("Video"),
+                          "video-display")
 
         # Now remove any no longer current devs
         devs = range(len(hw_list_model))
@@ -1927,23 +1914,27 @@ class vmmDetails(gobject.GObject):
         boot_model.clear()
         found_dev = {}
         for row in hw_list_model:
-            if row[4] == HW_LIST_TYPE_DISK:
-                diskinfo = row[5]
+            hwtype = row[HW_LIST_COL_TYPE]
+
+            if hwtype == HW_LIST_TYPE_DISK:
+                diskinfo = row[HW_LIST_COL_DEVICE]
+
                 if diskinfo[4] == virtinst.VirtualDisk.DEVICE_DISK and not \
                    found_dev.get(virtinst.VirtualDisk.DEVICE_DISK, False):
-                    boot_model.append(["Hard Disk", gtk.STOCK_HARDDISK, "hd"])
+                    boot_model.append(["Hard Disk", "drive-harddisk", "hd"])
                     found_dev[virtinst.VirtualDisk.DEVICE_DISK] = True
                 elif diskinfo[4] == virtinst.VirtualDisk.DEVICE_CDROM and not \
                      found_dev.get(virtinst.VirtualDisk.DEVICE_CDROM, False):
-                    boot_model.append(["CDROM", gtk.STOCK_CDROM, "cdrom"])
+                    boot_model.append(["CDROM", "media-optical", "cdrom"])
                     found_dev[virtinst.VirtualDisk.DEVICE_CDROM] = True
                 elif diskinfo[4] == virtinst.VirtualDisk.DEVICE_FLOPPY and not \
                      found_dev.get(virtinst.VirtualDisk.DEVICE_FLOPPY, False):
-                    boot_model.append(["Floppy", gtk.STOCK_FLOPPY, "fd"])
+                    boot_model.append(["Floppy", "media-floppy", "fd"])
                     found_dev[virtinst.VirtualDisk.DEVICE_FLOPPY] = True
-            elif row[4] == HW_LIST_TYPE_NIC and not \
-                 found_dev.get(HW_LIST_TYPE_NIC, False):
-                boot_model.append(["Network (PXE)", gtk.STOCK_NETWORK, "network"])
+
+            elif (hwtype == HW_LIST_TYPE_NIC and not
+                  found_dev.get(HW_LIST_TYPE_NIC, False)):
+                boot_model.append(["Network (PXE)", "network-idle", "network"])
                 found_dev[HW_LIST_TYPE_NIC] = True
 
         if len(boot_model) <= 0:

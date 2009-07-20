@@ -164,12 +164,17 @@ class vmmManager(gobject.GObject):
         self.vmmenu_icons["resume"] = gtk.Image()
         self.vmmenu_icons["resume"].set_from_stock(gtk.STOCK_MEDIA_PAUSE,
                                                    gtk.ICON_SIZE_MENU)
-        self.vmmenu_icons["reboot"] = gtk.Image()
-        self.vmmenu_icons["reboot"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
-        self.vmmenu_icons["poweroff"] = gtk.Image()
-        self.vmmenu_icons["poweroff"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
-        self.vmmenu_icons["forcepoweroff"] = gtk.Image()
-        self.vmmenu_icons["forcepoweroff"].set_from_pixbuf(gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/icon_shutdown.png", 18, 18))
+
+        icon_name = self.config.get_shutdown_icon_name()
+        rebootimg = gtk.image_new_from_icon_name(icon_name,
+                                                 gtk.ICON_SIZE_MENU)
+        shutdownimg = gtk.image_new_from_icon_name(icon_name,
+                                                   gtk.ICON_SIZE_MENU)
+        destroyimg = gtk.image_new_from_icon_name(icon_name,
+                                                  gtk.ICON_SIZE_MENU)
+        self.vmmenu_icons["reboot"] = rebootimg
+        self.vmmenu_icons["poweroff"] = shutdownimg
+        self.vmmenu_icons["forcepoweroff"] = destroyimg
 
         self.vmmenu = gtk.Menu()
         self.vmmenushutdown = gtk.Menu()

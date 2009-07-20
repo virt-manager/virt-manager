@@ -155,13 +155,15 @@ class vmmAddHardware(gobject.GObject):
 
         # Main HW list
         hw_list = self.window.get_widget("hardware-type")
-        # Name, icon name, page number, is sensitive, tooltip
+        # Name, icon name, page number, is sensitive, tooltip, icon size
         model = gtk.ListStore(str, str, int, bool, str)
         hw_list.set_model(model)
         icon = gtk.CellRendererPixbuf()
+        icon.set_property("stock-size", gtk.ICON_SIZE_BUTTON)
         hw_list.pack_start(icon, False)
-        hw_list.add_attribute(icon, 'stock-id', 1)
+        hw_list.add_attribute(icon, 'icon-name', 1)
         text = gtk.CellRendererText()
+        text.set_property("xpad", 6)
         hw_list.pack_start(text, True)
         hw_list.add_attribute(text, 'text', 0)
         hw_list.add_attribute(text, 'sensitive', 3)
@@ -193,12 +195,14 @@ class vmmAddHardware(gobject.GObject):
 
         # Disk device type / bus
         target_list = self.window.get_widget("target-device")
-        target_model = gtk.ListStore(str, str, str, str)
+        target_model = gtk.ListStore(str, str, str, str, int)
         target_list.set_model(target_model)
         icon = gtk.CellRendererPixbuf()
+        icon.set_property("stock-size", gtk.ICON_SIZE_BUTTON)
         target_list.pack_start(icon, False)
-        target_list.add_attribute(icon, 'stock-id', 2)
+        target_list.add_attribute(icon, 'icon-name', 2)
         text = gtk.CellRendererText()
+        text.set_property("xpad", 6)
         target_list.pack_start(text, True)
         target_list.add_attribute(text, 'text', 3)
 
@@ -388,13 +392,13 @@ class vmmAddHardware(gobject.GObject):
         def add_hw_option(name, icon, page, sensitive, tooltip):
             model.append([name, icon, page, sensitive, tooltip])
 
-        add_hw_option("Storage", gtk.STOCK_HARDDISK, PAGE_DISK, True, None)
-        add_hw_option("Network", gtk.STOCK_NETWORK, PAGE_NETWORK, True, None)
-        add_hw_option("Input", gtk.STOCK_INDEX, PAGE_INPUT, self.vm.is_hvm(),
+        add_hw_option("Storage", "drive-harddisk", PAGE_DISK, True, None)
+        add_hw_option("Network", "network-idle", PAGE_NETWORK, True, None)
+        add_hw_option("Input", "input-mouse", PAGE_INPUT, self.vm.is_hvm(),
                       _("Not supported for this guest type."))
-        add_hw_option("Graphics", gtk.STOCK_SELECT_COLOR, PAGE_GRAPHICS,
+        add_hw_option("Graphics", "video-display", PAGE_GRAPHICS,
                       True, None)
-        add_hw_option("Sound", gtk.STOCK_MEDIA_PLAY, PAGE_SOUND,
+        add_hw_option("Sound", "audio-card", PAGE_SOUND,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
         add_hw_option("Serial", gtk.STOCK_CONNECT, PAGE_CHAR,
@@ -403,11 +407,11 @@ class vmmAddHardware(gobject.GObject):
         add_hw_option("Parallel", gtk.STOCK_CONNECT, PAGE_CHAR,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
-        add_hw_option("Physical Host Device", None, PAGE_HOSTDEV,
+        add_hw_option("Physical Host Device", "system-run", PAGE_HOSTDEV,
                       self.vm.get_connection().is_nodedev_capable(),
                       _("Connection does not support host device "
                       "enumeration"))
-        add_hw_option("Video", gtk.STOCK_SELECT_COLOR, PAGE_VIDEO,
+        add_hw_option("Video", "video-display", PAGE_VIDEO,
                       libvirt.getVersion() > 6005,
                       _("Libvirt version does not support video devices."))
 
@@ -1275,24 +1279,26 @@ class vmmAddHardware(gobject.GObject):
 
     def populate_target_device_model(self, model):
         model.clear()
-        #[bus, device, icon, desc]
+        #[bus, device, icon, desc, iconsize]
+        def add_dev(bus, device, desc):
+            if device == virtinst.VirtualDisk.DEVICE_FLOPPY:
+                icon = "media-floppy"
+            elif device == virtinst.VirtualDisk.DEVICE_CDROM:
+                icon = "media-optical"
+            else:
+                icon = "drive-harddisk"
+            model.append([bus, device, icon, desc, gtk.ICON_SIZE_BUTTON])
+
         if self.vm.is_hvm():
-            model.append(["ide", virtinst.VirtualDisk.DEVICE_DISK,
-                          gtk.STOCK_HARDDISK, "IDE disk"])
-            model.append(["ide", virtinst.VirtualDisk.DEVICE_CDROM,
-                          gtk.STOCK_CDROM, "IDE cdrom"])
-            model.append(["fdc", virtinst.VirtualDisk.DEVICE_FLOPPY,
-                          gtk.STOCK_FLOPPY, "Floppy disk"])
-            model.append(["scsi",virtinst.VirtualDisk.DEVICE_DISK,
-                          gtk.STOCK_HARDDISK, "SCSI disk"])
-            model.append(["usb", virtinst.VirtualDisk.DEVICE_DISK,
-                          gtk.STOCK_HARDDISK, "USB disk"])
+            add_dev("ide", virtinst.VirtualDisk.DEVICE_DISK, "IDE disk")
+            add_dev("ide", virtinst.VirtualDisk.DEVICE_CDROM, "IDE cdrom")
+            add_dev("fdc", virtinst.VirtualDisk.DEVICE_FLOPPY, "Floppy disk")
+            add_dev("scsi",virtinst.VirtualDisk.DEVICE_DISK, "SCSI disk")
+            add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
         if self.vm.get_hv_type().lower() == "kvm":
-            model.append(["virtio", virtinst.VirtualDisk.DEVICE_DISK,
-                          gtk.STOCK_HARDDISK, "Virtio Disk"])
+            add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK, "Virtio Disk")
         if self.vm.get_connection().get_type().lower() == "xen":
-            model.append(["xen", virtinst.VirtualDisk.DEVICE_DISK,
-                          gtk.STOCK_HARDDISK, "Virtual disk"])
+            add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK, "Virtual disk")
 
     def populate_input_model(self, model):
         model.clear()

@@ -96,6 +96,12 @@ class vmmConfig:
     def get_vm_status_icon(self, state):
         return self.status_icons[state]
 
+    def get_shutdown_icon_name(self):
+        theme = gtk.icon_theme_get_default()
+        if theme.has_icon("system-shutdown"):
+            return "system-shutdown"
+        return "icon_shutdown"
+
     def get_appname(self):
         return self.appname
 

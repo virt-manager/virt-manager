@@ -62,7 +62,7 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("overview-arch").set_text(self.conn.host_architecture())
         self.window.get_widget("config-autoconnect").set_active(conn.get_autoconnect())
 
-        netListModel = gtk.ListStore(str, str, str)
+        netListModel = gtk.ListStore(str, str, str, int)
         self.window.get_widget("net-list").set_model(netListModel)
 
         volListModel = gtk.ListStore(str, str, str, str)
@@ -81,12 +81,14 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("vol-list").get_selection().connect("changed", self.vol_selected)
 
         netCol = gtk.TreeViewColumn("Networks")
+        netCol.set_spacing(6)
         net_txt = gtk.CellRendererText()
         net_img = gtk.CellRendererPixbuf()
-        netCol.pack_start(net_txt, True)
         netCol.pack_start(net_img, False)
+        netCol.pack_start(net_txt, True)
         netCol.add_attribute(net_txt, 'text', 1)
-        netCol.add_attribute(net_img, 'stock-id', 2)
+        netCol.add_attribute(net_img, 'icon-name', 2)
+        netCol.add_attribute(net_img, 'stock-size', 3)
         self.window.get_widget("net-list").append_column(netCol)
         netListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
@@ -385,7 +387,8 @@ class vmmHost(gobject.GObject):
         model.clear()
         for uuid in self.conn.list_net_uuids():
             net = self.conn.get_net(uuid)
-            model.append([uuid, net.get_name(), gtk.STOCK_NETWORK])
+            model.append([uuid, net.get_name(), "network-idle",
+                          gtk.ICON_SIZE_LARGE_TOOLBAR])
 
         _iter = model.get_iter_first()
         if _iter:

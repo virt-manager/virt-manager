@@ -289,6 +289,10 @@ def main():
         raise RuntimeError(_("Unable to initialize GTK: %s") % str(e))
     warnings.resetwarnings()
 
+    # Add our icon dir to icon theme
+    icon_theme = gtk.icon_theme_get_default()
+    icon_theme.prepend_search_path(icon_dir)
+
     gtk.gdk.threads_init()
     setup_glade_i18n()
 
