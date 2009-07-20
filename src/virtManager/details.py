@@ -115,13 +115,13 @@ class vmmDetails(gobject.GObject):
         self.config = config
         self.vm = vm
 
-        topwin = self.window.get_widget("vmm-details")
-        self.err = vmmErrorDialog(topwin,
+        self.topwin = self.window.get_widget("vmm-details")
+        self.err = vmmErrorDialog(self.topwin,
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
-        self.title = vm.get_name() + " " + topwin.get_title()
-        topwin.set_title(self.title)
+        self.title = vm.get_name() + " " + self.topwin.get_title()
+        self.topwin.set_title(self.title)
 
         self.engine = engine
         self.dynamic_tabs = []
@@ -219,7 +219,7 @@ class vmmDetails(gobject.GObject):
                                                 [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]))
         self.window.get_widget("graph-table").attach(self.network_traffic_graph, 1, 2, 3, 4)
 
-        self.accel_groups = gtk.accel_groups_from_object(topwin)
+        self.accel_groups = gtk.accel_groups_from_object(self.topwin)
         self.gtk_settings_accel = None
 
         self.vncViewer = gtkvnc.Display()
@@ -357,7 +357,7 @@ class vmmDetails(gobject.GObject):
         if w == -1 or h == -1:
             return
 
-        topw,toph = self.window.get_widget("vmm-details").size_request()
+        topw,toph = self.topwin.size_request()
 
         padx = topw-w
         pady = toph-h
@@ -379,31 +379,28 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("console-screenshot-scroll").set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
 
     def _disable_modifiers(self, ignore=None):
-        topwin = self.window.get_widget("vmm-details")
         for g in self.accel_groups:
-            topwin.remove_accel_group(g)
+            self.topwin.remove_accel_group(g)
         settings = gtk.settings_get_default()
         self.gtk_settings_accel = settings.get_property('gtk-menu-bar-accel')
         settings.set_property('gtk-menu-bar-accel', None)
 
     def _enable_modifiers(self, ignore=None):
-        topwin = self.window.get_widget("vmm-details")
         if self.gtk_settings_accel is None:
             return
         settings = gtk.settings_get_default()
         settings.set_property('gtk-menu-bar-accel', self.gtk_settings_accel)
         self.gtk_settings_accel = None
         for g in self.accel_groups:
-            topwin.add_accel_group(g)
+            self.topwin.add_accel_group(g)
 
     def notify_grabbed(self, src):
-        topwin = self.window.get_widget("vmm-details")
-        topwin.set_title(_("Press Ctrl+Alt to release pointer.") + " " + self.title)
+        self.topwin.set_title(_("Press Ctrl+Alt to release pointer.") + " " + self.title)
 
         if self.config.show_console_grab_notify() and self.notifyInterface:
             try:
-                (x, y) = topwin.window.get_origin()
-                self.notifyID = self.notifyInterface.Notify(topwin.get_title(),
+                (x, y) = self.topwin.window.get_origin()
+                self.notifyID = self.notifyInterface.Notify(self.topwin.get_title(),
                                                             0,
                                                             '',
                                                             _("Pointer grabbed"),
@@ -416,8 +413,7 @@ class vmmDetails(gobject.GObject):
                 logging.error("Cannot popup notification " + str(e))
 
     def notify_ungrabbed(self, src):
-        topwin = self.window.get_widget("vmm-details")
-        topwin.set_title(self.title)
+        self.topwin.set_title(self.title)
 
     def notify_closed(self, i, reason=None):
         if self.notifyID is not None and self.notifyID == i:
@@ -491,7 +487,7 @@ class vmmDetails(gobject.GObject):
             else:
                 self.vncViewer.set_size_request(-1, -1)
 
-            self.window.get_widget("vmm-details").fullscreen()
+            self.topwin.fullscreen()
             if self.config.get_console_keygrab() == 1:
                 gtk.gdk.keyboard_grab(self.vncViewer.window, False, 0L)
                 self._disable_modifiers()
@@ -504,7 +500,7 @@ class vmmDetails(gobject.GObject):
             if self.config.get_console_keygrab() == 1:
                 self._enable_modifiers()
                 gtk.gdk.keyboard_ungrab(0L)
-            self.window.get_widget("vmm-details").unfullscreen()
+            self.topwin.unfullscreen()
 
             tabs = self.window.get_widget("details-pages")
             tabs.set_show_tabs(True)
@@ -568,12 +564,11 @@ class vmmDetails(gobject.GObject):
         src.show_all()
 
     def show(self):
-        dialog = self.window.get_widget("vmm-details")
         if self.is_visible():
-            dialog.present()
+            self.topwin.present()
             return
-        dialog.show_all()
-        dialog.present()
+        self.topwin.show_all()
+        self.topwin.present()
 
         self.engine.increment_window_counter()
         self.update_widget_states(self.vm, self.vm.status())
@@ -600,7 +595,7 @@ class vmmDetails(gobject.GObject):
         if not self.is_visible():
             return
 
-        self.window.get_widget("vmm-details").hide()
+        self.topwin.hide()
         if self.vncViewer.flags() & gtk.VISIBLE:
             try:
                 self.vncViewer.close()
@@ -613,7 +608,7 @@ class vmmDetails(gobject.GObject):
         self.emit("action-exit-app")
 
     def is_visible(self):
-        if self.window.get_widget("vmm-details").flags() & gtk.VISIBLE:
+        if self.topwin.flags() & gtk.VISIBLE:
             return 1
         return 0
 
@@ -1440,7 +1435,7 @@ class vmmDetails(gobject.GObject):
     def control_vm_screenshot(self, src):
         # If someone feels kind they could extend this code to allow
         # user to choose what image format they'd like to save in....
-        path = util.browse_local(self.window.get_widget("vmm-details"),
+        path = util.browse_local(self.topwin,
                                  _("Save Virtual Machine Screenshot"),
                                  self.config, self.vm.get_connection(),
                                  _type = ("png", "PNG files"),
@@ -1462,7 +1457,7 @@ class vmmDetails(gobject.GObject):
                      'tEXt::Generator App': self.config.get_appname(),
                      'tEXt::Generator Version': self.config.get_appversion() })
 
-        msg = gtk.MessageDialog(self.window.get_widget("vmm-details"),
+        msg = gtk.MessageDialog(self.topwin,
                                 gtk.DIALOG_MODAL,
                                 gtk.MESSAGE_INFO,
                                 gtk.BUTTONS_OK,
