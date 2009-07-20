@@ -215,24 +215,39 @@ class vmmConnection(gobject.GObject):
             return True
         return False
 
-    def get_pretty_desc(self):
+    def _get_pretty_desc(self):
         (scheme, ignore, hostname,
          path, ignore, ignore) = virtinst.util.uri_split(self.uri)
 
+        hv = ""
+        rest = ""
         scheme = scheme.split("+")[0]
 
         if scheme == "qemu":
-            desc = "QEMU"
-            if self.is_kvm_supported():
-                desc += "/KVM"
+            hv = "QEMU"
         else:
-            desc = scheme.capitalize()
+            hv = scheme.capitalize()
 
-        if path == "/session":
-            desc += " Usermode"
+        if path and path != "/system":
+            if path == "/session":
+                rest += " Usermode"
+            else:
+                rest += " %s" % os.path.basename(path)
         if hostname:
-            desc += " (%s)" % hostname
-        return desc
+            rest += " (%s)" % hostname.split(".")[0]
+
+        return hv, rest
+
+    def get_pretty_desc_inactive(self):
+        hv, rest = self._get_pretty_desc()
+        return hv + rest
+
+    def get_pretty_desc_active(self):
+        hv, rest = self._get_pretty_desc()
+
+        if self.is_kvm_supported():
+            hv += "/KVM"
+        return hv + rest
 
     def get_uri(self):
         return self.uri
