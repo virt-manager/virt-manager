@@ -164,7 +164,8 @@ def browse_local(parent, dialog_name, config, conn, start_folder=None,
     return ret
 
 def dup_lib_conn(config, libconn):
-    return _dup_all_conn(config, None, libconn=libconn)
+    return _dup_all_conn(config, None, libconn=libconn,
+                         return_conn_class=False)
 
 def dup_conn(config, conn, return_conn_class=False):
     return _dup_all_conn(config, conn, None,
