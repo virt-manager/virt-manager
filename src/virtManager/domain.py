@@ -381,9 +381,9 @@ class vmmDomain(gobject.GObject):
             ret = 0.0
         return max(ret, 0,0) # avoid negative values at poweroff
 
-    def _set_max_rate(self, what):
-        if self.record[0][what] > self.maxRecord[what]:
-            self.maxRecord[what] = self.record[0][what]
+    def _set_max_rate(self, record, what):
+        if record[what] > self.maxRecord[what]:
+            self.maxRecord[what] = record[what]
 
     def tick(self, now):
         if self.connection.get_state() != self.connection.STATE_ACTIVE:
@@ -426,25 +426,30 @@ class vmmDomain(gobject.GObject):
                      "netTxKB": txBytes / 1024,
                      }
 
-        self.record.insert(0, newStats)
         nSamples = 5
         if nSamples > len(self.record):
             nSamples = len(self.record)
 
-        startCpuTime = self.record[nSamples-1]["cpuTimeAbs"]
-        startTimestamp = self.record[nSamples-1]["timestamp"]
-
-        if startTimestamp == now:
-            self.record[0]["cpuTimeMovingAvg"] = self.record[0]["cpuTimeAbs"]
-            self.record[0]["cpuTimeMovingAvgPercent"] = 0
+        if nSamples == 0:
+            avg = ["cpuTimeAbs"]
+            percent = 0
         else:
-            self.record[0]["cpuTimeMovingAvg"] = (self.record[0]["cpuTimeAbs"]-startCpuTime) / nSamples
-            self.record[0]["cpuTimeMovingAvgPercent"] = (self.record[0]["cpuTimeAbs"]-startCpuTime) * 100.0 / ((now-startTimestamp)*1000.0*1000.0*1000.0 * self.connection.host_active_processor_count())
+            startCpuTime = self.record[nSamples-1]["cpuTimeAbs"]
+            startTimestamp = self.record[nSamples-1]["timestamp"]
+
+            avg = ((newStats["cpuTimeAbs"] - startCpuTime) / nSamples)
+            percent = ((newStats["cpuTimeAbs"] - startCpuTime) * 100.0 /
+                       (((now - startTimestamp) * 1000.0 * 1000.0 * 1000.0) *
+                        self.connection.host_active_processor_count()))
+
+        newStats["cpuTimeMovingAvg"] = avg
+        newStats["cpuTimeMovingAvgPercent"] = percent
 
         for r in [ "diskRd", "diskWr", "netRx", "netTx" ]:
-            self.record[0][r + "Rate"] = self._get_cur_rate(r + "KB")
-            self._set_max_rate(r + "Rate")
+            newStats[r + "Rate"] = self._get_cur_rate(r + "KB")
+            self._set_max_rate(newStats, r + "Rate")
 
+        self.record.insert(0, newStats)
         self._update_status(info[0])
         gobject.idle_add(util.idle_emit, self, "resources-sampled")
 
