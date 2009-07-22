@@ -1,5 +1,5 @@
 
-SUBDIRS = graphWidgets virtManager
+SUBDIRS = virtManager
 
 bin_SCRIPTS_IN = virt-manager.in
 bin_SCRIPTS = virt-manager

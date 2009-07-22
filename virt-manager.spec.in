@@ -16,6 +16,7 @@ License: GPLv2+
 URL: http://virt-manager.org/
 Source0: http://virt-manager.org/download/sources/%{name}/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch: noarch
 
 # These two are just the oldest version tested
 Requires: pygtk2 >= 1.99.12-6
@@ -60,14 +61,6 @@ Requires: PolicyKit-authentication-agent
 Requires: PolicyKit-gnome
 %endif
 
-BuildRequires: pygtk2-devel
-BuildRequires: gtk2-devel
-BuildRequires: pygobject2-devel
-BuildRequires: glib2-devel
-BuildRequires: python-devel
-BuildRequires: pango-devel
-BuildRequires: atk-devel
-BuildRequires: cairo-devel
 BuildRequires: gettext
 BuildRequires: scrollkeeper
 BuildRequires: intltool
@@ -96,8 +89,6 @@ make %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 make install  DESTDIR=$RPM_BUILD_ROOT
-rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/sparkline.a
-rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/sparkline.la
 %find_lang %{name}
 
 %clean
@@ -137,8 +128,6 @@ fi
 %{_sysconfdir}/gconf/schemas/%{name}.schemas
 %{_bindir}/%{name}
 %{_libexecdir}/%{name}-launch
-%dir %{_libdir}/%{name}/
-%{_libdir}/%{name}/*
 
 %{_mandir}/man1/%{name}.1*
 

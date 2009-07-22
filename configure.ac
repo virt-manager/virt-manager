@@ -9,14 +9,6 @@ IT_PROG_INTLTOOL([0.35.0], [no-xml])
 AM_GNU_GETTEXT_VERSION([0.14.1])
 AM_GNU_GETTEXT([external])
 
-AC_PROG_CC
-AC_PROG_LIBTOOL
-
-AC_PYTHON_DEVEL([>= '2.3.4'])
-
-PKG_CHECK_MODULES(PYGTK2, pygtk-2.0 >= 1.99.11)
-PKG_CHECK_MODULES(GTK2, gtk+-2.0 >= 2.2.0)
-
 dnl ====================================
 dnl = Begin tests for scrollkeeper
 dnl ====================================
@@ -33,7 +25,6 @@ AC_OUTPUT(Makefile
           po/Makefile.in
           src/Makefile
           src/virtManager/Makefile
-          src/graphWidgets/Makefile
           man/Makefile
           tests/Makefile
           virt-manager.spec

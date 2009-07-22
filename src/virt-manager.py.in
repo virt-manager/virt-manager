@@ -75,13 +75,12 @@ def setup_pypath():
     if os.path.exists(os.getcwd() + "../gnome/help/virt-manager/C/virt-manager.xml"):
         data_dir = os.getcwd() + "../"
 
-    # First two are hacks to point python to local dir for source files
-    # in dev, the third is the main path if you have  normal install
+    # First 2 hacks are to point python to local dir for source files in dev,
+    # the third is the main path if you have  normal install
     if os.path.exists(os.getcwd() + "/src/virt-manager.py"):
-        sys.path.insert(0, os.getcwd() + "/src/graphWidgets/.libs")
+        pass
     elif os.path.exists(os.getcwd() + "/build/src/virt-manager.py"):
         sys.path.insert(0, os.getcwd() + "/src")
-        sys.path.insert(0, os.getcwd() + "/build/src/graphWidgets/.libs")
     else:
         sys.path.insert(0, pylib_dir)
         sys.path.insert(0, pyarchlib_dir)
