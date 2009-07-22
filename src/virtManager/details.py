@@ -337,8 +337,6 @@ class vmmDetails(gobject.GObject):
 
         self.update_widget_states(self.vm, self.vm.status())
 
-        self.pixbuf_processor = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
-        self.pixbuf_memory = gtk.gdk.pixbuf_new_from_file(config.get_icon_dir() + "/icon_cpu.png")
         self.prepare_hw_list()
         self.hw_selected(page=0)
         self.refresh_vm_info()
@@ -1757,10 +1755,12 @@ class vmmDetails(gobject.GObject):
                                 "computer")
         self.add_hw_list_option("Performance", HW_LIST_TYPE_STATS, [],
                                 "utilities-system-monitor")
-        self.add_hw_list_option("Processor", HW_LIST_TYPE_CPU, [], "icon_cpu")
-        self.add_hw_list_option("Memory", HW_LIST_TYPE_MEMORY, [], "icon_cpu")
+        self.add_hw_list_option("Processor", HW_LIST_TYPE_CPU, [],
+                                "device_cpu")
+        self.add_hw_list_option("Memory", HW_LIST_TYPE_MEMORY, [],
+                                "device_mem")
         self.add_hw_list_option("Boot Options", HW_LIST_TYPE_BOOT, [],
-                                "icon_cpu")
+                                "system-run")
 
         self.repopulate_hw_list()
 
@@ -1855,13 +1855,17 @@ class vmmDetails(gobject.GObject):
                 label += " %s" % charinfo[3] # Don't show port for console
 
             update_hwlist(HW_LIST_TYPE_CHAR, charinfo, label,
-                          gtk.STOCK_CONNECT)
+                          "device_serial")
 
         # Populate host devices
         for hostdevinfo in self.vm.get_hostdev_devices():
             currentHostdevs[hostdevinfo[2]] = 1
+            if hostdevinfo[4] == "usb":
+                icon = "device_usb"
+            else:
+                icon = "device_pci"
             update_hwlist(HW_LIST_TYPE_HOSTDEV, hostdevinfo, hostdevinfo[2],
-                          "system-run")
+                          icon)
 
         # Populate video devices
         for vidinfo in self.vm.get_video_devices():
