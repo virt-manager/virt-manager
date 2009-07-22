@@ -21,7 +21,6 @@
 import gobject
 import gtk
 import gtk.glade
-import sparkline
 import traceback
 
 from virtinst import Storage
@@ -31,6 +30,7 @@ from virtManager.createnet import vmmCreateNetwork
 from virtManager.createpool import vmmCreatePool
 from virtManager.createvol import vmmCreateVolume
 from virtManager.error import vmmErrorDialog
+from virtManager.graphwidgets import Sparkline
 
 class vmmHost(gobject.GObject):
     __gsignals__ = {
@@ -123,11 +123,11 @@ class vmmHost(gobject.GObject):
                                self.conn)
 
 
-        self.cpu_usage_graph = sparkline.Sparkline()
+        self.cpu_usage_graph = Sparkline()
         self.cpu_usage_graph.show()
         self.window.get_widget("performance-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
 
-        self.memory_usage_graph = sparkline.Sparkline()
+        self.memory_usage_graph = Sparkline()
         self.memory_usage_graph.show()
         self.window.get_widget("performance-table").attach(self.memory_usage_graph, 1, 2, 1, 2)
 

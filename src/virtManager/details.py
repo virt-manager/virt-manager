@@ -22,7 +22,6 @@ import gobject
 import gtk
 import gtk.glade
 import libvirt
-import sparkline
 import logging
 import traceback
 import sys
@@ -36,6 +35,7 @@ from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
 from virtManager.serialcon import vmmSerialConsole
+from virtManager.graphwidgets import Sparkline
 from virtManager import util as util
 
 import virtinst
@@ -193,15 +193,15 @@ class vmmDetails(gobject.GObject):
         util.tooltip_wrapper(self.window.get_widget("security-dynamic-info"),
             _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
 
-        self.cpu_usage_graph = sparkline.Sparkline()
+        self.cpu_usage_graph = Sparkline()
         self.cpu_usage_graph.set_property("reversed", True)
         self.window.get_widget("graph-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
 
-        self.memory_usage_graph = sparkline.Sparkline()
+        self.memory_usage_graph = Sparkline()
         self.memory_usage_graph.set_property("reversed", True)
         self.window.get_widget("graph-table").attach(self.memory_usage_graph, 1, 2, 1, 2)
 
-        self.disk_io_graph = sparkline.Sparkline()
+        self.disk_io_graph = Sparkline()
         self.disk_io_graph.set_property("reversed", True)
         self.disk_io_graph.set_property("filled", False)
         self.disk_io_graph.set_property("num_sets", 2)
@@ -209,7 +209,7 @@ class vmmDetails(gobject.GObject):
                                         [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]))
         self.window.get_widget("graph-table").attach(self.disk_io_graph, 1, 2, 2, 3)
 
-        self.network_traffic_graph = sparkline.Sparkline()
+        self.network_traffic_graph = Sparkline()
         self.network_traffic_graph.set_property("reversed", True)
         self.network_traffic_graph.set_property("filled", False)
         self.network_traffic_graph.set_property("num_sets", 2)

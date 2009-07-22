@@ -24,13 +24,13 @@ import gtk.glade
 import logging
 import traceback
 
-import sparkline
 import libvirt
 
 from virtManager.connection import vmmConnection
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
 from virtManager.delete import vmmDeleteDialog
+from virtManager.graphwidgets import CellRendererSparkline
 from virtManager import util as util
 
 VMLIST_SORT_ID = 1
@@ -912,7 +912,7 @@ class vmmManager(gobject.GObject):
         statusCol.set_visible(self.config.is_vmlist_status_visible())
 
         cpuUsage_txt = gtk.CellRendererText()
-        cpuUsage_img = sparkline.CellRendererSparkline()
+        cpuUsage_img = CellRendererSparkline()
         cpuUsage_img.set_property("reversed", True)
         cpuUsageCol.pack_start(cpuUsage_txt, False)
         cpuUsageCol.pack_start(cpuUsage_img, False)
@@ -937,7 +937,7 @@ class vmmManager(gobject.GObject):
 
         diskIOIn_txt = gtk.CellRendererText()
         diskIOOut_txt = gtk.CellRendererText()
-        diskIO_img = sparkline.CellRendererSparkline()
+        diskIO_img = CellRendererSparkline()
         diskIO_img.set_property("reversed", True)
         diskIOCol.pack_start(diskIOIn_txt, False)
         diskIOCol.pack_start(diskIOOut_txt, False)
@@ -950,7 +950,7 @@ class vmmManager(gobject.GObject):
 
         networkTrafficIn_txt = gtk.CellRendererText()
         networkTrafficOut_txt = gtk.CellRendererText()
-        networkTraffic_img = sparkline.CellRendererSparkline()
+        networkTraffic_img = CellRendererSparkline()
         networkTraffic_img.set_property("reversed", True)
         networkTrafficCol.pack_start(networkTrafficIn_txt, False)
         networkTrafficCol.pack_start(networkTrafficOut_txt, False)
