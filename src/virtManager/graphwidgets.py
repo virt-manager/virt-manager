@@ -92,7 +92,8 @@ class CellRendererSparkline(gtk.CellRenderer):
             val = self.data_array[n]
             return baseline_y - (cell_area.height * val)
 
-        pixels_per_point = (cell_area.width / (len(self.data_array) - 1))
+        pixels_per_point = (cell_area.width /
+                            ((len(self.data_array) - 1) or 1))
 
         points = []
         for index in range(0, len(self.data_array)):
@@ -193,7 +194,7 @@ class Sparkline(gtk.DrawingArea):
 
         points_per_set = (len(self.data_array) / self.num_sets)
         pixels_per_point = (float(cell_area.width) /
-                            float((points_per_set - 1)))
+                            (float((points_per_set - 1) or 1)))
 
         # Mid-color graphics context (gtk.GC)
         # This draws the light gray backing rectangle
