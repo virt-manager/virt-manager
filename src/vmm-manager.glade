@@ -262,94 +262,113 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <widget class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
-            <property name="border_width">6</property>
-            <property name="spacing">6</property>
+            <child>
+              <widget class="GtkHBox" id="hbox1">
+                <property name="visible">True</property>
+                <child>
+                  <widget class="GtkToolbar" id="vm-toolbar1">
+                    <property name="visible">True</property>
+                    <property name="show_arrow">False</property>
+                    <property name="icon_size">GTK_ICON_SIZE_DND</property>
+                    <child>
+                      <widget class="GtkToolButton" id="vm-new">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_New</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_name">vm_new_large</property>
+                        <signal name="clicked" handler="on_vm_new_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkToolbar" id="vm-toolbar2">
+                    <property name="visible">True</property>
+                    <property name="show_arrow">False</property>
+                    <child>
+                      <widget class="GtkToolButton" id="vm-open">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Open</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_name">icon_console</property>
+                        <signal name="clicked" handler="on_vm_open_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToolButton" id="vm-run">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Run</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-media-play</property>
+                        <signal name="clicked" handler="on_vm_run_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkToggleToolButton" id="vm-pause">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Pause</property>
+                        <property name="use_underline">True</property>
+                        <property name="stock_id">gtk-media-pause</property>
+                        <signal name="clicked" handler="on_vm_pause_clicked"/>
+                      </widget>
+                      <packing>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuToolButton" id="vm-shutdown">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Shutdown</property>
+                        <property name="use_underline">True</property>
+                        <signal name="clicked" handler="on_vm_shutdown_clicked"/>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="pack_type">GTK_PACK_END</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
             <child>
               <widget class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
-                <property name="shadow_type">in</property>
+                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                <property name="shadow_type">GTK_SHADOW_IN</property>
                 <child>
                   <widget class="GtkTreeView" id="vm-list">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="rules_hint">True</property>
                     <signal name="button_press_event" handler="on_vm_list_button_press_event"/>
-                    <signal name="row_expanded" handler="on_vm_list_row_expanded"/>
                     <signal name="row_collapsed" handler="on_vm_list_row_collapsed"/>
+                    <signal name="row_expanded" handler="on_vm_list_row_expanded"/>
                     <signal name="row_activated" handler="on_vm_list_row_activated"/>
                   </widget>
                 </child>
               </widget>
               <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkHButtonBox" id="hbuttonbox2">
-                <property name="visible">True</property>
-                <property name="spacing">3</property>
-                <property name="layout_style">end</property>
-                <child>
-                  <widget class="GtkButton" id="vm-delete">
-                    <property name="label">gtk-delete</property>
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_vm_delete_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="vm-new">
-                    <property name="label">gtk-new</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_vm_new_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="vm-open">
-                    <property name="label">gtk-open</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="can_default">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_vm_open_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
                 <property name="position">1</property>
               </packing>
             </child>

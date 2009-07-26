@@ -671,6 +671,27 @@ class vmmDomain(gobject.GObject):
     def status(self):
         return self.lastStatus
 
+    def is_stoppable(self):
+        return self.status() in [libvirt.VIR_DOMAIN_RUNNING,
+                                 libvirt.VIR_DOMAIN_PAUSED]
+
+    def is_destroyable(self):
+        return (self.is_stoppable() or
+                self.status() in [libvirt.VIR_DOMAIN_CRASHED])
+
+    def is_runable(self):
+        return self.status() in [libvirt.VIR_DOMAIN_SHUTOFF,
+                                 libvirt.VIR_DOMAIN_CRASHED]
+
+    def is_pauseable(self):
+        return self.status() in [libvirt.VIR_DOMAIN_RUNNING]
+
+    def is_unpauseable(self):
+        return self.status() in [libvirt.VIR_DOMAIN_PAUSED]
+
+    def is_paused(self):
+        return self.status() in [libvirt.VIR_DOMAIN_PAUSED]
+
     def run_status(self):
         if self.lastStatus == libvirt.VIR_DOMAIN_RUNNING:
             return _("Running")

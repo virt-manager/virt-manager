@@ -67,6 +67,51 @@ COL_MEM = 5
 COL_DISK = 6
 COL_NETWORK = 7
 
+rcstring = """
+style "toolbar-style" {
+    #GtkToolbar::button_relief = GTK_RELIEF_NONE
+    #GtkToolbar::shadow_type = GTK_SHADOW_NONE
+    GtkToolbar::internal_padding = 2
+}
+style "treeview-style" {
+    GtkTreeView::indent_expanders = 0
+}
+
+class "GtkToolbar" style "toolbar-style"
+class "GtkTreeView" style "treeview-style"
+"""
+gtk.rc_parse_string(rcstring)
+
+def build_shutdown_button_menu(config, widget, shutdown_cb, reboot_cb,
+                               destroy_cb):
+    icon_name = config.get_shutdown_icon_name()
+    widget.set_icon_name(icon_name)
+    menu = gtk.Menu()
+    widget.set_menu(menu)
+
+    rebootimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+    shutdownimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+    destroyimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+
+    reboot = gtk.ImageMenuItem(_("_Reboot"))
+    reboot.set_image(rebootimg)
+    reboot.show()
+    reboot.connect("activate", reboot_cb)
+    menu.add(reboot)
+
+    shutdown = gtk.ImageMenuItem(_("_Shut Down"))
+    shutdown.set_image(shutdownimg)
+    shutdown.show()
+    shutdown.connect("activate", shutdown_cb)
+    menu.add(shutdown)
+
+    destroy = gtk.ImageMenuItem(_("_Force Off"))
+    destroy.set_image(destroyimg)
+    destroy.show()
+    destroy.connect("activate", destroy_cb)
+    menu.add(destroy)
+
+
 class vmmManager(gobject.GObject):
     __gsignals__ = {
         "action-show-connect":(gobject.SIGNAL_RUN_FIRST,
@@ -124,6 +169,7 @@ class vmmManager(gobject.GObject):
 
         self.delete_dialog = None
         self.startup_error = None
+        self.ignore_pause = False
 
         self.prepare_vmlist()
 
@@ -160,6 +206,19 @@ class vmmManager(gobject.GObject):
         self.vmmenu_icons["resume"] = gtk.Image()
         self.vmmenu_icons["resume"].set_from_stock(gtk.STOCK_MEDIA_PAUSE,
                                                    gtk.ICON_SIZE_MENU)
+
+        def set_toolbar_image(widget, iconfile):
+            filename = self.config.get_icon_dir() + "/%s" % iconfile
+            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 38, 38)
+            image = gtk.image_new_from_pixbuf(pixbuf)
+            self.window.get_widget(widget).set_icon_widget(image)
+
+        set_toolbar_image("vm-new", "vm_new_large.png")
+        build_shutdown_button_menu(self.config,
+                                   self.window.get_widget("vm-shutdown"),
+                                   self.poweroff_vm,
+                                   self.reboot_vm,
+                                   self.destroy_vm)
 
         icon_name = self.config.get_shutdown_icon_name()
         rebootimg = gtk.image_new_from_icon_name(icon_name,
@@ -257,7 +316,7 @@ class vmmManager(gobject.GObject):
 
         self.connmenu_items["create"] = gtk.ImageMenuItem(gtk.STOCK_NEW)
         self.connmenu_items["create"].show()
-        self.connmenu_items["create"].connect("activate", self.show_vm_create)
+        self.connmenu_items["create"].connect("activate", self.new_vm)
         self.connmenu.add(self.connmenu_items["create"])
 
         self.connmenu_items["connect"] = gtk.ImageMenuItem(gtk.STOCK_CONNECT)
@@ -297,8 +356,10 @@ class vmmManager(gobject.GObject):
             "on_menu_restore_saved_activate": self.restore_saved,
             "on_vmm_close_clicked": self.close,
             "on_vm_open_clicked": self.open_vm_console,
-            "on_vm_delete_clicked": self.delete_vm,
+            "on_vm_run_clicked": self.start_vm,
             "on_vm_new_clicked": self.new_vm,
+            "on_vm_shutdown_clicked": self.poweroff_vm,
+            "on_vm_pause_clicked": self.pause_vm_button,
             "on_menu_edit_details_activate": self.open_vm_console,
             "on_menu_edit_delete_activate": self.delete_vm,
             "on_menu_host_details_activate": self.show_host,
@@ -517,6 +578,8 @@ class vmmManager(gobject.GObject):
         if missing:
             self._append_vm(model, vm, vm.get_connection())
 
+        # Update run/shutdown/pause button states
+        self.vm_selected()
 
     def vm_resources_sampled(self, vm):
         vmlist = self.window.get_widget("vm-list")
@@ -543,18 +606,10 @@ class vmmManager(gobject.GObject):
         row[ROW_NET_TX] = vm.network_tx_rate()
         model.row_changed(row.path, row.iter)
 
-        if vm == self.current_vm():
-            if vm.is_active():
-                self.window.get_widget("vm-delete").set_sensitive(False)
-                self.window.get_widget("menu_edit_delete").set_sensitive(False)
-            else:
-                self.window.get_widget("vm-delete").set_sensitive(True)
-                self.window.get_widget("menu_edit_delete").set_sensitive(True)
-
 
     def conn_state_changed(self, conn):
         self.conn_refresh_resources(conn)
-        self.vm_selected(self.window.get_widget("vm-list").get_selection())
+        self.vm_selected()
 
     def conn_refresh_resources(self, conn):
         vmlist = self.window.get_widget("vm-list")
@@ -626,9 +681,6 @@ class vmmManager(gobject.GObject):
         else:
             self.emit("action-show-console", conn.get_uri(), self.current_vmuuid())
 
-    def show_vm_create(self,ignore):
-        self.emit("action-show-create", self.current_connection_uri())
-
     def close_connection(self, ignore):
         conn = self.current_connection()
         if conn.get_state() != vmmConnection.STATE_DISCONNECTED:
@@ -650,45 +702,34 @@ class vmmManager(gobject.GObject):
             self.emit("action-clone-domain", self.current_connection_uri(),
                       self.current_vmuuid())
 
-    def vm_selected(self, selection):
+    def vm_selected(self, ignore=None):
         conn = self.current_connection()
         vm = self.current_vm()
-        if selection == None or selection.count_selected_rows() == 0:
-            # Nothing is selected
-            self.window.get_widget("vm-open").set_sensitive(False)
-            self.window.get_widget("vm-delete").set_sensitive(False)
-            self.window.get_widget("menu_edit_details").set_sensitive(False)
-            self.window.get_widget("menu_edit_delete").set_sensitive(False)
-            self.window.get_widget("menu_host_details").set_sensitive(False)
-            self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
-        elif vm is not None:
-            # A VM is selected
-            # this is strange to call this here, but it simplifies the code
-            # updating the treeview
-            self.vm_resources_sampled(vm)
-            self.window.get_widget("vm-open").set_sensitive(True)
-            if vm.status() == libvirt.VIR_DOMAIN_SHUTOFF:
-                self.window.get_widget("vm-delete").set_sensitive(True)
-            else:
-                self.window.get_widget("vm-delete").set_sensitive(False)
-            self.window.get_widget("menu_edit_details").set_sensitive(True)
-            self.window.get_widget("menu_edit_delete").set_sensitive(True)
-            self.window.get_widget("menu_host_details").set_sensitive(True)
-            self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
+
+        show_open = bool(vm)
+        show_details = bool(vm)
+        host_details = bool(vm or conn)
+        delete = bool((vm and vm.is_runable()) or conn)
+        show_run = bool(vm and vm.is_runable())
+        is_paused = bool(vm and vm.is_paused())
+        if is_paused:
+            show_pause = bool(vm and vm.is_unpauseable())
         else:
-            # A connection is selected
-            self.window.get_widget("vm-open").set_sensitive(False)
-            if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
-                self.window.get_widget("vm-delete").set_sensitive(True)
-            else:
-                self.window.get_widget("vm-delete").set_sensitive(False)
-            if conn.get_state() == vmmConnection.STATE_ACTIVE:
-                self.window.get_widget("menu_file_restore_saved").set_sensitive(True)
-            else:
-                self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
-            self.window.get_widget("menu_edit_details").set_sensitive(False)
-            self.window.get_widget("menu_edit_delete").set_sensitive(False)
-            self.window.get_widget("menu_host_details").set_sensitive(True)
+            show_pause = bool(vm and vm.is_pauseable())
+        show_shutdown = bool(vm and vm.is_stoppable())
+        restore = bool(conn and conn.get_state() == vmmConnection.STATE_ACTIVE)
+
+        self.window.get_widget("vm-open").set_sensitive(show_open)
+        self.window.get_widget("vm-run").set_sensitive(show_run)
+        self.window.get_widget("vm-shutdown").set_sensitive(show_shutdown)
+        self.set_pause_state(is_paused)
+        self.window.get_widget("vm-pause").set_sensitive(show_pause)
+
+        self.window.get_widget("menu_edit_details").set_sensitive(show_details)
+        self.window.get_widget("menu_host_details").set_sensitive(host_details)
+        self.window.get_widget("menu_edit_delete").set_sensitive(delete)
+        self.window.get_widget("menu_file_restore_saved").set_sensitive(restore)
+
 
     def popup_vm_menu(self, widget, event):
         tup = widget.get_path_at_pos(int(event.x), int(event.y))
@@ -1021,6 +1062,29 @@ class vmmManager(gobject.GObject):
             return
         data = model.get_value(_iter, ROW_HANDLE).network_traffic_vector_limit(40)
         cell.set_property('data_array', data)
+
+    def set_pause_state(self, state):
+        src = self.window.get_widget("vm-pause")
+        try:
+            self.ignore_pause = True
+            src.set_active(state)
+        finally:
+            self.ignore_pause = False
+
+    def pause_vm_button(self, src):
+        if self.ignore_pause:
+            return
+
+        do_pause = src.get_active()
+
+        if do_pause:
+            self.pause_vm(None)
+        else:
+            self.resume_vm(None)
+
+        # Set button state back to original value: just let the status
+        # update function fix things for us
+        self.set_pause_state(not do_pause)
 
     def start_vm(self, ignore):
         vm = self.current_vm()

@@ -34,6 +34,7 @@ import cairo
 from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
+from virtManager.manager import build_shutdown_button_menu
 from virtManager.serialcon import vmmSerialConsole
 from virtManager.graphwidgets import Sparkline
 from virtManager import util as util
@@ -134,35 +135,11 @@ class vmmDetails(gobject.GObject):
         else:
             self.window.get_widget("add-hardware-button").set_sensitive(True)
 
-        icon_name = self.config.get_shutdown_icon_name()
-        self.window.get_widget("control-shutdown").set_icon_name(icon_name)
-        menu = gtk.Menu()
-        self.window.get_widget("control-shutdown").set_menu(menu)
-
-        rebootimg = gtk.image_new_from_icon_name(icon_name,
-                                                 gtk.ICON_SIZE_MENU)
-        shutdownimg = gtk.image_new_from_icon_name(icon_name,
-                                                   gtk.ICON_SIZE_MENU)
-        destroyimg = gtk.image_new_from_icon_name(icon_name,
-                                                  gtk.ICON_SIZE_MENU)
-
-        reboot = gtk.ImageMenuItem(_("_Reboot"))
-        reboot.set_image(rebootimg)
-        reboot.show()
-        reboot.connect("activate", self.control_vm_reboot)
-        menu.add(reboot)
-
-        shutdown = gtk.ImageMenuItem(_("_Shut Down"))
-        shutdown.set_image(shutdownimg)
-        shutdown.show()
-        shutdown.connect("activate", self.control_vm_shutdown)
-        menu.add(shutdown)
-
-        destroy = gtk.ImageMenuItem(_("_Force Off"))
-        destroy.set_image(destroyimg)
-        destroy.show()
-        destroy.connect("activate", self.control_vm_destroy)
-        menu.add(destroy)
+        build_shutdown_button_menu(self.config,
+                                   self.window.get_widget("control-shutdown"),
+                                   self.control_vm_shutdown,
+                                   self.control_vm_reboot,
+                                   self.control_vm_destroy)
 
         smenu = gtk.Menu()
         smenu.connect("show", self.populate_serial_menu)
