@@ -418,6 +418,9 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("hardware-type").set_active(0)
 
     def hardware_type_changed(self, src):
+        if src.get_active() < 0:
+            return
+
         row = src.get_model()[src.get_active()]
 
         sens = row[3]
