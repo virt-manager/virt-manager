@@ -105,6 +105,8 @@ class vmmDetails(gobject.GObject):
                                 gobject.TYPE_NONE, []),
         "action-migrate-domain": (gobject.SIGNAL_RUN_FIRST,
                                   gobject.TYPE_NONE, (str,str,str)),
+        "action-clone-domain": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, (str,str)),
         }
 
 
@@ -280,6 +282,7 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_destroy_activate": self.control_vm_destroy,
             "on_details_menu_pause_activate": self.control_vm_pause,
             "on_details_menu_migrate_activate": self.populate_migrate_menu,
+            "on_details_menu_clone_activate": self.control_vm_clone,
             "on_details_menu_screenshot_activate": self.control_vm_screenshot,
             "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
@@ -727,6 +730,10 @@ class vmmDetails(gobject.GObject):
 
     def control_vm_destroy(self, src):
         self.emit("action-destroy-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+
+    def control_vm_clone(self, src):
+        self.emit("action-clone-domain", self.vm.get_connection().get_uri(),
+                  self.vm.get_uuid())
 
     def control_vm_migrate(self, src, uri):
         self.emit("action-migrate-domain", self.vm.get_connection().get_uri(),

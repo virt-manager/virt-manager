@@ -28,6 +28,7 @@ import threading
 
 from virtManager.about import vmmAbout
 from virtManager.netdevhelper import vmmNetDevHelper
+from virtManager.clone import vmmCloneVM
 from virtManager.connect import vmmConnect
 from virtManager.connection import vmmConnection
 from virtManager.createmeter import vmmCreateMeter
@@ -229,6 +230,8 @@ class vmmEngine(gobject.GObject):
         self.reboot_domain(src, uri, uuid)
     def _do_migrate_domain(self, src, uri, uuid, desturi):
         self.migrate_domain(uri, uuid, desturi)
+    def _do_clone_domain(self, src, uri, uuid):
+        self.clone_domain(uri, uuid)
     def _do_exit_app(self, src):
         self.exit_app()
 
@@ -305,6 +308,7 @@ class vmmEngine(gobject.GObject):
                 details.connect("action-exit-app", self._do_exit_app)
                 details.connect("action-view-manager", self._do_show_manager)
                 details.connect("action-migrate-domain", self._do_migrate_domain)
+                details.connect("action-clone-domain", self._do_clone_domain)
 
             except Exception, e:
                 self.err.show_err(_("Error bringing up domain details: %s") % str(e),
@@ -323,6 +327,7 @@ class vmmEngine(gobject.GObject):
             self.windowManager.connect("action-reboot-domain", self._do_reboot_domain)
             self.windowManager.connect("action-destroy-domain", self._do_destroy_domain)
             self.windowManager.connect("action-migrate-domain", self._do_migrate_domain)
+            self.windowManager.connect("action-clone-domain", self._do_clone_domain)
             self.windowManager.connect("action-show-console", self._do_show_console)
             self.windowManager.connect("action-show-details", self._do_show_details)
             self.windowManager.connect("action-show-preferences", self._do_show_preferences)
@@ -381,6 +386,7 @@ class vmmEngine(gobject.GObject):
             "windowHost": None,
             "windowDetails": {},
             "windowConsole": {},
+            "windowClone": None,
             }
         self.connections[uri]["connection"].connect("vm-removed", self._do_vm_removed)
         self.connections[uri]["connection"].connect("state-changed", self._do_connection_changed)
@@ -697,6 +703,24 @@ class vmmEngine(gobject.GObject):
                                                 desturi]
 
         return available_migrate_hostnames
+
+    def clone_domain(self, uri, uuid):
+        con = self._lookup_connection(uri)
+        orig_vm = con.get_vm(uuid)
+        clone_window = self.connections[uri]["windowClone"]
+
+        try:
+            if clone_window == None:
+                clone_window = vmmCloneVM(self.get_config(), orig_vm)
+                clone_window.connect("action-show-help", self._do_show_help)
+                self.connections[uri]["windowClone"] = clone_window
+            else:
+                clone_window.set_orig_vm(orig_vm)
+
+            clone_window.show()
+        except Exception, e:
+            self.err.show_err(_("Error setting clone parameters: %s") %
+                              str(e), "".join(traceback.format_exc()))
 
 
 gobject.type_register(vmmEngine)

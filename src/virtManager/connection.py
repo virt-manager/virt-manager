@@ -258,6 +258,11 @@ class vmmConnection(gobject.GObject):
     def get_net(self, uuid):
         return self.nets[uuid]
 
+    def get_net_by_name(self, name):
+        for net in self.nets.values():
+            if net.get_name() == name:
+                return net
+
     def get_net_device(self, path):
         if not self.netdev_helper:
             raise ValueError("No netdev helper specified.")

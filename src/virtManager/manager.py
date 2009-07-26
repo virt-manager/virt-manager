@@ -107,6 +107,8 @@ class vmmManager(gobject.GObject):
                                gobject.TYPE_NONE, [str]),
         "action-migrate-domain": (gobject.SIGNAL_RUN_FIRST,
                                   gobject.TYPE_NONE, (str,str,str)),
+        "action-clone-domain": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, (str,str)),
         "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
                             gobject.TYPE_NONE, []),}
 
@@ -235,6 +237,11 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["migrate"].connect("activate",
                                              self.populate_migrate_submenu)
         self.vmmenu.add(self.vmmenu_items["migrate"])
+
+        self.vmmenu_items["clone"] = gtk.ImageMenuItem("_Clone")
+        self.vmmenu_items["clone"].show()
+        self.vmmenu_items["clone"].connect("activate", self.open_clone_window)
+        self.vmmenu.add(self.vmmenu_items["clone"])
 
         self.vmmenu_items["hsep2"] = gtk.SeparatorMenuItem()
         self.vmmenu_items["hsep2"].show()
@@ -709,6 +716,10 @@ class vmmManager(gobject.GObject):
         elif self.current_connection():
             self.open_connection()
 
+    def open_clone_window(self, ignore1=None, ignore2=None, ignore3=None):
+        if self.current_vmuuid():
+            self.emit("action-clone-domain", self.current_connection_uri(),
+                      self.current_vmuuid())
 
     def vm_selected(self, selection):
         conn = self.current_connection()
