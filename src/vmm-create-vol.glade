@@ -7,6 +7,7 @@
     <property name="title" translatable="yes">Add a Storage Volume</property>
     <property name="default_width">500</property>
     <property name="default_height">320</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <signal name="delete_event" handler="on_vmm_create_vol_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">

@@ -4,6 +4,7 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="vmm-create">
     <property name="title" translatable="yes">New VM</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <signal name="delete_event" handler="on_vmm_newcreate_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
