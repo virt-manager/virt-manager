@@ -27,19 +27,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/::PACKAGE::/vmlist-fields/cpu_usage</key>
-      <applyto>/apps/::PACKAGE::/vmlist-fields/cpu_usage</applyto>
-      <owner>::PACKAGE::</owner>
-      <type>bool</type>
-      <default>1</default>
-
-      <locale name="C">
-        <short>Show cpu usage in summary</short>
-        <long>Show the cpu usage field in the domain list summary view</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/::PACKAGE::/vmlist-fields/virtual_cpus</key>
       <applyto>/apps/::PACKAGE::/vmlist-fields/virtual_cpus</applyto>
       <owner>::PACKAGE::</owner>
@@ -66,28 +53,15 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/::PACKAGE::/vmlist-fields/disk_usage</key>
-      <applyto>/apps/::PACKAGE::/vmlist-fields/disk_usage</applyto>
+      <key>/schemas/apps/::PACKAGE::/vmlist-fields/stats-type</key>
+      <applyto>/apps/::PACKAGE::/vmlist-fields/stats-type</applyto>
       <owner>::PACKAGE::</owner>
-      <type>bool</type>
+      <type>int</type>
       <default>0</default>
 
       <locale name="C">
-        <short>Show disk I/O in summary</short>
-        <long>Show the disk I/O field in the domain list summary view</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/::PACKAGE::/vmlist-fields/network_traffic</key>
-      <applyto>/apps/::PACKAGE::/vmlist-fields/network_traffic</applyto>
-      <owner>::PACKAGE::</owner>
-      <type>bool</type>
-      <default>0</default>
-
-      <locale name="C">
-        <short>Show network I/O in summary</short>
-        <long>Show the network I/O field in the domain list summary view</long>
+        <short>Stats type in manager view</short>
+        <long>Type of stats to graph (cpu, disk, net) in manager view</long>
       </locale>
     </schema>
 

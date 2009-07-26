@@ -37,6 +37,10 @@ CONSOLE_KEYGRAB_NEVER = 0
 CONSOLE_KEYGRAB_FULLSCREEN = 1
 CONSOLE_KEYGRAB_MOUSEOVER = 2
 
+STATS_CPU = 0
+STATS_DISK = 1
+STATS_NETWORK = 2
+
 DEFAULT_XEN_IMAGE_DIR = "/var/lib/xen/images"
 DEFAULT_XEN_SAVE_DIR = "/var/lib/xen/dump"
 
@@ -235,21 +239,14 @@ class vmmConfig:
     def is_vmlist_status_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/status")
 
-    def is_vmlist_cpu_usage_visible(self):
-        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/cpu_usage")
-
     def is_vmlist_virtual_cpus_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/virtual_cpus")
 
     def is_vmlist_memory_usage_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/memory_usage")
 
-    def is_vmlist_disk_io_visible(self):
-        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/disk_usage")
-
-    def is_vmlist_network_traffic_visible(self):
-        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/network_traffic")
-
+    def get_vmlist_stats_type(self):
+        return self.conf.get_int(self.conf_dir + "/vmlist-fields/stats_type")
 
 
     def set_vmlist_domain_id_visible(self, state):
@@ -258,20 +255,14 @@ class vmmConfig:
     def set_vmlist_status_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/status", state)
 
-    def set_vmlist_cpu_usage_visible(self, state):
-        self.conf.set_bool(self.conf_dir + "/vmlist-fields/cpu_usage", state)
-
     def set_vmlist_virtual_cpus_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/virtual_cpus", state)
 
     def set_vmlist_memory_usage_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/memory_usage", state)
 
-    def set_vmlist_disk_io_visible(self, state):
-        self.conf.set_bool(self.conf_dir + "/vmlist-fields/disk_usage", state)
-
-    def set_vmlist_network_traffic_visible(self, state):
-        self.conf.set_bool(self.conf_dir + "/vmlist-fields/network_traffic", state)
+    def set_vmlist_stats_type(self, val):
+        self.conf.set_int(self.conf_dir + "/vmlist-fields/stats_type", val)
 
 
     def get_default_directory(self, conn, _type):
@@ -311,22 +302,15 @@ class vmmConfig:
     def on_vmlist_status_visible_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/status", callback)
 
-    def on_vmlist_cpu_usage_visible_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/cpu_usage", callback)
-
     def on_vmlist_virtual_cpus_visible_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/virtual_cpus", callback)
 
     def on_vmlist_memory_usage_visible_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/memory_usage", callback)
 
-    def on_vmlist_disk_io_visible_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/disk_usage", callback)
-
-    def on_vmlist_network_traffic_visible_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/network_traffic", callback)
-
-
+    def on_vmlist_stats_type_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/vmlist-fields/stats_type",
+                             callback)
 
     def get_stats_update_interval(self):
         interval = self.conf.get_int(self.conf_dir + "/stats/update-interval")

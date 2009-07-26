@@ -156,6 +156,47 @@
                 <child>
                   <widget class="GtkMenu" id="menuitem6_menu">
                     <child>
+                      <widget class="GtkMenuItem" id="menuitem1">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Stats</property>
+                        <property name="use_underline">True</property>
+                        <child>
+                          <widget class="GtkMenu" id="menu1">
+                            <property name="visible">True</property>
+                            <child>
+                              <widget class="GtkRadioMenuItem" id="menu_view_stats_cpu">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">CPU</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_as_radio">True</property>
+                                <signal name="toggled" handler="on_menu_view_stats_cpu_toggled"/>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkRadioMenuItem" id="menu_view_stats_disk">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Disk</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_as_radio">True</property>
+                                <property name="group">menu_view_stats_cpu</property>
+                                <signal name="toggled" handler="on_menu_view_stats_disk_toggled"/>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkRadioMenuItem" id="menu_view_stats_network">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Network</property>
+                                <property name="use_underline">True</property>
+                                <property name="draw_as_radio">True</property>
+                                <property name="group">menu_view_stats_cpu</property>
+                                <signal name="toggled" handler="on_menu_view_stats_network_toggled"/>
+                              </widget>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
                       <widget class="GtkCheckMenuItem" id="menu_view_domain_id">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Domain ID</property>
@@ -183,39 +224,12 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkCheckMenuItem" id="menu_view_cpu_usage">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">CPU Usage</property>
-                        <property name="use_underline">True</property>
-                        <property name="active">True</property>
-                        <signal name="activate" handler="on_menu_view_cpu_usage_activate"/>
-                      </widget>
-                    </child>
-                    <child>
                       <widget class="GtkCheckMenuItem" id="menu_view_memory_usage">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Memory Usage</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <signal name="activate" handler="on_menu_view_memory_usage_activate"/>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkCheckMenuItem" id="menu_view_disk_io">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Disk I/O</property>
-                        <property name="use_underline">True</property>
-                        <property name="active">True</property>
-                        <signal name="activate" handler="on_menu_view_disk_io_activate"/>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkCheckMenuItem" id="menu_view_network_traffic">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Network I/O</property>
-                        <property name="use_underline">True</property>
-                        <property name="active">True</property>
-                        <signal name="activate" handler="on_menu_view_network_traffic_activate"/>
                       </widget>
                     </child>
                   </widget>
