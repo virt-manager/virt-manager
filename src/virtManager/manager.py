@@ -150,8 +150,6 @@ class vmmManager(gobject.GObject):
         self.config.on_stats_enable_net_poll_changed(self.enable_polling,
                                                      VMLIST_SORT_NETWORK_USAGE)
 
-        self.window.get_widget("vm-view").set_active(0)
-
         self.vmmenu_icons = {}
         self.vmmenu_icons["run"] = gtk.Image()
         self.vmmenu_icons["run"].set_from_stock(gtk.STOCK_MEDIA_PLAY,
@@ -305,7 +303,6 @@ class vmmManager(gobject.GObject):
             "on_menu_edit_delete_activate": self.delete_vm,
             "on_menu_host_details_activate": self.show_host,
 
-            "on_vm_view_changed": self.vm_view_changed,
             "on_vm_list_row_activated": self.open_vm_console,
             "on_vm_list_row_expanded": self.row_expanded,
             "on_vm_list_row_collapsed": self.row_collapsed,
@@ -377,18 +374,6 @@ class vmmManager(gobject.GObject):
     def new_connection(self, src=None):
         self.emit("action-show-connect")
 
-    def is_showing_active(self):
-        active = self.window.get_widget("vm-view").get_active()
-        if active in [0,1]:
-            return True
-        return False
-
-    def is_showing_inactive(self):
-        active = self.window.get_widget("vm-view").get_active()
-        if active in [0,2]:
-            return True
-        return False
-
     def vm_row_key(self, vm):
         return vm.get_uuid() + ":" + vm.get_connection().get_uri()
 
@@ -433,36 +418,6 @@ class vmmManager(gobject.GObject):
             asyncjob.set_error(err, details)
 
 
-    def vm_view_changed(self, src):
-        vmlist = self.window.get_widget("vm-list")
-        model = vmlist.get_model()
-
-        _iter = model.get_iter_first()
-        while _iter is not None:
-            conn = model.get_value(_iter, ROW_HANDLE)
-
-            children = model.iter_children(_iter)
-            while children is not None:
-                vm = model.get_value(children, ROW_HANDLE)
-                del self.rows[self.vm_row_key(vm)]
-                model.remove(children)
-                children = model.iter_children(_iter)
-
-            if conn:
-                uuids = conn.list_vm_uuids()
-                for vmuuid in uuids:
-                    vm = conn.get_vm(vmuuid)
-                    if vm.is_active():
-                        if not(self.is_showing_active()):
-                            continue
-                    else:
-                        if not(self.is_showing_inactive()):
-                            continue
-                    self._append_vm(model, vm, conn)
-
-            _iter = model.iter_next(_iter)
-
-
     def vm_added(self, connection, uri, vmuuid):
         vm = connection.get_vm(vmuuid)
         vm.connect("status-changed", self.vm_status_changed)
@@ -470,13 +425,6 @@ class vmmManager(gobject.GObject):
 
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
-
-        if vm.is_active():
-            if not(self.is_showing_active()):
-                return
-        else:
-            if not(self.is_showing_inactive()):
-                return
 
         self._append_vm(model, vm, connection)
 
@@ -555,13 +503,6 @@ class vmmManager(gobject.GObject):
 
     def vm_status_changed(self, vm, status):
         parent = self.rows[vm.get_connection().get_uri()].iter
-        wanted = False
-        if vm.is_active():
-            if self.is_showing_active():
-                wanted = True
-        else:
-            if self.is_showing_inactive():
-                wanted = True
 
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
@@ -570,14 +511,10 @@ class vmmManager(gobject.GObject):
         for row in range(model.iter_n_children(parent)):
             _iter = model.iter_nth_child(parent, row)
             if model.get_value(_iter, ROW_KEY) == vm.get_uuid():
-                if wanted:
-                    missing = False
-                else:
-                    model.remove(model.iter_nth_child(parent, row))
-                    del self.rows[self.vm_row_key(vm)]
+                missing = False
                 break
 
-        if missing and wanted:
+        if missing:
             self._append_vm(model, vm, vm.get_connection())
 
 
