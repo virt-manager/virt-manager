@@ -78,6 +78,9 @@ class vmmDomain(gobject.GObject):
         self.config.on_stats_enable_net_poll_changed(self.toggle_sample_network_traffic)
         self.config.on_stats_enable_disk_poll_changed(self.toggle_sample_disk_io)
 
+        self._stats_net_supported = True
+        self._stats_disk_supported = True
+
         self.toggle_sample_mem_stats()
         self.toggle_sample_cpu_stats()
         self.toggle_sample_network_traffic()
@@ -341,7 +344,7 @@ class vmmDomain(gobject.GObject):
     def _sample_network_traffic(self):
         rx = 0
         tx = 0
-        if not self.is_active():
+        if not self._stats_net_supported or not self.is_active():
             return rx, tx
 
         for netdev in self.get_network_devices(refresh_if_necc=False):
@@ -351,7 +354,11 @@ class vmmDomain(gobject.GObject):
                     rx += io[0]
                     tx += io[4]
             except libvirt.libvirtError, err:
-                logging.error("Error reading interface stats %s" % err)
+                if err.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT:
+                    logging.debug("Net stats not supported: %s" % err)
+                    self._stats_net_supported = False
+                else:
+                    logging.error("Error reading net stats: %s" % err)
         return rx, tx
 
     def _sample_disk_io_dummy(self):
@@ -360,7 +367,7 @@ class vmmDomain(gobject.GObject):
     def _sample_disk_io(self):
         rd = 0
         wr = 0
-        if not self.is_active():
+        if not self._stats_disk_supported or not self.is_active():
             return rd, wr
 
         for disk in self.get_disk_devices(refresh_if_necc=False):
@@ -370,7 +377,11 @@ class vmmDomain(gobject.GObject):
                     rd += io[1]
                     wr += io[3]
             except libvirt.libvirtError, err:
-                logging.error("Error reading block stats %s" % err)
+                if err.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT:
+                    logging.debug("Disk stats not supported: %s" % err)
+                    self._stats_disk_supported = False
+                else:
+                    logging.error("Error reading disk stats: %s" % err)
         return rd, wr
 
     def _get_cur_rate(self, what):
