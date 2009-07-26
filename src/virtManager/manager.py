@@ -34,34 +34,21 @@ from virtManager.delete import vmmDeleteDialog
 from virtManager.graphwidgets import CellRendererSparkline
 from virtManager import util as util
 
-VMLIST_SORT_ID = 1
-VMLIST_SORT_NAME = 2
-VMLIST_SORT_STATS = 3
-VMLIST_SORT_MEMORY_USAGE = 4
-VMLIST_SORT_DISK_IO = 5
-VMLIST_SORT_NETWORK_USAGE = 6
+VMLIST_SORT_NAME = 1
+VMLIST_SORT_STATS = 2
 
 # fields in the tree model data set
 ROW_HANDLE = 0
 ROW_NAME = 1
-ROW_ID = 2
-ROW_STATUS = 3
-ROW_STATUS_ICON = 4
-ROW_VCPUS = 5
-ROW_MEM = 6
-ROW_MEM_USAGE = 7
-ROW_KEY = 8
-ROW_HINT = 9
+ROW_STATUS = 2
+ROW_STATUS_ICON = 3
+ROW_KEY = 4
+ROW_HINT = 5
 
 # Columns in the tree view
 COL_NAME = 0
-COL_ID = 1
-COL_STATUS = 2
-COL_CPU = 3
-COL_VCPU = 4
-COL_MEM = 5
-COL_DISK = 6
-COL_NETWORK = 7
+COL_STATUS = 1
+COL_STATS = 2
 
 rcstring = """
 style "toolbar-style" {
@@ -172,16 +159,10 @@ class vmmManager(gobject.GObject):
 
         self.prepare_vmlist()
 
-        self.config.on_vmlist_domain_id_visible_changed(self.toggle_domain_id_visible_widget)
         self.config.on_vmlist_status_visible_changed(self.toggle_status_visible_widget)
-        self.config.on_vmlist_virtual_cpus_visible_changed(self.toggle_virtual_cpus_visible_widget)
-        self.config.on_vmlist_memory_usage_visible_changed(self.toggle_memory_usage_visible_widget)
         self.config.on_vmlist_stats_type_changed(self.stats_toggled_config)
 
-        self.window.get_widget("menu_view_domain_id").set_active(self.config.is_vmlist_domain_id_visible())
         self.window.get_widget("menu_view_status").set_active(self.config.is_vmlist_status_visible())
-        self.window.get_widget("menu_view_virtual_cpus").set_active(self.config.is_vmlist_virtual_cpus_visible())
-        self.window.get_widget("menu_view_memory_usage").set_active(self.config.is_vmlist_memory_usage_visible())
 
         # Register callbacks with the global stats enable/disable values
         # that disable the associated vmlist widgets if reporting is disabled
@@ -335,10 +316,7 @@ class vmmManager(gobject.GObject):
         self.connmenu.show()
 
         self.window.signal_autoconnect({
-            "on_menu_view_domain_id_activate" : self.toggle_domain_id_visible_conf,
             "on_menu_view_status_activate" : self.toggle_status_visible_conf,
-            "on_menu_view_virtual_cpus_activate" : self.toggle_virtual_cpus_visible_conf,
-            "on_menu_view_memory_usage_activate" : self.toggle_memory_usage_visible_conf,
 
             "on_menu_view_stats_disk_toggled" :     (self.stats_toggled,
                                                      cfg.STATS_DISK),
@@ -505,12 +483,8 @@ class vmmManager(gobject.GObject):
         row = []
         row.insert(ROW_HANDLE, vm)
         row.insert(ROW_NAME, vm.get_name())
-        row.insert(ROW_ID, vm.get_id_pretty())
         row.insert(ROW_STATUS, vm.run_status())
         row.insert(ROW_STATUS_ICON, vm.run_status_icon())
-        row.insert(ROW_VCPUS, vm.vcpu_count())
-        row.insert(ROW_MEM, vm.get_memory_pretty())
-        row.insert(ROW_MEM_USAGE, vm.current_memory_percentage())
         row.insert(ROW_KEY, vm.get_uuid())
         row.insert(ROW_HINT, None)
 
@@ -523,13 +497,9 @@ class vmmManager(gobject.GObject):
     def _append_connection(self, model, conn):
         row = []
         row.insert(ROW_HANDLE, conn)
+        row.insert(ROW_NAME, conn.get_pretty_desc_inactive())
         row.insert(ROW_STATUS, conn.get_state_text())
-        row.insert(ROW_NAME, conn.get_short_hostname())
-        row.insert(ROW_ID, conn.get_driver())
         row.insert(ROW_STATUS_ICON, None)
-        row.insert(ROW_VCPUS, conn.host_active_processor_count())
-        row.insert(ROW_MEM, conn.pretty_current_memory())
-        row.insert(ROW_MEM_USAGE, conn.current_memory_percentage())
         row.insert(ROW_KEY, conn.get_uri())
         row.insert(ROW_HINT, conn.get_uri())
 
@@ -577,16 +547,8 @@ class vmmManager(gobject.GObject):
             return
 
         row = self.rows[self.vm_row_key(vm)]
-        # Handle, name, ID, status, status icon, cpu, cpu graph, vcpus, mem, mem bar, diskRead, diskWrite, netRx, netTx
-        if vm.get_id() == -1:
-            row[ROW_ID] = "-"
-        else:
-            row[ROW_ID] = vm.get_id()
         row[ROW_STATUS] = vm.run_status()
         row[ROW_STATUS_ICON] = vm.run_status_icon()
-        row[ROW_VCPUS] = vm.vcpu_count()
-        row[ROW_MEM] = vm.get_memory_pretty()
-        row[ROW_MEM_USAGE] = vm.current_memory_percentage()
         model.row_changed(row.path, row.iter)
 
 
@@ -599,9 +561,6 @@ class vmmManager(gobject.GObject):
         model = vmlist.get_model()
         row = self.rows[conn.get_uri()]
         row[ROW_STATUS] = conn.get_state_text()
-        row[ROW_VCPUS] = conn.host_active_processor_count()
-        row[ROW_MEM] = conn.pretty_current_memory()
-        row[ROW_MEM_USAGE] = conn.current_memory_percentage()
         if conn.get_state() in [vmmConnection.STATE_DISCONNECTED,
                                 vmmConnection.STATE_CONNECTING]:
             # Connection went inactive, delete any VM child nodes
@@ -819,24 +778,18 @@ class vmmManager(gobject.GObject):
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
-        # Handle, name, ID, status, status icon, [cpu graph], vcpus, mem, mem bar, uuid
-        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, int, str, int, str, str)
+        # Handle, name, status, status icon, key/uuid, hint
+        model = gtk.TreeStore(object, str, str, gtk.gdk.Pixbuf, str, str)
         vmlist.set_model(model)
         util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
 
         nameCol = gtk.TreeViewColumn(_("Name"))
-        idCol = gtk.TreeViewColumn(_("ID"))
         statusCol = gtk.TreeViewColumn(_("Status"))
         cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
-        virtualCPUsCol = gtk.TreeViewColumn(_("CPUs"))
-        memoryUsageCol = gtk.TreeViewColumn(_("Memory usage"))
 
         vmlist.append_column(nameCol)
-        vmlist.append_column(idCol)
         vmlist.append_column(statusCol)
         vmlist.append_column(cpuUsageCol)
-        vmlist.append_column(virtualCPUsCol)
-        vmlist.append_column(memoryUsageCol)
 
         # For the columns which follow, we deliberately bind columns
         # to fields in the list store & on each update copy the info
@@ -851,12 +804,6 @@ class vmmManager(gobject.GObject):
         nameCol.pack_start(name_txt, True)
         nameCol.add_attribute(name_txt, 'text', ROW_NAME)
         nameCol.set_sort_column_id(VMLIST_SORT_NAME)
-
-        id_txt = gtk.CellRendererText()
-        idCol.pack_start(id_txt, True)
-        idCol.add_attribute(id_txt, 'text', ROW_ID)
-        idCol.set_visible(self.config.is_vmlist_domain_id_visible())
-        idCol.set_sort_column_id(VMLIST_SORT_ID)
 
         status_txt = gtk.CellRendererText()
         status_icon = gtk.CellRendererPixbuf()
@@ -874,30 +821,10 @@ class vmmManager(gobject.GObject):
         self.stats_column = cpuUsageCol
         self.stats_toggled(None, self.get_stats_type())
 
-        virtualCPUs_txt = gtk.CellRendererText()
-        virtualCPUsCol.pack_start(virtualCPUs_txt, False)
-        virtualCPUsCol.add_attribute(virtualCPUs_txt, 'text', ROW_VCPUS)
-        virtualCPUsCol.set_visible(self.config.is_vmlist_virtual_cpus_visible())
-
-        memoryUsage_txt = gtk.CellRendererText()
-        memoryUsage_img = gtk.CellRendererProgress()
-        memoryUsageCol.pack_start(memoryUsage_txt, False)
-        memoryUsageCol.pack_start(memoryUsage_img, False)
-        memoryUsageCol.add_attribute(memoryUsage_txt, 'text', ROW_MEM)
-        memoryUsageCol.add_attribute(memoryUsage_img, 'value', ROW_MEM_USAGE)
-        memoryUsageCol.set_visible(self.config.is_vmlist_memory_usage_visible())
-        memoryUsageCol.set_sort_column_id(VMLIST_SORT_MEMORY_USAGE)
-
-        model.set_sort_func(VMLIST_SORT_ID, self.vmlist_domain_id_sorter)
         model.set_sort_func(VMLIST_SORT_NAME, self.vmlist_name_sorter)
-        model.set_sort_func(VMLIST_SORT_MEMORY_USAGE,
-                            self.vmlist_memory_usage_sorter)
 
         model.set_sort_column_id(VMLIST_SORT_NAME, gtk.SORT_ASCENDING)
 
-
-    def vmlist_domain_id_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, ROW_HANDLE).get_id(), model.get_value(iter2, ROW_HANDLE).get_id())
 
     def vmlist_name_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, ROW_NAME), model.get_value(iter2, ROW_NAME))
@@ -905,22 +832,11 @@ class vmmManager(gobject.GObject):
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, ROW_HANDLE).cpu_time_percentage(), model.get_value(iter2, ROW_HANDLE).cpu_time_percentage())
 
-    def vmlist_memory_usage_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, ROW_HANDLE).current_memory_percentage(), model.get_value(iter2, ROW_HANDLE).current_memory_percentage())
-
     def vmlist_disk_io_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, ROW_HANDLE).disk_io_rate(), model.get_value(iter2, ROW_HANDLE).disk_io_rate())
 
     def vmlist_network_usage_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, ROW_HANDLE).network_traffic_rate(), model.get_value(iter2, ROW_HANDLE).network_traffic_rate())
-
-    def toggle_domain_id_visible_conf(self, menu):
-        self.config.set_vmlist_domain_id_visible(menu.get_active())
-
-    def toggle_domain_id_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(COL_ID)
-        col.set_visible(self.config.is_vmlist_domain_id_visible())
 
     def toggle_status_visible_conf(self, menu):
         self.config.set_vmlist_status_visible(menu.get_active())
@@ -955,22 +871,6 @@ class vmmManager(gobject.GObject):
 
     def stats_toggled_config(self, ignore1, ignore2, conf_entry, ignore4):
         self.stats_toggled(None, conf_entry.get_value().get_int())
-
-    def toggle_virtual_cpus_visible_conf(self, menu):
-        self.config.set_vmlist_virtual_cpus_visible(menu.get_active())
-
-    def toggle_virtual_cpus_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(COL_VCPU)
-        col.set_visible(self.config.is_vmlist_virtual_cpus_visible())
-
-    def toggle_memory_usage_visible_conf(self, menu):
-        self.config.set_vmlist_memory_usage_visible(menu.get_active())
-
-    def toggle_memory_usage_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(COL_MEM)
-        col.set_visible(self.config.is_vmlist_memory_usage_visible())
 
     def get_stats_type(self):
         return self.config.get_vmlist_stats_type()
