@@ -46,16 +46,11 @@ ROW_NAME = 1
 ROW_ID = 2
 ROW_STATUS = 3
 ROW_STATUS_ICON = 4
-ROW_CPU = 5
-ROW_VCPUS = 6
-ROW_MEM = 7
-ROW_MEM_USAGE = 8
-ROW_KEY = 9
-ROW_HINT = 10
-ROW_DISK_RD = 11
-ROW_DISK_WR = 12
-ROW_NET_RX = 13
-ROW_NET_TX = 14
+ROW_VCPUS = 5
+ROW_MEM = 6
+ROW_MEM_USAGE = 7
+ROW_KEY = 8
+ROW_HINT = 9
 
 # Columns in the tree view
 COL_NAME = 0
@@ -510,15 +505,10 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_ID, vm.get_id_pretty())
         row.insert(ROW_STATUS, vm.run_status())
         row.insert(ROW_STATUS_ICON, vm.run_status_icon())
-        row.insert(ROW_CPU, vm.cpu_time_pretty())
         row.insert(ROW_VCPUS, vm.vcpu_count())
         row.insert(ROW_MEM, vm.get_memory_pretty())
         row.insert(ROW_MEM_USAGE, vm.current_memory_percentage())
         row.insert(ROW_KEY, vm.get_uuid())
-        row.insert(ROW_DISK_RD, vm.disk_read_rate())
-        row.insert(ROW_DISK_WR, vm.disk_write_rate())
-        row.insert(ROW_NET_RX, vm.network_rx_rate())
-        row.insert(ROW_NET_TX, vm.network_tx_rate())
         row.insert(ROW_HINT, None)
 
         _iter = model.append(parent, row)
@@ -534,16 +524,11 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_NAME, conn.get_short_hostname())
         row.insert(ROW_ID, conn.get_driver())
         row.insert(ROW_STATUS_ICON, None)
-        row.insert(ROW_CPU, "%2.2f %%" % conn.cpu_time_percentage())
         row.insert(ROW_VCPUS, conn.host_active_processor_count())
         row.insert(ROW_MEM, conn.pretty_current_memory())
         row.insert(ROW_MEM_USAGE, conn.current_memory_percentage())
         row.insert(ROW_KEY, conn.get_uri())
         row.insert(ROW_HINT, conn.get_uri())
-        row.insert(ROW_DISK_RD, conn.disk_read_rate())
-        row.insert(ROW_DISK_WR, conn.disk_write_rate())
-        row.insert(ROW_NET_RX, conn.network_rx_rate())
-        row.insert(ROW_NET_TX, conn.network_tx_rate())
 
         _iter = model.append(None, row)
         path = model.get_path(_iter)
@@ -596,14 +581,9 @@ class vmmManager(gobject.GObject):
             row[ROW_ID] = vm.get_id()
         row[ROW_STATUS] = vm.run_status()
         row[ROW_STATUS_ICON] = vm.run_status_icon()
-        row[ROW_CPU] = vm.cpu_time_pretty()
         row[ROW_VCPUS] = vm.vcpu_count()
         row[ROW_MEM] = vm.get_memory_pretty()
         row[ROW_MEM_USAGE] = vm.current_memory_percentage()
-        row[ROW_DISK_RD] = vm.disk_read_rate()
-        row[ROW_DISK_WR] = vm.disk_write_rate()
-        row[ROW_NET_RX] = vm.network_rx_rate()
-        row[ROW_NET_TX] = vm.network_tx_rate()
         model.row_changed(row.path, row.iter)
 
 
@@ -616,15 +596,11 @@ class vmmManager(gobject.GObject):
         model = vmlist.get_model()
         row = self.rows[conn.get_uri()]
         row[ROW_STATUS] = conn.get_state_text()
-        row[ROW_CPU] = "%2.2f %%" % conn.cpu_time_percentage()
         row[ROW_VCPUS] = conn.host_active_processor_count()
         row[ROW_MEM] = conn.pretty_current_memory()
         row[ROW_MEM_USAGE] = conn.current_memory_percentage()
-        row[ROW_DISK_RD] = conn.disk_read_rate()
-        row[ROW_DISK_WR] = conn.disk_write_rate()
-        row[ROW_NET_RX] = conn.network_rx_rate()
-        row[ROW_NET_TX] = conn.network_tx_rate()
-        if conn.get_state() in [vmmConnection.STATE_DISCONNECTED, vmmConnection.STATE_CONNECTING]:
+        if conn.get_state() in [vmmConnection.STATE_DISCONNECTED,
+                                vmmConnection.STATE_CONNECTING]:
             # Connection went inactive, delete any VM child nodes
             parent = self.rows[conn.get_uri()].iter
             if parent is not None:
@@ -840,8 +816,8 @@ class vmmManager(gobject.GObject):
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
-        # Handle, name, ID, status, status icon, cpu, [cpu graph], vcpus, mem, mem bar, uuid, diskRead, diskWrite, netRx, netTx
-        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, int, str, int, str, str, int, int, int, int)
+        # Handle, name, ID, status, status icon, [cpu graph], vcpus, mem, mem bar, uuid
+        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, int, str, int, str, str)
         vmlist.set_model(model)
         util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
 
@@ -892,12 +868,9 @@ class vmmManager(gobject.GObject):
         statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
         statusCol.set_visible(self.config.is_vmlist_status_visible())
 
-        cpuUsage_txt = gtk.CellRendererText()
         cpuUsage_img = CellRendererSparkline()
         cpuUsage_img.set_property("reversed", True)
-        cpuUsageCol.pack_start(cpuUsage_txt, False)
-        cpuUsageCol.pack_start(cpuUsage_img, False)
-        cpuUsageCol.add_attribute(cpuUsage_txt, 'text', ROW_CPU)
+        cpuUsageCol.pack_start(cpuUsage_img, True)
         cpuUsageCol.set_cell_data_func(cpuUsage_img, self.cpu_usage_img, None)
         cpuUsageCol.set_visible(self.config.is_vmlist_cpu_usage_visible())
         cpuUsageCol.set_sort_column_id(VMLIST_SORT_CPU_USAGE)
@@ -916,29 +889,18 @@ class vmmManager(gobject.GObject):
         memoryUsageCol.set_visible(self.config.is_vmlist_memory_usage_visible())
         memoryUsageCol.set_sort_column_id(VMLIST_SORT_MEMORY_USAGE)
 
-        diskIOIn_txt = gtk.CellRendererText()
-        diskIOOut_txt = gtk.CellRendererText()
         diskIO_img = CellRendererSparkline()
         diskIO_img.set_property("reversed", True)
-        diskIOCol.pack_start(diskIOIn_txt, False)
-        diskIOCol.pack_start(diskIOOut_txt, False)
-        diskIOCol.pack_start(diskIO_img, False)
-        diskIOCol.add_attribute(diskIOIn_txt, 'text', ROW_DISK_RD)
-        diskIOCol.add_attribute(diskIOOut_txt, 'text', ROW_DISK_WR)
+        diskIOCol.pack_start(diskIO_img, True)
         diskIOCol.set_cell_data_func(diskIO_img, self.disk_io_img, None)
         diskIOCol.set_visible(self.config.is_vmlist_disk_io_visible())
         diskIOCol.set_sort_column_id(VMLIST_SORT_DISK_IO)
 
-        networkTrafficIn_txt = gtk.CellRendererText()
-        networkTrafficOut_txt = gtk.CellRendererText()
         networkTraffic_img = CellRendererSparkline()
         networkTraffic_img.set_property("reversed", True)
-        networkTrafficCol.pack_start(networkTrafficIn_txt, False)
-        networkTrafficCol.pack_start(networkTrafficOut_txt, False)
-        networkTrafficCol.pack_start(networkTraffic_img, False)
-        networkTrafficCol.add_attribute(networkTrafficIn_txt, 'text', ROW_NET_RX)
-        networkTrafficCol.add_attribute(networkTrafficOut_txt, 'text', ROW_NET_TX)
-        networkTrafficCol.set_cell_data_func(networkTraffic_img, self.network_traffic_img, None)
+        networkTrafficCol.pack_start(networkTraffic_img, True)
+        networkTrafficCol.set_cell_data_func(networkTraffic_img,
+                                             self.network_traffic_img, None)
         networkTrafficCol.set_visible(self.config.is_vmlist_network_traffic_visible())
         networkTrafficCol.set_sort_column_id(VMLIST_SORT_NETWORK_USAGE)
 
