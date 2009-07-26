@@ -159,10 +159,7 @@ class vmmManager(gobject.GObject):
 
         self.prepare_vmlist()
 
-        self.config.on_vmlist_status_visible_changed(self.toggle_status_visible_widget)
         self.config.on_vmlist_stats_type_changed(self.stats_toggled_config)
-
-        self.window.get_widget("menu_view_status").set_active(self.config.is_vmlist_status_visible())
 
         # Register callbacks with the global stats enable/disable values
         # that disable the associated vmlist widgets if reporting is disabled
@@ -316,8 +313,6 @@ class vmmManager(gobject.GObject):
         self.connmenu.show()
 
         self.window.signal_autoconnect({
-            "on_menu_view_status_activate" : self.toggle_status_visible_conf,
-
             "on_menu_view_stats_disk_toggled" :     (self.stats_toggled,
                                                      cfg.STATS_DISK),
             "on_menu_view_stats_network_toggled" :  (self.stats_toggled,
@@ -811,7 +806,6 @@ class vmmManager(gobject.GObject):
         statusCol.pack_start(status_txt, False)
         statusCol.add_attribute(status_txt, 'text', ROW_STATUS)
         statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
-        statusCol.set_visible(self.config.is_vmlist_status_visible())
 
         cpuUsage_img = CellRendererSparkline()
         cpuUsage_img.set_property("reversed", True)
@@ -837,14 +831,6 @@ class vmmManager(gobject.GObject):
 
     def vmlist_network_usage_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, ROW_HANDLE).network_traffic_rate(), model.get_value(iter2, ROW_HANDLE).network_traffic_rate())
-
-    def toggle_status_visible_conf(self, menu):
-        self.config.set_vmlist_status_visible(menu.get_active())
-
-    def toggle_status_visible_widget(self, ignore1, ignore2, ignore3, ignore4):
-        vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(COL_STATUS)
-        col.set_visible(self.config.is_vmlist_status_visible())
 
     def enable_polling(self, ignore1, ignore2, conf_entry, userdata):
         if userdata == cfg.STATS_DISK:

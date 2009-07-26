@@ -233,15 +233,8 @@ class vmmConfig:
             # Suggest gconf syncs, so that the unset dirs are fully removed
             self.conf.suggest_sync()
 
-    def is_vmlist_status_visible(self):
-        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/status")
-
     def get_vmlist_stats_type(self):
         return self.conf.get_int(self.conf_dir + "/vmlist-fields/stats_type")
-
-
-    def set_vmlist_status_visible(self, state):
-        self.conf.set_bool(self.conf_dir + "/vmlist-fields/status", state)
 
     def set_vmlist_stats_type(self, val):
         self.conf.set_int(self.conf_dir + "/vmlist-fields/stats_type", val)
@@ -277,9 +270,6 @@ class vmmConfig:
         logging.debug("set_default_directory(%s): saving %s" % (_type, folder))
         self.conf.set_value(self.conf_dir + "/paths/default-%s-path" % _type,
                                                                       folder)
-
-    def on_vmlist_status_visible_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/status", callback)
 
     def on_vmlist_stats_type_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/stats_type",
