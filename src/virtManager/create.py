@@ -168,10 +168,8 @@ class vmmCreate(gobject.GObject):
                                                           blue)
 
         box = self.window.get_widget("create-vm-icon-box")
-        iconfile = self.config.get_icon_dir() + "/virt-manager-icon.svg"
-        icon_pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(iconfile, 48, 48)
-        image = gtk.Image()
-        image.set_from_pixbuf(icon_pixbuf)
+        image = gtk.image_new_from_icon_name("vm_new_wizard",
+                                             gtk.ICON_SIZE_DIALOG)
         image.show()
         box.pack_end(image, False)
 

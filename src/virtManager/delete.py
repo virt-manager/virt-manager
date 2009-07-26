@@ -69,6 +69,12 @@ class vmmDeleteDialog(gobject.GObject):
             "on_delete_remove_storage_toggled" : self.toggle_remove_storage,
         })
 
+        image = gtk.image_new_from_icon_name("vm_delete_wizard",
+                                             gtk.ICON_SIZE_DIALOG)
+        image.show()
+        self.window.get_widget("icon-box").pack_end(image, False)
+
+
         prepare_storage_list(self.window.get_widget("delete-storage-list"))
 
     def toggle_remove_storage(self, src):
