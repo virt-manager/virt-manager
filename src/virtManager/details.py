@@ -930,14 +930,13 @@ class vmmDetails(gobject.GObject):
         dsk_txt = _("Disabled")
         net_txt = _("Disabled")
 
-        if self.config.get_stats_enable_cpu_poll():
-            cpu_txt = "%d %%" % self.vm.cpu_time_percentage()
+        cpu_txt = "%d %%" % self.vm.cpu_time_percentage()
 
-        if self.config.get_stats_enable_mem_poll():
-            vm_memory = self.vm.current_memory()
-            host_memory = self.vm.get_connection().host_memory_size()
-            mem_txt = "%d MB of %d MB" % (int(round(vm_memory/1024.0)),
-                                          int(round(host_memory/1024.0)))
+        vm_memory = self.vm.current_memory()
+        host_memory = self.vm.get_connection().host_memory_size()
+        mem_txt = "%d MB of %d MB" % (int(round(vm_memory/1024.0)),
+                                      int(round(host_memory/1024.0)))
+
         if self.config.get_stats_enable_disk_poll():
             dsk_txt = _rx_tx_text(self.vm.disk_read_rate(),
                                   self.vm.disk_write_rate(), "KB/s")

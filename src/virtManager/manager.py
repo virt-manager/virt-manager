@@ -149,10 +149,6 @@ class vmmManager(gobject.GObject):
                                                       VMLIST_SORT_DISK_IO)
         self.config.on_stats_enable_net_poll_changed(self.enable_polling,
                                                      VMLIST_SORT_NETWORK_USAGE)
-        self.config.on_stats_enable_cpu_poll_changed(self.enable_polling,
-                                                     VMLIST_SORT_CPU_USAGE)
-        self.config.on_stats_enable_mem_poll_changed(self.enable_polling,
-                                                     VMLIST_SORT_MEMORY_USAGE)
 
         self.window.get_widget("vm-view").set_active(0)
 
@@ -329,11 +325,7 @@ class vmmManager(gobject.GObject):
             [ (VMLIST_SORT_DISK_IO,
                self.config.get_stats_enable_disk_poll()),
               (VMLIST_SORT_NETWORK_USAGE,
-               self.config.get_stats_enable_net_poll()),
-              (VMLIST_SORT_CPU_USAGE,
-               self.config.get_stats_enable_cpu_poll()),
-              (VMLIST_SORT_MEMORY_USAGE,
-               self.config.get_stats_enable_mem_poll())]:
+               self.config.get_stats_enable_net_poll())]:
             self.enable_polling(None, None, init_val, typ)
 
         self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
@@ -1025,11 +1017,7 @@ class vmmManager(gobject.GObject):
         col.set_visible(self.config.is_vmlist_cpu_usage_visible())
 
     def enable_polling(self, ignore1, ignore2, conf_entry, userdata):
-        if userdata == VMLIST_SORT_CPU_USAGE:
-            widgn = "menu_view_cpu_usage"
-        elif userdata == VMLIST_SORT_MEMORY_USAGE:
-            widgn = "menu_view_memory_usage"
-        elif userdata == VMLIST_SORT_DISK_IO:
+        if userdata == VMLIST_SORT_DISK_IO:
             widgn = "menu_view_disk_io"
         elif userdata == VMLIST_SORT_NETWORK_USAGE:
             widgn = "menu_view_network_traffic"

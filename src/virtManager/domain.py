@@ -66,23 +66,17 @@ class vmmDomain(gobject.GObject):
         self._orig_inactive_xml = None
         self._valid_xml = False
 
-        self._mem_stats = None
-        self._cpu_stats = None
         self._network_traffic = None
         self._disk_io = None
 
         self._update_status()
 
-        self.config.on_stats_enable_mem_poll_changed(self.toggle_sample_mem_stats)
-        self.config.on_stats_enable_cpu_poll_changed(self.toggle_sample_cpu_stats)
         self.config.on_stats_enable_net_poll_changed(self.toggle_sample_network_traffic)
         self.config.on_stats_enable_disk_poll_changed(self.toggle_sample_disk_io)
 
         self._stats_net_supported = True
         self._stats_disk_supported = True
 
-        self.toggle_sample_mem_stats()
-        self.toggle_sample_cpu_stats()
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
 
@@ -297,16 +291,10 @@ class vmmDomain(gobject.GObject):
                                  self.config.on_console_scaling_changed, cb)
 
 
-    def _sample_mem_stats_dummy(self, ignore):
-        return 0, 0
-
     def _sample_mem_stats(self, info):
         pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
         pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
         return pcentCurrMem, pcentMaxMem
-
-    def _sample_cpu_stats_dummy(self, ignore, ignore1):
-        return 0, 0, 0
 
     def _sample_cpu_stats(self, info, now):
         prevCpuTime = 0
@@ -417,8 +405,8 @@ class vmmDomain(gobject.GObject):
         if self.get_id() == 0:
             info[1] = self.connection.host_memory_size()
 
-        cpuTime, cpuTimeAbs, pcentCpuTime = self._cpu_stats(info, now)
-        pcentCurrMem, pcentMaxMem = self._mem_stats(info)
+        cpuTime, cpuTimeAbs, pcentCpuTime = self._sample_cpu_stats(info, now)
+        pcentCurrMem, pcentMaxMem = self._sample_mem_stats(info)
         rdBytes, wrBytes = self._disk_io()
         rxBytes, txBytes = self._network_traffic()
 
@@ -1456,20 +1444,6 @@ class vmmDomain(gobject.GObject):
 
         self.redefine(util.xml_parse_wrapper,
                       change_label)
-
-    def toggle_sample_cpu_stats(self, ignore1=None, ignore2=None,
-                                ignore3=None, ignore4=None):
-        if self.config.get_stats_enable_cpu_poll():
-            self._cpu_stats = self._sample_cpu_stats
-        else:
-            self._cpu_stats = self._sample_cpu_stats_dummy
-
-    def toggle_sample_mem_stats(self, ignore1=None, ignore2=None,
-                                ignore3=None, ignore4=None):
-        if self.config.get_stats_enable_mem_poll():
-            self._mem_stats = self._sample_mem_stats
-        else:
-            self._mem_stats = self._sample_mem_stats_dummy
 
     def toggle_sample_network_traffic(self, ignore1=None, ignore2=None,
                                       ignore3=None, ignore4=None):
