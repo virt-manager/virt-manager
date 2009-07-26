@@ -44,6 +44,8 @@ ROW_STATUS = 2
 ROW_STATUS_ICON = 3
 ROW_KEY = 4
 ROW_HINT = 5
+ROW_IS_VM = 6
+ROW_IS_VM_RUNNING = 7
 
 # Columns in the tree view
 COL_NAME = 0
@@ -179,18 +181,24 @@ class vmmManager(gobject.GObject):
         self.vmmenu_icons["resume"].set_from_stock(gtk.STOCK_MEDIA_PAUSE,
                                                    gtk.ICON_SIZE_MENU)
 
-        def set_toolbar_image(widget, iconfile):
+        def set_toolbar_image(widget, iconfile, l, w):
             filename = self.config.get_icon_dir() + "/%s" % iconfile
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, 38, 38)
+            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, l, w)
             image = gtk.image_new_from_pixbuf(pixbuf)
             self.window.get_widget(widget).set_icon_widget(image)
 
-        set_toolbar_image("vm-new", "vm_new_large.png")
+        set_toolbar_image("vm-new", "vm_new_wizard.png", 28, 28)
+        set_toolbar_image("vm-open", "icon_console.png", 24, 24)
         build_shutdown_button_menu(self.config,
                                    self.window.get_widget("vm-shutdown"),
                                    self.poweroff_vm,
                                    self.reboot_vm,
                                    self.destroy_vm)
+
+        tool2 = self.window.get_widget("vm-toolbar2")
+        tool2.set_property("icon-size", gtk.ICON_SIZE_LARGE_TOOLBAR)
+        for c in tool2.get_children():
+            c.set_homogeneous(False)
 
         icon_name = self.config.get_shutdown_icon_name()
         rebootimg = gtk.image_new_from_icon_name(icon_name,
@@ -482,6 +490,8 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_STATUS_ICON, vm.run_status_icon())
         row.insert(ROW_KEY, vm.get_uuid())
         row.insert(ROW_HINT, None)
+        row.insert(ROW_IS_VM, True)
+        row.insert(ROW_IS_VM_RUNNING, vm.is_active())
 
         _iter = model.append(parent, row)
         path = model.get_path(_iter)
@@ -497,6 +507,8 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_STATUS_ICON, None)
         row.insert(ROW_KEY, conn.get_uri())
         row.insert(ROW_HINT, conn.get_uri())
+        row.insert(ROW_IS_VM, False)
+        row.insert(ROW_IS_VM_RUNNING, False)
 
         _iter = model.append(None, row)
         path = model.get_path(_iter)
@@ -544,6 +556,7 @@ class vmmManager(gobject.GObject):
         row = self.rows[self.vm_row_key(vm)]
         row[ROW_STATUS] = vm.run_status()
         row[ROW_STATUS_ICON] = vm.run_status_icon()
+        row[ROW_IS_VM_RUNNING] = vm.is_active()
         model.row_changed(row.path, row.iter)
 
 
@@ -773,12 +786,15 @@ class vmmManager(gobject.GObject):
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
-        # Handle, name, status, status icon, key/uuid, hint
-        model = gtk.TreeStore(object, str, str, gtk.gdk.Pixbuf, str, str)
+        # Handle, name, status, status icon, key/uuid, hint, is vm,
+        # is vm running
+        model = gtk.TreeStore(object, str, str, gtk.gdk.Pixbuf, str, str,
+                              bool, bool)
         vmlist.set_model(model)
         util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
 
         nameCol = gtk.TreeViewColumn(_("Name"))
+        nameCol.set_expand(True)
         statusCol = gtk.TreeViewColumn(_("Status"))
         cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
 
@@ -802,10 +818,13 @@ class vmmManager(gobject.GObject):
 
         status_txt = gtk.CellRendererText()
         status_icon = gtk.CellRendererPixbuf()
+        status_icon.set_property("xpad", 6)
         statusCol.pack_start(status_icon, False)
         statusCol.pack_start(status_txt, False)
         statusCol.add_attribute(status_txt, 'text', ROW_STATUS)
         statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
+        statusCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
+        statusCol.add_attribute(status_icon, 'sensitive', ROW_IS_VM_RUNNING)
 
         cpuUsage_img = CellRendererSparkline()
         cpuUsage_img.set_property("reversed", True)

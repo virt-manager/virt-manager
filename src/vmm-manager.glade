@@ -4,7 +4,7 @@
 <glade-interface>
   <widget class="GtkWindow" id="vmm-manager">
     <property name="title" translatable="yes">Virtual Machine Manager</property>
-    <property name="default_width">700</property>
+    <property name="default_width">600</property>
     <property name="default_height">500</property>
     <property name="gravity">GDK_GRAVITY_CENTER</property>
     <signal name="delete_event" handler="on_vm_manager_delete_event"/>
@@ -158,7 +158,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="menuitem1">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Stats</property>
+                        <property name="label" translatable="yes">Graph</property>
                         <property name="use_underline">True</property>
                         <child>
                           <widget class="GtkMenu" id="menu1">
