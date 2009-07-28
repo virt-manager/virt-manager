@@ -24,11 +24,10 @@ import os
 import logging
 import time
 import difflib
-import re
 
 from virtManager import util
 import virtinst.util as vutil
-import virtinst.Guest as vguest
+import virtinst
 
 def safeint(val, fmt="%.3d"):
     try:
@@ -560,7 +559,7 @@ class vmmDomain(gobject.GObject):
         cpuset = vutil.get_xml_path(self.get_xml(), "/domain/vcpu/@cpuset")
         # We need to set it to empty string not to show None in the entry
         if cpuset is None:
-           cpuset = ""
+            cpuset = ""
         return cpuset
 
     def vcpu_max_count(self):
@@ -1344,7 +1343,7 @@ class vmmDomain(gobject.GObject):
         if len(val) == 0:
             return None
 
-        guest = vguest(connection = self.get_connection().vmm)
+        guest = virtinst.Guest(connection = self.get_connection().vmm)
         guest.cpuset = val
 
     def define_vcpus(self, vcpus, cpuset=None):
