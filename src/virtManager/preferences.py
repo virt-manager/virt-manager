@@ -37,6 +37,7 @@ class vmmPreferences(gobject.GObject):
         self.topwin = self.window.get_widget("vmm-preferences")
         self.topwin.hide()
 
+        self.config.on_view_system_tray_changed(self.refresh_view_system_tray)
         self.config.on_console_popup_changed(self.refresh_console_popup)
         self.config.on_console_keygrab_changed(self.refresh_console_keygrab)
         self.config.on_console_scaling_changed(self.refresh_console_scaling)
@@ -47,6 +48,7 @@ class vmmPreferences(gobject.GObject):
         self.config.on_stats_enable_disk_poll_changed(self.refresh_disk_poll)
         self.config.on_stats_enable_net_poll_changed(self.refresh_net_poll)
 
+        self.refresh_view_system_tray()
         self.refresh_update_interval()
         self.refresh_history_length()
         self.refresh_console_popup()
@@ -58,6 +60,7 @@ class vmmPreferences(gobject.GObject):
         self.refresh_net_poll()
 
         self.window.signal_autoconnect({
+            "on_prefs_system_tray_toggled" : self.change_view_system_tray,
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
             "on_prefs_stats_history_length_changed": self.change_history_length,
             "on_prefs_console_popup_changed": self.change_console_popup,
@@ -83,6 +86,11 @@ class vmmPreferences(gobject.GObject):
     #########################
     # Config Change Options #
     #########################
+
+    def refresh_view_system_tray(self, ignore1=None, ignore2=None,
+                                 ignore3=None, ignore4=None):
+        val = self.config.get_view_system_tray()
+        self.window.get_widget("prefs-system-tray").set_active(bool(val))
 
     def refresh_update_interval(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
         self.window.get_widget("prefs-stats-update-interval").set_value(self.config.get_stats_update_interval())
@@ -115,6 +123,9 @@ class vmmPreferences(gobject.GObject):
     def refresh_net_poll(self, ignore1=None, ignore2=None, ignore3=None,
                          ignore4=None):
         self.window.get_widget("prefs-stats-enable-net").set_active(self.config.get_stats_enable_net_poll())
+
+    def change_view_system_tray(self, src):
+        self.config.set_view_system_tray(src.get_active())
 
     def change_update_interval(self, src):
         self.config.set_stats_update_interval(src.get_value_as_int())

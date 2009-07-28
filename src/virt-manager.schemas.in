@@ -170,6 +170,19 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/::PACKAGE::/system-tray</key>
+      <applyto>/apps/::PACKAGE::/system-tray</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>0</default>
+
+      <locale name="C">
+        <short>Show system tray icon</short>
+        <long>Show system tray icon while app is running</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/::PACKAGE::/paths/default-image-path</key>
       <applyto>/apps/::PACKAGE::/paths/default-image-path</applyto>
       <owner>::PACKAGE::</owner>

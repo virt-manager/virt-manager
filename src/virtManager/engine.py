@@ -40,6 +40,7 @@ from virtManager.asyncjob import vmmAsyncJob
 from virtManager.create import vmmCreate
 from virtManager.host import vmmHost
 from virtManager.error import vmmErrorDialog
+from virtManager.systray import vmmSystray
 import virtManager.util as util
 
 class vmmEngine(gobject.GObject):
@@ -68,6 +69,8 @@ class vmmEngine(gobject.GObject):
         self.timer = None
         self.last_timeout = 0
 
+        self.systray = None
+
         self._tick_thread = None
         self._tick_thread_slow = False
         self._libvirt_support_threading = (libvirt.getVersion() >= 6000)
@@ -79,12 +82,29 @@ class vmmEngine(gobject.GObject):
         self.windows = 0
 
         self.netdevHelper = vmmNetDevHelper(self.config)
+        self.init_systray()
 
         self.config.on_stats_update_interval_changed(self.reschedule_timer)
 
         self.schedule_timer()
         self.load_stored_uris()
         self.tick()
+
+    def init_systray(self):
+        if self.systray:
+            return
+
+        self.systray = vmmSystray(self.config, self)
+        self.systray.connect("action-view-manager", self._do_show_manager)
+        self.systray.connect("action-suspend-domain", self._do_suspend_domain)
+        self.systray.connect("action-resume-domain", self._do_resume_domain)
+        self.systray.connect("action-run-domain", self._do_run_domain)
+        self.systray.connect("action-shutdown-domain", self._do_shutdown_domain)
+        self.systray.connect("action-reboot-domain", self._do_reboot_domain)
+        self.systray.connect("action-destroy-domain", self._do_destroy_domain)
+        self.systray.connect("action-show-console", self._do_show_console)
+        self.systray.connect("action-show-details", self._do_show_details)
+        self.systray.connect("action-exit-app", self._do_exit_app)
 
     def load_stored_uris(self):
         uris = self.config.get_connections()

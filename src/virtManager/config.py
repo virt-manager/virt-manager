@@ -271,6 +271,13 @@ class vmmConfig:
         self.conf.set_value(self.conf_dir + "/paths/default-%s-path" % _type,
                                                                       folder)
 
+    def on_view_system_tray_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/system-tray", callback)
+    def get_view_system_tray(self):
+        return self.conf.get_bool(self.conf_dir + "/system-tray")
+    def set_view_system_tray(self, val):
+        self.conf.set_bool(self.conf_dir + "/system-tray", val)
+
     def on_vmlist_stats_type_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/vmlist-fields/stats_type",
                              callback)
