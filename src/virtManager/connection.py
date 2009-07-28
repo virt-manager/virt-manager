@@ -215,7 +215,7 @@ class vmmConnection(gobject.GObject):
             return True
         return False
 
-    def _get_pretty_desc(self):
+    def _get_pretty_desc(self, active, shorthost):
         (scheme, ignore, hostname,
          path, ignore, ignore) = virtinst.util.uri_split(self.uri)
 
@@ -223,31 +223,34 @@ class vmmConnection(gobject.GObject):
         rest = ""
         scheme = scheme.split("+")[0]
 
+        if hostname:
+            if shorthost:
+                rest = hostname.split(".")[0]
+            else:
+                rest = hostname
+        else:
+            rest = "localhost"
+
         if scheme == "qemu":
             hv = "QEMU"
+            if active and self.is_kvm_supported():
+                hv += "/KVM"
         else:
             hv = scheme.capitalize()
 
         if path and path != "/system":
             if path == "/session":
-                rest += " Usermode"
+                hv += " Usermode"
             else:
-                rest += " %s" % os.path.basename(path)
-        if hostname:
-            rest += " (%s)" % hostname.split(".")[0]
+                hv += " %s" % os.path.basename(path)
 
-        return hv, rest
+        return "%s (%s)" % (rest, hv)
 
-    def get_pretty_desc_inactive(self):
-        hv, rest = self._get_pretty_desc()
-        return hv + rest
+    def get_pretty_desc_inactive(self, shorthost=True):
+        return self._get_pretty_desc(False, shorthost)
 
-    def get_pretty_desc_active(self):
-        hv, rest = self._get_pretty_desc()
-
-        if self.is_kvm_supported():
-            hv += "/KVM"
-        return hv + rest
+    def get_pretty_desc_active(self, shorthost=True):
+        return self._get_pretty_desc(True, shorthost)
 
     def get_uri(self):
         return self.uri

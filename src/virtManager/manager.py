@@ -40,12 +40,17 @@ VMLIST_SORT_STATS = 2
 # fields in the tree model data set
 ROW_HANDLE = 0
 ROW_NAME = 1
-ROW_STATUS = 2
-ROW_STATUS_ICON = 3
-ROW_KEY = 4
-ROW_HINT = 5
-ROW_IS_VM = 6
-ROW_IS_VM_RUNNING = 7
+ROW_MARKUP = 2
+ROW_STATUS = 3
+ROW_STATUS_ICON = 4
+ROW_KEY = 5
+ROW_HINT = 6
+ROW_IS_CONN = 7
+ROW_IS_CONN_CONNECTED = 8
+ROW_IS_VM = 9
+ROW_IS_VM_RUNNING = 10
+ROW_COLOR = 11
+ROW_HEIGHT = 12
 
 # Columns in the tree view
 COL_NAME = 0
@@ -486,12 +491,16 @@ class vmmManager(gobject.GObject):
         row = []
         row.insert(ROW_HANDLE, vm)
         row.insert(ROW_NAME, vm.get_name())
+        row.insert(ROW_MARKUP, row[ROW_NAME])
         row.insert(ROW_STATUS, vm.run_status())
         row.insert(ROW_STATUS_ICON, vm.run_status_icon())
         row.insert(ROW_KEY, vm.get_uuid())
         row.insert(ROW_HINT, None)
+        row.insert(ROW_IS_CONN, False)
+        row.insert(ROW_IS_CONN_CONNECTED, True)
         row.insert(ROW_IS_VM, True)
         row.insert(ROW_IS_VM_RUNNING, vm.is_active())
+        row.insert(ROW_COLOR, "white")
 
         _iter = model.append(parent, row)
         path = model.get_path(_iter)
@@ -502,13 +511,24 @@ class vmmManager(gobject.GObject):
     def _append_connection(self, model, conn):
         row = []
         row.insert(ROW_HANDLE, conn)
-        row.insert(ROW_NAME, conn.get_pretty_desc_inactive())
-        row.insert(ROW_STATUS, conn.get_state_text())
+        row.insert(ROW_NAME, conn.get_pretty_desc_inactive(False))
+        if conn.state == conn.STATE_DISCONNECTED:
+            markup = ("<span font='9.5' color='#5b5b5b'>%s - "
+                      "Not Connected</span>" % row[ROW_NAME])
+        else:
+            markup = ("<span font='9.5'>%s</span>" % row[ROW_NAME])
+        row.insert(ROW_MARKUP, markup)
+        row.insert(ROW_STATUS, ("<span font='9'>%s</span>" %
+                                conn.get_state_text()))
         row.insert(ROW_STATUS_ICON, None)
         row.insert(ROW_KEY, conn.get_uri())
         row.insert(ROW_HINT, conn.get_uri())
+        row.insert(ROW_IS_CONN, True)
+        row.insert(ROW_IS_CONN_CONNECTED,
+                   conn.state != conn.STATE_DISCONNECTED)
         row.insert(ROW_IS_VM, False)
         row.insert(ROW_IS_VM_RUNNING, False)
+        row.insert(ROW_COLOR, "#d4d2d2")
 
         _iter = model.append(None, row)
         path = model.get_path(_iter)
@@ -568,7 +588,16 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
         row = self.rows[conn.get_uri()]
-        row[ROW_STATUS] = conn.get_state_text()
+
+        if conn.state == conn.STATE_DISCONNECTED:
+            markup = ("<span font='9.5' color='#5b5b5b'>%s - "
+                      "Not Connected</span>" % row[ROW_NAME])
+        else:
+            markup = ("<span font='9.5'>%s</span>" % row[ROW_NAME])
+        row[ROW_MARKUP] = markup
+        row[ROW_STATUS] = "<span font='9'>%s</span>" % conn.get_state_text()
+        row[ROW_IS_CONN_CONNECTED] = conn.state != conn.STATE_DISCONNECTED
+
         if conn.get_state() in [vmmConnection.STATE_DISCONNECTED,
                                 vmmConnection.STATE_CONNECTING]:
             # Connection went inactive, delete any VM child nodes
@@ -786,20 +815,24 @@ class vmmManager(gobject.GObject):
     def prepare_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
 
-        # Handle, name, status, status icon, key/uuid, hint, is vm,
-        # is vm running
-        model = gtk.TreeStore(object, str, str, gtk.gdk.Pixbuf, str, str,
-                              bool, bool)
+        # Handle, name, markup, status, status icon, key/uuid, hint, is conn,
+        # is conn connected, is vm, is vm running, color
+        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, str,
+                              bool, bool, bool, bool, str)
         vmlist.set_model(model)
         util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
 
+        vmlist.set_headers_visible(True)
+        vmlist.set_level_indentation(-15)
+
         nameCol = gtk.TreeViewColumn(_("Name"))
         nameCol.set_expand(True)
-        statusCol = gtk.TreeViewColumn(_("Status"))
+        nameCol.set_spacing(12)
         cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
+        cpuUsageCol.set_min_width(150)
 
+        statusCol = nameCol
         vmlist.append_column(nameCol)
-        vmlist.append_column(statusCol)
         vmlist.append_column(cpuUsageCol)
 
         # For the columns which follow, we deliberately bind columns
@@ -811,24 +844,30 @@ class vmmManager(gobject.GObject):
         # needs to do many transitions  C<->Python for callbacks
         # which are relatively slow.
 
-        name_txt = gtk.CellRendererText()
-        nameCol.pack_start(name_txt, True)
-        nameCol.add_attribute(name_txt, 'text', ROW_NAME)
-        nameCol.set_sort_column_id(VMLIST_SORT_NAME)
-
-        status_txt = gtk.CellRendererText()
         status_icon = gtk.CellRendererPixbuf()
-        status_icon.set_property("xpad", 6)
         statusCol.pack_start(status_icon, False)
-        statusCol.pack_start(status_txt, False)
-        statusCol.add_attribute(status_txt, 'text', ROW_STATUS)
+        statusCol.add_attribute(status_icon, 'cell-background', ROW_COLOR)
         statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
         statusCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
         statusCol.add_attribute(status_icon, 'sensitive', ROW_IS_VM_RUNNING)
 
+        name_txt = gtk.CellRendererText()
+        nameCol.pack_start(name_txt, True)
+        nameCol.add_attribute(name_txt, 'cell-background', ROW_COLOR)
+        nameCol.add_attribute(name_txt, 'markup', ROW_MARKUP)
+        nameCol.set_sort_column_id(VMLIST_SORT_NAME)
+
+        cpuUsage_txt = gtk.CellRendererText()
         cpuUsage_img = CellRendererSparkline()
+        cpuUsage_img.set_property("xpad", 6)
+        cpuUsage_img.set_property("ypad", 12)
         cpuUsage_img.set_property("reversed", True)
         cpuUsageCol.pack_start(cpuUsage_img, True)
+        cpuUsageCol.pack_start(cpuUsage_txt, False)
+        cpuUsageCol.add_attribute(cpuUsage_img, 'cell-background', ROW_COLOR)
+        cpuUsageCol.add_attribute(cpuUsage_img, 'visible', ROW_IS_VM)
+        cpuUsageCol.add_attribute(cpuUsage_txt, 'cell-background', ROW_COLOR)
+        cpuUsageCol.add_attribute(cpuUsage_txt, 'visible', ROW_IS_CONN)
         cpuUsageCol.set_sort_column_id(VMLIST_SORT_STATS)
         self.stats_sparkline = cpuUsage_img
         self.stats_column = cpuUsageCol
@@ -838,9 +877,9 @@ class vmmManager(gobject.GObject):
 
         model.set_sort_column_id(VMLIST_SORT_NAME, gtk.SORT_ASCENDING)
 
-
     def vmlist_name_sorter(self, model, iter1, iter2):
-        return cmp(model.get_value(iter1, ROW_NAME), model.get_value(iter2, ROW_NAME))
+        return cmp(model.get_value(iter1, ROW_NAME),
+                   model.get_value(iter2, ROW_NAME))
 
     def vmlist_cpu_usage_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, ROW_HANDLE).cpu_time_percentage(), model.get_value(iter2, ROW_HANDLE).cpu_time_percentage())
