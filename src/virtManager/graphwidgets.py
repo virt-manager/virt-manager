@@ -141,6 +141,10 @@ class CellRendererSparkline(gtk.CellRenderer):
         GRAPH_INDENT = 2
         GRAPH_PAD = (BORDER_PADDING + GRAPH_INDENT)
 
+        # We don't use yalign, since we expand to the entire height
+        #yalign = self.get_property("yalign")
+        xalign = self.get_property("xalign")
+
         # Set up graphing bounds
         graph_x      = (cell_area.x + GRAPH_PAD)
         graph_y      = (cell_area.y + GRAPH_PAD)
@@ -158,6 +162,13 @@ class CellRendererSparkline(gtk.CellRenderer):
         # Recalculate border width based on the amount we are graphing
         #border_width = graph_width + GRAPH_PAD
         border_width = graph_width + (GRAPH_INDENT * 2)
+
+        # Align the widget
+        empty_space = cell_area.width - border_width - (BORDER_PADDING * 2)
+        if empty_space:
+            xalign_space = int(empty_space * xalign)
+            cell_area.x += xalign_space
+            graph_x += xalign_space
 
         cairo_ct = window.cairo_create()
         cairo_ct.set_line_width(3)
