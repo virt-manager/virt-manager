@@ -17,32 +17,85 @@
 
 import gobject
 import gtk.glade
+import cairo
+
+# For debugging
+def rect_print(name, rect):
+    print ("%s: height=%d, width=%d, x=%d, y=%d" %
+           (name, rect.height, rect.width, rect.x, rect.y))
 
 # For gproperties info, see:
 # http://www.pygtk.org/docs/pygtk/class-gtkcontainer.html#function-gtk--container-class-install-child-property
 
-def _draw_sparkline(cairo_ct, cell_area, points, filled, points_per_set,
-                    taper=False):
-    for index in range(0, points_per_set):
+def _line_helper(cairo_ct, cell_area, points, for_fill=False):
+
+    bottom_baseline = cell_area.y + cell_area.height
+    last_was_zero = False
+    last_point = None
+
+    for index in range(0, len(points)):
         x, y = points[index]
+
+        # If stats value == 0, we don't want to draw a line
+        is_zero = bool(y == bottom_baseline)
+
+        # If the line is for filling, alter the coords so that fill covers
+        # the same area as the parent sparkline: by default, fill is one pixel
+        # short
+        if for_fill:
+            if index == 0:
+                x -= 1
+            elif index == (len(points) - 1):
+                x += 1
+            elif last_was_zero and is_zero:
+                y += 1
 
         if index == 0:
             cairo_ct.move_to(x, y)
+        elif last_was_zero and is_zero and not for_fill:
+            cairo_ct.move_to(x, y)
         else:
             cairo_ct.line_to(x, y)
+            last_point = (x, y)
 
-    if points_per_set:
-        if filled:
-            baseline_y = cell_area.height + cell_area.y
-            if taper:
-                x = cell_area.width + cell_area.x
-            else:
-                x = points[-1][0]
-            cairo_ct.line_to(x, baseline_y)
-            cairo_ct.line_to(0, baseline_y)
-            cairo_ct.fill()
-        else:
-            cairo_ct.stroke()
+        last_was_zero = is_zero
+
+    return last_point
+
+def draw_line(cairo_ct, cell_area, points):
+    if not len(points):
+        return
+
+    last_point = _line_helper(cairo_ct, cell_area, points)
+    if not last_point:
+        # Nothing to draw
+        return
+
+    # Paint the line
+    cairo_ct.stroke()
+
+def draw_fill(cairo_ct, cell_area, points, taper=False):
+    if not len(points):
+        return
+
+    last_point = _line_helper(cairo_ct, cell_area, points, for_fill = True)
+    if not last_point:
+        # Nothing to draw
+        #return
+        pass
+
+    baseline_y = cell_area.height + cell_area.y + 1
+    if taper:
+        x = cell_area.width + cell_area.x
+    else:
+        x = points[-1][0]
+
+    # Box out the area to fill
+    cairo_ct.line_to(x + 1, baseline_y)
+    cairo_ct.line_to(cell_area.x - 1, baseline_y)
+
+    # Paint the fill
+    cairo_ct.fill()
 
 
 class CellRendererSparkline(gtk.CellRenderer):
@@ -71,8 +124,8 @@ class CellRendererSparkline(gtk.CellRenderer):
         self.reversed = False
         self.rgb = None
 
-    def do_render(self, window, widget, backround_area, cell_area, expose_area,
-                  flags):
+    def do_render(self, window, widget, background_area, cell_area,
+                  expose_area, flags):
         # window            : gtk.gdk.Window (not plain window)
         # widget            : Parent widget (manager treeview)
         # background_area   : GdkRectangle: entire cell area
@@ -81,8 +134,53 @@ class CellRendererSparkline(gtk.CellRenderer):
         # flags             : flags that affect rendering
         # flags = gtk.CELL_RENDERER_SELECTED, gtk.CELL_RENDERER_PRELIT,
         #         gtk.CELL_RENDERER_INSENSITIVE or gtk.CELL_RENDERER_SORTED
+
+        # Indent of the gray border around the graph
+        BORDER_PADDING = 2
+        # Indent of graph from border
+        GRAPH_INDENT = 2
+        GRAPH_PAD = (BORDER_PADDING + GRAPH_INDENT)
+
+        # Set up graphing bounds
+        graph_x      = (cell_area.x + GRAPH_PAD)
+        graph_y      = (cell_area.y + GRAPH_PAD)
+        graph_width  = (cell_area.width - (GRAPH_PAD * 2))
+        graph_height = (cell_area.height - (GRAPH_PAD * 2))
+
+        # XXX: This needs to be smarter, we need to either center the graph
+        #      or have some way of making it variable sized
+        pixels_per_point = (graph_width / ((len(self.data_array) or 1) - 1))
+
+        # Graph width needs to be some multiple of the amount of data points
+        # we have
+        graph_width = (pixels_per_point * ((len(self.data_array) or 1) - 1))
+
+        # Recalculate border width based on the amount we are graphing
+        #border_width = graph_width + GRAPH_PAD
+        border_width = graph_width + (GRAPH_INDENT * 2)
+
+        cairo_ct = window.cairo_create()
+        cairo_ct.set_line_width(3)
+        cairo_ct.set_line_cap(cairo.LINE_CAP_ROUND)
+
+        # Draw gray graph border
+        cairo_ct.set_source_rgb(0.8828125, 0.8671875, 0.8671875)
+        cairo_ct.rectangle(cell_area.x + BORDER_PADDING,
+                           cell_area.y + BORDER_PADDING,
+                           border_width,
+                           cell_area.height - (BORDER_PADDING * 2))
+        cairo_ct.stroke()
+
+        # Fill in white box inside graph outline
+        cairo_ct.set_source_rgb(1, 1, 1)
+        cairo_ct.rectangle(cell_area.x + BORDER_PADDING,
+                           cell_area.y + BORDER_PADDING,
+                           border_width,
+                           cell_area.height - (BORDER_PADDING * 2))
+        cairo_ct.fill()
+
         def get_y(index):
-            baseline_y = cell_area.y + cell_area.height
+            baseline_y = graph_y + graph_height
 
             if self.reversed:
                 n = (len(self.data_array) - index - 1)
@@ -90,38 +188,57 @@ class CellRendererSparkline(gtk.CellRenderer):
                 n = index
 
             val = self.data_array[n]
-            return baseline_y - (cell_area.height * val)
+            y = baseline_y - (graph_height * val)
 
-        pixels_per_point = (cell_area.width /
-                            ((len(self.data_array) - 1) or 1))
+            y = max(graph_y, y)
+            y = min(graph_y + graph_height, y)
+            return y
 
         points = []
         for index in range(0, len(self.data_array)):
-            x = index * pixels_per_point
-            y = get_y(index)
+            x = int(((index * pixels_per_point) + graph_x))
+            y = int(get_y(index))
 
-            points.append((int(x + cell_area.x), int(y)))
+            points.append((x, y))
 
-        # Cairo stuff
-        cairo_ct = window.cairo_create()
-        cairo_ct.save()
-        cairo_ct.rectangle(cell_area.x, cell_area.y, cell_area.width,
-                           cell_area.height)
-        cairo_ct.clip()
-        cairo_ct.set_line_width(.5)
 
-        _draw_sparkline(cairo_ct, cell_area, points, self.filled, len(points))
+        cell_area.x = graph_x
+        cell_area.y = graph_y
+        cell_area.width = graph_width
+        cell_area.height = graph_height
+
+        # Set color to dark blue for the actual sparkline
+        cairo_ct.set_line_width(2)
+        cairo_ct.set_source_rgb(0.421875, 0.640625, 0.73046875)
+        draw_line(cairo_ct, cell_area, points)
+
+        # Set color to light blue for the fill
+        cairo_ct.set_source_rgba(0.71484375, 0.84765625, 0.89453125, .5)
+        draw_fill(cairo_ct, cell_area, points)
 
         # Stop clipping
+        cairo_ct.clip()
+        cairo_ct.save()
         cairo_ct.restore()
         del(cairo_ct)
         return
 
     def do_get_size(self, widget, cell_area=None):
-        xoffset = 0
-        yoffset = 0
-        width = len(self.data_array)
-        height = 20
+        FIXED_WIDTH = len(self.data_array)
+        FIXED_HEIGHT = 15
+        xpad = self.get_property("xpad")
+        ypad = self.get_property("ypad")
+
+        if cell_area:
+            # XXX: What to do here?
+            xoffset = 0
+            yoffset = 0
+        else:
+            xoffset = 0
+            yoffset = 0
+
+        width = ((xpad * 2) + FIXED_WIDTH)
+        height = ((ypad * 2) + FIXED_HEIGHT)
 
         return (xoffset, yoffset, width, height)
 
@@ -236,7 +353,7 @@ class Sparkline(gtk.DrawingArea):
         cairo_ct.save()
         cairo_ct.rectangle(0, 0, cell_area.width, cell_area.height)
         cairo_ct.clip()
-        cairo_ct.set_line_width(.5)
+        cairo_ct.set_line_width(2)
 
         for dataset in range(0, self.num_sets):
             if len(self.rgb) == (self.num_sets * 3):
@@ -253,11 +370,10 @@ class Sparkline(gtk.DrawingArea):
 
             if self.num_sets == 1:
                 pass
-                #print cell_area.width
-                #print cell_area.x
-                #print "\n%s\n" % points
-            _draw_sparkline(cairo_ct, cell_area, points, self.filled,
-                            points_per_set, True)
+
+            draw_line(cairo_ct, cell_area, points)
+            if self.filled:
+                draw_fill(cairo_ct, cell_area, points, taper=True)
 
         # Stop clipping
         cairo_ct.restore()
