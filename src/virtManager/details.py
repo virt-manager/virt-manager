@@ -126,7 +126,8 @@ class vmmDetails(gobject.GObject):
         self.topwin.set_title(self.title)
 
         self.engine = engine
-        self.dynamic_tabs = []
+        self.serial_tabs = []
+        self.last_console_page = PAGE_CONSOLE
         self.ignorePause = False
 
         # Don't allowing changing network/disks for Dom0
@@ -162,6 +163,7 @@ class vmmDetails(gobject.GObject):
         self.serial_popup.add(self.serial_close)
 
         self.window.get_widget("hw-panel").set_show_tabs(False)
+        self.window.get_widget("details-pages").set_show_tabs(False)
 
         self.addhw = None
         self.choose_cd = None
@@ -247,6 +249,8 @@ class vmmDetails(gobject.GObject):
             "on_vmm_details_delete_event": self.close,
             "on_details_menu_quit_activate": self.exit_app,
 
+            "on_control_vm_details_toggled": self.sync_details_console_view,
+            "on_control_vm_console_toggled": self.sync_details_console_view,
             "on_control_run_clicked": self.control_vm_run,
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
@@ -282,7 +286,6 @@ class vmmDetails(gobject.GObject):
             "on_add_hardware_button_clicked": self.add_hardware,
 
             "on_details_menu_view_fullscreen_activate": self.toggle_fullscreen,
-            "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
             "on_details_menu_view_scale_always_toggled": self.set_scale_type,
             "on_details_menu_view_scale_fullscreen_toggled": self.set_scale_type,
             "on_details_menu_view_scale_never_toggled": self.set_scale_type,
@@ -471,7 +474,7 @@ class vmmDetails(gobject.GObject):
             tabs = self.window.get_widget("details-pages")
             tabs.set_show_tabs(False)
             tabs.set_border_width(0)
-            self.window.get_widget("details-toolbar").hide()
+            self.window.get_widget("toolbar-box").hide()
         else:
             if self.config.get_console_keygrab() == 1:
                 self._enable_modifiers()
@@ -482,7 +485,7 @@ class vmmDetails(gobject.GObject):
             tabs.set_show_tabs(True)
             tabs.set_border_width(6)
             if self.window.get_widget("details-menu-view-toolbar").get_active():
-                self.window.get_widget("details-toolbar").show()
+                self.window.get_widget("toolbar-box").show()
         self.update_scaling()
 
     def auth_login(self, ignore):
@@ -494,9 +497,9 @@ class vmmDetails(gobject.GObject):
         self.config.set_details_show_toolbar(active)
         if active and not \
            self.window.get_widget("details-menu-view-fullscreen").get_active():
-            self.window.get_widget("details-toolbar").show()
+            self.window.get_widget("toolbar-box").show()
         else:
-            self.window.get_widget("details-toolbar").hide()
+            self.window.get_widget("toolbar-box").hide()
 
     def populate_serial_menu(self, src):
         for ent in src:
@@ -504,15 +507,26 @@ class vmmDetails(gobject.GObject):
 
         devs = self.vm.get_serial_devs()
         if len(devs) == 0:
-            item = gtk.CheckMenuItem(_("No serial devices found"))
+            item = gtk.MenuItem(_("No serial devices found"))
             item.set_sensitive(False)
             src.add(item)
 
+        on_serial = (self.last_console_page >= PAGE_DYNAMIC_OFFSET)
+        serial_page_dev = None
+        if on_serial:
+            serial_idx = self.last_console_page - PAGE_DYNAMIC_OFFSET
+            if len(self.serial_tabs) >= serial_idx:
+                serial_page_dev = self.serial_tabs[serial_idx]
+        on_graphics = (self.last_console_page == PAGE_CONSOLE)
+
+        group = None
         usable_types = [ "pty" ]
         for dev in devs:
             sensitive = False
             msg = ""
-            item = gtk.CheckMenuItem(dev[0])
+            item = gtk.RadioMenuItem(group, dev[0])
+            if group == None:
+                group = item
 
             if self.vm.get_connection().is_remote():
                 msg = _("Serial console not yet supported over remote "
@@ -531,10 +545,28 @@ class vmmDetails(gobject.GObject):
                 util.tooltip_wrapper(item, msg)
             item.set_sensitive(sensitive)
 
-            if sensitive and self.dynamic_tabs.count(dev[0]):
+            if sensitive and on_serial and serial_page_dev == dev[0]:
                 # Tab is already open, make sure marked as such
                 item.set_active(True)
-            item.connect("activate", self.control_serial_tab, dev[0], dev[3])
+            item.connect("toggled", self.control_serial_tab, dev[0], dev[3])
+            src.add(item)
+
+        src.add(gtk.SeparatorMenuItem())
+
+        devs = self.vm.get_graphics_devices()
+        if len(devs) == 0:
+            item = gtk.MenuItem(_("No graphics console found."))
+            item.set_sensitive(False)
+            src.add(item)
+        else:
+            dev = devs[0]
+            item = gtk.RadioMenuItem(group, _("Graphical Console %s") % dev[2])
+            if group == None:
+                group = item
+
+            if on_graphics:
+                item.set_active(True)
+            item.connect("toggled", self.control_serial_tab, dev[0], dev[2])
             src.add(item)
 
         src.show_all()
@@ -678,6 +710,24 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("config-remove").set_property("visible", rem)
 
         self.window.get_widget("hw-panel").set_current_page(pagetype)
+
+    def sync_details_console_view(self, ignore):
+        details = self.window.get_widget("control-vm-details")
+        console = self.window.get_widget("control-vm-console")
+        pages = self.window.get_widget("details-pages")
+        page = pages.get_current_page()
+
+        if not details.get_active() and not console.get_active():
+            return
+        elif page == PAGE_DETAILS and details.get_active():
+            return
+        elif page != PAGE_DETAILS and console.get_active():
+            return
+
+        if details.get_active():
+            pages.set_current_page(PAGE_DETAILS)
+        elif console.get_active():
+            pages.set_current_page(self.last_console_page)
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -828,6 +878,14 @@ class vmmDetails(gobject.GObject):
 
     def switch_page(self, ignore1=None, ignore2=None, newpage=None):
         self.page_refresh(newpage)
+
+        if newpage == PAGE_DETAILS:
+            self.window.get_widget("control-vm-details").set_active(True)
+        else:
+            self.window.get_widget("control-vm-console").set_active(True)
+
+        if newpage == PAGE_CONSOLE or newpage >= PAGE_DYNAMIC_OFFSET:
+            self.last_console_page = newpage
 
     def refresh_resources(self, ignore):
         details = self.window.get_widget("details-pages")
@@ -1454,10 +1512,13 @@ class vmmDetails(gobject.GObject):
     # ------------------------------
 
     def control_serial_tab(self, src, name, target_port):
-        if src.get_active():
+        is_graphics = (name == "graphics")
+        is_serial = not is_graphics
+
+        if is_graphics:
+            self.window.get_widget("details-pages").set_current_page(PAGE_CONSOLE)
+        elif is_serial:
             self._show_serial_tab(name, target_port)
-        else:
-            self._close_serial_tab(name)
 
     def show_serial_rcpopup(self, src, event):
         if event.button != 3:
@@ -1477,9 +1538,9 @@ class vmmDetails(gobject.GObject):
 
     def serial_close_tab(self, src, pagenum):
         tab_idx = (pagenum - PAGE_DYNAMIC_OFFSET)
-        if (tab_idx < 0) or (tab_idx > len(self.dynamic_tabs)-1):
+        if (tab_idx < 0) or (tab_idx > len(self.serial_tabs)-1):
             return
-        return self._close_serial_tab(self.dynamic_tabs[tab_idx])
+        return self._close_serial_tab(self.serial_tabs[tab_idx])
 
     def serial_copy_text(self, src, terminal):
         terminal.copy_clipboard()
@@ -1488,25 +1549,25 @@ class vmmDetails(gobject.GObject):
         terminal.paste_clipboard()
 
     def _show_serial_tab(self, name, target_port):
-        if not self.dynamic_tabs.count(name):
+        if not self.serial_tabs.count(name):
             child = vmmSerialConsole(self.vm, target_port)
             child.terminal.connect("button-press-event",
                                    self.show_serial_rcpopup)
             title = gtk.Label(name)
             child.show_all()
             self.window.get_widget("details-pages").append_page(child, title)
-            self.dynamic_tabs.append(name)
+            self.serial_tabs.append(name)
 
-        page_idx = self.dynamic_tabs.index(name) + PAGE_DYNAMIC_OFFSET
+        page_idx = self.serial_tabs.index(name) + PAGE_DYNAMIC_OFFSET
         self.window.get_widget("details-pages").set_current_page(page_idx)
 
     def _close_serial_tab(self, name):
-        if not self.dynamic_tabs.count(name):
+        if not self.serial_tabs.count(name):
             return
 
-        page_idx = self.dynamic_tabs.index(name) + PAGE_DYNAMIC_OFFSET
+        page_idx = self.serial_tabs.index(name) + PAGE_DYNAMIC_OFFSET
         self.window.get_widget("details-pages").remove_page(page_idx)
-        self.dynamic_tabs.remove(name)
+        self.serial_tabs.remove(name)
 
     # -----------------------
     # Overview -> Security

@@ -226,7 +226,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-view-serial-list">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Serial Consoles</property>
+                        <property name="label" translatable="yes">Consoles</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_view_serial_list_activate"/>
                       </widget>
@@ -426,62 +426,104 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkToolbar" id="details-toolbar">
+          <widget class="GtkHBox" id="toolbar-box">
             <property name="visible">True</property>
             <child>
-              <widget class="GtkToolButton" id="control-run">
+              <widget class="GtkToolbar" id="details-toolbar">
                 <property name="visible">True</property>
-                <property name="is_important">True</property>
-                <property name="label" translatable="yes">Run</property>
-                <property name="use_underline">True</property>
-                <property name="stock_id">gtk-media-play</property>
-                <signal name="clicked" handler="on_control_run_clicked"/>
+                <property name="show_arrow">False</property>
+                <child>
+                  <widget class="GtkRadioToolButton" id="control-vm-console">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Console</property>
+                    <property name="icon_name">icon_console</property>
+                    <property name="active">True</property>
+                    <signal name="toggled" handler="on_control_vm_console_toggled"/>
+                  </widget>
+                  <packing>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkRadioToolButton" id="control-vm-details">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Details</property>
+                    <property name="stock_id">gtk-info</property>
+                    <property name="group">control-vm-console</property>
+                    <signal name="toggled" handler="on_control_vm_details_toggled"/>
+                  </widget>
+                  <packing>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkSeparatorToolItem" id="toolbutton3">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkToolButton" id="control-run">
+                    <property name="visible">True</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Run</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-media-play</property>
+                    <signal name="clicked" handler="on_control_run_clicked"/>
+                  </widget>
+                  <packing>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkToggleToolButton" id="control-pause">
+                    <property name="visible">True</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Pause</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-media-pause</property>
+                    <signal name="toggled" handler="on_control_pause_toggled"/>
+                  </widget>
+                  <packing>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkMenuToolButton" id="control-shutdown">
+                    <property name="visible">True</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Shut Down</property>
+                    <property name="use_underline">True</property>
+                    <signal name="clicked" handler="on_control_shutdown_clicked"/>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkToolbar" id="toolbar1">
+                <property name="visible">True</property>
+                <property name="show_arrow">False</property>
+                <child>
+                  <widget class="GtkToggleToolButton" id="control-fullscreen">
+                    <property name="visible">True</property>
+                    <property name="stock_id">gtk-fullscreen</property>
+                    <signal name="toggled" handler="on_control_fullscreen_toggled"/>
+                  </widget>
+                  <packing>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
               </widget>
               <packing>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkToggleToolButton" id="control-pause">
-                <property name="visible">True</property>
-                <property name="is_important">True</property>
-                <property name="label" translatable="yes">Pause</property>
-                <property name="use_underline">True</property>
-                <property name="stock_id">gtk-media-pause</property>
-                <signal name="toggled" handler="on_control_pause_toggled"/>
-              </widget>
-              <packing>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkMenuToolButton" id="control-shutdown">
-                <property name="visible">True</property>
-                <property name="is_important">True</property>
-                <property name="label" translatable="yes">Shut Down</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_control_shutdown_clicked"/>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkSeparatorToolItem" id="separatortoolitem1">
-                <property name="visible">True</property>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkToggleToolButton" id="control-fullscreen">
-                <property name="visible">True</property>
-                <property name="stock_id">gtk-fullscreen</property>
-                <signal name="toggled" handler="on_control_fullscreen_toggled"/>
-              </widget>
-              <packing>
-                <property name="homogeneous">True</property>
+                <property name="expand">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
