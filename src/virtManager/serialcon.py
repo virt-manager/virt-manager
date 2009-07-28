@@ -86,8 +86,9 @@ class vmmSerialConsole(gtk.HBox):
             if port == self.target_port:
                 if path != self.ttypath:
                     logging.debug("Serial console '%s' path changed to %s."
-                                   % (self.target_port, self.ttypath))
-                    return path
+                                   % (self.target_port, path))
+
+                return path
 
         logging.debug("No serial devices found for serial console '%s'." %
                       self.target_port)
