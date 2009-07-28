@@ -763,6 +763,7 @@ class vmmDetails(gobject.GObject):
 
         ro = vm.is_read_only()
         self.window.get_widget("config-vcpus").set_sensitive(not ro)
+        self.window.get_widget("config-vcpupin").set_sensitive(not ro)
         self.window.get_widget("config-memory").set_sensitive(not ro)
         self.window.get_widget("config-maxmem").set_sensitive(not ro)
         self.window.get_widget("details-menu-migrate").set_sensitive(not ro)
@@ -950,6 +951,7 @@ class vmmDetails(gobject.GObject):
         if not(self.window.get_widget("config-apply").get_property("sensitive")):
             self.window.get_widget("config-vcpus").get_adjustment().value = self.vm.vcpu_count()
         self.window.get_widget("state-vm-vcpus").set_text("%d" % (self.vm.vcpu_count()))
+        self.window.get_widget("config-vcpupin").set_text("%s" % self.vm.vcpu_pinning() )
 
     def refresh_config_memory(self):
         self.window.get_widget("state-host-memory").set_text("%d MB" % (int(round(self.vm.get_connection().host_memory_size()/1024))))
@@ -1575,8 +1577,21 @@ class vmmDetails(gobject.GObject):
 
     def config_vcpus_apply(self):
         vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
-        logging.info("Setting vcpus for %s to %s" % (self.vm.get_name(),
-                                                     str(vcpus)))
+        cpuset = self.window.get_widget("config-vcpupin").get_text()
+
+        try:
+            self.vm.get_cpuset_syntax_error(cpuset)
+        except Exception, e:
+            self.err.show_err(_("Error setting CPU pinning: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return False
+
+        # Since for cpuset we require None for define_vcpus, we'll change this now
+        if len(cpuset) == 0:
+            cpuset = None
+
+        logging.info("Setting vcpus for %s to %s, cpuset is %s" % 
+                                    (self.vm.get_name(), str(vcpus), cpuset))
         hotplug_err = False
 
         try:
@@ -1588,7 +1603,7 @@ class vmmDetails(gobject.GObject):
 
         # Change persistent config
         try:
-            self.vm.define_vcpus(vcpus)
+            self.vm.define_vcpus(vcpus, cpuset)
         except Exception, e:
             self.err.show_err(_("Error changing vcpu value: %s" % str(e)),
                               "".join(traceback.format_exc()))

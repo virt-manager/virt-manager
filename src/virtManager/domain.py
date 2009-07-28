@@ -24,9 +24,11 @@ import os
 import logging
 import time
 import difflib
+import re
 
 from virtManager import util
 import virtinst.util as vutil
+import virtinst.Guest as vguest
 
 def safeint(val, fmt="%.3d"):
     try:
@@ -553,6 +555,13 @@ class vmmDomain(gobject.GObject):
         if len(self.record) == 0:
             return 0
         return self.record[0]["vcpuCount"]
+
+    def vcpu_pinning(self):
+        cpuset = vutil.get_xml_path(self.get_xml(), "/domain/vcpu/@cpuset")
+        # We need to set it to empty string not to show None in the entry
+        if cpuset is None:
+           cpuset = ""
+        return cpuset
 
     def vcpu_max_count(self):
         cpus = vutil.get_xml_path(self.get_xml(), "/domain/vcpu")
@@ -1329,22 +1338,39 @@ class vmmDomain(gobject.GObject):
         if vcpus != self.vcpu_count():
             self.vm.setVcpus(vcpus)
 
-    def define_vcpus(self, vcpus):
+    def get_cpuset_syntax_error(self, val):
+        # We need to allow None value and empty string so we can't get
+        # rid of this function
+        if len(val) == 0:
+            return None
+
+        guest = vguest(connection = self.get_connection().vmm)
+        guest.cpuset = val
+
+    def define_vcpus(self, vcpus, cpuset=None):
         vcpus = int(vcpus)
 
-        def set_node(doc, ctx, val, xpath):
+        def set_node(doc, ctx, vcpus, cpumask, xpath):
             node = ctx.xpathEval(xpath)
             node = (node and node[0] or None)
 
             if node:
-                node.setContent(str(val))
+                node.setContent(str(vcpus))
+
+                # If cpuset mask is not valid, don't change it
+                # If cpuset mask is None, we don't want to use cpuset
+                if cpumask is None or (cpumask is not None
+                    and len(cpumask) == 0):
+                    node.unsetProp("cpuset")
+                elif not self.get_cpuset_syntax_error(cpumask):
+                    node.setProp("cpuset", cpumask)
             return doc.serialize()
 
-        def change_vcpu_xml(xml, vcpus):
-            return util.xml_parse_wrapper(xml, set_node, vcpus,
+        def change_vcpu_xml(xml, vcpus, cpuset):
+            return util.xml_parse_wrapper(xml, set_node, vcpus, cpuset,
                                           "/domain/vcpu[1]")
 
-        self.redefine(change_vcpu_xml, vcpus)
+        self.redefine(change_vcpu_xml, vcpus, cpuset)
 
     def hotplug_memory(self, memory):
         if memory != self.get_memory():
