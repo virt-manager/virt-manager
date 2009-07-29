@@ -669,6 +669,7 @@ class vmmDetails(gobject.GObject):
             pagetype = HW_LIST_TYPE_GENERAL
             self.window.get_widget("hw-list").get_selection().select_path(0)
 
+        self.window.get_widget("config-remove").set_sensitive(True)
         self.window.get_widget("hw-panel").set_sensitive(True)
         self.window.get_widget("hw-panel").show_all()
 
