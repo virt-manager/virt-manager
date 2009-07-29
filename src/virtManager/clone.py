@@ -427,7 +427,8 @@ class vmmCloneVM(gobject.GObject):
                            (size and " (%s)" % size or "")),
                           can_clone, False])
             model.insert(STORAGE_COMBO_SHARE,
-                         [_("Share disk with %s") % orig_name, True, False])
+                         [_("Share disk with %s") % orig_name, can_share,
+                          False])
             model.insert(STORAGE_COMBO_SEP, ["", False, True])
             model.insert(STORAGE_COMBO_DETAILS,
                          [_("Details..."), True, False])
