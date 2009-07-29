@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip.or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-16 21:22-0400\n"
+"POT-Creation-Date: 2009-07-28 20:55-0400\n"
 "PO-Revision-Date: 2009-05-27 17:16+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
@@ -38,7 +38,8 @@ msgstr ""
 msgid "Manage virtual machines"
 msgstr "ଆଭାସୀ ଯନ୍ତ୍ରଗୁଡ଼ିକୁ ପରିଚାଳନ କରନ୍ତୁ"
 
-#: ../src/virt-manager.desktop.in.in.h:2 ../src/vmm-manager.glade.h:17
+#: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:101
+#: ../src/vmm-manager.glade.h:11
 msgid "Virtual Machine Manager"
 msgstr "ଆଭାସୀ ମେସିନ ପରିଚାଳକ"
 
@@ -48,130 +49,123 @@ msgstr "ଆଭାସୀ ମେସିନ ପରିଚାଳକ ଆରମ୍ଭ �
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:289
+#: ../src/virt-manager.py.in:288
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "GTK କୁ ଆରମ୍ଭ କରିବାରେ ଅସମର୍ଥ: %s"
 
 #: ../src/virt-manager.schemas.in.h:1
+msgid "Default image path"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:2
+#, fuzzy
+msgid "Default media path"
+msgstr "ଅବୈଧ ମେଡିଆ ପଥ"
+
+#: ../src/virt-manager.schemas.in.h:3
+msgid "Default path for choosing VM images"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:4
+msgid "Default path for choosing media"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:5
+msgid "Default path for saving VM snaphots"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:6
+msgid "Default path for saving screenshots from VMs"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:7
+msgid "Default path for stored VM snapshots"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:8
+msgid "Default restore path"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:9
+msgid "Default save domain path"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:10
+msgid "Default screenshot path"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:11
 msgid "Install sound device for local VM"
 msgstr "ସ୍ଥାନୀୟ VM ପାଇଁ ଧ୍ୱନୀ ଉପକରଣ ସ୍ଥାପନ କରନ୍ତୁ"
 
-#: ../src/virt-manager.schemas.in.h:2
+#: ../src/virt-manager.schemas.in.h:12
 msgid "Install sound device for remote VM"
 msgstr "ସୁଦୂର VM ପାଇଁ ଧ୍ୱନୀ ଉପକରଣ ସ୍ଥାପନ କରନ୍ତୁ"
 
-#: ../src/virt-manager.schemas.in.h:3
-msgid "Poll cpu stats"
-msgstr "cpu ପରିସଂଖ୍ଯାନରେ ମତ ଦିଅନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:4
+#: ../src/virt-manager.schemas.in.h:13
 msgid "Poll disk i/o stats"
 msgstr "ଡିସ୍କ i/o ପରିସଂଖ୍ଯାନରେ ମତ ଦିଅନ୍ତୁ"
 
-#: ../src/virt-manager.schemas.in.h:5
-msgid "Poll memory usage stats"
-msgstr "ସ୍ମୃତି ସ୍ଥାନ ବ୍ୟବହାର ବିଧି ପରିସଂଖ୍ଯାନକୁ ମତ ଦିଅନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:6
+#: ../src/virt-manager.schemas.in.h:14
 msgid "Poll net i/o stats"
 msgstr "ନେଟ i/o ପରିସଂଖ୍ଯାନକୁ ମତ ଦିଅନ୍ତୁ"
 
-#: ../src/virt-manager.schemas.in.h:7
-msgid "Show VCPU count in summary"
-msgstr "ସାରାଂଶରେ VCPU ଗଣନା ଦର୍ଶାନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:8
-msgid "Show cpu usage in summary"
-msgstr "ସାରାଂଶରେ cpu ବ୍ୟବହାର ବିଧି ଦର୍ଶାନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:9
-msgid "Show disk I/O in summary"
-msgstr "ସାରାଂଶରେ ଡିସ୍କ I/O ଦର୍ଶାନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:10
-msgid "Show domain id in summary"
-msgstr "ସାରାଂଶରେ ପରିସର ପରିଚୟ ଦର୍ଶାନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:11
-msgid "Show memory usage in summary"
-msgstr "ସାରାଂଶରେ ସ୍ମୃତି ସ୍ଥାନ ବ୍ୟବହାର ବିଧି ଦର୍ଶାନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:12
-msgid "Show network I/O in summary"
-msgstr "ସାରାଂଶରେ ନେଟୱାର୍କ I/O ଦର୍ଶାନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:13
-msgid "Show run state in summary"
-msgstr "ସାରାଂଶରେ ଚାଲୁଥିବା ସ୍ଥିତି ଦର୍ଶାନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:14
-msgid "Show the cpu usage field in the domain list summary view"
-msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ cpu ବ୍ୟବହାର ବିଧି କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
-
 #: ../src/virt-manager.schemas.in.h:15
-msgid "Show the disk I/O field in the domain list summary view"
-msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ଡିସ୍କ I/O କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
+msgid "Show system tray icon"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:16
-msgid "Show the domain id field in the domain list summary view"
-msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ପରିସର ପରିଚୟ କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
+msgid "Show system tray icon while app is running"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:17
-msgid "Show the memory usage field in the domain list summary view"
-msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ସ୍ମୃତି ସ୍ଥାନ ବ୍ୟବହାର ବିଧି କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
+msgid "Stats type in manager view"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:18
-msgid "Show the network I/O field in the domain list summary view"
-msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ନେଟୱର୍କ I/O କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:19
-msgid "Show the run state field in the domain list summary view"
-msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ଚାଲୁଥିବା ଅବସ୍ଥା କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:20
-msgid "Show the virtual CPU count field in the domain list summary view"
-msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ଆଭାସୀ CPU ଗଣନା କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
-
-#: ../src/virt-manager.schemas.in.h:21
 msgid "The length of the list of URLs"
 msgstr "URL ଗୁଡ଼ିକର ତାଲିକାର ଆକାର"
 
-#: ../src/virt-manager.schemas.in.h:22
+#: ../src/virt-manager.schemas.in.h:19
 msgid "The number of samples to keep in the statistics history"
 msgstr "ପରିସଂଖ୍ୟାନ ପୁରୁଣା ତଥ୍ୟରେ ରଖିବାକୁ ଥିବା ନମୁନାଗୁଡ଼ିକର ସଂଖ୍ୟା"
 
-#: ../src/virt-manager.schemas.in.h:23
+#: ../src/virt-manager.schemas.in.h:20
 msgid ""
 "The number of urls to keep in the history for the install media address page."
 msgstr ""
 "The number of urls to keep in the history for the install media address page."
 
-#: ../src/virt-manager.schemas.in.h:24
+#: ../src/virt-manager.schemas.in.h:21
 msgid "The statistics history length"
 msgstr "ପରିସଂଖ୍ୟାନ ପୁରୁଣା ତଥ୍ୟ ଆକାର"
 
-#: ../src/virt-manager.schemas.in.h:25
+#: ../src/virt-manager.schemas.in.h:22
 msgid "The statistics update interval"
 msgstr "ପରିସଂଖ୍ୟାନ ଅଦ୍ୟତନ ଅନ୍ତରାଳ"
 
-#: ../src/virt-manager.schemas.in.h:26
+#: ../src/virt-manager.schemas.in.h:23
 msgid "The statistics update interval in seconds"
 msgstr "ପରିସଂଖ୍ୟାନ ଅଦ୍ୟତନ ଅନ୍ତରାଳ ସେକଣ୍ଡରେ"
 
-#: ../src/virt-manager.schemas.in.h:27
+#: ../src/virt-manager.schemas.in.h:24
+msgid "Type of stats to graph (cpu, disk, net) in manager view"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:25
 msgid "When to grab keyboard input for the console"
 msgstr "କୋନସୋଲ ପାଇଁ କେତେବେଳେ କିବୋର୍ଡ ନିବେଶକୁ ଗ୍ରହଣ କରିବେ"
 
-#: ../src/virt-manager.schemas.in.h:28
+#: ../src/virt-manager.schemas.in.h:26
 msgid "When to pop up a console for a guest"
 msgstr "ଗୋଟିଏ ଅତିଥି ପାଇଁ କେତେବେଳେ ପପ ଅପ କରିବେ"
 
-#: ../src/virt-manager.schemas.in.h:29
+#: ../src/virt-manager.schemas.in.h:27
 msgid "When to scale the VM graphical console"
 msgstr "VM ଆଲେଖି କୋନସୋଲକୁ କେତେବେଳେ ମପାଯିବ"
 
-#: ../src/virt-manager.schemas.in.h:30
+#: ../src/virt-manager.schemas.in.h:28
 msgid ""
 "When to scale the VM graphical console. 0 = never, 1 = only when in full "
 "screen mode, 2 = Always"
@@ -179,24 +173,15 @@ msgstr ""
 "VM ଆଲେଖି କୋନସୋଲକୁ କେତେବେଳେ ମପାଯିବ। 0 = କଦାପି ନୁହଁ, 1 = କେବଳ ସମ୍ପୂର୍ଣ୍ଣ ପରଦା ଅବସ୍ଥା "
 "ସମୟରେ, 2 = ସର୍ବଦା"
 
-#: ../src/virt-manager.schemas.in.h:31
+#: ../src/virt-manager.schemas.in.h:29
 msgid "Whether or not the app will poll VM disk i/o statistics"
 msgstr "ପ୍ରୟୋଗଟି VM ଡିସ୍କ i/o ପରିସଂଖ୍ୟାନକୁ ମତ ଦେବ କି ନାହିଁ"
 
-#: ../src/virt-manager.schemas.in.h:32
+#: ../src/virt-manager.schemas.in.h:30
 msgid "Whether or not the app will poll VM network i/o statistics"
 msgstr "ପ୍ରୟୋଗଟି VM ନେଟୱର୍କ i/o ପରିସଂଖ୍ୟାନକୁ ମତ ଦେବ କି ନାହିଁ"
 
-#: ../src/virt-manager.schemas.in.h:33
-msgid "Whether or not the app will poll connection and VM cpu usage statistics"
-msgstr "ପ୍ରୟୋଗଟି ସଂଯୋଗ ଏବଂ VM cpu ବ୍ୟବହାର ବିଧି ପରିସଂଖ୍ୟାନକୁ ମତ ଦେବ କି ନାହିଁ"
-
-#: ../src/virt-manager.schemas.in.h:34
-msgid ""
-"Whether or not the app will poll connection and VM memory usage statistics"
-msgstr "ପ୍ରୟୋଗଟି ସଂଯୋଗ ଏବଂ VM ସ୍ମୃତିସ୍ଥାନ ବ୍ୟବହାର ବିଧି ପରିସଂଖ୍ୟାନକୁ ମତ ଦେବ କି ନାହିଁ"
-
-#: ../src/virt-manager.schemas.in.h:35
+#: ../src/virt-manager.schemas.in.h:31
 msgid ""
 "Whether to grab keyboard input for a guest console. 0 = never, 1 = only when "
 "in full screen mode, 2 = when mouse is over console"
@@ -204,15 +189,15 @@ msgstr ""
 "ଗୋଟିଏ ଅତିଥି କୋନଶୋଲ ପାଇଁ କିବୋର୍ଡ ନିବେଶକୁ ଧରିବା ଉଚିତ କି ନୁହଁ. 0 = କଦାପି ନୁହଁ, 1 = କେବଳ ସମ୍ପୂର୍ଣ୍ଣ "
 "ପରଦା ଅବସ୍ଥା ସମୟରେ, 2 = କୋନଶୋଲ ମାଉସ ଉପରେ ଥିବା ସମୟରେ"
 
-#: ../src/virt-manager.schemas.in.h:36
+#: ../src/virt-manager.schemas.in.h:32
 msgid "Whether to install a sound device for local VMs or not"
 msgstr "ସ୍ଥାନୀୟ VM ପାଇଁ ଧ୍ୱନୀ ଯନ୍ତ୍ର ସ୍ଥାପନ କରିବା ଉଚିତ କି ନୁହଁ"
 
-#: ../src/virt-manager.schemas.in.h:37
+#: ../src/virt-manager.schemas.in.h:33
 msgid "Whether to install a sound device for remote VMs or not"
 msgstr "ସୁଦୂର VM ପାଇଁ ଧ୍ୱନୀ ଯନ୍ତ୍ର ସ୍ଥାପନ କରିବା ଉଚିତ କି ନୁହଁ"
 
-#: ../src/virt-manager.schemas.in.h:38
+#: ../src/virt-manager.schemas.in.h:34
 msgid ""
 "Whether to pop up a console for a guest. 0 = never, 1 = only on creation of "
 "a new guest, 2 = On creation of any guest"
@@ -220,20 +205,20 @@ msgstr ""
 "ଗୋଟିଏ ଅତିଥି ପାଇଁ ପପ ଅପ କରିବା ଉଚିତ କି ନୁହଁ. 0 = କଦାପି ନୁହଁ, 1 = କେବଳ ଗୋଟିଏ ନୂତନ ଅତିଥି ନିର୍ମାଣ "
 "କରିବା ସମୟରେ, 2 = କୌଣସି ଏକ ଅତିଥି ନିର୍ମାଣ ସମୟରେ"
 
-#: ../src/virt-manager.schemas.in.h:39
+#: ../src/virt-manager.schemas.in.h:35
 msgid "Whether to show VM button toolbar in Details display"
 msgstr "ବିବରଣୀ ପ୍ରଦର୍ଶନରେ VM ବଟନ ସାଧନପଟି ଦର୍ଶାଇବା ଉଚିତ କି ନୁହଁ"
 
-#: ../src/virt-manager.schemas.in.h:40
+#: ../src/virt-manager.schemas.in.h:36
 msgid "Whether to show notification when grabbing mouse"
 msgstr "ମାଉସ ଧରିବା ସମୟରେ ବିଜ୍ଞପ୍ତି ଦର୍ଶାଇବା ଉଚିତ କି ନୁହଁ"
 
-#: ../src/virt-manager.schemas.in.h:41
+#: ../src/virt-manager.schemas.in.h:37
 msgid ""
 "Whether to show the notification hint when grabbing the mouse in the console"
 msgstr "ମାଉସକୁ କୋନସୋଲରେ ଧରିବା ସମୟରେ ବିଜ୍ଞପ୍ତି ସଂକେତ ଦର୍ଶାଇବା ଉଚିତ କି ନୁହଁ"
 
-#: ../src/virt-manager.schemas.in.h:42
+#: ../src/virt-manager.schemas.in.h:38
 msgid ""
 "Whether to show toolbar containing Virtual Machine action buttons (such as "
 "Run, Pause, Shutdown) in the details display"
@@ -241,100 +226,213 @@ msgstr ""
 "ବିବରଣୀ ପ୍ରଦର୍ଶନରେ ଆଭାସୀ ଯନ୍ତ୍ର କାର୍ଯ୍ୟ ବଟନଗୁଡ଼ିକୁ ଧାରଣ କରିଥିବା ସାଧନପଟି ଦର୍ଶାଇବା ଉଚିତ କି ନୁହଁ "
 "(ଯେପରିକି ଚଲାନ୍ତୁ, ବିରତି, ବନ୍ଦ କରନ୍ତୁ)"
 
-#: ../src/virtManager/addhardware.py:64 ../src/virtManager/choosecd.py:40
-#: ../src/virtManager/create.py:85 ../src/virtManager/createnet.py:53
-#: ../src/virtManager/createpool.py:52 ../src/virtManager/createvol.py:54
-#: ../src/virtManager/details.py:114 ../src/virtManager/engine.py:60
-#: ../src/virtManager/host.py:54 ../src/virtManager/manager.py:118
+#: ../src/virtManager/addhardware.py:79 ../src/virtManager/choosecd.py:40
+#: ../src/virtManager/clone.py:108 ../src/virtManager/create.py:85
+#: ../src/virtManager/createnet.py:53 ../src/virtManager/createpool.py:52
+#: ../src/virtManager/createvol.py:54 ../src/virtManager/delete.py:61
+#: ../src/virtManager/details.py:123 ../src/virtManager/engine.py:66
+#: ../src/virtManager/host.py:54 ../src/virtManager/manager.py:155
+#: ../src/virtManager/storagebrowse.py:54
 msgid "Unexpected Error"
 msgstr "ଅପ୍ରତ୍ୟାଶିତ ତ୍ରୁଟି"
 
-#: ../src/virtManager/addhardware.py:65 ../src/virtManager/choosecd.py:41
-#: ../src/virtManager/create.py:86 ../src/virtManager/createnet.py:54
-#: ../src/virtManager/createpool.py:53 ../src/virtManager/createvol.py:55
-#: ../src/virtManager/details.py:115 ../src/virtManager/engine.py:61
-#: ../src/virtManager/host.py:55 ../src/virtManager/manager.py:119
+#: ../src/virtManager/addhardware.py:80 ../src/virtManager/choosecd.py:41
+#: ../src/virtManager/clone.py:109 ../src/virtManager/create.py:86
+#: ../src/virtManager/createnet.py:54 ../src/virtManager/createpool.py:53
+#: ../src/virtManager/createvol.py:55 ../src/virtManager/delete.py:62
+#: ../src/virtManager/details.py:124 ../src/virtManager/engine.py:67
+#: ../src/virtManager/host.py:55 ../src/virtManager/manager.py:156
+#: ../src/virtManager/storagebrowse.py:55
 msgid "An unexpected error occurred"
 msgstr "ଗୋଟିଏ ଅପ୍ରତ୍ୟାଶିତ ତ୍ରୁଟି ଘଟିଲା"
 
-#: ../src/virtManager/addhardware.py:289
+#: ../src/virtManager/addhardware.py:398 ../src/virtManager/addhardware.py:403
+#: ../src/virtManager/addhardware.py:406 ../src/virtManager/addhardware.py:409
+#, fuzzy
+msgid "Not supported for this guest type."
+msgstr "ଅତିଥି ପାଇଁ କୋନଶୋଲ ସମର୍ଥିତ ହୋଇନାହିଁ"
+
+#: ../src/virtManager/addhardware.py:412
+#, fuzzy
+msgid "Connection does not support host device enumeration"
+msgstr "ସଂଯୋଗ ଭଣ୍ଡାର ପରିଚାଳନାକୁ ସମର୍ଥିନ କରେନାହିଁ।"
+
+#: ../src/virtManager/addhardware.py:416
+msgid "Libvirt version does not support video devices."
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:440
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr "ଧରାପଡ଼ିନଥିବା ତ୍ରୁଟି ସଂଶୋଧନ ହାର୍ଡୱେର ନିବେଶ: %s"
 
-#: ../src/virtManager/addhardware.py:481
-msgid "Shared physical device"
-msgstr "ସହଭାଗୀ ଭୌତିକ ଉପକରଣ"
+#: ../src/virtManager/addhardware.py:634
+msgid "Disk image:"
+msgstr "ଡିସ୍କ ପ୍ରତିଛବି:"
 
-#. FIXME: Should we use 'default' even if it's inactive?
-#: ../src/virtManager/addhardware.py:484 ../src/virtManager/create.py:626
-msgid "Virtual network"
-msgstr "ଆଭାସୀ ନେଟୱାର୍କ"
+#: ../src/virtManager/addhardware.py:635
+msgid "Disk size:"
+msgstr "ଡିସ୍କ ଆକାର:"
 
-#: ../src/virtManager/addhardware.py:487
-msgid "Usermode networking"
-msgstr "ଚାଳକ ଅବସ୍ଥା ନେଟୱାର୍କିଙ୍ଗ"
+#: ../src/virtManager/addhardware.py:636 ../src/vmm-add-hardware.glade.h:35
+msgid "Device type:"
+msgstr "ଉପକରଣ ପ୍ରକାର:"
 
-#: ../src/virtManager/addhardware.py:503
+#: ../src/virtManager/addhardware.py:637
+#, fuzzy
+msgid "Bus type:"
+msgstr "ଉତ୍ସ ପ୍ରକାର:"
+
+#: ../src/virtManager/addhardware.py:639 ../src/vmm-create.glade.h:42
+#: ../src/vmm-host.glade.h:39
+msgid "Storage"
+msgstr "ଭଣ୍ଡାର ସ୍ଥାନ"
+
+#: ../src/virtManager/addhardware.py:649
+#, fuzzy
+msgid "Network type:"
+msgstr "ନେଟୱାର୍କ ନାମ:"
+
+#: ../src/virtManager/addhardware.py:650
+msgid "Target:"
+msgstr "ଲକ୍ଷ୍ଯ:"
+
+#: ../src/virtManager/addhardware.py:651 ../src/vmm-details.glade.h:57
+msgid "MAC address:"
+msgstr "MAC ଠିକଣା:"
+
+#: ../src/virtManager/addhardware.py:652 ../src/virtManager/addhardware.py:700
+#: ../src/virtManager/addhardware.py:742 ../src/vmm-add-hardware.glade.h:49
+#: ../src/vmm-details.glade.h:66
+msgid "Model:"
+msgstr "ମୋଡେଲ:"
+
+#: ../src/virtManager/addhardware.py:654 ../src/vmm-manager.glade.h:7
+#, fuzzy
+msgid "Network"
+msgstr "ନେଟୱାର୍କ:"
+
+#: ../src/virtManager/addhardware.py:659
 msgid "Absolute movement"
 msgstr "ସମ୍ପୂର୍ଣ୍ଣ ଗତି"
 
-#: ../src/virtManager/addhardware.py:505
+#: ../src/virtManager/addhardware.py:661
 msgid "Relative movement"
 msgstr "ଆପେକ୍ଷିକ ଗତି"
 
-#: ../src/virtManager/addhardware.py:510
-#: ../src/virtManager/addhardware.py:1016 ../src/virtManager/details.py:1077
+#: ../src/virtManager/addhardware.py:664 ../src/virtManager/addhardware.py:690
+#: ../src/virtManager/addhardware.py:708 ../src/virtManager/addhardware.py:735
+#: ../src/vmm-add-hardware.glade.h:68 ../src/vmm-create-net.glade.h:50
+#: ../src/vmm-create-pool.glade.h:16 ../src/vmm-details.glade.h:107
+msgid "Type:"
+msgstr "ପ୍ରକାର:"
+
+#: ../src/virtManager/addhardware.py:665 ../src/vmm-add-hardware.glade.h:48
+#: ../src/vmm-details.glade.h:65
+msgid "Mode:"
+msgstr "ଅବସ୍ଥା:"
+
+#: ../src/virtManager/addhardware.py:667
+#, fuzzy
+msgid "Pointer"
+msgstr "<b>ସୂଚକ</b>"
+
+#: ../src/virtManager/addhardware.py:673
+#: ../src/virtManager/addhardware.py:1316 ../src/virtManager/details.py:1123
 msgid "VNC server"
 msgstr "VNC ସର୍ଭର"
 
 #. XXX inclined to just not give this choice at all
-#: ../src/virtManager/addhardware.py:512
-#: ../src/virtManager/addhardware.py:1018 ../src/virtManager/details.py:1079
+#: ../src/virtManager/addhardware.py:673
+#: ../src/virtManager/addhardware.py:1318 ../src/virtManager/details.py:1125
 msgid "Local SDL window"
 msgstr "ସ୍ଥାନୀୟ SDL ୱିଣ୍ଡୋ"
 
-#: ../src/virtManager/addhardware.py:516 ../src/virtManager/details.py:1089
-#: ../src/vmm-add-hardware.glade.h:31
-msgid "Automatically allocated"
-msgstr "ସ୍ବୟଂଚାଳିତ ବଣ୍ଟିତ ହୋଇଛି"
-
-#: ../src/virtManager/addhardware.py:520
-msgid "Yes"
-msgstr "ହଁ"
-
-#: ../src/virtManager/addhardware.py:522 ../src/vmm-add-hardware.glade.h:56
-msgid "No"
-msgstr "ନାଁ"
-
-#: ../src/virtManager/addhardware.py:526 ../src/vmm-add-hardware.glade.h:68
-msgid "Same as host"
-msgstr "ଆଧାର ପରି ସମାନ"
-
-#: ../src/virtManager/addhardware.py:529 ../src/virtManager/addhardware.py:530
-#: ../src/virtManager/addhardware.py:531 ../src/virtManager/addhardware.py:532
-#: ../src/virtManager/details.py:1095 ../src/virtManager/details.py:1096
+#: ../src/virtManager/addhardware.py:674 ../src/virtManager/addhardware.py:675
+#: ../src/virtManager/addhardware.py:676 ../src/virtManager/addhardware.py:677
+#: ../src/virtManager/details.py:1141 ../src/virtManager/details.py:1142
 msgid "N/A"
 msgstr "N/A"
 
-#: ../src/virtManager/addhardware.py:568
+#: ../src/virtManager/addhardware.py:686
+msgid "Yes"
+msgstr "ହଁ"
+
+#: ../src/virtManager/addhardware.py:686
+msgid "No"
+msgstr "ନାଁ"
+
+#: ../src/virtManager/addhardware.py:687 ../src/vmm-add-hardware.glade.h:65
+msgid "Same as host"
+msgstr "ଆଧାର ପରି ସମାନ"
+
+#: ../src/virtManager/addhardware.py:691 ../src/vmm-add-hardware.glade.h:27
+#: ../src/vmm-details.glade.h:22
+msgid "Address:"
+msgstr "ଠିକଣା:"
+
+#: ../src/virtManager/addhardware.py:692 ../src/vmm-add-hardware.glade.h:64
+#: ../src/vmm-details.glade.h:78
+msgid "Port:"
+msgstr "ସଂଯୋଗିକୀ:"
+
+#: ../src/virtManager/addhardware.py:693 ../src/vmm-add-hardware.glade.h:53
+#: ../src/vmm-details.glade.h:74
+msgid "Password:"
+msgstr "ପ୍ରବେଶ ସଙ୍କେତ:"
+
+#: ../src/virtManager/addhardware.py:694 ../src/vmm-add-hardware.glade.h:43
+#: ../src/vmm-details.glade.h:53
+msgid "Keymap:"
+msgstr "କିମ୍ୟାପ:"
+
+#: ../src/virtManager/addhardware.py:696
+#, fuzzy
+msgid "Graphics"
+msgstr "<b>ଆଲେଖୀ</b>"
+
+#: ../src/virtManager/addhardware.py:702 ../src/vmm-details.glade.h:90
+msgid "Sound"
+msgstr "ଧ୍ୱନୀ"
+
+#: ../src/virtManager/addhardware.py:729
+#, fuzzy
+msgid "Protocol:"
+msgstr "Proc"
+
+#: ../src/virtManager/addhardware.py:736 ../src/vmm-add-hardware.glade.h:36
+#: ../src/vmm-host.glade.h:19
+msgid "Device:"
+msgstr "ଉପକରଣ:"
+
+#: ../src/virtManager/addhardware.py:738
+#, fuzzy
+msgid "Physical Host Device"
+msgstr "<b>ଭୌତିକ ଆଧାର ଉପକରଣ</b>"
+
+#: ../src/virtManager/addhardware.py:744 ../src/virtManager/details.py:1932
+#, fuzzy
+msgid "Video"
+msgstr "ଦେଖନ୍ତୁ (_V)"
+
+#: ../src/virtManager/addhardware.py:778
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "ଉପକରଣକୁ ଯୋଗ କରିବାରେ ଅସମର୍ଥ: %s"
 
-#: ../src/virtManager/addhardware.py:610
+#: ../src/virtManager/addhardware.py:820
 msgid "Creating Storage File"
 msgstr "ଭଣ୍ଡାର ଫାଇଲର ସୃଷ୍ଟି କରିବା ବିଷୟରେ"
 
-#: ../src/virtManager/addhardware.py:611
+#: ../src/virtManager/addhardware.py:821
 msgid "Allocation of disk storage may take a few minutes to complete."
 msgstr "ଡିସ୍କ ଭଣ୍ଡାରର ବଣ୍ଟନ ସମ୍ପୂର୍ଣ୍ଣ ହେବା ପାଇଁ କିଛି ସମୟ ନେଇପାରେ।"
 
-#: ../src/virtManager/addhardware.py:632
+#: ../src/virtManager/addhardware.py:845
 msgid "Are you sure you want to add this device?"
 msgstr "ଆପଣ ଏହି ଉପକରଣକୁ ଯୋଗ କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି କି?"
 
-#: ../src/virtManager/addhardware.py:634
+#: ../src/virtManager/addhardware.py:847
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next VM shutdown?\n"
@@ -346,147 +444,159 @@ msgstr ""
 "\n"
 "ଚେତାବନୀ: ଏହା VM ପୁନଃଆରମ୍ଭ କରିବାକୁ ଆବଶ୍ୟକ କରୁଥିବା ଅନ୍ୟ ଯେକୌଣସି ପରିବର୍ତ୍ତନକୁ ନବଲିଖନ କରିବ."
 
-#: ../src/virtManager/addhardware.py:662 ../src/virtManager/addhardware.py:664
-#: ../src/virtManager/create.py:1515
+#: ../src/virtManager/addhardware.py:875 ../src/virtManager/addhardware.py:877
+#: ../src/virtManager/create.py:1503
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "ସ୍ଥାପନ କରିବାକୁ ଅସମର୍ଥ: '%s'"
 
-#: ../src/virtManager/addhardware.py:670
+#: ../src/virtManager/addhardware.py:883
 msgid "Locate Storage Partition"
 msgstr "ଭଣ୍ଡାର ବିଭାଜନର ଅବସ୍ଥିତି ନିର୍ଣ୍ଣୟ କରନ୍ତୁ"
 
-#: ../src/virtManager/addhardware.py:678
+#: ../src/virtManager/addhardware.py:891
 msgid "Locate or Create New Storage File"
 msgstr "ନୂତନ ଭଣ୍ଡାର ଫାଇଲର ସ୍ଥାନ ନିରୂପଣ କରନ୍ତୁ ଏବଂ ଏହାକୁ ସୃଷ୍ଟି କରନ୍ତୁ"
 
-#: ../src/virtManager/addhardware.py:804
+#: ../src/virtManager/addhardware.py:1054
 msgid "Hardware Type Required"
 msgstr "ହାର୍ଡୱେର ପ୍ରକାର ଆବଶ୍ଯକ"
 
-#: ../src/virtManager/addhardware.py:805
+#: ../src/virtManager/addhardware.py:1055
 msgid "You must specify what type of hardware to add."
 msgstr "ଯୋଗ କରାଯିବା ହାର୍ଡୱେର ପ୍ରକାରକୁ ଆପଣ ଉଲ୍ଲେଖ କରିବା ଉଚିତ"
 
-#: ../src/virtManager/addhardware.py:810
+#: ../src/virtManager/addhardware.py:1060
 msgid "Storage Path Required"
 msgstr "ଭଣ୍ଡାର ପଥ ଆବଶ୍ଯକ"
 
-#: ../src/virtManager/addhardware.py:811
+#: ../src/virtManager/addhardware.py:1061
 msgid "You must specify a partition or a file for disk storage."
 msgstr "ଡିସ୍କ ସଂରକ୍ଷଣ ପାଇଁ ଆପଣ ଗୋଟିଏ ବିଭାଜନ କିମ୍ବା ଫାଇଲକୁ ଉଲ୍ଲେଖ କରିବା ଉଚିତ."
 
-#: ../src/virtManager/addhardware.py:814
+#: ../src/virtManager/addhardware.py:1064
 msgid "Target Device Required"
 msgstr "ଲକ୍ଷ୍ୟ ଉପକରଣ ଆବଶ୍ଯକ"
 
-#: ../src/virtManager/addhardware.py:815
+#: ../src/virtManager/addhardware.py:1065
 msgid "You must select a target device for the disk."
 msgstr "ଡିସ୍କ ପାଇଁ ଆପଣ ଗୋଟିଏ ଲକ୍ଷ୍ୟ ଉପକରଣ ଚୟନ କରିବା ଉଚିତ"
 
-#: ../src/virtManager/addhardware.py:847
+#: ../src/virtManager/addhardware.py:1092
 msgid "Invalid Storage Parameters"
 msgstr "ଅବୈଧ ଭଣ୍ଡାର ପ୍ରାଚଳଗୁଡ଼ିକ"
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:851 ../src/virtManager/create.py:1286
+#: ../src/virtManager/addhardware.py:1096 ../src/virtManager/create.py:1275
 msgid "Not Enough Free Space"
 msgstr "ଯଥେଷ୍ଟ ମୁକ୍ତ ସ୍ଥାନ ନାହିଁ"
 
-#: ../src/virtManager/addhardware.py:856 ../src/virtManager/create.py:1292
+#: ../src/virtManager/addhardware.py:1101 ../src/virtManager/create.py:1281
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "\"%s\" ଡିସ୍କ ପୂର୍ବରୁ ଅନ୍ଯ ଗୋଟିଏ ଅତିଥି ଚାଳକ ଦ୍ବାରା ବ୍ଯବହୃତ ହେଉଛି!"
 
-#: ../src/virtManager/addhardware.py:857 ../src/virtManager/create.py:1294
+#: ../src/virtManager/addhardware.py:1102 ../src/virtManager/create.py:1283
 msgid "Do you really want to use the disk?"
 msgstr "ଆପଣ ପ୍ରକୃତରେ ଡିସ୍କ ବ୍ଯବହାର କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି କି ?"
 
-#: ../src/virtManager/addhardware.py:864
+#: ../src/virtManager/addhardware.py:1109
 msgid "Virtual Network Required"
 msgstr "ଆଭାସୀ ନେଟୱାର୍କ ଆବଶ୍ଯକ"
 
-#: ../src/virtManager/addhardware.py:865
+#: ../src/virtManager/addhardware.py:1110
 msgid "You must select one of the virtual networks."
 msgstr "ଆପଣ ଆଭାସୀ ନେଟୱାର୍କ ମାନଙ୍କ ମଧ୍ଯରୁ ଗୋଟିକୁ ଚୟନ କରିବା ଉଚିତ"
 
-#: ../src/virtManager/addhardware.py:868
+#: ../src/virtManager/addhardware.py:1113
 msgid "Physical Device Required"
 msgstr "ଭୌତିକ ଉପକରଣ ଆବଶ୍ଯକ"
 
-#: ../src/virtManager/addhardware.py:869
+#: ../src/virtManager/addhardware.py:1114
 msgid "You must select a physical device."
 msgstr "ଆପଣ ଭୌତିକ ଉପକରଣ ମାନଙ୍କ ମଧ୍ଯରୁ ଗୋଟିକୁ ଚୟନ କରିବା ଉଚିତ"
 
-#: ../src/virtManager/addhardware.py:875 ../src/virtManager/addhardware.py:881
+#: ../src/virtManager/addhardware.py:1120
+#: ../src/virtManager/addhardware.py:1126
 msgid "Invalid MAC address"
 msgstr "ଅବୈଧ MAC ଠିକଣା"
 
-#: ../src/virtManager/addhardware.py:876
+#: ../src/virtManager/addhardware.py:1121
 msgid "No MAC address was entered. Please enter a valid MAC address."
 msgstr "କୌଣସି MAC ଠିକଣା ଭରଣ କରାଯାଇନାହିଁ. ଦୟାକରି ଗୋଟିଏ ବୈଧ MAC ଠିକଣା ଭରଣ କରନ୍ତୁ."
 
-#: ../src/virtManager/addhardware.py:894
+#: ../src/virtManager/addhardware.py:1139
 msgid "Unsupported networking type"
 msgstr "ଅସମର୍ଥିତ ନେଟୱାର୍କିଙ୍ଗ ପ୍ରକାର"
 
-#: ../src/virtManager/addhardware.py:898
+#: ../src/virtManager/addhardware.py:1143
 msgid "Invalid Network Parameter"
 msgstr "ଅବୈଧ ନେଟୱର୍କ ପ୍ରାଚଳ"
 
-#: ../src/virtManager/addhardware.py:903 ../src/virtManager/addhardware.py:906
+#: ../src/virtManager/addhardware.py:1148
+#: ../src/virtManager/addhardware.py:1151
 msgid "Mac address collision"
 msgstr "Mac ଠିକଣା ଧକ୍କା"
 
-#: ../src/virtManager/addhardware.py:907
+#: ../src/virtManager/addhardware.py:1152
 msgid "Are you sure you want to use this address?"
 msgstr "ଆପଣ ଏହି ଠିକଣାକୁ ନିଶ୍ଚିତ ରୂପେ ବ୍ଯବହାର କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି କି?"
 
-#: ../src/virtManager/addhardware.py:922
+#: ../src/virtManager/addhardware.py:1167
 msgid "Graphics device parameter error"
 msgstr "ଆଲେଖୀ ଉପକରଣ ପ୍ରାଚଳ ତ୍ରୁଟି"
 
-#: ../src/virtManager/addhardware.py:929
+#: ../src/virtManager/addhardware.py:1174
 msgid "Sound device parameter error"
 msgstr "ଆଲେଖୀ ଉପକରଣ ପ୍ରାଚଳ ତ୍ରୁଟି"
 
-#: ../src/virtManager/addhardware.py:936
+#: ../src/virtManager/addhardware.py:1181
 msgid "Physical Device Requried"
 msgstr "ଭୌତିକ ଉପକରଣ ଆବଶ୍ଯକ"
 
-#: ../src/virtManager/addhardware.py:937
+#: ../src/virtManager/addhardware.py:1182
 msgid "A device must be selected."
 msgstr "ଗୋଟିଏ ଉପକରଣ ବାଛିବା ଉଚିତ।"
 
-#: ../src/virtManager/addhardware.py:944
+#: ../src/virtManager/addhardware.py:1189
 msgid "Host device parameter error"
 msgstr "ଆଧାର ଉପକରଣ ପ୍ରାଚଳ ତ୍ରୁଟି"
 
-#: ../src/virtManager/addhardware.py:965 ../src/virtManager/create.py:662
+#: ../src/virtManager/addhardware.py:1231
+#, fuzzy, python-format
+msgid "%s device parameter error."
+msgstr "ଆଧାର ଉପକରଣ ପ୍ରାଚଳ ତ୍ରୁଟି"
+
+#: ../src/virtManager/addhardware.py:1242
+#, fuzzy
+msgid "Video device parameter error."
+msgstr "ଆଧାର ଉପକରଣ ପ୍ରାଚଳ ତ୍ରୁଟି"
+
+#: ../src/virtManager/addhardware.py:1263 ../src/virtManager/create.py:653
 msgid "Bridge"
 msgstr "ବ୍ରିଜ"
 
-#: ../src/virtManager/addhardware.py:967 ../src/virtManager/create.py:665
+#: ../src/virtManager/addhardware.py:1265 ../src/virtManager/create.py:656
 msgid "Not bridged"
 msgstr "ବ୍ରିଜ ହୋଇନାହିଁ"
 
 #. [xml value, label]
-#: ../src/virtManager/addhardware.py:974
+#: ../src/virtManager/addhardware.py:1272
 msgid "Hypervisor default"
 msgstr "ହାଇପରଭାଇଜର ପୂର୍ବନିର୍ଦ୍ଧାରିତ"
 
-#: ../src/virtManager/addhardware.py:1008 ../src/virtManager/details.py:1048
+#: ../src/virtManager/addhardware.py:1308 ../src/virtManager/details.py:1094
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB ଆଲେଖୀ ଟ୍ଯାବଲେଟ"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:1012 ../src/virtManager/details.py:1050
+#: ../src/virtManager/addhardware.py:1312 ../src/virtManager/details.py:1096
 msgid "Generic USB Mouse"
 msgstr "ବର୍ଗୀୟ USB ମାଉସ"
 
-#: ../src/virtManager/addhardware.py:1052
+#: ../src/virtManager/addhardware.py:1352
 msgid "No Devices Available"
 msgstr "କୌଣସି ଉପକରଣ ଉପଲବ୍ଧ ନାହିଁ"
 
@@ -507,58 +617,203 @@ msgstr "ସଂସାଧନ କରୁଅଛି..."
 msgid "Completed"
 msgstr "ସମାପ୍ତ"
 
-#: ../src/virtManager/choosecd.py:104 ../src/virtManager/choosecd.py:113
+#: ../src/virtManager/choosecd.py:99 ../src/virtManager/choosecd.py:109
 msgid "Invalid Media Path"
 msgstr "ଅବୈଧ ମେଡିଆ ପଥ"
 
-#: ../src/virtManager/choosecd.py:105
+#: ../src/virtManager/choosecd.py:100
 msgid "A media path must be specified."
 msgstr "ଗୋଟିଏ ମେଡିଆ ପଥ ଉଲ୍ଲେଖ କରାଯିବା ଉଚିତ।"
 
-#: ../src/virtManager/choosecd.py:133 ../src/virtManager/create.py:998
+#: ../src/virtManager/choosecd.py:128 ../src/virtManager/create.py:989
 msgid "Locate ISO Image"
 msgstr "ISO ପ୍ରତିଛବିର ଅବସ୍ଥିତି ନିର୍ଣ୍ଣୟ କରନ୍ତୁ"
 
-#: ../src/virtManager/connect.py:74 ../src/virtManager/manager.py:863
-#: ../src/vmm-create-net.glade.h:31 ../src/vmm-create-pool.glade.h:9
-#: ../src/vmm-create.glade.h:32
+#: ../src/virtManager/clone.py:213 ../src/virtManager/clone.py:433
+#, fuzzy
+msgid "Details..."
+msgstr "ବିସ୍ତୃତ ବିବରଣୀ"
+
+#: ../src/virtManager/clone.py:244
+#, fuzzy
+msgid "Usermode"
+msgstr "ଆଧାର ନାମ:"
+
+#: ../src/virtManager/clone.py:254 ../src/virtManager/create.py:623
+msgid "Isolated network"
+msgstr "ପୃଥକ ନେଟୱାର୍କ"
+
+#: ../src/virtManager/clone.py:256 ../src/virtManager/create.py:625
+#, python-format
+msgid "NAT to %s"
+msgstr "NAT ରୁ %s"
+
+#: ../src/virtManager/clone.py:258
+#, fuzzy
+msgid "NAT"
+msgstr "N/A"
+
+#: ../src/virtManager/clone.py:262
+#, fuzzy
+msgid "Virtual Network"
+msgstr "ଆଭାସୀ ନେଟୱାର୍କ ଗୁଡିକ"
+
+#: ../src/virtManager/clone.py:334
+msgid "Nothing to clone."
+msgstr ""
+
+#: ../src/virtManager/clone.py:426
+msgid "Clone this disk"
+msgstr ""
+
+#: ../src/virtManager/clone.py:430
+#, python-format
+msgid "Share disk with %s"
+msgstr ""
+
+#: ../src/virtManager/clone.py:441
+msgid "Storage cannot be shared or cloned."
+msgstr ""
+
+#: ../src/virtManager/clone.py:494
+msgid "One or more disks cannot be cloned or shared."
+msgstr ""
+
+#: ../src/virtManager/clone.py:595
+#, fuzzy, python-format
+msgid "Error changing MAC address: %s"
+msgstr "ସ୍ମୃତି ମୂଲ୍ଯ ପରିବର୍ତ୍ତନ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
+
+#: ../src/virtManager/clone.py:622
+msgid "Cloning will overwrite the existing file"
+msgstr ""
+
+#: ../src/virtManager/clone.py:624
+#, fuzzy
+msgid ""
+"Using an existing image will overwrite the path during the clone process. "
+"Are you sure you want to use this path?"
+msgstr ""
+"ଏହି ପ୍ରକାରର ଗୋଟିଏ ପୁଲ ନିର୍ମାଣ କରିବା ଦ୍ୱାରା ଉତ୍ସ ଉପକରଣକୁ ଫର୍ମାଟ କରିଦେବ. ଆପଣ ଏହି ପୁଲ 'ନିର୍ମାଣ' "
+"କରିବାକୁ ନିଶ୍ଚିତ କି?"
+
+#: ../src/virtManager/clone.py:635
+#, fuzzy, python-format
+msgid "Error changing storage path: %s"
+msgstr "ସ୍ୱୟଂଚାଳିତ ମୂଲ୍ୟ ପରିବର୍ତ୍ତନ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
+
+#: ../src/virtManager/clone.py:686
+msgid "Skipping disks may cause data to be overwritten."
+msgstr ""
+
+#: ../src/virtManager/clone.py:687
+#, python-format
+msgid ""
+"The following disk devices will not be cloned:\n"
+"\n"
+"%s\n"
+"Running the new guest could overwrite data in these disk images."
+msgstr ""
+
+#: ../src/virtManager/clone.py:707 ../src/virtManager/createpool.py:261
+#: ../src/virtManager/createvol.py:143
+#, python-format
+msgid "Uncaught error validating input: %s"
+msgstr "ତ୍ରୁଟି ସଂଶୋଧନ ନିବେଶ: %s"
+
+#: ../src/virtManager/clone.py:714
+#, fuzzy, python-format
+msgid "Creating virtual machine clone '%s'"
+msgstr "ଆଭାସୀ ମେସିନ ସୃଷ୍ଟି କରୁଅଛି"
+
+#: ../src/virtManager/clone.py:718 ../src/virtManager/delete.py:142
+#, fuzzy
+msgid " and selected storage (this may take a while)"
+msgstr "ଭଣ୍ଡାର ପୁଲ ସୃଷ୍ଟି କରିବାକୁ କିଛି ସମୟ ନେଇପାରେ..."
+
+#: ../src/virtManager/clone.py:752
+#, fuzzy, python-format
+msgid "Error creating virtual machine clone '%s': %s"
+msgstr "ଆଭାସୀ ନେଟୱାର୍କ ସୃଷ୍ଟି କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
+
+#: ../src/virtManager/clone.py:784
+msgid "No storage to clone."
+msgstr ""
+
+#: ../src/virtManager/clone.py:790
+#, fuzzy
+msgid "Connection does not support managed storage cloning."
+msgstr "ସଂଯୋଗ ଭଣ୍ଡାର ପରିଚାଳନାକୁ ସମର୍ଥିନ କରେନାହିଁ।"
+
+#: ../src/virtManager/clone.py:793
+msgid "Cannot clone unmanaged remote storage."
+msgstr ""
+
+#: ../src/virtManager/clone.py:795 ../src/virtManager/delete.py:342
+#, fuzzy
+msgid "No write access to parent directory."
+msgstr "ଲକ୍ଷ୍ୟ ଡିରେକ୍ଟୋରୀ ବାଛନ୍ତୁ"
+
+#: ../src/virtManager/clone.py:797 ../src/virtManager/delete.py:340
+msgid "Path does not exist."
+msgstr ""
+
+#: ../src/virtManager/clone.py:818
+msgid "Removable"
+msgstr ""
+
+#: ../src/virtManager/clone.py:821
+msgid "Read Only"
+msgstr ""
+
+#: ../src/virtManager/clone.py:823
+msgid "No write access"
+msgstr ""
+
+#: ../src/virtManager/clone.py:826
+msgid "Shareable"
+msgstr ""
+
+#: ../src/virtManager/connect.py:74 ../src/virtManager/manager.py:828
+#: ../src/virtManager/storagebrowse.py:102 ../src/vmm-create-net.glade.h:31
+#: ../src/vmm-create-pool.glade.h:9 ../src/vmm-create.glade.h:32
 msgid "Name"
 msgstr "ନାମ"
 
-#: ../src/virtManager/connection.py:1214
+#: ../src/virtManager/connection.py:1104
 msgid "Disconnected"
 msgstr "ସଂଯୋଗ ବିଚ୍ଛିନ୍ନ ହୋଇଛି"
 
-#: ../src/virtManager/connection.py:1216
+#: ../src/virtManager/connection.py:1106
 msgid "Connecting"
 msgstr "ସଂଯୋଗ କରୁଅଛି"
 
-#: ../src/virtManager/connection.py:1219
+#: ../src/virtManager/connection.py:1109
 msgid "Active (RO)"
 msgstr "ସକ୍ରିୟ (RO)"
 
-#: ../src/virtManager/connection.py:1221 ../src/virtManager/host.py:322
-#: ../src/virtManager/host.py:545 ../src/vmm-host.glade.h:5
+#: ../src/virtManager/connection.py:1111 ../src/virtManager/host.py:324
+#: ../src/virtManager/host.py:548 ../src/vmm-host.glade.h:5
 msgid "Active"
 msgstr "ସକ୍ରିୟ"
 
-#: ../src/virtManager/connection.py:1223 ../src/virtManager/create.py:628
-#: ../src/virtManager/host.py:327 ../src/virtManager/host.py:366
-#: ../src/virtManager/host.py:545 ../src/virtManager/host.py:577
+#: ../src/virtManager/connection.py:1113 ../src/virtManager/create.py:619
+#: ../src/virtManager/host.py:329 ../src/virtManager/host.py:368
+#: ../src/virtManager/host.py:548 ../src/virtManager/host.py:580
 msgid "Inactive"
 msgstr "ନିଷ୍କ୍ରିୟ"
 
-#: ../src/virtManager/connection.py:1225 ../src/virtManager/create.py:1585
-#: ../src/virtManager/create.py:1586 ../src/virtManager/create.py:1588
-#: ../src/virtManager/details.py:900 ../src/virtManager/details.py:1013
+#: ../src/virtManager/connection.py:1115 ../src/virtManager/create.py:1573
+#: ../src/virtManager/create.py:1574 ../src/virtManager/create.py:1576
+#: ../src/virtManager/details.py:930 ../src/virtManager/details.py:1059
 msgid "Unknown"
 msgstr "ଅଜଣା"
 
-#: ../src/virtManager/create.py:238
+#: ../src/virtManager/create.py:229
 msgid "Error listing CD-ROM devices."
 msgstr "CD-ROM ଉପକରଣଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରିବାରେ ତ୍ରୁଟି।"
 
-#: ../src/virtManager/create.py:267
+#: ../src/virtManager/create.py:258
 msgid ""
 "Fully allocating storage will take longer now, but the OS install phase will "
 "be quicker. \n"
@@ -572,211 +827,207 @@ msgstr ""
 "ବଣ୍ଟନକୁ ଏଡ଼ାଇ ଦେବା ଦ୍ୱାରା ଆଧାର ଯନ୍ତ୍ରରେ ସ୍ଥାନ ସମସ୍ୟା ଦେଖାଦେଇପାରେ, ଯଦି ସର୍ବାଧିକ ପ୍ରତିଛବି "
 "ଆକାର ଉପଲବ୍ଧ ଭଣ୍ଡାର ସ୍ଥାନକୁ ଅତିକ୍ରମ କରିଥାଏ।"
 
-#: ../src/virtManager/create.py:287
+#: ../src/virtManager/create.py:278
 msgid "No active connection to install on."
 msgstr "ସ୍ଥାପନ କରିବା ପାଇଁ କୌଣସି ସକ୍ରିୟ ସଂଯୋଗ ନାହିଁ।"
 
-#: ../src/virtManager/create.py:332
+#: ../src/virtManager/create.py:323
 msgid "Connection is read only."
 msgstr "ସଂଯୋଗଟି କେବଳ ପଠନୀୟ।"
 
-#: ../src/virtManager/create.py:342
+#: ../src/virtManager/create.py:333
 msgid "No guests are supported for this connection."
 msgstr "କୌଣସି ଅତିଥି ଏହି ସଂଯୋଗ ପାଇଁ ସମର୍ଥିତ ନୁହଁନ୍ତି।"
 
-#: ../src/virtManager/create.py:364
+#: ../src/virtManager/create.py:355
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "paravirt ଅତିଥି ପାଇଁ %s ସ୍ଥାପନା ଉପଲବ୍ଧ ହେବନାହିଁ।"
 
-#: ../src/virtManager/create.py:368
+#: ../src/virtManager/create.py:359
 msgid "URL installs not available for remote connections."
 msgstr "ସୁଦୂର ସଂଯୋଗ ପାଇଁ URL ସ୍ଥାପନା ଉପଲବ୍ଧ ନାହିଁ।"
 
-#: ../src/virtManager/create.py:370 ../src/virtManager/create.py:460
+#: ../src/virtManager/create.py:361 ../src/virtManager/create.py:451
 msgid "Connection does not support storage management."
 msgstr "ସଂଯୋଗ ଭଣ୍ଡାର ପରିଚାଳନାକୁ ସମର୍ଥିନ କରେନାହିଁ।"
 
-#: ../src/virtManager/create.py:382
+#: ../src/virtManager/create.py:373
 msgid "No install options available for this connection."
 msgstr "ଏହି ସଂଯୋଗ ପାଇଁ କୌଣସି ସ୍ଥାପନା ବିକଳ୍ପ ଉପଲବ୍ଧ ନାହିଁ।"
 
-#: ../src/virtManager/create.py:415
+#: ../src/virtManager/create.py:406
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "ଆଧାରରେ %(maxmem)s ପର୍ଯ୍ୟନ୍ତ ଉପଲବ୍ଧ"
 
-#: ../src/virtManager/create.py:429
+#: ../src/virtManager/create.py:420
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
 msgstr "ହାଇପରଭାଇଜର କେବଳ %d ଆଭାସୀ CPUଗୁଡ଼ିକୁ ସମର୍ଥନ କରିଥାଏ।"
 
-#: ../src/virtManager/create.py:439
+#: ../src/virtManager/create.py:430
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "%(numcpus)d ପର୍ଯ୍ୟନ୍ତ ଉପଲବ୍ଧ"
 
-#: ../src/virtManager/create.py:508
+#: ../src/virtManager/create.py:499
 msgid "Only URL installs are supported for paravirt."
 msgstr "କେବଳ URL ସ୍ଥାପନାଗୁଡ଼ିକ paravirt ପାଇଁ ସମର୍ଥିତ।"
 
-#: ../src/virtManager/create.py:585 ../src/virtManager/create.py:594
-#: ../src/virtManager/create.py:743 ../src/virtManager/create.py:745
+#: ../src/virtManager/create.py:576 ../src/virtManager/create.py:585
+#: ../src/virtManager/create.py:734 ../src/virtManager/create.py:736
 msgid "Generic"
 msgstr "ଜାତିଗତ"
 
-#: ../src/virtManager/create.py:615
+#: ../src/virtManager/create.py:606
 msgid "Usermode Networking"
 msgstr "ଚାଳକ ଅବସ୍ଥା ନେଟୱାର୍କିଙ୍ଗ"
 
-#: ../src/virtManager/create.py:632
-msgid "Isolated network"
-msgstr "ପୃଥକ ନେଟୱାର୍କ"
+#. FIXME: Should we use 'default' even if it's inactive?
+#: ../src/virtManager/create.py:617
+msgid "Virtual network"
+msgstr "ଆଭାସୀ ନେଟୱାର୍କ"
 
-#: ../src/virtManager/create.py:634
-#, python-format
-msgid "NAT to %s"
-msgstr "NAT ରୁ %s"
-
-#: ../src/virtManager/create.py:636
+#: ../src/virtManager/create.py:627
 msgid "NAT to any device"
 msgstr "NAT ରୁ ଯେ କୌଣସି ଉପକରଣ"
 
-#: ../src/virtManager/create.py:647
+#: ../src/virtManager/create.py:638
 msgid "No virtual networks available"
 msgstr "କୌଣସି ଆଭାସୀ ନେଟୱର୍କ ଉପଲବ୍ଧ ନାହିଁ"
 
-#: ../src/virtManager/create.py:670
+#: ../src/virtManager/create.py:661
 #, python-format
 msgid "Host device %s %s"
 msgstr "ଆଧାର ଉପକରଣ %s %s"
 
-#: ../src/virtManager/create.py:682
+#: ../src/virtManager/create.py:673
 msgid "No networking."
 msgstr "କୌଣସି ନେଟୱାର୍କିଙ୍ଗ ନାହିଁ।"
 
-#: ../src/virtManager/create.py:727
+#: ../src/virtManager/create.py:718
 msgid "Local CDROM/ISO"
 msgstr "ସ୍ଥାନୀୟ CDROM/ISO"
 
-#: ../src/virtManager/create.py:729
+#: ../src/virtManager/create.py:720
 msgid "URL Install Tree"
 msgstr "URL ସ୍ଥାପନା ଟ୍ରୀ"
 
-#: ../src/virtManager/create.py:731
+#: ../src/virtManager/create.py:722
 msgid "PXE Install"
 msgstr "PXE ସ୍ଥାପନା"
 
-#: ../src/virtManager/create.py:734 ../src/virtManager/details.py:901
+#: ../src/virtManager/create.py:725 ../src/virtManager/details.py:931
 msgid "None"
 msgstr "କେହି ନୁହଁ"
 
-#: ../src/virtManager/create.py:1007
+#: ../src/virtManager/create.py:998
 msgid "Locate existing storage"
 msgstr "ସ୍ଥିତବାନ ଭଣ୍ଡାରକୁ ଦେଖନ୍ତୁ"
 
-#: ../src/virtManager/create.py:1080
+#: ../src/virtManager/create.py:1069
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "ପଦକ୍ଷେପ %(current_page)d of %(max_page)d"
 
-#: ../src/virtManager/create.py:1139
+#: ../src/virtManager/create.py:1128
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "ଧରା ପଡ଼ିନଥିବା ତ୍ରୁଟି ସଂଶୋଧନ ସ୍ଥାପନ ପ୍ରାଚଳଗୁଡ଼ିକ: %s"
 
-#: ../src/virtManager/create.py:1153
+#: ../src/virtManager/create.py:1142
 msgid "Invalid System Name"
 msgstr "ଅବୈଧ ତନ୍ତ୍ର ନାମ"
 
-#: ../src/virtManager/create.py:1177
+#: ../src/virtManager/create.py:1166
 msgid "An install media selection is required."
 msgstr "ଗୋଟିଏ ସ୍ଥାପିତ ମେଡିଆ ଚୟନ ଆବଶ୍ୟକ।"
 
-#: ../src/virtManager/create.py:1187
+#: ../src/virtManager/create.py:1176
 msgid "An install tree is required."
 msgstr "ଗୋଟିଏ ସ୍ଥାପନା ଟ୍ରୀ ଆବଶ୍ୟକ।"
 
-#: ../src/virtManager/create.py:1202
+#: ../src/virtManager/create.py:1191
 msgid "Error setting installer parameters."
 msgstr "ସ୍ଥାପନା ପ୍ରାଚଳଗୁଡ଼ିକୁ ବିନ୍ୟାସ କରିବା ସମୟରେ ତ୍ରୁଟି।"
 
-#: ../src/virtManager/create.py:1220
+#: ../src/virtManager/create.py:1209
 msgid "Error setting install media location."
 msgstr "ସ୍ଥାପନା ମେଡ଼ିଆ ଅବସ୍ଥାନକୁ ବିନ୍ୟାସ କରିବା ସମୟରେ ତ୍ରୁଟି।"
 
-#: ../src/virtManager/create.py:1230
+#: ../src/virtManager/create.py:1219
 msgid "Error setting OS information."
 msgstr "OS ସୂଚନା ବିନ୍ୟାସ କରିବା ସମୟରେ ତ୍ରୁଟି।"
 
-#: ../src/virtManager/create.py:1247
+#: ../src/virtManager/create.py:1236
 msgid "Error setting CPUs."
 msgstr "CPU ଗୁଡ଼ିକୁ ବିନ୍ୟାସ କରିବା ସମୟରେ ତ୍ରୁଟି।"
 
-#: ../src/virtManager/create.py:1254
+#: ../src/virtManager/create.py:1243
 msgid "Error setting guest memory."
 msgstr "ଅତିଥି ସ୍ମୃତି ସ୍ଥାନ ବିନ୍ୟାସ କରିବା ସମୟରେ ତ୍ରୁଟି।"
 
-#: ../src/virtManager/create.py:1272
+#: ../src/virtManager/create.py:1261
 msgid "A storage path must be specified."
 msgstr "ଗୋଟିଏ ଭଣ୍ଡାର ପଥ ଉଲ୍ଲେଖ କରାଯିବା ଉଚିତ।"
 
-#: ../src/virtManager/create.py:1281
+#: ../src/virtManager/create.py:1270
 msgid "Storage parameter error."
 msgstr "ଭଣ୍ଡାର ପ୍ରାଚଳ ତ୍ରୁଟି।"
 
-#: ../src/virtManager/create.py:1307
+#: ../src/virtManager/create.py:1296
 msgid "Virtual Network is not active."
 msgstr "ଆଭାସୀ ନେଟୱାର୍କ ସକ୍ରିୟ ନାହିଁ।"
 
-#: ../src/virtManager/create.py:1308
+#: ../src/virtManager/create.py:1297
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr ""
 "ଆଭାସୀ ନେଟୱାର୍କ '%s' ସକ୍ରିୟ ନାହିଁ। ଆପଣ ବର୍ତ୍ତମାନ ସେହି ନେଟୱର୍କକୁ ଆରମ୍ଭ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?"
 
-#: ../src/virtManager/create.py:1320
+#: ../src/virtManager/create.py:1309
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "ଆଭାସୀ ନେଟୱାର୍କ '%s'କୁ ଆରମ୍ଭ କରିପାରିଲା ନାହିଁ: %s"
 
-#: ../src/virtManager/create.py:1334
+#: ../src/virtManager/create.py:1323
 #, python-format
 msgid "Network device required for %s install."
 msgstr "%s ସ୍ଥାପନା ପାଇଁ ନେଟୱର୍କ ଉପକରଣ ଆବଶ୍ୟକ।"
 
-#: ../src/virtManager/create.py:1356
+#: ../src/virtManager/create.py:1345
 msgid "Error with network parameters."
 msgstr "ନେଟୱର୍କ ପ୍ରାଚଳଗୁଡ଼ିକ ସହିତ ତ୍ରୁଟି।"
 
-#: ../src/virtManager/create.py:1361 ../src/virtManager/create.py:1363
+#: ../src/virtManager/create.py:1350 ../src/virtManager/create.py:1352
 msgid "Mac address collision."
 msgstr "Mac ଠିକଣା ଧକ୍କା।"
 
-#: ../src/virtManager/create.py:1364
+#: ../src/virtManager/create.py:1353
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "%s ଆପଣ ଏହି ଠିକଣାକୁ ନିଶ୍ଚିତ ରୂପେ ବ୍ଯବହାର କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି କି?"
 
-#: ../src/virtManager/create.py:1407
+#: ../src/virtManager/create.py:1396
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "UUID ବିନ୍ୟାସ କରିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/create.py:1415
+#: ../src/virtManager/create.py:1404
 msgid "Error setting up graphics device:"
 msgstr "ଆଲେଖୀ ଉପକରଣ ବିନ୍ୟାସ କରିବାରେ ତ୍ରୁଟି:"
 
-#: ../src/virtManager/create.py:1425
+#: ../src/virtManager/create.py:1414
 msgid "Error setting up sound device:"
 msgstr "ଧ୍ୱନୀ ଉପକରଣ ବିନ୍ୟାସ କରିବାରେ ତ୍ରୁଟି:"
 
-#: ../src/virtManager/create.py:1450
+#: ../src/virtManager/create.py:1438
 msgid "Creating Virtual Machine"
 msgstr "ଆଭାସୀ ମେସିନ ସୃଷ୍ଟି କରୁଅଛି"
 
-#: ../src/virtManager/create.py:1451
+#: ../src/virtManager/create.py:1439
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -784,22 +1035,22 @@ msgstr ""
 "ଆଭାସୀ ଯନ୍ତ୍ରଟି ବର୍ତ୍ତମାନ ସୃଷ୍ଟି ହେଉଛି। ଡିସ୍କ ଭଣ୍ଡାରର ବଣ୍ଟନ ଏବଂ ସ୍ଥାପନା ପ୍ରତିଛବିର କାଢ଼ିବା ସମ୍ପୂର୍ଣ୍ଣ "
 "ହେବା ପାଇଁ କିଛି ସମୟ ଲାଗିପାରେ।"
 
-#: ../src/virtManager/create.py:1503
+#: ../src/virtManager/create.py:1491
 msgid "Guest installation failed to complete"
 msgstr "ଅତିଥି ସ୍ଥାପନ ସମ୍ପୂର୍ଣ୍ଣ ହୋଇପାରିଲା ନାହିଁ"
 
-#: ../src/virtManager/create.py:1624
+#: ../src/virtManager/create.py:1612
 msgid "Detecting"
 msgstr "ଯାଞ୍ଚ କରୁଅଛି"
 
 #: ../src/virtManager/createnet.py:97 ../src/virtManager/createnet.py:260
-#: ../src/virtManager/host.py:354 ../src/vmm-create-net.glade.h:30
+#: ../src/virtManager/host.py:356 ../src/vmm-create-net.glade.h:30
 #: ../src/vmm-host.glade.h:28
 msgid "NAT to any physical device"
 msgstr "ଯେ କୌଣସି ଭୌତିକ ଉପକରଣ ପାଇଁ NAT"
 
 #: ../src/virtManager/createnet.py:100 ../src/virtManager/createnet.py:258
-#: ../src/virtManager/host.py:352
+#: ../src/virtManager/host.py:354
 #, python-format
 msgid "NAT to physical device %s"
 msgstr "%s ଭୌତିକ ଉପକରଣ ପାଇଁ NAT"
@@ -825,8 +1076,8 @@ msgstr "ସଂରକ୍ଷିତ"
 msgid "Other"
 msgstr "ଅନ୍ଯାନ୍ଯ"
 
-#: ../src/virtManager/createnet.py:262 ../src/virtManager/host.py:357
-#: ../src/virtManager/host.py:377 ../src/vmm-create-net.glade.h:29
+#: ../src/virtManager/createnet.py:262 ../src/virtManager/host.py:359
+#: ../src/virtManager/host.py:379 ../src/vmm-create-net.glade.h:29
 msgid "Isolated virtual network"
 msgstr "ବିଚ୍ଛିନ୍ନ ଆଭାସୀ ନେଟୱାର୍କ"
 
@@ -907,37 +1158,32 @@ msgstr "ଅବୈଧ ଅଗ୍ରସରଣ ଧାରା"
 msgid "Please select where the traffic should be forwarded"
 msgstr "ଯାତାୟାତକୁ କେଉଁଠାକୁ ଅଗ୍ରସରଣ କରାଯିବା ଦୟାକରି ତାହା ଚୟନ କରନ୍ତୁ"
 
-#: ../src/virtManager/createpool.py:243
+#: ../src/virtManager/createpool.py:238
 msgid "Choose source path"
 msgstr "ଉତ୍ସ ପଥ ବାଛନ୍ତୁ"
 
-#: ../src/virtManager/createpool.py:249
+#: ../src/virtManager/createpool.py:244
 msgid "Choose target directory"
 msgstr "ଲକ୍ଷ୍ୟ ଡିରେକ୍ଟୋରୀ ବାଛନ୍ତୁ"
 
-#: ../src/virtManager/createpool.py:266 ../src/virtManager/createvol.py:143
-#, python-format
-msgid "Uncaught error validating input: %s"
-msgstr "ତ୍ରୁଟି ସଂଶୋଧନ ନିବେଶ: %s"
-
-#: ../src/virtManager/createpool.py:280
+#: ../src/virtManager/createpool.py:275
 msgid "Creating storage pool..."
 msgstr "ଭଣ୍ଡାର ପୁଲ ସୃଷ୍ଟି କରୁଅଛି..."
 
-#: ../src/virtManager/createpool.py:281
+#: ../src/virtManager/createpool.py:276
 msgid "Creating the storage pool may take a while..."
 msgstr "ଭଣ୍ଡାର ପୁଲ ସୃଷ୍ଟି କରିବାକୁ କିଛି ସମୟ ନେଇପାରେ..."
 
-#: ../src/virtManager/createpool.py:309
+#: ../src/virtManager/createpool.py:304
 #, python-format
 msgid "Error creating pool: %s"
 msgstr "ପୁଲ ନିର୍ମାଣ କରିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/createpool.py:338 ../src/virtManager/createpool.py:357
+#: ../src/virtManager/createpool.py:333 ../src/virtManager/createpool.py:354
 msgid "Pool Parameter Error"
 msgstr "ପୁଲ ପ୍ରାଚଳ ତ୍ରୁଟି"
 
-#: ../src/virtManager/createpool.py:362
+#: ../src/virtManager/createpool.py:359
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
@@ -945,9 +1191,13 @@ msgstr ""
 "ଏହି ପ୍ରକାରର ଗୋଟିଏ ପୁଲ ନିର୍ମାଣ କରିବା ଦ୍ୱାରା ଉତ୍ସ ଉପକରଣକୁ ଫର୍ମାଟ କରିଦେବ. ଆପଣ ଏହି ପୁଲ 'ନିର୍ମାଣ' "
 "କରିବାକୁ ନିଶ୍ଚିତ କି?"
 
-#: ../src/virtManager/createpool.py:374
+#: ../src/virtManager/createpool.py:372
 msgid "Format the source device."
 msgstr "ଉତ୍ସ ଉପକରଣକୁ ସଜାଡନ୍ତୁ।"
+
+#: ../src/virtManager/createpool.py:374
+msgid "Create a logical volume group from the source device."
+msgstr ""
 
 #: ../src/virtManager/createvol.py:154
 msgid "Creating storage volume..."
@@ -966,35 +1216,104 @@ msgstr "vol ନିର୍ମାଣ କରିବାରେ ତ୍ରୁଟି: %s"
 msgid "Volume Parameter Error"
 msgstr "ଆକାର ପ୍ରାଚଳ ତ୍ରୁଟି"
 
-#: ../src/virtManager/details.py:142 ../src/virtManager/manager.py:205
+#: ../src/virtManager/delete.py:98
 #, fuzzy
-msgid "_Reboot"
-msgstr "ପୁନର୍ଚାଳନ"
+msgid "Delete"
+msgstr "ପୁଲ ଅପସାରଣ କରନ୍ତୁ"
 
-#: ../src/virtManager/details.py:148 ../src/virtManager/manager.py:200
-#: ../src/virtManager/manager.py:211
+#: ../src/virtManager/delete.py:139
+#, fuzzy, python-format
+msgid "Deleting virtual machine '%s'"
+msgstr "ଆଭାସୀ ମେସିନକୁ ଅପସାରଣ କରନ୍ତୁ"
+
+#: ../src/virtManager/delete.py:174
+#, python-format
+msgid "Deleting path '%s'"
+msgstr ""
+
+#: ../src/virtManager/delete.py:185
+#, fuzzy, python-format
+msgid "Error deleting virtual machine '%s': %s"
+msgstr "ଭଲ୍ୟୁମକୁ ଅପସାରଣ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
+
+#: ../src/virtManager/delete.py:201
+msgid "Additionally, there were errors removing certain storage devices: \n"
+msgstr ""
+
+#: ../src/virtManager/delete.py:205
+msgid "Errors encountered while removing certain storage devices."
+msgstr ""
+
+#: ../src/virtManager/delete.py:286
 #, fuzzy
-msgid "_Shut Down"
-msgstr "ବନ୍ଦ କରନ୍ତୁ"
+msgid "Storage Path"
+msgstr "ଉତ୍ସ ପଥ:"
 
-#: ../src/virtManager/details.py:154 ../src/virtManager/manager.py:217
+#: ../src/virtManager/delete.py:287
 #, fuzzy
-msgid "_Force Off"
-msgstr "ବାଧ୍ଯକରି ଶକ୍ତି ପ୍ରବାହ ବନ୍ଦକରନ୍ତୁ"
+msgid "Target"
+msgstr "ଲକ୍ଷ୍ଯ:"
 
-#: ../src/virtManager/details.py:174
+#: ../src/virtManager/delete.py:335
+msgid "Cannot delete iscsi share."
+msgstr ""
+
+#: ../src/virtManager/delete.py:338
+#, fuzzy
+msgid "Cannot delete unmanaged remote storage."
+msgstr "ପରିଚାଳିତ କିମ୍ବା ଅନ୍ୟାନ୍ୟ ସ୍ଥିତବାନ ଭଣ୍ଡାରକୁ ବାଛନ୍ତୁ"
+
+#: ../src/virtManager/delete.py:344
+msgid "Cannot delete unmanaged block device."
+msgstr ""
+
+#: ../src/virtManager/delete.py:364
+#, fuzzy
+msgid "Storage is read-only."
+msgstr "ସଂଯୋଗଟି କେବଳ ପଠନୀୟ।"
+
+#: ../src/virtManager/delete.py:366
+msgid "No write access to path."
+msgstr ""
+
+#: ../src/virtManager/delete.py:369
+msgid "Storage is marked as shareable."
+msgstr ""
+
+#: ../src/virtManager/delete.py:383
+#, python-format
+msgid ""
+"Storage is in use by the following virtual machines:\n"
+"- %s "
+msgstr ""
+
+#: ../src/virtManager/details.py:159
 msgid "Close tab"
 msgstr "ଟ୍ୟାବ ବନ୍ଦ କରନ୍ତୁ"
 
-#: ../src/virtManager/details.py:391
+#: ../src/virtManager/details.py:173
+msgid ""
+"Static SELinux security type tells libvirt to always start the guest process "
+"with the specified label. The administrator is responsible for making sure "
+"the images are labeled corectly on disk."
+msgstr ""
+
+#: ../src/virtManager/details.py:175
+msgid ""
+"The dynamic SELinux security type tells libvirt to automatically pick a "
+"unique label for the guest process and guest image, ensuring total isolation "
+"of the guest. (Default)"
+msgstr ""
+
+#: ../src/virtManager/details.py:377
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "ସୂଚକକୁ ଛାଡିବା ପାଇଁ Ctrl+Alt ଦବାନ୍ତୁ"
 
-#: ../src/virtManager/details.py:399
+#: ../src/virtManager/details.py:385
 msgid "Pointer grabbed"
 msgstr "ସୂଚକକୁ ଧାରଣ କରାଯାଇଛି"
 
-#: ../src/virtManager/details.py:400
+#: ../src/virtManager/details.py:386
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair: Ctrl+Alt"
@@ -1002,122 +1321,135 @@ msgstr ""
 "ମାଉସ ସୂଚକକୁ କେବଳ ଆଭାସୀ କୋନଶୋଲ ୱିଣ୍ଡୋ ପ୍ରତି ସୀମାବଦ୍ଧ କରାଯାଇଛି। ସୂଚକକୁ ଛାଡିବା ପାଇଁ Ctrl"
 "+Alt ଚାବି ଯୋଡିକୁ ଦବାନ୍ତୁ"
 
-#: ../src/virtManager/details.py:401
+#: ../src/virtManager/details.py:387
 msgid "Do not show this notification in the future."
 msgstr "ଭବିଷ୍ୟତରେ ଏହି ବିଜ୍ଞପ୍ତି ଦର୍ଶାନ୍ତୁ ନାହିଁ।"
 
-#: ../src/virtManager/details.py:525
+#: ../src/virtManager/details.py:510
 msgid "No serial devices found"
 msgstr "କୌଣସି କ୍ରମିକ ଉପକରଣ ମିଳିଲା ନାହିଁ"
 
-#: ../src/virtManager/details.py:536
+#: ../src/virtManager/details.py:532
 msgid "Serial console not yet supported over remote connection."
 msgstr "କ୍ରମିକ କୋନସୋଲ ଏପର୍ଯ୍ୟନ୍ତ ସୁଦୂର ସଂଯୋଗ ଉପରେ ସମର୍ଥିତ ନୁହଁ।"
 
-#: ../src/virtManager/details.py:539
+#: ../src/virtManager/details.py:535
 msgid "Serial console not available for inactive guest."
 msgstr "କ୍ରମିକ କୋନସୋଲ ନିଷ୍କ୍ରିୟ ଅତିଥି ପାଇଁ ଉପଲବ୍ଧ ହେବନାହିଁ।"
 
-#: ../src/virtManager/details.py:541
+#: ../src/virtManager/details.py:537
 #, python-format
 msgid "Console for device type '%s' not yet supported."
 msgstr "ଉପକରଣ ପ୍ରକାର '%s' ପାଇଁ କୋନସୋଲ ଏପର୍ଯ୍ୟନ୍ତ ସମର୍ଥିତ ନୁହଁ।"
 
-#: ../src/virtManager/details.py:544
+#: ../src/virtManager/details.py:540
 #, python-format
 msgid "Can not access console path '%s'."
 msgstr "କୋନସୋଲ ପଥ '%s'କୁ ଅଭିଗମ୍ୟ କରିହେବ ନାହିଁ।"
 
-#: ../src/virtManager/details.py:813
+#: ../src/virtManager/details.py:558
+msgid "No graphics console found."
+msgstr ""
+
+#: ../src/virtManager/details.py:563
+#, fuzzy, python-format
+msgid "Graphical Console %s"
+msgstr "ଆଲେଖୀ କୋନସୋଲ ମାପ:"
+
+#: ../src/virtManager/details.py:852
 msgid "paused"
 msgstr "କିଛି ସମୟ ବନ୍ଦ କରନ୍ତୁ"
 
-#: ../src/virtManager/details.py:826
+#: ../src/virtManager/details.py:865
 msgid "Console not available while paused"
 msgstr "ବିରତି ସମୟରେ କୋନସୋଲ ଉପଲବ୍ଧ ହେବନାହିଁ"
 
-#: ../src/virtManager/details.py:909 ../src/virtManager/details.py:910
-#: ../src/virtManager/details.py:911 ../src/virtManager/details.py:912
+#: ../src/virtManager/details.py:964 ../src/virtManager/details.py:965
+#: ../src/virtManager/details.py:966 ../src/virtManager/details.py:967
 msgid "Disabled"
 msgstr "ନିଷ୍କ୍ରିୟ"
 
-#: ../src/virtManager/details.py:1039
+#: ../src/virtManager/details.py:1085
 msgid "Hypervisor Default"
 msgstr "ହାଇପରଭାଇଜର ପୂର୍ବନିର୍ଦ୍ଧାରିତ"
 
-#: ../src/virtManager/details.py:1052
+#: ../src/virtManager/details.py:1098
 msgid "Xen Mouse"
 msgstr "Xen ମାଉସ"
 
-#: ../src/virtManager/details.py:1054
+#: ../src/virtManager/details.py:1100
 msgid "PS/2 Mouse"
 msgstr "PS/2 ମାଉସ"
 
-#: ../src/virtManager/details.py:1061
+#: ../src/virtManager/details.py:1107
 msgid "Absolute Movement"
 msgstr "ସମ୍ପୂର୍ଣ୍ଣ ଗତି"
 
-#: ../src/virtManager/details.py:1063
+#: ../src/virtManager/details.py:1109
 msgid "Relative Movement"
 msgstr "ଆପେକ୍ଷିକ ଗତି"
 
-#: ../src/virtManager/details.py:1114
+#: ../src/virtManager/details.py:1135 ../src/vmm-add-hardware.glade.h:29
+msgid "Automatically allocated"
+msgstr "ସ୍ବୟଂଚାଳିତ ବଣ୍ଟିତ ହୋଇଛି"
+
+#: ../src/virtManager/details.py:1160
 msgid "(Primary Console)"
 msgstr "(ପ୍ରାଥମିକ କୋନଶୋଲ)"
 
-#: ../src/virtManager/details.py:1172 ../src/virtManager/details.py:1269
+#: ../src/virtManager/details.py:1232 ../src/virtManager/details.py:1335
 msgid "Guest not running"
 msgstr "ଅତିଥି ଚାଲୁନାହିଁ"
 
-#: ../src/virtManager/details.py:1175
+#: ../src/virtManager/details.py:1235
 msgid "Guest has crashed"
 msgstr "ଅତିଥି ନଷ୍ଟ ହୋଇଯାଇଛି"
 
-#: ../src/virtManager/details.py:1186
+#: ../src/virtManager/details.py:1247
 msgid ""
 "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "TCP/IP ତ୍ରୁଟି: ହାଇପରଭାଇଜର ଆଧାରକୁ VNC ସଂଯୋଗ ପ୍ରତ୍ୟାଖାନ କରାଯାଇଛି କିମ୍ବା ବିଛିନ୍ନ ହୋଇଛି!"
 
-#: ../src/virtManager/details.py:1278
+#: ../src/virtManager/details.py:1344
 msgid "Console not configured for guest"
 msgstr "ଅତିଥି ପାଇଁ କୋନଶୋଲ ବିନ୍ୟାସିତ ହୋଇନାହିଁ"
 
-#: ../src/virtManager/details.py:1290
+#: ../src/virtManager/details.py:1356
 msgid "Console not supported for guest"
 msgstr "ଅତିଥି ପାଇଁ କୋନଶୋଲ ସମର୍ଥିତ ହୋଇନାହିଁ"
 
-#: ../src/virtManager/details.py:1294
+#: ../src/virtManager/details.py:1360
 msgid "Console is not yet active for guest"
 msgstr "ଅତିଥି ପାଇଁ କୋନଶୋଲ ଏପର୍ଯ୍ୟନ୍ତ ସକ୍ରିୟ ହୋଇନାହିଁ"
 
-#: ../src/virtManager/details.py:1298
+#: ../src/virtManager/details.py:1364
 msgid "Connecting to console for guest"
 msgstr "ଅତିଥି ପାଇଁ କୋନଶୋଲରେ ସଂଯୋଗ କରାଯାଉଛି"
 
-#: ../src/virtManager/details.py:1335
+#: ../src/virtManager/details.py:1401
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr ""
 
-#: ../src/virtManager/details.py:1336
+#: ../src/virtManager/details.py:1402
 #, fuzzy, python-format
 msgid "The credential type %s is not supported"
 msgstr "ଉପକରଣ ପ୍ରକାର '%s' ପାଇଁ କୋନସୋଲ ଏପର୍ଯ୍ୟନ୍ତ ସମର୍ଥିତ ନୁହଁ।"
 
-#: ../src/virtManager/details.py:1337
+#: ../src/virtManager/details.py:1403
 #, fuzzy
 msgid "Unable to authenticate"
 msgstr "ଉପକରଣକୁ ଯୋଗ କରିବାରେ ଅସମର୍ଥ: %s"
 
-#: ../src/virtManager/details.py:1341
+#: ../src/virtManager/details.py:1407
 msgid "Unsupported console authentication type"
 msgstr "ଅସମର୍ଥିତ କୋନଶୋଲ ପ୍ରମାଣୀକରଣ ପ୍ରକାର"
 
-#: ../src/virtManager/details.py:1412
+#: ../src/virtManager/details.py:1478
 msgid "Save Virtual Machine Screenshot"
 msgstr "ଆଭାସୀ ମେସିନର ପରଦା ପ୍ରତିଛବିକୁ ସଂରକ୍ଷଣ କରନ୍ତୁ"
 
-#: ../src/virtManager/details.py:1435
+#: ../src/virtManager/details.py:1503
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1126,88 +1458,85 @@ msgstr ""
 "ପରଦା ପ୍ରତିଛବିକୁ ନିମ୍ନିଲିଖିତ ସ୍ଥାନରେ ସଂରକ୍ଷଣ କରାଗଲା:\n"
 "%s"
 
-#: ../src/virtManager/details.py:1437
+#: ../src/virtManager/details.py:1505
 msgid "Screenshot saved"
 msgstr "ପରଦା ପ୍ରତିଛବିକୁ ସଂରକ୍ଷଣ କରାଯାଇଛି"
 
-#: ../src/virtManager/details.py:1555
+#: ../src/virtManager/details.py:1610
+#, fuzzy, python-format
+msgid "Error Setting Security data: %s"
+msgstr "net ସ୍ୱୟଂଚାଳନକୁ ବିନ୍ୟାସ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
+
+#: ../src/virtManager/details.py:1646
+#, fuzzy, python-format
+msgid "Error setting CPU pinning: %s"
+msgstr "CPU ଗୁଡ଼ିକୁ ବିନ୍ୟାସ କରିବା ସମୟରେ ତ୍ରୁଟି।"
+
+#: ../src/virtManager/details.py:1669
+#, fuzzy, python-format
+msgid "Error changing vcpu value: %s"
+msgstr "ସ୍ୱୟଂଚାଳିତ ମୂଲ୍ୟ ପରିବର୍ତ୍ତନ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
+
+#: ../src/virtManager/details.py:1674 ../src/virtManager/details.py:1738
+msgid "These changes will take effect after the next guest reboot. "
+msgstr ""
+
+#: ../src/virtManager/details.py:1733
 #, python-format
 msgid "Error changing memory values: %s"
 msgstr "ସ୍ମୃତି ମୂଲ୍ଯ ପରିବର୍ତ୍ତନ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/details.py:1571
+#: ../src/virtManager/details.py:1751
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "ସ୍ୱୟଂଚାଳିତ ମୂଲ୍ୟ ପରିବର୍ତ୍ତନ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/details.py:1579
+#: ../src/virtManager/details.py:1758
 #, python-format
 msgid "Error changing boot device: %s"
 msgstr "ବୁଟ ଉପକରଣ ପରିବର୍ତ୍ତନ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/details.py:1626 ../src/vmm-details.glade.h:66
-#: ../src/vmm-host.glade.h:32
-msgid "Overview"
-msgstr "ପୂର୍ବାବଲୋକନ"
-
-#: ../src/virtManager/details.py:1628
-#, fuzzy
-msgid "Performance"
-msgstr "<b>ପ୍ରଦର୍ଶନ</b>"
-
-#: ../src/virtManager/details.py:1630
-#, fuzzy
-msgid "Processor"
-msgstr "ସଂସାଧନ କରୁଅଛି..."
-
-#: ../src/virtManager/details.py:1631 ../src/vmm-create.glade.h:30
-msgid "Memory"
-msgstr "ସ୍ମୃତି ସ୍ଥାନ"
-
-#: ../src/virtManager/details.py:1632
-msgid "Boot Options"
-msgstr ""
-
-#: ../src/virtManager/details.py:1697
+#: ../src/virtManager/details.py:1887
 msgid "Tablet"
 msgstr "ଟ୍ୟାବଲେଟ"
 
-#: ../src/virtManager/details.py:1699
+#: ../src/virtManager/details.py:1890
 msgid "Mouse"
 msgstr "ମାଉସ"
 
-#: ../src/virtManager/details.py:1701 ../src/vmm-details.glade.h:47
+#: ../src/virtManager/details.py:1892 ../src/vmm-details.glade.h:52
 msgid "Input"
 msgstr "ନିବେଶ"
 
-#: ../src/virtManager/details.py:1712
-msgid "Display"
+#: ../src/virtManager/details.py:1900
+#, fuzzy, python-format
+msgid "Display %s"
 msgstr "ପ୍ରଦର୍ଶନ"
 
-#: ../src/virtManager/details.py:1722
+#: ../src/virtManager/details.py:1907
 #, python-format
 msgid "Sound: %s"
 msgstr "ଧ୍ୱନୀ: %s"
 
-#: ../src/virtManager/details.py:1816
+#: ../src/virtManager/details.py:2004
 msgid "No Boot Device"
 msgstr "କୌଣସି ବୁଟ ଉପକରଣ ନାହିଁ"
 
-#: ../src/virtManager/details.py:1840
+#: ../src/virtManager/details.py:2024
 #, python-format
 msgid "Error Removing CDROM: %s"
 msgstr "CDROM କାଢ଼ିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/details.py:1857
+#: ../src/virtManager/details.py:2041
 #, python-format
 msgid "Error Connecting CDROM: %s"
 msgstr "CDROM ସଂଯୋଗ କରିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/details.py:1874
+#: ../src/virtManager/details.py:2058
 msgid "Are you sure you want to remove this device?"
 msgstr "ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ଏହି ଉପକରଣକୁ କାଢ଼ିବା ପାଇଁ ଚାହୁଁଛନ୍ତି?"
 
-#: ../src/virtManager/details.py:1876
+#: ../src/virtManager/details.py:2060
 msgid ""
 "This device could not be removed from the running machine. Would you like to "
 "remove the device after the next VM shutdown? \n"
@@ -1220,79 +1549,79 @@ msgstr ""
 "ଚେତାବନୀ: ଏହା ପରବର୍ତ୍ତି ଯେକୈଣସି ପରିବର୍ତ୍ତନକୁ ନବଲିଖନ କରିବ ଯାହାକି ଗୋଟିଏ VM ପୁନଃଚାଳନ ଆବଶ୍ୟକ "
 "କରେ."
 
-#: ../src/virtManager/details.py:1888
+#: ../src/virtManager/details.py:2072
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "ଉପକରଣ କାଢ଼ିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/domain.py:605
+#: ../src/virtManager/domain.py:705
 msgid "Running"
 msgstr "ଚାଲୁଅଛି"
 
-#: ../src/virtManager/domain.py:607
+#: ../src/virtManager/domain.py:707
 msgid "Paused"
 msgstr "କିଛି ସମୟ ପାଇଁ ବନ୍ଦ କରାଯାଇଛି"
 
-#: ../src/virtManager/domain.py:609
+#: ../src/virtManager/domain.py:709
 msgid "Shuting Down"
 msgstr "ବନ୍ଦ କରୁଅଛି"
 
-#: ../src/virtManager/domain.py:611
+#: ../src/virtManager/domain.py:711
 msgid "Shutoff"
 msgstr "ବନ୍ଦ କରନ୍ତୁ"
 
-#: ../src/virtManager/domain.py:613
+#: ../src/virtManager/domain.py:713
 msgid "Crashed"
 msgstr "ହଠାତ ଅଚଳ ହୋଇଗଲା"
 
-#: ../src/virtManager/domain.py:615
+#: ../src/virtManager/domain.py:715
 msgid "Unknown status code"
 msgstr "ଅଜଣା ଅବସ୍ଥିତି ସଙ୍କେତ"
 
-#: ../src/virtManager/domain.py:1000
-#, python-format
-msgid "Error parsing domain xml: %s"
-msgstr "ପରିସର xmlକୁ ବିଶ୍ଳେଷଣ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
-
-#: ../src/virtManager/domain.py:1115
+#: ../src/virtManager/domain.py:1233
 #, python-format
 msgid "Unknown device type '%s'"
 msgstr "ଅଜଣା ଉପକରଣ ପ୍ରକାର '%s'"
 
-#: ../src/virtManager/domain.py:1141
+#: ../src/virtManager/domain.py:1256
 #, python-format
 msgid "Didn't find the specified device to remove. Device was: %s %s"
 msgstr "କଢ଼ାଯିବା ପାଇଁ ଉଲ୍ଲେଖ କରାଯାଇଥିବା ଉପକରଣକୁ ପାଇଲା ନାହିଁ। ଉପକରଣଟି ହେଉଛି: %s %s"
 
-#: ../src/virtManager/engine.py:285
+#: ../src/virtManager/engine.py:334
 #, python-format
 msgid "Error bringing up domain details: %s"
 msgstr "ପରିସର ବିବରଣୀକୁ ଉଠାଇବା ସମୟରେ ତ୍ରୁଟି: %s"
 
+#: ../src/virtManager/engine.py:440
+#, python-format
+msgid "Unknown connection URI %s"
+msgstr ""
+
 #. FIXME: This should work with remote storage stuff
-#: ../src/virtManager/engine.py:393
+#: ../src/virtManager/engine.py:448
 msgid "Saving virtual machines over remote connections is not yet supported."
 msgstr "ଦୂର ସଂଯୋଗ ଉପରେ ଆଭାସୀ ଯନ୍ତ୍ରକୁ ସଂରକ୍ଷଣ କରିବା ଏପର୍ଯ୍ୟନ୍ତ ସମର୍ଥିତ ନୁହଁ."
 
-#: ../src/virtManager/engine.py:408
+#: ../src/virtManager/engine.py:463
 msgid "Save Virtual Machine"
 msgstr "ଆଭାସୀ ମେସିନକୁ ସଂରକ୍ଷଣ କରନ୍ତୁ"
 
-#: ../src/virtManager/engine.py:416
+#: ../src/virtManager/engine.py:472
 msgid "Saving Virtual Machine"
 msgstr "ଆଭାସୀ ମେସିନକୁ ସଂରକ୍ଷଣ କରନ୍ତୁ"
 
-#: ../src/virtManager/engine.py:421
+#: ../src/virtManager/engine.py:477
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "ପରିସର ସଂରକ୍ଷଣ କରିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:437
+#: ../src/virtManager/engine.py:496
 #, python-format
 msgid "About to poweroff virtual machine %s"
 msgstr "ଆଭାସୀ ମେସିନ %s କୁ ବନ୍ଦକରିବାକୁ ଯାଉଛି"
 
-#: ../src/virtManager/engine.py:437
+#: ../src/virtManager/engine.py:498
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss. Are you sure?"
@@ -1300,68 +1629,73 @@ msgstr ""
 "ଏହା OS କୁ ବନ୍ଦ ନକରି ତୁରନ୍ତ VM କୁ ବିଦ୍ୟୁତ ପ୍ରବାହ ବନ୍ଦ କରିଦେବ ଏବଂ ତଥ୍ୟ ନଷ୍ଟ କରିପାରେ. ଆପଣ ନିଶ୍ଚିତ "
 "କି?"
 
-#: ../src/virtManager/engine.py:443 ../src/virtManager/engine.py:506
-#: ../src/virtManager/engine.py:522
+#: ../src/virtManager/engine.py:508 ../src/virtManager/engine.py:588
+#: ../src/virtManager/engine.py:607
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "ପରିସର ବନ୍ଦକରିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:460
+#: ../src/virtManager/engine.py:530
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "ପରିସରକୁ ବିରତି ଦେବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:476
+#: ../src/virtManager/engine.py:553
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "ପରିସରକୁ ବିରତି ମୁକ୍ତ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:492
+#: ../src/virtManager/engine.py:569
 #, python-format
 msgid "Error starting domain: %s"
 msgstr "ପରିସର ଆରମ୍ଭ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:542
+#: ../src/virtManager/engine.py:615
 #, python-format
 msgid "Are you sure you want to migrate %s from %s to %s?"
 msgstr "ଆପଣ %sକୁ %s ରୁ %sକୁ ସ୍ଥାନାନ୍ତରଣ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି?"
 
-#: ../src/virtManager/engine.py:550
+#: ../src/virtManager/engine.py:623
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "VM '%s' କୁ ସ୍ଥାନାନ୍ତରିତ କରୁଅଛି"
 
-#: ../src/virtManager/engine.py:551
+#: ../src/virtManager/engine.py:624
 #, python-format
 msgid "Migrating VM '%s' from %s to %s. This may take awhile."
 msgstr "VM '%s' କୁ %s ରୁ %sକୁ ସ୍ଥାନାନ୍ତରିତ କରୁଅଛି। ଏହା ପାଇଁ କିଛି ସମୟ ଲାଗିପାରେ।"
 
-#: ../src/virtManager/engine.py:608
+#: ../src/virtManager/engine.py:681
 msgid "No connections available."
 msgstr "କୌଣସି ସଂଯୋଗ ଉପଲବ୍ଧ ନାହିଁ।"
 
-#: ../src/virtManager/engine.py:633
+#: ../src/virtManager/engine.py:708
 msgid "Connection hypervisors do not match."
 msgstr "ସଂଯୋଗ ହାଇପରଭାଇଜର ମେଳଖାଉନାହିଁ।"
 
-#: ../src/virtManager/engine.py:635
+#: ../src/virtManager/engine.py:710
 msgid "Connection is disconnected."
 msgstr "ସଂଯୋଗ ବିଚ୍ଛିନ୍ନ ହୋଇଛି।"
 
-#: ../src/virtManager/engine.py:637
+#: ../src/virtManager/engine.py:712
 msgid "Cannot migrate to same connection."
 msgstr "ସମାନ ସଂଯୋଗରେ ସ୍ଥାନାନ୍ତରଣ ହୋଇପାରିବ ନାହିଁ।"
+
+#: ../src/virtManager/engine.py:742
+#, fuzzy, python-format
+msgid "Error setting clone parameters: %s"
+msgstr "ସ୍ଥାପନା ପ୍ରାଚଳଗୁଡ଼ିକୁ ବିନ୍ୟାସ କରିବା ସମୟରେ ତ୍ରୁଟି।"
 
 #: ../src/virtManager/error.py:28
 msgid "Error"
 msgstr "ତ୍ରୁଟି"
 
 #. Expander section with details.
-#: ../src/virtManager/error.py:46 ../src/vmm-details.glade.h:33
+#: ../src/virtManager/error.py:46 ../src/vmm-details.glade.h:35
 msgid "Details"
 msgstr "ବିସ୍ତୃତ ବିବରଣୀ"
 
-#: ../src/virtManager/error.py:96
+#: ../src/virtManager/error.py:106
 msgid "Input Error"
 msgstr "ନିବେଶ ତ୍ରୁଟି"
 
@@ -1369,115 +1703,137 @@ msgstr "ନିବେଶ ତ୍ରୁଟି"
 msgid "Copy Volume Path"
 msgstr "ଭଲ୍ୟୁମ ପଥକୁ ନକଲ କରନ୍ତୁ"
 
-#: ../src/virtManager/host.py:205
+#: ../src/virtManager/host.py:207
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s %(maxmem)sର"
 
-#: ../src/virtManager/host.py:229
+#: ../src/virtManager/host.py:231
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ଏହି ନେଟୱର୍କ %sକୁ ସବୁଦିନ ପାଇଁ ଅପସାରଣ କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି?"
 
-#: ../src/virtManager/host.py:236
+#: ../src/virtManager/host.py:238
 #, python-format
 msgid "Error deleting network: %s"
 msgstr "ନେଟୱର୍କକୁ ଅପସାରଣ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/host.py:247
+#: ../src/virtManager/host.py:249
 #, python-format
 msgid "Error starting network: %s"
 msgstr "ନେଟୱର୍କକୁ ଆରମ୍ଭ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/host.py:258
+#: ../src/virtManager/host.py:260
 #, python-format
 msgid "Error stopping network: %s"
 msgstr "ନେଟୱର୍କକୁ ବନ୍ଦ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/host.py:267
+#: ../src/virtManager/host.py:269
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "ନେଟୱର୍କ ୱିଜର୍ଡ ଆରମ୍ଭ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/host.py:278
+#: ../src/virtManager/host.py:280
 #, python-format
 msgid "Error setting net autostart: %s"
 msgstr "net ସ୍ୱୟଂଚାଳନକୁ ବିନ୍ୟାସ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/host.py:286 ../src/virtManager/host.py:337
-#: ../src/virtManager/host.py:521 ../src/virtManager/host.py:546
+#: ../src/virtManager/host.py:288 ../src/virtManager/host.py:339
+#: ../src/virtManager/host.py:524 ../src/virtManager/host.py:549
 msgid "On Boot"
 msgstr "ବୁଟରେ ଅଛି"
 
-#: ../src/virtManager/host.py:287 ../src/virtManager/host.py:339
-#: ../src/virtManager/host.py:371 ../src/virtManager/host.py:522
-#: ../src/virtManager/host.py:546 ../src/virtManager/host.py:579
-#: ../src/vmm-details.glade.h:64
+#: ../src/virtManager/host.py:289 ../src/virtManager/host.py:341
+#: ../src/virtManager/host.py:373 ../src/virtManager/host.py:525
+#: ../src/virtManager/host.py:549 ../src/virtManager/host.py:582
+#: ../src/vmm-details.glade.h:71
 msgid "Never"
 msgstr "କେବେ ନୁହେଁ"
 
-#: ../src/virtManager/host.py:407 ../src/virtManager/host.py:417
+#: ../src/virtManager/host.py:410 ../src/virtManager/host.py:420
 #, python-format
 msgid "Error starting pool '%s': %s"
 msgstr "ପୁଲ '%s' କୁ ଆରମ୍ଭ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/host.py:426
+#: ../src/virtManager/host.py:429
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ଏହି ପୁଲ %sକୁ ସବୁଦିନ ପାଇଁ ଅପସାରଣ କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି?"
 
-#: ../src/virtManager/host.py:433
+#: ../src/virtManager/host.py:436
 #, python-format
 msgid "Error deleting pool: %s"
 msgstr "ପୁଲକୁ ଅପସାରଣ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/host.py:441
+#: ../src/virtManager/host.py:444
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ଏହି ଭଲ୍ୟୁମ %sକୁ ସବୁଦିନ ପାଇଁ ଅପସାରଣ କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି?"
 
-#: ../src/virtManager/host.py:450
+#: ../src/virtManager/host.py:453
 #, python-format
 msgid "Error deleting volume: %s"
 msgstr "ଭଲ୍ୟୁମକୁ ଅପସାରଣ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/host.py:461
+#: ../src/virtManager/host.py:464
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "ପୁଲ ୱିଜର୍ଡ ଆରମ୍ଭ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/host.py:476
+#: ../src/virtManager/host.py:479 ../src/virtManager/storagebrowse.py:237
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "ଭଲ୍ୟୁମ ୱିଜର୍ଡ ଆରମ୍ଭ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/host.py:513
+#: ../src/virtManager/host.py:516
 #, python-format
 msgid "Error setting pool autostart: %s"
 msgstr "ପୁଲ ସ୍ୱୟଂଚାଳନ ବିନ୍ୟାସ କରିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/manager.py:180 ../src/vmm-details.glade.h:113
+#. Shutdown menu
+#: ../src/virtManager/manager.py:86 ../src/virtManager/manager.py:250
+#: ../src/virtManager/systray.py:136
+#, fuzzy
+msgid "_Reboot"
+msgstr "ପୁନର୍ଚାଳନ"
+
+#: ../src/virtManager/manager.py:92 ../src/virtManager/manager.py:245
+#: ../src/virtManager/manager.py:256 ../src/virtManager/systray.py:143
+#: ../src/virtManager/systray.py:161
+#, fuzzy
+msgid "_Shut Down"
+msgstr "ବନ୍ଦ କରନ୍ତୁ"
+
+#: ../src/virtManager/manager.py:98 ../src/virtManager/manager.py:262
+#: ../src/virtManager/systray.py:150
+#, fuzzy
+msgid "_Force Off"
+msgstr "ବାଧ୍ଯକରି ଶକ୍ତି ପ୍ରବାହ ବନ୍ଦକରନ୍ତୁ"
+
+#: ../src/virtManager/manager.py:225 ../src/virtManager/systray.py:129
+#: ../src/vmm-details.glade.h:124 ../src/vmm-manager.glade.h:19
 msgid "_Run"
 msgstr "ଚଳାନ୍ତୁ (_R)"
 
-#: ../src/virtManager/manager.py:186 ../src/vmm-details.glade.h:112
+#: ../src/virtManager/manager.py:231 ../src/virtManager/systray.py:116
+#: ../src/vmm-details.glade.h:123 ../src/vmm-manager.glade.h:18
 msgid "_Pause"
 msgstr "କିଛି ସମୟ ବନ୍ଦ କରନ୍ତୁ (_P)"
 
-#: ../src/virtManager/manager.py:193
+#: ../src/virtManager/manager.py:238 ../src/virtManager/systray.py:122
 msgid "_Resume"
 msgstr ""
 
-#: ../src/virtManager/manager.py:227 ../src/vmm-details.glade.h:111
+#: ../src/virtManager/manager.py:272 ../src/vmm-details.glade.h:122
 msgid "_Migrate"
 msgstr "ସ୍ଥାନାନ୍ତରଣ କରନ୍ତୁ (_M)"
 
-#: ../src/virtManager/manager.py:271
+#: ../src/virtManager/manager.py:321
 #, fuzzy
 msgid "_Details"
 msgstr "ବିସ୍ତୃତ ବିବରଣୀ"
 
-#: ../src/virtManager/manager.py:335
+#: ../src/virtManager/manager.py:381
 msgid ""
 "Could not populate a default connection. Make sure the appropriate "
 "virtualization packages are installed (kvm, qemu, etc.) and that libvirtd "
@@ -1493,81 +1849,71 @@ msgstr ""
 "ଗୋଟିଏ ହାଇପରଭାଇଜର ସଂଯୋଗକୁ ହସ୍ତକୃତ ଭାବରେ ଫାଇଲ->ସଂଯୋଗ କରନ୍ତୁ \n"
 "ମାଧ୍ଯମରେ ଯୋଗ କରାଯାଇପାରିବ"
 
-#: ../src/virtManager/manager.py:354
+#: ../src/virtManager/manager.py:400
 msgid "Error determining default hypervisor."
 msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ହାଇପରଭାଇଜର ନିର୍ଦ୍ଧାରଣ କରିବାରେ ତ୍ରୁଟି।"
 
-#: ../src/virtManager/manager.py:355
+#: ../src/virtManager/manager.py:401
 msgid "Startup Error"
 msgstr "ଆରମ୍ଭ ତ୍ରୁଟି"
 
-#: ../src/virtManager/manager.py:394
+#: ../src/virtManager/manager.py:428
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr "ଆଭାସୀ ଯନ୍ତ୍ରକୁ ଦୂରବର୍ତ୍ତୀ ସଂଯୋଗଗୁଡ଼ିକ ଉପରେ ପୁନଃସ୍ଥାପନ କରିବା ଏପର୍ଯ୍ୟନ୍ତ ସମର୍ଥିତ ନୁହଁ"
 
-#: ../src/virtManager/manager.py:399
+#: ../src/virtManager/manager.py:433
 msgid "Restore Virtual Machine"
 msgstr "ଆଭାସୀ ମେସିନକୁ ପୁନଃସ୍ଥାପନ କରନ୍ତୁ"
 
-#: ../src/virtManager/manager.py:406
+#: ../src/virtManager/manager.py:441
 #, python-format
 msgid "The file '%s' does not appear to be a valid saved machine image"
 msgstr "'%s' ଫାଇଲ ଗୋଟିଏ ବୈଧ ସଂରକ୍ଷିତ ମେସିନ ପ୍ରତିଛବି ହୋଇଥିବା ପରି ଜଣାପଡୁ ନାହିଁ"
 
-#: ../src/virtManager/manager.py:411
+#: ../src/virtManager/manager.py:446
 msgid "Restoring Virtual Machine"
 msgstr "ଆଭାସୀ ମେସିନକୁ ପୁନଃସ୍ଥାପନ କରୁଅଛି"
 
-#: ../src/virtManager/manager.py:417
+#: ../src/virtManager/manager.py:452
 msgid "Error restoring domain"
 msgstr "ପରିସର ପୁନଃସ୍ଥାପନ କରିବା ସମୟରେ ତ୍ରୁଟି"
 
-#: ../src/virtManager/manager.py:425
+#: ../src/virtManager/manager.py:460
 #, python-format
 msgid "Error restoring domain '%s': %s"
 msgstr "ପରିସର '%s'କୁ ପୁନଃସ୍ଥାପନ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/manager.py:824
-#, python-format
-msgid "This will remove the connection \"%s\",are you sure?"
+#: ../src/virtManager/manager.py:785
+#, fuzzy, python-format
+msgid ""
+"This will remove the connection:\n"
+"\n"
+"%s\n"
+"\n"
+"Are you sure?"
 msgstr "ଏହା ସଂଯୋଗ \"%s\"କୁ କାଢ଼ିଦେଇପାରେ,ଆପଣ ନିଶ୍ଚିତ କି?"
 
-#: ../src/virtManager/manager.py:864
-msgid "ID"
-msgstr "ପରିଚୟ"
-
-#: ../src/virtManager/manager.py:865 ../src/vmm-manager.glade.h:15
-msgid "Status"
-msgstr "ଅବସ୍ଥିତି"
-
-#: ../src/virtManager/manager.py:866
+#: ../src/virtManager/manager.py:831
 msgid "CPU usage"
 msgstr "CPU ବ୍ଯବହାର ବିଧି"
 
-#: ../src/virtManager/manager.py:867 ../src/vmm-manager.glade.h:6
-msgid "CPUs"
-msgstr "CPUs"
-
-#: ../src/virtManager/manager.py:868
-msgid "Memory usage"
-msgstr "ସ୍ମୃତି ବ୍ଯବହାର ବିଧି"
-
-#. FIXME: add KBytes/s tooltip
-#: ../src/virtManager/manager.py:870 ../src/vmm-manager.glade.h:8
-#: ../src/vmm-preferences.glade.h:7
-msgid "Disk I/O"
-msgstr "ଡିସ୍କ I/O"
-
-#: ../src/virtManager/manager.py:871 ../src/vmm-manager.glade.h:12
-#: ../src/vmm-preferences.glade.h:14
-msgid "Network I/O"
-msgstr "ନେଟୱାର୍କ I/O"
-
-#: ../src/virtManager/manager.py:1031
+#: ../src/virtManager/manager.py:908
 msgid "Disabled in preferences dialog."
 msgstr "ମନପସନ୍ଧ ସଂଳାପରେ ନିଷ୍କ୍ରିୟ କରନ୍ତୁ।"
 
-#: ../src/virtManager/manager.py:1166
+#: ../src/virtManager/manager.py:927 ../src/vmm-preferences.glade.h:15
+msgid "Network I/O"
+msgstr "ନେଟୱାର୍କ I/O"
+
+#: ../src/virtManager/manager.py:932 ../src/vmm-preferences.glade.h:7
+msgid "Disk I/O"
+msgstr "ଡିସ୍କ I/O"
+
+#: ../src/virtManager/manager.py:937
+msgid "CPU Usage"
+msgstr "CPU ବ୍ଯବହାର ବିଧି"
+
+#: ../src/virtManager/manager.py:1078
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
@@ -1575,11 +1921,11 @@ msgstr ""
 "ଜେନ hypervisor/daemon ପାଇଁ ଗୋଟିଏ ସଂଯୋଗ ଖୋଲିବାରେ ଅସମର୍ଥ।\n"
 "\n"
 
-#: ../src/virtManager/manager.py:1171 ../src/virtManager/manager.py:1179
+#: ../src/virtManager/manager.py:1083 ../src/virtManager/manager.py:1091
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "ଆଭାସୀ ମେସିନ ପରିଚାଳକ ସଂଯୋଗ ବିଫଳ"
 
-#: ../src/virtManager/manager.py:1173
+#: ../src/virtManager/manager.py:1085
 msgid ""
 "Unable to open a connection to the libvirt management daemon.\n"
 "\n"
@@ -1587,17 +1933,51 @@ msgstr ""
 "libvirt ପରିଚାଳନ ଡେମନ ପାଇଁ ଗୋଟିଏ ସଂଯୋଗ ଖୋଲିବାରେ ଅସମର୍ଥ।\n"
 "\n"
 
-#: ../src/virtManager/opticalhelper.py:140
+#: ../src/virtManager/opticalhelper.py:105
 msgid "No media present"
 msgstr "କୌଣସି ମେଡିଆ ଉପସ୍ଥିତ ନାହିଁ"
 
-#: ../src/virtManager/util.py:57
+#. Arguments to pass to util.browse_local for local storage
+#: ../src/virtManager/storagebrowse.py:67
+msgid "Choose local storage"
+msgstr ""
+
+#: ../src/virtManager/storagebrowse.py:109
+#, fuzzy
+msgid "Size"
+msgstr "ଆକାର:"
+
+#: ../src/virtManager/storagebrowse.py:116 ../src/vmm-create-pool.glade.h:6
+msgid "Format"
+msgstr "ଶୈଳୀ"
+
+#: ../src/virtManager/storagebrowse.py:123
+msgid "Used By"
+msgstr ""
+
+#: ../src/virtManager/storagebrowse.py:163
+#, fuzzy
+msgid "Cannot use local storage on remote connection."
+msgstr "ସମାନ ସଂଯୋଗରେ ସ୍ଥାନାନ୍ତରଣ ହୋଇପାରିବ ନାହିଁ।"
+
+#: ../src/virtManager/systray.py:275
+#, fuzzy
+msgid "No virtual machines"
+msgstr "ସ୍ଥାନୀୟ ଆଭାସୀ ଯନ୍ତ୍ରଗୁଡ଼ିକୁ"
+
+#: ../src/virtManager/systray.py:324
+#, fuzzy
+msgid "No VMs available"
+msgstr "କୌଣସି ଉପକରଣ ଉପଲବ୍ଧ ନାହିଁ"
+
+#: ../src/virtManager/util.py:59
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଭଣ୍ଡାର ପୁଲ '%s' କୁ ନିର୍ମାଣ କରିପାରିବେ ନାହିଁ: %s"
 
 #: ../src/vmm-about.glade.h:1
-msgid "Copyright (C) 2006 Red Hat Inc."
+#, fuzzy
+msgid "Copyright (C) 2006-2009 Red Hat Inc."
 msgstr "Copyright (C) 2006 Red Hat Inc."
 
 #: ../src/vmm-about.glade.h:2
@@ -1610,54 +1990,49 @@ msgid "translator-credits"
 msgstr "ଶୁଭ୍ରାଂଶୁ ବେହେରା <sbehera@redhat.com>"
 
 #: ../src/vmm-add-hardware.glade.h:1
-msgid "<b>Graphics</b>"
-msgstr "<b>ଆଲେଖୀ</b>"
+#, fuzzy
+msgid "<b>Character Device</b>"
+msgstr "<b>ବୁଟ ଉପକରଣ</b>"
 
 #: ../src/vmm-add-hardware.glade.h:2
-msgid "<b>Network</b>"
-msgstr "<b>ନେଟୱାର୍କ</b>"
+#, fuzzy
+msgid "<b>Device Parameters</b>"
+msgstr "<b>ବୁଟ ଉପକରଣ</b>"
 
 #: ../src/vmm-add-hardware.glade.h:3
 msgid "<b>Physical Host Device</b>"
 msgstr "<b>ଭୌତିକ ଆଧାର ଉପକରଣ</b>"
 
-#: ../src/vmm-add-hardware.glade.h:4
-msgid "<b>Pointer</b>"
-msgstr "<b>ସୂଚକ</b>"
-
-#: ../src/vmm-add-hardware.glade.h:5 ../src/vmm-details.glade.h:10
+#: ../src/vmm-add-hardware.glade.h:4 ../src/vmm-details.glade.h:11
 msgid "<b>Sound Device</b>"
 msgstr "<b>ଧ୍ୱନୀ ଉପକରଣ</b>"
 
-#: ../src/vmm-add-hardware.glade.h:6
-msgid "<b>Sound</b>"
-msgstr "<b>ଧ୍ୱନୀ</b>"
-
-#: ../src/vmm-add-hardware.glade.h:7
+#: ../src/vmm-add-hardware.glade.h:5
 msgid "<b>Source:</b>"
 msgstr "<b>ଉତ୍ସ:</b>"
 
-#: ../src/vmm-add-hardware.glade.h:8
-msgid "<b>Storage</b>"
-msgstr "<b>ଭଣ୍ଡାର</b>"
-
-#: ../src/vmm-add-hardware.glade.h:9
+#: ../src/vmm-add-hardware.glade.h:6
 msgid "<b>Target:</b>"
 msgstr "<b>ଲକ୍ଷ୍ୟ:</b>"
 
-#: ../src/vmm-add-hardware.glade.h:10
+#: ../src/vmm-add-hardware.glade.h:7
+#, fuzzy
+msgid "<b>Video Device</b>"
+msgstr "<b>ବୁଟ ଉପକରଣ</b>"
+
+#: ../src/vmm-add-hardware.glade.h:8
 msgid "<b>Virtual display</b>"
 msgstr "<b>ଆଭାସୀ ପ୍ରଦର୍ଶନ</b>"
 
-#: ../src/vmm-add-hardware.glade.h:11
+#: ../src/vmm-add-hardware.glade.h:9
 msgid "<b>Virtual pointer</b>"
 msgstr "<b>ଆଭାସୀ ସୂଚକ</b>"
 
-#: ../src/vmm-add-hardware.glade.h:12
+#: ../src/vmm-add-hardware.glade.h:10
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
 msgstr "<small><b>ଉଦାହରଣ:</b> /dev/hdc2</small>"
 
-#: ../src/vmm-add-hardware.glade.h:13
+#: ../src/vmm-add-hardware.glade.h:11
 msgid ""
 "<small><b>Tip:</b> Automatically allocating the port ensures that every "
 "virtual machine uses a unique port. If two machines try to use the same "
@@ -1667,7 +2042,7 @@ msgstr ""
 "ଯନ୍ତ୍ର ଭିନ୍ନ ପ୍ରକାର ସଂଯୋଗିକୀ ବ୍ୟବହାର କରିଥାଏ. ଯଦି ଦୁଇଟି ଯନ୍ତ୍ର ସମାନ ସଂଯୋଗିକୀ ବ୍ୟବହାର କରିବାକୁ "
 "ଚେଷ୍ଟା କରନ୍ତି ତେବେ ସେମାନଙ୍କ ମଧ୍ଯରୁ ଗୋଟିଏ ଆରମ୍ଭ କରିବାରେ ବିଫଳ ହେବ.</small>"
 
-#: ../src/vmm-add-hardware.glade.h:14
+#: ../src/vmm-add-hardware.glade.h:12
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is disconnected, "
 "connected via wireless, or dynamically configured with NetworkManager.</"
@@ -1677,7 +2052,7 @@ msgstr ""
 "ହୋଇଥିଲେ, କିମ୍ବା ନେଟୱାର୍କ ପରିଚାଳକ ଦ୍ବାରା ଗତିଶୀଳ ଭାବରେ ବିନ୍ଯାସ କରାଯାଇଥିଲେ ଏହି ବିକଳ୍ପକୁ ଚୟନ "
 "କରନ୍ତୁ।</small>"
 
-#: ../src/vmm-add-hardware.glade.h:15
+#: ../src/vmm-add-hardware.glade.h:13
 msgid ""
 "<small><b>Tip:</b> Choose this option if your host is statically connected "
 "to wired ethernet, to gain the ability to migrate the virtual machine.</"
@@ -1687,7 +2062,7 @@ msgstr ""
 "ସଂଯୋଗ କରାଯାଇଥିଲେ, ଆଭାସୀ ତନ୍ତ୍ରକୁ ଉତ୍ପ୍ରବାସନ କରିବାର କ୍ଷମତା ହାସଲ କରିବା ପାଇଁ ଏହି ବିକଳ୍ପକୁ ଚୟନ "
 "କରନ୍ତୁ। </small>"
 
-#: ../src/vmm-add-hardware.glade.h:16
+#: ../src/vmm-add-hardware.glade.h:14
 msgid ""
 "<small><b>Tip:</b> VNC server is strongly recommended because it allows the "
 "virtual display to be embedded inside this application. It may also be used "
@@ -1697,7 +2072,7 @@ msgstr ""
 "ସଂଯୋଗ କରାଯାଇଥିଲେ, ଆଭାସୀ ତନ୍ତ୍ରକୁ ଉତ୍ପ୍ରବାସନ କରିବାର କ୍ଷମତା ହାସଲ କରିବା ପାଇଁ ଏହି ବିକଳ୍ପକୁ ଚୟନ "
 "କରନ୍ତୁ। </small>"
 
-#: ../src/vmm-add-hardware.glade.h:17
+#: ../src/vmm-add-hardware.glade.h:15
 msgid ""
 "<small><b>Tip:</b>Adding a graphics tablet (and configuring it as the "
 "default pointer in the virtual machine) will ensure the virtual cursor moves "
@@ -1707,7 +2082,7 @@ msgstr ""
 "ସୂଚକ ଭାବରେ ବିନ୍ୟାସ କରିବା ନିଶ୍ଚିତ କରେ ଯେ ଆଭାସୀ ସୂଚକ ସ୍ଥାନୀୟ ଡେସ୍କଟପ ସହିତ ସମତାଳରେ ଗତି "
 "କରିଥାଏ .</small>"
 
-#: ../src/vmm-add-hardware.glade.h:18
+#: ../src/vmm-add-hardware.glade.h:16
 msgid ""
 "<small><b>Warning:</b>If you do not allocate the entire disk now, space will "
 "be allocated as needed while the virtual machine is running. If sufficient "
@@ -1718,7 +2093,7 @@ msgstr ""
 "ସମୟରେ ଆବଶ୍ଯକତା ଅନୁସାରେ ଖାଲିସ୍ଥାନ ବଣ୍ଟାଯିବ। ଆଧାରରେ ଯଥେଷ୍ଟ ଖାଲିସ୍ଥାନ ନ ଥିଲେ, ଏହା ଆଭାସୀ "
 "ଯନ୍ତ୍ରରେ ତଥ୍ଯ ହାନି ଘଟାଇପାରେ।</small>"
 
-#: ../src/vmm-add-hardware.glade.h:19
+#: ../src/vmm-add-hardware.glade.h:17
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding Virtual "
 "Hardware</span>"
@@ -1726,7 +2101,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ଗୋଟିଏ ଆଭାସୀ "
 "ହାର୍ଡୱେର ଯୋଗ କରୁଅଛି</span>"
 
-#: ../src/vmm-add-hardware.glade.h:20
+#: ../src/vmm-add-hardware.glade.h:18
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Finish Adding "
 "Virtual Hardware</span>"
@@ -1734,13 +2109,13 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ଗୋଟିଏ ଆଭାସୀ "
 "ହାର୍ଡୱେର ଯୋଗ କରି ସମାପ୍ତ କରନ୍ତୁ</span>"
 
-#: ../src/vmm-add-hardware.glade.h:21
+#: ../src/vmm-add-hardware.glade.h:19
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Graphics</span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ଆଲେଖୀ</span>"
 
-#: ../src/vmm-add-hardware.glade.h:22
+#: ../src/vmm-add-hardware.glade.h:20
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Host Device</"
 "span>"
@@ -1748,161 +2123,133 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ଆଧାର ଉପକରଣ</"
 "span>"
 
-#: ../src/vmm-add-hardware.glade.h:23
+#: ../src/vmm-add-hardware.glade.h:21
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Input</span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ନିବେଶ</span>"
 
-#: ../src/vmm-add-hardware.glade.h:24
+#: ../src/vmm-add-hardware.glade.h:22
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Network</span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ନେଟୱାର୍କ</span>"
 
-#: ../src/vmm-add-hardware.glade.h:25
+#: ../src/vmm-add-hardware.glade.h:23
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sound</span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ଧ୍ୱନି</span>"
 
-#: ../src/vmm-add-hardware.glade.h:26
+#: ../src/vmm-add-hardware.glade.h:24
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Storage</span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ଭଣ୍ଡାର ସ୍ଥାନ</"
 "span>"
 
-#: ../src/vmm-add-hardware.glade.h:27
-msgid "Absolute"
-msgstr "ପରମ"
+#: ../src/vmm-add-hardware.glade.h:25
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Video Device</"
+"span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ଆଧାର ଉପକରଣ</"
+"span>"
 
-#: ../src/vmm-add-hardware.glade.h:28
+#: ../src/vmm-add-hardware.glade.h:26
 msgid "Add new virtual hardware"
 msgstr "ଗୋଟିଏ ନୂତନ ଆଭାସୀ ହାର୍ଡୱେର ଯୋଗ କରନ୍ତୁ"
 
-#: ../src/vmm-add-hardware.glade.h:29 ../src/vmm-details.glade.h:21
-msgid "Address:"
-msgstr "ଠିକଣା:"
-
-#: ../src/vmm-add-hardware.glade.h:30
+#: ../src/vmm-add-hardware.glade.h:28
 msgid "Allocate entire virtual disk now"
 msgstr "ସମ୍ପୂର୍ଣ୍ଣ ଆଭାସୀ ଡିସ୍କକୁ ବର୍ତ୍ତମାନ ବାଣ୍ଚନ୍ତୁ"
 
-#: ../src/vmm-add-hardware.glade.h:32 ../src/vmm-create.glade.h:12
+#: ../src/vmm-add-hardware.glade.h:30
+msgid "Bind Host:"
+msgstr ""
+
+#: ../src/vmm-add-hardware.glade.h:31 ../src/vmm-clone.glade.h:13
+#: ../src/vmm-create.glade.h:12
 msgid "Browse..."
 msgstr "ଖୋଜନ୍ତୁ..."
 
-#: ../src/vmm-add-hardware.glade.h:33
-msgid "Connection type:"
-msgstr "ସଂଯୋଗ ପ୍ରକାର:"
-
-#: ../src/vmm-add-hardware.glade.h:34 ../src/vmm-details.glade.h:35
+#: ../src/vmm-add-hardware.glade.h:32 ../src/vmm-details.glade.h:37
 msgid "Device Model:"
 msgstr "ଉପକରଣ ପ୍ରତିରୂପ:"
 
-#: ../src/vmm-add-hardware.glade.h:35
+#: ../src/vmm-add-hardware.glade.h:33
 msgid "Device Type Field"
 msgstr "ଉପକରଣ ପ୍ରକାର କ୍ଷେତ୍ର"
 
-#: ../src/vmm-add-hardware.glade.h:36 ../src/vmm-details.glade.h:36
+#: ../src/vmm-add-hardware.glade.h:34 ../src/vmm-details.glade.h:38
 msgid "Device Type:"
 msgstr "ଉପକରଣ ପ୍ରକାର:"
 
 #: ../src/vmm-add-hardware.glade.h:37
-msgid "Device type:"
-msgstr "ଉପକରଣ ପ୍ରକାର:"
-
-#: ../src/vmm-add-hardware.glade.h:38 ../src/vmm-host.glade.h:19
-msgid "Device:"
-msgstr "ଉପକରଣ:"
-
-#: ../src/vmm-add-hardware.glade.h:39
-msgid "Disk image:"
-msgstr "ଡିସ୍କ ପ୍ରତିଛବି:"
-
-#: ../src/vmm-add-hardware.glade.h:40
-msgid "Disk size:"
-msgstr "ଡିସ୍କ ଆକାର:"
-
-#: ../src/vmm-add-hardware.glade.h:41
-msgid "EvTouch Tablet"
-msgstr "EvTouch ସାରଣୀ"
-
-#: ../src/vmm-add-hardware.glade.h:42
 msgid "F_ile (disk image):"
 msgstr "ଫାଇଲ (ଡିସ୍କ ପ୍ରତିଛବି) (_i):"
 
-#: ../src/vmm-add-hardware.glade.h:43
+#: ../src/vmm-add-hardware.glade.h:38
 msgid "File Location Field"
 msgstr "ଫାଇଲ ଅବସ୍ଥାନ କ୍ଷେତ୍ର"
 
-#: ../src/vmm-add-hardware.glade.h:44
+#: ../src/vmm-add-hardware.glade.h:39
 msgid "File Size Field"
 msgstr "ଫାଇଲ ଆକାର କ୍ଷେତ୍ର"
 
-#: ../src/vmm-add-hardware.glade.h:45
+#: ../src/vmm-add-hardware.glade.h:40
 msgid "Hardware Type Select"
 msgstr "ହାର୍ଡୱେର ପ୍ରକାର ଚୟନ"
 
-#: ../src/vmm-add-hardware.glade.h:46
+#: ../src/vmm-add-hardware.glade.h:41
 msgid "Hardware type:"
 msgstr "ହାର୍ଡୱେର ପ୍ରକାର:"
 
-#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-details.glade.h:48
-msgid "Keymap:"
-msgstr "କିମ୍ୟାପ:"
+#: ../src/vmm-add-hardware.glade.h:42
+#, fuzzy
+msgid "Host:"
+msgstr "ଆଧାର ନାମ:"
 
-#: ../src/vmm-add-hardware.glade.h:48
+#: ../src/vmm-add-hardware.glade.h:44
 msgid "Listen on all public network interfaces "
 msgstr "ସମସ୍ତ ସର୍ବସାଧାରଣ ନେଟୱର୍କ ଅନ୍ତରାପୃଷ୍ଠରେ ଧ୍ୟାନ ଦିଅନ୍ତୁ"
 
-#: ../src/vmm-add-hardware.glade.h:49
+#: ../src/vmm-add-hardware.glade.h:45
 msgid "Loc_ation:"
 msgstr "ଅବସ୍ଥାନ (_a):"
 
-#: ../src/vmm-add-hardware.glade.h:50 ../src/vmm-details.glade.h:50
+#: ../src/vmm-add-hardware.glade.h:46 ../src/vmm-details.glade.h:56
 msgid "MAC Address Field"
 msgstr "MAC ଠିକଣା କ୍ଷେତ୍ର"
 
-#: ../src/vmm-add-hardware.glade.h:51 ../src/vmm-details.glade.h:51
-msgid "MAC address:"
-msgstr "MAC ଠିକଣା:"
-
-#: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create-vol.glade.h:22
-#: ../src/vmm-create.glade.h:29 ../src/vmm-details.glade.h:52
+#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create-vol.glade.h:22
+#: ../src/vmm-create.glade.h:29 ../src/vmm-details.glade.h:58
 msgid "MB"
 msgstr "ମେଗା-ବାଇଟ"
 
-#: ../src/vmm-add-hardware.glade.h:53 ../src/vmm-details.glade.h:59
-msgid "Mode:"
-msgstr "ଅବସ୍ଥା:"
-
-#: ../src/vmm-add-hardware.glade.h:54
-msgid "Model:"
-msgstr "ମୋଡେଲ:"
-
-#: ../src/vmm-add-hardware.glade.h:55
+#: ../src/vmm-add-hardware.glade.h:50
 msgid "Network Device Select"
 msgstr "ନେଟୱର୍କ ଉପକରଣ ଚୟନ"
 
-#: ../src/vmm-add-hardware.glade.h:57
+#: ../src/vmm-add-hardware.glade.h:51
 msgid "Other:"
 msgstr "ଅନ୍ଯାନ୍ଯ:"
 
-#: ../src/vmm-add-hardware.glade.h:58
+#: ../src/vmm-add-hardware.glade.h:52
 msgid "Partition Location Field"
 msgstr "ବିଭାଜନ ଅବସ୍ଥାନ କ୍ଷେତ୍ର"
 
-#: ../src/vmm-add-hardware.glade.h:59 ../src/vmm-details.glade.h:67
-msgid "Password:"
-msgstr "ପ୍ରବେଶ ସଙ୍କେତ:"
+#: ../src/vmm-add-hardware.glade.h:54
+#, fuzzy
+msgid "Path:"
+msgstr "ସଂଯୋଗିକୀ:"
 
-#: ../src/vmm-add-hardware.glade.h:60
+#: ../src/vmm-add-hardware.glade.h:55
 msgid "Please indicate how you would like to view the virtual display."
 msgstr "ଆପଣ ଆପଣଙ୍କର ଆଭାସୀ ପ୍ରଦର୍ଶକକୁ କିପରି ଦର୍ଶାଇବେ ଦୟାକରି ତାହା ସୂଚିତ କରନ୍ତୁ।"
 
-#: ../src/vmm-add-hardware.glade.h:61
+#: ../src/vmm-add-hardware.glade.h:56
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual storage device."
@@ -1910,7 +2257,7 @@ msgstr ""
 "ଆପଣଙ୍କର ନୂତନ ଆଭାସୀ ଭଣ୍ଡାର ଉପକରଣ ପାଇଁ ଏହି ଭୌତିକ ଆଧାର ତନ୍ତ୍ରରେ ଆପଣ କିପରି ଖାଲିସ୍ଥାନ ବଣ୍ଟିବା "
 "ପାଇଁ ଚାହିଁବେ ଦୟାକରି ତାହା ଉଲ୍ଲେଖ କରନ୍ତୁ।"
 
-#: ../src/vmm-add-hardware.glade.h:62
+#: ../src/vmm-add-hardware.glade.h:57
 msgid ""
 "Please indicate how you'd like to connect your new virtual network device to "
 "the host network."
@@ -1918,13 +2265,13 @@ msgstr ""
 "ଆପଣ ଆପଣଙ୍କ ନୂତନ ଆଭାସୀ ନେଟୱାର୍କ ଉପକରଣକୁ ଆଧାର ନେଟୱାର୍କ ସହିତ କିପରି ସଂଯୋଗ କରିବେ ଦୟାକରି "
 "ତାହା ସୂଚିତ କରନ୍ତୁ।"
 
-#: ../src/vmm-add-hardware.glade.h:63
+#: ../src/vmm-add-hardware.glade.h:58
 msgid ""
 "Please indicate what kind of pointer device to connect to the virtual "
 "machine."
 msgstr "ଦୟାକରି ଏହା ସୂଚାନ୍ତୁ ଯେ ଆଭାସୀ ଯନ୍ତ୍ର ସହିତ କେଉଁ ପ୍ରକାର ସୂଚକ ଯନ୍ତ୍ର ସଂଯୋଗ କରିଥାଏ।"
 
-#: ../src/vmm-add-hardware.glade.h:64
+#: ../src/vmm-add-hardware.glade.h:59
 msgid ""
 "Please indicate what physical device\n"
 "to connect to the virtual machine."
@@ -1932,28 +2279,23 @@ msgstr ""
 "ଦୟାକରି ଏହା ସୂଚାନ୍ତୁ ଯେ ଆଭାସୀ ଯନ୍ତ୍ର ସହିତ କେଉଁ ପ୍ରକାର\n"
 "ଧ୍ୱନି ଯନ୍ତ୍ର ସଂଯୋଗ କରିଥାଏ।"
 
-#: ../src/vmm-add-hardware.glade.h:66
+#: ../src/vmm-add-hardware.glade.h:61
 msgid ""
 "Please indicate what sound device type to connect to the virtual machine."
 msgstr "ଦୟାକରି ଏହା ସୂଚାନ୍ତୁ ଯେ ଆଭାସୀ ଯନ୍ତ୍ର ସହିତ କେଉଁ ପ୍ରକାର ଧ୍ୱନି ଯନ୍ତ୍ର ସଂଯୋଗ କରିଥାଏ।"
 
-#: ../src/vmm-add-hardware.glade.h:67 ../src/vmm-details.glade.h:70
-msgid "Port:"
-msgstr "ସଂଯୋଗିକୀ:"
+#: ../src/vmm-add-hardware.glade.h:62
+#, fuzzy
+msgid ""
+"Please indicate what video device type\n"
+"to connect to the virtual machine."
+msgstr "ଦୟାକରି ଏହା ସୂଚାନ୍ତୁ ଯେ ଆଭାସୀ ଯନ୍ତ୍ର ସହିତ କେଉଁ ପ୍ରକାର ଧ୍ୱନି ଯନ୍ତ୍ର ସଂଯୋଗ କରିଥାଏ।"
 
-#: ../src/vmm-add-hardware.glade.h:69
+#: ../src/vmm-add-hardware.glade.h:66
 msgid "Set fixed MAC _address for this NIC?"
 msgstr "ଏହି NIC ପାଇଁ ସ୍ଥିର MAC ଠିକଣା ବିନ୍ୟାସ କରିବେ କି (_a)?"
 
-#: ../src/vmm-add-hardware.glade.h:70
-msgid "Shared Physical Device"
-msgstr "ସହଭାଗୀ ଭୌତିକ ଉପକରଣ"
-
-#: ../src/vmm-add-hardware.glade.h:71
-msgid "Target:"
-msgstr "ଲକ୍ଷ୍ଯ:"
-
-#: ../src/vmm-add-hardware.glade.h:72
+#: ../src/vmm-add-hardware.glade.h:67
 msgid ""
 "This assistant will guide you through adding a new piece of virtual "
 "hardware. First select what type of hardware you wish to add:"
@@ -1961,59 +2303,55 @@ msgstr ""
 "ଏହି ସହକାରୀ ଉପଯୋଗ ଆପଣଙ୍କୁ ଗୋଟିଏ ନୂତନ ଆଭାସୀ ହାର୍ଡୱେରକୁ ଯୋଗ କରିବା ବିଷୟରେ ମାର୍ଗ ନିର୍ଦ୍ଦେଶ "
 "କରିବ। ଆପଣ କେଉଁ ପ୍ରକାରର ହାର୍ଡୱେର ଯୋଗ କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି ପ୍ରଥମେ ତାହା ଚୟନ କରନ୍ତୁ:"
 
-#: ../src/vmm-add-hardware.glade.h:73 ../src/vmm-create-net.glade.h:50
-#: ../src/vmm-create-pool.glade.h:16 ../src/vmm-details.glade.h:99
-msgid "Type:"
-msgstr "ପ୍ରକାର:"
+#: ../src/vmm-add-hardware.glade.h:69
+#, fuzzy
+msgid "Use Telnet:"
+msgstr "ଆଧାର ନାମ:"
 
-#: ../src/vmm-add-hardware.glade.h:74 ../src/vmm-details.glade.h:103
-msgid "VNC"
-msgstr "VNC"
-
-#: ../src/vmm-add-hardware.glade.h:75
+#: ../src/vmm-add-hardware.glade.h:70
 msgid "Virtual Network Select"
 msgstr "ଆଭାସୀ ନେଟୱାର୍କ ଚୟନ"
 
-#: ../src/vmm-add-hardware.glade.h:76
+#: ../src/vmm-add-hardware.glade.h:71
 msgid "_Block device (partition):"
 msgstr "ବ୍ଲକ ଉପକରଣ (ବିଭାଜନ) (_B):"
 
-#: ../src/vmm-add-hardware.glade.h:77
+#: ../src/vmm-add-hardware.glade.h:72
 msgid "_Device:"
 msgstr "ଉପକରଣ (_D):"
 
-#: ../src/vmm-add-hardware.glade.h:78 ../src/vmm-create-net.glade.h:53
+#: ../src/vmm-add-hardware.glade.h:73 ../src/vmm-create-net.glade.h:53
 #: ../src/vmm-create.glade.h:49
 msgid "_Finish"
 msgstr "ସମାପ୍ତ କରନ୍ତୁ (_F)"
 
-#: ../src/vmm-add-hardware.glade.h:79
+#: ../src/vmm-add-hardware.glade.h:74
 msgid "_Location:"
 msgstr "ଅବସ୍ଥାନ (_L):"
 
-#: ../src/vmm-add-hardware.glade.h:80
+#: ../src/vmm-add-hardware.glade.h:75
 msgid "_MAC address:"
 msgstr "MAC ଠିକଣା(_M):"
 
-#: ../src/vmm-add-hardware.glade.h:81
+#: ../src/vmm-add-hardware.glade.h:76
 msgid "_Network:"
 msgstr "ନେଟୱାର୍କ (_N):"
 
-#: ../src/vmm-add-hardware.glade.h:82
+#: ../src/vmm-add-hardware.glade.h:77
 msgid "_Shared physical device"
 msgstr "ସହଭାଗୀ ଭୌତିକ ଉପକରଣ (_S)"
 
-#: ../src/vmm-add-hardware.glade.h:83
+#: ../src/vmm-add-hardware.glade.h:78
 msgid "_Size:"
 msgstr "ଆକାର (_S):"
 
-#: ../src/vmm-add-hardware.glade.h:84
+#: ../src/vmm-add-hardware.glade.h:79
 msgid "_Virtual network"
 msgstr "ଆଭାସୀ ନେଟୱାର୍କ (_M)"
 
-#: ../src/vmm-add-hardware.glade.h:85
-msgid "summary-host-device"
-msgstr "summary-host-device"
+#: ../src/vmm-add-hardware.glade.h:80 ../src/vmm-create-pool.glade.h:17
+msgid "label"
+msgstr "ନାମପଟି"
 
 #: ../src/vmm-choose-cd.glade.h:1
 msgid "<b>CD Source Device Or File</b>"
@@ -2032,16 +2370,136 @@ msgid "_Browse..."
 msgstr "ବ୍ରାଉଜ କରନ୍ତୁ (_B) ..."
 
 #: ../src/vmm-choose-cd.glade.h:5
-msgid "_CD-ROM or DVD:"
+#, fuzzy
+msgid "_CD-ROM or DVD"
 msgstr "_CD-ROM କିମ୍ବା DVD:"
 
 #: ../src/vmm-choose-cd.glade.h:6
-msgid "_ISO Image Location:"
-msgstr "_ISO ପ୍ରତିଛବି ଅବସ୍ଥାନ:"
+#, fuzzy
+msgid "_Device Media:"
+msgstr "ଉପକରଣ ଧାରା:"
 
 #: ../src/vmm-choose-cd.glade.h:7
-msgid "_Path to install media:"
-msgstr "ସଞ୍ଚାରମାଧ୍ଯମକୁ ସ୍ଥାପନ କରିବା ପାଇଁ ପଥ (_P)"
+#, fuzzy
+msgid "_ISO Image Location"
+msgstr "_ISO ପ୍ରତିଛବି ଅବସ୍ଥାନ:"
+
+#: ../src/vmm-clone.glade.h:1
+#, fuzzy
+msgid "<span color='#484848'>MAC:</span>"
+msgstr "<span color='#484848'>CPUs:</span>"
+
+#: ../src/vmm-clone.glade.h:2
+#, fuzzy
+msgid "<span color='#484848'>Name:</span>"
+msgstr "<span color='#484848'>OS:</span>"
+
+#: ../src/vmm-clone.glade.h:3
+#, fuzzy
+msgid "<span color='#484848'>Networking:</span>"
+msgstr "<span color='#484848'>ଭଣ୍ଡାର:</span>"
+
+#: ../src/vmm-clone.glade.h:4
+#, fuzzy
+msgid "<span color='#484848'>New Path:</span>"
+msgstr "<span color='#484848'>CPUs:</span>"
+
+#: ../src/vmm-clone.glade.h:5
+#, fuzzy
+msgid "<span color='#484848'>Path:</span>"
+msgstr "<span color='#484848'>CPUs:</span>"
+
+#: ../src/vmm-clone.glade.h:6
+#, fuzzy
+msgid "<span color='#484848'>Size:</span>"
+msgstr "<span color='#484848'>OS:</span>"
+
+#: ../src/vmm-clone.glade.h:7 ../src/vmm-create.glade.h:6
+msgid "<span color='#484848'>Storage:</span>"
+msgstr "<span color='#484848'>ଭଣ୍ଡାର:</span>"
+
+#: ../src/vmm-clone.glade.h:8
+#, fuzzy
+msgid "<span color='#484848'>Target:</span>"
+msgstr "<span color='#484848'>ଭଣ୍ଡାର:</span>"
+
+#: ../src/vmm-clone.glade.h:9
+#, fuzzy
+msgid "<span color='#484848'>Type:</span>"
+msgstr "<span color='#484848'>OS:</span>"
+
+#: ../src/vmm-clone.glade.h:10
+#, fuzzy
+msgid "<span size='large' color='white'>Clone virtual machine</span>"
+msgstr "<span size='large' color='white'>ଗୋଟିଏ ନୂତନ ଆଭାସୀ ଯନ୍ତ୍ର ସୃଷ୍ଟି କରୁଅଛି</span>"
+
+#: ../src/vmm-clone.glade.h:11
+msgid ""
+"<span size='small'>Cloning creates a new, independent copy of the original "
+"disk. Sharing\n"
+"uses the existing disk image for both the original and the new machine.</"
+"span>"
+msgstr ""
+
+#: ../src/vmm-clone.glade.h:14
+#, fuzzy
+msgid "C_lone Virtual Machine"
+msgstr "ଆଭାସୀ ମେସିନକୁ ଅପସାରଣ କରନ୍ତୁ"
+
+#: ../src/vmm-clone.glade.h:15
+#, fuzzy
+msgid "Change MAC address"
+msgstr "MAC ଠିକଣା:"
+
+#: ../src/vmm-clone.glade.h:16
+#, fuzzy
+msgid "Change storage path"
+msgstr "ଉତ୍ସ ପଥ ବାଛନ୍ତୁ"
+
+#: ../src/vmm-clone.glade.h:17
+#, fuzzy
+msgid "Clone Virtual Machine"
+msgstr "ଆଭାସୀ ମେସିନକୁ ଅପସାରଣ କରନ୍ତୁ"
+
+#: ../src/vmm-clone.glade.h:18
+msgid "Create a clone based on:"
+msgstr ""
+
+#: ../src/vmm-clone.glade.h:19
+#, fuzzy
+msgid "Create a new disk (clone) for the virtual machine"
+msgstr "ଏହି ଆଭାସୀ ଯନ୍ତ୍ର ପାଇଁ ଭଣ୍ଡାରକୁ ସକ୍ରିୟ କରନ୍ତୁ"
+
+#: ../src/vmm-clone.glade.h:20
+msgid "Existing disk"
+msgstr ""
+
+#: ../src/vmm-clone.glade.h:21
+#, fuzzy
+msgid "New MAC:"
+msgstr "ନୂତନ VM"
+
+#: ../src/vmm-clone.glade.h:22
+#, fuzzy
+msgid "No networking devices"
+msgstr "କୌଣସି ନେଟୱାର୍କିଙ୍ଗ ନାହିଁ।"
+
+#: ../src/vmm-clone.glade.h:23
+msgid "No storage to clone"
+msgstr ""
+
+#: ../src/vmm-clone.glade.h:24 ../src/vmm-delete.glade.h:3
+#: ../src/vmm-storage-browse.glade.h:5
+msgid "gtk-cancel"
+msgstr ""
+
+#: ../src/vmm-clone.glade.h:25
+msgid "gtk-help"
+msgstr ""
+
+#: ../src/vmm-clone.glade.h:26
+msgid "gtk-ok"
+msgstr ""
 
 #: ../src/vmm-create-net.glade.h:1
 msgid "<b>DHCP</b>"
@@ -2301,10 +2759,6 @@ msgstr "ପୁଲ ନିର୍ମାଣ କରନ୍ତୁ:"
 msgid "Finish"
 msgstr "ସମାପ୍ତ କରନ୍ତୁ"
 
-#: ../src/vmm-create-pool.glade.h:6
-msgid "Format"
-msgstr "ଶୈଳୀ"
-
 #: ../src/vmm-create-pool.glade.h:7 ../src/vmm-create-vol.glade.h:21
 msgid "Format:"
 msgstr "ଶୈଳୀ:"
@@ -2314,12 +2768,12 @@ msgid "Host Name:"
 msgstr "ଆଧାର ନାମ:"
 
 #: ../src/vmm-create-pool.glade.h:10 ../src/vmm-create-vol.glade.h:24
-#: ../src/vmm-create.glade.h:33 ../src/vmm-details.glade.h:60
+#: ../src/vmm-create.glade.h:33 ../src/vmm-details.glade.h:67
 #: ../src/vmm-host.glade.h:29
 msgid "Name:"
 msgstr "ନାମ:"
 
-#: ../src/vmm-create-pool.glade.h:11 ../src/vmm-details.glade.h:84
+#: ../src/vmm-create-pool.glade.h:11 ../src/vmm-details.glade.h:92
 msgid "Source Path:"
 msgstr "ଉତ୍ସ ପଥ:"
 
@@ -2339,10 +2793,6 @@ msgstr "2 ର ପାଦ 2"
 #: ../src/vmm-create-pool.glade.h:15
 msgid "Target Path:"
 msgstr "ଲକ୍ଷ୍ଯ ପଥ:"
-
-#: ../src/vmm-create-pool.glade.h:17
-msgid "label"
-msgstr "ନାମପଟି"
 
 #: ../src/vmm-create-vol.glade.h:1
 msgid "<span size='large'>Storage Volume Quota</span>"
@@ -2428,10 +2878,6 @@ msgstr "<span color='#484848'>ସ୍ମୃତି ସ୍ଥାନ:</span>"
 msgid "<span color='#484848'>OS:</span>"
 msgstr "<span color='#484848'>OS:</span>"
 
-#: ../src/vmm-create.glade.h:6
-msgid "<span color='#484848'>Storage:</span>"
-msgstr "<span color='#484848'>ଭଣ୍ଡାର:</span>"
-
 #: ../src/vmm-create.glade.h:7
 msgid "<span size='large' color='white'>Create a new virtual machine</span>"
 msgstr "<span size='large' color='white'>ଗୋଟିଏ ନୂତନ ଆଭାସୀ ଯନ୍ତ୍ର ସୃଷ୍ଟି କରୁଅଛି</span>"
@@ -2444,7 +2890,7 @@ msgstr "ଉନ୍ନତ ବିକଳ୍ପଗୁଡ଼ିକ"
 msgid "Allocate entire disk now"
 msgstr "ସମ୍ପୂର୍ଣ୍ଣ ଡିସ୍କକୁ ବର୍ତ୍ତମାନ ବାଣ୍ଟନ୍ତୁ"
 
-#: ../src/vmm-create.glade.h:10 ../src/vmm-details.glade.h:23
+#: ../src/vmm-create.glade.h:10 ../src/vmm-details.glade.h:24
 #: ../src/vmm-host.glade.h:9
 msgid "Architecture:"
 msgstr "ସ୍ଥାପତ୍ଯ:"
@@ -2515,6 +2961,10 @@ msgstr "ସ୍ଥାନୀୟ ସ୍ଥାପତ୍ୟ ସଞ୍ଚାର ମା
 msgid "Locate your install media"
 msgstr "ଆପଣଙ୍କର ସ୍ଥାପନ ସଞ୍ଚାରମାଧ୍ଯମକୁ ଦେଖନ୍ତୁ"
 
+#: ../src/vmm-create.glade.h:30
+msgid "Memory"
+msgstr "ସ୍ମୃତି ସ୍ଥାନ"
+
 #: ../src/vmm-create.glade.h:31
 msgid "Memory (RAM):"
 msgstr "ସ୍ମୃତି ସ୍ଥାନ (RAM):"
@@ -2551,10 +3001,6 @@ msgstr "ପରିଚାଳିତ କିମ୍ବା ଅନ୍ୟାନ୍ୟ ସ
 msgid "Set a fixed mac address"
 msgstr "ଗୋଟିଏ ସ୍ଥିର mac ଠିକଣା ବିନ୍ୟାସ କରନ୍ତୁ"
 
-#: ../src/vmm-create.glade.h:42 ../src/vmm-host.glade.h:39
-msgid "Storage"
-msgstr "ଭଣ୍ଡାର ସ୍ଥାନ"
-
 #: ../src/vmm-create.glade.h:43
 msgid "URL"
 msgstr "URL"
@@ -2578,6 +3024,19 @@ msgstr "ସଂସ୍କରଣ:"
 #: ../src/vmm-create.glade.h:48
 msgid "Virt Type:"
 msgstr "Virt ପ୍ରକାର:"
+
+#: ../src/vmm-delete.glade.h:1
+#, fuzzy
+msgid "Delete Confirmation"
+msgstr "ପୁଲ ଅପସାରଣ କରନ୍ତୁ"
+
+#: ../src/vmm-delete.glade.h:2
+msgid "Delete associated storage files"
+msgstr ""
+
+#: ../src/vmm-delete.glade.h:4
+msgid "gtk-delete"
+msgstr ""
 
 #: ../src/vmm-details.glade.h:1
 msgid ""
@@ -2616,11 +3075,16 @@ msgstr "<b>ସ୍ମୃତି</b>"
 msgid "<b>Performance</b>"
 msgstr "<b>ପ୍ରଦର୍ଶନ</b>"
 
-#: ../src/vmm-details.glade.h:11
+#: ../src/vmm-details.glade.h:10
+#, fuzzy
+msgid "<b>Security</b>"
+msgstr "<b>ସାରାଂଶ</b> "
+
+#: ../src/vmm-details.glade.h:12
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>କୋନଶୋଲଟି ବର୍ତ୍ତମାନ ଅନୁପଲବ୍ଧ</b>"
 
-#: ../src/vmm-details.glade.h:12
+#: ../src/vmm-details.glade.h:13
 msgid ""
 "<b>Tip:</b> 'Source device' refers to the name of the device as seen from "
 "the host OS."
@@ -2628,7 +3092,7 @@ msgstr ""
 "<b>ପରାମର୍ଶ:</b> 'ଉତ୍ସ ଉପକରଣ' ଆଧାର ପ୍ରଚାଳନ ତନ୍ତ୍ରରେ ଥିବା ଉପକରଣର ନାମକୁ ନାମକୁ ନିର୍ଦ୍ଦେଶ "
 "କରିଥାଏ।"
 
-#: ../src/vmm-details.glade.h:13
+#: ../src/vmm-details.glade.h:14
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
@@ -2636,7 +3100,7 @@ msgstr ""
 "<b>ପରାମର୍ଶ:</b> 'ଉତ୍ସ' ଆଧାର ପ୍ରଚାଳନ ତନ୍ତ୍ରରୁ ମିଳିଥିବା ସୂଚନାକୁ ନିର୍ଦ୍ଦେଶ କରିଥାଏ, କିନ୍ତୁ 'ଲକ୍ଷ୍ଯ' "
 "ଅତିଥି ପ୍ରଚାଳନ ତନ୍ତ୍ରରୁ ମିଳିଥିବା ସୂଚନାକୁ ନିର୍ଦ୍ଦେଶ କରିଥାଏ।"
 
-#: ../src/vmm-details.glade.h:14
+#: ../src/vmm-details.glade.h:15
 msgid ""
 "<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
 "OS will ensure that the virtual cursor moves in sync with the local desktop "
@@ -2645,7 +3109,7 @@ msgstr ""
 "<b>ସଂକେତ:</b> ପୂର୍ବନିର୍ଦ୍ଧାରିତ ସୂଚକ ଭାବରେ ଅତିଥି OS ରେ ବିନ୍ୟାସିତ ହୋଇଥିବା ଗୋଟିଏ ଆଲେଖି ଟ୍ୟାବଲେଟ "
 "ନିଶ୍ଚିତ କରେ ଯେ ଆଭାସୀ ସୂଚକ ସ୍ଥାନୀୟ ଡେସ୍କଟପ ସୂଚକ ସହିତ ସମତାଳରେ ଗତିକରିଥାଏ."
 
-#: ../src/vmm-details.glade.h:15
+#: ../src/vmm-details.glade.h:16
 msgid ""
 "<b>Tip:</b> For best performance, the number of virtual CPUs should be less "
 "than (or equal to) the number of physical CPUs on the host system."
@@ -2653,43 +3117,43 @@ msgstr ""
 "<b>ପରାମର୍ଶ:</b> ସର୍ବତ୍କୃଷ୍ଟ ପ୍ରଦର୍ଶନ ପାଇଁ, ଆଧାର ତନ୍ତ୍ରରେ ଆଭାସୀ CPU ମାନଙ୍କର ସଂଖ୍ଯା ଭୌତିକ "
 "CPU ମାନଙ୍କର ସଂଖ୍ଯାଠାରୁ କମ (କିମ୍ବା ତାହା ସହିତ ସମାନ) ହେବା ଉଚିତ।"
 
-#: ../src/vmm-details.glade.h:16
+#: ../src/vmm-details.glade.h:17
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>ଆଭାସୀ ଡିସ୍କ</b>"
 
-#: ../src/vmm-details.glade.h:17
+#: ../src/vmm-details.glade.h:18
 msgid "<b>Virtual Display</b>"
 msgstr "<b>ଆଭାସୀ ପ୍ରଦର୍ଶକ</b>"
 
-#: ../src/vmm-details.glade.h:18
+#: ../src/vmm-details.glade.h:19
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>ଆଭାସୀ ନେଟୱାର୍କ ଅନ୍ତରାପୃଷ୍ଠ</b>"
 
-#: ../src/vmm-details.glade.h:19
+#: ../src/vmm-details.glade.h:20
 msgid "<b>Virtual Pointer</b>"
 msgstr "<b>ଆଭାସୀ ସୂଚକ</b>"
 
-#: ../src/vmm-details.glade.h:20
+#: ../src/vmm-details.glade.h:21
 msgid "<b>insert type</b>"
 msgstr "<b>ପ୍ରକାର ଭର୍ତ୍ତିକରନ୍ତୁ</b>"
 
-#: ../src/vmm-details.glade.h:22
+#: ../src/vmm-details.glade.h:23
 msgid "Always"
 msgstr "ସର୍ବଦା"
 
-#: ../src/vmm-details.glade.h:24
+#: ../src/vmm-details.glade.h:25
 msgid "Auth"
 msgstr "Auth"
 
-#: ../src/vmm-details.glade.h:25
+#: ../src/vmm-details.glade.h:26
 msgid "Block"
 msgstr "ଅଂଶ"
 
-#: ../src/vmm-details.glade.h:26
+#: ../src/vmm-details.glade.h:27
 msgid "Boot"
 msgstr "ବୁଟ"
 
-#: ../src/vmm-details.glade.h:27
+#: ../src/vmm-details.glade.h:28
 msgid ""
 "CPU\n"
 "usage:"
@@ -2697,35 +3161,40 @@ msgstr ""
 "CPU\n"
 "ବ୍ଯବହାର ବିଧି:"
 
-#: ../src/vmm-details.glade.h:29
+#: ../src/vmm-details.glade.h:30
 msgid "Change allocation:"
 msgstr "ବଣ୍ଟନ ପ୍ରକ୍ରିୟାକୁ ପରିବର୍ତ୍ତନ କରନ୍ତୁ:"
 
-#: ../src/vmm-details.glade.h:30
+#: ../src/vmm-details.glade.h:31
 msgid "Char"
 msgstr "ଅକ୍ଷର"
 
-#: ../src/vmm-details.glade.h:31
+#: ../src/vmm-details.glade.h:32
 msgid "Console"
 msgstr "କୋନଶୋଲ"
 
-#: ../src/vmm-details.glade.h:32
+#: ../src/vmm-details.glade.h:33
+#, fuzzy
+msgid "Consoles"
+msgstr "କୋନଶୋଲ"
+
+#: ../src/vmm-details.glade.h:34
 msgid "Current allocation:"
 msgstr "ବର୍ତ୍ତମାନ ବଣ୍ଟନ:"
 
-#: ../src/vmm-details.glade.h:34
+#: ../src/vmm-details.glade.h:36
 msgid "Device Mode:"
 msgstr "ଉପକରଣ ଧାରା:"
 
-#: ../src/vmm-details.glade.h:37
+#: ../src/vmm-details.glade.h:39
 msgid "Device virtual machine will boot from:"
 msgstr "ଉପକରଣ ଆଭାସୀ ଯନ୍ତ୍ର ବୁଟ କରିବ:"
 
-#: ../src/vmm-details.glade.h:38
+#: ../src/vmm-details.glade.h:40 ../src/vmm-manager.glade.h:4
 msgid "Disk"
 msgstr "ଡିସ୍କ"
 
-#: ../src/vmm-details.glade.h:39
+#: ../src/vmm-details.glade.h:41
 msgid ""
 "Disk\n"
 "I/O:"
@@ -2733,48 +3202,66 @@ msgstr ""
 "ଡିସ୍କ\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:41
+#: ../src/vmm-details.glade.h:43
+msgid "Dynamic"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:44
 msgid "Emulator:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:42
+#: ../src/vmm-details.glade.h:45
 msgid "Force Off"
 msgstr "ବାଧ୍ଯକରି ଶକ୍ତି ପ୍ରବାହ ବନ୍ଦକରନ୍ତୁ"
 
-#: ../src/vmm-details.glade.h:43
+#: ../src/vmm-details.glade.h:46
 msgid "Fullscreen"
 msgstr "ସଂପୂର୍ଣ୍ଣ ପରଦା"
 
-#: ../src/vmm-details.glade.h:44
+#: ../src/vmm-details.glade.h:47
+msgid "Heads:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:48
+#, fuzzy
+msgid "Host CPUs:"
+msgstr "CPUs:"
+
+#: ../src/vmm-details.glade.h:49
 msgid "How many virtual CPUs should be allocated for this machine?"
 msgstr "ଏହି ଯନ୍ତ୍ର ପାଇଁ କେତେ ସଂଖ୍ଯକ ଆଭାସୀ CPU ବଣ୍ଟାଯିବା ଉଚିତ?"
 
-#: ../src/vmm-details.glade.h:45
+#: ../src/vmm-details.glade.h:50
 msgid "How much memory should be allocated for this machine?"
 msgstr "ଏହି ମେସିନକୁ କେତେ ପରିମାଣର ସ୍ମୃତି ସ୍ଥାନ ବଣ୍ଟାଯିବା ଉଚିତ?"
 
-#: ../src/vmm-details.glade.h:46 ../src/vmm-host.glade.h:23
+#: ../src/vmm-details.glade.h:51 ../src/vmm-host.glade.h:23
 #: ../src/vmm-open-connection.glade.h:10
 msgid "Hypervisor:"
 msgstr "hypervisor:"
 
-#: ../src/vmm-details.glade.h:49
+#: ../src/vmm-details.glade.h:54
+#, fuzzy
+msgid "Label:"
+msgstr "ନାମପଟି"
+
+#: ../src/vmm-details.glade.h:55
 msgid "Login"
 msgstr "ଲଗଇନ କରନ୍ତୁ"
 
-#: ../src/vmm-details.glade.h:53
+#: ../src/vmm-details.glade.h:59
 msgid "Max Memory Select"
 msgstr "ସର୍ବାଧିକ ସ୍ମୃତିସ୍ଥାନ ଚୟନ"
 
-#: ../src/vmm-details.glade.h:54
+#: ../src/vmm-details.glade.h:60
 msgid "Maximum allocation:"
 msgstr "ସର୍ବାଧିକ ବଣ୍ଟନ:"
 
-#: ../src/vmm-details.glade.h:55
+#: ../src/vmm-details.glade.h:61
 msgid "Mem"
 msgstr "ସ୍ମୃତିସ୍ଥାନ"
 
-#: ../src/vmm-details.glade.h:56
+#: ../src/vmm-details.glade.h:62
 msgid ""
 "Memory\n"
 "usage:"
@@ -2782,15 +3269,15 @@ msgstr ""
 "ସ୍ମୃତିସ୍ଥାନ\n"
 "ବ୍ଯବହାର ବିଧି:"
 
-#: ../src/vmm-details.glade.h:58
+#: ../src/vmm-details.glade.h:64
 msgid "Memory Select"
 msgstr "ସ୍ମୃତି ଚୟନ"
 
-#: ../src/vmm-details.glade.h:61
+#: ../src/vmm-details.glade.h:68
 msgid "Net"
 msgstr "Net"
 
-#: ../src/vmm-details.glade.h:62
+#: ../src/vmm-details.glade.h:69
 msgid ""
 "Network\n"
 "I/O:"
@@ -2798,179 +3285,203 @@ msgstr ""
 "ନେଟୱାର୍କ\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:65
+#: ../src/vmm-details.glade.h:72
 msgid "Only when Fullscreen"
 msgstr "କେବଳ ସମ୍ପୂର୍ଣ୍ଣ ପରଦା ଅବସ୍ଥାରେ"
 
-#: ../src/vmm-details.glade.h:68
+#: ../src/vmm-details.glade.h:73
+#, fuzzy
+msgid "Over"
+msgstr "ଅନ୍ଯାନ୍ଯ"
+
+#: ../src/vmm-details.glade.h:75
 msgid "Pause"
 msgstr "କିଛି ସମୟ ପାଇଁ ବନ୍ଦ କରନ୍ତୁ"
 
-#: ../src/vmm-details.glade.h:69
+#: ../src/vmm-details.glade.h:76
 msgid "Permissions:"
 msgstr "ଅନୁମତି:"
 
-#: ../src/vmm-details.glade.h:71
+#: ../src/vmm-details.glade.h:77
+msgid "Physical CPU pinning:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:79
 msgid "Proc"
 msgstr "Proc"
 
-#: ../src/vmm-details.glade.h:72
+#: ../src/vmm-details.glade.h:80
+msgid "RAM:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:81
 msgid "Reboot"
 msgstr "ପୁନର୍ଚାଳନ"
 
-#: ../src/vmm-details.glade.h:73
+#: ../src/vmm-details.glade.h:82
 msgid "Run"
 msgstr "ଚଳାନ୍ତୁ"
 
-#: ../src/vmm-details.glade.h:74
+#: ../src/vmm-details.glade.h:83
 msgid "S_hut Down"
 msgstr "ବନ୍ଦ କରନ୍ତୁ (_h)"
 
-#: ../src/vmm-details.glade.h:75
+#: ../src/vmm-details.glade.h:84
 msgid "Save this password in your keyring"
 msgstr "ଆପଣଙ୍କ କି-ରିଙ୍ଗରେ ପ୍ରବେଶ ସଙ୍କେତକୁ ସଂରକ୍ଷଣ କରନ୍ତୁ"
 
-#: ../src/vmm-details.glade.h:76
+#: ../src/vmm-details.glade.h:85
 msgid "Scale Display"
 msgstr "ମାପ ପ୍ରଦର୍ଶନ"
 
-#: ../src/vmm-details.glade.h:77
+#: ../src/vmm-details.glade.h:86
 msgid "Screenshot"
 msgstr "ପରଦା ପ୍ରତିଛବି"
 
-#: ../src/vmm-details.glade.h:78
+#: ../src/vmm-details.glade.h:87
 msgid "Send Key"
 msgstr "କି ପଠାନ୍ତୁ"
 
-#: ../src/vmm-details.glade.h:79
-msgid "Serial Consoles"
-msgstr "କ୍ରମିକ କୋନଶୋଲ"
-
-#: ../src/vmm-details.glade.h:80
+#: ../src/vmm-details.glade.h:88
 msgid "Shut Down"
 msgstr "ବନ୍ଦ କରନ୍ତୁ"
 
-#: ../src/vmm-details.glade.h:81
+#: ../src/vmm-details.glade.h:89
 msgid "Shut down"
 msgstr "ବନ୍ଦ କରନ୍ତୁ"
 
-#: ../src/vmm-details.glade.h:82
-msgid "Sound"
-msgstr "ଧ୍ୱନୀ"
-
-#: ../src/vmm-details.glade.h:83
+#: ../src/vmm-details.glade.h:91
 msgid "Source Device:"
 msgstr "ଉତ୍ସ ଉପକରଣ:"
 
-#: ../src/vmm-details.glade.h:85
+#: ../src/vmm-details.glade.h:93
 msgid "Source device:"
 msgstr "ଉତ୍ସ ଉପକରଣ:"
 
-#: ../src/vmm-details.glade.h:86
+#: ../src/vmm-details.glade.h:94
 msgid "Source model:"
 msgstr "ଉତ୍ସ ପ୍ରତିମୂର୍ତ୍ତି:"
 
-#: ../src/vmm-details.glade.h:87
+#: ../src/vmm-details.glade.h:95
 msgid "Source path:"
 msgstr "ଉତ୍ସ ପଥ:"
 
-#: ../src/vmm-details.glade.h:88
+#: ../src/vmm-details.glade.h:96
 msgid "Source type:"
 msgstr "ଉତ୍ସ ପ୍ରକାର:"
 
-#: ../src/vmm-details.glade.h:89
+#: ../src/vmm-details.glade.h:97
 msgid "Start virtual machine on host boot up"
 msgstr "ଆଧାର ବୁଟ ଅପରେ ଆଭାସୀ ମେସିନ ଆରମ୍ଭ କରନ୍ତୁ"
 
-#: ../src/vmm-details.glade.h:90 ../src/vmm-preferences.glade.h:26
+#: ../src/vmm-details.glade.h:98
+#, fuzzy
+msgid "Static"
+msgstr "Stats"
+
+#: ../src/vmm-details.glade.h:99 ../src/vmm-preferences.glade.h:27
 msgid "Stats"
 msgstr "Stats"
 
-#: ../src/vmm-details.glade.h:91
+#: ../src/vmm-details.glade.h:100
 msgid "Status:"
 msgstr "ସ୍ଥିତି:"
 
-#: ../src/vmm-details.glade.h:92
+#: ../src/vmm-details.glade.h:101
 msgid "Target Port:"
 msgstr "ଲକ୍ଷ୍ଯ ପ୍ରକାର:"
 
-#: ../src/vmm-details.glade.h:93
+#: ../src/vmm-details.glade.h:102
 msgid "Target bus:"
 msgstr "ଲକ୍ଷ୍ଯ ବସ:"
 
-#: ../src/vmm-details.glade.h:94
+#: ../src/vmm-details.glade.h:103
 msgid "Target device:"
 msgstr "ଲକ୍ଷ୍ଯ ଉପକରଣ:"
 
-#: ../src/vmm-details.glade.h:95
+#: ../src/vmm-details.glade.h:104
 msgid "Target type:"
 msgstr "ଲକ୍ଷ୍ଯ ପ୍ରକାର:"
 
-#: ../src/vmm-details.glade.h:96
+#: ../src/vmm-details.glade.h:105
 msgid "Toolbar"
 msgstr "ସାଧନ ପଟି"
 
-#: ../src/vmm-details.glade.h:97
-msgid "Total CPUs on host machine:"
-msgstr "ଆଧାର ମେସିନରେ ସମୁଦାୟ CPU ସଂଖ୍ଯା:"
-
-#: ../src/vmm-details.glade.h:98
+#: ../src/vmm-details.glade.h:106
 msgid "Total memory on host machine:"
 msgstr "ଆଧାର ମେସିନରେ ସମୁଦାୟ ସ୍ମୃତି ପରିମାଣ:"
 
-#: ../src/vmm-details.glade.h:100
+#: ../src/vmm-details.glade.h:108
 msgid "UUID:"
 msgstr "ୟୁ.ୟୁ.ଆଇ.ଡି.:"
 
-#: ../src/vmm-details.glade.h:101
+#: ../src/vmm-details.glade.h:109
 msgid "Unavailable"
 msgstr "ଅନୁପଲବ୍ଧ"
 
-#: ../src/vmm-details.glade.h:102
+#: ../src/vmm-details.glade.h:110
 #, fuzzy
 msgid "Username:"
 msgstr "ଆଧାର ନାମ:"
 
-#: ../src/vmm-details.glade.h:104
+#: ../src/vmm-details.glade.h:111
+msgid "VNC"
+msgstr "VNC"
+
+#: ../src/vmm-details.glade.h:112
+msgid "Vid"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:113
 msgid "View Manager"
 msgstr "ପରିଚାଳକ ଦେଖନ୍ତୁ"
 
-#: ../src/vmm-details.glade.h:105
+#: ../src/vmm-details.glade.h:114
+#, fuzzy
+msgid "Virtual CPU Affinity Select"
+msgstr "ଆଭାସୀ CPU ଚୟନ"
+
+#: ../src/vmm-details.glade.h:115
 msgid "Virtual CPU Select"
 msgstr "ଆଭାସୀ CPU ଚୟନ"
 
-#: ../src/vmm-details.glade.h:106
+#: ../src/vmm-details.glade.h:116
 msgid "Virtual Machine"
 msgstr "ଆଭାସୀ ଯନ୍ତ୍ର"
 
-#: ../src/vmm-details.glade.h:107
+#: ../src/vmm-details.glade.h:117
 msgid "Virtual _Machine"
 msgstr "ଆଭାସୀ ମେସିନ (_M)"
 
-#: ../src/vmm-details.glade.h:108 ../src/vmm-host.glade.h:41
-#: ../src/vmm-manager.glade.h:18
+#: ../src/vmm-details.glade.h:118
+#, fuzzy
+msgid "_Clone..."
+msgstr "ବ୍ରାଉଜ କରନ୍ତୁ (_B) ..."
+
+#: ../src/vmm-details.glade.h:119 ../src/vmm-host.glade.h:41
+#: ../src/vmm-manager.glade.h:12
 msgid "_Contents"
 msgstr "ସୂଚୀ (_C)"
 
-#: ../src/vmm-details.glade.h:109 ../src/vmm-host.glade.h:42
-#: ../src/vmm-manager.glade.h:20
+#: ../src/vmm-details.glade.h:120 ../src/vmm-host.glade.h:42
+#: ../src/vmm-manager.glade.h:14
 msgid "_File"
 msgstr "ଫାଇଲ (_F)"
 
-#: ../src/vmm-details.glade.h:110 ../src/vmm-host.glade.h:43
-#: ../src/vmm-manager.glade.h:21
+#: ../src/vmm-details.glade.h:121 ../src/vmm-host.glade.h:43
+#: ../src/vmm-manager.glade.h:15
 msgid "_Help"
 msgstr "ସହାୟତା (_H)"
 
-#: ../src/vmm-details.glade.h:114
+#: ../src/vmm-details.glade.h:125
 msgid "_Save"
 msgstr "ସଂରକ୍ଷଣ କରନ୍ତୁ (_S)"
 
-#: ../src/vmm-details.glade.h:115
+#: ../src/vmm-details.glade.h:126
 msgid "_Take Screenshot"
 msgstr "ଗୋଟିଏ ପରଦା ପ୍ରତିଛବି ନିଅନ୍ତୁ (_T)"
 
-#: ../src/vmm-details.glade.h:116 ../src/vmm-manager.glade.h:22
+#: ../src/vmm-details.glade.h:127 ../src/vmm-manager.glade.h:21
 msgid "_View"
 msgstr "ଦେଖନ୍ତୁ (_V)"
 
@@ -3030,7 +3541,7 @@ msgstr "ଆକାର ଅପସାରଣ କରନ୍ତୁ"
 msgid "Forwarding:"
 msgstr "ଅଗ୍ରସରଣ କରୁଅଛି:"
 
-#: ../src/vmm-host.glade.h:21 ../src/vmm-manager.glade.h:10
+#: ../src/vmm-host.glade.h:21 ../src/vmm-manager.glade.h:6
 msgid "Host Details"
 msgstr "ଆଧାରର ବିସ୍ତୃତ ବିବରଣୀ"
 
@@ -3057,6 +3568,10 @@ msgstr "ସ୍ମୃତି:"
 #: ../src/vmm-host.glade.h:31
 msgid "New Volume"
 msgstr "ନୂତନ ଆକାର"
+
+#: ../src/vmm-host.glade.h:32
+msgid "Overview"
+msgstr "ପୂର୍ବାବଲୋକନ"
 
 #: ../src/vmm-host.glade.h:33
 msgid "Pool Type:"
@@ -3091,50 +3606,47 @@ msgid "Add Connection..."
 msgstr "ସଂଯୋଗ ଯୋଗକରନ୍ତୁ..."
 
 #: ../src/vmm-manager.glade.h:2
-msgid ""
-"All virtual machines\n"
-"Active virtual machines\n"
-"Inactive virtual machines"
-msgstr ""
-"ସମସ୍ତ ଆଭାସୀ ମେସିନ ଗୁଡିକ\n"
-"ସକ୍ରିୟ ଆଭାସୀ ମେସିନ ଗୁଡିକ\n"
-"ନିଷ୍କ୍ରିୟ ଆଭାସୀ ମେସିନ ଗୁଡିକ"
+#, fuzzy
+msgid "CPU"
+msgstr "CPUs"
 
-#: ../src/vmm-manager.glade.h:5 ../src/vmm-preferences.glade.h:6
-msgid "CPU Usage"
-msgstr "CPU ବ୍ଯବହାର ବିଧି"
-
-#: ../src/vmm-manager.glade.h:7
+#: ../src/vmm-manager.glade.h:3
 msgid "Delete Virtual Machine"
 msgstr "ଆଭାସୀ ମେସିନକୁ ଅପସାରଣ କରନ୍ତୁ"
 
-#: ../src/vmm-manager.glade.h:9
-msgid "Domain ID"
-msgstr "ପରିସର ପରିଚୟ"
+#: ../src/vmm-manager.glade.h:5
+msgid "Graph"
+msgstr ""
 
-#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:13
-msgid "Memory Usage"
-msgstr "ସ୍ମୃତିସ୍ଥାନ ବ୍ଯବହାର ବିଧି"
-
-#: ../src/vmm-manager.glade.h:13
+#: ../src/vmm-manager.glade.h:8
 msgid "Restore a saved machine from a filesystem image"
 msgstr "ଗୋଟିଏ ଫାଇଲ ତନ୍ତ୍ର ପ୍ରତିଛବିରୁ ଗୋଟିଏ ସଂରକ୍ଷିତ ମେସିନକୁ ପୁନଃସ୍ଥାପନ କରନ୍ତୁ"
 
-#: ../src/vmm-manager.glade.h:14
+#: ../src/vmm-manager.glade.h:9
 msgid "Restore saved machine..."
 msgstr "ସଂରକ୍ଷିତ ମେସିନକୁ ପୁନଃସ୍ଥାପନ କରନ୍ତୁ ..."
 
-#: ../src/vmm-manager.glade.h:16
+#: ../src/vmm-manager.glade.h:10
 msgid "Virtual Machine Details"
 msgstr "ଆଭାସୀ ଯନ୍ତ୍ର ବିବରଣୀ"
 
-#: ../src/vmm-manager.glade.h:19
+#: ../src/vmm-manager.glade.h:13
 msgid "_Edit"
 msgstr "ସମ୍ପାଦନ କରନ୍ତୁ (_E)"
 
-#: ../src/vmm-manager.glade.h:23
-msgid "_View:"
-msgstr "ଦେଖନ୍ତୁ (_V):"
+#: ../src/vmm-manager.glade.h:16
+#, fuzzy
+msgid "_New"
+msgstr "ଦେଖନ୍ତୁ (_V)"
+
+#: ../src/vmm-manager.glade.h:17
+msgid "_Open"
+msgstr ""
+
+#: ../src/vmm-manager.glade.h:20
+#, fuzzy
+msgid "_Shutdown"
+msgstr "ବନ୍ଦ କରନ୍ତୁ"
 
 #: ../src/vmm-open-connection.glade.h:1
 msgid "Add Connection"
@@ -3193,38 +3705,52 @@ msgid "<b>Enable Stats Polling</b>"
 msgstr "<b>ପରିସଂଖ୍ୟାନ ମତଦାନକୁ ସକ୍ରିୟ କରନ୍ତୁ</b>"
 
 #: ../src/vmm-preferences.glade.h:3
+#, fuzzy
+msgid "<b>General</b>"
+msgstr "<b>ସୂଚକ</b>"
+
+#: ../src/vmm-preferences.glade.h:4
 msgid "<b>New VM</b>"
 msgstr "<b>ନୂତନ VM</b>"
 
-#: ../src/vmm-preferences.glade.h:4
+#: ../src/vmm-preferences.glade.h:5
 msgid "<b>Stats Options</b>"
 msgstr "<b>Stats ବିକଳ୍ପଗୁଡ଼ିକ</b>"
 
-#: ../src/vmm-preferences.glade.h:5
+#: ../src/vmm-preferences.glade.h:6
 msgid "Automatically open consoles:"
 msgstr "କୋନଶୋଲ ମାନଙ୍କୁ ସ୍ବୟଂଚାଳିତ ଭାବରେ ଖୋଲନ୍ତୁ:"
 
 #: ../src/vmm-preferences.glade.h:8
+msgid "Enable system tray icon"
+msgstr ""
+
+#: ../src/vmm-preferences.glade.h:9
+#, fuzzy
+msgid "General"
+msgstr "ଜାତିଗତ"
+
+#: ../src/vmm-preferences.glade.h:10
 msgid "Grab keyboard input:"
 msgstr "କି-ବୋର୍ଡ ନିବେଶକୁ ହାସଲ କରନ୍ତୁ:"
 
-#: ../src/vmm-preferences.glade.h:9
+#: ../src/vmm-preferences.glade.h:11
 msgid "Graphical Console Scaling:"
 msgstr "ଆଲେଖୀ କୋନସୋଲ ମାପ:"
 
-#: ../src/vmm-preferences.glade.h:10
+#: ../src/vmm-preferences.glade.h:12
 msgid "Install Audio Device:"
 msgstr "ଧ୍ୱନୀ ଉପକରଣ ସ୍ଥାପନ କରନ୍ତୁ:"
 
-#: ../src/vmm-preferences.glade.h:11
+#: ../src/vmm-preferences.glade.h:13
 msgid "Local virtual machine"
 msgstr "ସ୍ଥାନୀୟ ଆଭାସୀ ଯନ୍ତ୍ରଗୁଡ଼ିକୁ"
 
-#: ../src/vmm-preferences.glade.h:12
+#: ../src/vmm-preferences.glade.h:14
 msgid "Maintain history of"
 msgstr "ଏହାର ପୁରାତନ ତଥ୍ଯର ତତ୍ବାବଧାନ ନିଅନ୍ତୁ"
 
-#: ../src/vmm-preferences.glade.h:15
+#: ../src/vmm-preferences.glade.h:16
 msgid ""
 "Never\n"
 "For all new domains\n"
@@ -3234,7 +3760,7 @@ msgstr ""
 "ନୂତନ ପରିସର ମାନଙ୍କ ପାଇଁ\n"
 "ସମସ୍ତ ପରିସର ମାନଙ୍କ ପାଇଁ"
 
-#: ../src/vmm-preferences.glade.h:18
+#: ../src/vmm-preferences.glade.h:19
 msgid ""
 "Never\n"
 "Fullscreen only\n"
@@ -3244,7 +3770,7 @@ msgstr ""
 "କେବଳ ସମ୍ପୂର୍ଣ୍ଣ ପରଦା\n"
 "ସର୍ବଦା"
 
-#: ../src/vmm-preferences.glade.h:21
+#: ../src/vmm-preferences.glade.h:22
 msgid ""
 "Never\n"
 "When fullscreen\n"
@@ -3254,26 +3780,179 @@ msgstr ""
 "ସମ୍ପୂର୍ଣ୍ଣ ପରଦା ଧାରା ସମୟରେ\n"
 "ମାଉସ ଉପରକୁ ଗଲେ"
 
-#: ../src/vmm-preferences.glade.h:24
+#: ../src/vmm-preferences.glade.h:25
 msgid "Preferences"
 msgstr "ପସନ୍ଦ"
 
-#: ../src/vmm-preferences.glade.h:25
+#: ../src/vmm-preferences.glade.h:26
 msgid "Remote virtual machine"
 msgstr "ସୁଦୂର ଆଭାସୀ ଯନ୍ତ୍ର"
 
-#: ../src/vmm-preferences.glade.h:27
+#: ../src/vmm-preferences.glade.h:28
 msgid "Update status every"
 msgstr "ସ୍ଥିତିକୁ ଅଦ୍ଯତନ କରନ୍ତୁ ପ୍ରତ୍ଯେକ"
 
-#: ../src/vmm-preferences.glade.h:28
+#: ../src/vmm-preferences.glade.h:29
 msgid "VM Details"
 msgstr "VM ବିସ୍ତୃତ ବିବରଣୀ"
 
-#: ../src/vmm-preferences.glade.h:29
+#: ../src/vmm-preferences.glade.h:30
 msgid "samples"
 msgstr "ନମୁନା"
 
-#: ../src/vmm-preferences.glade.h:30
+#: ../src/vmm-preferences.glade.h:31
 msgid "seconds"
 msgstr "ସେକେଣ୍ଡ"
+
+#: ../src/vmm-storage-browse.glade.h:1
+#, fuzzy
+msgid "Choose Storage Volume"
+msgstr "ଗୋଟିଏ ଭଣ୍ଡାର ଆକାର ଯୋଗକରନ୍ତୁ"
+
+#: ../src/vmm-storage-browse.glade.h:2
+#, fuzzy
+msgid "Choose _Volume"
+msgstr "ଆକାର ନିର୍ମାଣ କରନ୍ତୁ (_V)"
+
+#: ../src/vmm-storage-browse.glade.h:3
+#, fuzzy
+msgid "_Browse Local"
+msgstr "ବ୍ରାଉଜ କରନ୍ତୁ"
+
+#: ../src/vmm-storage-browse.glade.h:4
+#, fuzzy
+msgid "_New Volume"
+msgstr "ନୂତନ ଆକାର"
+
+#~ msgid "Poll cpu stats"
+#~ msgstr "cpu ପରିସଂଖ୍ଯାନରେ ମତ ଦିଅନ୍ତୁ"
+
+#~ msgid "Poll memory usage stats"
+#~ msgstr "ସ୍ମୃତି ସ୍ଥାନ ବ୍ୟବହାର ବିଧି ପରିସଂଖ୍ଯାନକୁ ମତ ଦିଅନ୍ତୁ"
+
+#~ msgid "Show VCPU count in summary"
+#~ msgstr "ସାରାଂଶରେ VCPU ଗଣନା ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show cpu usage in summary"
+#~ msgstr "ସାରାଂଶରେ cpu ବ୍ୟବହାର ବିଧି ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show disk I/O in summary"
+#~ msgstr "ସାରାଂଶରେ ଡିସ୍କ I/O ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show domain id in summary"
+#~ msgstr "ସାରାଂଶରେ ପରିସର ପରିଚୟ ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show memory usage in summary"
+#~ msgstr "ସାରାଂଶରେ ସ୍ମୃତି ସ୍ଥାନ ବ୍ୟବହାର ବିଧି ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show network I/O in summary"
+#~ msgstr "ସାରାଂଶରେ ନେଟୱାର୍କ I/O ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show run state in summary"
+#~ msgstr "ସାରାଂଶରେ ଚାଲୁଥିବା ସ୍ଥିତି ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show the cpu usage field in the domain list summary view"
+#~ msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ cpu ବ୍ୟବହାର ବିଧି କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show the disk I/O field in the domain list summary view"
+#~ msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ଡିସ୍କ I/O କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show the domain id field in the domain list summary view"
+#~ msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ପରିସର ପରିଚୟ କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show the memory usage field in the domain list summary view"
+#~ msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ସ୍ମୃତି ସ୍ଥାନ ବ୍ୟବହାର ବିଧି କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show the network I/O field in the domain list summary view"
+#~ msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ନେଟୱର୍କ I/O କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show the run state field in the domain list summary view"
+#~ msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ଚାଲୁଥିବା ଅବସ୍ଥା କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid "Show the virtual CPU count field in the domain list summary view"
+#~ msgstr "ପରିସର ତାଲିକା ସାରାଂଶ ଦୃଶ୍ୟରେ ଆଭାସୀ CPU ଗଣନା କ୍ଷେତ୍ର ଦର୍ଶାନ୍ତୁ"
+
+#~ msgid ""
+#~ "Whether or not the app will poll connection and VM cpu usage statistics"
+#~ msgstr "ପ୍ରୟୋଗଟି ସଂଯୋଗ ଏବଂ VM cpu ବ୍ୟବହାର ବିଧି ପରିସଂଖ୍ୟାନକୁ ମତ ଦେବ କି ନାହିଁ"
+
+#~ msgid ""
+#~ "Whether or not the app will poll connection and VM memory usage statistics"
+#~ msgstr "ପ୍ରୟୋଗଟି ସଂଯୋଗ ଏବଂ VM ସ୍ମୃତିସ୍ଥାନ ବ୍ୟବହାର ବିଧି ପରିସଂଖ୍ୟାନକୁ ମତ ଦେବ କି ନାହିଁ"
+
+#~ msgid "Shared physical device"
+#~ msgstr "ସହଭାଗୀ ଭୌତିକ ଉପକରଣ"
+
+#~ msgid "Usermode networking"
+#~ msgstr "ଚାଳକ ଅବସ୍ଥା ନେଟୱାର୍କିଙ୍ଗ"
+
+#, fuzzy
+#~ msgid "Performance"
+#~ msgstr "<b>ପ୍ରଦର୍ଶନ</b>"
+
+#, fuzzy
+#~ msgid "Processor"
+#~ msgstr "ସଂସାଧନ କରୁଅଛି..."
+
+#~ msgid "Error parsing domain xml: %s"
+#~ msgstr "ପରିସର xmlକୁ ବିଶ୍ଳେଷଣ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
+
+#~ msgid "ID"
+#~ msgstr "ପରିଚୟ"
+
+#~ msgid "Status"
+#~ msgstr "ଅବସ୍ଥିତି"
+
+#~ msgid "Memory usage"
+#~ msgstr "ସ୍ମୃତି ବ୍ଯବହାର ବିଧି"
+
+#~ msgid "<b>Network</b>"
+#~ msgstr "<b>ନେଟୱାର୍କ</b>"
+
+#~ msgid "<b>Sound</b>"
+#~ msgstr "<b>ଧ୍ୱନୀ</b>"
+
+#~ msgid "<b>Storage</b>"
+#~ msgstr "<b>ଭଣ୍ଡାର</b>"
+
+#~ msgid "Absolute"
+#~ msgstr "ପରମ"
+
+#~ msgid "Connection type:"
+#~ msgstr "ସଂଯୋଗ ପ୍ରକାର:"
+
+#~ msgid "EvTouch Tablet"
+#~ msgstr "EvTouch ସାରଣୀ"
+
+#~ msgid "Shared Physical Device"
+#~ msgstr "ସହଭାଗୀ ଭୌତିକ ଉପକରଣ"
+
+#~ msgid "summary-host-device"
+#~ msgstr "summary-host-device"
+
+#~ msgid "_Path to install media:"
+#~ msgstr "ସଞ୍ଚାରମାଧ୍ଯମକୁ ସ୍ଥାପନ କରିବା ପାଇଁ ପଥ (_P)"
+
+#~ msgid "Serial Consoles"
+#~ msgstr "କ୍ରମିକ କୋନଶୋଲ"
+
+#~ msgid "Total CPUs on host machine:"
+#~ msgstr "ଆଧାର ମେସିନରେ ସମୁଦାୟ CPU ସଂଖ୍ଯା:"
+
+#~ msgid ""
+#~ "All virtual machines\n"
+#~ "Active virtual machines\n"
+#~ "Inactive virtual machines"
+#~ msgstr ""
+#~ "ସମସ୍ତ ଆଭାସୀ ମେସିନ ଗୁଡିକ\n"
+#~ "ସକ୍ରିୟ ଆଭାସୀ ମେସିନ ଗୁଡିକ\n"
+#~ "ନିଷ୍କ୍ରିୟ ଆଭାସୀ ମେସିନ ଗୁଡିକ"
+
+#~ msgid "Domain ID"
+#~ msgstr "ପରିସର ପରିଚୟ"
+
+#~ msgid "Memory Usage"
+#~ msgstr "ସ୍ମୃତିସ୍ଥାନ ବ୍ଯବହାର ବିଧି"
+
+#~ msgid "_View:"
+#~ msgstr "ଦେଖନ୍ତୁ (_V):"
