@@ -1186,8 +1186,8 @@ class vmmAddHardware(gobject.GObject):
                     conn = self.vm.get_connection().vmm,
                     name = nodedev_name)
             except Exception, e:
-                return self.err.val_err(_("Host device parameter error",
-                                        str(e)))
+                return self.err.val_err(_("Host device parameter error"),
+                                        str(e))
 
         elif page_num == PAGE_CHAR:
             chartype = self.get_char_type()
