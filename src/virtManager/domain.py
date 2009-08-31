@@ -1291,19 +1291,28 @@ class vmmDomain(gobject.GObject):
         xml = self.get_device_xml("disk", dev_id_info)
 
         def cdrom_xml_connect(doc, ctx):
-            disk_fragment = ctx.xpathEval("/disk")
+            disk_fragment = ctx.xpathEval("/disk")[0]
             driver_fragment = ctx.xpathEval("/disk/driver")
-            disk_fragment[0].setProp("type", _type)
-            elem = disk_fragment[0].newChild(None, "source", None)
+            disk_fragment.setProp("type", _type)
+            elem = disk_fragment.newChild(None, "source", None)
+
             if _type == "file":
                 elem.setProp("file", source)
-                if driver_fragment:
-                    driver_fragment[0].setProp("name", _type)
+                driver_name = _type
             else:
                 elem.setProp("dev", source)
-                if driver_fragment:
-                    driver_fragment[0].setProp("name", "phy")
-            return disk_fragment[0].serialize()
+                driver_name = "phy"
+
+            if driver_fragment:
+                driver_fragment = driver_fragment[0]
+                orig_name = driver_fragment.prop("name")
+
+                # For Xen, the driver name is dependent on the storage type
+                # (file or phys).
+                if orig_name and orig_name in [ "file", "phy" ]:
+                    driver_fragment.setProp("name", driver_name)
+
+            return disk_fragment.serialize()
 
         result = util.xml_parse_wrapper(xml, cdrom_xml_connect)
         logging.debug("connect_cdrom produced: %s" % result)
@@ -1313,17 +1322,19 @@ class vmmDomain(gobject.GObject):
         xml = self.get_device_xml("disk", dev_id_info)
 
         def cdrom_xml_disconnect(doc, ctx):
-            disk_fragment = ctx.xpathEval("/disk")
+            disk_fragment = ctx.xpathEval("/disk")[0]
             sourcenode = None
-            for child in disk_fragment[0].children:
+
+            for child in disk_fragment.children:
                 if child.name == "source":
                     sourcenode = child
                     break
                 else:
                     continue
+
             sourcenode.unlinkNode()
             sourcenode.freeNode()
-            return disk_fragment[0].serialize()
+            return disk_fragment.serialize()
 
         result = util.xml_parse_wrapper(xml, cdrom_xml_disconnect)
         logging.debug("eject_cdrom produced: %s" % result)
