@@ -684,7 +684,8 @@ class vmmManager(gobject.GObject):
         show_open = bool(vm)
         show_details = bool(vm)
         host_details = bool(vm or conn)
-        delete = bool((vm and vm.is_runable()) or conn)
+        delete = bool((vm and vm.is_runable()) or
+                      (not vm and conn))
         show_run = bool(vm and vm.is_runable())
         is_paused = bool(vm and vm.is_paused())
         if is_paused:
