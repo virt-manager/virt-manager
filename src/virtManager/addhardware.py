@@ -80,7 +80,6 @@ class vmmAddHardware(gobject.GObject):
                                   _("An unexpected error occurred"))
 
         self.storage_browser = None
-        self._browse_cb_id = None
 
         self._dev = None
 
@@ -911,10 +910,8 @@ class vmmAddHardware(gobject.GObject):
         conn = self.vm.get_connection()
         if self.storage_browser == None:
             self.storage_browser = vmmStorageBrowser(self.config, conn, False)
-        if self._browse_cb_id:
-            self.storage_browser.disconnect(self._browse_cb_id)
 
-        self._browse_cb_id = self.storage_browser.connect("storage-browse-finish", set_storage_cb)
+        self.storage_browser.set_finish_cb(set_storage_cb)
         self.storage_browser.local_args = { "dialog_name": dialog_name,
                                             "confirm_func": confirm_func,
                                             "browse_reason":

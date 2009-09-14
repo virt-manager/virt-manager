@@ -47,6 +47,7 @@ class vmmStorageBrowser(gobject.GObject):
         self.config = config
         self.conn = conn
         self.conn_signal_ids = []
+        self.finish_cb_id = None
 
         self.topwin = self.window.get_widget("vmm-storage-browse")
         self.err = vmmErrorDialog(self.topwin,
@@ -88,6 +89,11 @@ class vmmStorageBrowser(gobject.GObject):
         if self.addvol:
             self.addvol.close()
         return 1
+
+    def set_finish_cb(self, callback):
+        if self.finish_cb_id:
+            self.disconnect(self.finish_cb_id)
+        self.finish_cb_id = self.connect("storage-browse-finish", callback)
 
     def set_initial_state(self):
         pool_list = self.window.get_widget("pool-list")

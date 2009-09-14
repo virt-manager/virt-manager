@@ -1644,8 +1644,9 @@ class vmmCreate(gobject.GObject):
         if self.storage_browser == None:
             self.storage_browser = vmmStorageBrowser(self.config, self.conn,
                                                      is_media)
-            self.storage_browser.connect("storage-browse-finish",
-                                         callback)
+
+        self.storage_browser.set_finish_cb(callback)
+
         if is_media:
             reason = self.config.CONFIG_DIR_MEDIA
         else:
