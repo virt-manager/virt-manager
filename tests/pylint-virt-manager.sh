@@ -95,6 +95,7 @@ pylint --ignore=IPy.py $FILES \
         -ve "$BUILTIN_TYPE" \
         -ve "$ERROR_VBOX" \
         -ve "$UNABLE_IMPORT" \
+        -ve "$MAX_RECURSION" \
         -ve "$EXCEPTHOOK" | \
 $AWK '\
 # Strip out any "*** Module name" lines if we dont list any errors for them
