@@ -24,6 +24,7 @@ EXCEPTHOOK="no '__excepthook__' member"
 CONNECT_VAR="no 'connect' member"
 DISCONNECT_VAR="no 'disconnect' member"
 UNABLE_IMPORT="Unable to import 'gtk.gdk.*|Unable to import 'sparkline"
+MAX_RECURSION="maximum recursion depth"
 
 # os._exit is needed for forked processes.
 OS_EXIT="protected member _exit of a client class"
