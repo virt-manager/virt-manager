@@ -337,8 +337,12 @@ class vmmDomain(gobject.GObject):
             return rx, tx
 
         for netdev in self.get_network_devices(refresh_if_necc=False):
+            dev = netdev[4]
+            if not dev:
+                continue
+
             try:
-                io = self.vm.interfaceStats(netdev[4])
+                io = self.vm.interfaceStats(dev)
                 if io:
                     rx += io[0]
                     tx += io[4]
@@ -347,7 +351,9 @@ class vmmDomain(gobject.GObject):
                     logging.debug("Net stats not supported: %s" % err)
                     self._stats_net_supported = False
                 else:
-                    logging.error("Error reading net stats: %s" % err)
+                    logging.error("Error reading net stats for "
+                                  "'%s' dev '%s': %s" %
+                                  (self.get_name(), dev, err))
         return rx, tx
 
     def _sample_disk_io_dummy(self):
@@ -360,8 +366,12 @@ class vmmDomain(gobject.GObject):
             return rd, wr
 
         for disk in self.get_disk_devices(refresh_if_necc=False):
+            dev = disk[2]
+            if not dev:
+                continue
+
             try:
-                io = self.vm.blockStats(disk[2])
+                io = self.vm.blockStats(dev)
                 if io:
                     rd += io[1]
                     wr += io[3]
@@ -370,7 +380,9 @@ class vmmDomain(gobject.GObject):
                     logging.debug("Disk stats not supported: %s" % err)
                     self._stats_disk_supported = False
                 else:
-                    logging.error("Error reading disk stats: %s" % err)
+                    logging.error("Error reading disk stats for "
+                                  "'%s' dev '%s': %s" %
+                                  (self.get_name(), dev, err))
         return rd, wr
 
     def _get_cur_rate(self, what):
