@@ -199,10 +199,14 @@ class vmmEngine(gobject.GObject):
                 self.connections[uri]["connection"].tick()
             except KeyboardInterrupt:
                 raise
-            except:
-                logging.exception("Could not refresh connection %s." % uri)
-                logging.debug("Closing connection since refresh failed.")
-                self.connections[uri]["connection"].close()
+            except libvirt.libvirtError, e:
+                if e.get_error_code() == libvirt.VIR_ERR_SYSTEM_ERROR:
+                    logging.exception("Could not refresh connection %s." % uri)
+                    logging.debug("Closing connection since libvirtd "
+                                  "appears to have stopped.")
+                    self.connections[uri]["connection"].close()
+                else:
+                    raise
         return 1
 
     def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):

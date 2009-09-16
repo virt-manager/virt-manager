@@ -941,7 +941,15 @@ class vmmConnection(gobject.GObject):
             updateVMs = newVMs
 
         for uuid in updateVMs:
-            self.vms[uuid].tick(now)
+            vm = self.vms[uuid]
+            try:
+                vm.tick(now)
+            except libvirt.libvirtError, e:
+                if e.get_error_code() == libvirt.VIR_ERR_SYSTEM_ERROR:
+                    raise
+                logging.exception("Tick for VM '%s' failed" % vm.get_name())
+            except Exception, e:
+                logging.exception("Tick for VM '%s' failed" % vm.get_name())
 
         if not noStatsUpdate:
             self._recalculate_stats(now)
