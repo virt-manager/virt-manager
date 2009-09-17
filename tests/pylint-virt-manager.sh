@@ -67,6 +67,8 @@ addmsg "C0322"      # C0322: *Operator not preceded by a space*
 addmsg "C0323"      # C0323: *Operator not followed by a space*
 addmsg "W0511"      # W0511: FIXME and XXX: messages
 addmsg "W0613"      # W0613: Unused arguments
+addmsg "W6501"      # W6501: Using string formatters in logging message
+                    #        (see help message for info)
 
 # Disabled Checkers:
 addchecker "Design"         # Things like "Too many func arguments",
