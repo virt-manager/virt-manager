@@ -486,12 +486,26 @@ class vmmManager(gobject.GObject):
         else:
             self.emit("action-refresh-console", uri, vmuuid)
 
+    def _build_conn_markup(self, conn, row):
+        if conn.state == conn.STATE_DISCONNECTED:
+            markup = ("<span font='9' color='#5b5b5b'>%s - "
+                      "Not Connected</span>" % row[ROW_NAME])
+        else:
+            markup = ("<span font='9'>%s</span>" % row[ROW_NAME])
+        return markup
+
+    def _build_vm_markup(self, vm, row):
+        markup = ("<span font='10'>%s</span>\n"
+                  "<span font='9' color='#989898'>%s</span>" %
+                  (row[ROW_NAME], row[ROW_STATUS]))
+        return markup
+
     def _append_vm(self, model, vm, conn):
         parent = self.rows[conn.get_uri()].iter
         row = []
         row.insert(ROW_HANDLE, vm)
         row.insert(ROW_NAME, vm.get_name())
-        row.insert(ROW_MARKUP, row[ROW_NAME])
+        row.insert(ROW_MARKUP, "")
         row.insert(ROW_STATUS, vm.run_status())
         row.insert(ROW_STATUS_ICON, vm.run_status_icon_large())
         row.insert(ROW_KEY, vm.get_uuid())
@@ -501,6 +515,8 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_IS_VM, True)
         row.insert(ROW_IS_VM_RUNNING, vm.is_active())
         row.insert(ROW_COLOR, "white")
+
+        row[ROW_MARKUP] = self._build_vm_markup(vm, row)
 
         _iter = model.append(parent, row)
         path = model.get_path(_iter)
@@ -512,12 +528,7 @@ class vmmManager(gobject.GObject):
         row = []
         row.insert(ROW_HANDLE, conn)
         row.insert(ROW_NAME, conn.get_pretty_desc_inactive(False))
-        if conn.state == conn.STATE_DISCONNECTED:
-            markup = ("<span font='9.5' color='#5b5b5b'>%s - "
-                      "Not Connected</span>" % row[ROW_NAME])
-        else:
-            markup = ("<span font='9.5'>%s</span>" % row[ROW_NAME])
-        row.insert(ROW_MARKUP, markup)
+        row.insert(ROW_MARKUP, self._build_conn_markup(conn, row))
         row.insert(ROW_STATUS, ("<span font='9'>%s</span>" %
                                 conn.get_state_text()))
         row.insert(ROW_STATUS_ICON, None)
@@ -589,12 +600,7 @@ class vmmManager(gobject.GObject):
         model = vmlist.get_model()
         row = self.rows[conn.get_uri()]
 
-        if conn.state == conn.STATE_DISCONNECTED:
-            markup = ("<span font='9.5' color='#5b5b5b'>%s - "
-                      "Not Connected</span>" % row[ROW_NAME])
-        else:
-            markup = ("<span font='9.5'>%s</span>" % row[ROW_NAME])
-        row[ROW_MARKUP] = markup
+        row[ROW_MARKUP] = self._build_conn_markup(conn, row)
         row[ROW_STATUS] = "<span font='9'>%s</span>" % conn.get_state_text()
         row[ROW_IS_CONN_CONNECTED] = conn.state != conn.STATE_DISCONNECTED
 
