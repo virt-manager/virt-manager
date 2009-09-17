@@ -49,8 +49,6 @@ ROW_IS_CONN = 7
 ROW_IS_CONN_CONNECTED = 8
 ROW_IS_VM = 9
 ROW_IS_VM_RUNNING = 10
-ROW_COLOR = 11
-ROW_HEIGHT = 12
 
 # Columns in the tree view
 COL_NAME = 0
@@ -514,7 +512,6 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_IS_CONN_CONNECTED, True)
         row.insert(ROW_IS_VM, True)
         row.insert(ROW_IS_VM_RUNNING, vm.is_active())
-        row.insert(ROW_COLOR, "white")
 
         row[ROW_MARKUP] = self._build_vm_markup(vm, row)
 
@@ -539,7 +536,6 @@ class vmmManager(gobject.GObject):
                    conn.state != conn.STATE_DISCONNECTED)
         row.insert(ROW_IS_VM, False)
         row.insert(ROW_IS_VM_RUNNING, False)
-        row.insert(ROW_COLOR, "#d4d2d2")
 
         _iter = model.append(None, row)
         path = model.get_path(_iter)
@@ -823,9 +819,9 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
 
         # Handle, name, markup, status, status icon, key/uuid, hint, is conn,
-        # is conn connected, is vm, is vm running, color
+        # is conn connected, is vm, is vm running
         model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, str,
-                              bool, bool, bool, bool, str)
+                              bool, bool, bool, bool)
         vmlist.set_model(model)
         util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
 
@@ -834,7 +830,7 @@ class vmmManager(gobject.GObject):
 
         nameCol = gtk.TreeViewColumn(_("Name"))
         nameCol.set_expand(True)
-        nameCol.set_spacing(12)
+        nameCol.set_spacing(6)
         cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
         cpuUsageCol.set_min_width(150)
 
@@ -853,13 +849,11 @@ class vmmManager(gobject.GObject):
 
         status_icon = gtk.CellRendererPixbuf()
         statusCol.pack_start(status_icon, False)
-        statusCol.add_attribute(status_icon, 'cell-background', ROW_COLOR)
         statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
         statusCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
 
         name_txt = gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
-        nameCol.add_attribute(name_txt, 'cell-background', ROW_COLOR)
         nameCol.add_attribute(name_txt, 'markup', ROW_MARKUP)
         nameCol.set_sort_column_id(VMLIST_SORT_NAME)
 
@@ -870,9 +864,7 @@ class vmmManager(gobject.GObject):
         cpuUsage_img.set_property("reversed", True)
         cpuUsageCol.pack_start(cpuUsage_img, True)
         cpuUsageCol.pack_start(cpuUsage_txt, False)
-        cpuUsageCol.add_attribute(cpuUsage_img, 'cell-background', ROW_COLOR)
         cpuUsageCol.add_attribute(cpuUsage_img, 'visible', ROW_IS_VM)
-        cpuUsageCol.add_attribute(cpuUsage_txt, 'cell-background', ROW_COLOR)
         cpuUsageCol.add_attribute(cpuUsage_txt, 'visible', ROW_IS_CONN)
         cpuUsageCol.set_sort_column_id(VMLIST_SORT_STATS)
         self.stats_sparkline = cpuUsage_img
