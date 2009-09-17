@@ -90,7 +90,16 @@ class vmmConfig:
             libvirt.VIR_DOMAIN_SHUTOFF: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_shutoff.png", 18, 18),
             libvirt.VIR_DOMAIN_NOSTATE: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 18, 18),
             }
-        #initialize the help stuff
+        self.status_icons_large = {
+            libvirt.VIR_DOMAIN_BLOCKED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 32, 32),
+            libvirt.VIR_DOMAIN_CRASHED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_crashed.png", 32, 32),
+            libvirt.VIR_DOMAIN_PAUSED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_paused.png", 32, 32),
+            libvirt.VIR_DOMAIN_RUNNING: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 32, 32),
+            libvirt.VIR_DOMAIN_SHUTDOWN: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_shutoff.png", 32, 32),
+            libvirt.VIR_DOMAIN_SHUTOFF: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_shutoff.png", 32, 32),
+            libvirt.VIR_DOMAIN_NOSTATE: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 32, 32),
+            }
+
         props = { gnome.PARAM_APP_DATADIR : self.get_data_dir()}
         gnome.program_init(self.get_appname(), self.get_appversion(), \
                                properties=props)
@@ -99,6 +108,9 @@ class vmmConfig:
 
     def get_vm_status_icon(self, state):
         return self.status_icons[state]
+
+    def get_vm_status_icon_large(self, state):
+        return self.status_icons_large[state]
 
     def get_shutdown_icon_name(self):
         theme = gtk.icon_theme_get_default()

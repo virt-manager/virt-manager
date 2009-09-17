@@ -728,6 +728,8 @@ class vmmDomain(gobject.GObject):
 
     def run_status_icon(self):
         return self.config.get_vm_status_icon(self.status())
+    def run_status_icon_large(self):
+        return self.config.get_vm_status_icon_large(self.status())
 
     def _is_serial_console_tty_accessible(self, path):
         # pty serial scheme doesn't work over remote

@@ -493,7 +493,7 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_NAME, vm.get_name())
         row.insert(ROW_MARKUP, row[ROW_NAME])
         row.insert(ROW_STATUS, vm.run_status())
-        row.insert(ROW_STATUS_ICON, vm.run_status_icon())
+        row.insert(ROW_STATUS_ICON, vm.run_status_icon_large())
         row.insert(ROW_KEY, vm.get_uuid())
         row.insert(ROW_HINT, None)
         row.insert(ROW_IS_CONN, False)
@@ -575,7 +575,7 @@ class vmmManager(gobject.GObject):
 
         row = self.rows[self.vm_row_key(vm)]
         row[ROW_STATUS] = vm.run_status()
-        row[ROW_STATUS_ICON] = vm.run_status_icon()
+        row[ROW_STATUS_ICON] = vm.run_status_icon_large()
         row[ROW_IS_VM_RUNNING] = vm.is_active()
         model.row_changed(row.path, row.iter)
 
@@ -850,7 +850,6 @@ class vmmManager(gobject.GObject):
         statusCol.add_attribute(status_icon, 'cell-background', ROW_COLOR)
         statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
         statusCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
-        statusCol.add_attribute(status_icon, 'sensitive', ROW_IS_VM_RUNNING)
 
         name_txt = gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
