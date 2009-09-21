@@ -93,6 +93,10 @@ class vmmCreate(gobject.GObject):
         # 'Guest' class from the previous failed install
         self.failed_guest = None
 
+        # Host space polling
+        self.host_storage_timer = None
+        self.host_storage = None
+
         self.window.signal_autoconnect({
             "on_vmm_newcreate_delete_event" : self.close,
 
@@ -136,7 +140,17 @@ class vmmCreate(gobject.GObject):
 
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
+        self.remove_timers()
+
         return 1
+
+    def remove_timers(self):
+        try:
+            if self.host_storage_timer:
+                gobject.source_remote(self.host_storage_timer)
+                self.host_storage_timer = None
+        except:
+            pass
 
     def set_conn(self, newconn):
         if self.conn == newconn:
@@ -303,9 +317,11 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("config-cpus").set_value(1)
 
         # Storage
+        if not self.host_storage_timer:
+            self.host_storage_timer = gobject.timeout_add(3 * 1000,
+                                                          self.host_space_tick)
         self.window.get_widget("enable-storage").set_active(True)
         self.window.get_widget("config-storage-create").set_active(True)
-        # FIXME: Make sure this doesn't exceed host?
         self.window.get_widget("config-storage-size").set_value(8)
         self.window.get_widget("config-storage-entry").set_text("")
         self.window.get_widget("config-storage-nosparse").set_active(True)
@@ -437,11 +453,6 @@ class vmmCreate(gobject.GObject):
         # Storage
         have_storage = (is_local or is_storage_capable)
         storage_tooltip = None
-        max_storage = self.host_disk_space()
-        hd_label = "%s available on the host" % self.pretty_storage(max_storage)
-        hd_label = ("<span color='#484848'>%s</span>" % hd_label)
-        self.window.get_widget("phys-hd-label").set_markup(hd_label)
-        self.window.get_widget("config-storage-size").set_range(1, max_storage)
 
         use_storage = self.window.get_widget("config-storage-select")
         storage_area = self.window.get_widget("config-storage-area")
@@ -863,6 +874,7 @@ class vmmCreate(gobject.GObject):
             # FIXME: use a conn specific function after we send pool-added
             pool = virtinst.util.lookup_pool_by_path(self.conn.vmm, path)
             if pool:
+                pool.refresh(0)
                 avail = int(virtinst.util.get_xml_path(pool.XMLDesc(0),
                                                        "/pool/available"))
 
@@ -870,7 +882,21 @@ class vmmCreate(gobject.GObject):
             vfs = os.statvfs(os.path.dirname(path))
             avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
 
-        return int(avail / 1024.0 / 1024.0 / 1024.0)
+        return float(avail / 1024.0 / 1024.0 / 1024.0)
+
+    def host_space_tick(self):
+        max_storage = self.host_disk_space()
+        if self.host_storage == max_storage:
+            return 1
+        self.host_storage = max_storage
+
+        hd_label = ("%s available in the default location" %
+                    self.pretty_storage(max_storage))
+        hd_label = ("<span color='#484848'>%s</span>" % hd_label)
+        self.window.get_widget("phys-hd-label").set_markup(hd_label)
+        self.window.get_widget("config-storage-size").set_range(1, self.host_storage)
+
+        return 1
 
     def get_config_network_info(self):
         netidx = self.window.get_widget("config-netdev").get_active()
