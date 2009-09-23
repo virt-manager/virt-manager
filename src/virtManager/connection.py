@@ -201,6 +201,13 @@ class vmmConnection(gobject.GObject):
     def is_nodedev_capable(self):
         return virtinst.NodeDeviceParser.is_nodedev_capable(self.vmm)
 
+    def is_qemu_system(self):
+        (scheme, ignore, ignore,
+         path, ignore, ignore) = virtinst.util.uri_split(self.uri)
+        if path == "/system" and scheme.startswith("qemu"):
+            return True
+        return False
+
     def is_qemu_session(self):
         (scheme, ignore, ignore,
          path, ignore, ignore) = virtinst.util.uri_split(self.uri)
