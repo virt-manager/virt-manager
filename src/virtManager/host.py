@@ -344,8 +344,12 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("net-ip4-network").set_text(str(network))
 
         dhcp = net.get_ipv4_dhcp_range()
-        self.window.get_widget("net-ip4-dhcp-start").set_text(str(dhcp[0]))
-        self.window.get_widget("net-ip4-dhcp-end").set_text(str(dhcp[1]))
+        if dhcp is not None:
+            self.window.get_widget("net-ip4-dhcp-start").set_text(str(dhcp[0]))
+            self.window.get_widget("net-ip4-dhcp-end").set_text(str(dhcp[1]))
+        else:
+            self.window.get_widget("net-ip4-dhcp-start").set_text("Disabled")
+            self.window.get_widget("net-ip4-dhcp-end").set_text("Disabled")
 
         (forward, forwardDev) = net.get_ipv4_forward()
         if forward:

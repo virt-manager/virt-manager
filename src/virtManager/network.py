@@ -109,6 +109,9 @@ class vmmNetwork(gobject.GObject):
         xml = self.get_xml()
         dhcpstart = util.get_xml_path(xml, "/network/ip/dhcp/range[1]/@start")
         dhcpend = util.get_xml_path(xml, "/network/ip/dhcp/range[1]/@end")
+        if not dhcpstart or not dhcpend:
+            return None
+
         return [IP(dhcpstart), IP(dhcpend)]
 
     def is_read_only(self):

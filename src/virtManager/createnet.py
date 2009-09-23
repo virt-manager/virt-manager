@@ -62,6 +62,7 @@ class vmmCreateNetwork(gobject.GObject):
             "on_create_finish_clicked" : self.finish,
             "on_net_forward_toggled" : self.change_forward_type,
             "on_net_network_changed": self.change_network,
+            "on_net_dhcp_enable_toggled": self.change_dhcp_enable,
             "on_net_dhcp_start_changed": self.change_dhcp_start,
             "on_net_dhcp_end_changed": self.change_dhcp_end,
             "on_create_help_clicked": self.show_help,
@@ -109,6 +110,7 @@ class vmmCreateNetwork(gobject.GObject):
 
         self.window.get_widget("net-name").set_text("")
         self.window.get_widget("net-network").set_text("192.168.100.0/24")
+        self.window.get_widget("net-dhcp-enable").set_active(True)
         self.window.get_widget("net-dhcp-start").set_text("")
         self.window.get_widget("net-dhcp-end").set_text("")
         self.window.get_widget("net-forward-none").set_active(True)
@@ -161,6 +163,11 @@ class vmmCreateNetwork(gobject.GObject):
                 self.window.get_widget("net-info-type").set_text(_("Reserved"))
             else:
                 self.window.get_widget("net-info-type").set_text(_("Other"))
+
+    def change_dhcp_enable(self, src):
+        val = src.get_active()
+        self.window.get_widget("net-dhcp-start").set_sensitive(val)
+        self.window.get_widget("net-dhcp-end").set_sensitive(val)
 
     def change_dhcp_start(self, src):
         end = self.get_config_dhcp_start()
@@ -219,6 +226,9 @@ class vmmCreateNetwork(gobject.GObject):
             name = model[active][2]
             return [True, name]
 
+    def get_config_dhcp_enable(self):
+        return self.window.get_widget("net-dhcp-enable").get_active()
+
     def page_changed(self, notebook, page, page_number):
         # would you like some spaghetti with your salad, sir?
 
@@ -247,10 +257,21 @@ class vmmCreateNetwork(gobject.GObject):
             self.window.get_widget("summary-ip4-gateway").set_text(str(ip[1]))
             self.window.get_widget("summary-ip4-netmask").set_text(str(ip.netmask()))
 
-            start = self.get_config_dhcp_start()
-            end = self.get_config_dhcp_end()
-            self.window.get_widget("summary-dhcp-start").set_text(str(start))
-            self.window.get_widget("summary-dhcp-end").set_text(str(end))
+            if self.get_config_dhcp_enable():
+                start = self.get_config_dhcp_start()
+                end = self.get_config_dhcp_end()
+                self.window.get_widget("summary-dhcp-start").set_text(str(start))
+                self.window.get_widget("summary-dhcp-end").set_text(str(end))
+                self.window.get_widget("label-dhcp-start").set_text( _("Start address:") )
+                self.window.get_widget("label-dhcp-start").show()
+                self.window.get_widget("label-dhcp-end").show()
+                self.window.get_widget("summary-dhcp-start").show()
+                self.window.get_widget("summary-dhcp-end").show()
+            else:
+                self.window.get_widget("label-dhcp-start").set_text( _("Status:") )
+                self.window.get_widget("summary-dhcp-start").set_text( _("Disabled") )
+                self.window.get_widget("label-dhcp-end").hide()
+                self.window.get_widget("summary-dhcp-end").hide()
 
             fw = self.get_config_forwarding()
             if fw[0]:
@@ -289,9 +310,12 @@ class vmmCreateNetwork(gobject.GObject):
                 xml += "  <forward/>\n"
 
         xml += "  <ip address='%s' netmask='%s'>\n" % (str(ip[1]), str(ip.netmask()))
-        xml += "    <dhcp>\n"
-        xml += "      <range start='%s' end='%s'/>\n" % (str(start), str(end))
-        xml += "    </dhcp>\n"
+
+        if self.get_config_dhcp_enable():
+            xml += "    <dhcp>\n"
+            xml += "      <range start='%s' end='%s'/>\n" % (str(start), str(end))
+            xml += "    </dhcp>\n"
+
         xml += "  </ip>\n"
         xml += "</network>\n"
 
