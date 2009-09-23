@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.12 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkAboutDialog" id="vmm-about">
     <property name="visible">True</property>
     <property name="destroy_with_parent">True</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">dialog</property>
     <property name="program_name">Virtual Machine Manager</property>
     <property name="copyright" translatable="yes">Copyright (C) 2006-2009 Red Hat Inc.</property>
     <property name="comments" translatable="yes">Powered by libvirt</property>
@@ -27,25 +27,26 @@
 </property>
     <property name="authors">Daniel P. Berrange &lt;berrange@redhat.com&gt;
 Hugh O. Brock &lt;hbrock@redhat.com&gt;
-Máirín Duffy &lt;duffy@redhat.com&gt;
+M&#xE1;ir&#xED;n Duffy &lt;duffy@redhat.com&gt;
 Jeremy Katz &lt;katzj@redhat.com&gt;
 Cole Robinson &lt;crobinso@redhat.com&gt;
 </property>
     <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
-    <property name="artists">Máirín Duffy &lt;duffy@redhat.com&gt;
+    <property name="artists">M&#xE1;ir&#xED;n Duffy &lt;duffy@redhat.com&gt;
 Mike Langlie &lt;mlanglie@redhat.com&gt;
 Jeremy Perry &lt;jeperry@redhat.com&gt;
 </property>
-    <signal name="delete_event" handler="on_vmm_about_delete_event"/>
     <signal name="response" handler="on_vmm_about_response"/>
+    <signal name="delete_event" handler="on_vmm_about_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
+        <property name="orientation">vertical</property>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area1">
-          </widget>
+          <widget class="GtkHButtonBox" id="dialog-action_area1"/>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">GTK_PACK_END</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </widget>

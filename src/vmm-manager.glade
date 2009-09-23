@@ -1,16 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.10 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="vmm-manager">
     <property name="title" translatable="yes">Virtual Machine Manager</property>
     <property name="default_width">550</property>
     <property name="default_height">550</property>
-    <property name="gravity">GDK_GRAVITY_CENTER</property>
+    <property name="gravity">center</property>
     <signal name="delete_event" handler="on_vm_manager_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkMenuBar" id="menubar1">
             <property name="visible">True</property>
@@ -23,19 +24,13 @@
                   <widget class="GtkMenu" id="menuitem4_menu">
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_file_restore_saved">
+                        <property name="label">Restore saved machine...</property>
                         <property name="visible">True</property>
                         <property name="tooltip" translatable="yes">Restore a saved machine from a filesystem image</property>
-                        <property name="label" translatable="yes">Restore saved machine...</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_restore_saved_activate"/>
-                        <accelerator key="r" modifiers="GDK_MOD1_MASK" signal="activate"/>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="image144">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-open</property>
-                            <property name="icon_size">1</property>
-                          </widget>
-                        </child>
+                        <accelerator key="r" signal="activate" modifiers="GDK_MOD1_MASK"/>
                       </widget>
                     </child>
                     <child>
@@ -45,17 +40,11 @@
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="open_connection">
+                        <property name="label">Add Connection...</property>
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Add Connection...</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_file_add_connection_activate"/>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="image145">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-connect</property>
-                            <property name="icon_size">1</property>
-                          </widget>
-                        </child>
                       </widget>
                     </child>
                     <child>
@@ -65,8 +54,8 @@
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_file_close">
-                        <property name="visible">True</property>
                         <property name="label">gtk-close</property>
+                        <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_file_close_activate"/>
@@ -74,8 +63,8 @@
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_file_quit">
-                        <property name="visible">True</property>
                         <property name="label">gtk-quit</property>
+                        <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_file_quit_activate"/>
@@ -102,32 +91,20 @@
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_edit_details">
+                        <property name="label">Virtual Machine Details</property>
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Virtual Machine Details</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_edit_details_activate"/>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="image146">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-properties</property>
-                            <property name="icon_size">1</property>
-                          </widget>
-                        </child>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_edit_delete">
+                        <property name="label">Delete</property>
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Delete</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_edit_delete_activate"/>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="image147">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-delete</property>
-                            <property name="icon_size">1</property>
-                          </widget>
-                        </child>
                       </widget>
                     </child>
                     <child>
@@ -137,8 +114,8 @@
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_edit_preferences">
-                        <property name="visible">True</property>
                         <property name="label">gtk-preferences</property>
+                        <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_edit_preferences_activate"/>
@@ -209,24 +186,18 @@
                   <widget class="GtkMenu" id="menuitem7_menu">
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_help">
+                        <property name="label">_Contents</property>
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Contents</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_help_activate"/>
-                        <accelerator key="F1" modifiers="" signal="activate"/>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="image148">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-help</property>
-                            <property name="icon_size">1</property>
-                          </widget>
-                        </child>
+                        <accelerator key="F1" signal="activate"/>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_help_about">
-                        <property name="visible">True</property>
                         <property name="label">gtk-about</property>
+                        <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_help_about_activate"/>
@@ -240,11 +211,13 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <widget class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <child>
               <widget class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
@@ -252,7 +225,7 @@
                   <widget class="GtkToolbar" id="vm-toolbar1">
                     <property name="visible">True</property>
                     <property name="show_arrow">False</property>
-                    <property name="icon_size">GTK_ICON_SIZE_DND</property>
+                    <property name="icon_size">0</property>
                     <child>
                       <widget class="GtkToolButton" id="vm-new">
                         <property name="visible">True</property>
@@ -262,10 +235,14 @@
                         <signal name="clicked" handler="on_vm_new_clicked"/>
                       </widget>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
                   </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
                 <child>
                   <widget class="GtkToolbar" id="vm-toolbar2">
@@ -280,6 +257,7 @@
                         <signal name="clicked" handler="on_vm_open_clicked"/>
                       </widget>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
@@ -292,6 +270,7 @@
                         <signal name="clicked" handler="on_vm_run_clicked"/>
                       </widget>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
@@ -304,6 +283,7 @@
                         <signal name="clicked" handler="on_vm_pause_clicked"/>
                       </widget>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
@@ -314,34 +294,37 @@
                         <property name="use_underline">True</property>
                         <signal name="clicked" handler="on_vm_shutdown_clicked"/>
                       </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                      </packing>
                     </child>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="pack_type">GTK_PACK_END</property>
+                    <property name="pack_type">end</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </widget>
               <packing>
                 <property name="expand">False</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
               <widget class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                <property name="shadow_type">GTK_SHADOW_IN</property>
+                <property name="hscrollbar_policy">automatic</property>
+                <property name="vscrollbar_policy">automatic</property>
+                <property name="shadow_type">in</property>
                 <child>
                   <widget class="GtkTreeView" id="vm-list">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="rules_hint">False</property>
                     <signal name="button_press_event" handler="on_vm_list_button_press_event"/>
-                    <signal name="row_collapsed" handler="on_vm_list_row_collapsed"/>
                     <signal name="row_expanded" handler="on_vm_list_row_expanded"/>
+                    <signal name="row_collapsed" handler="on_vm_list_row_collapsed"/>
                     <signal name="row_activated" handler="on_vm_list_row_activated"/>
                   </widget>
                 </child>

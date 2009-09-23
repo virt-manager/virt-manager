@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.6 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="vmm-progress">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Operation in progress</property>
-    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+    <property name="window_position">center-on-parent</property>
     <property name="default_width">300</property>
     <property name="default_height">200</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="urgency_hint">True</property>
     <child>
@@ -20,6 +20,7 @@
         <child>
           <widget class="GtkVBox" id="vbox13">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">5</property>
             <child>
               <widget class="GtkHBox" id="hbox50">
@@ -35,6 +36,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -52,6 +54,9 @@
                   </packing>
                 </child>
               </widget>
+              <packing>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkLabel" id="pbar-stage">
@@ -72,7 +77,6 @@
               <widget class="GtkProgressBar" id="pbar">
                 <property name="visible">True</property>
                 <property name="pulse_step">0.10000000149</property>
-                <property name="text" translatable="yes"></property>
               </widget>
               <packing>
                 <property name="expand">False</property>

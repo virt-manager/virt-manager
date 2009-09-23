@@ -4,11 +4,12 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="vmm-create">
     <property name="title" translatable="yes">New VM</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">dialog</property>
     <signal name="delete_event" handler="on_vmm_newcreate_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkViewport" id="create-header">
             <property name="visible">True</property>
@@ -36,6 +37,7 @@
                     <child>
                       <widget class="GtkVBox" id="vbox3">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <child>
                           <widget class="GtkLabel" id="label2">
                             <property name="visible">True</property>
@@ -81,6 +83,7 @@
           <widget class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
             <property name="border_width">12</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">15</property>
             <child>
               <widget class="GtkAlignment" id="alignment1">
@@ -96,10 +99,12 @@
                     <child>
                       <widget class="GtkVBox" id="vbox4">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">40</property>
                         <child>
                           <widget class="GtkVBox" id="vbox5">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkLabel" id="label10">
@@ -207,6 +212,7 @@
                         <child>
                           <widget class="GtkVBox" id="install-box">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">8</property>
                             <child>
                               <widget class="GtkLabel" id="label12">
@@ -226,6 +232,7 @@
                                 <child>
                                   <widget class="GtkVBox" id="vbox6">
                                     <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
                                     <property name="spacing">3</property>
                                     <child>
                                       <widget class="GtkRadioButton" id="method-local">
@@ -297,6 +304,7 @@
                     <child>
                       <widget class="GtkVBox" id="vbox7">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">10</property>
                         <child>
                           <widget class="GtkNotebook" id="install-method-pages">
@@ -310,6 +318,7 @@
                                 <child>
                                   <widget class="GtkVBox" id="vbox9">
                                     <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
                                     <property name="spacing">6</property>
                                     <child>
                                       <widget class="GtkLabel" id="label21">
@@ -329,10 +338,12 @@
                                         <child>
                                           <widget class="GtkVBox" id="vbox13">
                                             <property name="visible">True</property>
+                                            <property name="orientation">vertical</property>
                                             <property name="spacing">4</property>
                                             <child>
                                               <widget class="GtkVBox" id="install-local-cdrom-box">
                                                 <property name="visible">True</property>
+                                                <property name="orientation">vertical</property>
                                                 <property name="spacing">4</property>
                                                 <child>
                                                   <widget class="GtkRadioButton" id="install-local-cdrom">
@@ -465,6 +476,7 @@
                             <child>
                               <widget class="GtkVBox" id="vbox10">
                                 <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
                                 <property name="spacing">6</property>
                                 <child>
                                   <widget class="GtkLabel" id="label23">
@@ -623,10 +635,12 @@ User shouldn't see this.</property>
                         <child>
                           <widget class="GtkVBox" id="vbox8">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkVBox" id="install-detect-os-box">
                                 <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
                                 <signal name="hide" handler="on_install_detect_os_box_hide"/>
                                 <signal name="show" handler="on_install_detect_os_box_show"/>
                                 <child>
@@ -778,11 +792,13 @@ User shouldn't see this.</property>
                     <child>
                       <widget class="GtkVBox" id="vbox11">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">40</property>
                         <child>
                           <widget class="GtkVBox" id="vbox12">
                             <property name="visible">True</property>
                             <property name="extension_events">cursor</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkLabel" id="label15">
@@ -977,6 +993,7 @@ User shouldn't see this.</property>
                     <child>
                       <widget class="GtkVBox" id="config-storage-area">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
                           <widget class="GtkCheckButton" id="enable-storage">
@@ -1000,6 +1017,7 @@ User shouldn't see this.</property>
                             <child>
                               <widget class="GtkVBox" id="config-storage-box">
                                 <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
                                 <property name="spacing">4</property>
                                 <child>
                                   <widget class="GtkHBox" id="hbox6">
@@ -1038,6 +1056,7 @@ User shouldn't see this.</property>
                                     <child>
                                       <widget class="GtkVBox" id="vbox18">
                                         <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
                                         <property name="spacing">4</property>
                                         <child>
                                           <widget class="GtkHBox" id="hbox7">
@@ -1213,10 +1232,12 @@ User shouldn't see this.</property>
                     <child>
                       <widget class="GtkVBox" id="vbox15">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">30</property>
                         <child>
                           <widget class="GtkVBox" id="vbox16">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
                               <widget class="GtkLabel" id="summary-title">
@@ -1408,10 +1429,12 @@ User shouldn't see this.</property>
                                 <child>
                                   <widget class="GtkVBox" id="vbox14">
                                     <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
                                     <property name="spacing">6</property>
                                     <child>
                                       <widget class="GtkVBox" id="vbox17">
                                         <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
                                         <property name="spacing">6</property>
                                         <child>
                                           <widget class="GtkHBox" id="hbox8">

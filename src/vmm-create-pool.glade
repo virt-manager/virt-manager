@@ -1,18 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.6 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="vmm-create-pool">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Add a New Storage Pool</property>
     <property name="default_width">525</property>
     <property name="default_height">350</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">dialog</property>
     <signal name="delete_event" handler="on_vmm_create_pool_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <property name="border_width">6</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkNotebook" id="pool-pages">
             <property name="visible">True</property>
@@ -22,6 +23,7 @@
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
                 <property name="border_width">10</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
                   <widget class="GtkHBox" id="hbox5">
@@ -29,6 +31,7 @@
                     <child>
                       <widget class="GtkVBox" id="vbox3">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">3</property>
                         <child>
                           <widget class="GtkHBox" id="hbox6">
@@ -43,6 +46,7 @@
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -62,6 +66,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -76,6 +81,9 @@
                           </packing>
                         </child>
                       </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkLabel" id="label4">
@@ -94,6 +102,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="padding">5</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -148,9 +157,9 @@
                             <property name="visible">True</property>
                             <signal name="button_press_event" handler="on_pool_type_button_press_event"/>
                             <signal name="changed" handler="on_pool_type_changed"/>
+                            <signal name="focus" handler="on_pool_type_focus"/>
                             <signal name="motion_notify_event" handler="on_pool_type_motion_notify_event"/>
                             <signal name="focus_in_event" handler="on_pool_type_focus_in_event"/>
-                            <signal name="focus" handler="on_pool_type_focus"/>
                           </widget>
                           <packing>
                             <property name="left_attach">1</property>
@@ -161,6 +170,9 @@
                           </packing>
                         </child>
                       </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkEventBox" id="pool-info-box1">
@@ -173,7 +185,7 @@
                             <property name="yalign">0</property>
                             <property name="xpad">3</property>
                             <property name="ypad">6</property>
-                            <property name="label" translatable="no">label</property>
+                            <property name="label">label</property>
                             <property name="wrap">True</property>
                           </widget>
                         </child>
@@ -196,14 +208,15 @@
                 <property name="label" translatable="yes">Name</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
               <widget class="GtkVBox" id="vbox4">
                 <property name="visible">True</property>
                 <property name="border_width">10</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
                   <widget class="GtkHBox" id="hbox10">
@@ -212,6 +225,7 @@
                     <child>
                       <widget class="GtkVBox" id="vbox5">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">3</property>
                         <child>
                           <widget class="GtkHBox" id="hbox11">
@@ -226,6 +240,7 @@
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -245,6 +260,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -259,6 +275,9 @@
                           </packing>
                         </child>
                       </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkLabel" id="label15">
@@ -277,6 +296,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="padding">5</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -311,8 +331,8 @@
                           <widget class="GtkCheckButton" id="pool-build">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
-                            <property name="response_id">0</property>
                             <property name="draw_indicator">True</property>
                             <signal name="focus_in_event" handler="on_pool_build_focus_in_event"/>
                           </widget>
@@ -347,14 +367,17 @@
                                 <property name="can_focus">True</property>
                                 <signal name="focus_in_event" handler="on_pool_source_path_focus_in_event"/>
                               </widget>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <widget class="GtkButton" id="pool-source-button">
+                                <property name="label" translatable="yes">Browse</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">Browse</property>
+                                <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <signal name="clicked" handler="on_pool_source_button_clicked"/>
                               </widget>
                               <packing>
@@ -382,14 +405,17 @@
                                 <property name="can_focus">True</property>
                                 <signal name="focus_in_event" handler="on_pool_target_path_focus_in_event"/>
                               </widget>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <widget class="GtkButton" id="pool-target-button">
+                                <property name="label" translatable="yes">Browse</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">Browse</property>
+                                <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <signal name="clicked" handler="on_pool_target_button_clicked"/>
                               </widget>
                               <packing>
@@ -471,6 +497,9 @@
                           </packing>
                         </child>
                       </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkEventBox" id="pool-info-box2">
@@ -509,27 +538,31 @@
                 <property name="label" translatable="yes">Format</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">1</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
           </widget>
+          <packing>
+            <property name="position">0</property>
+          </packing>
         </child>
         <child>
           <widget class="GtkHBox" id="hbox7">
             <property name="visible">True</property>
             <child>
               <widget class="GtkButton" id="pool-help">
+                <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="label">gtk-help</property>
+                <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
               </widget>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -549,25 +582,26 @@
                 <property name="spacing">3</property>
                 <child>
                   <widget class="GtkButton" id="pool-cancel">
+                    <property name="label">gtk-cancel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label">gtk-cancel</property>
+                    <property name="receives_default">False</property>
                     <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
                     <signal name="clicked" handler="on_pool_cancel_clicked"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkButton" id="pool-back">
+                    <property name="label">gtk-go-back</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label">gtk-go-back</property>
+                    <property name="receives_default">False</property>
                     <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
                     <signal name="clicked" handler="on_pool_back_clicked"/>
                   </widget>
                   <packing>
@@ -578,11 +612,11 @@
                 </child>
                 <child>
                   <widget class="GtkButton" id="pool-forward">
+                    <property name="label">gtk-go-forward</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label">gtk-go-forward</property>
+                    <property name="receives_default">False</property>
                     <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
                     <signal name="clicked" handler="on_pool_forward_clicked"/>
                   </widget>
                   <packing>
@@ -595,7 +629,7 @@
                   <widget class="GtkButton" id="pool-finish">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="response_id">0</property>
+                    <property name="receives_default">False</property>
                     <signal name="clicked" handler="on_pool_finish_clicked"/>
                     <child>
                       <widget class="GtkAlignment" id="alignment1">
@@ -614,6 +648,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>

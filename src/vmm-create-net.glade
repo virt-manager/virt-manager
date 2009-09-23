@@ -1,15 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.6 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="vmm-create-net">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Create a new virtual network</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">dialog</property>
     <signal name="delete_event" handler="on_vmm_create_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox23">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkNotebook" id="create-pages">
             <property name="visible">True</property>
@@ -19,6 +20,7 @@
             <child>
               <widget class="GtkVBox" id="vbox22">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkAlignment" id="alignment45">
                     <property name="visible">True</property>
@@ -34,7 +36,7 @@
                             <property name="ypad">6</property>
                             <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Creating a new virtual network &lt;/span&gt;</property>
                             <property name="use_markup">True</property>
-                            <property name="justify">GTK_JUSTIFY_FILL</property>
+                            <property name="justify">fill</property>
                           </widget>
                         </child>
                       </widget>
@@ -42,11 +44,13 @@
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkVBox" id="vbox23">
+                  <widget class="GtkVBox" id="vbox1">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <widget class="GtkLabel" id="label148">
                         <property name="visible">True</property>
@@ -60,6 +64,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -77,7 +82,7 @@
                               <widget class="GtkLabel" id="label164">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
-                                <property name="label">&lt;small&gt;●&lt;/small&gt;</property>
+                                <property name="label">&lt;small&gt;&#x25CF;&lt;/small&gt;</property>
                                 <property name="use_markup">True</property>
                               </widget>
                               <packing>
@@ -91,7 +96,7 @@
                               <widget class="GtkLabel" id="label163">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
-                                <property name="label">&lt;small&gt;●&lt;/small&gt;</property>
+                                <property name="label">&lt;small&gt;&#x25CF;&lt;/small&gt;</property>
                                 <property name="use_markup">True</property>
                               </widget>
                               <packing>
@@ -105,7 +110,7 @@
                               <widget class="GtkLabel" id="label162">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
-                                <property name="label">&lt;small&gt;●&lt;/small&gt;</property>
+                                <property name="label">&lt;small&gt;&#x25CF;&lt;/small&gt;</property>
                                 <property name="use_markup">True</property>
                               </widget>
                               <packing>
@@ -119,7 +124,7 @@
                               <widget class="GtkLabel" id="label161">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
-                                <property name="label">&lt;small&gt;●&lt;/small&gt;</property>
+                                <property name="label">&lt;small&gt;&#x25CF;&lt;/small&gt;</property>
                                 <property name="use_markup">True</property>
                               </widget>
                               <packing>
@@ -216,14 +221,15 @@
                 <property name="label" translatable="yes">Intro</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
               <widget class="GtkVBox" id="vbox24">
                 <property name="visible">True</property>
                 <property name="border_width">1</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkAlignment" id="alignment47">
                     <property name="visible">True</property>
@@ -239,7 +245,7 @@
                             <property name="ypad">6</property>
                             <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Naming your virtual network &lt;/span&gt;</property>
                             <property name="use_markup">True</property>
-                            <property name="justify">GTK_JUSTIFY_FILL</property>
+                            <property name="justify">fill</property>
                           </widget>
                         </child>
                       </widget>
@@ -247,11 +253,13 @@
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkVBox" id="vbox25">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <widget class="GtkLabel" id="label167">
                         <property name="visible">True</property>
@@ -265,6 +273,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -279,15 +288,12 @@
                             <property name="column_spacing">4</property>
                             <property name="row_spacing">3</property>
                             <child>
-                              <placeholder/>
-                            </child>
-                            <child>
                               <widget class="GtkEntry" id="net-name">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="max_length">50</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible_name" translatable="yes">Net Name Field</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Net Name Field</atkproperty>
                                 </accessibility>
                               </widget>
                               <packing>
@@ -306,6 +312,7 @@
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -338,13 +345,16 @@
                                 <property name="label" translatable="yes">Network _Name:</property>
                                 <property name="use_markup">True</property>
                                 <property name="use_underline">True</property>
-                                <property name="justify">GTK_JUSTIFY_RIGHT</property>
+                                <property name="justify">right</property>
                                 <property name="mnemonic_widget">net-name</property>
                               </widget>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"></property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </widget>
                         </child>
@@ -369,15 +379,16 @@
                 <property name="label" translatable="yes">Name</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">1</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
               <widget class="GtkVBox" id="vbox26">
                 <property name="visible">True</property>
                 <property name="border_width">1</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkAlignment" id="alignment49">
                     <property name="visible">True</property>
@@ -393,7 +404,7 @@
                             <property name="ypad">6</property>
                             <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Choosing an IPv4 address space&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
-                            <property name="justify">GTK_JUSTIFY_FILL</property>
+                            <property name="justify">fill</property>
                           </widget>
                         </child>
                       </widget>
@@ -401,11 +412,13 @@
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkVBox" id="vbox27">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <widget class="GtkLabel" id="label176">
                         <property name="visible">True</property>
@@ -419,6 +432,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -433,12 +447,6 @@
                             <property name="n_columns">2</property>
                             <property name="column_spacing">3</property>
                             <property name="row_spacing">3</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
                             <child>
                               <widget class="GtkAlignment" id="alignment147">
                                 <property name="visible">True</property>
@@ -612,6 +620,7 @@
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -642,7 +651,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="width_chars">20</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible_name" translatable="yes">Network Range</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Network Range</atkproperty>
                                 </accessibility>
                                 <signal name="changed" handler="on_net_network_changed"/>
                               </widget>
@@ -662,6 +671,12 @@
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"></property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </widget>
                         </child>
@@ -688,15 +703,16 @@
                 <property name="label" translatable="yes">IPv4</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">2</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
               <widget class="GtkVBox" id="vbox28">
                 <property name="visible">True</property>
                 <property name="border_width">1</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkAlignment" id="alignment53">
                     <property name="visible">True</property>
@@ -712,7 +728,7 @@
                             <property name="ypad">6</property>
                             <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Selecting the DHCP range&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
-                            <property name="justify">GTK_JUSTIFY_FILL</property>
+                            <property name="justify">fill</property>
                           </widget>
                         </child>
                       </widget>
@@ -720,11 +736,13 @@
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkVBox" id="vbox29">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <widget class="GtkLabel" id="label186">
                         <property name="visible">True</property>
@@ -738,6 +756,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -753,9 +772,6 @@
                             <property name="column_spacing">3</property>
                             <property name="row_spacing">3</property>
                             <child>
-                              <placeholder/>
-                            </child>
-                            <child>
                               <widget class="GtkHBox" id="hbox65">
                                 <property name="visible">True</property>
                                 <child>
@@ -768,6 +784,7 @@
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -792,7 +809,6 @@
                                 <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
-<!-- MIG -->
                             <child>
                               <widget class="GtkLabel" id="label72">
                                 <property name="visible">True</property>
@@ -800,8 +816,6 @@
                                 <property name="label" translatable="yes">Enable DHCP:</property>
                               </widget>
                               <packing>
-                                <property name="top_attach">0</property>
-                                <property name="bottom_attach">1</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"></property>
                               </packing>
@@ -810,28 +824,25 @@
                               <widget class="GtkCheckButton" id="net-dhcp-enable">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="active">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
+                                <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_net_dhcp_enable_toggled"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">0</property>
-                                <property name="bottom_attach">1</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options"></property>
                               </packing>
                             </child>
-<!-- /MIG -->
                             <child>
                               <widget class="GtkEntry" id="net-dhcp-end">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible_name" translatable="yes">End Address</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">End Address</atkproperty>
                                 </accessibility>
                                 <signal name="changed" handler="on_net_dhcp_end_changed"/>
                               </widget>
@@ -848,7 +859,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible_name" translatable="yes">Start Address</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Start Address</atkproperty>
                                 </accessibility>
                                 <signal name="changed" handler="on_net_dhcp_start_changed"/>
                               </widget>
@@ -886,6 +897,15 @@
                                 <property name="y_options"></property>
                               </packing>
                             </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </widget>
                         </child>
                       </widget>
@@ -910,15 +930,16 @@
                 <property name="label" translatable="yes">DHCP</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">3</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
               <widget class="GtkVBox" id="vbox32">
                 <property name="visible">True</property>
                 <property name="border_width">1</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkAlignment" id="alignment69">
                     <property name="visible">True</property>
@@ -934,7 +955,7 @@
                             <property name="ypad">6</property>
                             <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Connecting to physical network&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
-                            <property name="justify">GTK_JUSTIFY_FILL</property>
+                            <property name="justify">fill</property>
                           </widget>
                         </child>
                       </widget>
@@ -942,11 +963,13 @@
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkVBox" id="vbox33">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <widget class="GtkLabel" id="label205">
                         <property name="visible">True</property>
@@ -960,6 +983,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -998,11 +1022,11 @@
                             </child>
                             <child>
                               <widget class="GtkRadioButton" id="net-forward-none">
+                                <property name="label" translatable="yes">Isolated virtual network</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">Isolated virtual network</property>
+                                <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">net-forward-dev</property>
                                 <signal name="toggled" handler="on_net_forward_toggled"/>
@@ -1015,11 +1039,11 @@
                             </child>
                             <child>
                               <widget class="GtkRadioButton" id="net-forward-dev">
+                                <property name="label" translatable="yes">Forwarding to physical network</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">Forwarding to physical network</property>
+                                <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_net_forward_toggled"/>
                               </widget>
@@ -1035,7 +1059,7 @@
                               <widget class="GtkComboBox" id="net-forward">
                                 <property name="visible">True</property>
                                 <accessibility>
-                                  <atkproperty name="AtkObject::accessible_name" translatable="yes">Physical Network</atkproperty>
+                                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Physical Network</atkproperty>
                                 </accessibility>
                               </widget>
                               <packing>
@@ -1070,15 +1094,16 @@
                 <property name="label" translatable="yes">Forwarding</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">4</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
               <widget class="GtkVBox" id="vbox41">
                 <property name="visible">True</property>
                 <property name="border_width">1</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkAlignment" id="alignment95">
                     <property name="visible">True</property>
@@ -1094,7 +1119,7 @@
                             <property name="ypad">6</property>
                             <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Ready to create network&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
-                            <property name="justify">GTK_JUSTIFY_FILL</property>
+                            <property name="justify">fill</property>
                           </widget>
                         </child>
                       </widget>
@@ -1102,6 +1127,7 @@
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -1122,24 +1148,6 @@
                         <property name="n_columns">3</property>
                         <property name="column_spacing">3</property>
                         <property name="row_spacing">3</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
                         <child>
                           <widget class="GtkLabel" id="summary-forwarding">
                             <property name="visible">True</property>
@@ -1333,7 +1341,7 @@
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="label">/xen/demo.img</property>
-                            <property name="ellipsize">PANGO_ELLIPSIZE_MIDDLE</property>
+                            <property name="ellipsize">middle</property>
                           </widget>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1349,7 +1357,7 @@
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="label">255.255.255.0</property>
-                            <property name="ellipsize">PANGO_ELLIPSIZE_MIDDLE</property>
+                            <property name="ellipsize">middle</property>
                           </widget>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1365,7 +1373,7 @@
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="label">192.168.10.254</property>
-                            <property name="ellipsize">PANGO_ELLIPSIZE_MIDDLE</property>
+                            <property name="ellipsize">middle</property>
                           </widget>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1432,6 +1440,24 @@
                             <property name="y_options"></property>
                           </packing>
                         </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </widget>
                     </child>
                   </widget>
@@ -1450,12 +1476,15 @@
                 <property name="label" translatable="yes">Complete</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">5</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
           </widget>
+          <packing>
+            <property name="position">0</property>
+          </packing>
         </child>
         <child>
           <widget class="GtkHBox" id="hbox51">
@@ -1466,17 +1495,18 @@
                 <property name="xalign">0</property>
                 <child>
                   <widget class="GtkButton" id="create-help">
+                    <property name="label">gtk-help</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label">gtk-help</property>
+                    <property name="receives_default">False</property>
                     <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
                     <signal name="clicked" handler="on_create_help_clicked"/>
                   </widget>
                 </child>
               </widget>
               <packing>
                 <property name="expand">False</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -1489,25 +1519,26 @@
                     <property name="spacing">10</property>
                     <child>
                       <widget class="GtkButton" id="create-cancel">
+                        <property name="label">gtk-cancel</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label">gtk-cancel</property>
+                        <property name="receives_default">False</property>
                         <property name="use_stock">True</property>
-                        <property name="response_id">0</property>
                         <signal name="clicked" handler="on_create_cancel_clicked"/>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <widget class="GtkButton" id="create-back">
+                        <property name="label">gtk-go-back</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label">gtk-go-back</property>
+                        <property name="receives_default">False</property>
                         <property name="use_stock">True</property>
-                        <property name="response_id">0</property>
                         <signal name="clicked" handler="on_create_back_clicked"/>
                       </widget>
                       <packing>
@@ -1518,11 +1549,11 @@
                     </child>
                     <child>
                       <widget class="GtkButton" id="create-forward">
+                        <property name="label">gtk-go-forward</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label">gtk-go-forward</property>
+                        <property name="receives_default">False</property>
                         <property name="use_stock">True</property>
-                        <property name="response_id">0</property>
                         <signal name="clicked" handler="on_create_forward_clicked"/>
                       </widget>
                       <packing>
@@ -1534,7 +1565,7 @@
                     <child>
                       <widget class="GtkButton" id="create-finish">
                         <property name="can_focus">True</property>
-                        <property name="response_id">0</property>
+                        <property name="receives_default">False</property>
                         <signal name="clicked" handler="on_create_finish_clicked"/>
                         <child>
                           <widget class="GtkAlignment" id="alignment119">
@@ -1553,6 +1584,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1584,7 +1616,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="pack_type">GTK_PACK_END</property>
+                <property name="pack_type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>

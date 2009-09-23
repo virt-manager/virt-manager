@@ -12,14 +12,15 @@
     <property name="type_hint">dialog</property>
     <property name="gravity">center</property>
     <property name="has_separator">False</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <signal name="delete_event" handler="on_vmm_choose_cd_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkVBox" id="vbox4">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
             <child>
               <widget class="GtkFrame" id="frame1">
                 <property name="visible">True</property>

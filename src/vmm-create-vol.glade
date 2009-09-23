@@ -1,27 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.6 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="vmm-create-vol">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Add a Storage Volume</property>
     <property name="default_width">500</property>
     <property name="default_height">320</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">dialog</property>
     <signal name="delete_event" handler="on_vmm_create_vol_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <property name="border_width">6</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
           <widget class="GtkVBox" id="vbox2">
             <property name="visible">True</property>
             <property name="border_width">13</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <widget class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">3</property>
                 <child>
                   <widget class="GtkHBox" id="hbox4">
@@ -35,6 +38,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -53,6 +57,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -71,6 +76,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -80,6 +86,7 @@
                 <child>
                   <widget class="GtkVBox" id="vbox4">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">10</property>
                     <child>
                       <widget class="GtkTable" id="table1">
@@ -97,6 +104,9 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                               </widget>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                             <child>
                               <widget class="GtkLabel" id="vol-name-suffix">
@@ -154,14 +164,19 @@
                           </packing>
                         </child>
                       </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkVBox" id="vbox5">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">5</property>
                         <child>
                           <widget class="GtkVBox" id="vbox6">
                             <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
                             <child>
                               <widget class="GtkLabel" id="label10">
                                 <property name="visible">True</property>
@@ -172,6 +187,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -181,11 +197,12 @@
                                 <child>
                                   <widget class="GtkLabel" id="vol-parent-name">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="no">(parent-name)</property>
+                                    <property name="label">(parent-name)</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -203,7 +220,7 @@
                                 <child>
                                   <widget class="GtkLabel" id="vol-parent-space">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="no">(space)</property>
+                                    <property name="label">(space)</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -222,6 +239,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -325,17 +343,20 @@
                       </packing>
                     </child>
                   </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
                 <child>
                   <widget class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
-                    <property name="vscrollbar_policy">GTK_POLICY_NEVER</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
                     <child>
                       <widget class="GtkViewport" id="vol-info-view">
                         <property name="visible">True</property>
-                        <property name="shadow_type">GTK_SHADOW_NONE</property>
+                        <property name="shadow_type">none</property>
                         <child>
                           <widget class="GtkLabel" id="vol-info">
                             <property name="visible">True</property>
@@ -375,6 +396,9 @@
               </packing>
             </child>
           </widget>
+          <packing>
+            <property name="position">0</property>
+          </packing>
         </child>
         <child>
           <widget class="GtkHBox" id="hbox1">
@@ -385,41 +409,46 @@
                 <property name="visible">True</property>
                 <child>
                   <widget class="GtkButton" id="pool-help">
+                    <property name="label">gtk-help</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label">gtk-help</property>
+                    <property name="receives_default">False</property>
                     <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
               </widget>
+              <packing>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkHBox" id="hbox8">
                 <property name="visible">True</property>
                 <child>
                   <widget class="GtkButton" id="vol-cancel">
+                    <property name="label">gtk-cancel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label">gtk-cancel</property>
+                    <property name="receives_default">False</property>
                     <property name="use_stock">True</property>
-                    <property name="response_id">0</property>
                     <signal name="clicked" handler="on_vol_cancel_clicked"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkButton" id="vol-create">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="response_id">0</property>
+                    <property name="receives_default">False</property>
                     <signal name="clicked" handler="on_vol_create_clicked"/>
                     <child>
                       <widget class="GtkAlignment" id="alignment1">
@@ -438,6 +467,7 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>

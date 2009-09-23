@@ -1,19 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Jul 28 21:02:03 2009 -->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.6 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkDialog" id="vmm-storage-browse">
     <property name="border_width">2</property>
     <property name="title" translatable="yes">Choose Storage Volume</property>
     <property name="default_width">750</property>
     <property name="default_height">500</property>
     <property name="destroy_with_parent">True</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
     <signal name="delete_event" handler="on_vmm_storage_browse_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
+        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
@@ -27,14 +28,15 @@
                 <child>
                   <widget class="GtkVBox" id="vbox3">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">10</property>
                     <child>
                       <widget class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
-                        <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="shadow_type">GTK_SHADOW_IN</property>
+                        <property name="hscrollbar_policy">never</property>
+                        <property name="vscrollbar_policy">automatic</property>
+                        <property name="shadow_type">in</property>
                         <child>
                           <widget class="GtkTreeView" id="pool-list">
                             <property name="visible">True</property>
@@ -42,6 +44,9 @@
                           </widget>
                         </child>
                       </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkHBox" id="hbox3">
@@ -52,7 +57,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="response_id">0</property>
                             <signal name="clicked" handler="on_browse_local_clicked"/>
                             <child>
                               <widget class="GtkAlignment" id="alignment4">
@@ -72,6 +76,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -94,19 +99,21 @@
                   </widget>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <widget class="GtkVBox" id="vbox2">
                     <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">10</property>
                     <child>
                       <widget class="GtkScrolledWindow" id="scrolledwindow2">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="shadow_type">GTK_SHADOW_IN</property>
+                        <property name="hscrollbar_policy">automatic</property>
+                        <property name="vscrollbar_policy">automatic</property>
+                        <property name="shadow_type">in</property>
                         <child>
                           <widget class="GtkTreeView" id="vol-list">
                             <property name="visible">True</property>
@@ -115,6 +122,9 @@
                           </widget>
                         </child>
                       </widget>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkHBox" id="hbox4">
@@ -125,7 +135,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="response_id">0</property>
                             <signal name="clicked" handler="on_new_volume_clicked"/>
                             <child>
                               <widget class="GtkHBox" id="hbox6">
@@ -139,6 +148,7 @@
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -158,6 +168,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -173,12 +184,11 @@
                         </child>
                         <child>
                           <widget class="GtkButton" id="browse-cancel">
+                            <property name="label">gtk-cancel</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="label" translatable="yes">gtk-cancel</property>
                             <property name="use_stock">True</property>
-                            <property name="response_id">0</property>
                             <signal name="clicked" handler="on_browse_cancel_clicked"/>
                           </widget>
                           <packing>
@@ -191,7 +201,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="response_id">0</property>
                             <signal name="clicked" handler="on_choose_volume_clicked"/>
                             <child>
                               <widget class="GtkHBox" id="hbox5">
@@ -204,6 +213,7 @@
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -247,14 +257,15 @@
         <child internal-child="action_area">
           <widget class="GtkHButtonBox" id="dialog-action_area1">
             <property name="no_show_all">True</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
             <child>
               <placeholder/>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">GTK_PACK_END</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </widget>
