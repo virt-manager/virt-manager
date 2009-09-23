@@ -131,3 +131,61 @@ class vmmErrorDialog (gtk.MessageDialog):
     def ok_cancel(self, text1, text2=None):
         return self._show_warning(gtk.BUTTONS_OK_CANCEL, text1, text2)
 
+    def warn_chkbox(self, text1, text2=None, chktext=None):
+        chkbox = vmmCheckDialog(self.parent, gtk.MESSAGE_WARNING)
+        return chkbox.show_chkbox(text1, text2, chktext)
+
+    def err_chkbox(self, text1, text2=None, chktext=None):
+        chkbox = vmmCheckDialog(self.parent, gtk.MESSAGE_ERROR)
+        return chkbox.show_chkbox(text1, text2, chktext)
+
+class vmmCheckDialog (gtk.MessageDialog):
+    def __init__ (self, parent=None, typ=gtk.MESSAGE_INFO):
+        if typ == gtk.MESSAGE_WARNING:
+            buttons = gtk.BUTTONS_OK_CANCEL
+        else:
+            buttons = gtk.BUTTONS_OK
+
+        gtk.MessageDialog.__init__ (self, parent, 0, typ, buttons)
+
+        self.connect("response", self.response_cb)
+        self.connect("delete-event", self.hide_on_delete)
+        self.set_title("")
+
+        self.chk_vbox = gtk.VBox(False, False)
+        self.chk_vbox.set_spacing(0)
+
+        self.chk_align = gtk.Alignment()
+        self.chk_align.set_padding(0, 0, 62, 0)
+        self.chk_align.add(self.chk_vbox)
+
+        self.chk_align.show_all()
+        self.vbox.pack_start(self.chk_align)
+
+    def response_cb(self, src, ignore):
+        src.hide()
+
+    def show_chkbox(self, text1, text2=None, chktext=None):
+        chkbox = None
+        res = None
+        chkres = None
+
+        self.hide()
+        for c in self.chk_vbox.get_children():
+            self.chk_vbox.remove(c)
+
+        self.set_property("text", text1)
+
+        if text2:
+            self.format_secondary_text(text2)
+
+        if chktext:
+            chkbox = gtk.CheckButton(chktext)
+            self.chk_vbox.add(chkbox)
+            chkbox.show()
+
+        res = self.run() in [ gtk.RESPONSE_YES, gtk.RESPONSE_OK ]
+        if chktext:
+            res = [res, chkbox.get_active()]
+
+        return res
