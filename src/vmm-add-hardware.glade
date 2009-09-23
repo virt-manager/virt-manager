@@ -10,9 +10,9 @@
     <child>
       <widget class="GtkVBox" id="vbox23">
         <property name="visible">True</property>
-        <property name="border_width">6</property>
+        <property name="border_width">12</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <child>
           <widget class="GtkNotebook" id="create-pages">
             <property name="visible">True</property>
@@ -2694,128 +2694,109 @@ to connect to the virtual machine.</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox51">
+          <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
+            <property name="spacing">6</property>
+            <property name="layout_style">end</property>
             <child>
-              <widget class="GtkAlignment" id="alignment135">
+              <widget class="GtkButton" id="create-help">
+                <property name="label">gtk-help</property>
                 <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <child>
-                  <widget class="GtkButton" id="create-help">
-                    <property name="label">gtk-help</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_create_help_clicked"/>
-                  </widget>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_create_help_clicked"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">0</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment134">
+              <widget class="GtkButton" id="create-cancel">
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
-                <property name="xalign">1</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_create_cancel_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="create-back">
+                <property name="label">gtk-go-back</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_create_back_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="create-forward">
+                <property name="label">gtk-go-forward</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_create_forward_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="create-finish">
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_create_finish_clicked"/>
                 <child>
-                  <widget class="GtkHBox" id="hbox25">
+                  <widget class="GtkAlignment" id="alignment119">
                     <property name="visible">True</property>
-                    <property name="spacing">10</property>
+                    <property name="xscale">0</property>
+                    <property name="yscale">0</property>
                     <child>
-                      <widget class="GtkButton" id="create-cancel">
-                        <property name="label">gtk-cancel</property>
+                      <widget class="GtkHBox" id="hbox45">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_stock">True</property>
-                        <signal name="clicked" handler="on_create_cancel_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="create-back">
-                        <property name="label">gtk-go-back</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_stock">True</property>
-                        <signal name="clicked" handler="on_create_back_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="create-forward">
-                        <property name="label">gtk-go-forward</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_stock">True</property>
-                        <signal name="clicked" handler="on_create_forward_clicked"/>
-                      </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="create-finish">
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <signal name="clicked" handler="on_create_finish_clicked"/>
+                        <property name="spacing">2</property>
                         <child>
-                          <widget class="GtkAlignment" id="alignment119">
+                          <widget class="GtkImage" id="image95">
                             <property name="visible">True</property>
-                            <property name="xscale">0</property>
-                            <property name="yscale">0</property>
-                            <child>
-                              <widget class="GtkHBox" id="hbox45">
-                                <property name="visible">True</property>
-                                <property name="spacing">2</property>
-                                <child>
-                                  <widget class="GtkImage" id="image95">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-quit</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkLabel" id="label305">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">_Finish</property>
-                                    <property name="use_underline">True</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </widget>
-                            </child>
+                            <property name="stock">gtk-quit</property>
                           </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label305">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">_Finish</property>
+                            <property name="use_underline">True</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
                       </widget>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">3</property>
-                      </packing>
                     </child>
                   </widget>
                 </child>
@@ -2823,14 +2804,12 @@ to connect to the virtual machine.</property>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="pack_type">end</property>
-                <property name="position">1</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>

@@ -3,24 +3,23 @@
   <!-- interface-requires gtk+ 2.6 -->
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="vmm-preferences">
+    <property name="border_width">12</property>
     <property name="title" translatable="yes">Preferences</property>
     <property name="type_hint">dialog</property>
     <signal name="delete_event" handler="on_vmm_preferences_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
-        <property name="border_width">3</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">3</property>
+        <property name="spacing">12</property>
         <child>
           <widget class="GtkNotebook" id="prefs-pages">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="border_width">3</property>
             <child>
               <widget class="GtkVBox" id="vbox5">
                 <property name="visible">True</property>
-                <property name="border_width">6</property>
+                <property name="border_width">12</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkFrame" id="frame5">
@@ -88,7 +87,7 @@
             <child>
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
-                <property name="border_width">6</property>
+                <property name="border_width">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">8</property>
                 <child>
@@ -135,6 +134,7 @@
                               <widget class="GtkSpinButton" id="prefs-stats-history-len">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="invisible_char">&#x25CF;</property>
                                 <property name="adjustment">0 0 300 5 5 0</property>
                                 <property name="climb_rate">0.01</property>
                                 <signal name="value_changed" handler="on_prefs_stats_history_length_changed"/>
@@ -151,6 +151,7 @@
                               <widget class="GtkSpinButton" id="prefs-stats-update-interval">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="invisible_char">&#x25CF;</property>
                                 <property name="adjustment">0 0 60 1 5 0</property>
                                 <signal name="value_changed" handler="on_prefs_stats_update_interval_changed"/>
                               </widget>
@@ -317,7 +318,7 @@
             <child>
               <widget class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
-                <property name="border_width">6</property>
+                <property name="border_width">12</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">8</property>
                 <child>
@@ -530,7 +531,7 @@ For all domains</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox2">
+          <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
             <child>
               <widget class="GtkButton" id="prefs-help">
@@ -547,44 +548,20 @@ For all domains</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkAlignment" id="alignment1">
+              <widget class="GtkButton" id="prefs-close">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
-                <child>
-                  <placeholder/>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+                <signal name="clicked" handler="on_prefs_close_clicked"/>
               </widget>
               <packing>
                 <property name="position">1</property>
               </packing>
             </child>
-            <child>
-              <widget class="GtkHBox" id="hbox3">
-                <property name="visible">True</property>
-                <property name="spacing">6</property>
-                <property name="homogeneous">True</property>
-                <child>
-                  <widget class="GtkButton" id="prefs-close">
-                    <property name="label">gtk-close</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_prefs_close_clicked"/>
-                  </widget>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
           </widget>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
