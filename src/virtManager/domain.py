@@ -1355,7 +1355,7 @@ class vmmDomain(gobject.GObject):
         self._change_cdrom(result, dev_id_info)
 
     def hotplug_vcpu(self, vcpus):
-        self.vm.setVcpus()
+        self.vm.setVcpus(int(vcpus))
 
     def hotplug_vcpus(self, vcpus):
         vcpus = int(vcpus)
