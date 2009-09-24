@@ -1122,7 +1122,7 @@ class vmmCreate(gobject.GObject):
             if pagenum == PAGE_NAME:
                 return self.validate_name_page()
             elif pagenum == PAGE_INSTALL:
-                return self.validate_install_page()
+                return self.validate_install_page(revalidate=False)
             elif pagenum == PAGE_MEM:
                 return self.validate_mem_page()
             elif pagenum == PAGE_STORAGE:
@@ -1135,7 +1135,7 @@ class vmmCreate(gobject.GObject):
                     return False
                 elif not self.validate_mem_page():
                     return False
-                return self.validate_storage_page()
+                return self.validate_storage_page(revalidate=False)
 
             elif pagenum == PAGE_FINISH:
                 # Since we allow the user to change to change HV type + arch
@@ -1169,7 +1169,7 @@ class vmmCreate(gobject.GObject):
 
         return True
 
-    def validate_install_page(self):
+    def validate_install_page(self, revalidate=True):
         instmethod = self.get_config_install_page()
         installer = None
         location = None
@@ -1270,7 +1270,7 @@ class vmmCreate(gobject.GObject):
 
         return True
 
-    def validate_storage_page(self):
+    def validate_storage_page(self, revalidate=True):
         use_storage = self.window.get_widget("enable-storage").get_active()
 
         self.guest.disks = []
@@ -1296,19 +1296,21 @@ class vmmCreate(gobject.GObject):
             return self.verr(_("Storage parameter error."), str(e))
 
         isfatal, errmsg = disk.is_size_conflict()
-        if not isfatal and errmsg:
+        if not revalidate and not isfatal and errmsg:
             # Fatal errors are reported when setting 'size'
             res = self.err.ok_cancel(_("Not Enough Free Space"), errmsg)
             if not res:
                 return False
 
         # Disk collision
-        if disk.is_conflict_disk(self.guest.conn):
-            return self.err.yes_no(_('Disk "%s" is already in use by another '
-                                     'guest!' % disk.path),
-                                   _("Do you really want to use the disk?"))
-        else:
-            return True
+        if not revalidate and disk.is_conflict_disk(self.guest.conn):
+            res = self.err.yes_no(_('Disk "%s" is already in use by another '
+                                    'guest!' % disk.path),
+                                  _("Do you really want to use the disk?"))
+            if not res:
+                return False
+
+        return True
 
     def validate_final_page(self):
         nettype, devname, macaddr = self.get_config_network_info()
