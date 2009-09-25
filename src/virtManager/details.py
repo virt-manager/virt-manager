@@ -1332,7 +1332,7 @@ class vmmDetails(gobject.GObject):
         self.vncTunnel = None
 
     def try_login(self, src=None):
-        if not self.vm.vm:
+        if not self.vm.get_handle():
             # VM was removed, skip login attempt
             return
 

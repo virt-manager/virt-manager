@@ -49,11 +49,11 @@ class vmmDomain(gobject.GObject):
                            []),
         }
 
-    def __init__(self, config, connection, vm, uuid):
+    def __init__(self, config, connection, backend, uuid):
         self.__gobject_init__()
         self.config = config
         self.connection = connection
-        self.vm = vm
+        self._backend = backend
         self.uuid = uuid
         self.lastStatus = None
         self.record = []
@@ -83,7 +83,124 @@ class vmmDomain(gobject.GObject):
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
-        self.connection.set_dom_flags(vm)
+        self._set_dom_flags()
+
+    ##########################
+    # Internal virDomain API #
+    ##########################
+
+    def _set_dom_flags(self):
+        self.connection.set_dom_flags(self._backend)
+
+    def _define(self, newxml):
+        self.get_connection().define_domain(newxml)
+
+    def _XMLDesc(self, flags):
+        return self._backend.XMLDesc(flags)
+
+    def get_id(self):
+        return self._backend.ID()
+
+    def get_name(self):
+        return self._backend.name()
+
+    def attach_device(self, xml):
+        """Hotplug device to running guest"""
+        if self.is_active():
+            self._backend.attachDevice(xml)
+
+    def detach_device(self, xml):
+        """Hotunplug device from running guest"""
+        if self.is_active():
+            self._backend.detachDevice(xml)
+
+    def get_info(self):
+        return self._backend.info()
+
+    def shutdown(self):
+        self._backend.shutdown()
+        self._update_status()
+
+    def reboot(self):
+        self._backend.reboot(0)
+        self._update_status()
+
+    def startup(self):
+        self._backend.create()
+        self._update_status()
+
+    def suspend(self):
+        self._backend.suspend()
+        self._update_status()
+
+    def delete(self):
+        self._backend.undefine()
+
+    def resume(self):
+        self._backend.resume()
+        self._update_status()
+
+    def save(self, filename, background=True):
+        if background:
+            conn = util.dup_conn(self.config, self.connection)
+            vm = conn.lookupByID(self.get_id())
+        else:
+            vm = self._backend
+
+        vm.save(filename)
+        self._update_status()
+
+    def destroy(self):
+        self._backend.destroy()
+
+    def interfaceStats(self, device):
+        return self._backend.interfaceStats(device)
+
+    def blockStats(self, device):
+        return self._backend.blockStats(device)
+
+    def hotplug_vcpu(self, vcpus):
+        self._backend.setVcpus(int(vcpus))
+
+    def hotplug_vcpus(self, vcpus):
+        vcpus = int(vcpus)
+        if vcpus != self.vcpu_count():
+            self._backend.setVcpus(vcpus)
+
+    def hotplug_memory(self, memory):
+        if memory != self.get_memory():
+            self._backend.setMemory(memory)
+
+    def hotplug_maxmem(self, maxmem):
+        if maxmem != self.maximum_memory():
+            self._backend.setMaxMemory(maxmem)
+
+    def get_autostart(self):
+        return self._backend.autostart()
+
+    def set_autostart(self, val):
+        if self.get_autostart() != val:
+            self._backend.setAutostart(val)
+
+    def migrate(self, destconn):
+        flags = 0
+        if self.lastStatus == libvirt.VIR_DOMAIN_RUNNING:
+            flags = libvirt.VIR_MIGRATE_LIVE
+
+        newxml = self.get_xml()
+
+        self._backend.migrate(destconn.vmm, flags, None, None, 0)
+
+        destconn.define_domain(newxml)
+
+
+    ####################
+    # End internal API #
+    ####################
+
+    #########################
+    # XML fetching routines #
+    #########################
 
     def get_xml(self):
         """
@@ -129,7 +246,7 @@ class vmmDomain(gobject.GObject):
             flags = 0
 
         origxml = self._xml
-        self._xml = self.vm.XMLDesc(flags)
+        self._xml = self._XMLDesc(flags)
         self._valid_xml = True
 
         if origxml != self._xml:
@@ -159,7 +276,7 @@ class vmmDomain(gobject.GObject):
             if not self.connection.has_dom_flags:
                 flags = 0
 
-        self._orig_inactive_xml = self.vm.XMLDesc(flags)
+        self._orig_inactive_xml = self._XMLDesc(flags)
 
     def redefine(self, xml_func, *args):
         """
@@ -187,41 +304,30 @@ class vmmDomain(gobject.GObject):
             logging.debug("Redefining '%s' with XML diff:\n%s",
                           self.get_name(), diff)
 
-        self.get_connection().define_domain(newxml)
+        self._define(newxml)
 
         # Invalidate cached XML
         self._invalidate_xml()
 
+    #############################
+    # End XML fetching routines #
+    #############################
+
     def release_handle(self):
-        del(self.vm)
-        self.vm = None
-
-    def set_handle(self, vm):
-        self.vm = vm
-
-    def is_active(self):
-        if self.vm.ID() == -1:
-            return False
-        else:
-            return True
-
-    def get_connection(self):
-        return self.connection
-
-    def get_id(self):
-        return self.vm.ID()
-
-    def get_id_pretty(self):
-        i = self.get_id()
-        if i < 0:
-            return "-"
-        return str(i)
-
-    def get_name(self):
-        return self.vm.name()
+        del(self._backend)
+        self._backend = None
 
     def get_uuid(self):
         return self.uuid
+
+    def set_handle(self, vm):
+        self._backend = vm
+
+    def get_handle(self):
+        return self._backend
+
+    def get_connection(self):
+        return self.connection
 
     def is_read_only(self):
         if self.connection.is_read_only():
@@ -231,7 +337,7 @@ class vmmDomain(gobject.GObject):
         return False
 
     def is_management_domain(self):
-        if self.vm.ID() == 0:
+        if self.get_id() == 0:
             return True
         return False
 
@@ -240,13 +346,23 @@ class vmmDomain(gobject.GObject):
             return True
         return False
 
+    def is_active(self):
+        if self.get_id() == -1:
+            return False
+        else:
+            return True
+
+    def get_id_pretty(self):
+        i = self.get_id()
+        if i < 0:
+            return "-"
+        return str(i)
+
     def get_abi_type(self):
-        # FIXME: This should be static, not parse xml everytime
         return str(vutil.get_xml_path(self.get_xml(),
                                       "/domain/os/type")).lower()
 
     def get_hv_type(self):
-        # FIXME: This should be static, not parse xml everytime
         return str(vutil.get_xml_path(self.get_xml(), "/domain/@type")).lower()
 
     def get_pretty_hv_type(self):
@@ -267,7 +383,7 @@ class vmmDomain(gobject.GObject):
 
     def _update_status(self, status=None):
         if status == None:
-            info = self.vm.info()
+            info = self.get_info()
             status = info[0]
         status = self._normalize_status(status)
 
@@ -342,7 +458,7 @@ class vmmDomain(gobject.GObject):
                 continue
 
             try:
-                io = self.vm.interfaceStats(dev)
+                io = self.interfaceStats(dev)
                 if io:
                     rx += io[0]
                     tx += io[4]
@@ -371,7 +487,7 @@ class vmmDomain(gobject.GObject):
                 continue
 
             try:
-                io = self.vm.blockStats(dev)
+                io = self.blockStats(dev)
                 if io:
                     rd += io[1]
                     wr += io[3]
@@ -404,7 +520,7 @@ class vmmDomain(gobject.GObject):
         # Invalidate cached xml
         self._invalidate_xml()
 
-        info = self.vm.info()
+        info = self.get_info()
         expected = self.config.get_stats_history_length()
         current = len(self.record)
         if current > expected:
@@ -651,42 +767,6 @@ class vmmDomain(gobject.GObject):
 
     def disk_io_vector_limit(self, limit):
         return self.in_out_vector_limit(self.disk_io_vector(), limit)
-
-    def shutdown(self):
-        self.vm.shutdown()
-        self._update_status()
-
-    def reboot(self):
-        self.vm.reboot(0)
-        self._update_status()
-
-    def startup(self):
-        self.vm.create()
-        self._update_status()
-
-    def suspend(self):
-        self.vm.suspend()
-        self._update_status()
-
-    def delete(self):
-        self.vm.undefine()
-
-    def resume(self):
-        self.vm.resume()
-        self._update_status()
-
-    def save(self, filename, background=True):
-        if background:
-            conn = util.dup_conn(self.config, self.connection)
-            vm = conn.lookupByID(self.get_id())
-        else:
-            vm = self.vm
-
-        vm.save(filename)
-        self._update_status()
-
-    def destroy(self):
-        self.vm.destroy()
 
     def status(self):
         return self.lastStatus
@@ -1273,16 +1353,6 @@ class vmmDomain(gobject.GObject):
 
         return util.xml_parse_wrapper(vmxml, unlink_dev_node)
 
-    def attach_device(self, xml):
-        """Hotplug device to running guest"""
-        if self.is_active():
-            self.vm.attachDevice(xml)
-
-    def detach_device(self, xml):
-        """Hotunplug device from running guest"""
-        if self.is_active():
-            self.vm.detachDevice(xml)
-
     def add_device(self, devxml):
         """Redefine guest with appended device"""
         self.redefine(self._add_xml_device, devxml)
@@ -1354,14 +1424,6 @@ class vmmDomain(gobject.GObject):
         logging.debug("eject_cdrom produced: %s" % result)
         self._change_cdrom(result, dev_id_info)
 
-    def hotplug_vcpu(self, vcpus):
-        self.vm.setVcpus(int(vcpus))
-
-    def hotplug_vcpus(self, vcpus):
-        vcpus = int(vcpus)
-        if vcpus != self.vcpu_count():
-            self.vm.setVcpus(vcpus)
-
     def get_cpuset_syntax_error(self, val):
         # We need to allow None value and empty string so we can't get
         # rid of this function
@@ -1395,14 +1457,6 @@ class vmmDomain(gobject.GObject):
                                           "/domain/vcpu[1]")
 
         self.redefine(change_vcpu_xml, vcpus, cpuset)
-
-    def hotplug_memory(self, memory):
-        if memory != self.get_memory():
-            self.vm.setMemory(memory)
-
-    def hotplug_maxmem(self, maxmem):
-        if maxmem != self.maximum_memory():
-            self.vm.setMaxMemory(maxmem)
 
     def hotplug_both_mem(self, memory, maxmem):
         logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'" %
@@ -1440,13 +1494,6 @@ class vmmDomain(gobject.GObject):
             return xml
 
         self.redefine(change_mem_xml, memory, maxmem)
-
-    def get_autostart(self):
-        return self.vm.autostart()
-
-    def set_autostart(self, val):
-        if self.get_autostart() != val:
-            self.vm.setAutostart(val)
 
     def get_boot_device(self):
         xml = self.get_xml()
@@ -1543,17 +1590,5 @@ class vmmDomain(gobject.GObject):
             self._disk_io = self._sample_disk_io
         else:
             self._disk_io = self._sample_disk_io_dummy
-
-
-    def migrate(self, destconn):
-        flags = 0
-        if self.lastStatus == libvirt.VIR_DOMAIN_RUNNING:
-            flags = libvirt.VIR_MIGRATE_LIVE
-
-        newxml = self.get_xml()
-
-        self.vm.migrate(destconn.vmm, flags, None, None, 0)
-
-        destconn.define_domain(newxml)
 
 gobject.type_register(vmmDomain)
