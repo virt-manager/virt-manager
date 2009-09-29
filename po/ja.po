@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-28 20:55-0400\n"
+"POT-Creation-Date: 2009-09-29 14:34-0400\n"
 "PO-Revision-Date: 2009-04-07 15:34+1000\n"
 "Last-Translator: Noriko Mizumoto <noriko@redhat.com>\n"
 "Language-Team: Japanese <fedora-trans-ja@redhat.com>\n"
@@ -25,7 +25,7 @@ msgid "Manage virtual machines"
 msgstr "仮想マシンを管理する"
 
 #: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:101
-#: ../src/vmm-manager.glade.h:11
+#: ../src/vmm-manager.glade.h:7
 msgid "Virtual Machine Manager"
 msgstr "仮想マシンマネージャー"
 
@@ -216,8 +216,8 @@ msgstr ""
 #: ../src/virtManager/createnet.py:53 ../src/virtManager/createpool.py:52
 #: ../src/virtManager/createvol.py:54 ../src/virtManager/delete.py:61
 #: ../src/virtManager/details.py:123 ../src/virtManager/engine.py:66
-#: ../src/virtManager/host.py:54 ../src/virtManager/manager.py:155
-#: ../src/virtManager/storagebrowse.py:54
+#: ../src/virtManager/host.py:54 ../src/virtManager/manager.py:153
+#: ../src/virtManager/storagebrowse.py:55
 msgid "Unexpected Error"
 msgstr "予想外のエラー"
 
@@ -226,197 +226,196 @@ msgstr "予想外のエラー"
 #: ../src/virtManager/createnet.py:54 ../src/virtManager/createpool.py:53
 #: ../src/virtManager/createvol.py:55 ../src/virtManager/delete.py:62
 #: ../src/virtManager/details.py:124 ../src/virtManager/engine.py:67
-#: ../src/virtManager/host.py:55 ../src/virtManager/manager.py:156
-#: ../src/virtManager/storagebrowse.py:55
+#: ../src/virtManager/host.py:55 ../src/virtManager/manager.py:154
+#: ../src/virtManager/storagebrowse.py:56
 msgid "An unexpected error occurred"
 msgstr "予想外のエラーが発生しました"
 
-#: ../src/virtManager/addhardware.py:398 ../src/virtManager/addhardware.py:403
-#: ../src/virtManager/addhardware.py:406 ../src/virtManager/addhardware.py:409
+#: ../src/virtManager/addhardware.py:400 ../src/virtManager/addhardware.py:405
+#: ../src/virtManager/addhardware.py:408 ../src/virtManager/addhardware.py:411
 #, fuzzy
 msgid "Not supported for this guest type."
 msgstr "ゲスト用のコンソールがサポートされていません"
 
-#: ../src/virtManager/addhardware.py:412
-#, fuzzy
+#: ../src/virtManager/addhardware.py:414
 msgid "Connection does not support host device enumeration"
-msgstr "ゲスト用のコンソールがサポートされていません"
+msgstr ""
 
-#: ../src/virtManager/addhardware.py:416
+#: ../src/virtManager/addhardware.py:418
 msgid "Libvirt version does not support video devices."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:440
+#: ../src/virtManager/addhardware.py:442
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr "ハードウェア入力の検証中に未検出のエラー: %s"
 
-#: ../src/virtManager/addhardware.py:634
+#: ../src/virtManager/addhardware.py:636
 msgid "Disk image:"
 msgstr "ディスクイメージ:"
 
-#: ../src/virtManager/addhardware.py:635
+#: ../src/virtManager/addhardware.py:637
 msgid "Disk size:"
 msgstr "ディスクサイズ:"
 
-#: ../src/virtManager/addhardware.py:636 ../src/vmm-add-hardware.glade.h:35
+#: ../src/virtManager/addhardware.py:638 ../src/vmm-add-hardware.glade.h:35
 msgid "Device type:"
 msgstr "装置タイプ:"
 
-#: ../src/virtManager/addhardware.py:637
+#: ../src/virtManager/addhardware.py:639
 #, fuzzy
 msgid "Bus type:"
 msgstr "ソースタイプ:"
 
-#: ../src/virtManager/addhardware.py:639 ../src/vmm-create.glade.h:42
+#: ../src/virtManager/addhardware.py:641 ../src/vmm-create.glade.h:43
 #: ../src/vmm-host.glade.h:39
 msgid "Storage"
 msgstr "ストレージ"
 
-#: ../src/virtManager/addhardware.py:649
+#: ../src/virtManager/addhardware.py:651
 #, fuzzy
 msgid "Network type:"
 msgstr "ネットワーク名:"
 
-#: ../src/virtManager/addhardware.py:650
+#: ../src/virtManager/addhardware.py:652
 msgid "Target:"
 msgstr "ターゲット:"
 
-#: ../src/virtManager/addhardware.py:651 ../src/vmm-details.glade.h:57
+#: ../src/virtManager/addhardware.py:653 ../src/vmm-details.glade.h:57
 msgid "MAC address:"
 msgstr "MAC アドレス:"
 
-#: ../src/virtManager/addhardware.py:652 ../src/virtManager/addhardware.py:700
-#: ../src/virtManager/addhardware.py:742 ../src/vmm-add-hardware.glade.h:49
+#: ../src/virtManager/addhardware.py:654 ../src/virtManager/addhardware.py:702
+#: ../src/virtManager/addhardware.py:744 ../src/vmm-add-hardware.glade.h:49
 #: ../src/vmm-details.glade.h:66
 msgid "Model:"
 msgstr "モデル:"
 
-#: ../src/virtManager/addhardware.py:654 ../src/vmm-manager.glade.h:7
+#: ../src/virtManager/addhardware.py:656 ../src/vmm-manager.glade.h:5
 msgid "Network"
 msgstr "ネットワーク"
 
-#: ../src/virtManager/addhardware.py:659
+#: ../src/virtManager/addhardware.py:661
 msgid "Absolute movement"
 msgstr "絶対的動作"
 
-#: ../src/virtManager/addhardware.py:661
+#: ../src/virtManager/addhardware.py:663
 msgid "Relative movement"
 msgstr "相対的動作"
 
-#: ../src/virtManager/addhardware.py:664 ../src/virtManager/addhardware.py:690
-#: ../src/virtManager/addhardware.py:708 ../src/virtManager/addhardware.py:735
-#: ../src/vmm-add-hardware.glade.h:68 ../src/vmm-create-net.glade.h:50
+#: ../src/virtManager/addhardware.py:666 ../src/virtManager/addhardware.py:692
+#: ../src/virtManager/addhardware.py:710 ../src/virtManager/addhardware.py:737
+#: ../src/vmm-add-hardware.glade.h:68 ../src/vmm-create-net.glade.h:51
 #: ../src/vmm-create-pool.glade.h:16 ../src/vmm-details.glade.h:107
 msgid "Type:"
 msgstr "タイプ:"
 
-#: ../src/virtManager/addhardware.py:665 ../src/vmm-add-hardware.glade.h:48
+#: ../src/virtManager/addhardware.py:667 ../src/vmm-add-hardware.glade.h:48
 #: ../src/vmm-details.glade.h:65
 msgid "Mode:"
 msgstr "モード:"
 
-#: ../src/virtManager/addhardware.py:667
+#: ../src/virtManager/addhardware.py:669
 #, fuzzy
 msgid "Pointer"
 msgstr "<b>ポインタ</b>"
 
-#: ../src/virtManager/addhardware.py:673
-#: ../src/virtManager/addhardware.py:1316 ../src/virtManager/details.py:1123
+#: ../src/virtManager/addhardware.py:675
+#: ../src/virtManager/addhardware.py:1316 ../src/virtManager/details.py:1127
 msgid "VNC server"
 msgstr "VNC サーバー"
 
 #. XXX inclined to just not give this choice at all
-#: ../src/virtManager/addhardware.py:673
-#: ../src/virtManager/addhardware.py:1318 ../src/virtManager/details.py:1125
+#: ../src/virtManager/addhardware.py:675
+#: ../src/virtManager/addhardware.py:1318 ../src/virtManager/details.py:1129
 msgid "Local SDL window"
 msgstr "ローカル SDL ウィンドウ"
 
-#: ../src/virtManager/addhardware.py:674 ../src/virtManager/addhardware.py:675
 #: ../src/virtManager/addhardware.py:676 ../src/virtManager/addhardware.py:677
-#: ../src/virtManager/details.py:1141 ../src/virtManager/details.py:1142
+#: ../src/virtManager/addhardware.py:678 ../src/virtManager/addhardware.py:679
+#: ../src/virtManager/details.py:1145 ../src/virtManager/details.py:1146
 msgid "N/A"
 msgstr "適用外"
 
-#: ../src/virtManager/addhardware.py:686
+#: ../src/virtManager/addhardware.py:688
 msgid "Yes"
 msgstr "はい"
 
-#: ../src/virtManager/addhardware.py:686
+#: ../src/virtManager/addhardware.py:688
 msgid "No"
 msgstr "いいえ"
 
-#: ../src/virtManager/addhardware.py:687 ../src/vmm-add-hardware.glade.h:65
+#: ../src/virtManager/addhardware.py:689 ../src/vmm-add-hardware.glade.h:65
 msgid "Same as host"
 msgstr "ホストと同じ"
 
-#: ../src/virtManager/addhardware.py:691 ../src/vmm-add-hardware.glade.h:27
+#: ../src/virtManager/addhardware.py:693 ../src/vmm-add-hardware.glade.h:27
 #: ../src/vmm-details.glade.h:22
 msgid "Address:"
 msgstr "アドレス:"
 
-#: ../src/virtManager/addhardware.py:692 ../src/vmm-add-hardware.glade.h:64
+#: ../src/virtManager/addhardware.py:694 ../src/vmm-add-hardware.glade.h:64
 #: ../src/vmm-details.glade.h:78
 msgid "Port:"
 msgstr "ポート:"
 
-#: ../src/virtManager/addhardware.py:693 ../src/vmm-add-hardware.glade.h:53
+#: ../src/virtManager/addhardware.py:695 ../src/vmm-add-hardware.glade.h:53
 #: ../src/vmm-details.glade.h:74
 msgid "Password:"
 msgstr "パスワード:"
 
-#: ../src/virtManager/addhardware.py:694 ../src/vmm-add-hardware.glade.h:43
+#: ../src/virtManager/addhardware.py:696 ../src/vmm-add-hardware.glade.h:43
 #: ../src/vmm-details.glade.h:53
 msgid "Keymap:"
 msgstr "キーマップ:"
 
-#: ../src/virtManager/addhardware.py:696
+#: ../src/virtManager/addhardware.py:698
 msgid "Graphics"
 msgstr "グラフィック"
 
-#: ../src/virtManager/addhardware.py:702 ../src/vmm-details.glade.h:90
+#: ../src/virtManager/addhardware.py:704 ../src/vmm-details.glade.h:90
 msgid "Sound"
 msgstr "サウンド"
 
-#: ../src/virtManager/addhardware.py:729
+#: ../src/virtManager/addhardware.py:731
 #, fuzzy
 msgid "Protocol:"
 msgstr "プロセッサ"
 
-#: ../src/virtManager/addhardware.py:736 ../src/vmm-add-hardware.glade.h:36
+#: ../src/virtManager/addhardware.py:738 ../src/vmm-add-hardware.glade.h:36
 #: ../src/vmm-host.glade.h:19
 msgid "Device:"
 msgstr "装置:"
 
-#: ../src/virtManager/addhardware.py:738
+#: ../src/virtManager/addhardware.py:740
 #, fuzzy
 msgid "Physical Host Device"
-msgstr "<b>起動デバイス</b>"
+msgstr "共有物理デバイス"
 
-#: ../src/virtManager/addhardware.py:744 ../src/virtManager/details.py:1932
+#: ../src/virtManager/addhardware.py:746 ../src/virtManager/details.py:1936
 #, fuzzy
 msgid "Video"
 msgstr "表示 (_V)"
 
-#: ../src/virtManager/addhardware.py:778
+#: ../src/virtManager/addhardware.py:780
 #, fuzzy, python-format
 msgid "Unable to add device: %s"
 msgstr "GTK を初期化できません: %s"
 
-#: ../src/virtManager/addhardware.py:820
+#: ../src/virtManager/addhardware.py:822
 msgid "Creating Storage File"
 msgstr "ストレージファイルの作成"
 
-#: ../src/virtManager/addhardware.py:821
+#: ../src/virtManager/addhardware.py:823
 #, fuzzy
 msgid "Allocation of disk storage may take a few minutes to complete."
 msgstr "ディスク領域の割り当てには"
 
-#: ../src/virtManager/addhardware.py:845
+#: ../src/virtManager/addhardware.py:847
 msgid "Are you sure you want to add this device?"
 msgstr "本当にこのデバイスを追加しますか?"
 
-#: ../src/virtManager/addhardware.py:847
+#: ../src/virtManager/addhardware.py:849
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next VM shutdown?\n"
@@ -428,17 +427,17 @@ msgstr ""
 "\n"
 "警告: この操作は VM の再起動を必要とする他の変更を上書きします。"
 
-#: ../src/virtManager/addhardware.py:875 ../src/virtManager/addhardware.py:877
-#: ../src/virtManager/create.py:1503
+#: ../src/virtManager/addhardware.py:877 ../src/virtManager/addhardware.py:879
+#: ../src/virtManager/create.py:1535
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "インストールを完了できません: '%s'"
 
-#: ../src/virtManager/addhardware.py:883
+#: ../src/virtManager/addhardware.py:885
 msgid "Locate Storage Partition"
 msgstr "ストレージパーティションの検索"
 
-#: ../src/virtManager/addhardware.py:891
+#: ../src/virtManager/addhardware.py:893
 msgid "Locate or Create New Storage File"
 msgstr "新しいストレージファイルの検索または作成"
 
@@ -472,16 +471,16 @@ msgid "Invalid Storage Parameters"
 msgstr "無効なストレージパラメータです"
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:1096 ../src/virtManager/create.py:1275
+#: ../src/virtManager/addhardware.py:1096 ../src/virtManager/create.py:1305
 msgid "Not Enough Free Space"
 msgstr "不十分な空き領域"
 
-#: ../src/virtManager/addhardware.py:1101 ../src/virtManager/create.py:1281
+#: ../src/virtManager/addhardware.py:1101 ../src/virtManager/create.py:1311
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "ディスク \"%s\" は既に他のゲストで使われています!"
 
-#: ../src/virtManager/addhardware.py:1102 ../src/virtManager/create.py:1283
+#: ../src/virtManager/addhardware.py:1102 ../src/virtManager/create.py:1313
 msgid "Do you really want to use the disk?"
 msgstr "本当にこのディスクを使用しますか?"
 
@@ -561,11 +560,11 @@ msgstr "サウンドデバイスのパラメータエラーです"
 msgid "Video device parameter error."
 msgstr "サウンドデバイスのパラメータエラーです"
 
-#: ../src/virtManager/addhardware.py:1263 ../src/virtManager/create.py:653
+#: ../src/virtManager/addhardware.py:1263 ../src/virtManager/create.py:668
 msgid "Bridge"
 msgstr "ブリッジ"
 
-#: ../src/virtManager/addhardware.py:1265 ../src/virtManager/create.py:656
+#: ../src/virtManager/addhardware.py:1265 ../src/virtManager/create.py:671
 msgid "Not bridged"
 msgstr "ブリッジなし"
 
@@ -574,14 +573,14 @@ msgstr "ブリッジなし"
 msgid "Hypervisor default"
 msgstr "ハイパーバイザーのデフォルト"
 
-#: ../src/virtManager/addhardware.py:1308 ../src/virtManager/details.py:1094
+#: ../src/virtManager/addhardware.py:1308 ../src/virtManager/details.py:1098
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB グラフィックタブレット"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:1312 ../src/virtManager/details.py:1096
+#: ../src/virtManager/addhardware.py:1312 ../src/virtManager/details.py:1100
 msgid "Generic USB Mouse"
 msgstr "汎用 USB マウス"
 
@@ -615,71 +614,70 @@ msgstr "無効なメディアパスです"
 msgid "A media path must be specified."
 msgstr "メディアパスを指定してください。"
 
-#: ../src/virtManager/choosecd.py:128 ../src/virtManager/create.py:989
+#: ../src/virtManager/choosecd.py:128 ../src/virtManager/create.py:1019
 msgid "Locate ISO Image"
 msgstr "ISO イメージの検索"
 
-#: ../src/virtManager/clone.py:213 ../src/virtManager/clone.py:433
+#: ../src/virtManager/clone.py:216 ../src/virtManager/clone.py:437
 #, fuzzy
 msgid "Details..."
 msgstr "詳細"
 
-#: ../src/virtManager/clone.py:244
-#, fuzzy
+#: ../src/virtManager/clone.py:247
 msgid "Usermode"
-msgstr "ホスト名:"
+msgstr ""
 
-#: ../src/virtManager/clone.py:254 ../src/virtManager/create.py:623
+#: ../src/virtManager/clone.py:257 ../src/virtManager/create.py:638
 #, fuzzy
 msgid "Isolated network"
 msgstr "分離された仮想ネットワーク"
 
-#: ../src/virtManager/clone.py:256 ../src/virtManager/create.py:625
+#: ../src/virtManager/clone.py:259 ../src/virtManager/create.py:640
 #, python-format
 msgid "NAT to %s"
 msgstr ""
 
-#: ../src/virtManager/clone.py:258
+#: ../src/virtManager/clone.py:261
 #, fuzzy
 msgid "NAT"
 msgstr "適用外"
 
-#: ../src/virtManager/clone.py:262
+#: ../src/virtManager/clone.py:265
 #, fuzzy
 msgid "Virtual Network"
 msgstr "仮想ネットワーク"
 
-#: ../src/virtManager/clone.py:334
+#: ../src/virtManager/clone.py:337
 msgid "Nothing to clone."
 msgstr ""
 
-#: ../src/virtManager/clone.py:426
+#: ../src/virtManager/clone.py:429
 msgid "Clone this disk"
 msgstr ""
 
-#: ../src/virtManager/clone.py:430
+#: ../src/virtManager/clone.py:433
 #, python-format
 msgid "Share disk with %s"
 msgstr ""
 
-#: ../src/virtManager/clone.py:441
+#: ../src/virtManager/clone.py:445
 msgid "Storage cannot be shared or cloned."
 msgstr ""
 
-#: ../src/virtManager/clone.py:494
+#: ../src/virtManager/clone.py:498
 msgid "One or more disks cannot be cloned or shared."
 msgstr ""
 
-#: ../src/virtManager/clone.py:595
+#: ../src/virtManager/clone.py:599
 #, fuzzy, python-format
 msgid "Error changing MAC address: %s"
 msgstr "メモリ値の変更中にエラー: %s"
 
-#: ../src/virtManager/clone.py:622
+#: ../src/virtManager/clone.py:626
 msgid "Cloning will overwrite the existing file"
 msgstr ""
 
-#: ../src/virtManager/clone.py:624
+#: ../src/virtManager/clone.py:628
 #, fuzzy
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
@@ -688,16 +686,16 @@ msgstr ""
 "このタイプのプールの構築はソースデバイスをフォーマットします。本当に このプー"
 "ルを構築したいですか?"
 
-#: ../src/virtManager/clone.py:635
+#: ../src/virtManager/clone.py:639
 #, fuzzy, python-format
 msgid "Error changing storage path: %s"
 msgstr "autostart 値の変更中にエラー: %s"
 
-#: ../src/virtManager/clone.py:686
+#: ../src/virtManager/clone.py:690
 msgid "Skipping disks may cause data to be overwritten."
 msgstr ""
 
-#: ../src/virtManager/clone.py:687
+#: ../src/virtManager/clone.py:691
 #, python-format
 msgid ""
 "The following disk devices will not be cloned:\n"
@@ -706,106 +704,105 @@ msgid ""
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
 
-#: ../src/virtManager/clone.py:707 ../src/virtManager/createpool.py:261
-#: ../src/virtManager/createvol.py:143
+#: ../src/virtManager/clone.py:711 ../src/virtManager/createpool.py:264
+#: ../src/virtManager/createvol.py:147
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "入力を検証中に未検出のエラー: %s"
 
-#: ../src/virtManager/clone.py:714
+#: ../src/virtManager/clone.py:718
 #, fuzzy, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "仮想マシンを作成中"
 
-#: ../src/virtManager/clone.py:718 ../src/virtManager/delete.py:142
+#: ../src/virtManager/clone.py:722 ../src/virtManager/delete.py:142
 #, fuzzy
 msgid " and selected storage (this may take a while)"
 msgstr "ストレージプールの作成には少し時間がかかります..."
 
-#: ../src/virtManager/clone.py:752
+#: ../src/virtManager/clone.py:756
 #, fuzzy, python-format
 msgid "Error creating virtual machine clone '%s': %s"
 msgstr "仮想ネットワークの作成中にエラー発生: %s"
 
-#: ../src/virtManager/clone.py:784
+#: ../src/virtManager/clone.py:788
 msgid "No storage to clone."
 msgstr ""
 
-#: ../src/virtManager/clone.py:790
-#, fuzzy
+#: ../src/virtManager/clone.py:794
 msgid "Connection does not support managed storage cloning."
-msgstr "ゲスト用のコンソールがサポートされていません"
+msgstr ""
 
-#: ../src/virtManager/clone.py:793
+#: ../src/virtManager/clone.py:797
 msgid "Cannot clone unmanaged remote storage."
 msgstr ""
 
-#: ../src/virtManager/clone.py:795 ../src/virtManager/delete.py:342
+#: ../src/virtManager/clone.py:799 ../src/virtManager/delete.py:342
 #, fuzzy
 msgid "No write access to parent directory."
 msgstr "ターゲットディレクトリの選択"
 
-#: ../src/virtManager/clone.py:797 ../src/virtManager/delete.py:340
+#: ../src/virtManager/clone.py:801 ../src/virtManager/delete.py:340
 msgid "Path does not exist."
 msgstr ""
 
-#: ../src/virtManager/clone.py:818
+#: ../src/virtManager/clone.py:822
 msgid "Removable"
 msgstr ""
 
-#: ../src/virtManager/clone.py:821
+#: ../src/virtManager/clone.py:825
 msgid "Read Only"
 msgstr ""
 
-#: ../src/virtManager/clone.py:823
+#: ../src/virtManager/clone.py:827
 msgid "No write access"
 msgstr ""
 
-#: ../src/virtManager/clone.py:826
+#: ../src/virtManager/clone.py:830
 msgid "Shareable"
 msgstr ""
 
-#: ../src/virtManager/connect.py:74 ../src/virtManager/manager.py:828
-#: ../src/virtManager/storagebrowse.py:102 ../src/vmm-create-net.glade.h:31
-#: ../src/vmm-create-pool.glade.h:9 ../src/vmm-create.glade.h:32
+#: ../src/virtManager/connect.py:74 ../src/virtManager/manager.py:837
+#: ../src/virtManager/storagebrowse.py:108 ../src/vmm-create-net.glade.h:32
+#: ../src/vmm-create-pool.glade.h:9 ../src/vmm-create.glade.h:33
 msgid "Name"
 msgstr "名前"
 
-#: ../src/virtManager/connection.py:1104
+#: ../src/virtManager/connection.py:1119
 msgid "Disconnected"
 msgstr "切断されました"
 
-#: ../src/virtManager/connection.py:1106
+#: ../src/virtManager/connection.py:1121
 msgid "Connecting"
 msgstr "接続中"
 
-#: ../src/virtManager/connection.py:1109
+#: ../src/virtManager/connection.py:1124
 msgid "Active (RO)"
 msgstr "アクティブ(RO)"
 
-#: ../src/virtManager/connection.py:1111 ../src/virtManager/host.py:324
-#: ../src/virtManager/host.py:548 ../src/vmm-host.glade.h:5
+#: ../src/virtManager/connection.py:1126 ../src/virtManager/host.py:327
+#: ../src/virtManager/host.py:555 ../src/vmm-host.glade.h:5
 msgid "Active"
 msgstr "動作中"
 
-#: ../src/virtManager/connection.py:1113 ../src/virtManager/create.py:619
-#: ../src/virtManager/host.py:329 ../src/virtManager/host.py:368
-#: ../src/virtManager/host.py:548 ../src/virtManager/host.py:580
+#: ../src/virtManager/connection.py:1128 ../src/virtManager/create.py:634
+#: ../src/virtManager/host.py:332 ../src/virtManager/host.py:375
+#: ../src/virtManager/host.py:555 ../src/virtManager/host.py:587
 msgid "Inactive"
 msgstr "停止"
 
-#: ../src/virtManager/connection.py:1115 ../src/virtManager/create.py:1573
-#: ../src/virtManager/create.py:1574 ../src/virtManager/create.py:1576
-#: ../src/virtManager/details.py:930 ../src/virtManager/details.py:1059
+#: ../src/virtManager/connection.py:1130 ../src/virtManager/create.py:1605
+#: ../src/virtManager/create.py:1606 ../src/virtManager/create.py:1608
+#: ../src/virtManager/details.py:934 ../src/virtManager/details.py:1063
 msgid "Unknown"
 msgstr "不明"
 
-#: ../src/virtManager/create.py:229
+#: ../src/virtManager/create.py:246
 #, fuzzy
 msgid "Error listing CD-ROM devices."
 msgstr "CDROM の接続中にエラー: %s"
 
-#: ../src/virtManager/create.py:258
+#: ../src/virtManager/create.py:275
 msgid ""
 "Fully allocating storage will take longer now, but the OS install phase will "
 "be quicker. \n"
@@ -814,180 +811,180 @@ msgid ""
 "maximum image size exceeds available storage space."
 msgstr ""
 
-#: ../src/virtManager/create.py:278
+#: ../src/virtManager/create.py:297
 #, fuzzy
 msgid "No active connection to install on."
 msgstr "使用可能な接続はありません。"
 
-#: ../src/virtManager/create.py:323
+#: ../src/virtManager/create.py:343
 #, fuzzy
 msgid "Connection is read only."
 msgstr "接続が切断されます。"
 
-#: ../src/virtManager/create.py:333
+#: ../src/virtManager/create.py:353
 #, fuzzy
 msgid "No guests are supported for this connection."
 msgstr "リモート接続にはまだシリアルコンソールへのサポートがありません。"
 
-#: ../src/virtManager/create.py:355
+#: ../src/virtManager/create.py:375
 #, fuzzy, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "停止中のゲストにコンソールは利用できません"
 
-#: ../src/virtManager/create.py:359
+#: ../src/virtManager/create.py:379
 #, fuzzy
 msgid "URL installs not available for remote connections."
 msgstr "リモート接続にはまだシリアルコンソールへのサポートがありません。"
 
-#: ../src/virtManager/create.py:361 ../src/virtManager/create.py:451
+#: ../src/virtManager/create.py:381 ../src/virtManager/create.py:466
 #, fuzzy
 msgid "Connection does not support storage management."
 msgstr "ゲスト用のコンソールがサポートされていません"
 
-#: ../src/virtManager/create.py:373
+#: ../src/virtManager/create.py:393
 msgid "No install options available for this connection."
 msgstr ""
 
-#: ../src/virtManager/create.py:406
+#: ../src/virtManager/create.py:426
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr ""
 
-#: ../src/virtManager/create.py:420
+#: ../src/virtManager/create.py:440
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
 msgstr ""
 
-#: ../src/virtManager/create.py:430
+#: ../src/virtManager/create.py:450
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr ""
 
-#: ../src/virtManager/create.py:499
+#: ../src/virtManager/create.py:514
 msgid "Only URL installs are supported for paravirt."
 msgstr ""
 
-#: ../src/virtManager/create.py:576 ../src/virtManager/create.py:585
-#: ../src/virtManager/create.py:734 ../src/virtManager/create.py:736
+#: ../src/virtManager/create.py:591 ../src/virtManager/create.py:600
+#: ../src/virtManager/create.py:749 ../src/virtManager/create.py:751
 msgid "Generic"
 msgstr ""
 
-#: ../src/virtManager/create.py:606
+#: ../src/virtManager/create.py:621
 #, fuzzy
 msgid "Usermode Networking"
 msgstr "ユーザーモードネットワーク"
 
 #. FIXME: Should we use 'default' even if it's inactive?
-#: ../src/virtManager/create.py:617
+#: ../src/virtManager/create.py:632
 msgid "Virtual network"
 msgstr "仮想ネットワーク"
 
-#: ../src/virtManager/create.py:627
+#: ../src/virtManager/create.py:642
 #, fuzzy
 msgid "NAT to any device"
 msgstr "どれかの物理デバイスへの NAT"
 
-#: ../src/virtManager/create.py:638
+#: ../src/virtManager/create.py:653
 #, fuzzy
 msgid "No virtual networks available"
 msgstr "使用可能な接続はありません。"
 
-#: ../src/virtManager/create.py:661
+#: ../src/virtManager/create.py:676
 #, python-format
 msgid "Host device %s %s"
 msgstr ""
 
-#: ../src/virtManager/create.py:673
+#: ../src/virtManager/create.py:688
 #, fuzzy
 msgid "No networking."
 msgstr "ユーザーモードネットワーク"
 
-#: ../src/virtManager/create.py:718
+#: ../src/virtManager/create.py:733
 msgid "Local CDROM/ISO"
 msgstr ""
 
-#: ../src/virtManager/create.py:720
+#: ../src/virtManager/create.py:735
 msgid "URL Install Tree"
 msgstr ""
 
-#: ../src/virtManager/create.py:722
+#: ../src/virtManager/create.py:737
 msgid "PXE Install"
 msgstr ""
 
-#: ../src/virtManager/create.py:725 ../src/virtManager/details.py:931
+#: ../src/virtManager/create.py:740 ../src/virtManager/details.py:935
 #, fuzzy
 msgid "None"
 msgstr "いいえ"
 
-#: ../src/virtManager/create.py:998
+#: ../src/virtManager/create.py:1028
 msgid "Locate existing storage"
 msgstr ""
 
-#: ../src/virtManager/create.py:1069
+#: ../src/virtManager/create.py:1099
 #, fuzzy, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "%(currentmem)s of %(maxmem)s"
 
-#: ../src/virtManager/create.py:1128
+#: ../src/virtManager/create.py:1158
 #, fuzzy, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "入力を検証中に未検出のエラー: %s"
 
-#: ../src/virtManager/create.py:1142
+#: ../src/virtManager/create.py:1172
 msgid "Invalid System Name"
 msgstr "無効なシステム名です"
 
-#: ../src/virtManager/create.py:1166
+#: ../src/virtManager/create.py:1196
 #, fuzzy
 msgid "An install media selection is required."
 msgstr "インストールメディアパスが必要です。"
 
-#: ../src/virtManager/create.py:1176
+#: ../src/virtManager/create.py:1206
 #, fuzzy
 msgid "An install tree is required."
 msgstr "インストールの URL が必要です。"
 
-#: ../src/virtManager/create.py:1191
+#: ../src/virtManager/create.py:1221
 #, fuzzy
 msgid "Error setting installer parameters."
 msgstr "net autostart の設定中にエラー: %s"
 
-#: ../src/virtManager/create.py:1209
+#: ../src/virtManager/create.py:1239
 #, fuzzy
 msgid "Error setting install media location."
 msgstr "net autostart の設定中にエラー: %s"
 
-#: ../src/virtManager/create.py:1219
+#: ../src/virtManager/create.py:1249
 #, fuzzy
 msgid "Error setting OS information."
 msgstr "ドメインの開始中にエラー発生: %s"
 
-#: ../src/virtManager/create.py:1236
+#: ../src/virtManager/create.py:1266
 #, fuzzy
 msgid "Error setting CPUs."
 msgstr "ドメインの開始中にエラー発生: %s"
 
-#: ../src/virtManager/create.py:1243
+#: ../src/virtManager/create.py:1273
 #, fuzzy
 msgid "Error setting guest memory."
 msgstr "net autostart の設定中にエラー: %s"
 
-#: ../src/virtManager/create.py:1261
+#: ../src/virtManager/create.py:1291
 #, fuzzy
 msgid "A storage path must be specified."
 msgstr "メディアパスを指定してください。"
 
-#: ../src/virtManager/create.py:1270
+#: ../src/virtManager/create.py:1300
 #, fuzzy
 msgid "Storage parameter error."
 msgstr "サウンドデバイスのパラメータエラーです"
 
-#: ../src/virtManager/create.py:1296
+#: ../src/virtManager/create.py:1328
 #, fuzzy
 msgid "Virtual Network is not active."
 msgstr "仮想ネットワークは停止中"
 
-#: ../src/virtManager/create.py:1297
+#: ../src/virtManager/create.py:1329
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
@@ -995,140 +992,154 @@ msgstr ""
 "仮想ネットワーク '%s' はアクティブではありません。このネットワークを今起動し"
 "ますか?"
 
-#: ../src/virtManager/create.py:1309
+#: ../src/virtManager/create.py:1341
 #, fuzzy, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "仮想ネットワークの作成中にエラー発生: %s"
 
-#: ../src/virtManager/create.py:1323
+#: ../src/virtManager/create.py:1355
 #, python-format
 msgid "Network device required for %s install."
 msgstr ""
 
-#: ../src/virtManager/create.py:1345
+#: ../src/virtManager/create.py:1377
 #, fuzzy
 msgid "Error with network parameters."
 msgstr "無効なネットワークパラメータ"
 
-#: ../src/virtManager/create.py:1350 ../src/virtManager/create.py:1352
+#: ../src/virtManager/create.py:1382 ../src/virtManager/create.py:1384
 #, fuzzy
 msgid "Mac address collision."
 msgstr "Mac アドレス競合"
 
-#: ../src/virtManager/create.py:1353
+#: ../src/virtManager/create.py:1385
 #, fuzzy, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "本当にこのアドレスを使いたいのですか?"
 
-#: ../src/virtManager/create.py:1396
+#: ../src/virtManager/create.py:1428
 #, fuzzy, python-format
 msgid "Error setting UUID: %s"
 msgstr "ボリュームの作成中にエラー: %s"
 
-#: ../src/virtManager/create.py:1404
+#: ../src/virtManager/create.py:1436
 msgid "Error setting up graphics device:"
 msgstr "グラフィックデバイスを設定中にエラー:"
 
-#: ../src/virtManager/create.py:1414
+#: ../src/virtManager/create.py:1446
 msgid "Error setting up sound device:"
 msgstr "サウンドデバイスのセットアップ中にエラー:"
 
-#: ../src/virtManager/create.py:1438
+#: ../src/virtManager/create.py:1470
 msgid "Creating Virtual Machine"
 msgstr "仮想マシンを作成中"
 
-#: ../src/virtManager/create.py:1439
+#: ../src/virtManager/create.py:1471
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
 
-#: ../src/virtManager/create.py:1491
+#: ../src/virtManager/create.py:1523
 msgid "Guest installation failed to complete"
 msgstr "ゲストのインストールに失敗しました"
 
-#: ../src/virtManager/create.py:1612
+#: ../src/virtManager/create.py:1644
 #, fuzzy
 msgid "Detecting"
 msgstr "接続中"
 
-#: ../src/virtManager/createnet.py:97 ../src/virtManager/createnet.py:260
-#: ../src/virtManager/host.py:356 ../src/vmm-create-net.glade.h:30
+#: ../src/virtManager/createnet.py:101 ../src/virtManager/createnet.py:284
+#: ../src/virtManager/host.py:363 ../src/vmm-create-net.glade.h:31
 #: ../src/vmm-host.glade.h:28
 msgid "NAT to any physical device"
 msgstr "どれかの物理デバイスへの NAT"
 
-#: ../src/virtManager/createnet.py:100 ../src/virtManager/createnet.py:258
-#: ../src/virtManager/host.py:354
+#: ../src/virtManager/createnet.py:104 ../src/virtManager/createnet.py:282
+#: ../src/virtManager/host.py:361
 #, python-format
 msgid "NAT to physical device %s"
 msgstr "物理デバイス %s への NAT"
 
-#: ../src/virtManager/createnet.py:155
+#: ../src/virtManager/createnet.py:160
 #, python-format
 msgid "%d addresses"
 msgstr "%d アドレス"
 
-#: ../src/virtManager/createnet.py:157
+#: ../src/virtManager/createnet.py:162
 msgid "Public"
 msgstr "公開"
 
-#: ../src/virtManager/createnet.py:159 ../src/vmm-create-net.glade.h:42
+#: ../src/virtManager/createnet.py:164 ../src/vmm-create-net.glade.h:43
 msgid "Private"
 msgstr "私用"
 
-#: ../src/virtManager/createnet.py:161
+#: ../src/virtManager/createnet.py:166
 msgid "Reserved"
 msgstr "予約"
 
-#: ../src/virtManager/createnet.py:163
+#: ../src/virtManager/createnet.py:168
 msgid "Other"
 msgstr "他"
 
-#: ../src/virtManager/createnet.py:262 ../src/virtManager/host.py:359
-#: ../src/virtManager/host.py:379 ../src/vmm-create-net.glade.h:29
+#: ../src/virtManager/createnet.py:268 ../src/vmm-create-net.glade.h:46
+msgid "Start address:"
+msgstr "開始アドレス"
+
+#: ../src/virtManager/createnet.py:274 ../src/vmm-details.glade.h:100
+msgid "Status:"
+msgstr "状態:"
+
+#: ../src/virtManager/createnet.py:275 ../src/virtManager/details.py:968
+#: ../src/virtManager/details.py:969 ../src/virtManager/details.py:970
+#: ../src/virtManager/details.py:971
+msgid "Disabled"
+msgstr "無効になりました"
+
+#: ../src/virtManager/createnet.py:286 ../src/virtManager/host.py:366
+#: ../src/virtManager/host.py:386 ../src/vmm-create-net.glade.h:30
 msgid "Isolated virtual network"
 msgstr "分離された仮想ネットワーク"
 
-#: ../src/virtManager/createnet.py:303
+#: ../src/virtManager/createnet.py:330
 #, python-format
 msgid "Error creating virtual network: %s"
 msgstr "仮想ネットワークの作成中にエラー発生: %s"
 
-#: ../src/virtManager/createnet.py:312 ../src/virtManager/createnet.py:315
+#: ../src/virtManager/createnet.py:339 ../src/virtManager/createnet.py:342
 msgid "Invalid Network Name"
 msgstr "無効なネットワーク名です"
 
-#: ../src/virtManager/createnet.py:313
+#: ../src/virtManager/createnet.py:340
 msgid "Network name must be non-blank and less than 50 characters"
 msgstr "システム名は50文字以内で空白を含まないようにしてください。"
 
-#: ../src/virtManager/createnet.py:316
+#: ../src/virtManager/createnet.py:343
 msgid "Network name may contain alphanumeric and '_' characters only"
 msgstr "ネットワーク名には英数字と '_' だけが使えます。"
 
-#: ../src/virtManager/createnet.py:322 ../src/virtManager/createnet.py:326
-#: ../src/virtManager/createnet.py:330
+#: ../src/virtManager/createnet.py:349 ../src/virtManager/createnet.py:353
+#: ../src/virtManager/createnet.py:357
 msgid "Invalid Network Address"
 msgstr "無効なネットワークアドレスです"
 
-#: ../src/virtManager/createnet.py:323
+#: ../src/virtManager/createnet.py:350
 msgid "The network address could not be understood"
 msgstr "ネットワークアドレスを理解できません"
 
-#: ../src/virtManager/createnet.py:327
+#: ../src/virtManager/createnet.py:354
 msgid "The network must be an IPv4 address"
 msgstr "ネットワークアドレスは IPv4 アドレスでなければなりません"
 
-#: ../src/virtManager/createnet.py:331
+#: ../src/virtManager/createnet.py:358
 msgid "The network prefix must be at least /4 (16 addresses)"
 msgstr "ネットワークプリフィクスは最小で /4 (16 アドレス)"
 
-#: ../src/virtManager/createnet.py:334
+#: ../src/virtManager/createnet.py:361
 msgid "Check Network Address"
 msgstr "ネットワークアドレスをチェック"
 
-#: ../src/virtManager/createnet.py:335
+#: ../src/virtManager/createnet.py:362
 msgid ""
 "The network should normally use a private IPv4 address. Use this non-private "
 "address anyway?"
@@ -1136,63 +1147,63 @@ msgstr ""
 "ネットワークは通常、プライベートの IPv4 アドレスを使うべきです。どうしてもこ"
 "の非プライベートアドレスを使いますか?"
 
-#: ../src/virtManager/createnet.py:344 ../src/virtManager/createnet.py:347
-#: ../src/virtManager/createnet.py:351 ../src/virtManager/createnet.py:354
+#: ../src/virtManager/createnet.py:371 ../src/virtManager/createnet.py:374
+#: ../src/virtManager/createnet.py:378 ../src/virtManager/createnet.py:381
 msgid "Invalid DHCP Address"
 msgstr "無効な DHCP アドレスです"
 
-#: ../src/virtManager/createnet.py:345
+#: ../src/virtManager/createnet.py:372
 msgid "The DHCP start address could not be understood"
 msgstr "DHCP 開始アドレスを理解できません"
 
-#: ../src/virtManager/createnet.py:348
+#: ../src/virtManager/createnet.py:375
 msgid "The DHCP end address could not be understood"
 msgstr "DHCP 終了アドレスを理解できません"
 
-#: ../src/virtManager/createnet.py:352
+#: ../src/virtManager/createnet.py:379
 #, python-format
 msgid "The DHCP start address is not with the network %s"
 msgstr "DHCP 開始アドレスがネットワーク %s にありません"
 
-#: ../src/virtManager/createnet.py:355
+#: ../src/virtManager/createnet.py:382
 #, python-format
 msgid "The DHCP end address is not with the network %s"
 msgstr "DHCP 終了アドレスがネットワーク %s にありません"
 
-#: ../src/virtManager/createnet.py:360
+#: ../src/virtManager/createnet.py:387
 msgid "Invalid forwarding mode"
 msgstr "無効なフォワードモードです"
 
-#: ../src/virtManager/createnet.py:361
+#: ../src/virtManager/createnet.py:388
 msgid "Please select where the traffic should be forwarded"
 msgstr "トラフィックがフォワードされるところを選んで下さい"
 
-#: ../src/virtManager/createpool.py:238
+#: ../src/virtManager/createpool.py:241
 msgid "Choose source path"
 msgstr "ソースパスを選択"
 
-#: ../src/virtManager/createpool.py:244
+#: ../src/virtManager/createpool.py:247
 msgid "Choose target directory"
 msgstr "ターゲットディレクトリの選択"
 
-#: ../src/virtManager/createpool.py:275
+#: ../src/virtManager/createpool.py:278
 msgid "Creating storage pool..."
 msgstr "ストレージプールを作成中..."
 
-#: ../src/virtManager/createpool.py:276
+#: ../src/virtManager/createpool.py:279
 msgid "Creating the storage pool may take a while..."
 msgstr "ストレージプールの作成には少し時間がかかります..."
 
-#: ../src/virtManager/createpool.py:304
+#: ../src/virtManager/createpool.py:307
 #, python-format
 msgid "Error creating pool: %s"
 msgstr "プールの作成中にエラー: %s"
 
-#: ../src/virtManager/createpool.py:333 ../src/virtManager/createpool.py:354
+#: ../src/virtManager/createpool.py:336 ../src/virtManager/createpool.py:357
 msgid "Pool Parameter Error"
 msgstr "プールパラメータエラー"
 
-#: ../src/virtManager/createpool.py:359
+#: ../src/virtManager/createpool.py:362
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
@@ -1200,28 +1211,28 @@ msgstr ""
 "このタイプのプールの構築はソースデバイスをフォーマットします。本当に このプー"
 "ルを構築したいですか?"
 
-#: ../src/virtManager/createpool.py:372
+#: ../src/virtManager/createpool.py:375
 msgid "Format the source device."
 msgstr "ソースデバイスをフォーマット化します。"
 
-#: ../src/virtManager/createpool.py:374
+#: ../src/virtManager/createpool.py:377
 msgid "Create a logical volume group from the source device."
 msgstr ""
 
-#: ../src/virtManager/createvol.py:154
+#: ../src/virtManager/createvol.py:158
 msgid "Creating storage volume..."
 msgstr "ストレージボリュームを作成中..."
 
-#: ../src/virtManager/createvol.py:155
+#: ../src/virtManager/createvol.py:159
 msgid "Creating the storage volume may take a while..."
 msgstr "ストレージボリュームの作成には少し時間がかかります..."
 
-#: ../src/virtManager/createvol.py:183
+#: ../src/virtManager/createvol.py:187
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "ボリュームの作成中にエラー: %s"
 
-#: ../src/virtManager/createvol.py:203
+#: ../src/virtManager/createvol.py:207
 msgid "Volume Parameter Error"
 msgstr "ボリュームパラメーターエラー"
 
@@ -1276,9 +1287,8 @@ msgid "Cannot delete unmanaged block device."
 msgstr ""
 
 #: ../src/virtManager/delete.py:364
-#, fuzzy
 msgid "Storage is read-only."
-msgstr "接続が切断されます。"
+msgstr ""
 
 #: ../src/virtManager/delete.py:366
 msgid "No write access to path."
@@ -1313,15 +1323,15 @@ msgid ""
 "of the guest. (Default)"
 msgstr ""
 
-#: ../src/virtManager/details.py:377
+#: ../src/virtManager/details.py:380
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "ポインターを解放するために Ctrl+Alt を押してください。"
 
-#: ../src/virtManager/details.py:385
+#: ../src/virtManager/details.py:388
 msgid "Pointer grabbed"
 msgstr "ポインターをつかまえました"
 
-#: ../src/virtManager/details.py:386
+#: ../src/virtManager/details.py:389
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair: Ctrl+Alt"
@@ -1329,136 +1339,131 @@ msgstr ""
 "マウスポインターが仮想コンソールウィンドウに制限されています。 ポインターを解"
 "放するには Ctrl+Alt を押してください。"
 
-#: ../src/virtManager/details.py:387
+#: ../src/virtManager/details.py:390
 msgid "Do not show this notification in the future."
 msgstr "今後はこの通知を表示しない"
 
-#: ../src/virtManager/details.py:510
+#: ../src/virtManager/details.py:513
 msgid "No serial devices found"
 msgstr "シリアルデバイスが見つかりません"
 
-#: ../src/virtManager/details.py:532
+#: ../src/virtManager/details.py:535
 msgid "Serial console not yet supported over remote connection."
 msgstr "リモート接続にはまだシリアルコンソールへのサポートがありません。"
 
-#: ../src/virtManager/details.py:535
+#: ../src/virtManager/details.py:538
 msgid "Serial console not available for inactive guest."
 msgstr "停止中のゲストにコンソールは利用できません"
 
-#: ../src/virtManager/details.py:537
+#: ../src/virtManager/details.py:540
 #, python-format
 msgid "Console for device type '%s' not yet supported."
 msgstr "デバイスタイプ '%s' のコンソールはまだサポートがありません。"
 
-#: ../src/virtManager/details.py:540
+#: ../src/virtManager/details.py:543
 #, python-format
 msgid "Can not access console path '%s'."
 msgstr "コンソールパス '%s' へアクセスできません。"
 
-#: ../src/virtManager/details.py:558
+#: ../src/virtManager/details.py:561
 msgid "No graphics console found."
 msgstr ""
 
-#: ../src/virtManager/details.py:563
+#: ../src/virtManager/details.py:566
 #, fuzzy, python-format
 msgid "Graphical Console %s"
 msgstr "グラフィカルなコンソールの縮小拡大:"
 
-#: ../src/virtManager/details.py:852
+#: ../src/virtManager/details.py:856
 msgid "paused"
 msgstr "一時停止されました"
 
-#: ../src/virtManager/details.py:865
+#: ../src/virtManager/details.py:869
 msgid "Console not available while paused"
 msgstr "一時停止中はコンソールは利用できません"
 
-#: ../src/virtManager/details.py:964 ../src/virtManager/details.py:965
-#: ../src/virtManager/details.py:966 ../src/virtManager/details.py:967
-msgid "Disabled"
-msgstr "無効になりました"
-
-#: ../src/virtManager/details.py:1085
+#: ../src/virtManager/details.py:1089
 msgid "Hypervisor Default"
 msgstr "ハイパーバイザーのデフォルト"
 
-#: ../src/virtManager/details.py:1098
+#: ../src/virtManager/details.py:1102
 msgid "Xen Mouse"
 msgstr "Xen マウス"
 
-#: ../src/virtManager/details.py:1100
+#: ../src/virtManager/details.py:1104
 msgid "PS/2 Mouse"
 msgstr "PS/2 マウス"
 
-#: ../src/virtManager/details.py:1107
+#: ../src/virtManager/details.py:1111
 msgid "Absolute Movement"
 msgstr "絶対的動作"
 
-#: ../src/virtManager/details.py:1109
+#: ../src/virtManager/details.py:1113
 msgid "Relative Movement"
 msgstr "相対的動作"
 
-#: ../src/virtManager/details.py:1135 ../src/vmm-add-hardware.glade.h:29
+#: ../src/virtManager/details.py:1139 ../src/vmm-add-hardware.glade.h:29
 msgid "Automatically allocated"
 msgstr "自動的に割り当て"
 
-#: ../src/virtManager/details.py:1160
+#: ../src/virtManager/details.py:1164
 msgid "(Primary Console)"
 msgstr "（プライマリコンソール）"
 
-#: ../src/virtManager/details.py:1232 ../src/virtManager/details.py:1335
+#: ../src/virtManager/details.py:1236 ../src/virtManager/details.py:1339
 msgid "Guest not running"
 msgstr "ゲストは稼働していません"
 
-#: ../src/virtManager/details.py:1235
+#: ../src/virtManager/details.py:1239
 msgid "Guest has crashed"
 msgstr "ゲストはクラッシュしました"
 
-#: ../src/virtManager/details.py:1247
+#: ../src/virtManager/details.py:1251
 msgid ""
 "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "TCP/IP エラー: ハイパバイザーホストへの VNC 接続は拒否されたか、又は切断され"
 "ました!"
 
-#: ../src/virtManager/details.py:1344
+#: ../src/virtManager/details.py:1348
 msgid "Console not configured for guest"
 msgstr "ゲスト用のコンソールが設定されていません"
 
-#: ../src/virtManager/details.py:1356
+#: ../src/virtManager/details.py:1360
 msgid "Console not supported for guest"
 msgstr "ゲスト用のコンソールがサポートされていません"
 
-#: ../src/virtManager/details.py:1360
+#: ../src/virtManager/details.py:1364
 msgid "Console is not yet active for guest"
 msgstr "ゲスト用のコンソールはまだ動作中ではありません"
 
-#: ../src/virtManager/details.py:1364
+#: ../src/virtManager/details.py:1368
 msgid "Connecting to console for guest"
 msgstr "ゲスト用のコンソールに接続中"
 
-#: ../src/virtManager/details.py:1401
+#: ../src/virtManager/details.py:1405
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr ""
 
-#: ../src/virtManager/details.py:1402
+#: ../src/virtManager/details.py:1406
 #, fuzzy, python-format
 msgid "The credential type %s is not supported"
 msgstr "デバイスタイプ '%s' のコンソールはまだサポートがありません。"
 
-#: ../src/virtManager/details.py:1403
+#: ../src/virtManager/details.py:1407
 #, fuzzy
 msgid "Unable to authenticate"
 msgstr "GTK を初期化できません: %s"
 
-#: ../src/virtManager/details.py:1407
+#: ../src/virtManager/details.py:1411
 msgid "Unsupported console authentication type"
 msgstr "サポートしていないコンソール認証タイプ"
 
-#: ../src/virtManager/details.py:1478
+#: ../src/virtManager/details.py:1482
 msgid "Save Virtual Machine Screenshot"
 msgstr "仮想マシンのスクリーンショットを保存"
 
-#: ../src/virtManager/details.py:1503
+#: ../src/virtManager/details.py:1507
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1467,85 +1472,85 @@ msgstr ""
 "スクリーンショットは次の場所に保存されています:\n"
 "%s"
 
-#: ../src/virtManager/details.py:1505
+#: ../src/virtManager/details.py:1509
 msgid "Screenshot saved"
 msgstr "スクリーンショットが保存されました"
 
-#: ../src/virtManager/details.py:1610
+#: ../src/virtManager/details.py:1614
 #, fuzzy, python-format
 msgid "Error Setting Security data: %s"
 msgstr "net autostart の設定中にエラー: %s"
 
-#: ../src/virtManager/details.py:1646
+#: ../src/virtManager/details.py:1650
 #, fuzzy, python-format
 msgid "Error setting CPU pinning: %s"
 msgstr "ドメインの開始中にエラー発生: %s"
 
-#: ../src/virtManager/details.py:1669
+#: ../src/virtManager/details.py:1673
 #, fuzzy, python-format
 msgid "Error changing vcpu value: %s"
 msgstr "autostart 値の変更中にエラー: %s"
 
-#: ../src/virtManager/details.py:1674 ../src/virtManager/details.py:1738
+#: ../src/virtManager/details.py:1678 ../src/virtManager/details.py:1742
 msgid "These changes will take effect after the next guest reboot. "
 msgstr ""
 
-#: ../src/virtManager/details.py:1733
+#: ../src/virtManager/details.py:1737
 #, python-format
 msgid "Error changing memory values: %s"
 msgstr "メモリ値の変更中にエラー: %s"
 
-#: ../src/virtManager/details.py:1751
+#: ../src/virtManager/details.py:1755
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "autostart 値の変更中にエラー: %s"
 
-#: ../src/virtManager/details.py:1758
+#: ../src/virtManager/details.py:1762
 #, python-format
 msgid "Error changing boot device: %s"
 msgstr "ブートデバイスの変更中にエラー: %s"
 
-#: ../src/virtManager/details.py:1887
+#: ../src/virtManager/details.py:1891
 msgid "Tablet"
 msgstr "タブレット"
 
-#: ../src/virtManager/details.py:1890
+#: ../src/virtManager/details.py:1894
 msgid "Mouse"
 msgstr "マウス"
 
-#: ../src/virtManager/details.py:1892 ../src/vmm-details.glade.h:52
+#: ../src/virtManager/details.py:1896 ../src/vmm-details.glade.h:52
 msgid "Input"
 msgstr "入力"
 
-#: ../src/virtManager/details.py:1900
+#: ../src/virtManager/details.py:1904
 #, fuzzy, python-format
 msgid "Display %s"
 msgstr "表示"
 
-#: ../src/virtManager/details.py:1907
+#: ../src/virtManager/details.py:1911
 #, python-format
 msgid "Sound: %s"
 msgstr "サウンド: %s"
 
-#: ../src/virtManager/details.py:2004
+#: ../src/virtManager/details.py:2008
 msgid "No Boot Device"
 msgstr "ブートデバイスがありません"
 
-#: ../src/virtManager/details.py:2024
+#: ../src/virtManager/details.py:2028
 #, python-format
 msgid "Error Removing CDROM: %s"
 msgstr "CDROM の削除中にエラー: %s"
 
-#: ../src/virtManager/details.py:2041
+#: ../src/virtManager/details.py:2045
 #, python-format
 msgid "Error Connecting CDROM: %s"
 msgstr "CDROM の接続中にエラー: %s"
 
-#: ../src/virtManager/details.py:2058
+#: ../src/virtManager/details.py:2062
 msgid "Are you sure you want to remove this device?"
 msgstr "本当にこのデバイスを削除したいのですか?"
 
-#: ../src/virtManager/details.py:2060
+#: ../src/virtManager/details.py:2064
 msgid ""
 "This device could not be removed from the running machine. Would you like to "
 "remove the device after the next VM shutdown? \n"
@@ -1557,81 +1562,81 @@ msgstr ""
 "\n"
 "警告: この操作は VM の再起動を必要とする他の変更を上書きします。"
 
-#: ../src/virtManager/details.py:2072
+#: ../src/virtManager/details.py:2076
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "デバイスの削除中にエラー: %s"
 
-#: ../src/virtManager/domain.py:705
+#: ../src/virtManager/domain.py:717
 msgid "Running"
 msgstr "実行中"
 
-#: ../src/virtManager/domain.py:707
+#: ../src/virtManager/domain.py:719
 msgid "Paused"
 msgstr "一時停止"
 
-#: ../src/virtManager/domain.py:709
+#: ../src/virtManager/domain.py:721
 msgid "Shuting Down"
 msgstr "シャットダウン中"
 
-#: ../src/virtManager/domain.py:711
+#: ../src/virtManager/domain.py:723
 msgid "Shutoff"
 msgstr "シャットオフ"
 
-#: ../src/virtManager/domain.py:713
+#: ../src/virtManager/domain.py:725
 msgid "Crashed"
 msgstr "クラッシュ"
 
-#: ../src/virtManager/domain.py:715
+#: ../src/virtManager/domain.py:727
 msgid "Unknown status code"
 msgstr "不明な状態コード"
 
-#: ../src/virtManager/domain.py:1233
+#: ../src/virtManager/domain.py:1247
 #, python-format
 msgid "Unknown device type '%s'"
 msgstr "不明なデバイスタイプ '%s'"
 
-#: ../src/virtManager/domain.py:1256
+#: ../src/virtManager/domain.py:1270
 #, python-format
 msgid "Didn't find the specified device to remove. Device was: %s %s"
 msgstr ""
 "削除するよう指定されたデバイスを見つけませんでした。 デバイスは %s %s でし"
 "た。"
 
-#: ../src/virtManager/engine.py:334
+#: ../src/virtManager/engine.py:338
 #, python-format
 msgid "Error bringing up domain details: %s"
 msgstr "ドメイン詳細の取り込み中にエラー発生: %s"
 
-#: ../src/virtManager/engine.py:440
+#: ../src/virtManager/engine.py:444
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr ""
 
 #. FIXME: This should work with remote storage stuff
-#: ../src/virtManager/engine.py:448
+#: ../src/virtManager/engine.py:452
 msgid "Saving virtual machines over remote connections is not yet supported."
 msgstr "リモート接続上の仮想マシンの保存にはまだサポートがありません"
 
-#: ../src/virtManager/engine.py:463
+#: ../src/virtManager/engine.py:467
 msgid "Save Virtual Machine"
 msgstr "仮想マシンの保存"
 
-#: ../src/virtManager/engine.py:472
+#: ../src/virtManager/engine.py:476
 msgid "Saving Virtual Machine"
 msgstr "仮想マシンの保存中"
 
-#: ../src/virtManager/engine.py:477
+#: ../src/virtManager/engine.py:481
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "ドメインを保存中にエラー: %s"
 
-#: ../src/virtManager/engine.py:496
+#: ../src/virtManager/engine.py:500
 #, python-format
 msgid "About to poweroff virtual machine %s"
 msgstr "仮想マシン %s をパワーオフしようとしています"
 
-#: ../src/virtManager/engine.py:498
+#: ../src/virtManager/engine.py:502
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss. Are you sure?"
@@ -1639,59 +1644,59 @@ msgstr ""
 "これは OS を終了せずに VM をただちにパワーオフするため、データを喪失するかも "
 "知れません。実行しますか?"
 
-#: ../src/virtManager/engine.py:508 ../src/virtManager/engine.py:588
-#: ../src/virtManager/engine.py:607
+#: ../src/virtManager/engine.py:512 ../src/virtManager/engine.py:592
+#: ../src/virtManager/engine.py:611
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "ドメインをシャットダウン中にエラー: %s"
 
-#: ../src/virtManager/engine.py:530
+#: ../src/virtManager/engine.py:534
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "ドメインを休止中にエラー: %s"
 
-#: ../src/virtManager/engine.py:553
+#: ../src/virtManager/engine.py:557
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "ドメインの休止解除中にエラー: %s"
 
-#: ../src/virtManager/engine.py:569
+#: ../src/virtManager/engine.py:573
 #, python-format
 msgid "Error starting domain: %s"
 msgstr "ドメインの開始中にエラー発生: %s"
 
-#: ../src/virtManager/engine.py:615
+#: ../src/virtManager/engine.py:619
 #, python-format
 msgid "Are you sure you want to migrate %s from %s to %s?"
 msgstr "本当に %s を %s から %s に移動しますか?"
 
-#: ../src/virtManager/engine.py:623
+#: ../src/virtManager/engine.py:627
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr ""
 
-#: ../src/virtManager/engine.py:624
+#: ../src/virtManager/engine.py:628
 #, python-format
 msgid "Migrating VM '%s' from %s to %s. This may take awhile."
 msgstr ""
 
-#: ../src/virtManager/engine.py:681
+#: ../src/virtManager/engine.py:685
 msgid "No connections available."
 msgstr "使用可能な接続はありません。"
 
-#: ../src/virtManager/engine.py:708
+#: ../src/virtManager/engine.py:712
 msgid "Connection hypervisors do not match."
 msgstr "接続ハイパーバイザーが一致しません。"
 
-#: ../src/virtManager/engine.py:710
+#: ../src/virtManager/engine.py:714
 msgid "Connection is disconnected."
 msgstr "接続が切断されます。"
 
-#: ../src/virtManager/engine.py:712
+#: ../src/virtManager/engine.py:716
 msgid "Cannot migrate to same connection."
 msgstr "同じ接続に移動できません。"
 
-#: ../src/virtManager/engine.py:742
+#: ../src/virtManager/engine.py:746
 #, fuzzy, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "net autostart の設定中にエラー: %s"
@@ -1713,137 +1718,137 @@ msgstr "入力エラー"
 msgid "Copy Volume Path"
 msgstr "ボリュームのパスをコピー"
 
-#: ../src/virtManager/host.py:207
+#: ../src/virtManager/host.py:210
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s of %(maxmem)s"
 
-#: ../src/virtManager/host.py:231
+#: ../src/virtManager/host.py:234
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "本当にこのネットワーク %s を永久に削除してもよいですか?"
 
-#: ../src/virtManager/host.py:238
+#: ../src/virtManager/host.py:241
 #, python-format
 msgid "Error deleting network: %s"
 msgstr "ネットワークの削除中にエラー: %s"
 
-#: ../src/virtManager/host.py:249
+#: ../src/virtManager/host.py:252
 #, python-format
 msgid "Error starting network: %s"
 msgstr "ネットワークの開始中にエラー: %s"
 
-#: ../src/virtManager/host.py:260
+#: ../src/virtManager/host.py:263
 #, python-format
 msgid "Error stopping network: %s"
 msgstr "ネットワークの停止中にエラー: %s"
 
-#: ../src/virtManager/host.py:269
+#: ../src/virtManager/host.py:272
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "ネットワークウィザードの起動中にエラー: %s"
 
-#: ../src/virtManager/host.py:280
+#: ../src/virtManager/host.py:283
 #, python-format
 msgid "Error setting net autostart: %s"
 msgstr "net autostart の設定中にエラー: %s"
 
-#: ../src/virtManager/host.py:288 ../src/virtManager/host.py:339
-#: ../src/virtManager/host.py:524 ../src/virtManager/host.py:549
+#: ../src/virtManager/host.py:291 ../src/virtManager/host.py:342
+#: ../src/virtManager/host.py:531 ../src/virtManager/host.py:556
 msgid "On Boot"
 msgstr "ブート時"
 
-#: ../src/virtManager/host.py:289 ../src/virtManager/host.py:341
-#: ../src/virtManager/host.py:373 ../src/virtManager/host.py:525
-#: ../src/virtManager/host.py:549 ../src/virtManager/host.py:582
+#: ../src/virtManager/host.py:292 ../src/virtManager/host.py:344
+#: ../src/virtManager/host.py:380 ../src/virtManager/host.py:532
+#: ../src/virtManager/host.py:556 ../src/virtManager/host.py:589
 #: ../src/vmm-details.glade.h:71
 msgid "Never"
 msgstr "未"
 
-#: ../src/virtManager/host.py:410 ../src/virtManager/host.py:420
+#: ../src/virtManager/host.py:417 ../src/virtManager/host.py:427
 #, python-format
 msgid "Error starting pool '%s': %s"
 msgstr "プール '%s'の開始中にエラー: %s"
 
-#: ../src/virtManager/host.py:429
+#: ../src/virtManager/host.py:436
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "本当にこのプール %s を永久に削除してもよいですか?"
 
-#: ../src/virtManager/host.py:436
+#: ../src/virtManager/host.py:443
 #, python-format
 msgid "Error deleting pool: %s"
 msgstr "プールを削除中にエラー: %s"
 
-#: ../src/virtManager/host.py:444
+#: ../src/virtManager/host.py:451
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "本当にこのボリューム %s を永久に削除してもよいですか?"
 
-#: ../src/virtManager/host.py:453
+#: ../src/virtManager/host.py:460
 #, python-format
 msgid "Error deleting volume: %s"
 msgstr "ボリュームの削除中にエラー: %s"
 
-#: ../src/virtManager/host.py:464
+#: ../src/virtManager/host.py:471
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "プールウィザードの起動中にエラー: %s"
 
-#: ../src/virtManager/host.py:479 ../src/virtManager/storagebrowse.py:237
+#: ../src/virtManager/host.py:486 ../src/virtManager/storagebrowse.py:243
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "ボリュームウィザードの起動中にエラー: %s"
 
-#: ../src/virtManager/host.py:516
+#: ../src/virtManager/host.py:523
 #, python-format
 msgid "Error setting pool autostart: %s"
 msgstr "pool autostart の設定中にエラー: %s"
 
 #. Shutdown menu
-#: ../src/virtManager/manager.py:86 ../src/virtManager/manager.py:250
+#: ../src/virtManager/manager.py:84 ../src/virtManager/manager.py:249
 #: ../src/virtManager/systray.py:136
 #, fuzzy
 msgid "_Reboot"
 msgstr "再起動"
 
-#: ../src/virtManager/manager.py:92 ../src/virtManager/manager.py:245
-#: ../src/virtManager/manager.py:256 ../src/virtManager/systray.py:143
+#: ../src/virtManager/manager.py:90 ../src/virtManager/manager.py:244
+#: ../src/virtManager/manager.py:255 ../src/virtManager/systray.py:143
 #: ../src/virtManager/systray.py:161
 #, fuzzy
 msgid "_Shut Down"
 msgstr "シャットダウン"
 
-#: ../src/virtManager/manager.py:98 ../src/virtManager/manager.py:262
+#: ../src/virtManager/manager.py:96 ../src/virtManager/manager.py:261
 #: ../src/virtManager/systray.py:150
 #, fuzzy
 msgid "_Force Off"
 msgstr "電源オフを強制"
 
-#: ../src/virtManager/manager.py:225 ../src/virtManager/systray.py:129
-#: ../src/vmm-details.glade.h:124 ../src/vmm-manager.glade.h:19
+#: ../src/virtManager/manager.py:224 ../src/virtManager/systray.py:129
+#: ../src/vmm-details.glade.h:123 ../src/vmm-manager.glade.h:14
 msgid "_Run"
 msgstr "実行 (_R)"
 
-#: ../src/virtManager/manager.py:231 ../src/virtManager/systray.py:116
-#: ../src/vmm-details.glade.h:123 ../src/vmm-manager.glade.h:18
+#: ../src/virtManager/manager.py:230 ../src/virtManager/systray.py:116
+#: ../src/vmm-details.glade.h:122 ../src/vmm-manager.glade.h:13
 msgid "_Pause"
 msgstr "一時停止 (_P)"
 
-#: ../src/virtManager/manager.py:238 ../src/virtManager/systray.py:122
+#: ../src/virtManager/manager.py:237 ../src/virtManager/systray.py:122
 msgid "_Resume"
 msgstr ""
 
-#: ../src/virtManager/manager.py:272 ../src/vmm-details.glade.h:122
+#: ../src/virtManager/manager.py:271 ../src/vmm-details.glade.h:121
 msgid "_Migrate"
 msgstr "移動 (_M)"
 
-#: ../src/virtManager/manager.py:321
+#: ../src/virtManager/manager.py:320
 #, fuzzy
 msgid "_Details"
 msgstr "詳細"
 
-#: ../src/virtManager/manager.py:381
+#: ../src/virtManager/manager.py:383
 msgid ""
 "Could not populate a default connection. Make sure the appropriate "
 "virtualization packages are installed (kvm, qemu, etc.) and that libvirtd "
@@ -1853,42 +1858,42 @@ msgid ""
 "File->Add Connection"
 msgstr ""
 
-#: ../src/virtManager/manager.py:400
+#: ../src/virtManager/manager.py:403
 msgid "Error determining default hypervisor."
 msgstr ""
 
-#: ../src/virtManager/manager.py:401
+#: ../src/virtManager/manager.py:404
 #, fuzzy
 msgid "Startup Error"
 msgstr "キックスタート URL エラー"
 
-#: ../src/virtManager/manager.py:428
+#: ../src/virtManager/manager.py:431
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr "リモート接続の仮想マシン復元にはまだサポートがありません"
 
-#: ../src/virtManager/manager.py:433
+#: ../src/virtManager/manager.py:436
 msgid "Restore Virtual Machine"
 msgstr "仮想マシンの復元"
 
-#: ../src/virtManager/manager.py:441
+#: ../src/virtManager/manager.py:444
 #, python-format
 msgid "The file '%s' does not appear to be a valid saved machine image"
 msgstr "ファイル '%s' は正しく保存されたマシンイメージではありません。"
 
-#: ../src/virtManager/manager.py:446
+#: ../src/virtManager/manager.py:449
 msgid "Restoring Virtual Machine"
 msgstr "仮想マシンを復元中"
 
-#: ../src/virtManager/manager.py:452
+#: ../src/virtManager/manager.py:455
 msgid "Error restoring domain"
 msgstr "ドメインの復元中にエラーが発生しました"
 
-#: ../src/virtManager/manager.py:460
+#: ../src/virtManager/manager.py:463
 #, python-format
 msgid "Error restoring domain '%s': %s"
 msgstr "ドメイン '%s' の復元中にエラー発生: %s"
 
-#: ../src/virtManager/manager.py:785
+#: ../src/virtManager/manager.py:794
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -1898,27 +1903,27 @@ msgid ""
 "Are you sure?"
 msgstr ""
 
-#: ../src/virtManager/manager.py:831
+#: ../src/virtManager/manager.py:840
 msgid "CPU usage"
 msgstr "CPU 使用率"
 
-#: ../src/virtManager/manager.py:908
+#: ../src/virtManager/manager.py:912
 msgid "Disabled in preferences dialog."
 msgstr "個人設定ダイアログで無効になりました。"
 
-#: ../src/virtManager/manager.py:927 ../src/vmm-preferences.glade.h:15
+#: ../src/virtManager/manager.py:931 ../src/vmm-preferences.glade.h:15
 msgid "Network I/O"
 msgstr "ネットワーク入出力"
 
-#: ../src/virtManager/manager.py:932 ../src/vmm-preferences.glade.h:7
+#: ../src/virtManager/manager.py:936 ../src/vmm-preferences.glade.h:7
 msgid "Disk I/O"
 msgstr "ディスク入出力"
 
-#: ../src/virtManager/manager.py:937
+#: ../src/virtManager/manager.py:941
 msgid "CPU Usage"
 msgstr "CPU 使用率"
 
-#: ../src/virtManager/manager.py:1078
+#: ../src/virtManager/manager.py:1082
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
@@ -1926,11 +1931,11 @@ msgstr ""
 "Xen ハイパーバイザー / デーモンへの接続を開けません。\n"
 "\n"
 
-#: ../src/virtManager/manager.py:1083 ../src/virtManager/manager.py:1091
+#: ../src/virtManager/manager.py:1087 ../src/virtManager/manager.py:1095
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "仮想マシンマネージャーの接続障害"
 
-#: ../src/virtManager/manager.py:1085
+#: ../src/virtManager/manager.py:1089
 msgid ""
 "Unable to open a connection to the libvirt management daemon.\n"
 "\n"
@@ -1943,24 +1948,24 @@ msgid "No media present"
 msgstr "メディアがありません。"
 
 #. Arguments to pass to util.browse_local for local storage
-#: ../src/virtManager/storagebrowse.py:67
+#: ../src/virtManager/storagebrowse.py:68
 msgid "Choose local storage"
 msgstr ""
 
-#: ../src/virtManager/storagebrowse.py:109
+#: ../src/virtManager/storagebrowse.py:115
 #, fuzzy
 msgid "Size"
 msgstr "サイズ:"
 
-#: ../src/virtManager/storagebrowse.py:116 ../src/vmm-create-pool.glade.h:6
+#: ../src/virtManager/storagebrowse.py:122 ../src/vmm-create-pool.glade.h:6
 msgid "Format"
 msgstr "フォーマット"
 
-#: ../src/virtManager/storagebrowse.py:123
+#: ../src/virtManager/storagebrowse.py:129
 msgid "Used By"
 msgstr ""
 
-#: ../src/virtManager/storagebrowse.py:163
+#: ../src/virtManager/storagebrowse.py:169
 #, fuzzy
 msgid "Cannot use local storage on remote connection."
 msgstr "同じ接続に移動できません。"
@@ -2166,7 +2171,7 @@ msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Video Device</"
 "span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ストレージ</"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ネットワーク</"
 "span>"
 
 #: ../src/vmm-add-hardware.glade.h:26
@@ -2235,8 +2240,8 @@ msgstr "場所 (_A):"
 msgid "MAC Address Field"
 msgstr "MAC アドレス域"
 
-#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create-vol.glade.h:22
-#: ../src/vmm-create.glade.h:29 ../src/vmm-details.glade.h:58
+#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create-vol.glade.h:21
+#: ../src/vmm-create.glade.h:30 ../src/vmm-details.glade.h:58
 msgid "MB"
 msgstr "MB"
 
@@ -2322,9 +2327,8 @@ msgstr ""
 "ハードウェアを追加したいか、最初に選択してください:"
 
 #: ../src/vmm-add-hardware.glade.h:69
-#, fuzzy
 msgid "Use Telnet:"
-msgstr "ホスト名:"
+msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:70
 msgid "Virtual Network Select"
@@ -2338,8 +2342,8 @@ msgstr "ブロックデバイス (パーティション) (_B):"
 msgid "_Device:"
 msgstr "装置:"
 
-#: ../src/vmm-add-hardware.glade.h:73 ../src/vmm-create-net.glade.h:53
-#: ../src/vmm-create.glade.h:49
+#: ../src/vmm-add-hardware.glade.h:73 ../src/vmm-create-net.glade.h:54
+#: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:50
 msgid "_Finish"
 msgstr "完了 (_F)"
 
@@ -2441,9 +2445,7 @@ msgstr ""
 #: ../src/vmm-clone.glade.h:10
 #, fuzzy
 msgid "<span size='large' color='white'>Clone virtual machine</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">新しい仮想ネット"
-"ワークを作成中</span>"
+msgstr "<span size='large'>ストレージボリューム割り当て</span>"
 
 #: ../src/vmm-clone.glade.h:11
 msgid ""
@@ -2487,30 +2489,16 @@ msgid "Existing disk"
 msgstr ""
 
 #: ../src/vmm-clone.glade.h:21
-#, fuzzy
 msgid "New MAC:"
-msgstr "<b>新規の VM</b>"
+msgstr ""
 
 #: ../src/vmm-clone.glade.h:22
 #, fuzzy
 msgid "No networking devices"
-msgstr "ユーザーモードネットワーク"
+msgstr "シリアルデバイスが見つかりません"
 
 #: ../src/vmm-clone.glade.h:23
 msgid "No storage to clone"
-msgstr ""
-
-#: ../src/vmm-clone.glade.h:24 ../src/vmm-delete.glade.h:3
-#: ../src/vmm-storage-browse.glade.h:5
-msgid "gtk-cancel"
-msgstr ""
-
-#: ../src/vmm-clone.glade.h:25
-msgid "gtk-help"
-msgstr ""
-
-#: ../src/vmm-clone.glade.h:26
-msgid "gtk-ok"
 msgstr ""
 
 #: ../src/vmm-create-net.glade.h:1
@@ -2526,8 +2514,9 @@ msgid "<b>Forwarding</b>"
 msgstr "<b>フォワーディング</b>"
 
 #: ../src/vmm-create-net.glade.h:4
+#, fuzzy
 msgid ""
-"<b>Hint:</b> The network should be choosen from one of the IPv4 private "
+"<b>Hint:</b> The network should be chosen from one of the IPv4 private "
 "address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
 msgstr ""
 "<b>ヒント:</b> ネットワークは 10.0.0.0/8 や、172.16.0.0/12、192.168.0.0/16 の"
@@ -2628,70 +2617,75 @@ msgid "Desination:"
 msgstr "目的地:"
 
 #: ../src/vmm-create-net.glade.h:21
+#, fuzzy
+msgid "Enable DHCP:"
+msgstr "オーディオを有効にする:"
+
+#: ../src/vmm-create-net.glade.h:22
 msgid "End Address"
 msgstr "終了アドレス"
 
-#: ../src/vmm-create-net.glade.h:22
+#: ../src/vmm-create-net.glade.h:23
 msgid "End address:"
 msgstr "終了アドレス:"
 
-#: ../src/vmm-create-net.glade.h:23
+#: ../src/vmm-create-net.glade.h:24
 msgid "End:"
 msgstr "終了:"
 
-#: ../src/vmm-create-net.glade.h:24
+#: ../src/vmm-create-net.glade.h:25
 msgid "Forwarding"
 msgstr "フォワーディング"
 
-#: ../src/vmm-create-net.glade.h:25
+#: ../src/vmm-create-net.glade.h:26
 msgid "Forwarding to physical network"
 msgstr "物理ネットワークにフォワーディング"
 
-#: ../src/vmm-create-net.glade.h:26
+#: ../src/vmm-create-net.glade.h:27
 msgid "Gateway:"
 msgstr "ゲートウェイ:"
 
-#: ../src/vmm-create-net.glade.h:27
+#: ../src/vmm-create-net.glade.h:28
 msgid "IPv4"
 msgstr "IPv4"
 
-#: ../src/vmm-create-net.glade.h:28
+#: ../src/vmm-create-net.glade.h:29
 msgid "Intro"
 msgstr "はじめに"
 
-#: ../src/vmm-create-net.glade.h:32
+#: ../src/vmm-create-net.glade.h:33
 msgid "Net Name Field"
 msgstr "ネット名域"
 
-#: ../src/vmm-create-net.glade.h:33
+#: ../src/vmm-create-net.glade.h:34
 msgid "Netmask:"
 msgstr "ネットマスク:"
 
-#: ../src/vmm-create-net.glade.h:34
+#: ../src/vmm-create-net.glade.h:35
 msgid "Network Range"
 msgstr "ネットワークの範囲"
 
-#: ../src/vmm-create-net.glade.h:35
+#: ../src/vmm-create-net.glade.h:36
 msgid "Network _Name:"
 msgstr "ネットワーク名 (_N):"
 
-#: ../src/vmm-create-net.glade.h:36
+#: ../src/vmm-create-net.glade.h:37
 msgid "Network name:"
 msgstr "ネットワーク名:"
 
-#: ../src/vmm-create-net.glade.h:37 ../src/vmm-host.glade.h:30
+#: ../src/vmm-create-net.glade.h:38 ../src/vmm-host.glade.h:30
 msgid "Network:"
 msgstr "ネットワーク:"
 
-#: ../src/vmm-create-net.glade.h:38
+#: ../src/vmm-create-net.glade.h:39
 msgid "Physical Network"
 msgstr "物理ネットワーク"
 
-#: ../src/vmm-create-net.glade.h:39
+#: ../src/vmm-create-net.glade.h:40
 msgid "Please choose a name for your virtual network:"
 msgstr "ご使用の仮想ネットワークの名前を選択してください:"
 
-#: ../src/vmm-create-net.glade.h:40
+#: ../src/vmm-create-net.glade.h:41
 msgid ""
 "Please choose the range of addresses the DHCP server will allocate to "
 "virtual machines attached to the virtual network."
@@ -2699,7 +2693,7 @@ msgstr ""
 "DHCP サーバーが仮想ネットワークに接続された仮想マシンに割り当てるアドレスの範"
 "囲を選択してください。"
 
-#: ../src/vmm-create-net.glade.h:41
+#: ../src/vmm-create-net.glade.h:42
 msgid ""
 "Please indicate whether this virtual network should be connected to the "
 "physical network."
@@ -2707,23 +2701,19 @@ msgstr ""
 "この仮想ネットワークは物理ネットワークに接続されるべきかどうかを示してくださ"
 "い。"
 
-#: ../src/vmm-create-net.glade.h:43
+#: ../src/vmm-create-net.glade.h:44
 msgid "Size:"
 msgstr "サイズ:"
 
-#: ../src/vmm-create-net.glade.h:44
+#: ../src/vmm-create-net.glade.h:45
 msgid "Start Address"
 msgstr "開始アドレス"
 
-#: ../src/vmm-create-net.glade.h:45
-msgid "Start address:"
-msgstr "開始アドレス"
-
-#: ../src/vmm-create-net.glade.h:46
+#: ../src/vmm-create-net.glade.h:47
 msgid "Start:"
 msgstr "開始:"
 
-#: ../src/vmm-create-net.glade.h:47
+#: ../src/vmm-create-net.glade.h:48
 msgid ""
 "The <b>address range</b> from which the <b>DHCP</b> server will allocate "
 "addresses for virtual machines"
@@ -2731,11 +2721,11 @@ msgstr ""
 "<b>DHCP</b>サーバーが仮想マシンのために割り当てることができる<b>アドレス範囲"
 "</b>"
 
-#: ../src/vmm-create-net.glade.h:48
+#: ../src/vmm-create-net.glade.h:49
 msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
 msgstr "割り当てる IPv4 <b>アドレス</b>と<b>ネットマスク</b>"
 
-#: ../src/vmm-create-net.glade.h:49
+#: ../src/vmm-create-net.glade.h:50
 msgid ""
 "This assistant will guide you through creating a new virtual network. You "
 "will be asked for some information about the virtual network you'd like to "
@@ -2744,11 +2734,11 @@ msgstr ""
 "このアシスタントは仮想ネットワークを追加することを案内します。あなたが作ろう"
 "としている仮想ネットワーク２ついての情報をいくつか尋ねます。例えば:"
 
-#: ../src/vmm-create-net.glade.h:51
+#: ../src/vmm-create-net.glade.h:52
 msgid "Whether to <b>forward</b> traffic to the physical network"
 msgstr "どの物理ネットワークにトラフィックを<b>フォワード</b>しますか"
 
-#: ../src/vmm-create-net.glade.h:52
+#: ../src/vmm-create-net.glade.h:53
 msgid "You will need to choose an IPv4 address space for the virtual network:"
 msgstr "仮想ネットワークのための IPv4 アドレス範囲を選択する必要があります:"
 
@@ -2768,11 +2758,11 @@ msgstr "閲覧"
 msgid "Build Pool:"
 msgstr "プールを構築:"
 
-#: ../src/vmm-create-pool.glade.h:5 ../src/vmm-create.glade.h:21
+#: ../src/vmm-create-pool.glade.h:5 ../src/vmm-create.glade.h:22
 msgid "Finish"
 msgstr "完了"
 
-#: ../src/vmm-create-pool.glade.h:7 ../src/vmm-create-vol.glade.h:21
+#: ../src/vmm-create-pool.glade.h:7 ../src/vmm-create-vol.glade.h:20
 msgid "Format:"
 msgstr "フォーマット:"
 
@@ -2780,8 +2770,8 @@ msgstr "フォーマット:"
 msgid "Host Name:"
 msgstr "ホスト名:"
 
-#: ../src/vmm-create-pool.glade.h:10 ../src/vmm-create-vol.glade.h:24
-#: ../src/vmm-create.glade.h:33 ../src/vmm-details.glade.h:67
+#: ../src/vmm-create-pool.glade.h:10 ../src/vmm-create-vol.glade.h:23
+#: ../src/vmm-create.glade.h:34 ../src/vmm-details.glade.h:67
 #: ../src/vmm-host.glade.h:29
 msgid "Name:"
 msgstr "名前"
@@ -2856,14 +2846,10 @@ msgid "Allocation:"
 msgstr "割り当て:"
 
 #: ../src/vmm-create-vol.glade.h:19
-msgid "Create _Volume"
-msgstr "Create _Volume"
-
-#: ../src/vmm-create-vol.glade.h:20
 msgid "Create a storage unit that can be used directly by a virtual machine."
 msgstr "仮想マシンにより直接使用可能なストレージユニットを作成します。"
 
-#: ../src/vmm-create-vol.glade.h:23
+#: ../src/vmm-create-vol.glade.h:22
 msgid "Max Capacity:"
 msgstr "最大容量:"
 
@@ -2954,110 +2940,114 @@ msgstr "仮想マシンを管理する"
 msgid "Enter your virtual machine details"
 msgstr "仮想マシンの詳細"
 
-#: ../src/vmm-create.glade.h:22
-msgid "GB"
+#: ../src/vmm-create.glade.h:21
+msgid "Error message"
 msgstr ""
 
 #: ../src/vmm-create.glade.h:23
-msgid "ISO"
+msgid "GB"
 msgstr ""
 
 #: ../src/vmm-create.glade.h:24
-msgid "Install"
+msgid "ISO"
 msgstr ""
 
 #: ../src/vmm-create.glade.h:25
+msgid "Install"
+msgstr ""
+
+#: ../src/vmm-create.glade.h:26
 #, fuzzy
 msgid "Kernel Options:"
 msgstr "カーネルパラメーター:"
 
-#: ../src/vmm-create.glade.h:26
+#: ../src/vmm-create.glade.h:27
 #, fuzzy
 msgid "Kickstart URL:"
 msgstr "キックスタート URL (_R):"
 
-#: ../src/vmm-create.glade.h:27
+#: ../src/vmm-create.glade.h:28
 #, fuzzy
 msgid "Local install media (ISO image or CDROM)"
 msgstr "ローカルインストールのメディア (ISO イメージ、又は CDROM)（_L）"
 
-#: ../src/vmm-create.glade.h:28
+#: ../src/vmm-create.glade.h:29
 #, fuzzy
 msgid "Locate your install media"
 msgstr "インストールメディアへのパス (_P):"
 
-#: ../src/vmm-create.glade.h:30
+#: ../src/vmm-create.glade.h:31
 #, fuzzy
 msgid "Memory"
 msgstr "メモリ:"
 
-#: ../src/vmm-create.glade.h:31
+#: ../src/vmm-create.glade.h:32
 #, fuzzy
 msgid "Memory (RAM):"
 msgstr "最大メモリ (MB) (_M):"
 
-#: ../src/vmm-create.glade.h:34
+#: ../src/vmm-create.glade.h:35
 #, fuzzy
 msgid "Network Boot (PXE)"
 msgstr "ネットワークブート(PXE)（_N）"
 
-#: ../src/vmm-create.glade.h:35
+#: ../src/vmm-create.glade.h:36
 #, fuzzy
 msgid "Network Install (HTTP, FTP, or NFS)"
 msgstr "ネットワークのインストールツリー(HTTP, FTP, 又は NFS)（_T）"
 
-#: ../src/vmm-create.glade.h:36
+#: ../src/vmm-create.glade.h:37
 #, fuzzy
 msgid "New VM"
 msgstr "<b>新規の VM</b>"
 
-#: ../src/vmm-create.glade.h:37
+#: ../src/vmm-create.glade.h:38
 #, fuzzy
 msgid "OS Type:"
 msgstr "OS タイプ (_T) "
 
-#: ../src/vmm-create.glade.h:38
+#: ../src/vmm-create.glade.h:39
 msgid "PXE"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:39
+#: ../src/vmm-create.glade.h:40
 #, fuzzy
 msgid "Provide the operating system URL"
 msgstr "オペレーティングシステム:"
 
-#: ../src/vmm-create.glade.h:40
+#: ../src/vmm-create.glade.h:41
 msgid "Select managed or other existing storage"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:41
+#: ../src/vmm-create.glade.h:42
 #, fuzzy
 msgid "Set a fixed mac address"
 msgstr "この NIC に固定 MAC アドレスを設定しますか (_A)？"
 
-#: ../src/vmm-create.glade.h:43
+#: ../src/vmm-create.glade.h:44
 msgid "URL"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:44
+#: ../src/vmm-create.glade.h:45
 msgid "URL:"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:45
+#: ../src/vmm-create.glade.h:46
 #, fuzzy
 msgid "Use CDROM or DVD"
 msgstr "CD-ROM または DVD (_C):"
 
-#: ../src/vmm-create.glade.h:46
+#: ../src/vmm-create.glade.h:47
 #, fuzzy
 msgid "Use ISO image:"
 msgstr "ISO イメージの検索"
 
-#: ../src/vmm-create.glade.h:47
+#: ../src/vmm-create.glade.h:48
 #, fuzzy
 msgid "Version:"
 msgstr "パーティション:"
 
-#: ../src/vmm-create.glade.h:48
+#: ../src/vmm-create.glade.h:49
 #, fuzzy
 msgid "Virt Type:"
 msgstr "タイプ:"
@@ -3069,10 +3059,6 @@ msgstr "プールを削除"
 
 #: ../src/vmm-delete.glade.h:2
 msgid "Delete associated storage files"
-msgstr ""
-
-#: ../src/vmm-delete.glade.h:4
-msgid "gtk-delete"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:1
@@ -3227,7 +3213,7 @@ msgstr "デバイスモード:"
 msgid "Device virtual machine will boot from:"
 msgstr "デバイス仮想マシンは以下から起動します:"
 
-#: ../src/vmm-details.glade.h:40 ../src/vmm-manager.glade.h:4
+#: ../src/vmm-details.glade.h:40 ../src/vmm-manager.glade.h:2
 msgid "Disk"
 msgstr "ディスク"
 
@@ -3262,7 +3248,7 @@ msgstr ""
 #: ../src/vmm-details.glade.h:48
 #, fuzzy
 msgid "Host CPUs:"
-msgstr "CPU"
+msgstr "論理ホストの CPU:"
 
 #: ../src/vmm-details.glade.h:49
 msgid "How many virtual CPUs should be allocated for this machine?"
@@ -3420,10 +3406,6 @@ msgstr "状態"
 msgid "Stats"
 msgstr "状態"
 
-#: ../src/vmm-details.glade.h:100
-msgid "Status:"
-msgstr "状態:"
-
 #: ../src/vmm-details.glade.h:101
 msgid "Target Port:"
 msgstr "ターゲットポート:"
@@ -3496,29 +3478,24 @@ msgid "_Clone..."
 msgstr "ブラウズ (_B)..."
 
 #: ../src/vmm-details.glade.h:119 ../src/vmm-host.glade.h:41
-#: ../src/vmm-manager.glade.h:12
-msgid "_Contents"
-msgstr "目次"
-
-#: ../src/vmm-details.glade.h:120 ../src/vmm-host.glade.h:42
-#: ../src/vmm-manager.glade.h:14
+#: ../src/vmm-manager.glade.h:9
 msgid "_File"
 msgstr "ファイル (_F)"
 
-#: ../src/vmm-details.glade.h:121 ../src/vmm-host.glade.h:43
-#: ../src/vmm-manager.glade.h:15
+#: ../src/vmm-details.glade.h:120 ../src/vmm-host.glade.h:42
+#: ../src/vmm-manager.glade.h:10
 msgid "_Help"
 msgstr "ヘルプ (_H)"
 
-#: ../src/vmm-details.glade.h:125
+#: ../src/vmm-details.glade.h:124
 msgid "_Save"
 msgstr "保存 (_S)"
 
-#: ../src/vmm-details.glade.h:126
+#: ../src/vmm-details.glade.h:125
 msgid "_Take Screenshot"
 msgstr "スクリーンショットの取得 (_T)"
 
-#: ../src/vmm-details.glade.h:127 ../src/vmm-manager.glade.h:21
+#: ../src/vmm-details.glade.h:126 ../src/vmm-manager.glade.h:16
 msgid "_View"
 msgstr "表示 (_V)"
 
@@ -3578,7 +3555,7 @@ msgstr "ボリュームを削除"
 msgid "Forwarding:"
 msgstr "フォワーディング:"
 
-#: ../src/vmm-host.glade.h:21 ../src/vmm-manager.glade.h:6
+#: ../src/vmm-host.glade.h:21 ../src/vmm-manager.glade.h:4
 msgid "Host Details"
 msgstr "ホスト詳細"
 
@@ -3639,49 +3616,33 @@ msgid "Virtual Networks"
 msgstr "仮想ネットワーク"
 
 #: ../src/vmm-manager.glade.h:1
-msgid "Add Connection..."
-msgstr "接続を追加..."
-
-#: ../src/vmm-manager.glade.h:2
 #, fuzzy
 msgid "CPU"
 msgstr "CPU"
 
 #: ../src/vmm-manager.glade.h:3
-msgid "Delete Virtual Machine"
-msgstr "仮想マシンの削除"
-
-#: ../src/vmm-manager.glade.h:5
 #, fuzzy
 msgid "Graph"
 msgstr "グラフィック"
 
-#: ../src/vmm-manager.glade.h:8
+#: ../src/vmm-manager.glade.h:6
 msgid "Restore a saved machine from a filesystem image"
 msgstr "ファイルシステムのイメージから保存したマシンを復元します"
 
-#: ../src/vmm-manager.glade.h:9
-msgid "Restore saved machine..."
-msgstr "保存したマシンの復元..."
-
-#: ../src/vmm-manager.glade.h:10
-msgid "Virtual Machine Details"
-msgstr "仮想マシンの詳細"
-
-#: ../src/vmm-manager.glade.h:13
+#: ../src/vmm-manager.glade.h:8
 msgid "_Edit"
 msgstr "編集 (_E)"
 
-#: ../src/vmm-manager.glade.h:16
+#: ../src/vmm-manager.glade.h:11
 #, fuzzy
 msgid "_New"
 msgstr "表示 (_V)"
 
-#: ../src/vmm-manager.glade.h:17
+#: ../src/vmm-manager.glade.h:12
 msgid "_Open"
 msgstr ""
 
-#: ../src/vmm-manager.glade.h:20
+#: ../src/vmm-manager.glade.h:15
 #, fuzzy
 msgid "_Shutdown"
 msgstr "シャットダウン"
@@ -3923,80 +3884,6 @@ msgstr "新規ボリューム"
 #~ msgid "Shared physical device"
 #~ msgstr "共用物理デバイス"
 
-#~ msgid "Usermode networking"
-#~ msgstr "ユーザーモードネットワーク"
-
-#, fuzzy
-#~ msgid "Performance"
-#~ msgstr "<b>パフォーマンス</b>"
-
-#, fuzzy
-#~ msgid "Processor"
-#~ msgstr "処理中..."
-
-#~ msgid "Error parsing domain xml: %s"
-#~ msgstr "ドメイン xml の構文解析中にエラー: %s"
-
-#~ msgid "ID"
-#~ msgstr "ID"
-
-#~ msgid "Status"
-#~ msgstr "状態"
-
-#~ msgid "Memory usage"
-#~ msgstr "メモリ使用率"
-
-#~ msgid "<b>Graphics</b>"
-#~ msgstr "<b>グラフィック</b>"
-
-#~ msgid "<b>Network</b>"
-#~ msgstr "<b>ネットワーク</b>"
-
-#~ msgid "<b>Sound</b>"
-#~ msgstr "<b>サウンド</b>"
-
-#~ msgid "<b>Storage</b>"
-#~ msgstr "<b>ストレージ</b>"
-
-#~ msgid "Absolute"
-#~ msgstr "絶対"
-
-#~ msgid "Connection type:"
-#~ msgstr "接続タイプ:"
-
-#~ msgid "EvTouch Tablet"
-#~ msgstr "EvTouch タブレット"
-
-#~ msgid "Shared Physical Device"
-#~ msgstr "共有物理デバイス"
-
-#~ msgid "_Path to install media:"
-#~ msgstr "インストールメディアへのパス (_P):"
-
-#~ msgid "Serial Consoles"
-#~ msgstr "シリアルコンソール"
-
-#~ msgid "Total CPUs on host machine:"
-#~ msgstr "ホストマシン上の CPU 合計:"
-
-#~ msgid ""
-#~ "All virtual machines\n"
-#~ "Active virtual machines\n"
-#~ "Inactive virtual machines"
-#~ msgstr ""
-#~ "すべての仮想マシン\n"
-#~ "動作中の仮想マシン\n"
-#~ "動作中ではない仮想マシン"
-
-#~ msgid "Domain ID"
-#~ msgstr "ドメイン ID"
-
-#~ msgid "Memory Usage"
-#~ msgstr "メモリ使用率"
-
-#~ msgid "_View:"
-#~ msgstr "表示 (_V):"
-
 #~ msgid "Unable to complete install: "
 #~ msgstr "インストールを完了できません:"
 
@@ -4057,6 +3944,9 @@ msgstr "新規ボリューム"
 #~ msgid "Max Memory Amount Error"
 #~ msgstr "最大メモリ量エラー"
 
+#~ msgid "Error parsing domain xml: %s"
+#~ msgstr "ドメイン xml の構文解析中にエラー: %s"
+
 #~ msgid "Error migrating domain: %s"
 #~ msgstr "ドメインの移動中にエラー発生: %s"
 
@@ -4071,6 +3961,36 @@ msgstr "新規ボリューム"
 
 #~ msgid "Error deleting domain: %s"
 #~ msgstr "ドメインの削除中にエラー: %s"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Status"
+#~ msgstr "状態"
+
+#~ msgid "Memory usage"
+#~ msgstr "メモリ使用率"
+
+#~ msgid "<b>Graphics</b>"
+#~ msgstr "<b>グラフィック</b>"
+
+#~ msgid "<b>Network</b>"
+#~ msgstr "<b>ネットワーク</b>"
+
+#~ msgid "<b>Sound</b>"
+#~ msgstr "<b>サウンド</b>"
+
+#~ msgid "<b>Storage</b>"
+#~ msgstr "<b>ストレージ</b>"
+
+#~ msgid "Absolute"
+#~ msgstr "絶対"
+
+#~ msgid "Connection type:"
+#~ msgstr "接続タイプ:"
+
+#~ msgid "EvTouch Tablet"
+#~ msgstr "EvTouch タブレット"
 
 #~ msgid "<b>CPUs:</b>"
 #~ msgstr "<b>CPU:</b>"
@@ -4222,9 +4142,6 @@ msgstr "新規ボリューム"
 #~ msgid "CPU architecture:"
 #~ msgstr "CPU アーキテクチャー:"
 
-#~ msgid "Enable audio:"
-#~ msgstr "オーディオを有効にする:"
-
 #~ msgid "F_ully virtualized:"
 #~ msgstr "完全仮想化 (_U):"
 
@@ -4273,9 +4190,6 @@ msgstr "新規ボリューム"
 #~ "マシンの仮想化における軽量タイプのメソッドです。 準仮想化をサポートするよ"
 #~ "うOS に対して特別に変更を加える必要があるためオペレーティングシステムの種"
 #~ "類は限られます。 完全仮想化システムに比べパフォーマンスがよくなります。"
-
-#~ msgid "Logical host CPUs:"
-#~ msgstr "論理ホストの CPU:"
 
 #~ msgid "MAC Field"
 #~ msgstr "MAC 域"
@@ -4419,3 +4333,36 @@ msgstr "新規ボリューム"
 
 #~ msgid "_Virtual CPUs:"
 #~ msgstr "仮想 CPU 数 (_V):"
+
+#~ msgid "Serial Consoles"
+#~ msgstr "シリアルコンソール"
+
+#~ msgid "Total CPUs on host machine:"
+#~ msgstr "ホストマシン上の CPU 合計:"
+
+#~ msgid "_Contents"
+#~ msgstr "目次"
+
+#~ msgid "Add Connection..."
+#~ msgstr "接続を追加..."
+
+#~ msgid ""
+#~ "All virtual machines\n"
+#~ "Active virtual machines\n"
+#~ "Inactive virtual machines"
+#~ msgstr ""
+#~ "すべての仮想マシン\n"
+#~ "動作中の仮想マシン\n"
+#~ "動作中ではない仮想マシン"
+
+#~ msgid "Domain ID"
+#~ msgstr "ドメイン ID"
+
+#~ msgid "Memory Usage"
+#~ msgstr "メモリ使用率"
+
+#~ msgid "Restore saved machine..."
+#~ msgstr "保存したマシンの復元..."
+
+#~ msgid "_View:"
+#~ msgstr "表示 (_V):"
