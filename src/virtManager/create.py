@@ -163,10 +163,11 @@ class vmmCreate(gobject.GObject):
 
     # State init methods
     def startup_error(self, error):
+        self.window.get_widget("startup-error").show()
+        self.window.get_widget("install-box").hide()
         self.window.get_widget("create-forward").set_sensitive(False)
-        self.window.get_widget("install-box").set_sensitive(False)
-        util.tooltip_wrapper(self.window.get_widget("install-box"),
-                             error)
+
+        self.window.get_widget("startup-error").set_text("Error: %s" % error)
         return False
 
     def set_initial_state(self):
@@ -188,6 +189,8 @@ class vmmCreate(gobject.GObject):
         box.pack_end(image, False)
 
         # Connection list
+        self.window.get_widget("create-conn-label").set_text("")
+        self.window.get_widget("startup-error").set_text("")
         conn_list = self.window.get_widget("create-conn")
         conn_model = gtk.ListStore(str, str)
         conn_list.set_model(conn_model)
@@ -281,6 +284,8 @@ class vmmCreate(gobject.GObject):
         self.failed_guest = None
         self.window.get_widget("create-pages").set_current_page(PAGE_NAME)
         self.page_changed(None, None, PAGE_NAME)
+        self.window.get_widget("startup-error").hide()
+        self.window.get_widget("install-box").show()
 
         # Name page state
         self.window.get_widget("create-vm-name").set_text("")
@@ -333,7 +338,6 @@ class vmmCreate(gobject.GObject):
         # Update all state that has some dependency on the current connection
 
         self.window.get_widget("create-forward").set_sensitive(True)
-        self.window.get_widget("install-box").set_sensitive(True)
 
         if self.conn.is_read_only():
             return self.startup_error(_("Connection is read only."))
