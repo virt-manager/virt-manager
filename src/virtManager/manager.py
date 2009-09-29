@@ -584,6 +584,7 @@ class vmmManager(gobject.GObject):
         row[ROW_STATUS] = vm.run_status()
         row[ROW_STATUS_ICON] = vm.run_status_icon_large()
         row[ROW_IS_VM_RUNNING] = vm.is_active()
+        row[ROW_MARKUP] = self._build_vm_markup(vm, row)
         model.row_changed(row.path, row.iter)
 
 
