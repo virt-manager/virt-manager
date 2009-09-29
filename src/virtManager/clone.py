@@ -129,6 +129,9 @@ class vmmCloneVM(gobject.GObject):
             "on_clone_help_clicked" : self.show_help,
         })
 
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("clone-help").hide()
+
         self.set_initial_state()
 
     def show(self):

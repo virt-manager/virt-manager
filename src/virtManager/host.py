@@ -169,6 +169,9 @@ class vmmHost(gobject.GObject):
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
             })
 
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("help_menuitem").hide()
+
         self.conn.connect("resources-sampled", self.refresh_resources)
         self.reset_state()
 

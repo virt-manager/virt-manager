@@ -88,6 +88,9 @@ class vmmCreatePool(gobject.GObject):
             "on_pool_build_focus_in_event": (self.update_build_doc)
         })
 
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("pool-help").hide()
+
         self.set_initial_state()
 
     def show(self):

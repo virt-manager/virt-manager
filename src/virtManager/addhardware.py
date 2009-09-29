@@ -115,6 +115,9 @@ class vmmAddHardware(gobject.GObject):
             "char_telnet_focus_in": (self.update_doc, "protocol"),
             })
 
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("create-help").hide()
+
         self.set_initial_state()
 
     def update_doc(self, ignore1, ignore2, param):

@@ -188,6 +188,7 @@ class vmmManager(gobject.GObject):
             filename = self.config.get_icon_dir() + "/%s" % iconfile
             pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, l, w)
             image = gtk.image_new_from_pixbuf(pixbuf)
+            image.show_all()
             self.window.get_widget(widget).set_icon_widget(image)
 
         set_toolbar_image("vm-new", "vm_new_wizard.png", 28, 28)
@@ -356,6 +357,9 @@ class vmmManager(gobject.GObject):
             "on_menu_help_activate": self.show_help,
             })
 
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("menu_help").hide()
+
         self.vm_selected(None)
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
 
@@ -391,7 +395,8 @@ class vmmManager(gobject.GObject):
         if self.is_visible():
             win.present()
             return
-        win.show_all()
+        win.show()
+        win.present()
         self.engine.increment_window_counter()
 
         if self.startup_error:

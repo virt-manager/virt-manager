@@ -313,6 +313,9 @@ class vmmDetails(gobject.GObject):
             "on_security_model_changed": self.security_model_changed,
             })
 
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("help_menuitem").hide()
+
         self.vm.connect("status-changed", self.update_widget_states)
         self.vm.connect("resources-sampled", self.refresh_resources)
         self.vm.connect("config-changed", self.refresh_vm_info)
@@ -575,7 +578,7 @@ class vmmDetails(gobject.GObject):
         if self.is_visible():
             self.topwin.present()
             return
-        self.topwin.show_all()
+        self.topwin.show()
         self.topwin.present()
 
         self.engine.increment_window_counter()

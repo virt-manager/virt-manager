@@ -72,6 +72,10 @@ class vmmCreateVolume(gobject.GObject):
         format_list.add_attribute(text2, 'text', 1)
         self.window.get_widget("vol-info-view").modify_bg(gtk.STATE_NORMAL,
                                                           gtk.gdk.color_parse("grey"))
+
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("pool-help").hide()
+
         self.reset_state()
 
 

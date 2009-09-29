@@ -68,6 +68,9 @@ class vmmCreateNetwork(gobject.GObject):
             "on_create_help_clicked": self.show_help,
             })
 
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("create-help").hide()
+
         self.set_initial_state()
 
     def show(self):

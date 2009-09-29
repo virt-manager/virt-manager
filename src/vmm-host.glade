@@ -36,13 +36,13 @@
               </widget>
             </child>
             <child>
-              <widget class="GtkMenuItem" id="help1">
+              <widget class="GtkMenuItem" id="help_menuitem">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">_Help</property>
                 <property name="use_underline">True</property>
                 <signal name="activate" handler="on_help1_activate"/>
                 <child>
-                  <widget class="GtkMenu" id="help1_menu">
+                  <widget class="GtkMenu" id="help_menu">
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_help_contents">
                         <property name="label">_Contents</property>

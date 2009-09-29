@@ -75,6 +75,9 @@ class vmmPreferences(gobject.GObject):
             "on_prefs_stats_enable_net_toggled": self.change_net_poll,
             })
 
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("prefs-help").hide()
+
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
         return 1
