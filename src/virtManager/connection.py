@@ -669,11 +669,11 @@ class vmmConnection(gobject.GObject):
         try:
             newActiveNetNames = self.vmm.listNetworks()
         except:
-            logging.warn("Unable to list active networks")
+            logging.exception("Unable to list active networks")
         try:
             newInactiveNetNames = self.vmm.listDefinedNetworks()
         except:
-            logging.warn("Unable to list inactive networks")
+            logging.exception("Unable to list inactive networks")
 
         for name in newActiveNetNames:
             try:
@@ -693,7 +693,8 @@ class vmmConnection(gobject.GObject):
                         startNets.append(uuid)
                     del origNets[uuid]
             except libvirt.libvirtError:
-                logging.warn("Couldn't fetch active network name '%s'" % name)
+                logging.exception("Couldn't fetch active network name '%s'" %
+                                  name)
 
         for name in newInactiveNetNames:
             try:
@@ -710,7 +711,8 @@ class vmmConnection(gobject.GObject):
                         stopNets.append(uuid)
                     del origNets[uuid]
             except libvirt.libvirtError:
-                logging.warn("Couldn't fetch inactive network name '%s'" % name)
+                logging.exception("Couldn't fetch inactive network name '%s'"
+                                  % name)
 
         return (startNets, stopNets, newNets, origNets, currentNets)
 
@@ -735,11 +737,11 @@ class vmmConnection(gobject.GObject):
         try:
             newActivePoolNames = self.vmm.listStoragePools()
         except:
-            logging.warn("Unable to list active pools")
+            logging.exception("Unable to list active pools")
         try:
             newInactivePoolNames = self.vmm.listDefinedStoragePools()
         except:
-            logging.warn("Unable to list inactive pools")
+            logging.exception("Unable to list inactive pools")
 
         for name in newActivePoolNames:
             try:
@@ -757,7 +759,7 @@ class vmmConnection(gobject.GObject):
                         startPools.append(uuid)
                     del origPools[uuid]
             except libvirt.libvirtError:
-                logging.warn("Couldn't fetch active pool '%s'" % name)
+                logging.exception("Couldn't fetch active pool '%s'" % name)
 
         for name in newInactivePoolNames:
             try:
@@ -774,7 +776,7 @@ class vmmConnection(gobject.GObject):
                         stopPools.append(uuid)
                     del origPools[uuid]
             except libvirt.libvirtError:
-                logging.warn("Couldn't fetch inactive pool '%s'" % name)
+                logging.exception("Couldn't fetch inactive pool '%s'" % name)
         return (stopPools, startPools, origPools, newPools, currentPools)
 
     def _update_vms(self):
@@ -798,13 +800,13 @@ class vmmConnection(gobject.GObject):
         try:
             newActiveIDs = self.vmm.listDomainsID()
         except:
-            logging.warn("Unable to list active domains")
+            logging.exception("Unable to list active domains")
 
         newInactiveNames = []
         try:
             newInactiveNames = self.vmm.listDefinedDomains()
         except:
-            logging.warn("Unable to list inactive domains")
+            logging.exception("Unable to list inactive domains")
 
         curUUIDs = {}       # new master list of vms
         maybeNewUUIDs = {}  # list of vms that changed state or are brand new
@@ -837,8 +839,8 @@ class vmmConnection(gobject.GObject):
                         startedUUIDs.append(uuid)
                         activeUUIDs.append(uuid)
                     except libvirt.libvirtError:
-                        logging.debug("Couldn't fetch domain id '%s'" % str(_id)
-                                      + ": it probably went away")
+                        logging.exception("Couldn't fetch domain id '%s'" %
+                                          str(_id))
 
         # Filter out inactive domains which haven't changed
         if newInactiveNames != None:
@@ -856,8 +858,8 @@ class vmmConnection(gobject.GObject):
                         uuid = self.uuidstr(vm.UUID())
                         maybeNewUUIDs[uuid] = vm
                     except libvirt.libvirtError:
-                        logging.debug("Couldn't fetch domain id '%s'" % str(id)
-                                      + ": it probably went away")
+                        logging.exception("Couldn't fetch domain id '%s'" %
+                                          str(id))
 
         # At this point, maybeNewUUIDs has domains which are
         # either completely new, or changed state.
