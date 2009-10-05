@@ -62,6 +62,7 @@ class vmmCreateVolume(gobject.GObject):
             "on_vmm_create_vol_delete_event" : self.close,
             "on_vol_cancel_clicked"  : self.close,
             "on_vol_create_clicked"  : self.finish,
+            "on_vol_name_changed"    : self.vol_name_changed,
         })
 
         format_list = self.window.get_widget("vol-format")
@@ -99,6 +100,7 @@ class vmmCreateVolume(gobject.GObject):
 
     def reset_state(self):
         self.window.get_widget("vol-name").set_text("")
+        self.window.get_widget("vol-create").set_sensitive(False)
         self.populate_vol_format()
         self.populate_vol_suffix()
 
@@ -137,6 +139,10 @@ class vmmCreateVolume(gobject.GObject):
         if self.vol_class == Storage.FileVolume:
             suffix = ".img"
         self.window.get_widget("vol-name-suffix").set_text(suffix)
+
+    def vol_name_changed(self, src):
+        text = src.get_text()
+        self.window.get_widget("vol-create").set_sensitive(bool(text))
 
     def finish(self, src):
         # validate input
