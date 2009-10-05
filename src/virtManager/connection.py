@@ -983,7 +983,7 @@ class vmmConnection(gobject.GObject):
         for uuid in self.vms:
             vm = self.vms[uuid]
             if vm.get_id() != -1:
-                cpuTime = cpuTime + vm.get_cputime()
+                cpuTime = cpuTime + vm.cpu_time()
                 mem = mem + vm.get_memory()
                 rdRate += vm.disk_read_rate()
                 wrRate += vm.disk_write_rate()

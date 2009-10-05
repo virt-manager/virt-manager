@@ -597,39 +597,12 @@ class vmmDomain(gobject.GObject):
             return "0 MB"
         return self.get_memory_pretty()
 
-
-    def get_memory(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["currMem"]
-
-    def get_memory_percentage(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["currMemPercent"]
-
-    def get_cputime(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["cpuTime"]
-
     def get_memory_pretty(self):
         mem = self.get_memory()
         if mem > (10*1024*1024):
             return "%2.2f GB" % (mem/(1024.0*1024.0))
         else:
             return "%2.0f MB" % (mem/1024.0)
-
-
-    def maximum_memory(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["maxMem"]
-
-    def maximum_memory_percentage(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["maxMemPercent"]
 
     def maximum_memory_pretty(self):
         mem = self.maximum_memory()
@@ -638,50 +611,43 @@ class vmmDomain(gobject.GObject):
         else:
             return "%2.0f MB" % (mem/1024.0)
 
-
-    def cpu_time(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["cpuTime"]
-
-    def cpu_time_percentage(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["cpuTimePercent"]
-
     def cpu_time_pretty(self):
         return "%2.2f %%" % self.cpu_time_percentage()
 
-    def network_rx_rate(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["netRxRate"]
 
-    def network_tx_rate(self):
+    def _get_record_helper(self, record_name):
         if len(self.record) == 0:
             return 0
-        return self.record[0]["netTxRate"]
+        return self.record[0][record_name]
+
+    def get_memory(self):
+        return self._get_record_helper("currMem")
+    def get_memory_percentage(self):
+        return self._get_record_helper("currMemPercent")
+    def maximum_memory(self):
+        return self._get_record_helper("maxMem")
+    def maximum_memory_percentage(self):
+        return self._get_record_helper("maxMemPercent")
+    def cpu_time(self):
+        return self._get_record_helper("cpuTime")
+    def cpu_time_percentage(self):
+        return self._get_record_helper("cpuTimePercent")
+    def vcpu_count(self):
+        return self._get_record_helper("vcpuCount")
+    def network_rx_rate(self):
+        return self._get_record_helper("netRxRate")
+    def network_tx_rate(self):
+        return self._get_record_helper("netTxRate")
+    def disk_read_rate(self):
+        return self._get_record_helper("diskRdRate")
+    def disk_write_rate(self):
+        return self._get_record_helper("diskWrRate")
 
     def network_traffic_rate(self):
         return self.network_tx_rate() + self.network_rx_rate()
 
-    def disk_read_rate(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["diskRdRate"]
-
-    def disk_write_rate(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["diskWrRate"]
-
     def disk_io_rate(self):
         return self.disk_read_rate() + self.disk_write_rate()
-
-    def vcpu_count(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["vcpuCount"]
 
     def vcpu_pinning(self):
         cpuset = vutil.get_xml_path(self.get_xml(), "/domain/vcpu/@cpuset")
@@ -694,40 +660,27 @@ class vmmDomain(gobject.GObject):
         cpus = vutil.get_xml_path(self.get_xml(), "/domain/vcpu")
         return int(cpus)
 
-    def cpu_time_vector(self):
+
+    def _vector_helper(self, record_name):
         vector = []
         stats = self.record
-        for i in range(self.config.get_stats_history_length()+1):
+        for i in range(self.config.get_stats_history_length() + 1):
             if i < len(stats):
-                vector.append(stats[i]["cpuTimePercent"]/100.0)
+                vector.append(stats[i][record_name] / 100.0)
             else:
                 vector.append(0)
         return vector
 
-    def cpu_time_vector_limit(self, limit):
-        cpudata = self.cpu_time_vector()
-        if len(cpudata) > limit:
-            cpudata = cpudata[0:limit]
-        return cpudata
-
-    def cpu_time_moving_avg_vector(self):
+    def _in_out_vector_helper(self, name1, name2):
         vector = []
         stats = self.record
-        for i in range(self.config.get_stats_history_length()+1):
-            if i < len(stats):
-                vector.append(stats[i]["cpuTimeMovingAvgPercent"]/100.0)
-            else:
-                vector.append(0)
-        return vector
-
-    def current_memory_vector(self):
-        vector = []
-        stats = self.record
-        for i in range(self.config.get_stats_history_length()+1):
-            if i < len(stats):
-                vector.append(stats[i]["currMemPercent"]/100.0)
-            else:
-                vector.append(0)
+        ceil = float(max(self.maxRecord[name1], self.maxRecord[name2]))
+        for n in [ name1, name2 ]:
+            for i in range(self.config.get_stats_history_length()+1):
+                if i < len(stats):
+                    vector.append(float(stats[i][n])/ceil)
+                else:
+                    vector.append(0.0)
         return vector
 
     def in_out_vector_limit(self, data, limit):
@@ -735,38 +688,30 @@ class vmmDomain(gobject.GObject):
         end = [l, limit][l > limit]
         if l > limit:
             data = data[0:end] + data[l:l+end]
-        d = map(lambda x,y: (x + y)/2, data[0:end], data[end:end*2]) 
+        d = map(lambda x,y: (x + y)/2, data[0:end], data[end:end*2])
         return d
 
+    def cpu_time_vector(self):
+        return self._vector_helper("cpuTimePercent")
+    def cpu_time_moving_avg_vector(self):
+        return self._vector_helper("cpuTimeMovingAvgPercent")
+    def current_memory_vector(self):
+        return self._vector_helper("currMemPercent")
     def network_traffic_vector(self):
-        vector = []
-        stats = self.record
-        ceil = float(max(self.maxRecord["netRxRate"], self.maxRecord["netTxRate"]))
-        for n in [ "netRxRate", "netTxRate" ]:
-            for i in range(self.config.get_stats_history_length()+1):
-                if i < len(stats):
-                    vector.append(float(stats[i][n])/ceil)
-                else:
-                    vector.append(0.0)
-        return vector
+        return self._in_out_vector_helper("netRxRate", "netTxRate")
+    def disk_io_vector(self):
+        return self._in_out_vector_helper("diskRdRate", "diskWrRate")
 
+    def cpu_time_vector_limit(self, limit):
+        cpudata = self.cpu_time_vector()
+        if len(cpudata) > limit:
+            cpudata = cpudata[0:limit]
+        return cpudata
     def network_traffic_vector_limit(self, limit):
         return self.in_out_vector_limit(self.network_traffic_vector(), limit)
-
-    def disk_io_vector(self):
-        vector = []
-        stats = self.record
-        ceil = float(max(self.maxRecord["diskRdRate"], self.maxRecord["diskWrRate"]))
-        for n in [ "diskRdRate", "diskWrRate" ]:
-            for i in range(self.config.get_stats_history_length()+1):
-                if i < len(stats):
-                    vector.append(float(stats[i][n])/ceil)
-                else:
-                    vector.append(0.0)
-        return vector
-
     def disk_io_vector_limit(self, limit):
         return self.in_out_vector_limit(self.disk_io_vector(), limit)
+
 
     def status(self):
         return self.lastStatus
