@@ -313,6 +313,232 @@ class vmmDomain(gobject.GObject):
     # End XML fetching routines #
     #############################
 
+    ####################
+    # XML Altering API #
+    ####################
+
+    def _add_xml_device(self, xml, devxml):
+        """
+        Add device 'devxml' to devices section of 'xml', return result
+        """
+        index = xml.find("</devices>")
+        return xml[0:index] + devxml + xml[index:]
+
+    def _remove_xml_device(self, vmxml, dev_type, dev_id_info):
+        """
+        Remove device 'devxml' from devices section of 'xml, return result
+        """
+
+        def unlink_dev_node(doc, ctx):
+            ret = self._get_device_xml_helper(ctx, dev_type, dev_id_info)
+
+            if ret and len(ret) > 0:
+                if len(ret) > 1 and ret[0].name == "serial" and \
+                   ret[1].name == "console":
+                    ret[1].unlinkNode()
+                    ret[1].freeNode()
+
+                ret[0].unlinkNode()
+                ret[0].freeNode()
+                newxml = doc.serialize()
+                return newxml
+            else:
+                raise ValueError(_("Didn't find the specified device to "
+                                   "remove. Device was: %s %s" % \
+                                   (dev_type, str(dev_id_info))))
+
+        return util.xml_parse_wrapper(vmxml, unlink_dev_node)
+
+    def add_device(self, devxml):
+        """Redefine guest with appended device"""
+        self.redefine(self._add_xml_device, devxml)
+
+    def remove_device(self, dev_type, dev_id_info):
+        self.redefine(self._remove_xml_device, dev_type, dev_id_info)
+
+    def _change_cdrom(self, newdev, dev_id_info):
+        # If vm is shutoff, remove device, and redefine with media
+        if not self.is_active():
+            def change_cdrom_helper(origxml, newdev, dev_id_info):
+                tmpxml = self._remove_xml_device(origxml, "disk", dev_id_info)
+                return self._add_xml_device(tmpxml, newdev)
+
+            self.redefine(change_cdrom_helper, newdev, dev_id_info)
+        else:
+            self.attach_device(newdev)
+
+    def connect_cdrom_device(self, _type, source, dev_id_info):
+        xml = self.get_device_xml("disk", dev_id_info)
+
+        def cdrom_xml_connect(doc, ctx):
+            disk_fragment = ctx.xpathEval("/disk")[0]
+            driver_fragment = ctx.xpathEval("/disk/driver")
+            disk_fragment.setProp("type", _type)
+            elem = disk_fragment.newChild(None, "source", None)
+
+            if _type == "file":
+                elem.setProp("file", source)
+                driver_name = _type
+            else:
+                elem.setProp("dev", source)
+                driver_name = "phy"
+
+            if driver_fragment:
+                driver_fragment = driver_fragment[0]
+                orig_name = driver_fragment.prop("name")
+
+                # For Xen, the driver name is dependent on the storage type
+                # (file or phys).
+                if orig_name and orig_name in [ "file", "phy" ]:
+                    driver_fragment.setProp("name", driver_name)
+
+            return disk_fragment.serialize()
+
+        result = util.xml_parse_wrapper(xml, cdrom_xml_connect)
+        logging.debug("connect_cdrom produced: %s" % result)
+        self._change_cdrom(result, dev_id_info)
+
+    def disconnect_cdrom_device(self, dev_id_info):
+        xml = self.get_device_xml("disk", dev_id_info)
+
+        def cdrom_xml_disconnect(doc, ctx):
+            disk_fragment = ctx.xpathEval("/disk")[0]
+            sourcenode = None
+
+            for child in disk_fragment.children:
+                if child.name == "source":
+                    sourcenode = child
+                    break
+                else:
+                    continue
+
+            sourcenode.unlinkNode()
+            sourcenode.freeNode()
+            return disk_fragment.serialize()
+
+        result = util.xml_parse_wrapper(xml, cdrom_xml_disconnect)
+        logging.debug("eject_cdrom produced: %s" % result)
+        self._change_cdrom(result, dev_id_info)
+
+    def define_vcpus(self, vcpus, cpuset=None):
+        vcpus = int(vcpus)
+
+        def get_cpuset_syntax_error(self, val):
+            guest = virtinst.Guest(connection = self.get_connection().vmm)
+            guest.cpuset = val
+
+        def set_node(doc, ctx, vcpus, cpumask, xpath):
+            node = ctx.xpathEval(xpath)
+            node = (node and node[0] or None)
+
+            if node:
+                node.setContent(str(vcpus))
+
+                # If cpuset mask is not valid, don't change it
+                # If cpuset mask is None, we don't want to use cpuset
+                if cpumask is None or (cpumask is not None
+                    and len(cpumask) == 0):
+                    node.unsetProp("cpuset")
+                elif not self.get_cpuset_syntax_error(cpumask):
+                    node.setProp("cpuset", cpumask)
+            return doc.serialize()
+
+        def change_vcpu_xml(xml, vcpus, cpuset):
+            return util.xml_parse_wrapper(xml, set_node, vcpus, cpuset,
+                                          "/domain/vcpu[1]")
+
+        self.redefine(change_vcpu_xml, vcpus, cpuset)
+
+    def hotplug_both_mem(self, memory, maxmem):
+        logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'" %
+                     (memory, maxmem, self.get_name()))
+
+        if self.is_active():
+            actual_cur = self.get_memory()
+            if memory:
+                if maxmem < actual_cur:
+                    # Set current first to avoid error
+                    self.hotplug_memory(memory)
+                    self.hotplug_maxmem(maxmem)
+                else:
+                    self.hotplug_maxmem(maxmem)
+                    self.hotplug_memory(memory)
+            else:
+                self.hotplug_maxmem(maxmem)
+
+    def define_both_mem(self, memory, maxmem):
+        def set_mem_node(doc, ctx, memval, xpath):
+            node = ctx.xpathEval(xpath)
+            node = (node and node[0] or None)
+
+            if node:
+                node.setContent(str(memval))
+            return doc.serialize()
+
+        def change_mem_xml(xml, memory, maxmem):
+            if memory:
+                xml = util.xml_parse_wrapper(xml, set_mem_node, memory,
+                                             "/domain/currentMemory[1]")
+            if maxmem:
+                xml = util.xml_parse_wrapper(xml, set_mem_node, maxmem,
+                                             "/domain/memory[1]")
+            return xml
+
+        self.redefine(change_mem_xml, memory, maxmem)
+
+    def set_boot_device(self, boot_type):
+        logging.debug("Setting boot device to type: %s" % boot_type)
+
+        def set_boot_xml(doc, ctx):
+            node = ctx.xpathEval("/domain/os/boot[1]")
+            node = (node and node[0] or None)
+
+            if node and node.prop("dev"):
+                node.setProp("dev", boot_type)
+
+            return doc.serialize()
+
+        self.redefine(util.xml_parse_wrapper, set_boot_xml)
+
+    def define_seclabel(self, model, t, label):
+        logging.debug("Changing seclabel with model=%s t=%s label=%s" %
+                      (model, t, label))
+
+        def change_label(doc, ctx):
+            secnode = ctx.xpathEval("/domain/seclabel")
+            secnode = (secnode and secnode[0] or None)
+
+            if not model:
+                if secnode:
+                    secnode.unlinkNode()
+
+            elif not secnode:
+                # Need to create new node
+                domain = ctx.xpathEval("/domain")[0]
+                seclabel = domain.newChild(None, "seclabel", None)
+                seclabel.setProp("model", model)
+                seclabel.setProp("type", t)
+                seclabel.newChild(None, "label", label)
+
+            else:
+                # Change existing label info
+                secnode.setProp("model", model)
+                secnode.setProp("type", t)
+                l = ctx.xpathEval("/domain/seclabel/label")
+                if len(l) > 0:
+                    l[0].setContent(label)
+                else:
+                    secnode.newChild(None, "label", label)
+
+            return doc.serialize()
+
+        self.redefine(util.xml_parse_wrapper,
+                      change_label)
+
+    ########################
+    # End XML Altering API #
+    ########################
+
     def release_handle(self):
         del(self._backend)
         self._backend = None
@@ -1158,13 +1384,6 @@ class vmmDomain(gobject.GObject):
 
         return util.xml_parse_wrapper(xml, parse_wrap_func)
 
-    def _add_xml_device(self, xml, devxml):
-        """
-        Add device 'devxml' to devices section of 'xml', return result
-        """
-        index = xml.find("</devices>")
-        return xml[0:index] + devxml + xml[index:]
-
     def get_device_xml(self, dev_type, dev_id_info):
         vmxml = self.get_xml()
 
@@ -1273,173 +1492,6 @@ class vmmDomain(gobject.GObject):
 
         return ret
 
-    def _remove_xml_device(self, vmxml, dev_type, dev_id_info):
-        """
-        Remove device 'devxml' from devices section of 'xml, return result
-        """
-
-        def unlink_dev_node(doc, ctx):
-            ret = self._get_device_xml_helper(ctx, dev_type, dev_id_info)
-
-            if ret and len(ret) > 0:
-                if len(ret) > 1 and ret[0].name == "serial" and \
-                   ret[1].name == "console":
-                    ret[1].unlinkNode()
-                    ret[1].freeNode()
-
-                ret[0].unlinkNode()
-                ret[0].freeNode()
-                newxml = doc.serialize()
-                return newxml
-            else:
-                raise ValueError(_("Didn't find the specified device to "
-                                   "remove. Device was: %s %s" % \
-                                   (dev_type, str(dev_id_info))))
-
-        return util.xml_parse_wrapper(vmxml, unlink_dev_node)
-
-    def add_device(self, devxml):
-        """Redefine guest with appended device"""
-        self.redefine(self._add_xml_device, devxml)
-
-    def remove_device(self, dev_type, dev_id_info):
-        self.redefine(self._remove_xml_device, dev_type, dev_id_info)
-
-    def _change_cdrom(self, newdev, dev_id_info):
-        # If vm is shutoff, remove device, and redefine with media
-        if not self.is_active():
-            def change_cdrom_helper(origxml, newdev, dev_id_info):
-                tmpxml = self._remove_xml_device(origxml, "disk", dev_id_info)
-                return self._add_xml_device(tmpxml, newdev)
-
-            self.redefine(change_cdrom_helper, newdev, dev_id_info)
-        else:
-            self.attach_device(newdev)
-
-    def connect_cdrom_device(self, _type, source, dev_id_info):
-        xml = self.get_device_xml("disk", dev_id_info)
-
-        def cdrom_xml_connect(doc, ctx):
-            disk_fragment = ctx.xpathEval("/disk")[0]
-            driver_fragment = ctx.xpathEval("/disk/driver")
-            disk_fragment.setProp("type", _type)
-            elem = disk_fragment.newChild(None, "source", None)
-
-            if _type == "file":
-                elem.setProp("file", source)
-                driver_name = _type
-            else:
-                elem.setProp("dev", source)
-                driver_name = "phy"
-
-            if driver_fragment:
-                driver_fragment = driver_fragment[0]
-                orig_name = driver_fragment.prop("name")
-
-                # For Xen, the driver name is dependent on the storage type
-                # (file or phys).
-                if orig_name and orig_name in [ "file", "phy" ]:
-                    driver_fragment.setProp("name", driver_name)
-
-            return disk_fragment.serialize()
-
-        result = util.xml_parse_wrapper(xml, cdrom_xml_connect)
-        logging.debug("connect_cdrom produced: %s" % result)
-        self._change_cdrom(result, dev_id_info)
-
-    def disconnect_cdrom_device(self, dev_id_info):
-        xml = self.get_device_xml("disk", dev_id_info)
-
-        def cdrom_xml_disconnect(doc, ctx):
-            disk_fragment = ctx.xpathEval("/disk")[0]
-            sourcenode = None
-
-            for child in disk_fragment.children:
-                if child.name == "source":
-                    sourcenode = child
-                    break
-                else:
-                    continue
-
-            sourcenode.unlinkNode()
-            sourcenode.freeNode()
-            return disk_fragment.serialize()
-
-        result = util.xml_parse_wrapper(xml, cdrom_xml_disconnect)
-        logging.debug("eject_cdrom produced: %s" % result)
-        self._change_cdrom(result, dev_id_info)
-
-    def get_cpuset_syntax_error(self, val):
-        # We need to allow None value and empty string so we can't get
-        # rid of this function
-        if len(val) == 0:
-            return None
-
-        guest = virtinst.Guest(connection = self.get_connection().vmm)
-        guest.cpuset = val
-
-    def define_vcpus(self, vcpus, cpuset=None):
-        vcpus = int(vcpus)
-
-        def set_node(doc, ctx, vcpus, cpumask, xpath):
-            node = ctx.xpathEval(xpath)
-            node = (node and node[0] or None)
-
-            if node:
-                node.setContent(str(vcpus))
-
-                # If cpuset mask is not valid, don't change it
-                # If cpuset mask is None, we don't want to use cpuset
-                if cpumask is None or (cpumask is not None
-                    and len(cpumask) == 0):
-                    node.unsetProp("cpuset")
-                elif not self.get_cpuset_syntax_error(cpumask):
-                    node.setProp("cpuset", cpumask)
-            return doc.serialize()
-
-        def change_vcpu_xml(xml, vcpus, cpuset):
-            return util.xml_parse_wrapper(xml, set_node, vcpus, cpuset,
-                                          "/domain/vcpu[1]")
-
-        self.redefine(change_vcpu_xml, vcpus, cpuset)
-
-    def hotplug_both_mem(self, memory, maxmem):
-        logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'" %
-                     (memory, maxmem, self.get_name()))
-
-        if self.is_active():
-            actual_cur = self.get_memory()
-            if memory:
-                if maxmem < actual_cur:
-                    # Set current first to avoid error
-                    self.hotplug_memory(memory)
-                    self.hotplug_maxmem(maxmem)
-                else:
-                    self.hotplug_maxmem(maxmem)
-                    self.hotplug_memory(memory)
-            else:
-                self.hotplug_maxmem(maxmem)
-
-    def define_both_mem(self, memory, maxmem):
-        def set_mem_node(doc, ctx, memval, xpath):
-            node = ctx.xpathEval(xpath)
-            node = (node and node[0] or None)
-
-            if node:
-                node.setContent(str(memval))
-            return doc.serialize()
-
-        def change_mem_xml(xml, memory, maxmem):
-            if memory:
-                xml = util.xml_parse_wrapper(xml, set_mem_node, memory,
-                                             "/domain/currentMemory[1]")
-            if maxmem:
-                xml = util.xml_parse_wrapper(xml, set_mem_node, maxmem,
-                                             "/domain/memory[1]")
-            return xml
-
-        self.redefine(change_mem_xml, memory, maxmem)
-
     def get_boot_device(self):
         xml = self.get_xml()
 
@@ -1451,20 +1503,6 @@ class vmmDomain(gobject.GObject):
 
         return util.xml_parse_wrapper(xml, get_boot_xml)
 
-    def set_boot_device(self, boot_type):
-        logging.debug("Setting boot device to type: %s" % boot_type)
-
-        def set_boot_xml(doc, ctx):
-            node = ctx.xpathEval("/domain/os/boot[1]")
-            node = (node and node[0] or None)
-
-            if node and node.prop("dev"):
-                node.setProp("dev", boot_type)
-
-            return doc.serialize()
-
-        self.redefine(util.xml_parse_wrapper, set_boot_xml)
-
     def get_seclabel(self):
         xml = self.get_xml()
         model = vutil.get_xml_path(xml, "/domain/seclabel/@model")
@@ -1472,41 +1510,6 @@ class vmmDomain(gobject.GObject):
         label = vutil.get_xml_path(self.get_xml(), "/domain/seclabel/label")
 
         return [model, t or "dynamic", label or ""]
-
-    def define_seclabel(self, model, t, label):
-        logging.debug("Changing seclabel with model=%s t=%s label=%s" %
-                      (model, t, label))
-
-        def change_label(doc, ctx):
-            secnode = ctx.xpathEval("/domain/seclabel")
-            secnode = (secnode and secnode[0] or None)
-
-            if not model:
-                if secnode:
-                    secnode.unlinkNode()
-
-            elif not secnode:
-                # Need to create new node
-                domain = ctx.xpathEval("/domain")[0]
-                seclabel = domain.newChild(None, "seclabel", None)
-                seclabel.setProp("model", model)
-                seclabel.setProp("type", t)
-                seclabel.newChild(None, "label", label)
-
-            else:
-                # Change existing label info
-                secnode.setProp("model", model)
-                secnode.setProp("type", t)
-                l = ctx.xpathEval("/domain/seclabel/label")
-                if len(l) > 0:
-                    l[0].setContent(label)
-                else:
-                    secnode.newChild(None, "label", label)
-
-            return doc.serialize()
-
-        self.redefine(util.xml_parse_wrapper,
-                      change_label)
 
     def toggle_sample_network_traffic(self, ignore1=None, ignore2=None,
                                       ignore3=None, ignore4=None):
