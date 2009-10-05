@@ -147,7 +147,7 @@ class vmmCreate(gobject.GObject):
     def remove_timers(self):
         try:
             if self.host_storage_timer:
-                gobject.source_remote(self.host_storage_timer)
+                gobject.source_remove(self.host_storage_timer)
                 self.host_storage_timer = None
         except:
             pass
