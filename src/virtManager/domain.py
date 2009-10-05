@@ -330,22 +330,14 @@ class vmmDomain(gobject.GObject):
         """
 
         def unlink_dev_node(doc, ctx):
-            ret = self._get_device_xml_helper(ctx, dev_type, dev_id_info)
+            ret = self._get_device_xml_nodes(ctx, dev_type, dev_id_info)
 
-            if ret and len(ret) > 0:
-                if len(ret) > 1 and ret[0].name == "serial" and \
-                   ret[1].name == "console":
-                    ret[1].unlinkNode()
-                    ret[1].freeNode()
+            for node in ret:
+                node.unlinkNode()
+                node.freeNode()
 
-                ret[0].unlinkNode()
-                ret[0].freeNode()
-                newxml = doc.serialize()
-                return newxml
-            else:
-                raise ValueError(_("Didn't find the specified device to "
-                                   "remove. Device was: %s %s" % \
-                                   (dev_type, str(dev_id_info))))
+            newxml = doc.serialize()
+            return newxml
 
         return util.xml_parse_wrapper(vmxml, unlink_dev_node)
 
@@ -1388,47 +1380,41 @@ class vmmDomain(gobject.GObject):
         vmxml = self.get_xml()
 
         def dev_xml_serialize(doc, ctx):
-            nodes = self._get_device_xml_helper(ctx, dev_type, dev_id_info)
+            nodes = self._get_device_xml_nodes(ctx, dev_type, dev_id_info)
             if nodes:
                 return nodes[0].serialize()
 
         return util.xml_parse_wrapper(vmxml, dev_xml_serialize)
 
-    def _get_device_xml_helper(self, ctx, dev_type, dev_id_info):
-        """Does all the work of looking up the device in the VM xml"""
+    def _get_device_xml_xpath(self, dev_type, dev_id_info):
+        """
+        Generate the XPath needed to lookup the passed device info
+        """
+        xpath = None
 
         if dev_type=="interface":
-            ret = ctx.xpathEval("/domain/devices/interface[mac/@address='%s']" % dev_id_info)
+            xpath = ("/domain/devices/interface[mac/@address='%s'][1]" %
+                     dev_id_info)
 
         elif dev_type=="disk":
-            ret = ctx.xpathEval("/domain/devices/disk[target/@dev='%s']" % \
-                                dev_id_info)
+            xpath = "/domain/devices/disk[target/@dev='%s'][1]" % dev_id_info
 
         elif dev_type=="input":
             typ, bus = dev_id_info
-            ret = ctx.xpathEval("/domain/devices/input[@type='%s' and @bus='%s']" % (typ, bus))
+            xpath = ("/domain/devices/input[@type='%s' and @bus='%s'][1]" %
+                     (typ, bus))
 
         elif dev_type=="graphics":
-            ret = ctx.xpathEval("/domain/devices/graphics[@type='%s']" % \
-                                dev_id_info)
+            xpath = "/domain/devices/graphics[@type='%s'][1]" % dev_id_info
 
         elif dev_type == "sound":
-            ret = ctx.xpathEval("/domain/devices/sound[@model='%s']" % \
-                                dev_id_info)
+            xpath = "/domain/devices/sound[@model='%s'][1]" % dev_id_info
 
-        elif dev_type == "parallel" or dev_type == "console" or \
-             dev_type == "serial":
-            ret = ctx.xpathEval("/domain/devices/%s[target/@port='%s']" % (dev_type, dev_id_info))
-
-            # If serial and console are both present, console is
-            # probably (always?) just a dup of the 'primary' serial
-            # device. Try and find an associated console device with
-            # the same port and remove that as well, otherwise the
-            # removal doesn't go through on libvirt <= 0.4.4
-            if dev_type == "serial":
-                cons_ret = ctx.xpathEval("/domain/devices/console[target/@port='%s']" % dev_id_info)
-                if cons_ret and len(cons_ret) > 0:
-                    ret.append(cons_ret[0])
+        elif (dev_type == "parallel" or
+              dev_type == "console" or
+              dev_type == "serial"):
+            xpath = ("/domain/devices/%s[target/@port='%s'][1]" %
+                     (dev_type, dev_id_info))
 
         elif dev_type == "hostdev":
             # This whole process is a little funky, since we need a decent
@@ -1437,7 +1423,6 @@ class vmmDomain(gobject.GObject):
             xmlbase = "/domain/devices/hostdev[@type='%s' and " % \
                       dev_id_info["type"]
             xpath = ""
-            ret = []
 
             addr = dev_id_info.get("address")
             vend = dev_id_info.get("vendor")
@@ -1471,8 +1456,8 @@ class vmmDomain(gobject.GObject):
             if xpath:
                 # Log this, since we could hit issues with unexpected
                 # xml parameters in the future
+                xpath += "[1]"
                 logging.debug("Hostdev xpath string: %s" % xpath)
-                ret = ctx.xpathEval(xpath)
 
         elif dev_type == "video":
             model, ram, heads = dev_id_info
@@ -1485,10 +1470,36 @@ class vmmDomain(gobject.GObject):
                 xpath += " and model/@heads='%s'" % heads
             xpath += "][1]"
 
-            ret = ctx.xpathEval(xpath)
-
         else:
-            raise RuntimeError, _("Unknown device type '%s'" % dev_type)
+            raise RuntimeError(_("Unknown device type '%s'") % dev_type)
+
+        if not xpath:
+            raise RuntimeError(_("Couldn't build xpath for device %s:%s") %
+                               (dev_type, dev_id_info))
+
+        return xpath
+
+    def _get_device_xml_nodes(self, ctx, dev_type, dev_id_info):
+        """
+        Return nodes needed to alter/remove the desired device
+        """
+        xpath = self._get_device_xml_xpath(dev_type, dev_id_info)
+
+        ret = ctx.xpathEval(xpath)
+
+        # If serial and console are both present, console is
+        # probably (always?) just a dup of the 'primary' serial
+        # device. Try and find an associated console device with
+        # the same port and remove that as well, otherwise the
+        # removal doesn't go through on libvirt <= 0.4.4
+        if dev_type == "serial":
+            con = ctx.xpathEval("/domain/devices/console[target/@port='%s'][1]"
+                                % dev_id_info)
+            if con and len(con) > 0 and ret:
+                ret.append(con[0])
+
+        if not ret or len(ret) <= 0:
+            raise RuntimeError(_("Could not find device %s") % xpath)
 
         return ret
 
