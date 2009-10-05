@@ -63,6 +63,8 @@ class vmmCreateVolume(gobject.GObject):
             "on_vol_cancel_clicked"  : self.close,
             "on_vol_create_clicked"  : self.finish,
             "on_vol_name_changed"    : self.vol_name_changed,
+            "on_vol_allocation_value_changed" : self.vol_allocation_changed,
+            "on_vol_capacity_value_changed"   : self.vol_capacity_changed,
         })
 
         format_list = self.window.get_widget("vol-format")
@@ -143,6 +145,24 @@ class vmmCreateVolume(gobject.GObject):
     def vol_name_changed(self, src):
         text = src.get_text()
         self.window.get_widget("vol-create").set_sensitive(bool(text))
+
+    def vol_allocation_changed(self, src):
+        cap_widget = self.window.get_widget("vol-capacity")
+
+        alloc = src.get_value()
+        cap   = cap_widget.get_value()
+
+        if alloc > cap:
+            cap_widget.set_value(alloc)
+
+    def vol_capacity_changed(self, src):
+        alloc_widget = self.window.get_widget("vol-allocation")
+
+        cap   = src.get_value()
+        alloc = self.window.get_widget("vol-allocation").get_value()
+
+        if cap < alloc:
+            alloc_widget.set_value(cap)
 
     def finish(self, src):
         # validate input

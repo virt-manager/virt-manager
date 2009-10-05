@@ -260,8 +260,9 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">&#x25CF;</property>
-                                    <property name="adjustment">1 0 100000 1 10 0</property>
-                                    <property name="climb_rate">1</property>
+                                    <property name="adjustment">1 0 100000 1 1000 0</property>
+                                    <property name="climb_rate">10</property>
+                                    <signal name="value_changed" handler="on_vol_capacity_value_changed"/>
                                   </widget>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -275,8 +276,9 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">&#x25CF;</property>
-                                    <property name="adjustment">1 0 100000 1 10 0</property>
-                                    <property name="climb_rate">1</property>
+                                    <property name="adjustment">1 0 100000 1 1000 0</property>
+                                    <property name="climb_rate">10</property>
+                                    <signal name="value_changed" handler="on_vol_allocation_value_changed"/>
                                   </widget>
                                   <packing>
                                     <property name="left_attach">1</property>
