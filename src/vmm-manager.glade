@@ -229,6 +229,7 @@
                     <child>
                       <widget class="GtkToolButton" id="vm-new">
                         <property name="visible">True</property>
+                        <property name="tooltip" translatable="yes">Create a new virtual machine</property>
                         <property name="label" translatable="yes">_New</property>
                         <property name="use_underline">True</property>
                         <property name="icon_name">vm_new_large</property>
@@ -251,6 +252,7 @@
                     <child>
                       <widget class="GtkToolButton" id="vm-open">
                         <property name="visible">True</property>
+                        <property name="tooltip" translatable="yes">Show the virtual machine's details</property>
                         <property name="label" translatable="yes">_Open</property>
                         <property name="use_underline">True</property>
                         <property name="icon_name">icon_console</property>
@@ -264,6 +266,7 @@
                     <child>
                       <widget class="GtkToolButton" id="vm-run">
                         <property name="visible">True</property>
+                        <property name="tooltip" translatable="yes">Power on the virtual machine</property>
                         <property name="label" translatable="yes">_Run</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-media-play</property>
@@ -277,6 +280,7 @@
                     <child>
                       <widget class="GtkToggleToolButton" id="vm-pause">
                         <property name="visible">True</property>
+                        <property name="tooltip" translatable="yes">Pause the virtual machine</property>
                         <property name="label" translatable="yes">_Pause</property>
                         <property name="use_underline">True</property>
                         <property name="stock_id">gtk-media-pause</property>
@@ -290,6 +294,7 @@
                     <child>
                       <widget class="GtkMenuToolButton" id="vm-shutdown">
                         <property name="visible">True</property>
+                        <property name="tooltip" translatable="yes">Shutdown the virtual machine</property>
                         <property name="label" translatable="yes">_Shutdown</property>
                         <property name="use_underline">True</property>
                         <signal name="clicked" handler="on_vm_shutdown_clicked"/>

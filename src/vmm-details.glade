@@ -430,6 +430,7 @@
                 <child>
                   <widget class="GtkRadioToolButton" id="control-vm-console">
                     <property name="visible">True</property>
+                    <property name="tooltip" translatable="yes">Show the graphical console</property>
                     <property name="label" translatable="yes">Console</property>
                     <property name="icon_name">icon_console</property>
                     <property name="active">True</property>
@@ -443,6 +444,7 @@
                 <child>
                   <widget class="GtkRadioToolButton" id="control-vm-details">
                     <property name="visible">True</property>
+                    <property name="tooltip" translatable="yes">Show virtual hardware details</property>
                     <property name="label" translatable="yes">Details</property>
                     <property name="stock_id">gtk-info</property>
                     <property name="group">control-vm-console</property>
@@ -465,6 +467,7 @@
                 <child>
                   <widget class="GtkToolButton" id="control-run">
                     <property name="visible">True</property>
+                    <property name="tooltip" translatable="yes">Power on the virtual machine</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Run</property>
                     <property name="use_underline">True</property>
@@ -479,6 +482,7 @@
                 <child>
                   <widget class="GtkToggleToolButton" id="control-pause">
                     <property name="visible">True</property>
+                    <property name="tooltip" translatable="yes">Pause the virtual machine</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Pause</property>
                     <property name="use_underline">True</property>
@@ -493,6 +497,7 @@
                 <child>
                   <widget class="GtkMenuToolButton" id="control-shutdown">
                     <property name="visible">True</property>
+                    <property name="tooltip" translatable="yes">Shutdown the virtual machine</property>
                     <property name="is_important">True</property>
                     <property name="label" translatable="yes">Shut Down</property>
                     <property name="use_underline">True</property>
@@ -514,6 +519,7 @@
                 <child>
                   <widget class="GtkToggleToolButton" id="control-fullscreen">
                     <property name="visible">True</property>
+                    <property name="tooltip" translatable="yes">Switch to fullscreen view</property>
                     <property name="stock_id">gtk-fullscreen</property>
                     <signal name="toggled" handler="on_control_fullscreen_toggled"/>
                   </widget>
