@@ -83,6 +83,13 @@ class vmmCreatePool(gobject.GObject):
             "on_pool_source_path_focus_in_event": (self.update_doc,
                                                    "source_path",
                                                    "pool-info2"),
+
+            "on_pool_source_path_focus": (self.update_doc, "source_path",
+                                          "pool-info2"),
+            "on_pool_source_path_changed": (self.update_doc_changed,
+                                            "source_path",
+                                            "pool-info2"),
+
             "on_pool_hostname_focus_in_event": (self.update_doc, "host",
                                                 "pool-info2"),
             "on_pool_build_focus_in_event": (self.update_build_doc)
@@ -119,6 +126,14 @@ class vmmCreatePool(gobject.GObject):
         format_list.pack_start(text2, False)
         format_list.add_attribute(text2, 'text', 1)
 
+        # Source path combo box entry
+        source_list = self.window.get_widget("pool-source-path")
+        source_model = gtk.ListStore(str, str)
+        source_list.set_model(source_model)
+        source_list.set_text_column(0)
+        source_list.child.connect("focus-in-event", self.update_doc,
+                                  "source_path", "pool-info2")
+
         self.populate_pool_type()
 
         self.window.get_widget("pool-info-box1").modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("grey"))
@@ -133,7 +148,7 @@ class vmmCreatePool(gobject.GObject):
         self.window.get_widget("pool-name").set_text("")
         self.window.get_widget("pool-type").set_active(0)
         self.window.get_widget("pool-target-path").set_text("")
-        self.window.get_widget("pool-source-path").set_text("")
+        self.window.get_widget("pool-source-path").child.set_text("")
         self.window.get_widget("pool-hostname").set_text("")
         self.window.get_widget("pool-format").set_active(-1)
         self.window.get_widget("pool-build").set_sensitive(True)
@@ -155,10 +170,44 @@ class vmmCreatePool(gobject.GObject):
         for f in formats:
             model.append([f, f])
 
+    def populate_source_paths(self):
+        widget = self.window.get_widget("pool-source-path")
+        model = widget.get_model()
+        model.clear()
+
+        entry_list = []
+        if self._pool.type == Storage.StoragePool.TYPE_SCSI:
+            entry_list = self.list_scsi_adapters()
+
+        for e in entry_list:
+            model.append(e)
+
+        if entry_list:
+            widget.set_active(0)
+            widget.child.set_editable(False)
+        else:
+            widget.set_active(-1)
+            widget.child.set_editable(True)
+
+    def list_scsi_adapters(self):
+        scsi_hosts = self.conn.get_devices("scsi_host")
+        host_list = map(lambda dev: dev.host, scsi_hosts)
+
+        clean_list = []
+        for h in host_list:
+            name = "host%s" % h
+            entry = [name, name]
+
+            if entry not in clean_list:
+                clean_list.append(entry)
+
+        return clean_list
+
     def show_options_by_pool(self):
         if hasattr(self._pool, "source_path"):
             if self._pool.type in [Storage.StoragePool.TYPE_NETFS,
-                                   Storage.StoragePool.TYPE_ISCSI]:
+                                   Storage.StoragePool.TYPE_ISCSI,
+                                   Storage.StoragePool.TYPE_SCSI]:
                 # Source path broswing is meaningless for net pools
                 self.window.get_widget("pool-source-button").set_sensitive(False)
             else:
@@ -186,6 +235,8 @@ class vmmCreatePool(gobject.GObject):
             self.window.get_widget("pool-source-button").set_sensitive(False)
             self.window.get_widget("pool-target-button").set_sensitive(False)
 
+        self.populate_source_paths()
+
 
     def get_config_type(self):
         typ = self.window.get_widget("pool-type")
@@ -201,9 +252,16 @@ class vmmCreatePool(gobject.GObject):
 
     def get_config_source_path(self):
         src = self.window.get_widget("pool-source-path")
-        if src.get_property("sensitive"):
-            return src.get_text()
-        return None
+        if not src.get_property("sensitive"):
+            return None
+
+        # If we provide the user with a drop down
+        model = src.get_model()
+        selection = src.get_active()
+        if selection != -1:
+            return model[selection][1]
+
+        return src.child.get_text()
 
     def get_config_host(self):
         host = self.window.get_widget("pool-hostname")
