@@ -21,6 +21,7 @@
 import gobject
 import gtk.glade
 
+import copy
 import traceback
 import logging
 
@@ -394,16 +395,17 @@ class vmmCreatePool(gobject.GObject):
             source = self.get_config_source_path()
             fmt    = self.get_config_format()
 
+            tmppool = copy.copy(self._pool)
             try:
-                self._pool.target_path = target
+                tmppool.target_path = target
                 if host:
-                    self._pool.host = host
+                    tmppool.host = host
                 if source:
-                    self._pool.source_path = source
+                    tmppool.source_path = source
                 if fmt:
-                    self._pool.format = fmt
+                    tmppool.format = fmt
 
-                self._pool.get_xml_config()
+                tmppool.get_xml_config()
             except ValueError, e:
                 return self.err.val_err(_("Pool Parameter Error"), str(e))
 
@@ -413,6 +415,7 @@ class vmmCreatePool(gobject.GObject):
                 return self.err.yes_no(_("Building a pool of this type will "
                                          "format the source device. Are you "
                                          "sure you want to 'build' this pool?"))
+            self._pool = tmppool
             return True
 
     def update_doc(self, ignore1, ignore2, param, infobox):
