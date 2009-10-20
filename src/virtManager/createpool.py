@@ -204,36 +204,29 @@ class vmmCreatePool(gobject.GObject):
         return clean_list
 
     def show_options_by_pool(self):
-        if hasattr(self._pool, "source_path"):
-            if self._pool.type in [Storage.StoragePool.TYPE_NETFS,
-                                   Storage.StoragePool.TYPE_ISCSI,
-                                   Storage.StoragePool.TYPE_SCSI]:
-                # Source path broswing is meaningless for net pools
-                self.window.get_widget("pool-source-button").set_sensitive(False)
-            else:
-                self.window.get_widget("pool-source-button").set_sensitive(True)
-            self.window.get_widget("pool-source-path").set_sensitive(True)
-        else:
-            self.window.get_widget("pool-source-path").set_sensitive(False)
-            self.window.get_widget("pool-source-button").set_sensitive(False)
+        src     = hasattr(self._pool, "source_path")
+        src_b   = src and not self.conn.is_remote()
+        tgt     = hasattr(self._pool, "target_path")
+        tgt_b   = tgt and not self.conn.is_remote()
+        host    = hasattr(self._pool, "host")
+        fmt     = hasattr(self._pool, "formats")
 
-        if hasattr(self._pool, "host"):
-            self.window.get_widget("pool-hostname").set_sensitive(True)
-        else:
-            self.window.get_widget("pool-hostname").set_sensitive(False)
+        # Source path broswing is meaningless for net pools
+        if self._pool.type in [Storage.StoragePool.TYPE_NETFS,
+                               Storage.StoragePool.TYPE_ISCSI,
+                               Storage.StoragePool.TYPE_SCSI]:
+            src_b = False
 
-        if hasattr(self._pool, "formats"):
-            self.window.get_widget("pool-format").set_sensitive(True)
+        self.window.get_widget("pool-target-button").set_sensitive(tgt_b)
+        self.window.get_widget("pool-source-button").set_sensitive(src_b)
+        self.window.get_widget("pool-source-path").set_sensitive(src)
+        self.window.get_widget("pool-hostname").set_sensitive(host)
+        self.window.get_widget("pool-format").set_sensitive(fmt)
+        self.window.get_widget("pool-format").set_active(-1)
+
+        if fmt:
             self.populate_pool_format()
             self.window.get_widget("pool-format").set_active(0)
-        else:
-            self.window.get_widget("pool-format").set_sensitive(False)
-            self.window.get_widget("pool-format").set_active(-1)
-
-        if self.conn.is_remote():
-            # Disable browse buttons for remote connections
-            self.window.get_widget("pool-source-button").set_sensitive(False)
-            self.window.get_widget("pool-target-button").set_sensitive(False)
 
         self.populate_source_paths()
 
