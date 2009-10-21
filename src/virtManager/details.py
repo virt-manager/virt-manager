@@ -786,44 +786,31 @@ class vmmDetails(gobject.GObject):
     def update_widget_states(self, vm, status):
         self.toggle_toolbar(self.window.get_widget("details-menu-view-toolbar"))
 
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
-                       libvirt.VIR_DOMAIN_SHUTOFF ] or vm.is_read_only():
-            self.window.get_widget("details-menu-destroy").set_sensitive(False)
-        else:
-            self.window.get_widget("details-menu-destroy").set_sensitive(True)
+        destroy = vm.is_destroyable()
+        run     = vm.is_runable()
+        stop    = vm.is_stoppable()
+        paused  = vm.is_paused()
+        ro      = vm.is_read_only()
 
-        if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ] and not self.vm.is_read_only():
-            self.window.get_widget("control-run").set_sensitive(True)
-            self.window.get_widget("details-menu-run").set_sensitive(True)
-        else:
-            self.window.get_widget("control-run").set_sensitive(False)
-            self.window.get_widget("details-menu-run").set_sensitive(False)
+        self.window.get_widget("details-menu-destroy").set_sensitive(destroy)
+        self.window.get_widget("control-run").set_sensitive(run)
+        self.window.get_widget("details-menu-run").set_sensitive(run)
 
-        if status in [libvirt.VIR_DOMAIN_SHUTDOWN, libvirt.VIR_DOMAIN_SHUTOFF,
-                      libvirt.VIR_DOMAIN_CRASHED ] or vm.is_read_only():
-            self.set_pause_widget_states(False)
-            self.window.get_widget("control-shutdown").set_sensitive(False)
-            self.window.get_widget("details-menu-shutdown").set_sensitive(False)
-            self.window.get_widget("details-menu-save").set_sensitive(False)
-            self.window.get_widget("control-pause").set_sensitive(False)
-            self.window.get_widget("details-menu-pause").set_sensitive(False)
-        else:
-            self.window.get_widget("control-pause").set_sensitive(True)
-            self.window.get_widget("details-menu-pause").set_sensitive(True)
-            self.set_pause_widget_states(status == libvirt.VIR_DOMAIN_PAUSED)
-            self.window.get_widget("control-shutdown").set_sensitive(True)
-            self.window.get_widget("details-menu-shutdown").set_sensitive(True)
-            self.window.get_widget("details-menu-save").set_sensitive(True)
+        self.window.get_widget("control-shutdown").set_sensitive(stop)
+        self.window.get_widget("details-menu-shutdown").set_sensitive(stop)
+        self.window.get_widget("details-menu-save").set_sensitive(stop)
+        self.window.get_widget("control-pause").set_sensitive(stop)
+        self.window.get_widget("details-menu-pause").set_sensitive(stop)
 
-        ro = vm.is_read_only()
+        self.set_pause_widget_states(paused)
+
         self.window.get_widget("config-vcpus").set_sensitive(not ro)
         self.window.get_widget("config-vcpupin").set_sensitive(not ro)
         self.window.get_widget("config-memory").set_sensitive(not ro)
         self.window.get_widget("config-maxmem").set_sensitive(not ro)
         self.window.get_widget("details-menu-migrate").set_sensitive(not ro)
 
-        if status in [ libvirt.VIR_DOMAIN_SHUTOFF,
-                       libvirt.VIR_DOMAIN_CRASHED ]:
+        if run:
             if self.window.get_widget("console-pages").get_current_page() != PAGE_UNAVAILABLE:
                 self.vncViewer.close()
                 self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
@@ -832,7 +819,7 @@ class vmmDetails(gobject.GObject):
             # Disabled screenshot when paused - doesn't work when scaled
             # and you can connect to VNC when paused already, it'll simply
             # not respond to input.
-            if status == libvirt.VIR_DOMAIN_PAUSED and 0 == 1:
+            if paused and 0 == 1:
                 if self.window.get_widget("console-pages").get_current_page() == PAGE_VNCVIEWER:
                     screenshot = self.window.get_widget("console-screenshot")
                     image = self.vncViewer.get_pixbuf()
