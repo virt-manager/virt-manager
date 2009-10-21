@@ -129,7 +129,8 @@ class vmmCreatePool(gobject.GObject):
 
         # Source path combo box entry
         source_list = self.window.get_widget("pool-source-path")
-        source_model = gtk.ListStore(str, str)
+        # source_path, Label, pool class instance
+        source_model = gtk.ListStore(str, str, object)
         source_list.set_model(source_model)
         source_list.set_text_column(0)
         source_list.child.connect("focus-in-event", self.update_doc,
@@ -196,10 +197,13 @@ class vmmCreatePool(gobject.GObject):
 
         clean_list = []
         for h in host_list:
+            tmppool = copy.copy(self._pool)
             name = "host%s" % h
-            entry = [name, name]
 
-            if entry not in clean_list:
+            tmppool.source_path = name
+            entry = [name, name, tmppool]
+
+            if name not in map(lambda l: l[0], clean_list):
                 clean_list.append(entry)
 
         return clean_list
@@ -375,6 +379,21 @@ class vmmCreatePool(gobject.GObject):
             self.window.get_widget("pool-finish").show()
             self.window.get_widget("pool-forward").hide()
 
+    def get_pool_to_validate(self):
+        """
+        Return a pool instance to use for parameter assignment validation.
+        For most pools this will be the one we built after step 1, but for
+        pools we find via FindPoolSources, this will be different
+        """
+        source_list = self.window.get_widget("pool-source-path")
+
+        pool = copy.copy(self._pool)
+
+        if source_list.get_active() != -1:
+            pool = source_list.get_model()[source_list.get_active()][2]
+
+        return pool
+
     def validate(self, page):
         if page == PAGE_NAME:
             typ  = self.get_config_type()
@@ -395,7 +414,7 @@ class vmmCreatePool(gobject.GObject):
             source = self.get_config_source_path()
             fmt    = self.get_config_format()
 
-            tmppool = copy.copy(self._pool)
+            tmppool = self.get_pool_to_validate()
             try:
                 tmppool.target_path = target
                 if host:
