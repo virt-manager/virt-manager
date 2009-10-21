@@ -475,7 +475,6 @@ class vmmDetails(gobject.GObject):
                 self._disable_modifiers()
 
             tabs = self.window.get_widget("details-pages")
-            tabs.set_show_tabs(False)
             tabs.set_border_width(0)
             self.window.get_widget("toolbar-box").hide()
         else:
@@ -485,7 +484,6 @@ class vmmDetails(gobject.GObject):
             self.topwin.unfullscreen()
 
             tabs = self.window.get_widget("details-pages")
-            tabs.set_show_tabs(True)
             tabs.set_border_width(6)
             if self.window.get_widget("details-menu-view-toolbar").get_active():
                 self.window.get_widget("toolbar-box").show()
