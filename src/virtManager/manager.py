@@ -489,6 +489,12 @@ class vmmManager(gobject.GObject):
         else:
             self.emit("action-refresh-console", uri, vmuuid)
 
+    def _build_conn_hint(self, conn):
+        hint = conn.get_uri()
+        if conn.state == conn.STATE_DISCONNECTED:
+            hint += " (%s)" % _("Double click to connect")
+        return hint
+
     def _build_conn_markup(self, conn, row):
         if conn.state == conn.STATE_DISCONNECTED:
             markup = ("<span font_desc='9' color='#5b5b5b'>%s - "
@@ -535,7 +541,7 @@ class vmmManager(gobject.GObject):
                                 conn.get_state_text()))
         row.insert(ROW_STATUS_ICON, None)
         row.insert(ROW_KEY, conn.get_uri())
-        row.insert(ROW_HINT, conn.get_uri())
+        row.insert(ROW_HINT, self._build_conn_hint(conn))
         row.insert(ROW_IS_CONN, True)
         row.insert(ROW_IS_CONN_CONNECTED,
                    conn.state != conn.STATE_DISCONNECTED)
@@ -605,6 +611,7 @@ class vmmManager(gobject.GObject):
         row[ROW_MARKUP] = self._build_conn_markup(conn, row)
         row[ROW_STATUS] = "<span font_desc='9'>%s</span>" % conn.get_state_text()
         row[ROW_IS_CONN_CONNECTED] = conn.state != conn.STATE_DISCONNECTED
+        row[ROW_HINT] = self._build_conn_hint(conn)
 
         if conn.get_state() in [vmmConnection.STATE_DISCONNECTED,
                                 vmmConnection.STATE_CONNECTING]:
