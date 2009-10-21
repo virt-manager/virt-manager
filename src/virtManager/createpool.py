@@ -67,6 +67,8 @@ class vmmCreatePool(gobject.GObject):
             "on_pool_source_button_clicked" : self.browse_source_path,
             "on_pool_target_button_clicked" : self.browse_target_path,
 
+            "on_pool_hostname_activate" : self.hostname_changed,
+
             "on_pool_name_focus_in_event": (self.update_doc, "name",
                                             "pool-info1"),
             # I cannot for the life of me get a combobox to abide
@@ -137,6 +139,7 @@ class vmmCreatePool(gobject.GObject):
         target_list = self.window.get_widget("pool-target-path")
         # target_path, Label, pool class instance
         target_model = gtk.ListStore(str, str, object)
+        target_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
         target_list.set_model(target_model)
         target_list.set_text_column(0)
         target_list.child.connect("focus-in-event", self.update_doc,
@@ -146,6 +149,7 @@ class vmmCreatePool(gobject.GObject):
         source_list = self.window.get_widget("pool-source-path")
         # source_path, Label, pool class instance
         source_model = gtk.ListStore(str, str, object)
+        source_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
         source_list.set_model(source_model)
         source_list.set_text_column(0)
         source_list.child.connect("focus-in-event", self.update_doc,
@@ -171,6 +175,10 @@ class vmmCreatePool(gobject.GObject):
         self.window.get_widget("pool-build").set_sensitive(True)
         self.window.get_widget("pool-build").set_active(False)
 
+
+    def hostname_changed(self, ignore):
+        # If a hostname was entered, try to lookup valid pool sources.
+        self.populate_pool_sources()
 
     def populate_pool_type(self):
         model = self.window.get_widget("pool-type").get_model()
@@ -211,6 +219,15 @@ class vmmCreatePool(gobject.GObject):
             use_list = target_list
             use_model = target_model
 
+        elif self._pool.type == Storage.StoragePool.TYPE_NETFS:
+            host = self.get_config_host()
+            if host:
+                pool_list = self.list_pool_sources(host=host)
+                entry_list = map(lambda p: [p.source_path, p.source_path, p],
+                                 pool_list)
+                use_list = source_list
+                use_model = source_model
+
         for e in entry_list:
             use_model.append(e)
 
@@ -234,14 +251,15 @@ class vmmCreatePool(gobject.GObject):
 
         return clean_list
 
-    def list_pool_sources(self):
+    def list_pool_sources(self, host=None):
         name = self.get_config_name()
         pool_type = self._pool.type
 
         plist = []
         try:
             plist = Storage.StoragePool.pool_list_from_sources(self.conn.vmm,
-                                                               name, pool_type)
+                                                               name, pool_type,
+                                                               host=host)
         except Exception, e:
             logging.exception("Pool enumeration failed")
 
