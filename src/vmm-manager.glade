@@ -24,13 +24,19 @@
                   <widget class="GtkMenu" id="menuitem4_menu">
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_file_restore_saved">
-                        <property name="label">Restore saved machine...</property>
+                        <property name="label">Restore Saved Machine...</property>
                         <property name="visible">True</property>
                         <property name="tooltip" translatable="yes">Restore a saved machine from a filesystem image</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="use_stock">False</property>
                         <signal name="activate" handler="on_menu_restore_saved_activate"/>
                         <accelerator key="r" signal="activate" modifiers="GDK_MOD1_MASK"/>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image3">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-open</property>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
@@ -43,8 +49,14 @@
                         <property name="label">Add Connection...</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="use_stock">False</property>
                         <signal name="activate" handler="on_menu_file_add_connection_activate"/>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image2">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-add</property>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
@@ -94,13 +106,19 @@
                         <property name="label">Virtual Machine Details</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="use_stock">False</property>
                         <signal name="activate" handler="on_menu_edit_details_activate"/>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image4">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-properties</property>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_edit_delete">
-                        <property name="label">Delete</property>
+                        <property name="label">gtk-delete</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
@@ -189,9 +207,15 @@
                         <property name="label">_Contents</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="use_stock">False</property>
                         <signal name="activate" handler="on_menu_help_activate"/>
                         <accelerator key="F1" signal="activate"/>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image1">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-help</property>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
