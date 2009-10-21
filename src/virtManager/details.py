@@ -129,6 +129,7 @@ class vmmDetails(gobject.GObject):
         self.serial_tabs = []
         self.last_console_page = PAGE_CONSOLE
         self.ignorePause = False
+        self.ignoreDetails = False
 
         # Don't allowing changing network/disks for Dom0
         if self.vm.is_management_domain():
@@ -249,8 +250,8 @@ class vmmDetails(gobject.GObject):
             "on_vmm_details_delete_event": self.close,
             "on_details_menu_quit_activate": self.exit_app,
 
-            "on_control_vm_details_toggled": self.sync_details_console_view,
-            "on_control_vm_console_toggled": self.sync_details_console_view,
+            "on_control_vm_details_toggled": self.details_console_changed,
+            "on_control_vm_console_toggled": self.details_console_changed,
             "on_control_run_clicked": self.control_vm_run,
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
@@ -268,6 +269,8 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_graphics_activate": self.control_vm_console,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
             "on_details_menu_view_manager_activate": self.view_manager,
+            "on_details_menu_view_details_toggled": self.details_console_changed,
+            "on_details_menu_view_console_toggled": self.details_console_changed,
 
             "on_details_pages_switch_page": self.switch_page,
 
@@ -713,23 +716,39 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("hw-panel").set_current_page(pagetype)
 
-    def sync_details_console_view(self, ignore):
-        details = self.window.get_widget("control-vm-details")
-        console = self.window.get_widget("control-vm-console")
+    def details_console_changed(self, src):
+        if self.ignoreDetails:
+            return
+
+        if not src.get_active():
+            return
+
+        is_details = False
+        if (src == self.window.get_widget("control-vm-details") or
+            src == self.window.get_widget("details-menu-view-details")):
+            is_details = True
+
         pages = self.window.get_widget("details-pages")
-        page = pages.get_current_page()
-
-        if not details.get_active() and not console.get_active():
-            return
-        elif page == PAGE_DETAILS and details.get_active():
-            return
-        elif page != PAGE_DETAILS and console.get_active():
-            return
-
-        if details.get_active():
+        if is_details:
             pages.set_current_page(PAGE_DETAILS)
-        elif console.get_active():
+        else:
             pages.set_current_page(self.last_console_page)
+
+    def sync_details_console_view(self, is_details):
+        details = self.window.get_widget("control-vm-details")
+        details_menu = self.window.get_widget("details-menu-view-details")
+        console = self.window.get_widget("control-vm-console")
+        console_menu = self.window.get_widget("details-menu-view-console")
+
+        try:
+            self.ignoreDetails = True
+
+            details.set_active(is_details)
+            details_menu.set_active(is_details)
+            console.set_active(not is_details)
+            console_menu.set_active(not is_details)
+        finally:
+            self.ignoreDetails = False
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -868,10 +887,7 @@ class vmmDetails(gobject.GObject):
     def switch_page(self, ignore1=None, ignore2=None, newpage=None):
         self.page_refresh(newpage)
 
-        if newpage == PAGE_DETAILS:
-            self.window.get_widget("control-vm-details").set_active(True)
-        else:
-            self.window.get_widget("control-vm-console").set_active(True)
+        self.sync_details_console_view(newpage == PAGE_DETAILS)
 
         if newpage == PAGE_CONSOLE or newpage >= PAGE_DYNAMIC_OFFSET:
             self.last_console_page = newpage
