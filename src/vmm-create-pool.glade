@@ -402,10 +402,9 @@
                           <widget class="GtkHBox" id="hbox13">
                             <property name="visible">True</property>
                             <child>
-                              <widget class="GtkEntry" id="pool-target-path">
+                              <widget class="GtkComboBoxEntry" id="pool-target-path">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="invisible_char">&#x25CF;</property>
+                                <signal name="changed" handler="on_pool_target_path_changed"/>
                                 <signal name="focus_in_event" handler="on_pool_target_path_focus_in_event"/>
                               </widget>
                               <packing>

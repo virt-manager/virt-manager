@@ -78,13 +78,19 @@ class vmmCreatePool(gobject.GObject):
             "on_pool_format_focus": (self.update_doc, "format", "pool-info2"),
             "on_pool_format_changed": (self.update_doc_changed, "format",
                                        "pool-info2"),
+
             "on_pool_target_path_focus_in_event": (self.update_doc,
                                                    "target_path",
                                                    "pool-info2"),
+            "on_pool_target_path_focus": (self.update_doc, "target_path",
+                                          "pool-info2"),
+            "on_pool_target_path_changed": (self.update_doc_changed,
+                                            "target_path",
+                                            "pool-info2"),
+
             "on_pool_source_path_focus_in_event": (self.update_doc,
                                                    "source_path",
                                                    "pool-info2"),
-
             "on_pool_source_path_focus": (self.update_doc, "source_path",
                                           "pool-info2"),
             "on_pool_source_path_changed": (self.update_doc_changed,
@@ -127,6 +133,15 @@ class vmmCreatePool(gobject.GObject):
         format_list.pack_start(text2, False)
         format_list.add_attribute(text2, 'text', 1)
 
+        # Target path combo box entry
+        target_list = self.window.get_widget("pool-target-path")
+        # target_path, Label, pool class instance
+        target_model = gtk.ListStore(str, str, object)
+        target_list.set_model(target_model)
+        target_list.set_text_column(0)
+        target_list.child.connect("focus-in-event", self.update_doc,
+                                  "target_path", "pool-info2")
+
         # Source path combo box entry
         source_list = self.window.get_widget("pool-source-path")
         # source_path, Label, pool class instance
@@ -149,7 +164,7 @@ class vmmCreatePool(gobject.GObject):
 
         self.window.get_widget("pool-name").set_text("")
         self.window.get_widget("pool-type").set_active(0)
-        self.window.get_widget("pool-target-path").set_text("")
+        self.window.get_widget("pool-target-path").child.set_text("")
         self.window.get_widget("pool-source-path").child.set_text("")
         self.window.get_widget("pool-hostname").set_text("")
         self.window.get_widget("pool-format").set_active(-1)
@@ -172,24 +187,35 @@ class vmmCreatePool(gobject.GObject):
         for f in formats:
             model.append([f, f])
 
-    def populate_source_paths(self):
-        widget = self.window.get_widget("pool-source-path")
-        model = widget.get_model()
-        model.clear()
+    def populate_pool_sources(self):
+        source_list = self.window.get_widget("pool-source-path")
+        source_model = source_list.get_model()
+        source_model.clear()
 
+        target_list = self.window.get_widget("pool-target-path")
+        target_model = target_list.get_model()
+        target_model.clear()
+
+        use_list = source_list
+        use_model = source_model
         entry_list = []
         if self._pool.type == Storage.StoragePool.TYPE_SCSI:
             entry_list = self.list_scsi_adapters()
+            use_list = source_list
+            use_model = source_model
+
+        elif self._pool.type == Storage.StoragePool.TYPE_LOGICAL:
+            pool_list = self.list_pool_sources()
+            entry_list = map(lambda p: [p.target_path, p.target_path, p],
+                             pool_list)
+            use_list = target_list
+            use_model = target_model
 
         for e in entry_list:
-            model.append(e)
+            use_model.append(e)
 
         if entry_list:
-            widget.set_active(0)
-            widget.child.set_editable(False)
-        else:
-            widget.set_active(-1)
-            widget.child.set_editable(True)
+            use_list.set_active(0)
 
     def list_scsi_adapters(self):
         scsi_hosts = self.conn.get_devices("scsi_host")
@@ -207,6 +233,19 @@ class vmmCreatePool(gobject.GObject):
                 clean_list.append(entry)
 
         return clean_list
+
+    def list_pool_sources(self):
+        name = self.get_config_name()
+        pool_type = self._pool.type
+
+        plist = []
+        try:
+            plist = Storage.StoragePool.pool_list_from_sources(self.conn.vmm,
+                                                               name, pool_type)
+        except Exception, e:
+            logging.exception("Pool enumeration failed")
+
+        return plist
 
     def show_options_by_pool(self):
         src     = hasattr(self._pool, "source_path")
@@ -233,7 +272,7 @@ class vmmCreatePool(gobject.GObject):
             self.populate_pool_format()
             self.window.get_widget("pool-format").set_active(0)
 
-        self.populate_source_paths()
+        self.populate_pool_sources()
 
 
     def get_config_type(self):
@@ -246,7 +285,17 @@ class vmmCreatePool(gobject.GObject):
         return self.window.get_widget("pool-name").get_text()
 
     def get_config_target_path(self):
-        return self.window.get_widget("pool-target-path").get_text()
+        src = self.window.get_widget("pool-target-path")
+        if not src.get_property("sensitive"):
+            return None
+
+        # If we provide the user with a drop down
+        model = src.get_model()
+        selection = src.get_active()
+        if selection != -1:
+            return model[selection][1]
+
+        return src.child.get_text()
 
     def get_config_source_path(self):
         src = self.window.get_widget("pool-source-path")
@@ -304,7 +353,7 @@ class vmmCreatePool(gobject.GObject):
                                    startfolder="/var/lib/libvirt",
                                    foldermode=True)
         if target:
-            self.window.get_widget("pool-target-path").set_text(target)
+            self.window.get_widget("pool-target-path").child.set_text(target)
 
 
     def forward(self, ignore=None):
@@ -371,7 +420,7 @@ class vmmCreatePool(gobject.GObject):
             self.window.get_widget("pool-forward").show()
         elif page_number == PAGE_FORMAT:
             self.show_options_by_pool()
-            self.window.get_widget("pool-target-path").set_text(self._pool.target_path)
+            self.window.get_widget("pool-target-path").child.set_text(self._pool.target_path)
             self.window.get_widget("pool-back").set_sensitive(True)
             buildret = self.get_build_default()
             self.window.get_widget("pool-build").set_sensitive(buildret[1])
@@ -386,11 +435,14 @@ class vmmCreatePool(gobject.GObject):
         pools we find via FindPoolSources, this will be different
         """
         source_list = self.window.get_widget("pool-source-path")
+        target_list = self.window.get_widget("pool-target-path")
 
         pool = copy.copy(self._pool)
 
         if source_list.get_active() != -1:
             pool = source_list.get_model()[source_list.get_active()][2]
+        elif target_list.get_active() != -1:
+            pool = target_list.get_model()[target_list.get_active()][2]
 
         return pool
 
