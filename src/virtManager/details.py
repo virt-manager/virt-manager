@@ -2021,29 +2021,26 @@ class vmmDetails(gobject.GObject):
         if not info:
             return
 
+        dev_id_info = info[1]
+
         if src.get_label() == gtk.STOCK_DISCONNECT:
-            #disconnect the cdrom
-            try:
-                self.vm.disconnect_cdrom_device(info[1])
-            except Exception, e:
-                self.err.show_err(_("Error Removing CDROM: %s" % str(e)),
-                                  "".join(traceback.format_exc()))
-                return
+            # Disconnect cdrom
+            self.vm.change_cdrom_media(dev_id_info, None)
 
         else:
             # connect a new cdrom
             if self.choose_cd is None:
                 self.choose_cd = vmmChooseCD(self.config, self.window.get_widget("disk-target-device").get_text(), self.vm.get_connection())
-                self.choose_cd.connect("cdrom-chosen", self.connect_cdrom)
+                self.choose_cd.connect("cdrom-chosen", self.change_cdrom_media)
             else:
-                self.choose_cd.dev_id_info = info[1]
+                self.choose_cd.dev_id_info = dev_id_info
             self.choose_cd.show()
 
-    def connect_cdrom(self, src, typ, source, dev_id_info):
+    def change_cdrom_media(self, ignore, dev_id_info, newpath, _type=None):
         try:
-            self.vm.connect_cdrom_device(typ, source, dev_id_info)
+            self.vm.change_cdrom_media(dev_id_info, newpath, _type)
         except Exception, e:
-            self.err.show_err(_("Error Connecting CDROM: %s" % str(e)),
+            self.err.show_err(_("Error changing CDROM media: %s" % str(e)),
                               "".join(traceback.format_exc()))
 
     def remove_device(self, dev_type, dev_id_info):

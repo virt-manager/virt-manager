@@ -108,7 +108,7 @@ class vmmChooseCD(gobject.GObject):
         except Exception, e:
             return self.err.val_err(_("Invalid Media Path"), str(e))
 
-        self.emit("cdrom-chosen", disk.type, disk.path, self.dev_id_info)
+        self.emit("cdrom-chosen", self.dev_id_info, disk.path, disk.type)
         self.cancel()
 
     def media_toggled(self, ignore1=None, ignore2=None):
