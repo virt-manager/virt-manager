@@ -24,6 +24,8 @@ import gtk.glade
 
 class vmmSystray(gobject.GObject):
     __gsignals__ = {
+        "action-toggle-manager": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, []),
         "action-view-manager": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, []),
         "action-suspend-domain": (gobject.SIGNAL_RUN_FIRST,
@@ -208,7 +210,7 @@ class vmmSystray(gobject.GObject):
     # Listeners
 
     def systray_activate(self, widget):
-        self.emit("action-view-manager")
+        self.emit("action-toggle-manager")
 
     def systray_popup(self, widget, button, event_time):
         if button != 3:

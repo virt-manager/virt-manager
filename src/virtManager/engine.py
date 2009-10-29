@@ -78,13 +78,15 @@ class vmmEngine(gobject.GObject):
             logging.debug("Libvirt doesn't support threading, skipping.")
 
         # Counter keeping track of how many manager and details windows
-        # are open. When it is decremented to 0, close the app
+        # are open. When it is decremented to 0, close the app or
+        # keep running in system tray if enabled
         self.windows = 0
 
         self.netdevHelper = vmmNetDevHelper(self.config)
         self.init_systray()
 
         self.config.on_stats_update_interval_changed(self.reschedule_timer)
+        self.config.on_view_system_tray_changed(self.system_tray_changed) 
 
         self.schedule_timer()
         self.load_stored_uris()
@@ -95,7 +97,7 @@ class vmmEngine(gobject.GObject):
             return
 
         self.systray = vmmSystray(self.config, self)
-        self.systray.connect("action-view-manager", self._do_show_manager)
+        self.systray.connect("action-toggle-manager", self._do_toggle_manager)
         self.systray.connect("action-suspend-domain", self._do_suspend_domain)
         self.systray.connect("action-resume-domain", self._do_resume_domain)
         self.systray.connect("action-run-domain", self._do_run_domain)
@@ -105,6 +107,12 @@ class vmmEngine(gobject.GObject):
         self.systray.connect("action-show-console", self._do_show_console)
         self.systray.connect("action-show-details", self._do_show_details)
         self.systray.connect("action-exit-app", self._do_exit_app)
+
+    def system_tray_changed(self, *ignore):
+        systray_enabled = self.config.get_view_system_tray()
+        if self.windows == 0 and not systray_enabled:
+            # Show the manager so that the user can control the application
+            self.show_manager()
 
     def load_stored_uris(self):
         uris = self.config.get_connections()
@@ -233,6 +241,8 @@ class vmmEngine(gobject.GObject):
         self.show_help(index)
     def _do_show_console(self, src, uri, uuid):
         self.show_console(uri, uuid)
+    def _do_toggle_manager(self, src):
+        self.toggle_manager()
     def _do_show_manager(self, src):
         self.show_manager()
     def _do_refresh_console(self, src, uri, uuid):
@@ -364,6 +374,11 @@ class vmmEngine(gobject.GObject):
             self.windowManager.connect("action-exit-app", self._do_exit_app)
         return self.windowManager
 
+    def toggle_manager(self):
+        manager = self.get_manager()
+        if not manager.close():
+            manager.show()
+
     def show_manager(self):
         self.get_manager().show()
 
@@ -374,7 +389,8 @@ class vmmEngine(gobject.GObject):
     def decrement_window_counter(self):
         self.windows -= 1
         logging.debug("window counter decremented to %s" % self.windows)
-        if self.windows <= 0:
+        # Don't exit if system tray is enabled
+        if self.windows <= 0 and not self.config.get_view_system_tray() :
             self.exit_app()
 
     def exit_app(self):
