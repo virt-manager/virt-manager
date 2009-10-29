@@ -168,7 +168,6 @@ class vmmCheckDialog (gtk.MessageDialog):
     def show_chkbox(self, text1, text2=None, chktext=None):
         chkbox = None
         res = None
-        chkres = None
 
         self.hide()
         for c in self.chk_vbox.get_children():

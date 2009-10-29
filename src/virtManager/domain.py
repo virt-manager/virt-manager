@@ -430,7 +430,7 @@ class vmmDomain(gobject.GObject):
                 if cpumask is None or (cpumask is not None
                     and len(cpumask) == 0):
                     node.unsetProp("cpuset")
-                elif not self.get_cpuset_syntax_error(cpumask):
+                elif not get_cpuset_syntax_error(cpumask):
                     node.setProp("cpuset", cpumask)
             return doc.serialize()
 

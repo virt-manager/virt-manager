@@ -260,7 +260,7 @@ class vmmCreatePool(gobject.GObject):
             plist = Storage.StoragePool.pool_list_from_sources(self.conn.vmm,
                                                                name, pool_type,
                                                                host=host)
-        except Exception, e:
+        except Exception:
             logging.exception("Pool enumeration failed")
 
         return plist

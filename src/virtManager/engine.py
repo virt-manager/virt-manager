@@ -136,13 +136,13 @@ class vmmEngine(gobject.GObject):
         try:
             try:
                 conn = self._lookup_connection(uri)
-            except Exception, e:
+            except Exception:
                 conn = self.add_connection(uri, readOnly, autoconnect)
 
             self.show_manager()
             conn.open()
             return conn
-        except Exception, e:
+        except Exception:
             return None
 
     def _connect_cancelled(self, connect):
