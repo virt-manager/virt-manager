@@ -39,6 +39,13 @@ PAGE_SCREENSHOT = 1
 PAGE_AUTHENTICATE = 2
 PAGE_VNCVIEWER = 3
 
+def has_property(obj, setting):
+    try:
+        obj.get_property(setting)
+    except TypeError:
+        return False
+    return True
+
 class vmmConsolePages(gobject.GObject):
     def __init__(self, config, vm, engine, window):
         self.__gobject_init__()
@@ -60,6 +67,7 @@ class vmmConsolePages(gobject.GObject):
         # State for disabling modifiers when keyboard is grabbed
         self.accel_groups = gtk.accel_groups_from_object(self.topwin)
         self.gtk_settings_accel = None
+        self.gtk_settings_mnemonic = None
 
         # Initialize display widget
         self.scale_type = self.vm.get_console_scaling()
@@ -175,9 +183,15 @@ class vmmConsolePages(gobject.GObject):
 
         for g in self.accel_groups:
             self.topwin.remove_accel_group(g)
+
         settings = gtk.settings_get_default()
         self.gtk_settings_accel = settings.get_property('gtk-menu-bar-accel')
         settings.set_property('gtk-menu-bar-accel', None)
+
+        if has_property(settings, "gtk-enable-mnemonics"):
+            self.gtk_settings_mnemonic = settings.get_property("gtk-enable-mnemonics")
+            settings.set_property("gtk-enable-mnemonics", False)
+
 
     def _enable_modifiers(self, ignore=None):
         if self.gtk_settings_accel is None:
@@ -186,6 +200,11 @@ class vmmConsolePages(gobject.GObject):
         settings = gtk.settings_get_default()
         settings.set_property('gtk-menu-bar-accel', self.gtk_settings_accel)
         self.gtk_settings_accel = None
+
+        if self.gtk_settings_mnemonic is not None:
+            settings.set_property("gtk-enable-mnemonics",
+                                  self.gtk_settings_mnemonic)
+
         for g in self.accel_groups:
             self.topwin.add_accel_group(g)
 
