@@ -304,6 +304,9 @@ class vmmEngine(gobject.GObject):
 
     def show_console(self, uri, uuid):
         win = self.show_details(uri, uuid)
+        if not win:
+            return
+
         win.activate_console_page()
 
     def refresh_console(self, uri, uuid):
@@ -318,10 +321,16 @@ class vmmEngine(gobject.GObject):
 
     def show_details_performance(self, uri, uuid):
         win = self.show_details(uri, uuid)
+        if not win:
+            return
+
         win.activate_performance_page()
 
     def show_details_config(self, uri, uuid):
         win = self.show_details(uri, uuid)
+        if not win:
+            return
+
         win.activate_config_page()
 
     def show_details(self, uri, uuid):
@@ -346,6 +355,8 @@ class vmmEngine(gobject.GObject):
             except Exception, e:
                 self.err.show_err(_("Error bringing up domain details: %s") % str(e),
                                   "".join(traceback.format_exc()))
+                return None
+
             self.connections[uri]["windowDetails"][uuid] = details
         self.connections[uri]["windowDetails"][uuid].show()
         return self.connections[uri]["windowDetails"][uuid]
