@@ -414,7 +414,7 @@ class vmmDomain(gobject.GObject):
     def define_vcpus(self, vcpus, cpuset=None):
         vcpus = int(vcpus)
 
-        def get_cpuset_syntax_error(self, val):
+        def get_cpuset_syntax_error(val):
             guest = virtinst.Guest(connection = self.get_connection().vmm)
             guest.cpuset = val
 

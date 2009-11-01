@@ -1105,19 +1105,8 @@ class vmmDetails(gobject.GObject):
         vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
         cpuset = self.window.get_widget("config-vcpupin").get_text()
 
-        try:
-            self.vm.get_cpuset_syntax_error(cpuset)
-        except Exception, e:
-            self.err.show_err(_("Error setting CPU pinning: %s") % str(e),
-                              "".join(traceback.format_exc()))
-            return False
-
-        # Since for cpuset we require None for define_vcpus, we'll change this now
-        if len(cpuset) == 0:
-            cpuset = None
-
-        logging.info("Setting vcpus for %s to %s, cpuset is %s" % 
-                                    (self.vm.get_name(), str(vcpus), cpuset))
+        logging.info("Setting vcpus for %s to %s, cpuset is %s" %
+                     (self.vm.get_name(), str(vcpus), cpuset))
         hotplug_err = False
 
         try:
