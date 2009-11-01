@@ -170,6 +170,9 @@ class vmmConsolePages(gobject.GObject):
 
 
     def _disable_modifiers(self, ignore=None):
+        if self.gtk_settings_accel is not None:
+            return
+
         for g in self.accel_groups:
             self.topwin.remove_accel_group(g)
         settings = gtk.settings_get_default()
@@ -179,6 +182,7 @@ class vmmConsolePages(gobject.GObject):
     def _enable_modifiers(self, ignore=None):
         if self.gtk_settings_accel is None:
             return
+
         settings = gtk.settings_get_default()
         settings.set_property('gtk-menu-bar-accel', self.gtk_settings_accel)
         self.gtk_settings_accel = None
