@@ -575,14 +575,19 @@
           <widget class="GtkNotebook" id="details-pages">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="border_width">6</property>
             <property name="show_border">False</property>
+            <property name="tab_border">0</property>
+            <property name="tab_hborder">0</property>
+            <property name="tab_vborder">0</property>
             <signal name="switch_page" handler="on_details_pages_switch_page"/>
             <child>
               <widget class="GtkNotebook" id="console-pages">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="show_border">False</property>
+                <property name="tab_border">0</property>
+                <property name="tab_hborder">0</property>
+                <property name="tab_vborder">0</property>
                 <child>
                   <widget class="GtkLabel" id="console-unavailable">
                     <property name="visible">True</property>
@@ -805,7 +810,7 @@
             <child>
               <widget class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
-                <property name="border_width">6</property>
+                <property name="border_width">12</property>
                 <property name="spacing">12</property>
                 <child>
                   <widget class="GtkVBox" id="vbox53">
