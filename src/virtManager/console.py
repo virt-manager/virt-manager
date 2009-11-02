@@ -29,15 +29,13 @@ import dbus
 import gtkvnc
 import os
 import socket
-import cairo
 
 from virtManager.error import vmmErrorDialog
 
 # Console pages
 PAGE_UNAVAILABLE = 0
-PAGE_SCREENSHOT = 1
-PAGE_AUTHENTICATE = 2
-PAGE_VNCVIEWER = 3
+PAGE_AUTHENTICATE = 1
+PAGE_VNCVIEWER = 2
 
 def has_property(obj, setting):
     try:
@@ -355,7 +353,7 @@ class vmmConsolePages(gobject.GObject):
             self.view_vm_status()
             return
 
-        elif page in [PAGE_UNAVAILABLE, PAGE_SCREENSHOT, PAGE_VNCVIEWER]:
+        elif page in [PAGE_UNAVAILABLE, PAGE_VNCVIEWER]:
             if self.vncViewer.is_open():
                 self.activate_viewer_page()
             else:
@@ -363,57 +361,7 @@ class vmmConsolePages(gobject.GObject):
                 self.vncViewerRetryDelay = 125
                 self.try_login()
 
-        # Disabled screenshot when paused - doesn't work when scaled
-        # and you can connect to VNC when paused already, it'll simply
-        # not respond to input.
-        #paused  = vm.is_paused()
-        #if paused:
-        #   set_paused_console_state()
-
         return
-
-    def set_paused_console_state(self):
-        pages = self.window.get_widget("console-pages")
-
-        if pages.get_current_page() == PAGE_SCREENSHOT:
-            return
-
-        if pages.get_current_page() != PAGE_VNCVIEWER:
-            if pages.get_current_page() != PAGE_UNAVAILABLE:
-                self.vncViewer.close()
-            self.activate_unavailable_page(_("Console not available while paused"))
-            return
-
-        screenshot = self.window.get_widget("console-screenshot")
-        image = self.vncViewer.get_pixbuf()
-        width = image.get_width()
-        height = image.get_height()
-        pixmap = gtk.gdk.Pixmap(screenshot.get_root_window(), width, height)
-        cr = pixmap.cairo_create()
-        cr.set_source_pixbuf(image, 0, 0)
-        cr.rectangle(0, 0, width, height)
-        cr.fill()
-
-        # Set 50% gray overlayed
-        cr.set_source_rgba(0, 0, 0, 0.5)
-        cr.rectangle(0, 0, width, height)
-        cr.fill()
-
-        # Render a big text 'paused' across it
-        cr.set_source_rgba(1, 1,1, 1)
-        cr.set_font_size(80)
-        cr.select_font_face("Sans",
-                            cairo.FONT_SLANT_NORMAL,
-                            cairo.FONT_WEIGHT_NORMAL)
-        overlay = _("paused")
-        extents = cr.text_extents(overlay)
-        x = width/2 - (extents[2]/2)
-        y = height/2 - (extents[3]/2)
-        cr.move_to(x, y)
-        cr.show_text(overlay)
-        screenshot.set_from_pixmap(pixmap, None)
-        self.activate_screenshot_page()
-
 
     ###################
     # Page Navigation #
@@ -423,10 +371,6 @@ class vmmConsolePages(gobject.GObject):
         self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
         self.window.get_widget("details-menu-vm-screenshot").set_sensitive(False)
         self.window.get_widget("console-unavailable").set_label("<b>" + msg + "</b>")
-
-    def activate_screenshot_page(self):
-        self.window.get_widget("console-pages").set_current_page(PAGE_SCREENSHOT)
-        self.window.get_widget("details-menu-vm-screenshot").set_sensitive(True)
 
     def activate_auth_page(self, withPassword=True, withUsername=False):
         (pw, username) = self.config.get_console_password(self.vm)
@@ -496,8 +440,6 @@ class vmmConsolePages(gobject.GObject):
         maxh = rooth - 100 - pady
 
         self.window.get_widget("console-vnc-viewport").set_size_request(w, h)
-        self.window.get_widget("console-screenshot").set_size_request(w, h)
-        self.window.get_widget("console-screenshot-viewport").set_size_request(w, h)
         self.window.get_widget("console-vnc-scroll").set_size_request(w, h)
         if w > maxw or h > maxh:
             p = gtk.POLICY_ALWAYS
@@ -505,7 +447,6 @@ class vmmConsolePages(gobject.GObject):
             p = gtk.POLICY_NEVER
 
         self.window.get_widget("console-vnc-scroll").set_policy(p, p)
-        self.window.get_widget("console-screenshot-scroll").set_policy(p, p)
 
     def _vnc_disconnected(self, src):
         if self.vncTunnel is not None:
