@@ -149,6 +149,10 @@ class vmmConsolePages(gobject.GObject):
             return
 
         try:
+            if self.notifyID is not None:
+                self.notifyInterface.CloseNotification(self.notifyID)
+                self.notifyID = None
+
             (x, y) = self.topwin.window.get_origin()
             self.notifyID = self.notifyInterface.Notify(self.topwin.get_title(),
                                                         0,
