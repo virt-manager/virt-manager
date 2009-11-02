@@ -104,7 +104,9 @@ class vmmDetails(gobject.GObject):
 
     def __init__(self, config, vm, engine):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-details.glade", "vmm-details", domain="virt-manager")
+        self.window = gtk.glade.XML((config.get_glade_dir() +
+                                     "/vmm-details.glade"),
+                                     "vmm-details", domain="virt-manager")
         self.config = config
         self.vm = vm
         self.engine = engine
@@ -117,82 +119,29 @@ class vmmDetails(gobject.GObject):
 
         self.serial_tabs = []
         self.last_console_page = PAGE_CONSOLE
-        self.ignorePause = False
-        self.ignoreDetails = False
-
-        # Don't allowing changing network/disks for Dom0
-        if self.vm.is_management_domain():
-            self.window.get_widget("add-hardware-button").set_sensitive(False)
-        else:
-            self.window.get_widget("add-hardware-button").set_sensitive(True)
-
-        build_shutdown_button_menu(self.config,
-                                   self.window.get_widget("control-shutdown"),
-                                   self.control_vm_shutdown,
-                                   self.control_vm_reboot,
-                                   self.control_vm_destroy)
-
-        smenu = gtk.Menu()
-        smenu.connect("show", self.populate_serial_menu)
-        self.window.get_widget("details-menu-view-serial-list").set_submenu(smenu)
-
-        self.serial_popup = gtk.Menu()
-
-        self.serial_copy = gtk.ImageMenuItem(gtk.STOCK_COPY)
-        self.serial_popup.add(self.serial_copy)
-
-        self.serial_paste = gtk.ImageMenuItem(gtk.STOCK_PASTE)
-        self.serial_popup.add(self.serial_paste)
-
-        self.serial_popup.add(gtk.SeparatorMenuItem())
-
-        self.serial_close = gtk.ImageMenuItem(_("Close tab"))
-        close_image = gtk.Image()
-        close_image.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU)
-        self.serial_close.set_image(close_image)
-        self.serial_popup.add(self.serial_close)
-
-        self.window.get_widget("hw-panel").set_show_tabs(False)
-        self.window.get_widget("details-pages").set_show_tabs(False)
-
         self.addhw = None
         self.choose_cd = None
 
-        # Security info tooltips
-        util.tooltip_wrapper(self.window.get_widget("security-static-info"),
-            _("Static SELinux security type tells libvirt to always start the guest process with the specified label. The administrator is responsible for making sure the images are labeled corectly on disk."))
-        util.tooltip_wrapper(self.window.get_widget("security-dynamic-info"),
-            _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
-
-        self.cpu_usage_graph = Sparkline()
-        self.cpu_usage_graph.set_property("reversed", True)
-        self.window.get_widget("graph-table").attach(self.cpu_usage_graph, 1, 2, 0, 1)
-
-        self.memory_usage_graph = Sparkline()
-        self.memory_usage_graph.set_property("reversed", True)
-        self.window.get_widget("graph-table").attach(self.memory_usage_graph, 1, 2, 1, 2)
-
-        self.disk_io_graph = Sparkline()
-        self.disk_io_graph.set_property("reversed", True)
-        self.disk_io_graph.set_property("filled", False)
-        self.disk_io_graph.set_property("num_sets", 2)
-        self.disk_io_graph.set_property("rgb", map(lambda x: x/255.0,
-                                        [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]))
-        self.window.get_widget("graph-table").attach(self.disk_io_graph, 1, 2, 2, 3)
-
-        self.network_traffic_graph = Sparkline()
-        self.network_traffic_graph.set_property("reversed", True)
-        self.network_traffic_graph.set_property("filled", False)
-        self.network_traffic_graph.set_property("num_sets", 2)
-        self.network_traffic_graph.set_property("rgb", map(lambda x: x/255.0,
-                                                [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]))
-        self.window.get_widget("graph-table").attach(self.network_traffic_graph, 1, 2, 3, 4)
+        self.ignorePause = False
+        self.ignoreDetails = False
 
         self.console = vmmConsolePages(self.config, self.vm, self.engine,
                                        self.window)
 
-        self.window.get_widget("console-pages").set_show_tabs(False)
-        self.window.get_widget("details-menu-view-toolbar").set_active(self.config.get_details_show_toolbar())
+        self.init_menus()
+        self.init_details()
+
+        self.serial_popup = None
+        self.serial_copy = None
+        self.serial_paste = None
+        self.serial_close = None
+        self.init_serial()
+
+        self.cpu_usage_graph = None
+        self.memory_usage_graph = None
+        self.disk_io_graph = None
+        self.network_traffic_graph = None
+        self.init_graphs()
 
         self.window.signal_autoconnect({
             "on_close_details_clicked": self.close,
@@ -268,9 +217,7 @@ class vmmDetails(gobject.GObject):
             "on_console_auth_login_clicked": self.console.auth_login,
         })
 
-        # XXX: Help docs useless/out of date
-        self.window.get_widget("help_menuitem").hide()
-
+        # Deliberately keep all this after signal connection
         self.vm.connect("status-changed", self.update_widget_states)
         self.vm.connect("resources-sampled", self.refresh_resources)
         self.vm.connect("config-changed", self.refresh_vm_info)
@@ -283,12 +230,93 @@ class vmmDetails(gobject.GObject):
         self.refresh_vm_info()
 
 
+    ##########################
+    # Initialization helpers #
+    ##########################
+
+    def init_menus(self):
+        # Shutdown button menu
+        build_shutdown_button_menu(self.config,
+                                   self.window.get_widget("control-shutdown"),
+                                   self.control_vm_shutdown,
+                                   self.control_vm_reboot,
+                                   self.control_vm_destroy)
+
+        # Serial list menu
+        smenu = gtk.Menu()
+        smenu.connect("show", self.populate_serial_menu)
+        self.window.get_widget("details-menu-view-serial-list").set_submenu(smenu)
+
+        # Don't allowing changing network/disks for Dom0
+        dom0 = self.vm.is_management_domain()
+        self.window.get_widget("add-hardware-button").set_sensitive(not dom0)
+
+        self.window.get_widget("hw-panel").set_show_tabs(False)
+        self.window.get_widget("details-pages").set_show_tabs(False)
+        self.window.get_widget("console-pages").set_show_tabs(False)
+        self.window.get_widget("details-menu-view-toolbar").set_active(self.config.get_details_show_toolbar())
+
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("help_menuitem").hide()
+
+    def init_serial(self):
+        self.serial_popup = gtk.Menu()
+
+        self.serial_copy = gtk.ImageMenuItem(gtk.STOCK_COPY)
+        self.serial_popup.add(self.serial_copy)
+
+        self.serial_paste = gtk.ImageMenuItem(gtk.STOCK_PASTE)
+        self.serial_popup.add(self.serial_paste)
+
+        self.serial_popup.add(gtk.SeparatorMenuItem())
+
+        self.serial_close = gtk.ImageMenuItem(_("Close tab"))
+        close_image = gtk.Image()
+        close_image.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU)
+        self.serial_close.set_image(close_image)
+        self.serial_popup.add(self.serial_close)
+
+    def init_graphs(self):
+        graph_table = self.window.get_widget("graph-table")
+
+        self.cpu_usage_graph = Sparkline()
+        self.cpu_usage_graph.set_property("reversed", True)
+        graph_table.attach(self.cpu_usage_graph, 1, 2, 0, 1)
+
+        self.memory_usage_graph = Sparkline()
+        self.memory_usage_graph.set_property("reversed", True)
+        graph_table.attach(self.memory_usage_graph, 1, 2, 1, 2)
+
+        self.disk_io_graph = Sparkline()
+        self.disk_io_graph.set_property("reversed", True)
+        self.disk_io_graph.set_property("filled", False)
+        self.disk_io_graph.set_property("num_sets", 2)
+        self.disk_io_graph.set_property("rgb", map(lambda x: x/255.0,
+                                        [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]))
+        graph_table.attach(self.disk_io_graph, 1, 2, 2, 3)
+
+        self.network_traffic_graph = Sparkline()
+        self.network_traffic_graph.set_property("reversed", True)
+        self.network_traffic_graph.set_property("filled", False)
+        self.network_traffic_graph.set_property("num_sets", 2)
+        self.network_traffic_graph.set_property("rgb",
+                                                map(lambda x: x/255.0,
+                                                    [0x82, 0x00, 0x3B,
+                                                     0x29, 0x5C, 0x45]))
+        graph_table.attach(self.network_traffic_graph, 1, 2, 3, 4)
+
+    def init_details(self):
+        # Security info tooltips
+        util.tooltip_wrapper(self.window.get_widget("security-static-info"),
+            _("Static SELinux security type tells libvirt to always start the guest process with the specified label. The administrator is responsible for making sure the images are labeled corectly on disk."))
+        util.tooltip_wrapper(self.window.get_widget("security-dynamic-info"),
+            _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
+
+
     def control_fullscreen(self, src):
         menu = self.window.get_widget("details-menu-view-fullscreen")
         if src.get_active() != menu.get_active():
             menu.set_active(src.get_active())
-
-
 
     def toggle_toolbar(self, src):
         active = src.get_active()
