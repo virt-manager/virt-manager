@@ -275,8 +275,6 @@ class vmmConsolePages(gobject.GObject):
                 gtk.gdk.keyboard_grab(self.vncViewer.window, False, 0L)
                 self._disable_modifiers()
 
-            tabs = self.window.get_widget("details-pages")
-            tabs.set_border_width(0)
             self.window.get_widget("toolbar-box").hide()
         else:
             if self.config.get_console_keygrab() == 1:
@@ -284,8 +282,6 @@ class vmmConsolePages(gobject.GObject):
                 gtk.gdk.keyboard_ungrab(0L)
             self.topwin.unfullscreen()
 
-            tabs = self.window.get_widget("details-pages")
-            tabs.set_border_width(6)
             if self.window.get_widget("details-menu-view-toolbar").get_active():
                 self.window.get_widget("toolbar-box").show()
 
