@@ -784,7 +784,7 @@ def can_we_clone(conn, vol, path):
     ret = True
     msg = None
 
-    if not path or path == "-":
+    if not path:
         msg = _("No storage to clone.")
 
     elif vol:

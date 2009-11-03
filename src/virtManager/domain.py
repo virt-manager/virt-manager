@@ -1123,8 +1123,6 @@ class vmmDomain(gobject.GObject):
                             srcpath = child.prop("file")
                         elif typ == "block":
                             srcpath = child.prop("dev")
-                        elif typ == None:
-                            typ = "-"
                     elif child.name == "target":
                         devdst = child.prop("dev")
                         bus = child.prop("bus")
@@ -1135,7 +1133,6 @@ class vmmDomain(gobject.GObject):
 
                 if srcpath == None:
                     if devtype == "cdrom" or devtype == "floppy":
-                        srcpath = "-"
                         typ = "block"
                     else:
                         raise RuntimeError("missing source path")

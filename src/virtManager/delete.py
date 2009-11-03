@@ -245,7 +245,7 @@ def populate_storage_list(storage_list, vm, conn):
         #    default? Reasons not to, are if the storage is marked
         #    readonly or sharable, or is in use by another VM.
 
-        if not path or path == "-":
+        if not path:
             continue
 
         default = False

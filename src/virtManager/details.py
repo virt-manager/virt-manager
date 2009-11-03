@@ -1230,7 +1230,7 @@ class vmmDetails(gobject.GObject):
             return
 
         self.window.get_widget("disk-source-type").set_text(diskinfo[5])
-        self.window.get_widget("disk-source-path").set_text(diskinfo[3])
+        self.window.get_widget("disk-source-path").set_text(diskinfo[3] or "-")
         self.window.get_widget("disk-target-type").set_text(diskinfo[4])
         self.window.get_widget("disk-target-device").set_text(diskinfo[2])
         if diskinfo[6] == True:
@@ -1245,7 +1245,7 @@ class vmmDetails(gobject.GObject):
 
         button = self.window.get_widget("config-cdrom-connect")
         if diskinfo[4] == "cdrom":
-            if diskinfo[3] == "-":
+            if not diskinfo[3]:
                 # source device not connected
                 button.set_label(gtk.STOCK_CONNECT)
             else:
