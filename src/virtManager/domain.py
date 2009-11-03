@@ -349,6 +349,7 @@ class vmmDomain(gobject.GObject):
                 raise e
 
 
+    # Generic device Add/Remove
     def add_device(self, devxml):
         """
         Redefine guest with appended device XML 'devxml'
@@ -383,69 +384,81 @@ class vmmDomain(gobject.GObject):
 
         self.redefine(_remove_xml_device, dev_type, dev_id_info)
 
-    def change_cdrom_media(self, dev_id_info, newpath, _type=None):
-        def cdrom_xml_connect(doc, ctx):
-            disk_fragment = self._get_device_xml_nodes(ctx, "disk",
-                                                       dev_id_info)[0]
-            driver_fragment = None
+    # Media change
 
-            for child in disk_fragment.children or []:
-                if child.name == "driver":
-                    driver_fragment = child
+    # Helper for connecting a new source path to an existing disk
+    def _media_xml_connect(self, doc, ctx, dev_id_info, newpath, _type):
+        disk_fragment = self._get_device_xml_nodes(ctx, "disk",
+                                                   dev_id_info)[0]
+        driver_fragment = None
 
-            disk_fragment.setProp("type", _type)
-            elem = disk_fragment.newChild(None, "source", None)
+        for child in disk_fragment.children or []:
+            if child.name == "driver":
+                driver_fragment = child
 
-            if _type == "file":
-                elem.setProp("file", newpath)
-                driver_name = _type
+        disk_fragment.setProp("type", _type)
+        elem = disk_fragment.newChild(None, "source", None)
+
+        if _type == "file":
+            elem.setProp("file", newpath)
+            driver_name = _type
+        else:
+            elem.setProp("dev", newpath)
+            driver_name = "phy"
+
+        if driver_fragment:
+            orig_name = driver_fragment.prop("name")
+
+            # For Xen, the driver name is dependent on the storage type
+            # (file or phys).
+            if orig_name and orig_name in [ "file", "phy" ]:
+                driver_fragment.setProp("name", driver_name)
+
+        return doc.serialize(), disk_fragment.serialize()
+
+    # Helper for disconnecting a path from an existing disk
+    def _media_xml_disconnect(self, doc, ctx, dev_id_info, newpath, _type):
+        disk_fragment = self._get_device_xml_nodes(ctx, "disk",
+                                                   dev_id_info)[0]
+        sourcenode = None
+
+        for child in disk_fragment.children:
+            if child.name == "source":
+                sourcenode = child
+                break
             else:
-                elem.setProp("dev", newpath)
-                driver_name = "phy"
+                continue
 
-            if driver_fragment:
-                orig_name = driver_fragment.prop("name")
-
-                # For Xen, the driver name is dependent on the storage type
-                # (file or phys).
-                if orig_name and orig_name in [ "file", "phy" ]:
-                    driver_fragment.setProp("name", driver_name)
-
-            return doc.serialize(), disk_fragment.serialize()
-
-        def cdrom_xml_disconnect(doc, ctx):
-            disk_fragment = self._get_device_xml_nodes(ctx, "disk",
-                                                       dev_id_info)[0]
-
-            sourcenode = None
-
-            for child in disk_fragment.children:
-                if child.name == "source":
-                    sourcenode = child
-                    break
-                else:
-                    continue
-
+        if sourcenode:
             sourcenode.unlinkNode()
             sourcenode.freeNode()
-            return doc.serialize(), disk_fragment.serialize()
 
+        return doc.serialize(), disk_fragment.serialize()
+
+    def define_cdrom_media(self, dev_id_info, newpath, _type=None):
         if not newpath:
-            func = cdrom_xml_disconnect
+            func = self._media_xml_disconnect
         else:
-            func = cdrom_xml_connect
+            func = self._media_xml_connect
 
-        ignore, diskxml = util.xml_parse_wrapper(self.get_xml(), func)
-
-        def change_cdrom_helper(origxml, newdev, dev_id_info):
-            vmxml, ignore = util.xml_parse_wrapper(origxml, func)
+        def change_cdrom_helper(origxml):
+            vmxml, ignore = util.xml_parse_wrapper(origxml, func, dev_id_info,
+                                                   newpath, _type)
             return vmxml
-        self.redefine(change_cdrom_helper, diskxml, dev_id_info)
+        self.redefine(change_cdrom_helper)
 
-        # If vm is shutoff, remove device, and redefine with media
-        if self.is_active():
-            self.attach_device(diskxml)
+    def hotplug_cdrom_media(self, dev_id_info, newpath, _type=None):
+        if not newpath:
+            func = self._media_xml_disconnect
+        else:
+            func = self._media_xml_connect
 
+        ignore, diskxml = util.xml_parse_wrapper(self.get_xml(), func,
+                                                 dev_id_info, newpath, _type)
+
+        self.attach_device(diskxml)
+
+    # VCPU changing
     def define_vcpus(self, vcpus, cpuset=None):
         vcpus = int(vcpus)
 

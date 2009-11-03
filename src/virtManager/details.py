@@ -864,6 +864,33 @@ class vmmDetails(gobject.GObject):
     def config_boot_options_changed(self, src):
         self.window.get_widget("config-apply").set_sensitive(True)
 
+    # CDROM Eject/Connect
+    def toggle_cdrom(self, src):
+        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not info:
+            return
+
+        dev_id_info = info[1]
+        curpath = info[3]
+
+        if curpath:
+            # Disconnect cdrom
+            self.change_cdrom_media(dev_id_info, None, _type=None)
+
+        else:
+            def change_cdrom_wrapper(src, dev_id_info, newpath,
+                                     _type=None):
+                return self.change_cdrom_media(dev_id_info, newpath, _type)
+
+            # Launch 'Choose CD' dialog
+            if self.choose_cd is None:
+                self.choose_cd = vmmChooseCD(self.config,
+                                             dev_id_info,
+                                             self.vm.get_connection())
+                self.choose_cd.connect("cdrom-chosen", change_cdrom_wrapper)
+            else:
+                self.choose_cd.dev_id_info = dev_id_info
+            self.choose_cd.show()
 
     ##################################################
     # Details/Hardware config changes (apply button) #
@@ -990,35 +1017,30 @@ class vmmDetails(gobject.GObject):
                 return False
 
     # CDROM
-    def toggle_cdrom(self, src):
-        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not info:
-            return
+    def change_cdrom_media(self, dev_id_info, newpath, _type=None):
+        hotplug_err = False
 
-        dev_id_info = info[1]
-
-        if src.get_label() == gtk.STOCK_DISCONNECT:
-            # Disconnect cdrom
-            self.vm.change_cdrom_media(dev_id_info, None)
-
-        else:
-            # connect a new cdrom
-            if self.choose_cd is None:
-                self.choose_cd = vmmChooseCD(self.config,
-                                             dev_id_info,
-                                             self.vm.get_connection())
-                self.choose_cd.connect("cdrom-chosen", self.change_cdrom_media)
-            else:
-                self.choose_cd.dev_id_info = dev_id_info
-            self.choose_cd.show()
-
-    def change_cdrom_media(self, ignore, dev_id_info, newpath, _type=None):
+        # Hotplug change
         try:
-            self.vm.change_cdrom_media(dev_id_info, newpath, _type)
+            if self.vm.is_active():
+                self.vm.hotplug_cdrom_media(dev_id_info, newpath, _type)
+        except Exception, e:
+            logging.debug("CDROM eject/connect failed: %s" % str(e))
+            hotplug_err = True
+
+        # Persistent config change
+        try:
+            self.vm.define_cdrom_media(dev_id_info, newpath, _type)
         except Exception, e:
             self.err.show_err(_("Error changing CDROM media: %s" % str(e)),
                               "".join(traceback.format_exc()))
+            return
 
+        if hotplug_err:
+            self.err.show_info(_("These changes will take effect after the "
+                                 "next guest reboot."))
+
+    # Device removal
     def remove_device(self, dev_type, dev_id_info):
         logging.debug("Removing device: %s %s" % (dev_type, dev_id_info))
 
