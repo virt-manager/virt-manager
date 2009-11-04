@@ -929,12 +929,10 @@ class vmmDetails(gobject.GObject):
             setype = "static"
 
         selabel = self.window.get_widget("security-label").get_text()
-        try:
-            self.vm.define_seclabel(semodel, setype, selabel)
-        except Exception, e:
-            self.err.show_err(_("Error Setting Security data: %s") % str(e),
-                              "".join(traceback.format_exc()))
-            return False
+
+        return self._change_config_helper(self.vm.define_seclabel,
+                                          (semodel, setype, selabel))
+
 
     # CPUs
     def config_vcpus_apply(self):
@@ -943,30 +941,15 @@ class vmmDetails(gobject.GObject):
 
         logging.info("Setting vcpus for %s to %s, cpuset is %s" %
                      (self.vm.get_name(), str(vcpus), cpuset))
-        hotplug_err = False
 
-        try:
-            if self.vm.is_active():
-                self.vm.hotplug_vcpus(vcpus)
-        except Exception, e:
-            logging.debug("VCPU hotplug failed: %s" % str(e))
-            hotplug_err = True
+        return self._change_config_helper(self.vm.define_vcpus,
+                                          (vcpus, cpuset),
+                                          self.vm.hotplug_vcpus,
+                                          (vcpus,))
 
-        # Change persistent config
-        try:
-            self.vm.define_vcpus(vcpus, cpuset)
-        except Exception, e:
-            self.err.show_err(_("Error changing vcpu value: %s" % str(e)),
-                              "".join(traceback.format_exc()))
-            return False
-
-        if hotplug_err:
-            self.err.show_info(_("These changes will take effect after the "
-                                 "next guest reboot. "))
     # Memory
     def config_memory_apply(self):
         self.refresh_config_memory()
-        hotplug_err = False
 
         curmem = None
         maxmem = self.config_get_maxmem()
@@ -978,67 +961,36 @@ class vmmDetails(gobject.GObject):
         if maxmem:
             maxmem = int(maxmem) * 1024
 
-        try:
-            if self.vm.is_active():
-                self.vm.hotplug_both_mem(curmem, maxmem)
-        except Exception, e:
-            logging.debug("Memory hotplug failed: %s" % str(e))
-            hotplug_err = True
-
-        # Change persistent config
-        try:
-            self.vm.define_both_mem(curmem, maxmem)
-        except Exception, e:
-            self.err.show_err(_("Error changing memory values: %s" % str(e)),
-                              "".join(traceback.format_exc()))
-            return False
-
-        if hotplug_err:
-            self.err.show_info(_("These changes will take effect after the "
-                                 "next guest reboot. "))
+        return self._change_config_helper(self.vm.define_both_mem,
+                                          (curmem, maxmem),
+                                          self.vm.hotplug_both_mem,
+                                          (curmem, maxmem))
 
     # Boot device / Autostart
     def config_boot_options_apply(self):
         boot = self.window.get_widget("config-boot-device")
         auto = self.window.get_widget("config-autostart")
+
         if auto.get_property("sensitive"):
             try:
                 self.vm.set_autostart(auto.get_active())
             except Exception, e:
-                self.err.show_err(_("Error changing autostart value: %s") % \
-                                  str(e), "".join(traceback.format_exc()))
-
-        if boot.get_property("sensitive"):
-            try:
-                self.vm.set_boot_device(boot.get_model()[boot.get_active()][2])
-            except Exception, e:
-                self.err.show_err(_("Error changing boot device: %s" % str(e)),
-                                  "".join(traceback.format_exc()))
+                self.err.show_err((_("Error changing autostart value: %s") %
+                                   str(e)), "".join(traceback.format_exc()))
                 return False
+
+        if boot.get_property("sensitive") and boot.get_active() > 0:
+            bootdev = boot.get_model()[boot.get_active()][2]
+            return self._change_config_helper(self.vm.set_boot_device,
+                                              (bootdev,))
 
     # CDROM
     def change_cdrom_media(self, dev_id_info, newpath, _type=None):
-        hotplug_err = False
+        return self._change_config_helper(self.vm.define_cdrom_media,
+                                          (dev_id_info, newpath, _type),
+                                          self.vm.hotplug_cdrom_media,
+                                          (dev_id_info, newpath, _type))
 
-        # Hotplug change
-        try:
-            if self.vm.is_active():
-                self.vm.hotplug_cdrom_media(dev_id_info, newpath, _type)
-        except Exception, e:
-            logging.debug("CDROM eject/connect failed: %s" % str(e))
-            hotplug_err = True
-
-        # Persistent config change
-        try:
-            self.vm.define_cdrom_media(dev_id_info, newpath, _type)
-        except Exception, e:
-            self.err.show_err(_("Error changing CDROM media: %s" % str(e)),
-                              "".join(traceback.format_exc()))
-            return
-
-        if hotplug_err:
-            self.err.show_info(_("These changes will take effect after the "
-                                 "next guest reboot."))
 
     # Device removal
     def remove_device(self, dev_type, dev_id_info):
@@ -1060,10 +1012,7 @@ class vmmDetails(gobject.GObject):
                                    _("This device could not be removed from "
                                      "the running machine. Would you like to "
                                      "remove the device after the next VM "
-                                     "shutdown? \n\n"
-                                     "Warning: this will overwrite any "
-                                     "other changes that require a VM "
-                                     "reboot.")):
+                                     "shutdown?")):
                 return
 
         try:
@@ -1072,6 +1021,65 @@ class vmmDetails(gobject.GObject):
             self.err.show_err(_("Error Removing Device: %s" % str(e)),
                               "".join(traceback.format_exc()))
 
+    # Generic config change helpers
+    def _change_config_helper(self,
+                              define_funcs, define_funcs_args,
+                              hotplug_funcs=None, hotplug_funcs_args=None):
+        """
+        Requires at least a 'define' function and arglist to be specified
+        (a function where we change the inactive guest config).
+
+        Arguments can be a single arg or a list or appropriate arg type (e.g.
+        a list of functions for define_funcs)
+        """
+        def listify(val):
+            if not val:
+                return []
+            if type(val) is not list:
+                return [val]
+            return val
+
+        define_funcs = listify(define_funcs)
+        define_funcs_args = listify(define_funcs_args)
+        hotplug_funcs = listify(hotplug_funcs)
+        hotplug_funcs_args = listify(hotplug_funcs_args)
+
+        hotplug_err = False
+        active = self.vm.is_active()
+
+        # Hotplug change
+        func = None
+        if active and hotplug_funcs:
+            for idx in range(len(hotplug_funcs)):
+                func = hotplug_funcs[idx]
+                args = hotplug_funcs_args[idx]
+                try:
+                    func(*args)
+                except Exception, e:
+                    logging.debug("Hotplug failed: func=%s: %s" % (func,
+                                                                   str(e)))
+                    hotplug_err = True
+
+        # Persistent config change
+        for idx in range(len(define_funcs)):
+            func = define_funcs[idx]
+            args = define_funcs_args[idx]
+            try:
+                func(*args)
+            except Exception, e:
+                self.err.show_err((_("Error changing VM configuration: %s") %
+                                   str(e)), "".join(traceback.format_exc()))
+                return False
+
+        if (hotplug_err or
+            (active and not len(hotplug_funcs) == len(define_funcs))):
+            if len(define_funcs) > 1:
+                self.err.show_info(_("Some changes will take effect after the "
+                                     "next guest reboot."))
+            else:
+                self.err.show_info(_("These changes will take effect after "
+                                     "the next guest reboot."))
+        return True
 
     ########################
     # Details page refresh #

@@ -851,10 +851,7 @@ class vmmAddHardware(gobject.GObject):
                                    _("This device could not be attached to "
                                      "the running machine. Would you like to "
                                      "make the device available after the "
-                                     "next VM shutdown?\n\n"
-                                     "Warning: this will overwrite any "
-                                     "other changes that require a VM "
-                                     "reboot.")):
+                                     "next VM shutdown?")):
                 return
 
         if self.vm.is_active() and not attach_err:
