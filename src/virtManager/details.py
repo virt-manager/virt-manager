@@ -225,9 +225,44 @@ class vmmDetails(gobject.GObject):
 
         self.update_widget_states(self.vm, self.vm.status())
 
-        self.prepare_hw_list()
+        self.populate_hw_list()
+        self.repopulate_boot_list()
+
         self.hw_selected(page=0)
         self.refresh_vm_info()
+
+
+    def show(self):
+        if self.is_visible():
+            self.topwin.present()
+            return
+        self.topwin.show()
+        self.topwin.present()
+
+        self.engine.increment_window_counter()
+        self.update_widget_states(self.vm, self.vm.status())
+
+    def close(self,ignore1=None,ignore2=None):
+        fs = self.window.get_widget("details-menu-view-fullscreen")
+        if fs.get_active():
+            fs.set_active(False)
+
+        if not self.is_visible():
+            return
+
+        self.topwin.hide()
+        if self.console.vncViewer.flags() & gtk.VISIBLE:
+            try:
+                self.console.vncViewer.close()
+            except:
+                logging.error("Failure when disconnecting from VNC server")
+        self.engine.decrement_window_counter()
+        return 1
+
+    def is_visible(self):
+        if self.topwin.flags() & gtk.VISIBLE:
+            return 1
+        return 0
 
 
     ##########################
@@ -311,6 +346,24 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("overview-acpi").set_sensitive(False)
         self.window.get_widget("overview-apic").set_sensitive(False)
 
+        # Hardware list
+        # [ label, icon name, icon size, hw type, hw data ]
+        hw_list_model = gtk.ListStore(str, str, int, int,
+                                      gobject.TYPE_PYOBJECT)
+        self.window.get_widget("hw-list").set_model(hw_list_model)
+
+        hwCol = gtk.TreeViewColumn("Hardware")
+        hwCol.set_spacing(6)
+        hwCol.set_min_width(165)
+        hw_txt = gtk.CellRendererText()
+        hw_img = gtk.CellRendererPixbuf()
+        hwCol.pack_start(hw_img, False)
+        hwCol.pack_start(hw_txt, True)
+        hwCol.add_attribute(hw_txt, 'text', HW_LIST_COL_LABEL)
+        hwCol.add_attribute(hw_img, 'stock-size', HW_LIST_COL_ICON_SIZE)
+        hwCol.add_attribute(hw_img, 'icon-name', HW_LIST_COL_ICON_NAME)
+        self.window.get_widget("hw-list").append_column(hwCol)
+
         # Clock combo
         clock_combo = self.window.get_widget("overview-clock-combo")
         clock_model = gtk.ListStore(str)
@@ -328,20 +381,23 @@ class vmmDetails(gobject.GObject):
         util.tooltip_wrapper(self.window.get_widget("security-dynamic-info"),
             _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
 
+        # Boot device list
+        boot_list = self.window.get_widget("config-boot-device")
+        # model = [ display name, icon name, boot type (hd, fd, etc) ]
+        boot_list_model = gtk.ListStore(str, str, str)
+        boot_list.set_model(boot_list_model)
 
-    def control_fullscreen(self, src):
-        menu = self.window.get_widget("details-menu-view-fullscreen")
-        if src.get_active() != menu.get_active():
-            menu.set_active(src.get_active())
+        icon = gtk.CellRendererPixbuf()
+        boot_list.pack_start(icon, False)
+        boot_list.add_attribute(icon, 'icon-name', 1)
+        text = gtk.CellRendererText()
+        boot_list.pack_start(text, True)
+        boot_list.add_attribute(text, 'text', 0)
 
-    def toggle_toolbar(self, src):
-        active = src.get_active()
-        self.config.set_details_show_toolbar(active)
-        if active and not \
-           self.window.get_widget("details-menu-view-fullscreen").get_active():
-            self.window.get_widget("toolbar-box").show()
-        else:
-            self.window.get_widget("toolbar-box").hide()
+
+    ##########################
+    # Window state listeners #
+    ##########################
 
     def populate_serial_menu(self, src):
         for ent in src:
@@ -413,57 +469,33 @@ class vmmDetails(gobject.GObject):
 
         src.show_all()
 
-    def show(self):
-        if self.is_visible():
-            self.topwin.present()
-            return
-        self.topwin.show()
-        self.topwin.present()
+    def populate_migrate_menu(self, ignore1=None):
+        menu = self.window.get_widget("details-menu-migrate_menu")
+        self.engine.populate_migrate_menu(menu, self.control_vm_migrate,
+                                          self.vm)
 
-        self.engine.increment_window_counter()
-        self.update_widget_states(self.vm, self.vm.status())
+    def control_fullscreen(self, src):
+        menu = self.window.get_widget("details-menu-view-fullscreen")
+        if src.get_active() != menu.get_active():
+            menu.set_active(src.get_active())
 
-    def show_help(self, src):
-        # From the Details window, show the help document from the Details page
-        self.emit("action-show-help", "virt-manager-details-window")
+    def toggle_toolbar(self, src):
+        active = src.get_active()
+        self.config.set_details_show_toolbar(active)
+        if active and not \
+           self.window.get_widget("details-menu-view-fullscreen").get_active():
+            self.window.get_widget("toolbar-box").show()
+        else:
+            self.window.get_widget("toolbar-box").hide()
 
-    def activate_console_page(self):
-        self.window.get_widget("details-pages").set_current_page(PAGE_CONSOLE)
-
-    def activate_performance_page(self):
-        self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
-        self.window.get_widget("hw-panel").set_current_page(HW_LIST_TYPE_STATS)
-
-    def activate_config_page(self):
-        self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
-
-    def close(self,ignore1=None,ignore2=None):
-        fs = self.window.get_widget("details-menu-view-fullscreen")
-        if fs.get_active():
-            fs.set_active(False)
-
-        if not self.is_visible():
-            return
-
-        self.topwin.hide()
-        if self.console.vncViewer.flags() & gtk.VISIBLE:
-            try:
-                self.console.vncViewer.close()
-            except:
-                logging.error("Failure when disconnecting from VNC server")
-        self.engine.decrement_window_counter()
-        return 1
-
-    def exit_app(self, src):
-        self.emit("action-exit-app")
-
-    def is_visible(self):
-        if self.topwin.flags() & gtk.VISIBLE:
-            return 1
-        return 0
-
-    def view_manager(self, src):
-        self.emit("action-view-manager")
+    def get_hw_selection(self, field):
+        vmlist = self.window.get_widget("hw-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+        if active[1] == None:
+            return None
+        else:
+            return active[0].get_value(active[1], field)
 
     def hw_selected(self, src=None, page=None, selected=True):
         pagetype = page
@@ -506,7 +538,6 @@ class vmmDetails(gobject.GObject):
             self.refresh_video_page()
         else:
             pagetype = -1
-
 
         app = pagetype in apply_pages
         rem = pagetype in remove_pages
@@ -551,6 +582,89 @@ class vmmDetails(gobject.GObject):
         finally:
             self.ignoreDetails = False
 
+    def switch_page(self, ignore1=None, ignore2=None, newpage=None):
+        self.page_refresh(newpage)
+
+        self.sync_details_console_view(newpage == PAGE_DETAILS)
+
+        if newpage == PAGE_CONSOLE or newpage >= PAGE_DYNAMIC_OFFSET:
+            self.last_console_page = newpage
+
+    def update_widget_states(self, vm, status):
+        self.toggle_toolbar(self.window.get_widget("details-menu-view-toolbar"))
+
+        destroy = vm.is_destroyable()
+        run     = vm.is_runable()
+        stop    = vm.is_stoppable()
+        paused  = vm.is_paused()
+        ro      = vm.is_read_only()
+
+        self.window.get_widget("details-menu-destroy").set_sensitive(destroy)
+        self.window.get_widget("control-run").set_sensitive(run)
+        self.window.get_widget("details-menu-run").set_sensitive(run)
+
+        self.window.get_widget("control-shutdown").set_sensitive(stop)
+        self.window.get_widget("details-menu-shutdown").set_sensitive(stop)
+        self.window.get_widget("details-menu-save").set_sensitive(stop)
+        self.window.get_widget("control-pause").set_sensitive(stop)
+        self.window.get_widget("details-menu-pause").set_sensitive(stop)
+
+        # Set pause widget states
+        try:
+            self.ignorePause = True
+            self.window.get_widget("control-pause").set_active(paused)
+            self.window.get_widget("details-menu-pause").set_active(paused)
+        finally:
+            self.ignorePause = False
+
+        self.window.get_widget("config-vcpus").set_sensitive(not ro)
+        self.window.get_widget("config-vcpupin").set_sensitive(not ro)
+        self.window.get_widget("config-memory").set_sensitive(not ro)
+        self.window.get_widget("config-maxmem").set_sensitive(not ro)
+        self.window.get_widget("details-menu-migrate").set_sensitive(not ro)
+
+        self.console.update_widget_states(vm, status)
+
+        self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
+        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())
+
+
+    #############################
+    # External action listeners #
+    #############################
+
+    def show_help(self, src):
+        self.emit("action-show-help", "virt-manager-details-window")
+
+    def view_manager(self, src):
+        self.emit("action-view-manager")
+
+    def exit_app(self, src):
+        self.emit("action-exit-app")
+
+    def activate_console_page(self):
+        self.window.get_widget("details-pages").set_current_page(PAGE_CONSOLE)
+
+    def activate_performance_page(self):
+        self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
+        self.window.get_widget("hw-panel").set_current_page(HW_LIST_TYPE_STATS)
+
+    def activate_config_page(self):
+        self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
+
+    def add_hardware(self, src):
+        if self.addhw is None:
+            self.addhw = vmmAddHardware(self.config, self.vm)
+
+        self.addhw.show()
+
+    def remove_xml_dev(self, src):
+        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not info:
+            return
+
+        self.remove_device(info[0], info[1])
+
     def control_vm_pause(self, src):
         if self.ignorePause:
             return
@@ -566,10 +680,10 @@ class vmmDetails(gobject.GObject):
         self.emit("action-run-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_shutdown(self, src):
-        self.emit("action-shutdown-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())     
+        self.emit("action-shutdown-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_reboot(self, src):
-        self.emit("action-reboot-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())     
+        self.emit("action-reboot-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_console(self, src):
         self.emit("action-show-console", self.vm.get_connection().get_uri(), self.vm.get_uuid())
@@ -587,11 +701,6 @@ class vmmDetails(gobject.GObject):
     def control_vm_migrate(self, src, uri):
         self.emit("action-migrate-domain", self.vm.get_connection().get_uri(),
                   self.vm.get_uuid(), uri)
-
-    def populate_migrate_menu(self, ignore1=None):
-        menu = self.window.get_widget("details-menu-migrate_menu")
-        self.engine.populate_migrate_menu(menu, self.control_vm_migrate,
-                                          self.vm)
 
     def control_vm_screenshot(self, src):
         # If someone feels kind they could extend this code to allow
@@ -628,53 +737,323 @@ class vmmDetails(gobject.GObject):
         msg.run()
         msg.destroy()
 
-    def set_pause_widget_states(self, state):
+
+    # ------------------------------
+    # Serial Console pieces
+    # ------------------------------
+
+    def control_serial_tab(self, src, name, target_port):
+        is_graphics = (name == "graphics")
+        is_serial = not is_graphics
+
+        if is_graphics:
+            self.window.get_widget("details-pages").set_current_page(PAGE_CONSOLE)
+        elif is_serial:
+            self._show_serial_tab(name, target_port)
+
+    def show_serial_rcpopup(self, src, event):
+        if event.button != 3:
+            return
+
+        self.serial_popup.show_all()
+        self.serial_copy.connect("activate", self.serial_copy_text, src)
+        self.serial_paste.connect("activate", self.serial_paste_text, src)
+        self.serial_close.connect("activate", self.serial_close_tab,
+                                  self.window.get_widget("details-pages").get_current_page())
+
+        if src.get_has_selection():
+            self.serial_copy.set_sensitive(True)
+        else:
+            self.serial_copy.set_sensitive(False)
+        self.serial_popup.popup(None, None, None, 0, event.time)
+
+    def serial_close_tab(self, src, pagenum):
+        tab_idx = (pagenum - PAGE_DYNAMIC_OFFSET)
+        if (tab_idx < 0) or (tab_idx > len(self.serial_tabs)-1):
+            return
+        return self._close_serial_tab(self.serial_tabs[tab_idx])
+
+    def serial_copy_text(self, src, terminal):
+        terminal.copy_clipboard()
+
+    def serial_paste_text(self, src, terminal):
+        terminal.paste_clipboard()
+
+    def _show_serial_tab(self, name, target_port):
+        if not self.serial_tabs.count(name):
+            child = vmmSerialConsole(self.vm, target_port)
+            child.terminal.connect("button-press-event",
+                                   self.show_serial_rcpopup)
+            title = gtk.Label(name)
+            child.show_all()
+            self.window.get_widget("details-pages").append_page(child, title)
+            self.serial_tabs.append(name)
+
+        page_idx = self.serial_tabs.index(name) + PAGE_DYNAMIC_OFFSET
+        self.window.get_widget("details-pages").set_current_page(page_idx)
+
+    def _close_serial_tab(self, name):
+        if not self.serial_tabs.count(name):
+            return
+
+        page_idx = self.serial_tabs.index(name) + PAGE_DYNAMIC_OFFSET
+        self.window.get_widget("details-pages").remove_page(page_idx)
+        self.serial_tabs.remove(name)
+
+
+    ##############################
+    # Details/Hardware listeners #
+    ##############################
+
+    # Overview -> Security
+    def security_model_changed(self, combo):
+        model = combo.get_model()
+        idx = combo.get_active()
+        if idx < 0:
+            return
+
+        self.window.get_widget("config-apply").set_sensitive(True)
+        val = model[idx][0]
+        show_type = (val == "selinux")
+        self.window.get_widget("security-type-box").set_sensitive(show_type)
+
+    def security_label_changed(self, label):
+        self.window.get_widget("config-apply").set_sensitive(True)
+
+    def security_type_changed(self, button, sensitive = True):
+        self.window.get_widget("config-apply").set_sensitive(True)
+        self.window.get_widget("security-label").set_sensitive(not button.get_active())
+
+    # CPUS
+    def config_vcpus_changed(self, src):
+        self.window.get_widget("config-apply").set_sensitive(True)
+
+    # Memory
+    def config_get_maxmem(self):
+        maxadj = self.window.get_widget("config-maxmem").get_adjustment()
+        txtmax = self.window.get_widget("config-maxmem").get_text()
         try:
-            self.ignorePause = True
-            self.window.get_widget("control-pause").set_active(state)
-            self.window.get_widget("details-menu-pause").set_active(state)
-        finally:
-            self.ignorePause = False
+            maxmem = int(txtmax)
+        except:
+            maxmem = maxadj.value
+        return maxmem
 
-    def update_widget_states(self, vm, status):
-        self.toggle_toolbar(self.window.get_widget("details-menu-view-toolbar"))
+    def config_get_memory(self):
+        memadj = self.window.get_widget("config-memory").get_adjustment()
+        txtmem = self.window.get_widget("config-memory").get_text()
+        try:
+            mem = int(txtmem)
+        except:
+            mem = memadj.value
+        return mem
 
-        destroy = vm.is_destroyable()
-        run     = vm.is_runable()
-        stop    = vm.is_stoppable()
-        paused  = vm.is_paused()
-        ro      = vm.is_read_only()
+    def config_maxmem_changed(self, src):
+        self.window.get_widget("config-apply").set_sensitive(True)
 
-        self.window.get_widget("details-menu-destroy").set_sensitive(destroy)
-        self.window.get_widget("control-run").set_sensitive(run)
-        self.window.get_widget("details-menu-run").set_sensitive(run)
+    def config_memory_changed(self, src):
+        self.window.get_widget("config-apply").set_sensitive(True)
 
-        self.window.get_widget("control-shutdown").set_sensitive(stop)
-        self.window.get_widget("details-menu-shutdown").set_sensitive(stop)
-        self.window.get_widget("details-menu-save").set_sensitive(stop)
-        self.window.get_widget("control-pause").set_sensitive(stop)
-        self.window.get_widget("details-menu-pause").set_sensitive(stop)
+        maxadj = self.window.get_widget("config-maxmem").get_adjustment()
 
-        self.set_pause_widget_states(paused)
+        mem = self.config_get_memory()
+        if maxadj.value < mem:
+            maxadj.value = mem
+        maxadj.lower = mem
 
-        self.window.get_widget("config-vcpus").set_sensitive(not ro)
-        self.window.get_widget("config-vcpupin").set_sensitive(not ro)
-        self.window.get_widget("config-memory").set_sensitive(not ro)
-        self.window.get_widget("config-maxmem").set_sensitive(not ro)
-        self.window.get_widget("details-menu-migrate").set_sensitive(not ro)
+    # Boot device / Autostart
+    def config_boot_options_changed(self, src):
+        self.window.get_widget("config-apply").set_sensitive(True)
 
-        self.console.update_widget_states(vm, status)
 
-        self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
-        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())
+    ##################################################
+    # Details/Hardware config changes (apply button) #
+    ##################################################
 
-    def switch_page(self, ignore1=None, ignore2=None, newpage=None):
-        self.page_refresh(newpage)
+    def config_apply(self, ignore):
+        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+        ret = False
 
-        self.sync_details_console_view(newpage == PAGE_DETAILS)
+        if pagetype is HW_LIST_TYPE_GENERAL:
+            ret = self.config_security_apply()
+        elif pagetype is HW_LIST_TYPE_CPU:
+            ret = self.config_vcpus_apply()
+        elif pagetype is HW_LIST_TYPE_MEMORY:
+            ret = self.config_memory_apply()
+        elif pagetype is HW_LIST_TYPE_BOOT:
+            ret = self.config_boot_options_apply()
+        else:
+            ret = False
 
-        if newpage == PAGE_CONSOLE or newpage >= PAGE_DYNAMIC_OFFSET:
-            self.last_console_page = newpage
+        if ret is not False:
+            self.window.get_widget("config-apply").set_sensitive(False)
+
+    # Overview -> Security
+    def config_security_apply(self):
+        combo = self.window.get_widget("security-model")
+        model = combo.get_model()
+        semodel = model[combo.get_active()][0]
+
+        if not semodel or str(semodel).lower() == "none":
+            semodel = None
+
+        if self.window.get_widget("security-dynamic").get_active():
+            setype = "dynamic"
+        else:
+            setype = "static"
+
+        selabel = self.window.get_widget("security-label").get_text()
+        try:
+            self.vm.define_seclabel(semodel, setype, selabel)
+        except Exception, e:
+            self.err.show_err(_("Error Setting Security data: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return False
+
+    # CPUs
+    def config_vcpus_apply(self):
+        vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
+        cpuset = self.window.get_widget("config-vcpupin").get_text()
+
+        logging.info("Setting vcpus for %s to %s, cpuset is %s" %
+                     (self.vm.get_name(), str(vcpus), cpuset))
+        hotplug_err = False
+
+        try:
+            if self.vm.is_active():
+                self.vm.hotplug_vcpus(vcpus)
+        except Exception, e:
+            logging.debug("VCPU hotplug failed: %s" % str(e))
+            hotplug_err = True
+
+        # Change persistent config
+        try:
+            self.vm.define_vcpus(vcpus, cpuset)
+        except Exception, e:
+            self.err.show_err(_("Error changing vcpu value: %s" % str(e)),
+                              "".join(traceback.format_exc()))
+            return False
+
+        if hotplug_err:
+            self.err.show_info(_("These changes will take effect after the "
+                                 "next guest reboot. "))
+    # Memory
+    def config_memory_apply(self):
+        self.refresh_config_memory()
+        hotplug_err = False
+
+        curmem = None
+        maxmem = self.config_get_maxmem()
+        if self.window.get_widget("config-memory").get_property("sensitive"):
+            curmem = self.config_get_memory()
+
+        if curmem:
+            curmem = int(curmem) * 1024
+        if maxmem:
+            maxmem = int(maxmem) * 1024
+
+        try:
+            if self.vm.is_active():
+                self.vm.hotplug_both_mem(curmem, maxmem)
+        except Exception, e:
+            logging.debug("Memory hotplug failed: %s" % str(e))
+            hotplug_err = True
+
+        # Change persistent config
+        try:
+            self.vm.define_both_mem(curmem, maxmem)
+        except Exception, e:
+            self.err.show_err(_("Error changing memory values: %s" % str(e)),
+                              "".join(traceback.format_exc()))
+            return False
+
+        if hotplug_err:
+            self.err.show_info(_("These changes will take effect after the "
+                                 "next guest reboot. "))
+
+    # Boot device / Autostart
+    def config_boot_options_apply(self):
+        boot = self.window.get_widget("config-boot-device")
+        auto = self.window.get_widget("config-autostart")
+        if auto.get_property("sensitive"):
+            try:
+                self.vm.set_autostart(auto.get_active())
+            except Exception, e:
+                self.err.show_err(_("Error changing autostart value: %s") % \
+                                  str(e), "".join(traceback.format_exc()))
+
+        if boot.get_property("sensitive"):
+            try:
+                self.vm.set_boot_device(boot.get_model()[boot.get_active()][2])
+            except Exception, e:
+                self.err.show_err(_("Error changing boot device: %s" % str(e)),
+                                  "".join(traceback.format_exc()))
+                return False
+
+    # CDROM
+    def toggle_cdrom(self, src):
+        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not info:
+            return
+
+        dev_id_info = info[1]
+
+        if src.get_label() == gtk.STOCK_DISCONNECT:
+            # Disconnect cdrom
+            self.vm.change_cdrom_media(dev_id_info, None)
+
+        else:
+            # connect a new cdrom
+            if self.choose_cd is None:
+                self.choose_cd = vmmChooseCD(self.config,
+                                             dev_id_info,
+                                             self.vm.get_connection())
+                self.choose_cd.connect("cdrom-chosen", self.change_cdrom_media)
+            else:
+                self.choose_cd.dev_id_info = dev_id_info
+            self.choose_cd.show()
+
+    def change_cdrom_media(self, ignore, dev_id_info, newpath, _type=None):
+        try:
+            self.vm.change_cdrom_media(dev_id_info, newpath, _type)
+        except Exception, e:
+            self.err.show_err(_("Error changing CDROM media: %s" % str(e)),
+                              "".join(traceback.format_exc()))
+
+    def remove_device(self, dev_type, dev_id_info):
+        logging.debug("Removing device: %s %s" % (dev_type, dev_id_info))
+
+        detach_err = False
+        devxml = self.vm.get_device_xml(dev_type, dev_id_info)
+        try:
+            if self.vm.is_active():
+                self.vm.detach_device(devxml)
+                return
+        except Exception, e:
+            logging.debug("Device could not be hotUNplugged: %s" % str(e))
+            detach_err = True
+
+        if detach_err:
+            if not self.err.yes_no(_("Are you sure you want to remove this "
+                                     "device?"),
+                                   _("This device could not be removed from "
+                                     "the running machine. Would you like to "
+                                     "remove the device after the next VM "
+                                     "shutdown? \n\n"
+                                     "Warning: this will overwrite any "
+                                     "other changes that require a VM "
+                                     "reboot.")):
+                return
+
+        try:
+            self.vm.remove_device(dev_type, dev_id_info)
+        except Exception, e:
+            self.err.show_err(_("Error Removing Device: %s" % str(e)),
+                              "".join(traceback.format_exc()))
+
+
+    ########################
+    # Details page refresh #
+    ########################
 
     def refresh_resources(self, ignore):
         details = self.window.get_widget("details-pages")
@@ -844,15 +1223,6 @@ class vmmDetails(gobject.GObject):
         if not self.window.get_widget("config-memory").get_property("sensitive"):
             maxmem.lower = curmem.value
         self.window.get_widget("state-vm-memory").set_text("%d MB" % int(round(self.vm.get_memory()/1024.0)))
-
-    def get_hw_selection(self, field):
-        vmlist = self.window.get_widget("hw-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] == None:
-            return None
-        else:
-            return active[0].get_value(active[1], field)
 
     def refresh_disk_page(self):
         diskinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -1097,316 +1467,28 @@ class vmmDetails(gobject.GObject):
             # If no boot devices, select the 'No Device' entry
             boot_combo.set_active(0)
 
-        # TODO: if nothing selected, what to select? auto change device?
 
-
-
-
-    # ------------------------------
-    # Serial Console pieces
-    # ------------------------------
-
-    def control_serial_tab(self, src, name, target_port):
-        is_graphics = (name == "graphics")
-        is_serial = not is_graphics
-
-        if is_graphics:
-            self.window.get_widget("details-pages").set_current_page(PAGE_CONSOLE)
-        elif is_serial:
-            self._show_serial_tab(name, target_port)
-
-    def show_serial_rcpopup(self, src, event):
-        if event.button != 3:
-            return
-
-        self.serial_popup.show_all()
-        self.serial_copy.connect("activate", self.serial_copy_text, src)
-        self.serial_paste.connect("activate", self.serial_paste_text, src)
-        self.serial_close.connect("activate", self.serial_close_tab,
-                                  self.window.get_widget("details-pages").get_current_page())
-
-        if src.get_has_selection():
-            self.serial_copy.set_sensitive(True)
-        else:
-            self.serial_copy.set_sensitive(False)
-        self.serial_popup.popup(None, None, None, 0, event.time)
-
-    def serial_close_tab(self, src, pagenum):
-        tab_idx = (pagenum - PAGE_DYNAMIC_OFFSET)
-        if (tab_idx < 0) or (tab_idx > len(self.serial_tabs)-1):
-            return
-        return self._close_serial_tab(self.serial_tabs[tab_idx])
-
-    def serial_copy_text(self, src, terminal):
-        terminal.copy_clipboard()
-
-    def serial_paste_text(self, src, terminal):
-        terminal.paste_clipboard()
-
-    def _show_serial_tab(self, name, target_port):
-        if not self.serial_tabs.count(name):
-            child = vmmSerialConsole(self.vm, target_port)
-            child.terminal.connect("button-press-event",
-                                   self.show_serial_rcpopup)
-            title = gtk.Label(name)
-            child.show_all()
-            self.window.get_widget("details-pages").append_page(child, title)
-            self.serial_tabs.append(name)
-
-        page_idx = self.serial_tabs.index(name) + PAGE_DYNAMIC_OFFSET
-        self.window.get_widget("details-pages").set_current_page(page_idx)
-
-    def _close_serial_tab(self, name):
-        if not self.serial_tabs.count(name):
-            return
-
-        page_idx = self.serial_tabs.index(name) + PAGE_DYNAMIC_OFFSET
-        self.window.get_widget("details-pages").remove_page(page_idx)
-        self.serial_tabs.remove(name)
-
-    # -----------------------
-    # Overview -> Security
-    # -----------------------
-    def security_model_changed(self, combo):
-        model = combo.get_model()
-        idx = combo.get_active()
-        if idx < 0:
-            return
-
-        self.window.get_widget("config-apply").set_sensitive(True)
-        val = model[idx][0]
-        show_type = (val == "selinux")
-        self.window.get_widget("security-type-box").set_sensitive(show_type)
-
-    def security_label_changed(self, label):
-        self.window.get_widget("config-apply").set_sensitive(True)
-
-    def security_type_changed(self, button, sensitive = True):
-        self.window.get_widget("config-apply").set_sensitive(True)
-        self.window.get_widget("security-label").set_sensitive(not button.get_active())
-
-    def config_security_apply(self):
-        combo = self.window.get_widget("security-model")
-        model = combo.get_model()
-        semodel = model[combo.get_active()][0]
-
-        if not semodel or str(semodel).lower() == "none":
-            semodel = None
-
-        if self.window.get_widget("security-dynamic").get_active():
-            setype = "dynamic"
-        else:
-            setype = "static"
-
-        selabel = self.window.get_widget("security-label").get_text()
-        try:
-            self.vm.define_seclabel(semodel, setype, selabel)
-        except Exception, e:
-            self.err.show_err(_("Error Setting Security data: %s") % str(e),
-                              "".join(traceback.format_exc()))
-            return False
-
-    # -----------------------
-    # Hardware Section Pieces
-    # -----------------------
-
-    def config_apply(self, ignore):
-        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
-        ret = False
-
-        if pagetype is HW_LIST_TYPE_GENERAL:
-            ret = self.config_security_apply()
-        elif pagetype is HW_LIST_TYPE_CPU:
-            ret = self.config_vcpus_apply()
-        elif pagetype is HW_LIST_TYPE_MEMORY:
-            ret = self.config_memory_apply()
-        elif pagetype is HW_LIST_TYPE_BOOT:
-            ret = self.config_boot_options_apply()
-        else:
-            ret = False
-
-        if ret is not False:
-            self.window.get_widget("config-apply").set_sensitive(False)
-
-    def config_vcpus_changed(self, src):
-        self.window.get_widget("config-apply").set_sensitive(True)
-
-    def config_vcpus_apply(self):
-        vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
-        cpuset = self.window.get_widget("config-vcpupin").get_text()
-
-        logging.info("Setting vcpus for %s to %s, cpuset is %s" %
-                     (self.vm.get_name(), str(vcpus), cpuset))
-        hotplug_err = False
-
-        try:
-            if self.vm.is_active():
-                self.vm.hotplug_vcpus(vcpus)
-        except Exception, e:
-            logging.debug("VCPU hotplug failed: %s" % str(e))
-            hotplug_err = True
-
-        # Change persistent config
-        try:
-            self.vm.define_vcpus(vcpus, cpuset)
-        except Exception, e:
-            self.err.show_err(_("Error changing vcpu value: %s" % str(e)),
-                              "".join(traceback.format_exc()))
-            return False
-
-        if hotplug_err:
-            self.err.show_info(_("These changes will take effect after the "
-                                 "next guest reboot. "))
-
-    def config_get_maxmem(self):
-        maxadj = self.window.get_widget("config-maxmem").get_adjustment()
-        txtmax = self.window.get_widget("config-maxmem").get_text()
-        try:
-            maxmem = int(txtmax)
-        except:
-            maxmem = maxadj.value
-        return maxmem
-
-    def config_get_memory(self):
-        memadj = self.window.get_widget("config-memory").get_adjustment()
-        txtmem = self.window.get_widget("config-memory").get_text()
-        try:
-            mem = int(txtmem)
-        except:
-            mem = memadj.value
-        return mem
-
-    def config_maxmem_changed(self, src):
-        self.window.get_widget("config-apply").set_sensitive(True)
-
-    def config_memory_changed(self, src):
-        self.window.get_widget("config-apply").set_sensitive(True)
-
-        maxadj = self.window.get_widget("config-maxmem").get_adjustment()
-
-        mem = self.config_get_memory()
-        if maxadj.value < mem:
-            maxadj.value = mem
-        maxadj.lower = mem
-
-    def config_memory_apply(self):
-        self.refresh_config_memory()
-        hotplug_err = False
-
-        curmem = None
-        maxmem = self.config_get_maxmem()
-        if self.window.get_widget("config-memory").get_property("sensitive"):
-            curmem = self.config_get_memory()
-
-        if curmem:
-            curmem = int(curmem) * 1024
-        if maxmem:
-            maxmem = int(maxmem) * 1024
-
-        try:
-            if self.vm.is_active():
-                self.vm.hotplug_both_mem(curmem, maxmem)
-        except Exception, e:
-            logging.debug("Memory hotplug failed: %s" % str(e))
-            hotplug_err = True
-
-        # Change persistent config
-        try:
-            self.vm.define_both_mem(curmem, maxmem)
-        except Exception, e:
-            self.err.show_err(_("Error changing memory values: %s" % str(e)),
-                              "".join(traceback.format_exc()))
-            return False
-
-        if hotplug_err:
-            self.err.show_info(_("These changes will take effect after the "
-                                 "next guest reboot. "))
-
-    def config_boot_options_changed(self, src):
-        self.window.get_widget("config-apply").set_sensitive(True)
-
-    def config_boot_options_apply(self):
-        boot = self.window.get_widget("config-boot-device")
-        auto = self.window.get_widget("config-autostart")
-        if auto.get_property("sensitive"):
-            try:
-                self.vm.set_autostart(auto.get_active())
-            except Exception, e:
-                self.err.show_err(_("Error changing autostart value: %s") % \
-                                  str(e), "".join(traceback.format_exc()))
-
-        if boot.get_property("sensitive"):
-            try:
-                self.vm.set_boot_device(boot.get_model()[boot.get_active()][2])
-            except Exception, e:
-                self.err.show_err(_("Error changing boot device: %s" % str(e)),
-                                  "".join(traceback.format_exc()))
-                return False
-
-    def remove_xml_dev(self, src):
-        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not info:
-            return
-
-        self.remove_device(info[0], info[1])
-
-    def prepare_hw_list(self):
-        # [ label, icon name, icon size, hw type, hw data ]
-        hw_list_model = gtk.ListStore(str, str, int, int,
-                                      gobject.TYPE_PYOBJECT)
-        self.window.get_widget("hw-list").set_model(hw_list_model)
-
-        hwCol = gtk.TreeViewColumn("Hardware")
-        hwCol.set_spacing(6)
-        hwCol.set_min_width(165)
-        hw_txt = gtk.CellRendererText()
-        hw_img = gtk.CellRendererPixbuf()
-        hwCol.pack_start(hw_img, False)
-        hwCol.pack_start(hw_txt, True)
-        hwCol.add_attribute(hw_txt, 'text', HW_LIST_COL_LABEL)
-        hwCol.add_attribute(hw_img, 'stock-size', HW_LIST_COL_ICON_SIZE)
-        hwCol.add_attribute(hw_img, 'icon-name', HW_LIST_COL_ICON_NAME)
-        self.window.get_widget("hw-list").append_column(hwCol)
-        self.prepare_boot_list()
-
-        self.populate_hw_list()
-        self.repopulate_boot_list()
-
-    def prepare_boot_list(self):
-        boot_list = self.window.get_widget("config-boot-device")
-        # model = [ display name, icon name, boot type (hd, fd, etc) ]
-        boot_list_model = gtk.ListStore(str, str, str)
-        boot_list.set_model(boot_list_model)
-
-        icon = gtk.CellRendererPixbuf()
-        boot_list.pack_start(icon, False)
-        boot_list.add_attribute(icon, 'icon-name', 1)
-        text = gtk.CellRendererText()
-        boot_list.pack_start(text, True)
-        boot_list.add_attribute(text, 'text', 0)
-
-    def add_hw_list_option(self, title, page_id, data, icon_name):
-        model = self.window.get_widget("hw-list").get_model()
-        model.append([title, icon_name, gtk.ICON_SIZE_LARGE_TOOLBAR,
-                      page_id, data])
+    ############################
+    # Hardware list population #
+    ############################
 
     def populate_hw_list(self):
         hw_list_model = self.window.get_widget("hw-list").get_model()
         hw_list_model.clear()
 
-        self.add_hw_list_option("Overview", HW_LIST_TYPE_GENERAL, [],
-                                "computer")
-        self.add_hw_list_option("Performance", HW_LIST_TYPE_STATS, [],
-                                "utilities-system-monitor")
-        self.add_hw_list_option("Processor", HW_LIST_TYPE_CPU, [],
-                                "device_cpu")
-        self.add_hw_list_option("Memory", HW_LIST_TYPE_MEMORY, [],
-                                "device_mem")
-        self.add_hw_list_option("Boot Options", HW_LIST_TYPE_BOOT, [],
-                                "system-run")
+        def add_hw_list_option(title, page_id, data, icon_name):
+            hw_list_model.append([title, icon_name,
+                                  gtk.ICON_SIZE_LARGE_TOOLBAR,
+                                  page_id, data])
+
+        add_hw_list_option("Overview", HW_LIST_TYPE_GENERAL, [], "computer")
+        add_hw_list_option("Performance", HW_LIST_TYPE_STATS, [],
+                           "utilities-system-monitor")
+        add_hw_list_option("Processor", HW_LIST_TYPE_CPU, [], "device_cpu")
+        add_hw_list_option("Memory", HW_LIST_TYPE_MEMORY, [], "device_mem")
+        add_hw_list_option("Boot Options", HW_LIST_TYPE_BOOT, [], "system-run")
 
         self.repopulate_hw_list()
-
 
     def repopulate_hw_list(self):
         hw_list = self.window.get_widget("hw-list")
@@ -1588,69 +1670,5 @@ class vmmDetails(gobject.GObject):
             boot_model.append([_("No Boot Device"), None, None])
 
         boot_combo.set_model(boot_model)
-
-    def add_hardware(self, src):
-        if self.addhw is None:
-            self.addhw = vmmAddHardware(self.config, self.vm)
-
-        self.addhw.show()
-
-    def toggle_cdrom(self, src):
-        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not info:
-            return
-
-        dev_id_info = info[1]
-
-        if src.get_label() == gtk.STOCK_DISCONNECT:
-            # Disconnect cdrom
-            self.vm.change_cdrom_media(dev_id_info, None)
-
-        else:
-            # connect a new cdrom
-            if self.choose_cd is None:
-                self.choose_cd = vmmChooseCD(self.config, self.window.get_widget("disk-target-device").get_text(), self.vm.get_connection())
-                self.choose_cd.connect("cdrom-chosen", self.change_cdrom_media)
-            else:
-                self.choose_cd.dev_id_info = dev_id_info
-            self.choose_cd.show()
-
-    def change_cdrom_media(self, ignore, dev_id_info, newpath, _type=None):
-        try:
-            self.vm.change_cdrom_media(dev_id_info, newpath, _type)
-        except Exception, e:
-            self.err.show_err(_("Error changing CDROM media: %s" % str(e)),
-                              "".join(traceback.format_exc()))
-
-    def remove_device(self, dev_type, dev_id_info):
-        logging.debug("Removing device: %s %s" % (dev_type, dev_id_info))
-
-        detach_err = False
-        devxml = self.vm.get_device_xml(dev_type, dev_id_info)
-        try:
-            if self.vm.is_active():
-                self.vm.detach_device(devxml)
-                return
-        except Exception, e:
-            logging.debug("Device could not be hotUNplugged: %s" % str(e))
-            detach_err = True
-
-        if detach_err:
-            if not self.err.yes_no(_("Are you sure you want to remove this "
-                                     "device?"),
-                                   _("This device could not be removed from "
-                                     "the running machine. Would you like to "
-                                     "remove the device after the next VM "
-                                     "shutdown? \n\n"
-                                     "Warning: this will overwrite any "
-                                     "other changes that require a VM "
-                                     "reboot.")):
-                return
-
-        try:
-            self.vm.remove_device(dev_type, dev_id_info)
-        except Exception, e:
-            self.err.show_err(_("Error Removing Device: %s" % str(e)),
-                              "".join(traceback.format_exc()))
 
 gobject.type_register(vmmDetails)
