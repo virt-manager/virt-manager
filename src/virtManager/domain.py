@@ -64,8 +64,8 @@ class vmmDomain(gobject.GObject):
                          }
 
         self._xml = None
-        self._orig_inactive_xml = None
-        self._valid_xml = False
+        self._inactive_xml = None
+        self._is_xml_valid = False
 
         self._network_traffic = None
         self._disk_io = None
@@ -216,9 +216,6 @@ class vmmDomain(gobject.GObject):
         return self._xml_fetch_helper(refresh_if_necc=False)
 
     def get_xml_to_define(self):
-        # FIXME: This isn't sufficient, since we pull stuff like disk targets
-        #        from the active XML. This all needs proper fixing in the long
-        #        term.
         if self.is_active():
             return self._get_inactive_xml()
         else:
@@ -226,18 +223,6 @@ class vmmDomain(gobject.GObject):
             return self.get_xml()
 
     def refresh_xml(self):
-        self._update_xml()
-
-    def _xml_fetch_helper(self, refresh_if_necc):
-        # Helper to fetch xml with various options
-        if self._xml is None:
-            self._update_xml()
-        elif refresh_if_necc and self._valid_xml:
-            self._update_xml()
-
-        return self._xml
-
-    def _update_xml(self):
         # Force an xml update. Signal 'config-changed' if domain xml has
         # changed since last refresh
 
@@ -247,26 +232,31 @@ class vmmDomain(gobject.GObject):
 
         origxml = self._xml
         self._xml = self._XMLDesc(flags)
-        self._valid_xml = True
+        self._is_xml_valid = True
 
         if origxml != self._xml:
             # 'tick' to make sure we have the latest time
             self.tick(time.time())
             gobject.idle_add(util.idle_emit, self, "config-changed")
 
+    def _xml_fetch_helper(self, refresh_if_necc):
+        # Helper to fetch xml with various options
+        if self._xml is None:
+            self.refresh_xml()
+        elif refresh_if_necc and not self._is_xml_valid:
+            self.refresh_xml()
+
+        return self._xml
+
     def _invalidate_xml(self):
         # Mark cached xml as invalid
-        self._valid_xml = False
-        self._orig_inactive_xml = None
+        self._is_xml_valid = False
+        self._inactive_xml = None
 
     def _get_inactive_xml(self):
-        # FIXME: We only allow the user to change the inactive xml once.
-        #        We should eventually allow them to continually change it,
-        #        possibly see the inactive config? and not choke if they try
-        #        to remove a device twice.
-        if self._orig_inactive_xml is None:
+        if self._inactive_xml is None:
             self._refresh_inactive_xml()
-        return self._orig_inactive_xml
+        return self._inactive_xml
 
     def _refresh_inactive_xml(self):
         flags = (libvirt.VIR_DOMAIN_XML_INACTIVE |
@@ -277,7 +267,7 @@ class vmmDomain(gobject.GObject):
             if not self.connection.has_dom_flags:
                 flags = 0
 
-        self._orig_inactive_xml = self._XMLDesc(flags)
+        self._inactive_xml = self._XMLDesc(flags)
 
     def redefine(self, xml_func, *args):
         """
@@ -296,7 +286,7 @@ class vmmDomain(gobject.GObject):
         if origxml == newxml:
             logging.debug("Redefinition requested, but new xml was not"
                           " different")
-
+            return
         else:
             diff = "".join(difflib.unified_diff(origxml.splitlines(1),
                                                 newxml.splitlines(1),
@@ -668,7 +658,7 @@ class vmmDomain(gobject.GObject):
                                     libvirt.VIR_DOMAIN_SHUTOFF,
                                     libvirt.VIR_DOMAIN_CRASHED ]:
                 # Domain just started. Invalidate inactive xml
-                self._orig_inactive_xml = None
+                self._inactive_xml = None
             self.lastStatus = status
             gobject.idle_add(util.idle_emit, self, "status-changed", status)
 
