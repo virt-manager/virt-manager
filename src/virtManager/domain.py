@@ -603,6 +603,21 @@ class vmmDomain(gobject.GObject):
             return
         self.redefine(self._change_features_helper, "apic", do_enable)
 
+    def define_clock(self, newclock):
+        if newclock == self.get_clock():
+            return
+
+        def change_clock(doc, ctx, newclock):
+            clock_node = ctx.xpathEval("/domain/clock")
+            clock_node = (clock_node and clock_node[0] or None)
+
+            if clock_node:
+                clock_node.setProp("offset", newclock)
+
+            return doc.serialize()
+
+        return self.redefine(util.xml_parse_wrapper, change_clock, newclock)
+
     ########################
     # End XML Altering API #
     ########################

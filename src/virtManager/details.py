@@ -175,6 +175,7 @@ class vmmDetails(gobject.GObject):
 
             "on_overview_acpi_changed": self.config_enable_apply,
             "on_overview_apic_changed": self.config_enable_apply,
+            "on_overview_clock_changed": self.config_enable_apply,
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
@@ -343,9 +344,6 @@ class vmmDetails(gobject.GObject):
         graph_table.attach(self.network_traffic_graph, 1, 2, 3, 4)
 
     def init_details(self):
-        # Disable all 'machine details' options since we don't yet allow edit
-        self.window.get_widget("overview-clock-combo").set_sensitive(False)
-
         # Hardware list
         # [ label, icon name, icon size, hw type, hw data ]
         hw_list_model = gtk.ListStore(str, str, int, int,
@@ -922,6 +920,11 @@ class vmmDetails(gobject.GObject):
         # Machine details
         enable_acpi = self.window.get_widget("overview-acpi").get_active()
         enable_apic = self.window.get_widget("overview-apic").get_active()
+        clock_combo = self.window.get_widget("overview-clock-combo")
+        if clock_combo.get_property("visible"):
+            clock = clock_combo.get_model()[clock_combo.get_active()][0]
+        else:
+            clock = self.window.get_widget("overview-clock-label").get_text()
 
         # Security
         combo = self.window.get_widget("security-model")
@@ -940,9 +943,11 @@ class vmmDetails(gobject.GObject):
 
         return self._change_config_helper([self.vm.define_acpi,
                                            self.vm.define_apic,
+                                           self.vm.define_clock,
                                            self.vm.define_seclabel],
                                           [(enable_acpi,),
                                            (enable_apic,),
+                                           (clock,),
                                            (semodel, setype, selabel)])
 
     # CPUs

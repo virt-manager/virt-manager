@@ -1259,6 +1259,7 @@
                                             <child>
                                               <widget class="GtkComboBox" id="overview-clock-combo">
                                                 <property name="visible">True</property>
+                                                <signal name="changed" handler="on_overview_clock_changed"/>
                                               </widget>
                                               <packing>
                                                 <property name="expand">False</property>
