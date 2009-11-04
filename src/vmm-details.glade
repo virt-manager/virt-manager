@@ -2465,6 +2465,7 @@ I/O:</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_disk_readonly_changed"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -2480,6 +2481,7 @@ I/O:</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_disk_shareable_changed"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>

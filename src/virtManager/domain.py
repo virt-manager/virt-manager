@@ -426,6 +426,9 @@ class vmmDomain(gobject.GObject):
         return doc.serialize(), disk_fragment.serialize()
 
     def define_cdrom_media(self, dev_id_info, newpath, _type=None):
+        if not self.check_device_is_present("disk", dev_id_info):
+            return
+
         if not newpath:
             func = self._media_xml_disconnect
         else:
@@ -593,6 +596,7 @@ class vmmDomain(gobject.GObject):
 
         return util.xml_parse_wrapper(xml, change_feature)
 
+    # 'Overview' section settings
     def define_acpi(self, do_enable):
         if do_enable == self.get_acpi():
             return
@@ -617,6 +621,41 @@ class vmmDomain(gobject.GObject):
             return doc.serialize()
 
         return self.redefine(util.xml_parse_wrapper, change_clock, newclock)
+
+    def _change_disk_param(self, doc, ctx, dev_id_info, node_name, newvalue):
+        disk_node = self._get_device_xml_nodes(ctx, "disk", dev_id_info)[0]
+
+        found_node = None
+        for child in disk_node.children:
+            if child.name == node_name:
+                found_node = child
+                break
+            child = child.next
+
+        if bool(found_node) != newvalue:
+            if not newvalue:
+                found_node.unlinkNode()
+                found_node.freeNode()
+            else:
+                disk_node.newChild(None, node_name, None)
+
+        return doc.serialize()
+
+    # Disk properties
+    def define_disk_readonly(self, dev_id_info, do_readonly):
+        if not self.check_device_is_present("disk", dev_id_info):
+            return
+
+        return self.redefine(util.xml_parse_wrapper, self._change_disk_param,
+                             dev_id_info, "readonly", do_readonly)
+
+    def define_disk_shareable(self, dev_id_info, do_shareable):
+        if not self.check_device_is_present("disk", dev_id_info):
+            return
+
+        return self.redefine(util.xml_parse_wrapper, self._change_disk_param,
+                             dev_id_info, "shareable", do_shareable)
+
 
     ########################
     # End XML Altering API #

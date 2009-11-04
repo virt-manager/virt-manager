@@ -60,8 +60,8 @@ HW_LIST_TYPE_HOSTDEV = 11
 HW_LIST_TYPE_VIDEO = 12
 
 apply_pages  = [ HW_LIST_TYPE_GENERAL, HW_LIST_TYPE_CPU, HW_LIST_TYPE_MEMORY,
-                 HW_LIST_TYPE_BOOT]
-remove_pages = [ HW_LIST_TYPE_DISK, HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
+                 HW_LIST_TYPE_BOOT, HW_LIST_TYPE_DISK]
+remove_pages = [ HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                  HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
                  HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_VIDEO ]
 
@@ -176,11 +176,13 @@ class vmmDetails(gobject.GObject):
             "on_overview_acpi_changed": self.config_enable_apply,
             "on_overview_apic_changed": self.config_enable_apply,
             "on_overview_clock_changed": self.config_enable_apply,
-            "on_config_vcpus_changed": self.config_vcpus_changed,
+            "on_config_vcpus_changed": self.config_enable_apply,
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
             "on_config_boot_device_changed": self.config_boot_options_changed,
             "on_config_autostart_changed": self.config_boot_options_changed,
+            "on_disk_readonly_changed": self.config_enable_apply,
+            "on_disk_shareable_changed": self.config_enable_apply,
 
             "on_config_apply_clicked": self.config_apply,
 
@@ -825,10 +827,6 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("config-apply").set_sensitive(True)
         self.window.get_widget("security-label").set_sensitive(not button.get_active())
 
-    # CPUS
-    def config_vcpus_changed(self, src):
-        self.window.get_widget("config-apply").set_sensitive(True)
-
     # Memory
     def config_get_maxmem(self):
         maxadj = self.window.get_widget("config-maxmem").get_adjustment()
@@ -901,6 +899,8 @@ class vmmDetails(gobject.GObject):
         pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
         ret = False
 
+        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
+
         if pagetype is HW_LIST_TYPE_GENERAL:
             ret = self.config_overview_apply()
         elif pagetype is HW_LIST_TYPE_CPU:
@@ -909,6 +909,8 @@ class vmmDetails(gobject.GObject):
             ret = self.config_memory_apply()
         elif pagetype is HW_LIST_TYPE_BOOT:
             ret = self.config_boot_options_apply()
+        elif pagetype is HW_LIST_TYPE_DISK:
+            ret = self.config_disk_apply(info[1])
         else:
             ret = False
 
@@ -1006,6 +1008,17 @@ class vmmDetails(gobject.GObject):
                                           (dev_id_info, newpath, _type),
                                           self.vm.hotplug_cdrom_media,
                                           (dev_id_info, newpath, _type))
+
+    # Disk options
+    def config_disk_apply(self, dev_id_info):
+        do_readonly = self.window.get_widget("disk-readonly").get_active()
+        do_shareable = self.window.get_widget("disk-shareable").get_active()
+
+        return self._change_config_helper([self.vm.define_disk_readonly,
+                                           self.vm.define_disk_shareable],
+                                          [(dev_id_info, do_readonly),
+                                           (dev_id_info, do_shareable)])
+
 
 
     # Device removal
@@ -1282,6 +1295,8 @@ class vmmDetails(gobject.GObject):
         share = diskinfo[7]
         bus = diskinfo[8]
 
+        is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
+
         if devtype == virtinst.VirtualDisk.DEVICE_FLOPPY:
             pretty_name = "floppy"
         elif bus:
@@ -1294,6 +1309,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("disk-target-type").set_text(pretty_name)
 
         self.window.get_widget("disk-readonly").set_active(ro)
+        self.window.get_widget("disk-readonly").set_sensitive(not is_cdrom)
         self.window.get_widget("disk-shareable").set_active(share)
 
         bus = diskinfo[8] or _("Unknown")
