@@ -257,6 +257,7 @@ class vmmDomain(gobject.GObject):
     def _invalidate_xml(self):
         # Mark cached xml as invalid
         self._valid_xml = False
+        self._orig_inactive_xml = None
 
     def _get_inactive_xml(self):
         # FIXME: We only allow the user to change the inactive xml once.
@@ -317,36 +318,70 @@ class vmmDomain(gobject.GObject):
     # XML Altering API #
     ####################
 
-    def _add_xml_device(self, xml, devxml):
+    def check_device_is_present(self, dev_type, dev_id_info):
         """
-        Add device 'devxml' to devices section of 'xml', return result
-        """
-        index = xml.find("</devices>")
-        return xml[0:index] + devxml + xml[index:]
+        Return True if device is present in the inactive XML, False otherwise.
+        If device can not be found in either the active or inactive XML,
+        raise an exception (which should not be caught in any domain.py func)
 
-    def _remove_xml_device(self, vmxml, dev_type, dev_id_info):
+        We need to make this check every time we are altering device props
+        of the inactive XML. If the device can't be found, make no change
+        and return success.
         """
-        Remove device 'devxml' from devices section of 'xml, return result
-        """
+        vmxml = self._get_inactive_xml()
 
-        def unlink_dev_node(doc, ctx):
+        def find_dev(doc, ctx, dev_type, dev_id_info):
             ret = self._get_device_xml_nodes(ctx, dev_type, dev_id_info)
+            return ret is not None
 
-            for node in ret:
-                node.unlinkNode()
-                node.freeNode()
+        try:
+            util.xml_parse_wrapper(vmxml, find_dev, dev_type, dev_id_info)
+            return True
+        except Exception, e:
+            # If we are removing multiple dev from an active VM, a double
+            # attempt may result in a lookup failure. If device is present
+            # in the active XML, assume all is good.
+            try:
+                util.xml_parse_wrapper(self.get_xml(), find_dev,
+                                       dev_type, dev_id_info)
+                return False
+            except:
+                raise e
 
-            newxml = doc.serialize()
-            return newxml
-
-        return util.xml_parse_wrapper(vmxml, unlink_dev_node)
 
     def add_device(self, devxml):
-        """Redefine guest with appended device"""
-        self.redefine(self._add_xml_device, devxml)
+        """
+        Redefine guest with appended device XML 'devxml'
+        """
+        def _add_xml_device(xml, devxml):
+            index = xml.find("</devices>")
+            return xml[0:index] + devxml + xml[index:]
+
+        self.redefine(_add_xml_device, devxml)
 
     def remove_device(self, dev_type, dev_id_info):
-        self.redefine(self._remove_xml_device, dev_type, dev_id_info)
+        """
+        Remove device of type 'dev_type' with unique info 'dev_id_info' from
+        the inactive guest XML
+        """
+        if not self.check_device_is_present(dev_type, dev_id_info):
+            return
+
+        def _remove_xml_device(vmxml, dev_type, dev_id_info):
+
+            def unlink_dev_node(doc, ctx):
+                ret = self._get_device_xml_nodes(ctx, dev_type, dev_id_info)
+
+                for node in ret:
+                    node.unlinkNode()
+                    node.freeNode()
+
+                newxml = doc.serialize()
+                return newxml
+
+            return util.xml_parse_wrapper(vmxml, unlink_dev_node)
+
+        self.redefine(_remove_xml_device, dev_type, dev_id_info)
 
     def change_cdrom_media(self, dev_id_info, newpath, _type=None):
         def cdrom_xml_connect(doc, ctx):
@@ -1068,7 +1103,7 @@ class vmmDomain(gobject.GObject):
     # [ device_type, unique_attribute(s), hw column label, attr1, attr2, ... ]
     # ----------------
 
-    def get_disk_devices(self, refresh_if_necc=True):
+    def get_disk_devices(self, refresh_if_necc=True, inactive=False):
         def _parse_disk_devs(ctx):
             disks = []
             ret = ctx.xpathEval("/domain/devices/disk")
@@ -1115,7 +1150,8 @@ class vmmDomain(gobject.GObject):
 
             return disks
 
-        return self._parse_device_xml(_parse_disk_devs, refresh_if_necc)
+        return self._parse_device_xml(_parse_disk_devs, refresh_if_necc,
+                                      inactive)
 
     def get_network_devices(self, refresh_if_necc=True):
         def _parse_network_devs(ctx):
@@ -1375,11 +1411,14 @@ class vmmDomain(gobject.GObject):
         return self._parse_device_xml(_parse_hostdev_devs)
 
 
-    def _parse_device_xml(self, parse_function, refresh_if_necc=True):
+    def _parse_device_xml(self, parse_function, refresh_if_necc=True,
+                          inactive=False):
         def parse_wrap_func(doc, ctx):
             return parse_function(ctx)
 
-        if refresh_if_necc:
+        if inactive:
+            xml = self._get_inactive_xml()
+        elif refresh_if_necc:
             xml = self.get_xml()
         else:
             xml = self.get_xml_no_refresh()
