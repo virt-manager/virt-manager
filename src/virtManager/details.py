@@ -306,6 +306,22 @@ class vmmDetails(gobject.GObject):
         graph_table.attach(self.network_traffic_graph, 1, 2, 3, 4)
 
     def init_details(self):
+        # Disable all 'machine details' options since we don't yet allow edit
+        self.window.get_widget("overview-clock-combo").set_sensitive(False)
+        self.window.get_widget("overview-acpi").set_sensitive(False)
+        self.window.get_widget("overview-apic").set_sensitive(False)
+
+        # Clock combo
+        clock_combo = self.window.get_widget("overview-clock-combo")
+        clock_model = gtk.ListStore(str)
+        clock_combo.set_model(clock_model)
+        text = gtk.CellRendererText()
+        clock_combo.pack_start(text, True)
+        clock_combo.add_attribute(text, 'text', 0)
+        clock_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        for offset in [ "localtime", "utc" ]:
+            clock_model.append([offset])
+
         # Security info tooltips
         util.tooltip_wrapper(self.window.get_widget("security-static-info"),
             _("Static SELinux security type tells libvirt to always start the guest process with the specified label. The administrator is responsible for making sure the images are labeled corectly on disk."))
@@ -696,15 +712,40 @@ class vmmDetails(gobject.GObject):
         self.hw_selected(page=pagetype)
 
     def refresh_overview_page(self):
+        # Basic details
         self.window.get_widget("overview-name").set_text(self.vm.get_name())
         self.window.get_widget("overview-uuid").set_text(self.vm.get_uuid())
 
+        # Hypervisor Details
         self.window.get_widget("overview-hv").set_text(self.vm.get_pretty_hv_type())
         arch = self.vm.get_arch() or _("Unknown")
         emu = self.vm.get_emulator() or _("None")
         self.window.get_widget("overview-arch").set_text(arch)
         self.window.get_widget("overview-emulator").set_text(emu)
 
+        # Machine settings
+        acpi = self.vm.get_acpi()
+        apic = self.vm.get_apic()
+        clock = self.vm.get_clock()
+
+        self.window.get_widget("overview-acpi").set_active(acpi)
+        self.window.get_widget("overview-apic").set_active(apic)
+        if not clock:
+            clock = _("Same as host")
+
+        clock_combo = self.window.get_widget("overview-clock-combo")
+        clock_label = self.window.get_widget("overview-clock-label")
+        clock_list = map(lambda x: x[0], clock_combo.get_model())
+        clock_in_combo = (clock in clock_list)
+
+        clock_combo.set_property("visible", clock_in_combo)
+        clock_label.set_property("visible", not clock_in_combo)
+        if clock_in_combo:
+            clock_combo.set_active(clock_list.index(clock))
+        else:
+            clock_label.set_text(clock)
+
+        # Security details
         vmmodel, ignore, vmlabel = self.vm.get_seclabel()
         semodel_combo = self.window.get_widget("security-model")
         semodel_model = semodel_combo.get_model()

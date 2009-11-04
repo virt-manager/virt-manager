@@ -591,6 +591,17 @@ class vmmDomain(gobject.GObject):
     def get_emulator(self):
         return vutil.get_xml_path(self.get_xml(), "/domain/devices/emulator")
 
+    def get_acpi(self):
+        return bool(vutil.get_xml_path(self.get_xml(),
+                                       "count(/domain/features/acpi)"))
+
+    def get_apic(self):
+        return bool(vutil.get_xml_path(self.get_xml(),
+                                       "count(/domain/features/apic)"))
+
+    def get_clock(self):
+        return vutil.get_xml_path(self.get_xml(), "/domain/clock/@offset")
+
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:
             return libvirt.VIR_DOMAIN_RUNNING
