@@ -913,12 +913,73 @@ class vmmDetails(gobject.GObject):
         if not hostdevinfo:
             return
 
+        def intify(val, do_hex=False):
+            try:
+                if do_hex:
+                    return int(val or '0x00', 16)
+                else:
+                    return int(val)
+            except:
+                return -1
+
+        def attrVal(node, attr):
+            if not hasattr(node, attr):
+                return None
+            return getattr(node, attr)
+
+        devinfo = hostdevinfo[1]
+        vendor_id = -1
+        product_id = -1
+        device = 0
+        bus = 0
+        domain = 0
+        func = 0
+        slot = 0
+
+        if devinfo.get("vendor") and devinfo.get("product"):
+            vendor_id = devinfo["vendor"].get("id") or -1
+            product_id = devinfo["product"].get("id") or -1
+
+        elif devinfo.get("address"):
+            device = intify(devinfo["address"].get("device"), True)
+            bus = intify(devinfo["address"].get("bus"), True)
+            domain = intify(devinfo["address"].get("domain"), True)
+            func = intify(devinfo["address"].get("function"), True)
+            slot = intify(devinfo["address"].get("slot"), True)
+
+        typ = devinfo.get("type")
+        # For USB we want a device, not a bus
+        if typ == 'usb':
+            typ = 'usb_device'
+        dev_pretty_name = None
+        devs = self.vm.get_connection().get_devices( typ, None )
+
+        # Get device pretty name
+        for dev in devs:
+            # Try to get info from {product|vendor}_id
+            if (attrVal(dev, "product_id") == product_id and
+                attrVal(dev, "vendor_id") == vendor_id):
+                dev_pretty_name = dev.pretty_name()
+                break
+            else:
+                # Try to get info from bus/addr
+                dev_id = intify(attrVal(dev, "device"))
+                bus_id = intify(attrVal(dev, "bus"))
+                dom_id = intify(attrVal(dev, "domain"))
+                func_id = intify(attrVal(dev, "function"))
+                slot_id = intify(attrVal(dev, "slot"))
+
+                if ((dev_id == device and bus_id == bus) or
+                    (dom_id == domain and func_id == func and
+                     bus_id == bus and slot_id == slot)):
+                    dev_pretty_name = dev.pretty_name()
+                    break
+
         devlabel = "<b>Physical %s Device</b>" % hostdevinfo[4].upper()
 
         self.window.get_widget("hostdev-title").set_markup(devlabel)
-        self.window.get_widget("hostdev-type").set_text(hostdevinfo[4])
-        self.window.get_widget("hostdev-mode").set_text(hostdevinfo[3])
-        self.window.get_widget("hostdev-source").set_text(hostdevinfo[5])
+        self.window.get_widget("hostdev-source").set_text(dev_pretty_name or
+                                                          "-")
 
     def refresh_video_page(self):
         vidinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
