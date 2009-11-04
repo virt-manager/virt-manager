@@ -173,6 +173,8 @@ class vmmDetails(gobject.GObject):
 
             "on_details_pages_switch_page": self.switch_page,
 
+            "on_overview_acpi_changed": self.config_enable_apply,
+            "on_overview_apic_changed": self.config_enable_apply,
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
@@ -343,8 +345,6 @@ class vmmDetails(gobject.GObject):
     def init_details(self):
         # Disable all 'machine details' options since we don't yet allow edit
         self.window.get_widget("overview-clock-combo").set_sensitive(False)
-        self.window.get_widget("overview-acpi").set_sensitive(False)
-        self.window.get_widget("overview-apic").set_sensitive(False)
 
         # Hardware list
         # [ label, icon name, icon size, hw type, hw data ]
@@ -805,6 +805,9 @@ class vmmDetails(gobject.GObject):
     # Details/Hardware listeners #
     ##############################
 
+    def config_enable_apply(self, ignore):
+        self.window.get_widget("config-apply").set_sensitive(True)
+
     # Overview -> Security
     def security_model_changed(self, combo):
         model = combo.get_model()
@@ -901,7 +904,7 @@ class vmmDetails(gobject.GObject):
         ret = False
 
         if pagetype is HW_LIST_TYPE_GENERAL:
-            ret = self.config_security_apply()
+            ret = self.config_overview_apply()
         elif pagetype is HW_LIST_TYPE_CPU:
             ret = self.config_vcpus_apply()
         elif pagetype is HW_LIST_TYPE_MEMORY:
@@ -914,8 +917,13 @@ class vmmDetails(gobject.GObject):
         if ret is not False:
             self.window.get_widget("config-apply").set_sensitive(False)
 
-    # Overview -> Security
-    def config_security_apply(self):
+    # Overview section
+    def config_overview_apply(self):
+        # Machine details
+        enable_acpi = self.window.get_widget("overview-acpi").get_active()
+        enable_apic = self.window.get_widget("overview-apic").get_active()
+
+        # Security
         combo = self.window.get_widget("security-model")
         model = combo.get_model()
         semodel = model[combo.get_active()][0]
@@ -930,9 +938,12 @@ class vmmDetails(gobject.GObject):
 
         selabel = self.window.get_widget("security-label").get_text()
 
-        return self._change_config_helper(self.vm.define_seclabel,
-                                          (semodel, setype, selabel))
-
+        return self._change_config_helper([self.vm.define_acpi,
+                                           self.vm.define_apic,
+                                           self.vm.define_seclabel],
+                                          [(enable_acpi,),
+                                           (enable_apic,),
+                                           (semodel, setype, selabel)])
 
     # CPUs
     def config_vcpus_apply(self):

@@ -304,9 +304,9 @@ class vmmDomain(gobject.GObject):
     # End XML fetching routines #
     #############################
 
-    ####################
-    # XML Altering API #
-    ####################
+    ###########################
+    # XML/Config Altering API #
+    ###########################
 
     def check_device_is_present(self, dev_type, dev_id_info):
         """
@@ -478,6 +478,7 @@ class vmmDomain(gobject.GObject):
 
         self.redefine(change_vcpu_xml, vcpus, cpuset)
 
+    # Memory routines
     def hotplug_both_mem(self, memory, maxmem):
         logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'" %
                      (memory, maxmem, self.get_name()))
@@ -515,6 +516,7 @@ class vmmDomain(gobject.GObject):
 
         self.redefine(change_mem_xml, memory, maxmem)
 
+    # Boot device
     def set_boot_device(self, boot_type):
         logging.debug("Setting boot device to type: %s" % boot_type)
 
@@ -529,6 +531,7 @@ class vmmDomain(gobject.GObject):
 
         self.redefine(util.xml_parse_wrapper, set_boot_xml)
 
+    # Security label
     def define_seclabel(self, model, t, label):
         logging.debug("Changing seclabel with model=%s t=%s label=%s" %
                       (model, t, label))
@@ -561,8 +564,44 @@ class vmmDomain(gobject.GObject):
 
             return doc.serialize()
 
-        self.redefine(util.xml_parse_wrapper,
-                      change_label)
+        self.redefine(util.xml_parse_wrapper, change_label)
+
+    # Helper function for changing ACPI/APIC
+    def _change_features_helper(self, xml, feature_name, do_enable):
+        def change_feature(doc, ctx):
+            feature_node = ctx.xpathEval("/domain/features")
+            feature_node = (feature_node and feature_node[0] or None)
+
+            if not feature_node:
+                if do_enable:
+                    domain_node = ctx.xpathEval("/domain")[0]
+                    feature_node = domain_node.newChild(None, "features", None)
+
+            if feature_node:
+                node = ctx.xpathEval("/domain/features/%s" % feature_name)
+                node = (node and node[0] or None)
+
+                if node:
+                    if not do_enable:
+                        node.unlinkNode()
+                        node.freeNode()
+                else:
+                    if do_enable:
+                        feature_node.newChild(None, feature_name, None)
+
+            return doc.serialize()
+
+        return util.xml_parse_wrapper(xml, change_feature)
+
+    def define_acpi(self, do_enable):
+        if do_enable == self.get_acpi():
+            return
+        self.redefine(self._change_features_helper, "acpi", do_enable)
+
+    def define_apic(self, do_enable):
+        if do_enable == self.get_apic():
+            return
+        self.redefine(self._change_features_helper, "apic", do_enable)
 
     ########################
     # End XML Altering API #

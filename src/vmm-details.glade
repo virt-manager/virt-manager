@@ -1228,6 +1228,7 @@
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_overview_acpi_changed"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1241,6 +1242,7 @@
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="on_overview_apic_changed"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
