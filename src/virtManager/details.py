@@ -1275,23 +1275,32 @@ class vmmDetails(gobject.GObject):
         if not diskinfo:
             return
 
-        self.window.get_widget("disk-source-type").set_text(diskinfo[5])
-        self.window.get_widget("disk-source-path").set_text(diskinfo[3] or "-")
-        self.window.get_widget("disk-target-type").set_text(diskinfo[4])
-        self.window.get_widget("disk-target-device").set_text(diskinfo[2])
-        if diskinfo[6] == True:
-            perms = "Readonly"
+        target = diskinfo[2]
+        path = diskinfo[3]
+        devtype = diskinfo[4]
+        ro = diskinfo[6]
+        share = diskinfo[7]
+        bus = diskinfo[8]
+
+        if devtype == virtinst.VirtualDisk.DEVICE_FLOPPY:
+            pretty_name = "floppy"
+        elif bus:
+            pretty_name = "%s %s" % (bus, devtype)
         else:
-            perms = "Read/Write"
-        if diskinfo[7] == True:
-            perms += ", Shareable"
-        self.window.get_widget("disk-permissions").set_text(perms)
+            pretty_name = devtype
+        pretty_name += " %s" % target
+
+        self.window.get_widget("disk-source-path").set_text(path or "-")
+        self.window.get_widget("disk-target-type").set_text(pretty_name)
+
+        self.window.get_widget("disk-readonly").set_active(ro)
+        self.window.get_widget("disk-shareable").set_active(share)
+
         bus = diskinfo[8] or _("Unknown")
-        self.window.get_widget("disk-bus").set_text(bus)
 
         button = self.window.get_widget("config-cdrom-connect")
-        if diskinfo[4] == "cdrom":
-            if not diskinfo[3]:
+        if devtype == "cdrom":
+            if not path:
                 # source device not connected
                 button.set_label(gtk.STOCK_CONNECT)
             else:
