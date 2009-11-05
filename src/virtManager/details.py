@@ -26,6 +26,7 @@ import logging
 import traceback
 import os
 
+import virtManager.addhardware
 from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
@@ -60,10 +61,10 @@ HW_LIST_TYPE_HOSTDEV = 11
 HW_LIST_TYPE_VIDEO = 12
 
 apply_pages  = [ HW_LIST_TYPE_GENERAL, HW_LIST_TYPE_CPU, HW_LIST_TYPE_MEMORY,
-                 HW_LIST_TYPE_BOOT, HW_LIST_TYPE_DISK]
+                 HW_LIST_TYPE_BOOT, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO]
 remove_pages = [ HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                  HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
-                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_VIDEO ]
+                 HW_LIST_TYPE_HOSTDEV]
 
 # Main tab pages
 PAGE_CONSOLE = 0
@@ -183,6 +184,7 @@ class vmmDetails(gobject.GObject):
             "on_config_autostart_changed": self.config_boot_options_changed,
             "on_disk_readonly_changed": self.config_enable_apply,
             "on_disk_shareable_changed": self.config_enable_apply,
+            "on_video_model_combo_changed": self.config_enable_apply,
 
             "on_config_apply_clicked": self.config_apply,
 
@@ -394,6 +396,9 @@ class vmmDetails(gobject.GObject):
         boot_list.pack_start(text, True)
         boot_list.add_attribute(text, 'text', 0)
 
+        # Video model combo
+        video_dev = self.window.get_widget("video-model-combo")
+        virtManager.addhardware.build_video_combo(self.vm, video_dev)
 
     ##########################
     # Window state listeners #
@@ -911,6 +916,8 @@ class vmmDetails(gobject.GObject):
             ret = self.config_boot_options_apply()
         elif pagetype is HW_LIST_TYPE_DISK:
             ret = self.config_disk_apply(info[1])
+        elif pagetype is HW_LIST_TYPE_VIDEO:
+            ret = self.config_video_apply(info[1])
         else:
             ret = False
 
@@ -1019,7 +1026,17 @@ class vmmDetails(gobject.GObject):
                                           [(dev_id_info, do_readonly),
                                            (dev_id_info, do_shareable)])
 
+    # Video options
+    def config_video_apply(self, dev_id_info):
+        model_combo = self.window.get_widget("video-model-combo")
 
+        model = None
+        if model_combo.get_property("visible"):
+            model = model_combo.get_model()[model_combo.get_active()][0]
+
+        if model:
+            return self._change_config_helper(self.vm.define_video_model,
+                                              (dev_id_info, model))
 
     # Device removal
     def remove_device(self, dev_type, dev_id_info):
@@ -1502,9 +1519,20 @@ class vmmDetails(gobject.GObject):
         except:
             ramlabel = "-"
 
-        self.window.get_widget("video-model").set_text(model)
         self.window.get_widget("video-ram").set_text(ramlabel)
         self.window.get_widget("video-heads").set_text(heads and heads or "-")
+
+        model_label = self.window.get_widget("video-model-label")
+        model_combo = self.window.get_widget("video-model-combo")
+        model_list = map(lambda x: x[0], model_combo.get_model())
+        model_in_list = (model in model_list)
+
+        model_label.set_property("visible", not model_in_list)
+        model_combo.set_property("visible", model_in_list)
+        model_label.set_text(model)
+
+        if model_in_list:
+            model_combo.set_active(model_list.index(model))
 
     def refresh_boot_page(self):
         # Refresh autostart

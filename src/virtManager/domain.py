@@ -656,6 +656,21 @@ class vmmDomain(gobject.GObject):
         return self.redefine(util.xml_parse_wrapper, self._change_disk_param,
                              dev_id_info, "shareable", do_shareable)
 
+    def define_video_model(self, dev_id_info, newmodel):
+        if not self.check_device_is_present("video", dev_id_info):
+            return
+
+        def change_model(doc, ctx, dev_id_info, newmodel):
+            vid_node = self._get_device_xml_nodes(ctx, "video",
+                                                  dev_id_info)[0]
+
+            model_node = vid_node.xpathEval("./model")[0]
+            model_node.setProp("type", newmodel)
+
+            return doc.serialize()
+
+        return self.redefine(util.xml_parse_wrapper, change_model,
+                             dev_id_info, newmodel)
 
     ########################
     # End XML Altering API #

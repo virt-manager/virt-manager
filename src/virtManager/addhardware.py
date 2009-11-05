@@ -63,6 +63,18 @@ char_widget_mappings = {
     "protocol" : "char-use-telnet",
 }
 
+def build_video_combo(vm, video_dev):
+    video_dev_model = gtk.ListStore(str)
+    video_dev.set_model(video_dev_model)
+    text = gtk.CellRendererText()
+    video_dev.pack_start(text, True)
+    video_dev.add_attribute(text, 'text', 0)
+    video_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+    for m in VirtualVideoDevice(vm.get_connection().vmm).model_types:
+        video_dev_model.append([m])
+    if len(video_dev_model) > 0:
+        video_dev.set_active(0)
+
 class vmmAddHardware(gobject.GObject):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
@@ -253,16 +265,7 @@ class vmmAddHardware(gobject.GObject):
 
         # Video device
         video_dev = self.window.get_widget("video-model")
-        video_dev_model = gtk.ListStore(str)
-        video_dev.set_model(video_dev_model)
-        text = gtk.CellRendererText()
-        video_dev.pack_start(text, True)
-        video_dev.add_attribute(text, 'text', 0)
-        video_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
-        for m in VirtualVideoDevice(self.vm.get_connection().vmm).model_types:
-            video_dev_model.append([m])
-        if len(video_dev_model) > 0:
-            video_dev.set_active(0)
+        build_video_combo(self.vm, video_dev)
 
         char_devtype = self.window.get_widget("char-device-type")
         # Type name, desc
