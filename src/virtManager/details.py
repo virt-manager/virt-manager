@@ -60,11 +60,9 @@ HW_LIST_TYPE_CHAR = 10
 HW_LIST_TYPE_HOSTDEV = 11
 HW_LIST_TYPE_VIDEO = 12
 
-apply_pages  = [ HW_LIST_TYPE_GENERAL, HW_LIST_TYPE_CPU, HW_LIST_TYPE_MEMORY,
-                 HW_LIST_TYPE_BOOT, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO]
 remove_pages = [ HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                  HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
-                 HW_LIST_TYPE_HOSTDEV]
+                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO]
 
 # Main tab pages
 PAGE_CONSOLE = 0
@@ -544,11 +542,9 @@ class vmmDetails(gobject.GObject):
         else:
             pagetype = -1
 
-        app = pagetype in apply_pages
         rem = pagetype in remove_pages
         if selected:
             self.window.get_widget("config-apply").set_sensitive(False)
-        self.window.get_widget("config-apply").set_property("visible", app)
         self.window.get_widget("config-remove").set_property("visible", rem)
 
         self.window.get_widget("hw-panel").set_current_page(pagetype)

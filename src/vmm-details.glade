@@ -3724,6 +3724,22 @@ I/O:</property>
                         <property name="spacing">12</property>
                         <property name="layout_style">end</property>
                         <child>
+                          <widget class="GtkButton" id="config-remove">
+                            <property name="label">gtk-remove</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="can_default">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_stock">True</property>
+                            <signal name="clicked" handler="on_config_remove_clicked"/>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <widget class="GtkButton" id="config-apply">
                             <property name="label">gtk-apply</property>
                             <property name="visible">True</property>
@@ -3733,22 +3749,6 @@ I/O:</property>
                             <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
                             <signal name="clicked" handler="on_config_apply_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="config-remove">
-                            <property name="label">gtk-remove</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="can_default">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_stock">True</property>
-                            <signal name="clicked" handler="on_config_remove_clicked"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
