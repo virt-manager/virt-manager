@@ -222,7 +222,8 @@ class vmmSystray(gobject.GObject):
         if button != 3:
             return
 
-        self.systray_menu.popup(None, None, None, 0, event_time)
+        self.systray_menu.popup(None, None, gtk.status_icon_position_menu,
+                                0, event_time, self.systray_icon)
 
     def conn_added(self, engine, conn):
         conn.connect("vm-added", self.vm_added)
