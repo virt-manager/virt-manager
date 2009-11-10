@@ -199,9 +199,9 @@ class vmmManager(gobject.GObject):
                                    self.reboot_vm,
                                    self.destroy_vm)
 
-        tool2 = self.window.get_widget("vm-toolbar2")
-        tool2.set_property("icon-size", gtk.ICON_SIZE_LARGE_TOOLBAR)
-        for c in tool2.get_children():
+        tool = self.window.get_widget("vm-toolbar")
+        tool.set_property("icon-size", gtk.ICON_SIZE_LARGE_TOOLBAR)
+        for c in tool.get_children():
             c.set_homogeneous(False)
 
         icon_name = self.config.get_shutdown_icon_name()
