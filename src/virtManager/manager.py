@@ -697,12 +697,14 @@ class vmmManager(gobject.GObject):
         conn = self.current_connection()
         if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
             conn.open()
+            return True
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
         if self.current_vmuuid():
             self.emit("action-show-console", self.current_connection_uri(), self.current_vmuuid())
         elif self.current_connection():
-            self.open_connection()
+            if not self.open_connection():
+                self.emit("action-show-host", self.current_connection_uri())
 
     def open_clone_window(self, ignore1=None, ignore2=None, ignore3=None):
         if self.current_vmuuid():

@@ -49,6 +49,9 @@ class vmmHost(gobject.GObject):
         topwin = self.window.get_widget("vmm-host")
         topwin.hide()
 
+        self.title = conn.get_short_hostname() + " " + topwin.get_title()
+        topwin.set_title(self.title)
+
         self.err = vmmErrorDialog(topwin,
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
