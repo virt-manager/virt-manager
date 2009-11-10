@@ -282,6 +282,7 @@ def main():
     warnings.filterwarnings('error', module='gtk')
     try:
         import gtk
+        import gobject
     except Warning, e:
         # ...the risk is we catch too much though
         # Damned if we do, damned if we dont :-)(
