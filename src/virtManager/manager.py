@@ -49,6 +49,7 @@ ROW_IS_CONN = 7
 ROW_IS_CONN_CONNECTED = 8
 ROW_IS_VM = 9
 ROW_IS_VM_RUNNING = 10
+ROW_COLOR = 11
 
 # Columns in the tree view
 COL_NAME = 0
@@ -360,7 +361,7 @@ class vmmManager(gobject.GObject):
         # XXX: Help docs useless/out of date
         self.window.get_widget("menu_help").hide()
 
-        self.vm_selected(None)
+        self.vm_selected()
         self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
 
         # Initialize stat polling columns based on global polling
@@ -497,15 +498,26 @@ class vmmManager(gobject.GObject):
 
     def _build_conn_markup(self, conn, row):
         if conn.state == conn.STATE_DISCONNECTED:
-            markup = ("<span font_desc='9' color='#5b5b5b'>%s - "
+            markup = ("<span font_desc='9'>%s - "
                       "Not Connected</span>" % row[ROW_NAME])
+        elif conn.state == conn.STATE_CONNECTING:
+            markup = ("<span font_desc='9'>%s - "
+                      "Connecting...</span>" % row[ROW_NAME])
         else:
             markup = ("<span font_desc='9'>%s</span>" % row[ROW_NAME])
         return markup
 
+    def _build_conn_color(self, conn):
+        color = None
+        if conn.state != conn.STATE_DISCONNECTED:
+            color = gtk.gdk.Color("#000000")
+        else:
+            color = gtk.gdk.Color("#5b5b5b")
+        return color
+
     def _build_vm_markup(self, vm, row):
         markup = ("<span font_desc='10'>%s</span>\n"
-                  "<span font_desc='9' color='#989898'>%s</span>" %
+                  "<span font_desc='8'>%s</span>" %
                   (row[ROW_NAME], row[ROW_STATUS]))
         return markup
 
@@ -523,6 +535,7 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_IS_CONN_CONNECTED, True)
         row.insert(ROW_IS_VM, True)
         row.insert(ROW_IS_VM_RUNNING, vm.is_active())
+        row.insert(ROW_COLOR, gtk.gdk.Color("#000000"))
 
         row[ROW_MARKUP] = self._build_vm_markup(vm, row)
 
@@ -547,6 +560,7 @@ class vmmManager(gobject.GObject):
                    conn.state != conn.STATE_DISCONNECTED)
         row.insert(ROW_IS_VM, False)
         row.insert(ROW_IS_VM_RUNNING, False)
+        row.insert(ROW_COLOR, self._build_conn_color(conn))
 
         _iter = model.append(None, row)
         path = model.get_path(_iter)
@@ -612,6 +626,7 @@ class vmmManager(gobject.GObject):
         row[ROW_STATUS] = "<span font_desc='9'>%s</span>" % conn.get_state_text()
         row[ROW_IS_CONN_CONNECTED] = conn.state != conn.STATE_DISCONNECTED
         row[ROW_HINT] = self._build_conn_hint(conn)
+        row[ROW_COLOR] = self._build_conn_color(conn)
 
         if conn.get_state() in [vmmConnection.STATE_DISCONNECTED,
                                 vmmConnection.STATE_CONNECTING]:
@@ -625,29 +640,33 @@ class vmmManager(gobject.GObject):
                     child = model.iter_children(parent)
         model.row_changed(row.path, row.iter)
 
-    def current_vm(self):
+    def current_row(self):
         vmlist = self.window.get_widget("vm-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
-        # check that something is selected and that it is a vm, not a connection
-        if active[1] != None and active[0].iter_parent(active[1]) != None:
-            return active[0].get_value(active[1], ROW_HANDLE)
+
+        treestore, treeiter = active
+        if treeiter != None:
+            return treestore[treeiter]
         return None
 
+    def current_vm(self):
+        row = self.current_row()
+        if not row or row[ROW_IS_CONN]:
+            return None
+
+        return row[ROW_HANDLE]
+
     def current_connection(self):
-        # returns a uri
-        vmlist = self.window.get_widget("vm-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-        if active[1] != None:
-            parent = active[0].iter_parent(active[1])
-            # return the connection of the currently selected vm, or the
-            # currently selected connection
-            if parent is not None:
-                return active[0].get_value(parent, ROW_HANDLE)
-            else:
-                return active[0].get_value(active[1], ROW_HANDLE)
-        return None
+        row = self.current_row()
+        if not row:
+            return None
+
+        handle = row[ROW_HANDLE]
+        if row[ROW_IS_CONN]:
+            return handle
+        else:
+            return handle.get_connection()
 
     def current_vmuuid(self):
         vm = self.current_vm()
@@ -832,9 +851,9 @@ class vmmManager(gobject.GObject):
         vmlist = self.window.get_widget("vm-list")
 
         # Handle, name, markup, status, status icon, key/uuid, hint, is conn,
-        # is conn connected, is vm, is vm running
+        # is conn connected, is vm, is vm running, fg color
         model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, str,
-                              bool, bool, bool, bool)
+                              bool, bool, bool, bool, gtk.gdk.Color)
         vmlist.set_model(model)
         util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
 
@@ -868,6 +887,7 @@ class vmmManager(gobject.GObject):
         name_txt = gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
         nameCol.add_attribute(name_txt, 'markup', ROW_MARKUP)
+        nameCol.add_attribute(name_txt, 'foreground-gdk', ROW_COLOR)
         nameCol.set_sort_column_id(VMLIST_SORT_NAME)
 
         cpuUsage_txt = gtk.CellRendererText()
