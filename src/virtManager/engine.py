@@ -401,7 +401,7 @@ class vmmEngine(gobject.GObject):
         self.windows -= 1
         logging.debug("window counter decremented to %s" % self.windows)
         # Don't exit if system tray is enabled
-        if self.windows <= 0 and not self.config.get_view_system_tray() :
+        if self.windows <= 0 and not self.systray.is_visible():
             self.exit_app()
 
     def exit_app(self):

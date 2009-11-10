@@ -70,6 +70,11 @@ class vmmSystray(gobject.GObject):
         self.config.on_view_system_tray_changed(self.show_systray)
         self.show_systray()
 
+    def is_visible(self):
+        return (self.config.get_view_system_tray() and
+                self.systray_icon and
+                self.systray_icon.is_embedded())
+
     # Initialization routines
 
     def init_systray_menu(self):
