@@ -94,14 +94,14 @@ class vmmSystray(gobject.GObject):
         self.systray_menu.add(exit_item)
         self.systray_menu.show_all()
 
-    def init_systray(self, show):
+    def init_systray(self):
         # Build the systray icon
         if self.systray_icon:
             return
 
         iconfile = self.config.get_icon_dir() + "/virt-manager-icon.svg"
         self.systray_icon = gtk.StatusIcon()
-        self.systray_icon.set_visible(show)
+        self.systray_icon.set_visible(True)
         self.systray_icon.set_property("file", iconfile)
         self.systray_icon.connect("activate", self.systray_activate)
         self.systray_icon.connect("popup-menu", self.systray_popup)
@@ -112,7 +112,8 @@ class vmmSystray(gobject.GObject):
         do_show = self.config.get_view_system_tray()
 
         if not self.systray_icon:
-            self.init_systray(show=do_show)
+            if do_show:
+                self.init_systray()
         else:
             self.systray_icon.set_visible(do_show)
 
