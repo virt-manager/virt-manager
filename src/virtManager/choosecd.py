@@ -125,7 +125,7 @@ class vmmChooseCD(gobject.GObject):
         pass
 
     def browse_fv_iso_location(self, ignore1=None, ignore2=None):
-        self._browse_file(_("Locate ISO Image"))
+        self._browse_file()
 
     def initialize_opt_media(self):
         try:
@@ -139,16 +139,13 @@ class vmmChooseCD(gobject.GObject):
     def set_storage_path(self, src, path):
         self.window.get_widget("iso-path").set_text(path)
 
-    def _browse_file(self, dialog_name):
+    def _browse_file(self):
         if self.storage_browser == None:
-            self.storage_browser = vmmStorageBrowser(self.config, self.conn,
-                                                     True)
+            self.storage_browser = vmmStorageBrowser(self.config, self.conn)
             self.storage_browser.connect("storage-browse-finish",
                                          self.set_storage_path)
-        self.storage_browser.local_args = { "dialog_name": dialog_name,
-                                            "browse_reason":
-                                                 self.config.CONFIG_DIR_MEDIA }
+
+        self.storage_browser.set_browse_reason(self.config.CONFIG_DIR_MEDIA)
         self.storage_browser.show(self.conn)
-        return None
 
 gobject.type_register(vmmChooseCD)

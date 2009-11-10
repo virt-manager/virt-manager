@@ -29,6 +29,7 @@ import virtinst
 import virtManager.host
 import virtManager.util as util
 from virtManager.createvol import vmmCreateVolume
+from virtManager.config import vmmConfig
 from virtManager.error import vmmErrorDialog
 
 class vmmStorageBrowser(gobject.GObject):
@@ -38,7 +39,7 @@ class vmmStorageBrowser(gobject.GObject):
                                   gobject.TYPE_NONE, [str]),
     }
 
-    def __init__(self, config, conn, is_media=False):
+    def __init__(self, config, conn):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + \
                                     "/vmm-storage-browse.glade",
@@ -46,6 +47,7 @@ class vmmStorageBrowser(gobject.GObject):
                                     domain="virt-manager")
         self.config = config
         self.conn = conn
+
         self.conn_signal_ids = []
         self.finish_cb_id = None
 
@@ -59,14 +61,9 @@ class vmmStorageBrowser(gobject.GObject):
         # Add Volume wizard
         self.addvol = None
 
-        if is_media:
-            reason = self.config.CONFIG_DIR_MEDIA
-        else:
-            reason = self.config.CONFIG_DIR_IMAGE
-
         # Arguments to pass to util.browse_local for local storage
-        self.local_args = {"dialog_name": _("Choose local storage"),
-                           "browse_reason": reason, }
+        self.browse_reason = None
+        self.local_args = {}
 
         self.window.signal_autoconnect({
             "on_vmm_storage_browse_delete_event" : self.close,
@@ -94,6 +91,12 @@ class vmmStorageBrowser(gobject.GObject):
         if self.finish_cb_id:
             self.disconnect(self.finish_cb_id)
         self.finish_cb_id = self.connect("storage-browse-finish", callback)
+
+    def set_browse_reason(self, reason):
+        self.browse_reason = reason
+
+    def set_local_arg(self, arg, val):
+        self.local_args[arg] = val
 
     def set_initial_state(self):
         pool_list = self.window.get_widget("pool-list")
@@ -169,6 +172,18 @@ class vmmStorageBrowser(gobject.GObject):
             tooltip = _("Cannot use local storage on remote connection.")
         util.tooltip_wrapper(self.window.get_widget("browse-local"),
                              tooltip)
+
+        # Set data based on browse type
+        self.local_args["browse_reason"] = self.browse_reason
+        if not vmmConfig.browse_reason_data.has_key(self.browse_reason):
+            return
+
+        data = vmmConfig.browse_reason_data[self.browse_reason]
+        self.topwin.set_title(data["storage_title"])
+        self.local_args["dialog_name"] = data["local_title"]
+
+        allow_create = data["enable_create"]
+        self.window.get_widget("new-volume").set_sensitive(allow_create)
 
     # Convenience helpers
     def current_pool(self):

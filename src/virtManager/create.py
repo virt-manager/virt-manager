@@ -1016,8 +1016,7 @@ class vmmCreate(gobject.GObject):
             nodetect_label.show()
 
     def browse_iso(self, ignore1=None, ignore2=None):
-        self._browse_file(_("Locate ISO Image"),
-                          self.set_iso_storage_path,
+        self._browse_file(self.set_iso_storage_path,
                           is_media=True)
         self.window.get_widget("install-local-box").activate()
 
@@ -1025,8 +1024,7 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("config-storage-box").set_sensitive(src.get_active())
 
     def browse_storage(self, ignore1):
-        self._browse_file(_("Locate existing storage"),
-                          self.set_disk_storage_path,
+        self._browse_file(self.set_disk_storage_path,
                           is_media=False)
 
     def toggle_storage_select(self, src):
@@ -1672,21 +1670,17 @@ class vmmCreate(gobject.GObject):
             logging.exception("Error detecting distro.")
             self.detectedDistro = (None, None)
 
-    def _browse_file(self, dialog_name, callback, folder=None, is_media=False):
-        if self.storage_browser == None:
-            self.storage_browser = vmmStorageBrowser(self.config, self.conn,
-                                                     is_media)
-
-        self.storage_browser.set_finish_cb(callback)
-
+    def _browse_file(self, callback, is_media=False):
         if is_media:
             reason = self.config.CONFIG_DIR_MEDIA
         else:
             reason = self.config.CONFIG_DIR_IMAGE
 
-        self.storage_browser.local_args = { "dialog_name": dialog_name,
-                                            "start_folder": folder,
-                                            "browse_reason": reason}
+        if self.storage_browser == None:
+            self.storage_browser = vmmStorageBrowser(self.config, self.conn)
+
+        self.storage_browser.set_finish_cb(callback)
+        self.storage_browser.set_browse_reason(reason)
         self.storage_browser.show(self.conn)
 
     def show_help(self, ignore):

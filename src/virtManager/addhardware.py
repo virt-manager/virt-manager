@@ -884,29 +884,19 @@ class vmmAddHardware(gobject.GObject):
 
     def browse_storage_partition_address(self, src, ignore=None):
         textent = self.window.get_widget("storage-partition-address")
-        part = self._browse_file(_("Locate Storage Partition"), textent,
-                                 "/dev")
-        if part != None:
-            textent.set_text(part)
+
+        self._browse_file(textent)
 
     def browse_storage_file_address(self, src, ignore=None):
         textent = self.window.get_widget("storage-file-address")
-        folder = self.config.get_default_image_dir(self.vm.get_connection())
-        filename = self._browse_file(_("Locate or Create New Storage File"),
-                                     textent, folder=folder,
-                                     confirm_overwrite=True)
-        if filename != None:
-            textent.set_text(filename)
 
-    def _browse_file(self, dialog_name, textent, folder=None,
-                     confirm_overwrite=False):
+        self._browse_file(textent, confirm_overwrite=True)
+
+    def _browse_file(self, textent, confirm_overwrite=False):
 
         confirm_func = None
         if confirm_overwrite:
             confirm_func = self.confirm_overwrite_callback
-
-        if folder and not os.access(folder, os.R_OK):
-            folder = None
 
         def set_storage_cb(src, path):
             if path:
@@ -914,15 +904,13 @@ class vmmAddHardware(gobject.GObject):
 
         conn = self.vm.get_connection()
         if self.storage_browser == None:
-            self.storage_browser = vmmStorageBrowser(self.config, conn, False)
+            self.storage_browser = vmmStorageBrowser(self.config, conn)
 
         self.storage_browser.set_finish_cb(set_storage_cb)
-        self.storage_browser.local_args = { "dialog_name": dialog_name,
-                                            "confirm_func": confirm_func,
-                                            "browse_reason":
-                                                  self.config.CONFIG_DIR_IMAGE }
+        self.storage_browser.set_browse_reason(self.config.CONFIG_DIR_IMAGE)
+        self.storage_browser.set_local_arg("confirm_func", confirm_func)
+
         self.storage_browser.show(conn)
-        return None
 
     def toggle_storage_size(self, ignore1=None, ignore2=None):
         filename = self.get_config_disk_image()

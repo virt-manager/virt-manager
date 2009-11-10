@@ -111,14 +111,12 @@ def browse_local(parent, dialog_name, config, conn, start_folder=None,
 
     """
 
+    # Initial setup
     overwrite_confirm = False
     choose_button = gtk.STOCK_OPEN
     if dialog_type == gtk.FILE_CHOOSER_ACTION_SAVE:
         choose_button = gtk.STOCK_SAVE
         overwrite_confirm = True
-
-    if browse_reason:
-        start_folder = config.get_default_directory(conn, browse_reason)
 
     fcdialog = gtk.FileChooserDialog(dialog_name, parent,
                                      dialog_type,
@@ -127,11 +125,13 @@ def browse_local(parent, dialog_name, config, conn, start_folder=None,
                                       None)
     fcdialog.set_default_response(gtk.RESPONSE_ACCEPT)
 
+    # If confirm is set, warn about a file overwrite
     if confirm_func:
         overwrite_confirm = True
         fcdialog.connect("confirm-overwrite", confirm_func)
     fcdialog.set_do_overwrite_confirmation(overwrite_confirm)
 
+    # Set file match pattern (ex. *.png)
     if _type != None:
         pattern = _type
         name = None
@@ -145,12 +145,18 @@ def browse_local(parent, dialog_name, config, conn, start_folder=None,
             f.set_name(name)
         fcdialog.set_filter(f)
 
-    if start_folder != None:
-        fcdialog.set_current_folder(start_folder)
+    # Set initial dialog folder
+    if browse_reason:
+        start_folder = config.get_default_directory(conn, browse_reason)
 
+    if start_folder != None:
+        if not os.access(start_folder, os.R_OK):
+            fcdialog.set_current_folder(start_folder)
+
+    # Run the dialog and parse the response
     response = fcdialog.run()
     fcdialog.hide()
-    if(response == gtk.RESPONSE_ACCEPT):
+    if (response == gtk.RESPONSE_ACCEPT):
         filename = fcdialog.get_filename()
         fcdialog.destroy()
         ret = filename
@@ -158,6 +164,7 @@ def browse_local(parent, dialog_name, config, conn, start_folder=None,
         fcdialog.destroy()
         ret = None
 
+    # Store the chosen directory in gconf if necessary
     if ret and browse_reason and not ret.startswith("/dev"):
         config.set_default_directory(os.path.dirname(ret), browse_reason)
 

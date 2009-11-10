@@ -55,6 +55,22 @@ class vmmConfig:
     CONFIG_DIR_RESTORE = "restore"
     CONFIG_DIR_SCREENSHOT = "screenshot"
 
+    # Metadata mapping for browse types. Prob shouldn't go here, but works
+    # for now.
+    browse_reason_data = {
+        CONFIG_DIR_IMAGE : {
+            "enable_create" : True,
+            "storage_title" : _("Locate or create storage volume"),
+            "local_title"   : _("Locate existing storage"),
+        },
+
+        CONFIG_DIR_MEDIA : {
+            "enable_create" : False,
+            "storage_title" : _("Locate ISO media volume"),
+            "local_title"   : _("Locate ISO media"),
+        }
+    }
+
     CONSOLE_SCALE_NEVER = 0
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2
