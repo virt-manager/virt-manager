@@ -24,8 +24,6 @@ import gtk.glade
 import logging
 import traceback
 
-import libvirt
-
 import virtManager.config as cfg
 from virtManager.connection import vmmConnection
 from virtManager.asyncjob import vmmAsyncJob
@@ -742,65 +740,53 @@ class vmmManager(gobject.GObject):
 
 
     def popup_vm_menu(self, widget, event):
+        if event.button != 3:
+            return False
+
         tup = widget.get_path_at_pos(int(event.x), int(event.y))
         if tup == None:
             return False
         path = tup[0]
         model = widget.get_model()
         _iter = model.get_iter(path)
+
         if model.iter_parent(_iter) != None:
-            # a vm is selected, retrieve it from the first column of the model
+            # Popup the vm menu
             vm = model.get_value(_iter, ROW_HANDLE)
-            if event.button == 3:
-                # Update popup menu based upon vm status
-                if vm.is_read_only() == True:
-                    self.vmmenu_items["run"].set_sensitive(False)
-                    self.vmmenu_items["pause"].set_sensitive(False)
-                    self.vmmenu_items["pause"].show()
-                    self.vmmenu_items["resume"].hide()
-                    self.vmmenu_items["resume"].set_sensitive(False)
-                    self.vmmenu_items["shutdown"].set_sensitive(False)
-                    self.vmmenu_items["migrate"].set_sensitive(False)
-                else:
-                    if vm.status() == libvirt.VIR_DOMAIN_SHUTOFF:
-                        self.vmmenu_items["run"].set_sensitive(True)
-                        self.vmmenu_items["pause"].set_sensitive(False)
-                        self.vmmenu_items["pause"].show()
-                        self.vmmenu_items["resume"].hide()
-                        self.vmmenu_items["resume"].set_sensitive(False)
-                        self.vmmenu_items["shutdown"].set_sensitive(False)
-                        self.vmmenu_items["migrate"].set_sensitive(True)
-                    elif vm.status() == libvirt.VIR_DOMAIN_RUNNING:
-                        self.vmmenu_items["run"].set_sensitive(False)
-                        self.vmmenu_items["pause"].set_sensitive(True)
-                        self.vmmenu_items["pause"].show()
-                        self.vmmenu_items["resume"].hide()
-                        self.vmmenu_items["resume"].set_sensitive(False)
-                        self.vmmenu_items["shutdown"].set_sensitive(True)
-                        self.vmmenu_items["migrate"].set_sensitive(True)
-                    elif vm.status() == libvirt.VIR_DOMAIN_PAUSED:
-                        self.vmmenu_items["run"].set_sensitive(False)
-                        self.vmmenu_items["pause"].hide()
-                        self.vmmenu_items["pause"].set_sensitive(False)
-                        self.vmmenu_items["resume"].show()
-                        self.vmmenu_items["resume"].set_sensitive(True)
-                        self.vmmenu_items["shutdown"].set_sensitive(True)
-                        self.vmmenu_items["migrate"].set_sensitive(True)
-                self.vmmenu.popup(None, None, None, 0, event.time)
-            return False
+
+            destroy = vm.is_destroyable()
+            run     = vm.is_runable()
+            stop    = vm.is_stoppable()
+            paused  = vm.is_paused()
+            ro      = vm.is_read_only()
+
+            self.vmmenu_items["run"].set_sensitive(run)
+            self.vmmenu_items["shutdown"].set_sensitive(stop)
+            self.vmmenu_items["pause"].set_property("visible", not paused)
+            self.vmmenu_items["pause"].set_sensitive(stop)
+            self.vmmenu_items["resume"].set_property("visible", paused)
+            self.vmmenu_items["resume"].set_sensitive(paused)
+            self.vmmenu_items["migrate"].set_sensitive(not ro)
+            self.vmmenu_items["clone"].set_sensitive(not ro)
+
+            self.vmmenushutdown_items["poweroff"].set_sensitive(stop)
+            self.vmmenushutdown_items["reboot"].set_sensitive(stop)
+            self.vmmenushutdown_items["forcepoweroff"].set_sensitive(destroy)
+            self.vmmenu.popup(None, None, None, 0, event.time)
         else:
+            # Pop up connection menu
             conn = model.get_value(_iter, ROW_HANDLE)
-            if event.button == 3:
-                if conn.get_state() != vmmConnection.STATE_DISCONNECTED:
-                    self.connmenu_items["create"].set_sensitive(True)
-                    self.connmenu_items["disconnect"].set_sensitive(True)
-                    self.connmenu_items["connect"].set_sensitive(False)
-                else:
-                    self.connmenu_items["create"].set_sensitive(False)
-                    self.connmenu_items["disconnect"].set_sensitive(False)
-                    self.connmenu_items["connect"].set_sensitive(True)
-                self.connmenu.popup(None, None, None, 0, event.time)
-            return False
+            disconn = (conn.get_state() == vmmConnection.STATE_DISCONNECTED)
+            conning = (conn.get_state() == vmmConnection.STATE_CONNECTING)
+
+            self.connmenu_items["create"].set_sensitive(not disconn)
+            self.connmenu_items["disconnect"].set_sensitive(not (disconn or
+                                                                 conning))
+            self.connmenu_items["connect"].set_sensitive(disconn)
+
+            self.connmenu.popup(None, None, None, 0, event.time)
+
+        return False
 
     def new_vm(self, ignore=None):
         self.emit("action-show-create", self.current_connection_uri())
