@@ -22,7 +22,6 @@ import gobject
 import gtk
 import libvirt
 import logging
-import gnome
 import traceback
 import threading
 
@@ -275,8 +274,12 @@ class vmmEngine(gobject.GObject):
 
     def show_help(self, index):
         try:
-            logging.debug("Showing help for %s" % index)
-            gnome.help_display(self.config.get_appname(), index)
+            uri = "ghelp:%s" % self.config.get_appname()
+            if index:
+                uri += "#%s" % index
+
+            logging.debug("Showing help for %s" % uri)
+            gtk.show_uri(None, uri, gtk.get_current_event_time())
         except gobject.GError, e:
             logging.error(("Unable to display documentation:\n%s") % e)
 
