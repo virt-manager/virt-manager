@@ -213,6 +213,9 @@ class vmmManager(gobject.GObject):
         self.vmmenu_icons["reboot"] = rebootimg
         self.vmmenu_icons["poweroff"] = shutdownimg
         self.vmmenu_icons["forcepoweroff"] = destroyimg
+        self.vmmenu_icons["delete"] = gtk.Image()
+        self.vmmenu_icons["delete"].set_from_stock(gtk.STOCK_DELETE,
+                                                   gtk.ICON_SIZE_MENU)
 
         self.vmmenu = gtk.Menu()
         self.vmmenushutdown = gtk.Menu()
@@ -278,6 +281,12 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["clone"].show()
         self.vmmenu_items["clone"].connect("activate", self.open_clone_window)
         self.vmmenu.add(self.vmmenu_items["clone"])
+
+        self.vmmenu_items["delete"] = gtk.ImageMenuItem("_Delete")
+        self.vmmenu_items["delete"].set_image(self.vmmenu_icons["delete"])
+        self.vmmenu_items["delete"].show()
+        self.vmmenu_items["delete"].connect("activate", self.delete_vm)
+        self.vmmenu.add(self.vmmenu_items["delete"])
 
         self.vmmenu_items["hsep2"] = gtk.SeparatorMenuItem()
         self.vmmenu_items["hsep2"].show()
@@ -784,6 +793,7 @@ class vmmManager(gobject.GObject):
             self.vmmenu_items["resume"].set_sensitive(paused)
             self.vmmenu_items["migrate"].set_sensitive(not ro)
             self.vmmenu_items["clone"].set_sensitive(not ro)
+            self.vmmenu_items["delete"].set_sensitive(run)
 
             self.vmmenushutdown_items["poweroff"].set_sensitive(stop)
             self.vmmenushutdown_items["reboot"].set_sensitive(stop)
