@@ -9,6 +9,10 @@ IT_PROG_INTLTOOL([0.35.0], [no-xml])
 AM_GNU_GETTEXT_VERSION([0.14.1])
 AM_GNU_GETTEXT([external])
 
+# Latest virtinst version required to run
+VIRTINST_VERSION="0.400.3"
+AC_SUBST([VIRTINST_VERSION])
+
 dnl ====================================
 dnl = Begin tests for scrollkeeper
 dnl ====================================

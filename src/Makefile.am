@@ -48,7 +48,8 @@ EXTRA_DIST = $(bin_SCRIPTS_IN) $(desktop_DATA_IN) $(dbus_DATA_IN) $(python_DATA_
 	  -e "s,::PYLIBDIR::,$(pkgdatadir)," \
 	  -e "s,::GETTEXTDIR::,$(datadir)/locale," \
 	  -e "s,::DATADIR::,$(datadir)," \
-          -e "s,::PYARCHLIBDIR::,$(pkglibdir)," < $< > $@
+	  -e "s,::PYARCHLIBDIR::,$(pkglibdir)," \
+	  -e "s,::VIRTINST_VERSION::,$(VIRTINST_VERSION)," < $< > $@
 
 $(PACKAGE): $(srcdir)/$(PACKAGE).in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PYTHONDIR::,$(pkgdatadir)," < $< > $@
