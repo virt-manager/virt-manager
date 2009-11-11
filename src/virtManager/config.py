@@ -256,12 +256,23 @@ class vmmConfig:
             # Suggest gconf syncs, so that the unset dirs are fully removed
             self.conf.suggest_sync()
 
-    def get_vmlist_stats_type(self):
-        return self.conf.get_int(self.conf_dir + "/vmlist-fields/stats_type")
+    def is_vmlist_cpu_usage_visible(self):
+        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/cpu_usage")
 
-    def set_vmlist_stats_type(self, val):
-        self.conf.set_int(self.conf_dir + "/vmlist-fields/stats_type", val)
+    def is_vmlist_disk_io_visible(self):
+        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/disk_usage")
 
+    def is_vmlist_network_traffic_visible(self):
+        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/network_traffic")
+
+    def set_vmlist_cpu_usage_visible(self, state):
+        self.conf.set_bool(self.conf_dir + "/vmlist-fields/cpu_usage", state)
+
+    def set_vmlist_disk_io_visible(self, state):
+        self.conf.set_bool(self.conf_dir + "/vmlist-fields/disk_usage", state)
+
+    def set_vmlist_network_traffic_visible(self, state):
+        self.conf.set_bool(self.conf_dir + "/vmlist-fields/network_traffic", state)
 
     def get_default_directory(self, conn, _type):
         if not _type:
@@ -301,9 +312,14 @@ class vmmConfig:
     def set_view_system_tray(self, val):
         self.conf.set_bool(self.conf_dir + "/system-tray", val)
 
-    def on_vmlist_stats_type_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/stats_type",
-                             callback)
+    def on_vmlist_cpu_usage_visible_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/vmlist-fields/cpu_usage", callback)
+
+    def on_vmlist_disk_io_visible_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/vmlist-fields/disk_usage", callback)
+
+    def on_vmlist_network_traffic_visible_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/vmlist-fields/network_traffic", callback)
 
     def get_stats_update_interval(self):
         interval = self.conf.get_int(self.conf_dir + "/stats/update-interval")

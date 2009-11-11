@@ -32,8 +32,6 @@ from virtManager.delete import vmmDeleteDialog
 from virtManager.graphwidgets import CellRendererSparkline
 from virtManager import util as util
 
-VMLIST_SORT_NAME = 1
-VMLIST_SORT_STATS = 2
 
 # fields in the tree model data set
 ROW_HANDLE = 0
@@ -51,8 +49,9 @@ ROW_COLOR = 11
 
 # Columns in the tree view
 COL_NAME = 0
-COL_STATUS = 1
-COL_STATS = 2
+COL_CPU = 1
+COL_DISK = 2
+COL_NETWORK = 3
 
 rcstring = """
 style "toolbar-style" {
@@ -158,12 +157,11 @@ class vmmManager(gobject.GObject):
         self.startup_error = None
         self.ignore_pause = False
 
-        self.stats_column = None
-        self.stats_sparkline = None
-
         self.prepare_vmlist()
 
-        self.config.on_vmlist_stats_type_changed(self.stats_toggled_config)
+        self.config.on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
+        self.config.on_vmlist_disk_io_visible_changed(self.toggle_disk_io_visible_widget)
+        self.config.on_vmlist_network_traffic_visible_changed(self.toggle_network_traffic_visible_widget)
 
         # Register callbacks with the global stats enable/disable values
         # that disable the associated vmlist widgets if reporting is disabled
@@ -171,6 +169,11 @@ class vmmManager(gobject.GObject):
                                                       cfg.STATS_DISK)
         self.config.on_stats_enable_net_poll_changed(self.enable_polling,
                                                      cfg.STATS_NETWORK)
+
+        self.window.get_widget("menu_view_stats_cpu").set_active(self.config.is_vmlist_cpu_usage_visible())
+        self.window.get_widget("menu_view_stats_disk").set_active(self.config.is_vmlist_disk_io_visible())
+        self.window.get_widget("menu_view_stats_network").set_active(self.config.is_vmlist_network_traffic_visible())
+
 
         self.vmmenu_icons = {}
         self.vmmenu_icons["run"] = gtk.Image()
@@ -333,12 +336,12 @@ class vmmManager(gobject.GObject):
         self.connmenu.show()
 
         self.window.signal_autoconnect({
-            "on_menu_view_stats_disk_toggled" :     (self.stats_toggled,
-                                                     cfg.STATS_DISK),
-            "on_menu_view_stats_network_toggled" :  (self.stats_toggled,
-                                                     cfg.STATS_NETWORK),
-            "on_menu_view_stats_cpu_toggled" :      (self.stats_toggled,
-                                                     cfg.STATS_CPU),
+            "on_menu_view_cpu_usage_activate":  (self.toggle_stats_visible,
+                                                    cfg.STATS_CPU),
+            "on_menu_view_disk_io_activate" :   (self.toggle_stats_visible,
+                                                    cfg.STATS_DISK),
+            "on_menu_view_network_traffic_activate": (self.toggle_stats_visible,
+                                                cfg.STATS_NETWORK),
 
             "on_vm_manager_delete_event": self.close,
             "on_menu_file_add_connection_activate": self.new_connection,
@@ -876,11 +879,18 @@ class vmmManager(gobject.GObject):
         nameCol.set_expand(True)
         nameCol.set_spacing(6)
         cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
-        cpuUsageCol.set_min_width(150)
+        diskIOCol = gtk.TreeViewColumn(_("Disk I/O"))
+        networkTrafficCol = gtk.TreeViewColumn(_("Network I/O"))
+
+        cpuUsageCol.set_min_width(140)
+        diskIOCol.set_min_width(140)
+        networkTrafficCol.set_min_width(140)
 
         statusCol = nameCol
         vmlist.append_column(nameCol)
         vmlist.append_column(cpuUsageCol)
+        vmlist.append_column(diskIOCol)
+        vmlist.append_column(networkTrafficCol)
 
         # For the columns which follow, we deliberately bind columns
         # to fields in the list store & on each update copy the info
@@ -900,7 +910,7 @@ class vmmManager(gobject.GObject):
         nameCol.pack_start(name_txt, True)
         nameCol.add_attribute(name_txt, 'markup', ROW_MARKUP)
         nameCol.add_attribute(name_txt, 'foreground-gdk', ROW_COLOR)
-        nameCol.set_sort_column_id(VMLIST_SORT_NAME)
+        nameCol.set_sort_column_id(COL_NAME)
 
         cpuUsage_txt = gtk.CellRendererText()
         cpuUsage_img = CellRendererSparkline()
@@ -911,14 +921,37 @@ class vmmManager(gobject.GObject):
         cpuUsageCol.pack_start(cpuUsage_txt, False)
         cpuUsageCol.add_attribute(cpuUsage_img, 'visible', ROW_IS_VM)
         cpuUsageCol.add_attribute(cpuUsage_txt, 'visible', ROW_IS_CONN)
-        cpuUsageCol.set_sort_column_id(VMLIST_SORT_STATS)
-        self.stats_sparkline = cpuUsage_img
-        self.stats_column = cpuUsageCol
-        self.stats_toggled(None, self.get_stats_type())
+        cpuUsageCol.set_cell_data_func(cpuUsage_img, self.cpu_usage_img, None)
+        cpuUsageCol.set_visible(self.config.is_vmlist_cpu_usage_visible())
+        cpuUsageCol.set_sort_column_id(COL_CPU)
 
-        model.set_sort_func(VMLIST_SORT_NAME, self.vmlist_name_sorter)
+        diskIO_img = CellRendererSparkline()
+        diskIO_img.set_property("xpad", 6)
+        diskIO_img.set_property("ypad", 12)
+        diskIO_img.set_property("reversed", True)
+        diskIOCol.pack_start(diskIO_img, True)
+        diskIOCol.add_attribute(diskIO_img, 'visible', ROW_IS_VM)
+        diskIOCol.set_cell_data_func(diskIO_img, self.disk_io_img, None)
+        diskIOCol.set_visible(self.config.is_vmlist_disk_io_visible())
+        diskIOCol.set_sort_column_id(COL_DISK)
 
-        model.set_sort_column_id(VMLIST_SORT_NAME, gtk.SORT_ASCENDING)
+        networkTraffic_img = CellRendererSparkline()
+        networkTraffic_img.set_property("xpad", 6)
+        networkTraffic_img.set_property("ypad", 12)
+        networkTraffic_img.set_property("reversed", True)
+        networkTrafficCol.pack_start(networkTraffic_img, True)
+        networkTrafficCol.add_attribute(networkTraffic_img, 'visible', ROW_IS_VM)
+        networkTrafficCol.set_cell_data_func(networkTraffic_img,
+                                             self.network_traffic_img, None)
+        networkTrafficCol.set_visible(self.config.is_vmlist_network_traffic_visible())
+        networkTrafficCol.set_sort_column_id(COL_NETWORK)
+
+        model.set_sort_func(COL_NAME, self.vmlist_name_sorter)
+        model.set_sort_func(COL_CPU, self.vmlist_cpu_usage_sorter)
+        model.set_sort_func(COL_DISK, self.vmlist_disk_io_sorter)
+        model.set_sort_func(COL_NETWORK, self.vmlist_network_usage_sorter)
+
+        model.set_sort_column_id(COL_NAME, gtk.SORT_ASCENDING)
 
     def vmlist_name_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, ROW_NAME),
@@ -950,53 +983,31 @@ class vmmManager(gobject.GObject):
             widget.set_sensitive(False)
             tool_text = _("Disabled in preferences dialog.")
 
-            if self.get_stats_type() == userdata:
-                # Switch graphs over to guaranteed safe value
-                self.stats_toggled(None, cfg.STATS_CPU)
-
         util.tooltip_wrapper(widget, tool_text)
 
-    def stats_toggled_config(self, ignore1, ignore2, conf_entry, ignore4):
-        self.stats_toggled(None, conf_entry.get_value().get_int())
+    def toggle_network_traffic_visible_widget(self, *ignore):
+        vmlist = self.window.get_widget("vm-list")
+        col = vmlist.get_column(COL_NETWORK)
+        col.set_visible(self.config.is_vmlist_network_traffic_visible())
 
-    def get_stats_type(self):
-        return self.config.get_vmlist_stats_type()
+    def toggle_disk_io_visible_widget(self, *ignore):
+        vmlist = self.window.get_widget("vm-list")
+        col = vmlist.get_column(COL_DISK)
+        col.set_visible(self.config.is_vmlist_disk_io_visible())
 
-    def stats_toggled(self, src, stats_id):
-        if src and not src.get_active():
-            return
+    def toggle_cpu_usage_visible_widget(self, *ignore):
+        vmlist = self.window.get_widget("vm-list")
+        col = vmlist.get_column(COL_CPU)
+        col.set_visible(self.config.is_vmlist_cpu_usage_visible())
 
-        if stats_id == cfg.STATS_NETWORK:
-            column_name = _("Network I/O")
-            stats_func = self.network_traffic_img
-            sort_func = self.vmlist_network_usage_sorter
-            widg = "menu_view_stats_network"
-        elif stats_id == cfg.STATS_DISK:
-            column_name = _("Disk I/O")
-            stats_func = self.disk_io_img
-            sort_func = self.vmlist_disk_io_sorter
-            widg = "menu_view_stats_disk"
-        elif stats_id == cfg.STATS_CPU:
-            column_name = _("CPU Usage")
-            stats_func = self.cpu_usage_img
-            sort_func = self.vmlist_cpu_usage_sorter
-            widg = "menu_view_stats_cpu"
-        else:
-            return
-
-        if not src:
-            self.window.get_widget(widg).set_active(True)
-
-        if self.stats_column:
-            vmlist = self.window.get_widget("vm-list")
-            model = vmlist.get_model()
-            self.stats_column.set_title(column_name)
-            self.stats_column.set_cell_data_func(self.stats_sparkline,
-                                                 stats_func, None)
-            model.set_sort_func(VMLIST_SORT_STATS, sort_func)
-
-        if stats_id != self.get_stats_type():
-            self.config.set_vmlist_stats_type(stats_id)
+    def toggle_stats_visible(self, src, stats_id):
+        visible = src.get_active()
+        set_stats = {
+        cfg.STATS_CPU: self.config.set_vmlist_cpu_usage_visible,
+        cfg.STATS_DISK: self.config.set_vmlist_disk_io_visible,
+        cfg.STATS_NETWORK: self.config.set_vmlist_network_traffic_visible,
+        }
+        set_stats[stats_id](visible)
 
     def cpu_usage_img(self,  column, cell, model, _iter, data):
         if model.get_value(_iter, ROW_HANDLE) is None:
