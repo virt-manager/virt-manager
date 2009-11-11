@@ -1261,23 +1261,37 @@ class vmmDetails(gobject.GObject):
                                                 self.vm.network_traffic_vector())
 
     def refresh_config_cpu(self):
-        self.window.get_widget("state-host-cpus").set_text("%d" % self.vm.get_connection().host_active_processor_count())
-        status = self.vm.status()
-        if status in [ libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED ]:
-            cpu_max = self.vm.get_connection().get_max_vcpus(self.vm.get_hv_type())
-            self.window.get_widget("config-vcpus").get_adjustment().upper = cpu_max
-            self.window.get_widget("state-vm-maxvcpus").set_text(str(cpu_max))
-        else:
-            self.window.get_widget("config-vcpus").get_adjustment().upper = self.vm.vcpu_max_count()
-            self.window.get_widget("state-vm-maxvcpus").set_text("%d" % (self.vm.vcpu_max_count()))
+        conn = self.vm.get_connection()
+        host_active_count = conn.host_active_processor_count()
+        cpu_max = (self.vm.is_runable() and
+                   conn.get_max_vcpus(self.vm.get_hv_type()) or
+                   self.vm.vcpu_max_count())
+        curvcpus = self.vm.vcpu_count()
+        vcpupin  = self.vm.vcpu_pinning()
 
-        if not(self.window.get_widget("config-apply").get_property("sensitive")):
-            self.window.get_widget("config-vcpus").get_adjustment().value = self.vm.vcpu_count()
-        self.window.get_widget("state-vm-vcpus").set_text("%d" % (self.vm.vcpu_count()))
-        self.window.get_widget("config-vcpupin").set_text("%s" % self.vm.vcpu_pinning() )
+        config_apply = self.window.get_widget("config-apply")
+        vcpus_adj = self.window.get_widget("config-vcpus").get_adjustment()
+
+        vcpus_adj.upper = cpu_max
+        self.window.get_widget("state-host-cpus").set_text("%s" %
+                                                           host_active_count)
+        self.window.get_widget("state-vm-maxvcpus").set_text(str(cpu_max))
+
+        if not config_apply.get_property("sensitive"):
+            vcpus_adj.value = curvcpus
+
+        self.window.get_widget("state-vm-vcpus").set_text(str(curvcpus))
+        self.window.get_widget("config-vcpupin").set_text(vcpupin)
 
     def refresh_config_memory(self):
-        self.window.get_widget("state-host-memory").set_text("%d MB" % (int(round(self.vm.get_connection().host_memory_size()/1024))))
+        host_mem_widget = self.window.get_widget("state-host-memory")
+        vm_mem_widget = self.window.get_widget("state-vm-memory")
+        host_mem = self.vm.get_connection().host_memory_size()/1024
+        vm_cur_mem = self.vm.get_memory()/1024.0
+        vm_max_mem = self.vm.maximum_memory()/1024.0
+
+        host_mem_widget.set_text("%d MB" % (int(round(host_mem))))
+        vm_mem_widget.set_text("%d MB" % int(round(vm_cur_mem)))
 
         curmem = self.window.get_widget("config-memory").get_adjustment()
         maxmem = self.window.get_widget("config-maxmem").get_adjustment()
@@ -1289,12 +1303,13 @@ class vmmDetails(gobject.GObject):
                 maxmem.value = memval
             maxmem.lower = memval
         else:
-            curmem.value = int(round(self.vm.get_memory()/1024.0))
-            maxmem.value = int(round(self.vm.maximum_memory()/1024.0))
+            curmem.value = int(round(vm_cur_mem))
+            maxmem.value = int(round(vm_max_mem))
 
-        if not self.window.get_widget("config-memory").get_property("sensitive"):
+        if (not
+            self.window.get_widget("config-memory").get_property("sensitive")):
             maxmem.lower = curmem.value
-        self.window.get_widget("state-vm-memory").set_text("%d MB" % int(round(self.vm.get_memory()/1024.0)))
+
 
     def refresh_disk_page(self):
         diskinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -1344,11 +1359,9 @@ class vmmDetails(gobject.GObject):
             return
 
         self.window.get_widget("network-source-type").set_text(netinfo[5])
-        if netinfo[3] is not None:
-            self.window.get_widget("network-source-device").set_text(netinfo[3])
-        else:
-            self.window.get_widget("network-source-device").set_text("-")
         self.window.get_widget("network-mac-address").set_text(netinfo[2])
+        self.window.get_widget("network-source-device").set_text(netinfo[3] or
+                                                                 "-")
 
         model = netinfo[6] or _("Hypervisor Default")
         self.window.get_widget("network-source-model").set_text(model)
@@ -1359,22 +1372,23 @@ class vmmDetails(gobject.GObject):
             return
 
         if inputinfo[2] == "tablet:usb":
-            self.window.get_widget("input-dev-type").set_text(_("EvTouch USB Graphics Tablet"))
+            dev = _("EvTouch USB Graphics Tablet")
         elif inputinfo[2] == "mouse:usb":
-            self.window.get_widget("input-dev-type").set_text(_("Generic USB Mouse"))
+            dev = _("Generic USB Mouse")
         elif inputinfo[2] == "mouse:xen":
-            self.window.get_widget("input-dev-type").set_text(_("Xen Mouse"))
+            dev = _("Xen Mouse")
         elif inputinfo[2] == "mouse:ps2":
-            self.window.get_widget("input-dev-type").set_text(_("PS/2 Mouse"))
+            dev = _("PS/2 Mouse")
         else:
-            self.window.get_widget("input-dev-type").set_text(inputinfo[4] + \
-                                                              " " \
-                                                              + inputinfo[3])
+            dev = inputinfo[4] + " " + inputinfo[3]
 
         if inputinfo[4] == "tablet":
-            self.window.get_widget("input-dev-mode").set_text(_("Absolute Movement"))
+            mode = _("Absolute Movement")
         else:
-            self.window.get_widget("input-dev-mode").set_text(_("Relative Movement"))
+            mode = _("Relative Movement")
+
+        self.window.get_widget("input-dev-type").set_text(dev)
+        self.window.get_widget("input-dev-mode").set_text(mode)
 
         # Can't remove primary Xen or PS/2 mice
         if inputinfo[4] == "mouse" and inputinfo[3] in ("xen", "ps2"):
@@ -1387,29 +1401,29 @@ class vmmDetails(gobject.GObject):
         if not gfxinfo:
             return
 
-        if gfxinfo[2] == "vnc":
-            self.window.get_widget("graphics-type").set_text(_("VNC server"))
-        elif gfxinfo[2] == "sdl":
-            self.window.get_widget("graphics-type").set_text(_("Local SDL window"))
-        else:
-            self.window.get_widget("graphics-type").set_text(gfxinfo[2])
+        is_vnc = (gfxinfo[2] == "vnc")
+        is_sdl = (gfxinfo[2] == "sdl")
 
-        if gfxinfo[2] == "vnc":
-            if gfxinfo[3] == None:
-                self.window.get_widget("graphics-address").set_text("127.0.0.1")
-            else:
-                self.window.get_widget("graphics-address").set_text(gfxinfo[3])
-            if int(gfxinfo[4]) == -1:
-                self.window.get_widget("graphics-port").set_text(_("Automatically allocated"))
-            else:
-                self.window.get_widget("graphics-port").set_text(gfxinfo[4])
-            self.window.get_widget("graphics-password").set_text("-")
-            self.window.get_widget("graphics-keymap").set_text(gfxinfo[5] or "en-us")
+        port = _("N/A")
+        if is_vnc:
+            gtype = _("VNC server")
+            port  = (gfxinfo[4] == "-1" and
+                     _("Automatically allocated") or
+                     gfxinfo[4])
+        elif is_sdl:
+            gtype = _("Local SDL window")
         else:
-            self.window.get_widget("graphics-address").set_text(_("N/A"))
-            self.window.get_widget("graphics-port").set_text(_("N/A"))
-            self.window.get_widget("graphics-password").set_text("N/A")
-            self.window.get_widget("graphics-keymap").set_text("N/A")
+            gtype = gfxinfo[2]
+
+        address = (is_vnc and (gfxinfo[3] or "127.0.0.1") or _("N/A"))
+        passwd  = (is_vnc and "-" or _("N/A"))
+        keymap  = (is_vnc and (gfxinfo[5] or "en-us") or _("N/A"))
+
+        self.window.get_widget("graphics-type").set_text(gtype)
+        self.window.get_widget("graphics-address").set_text(address)
+        self.window.get_widget("graphics-port").set_text(port)
+        self.window.get_widget("graphics-password").set_text(passwd)
+        self.window.get_widget("graphics-keymap").set_text(keymap)
 
     def refresh_sound_page(self):
         soundinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
