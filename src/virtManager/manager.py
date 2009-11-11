@@ -349,7 +349,8 @@ class vmmManager(gobject.GObject):
             "on_vm_list_row_activated": self.open_vm_console,
             "on_vm_list_row_expanded": self.row_expanded,
             "on_vm_list_row_collapsed": self.row_collapsed,
-            "on_vm_list_button_press_event": self.popup_vm_menu,
+            "on_vm_list_button_press_event": self.popup_vm_menu_button,
+            "on_vm_list_key_press_event": self.popup_vm_menu_key,
 
             "on_menu_edit_preferences_activate": self.show_preferences,
             "on_menu_help_about_activate": self.show_about,
@@ -740,8 +741,17 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("menu_edit_delete").set_sensitive(delete)
         self.window.get_widget("menu_file_restore_saved").set_sensitive(restore)
 
+    def popup_vm_menu_key(self, widget, event):
+        if gtk.gdk.keyval_name(event.keyval) != "Menu":
+            return False
 
-    def popup_vm_menu(self, widget, event):
+        vmlist = self.window.get_widget("vm-list")
+        treeselection = vmlist.get_selection()
+        model, _iter = treeselection.get_selected()
+        self.popup_vm_menu(model, _iter, event)
+        return True
+
+    def popup_vm_menu_button(self, widget, event):
         if event.button != 3:
             return False
 
@@ -752,6 +762,10 @@ class vmmManager(gobject.GObject):
         model = widget.get_model()
         _iter = model.get_iter(path)
 
+        self.popup_vm_menu(model, _iter, event)
+        return True
+
+    def popup_vm_menu(self, model, _iter, event):
         if model.iter_parent(_iter) != None:
             # Popup the vm menu
             vm = model.get_value(_iter, ROW_HANDLE)
