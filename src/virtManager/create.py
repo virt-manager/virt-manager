@@ -110,7 +110,7 @@ class vmmCreate(gobject.GObject):
             "on_create_conn_changed": self.conn_changed,
 
             "on_install_url_box_changed": self.url_box_changed,
-            "on_install_local_cdrom_toggled": self.local_cdrom_toggled,
+            "on_install_local_cdrom_toggled": self.toggle_local_cdrom,
             "on_install_local_cdrom_combo_changed": self.detect_media_os,
             "on_install_local_box_changed": self.detect_media_os,
             "on_install_local_browse_clicked": self.browse_iso,
@@ -409,17 +409,23 @@ class vmmCreate(gobject.GObject):
 
 
         # Install local
-        self.window.get_widget("install-local-cdrom-box").set_sensitive(is_local)
-        if not is_local:
-            self.window.get_widget("install-local-iso").set_active(True)
+        iso_option = self.window.get_widget("install-local-iso")
+        cdrom_option = self.window.get_widget("install-local-cdrom")
 
+        self.window.get_widget("install-local-cdrom-box").set_sensitive(is_local)
         # Don't select physical CDROM if no valid media is present
         use_cd = (self.window.get_widget("install-local-cdrom-combo").get_active() >= 0)
         if use_cd:
-            self.window.get_widget("install-local-cdrom").set_active(True)
+            cdrom_option.set_active(True)
         else:
-            self.window.get_widget("install-local-iso").set_active(True)
+            iso_option.set_active(True)
 
+        # Only allow ISO option for remote VM
+        if not is_local:
+            iso_option.set_active(True)
+
+        self.toggle_local_cdrom(cdrom_option)
+        self.toggle_local_iso(iso_option)
 
         # Memory
         memory = int(self.conn.host_memory_size())
@@ -987,7 +993,7 @@ class vmmCreate(gobject.GObject):
         variant = self.window.get_widget("install-os-version")
         variant.set_active(0)
 
-    def local_cdrom_toggled(self, src):
+    def toggle_local_cdrom(self, src):
         combo = self.window.get_widget("install-local-cdrom-combo")
         is_active = src.get_active()
         if is_active:
