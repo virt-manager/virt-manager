@@ -30,10 +30,9 @@ from virtManager.netdevhelper import vmmNetDevHelper
 from virtManager.clone import vmmCloneVM
 from virtManager.connect import vmmConnect
 from virtManager.connection import vmmConnection
-from virtManager.createmeter import vmmCreateMeter
-from virtManager.domain import vmmDomain
 from virtManager.preferences import vmmPreferences
 from virtManager.manager import vmmManager
+from virtManager.migrate import vmmMigrateDialog
 from virtManager.details import vmmDetails
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.create import vmmCreate
@@ -54,11 +53,14 @@ class vmmEngine(gobject.GObject):
         self.__gobject_init__()
 
         self.config = config
+
         self.windowConnect = None
         self.windowPreferences = None
         self.windowAbout = None
         self.windowCreate = None
         self.windowManager = None
+        self.windowMigrate = None
+
         self.connections = {}
         self.err = vmmErrorDialog(None,
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
@@ -645,52 +647,11 @@ class vmmEngine(gobject.GObject):
         vm = conn.get_vm(uuid)
         destconn = self._lookup_connection(desturi)
 
-        resp = self.err.yes_no(_("Are you sure you want to migrate %s from "
-                                 "%s to %s?") %
-                                (vm.get_name(), conn.get_hostname(),
-                                 destconn.get_hostname()))
-        if not resp:
-            return
+        if not self.windowMigrate:
+            self.windowMigrate = vmmMigrateDialog(self.config, vm, destconn)
 
-        progWin = vmmAsyncJob(self.config, self._async_migrate, [vm, destconn],
-                              title=_("Migrating VM '%s'" % vm.get_name()),
-                              text=(_("Migrating VM '%s' from %s to %s. "
-                                      "This may take awhile.") %
-                                      (vm.get_name(), conn.get_hostname(),
-                                       destconn.get_hostname())))
-        progWin.run()
-        error, details = progWin.get_error()
-
-        if error:
-            self.err.show_err(error, details)
-
-        self.windowManager.conn_refresh_resources(vm.get_connection())
-        self.windowManager.conn_refresh_resources(destconn)
-
-    def _async_migrate(self, origvm, origdconn, asyncjob):
-        errinfo = None
-        try:
-            try:
-                ignore = vmmCreateMeter(asyncjob)
-
-                srcconn = util.dup_conn(self.config, origvm.get_connection(),
-                                        return_conn_class=True)
-                dstconn = util.dup_conn(self.config, origdconn,
-                                        return_conn_class=True)
-
-                vminst = srcconn.vmm.lookupByName(origvm.get_name())
-                vm = vmmDomain(self.config, srcconn, vminst, vminst.UUID())
-
-                logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
-                              srcconn.get_uri(), dstconn.get_uri())
-                vm.migrate(dstconn)
-            except Exception, e:
-                errinfo = (str(e), ("Unable to migrate guest:\n %s" %
-                                    "".join(traceback.format_exc())))
-        finally:
-            if errinfo:
-                asyncjob.set_error(errinfo[0], errinfo[1])
-
+        self.windowMigrate.set_state(vm, destconn)
+        self.windowMigrate.show()
 
     def populate_migrate_menu(self, menu, migrate_func, vm):
         conns = self.get_available_migrate_hostnames(vm)
@@ -733,7 +694,7 @@ class vmmEngine(gobject.GObject):
             conn = value["connection"]
 
             can_migrate = False
-            desc = "%s (%s)" % (conn.get_hostname(), conn.get_driver())
+            desc = conn.get_pretty_desc_inactive()
             reason = ""
             desturi = conn.get_uri()
 

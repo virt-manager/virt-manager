@@ -182,15 +182,23 @@ class vmmDomain(gobject.GObject):
         if self.get_autostart() != val:
             self._backend.setAutostart(val)
 
-    def migrate(self, destconn):
+    def migrate(self, destconn, interface=None, rate=0,
+                live=False, secure=False):
+        newname = None
+
         flags = 0
-        if self.lastStatus == libvirt.VIR_DOMAIN_RUNNING:
-            flags = libvirt.VIR_MIGRATE_LIVE
+        if self.lastStatus == libvirt.VIR_DOMAIN_RUNNING and live:
+            flags |= libvirt.VIR_MIGRATE_LIVE
 
-        newxml = self.get_xml()
+        if secure:
+            flags |= libvirt.VIR_MIGRATE_PEER2PEER
+            flags |= libvirt.VIR_MIGRATE_TUNNELLED
 
-        self._backend.migrate(destconn.vmm, flags, None, None, 0)
+        newxml = self.get_xml_to_define()
 
+        logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s rate=%s" %
+                      (destconn.vmm, flags, newname, interface, rate))
+        self._backend.migrate(destconn.vmm, flags, newname, interface, rate)
         destconn.define_domain(newxml)
 
 

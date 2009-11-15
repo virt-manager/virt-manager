@@ -39,13 +39,6 @@ XEN_SAVE_MAGIC = "LinuxGuestRecord"
 QEMU_SAVE_MAGIC = "LibvirtQemudSave"
 TEST_SAVE_MAGIC = "TestGuestMagic"
 
-def get_local_hostname():
-    try:
-        return gethostbyaddr(gethostname())[0]
-    except:
-        logging.warning("Unable to resolve local hostname for machine")
-        return "localhost"
-
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
         "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -139,6 +132,23 @@ class vmmConnection(gobject.GObject):
             return None
         return self.vmm.getType()
 
+    def is_local(self):
+        return bool(self.get_uri_hostname() == "localhost")
+
+    def get_qualified_hostname(self):
+        if util.libvirt_support_and_check(self.vmm, "getHostname"):
+            return self.vmm.getHostname()
+
+        uri_hostname = self.get_uri_hostname()
+        if self.is_remote() and uri_hostname.lower() != "localhost":
+            return uri_hostname
+
+        # This can throw an exception, so beware when calling!
+        return gethostbyaddr(gethostname())[0]
+
+    def get_uri_hostname(self):
+        return virtinst.util.get_uri_hostname(self.uri)
+
     def get_short_hostname(self):
         hostname = self.get_hostname()
         offset = hostname.find(".")
@@ -147,7 +157,10 @@ class vmmConnection(gobject.GObject):
         return hostname
 
     def get_hostname(self, resolveLocal=False):
-        return virtinst.util.get_uri_hostname(self.uri)
+        try:
+            return self.get_qualified_hostname()
+        except:
+            return self.get_uri_hostname()
 
     def get_transport(self):
         return virtinst.util.get_uri_transport(self.uri)
@@ -180,6 +193,12 @@ class vmmConnection(gobject.GObject):
             return False
 
         return bool(self.dom_xml_flags.count(flags))
+
+    def is_xen(self):
+        scheme = virtinst.util.uri_split(self.uri)[0]
+        if scheme.startswith("xen"):
+            return True
+        return False
 
     def is_kvm_supported(self):
         if self.is_qemu_session():
