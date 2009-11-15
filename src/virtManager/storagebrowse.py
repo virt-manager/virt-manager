@@ -61,6 +61,10 @@ class vmmStorageBrowser(gobject.GObject):
         # Add Volume wizard
         self.addvol = None
 
+        # Name of VM we are choosing storage for, can be used to recommend
+        # volume name if creating
+        self.vm_name = None
+
         # Arguments to pass to util.browse_local for local storage
         self.browse_reason = None
         self.local_args = {}
@@ -97,6 +101,9 @@ class vmmStorageBrowser(gobject.GObject):
 
     def set_local_arg(self, arg, val):
         self.local_args[arg] = val
+
+    def set_vm_name(self, name):
+        self.vm_name = name
 
     def set_initial_state(self):
         pool_list = self.window.get_widget("pool-list")
@@ -253,6 +260,7 @@ class vmmStorageBrowser(gobject.GObject):
             else:
                 self.addvol.set_parent_pool(pool)
             self.addvol.set_modal(True)
+            self.addvol.set_name_hint(self.vm_name)
             self.addvol.show()
         except Exception, e:
             self.show_err(_("Error launching volume wizard: %s") % str(e),

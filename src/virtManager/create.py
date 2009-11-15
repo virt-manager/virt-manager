@@ -1679,6 +1679,7 @@ class vmmCreate(gobject.GObject):
         if self.storage_browser == None:
             self.storage_browser = vmmStorageBrowser(self.config, self.conn)
 
+        self.storage_browser.set_vm_name(self.get_config_name())
         self.storage_browser.set_finish_cb(callback)
         self.storage_browser.set_browse_reason(reason)
         self.storage_browser.show(self.conn)

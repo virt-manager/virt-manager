@@ -55,6 +55,7 @@ class vmmCreateVolume(gobject.GObject):
                                   _("An unexpected error occurred"))
         self.topwin.hide()
 
+        self.name_hint = None
         self.vol = None
         self.vol_class = Storage.StoragePool.get_volume_for_pool(parent_pool.get_type())
 
@@ -92,6 +93,9 @@ class vmmCreateVolume(gobject.GObject):
         self.set_modal(False)
         return 1
 
+    def set_name_hint(self, hint):
+        self.name_hint = hint
+
     def set_modal(self, modal):
         self.topwin.set_modal(bool(modal))
 
@@ -100,8 +104,26 @@ class vmmCreateVolume(gobject.GObject):
         self.vol_class = Storage.StoragePool.get_volume_for_pool(self.parent_pool.get_type())
 
 
+    def default_vol_name(self):
+        if not self.name_hint:
+            return ""
+
+        suffix = self.default_suffix()
+        try:
+            return Storage.StorageVolume.find_free_name(self.name_hint,
+                                            pool_object=self.parent_pool.pool,
+                                            suffix=suffix)
+        except:
+            return ""
+
+    def default_suffix(self):
+        suffix = ""
+        if self.vol_class == Storage.FileVolume:
+            suffix = ".img"
+        return suffix
+
     def reset_state(self):
-        self.window.get_widget("vol-name").set_text("")
+        self.window.get_widget("vol-name").set_text(self.default_vol_name())
         self.window.get_widget("vol-create").set_sensitive(False)
         self.populate_vol_format()
         self.populate_vol_suffix()
@@ -137,7 +159,7 @@ class vmmCreateVolume(gobject.GObject):
             model.append([f, f])
 
     def populate_vol_suffix(self):
-        suffix = ""
+        suffix = self.default_suffix()
         if self.vol_class == Storage.FileVolume:
             suffix = ".img"
         self.window.get_widget("vol-name-suffix").set_text(suffix)
