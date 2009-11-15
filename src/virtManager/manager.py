@@ -794,7 +794,7 @@ class vmmManager(gobject.GObject):
             self.vmmenu_items["pause"].set_sensitive(stop)
             self.vmmenu_items["resume"].set_property("visible", paused)
             self.vmmenu_items["resume"].set_sensitive(paused)
-            self.vmmenu_items["migrate"].set_sensitive(not ro)
+            self.vmmenu_items["migrate"].set_sensitive(stop)
             self.vmmenu_items["clone"].set_sensitive(not ro)
             self.vmmenu_items["delete"].set_sensitive(run)
 

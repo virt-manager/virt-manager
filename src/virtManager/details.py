@@ -604,6 +604,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("control-run").set_sensitive(run)
         self.window.get_widget("details-menu-run").set_sensitive(run)
 
+        self.window.get_widget("details-menu-migrate").set_sensitive(stop)
         self.window.get_widget("control-shutdown").set_sensitive(stop)
         self.window.get_widget("details-menu-shutdown").set_sensitive(stop)
         self.window.get_widget("details-menu-save").set_sensitive(stop)
@@ -622,7 +623,6 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("config-vcpupin").set_sensitive(not ro)
         self.window.get_widget("config-memory").set_sensitive(not ro)
         self.window.get_widget("config-maxmem").set_sensitive(not ro)
-        self.window.get_widget("details-menu-migrate").set_sensitive(not ro)
 
         self.console.update_widget_states(vm, status)
 
