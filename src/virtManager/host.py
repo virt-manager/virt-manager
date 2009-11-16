@@ -324,49 +324,43 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("net-details").set_sensitive(True)
         self.window.get_widget("net-name").set_text(net.get_name())
 
-        if active:
-            self.window.get_widget("net-device").set_text(net.get_bridge_device())
-            self.window.get_widget("net-device").set_sensitive(True)
-            self.window.get_widget("net-state").set_text(_("Active"))
-            self.window.get_widget("net-state-icon").set_from_pixbuf(self.PIXBUF_STATE_RUNNING)
-        else:
-            self.window.get_widget("net-device").set_text("")
-            self.window.get_widget("net-device").set_sensitive(False)
-            self.window.get_widget("net-state").set_text(_("Inactive"))
-            self.window.get_widget("net-state-icon").set_from_pixbuf(self.PIXBUF_STATE_SHUTOFF)
+        dev = active and net.get_bridge_device() or ""
+        state = active and _("Active") or _("Inactive")
+        icon = (active and self.PIXBUF_STATE_RUNNING or
+                           self.PIXBUF_STATE_SHUTOFF)
+
+        self.window.get_widget("net-device").set_text(dev)
+        self.window.get_widget("net-device").set_sensitive(active)
+        self.window.get_widget("net-state").set_text(state)
+        self.window.get_widget("net-state-icon").set_from_pixbuf(icon)
 
         self.window.get_widget("net-start").set_sensitive(not active)
         self.window.get_widget("net-stop").set_sensitive(active)
         self.window.get_widget("net-delete").set_sensitive(not active)
 
         autostart = net.get_autostart()
+        autolabel = autostart and _("On Boot") or _("Never")
         self.window.get_widget("net-autostart").set_active(autostart)
-        if autostart:
-            self.window.get_widget("net-autostart").set_label(_("On Boot"))
-        else:
-            self.window.get_widget("net-autostart").set_label(_("Never"))
+        self.window.get_widget("net-autostart").set_label(autolabel)
 
         network = net.get_ipv4_network()
         self.window.get_widget("net-ip4-network").set_text(str(network))
 
         dhcp = net.get_ipv4_dhcp_range()
-        if dhcp is not None:
-            self.window.get_widget("net-ip4-dhcp-start").set_text(str(dhcp[0]))
-            self.window.get_widget("net-ip4-dhcp-end").set_text(str(dhcp[1]))
-        else:
-            self.window.get_widget("net-ip4-dhcp-start").set_text("Disabled")
-            self.window.get_widget("net-ip4-dhcp-end").set_text("Disabled")
+        start = dhcp and str(dhcp[0]) or _("Disabled")
+        end = dhcp and str(dhcp[1]) or _("Disabled")
+        self.window.get_widget("net-ip4-dhcp-start").set_text(start)
+        self.window.get_widget("net-ip4-dhcp-end").set_text(end)
 
-        (forward, forwardDev) = net.get_ipv4_forward()
-        if forward:
-            self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_CONNECT, gtk.ICON_SIZE_MENU)
-            if forwardDev != None and forwardDev != "":
-                self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to physical device %s") % (forwardDev))
-            else:
-                self.window.get_widget("net-ip4-forwarding").set_text(_("NAT to any physical device"))
-        else:
-            self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(gtk.STOCK_DISCONNECT, gtk.ICON_SIZE_MENU)
-            self.window.get_widget("net-ip4-forwarding").set_text(_("Isolated virtual network"))
+        forward, ignore = net.get_ipv4_forward()
+        iconsize = gtk.ICON_SIZE_MENU
+        icon = forward and gtk.STOCK_CONNECT or gtk.STOCK_DISCONNECT
+
+        self.window.get_widget("net-ip4-forwarding-icon").set_from_stock(
+                                                        icon, iconsize)
+
+        forward_str = net.pretty_forward_mode()
+        self.window.get_widget("net-ip4-forwarding").set_text(forward_str)
 
         self.window.get_widget("net-apply").set_sensitive(False)
 

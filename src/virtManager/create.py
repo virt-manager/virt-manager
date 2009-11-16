@@ -639,13 +639,7 @@ class vmmCreate(gobject.GObject):
             if not net.is_active():
                 label +=  " (%s)" % _("Inactive")
 
-            use_nat, host_dev = net.get_ipv4_forward()
-            if not use_nat:
-                desc = _("Isolated network")
-            elif host_dev:
-                desc = _("NAT to %s") % host_dev
-            else:
-                desc = _("NAT to any device")
+            desc = net.pretty_forward_mode()
             label += ": %s" % desc
 
             model.append([ VirtualNetworkInterface.TYPE_VIRTUAL,

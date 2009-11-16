@@ -252,13 +252,7 @@ class vmmCloneVM(gobject.GObject):
                 if net:
                     label = ""
 
-                    use_nat, host_dev = net.get_ipv4_forward()
-                    if not use_nat:
-                        desc = _("Isolated network")
-                    elif host_dev:
-                        desc = _("NAT to %s") % host_dev
-                    else:
-                        desc = _("NAT")
+                    desc = net.pretty_forward_mode()
                     label += "%s" % desc
 
                 else:
