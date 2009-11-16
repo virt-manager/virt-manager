@@ -136,7 +136,8 @@ class vmmConnection(gobject.GObject):
         return bool(self.get_uri_hostname() == "localhost")
 
     def get_qualified_hostname(self):
-        if util.libvirt_support_and_check(self.vmm, "getHostname"):
+        if virtinst.support.check_conn_support(self.vmm,
+                                virtinst.support.SUPPORT_CONN_GETHOSTNAME):
             return self.vmm.getHostname()
 
         uri_hostname = self.get_uri_hostname()

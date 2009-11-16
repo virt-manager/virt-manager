@@ -20,10 +20,13 @@
 
 import gobject
 import gtk
-import libvirt
+
 import logging
 import traceback
 import threading
+
+import libvirt
+import virtinst
 
 from virtManager.about import vmmAbout
 from virtManager.netdevhelper import vmmNetDevHelper
@@ -74,7 +77,7 @@ class vmmEngine(gobject.GObject):
 
         self._tick_thread = None
         self._tick_thread_slow = False
-        self._libvirt_support_threading = (libvirt.getVersion() >= 6000)
+        self._libvirt_support_threading = virtinst.support.support_threading()
         if not self._libvirt_support_threading:
             logging.debug("Libvirt doesn't support threading, skipping.")
 
@@ -87,7 +90,7 @@ class vmmEngine(gobject.GObject):
         self.init_systray()
 
         self.config.on_stats_update_interval_changed(self.reschedule_timer)
-        self.config.on_view_system_tray_changed(self.system_tray_changed) 
+        self.config.on_view_system_tray_changed(self.system_tray_changed)
 
         self.schedule_timer()
         self.load_stored_uris()

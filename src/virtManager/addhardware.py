@@ -27,7 +27,6 @@ import gtk
 import gtk.gdk
 import gtk.glade
 
-import libvirt
 import virtinst
 from virtinst import VirtualCharDevice, VirtualDevice, VirtualVideoDevice
 
@@ -417,7 +416,9 @@ class vmmAddHardware(gobject.GObject):
                       _("Connection does not support host device "
                       "enumeration"))
         add_hw_option("Video", "video-display", PAGE_VIDEO,
-                      libvirt.getVersion() > 6005,
+                      virtinst.support.check_conn_support(
+                            self.vm.get_connection().vmm,
+                            virtinst.support.SUPPORT_CONN_DOMAIN_VIDEO),
                       _("Libvirt version does not support video devices."))
 
         self.window.get_widget("hardware-type").set_active(0)

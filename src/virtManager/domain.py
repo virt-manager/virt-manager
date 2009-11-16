@@ -845,7 +845,7 @@ class vmmDomain(gobject.GObject):
                     rx += io[0]
                     tx += io[4]
             except libvirt.libvirtError, err:
-                if err.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT:
+                if virtinst.support.is_error_nosupport(err):
                     logging.debug("Net stats not supported: %s" % err)
                     self._stats_net_supported = False
                 else:
@@ -874,7 +874,7 @@ class vmmDomain(gobject.GObject):
                     rd += io[1]
                     wr += io[3]
             except libvirt.libvirtError, err:
-                if err.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT:
+                if virtinst.support.is_error_nosupport():
                     logging.debug("Disk stats not supported: %s" % err)
                     self._stats_disk_supported = False
                 else:

@@ -197,7 +197,7 @@ def _dup_all_conn(config, conn, libconn, return_conn_class):
         # between instances
         return return_conn_class and conn or vmm
 
-    if int(libvirt.getVersion()) >= 6000:
+    if virtinst.support.support_threading():
         # Libvirt 0.6.0 implemented client side request threading: this
         # removes the need to actually duplicate the connection.
         return return_conn_class and conn or vmm
@@ -243,25 +243,4 @@ def idle_emit(self, signal, *args):
     Safe wrapper for using 'self.emit' with gobject.idle_add
     """
     self.emit(signal, *args)
-    return False
-
-def libvirt_support_and_check(libvirtobj, funcname, funcargs=()):
-    """
-    Try to determine if function 'funcname' is support for 'libvirtobj' (could
-    be virDomain), and test the function with passed args 'funcargs'
-    """
-    try:
-        if not hasattr(libvirtobj, funcname):
-            return False
-
-        try:
-            func = getattr(libvirtobj, funcname)
-            func(*funcargs)
-        except libvirt.libvirtError, e:
-            if e.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT:
-                return False
-    except Exception, e:
-        logging.debug("Error testing libvirt command '%s': %s" %
-                      (funcname, str(e)))
-
     return False
