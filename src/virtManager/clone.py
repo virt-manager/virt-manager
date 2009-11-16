@@ -302,7 +302,7 @@ class vmmCloneVM(gobject.GObject):
             definfo = ""
 
             storage_row = []
-            storage_row.insert(STORAGE_INFO_ORIG_PATH, path)
+            storage_row.insert(STORAGE_INFO_ORIG_PATH, path or "-")
             storage_row.insert(STORAGE_INFO_NEW_PATH, clone_path)
             storage_row.insert(STORAGE_INFO_TARGET, force_target)
             storage_row.insert(STORAGE_INFO_SIZE, size)
