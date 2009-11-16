@@ -381,6 +381,36 @@ class vmmDetails(gobject.GObject):
         util.tooltip_wrapper(self.window.get_widget("security-dynamic-info"),
             _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
 
+        # VCPU Pinning list
+        # [ VCPU #, Currently running on Phys CPU #, CPU Pinning list ]
+        vcpu_list = self.window.get_widget("config-vcpu-list")
+        vcpu_model = gtk.ListStore(str, str, str)
+        vcpu_list.set_model(vcpu_model)
+
+        vcpuCol = gtk.TreeViewColumn(_("VCPU"))
+        physCol = gtk.TreeViewColumn(_("On CPU"))
+        pinCol  = gtk.TreeViewColumn(_("Pinning"))
+
+        vcpu_list.append_column(vcpuCol)
+        vcpu_list.append_column(physCol)
+        vcpu_list.append_column(pinCol)
+
+        vcpu_text = gtk.CellRendererText()
+        vcpuCol.pack_start(vcpu_text, True)
+        vcpuCol.add_attribute(vcpu_text, 'text', 0)
+        vcpuCol.set_sort_column_id(0)
+
+        phys_text = gtk.CellRendererText()
+        physCol.pack_start(phys_text, True)
+        physCol.add_attribute(phys_text, 'text', 1)
+        physCol.set_sort_column_id(1)
+
+        pin_text = gtk.CellRendererText()
+        pin_text.set_property("editable", True)
+        pin_text.connect("edited", self.config_vcpu_pin)
+        pinCol.pack_start(pin_text, True)
+        pinCol.add_attribute(pin_text, 'text', 2)
+
         # Boot device list
         boot_list = self.window.get_widget("config-boot-device")
         # model = [ display name, icon name, boot type (hd, fd, etc) ]
@@ -963,10 +993,35 @@ class vmmDetails(gobject.GObject):
         logging.info("Setting vcpus for %s to %s, cpuset is %s" %
                      (self.vm.get_name(), str(vcpus), cpuset))
 
-        return self._change_config_helper(self.vm.define_vcpus,
-                                          (vcpus, cpuset),
+        return self._change_config_helper([self.vm.define_vcpus,
+                                           self.vm.define_cpuset],
+                                          [(vcpus,),
+                                           (cpuset,)],
                                           self.vm.hotplug_vcpus,
                                           (vcpus,))
+
+    def config_vcpu_pin(self, src, path, new_text):
+        vcpu_list = self.window.get_widget("config-vcpu-list")
+        vcpu_model = vcpu_list.get_model()
+        row = vcpu_model[path]
+        conn = self.vm.get_connection()
+
+        try:
+            vcpu_num = int(row[0])
+            pinlist = virtinst.Guest.cpuset_str_to_tuple(conn.vmm, new_text)
+        except Exception, e:
+            self.err.val_err(_("Error building pin list: %s") % str(e))
+            return
+
+        try:
+            self.vm.pin_vcpu(vcpu_num, pinlist)
+        except Exception, e:
+            self.err.show_err(_("Error pinning vcpus: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return
+
+        self.refresh_config_cpu()
+
 
     # Memory
     def config_memory_apply(self):
@@ -1116,8 +1171,8 @@ class vmmDetails(gobject.GObject):
         if (hotplug_err or
             (active and not len(hotplug_funcs) == len(define_funcs))):
             if len(define_funcs) > 1:
-                self.err.show_info(_("Some changes will take effect after the "
-                                     "next guest reboot."))
+                self.err.show_info(_("Some changes may require a guest reboot "
+                                     "to take effect."))
             else:
                 self.err.show_info(_("These changes will take effect after "
                                      "the next guest reboot."))
@@ -1136,6 +1191,7 @@ class vmmDetails(gobject.GObject):
         if self.is_visible():
             self.vm.refresh_xml()
 
+        # Stats page needs to be refreshed every tick
         if (page == PAGE_DETAILS and
             self.get_hw_selection(HW_LIST_COL_TYPE) == HW_LIST_TYPE_STATS):
             self.refresh_stats_page()
@@ -1281,7 +1337,44 @@ class vmmDetails(gobject.GObject):
             vcpus_adj.value = curvcpus
 
         self.window.get_widget("state-vm-vcpus").set_text(str(curvcpus))
+
+        # Populate VCPU pinning
         self.window.get_widget("config-vcpupin").set_text(vcpupin)
+
+        vcpu_list = self.window.get_widget("config-vcpu-list")
+        vcpu_model = vcpu_list.get_model()
+        vcpu_model.clear()
+
+        reason = ""
+        if not self.vm.is_active():
+            reason = _("VCPU info only available for running domain.")
+        elif not self.vm.getvcpus_supported:
+            reason = _("Virtual machine does not support runtime VPCU info.")
+        else:
+            try:
+                vcpu_info, vcpu_pinning = self.vm.vcpu_info()
+            except Exception, e:
+                reason = _("Error getting VCPU info: %s") % str(e)
+
+        vcpu_list.set_sensitive(not bool(reason))
+        util.tooltip_wrapper(vcpu_list, reason or None)
+        if reason:
+            return
+
+        def build_cpuset_str(pin_info):
+            pinstr = ""
+            for i in range(host_active_count):
+                if i < len(pin_info) and pin_info[i]:
+                    pinstr += (",%s" % str(i))
+
+            return pinstr.strip(",")
+
+        for idx in range(len(vcpu_info)):
+            vcpu = vcpu_info[idx][0]
+            vcpucur = vcpu_info[idx][3]
+            vcpupin = build_cpuset_str(vcpu_pinning[idx])
+
+            vcpu_model.append([vcpu, vcpucur, vcpupin])
 
     def refresh_config_memory(self):
         host_mem_widget = self.window.get_widget("state-host-memory")

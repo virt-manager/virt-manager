@@ -27,7 +27,7 @@ import difflib
 
 from virtManager import util
 import virtinst.util as vutil
-import virtinst
+import virtinst.support as support
 
 def safeint(val, fmt="%.3d"):
     try:
@@ -77,6 +77,8 @@ class vmmDomain(gobject.GObject):
 
         self._stats_net_supported = True
         self._stats_disk_supported = True
+        self.getvcpus_supported = support.check_domain_support(self._backend,
+                                            support.SUPPORT_DOMAIN_GETVCPUS)
 
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
@@ -158,6 +160,14 @@ class vmmDomain(gobject.GObject):
 
     def blockStats(self, device):
         return self._backend.blockStats(device)
+
+    def pin_vcpu(self, vcpu_num, pinlist):
+        self._backend.pinVcpu(vcpu_num, pinlist)
+
+    def vcpu_info(self):
+        if self.is_active() and self.getvcpus_supported:
+            return self._backend.vcpus()
+        return [[], []]
 
     def hotplug_vcpu(self, vcpus):
         self._backend.setVcpus(int(vcpus))
@@ -463,10 +473,6 @@ class vmmDomain(gobject.GObject):
     def define_vcpus(self, vcpus, cpuset=None):
         vcpus = int(vcpus)
 
-        def get_cpuset_syntax_error(val):
-            guest = virtinst.Guest(connection = self.get_connection().vmm)
-            guest.cpuset = val
-
         def set_node(doc, ctx, vcpus, cpumask, xpath):
             node = ctx.xpathEval(xpath)
             node = (node and node[0] or None)
@@ -476,10 +482,10 @@ class vmmDomain(gobject.GObject):
 
                 # If cpuset mask is not valid, don't change it
                 # If cpuset mask is None, we don't want to use cpuset
-                if cpumask is None or (cpumask is not None
-                    and len(cpumask) == 0):
+                if cpumask is None or (cpumask is not None and
+                                       len(cpumask) == 0):
                     node.unsetProp("cpuset")
-                elif not get_cpuset_syntax_error(cpumask):
+                else:
                     node.setProp("cpuset", cpumask)
             return doc.serialize()
 
@@ -488,6 +494,23 @@ class vmmDomain(gobject.GObject):
                                           "/domain/vcpu[1]")
 
         self.redefine(change_vcpu_xml, vcpus, cpuset)
+
+    def define_cpuset(self, cpuset):
+        def set_node(doc, ctx, xpath):
+            node = ctx.xpathEval(xpath)
+            node = (node and node[0] or None)
+
+            if node:
+                if cpuset:
+                    node.setProp("cpuset", cpuset)
+                else:
+                    node.unsetProp("cpuset")
+            return doc.serialize()
+
+        def change_cpuset_xml(xml):
+            return util.xml_parse_wrapper(xml, set_node, "/domain/vcpu[1]")
+
+        self.redefine(change_cpuset_xml)
 
     # Memory routines
     def hotplug_both_mem(self, memory, maxmem):
@@ -845,7 +868,7 @@ class vmmDomain(gobject.GObject):
                     rx += io[0]
                     tx += io[4]
             except libvirt.libvirtError, err:
-                if virtinst.support.is_error_nosupport(err):
+                if support.is_error_nosupport(err):
                     logging.debug("Net stats not supported: %s" % err)
                     self._stats_net_supported = False
                 else:
@@ -874,7 +897,7 @@ class vmmDomain(gobject.GObject):
                     rd += io[1]
                     wr += io[3]
             except libvirt.libvirtError, err:
-                if virtinst.support.is_error_nosupport():
+                if support.is_error_nosupport():
                     logging.debug("Disk stats not supported: %s" % err)
                     self._stats_disk_supported = False
                 else:
