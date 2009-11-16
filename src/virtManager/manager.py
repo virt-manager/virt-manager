@@ -288,7 +288,7 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["delete"] = gtk.ImageMenuItem("_Delete")
         self.vmmenu_items["delete"].set_image(self.vmmenu_icons["delete"])
         self.vmmenu_items["delete"].show()
-        self.vmmenu_items["delete"].connect("activate", self.delete_vm)
+        self.vmmenu_items["delete"].connect("activate", self.do_delete)
         self.vmmenu.add(self.vmmenu_items["delete"])
 
         self.vmmenu_items["hsep2"] = gtk.SeparatorMenuItem()
@@ -316,17 +316,29 @@ class vmmManager(gobject.GObject):
 
         self.connmenu_items["connect"] = gtk.ImageMenuItem(gtk.STOCK_CONNECT)
         self.connmenu_items["connect"].show()
-        self.connmenu_items["connect"].connect("activate", self.open_connection)
+        self.connmenu_items["connect"].connect("activate",
+                                               self.open_connection)
         self.connmenu.add(self.connmenu_items["connect"])
 
         self.connmenu_items["disconnect"] = gtk.ImageMenuItem(gtk.STOCK_DISCONNECT)
         self.connmenu_items["disconnect"].show()
-        self.connmenu_items["disconnect"].connect("activate", self.close_connection)
+        self.connmenu_items["disconnect"].connect("activate",
+                                                  self.close_connection)
         self.connmenu.add(self.connmenu_items["disconnect"])
 
-        self.connmenu_items["hsep"] = gtk.SeparatorMenuItem()
-        self.connmenu_items["hsep"].show()
-        self.connmenu.add(self.connmenu_items["hsep"])
+        self.connmenu_items["hsep1"] = gtk.SeparatorMenuItem()
+        self.connmenu_items["hsep1"].show()
+        self.connmenu.add(self.connmenu_items["hsep1"])
+
+        self.connmenu_items["delete"] = gtk.ImageMenuItem(gtk.STOCK_DELETE)
+        self.connmenu_items["delete"].show()
+        self.connmenu_items["delete"].connect("activate",
+                                              self.do_delete)
+        self.connmenu.add(self.connmenu_items["delete"])
+
+        self.connmenu_items["hsep2"] = gtk.SeparatorMenuItem()
+        self.connmenu_items["hsep2"].show()
+        self.connmenu.add(self.connmenu_items["hsep2"])
 
         self.connmenu_items["details"] = gtk.ImageMenuItem(_("_Details"))
         self.connmenu_items["details"].connect("activate", self.show_host)
@@ -355,7 +367,7 @@ class vmmManager(gobject.GObject):
             "on_vm_shutdown_clicked": self.poweroff_vm,
             "on_vm_pause_clicked": self.pause_vm_button,
             "on_menu_edit_details_activate": self.open_vm_console,
-            "on_menu_edit_delete_activate": self.delete_vm,
+            "on_menu_edit_delete_activate": self.do_delete,
             "on_menu_host_details_activate": self.show_host,
 
             "on_vm_list_row_activated": self.open_vm_console,
@@ -812,6 +824,7 @@ class vmmManager(gobject.GObject):
             self.connmenu_items["disconnect"].set_sensitive(not (disconn or
                                                                  conning))
             self.connmenu_items["connect"].set_sensitive(disconn)
+            self.connmenu_items["delete"].set_sensitive(disconn)
 
             self.connmenu.popup(None, None, None, 0, event.time)
 
@@ -820,7 +833,7 @@ class vmmManager(gobject.GObject):
     def new_vm(self, ignore=None):
         self.emit("action-show-create", self.current_connection_uri())
 
-    def delete_vm(self, ignore=None):
+    def do_delete(self, ignore=None):
         conn = self.current_connection()
         vm = self.current_vm()
         if vm is None:
