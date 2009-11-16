@@ -789,7 +789,7 @@ def can_we_clone(conn, vol, path):
 
     elif vol:
         # Managed storage
-        if not virtinst.Storage.is_create_vol_from_supported(conn):
+        if not virtinst.Storage.is_create_vol_from_supported(conn.vmm):
             if conn.is_remote() or not os.access(path, os.R_OK):
                 msg = _("Connection does not support managed storage cloning.")
     else:
