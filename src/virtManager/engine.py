@@ -298,8 +298,10 @@ class vmmEngine(gobject.GObject):
         con = self._lookup_connection(uri)
 
         if self.connections[uri]["windowHost"] == None:
-            manager = vmmHost(self.get_config(), con)
+            manager = vmmHost(self.get_config(), con, self)
             manager.connect("action-show-help", self._do_show_help)
+            manager.connect("action-exit-app", self._do_exit_app)
+            manager.connect("action-view-manager", self._do_show_manager)
             self.connections[uri]["windowHost"] = manager
         self.connections[uri]["windowHost"].show()
 

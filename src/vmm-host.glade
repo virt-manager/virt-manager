@@ -23,12 +23,34 @@
                 <child>
                   <widget class="GtkMenu" id="menuitem4_menu">
                     <child>
+                      <widget class="GtkMenuItem" id="menu-file-view-manager">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_View Manager</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_menu_file_view_manager_activate"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkSeparatorMenuItem" id="menuitem1">
+                        <property name="visible">True</property>
+                      </widget>
+                    </child>
+                    <child>
                       <widget class="GtkImageMenuItem" id="menu-file-close">
                         <property name="label">gtk-close</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_menu_file_close_activate"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="menu-file-quit">
+                        <property name="label">gtk-quit</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_menu_file_quit_activate"/>
                       </widget>
                     </child>
                   </widget>

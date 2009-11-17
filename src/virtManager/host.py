@@ -36,12 +36,17 @@ class vmmHost(gobject.GObject):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),
+        "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
+                            gobject.TYPE_NONE, []),
+        "action-view-manager": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, []),
         }
-    def __init__(self, config, conn):
+    def __init__(self, config, conn, engine):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-host.glade", "vmm-host", domain="virt-manager")
         self.config = config
         self.conn = conn
+        self.engine = engine
 
         self.PIXBUF_STATE_RUNNING = gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_running.png", 18, 18)
         self.PIXBUF_STATE_SHUTOFF = gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_shutoff.png", 18, 18)
@@ -151,8 +156,11 @@ class vmmHost(gobject.GObject):
         self.conn.connect("state-changed", self.conn_state_changed)
 
         self.window.signal_autoconnect({
+            "on_menu_file_view_manager_activate" : self.view_manager,
+            "on_menu_file_quit_activate" : self.exit_app,
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
+
             "on_menu_help_contents_activate": self.show_help,
             "on_net_add_clicked": self.add_network,
             "on_net_delete_clicked": self.delete_network,
@@ -191,6 +199,8 @@ class vmmHost(gobject.GObject):
         dialog = self.window.get_widget("vmm-host")
         dialog.present()
 
+        self.engine.increment_window_counter()
+
     def is_visible(self):
         if self.window.get_widget("vmm-host").flags() & gtk.VISIBLE:
             return 1
@@ -198,10 +208,17 @@ class vmmHost(gobject.GObject):
 
     def close(self,ignore1=None,ignore2=None):
         self.window.get_widget("vmm-host").hide()
+        self.engine.decrement_window_counter()
         return 1
 
     def show_help(self, src):
         self.emit("action-show-help", "virt-manager-host-window")
+
+    def view_manager(self, src):
+        self.emit("action-view-manager")
+
+    def exit_app(self, src):
+        self.emit("action-exit-app")
 
     def toggle_autoconnect(self, ignore=None):
         if self.conn.get_autoconnect() != \
