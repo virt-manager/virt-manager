@@ -285,6 +285,14 @@ class vmmDetails(gobject.GObject):
                                    self.control_vm_reboot,
                                    self.control_vm_destroy)
 
+        icon_name = self.config.get_shutdown_icon_name()
+        for name in ["details-menu-shutdown",
+                     "details-menu-reboot",
+                     "details-menu-poweroff",
+                     "details-menu-destroy"]:
+            image = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+            self.window.get_widget(name).set_image(image)
+
         # Serial list menu
         smenu = gtk.Menu()
         smenu.connect("show", self.populate_serial_menu)

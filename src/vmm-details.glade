@@ -25,7 +25,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="view_manager">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">View Manager</property>
+                        <property name="label" translatable="yes">_View Manager</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_view_manager_activate"/>
                       </widget>
@@ -66,11 +66,18 @@
                 <child>
                   <widget class="GtkMenu" id="virtual_machine1_menu">
                     <child>
-                      <widget class="GtkMenuItem" id="details-menu-run">
-                        <property name="visible">True</property>
+                      <widget class="GtkImageMenuItem" id="details-menu-run">
                         <property name="label" translatable="yes">_Run</property>
+                        <property name="visible">True</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
                         <signal name="activate" handler="on_details_menu_run_activate"/>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image2">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-media-play</property>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
@@ -82,37 +89,64 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkMenuItem" id="details-menu-shutdown">
-                        <property name="visible">True</property>
+                      <widget class="GtkImageMenuItem" id="details-menu-shutdown">
                         <property name="label" translatable="yes">S_hut Down</property>
+                        <property name="visible">True</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="on_details_menu_shutdown_activate"/>
+                        <property name="use_stock">False</property>
                         <child>
                           <widget class="GtkMenu" id="details-menu-shutdown_menu">
                             <child>
-                              <widget class="GtkMenuItem" id="details-menu-reboot">
+                              <widget class="GtkImageMenuItem" id="details-menu-reboot">
+                                <property name="label" translatable="yes">_Reboot</property>
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Reboot</property>
                                 <property name="use_underline">True</property>
+                                <property name="use_stock">False</property>
                                 <signal name="activate" handler="on_details_menu_reboot_activate"/>
+                                <child internal-child="image">
+                                  <widget class="GtkImage" id="image4">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-missing-image</property>
+                                  </widget>
+                                </child>
                               </widget>
                             </child>
                             <child>
-                              <widget class="GtkMenuItem" id="details-menu-poweroff">
+                              <widget class="GtkImageMenuItem" id="details-menu-poweroff">
+                                <property name="label" translatable="yes">S_hut Down</property>
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Shut Down</property>
                                 <property name="use_underline">True</property>
+                                <property name="use_stock">False</property>
                                 <signal name="activate" handler="on_details_menu_poweroff_activate"/>
+                                <child internal-child="image">
+                                  <widget class="GtkImage" id="image5">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-missing-image</property>
+                                  </widget>
+                                </child>
                               </widget>
                             </child>
                             <child>
-                              <widget class="GtkMenuItem" id="details-menu-destroy">
+                              <widget class="GtkImageMenuItem" id="details-menu-destroy">
+                                <property name="label" translatable="yes">_Force Off</property>
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Force Off</property>
                                 <property name="use_underline">True</property>
+                                <property name="use_stock">False</property>
                                 <signal name="activate" handler="on_details_menu_destroy_activate"/>
+                                <child internal-child="image">
+                                  <widget class="GtkImage" id="image6">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-missing-image</property>
+                                  </widget>
+                                </child>
                               </widget>
                             </child>
+                          </widget>
+                        </child>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image3">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-missing-image</property>
                           </widget>
                         </child>
                       </widget>
@@ -177,7 +211,7 @@
                     <child>
                       <widget class="GtkRadioMenuItem" id="details-menu-view-console">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Console</property>
+                        <property name="label" translatable="yes">_Console</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <property name="draw_as_radio">True</property>
@@ -187,7 +221,7 @@
                     <child>
                       <widget class="GtkRadioMenuItem" id="details-menu-view-details">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Details</property>
+                        <property name="label" translatable="yes">_Details</property>
                         <property name="use_underline">True</property>
                         <property name="draw_as_radio">True</property>
                         <property name="group">details-menu-view-console</property>
@@ -202,7 +236,7 @@
                     <child>
                       <widget class="GtkCheckMenuItem" id="details-menu-view-fullscreen">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Fullscreen</property>
+                        <property name="label" translatable="yes">_Fullscreen</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_view_fullscreen_activate"/>
                       </widget>
@@ -210,7 +244,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="menuitem1">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Scale Display</property>
+                        <property name="label" translatable="yes">_Scale Display</property>
                         <property name="use_underline">True</property>
                         <child>
                           <widget class="GtkMenu" id="menu1">
@@ -218,7 +252,7 @@
                             <child>
                               <widget class="GtkRadioMenuItem" id="details-menu-view-scale-always">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Always</property>
+                                <property name="label" translatable="yes">_Always</property>
                                 <property name="use_underline">True</property>
                                 <property name="active">True</property>
                                 <signal name="toggled" handler="on_details_menu_view_scale_always_toggled"/>
@@ -227,7 +261,7 @@
                             <child>
                               <widget class="GtkRadioMenuItem" id="details-menu-view-scale-fullscreen">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Only when Fullscreen</property>
+                                <property name="label" translatable="yes">_Only when Fullscreen</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_as_radio">True</property>
                                 <property name="group">details-menu-view-scale-always</property>
@@ -237,7 +271,7 @@
                             <child>
                               <widget class="GtkRadioMenuItem" id="details-menu-view-scale-never">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Never</property>
+                                <property name="label" translatable="yes">_Never</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_as_radio">True</property>
                                 <property name="group">details-menu-view-scale-always</property>
@@ -251,7 +285,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-view-serial-list">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Text Consoles</property>
+                        <property name="label" translatable="yes">_Text Consoles</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_view_serial_list_activate"/>
                       </widget>
@@ -264,7 +298,7 @@
                     <child>
                       <widget class="GtkCheckMenuItem" id="details-menu-view-toolbar">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Toolbar</property>
+                        <property name="label" translatable="yes">T_oolbar</property>
                         <property name="use_underline">True</property>
                         <property name="active">True</property>
                         <signal name="activate" handler="on_details_menu_view_toolbar_activate"/>
@@ -285,7 +319,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-cab">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+Backspace</property>
+                        <property name="label">Ctrl+Alt+_Backspace</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_cab_activate"/>
                       </widget>
@@ -293,7 +327,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-cad">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+Delete</property>
+                        <property name="label">Ctrl+Alt+_Delete</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_cad_activate"/>
                       </widget>
@@ -306,7 +340,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf1">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F1</property>
+                        <property name="label">Ctrl+Alt+F_1</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf1_activate"/>
                       </widget>
@@ -314,7 +348,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf2">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F2</property>
+                        <property name="label">Ctrl+Alt+F_2</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf2_activate"/>
                       </widget>
@@ -322,7 +356,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf3">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F3</property>
+                        <property name="label">Ctrl+Alt+F_3</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf3_activate"/>
                       </widget>
@@ -330,7 +364,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf4">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F4</property>
+                        <property name="label">Ctrl+Alt+F_4</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf4_activate"/>
                       </widget>
@@ -338,7 +372,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf5">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F5</property>
+                        <property name="label">Ctrl+Alt+F_5</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf5_activate"/>
                       </widget>
@@ -346,7 +380,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf6">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F6</property>
+                        <property name="label">Ctrl+Alt+F_6</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf6_activate"/>
                       </widget>
@@ -354,7 +388,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf7">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F7</property>
+                        <property name="label">Ctrl+Alt+F_7</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf7_activate"/>
                       </widget>
@@ -362,7 +396,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf8">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F8</property>
+                        <property name="label">Ctrl+Alt+F_8</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf8_activate"/>
                       </widget>
@@ -370,7 +404,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf9">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F9</property>
+                        <property name="label">Ctrl+Alt+F_9</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf9_activate"/>
                       </widget>
@@ -378,7 +412,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf10">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F10</property>
+                        <property name="label">Ctrl+Alt+F1_0</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf10_activate"/>
                       </widget>
@@ -386,7 +420,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf11">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F11</property>
+                        <property name="label">C_trl+Alt+F11</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf11_activate"/>
                       </widget>
@@ -394,7 +428,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-caf12">
                         <property name="visible">True</property>
-                        <property name="label">Ctrl+Alt+F12</property>
+                        <property name="label">Ct_rl+Alt+F12</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_caf12_activate"/>
                       </widget>
@@ -407,7 +441,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-send-printscreen">
                         <property name="visible">True</property>
-                        <property name="label">PrintScreen</property>
+                        <property name="label">_PrintScreen</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_send_printscreen_activate"/>
                       </widget>

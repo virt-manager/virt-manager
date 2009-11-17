@@ -46,7 +46,7 @@
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="open_connection">
-                        <property name="label">Add Connection...</property>
+                        <property name="label">_Add Connection...</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">False</property>
@@ -94,16 +94,23 @@
                 <child>
                   <widget class="GtkMenu" id="menuitem5_menu">
                     <child>
-                      <widget class="GtkMenuItem" id="menu_host_details">
+                      <widget class="GtkImageMenuItem" id="menu_host_details">
+                        <property name="label" translatable="yes">_Host Details</property>
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Host Details</property>
                         <property name="use_underline">True</property>
+                        <property name="use_stock">False</property>
                         <signal name="activate" handler="on_menu_host_details_activate"/>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="image5">
+                            <property name="visible">True</property>
+                            <property name="stock">gtk-properties</property>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
                       <widget class="GtkImageMenuItem" id="menu_edit_details">
-                        <property name="label">Virtual Machine Details</property>
+                        <property name="label">_Virtual Machine Details</property>
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">False</property>
@@ -153,7 +160,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="menuitem1">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Graph</property>
+                        <property name="label" translatable="yes">_Graph</property>
                         <property name="use_underline">True</property>
                         <child>
                           <widget class="GtkMenu" id="menu1">
@@ -161,7 +168,7 @@
                             <child>
                               <widget class="GtkCheckMenuItem" id="menu_view_stats_cpu">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">CPU Usage</property>
+                                <property name="label" translatable="yes">_CPU Usage</property>
                                 <property name="use_underline">True</property>
                                 <property name="active">True</property>
                                 <signal name="activate" handler="on_menu_view_cpu_usage_activate"/>
@@ -170,7 +177,7 @@
                             <child>
                               <widget class="GtkCheckMenuItem" id="menu_view_stats_disk">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Disk I/O</property>
+                                <property name="label" translatable="yes">_Disk I/O</property>
                                 <property name="use_underline">True</property>
                                 <property name="active">True</property>
                                 <signal name="activate" handler="on_menu_view_disk_io_activate"/>
@@ -179,7 +186,7 @@
                             <child>
                               <widget class="GtkCheckMenuItem" id="menu_view_stats_network">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Network I/O</property>
+                                <property name="label" translatable="yes">_Network I/O</property>
                                 <property name="use_underline">True</property>
                                 <property name="active">True</property>
                                 <signal name="activate" handler="on_menu_view_network_traffic_activate"/>
