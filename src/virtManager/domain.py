@@ -67,6 +67,8 @@ class vmmDomain(gobject.GObject):
         self._inactive_xml = None
         self._is_xml_valid = False
 
+        self._startup_vcpus = None
+
         self._network_traffic = None
         self._disk_io = None
 
@@ -798,6 +800,11 @@ class vmmDomain(gobject.GObject):
                                     libvirt.VIR_DOMAIN_CRASHED ]:
                 # Domain just started. Invalidate inactive xml
                 self._inactive_xml = None
+
+                # Want to track the startup vcpu amount, which is the
+                # cap of how many VCPUs can be added
+                self._startup_vcpus = None
+                self.vcpu_max_count()
             self.lastStatus = status
             gobject.idle_add(util.idle_emit, self, "status-changed", status)
 
@@ -1062,9 +1069,10 @@ class vmmDomain(gobject.GObject):
         return cpuset
 
     def vcpu_max_count(self):
-        cpus = vutil.get_xml_path(self.get_xml(), "/domain/vcpu")
-        return int(cpus)
-
+        if self._startup_vcpus == None:
+            self._startup_vcpus = int(vutil.get_xml_path(self.get_xml(),
+                                      "/domain/vcpu"))
+        return int(self._startup_vcpus)
 
     def _vector_helper(self, record_name):
         vector = []
