@@ -67,10 +67,11 @@
                     </child>
                     <child>
                       <widget class="GtkCheckButton" id="delete-remove-storage">
-                        <property name="label" translatable="yes">Delete associated storage files</property>
+                        <property name="label" translatable="yes">Delete _associated storage files</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="on_delete_remove_storage_toggled"/>
                       </widget>
@@ -90,7 +91,7 @@
             <child>
               <widget class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="border_width">6</property>
                 <property name="hscrollbar_policy">automatic</property>
                 <property name="vscrollbar_policy">automatic</property>

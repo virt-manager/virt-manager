@@ -121,7 +121,9 @@
                           <widget class="GtkLabel" id="label9">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Name:</property>
+                            <property name="label" translatable="yes">_Name:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">pool-name</property>
                           </widget>
                           <packing>
                             <property name="x_options">GTK_FILL</property>
@@ -132,7 +134,9 @@
                           <widget class="GtkLabel" id="label10">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Type:</property>
+                            <property name="label" translatable="yes">_Type:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">pool-type</property>
                           </widget>
                           <packing>
                             <property name="top_attach">1</property>
@@ -351,7 +355,9 @@
                           <widget class="GtkLabel" id="label19">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Build Pool:</property>
+                            <property name="label" translatable="yes">B_uild Pool:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">pool-build</property>
                           </widget>
                           <packing>
                             <property name="top_attach">4</property>
@@ -363,6 +369,7 @@
                         <child>
                           <widget class="GtkHBox" id="hbox14">
                             <property name="visible">True</property>
+                            <property name="spacing">6</property>
                             <child>
                               <widget class="GtkComboBoxEntry" id="pool-source-path">
                                 <property name="visible">True</property>
@@ -375,7 +382,7 @@
                             </child>
                             <child>
                               <widget class="GtkButton" id="pool-source-button">
-                                <property name="label" translatable="yes">Browse</property>
+                                <property name="label" translatable="yes">Bro_wse</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -401,6 +408,7 @@
                         <child>
                           <widget class="GtkHBox" id="hbox13">
                             <property name="visible">True</property>
+                            <property name="spacing">6</property>
                             <child>
                               <widget class="GtkComboBoxEntry" id="pool-target-path">
                                 <property name="visible">True</property>
@@ -413,7 +421,7 @@
                             </child>
                             <child>
                               <widget class="GtkButton" id="pool-target-button">
-                                <property name="label" translatable="yes">Browse</property>
+                                <property name="label" translatable="yes">B_rowse</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -438,7 +446,9 @@
                           <widget class="GtkLabel" id="label11">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Target Path:</property>
+                            <property name="label" translatable="yes">_Target Path:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">pool-target-path</property>
                           </widget>
                           <packing>
                             <property name="x_options">GTK_FILL</property>
@@ -449,7 +459,9 @@
                           <widget class="GtkLabel" id="label17">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Format:</property>
+                            <property name="label" translatable="yes">F_ormat:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">pool-format</property>
                           </widget>
                           <packing>
                             <property name="top_attach">1</property>
@@ -462,7 +474,9 @@
                           <widget class="GtkLabel" id="label16">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Host Name:</property>
+                            <property name="label" translatable="yes">Host Na_me:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">pool-hostname</property>
                           </widget>
                           <packing>
                             <property name="top_attach">2</property>
@@ -491,7 +505,9 @@
                           <widget class="GtkLabel" id="label18">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">Source Path:</property>
+                            <property name="label" translatable="yes">_Source Path:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">pool-source-path</property>
                           </widget>
                           <packing>
                             <property name="top_attach">3</property>
@@ -555,7 +571,7 @@
         <child>
           <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
-            <property name="spacing">6</property>
+            <property name="spacing">12</property>
             <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="pool-help">
@@ -619,46 +635,12 @@
             </child>
             <child>
               <widget class="GtkButton" id="pool-finish">
+                <property name="label" translatable="yes">_Finish</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_pool_finish_clicked"/>
-                <child>
-                  <widget class="GtkAlignment" id="alignment1">
-                    <property name="visible">True</property>
-                    <property name="xscale">0</property>
-                    <property name="yscale">0</property>
-                    <child>
-                      <widget class="GtkHBox" id="hbox9">
-                        <property name="visible">True</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <widget class="GtkImage" id="image2">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-quit</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="label12">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Finish</property>
-                            <property name="use_underline">True</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </widget>
-                    </child>
-                  </widget>
-                </child>
               </widget>
               <packing>
                 <property name="expand">False</property>

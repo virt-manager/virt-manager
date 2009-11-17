@@ -95,7 +95,7 @@
                             <property name="border_width">3</property>
                             <property name="n_rows">7</property>
                             <property name="n_columns">2</property>
-                            <property name="column_spacing">3</property>
+                            <property name="column_spacing">6</property>
                             <property name="row_spacing">3</property>
                             <child>
                               <widget class="GtkLabel" id="label6">
@@ -260,7 +260,9 @@
                               <widget class="GtkLabel" id="label72">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Autoconnect:</property>
+                                <property name="label" translatable="yes">A_utoconnect:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">config-autoconnect</property>
                               </widget>
                               <packing>
                                 <property name="top_attach">6</property>
@@ -563,7 +565,9 @@
                                   <widget class="GtkLabel" id="label70">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Autostart:</property>
+                                    <property name="label" translatable="yes">A_utostart:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">net-autostart</property>
                                   </widget>
                                   <packing>
                                     <property name="top_attach">3</property>
@@ -889,46 +893,12 @@
                         <property name="visible">True</property>
                         <child>
                           <widget class="GtkButton" id="net-apply">
+                            <property name="label">gtk-apply</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_stock">True</property>
                             <signal name="clicked" handler="on_net_apply_clicked"/>
-                            <child>
-                              <widget class="GtkAlignment" id="alignment14">
-                                <property name="visible">True</property>
-                                <property name="xscale">0</property>
-                                <property name="yscale">0</property>
-                                <child>
-                                  <widget class="GtkHBox" id="hbox18">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <widget class="GtkImage" id="image14">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-apply</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkLabel" id="label83">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Apply</property>
-                                        <property name="use_underline">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </widget>
-                                </child>
-                              </widget>
-                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -1030,6 +1000,7 @@
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="label">Pool Type</property>
+                                    <property name="selectable">True</property>
                                   </widget>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -1146,7 +1117,9 @@
                                   <widget class="GtkLabel" id="label76">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Autostart:</property>
+                                    <property name="label" translatable="yes">A_utostart:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">pool-autostart</property>
                                   </widget>
                                   <packing>
                                     <property name="top_attach">4</property>
@@ -1333,46 +1306,12 @@
                         <property name="spacing">6</property>
                         <child>
                           <widget class="GtkButton" id="vol-add">
+                            <property name="label" translatable="yes">_New Volume</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_vol_add_clicked"/>
-                            <child>
-                              <widget class="GtkAlignment" id="alignment9">
-                                <property name="visible">True</property>
-                                <property name="xscale">0</property>
-                                <property name="yscale">0</property>
-                                <child>
-                                  <widget class="GtkHBox" id="hbox13">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <widget class="GtkImage" id="image8">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-new</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkLabel" id="somelabel">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">New Volume</property>
-                                        <property name="use_underline">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </widget>
-                                </child>
-                              </widget>
-                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -1382,46 +1321,12 @@
                         </child>
                         <child>
                           <widget class="GtkButton" id="vol-delete">
+                            <property name="label" translatable="yes">_Delete Volume</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_vol_delete_clicked"/>
-                            <child>
-                              <widget class="GtkAlignment" id="alignment10">
-                                <property name="visible">True</property>
-                                <property name="xscale">0</property>
-                                <property name="yscale">0</property>
-                                <child>
-                                  <widget class="GtkHBox" id="hbox14">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <widget class="GtkImage" id="image9">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-delete</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkLabel" id="label82">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Delete Volume</property>
-                                        <property name="use_underline">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </widget>
-                                </child>
-                              </widget>
-                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -1431,46 +1336,12 @@
                         </child>
                         <child>
                           <widget class="GtkButton" id="pool-apply">
+                            <property name="label">gtk-apply</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_stock">True</property>
                             <signal name="clicked" handler="on_pool_apply_clicked"/>
-                            <child>
-                              <widget class="GtkAlignment" id="alignment15">
-                                <property name="visible">True</property>
-                                <property name="xscale">0</property>
-                                <property name="yscale">0</property>
-                                <child>
-                                  <widget class="GtkHBox" id="hbox19">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <widget class="GtkImage" id="image15">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-apply</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkLabel" id="label84">
-                                        <property name="visible">True</property>
-                                        <property name="label">Apply</property>
-                                        <property name="use_underline">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </widget>
-                                </child>
-                              </widget>
-                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>

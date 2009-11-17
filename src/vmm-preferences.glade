@@ -38,10 +38,11 @@
                             <property name="row_spacing">6</property>
                             <child>
                               <widget class="GtkCheckButton" id="prefs-system-tray">
-                                <property name="label" translatable="yes">Enable system tray icon</property>
+                                <property name="label" translatable="yes">Enable _system tray icon</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="on_prefs_system_tray_toggled"/>
                               </widget>
@@ -165,7 +166,9 @@
                               <widget class="GtkLabel" id="label7">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Maintain history of</property>
+                                <property name="label" translatable="yes">Maintain h_istory of</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">prefs-stats-history-len</property>
                               </widget>
                               <packing>
                                 <property name="top_attach">1</property>
@@ -176,7 +179,9 @@
                               <widget class="GtkLabel" id="label6">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Update status every</property>
+                                <property name="label" translatable="yes">_Update status every</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">prefs-stats-update-interval</property>
                               </widget>
                             </child>
                           </widget>
@@ -249,7 +254,9 @@
                               <widget class="GtkLabel" id="label14">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Network I/O</property>
+                                <property name="label" translatable="yes">_Network I/O</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">prefs-stats-enable-net</property>
                               </widget>
                               <packing>
                                 <property name="top_attach">1</property>
@@ -261,7 +268,9 @@
                               <widget class="GtkLabel" id="label13">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Disk I/O</property>
+                                <property name="label" translatable="yes">_Disk I/O</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">prefs-stats-enable-disk</property>
                               </widget>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
@@ -353,7 +362,9 @@ Always</property>
                               <widget class="GtkLabel" id="label17">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Graphical Console Scaling:</property>
+                                <property name="label" translatable="yes">Graphical console _scaling:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">prefs-console-scaling</property>
                               </widget>
                               <packing>
                                 <property name="top_attach">4</property>
@@ -378,7 +389,9 @@ On mouse over</property>
                               <widget class="GtkLabel" id="label15">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Grab keyboard input:</property>
+                                <property name="label" translatable="yes">Grab _keyboard input:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">prefs-console-keygrab</property>
                               </widget>
                               <packing>
                                 <property name="top_attach">2</property>
@@ -389,7 +402,9 @@ On mouse over</property>
                               <widget class="GtkLabel" id="label5">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Automatically open consoles:</property>
+                                <property name="label" translatable="yes">Automatically _open consoles:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">prefs-console-popup</property>
                               </widget>
                             </child>
                             <child>
@@ -450,10 +465,11 @@ For all domains</property>
                                     <property name="orientation">vertical</property>
                                     <child>
                                       <widget class="GtkCheckButton" id="prefs-sound-local">
-                                        <property name="label" translatable="yes">Local virtual machine</property>
+                                        <property name="label" translatable="yes">_Local virtual machine</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="on_prefs_sound_local_toggled"/>
                                       </widget>
@@ -463,10 +479,11 @@ For all domains</property>
                                     </child>
                                     <child>
                                       <widget class="GtkCheckButton" id="prefs-sound-remote">
-                                        <property name="label" translatable="yes">Remote virtual machine</property>
+                                        <property name="label" translatable="yes">_Remote virtual machine</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="prefs_sound_remote_toggled_cb"/>
                                       </widget>

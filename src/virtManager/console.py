@@ -78,6 +78,10 @@ class vmmConsolePages(gobject.GObject):
 
         self.init_vnc()
 
+        finish_img = gtk.image_new_from_stock(gtk.STOCK_YES,
+                                              gtk.ICON_SIZE_BUTTON)
+        self.window.get_widget("console-auth-login").set_image(finish_img)
+
         self.notifyID = None
         self.notifyInterface = None
         self.init_dbus()

@@ -228,6 +228,9 @@ class vmmDetails(gobject.GObject):
         self.vm.connect("config-changed", self.refresh_vm_info)
         self.window.get_widget("hw-list").get_selection().connect("changed", self.hw_selected)
 
+        finish_img = gtk.image_new_from_stock(gtk.STOCK_ADD,
+                                              gtk.ICON_SIZE_BUTTON)
+        self.window.get_widget("add-hardware-button").set_image(finish_img)
         self.update_widget_states(self.vm, self.vm.status())
 
         self.populate_hw_list()

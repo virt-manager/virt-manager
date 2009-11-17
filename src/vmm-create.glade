@@ -143,7 +143,9 @@
                                       <widget class="GtkLabel" id="label77">
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">Connection:</property>
+                                        <property name="label" translatable="yes">C_onnection:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">create-conn</property>
                                       </widget>
                                       <packing>
                                         <property name="top_attach">1</property>
@@ -155,7 +157,9 @@
                                       <widget class="GtkLabel" id="label11">
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">Name:</property>
+                                        <property name="label" translatable="yes">_Name:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">create-vm-name</property>
                                       </widget>
                                       <packing>
                                         <property name="x_options">GTK_FILL</property>
@@ -240,10 +244,11 @@
                                         <property name="spacing">3</property>
                                         <child>
                                           <widget class="GtkRadioButton" id="method-local">
-                                            <property name="label" translatable="yes">Local install media (ISO image or CDROM)</property>
+                                            <property name="label" translatable="yes">_Local install media (ISO image or CDROM)</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
                                             <property name="active">True</property>
                                             <property name="draw_indicator">True</property>
                                           </widget>
@@ -254,10 +259,11 @@
                                         </child>
                                         <child>
                                           <widget class="GtkRadioButton" id="method-tree">
-                                            <property name="label" translatable="yes">Network Install (HTTP, FTP, or NFS)</property>
+                                            <property name="label" translatable="yes">Network _Install (HTTP, FTP, or NFS)</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">method-local</property>
                                           </widget>
@@ -268,10 +274,11 @@
                                         </child>
                                         <child>
                                           <widget class="GtkRadioButton" id="method-pxe">
-                                            <property name="label" translatable="yes">Network Boot (PXE)</property>
+                                            <property name="label" translatable="yes">Network _Boot (PXE)</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
                                             <property name="draw_indicator">True</property>
                                             <property name="group">method-local</property>
                                           </widget>
@@ -368,10 +375,11 @@
                                                 <property name="spacing">4</property>
                                                 <child>
                                                   <widget class="GtkRadioButton" id="install-local-cdrom">
-                                                    <property name="label" translatable="yes">Use CDROM or DVD</property>
+                                                    <property name="label" translatable="yes">Use CD_ROM or DVD</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">False</property>
+                                                    <property name="use_underline">True</property>
                                                     <property name="active">True</property>
                                                     <property name="draw_indicator">True</property>
                                                     <signal name="toggled" handler="on_install_local_cdrom_toggled"/>
@@ -420,10 +428,11 @@
                                             </child>
                                             <child>
                                               <widget class="GtkRadioButton" id="install-local-iso">
-                                                <property name="label" translatable="yes">Use ISO image:</property>
+                                                <property name="label" translatable="yes">Use _ISO image:</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
+                                                <property name="use_underline">True</property>
                                                 <property name="active">True</property>
                                                 <property name="draw_indicator">True</property>
                                                 <property name="group">install-local-cdrom</property>
@@ -455,11 +464,12 @@
                                                 </child>
                                                 <child>
                                                   <widget class="GtkButton" id="install-local-browse">
-                                                    <property name="label" translatable="yes">Browse...</property>
+                                                    <property name="label" translatable="yes">Bro_wse...</property>
                                                     <property name="visible">True</property>
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
+                                                    <property name="use_underline">True</property>
                                                     <signal name="clicked" handler="on_install_local_browse_clicked"/>
                                                   </widget>
                                                   <packing>
@@ -666,10 +676,11 @@ User shouldn't see this.</property>
                                 <signal name="show" handler="on_install_detect_os_box_show"/>
                                 <child>
                                   <widget class="GtkCheckButton" id="install-detect-os">
-                                    <property name="label" translatable="yes">Automatically detect operating system based on install media</property>
+                                    <property name="label" translatable="yes">A_utomatically detect operating system based on install media</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="use_underline">True</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="on_install_detect_os_toggled"/>
@@ -761,7 +772,9 @@ User shouldn't see this.</property>
                                       <widget class="GtkLabel" id="label17">
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">Version:</property>
+                                        <property name="label" translatable="yes">_Version:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">install-os-version</property>
                                       </widget>
                                       <packing>
                                         <property name="top_attach">1</property>
@@ -774,7 +787,9 @@ User shouldn't see this.</property>
                                       <widget class="GtkLabel" id="label16">
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">OS Type:</property>
+                                        <property name="label" translatable="yes">OS _Type:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">install-os-type</property>
                                       </widget>
                                       <packing>
                                         <property name="x_options">GTK_FILL</property>
@@ -851,7 +866,9 @@ User shouldn't see this.</property>
                                           <widget class="GtkLabel" id="label27">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">CPUs:</property>
+                                            <property name="label" translatable="yes">C_PUs:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">config-cpus</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">2</property>
@@ -863,7 +880,9 @@ User shouldn't see this.</property>
                                           <widget class="GtkLabel" id="label22">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Memory (RAM):</property>
+                                            <property name="label" translatable="yes">_Memory (RAM):</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">config-mem</property>
                                           </widget>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
@@ -1018,10 +1037,11 @@ User shouldn't see this.</property>
                         <property name="spacing">6</property>
                         <child>
                           <widget class="GtkCheckButton" id="enable-storage">
-                            <property name="label" translatable="yes">Enable storage for this virtual machine</property>
+                            <property name="label" translatable="yes">_Enable storage for this virtual machine</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_enable_storage_toggled"/>
@@ -1054,8 +1074,10 @@ User shouldn't see this.</property>
                                         <child>
                                           <widget class="GtkLabel" id="label123">
                                             <property name="visible">True</property>
-                                            <property name="label" translatable="yes">Create a disk image on the computer's hard drive</property>
+                                            <property name="label" translatable="yes">C_reate a disk image on the computer's hard drive</property>
                                             <property name="use_markup">True</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">config-storage-create</property>
                                           </widget>
                                         </child>
                                       </widget>
@@ -1100,7 +1122,9 @@ User shouldn't see this.</property>
                                             <child>
                                               <widget class="GtkLabel" id="label31">
                                                 <property name="visible">True</property>
-                                                <property name="label" translatable="yes">GB</property>
+                                                <property name="label" translatable="yes">_GB</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">config-storage-size</property>
                                               </widget>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -1130,10 +1154,11 @@ User shouldn't see this.</property>
                                             <property name="spacing">6</property>
                                             <child>
                                               <widget class="GtkCheckButton" id="config-storage-nosparse">
-                                                <property name="label" translatable="yes">Allocate entire disk now</property>
+                                                <property name="label" translatable="yes">_Allocate entire disk now</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
+                                                <property name="use_underline">True</property>
                                                 <property name="draw_indicator">True</property>
                                               </widget>
                                               <packing>
@@ -1179,8 +1204,10 @@ User shouldn't see this.</property>
                                         <child>
                                           <widget class="GtkLabel" id="label124">
                                             <property name="visible">True</property>
-                                            <property name="label" translatable="yes">Select managed or other existing storage</property>
+                                            <property name="label" translatable="yes">Select _managed or other existing storage</property>
                                             <property name="use_markup">True</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">config-storage-select</property>
                                           </widget>
                                         </child>
                                       </widget>
@@ -1201,10 +1228,11 @@ User shouldn't see this.</property>
                                     <property name="spacing">6</property>
                                     <child>
                                       <widget class="GtkButton" id="config-storage-browse">
-                                        <property name="label" translatable="yes">Browse...</property>
+                                        <property name="label" translatable="yes">B_rowse...</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
+                                        <property name="use_underline">True</property>
                                         <signal name="clicked" handler="on_config_storage_browse_clicked"/>
                                       </widget>
                                       <packing>
@@ -1479,10 +1507,11 @@ User shouldn't see this.</property>
                                         </child>
                                         <child>
                                           <widget class="GtkCheckButton" id="config-set-macaddr">
-                                            <property name="label" translatable="yes">Set a fixed mac address</property>
+                                            <property name="label" translatable="yes">Set a fixed _MAC address</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
+                                            <property name="use_underline">True</property>
                                             <property name="draw_indicator">True</property>
                                             <signal name="toggled" handler="on_config_set_macaddr_toggled"/>
                                           </widget>
@@ -1589,7 +1618,9 @@ User shouldn't see this.</property>
                                           <widget class="GtkLabel" id="label30">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Architecture:</property>
+                                            <property name="label" translatable="yes">_Architecture:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">config-arch</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -1601,7 +1632,9 @@ User shouldn't see this.</property>
                                           <widget class="GtkLabel" id="label28">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Virt Type:</property>
+                                            <property name="label" translatable="yes">_Virt Type:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">config-hv</property>
                                           </widget>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
@@ -1656,144 +1689,88 @@ User shouldn't see this.</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox51">
+              <widget class="GtkHButtonBox" id="hbuttonbox1">
                 <property name="visible">True</property>
+                <property name="spacing">12</property>
+                <property name="layout_style">end</property>
                 <child>
-                  <widget class="GtkAlignment" id="alignment135">
+                  <widget class="GtkButton" id="create-help">
+                    <property name="label">gtk-help</property>
                     <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <child>
-                      <widget class="GtkButton" id="create-help">
-                        <property name="label">gtk-help</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_stock">True</property>
-                        <signal name="clicked" handler="on_create_help_clicked"/>
-                      </widget>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkAlignment" id="alignment134">
-                    <property name="visible">True</property>
-                    <property name="xalign">1</property>
-                    <child>
-                      <widget class="GtkHBox" id="hbox25">
-                        <property name="visible">True</property>
-                        <property name="spacing">10</property>
-                        <child>
-                          <widget class="GtkButton" id="create-cancel">
-                            <property name="label">gtk-cancel</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_stock">True</property>
-                            <signal name="clicked" handler="on_create_cancel_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="create-back">
-                            <property name="label">gtk-go-back</property>
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_stock">True</property>
-                            <signal name="clicked" handler="on_create_back_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="create-forward">
-                            <property name="label">gtk-go-forward</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="use_stock">True</property>
-                            <signal name="clicked" handler="on_create_forward_clicked"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkButton" id="create-finish">
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <signal name="clicked" handler="on_create_finish_clicked"/>
-                            <child>
-                              <widget class="GtkAlignment" id="alignment119">
-                                <property name="visible">True</property>
-                                <property name="xscale">0</property>
-                                <property name="yscale">0</property>
-                                <child>
-                                  <widget class="GtkHBox" id="hbox45">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">2</property>
-                                    <child>
-                                      <widget class="GtkImage" id="image95">
-                                        <property name="visible">True</property>
-                                        <property name="stock">gtk-quit</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <widget class="GtkLabel" id="label305">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">_Finish</property>
-                                        <property name="use_underline">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </widget>
-                                </child>
-                              </widget>
-                            </child>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
-                      </widget>
-                    </child>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                    <signal name="clicked" handler="on_create_help_clicked"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="pack_type">end</property>
+                    <property name="position">0</property>
+                    <property name="secondary">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkButton" id="create-cancel">
+                    <property name="label">gtk-cancel</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                    <signal name="clicked" handler="on_create_cancel_clicked"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
                     <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkButton" id="create-back">
+                    <property name="label">gtk-go-back</property>
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                    <signal name="clicked" handler="on_create_back_clicked"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkButton" id="create-forward">
+                    <property name="label">gtk-go-forward</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_stock">True</property>
+                    <signal name="clicked" handler="on_create_forward_clicked"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkButton" id="create-finish">
+                    <property name="label" translatable="yes">_Finish</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
+                    <signal name="clicked" handler="on_create_finish_clicked"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
               </widget>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>

@@ -4,6 +4,7 @@
   <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="vmm-progress">
     <property name="visible">True</property>
+    <property name="border_width">12</property>
     <property name="title" translatable="yes">Operation in progress</property>
     <property name="window_position">center-on-parent</property>
     <property name="default_width">300</property>
@@ -14,9 +15,6 @@
     <child>
       <widget class="GtkAlignment" id="alignment134">
         <property name="visible">True</property>
-        <property name="bottom_padding">3</property>
-        <property name="left_padding">3</property>
-        <property name="right_padding">3</property>
         <child>
           <widget class="GtkVBox" id="vbox13">
             <property name="visible">True</property>

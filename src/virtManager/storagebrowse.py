@@ -78,6 +78,14 @@ class vmmStorageBrowser(gobject.GObject):
             "on_vol_list_row_activated" : self.finish,
         })
 
+
+        finish_img = gtk.image_new_from_stock(gtk.STOCK_NEW,
+                                              gtk.ICON_SIZE_BUTTON)
+        self.window.get_widget("new-volume").set_image(finish_img)
+        finish_img = gtk.image_new_from_stock(gtk.STOCK_OPEN,
+                                              gtk.ICON_SIZE_BUTTON)
+        self.window.get_widget("choose-volume").set_image(finish_img)
+
         self.set_initial_state()
 
     def show(self, conn=None):

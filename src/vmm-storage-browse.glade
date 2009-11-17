@@ -33,7 +33,7 @@
                     <child>
                       <widget class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
                         <property name="hscrollbar_policy">never</property>
                         <property name="vscrollbar_policy">automatic</property>
                         <property name="shadow_type">in</property>
@@ -110,7 +110,7 @@
                     <child>
                       <widget class="GtkScrolledWindow" id="scrolledwindow2">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
                         <property name="hscrollbar_policy">automatic</property>
                         <property name="vscrollbar_policy">automatic</property>
                         <property name="shadow_type">in</property>
@@ -132,39 +132,12 @@
                         <property name="spacing">6</property>
                         <child>
                           <widget class="GtkButton" id="new-volume">
+                            <property name="label" translatable="yes">_New Volume</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_new_volume_clicked"/>
-                            <child>
-                              <widget class="GtkHBox" id="hbox6">
-                                <property name="visible">True</property>
-                                <property name="spacing">3</property>
-                                <child>
-                                  <widget class="GtkImage" id="image2">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-new</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkLabel" id="label1234">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">_New Volume</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">new-volume</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </widget>
-                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -198,38 +171,12 @@
                         </child>
                         <child>
                           <widget class="GtkButton" id="choose-volume">
+                            <property name="label" translatable="yes">Choose _Volume</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="on_choose_volume_clicked"/>
-                            <child>
-                              <widget class="GtkHBox" id="hbox5">
-                                <property name="visible">True</property>
-                                <property name="spacing">4</property>
-                                <child>
-                                  <widget class="GtkImage" id="image1">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-open</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkLabel" id="label1">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Choose _Volume</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">choose-volume</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </widget>
-                            </child>
                           </widget>
                           <packing>
                             <property name="expand">False</property>

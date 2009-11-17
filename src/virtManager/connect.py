@@ -64,6 +64,9 @@ class vmmConnect(gobject.GObject):
         # Plain hostname resolve failed, means we should just use IP addr
         self.can_resolve_hostname = None
 
+        stock_img = gtk.image_new_from_stock(gtk.STOCK_CONNECT,
+                                             gtk.ICON_SIZE_BUTTON)
+        self.window.get_widget("connect").set_image(stock_img)
         self.window.get_widget("connection").set_active(0)
         self.window.get_widget("connect").grab_default()
         self.window.get_widget("autoconnect").set_active(True)

@@ -277,7 +277,7 @@
             <child>
               <widget class="GtkMenuItem" id="details-menu-send-key">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Send Key</property>
+                <property name="label" translatable="yes">Send _Key</property>
                 <property name="use_underline">True</property>
                 <signal name="activate" handler="on_details-menu-send-key_activate"/>
                 <child>
@@ -622,7 +622,9 @@
                       <widget class="GtkLabel" id="label-auth-password">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Password:</property>
+                        <property name="label" translatable="yes">_Password:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">console-auth-password</property>
                       </widget>
                       <packing>
                         <property name="top_attach">1</property>
@@ -647,7 +649,7 @@
                     </child>
                     <child>
                       <widget class="GtkCheckButton" id="console-auth-remember">
-                        <property name="label" translatable="yes">Save this password in your keyring</property>
+                        <property name="label" translatable="yes">_Save this password in your keyring</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -668,7 +670,9 @@
                       <widget class="GtkLabel" id="label-auth-username">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Username:</property>
+                        <property name="label" translatable="yes">_Username:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">console-auth-username</property>
                       </widget>
                       <packing>
                         <property name="x_options">GTK_FILL</property>
@@ -689,46 +693,12 @@
                     </child>
                     <child>
                       <widget class="GtkButton" id="console-auth-login">
+                        <property name="label" translatable="yes">_Login</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="on_console_auth_login_clicked"/>
-                        <child>
-                          <widget class="GtkAlignment" id="alignment158">
-                            <property name="visible">True</property>
-                            <property name="xscale">0</property>
-                            <property name="yscale">0</property>
-                            <child>
-                              <widget class="GtkHBox" id="hbox52">
-                                <property name="visible">True</property>
-                                <property name="spacing">2</property>
-                                <child>
-                                  <widget class="GtkImage" id="image84">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-yes</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkLabel" id="label437">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Login</property>
-                                    <property name="use_underline">True</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </widget>
-                            </child>
-                          </widget>
-                        </child>
                       </widget>
                       <packing>
                         <property name="left_attach">2</property>
@@ -838,46 +808,12 @@
                     </child>
                     <child>
                       <widget class="GtkButton" id="add-hardware-button">
+                        <property name="label" translatable="yes">A_dd Hardware</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="on_add_hardware_button_clicked"/>
-                        <child>
-                          <widget class="GtkAlignment" id="alignment161">
-                            <property name="visible">True</property>
-                            <property name="xscale">0</property>
-                            <property name="yscale">0</property>
-                            <child>
-                              <widget class="GtkHBox" id="hbox53">
-                                <property name="visible">True</property>
-                                <property name="spacing">2</property>
-                                <child>
-                                  <widget class="GtkImage" id="image86">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-add</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkLabel" id="label506">
-                                    <property name="visible">True</property>
-                                    <property name="label">_Add Hardware</property>
-                                    <property name="use_underline">True</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </widget>
-                            </child>
-                          </widget>
-                        </child>
                       </widget>
                       <packing>
                         <property name="expand">False</property>
@@ -1104,6 +1040,7 @@
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">foo</property>
+                                            <property name="selectable">True</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1117,6 +1054,7 @@
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">foo</property>
+                                            <property name="selectable">True</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1132,6 +1070,7 @@
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">foo</property>
+                                            <property name="selectable">True</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1195,7 +1134,9 @@
                                           <widget class="GtkLabel" id="label20">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Enable ACPI:</property>
+                                            <property name="label" translatable="yes">Enable A_CPI:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">overview-acpi</property>
                                           </widget>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
@@ -1205,7 +1146,9 @@
                                           <widget class="GtkLabel" id="label21">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Enable APIC:</property>
+                                            <property name="label" translatable="yes">Enable A_PIC:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">overview-apic</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -1217,7 +1160,9 @@
                                           <widget class="GtkLabel" id="label22">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Clock Offset:</property>
+                                            <property name="label" translatable="yes">C_lock Offset:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">overview-clock-combo</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">2</property>
@@ -1370,7 +1315,9 @@
                                                       <widget class="GtkLabel" id="security_id">
                                                         <property name="visible">True</property>
                                                         <property name="xalign">0</property>
-                                                        <property name="label" translatable="yes">Label:</property>
+                                                        <property name="label" translatable="yes">_Label:</property>
+                                                        <property name="use_underline">True</property>
+                                                        <property name="mnemonic_widget">security-label</property>
                                                       </widget>
                                                     </child>
                                                   </widget>
@@ -1401,7 +1348,7 @@
                                             </child>
                                             <child>
                                               <widget class="GtkRadioButton" id="security-dynamic">
-                                                <property name="label" translatable="yes">Dynamic</property>
+                                                <property name="label" translatable="yes">D_ynamic</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
@@ -1416,7 +1363,7 @@
                                             </child>
                                             <child>
                                               <widget class="GtkRadioButton" id="security-static">
-                                                <property name="label" translatable="yes">Static</property>
+                                                <property name="label" translatable="yes">_Static</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
@@ -1471,7 +1418,9 @@
                                           <widget class="GtkLabel" id="label514">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Model:</property>
+                                            <property name="label" translatable="yes">M_odel:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">security-model</property>
                                           </widget>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
@@ -1545,7 +1494,7 @@
                                         <property name="n_rows">4</property>
                                         <property name="n_columns">3</property>
                                         <property name="column_spacing">6</property>
-                                        <property name="row_spacing">8</property>
+                                        <property name="row_spacing">12</property>
                                         <child>
                                           <widget class="GtkLabel" id="label45">
                                             <property name="visible">True</property>
@@ -1742,6 +1691,7 @@ I/O:</property>
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">8</property>
+                                            <property name="selectable">True</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1757,6 +1707,7 @@ I/O:</property>
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">2</property>
+                                            <property name="selectable">True</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1770,6 +1721,7 @@ I/O:</property>
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">8</property>
+                                            <property name="selectable">True</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1821,7 +1773,9 @@ I/O:</property>
                                           <widget class="GtkLabel" id="label333">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Change allocation:</property>
+                                            <property name="label" translatable="yes">Change a_llocation:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">config-vcpus</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -1917,7 +1871,9 @@ I/O:</property>
                                               <widget class="GtkLabel" id="label336">
                                                 <property name="visible">True</property>
                                                 <property name="xalign">1</property>
-                                                <property name="label" translatable="yes">Initial pinning:</property>
+                                                <property name="label" translatable="yes">Initial _pinning:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">config-vcpupin</property>
                                               </widget>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -1981,7 +1937,7 @@ I/O:</property>
                                 <child>
                                   <widget class="GtkLabel" id="label9">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;Physical CPU Pinning&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;CPU Pinning&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
                                   </widget>
                                   <packing>
@@ -2046,7 +2002,9 @@ I/O:</property>
                                           <widget class="GtkLabel" id="label60">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Change allocation:</property>
+                                            <property name="label" translatable="yes">Change a_llocation:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">config-memory</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -2059,7 +2017,9 @@ I/O:</property>
                                           <widget class="GtkLabel" id="label307">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Maximum allocation:</property>
+                                            <property name="label" translatable="yes">Ma_ximum allocation:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">config-maxmem</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">2</property>
@@ -2086,6 +2046,7 @@ I/O:</property>
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">2 GB</property>
+                                            <property name="selectable">True</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -2101,6 +2062,7 @@ I/O:</property>
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">200 MB</property>
+                                            <property name="selectable">True</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -2251,7 +2213,7 @@ I/O:</property>
                                         <property name="left_padding">12</property>
                                         <child>
                                           <widget class="GtkCheckButton" id="config-autostart">
-                                            <property name="label" translatable="yes">Start virtual machine on host boot up</property>
+                                            <property name="label" translatable="yes">Start virt_ual machine on host boot up</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
@@ -2299,7 +2261,9 @@ I/O:</property>
                                               <widget class="GtkLabel" id="label4">
                                                 <property name="visible">True</property>
                                                 <property name="xalign">0</property>
-                                                <property name="label" translatable="yes">Device virtual machine will boot from:</property>
+                                                <property name="label" translatable="yes">Device virtual machine will _boot from:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">config-boot-device</property>
                                               </widget>
                                               <packing>
                                                 <property name="x_options"></property>
@@ -2385,7 +2349,9 @@ I/O:</property>
                                           <widget class="GtkLabel" id="permissions-label">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Readonly:</property>
+                                            <property name="label" translatable="yes">R_eadonly:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">disk-readonly</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">2</property>
@@ -2398,7 +2364,9 @@ I/O:</property>
                                           <widget class="GtkLabel" id="label3">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Shareable:</property>
+                                            <property name="label" translatable="yes">Sharea_ble:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">disk-shareable</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">3</property>
@@ -2505,6 +2473,7 @@ I/O:</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="can_default">True</property>
                                                 <property name="receives_default">True</property>
+                                                <property name="tooltip" translatable="yes">Connect or disconnect media</property>
                                                 <property name="use_stock">True</property>
                                                 <signal name="clicked" handler="on_config_cdrom_connect_clicked"/>
                                               </widget>
@@ -2696,29 +2665,11 @@ I/O:</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkEntry" id="network-mac-address">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="editable">False</property>
-                                            <accessibility>
-                                              <atkproperty name="AtkObject::accessible-name" translatable="yes">MAC Address Field</atkproperty>
-                                            </accessibility>
-                                          </widget>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="top_attach">3</property>
-                                            <property name="bottom_attach">4</property>
-                                            <property name="y_options"></property>
-                                          </packing>
-                                        </child>
-                                        <child>
                                           <widget class="GtkLabel" id="mac-address-label">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
                                             <property name="label" translatable="yes">MAC address:</property>
                                             <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">network-mac-address</property>
                                           </widget>
                                           <packing>
                                             <property name="top_attach">3</property>
@@ -2753,6 +2704,19 @@ I/O:</property>
                                             <property name="bottom_attach">3</property>
                                             <property name="x_options">GTK_FILL</property>
                                             <property name="y_options"></property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="network-mac-address">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="selectable">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">3</property>
+                                            <property name="bottom_attach">4</property>
                                           </packing>
                                         </child>
                                       </widget>
@@ -3459,6 +3423,7 @@ I/O:</property>
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">label</property>
+                                            <property name="selectable">True</property>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -3570,7 +3535,9 @@ I/O:</property>
                                           <widget class="GtkLabel" id="label17">
                                             <property name="visible">True</property>
                                             <property name="xalign">1</property>
-                                            <property name="label" translatable="yes">Model:</property>
+                                            <property name="label" translatable="yes">M_odel:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">video-model-combo</property>
                                           </widget>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>

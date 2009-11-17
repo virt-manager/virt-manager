@@ -91,7 +91,9 @@
                           <widget class="GtkLabel" id="label10">
                             <property name="visible">True</property>
                             <property name="xalign">1</property>
-                            <property name="label" translatable="yes">New MAC:</property>
+                            <property name="label" translatable="yes">New _MAC:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">change-mac-new</property>
                           </widget>
                           <packing>
                             <property name="right_attach">2</property>
@@ -383,8 +385,10 @@
                       <widget class="GtkLabel" id="label12">
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">&lt;span color='#484848'&gt;New Path:&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">&lt;span color='#484848'&gt;New _Path:&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">change-storage-new</property>
                       </widget>
                     </child>
                   </widget>
@@ -397,10 +401,11 @@
                 </child>
                 <child>
                   <widget class="GtkCheckButton" id="change-storage-doclone">
-                    <property name="label" translatable="yes">Create a new disk (clone) for the virtual machine</property>
+                    <property name="label" translatable="yes">Create a new disk (c_lone) for the virtual machine</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="on_change_storage_doclone_toggled"/>
                   </widget>
@@ -425,10 +430,11 @@
                 </child>
                 <child>
                   <widget class="GtkButton" id="change-storage-browse">
-                    <property name="label" translatable="yes">Browse...</property>
+                    <property name="label" translatable="yes">_Browse...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_change_storage_browse_clicked"/>
                   </widget>
                   <packing>
@@ -781,8 +787,10 @@
                               <widget class="GtkLabel" id="label3">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">&lt;span color='#484848'&gt;Name:&lt;/span&gt;</property>
+                                <property name="label" translatable="yes">&lt;span color='#484848'&gt;_Name:&lt;/span&gt;</property>
                                 <property name="use_markup">True</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">clone-new-name</property>
                               </widget>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
@@ -833,9 +841,10 @@ uses the existing disk image for both the original and the new machine.&lt;/span
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox5">
+              <widget class="GtkHButtonBox" id="hbuttonbox1">
                 <property name="visible">True</property>
-                <property name="spacing">6</property>
+                <property name="spacing">12</property>
+                <property name="layout_style">end</property>
                 <child>
                   <widget class="GtkButton" id="clone-help">
                     <property name="label">gtk-help</property>
@@ -849,6 +858,23 @@ uses the existing disk image for both the original and the new machine.&lt;/span
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="position">0</property>
+                    <property name="secondary">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkButton" id="clone-ok">
+                    <property name="label" translatable="yes">C_lone</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
+                    <signal name="clicked" handler="on_clone_ok_clicked"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -864,52 +890,11 @@ uses the existing disk image for both the original and the new machine.&lt;/span
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkButton" id="clone-ok">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_clone_ok_clicked"/>
-                    <child>
-                      <widget class="GtkHBox" id="hbox3">
-                        <property name="visible">True</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <widget class="GtkImage" id="image1">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-new</property>
-                          </widget>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="label5">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">C_lone Virtual Machine</property>
-                            <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">clone-ok</property>
-                          </widget>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </widget>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="pack_type">end</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </widget>
               <packing>
-                <property name="expand">False</property>
                 <property name="position">1</property>
               </packing>
             </child>

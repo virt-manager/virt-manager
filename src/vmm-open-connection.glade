@@ -20,7 +20,7 @@
             <property name="border_width">6</property>
             <property name="n_rows">5</property>
             <property name="n_columns">2</property>
-            <property name="column_spacing">3</property>
+            <property name="column_spacing">6</property>
             <property name="row_spacing">6</property>
             <child>
               <widget class="GtkCheckButton" id="autoconnect">
@@ -37,15 +37,15 @@
                 <property name="bottom_attach">5</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
-                <property name="x_padding">7</property>
               </packing>
             </child>
             <child>
               <widget class="GtkLabel" id="label90">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Autoconnect
-   at Startup:</property>
+                <property name="label" translatable="yes">A_utoconnect:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">autoconnect</property>
               </widget>
               <packing>
                 <property name="top_attach">4</property>
@@ -75,36 +75,15 @@
               <widget class="GtkLabel" id="label91">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Hostname:</property>
+                <property name="label" translatable="yes">H_ostname:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">hostname</property>
               </widget>
               <packing>
                 <property name="top_attach">3</property>
                 <property name="bottom_attach">4</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkScrolledWindow" id="scrolledwindow1">
-                <property name="width_request">70</property>
-                <property name="height_request">220</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="border_width">3</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <widget class="GtkTreeView" id="conn-list">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                  </widget>
-                </child>
-              </widget>
-              <packing>
-                <property name="right_attach">2</property>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
               </packing>
             </child>
             <child>
@@ -128,7 +107,9 @@ QEMU/KVM</property>
               <widget class="GtkLabel" id="label87">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Hypervisor:</property>
+                <property name="label" translatable="yes">_Hypervisor:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">hypervisor</property>
               </widget>
               <packing>
                 <property name="x_options">GTK_FILL</property>
@@ -139,7 +120,9 @@ QEMU/KVM</property>
               <widget class="GtkLabel" id="label88">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Connection:</property>
+                <property name="label" translatable="yes">Connec_tion:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">connection</property>
               </widget>
               <packing>
                 <property name="top_attach">1</property>
@@ -169,6 +152,29 @@ Remote tunnel over SSH</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
             </child>
+            <child>
+              <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                <property name="width_request">70</property>
+                <property name="height_request">220</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="border_width">3</property>
+                <property name="hscrollbar_policy">automatic</property>
+                <property name="vscrollbar_policy">automatic</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <widget class="GtkTreeView" id="conn-list">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="right_attach">2</property>
+                <property name="top_attach">2</property>
+                <property name="bottom_attach">3</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="position">1</property>
@@ -196,47 +202,14 @@ Remote tunnel over SSH</property>
             </child>
             <child>
               <widget class="GtkButton" id="connect">
+                <property name="label" translatable="yes">Co_nnect</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_connect_clicked"/>
-                <child>
-                  <widget class="GtkAlignment" id="alignment11">
-                    <property name="visible">True</property>
-                    <property name="xscale">0</property>
-                    <property name="yscale">0</property>
-                    <child>
-                      <widget class="GtkHBox" id="hbox12">
-                        <property name="visible">True</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <widget class="GtkImage" id="image9">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-connect</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="label86">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Co_nnect</property>
-                            <property name="use_underline">True</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </widget>
-                    </child>
-                  </widget>
-                </child>
               </widget>
               <packing>
                 <property name="expand">False</property>

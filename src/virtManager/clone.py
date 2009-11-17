@@ -131,6 +131,9 @@ class vmmCloneVM(gobject.GObject):
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("clone-help").hide()
+        finish_img = gtk.image_new_from_stock(gtk.STOCK_NEW,
+                                              gtk.ICON_SIZE_BUTTON)
+        self.window.get_widget("clone-ok").set_image(finish_img)
 
         self.set_initial_state()
 

@@ -154,8 +154,10 @@
                       <widget class="GtkLabel" id="label10">
                         <property name="visible">True</property>
                         <property name="xalign">1</property>
-                        <property name="label" translatable="yes">&lt;span color='#484848'&gt;Migrate offline:&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">&lt;span color='#484848'&gt;Migrate _offline:&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">migrate-offline</property>
                       </widget>
                       <packing>
                         <property name="top_attach">3</property>
@@ -222,7 +224,9 @@
                                 <child>
                                   <widget class="GtkLabel" id="label11">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Tunnel migration through libvirt's daemon:</property>
+                                    <property name="label" translatable="yes">_Tunnel migration through libvirt's daemon:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">migrate-secure</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -323,7 +327,9 @@
                                       <widget class="GtkLabel" id="label2">
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">Address:</property>
+                                        <property name="label" translatable="yes">_Address:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">migrate-set-interface</property>
                                       </widget>
                                       <packing>
                                         <property name="x_options">GTK_FILL</property>
@@ -333,7 +339,9 @@
                                       <widget class="GtkLabel" id="label5">
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">Port:</property>
+                                        <property name="label" translatable="yes">_Port:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">migrate-set-port</property>
                                       </widget>
                                       <packing>
                                         <property name="top_attach">1</property>
@@ -345,7 +353,9 @@
                                       <widget class="GtkLabel" id="label3">
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">Bandwidth:</property>
+                                        <property name="label" translatable="yes">_Bandwidth:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">migrate-set-rate</property>
                                       </widget>
                                       <packing>
                                         <property name="top_attach">2</property>

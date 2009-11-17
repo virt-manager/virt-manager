@@ -666,7 +666,9 @@
                               <widget class="GtkLabel" id="label385">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">Network:</property>
+                                <property name="label" translatable="yes">_Network:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">net-network</property>
                               </widget>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
@@ -814,7 +816,9 @@
                               <widget class="GtkLabel" id="label72">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Enable DHCP:</property>
+                                <property name="label" translatable="yes">_Enable DHCP:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">net-dhcp-enable</property>
                               </widget>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
@@ -876,7 +880,9 @@
                               <widget class="GtkLabel" id="label390">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">End:</property>
+                                <property name="label" translatable="yes">E_nd:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">net-dhcp-end</property>
                               </widget>
                               <packing>
                                 <property name="top_attach">2</property>
@@ -889,7 +895,9 @@
                               <widget class="GtkLabel" id="label389">
                                 <property name="visible">True</property>
                                 <property name="xalign">1</property>
-                                <property name="label" translatable="yes">Start:</property>
+                                <property name="label" translatable="yes">_Start:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">net-dhcp-start</property>
                               </widget>
                               <packing>
                                 <property name="top_attach">1</property>
@@ -1008,7 +1016,9 @@
                                       <widget class="GtkLabel" id="label392">
                                         <property name="visible">True</property>
                                         <property name="xalign">1</property>
-                                        <property name="label" translatable="yes">Desination:</property>
+                                        <property name="label" translatable="yes">_Desination:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">net-forward-dev</property>
                                       </widget>
                                     </child>
                                   </widget>
@@ -1023,7 +1033,7 @@
                             </child>
                             <child>
                               <widget class="GtkRadioButton" id="net-forward-none">
-                                <property name="label" translatable="yes">Isolated virtual network</property>
+                                <property name="label" translatable="yes">_Isolated virtual network</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -1040,7 +1050,7 @@
                             </child>
                             <child>
                               <widget class="GtkRadioButton" id="net-forward-dev">
-                                <property name="label" translatable="yes">Forwarding to physical network</property>
+                                <property name="label" translatable="yes">For_warding to physical network</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -1490,7 +1500,7 @@
         <child>
           <widget class="GtkHButtonBox" id="hbuttonbox1">
             <property name="visible">True</property>
-            <property name="spacing">6</property>
+            <property name="spacing">12</property>
             <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="create-cancel">
@@ -1539,45 +1549,11 @@
             </child>
             <child>
               <widget class="GtkButton" id="create-finish">
+                <property name="label" translatable="yes">_Finish</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_create_finish_clicked"/>
-                <child>
-                  <widget class="GtkAlignment" id="alignment119">
-                    <property name="visible">True</property>
-                    <property name="xscale">0</property>
-                    <property name="yscale">0</property>
-                    <child>
-                      <widget class="GtkHBox" id="hbox45">
-                        <property name="visible">True</property>
-                        <property name="spacing">2</property>
-                        <child>
-                          <widget class="GtkImage" id="image95">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-quit</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="label305">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">_Finish</property>
-                            <property name="use_underline">True</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </widget>
-                    </child>
-                  </widget>
-                </child>
               </widget>
               <packing>
                 <property name="expand">False</property>

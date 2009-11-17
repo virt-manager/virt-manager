@@ -129,6 +129,10 @@ class vmmAddHardware(gobject.GObject):
         # XXX: Help docs useless/out of date
         self.window.get_widget("create-help").hide()
 
+        finish_img = gtk.image_new_from_stock(gtk.STOCK_QUIT,
+                                              gtk.ICON_SIZE_BUTTON)
+        self.window.get_widget("create-finish").set_image(finish_img)
+
         self.set_initial_state()
 
     def update_doc(self, ignore1, ignore2, param):

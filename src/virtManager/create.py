@@ -177,6 +177,9 @@ class vmmCreate(gobject.GObject):
 
         # FIXME: Unhide this when we make some documentation
         self.window.get_widget("create-help").hide()
+        finish_img = gtk.image_new_from_stock(gtk.STOCK_QUIT,
+                                              gtk.ICON_SIZE_BUTTON)
+        self.window.get_widget("create-finish").set_image(finish_img)
 
         blue = gtk.gdk.color_parse("#0072A8")
         self.window.get_widget("create-header").modify_bg(gtk.STATE_NORMAL,

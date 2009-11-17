@@ -158,7 +158,7 @@
                         <child>
                           <widget class="GtkMenu" id="menu1">
                             <property name="visible">True</property>
-                           <child>
+                            <child>
                               <widget class="GtkCheckMenuItem" id="menu_view_stats_cpu">
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">CPU Usage</property>
@@ -167,7 +167,7 @@
                                 <signal name="activate" handler="on_menu_view_cpu_usage_activate"/>
                               </widget>
                             </child>
-                           <child>
+                            <child>
                               <widget class="GtkCheckMenuItem" id="menu_view_stats_disk">
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">Disk I/O</property>
@@ -335,7 +335,7 @@
             <child>
               <widget class="GtkScrolledWindow" id="scrolledwindow1">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="hscrollbar_policy">automatic</property>
                 <property name="vscrollbar_policy">automatic</property>
                 <property name="shadow_type">in</property>
