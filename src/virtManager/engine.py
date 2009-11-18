@@ -490,14 +490,6 @@ class vmmEngine(gobject.GObject):
             return
 
         vm = conn.get_vm(uuid)
-        status = vm.status()
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
-                       libvirt.VIR_DOMAIN_SHUTOFF,
-                       libvirt.VIR_DOMAIN_CRASHED,
-                       libvirt.VIR_DOMAIN_PAUSED ]:
-            logging.warning("Save requested, but machine is shutdown / "
-                            "shutoff / paused")
-            return
 
         path = util.browse_local(src.window.get_widget("vmm-details"),
                                  _("Save Virtual Machine"),
@@ -525,7 +517,6 @@ class vmmEngine(gobject.GObject):
     def destroy_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
-        status = vm.status()
 
         resp = self.err.yes_no(text1=_("About to poweroff virtual "
                                          "machine %s" % vm.get_name()),
@@ -545,7 +536,6 @@ class vmmEngine(gobject.GObject):
     def suspend_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
-        status = vm.status()
 
         logging.debug("Pausing vm '%s'." % vm.get_name())
         try:
@@ -557,7 +547,6 @@ class vmmEngine(gobject.GObject):
     def resume_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
-        status = vm.status()
 
         logging.debug("Unpausing vm '%s'." % vm.get_name())
         try:
@@ -569,7 +558,6 @@ class vmmEngine(gobject.GObject):
     def run_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
-        status = vm.status()
 
         logging.debug("Starting vm '%s'." % vm.get_name())
         try:
@@ -581,7 +569,6 @@ class vmmEngine(gobject.GObject):
     def shutdown_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
-        status = vm.status()
 
         logging.debug("Shutting down vm '%s'." % vm.get_name())
         try:
@@ -593,7 +580,6 @@ class vmmEngine(gobject.GObject):
     def reboot_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
-        status = vm.status()
 
         logging.debug("Rebooting vm '%s'." % vm.get_name())
         try:
