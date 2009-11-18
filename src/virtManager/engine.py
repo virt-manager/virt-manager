@@ -527,12 +527,6 @@ class vmmEngine(gobject.GObject):
         vm = conn.get_vm(uuid)
         status = vm.status()
 
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
-                       libvirt.VIR_DOMAIN_SHUTOFF ]:
-            logging.warning("Destroy requested, but machine is "
-                            "shutdown/shutoff")
-            return
-
         resp = self.err.yes_no(text1=_("About to poweroff virtual "
                                          "machine %s" % vm.get_name()),
                                text2=_("This will immediately poweroff the VM "
@@ -553,16 +547,6 @@ class vmmEngine(gobject.GObject):
         vm = conn.get_vm(uuid)
         status = vm.status()
 
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
-                       libvirt.VIR_DOMAIN_SHUTOFF,
-                       libvirt.VIR_DOMAIN_CRASHED ]:
-            logging.warning("Pause requested, but machine is shutdown/shutoff")
-            return
-
-        elif status in [ libvirt.VIR_DOMAIN_PAUSED ]:
-            logging.warning("Pause requested, but machine is already paused")
-            return
-
         logging.debug("Pausing vm '%s'." % vm.get_name())
         try:
             vm.suspend()
@@ -574,17 +558,6 @@ class vmmEngine(gobject.GObject):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
         status = vm.status()
-
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
-                       libvirt.VIR_DOMAIN_SHUTOFF,
-                       libvirt.VIR_DOMAIN_CRASHED ]:
-            logging.warning("Resume requested, but machine is "
-                            "shutdown/shutoff")
-            return
-
-        elif status not in [ libvirt.VIR_DOMAIN_PAUSED ]:
-            logging.warning("Unpause requested, but machine is not paused.")
-            return
 
         logging.debug("Unpausing vm '%s'." % vm.get_name())
         try:
@@ -598,10 +571,6 @@ class vmmEngine(gobject.GObject):
         vm = conn.get_vm(uuid)
         status = vm.status()
 
-        if status != libvirt.VIR_DOMAIN_SHUTOFF:
-            logging.warning("Run requested, but domain isn't shutoff.")
-            return
-
         logging.debug("Starting vm '%s'." % vm.get_name())
         try:
             vm.startup()
@@ -614,13 +583,6 @@ class vmmEngine(gobject.GObject):
         vm = conn.get_vm(uuid)
         status = vm.status()
 
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
-                       libvirt.VIR_DOMAIN_SHUTOFF,
-                       libvirt.VIR_DOMAIN_CRASHED ]:
-            logging.warning("Shut down requested, but the virtual machine is "
-                            "already shutting down / powered off")
-            return
-
         logging.debug("Shutting down vm '%s'." % vm.get_name())
         try:
             vm.shutdown()
@@ -632,13 +594,6 @@ class vmmEngine(gobject.GObject):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
         status = vm.status()
-
-        if status in [ libvirt.VIR_DOMAIN_SHUTDOWN,
-                       libvirt.VIR_DOMAIN_SHUTOFF,
-                       libvirt.VIR_DOMAIN_CRASHED ]:
-            logging.warning("Reboot requested, but machine is already "
-                            "shutting down / shutoff")
-            return
 
         logging.debug("Rebooting vm '%s'." % vm.get_name())
         try:
