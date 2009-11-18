@@ -48,6 +48,10 @@ class vmmPreferences(gobject.GObject):
         self.config.on_stats_enable_disk_poll_changed(self.refresh_disk_poll)
         self.config.on_stats_enable_net_poll_changed(self.refresh_net_poll)
 
+        self.config.on_confirm_forcepoweroff_changed(self.refresh_confirm_forcepoweroff)
+        self.config.on_confirm_poweroff_changed(self.refresh_confirm_poweroff)
+        self.config.on_confirm_pause_changed(self.refresh_confirm_pause)
+
         self.refresh_view_system_tray()
         self.refresh_update_interval()
         self.refresh_history_length()
@@ -58,6 +62,9 @@ class vmmPreferences(gobject.GObject):
         self.refresh_sound_remote()
         self.refresh_disk_poll()
         self.refresh_net_poll()
+        self.refresh_confirm_forcepoweroff()
+        self.refresh_confirm_poweroff()
+        self.refresh_confirm_pause()
 
         self.window.signal_autoconnect({
             "on_prefs_system_tray_toggled" : self.change_view_system_tray,
@@ -73,6 +80,9 @@ class vmmPreferences(gobject.GObject):
             "on_prefs_sound_remote_toggled": self.change_remote_sound,
             "on_prefs_stats_enable_disk_toggled": self.change_disk_poll,
             "on_prefs_stats_enable_net_toggled": self.change_net_poll,
+            "on_prefs_confirm_forcepoweroff_toggled": self.change_confirm_forcepoweroff,
+            "on_prefs_confirm_poweroff_toggled": self.change_confirm_poweroff,
+            "on_prefs_confirm_pause_toggled": self.change_confirm_pause,
             })
 
         # XXX: Help docs useless/out of date
@@ -127,6 +137,16 @@ class vmmPreferences(gobject.GObject):
                          ignore4=None):
         self.window.get_widget("prefs-stats-enable-net").set_active(self.config.get_stats_enable_net_poll())
 
+    def refresh_confirm_forcepoweroff(self, ignore1=None, ignore2=None,
+                                      ignore3=None, ignore4=None):
+        self.window.get_widget("prefs-confirm-forcepoweroff").set_active(self.config.get_confirm_forcepoweroff())
+    def refresh_confirm_poweroff(self, ignore1=None, ignore2=None,
+                                      ignore3=None, ignore4=None):
+        self.window.get_widget("prefs-confirm-poweroff").set_active(self.config.get_confirm_poweroff())
+    def refresh_confirm_pause(self, ignore1=None, ignore2=None,
+                              ignore3=None, ignore4=None):
+        self.window.get_widget("prefs-confirm-pause").set_active(self.config.get_confirm_pause())
+
     def change_view_system_tray(self, src):
         self.config.set_view_system_tray(src.get_active())
 
@@ -151,6 +171,13 @@ class vmmPreferences(gobject.GObject):
         self.config.set_stats_enable_disk_poll(src.get_active())
     def change_net_poll(self, src):
         self.config.set_stats_enable_net_poll(src.get_active())
+
+    def change_confirm_forcepoweroff(self, src):
+        self.config.set_confirm_forcepoweroff(src.get_active())
+    def change_confirm_poweroff(self, src):
+        self.config.set_confirm_poweroff(src.get_active())
+    def change_confirm_pause(self, src):
+        self.config.set_confirm_pause(src.get_active())
 
     def show_help(self, src):
         # From the Preferences window, show the help document from

@@ -517,14 +517,21 @@ class vmmEngine(gobject.GObject):
     def destroy_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
+        do_prompt = self.config.get_confirm_forcepoweroff()
 
-        resp = self.err.yes_no(text1=_("About to poweroff virtual "
-                                         "machine %s" % vm.get_name()),
-                               text2=_("This will immediately poweroff the VM "
-                                       "without shutting down the OS and may "
-                                       "cause data loss. Are you sure?"))
-        if not resp:
-            return
+        if do_prompt:
+            res = self.err.warn_chkbox(
+                    text1=(_("Are you sure you want to force poweroff '%s'?") %
+                           vm.get_name()),
+                    text2=_("This will immediately poweroff the VM without "
+                            "shutting down the OS and may cause data loss."),
+                    chktext=_("Don't ask me again."),
+                    buttons=gtk.BUTTONS_YES_NO)
+
+            response, skip_prompt = res
+            if not response:
+                return
+            self.config.set_confirm_forcepoweroff(not skip_prompt)
 
         logging.debug("Destroying vm '%s'." % vm.get_name())
         try:
@@ -536,6 +543,19 @@ class vmmEngine(gobject.GObject):
     def suspend_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
+        do_prompt = self.config.get_confirm_pause()
+
+        if do_prompt:
+            res = self.err.warn_chkbox(
+                    text1=_("Are you sure you want to pause "
+                            "'%s'?" % vm.get_name()),
+                    chktext=_("Don't ask me again."),
+                    buttons=gtk.BUTTONS_YES_NO)
+
+            response, skip_prompt = res
+            if not response:
+                return
+            self.config.set_confirm_pause(not skip_prompt)
 
         logging.debug("Pausing vm '%s'." % vm.get_name())
         try:
@@ -569,6 +589,19 @@ class vmmEngine(gobject.GObject):
     def shutdown_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
+        do_prompt = self.config.get_confirm_poweroff()
+
+        if do_prompt:
+            res = self.err.warn_chkbox(
+                    text1=_("Are you sure you want to poweroff "
+                            "'%s'?" % vm.get_name()),
+                    chktext=_("Don't ask me again."),
+                    buttons=gtk.BUTTONS_YES_NO)
+
+            response, skip_prompt = res
+            if not response:
+                return
+            self.config.set_confirm_poweroff(not skip_prompt)
 
         logging.debug("Shutting down vm '%s'." % vm.get_name())
         try:
@@ -580,6 +613,19 @@ class vmmEngine(gobject.GObject):
     def reboot_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
+        do_prompt = self.config.get_confirm_poweroff()
+
+        if do_prompt:
+            res = self.err.warn_chkbox(
+                    text1=_("Are you sure you want to reboot "
+                            "'%s'?" % vm.get_name()),
+                    chktext=_("Don't ask me again."),
+                    buttons=gtk.BUTTONS_YES_NO)
+
+            response, skip_prompt = res
+            if not response:
+                return
+            self.config.set_confirm_poweroff(not skip_prompt)
 
         logging.debug("Rebooting vm '%s'." % vm.get_name())
         try:

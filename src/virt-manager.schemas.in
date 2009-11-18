@@ -272,5 +272,44 @@
         <long>Default path for saving screenshots from VMs</long>
       </locale>
     </schema>
+
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/confirm/forcepoweroff</key>
+      <applyto>/apps/::PACKAGE::/confirm/forcepoweroff</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>1</default>
+
+      <locale name="C">
+        <short>Confirm force poweroff request</short>
+        <long>Whether we require confirmation to forcepoweroff a VM</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/confirm/poweroff</key>
+      <applyto>/apps/::PACKAGE::/confirm/poweroff</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>0</default>
+
+      <locale name="C">
+        <short>Confirm poweroff request</short>
+        <long>Whether we require confirmation to poweroff/reboot a VM</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/confirm/pause</key>
+      <applyto>/apps/::PACKAGE::/confirm/pause</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>0</default>
+
+      <locale name="C">
+        <short>Confirm pause request</short>
+        <long>Whether we require confirmation to pause a VM</long>
+      </locale>
+    </schema>
   </schemalist>
 </gconfschemafile>

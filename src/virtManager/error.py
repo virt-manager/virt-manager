@@ -131,20 +131,22 @@ class vmmErrorDialog (gtk.MessageDialog):
     def ok_cancel(self, text1, text2=None):
         return self._show_warning(gtk.BUTTONS_OK_CANCEL, text1, text2)
 
-    def warn_chkbox(self, text1, text2=None, chktext=None):
-        chkbox = vmmCheckDialog(self.parent, gtk.MESSAGE_WARNING)
+    def warn_chkbox(self, text1, text2=None, chktext=None, buttons=None):
+        chkbox = vmmCheckDialog(self.parent, gtk.MESSAGE_WARNING, buttons)
         return chkbox.show_chkbox(text1, text2, chktext)
 
-    def err_chkbox(self, text1, text2=None, chktext=None):
-        chkbox = vmmCheckDialog(self.parent, gtk.MESSAGE_ERROR)
+    def err_chkbox(self, text1, text2=None, chktext=None, buttons=None):
+        chkbox = vmmCheckDialog(self.parent, gtk.MESSAGE_ERROR, buttons)
         return chkbox.show_chkbox(text1, text2, chktext)
 
 class vmmCheckDialog (gtk.MessageDialog):
-    def __init__ (self, parent=None, typ=gtk.MESSAGE_INFO):
-        if typ == gtk.MESSAGE_WARNING:
-            buttons = gtk.BUTTONS_OK_CANCEL
-        else:
-            buttons = gtk.BUTTONS_OK
+    def __init__ (self, parent=None, typ=gtk.MESSAGE_INFO,
+                  buttons=None):
+        if not buttons:
+            if typ == gtk.MESSAGE_WARNING:
+                buttons = gtk.BUTTONS_OK_CANCEL
+            else:
+                buttons = gtk.BUTTONS_OK
 
         gtk.MessageDialog.__init__ (self, parent, 0, typ, buttons)
 
