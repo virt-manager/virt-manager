@@ -1098,6 +1098,18 @@ class vmmDetails(gobject.GObject):
     # Device removal
     def remove_device(self, dev_type, dev_id_info):
         logging.debug("Removing device: %s %s" % (dev_type, dev_id_info))
+        do_prompt = self.config.get_confirm_removedev()
+
+        if do_prompt:
+            res = self.err.warn_chkbox(
+                    text1=(_("Are you sure you want to remove this device?")),
+                    chktext=_("Don't ask me again."),
+                    buttons=gtk.BUTTONS_YES_NO)
+
+            response, skip_prompt = res
+            if not response:
+                return
+            self.config.set_confirm_removedev(not skip_prompt)
 
         detach_err = False
         devxml = self.vm.get_device_xml(dev_type, dev_id_info)
@@ -1109,20 +1121,17 @@ class vmmDetails(gobject.GObject):
             logging.debug("Device could not be hotUNplugged: %s" % str(e))
             detach_err = True
 
-        if detach_err:
-            if not self.err.yes_no(_("Are you sure you want to remove this "
-                                     "device?"),
-                                   _("This device could not be removed from "
-                                     "the running machine. Would you like to "
-                                     "remove the device after the next VM "
-                                     "shutdown?")):
-                return
-
         try:
             self.vm.remove_device(dev_type, dev_id_info)
         except Exception, e:
             self.err.show_err(_("Error Removing Device: %s" % str(e)),
                               "".join(traceback.format_exc()))
+            return
+
+        if detach_err:
+            self.err.show_info(
+                _("Device could not be removed from the running machine."),
+                _("This change will take effect after the next VM reboot"))
 
     # Generic config change helpers
     def _change_config_helper(self,

@@ -311,5 +311,18 @@
         <long>Whether we require confirmation to pause a VM</long>
       </locale>
     </schema>
+
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/confirm/removedev</key>
+      <applyto>/apps/::PACKAGE::/confirm/removedev</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>1</default>
+
+      <locale name="C">
+        <short>Confirm device removal request</short>
+        <long>Whether we require confirmation to remove a virtual device</long>
+      </locale>
+    </schema>
   </schemalist>
 </gconfschemafile>

@@ -294,6 +294,8 @@ class vmmConfig:
         return self.conf.get_bool(self.conf_dir + "/confirm/poweroff")
     def get_confirm_pause(self):
         return self.conf.get_bool(self.conf_dir + "/confirm/pause")
+    def get_confirm_removedev(self):
+        return self.conf.get_bool(self.conf_dir + "/confirm/removedev")
 
     def set_confirm_forcepoweroff(self, val):
         self.conf.set_bool(self.conf_dir + "/confirm/forcepoweroff", val)
@@ -301,6 +303,8 @@ class vmmConfig:
         self.conf.set_bool(self.conf_dir + "/confirm/poweroff", val)
     def set_confirm_pause(self, val):
         self.conf.set_bool(self.conf_dir + "/confirm/pause", val)
+    def set_confirm_removedev(self, val):
+        self.conf.set_bool(self.conf_dir + "/confirm/removedev", val)
 
     def on_confirm_forcepoweroff_changed(self, cb):
         self.conf.notify_add(self.conf_dir + "/confirm/forcepoweroff", cb)
@@ -308,6 +312,8 @@ class vmmConfig:
         self.conf.notify_add(self.conf_dir + "/confirm/poweroff", cb)
     def on_confirm_pause_changed(self, cb):
         self.conf.notify_add(self.conf_dir + "/confirm/pause", cb)
+    def on_confirm_removedev_changed(self, cb):
+        self.conf.notify_add(self.conf_dir + "/confirm/removedev", cb)
 
 
     # System tray visibility
