@@ -49,7 +49,7 @@ class vmmMigrateDialog(gobject.GObject):
     __gsignals__ = {
     }
 
-    def __init__(self, config, vm, destconn):
+    def __init__(self, config, vm, engine):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + \
                                     "/vmm-migrate.glade",
@@ -57,7 +57,7 @@ class vmmMigrateDialog(gobject.GObject):
         self.config = config
         self.vm = vm
         self.conn = vm.connection
-        self.destconn = destconn
+        self.engine = engine
 
         self.topwin = self.window.get_widget("vmm-migrate")
         self.err = vmmErrorDialog(self.topwin,
@@ -66,12 +66,15 @@ class vmmMigrateDialog(gobject.GObject):
                                   _("An unexpected error occurred"))
         self.topwin.hide()
 
+        self.destconn_rows = []
+
         self.window.signal_autoconnect({
             "on_vmm_migrate_delete_event" : self.close,
 
             "on_migrate_cancel_clicked" : self.close,
             "on_migrate_finish_clicked" : self.finish,
 
+            "on_migrate_dest_changed" : self.destconn_changed,
             "on_migrate_set_rate_toggled" : self.toggle_set_rate,
             "on_migrate_set_interface_toggled" : self.toggle_set_interface,
             "on_migrate_set_port_toggled" : self.toggle_set_port,
@@ -85,6 +88,8 @@ class vmmMigrateDialog(gobject.GObject):
         image.show()
         self.window.get_widget("migrate-vm-icon-box").pack_end(image, False)
 
+        self.init_state()
+
     def show(self):
         self.reset_state()
         self.topwin.show()
@@ -94,19 +99,33 @@ class vmmMigrateDialog(gobject.GObject):
         self.topwin.hide()
         return 1
 
-    def reset_state(self):
+    def init_state(self):
+        # [hostname, conn, can_migrate, tooltip]
+        dest_model = gtk.ListStore(str, object, bool, str)
+        dest_combo = self.window.get_widget("migrate-dest")
+        dest_combo.set_model(dest_model)
+        text = gtk.CellRendererText()
+        dest_combo.pack_start(text, True)
+        dest_combo.add_attribute(text, 'text', 0)
+        dest_combo.add_attribute(text, 'sensitive', 2)
+        dest_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        # XXX no way to set tooltips here, kind of annoying
 
+        # Hook up signals to get connection listing
+        self.engine.connect("connection-added", self.dest_add_connection)
+        self.engine.connect("connection-removed", self.dest_remove_connection)
+        self.destconn_changed(dest_combo)
+
+    def reset_state(self):
         title_str = ("<span size='large' color='white'>%s '%s'</span>" %
                      (_("Migrate"), self.vm.get_name()))
         self.window.get_widget("migrate-main-label").set_markup(title_str)
 
         name = self.vm.get_name()
         srchost = self.conn.get_hostname()
-        dsthost = self.destconn.get_qualified_hostname()
 
         self.window.get_widget("migrate-label-name").set_text(name)
         self.window.get_widget("migrate-label-src").set_text(srchost)
-        self.window.get_widget("migrate-label-dest").set_text(dsthost)
 
         self.window.get_widget("migrate-advanced-expander").set_expanded(False)
         self.window.get_widget("migrate-set-interface").set_active(False)
@@ -117,7 +136,6 @@ class vmmMigrateDialog(gobject.GObject):
         self.window.get_widget("migrate-offline").set_active(not running)
         self.window.get_widget("migrate-offline").set_sensitive(running)
 
-        self.window.get_widget("migrate-interface").set_text(dsthost)
         self.window.get_widget("migrate-rate").set_value(0)
         self.window.get_widget("migrate-secure").set_active(False)
 
@@ -138,11 +156,21 @@ class vmmMigrateDialog(gobject.GObject):
         secure_box.set_sensitive(support_secure)
         util.tooltip_wrapper(secure_box, secure_tooltip)
 
-    def set_state(self, vm, destconn):
+        self.rebuild_dest_rows()
+
+    def set_state(self, vm):
         self.vm = vm
         self.conn = vm.connection
-        self.destconn = destconn
         self.reset_state()
+
+    def destconn_changed(self, src):
+        active = src.get_active()
+        tooltip = None
+        if active == -1:
+            tooltip = _("A valid destination connection must be selected.")
+
+        self.window.get_widget("migrate-finish").set_sensitive(active != -1)
+        util.tooltip_wrapper(self.window.get_widget("migrate-finish"), tooltip)
 
     def toggle_set_rate(self, src):
         enable = src.get_active()
@@ -159,6 +187,20 @@ class vmmMigrateDialog(gobject.GObject):
     def toggle_set_port(self, src):
         enable = src.get_active()
         self.window.get_widget("migrate-port").set_sensitive(enable)
+
+    def get_config_destconn(self):
+        combo = self.window.get_widget("migrate-dest")
+        model = combo.get_model()
+
+        idx = combo.get_active()
+        if idx == -1:
+            return None
+
+        row = model[idx]
+        if not row[2]:
+            return None
+
+        return row[1]
 
     def get_config_offline(self):
         return self.window.get_widget("migrate-offline").get_active()
@@ -186,21 +228,21 @@ class vmmMigrateDialog(gobject.GObject):
             return 0
         return int(self.window.get_widget("migrate-port").get_value())
 
-    def build_localhost_uri(self):
+    def build_localhost_uri(self, destconn):
         # Try to build a remotely accessible URI for the local connection
-        desthost = self.destconn.get_qualified_hostname()
+        desthost = destconn.get_qualified_hostname()
         if desthost == "localhost":
             raise RuntimeError(_("Could not determine remotely accessible "
                                  "hostname for destination connection."))
 
-        desturi_tuple = virtinst.util.uri_split(self.destconn.get_uri())
+        desturi_tuple = virtinst.util.uri_split(destconn.get_uri())
 
         # Replace dest hostname with src hostname
         desturi_tuple = list(desturi_tuple)
         desturi_tuple[2] = desthost
         return uri_join(desturi_tuple)
 
-    def build_migrate_uri(self):
+    def build_migrate_uri(self, destconn):
         conn = self.conn
 
         interface = self.get_config_interface()
@@ -214,8 +256,8 @@ class vmmMigrateDialog(gobject.GObject):
             # For secure migration, we need to make sure we aren't migrating
             # to the local connection, because libvirt will pull try to use
             # 'qemu:///system' as the migrate URI which will deadlock
-            if self.destconn.is_local():
-                return self.build_localhost_uri()
+            if destconn.is_local():
+                return self.build_localhost_uri(destconn)
 
         uri = ""
         if conn.is_xen():
@@ -228,6 +270,105 @@ class vmmMigrateDialog(gobject.GObject):
             uri += ":%s" % port
 
         return uri
+
+    def rebuild_dest_rows(self):
+        newrows = []
+
+        for row in self.destconn_rows:
+            newrows.append(self.build_dest_row(row[1]))
+
+        self.destconn_rows = newrows
+        self.populate_dest_combo()
+
+    def populate_dest_combo(self):
+        combo = self.window.get_widget("migrate-dest")
+        model = combo.get_model()
+        idx = combo.get_active()
+        idxconn = None
+        if idx != -1:
+            idxconn = model[idx][1]
+
+        rows = [[_("No connections available."), None, False, None]]
+        if self.destconn_rows:
+            rows = self.destconn_rows
+
+        model.clear()
+        for r in rows:
+            # Don't list the current connection
+            if r[1] == self.conn:
+                continue
+            model.append(r)
+
+        # Find old index
+        idx = -1
+        for i in range(len(model)):
+            row = model[i]
+            conn = row[1]
+
+            if idxconn:
+                if conn == idxconn and row[2]:
+                    idx = i
+                    break
+            else:
+                if row[2]:
+                    idx = i
+                    break
+
+        combo.set_active(idx)
+
+    def dest_add_connection(self, engine_ignore, conn):
+        combo = self.window.get_widget("migrate-dest")
+        model = combo.get_model()
+
+        newrow = self.build_dest_row(conn)
+
+        # Make sure connection isn't already present
+        for row in model:
+            if row[1] and row[1].get_uri() == newrow[1].get_uri():
+                return
+
+        conn.connect("state-changed", self.destconn_state_changed)
+        self.destconn_rows.append(newrow)
+        self.populate_dest_combo()
+
+    def dest_remove_connection(self, engine_ignore, conn):
+        # Make sure connection isn't already present
+        for row in self.destconn_rows:
+            if row[1] and row[1].get_uri() == conn.get_uri():
+                self.destconn_rows.remove(row)
+
+        self.populate_dest_combo()
+
+    def destconn_state_changed(self, conn):
+        for row in self.destconn_rows:
+            if row[1] == conn:
+                self.destconn_rows.remove(row)
+                self.destconn_rows.append(self.build_dest_row(conn))
+
+        self.populate_dest_combo()
+
+    def build_dest_row(self, destconn):
+        driver = self.conn.get_driver()
+        origuri = self.conn.get_uri()
+
+        can_migrate = False
+        desc = destconn.get_pretty_desc_inactive()
+        reason = ""
+        desturi = destconn.get_uri()
+
+        if destconn.get_driver() != driver:
+            reason = _("Connection hypervisors do not match.")
+        elif destconn.get_state() == destconn.STATE_DISCONNECTED:
+            reason = _("Connection is disconnected.")
+        elif destconn.get_uri() == origuri:
+            # Same connection
+            pass
+        elif destconn.get_state() == destconn.STATE_ACTIVE:
+            # Assumably we can migrate to this connection
+            can_migrate = True
+            reason = desturi
+
+        return [desc, destconn, can_migrate, reason]
 
 
     def validate(self):
@@ -251,11 +392,12 @@ class vmmMigrateDialog(gobject.GObject):
             if not self.validate():
                 return
 
+            destconn = self.get_config_destconn()
             srchost = self.vm.get_connection().get_hostname()
-            dsthost = self.destconn.get_qualified_hostname()
+            dsthost = destconn.get_qualified_hostname()
             live = not self.get_config_offline()
             secure = self.get_config_secure()
-            uri = self.build_migrate_uri()
+            uri = self.build_migrate_uri(destconn)
             rate = self.get_config_rate()
             if rate:
                 rate = int(rate)
@@ -269,7 +411,7 @@ class vmmMigrateDialog(gobject.GObject):
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
         progWin = vmmAsyncJob(self.config, self._async_migrate,
-                              [self.vm, self.destconn, uri, rate, live, secure],
+                              [self.vm, destconn, uri, rate, live, secure],
                               title=_("Migrating VM '%s'" % self.vm.get_name()),
                               text=(_("Migrating VM '%s' from %s to %s. "
                                       "This may take awhile.") %
@@ -285,7 +427,7 @@ class vmmMigrateDialog(gobject.GObject):
 
         if error is None:
             self.conn.tick(noStatsUpdate=True)
-            self.destconn.tick(noStatsUpdate=True)
+            destconn.tick(noStatsUpdate=True)
             self.close()
 
     def _async_migrate(self, origvm, origdconn, migrate_uri, rate, live,

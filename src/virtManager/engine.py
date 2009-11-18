@@ -265,8 +265,8 @@ class vmmEngine(gobject.GObject):
         self.shutdown_domain(src, uri, uuid)
     def _do_reboot_domain(self, src, uri, uuid):
         self.reboot_domain(src, uri, uuid)
-    def _do_migrate_domain(self, src, uri, uuid, desturi):
-        self.migrate_domain(uri, uuid, desturi)
+    def _do_migrate_domain(self, src, uri, uuid):
+        self.migrate_domain(uri, uuid)
     def _do_clone_domain(self, src, uri, uuid):
         self.clone_domain(uri, uuid)
     def _do_exit_app(self, src):
@@ -647,81 +647,15 @@ class vmmEngine(gobject.GObject):
             self.err.show_err(_("Error shutting down domain: %s" % str(e)),
                               "".join(traceback.format_exc()))
 
-    def migrate_domain(self, uri, uuid, desturi):
+    def migrate_domain(self, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
-        destconn = self._lookup_connection(desturi)
 
         if not self.windowMigrate:
-            self.windowMigrate = vmmMigrateDialog(self.config, vm, destconn)
+            self.windowMigrate = vmmMigrateDialog(self.config, vm, self)
 
-        self.windowMigrate.set_state(vm, destconn)
+        self.windowMigrate.set_state(vm)
         self.windowMigrate.show()
-
-    def populate_migrate_menu(self, menu, migrate_func, vm):
-        conns = self.get_available_migrate_hostnames(vm)
-
-        # Clear menu
-        for item in menu:
-            menu.remove(item)
-
-        for ignore, val_list in conns.items():
-            can_migrate, label, tooltip, uri = val_list
-            mitem = gtk.ImageMenuItem(label)
-            mitem.set_sensitive(can_migrate)
-            mitem.connect("activate", migrate_func, uri)
-            if tooltip:
-                util.tooltip_wrapper(mitem, tooltip)
-            mitem.show()
-
-            menu.add(mitem)
-
-        if len(menu) == 0:
-            mitem = gtk.ImageMenuItem(_("No connections available."))
-            mitem.show()
-            menu.add(mitem)
-
-    def get_available_migrate_hostnames(self, vm):
-        driver = vm.get_connection().get_driver()
-        origuri = vm.get_connection().get_uri()
-        available_migrate_hostnames = {}
-
-        # Returns list of lists of the form
-        #   [ Can we migrate to this connection?,
-        #     String to use as list entry,
-        #     Tooltip reason,
-        #     Conn URI ]
-
-        # 1. connected(ACTIVE, INACTIVE) host
-        for key, value in self.connections.items():
-            if not value.has_key("connection"):
-                continue
-            conn = value["connection"]
-
-            can_migrate = False
-            desc = conn.get_pretty_desc_inactive()
-            reason = ""
-            desturi = conn.get_uri()
-
-            if conn.get_driver() != driver:
-                reason = _("Connection hypervisors do not match.")
-            elif conn.get_state() == vmmConnection.STATE_DISCONNECTED:
-                reason = _("Connection is disconnected.")
-            elif key == origuri:
-                reason = _("Cannot migrate to same connection.")
-
-                # Explicitly don't include this in the list
-                continue
-            elif conn.get_state() == vmmConnection.STATE_ACTIVE:
-                # Assumably we can migrate to this connection
-                can_migrate = True
-                reason = desturi
-
-
-            available_migrate_hostnames[key] = [can_migrate, desc, reason,
-                                                desturi]
-
-        return available_migrate_hostnames
 
     def clone_domain(self, uri, uuid):
         con = self._lookup_connection(uri)

@@ -167,7 +167,7 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-clone">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Clone...</property>
+                        <property name="label" translatable="yes">_Clone</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_clone_activate"/>
                       </widget>
@@ -175,12 +175,9 @@
                     <child>
                       <widget class="GtkMenuItem" id="details-menu-migrate">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Migrate</property>
+                        <property name="label" translatable="yes">_Migrate...</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_migrate_activate"/>
-                        <child>
-                          <widget class="GtkMenu" id="details-menu-migrate_menu"/>
-                        </child>
                       </widget>
                     </child>
                     <child>

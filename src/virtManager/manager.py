@@ -137,7 +137,7 @@ class vmmManager(gobject.GObject):
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),
         "action-migrate-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str,str,str)),
+                                  gobject.TYPE_NONE, (str,str)),
         "action-clone-domain": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
         "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
@@ -215,7 +215,6 @@ class vmmManager(gobject.GObject):
         self.vmmenushutdown = gtk.Menu()
         self.vmmenu_items = {}
         self.vmmenushutdown_items = {}
-        self.vmmenumigrate = gtk.Menu()
 
         self.vmmenu_items["run"] = gtk.ImageMenuItem(_("_Run"))
         self.vmmenu_items["run"].set_image(run_icon)
@@ -272,11 +271,9 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["clone"].connect("activate", self.open_clone_window)
         self.vmmenu.add(self.vmmenu_items["clone"])
 
-        self.vmmenu_items["migrate"] = gtk.ImageMenuItem(_("_Migrate"))
-        self.vmmenu_items["migrate"].set_submenu(self.vmmenumigrate)
+        self.vmmenu_items["migrate"] = gtk.ImageMenuItem(_("_Migrate..."))
         self.vmmenu_items["migrate"].show()
-        self.vmmenu_items["migrate"].connect("activate",
-                                             self.populate_migrate_submenu)
+        self.vmmenu_items["migrate"].connect("activate", self.migrate_vm)
         self.vmmenu.add(self.vmmenu_items["migrate"])
 
         self.vmmenu_items["delete"] = gtk.ImageMenuItem("_Delete")
@@ -539,6 +536,10 @@ class vmmManager(gobject.GObject):
         return markup
 
     def _append_vm(self, model, vm, conn):
+        row_key = self.vm_row_key(vm)
+        if self.rows.has_key(row_key):
+            return
+
         parent = self.rows[conn.get_uri()].iter
         row = []
         row.insert(ROW_HANDLE, vm)
@@ -558,7 +559,7 @@ class vmmManager(gobject.GObject):
 
         _iter = model.append(parent, row)
         path = model.get_path(_iter)
-        self.rows[self.vm_row_key(vm)] = model[path]
+        self.rows[row_key] = model[path]
         # Expand a connection when adding a vm to it
         self.window.get_widget("vm-list").expand_row(model.get_path(parent), False)
 
@@ -1087,32 +1088,27 @@ class vmmManager(gobject.GObject):
         if vm is not None:
             self.emit("action-resume-domain", vm.get_connection().get_uri(), vm.get_uuid())
 
-    def migrate(self, ignore, uri):
+    def migrate_vm(self, ignore):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-migrate-domain", vm.get_connection().get_uri(),
-                      vm.get_uuid(), uri)
-
-    def populate_migrate_submenu(self, src):
-        vm = self.current_vm()
-        if not vm:
-            return
-
-        self.engine.populate_migrate_menu(self.vmmenumigrate, self.migrate,
-                                          vm)
+                      vm.get_uuid())
 
     def _add_connection(self, engine, conn):
+        if self.rows.has_key(conn.get_uri()):
+            return
+
         conn.connect("vm-added", self.vm_added)
         conn.connect("vm-removed", self.vm_removed)
         conn.connect("resources-sampled", self.conn_refresh_resources)
         conn.connect("state-changed", self.conn_state_changed)
         conn.connect("connect-error", self._connect_error)
         conn.connect("vm-started", self.vm_started)
+
         # add the connection to the treeModel
         vmlist = self.window.get_widget("vm-list")
-        if not self.rows.has_key(conn.get_uri()):
-            row = self._append_connection(vmlist.get_model(), conn)
-            vmlist.get_selection().select_iter(row)
+        row = self._append_connection(vmlist.get_model(), conn)
+        vmlist.get_selection().select_iter(row)
 
     def _remove_connection(self, engine, conn):
         model = self.window.get_widget("vm-list").get_model()
