@@ -116,6 +116,7 @@ class vmmConfig:
             }
 
 
+    # General app wide helpers (gconf agnostic)
 
     def get_vm_status_icon(self, state):
         return self.status_icons[state]
@@ -170,7 +171,7 @@ class vmmConfig:
         # conf_dir/connection_prefs/{CONN_URI}/vms/{VM_UUID}
         #
         # So a per-VM pref will look like
-        # /apps/virt-manager/connection_prefs/qemu:---system/vms/1234.../console/scaling
+        # .../connection_prefs/qemu:---system/vms/1234.../console/scaling
         #
         # Yeah this is evil but it's also nice and easy :)
 
@@ -256,55 +257,37 @@ class vmmConfig:
             # Suggest gconf syncs, so that the unset dirs are fully removed
             self.conf.suggest_sync()
 
+    #########################
+    # General GConf helpers #
+    #########################
+
+    # Manager stats view preferences
     def is_vmlist_cpu_usage_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/cpu_usage")
-
     def is_vmlist_disk_io_visible(self):
         return self.conf.get_bool(self.conf_dir + "/vmlist-fields/disk_usage")
-
     def is_vmlist_network_traffic_visible(self):
-        return self.conf.get_bool(self.conf_dir + "/vmlist-fields/network_traffic")
+        return self.conf.get_bool(self.conf_dir +
+                                  "/vmlist-fields/network_traffic")
 
     def set_vmlist_cpu_usage_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/cpu_usage", state)
-
     def set_vmlist_disk_io_visible(self, state):
         self.conf.set_bool(self.conf_dir + "/vmlist-fields/disk_usage", state)
-
     def set_vmlist_network_traffic_visible(self, state):
-        self.conf.set_bool(self.conf_dir + "/vmlist-fields/network_traffic", state)
+        self.conf.set_bool(self.conf_dir + "/vmlist-fields/network_traffic",
+                           state)
 
-    def get_default_directory(self, conn, _type):
-        if not _type:
-            logging.error("Unknown type for get_default_directory")
-            return
+    def on_vmlist_cpu_usage_visible_changed(self, cb):
+        self.conf.notify_add(self.conf_dir + "/vmlist-fields/cpu_usage", cb)
+    def on_vmlist_disk_io_visible_changed(self, cb):
+        self.conf.notify_add(self.conf_dir + "/vmlist-fields/disk_usage", cb)
+    def on_vmlist_network_traffic_visible_changed(self, cb):
+        self.conf.notify_add(self.conf_dir + "/vmlist-fields/network_traffic",
+                             cb)
 
-        try:
-            path = self.conf.get_value(self.conf_dir + "/paths/default-%s-path"
-                                                                       % _type)
-        except:
-            path = None
 
-        if not path:
-            if (_type == self.CONFIG_DIR_IMAGE or
-                _type == self.CONFIG_DIR_MEDIA):
-                path = self.get_default_image_dir(conn)
-            if (_type == self.CONFIG_DIR_SAVE or
-                _type == self.CONFIG_DIR_RESTORE):
-                path = self.get_default_save_dir(conn)
-
-        logging.debug("get_default_directory(%s): returning %s" % (_type, path))
-        return path
-
-    def set_default_directory(self, folder, _type):
-        if not _type:
-            logging.error("Unknown type for set_default_directory")
-            return
-
-        logging.debug("set_default_directory(%s): saving %s" % (_type, folder))
-        self.conf.set_value(self.conf_dir + "/paths/default-%s-path" % _type,
-                                                                      folder)
-
+    # System tray visibility
     def on_view_system_tray_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/system-tray", callback)
     def get_view_system_tray(self):
@@ -312,38 +295,26 @@ class vmmConfig:
     def set_view_system_tray(self, val):
         self.conf.set_bool(self.conf_dir + "/system-tray", val)
 
-    def on_vmlist_cpu_usage_visible_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/cpu_usage", callback)
 
-    def on_vmlist_disk_io_visible_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/disk_usage", callback)
-
-    def on_vmlist_network_traffic_visible_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/network_traffic", callback)
-
+    # Stats history and interval length
     def get_stats_update_interval(self):
         interval = self.conf.get_int(self.conf_dir + "/stats/update-interval")
         if interval < 1:
             return 1
         return interval
-
     def get_stats_history_length(self):
         history = self.conf.get_int(self.conf_dir + "/stats/history-length")
         if history < 10:
             return 10
         return history
 
-
     def set_stats_update_interval(self, interval):
         self.conf.set_int(self.conf_dir + "/stats/update-interval", interval)
-
     def set_stats_history_length(self, length):
         self.conf.set_int(self.conf_dir + "/stats/history-length", length)
 
-
     def on_stats_update_interval_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/stats/update-interval", callback)
-
     def on_stats_history_length_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/stats/history-length", callback)
 
@@ -397,40 +368,188 @@ class vmmConfig:
     def set_console_scaling(self, pref):
         self.conf.set_int(self.conf_dir + "/console/scaling", pref)
 
+    # VNC console pointer grab notification
     def show_console_grab_notify(self):
         return self.conf.get_bool(self.conf_dir + "/console/grab-notify")
     def set_console_grab_notify(self, state):
         self.conf.set_bool(self.conf_dir + "/console/grab-notify", state)
 
+
+    # Show VM details toolbar
     def get_details_show_toolbar(self):
         res = self.conf.get_bool(self.conf_dir + "/details/show-toolbar")
         if res == None:
             res = True
         return res
-
     def set_details_show_toolbar(self, state):
         self.conf.set_bool(self.conf_dir + "/details/show-toolbar", state)
 
+
+    # Create sound device for default guest
     def get_local_sound(self):
         return self.conf.get_bool(self.conf_dir + "/new-vm/local-sound")
-
     def get_remote_sound(self):
         return self.conf.get_bool(self.conf_dir + "/new-vm/remote-sound")
 
     def set_local_sound(self, state):
         self.conf.set_bool(self.conf_dir + "/new-vm/local-sound", state)
-
     def set_remote_sound(self, state):
         self.conf.set_bool(self.conf_dir + "/new-vm/remote-sound", state)
 
-    def on_sound_local_changed(self, cb, userdata=None):
-        self.conf.notify_add(self.conf_dir + "/new-vm/local-sound", cb,
-                             userdata)
+    def on_sound_local_changed(self, cb, data=None):
+        self.conf.notify_add(self.conf_dir + "/new-vm/local-sound", cb, data)
+    def on_sound_remote_changed(self, cb, data=None):
+        self.conf.notify_add(self.conf_dir + "/new-vm/remote-sound", cb, data)
 
-    def on_sound_remote_changed(self, cb, userdata=None):
-        self.conf.notify_add(self.conf_dir + "/new-vm/remote-sound", cb,
-                             userdata)
 
+    # URL/Media path history
+    def _url_add_helper(self, gconf_path, url):
+        urls = self.conf.get_list(gconf_path, gconf.VALUE_STRING)
+        if urls == None:
+            urls = []
+
+        if urls.count(url) == 0 and len(url) > 0 and not url.isspace():
+            # The url isn't already in the list, so add it
+            urls.insert(0,url)
+            length = self.get_url_list_length()
+            if len(urls) > length:
+                del urls[len(urls) -1]
+            self.conf.set_list(gconf_path, gconf.VALUE_STRING, urls)
+
+    def add_media_url(self, url):
+        self._url_add_helper(self.conf_dir + "/urls/media", url)
+    def add_kickstart_url(self, url):
+        self._url_add_helper(self.conf_dir + "/urls/kickstart", url)
+    def add_iso_path(self, path):
+        self._url_add_helper(self.conf_dir + "/urls/local_media", path)
+
+    def get_media_urls(self):
+        return self.conf.get_list(self.conf_dir + "/urls/media",
+                                  gconf.VALUE_STRING)
+    def get_kickstart_urls(self):
+        return self.conf.get_list(self.conf_dir + "/urls/kickstart",
+                                  gconf.VALUE_STRING)
+    def get_iso_paths(self):
+        return self.conf.get_list(self.conf_dir + "/urls/local_media",
+                                 gconf.VALUE_STRING)
+
+    def get_url_list_length(self):
+        length = self.conf.get_int(self.conf_dir + "/urls/url-list-length")
+        if length < 5:
+            return 5
+        return length
+    def set_url_list_length(self, length):
+        self.conf.set_int(self.conf_dir + "/urls/url-list-length", length)
+
+
+    # Manager view connection list
+    def add_connection(self, uri):
+        uris = self.conf.get_list(self.conf_dir + "/connections/uris",
+                                  gconf.VALUE_STRING)
+        if uris == None:
+            uris = []
+
+        if uris.count(uri) == 0:
+            uris.insert(len(uris) - 1, uri)
+            self.conf.set_list(self.conf_dir + "/connections/uris",
+                               gconf.VALUE_STRING, uris)
+    def remove_connection(self, uri):
+        uris = self.conf.get_list(self.conf_dir + "/connections/uris",
+                                  gconf.VALUE_STRING)
+        if uris == None:
+            return
+
+        if uris.count(uri) != 0:
+            uris.remove(uri)
+            self.conf.set_list(self.conf_dir + "/connections/uris",
+                               gconf.VALUE_STRING, uris)
+
+        if self.get_conn_autoconnect(uri):
+            uris = self.conf.get_list(self.conf_dir +
+                                      "/connections/autoconnect",
+                                      gconf.VALUE_STRING)
+            uris.remove(uri)
+            self.conf.set_list(self.conf_dir + "/connections/autoconnect",
+                               gconf.VALUE_STRING, uris)
+
+    def get_connections(self):
+        return self.conf.get_list(self.conf_dir + "/connections/uris",
+                                  gconf.VALUE_STRING)
+
+
+    # URI autoconnect
+    def get_conn_autoconnect(self, uri):
+        uris = self.conf.get_list(self.conf_dir + "/connections/autoconnect",
+                                  gconf.VALUE_STRING)
+        return ((uris is not None) and (uri in uris))
+
+    def toggle_conn_autoconnect(self, uri):
+        uris = self.conf.get_list(self.conf_dir + "/connections/autoconnect",
+                                  gconf.VALUE_STRING)
+        if uris is None:
+            uris = []
+        if uri in uris:
+            uris.remove(uri)
+        else:
+            uris.append(uri)
+        self.conf.set_list(self.conf_dir + "/connections/autoconnect",
+                           gconf.VALUE_STRING, uris)
+
+
+    # Default directory location dealings
+    def get_default_directory(self, conn, _type):
+        if not _type:
+            logging.error("Unknown type for get_default_directory")
+            return
+
+        try:
+            path = self.conf.get_value(self.conf_dir + "/paths/default-%s-path"
+                                                                       % _type)
+        except:
+            path = None
+
+        if not path:
+            if (_type == self.CONFIG_DIR_IMAGE or
+                _type == self.CONFIG_DIR_MEDIA):
+                path = self.get_default_image_dir(conn)
+            if (_type == self.CONFIG_DIR_SAVE or
+                _type == self.CONFIG_DIR_RESTORE):
+                path = self.get_default_save_dir(conn)
+
+        logging.debug("get_default_directory(%s): returning %s" % (_type, path))
+        return path
+
+    def set_default_directory(self, folder, _type):
+        if not _type:
+            logging.error("Unknown type for set_default_directory")
+            return
+
+        logging.debug("set_default_directory(%s): saving %s" % (_type, folder))
+        self.conf.set_value(self.conf_dir + "/paths/default-%s-path" % _type,
+                                                                      folder)
+
+    def get_default_image_dir(self, connection):
+        if connection.get_type() == "Xen":
+            return DEFAULT_XEN_IMAGE_DIR
+
+        if (connection.is_qemu_session() or
+            not os.access(DEFAULT_VIRT_IMAGE_DIR, os.W_OK)):
+            return os.getcwd()
+
+        # Just return the default dir since the intention is that it
+        # is a managed pool and the user will be able to install to it.
+        return DEFAULT_VIRT_IMAGE_DIR
+
+    def get_default_save_dir(self, connection):
+        if connection.get_type() == "Xen":
+            return DEFAULT_XEN_SAVE_DIR
+        elif os.access(DEFAULT_VIRT_SAVE_DIR, os.W_OK):
+            return DEFAULT_VIRT_SAVE_DIR
+        else:
+            return os.getcwd()
+
+
+    # Keyring / VNC password dealings
     def get_secret_name(self, vm):
         return "vm-console-" + vm.get_uuid()
 
@@ -489,111 +608,3 @@ class vmmConfig:
         if _id != None:
             self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), _id)
             self.conf.set_string(self.conf_dir + "/console/usernames/" + vm.get_uuid(), username)
-
-    def get_url_list_length(self):
-        length = self.conf.get_int(self.conf_dir + "/urls/url-list-length")
-        if length < 5:
-            return 5
-        return length
-
-    def set_url_list_length(self, length):
-        self.conf.set_int(self.conf_dir + "/urls/url-list-length", length)
-
-    def _url_add_helper(self, gconf_path, url):
-        urls = self.conf.get_list(gconf_path, gconf.VALUE_STRING)
-        if urls == None:
-            urls = []
-
-        if urls.count(url) == 0 and len(url) > 0 and not url.isspace():
-            # The url isn't already in the list, so add it
-            urls.insert(0,url)
-            length = self.get_url_list_length()
-            if len(urls) > length:
-                del urls[len(urls) -1]
-            self.conf.set_list(gconf_path, gconf.VALUE_STRING, urls)
-
-    def add_media_url(self, url):
-        self._url_add_helper(self.conf_dir + "/urls/media", url)
-
-    def add_kickstart_url(self, url):
-        self._url_add_helper(self.conf_dir + "/urls/kickstart", url)
-
-    def add_iso_path(self, path):
-        self._url_add_helper(self.conf_dir + "/urls/local_media", path)
-
-    def add_connection(self, uri):
-        uris = self.conf.get_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING)
-        if uris == None:
-            uris = []
-        if uris.count(uri) == 0:
-            # the url isn't already in the list, so add it
-            uris.insert(len(uris) - 1,uri)
-            self.conf.set_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING, uris)
-
-    def remove_connection(self, uri):
-        uris = self.conf.get_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING)
-        if uris == None:
-            return
-        if uris.count(uri) != 0:
-            uris.remove(uri)
-            self.conf.set_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING, uris)
-        if self.get_conn_autoconnect(uri):
-            uris = self.conf.get_list(self.conf_dir + \
-                                      "/connections/autoconnect",\
-                                      gconf.VALUE_STRING)
-            uris.remove(uri)
-            self.conf.set_list(self.conf_dir + "/connections/autoconnect", \
-                               gconf.VALUE_STRING, uris)
-
-
-    def get_conn_autoconnect(self, uri):
-        uris = self.conf.get_list(self.conf_dir + "/connections/autoconnect",\
-                                  gconf.VALUE_STRING)
-        return ((uris is not None) and (uri in uris))
-
-    def toggle_conn_autoconnect(self, uri):
-        uris = self.conf.get_list(self.conf_dir + "/connections/autoconnect",\
-                                  gconf.VALUE_STRING)
-        if uris is None:
-            uris = []
-        if uri in uris:
-            uris.remove(uri)
-        else:
-            uris.append(uri)
-        self.conf.set_list(self.conf_dir + "/connections/autoconnect", \
-                           gconf.VALUE_STRING, uris)
-
-    def get_media_urls(self):
-        return self.conf.get_list(self.conf_dir + "/urls/media",
-                                  gconf.VALUE_STRING)
-    def get_kickstart_urls(self):
-        return self.conf.get_list(self.conf_dir + "/urls/kickstart",
-                                  gconf.VALUE_STRING)
-    def get_iso_paths(self):
-        return self.conf.get_list(self.conf_dir + "/urls/local_media",
-                                 gconf.VALUE_STRING)
-
-    def get_connections(self):
-        return self.conf.get_list(self.conf_dir + "/connections/uris", gconf.VALUE_STRING)
-
-
-    def get_default_image_dir(self, connection):
-        if connection.get_type() == "Xen":
-            return DEFAULT_XEN_IMAGE_DIR
-
-        if (connection.is_qemu_session() or
-            not os.access(DEFAULT_VIRT_IMAGE_DIR, os.W_OK)):
-            return os.getcwd()
-
-        # Just return the default dir since the intention is that it
-        # is a managed pool and the user will be able to install to it.
-        return DEFAULT_VIRT_IMAGE_DIR
-
-    def get_default_save_dir(self, connection):
-        if connection.get_type() == "Xen":
-            return DEFAULT_XEN_SAVE_DIR
-        elif os.access(DEFAULT_VIRT_SAVE_DIR, os.W_OK):
-            return DEFAULT_VIRT_SAVE_DIR
-        else:
-            return os.getcwd()
-
