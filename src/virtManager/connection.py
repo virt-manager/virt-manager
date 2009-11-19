@@ -106,6 +106,8 @@ class vmmConnection(gobject.GObject):
         self.readOnly = readOnly
         self.state = self.STATE_DISCONNECTED
         self.vmm = None
+
+        self.network_capable = None
         self.storage_capable = None
         self.interface_capable = None
         self.dom_xml_flags = None
@@ -710,6 +712,18 @@ class vmmConnection(gobject.GObject):
         newNets = []
         newActiveNetNames = []
         newInactiveNetNames = []
+
+        if self.network_capable == None:
+            self.network_capable = virtinst.support.check_conn_support(
+                                       self.vmm,
+                                       virtinst.support.SUPPORT_CONN_NETWORK)
+            if self.network_capable is False:
+                logging.debug("Connection doesn't seem to support network "
+                              "APIs. Skipping all network polling.")
+
+        if not self.network_capable:
+            return (stopNets, startNets, origNets, newNets, currentNets)
+
         try:
             newActiveNetNames = self.vmm.listNetworks()
         except:
