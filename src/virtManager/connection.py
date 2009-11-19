@@ -34,6 +34,7 @@ from virtManager import util
 from virtManager.domain import vmmDomain
 from virtManager.network import vmmNetwork
 from virtManager.storagepool import vmmStoragePool
+from virtManager.interface import vmmInterface
 
 XEN_SAVE_MAGIC = "LinuxGuestRecord"
 QEMU_SAVE_MAGIC = "LibvirtQemudSave"
@@ -47,6 +48,7 @@ class vmmConnection(gobject.GObject):
                      [str, str]),
         "vm-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                        [str, str]),
+
         "net-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                       [str, str]),
         "net-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -55,6 +57,7 @@ class vmmConnection(gobject.GObject):
                         [str, str]),
         "net-stopped": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                         [str, str]),
+
         "pool-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                        [str, str]),
         "pool-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -63,6 +66,16 @@ class vmmConnection(gobject.GObject):
                          [str, str]),
         "pool-stopped": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                          [str, str]),
+
+        "interface-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                            [str, str]),
+        "interface-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                              [str, str]),
+        "interface-started": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                              [str, str]),
+        "interface-stopped": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                              [str, str]),
+
         "resources-sampled": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                               []),
         "state-changed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -94,8 +107,11 @@ class vmmConnection(gobject.GObject):
         self.state = self.STATE_DISCONNECTED
         self.vmm = None
         self.storage_capable = None
+        self.interface_capable = None
         self.dom_xml_flags = None
 
+        # Connection Storage pools: name -> vmmInterface
+        self.interfaces = {}
         # Connection Storage pools: UUID -> vmmStoragePool
         self.pools = {}
         # Virtual networks UUUID -> vmmNetwork object
@@ -300,6 +316,9 @@ class vmmConnection(gobject.GObject):
 
     def get_pool(self, uuid):
         return self.pools[uuid]
+
+    def get_interface(self, name):
+        return self.interfaces[name]
 
     def get_devices(self, devtype=None, devcap=None):
         if not self.is_nodedev_capable():
@@ -597,6 +616,9 @@ class vmmConnection(gobject.GObject):
     def list_pool_uuids(self):
         return self.pools.keys()
 
+    def list_interface_names(self):
+        return self.interfaces.keys()
+
     def get_host_info(self):
         return self.hostinfo
 
@@ -677,7 +699,9 @@ class vmmConnection(gobject.GObject):
                           frm)
 
     def _update_nets(self):
-        """Return lists of start/stopped/new networks"""
+        """
+        Return lists of start/stopped/new networks
+        """
 
         origNets = self.nets
         currentNets = {}
@@ -799,8 +823,82 @@ class vmmConnection(gobject.GObject):
                 logging.exception("Couldn't fetch inactive pool '%s'" % name)
         return (stopPools, startPools, origPools, newPools, currentPools)
 
+    def _update_interfaces(self):
+        orig = self.interfaces
+        current = {}
+        start = []
+        stop = []
+        new = []
+        newActiveNames = []
+        newInactiveNames = []
+
+        if self.interface_capable == None:
+            self.interface_capable = virtinst.support.check_conn_support(
+                                       self.vmm,
+                                       virtinst.support.SUPPORT_CONN_INTERFACE)
+            if self.interface_capable is False:
+                logging.debug("Connection doesn't seem to support interface "
+                              "APIs. Skipping all interface polling.")
+
+        if not self.interface_capable:
+            return (stop, start, orig, new, current)
+
+        try:
+            newActiveNames = self.vmm.listInterfaces()
+        except:
+            logging.exception("Unable to list active interfaces")
+        try:
+            newInactiveNames = self.vmm.listDefinedInterfaces()
+        except:
+            logging.exception("Unable to list inactive interfaces")
+
+        def check_obj(name, is_active):
+            obj = self.vmm.interfaceLookupByName(name)
+            key = obj.name()
+
+            if not orig.has_key(key):
+                # Object is brand new this tick period
+                current[key] = vmmInterface(self.config, self, obj, key,
+                                            is_active)
+                new.append(key)
+
+                if is_active:
+                    start.append(key)
+            else:
+                # Previously known object, see if it changed state
+                current[key] = orig[key]
+
+                if current[key].is_active() != is_active:
+                    current[key].set_active(is_active)
+
+                    if is_active:
+                        start.append(key)
+                    else:
+                        stop.append(key)
+
+                del orig[key]
+
+        for name in newActiveNames:
+            try:
+                check_obj(name, True)
+            except libvirt.libvirtError:
+                logging.exception("Couldn't fetch active "
+                                  "interface '%s'" % name)
+
+        for name in newInactiveNames:
+            try:
+                check_obj(name, False)
+            except libvirt.libvirtError:
+                logging.exception("Couldn't fetch inactive "
+                                  "interface '%s'" % name)
+
+        return (stop, start, orig, new, current)
+
+
     def _update_vms(self):
-        """returns lists of changed VM states"""
+        """
+        returns lists of changed VM states
+        """
 
         oldActiveIDs = {}
         oldInactiveNames = {}
@@ -921,6 +1019,10 @@ class vmmConnection(gobject.GObject):
         (stopPools, startPools, oldPools,
          newPools, self.pools) = self._update_pools()
 
+        # Update interfaces
+        (stopInterfaces, startInterfaces, oldInterfaces,
+         newInterfaces, self.interfaces) = self._update_interfaces()
+
         # Poll for changed/new/removed VMs
         (startVMs, newVMs, oldVMs,
          self.vms, self.activeUUIDs) = self._update_vms()
@@ -951,6 +1053,7 @@ class vmmConnection(gobject.GObject):
             for uuid in stopNets:
                 self.emit("net-stopped", self.uri, uuid)
 
+            # Update storage pool states
             for uuid in oldPools:
                 self.emit("pool-removed", self.uri, uuid)
             for uuid in newPools:
@@ -959,6 +1062,17 @@ class vmmConnection(gobject.GObject):
                 self.emit("pool-started", self.uri, uuid)
             for uuid in stopPools:
                 self.emit("pool-stopped", self.uri, uuid)
+
+            # Update interface states
+            for name in oldInterfaces:
+                self.emit("interface-removed", self.uri, name)
+            for name in newInterfaces:
+                self.emit("interface-added", self.uri, name)
+            for name in startInterfaces:
+                self.emit("interface-started", self.uri, name)
+            for name in stopInterfaces:
+                self.emit("interface-stopped", self.uri, name)
+
 
         gobject.idle_add(tick_send_signals)
 
