@@ -66,11 +66,7 @@ class vmmHost(gobject.GObject):
         self.addnet = None
         self.addpool = None
         self.addvol = None
-
-        self.init_net_state()
-
         self.volmenu = None
-        self.init_storage_state()
 
         self.cpu_usage_graph = None
         self.memory_usage_graph = None
@@ -79,6 +75,9 @@ class vmmHost(gobject.GObject):
         # Set up signals
         self.window.get_widget("net-list").get_selection().connect("changed", self.net_selected)
         self.window.get_widget("vol-list").get_selection().connect("changed", self.vol_selected)
+
+        self.init_net_state()
+        self.init_storage_state()
 
         self.conn.connect("net-added", self.repopulate_networks)
         self.conn.connect("net-removed", self.repopulate_networks)
@@ -131,7 +130,8 @@ class vmmHost(gobject.GObject):
 
 
     def init_net_state(self):
-        netListModel = gtk.ListStore(str, str, str, int)
+        # [ unique, label, icon name, icon size, is_active ]
+        netListModel = gtk.ListStore(str, str, str, int, bool)
         self.window.get_widget("net-list").set_model(netListModel)
 
         netCol = gtk.TreeViewColumn("Networks")
@@ -141,6 +141,7 @@ class vmmHost(gobject.GObject):
         netCol.pack_start(net_img, False)
         netCol.pack_start(net_txt, True)
         netCol.add_attribute(net_txt, 'text', 1)
+        netCol.add_attribute(net_txt, 'sensitive', 4)
         netCol.add_attribute(net_img, 'icon-name', 2)
         netCol.add_attribute(net_img, 'stock-size', 3)
         self.window.get_widget("net-list").append_column(netCol)
@@ -166,7 +167,6 @@ class vmmHost(gobject.GObject):
         volCol.pack_start(vol_txt1, True)
         volCol.add_attribute(vol_txt1, 'text', 1)
         volCol.set_sort_column_id(1)
-        self.window.get_widget("net-details").set_sensitive(False)
         self.window.get_widget("vol-list").append_column(volCol)
 
         volSizeCol = gtk.TreeViewColumn("Size")
@@ -369,6 +369,7 @@ class vmmHost(gobject.GObject):
 
         net = self.conn.get_net(selected[0].get_value(selected[1], 0))
         active = net.is_active()
+        selected[0].set_value(selected[1], 4, bool(active))
 
         self.window.get_widget("net-details").set_sensitive(True)
         self.window.get_widget("net-name").set_text(net.get_name())
@@ -441,7 +442,8 @@ class vmmHost(gobject.GObject):
         for uuid in self.conn.list_net_uuids():
             net = self.conn.get_net(uuid)
             model.append([uuid, net.get_name(), "network-idle",
-                          gtk.ICON_SIZE_LARGE_TOOLBAR])
+                          gtk.ICON_SIZE_LARGE_TOOLBAR,
+                          bool(net.is_active())])
 
         _iter = model.get_iter_first()
         if _iter:
