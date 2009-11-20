@@ -32,6 +32,7 @@ import virtinst
 from virtinst import VirtualNetworkInterface
 
 import virtManager.opticalhelper
+import virtManager.uihelpers as uihelpers
 from virtManager import util
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
@@ -52,6 +53,8 @@ PAGE_FINISH = 4
 INSTALL_PAGE_ISO = 0
 INSTALL_PAGE_URL = 1
 INSTALL_PAGE_PXE = 2
+
+
 
 class vmmCreate(gobject.GObject):
     __gsignals__ = {
@@ -251,12 +254,7 @@ class vmmCreate(gobject.GObject):
         # Networking
         # [ interface type, device name, label, sensitive ]
         net_list = self.window.get_widget("config-netdev")
-        net_model = gtk.ListStore(str, str, str, bool)
-        net_list.set_model(net_model)
-        text = gtk.CellRendererText()
-        net_list.pack_start(text, True)
-        net_list.add_attribute(text, 'text', 2)
-        net_list.add_attribute(text, 'sensitive', 3)
+        uihelpers.init_network_list(net_list)
 
         # Archtecture
         archModel = gtk.ListStore(str)
@@ -478,8 +476,9 @@ class vmmCreate(gobject.GObject):
         util.tooltip_wrapper(storage_area, storage_tooltip)
 
         # Networking
-        # This function will take care of all the remote stuff for us
-        self.populate_network_model()
+        net_list = self.window.get_widget("config-netdev")
+        uihelpers.populate_network_list(net_list, self.conn)
+
         self.window.get_widget("config-set-macaddr").set_active(True)
         newmac = ""
         try:
@@ -619,79 +618,6 @@ class vmmCreate(gobject.GObject):
         for url in urls:
             model.append([url])
 
-    def populate_network_model(self):
-        net_list = self.window.get_widget("config-netdev")
-        model = net_list.get_model()
-        model.clear()
-
-        # For qemu:///session
-        if self.conn.is_qemu_session():
-            model.append([VirtualNetworkInterface.TYPE_USER, None,
-                          _("Usermode Networking"), True])
-            net_list.set_active(0)
-            return
-
-        hasNet = False
-        netIdx = 0
-        # Virtual Networks
-        for uuid in self.conn.list_net_uuids():
-            net = self.conn.get_net(uuid)
-
-            # FIXME: Should we use 'default' even if it's inactive?
-            label = _("Virtual network") + " '%s'" % net.get_name()
-            if not net.is_active():
-                label +=  " (%s)" % _("Inactive")
-
-            desc = net.pretty_forward_mode()
-            label += ": %s" % desc
-
-            model.append([ VirtualNetworkInterface.TYPE_VIRTUAL,
-                           net.get_name(), label, True])
-            hasNet = True
-            # FIXME: This preference should be configurable
-            if net.get_name() == "default":
-                netIdx = len(model) - 1
-
-        if not hasNet:
-            model.append([None, None, _("No virtual networks available"),
-                          False])
-
-        # Physical devices
-        hasShared = False
-        brIndex = -1
-        if not self.conn.is_remote():
-            for name in self.conn.list_net_device_paths():
-                br = self.conn.get_net_device(name)
-
-                if br.is_shared():
-                    hasShared = True
-                    if brIndex < 0:
-                        brIndex = len(model)
-
-                    brlabel =  "(%s %s)" % (_("Bridge"), br.get_bridge())
-                    sensitive = True
-                else:
-                    brlabel = "(%s)" %  _("Not bridged")
-                    sensitive = False
-
-                model.append([VirtualNetworkInterface.TYPE_BRIDGE,
-                              br.get_bridge(),
-                              _("Host device %s %s") % (br.get_name(), brlabel),
-                              sensitive])
-
-        # If there is a bridge device, default to that
-        # If not, use 'default' network
-        # If not present, use first list entry
-        # If list empty, use no network devices
-        if hasShared:
-            default = brIndex
-        elif hasNet:
-            default = netIdx
-        else:
-            model.insert(0, [None, None, _("No networking."), True])
-            default = 0
-
-        net_list.set_active(default)
 
     def change_caps(self, gtype=None, dtype=None, arch=None):
 
