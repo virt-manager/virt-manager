@@ -846,6 +846,7 @@ class vmmAddHardware(gobject.GObject):
 
         logging.debug("Adding device:\n" + xml)
 
+        # Hotplug device
         attach_err = False
         try:
             self.vm.attach_device(xml)
@@ -862,11 +863,13 @@ class vmmAddHardware(gobject.GObject):
                                      "next VM shutdown?")):
                 return
 
-        if self.vm.is_active() and not attach_err:
-            # Attach device should alter xml for us
+        # Alter persistent config
+        try:
+            self.vm.add_device(xml)
+        except Exception, e:
+            self.err.show_err(_("Error adding device: %s" % str(e)),
+                              "".join(traceback.format_exc()))
             return
-
-        self.vm.add_device(xml)
 
     def do_file_allocate(self, disk, asyncjob):
         meter = vmmCreateMeter(asyncjob)

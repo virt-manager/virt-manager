@@ -1111,22 +1111,23 @@ class vmmDetails(gobject.GObject):
                 return
             self.config.set_confirm_removedev(not skip_prompt)
 
-        detach_err = False
-        devxml = self.vm.get_device_xml(dev_type, dev_id_info)
-        try:
-            if self.vm.is_active():
-                self.vm.detach_device(devxml)
-                return
-        except Exception, e:
-            logging.debug("Device could not be hotUNplugged: %s" % str(e))
-            detach_err = True
-
+        # Define the change
         try:
             self.vm.remove_device(dev_type, dev_id_info)
         except Exception, e:
             self.err.show_err(_("Error Removing Device: %s" % str(e)),
                               "".join(traceback.format_exc()))
             return
+
+        # Try to hot remove
+        detach_err = False
+        devxml = self.vm.get_device_xml(dev_type, dev_id_info)
+        try:
+            if self.vm.is_active():
+                self.vm.detach_device(devxml)
+        except Exception, e:
+            logging.debug("Device could not be hotUNplugged: %s" % str(e))
+            detach_err = True
 
         if detach_err:
             self.err.show_info(
