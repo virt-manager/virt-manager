@@ -494,7 +494,6 @@ class vmmConsolePages(gobject.GObject):
 
         gtk.gdk.threads_enter()
         try:
-            logging.debug("Got timed retry")
             self.try_login()
             return
         finally:
@@ -552,7 +551,6 @@ class vmmConsolePages(gobject.GObject):
             self.schedule_retry()
             return
 
-        logging.debug("Trying console login")
         protocol, host, port, trans, username = self.vm.get_graphics_console()
 
         if protocol is None:
