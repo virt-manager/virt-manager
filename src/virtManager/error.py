@@ -62,6 +62,9 @@ class vmmErrorDialog (gtk.MessageDialog):
             self.vbox.pack_start (expander)
             expander.show ()
 
+    def set_parent(self, parent):
+        self.set_transient_for(parent)
+
     def response_cb(self, src, ignore):
         src.hide()
 
@@ -87,7 +90,7 @@ class vmmErrorDialog (gtk.MessageDialog):
         if self.val_err_box:
             self.val_err_box.destroy()
 
-        self.val_err_box = gtk.MessageDialog(self.parent,
+        self.val_err_box = gtk.MessageDialog(self.get_transient_for(),
                                              gtk.DIALOG_DESTROY_WITH_PARENT,
                                              dialog_type,
                                              gtk.BUTTONS_OK, text1)
@@ -112,7 +115,7 @@ class vmmErrorDialog (gtk.MessageDialog):
         return self._show_ok(gtk.MESSAGE_INFO, text1, text2, title)
 
     def _show_warning(self, buttons, text1, text2):
-        message_box = gtk.MessageDialog(self.parent,
+        message_box = gtk.MessageDialog(self.get_transient_for(),
                                         gtk.DIALOG_DESTROY_WITH_PARENT,
                                         gtk.MESSAGE_WARNING,
                                         buttons, text1)
@@ -132,11 +135,13 @@ class vmmErrorDialog (gtk.MessageDialog):
         return self._show_warning(gtk.BUTTONS_OK_CANCEL, text1, text2)
 
     def warn_chkbox(self, text1, text2=None, chktext=None, buttons=None):
-        chkbox = vmmCheckDialog(self.parent, gtk.MESSAGE_WARNING, buttons)
+        chkbox = vmmCheckDialog(self.get_transient_for(),
+                                gtk.MESSAGE_WARNING, buttons)
         return chkbox.show_chkbox(text1, text2, chktext)
 
     def err_chkbox(self, text1, text2=None, chktext=None, buttons=None):
-        chkbox = vmmCheckDialog(self.parent, gtk.MESSAGE_ERROR, buttons)
+        chkbox = vmmCheckDialog(self.get_transient_for(),
+                                gtk.MESSAGE_ERROR, buttons)
         return chkbox.show_chkbox(text1, text2, chktext)
 
 class vmmCheckDialog (gtk.MessageDialog):
