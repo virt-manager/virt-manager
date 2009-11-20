@@ -1248,27 +1248,6 @@ class vmmCreate(gobject.GObject):
 
         self.guest.nics = []
 
-        # Make sure VirtualNetwork is running
-        if (nettype == VirtualNetworkInterface.TYPE_VIRTUAL and
-            devname not in self.conn.vmm.listNetworks()):
-
-            res = self.err.yes_no(_("Virtual Network is not active."),
-                                  _("Virtual Network '%s' is not active. "
-                                    "Would you like to start the network "
-                                    "now?") % devname)
-            if not res:
-                return False
-
-            # Try to start the network
-            try:
-                net = self.conn.vmm.networkLookupByName(devname)
-                net.create()
-                logging.info("Started network '%s'." % devname)
-            except Exception, e:
-                return self.err.show_err(_("Could not start virtual network "
-                                           "'%s': %s") % (devname, str(e)),
-                                         "".join(traceback.format_exc()))
-
         if nettype is None:
             # No network device available
             instmethod = self.get_config_install_page()
@@ -1281,36 +1260,13 @@ class vmmCreate(gobject.GObject):
             if methname:
                 return self.verr(_("Network device required for %s install.") %
                                  methname)
-            return True
 
-        # Create network device
-        try:
-            bridge = None
-            netname = None
-            if nettype == VirtualNetworkInterface.TYPE_VIRTUAL:
-                netname = devname
-            elif nettype == VirtualNetworkInterface.TYPE_BRIDGE:
-                bridge = devname
-            elif nettype == VirtualNetworkInterface.TYPE_USER:
-                pass
+        ret = uihelpers.validate_network(self.topwin,
+                                         self.conn, nettype, devname, macaddr)
+        if ret == False:
+            return False
 
-            net = VirtualNetworkInterface(type = nettype,
-                                          bridge = bridge,
-                                          network = netname,
-                                          macaddr = macaddr)
-
-            self.guest.nics.append(net)
-        except Exception, e:
-            return self.verr(_("Error with network parameters."), str(e))
-
-        # Make sure there is no mac address collision
-        isfatal, errmsg = net.is_conflict_net(self.guest.conn)
-        if isfatal:
-            return self.err.val_err(_("Mac address collision."), errmsg)
-        elif errmsg is not None:
-            return self.err.yes_no(_("Mac address collision."),
-                                   _("%s Are you sure you want to use this "
-                                     "address?") % errmsg)
+        self.guest.nics.append(ret)
         return True
 
 

@@ -18,10 +18,25 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+import traceback
+
 import gtk
 
-import virtinst
 from virtinst import VirtualNetworkInterface
+
+from virtManager.error import vmmErrorDialog
+
+# Initialize an error object to use for validation functions
+err_dial = vmmErrorDialog(None,
+                          0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                          _("Unexpected Error"),
+                          _("An unexpected error occurred"))
+
+def set_error_parent(parent):
+    global err_dial
+    err_dial.set_parent(parent)
+    err_dial = err_dial
 
 # Widgets for listing network device options (in create, addhardware)
 def init_network_list(net_list):
@@ -104,3 +119,64 @@ def populate_network_list(net_list, conn):
         default = 0
 
     net_list.set_active(default)
+
+def validate_network(parent, conn, nettype, devname, macaddr, model=None):
+    set_error_parent(parent)
+
+    net = None
+
+    if nettype is None:
+        return None
+
+    # Make sure VirtualNetwork is running
+    if (nettype == VirtualNetworkInterface.TYPE_VIRTUAL and
+        devname not in conn.vmm.listNetworks()):
+
+        res = err_dial.yes_no(_("Virtual Network is not active."),
+                              _("Virtual Network '%s' is not active. "
+                                "Would you like to start the network "
+                                "now?") % devname)
+        if not res:
+            return False
+
+        # Try to start the network
+        try:
+            virnet = conn.vmm.networkLookupByName(devname)
+            virnet.create()
+            logging.info("Started network '%s'." % devname)
+        except Exception, e:
+            return err_dial.show_err(_("Could not start virtual network "
+                                       "'%s': %s") % (devname, str(e)),
+                                       "".join(traceback.format_exc()))
+
+    # Create network device
+    try:
+        bridge = None
+        netname = None
+        if nettype == VirtualNetworkInterface.TYPE_VIRTUAL:
+            netname = devname
+        elif nettype == VirtualNetworkInterface.TYPE_BRIDGE:
+            bridge = devname
+        elif nettype == VirtualNetworkInterface.TYPE_USER:
+            pass
+
+        net = VirtualNetworkInterface(type = nettype,
+                                      bridge = bridge,
+                                      network = netname,
+                                      macaddr = macaddr)
+    except Exception, e:
+        return err_dial.val_err(_("Error with network parameters."), str(e))
+
+    # Make sure there is no mac address collision
+    isfatal, errmsg = net.is_conflict_net(conn.vmm)
+    if isfatal:
+        return err_dial.val_err(_("Mac address collision."), errmsg)
+    elif errmsg is not None:
+        retv = err_dial.yes_no(_("Mac address collision."),
+                               _("%s Are you sure you want to use this "
+                                 "address?") % errmsg)
+        if not retv:
+            return False
+
+    return net
+
