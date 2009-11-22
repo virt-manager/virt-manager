@@ -904,7 +904,7 @@ class vmmDomain(gobject.GObject):
                     rd += io[1]
                     wr += io[3]
             except libvirt.libvirtError, err:
-                if support.is_error_nosupport():
+                if support.is_error_nosupport(err):
                     logging.debug("Disk stats not supported: %s" % err)
                     self._stats_disk_supported = False
                 else:
