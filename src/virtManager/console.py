@@ -67,6 +67,9 @@ class vmmConsolePages(gobject.GObject):
         self.gtk_settings_accel = None
         self.gtk_settings_mnemonic = None
 
+        # Window size before we fullscreen
+        self.previous_size = None
+
         # Initialize display widget
         self.scale_type = self.vm.get_console_scaling()
         self.vncTunnel = None
@@ -262,8 +265,13 @@ class vmmConsolePages(gobject.GObject):
         self.activate_viewer_page()
 
     def toggle_fullscreen(self, src):
-        self.window.get_widget("control-fullscreen").set_active(src.get_active())
-        if src.get_active():
+        do_fullscreen = src.get_active()
+
+        self.window.get_widget("control-fullscreen").set_active(do_fullscreen)
+
+        if do_fullscreen:
+            if not self.previous_size:
+                self.previous_size = self.vncViewer.get_size_request()
 
             # if scaling is enabled make sure we fit onto the root window
             if self.vncViewer.get_scaling():
@@ -288,6 +296,11 @@ class vmmConsolePages(gobject.GObject):
 
             if self.window.get_widget("details-menu-view-toolbar").get_active():
                 self.window.get_widget("toolbar-box").show()
+
+            if self.previous_size:
+                self.vncViewer.set_size_request(self.previous_size[0],
+                                                self.previous_size[1])
+                self.previous_size = None
 
         self.update_scaling()
 
