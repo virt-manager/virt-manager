@@ -31,6 +31,7 @@ import virtinst
 from virtinst import VirtualCharDevice, VirtualDevice, VirtualVideoDevice
 
 import virtManager.util as vmmutil
+import virtManager.uihelpers as uihelpers
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
 from virtManager.createmeter import vmmCreateMeter
@@ -96,25 +97,30 @@ class vmmAddHardware(gobject.GObject):
 
         self.topwin.hide()
         self.window.signal_autoconnect({
-            "on_hardware_type_changed"  : self.hardware_type_changed,
             "on_create_pages_switch_page" : self.page_changed,
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,
             "on_create_back_clicked" : self.back,
             "on_create_forward_clicked" : self.forward,
             "on_create_finish_clicked" : self.finish,
+            "on_create_help_clicked": self.show_help,
+
+            "on_hardware_type_changed"  : self.hardware_type_changed,
+
             "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
             "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
             "on_storage_file_address_changed": self.toggle_storage_size,
             "on_storage_toggled" : self.change_storage_type,
-            "on_network_toggled" : self.change_network_type,
+
             "on_mac_address_clicked" : self.change_macaddr_use,
+
             "on_graphics_type_changed": self.change_graphics_type,
             "on_graphics_port_auto_toggled": self.change_port_auto,
             "on_graphics_keymap_toggled": self.change_keymap,
+
             "on_host_device_type_changed": self.change_host_device_type,
+
             "on_char_device_type_changed": self.change_char_device_type,
-            "on_create_help_clicked": self.show_help,
 
             # Char dev info signals
             "char_device_type_focus": (self.update_doc, "char_type"),
@@ -200,21 +206,8 @@ class vmmAddHardware(gobject.GObject):
         hw_list.add_attribute(text, 'sensitive', 3)
 
         # Virtual network list
-        network_list = self.window.get_widget("net-network")
-        network_model = gtk.ListStore(str, str)
-        network_list.set_model(network_model)
-        text = gtk.CellRendererText()
-        network_list.pack_start(text, True)
-        network_list.add_attribute(text, 'text', 1)
-
-        # Physical network list
-        device_list = self.window.get_widget("net-device")
-        device_model = gtk.ListStore(str, str, bool)
-        device_list.set_model(device_model)
-        text = gtk.CellRendererText()
-        device_list.pack_start(text, True)
-        device_list.add_attribute(text, 'text', 1)
-        device_list.add_attribute(text, 'sensitive', 2)
+        net_list = self.window.get_widget("net-list")
+        uihelpers.init_network_list(net_list)
 
         # Network model list
         netmodel_list  = self.window.get_widget("net-model")
@@ -313,7 +306,6 @@ class vmmAddHardware(gobject.GObject):
     def reset_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
-        is_remote = self.vm.get_connection().is_remote()
 
         # Hide the "finish" button until the appropriate time
         self.window.get_widget("create-finish").hide()
@@ -338,37 +330,18 @@ class vmmAddHardware(gobject.GObject):
             target_list.set_active(0)
 
         # Network init
-        self.change_network_type()
+        newmac = uihelpers.generate_macaddr(self.vm.get_connection())
+        self.window.get_widget("mac-address").set_active(bool(newmac))
+        self.window.get_widget("create-mac-address").set_text(newmac)
         self.change_macaddr_use()
-        self.window.get_widget("net-type-network").set_active(True)
-        self.window.get_widget("net-type-device").set_active(False)
-        self.window.get_widget("mac-address").set_active(False)
-        self.window.get_widget("create-mac-address").set_text("")
-        self.window.get_widget("net-model").set_active(0)
 
-        net_box = self.window.get_widget("net-network")
-        self.populate_network_model(net_box.get_model())
-        net_box.set_active(0)
-
-        dev_box = self.window.get_widget("net-device")
-        res = self.populate_device_model(dev_box.get_model())
-        if res[0]:
-            dev_box.set_active(res[1])
-        else:
-            dev_box.set_active(-1)
+        net_list = self.window.get_widget("net-list")
+        uihelpers.populate_network_list(net_list, self.vm.get_connection())
 
         netmodel = self.window.get_widget("net-model")
         self.populate_network_model_model(netmodel.get_model())
         if len(netmodel.get_model()) > 0:
             netmodel.set_active(0)
-
-        if is_remote:
-            self.window.get_widget("net-type-network").set_active(True)
-            self.window.get_widget("net-type-device").set_active(False)
-            self.window.get_widget("net-type-device").set_sensitive(False)
-            self.window.get_widget("net-device").set_active(-1)
-        else:
-            self.window.get_widget("net-type-device").set_sensitive(True)
 
         # Input device init
         input_box = self.window.get_widget("input-type")
@@ -444,27 +417,6 @@ class vmmAddHardware(gobject.GObject):
     #########################
     # UI population methods #
     #########################
-
-    def populate_network_model(self, model):
-        model.clear()
-        for uuid in self.vm.get_connection().list_net_uuids():
-            net = self.vm.get_connection().get_net(uuid)
-            model.append([net.get_label(), net.get_name()])
-
-    def populate_device_model(self, model):
-        model.clear()
-        hasShared = False
-        brIndex = -1
-        for name in self.vm.get_connection().list_net_device_paths():
-            net = self.vm.get_connection().get_net_device(name)
-            if net.is_shared():
-                hasShared = True
-                if brIndex < 0:
-                    brIndex = len(model)
-                model.append([net.get_bridge(), "%s (%s %s)" % (net.get_name(), _("Bridge"), net.get_bridge()), True])
-            else:
-                model.append([net.get_bridge(), "%s (%s)" % (net.get_name(), _("Not bridged")), False])
-        return (hasShared, brIndex)
 
     def populate_network_model_model(self, model):
         model.clear()
@@ -645,17 +597,18 @@ class vmmAddHardware(gobject.GObject):
 
     # Network getters
     def get_config_network(self):
-        if self.vm.get_connection().is_qemu_session():
-            return ["user", None]
+        net_list = self.window.get_widget("net-list")
+        selection = net_list.get_active()
+        model = net_list.get_model()
 
-        if self.window.get_widget("net-type-network").get_active():
-            net = self.window.get_widget("net-network")
-            model = net.get_model()
-            return ["network", model.get_value(net.get_active_iter(), 0)]
-        else:
-            dev = self.window.get_widget("net-device")
-            model = dev.get_model()
-            return ["bridge", model.get_value(dev.get_active_iter(), 0)]
+        nettype = None
+        devname = None
+        if selection >= 0:
+            row = model[selection]
+            nettype = row[0]
+            devname = row[1]
+
+        return (nettype, devname)
 
     def get_config_net_model(self):
         model = self.window.get_widget("net-model")
@@ -981,14 +934,6 @@ class vmmAddHardware(gobject.GObject):
             self.toggle_storage_size()
 
     # Network listeners
-    def change_network_type(self, ignore=None):
-        if self.window.get_widget("net-type-network").get_active():
-            self.window.get_widget("net-network").set_sensitive(True)
-            self.window.get_widget("net-device").set_sensitive(False)
-        else:
-            self.window.get_widget("net-network").set_sensitive(False)
-            self.window.get_widget("net-device").set_sensitive(True)
-
     def change_macaddr_use(self, ignore=None):
         if self.window.get_widget("mac-address").get_active():
             self.window.get_widget("create-mac-address").set_sensitive(True)
@@ -1254,54 +1199,24 @@ class vmmAddHardware(gobject.GObject):
             return res
 
     def validate_page_network(self):
-        net = self.get_config_network()
-        if self.window.get_widget("net-type-network").get_active():
-            if self.window.get_widget("net-network").get_active() == -1:
-                return self.err.val_err(_("Virtual Network Required"),
-                            _("You must select one of the virtual networks."))
-
-        else:
-            if self.window.get_widget("net-device").get_active() == -1:
-                return self.err.val_err(_("Physical Device Required"),
-                                    _("You must select a physical device."))
-
+        nettype, devname = self.get_config_network()
         mac = self.get_config_macaddr()
-        if self.window.get_widget("mac-address").get_active():
-
-            if mac is None or len(mac) == 0:
-                return self.err.val_err(_("Invalid MAC address"),
-                                        _("No MAC address was entered. Please enter a valid MAC address."))
-
-            try:
-                self._dev = virtinst.VirtualNetworkInterface(macaddr=mac)
-            except ValueError, e:
-                return self.err.val_err(_("Invalid MAC address"), str(e))
-
         model = self.get_config_net_model()[0]
-        try:
-            if net[0] == "bridge":
-                self._dev = virtinst.VirtualNetworkInterface(macaddr=mac,
-                                                             type=net[0],
-                                                             bridge=net[1])
-            elif net[0] == "network":
-                self._dev = virtinst.VirtualNetworkInterface(macaddr=mac,
-                                                             type=net[0],
-                                                             network=net[1])
-            else:
-                raise ValueError, _("Unsupported networking type") + net[0]
 
-            self._dev.model = model
+        if not nettype:
+            return self.err.val_err(_("Network selection error."),
+                                    _("A network source must be selected."))
 
-        except ValueError, e:
-            return self.err.val_err(_("Invalid Network Parameter"), str(e))
+        if not mac:
+            return self.err.val_err(_("Invalid MAC address"),
+                                    _("A MAC address must be entered."))
 
-        conflict = self._dev.is_conflict_net(self.vm.get_connection().vmm)
-        if conflict[0]:
-            return self.err.val_err(_("Mac address collision"),
-                                    conflict[1])
-        elif conflict[1] is not None:
-            return self.err.yes_no(_("Mac address collision"),
-                                    conflict[1] + " " + _("Are you sure you want to use this address?"))
+        ret = uihelpers.validate_network(self.topwin, self.vm.get_connection(),
+                                         nettype, devname, mac, model)
+        if ret == False:
+            return False
+
+        self._dev = ret
 
     def validate_page_graphics(self):
         graphics = self.get_config_graphics()

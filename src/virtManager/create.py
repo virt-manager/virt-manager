@@ -29,7 +29,6 @@ import threading
 import logging
 
 import virtinst
-from virtinst import VirtualNetworkInterface
 
 import virtManager.opticalhelper
 import virtManager.uihelpers as uihelpers
@@ -479,14 +478,8 @@ class vmmCreate(gobject.GObject):
         net_list = self.window.get_widget("config-netdev")
         uihelpers.populate_network_list(net_list, self.conn)
 
-        self.window.get_widget("config-set-macaddr").set_active(True)
-        newmac = ""
-        try:
-            net = VirtualNetworkInterface(conn=self.conn.vmm)
-            net.setup(self.conn.vmm)
-            newmac = net.macaddr
-        except Exception, e:
-            logging.exception("Generating macaddr failed: %s" % str(e))
+        newmac = uihelpers.generate_macaddr(self.conn)
+        self.window.get_widget("config-set-macaddr").set_active(bool(newmac))
         self.window.get_widget("config-macaddr").set_text(newmac)
 
     def populate_hv(self):

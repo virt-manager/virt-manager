@@ -43,20 +43,31 @@ def init_network_list(net_list):
     # [ network type, source name, label, sensitive? ]
     net_model = gtk.ListStore(str, str, str, bool)
     net_list.set_model(net_model)
+
+    if isinstance(net_list, gtk.ComboBox):
+        net_col = net_list
+    else:
+        net_col = gtk.TreeViewColumn()
+        net_list.append_column(net_col)
+
     text = gtk.CellRendererText()
-    net_list.pack_start(text, True)
-    net_list.add_attribute(text, 'text', 2)
-    net_list.add_attribute(text, 'sensitive', 3)
+    net_col.pack_start(text, True)
+    net_col.add_attribute(text, 'text', 2)
+    net_col.add_attribute(text, 'sensitive', 3)
 
 def populate_network_list(net_list, conn):
     model = net_list.get_model()
     model.clear()
 
+    def set_active(idx):
+        if isinstance(net_list, gtk.ComboBox):
+            net_list.set_active(idx)
+
     # For qemu:///session
     if conn.is_qemu_session():
         model.append([VirtualNetworkInterface.TYPE_USER, None,
                      _("Usermode Networking"), True])
-        net_list.set_active(0)
+        set_active(0)
         return
 
     hasNet = False
@@ -118,7 +129,7 @@ def populate_network_list(net_list, conn):
         model.insert(0, [None, None, _("No networking."), True])
         default = 0
 
-    net_list.set_active(default)
+    set_active(default)
 
 def validate_network(parent, conn, nettype, devname, macaddr, model=None):
     set_error_parent(parent)
@@ -163,7 +174,8 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         net = VirtualNetworkInterface(type = nettype,
                                       bridge = bridge,
                                       network = netname,
-                                      macaddr = macaddr)
+                                      macaddr = macaddr,
+                                      model = model)
     except Exception, e:
         return err_dial.val_err(_("Error with network parameters."), str(e))
 
@@ -180,3 +192,13 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
 
     return net
 
+def generate_macaddr(conn):
+    newmac = ""
+    try:
+        net = VirtualNetworkInterface(conn=conn.vmm)
+        net.setup(conn.vmm)
+        newmac = net.macaddr
+    except:
+        pass
+
+    return newmac
