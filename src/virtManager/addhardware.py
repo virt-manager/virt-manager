@@ -161,6 +161,20 @@ class vmmAddHardware(gobject.GObject):
         self.topwin.show()
         self.topwin.present()
 
+    def close(self, ignore1=None,ignore2=None):
+        self.topwin.hide()
+        return 1
+
+    def is_visible(self):
+        if self.topwin.flags() & gtk.VISIBLE:
+            return 1
+        return 0
+
+
+    ##########################
+    # Initialization methods #
+    ##########################
+
     def set_initial_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_show_tabs(False)
@@ -427,57 +441,120 @@ class vmmAddHardware(gobject.GObject):
 
         self.window.get_widget("hardware-type").set_active(0)
 
-    def hardware_type_changed(self, src):
-        if src.get_active() < 0:
-            return
+    #########################
+    # UI population methods #
+    #########################
 
-        row = src.get_model()[src.get_active()]
+    def populate_network_model(self, model):
+        model.clear()
+        for uuid in self.vm.get_connection().list_net_uuids():
+            net = self.vm.get_connection().get_net(uuid)
+            model.append([net.get_label(), net.get_name()])
 
-        sens = row[3]
-        msg = row[4] or ""
-
-        self.window.get_widget("create-forward").set_sensitive(sens)
-        self.window.get_widget("hardware-info-box").set_property("visible",
-                                                                 (not sens))
-        self.window.get_widget("hardware-info").set_text(msg)
-
-    def forward(self, ignore=None):
-        notebook = self.window.get_widget("create-pages")
-        try:
-            if(self.validate(notebook.get_current_page()) != True):
-                return
-        except Exception, e:
-            self.err.show_err(_("Uncaught error validating hardware "
-                                "input: %s") % str(e),
-                              "".join(traceback.format_exc()))
-            return
-
-        hwtype = self.get_config_hardware_type()
-        if notebook.get_current_page() == PAGE_INTRO and \
-           (hwtype != PAGE_NETWORK or \
-            not self.vm.get_connection().is_qemu_session()):
-            notebook.set_current_page(hwtype)
-        else:
-            notebook.set_current_page(PAGE_SUMMARY)
-            self.window.get_widget("create-finish").show()
-            self.window.get_widget("create-forward").hide()
-        self.window.get_widget("create-back").set_sensitive(True)
-
-    def back(self, ignore=None):
-        notebook = self.window.get_widget("create-pages")
-
-        if notebook.get_current_page() == PAGE_SUMMARY:
-            hwtype = self.get_config_hardware_type()
-            if hwtype == PAGE_NETWORK and \
-               self.vm.get_connection().is_qemu_session():
-                notebook.set_current_page(PAGE_INTRO)
+    def populate_device_model(self, model):
+        model.clear()
+        hasShared = False
+        brIndex = -1
+        for name in self.vm.get_connection().list_net_device_paths():
+            net = self.vm.get_connection().get_net_device(name)
+            if net.is_shared():
+                hasShared = True
+                if brIndex < 0:
+                    brIndex = len(model)
+                model.append([net.get_bridge(), "%s (%s %s)" % (net.get_name(), _("Bridge"), net.get_bridge()), True])
             else:
-                notebook.set_current_page(hwtype)
-            self.window.get_widget("create-finish").hide()
-        else:
-            notebook.set_current_page(PAGE_INTRO)
-            self.window.get_widget("create-back").set_sensitive(False)
-        self.window.get_widget("create-forward").show()
+                model.append([net.get_bridge(), "%s (%s)" % (net.get_name(), _("Not bridged")), False])
+        return (hasShared, brIndex)
+
+    def populate_network_model_model(self, model):
+        model.clear()
+
+        # [xml value, label]
+        model.append([None, _("Hypervisor default")])
+        if self.vm.is_hvm():
+            mod_list = [ "rtl8139", "ne2k_pci", "pcnet" ]
+            if self.vm.get_hv_type() == "kvm":
+                mod_list.append("e1000")
+                mod_list.append("virtio")
+            mod_list.sort()
+
+            for m in mod_list:
+                model.append([m, m])
+
+    def populate_target_device_model(self, model):
+        model.clear()
+        #[bus, device, icon, desc, iconsize]
+        def add_dev(bus, device, desc):
+            if device == virtinst.VirtualDisk.DEVICE_FLOPPY:
+                icon = "media-floppy"
+            elif device == virtinst.VirtualDisk.DEVICE_CDROM:
+                icon = "media-optical"
+            else:
+                icon = "drive-harddisk"
+            model.append([bus, device, icon, desc, gtk.ICON_SIZE_BUTTON])
+
+        if self.vm.is_hvm():
+            add_dev("ide", virtinst.VirtualDisk.DEVICE_DISK, "IDE disk")
+            add_dev("ide", virtinst.VirtualDisk.DEVICE_CDROM, "IDE cdrom")
+            add_dev("fdc", virtinst.VirtualDisk.DEVICE_FLOPPY, "Floppy disk")
+            add_dev("scsi",virtinst.VirtualDisk.DEVICE_DISK, "SCSI disk")
+            add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
+        if self.vm.get_hv_type().lower() == "kvm":
+            add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK, "Virtio Disk")
+        if self.vm.get_connection().get_type().lower() == "xen":
+            add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK, "Virtual disk")
+
+    def populate_input_model(self, model):
+        model.clear()
+        model.append([_("EvTouch USB Graphics Tablet"), "tablet", "usb", True])
+        # XXX libvirt needs to support 'model' for input devices to distinguish
+        # wacom from evtouch tablets
+        #model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
+        model.append([_("Generic USB Mouse"), "mouse", "usb", True])
+
+    def populate_graphics_model(self, model):
+        model.clear()
+        model.append([_("VNC server"), "vnc"])
+        model.append([_("Local SDL window"), "sdl"])
+
+    def populate_sound_model_model(self, model):
+        model.clear()
+        lst = virtinst.VirtualAudio.MODELS
+        lst.sort()
+        for m in lst:
+            model.append([m])
+
+    def populate_host_device_type_model(self, model):
+        model.clear()
+        for m in [ ["PCI Device", "pci", None, "net", "80203"],
+                   ["USB Device", "usb_device", None, None, None]]:
+            model.append(m)
+
+    def populate_host_device_model(self, model, devtype, devcap, subtype,
+                                   subcap):
+        model.clear()
+        subdevs = []
+
+        if subtype:
+            subdevs = self.vm.get_connection().get_devices(subtype, subcap)
+
+        devs = self.vm.get_connection().get_devices(devtype, devcap)
+        for dev in devs:
+            prettyname = dev.pretty_name()
+
+            for subdev in subdevs:
+                if dev.name == subdev.parent:
+                    prettyname = dev.pretty_name(subdev)
+
+            model.append([prettyname, dev.name])
+
+        if len(model) == 0:
+            model.append([_("No Devices Available"), None])
+
+
+    ########################
+    # get_config_* methods #
+    ########################
 
     def get_config_hardware_type(self):
         _type = self.window.get_widget("hardware-type")
@@ -485,6 +562,7 @@ class vmmAddHardware(gobject.GObject):
             return None
         return _type.get_model().get_value(_type.get_active_iter(), 2)
 
+    # Disk getters
     def get_config_disk_image(self):
         if self.window.get_widget("storage-partition").get_active():
             return self.window.get_widget("storage-partition-address").get_text()
@@ -520,6 +598,13 @@ class vmmAddHardware(gobject.GObject):
         device = target.get_model().get_value(target.get_active_iter(), 1)
         return bus, device
 
+    def is_sparse_file(self):
+        if self.window.get_widget("non-sparse").get_active():
+            return False
+        else:
+            return True
+
+    # Input getters
     def get_config_input(self):
         target = self.window.get_widget("input-type")
         label = target.get_model().get_value(target.get_active_iter(), 0)
@@ -527,6 +612,7 @@ class vmmAddHardware(gobject.GObject):
         bus = target.get_model().get_value(target.get_active_iter(), 2)
         return label, _type, bus
 
+    # Graphics getters
     def get_config_graphics(self):
         _type = self.window.get_widget("graphics-type")
         if _type.get_active_iter() is None:
@@ -557,6 +643,7 @@ class vmmAddHardware(gobject.GObject):
         else:
             return None
 
+    # Network getters
     def get_config_network(self):
         if self.vm.get_connection().is_qemu_session():
             return ["user", None]
@@ -585,11 +672,13 @@ class vmmAddHardware(gobject.GObject):
             macaddr = self.window.get_widget("create-mac-address").get_text()
         return macaddr
 
+    # Sound getters
     def get_config_sound_model(self):
         model = self.window.get_widget("sound-model")
         modelstr = model.get_model().get_value(model.get_active_iter(), 0)
         return modelstr
 
+    # Host device getters
     def get_config_host_device_type_info(self):
         devbox = self.window.get_widget("host-device-type")
         return devbox.get_model()[devbox.get_active()]
@@ -598,9 +687,67 @@ class vmmAddHardware(gobject.GObject):
         devbox = self.window.get_widget("host-device")
         return devbox.get_model()[devbox.get_active()]
 
+    # Video Getters
     def get_config_video_model(self):
         modbox = self.window.get_widget("video-model")
         return modbox.get_model()[modbox.get_active()][0]
+
+
+    ################
+    # UI listeners #
+    ################
+
+    def hardware_type_changed(self, src):
+        if src.get_active() < 0:
+            return
+
+        row = src.get_model()[src.get_active()]
+
+        sens = row[3]
+        msg = row[4] or ""
+
+        self.window.get_widget("create-forward").set_sensitive(sens)
+        self.window.get_widget("hardware-info-box").set_property("visible",
+                                                                 (not sens))
+        self.window.get_widget("hardware-info").set_text(msg)
+
+    def forward(self, ignore=None):
+        notebook = self.window.get_widget("create-pages")
+        try:
+            if self.validate(notebook.get_current_page()) == False:
+                return
+        except Exception, e:
+            self.err.show_err(_("Uncaught error validating hardware "
+                                "input: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return
+
+        hwtype = self.get_config_hardware_type()
+        if notebook.get_current_page() == PAGE_INTRO and \
+           (hwtype != PAGE_NETWORK or \
+            not self.vm.get_connection().is_qemu_session()):
+            notebook.set_current_page(hwtype)
+        else:
+            notebook.set_current_page(PAGE_SUMMARY)
+            self.window.get_widget("create-finish").show()
+            self.window.get_widget("create-forward").hide()
+        self.window.get_widget("create-back").set_sensitive(True)
+
+    def back(self, ignore=None):
+        notebook = self.window.get_widget("create-pages")
+
+        if notebook.get_current_page() == PAGE_SUMMARY:
+            hwtype = self.get_config_hardware_type()
+            if hwtype == PAGE_NETWORK and \
+               self.vm.get_connection().is_qemu_session():
+                notebook.set_current_page(PAGE_INTRO)
+            else:
+                notebook.set_current_page(hwtype)
+            self.window.get_widget("create-finish").hide()
+        else:
+            notebook.set_current_page(PAGE_INTRO)
+            self.window.get_widget("create-back").set_sensitive(False)
+        self.window.get_widget("create-forward").show()
 
     def page_changed(self, notebook, page, page_number):
         if page_number == PAGE_CHAR:
@@ -608,9 +755,12 @@ class vmmAddHardware(gobject.GObject):
             self.change_char_device_type(devtype)
             self.set_page_char_type()
 
-        if page_number != PAGE_SUMMARY:
-            return
+        elif page_number == PAGE_SUMMARY:
+            self.populate_summary()
 
+        return
+
+    def populate_summary(self):
         hwpage = self.get_config_hardware_type()
 
         summary_table = self.window.get_widget("summary-table")
@@ -756,15 +906,6 @@ class vmmAddHardware(gobject.GObject):
         set_table(title, info_list)
 
 
-    def close(self, ignore1=None,ignore2=None):
-        self.topwin.hide()
-        return 1
-
-    def is_visible(self):
-        if self.topwin.flags() & gtk.VISIBLE:
-            return 1
-        return 0
-
     def finish(self, ignore=None):
         hw = self.get_config_hardware_type()
 
@@ -795,8 +936,148 @@ class vmmAddHardware(gobject.GObject):
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
         if not error:
-            # Leave window open if there was an error, so user can retry
             self.close()
+
+    # Storage listeners
+    def browse_storage_partition_address(self, src, ignore=None):
+        textent = self.window.get_widget("storage-partition-address")
+
+        self._browse_file(textent)
+
+    def browse_storage_file_address(self, src, ignore=None):
+        textent = self.window.get_widget("storage-file-address")
+
+        self._browse_file(textent, confirm_overwrite=True)
+
+    def toggle_storage_size(self, ignore1=None, ignore2=None):
+        filename = self.get_config_disk_image()
+        if filename != None and len(filename) > 0 and \
+           (self.vm.get_connection().is_remote() or
+            not os.path.exists(filename)):
+            self.window.get_widget("storage-file-size").set_sensitive(True)
+            self.window.get_widget("non-sparse").set_sensitive(True)
+            size = self.get_config_disk_size()
+            if size == None:
+                size = 4000
+            self.window.get_widget("storage-file-size").set_value(size)
+        else:
+            self.window.get_widget("storage-file-size").set_sensitive(False)
+            self.window.get_widget("non-sparse").set_sensitive(False)
+            if os.path.isfile(filename):
+                size = os.path.getsize(filename)/(1024*1024)
+                self.window.get_widget("storage-file-size").set_value(size)
+            else:
+                self.window.get_widget("storage-file-size").set_value(0)
+
+    def change_storage_type(self, ignore=None):
+        if self.window.get_widget("storage-partition").get_active():
+            self.window.get_widget("storage-partition-box").set_sensitive(True)
+            self.window.get_widget("storage-file-box").set_sensitive(False)
+            self.window.get_widget("storage-file-size").set_sensitive(False)
+            self.window.get_widget("non-sparse").set_sensitive(False)
+        else:
+            self.window.get_widget("storage-partition-box").set_sensitive(False)
+            self.window.get_widget("storage-file-box").set_sensitive(True)
+            self.toggle_storage_size()
+
+    # Network listeners
+    def change_network_type(self, ignore=None):
+        if self.window.get_widget("net-type-network").get_active():
+            self.window.get_widget("net-network").set_sensitive(True)
+            self.window.get_widget("net-device").set_sensitive(False)
+        else:
+            self.window.get_widget("net-network").set_sensitive(False)
+            self.window.get_widget("net-device").set_sensitive(True)
+
+    def change_macaddr_use(self, ignore=None):
+        if self.window.get_widget("mac-address").get_active():
+            self.window.get_widget("create-mac-address").set_sensitive(True)
+        else:
+            self.window.get_widget("create-mac-address").set_sensitive(False)
+
+    # Graphics listeners
+    def change_graphics_type(self,ignore=None):
+        graphics = self.get_config_graphics()
+        if graphics == "vnc":
+            self.window.get_widget("graphics-port-auto").set_sensitive(True)
+            self.window.get_widget("graphics-address").set_sensitive(True)
+            self.window.get_widget("graphics-password").set_sensitive(True)
+            self.window.get_widget("graphics-keymap-chk").set_sensitive(True)
+            self.change_port_auto()
+        else:
+            self.window.get_widget("graphics-port").set_sensitive(False)
+            self.window.get_widget("graphics-port-auto").set_sensitive(False)
+            self.window.get_widget("graphics-address").set_sensitive(False)
+            self.window.get_widget("graphics-password").set_sensitive(False)
+            self.window.get_widget("graphics-keymap-chk").set_sensitive(False)
+            self.window.get_widget("graphics-keymap").set_sensitive(False)
+
+    def change_port_auto(self,ignore=None):
+        if self.window.get_widget("graphics-port-auto").get_active():
+            self.window.get_widget("graphics-port").set_sensitive(False)
+        else:
+            self.window.get_widget("graphics-port").set_sensitive(True)
+
+    def change_keymap(self, ignore=None):
+        if self.window.get_widget("graphics-keymap-chk").get_active():
+            self.window.get_widget("graphics-keymap").set_sensitive(False)
+        else:
+            self.window.get_widget("graphics-keymap").set_sensitive(True)
+
+    # Hostdevice listeners
+    def change_host_device_type(self, src):
+        devbox = self.window.get_widget("host-device")
+        if src.get_active() < 0:
+            devbox.get_model().clear()
+            return
+
+        (ignore, devtype, devcap,
+         subtype, subcap) = src.get_model()[src.get_active()]
+        self.populate_host_device_model(devbox.get_model(), devtype, devcap,
+                                        subtype, subcap)
+        devbox.set_active(0)
+
+    # Char device listeners
+    def get_char_type(self):
+        hw_list = self.window.get_widget("hardware-type")
+        if hw_list.get_active() < 0:
+            label = "serial"
+        else:
+            label = hw_list.get_model()[hw_list.get_active()][0]
+
+        if label.lower() == "parallel":
+            return VirtualDevice.VIRTUAL_DEV_PARALLEL
+        return VirtualDevice.VIRTUAL_DEV_SERIAL
+
+    def set_page_char_type(self):
+        char_type = self.get_char_type().capitalize()
+        self.window.get_widget("char-title-label").set_markup(
+            """<span weight="heavy" size="xx-large" foreground="#FFF">%s Device</span>""" % char_type)
+
+    def change_char_device_type(self, src):
+        self.update_doc(None, None, "char_type")
+
+        chartype = self.get_char_type()
+        devtype = src.get_model()[src.get_active()][0]
+        conn = self.vm.get_connection().vmm
+
+        self._dev = VirtualCharDevice.get_dev_instance(conn,
+                                                       chartype,
+                                                       devtype)
+
+        for param_name, widget_name in char_widget_mappings.items():
+            make_visible = hasattr(self._dev, param_name)
+            self.window.get_widget(widget_name).set_sensitive(make_visible)
+
+        has_mode = hasattr(self._dev, "source_mode")
+
+        if has_mode and self.window.get_widget("char-mode").get_active() == -1:
+            self.window.get_widget("char-mode").set_active(0)
+
+
+    ######################
+    # Add device methods #
+    ######################
 
     def add_network(self):
         if self._dev is None and self.vm.get_connection().is_qemu_session():
@@ -890,25 +1171,246 @@ class vmmAddHardware(gobject.GObject):
             asyncjob.set_error(error, details)
 
 
-    def browse_storage_partition_address(self, src, ignore=None):
-        textent = self.window.get_widget("storage-partition-address")
+    ###########################
+    # Page validation methods #
+    ###########################
 
-        self._browse_file(textent)
+    def validate(self, page_num):
+        if page_num == PAGE_INTRO:
+            return self.validate_page_intro()
+        elif page_num == PAGE_DISK:
+            return self.validate_page_storage()
+        elif page_num == PAGE_NETWORK:
+            return self.validate_page_network()
+        elif page_num == PAGE_INPUT:
+            return True
+        elif page_num == PAGE_GRAPHICS:
+            return self.validate_page_graphics()
+        elif page_num == PAGE_SOUND:
+            return self.validate_page_sound()
+        elif page_num == PAGE_HOSTDEV:
+            return self.validate_page_hostdev()
+        elif page_num == PAGE_CHAR:
+            return self.validate_page_char()
+        elif page_num == PAGE_VIDEO:
+            return self.validate_page_video()
 
-    def browse_storage_file_address(self, src, ignore=None):
-        textent = self.window.get_widget("storage-file-address")
+    def validate_page_intro(self):
+        if self.get_config_hardware_type() == None:
+            return self.err.val_err(_("Hardware Type Required"),
+                    _("You must specify what type of hardware to add."))
+        self._dev = None
 
-        self._browse_file(textent, confirm_overwrite=True)
+    def validate_page_storage(self):
+        path = self.get_config_disk_image()
+        if not path:
+            return self.err.val_err(_("Storage Path Required"),
+                _("You must specify a partition or a file for disk storage."))
+
+        if self.window.get_widget("target-device").get_active() == -1:
+            return self.err.val_err(_("Target Device Required"),
+                        _("You must select a target device for the disk."))
+
+        bus, device = self.get_config_disk_target()
+
+        # Build disk object
+        filesize = self.get_config_disk_size()
+        if self.get_config_disk_size() != None:
+            filesize = self.get_config_disk_size() / 1024.0
+        readonly = False
+        if device == virtinst.VirtualDisk.DEVICE_CDROM:
+            readonly=True
+
+        try:
+            if (os.path.dirname(os.path.abspath(path)) ==
+                vmmutil.DEFAULT_POOL_PATH):
+                vmmutil.build_default_pool(self.vm.get_connection().vmm)
+
+            self._dev = virtinst.VirtualDisk(self.get_config_disk_image(),
+                                             filesize,
+                                             sparse=self.is_sparse_file(),
+                                             readOnly=readonly,
+                                             device=device,
+                                             bus=bus,
+                                             conn=self.vm.get_connection().vmm)
+
+            if (self._dev.type == virtinst.VirtualDisk.TYPE_FILE and
+                not self.vm.is_hvm() and virtinst.util.is_blktap_capable()):
+                self._dev.driver_name = virtinst.VirtualDisk.DRIVER_TAP
+
+        except ValueError, e:
+            return self.err.val_err(_("Invalid Storage Parameters"), str(e))
+
+        ret = self._dev.is_size_conflict()
+        if not ret[0] and ret[1]:
+            res = self.err.ok_cancel(_("Not Enough Free Space"), ret[1])
+            if not res:
+                return False
+
+        if self._dev.is_conflict_disk(self.vm.get_connection().vmm) is True:
+            res = self.err.yes_no(
+                _('Disk "%s" is already in use by another guest!' % self._dev),
+                _("Do you really want to use the disk?"))
+            return res
+
+    def validate_page_network(self):
+        net = self.get_config_network()
+        if self.window.get_widget("net-type-network").get_active():
+            if self.window.get_widget("net-network").get_active() == -1:
+                return self.err.val_err(_("Virtual Network Required"),
+                            _("You must select one of the virtual networks."))
+
+        else:
+            if self.window.get_widget("net-device").get_active() == -1:
+                return self.err.val_err(_("Physical Device Required"),
+                                    _("You must select a physical device."))
+
+        mac = self.get_config_macaddr()
+        if self.window.get_widget("mac-address").get_active():
+
+            if mac is None or len(mac) == 0:
+                return self.err.val_err(_("Invalid MAC address"),
+                                        _("No MAC address was entered. Please enter a valid MAC address."))
+
+            try:
+                self._dev = virtinst.VirtualNetworkInterface(macaddr=mac)
+            except ValueError, e:
+                return self.err.val_err(_("Invalid MAC address"), str(e))
+
+        model = self.get_config_net_model()[0]
+        try:
+            if net[0] == "bridge":
+                self._dev = virtinst.VirtualNetworkInterface(macaddr=mac,
+                                                             type=net[0],
+                                                             bridge=net[1])
+            elif net[0] == "network":
+                self._dev = virtinst.VirtualNetworkInterface(macaddr=mac,
+                                                             type=net[0],
+                                                             network=net[1])
+            else:
+                raise ValueError, _("Unsupported networking type") + net[0]
+
+            self._dev.model = model
+
+        except ValueError, e:
+            return self.err.val_err(_("Invalid Network Parameter"), str(e))
+
+        conflict = self._dev.is_conflict_net(self.vm.get_connection().vmm)
+        if conflict[0]:
+            return self.err.val_err(_("Mac address collision"),
+                                    conflict[1])
+        elif conflict[1] is not None:
+            return self.err.yes_no(_("Mac address collision"),
+                                    conflict[1] + " " + _("Are you sure you want to use this address?"))
+
+    def validate_page_graphics(self):
+        graphics = self.get_config_graphics()
+        if graphics == "vnc":
+            _type = virtinst.VirtualGraphics.TYPE_VNC
+        else:
+            _type = virtinst.VirtualGraphics.TYPE_SDL
+
+        self._dev = virtinst.VirtualGraphics(type=_type)
+        try:
+            self._dev.port   = self.get_config_vnc_port()
+            self._dev.passwd = self.get_config_vnc_password()
+            self._dev.listen = self.get_config_vnc_address()
+            self._dev.keymap = self.get_config_keymap()
+        except ValueError, e:
+            self.err.val_err(_("Graphics device parameter error"), str(e))
+
+    def validate_page_sound(self):
+        smodel = self.get_config_sound_model()
+        try:
+            self._dev = virtinst.VirtualAudio(model=smodel)
+        except Exception, e:
+            return self.err.val_err(_("Sound device parameter error"), str(e))
+
+    def validate_page_hostdev(self):
+        ignore, nodedev_name = self.get_config_host_device_info()
+
+        if nodedev_name == None:
+            return self.err.val_err(_("Physical Device Requried"),
+                                    _("A device must be selected."))
+
+        try:
+            self._dev = virtinst.VirtualHostDevice.device_from_node(
+                            conn = self.vm.get_connection().vmm,
+                            name = nodedev_name)
+        except Exception, e:
+            return self.err.val_err(_("Host device parameter error"), str(e))
+
+    def validate_page_char(self):
+        chartype = self.get_char_type()
+        devbox = self.window.get_widget("char-device-type")
+        devtype = devbox.get_model()[devbox.get_active()][0]
+        conn = self.vm.get_connection().vmm
+
+        devclass = VirtualCharDevice.get_dev_instance(conn, chartype, devtype)
+
+        source_path = self.window.get_widget("char-path").get_text()
+        source_host = self.window.get_widget("char-host").get_text()
+        bind_host = self.window.get_widget("char-bind-host").get_text()
+        source_port = self.window.get_widget("char-port").get_adjustment().value
+        bind_port = self.window.get_widget("char-bind-port").get_adjustment().value
+
+        if self.window.get_widget("char-use-telnet").get_active():
+            protocol = VirtualCharDevice.CHAR_PROTOCOL_TELNET
+        else:
+            protocol = VirtualCharDevice.CHAR_PROTOCOL_RAW
+
+        value_mappings = {
+            "source_path" : source_path,
+            "source_host" : source_host,
+            "source_port" : source_port,
+            "bind_port": bind_port,
+            "bind_host": bind_host,
+            "protocol": protocol,
+        }
+
+        try:
+            self._dev = devclass
+
+            for param_name, val in value_mappings.items():
+                if hasattr(self._dev, param_name):
+                    setattr(self._dev, param_name, val)
+
+            # Dump XML for sanity checking
+            self._dev.get_xml_config()
+        except Exception, e:
+            return self.err.val_err(_("%s device parameter error.") %
+                                    chartype.capitalize(), str(e))
+
+    def validate_page_video(self):
+        conn = self.vm.get_connection().vmm
+        model = self.get_config_video_model()
+
+        try:
+            self._dev = VirtualVideoDevice(conn=conn)
+            self._dev.model_type = model
+        except Exception, e:
+            return self.err.val_err(_("Video device parameter error.") %
+                                    str(e))
+
+
+
+    ####################
+    # Unsorted helpers #
+    ####################
 
     def _browse_file(self, textent, confirm_overwrite=False):
-
-        confirm_func = None
-        if confirm_overwrite:
-            confirm_func = self.confirm_overwrite_callback
+        def confirm_cb(chooser):
+            # Only called when the user has chosen an existing file
+            self.window.get_widget("storage-file-size").set_sensitive(False)
+            return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
 
         def set_storage_cb(src, path):
             if path:
                 textent.set_text(path)
+
+        confirm_func = None
+        if confirm_overwrite:
+            confirm_func = confirm_cb
 
         conn = self.vm.get_connection()
         if self.storage_browser == None:
@@ -919,441 +1421,6 @@ class vmmAddHardware(gobject.GObject):
         self.storage_browser.set_local_arg("confirm_func", confirm_func)
 
         self.storage_browser.show(conn)
-
-    def toggle_storage_size(self, ignore1=None, ignore2=None):
-        filename = self.get_config_disk_image()
-        if filename != None and len(filename) > 0 and \
-           (self.vm.get_connection().is_remote() or
-            not os.path.exists(filename)):
-            self.window.get_widget("storage-file-size").set_sensitive(True)
-            self.window.get_widget("non-sparse").set_sensitive(True)
-            size = self.get_config_disk_size()
-            if size == None:
-                size = 4000
-            self.window.get_widget("storage-file-size").set_value(size)
-        else:
-            self.window.get_widget("storage-file-size").set_sensitive(False)
-            self.window.get_widget("non-sparse").set_sensitive(False)
-            if os.path.isfile(filename):
-                size = os.path.getsize(filename)/(1024*1024)
-                self.window.get_widget("storage-file-size").set_value(size)
-            else:
-                self.window.get_widget("storage-file-size").set_value(0)
-
-    def confirm_overwrite_callback(self, chooser):
-        # Only called when the user has chosen an existing file
-        self.window.get_widget("storage-file-size").set_sensitive(False)
-        return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
-
-    def change_storage_type(self, ignore=None):
-        if self.window.get_widget("storage-partition").get_active():
-            self.window.get_widget("storage-partition-box").set_sensitive(True)
-            self.window.get_widget("storage-file-box").set_sensitive(False)
-            self.window.get_widget("storage-file-size").set_sensitive(False)
-            self.window.get_widget("non-sparse").set_sensitive(False)
-        else:
-            self.window.get_widget("storage-partition-box").set_sensitive(False)
-            self.window.get_widget("storage-file-box").set_sensitive(True)
-            self.toggle_storage_size()
-
-    def change_network_type(self, ignore=None):
-        if self.window.get_widget("net-type-network").get_active():
-            self.window.get_widget("net-network").set_sensitive(True)
-            self.window.get_widget("net-device").set_sensitive(False)
-        else:
-            self.window.get_widget("net-network").set_sensitive(False)
-            self.window.get_widget("net-device").set_sensitive(True)
-
-    def change_macaddr_use(self, ignore=None):
-        if self.window.get_widget("mac-address").get_active():
-            self.window.get_widget("create-mac-address").set_sensitive(True)
-        else:
-            self.window.get_widget("create-mac-address").set_sensitive(False)
-
-    def change_graphics_type(self,ignore=None):
-        graphics = self.get_config_graphics()
-        if graphics == "vnc":
-            self.window.get_widget("graphics-port-auto").set_sensitive(True)
-            self.window.get_widget("graphics-address").set_sensitive(True)
-            self.window.get_widget("graphics-password").set_sensitive(True)
-            self.window.get_widget("graphics-keymap-chk").set_sensitive(True)
-            self.change_port_auto()
-        else:
-            self.window.get_widget("graphics-port").set_sensitive(False)
-            self.window.get_widget("graphics-port-auto").set_sensitive(False)
-            self.window.get_widget("graphics-address").set_sensitive(False)
-            self.window.get_widget("graphics-password").set_sensitive(False)
-            self.window.get_widget("graphics-keymap-chk").set_sensitive(False)
-            self.window.get_widget("graphics-keymap").set_sensitive(False)
-
-    def change_port_auto(self,ignore=None):
-        if self.window.get_widget("graphics-port-auto").get_active():
-            self.window.get_widget("graphics-port").set_sensitive(False)
-        else:
-            self.window.get_widget("graphics-port").set_sensitive(True)
-
-    def change_keymap(self, ignore=None):
-        if self.window.get_widget("graphics-keymap-chk").get_active():
-            self.window.get_widget("graphics-keymap").set_sensitive(False)
-        else:
-            self.window.get_widget("graphics-keymap").set_sensitive(True)
-
-    def change_host_device_type(self, src):
-        devbox = self.window.get_widget("host-device")
-        if src.get_active() < 0:
-            devbox.get_model().clear()
-            return
-
-        (ignore, devtype, devcap,
-         subtype, subcap) = src.get_model()[src.get_active()]
-        self.populate_host_device_model(devbox.get_model(), devtype, devcap,
-                                        subtype, subcap)
-        devbox.set_active(0)
-
-    def get_char_type(self):
-        hw_list = self.window.get_widget("hardware-type")
-        if hw_list.get_active() < 0:
-            label = "serial"
-        else:
-            label = hw_list.get_model()[hw_list.get_active()][0]
-
-        if label.lower() == "parallel":
-            return VirtualDevice.VIRTUAL_DEV_PARALLEL
-        return VirtualDevice.VIRTUAL_DEV_SERIAL
-
-    def set_page_char_type(self):
-        char_type = self.get_char_type().capitalize()
-        self.window.get_widget("char-title-label").set_markup(
-            """<span weight="heavy" size="xx-large" foreground="#FFF">%s Device</span>""" % char_type)
-
-    def change_char_device_type(self, src):
-        self.update_doc(None, None, "char_type")
-
-        chartype = self.get_char_type()
-        devtype = src.get_model()[src.get_active()][0]
-        conn = self.vm.get_connection().vmm
-
-        self._dev = VirtualCharDevice.get_dev_instance(conn,
-                                                       chartype,
-                                                       devtype)
-
-        for param_name, widget_name in char_widget_mappings.items():
-            make_visible = hasattr(self._dev, param_name)
-            self.window.get_widget(widget_name).set_sensitive(make_visible)
-
-        has_mode = hasattr(self._dev, "source_mode")
-
-        if has_mode and self.window.get_widget("char-mode").get_active() == -1:
-            self.window.get_widget("char-mode").set_active(0)
-
-    def validate(self, page_num):
-        if page_num == PAGE_INTRO:
-            if self.get_config_hardware_type() == None:
-                return self.err.val_err(_("Hardware Type Required"), \
-                                        _("You must specify what type of hardware to add."))
-            self._dev = None
-        elif page_num == PAGE_DISK:
-            path = self.get_config_disk_image()
-            if path == None or len(path) == 0:
-                return self.err.val_err(_("Storage Path Required"), \
-                                        _("You must specify a partition or a file for disk storage."))
-
-            if self.window.get_widget("target-device").get_active() == -1:
-                return self.err.val_err(_("Target Device Required"),
-                                        _("You must select a target device for the disk."))
-
-            bus, device = self.get_config_disk_target()
-
-            # Build disk object
-            filesize = self.get_config_disk_size()
-            if self.get_config_disk_size() != None:
-                filesize = self.get_config_disk_size() / 1024.0
-            readonly = False
-            if device == virtinst.VirtualDisk.DEVICE_CDROM:
-                readonly=True
-
-            try:
-                if os.path.dirname(os.path.abspath(path)) == \
-                   vmmutil.DEFAULT_POOL_PATH:
-                    vmmutil.build_default_pool(self.vm.get_connection().vmm)
-                self._dev = virtinst.VirtualDisk(self.get_config_disk_image(),
-                                                 filesize,
-                                                 sparse=self.is_sparse_file(),
-                                                 readOnly=readonly,
-                                                 device=device,
-                                                 bus=bus,
-                                                 conn=self.vm.get_connection().vmm)
-                if self._dev.type == virtinst.VirtualDisk.TYPE_FILE and \
-                   not self.vm.is_hvm() and virtinst.util.is_blktap_capable():
-                    self._dev.driver_name = virtinst.VirtualDisk.DRIVER_TAP
-            except ValueError, e:
-                return self.err.val_err(_("Invalid Storage Parameters"), str(e))
-
-            ret = self._dev.is_size_conflict()
-            if not ret[0] and ret[1]:
-                res = self.err.ok_cancel(_("Not Enough Free Space"), ret[1])
-                if not res:
-                    return False
-
-            if self._dev.is_conflict_disk(self.vm.get_connection().vmm) is True:
-                res = self.err.yes_no(_('Disk "%s" is already in use by another guest!' % self._dev), \
-                                      _("Do you really want to use the disk?"))
-                return res
-
-        elif page_num == PAGE_NETWORK:
-            net = self.get_config_network()
-            if self.window.get_widget("net-type-network").get_active():
-                if self.window.get_widget("net-network").get_active() == -1:
-                    return self.err.val_err(_("Virtual Network Required"),
-                                            _("You must select one of the virtual networks."))
-            else:
-                if self.window.get_widget("net-device").get_active() == -1:
-                    return self.err.val_err(_("Physical Device Required"),
-                                            _("You must select a physical device."))
-
-            mac = self.get_config_macaddr()
-            if self.window.get_widget("mac-address").get_active():
-
-                if mac is None or len(mac) == 0:
-                    return self.err.val_err(_("Invalid MAC address"), \
-                                            _("No MAC address was entered. Please enter a valid MAC address."))
-
-                try:
-                    self._dev = virtinst.VirtualNetworkInterface(macaddr=mac)
-                except ValueError, e:
-                    return self.err.val_err(_("Invalid MAC address"), str(e))
-
-            model = self.get_config_net_model()[0]
-            try:
-                if net[0] == "bridge":
-                    self._dev = virtinst.VirtualNetworkInterface(macaddr=mac,
-                                                                 type=net[0],
-                                                                 bridge=net[1])
-                elif net[0] == "network":
-                    self._dev = virtinst.VirtualNetworkInterface(macaddr=mac,
-                                                                 type=net[0],
-                                                                 network=net[1])
-                else:
-                    raise ValueError, _("Unsupported networking type") + net[0]
-
-                self._dev.model = model
-            except ValueError, e:
-                return self.err.val_err(_("Invalid Network Parameter"), \
-                                        str(e))
-
-            conflict = self._dev.is_conflict_net(self.vm.get_connection().vmm)
-            if conflict[0]:
-                return self.err.val_err(_("Mac address collision"),\
-                                        conflict[1])
-            elif conflict[1] is not None:
-                return self.err.yes_no(_("Mac address collision"),\
-                                       conflict[1] + " " + _("Are you sure you want to use this address?"))
-
-        elif page_num == PAGE_GRAPHICS:
-            graphics = self.get_config_graphics()
-            if graphics == "vnc":
-                _type = virtinst.VirtualGraphics.TYPE_VNC
-            else:
-                _type = virtinst.VirtualGraphics.TYPE_SDL
-            self._dev = virtinst.VirtualGraphics(type=_type)
-            try:
-                self._dev.port   = self.get_config_vnc_port()
-                self._dev.passwd = self.get_config_vnc_password()
-                self._dev.listen = self.get_config_vnc_address()
-                self._dev.keymap = self.get_config_keymap()
-            except ValueError, e:
-                self.err.val_err(_("Graphics device parameter error"), str(e))
-
-        elif page_num == PAGE_SOUND:
-            smodel = self.get_config_sound_model()
-            try:
-                self._dev = virtinst.VirtualAudio(model=smodel)
-            except Exception, e:
-                return self.err.val_err(_("Sound device parameter error"),
-                                        str(e))
-
-        elif page_num == PAGE_HOSTDEV:
-            ignore, nodedev_name = self.get_config_host_device_info()
-
-            if nodedev_name == None:
-                return self.err.val_err(_("Physical Device Requried"),
-                                        _("A device must be selected."))
-
-            try:
-                self._dev = virtinst.VirtualHostDevice.device_from_node(
-                    conn = self.vm.get_connection().vmm,
-                    name = nodedev_name)
-            except Exception, e:
-                return self.err.val_err(_("Host device parameter error"),
-                                        str(e))
-
-        elif page_num == PAGE_CHAR:
-            chartype = self.get_char_type()
-            devbox = self.window.get_widget("char-device-type")
-            devtype = devbox.get_model()[devbox.get_active()][0]
-            conn = self.vm.get_connection().vmm
-
-            devclass = VirtualCharDevice.get_dev_instance(conn, chartype,
-                                                          devtype)
-
-            source_path = self.window.get_widget("char-path").get_text()
-            source_host = self.window.get_widget("char-host").get_text()
-            bind_host = self.window.get_widget("char-bind-host").get_text()
-            source_port = self.window.get_widget("char-port").get_adjustment().value
-            bind_port = self.window.get_widget("char-bind-port").get_adjustment().value
-
-            if self.window.get_widget("char-use-telnet").get_active():
-                protocol = VirtualCharDevice.CHAR_PROTOCOL_TELNET
-            else:
-                protocol = VirtualCharDevice.CHAR_PROTOCOL_RAW
-
-            value_mappings = {
-                "source_path" : source_path,
-                "source_host" : source_host,
-                "source_port" : source_port,
-                "bind_port": bind_port,
-                "bind_host": bind_host,
-                "protocol": protocol,
-            }
-
-            try:
-                self._dev = devclass
-
-                for param_name, val in value_mappings.items():
-                    if hasattr(self._dev, param_name):
-                        setattr(self._dev, param_name, val)
-
-                # Dump XML for sanity checking
-                self._dev.get_xml_config()
-            except Exception, e:
-                return self.err.val_err(_("%s device parameter error.") %
-                                        chartype.capitalize(), str(e))
-
-        elif page_num == PAGE_VIDEO:
-            conn = self.vm.get_connection().vmm
-            model = self.get_config_video_model()
-
-            try:
-                self._dev = VirtualVideoDevice(conn=conn)
-                self._dev.model_type = model
-            except Exception, e:
-                return self.err.val_err(_("Video device parameter error.") %
-                                        str(e))
-
-        return True
-
-    def populate_network_model(self, model):
-        model.clear()
-        for uuid in self.vm.get_connection().list_net_uuids():
-            net = self.vm.get_connection().get_net(uuid)
-            model.append([net.get_label(), net.get_name()])
-
-    def populate_device_model(self, model):
-        model.clear()
-        hasShared = False
-        brIndex = -1
-        for name in self.vm.get_connection().list_net_device_paths():
-            net = self.vm.get_connection().get_net_device(name)
-            if net.is_shared():
-                hasShared = True
-                if brIndex < 0:
-                    brIndex = len(model)
-                model.append([net.get_bridge(), "%s (%s %s)" % (net.get_name(), _("Bridge"), net.get_bridge()), True])
-            else:
-                model.append([net.get_bridge(), "%s (%s)" % (net.get_name(), _("Not bridged")), False])
-        return (hasShared, brIndex)
-
-    def populate_network_model_model(self, model):
-        model.clear()
-
-        # [xml value, label]
-        model.append([None, _("Hypervisor default")])
-        if self.vm.is_hvm():
-            mod_list = [ "rtl8139", "ne2k_pci", "pcnet" ]
-            if self.vm.get_hv_type() == "kvm":
-                mod_list.append("e1000")
-                mod_list.append("virtio")
-            mod_list.sort()
-
-            for m in mod_list:
-                model.append([m, m])
-
-    def populate_target_device_model(self, model):
-        model.clear()
-        #[bus, device, icon, desc, iconsize]
-        def add_dev(bus, device, desc):
-            if device == virtinst.VirtualDisk.DEVICE_FLOPPY:
-                icon = "media-floppy"
-            elif device == virtinst.VirtualDisk.DEVICE_CDROM:
-                icon = "media-optical"
-            else:
-                icon = "drive-harddisk"
-            model.append([bus, device, icon, desc, gtk.ICON_SIZE_BUTTON])
-
-        if self.vm.is_hvm():
-            add_dev("ide", virtinst.VirtualDisk.DEVICE_DISK, "IDE disk")
-            add_dev("ide", virtinst.VirtualDisk.DEVICE_CDROM, "IDE cdrom")
-            add_dev("fdc", virtinst.VirtualDisk.DEVICE_FLOPPY, "Floppy disk")
-            add_dev("scsi",virtinst.VirtualDisk.DEVICE_DISK, "SCSI disk")
-            add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
-        if self.vm.get_hv_type().lower() == "kvm":
-            add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK, "Virtio Disk")
-        if self.vm.get_connection().get_type().lower() == "xen":
-            add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK, "Virtual disk")
-
-    def populate_input_model(self, model):
-        model.clear()
-        model.append([_("EvTouch USB Graphics Tablet"), "tablet", "usb", True])
-        # XXX libvirt needs to support 'model' for input devices to distinguish
-        # wacom from evtouch tablets
-        #model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-        model.append([_("Generic USB Mouse"), "mouse", "usb", True])
-
-    def populate_graphics_model(self, model):
-        model.clear()
-        model.append([_("VNC server"), "vnc"])
-        # XXX inclined to just not give this choice at all
-        model.append([_("Local SDL window"), "sdl"])
-
-    def populate_sound_model_model(self, model):
-        model.clear()
-        lst = virtinst.VirtualAudio.MODELS
-        lst.sort()
-        for m in lst:
-            model.append([m])
-
-    def populate_host_device_type_model(self, model):
-        model.clear()
-        for m in [ ["PCI Device", "pci", None, "net", "80203"],
-                   ["USB Device", "usb_device", None, None, None]]:
-            model.append(m)
-
-    def populate_host_device_model(self, model, devtype, devcap, subtype,
-                                   subcap):
-        model.clear()
-        subdevs = []
-
-        if subtype:
-            subdevs = self.vm.get_connection().get_devices(subtype, subcap)
-
-        devs = self.vm.get_connection().get_devices(devtype, devcap)
-        for dev in devs:
-            prettyname = dev.pretty_name()
-
-            for subdev in subdevs:
-                if dev.name == subdev.parent:
-                    prettyname = dev.pretty_name(subdev)
-
-            model.append([prettyname, dev.name])
-
-        if len(model) == 0:
-            model.append([_("No Devices Available"), None])
-
-    def is_sparse_file(self):
-        if self.window.get_widget("non-sparse").get_active():
-            return False
-        else:
-            return True
 
     def show_help(self, src):
         # help to show depends on the notebook page, yahoo
