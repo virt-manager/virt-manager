@@ -530,7 +530,6 @@
                   <widget class="GtkToolButton" id="control-run">
                     <property name="visible">True</property>
                     <property name="tooltip" translatable="yes">Power on the virtual machine</property>
-                    <property name="is_important">True</property>
                     <property name="label" translatable="yes">Run</property>
                     <property name="use_underline">True</property>
                     <property name="stock_id">gtk-media-play</property>
@@ -545,7 +544,6 @@
                   <widget class="GtkToggleToolButton" id="control-pause">
                     <property name="visible">True</property>
                     <property name="tooltip" translatable="yes">Pause the virtual machine</property>
-                    <property name="is_important">True</property>
                     <property name="label" translatable="yes">Pause</property>
                     <property name="use_underline">True</property>
                     <property name="stock_id">gtk-media-pause</property>
@@ -560,7 +558,6 @@
                   <widget class="GtkMenuToolButton" id="control-shutdown">
                     <property name="visible">True</property>
                     <property name="tooltip" translatable="yes">Shutdown the virtual machine</property>
-                    <property name="is_important">True</property>
                     <property name="label" translatable="yes">Shut Down</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_control_shutdown_clicked"/>
