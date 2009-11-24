@@ -676,9 +676,7 @@ class vmmAddHardware(gobject.GObject):
             return
 
         hwtype = self.get_config_hardware_type()
-        if notebook.get_current_page() == PAGE_INTRO and \
-           (hwtype != PAGE_NETWORK or \
-            not self.vm.get_connection().is_qemu_session()):
+        if notebook.get_current_page() == PAGE_INTRO:
             notebook.set_current_page(hwtype)
         else:
             notebook.set_current_page(PAGE_SUMMARY)
@@ -691,15 +689,12 @@ class vmmAddHardware(gobject.GObject):
 
         if notebook.get_current_page() == PAGE_SUMMARY:
             hwtype = self.get_config_hardware_type()
-            if hwtype == PAGE_NETWORK and \
-               self.vm.get_connection().is_qemu_session():
-                notebook.set_current_page(PAGE_INTRO)
-            else:
-                notebook.set_current_page(hwtype)
+            notebook.set_current_page(hwtype)
             self.window.get_widget("create-finish").hide()
         else:
             notebook.set_current_page(PAGE_INTRO)
             self.window.get_widget("create-back").set_sensitive(False)
+
         self.window.get_widget("create-forward").show()
 
     def page_changed(self, notebook, page, page_number):
@@ -1025,8 +1020,6 @@ class vmmAddHardware(gobject.GObject):
     ######################
 
     def add_network(self):
-        if self._dev is None and self.vm.get_connection().is_qemu_session():
-            self._dev = virtinst.VirtualNetworkInterface(type="user")
         self._dev.setup(self.vm.get_connection().vmm)
         self.add_device(self._dev.get_xml_config())
 
