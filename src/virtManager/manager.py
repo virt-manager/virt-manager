@@ -455,11 +455,6 @@ class vmmManager(gobject.GObject):
         if not path:
             return
 
-        if not conn.is_valid_saved_image(path):
-            self.err.val_err(_("The file '%s' does not appear to be a "
-                               "valid saved machine image") % path)
-            return
-
         progWin = vmmAsyncJob(self.config, self.restore_saved_callback,
                               [path], _("Restoring Virtual Machine"))
         progWin.run()

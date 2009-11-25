@@ -36,10 +36,6 @@ from virtManager.network import vmmNetwork
 from virtManager.storagepool import vmmStoragePool
 from virtManager.interface import vmmInterface
 
-XEN_SAVE_MAGIC = "LinuxGuestRecord"
-QEMU_SAVE_MAGIC = "LibvirtQemudSave"
-TEST_SAVE_MAGIC = "TestGuestMagic"
-
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
         "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -179,31 +175,6 @@ class vmmConnection(gobject.GObject):
             return 0
         return (self.hostinfo[4] * self.hostinfo[5] *
                 self.hostinfo[6] * self.hostinfo[7])
-
-    def is_valid_saved_image(self, path):
-        # FIXME: Not really sure why we are even doing this check? If libvirt
-        # isn't exporting this information, seems like we shouldn't be duping
-        # the validation. Maintain existing behavior until someone insists
-        # otherwise I suppose.
-        magic = ""
-
-        # If running on PolKit or remote, we may not be able to access
-        if not self.is_remote() and os.access(path, os.R_OK):
-            try:
-                f = open(path, "r")
-                magic = f.read(16)
-            except:
-                logging.exception("Reading save image file header failed.")
-                return False
-        else:
-            return True
-
-        driver = self.get_driver()
-        if driver == "xen" and not magic.startswith(XEN_SAVE_MAGIC):
-            return False
-
-        # Libvirt should validate the magic for other drivers
-        return True
 
     def connect(self, name, callback):
         handle_id = gobject.GObject.connect(self, name, callback)
