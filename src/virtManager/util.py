@@ -244,3 +244,13 @@ def idle_emit(self, signal, *args):
     """
     self.emit(signal, *args)
     return False
+
+def uuidstr(rawuuid):
+    hx = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+    uuid = []
+    for i in range(16):
+        uuid.append(hx[((ord(rawuuid[i]) >> 4) & 0xf)])
+        uuid.append(hx[(ord(rawuuid[i]) & 0xf)])
+        if i == 3 or i == 5 or i == 7 or i == 9:
+            uuid.append('-')
+    return "".join(uuid)

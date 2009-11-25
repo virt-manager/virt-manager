@@ -133,38 +133,95 @@ class vmmConnection(gobject.GObject):
             netdev_helper.connect("netdev-added", self._netdev_added)
             netdev_helper.connect("netdev-removed", self._netdev_removed)
 
-    def _acquire_tgt(self):
-        logging.debug("In acquire tgt.")
-        try:
-            bus = dbus.SessionBus()
-            ka = bus.get_object('org.gnome.KrbAuthDialog',
-                                '/org/gnome/KrbAuthDialog')
-            ret = ka.acquireTgt("", dbus_interface='org.gnome.KrbAuthDialog')
-        except Exception, e:
-            logging.info("Cannot acquire tgt" + str(e))
-            ret = False
-        return ret
 
-    def _netdev_added(self, ignore, netdev):
-        name = netdev.get_name()
-        self.netdevs[name] = netdev
-
-    def _netdev_removed(self, ignore, name):
-        del self.netdevs[name]
 
     def is_read_only(self):
         return self.readOnly
 
-    def is_active(self):
-        return self.state == self.STATE_ACTIVE
+    def get_uri(self):
+        return self.uri
 
     def get_type(self):
         if self.vmm is None:
             return None
         return self.vmm.getType()
 
-    def is_local(self):
-        return bool(self.get_uri_hostname() == "localhost")
+    def get_capabilities(self):
+        return virtinst.CapabilitiesParser.parse(self.vmm.getCapabilities())
+
+    def get_max_vcpus(self, _type=None):
+        return virtinst.util.get_max_vcpus(self.vmm, _type)
+
+    def get_host_info(self):
+        return self.hostinfo
+
+    def pretty_host_memory_size(self):
+        if self.vmm is None:
+            return ""
+        mem = self.host_memory_size()
+        if mem > (10*1024*1024):
+            return "%2.2f GB" % (mem/(1024.0*1024.0))
+        else:
+            return "%2.0f MB" % (mem/1024.0)
+
+    def host_memory_size(self):
+        if self.vmm is None:
+            return 0
+        return self.hostinfo[1]*1024
+
+    def host_architecture(self):
+        if self.vmm is None:
+            return ""
+        return self.hostinfo[0]
+
+    def host_active_processor_count(self):
+        if self.vmm is None:
+            return 0
+        return self.hostinfo[2]
+
+    def host_maximum_processor_count(self):
+        if self.vmm is None:
+            return 0
+        return (self.hostinfo[4] * self.hostinfo[5] *
+                self.hostinfo[6] * self.hostinfo[7])
+
+    def is_valid_saved_image(self, path):
+        # FIXME: Not really sure why we are even doing this check? If libvirt
+        # isn't exporting this information, seems like we shouldn't be duping
+        # the validation. Maintain existing behavior until someone insists
+        # otherwise I suppose.
+        magic = ""
+
+        # If running on PolKit or remote, we may not be able to access
+        if not self.is_remote() and os.access(path, os.R_OK):
+            try:
+                f = open(path, "r")
+                magic = f.read(16)
+            except:
+                logging.exception("Reading save image file header failed.")
+                return False
+        else:
+            return True
+
+        driver = self.get_driver()
+        if driver == "xen" and not magic.startswith(XEN_SAVE_MAGIC):
+            return False
+
+        # Libvirt should validate the magic for other drivers
+        return True
+
+    def connect(self, name, callback):
+        handle_id = gobject.GObject.connect(self, name, callback)
+
+        if name == "vm-added":
+            for uuid in self.vms.keys():
+                self.emit("vm-added", self.uri, uuid)
+
+        return handle_id
+
+    ##########################
+    # URI + hostname helpers #
+    ##########################
 
     def get_qualified_hostname(self):
         if virtinst.support.check_conn_support(self.vmm,
@@ -200,31 +257,8 @@ class vmmConnection(gobject.GObject):
     def get_driver(self):
         return virtinst.util.get_uri_driver(self.uri)
 
-    def get_capabilities(self):
-        return virtinst.CapabilitiesParser.parse(self.vmm.getCapabilities())
-
-    def set_dom_flags(self, vm):
-        if self.dom_xml_flags != None:
-            # Already set
-            return
-
-        self.dom_xml_flags = []
-        for flags in [libvirt.VIR_DOMAIN_XML_SECURE,
-                      libvirt.VIR_DOMAIN_XML_INACTIVE,
-                      (libvirt.VIR_DOMAIN_XML_SECURE |
-                       libvirt.VIR_DOMAIN_XML_INACTIVE )]:
-            try:
-                vm.XMLDesc(flags)
-                self.dom_xml_flags.append(flags)
-            except libvirt.libvirtError, e:
-                logging.debug("%s does not support flags=%d : %s" %
-                              (self.get_uri(), flags, str(e)))
-
-    def has_dom_flags(self, flags):
-        if self.dom_xml_flags == None:
-            return False
-
-        return bool(self.dom_xml_flags.count(flags))
+    def is_local(self):
+        return bool(self.get_uri_hostname() == "localhost")
 
     def is_xen(self):
         scheme = virtinst.util.uri_split(self.uri)[0]
@@ -245,12 +279,6 @@ class vmmConnection(gobject.GObject):
 
     def is_remote(self):
         return virtinst.util.is_uri_remote(self.uri)
-
-    def is_storage_capable(self):
-        return virtinst.util.is_storage_capable(self.vmm)
-
-    def is_nodedev_capable(self):
-        return virtinst.NodeDeviceParser.is_nodedev_capable(self.vmm)
 
     def is_qemu_system(self):
         (scheme, ignore, ignore,
@@ -310,29 +338,104 @@ class vmmConnection(gobject.GObject):
     def get_pretty_desc_active(self, shorthost=True):
         return self._get_pretty_desc(True, shorthost)
 
-    def get_uri(self):
-        return self.uri
+
+    #######################
+    # API support helpers #
+    #######################
+
+    def is_storage_capable(self):
+        return virtinst.util.is_storage_capable(self.vmm)
+
+    def is_nodedev_capable(self):
+        return virtinst.NodeDeviceParser.is_nodedev_capable(self.vmm)
+
+    def set_dom_flags(self, vm):
+        if self.dom_xml_flags != None:
+            # Already set
+            return
+
+        self.dom_xml_flags = []
+        for flags in [libvirt.VIR_DOMAIN_XML_SECURE,
+                      libvirt.VIR_DOMAIN_XML_INACTIVE,
+                      (libvirt.VIR_DOMAIN_XML_SECURE |
+                       libvirt.VIR_DOMAIN_XML_INACTIVE )]:
+            try:
+                vm.XMLDesc(flags)
+                self.dom_xml_flags.append(flags)
+            except libvirt.libvirtError, e:
+                logging.debug("%s does not support flags=%d : %s" %
+                              (self.get_uri(), flags, str(e)))
+
+    def has_dom_flags(self, flags):
+        if self.dom_xml_flags == None:
+            return False
+
+        return bool(self.dom_xml_flags.count(flags))
+
+
+    ###################################
+    # Connection state getter/setters #
+    ###################################
+
+    def _change_state(self, newstate):
+        if self.state != newstate:
+            self.state = newstate
+            self.emit("state-changed")
+
+    def get_state(self):
+        return self.state
+
+    def get_state_text(self):
+        if self.state == self.STATE_DISCONNECTED:
+            return _("Disconnected")
+        elif self.state == self.STATE_CONNECTING:
+            return _("Connecting")
+        elif self.state == self.STATE_ACTIVE:
+            if self.is_read_only():
+                return _("Active (RO)")
+            else:
+                return _("Active")
+        elif self.state == self.STATE_INACTIVE:
+            return _("Inactive")
+        else:
+            return _("Unknown")
+
+    def pause(self):
+        if self.state != self.STATE_ACTIVE:
+            return
+        self._change_state(self.STATE_INACTIVE)
+
+    def resume(self):
+        if self.state != self.STATE_INACTIVE:
+            return
+        self._change_state(self.STATE_ACTIVE)
+
+    def is_active(self):
+        return self.state == self.STATE_ACTIVE
+
+    def is_paused(self):
+        return self.state == self.STATE_INACTIVE
+
+    def is_disconnected(self):
+        return self.state == self.STATE_DISCONNECTED
+
+    def is_connecting(self):
+        return self.state == self.STATE_CONNECTING
+
+    #################################
+    # Libvirt object lookup methods #
+    #################################
 
     def get_vm(self, uuid):
         return self.vms[uuid]
-
     def get_net(self, uuid):
         return self.nets[uuid]
-
-    def get_net_by_name(self, name):
-        for net in self.nets.values():
-            if net.get_name() == name:
-                return net
-
     def get_net_device(self, path):
         return self.netdevs[path]
-
     def get_pool(self, uuid):
         return self.pools[uuid]
-
     def get_interface(self, name):
         return self.interfaces[name]
-
     def get_devices(self, devtype=None, devcap=None):
         if not self.is_nodedev_capable():
             return []
@@ -351,31 +454,10 @@ class vmmConnection(gobject.GObject):
 
         return retdevs
 
-    def is_valid_saved_image(self, path):
-        # FIXME: Not really sure why we are even doing this check? If libvirt
-        # isn't exporting this information, seems like we shouldn't be duping
-        # the validation. Maintain existing behavior until someone insists
-        # otherwise I suppose.
-        magic = ""
-
-        # If running on PolKit or remote, we may not be able to access
-        if not self.is_remote() and os.access(path, os.R_OK):
-            try:
-                f = open(path, "r")
-                magic = f.read(16)
-            except:
-                logging.exception("Reading save image file header failed.")
-                return False
-        else:
-            return True
-
-        driver = self.get_driver()
-        if driver == "xen" and not magic.startswith(XEN_SAVE_MAGIC):
-            return False
-
-        # Libvirt should validate the magic for other drivers
-        return True
-
+    def get_net_by_name(self, name):
+        for net in self.nets.values():
+            if net.get_name() == name:
+                return net
 
     def get_pool_by_path(self, path):
         for pool in self.pools.values():
@@ -395,6 +477,82 @@ class vmmConnection(gobject.GObject):
                 if vol.get_path() == path:
                     return vol
         return None
+
+    def list_vm_uuids(self):
+        return self.vms.keys()
+    def list_net_uuids(self):
+        return self.nets.keys()
+    def list_net_device_paths(self):
+        return self.netdevs.keys()
+    def list_pool_uuids(self):
+        return self.pools.keys()
+    def list_interface_names(self):
+        return self.interfaces.keys()
+
+
+    ###################################
+    # Libvirt object creation methods #
+    ###################################
+
+    def create_network(self, xml, start=True, autostart=True):
+        net = self.vmm.networkDefineXML(xml)
+        uuid = util.uuidstr(net.UUID())
+        self.nets[uuid] = vmmNetwork(self.config, self, net, uuid, False)
+        self.nets[uuid].start()
+        self.nets[uuid].set_active(True)
+        self.nets[uuid].set_autostart(True)
+        self.emit("net-added", self.uri, uuid)
+        self.emit("net-started", self.uri, uuid)
+        return self.nets[uuid]
+
+    def define_domain(self, xml):
+        self.vmm.defineXML(xml)
+
+    def restore(self, frm):
+        self.vmm.restore(frm)
+        try:
+            # FIXME: This isn't correct in the remote case. Why do we even
+            #        do this? Seems like we should provide an option for this
+            #        to the user.
+            os.remove(frm)
+        except:
+            logging.debug("Couldn't remove save file '%s' used for restore." %
+                          frm)
+
+    ####################
+    # Update listeners #
+    ####################
+
+    def _netdev_added(self, ignore, netdev):
+        name = netdev.get_name()
+        self.netdevs[name] = netdev
+
+    def _netdev_removed(self, ignore, name):
+        del self.netdevs[name]
+
+
+    ######################################
+    # Connection closing/opening methods #
+    ######################################
+
+    def get_autoconnect(self):
+        return self.autoconnect
+
+    def toggle_autoconnect(self):
+        self.config.toggle_conn_autoconnect(self.get_uri())
+        self.autoconnect = (not self.autoconnect)
+
+    def close(self):
+        if self.vmm == None:
+            return
+
+        self.vmm = None
+        self.nets = {}
+        self.pools = {}
+        self.vms = {}
+        self.activeUUIDs = []
+        self.record = []
+        self._change_state(self.STATE_DISCONNECTED)
 
     def open(self):
         if self.state != self.STATE_DISCONNECTED:
@@ -500,6 +658,18 @@ class vmmConnection(gobject.GObject):
             logging.debug(self.connectError)
             return -1
 
+    def _acquire_tgt(self):
+        logging.debug("In acquire tgt.")
+        try:
+            bus = dbus.SessionBus()
+            ka = bus.get_object('org.gnome.KrbAuthDialog',
+                                '/org/gnome/KrbAuthDialog')
+            ret = ka.acquireTgt("", dbus_interface='org.gnome.KrbAuthDialog')
+        except Exception, e:
+            logging.info("Cannot acquire tgt" + str(e))
+            ret = False
+        return ret
+
     def _try_open(self):
         try:
             flags = 0
@@ -585,127 +755,10 @@ class vmmConnection(gobject.GObject):
         finally:
             self.connectThreadEvent.set()
 
-    def _change_state(self, newstate):
-        if self.state != newstate:
-            self.state = newstate
-            self.emit("state-changed")
 
-    def pause(self):
-        if self.state != self.STATE_ACTIVE:
-            return
-        self._change_state(self.STATE_INACTIVE)
-
-    def resume(self):
-        if self.state != self.STATE_INACTIVE:
-            return
-        self._change_state(self.STATE_ACTIVE)
-
-    def close(self):
-        if self.vmm == None:
-            return
-
-        #self.vmm.close()
-        self.vmm = None
-        self.nets = {}
-        self.pools = {}
-        self.vms = {}
-        self.activeUUIDs = []
-        self.record = []
-        self._change_state(self.STATE_DISCONNECTED)
-
-    def list_vm_uuids(self):
-        return self.vms.keys()
-
-    def list_net_uuids(self):
-        return self.nets.keys()
-
-    def list_net_device_paths(self):
-        return self.netdevs.keys()
-
-    def list_pool_uuids(self):
-        return self.pools.keys()
-
-    def list_interface_names(self):
-        return self.interfaces.keys()
-
-    def get_host_info(self):
-        return self.hostinfo
-
-    def get_max_vcpus(self, _type=None):
-        return virtinst.util.get_max_vcpus(self.vmm, _type)
-
-    def get_autoconnect(self):
-        # Use a local variable to cache autoconnect so we don't repeatedly
-        # have to poll gconf
-        return self.autoconnect
-
-    def toggle_autoconnect(self):
-        self.config.toggle_conn_autoconnect(self.get_uri())
-        self.autoconnect = (not self.autoconnect)
-
-    def connect(self, name, callback):
-        handle_id = gobject.GObject.connect(self, name, callback)
-
-        if name == "vm-added":
-            for uuid in self.vms.keys():
-                self.emit("vm-added", self.uri, uuid)
-
-        return handle_id
-
-    def pretty_host_memory_size(self):
-        if self.vmm is None:
-            return ""
-        mem = self.host_memory_size()
-        if mem > (10*1024*1024):
-            return "%2.2f GB" % (mem/(1024.0*1024.0))
-        else:
-            return "%2.0f MB" % (mem/1024.0)
-
-
-    def host_memory_size(self):
-        if self.vmm is None:
-            return 0
-        return self.hostinfo[1]*1024
-
-    def host_architecture(self):
-        if self.vmm is None:
-            return ""
-        return self.hostinfo[0]
-
-    def host_active_processor_count(self):
-        if self.vmm is None:
-            return 0
-        return self.hostinfo[2]
-
-    def host_maximum_processor_count(self):
-        if self.vmm is None:
-            return 0
-        return self.hostinfo[4] * self.hostinfo[5] * self.hostinfo[6] * self.hostinfo[7]
-
-    def create_network(self, xml, start=True, autostart=True):
-        net = self.vmm.networkDefineXML(xml)
-        uuid = self.uuidstr(net.UUID())
-        self.nets[uuid] = vmmNetwork(self.config, self, net, uuid, False)
-        self.nets[uuid].start()
-        self.nets[uuid].set_active(True)
-        self.nets[uuid].set_autostart(True)
-        self.emit("net-added", self.uri, uuid)
-        self.emit("net-started", self.uri, uuid)
-        return self.nets[uuid]
-
-    def define_domain(self, xml):
-        self.vmm.defineXML(xml)
-
-    def restore(self, frm):
-        self.vmm.restore(frm)
-        try:
-            # FIXME: This isn't correct in the remote case. Why do we even
-            #        do this? Seems like we should provide an option for this
-            #        to the user.
-            os.remove(frm)
-        except:
-            logging.debug("Couldn't remove save file '%s' used for restore." %
-                          frm)
+    #######################
+    # Tick/Update methods #
+    #######################
 
     def _update_nets(self):
         """
@@ -743,7 +796,7 @@ class vmmConnection(gobject.GObject):
         for name in newActiveNetNames:
             try:
                 net = self.vmm.networkLookupByName(name)
-                uuid = self.uuidstr(net.UUID())
+                uuid = util.uuidstr(net.UUID())
                 if not origNets.has_key(uuid):
                     # Brand new network
                     currentNets[uuid] = vmmNetwork(self.config, self, net,
@@ -764,7 +817,7 @@ class vmmConnection(gobject.GObject):
         for name in newInactiveNetNames:
             try:
                 net = self.vmm.networkLookupByName(name)
-                uuid = self.uuidstr(net.UUID())
+                uuid = util.uuidstr(net.UUID())
                 if not origNets.has_key(uuid):
                     currentNets[uuid] = vmmNetwork(self.config, self, net,
                                                  uuid, False)
@@ -811,7 +864,7 @@ class vmmConnection(gobject.GObject):
         for name in newActivePoolNames:
             try:
                 pool = self.vmm.storagePoolLookupByName(name)
-                uuid = self.uuidstr(pool.UUID())
+                uuid = util.uuidstr(pool.UUID())
                 if not origPools.has_key(uuid):
                     currentPools[uuid] = vmmStoragePool(self.config, self,
                                                         pool, uuid, True)
@@ -829,7 +882,7 @@ class vmmConnection(gobject.GObject):
         for name in newInactivePoolNames:
             try:
                 pool = self.vmm.storagePoolLookupByName(name)
-                uuid = self.uuidstr(pool.UUID())
+                uuid = util.uuidstr(pool.UUID())
                 if not origPools.has_key(uuid):
                     currentPools[uuid] = vmmStoragePool(self.config, self,
                                                         pool, uuid, False)
@@ -973,7 +1026,7 @@ class vmmConnection(gobject.GObject):
                     # if its a previously inactive domain.
                     try:
                         vm = self.vmm.lookupByID(_id)
-                        uuid = self.uuidstr(vm.UUID())
+                        uuid = util.uuidstr(vm.UUID())
                         maybeNewUUIDs[uuid] = vm
                         startedUUIDs.append(uuid)
                         activeUUIDs.append(uuid)
@@ -994,7 +1047,7 @@ class vmmConnection(gobject.GObject):
                     # if its a previously inactive domain.
                     try:
                         vm = self.vmm.lookupByName(name)
-                        uuid = self.uuidstr(vm.UUID())
+                        uuid = util.uuidstr(vm.UUID())
                         maybeNewUUIDs[uuid] = vm
                     except libvirt.libvirtError:
                         logging.exception("Couldn't fetch domain id '%s'" %
@@ -1176,6 +1229,11 @@ class vmmConnection(gobject.GObject):
 
         self.record.insert(0, newStats)
 
+
+    ########################
+    # Stats getter methods #
+    ########################
+
     def cpu_time_vector(self):
         vector = []
         stats = self.record
@@ -1258,35 +1316,11 @@ class vmmConnection(gobject.GObject):
         """No point to accumulate unnormalized Rx/Tx for a conenction"""
         return [ 0.0 ]
 
-    def uuidstr(self, rawuuid):
-        hx = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
-        uuid = []
-        for i in range(16):
-            uuid.append(hx[((ord(rawuuid[i]) >> 4) & 0xf)])
-            uuid.append(hx[(ord(rawuuid[i]) & 0xf)])
-            if i == 3 or i == 5 or i == 7 or i == 9:
-                uuid.append('-')
-        return "".join(uuid)
 
-    def get_state(self):
-        return self.state
+    ####################################
+    # Per-Connection gconf preferences #
+    ####################################
 
-    def get_state_text(self):
-        if self.state == self.STATE_DISCONNECTED:
-            return _("Disconnected")
-        elif self.state == self.STATE_CONNECTING:
-            return _("Connecting")
-        elif self.state == self.STATE_ACTIVE:
-            if self.is_read_only():
-                return _("Active (RO)")
-            else:
-                return _("Active")
-        elif self.state == self.STATE_INACTIVE:
-            return _("Inactive")
-        else:
-            return _("Unknown")
-
-    # Per-Connection preferences
     def config_add_iso_path(self, path):
         self.config.set_perhost(self.get_uri(), self.config.add_iso_path, path)
     def config_get_iso_paths(self):
