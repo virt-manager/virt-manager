@@ -897,10 +897,10 @@ class vmmConnection(gobject.GObject):
             logging.exception("Unable to list inactive interfaces")
 
         def check_obj(name, is_active):
-            obj = self.vmm.interfaceLookupByName(name)
-            key = obj.name()
+            key = name
 
             if not orig.has_key(key):
+                obj = self.vmm.interfaceLookupByName(name)
                 # Object is brand new this tick period
                 current[key] = vmmInterface(self.config, self, obj, key,
                                             is_active)
