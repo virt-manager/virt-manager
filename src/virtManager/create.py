@@ -1275,10 +1275,10 @@ class vmmCreate(gobject.GObject):
     def guest_from_install_type(self):
         instmeth = self.get_config_install_page()
 
-        conntype = self.conn.get_type().lower()
-        if conntype not in ["xen", "test"]:
+        if not self.conn.is_xen() and not self.conn.is_test_conn():
             return
 
+        conntype = self.conn.get_driver()
         # FIXME: some things are dependent on domain type (vcpu max)
         if instmeth == INSTALL_PAGE_URL:
             self.change_caps(gtype = "xen", dtype = conntype)

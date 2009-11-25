@@ -453,7 +453,7 @@ class vmmAddHardware(gobject.GObject):
             add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
         if self.vm.get_hv_type().lower() == "kvm":
             add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK, "Virtio Disk")
-        if self.vm.get_connection().get_type().lower() == "xen":
+        if self.vm.get_connection().is_xen():
             add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK, "Virtual disk")
 
     def populate_input_model(self, model):

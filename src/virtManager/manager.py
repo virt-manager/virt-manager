@@ -1131,7 +1131,7 @@ class vmmManager(gobject.GObject):
         conn.pause()
 
     def _connect_error(self, conn, details):
-        if conn.get_driver() == "xen" and not conn.is_remote():
+        if conn.is_xen() and not conn.is_remote():
             self.err.show_err(_("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
                               "Verify that:\n" +
                               " - A Xen host kernel was booted\n" +

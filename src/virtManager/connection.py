@@ -141,11 +141,6 @@ class vmmConnection(gobject.GObject):
     def get_uri(self):
         return self.uri
 
-    def get_type(self):
-        if self.vmm is None:
-            return None
-        return self.vmm.getType()
-
     def get_capabilities(self):
         return virtinst.CapabilitiesParser.parse(self.vmm.getCapabilities())
 

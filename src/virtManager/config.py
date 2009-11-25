@@ -558,7 +558,7 @@ class vmmConfig:
                                                                       folder)
 
     def get_default_image_dir(self, connection):
-        if connection.get_type() == "Xen":
+        if connection.is_xen():
             return DEFAULT_XEN_IMAGE_DIR
 
         if (connection.is_qemu_session() or
@@ -570,7 +570,7 @@ class vmmConfig:
         return DEFAULT_VIRT_IMAGE_DIR
 
     def get_default_save_dir(self, connection):
-        if connection.get_type() == "Xen":
+        if connection.is_xen():
             return DEFAULT_XEN_SAVE_DIR
         elif os.access(DEFAULT_VIRT_SAVE_DIR, os.W_OK):
             return DEFAULT_VIRT_SAVE_DIR
