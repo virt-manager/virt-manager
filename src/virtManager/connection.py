@@ -72,6 +72,11 @@ class vmmConnection(gobject.GObject):
         "interface-stopped": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                               [str, str]),
 
+        "nodedev-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                          [str, str]),
+        "nodedev-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                            [str, str]),
+
         "resources-sampled": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                               []),
         "state-changed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -105,8 +110,11 @@ class vmmConnection(gobject.GObject):
         self.network_capable = None
         self.storage_capable = None
         self.interface_capable = None
+        self._nodedev_capable = None
         self.dom_xml_flags = None
 
+        # Physical network interfaces: name -> virtinst.NodeDevice
+        self.nodedevs = {}
         # Physical network interfaces: name (eth0) -> vmmNetDevice
         self.netdevs = {}
         # Connection Storage pools: name -> vmmInterface
@@ -312,7 +320,9 @@ class vmmConnection(gobject.GObject):
         return virtinst.util.is_storage_capable(self.vmm)
 
     def is_nodedev_capable(self):
-        return virtinst.NodeDeviceParser.is_nodedev_capable(self.vmm)
+        if self._nodedev_capable == None:
+            self._nodedev_capable = virtinst.NodeDeviceParser.is_nodedev_capable(self.vmm)
+        return self._nodedev_capable
 
     def set_dom_flags(self, vm):
         if self.dom_xml_flags != None:
@@ -402,18 +412,15 @@ class vmmConnection(gobject.GObject):
     def get_interface(self, name):
         return self.interfaces[name]
     def get_devices(self, devtype=None, devcap=None):
-        if not self.is_nodedev_capable():
-            return []
-
-        devs = self.vmm.listDevices(devtype, 0)
         retdevs = []
-
-        for name in devs:
-            dev = self.vmm.nodeDeviceLookupByName(name)
-            vdev = virtinst.NodeDeviceParser.parse(dev.XMLDesc(0))
-
-            if devcap and vdev.capability_type != devcap:
+        for vdev in self.nodedevs.values():
+            if devtype and vdev.device_type != devtype:
                 continue
+
+            if devcap:
+                if (not hasattr(vdev, "capability_type") or
+                    vdev.capability_type != devcap):
+                    continue
 
             retdevs.append(vdev)
 
@@ -931,6 +938,49 @@ class vmmConnection(gobject.GObject):
 
         return (stop, start, orig, new, current)
 
+    def _update_nodedevs(self):
+        orig = self.nodedevs
+        current = {}
+        new = []
+        newActiveNames = []
+
+        if self._nodedev_capable == None:
+            self._nodedev_capable = self.is_nodedev_capable()
+            if self._nodedev_capable is False:
+                logging.debug("Connection doesn't seem to support nodedev "
+                              "APIs. Skipping all nodedev polling.")
+
+        if not self.is_nodedev_capable():
+            return (orig, new, current)
+
+        try:
+            newActiveNames = self.vmm.listDevices(None, 0)
+        except:
+            logging.exception("Unable to list nodedev devices")
+
+        def check_obj(name):
+            key = name
+
+            if not orig.has_key(key):
+                obj = self.vmm.nodeDeviceLookupByName(name)
+                vdev = virtinst.NodeDeviceParser.parse(obj.XMLDesc(0))
+
+                # Object is brand new this tick period
+                current[key] = vdev
+                new.append(key)
+
+            else:
+                # Previously known object, remove it from the orig list
+                current[key] = orig[key]
+                del orig[key]
+
+        for name in newActiveNames:
+            try:
+                check_obj(name)
+            except libvirt.libvirtError:
+                logging.exception("Couldn't fetch nodedev '%s'" % name)
+
+        return (orig, new, current)
 
     def _update_vms(self):
         """
@@ -1060,6 +1110,9 @@ class vmmConnection(gobject.GObject):
         (stopInterfaces, startInterfaces, oldInterfaces,
          newInterfaces, self.interfaces) = self._update_interfaces()
 
+        # Update nodedevice list
+        (oldNodedevs, newNodedevs, self.nodedevs) = self._update_nodedevs()
+
         # Poll for changed/new/removed VMs
         (startVMs, newVMs, oldVMs,
          self.vms, self.activeUUIDs) = self._update_vms()
@@ -1110,6 +1163,11 @@ class vmmConnection(gobject.GObject):
             for name in stopInterfaces:
                 self.emit("interface-stopped", self.uri, name)
 
+            # Update nodedev list
+            for name in oldNodedevs:
+                self.emit("nodedev-removed", self.uri, name)
+            for name in newNodedevs:
+                self.emit("nodedev-added", self.uri, name)
 
         gobject.idle_add(tick_send_signals)
 
