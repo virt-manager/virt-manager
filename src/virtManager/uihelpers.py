@@ -59,9 +59,20 @@ def populate_network_list(net_list, conn):
     model = net_list.get_model()
     model.clear()
 
+    vnet_dict = {}
+    bridge_dict = {}
+    iface_dict = {}
+
     def set_active(idx):
         if isinstance(net_list, gtk.ComboBox):
             net_list.set_active(idx)
+
+    def add_dict(indict, model):
+        keylist = indict.keys()
+        keylist.sort()
+        rowlist = map(lambda key: indict[key], keylist)
+        for row in rowlist:
+            model.append(row)
 
     # For qemu:///session
     if conn.is_qemu_session():
@@ -71,12 +82,11 @@ def populate_network_list(net_list, conn):
         return
 
     hasNet = False
-    netIdx = 0
+    netIdxLabel = None
     # Virtual Networks
     for uuid in conn.list_net_uuids():
         net = conn.get_net(uuid)
 
-        # FIXME: Should we use 'default' even if it's inactive?
         label = _("Virtual network") + " '%s'" % net.get_name()
         if not net.is_active():
             label +=  " (%s)" % _("Inactive")
@@ -85,46 +95,64 @@ def populate_network_list(net_list, conn):
         label += ": %s" % desc
 
         hasNet = True
+        # FIXME: Should we use 'default' even if it's inactive?
         # FIXME: This preference should be configurable
         if net.get_name() == "default":
-            netIdx = len(model) - 1
+            netIdxLabel = label
 
-        model.append([VirtualNetworkInterface.TYPE_VIRTUAL,
-                      net.get_name(), label, True])
+        vnet_dict[label] = [VirtualNetworkInterface.TYPE_VIRTUAL,
+                           net.get_name(), label, True]
     if not hasNet:
-        model.append([None, None, _("No virtual networks available"), False])
+        label = _("No virtual networks available")
+        vnet_dict[label] = [None, None, label, False]
 
     # Physical devices
     hasShared = False
-    brIndex = -1
-    if not conn.is_remote():
-        for name in conn.list_net_device_paths():
-            br = conn.get_net_device(name)
+    brIdxLabel = None
+    for name in conn.list_net_device_paths():
+        br = conn.get_net_device(name)
+        bridge_name = br.get_bridge()
 
-            if br.is_shared():
-                hasShared = True
-                if brIndex < 0:
-                    brIndex = len(model)
-
+        if br.is_shared():
+            hasShared = True
+            sensitive = True
+            if br.get_bridge():
                 brlabel =  "(%s %s)" % (_("Bridge"), br.get_bridge())
-                sensitive = True
             else:
-                brlabel = "(%s)" %  _("Not bridged")
-                sensitive = False
+                bridge_name = name
+                brlabel = _("(Empty bridge)")
+        else:
+            sensitive = False
+            brlabel = "(%s)" %  _("Not bridged")
 
-            model.append([VirtualNetworkInterface.TYPE_BRIDGE,
-                          br.get_bridge(),
-                          _("Host device %s %s") % (br.get_name(), brlabel),
-                          sensitive])
+        label = _("Host device %s %s") % (br.get_name(), brlabel)
+        if hasShared and not brIdxLabel:
+            brIdxLabel = label
+
+        row = [VirtualNetworkInterface.TYPE_BRIDGE,
+               bridge_name, label, sensitive]
+
+        if sensitive:
+            bridge_dict[label] = row
+        else:
+            iface_dict[label] = row
+
+    add_dict(bridge_dict, model)
+    add_dict(vnet_dict, model)
+    add_dict(iface_dict, model)
 
     # If there is a bridge device, default to that
     # If not, use 'default' network
     # If not present, use first list entry
     # If list empty, use no network devices
-    if hasShared:
-        default = brIndex
-    elif hasNet:
-        default = netIdx
+    label = brIdxLabel or netIdxLabel
+    if label:
+        for idx in range(len(model)):
+            row = model[idx]
+            if row[2] == label:
+                default = idx
+                break
+
     else:
         model.insert(0, [None, None, _("No networking."), True])
         default = 0
