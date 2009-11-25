@@ -512,15 +512,16 @@ class vmmConfig:
                                   gconf.VALUE_STRING)
         return ((uris is not None) and (uri in uris))
 
-    def toggle_conn_autoconnect(self, uri):
+    def set_conn_autoconnect(self, uri, val):
         uris = self.conf.get_list(self.conf_dir + "/connections/autoconnect",
                                   gconf.VALUE_STRING)
         if uris is None:
             uris = []
-        if uri in uris:
+        if not val and uri in uris:
             uris.remove(uri)
-        else:
+        elif val and uri not in uris:
             uris.append(uri)
+
         self.conf.set_list(self.conf_dir + "/connections/autoconnect",
                            gconf.VALUE_STRING, uris)
 

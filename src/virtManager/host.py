@@ -246,6 +246,7 @@ class vmmHost(gobject.GObject):
     def reset_state(self):
         self.refresh_resources()
         self.conn_state_changed()
+
         # Update autostart value
         auto = self.conn.get_autoconnect()
         self.window.get_widget("config-autoconnect").set_active(auto)
@@ -269,10 +270,8 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("net-add").set_sensitive(state)
         self.window.get_widget("pool-add").set_sensitive(state)
 
-    def toggle_autoconnect(self, ignore=None):
-        if self.conn.get_autoconnect() != \
-           self.window.get_widget("config-autoconnect").get_active():
-            self.conn.toggle_autoconnect()
+    def toggle_autoconnect(self, src):
+        self.conn.set_autoconnect(src.get_active())
 
     # -------------------------
     # Virtual Network functions

@@ -122,7 +122,6 @@ class vmmConnection(gobject.GObject):
         # Resource utilization statistics
         self.record = []
         self.hostinfo = None
-        self.autoconnect = self.config.get_conn_autoconnect(self.get_uri())
 
         if netdev_helper and not self.is_remote():
             # Make sure we get net device add/remove signals
@@ -502,11 +501,9 @@ class vmmConnection(gobject.GObject):
     ######################################
 
     def get_autoconnect(self):
-        return self.autoconnect
-
-    def toggle_autoconnect(self):
-        self.config.toggle_conn_autoconnect(self.get_uri())
-        self.autoconnect = (not self.autoconnect)
+        return self.config.get_conn_autoconnect(self.get_uri())
+    def set_autoconnect(self, val):
+        self.config.set_conn_autoconnect(self.get_uri(), val)
 
     def close(self):
         if self.vmm == None:
