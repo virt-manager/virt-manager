@@ -31,7 +31,7 @@ from virtManager.netdev import vmmNetDevice
 class vmmNetDevHelper(gobject.GObject):
     __gsignals__ = {
         "netdev-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         [str]),
+                         [object]),
         "netdev-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                            [str]),
     }
@@ -53,12 +53,6 @@ class vmmNetDevHelper(gobject.GObject):
         self.hal_to_netdev = {}
 
         self._dbus_connect()
-
-    def list_net_device_paths(self):
-        return self.netdevs.keys()
-
-    def get_net_device(self, path):
-        return self.netdevs[path]
 
     def _dbus_connect(self):
         # Probe for network devices
@@ -98,6 +92,22 @@ class vmmNetDevHelper(gobject.GObject):
                           str(_type) + " " + str(value) + "\n" +
                           traceback.format_exc (stacktrace))
 
+
+    def connect(self, name, callback):
+        # Override connect, so when a new caller attaches to netdev-added,
+        # they get the full list of current devices
+        handle_id = gobject.GObject.connect(self, name, callback)
+
+        if name == "netdev-added":
+            for dev in self.netdevs.values():
+                self.emit("netdev-added", dev)
+
+        return handle_id
+
+
+    #############################
+    # Device population methods #
+    #############################
 
     def _net_phys_device_added(self, path):
         obj = self.bus.get_object("org.freedesktop.Hal", path)
@@ -164,6 +174,7 @@ class vmmNetDevHelper(gobject.GObject):
 
     def _net_device_added(self, name, mac, sysfspath, halpath=None):
         # Race conditions mean we can occassionally see device twice
+        name = str(name)
         if self.netdevs.has_key(name):
             return
 
@@ -175,14 +186,14 @@ class vmmNetDevHelper(gobject.GObject):
         logging.debug("Adding net device %s %s %s (bridge: %s)" %
                       (name, mac, sysfspath, str(bridge)))
 
-        dev = vmmNetDevice(self.config, self, name, mac, shared, bridge)
+        dev = vmmNetDevice(name, mac, shared, bridge)
         self._add_net_dev(name, halpath, dev)
 
     def _add_net_dev(self, name, halpath, dev):
         if halpath:
-            self.hal_to_netdev[halpath] = name
+            self.hal_to_netdev[halpath] = str(name)
         self.netdevs[name] = dev
-        self.emit("netdev-added", dev.get_name())
+        self.emit("netdev-added", dev)
 
 gobject.type_register(vmmNetDevHelper)
 

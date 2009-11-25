@@ -22,17 +22,13 @@ import gobject
 class vmmNetDevice(gobject.GObject):
     __gsignals__ = {}
 
-    def __init__(self, config, connection, name, mac, shared, bridge=None):
+    def __init__(self, name, mac, is_shared, bridge=None):
         self.__gobject_init__()
 
-        self.conn = connection
         self.name = name
         self.mac = mac
-        self.shared = shared
+        self.shared = is_shared
         self.bridge = bridge
-
-    def get_connection(self):
-        return self.conn
 
     def get_name(self):
         return self.name
@@ -45,8 +41,5 @@ class vmmNetDevice(gobject.GObject):
 
     def get_mac(self):
         return self.mac
-
-    def get_info(self):
-        return (self.name, self.mac, self.shared, self.bridge)
 
 gobject.type_register(vmmNetDevice)

@@ -93,7 +93,6 @@ class vmmConnection(gobject.GObject):
         self.__gobject_init__()
 
         self.config = config
-        self.netdev_helper = netdev_helper
 
         self.connectThread = None
         self.connectThreadEvent = threading.Event()
@@ -112,6 +111,8 @@ class vmmConnection(gobject.GObject):
         self.interface_capable = None
         self.dom_xml_flags = None
 
+        # Physical network interfaces: name (eth0) -> vmmNetDevice
+        self.netdevs = {}
         # Connection Storage pools: name -> vmmInterface
         self.interfaces = {}
         # Connection Storage pools: UUID -> vmmStoragePool
@@ -127,6 +128,11 @@ class vmmConnection(gobject.GObject):
         self.hostinfo = None
         self.autoconnect = self.config.get_conn_autoconnect(self.get_uri())
 
+        if netdev_helper and not self.is_remote():
+            # Make sure we get net device add/remove signals
+            netdev_helper.connect("netdev-added", self._netdev_added)
+            netdev_helper.connect("netdev-removed", self._netdev_removed)
+
     def _acquire_tgt(self):
         logging.debug("In acquire tgt.")
         try:
@@ -138,6 +144,13 @@ class vmmConnection(gobject.GObject):
             logging.info("Cannot acquire tgt" + str(e))
             ret = False
         return ret
+
+    def _netdev_added(self, ignore, netdev):
+        name = netdev.get_name()
+        self.netdevs[name] = netdev
+
+    def _netdev_removed(self, ignore, name):
+        del self.netdevs[name]
 
     def is_read_only(self):
         return self.readOnly
@@ -312,9 +325,7 @@ class vmmConnection(gobject.GObject):
                 return net
 
     def get_net_device(self, path):
-        if not self.netdev_helper:
-            raise ValueError("No netdev helper specified.")
-        return self.netdev_helper.get_net_device(path)
+        return self.netdevs[path]
 
     def get_pool(self, uuid):
         return self.pools[uuid]
@@ -609,11 +620,7 @@ class vmmConnection(gobject.GObject):
         return self.nets.keys()
 
     def list_net_device_paths(self):
-        if not self.netdev_helper:
-            return []
-        if self.is_remote():
-            return []
-        return self.netdev_helper.list_net_device_paths()
+        return self.netdevs.keys()
 
     def list_pool_uuids(self):
         return self.pools.keys()
@@ -1242,7 +1249,7 @@ class vmmConnection(gobject.GObject):
 
     def disk_io_rate(self):
         return self.disk_read_rate() + self.disk_write_rate()
-       
+
     def disk_io_vector_limit(self, dummy):
         """No point to accumulate unnormalized I/O for a conenction"""
         return [ 0.0 ]
