@@ -43,9 +43,8 @@ class vmmNetDevHelper(gobject.GObject):
         self.bus = None
         self.hal_iface = None
 
-        # Whether we have successfully connected to dbus and polled once
-        # Unused for now
-        self.initialized = False
+        # Error message we encountered when initializing
+        self.startup_error = None
 
         # Host network devices. name -> vmmNetDevice object
         self.netdevs = {}
@@ -53,6 +52,9 @@ class vmmNetDevHelper(gobject.GObject):
         self.hal_to_netdev = {}
 
         self._dbus_connect()
+
+    def get_init_error(self):
+        return self.startup_error
 
     def _dbus_connect(self):
         # Probe for network devices
@@ -85,13 +87,13 @@ class vmmNetDevHelper(gobject.GObject):
             # This is OS portable...
             for path in self.hal_iface.FindDeviceByCapability("net"):
                 self._net_phys_device_added(path)
-        except:
+        except Exception, e:
             (_type, value, stacktrace) = sys.exc_info ()
             logging.error("Unable to connect to HAL to list network "
                           "devices: '%s'" +
                           str(_type) + " " + str(value) + "\n" +
                           traceback.format_exc (stacktrace))
-
+            self.startup_error = str(e)
 
     def connect(self, name, callback):
         # Override connect, so when a new caller attaches to netdev-added,

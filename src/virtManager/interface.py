@@ -71,8 +71,25 @@ class vmmInterface(gobject.GObject):
             self._update_xml()
         return self._xml
 
+    def is_bridge(self):
+        typ = self.get_type()
+        return typ == "bridge"
 
     def get_type(self):
         return virtinst.util.get_xml_path(self.get_xml(), "/interface/@type")
+
+    def get_slave_names(self):
+        # Returns a list of names of all enslaved interfaces
+        typ = self.get_type()
+        xpath = "/interface/%s/interface/@name" % typ
+        def node_func(ctx):
+            nodes = ctx.xpathEval(xpath)
+            return map(lambda x: x.content, nodes)
+
+        ret = virtinst.util.get_xml_path(self.get_xml(), func=node_func)
+
+        if not ret:
+            return []
+        return ret
 
 gobject.type_register(vmmInterface)

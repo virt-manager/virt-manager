@@ -35,6 +35,7 @@ from virtManager.domain import vmmDomain
 from virtManager.network import vmmNetwork
 from virtManager.storagepool import vmmStoragePool
 from virtManager.interface import vmmInterface
+from virtManager.netdev import vmmNetDevice
 
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
@@ -131,12 +132,59 @@ class vmmConnection(gobject.GObject):
         self.record = []
         self.hostinfo = None
 
-        if netdev_helper and not self.is_remote():
-            # Make sure we get net device add/remove signals
-            netdev_helper.connect("netdev-added", self._netdev_added)
-            netdev_helper.connect("netdev-removed", self._netdev_removed)
+        self.netdev_initialized = False
+        self.netdev_helper = netdev_helper
+        self.netdev_error = ""
+        self.netdev_use_libvirt = False
 
 
+    #################
+    # Init routines #
+    #################
+
+    def _init_netdev(self):
+        """
+        Determine how we will be polling for net devices (HAL or libvirt)
+        """
+        if self.is_nodedev_capable() and self.interface_capable:
+            try:
+                self._build_libvirt_netdev_list()
+                self.netdev_use_libvirt = True
+            except Exception, e:
+                self.netdev_error = _("Could build physical interface "
+                                      "list via libvirt: %s") % str(e)
+        elif self.netdev_helper:
+            if self.is_remote():
+                self.netdev_error = _("Libvirt version does not support "
+                                      "physical interface listing")
+
+            else:
+                error = self.netdev_helper.get_init_error()
+                if not error:
+                    self.netdev_helper.connect("netdev-added",
+                                               self._netdev_added)
+                    self.netdev_helper.connect("netdev-removed",
+                                               self._netdev_removed)
+                else:
+                    self.netdev_error = _("Could not initialize HAL for "
+                                          "interface listing: %s") % error
+        else:
+            self.netdev_error = _("Libvirt version does not support "
+                                  "physical interface listing")
+
+        self.netdev_initialized = True
+        if self.netdev_error:
+            logging.debug(self.netdev_error)
+        else:
+            if self.netdev_use_libvirt:
+                logging.debug("Using libvirt API for netdev enumeration")
+            else:
+                logging.debug("Using HAL for netdev enumeration")
+
+
+    ########################
+    # General data getters #
+    ########################
 
     def is_read_only(self):
         return self.readOnly
@@ -401,6 +449,53 @@ class vmmConnection(gobject.GObject):
     # Libvirt object lookup methods #
     #################################
 
+    def _build_libvirt_netdev_list(self):
+        bridges = []
+        netdev_list = {}
+
+        def interface_to_netdev(interface):
+            name = interface.get_name()
+            mac = interface.get_mac()
+            is_bridge = interface.is_bridge()
+            slave_names = interface.get_slave_names()
+
+            if is_bridge and slave_names:
+                bridges.append((name, slave_names))
+            else:
+                netdev_list[name] = vmmNetDevice(name, mac, is_bridge, None)
+
+        def nodedev_to_netdev(nodedev):
+            name = nodedev.interface
+            mac = nodedev.address
+
+            if name not in netdev_list.keys():
+                netdev_list[name] = vmmNetDevice(name, mac, False, None)
+            else:
+                # Believe this info over libvirt interface APIs, since
+                # this comes from the hardware
+                if mac:
+                    netdev_list[name].mac = mac
+
+        for name, iface in self.interfaces.items():
+            interface_to_netdev(iface)
+
+        for nodedev in self.get_devices("net"):
+            nodedev_to_netdev(nodedev)
+
+        # Mark NetDevices as bridged where appropriate
+        for bridge_name, slave_names in bridges:
+            for name, netdev in netdev_list.items():
+                if name not in slave_names:
+                    continue
+
+                # XXX: Can a physical device be in two bridges?
+                netdev.bridge = bridge_name
+                netdev.shared = True
+                break
+
+        # XXX: How to handle added/removed signals to clients?
+        return netdev_list
+
     def get_vm(self, uuid):
         return self.vms[uuid]
     def get_net(self, uuid):
@@ -455,6 +550,9 @@ class vmmConnection(gobject.GObject):
     def list_net_uuids(self):
         return self.nets.keys()
     def list_net_device_paths(self):
+        # Update netdev list
+        if self.netdev_use_libvirt:
+            self.netdevs = self._build_libvirt_netdev_list()
         return self.netdevs.keys()
     def list_pool_uuids(self):
         return self.pools.keys()
@@ -1116,6 +1214,10 @@ class vmmConnection(gobject.GObject):
         # Poll for changed/new/removed VMs
         (startVMs, newVMs, oldVMs,
          self.vms, self.activeUUIDs) = self._update_vms()
+
+        # Make sure netdev polling is setup
+        if not self.netdev_initialized:
+            self._init_netdev()
 
         def tick_send_signals():
             """
