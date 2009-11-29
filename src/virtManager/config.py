@@ -186,7 +186,9 @@ class vmmConfig:
         try:
             self.conf_dir = newconf
             if func_type == self._PEROBJ_FUNC_SET:
-                pref_func(value)
+                if type(value) is not tuple:
+                    value = (value,)
+                pref_func(*value)
             elif func_type == self._PEROBJ_FUNC_GET:
                 ret = pref_func()
             elif func_type == self._PEROBJ_FUNC_LISTEN:
@@ -196,7 +198,7 @@ class vmmConfig:
 
         return ret
 
-    def set_pervm(self, uri, uuid, pref_func, value):
+    def set_pervm(self, uri, uuid, pref_func, args):
         """
         @param uri: VM connection URI
         @param uuid: VM UUID
@@ -204,7 +206,7 @@ class vmmConfig:
         @param pref_func: Global preference get/set/listen func that the
                           pervm instance will overshadow
         """
-        self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_SET, value)
+        self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_SET, args)
     def get_pervm(self, uri, uuid, pref_func):
         ret = self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_GET)
         if ret == None:
@@ -413,6 +415,14 @@ class vmmConfig:
     def set_details_show_toolbar(self, state):
         self.conf.set_bool(self.conf_dir + "/details/show-toolbar", state)
 
+    # VM details default size
+    def get_details_window_size(self):
+        w = self.conf.get_int(self.conf_dir + "/details/window_width")
+        h = self.conf.get_int(self.conf_dir + "/details/window_height")
+        return (w, h)
+    def set_details_window_size(self, w, h):
+        self.conf.set_int(self.conf_dir + "/details/window_width", w)
+        self.conf.set_int(self.conf_dir + "/details/window_height", h)
 
     # Create sound device for default guest
     def get_local_sound(self):

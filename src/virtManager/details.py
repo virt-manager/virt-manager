@@ -127,6 +127,10 @@ class vmmDetails(gobject.GObject):
         self.console = vmmConsolePages(self.config, self.vm, self.engine,
                                        self.window)
 
+        # Set default window size
+        w, h = self.vm.get_details_window_size()
+        self.topwin.set_default_size(w or 800, h or 600)
+
         self.init_menus()
         self.init_details()
 
@@ -146,6 +150,7 @@ class vmmDetails(gobject.GObject):
             "on_close_details_clicked": self.close,
             "on_details_menu_close_activate": self.close,
             "on_vmm_details_delete_event": self.close,
+            "on_vmm_details_configure_event": self.window_resized,
             "on_details_menu_quit_activate": self.exit_app,
 
             "on_control_vm_details_toggled": self.details_console_changed,
@@ -198,6 +203,7 @@ class vmmDetails(gobject.GObject):
 
             # Listeners stored in vmmConsolePages
             "on_details_menu_view_fullscreen_activate": self.console.toggle_fullscreen,
+            "on_details_menu_view_size_to_vm_activate": self.console.size_to_vm,
             "on_details_menu_view_scale_always_toggled": self.console.set_scale_type,
             "on_details_menu_view_scale_fullscreen_toggled": self.console.set_scale_type,
             "on_details_menu_view_scale_never_toggled": self.console.set_scale_type,
@@ -442,6 +448,13 @@ class vmmDetails(gobject.GObject):
     ##########################
     # Window state listeners #
     ##########################
+
+    def window_resized(self, ignore, event):
+        # Sometimes dimensions change when window isn't visible
+        if not self.is_visible():
+            return
+
+        self.vm.set_details_window_size(event.width, event.height)
 
     def populate_serial_menu(self, src):
         for ent in src:

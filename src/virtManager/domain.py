@@ -819,6 +819,12 @@ class vmmDomain(gobject.GObject):
         self.config.listen_pervm(self.connection.get_uri(), self.uuid,
                                  self.config.on_console_scaling_changed, cb)
 
+    def set_details_window_size(self, w, h):
+        self.config.set_pervm(self.connection.get_uri(), self.uuid,
+                              self.config.set_details_window_size, (w, h))
+    def get_details_window_size(self):
+        return self.config.get_pervm(self.connection.get_uri(), self.uuid,
+                                     self.config.get_details_window_size)
 
     def _sample_mem_stats(self, info):
         pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()

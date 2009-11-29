@@ -6,6 +6,7 @@
     <property name="title" translatable="yes">Virtual Machine</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
+    <signal name="configure_event" handler="on_vmm_details_configure_event"/>
     <signal name="delete_event" handler="on_vmm_details_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox2">
@@ -236,6 +237,14 @@
                         <property name="label" translatable="yes">_Fullscreen</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_details_menu_view_fullscreen_activate"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="detains-menu-view-size-to-vm">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Resize to VM</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_details_menu_view_size_to_vm_activate"/>
                       </widget>
                     </child>
                     <child>

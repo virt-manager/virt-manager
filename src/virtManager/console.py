@@ -305,6 +305,16 @@ class vmmConsolePages(gobject.GObject):
 
         self.update_scaling()
 
+    def size_to_vm(self, src):
+        # Resize the console to best fit the VM resolution
+        if not self.desktop_resolution:
+            return
+
+        w, h = self.desktop_resolution
+        self.topwin.unmaximize()
+        self.topwin.resize(1, 1)
+        self.queue_resize_helper("console-vnc-scroll", w, h)
+
     def send_key(self, src):
         keys = None
         if src.get_name() == "details-menu-send-cad":
@@ -624,7 +634,7 @@ class vmmConsolePages(gobject.GObject):
 
     def desktop_resize(self, src, w, h):
         self.desktop_resolution = (w, h)
-        self.queue_resize_helper("console-vnc-scroll", w, h)
+        self.window.get_widget("console-vnc-scroll").queue_resize()
 
     def queue_resize_helper(self, widget_name, w, h):
         """
