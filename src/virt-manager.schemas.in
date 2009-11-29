@@ -324,5 +324,32 @@
         <long>Whether we require confirmation to remove a virtual device</long>
       </locale>
     </schema>
+
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/manager_window_height</key>
+      <applyto>/apps/::PACKAGE::/manager_window_height</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>int</type>
+      <default>0</default>
+
+      <locale name="C">
+        <short>Default manager window height</short>
+        <long>Default manager window height</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/::PACKAGE::/manager_window_width</key>
+      <applyto>/apps/::PACKAGE::/manager_window_width</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>int</type>
+      <default>0</default>
+
+      <locale name="C">
+        <short>Default manager window width</short>
+        <long>Default manager window width</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

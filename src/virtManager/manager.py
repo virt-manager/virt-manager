@@ -117,7 +117,9 @@ class vmmManager(gobject.GObject):
 
     def __init__(self, config, engine):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-manager.glade", "vmm-manager", domain="virt-manager")
+        self.window = gtk.glade.XML((config.get_glade_dir() +
+                                     "/vmm-manager.glade"),
+                                     "vmm-manager", domain="virt-manager")
         self.err = vmmErrorDialog(self.window.get_widget("vmm-manager"),
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
@@ -132,6 +134,10 @@ class vmmManager(gobject.GObject):
         # Mapping of VM UUID -> tree model rows to
         # allow O(1) access instead of O(n)
         self.rows = {}
+
+        w, h = self.config.get_manager_window_size()
+        self.window.get_widget("vmm-manager").set_default_size(w or 550,
+                                                               h or 550)
 
         self.init_vmlist()
         self.init_stats()
@@ -154,6 +160,7 @@ class vmmManager(gobject.GObject):
                                                 cfg.STATS_NETWORK),
 
             "on_vm_manager_delete_event": self.close,
+            "on_vmm_manager_configure_event": self.window_resized,
             "on_menu_file_add_connection_activate": self.new_connection,
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
@@ -561,6 +568,13 @@ class vmmManager(gobject.GObject):
     ####################
     # Action listeners #
     ####################
+
+    def window_resized(self, ignore, event):
+        # Sometimes dimensions change when window isn't visible
+        if not self.is_visible():
+            return
+
+        self.config.set_manager_window_size(event.width, event.height)
 
     def exit_app(self, src=None, src2=None):
         self.emit("action-exit-app")

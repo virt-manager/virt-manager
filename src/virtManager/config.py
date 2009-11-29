@@ -515,6 +515,14 @@ class vmmConfig:
         return self.conf.get_list(self.conf_dir + "/connections/uris",
                                   gconf.VALUE_STRING)
 
+    # Manager default window size
+    def get_manager_window_size(self):
+        w = self.conf.get_int(self.conf_dir + "/manager_window_width")
+        h = self.conf.get_int(self.conf_dir + "/manager_window_height")
+        return (w, h)
+    def set_manager_window_size(self, w, h):
+        self.conf.set_int(self.conf_dir + "/manager_window_width", w)
+        self.conf.set_int(self.conf_dir + "/manager_window_height", h)
 
     # URI autoconnect
     def get_conn_autoconnect(self, uri):

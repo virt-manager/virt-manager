@@ -7,6 +7,7 @@
     <property name="default_width">550</property>
     <property name="default_height">550</property>
     <property name="gravity">center</property>
+    <signal name="configure_event" handler="on_vmm_manager_configure_event"/>
     <signal name="delete_event" handler="on_vm_manager_delete_event"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
