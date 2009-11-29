@@ -230,3 +230,33 @@ def generate_macaddr(conn):
         pass
 
     return newmac
+
+# Build toolbar shutdown button menu (manager and details toolbar)
+def build_shutdown_button_menu(config, widget, shutdown_cb, reboot_cb,
+                               destroy_cb):
+    icon_name = config.get_shutdown_icon_name()
+    widget.set_icon_name(icon_name)
+    menu = gtk.Menu()
+    widget.set_menu(menu)
+
+    rebootimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+    shutdownimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+    destroyimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+
+    reboot = gtk.ImageMenuItem(_("_Reboot"))
+    reboot.set_image(rebootimg)
+    reboot.show()
+    reboot.connect("activate", reboot_cb)
+    menu.add(reboot)
+
+    shutdown = gtk.ImageMenuItem(_("_Shut Down"))
+    shutdown.set_image(shutdownimg)
+    shutdown.show()
+    shutdown.connect("activate", shutdown_cb)
+    menu.add(shutdown)
+
+    destroy = gtk.ImageMenuItem(_("_Force Off"))
+    destroy.set_image(destroyimg)
+    destroy.show()
+    destroy.connect("activate", destroy_cb)
+    menu.add(destroy)

@@ -27,11 +27,11 @@ import traceback
 import os
 
 import virtManager.addhardware
+import virtManager.uihelpers as uihelpers
 from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
 from virtManager.console import vmmConsolePages
-from virtManager.manager import build_shutdown_button_menu
 from virtManager.serialcon import vmmSerialConsole
 from virtManager.graphwidgets import Sparkline
 from virtManager import util as util
@@ -285,7 +285,8 @@ class vmmDetails(gobject.GObject):
 
     def init_menus(self):
         # Shutdown button menu
-        build_shutdown_button_menu(self.config,
+        uihelpers.build_shutdown_button_menu(
+                                   self.config,
                                    self.window.get_widget("control-shutdown"),
                                    self.control_vm_shutdown,
                                    self.control_vm_reboot,

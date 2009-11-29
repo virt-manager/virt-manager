@@ -25,6 +25,7 @@ import logging
 import traceback
 
 import virtManager.config as cfg
+import virtManager.uihelpers as uihelpers
 from virtManager.connection import vmmConnection
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
@@ -67,35 +68,6 @@ class "GtkToolbar" style "toolbar-style"
 class "GtkTreeView" style "treeview-style"
 """
 gtk.rc_parse_string(rcstring)
-
-def build_shutdown_button_menu(config, widget, shutdown_cb, reboot_cb,
-                               destroy_cb):
-    icon_name = config.get_shutdown_icon_name()
-    widget.set_icon_name(icon_name)
-    menu = gtk.Menu()
-    widget.set_menu(menu)
-
-    rebootimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
-    shutdownimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
-    destroyimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
-
-    reboot = gtk.ImageMenuItem(_("_Reboot"))
-    reboot.set_image(rebootimg)
-    reboot.show()
-    reboot.connect("activate", reboot_cb)
-    menu.add(reboot)
-
-    shutdown = gtk.ImageMenuItem(_("_Shut Down"))
-    shutdown.set_image(shutdownimg)
-    shutdown.show()
-    shutdown.connect("activate", shutdown_cb)
-    menu.add(shutdown)
-
-    destroy = gtk.ImageMenuItem(_("_Force Off"))
-    destroy.set_image(destroyimg)
-    destroy.show()
-    destroy.connect("activate", destroy_cb)
-    menu.add(destroy)
 
 
 class vmmManager(gobject.GObject):
@@ -157,11 +129,130 @@ class vmmManager(gobject.GObject):
         self.startup_error = None
         self.ignore_pause = False
 
-        self.prepare_vmlist()
+        # Mapping of VM UUID -> tree model rows to
+        # allow O(1) access instead of O(n)
+        self.rows = {}
 
-        self.config.on_vmlist_cpu_usage_visible_changed(self.toggle_cpu_usage_visible_widget)
-        self.config.on_vmlist_disk_io_visible_changed(self.toggle_disk_io_visible_widget)
-        self.config.on_vmlist_network_traffic_visible_changed(self.toggle_network_traffic_visible_widget)
+        self.init_vmlist()
+        self.init_stats()
+        self.init_toolbar()
+
+        self.vmmenu = gtk.Menu()
+        self.vmmenushutdown = gtk.Menu()
+        self.vmmenu_items = {}
+        self.vmmenushutdown_items = {}
+        self.connmenu = gtk.Menu()
+        self.connmenu_items = {}
+        self.init_context_menus()
+
+        self.window.signal_autoconnect({
+            "on_menu_view_cpu_usage_activate":  (self.toggle_stats_visible,
+                                                    cfg.STATS_CPU),
+            "on_menu_view_disk_io_activate" :   (self.toggle_stats_visible,
+                                                    cfg.STATS_DISK),
+            "on_menu_view_network_traffic_activate": (self.toggle_stats_visible,
+                                                cfg.STATS_NETWORK),
+
+            "on_vm_manager_delete_event": self.close,
+            "on_menu_file_add_connection_activate": self.new_connection,
+            "on_menu_file_quit_activate": self.exit_app,
+            "on_menu_file_close_activate": self.close,
+            "on_menu_restore_saved_activate": self.restore_saved,
+            "on_vmm_close_clicked": self.close,
+            "on_vm_open_clicked": self.open_vm_console,
+            "on_vm_run_clicked": self.start_vm,
+            "on_vm_new_clicked": self.new_vm,
+            "on_vm_shutdown_clicked": self.poweroff_vm,
+            "on_vm_pause_clicked": self.pause_vm_button,
+            "on_menu_edit_details_activate": self.open_vm_console,
+            "on_menu_edit_delete_activate": self.do_delete,
+            "on_menu_host_details_activate": self.show_host,
+
+            "on_vm_list_row_activated": self.open_vm_console,
+            "on_vm_list_row_expanded": self.row_expanded,
+            "on_vm_list_row_collapsed": self.row_collapsed,
+            "on_vm_list_button_press_event": self.popup_vm_menu_button,
+            "on_vm_list_key_press_event": self.popup_vm_menu_key,
+
+            "on_menu_edit_preferences_activate": self.show_preferences,
+            "on_menu_help_about_activate": self.show_about,
+            "on_menu_help_activate": self.show_help,
+            })
+
+        # XXX: Help docs useless/out of date
+        self.window.get_widget("menu_help").hide()
+
+        self.vm_selected()
+        self.window.get_widget("vm-list").get_selection().connect("changed",
+                                                            self.vm_selected)
+
+        # Initialize stat polling columns based on global polling
+        # preferences (we want signal handlers for this)
+        for typ, init_val in \
+            [ (cfg.STATS_DISK,
+               self.config.get_stats_enable_disk_poll()),
+              (cfg.STATS_NETWORK,
+               self.config.get_stats_enable_net_poll())]:
+            self.enable_polling(None, None, init_val, typ)
+
+        self.engine.connect("connection-added", self._add_connection)
+        self.engine.connect("connection-removed", self._remove_connection)
+
+        # Select first list entry
+        vmlist = self.window.get_widget("vm-list")
+        if len(vmlist.get_model()) == 0:
+            self.startup_error = _("Could not populate a default connection. "
+                                   "Make sure the appropriate virtualization "
+                                   "packages are installed (kvm, qemu, etc.) "
+                                   "and that libvirtd has been restarted to "
+                                   "notice the changes.\n\n"
+                                   "A hypervisor connection can be manually "
+                                   "added via \nFile->Add Connection")
+        else:
+            vmlist.get_selection().select_iter(vmlist.get_model().get_iter_first())
+
+    ##################
+    # Common methods #
+    ##################
+
+    def show(self):
+        win = self.window.get_widget("vmm-manager")
+        if self.is_visible():
+            win.present()
+            return
+        win.show()
+        win.present()
+        self.engine.increment_window_counter()
+
+        if self.startup_error:
+            self.err.val_err(_("Error determining default hypervisor."),
+                             self.startup_error, _("Startup Error"))
+            self.startup_error = None
+
+    def close(self, src=None, src2=None):
+        if self.is_visible():
+            win = self.window.get_widget("vmm-manager")
+            win.hide()
+            self.engine.decrement_window_counter()
+            return 1
+
+    def is_visible(self):
+        if self.window.get_widget("vmm-manager").flags() & gtk.VISIBLE:
+            return 1
+        return 0
+
+
+    ################
+    # Init methods #
+    ################
+
+    def init_stats(self):
+        self.config.on_vmlist_cpu_usage_visible_changed(
+                                    self.toggle_cpu_usage_visible_widget)
+        self.config.on_vmlist_disk_io_visible_changed(
+                                    self.toggle_disk_io_visible_widget)
+        self.config.on_vmlist_network_traffic_visible_changed(
+                                    self.toggle_network_traffic_visible_widget)
 
         # Register callbacks with the global stats enable/disable values
         # that disable the associated vmlist widgets if reporting is disabled
@@ -170,11 +261,14 @@ class vmmManager(gobject.GObject):
         self.config.on_stats_enable_net_poll_changed(self.enable_polling,
                                                      cfg.STATS_NETWORK)
 
-        self.window.get_widget("menu_view_stats_cpu").set_active(self.config.is_vmlist_cpu_usage_visible())
-        self.window.get_widget("menu_view_stats_disk").set_active(self.config.is_vmlist_disk_io_visible())
-        self.window.get_widget("menu_view_stats_network").set_active(self.config.is_vmlist_network_traffic_visible())
+        self.window.get_widget("menu_view_stats_cpu").set_active(
+                            self.config.is_vmlist_cpu_usage_visible())
+        self.window.get_widget("menu_view_stats_disk").set_active(
+                            self.config.is_vmlist_disk_io_visible())
+        self.window.get_widget("menu_view_stats_network").set_active(
+                            self.config.is_vmlist_network_traffic_visible())
 
-
+    def init_toolbar(self):
         def set_toolbar_image(widget, iconfile, l, w):
             filename = self.config.get_icon_dir() + "/%s" % iconfile
             pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, l, w)
@@ -184,7 +278,8 @@ class vmmManager(gobject.GObject):
 
         set_toolbar_image("vm-new", "vm_new_wizard.png", 28, 28)
         set_toolbar_image("vm-open", "icon_console.png", 24, 24)
-        build_shutdown_button_menu(self.config,
+        uihelpers.build_shutdown_button_menu(
+                                   self.config,
                                    self.window.get_widget("vm-shutdown"),
                                    self.poweroff_vm,
                                    self.reboot_vm,
@@ -195,6 +290,7 @@ class vmmManager(gobject.GObject):
         for c in tool.get_children():
             c.set_homogeneous(False)
 
+    def init_context_menus(self):
         def build_icon(name):
             return gtk.image_new_from_icon_name(name, gtk.ICON_SIZE_MENU)
 
@@ -210,11 +306,6 @@ class vmmManager(gobject.GObject):
         pause_icon          = build_stock(gtk.STOCK_MEDIA_PAUSE)
         resume_icon         = build_stock(gtk.STOCK_MEDIA_PAUSE)
         delete_icon         = build_stock(gtk.STOCK_DELETE)
-
-        self.vmmenu = gtk.Menu()
-        self.vmmenushutdown = gtk.Menu()
-        self.vmmenu_items = {}
-        self.vmmenushutdown_items = {}
 
         self.vmmenu_items["run"] = gtk.ImageMenuItem(_("_Run"))
         self.vmmenu_items["run"].set_image(run_icon)
@@ -293,13 +384,6 @@ class vmmManager(gobject.GObject):
 
         self.vmmenu.show()
 
-        # Mapping of VM UUID -> tree model rows to
-        # allow O(1) access instead of O(n)
-        self.rows = {}
-
-        self.connmenu = gtk.Menu()
-        self.connmenu_items = {}
-
         self.connmenu_items["create"] = gtk.ImageMenuItem(gtk.STOCK_NEW)
         self.connmenu_items["create"].show()
         self.connmenu_items["create"].connect("activate", self.new_vm)
@@ -338,98 +422,145 @@ class vmmManager(gobject.GObject):
 
         self.connmenu.show()
 
-        self.window.signal_autoconnect({
-            "on_menu_view_cpu_usage_activate":  (self.toggle_stats_visible,
-                                                    cfg.STATS_CPU),
-            "on_menu_view_disk_io_activate" :   (self.toggle_stats_visible,
-                                                    cfg.STATS_DISK),
-            "on_menu_view_network_traffic_activate": (self.toggle_stats_visible,
-                                                cfg.STATS_NETWORK),
-
-            "on_vm_manager_delete_event": self.close,
-            "on_menu_file_add_connection_activate": self.new_connection,
-            "on_menu_file_quit_activate": self.exit_app,
-            "on_menu_file_close_activate": self.close,
-            "on_menu_restore_saved_activate": self.restore_saved,
-            "on_vmm_close_clicked": self.close,
-            "on_vm_open_clicked": self.open_vm_console,
-            "on_vm_run_clicked": self.start_vm,
-            "on_vm_new_clicked": self.new_vm,
-            "on_vm_shutdown_clicked": self.poweroff_vm,
-            "on_vm_pause_clicked": self.pause_vm_button,
-            "on_menu_edit_details_activate": self.open_vm_console,
-            "on_menu_edit_delete_activate": self.do_delete,
-            "on_menu_host_details_activate": self.show_host,
-
-            "on_vm_list_row_activated": self.open_vm_console,
-            "on_vm_list_row_expanded": self.row_expanded,
-            "on_vm_list_row_collapsed": self.row_collapsed,
-            "on_vm_list_button_press_event": self.popup_vm_menu_button,
-            "on_vm_list_key_press_event": self.popup_vm_menu_key,
-
-            "on_menu_edit_preferences_activate": self.show_preferences,
-            "on_menu_help_about_activate": self.show_about,
-            "on_menu_help_activate": self.show_help,
-            })
-
-        # XXX: Help docs useless/out of date
-        self.window.get_widget("menu_help").hide()
-
-        self.vm_selected()
-        self.window.get_widget("vm-list").get_selection().connect("changed", self.vm_selected)
-
-        # Initialize stat polling columns based on global polling
-        # preferences (we want signal handlers for this)
-        for typ, init_val in \
-            [ (cfg.STATS_DISK,
-               self.config.get_stats_enable_disk_poll()),
-              (cfg.STATS_NETWORK,
-               self.config.get_stats_enable_net_poll())]:
-            self.enable_polling(None, None, init_val, typ)
-
-        self.window.get_widget("menu_file_restore_saved").set_sensitive(False)
-
-        self.engine.connect("connection-added", self._add_connection)
-        self.engine.connect("connection-removed", self._remove_connection)
-
-        # Select first list entry
+    def init_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
-        if len(vmlist.get_model()) == 0:
-            self.startup_error = _("Could not populate a default connection. "
-                                   "Make sure the appropriate virtualization "
-                                   "packages are installed (kvm, qemu, etc.) "
-                                   "and that libvirtd has been restarted to "
-                                   "notice the changes.\n\n"
-                                   "A hypervisor connection can be manually "
-                                   "added via \nFile->Add Connection")
+
+        # Handle, name, markup, status, status icon, key/uuid, hint, is conn,
+        # is conn connected, is vm, is vm running, fg color
+        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, str,
+                              bool, bool, bool, bool, gtk.gdk.Color)
+        vmlist.set_model(model)
+        util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
+
+        vmlist.set_headers_visible(True)
+        vmlist.set_level_indentation(-15)
+
+        nameCol = gtk.TreeViewColumn(_("Name"))
+        nameCol.set_expand(True)
+        nameCol.set_spacing(6)
+        cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
+        diskIOCol = gtk.TreeViewColumn(_("Disk I/O"))
+        networkTrafficCol = gtk.TreeViewColumn(_("Network I/O"))
+
+        cpuUsageCol.set_min_width(140)
+        diskIOCol.set_min_width(140)
+        networkTrafficCol.set_min_width(140)
+
+        statusCol = nameCol
+        vmlist.append_column(nameCol)
+        vmlist.append_column(cpuUsageCol)
+        vmlist.append_column(diskIOCol)
+        vmlist.append_column(networkTrafficCol)
+
+        # For the columns which follow, we deliberately bind columns
+        # to fields in the list store & on each update copy the info
+        # out of the vmmDomain object into the store. Although this
+        # sounds foolish, empirically this is faster than using the
+        # set_cell_data_func() callbacks to pull the data out of
+        # vmmDomain on demand. I suspect this is because the latter
+        # needs to do many transitions  C<->Python for callbacks
+        # which are relatively slow.
+
+        status_icon = gtk.CellRendererPixbuf()
+        statusCol.pack_start(status_icon, False)
+        statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
+        statusCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
+
+        name_txt = gtk.CellRendererText()
+        nameCol.pack_start(name_txt, True)
+        nameCol.add_attribute(name_txt, 'markup', ROW_MARKUP)
+        nameCol.add_attribute(name_txt, 'foreground-gdk', ROW_COLOR)
+        nameCol.set_sort_column_id(COL_NAME)
+
+        cpuUsage_txt = gtk.CellRendererText()
+        cpuUsage_img = CellRendererSparkline()
+        cpuUsage_img.set_property("xpad", 6)
+        cpuUsage_img.set_property("ypad", 12)
+        cpuUsage_img.set_property("reversed", True)
+        cpuUsageCol.pack_start(cpuUsage_img, True)
+        cpuUsageCol.pack_start(cpuUsage_txt, False)
+        cpuUsageCol.add_attribute(cpuUsage_img, 'visible', ROW_IS_VM)
+        cpuUsageCol.add_attribute(cpuUsage_txt, 'visible', ROW_IS_CONN)
+        cpuUsageCol.set_cell_data_func(cpuUsage_img, self.cpu_usage_img, None)
+        cpuUsageCol.set_visible(self.config.is_vmlist_cpu_usage_visible())
+        cpuUsageCol.set_sort_column_id(COL_CPU)
+
+        diskIO_img = CellRendererSparkline()
+        diskIO_img.set_property("xpad", 6)
+        diskIO_img.set_property("ypad", 12)
+        diskIO_img.set_property("reversed", True)
+        diskIOCol.pack_start(diskIO_img, True)
+        diskIOCol.add_attribute(diskIO_img, 'visible', ROW_IS_VM)
+        diskIOCol.set_cell_data_func(diskIO_img, self.disk_io_img, None)
+        diskIOCol.set_visible(self.config.is_vmlist_disk_io_visible())
+        diskIOCol.set_sort_column_id(COL_DISK)
+
+        networkTraffic_img = CellRendererSparkline()
+        networkTraffic_img.set_property("xpad", 6)
+        networkTraffic_img.set_property("ypad", 12)
+        networkTraffic_img.set_property("reversed", True)
+        networkTrafficCol.pack_start(networkTraffic_img, True)
+        networkTrafficCol.add_attribute(networkTraffic_img, 'visible', ROW_IS_VM)
+        networkTrafficCol.set_cell_data_func(networkTraffic_img,
+                                             self.network_traffic_img, None)
+        networkTrafficCol.set_visible(self.config.is_vmlist_network_traffic_visible())
+        networkTrafficCol.set_sort_column_id(COL_NETWORK)
+
+        model.set_sort_func(COL_NAME, self.vmlist_name_sorter)
+        model.set_sort_func(COL_CPU, self.vmlist_cpu_usage_sorter)
+        model.set_sort_func(COL_DISK, self.vmlist_disk_io_sorter)
+        model.set_sort_func(COL_NETWORK, self.vmlist_network_usage_sorter)
+
+        model.set_sort_column_id(COL_NAME, gtk.SORT_ASCENDING)
+
+
+    ##################
+    # Helper methods #
+    ##################
+
+    def current_row(self):
+        vmlist = self.window.get_widget("vm-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+
+        treestore, treeiter = active
+        if treeiter != None:
+            return treestore[treeiter]
+        return None
+
+    def current_vm(self):
+        row = self.current_row()
+        if not row or row[ROW_IS_CONN]:
+            return None
+
+        return row[ROW_HANDLE]
+
+    def current_connection(self):
+        row = self.current_row()
+        if not row:
+            return None
+
+        handle = row[ROW_HANDLE]
+        if row[ROW_IS_CONN]:
+            return handle
         else:
-            vmlist.get_selection().select_iter(vmlist.get_model().get_iter_first())
+            return handle.get_connection()
 
-    def show(self):
-        win = self.window.get_widget("vmm-manager")
-        if self.is_visible():
-            win.present()
-            return
-        win.show()
-        win.present()
-        self.engine.increment_window_counter()
+    def current_vmuuid(self):
+        vm = self.current_vm()
+        if vm is None:
+            return None
+        return vm.get_uuid()
 
-        if self.startup_error:
-            self.err.val_err(_("Error determining default hypervisor."),
-                             self.startup_error, _("Startup Error"))
-            self.startup_error = None
+    def current_connection_uri(self):
+        conn = self.current_connection()
+        if conn is None:
+            return None
+        return conn.get_uri()
 
-    def close(self, src=None, src2=None):
-        if self.is_visible():
-            win = self.window.get_widget("vmm-manager")
-            win.hide()
-            self.engine.decrement_window_counter()
-            return 1
-
-    def is_visible(self):
-        if self.window.get_widget("vmm-manager").flags() & gtk.VISIBLE:
-            return 1
-        return 0
+    ####################
+    # Action listeners #
+    ####################
 
     def exit_app(self, src=None, src2=None):
         self.emit("action-exit-app")
@@ -437,8 +568,44 @@ class vmmManager(gobject.GObject):
     def new_connection(self, src=None):
         self.emit("action-show-connect")
 
-    def vm_row_key(self, vm):
-        return vm.get_uuid() + ":" + vm.get_connection().get_uri()
+    def new_vm(self, ignore=None):
+        self.emit("action-show-create", self.current_connection_uri())
+
+    def show_about(self, src):
+        self.emit("action-show-about")
+
+    def show_help(self, src):
+        self.emit("action-show-help", None)
+
+    def show_preferences(self, src):
+        self.emit("action-show-preferences")
+
+    def show_host(self, src):
+        self.emit("action-show-host", self.current_connection_uri())
+
+    def open_vm_console(self,ignore,ignore2=None,ignore3=None):
+        if self.current_vmuuid():
+            self.emit("action-show-console",
+                      self.current_connection_uri(), self.current_vmuuid())
+        elif self.current_connection():
+            if not self.open_connection():
+                self.emit("action-show-host", self.current_connection_uri())
+
+    def open_clone_window(self, ignore1=None, ignore2=None, ignore3=None):
+        if self.current_vmuuid():
+            self.emit("action-clone-domain", self.current_connection_uri(),
+                      self.current_vmuuid())
+
+    def show_vm_details(self,ignore):
+        conn = self.current_connection()
+        if conn is None:
+            return
+        vm = self.current_vm()
+        if vm is None:
+            self.emit("action-show-host", conn.get_uri())
+        else:
+            self.emit("action-show-console",
+                      conn.get_uri(), self.vm.get_uuid())
 
     def restore_saved(self, src=None):
         conn = self.current_connection()
@@ -475,6 +642,144 @@ class vmmManager(gobject.GObject):
             details = "".join(traceback.format_exc())
             asyncjob.set_error(err, details)
 
+    def do_delete(self, ignore=None):
+        conn = self.current_connection()
+        vm = self.current_vm()
+        if vm is None:
+            self._do_delete_connection(conn)
+        else:
+            self._do_delete_vm(vm)
+
+    def _do_delete_connection(self, conn):
+        if conn is None:
+            return
+
+        result = self.err.yes_no(_("This will remove the connection:\n\n%s\n\n"
+                                   "Are you sure?") % conn.get_uri())
+        if not result:
+            return
+        self.engine.remove_connection(conn.get_uri())
+
+    def _do_delete_vm(self, vm):
+        if vm.is_active():
+            return
+
+        if not self.delete_dialog:
+            self.delete_dialog = vmmDeleteDialog(self.config, vm)
+        else:
+            self.delete_dialog.set_vm(vm)
+
+        self.delete_dialog.show()
+
+    def set_pause_state(self, state):
+        src = self.window.get_widget("vm-pause")
+        try:
+            self.ignore_pause = True
+            src.set_active(state)
+        finally:
+            self.ignore_pause = False
+
+    def pause_vm_button(self, src):
+        if self.ignore_pause:
+            return
+
+        do_pause = src.get_active()
+
+        if do_pause:
+            self.pause_vm(None)
+        else:
+            self.resume_vm(None)
+
+        # Set button state back to original value: just let the status
+        # update function fix things for us
+        self.set_pause_state(not do_pause)
+
+    def start_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-run-domain",
+                      vm.get_connection().get_uri(), vm.get_uuid())
+
+    def reboot_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-reboot-domain",
+                      vm.get_connection().get_uri(), vm.get_uuid())
+
+    def poweroff_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-shutdown-domain",
+                      vm.get_connection().get_uri(), vm.get_uuid())
+
+    def destroy_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-destroy-domain",
+                      vm.get_connection().get_uri(), vm.get_uuid())
+
+    def pause_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-suspend-domain",
+                      vm.get_connection().get_uri(), vm.get_uuid())
+
+    def resume_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-resume-domain",
+                      vm.get_connection().get_uri(), vm.get_uuid())
+
+    def migrate_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-migrate-domain",
+                      vm.get_connection().get_uri(), vm.get_uuid())
+
+    def row_expanded(self, treeview, _iter, path):
+        conn = treeview.get_model().get_value(_iter, ROW_HANDLE)
+        conn.resume()
+
+    def row_collapsed(self, treeview, _iter, path):
+        conn = treeview.get_model().get_value(_iter, ROW_HANDLE)
+        conn.pause()
+
+    def close_connection(self, ignore):
+        conn = self.current_connection()
+        if conn.get_state() != vmmConnection.STATE_DISCONNECTED:
+            conn.close()
+
+    def open_connection(self, ignore = None):
+        conn = self.current_connection()
+        if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
+            conn.open()
+            return True
+
+    def _connect_error(self, conn, details):
+        if conn.get_driver() == "xen" and not conn.is_remote():
+            self.err.show_err(_("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
+                              "Verify that:\n" +
+                              " - A Xen host kernel was booted\n" +
+                              " - The Xen service has been started\n"),
+                              details,
+                              title=_("Virtual Machine Manager Connection Failure"))
+        else:
+            self.err.show_err(_("Unable to open a connection to the libvirt "
+                                "management daemon.\n\n" +
+                                "Libvirt URI is: %s\n\n" % conn.get_uri() +
+                                "Verify that:\n" +
+                                " - The 'libvirtd' daemon has been started\n"),
+                              details,
+                              title=_("Virtual Machine Manager Connection "
+                                      "Failure"))
+
+
+    ####################################
+    # VM add/remove management methods #
+    ####################################
+
+    def vm_row_key(self, vm):
+        return vm.get_uuid() + ":" + vm.get_connection().get_uri()
 
     def vm_added(self, connection, uri, vmuuid):
         vm = connection.get_vm(vmuuid)
@@ -485,6 +790,18 @@ class vmmManager(gobject.GObject):
         model = vmlist.get_model()
 
         self._append_vm(model, vm, connection)
+
+    def vm_removed(self, connection, uri, vmuuid):
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
+
+        parent = self.rows[connection.get_uri()].iter
+        for row in range(model.iter_n_children(parent)):
+            vm = model.get_value(model.iter_nth_child(parent, row), ROW_HANDLE)
+            if vm.get_uuid() == vmuuid:
+                model.remove(model.iter_nth_child(parent, row))
+                del self.rows[self.vm_row_key(vm)]
+                break
 
     def vm_started(self, connection, uri, vmuuid):
         vm = connection.get_vm(vmuuid)
@@ -580,17 +897,38 @@ class vmmManager(gobject.GObject):
         self.rows[conn.get_uri()] = model[path]
         return _iter
 
-    def vm_removed(self, connection, uri, vmuuid):
-        vmlist = self.window.get_widget("vm-list")
-        model = vmlist.get_model()
+    def _add_connection(self, engine, conn):
+        if self.rows.has_key(conn.get_uri()):
+            return
 
-        parent = self.rows[connection.get_uri()].iter
-        for row in range(model.iter_n_children(parent)):
-            vm = model.get_value(model.iter_nth_child(parent, row), ROW_HANDLE)
-            if vm.get_uuid() == vmuuid:
-                model.remove(model.iter_nth_child(parent, row))
-                del self.rows[self.vm_row_key(vm)]
-                break
+        conn.connect("vm-added", self.vm_added)
+        conn.connect("vm-removed", self.vm_removed)
+        conn.connect("resources-sampled", self.conn_refresh_resources)
+        conn.connect("state-changed", self.conn_state_changed)
+        conn.connect("connect-error", self._connect_error)
+        conn.connect("vm-started", self.vm_started)
+
+        # add the connection to the treeModel
+        vmlist = self.window.get_widget("vm-list")
+        row = self._append_connection(vmlist.get_model(), conn)
+        vmlist.get_selection().select_iter(row)
+
+    def _remove_connection(self, engine, conn):
+        model = self.window.get_widget("vm-list").get_model()
+        parent = self.rows[conn.get_uri()].iter
+        if parent is not None:
+            child = model.iter_children(parent)
+            while child is not None:
+                del self.rows[self.vm_row_key(model.get_value(child, ROW_HANDLE))]
+                model.remove(child)
+                child = model.iter_children(parent)
+            model.remove(parent)
+            del self.rows[conn.get_uri()]
+
+
+    #############################
+    # State/UI updating methods #
+    #############################
 
     def vm_status_changed(self, vm, status):
         parent = self.rows[vm.get_connection().get_uri()].iter
@@ -625,7 +963,6 @@ class vmmManager(gobject.GObject):
         row[ROW_MARKUP] = self._build_vm_markup(vm, row)
         model.row_changed(row.path, row.iter)
 
-
     def conn_state_changed(self, conn):
         self.conn_refresh_resources(conn)
         self.vm_selected()
@@ -653,78 +990,6 @@ class vmmManager(gobject.GObject):
                     child = model.iter_children(parent)
         model.row_changed(row.path, row.iter)
 
-    def current_row(self):
-        vmlist = self.window.get_widget("vm-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-
-        treestore, treeiter = active
-        if treeiter != None:
-            return treestore[treeiter]
-        return None
-
-    def current_vm(self):
-        row = self.current_row()
-        if not row or row[ROW_IS_CONN]:
-            return None
-
-        return row[ROW_HANDLE]
-
-    def current_connection(self):
-        row = self.current_row()
-        if not row:
-            return None
-
-        handle = row[ROW_HANDLE]
-        if row[ROW_IS_CONN]:
-            return handle
-        else:
-            return handle.get_connection()
-
-    def current_vmuuid(self):
-        vm = self.current_vm()
-        if vm is None:
-            return None
-        return vm.get_uuid()
-
-    def current_connection_uri(self):
-        conn = self.current_connection()
-        if conn is None:
-            return None
-        return conn.get_uri()
-
-    def show_vm_details(self,ignore):
-        conn = self.current_connection()
-        if conn is None:
-            return
-        vm = self.current_vm()
-        if vm is None:
-            self.emit("action-show-host", conn.get_uri())
-        else:
-            self.emit("action-show-console", conn.get_uri(), self.current_vmuuid())
-
-    def close_connection(self, ignore):
-        conn = self.current_connection()
-        if conn.get_state() != vmmConnection.STATE_DISCONNECTED:
-            conn.close()
-
-    def open_connection(self, ignore = None):
-        conn = self.current_connection()
-        if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
-            conn.open()
-            return True
-
-    def open_vm_console(self,ignore,ignore2=None,ignore3=None):
-        if self.current_vmuuid():
-            self.emit("action-show-console", self.current_connection_uri(), self.current_vmuuid())
-        elif self.current_connection():
-            if not self.open_connection():
-                self.emit("action-show-host", self.current_connection_uri())
-
-    def open_clone_window(self, ignore1=None, ignore2=None, ignore3=None):
-        if self.current_vmuuid():
-            self.emit("action-clone-domain", self.current_connection_uri(),
-                      self.current_vmuuid())
 
     def vm_selected(self, ignore=None):
         conn = self.current_connection()
@@ -820,141 +1085,10 @@ class vmmManager(gobject.GObject):
 
         return False
 
-    def new_vm(self, ignore=None):
-        self.emit("action-show-create", self.current_connection_uri())
 
-    def do_delete(self, ignore=None):
-        conn = self.current_connection()
-        vm = self.current_vm()
-        if vm is None:
-            self._do_delete_connection(conn)
-        else:
-            self._do_delete_vm(vm)
-
-    def _do_delete_connection(self, conn):
-        if conn is None:
-            return
-
-        result = self.err.yes_no(_("This will remove the connection:\n\n%s\n\n"
-                                   "Are you sure?") % conn.get_uri())
-        if not result:
-            return
-        self.engine.remove_connection(conn.get_uri())
-
-    def _do_delete_vm(self, vm):
-        if vm.is_active():
-            return
-
-        if not self.delete_dialog:
-            self.delete_dialog = vmmDeleteDialog(self.config, vm)
-        else:
-            self.delete_dialog.set_vm(vm)
-
-        self.delete_dialog.show()
-
-    def show_about(self, src):
-        self.emit("action-show-about")
-
-    def show_help(self, src):
-        # From the manager window, show the help document from the beginning
-        self.emit("action-show-help", None) #No 'id', load the front page
-
-    def show_preferences(self, src):
-        self.emit("action-show-preferences")
-
-    def show_host(self, src):
-        self.emit("action-show-host", self.current_connection_uri())
-
-    def prepare_vmlist(self):
-        vmlist = self.window.get_widget("vm-list")
-
-        # Handle, name, markup, status, status icon, key/uuid, hint, is conn,
-        # is conn connected, is vm, is vm running, fg color
-        model = gtk.TreeStore(object, str, str, str, gtk.gdk.Pixbuf, str, str,
-                              bool, bool, bool, bool, gtk.gdk.Color)
-        vmlist.set_model(model)
-        util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
-
-        vmlist.set_headers_visible(True)
-        vmlist.set_level_indentation(-15)
-
-        nameCol = gtk.TreeViewColumn(_("Name"))
-        nameCol.set_expand(True)
-        nameCol.set_spacing(6)
-        cpuUsageCol = gtk.TreeViewColumn(_("CPU usage"))
-        diskIOCol = gtk.TreeViewColumn(_("Disk I/O"))
-        networkTrafficCol = gtk.TreeViewColumn(_("Network I/O"))
-
-        cpuUsageCol.set_min_width(140)
-        diskIOCol.set_min_width(140)
-        networkTrafficCol.set_min_width(140)
-
-        statusCol = nameCol
-        vmlist.append_column(nameCol)
-        vmlist.append_column(cpuUsageCol)
-        vmlist.append_column(diskIOCol)
-        vmlist.append_column(networkTrafficCol)
-
-        # For the columns which follow, we deliberately bind columns
-        # to fields in the list store & on each update copy the info
-        # out of the vmmDomain object into the store. Although this
-        # sounds foolish, empirically this is faster than using the
-        # set_cell_data_func() callbacks to pull the data out of
-        # vmmDomain on demand. I suspect this is because the latter
-        # needs to do many transitions  C<->Python for callbacks
-        # which are relatively slow.
-
-        status_icon = gtk.CellRendererPixbuf()
-        statusCol.pack_start(status_icon, False)
-        statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
-        statusCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
-
-        name_txt = gtk.CellRendererText()
-        nameCol.pack_start(name_txt, True)
-        nameCol.add_attribute(name_txt, 'markup', ROW_MARKUP)
-        nameCol.add_attribute(name_txt, 'foreground-gdk', ROW_COLOR)
-        nameCol.set_sort_column_id(COL_NAME)
-
-        cpuUsage_txt = gtk.CellRendererText()
-        cpuUsage_img = CellRendererSparkline()
-        cpuUsage_img.set_property("xpad", 6)
-        cpuUsage_img.set_property("ypad", 12)
-        cpuUsage_img.set_property("reversed", True)
-        cpuUsageCol.pack_start(cpuUsage_img, True)
-        cpuUsageCol.pack_start(cpuUsage_txt, False)
-        cpuUsageCol.add_attribute(cpuUsage_img, 'visible', ROW_IS_VM)
-        cpuUsageCol.add_attribute(cpuUsage_txt, 'visible', ROW_IS_CONN)
-        cpuUsageCol.set_cell_data_func(cpuUsage_img, self.cpu_usage_img, None)
-        cpuUsageCol.set_visible(self.config.is_vmlist_cpu_usage_visible())
-        cpuUsageCol.set_sort_column_id(COL_CPU)
-
-        diskIO_img = CellRendererSparkline()
-        diskIO_img.set_property("xpad", 6)
-        diskIO_img.set_property("ypad", 12)
-        diskIO_img.set_property("reversed", True)
-        diskIOCol.pack_start(diskIO_img, True)
-        diskIOCol.add_attribute(diskIO_img, 'visible', ROW_IS_VM)
-        diskIOCol.set_cell_data_func(diskIO_img, self.disk_io_img, None)
-        diskIOCol.set_visible(self.config.is_vmlist_disk_io_visible())
-        diskIOCol.set_sort_column_id(COL_DISK)
-
-        networkTraffic_img = CellRendererSparkline()
-        networkTraffic_img.set_property("xpad", 6)
-        networkTraffic_img.set_property("ypad", 12)
-        networkTraffic_img.set_property("reversed", True)
-        networkTrafficCol.pack_start(networkTraffic_img, True)
-        networkTrafficCol.add_attribute(networkTraffic_img, 'visible', ROW_IS_VM)
-        networkTrafficCol.set_cell_data_func(networkTraffic_img,
-                                             self.network_traffic_img, None)
-        networkTrafficCol.set_visible(self.config.is_vmlist_network_traffic_visible())
-        networkTrafficCol.set_sort_column_id(COL_NETWORK)
-
-        model.set_sort_func(COL_NAME, self.vmlist_name_sorter)
-        model.set_sort_func(COL_CPU, self.vmlist_cpu_usage_sorter)
-        model.set_sort_func(COL_DISK, self.vmlist_disk_io_sorter)
-        model.set_sort_func(COL_NETWORK, self.vmlist_network_usage_sorter)
-
-        model.set_sort_column_id(COL_NAME, gtk.SORT_ASCENDING)
+    #################
+    # Stats methods #
+    #################
 
     def vmlist_name_sorter(self, model, iter1, iter2):
         return cmp(model.get_value(iter1, ROW_NAME),
@@ -1029,118 +1163,5 @@ class vmmManager(gobject.GObject):
             return
         data = model.get_value(_iter, ROW_HANDLE).network_traffic_vector_limit(40)
         cell.set_property('data_array', data)
-
-    def set_pause_state(self, state):
-        src = self.window.get_widget("vm-pause")
-        try:
-            self.ignore_pause = True
-            src.set_active(state)
-        finally:
-            self.ignore_pause = False
-
-    def pause_vm_button(self, src):
-        if self.ignore_pause:
-            return
-
-        do_pause = src.get_active()
-
-        if do_pause:
-            self.pause_vm(None)
-        else:
-            self.resume_vm(None)
-
-        # Set button state back to original value: just let the status
-        # update function fix things for us
-        self.set_pause_state(not do_pause)
-
-    def start_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-run-domain", vm.get_connection().get_uri(), vm.get_uuid())
-
-    def reboot_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-reboot-domain", vm.get_connection().get_uri(), vm.get_uuid())
-
-    def poweroff_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-shutdown-domain", vm.get_connection().get_uri(), vm.get_uuid())
-
-    def destroy_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-destroy-domain", vm.get_connection().get_uri(), vm.get_uuid())
-
-    def pause_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-suspend-domain", vm.get_connection().get_uri(), vm.get_uuid())
-
-    def resume_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-resume-domain", vm.get_connection().get_uri(), vm.get_uuid())
-
-    def migrate_vm(self, ignore):
-        vm = self.current_vm()
-        if vm is not None:
-            self.emit("action-migrate-domain", vm.get_connection().get_uri(),
-                      vm.get_uuid())
-
-    def _add_connection(self, engine, conn):
-        if self.rows.has_key(conn.get_uri()):
-            return
-
-        conn.connect("vm-added", self.vm_added)
-        conn.connect("vm-removed", self.vm_removed)
-        conn.connect("resources-sampled", self.conn_refresh_resources)
-        conn.connect("state-changed", self.conn_state_changed)
-        conn.connect("connect-error", self._connect_error)
-        conn.connect("vm-started", self.vm_started)
-
-        # add the connection to the treeModel
-        vmlist = self.window.get_widget("vm-list")
-        row = self._append_connection(vmlist.get_model(), conn)
-        vmlist.get_selection().select_iter(row)
-
-    def _remove_connection(self, engine, conn):
-        model = self.window.get_widget("vm-list").get_model()
-        parent = self.rows[conn.get_uri()].iter
-        if parent is not None:
-            child = model.iter_children(parent)
-            while child is not None:
-                del self.rows[self.vm_row_key(model.get_value(child, ROW_HANDLE))]
-                model.remove(child)
-                child = model.iter_children(parent)
-            model.remove(parent)
-            del self.rows[conn.get_uri()]
-
-    def row_expanded(self, treeview, _iter, path):
-        conn = treeview.get_model().get_value(_iter, ROW_HANDLE)
-        conn.resume()
-
-    def row_collapsed(self, treeview, _iter, path):
-        conn = treeview.get_model().get_value(_iter, ROW_HANDLE)
-        conn.pause()
-
-    def _connect_error(self, conn, details):
-        if conn.is_xen() and not conn.is_remote():
-            self.err.show_err(_("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
-                              "Verify that:\n" +
-                              " - A Xen host kernel was booted\n" +
-                              " - The Xen service has been started\n"),
-                              details,
-                              title=_("Virtual Machine Manager Connection Failure"))
-        else:
-            self.err.show_err(_("Unable to open a connection to the libvirt "
-                                "management daemon.\n\n" +
-                                "Libvirt URI is: %s\n\n" % conn.get_uri() +
-                                "Verify that:\n" +
-                                " - The 'libvirtd' daemon has been started\n"),
-                              details,
-                              title=_("Virtual Machine Manager Connection "
-                                      "Failure"))
 
 gobject.type_register(vmmManager)
