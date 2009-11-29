@@ -673,6 +673,11 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("config-memory").set_sensitive(not ro)
         self.window.get_widget("config-maxmem").set_sensitive(not ro)
 
+        # Disable send key menu entries for offline VM
+        send_key = self.window.get_widget("details-menu-send-key")
+        for c in send_key.get_submenu().get_children():
+            c.set_sensitive(not (run or paused))
+
         self.console.update_widget_states(vm, status)
 
         self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
