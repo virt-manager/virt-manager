@@ -96,10 +96,11 @@ class vmmConnection(gobject.GObject):
     STATE_ACTIVE = 2
     STATE_INACTIVE = 3
 
-    def __init__(self, config, uri, readOnly=None, hal_helper=None):
+    def __init__(self, config, uri, readOnly=None, engine=None):
         self.__gobject_init__()
 
         self.config = config
+        self.engine = engine
 
         self.connectThread = None
         self.connectThreadEvent = threading.Event()
@@ -139,7 +140,6 @@ class vmmConnection(gobject.GObject):
         self.record = []
         self.hostinfo = None
 
-        self.hal_helper = hal_helper
         self.hal_helper_remove_sig = None
 
         self.netdev_initialized = False
@@ -153,10 +153,15 @@ class vmmConnection(gobject.GObject):
     # Init routines #
     #################
 
-    def _set_hal_remove_sig(self):
+    def get_hal_helper(self):
+        if self.engine:
+            return self.engine.get_hal_helper()
+        return None
+
+    def _set_hal_remove_sig(self, hal_helper):
         if not self.hal_helper_remove_sig:
-            sig = self.hal_helper.connect("device-removed",
-                                          self._haldev_removed)
+            sig = hal_helper.connect("device-removed",
+                                     self._haldev_removed)
             self.hal_helper_remove_sig = sig
 
     def _init_netdev(self):
@@ -170,17 +175,18 @@ class vmmConnection(gobject.GObject):
             except Exception, e:
                 self.netdev_error = _("Could build physical interface "
                                       "list via libvirt: %s") % str(e)
-        elif self.hal_helper:
+        elif self.get_hal_helper():
+            hal_helper = self.get_hal_helper()
+
             if self.is_remote():
                 self.netdev_error = _("Libvirt version does not support "
                                       "physical interface listing")
 
             else:
-                error = self.hal_helper.get_init_error()
+                error = hal_helper.get_init_error()
                 if not error:
-                    self.hal_helper.connect("netdev-added",
-                                            self._netdev_added)
-                    self._set_hal_remove_sig()
+                    hal_helper.connect("netdev-added", self._netdev_added)
+                    self._set_hal_remove_sig(hal_helper)
 
                 else:
                     self.netdev_error = _("Could not initialize HAL for "
@@ -199,17 +205,18 @@ class vmmConnection(gobject.GObject):
                 logging.debug("Using HAL for netdev enumeration")
 
     def _init_optical(self):
-        if self.hal_helper:
+        if self.get_hal_helper():
+            hal_helper = self.get_hal_helper()
+
             if self.is_remote():
                 self.optical_error = _("Libvirt version does not support "
                                        "optical media listing.")
 
             else:
-                error = self.hal_helper.get_init_error()
+                error = hal_helper.get_init_error()
                 if not error:
-                    self.hal_helper.connect("optical-added",
-                                            self._optical_added)
-                    self._set_hal_remove_sig()
+                    hal_helper.connect("optical-added", self._optical_added)
+                    self._set_hal_remove_sig(hal_helper)
 
                 else:
                     self.optical_error = _("Could not initialize HAL for "

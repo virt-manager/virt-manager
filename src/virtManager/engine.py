@@ -86,7 +86,7 @@ class vmmEngine(gobject.GObject):
         # keep running in system tray if enabled
         self.windows = 0
 
-        self.halHelper = vmmHalHelper()
+        self.hal_helper = None
         self.init_systray()
 
         self.config.on_stats_update_interval_changed(self.reschedule_timer)
@@ -117,6 +117,11 @@ class vmmEngine(gobject.GObject):
         if self.windows == 0 and not systray_enabled:
             # Show the manager so that the user can control the application
             self.show_manager()
+
+    def get_hal_helper(self):
+        if not self.hal_helper:
+            self.hal_helper = vmmHalHelper()
+        return self.hal_helper
 
     def load_stored_uris(self):
         uris = self.config.get_connections()
@@ -439,8 +444,7 @@ class vmmEngine(gobject.GObject):
         self.windowCreate.show(uri)
 
     def add_connection(self, uri, readOnly=None, autoconnect=False):
-        conn = vmmConnection(self.get_config(), uri, readOnly,
-                             self.halHelper)
+        conn = vmmConnection(self.get_config(), uri, readOnly, self)
         self.connections[uri] = {
             "connection": conn,
             "windowHost": None,
