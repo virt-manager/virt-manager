@@ -266,7 +266,6 @@ def init_optical_combo(widget, empty_sensitive=False):
 
     helper = vmmHalHelper()
     helper.connect("optical-added", optical_added, widget)
-    helper.connect("optical-media-added", optical_media_added, widget)
     helper.connect("device-removed", optical_removed, widget)
 
     widget.set_active(-1)
@@ -285,17 +284,8 @@ def optical_removed(ignore_helper, key, widget):
     active = widget.get_active()
     idx = 0
 
-    # Search for the row containing matching media key and update
-    # (clear) it, de-activating it if its currently selected
     for row in model:
-        if row[OPTICAL_MEDIA_KEY] == key:
-            row[OPTICAL_MEDIADEV].clear_media()
-            set_row_from_object(row)
-
-            if idx == active:
-                widget.set_active(-1)
-
-        elif row[OPTICAL_DEV_KEY] == key:
+        if row[OPTICAL_DEV_KEY] == key:
             # Whole device removed
             del(model[idx])
             widget.set_active(-1)
@@ -307,12 +297,15 @@ def optical_removed(ignore_helper, key, widget):
 def optical_added(ignore_helper, newobj, widget):
     model = widget.get_model()
 
+    newobj.connect("media-added", optical_media_changed, widget)
+    newobj.connect("media-removed", optical_media_changed, widget)
+
     # Brand new device
     row = [None, None, None, None, None, newobj]
     set_row_from_object(row)
     model.append(row)
 
-def optical_media_added(ignore_helper, newobj, widget):
+def optical_media_changed(newobj, widget):
     model = widget.get_model()
     active = widget.get_active()
     idx = 0
@@ -322,11 +315,13 @@ def optical_media_added(ignore_helper, newobj, widget):
     # selection, select the new media.
     for row in model:
         if row[OPTICAL_DEV_PATH] == newobj.get_path():
-            row[OPTICAL_MEDIADEV] = newobj
             set_row_from_object(row)
+            has_media = row[OPTICAL_IS_MEDIA_PRESENT]
 
-            if active == -1:
+            if has_media and active == -1:
                 widget.set_active(idx)
+            elif not has_media and active == idx:
+                widget.set_active(-1)
 
         idx = idx + 1
 

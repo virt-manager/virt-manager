@@ -21,7 +21,17 @@
 import gobject
 
 class vmmMediaDevice(gobject.GObject):
-    __gsignals__ = {}
+    __gsignals__ = {
+        "media-added"  : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                          []),
+        "media-removed"  : (gobject.SIGNAL_RUN_FIRST,
+                            gobject.TYPE_NONE, []),
+    }
+
+    def __init__(self):
+        self.__gobject_init__()
+
+        self.bus = None
 
     def __init__(self, path, key, media_label, media_key):
         self.__gobject_init__()
@@ -49,13 +59,36 @@ class vmmMediaDevice(gobject.GObject):
         self.media_label = media_label
         self.media_key = media_key
     def clear_media(self):
-        self.media_label = None
-        self.media_key = None
+        self.set_media(None, None)
 
     def pretty_label(self):
         media_label = self.get_media_label()
         if not media_label:
             media_label = _("No media present")
         return "%s (%s)" % (media_label, self.get_path())
+
+
+    ############################
+    # HAL media signal helpers #
+    ############################
+
+    def set_hal_media_signals(self, halhelper):
+        halhelper.connect("optical-media-added", self.hal_media_added)
+        halhelper.connect("device-removed", self.hal_media_removed)
+
+    def hal_media_added(self, ignore, devpath, media_label, media_key):
+        if devpath != self.get_path():
+            return
+
+        self.set_media(media_label, media_key)
+        self.emit("media-added")
+
+    def hal_media_removed(self, ignore, media_hal_path):
+        if media_hal_path != self.get_media_key():
+            return
+
+        self.clear_media()
+        self.emit("media-removed")
+
 
 gobject.type_register(vmmMediaDevice)

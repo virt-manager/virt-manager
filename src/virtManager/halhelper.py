@@ -36,7 +36,7 @@ class vmmHalHelper(gobject.GObject):
         "optical-added"  : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                             [object]),
         "optical-media-added"  : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                                  [object]),
+                                  [str, str, str]),
         "device-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                            [str]),
     }
@@ -129,13 +129,9 @@ class vmmHalHelper(gobject.GObject):
                 continue
 
             devnode, media_label, media_hal_path = self._fetch_cdrom_info(path)
-            obj = vmmMediaDevice(str(devnode), str(path), media_label,
+            self.add_optical_dev(str(devnode), str(path), media_label,
                                  media_hal_path)
 
-            optical_info[str(devnode)] = obj
-
-        for obj in optical_info.values():
-            self.emit("optical-added", obj)
 
     def populate_netdevs(self):
         bondMasters = get_bonding_masters()
@@ -169,19 +165,19 @@ class vmmHalHelper(gobject.GObject):
     def _device_removed(self, path):
         self.emit("device-removed", str(path))
 
+    def add_optical_dev(self, devpath, halpath, media_label, media_hal_path):
+        obj = vmmMediaDevice(devpath, halpath, media_label, media_hal_path)
+        obj.set_hal_media_signals(self)
+        self.emit("optical-added", obj)
 
     def _optical_added(self, halpath):
         devpath, media_label, media_hal_path = self._fetch_cdrom_info(halpath)
+        self.add_optical_dev(devpath, halpath, media_label, media_hal_path)
 
-        obj = vmmMediaDevice(devpath, halpath, media_label, media_hal_path)
-        self.emit("optical-added", obj)
+    def _optical_media_added(self, media_hal_path):
+        media_label, devpath = self._fetch_media_info(media_hal_path)
 
-    def _optical_media_added(self, halpath):
-        media_hal_path = halpath
-        media_label, devpath = self._fetch_media_info(halpath)
-
-        obj = vmmMediaDevice(devpath, halpath, media_label, media_hal_path)
-        self.emit("optical-media-added", obj)
+        self.emit("optical-media-added", devpath, media_label, media_hal_path)
 
     def _net_phys_device_added(self, halpath):
         dbusobj = self.dbus_dev_lookup(halpath)
