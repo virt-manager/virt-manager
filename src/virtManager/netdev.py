@@ -22,13 +22,16 @@ import gobject
 class vmmNetDevice(gobject.GObject):
     __gsignals__ = {}
 
-    def __init__(self, name, mac, is_shared, bridge=None):
+    def __init__(self, name, mac, is_shared, bridge=None, hal_path=None):
         self.__gobject_init__()
 
         self.name = name
         self.mac = mac
         self.shared = is_shared
         self.bridge = bridge
+
+        # Used for HAL backend population
+        self.hal_path = hal_path
 
     def get_name(self):
         return self.name
@@ -41,5 +44,8 @@ class vmmNetDevice(gobject.GObject):
 
     def get_mac(self):
         return self.mac
+
+    def get_hal_path(self):
+        return self.hal_path
 
 gobject.type_register(vmmNetDevice)

@@ -596,11 +596,16 @@ class vmmConnection(gobject.GObject):
 
     def _netdev_added(self, ignore, netdev):
         name = netdev.get_name()
+        if self.netdevs.has_key(name):
+            return
+
         self.netdevs[name] = netdev
 
-    def _haldev_removed(self, ignore, name):
-        if self.netdevs.has_key(name):
-            del self.netdevs[name]
+    def _haldev_removed(self, ignore, hal_path):
+        for name, obj in self.netdevs.items():
+            if obj.get_hal_path() == hal_path:
+                del self.netdevs[name]
+                return
 
 
     ######################################

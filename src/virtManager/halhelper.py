@@ -50,13 +50,6 @@ class vmmHalHelper(gobject.GObject):
         # Error message we encountered when initializing
         self.startup_error = None
 
-        # Host network devices. name -> vmmNetDevice object
-        self.netdevs = {}
-        # Mapping of hal IDs to net names
-        self.hal_to_netdev = {}
-        # Mapping of HAL path -> vmmMediaDevice
-        self.optical_info = {}
-
         self._dbus_connect()
 
     def get_init_error(self):
@@ -73,8 +66,6 @@ class vmmHalHelper(gobject.GObject):
             self.hal_iface = dbus.Interface(hal_object,
                                             'org.freedesktop.Hal.Manager')
 
-            self.populate_opt_media()
-            self.populate_netdevs()
 
             # Track device add/removes so we can detect newly inserted CD media
             self.hal_iface.connect_to_signal("DeviceAdded",
@@ -94,12 +85,10 @@ class vmmHalHelper(gobject.GObject):
         handle_id = gobject.GObject.connect(self, name, callback, *args)
 
         if name == "netdev-added":
-            for dev in self.netdevs.values():
-                self.emit("netdev-added", dev)
+            self.populate_netdevs()
 
         elif name == "optical-added":
-            for dev in self.optical_info.values():
-                self.emit("optical-added", dev)
+            self.populate_opt_media()
 
         return handle_id
 
@@ -133,6 +122,7 @@ class vmmHalHelper(gobject.GObject):
     #############################
 
     def populate_opt_media(self):
+        optical_info = {}
         for path in self.hal_iface.FindDeviceByCapability("storage.cdrom"):
             # Make sure we only populate CDROM devs
             if not self.is_cdrom(path):
@@ -142,11 +132,13 @@ class vmmHalHelper(gobject.GObject):
             obj = vmmMediaDevice(str(devnode), str(path), media_label,
                                  media_hal_path)
 
-            self.optical_info[str(devnode)] = obj
+            optical_info[str(devnode)] = obj
+
+        for obj in optical_info.values():
+            self.emit("optical-added", obj)
 
     def populate_netdevs(self):
         bondMasters = get_bonding_masters()
-        logging.debug("Bonding masters are: %s" % bondMasters)
 
         for bond in bondMasters:
             sysfspath = "/sys/class/net/" + bond
@@ -175,22 +167,6 @@ class vmmHalHelper(gobject.GObject):
             self._net_phys_device_added(path)
 
     def _device_removed(self, path):
-        if self.hal_to_netdev.has_key(path):
-            name = self.hal_to_netdev[path]
-            logging.debug("Removing physical net device %s from list." % name)
-
-            dev = self.netdevs[name]
-            del self.netdevs[name]
-            del self.hal_to_netdev[path]
-            return
-
-        # Update optical info
-        for dev, obj in self.optical_info.items():
-            if obj.get_key() == path:
-                del(self.optical_info[dev])
-            elif obj.get_media_key() == path:
-                obj.clear_media()
-
         self.emit("device-removed", str(path))
 
 
@@ -198,7 +174,6 @@ class vmmHalHelper(gobject.GObject):
         devpath, media_label, media_hal_path = self._fetch_cdrom_info(halpath)
 
         obj = vmmMediaDevice(devpath, halpath, media_label, media_hal_path)
-        self.optical_info[devpath] = obj
         self.emit("optical-added", obj)
 
     def _optical_media_added(self, halpath):
@@ -206,7 +181,6 @@ class vmmHalHelper(gobject.GObject):
         media_label, devpath = self._fetch_media_info(halpath)
 
         obj = vmmMediaDevice(devpath, halpath, media_label, media_hal_path)
-        self.optical_info[devpath] = obj
         self.emit("optical-media-added", obj)
 
     def _net_phys_device_added(self, halpath):
@@ -261,26 +235,12 @@ class vmmHalHelper(gobject.GObject):
                     self._net_device_added(vlanname, vlanmac, vlanpath)
 
     def _net_device_added(self, name, mac, sysfspath, halpath=None):
-        # Race conditions mean we can occassionally see device twice
-        name = str(name)
-        if self.netdevs.has_key(name):
-            return
-
         bridge = get_net_bridge_owner(name, sysfspath)
         shared = False
         if bridge is not None:
             shared = True
 
-        logging.debug("Adding net device %s %s %s (bridge: %s)" %
-                      (name, mac, sysfspath, str(bridge)))
-
-        dev = vmmNetDevice(name, mac, shared, bridge)
-        self._add_net_dev(name, halpath, dev)
-
-    def _add_net_dev(self, name, halpath, dev):
-        if halpath:
-            self.hal_to_netdev[halpath] = str(name)
-        self.netdevs[name] = dev
+        dev = vmmNetDevice(name, mac, shared, bridge, halpath)
         self.emit("netdev-added", dev)
 
 
