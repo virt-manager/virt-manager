@@ -23,7 +23,7 @@ import logging
 
 import virtinst
 
-import virtManager.opticalhelper
+import virtManager.uihelpers as uihelpers
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.error import vmmErrorDialog
 
@@ -93,7 +93,7 @@ class vmmChooseCD(gobject.GObject):
             idx = cd.get_active()
             model = cd.get_model()
             if idx != -1:
-                path = model[idx][virtManager.opticalhelper.OPTICAL_PATH]
+                path = model[idx][uihelpers.OPTICAL_PATH]
 
         if path == "" or path == None:
             return self.err.val_err(_("Invalid Media Path"),
@@ -130,7 +130,7 @@ class vmmChooseCD(gobject.GObject):
     def initialize_opt_media(self):
         try:
             widget = self.window.get_widget("cd-path")
-            virtManager.opticalhelper.init_optical_combo(widget)
+            uihelpers.init_optical_combo(widget)
             self.window.get_widget("physical-media").set_sensitive(True)
         except Exception, e:
             logging.error("Unable to create optical-helper widget: '%s'", e)

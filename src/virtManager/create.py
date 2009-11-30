@@ -30,7 +30,6 @@ import logging
 
 import virtinst
 
-import virtManager.opticalhelper
 import virtManager.uihelpers as uihelpers
 from virtManager import util
 from virtManager.error import vmmErrorDialog
@@ -243,7 +242,7 @@ class vmmCreate(gobject.GObject):
 
         # FIXME: We should disable all this if on a remote connection
         try:
-            virtManager.opticalhelper.init_optical_combo(cd_list)
+            uihelpers.init_optical_combo(cd_list)
         except Exception, e:
             logging.exception("Unable to create optical-helper widget: '%s'", e)
             cd_radio.set_sensitive(False)
