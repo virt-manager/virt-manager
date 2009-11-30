@@ -164,7 +164,8 @@ class vmmHalHelper(gobject.GObject):
         self.emit("device-removed", str(path))
 
     def add_optical_dev(self, devpath, halpath, media_label, media_hal_path):
-        obj = vmmMediaDevice(devpath, halpath, media_label, media_hal_path)
+        obj = vmmMediaDevice(devpath, halpath, bool(media_label),
+                             media_label, media_hal_path)
         obj.set_hal_media_signals(self)
         self.emit("optical-added", obj)
 

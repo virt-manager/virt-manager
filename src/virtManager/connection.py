@@ -36,6 +36,7 @@ from virtManager.network import vmmNetwork
 from virtManager.storagepool import vmmStoragePool
 from virtManager.interface import vmmInterface
 from virtManager.netdev import vmmNetDevice
+from virtManager.mediadev import vmmMediaDevice
 
 class vmmConnection(gobject.GObject):
     __gsignals__ = {
@@ -148,6 +149,7 @@ class vmmConnection(gobject.GObject):
 
         self.optical_initialized = False
         self.optical_error = ""
+        self.optical_use_libvirt = False
 
     #################
     # Init routines #
@@ -205,7 +207,16 @@ class vmmConnection(gobject.GObject):
                 logging.debug("Using HAL for netdev enumeration")
 
     def _init_optical(self):
-        if self.get_hal_helper():
+        if self.is_nodedev_capable():
+            try:
+                self.connect("nodedev-added", self._nodedev_optical_added)
+                self.connect("nodedev-removed", self._nodedev_optical_removed)
+                self.optical_use_libvirt = True
+            except Exception, e:
+                self.optical_error = _("Could build optical interface "
+                                       "list via libvirt: %s") % str(e)
+
+        elif self.get_hal_helper():
             hal_helper = self.get_hal_helper()
 
             if self.is_remote():
@@ -229,7 +240,10 @@ class vmmConnection(gobject.GObject):
         if self.optical_error:
             logging.debug(self.optical_error)
         else:
-            logging.debug("Using HAL for optical enumeration")
+            if self.optical_use_libvirt:
+                logging.debug("Using libvirt API for optical enumeration")
+            else:
+                logging.debug("Using HAL for optical enumeration")
 
     ########################
     # General data getters #
@@ -289,6 +303,9 @@ class vmmConnection(gobject.GObject):
         elif name == "optical-added":
             for dev in self.opticaldevs.values():
                 self.emit("optical-added", dev)
+        elif name == "nodedev-added":
+            for key in self.nodedevs.keys():
+                self.emit("nodedev-added", self.get_uri(), key)
 
         return handle_id
 
@@ -558,6 +575,8 @@ class vmmConnection(gobject.GObject):
         return self.pools[uuid]
     def get_interface(self, name):
         return self.interfaces[name]
+    def get_nodedev(self, name):
+        return self.nodedevs[name]
     def get_devices(self, devtype=None, devcap=None):
         retdevs = []
         for vdev in self.nodedevs.values():
@@ -645,6 +664,13 @@ class vmmConnection(gobject.GObject):
     # Update listeners #
     ####################
 
+    def _remove_optical(self, key):
+        del(self.opticaldevs[key])
+        self.emit("optical-removed", key)
+    def _add_optical(self, key, dev):
+        self.opticaldevs[key] = dev
+        self.emit("optical-added", dev)
+
     def _haldev_removed(self, ignore, hal_path):
         # Physical net device
         for name, obj in self.netdevs.items():
@@ -653,10 +679,8 @@ class vmmConnection(gobject.GObject):
                 return
 
         for key, obj in self.opticaldevs.items():
-            if obj.get_key() == hal_path:
-                del(self.opticaldevs[key])
-                print "optical-removed %s" % hal_path
-                self.emit("optical-removed", hal_path)
+            if key == hal_path:
+                self._remove_optical(key)
 
     def _netdev_added(self, ignore, netdev):
         name = netdev.get_name()
@@ -670,8 +694,24 @@ class vmmConnection(gobject.GObject):
         if self.opticaldevs.has_key(key):
             return
 
-        self.opticaldevs[key] = dev
-        self.emit("optical-added", dev)
+        self._add_optical(key, dev)
+
+    def _nodedev_optical_added(self, ignore1, ignore2, name):
+        if self.opticaldevs.has_key(name):
+            return
+
+        vobj = self.get_nodedev(name)
+        mediadev = vmmMediaDevice.mediadev_from_nodedev(self, vobj)
+        if not mediadev:
+            return
+
+        self._add_optical(name, mediadev)
+
+    def _nodedev_optical_removed(self, ignore1, ignore2, name):
+        if not self.opticaldevs.has_key(name):
+            return
+
+        self._remove_optical(name)
 
     ######################################
     # Connection closing/opening methods #

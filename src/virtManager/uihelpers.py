@@ -32,7 +32,6 @@ OPTICAL_LABEL = 1
 OPTICAL_IS_MEDIA_PRESENT = 2
 OPTICAL_DEV_KEY = 3
 OPTICAL_MEDIA_KEY = 4
-OPTICAL_MEDIADEV = 5
 
 ##############################################################
 # Initialize an error object to use for validation functions #
@@ -253,7 +252,7 @@ def generate_macaddr(conn):
 def init_optical_combo(widget, empty_sensitive=False):
     # [Device path, pretty label, has_media?, device key, media key,
     #  vmmMediaDevice]
-    model = gtk.ListStore(str, str, bool, str, str, object)
+    model = gtk.ListStore(str, str, bool, str, str)
     widget.set_model(model)
     model.clear()
 
@@ -276,11 +275,10 @@ def populate_optical_combo(conn, widget):
 
     return sigs
 
-def set_row_from_object(row):
-    obj = row[OPTICAL_MEDIADEV]
+def set_row_from_object(row, obj):
     row[OPTICAL_DEV_PATH] = obj.get_path()
     row[OPTICAL_LABEL] = obj.pretty_label()
-    row[OPTICAL_IS_MEDIA_PRESENT] = bool(obj.get_media_label())
+    row[OPTICAL_IS_MEDIA_PRESENT] = obj.has_media()
     row[OPTICAL_DEV_KEY] = obj.get_key()
     row[OPTICAL_MEDIA_KEY] = obj.get_media_key()
 
@@ -310,9 +308,11 @@ def optical_added(ignore_helper, newobj, widget):
     newobj.connect("media-removed", optical_media_changed, widget)
 
     # Brand new device
-    row = [None, None, None, None, None, newobj]
-    set_row_from_object(row)
+    row = [None, None, None, None, None]
+    set_row_from_object(row, newobj)
     model.append(row)
+
+    optical_set_default_selection(widget)
 
 def optical_media_changed(newobj, widget):
     model = widget.get_model()
@@ -324,7 +324,7 @@ def optical_media_changed(newobj, widget):
     # selection, select the new media.
     for row in model:
         if row[OPTICAL_DEV_PATH] == newobj.get_path():
-            set_row_from_object(row)
+            set_row_from_object(row, newobj)
             has_media = row[OPTICAL_IS_MEDIA_PRESENT]
 
             if has_media and active == -1:
@@ -333,6 +333,8 @@ def optical_media_changed(newobj, widget):
                 widget.set_active(-1)
 
         idx = idx + 1
+
+    optical_set_default_selection(widget)
 
 def optical_set_default_selection(widget):
     # Set the first active cdrom device as selected, otherwise none
