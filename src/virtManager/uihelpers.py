@@ -25,7 +25,6 @@ import gtk
 
 from virtinst import VirtualNetworkInterface
 
-from virtManager.halhelper import vmmHalHelper
 from virtManager.error import vmmErrorDialog
 
 OPTICAL_DEV_PATH = 0
@@ -264,12 +263,18 @@ def init_optical_combo(widget, empty_sensitive=False):
     if not empty_sensitive:
         widget.add_attribute(text, 'sensitive', 2)
 
-    helper = vmmHalHelper()
-    helper.connect("optical-added", optical_added, widget)
-    helper.connect("device-removed", optical_removed, widget)
+def populate_optical_combo(conn, widget):
+    sigs = []
+
+    widget.get_model().clear()
+
+    sigs.append(conn.connect("optical-added", optical_added, widget))
+    sigs.append(conn.connect("optical-removed", optical_removed, widget))
 
     widget.set_active(-1)
     optical_set_default_selection(widget)
+
+    return sigs
 
 def set_row_from_object(row):
     obj = row[OPTICAL_MEDIADEV]
@@ -288,7 +293,11 @@ def optical_removed(ignore_helper, key, widget):
         if row[OPTICAL_DEV_KEY] == key:
             # Whole device removed
             del(model[idx])
-            widget.set_active(-1)
+
+            if idx > active and active != -1:
+                widget.set_active(active-1)
+            elif idx == active:
+                widget.set_active(-1)
 
         idx += 1
 

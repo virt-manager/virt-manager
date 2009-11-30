@@ -122,7 +122,6 @@ class vmmHalHelper(gobject.GObject):
     #############################
 
     def populate_opt_media(self):
-        optical_info = {}
         for path in self.hal_iface.FindDeviceByCapability("storage.cdrom"):
             # Make sure we only populate CDROM devs
             if not self.is_cdrom(path):

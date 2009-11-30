@@ -131,6 +131,7 @@ class vmmChooseCD(gobject.GObject):
         try:
             widget = self.window.get_widget("cd-path")
             uihelpers.init_optical_combo(widget)
+            uihelpers.populate_optical_combo(self.conn, widget)
             self.window.get_widget("physical-media").set_sensitive(True)
         except Exception, e:
             logging.error("Unable to create optical-helper widget: '%s'", e)

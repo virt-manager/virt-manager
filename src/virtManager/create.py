@@ -79,6 +79,7 @@ class vmmCreate(gobject.GObject):
         self.guest = None
         self.usepool = False
         self.storage_browser = None
+        self.conn_signals = []
 
         self.topwin = self.window.get_widget("vmm-create")
         self.err = vmmErrorDialog(self.topwin,
@@ -156,6 +157,11 @@ class vmmCreate(gobject.GObject):
     def set_conn(self, newconn):
         if self.conn == newconn:
             return
+
+        if self.conn:
+            for signal in self.conn_signals:
+                self.conn.disconnect(signal)
+            self.conn_signals = []
 
         self.conn = newconn
         if self.conn:
@@ -238,16 +244,7 @@ class vmmCreate(gobject.GObject):
 
         # Physical CD-ROM model
         cd_list = self.window.get_widget("install-local-cdrom-combo")
-        cd_radio = self.window.get_widget("install-local-cdrom")
-
-        # FIXME: We should disable all this if on a remote connection
-        try:
-            uihelpers.init_optical_combo(cd_list)
-        except Exception, e:
-            logging.exception("Unable to create optical-helper widget: '%s'", e)
-            cd_radio.set_sensitive(False)
-            cd_list.set_sensitive(False)
-            util.tooltip_wrapper(self.window.get_widget("install-local-cdrom-box"), _("Error listing CD-ROM devices."))
+        uihelpers.init_optical_combo(cd_list)
 
         # Networking
         # [ interface type, device name, label, sensitive ]
@@ -302,7 +299,6 @@ class vmmCreate(gobject.GObject):
         self.populate_os_type_model()
         self.window.get_widget("install-os-type").set_active(0)
 
-        # Install local/iso
         self.window.get_widget("install-local-box").child.set_text("")
         iso_model = self.window.get_widget("install-local-box").get_model()
         self.populate_media_model(iso_model, self.conn.config_get_iso_paths())
@@ -411,9 +407,20 @@ class vmmCreate(gobject.GObject):
         iso_option = self.window.get_widget("install-local-iso")
         cdrom_option = self.window.get_widget("install-local-cdrom")
 
+        # Install local/iso
+        cdrom_list = self.window.get_widget("install-local-cdrom-combo")
+        try:
+            sigs = uihelpers.populate_optical_combo(self.conn, cdrom_list)
+            self.conn_signals.extend(sigs)
+        except Exception, e:
+            logging.exception("Unable to populate optical-helper widget: '%s'", e)
+            cdrom_option.set_sensitive(False)
+            util.tooltip_wrapper(
+                self.window.get_widget("install-local-cdrom-box"),
+                _("Error listing CD-ROM devices."))
         self.window.get_widget("install-local-cdrom-box").set_sensitive(is_local)
         # Don't select physical CDROM if no valid media is present
-        use_cd = (self.window.get_widget("install-local-cdrom-combo").get_active() >= 0)
+        use_cd = (cdrom_list.get_active() >= 0)
         if use_cd:
             cdrom_option.set_active(True)
         else:

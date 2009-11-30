@@ -28,11 +28,6 @@ class vmmMediaDevice(gobject.GObject):
                             gobject.TYPE_NONE, []),
     }
 
-    def __init__(self):
-        self.__gobject_init__()
-
-        self.bus = None
-
     def __init__(self, path, key, media_label, media_key):
         self.__gobject_init__()
 
