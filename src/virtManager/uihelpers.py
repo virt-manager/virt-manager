@@ -25,7 +25,7 @@ import gtk
 
 from virtinst import VirtualNetworkInterface
 
-from virtManager.opticalhelper import vmmOpticalDriveHelper
+from virtManager.halhelper import vmmHalHelper
 from virtManager.error import vmmErrorDialog
 
 OPTICAL_DEV_PATH = 0
@@ -264,7 +264,7 @@ def init_optical_combo(widget, empty_sensitive=False):
     if not empty_sensitive:
         widget.add_attribute(text, 'sensitive', 2)
 
-    helper = vmmOpticalDriveHelper()
+    helper = vmmHalHelper()
     helper.connect("optical-added", optical_added, widget)
     helper.connect("optical-media-added", optical_media_added, widget)
     helper.connect("device-removed", optical_removed, widget)
@@ -304,26 +304,8 @@ def optical_removed(ignore_helper, key, widget):
 
     optical_set_default_selection(widget)
 
-def remove_row_from_model(widget, rmrow):
-    active = widget.get_active()
-    model = widget.get_model()
-    newmodel = []
-
-    for row in model:
-        if row != rmrow:
-            newmodel.append(row)
-
-    model.clear()
-    for row in newmodel:
-        print row
-        model.append(row)
-
-    widget.set_active(-1)
-
 def optical_added(ignore_helper, newobj, widget):
     model = widget.get_model()
-    active = widget.get_active()
-    idx = 0
 
     # Brand new device
     row = [None, None, None, None, None, newobj]

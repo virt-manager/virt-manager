@@ -93,7 +93,7 @@ class vmmChooseCD(gobject.GObject):
             idx = cd.get_active()
             model = cd.get_model()
             if idx != -1:
-                path = model[idx][uihelpers.OPTICAL_PATH]
+                path = model[idx][uihelpers.OPTICAL_DEV_PATH]
 
         if path == "" or path == None:
             return self.err.val_err(_("Invalid Media Path"),

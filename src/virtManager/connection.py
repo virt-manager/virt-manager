@@ -91,7 +91,7 @@ class vmmConnection(gobject.GObject):
     STATE_ACTIVE = 2
     STATE_INACTIVE = 3
 
-    def __init__(self, config, uri, readOnly=None, netdev_helper=None):
+    def __init__(self, config, uri, readOnly=None, hal_helper=None):
         self.__gobject_init__()
 
         self.config = config
@@ -132,8 +132,9 @@ class vmmConnection(gobject.GObject):
         self.record = []
         self.hostinfo = None
 
+        self.hal_helper = hal_helper
+
         self.netdev_initialized = False
-        self.netdev_helper = netdev_helper
         self.netdev_error = ""
         self.netdev_use_libvirt = False
 
@@ -146,25 +147,25 @@ class vmmConnection(gobject.GObject):
         """
         Determine how we will be polling for net devices (HAL or libvirt)
         """
-        if self.is_nodedev_capable() and self.interface_capable:
+        if self.is_nodedev_capable() and self.interface_capable and False:
             try:
                 self._build_libvirt_netdev_list()
                 self.netdev_use_libvirt = True
             except Exception, e:
                 self.netdev_error = _("Could build physical interface "
                                       "list via libvirt: %s") % str(e)
-        elif self.netdev_helper:
+        elif self.hal_helper:
             if self.is_remote():
                 self.netdev_error = _("Libvirt version does not support "
                                       "physical interface listing")
 
             else:
-                error = self.netdev_helper.get_init_error()
+                error = self.hal_helper.get_init_error()
                 if not error:
-                    self.netdev_helper.connect("netdev-added",
-                                               self._netdev_added)
-                    self.netdev_helper.connect("netdev-removed",
-                                               self._netdev_removed)
+                    self.hal_helper.connect("netdev-added",
+                                            self._netdev_added)
+                    self.hal_helper.connect("device-removed",
+                                            self._haldev_removed)
                 else:
                     self.netdev_error = _("Could not initialize HAL for "
                                           "interface listing: %s") % error
@@ -597,8 +598,9 @@ class vmmConnection(gobject.GObject):
         name = netdev.get_name()
         self.netdevs[name] = netdev
 
-    def _netdev_removed(self, ignore, name):
-        del self.netdevs[name]
+    def _haldev_removed(self, ignore, name):
+        if self.netdevs.has_key(name):
+            del self.netdevs[name]
 
 
     ######################################

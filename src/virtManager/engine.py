@@ -29,7 +29,7 @@ import libvirt
 import virtinst
 
 from virtManager.about import vmmAbout
-from virtManager.netdevhelper import vmmNetDevHelper
+from virtManager.halhelper import vmmHalHelper
 from virtManager.clone import vmmCloneVM
 from virtManager.connect import vmmConnect
 from virtManager.connection import vmmConnection
@@ -86,7 +86,7 @@ class vmmEngine(gobject.GObject):
         # keep running in system tray if enabled
         self.windows = 0
 
-        self.netdevHelper = vmmNetDevHelper(self.config)
+        self.halHelper = vmmHalHelper()
         self.init_systray()
 
         self.config.on_stats_update_interval_changed(self.reschedule_timer)
@@ -440,7 +440,7 @@ class vmmEngine(gobject.GObject):
 
     def add_connection(self, uri, readOnly=None, autoconnect=False):
         conn = vmmConnection(self.get_config(), uri, readOnly,
-                             self.netdevHelper)
+                             self.halHelper)
         self.connections[uri] = {
             "connection": conn,
             "windowHost": None,
