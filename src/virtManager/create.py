@@ -245,7 +245,7 @@ class vmmCreate(gobject.GObject):
         try:
             virtManager.opticalhelper.init_optical_combo(cd_list)
         except Exception, e:
-            logging.error("Unable to create optical-helper widget: '%s'", e)
+            logging.exception("Unable to create optical-helper widget: '%s'", e)
             cd_radio.set_sensitive(False)
             cd_list.set_sensitive(False)
             util.tooltip_wrapper(self.window.get_widget("install-local-cdrom-box"), _("Error listing CD-ROM devices."))
