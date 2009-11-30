@@ -336,7 +336,15 @@ class vmmAddHardware(gobject.GObject):
         self.change_macaddr_use()
 
         net_list = self.window.get_widget("net-list")
+        net_warn = self.window.get_widget("net-list-warn")
         uihelpers.populate_network_list(net_list, self.vm.get_connection())
+
+        error = self.vm.get_connection().netdev_error
+        if error:
+            net_warn.show()
+            vmmutil.tooltip_wrapper(net_warn, error)
+        else:
+            net_warn.hide()
 
         netmodel = self.window.get_widget("net-model")
         self.populate_network_model_model(netmodel.get_model())

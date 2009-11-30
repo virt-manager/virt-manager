@@ -72,7 +72,6 @@ class vmmHalHelper(gobject.GObject):
                                              self._device_added)
             self.hal_iface.connect_to_signal("DeviceRemoved",
                                              self._device_removed)
-
         except Exception, e:
             (_type, value, stacktrace) = sys.exc_info ()
             logging.error("Unable to connect to HAL to list network "

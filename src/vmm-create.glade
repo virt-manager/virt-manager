@@ -369,7 +369,7 @@
                                             <property name="orientation">vertical</property>
                                             <property name="spacing">4</property>
                                             <child>
-                                              <widget class="GtkVBox" id="install-local-cdrom-box">
+                                              <widget class="GtkVBox" id="vbox123">
                                                 <property name="visible">True</property>
                                                 <property name="orientation">vertical</property>
                                                 <property name="spacing">4</property>
@@ -396,6 +396,7 @@
                                                     <child>
                                                       <widget class="GtkHBox" id="hbox10">
                                                         <property name="visible">True</property>
+                                                        <property name="spacing">6</property>
                                                         <child>
                                                           <widget class="GtkComboBox" id="install-local-cdrom-combo">
                                                             <property name="visible">True</property>
@@ -408,7 +409,14 @@
                                                           </packing>
                                                         </child>
                                                         <child>
-                                                          <placeholder/>
+                                                          <widget class="GtkImage" id="install-local-cdrom-warn">
+                                                            <property name="visible">True</property>
+                                                            <property name="stock">gtk-dialog-warning</property>
+                                                          </widget>
+                                                          <packing>
+                                                            <property name="expand">False</property>
+                                                            <property name="position">1</property>
+                                                          </packing>
                                                         </child>
                                                       </widget>
                                                     </child>
@@ -1488,6 +1496,7 @@ User shouldn't see this.</property>
                                         <child>
                                           <widget class="GtkHBox" id="hbox8">
                                             <property name="visible">True</property>
+                                            <property name="spacing">6</property>
                                             <child>
                                               <widget class="GtkComboBox" id="config-netdev">
                                                 <property name="visible">True</property>
@@ -1496,6 +1505,16 @@ User shouldn't see this.</property>
                                                 <property name="expand">False</property>
                                                 <property name="fill">False</property>
                                                 <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkImage" id="config-netdev-warn">
+                                                <property name="visible">True</property>
+                                                <property name="stock">gtk-dialog-warning</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="position">1</property>
                                               </packing>
                                             </child>
                                           </widget>

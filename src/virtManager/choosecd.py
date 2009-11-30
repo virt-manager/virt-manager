@@ -19,11 +19,11 @@
 #
 import gtk.glade
 import gobject
-import logging
 
 import virtinst
 
 import virtManager.uihelpers as uihelpers
+import virtManager.util as util
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.error import vmmErrorDialog
 
@@ -74,14 +74,13 @@ class vmmChooseCD(gobject.GObject):
         win.show()
 
     def reset_state(self):
-        if self.conn.is_remote():
-            self.window.get_widget("physical-media").set_sensitive(False)
-            self.window.get_widget("iso-image").set_active(True)
-            self.window.get_widget("cd-path").set_active(-1)
-            self.window.get_widget("iso-file-chooser").set_sensitive(False)
+        cd_path = self.window.get_widget("cd-path")
+        use_cdrom = (cd_path.get_active() > -1)
+
+        if use_cdrom:
+            self.window.get_widget("physical-media").set_active(True)
         else:
-            self.window.get_widget("physical-media").set_sensitive(True)
-            self.window.get_widget("iso-file-chooser").set_sensitive(True)
+            self.window.get_widget("iso-image").set_active(True)
 
     def ok(self,ignore1=None, ignore2=None):
         path = None
@@ -128,14 +127,20 @@ class vmmChooseCD(gobject.GObject):
         self._browse_file()
 
     def initialize_opt_media(self):
-        try:
-            widget = self.window.get_widget("cd-path")
-            uihelpers.init_optical_combo(widget)
-            uihelpers.populate_optical_combo(self.conn, widget)
-            self.window.get_widget("physical-media").set_sensitive(True)
-        except Exception, e:
-            logging.error("Unable to create optical-helper widget: '%s'", e)
-            self.window.get_widget("physical-media").set_sensitive(False)
+        widget = self.window.get_widget("cd-path")
+        warn = self.window.get_widget("cd-path-warn")
+        error = self.conn.optical_error
+
+        uihelpers.init_optical_combo(widget)
+        uihelpers.populate_optical_combo(self.conn, widget)
+
+        if error:
+            warn.show()
+            util.tooltip_wrapper(warn, error)
+        else:
+            warn.hide()
+
+        self.window.get_widget("physical-media").set_sensitive(not bool(error))
 
     def set_storage_path(self, src, path):
         self.window.get_widget("iso-path").set_text(path)

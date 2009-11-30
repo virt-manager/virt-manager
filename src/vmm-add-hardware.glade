@@ -957,6 +957,7 @@
                             <child>
                               <widget class="GtkHBox" id="hbox6">
                                 <property name="visible">True</property>
+                                <property name="spacing">6</property>
                                 <child>
                                   <widget class="GtkComboBox" id="net-list">
                                     <property name="visible">True</property>
@@ -967,13 +968,12 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkAlignment" id="alignment15">
+                                  <widget class="GtkImage" id="net-list-warn">
                                     <property name="visible">True</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
+                                    <property name="stock">gtk-dialog-warning</property>
                                   </widget>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>

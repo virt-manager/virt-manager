@@ -406,19 +406,19 @@ class vmmCreate(gobject.GObject):
         # Install local
         iso_option = self.window.get_widget("install-local-iso")
         cdrom_option = self.window.get_widget("install-local-cdrom")
-
-        # Install local/iso
         cdrom_list = self.window.get_widget("install-local-cdrom-combo")
-        try:
-            sigs = uihelpers.populate_optical_combo(self.conn, cdrom_list)
-            self.conn_signals.extend(sigs)
-        except Exception, e:
-            logging.exception("Unable to populate optical-helper widget: '%s'", e)
+        cdrom_warn = self.window.get_widget("install-local-cdrom-warn")
+
+        sigs = uihelpers.populate_optical_combo(self.conn, cdrom_list)
+        self.conn_signals.extend(sigs)
+
+        if self.conn.optical_error:
+            cdrom_warn.show()
             cdrom_option.set_sensitive(False)
-            util.tooltip_wrapper(
-                self.window.get_widget("install-local-cdrom-box"),
-                _("Error listing CD-ROM devices."))
-        self.window.get_widget("install-local-cdrom-box").set_sensitive(is_local)
+            util.tooltip_wrapper(cdrom_warn, self.conn.optical_error)
+        else:
+            cdrom_warn.hide()
+
         # Don't select physical CDROM if no valid media is present
         use_cd = (cdrom_list.get_active() >= 0)
         if use_cd:
@@ -482,7 +482,14 @@ class vmmCreate(gobject.GObject):
 
         # Networking
         net_list = self.window.get_widget("config-netdev")
+        net_warn = self.window.get_widget("config-netdev-warn")
         uihelpers.populate_network_list(net_list, self.conn)
+
+        if self.conn.netdev_error:
+            net_warn.show()
+            util.tooltip_wrapper(net_warn, self.conn.netdev_error)
+        else:
+            net_warn.hide()
 
         newmac = uihelpers.generate_macaddr(self.conn)
         self.window.get_widget("config-set-macaddr").set_active(bool(newmac))
