@@ -28,11 +28,12 @@ from virtinst import VirtualNetworkInterface
 from virtManager.opticalhelper import vmmOpticalDriveHelper
 from virtManager.error import vmmErrorDialog
 
-OPTICAL_PATH = 0
+OPTICAL_DEV_PATH = 0
 OPTICAL_LABEL = 1
 OPTICAL_IS_MEDIA_PRESENT = 2
-OPTICAL_HAL_PATH = 3
-OPTICAL_MEDIADEV = 4
+OPTICAL_DEV_KEY = 3
+OPTICAL_MEDIA_KEY = 4
+OPTICAL_MEDIADEV = 5
 
 ##############################################################
 # Initialize an error object to use for validation functions #
@@ -251,8 +252,9 @@ def generate_macaddr(conn):
 ##############################################
 
 def init_optical_combo(widget, empty_sensitive=False):
-    # [Device path, pretty label, has_media?, unique hal path, vmmMediaDevice]
-    model = gtk.ListStore(str, str, bool, str, object)
+    # [Device path, pretty label, has_media?, device key, media key,
+    #  vmmMediaDevice]
+    model = gtk.ListStore(str, str, bool, str, str, object)
     widget.set_model(model)
     model.clear()
 
@@ -264,48 +266,80 @@ def init_optical_combo(widget, empty_sensitive=False):
 
     helper = vmmOpticalDriveHelper()
     helper.connect("optical-added", optical_added, widget)
-    helper.connect("optical-removed", optical_removed, widget)
+    helper.connect("optical-media-added", optical_media_added, widget)
+    helper.connect("device-removed", optical_removed, widget)
 
     widget.set_active(-1)
     optical_set_default_selection(widget)
 
 def set_row_from_object(row):
     obj = row[OPTICAL_MEDIADEV]
-    row[OPTICAL_PATH] = obj.get_path()
+    row[OPTICAL_DEV_PATH] = obj.get_path()
     row[OPTICAL_LABEL] = obj.pretty_label()
     row[OPTICAL_IS_MEDIA_PRESENT] = bool(obj.get_media_label())
-    row[OPTICAL_HAL_PATH] = obj.get_key()
+    row[OPTICAL_DEV_KEY] = obj.get_key()
+    row[OPTICAL_MEDIA_KEY] = obj.get_media_key()
 
-def optical_removed(ignore_helper, halpath, widget):
+def optical_removed(ignore_helper, key, widget):
     model = widget.get_model()
     active = widget.get_active()
     idx = 0
-    # Search for the row containing matching HAL volume path
-    # and update (clear) it, de-activating it if its currently
-    # selected
+
+    # Search for the row containing matching media key and update
+    # (clear) it, de-activating it if its currently selected
     for row in model:
-        if row[OPTICAL_HAL_PATH] == halpath:
-            row[OPTICAL_MEDIADEV].set_media_label(None)
+        if row[OPTICAL_MEDIA_KEY] == key:
+            row[OPTICAL_MEDIADEV].clear_media()
             set_row_from_object(row)
 
             if idx == active:
                 widget.set_active(-1)
-        idx = idx + 1
+
+        elif row[OPTICAL_DEV_KEY] == key:
+            # Whole device removed
+            del(model[idx])
+            widget.set_active(-1)
+
+        idx += 1
 
     optical_set_default_selection(widget)
+
+def remove_row_from_model(widget, rmrow):
+    active = widget.get_active()
+    model = widget.get_model()
+    newmodel = []
+
+    for row in model:
+        if row != rmrow:
+            newmodel.append(row)
+
+    model.clear()
+    for row in newmodel:
+        print row
+        model.append(row)
+
+    widget.set_active(-1)
 
 def optical_added(ignore_helper, newobj, widget):
     model = widget.get_model()
     active = widget.get_active()
     idx = 0
-    found = False
+
+    # Brand new device
+    row = [None, None, None, None, None, newobj]
+    set_row_from_object(row)
+    model.append(row)
+
+def optical_media_added(ignore_helper, newobj, widget):
+    model = widget.get_model()
+    active = widget.get_active()
+    idx = 0
 
     # Search for the row with matching device node and
     # fill in info about inserted media. If model has no current
     # selection, select the new media.
     for row in model:
-        if row[OPTICAL_PATH] == newobj.get_path():
-            found = True
+        if row[OPTICAL_DEV_PATH] == newobj.get_path():
             row[OPTICAL_MEDIADEV] = newobj
             set_row_from_object(row)
 
@@ -313,14 +347,6 @@ def optical_added(ignore_helper, newobj, widget):
                 widget.set_active(idx)
 
         idx = idx + 1
-
-    if not found:
-        # Brand new device
-        row = [None, None, None, None, newobj]
-        set_row_from_object(row)
-        model.append(row)
-        if active == -1:
-            widget.set_active(len(model) - 1)
 
 def optical_set_default_selection(widget):
     # Set the first active cdrom device as selected, otherwise none

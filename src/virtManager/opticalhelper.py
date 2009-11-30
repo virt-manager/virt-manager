@@ -20,7 +20,6 @@
 import gobject
 import dbus
 import logging
-import gtk
 
 from virtManager.mediadev import vmmMediaDevice
 
@@ -28,8 +27,10 @@ class vmmOpticalDriveHelper(gobject.GObject):
     __gsignals__ = {
         "optical-added"  : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                             [object]),
-        "optical-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                            [str]),
+        "optical-media-added"  : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                                  [object]),
+        "device-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+                           [str]),
     }
 
     def __init__(self):
@@ -74,64 +75,93 @@ class vmmOpticalDriveHelper(gobject.GObject):
     def populate_opt_media(self):
         volinfo = {}
 
-        # Find info about all current present media
-        for path in self.hal_iface.FindDeviceByCapability("volume"):
-            label, devnode = self._fetch_device_info(path)
-
-            if not devnode:
-                # Not an applicable device
-                continue
-
-            volinfo[devnode] = (label, path)
-
         for path in self.hal_iface.FindDeviceByCapability("storage.cdrom"):
             # Make sure we only populate CDROM devs
-            dev = self.bus.get_object("org.freedesktop.Hal", path)
-            devif = dbus.Interface(dev, "org.freedesktop.Hal.Device")
-            devnode = devif.GetProperty("block.device")
+            if not self.is_cdrom(path):
+                continue
 
-            if volinfo.has_key(devnode):
-                label, path = volinfo[devnode]
-            else:
-                label, path = None, None
-
-            obj = vmmMediaDevice(str(devnode), str(path), label)
+            devnode, media_label, media_hal_path = self._fetch_cdrom_info(path)
+            obj = vmmMediaDevice(str(devnode), str(path), media_label,
+                                 media_hal_path)
 
             self.device_info[str(devnode)] = obj
 
     def _device_added(self, path):
-        label, devnode = self._fetch_device_info(path)
+        media_label = None
+        media_hal_path = None
+        devpath = None
+        signal = None
 
-        if not devnode:
-            # Not an applicable device
+        if self.is_cdrom_media(path):
+            media_hal_path = path
+            media_label, devpath = self._fetch_media_info(path)
+            signal = "optical-media-added"
+        elif self.is_cdrom(path):
+            devpath, media_label, media_hal_path = self._fetch_cdrom_info(path)
+            signal = "optical-added"
+        else:
+            # Not a relevant device
             return
 
-        obj = vmmMediaDevice(str(devnode), str(path), str(label))
-        self.device_info[str(devnode)] = obj
+        obj = vmmMediaDevice(devpath, path, media_label, media_hal_path)
+        self.device_info[devpath] = obj
 
-        logging.debug("Optical device added: %s" % obj.pretty_label())
-        self.emit("optical-added", obj)
+        self.emit(signal, obj)
 
     def _device_removed(self, path):
-        logging.debug("Optical device removed: %s" % str(path))
-        self.emit("optical-removed", str(path))
+        self.emit("device-removed", str(path))
 
-    def _fetch_device_info(self, path):
+    def dbus_dev_lookup(self, halpath):
+        obj = self.bus.get_object("org.freedesktop.Hal", halpath)
+        objif = dbus.Interface(obj, "org.freedesktop.Hal.Device")
+        return objif
+
+    def is_cdrom_media(self, halpath):
+        obj = self.dbus_dev_lookup(halpath)
+        return bool(obj.QueryCapability("volume") and
+                    obj.GetPropertyBoolean("volume.is_disc") and
+                    obj.GetPropertyBoolean("volume.disc.has_data"))
+
+    def is_cdrom(self, halpath):
+        obj = self.dbus_dev_lookup(halpath)
+        return bool(obj.QueryCapability("storage.cdrom"))
+
+
+    def _fetch_media_info(self, halpath):
         label = None
         devnode = None
 
-        vol = self.bus.get_object("org.freedesktop.Hal", path)
-        volif = dbus.Interface(vol, "org.freedesktop.Hal.Device")
-        if volif.QueryCapability("volume"):
+        volif = self.dbus_dev_lookup(halpath)
 
-            if (volif.GetPropertyBoolean("volume.is_disc") and
-                volif.GetPropertyBoolean("volume.disc.has_data")):
-
-                devnode = volif.GetProperty("block.device")
-                label = volif.GetProperty("volume.label")
-                if label == None or len(label) == 0:
-                    label = devnode
+        devnode = volif.GetProperty("block.device")
+        label = volif.GetProperty("volume.label")
+        if not label:
+            label = devnode
 
         return (label and str(label), devnode and str(devnode))
+
+    def _fetch_cdrom_info(self, halpath):
+        devif = self.dbus_dev_lookup(halpath)
+
+        devnode = devif.GetProperty("block.device")
+        media_label = None
+        media_hal_path = None
+
+        if devnode:
+            media_label, media_hal_path = self._find_media_for_devpath(devnode)
+
+        return (devnode and str(devnode), media_label, media_hal_path)
+
+    def _find_media_for_devpath(self, devpath):
+        for path in self.hal_iface.FindDeviceByCapability("volume"):
+            if not self.is_cdrom_media(path):
+                continue
+
+            label, devnode = self._fetch_media_info(path)
+
+            if devnode == devpath:
+                return (label, path)
+
+        return None, None
 
 gobject.type_register(vmmOpticalDriveHelper)

@@ -23,12 +23,13 @@ import gobject
 class vmmMediaDevice(gobject.GObject):
     __gsignals__ = {}
 
-    def __init__(self, path, key, media_label=None):
+    def __init__(self, path, key, media_label, media_key):
         self.__gobject_init__()
 
         self.path = path
         self.key = key
         self.media_label = media_label
+        self.media_key = media_key
 
     def get_path(self):
         return self.path
@@ -41,9 +42,15 @@ class vmmMediaDevice(gobject.GObject):
 
     def get_media_label(self):
         return self.media_label
+    def get_media_key(self):
+        return self.media_key
 
-    def set_media_label(self, media_label):
+    def set_media(self, media_label, media_key):
         self.media_label = media_label
+        self.media_key = media_key
+    def clear_media(self):
+        self.media_label = None
+        self.media_key = None
 
     def pretty_label(self):
         media_label = self.get_media_label()
