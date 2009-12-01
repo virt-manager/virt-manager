@@ -26,6 +26,24 @@ from virtManager.IPy import IP
 class vmmNetwork(gobject.GObject):
     __gsignals__ = { }
 
+    @staticmethod
+    def pretty_desc(forward, forwardDev):
+        if forward or forwardDev:
+            if not forward or forward == "nat":
+                if forwardDev:
+                    desc = _("NAT to %s") % forwardDev
+                else:
+                    desc = _("NAT")
+            elif forward == "route":
+                if forwardDev:
+                    desc = _("Route to %s") % forwardDev
+                else:
+                    desc = _("Routed network")
+        else:
+            desc = _("Isolated network")
+
+        return desc
+
     def __init__(self, config, connection, net, uuid, active):
         self.__gobject_init__()
         self.config = config
@@ -115,21 +133,7 @@ class vmmNetwork(gobject.GObject):
 
     def pretty_forward_mode(self):
         forward, forwardDev = self.get_ipv4_forward()
-        if forward or forwardDev:
-            if not forward or forward == "nat":
-                if forwardDev:
-                    desc = _("NAT to %s") % forwardDev
-                else:
-                    desc = _("NAT")
-            elif forward == "route":
-                if forwardDev:
-                    desc = _("Route to %s") % forwardDev
-                else:
-                    desc = _("Routed network")
-        else:
-            desc = _("Isolated network")
-
-        return desc
+        return vmmNetwork.pretty_desc(forward, forwardDev)
 
     def is_read_only(self):
         if self.connection.is_read_only():
