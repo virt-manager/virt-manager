@@ -1182,10 +1182,19 @@ class vmmCreate(gobject.GObject):
             return self.err.val_err(_("Error setting OS information."),
                                     str(e))
 
-        if instmethod == INSTALL_PAGE_ISO and not revalidate:
-            uihelpers.check_path_search_for_qemu(self.topwin, self.config,
-                                                 self.conn,
-                                                 self.guest.installer.location)
+        if not revalidate:
+            if self.guest.installer.scratchdir_required():
+                path = self.guest.installer.scratchdir
+            elif instmethod == INSTALL_PAGE_ISO:
+                path = self.guest.installer.location
+            else:
+                path = None
+
+            if path:
+                uihelpers.check_path_search_for_qemu(self.topwin, self.config,
+                                                     self.conn, path)
+
+
 
         # Validation passed, store the install path (if there is one) in
         # gconf
