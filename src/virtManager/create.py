@@ -1182,6 +1182,11 @@ class vmmCreate(gobject.GObject):
             return self.err.val_err(_("Error setting OS information."),
                                     str(e))
 
+        if instmethod == INSTALL_PAGE_ISO and not revalidate:
+            uihelpers.check_path_search_for_qemu(self.topwin, self.config,
+                                                 self.conn,
+                                                 self.guest.installer.location)
+
         # Validation passed, store the install path (if there is one) in
         # gconf
         self.get_config_local_media(store_media=True)
@@ -1246,6 +1251,10 @@ class vmmCreate(gobject.GObject):
                                   _("Do you really want to use the disk?"))
             if not res:
                 return False
+
+        if not revalidate:
+            uihelpers.check_path_search_for_qemu(self.topwin, self.config,
+                                                 self.conn, disk.path)
 
         return True
 

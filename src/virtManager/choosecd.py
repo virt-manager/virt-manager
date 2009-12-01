@@ -35,12 +35,13 @@ class vmmChooseCD(gobject.GObject):
     def __init__(self, config, dev_id_info, connection):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-choose-cd.glade", "vmm-choose-cd", domain="virt-manager")
-        self.err = vmmErrorDialog(self.window.get_widget("vmm-choose-cd"),
+        self.topwin = self.window.get_widget("vmm-choose-cd")
+        self.topwin.hide()
+
+        self.err = vmmErrorDialog(self.topwin,
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
-        self.topwin = self.window.get_widget("vmm-choose-cd")
-        self.topwin.hide()
 
         self.config = config
         self.dev_id_info = dev_id_info
@@ -106,6 +107,9 @@ class vmmChooseCD(gobject.GObject):
                                         conn=self.conn.vmm)
         except Exception, e:
             return self.err.val_err(_("Invalid Media Path"), str(e))
+
+        uihelpers.check_path_search_for_qemu(self.topwin, self.config,
+                                             self.conn, self._dev.path)
 
         self.emit("cdrom-chosen", self.dev_id_info, disk.path, disk.type)
         self.cancel()

@@ -34,6 +34,10 @@ OPTICAL_IS_MEDIA_PRESENT = 2
 OPTICAL_DEV_KEY = 3
 OPTICAL_MEDIA_KEY = 4
 
+# What user we guess the qemu:///system starts the emulator as. Some distros
+# may use a nonroot user, so simply changing this will cause several UI
+# pieces to attempt to verify that permissions are correct. Eventually this
+# should be exposed via capabilities so we can determine this programmatically.
 QEMU_SYSTEM_EMULATOR_USER = "root"
 
 ##############################################################

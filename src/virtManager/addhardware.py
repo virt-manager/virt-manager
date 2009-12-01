@@ -84,6 +84,7 @@ class vmmAddHardware(gobject.GObject):
         self.__gobject_init__()
         self.config = config
         self.vm = vm
+        self.conn = vm.get_connection()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-add-hardware.glade", "vmm-add-hardware", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-add-hardware")
         self.err = vmmErrorDialog(self.topwin,
@@ -1197,7 +1198,13 @@ class vmmAddHardware(gobject.GObject):
             res = self.err.yes_no(
                 _('Disk "%s" is already in use by another guest!' % self._dev),
                 _("Do you really want to use the disk?"))
-            return res
+            if not res:
+                return False
+
+        uihelpers.check_path_search_for_qemu(self.topwin, self.config,
+                                             self.conn, self._dev.path)
+
+
 
     def validate_page_network(self):
         nettype, devname = self.get_config_network()
