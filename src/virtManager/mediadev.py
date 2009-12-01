@@ -44,7 +44,7 @@ class vmmMediaDevice(gobject.GObject):
         path = nodedev.block
         key = nodedev.name
         has_media = nodedev.media_available
-        media_label = None
+        media_label = nodedev.media_label
         media_key = None
 
         nodedev_obj = conn.vmm.nodeDeviceLookupByName(key)
@@ -92,7 +92,7 @@ class vmmMediaDevice(gobject.GObject):
         has_media = self.has_media()
         if not has_media:
             media_label = _("No media present")
-        else:
+        elif not media_label:
             media_label = _("Media Unknown")
 
         return "%s (%s)" % (media_label, self.get_path())
