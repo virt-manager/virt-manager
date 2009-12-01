@@ -283,8 +283,14 @@ def main():
     import warnings
     warnings.filterwarnings('error', module='gtk')
     try:
-        import gtk
         import gobject
+
+        # Set program name for gnome shell (before importing gtk, which
+        # seems to call set_prgname on its own)
+        if hasattr(gobject, "set_prgname"):
+            gobject.set_prgname(appname)
+
+        import gtk
     except Warning, e:
         # ...the risk is we catch too much though
         # Damned if we do, damned if we dont :-)(
@@ -319,10 +325,6 @@ def main():
     import dbus.glib
     dbus.glib.threads_init()
     import dbus.service
-
-    # Set program name for gnome shell
-    if hasattr(gobject, "set_prgname"):
-        gobject.set_prgname(appname)
 
     # Specifically init config/gconf before the fork, so that pam
     # doesn't think we closed the app, therefor robbing us of
