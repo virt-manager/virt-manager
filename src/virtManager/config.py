@@ -480,6 +480,20 @@ class vmmConfig:
     def set_url_list_length(self, length):
         self.conf.set_int(self.conf_dir + "/urls/url-list-length", length)
 
+    # Whether to ask about fixing path permissions
+    def add_perms_fix_ignore(self, pathlist):
+        current_list = self.get_perms_fix_ignore() or []
+        for path in pathlist:
+            if path in current_list:
+                continue
+            current_list.append(path)
+        self.conf.set_list(self.conf_dir + "/paths/perms_fix_ignore",
+                           gconf.VALUE_STRING,
+                           current_list)
+    def get_perms_fix_ignore(self):
+        return self.conf.get_list(self.conf_dir + "/paths/perms_fix_ignore",
+                                  gconf.VALUE_STRING)
+
 
     # Manager view connection list
     def add_connection(self, uri):

@@ -24,6 +24,7 @@ import traceback
 import gtk
 
 from virtinst import VirtualNetworkInterface
+from virtinst import VirtualDisk
 
 from virtManager.error import vmmErrorDialog
 
@@ -32,6 +33,8 @@ OPTICAL_LABEL = 1
 OPTICAL_IS_MEDIA_PRESENT = 2
 OPTICAL_DEV_KEY = 3
 OPTICAL_MEDIA_KEY = 4
+
+QEMU_SYSTEM_EMULATOR_USER = "root"
 
 ##############################################################
 # Initialize an error object to use for validation functions #
@@ -387,3 +390,57 @@ def build_shutdown_button_menu(config, widget, shutdown_cb, reboot_cb,
     destroy.show()
     destroy.connect("activate", destroy_cb)
     menu.add(destroy)
+
+#####################################
+# Path permissions checker for qemu #
+#####################################
+def check_path_search_for_qemu(parent, config, conn, path):
+    set_error_parent(parent)
+
+    if conn.is_remote() or not conn.is_qemu_system():
+        return
+
+    user = QEMU_SYSTEM_EMULATOR_USER
+
+    skip_paths = config.get_perms_fix_ignore()
+    broken_paths = VirtualDisk.check_path_search_for_user(conn.vmm, path, user)
+    for p in broken_paths:
+        if p in skip_paths:
+            broken_paths.remove(p)
+
+    if not broken_paths:
+        return
+
+    logging.debug("No search access for dirs: %s" % broken_paths)
+    resp, chkres = err_dial.warn_chkbox(
+                    _("The emulator may not have search permissions "
+                      "for the path '%s'.") % path,
+                    _("Do you want to correct this now?"),
+                    _("Don't ask about these directories again."))
+
+    if chkres:
+        config.add_perms_fix_ignore(broken_paths)
+    if not resp:
+        return
+
+    logging.debug("Attempting to correct permission issues.")
+    errors = VirtualDisk.fix_path_search_for_user(conn.vmm, path, user)
+    if not errors:
+        return
+
+    errmsg = _("Errors were encountered changing permissions for the "
+               "following directories:")
+    details = ""
+    for path, error in errors.items():
+        if path not in broken_paths:
+            continue
+        details += "%s : %s\n" % (path, error)
+
+    logging.debug("Permission errors:\n%s" % details)
+
+    ignore, chkres = err_dial.err_chkbox(errmsg, details,
+                         _("Don't ask about these directories again."))
+
+    if chkres:
+        config.add_perms_fix_ignore(errors.keys())
+
