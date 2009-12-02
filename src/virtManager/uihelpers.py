@@ -59,6 +59,27 @@ def set_error_parent(parent):
 # Widgets for listing network device options (in create, addhardware) #
 #######################################################################
 
+def pretty_network_desc(nettype, source=None, netobj=None):
+    if nettype == VirtualNetworkInterface.TYPE_USER:
+        return _("Usermode networking")
+
+    extra = None
+    if nettype == VirtualNetworkInterface.TYPE_BRIDGE:
+        ret = _("Bridge")
+    elif nettype == VirtualNetworkInterface.TYPE_VIRTUAL:
+        ret = _("Virtual network")
+        if netobj:
+            extra = ": %s" % netobj.pretty_forward_mode()
+    else:
+        ret = nettype.capitalize()
+
+    if source:
+        ret += " '%s'" % source
+    if extra:
+        ret += " %s" % extra
+
+    return ret
+
 def init_network_list(net_list):
     # [ network type, source name, label, sensitive? ]
     net_model = gtk.ListStore(str, str, str, bool)
@@ -97,8 +118,8 @@ def populate_network_list(net_list, conn):
 
     # For qemu:///session
     if conn.is_qemu_session():
-        model.append([VirtualNetworkInterface.TYPE_USER, None,
-                     _("Usermode Networking"), True])
+        nettype = VirtualNetworkInterface.TYPE_USER
+        model.append([nettype, None, pretty_network_desc(nettype), True])
         set_active(0)
         return
 
@@ -107,13 +128,11 @@ def populate_network_list(net_list, conn):
     # Virtual Networks
     for uuid in conn.list_net_uuids():
         net = conn.get_net(uuid)
+        nettype = VirtualNetworkInterface.TYPE_VIRTUAL
 
-        label = _("Virtual network") + " '%s'" % net.get_name()
+        label = pretty_network_desc(nettype, net.get_name(), net)
         if not net.is_active():
             label +=  " (%s)" % _("Inactive")
-
-        desc = net.pretty_forward_mode()
-        label += ": %s" % desc
 
         hasNet = True
         # FIXME: Should we use 'default' even if it's inactive?
@@ -121,8 +140,7 @@ def populate_network_list(net_list, conn):
         if net.get_name() == "default":
             netIdxLabel = label
 
-        vnet_dict[label] = [VirtualNetworkInterface.TYPE_VIRTUAL,
-                           net.get_name(), label, True]
+        vnet_dict[label] = [nettype, net.get_name(), label, True]
 
         # Build a list of vnet bridges, so we know not to list them
         # in the physical interface list
@@ -140,16 +158,17 @@ def populate_network_list(net_list, conn):
     for name in conn.list_net_device_paths():
         br = conn.get_net_device(name)
         bridge_name = br.get_bridge()
+        nettype = VirtualNetworkInterface.TYPE_BRIDGE
 
         if (bridge_name in vnet_bridges) or (br.get_name() in vnet_bridges):
             # Don't list this, as it is basically duplicating virtual net info
             continue
 
         if br.is_shared():
-            hasShared = True
             sensitive = True
+            hasShared = True
             if br.get_bridge():
-                brlabel =  "(%s %s)" % (_("Bridge"), bridge_name)
+                brlabel = "(%s)" % pretty_network_desc(nettype, bridge_name)
             else:
                 bridge_name = name
                 brlabel = _("(Empty bridge)")
@@ -161,8 +180,7 @@ def populate_network_list(net_list, conn):
         if hasShared and not brIdxLabel:
             brIdxLabel = label
 
-        row = [VirtualNetworkInterface.TYPE_BRIDGE,
-               bridge_name, label, sensitive]
+        row = [nettype, bridge_name, label, sensitive]
 
         if sensitive:
             bridge_dict[label] = row

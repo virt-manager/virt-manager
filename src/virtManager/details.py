@@ -137,6 +137,7 @@ class vmmDetails(gobject.GObject):
                                      "vmm-details", domain="virt-manager")
         self.config = config
         self.vm = vm
+        self.conn = self.vm.get_connection()
         self.engine = engine
 
         self.topwin = self.window.get_widget("vmm-details")
@@ -1507,12 +1508,26 @@ class vmmDetails(gobject.GObject):
         if not netinfo:
             return
 
-        self.window.get_widget("network-source-type").set_text(netinfo[5])
-        self.window.get_widget("network-mac-address").set_text(netinfo[2])
-        self.window.get_widget("network-source-device").set_text(netinfo[3] or
-                                                                 "-")
+        nettype = netinfo[5]
+        source = netinfo[3]
 
-        model = netinfo[6] or _("Hypervisor Default")
+        netobj = None
+        if nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
+            name_dict = {}
+            for uuid in self.conn.list_net_uuids():
+                net = self.conn.get_net(uuid)
+                name = net.get_name()
+                name_dict[name] = net
+
+            if source and name_dict.has_key(source):
+                netobj = name_dict[source]
+
+        desc = uihelpers.pretty_network_desc(nettype, source, netobj)
+
+        self.window.get_widget("network-mac-address").set_text(netinfo[2])
+        self.window.get_widget("network-source-device").set_text(desc)
+
+        model = netinfo[6] or _("Hypervisor default")
         self.window.get_widget("network-source-model").set_text(model)
 
     def refresh_input_page(self):
