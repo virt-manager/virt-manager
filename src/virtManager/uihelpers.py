@@ -166,8 +166,8 @@ def populate_network_list(net_list, conn):
 
         if br.is_shared():
             sensitive = True
-            hasShared = True
             if br.get_bridge():
+                hasShared = True
                 brlabel = "(%s)" % pretty_network_desc(nettype, bridge_name)
             else:
                 bridge_name = name
