@@ -820,7 +820,7 @@ def do_we_default(conn, vol, path, ro, shared, devtype):
 
     if ro:
         info = append_str(info, _("Read Only"))
-    elif not vol and not os.access(path, os.W_OK):
+    elif not vol and path and not os.access(path, os.W_OK):
         info = append_str(info, _("No write access"))
 
     if shared:
