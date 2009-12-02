@@ -1297,9 +1297,22 @@ class vmmDomain(gobject.GObject):
 
                 # [ devicetype, unique, device target, source path,
                 #   disk device type, disk type, readonly?, sharable?,
-                #   bus type ]
+                #   bus type, disk idx ]
                 disks.append(["disk", devdst, devdst, srcpath, devtype, typ,
-                              readonly, sharable, bus])
+                              readonly, sharable, bus, 0])
+
+            # Iterate through all disks and calculate what number they are
+            idx_mapping = {}
+            for disk in disks:
+                devtype = disk[4]
+                bus = disk[8]
+                key = devtype + (bus or "")
+
+                if not idx_mapping.has_key(key):
+                    idx_mapping[key] = 1
+
+                disk[9] = idx_mapping[key]
+                idx_mapping[key] += 1
 
             return disks
 

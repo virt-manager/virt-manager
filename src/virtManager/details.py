@@ -69,6 +69,35 @@ PAGE_CONSOLE = 0
 PAGE_DETAILS = 1
 PAGE_DYNAMIC_OFFSET = 2
 
+def prettyify_disk_bus(bus):
+    if bus in ["ide", "scsi", "usb"]:
+        return bus.upper()
+
+    if bus in ["xen"]:
+        return bus.capitalize()
+
+    if bus == "virtio":
+        return "VirtIO"
+
+    return bus
+
+def prettyify_disk(devtype, bus, idx):
+    busstr = prettyify_disk_bus(bus) or ""
+
+    if devtype == "floppy":
+        devstr = "Floppy"
+        busstr = ""
+    elif devtype == "cdrom":
+        devstr = "CDROM"
+    else:
+        devstr = devtype.capitalize()
+
+    if busstr:
+        ret = "%s %s" % (busstr, devstr)
+    else:
+        ret = devstr
+
+    return "%s %s" % (ret, idx)
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
@@ -1444,22 +1473,16 @@ class vmmDetails(gobject.GObject):
         if not diskinfo:
             return
 
-        target = diskinfo[2]
         path = diskinfo[3]
         devtype = diskinfo[4]
         ro = diskinfo[6]
         share = diskinfo[7]
         bus = diskinfo[8]
+        idx = diskinfo[9]
 
         is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
 
-        if devtype == virtinst.VirtualDisk.DEVICE_FLOPPY:
-            pretty_name = "floppy"
-        elif bus:
-            pretty_name = "%s %s" % (bus, devtype)
-        else:
-            pretty_name = devtype
-        pretty_name += " %s" % target
+        pretty_name = prettyify_disk(devtype, bus, idx)
 
         self.window.get_widget("disk-source-path").set_text(path or "-")
         self.window.get_widget("disk-target-type").set_text(pretty_name)
@@ -1467,8 +1490,6 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("disk-readonly").set_active(ro)
         self.window.get_widget("disk-readonly").set_sensitive(not is_cdrom)
         self.window.get_widget("disk-shareable").set_active(share)
-
-        bus = diskinfo[8] or _("Unknown")
 
         button = self.window.get_widget("config-cdrom-connect")
         if devtype == "cdrom":
@@ -1773,8 +1794,12 @@ class vmmDetails(gobject.GObject):
             elif diskinfo[4] == "floppy":
                 icon = "media-floppy"
 
-            update_hwlist(HW_LIST_TYPE_DISK, diskinfo, "Disk %s" % diskinfo[2],
-                          icon)
+            devtype = diskinfo[4]
+            bus = diskinfo[8]
+            idx = diskinfo[9]
+            label = prettyify_disk(devtype, bus, idx)
+
+            update_hwlist(HW_LIST_TYPE_DISK, diskinfo, label, icon)
 
         # Populate list of NICs
         for netinfo in self.vm.get_network_devices():
