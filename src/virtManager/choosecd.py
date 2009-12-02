@@ -109,7 +109,7 @@ class vmmChooseCD(gobject.GObject):
             return self.err.val_err(_("Invalid Media Path"), str(e))
 
         uihelpers.check_path_search_for_qemu(self.topwin, self.config,
-                                             self.conn, self._dev.path)
+                                             self.conn, path)
 
         self.emit("cdrom-chosen", self.dev_id_info, disk.path, disk.type)
         self.cancel()
