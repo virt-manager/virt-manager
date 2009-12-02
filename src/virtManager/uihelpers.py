@@ -79,6 +79,7 @@ def populate_network_list(net_list, conn):
     model = net_list.get_model()
     model.clear()
 
+    vnet_bridges = []
     vnet_dict = {}
     bridge_dict = {}
     iface_dict = {}
@@ -122,6 +123,13 @@ def populate_network_list(net_list, conn):
 
         vnet_dict[label] = [VirtualNetworkInterface.TYPE_VIRTUAL,
                            net.get_name(), label, True]
+
+        # Build a list of vnet bridges, so we know not to list them
+        # in the physical interface list
+        vnet_bridge = net.get_bridge_device()
+        if vnet_bridge:
+            vnet_bridges.append(vnet_bridge)
+
     if not hasNet:
         label = _("No virtual networks available")
         vnet_dict[label] = [None, None, label, False]
@@ -133,11 +141,15 @@ def populate_network_list(net_list, conn):
         br = conn.get_net_device(name)
         bridge_name = br.get_bridge()
 
+        if (bridge_name in vnet_bridges) or (br.get_name() in vnet_bridges):
+            # Don't list this, as it is basically duplicating virtual net info
+            continue
+
         if br.is_shared():
             hasShared = True
             sensitive = True
             if br.get_bridge():
-                brlabel =  "(%s %s)" % (_("Bridge"), br.get_bridge())
+                brlabel =  "(%s %s)" % (_("Bridge"), bridge_name)
             else:
                 bridge_name = name
                 brlabel = _("(Empty bridge)")
