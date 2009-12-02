@@ -36,6 +36,23 @@ def safeint(val, fmt="%.3d"):
         return str(val)
     return fmt % int(val)
 
+def disk_type_to_xen_driver_name(disk_type):
+    if disk_type == "block":
+        return "phy"
+    elif disk_type == "file":
+        return "file"
+
+    return "file"
+
+def disk_type_to_target_prop(disk_type):
+    if disk_type == "file":
+        return "file"
+    elif disk_type == "block":
+        return "dev"
+    elif disk_type == "dir":
+        return "dir"
+    return "file"
+
 class vmmDomain(gobject.GObject):
     __gsignals__ = {
         "status-changed": (gobject.SIGNAL_RUN_FIRST,
@@ -409,12 +426,9 @@ class vmmDomain(gobject.GObject):
         disk_fragment.setProp("type", _type)
         elem = disk_fragment.newChild(None, "source", None)
 
-        if _type == "file":
-            elem.setProp("file", newpath)
-            driver_name = _type
-        else:
-            elem.setProp("dev", newpath)
-            driver_name = "phy"
+        targetprop = disk_type_to_target_prop(_type)
+        elem.setProp(targetprop, newpath)
+        driver_name = disk_type_to_xen_driver_name(_type)
 
         if driver_fragment:
             orig_name = driver_fragment.prop("name")
@@ -1275,10 +1289,8 @@ class vmmDomain(gobject.GObject):
                     devtype = "disk"
                 for child in node.children:
                     if child.name == "source":
-                        if typ == "file":
-                            srcpath = child.prop("file")
-                        elif typ == "block":
-                            srcpath = child.prop("dev")
+                        propname = disk_type_to_target_prop(typ)
+                        srcpath = child.prop(propname)
                     elif child.name == "target":
                         devdst = child.prop("dev")
                         bus = child.prop("bus")
@@ -1290,10 +1302,6 @@ class vmmDomain(gobject.GObject):
                 if srcpath == None:
                     if devtype == "cdrom" or devtype == "floppy":
                         typ = "block"
-                    else:
-                        raise RuntimeError("missing source path")
-                if devdst == None:
-                    raise RuntimeError("missing destination device")
 
                 # [ devicetype, unique, device target, source path,
                 #   disk device type, disk type, readonly?, sharable?,
