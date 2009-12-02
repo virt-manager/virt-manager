@@ -307,6 +307,7 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("install-urlopts-entry").set_text("")
         self.window.get_widget("install-ks-box").child.set_text("")
         self.window.get_widget("install-url-box").child.set_text("")
+        self.window.get_widget("install-url-options").set_expanded(False)
         urlmodel = self.window.get_widget("install-url-box").get_model()
         ksmodel  = self.window.get_widget("install-ks-box").get_model()
         self.populate_media_model(urlmodel, self.config.get_media_urls())
