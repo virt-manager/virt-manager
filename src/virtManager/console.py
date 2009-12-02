@@ -497,8 +497,18 @@ class vmmConsolePages(gobject.GObject):
         if self.vncTunnel is not None:
             return -1
 
-        logging.debug("Spawning SSH tunnel to %s, for %s:%d" %
-                      (server, vncaddr, vncport))
+        # Build SSH cmd
+        argv = ["ssh", "ssh"]
+        if server.count(":"):
+            (server, sshport) = server.split(":")
+            argv += ["-p", sshport]
+
+        if username:
+            argv += ['-l', username]
+
+        argv += [ server, "nc", vncaddr, str(vncport) ]
+
+        logging.debug("Creating SSH tunnel: %s" % argv)
 
         fds = socket.socketpair()
         pid = os.fork()
@@ -508,14 +518,6 @@ class vmmConsolePages(gobject.GObject):
             os.close(1)
             os.dup(fds[1].fileno())
             os.dup(fds[1].fileno())
-            if not server.count(":"):
-                sshport = "22"
-            else:
-                (server, sshport) = server.split(":")
-            argv = ["ssh", "ssh", "-p", sshport]
-            if username:
-                argv += ['-l', username]
-            argv += [ server, "nc", vncaddr, str(vncport) ]
             os.execlp(*argv)
             os._exit(1)
         else:
