@@ -176,8 +176,6 @@ class vmmManager(gobject.GObject):
             "on_menu_host_details_activate": self.show_host,
 
             "on_vm_list_row_activated": self.open_vm_console,
-            "on_vm_list_row_expanded": self.row_expanded,
-            "on_vm_list_row_collapsed": self.row_collapsed,
             "on_vm_list_button_press_event": self.popup_vm_menu_button,
             "on_vm_list_key_press_event": self.popup_vm_menu_key,
 
@@ -749,14 +747,6 @@ class vmmManager(gobject.GObject):
         if vm is not None:
             self.emit("action-migrate-domain",
                       vm.get_connection().get_uri(), vm.get_uuid())
-
-    def row_expanded(self, treeview, _iter, path):
-        conn = treeview.get_model().get_value(_iter, ROW_HANDLE)
-        conn.resume()
-
-    def row_collapsed(self, treeview, _iter, path):
-        conn = treeview.get_model().get_value(_iter, ROW_HANDLE)
-        conn.pause()
 
     def close_connection(self, ignore):
         conn = self.current_connection()
