@@ -196,13 +196,16 @@ def populate_network_list(net_list, conn):
     # If not present, use first list entry
     # If list empty, use no network devices
     label = brIdxLabel or netIdxLabel
-    if label:
-        for idx in range(len(model)):
-            row = model[idx]
+    for idx in range(len(model)):
+        row = model[idx]
+        if label:
             if row[2] == label:
                 default = idx
                 break
-
+        else:
+            if row[3] == True:
+                default = idx
+                break
     else:
         model.insert(0, [None, None, _("No networking."), True])
         default = 0
