@@ -375,6 +375,7 @@ class vmmCloneVM(gobject.GObject):
         devtype = disk[STORAGE_INFO_DEVTYPE]
         size = disk[STORAGE_INFO_SIZE]
         can_clone = disk[STORAGE_INFO_CAN_CLONE]
+        do_clone = disk[STORAGE_INFO_DO_CLONE]
         can_share = disk[STORAGE_INFO_CAN_SHARE]
         is_default = disk[STORAGE_INFO_DO_DEFAULT]
         definfo = disk[STORAGE_INFO_DEFINFO]
@@ -433,7 +434,7 @@ class vmmCloneVM(gobject.GObject):
             model.insert(STORAGE_COMBO_DETAILS,
                          [_("Details..."), True, False])
 
-            if can_clone and is_default:
+            if (can_clone and is_default) or do_clone:
                 option_combo.set_active(STORAGE_COMBO_CLONE)
             else:
                 option_combo.set_active(STORAGE_COMBO_SHARE)
@@ -606,12 +607,13 @@ class vmmCloneVM(gobject.GObject):
 
         # Sync 'do clone' checkbox, and main dialog combo
         combo = row[STORAGE_INFO_COMBO]
-        if cs.get_widget("change-storage-doclone").get_active():
+        do_clone = cs.get_widget("change-storage-doclone").get_active()
+        if do_clone:
             combo.set_active(STORAGE_COMBO_CLONE)
         else:
             combo.set_active(STORAGE_COMBO_SHARE)
 
-        do_clone = row[STORAGE_INFO_DO_CLONE]
+        row[STORAGE_INFO_DO_CLONE] = do_clone
         if not do_clone:
             self.change_storage_close()
             return
