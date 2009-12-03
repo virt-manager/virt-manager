@@ -1110,7 +1110,7 @@ class vmmDetails(gobject.GObject):
                                    str(e)), "".join(traceback.format_exc()))
                 return False
 
-        if boot.get_property("sensitive") and boot.get_active() > 0:
+        if boot.get_property("sensitive") and boot.get_active() > -1:
             bootdev = boot.get_model()[boot.get_active()][2]
             return self._change_config_helper(self.vm.set_boot_device,
                                               (bootdev,))
@@ -1601,13 +1601,22 @@ class vmmDetails(gobject.GObject):
         if not charinfo:
             return
 
-        typelabel = "<b>%s Device %s</b>" % (charinfo[0].capitalize(),
-                                             charinfo[6] and \
-                                             _("(Primary Console)") or "")
+        char_type = charinfo[0].capitalize()
+        target_port = charinfo[3]
+        dev_type = charinfo[4] or "pty"
+        src_path = charinfo[5]
+        primary = charinfo[6]
+
+        typelabel = "%s Device" % char_type
+        if target_port:
+            typelabel += " %s" % target_port
+        if primary:
+            typelabel += " (%s)" % _("Primary Console")
+        typelabel = "<b>%s</b>" % typelabel
+
         self.window.get_widget("char-type").set_markup(typelabel)
-        self.window.get_widget("char-dev-type").set_text(charinfo[4] or "-")
-        self.window.get_widget("char-target-port").set_text(charinfo[3] or "")
-        self.window.get_widget("char-source-path").set_text(charinfo[5] or "-")
+        self.window.get_widget("char-dev-type").set_text(dev_type)
+        self.window.get_widget("char-source-path").set_text(src_path or "-")
 
     def refresh_hostdev_page(self):
         hostdevinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -1711,10 +1720,15 @@ class vmmDetails(gobject.GObject):
     def refresh_boot_page(self):
         # Refresh autostart
         try:
+            # Older libvirt versions return None if not supported
             autoval = self.vm.get_autostart()
+        except libvirt.libvirtError:
+            autoval = None
+
+        if autoval is not None:
             self.window.get_widget("config-autostart").set_active(autoval)
             self.window.get_widget("config-autostart").set_sensitive(True)
-        except libvirt.libvirtError:
+        else:
             # Autostart isn't supported
             self.window.get_widget("config-autostart").set_active(False)
             self.window.get_widget("config-autostart").set_sensitive(False)

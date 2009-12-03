@@ -301,7 +301,7 @@ class vmmDomain(gobject.GObject):
         if not self.connection.has_dom_flags(flags):
             flags = libvirt.VIR_DOMAIN_XML_INACTIVE
 
-            if not self.connection.has_dom_flags:
+            if not self.connection.has_dom_flags(flags):
                 flags = 0
 
         self._inactive_xml = self._XMLDesc(flags)
@@ -321,9 +321,8 @@ class vmmDomain(gobject.GObject):
         newxml = xml_func(origxml, *args)
 
         if origxml == newxml:
-            logging.debug("Redefinition requested, but new xml was not"
-                          " different")
-            return
+            logging.debug("Redefinition request XML was no different,"
+                          " redefining anyways")
         else:
             diff = "".join(difflib.unified_diff(origxml.splitlines(1),
                                                 newxml.splitlines(1),
@@ -1455,6 +1454,7 @@ class vmmDomain(gobject.GObject):
                 if node.name == "console":
                     cons_port = target_port
                     cons_dev = dev
+                    dev[6] = True
                     continue
                 elif node.name == "serial" and cons_port \
                    and target_port == cons_port:
