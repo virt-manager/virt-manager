@@ -307,6 +307,7 @@ def main():
         ignore = virtinst.__version__
         ignore = virtinst.__version_info__
     except Exception, e:
+        logging.exception("Error import virtinst")
         raise RuntimeError(str(e) + "\n\n" + msg)
 
     if virtinst.__version_info__ < virtinst_version:
