@@ -209,7 +209,8 @@ class vmmSystray(gobject.GObject):
         return None
 
     def _set_vm_status_icon(self, vm, menu_item):
-        image = gtk.image_new_from_pixbuf(vm.run_status_icon())
+        image = gtk.Image()
+        image.set_from_pixbuf(vm.run_status_icon())
         image.set_sensitive(vm.is_active())
         menu_item.set_image(image)
 

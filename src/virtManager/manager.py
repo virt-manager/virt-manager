@@ -277,7 +277,8 @@ class vmmManager(gobject.GObject):
         def set_toolbar_image(widget, iconfile, l, w):
             filename = self.config.get_icon_dir() + "/%s" % iconfile
             pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, l, w)
-            image = gtk.image_new_from_pixbuf(pixbuf)
+            image = gtk.Image()
+            image.set_from_pixbuf(pixbuf)
             image.show_all()
             self.window.get_widget(widget).set_icon_widget(image)
 
@@ -438,7 +439,8 @@ class vmmManager(gobject.GObject):
         util.tooltip_wrapper(vmlist, ROW_HINT, "set_tooltip_column")
 
         vmlist.set_headers_visible(True)
-        vmlist.set_level_indentation(-15)
+        if hasattr(vmlist, "set_level_indentation"):
+            vmlist.set_level_indentation(-15)
 
         nameCol = gtk.TreeViewColumn(_("Name"))
         nameCol.set_expand(True)
@@ -840,9 +842,10 @@ class vmmManager(gobject.GObject):
     def _build_conn_color(self, conn):
         color = None
         if conn.state != conn.STATE_DISCONNECTED:
-            color = gtk.gdk.Color("#000000")
+            color = gtk.gdk.Color(0, 0, 0)
         else:
-            color = gtk.gdk.Color("#5b5b5b")
+            # Color code #5b5b5b
+            color = gtk.gdk.Color(23296, 23296, 23296)
         return color
 
     def _build_vm_markup(self, vm, row):
@@ -869,7 +872,7 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_IS_CONN_CONNECTED, True)
         row.insert(ROW_IS_VM, True)
         row.insert(ROW_IS_VM_RUNNING, vm.is_active())
-        row.insert(ROW_COLOR, gtk.gdk.Color("#000000"))
+        row.insert(ROW_COLOR, gtk.gdk.Color(0, 0, 0))
 
         row[ROW_MARKUP] = self._build_vm_markup(vm, row)
 

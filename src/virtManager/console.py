@@ -91,7 +91,7 @@ class vmmConsolePages(gobject.GObject):
         self.init_dbus()
 
         # Make VNC widget background always be black
-        black = gtk.gdk.Color("black")
+        black = gtk.gdk.Color(65535, 65535, 65535)
         self.window.get_widget("console-vnc-viewport").modify_bg(
                                                         gtk.STATE_NORMAL,
                                                         black)
