@@ -101,6 +101,10 @@ class vmmAsyncJob(gobject.GObject):
             else:
                 self.stage.set_text(_("Processing..."))
             self.pbar.set_text(progress)
+            if frac > 1:
+                frac = 1.0
+            if frac < 0:
+                frac = 0
             self.pbar.set_fraction(frac)
         finally:
             gtk.gdk.threads_leave()
