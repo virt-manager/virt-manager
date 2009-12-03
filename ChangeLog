@@ -1,4 +1,1299 @@
+2009-12-03  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/asyncjob.py, src/virtManager/console.py, src/vmm-
+	progress.glade:
+	A few more small UI tweaks
+
+	- Actually make console border black
+	- Don't set overly large progress bar values in asyncjob
+	- Use larger icon in progress dialog.
+	[4b2f91395293] [tip]
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	Various libvirt back compat fixes
+
+	- Fix a check for domain support flags that was breaking inactive
+	XML updates
+	- Even if requested XML hasn't changed, redefine. Needed for changes
+	to take permenant effect if INACTIVE XML flag not supported
+	- Fix setting HD as a boot device
+	- Detect autostart unavailability on older libvirt
+	- Clean up how we display console devices to give more concise output
+	[a6435e9673b1]
+
+	* src/virtManager/connection.py:
+	connection: Make sure openAuth is supported before we use it
+
+	Also fix a broken error call in that this path triggered, and a
+	small tweak to pretty printing a Xen connection.
+	[8c7546828618]
+
+	* src/virtManager/console.py, src/virtManager/manager.py,
+	src/virtManager/systray.py:
+	Fix some gtk calls for older version compat (RHEL5 vintage)
+	[0b15bdb8eaf6]
+
+	* src/virt-manager.py.in:
+	Log virtinst exception if we fail to import at startup
+	[923629781013]
+
+2009-12-02  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-manager.glade:
+	manager: Improve tooltip for 'Open' toolbar button
+	[0667248c1d91]
+
+	* src/virtManager/uihelpers.py:
+	uihelpers: Make sure we have a reasonable network selection fallback
+	[be834c62cc81]
+
+	* src/virtManager/uihelpers.py:
+	uihelpers: Don't let empty bridge be the default selection
+
+	On rethinking, it seems a bit risky that user could create a bogus
+	bridge and then have all new guests choose it by default and provide
+	no networking. Be safe and force the user to opt in.
+	[d2e368c29932]
+
+	* src/virtManager/details.py, src/virtManager/uihelpers.py, src/vmm-
+	details.glade:
+	details: Give a pretty description of network source
+
+	Currently we just printed net type and source device, when we could
+	use the pretty print we already have in uihelpers. Break out the
+	functionality and use it on the net screen.
+	[4e7cd0a0d065]
+
+	* src/virtManager/uihelpers.py:
+	uihelpers: Don't list virtual network bridges as shared interfaces
+	[bee4ed9cc16c]
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	create: Put kickstart and kernel opts under a minimized expander
+
+	Since these will likely be rarely used, and they currently appear
+	mandatory, hide them from view by default.
+	[22aab5e422c0]
+
+	* src/virtManager/domain.py:
+	domain: Handle parsing disks of type 'dir'
+
+	Also, don't raise exceptions if XML appears bogus: if libvirt is
+	happy, we should be happy.
+	[2ada069aea4b]
+
+	* src/virtManager/choosecd.py:
+	choosecd: Fix typo with check_qemu_path_search call
+	[f5b7d6c9e108]
+
+2009-12-01  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/clone.py:
+	clone: If choosing to clone via 'Storage Details' make it stick
+	[2a67823d6e71]
+
+	* src/virtManager/details.py, src/virtManager/domain.py:
+	details: List disks as 'IDE disk 2' as opposed to 'Disk hdb'
+
+	The 'target' name in the XML is really just an index for libvirt to
+	use, but is kind of meaningless in the real world, so calculate an
+	index instead.
+	[c2d8f51bc161]
+
+	* src/virtManager/clone.py:
+	clone: Fix yet more 'empty disk path' fallout
+	[28b190cf9efb]
+
+	* src/virtManager/manager.py:
+	manager: Don't 'pause' connection rows if collapsed
+
+	The paused vs. active state is unclear, and may suprise users by
+	doing things like closing child dialogs (VM details and New VM
+	wizard).
+
+	Turning of polling is of only marginal benefit anyways, as most
+	users prob don't have multiple concurrent connections, and libvirt
+	threading handles most of the original performance concerns.
+	[8360edbf1af6]
+
+	* src/virtManager/console.py:
+	console: Don't hardcode port 22 for ssh, defer to site default
+	[f714530aff4f]
+
+	* src/virt-manager.py.in:
+	virt-manager.py: Call set_prgname before import gtk
+
+	Some recent rawhide versions seem to have an implicit set_prgname
+	call when importing gtk, so make sure we get ours in before it.
+	[f48dbb02068b]
+
+	* src/virtManager/mediadev.py:
+	mediadev: Support media_label nodedev property
+	[b6506a7db496]
+
+	* src/virtManager/create.py:
+	create: Also check installer scratchdir perms if required.
+	[761325bad96a]
+
+	* src/virtManager/addhardware.py, src/virtManager/choosecd.py,
+	src/virtManager/create.py, src/virtManager/uihelpers.py:
+	Use check_path_search_for_qemu
+
+	Used in create wizard, addhw, and choosecd.
+	[6bbbeae871be]
+
+	* src/virtManager/config.py, src/virtManager/uihelpers.py:
+	uihelpers: Add check_path_search_for_qemu helper
+
+	This can be used by various UI pieces to determine if the requested
+	disk/install path is accessible by the user libvirt launches qemu
+	processes as. We currently cannot programmatically determine what
+	this user is, so make it easy for distros to hardcode.
+	[4bf98bfbc87e]
+
+	* src/virtManager/createnet.py, src/virtManager/network.py, src/vmm-
+	create-net.glade:
+	createnet: Allow specifying <forward mode='route'/>
+	[643d88fd26eb]
+
+2009-11-30  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/halhelper.py,
+	src/virtManager/mediadev.py, src/virtManager/uihelpers.py:
+	Allow using node device APIs for CDROM enumeration.
+
+	One piece of info libvirt doesn't provide for us in the media label
+	name, other than that we have feature parity.
+	[e32dcadca28c]
+
+	* src/virtManager/connection.py, src/virtManager/engine.py:
+	connection: Only attempt to talk to HAL if absolutely required.
+	[fb5c5cff94e2]
+
+	* src/virtManager/addhardware.py, src/virtManager/choosecd.py,
+	src/virtManager/create.py, src/virtManager/halhelper.py, src/vmm-
+	add-hardware.glade, src/vmm-choose-cd.glade, src/vmm-create.glade:
+	Show netdev and optical errors in UI.
+
+	Take the error from the vmmConnection object, and show where
+	appropriate in various UI locations.
+	[adaabc825e7d]
+
+	* src/virtManager/choosecd.py, src/virtManager/connection.py,
+	src/virtManager/create.py, src/virtManager/halhelper.py,
+	src/virtManager/mediadev.py, src/virtManager/uihelpers.py:
+	Expose optical signals through connection object.
+
+	Connection object will get this info from either halhelper or
+	libvirt (not implemented yet).
+	[a7889f4c8210]
+
+	* src/virtManager/halhelper.py, src/virtManager/mediadev.py,
+	src/virtManager/uihelpers.py:
+	mediadev: Associate media-added/removed signals
+
+	Rather than have these come from halhelper, push them to users via
+	mediadev, since this will be useful for non-hal backeneds (libvirt)
+	[63730ecc5e08]
+
+	* src/virtManager/connection.py, src/virtManager/halhelper.py,
+	src/virtManager/netdev.py:
+	halhelper: Don't track any state
+
+	Tracking state is largely needless, so drop it. Should be a no op
+	[b418f93238ed]
+
+	* po/POTFILES.in, src/virtManager/choosecd.py,
+	src/virtManager/connection.py, src/virtManager/engine.py,
+	src/virtManager/halhelper.py, src/virtManager/netdevhelper.py,
+	src/virtManager/opticalhelper.py, src/virtManager/uihelpers.py:
+	Merge NetdevHelper and OpticalHelper into new class HalHelper
+
+	Provides all the signals we need from the previous two classes.
+	[7d9f19479666]
+
+	* src/virtManager/mediadev.py, src/virtManager/opticalhelper.py,
+	src/virtManager/uihelpers.py:
+	opticalhelper: Clean up signals
+	[8503439dfefd]
+
+	* src/virtManager/choosecd.py, src/virtManager/create.py,
+	src/virtManager/opticalhelper.py, src/virtManager/uihelpers.py:
+	opticalhelper: Move UI update routines to uihelpers
+	[ccc179a77f92]
+
+	* po/POTFILES.in, src/virtManager/create.py,
+	src/virtManager/mediadev.py, src/virtManager/opticalhelper.py:
+	Add new class vmmMediaDev, similar to vmmNetDev
+
+	Represents a physical media drive on the host (only cdrom for now,
+	but could be floppy later). Use this in opticalhelper
+	[8aca8f3e9ef1]
+
+2009-11-28  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virt-manager.schemas.in, src/virtManager/config.py,
+	src/virtManager/manager.py, src/vmm-manager.glade:
+	manager: Remember previous window dimensions
+	[e5f0491d0c3c]
+
+	* src/virtManager/details.py, src/virtManager/manager.py,
+	src/virtManager/uihelpers.py:
+	manager: Make code organization more readable
+
+	As has been done with other files, try to group similar functions in
+	commented blocks, and break apart massive __init__ functions into
+	chunks.
+	[ddacc94d1480]
+
+	* src/virtManager/details.py:
+	details: Disable send key menu entries if VM is paused
+	[6e347f113f40]
+
+	* src/virtManager/config.py, src/virtManager/console.py,
+	src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	details: Remember previous window dimensions
+
+	In order to do this, we can't auto resize the window to the VNC
+	desktop resolution when details is brought up. So, to make this
+	desired behavior easier, add a View menu item 'Resize to VM' which
+	resizes the details window to match the active desktop dimensions.
+	[b860d94716c8]
+
+	* src/virtManager/console.py, src/vmm-details.glade:
+	console: Rework VNC sizing: allow scaling down and maintain ratio
+
+	There were several defficiencies in the way we handled VNC widget
+	sizing, so try to fix them up. We now have:
+
+	- Ability to scale down
+	- Aspect ratio maintained while scaling
+	- Much better scrollbar handling without the hacks.
+	[711880791b8f]
+
+2009-11-25  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/interface.py,
+	src/virtManager/netdevhelper.py:
+	connection: Prefer libvirt APIs for net device enumeration
+
+	If a connection supports interface APIs and nodedev APIs, use them
+	over HAL to enumerate net devices.
+	[100e09f6d0fa]
+
+	* src/virtManager/connection.py:
+	connection: Only fetch interface object in tick when needed
+
+	We don't need to look up the interface object ahead of time, only do
+	it if we appear to have a new interface.
+	[dc8147627c7d]
+
+	* src/virtManager/connection.py:
+	connection: Poll for node devices, rather than fetch on demand
+
+	This should hopefully be much less taxing on bandwidth, since
+	hostdevices shouldn't change too much, so every tick we only need to
+	compare a couples lists.
+	[7dfbb4b9719a]
+
+	* src/virtManager/config.py, src/virtManager/connection.py,
+	src/virtManager/host.py:
+	connection: Clean up autoconnect get/set routines
+
+	No reason to cache the autoconnect value, use gconf as intended.
+	[3bdba9bcf9e1]
+
+	* src/virtManager/addhardware.py:
+	addhw: Drop paranoid lower() call
+	[275e26b5ee86]
+
+	* src/virtManager/connection.py, src/virtManager/manager.py:
+	connection: Drop image validation for restore
+
+	Apps shouldn't be expected to do this. If we want it, should be done
+	at the libvirt level or the hypervisor level. Qemu and test drivers
+	already do the correct thing.
+	[f353fecd8fa1]
+
+	* src/virtManager/addhardware.py, src/virtManager/config.py,
+	src/virtManager/connection.py, src/virtManager/create.py,
+	src/virtManager/manager.py:
+	connection: Clean up usage of get_type
+
+	Move users to either get_driver or is_* functions, which are self
+	documenting.
+	[6d48b92d99f5]
+
+	* src/virtManager/connection.py, src/virtManager/util.py:
+	connection: Reorganize code placement
+
+	Similar to what's been done in some other files, try to group
+	functionality into relevant commented blocks.
+	[35617ae98e01]
+
+	* src/virtManager/details.py:
+	details: Fix a useless traceback if removing a device from inactive
+	VM
+	[d8053c0582c6]
+
+	* src/virtManager/uihelpers.py:
+	uihelpers: Some improvements for network device listing
+
+	Sort the device list by device type, and alphabetically within types
+	Make sure we have a sane default selection List empty bridges
+	[3bfa7e152e02]
+
+	* src/virtManager/connection.py, src/virtManager/netdev.py,
+	src/virtManager/netdevhelper.py:
+	connection: Track netdevs natively, don't just use netdevhelper
+	lists
+
+	Our lists are built up from netdev-added and netdev-removed signals.
+	[92553570c22a]
+
+2009-11-24  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-details.glade, src/vmm-manager.glade:
+	Fix toolbar priority text settings
+	[e8ae9edb555b]
+
+	* src/virtManager/addhardware.py:
+	addhw: Remove usermode networking skip-network-page hack
+
+	The previous network page had no place to choose usermode
+	networking, but the current one is a bit more flexible, so drop our
+	original hack to skip straight to the summary page.
+	[722cc9c65db4]
+
+	* src/vmm-create-vol.glade, src/vmm-create.glade, src/vmm-
+	preferences.glade, src/vmm-storage-browse.glade:
+	A few more UI tweaks.
+
+	Make sure dialog button boxes aren't expanding. Make storage browser
+	a gtk Window, with a dialog type hint.
+	[a5aefafc0153]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py,
+	src/virtManager/uihelpers.py, src/vmm-add-hardware.glade:
+	addhw: Greatly simply 'Add Network' wizard
+
+	Use a single combo box for the source device, and drop the network
+	hints. Most people likely won't have virtual networking and bridging
+	set up, and if they do they probably know what they are doing.
+
+	This allows us to reuse the UI code from the create wizard.
+	[0539f02deac8]
+
+	* src/virtManager/addhardware.py:
+	addhw: Try to organize method placement
+
+	Also break apart some complex methods. This should be a no op.
+	[9b2090fe9ad5]
+
+2009-11-23  Cole Robinson  <crobinso@redhat.com>
+
+	* .hgignore, po/POTFILES.in, src/virtManager/Makefile.am:
+	Fix 'make check'
+	[ee3c8f2cd915]
+
+2009-11-22  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py:
+	console: Make sure previous dimensions are restored after
+	fullscreen.
+
+	If scaling is always enabled, returning from fullscreen wouldn't
+	restore the original VNC dimensions.
+	[63bd22cb3fbc]
+
+	* src/virtManager/domain.py:
+	domain: Fix a small typo causing a useless backtrace
+	[c4f43dc102cd]
+
+2009-11-24  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py:
+	console: s/Console/Graphical console/g in page messages
+	[f645010a2113]
+
+2009-11-22  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/interface.py:
+	Actually add the new interface file
+	[7a5228af1084]
+
+2009-11-20  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py, src/virtManager/uihelpers.py:
+	create: Break out network paremeter validation to uihelpers
+
+	This will also be used by addhardware.
+	[3f6e5cc0390f]
+
+	* src/virtManager/error.py:
+	error: Make sure we set proper transient parent
+
+	We were using widget.parent, which is the parent container widget
+	(if present), not the dialog transient parent.
+	[8d16f01eacd5]
+
+	* src/virtManager/console.py:
+	console: Remove some redundant debugging
+	[aa6ac6a4ed28]
+
+	* src/virtManager/create.py, src/virtManager/uihelpers.py:
+	create: Break out network populate functions to new file
+	uihelpers.py
+
+	We will use this in the addhardware wizard.
+	[e4b9161047dc]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py:
+	Make sure that persistent VM config is updated after successful
+	hotplug.
+	[e90f749e1182]
+
+2009-11-19  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-host.glade:
+	host: Add some basic UI work for viewing interfaces (not hooked up
+	yet)
+
+	Won't be really implementing this for a while, but just push the
+	basic UI template in place, so any work done now will merge easier
+	later.
+	[50e1bd20aed8]
+
+	* src/virtManager/host.py:
+	host: Fix some small UI issues with listing networks
+
+	- Desenitize list entry when network is inactive
+	- Have initial host window show sensitized network output
+	- Make sure network is selected when host window is open
+	[8cc1b90cdc2b]
+
+	* src/virtManager/connection.py:
+	connection: Check for network API support before polling
+	[73459b864e1b]
+
+	* src/virtManager/connection.py:
+	connection: Poll for and track libvirt interfaces
+	[77a1cae1067a]
+
+2009-11-18  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virt-manager.schemas.in, src/virtManager/config.py,
+	src/virtManager/details.py, src/virtManager/preferences.py, src/vmm-
+	preferences.glade:
+	details: Confirm with user before removing a device
+
+	Allow this removal to be skipped using a similar 'Don't show this
+	again' option as the previous commit.
+	[f65a210898c4]
+
+	* src/virt-manager.schemas.in, src/virtManager/config.py,
+	src/virtManager/engine.py, src/virtManager/error.py,
+	src/virtManager/preferences.py, src/vmm-preferences.glade:
+	Allow disabling 'force poweroff' prompt.
+
+	Also allow enabling poweroff, reboot, and pause prompts. This was
+	folks administering live servers can add extra security and be sure
+	they don't accidentally hit a button and cause damage.
+	[958d7ff99a5b]
+
+	* src/virtManager/config.py:
+	config: Move code around to make things more readable.
+	[c90940052b6f]
+
+	* src/virtManager/engine.py:
+	engine: Remove status checks in state changing commands.
+
+	If these are needed, then we have UI bugs elsewhere. Better to
+	expose the error and solve the source issue.
+	[77414407f0f2]
+
+	* src/virtManager/engine.py:
+	engine: Remove status checks in state changing commands.
+
+	If these are needed, then we have UI bugs elsewhere. Better to
+	expose the error and solve the source issue.
+	[3ae7f0a96065]
+
+	* src/virtManager/details.py, src/virtManager/engine.py,
+	src/virtManager/manager.py, src/virtManager/migrate.py, src/vmm-
+	details.glade, src/vmm-migrate.glade:
+	migrate: Storage connection list in the migrate dialog, not migrate
+	menu.
+	[a5a129cc1c4f]
+
+2009-11-17  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/vmm-details.glade, src/vmm-
+	manager.glade:
+	Add mnemonics for various menu items.
+
+	Also, try to be a bit more consistent between manager and details
+	menus.
+	[306c84b2d0a0]
+
+	* src/virtManager/domain.py:
+	domain: Accurately cap max VCPUs to startup count, not just running
+	count.
+	[bcd3e17724cd]
+
+	* src/virtManager/manager.py:
+	manager: Clean up setting context menu icons, and add a few
+	[4a26577e6fc9]
+
+	* src/virtManager/host.py:
+	host: Clean up the __init__ routine.
+
+	Break logical pieces into their own functions, so things are
+	actually readable.
+	[3b2926cac21f]
+
+	* src/virtManager/engine.py, src/virtManager/host.py, src/vmm-
+	host.glade:
+	Make the host details window a first class citizen.
+
+	This means the host window can be the only window visible and the
+	app will still be running.
+	[8ee1f2a28dd9]
+
+	* src/virtManager/addhardware.py, src/virtManager/clone.py,
+	src/virtManager/connect.py, src/virtManager/console.py,
+	src/virtManager/create.py, src/virtManager/createnet.py,
+	src/virtManager/createpool.py, src/virtManager/createvol.py,
+	src/virtManager/details.py, src/virtManager/host.py,
+	src/virtManager/storagebrowse.py, src/vmm-add-hardware.glade, src
+	/vmm-choose-cd.glade, src/vmm-clone.glade, src/vmm-create-net.glade,
+	src/vmm-create-pool.glade, src/vmm-create-vol.glade, src/vmm-
+	create.glade, src/vmm-delete.glade, src/vmm-details.glade, src/vmm-
+	host.glade, src/vmm-manager.glade, src/vmm-migrate.glade, src/vmm-
+	open-connection.glade, src/vmm-preferences.glade, src/vmm-
+	progress.glade, src/vmm-storage-browse.glade:
+	Numerous UI tweaks.
+
+	- Don't use custom button content, because it doesn't abide typical
+	button gtk button + image preferences. This forces us to set the
+	button image in the code since glade can't handle it.
+
+	- Use widget mnemonics _everywhere_
+
+	- Tweak some default widget focus, and other misc things.
+	[72b610046c3f]
+
+2009-11-16  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/manager.py:
+	manager: Add 'delete' option in connection context menu.
+	[3b9d502cada4]
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	details: cpu: List per cpu pinning info, and allow changing it.
+	[5792f92367a3]
+
+	* src/virtManager/clone.py, src/virtManager/create.py,
+	src/virtManager/host.py, src/virtManager/network.py:
+	host: Clean up network selected function.
+
+	Make a new network function 'pretty_forward_mode' so we aren't
+	duplicating functionality everywhere.
+	[400eb6df6220]
+
+	* src/virtManager/clone.py:
+	clone: Pass proper connection object to virtinst support function
+	[fcb40049132d]
+
+	* src/virtManager/clone.py:
+	clone: Fix some recent errors handling empty disks
+	[170f725cbd39]
+
+2009-11-15  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/connection.py,
+	src/virtManager/domain.py, src/virtManager/engine.py,
+	src/virtManager/util.py:
+	Make use of virtinst's new 'support' module, instead of duplicating
+	checks.
+	[a6bcab8ab4bc]
+
+2009-11-06  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-details.glade:
+	details: Use more consistent padding in details pane.
+
+	Also drop some unneeded text from CPU and Memory views.
+	[c13878dd8247]
+
+2009-11-15  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	create: Fix some default media logic
+	[09265256d04f]
+
+	* src/virtManager/create.py, src/virtManager/createvol.py,
+	src/virtManager/storagebrowse.py:
+	storagebrowser: If creating new VM, have new vol name be based on vm
+	name.
+	[1b73a9a92879]
+
+	* src/vmm-details.glade:
+	details: Allow selecting video labels
+	[144ce54413d6]
+
+	* src/virtManager/details.py, src/virtManager/manager.py:
+	Don't enable migration for offline VMs.
+	[a7a95359f713]
+
+	* src/virtManager/connection.py, src/virtManager/domain.py,
+	src/virtManager/engine.py, src/virtManager/migrate.py,
+	src/virtManager/util.py, src/vmm-migrate.glade:
+	Add a proper migrate dialog.
+	[c9f7fa2d73c7]
+
+2009-11-11  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virt-manager.py.in:
+	Add --version cli command.
+	[a66ebea11ba9]
+
+	* configure.ac, docs/RELEASE-PROCESS.txt, src/Makefile.am, src/virt-
+	manager.py.in:
+	Show a startup error if virtinst version isn't new enough.
+	[cfd9ab725445]
+
+	* src/virtManager/details.py:
+	details: Make cpu/mem/graphics/input refresh routines more readable.
+	[982dcf8191cb]
+
+2009-11-11  Jon Nordby  <jononor@gmail.com>
+
+	* src/virt-manager.schemas.in, src/virtManager/config.py,
+	src/virtManager/manager.py, src/vmm-manager.glade:
+	manager: Bring back multiple graph as an option.
+
+	Essentially a revert of the changes in 09189003ddf9
+	[7449fa221c45]
+
+2009-11-11  Ales Zelinka  <azelinka@redhat.com>
+
+	* AUTHORS, src/virtManager/manager.py:
+	manager: Add 'delete' option to the VM context menu.
+	[defec581269a]
+
+2009-11-11  Jon Nordby  <jononor@gmail.com>
+
+	* src/virtManager/manager.py, src/vmm-manager.glade:
+	manager: enable menu key to open context menu
+	[c4e86d692222]
+
+2009-11-10  Jon Nordby  <jononor@gmail.com>
+
+	* src/virtManager/host.py, src/virtManager/manager.py:
+	host: Show hostname in window title
+
+	Activating a connected host entry in manager opens host window.
+	[8880a88fba25]
+
+2009-11-10  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/manager.py:
+	manager: Clean up VM/Conn popup menu routine.
+	[612b47d7f128]
+
+	* src/virtManager/manager.py:
+	manager: Make sure selected row text color isn't ugly.
+	[742f8232c115]
+
+	* src/virtManager/addhardware.py, src/virtManager/choosecd.py,
+	src/virtManager/config.py, src/virtManager/create.py,
+	src/virtManager/storagebrowse.py, src/virtManager/util.py:
+	storagebrowser: Allow setting browser title.
+
+	Also, various refactoring in how we pass options off to the local
+	browser (try to centralize a lot of duplication).
+	[e7ba492ec670]
+
+	* src/virtManager/manager.py, src/vmm-manager.glade:
+	manager: Only use one toolbar at the top of the window.
+	[07c7d3be4100]
+
+	* src/virt-manager.py.in:
+	Sigh, fix set_prgname check just committed.
+	[b52f7149ae3e]
+
+	* src/vmm-about.glade:
+	about: List virt-manager.org as the website path
+	[00b396f1897f]
+
+	* src/virtManager/config.py, src/virtManager/engine.py, virt-
+	manager.spec.in:
+	Don't use deprecated libgnome.
+	[5ab2d10618ea]
+
+	* src/virt-manager.py.in:
+	Use gobject set_prgname to make gnome shell happy.
+	[a6b0292febee]
+
+	* src/virtManager/systray.py:
+	systray: Use gtk.status_icon_position_menu for proper menu
+	positioning.
+	[f8fbdfc7439c]
+
+	* src/virtManager/systray.py:
+	systray: Don't momentarilly show systray on startup if disabled.
+	[a274411d1bad]
+
+	* src/virtManager/engine.py, src/virtManager/systray.py:
+	systray: Make sure systray is actually embedded before we keep app
+	running.
+	[c066fbdf7f3c]
+
+2009-11-05  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	details: Always have the apply button showing.
+
+	Also, swap the order of remove and apply so remove is less likely to
+	be pushed by accident.
+	[5fcf0b4bdce6]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/vmm-details.glade:
+	details: Allow changing video model of an existing device.
+	[42a44c41f8ab]
+
+2009-11-04  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	details: Allow changing disk readonly + shareable attributes.
+	[910a4e5759d3]
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	details: disk: Slim down information output
+
+	Also, use checkboxes for readonly + shareable in preparation for
+	making them editable.
+	[14a0a4c8264d]
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	details: Allow changing clock offset value.
+	[35bf36ee9d55]
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	details: Allow changing APIC and ACPI settings.
+	[5123627435da]
+
+	* src/virtManager/domain.py:
+	domain: More cleanup for XML fetching routines.
+
+	Remove scary comments about updating inactive XML, as this should
+	largely be resolved now. Use more consistent naming.
+	[33ff116be822]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py:
+	details: Break out wrapper for hotplug/config update routines
+
+	All XML updating routines follow a similar pattern or 'try hotplug,
+	try redefine, report error'. Break out a helper function for all
+	this and use it for security relabelling, media change, memory and
+	vcpu hotplug.
+	[b06d34c4fb94]
+
+2009-11-03  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py:
+	domain: Split cdrom media change into hotplug and define pieces.
+
+	This allows us to check for hotplug errors, but still define the
+	change to take place after the next reboot.
+	[20429e670b8e]
+
+	* src/virtManager/clone.py, src/virtManager/delete.py,
+	src/virtManager/details.py, src/virtManager/domain.py:
+	domain: Don't set disk path to '-' if empty, let details do that.
+	[e430ab999a9b]
+
+2009-11-04  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/domain.py:
+	domain: Fix updating inactive XML config
+
+	If domain is running and we can't change the running config (hotplug
+	not supported, etc.), we update the inactive config. Make sure that
+	we merge inactive config changes and don't just blow away whatever
+	is set.
+	[101972567dd6]
+
+	* src/virtManager/details.py:
+	details: Lots of code reorganization.
+
+	Group all relevant functions into documented blocks, rather than
+	leave them scattered all along the code. Turn some methods into
+	internal functions.
+	[b07763ff6dc5]
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	details: List ACPI, APIC, and clock offset values.
+
+	These will be made editable shortly, but for now just show their
+	values.
+	[1814467506fe]
+
+2009-11-02  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py:
+	details: Clean up and comment __init__
+	[49df052721d6]
+
+2009-11-04  Michal Novotny  <minovotn@redhat.com>
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	details: Lookup product/vendor name for host device details.
+	[588f8bb2b3fa]
+
+2009-11-01  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py:
+	console: Don't mess with console padding on fullscreen on/off
+	[a5b9807ead04]
+
+	* src/vmm-details.glade:
+	console: Remove 6 pixel border around VNC widget
+	[beea3af2f713]
+
+	* src/virtManager/console.py, src/vmm-details.glade:
+	console: Remove paused screenshot code.
+
+	It's been disabled since VNC scaling was added, and the comment
+	indicates it isn't even required, so just remove it.
+	[73c0946232a5]
+
+	* src/virtManager/console.py:
+	Don't launch multiple 'pointer grabbed' notifications if timer still
+	running.
+	[74b2c258cd30]
+
+	* src/virtManager/details.py, src/virtManager/domain.py:
+	Fix setting VCPUs and cpuset.
+	[cff7488c0e1b]
+
+2009-10-30  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py:
+	console: Disable key mnemonics when pointer is grabbed.
+	[43585a028ab7]
+
+2009-11-01  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py:
+	console: Don't throw warning when disable accelerators.
+	[39deb768817a]
+
+2009-10-30  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py, src/virtManager/details.py:
+	details: Break out VNC + console pages to a separate class.
+
+	The details class is getting pretty big, so split out the VNC
+	functionality into a separate class (like it was many moons ago).
+
+	The split isn't as clean as it should be, but things work and
+	readability is greatly improved. If we ever add support for a
+	different viewer widget (rdp or spice?) we would need to do
+	something similar anyways.
+	[624843e9db91]
+
+2009-11-01  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/engine.py:
+	Don't show a useless traceback if details window errors.
+	[0ff723779fe0]
+
+2009-10-28  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/createpool.py, src/virtManager/domain.py,
+	src/virtManager/engine.py, src/virtManager/error.py, tests/pylint-
+	virt-manager.sh:
+	Fix up some pylint.
+	[2907191a7a21]
+
+	* tests/pylint-virt-manager.sh:
+	Make sure pylint supports a check before we disable it.
+	[961873c183aa]
+
+	* src/virtManager/choosecd.py, src/virtManager/details.py,
+	src/virtManager/domain.py:
+	Refactor cdrom insert/eject routines.
+
+	We were doing some hacky stuff behind the scenes, removing and
+	readding a new device to the XML when we could just edit in place.
+	Fix up these issues (should be an effective nop).
+	[737f74f9be4d]
+
+2009-10-05  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	domain: Break apart device lookup helper functions for xpath and
+	nodes
+
+	Both are useful pieces to have, so separate the logic into two
+	functions.
+	[961afdef2b1f]
+
+	* src/virtManager/create.py:
+	create: Fix removing of host storage poll timer
+	[f4bf25d91bc1]
+
+	* src/virtManager/domain.py:
+	domain: Explicitly mark XML altering API.
+	[ceb4c87602e2]
+
+	* src/virtManager/connection.py, src/virtManager/domain.py:
+	domain: cleanup: Use helper functions for methods that pull from
+	self.record
+	[fe855df1666b]
+
+2009-09-25  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py:
+	Reorganize domain methods to wrap all virDomain calls.
+
+	Explicitly discourage direct access to the virDomain instance.
+	[e7c4225ba381]
+
+2009-10-29  Jon Nordby  <jononor@gmail.com>
+
+	* AUTHORS, src/virtManager/engine.py, src/virtManager/systray.py:
+	Keep app running on close if systray enabled.
+	[c6e06bd32322]
+
+2009-10-28  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/engine.py:
+	Remove some debugging prints.
+	[5c1bceff5b03]
+
+2009-10-21  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	details: List console vs. details choice in View menu
+
+	This way, if the user hides the toolbar, the same functionality is
+	still available.
+	[e363de9ac549]
+
+	* src/virtManager/manager.py:
+	manager: Add 'Double click to connect' hint to connection row
+	tooltip
+	[14847cca4510]
+
+	* src/virtManager/details.py:
+	details: Don't show console tabs after going fullscreen.
+	[42adf97a009a]
+
+	* src/virtManager/details.py:
+	details: Clean up VM state updating
+	[5d4c7614b369]
+
+	* src/virtManager/createpool.py, src/vmm-create-pool.glade:
+	createpool: Support netfs pool enumeration
+
+	The user needs to enter a hostname and activate (hit enter) the
+	entry, which will populate the pool sources.
+	[2aa59956cc13]
+
+2009-10-20  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-manager.glade:
+	Fix glade 'invalid icon size' warning.
+	[53bfdaa71a4f]
+
+	* src/vmm-details.glade, src/vmm-host.glade, src/vmm-manager.glade:
+	Fix up glade stock id warning/screwiness.
+
+	Some previous glade version messed up a lot of imagemenuitems with
+	nonstandard text, but using stock icons. Fix these issues.
+	[8fff2676bce1]
+
+	* src/virtManager/createpool.py, src/vmm-create-pool.glade:
+	createpool: Support logical pool enumeration.
+	[d46b95ddbbcf]
+
+	* src/virtManager/createpool.py:
+	createpool: Refactor pool building to accomodate FindPoolSources
+
+	Store a pre built pool in the source list model when we populate
+	pool sources. This allows us to store info in the pool object that
+	isn't directly exposed to the user (like pool source name).
+	[d4e84203126c]
+
+	* src/virtManager/createpool.py:
+	createpool: Don't set values half way through the validation
+	process.
+	[5eed1b562957]
+
+	* src/virtManager/createpool.py:
+	createpool: Clean up field sensitivity logic.
+	[2232b5e2f998]
+
+2009-10-19  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/createpool.py, src/vmm-create-pool.glade:
+	createpool: Support adding SCSI pools
+
+	We show the available host adapters in a drop down for 'source
+	path'.
+	[82d3d23767a7]
+
+2009-10-05  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-details.glade, src/vmm-manager.glade:
+	Add tooltips for toolbar buttons in manager and details.
+	[7df46187c156]
+
+	* src/virtManager/createvol.py, src/vmm-create-vol.glade:
+	create-vol: Don't allow allocation to be higher than capacity.
+
+	Also tweak the spin button climb rates to be more useful.
+	[97c40c4fb29f]
+
+	* src/virtManager/createvol.py, src/vmm-create-vol.glade:
+	create-vol: Don't allow creating vol without a name entered
+	[c0cffb13680c]
+
+	* po/fr.po, po/pl.po:
+	Updated french and polish translations.
+	[67d5721a535f]
+
+2009-10-01  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	Log exceptions (not warnings) if we can't fetch a domain/net/pool.
+	[dab7da238a24]
+
+	* src/virtManager/engine.py:
+	Fix debug log spamming if on slow connection.
+	[2e9d29dc76c1]
+
+2009-10-01  Fred Leeflang  <fredl@dutchie.org>
+
+	* AUTHORS, src/virtManager/manager.py:
+	manager: Fix markup on pango < 1.21
+	[2c6e968773c6]
+
+2009-09-29  Cole Robinson  <crobinso@redhat.com>
+
+	* po/as.po, po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po,
+	po/da.po, po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po,
+	po/hi.po, po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po,
+	po/kn.po, po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po,
+	po/nl.po, po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sr.po, po/sr@latin.po, po/sv.po, po/ta.po,
+	po/te.po, po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po,
+	po/zh_TW.po:
+	Update translations.
+	[a1225cd49733]
+
+	* src/vmm-preferences.glade:
+	Preferences: fix button alignment.
+	[71f728401f53]
+
+	* src/virtManager/addhardware.py, src/virtManager/clone.py,
+	src/virtManager/createnet.py, src/virtManager/createpool.py,
+	src/virtManager/createvol.py, src/virtManager/details.py,
+	src/virtManager/host.py, src/virtManager/manager.py,
+	src/virtManager/preferences.py, src/vmm-details.glade, src/vmm-
+	host.glade:
+	Hide access to help docs: they are out of date to the point of
+	uselessness.
+	[65951459abe9]
+
+	* src/virtManager/manager.py:
+	manager: Actually update VM state text when state changes
+	[59f3d7a2ec28]
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	create: Explictly show startup error messages.
+
+	Previously we confusing stuffed them in a tooltip.
+	[6d219a6db4fb]
+
+2009-09-24  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	Fix vcpu hotplug.
+	[d78b7e713143]
+
+	* src/virtManager/create.py:
+	create: Don't prompt with same dialog multiple times.
+	[cfcd19d057dd]
+
+2009-09-23  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	connection: Add is_qemu_system helper.
+	[f5f3ff4f8942]
+
+	* src/virtManager/error.py:
+	Add dialog-with-checkbox helper functions.
+
+	Useful for things like "Don't show this again'.
+	[e7ee75a8f135]
+
+	* src/vmm-add-hardware.glade, src/vmm-choose-cd.glade, src/vmm-create-
+	net.glade, src/vmm-create-pool.glade, src/vmm-create-vol.glade, src
+	/vmm-host.glade, src/vmm-open-connection.glade, src/vmm-
+	preferences.glade:
+	Bring borders and button spacing more inline with Gnome HIG.
+	[292a065aad7e]
+
+	* src/vmm-about.glade, src/vmm-add-hardware.glade, src/vmm-choose-
+	cd.glade, src/vmm-clone.glade, src/vmm-create-net.glade, src/vmm-
+	create-pool.glade, src/vmm-create-vol.glade, src/vmm-create.glade,
+	src/vmm-delete.glade, src/vmm-details.glade, src/vmm-host.glade, src
+	/vmm-manager.glade, src/vmm-open-connection.glade, src/vmm-
+	preferences.glade, src/vmm-progress.glade, src/vmm-storage-
+	browse.glade:
+	Fix up vbox orientation with latest glade version.
+
+	Resave all files with the latest version as well, which causes lots
+	of churn.
+	[a4d201960c1c]
+
+2009-09-23  Michal Novotny  <minovotn@redhat.com>
+
+	* src/virtManager/createnet.py, src/virtManager/host.py,
+	src/virtManager/network.py, src/vmm-create-net.glade:
+	createnet: Allow disabling dhcp for new virtual networks.
+	[6f6845f2179a]
+
+2009-09-23  Laurent Léonard  <laurent@open-minds.org>
+
+	* po/fr.po:
+	Updated french translation.
+	[021fe6fe88e6]
+
+2009-09-21  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	Use timer to refresh available disk space in 'New VM' wizard (bz
+	502777)
+	[f75237b0a84e]
+
+2009-09-17  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-create-net.glade:
+	create-net: Fix typo
+	[d3b377306a99]
+
+	* tests/pylint-virt-manager.sh:
+	Block a new pylint check.
+	[1230b3aa25b5]
+
+	* src/virtManager/manager.py:
+	Drop row coloring for managed connection rows.
+
+	Looks kind of funky with lots of dark colored rows for a user with
+	multiple connections.
+	[739a6876af46]
+
+	* src/virtManager/manager.py:
+	Change VM name text arrangement in manager view.
+
+	Shrink text size, add a second row that shows the VM status. Fills
+	the display up a bit so it doesn't look so sparse.
+	[cdbe1da3ce75]
+
+	* pixmaps/state_paused.png, pixmaps/state_running.png,
+	pixmaps/state_shutoff.png, src/virtManager/config.py,
+	src/virtManager/domain.py, src/virtManager/manager.py:
+	Update new VM status icons.
+
+	Previous round didn't convey state very well, and looked too much
+	like buttons.
+	[a6f055361d16]
+
+2009-09-16  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/engine.py:
+	Don't close connection on all libvirt errors: only if libvirtd goes
+	away.
+	[1c886d1863f7]
+
+	* src/virtManager/domain.py:
+	Better logging and error avoidance with net/disk stats routines.
+	[9242a7fe76b1]
+
+	* tests/pylint-virt-manager.sh:
+	Actually try to fix pylint spamming.
+	[6aa2dc9ada0c]
+
+2009-09-14  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py,
+	src/virtManager/storagebrowse.py:
+	Fix populating text box with storage browser selection in 'New VM'
+	(bz 517263)
+
+	We were only properly setting the 'finish' callback for the first
+	time the storage browser was launched. All subsequent runs would not
+	enter anything in the associated text box.
+	[486cd6791c39]
+
+	* tests/pylint-virt-manager.sh:
+	Try to avoid 'maximum recursion depth' errors from pylint script.
+	[043ca66e19aa]
+
+2009-08-31  Paul W. Frields  <stickster@gmail.com>
+
+	* AUTHORS, src/virtManager/addhardware.py, src/vmm-manager.glade:
+	addhardware: Fix error message syntax typo
+	[d34def55dbd7]
+
+2009-08-31  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/manager.py:
+	Don't allow deleting an active VM (bz 518536)
+	[b70858b9f8c6]
+
+	* po/de.po:
+	Updated german translation.
+	[0bdea2b6c30e]
+
+	* src/virtManager/domain.py:
+	Don't mangle QEMU driver name on cdrom connect (bz 516116)
+	[c0de24094ca2]
+
+2009-08-27  Laurent Léonard  <laurent@open-minds.org>
+
+	* po/fr.po:
+	Really update french translation.
+	[37a986ce54ce]
+
+2009-08-05  Laurent Léonard  <laurent@open-minds.org>
+
+	* po/fr.po:
+	Updated french translation.
+	[5195fe3509bc]
+
 2009-07-28  Cole Robinson  <crobinso@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.8.0-1 for changeset 0705dee11e81
+	[18e673ca4e14]
+
+	* ChangeLog, NEWS, configure.ac, virt-manager.spec.in:
+	Bump version number, update NEWS and CHANGELOG.
+	[0705dee11e81] [RELEASE-0.8.0-1]
 
 	* src/virtManager/details.py:
 	details: Make sure 'remove' doesn't enter permenant insensitive
@@ -7,7 +1302,7 @@
 	If we selected a PS2 mouse, the refresh function would disable the
 	'remove' button. Since nothing else explictly enabled it, it would
 	be stuck like that.
-	[4629adb399c5] [tip]
+	[4629adb399c5]
 
 	* src/virtManager/clone.py:
 	clone: Disable 'share' dropdown option if disk is not shareable.
@@ -2911,7 +4206,7 @@
 	* merge heads
 	[80238ca5f800]
 
-2008-02-05  Ville-Pekka Vainio  <vpivaini AT cs DOT helsinki DOT fi>
+2008-02-05  Ville-Pekka Vainio <vpivaini AT cs DOT helsinki DOT fi>  <vpivaini AT cs DOT helsinki DOT fi>
 
 	* po/fi.po:
 	Updated Finnish translation
