@@ -414,7 +414,7 @@ class vmmConnection(gobject.GObject):
         else:
             hv = scheme.capitalize()
 
-        if path and path != "/system":
+        if path and path != "/system" and path != "/":
             if path == "/session":
                 hv += " Usermode"
             else:
@@ -857,12 +857,18 @@ class vmmConnection(gobject.GObject):
                 logging.info("Caller requested read only connection")
                 flags = libvirt.VIR_CONNECT_RO
 
-            self.vmm = libvirt.openAuth(self.uri,
-                                        [[libvirt.VIR_CRED_AUTHNAME,
-                                          libvirt.VIR_CRED_PASSPHRASE,
-                                          libvirt.VIR_CRED_EXTERNAL],
-                                         self._do_creds,
-                                         None], flags)
+            if virtinst.support.support_openauth():
+                self.vmm = libvirt.openAuth(self.uri,
+                                            [[libvirt.VIR_CRED_AUTHNAME,
+                                              libvirt.VIR_CRED_PASSPHRASE,
+                                              libvirt.VIR_CRED_EXTERNAL],
+                                             self._do_creds,
+                                             None], flags)
+            else:
+                if flags:
+                    self.vmm = libvirt.openReadOnly(self.uri)
+                else:
+                    self.vmm = libvirt.open(self.uri)
         except:
             return sys.exc_info()
 
@@ -887,7 +893,7 @@ class vmmConnection(gobject.GObject):
 
                 (_type, value, stacktrace) = open_error
 
-                if (type(_type) == type(libvirt.libvirtError) and
+                if (type(_type) == libvirt.libvirtError and
                     value.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
                     "GSSAPI Error" in value.get_error_message() and
                     "No credentials cache found" in value.get_error_message()):
