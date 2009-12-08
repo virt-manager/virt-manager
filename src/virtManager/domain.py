@@ -187,9 +187,6 @@ class vmmDomain(gobject.GObject):
             return self._backend.vcpus()
         return [[], []]
 
-    def hotplug_vcpu(self, vcpus):
-        self._backend.setVcpus(int(vcpus))
-
     def hotplug_vcpus(self, vcpus):
         vcpus = int(vcpus)
         if vcpus != self.vcpu_count():
