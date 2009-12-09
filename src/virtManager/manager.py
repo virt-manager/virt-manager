@@ -1049,7 +1049,7 @@ class vmmManager(gobject.GObject):
         _iter = model.get_iter(path)
 
         self.popup_vm_menu(model, _iter, event)
-        return True
+        return False
 
     def popup_vm_menu(self, model, _iter, event):
         if model.iter_parent(_iter) != None:
@@ -1089,8 +1089,6 @@ class vmmManager(gobject.GObject):
             self.connmenu_items["delete"].set_sensitive(disconn)
 
             self.connmenu.popup(None, None, None, 0, event.time)
-
-        return False
 
 
     #################
