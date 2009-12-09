@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 13:52-0500\n"
+"POT-Creation-Date: 2009-12-09 10:53-0500\n"
 "PO-Revision-Date: 2009-09-06 01:50+0530\n"
 "Last-Translator: Ani Peter <apeter@redhat.com> \n"
 "Language-Team:  Swathantra Malayalam Computing| സ്വതന്ത്ര മലയാളം കമ്പ്യൂട്ടിങ് <smc-"
@@ -772,7 +772,7 @@ msgstr "പേര്"
 
 #: ../src/virtManager/connection.py:178
 #, python-format
-msgid "Could build physical interface list via libvirt: %s"
+msgid "Could not build physical interface list via libvirt: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:184
@@ -792,17 +792,17 @@ msgstr "Libvirt പതിപ്പ് വീഡിയോ ഡിവൈസുക�
 
 #: ../src/virtManager/connection.py:216
 #, python-format
-msgid "Could build optical interface list via libvirt: %s"
+msgid "Could not build media list via libvirt: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
 #, fuzzy
-msgid "Libvirt version does not support optical media listing."
+msgid "Libvirt version does not support media listing."
 msgstr "Libvirt പതിപ്പ് വീഡിയോ ഡിവൈസുകളെ പിന്തുണയ്ക്കുന്നില്ല."
 
 #: ../src/virtManager/connection.py:233
 #, python-format
-msgid "Could not initialize HAL for optical listing: %s"
+msgid "Could not initialize HAL for media listing: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:482
@@ -834,15 +834,15 @@ msgstr "നിര്‍ജീവം"
 msgid "Unknown"
 msgstr "അപരിചിതം"
 
-#: ../src/virtManager/console.py:161
+#: ../src/virtManager/console.py:175
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "പോയിന്‍ററ്‍ ലഭ്യമാക്കുന്നതിനായി Ctrl+Alt അമറ്‍ത്തുക."
 
-#: ../src/virtManager/console.py:177
+#: ../src/virtManager/console.py:191
 msgid "Pointer grabbed"
 msgstr "പോയിന്‍ററ്‍ ലഭ്യമാക്കിയിരിക്കുന്നു"
 
-#: ../src/virtManager/console.py:178
+#: ../src/virtManager/console.py:192
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair: Ctrl+Alt"
@@ -850,58 +850,58 @@ msgstr ""
 "മൌസ് പോയിന്റര്‍ വിര്‍ച്ച്വല്‍ കണ്‍സോള്‍ ജാലകത്തിനു് മാത്രം ലഭിക്കുന്നു. പോയിന്റര്‍ തിരികെ ലഭിക്കുന്നതിനു്, "
 "Ctrl+Alt ഒന്നിച്ചമര്‍ത്തുക"
 
-#: ../src/virtManager/console.py:179
+#: ../src/virtManager/console.py:193
 msgid "Do not show this notification in the future."
 msgstr "ഇനി ഇത്തരം മുന്നറിയിപ്പുകള്‍ കാണിക്കരുതു്."
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:381 ../src/virtManager/console.py:565
 msgid "Guest not running"
 msgstr "ഗസ്റ്റ് പ്രവര്‍ത്തിക്കുന്നില്ല"
 
-#: ../src/virtManager/console.py:365
+#: ../src/virtManager/console.py:384
 msgid "Guest has crashed"
 msgstr "ഗസ്റ്റിനു് തകരാറു സംഭവിച്ചിരിക്കുന്നു"
 
-#: ../src/virtManager/console.py:455
+#: ../src/virtManager/console.py:474
 msgid ""
 "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "ടിസിപി/ഐപി പിശക്: ഹൈപ്പര്‍വൈസര്‍ലേക്കുള്ള വിഎന്‍സി കണക്ഷന്‍ നിരസിച്ചു അല്ലെങ്കില്‍ വേര്‍പെട്ടു!"
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:573
 #, fuzzy
 msgid "Graphical console not configured for guest"
 msgstr "ഗസ്റ്റിനായി കണ്‍സോള്‍ ക്രമികരിച്ചിട്ടില്ല"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:585
 #, fuzzy
 msgid "Graphical console not supported for guest"
 msgstr "ഗസ്റ്റിനു് കണ്‍സോള്‍ ഇതുവരെ പിന്തുണ നല്‍കുന്നില്ല"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:589
 #, fuzzy
 msgid "Graphical console is not yet active for guest"
 msgstr "ഗസ്റ്റിനു് കണ്‍സോള്‍ ഇതുവരെ സജീവമല്ല"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:593
 #, fuzzy
 msgid "Connecting to graphical console for guest"
 msgstr "ഗസ്റ്റിനായി കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യുന്നു"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:633
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr "വിഎന്‍സി സര്‍വര്‍ ആവശ്യപ്പെട്ട ആനുകൂല്യങ്ങള്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല"
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:634
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr "'%s' തരത്തിലുള്ള ആനുകൂല്യങ്ങള്‍ക്ക് പിന്തുണ ലഭ്യമല്ല"
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:635
 msgid "Unable to authenticate"
 msgstr "ആധികാരികത ഉറപ്പാക്കുവാന്‍ സാധ്യമല്ല"
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:639
 msgid "Unsupported console authentication type"
 msgstr "പിന്തുണയില്ലാത്ത കണ്‍സോള്‍ തിരിച്ചറിയല്‍ തരം"
 
@@ -2859,7 +2859,7 @@ msgstr ""
 
 #: ../src/vmm-create-net.glade.h:50
 #, fuzzy
-msgid "_Desination:"
+msgid "_Destination:"
 msgstr "ലക്ഷ്യസ്ഥാനം:"
 
 #: ../src/vmm-create-net.glade.h:51

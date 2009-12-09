@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 13:52-0500\n"
+"POT-Creation-Date: 2009-12-09 10:53-0500\n"
 "PO-Revision-Date: 2009-04-12 12:09-0600\n"
 "Last-Translator: Izaac Zavaleta <izaac@fedoraproject.org>\n"
 "Language-Team: fedora spanish <fedora-trans-es@redhat.com>\n"
@@ -826,7 +826,7 @@ msgstr "Nombre"
 
 #: ../src/virtManager/connection.py:178
 #, python-format
-msgid "Could build physical interface list via libvirt: %s"
+msgid "Could not build physical interface list via libvirt: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:184
@@ -844,16 +844,16 @@ msgstr ""
 
 #: ../src/virtManager/connection.py:216
 #, python-format
-msgid "Could build optical interface list via libvirt: %s"
+msgid "Could not build media list via libvirt: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
-msgid "Libvirt version does not support optical media listing."
+msgid "Libvirt version does not support media listing."
 msgstr ""
 
 #: ../src/virtManager/connection.py:233
 #, python-format
-msgid "Could not initialize HAL for optical listing: %s"
+msgid "Could not initialize HAL for media listing: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:482
@@ -888,15 +888,15 @@ msgstr "Inactivo"
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../src/virtManager/console.py:161
+#: ../src/virtManager/console.py:175
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "Presione Ctrl+Alt para liberar el puntero."
 
-#: ../src/virtManager/console.py:177
+#: ../src/virtManager/console.py:191
 msgid "Pointer grabbed"
 msgstr "Puntero capturado"
 
-#: ../src/virtManager/console.py:178
+#: ../src/virtManager/console.py:192
 #, fuzzy
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
@@ -905,60 +905,60 @@ msgstr ""
 "El puntero del mouse ha sido restringido a la ventana de la consola virtual. "
 "Para liberar el puntero presione las teclas Ctrl+Alt"
 
-#: ../src/virtManager/console.py:179
+#: ../src/virtManager/console.py:193
 msgid "Do not show this notification in the future."
 msgstr "No mostrar esta notificación en el futuro."
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:381 ../src/virtManager/console.py:565
 msgid "Guest not running"
 msgstr "Huésped no ejecutándose"
 
-#: ../src/virtManager/console.py:365
+#: ../src/virtManager/console.py:384
 msgid "Guest has crashed"
 msgstr "Huésped se ha colgado"
 
-#: ../src/virtManager/console.py:455
+#: ../src/virtManager/console.py:474
 msgid ""
 "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "TCP/IP error: !Conexión VNC al alfitrión hypervisor fué rechazada o "
 "desconectada!"
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:573
 #, fuzzy
 msgid "Graphical console not configured for guest"
 msgstr "Consola no configurada para huésped"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:585
 #, fuzzy
 msgid "Graphical console not supported for guest"
 msgstr "Consola no soportada para huésped"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:589
 #, fuzzy
 msgid "Graphical console is not yet active for guest"
 msgstr "Consola aún no activa para huésped"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:593
 #, fuzzy
 msgid "Connecting to graphical console for guest"
 msgstr "Conectando a consola para huésped"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:633
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr ""
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:634
 #, fuzzy, python-format
 msgid "The credential type %s is not supported"
 msgstr "Consola para dispositivo tipo '%s' no está aún soportada."
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:635
 #, fuzzy
 msgid "Unable to authenticate"
 msgstr "No se pudo iniciar GTK: %s"
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:639
 #, fuzzy
 msgid "Unsupported console authentication type"
 msgstr "Tipo de autenticación de consola no soportada"
@@ -2988,7 +2988,7 @@ msgstr "Necesitará elegir el espacio de direcciones IPv4 para la red virtual:"
 
 #: ../src/vmm-create-net.glade.h:50
 #, fuzzy
-msgid "_Desination:"
+msgid "_Destination:"
 msgstr "Destino:"
 
 #: ../src/vmm-create-net.glade.h:51

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 13:52-0500\n"
+"POT-Creation-Date: 2009-12-09 10:53-0500\n"
 "PO-Revision-Date: 2007-05-15 03:00+0300\n"
 "Last-Translator: Doncho N. Gunchev <gunchev@gmail.com>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -791,7 +791,7 @@ msgstr "Име"
 
 #: ../src/virtManager/connection.py:178
 #, python-format
-msgid "Could build physical interface list via libvirt: %s"
+msgid "Could not build physical interface list via libvirt: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:184
@@ -809,16 +809,16 @@ msgstr ""
 
 #: ../src/virtManager/connection.py:216
 #, python-format
-msgid "Could build optical interface list via libvirt: %s"
+msgid "Could not build media list via libvirt: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
-msgid "Libvirt version does not support optical media listing."
+msgid "Libvirt version does not support media listing."
 msgstr ""
 
 #: ../src/virtManager/connection.py:233
 #, python-format
-msgid "Could not initialize HAL for optical listing: %s"
+msgid "Could not initialize HAL for media listing: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:482
@@ -853,15 +853,15 @@ msgstr "Неактивна"
 msgid "Unknown"
 msgstr ""
 
-#: ../src/virtManager/console.py:161
+#: ../src/virtManager/console.py:175
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "Натиснете Ctrl+Alt за освобождаване на мишката."
 
-#: ../src/virtManager/console.py:177
+#: ../src/virtManager/console.py:191
 msgid "Pointer grabbed"
 msgstr "Мишката е прихваната"
 
-#: ../src/virtManager/console.py:178
+#: ../src/virtManager/console.py:192
 #, fuzzy
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
@@ -870,54 +870,54 @@ msgstr ""
 "Курсора на мишката бе ограничен в прозореца на виртуалната конзола. За да "
 "освободите курсора натиснете едновременно Ctrl+Alt"
 
-#: ../src/virtManager/console.py:179
+#: ../src/virtManager/console.py:193
 msgid "Do not show this notification in the future."
 msgstr ""
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:381 ../src/virtManager/console.py:565
 msgid "Guest not running"
 msgstr ""
 
-#: ../src/virtManager/console.py:365
+#: ../src/virtManager/console.py:384
 msgid "Guest has crashed"
 msgstr ""
 
-#: ../src/virtManager/console.py:455
+#: ../src/virtManager/console.py:474
 msgid ""
 "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:573
 msgid "Graphical console not configured for guest"
 msgstr ""
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:585
 msgid "Graphical console not supported for guest"
 msgstr ""
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:589
 msgid "Graphical console is not yet active for guest"
 msgstr ""
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:593
 msgid "Connecting to graphical console for guest"
 msgstr ""
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:633
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr ""
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:634
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr ""
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:635
 #, fuzzy
 msgid "Unable to authenticate"
 msgstr "Не може да се инициализира GTK: "
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:639
 msgid "Unsupported console authentication type"
 msgstr ""
 
@@ -2925,7 +2925,7 @@ msgstr "Ще трябва да изберете IPv4 адресно простр
 
 #: ../src/vmm-create-net.glade.h:50
 #, fuzzy
-msgid "_Desination:"
+msgid "_Destination:"
 msgstr "Назначение:"
 
 #: ../src/vmm-create-net.glade.h:51

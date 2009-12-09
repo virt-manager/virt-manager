@@ -175,7 +175,7 @@ class vmmConnection(gobject.GObject):
                 self._build_libvirt_netdev_list()
                 self.netdev_use_libvirt = True
             except Exception, e:
-                self.netdev_error = _("Could build physical interface "
+                self.netdev_error = _("Could not build physical interface "
                                       "list via libvirt: %s") % str(e)
         elif self.get_hal_helper():
             hal_helper = self.get_hal_helper()
@@ -213,7 +213,7 @@ class vmmConnection(gobject.GObject):
                 self.connect("nodedev-removed", self._nodedev_optical_removed)
                 self.optical_use_libvirt = True
             except Exception, e:
-                self.optical_error = _("Could build optical interface "
+                self.optical_error = _("Could not build media "
                                        "list via libvirt: %s") % str(e)
 
         elif self.get_hal_helper():
@@ -221,7 +221,7 @@ class vmmConnection(gobject.GObject):
 
             if self.is_remote():
                 self.optical_error = _("Libvirt version does not support "
-                                       "optical media listing.")
+                                       "media listing.")
 
             else:
                 error = hal_helper.get_init_error()
@@ -231,10 +231,10 @@ class vmmConnection(gobject.GObject):
 
                 else:
                     self.optical_error = _("Could not initialize HAL for "
-                                           "optical listing: %s") % error
+                                           "media listing: %s") % error
         else:
             self.optical_error = _("Libvirt version does not support "
-                                   "optical media listing.")
+                                   "media listing.")
 
         self.optical_initialized = True
         if self.optical_error:

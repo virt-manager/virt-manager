@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 13:52-0500\n"
+"POT-Creation-Date: 2009-12-09 10:53-0500\n"
 "PO-Revision-Date: 2009-12-05 19:21+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <fedora-trans-pl@redhat.com>\n"
@@ -765,8 +765,8 @@ msgid "Name"
 msgstr "Nazwa"
 
 #: ../src/virtManager/connection.py:178
-#, python-format
-msgid "Could build physical interface list via libvirt: %s"
+#, fuzzy, python-format
+msgid "Could not build physical interface list via libvirt: %s"
 msgstr ""
 "Nie można zbudować listy interfejsów fizycznych przez bibliotekę libvirt: %s"
 
@@ -788,20 +788,21 @@ msgstr ""
 "fizycznych."
 
 #: ../src/virtManager/connection.py:216
-#, python-format
-msgid "Could build optical interface list via libvirt: %s"
+#, fuzzy, python-format
+msgid "Could not build media list via libvirt: %s"
 msgstr ""
 "Nie można zbudować listy interfejsów optycznych przez bibliotekę libvirt: %s"
 
 #: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
-msgid "Libvirt version does not support optical media listing."
+#, fuzzy
+msgid "Libvirt version does not support media listing."
 msgstr ""
 "Ta wersja biblioteki libvirt nie obsługuje wyświetlania listy nośników "
 "optycznych."
 
 #: ../src/virtManager/connection.py:233
-#, python-format
-msgid "Could not initialize HAL for optical listing: %s"
+#, fuzzy, python-format
+msgid "Could not initialize HAL for media listing: %s"
 msgstr ""
 "Nie można zainicjować HAL do wyświetlenia listy interfejsów optycznych: %s"
 
@@ -834,15 +835,15 @@ msgstr "Deaktywacja"
 msgid "Unknown"
 msgstr "Nieznane"
 
-#: ../src/virtManager/console.py:161
+#: ../src/virtManager/console.py:175
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "Naciśnięcie Ctrl+Alt uwalnia wskaźnik."
 
-#: ../src/virtManager/console.py:177
+#: ../src/virtManager/console.py:191
 msgid "Pointer grabbed"
 msgstr "Przechwycono wskaźnik"
 
-#: ../src/virtManager/console.py:178
+#: ../src/virtManager/console.py:192
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair: Ctrl+Alt"
@@ -850,56 +851,56 @@ msgstr ""
 "Wskaźnik myszy został ograniczony do okna konsoli wirtualnej. Aby go "
 "uwolnić, należy nacisnąć parę klawiszy Ctrl+Alt"
 
-#: ../src/virtManager/console.py:179
+#: ../src/virtManager/console.py:193
 msgid "Do not show this notification in the future."
 msgstr "Bez wyświetlania tego powiadomienia w przyszłości."
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:381 ../src/virtManager/console.py:565
 msgid "Guest not running"
 msgstr "Gość nie jest uruchomiony"
 
-#: ../src/virtManager/console.py:365
+#: ../src/virtManager/console.py:384
 msgid "Guest has crashed"
 msgstr "Gość się zawiesił"
 
-#: ../src/virtManager/console.py:455
+#: ../src/virtManager/console.py:474
 msgid ""
 "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "Błąd TCP/IP: połączenie VNC do gospodarza nadzorcy zostało odrzucone lub "
 "rozłączone."
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:573
 msgid "Graphical console not configured for guest"
 msgstr "Konsola graficzna nie została skonfigurowana dla gościa"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:585
 msgid "Graphical console not supported for guest"
 msgstr "Konsola graficzna nie jest obsługiwana dla gościa"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:589
 msgid "Graphical console is not yet active for guest"
 msgstr "Konsola graficzna nie jest jeszcze aktywna dla gościa"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:593
 msgid "Connecting to graphical console for guest"
 msgstr "Łączenie się z konsolą graficzną gościa"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:633
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr ""
 "Nie można dostarczyć wymaganych danych uwierzytelniających do serwera VNC"
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:634
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr "Typ danych uwierzytelniających %s nie jest obsługiwany"
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:635
 msgid "Unable to authenticate"
 msgstr "Nie można uwierzytelnić"
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:639
 msgid "Unsupported console authentication type"
 msgstr "Nieobsługiwany typ uwierzytelniania konsoli"
 
@@ -1478,7 +1479,8 @@ msgstr ""
 #: ../src/virtManager/details.py:1415
 msgid "VCPU info only available for running domain."
 msgstr ""
-"Informacje o procesorach wirtualnych są dostępne tylko dla uruchomionych domen."
+"Informacje o procesorach wirtualnych są dostępne tylko dla uruchomionych "
+"domen."
 
 #: ../src/virtManager/details.py:1417
 msgid "Virtual machine does not support runtime VPCU info."
@@ -2838,7 +2840,8 @@ msgid "You will need to choose an IPv4 address space for the virtual network:"
 msgstr "Należy wybrać przestrzeń adresów IPv4 dla sieci wirtualnej:"
 
 #: ../src/vmm-create-net.glade.h:50
-msgid "_Desination:"
+#, fuzzy
+msgid "_Destination:"
 msgstr "_Cel:"
 
 #: ../src/vmm-create-net.glade.h:51

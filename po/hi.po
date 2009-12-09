@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-07 20:19+0000\n"
+"POT-Creation-Date: 2009-12-09 10:53-0500\n"
 "PO-Revision-Date: 2009-12-09 16:29+0530\n"
 "Last-Translator: Rajesh Ranjan <rajesh672@gmail.com>\n"
 "Language-Team: Hindi <hindi.sf.net>\n"
@@ -15,7 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"\n"
 "\n"
 
 #: ../src/virt-manager.desktop.in.in.h:1
@@ -159,7 +160,8 @@ msgid "The number of samples to keep in the statistics history"
 msgstr "सांख्यिकी इतिहास में रखने के लिए नमूना की संख्या"
 
 #: ../src/virt-manager.schemas.in.h:31
-msgid "The number of urls to keep in the history for the install media address page."
+msgid ""
+"The number of urls to keep in the history for the install media address page."
 msgstr "संस्थापन मीडिया पता पृष्ठ के लिए इतिहास में रखने के लिए url की संख्या."
 
 #: ../src/virt-manager.schemas.in.h:32
@@ -235,8 +237,10 @@ msgid "Whether to show notification when grabbing mouse"
 msgstr "माउस पकड़ने वक्त क्या अधिसूचना दिखाना है या नहीं"
 
 #: ../src/virt-manager.schemas.in.h:47
-msgid "Whether to show the notification hint when grabbing the mouse in the console"
-msgstr "Whether to show the notification hint when grabbing the mouse in the console"
+msgid ""
+"Whether to show the notification hint when grabbing the mouse in the console"
+msgstr ""
+"Whether to show the notification hint when grabbing the mouse in the console"
 
 #: ../src/virt-manager.schemas.in.h:48
 msgid ""
@@ -757,8 +761,8 @@ msgid "Name"
 msgstr "नाम"
 
 #: ../src/virtManager/connection.py:178
-#, python-format
-msgid "Could build physical interface list via libvirt: %s"
+#, fuzzy, python-format
+msgid "Could not build physical interface list via libvirt: %s"
 msgstr "libvirt के द्वारा भौतिक अंतरफलक सूची बना सकता है: %s"
 
 #: ../src/virtManager/connection.py:184
@@ -775,17 +779,18 @@ msgid "Libvirt version does not support physical interface listing."
 msgstr "Libvirt संस्करण भौतिक अंतरफलक सूचीकरण का समर्थन नहीं करता है."
 
 #: ../src/virtManager/connection.py:216
-#, python-format
-msgid "Could build optical interface list via libvirt: %s"
+#, fuzzy, python-format
+msgid "Could not build media list via libvirt: %s"
 msgstr "libvirt के द्वारा ऑप्टिकल अंतरफलक बना नहीं सका: %s"
 
 #: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
-msgid "Libvirt version does not support optical media listing."
+#, fuzzy
+msgid "Libvirt version does not support media listing."
 msgstr "Libvirt संस्करण ऑप्टिलक मीडिया सूचीकरण का समर्थन नहीं करता है."
 
 #: ../src/virtManager/connection.py:233
-#, python-format
-msgid "Could not initialize HAL for optical listing: %s"
+#, fuzzy, python-format
+msgid "Could not initialize HAL for media listing: %s"
 msgstr "HAL को ऑप्टिकल सूचीकरण के लिए आरंभीकृत नहीं कर सका: %s"
 
 #: ../src/virtManager/connection.py:482
@@ -817,15 +822,15 @@ msgstr "निष्क्रिय"
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: ../src/virtManager/console.py:161
+#: ../src/virtManager/console.py:175
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "Ctrl+Alt को मुद्रक छोड़ने के लिये दबायें."
 
-#: ../src/virtManager/console.py:177
+#: ../src/virtManager/console.py:191
 msgid "Pointer grabbed"
 msgstr "संकेतक पकड़ा"
 
-#: ../src/virtManager/console.py:178
+#: ../src/virtManager/console.py:192
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair: Ctrl+Alt"
@@ -833,52 +838,54 @@ msgstr ""
 "माउस संकेतक को वर्चुअल कंसोल विंडो तक प्रतिबंधित किया गया है. संकेतक को छोड़ने के लिये कुंजी "
 "युग्म दबायें: Ctrl+Alt"
 
-#: ../src/virtManager/console.py:179
+#: ../src/virtManager/console.py:193
 msgid "Do not show this notification in the future."
 msgstr "भविष्य में यह अधिसूचना मत दिखाएँ."
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:381 ../src/virtManager/console.py:565
 msgid "Guest not running"
 msgstr "अतिथि चल रहा है"
 
-#: ../src/virtManager/console.py:365
+#: ../src/virtManager/console.py:384
 msgid "Guest has crashed"
 msgstr "अतिथि क्रैश कर गया"
 
-#: ../src/virtManager/console.py:455
-msgid "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
-msgstr "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
+#: ../src/virtManager/console.py:474
+msgid ""
+"TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
+msgstr ""
+"TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:573
 msgid "Graphical console not configured for guest"
 msgstr "आलेखी कंसोल अतिथि के लिए विन्यस्त नहीं"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:585
 msgid "Graphical console not supported for guest"
 msgstr "आलेखी कंसोल अतिथि के लिए समर्थित नहीं"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:589
 msgid "Graphical console is not yet active for guest"
 msgstr "आलेखी कंसोल अतिथि के लिए अभी सक्रिय नहीं"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:593
 msgid "Connecting to graphical console for guest"
 msgstr "अतिथि के लिए आलेखी कंसोल में जोड़ रहा है"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:633
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr "VNC सर्वर में निवेदित श्रेय देने में असमर्थ"
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:634
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr "श्रेय प्रकार %s समर्थित नहीं है"
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:635
 msgid "Unable to authenticate"
 msgstr "सत्यापन में असमर्थ"
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:639
 msgid "Unsupported console authentication type"
 msgstr "असमर्थित कंसोल सत्यापन प्रकार"
 
@@ -1891,8 +1898,10 @@ msgid "A valid destination connection must be selected."
 msgstr "वैध गंतव्य कनेक्शन को जरूर चुना जाना चाहिए."
 
 #: ../src/virtManager/migrate.py:235
-msgid "Could not determine remotely accessible hostname for destination connection."
-msgstr "गंतव्य कनेक्शन के लिए दूरस्थ रूप से पहुँच योग्य मेजबाननाम को निर्धारित नहीं कर सकता है."
+msgid ""
+"Could not determine remotely accessible hostname for destination connection."
+msgstr ""
+"गंतव्य कनेक्शन के लिए दूरस्थ रूप से पहुँच योग्य मेजबाननाम को निर्धारित नहीं कर सकता है."
 
 #: ../src/virtManager/migrate.py:291
 msgid "No connections available."
@@ -2013,7 +2022,8 @@ msgstr "वर्चुअल संजाल निष्क्रिय है
 
 #: ../src/virtManager/uihelpers.py:228
 #, python-format
-msgid "Virtual Network '%s' is not active. Would you like to start the network now?"
+msgid ""
+"Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr "आभासी संजाल '%s' सक्रिय नहीं है. क्या आप संजाल अब शुरू करना चाहेंगे?"
 
 #: ../src/virtManager/uihelpers.py:240
@@ -2048,7 +2058,8 @@ msgid "Don't ask about these directories again."
 msgstr "इस निर्देशिका के बारे में मुझसे फिर मत पूछें."
 
 #: ../src/virtManager/uihelpers.py:468
-msgid "Errors were encountered changing permissions for the following directories:"
+msgid ""
+"Errors were encountered changing permissions for the following directories:"
 msgstr "त्रुटियाँ सामने आईं जब निम्नलिखित निर्देशिकाओं के लिए अनुमति को बदल रहा था:"
 
 #: ../src/virtManager/util.py:59
@@ -2167,8 +2178,10 @@ msgstr ""
 "समाप्त करें</span>"
 
 #: ../src/vmm-add-hardware.glade.h:17
-msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Graphics</span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">चित्रादि</span>"
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Graphics</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">चित्रादि</span>"
 
 #: ../src/vmm-add-hardware.glade.h:18
 msgid ""
@@ -2179,20 +2192,28 @@ msgstr ""
 "span>"
 
 #: ../src/vmm-add-hardware.glade.h:19
-msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Input</span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">इनपुट</span>"
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Input</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">इनपुट</span>"
 
 #: ../src/vmm-add-hardware.glade.h:20
-msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Network</span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">संजाल</span>"
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Network</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">संजाल</span>"
 
 #: ../src/vmm-add-hardware.glade.h:21
-msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sound</span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ध्वनि</span>"
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sound</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ध्वनि</span>"
 
 #: ../src/vmm-add-hardware.glade.h:22
-msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Storage</span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">भंडार</span>"
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Storage</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">भंडार</span>"
 
 #: ../src/vmm-add-hardware.glade.h:23
 msgid ""
@@ -2303,7 +2324,8 @@ msgstr ""
 msgid ""
 "Please indicate how you'd like to connect your new virtual network device to "
 "the host network."
-msgstr "कृपया बतायें कि अपने नये वर्चुअल संजाल युक्ति को इस मेजबान संजाल पर कैसे आप जोड़ना चाहेंगे."
+msgstr ""
+"कृपया बतायें कि अपने नये वर्चुअल संजाल युक्ति को इस मेजबान संजाल पर कैसे आप जोड़ना चाहेंगे."
 
 #: ../src/vmm-add-hardware.glade.h:48
 msgid ""
@@ -2320,7 +2342,8 @@ msgstr ""
 "वर्चुअल मशीन में कनेक्ट होने के लिए है."
 
 #: ../src/vmm-add-hardware.glade.h:51
-msgid "Please indicate what sound device type to connect to the virtual machine."
+msgid ""
+"Please indicate what sound device type to connect to the virtual machine."
 msgstr "कृपया बताएँ कि कौन सी ध्वनि युक्ति वर्चुअल मशीन में कनेक्ट होने के लिए है."
 
 #: ../src/vmm-add-hardware.glade.h:52
@@ -2764,7 +2787,8 @@ msgid "You will need to choose an IPv4 address space for the virtual network:"
 msgstr "आपको एक IPv4 पता स्थान को आभासी संजाल के लिए चुनने की जरूरत होगी:"
 
 #: ../src/vmm-create-net.glade.h:50
-msgid "_Desination:"
+#, fuzzy
+msgid "_Destination:"
 msgstr "गंतव्य (_D):"
 
 #: ../src/vmm-create-net.glade.h:51
@@ -2812,7 +2836,8 @@ msgid "Host Na_me:"
 msgstr "मेजबान नाम (_m):"
 
 #: ../src/vmm-create-pool.glade.h:10
-msgid "Specify a storage location to be later split into virtual machine storage."
+msgid ""
+"Specify a storage location to be later split into virtual machine storage."
 msgstr "कोई भंडारण स्थान निर्दिष्ट करें जिसे बाद में वर्चुअल मशीन स्टोरेज में बांटा जाए."
 
 #: ../src/vmm-create-pool.glade.h:11
@@ -3972,4 +3997,3 @@ msgstr "आयतन चुनें (_V)"
 #: ../src/vmm-storage-browse.glade.h:3
 msgid "_Browse Local"
 msgstr "स्थानीय ब्रॉउज करें (_B)"
-

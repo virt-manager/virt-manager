@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 13:52-0500\n"
+"POT-Creation-Date: 2009-12-09 10:53-0500\n"
 "PO-Revision-Date: 2009-07-24 11:04+0100\n"
 "Last-Translator: Fabian Affolter <fab@fedoraproject.org>\n"
 "Language-Team: German <fedora-trans-de@redhat.com>\n"
@@ -803,7 +803,7 @@ msgstr "Name"
 
 #: ../src/virtManager/connection.py:178
 #, python-format
-msgid "Could build physical interface list via libvirt: %s"
+msgid "Could not build physical interface list via libvirt: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:184
@@ -823,17 +823,17 @@ msgstr "Konsole nicht unterstützt für Gast"
 
 #: ../src/virtManager/connection.py:216
 #, python-format
-msgid "Could build optical interface list via libvirt: %s"
+msgid "Could not build media list via libvirt: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
 #, fuzzy
-msgid "Libvirt version does not support optical media listing."
+msgid "Libvirt version does not support media listing."
 msgstr "Konsole nicht unterstützt für Gast"
 
 #: ../src/virtManager/connection.py:233
 #, python-format
-msgid "Could not initialize HAL for optical listing: %s"
+msgid "Could not initialize HAL for media listing: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:482
@@ -865,15 +865,15 @@ msgstr "Inaktiv"
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: ../src/virtManager/console.py:161
+#: ../src/virtManager/console.py:175
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "Drücken Sie Strg+Alt, um den Mauszeiger freizugeben."
 
-#: ../src/virtManager/console.py:177
+#: ../src/virtManager/console.py:191
 msgid "Pointer grabbed"
 msgstr "Mauszeiger übernommen"
 
-#: ../src/virtManager/console.py:178
+#: ../src/virtManager/console.py:192
 #, fuzzy
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
@@ -883,59 +883,59 @@ msgstr ""
 "Drücken Sie die Tastaturkombination Strg+Alt, um den Mauszeiger wieder "
 "freizugeben."
 
-#: ../src/virtManager/console.py:179
+#: ../src/virtManager/console.py:193
 msgid "Do not show this notification in the future."
 msgstr "Benachrichtigungsmeldung in Zukunft nicht mehr anzeigen."
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:381 ../src/virtManager/console.py:565
 msgid "Guest not running"
 msgstr "Gast läuft nicht"
 
-#: ../src/virtManager/console.py:365
+#: ../src/virtManager/console.py:384
 msgid "Guest has crashed"
 msgstr "Gast ist abgestürzt"
 
-#: ../src/virtManager/console.py:455
+#: ../src/virtManager/console.py:474
 msgid ""
 "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "TCP/IP-Fehler: VNC-Verbindung zum Hypervisor-Host abgelehnt oder getrennt!"
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:573
 #, fuzzy
 msgid "Graphical console not configured for guest"
 msgstr "Konsole nicht konfiguriert für Gast"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:585
 #, fuzzy
 msgid "Graphical console not supported for guest"
 msgstr "Konsole nicht unterstützt für Gast"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:589
 #, fuzzy
 msgid "Graphical console is not yet active for guest"
 msgstr "Konsole nicht aktiviert für Gast jetzt"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:593
 #, fuzzy
 msgid "Connecting to graphical console for guest"
 msgstr "Verbinde mit Konsole für Gast"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:633
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr ""
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:634
 #, fuzzy, python-format
 msgid "The credential type %s is not supported"
 msgstr "Konsole für Geräte-Typ '%s' wird momentan nicht unterstützt."
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:635
 #, fuzzy
 msgid "Unable to authenticate"
 msgstr "Kann GTK nicht initialisieren: "
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:639
 msgid "Unsupported console authentication type"
 msgstr "Nicht unterstützter Konsolen-Authentifikationstyp"
 
@@ -2928,7 +2928,7 @@ msgstr ""
 
 #: ../src/vmm-create-net.glade.h:50
 #, fuzzy
-msgid "_Desination:"
+msgid "_Destination:"
 msgstr "Ziel:"
 
 #: ../src/vmm-create-net.glade.h:51
