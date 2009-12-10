@@ -458,7 +458,7 @@ class vmmEngine(gobject.GObject):
         self.emit("connection-added", conn)
         self.config.add_connection(conn.get_uri())
         if autoconnect:
-            conn.toggle_autoconnect()
+            conn.set_autoconnect(True)
 
         return conn
 
