@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-07 08:42+0000\n"
-"PO-Revision-Date: 2009-12-10 19:40+0530\n"
+"POT-Creation-Date: 2009-12-09 10:53-0500\n"
+"PO-Revision-Date: 2009-12-10 20:19+0530\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
 "Language-Team: Marathi <fedora-trans-mr@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -759,8 +759,8 @@ msgstr "नाव"
 
 #: ../src/virtManager/connection.py:178
 #, python-format
-msgid "Could build physical interface list via libvirt: %s"
-msgstr "libvirt द्वारे फिजीकल संवाद सूची बिल्ड करणे शक्य: %s"
+msgid "Could not build physical interface list via libvirt: %s"
+msgstr "libvirt द्वारे फिजीकल संवाद सूची बिल्ड करणे अशक्य: %s"
 
 #: ../src/virtManager/connection.py:184
 msgid "Libvirt version does not support physical interface listing"
@@ -777,17 +777,17 @@ msgstr "Libvirt आवृत्ती फिजीकल संवाद सू�
 
 #: ../src/virtManager/connection.py:216
 #, python-format
-msgid "Could build optical interface list via libvirt: %s"
-msgstr "libvirt च्या सहाय्याने ऑप्टिकल संवाद बिल्ड करणे शक्य: %s"
+msgid "Could not build media list via libvirt: %s"
+msgstr "libvirt च्या सहाय्याने ऑप्टिकल संवाद बिल्ड करणे अशक्य: %s"
 
 #: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
-msgid "Libvirt version does not support optical media listing."
-msgstr "Libvirt आवृत्ती ऑप्टिकल मिडीया सूची पुरवत नाही."
+msgid "Libvirt version does not support media listing."
+msgstr "Libvirt आवृत्ती ऑप्टिकल मिडीया सूचीकरीता समर्थन पुरवत नाही."
 
 #: ../src/virtManager/connection.py:233
 #, python-format
-msgid "Could not initialize HAL for optical listing: %s"
-msgstr "HAL ला ऑप्टिकल सूचीकरीता प्रारंभ करणे अशक्य: %s"
+msgid "Could not initialize HAL for media listing: %s"
+msgstr "HAL ला मिडीया सूचीकरीता प्रारंभ करणे अशक्य: %s"
 
 #: ../src/virtManager/connection.py:482
 msgid "Disconnected"
@@ -818,15 +818,15 @@ msgstr "निष्क्रीय"
 msgid "Unknown"
 msgstr "अपरिचित"
 
-#: ../src/virtManager/console.py:161
+#: ../src/virtManager/console.py:175
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "पॉईन्टर सोडण्याकरीता Ctrl+Alt दाबा."
 
-#: ../src/virtManager/console.py:177
+#: ../src/virtManager/console.py:191
 msgid "Pointer grabbed"
 msgstr "पॉईन्टर प्राप्त झाले"
 
-#: ../src/virtManager/console.py:178
+#: ../src/virtManager/console.py:192
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair: Ctrl+Alt"
@@ -834,54 +834,54 @@ msgstr ""
 "माऊस पॉईन्टर आभासी कंसोल खिडकी करीता निर्बंधीत आहे. पॉईन्टर सोडण्याकरीता, कि जोडी: "
 "Ctrl+Alt दाबा"
 
-#: ../src/virtManager/console.py:179
+#: ../src/virtManager/console.py:193
 msgid "Do not show this notification in the future."
 msgstr "ही सूचना भविष्यात दाखवू नका."
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:381 ../src/virtManager/console.py:565
 msgid "Guest not running"
 msgstr "अतिथी कार्यरत नाही"
 
-#: ../src/virtManager/console.py:365
+#: ../src/virtManager/console.py:384
 msgid "Guest has crashed"
 msgstr "अतिथी नष्ट झाले"
 
-#: ../src/virtManager/console.py:455
+#: ../src/virtManager/console.py:474
 msgid "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "TCP/IP त्रुटी: हायपरवाजर यजमान करीता VNC जुळवणी नकारली गेली किंवा जुळवणी अस्थापीत "
 "केली गेली!"
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:573
 msgid "Graphical console not configured for guest"
 msgstr "अतिथीकरीता ग्राफिकल कंसोल संरचीत केले नाही"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:585
 msgid "Graphical console not supported for guest"
 msgstr "अतिथीकरीता ग्राफिकल कंसोल समर्थीत नाही"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:589
 msgid "Graphical console is not yet active for guest"
 msgstr "अतिथी करीता कंसोल अजूनही सक्रिय केले नाही"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:593
 msgid "Connecting to graphical console for guest"
 msgstr "अतिथीकरीता ग्राफिकल कंसोलशी जुळवणी करत आहे"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:633
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr "VNC सर्वरकरीता विनंतीकृत श्रेय पुरवण्यास अशक्य"
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:634
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr "श्रेय प्रकार '%s' समर्थीत नाही"
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:635
 msgid "Unable to authenticate"
 msgstr "ओळख पटवण्यास अशक्य"
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:639
 msgid "Unsupported console authentication type"
 msgstr "असमर्थीत कंसोल अधिप्रमाणन प्रकार"
 
@@ -1216,8 +1216,8 @@ msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
 msgstr ""
-"या प्रकारचे संग्रहची बांधणी केल्यास स्रोत साधणचे स्वरूपन केले जाते. तुम्हाला नक्की या "
-"संग्रहाची बांधणी करायची?"
+"या प्रकारचे संग्रहची बांधणी केल्यास स्रोत साधणचे स्वरूपन केले जाते. तुम्हाला नक्की या संग्रहाची "
+"बांधणी करायची?"
 
 #: ../src/virtManager/createpool.py:521
 msgid "Format the source device."
@@ -2597,8 +2597,8 @@ msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual network </span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">नविन आभासी नेटवर्क "
-"बनवित आहे </span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">नविन आभासी "
+"नेटवर्क बनवित आहे </span>"
 
 #: ../src/vmm-create-net.glade.h:11
 msgid ""
@@ -2766,7 +2766,7 @@ msgid "You will need to choose an IPv4 address space for the virtual network:"
 msgstr "आभासी नेटवर्क करीता तुम्हाला IPv4 पत्ता क्षेत्र नीवडावे लागेल:"
 
 #: ../src/vmm-create-net.glade.h:50
-msgid "_Desination:"
+msgid "_Destination:"
 msgstr "लक्ष्य (_D):"
 
 #: ../src/vmm-create-net.glade.h:51
@@ -3151,8 +3151,8 @@ msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
 msgstr ""
-"<b>टिप:</b> 'स्रोत' म्हणजे यजमान OS च्या दृष्टीकोण नुरूप माहिती, व 'लक्ष्य' म्हणजे "
-"अतिथी OS च्या दृष्टीकोण नुरूप माहिती"
+"<b>टिप:</b> 'स्रोत' म्हणजे यजमान OS च्या दृष्टीकोण नुरूप माहिती, व 'लक्ष्य' म्हणजे अतिथी "
+"OS च्या दृष्टीकोण नुरूप माहिती"
 
 #: ../src/vmm-details.glade.h:16
 msgid ""
