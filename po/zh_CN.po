@@ -1,4 +1,4 @@
-# translation of virt-manager.tip.po to Simplified Chinese
+# translation of virt-manager.tip.zh_CN(2).po to Simplified Chinese
 # translation of zh_CN.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
@@ -8,10 +8,10 @@
 # Leah Liu <lliu@redhat.com>, 2008, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: virt-manager.tip\n"
+"Project-Id-Version: virt-manager.tip.zh_CN(2)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-07 20:19+0000\n"
-"PO-Revision-Date: 2009-12-10 12:31+1000\n"
+"POT-Creation-Date: 2009-12-09 10:53-0500\n"
+"PO-Revision-Date: 2009-12-10 19:53+1000\n"
 "Last-Translator: Leah Liu <lliu@redhat.com>\n"
 "Language-Team: Simplified Chinese <zh@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -751,8 +751,8 @@ msgstr "名称"
 
 #: ../src/virtManager/connection.py:178
 #, python-format
-msgid "Could build physical interface list via libvirt: %s"
-msgstr "可使用 libvirt 构建物理端口列表：%s"
+msgid "Could not build physical interface list via libvirt: %s"
+msgstr "无法使用 libvirt 构建物理端口列表：%s"
 
 #: ../src/virtManager/connection.py:184
 msgid "Libvirt version does not support physical interface listing"
@@ -769,17 +769,17 @@ msgstr "Libvirt 版本不支持物理端口列表。"
 
 #: ../src/virtManager/connection.py:216
 #, python-format
-msgid "Could build optical interface list via libvirt: %s"
-msgstr "无法使用 libvirt 构建优化端口列表：%s"
+msgid "Could not build media list via libvirt: %s"
+msgstr "无法使用 libvirt 构建介质列表：%s"
 
 #: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
-msgid "Libvirt version does not support optical media listing."
-msgstr "Libvirt 版本不支持优化介质列表。"
+msgid "Libvirt version does not support media listing."
+msgstr "Libvirt 版本不支持介质列表。"
 
 #: ../src/virtManager/connection.py:233
 #, python-format
-msgid "Could not initialize HAL for optical listing: %s"
-msgstr "无法为优化列表初始化 HAL：%s"
+msgid "Could not initialize HAL for media listing: %s"
+msgstr "无法为介质列表初始化 HAL：%s"
 
 #: ../src/virtManager/connection.py:482
 msgid "Disconnected"
@@ -810,66 +810,66 @@ msgstr "不活跃的"
 msgid "Unknown"
 msgstr "未知"
 
-#: ../src/virtManager/console.py:161
+#: ../src/virtManager/console.py:175
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "按 Ctrl+Alt 释放指针。"
 
-#: ../src/virtManager/console.py:177
+#: ../src/virtManager/console.py:191
 msgid "Pointer grabbed"
 msgstr "抓住的指针"
 
-#: ../src/virtManager/console.py:178
+#: ../src/virtManager/console.py:192
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair: Ctrl+Alt"
 msgstr "已经将鼠标指针限制在控制台窗口中。要释放该指针请按组合键：Ctrl+Alt"
 
-#: ../src/virtManager/console.py:179
+#: ../src/virtManager/console.py:193
 msgid "Do not show this notification in the future."
 msgstr "今后不要显示此通知。"
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:381 ../src/virtManager/console.py:565
 msgid "Guest not running"
 msgstr "客户端没有运行"
 
-#: ../src/virtManager/console.py:365
+#: ../src/virtManager/console.py:384
 msgid "Guest has crashed"
 msgstr "客户端崩溃"
 
-#: ../src/virtManager/console.py:455
+#: ../src/virtManager/console.py:474
 msgid "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr "TCP/IP 错误：到监控程序主机的 VNC 连接被拒绝或者断开连接！"
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:573
 msgid "Graphical console not configured for guest"
 msgstr "没有为客户端配置图形控制台"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:585
 msgid "Graphical console not supported for guest"
 msgstr "客户端不支持图形控制台"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:589
 msgid "Graphical console is not yet active for guest"
 msgstr "没有为客户端激活图形控制台"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:593
 msgid "Connecting to graphical console for guest"
 msgstr "为客户端连接到图形控制台"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:633
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr "无法为 VNC 服务器提供需要的证书"
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:634
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr "不支持证书类型 %s"
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:635
 msgid "Unable to authenticate"
 msgstr "无法验证"
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:639
 msgid "Unsupported console authentication type"
 msgstr "不支持的控制台验证类型"
 
@@ -1301,14 +1301,18 @@ msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
 "with the specified label. The administrator is responsible for making sure "
 "the images are labeled corectly on disk."
-msgstr "静态 SELinux 安全性类型让 libvirt 总是启动带指定标签的客户端进程。管理员负责确保正确标记磁盘中的映像。"
+msgstr ""
+"静态 SELinux 安全性类型让 libvirt 总是启动带指定标签的客户端进程。管理员负责"
+"确保正确标记磁盘中的映像。"
 
 #: ../src/virtManager/details.py:430
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
 "unique label for the guest process and guest image, ensuring total isolation "
 "of the guest. (Default)"
-msgstr "静态 SELinux 安全性类型让 libvirt 自动为客户端进程和客户端映像选择唯一标签，保证完全独立于该客户端。（默认）"
+msgstr ""
+"静态 SELinux 安全性类型让 libvirt 自动为客户端进程和客户端映像选择唯一标签，"
+"保证完全独立于该客户端。（默认）"
 
 #: ../src/virtManager/details.py:438
 msgid "VCPU"
@@ -1719,7 +1723,8 @@ msgid ""
 "A hypervisor connection can be manually added via \n"
 "File->Add Connection"
 msgstr ""
-"无法使用默认连接。请确定安装了正确的虚拟化软件包（kvm、qemu 等等）并重启 libvirtd 了解这些更改。\n"
+"无法使用默认连接。请确定安装了正确的虚拟化软件包（kvm、qemu 等等）并重启 "
+"libvirtd 了解这些更改。\n"
 "\n"
 "可通过 文件 -> 添加连接 \n"
 "手动添加管理程序"
@@ -2728,7 +2733,7 @@ msgid "You will need to choose an IPv4 address space for the virtual network:"
 msgstr "您将需要为虚拟网络选择一个 IPv4 地址空间："
 
 #: ../src/vmm-create-net.glade.h:50
-msgid "_Desination:"
+msgid "_Destination:"
 msgstr "目的地（_D）："
 
 #: ../src/vmm-create-net.glade.h:51
@@ -2886,7 +2891,10 @@ msgstr "<span color='#484848'>操作系统：</span>"
 
 #: ../src/vmm-create.glade.h:7
 msgid "<span size='large' color='white'>Create a new virtual machine</span>"
-msgstr "                                 生成新虚拟机</span>                                            <span size='large' color='white'>"
+msgstr ""
+"                                 生成新虚拟机</"
+"span>                                            <span size='large' "
+"color='white'>"
 
 #: ../src/vmm-create.glade.h:8
 msgid "A_utomatically detect operating system based on install media"
