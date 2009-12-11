@@ -79,9 +79,9 @@ class vmmConnection(gobject.GObject):
         "nodedev-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                             [str, str]),
 
-        "optical-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+        "mediadev-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                           [object]),
-        "optical-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
+        "mediadev-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                             [str]),
 
         "resources-sampled": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
@@ -126,7 +126,7 @@ class vmmConnection(gobject.GObject):
         # Physical network interfaces: name (eth0) -> vmmNetDevice
         self.netdevs = {}
         # Physical media devices: vmmMediaDevice.key -> vmmMediaDevice
-        self.opticaldevs = {}
+        self.mediadevs = {}
         # Connection Storage pools: name -> vmmInterface
         self.interfaces = {}
         # Connection Storage pools: UUID -> vmmStoragePool
@@ -147,9 +147,9 @@ class vmmConnection(gobject.GObject):
         self.netdev_error = ""
         self.netdev_use_libvirt = False
 
-        self.optical_initialized = False
-        self.optical_error = ""
-        self.optical_use_libvirt = False
+        self.mediadev_initialized = False
+        self.mediadev_error = ""
+        self.mediadev_use_libvirt = False
 
     #################
     # Init routines #
@@ -206,22 +206,22 @@ class vmmConnection(gobject.GObject):
             else:
                 logging.debug("Using HAL for netdev enumeration")
 
-    def _init_optical(self):
+    def _init_mediadev(self):
         if self.is_nodedev_capable():
             try:
-                self.connect("nodedev-added", self._nodedev_optical_added)
-                self.connect("nodedev-removed", self._nodedev_optical_removed)
-                self.optical_use_libvirt = True
+                self.connect("nodedev-added", self._nodedev_mediadev_added)
+                self.connect("nodedev-removed", self._nodedev_mediadev_removed)
+                self.mediadev_use_libvirt = True
             except Exception, e:
-                self.optical_error = _("Could not build media "
-                                       "list via libvirt: %s") % str(e)
+                self.mediadev_error = _("Could not build media "
+                                        "list via libvirt: %s") % str(e)
 
         elif self.get_hal_helper():
             hal_helper = self.get_hal_helper()
 
             if self.is_remote():
-                self.optical_error = _("Libvirt version does not support "
-                                       "media listing.")
+                self.mediadev_error = _("Libvirt version does not support "
+                                        "media listing.")
 
             else:
                 error = hal_helper.get_init_error()
@@ -230,20 +230,20 @@ class vmmConnection(gobject.GObject):
                     self._set_hal_remove_sig(hal_helper)
 
                 else:
-                    self.optical_error = _("Could not initialize HAL for "
-                                           "media listing: %s") % error
+                    self.mediadev_error = _("Could not initialize HAL for "
+                                            "media listing: %s") % error
         else:
-            self.optical_error = _("Libvirt version does not support "
-                                   "media listing.")
+            self.mediadev_error = _("Libvirt version does not support "
+                                    "media listing.")
 
-        self.optical_initialized = True
-        if self.optical_error:
-            logging.debug(self.optical_error)
+        self.mediadev_initialized = True
+        if self.mediadev_error:
+            logging.debug(self.mediadev_error)
         else:
-            if self.optical_use_libvirt:
-                logging.debug("Using libvirt API for optical enumeration")
+            if self.mediadev_use_libvirt:
+                logging.debug("Using libvirt API for mediadev enumeration")
             else:
-                logging.debug("Using HAL for optical enumeration")
+                logging.debug("Using HAL for mediadev enumeration")
 
     ########################
     # General data getters #
@@ -300,9 +300,9 @@ class vmmConnection(gobject.GObject):
         if name == "vm-added":
             for uuid in self.vms.keys():
                 self.emit("vm-added", self.uri, uuid)
-        elif name == "optical-added":
-            for dev in self.opticaldevs.values():
-                self.emit("optical-added", dev)
+        elif name == "mediadev-added":
+            for dev in self.mediadevs.values():
+                self.emit("mediadev-added", dev)
         elif name == "nodedev-added":
             for key in self.nodedevs.keys():
                 self.emit("nodedev-added", self.get_uri(), key)
@@ -667,12 +667,13 @@ class vmmConnection(gobject.GObject):
     # Update listeners #
     ####################
 
-    def _remove_optical(self, key):
-        del(self.opticaldevs[key])
-        self.emit("optical-removed", key)
-    def _add_optical(self, key, dev):
-        self.opticaldevs[key] = dev
-        self.emit("optical-added", dev)
+    # Generic media device helpers
+    def _remove_mediadev(self, key):
+        del(self.mediadevs[key])
+        self.emit("mediadev-removed", key)
+    def _add_mediadev(self, key, dev):
+        self.mediadevs[key] = dev
+        self.emit("mediadev-added", dev)
 
     def _haldev_removed(self, ignore, hal_path):
         # Physical net device
@@ -681,9 +682,9 @@ class vmmConnection(gobject.GObject):
                 del self.netdevs[name]
                 return
 
-        for key, obj in self.opticaldevs.items():
+        for key, obj in self.mediadevs.items():
             if key == hal_path:
-                self._remove_optical(key)
+                self._remove_mediadev(key)
 
     def _netdev_added(self, ignore, netdev):
         name = netdev.get_name()
@@ -692,15 +693,16 @@ class vmmConnection(gobject.GObject):
 
         self.netdevs[name] = netdev
 
+    # Optical HAL listener
     def _optical_added(self, ignore, dev):
         key = dev.get_key()
-        if self.opticaldevs.has_key(key):
+        if self.mediadevs.has_key(key):
             return
 
-        self._add_optical(key, dev)
+        self._add_mediadev(key, dev)
 
-    def _nodedev_optical_added(self, ignore1, ignore2, name):
-        if self.opticaldevs.has_key(name):
+    def _nodedev_mediadev_added(self, ignore1, ignore2, name):
+        if self.mediadevs.has_key(name):
             return
 
         vobj = self.get_nodedev(name)
@@ -708,13 +710,13 @@ class vmmConnection(gobject.GObject):
         if not mediadev:
             return
 
-        self._add_optical(name, mediadev)
+        self._add_mediadev(name, mediadev)
 
-    def _nodedev_optical_removed(self, ignore1, ignore2, name):
-        if not self.opticaldevs.has_key(name):
+    def _nodedev_mediadev_removed(self, ignore1, ignore2, name):
+        if not self.mediadevs.has_key(name):
             return
 
-        self._remove_optical(name)
+        self._remove_mediadev(name)
 
     ######################################
     # Connection closing/opening methods #
@@ -1340,8 +1342,8 @@ class vmmConnection(gobject.GObject):
         if not self.netdev_initialized:
             self._init_netdev()
 
-        if not self.optical_initialized:
-            self._init_optical()
+        if not self.mediadev_initialized:
+            self._init_mediadev()
 
         def tick_send_signals():
             """

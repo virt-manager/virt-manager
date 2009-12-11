@@ -285,11 +285,11 @@ def generate_macaddr(conn):
     return newmac
 
 
-##############################################
-# Populate optical widget (choosecd, create) #
-##############################################
+############################################
+# Populate media widget (choosecd, create) #
+############################################
 
-def init_optical_combo(widget, empty_sensitive=False):
+def init_mediadev_combo(widget, empty_sensitive=False):
     # [Device path, pretty label, has_media?, device key, media key,
     #  vmmMediaDevice]
     model = gtk.ListStore(str, str, bool, str, str)
@@ -302,16 +302,16 @@ def init_optical_combo(widget, empty_sensitive=False):
     if not empty_sensitive:
         widget.add_attribute(text, 'sensitive', 2)
 
-def populate_optical_combo(conn, widget):
+def populate_mediadev_combo(conn, widget, devtype):
     sigs = []
 
     widget.get_model().clear()
 
-    sigs.append(conn.connect("optical-added", optical_added, widget))
-    sigs.append(conn.connect("optical-removed", optical_removed, widget))
+    sigs.append(conn.connect("mediadev-added", mediadev_added, widget, devtype))
+    sigs.append(conn.connect("mediadev-removed", mediadev_removed, widget))
 
     widget.set_active(-1)
-    optical_set_default_selection(widget)
+    mediadev_set_default_selection(widget)
 
     return sigs
 
@@ -322,7 +322,7 @@ def set_row_from_object(row, obj):
     row[OPTICAL_DEV_KEY] = obj.get_key()
     row[OPTICAL_MEDIA_KEY] = obj.get_media_key()
 
-def optical_removed(ignore_helper, key, widget):
+def mediadev_removed(ignore_helper, key, widget):
     model = widget.get_model()
     active = widget.get_active()
     idx = 0
@@ -339,22 +339,25 @@ def optical_removed(ignore_helper, key, widget):
 
         idx += 1
 
-    optical_set_default_selection(widget)
+    mediadev_set_default_selection(widget)
 
-def optical_added(ignore_helper, newobj, widget):
+def mediadev_added(ignore_helper, newobj, widget, devtype):
     model = widget.get_model()
 
-    newobj.connect("media-added", optical_media_changed, widget)
-    newobj.connect("media-removed", optical_media_changed, widget)
+    if newobj.get_media_type() != devtype:
+        return
+
+    newobj.connect("media-added", mediadev_media_changed, widget)
+    newobj.connect("media-removed", mediadev_media_changed, widget)
 
     # Brand new device
     row = [None, None, None, None, None]
     set_row_from_object(row, newobj)
     model.append(row)
 
-    optical_set_default_selection(widget)
+    mediadev_set_default_selection(widget)
 
-def optical_media_changed(newobj, widget):
+def mediadev_media_changed(newobj, widget):
     model = widget.get_model()
     active = widget.get_active()
     idx = 0
@@ -374,9 +377,9 @@ def optical_media_changed(newobj, widget):
 
         idx = idx + 1
 
-    optical_set_default_selection(widget)
+    mediadev_set_default_selection(widget)
 
-def optical_set_default_selection(widget):
+def mediadev_set_default_selection(widget):
     # Set the first active cdrom device as selected, otherwise none
     model = widget.get_model()
     idx = 0

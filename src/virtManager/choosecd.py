@@ -24,14 +24,20 @@ import virtinst
 
 import virtManager.uihelpers as uihelpers
 import virtManager.util as util
+from virtManager.mediadev import MEDIA_CDROM
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.error import vmmErrorDialog
 
 class vmmChooseCD(gobject.GObject):
-    __gsignals__ = {"cdrom-chosen": (gobject.SIGNAL_RUN_FIRST,
-                           gobject.TYPE_NONE,
-                           (str, str, str)), # type, source, target
-}
+    __gsignals__ = {
+        "cdrom-chosen": (gobject.SIGNAL_RUN_FIRST,
+                         gobject.TYPE_NONE,
+                         (str, str, str)), # type, source, target
+    }
+
+    IS_FLOPPY = 1
+    IS_CDROM  = 2
+
     def __init__(self, config, dev_id_info, connection):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-choose-cd.glade", "vmm-choose-cd", domain="virt-manager")
@@ -133,10 +139,10 @@ class vmmChooseCD(gobject.GObject):
     def initialize_opt_media(self):
         widget = self.window.get_widget("cd-path")
         warn = self.window.get_widget("cd-path-warn")
-        error = self.conn.optical_error
 
-        uihelpers.init_optical_combo(widget)
-        uihelpers.populate_optical_combo(self.conn, widget)
+        error = self.conn.mediadev_error
+        uihelpers.init_mediadev_combo(widget)
+        uihelpers.populate_mediadev_combo(self.conn, widget, MEDIA_CDROM)
 
         if error:
             warn.show()

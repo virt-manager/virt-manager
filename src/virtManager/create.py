@@ -32,6 +32,7 @@ import virtinst
 
 import virtManager.uihelpers as uihelpers
 from virtManager import util
+from virtManager.mediadev import MEDIA_CDROM
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
@@ -244,7 +245,7 @@ class vmmCreate(gobject.GObject):
 
         # Physical CD-ROM model
         cd_list = self.window.get_widget("install-local-cdrom-combo")
-        uihelpers.init_optical_combo(cd_list)
+        uihelpers.init_mediadev_combo(cd_list)
 
         # Networking
         # [ interface type, device name, label, sensitive ]
@@ -410,13 +411,14 @@ class vmmCreate(gobject.GObject):
         cdrom_list = self.window.get_widget("install-local-cdrom-combo")
         cdrom_warn = self.window.get_widget("install-local-cdrom-warn")
 
-        sigs = uihelpers.populate_optical_combo(self.conn, cdrom_list)
+        sigs = uihelpers.populate_mediadev_combo(self.conn, cdrom_list,
+                                                 MEDIA_CDROM)
         self.conn_signals.extend(sigs)
 
-        if self.conn.optical_error:
+        if self.conn.mediadev_error:
             cdrom_warn.show()
             cdrom_option.set_sensitive(False)
-            util.tooltip_wrapper(cdrom_warn, self.conn.optical_error)
+            util.tooltip_wrapper(cdrom_warn, self.conn.mediadev_error)
         else:
             cdrom_warn.hide()
 

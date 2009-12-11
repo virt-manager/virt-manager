@@ -23,6 +23,9 @@ import logging
 
 import virtinst
 
+MEDIA_FLOPPY = "floppy"
+MEDIA_CDROM = "cdrom"
+
 MEDIA_TIMEOUT = 3
 
 class vmmMediaDevice(gobject.GObject):
@@ -38,9 +41,10 @@ class vmmMediaDevice(gobject.GObject):
         if nodedev.device_type != "storage":
             return None
 
-        if nodedev.drive_type != "cdrom":
+        if nodedev.drive_type not in [ MEDIA_CDROM, MEDIA_FLOPPY]:
             return None
 
+        drvtype = nodedev.drive_type
         path = nodedev.block
         key = nodedev.name
         has_media = nodedev.media_available
@@ -49,13 +53,13 @@ class vmmMediaDevice(gobject.GObject):
 
         nodedev_obj = conn.vmm.nodeDeviceLookupByName(key)
         obj = vmmMediaDevice(path, key, has_media, media_label, media_key,
-                             nodedev_obj)
+                             nodedev_obj, drvtype)
         obj.enable_poll_for_media()
 
         return obj
 
     def __init__(self, path, key, has_media, media_label, media_key,
-                 nodedev_obj = None):
+                 nodedev_obj = None, media_type = MEDIA_CDROM):
         self.__gobject_init__()
 
         self.path = path
@@ -63,6 +67,7 @@ class vmmMediaDevice(gobject.GObject):
         self._has_media = has_media
         self.media_label = media_label
         self.media_key = media_key
+        self.media_type = media_type
 
         self.nodedev_obj = nodedev_obj
         self.poll_signal = None
@@ -72,6 +77,9 @@ class vmmMediaDevice(gobject.GObject):
 
     def get_key(self):
         return self.key
+
+    def get_media_type(self):
+        return self.media_type
 
     def has_media(self):
         return self._has_media
