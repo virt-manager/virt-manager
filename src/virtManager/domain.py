@@ -458,7 +458,7 @@ class vmmDomain(gobject.GObject):
 
         return doc.serialize(), disk_fragment.serialize()
 
-    def define_cdrom_media(self, dev_id_info, newpath, _type=None):
+    def define_storage_media(self, dev_id_info, newpath, _type=None):
         if not self.check_device_is_present("disk", dev_id_info):
             return
 
@@ -467,13 +467,13 @@ class vmmDomain(gobject.GObject):
         else:
             func = self._media_xml_connect
 
-        def change_cdrom_helper(origxml):
+        def change_storage_helper(origxml):
             vmxml, ignore = util.xml_parse_wrapper(origxml, func, dev_id_info,
                                                    newpath, _type)
             return vmxml
-        self.redefine(change_cdrom_helper)
+        self.redefine(change_storage_helper)
 
-    def hotplug_cdrom_media(self, dev_id_info, newpath, _type=None):
+    def hotplug_storage_media(self, dev_id_info, newpath, _type=None):
         if not newpath:
             func = self._media_xml_disconnect
         else:

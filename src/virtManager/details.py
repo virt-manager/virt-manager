@@ -223,7 +223,7 @@ class vmmDetails(gobject.GObject):
 
             "on_details_help_activate": self.show_help,
 
-            "on_config_cdrom_connect_clicked": self.toggle_cdrom,
+            "on_config_cdrom_connect_clicked": self.toggle_storage_media,
             "on_config_remove_clicked": self.remove_xml_dev,
             "on_add_hardware_button_clicked": self.add_hardware,
 
@@ -950,22 +950,26 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("config-apply").set_sensitive(True)
 
     # CDROM Eject/Connect
-    def toggle_cdrom(self, src):
-        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not info:
+    def toggle_storage_media(self, src):
+        diskinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not diskinfo:
             return
 
-        dev_id_info = info[1]
-        curpath = info[3]
+        dev_id_info = diskinfo[1]
+        curpath = diskinfo[3]
+        devtype = diskinfo[4]
+
+        is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
+        is_floppy = (devtype == virtinst.VirtualDisk.DEVICE_FLOPPY)
 
         if curpath:
             # Disconnect cdrom
-            self.change_cdrom_media(dev_id_info, None, _type=None)
+            self.change_storage_media(dev_id_info, None, _type=None)
 
         else:
             def change_cdrom_wrapper(src, dev_id_info, newpath,
                                      _type=None):
-                return self.change_cdrom_media(dev_id_info, newpath, _type)
+                return self.change_storage_media(dev_id_info, newpath, _type)
 
             # Launch 'Choose CD' dialog
             if self.choose_cd is None:
@@ -1116,10 +1120,10 @@ class vmmDetails(gobject.GObject):
                                               (bootdev,))
 
     # CDROM
-    def change_cdrom_media(self, dev_id_info, newpath, _type=None):
-        return self._change_config_helper(self.vm.define_cdrom_media,
+    def change_storage_media(self, dev_id_info, newpath, _type=None):
+        return self._change_config_helper(self.vm.define_storage_media,
                                           (dev_id_info, newpath, _type),
-                                          self.vm.hotplug_cdrom_media,
+                                          self.vm.hotplug_storage_media,
                                           (dev_id_info, newpath, _type))
 
     # Disk options
@@ -1482,6 +1486,7 @@ class vmmDetails(gobject.GObject):
         idx = diskinfo[9]
 
         is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
+        is_floppy = (devtype == virtinst.VirtualDisk.DEVICE_FLOPPY)
 
         pretty_name = prettyify_disk(devtype, bus, idx)
 
@@ -1493,7 +1498,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("disk-shareable").set_active(share)
 
         button = self.window.get_widget("config-cdrom-connect")
-        if devtype == "cdrom":
+        if is_cdrom or is_floppy:
             if not path:
                 # source device not connected
                 button.set_label(gtk.STOCK_CONNECT)
