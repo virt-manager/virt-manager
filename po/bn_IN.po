@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-07 20:19+0000\n"
-"PO-Revision-Date: 2009-12-10 11:09+0530\n"
+"POT-Creation-Date: 2009-12-09 10:53-0500\n"
+"PO-Revision-Date: 2009-12-11 10:43+0530\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali INDIA <anubad@lists.ankur.org.in>\n"
 "MIME-Version: 1.0\n"
@@ -141,15 +141,21 @@ msgstr "অ্যাপ্লিকেশন চলাকালে সিস্�
 
 #: ../src/virt-manager.schemas.in.h:26
 msgid "Show the cpu usage field in the domain list summary view"
-msgstr "ডোমেইনের তালিকা সংক্রান্ত সংক্ষিপ্ত প্রদর্শনের মধ্যে cpu-র ব্যবহার সংক্রান্ত ক্ষেত্র অন্তর্ভুক্ত করা হবে"
+msgstr ""
+"ডোমেইনের তালিকা সংক্রান্ত সংক্ষিপ্ত প্রদর্শনের মধ্যে cpu-র ব্যবহার সংক্রান্ত ক্ষেত্র "
+"অন্তর্ভুক্ত করা হবে"
 
 #: ../src/virt-manager.schemas.in.h:27
 msgid "Show the disk I/O field in the domain list summary view"
-msgstr "ডোমেইনের তালিকা সংক্রান্ত সংক্ষিপ্ত প্রদর্শনের মধ্যে ডিস্কের ইনপুট/আউটপুট সংক্রান্ত ক্ষেত্র অন্তর্ভুক্ত করা হবে"
+msgstr ""
+"ডোমেইনের তালিকা সংক্রান্ত সংক্ষিপ্ত প্রদর্শনের মধ্যে ডিস্কের ইনপুট/আউটপুট সংক্রান্ত "
+"ক্ষেত্র অন্তর্ভুক্ত করা হবে"
 
 #: ../src/virt-manager.schemas.in.h:28
 msgid "Show the network I/O field in the domain list summary view"
-msgstr "ডোমেইনের তালিকা সংক্রান্ত সংক্ষিপ্ত প্রদর্শনের মধ্যে নেটওয়ার্কের ইনপুট/আউটপুট সংক্রান্ত ক্ষেত্র অন্তর্ভুক্ত করা হবে"
+msgstr ""
+"ডোমেইনের তালিকা সংক্রান্ত সংক্ষিপ্ত প্রদর্শনের মধ্যে নেটওয়ার্কের ইনপুট/আউটপুট সংক্রান্ত "
+"ক্ষেত্র অন্তর্ভুক্ত করা হবে"
 
 #: ../src/virt-manager.schemas.in.h:29
 msgid "The length of the list of URLs"
@@ -760,8 +766,8 @@ msgstr "নাম"
 
 #: ../src/virtManager/connection.py:178
 #, python-format
-msgid "Could build physical interface list via libvirt: %s"
-msgstr "libvirt-র মাধ্যমে প্রকৃত ইন্টারফেসের তালিকা নির্মাণ করা যাবে: %s"
+msgid "Could not build physical interface list via libvirt: %s"
+msgstr "libvirt-র মাধ্যমে প্রকৃত ইন্টারফেসের তালিকা নির্মাণ করা সম্ভব নয়: %s"
 
 #: ../src/virtManager/connection.py:184
 msgid "Libvirt version does not support physical interface listing"
@@ -778,17 +784,17 @@ msgstr "Libvirt-র সংস্করণ দ্বারা প্রকৃত 
 
 #: ../src/virtManager/connection.py:216
 #, python-format
-msgid "Could build optical interface list via libvirt: %s"
-msgstr "libvirt-র মাধ্যমে অপটিক্যাল ইন্টারফেসের তালিকা নির্মাণ করা যাবে: %s"
+msgid "Could not build media list via libvirt: %s"
+msgstr "libvirt-র মাধ্যমে অপটিক্যাল ইন্টারফেসের তালিকা নির্মাণ করা সম্ভব নয়: %s"
 
 #: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
-msgid "Libvirt version does not support optical media listing."
-msgstr "Libvirt-র সংস্করণ দ্বারা অপটিক্যাল মিডিয়ার তালিকা নির্মাণ সমর্থিত নয়।"
+msgid "Libvirt version does not support media listing."
+msgstr "Libvirt-র সংস্করণ দ্বারা মিডিয়ার তালিকা নির্মাণ সমর্থিত নয়।"
 
 #: ../src/virtManager/connection.py:233
 #, python-format
-msgid "Could not initialize HAL for optical listing: %s"
-msgstr "অপটিক্যাল তালিকা নির্মাণের জন্য HAL আরম্ভ করতে ব্যর্থ: %s"
+msgid "Could not initialize HAL for media listing: %s"
+msgstr "মিডিয়ার তালিকা নির্মাণের জন্য HAL আরম্ভ করতে ব্যর্থ: %s"
 
 #: ../src/virtManager/connection.py:482
 msgid "Disconnected"
@@ -819,15 +825,15 @@ msgstr "নিষ্ক্রিয়"
 msgid "Unknown"
 msgstr "অজানা"
 
-#: ../src/virtManager/console.py:161
+#: ../src/virtManager/console.py:175
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "পয়েন্টার মুক্ত করতে Ctrl+Alt টিপুন।"
 
-#: ../src/virtManager/console.py:177
+#: ../src/virtManager/console.py:191
 msgid "Pointer grabbed"
 msgstr "পয়েন্টার আটক করা হয়েছে"
 
-#: ../src/virtManager/console.py:178
+#: ../src/virtManager/console.py:192
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair: Ctrl+Alt"
@@ -835,54 +841,54 @@ msgstr ""
 "মাউস পয়েন্টারটি ভার্চুয়াল কনসোলের মধ্যে আটক করা হয়েছে। পয়েন্টার মুক্ত করার জন্য Ctrl"
 "+Alt কি সংকলন একযোগে টিপুন।"
 
-#: ../src/virtManager/console.py:179
+#: ../src/virtManager/console.py:193
 msgid "Do not show this notification in the future."
 msgstr "ভবিষ্যতে এই সূচনাবার্তা প্রদর্শন করা হবে না।"
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:381 ../src/virtManager/console.py:565
 msgid "Guest not running"
 msgstr "গেস্ট বর্তমানে চলছে না"
 
-#: ../src/virtManager/console.py:365
+#: ../src/virtManager/console.py:384
 msgid "Guest has crashed"
 msgstr "গেস্ট বিপর্যস্ত হয়েছে"
 
-#: ../src/virtManager/console.py:455
+#: ../src/virtManager/console.py:474
 msgid "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "TCP/IP সংযোগ: হাইপার-ভাইসর হোস্টের সাথে VNC সংযোগ প্রত্যাখ্যান করা হয়েছে অথবা "
 "সংযোগ বিচ্ছিন্ত হয়েছে!"
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:573
 msgid "Graphical console not configured for guest"
 msgstr "গেস্টের জন্য গ্রাফিক্যাল কনসোল কনফিগার করা হয়নি"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:585
 msgid "Graphical console not supported for guest"
 msgstr "গেস্টের জন্য গ্রাফিক্যাল কনসোল সমর্থিত নয়"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:589
 msgid "Graphical console is not yet active for guest"
 msgstr "গেস্টের জন্য গ্রাফিক্যাল কনসোল বর্তমানে সক্রিয় নয়"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:593
 msgid "Connecting to graphical console for guest"
 msgstr "গেস্টের জন্য গ্রাফিক্যাল কনসোলের সাথে সংযোগ স্থাপন করা হচ্ছে"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:633
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr "অনুরোধ করা পরিচয়ের তথ্য VNC সার্ভারে প্রদান করা সম্ভব হয়নি"
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:634
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr "%s ধরনে পরিচিতি বর্তমানে সমর্থিত নয়"
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:635
 msgid "Unable to authenticate"
 msgstr "অনুমোদন করতে ব্যর্থ"
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:639
 msgid "Unsupported console authentication type"
 msgstr "কনসোলের মাধ্যমে অনুমোদনের ধরন সমর্থিত নয়"
 
@@ -2567,8 +2573,8 @@ msgid ""
 "<b>Hint:</b> The network should be chosen from one of the IPv4 private "
 "address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
 msgstr ""
-"<b>ইঙ্গিত:</b>IPv4-র ব্যক্তিগত ঠিকানার সীমার মধ্যে একটি নেটওয়ার্ক নির্বাচন করা আবশ্যক। যেমন, 10.0.0.0/8,  "
-"172.16.0.0/12, অথবা 192.168.0.0/16"
+"<b>ইঙ্গিত:</b>IPv4-র ব্যক্তিগত ঠিকানার সীমার মধ্যে একটি নেটওয়ার্ক নির্বাচন করা "
+"আবশ্যক। যেমন, 10.0.0.0/8,  172.16.0.0/12, অথবা 192.168.0.0/16"
 
 #: ../src/vmm-create-net.glade.h:5
 msgid "<b>IPv4 network</b>"
@@ -2782,8 +2788,8 @@ msgid "You will need to choose an IPv4 address space for the virtual network:"
 msgstr "আপনার ভার্চুয়াল নেটওয়ার্কের জন্য IPv4 ঠিকানার স্থান নির্বাচন করা আবশ্যক:"
 
 #: ../src/vmm-create-net.glade.h:50
-msgid "_Desination:"
-msgstr "গন্তব্য:(_D)"
+msgid "_Destination:"
+msgstr "গন্তব্য: (_D)"
 
 #: ../src/vmm-create-net.glade.h:51
 msgid "_Enable DHCP:"
