@@ -636,15 +636,18 @@ class vmmConnection(gobject.GObject):
     ###################################
 
     def create_network(self, xml, start=True, autostart=True):
+        # Define network
         net = self.vmm.networkDefineXML(xml)
-        uuid = util.uuidstr(net.UUID())
-        self.nets[uuid] = vmmNetwork(self.config, self, net, uuid, False)
-        self.nets[uuid].start()
-        self.nets[uuid].set_active(True)
-        self.nets[uuid].set_autostart(True)
-        self.emit("net-added", self.uri, uuid)
-        self.emit("net-started", self.uri, uuid)
-        return self.nets[uuid]
+
+        try:
+            if start:
+                net.create()
+            net.setAutostart(autostart)
+        except:
+            net.undefine()
+            raise
+
+        return net
 
     def define_domain(self, xml):
         self.vmm.defineXML(xml)

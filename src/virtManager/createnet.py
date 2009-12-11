@@ -345,6 +345,8 @@ class vmmCreateNetwork(gobject.GObject):
             self.err.show_err(_("Error creating virtual network: %s" % str(e)),
                               "".join(traceback.format_exc()))
             return
+
+        self.conn.tick(noStatsUpdate=True)
         self.close()
 
     def validate(self, page_num):
