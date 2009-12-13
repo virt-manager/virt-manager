@@ -1804,8 +1804,10 @@ class vmmDetails(gobject.GObject):
             for row in hw_list_model:
                 if (row[HW_LIST_COL_TYPE] == hwtype and
                     row[HW_LIST_COL_DEVICE][2] == info[2]):
+
                     # Update existing HW info
                     row[HW_LIST_COL_DEVICE] = info
+                    row[HW_LIST_COL_LABEL] = name
                     return
 
                 if row[HW_LIST_COL_TYPE] <= hwtype:
