@@ -996,7 +996,7 @@ class vmmConnection(gobject.GObject):
                         currentNets[uuid].set_active(True)
                         startNets.append(uuid)
                     del origNets[uuid]
-            except libvirt.libvirtError:
+            except:
                 logging.exception("Couldn't fetch active network name '%s'" %
                                   name)
 
@@ -1014,7 +1014,7 @@ class vmmConnection(gobject.GObject):
                         currentNets[uuid].set_active(False)
                         stopNets.append(uuid)
                     del origNets[uuid]
-            except libvirt.libvirtError:
+            except:
                 logging.exception("Couldn't fetch inactive network name '%s'"
                                   % name)
 
@@ -1062,7 +1062,7 @@ class vmmConnection(gobject.GObject):
                         currentPools[uuid].set_active(True)
                         startPools.append(uuid)
                     del origPools[uuid]
-            except libvirt.libvirtError:
+            except:
                 logging.exception("Couldn't fetch active pool '%s'" % name)
 
         for name in newInactivePoolNames:
@@ -1079,7 +1079,7 @@ class vmmConnection(gobject.GObject):
                         currentPools[uuid].set_active(False)
                         stopPools.append(uuid)
                     del origPools[uuid]
-            except libvirt.libvirtError:
+            except:
                 logging.exception("Couldn't fetch inactive pool '%s'" % name)
         return (stopPools, startPools, origPools, newPools, currentPools)
 
@@ -1141,14 +1141,14 @@ class vmmConnection(gobject.GObject):
         for name in newActiveNames:
             try:
                 check_obj(name, True)
-            except libvirt.libvirtError:
+            except:
                 logging.exception("Couldn't fetch active "
                                   "interface '%s'" % name)
 
         for name in newInactiveNames:
             try:
                 check_obj(name, False)
-            except libvirt.libvirtError:
+            except:
                 logging.exception("Couldn't fetch inactive "
                                   "interface '%s'" % name)
 
@@ -1193,7 +1193,7 @@ class vmmConnection(gobject.GObject):
         for name in newActiveNames:
             try:
                 check_obj(name)
-            except libvirt.libvirtError:
+            except:
                 logging.exception("Couldn't fetch nodedev '%s'" % name)
 
         return (orig, new, current)
@@ -1259,7 +1259,7 @@ class vmmConnection(gobject.GObject):
                         maybeNewUUIDs[uuid] = vm
                         startedUUIDs.append(uuid)
                         activeUUIDs.append(uuid)
-                    except libvirt.libvirtError:
+                    except:
                         logging.exception("Couldn't fetch domain id '%s'" %
                                           str(_id))
 
@@ -1278,7 +1278,7 @@ class vmmConnection(gobject.GObject):
                         vm = self.vmm.lookupByName(name)
                         uuid = util.uuidstr(vm.UUID())
                         maybeNewUUIDs[uuid] = vm
-                    except libvirt.libvirtError:
+                    except:
                         logging.exception("Couldn't fetch domain id '%s'" %
                                           str(id))
 
