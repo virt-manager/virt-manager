@@ -30,7 +30,7 @@ import gtk.glade
 import virtinst
 from virtinst import VirtualCharDevice, VirtualDevice, VirtualVideoDevice
 
-import virtManager.util as vmmutil
+import virtManager.util as util
 import virtManager.uihelpers as uihelpers
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
@@ -132,6 +132,7 @@ class vmmAddHardware(gobject.GObject):
             "char_bind_host_focus_in": (self.update_doc, "bind_host"),
             "char_telnet_focus_in": (self.update_doc, "protocol"),
             })
+        util.bind_escape_key_close(self)
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("create-help").hide()
@@ -344,7 +345,7 @@ class vmmAddHardware(gobject.GObject):
         error = self.vm.get_connection().netdev_error
         if error:
             net_warn.show()
-            vmmutil.tooltip_wrapper(net_warn, error)
+            util.tooltip_wrapper(net_warn, error)
         else:
             net_warn.hide()
 
@@ -1108,7 +1109,7 @@ class vmmAddHardware(gobject.GObject):
             # If creating disk via storage API, we need to thread
             # off a new connection
             if disk.vol_install:
-                newconn = vmmutil.dup_lib_conn(self.config, disk.conn)
+                newconn = util.dup_lib_conn(self.config, disk.conn)
                 disk.conn = newconn
             logging.debug("Starting background file allocate process")
             disk.setup(meter)
@@ -1172,8 +1173,8 @@ class vmmAddHardware(gobject.GObject):
 
         try:
             if (os.path.dirname(os.path.abspath(path)) ==
-                vmmutil.DEFAULT_POOL_PATH):
-                vmmutil.build_default_pool(self.vm.get_connection().vmm)
+                util.DEFAULT_POOL_PATH):
+                util.build_default_pool(self.vm.get_connection().vmm)
 
             self._dev = virtinst.VirtualDisk(self.get_config_disk_image(),
                                              filesize,

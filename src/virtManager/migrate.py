@@ -79,6 +79,7 @@ class vmmMigrateDialog(gobject.GObject):
             "on_migrate_set_interface_toggled" : self.toggle_set_interface,
             "on_migrate_set_port_toggled" : self.toggle_set_port,
         })
+        util.bind_escape_key_close(self)
 
         blue = gtk.gdk.color_parse("#0072A8")
         self.window.get_widget("migrate-header").modify_bg(gtk.STATE_NORMAL,

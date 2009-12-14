@@ -77,7 +77,7 @@ class vmmStorageBrowser(gobject.GObject):
             "on_choose_volume_clicked" : self.finish,
             "on_vol_list_row_activated" : self.finish,
         })
-
+        util.bind_escape_key_close(self)
 
         finish_img = gtk.image_new_from_stock(gtk.STOCK_NEW,
                                               gtk.ICON_SIZE_BUTTON)

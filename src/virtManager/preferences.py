@@ -21,6 +21,8 @@
 import gtk.glade
 import gobject
 
+import virtManager.util as util
+
 PREFS_PAGE_STATS    = 0
 PREFS_PAGE_VM_PREFS = 1
 
@@ -87,6 +89,7 @@ class vmmPreferences(gobject.GObject):
             "on_prefs_confirm_pause_toggled": self.change_confirm_pause,
             "on_prefs_confirm_removedev_toggled": self.change_confirm_removedev,
             })
+        util.bind_escape_key_close(self)
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("prefs-help").hide()

@@ -254,3 +254,10 @@ def uuidstr(rawuuid):
         if i == 3 or i == 5 or i == 7 or i == 9:
             uuid.append('-')
     return "".join(uuid)
+
+def bind_escape_key_close(vmmobj):
+    def close_on_escape(src, event):
+        if gtk.gdk.keyval_name(event.keyval) == "Escape":
+            vmmobj.close()
+
+    vmmobj.topwin.connect("key-press-event", close_on_escape)

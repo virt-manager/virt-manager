@@ -104,6 +104,7 @@ class vmmCreatePool(gobject.GObject):
                                                 "pool-info2"),
             "on_pool_build_focus_in_event": (self.update_build_doc)
         })
+        util.bind_escape_key_close(self)
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("pool-help").hide()
