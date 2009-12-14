@@ -313,7 +313,7 @@ class vmmConsolePages(gobject.GObject):
         w, h = self.desktop_resolution
         self.topwin.unmaximize()
         self.topwin.resize(1, 1)
-        self.queue_resize_helper("console-vnc-scroll", w, h)
+        self.queue_scroll_resize_helper(w, h)
 
     def send_key(self, src):
         keys = None
@@ -638,17 +638,31 @@ class vmmConsolePages(gobject.GObject):
         self.desktop_resolution = (w, h)
         self.window.get_widget("console-vnc-scroll").queue_resize()
 
-    def queue_resize_helper(self, widget_name, w, h):
+    def queue_scroll_resize_helper(self, w, h):
         """
         Resize the VNC container widget to the requested size. The new size
         isn't a hard requirment so the user can still shrink the window
         again, as opposed to set_size_request
         """
-        widget = self.window.get_widget(widget_name)
+        widget = self.window.get_widget("console-vnc-scroll")
         signal_holder = []
 
+        def restore_scroll(src):
+            is_scale = self.vncViewer.get_scaling()
+
+            if is_scale:
+                w_policy = gtk.POLICY_NEVER
+                h_policy = gtk.POLICY_NEVER
+            else:
+                w_policy = gtk.POLICY_AUTOMATIC
+                h_policy = gtk.POLICY_AUTOMATIC
+
+            src.set_policy(w_policy, h_policy)
+            return False
+
         def unset_cb(src):
-            widget.queue_resize_no_redraw()
+            src.queue_resize_no_redraw()
+            gobject.idle_add(restore_scroll, src)
             return False
 
         def request_cb(src, req):
@@ -660,6 +674,10 @@ class vmmConsolePages(gobject.GObject):
 
             gobject.idle_add(unset_cb, widget)
             return False
+
+        # Disable scroll bars while we resize, since resizing to the VM's
+        # dimensions can erroneously show scroll bars when they aren't needed
+        widget.set_policy(gtk.POLICY_NEVER, gtk.POLICY_NEVER)
 
         signal_id = widget.connect("size-request", request_cb)
         signal_holder.append(signal_id)
