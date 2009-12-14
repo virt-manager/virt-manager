@@ -67,6 +67,7 @@ class vmmCreatePool(gobject.GObject):
             "on_pool_source_button_clicked" : self.browse_source_path,
             "on_pool_target_button_clicked" : self.browse_target_path,
 
+            "on_pool_name_activate": self.forward,
             "on_pool_hostname_activate" : self.hostname_changed,
 
             "on_pool_name_focus_in_event": (self.update_doc, "name",
@@ -170,6 +171,7 @@ class vmmCreatePool(gobject.GObject):
         self.window.get_widget("pool-back").set_sensitive(False)
 
         self.window.get_widget("pool-name").set_text("")
+        self.window.get_widget("pool-name").grab_focus()
         self.window.get_widget("pool-type").set_active(0)
         self.window.get_widget("pool-target-path").child.set_text("")
         self.window.get_widget("pool-source-path").child.set_text("")
@@ -385,6 +387,7 @@ class vmmCreatePool(gobject.GObject):
             if notebook.get_current_page() == PAGE_FORMAT:
                 self.finish()
             else:
+                self.window.get_widget("pool-forward").grab_focus()
                 notebook.next_page()
         except Exception, e:
             self.err.show_err(_("Uncaught error validating input: %s") % str(e),
@@ -439,6 +442,7 @@ class vmmCreatePool(gobject.GObject):
             self.window.get_widget("pool-back").set_sensitive(False)
             self.window.get_widget("pool-finish").hide()
             self.window.get_widget("pool-forward").show()
+            self.window.get_widget("pool-forward").grab_focus()
         elif page_number == PAGE_FORMAT:
             self.show_options_by_pool()
             self.window.get_widget("pool-target-path").child.set_text(self._pool.target_path)
@@ -447,6 +451,7 @@ class vmmCreatePool(gobject.GObject):
             self.window.get_widget("pool-build").set_sensitive(buildret[1])
             self.window.get_widget("pool-build").set_active(buildret[0])
             self.window.get_widget("pool-finish").show()
+            self.window.get_widget("pool-finish").grab_focus()
             self.window.get_widget("pool-forward").hide()
 
     def get_pool_to_validate(self):

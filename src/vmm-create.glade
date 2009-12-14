@@ -132,6 +132,7 @@
                                       <widget class="GtkEntry" id="create-vm-name">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <signal name="activate" handler="on_create_vm_name_activate"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">1</property>

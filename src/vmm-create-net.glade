@@ -296,6 +296,7 @@
                                 <accessibility>
                                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Net Name Field</atkproperty>
                                 </accessibility>
+                                <signal name="activate" handler="on_net_name_activate"/>
                               </widget>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -1602,6 +1603,7 @@
                 <property name="label">gtk-go-forward</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_create_forward_clicked"/>

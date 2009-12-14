@@ -110,6 +110,7 @@ class vmmCreate(gobject.GObject):
             "on_create_help_clicked": self.show_help,
             "on_create_pages_switch_page": self.page_changed,
 
+            "on_create_vm_name_activate": self.forward,
             "on_create_conn_changed": self.conn_changed,
 
             "on_install_url_box_changed": self.url_box_changed,
@@ -1011,7 +1012,7 @@ class vmmCreate(gobject.GObject):
 
         notebook.set_current_page(curpage - 1)
 
-    def forward(self, src):
+    def forward(self, ignore):
         notebook = self.window.get_widget("create-pages")
         curpage = notebook.get_current_page()
 
@@ -1025,7 +1026,7 @@ class vmmCreate(gobject.GObject):
             # PV or FV
             self.guest_from_install_type()
 
-
+        self.window.get_widget("create-forward").grab_focus()
         notebook.set_current_page(curpage + 1)
 
     def page_changed(self, ignore1, ignore2, pagenum):
@@ -1048,6 +1049,7 @@ class vmmCreate(gobject.GObject):
         if pagenum == PAGE_FINISH:
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
+            self.window.get_widget("create-finish").grab_focus()
             self.populate_summary()
 
             # Repopulate the HV list, so we can make install method relevant

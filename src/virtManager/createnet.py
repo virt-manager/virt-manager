@@ -61,6 +61,8 @@ class vmmCreateNetwork(gobject.GObject):
             "on_create_back_clicked" : self.back,
             "on_create_forward_clicked" : self.forward,
             "on_create_finish_clicked" : self.finish,
+
+            "on_net_name_activate": self.forward,
             "on_net_forward_toggled" : self.change_forward_type,
             "on_net_network_changed": self.change_network,
             "on_net_dhcp_enable_toggled": self.change_dhcp_enable,
@@ -140,6 +142,7 @@ class vmmCreateNetwork(gobject.GObject):
         if(self.validate(notebook.get_current_page()) != True):
             return
 
+        self.window.get_widget("create-forward").grab_focus()
         notebook.next_page()
 
     def back(self, ignore=None):
@@ -302,6 +305,7 @@ class vmmCreateNetwork(gobject.GObject):
             self.window.get_widget("summary-forwarding").set_text(forward_txt)
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
+            self.window.get_widget("create-finish").grab_focus()
 
     def close(self, ignore1=None,ignore2=None):
         self.topwin.hide()

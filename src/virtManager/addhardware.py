@@ -690,6 +690,7 @@ class vmmAddHardware(gobject.GObject):
         else:
             notebook.set_current_page(PAGE_SUMMARY)
             self.window.get_widget("create-finish").show()
+            self.window.get_widget("create-finish").grab_focus()
             self.window.get_widget("create-forward").hide()
         self.window.get_widget("create-back").set_sensitive(True)
 
