@@ -24,7 +24,7 @@ import virtinst
 
 import virtManager.uihelpers as uihelpers
 import virtManager.util as util
-from virtManager.mediadev import MEDIA_CDROM
+from virtManager.mediadev import MEDIA_FLOPPY
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.error import vmmErrorDialog
 
@@ -38,7 +38,7 @@ class vmmChooseCD(gobject.GObject):
     IS_FLOPPY = 1
     IS_CDROM  = 2
 
-    def __init__(self, config, dev_id_info, connection):
+    def __init__(self, config, dev_id_info, connection, media_type):
         self.__gobject_init__()
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-choose-cd.glade", "vmm-choose-cd", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-choose-cd")
@@ -53,6 +53,7 @@ class vmmChooseCD(gobject.GObject):
         self.dev_id_info = dev_id_info
         self.conn = connection
         self.storage_browser = None
+        self.media_type = media_type
 
         self.window.signal_autoconnect({
             "on_media_toggled": self.media_toggled,
@@ -142,7 +143,7 @@ class vmmChooseCD(gobject.GObject):
 
         error = self.conn.mediadev_error
         uihelpers.init_mediadev_combo(widget)
-        uihelpers.populate_mediadev_combo(self.conn, widget, MEDIA_CDROM)
+        uihelpers.populate_mediadev_combo(self.conn, widget, self.media_type)
 
         if error:
             warn.show()
@@ -151,6 +152,11 @@ class vmmChooseCD(gobject.GObject):
             warn.hide()
 
         self.window.get_widget("physical-media").set_sensitive(not bool(error))
+
+        if self.media_type == MEDIA_FLOPPY:
+            self.window.get_widget("physical-media").set_label(
+                                                            _("Floppy D_rive"))
+            self.window.get_widget("iso-image").set_label(_("Floppy _Image"))
 
     def set_storage_path(self, src, path):
         self.window.get_widget("iso-path").set_text(path)

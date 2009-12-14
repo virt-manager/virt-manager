@@ -149,7 +149,7 @@ class vmmDetails(gobject.GObject):
         self.serial_tabs = []
         self.last_console_page = PAGE_CONSOLE
         self.addhw = None
-        self.choose_cd = None
+        self.media_choosers = {"cdrom": None, "floppy": None}
 
         self.ignorePause = False
         self.ignoreDetails = False
@@ -959,9 +959,6 @@ class vmmDetails(gobject.GObject):
         curpath = diskinfo[3]
         devtype = diskinfo[4]
 
-        is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
-        is_floppy = (devtype == virtinst.VirtualDisk.DEVICE_FLOPPY)
-
         if curpath:
             # Disconnect cdrom
             self.change_storage_media(dev_id_info, None, _type=None)
@@ -972,14 +969,18 @@ class vmmDetails(gobject.GObject):
                 return self.change_storage_media(dev_id_info, newpath, _type)
 
             # Launch 'Choose CD' dialog
-            if self.choose_cd is None:
-                self.choose_cd = vmmChooseCD(self.config,
-                                             dev_id_info,
-                                             self.vm.get_connection())
-                self.choose_cd.connect("cdrom-chosen", change_cdrom_wrapper)
-            else:
-                self.choose_cd.dev_id_info = dev_id_info
-            self.choose_cd.show()
+            if self.media_choosers[devtype] is None:
+                ret = vmmChooseCD(self.config,
+                                  dev_id_info,
+                                  self.vm.get_connection(),
+                                  devtype)
+
+                ret.connect("cdrom-chosen", change_cdrom_wrapper)
+                self.media_choosers[devtype] = ret
+
+            dialog = self.media_choosers[devtype]
+            dialog.dev_id_info = dev_id_info
+            dialog.show()
 
     ##################################################
     # Details/Hardware config changes (apply button) #
