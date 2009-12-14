@@ -98,6 +98,8 @@ class vmmDeleteDialog(gobject.GObject):
                      (_("Delete"), self.vm.get_name()))
         self.window.get_widget("delete-main-label").set_markup(title_str)
 
+        self.window.get_widget("delete-cancel").grab_focus()
+
         # Disable storage removal by default
         self.window.get_widget("delete-remove-storage").set_active(False)
         self.window.get_widget("delete-remove-storage").toggled()

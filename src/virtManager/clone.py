@@ -173,6 +173,8 @@ class vmmCloneVM(gobject.GObject):
 
     # Populate state
     def reset_state(self):
+        self.window.get_widget("clone-cancel").grab_focus()
+
         # Populate default clone values
         self.setup_clone_info()
 

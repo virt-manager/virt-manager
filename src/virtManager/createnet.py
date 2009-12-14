@@ -124,6 +124,7 @@ class vmmCreateNetwork(gobject.GObject):
         # Hide the "finish" button until the appropriate time
         self.window.get_widget("create-finish").hide()
         self.window.get_widget("create-forward").show()
+        self.window.get_widget("create-forward").grab_focus()
         self.window.get_widget("create-back").set_sensitive(False)
 
         self.window.get_widget("net-name").set_text("")

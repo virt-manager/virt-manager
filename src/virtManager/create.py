@@ -287,6 +287,7 @@ class vmmCreate(gobject.GObject):
 
         # Name page state
         self.window.get_widget("create-vm-name").set_text("")
+        self.window.get_widget("create-vm-name").grab_focus()
         self.window.get_widget("method-local").set_active(True)
         self.window.get_widget("create-conn").set_active(-1)
         activeconn = self.populate_conn_list(urihint)

@@ -121,6 +121,8 @@ class vmmMigrateDialog(gobject.GObject):
                      (_("Migrate"), self.vm.get_name()))
         self.window.get_widget("migrate-main-label").set_markup(title_str)
 
+        self.window.get_widget("migrate-cancel").grab_focus()
+
         name = self.vm.get_name()
         srchost = self.conn.get_hostname()
 

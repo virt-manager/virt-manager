@@ -127,6 +127,7 @@ class vmmCreateVolume(gobject.GObject):
 
     def reset_state(self):
         self.window.get_widget("vol-name").set_text(self.default_vol_name())
+        self.window.get_widget("vol-name").grab_focus()
         self.window.get_widget("vol-create").set_sensitive(False)
         self.populate_vol_format()
         self.populate_vol_suffix()
