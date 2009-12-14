@@ -1,4 +1,319 @@
+2009-12-14  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/clone.py,
+	src/virtManager/create.py, src/virtManager/createnet.py,
+	src/virtManager/createpool.py, src/virtManager/createvol.py,
+	src/virtManager/delete.py, src/virtManager/migrate.py,
+	src/virtManager/preferences.py, src/virtManager/storagebrowse.py,
+	src/virtManager/util.py:
+	Make 'Escape' key close dialogs
+
+	We should get this for free by using gtk Dialogs for our various UI
+	pieces, however the stock dialog is pretty restrictive WRT widget
+	spacing, and prevents us from make our nice blue header, so we are
+	stuck with gtk.Windows
+	[6420482fe6e4] [tip]
+
+	* src/virtManager/addhardware.py, src/virtManager/clone.py,
+	src/virtManager/create.py, src/virtManager/createnet.py,
+	src/virtManager/createvol.py, src/virtManager/delete.py,
+	src/virtManager/migrate.py:
+	Additional focus improvements
+	[e9203257b620]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py,
+	src/virtManager/createnet.py, src/virtManager/createpool.py, src
+	/vmm-create-net.glade, src/vmm-create-pool.glade, src/vmm-
+	create.glade, src/vmm-delete.glade:
+	Improve default widget focus for various wizards
+	[34f45852fa47]
+
+	* src/virtManager/choosecd.py, src/virtManager/details.py, src/vmm-
+	choose-cd.glade:
+	choosecd: Customize dialog based on media type (cdrom, floppy)
+	[d4f47a67ba00]
+
+2009-12-10  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/choosecd.py, src/virtManager/connection.py,
+	src/virtManager/create.py, src/virtManager/mediadev.py,
+	src/virtManager/uihelpers.py, src/vmm-choose-cd.glade:
+	s/optical/mediadev/g for many internal routines
+
+	Make the move towards generalizing these for not just CDROM media,
+	but also floppy devices (and others in the future).
+	[941bded06ccc]
+
+	* src/virtManager/details.py, src/virtManager/domain.py:
+	details: Enable media attach/detach for floppy devices
+
+	We still use the CD chooser when attaching media (for now).
+	[b155d864c6ec]
+
+2009-12-14  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py:
+	console: Disable scrollbars when doing 'resize to VM'
+
+	The same scrollbar confusion plagues us: if scrollbars are already
+	showing and we resize the window to the size of the VNC widget, the
+	scrollbars don't go away. Hide the scrollbars in this case.
+	[dcdee8f48b74]
+
+2009-12-14  logan  <logan@fedoraproject.org>
+
+	* po/es.po:
+	Sending translation for Spanish
+	[11d7f3e75b91]
+
+2009-12-11  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/createnet.py:
+	createnet: Make sure a failed network start cleans up properly
+	[a0f49530854f]
+
+2009-12-13  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py:
+	details: Properly update disk names after device removal
+	[8f7b1d4946c0]
+
+	* src/virtManager/connection.py:
+	connection: Catch all exceptions when building looking up libvirt
+	objects
+
+	Currently in many places we only catch a libvirt exception. Make
+	sure we catch all exceptions, because not doing so pretty much
+	leaves 'tick' dead in the water. This helps avoid issues reported
+	here:
+
+	https://bugzilla.redhat.com/show_bug.cgi?id=547045
+	[e6f8cf9e2177]
+
+2009-12-11  logan  <logan@fedoraproject.org>
+
+	* po/es.po:
+	Sending translation for Spanish
+	[761a671d1c62]
+
+2009-12-11  amitakhya  <amitakhya@fedoraproject.org>
+
+	* po/as.po:
+	Sending translation for Assamese
+	[ec736c08163e]
+
+2009-12-11  anipeter  <anipeter@fedoraproject.org>
+
+	* po/ml.po:
+	Sending translation for Malayalam
+	[29800b261da2]
+
+2009-12-11  khasida  <khasida@fedoraproject.org>
+
+	* po/ja.po:
+	Sending translation for Japanese
+	[0de0d5c44446]
+
+2009-12-11  shanky  <shanky@fedoraproject.org>
+
+	* po/kn.po:
+	Sending translation for Kannada
+	[8117bf384b18]
+
+2009-12-11  anipeter  <anipeter@fedoraproject.org>
+
+	* po/ml.po:
+	Sending translation for Malayalam
+	[c1bdddf4dce0]
+
+2009-12-11  ifelix  <ifelix@fedoraproject.org>
+
+	* po/ta.po:
+	Sending translation for Tamil
+	[9b8e4f6107a5]
+
+2009-12-11  runab  <runab@fedoraproject.org>
+
+	* po/bn_IN.po:
+	Sending translation for Bengali (India)
+	[e52e93fe3071]
+
+2009-12-11  hedda  <hedda@fedoraproject.org>
+
+	* po/de.po:
+	Sending translation for German
+	[c0df33a49f58]
+
+2009-12-10  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/engine.py:
+	engine: Fix first app startup traceback
+	[b0a5c400b0ad]
+
+2009-12-10  raven  <raven@fedoraproject.org>
+
+	* po/pl.po:
+	Sending translation for Polish
+	[b243a56cccf6]
+
+2009-12-10  sandeeps  <sandeeps@fedoraproject.org>
+
+	* po/mr.po:
+	Sending translation for Marathi
+	[6c50ad09c144]
+
+	* po/mr.po:
+	Sending translation for Marathi
+	[db2a26666261]
+
+2009-12-10  shanky  <shanky@fedoraproject.org>
+
+	* po/kn.po:
+	Sending translation for Kannada
+	[cdff2b0cbfc1]
+
+2009-12-10  ifelix  <ifelix@fedoraproject.org>
+
+	* po/ta.po:
+	Sending translation for Tamil
+	[0dc69c425458]
+
+2009-12-10  jassy  <jassy@fedoraproject.org>
+
+	* po/pa.po:
+	Sending translation for Punjabi
+	[68265c3ac30b]
+
+2009-12-10  leahliu  <leahliu@fedoraproject.org>
+
+	* po/zh_CN.po:
+	Sending translation for Chinese (Simplified)
+	[115086ccb477]
+
+2009-12-10  swkothar  <swkothar@fedoraproject.org>
+
+	* po/gu.po:
+	Sending translation for Gujarati
+	[c0c69282ff22]
+
+2009-12-10  rajesh  <rajesh@fedoraproject.org>
+
+	* po/hi.po:
+	Sending translation for Hindi
+	[40a84fb140be]
+
+2009-12-10  ifelix  <ifelix@fedoraproject.org>
+
+	* po/ta.po:
+	Sending translation for Tamil
+	[f8f48ef45362]
+
+2009-12-10  kkrothap  <kkrothap@fedoraproject.org>
+
+	* po/te.po:
+	Sending translation for Telugu
+	[1487316b78a8]
+
+2009-12-10  mgiri  <mgiri@fedoraproject.org>
+
+	* po/or.po:
+	Sending translation for Oriya
+	[b5b607840b18]
+
+2009-12-10  runab  <runab@fedoraproject.org>
+
+	* po/bn_IN.po:
+	Sending translation for Bengali (India)
+	[7e4320226279]
+
+2009-12-10  leahliu  <leahliu@fedoraproject.org>
+
+	* po/zh_CN.po:
+	Sending translation for Chinese (Simplified)
+	[b9dddf1a4b96]
+
+2009-12-09  runab  <runab@fedoraproject.org>
+
+	* po/bn_IN.po:
+	Sending translation for Bengali (India)
+	[ae9218cd49d0]
+
+2009-12-09  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/manager.py:
+	manager: Change the selection to the row we right click on
+	[b69f02302341]
+
+	* po/as.po, po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po,
+	po/da.po, po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po,
+	po/hi.po, po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po,
+	po/kn.po, po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po,
+	po/nl.po, po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sr.po, po/sr@latin.po, po/sv.po, po/ta.po,
+	po/te.po, po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po,
+	po/zh_TW.po, src/virtManager/connection.py, src/vmm-create-
+	net.glade:
+	Fix some UI typos
+	[79c021ce4110]
+
+2009-12-09  rajesh  <rajesh@fedoraproject.org>
+
+	* po/hi.po:
+	Sending translation for Hindi
+	[12ccfabb2d61]
+
+2009-12-09  ifelix  <ifelix@fedoraproject.org>
+
+	* po/ta.po:
+	Sending translation for Tamil
+	[27485f1c9c7e]
+
+2009-12-09  mgiri  <mgiri@fedoraproject.org>
+
+	* po/or.po:
+	Sending translation for Oriya
+	[70d3ec4a7842]
+
+2009-12-09  swkothar  <swkothar@fedoraproject.org>
+
+	* po/gu.po:
+	Sending translation for Gujarati
+	[29e5cd8be6f7]
+
+2009-12-08  swkothar  <swkothar@fedoraproject.org>
+
+	* po/gu.po:
+	Sending translation for Gujarati
+	[d43be4f2d7a5]
+
+2009-12-08  kkrothap  <kkrothap@fedoraproject.org>
+
+	* po/te.po:
+	Sending translation for Telugu
+	[8b598eb849e9]
+
+2009-12-07  raven  <raven@fedoraproject.org>
+
+	* po/pl.po:
+	Sending translation for Polish
+	[f35a62fd33fc]
+
 2009-12-03  Cole Robinson  <crobinso@redhat.com>
+
+	* ChangeLog, NEWS, configure.ac, docs/RELEASE-PROCESS.txt, po/as.po,
+	po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po, po/hi.po,
+	po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po, po/kn.po,
+	po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po, po/nl.po,
+	po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sr.po, po/sr@latin.po, po/sv.po, po/ta.po, po/te.po,
+	po/tr.po, po/uk.po, po/zh_CN.po, po/zh_TW.po, virt-manager.spec.in:
+	Prep for release (Update NEWS, translations, configure...)
+	[cc8c4ce89bfa]
+
+	* src/virtManager/about.py, virt-manager.spec.in:
+	Drop gnomevfs dependency
+	[df4cbc8165df]
 
 	* src/virtManager/asyncjob.py, src/virtManager/console.py, src/vmm-
 	progress.glade:
@@ -7,7 +322,7 @@
 	- Actually make console border black
 	- Don't set overly large progress bar values in asyncjob
 	- Use larger icon in progress dialog.
-	[4b2f91395293] [tip]
+	[4b2f91395293]
 
 	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
 	details.glade:

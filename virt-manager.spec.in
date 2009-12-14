@@ -146,6 +146,16 @@ fi
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Mon Dec 14 2009 Cole Robinson <crobinso@redhat.com> - 0.8.2-1
+- Fix right click in the manager window to operate on the clicked row
+- Running on a new machine / user account no longer produces a traceback.
+- Allow ejecting and connecting floppy media
+
+* Thu Dec  3 2009 Cole Robinson <crobinso@redhat.com> - 0.8.1-1
+- VM Migration wizard, exposing various migration options
+- Enumerate CDROM and bridge devices on remote connections
+- Support storage pool source enumeration for LVM, NFS, and SCSI
+
 * Tue Jul 28 2009 Cole Robinson <crobinso@redhat.com> - 0.8.0-1
 - New 'Clone VM' Wizard
 - Improved UI, including an overhaul of the main 'manager' view

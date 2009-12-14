@@ -1,6 +1,21 @@
  Virtual Machine Manager News
  ============================
 
+Release 0.8.2 (December 14th, 2009)
+-----------------------------------
+
+This is largely a bug fix release. The following important bugs were fixed:
+
+- Right click in the manager window operates on the clicked row, NOT
+  the last selected row. This could cause an admin to accidentally shut down
+  the wrong machine.
+- Running virt-manager on a new machine / user account no longer produces
+  a traceback.
+
+Additionally, there is one new feature:
+
+- Allow ejecting and connecting floppy media
+
 Release 0.8.1 (December 3rd, 2009)
 ----------------------------------
 
