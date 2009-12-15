@@ -39,6 +39,11 @@ class vmmNetwork(gobject.GObject):
                     desc = _("Route to %s") % forwardDev
                 else:
                     desc = _("Routed network")
+            else:
+                if forwardDev:
+                    desc = "%s to %s" % (forward, forwardDev)
+                else:
+                    desc = "%s network" % forward.capitalize()
         else:
             desc = _("Isolated network")
 
