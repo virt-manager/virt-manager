@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: virt-manager.tip\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-14 17:10-0500\n"
-"PO-Revision-Date: 2009-12-15 11:48-0300\n"
+"PO-Revision-Date: 2009-12-16 12:19-0300\n"
 "Last-Translator: Héctor Daniel Cabrera <logan@fedoraproject.org>\n"
 "Language-Team: Fedora Spanish <fedora-trans-es@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -2079,9 +2079,8 @@ msgid "No networking."
 msgstr "No existe un entorno de red."
 
 #: ../src/virtManager/uihelpers.py:227
-#, fuzzy
 msgid "Virtual Network is not active."
-msgstr "Red Virtual está inactiva"
+msgstr "La red virtual está inactiva"
 
 #: ../src/virtManager/uihelpers.py:228
 #, python-format
@@ -2089,25 +2088,23 @@ msgid "Virtual Network '%s' is not active. Would you like to start the network n
 msgstr "Red Virtual '%s' no está activa. ¿Quisiera iniciar la red ahora?"
 
 #: ../src/virtManager/uihelpers.py:240
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start virtual network '%s': %s"
-msgstr "Crear una red virtual nueva"
+msgstr "No se pudo iniciar la red virtual '%s': %s"
 
 #: ../src/virtManager/uihelpers.py:261
-#, fuzzy
 msgid "Error with network parameters."
-msgstr "Parámetro de red inválido"
+msgstr "Error en los parámetros de red."
 
 #: ../src/virtManager/uihelpers.py:266
 #: ../src/virtManager/uihelpers.py:268
-#, fuzzy
 msgid "Mac address collision."
-msgstr "Colisión de dirección Mac"
+msgstr "Colisión de dirección mac."
 
 #: ../src/virtManager/uihelpers.py:269
-#, fuzzy, python-format
+#, python-format
 msgid "%s Are you sure you want to use this address?"
-msgstr "¿Seguro que quiere utilizar esta dirección?"
+msgstr "%s ¿Está seguro de querer utilizar esta dirección?"
 
 #: ../src/virtManager/uihelpers.py:456
 #, python-format
@@ -2115,9 +2112,8 @@ msgid "The emulator may not have search permissions for the path '%s'."
 msgstr "El emulador podría no tener permisos de búsqueda para la ruta '%s'."
 
 #: ../src/virtManager/uihelpers.py:458
-#, fuzzy
 msgid "Do you want to correct this now?"
-msgstr "¿Realmente quiere usar el disco?"
+msgstr "¿Desea corregir esto ahora?"
 
 #: ../src/virtManager/uihelpers.py:459
 #: ../src/virtManager/uihelpers.py:482
@@ -2129,14 +2125,13 @@ msgid "Errors were encountered changing permissions for the following directorie
 msgstr "Se han encontrado errores al modificar los permisos de los siguientes directorios:"
 
 #: ../src/virtManager/util.py:59
-#, fuzzy, python-format
+#, python-format
 msgid "Couldn't create default storage pool '%s': %s"
-msgstr "No se pudo crear pila de almacenaje por defecto '%s': %s"
+msgstr "No se pudo crear el grupo de almacenamiento predeterminado '%s': %s"
 
 #: ../src/vmm-about.glade.h:1
-#, fuzzy
 msgid "Copyright (C) 2006-2009 Red Hat Inc."
-msgstr "Copyright (C) 2006 Red Hat Inc."
+msgstr "Copyright (C) 2006-2009 Red Hat Inc."
 
 #: ../src/vmm-about.glade.h:2
 msgid "Powered by libvirt"
@@ -2150,19 +2145,16 @@ msgstr ""
 "Izaac Zavaleta, 2009, izaac@fedoraproject.org"
 
 #: ../src/vmm-add-hardware.glade.h:1
-#, fuzzy
 msgid "<b>Character Device</b>"
-msgstr "<b>Dispositivo de arranque</b>"
+msgstr "<b>Dispositivo de caracteres</b>"
 
 #: ../src/vmm-add-hardware.glade.h:2
-#, fuzzy
 msgid "<b>Device Parameters</b>"
-msgstr "<b>Dispositivo de arranque</b>"
+msgstr "<b>Parámetros de dispositivo</b>"
 
 #: ../src/vmm-add-hardware.glade.h:3
-#, fuzzy
 msgid "<b>Physical Host Device</b>"
-msgstr "<b>Dispositivo de arranque</b>"
+msgstr "<b>Dispositivo de equipo físico</b>"
 
 #: ../src/vmm-add-hardware.glade.h:4
 #: ../src/vmm-details.glade.h:13
@@ -2178,14 +2170,12 @@ msgid "<b>Target:</b>"
 msgstr "<b>Destino:</b>"
 
 #: ../src/vmm-add-hardware.glade.h:7
-#, fuzzy
 msgid "<b>Video Device</b>"
-msgstr "<b>Dispositivo de arranque</b>"
+msgstr "<b>Dispositivo de video</b>"
 
 #: ../src/vmm-add-hardware.glade.h:8
-#, fuzzy
 msgid "<b>Virtual display</b>"
-msgstr "<b>Pantalla Virtual:</b> "
+msgstr "<b>Monitor virtual</b> "
 
 #: ../src/vmm-add-hardware.glade.h:9
 msgid "<b>Virtual pointer</b>"
@@ -2208,12 +2198,10 @@ msgid "<small><b>Tip:</b>Adding a graphics tablet (and configuring it as the def
 msgstr "<small><b>Consejo:</b>Añadir una tableta gráfica (y configurandola como el puntero default de la máquina virtual) asegurará que el cursor virtual se mueva en sincronía con el cursor de escritorio local.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:14
-#, fuzzy
 msgid "<small><b>Warning:</b>If you do not allocate the entire disk now, space will be allocated as needed while the virtual machine is running. If sufficient free space is not available on the host, this may result in data corruption on the virtual machine.</small>"
-msgstr "<small><b>Advertencia:</b> Si no asigna el disco entero en la creación de la MV, el espacio será asignado como sea necesario mientras el cliente esté en ejecución. Si no hay espacio libre suficiente, puede haber corrupción de datos en el cliente.</small>"
+msgstr "<small><b>Advertencia:</b> Si no aloja completamente el disco en este momento, el espacio será alojado a medida que sea necesario durante la ejecución de la máquina virtual. Si en el equipo no hubiera espacio suficiente, una de las consecuencias podría ser la corrupción de los datos de la máquina virtual.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:15
-#, fuzzy
 msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding Virtual Hardware</span>"
 msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Agregar nuevo hardware virtual</span>"
 
@@ -2226,9 +2214,8 @@ msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Graphics</sp
 msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Graficos</span>"
 
 #: ../src/vmm-add-hardware.glade.h:18
-#, fuzzy
 msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Host Device</span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Almacenamiento</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Dispositivo de equipo</span>"
 
 #: ../src/vmm-add-hardware.glade.h:19
 msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Input</span>"
@@ -2247,14 +2234,13 @@ msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Storage</spa
 msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Almacenamiento</span>"
 
 #: ../src/vmm-add-hardware.glade.h:23
-#, fuzzy
 msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Video Device</span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Red</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Dispositivo de video</span>"
 
 #: ../src/vmm-add-hardware.glade.h:24
 #, fuzzy
 msgid "A_utomatically allocated"
-msgstr "Abrir automáticamente consolas:"
+msgstr "Alojado a_utomáticamente"
 
 #: ../src/vmm-add-hardware.glade.h:25
 msgid "Add new virtual hardware"
@@ -2267,7 +2253,7 @@ msgstr "Asignar disco virtual entero ahora"
 #: ../src/vmm-add-hardware.glade.h:27
 #, fuzzy
 msgid "B_lock device (partition):"
-msgstr "Dispositivo en Bloque (partición):"
+msgstr "Dispositivo de b_loque (partición):"
 
 #: ../src/vmm-add-hardware.glade.h:28
 msgid "Browse..."
@@ -2276,52 +2262,47 @@ msgstr "Explorar..."
 #: ../src/vmm-add-hardware.glade.h:29
 #, fuzzy
 msgid "D_evice model:"
-msgstr "Modelo de dispositivo:"
+msgstr "Modelo de d_ispositivo:"
 
 #: ../src/vmm-add-hardware.glade.h:30
-#, fuzzy
 msgid "Device Type Field"
-msgstr "Campo Tipo de dispositivo"
+msgstr "Campo de tipo de dispositivo"
 
 #: ../src/vmm-add-hardware.glade.h:31
 #, fuzzy
 msgid "Device _Type:"
-msgstr "Tipo de dispositivo:"
+msgstr "_Tipo de dispositivo:"
 
 #: ../src/vmm-add-hardware.glade.h:32
 #, fuzzy
 msgid "F_ile (disk image):"
-msgstr "Imágen de disco:"
+msgstr "A_rchivo (imagen de disco):"
 
 #: ../src/vmm-add-hardware.glade.h:33
-#, fuzzy
 msgid "File Location Field"
-msgstr "Ubicación de_l Archivo:"
+msgstr "Campo de ubicación del archivo:"
 
 #: ../src/vmm-add-hardware.glade.h:34
-#, fuzzy
 msgid "File Size Field"
-msgstr "Tamaño _del archivo:"
+msgstr "Campo de tamaño del archivo"
 
 #: ../src/vmm-add-hardware.glade.h:35
 #, fuzzy
 msgid "H_ost:"
-msgstr "An_fitrión:"
+msgstr "E_quipo:"
 
 #: ../src/vmm-add-hardware.glade.h:36
 #, fuzzy
 msgid "Ha_rdware type:"
-msgstr "Tipo de hardware:"
+msgstr "Tipo de ha_rdware:"
 
 #: ../src/vmm-add-hardware.glade.h:37
-#, fuzzy
 msgid "Hardware Type Select"
-msgstr "Tipo de Hardware Requerido"
+msgstr "Selección de tipo de hardware"
 
 #: ../src/vmm-add-hardware.glade.h:38
-#, fuzzy
 msgid "Host device:"
-msgstr "Dispositivo fuente:"
+msgstr "Dispositivo de equipo:"
 
 #: ../src/vmm-add-hardware.glade.h:39
 msgid "Listen on all public network interfaces "
@@ -2330,7 +2311,7 @@ msgstr "Escuchando en todas las interfaces de red públicas "
 #: ../src/vmm-add-hardware.glade.h:40
 #, fuzzy
 msgid "Loc_ation:"
-msgstr "Ubicación:"
+msgstr "Ub_icación:"
 
 #: ../src/vmm-add-hardware.glade.h:41
 msgid "MAC Address Field"
@@ -2346,14 +2327,13 @@ msgstr "MB"
 #: ../src/vmm-add-hardware.glade.h:43
 #, fuzzy
 msgid "Pa_ssword:"
-msgstr "Contraseña:"
+msgstr "Co_ntraseña:"
 
 #: ../src/vmm-add-hardware.glade.h:44
 msgid "Partition Location Field"
 msgstr "Campo de localización de partición"
 
 #: ../src/vmm-add-hardware.glade.h:45
-#, fuzzy
 msgid "Please indicate how you would like to view the virtual display."
 msgstr "Por favor, indique cómo le gustaría visualizar su pantalla virtual."
 
@@ -2366,33 +2346,33 @@ msgid "Please indicate how you'd like to connect your new virtual network device
 msgstr "Por favor, indique cómo le gustaría conectar su nuevo dispositivo de red virtaul a la red anfitriona."
 
 #: ../src/vmm-add-hardware.glade.h:48
-#, fuzzy
 msgid "Please indicate what kind of pointer device to connect to the virtual machine."
-msgstr "Por favor indique si la red virtual debe estar conectada a la red física."
+msgstr "Por favor indique el tipo de dispositivo de puntero con el que conectarse con la máquina virtual."
 
 #: ../src/vmm-add-hardware.glade.h:49
-#, fuzzy
 msgid ""
 "Please indicate what physical device\n"
 "to connect to the virtual machine."
-msgstr "Por favor indique si la red virtual debe estar conectada a la red física."
+msgstr ""
+"Por favor indique el tipo de dispositivo físico\n"
+"con el que conectarse a la máquina virtual."
 
 #: ../src/vmm-add-hardware.glade.h:51
-#, fuzzy
 msgid "Please indicate what sound device type to connect to the virtual machine."
-msgstr "Por favor indique si la red virtual debe estar conectada a la red física."
+msgstr "Por favor indique el tipo de dispositivo de sonido con el que conectarse con la máquina virtual."
 
 #: ../src/vmm-add-hardware.glade.h:52
-#, fuzzy
 msgid ""
 "Please indicate what video device type\n"
 "to connect to the virtual machine."
-msgstr "Por favor indique si la red virtual debe estar conectada a la red física."
+msgstr ""
+"Por favor indique el tipo de dispositivo de video\n"
+"con el que conectarse con la máquina virtual."
 
 #: ../src/vmm-add-hardware.glade.h:54
 #, fuzzy
 msgid "Po_rt:"
-msgstr "Puerto:"
+msgstr "Pu_erto:"
 
 #: ../src/vmm-add-hardware.glade.h:56
 msgid "This assistant will guide you through adding a new piece of virtual hardware. First select what type of hardware you wish to add:"
@@ -2406,17 +2386,17 @@ msgstr "Utilice Te_lnet:"
 #: ../src/vmm-migrate.glade.h:9
 #, fuzzy
 msgid "_Address:"
-msgstr "Dirección:"
+msgstr "_Dirección:"
 
 #: ../src/vmm-add-hardware.glade.h:59
 #, fuzzy
 msgid "_Bind Host:"
-msgstr "An_fitrión:"
+msgstr "Equipo _asociado:"
 
 #: ../src/vmm-add-hardware.glade.h:60
 #, fuzzy
 msgid "_Device type:"
-msgstr "Tipo de dispositivo:"
+msgstr "Tipo de _dispositivo:"
 
 #: ../src/vmm-add-hardware.glade.h:61
 msgid "_Device:"
@@ -2433,13 +2413,13 @@ msgstr "_Finalizar"
 #: ../src/vmm-add-hardware.glade.h:63
 #, fuzzy
 msgid "_Keymap:"
-msgstr "Mapa de teclado:"
+msgstr "_Mapa de teclado:"
 
 #: ../src/vmm-add-hardware.glade.h:64
 #: ../src/vmm-choose-cd.glade.h:7
 #, fuzzy
 msgid "_Location:"
-msgstr "Ubicación:"
+msgstr "_Ubicación:"
 
 #: ../src/vmm-add-hardware.glade.h:65
 msgid "_MAC address:"
@@ -2449,28 +2429,28 @@ msgstr "Dirección _MAC:"
 #: ../src/vmm-create-net.glade.h:54
 #, fuzzy
 msgid "_Mode:"
-msgstr "Modo:"
+msgstr "_Modo:"
 
 #: ../src/vmm-add-hardware.glade.h:67
 #, fuzzy
 msgid "_Model:"
-msgstr "Modelo:"
+msgstr "_Modelo:"
 
 #: ../src/vmm-add-hardware.glade.h:68
 #, fuzzy
 msgid "_Other:"
-msgstr "Otro:"
+msgstr "_Otro:"
 
 #: ../src/vmm-add-hardware.glade.h:69
 #, fuzzy
 msgid "_Path:"
-msgstr "Puerto:"
+msgstr "_Ruta:"
 
 #: ../src/vmm-add-hardware.glade.h:70
 #: ../src/vmm-migrate.glade.h:12
 #, fuzzy
 msgid "_Port:"
-msgstr "Puerto:"
+msgstr "_Puerto:"
 
 #: ../src/vmm-add-hardware.glade.h:71
 msgid "_Size:"
@@ -2480,7 +2460,7 @@ msgstr "_Tamaño"
 #: ../src/vmm-create-pool.glade.h:17
 #, fuzzy
 msgid "_Type:"
-msgstr "Tipo:"
+msgstr "_Tipo:"
 
 #: ../src/vmm-add-hardware.glade.h:73
 msgid "aa:bb:cc:dd:ee:ff"
@@ -2492,19 +2472,17 @@ msgid "label"
 msgstr "etiqueta"
 
 #: ../src/vmm-choose-cd.glade.h:1
-#, fuzzy
 msgid "<b>Choose Source Device or File</b>"
-msgstr "<b>Dispositivo fuente CD ó Archivo</b>"
+msgstr "<b>Elija dispositivo fuente o archivo</b>"
 
 #: ../src/vmm-choose-cd.glade.h:2
 #, fuzzy
 msgid "CD-_ROM or DVD"
-msgstr "_CD-ROM o DVD:"
+msgstr "CD-_ROM o DVD:"
 
 #: ../src/vmm-choose-cd.glade.h:3
-#, fuzzy
 msgid "Choose Media"
-msgstr "Elija un CD como dispositivo fuente:"
+msgstr "Elija el medio"
 
 #: ../src/vmm-choose-cd.glade.h:4
 #: ../src/vmm-clone.glade.h:23
@@ -2512,14 +2490,12 @@ msgid "_Browse..."
 msgstr "_Explorar..."
 
 #: ../src/vmm-choose-cd.glade.h:5
-#, fuzzy
 msgid "_Device Media:"
-msgstr "Modo de dispositivo:"
+msgstr "_Dispositivo de medio:"
 
 #: ../src/vmm-choose-cd.glade.h:6
-#, fuzzy
 msgid "_ISO Image Location"
-msgstr "Ubicación de la Imagen _ISO:"
+msgstr "Ubicación de la imagen _ISO:"
 
 #: ../src/vmm-clone.glade.h:1
 msgid "<span color='#484848'>MAC:</span>"
@@ -2532,7 +2508,7 @@ msgstr "<span color='#484848'>Entorno de red:</span>"
 #: ../src/vmm-clone.glade.h:3
 #, fuzzy
 msgid "<span color='#484848'>New _Path:</span>"
-msgstr "<span color='#484848'>Nueva _Ruta:</span>"
+msgstr "<span color='#484848'>Nueva _ruta:</span>"
 
 #: ../src/vmm-clone.glade.h:4
 msgid "<span color='#484848'>Path:</span>"
@@ -2561,9 +2537,8 @@ msgid "<span color='#484848'>_Name:</span>"
 msgstr "<span color='#484848'>_Nombre:</span>"
 
 #: ../src/vmm-clone.glade.h:10
-#, fuzzy
 msgid "<span size='large' color='white'>Clone virtual machine</span>"
-msgstr "<span size='large'>Cuota de Volumen de Almacenaje</span>"
+msgstr "<span size='large'>Clonar máquina virtual</span>"
 
 #: ../src/vmm-clone.glade.h:11
 msgid ""
@@ -2576,31 +2551,27 @@ msgstr ""
 #: ../src/vmm-clone.glade.h:13
 #, fuzzy
 msgid "C_lone"
-msgstr "_Explorar..."
+msgstr "_Clonar"
 
 #: ../src/vmm-clone.glade.h:14
-#, fuzzy
 msgid "Change MAC address"
-msgstr "Dirección MAC:"
+msgstr "Modificar dirección MAC"
 
 #: ../src/vmm-clone.glade.h:15
-#, fuzzy
 msgid "Change storage path"
-msgstr "Elija ruta fuente:"
+msgstr "Modificar ruta de almacenamiento"
 
 #: ../src/vmm-clone.glade.h:16
-#, fuzzy
 msgid "Clone Virtual Machine"
-msgstr "Restaurar Máquina Virtual"
+msgstr "Clonar máquina virtual"
 
 #: ../src/vmm-clone.glade.h:17
 msgid "Create a clone based on:"
 msgstr "Crear un clon basado en:"
 
 #: ../src/vmm-clone.glade.h:18
-#, fuzzy
 msgid "Create a new disk (c_lone) for the virtual machine"
-msgstr "Crear una red virtual nueva"
+msgstr "Crear un nuevo disco (c_lone) para la máquina virtual"
 
 #: ../src/vmm-clone.glade.h:19
 msgid "Existing disk"
@@ -2609,17 +2580,15 @@ msgstr "Disco existente"
 #: ../src/vmm-clone.glade.h:20
 #, fuzzy
 msgid "New _MAC:"
-msgstr "<b>Nueva máquina virtual</b>"
+msgstr "Nueva _MAC:"
 
 #: ../src/vmm-clone.glade.h:21
-#, fuzzy
 msgid "No networking devices"
-msgstr "No se encontraron dispositivos seriales."
+msgstr "No se encontraron dispositivos de red"
 
 #: ../src/vmm-clone.glade.h:22
-#, fuzzy
 msgid "No storage to clone"
-msgstr "Ubicación de Almacenamiento"
+msgstr "No existe un almacenamiento que clonar"
 
 #: ../src/vmm-create-net.glade.h:1
 msgid "<b>DHCP</b>"
@@ -2634,9 +2603,8 @@ msgid "<b>Forwarding</b>"
 msgstr "<b>Reenvío</b>"
 
 #: ../src/vmm-create-net.glade.h:4
-#, fuzzy
 msgid "<b>Hint:</b> The network should be chosen from one of the IPv4 private address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
-msgstr "<b>Nota:</b> La red debe ser elegida dentro de los rangos de redes privadas IPv4, por ejemplo,  10.0.0.0/8,  172.16.0.0/12, o 192.168.0.0/16"
+msgstr "<b>Sugerencia:</b> La red debe ser seleccionada dentro de los rangos de redes privadas IPv4, por ejemplo, 10.0.0.0/8, 172.16.0.0/12, o 192.168.0.0/16"
 
 #: ../src/vmm-create-net.glade.h:5
 msgid "<b>IPv4 network</b>"
@@ -2701,21 +2669,19 @@ msgstr "DHCP"
 #: ../src/vmm-create-net.glade.h:20
 #, fuzzy
 msgid "E_nd:"
-msgstr "Fin:"
+msgstr "F_in:"
 
 #: ../src/vmm-create-net.glade.h:21
-#, fuzzy
 msgid "End Address"
-msgstr "Dirección final:"
+msgstr "Dirección final"
 
 #: ../src/vmm-create-net.glade.h:22
 msgid "End address:"
 msgstr "Dirección final:"
 
 #: ../src/vmm-create-net.glade.h:23
-#, fuzzy
 msgid "For_warding to physical network"
-msgstr "Reenvío a la red física"
+msgstr "Re_envío a la red física"
 
 #: ../src/vmm-create-net.glade.h:24
 msgid "Forwarding"
@@ -2747,9 +2713,8 @@ msgid "Netmask:"
 msgstr "Máscara de red:"
 
 #: ../src/vmm-create-net.glade.h:32
-#, fuzzy
 msgid "Network Range"
-msgstr "Uso de la red:"
+msgstr "Rango de la red"
 
 #: ../src/vmm-create-net.glade.h:33
 msgid "Network _Name:"
@@ -2765,18 +2730,16 @@ msgid "Network:"
 msgstr "Red:"
 
 #: ../src/vmm-create-net.glade.h:36
-#, fuzzy
 msgid "Physical Network"
-msgstr "Redes Virtuales"
+msgstr "Red Virtual"
 
 #: ../src/vmm-create-net.glade.h:37
 msgid "Please choose a name for your virtual network:"
 msgstr "Por favor elija un nombre para su red virtual:"
 
 #: ../src/vmm-create-net.glade.h:38
-#, fuzzy
 msgid "Please choose the range of addresses the DHCP server will allocate to virtual machines attached to the virtual network."
-msgstr "Por favor, elija el rango de direcciones que puede usar el servidor DHCP para asignar invitados conectados a la red virtual"
+msgstr "Por favor, elija el rango de direcciones que el servidor DHCP alojará para las máquinas virtuales asociadas a la red virtual."
 
 #: ../src/vmm-create-net.glade.h:39
 msgid "Please indicate whether this virtual network should be connected to the physical network."
@@ -2787,9 +2750,8 @@ msgid "Size:"
 msgstr "Tamaño:"
 
 #: ../src/vmm-create-net.glade.h:42
-#, fuzzy
 msgid "Start Address"
-msgstr "Dirección inicial:"
+msgstr "Dirección inicial"
 
 #: ../src/vmm-create-net.glade.h:44
 msgid "The <b>address range</b> from which the <b>DHCP</b> server will allocate addresses for virtual machines"
@@ -2814,17 +2776,17 @@ msgstr "Necesitará elegir el espacio de direcciones IPv4 para la red virtual:"
 #: ../src/vmm-create-net.glade.h:50
 #, fuzzy
 msgid "_Destination:"
-msgstr "Destino:"
+msgstr "_Destino:"
 
 #: ../src/vmm-create-net.glade.h:51
 #, fuzzy
 msgid "_Enable DHCP:"
-msgstr "Habilitar audio:"
+msgstr "_Habilitar DHCP:"
 
 #: ../src/vmm-create-net.glade.h:53
 #, fuzzy
 msgid "_Isolated virtual network"
-msgstr "Red virtual aislada"
+msgstr "Red virtual _aislada"
 
 #: ../src/vmm-create-net.glade.h:55
 msgid "_Network:"
@@ -2833,45 +2795,42 @@ msgstr "_Red:"
 #: ../src/vmm-create-net.glade.h:56
 #, fuzzy
 msgid "_Start:"
-msgstr "Inicio:"
+msgstr "_Inicio:"
 
 #: ../src/vmm-create-pool.glade.h:1
-#, fuzzy
 msgid "<span size='x-large'>Add Storage Pool</span>"
-msgstr "<span size='x-large'>Añada pila de almacenamiento</span>"
+msgstr "<span size='x-large'>Añadir grupo de almacenamiento</span>"
 
 #: ../src/vmm-create-pool.glade.h:2
-#, fuzzy
 msgid "Add a New Storage Pool"
-msgstr "Añada una nueva Pila de Almacenamiento"
+msgstr "Añadir un nuev grupo de almacenamiento"
 
 #: ../src/vmm-create-pool.glade.h:3
 #, fuzzy
 msgid "B_rowse"
-msgstr "Explorar"
+msgstr "E_xplorar"
 
 #: ../src/vmm-create-pool.glade.h:4
 #, fuzzy
 msgid "B_uild Pool:"
-msgstr "Pila Construída:"
+msgstr "C_onstruir grupo:"
 
 #: ../src/vmm-create-pool.glade.h:5
 #, fuzzy
 msgid "Bro_wse"
-msgstr "Explorar"
+msgstr "Exp_lorar"
 
 #: ../src/vmm-create-pool.glade.h:6
 #, fuzzy
 msgid "F_ormat:"
-msgstr "Formato:"
+msgstr "F_ormato:"
 
 #: ../src/vmm-create-pool.glade.h:8
 #, fuzzy
 msgid "Host Na_me:"
-msgstr "Nombre de anfitrión:"
+msgstr "Nom_bre del equipo:"
 
 #: ../src/vmm-create-pool.glade.h:10
-#, fuzzy
 msgid "Specify a storage location to be later split into virtual machine storage."
 msgstr "Especifique una ubicación de almacenamiento para ser luego dividida en almacenamiento de la máquina virtual."
 
@@ -2892,17 +2851,16 @@ msgstr "_Nombre:"
 #: ../src/vmm-create-pool.glade.h:15
 #, fuzzy
 msgid "_Source Path:"
-msgstr "Ruta fuente:"
+msgstr "Ruta _fuente:"
 
 #: ../src/vmm-create-pool.glade.h:16
 #, fuzzy
 msgid "_Target Path:"
-msgstr "Ruta destino:"
+msgstr "Ruta _destino:"
 
 #: ../src/vmm-create-vol.glade.h:1
-#, fuzzy
 msgid "<span size='large'>Storage Volume Quota</span>"
-msgstr "<span size='large'>Cuota de Volumen de Almacenaje</span>"
+msgstr "<span size='large'>Cuota de volumen de almacenamiento</span>"
 
 #: ../src/vmm-create-vol.glade.h:2
 msgid ""
@@ -2951,24 +2909,22 @@ msgstr "Crear unidad de almacenaje que puede ser usada directamente por la máqu
 #: ../src/vmm-create-vol.glade.h:20
 #, fuzzy
 msgid "Max Ca_pacity:"
-msgstr "Máxima Capacidad:"
+msgstr "Máxima ca_pacidad:"
 
 #: ../src/vmm-create-vol.glade.h:21
-#, fuzzy
 msgid "_Allocation:"
-msgstr "Asignación:"
+msgstr "_Alojamiento:"
 
 #: ../src/vmm-create-vol.glade.h:23
 #, fuzzy
 msgid "_Format:"
-msgstr "Formato:"
+msgstr "_Formato:"
 
 #: ../src/vmm-create-vol.glade.h:25
 msgid "available space:"
 msgstr "espacio disponible:"
 
 #: ../src/vmm-create.glade.h:1
-#, fuzzy
 msgid "(Insert host mem)"
 msgstr "(Insertar mem de equipo)"
 
@@ -2989,64 +2945,57 @@ msgid "<span color='#484848'>OS:</span>"
 msgstr "<span color='#484848'>SO:</span>"
 
 #: ../src/vmm-create.glade.h:7
-#, fuzzy
 msgid "<span size='large' color='white'>Create a new virtual machine</span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creación de una red virtual nueva </span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creación de una máquina virtual nueva </span>"
 
 #: ../src/vmm-create.glade.h:8
-#, fuzzy
 msgid "A_utomatically detect operating system based on install media"
-msgstr "Detecta A_utomáticamente un sistema operativo basado en el medio de instalación"
+msgstr "Detecta a_utomáticamente un sistema operativo basado en el medio de instalación"
 
 #: ../src/vmm-create.glade.h:9
 #: ../src/vmm-migrate.glade.h:6
-#, fuzzy
 msgid "Advanced options"
-msgstr "Tipo de conección:"
+msgstr "Opciones avanzadas"
 
 #: ../src/vmm-create.glade.h:10
 #, fuzzy
 msgid "B_rowse..."
-msgstr "Explorar..."
+msgstr "E_xplorar..."
 
 #: ../src/vmm-create.glade.h:11
 #, fuzzy
 msgid "Bro_wse..."
-msgstr "Explorar..."
+msgstr "Exp_lorar..."
 
 #: ../src/vmm-create.glade.h:12
 #, fuzzy
 msgid "C_PUs:"
-msgstr "CPUs"
+msgstr "C_PUs"
 
 #: ../src/vmm-create.glade.h:13
 #, fuzzy
 msgid "C_onnection:"
-msgstr "Conección:"
+msgstr "C_onexión:"
 
 #: ../src/vmm-create.glade.h:14
-#, fuzzy
 msgid "C_reate a disk image on the computer's hard drive"
 msgstr "C_rea una imagen de disco en el disco rígido de la computadora"
 
 #: ../src/vmm-create.glade.h:15
-#, fuzzy
 msgid "Choose Memory and CPU settings"
-msgstr "Modificar la Configuración de CPU"
+msgstr "Elija la configuración de la memoria y del CPU"
 
 #: ../src/vmm-create.glade.h:16
 msgid "Choose an operating systen type and version"
 msgstr "Elige un tipo y versión de sistema operativo "
 
 #: ../src/vmm-create.glade.h:17
-#, fuzzy
 msgid "Choose how you would like to install the operating system"
-msgstr "Por favor, indique cómo le gustaría visualizar su pantalla virtual."
+msgstr "Elija cómo le gustaría instalar el sistema operativo"
 
 #: ../src/vmm-create.glade.h:18
-#, fuzzy
 msgid "Enter your virtual machine details"
-msgstr "Detalles de Máquina Virtual"
+msgstr "Ingrese los detalles de su máquina virtual"
 
 #: ../src/vmm-create.glade.h:19
 msgid "Error message"
@@ -3061,44 +3010,38 @@ msgid "ISO"
 msgstr "ISO"
 
 #: ../src/vmm-create.glade.h:22
-#, fuzzy
 msgid "Install"
-msgstr "PVinstall"
+msgstr "Instalar"
 
 #: ../src/vmm-create.glade.h:23
-#, fuzzy
 msgid "Kernel options:"
-msgstr "Parámetros de _Kernel:"
+msgstr "Opciones del kernel:"
 
 #: ../src/vmm-create.glade.h:24
-#, fuzzy
 msgid "Kickstart URL:"
-msgstr "U_RL del Kickstart:"
+msgstr "URL de kickstart:"
 
 #: ../src/vmm-create.glade.h:25
-#, fuzzy
 msgid "Locate your install media"
-msgstr "_Camino al medio de instalación:"
+msgstr "Ubique el medio de instalación"
 
 #: ../src/vmm-create.glade.h:27
-#, fuzzy
 msgid "Memory"
-msgstr "Memoria:"
+msgstr "Memoria"
 
 #: ../src/vmm-create.glade.h:29
 #, fuzzy
 msgid "Network _Boot (PXE)"
-msgstr "Arranque desde _Red (PXE)"
+msgstr "_Arranque desde Red (PXE)"
 
 #: ../src/vmm-create.glade.h:30
 #, fuzzy
 msgid "Network _Install (HTTP, FTP, or NFS)"
-msgstr "Árbol de red de instalación (HTTP, FTP, ó NFS)"
+msgstr "_Instalación desde red (HTTP, FTP, ó NFS)"
 
 #: ../src/vmm-create.glade.h:31
-#, fuzzy
 msgid "New VM"
-msgstr "<b>Nueva máquina virtual</b>"
+msgstr "Nueva MV"
 
 #: ../src/vmm-create.glade.h:32
 #, fuzzy
@@ -3110,93 +3053,80 @@ msgid "PXE"
 msgstr "PXE"
 
 #: ../src/vmm-create.glade.h:34
-#, fuzzy
 msgid "Provide the operating system install URL"
-msgstr "Sistema Operativo:"
+msgstr "Indique la URL de instalación del sistema operativo"
 
 #: ../src/vmm-create.glade.h:35
-#, fuzzy
 msgid "Select _managed or other existing storage"
-msgstr "Elije _administrado, o algún otro tipo de almacenamiento existente"
+msgstr "Elija _administrado, o algún otro tipo de almacenamiento existente"
 
 #: ../src/vmm-create.glade.h:36
 #, fuzzy
 msgid "Set a fixed _MAC address"
-msgstr "Dirección MAC inválida"
+msgstr "Define una dirección _MAC estática"
 
 #: ../src/vmm-create.glade.h:38
 msgid "URL"
 msgstr "URL"
 
 #: ../src/vmm-create.glade.h:39
-#, fuzzy
 msgid "URL Options"
-msgstr "Parámetros de _Kernel:"
+msgstr "Opciones URL"
 
 #: ../src/vmm-create.glade.h:40
-#, fuzzy
 msgid "URL:"
-msgstr "_URI:"
+msgstr "URL:"
 
 #: ../src/vmm-create.glade.h:41
-#, fuzzy
 msgid "Use CD_ROM or DVD"
-msgstr "_CD-ROM o DVD:"
+msgstr "Utilice CD_ROM o DVD"
 
 #: ../src/vmm-create.glade.h:42
 #, fuzzy
 msgid "Use _ISO image:"
-msgstr "Ubicar Imágen ISO"
+msgstr "Utilice la imagen _ISO:"
 
 #: ../src/vmm-create.glade.h:43
-#, fuzzy
 msgid "_Allocate entire disk now"
-msgstr "Asignar disco virtual entero ahora"
+msgstr "_Alojar en este momento la totalidad del disco"
 
 #: ../src/vmm-create.glade.h:44
-#, fuzzy
 msgid "_Architecture:"
-msgstr "Arquitectura:"
+msgstr "_Arquitectura:"
 
 #: ../src/vmm-create.glade.h:45
-#, fuzzy
 msgid "_Enable storage for this virtual machine"
-msgstr "Administra Máquinas Virtuales"
+msgstr "_Habilitar almacenamiento para esta máquina virtual"
 
 #: ../src/vmm-create.glade.h:47
-#, fuzzy
 msgid "_GB"
-msgstr "5 GB"
+msgstr "_GB"
 
 #: ../src/vmm-create.glade.h:48
 #, fuzzy
 msgid "_Local install media (ISO image or CDROM)"
-msgstr "Medio de instalación local (Imagen ISO ó CDROM)"
+msgstr "Medio de instalación _local (Imagen ISO ó CDROM)"
 
 #: ../src/vmm-create.glade.h:49
-#, fuzzy
 msgid "_Memory (RAM):"
-msgstr "_Memoria máxima de la MV (MB):"
+msgstr "_Memoria (RAM):"
 
 #: ../src/vmm-create.glade.h:51
-#, fuzzy
 msgid "_Version:"
-msgstr "Permisos:"
+msgstr "_Versión:"
 
 #: ../src/vmm-create.glade.h:52
 #, fuzzy
 msgid "_Virt Type:"
-msgstr "Tipo:"
+msgstr "Tipo de _virtualización:"
 
 #: ../src/vmm-delete.glade.h:1
-#, fuzzy
 msgid "Delete Confirmation"
-msgstr "Borrar máquina"
+msgstr "Eliminar confirmación"
 
 #: ../src/vmm-delete.glade.h:2
-#, fuzzy
 msgid "Delete _associated storage files"
-msgstr "Elimina archivos de almacenamiento _asociados"
+msgstr "Eliminar archivos de almacenamiento _asociados"
 
 #: ../src/vmm-details.glade.h:1
 msgid ""
@@ -3207,12 +3137,10 @@ msgstr ""
 "0KBytes/s"
 
 #: ../src/vmm-details.glade.h:3
-#, fuzzy
 msgid "<b>Autostart</b>"
 msgstr "<b>Autoiniciar</b>"
 
 #: ../src/vmm-details.glade.h:4
-#, fuzzy
 msgid "<b>Basic Details</b>"
 msgstr "<b>Detalles básicos</b>"
 
@@ -3223,21 +3151,19 @@ msgstr "<b>Dispositivo de arranque</b>"
 #: ../src/vmm-details.glade.h:6
 #, fuzzy
 msgid "<b>CPU Pinning</b>"
-msgstr "<b>CPUs</b>"
+msgstr "<b>Asociado de CPU</b>"
 
 #: ../src/vmm-details.glade.h:7
 msgid "<b>CPUs</b>"
 msgstr "<b>CPUs</b>"
 
 #: ../src/vmm-details.glade.h:8
-#, fuzzy
 msgid "<b>Hypervisor Details</b>"
-msgstr "Hipervisor por defecto"
+msgstr "<b>Detalles del hipervisor</b>"
 
 #: ../src/vmm-details.glade.h:9
-#, fuzzy
 msgid "<b>Machine Settings</b>"
-msgstr "<b>Detalles básicos</b>"
+msgstr "<b>Configuraciones de la máquina</b>"
 
 #: ../src/vmm-details.glade.h:10
 msgid "<b>Memory</b>"
@@ -3249,9 +3175,8 @@ msgid "<b>Performance</b>"
 msgstr "<b>Rendimiento</b>"
 
 #: ../src/vmm-details.glade.h:12
-#, fuzzy
 msgid "<b>Security</b>"
-msgstr "<b>Resúmen</b>"
+msgstr "<b>Seguridad</b>"
 
 #: ../src/vmm-details.glade.h:14
 msgid "<b>The console is currently unavailable</b>"
@@ -3270,28 +3195,25 @@ msgid "<b>Virtual Disk</b>"
 msgstr "<b>Disco Virtual</b> "
 
 #: ../src/vmm-details.glade.h:18
-#, fuzzy
 msgid "<b>Virtual Display</b>"
-msgstr "<b>Pantalla virtual</b> "
+msgstr "<b>Monitor virtual</b> "
 
 #: ../src/vmm-details.glade.h:19
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Interfase de Red Virtual</b>"
 
 #: ../src/vmm-details.glade.h:20
-#, fuzzy
 msgid "<b>Virtual Pointer</b>"
-msgstr "<b>Discos Virtuales:</b> "
+msgstr "<b>Puntero virtual</b> "
 
 #: ../src/vmm-details.glade.h:21
-#, fuzzy
 msgid "<b>insert type</b>"
-msgstr "<b>Consolas</b>"
+msgstr "<b>ingresar tipo</b>"
 
 #: ../src/vmm-details.glade.h:22
 #, fuzzy
 msgid "A_dd Hardware"
-msgstr "Hardware"
+msgstr "A_gregar hardware"
 
 #: ../src/vmm-details.glade.h:24
 #: ../src/vmm-host.glade.h:11
@@ -3303,7 +3225,6 @@ msgid "Auth"
 msgstr "Autenticación"
 
 #: ../src/vmm-details.glade.h:26
-#, fuzzy
 msgid "Boot"
 msgstr "Arranque"
 
@@ -3316,7 +3237,6 @@ msgstr ""
 "CPU:"
 
 #: ../src/vmm-details.glade.h:29
-#, fuzzy
 msgid "C_lock Offset:"
 msgstr "Offset del R_eloj:"
 
