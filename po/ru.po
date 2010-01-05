@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-14 17:10-0500\n"
-"PO-Revision-Date: 2010-01-04 12:01+0200\n"
+"PO-Revision-Date: 2010-01-05 11:46+0200\n"
 "Last-Translator:  <>\n"
 "Language-Team:  <>\n"
 "MIME-Version: 1.0\n"
@@ -543,9 +543,8 @@ msgid "Network selection error."
 msgstr "Ошибка выбора сети."
 
 #: ../src/virtManager/addhardware.py:1219
-#, fuzzy
 msgid "A network source must be selected."
-msgstr "Начало сети должно быть выбрано."
+msgstr "Источник сети должен быть выбран."
 
 #: ../src/virtManager/addhardware.py:1222
 msgid "Invalid MAC address"
@@ -726,7 +725,7 @@ msgstr ""
 #: ../src/virtManager/clone.py:803 ../src/virtManager/delete.py:343
 #, fuzzy
 msgid "Path does not exist."
-msgstr "Накопители"
+msgstr "Пути не существует."
 
 #: ../src/virtManager/clone.py:824
 msgid "Removable"
@@ -765,9 +764,8 @@ msgstr "Расположение ISO носителя"
 #: ../src/virtManager/connect.py:77 ../src/virtManager/manager.py:445
 #: ../src/virtManager/storagebrowse.py:126 ../src/vmm-create-net.glade.h:29
 #: ../src/vmm-create-pool.glade.h:9 ../src/vmm-create.glade.h:28
-#, fuzzy
 msgid "Name"
-msgstr "Имя"
+msgstr "Название"
 
 #: ../src/virtManager/connection.py:178
 #, python-format
@@ -961,7 +959,7 @@ msgstr ""
 #: ../src/virtManager/create.py:611 ../src/virtManager/create.py:620
 #: ../src/virtManager/create.py:690 ../src/virtManager/create.py:692
 msgid "Generic"
-msgstr "Общей"
+msgstr "Общая"
 
 #: ../src/virtManager/create.py:674
 msgid "Local CDROM/ISO"
@@ -982,7 +980,7 @@ msgstr "Ничего"
 #: ../src/virtManager/create.py:1038
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
-msgstr ""
+msgstr "Шаг %(current_page)d из %(max_page)d"
 
 #: ../src/virtManager/create.py:1098
 #, python-format
@@ -1794,12 +1792,12 @@ msgstr "_Выключить"
 #: ../src/virtManager/manager.py:342 ../src/virtManager/systray.py:144
 #: ../src/virtManager/uihelpers.py:416 ../src/vmm-details.glade.h:122
 msgid "_Reboot"
-msgstr "_Перезагрузка"
+msgstr "П_ерезагрузить"
 
 #: ../src/virtManager/manager.py:355 ../src/virtManager/systray.py:158
 #: ../src/virtManager/uihelpers.py:428 ../src/vmm-details.glade.h:112
 msgid "_Force Off"
-msgstr "_Принудительное выключение"
+msgstr "Выключить _Принудительно"
 
 #: ../src/virtManager/manager.py:371 ../src/vmm-details.glade.h:117
 msgid "_Migrate..."
@@ -1957,14 +1955,12 @@ msgid "Route to %s"
 msgstr ""
 
 #: ../src/virtManager/network.py:41
-#, fuzzy
 msgid "Routed network"
-msgstr "Изолированная виртуальная сеть"
+msgstr "Маршрутизирующая сеть"
 
 #: ../src/virtManager/network.py:43
-#, fuzzy
 msgid "Isolated network"
-msgstr "Изолированная виртуальная сеть"
+msgstr "Изолированная сеть"
 
 #: ../src/virtManager/storagebrowse.py:133
 msgid "Size"
@@ -2425,9 +2421,8 @@ msgid "Use Te_lnet:"
 msgstr "Хост:"
 
 #: ../src/vmm-add-hardware.glade.h:58 ../src/vmm-migrate.glade.h:9
-#, fuzzy
 msgid "_Address:"
-msgstr "MAC-адрес:"
+msgstr "Адр_ес:"
 
 #: ../src/vmm-add-hardware.glade.h:59
 #, fuzzy
@@ -2435,9 +2430,8 @@ msgid "_Bind Host:"
 msgstr "_Хост:"
 
 #: ../src/vmm-add-hardware.glade.h:60
-#, fuzzy
 msgid "_Device type:"
-msgstr "Устройство:"
+msgstr "_Тип устройства:"
 
 #: ../src/vmm-add-hardware.glade.h:61
 msgid "_Device:"
@@ -2451,12 +2445,11 @@ msgstr "_Завершить"
 
 #: ../src/vmm-add-hardware.glade.h:63
 msgid "_Keymap:"
-msgstr ""
+msgstr "_Раскладка:"
 
 #: ../src/vmm-add-hardware.glade.h:64 ../src/vmm-choose-cd.glade.h:7
-#, fuzzy
 msgid "_Location:"
-msgstr "Расположение:"
+msgstr "_Расположение:"
 
 #: ../src/vmm-add-hardware.glade.h:65
 msgid "_MAC address:"
@@ -2464,7 +2457,7 @@ msgstr "_MAC-адрес:"
 
 #: ../src/vmm-add-hardware.glade.h:66 ../src/vmm-create-net.glade.h:54
 msgid "_Mode:"
-msgstr "Режим:"
+msgstr "_Режим:"
 
 #: ../src/vmm-add-hardware.glade.h:67
 msgid "_Model:"
@@ -2509,18 +2502,16 @@ msgid "CD-_ROM or DVD"
 msgstr "CD-_ROM или DVD:"
 
 #: ../src/vmm-choose-cd.glade.h:3
-#, fuzzy
 msgid "Choose Media"
-msgstr "Устройство источника:"
+msgstr "Выбрать Носитель"
 
 #: ../src/vmm-choose-cd.glade.h:4 ../src/vmm-clone.glade.h:23
 msgid "_Browse..."
 msgstr "_Обзор..."
 
 #: ../src/vmm-choose-cd.glade.h:5
-#, fuzzy
 msgid "_Device Media:"
-msgstr "Устройство:"
+msgstr "_Устройство Носителя:"
 
 #: ../src/vmm-choose-cd.glade.h:6
 msgid "_ISO Image Location"
@@ -2540,15 +2531,15 @@ msgstr ""
 
 #: ../src/vmm-clone.glade.h:4
 msgid "<span color='#484848'>Path:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Путь:</span>"
 
 #: ../src/vmm-clone.glade.h:5
 msgid "<span color='#484848'>Size:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Размер:</span>"
 
 #: ../src/vmm-clone.glade.h:6 ../src/vmm-create.glade.h:6
 msgid "<span color='#484848'>Storage:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Хранилище:</span>"
 
 #: ../src/vmm-clone.glade.h:7
 msgid "<span color='#484848'>Target:</span>"
@@ -2560,14 +2551,11 @@ msgstr "<span color='#484848'>Тип:</span>"
 
 #: ../src/vmm-clone.glade.h:9
 msgid "<span color='#484848'>_Name:</span>"
-msgstr ""
+msgstr "<span color='#484848'>_Название:</span>"
 
 #: ../src/vmm-clone.glade.h:10
-#, fuzzy
 msgid "<span size='large' color='white'>Clone virtual machine</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Создание "
-"виртуальной сети</span>"
+msgstr "<span size='large' color='white'>Клонировать виртуальную машину</span>"
 
 #: ../src/vmm-clone.glade.h:11
 msgid ""
@@ -2586,9 +2574,8 @@ msgid "Change MAC address"
 msgstr "Изменить MAC-адрес"
 
 #: ../src/vmm-clone.glade.h:15
-#, fuzzy
 msgid "Change storage path"
-msgstr "Изменить путь накопителя"
+msgstr "Изменить путь хранилища"
 
 #: ../src/vmm-clone.glade.h:16
 msgid "Clone Virtual Machine"
@@ -2605,22 +2592,19 @@ msgstr "Создать новую виртуальную сеть"
 
 #: ../src/vmm-clone.glade.h:19
 msgid "Existing disk"
-msgstr ""
+msgstr "Существующий диск"
 
 #: ../src/vmm-clone.glade.h:20
-#, fuzzy
 msgid "New _MAC:"
-msgstr "<b>Сеть</b>"
+msgstr "Новый _MAC:"
 
 #: ../src/vmm-clone.glade.h:21
-#, fuzzy
 msgid "No networking devices"
-msgstr "Пользовательский режим сети"
+msgstr "Отсутствует сетевое устройство"
 
 #: ../src/vmm-clone.glade.h:22
-#, fuzzy
 msgid "No storage to clone"
-msgstr "Расположение о_браза ISO:"
+msgstr "Отсутствует хранилище для клонирования"
 
 #: ../src/vmm-create-net.glade.h:1
 msgid "<b>DHCP</b>"
@@ -2771,7 +2755,7 @@ msgstr "NAT на любое физическое устройство"
 
 #: ../src/vmm-create-net.glade.h:30
 msgid "Net Name Field"
-msgstr ""
+msgstr "Поле Названия Сети"
 
 #: ../src/vmm-create-net.glade.h:31
 msgid "Netmask:"
@@ -2779,15 +2763,15 @@ msgstr "Маска:"
 
 #: ../src/vmm-create-net.glade.h:32
 msgid "Network Range"
-msgstr "Длинна Сети"
+msgstr "Диапазон Сети"
 
 #: ../src/vmm-create-net.glade.h:33
 msgid "Network _Name:"
-msgstr "_Имя Сети:"
+msgstr "_Название Сети:"
 
 #: ../src/vmm-create-net.glade.h:34
 msgid "Network name:"
-msgstr "Имя сети:"
+msgstr "Название сети:"
 
 #: ../src/vmm-create-net.glade.h:35 ../src/vmm-host.glade.h:31
 msgid "Network:"
@@ -2799,32 +2783,31 @@ msgstr "Физическая Сеть"
 
 #: ../src/vmm-create-net.glade.h:37
 msgid "Please choose a name for your virtual network:"
-msgstr "Укажите имя виртуальной сети:"
+msgstr "Укажите название виртуальной сети:"
 
 #: ../src/vmm-create-net.glade.h:38
-#, fuzzy
 msgid ""
 "Please choose the range of addresses the DHCP server will allocate to "
 "virtual machines attached to the virtual network."
 msgstr ""
-"Укажите диапазон адресов, которые DHCP сервер может зарезервировать для "
-"гостей, подключенных к виртуальной сети"
+"Просьба указать диапазон адресов, которые DHCP сервер может назначить "
+"виртуальным машинам в описанной виртуальной сети."
 
 #: ../src/vmm-create-net.glade.h:39
-#, fuzzy
 msgid ""
 "Please indicate whether this virtual network should be connected to the "
 "physical network."
-msgstr "Укажите, должна ли виртуальная сеть быть подключена к физической сети."
+msgstr ""
+"Просьба указать должна ли эта виртуальная сеть быть подключена к физической "
+"сети."
 
 #: ../src/vmm-create-net.glade.h:41
 msgid "Size:"
 msgstr "Размер:"
 
 #: ../src/vmm-create-net.glade.h:42
-#, fuzzy
 msgid "Start Address"
-msgstr "Начальный адрес:"
+msgstr "Начальный адрес"
 
 #: ../src/vmm-create-net.glade.h:44
 msgid ""
@@ -2878,7 +2861,7 @@ msgstr "_Начало:"
 
 #: ../src/vmm-create-pool.glade.h:1
 msgid "<span size='x-large'>Add Storage Pool</span>"
-msgstr ""
+msgstr "<span size='x-large'>Добавить Пул Хранилища</span>"
 
 #: ../src/vmm-create-pool.glade.h:2
 msgid "Add a New Storage Pool"
@@ -2994,7 +2977,7 @@ msgstr "(Insert host mem)"
 
 #: ../src/vmm-create.glade.h:2
 msgid "<span color='#484848'>CPUs:</span>"
-msgstr "<span color='#484848'>CPUs:</span>"
+msgstr "<span color='#484848'>Процессоры:</span>"
 
 #: ../src/vmm-create.glade.h:3
 msgid "<span color='#484848'>Install:</span>"
@@ -3015,6 +2998,7 @@ msgstr "<span color='#484848'>Создать новую виртуальную �
 #: ../src/vmm-create.glade.h:8
 msgid "A_utomatically detect operating system based on install media"
 msgstr ""
+"Автомати_ческий определять операционную систему на установочном носителе"
 
 #: ../src/vmm-create.glade.h:9 ../src/vmm-migrate.glade.h:6
 msgid "Advanced options"
@@ -3029,7 +3013,6 @@ msgid "Bro_wse..."
 msgstr "Об_зор..."
 
 #: ../src/vmm-create.glade.h:12
-#, fuzzy
 msgid "C_PUs:"
 msgstr "C_PU:"
 
@@ -3039,26 +3022,23 @@ msgstr "П_одключение:"
 
 #: ../src/vmm-create.glade.h:14
 msgid "C_reate a disk image on the computer's hard drive"
-msgstr ""
+msgstr "С_оздать образ диска на жестком диске компьютера"
 
 #: ../src/vmm-create.glade.h:15
-#, fuzzy
 msgid "Choose Memory and CPU settings"
-msgstr "Изменить настройки CPU"
+msgstr "Выберите Память и настройки CPU"
 
 #: ../src/vmm-create.glade.h:16
 msgid "Choose an operating systen type and version"
-msgstr ""
+msgstr "Выберите тип операционной системы и версию"
 
 #: ../src/vmm-create.glade.h:17
-#, fuzzy
 msgid "Choose how you would like to install the operating system"
-msgstr "Укажите способ связи новой виртуальной системы с сетью."
+msgstr "Выберите, как бы вы хотели установить операционную систему"
 
 #: ../src/vmm-create.glade.h:18
-#, fuzzy
 msgid "Enter your virtual machine details"
-msgstr "Данные вирт.машины"
+msgstr "Введите данные вашей виртуальной машины"
 
 #: ../src/vmm-create.glade.h:19
 msgid "Error message"
@@ -3086,9 +3066,8 @@ msgid "Kickstart URL:"
 msgstr "URL _кикстарта:"
 
 #: ../src/vmm-create.glade.h:25
-#, fuzzy
 msgid "Locate your install media"
-msgstr "Путь к у_становочному носителю:"
+msgstr "Расположение вашего установочного носителя"
 
 #: ../src/vmm-create.glade.h:27
 msgid "Memory"
@@ -3121,11 +3100,11 @@ msgstr "Операционная система:"
 
 #: ../src/vmm-create.glade.h:35
 msgid "Select _managed or other existing storage"
-msgstr ""
+msgstr "Выберите у_правляемые или другими существующие хранилища"
 
 #: ../src/vmm-create.glade.h:36
 msgid "Set a fixed _MAC address"
-msgstr "Установить фиксированные _MAC-адрес"
+msgstr "Установить фиксированный _MAC-адрес"
 
 #: ../src/vmm-create.glade.h:38
 msgid "URL"
@@ -3148,18 +3127,16 @@ msgid "Use _ISO image:"
 msgstr "Использовать _ISO образ:"
 
 #: ../src/vmm-create.glade.h:43
-#, fuzzy
 msgid "_Allocate entire disk now"
-msgstr "Занять весь виртуальный диск?"
+msgstr "В_ыделить весь диск сейчас"
 
 #: ../src/vmm-create.glade.h:44
 msgid "_Architecture:"
 msgstr "_Архитектура:"
 
 #: ../src/vmm-create.glade.h:45
-#, fuzzy
 msgid "_Enable storage for this virtual machine"
-msgstr "Виртуальная машина сохраняется"
+msgstr "_Включить хранилище для этой виртуальной машины"
 
 #: ../src/vmm-create.glade.h:47
 msgid "_GB"
@@ -3167,7 +3144,7 @@ msgstr "_ГБ"
 
 #: ../src/vmm-create.glade.h:48
 msgid "_Local install media (ISO image or CDROM)"
-msgstr "_Установка локального носителя (ISO образ или CDROM)"
+msgstr "Ус_тановка локального носителя (ISO образ или CDROM)"
 
 #: ../src/vmm-create.glade.h:49
 msgid "_Memory (RAM):"
@@ -3178,14 +3155,12 @@ msgid "_Version:"
 msgstr "_Версия:"
 
 #: ../src/vmm-create.glade.h:52
-#, fuzzy
 msgid "_Virt Type:"
-msgstr "Тип:"
+msgstr "_Вирт. Тип:"
 
 #: ../src/vmm-delete.glade.h:1
-#, fuzzy
 msgid "Delete Confirmation"
-msgstr "Удалить машину"
+msgstr "Удалить Подтверждения"
 
 #: ../src/vmm-delete.glade.h:2
 msgid "Delete _associated storage files"
@@ -3476,7 +3451,7 @@ msgstr "Запуск"
 
 #: ../src/vmm-details.glade.h:79
 msgid "S_hut Down"
-msgstr "В_ыключение"
+msgstr "В_ыключить"
 
 #: ../src/vmm-details.glade.h:80
 msgid "Send _Key"
@@ -3507,9 +3482,8 @@ msgid "Shutdown the virtual machine"
 msgstr "Выключить виртуальную машину"
 
 #: ../src/vmm-details.glade.h:88
-#, fuzzy
 msgid "Source Path:"
-msgstr "Путь источника:"
+msgstr "Путь Источника:"
 
 #: ../src/vmm-details.glade.h:89
 msgid "Source device:"
@@ -3623,9 +3597,8 @@ msgid "_Password:"
 msgstr "_Пароль:"
 
 #: ../src/vmm-details.glade.h:123
-#, fuzzy
 msgid "_Resize to VM"
-msgstr "_Изменить размер к VM"
+msgstr "_Изменить размер к ВМ"
 
 #: ../src/vmm-details.glade.h:125
 msgid "_Save"
@@ -3637,7 +3610,7 @@ msgstr "_Сохранить пароль в связке паролей"
 
 #: ../src/vmm-details.glade.h:127
 msgid "_Scale Display"
-msgstr ""
+msgstr "_Масштабировать экран"
 
 #: ../src/vmm-details.glade.h:128
 msgid "_Static"
@@ -3853,29 +3826,28 @@ msgid "_Shutdown"
 msgstr "В_ыключить"
 
 #: ../src/vmm-migrate.glade.h:1
-#, fuzzy
 msgid "<b>Connectivity</b>"
-msgstr "Подключение:"
+msgstr "<b>Связь</b>"
 
 #: ../src/vmm-migrate.glade.h:2
 msgid "<span color='#484848'>Migrate _offline:</span>"
-msgstr ""
+msgstr "<span color='#484848'>_Автономная Миграция:</span>"
 
 #: ../src/vmm-migrate.glade.h:3
 msgid "<span color='#484848'>Name:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Название:</span>"
 
 #: ../src/vmm-migrate.glade.h:4
 msgid "<span color='#484848'>New host:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Новый хост:</span>"
 
 #: ../src/vmm-migrate.glade.h:5
 msgid "<span color='#484848'>Original host:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Исходный хост:</span>"
 
 #: ../src/vmm-migrate.glade.h:7
 msgid "Mbps"
-msgstr ""
+msgstr "Мбит/с"
 
 #: ../src/vmm-migrate.glade.h:8
 msgid "Migrate the virtual machine"
@@ -3883,7 +3855,7 @@ msgstr "Миграция виртуальной машины"
 
 #: ../src/vmm-migrate.glade.h:10
 msgid "_Bandwidth:"
-msgstr ""
+msgstr "По_лоса пропускания:"
 
 #: ../src/vmm-migrate.glade.h:11
 msgid "_Migrate"
@@ -3891,7 +3863,7 @@ msgstr "_Миграция"
 
 #: ../src/vmm-migrate.glade.h:13
 msgid "_Tunnel migration through libvirt's daemon:"
-msgstr ""
+msgstr "_Туннель миграции через демона libvirt:"
 
 #: ../src/vmm-open-connection.glade.h:2
 msgid "Add Connection"
@@ -3990,14 +3962,12 @@ msgid "General"
 msgstr "Общие"
 
 #: ../src/vmm-preferences.glade.h:12
-#, fuzzy
 msgid "Grab _keyboard input:"
-msgstr "Получить ввод с клавиатуры:"
+msgstr "Захватить ввод с _клавиатуры:"
 
 #: ../src/vmm-preferences.glade.h:13
-#, fuzzy
 msgid "Graphical console _scaling:"
-msgstr "_Графическая консоль"
+msgstr "Масштабировать графическую _консоль:"
 
 #: ../src/vmm-preferences.glade.h:14
 msgid "Install Audio Device:"
