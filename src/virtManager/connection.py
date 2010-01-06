@@ -19,15 +19,18 @@
 #
 
 import gobject
-import libvirt
+import gtk
+
 import logging
 import os, sys
 import traceback
+import re
+import threading
 from time import time
 from socket import gethostbyaddr, gethostname
+
 import dbus
-import threading
-import gtk
+import libvirt
 import virtinst
 
 from virtManager import util
@@ -392,6 +395,16 @@ class vmmConnection(gobject.GObject):
         return False
 
     def _get_pretty_desc(self, active, shorthost):
+        def match_whole_string(orig, reg):
+            match = re.match(reg, orig)
+            if not match:
+                return False
+
+            return ((match.end() - match.start()) == len(orig))
+
+        def is_ip_addr(orig):
+            return match_whole_string(orig, "[0-9.]+")
+
         (scheme, ignore, hostname,
          path, ignore, ignore) = virtinst.util.uri_split(self.uri)
 
@@ -399,8 +412,11 @@ class vmmConnection(gobject.GObject):
         rest = ""
         scheme = scheme.split("+")[0]
 
+        if hostname.count(":"):
+            hostname = hostname.split(":")[0]
+
         if hostname:
-            if shorthost:
+            if shorthost and not is_ip_addr(hostname):
                 rest = hostname.split(".")[0]
             else:
                 rest = hostname
