@@ -1,9 +1,9 @@
 ACLOCAL_AMFLAGS = -I m4/
 
-SUBDIRS = src pixmaps man po help
+SUBDIRS = src pixmaps man po help tests
 
 EXTRA_DIST = @PACKAGE@.spec HACKING COPYING-DOCS xmldocs.make omf.make \
-	intltool-extract.in intltool-merge.in intltool-update.in tests
+	intltool-extract.in intltool-merge.in intltool-update.in
 
 DISTCLEAN_FILES = @PACKAGE@.spec intltool-extract intltool-merge intltool-update
 
