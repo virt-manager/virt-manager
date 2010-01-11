@@ -546,8 +546,16 @@ class vmmConsolePages(gobject.GObject):
             self.schedule_retry()
             return
 
+        try:
+            (protocol, host,
+             port, trans, username) = self.vm.get_graphics_console()
+        except Exception, e:
+            # We can fail here if VM is destroyed: xen is a bit racy
+            # and can't handle domain lookups that soon after
+            logging.debug("Getting graphics console failed: %s" % str(e))
+            return
+
         connport = None
-        protocol, host, port, trans, username = self.vm.get_graphics_console()
         if host.count(":"):
             host, connport = host.split(":", 1)
 
