@@ -22,6 +22,14 @@ import gtk.glade
 
 import logging
 
+def safe_set_text(self, text):
+    try:
+        # pygtk < 2.10 doesn't support test property
+        self.get_property("text")
+        self.set_property("text", text)
+    except TypeError:
+        self.set_markup(text)
+
 class vmmErrorDialog (gtk.MessageDialog):
     def __init__ (self, parent=None, flags=0, typ=gtk.MESSAGE_INFO,
                   buttons=gtk.BUTTONS_NONE, message_format=None,
@@ -37,7 +45,6 @@ class vmmErrorDialog (gtk.MessageDialog):
         self.buffer = None
         self.default_title = default_title
         self.set_title(self.default_title)
-        self.set_property("text", self.message_format)
         self.connect("response", self.response_cb)
         self.connect("delete-event", self.hide_on_delete)
 
@@ -74,7 +81,7 @@ class vmmErrorDialog (gtk.MessageDialog):
         if title is None:
             title = self.default_title
         self.set_title(title)
-        self.set_property("text", summary)
+        safe_set_text(self, summary)
         self.buffer.set_text(details)
         logging.debug("Uncaught Error: %s : %s" % (summary, details))
 
@@ -180,7 +187,7 @@ class vmmCheckDialog (gtk.MessageDialog):
         for c in self.chk_vbox.get_children():
             self.chk_vbox.remove(c)
 
-        self.set_property("text", text1)
+        safe_set_text(self, text1)
 
         if text2:
             self.format_secondary_text(text2)
