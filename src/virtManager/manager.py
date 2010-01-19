@@ -292,7 +292,7 @@ class vmmManager(gobject.GObject):
                                    self.destroy_vm)
 
         tool = self.window.get_widget("vm-toolbar")
-        tool.set_property("icon-size", gtk.ICON_SIZE_LARGE_TOOLBAR)
+        util.safe_set_prop(tool, "icon-size", gtk.ICON_SIZE_LARGE_TOOLBAR)
         for c in tool.get_children():
             c.set_homogeneous(False)
 
