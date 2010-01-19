@@ -259,11 +259,11 @@ def show_remote(managerObj, show, uri, uuid):
         managerObj.show_manager()
 
 # Generic OptionParser callback for all --show-* options
-# This routine stores UUID to options.uuid for all --show-* options 
+# This routine stores UUID to options.uuid for all --show-* options
 # where is metavar="UUID" and also sets options.show
 def opt_show_cb(option, opt_str, value, parser):
     if option.metavar=="UUID":
-        setattr(parser.values, "uuid", value)        
+        setattr(parser.values, "uuid", value)
     s = str(option)
     show = s[s.rindex('-')+1:]
     setattr(parser.values, "show", show)
