@@ -22,13 +22,13 @@ import gtk.glade
 
 import logging
 
+import virtManager.util as util
+
 def safe_set_text(self, text):
-    try:
-        # pygtk < 2.10 doesn't support test property
-        self.get_property("text")
-        self.set_property("text", text)
-    except TypeError:
+    # pygtk < 2.10 doesn't support test property
+    if not util.safe_set_prop(self, "text", text):
         self.set_markup(text)
+
 
 class vmmErrorDialog (gtk.MessageDialog):
     def __init__ (self, parent=None, flags=0, typ=gtk.MESSAGE_INFO,
