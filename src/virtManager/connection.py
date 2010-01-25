@@ -773,9 +773,9 @@ class vmmConnection(gobject.GObject):
             logging.debug("Skipping policykit check as root")
             return 0
         logging.debug("Doing policykit for %s" % action)
-        bus = dbus.SessionBus()
 
         try:
+            bus = dbus.SessionBus()
             # First try to use org.freedesktop.PolicyKit.AuthenticationAgent
             # which is introduced with PolicyKit-0.7
             obj = bus.get_object("org.freedesktop.PolicyKit.AuthenticationAgent", "/")
