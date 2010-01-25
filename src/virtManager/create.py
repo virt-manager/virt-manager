@@ -1297,7 +1297,9 @@ class vmmCreate(gobject.GObject):
         if ret == False:
             return False
 
-        self.guest.nics.append(ret)
+        if ret != None:
+            self.guest.nics.append(ret)
+
         return True
 
 
