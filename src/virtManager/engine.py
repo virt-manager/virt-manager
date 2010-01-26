@@ -211,8 +211,9 @@ class vmmEngine(gobject.GObject):
 
     def _tick(self):
         for uri in self.connections.keys():
+            conn = self.connections[uri]["connection"]
             try:
-                self.connections[uri]["connection"].tick()
+                conn.tick()
             except KeyboardInterrupt:
                 raise
             except libvirt.libvirtError, e:
@@ -220,7 +221,7 @@ class vmmEngine(gobject.GObject):
                     logging.exception("Could not refresh connection %s." % uri)
                     logging.debug("Closing connection since libvirtd "
                                   "appears to have stopped.")
-                    self.connections[uri]["connection"].close()
+                    gobject.idle_add(conn.close)
                 else:
                     raise
         return 1
