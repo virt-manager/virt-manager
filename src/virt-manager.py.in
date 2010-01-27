@@ -34,6 +34,13 @@ import traceback
 import signal
 from optparse import OptionParser, OptionValueError
 
+try:
+    # Make sure we have a default '_' implementation, in case something
+    # fails before gettext is set up
+    __builtins__._ = lambda msg: msg
+except:
+    pass
+
 # These are substituted into code based on --prefix given to configure
 appname = "::PACKAGE::"
 appversion = "::VERSION::"
