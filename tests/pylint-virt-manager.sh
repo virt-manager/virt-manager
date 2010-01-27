@@ -47,7 +47,8 @@ addchecker() {
 }
 
 addmsg_support() {
-    if `pylint --list-msgs | grep -q $1` ; then
+    out=`pylint --list-msgs`
+    if `echo $out | grep -q $1` ; then
         addmsg "$1"
     fi
 }
