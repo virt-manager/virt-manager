@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-14 17:10-0500\n"
+"POT-Creation-Date: 2010-01-27 10:33-0500\n"
 "PO-Revision-Date: 2008-10-10 16:09+1000\n"
 "Last-Translator: Terry Chuang <tchuang@redhat.com>\n"
 "Language-Team:  <zh@li.org>\n"
@@ -26,13 +26,13 @@ msgstr "管理虛擬機器"
 msgid "Virtual Machine Manager"
 msgstr "虛擬機器管理員"
 
-#: ../src/virt-manager.py.in:57
+#: ../src/virt-manager.py.in:64
 msgid "Error starting Virtual Machine Manager"
 msgstr "啟用虛擬機器管理員時發生錯誤"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:297
+#: ../src/virt-manager.py.in:304
 #, fuzzy, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "無法啟動 GTK："
@@ -513,7 +513,7 @@ msgid "Error adding device: %s"
 msgstr "更改 boot 裝置時發生錯誤：%s"
 
 #: ../src/virtManager/addhardware.py:1118
-#: ../src/virtManager/addhardware.py:1120 ../src/virtManager/create.py:1449
+#: ../src/virtManager/addhardware.py:1120 ../src/virtManager/create.py:1451
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "無法完成安裝：「%s」"
@@ -719,7 +719,7 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/clone.py:713 ../src/virtManager/createpool.py:394
-#: ../src/virtManager/createvol.py:200 ../src/virtManager/migrate.py:409
+#: ../src/virtManager/createvol.py:200 ../src/virtManager/migrate.py:413
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "驗證輸入時發生了 uncaught error：%s"
@@ -802,66 +802,66 @@ msgstr "指定 ISO 映像檔"
 msgid "Name"
 msgstr "名稱"
 
-#: ../src/virtManager/connection.py:178
+#: ../src/virtManager/connection.py:181
 #, python-format
 msgid "Could not build physical interface list via libvirt: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:184
+#: ../src/virtManager/connection.py:187
 #, fuzzy
 msgid "Libvirt version does not support physical interface listing"
 msgstr "客座端不支援主控台"
 
-#: ../src/virtManager/connection.py:194
+#: ../src/virtManager/connection.py:197
 #, python-format
 msgid "Could not initialize HAL for interface listing: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:197
+#: ../src/virtManager/connection.py:200
 #, fuzzy
 msgid "Libvirt version does not support physical interface listing."
 msgstr "客座端不支援主控台"
 
-#: ../src/virtManager/connection.py:216
+#: ../src/virtManager/connection.py:219
 #, python-format
 msgid "Could not build media list via libvirt: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
+#: ../src/virtManager/connection.py:226 ../src/virtManager/connection.py:239
 #, fuzzy
 msgid "Libvirt version does not support media listing."
 msgstr "客座端不支援主控台"
 
-#: ../src/virtManager/connection.py:233
+#: ../src/virtManager/connection.py:236
 #, python-format
 msgid "Could not initialize HAL for media listing: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:482
+#: ../src/virtManager/connection.py:498
 msgid "Disconnected"
 msgstr "已斷線"
 
-#: ../src/virtManager/connection.py:484
+#: ../src/virtManager/connection.py:500
 msgid "Connecting"
 msgstr "連接中"
 
-#: ../src/virtManager/connection.py:487
+#: ../src/virtManager/connection.py:503
 msgid "Active (RO)"
 msgstr "啟用（RO）"
 
-#: ../src/virtManager/connection.py:489 ../src/virtManager/host.py:377
+#: ../src/virtManager/connection.py:505 ../src/virtManager/host.py:377
 #: ../src/virtManager/host.py:602 ../src/vmm-host.glade.h:8
 msgid "Active"
 msgstr "啟用"
 
-#: ../src/virtManager/connection.py:491 ../src/virtManager/host.py:377
+#: ../src/virtManager/connection.py:507 ../src/virtManager/host.py:377
 #: ../src/virtManager/host.py:421 ../src/virtManager/host.py:602
 #: ../src/virtManager/host.py:634 ../src/virtManager/uihelpers.py:135
 msgid "Inactive"
 msgstr "未啟用"
 
-#: ../src/virtManager/connection.py:493 ../src/virtManager/create.py:1519
-#: ../src/virtManager/create.py:1520 ../src/virtManager/create.py:1522
+#: ../src/virtManager/connection.py:509 ../src/virtManager/create.py:1521
+#: ../src/virtManager/create.py:1522 ../src/virtManager/create.py:1524
 #: ../src/virtManager/details.py:1298
 msgid "Unknown"
 msgstr "不明"
@@ -888,7 +888,7 @@ msgstr ""
 msgid "Do not show this notification in the future."
 msgstr "以後不顯示此通知"
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:545
 msgid "Guest not running"
 msgstr "客座端沒有在運作"
 
@@ -901,41 +901,41 @@ msgid ""
 "TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr "TCP/IP 錯誤：連至 hypervisor 主機的 VNC 連線被拒絕或是斷線了！"
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:564
 #, fuzzy
 msgid "Graphical console not configured for guest"
 msgstr "主控台尚未針對於客座端進行配置"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:576
 #, fuzzy
 msgid "Graphical console not supported for guest"
 msgstr "客座端不支援主控台"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:580
 #, fuzzy
 msgid "Graphical console is not yet active for guest"
 msgstr "客座端還無法啟用主控台"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:584
 #, fuzzy
 msgid "Connecting to graphical console for guest"
 msgstr "連至客座端的主控台"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:625
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr ""
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:626
 #, fuzzy, python-format
 msgid "The credential type %s is not supported"
 msgstr "裝置類型「%s」的主控台還未被支援。"
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:627
 #, fuzzy
 msgid "Unable to authenticate"
 msgstr "無法啟動 GTK："
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:631
 msgid "Unsupported console authentication type"
 msgstr "未支援的主控台驗證類型"
 
@@ -1089,34 +1089,34 @@ msgstr "圖形裝置參數發生錯誤"
 msgid "Network device required for %s install."
 msgstr ""
 
-#: ../src/virtManager/create.py:1342
+#: ../src/virtManager/create.py:1344
 #, fuzzy, python-format
 msgid "Error setting UUID: %s"
 msgstr "建立 vol 時發生錯誤：%s"
 
-#: ../src/virtManager/create.py:1350
+#: ../src/virtManager/create.py:1352
 msgid "Error setting up graphics device:"
 msgstr "設定圖形裝置時發生了錯誤："
 
-#: ../src/virtManager/create.py:1360
+#: ../src/virtManager/create.py:1362
 msgid "Error setting up sound device:"
 msgstr "設定音效裝置時發生了錯誤："
 
-#: ../src/virtManager/create.py:1384
+#: ../src/virtManager/create.py:1386
 msgid "Creating Virtual Machine"
 msgstr "建立虛擬機器"
 
-#: ../src/virtManager/create.py:1385
+#: ../src/virtManager/create.py:1387
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
 
-#: ../src/virtManager/create.py:1437
+#: ../src/virtManager/create.py:1439
 msgid "Guest installation failed to complete"
 msgstr "客座端安裝並未完成"
 
-#: ../src/virtManager/create.py:1558
+#: ../src/virtManager/create.py:1560
 #, fuzzy
 msgid "Detecting"
 msgstr "連接中"
@@ -1479,9 +1479,9 @@ msgstr "更改 autostart 值的時候發生錯誤：%s"
 msgid "Are you sure you want to remove this device?"
 msgstr "您是否確定要移除此裝置？"
 
-#: ../src/virtManager/details.py:1160 ../src/virtManager/engine.py:532
-#: ../src/virtManager/engine.py:556 ../src/virtManager/engine.py:602
-#: ../src/virtManager/engine.py:626
+#: ../src/virtManager/details.py:1160 ../src/virtManager/engine.py:533
+#: ../src/virtManager/engine.py:557 ../src/virtManager/engine.py:603
+#: ../src/virtManager/engine.py:627
 msgid "Don't ask me again."
 msgstr ""
 
@@ -1615,40 +1615,40 @@ msgstr ""
 msgid "Could not find device %s"
 msgstr "無法啟動 GTK："
 
-#: ../src/virtManager/engine.py:371
+#: ../src/virtManager/engine.py:372
 #, python-format
 msgid "Error bringing up domain details: %s"
 msgstr "開啟網域詳細資料時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:484
+#: ../src/virtManager/engine.py:485
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr ""
 
 #. FIXME: This should work with remote storage stuff
-#: ../src/virtManager/engine.py:492
+#: ../src/virtManager/engine.py:493
 msgid "Saving virtual machines over remote connections is not yet supported."
 msgstr "還未支援透過遠端連線來儲存虛擬機器。"
 
-#: ../src/virtManager/engine.py:499
+#: ../src/virtManager/engine.py:500
 msgid "Save Virtual Machine"
 msgstr "儲存虛擬機器"
 
-#: ../src/virtManager/engine.py:508
+#: ../src/virtManager/engine.py:509
 msgid "Saving Virtual Machine"
 msgstr "虛擬機器儲存中"
 
-#: ../src/virtManager/engine.py:513
+#: ../src/virtManager/engine.py:514
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "儲存網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:528
+#: ../src/virtManager/engine.py:529
 #, fuzzy, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "您是否確定要移除此裝置？"
 
-#: ../src/virtManager/engine.py:530
+#: ../src/virtManager/engine.py:531
 #, fuzzy
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
@@ -1657,57 +1657,57 @@ msgstr ""
 "這將會立即在不關閉作業系統的情況下關閉虛擬機器，這可能會造成資料遺失，您確定"
 "要這樣做嗎？"
 
-#: ../src/virtManager/engine.py:544 ../src/virtManager/engine.py:614
-#: ../src/virtManager/engine.py:638
+#: ../src/virtManager/engine.py:545 ../src/virtManager/engine.py:615
+#: ../src/virtManager/engine.py:639
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "關閉網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:554
+#: ../src/virtManager/engine.py:555
 #, fuzzy, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "您確定要使用此位址？"
 
-#: ../src/virtManager/engine.py:568
+#: ../src/virtManager/engine.py:569
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "暫停網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:579
+#: ../src/virtManager/engine.py:580
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "再次啟用網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:590
+#: ../src/virtManager/engine.py:591
 #, python-format
 msgid "Error starting domain: %s"
 msgstr "啟動網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:600
+#: ../src/virtManager/engine.py:601
 #, fuzzy, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "您是否確定要移除此裝置？"
 
-#: ../src/virtManager/engine.py:624
+#: ../src/virtManager/engine.py:625
 #, fuzzy, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "您是否確定要移除此裝置？"
 
-#: ../src/virtManager/engine.py:666
+#: ../src/virtManager/engine.py:667
 #, fuzzy, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "設定 net autostart 時發生錯誤：%s"
 
-#: ../src/virtManager/error.py:28
+#: ../src/virtManager/error.py:36
 msgid "Error"
 msgstr "錯誤"
 
 #. Expander section with details.
-#: ../src/virtManager/error.py:46 ../src/vmm-details.glade.h:36
+#: ../src/virtManager/error.py:53 ../src/vmm-details.glade.h:36
 msgid "Details"
 msgstr "詳細資料"
 
-#: ../src/virtManager/error.py:109
+#: ../src/virtManager/error.py:116
 msgid "Input Error"
 msgstr "輸入錯誤"
 
@@ -1963,43 +1963,48 @@ msgstr "客座端不支援主控台"
 msgid "A valid destination connection must be selected."
 msgstr ""
 
-#: ../src/virtManager/migrate.py:238
+#. We couldn't find a host name for the destination machine
+#. that is accessible from the source machine.
+#. /etc/hosts is likely borked and the only hostname it will
+#. give us is localhost. Remember, the dest machine can actually
+#. be our local machine so we may not already know its hostname
+#: ../src/virtManager/migrate.py:242
 msgid ""
 "Could not determine remotely accessible hostname for destination connection."
 msgstr ""
 
-#: ../src/virtManager/migrate.py:294
+#: ../src/virtManager/migrate.py:298
 #, fuzzy
 msgid "No connections available."
 msgstr "連線詳情..."
 
-#: ../src/virtManager/migrate.py:363
+#: ../src/virtManager/migrate.py:367
 msgid "Connection hypervisors do not match."
 msgstr ""
 
-#: ../src/virtManager/migrate.py:365
+#: ../src/virtManager/migrate.py:369
 #, fuzzy
 msgid "Connection is disconnected."
 msgstr "選擇連線"
 
-#: ../src/virtManager/migrate.py:383
+#: ../src/virtManager/migrate.py:387
 msgid "An interface must be specified."
 msgstr ""
 
-#: ../src/virtManager/migrate.py:386
+#: ../src/virtManager/migrate.py:390
 msgid "Transfer rate must be greater than 0."
 msgstr ""
 
-#: ../src/virtManager/migrate.py:389
+#: ../src/virtManager/migrate.py:393
 msgid "Port must be greater than 0."
 msgstr ""
 
-#: ../src/virtManager/migrate.py:418
+#: ../src/virtManager/migrate.py:422
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr ""
 
-#: ../src/virtManager/migrate.py:419
+#: ../src/virtManager/migrate.py:423
 #, python-format
 msgid "Migrating VM '%s' from %s to %s. This may take awhile."
 msgstr ""
@@ -2019,7 +2024,7 @@ msgstr ""
 msgid "Routed network"
 msgstr "孤立的虛擬網路"
 
-#: ../src/virtManager/network.py:43
+#: ../src/virtManager/network.py:48
 #, fuzzy
 msgid "Isolated network"
 msgstr "孤立的虛擬網路"

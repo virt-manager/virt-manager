@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-14 17:10-0500\n"
+"POT-Creation-Date: 2010-01-27 10:33-0500\n"
 "PO-Revision-Date: 2009-12-11 11:14+0530\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -28,13 +28,13 @@ msgstr "மெய்நிகர் கணினிகளை நிர்வக�
 msgid "Virtual Machine Manager"
 msgstr "மெய்நிகர் கணினி மேலாளர்"
 
-#: ../src/virt-manager.py.in:57
+#: ../src/virt-manager.py.in:64
 msgid "Error starting Virtual Machine Manager"
 msgstr "பிழையை துவக்கும் மெய்நிகர் கணினி மேலாளர்"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:297
+#: ../src/virt-manager.py.in:304
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "GTKஐ ஆரம்பிக்க முடியவில்லை: %s"
@@ -492,7 +492,7 @@ msgid "Error adding device: %s"
 msgstr "பிழை சேர்க்கும் சாதனம்: %s"
 
 #: ../src/virtManager/addhardware.py:1118
-#: ../src/virtManager/addhardware.py:1120 ../src/virtManager/create.py:1449
+#: ../src/virtManager/addhardware.py:1120 ../src/virtManager/create.py:1451
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "'%s' நிறுவலை முடிக்க இயலவில்லை: "
@@ -690,7 +690,7 @@ msgstr ""
 "இயங்கும் புதிய விருந்தினர் இந்த வட்டு உருக்களில் தரவை மேலெழுதலாம்."
 
 #: ../src/virtManager/clone.py:713 ../src/virtManager/createpool.py:394
-#: ../src/virtManager/createvol.py:200 ../src/virtManager/migrate.py:409
+#: ../src/virtManager/createvol.py:200 ../src/virtManager/migrate.py:413
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "மதிக்ககூடிய உள்ளீட்டின் போது பிடிக்கப்படாத பிழை: %s"
@@ -767,63 +767,63 @@ msgstr "ISO மீடியாவை இடங்காட்டு"
 msgid "Name"
 msgstr "பெயர்"
 
-#: ../src/virtManager/connection.py:178
+#: ../src/virtManager/connection.py:181
 #, python-format
 msgid "Could not build physical interface list via libvirt: %s"
 msgstr "libvirt வழியாக பருநிலை இடைமுகப் பட்டியலைக் கட்ட முடியவில்லை: %s"
 
-#: ../src/virtManager/connection.py:184
+#: ../src/virtManager/connection.py:187
 msgid "Libvirt version does not support physical interface listing"
 msgstr "Libvirt பதிப்பு பருநிலை இடைமுக பட்டியலுக்கு துணைபுரியவில்லை"
 
-#: ../src/virtManager/connection.py:194
+#: ../src/virtManager/connection.py:197
 #, python-format
 msgid "Could not initialize HAL for interface listing: %s"
 msgstr "இடைமுகப் பட்டியலுக்காக HAL ஐ துவக்க முடியவில்லை: %s"
 
-#: ../src/virtManager/connection.py:197
+#: ../src/virtManager/connection.py:200
 msgid "Libvirt version does not support physical interface listing."
 msgstr "Libvirt பதிப்பு பருநிலை இடைமுக பட்டியலுக்கு துணைபுரியவில்லை."
 
-#: ../src/virtManager/connection.py:216
+#: ../src/virtManager/connection.py:219
 #, python-format
 msgid "Could not build media list via libvirt: %s"
 msgstr "libvirt வழியாக ஊடக பட்டியலைக் கட்ட முடியவில்லை: %s"
 
-#: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
+#: ../src/virtManager/connection.py:226 ../src/virtManager/connection.py:239
 msgid "Libvirt version does not support media listing."
 msgstr "Libvirt பதிப்பு ஊடக பட்டியலுக்குக் துணைபுரியவில்லை."
 
-#: ../src/virtManager/connection.py:233
+#: ../src/virtManager/connection.py:236
 #, python-format
 msgid "Could not initialize HAL for media listing: %s"
 msgstr "ஊடக பட்டியலுக்காக HALஐ துவக்க முடியவில்லை: %s"
 
-#: ../src/virtManager/connection.py:482
+#: ../src/virtManager/connection.py:498
 msgid "Disconnected"
 msgstr "இணைப்பு துண்டிக்கப்பட்டது"
 
-#: ../src/virtManager/connection.py:484
+#: ../src/virtManager/connection.py:500
 msgid "Connecting"
 msgstr "இணைப்படுகிறது"
 
-#: ../src/virtManager/connection.py:487
+#: ../src/virtManager/connection.py:503
 msgid "Active (RO)"
 msgstr "செயல்பாட்டிலுள்ள (RO)"
 
-#: ../src/virtManager/connection.py:489 ../src/virtManager/host.py:377
+#: ../src/virtManager/connection.py:505 ../src/virtManager/host.py:377
 #: ../src/virtManager/host.py:602 ../src/vmm-host.glade.h:8
 msgid "Active"
 msgstr "செயல்பாட்டிலுள்ள"
 
-#: ../src/virtManager/connection.py:491 ../src/virtManager/host.py:377
+#: ../src/virtManager/connection.py:507 ../src/virtManager/host.py:377
 #: ../src/virtManager/host.py:421 ../src/virtManager/host.py:602
 #: ../src/virtManager/host.py:634 ../src/virtManager/uihelpers.py:135
 msgid "Inactive"
 msgstr "செயலிழந்த"
 
-#: ../src/virtManager/connection.py:493 ../src/virtManager/create.py:1519
-#: ../src/virtManager/create.py:1520 ../src/virtManager/create.py:1522
+#: ../src/virtManager/connection.py:509 ../src/virtManager/create.py:1521
+#: ../src/virtManager/create.py:1522 ../src/virtManager/create.py:1524
 #: ../src/virtManager/details.py:1298
 msgid "Unknown"
 msgstr "தெரியாத"
@@ -848,7 +848,7 @@ msgstr ""
 msgid "Do not show this notification in the future."
 msgstr "வரும்காலத்தில் இந்த அறிக்கை காட்ட வேண்டாம்."
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:545
 msgid "Guest not running"
 msgstr "விருந்தினர் இயங்கவில்லை"
 
@@ -862,36 +862,36 @@ msgid ""
 msgstr ""
 "TCP/IP பிழை: VNC இணைப்பு ஹைபர்வைசர் நிறுவுதல் நீக்கப்பட்டது அல்லது துண்டிக்கப்பட்டது!"
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:564
 msgid "Graphical console not configured for guest"
 msgstr "விருந்தினருக்காக வரைகலை பணியகம் கட்டமைக்கப்படவில்லை"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:576
 msgid "Graphical console not supported for guest"
 msgstr "விருந்தினருக்காக வரைகலை பணியகம் துணைபுரியவில்லை"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:580
 msgid "Graphical console is not yet active for guest"
 msgstr "விருந்தினருக்கு வரைகலை பணியகம் இன்னும் செயல்படவில்லை"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:584
 msgid "Connecting to graphical console for guest"
 msgstr "விருந்தினருக்கான வரைகலைப் பணியகத்தை இணைக்கிறது"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:625
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr "VNC சேவையகத்திற்கு விண்ணப்பிக்கப்பட்ட நற்சான்றுகளை கொடுக்க முடியவில்லை"
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:626
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr "'%s' நற்சான்று வகை துணை புரியவில்லை."
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:627
 msgid "Unable to authenticate"
 msgstr "அங்கீகரிக்க முடியவில்லை"
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:631
 msgid "Unsupported console authentication type"
 msgstr "துணைபுரியாத பணியக அங்கீகார வகை"
 
@@ -1033,24 +1033,24 @@ msgstr "சேமிப்பக அளவுரு பிழை."
 msgid "Network device required for %s install."
 msgstr "பிணைய சாதனத்திற்கு %s நிறுவல் தேவைப்படுகிறது."
 
-#: ../src/virtManager/create.py:1342
+#: ../src/virtManager/create.py:1344
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "பிழை அமைவுகள் UUID: %s"
 
-#: ../src/virtManager/create.py:1350
+#: ../src/virtManager/create.py:1352
 msgid "Error setting up graphics device:"
 msgstr "வரைகலை இயக்கியை அமைப்பதில் பிழை:"
 
-#: ../src/virtManager/create.py:1360
+#: ../src/virtManager/create.py:1362
 msgid "Error setting up sound device:"
 msgstr "ஒலி இயக்கியை அமைப்பதில் பிழை:"
 
-#: ../src/virtManager/create.py:1384
+#: ../src/virtManager/create.py:1386
 msgid "Creating Virtual Machine"
 msgstr "மெய்நிகர் கணினியை உருவாக்குகிறது"
 
-#: ../src/virtManager/create.py:1385
+#: ../src/virtManager/create.py:1387
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1058,11 +1058,11 @@ msgstr ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 
-#: ../src/virtManager/create.py:1437
+#: ../src/virtManager/create.py:1439
 msgid "Guest installation failed to complete"
 msgstr "விருந்தினர் நிறுவல் முடிவடைவதில் தோல்வி"
 
-#: ../src/virtManager/create.py:1558
+#: ../src/virtManager/create.py:1560
 msgid "Detecting"
 msgstr "கண்டுபிடிக்கப்படுகிறது"
 
@@ -1425,9 +1425,9 @@ msgstr "ஆட்டோ துவக்கியின் மதிப்பி�
 msgid "Are you sure you want to remove this device?"
 msgstr "இந்த சாதனத்தை நீங்கள் நீக்க விரும்புகிறீர்களா?"
 
-#: ../src/virtManager/details.py:1160 ../src/virtManager/engine.py:532
-#: ../src/virtManager/engine.py:556 ../src/virtManager/engine.py:602
-#: ../src/virtManager/engine.py:626
+#: ../src/virtManager/details.py:1160 ../src/virtManager/engine.py:533
+#: ../src/virtManager/engine.py:557 ../src/virtManager/engine.py:603
+#: ../src/virtManager/engine.py:627
 msgid "Don't ask me again."
 msgstr "என்னை மீண்டும் கேட்காதே."
 
@@ -1559,40 +1559,40 @@ msgstr "சாதனம் %s கான xபாதையை கட்ட மு�
 msgid "Could not find device %s"
 msgstr "சாதன %sஐ தேட முடியவில்லை"
 
-#: ../src/virtManager/engine.py:371
+#: ../src/virtManager/engine.py:372
 #, python-format
 msgid "Error bringing up domain details: %s"
 msgstr "செயற்கள விவரங்களுக்கு பிழையை கொண்டு வருகிறது: %s"
 
-#: ../src/virtManager/engine.py:484
+#: ../src/virtManager/engine.py:485
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "தெரியாத இணைப்பு URI %s"
 
 #. FIXME: This should work with remote storage stuff
-#: ../src/virtManager/engine.py:492
+#: ../src/virtManager/engine.py:493
 msgid "Saving virtual machines over remote connections is not yet supported."
 msgstr "தொலை இணைப்புகள் துணைபுரியாத போதும் மெய்நிகர் கணினியை சேமிக்கிறது."
 
-#: ../src/virtManager/engine.py:499
+#: ../src/virtManager/engine.py:500
 msgid "Save Virtual Machine"
 msgstr "மெய்நிகர் கணினியை சேமிக்கவும்"
 
-#: ../src/virtManager/engine.py:508
+#: ../src/virtManager/engine.py:509
 msgid "Saving Virtual Machine"
 msgstr "மெய்நிகர் கணினியை சேமிக்கவும்"
 
-#: ../src/virtManager/engine.py:513
+#: ../src/virtManager/engine.py:514
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "பிழை சேமிக்கும் செயற்களம்: %s"
 
-#: ../src/virtManager/engine.py:528
+#: ../src/virtManager/engine.py:529
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "'%s'ஐ இழுத்த பவர்ஆஃப் செய்ய நீங்கள் விரும்புகிறீர்களா?"
 
-#: ../src/virtManager/engine.py:530
+#: ../src/virtManager/engine.py:531
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -1600,57 +1600,57 @@ msgstr ""
 "இது உடனடியாக VMஆனது OSஐ பணிநிறுத்தம் செய்யாமல் மின்நிறுத்தம் செய்யும் செய்து தரவை இழக்க "
 "செய்யும்.  "
 
-#: ../src/virtManager/engine.py:544 ../src/virtManager/engine.py:614
-#: ../src/virtManager/engine.py:638
+#: ../src/virtManager/engine.py:545 ../src/virtManager/engine.py:615
+#: ../src/virtManager/engine.py:639
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "டொமைனை பணிநிறுத்தும் போது பிழை: %s"
 
-#: ../src/virtManager/engine.py:554
+#: ../src/virtManager/engine.py:555
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "'%s'ஐ இடைநிறுத்த நீங்கள் விரும்புகிறீர்களா?"
 
-#: ../src/virtManager/engine.py:568
+#: ../src/virtManager/engine.py:569
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "பிழை இடைநிறுத்தும் செயற்களம்: %s"
 
-#: ../src/virtManager/engine.py:579
+#: ../src/virtManager/engine.py:580
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "டொமைனை இடைநிறுத்தாத போது பிழை: %s"
 
-#: ../src/virtManager/engine.py:590
+#: ../src/virtManager/engine.py:591
 #, python-format
 msgid "Error starting domain: %s"
 msgstr "பிழை துவக்கும் செயற்களம்: %s"
 
-#: ../src/virtManager/engine.py:600
+#: ../src/virtManager/engine.py:601
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "நீங்கள் '%s'ஐ பணிநிறுத்த விரும்புகிறீர்களா?"
 
-#: ../src/virtManager/engine.py:624
+#: ../src/virtManager/engine.py:625
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "நீங்கள் '%s'ஐ மறுதுவக்க விரும்புகிறீர்களா?"
 
-#: ../src/virtManager/engine.py:666
+#: ../src/virtManager/engine.py:667
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "க்ளோன் அளவுருக்களை அமைப்பதில் பிழை: %s"
 
-#: ../src/virtManager/error.py:28
+#: ../src/virtManager/error.py:36
 msgid "Error"
 msgstr "பிழை"
 
 #. Expander section with details.
-#: ../src/virtManager/error.py:46 ../src/vmm-details.glade.h:36
+#: ../src/virtManager/error.py:53 ../src/vmm-details.glade.h:36
 msgid "Details"
 msgstr "விவரங்கள்"
 
-#: ../src/virtManager/error.py:109
+#: ../src/virtManager/error.py:116
 msgid "Input Error"
 msgstr "இறக்குமதி பிழை"
 
@@ -1907,42 +1907,47 @@ msgstr "Libvirt பதிப்பு வீடியோ டன்னல்இ�
 msgid "A valid destination connection must be selected."
 msgstr "ஒரு சரியான இலக்கு இணைப்பு தேர்ந்தெடுக்கப்பட வேண்டும்."
 
-#: ../src/virtManager/migrate.py:238
+#. We couldn't find a host name for the destination machine
+#. that is accessible from the source machine.
+#. /etc/hosts is likely borked and the only hostname it will
+#. give us is localhost. Remember, the dest machine can actually
+#. be our local machine so we may not already know its hostname
+#: ../src/virtManager/migrate.py:242
 msgid ""
 "Could not determine remotely accessible hostname for destination connection."
 msgstr ""
 "Could not determine remotely accessible hostname for destination connection."
 
-#: ../src/virtManager/migrate.py:294
+#: ../src/virtManager/migrate.py:298
 msgid "No connections available."
 msgstr "இணைப்புகள் எதுவும் கிடைக்கப் பெறவில்லை."
 
-#: ../src/virtManager/migrate.py:363
+#: ../src/virtManager/migrate.py:367
 msgid "Connection hypervisors do not match."
 msgstr "இணைப்பு ஹைபர்வைசர்கள் பொருந்தவில்லை."
 
-#: ../src/virtManager/migrate.py:365
+#: ../src/virtManager/migrate.py:369
 msgid "Connection is disconnected."
 msgstr "இணைப்புகள் துண்டிக்கப்பட்டன."
 
-#: ../src/virtManager/migrate.py:383
+#: ../src/virtManager/migrate.py:387
 msgid "An interface must be specified."
 msgstr "ஒரு இடைமுகத்தை குறிப்பிடப்பட வேண்டும்."
 
-#: ../src/virtManager/migrate.py:386
+#: ../src/virtManager/migrate.py:390
 msgid "Transfer rate must be greater than 0."
 msgstr "0ஆனது இடமாற்று விகிதத்தை விட அதிகமானது."
 
-#: ../src/virtManager/migrate.py:389
+#: ../src/virtManager/migrate.py:393
 msgid "Port must be greater than 0."
 msgstr "0ஆனது துறையை விட அதிகமானது."
 
-#: ../src/virtManager/migrate.py:418
+#: ../src/virtManager/migrate.py:422
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "VM '%s'ஐ நகர்த்துகிறது"
 
-#: ../src/virtManager/migrate.py:419
+#: ../src/virtManager/migrate.py:423
 #, python-format
 msgid "Migrating VM '%s' from %s to %s. This may take awhile."
 msgstr "Migrating VM '%s' from %s to %s. This may take awhile."
@@ -1961,7 +1966,7 @@ msgstr "%sக்கான தடம்"
 msgid "Routed network"
 msgstr "தடமாக்கப்பட்ட பிணையம்"
 
-#: ../src/virtManager/network.py:43
+#: ../src/virtManager/network.py:48
 msgid "Isolated network"
 msgstr "தனிப்பட்ட ிகர் பிணையம்"
 

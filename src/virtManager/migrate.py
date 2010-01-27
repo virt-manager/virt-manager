@@ -232,9 +232,13 @@ class vmmMigrateDialog(gobject.GObject):
         return int(self.window.get_widget("migrate-port").get_value())
 
     def build_localhost_uri(self, destconn):
-        # Try to build a remotely accessible URI for the local connection
         desthost = destconn.get_qualified_hostname()
         if desthost == "localhost":
+            # We couldn't find a host name for the destination machine
+            # that is accessible from the source machine.
+            # /etc/hosts is likely borked and the only hostname it will
+            # give us is localhost. Remember, the dest machine can actually
+            # be our local machine so we may not already know its hostname
             raise RuntimeError(_("Could not determine remotely accessible "
                                  "hostname for destination connection."))
 

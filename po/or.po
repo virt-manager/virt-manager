@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip.or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-14 17:10-0500\n"
+"POT-Creation-Date: 2010-01-27 10:33-0500\n"
 "PO-Revision-Date: 2009-12-10 12:10+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
@@ -51,13 +51,13 @@ msgstr "ଆଭାସୀ ଯନ୍ତ୍ରଗୁଡ଼ିକୁ ପରିଚା�
 msgid "Virtual Machine Manager"
 msgstr "ଆଭାସୀ ମେସିନ ପରିଚାଳକ"
 
-#: ../src/virt-manager.py.in:57
+#: ../src/virt-manager.py.in:64
 msgid "Error starting Virtual Machine Manager"
 msgstr "ଆଭାସୀ ମେସିନ ପରିଚାଳକ ଆରମ୍ଭ କରିବାରେ ତ୍ରୁଟି"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:297
+#: ../src/virt-manager.py.in:304
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "GTK କୁ ଆରମ୍ଭ କରିବାରେ ଅସମର୍ଥ: %s"
@@ -516,7 +516,7 @@ msgid "Error adding device: %s"
 msgstr "ଉପକରଣକୁ ସଂଯୋଗ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
 #: ../src/virtManager/addhardware.py:1118
-#: ../src/virtManager/addhardware.py:1120 ../src/virtManager/create.py:1449
+#: ../src/virtManager/addhardware.py:1120 ../src/virtManager/create.py:1451
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "ସ୍ଥାପନ କରିବାକୁ ଅସମର୍ଥ: '%s'"
@@ -714,7 +714,7 @@ msgstr ""
 "ନୂତନ ଅତିଥିକୁ ଚଲାଇବା ଫଳରେ ଡିସ୍କ ପ୍ରତିଛବିରେ ତଥ୍ୟ ନବଲିଖନ ହୋଇପାରେ।"
 
 #: ../src/virtManager/clone.py:713 ../src/virtManager/createpool.py:394
-#: ../src/virtManager/createvol.py:200 ../src/virtManager/migrate.py:409
+#: ../src/virtManager/createvol.py:200 ../src/virtManager/migrate.py:413
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "ତ୍ରୁଟି ସଂଶୋଧନ ନିବେଶ: %s"
@@ -791,63 +791,63 @@ msgstr "ISO ପ୍ରତିଛବିର ଅବସ୍ଥିତି ନିର୍ଣ
 msgid "Name"
 msgstr "ନାମ"
 
-#: ../src/virtManager/connection.py:178
+#: ../src/virtManager/connection.py:181
 #, python-format
 msgid "Could not build physical interface list via libvirt: %s"
 msgstr "libvirt ମାଧ୍ଯମରେ ଭୌତିକ ଅନ୍ତରାପୃଷ୍ଠ ତାଲିକା ନିର୍ମାଣ କରିପାରିଲା ନାହିଁ: %s"
 
-#: ../src/virtManager/connection.py:184
+#: ../src/virtManager/connection.py:187
 msgid "Libvirt version does not support physical interface listing"
 msgstr "Libvirt ସଂସ୍କରଣ ଭୌତିକ ଅନ୍ତରାପୃଷ୍ଠ ତାଲିକାକୁ ସମର୍ଥନ କରିନଥାଏ"
 
-#: ../src/virtManager/connection.py:194
+#: ../src/virtManager/connection.py:197
 #, python-format
 msgid "Could not initialize HAL for interface listing: %s"
 msgstr "ଅନ୍ତରାପୃଷ୍ଠ ତାଲିକା ପାଇଁ HAL କୁ ଆରମ୍ଭ କରିପାରିଲା ନାହିଁ: %s"
 
-#: ../src/virtManager/connection.py:197
+#: ../src/virtManager/connection.py:200
 msgid "Libvirt version does not support physical interface listing."
 msgstr "Libvirt ସଂସ୍କରଣ ଭୌତିକ ଅନ୍ତରାପୃଷ୍ଠ ତାଲିକାକୁ ସମର୍ଥନ କରିନଥାଏ।"
 
-#: ../src/virtManager/connection.py:216
+#: ../src/virtManager/connection.py:219
 #, python-format
 msgid "Could not build media list via libvirt: %s"
 msgstr "libvirt ମାଧ୍ଯମରେ ଚାକ୍ଷୁଷ ଅନ୍ତରାପୃଷ୍ଠ ତାଲିକାକୁ ନିର୍ମାଣ କରାପାରିଲା ନାହିଁ: %s"
 
-#: ../src/virtManager/connection.py:223 ../src/virtManager/connection.py:236
+#: ../src/virtManager/connection.py:226 ../src/virtManager/connection.py:239
 msgid "Libvirt version does not support media listing."
 msgstr "Libvirt ସଂସ୍କରଣ ମେଡିଆ ତାଲିକାକୁ ସମର୍ଥନ କରିନଥାଏ।"
 
-#: ../src/virtManager/connection.py:233
+#: ../src/virtManager/connection.py:236
 #, python-format
 msgid "Could not initialize HAL for media listing: %s"
 msgstr "ମେଡ଼ିଆ ତାଲିକା ପାଇଁ HAL କୁ ଆରମ୍ଭ କରିପାରିଲା ନାହିଁ: %s"
 
-#: ../src/virtManager/connection.py:482
+#: ../src/virtManager/connection.py:498
 msgid "Disconnected"
 msgstr "ସଂଯୋଗ ବିଚ୍ଛିନ୍ନ ହୋଇଛି"
 
-#: ../src/virtManager/connection.py:484
+#: ../src/virtManager/connection.py:500
 msgid "Connecting"
 msgstr "ସଂଯୋଗ କରୁଅଛି"
 
-#: ../src/virtManager/connection.py:487
+#: ../src/virtManager/connection.py:503
 msgid "Active (RO)"
 msgstr "ସକ୍ରିୟ (RO)"
 
-#: ../src/virtManager/connection.py:489 ../src/virtManager/host.py:377
+#: ../src/virtManager/connection.py:505 ../src/virtManager/host.py:377
 #: ../src/virtManager/host.py:602 ../src/vmm-host.glade.h:8
 msgid "Active"
 msgstr "ସକ୍ରିୟ"
 
-#: ../src/virtManager/connection.py:491 ../src/virtManager/host.py:377
+#: ../src/virtManager/connection.py:507 ../src/virtManager/host.py:377
 #: ../src/virtManager/host.py:421 ../src/virtManager/host.py:602
 #: ../src/virtManager/host.py:634 ../src/virtManager/uihelpers.py:135
 msgid "Inactive"
 msgstr "ନିଷ୍କ୍ରିୟ"
 
-#: ../src/virtManager/connection.py:493 ../src/virtManager/create.py:1519
-#: ../src/virtManager/create.py:1520 ../src/virtManager/create.py:1522
+#: ../src/virtManager/connection.py:509 ../src/virtManager/create.py:1521
+#: ../src/virtManager/create.py:1522 ../src/virtManager/create.py:1524
 #: ../src/virtManager/details.py:1298
 msgid "Unknown"
 msgstr "ଅଜଣା"
@@ -872,7 +872,7 @@ msgstr ""
 msgid "Do not show this notification in the future."
 msgstr "ଭବିଷ୍ୟତରେ ଏହି ବିଜ୍ଞପ୍ତି ଦର୍ଶାନ୍ତୁ ନାହିଁ।"
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:546
+#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:545
 msgid "Guest not running"
 msgstr "ଅତିଥି ଚାଲୁନାହିଁ"
 
@@ -886,36 +886,36 @@ msgid ""
 msgstr ""
 "TCP/IP ତ୍ରୁଟି: ହାଇପରଭାଇଜର ଆଧାରକୁ VNC ସଂଯୋଗ ପ୍ରତ୍ୟାଖାନ କରାଯାଇଛି କିମ୍ବା ବିଛିନ୍ନ ହୋଇଛି!"
 
-#: ../src/virtManager/console.py:554
+#: ../src/virtManager/console.py:564
 msgid "Graphical console not configured for guest"
 msgstr "ଅତିଥି ପାଇଁ ଆଲେଖିକ କୋନଶୋଲ ବିନ୍ୟାସିତ ହୋଇନାହିଁ"
 
-#: ../src/virtManager/console.py:566
+#: ../src/virtManager/console.py:576
 msgid "Graphical console not supported for guest"
 msgstr "ଅତିଥି ପାଇଁ ଆଲେଖିକ କୋନଶୋଲ ସମର୍ଥିତ ହୋଇନାହିଁ"
 
-#: ../src/virtManager/console.py:570
+#: ../src/virtManager/console.py:580
 msgid "Graphical console is not yet active for guest"
 msgstr "ଅତିଥି ପାଇଁ ଆଲେଖିକ କୋନଶୋଲ ଏପର୍ଯ୍ୟନ୍ତ ସକ୍ରିୟ ହୋଇନାହିଁ"
 
-#: ../src/virtManager/console.py:574
+#: ../src/virtManager/console.py:584
 msgid "Connecting to graphical console for guest"
 msgstr "ଅତିଥି ପାଇଁ ଆଲେଖିକ କୋନଶୋଲରେ ସଂଯୋଗ କରାଯାଉଛି"
 
-#: ../src/virtManager/console.py:614
+#: ../src/virtManager/console.py:625
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr "VNC ସର୍ଭରରେ ଅନୁରୋଧ କରାଯାଇଥିବା ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ପ୍ରଦାନ କରିବାରେ ଅସମର୍ଥ"
 
-#: ../src/virtManager/console.py:615
+#: ../src/virtManager/console.py:626
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr "ପ୍ରମାଣପତ୍ର ପ୍ରକାର %s ସମର୍ଥିତ ନୁହଁ"
 
-#: ../src/virtManager/console.py:616
+#: ../src/virtManager/console.py:627
 msgid "Unable to authenticate"
 msgstr "ବୈଧିକରଣ କରିବାରେ ଅସମର୍ଥ"
 
-#: ../src/virtManager/console.py:620
+#: ../src/virtManager/console.py:631
 msgid "Unsupported console authentication type"
 msgstr "ଅସମର୍ଥିତ କୋନଶୋଲ ପ୍ରମାଣୀକରଣ ପ୍ରକାର"
 
@@ -1057,24 +1057,24 @@ msgstr "ଭଣ୍ଡାର ପ୍ରାଚଳ ତ୍ରୁଟି।"
 msgid "Network device required for %s install."
 msgstr "%s ସ୍ଥାପନା ପାଇଁ ନେଟୱର୍କ ଉପକରଣ ଆବଶ୍ୟକ।"
 
-#: ../src/virtManager/create.py:1342
+#: ../src/virtManager/create.py:1344
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "UUID ବିନ୍ୟାସ କରିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/create.py:1350
+#: ../src/virtManager/create.py:1352
 msgid "Error setting up graphics device:"
 msgstr "ଆଲେଖୀ ଉପକରଣ ବିନ୍ୟାସ କରିବାରେ ତ୍ରୁଟି:"
 
-#: ../src/virtManager/create.py:1360
+#: ../src/virtManager/create.py:1362
 msgid "Error setting up sound device:"
 msgstr "ଧ୍ୱନୀ ଉପକରଣ ବିନ୍ୟାସ କରିବାରେ ତ୍ରୁଟି:"
 
-#: ../src/virtManager/create.py:1384
+#: ../src/virtManager/create.py:1386
 msgid "Creating Virtual Machine"
 msgstr "ଆଭାସୀ ମେସିନ ସୃଷ୍ଟି କରୁଅଛି"
 
-#: ../src/virtManager/create.py:1385
+#: ../src/virtManager/create.py:1387
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1082,11 +1082,11 @@ msgstr ""
 "ଆଭାସୀ ଯନ୍ତ୍ରଟି ବର୍ତ୍ତମାନ ସୃଷ୍ଟି ହେଉଛି। ଡିସ୍କ ଭଣ୍ଡାରର ବଣ୍ଟନ ଏବଂ ସ୍ଥାପନା ପ୍ରତିଛବିର କାଢ଼ିବା ସମ୍ପୂର୍ଣ୍ଣ "
 "ହେବା ପାଇଁ କିଛି ସମୟ ଲାଗିପାରେ।"
 
-#: ../src/virtManager/create.py:1437
+#: ../src/virtManager/create.py:1439
 msgid "Guest installation failed to complete"
 msgstr "ଅତିଥି ସ୍ଥାପନ ସମ୍ପୂର୍ଣ୍ଣ ହୋଇପାରିଲା ନାହିଁ"
 
-#: ../src/virtManager/create.py:1558
+#: ../src/virtManager/create.py:1560
 msgid "Detecting"
 msgstr "ଯାଞ୍ଚ କରୁଅଛି"
 
@@ -1448,9 +1448,9 @@ msgstr "ସ୍ୱୟଂଚାଳିତ ମୂଲ୍ୟ ପରିବର୍ତ୍�
 msgid "Are you sure you want to remove this device?"
 msgstr "ଆପଣ ନିଶ୍ଚିତ କି ଆପଣ ଏହି ଉପକରଣକୁ କାଢ଼ିବା ପାଇଁ ଚାହୁଁଛନ୍ତି?"
 
-#: ../src/virtManager/details.py:1160 ../src/virtManager/engine.py:532
-#: ../src/virtManager/engine.py:556 ../src/virtManager/engine.py:602
-#: ../src/virtManager/engine.py:626
+#: ../src/virtManager/details.py:1160 ../src/virtManager/engine.py:533
+#: ../src/virtManager/engine.py:557 ../src/virtManager/engine.py:603
+#: ../src/virtManager/engine.py:627
 msgid "Don't ask me again."
 msgstr "ମୋତେ ପୁଣିଥରେ ପଚାର ନାହିଁ"
 
@@ -1582,97 +1582,97 @@ msgstr "ଉପକରଣ %s ପାଇଁ xpath ନିର୍ମାଣ କରିପ
 msgid "Could not find device %s"
 msgstr "ଉପକରଣ %s କୁ ପାଇଲା ନାହିଁ"
 
-#: ../src/virtManager/engine.py:371
+#: ../src/virtManager/engine.py:372
 #, python-format
 msgid "Error bringing up domain details: %s"
 msgstr "ପରିସର ବିବରଣୀକୁ ଉଠାଇବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:484
+#: ../src/virtManager/engine.py:485
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "ଅଜଣା ସଂଯୋଗ URI %s"
 
 #. FIXME: This should work with remote storage stuff
-#: ../src/virtManager/engine.py:492
+#: ../src/virtManager/engine.py:493
 msgid "Saving virtual machines over remote connections is not yet supported."
 msgstr "ଦୂର ସଂଯୋଗ ଉପରେ ଆଭାସୀ ଯନ୍ତ୍ରକୁ ସଂରକ୍ଷଣ କରିବା ଏପର୍ଯ୍ୟନ୍ତ ସମର୍ଥିତ ନୁହଁ."
 
-#: ../src/virtManager/engine.py:499
+#: ../src/virtManager/engine.py:500
 msgid "Save Virtual Machine"
 msgstr "ଆଭାସୀ ମେସିନକୁ ସଂରକ୍ଷଣ କରନ୍ତୁ"
 
-#: ../src/virtManager/engine.py:508
+#: ../src/virtManager/engine.py:509
 msgid "Saving Virtual Machine"
 msgstr "ଆଭାସୀ ମେସିନକୁ ସଂରକ୍ଷଣ କରନ୍ତୁ"
 
-#: ../src/virtManager/engine.py:513
+#: ../src/virtManager/engine.py:514
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "ପରିସର ସଂରକ୍ଷଣ କରିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:528
+#: ../src/virtManager/engine.py:529
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "%s କୁ ବାଧ୍ଯତା ମୂଳକ ଭାବରେ ବନ୍ଦ କରିବେ ବୋଲି ଆପଣ ନିଶ୍ଚିତ କି?"
 
-#: ../src/virtManager/engine.py:530
+#: ../src/virtManager/engine.py:531
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
 "ଏହା OS କୁ ବନ୍ଦ ନକରି ତୁରନ୍ତ VM କୁ ବିଦ୍ୟୁତ ପ୍ରବାହ ବନ୍ଦ କରିଦେବ ଏବଂ ଏହା ତଥ୍ୟ ନଷ୍ଟ କରିପାରେ।"
 
-#: ../src/virtManager/engine.py:544 ../src/virtManager/engine.py:614
-#: ../src/virtManager/engine.py:638
+#: ../src/virtManager/engine.py:545 ../src/virtManager/engine.py:615
+#: ../src/virtManager/engine.py:639
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "ପରିସର ବନ୍ଦକରିବାରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:554
+#: ../src/virtManager/engine.py:555
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "'%s' କୁ ସ୍ଥିର କରିବେ ବୋଲି ଚାହୁଁଛନ୍ତି କି?"
 
-#: ../src/virtManager/engine.py:568
+#: ../src/virtManager/engine.py:569
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "ପରିସରକୁ ବିରତି ଦେବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:579
+#: ../src/virtManager/engine.py:580
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "ପରିସରକୁ ବିରତି ମୁକ୍ତ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:590
+#: ../src/virtManager/engine.py:591
 #, python-format
 msgid "Error starting domain: %s"
 msgstr "ପରିସର ଆରମ୍ଭ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/engine.py:600
+#: ../src/virtManager/engine.py:601
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "'%s' କୁ ବିଦ୍ୟତ ପ୍ରବାହ ବନ୍ଦ କରିବେ ବୋଲି ଆପଣ ନିଶ୍ଚିତ କି?"
 
-#: ../src/virtManager/engine.py:624
+#: ../src/virtManager/engine.py:625
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "'%s' କୁ ପୁନଃଚାଳନ କରିବେ ବୋଲି ଆପଣ ନିଶ୍ଚିତ କି?"
 
-#: ../src/virtManager/engine.py:666
+#: ../src/virtManager/engine.py:667
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "କ୍ଲୋନ ପ୍ରାଚଳଗୁଡ଼ିକୁ ବିନ୍ୟାସ କରିବା ସମୟରେ ତ୍ରୁଟି: %s"
 
-#: ../src/virtManager/error.py:28
+#: ../src/virtManager/error.py:36
 msgid "Error"
 msgstr "ତ୍ରୁଟି"
 
 #. Expander section with details.
-#: ../src/virtManager/error.py:46 ../src/vmm-details.glade.h:36
+#: ../src/virtManager/error.py:53 ../src/vmm-details.glade.h:36
 msgid "Details"
 msgstr "ବିସ୍ତୃତ ବିବରଣୀ"
 
-#: ../src/virtManager/error.py:109
+#: ../src/virtManager/error.py:116
 msgid "Input Error"
 msgstr "ନିବେଶ ତ୍ରୁଟି"
 
@@ -1929,41 +1929,46 @@ msgstr "Libvirt ସଂସ୍କରଣ ଟନେଲ ସ୍ଥାନାନ୍ତ�
 msgid "A valid destination connection must be selected."
 msgstr "ଗୋଟିଏ ବୈଧ ଲକ୍ଷ୍ଯସ୍ଥଳ ସଂଯୋଗକୁ ବାଛିବା ଉଚିତ।"
 
-#: ../src/virtManager/migrate.py:238
+#. We couldn't find a host name for the destination machine
+#. that is accessible from the source machine.
+#. /etc/hosts is likely borked and the only hostname it will
+#. give us is localhost. Remember, the dest machine can actually
+#. be our local machine so we may not already know its hostname
+#: ../src/virtManager/migrate.py:242
 msgid ""
 "Could not determine remotely accessible hostname for destination connection."
 msgstr "ଲକ୍ଷ୍ଯସ୍ଥଳ ସଂଯୋଗ ପାଇଁ ଦୂରରୁ ଅଭିଗମ୍ୟ ହୋଷ୍ଟ ନାମକୁ ନିର୍ଦ୍ଧାରଣ କରିପାରିଲା ନାହିଁ।"
 
-#: ../src/virtManager/migrate.py:294
+#: ../src/virtManager/migrate.py:298
 msgid "No connections available."
 msgstr "କୌଣସି ସଂଯୋଗ ଉପଲବ୍ଧ ନାହିଁ।"
 
-#: ../src/virtManager/migrate.py:363
+#: ../src/virtManager/migrate.py:367
 msgid "Connection hypervisors do not match."
 msgstr "ସଂଯୋଗ ହାଇପରଭାଇଜର ମେଳଖାଉନାହିଁ।"
 
-#: ../src/virtManager/migrate.py:365
+#: ../src/virtManager/migrate.py:369
 msgid "Connection is disconnected."
 msgstr "ସଂଯୋଗ ବିଚ୍ଛିନ୍ନ ହୋଇଛି।"
 
-#: ../src/virtManager/migrate.py:383
+#: ../src/virtManager/migrate.py:387
 msgid "An interface must be specified."
 msgstr "ଗୋଟିଏ ଅନ୍ତରାପୃଷ୍ଠକୁ ଉଲ୍ଲେଖ କରାଯିବା ଉଚିତ।"
 
-#: ../src/virtManager/migrate.py:386
+#: ../src/virtManager/migrate.py:390
 msgid "Transfer rate must be greater than 0."
 msgstr "ପରିବହନ ହାର ନିଶ୍ଚିତ ଭାବରେ 0 ଠାରୁ ଅଧିକ ହେବା ଉଚିତ।"
 
-#: ../src/virtManager/migrate.py:389
+#: ../src/virtManager/migrate.py:393
 msgid "Port must be greater than 0."
 msgstr "ସଂଯୋଗିକୀଟି ନିଶ୍ଚିତ ଭାବରେ 0 ଠାରୁ ଅଧିକ ହେବା ଉଚିତ।"
 
-#: ../src/virtManager/migrate.py:418
+#: ../src/virtManager/migrate.py:422
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "VM '%s' କୁ ସ୍ଥାନାନ୍ତରିତ କରୁଅଛି"
 
-#: ../src/virtManager/migrate.py:419
+#: ../src/virtManager/migrate.py:423
 #, python-format
 msgid "Migrating VM '%s' from %s to %s. This may take awhile."
 msgstr "VM '%s' କୁ %s ରୁ %sକୁ ସ୍ଥାନାନ୍ତରିତ କରୁଅଛି। ଏହା ପାଇଁ କିଛି ସମୟ ଲାଗିପାରେ।"
@@ -1982,7 +1987,7 @@ msgstr "%s କୁ ପଥ ନିର୍ଦ୍ଦେଶ କରନ୍ତୁ"
 msgid "Routed network"
 msgstr "ପଥ ନିର୍ଦ୍ଦେଶିତ ନେଟୱାର୍କ"
 
-#: ../src/virtManager/network.py:43
+#: ../src/virtManager/network.py:48
 msgid "Isolated network"
 msgstr "ପୃଥକ ନେଟୱାର୍କ"
 
