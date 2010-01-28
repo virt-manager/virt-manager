@@ -6,14 +6,15 @@
 # Francesco Tombolini <tombo@adamantio.net>, 2007, 2008.
 # Silvio Pierro <perplesso82@gmail.com>, 2008.
 # Guido Grazioli <guido.grazioli@gmail.com>, 2010.
+# Gianluca Sforna <giallu@fedoraproject.org>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip.it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-27 10:33-0500\n"
-"PO-Revision-Date: 2010-01-23 20:23+0100\n"
+"PO-Revision-Date: 2010-01-28 23:39+0100\n"
 "Last-Translator: Guido Grazioli <guido.grazioli@gmail.com>\n"
-"Language-Team: Italiano <fedora-trans-it@redhat.com>\n"
+"Language-Team: Italiano <trans-it@lists.fedoraproject.org\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,13 +24,13 @@ msgstr ""
 # tooltip del desktop entry
 #: ../src/virt-manager.desktop.in.in.h:1
 msgid "Manage virtual machines"
-msgstr "Gestione delle macchine virtuali"
+msgstr "Gestisci macchine virtuali"
 
 # titolo del desktop entry
 #: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:108
 #: ../src/vmm-manager.glade.h:8
 msgid "Virtual Machine Manager"
-msgstr "Gestione macchine virtuali"
+msgstr "Virtual Machine Manager"
 
 #: ../src/virt-manager.py.in:64
 msgid "Error starting Virtual Machine Manager"
@@ -84,11 +85,11 @@ msgstr "Percorso predefinito da cui scegliere i supporti"
 
 #: ../src/virt-manager.schemas.in.h:11
 msgid "Default path for saving VM snaphots"
-msgstr "Percorso predefinito snapshot delle VM"
+msgstr "Percorso predefinito di salvataggio per gli snapshot delle VM"
 
 #: ../src/virt-manager.schemas.in.h:12
 msgid "Default path for saving screenshots from VMs"
-msgstr "Percorso predefinito in cui salvare le schermate delle VM"
+msgstr "Percorso predefinito di salvataggio per gli screenshot delle VM"
 
 #: ../src/virt-manager.schemas.in.h:13
 msgid "Default path for stored VM snapshots"
@@ -116,11 +117,11 @@ msgstr "Installa dispositivo audio per la VM remota"
 
 #: ../src/virt-manager.schemas.in.h:19
 msgid "Poll disk i/o stats"
-msgstr "Controlla le statistiche di i/o su disco"
+msgstr "Esegui poll delle statistiche di i/o su disco"
 
 #: ../src/virt-manager.schemas.in.h:20
 msgid "Poll net i/o stats"
-msgstr "Controlla le statistiche di i/o di rete"
+msgstr "Esegui poll delle statistiche di i/o di rete"
 
 #: ../src/virt-manager.schemas.in.h:21
 msgid "Show cpu usage in summary"
@@ -188,7 +189,7 @@ msgstr "Quando catturare l'input da tastiera per la console"
 
 #: ../src/virt-manager.schemas.in.h:36
 msgid "When to pop up a console for a guest"
-msgstr "Quando aprire una console per un'ospite"
+msgstr "Quando aprire una console per un guest"
 
 #: ../src/virt-manager.schemas.in.h:37
 msgid "When to scale the VM graphical console"
@@ -219,7 +220,7 @@ msgid ""
 "Whether to grab keyboard input for a guest console. 0 = never, 1 = only when "
 "in full screen mode, 2 = when mouse is over console"
 msgstr ""
-"Quando catturare la tastiera per la console di un ospite. 0 = mai, 1 = solo "
+"Quando catturare la tastiera per la console di un guest. 0 = mai, 1 = solo "
 "quando a schermo intero, 2 = quando il mouse è sopra la console"
 
 #: ../src/virt-manager.schemas.in.h:42
@@ -235,8 +236,8 @@ msgid ""
 "Whether to pop up a console for a guest. 0 = never, 1 = only on creation of "
 "a new guest, 2 = On creation of any guest"
 msgstr ""
-"Specifica se mostrare una console di un ospite. 0 = mai, 1 = solo alla "
-"creazione di un nuovo ospite, 2 = su creazione di qualsiasi ospite"
+"Specifica se mostrare una console di un guest. 0 = mai, 1 = solo alla "
+"creazione di un nuovo guest, 2 = su creazione di qualsiasi guest"
 
 #: ../src/virt-manager.schemas.in.h:45
 msgid "Whether to show VM button toolbar in Details display"
@@ -312,12 +313,12 @@ msgstr "Si è verificato un errore inaspettato"
 #: ../src/virtManager/addhardware.py:404 ../src/virtManager/addhardware.py:409
 #: ../src/virtManager/addhardware.py:412 ../src/virtManager/addhardware.py:415
 msgid "Not supported for this guest type."
-msgstr "Non supportata per questo tipo di ospite."
+msgstr "Non supportata per questo tipo di guest."
 
 #: ../src/virtManager/addhardware.py:418
 msgid "Connection does not support host device enumeration"
 msgstr ""
-"Questa connessione non supporta l'enumerazione dei dispositivi dell'ospite"
+"Questa connessione non supporta l'enumerazione dei dispositivi del guest"
 
 #: ../src/virtManager/addhardware.py:424
 msgid "Libvirt version does not support video devices."
@@ -1120,7 +1121,7 @@ msgstr "Routed"
 #: ../src/virtManager/createnet.py:182
 #, python-format
 msgid "%d addresses"
-msgstr "Indirizzi %d"
+msgstr "%d indirizzi"
 
 #: ../src/virtManager/createnet.py:184
 msgid "Public"
@@ -1198,7 +1199,7 @@ msgid ""
 "address anyway?"
 msgstr ""
 "La rete dovrebbe normalmente usare un IPv4 privato. Usare comunque questo "
-"indirizzo pubblico"
+"indirizzo pubblico?"
 
 #: ../src/virtManager/createnet.py:395 ../src/virtManager/createnet.py:398
 #: ../src/virtManager/createnet.py:402 ../src/virtManager/createnet.py:405
@@ -1241,7 +1242,7 @@ msgstr "Scelta directory destinazione"
 
 #: ../src/virtManager/createpool.py:408
 msgid "Creating storage pool..."
-msgstr "Creazione gruppo di storage in corso..."
+msgstr "Creazione pool di storage in corso..."
 
 #: ../src/virtManager/createpool.py:409
 msgid "Creating the storage pool may take a while..."
@@ -1432,7 +1433,7 @@ msgstr "Console grafica %s"
 
 #: ../src/virtManager/details.py:795
 msgid "Save Virtual Machine Screenshot"
-msgstr "Salva una schermata della macchina virtuale"
+msgstr "Salva uno screenshot della macchina virtuale"
 
 #: ../src/virtManager/details.py:820
 #, python-format
@@ -1440,12 +1441,12 @@ msgid ""
 "The screenshot has been saved to:\n"
 "%s"
 msgstr ""
-"La schermata è stata salvata su:\n"
+"Lo screenshot è stato salvato su:\n"
 "%s"
 
 #: ../src/virtManager/details.py:822
 msgid "Screenshot saved"
-msgstr "Schermata salvata"
+msgstr "Screenshot salvato"
 
 #: ../src/virtManager/details.py:1073
 #, python-format
@@ -1758,7 +1759,7 @@ msgstr "Rete virtuale isolata"
 #: ../src/virtManager/host.py:464 ../src/virtManager/host.py:474
 #, python-format
 msgid "Error starting pool '%s': %s"
-msgstr "Errore avvio del gruppo '%s': %s"
+msgstr "Errore avvio del pool '%s': %s"
 
 #: ../src/virtManager/host.py:483
 #, python-format
@@ -1852,7 +1853,7 @@ msgstr "_Forza spegnimento"
 
 #: ../src/virtManager/manager.py:371 ../src/vmm-details.glade.h:117
 msgid "_Migrate..."
-msgstr "_Migrazione..."
+msgstr "_Migra..."
 
 #: ../src/virtManager/manager.py:424 ../src/vmm-details.glade.h:110
 msgid "_Details"
@@ -1964,7 +1965,7 @@ msgstr "Occorre specificare una connessione di destinazione valida."
 msgid ""
 "Could not determine remotely accessible hostname for destination connection."
 msgstr ""
-"Impossibile determinare l'hostname remoto accessibile per la connessione di "
+"Impossibile determinare l'hostname accessibile da remoto per la connessione di "
 "destinazione."
 
 #: ../src/virtManager/migrate.py:298
@@ -2103,7 +2104,7 @@ msgstr "Errore nei parametri di rete."
 
 #: ../src/virtManager/uihelpers.py:266 ../src/virtManager/uihelpers.py:268
 msgid "Mac address collision."
-msgstr "Collisione indirizzi mac."
+msgstr "Collisione indirizzi MAC."
 
 #: ../src/virtManager/uihelpers.py:269
 #, python-format
@@ -2150,7 +2151,8 @@ msgstr ""
 "Francesco Valente <fvalen@redhat.com>.\n"
 "Francesco Tombolini <tombo@adamantio.net>.\n"
 "Silvio Pierro <perplesso82@gmail.com>.\n"
-"Guido Grazioli <guido.grazioli@gmail.com>."
+"Guido Grazioli <guido.grazioli@gmail.com>.\n"
+"Gianluca Sforna <giallu@fedoraproject.org>."
 
 #: ../src/vmm-add-hardware.glade.h:1
 msgid "<b>Character Device</b>"
@@ -3389,7 +3391,7 @@ msgstr "Abilita A_PIC:"
 
 #: ../src/vmm-details.glade.h:48
 msgid "Heads:"
-msgstr "Testine:"
+msgstr "Schermi:"
 
 #: ../src/vmm-details.glade.h:49
 msgid "Host CPUs:"
@@ -3887,15 +3889,16 @@ msgstr "Larghezza di _banda:"
 
 #: ../src/vmm-migrate.glade.h:11
 msgid "_Migrate"
-msgstr "_Migrazione"
+msgstr "_Migra"
+
 
 #: ../src/vmm-migrate.glade.h:13
 msgid "_Tunnel migration through libvirt's daemon:"
-msgstr "Migrazione _tunnel attraverso demone libvirt:"
+msgstr "_Veicola la migrazione attraverso il demone libvirt:"
 
 #: ../src/vmm-open-connection.glade.h:2
 msgid "Add Connection"
-msgstr "Aggiungere connessione"
+msgstr "Aggiungi connessione"
 
 #: ../src/vmm-open-connection.glade.h:3
 msgid "Co_nnect"
