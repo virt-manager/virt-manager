@@ -81,7 +81,6 @@ class vmmDomain(gobject.GObject):
                          }
 
         self._xml = None
-        self._inactive_xml = None
         self._is_xml_valid = False
 
         self._startup_vcpus = None
@@ -288,14 +287,8 @@ class vmmDomain(gobject.GObject):
     def _invalidate_xml(self):
         # Mark cached xml as invalid
         self._is_xml_valid = False
-        self._inactive_xml = None
 
     def _get_inactive_xml(self):
-        if self._inactive_xml is None:
-            self._refresh_inactive_xml()
-        return self._inactive_xml
-
-    def _refresh_inactive_xml(self):
         flags = (libvirt.VIR_DOMAIN_XML_INACTIVE |
                  libvirt.VIR_DOMAIN_XML_SECURE)
         if not self.connection.has_dom_flags(flags):
@@ -304,7 +297,7 @@ class vmmDomain(gobject.GObject):
             if not self.connection.has_dom_flags(flags):
                 flags = 0
 
-        self._inactive_xml = self._XMLDesc(flags)
+        return self._XMLDesc(flags)
 
     def redefine(self, xml_func, *args):
         """
@@ -811,8 +804,6 @@ class vmmDomain(gobject.GObject):
             if self.lastStatus in [ libvirt.VIR_DOMAIN_SHUTDOWN,
                                     libvirt.VIR_DOMAIN_SHUTOFF,
                                     libvirt.VIR_DOMAIN_CRASHED ]:
-                # Domain just started. Invalidate inactive xml
-                self._inactive_xml = None
 
                 # Want to track the startup vcpu amount, which is the
                 # cap of how many VCPUs can be added
