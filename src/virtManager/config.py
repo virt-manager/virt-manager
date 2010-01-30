@@ -587,8 +587,8 @@ class vmmConfig:
             return
 
         logging.debug("set_default_directory(%s): saving %s" % (_type, folder))
-        self.conf.set_value(self.conf_dir + "/paths/default-%s-path" % _type,
-                                                                      folder)
+        self.conf.set_string(self.conf_dir + "/paths/default-%s-path" % _type,
+                             folder)
 
     def get_default_image_dir(self, connection):
         if connection.is_xen():
