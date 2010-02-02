@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-27 10:33-0500\n"
-"PO-Revision-Date: 2010-01-05 11:46+0200\n"
+"PO-Revision-Date: 2010-02-02 10:38+0200\n"
 "Last-Translator:  <>\n"
 "Language-Team:  <>\n"
 "MIME-Version: 1.0\n"
@@ -113,11 +113,11 @@ msgstr "Установка звукового устройства для уда
 
 #: ../src/virt-manager.schemas.in.h:19
 msgid "Poll disk i/o stats"
-msgstr ""
+msgstr "Опрос статистики дискового в/в"
 
 #: ../src/virt-manager.schemas.in.h:20
 msgid "Poll net i/o stats"
-msgstr ""
+msgstr "Опрос статистики сетевого в/в"
 
 #: ../src/virt-manager.schemas.in.h:21
 msgid "Show cpu usage in summary"
@@ -286,12 +286,10 @@ msgid "Not supported for this guest type."
 msgstr "Не поддерживается для данного типа гостя."
 
 #: ../src/virtManager/addhardware.py:418
-#, fuzzy
 msgid "Connection does not support host device enumeration"
-msgstr "Подключение не поддерживается в перечне хост-устройсвом "
+msgstr "Подключение не поддерживается в перечне устройств хоста"
 
 #: ../src/virtManager/addhardware.py:424
-#, fuzzy
 msgid "Libvirt version does not support video devices."
 msgstr "Версия libvirt не поддерживает видео устройства."
 
@@ -467,9 +465,8 @@ msgid "Creating Storage File"
 msgstr "Создание файла накопителя"
 
 #: ../src/virtManager/addhardware.py:1064
-#, fuzzy
 msgid "Allocation of disk storage may take a few minutes to complete."
-msgstr "Выделение дискового пространства может занять несколько минут"
+msgstr "Выделение дискового пространства может занять несколько минут."
 
 #: ../src/virtManager/addhardware.py:1089
 msgid "Are you sure you want to add this device?"
@@ -480,6 +477,8 @@ msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next VM shutdown?"
 msgstr ""
+"Это устройство не может быть добавлено в запущенную машину. Вы хотите "
+"сделать это устройство доступным после следующего выключения ВМ?"
 
 #: ../src/virtManager/addhardware.py:1101
 #, python-format
@@ -516,9 +515,8 @@ msgid "Target Device Required"
 msgstr "Обязательное Устройства"
 
 #: ../src/virtManager/addhardware.py:1162
-#, fuzzy
 msgid "You must select a target device for the disk."
-msgstr "Вы должны выбрать одно из виртуальных устройств"
+msgstr "Вы должны выбрать целевое устройство для диска."
 
 #: ../src/virtManager/addhardware.py:1192
 msgid "Invalid Storage Parameters"
@@ -610,14 +608,12 @@ msgid "A media path must be specified."
 msgstr "Путь носителя должен быть указан."
 
 #: ../src/virtManager/choosecd.py:158
-#, fuzzy
 msgid "Floppy D_rive"
-msgstr "Флоппи П_ривод"
+msgstr "Ди_сковод"
 
 #: ../src/virtManager/choosecd.py:159
-#, fuzzy
 msgid "Floppy _Image"
-msgstr "Флоппи _Образ"
+msgstr "_Образ Дискеты"
 
 #: ../src/virtManager/clone.py:222 ../src/virtManager/clone.py:438
 msgid "Details..."
@@ -647,11 +643,11 @@ msgstr ""
 
 #: ../src/virtManager/clone.py:446
 msgid "Storage cannot be shared or cloned."
-msgstr ""
+msgstr "Хранилище не может быть общим или клонированным."
 
 #: ../src/virtManager/clone.py:499
 msgid "One or more disks cannot be cloned or shared."
-msgstr ""
+msgstr "Один или более дисков не могут быть клонированными или общими."
 
 #: ../src/virtManager/clone.py:600
 #, python-format
@@ -837,17 +833,16 @@ msgid "Pointer grabbed"
 msgstr "Указатель захвачен"
 
 #: ../src/virtManager/console.py:178
-#, fuzzy
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair: Ctrl+Alt"
 msgstr ""
-"Указатель мыши функционален только в окне виртуальной консоли. Для "
-"освобождения указателя нажмите Ctrl+Alt"
+"Указатель мыши будет ограничен только в окне виртуальной консоли. Для "
+"освобождения указателя нажмите комбинацию: Ctrl+Alt"
 
 #: ../src/virtManager/console.py:179
 msgid "Do not show this notification in the future."
-msgstr ""
+msgstr "Не показывать это уведомление в будущем."
 
 #: ../src/virtManager/console.py:362 ../src/virtManager/console.py:545
 msgid "Guest not running"
@@ -866,15 +861,15 @@ msgstr ""
 
 #: ../src/virtManager/console.py:564
 msgid "Graphical console not configured for guest"
-msgstr "Графическая консоль не настроена для хоста"
+msgstr "Графическая консоль не настроена для гостя"
 
 #: ../src/virtManager/console.py:576
 msgid "Graphical console not supported for guest"
-msgstr "Графическая консоль не поддерживается для хоста"
+msgstr "Графическая консоль не поддерживается для гостя"
 
 #: ../src/virtManager/console.py:580
 msgid "Graphical console is not yet active for guest"
-msgstr ""
+msgstr "Графическая консоль еще не активна для гостя"
 
 #: ../src/virtManager/console.py:584
 msgid "Connecting to graphical console for guest"
@@ -910,7 +905,7 @@ msgstr ""
 #: ../src/virtManager/create.py:297
 #, fuzzy
 msgid "No active connection to install on."
-msgstr "Тип соединения:"
+msgstr "Нет активных подключений для установки на."
 
 #: ../src/virtManager/create.py:343
 msgid "Connection is read only."
@@ -918,43 +913,43 @@ msgstr "Подключено только для чтения."
 
 #: ../src/virtManager/create.py:353
 msgid "No guests are supported for this connection."
-msgstr ""
+msgstr "Гости не поддерживаются для этого подключения. "
 
 #: ../src/virtManager/create.py:375
 #, python-format
 msgid "%s installs not available for paravirt guests."
-msgstr ""
+msgstr "%s установки не доступны для паравиртуализационных гостей."
 
 #: ../src/virtManager/create.py:379
 msgid "URL installs not available for remote connections."
-msgstr ""
+msgstr "URL установки не доступены для удаленных подключений."
 
 #: ../src/virtManager/create.py:381 ../src/virtManager/create.py:484
 msgid "Connection does not support storage management."
-msgstr ""
+msgstr "Подключение не поддерживает управление хранилищем."
 
 #: ../src/virtManager/create.py:393
 msgid "No install options available for this connection."
-msgstr ""
+msgstr "Нет доступных настроек установки для этого подключения."
 
 #: ../src/virtManager/create.py:444
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
-msgstr ""
+msgstr "Увеличить до %(maxmem)s доступных на хосте"
 
 #: ../src/virtManager/create.py:458
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
-msgstr ""
+msgstr "Гипервизор поддерживает только %d виртуальныех CPU."
 
 #: ../src/virtManager/create.py:468
 #, python-format
 msgid "Up to %(numcpus)d available"
-msgstr ""
+msgstr "Увеличить до доступных %(numcpus)d "
 
 #: ../src/virtManager/create.py:534
 msgid "Only URL installs are supported for paravirt."
-msgstr ""
+msgstr "Только URL установки поддерживается для паравиртуализации."
 
 #: ../src/virtManager/create.py:611 ../src/virtManager/create.py:620
 #: ../src/virtManager/create.py:690 ../src/virtManager/create.py:692
@@ -1009,25 +1004,26 @@ msgid "Error setting install media location."
 msgstr ""
 
 #: ../src/virtManager/create.py:1189
+#, fuzzy
 msgid "Error setting OS information."
-msgstr ""
+msgstr "Ошибка настройки информации ОС."
 
 #: ../src/virtManager/create.py:1220
+#, fuzzy
 msgid "Error setting CPUs."
-msgstr ""
+msgstr "Ошибка настройки CPU."
 
 #: ../src/virtManager/create.py:1227
 msgid "Error setting guest memory."
-msgstr ""
+msgstr "Ошибка настройки памяти."
 
 #: ../src/virtManager/create.py:1245
 msgid "A storage path must be specified."
-msgstr ""
+msgstr "Путь хранилища должен быть определен."
 
 #: ../src/virtManager/create.py:1254
-#, fuzzy
 msgid "Storage parameter error."
-msgstr "Имя сети:"
+msgstr "Ошибка параметров хранилища."
 
 #: ../src/virtManager/create.py:1292
 #, python-format
@@ -1163,6 +1159,8 @@ msgid ""
 "The network should normally use a private IPv4 address. Use this non-private "
 "address anyway?"
 msgstr ""
+"Сеть, как правило использует приватный адрес IPv4. Все равно использовать "
+"этот не приватные адрес?"
 
 #: ../src/virtManager/createnet.py:395 ../src/virtManager/createnet.py:398
 #: ../src/virtManager/createnet.py:402 ../src/virtManager/createnet.py:405
@@ -1216,18 +1214,19 @@ msgstr ""
 #: ../src/virtManager/createpool.py:437
 #, python-format
 msgid "Error creating pool: %s"
-msgstr ""
+msgstr "Ошибка создания пула: %s"
 
 #: ../src/virtManager/createpool.py:486 ../src/virtManager/createpool.py:508
-#, fuzzy
 msgid "Pool Parameter Error"
-msgstr "Имя сети:"
+msgstr "Ошибка Параметров Пула"
 
 #: ../src/virtManager/createpool.py:513
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
 msgstr ""
+"Построение пула этого типа отформатирует устройство источника. Вы уверены "
+"что хотите 'построить' этот пул?"
 
 #: ../src/virtManager/createpool.py:527
 #, fuzzy
@@ -1239,9 +1238,8 @@ msgid "Create a logical volume group from the source device."
 msgstr ""
 
 #: ../src/virtManager/createvol.py:211
-#, fuzzy
 msgid "Creating storage volume..."
-msgstr "Создание файла накопителя"
+msgstr "Создание тома хранилища"
 
 #: ../src/virtManager/createvol.py:212
 msgid "Creating the storage volume may take a while..."
@@ -1250,12 +1248,11 @@ msgstr ""
 #: ../src/virtManager/createvol.py:240
 #, python-format
 msgid "Error creating vol: %s"
-msgstr ""
+msgstr "Ошибка создания тома: %s"
 
 #: ../src/virtManager/createvol.py:260
-#, fuzzy
 msgid "Volume Parameter Error"
-msgstr "Имя сети:"
+msgstr "Ошибка Параметров Тома"
 
 #: ../src/virtManager/delete.py:99
 msgid "Delete"
@@ -1285,9 +1282,8 @@ msgid "Errors encountered while removing certain storage devices."
 msgstr ""
 
 #: ../src/virtManager/delete.py:289
-#, fuzzy
 msgid "Storage Path"
-msgstr "Путь источника:"
+msgstr "Путь Хранилища"
 
 #: ../src/virtManager/delete.py:290
 #, fuzzy
@@ -1296,7 +1292,7 @@ msgstr "Приемник:"
 
 #: ../src/virtManager/delete.py:338
 msgid "Cannot delete iscsi share."
-msgstr ""
+msgstr "Не возможно удалит общий iscsi."
 
 #: ../src/virtManager/delete.py:341
 msgid "Cannot delete unmanaged remote storage."
@@ -1382,7 +1378,7 @@ msgstr ""
 
 #: ../src/virtManager/details.py:544
 msgid "No graphics console found."
-msgstr ""
+msgstr "Графическая консоль не найдена."
 
 #: ../src/virtManager/details.py:549
 #, python-format
@@ -1422,20 +1418,19 @@ msgid "Error changing autostart value: %s"
 msgstr ""
 
 #: ../src/virtManager/details.py:1159
-#, fuzzy
 msgid "Are you sure you want to remove this device?"
-msgstr "Вы действительно хотите использовать диск ?"
+msgstr "Вы уверены, что вы хотите удалить это устройство?"
 
 #: ../src/virtManager/details.py:1160 ../src/virtManager/engine.py:533
 #: ../src/virtManager/engine.py:557 ../src/virtManager/engine.py:603
 #: ../src/virtManager/engine.py:627
 msgid "Don't ask me again."
-msgstr ""
+msgstr "Больше меня не спрашивать."
 
 #: ../src/virtManager/details.py:1172
-#, python-format
+#, fuzzy, python-format
 msgid "Error Removing Device: %s"
-msgstr ""
+msgstr "Ошибка Удаления Устройства: s"
 
 #: ../src/virtManager/details.py:1188
 msgid "Device could not be removed from the running machine."
@@ -1594,13 +1589,12 @@ msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Вы уверены, что вы хотите принудительно выключить '%s'?"
 
 #: ../src/virtManager/engine.py:531
-#, fuzzy
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
-"Это приведет к немедленному завершению виртуальной машины и может повлечь за "
-"собой повреждение ее дискового образа. Вы уверены?"
+"Это приведет к немедленному завершению ВМ без выключения ОС и может стать "
+"причиной потери данных."
 
 #: ../src/virtManager/engine.py:545 ../src/virtManager/engine.py:615
 #: ../src/virtManager/engine.py:639
@@ -1666,9 +1660,9 @@ msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s из %(maxmem)s"
 
 #: ../src/virtManager/host.py:285
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
-msgstr "Вы уверены, что вы хотите удалить сеть '%s'?"
+msgstr "Вы уверены, что вы хотите навсегда удалить сеть %s?"
 
 #: ../src/virtManager/host.py:292
 #, python-format
@@ -1688,12 +1682,12 @@ msgstr "Ошибка остановки сети: %s"
 #: ../src/virtManager/host.py:323
 #, python-format
 msgid "Error launching network wizard: %s"
-msgstr ""
+msgstr "Ошибка запуска мастера сети: %s"
 
 #: ../src/virtManager/host.py:334
 #, python-format
 msgid "Error setting net autostart: %s"
-msgstr ""
+msgstr "Ошибка настройки автозапуска сети: %s"
 
 #: ../src/virtManager/host.py:342 ../src/virtManager/host.py:391
 #: ../src/virtManager/host.py:578 ../src/virtManager/host.py:603
@@ -1716,9 +1710,9 @@ msgid "Error starting pool '%s': %s"
 msgstr "Ошибка запуска пула '%s': %s"
 
 #: ../src/virtManager/host.py:483
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
-msgstr "Вы действительно хотите использовать диск ?"
+msgstr "Вы уверены, что вы хотите навсегда удалить пул %s?"
 
 #: ../src/virtManager/host.py:490
 #, python-format
@@ -1726,19 +1720,19 @@ msgid "Error deleting pool: %s"
 msgstr "Ошибка удаления пула: %s"
 
 #: ../src/virtManager/host.py:498
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
-msgstr "Вы действительно хотите использовать диск ?"
+msgstr "Вы уверены, что вы хотите навсегда удалить том %s?"
 
 #: ../src/virtManager/host.py:507
-#, python-format
+#, fuzzy, python-format
 msgid "Error deleting volume: %s"
-msgstr ""
+msgstr "Ошибка удаления тома: %s"
 
 #: ../src/virtManager/host.py:518
-#, python-format
+#, fuzzy, python-format
 msgid "Error launching pool wizard: %s"
-msgstr ""
+msgstr "Ошибка запуска мастера пула: %s"
 
 #: ../src/virtManager/host.py:533 ../src/virtManager/storagebrowse.py:274
 #, python-format
@@ -2100,7 +2094,7 @@ msgstr "Предоставлено libvirt"
 msgid "translator-credits"
 msgstr ""
 "Nikolay Sivov <bunglehead@gmail.com>, 2007\n"
-"Anatoliy Guskov <anatoliy.guskov@gmail.com>, 2009"
+"Anatoliy Guskov <anatoliy.guskov@gmail.com>, 2009,2010"
 
 #: ../src/vmm-add-hardware.glade.h:1
 #, fuzzy
@@ -2108,19 +2102,16 @@ msgid "<b>Character Device</b>"
 msgstr "<b>Консоли</b>"
 
 #: ../src/vmm-add-hardware.glade.h:2
-#, fuzzy
 msgid "<b>Device Parameters</b>"
-msgstr "<b>Консоли</b>"
+msgstr "<b>Параметры Устройства</b>"
 
 #: ../src/vmm-add-hardware.glade.h:3
-#, fuzzy
 msgid "<b>Physical Host Device</b>"
-msgstr "<b>Консоли</b>"
+msgstr "<b>Физическое Устройство Хоста</b>"
 
 #: ../src/vmm-add-hardware.glade.h:4 ../src/vmm-details.glade.h:13
-#, fuzzy
 msgid "<b>Sound Device</b>"
-msgstr "<b>Хранилище</b>"
+msgstr "<b>Звуковое Устройство</b>"
 
 #: ../src/vmm-add-hardware.glade.h:5
 #, fuzzy
@@ -2133,19 +2124,17 @@ msgid "<b>Target:</b>"
 msgstr "<b>Хранилище</b>"
 
 #: ../src/vmm-add-hardware.glade.h:7
-#, fuzzy
 msgid "<b>Video Device</b>"
-msgstr "<b>Консоли</b>"
+msgstr "<b>Видео Устройство</b>"
 
 #: ../src/vmm-add-hardware.glade.h:8
 #, fuzzy
 msgid "<b>Virtual display</b>"
-msgstr "<b>Виртуальный диск</b>"
+msgstr "<b>Виртуальный экран</b>"
 
 #: ../src/vmm-add-hardware.glade.h:9
-#, fuzzy
 msgid "<b>Virtual pointer</b>"
-msgstr "<b>Виртуальный диск</b>"
+msgstr "<b>Виртуальный указатель</b>"
 
 #: ../src/vmm-add-hardware.glade.h:10
 msgid "<small><b>Example:</b> /dev/hdc2</small>"
@@ -2186,80 +2175,66 @@ msgstr ""
 "повреждению данных гостя.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:15
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding Virtual "
 "Hardware</span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Добавление "
-"виртуального оборудования </span>"
+"Виртуального Оборудования</span>"
 
 #: ../src/vmm-add-hardware.glade.h:16
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Finish Adding "
 "Virtual Hardware</span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Добавление "
-"виртуального оборудования </span>"
+"Виртуального Оборудования Завершено</span>"
 
 #: ../src/vmm-add-hardware.glade.h:17
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Graphics</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Назначение "
-"пространства хранения</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Графика</span>"
 
 #: ../src/vmm-add-hardware.glade.h:18
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Host Device</"
 "span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Назначение "
-"пространства хранения</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Устройство "
+"Хоста</span>"
 
 #: ../src/vmm-add-hardware.glade.h:19
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Input</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Выбор диапазона "
-"DHCP</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ввод</span>"
 
 #: ../src/vmm-add-hardware.glade.h:20
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Network</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Подключение к "
-"сети</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Сеть</span>"
 
 #: ../src/vmm-add-hardware.glade.h:21
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sound</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Выделить память "
-"и CPU</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Звук</span>"
 
 #: ../src/vmm-add-hardware.glade.h:22
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Storage</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Назначение "
-"пространства хранения</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Хранилище</span>"
 
 #: ../src/vmm-add-hardware.glade.h:23
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Video Device</"
 "span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Назначение "
-"пространства хранения</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Видео "
+"Устройство</span>"
 
 #: ../src/vmm-add-hardware.glade.h:24
 #, fuzzy
@@ -2928,6 +2903,7 @@ msgid "<span size='large'>Storage Volume Quota</span>"
 msgstr ""
 
 #: ../src/vmm-create-vol.glade.h:2
+#, fuzzy
 msgid ""
 "<span size='small'><i><u>Name</u>: Name of the\n"
 "  volume to create. File\n"
@@ -2944,15 +2920,28 @@ msgid ""
 "  allocated to volume\n"
 "  at this time.</i></span>"
 msgstr ""
+"<span size='small'><i><u>Нозвание</u>: Имя\n"
+"  volume to create. File\n"
+"  extension may be\n"
+"  appended\n"
+"\n"
+"<u>Format</u>: File/Partition\n"
+"  format of the volume\n"
+"\n"
+"<u>Capacity</u>: Maximum\n"
+"  size of the volume.\n"
+"\n"
+"<u>Allocation</u>: Actual size\n"
+"  allocated to volume\n"
+"  at this time.</i></span>"
 
 #: ../src/vmm-create-vol.glade.h:16
 msgid "<span size='x-large'>New Storage Volume</span>"
-msgstr ""
+msgstr "<span size='x-large'>Новый Том Хранилища</span>"
 
 #: ../src/vmm-create-vol.glade.h:17
-#, fuzzy
 msgid "Add a Storage Volume"
-msgstr "Накопители"
+msgstr "Добавить Том Хранилища"
 
 #: ../src/vmm-create-vol.glade.h:18
 msgid "Create a storage unit that can be used directly by a virtual machine."
@@ -3068,7 +3057,7 @@ msgstr "Параметры ядра:"
 #: ../src/vmm-create.glade.h:24
 #, fuzzy
 msgid "Kickstart URL:"
-msgstr "URL _кикстарта:"
+msgstr "URL Быстрого старта:"
 
 #: ../src/vmm-create.glade.h:25
 msgid "Locate your install media"
@@ -3464,7 +3453,7 @@ msgstr "Послать _Клавиши"
 
 #: ../src/vmm-details.glade.h:81
 msgid "Sharea_ble:"
-msgstr ""
+msgstr "Общ_ий:"
 
 #: ../src/vmm-details.glade.h:82
 msgid "Show the graphical console"
@@ -3654,9 +3643,8 @@ msgid "<b>Name:</b>"
 msgstr "<b>Название:</b>"
 
 #: ../src/vmm-host.glade.h:5
-#, fuzzy
 msgid "<b>Volumes</b>"
-msgstr "<b>Консоли</b>"
+msgstr "<b>Тома</b>"
 
 #: ../src/vmm-host.glade.h:6 ../src/vmm-open-connection.glade.h:1
 msgid "A_utoconnect:"
@@ -3767,14 +3755,12 @@ msgid "Virtual Networks"
 msgstr "Виртуальные сети"
 
 #: ../src/vmm-host.glade.h:42
-#, fuzzy
 msgid "_Delete Volume"
-msgstr "Удалить машину"
+msgstr "_Удалить Том"
 
 #: ../src/vmm-host.glade.h:45 ../src/vmm-storage-browse.glade.h:4
-#, fuzzy
 msgid "_New Volume"
-msgstr "Удалить машину"
+msgstr "_Новый Том"
 
 #: ../src/vmm-host.glade.h:47
 #, fuzzy
