@@ -133,11 +133,15 @@ def setup_logging(debug_stdout):
 
     # set up logging
     vm_dir = os.path.expanduser("~/%s" % DIR_NAME)
-    if not os.access(vm_dir,os.W_OK):
+    if not os.access(vm_dir, os.W_OK):
+        if os.path.exists(vm_dir):
+            raise RuntimeError("No write access to %s" % vm_dir)
+
         try:
-            os.mkdir(vm_dir)
+            os.mkdir(vm_dir, 0751)
         except IOError, e:
-            raise RuntimeError, "Could not create %d directory: " % vm_dir, e
+            raise RuntimeError("Could not create directory %s: %s" %
+                               (vm_dir, e))
 
     # XXX should we get logging level from gconf, or command line args ?
     filename = "%s/%s" % (vm_dir, FILE_NAME)
