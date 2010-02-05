@@ -1061,6 +1061,39 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("create-forward").show()
             self.window.get_widget("create-finish").hide()
 
+    def build_guest(self, installer, name):
+        guest = installer.guest_from_installer()
+        guest.name = self.get_config_name()
+        disk = len(guest.disks) and guest.disks[0]
+
+        # Generate UUID
+        try:
+            guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
+        except Exception, e:
+            self.err.show_err(_("Error setting UUID: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return None
+
+        # Set up graphics device
+        try:
+            guest._graphics_dev = virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC)
+        except Exception, e:
+            self.err.show_err(_("Error setting up graphics device:") + str(e),
+                              "".join(traceback.format_exc()))
+            return None
+
+        # Set up sound device (if present)
+        guest.sound_devs = []
+        try:
+            if self.get_config_sound():
+                guest.sound_devs.append(virtinst.VirtualAudio(model="es1370"))
+        except Exception, e:
+            self.err.show_err(_("Error setting up sound device:") + str(e),
+                              "".join(traceback.format_exc()))
+            return None
+
+        return guest
+
     def validate(self, pagenum):
         try:
             if pagenum == PAGE_NAME:
@@ -1102,8 +1135,6 @@ class vmmCreate(gobject.GObject):
 
     def validate_name_page(self):
         name = self.get_config_name()
-
-        self.guest = None
 
         try:
             g = virtinst.Guest(connection=self.conn.vmm)
@@ -1154,9 +1185,10 @@ class vmmCreate(gobject.GObject):
         # Build the installer and Guest instance
         try:
             installer = self.build_installer(instclass)
-
-            self.guest = installer.guest_from_installer()
-            self.guest.name = self.get_config_name()
+            name = self.get_config_name()
+            self.guest = self.build_guest(installer, name)
+            if not self.guest:
+                return False
         except Exception, e:
             return self.verr(_("Error setting installer parameters."), str(e))
 
@@ -1329,38 +1361,11 @@ class vmmCreate(gobject.GObject):
         self.change_caps()
 
     def finish(self, src):
-
-        # Validate the final page
-        if self.validate(self.window.get_widget("create-pages").get_current_page()) != True:
-            return False
-
         guest = self.guest
         disk = len(guest.disks) and guest.disks[0]
 
-        # Generate UUID
-        try:
-            guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
-        except Exception, e:
-            self.err.show_err(_("Error setting UUID: %s") % str(e),
-                              "".join(traceback.format_exc()))
-            return False
-
-        # Set up graphics device
-        try:
-            guest._graphics_dev = virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC)
-        except Exception, e:
-            self.err.show_err(_("Error setting up graphics device:") + str(e),
-                              "".join(traceback.format_exc()))
-            return False
-
-        # Set up sound device (if present)
-        guest.sound_devs = []
-        try:
-            if self.get_config_sound():
-                guest.sound_devs.append(virtinst.VirtualAudio(model="es1370"))
-        except Exception, e:
-            self.err.show_err(_("Error setting up sound device:") + str(e),
-                              "".join(traceback.format_exc()))
+        # Validate the final page
+        if self.validate(self.window.get_widget("create-pages").get_current_page()) != True:
             return False
 
         logging.debug("Creating a VM %s" % guest.name +
