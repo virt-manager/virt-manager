@@ -475,30 +475,23 @@ class vmmDomain(gobject.GObject):
         self.attach_device(diskxml)
 
     # VCPU changing
-    def define_vcpus(self, vcpus, cpuset=None):
+    def define_vcpus(self, vcpus):
         vcpus = int(vcpus)
 
-        def set_node(doc, ctx, vcpus, cpumask, xpath):
+        def set_node(doc, ctx, vcpus, xpath):
             node = ctx.xpathEval(xpath)
             node = (node and node[0] or None)
 
             if node:
                 node.setContent(str(vcpus))
 
-                # If cpuset mask is not valid, don't change it
-                # If cpuset mask is None, we don't want to use cpuset
-                if cpumask is None or (cpumask is not None and
-                                       len(cpumask) == 0):
-                    node.unsetProp("cpuset")
-                else:
-                    node.setProp("cpuset", cpumask)
             return doc.serialize()
 
-        def change_vcpu_xml(xml, vcpus, cpuset):
-            return util.xml_parse_wrapper(xml, set_node, vcpus, cpuset,
+        def change_vcpu_xml(xml, vcpus):
+            return util.xml_parse_wrapper(xml, set_node, vcpus,
                                           "/domain/vcpu[1]")
 
-        self.redefine(change_vcpu_xml, vcpus, cpuset)
+        self.redefine(change_vcpu_xml, vcpus)
 
     def define_cpuset(self, cpuset):
         def set_node(doc, ctx, xpath):
