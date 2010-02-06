@@ -872,17 +872,12 @@ class vmmAddHardware(gobject.GObject):
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
-        func_dict = { PAGE_NETWORK: self.add_network,
-                      PAGE_DISK: self.add_storage,
-                      PAGE_INPUT: self.add_input,
-                      PAGE_GRAPHICS: self.add_graphics,
-                      PAGE_SOUND: self.add_sound,
-                      PAGE_HOSTDEV: self.add_hostdev,
-                      PAGE_CHAR: self.add_device,
-                      PAGE_VIDEO: self.add_device}
-
         try:
-            func = func_dict[hw]
+            if hw == PAGE_DISK:
+                func = self.add_storage
+            else:
+                func = self.add_device
+
             errinfo = func()
             error, details = errinfo or (None, None)
         except Exception, e:
@@ -1031,25 +1026,6 @@ class vmmAddHardware(gobject.GObject):
     # Add device methods #
     ######################
 
-    def add_network(self):
-        self._dev.setup(self.vm.get_connection().vmm)
-        self.add_device(self._dev.get_xml_config())
-
-    def add_input(self):
-        inp = self.get_config_input()
-        xml = "<input type='%s' bus='%s'/>\n" % (inp[1], inp[2])
-        self.add_device(xml)
-
-    def add_graphics(self):
-        self.add_device(self._dev.get_xml_config())
-
-    def add_sound(self):
-        self.add_device(self._dev.get_xml_config())
-
-    def add_hostdev(self):
-        self._dev.setup()
-        self.add_device(self._dev.get_xml_config())
-
     def add_storage(self):
         used = []
         disks = (self.vm.get_disk_devices() +
@@ -1073,6 +1049,7 @@ class vmmAddHardware(gobject.GObject):
 
     def add_device(self, xml=None):
         if not xml:
+            self._dev.setup_dev(self.conn.vmm)
             xml = self._dev.get_xml_config()
 
         logging.debug("Adding device:\n" + xml)
@@ -1133,7 +1110,7 @@ class vmmAddHardware(gobject.GObject):
         elif page_num == PAGE_NETWORK:
             return self.validate_page_network()
         elif page_num == PAGE_INPUT:
-            return True
+            return self.validate_page_input()
         elif page_num == PAGE_GRAPHICS:
             return self.validate_page_graphics()
         elif page_num == PAGE_SOUND:
@@ -1228,6 +1205,14 @@ class vmmAddHardware(gobject.GObject):
             return False
 
         self._dev = ret
+
+    def validate_page_input(self):
+        ignore, inp_type, inp_bus = self.get_config_input()
+        dev = virtinst.VirtualInputDevice(self.conn.vmm)
+        dev.type = inp_type
+        dev.bus = inp_bus
+
+        self._dev = dev
 
     def validate_page_graphics(self):
         graphics = self.get_config_graphics()
