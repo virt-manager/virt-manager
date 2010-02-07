@@ -25,9 +25,11 @@ import logging
 import time
 import difflib
 
+import virtinst
 from virtManager import util
 import virtinst.util as vutil
 import virtinst.support as support
+from virtinst import VirtualDevice
 
 def safeint(val, fmt="%.3d"):
     try:
@@ -1873,5 +1875,290 @@ class vmmDomain(vmmDomainBase):
         self._update_status(info[0])
         gobject.idle_add(util.idle_emit, self, "resources-sampled")
 
+
+class vmmDomainVirtinst(vmmDomainBase):
+    """
+    Domain object backed by a virtinst Guest object.
+
+    Used for launching a details window for customizing a VM before install.
+    """
+    def __init__(self, config, connection, backend, uuid):
+        vmmDomainBase.__init__(self, config, connection, backend, uuid)
+
+    def get_name(self):
+        return self._backend.name
+    def get_id(self):
+        return -1
+    def status(self):
+        return libvirt.VIR_DOMAIN_SHUTOFF
+
+    def get_xml(self):
+        return self._backend.get_config_xml()
+    def refresh_xml(self):
+        # No caching, so no refresh needed
+        return
+    def _get_inactive_xml(self):
+        return self.get_xml()
+
+    def get_autostart(self):
+        return self._backend.autostart
+
+    def get_memory(self):
+        return int(self._backend.memory * 1024.0)
+    def get_memory_percentage(self):
+        return 0
+    def maximum_memory(self):
+        return int(self._backend.maxmemory * 1024.0)
+    def maximum_memory_percentage(self):
+        return 0
+    def cpu_time(self):
+        return 0
+    def cpu_time_percentage(self):
+        return 0
+    def vcpu_count(self):
+        return self._backend.vcpus
+    def network_rx_rate(self):
+        return 0
+    def network_tx_rate(self):
+        return 0
+    def disk_read_rate(self):
+        return 0
+    def disk_write_rate(self):
+        return 0
+
+
+    # Device/XML altering implementations
+    def set_autostart(self, val):
+        self._backend.autostart = bool(val)
+        self.emit("config-changed")
+
+    def attach_device(self, devobj):
+        return
+    def detach_device(self, devtype, dev_id_info):
+        return
+
+    def add_device(self, devobj):
+        def add_dev():
+            self._backend.add_device(devobj)
+        self._redefine(add_dev)
+    def remove_device(self, dev_type, dev_id_info):
+        dev = self._get_device_xml_object(dev_type, dev_id_info)
+
+        def rm_dev():
+            self._backend.remove_device(dev)
+        self._redefine(rm_dev)
+
+    def define_storage_media(self, dev_id_info, newpath, _type=None):
+        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_DISK,
+                                          dev_id_info)
+
+        def change_path():
+            dev.path = newpath
+        self._redefine(change_path)
+    def hotplug_storage_media(self, dev_id_info, newpath, _type=None):
+        return
+
+    def define_vcpus(self, vcpus):
+        def change_vcpu():
+            self._backend.vcpus = int(vcpus)
+        self._redefine(change_vcpu)
+    def hotplug_vcpus(self, vcpus):
+        return
+    def define_cpuset(self, cpuset):
+        def change_cpuset():
+            self._backend.cpuset = cpuset
+        self._redefine(change_cpuset)
+
+    def define_both_mem(self, memory, maxmem):
+        def change_mem():
+            self._backend.memory = int(int(memory) / 1024)
+            self._backend.maxmemory = int(int(maxmem) / 1024)
+        self._redefine(change_mem)
+    def hotplug_both_mem(self, memory, maxmem):
+        return
+
+    def define_seclabel(self, model, t, label):
+        def change_seclabel():
+            if not model:
+                self._backend.seclabel = None
+                return
+
+            seclabel = virtinst.Seclabel(self.get_connection().vmm)
+            seclabel.type = t
+            seclabel.model = model
+            if label:
+                seclabel.label = label
+
+            self._backend.seclabel = seclabel
+
+        self._redefine(change_seclabel)
+
+    def set_boot_device(self, boot_type):
+        if not boot_type or boot_type == self.get_boot_device():
+            return
+
+        raise RuntimeError("Boot device is determined by the install media.")
+
+    def define_acpi(self, newvalue):
+        def change_acpi():
+            self._backend.features["acpi"] = bool(newvalue)
+        self._redefine(change_acpi)
+    def define_apic(self, newvalue):
+        def change_apic():
+            self._backend.features["apic"] = bool(newvalue)
+        self._redefine(change_apic)
+
+    def define_clock(self, newvalue):
+        def change_clock():
+            self._backend.clock.offset = newvalue
+        self._redefine(change_clock)
+
+    def define_disk_readonly(self, dev_id_info, do_readonly):
+        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_DISK,
+                                          dev_id_info)
+
+        def change_readonly():
+            dev.read_only = do_readonly
+        self._redefine(change_readonly)
+    def define_disk_shareable(self, dev_id_info, do_shareable):
+        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_DISK,
+                                          dev_id_info)
+
+        def change_shareable():
+            dev.shareable = do_shareable
+        self._redefine(change_shareable)
+
+    def define_video_model(self, dev_id_info, newmodel):
+        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_VIDEO,
+                                          dev_id_info)
+
+        def change_video_model():
+            dev.model_type = newmodel
+        self._redefine(change_video_model)
+
+    # Helper functions
+    def _redefine(self, alter_func):
+        origxml = self.get_xml()
+
+        # Make change
+        alter_func()
+
+        newxml = self.get_xml()
+
+        if origxml == newxml:
+            logging.debug("Redefinition request XML was no different,"
+                          " redefining anyways")
+        else:
+            diff = "".join(difflib.unified_diff(origxml.splitlines(1),
+                                                newxml.splitlines(1),
+                                                fromfile="Original XML",
+                                                tofile="New XML"))
+            logging.debug("Redefining '%s' with XML diff:\n%s",
+                          self.get_name(), diff)
+
+        self.emit("config-changed")
+
+    def _get_device_xml_object(self, dev_type, dev_id_info):
+        """
+        Find the virtinst device for the passed id info
+        """
+        def device_iter(try_func):
+            devs = self._backend.get_devices(dev_type)
+            for dev in devs:
+                if try_func(dev):
+                    return dev
+
+        def count_func(count):
+            devs = self._backend.get_devices(dev_type)
+            tmpcount = -1
+            for dev in devs:
+                tmpcount += 1
+                if count == tmpcount:
+                    return dev
+            return None
+
+        found_func = None
+        count = None
+
+        if dev_type == VirtualDevice.VIRTUAL_DEV_NET:
+            found_func = (lambda x: x.macaddr == dev_id_info)
+
+        elif dev_type == VirtualDevice.VIRTUAL_DEV_DISK:
+            found_func = (lambda x: x.target == dev_id_info)
+
+        elif dev_type == VirtualDevice.VIRTUAL_DEV_INPUT:
+            found_func = (lambda x: (x.type == dev_id_info[0] and
+                                     x.bus  == dev_id_info[1]))
+
+        elif dev_type == VirtualDevice.VIRTUAL_DEV_GRAPHICS:
+            found_func = (lambda x: x.type == dev_id_info)
+
+        elif dev_type == VirtualDevice.VIRTUAL_DEV_AUDIO:
+            found_func = (lambda x: x.model == dev_id_info)
+
+        elif (dev_type == VirtualDevice.VIRTUAL_DEV_PARALLEL or
+              dev_type == VirtualDevice.VIRTUAL_DEV_SERIAL or
+              dev_type == VirtualDevice.VIRTUAL_DEV_CONSOLE):
+            count = int(dev_id_info)
+
+        elif dev_type == VirtualDevice.VIRTUAL_DEV_HOSTDEV:
+            # This whole process is a little funky, since we need a decent
+            # amount of info to determine which specific hostdev to remove
+
+            def found_func(rmdev):
+                host_type = dev_id_info["type"]
+                addr = dev_id_info.get("address")
+                vend = dev_id_info.get("vendor")
+                prod = dev_id_info.get("product")
+
+                if rmdev.type != host_type:
+                    return False
+
+                if addr:
+                    bus = addr.get("bus")
+                    dev = addr.get("device")
+                    slot = addr.get("slot")
+                    funct = addr.get("function")
+                    dom = addr.get("domain")
+
+                    if bus and dev:
+                        return (rmdev.bus == bus and rmdev.device == dev)
+
+                    elif bus and slot and funct and dom:
+                        return (rmdev.bus == bus and
+                                rmdev.slot == slot and
+                                rmdev.function == funct and
+                                rmdev.domain == dom)
+
+                elif vend.get("id") and prod.get("id"):
+                    return (rmdev.vendor == vend.get("id") and
+                            rmdev.product == prod.get("id"))
+
+                return False
+
+
+        elif dev_type == VirtualDevice.VIRTUAL_DEV_VIDEO:
+            model, ram, heads = dev_id_info
+
+            def found_func(rmdev):
+                return (rmdev.model_type == model and
+                        rmdev.vram == ram and
+                        rmdev.heads == heads)
+
+        else:
+            raise RuntimeError(_("Unknown device type '%s'") % dev_type)
+
+        if count != None:
+            # We are looking up devices by a simple index
+            found_dev = count_func(count)
+        else:
+            found_dev = device_iter(found_func)
+
+        if not found_dev:
+            raise RuntimeError(_("Did not find selected device."))
+
+        return found_dev
+
+gobject.type_register(vmmDomainVirtinst)
 gobject.type_register(vmmDomainBase)
 gobject.type_register(vmmDomain)
