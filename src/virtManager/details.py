@@ -1177,8 +1177,7 @@ class vmmDetails(gobject.GObject):
         detach_err = False
         try:
             if self.vm.is_active():
-                devxml = self.vm.get_device_xml(dev_type, dev_id_info)
-                self.vm.detach_device(devxml)
+                self.vm.detach_device(dev_type, dev_id_info)
         except Exception, e:
             logging.debug("Device could not be hotUNplugged: %s" % str(e))
             detach_err = True

@@ -1045,13 +1045,13 @@ class vmmAddHardware(gobject.GObject):
             # Encountered an error
             return (True, ret)
 
-        xml = self._dev.get_xml_config()
-        logging.debug("Adding device:\n" + xml)
+        self._dev.get_xml_config()
+        logging.debug("Adding device:\n" + self._dev.get_xml_config())
 
         # Hotplug device
         attach_err = False
         try:
-            self.vm.attach_device(xml)
+            self.vm.attach_device(self._dev)
         except Exception, e:
             logging.debug("Device could not be hotplugged: %s" % str(e))
             attach_err = True
@@ -1067,7 +1067,7 @@ class vmmAddHardware(gobject.GObject):
 
         # Alter persistent config
         try:
-            self.vm.add_device(xml)
+            self.vm.add_device(self._dev)
         except Exception, e:
             self.err.show_err(_("Error adding device: %s" % str(e)),
                               "".join(traceback.format_exc()))
