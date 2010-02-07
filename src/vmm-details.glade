@@ -13,7 +13,7 @@
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <child>
-          <widget class="GtkMenuBar" id="menubar3">
+          <widget class="GtkMenuBar" id="details-menubar">
             <property name="visible">True</property>
             <child>
               <widget class="GtkMenuItem" id="file1">
@@ -575,15 +575,15 @@
                     <property name="expand">False</property>
                   </packing>
                 </child>
-              </widget>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkToolbar" id="toolbar1">
-                <property name="visible">True</property>
-                <property name="show_arrow">False</property>
+                <child>
+                  <widget class="GtkSeparatorToolItem" id="toolbutton7">
+                    <property name="visible">True</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
                 <child>
                   <widget class="GtkToggleToolButton" id="control-fullscreen">
                     <property name="visible">True</property>
@@ -598,7 +598,26 @@
                 </child>
               </widget>
               <packing>
-                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkToolbar" id="customize-toolbar">
+                <child>
+                  <widget class="GtkToolButton" id="details-finish-customize">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Finish Install</property>
+                    <property name="use_underline">True</property>
+                    <property name="stock_id">gtk-apply</property>
+                    <signal name="clicked" handler="on_details_customize_finish_clicked"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
                 <property name="position">1</property>
               </packing>
             </child>

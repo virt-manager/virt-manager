@@ -127,10 +127,12 @@ class vmmDetails(gobject.GObject):
                                   gobject.TYPE_NONE, (str,str)),
         "action-clone-domain": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
+        "details-closed": (gobject.SIGNAL_RUN_FIRST,
+                           gobject.TYPE_NONE, ()),
         }
 
 
-    def __init__(self, config, vm, engine):
+    def __init__(self, config, vm, engine, parent=None):
         self.__gobject_init__()
         self.window = gtk.glade.XML((config.get_glade_dir() +
                                      "/vmm-details.glade"),
@@ -145,6 +147,21 @@ class vmmDetails(gobject.GObject):
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
+
+        self.is_customize_dialog = False
+        if parent:
+            self.is_customize_dialog = True
+            # Details window is being abused as a 'configure before install'
+            # dialog, set things as appropriate
+            self.topwin.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DIALOG)
+            self.topwin.set_transient_for(parent)
+
+            self.window.get_widget("customize-toolbar").show()
+            self.window.get_widget("details-toolbar").hide()
+            self.window.get_widget("details-menubar").hide()
+            pages = self.window.get_widget("details-pages")
+            pages.set_current_page(PAGE_DETAILS)
+
 
         self.serial_tabs = []
         self.last_console_page = PAGE_CONSOLE
@@ -189,6 +206,8 @@ class vmmDetails(gobject.GObject):
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
             "on_control_fullscreen_toggled": self.control_fullscreen,
+
+            "on_details_customize_finish_clicked": self.close,
 
             "on_details_menu_run_activate": self.control_vm_run,
             "on_details_menu_poweroff_activate": self.control_vm_shutdown,
@@ -286,7 +305,7 @@ class vmmDetails(gobject.GObject):
         self.engine.increment_window_counter()
         self.update_widget_states(self.vm, self.vm.status())
 
-    def close(self,ignore1=None,ignore2=None):
+    def close(self, ignore1=None, ignore2=None):
         fs = self.window.get_widget("details-menu-view-fullscreen")
         if fs.get_active():
             fs.set_active(False)
@@ -301,6 +320,8 @@ class vmmDetails(gobject.GObject):
             except:
                 logging.error("Failure when disconnecting from VNC server")
         self.engine.decrement_window_counter()
+
+        self.emit("details-closed")
         return 1
 
     def is_visible(self):
@@ -903,7 +924,7 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("config-apply").set_sensitive(True)
         val = model[idx][0]
-        show_type = (val == "selinux")
+        show_type = (val.lower() != "none")
         self.window.get_widget("security-type-box").set_sensitive(show_type)
 
     def security_label_changed(self, label):
@@ -1774,8 +1795,9 @@ class vmmDetails(gobject.GObject):
                                   page_id, data])
 
         add_hw_list_option("Overview", HW_LIST_TYPE_GENERAL, [], "computer")
-        add_hw_list_option("Performance", HW_LIST_TYPE_STATS, [],
-                           "utilities-system-monitor")
+        if not self.is_customize_dialog:
+            add_hw_list_option("Performance", HW_LIST_TYPE_STATS, [],
+                               "utilities-system-monitor")
         add_hw_list_option("Processor", HW_LIST_TYPE_CPU, [], "device_cpu")
         add_hw_list_option("Memory", HW_LIST_TYPE_MEMORY, [], "device_mem")
         add_hw_list_option("Boot Options", HW_LIST_TYPE_BOOT, [], "system-run")
