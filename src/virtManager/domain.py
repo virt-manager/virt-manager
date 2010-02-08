@@ -20,7 +20,6 @@
 
 import gobject
 import libvirt
-import os
 import logging
 import time
 import difflib
@@ -80,6 +79,12 @@ class vmmDomainBase(gobject.GObject):
         self.uuid = uuid
 
         self._startup_vcpus = None
+
+        self._network_traffic = None
+        self._disk_io = None
+
+        self._stats_net_supported = True
+        self._stats_disk_supported = True
 
     # Info accessors
     def get_name(self):
@@ -1129,16 +1134,11 @@ class vmmDomain(vmmDomainBase):
         self._xml = None
         self._is_xml_valid = False
 
-        self._network_traffic = None
-        self._disk_io = None
-
         self._update_status()
 
         self.config.on_stats_enable_net_poll_changed(self.toggle_sample_network_traffic)
         self.config.on_stats_enable_disk_poll_changed(self.toggle_sample_disk_io)
 
-        self._stats_net_supported = True
-        self._stats_disk_supported = True
         self.getvcpus_supported = support.check_domain_support(self._backend,
                                             support.SUPPORT_DOMAIN_GETVCPUS)
 

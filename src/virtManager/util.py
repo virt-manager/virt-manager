@@ -270,8 +270,19 @@ def safe_set_prop(self, prop, value):
     """
 
     try:
-       self.get_property(prop)
-       self.set_property(prop, value)
-       return True
+        self.get_property(prop)
+        self.set_property(prop, value)
+        return True
     except TypeError:
         return False
+
+def iface_in_use_by(conn, name):
+    use_str = ""
+    for i in conn.list_interface_names():
+        iface = conn.get_interface(i)
+        if name in iface.get_slave_names():
+            if use_str:
+                use_str += ", "
+            use_str += iface.get_name()
+
+    return use_str

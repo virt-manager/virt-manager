@@ -24,13 +24,23 @@ import gtk.glade
 import traceback
 
 from virtinst import Storage
+from virtinst import Interface
 
+from virtManager import uihelpers
+from virtManager import util
 from virtManager.connection import vmmConnection
 from virtManager.createnet import vmmCreateNetwork
 from virtManager.createpool import vmmCreatePool
 from virtManager.createvol import vmmCreateVolume
+#from virtManager.createinterface import vmmCreateInterface
 from virtManager.error import vmmErrorDialog
 from virtManager.graphwidgets import Sparkline
+
+INTERFACE_PAGE_INFO = 0
+INTERFACE_PAGE_ERROR = 1
+
+# TODO: Improve no interface support and no interface selected sensitivity
+# Do the same for storage a networks
 
 class vmmHost(gobject.GObject):
     __gsignals__ = {
@@ -66,6 +76,7 @@ class vmmHost(gobject.GObject):
         self.addnet = None
         self.addpool = None
         self.addvol = None
+        self.addinterface = None
         self.volmenu = None
 
         self.cpu_usage_graph = None
@@ -75,9 +86,12 @@ class vmmHost(gobject.GObject):
         # Set up signals
         self.window.get_widget("net-list").get_selection().connect("changed", self.net_selected)
         self.window.get_widget("vol-list").get_selection().connect("changed", self.vol_selected)
+        self.window.get_widget("interface-list").get_selection().connect("changed", self.interface_selected)
+
 
         self.init_net_state()
         self.init_storage_state()
+        self.init_interface_state()
 
         self.conn.connect("net-added", self.repopulate_networks)
         self.conn.connect("net-removed", self.repopulate_networks)
@@ -89,6 +103,11 @@ class vmmHost(gobject.GObject):
         self.conn.connect("pool-started", self.refresh_storage_pool)
         self.conn.connect("pool-stopped", self.refresh_storage_pool)
 
+        self.conn.connect("interface-added", self.repopulate_interfaces)
+        self.conn.connect("interface-removed", self.repopulate_interfaces)
+        self.conn.connect("interface-started", self.refresh_interface)
+        self.conn.connect("interface-stopped", self.refresh_interface)
+
         self.conn.connect("state-changed", self.conn_state_changed)
 
         self.window.signal_autoconnect({
@@ -98,12 +117,14 @@ class vmmHost(gobject.GObject):
             "on_vmm_host_delete_event": self.close,
 
             "on_menu_help_contents_activate": self.show_help,
+
             "on_net_add_clicked": self.add_network,
             "on_net_delete_clicked": self.delete_network,
             "on_net_stop_clicked": self.stop_network,
             "on_net_start_clicked": self.start_network,
             "on_net_autostart_toggled": self.net_autostart_changed,
             "on_net_apply_clicked": self.net_apply,
+
             "on_pool_add_clicked" : self.add_pool,
             "on_vol_add_clicked" : self.add_vol,
             "on_pool_stop_clicked": self.stop_pool,
@@ -113,6 +134,14 @@ class vmmHost(gobject.GObject):
             "on_vol_delete_clicked": self.delete_vol,
             "on_vol_list_button_press_event": self.popup_vol_menu,
             "on_pool_apply_clicked": self.pool_apply,
+
+            "on_interface_add_clicked" : self.add_interface,
+            "on_interface_start_clicked" : self.start_interface,
+            "on_interface_stop_clicked" : self.stop_interface,
+            "on_interface_delete_clicked" : self.delete_interface,
+            "on_interface_startmode_changed": self.interface_startmode_changed,
+            "on_interface_apply_clicked" : self.interface_apply,
+
             "on_config_autoconnect_toggled": self.toggle_autoconnect,
             })
 
@@ -190,6 +219,55 @@ class vmmHost(gobject.GObject):
         populate_storage_pools(self.window.get_widget("pool-list"),
                                self.conn)
 
+    def init_interface_state(self):
+        self.window.get_widget("interface-pages").set_show_tabs(False)
+
+        # [ unique, label, icon name, icon size, is_active ]
+        interfaceListModel = gtk.ListStore(str, str, str, int, bool)
+        self.window.get_widget("interface-list").set_model(interfaceListModel)
+
+        interfaceCol = gtk.TreeViewColumn("Interfaces")
+        interfaceCol.set_spacing(6)
+        interface_txt = gtk.CellRendererText()
+        interface_img = gtk.CellRendererPixbuf()
+        interfaceCol.pack_start(interface_img, False)
+        interfaceCol.pack_start(interface_txt, True)
+        interfaceCol.add_attribute(interface_txt, 'text', 1)
+        interfaceCol.add_attribute(interface_txt, 'sensitive', 4)
+        interfaceCol.add_attribute(interface_img, 'icon-name', 2)
+        interfaceCol.add_attribute(interface_img, 'stock-size', 3)
+        self.window.get_widget("interface-list").append_column(interfaceCol)
+        interfaceListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
+
+        # Starmode combo
+        uihelpers.build_startmode_combo(
+            self.window.get_widget("interface-startmode"))
+
+        # [ name, type ]
+        childListModel = gtk.ListStore(str, str)
+        childList = self.window.get_widget("interface-child-list")
+        childList.set_model(childListModel)
+
+        childNameCol = gtk.TreeViewColumn("Name")
+        child_txt1 = gtk.CellRendererText()
+        childNameCol.pack_start(child_txt1, True)
+        childNameCol.add_attribute(child_txt1, 'text', 0)
+        childNameCol.set_sort_column_id(0)
+        childList.append_column(childNameCol)
+
+        childTypeCol = gtk.TreeViewColumn("Interface Type")
+        child_txt2 = gtk.CellRendererText()
+        childTypeCol.pack_start(child_txt2, True)
+        childTypeCol.add_attribute(child_txt2, 'text', 1)
+        childTypeCol.set_sort_column_id(1)
+        childList.append_column(childTypeCol)
+        childListModel.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
+        self.populate_interfaces(interfaceListModel)
+
+        if not self.conn.interface_capable:
+            self.set_interface_error_page(
+                _("Libvirt connection does not have interface support."))
 
     def init_conn_state(self):
         uri = self.conn.get_uri()
@@ -682,6 +760,209 @@ class vmmHost(gobject.GObject):
             vol = vols[key]
             model.append([key, vol.get_name(), vol.get_pretty_capacity(),
                           vol.get_format() or ""])
+
+
+    #############################
+    # Interface manager methods #
+    #############################
+
+    def stop_interface(self, src):
+        interface = self.current_interface()
+        if interface is None:
+            return
+
+        try:
+            interface.stop()
+        except Exception, e:
+            self.err.show_err(_("Error stopping interface '%s': %s") % \
+                              (interface.get_name(), str(e)),
+                              "".join(traceback.format_exc()))
+
+    def start_interface(self, src):
+        interface = self.current_interface()
+        if interface is None:
+            return
+
+        try:
+            interface.start()
+        except Exception, e:
+            self.err.show_err(_("Error starting interface '%s': %s") % \
+                              (interface.get_name(), str(e)),
+                              "".join(traceback.format_exc()))
+
+    def delete_interface(self, src):
+        interface = self.current_interface()
+        if interface is None:
+            return
+
+        result = self.err.yes_no(_("Are you sure you want to permanently "
+                                   "delete the interface %s?")
+                                   % interface.get_name())
+        if not result:
+            return
+
+        try:
+            interface.delete()
+        except Exception, e:
+            self.err.show_err(_("Error deleting interface: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+    def add_interface(self, src):
+        # Will be implemented shortly
+        return
+
+        try:
+            if self.addinterface is None:
+                self.addinterface = vmmCreateInterface(self.config, self.conn)
+            self.addinterface.show()
+        except Exception, e:
+            self.err.show_err(_("Error launching interface wizard: %s") %
+                              str(e), "".join(traceback.format_exc()))
+
+    def refresh_current_interface(self, ignore1=None):
+        cp = self.current_interface()
+        if cp is None:
+            return
+
+        self.refresh_interface(None, None, cp.get_name())
+
+    def current_interface(self):
+        sel = self.window.get_widget("interface-list").get_selection()
+        active = sel.get_selected()
+        if active[1] != None:
+            currname = active[0].get_value(active[1], 0)
+            return self.conn.get_interface(currname)
+
+        return None
+
+    def interface_apply(self, src):
+        interface = self.current_interface()
+        if interface is None:
+            return
+
+        start_list = self.window.get_widget("interface-startmode")
+        model = start_list.get_model()
+        newmode = model[start_list.get_active()][0]
+
+        try:
+            interface.set_startmode(newmode)
+        except Exception, e:
+            self.err.show_err(_("Error setting interface startmode: %s") %
+                              str(e), "".join(traceback.format_exc()))
+            return
+
+        # XXX: This will require an interface restart
+        self.window.get_widget("interface-apply").set_sensitive(False)
+
+    def interface_startmode_changed(self, src):
+        self.window.get_widget("interface-apply").set_sensitive(True)
+
+    def set_interface_error_page(self, msg):
+        self.reset_interface_state()
+        self.window.get_widget("interface-pages").set_current_page(
+                                                        INTERFACE_PAGE_ERROR)
+        self.window.get_widget("interface-error-label").set_text(msg)
+
+    def interface_selected(self, src):
+        selected = src.get_selected()
+        if selected[1] is None or \
+           selected[0].get_value(selected[1], 0) is None:
+            self.set_interface_error_page(_("No interface selected."))
+            return
+
+        self.window.get_widget("interface-pages").set_current_page(
+                                                        INTERFACE_PAGE_INFO)
+        name = selected[0].get_value(selected[1], 0)
+        interface = self.conn.get_interface(name)
+        children = interface.get_slaves()
+        itype = interface.get_type()
+        mac = interface.get_mac()
+        active = interface.is_active()
+        startmode = interface.get_startmode()
+
+        self.window.get_widget("interface-details").set_sensitive(True)
+        self.window.get_widget("interface-name").set_markup(
+            "<b>%s %s:</b>" % (interface.get_pretty_type(),
+                               interface.get_name()))
+        self.window.get_widget("interface-mac").set_text(mac or _("Unknown"))
+
+        self.window.get_widget("interface-state-icon").set_from_pixbuf(
+            (active and self.PIXBUF_STATE_RUNNING) or self.PIXBUF_STATE_SHUTOFF)
+        self.window.get_widget("interface-state").set_text(
+                                    (active and _("Active")) or _("Inactive"))
+
+        self.window.get_widget("interface-startmode").hide()
+        self.window.get_widget("interface-startmode-label").show()
+        self.window.get_widget("interface-startmode-label").set_text(startmode)
+
+        used_by = util.iface_in_use_by(self.conn, name)
+        self.window.get_widget("interface-inuseby").set_text(used_by or "-")
+
+        self.window.get_widget("interface-delete").set_sensitive(not active)
+        self.window.get_widget("interface-stop").set_sensitive(active)
+        self.window.get_widget("interface-start").set_sensitive(not active)
+        self.window.get_widget("interface-apply").set_sensitive(False)
+
+        show_child = (children or
+                      itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
+                                Interface.Interface.INTERFACE_TYPE_BOND])
+        self.window.get_widget("interface-child-box").set_property("visible",
+                                                                   show_child)
+        self.populate_interface_children()
+
+    def refresh_interface(self, src, uri, name):
+        iface_list = self.window.get_widget("interface-list")
+        sel = iface_list.get_selection()
+        active = sel.get_selected()
+
+        for row in iface_list.get_model():
+            if row[0] == name:
+                row[4] = self.conn.get_interface(name).is_active()
+
+        if active[1] != None:
+            currname = active[0].get_value(active[1], 0)
+            if currname == name:
+                self.interface_selected(sel)
+
+
+    def reset_interface_state(self):
+        if not self.conn.interface_capable:
+            self.window.get_widget("interface-add").set_sensitive(False)
+        self.window.get_widget("interface-delete").set_sensitive(False)
+        self.window.get_widget("interface-stop").set_sensitive(False)
+        self.window.get_widget("interface-start").set_sensitive(False)
+        self.window.get_widget("interface-apply").set_sensitive(False)
+
+    def repopulate_interfaces(self, src, uri, name):
+        interface_list = self.window.get_widget("interface-list")
+        self.populate_interfaces(interface_list.get_model())
+
+    def populate_interfaces(self, model):
+        iface_list = self.window.get_widget("interface-list")
+        model.clear()
+        for name in self.conn.list_interface_names():
+            iface = self.conn.get_interface(name)
+            model.append([name, iface.get_name(), "network-idle",
+                          gtk.ICON_SIZE_LARGE_TOOLBAR,
+                          bool(iface.is_active())])
+
+        _iter = model.get_iter_first()
+        if _iter:
+            iface_list.get_selection().select_iter(_iter)
+        iface_list.get_selection().emit("changed")
+
+    def populate_interface_children(self):
+        interface = self.current_interface()
+        child_list = self.window.get_widget("interface-child-list")
+        model = child_list.get_model()
+        model.clear()
+
+        if not interface:
+            return
+
+        for name, itype in interface.get_slaves():
+            row = [name, itype]
+            model.append(row)
 
 
 # These functions are broken out, since they are used by storage browser

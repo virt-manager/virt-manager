@@ -484,3 +484,17 @@ def check_path_search_for_qemu(parent, config, conn, path):
     if chkres:
         config.add_perms_fix_ignore(errors.keys())
 
+######################################
+# Interface startmode widget builder #
+######################################
+
+def build_startmode_combo(start_list):
+    start_model = gtk.ListStore(str)
+    start_list.set_model(start_model)
+    text = gtk.CellRendererText()
+    start_list.pack_start(text, True)
+    start_list.add_attribute(text, 'text', 0)
+    start_model.append(["none"])
+    start_model.append(["onboot"])
+    start_model.append(["hotplug"])
+

@@ -867,8 +867,6 @@ class vmmAddHardware(gobject.GObject):
 
 
     def finish(self, ignore=None):
-        hw = self.get_config_hardware_type()
-
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
