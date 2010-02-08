@@ -32,7 +32,7 @@ from virtManager.connection import vmmConnection
 from virtManager.createnet import vmmCreateNetwork
 from virtManager.createpool import vmmCreatePool
 from virtManager.createvol import vmmCreateVolume
-#from virtManager.createinterface import vmmCreateInterface
+from virtManager.createinterface import vmmCreateInterface
 from virtManager.error import vmmErrorDialog
 from virtManager.graphwidgets import Sparkline
 
@@ -808,9 +808,6 @@ class vmmHost(gobject.GObject):
                               "".join(traceback.format_exc()))
 
     def add_interface(self, src):
-        # Will be implemented shortly
-        return
-
         try:
             if self.addinterface is None:
                 self.addinterface = vmmCreateInterface(self.config, self.conn)
