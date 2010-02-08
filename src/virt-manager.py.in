@@ -284,9 +284,6 @@ def main():
     setup_i18n()
     setup_pypath()
 
-    (options, ignore) = parse_commandline()
-    setup_logging(options.debug)
-
     # Urgh, pygtk merely logs a warning when failing to open
     # the X11 display connection, and lets everything carry
     # on as if all were fine. Ultimately bad stuff happens,
@@ -307,6 +304,9 @@ def main():
         # Damned if we do, damned if we dont :-)(
         raise RuntimeError(_("Unable to initialize GTK: %s") % str(e))
     warnings.resetwarnings()
+
+    (options, ignore) = parse_commandline()
+    setup_logging(options.debug)
 
     # Make sure we have a sufficiently new virtinst version, since we are
     # very closely tied to the lib
