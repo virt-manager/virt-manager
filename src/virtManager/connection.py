@@ -1354,19 +1354,18 @@ class vmmConnection(gobject.GObject):
         (startVMs, newVMs, oldVMs,
          self.vms, self.activeUUIDs) = self._update_vms()
 
-        # Make sure device polling is setup
-        if not self.netdev_initialized:
-            self._init_netdev()
-
-        if not self.mediadev_initialized:
-            self._init_mediadev()
-
         def tick_send_signals():
             """
             Responsible for signaling the UI for any updates. All possible UI
             updates need to go here to enable threading that doesn't block the
             app with long tick operations.
             """
+            # Make sure device polling is setup
+            if not self.netdev_initialized:
+                self._init_netdev()
+
+            if not self.mediadev_initialized:
+                self._init_mediadev()
 
             # Update VM states
             for uuid in oldVMs:
