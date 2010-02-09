@@ -1,4 +1,334 @@
+2010-02-08  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virt-manager.schemas.in, src/virtManager/config.py,
+	src/virtManager/host.py, src/virtManager/preferences.py, src/vmm-
+	preferences.glade:
+	host: Confirm before starting/stopping interfaces
+	[fe06b37592f8] [tip]
+
+	* tests/Makefile.am:
+	Fix 'tests' install to not end up in RPM
+	[85e4bc132ca8]
+
+	* po/POTFILES.in, po/virt-manager.pot,
+	src/virtManager/createinterface.py, src/virtManager/host.py, src
+	/vmm-create-interface.glade:
+	Add libvirt interface create wizard.
+	[0b4c598a3398]
+
+	* src/virtManager/addhardware.py, src/virtManager/domain.py,
+	src/virtManager/host.py, src/virtManager/interface.py,
+	src/virtManager/uihelpers.py, src/virtManager/util.py, src/vmm-
+	host.glade:
+	List libvirt interfaces in host details view.
+
+	We use a similar look to storage and virtual network management.
+	[abc599fa7f63]
+
+	* src/virt-manager.py.in:
+	Abide gtk cmdline options
+
+	By parsing opts later, GTK seems to auto parse and abide options
+	like
+	--sync.
+	[876f708ad69b]
+
+	* src/virtManager/connection.py:
+	connection: Make sure HAL initializers are run thread safe.
+	[295646fddf43]
+
+2010-02-07  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py, src/virtManager/details.py, src/vmm-
+	create.glade, src/vmm-details.glade:
+	create: Add an option to 'customize before install'
+
+	This drops the user into a 'details' dialog where they can add,
+	remove, or tweaks settings before starting the install.
+	[fa2d764e580a]
+
+	* src/virtManager/domain.py:
+	domain: Add vmmDomainVirtinst class.
+
+	A domain class backed by a virtinst Guest, this allows for
+	customizing a VM before installing.
+	[40b1e3aa7761]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py:
+	domain: Factor out a vmmDomainBase class
+
+	This will be used to implement a virtinst Guest backed domain, to
+	allow customizing a VM before install.
+
+	Also make some small changes to how we add and remove devices.
+	[6ce626ed6626]
+
+2010-02-06  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py:
+	addhw: Have all device creation go through the same code path.
+	[70511ece28e9]
+
+	* src/virtManager/addhardware.py:
+	addhw: Use common setup_dev function when building XML
+	[70add1b5ef69]
+
+2010-02-05  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	create: Move default guest device set up out of finish phase.
+	[b88c77063e13]
+
+	* src/virtManager/domain.py:
+	domain: Drop unneeded define_vcpus params
+	[c00d4bd44635]
+
+2009-12-08  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	domain: Remove redundant method
+	[2037454810a9]
+
+2010-02-05  aguskov  <aguskov@fedoraproject.org>
+
+	* po/ru.po:
+	Sending translation for Russian
+	[a1f645aff26a]
+
+2010-02-03  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virt-manager.py.in:
+	Better error reporting when opening ~/.virt-manager
+	[96cd3bb0cdc0]
+
+2010-02-02  aguskov  <aguskov@fedoraproject.org>
+
+	* po/ru.po:
+	Sending translation for Russian
+	[30f41911fc97]
+
+2010-02-01  mgiri  <mgiri@fedoraproject.org>
+
+	* po/or.po:
+	Sending translation for Oriya
+	[228ab9a3f5a4]
+
+2010-01-30  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	domain: Refresh inactive XML on demand
+
+	It was a useless operation, whenever we fetch inactive XML we always
+	want the latest and greatest, so don't cache anything.
+	[622d8262e6eb]
+
+	* src/virtManager/config.py:
+	config: Store saved paths using set_string
+	[dd419582d006]
+
+2010-01-29  kkrothap  <kkrothap@fedoraproject.org>
+
+	* po/te.po:
+	Sending translation for Telugu
+	[4a27ff33464c]
+
+2010-01-28  guidograzioli  <guidograzioli@fedoraproject.org>
+
+	* po/it.po:
+	Sending translation for Italian
+	[db1c5b65e14c]
+
+2010-01-27  Cole Robinson  <crobinso@redhat.com>
+
+	* tests/pylint-virt-manager.sh:
+	Fix an error detecting pylint features
+	[d228d96b774f]
+
+	* po/as.po, po/bg.po, po/bn_IN.po, po/bs.po, po/ca.po, po/cs.po,
+	po/da.po, po/de.po, po/es.po, po/fi.po, po/fr.po, po/gu.po,
+	po/hi.po, po/hr.po, po/hu.po, po/is.po, po/it.po, po/ja.po,
+	po/kn.po, po/ko.po, po/ml.po, po/mr.po, po/ms.po, po/nb.po,
+	po/nl.po, po/or.po, po/pa.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sr.po, po/sr@latin.po, po/sv.po, po/ta.po,
+	po/te.po, po/tr.po, po/uk.po, po/virt-manager.pot, po/zh_CN.po,
+	po/zh_TW.po, src/virtManager/migrate.py:
+	Add a comment explaining an ambiguous message needing translation.
+	[83bd6b5ee32c]
+
+	* src/virt-manager.py.in:
+	Make sure a default '_' implementation is always available
+
+	If things error out sufficiently earlier, '_' wouldn't have been
+	installed in the builtin namespace, so we will trigger an when
+	trying to show a translated error dialog.
+	[6511a0fa7057]
+
+2010-01-26  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/engine.py:
+	engine: Make sure a libvirtd restart doesn't lock the app
+
+	We were trying to close the connection without thread locking (and
+	closing can emit a signal which updates the UI).
+	[3fc51aee7be3]
+
+2010-01-25  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	create: Fix creation when no network sources are found
+	[0ade95843eba]
+
+	* src/virtManager/connect.py, src/virtManager/connection.py:
+	Catch errors when connection to dbus
+	[292f859a53fb]
+
+2010-01-25  guidograzioli  <guidograzioli@fedoraproject.org>
+
+	* po/it.po:
+	Sending translation for Italian
+	[01d6dcbfc6f7]
+
+2010-01-19  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/manager.py:
+	manager: Safely set toolbar "icon-size" prop
+	[f5a21bd1b909]
+
+	* src/virt-manager.py.in:
+	virt-manager.py: Remove some trailing whitespace
+	[f916b75d6341]
+
+	* src/virtManager/error.py, src/virtManager/util.py:
+	util: Break out common function to conditionally set gtk property
+	[f0dd9897a687]
+
+2010-01-14  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/error.py:
+	error: Fix launching error dialog on pygtk < 2.10
+	[e95681a690fd]
+
+2010-01-11  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py:
+	console: Try to catch xen race errors when opening VNC
+	[d27aff0a17da]
+
+	* Makefile.am:
+	Don't blindly include tests/* in dist tarball.
+	[cf92153ce1c1]
+
+2010-01-06  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	migrate: Don't shorten URI IP addresses
+	[69182866528d]
+
+	* src/virtManager/console.py:
+	console: Fix opening VNC console over tcp URI with manual port
+	[3899c5824b99]
+
+2010-01-05  aguskov  <aguskov@fedoraproject.org>
+
+	* po/ru.po:
+	Sending translation for Russian
+	[bcec4c22c4c1]
+
+2010-01-04  aguskov  <aguskov@fedoraproject.org>
+
+	* po/ru.po:
+	Sending translation for Russian
+	[0edce500f214]
+
+2010-01-03  aguskov  <aguskov@fedoraproject.org>
+
+	* po/ru.po:
+	Sending translation for Russian
+	[154aee699229]
+
+2010-01-02  aguskov  <aguskov@fedoraproject.org>
+
+	* po/ru.po:
+	Sending translation for Russian
+	[89308cf0f2c8]
+
+2009-12-31  aguskov  <aguskov@fedoraproject.org>
+
+	* po/ru.po:
+	Sending translation for Russian
+	[e96fee4f1931]
+
+	* po/ru.po:
+	Sending translation for Russian
+	[809a60126a95]
+
+2009-12-24  elsupergomez  <elsupergomez@fedoraproject.org>
+
+	* po/es.po:
+	Sending translation for Spanish
+	[adae80a6ebfb]
+
+2009-12-22  Laurent Léonard  <laurent@open-minds.org>
+
+	* po/fr.po:
+	Updated french translation
+	[233d4c6cbd15]
+
+2009-12-19  raven  <raven@fedoraproject.org>
+
+	* po/pl.po:
+	Sending translation for Polish
+	[076be6aa9f50]
+
+2009-12-18  logan  <logan@fedoraproject.org>
+
+	* po/es.po:
+	Sending translation for Spanish
+	[54aff4e448be]
+
+2009-12-16  logan  <logan@fedoraproject.org>
+
+	* po/es.po:
+	Sending translation for Spanish
+	[a917689a7e4a]
+
+2009-12-15  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/network.py:
+	network: Future proof pretty_desc
+	[e7413b0fd6e8]
+
+2009-12-15  logan  <logan@fedoraproject.org>
+
+	* po/es.po:
+	Sending translation for Spanish
+	[80bdaec08744]
+
 2009-12-14  Cole Robinson  <crobinso@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.8.1-1 for changeset cc8c4ce89bfa
+	[ffa8425180e9]
+
+	* .hgtags:
+	Added tag RELEASE-0.8.2-1 for changeset 0a1b58157a5e
+	[86b3df200821]
+
+	* ChangeLog, NEWS, configure.ac, po/as.po, po/bg.po, po/bn_IN.po,
+	po/bs.po, po/ca.po, po/cs.po, po/da.po, po/de.po, po/es.po,
+	po/fi.po, po/fr.po, po/gu.po, po/hi.po, po/hr.po, po/hu.po,
+	po/is.po, po/it.po, po/ja.po, po/kn.po, po/ko.po, po/ml.po,
+	po/mr.po, po/ms.po, po/nb.po, po/nl.po, po/or.po, po/pa.po,
+	po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po, po/ru.po, po/sr.po,
+	po/sr@latin.po, po/sv.po, po/ta.po, po/te.po, po/tr.po, po/uk.po, po
+	/virt-manager.pot, po/zh_CN.po, po/zh_TW.po, virt-manager.spec.in:
+	Prep for release
+	[0a1b58157a5e] [RELEASE-0.8.2-1]
+
+	* man/Makefile.am:
+	Don't show 'perl' in man page
+	[65e81192efe4]
 
 	* src/virtManager/addhardware.py, src/virtManager/clone.py,
 	src/virtManager/create.py, src/virtManager/createnet.py,
@@ -12,7 +342,7 @@
 	pieces, however the stock dialog is pretty restrictive WRT widget
 	spacing, and prevents us from make our nice blue header, so we are
 	stuck with gtk.Windows
-	[6420482fe6e4] [tip]
+	[6420482fe6e4]
 
 	* src/virtManager/addhardware.py, src/virtManager/clone.py,
 	src/virtManager/create.py, src/virtManager/createnet.py,
@@ -309,7 +639,7 @@
 	po/ru.po, po/sr.po, po/sr@latin.po, po/sv.po, po/ta.po, po/te.po,
 	po/tr.po, po/uk.po, po/zh_CN.po, po/zh_TW.po, virt-manager.spec.in:
 	Prep for release (Update NEWS, translations, configure...)
-	[cc8c4ce89bfa]
+	[cc8c4ce89bfa] [RELEASE-0.8.1-1]
 
 	* src/virtManager/about.py, virt-manager.spec.in:
 	Drop gnomevfs dependency

@@ -146,6 +146,10 @@ fi
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Mon Feb  8 2010 Cole Robinson <crobinso@redhat.com> - 0.8.3-1
+- Manage network interfaces: start, stop, view, provision bridges, bonds, etc.
+- Option to 'customize VM before install'.
+
 * Mon Dec 14 2009 Cole Robinson <crobinso@redhat.com> - 0.8.2-1
 - Fix right click in the manager window to operate on the clicked row
 - Running on a new machine / user account no longer produces a traceback.
