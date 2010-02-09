@@ -39,9 +39,6 @@ from virtManager.graphwidgets import Sparkline
 INTERFACE_PAGE_INFO = 0
 INTERFACE_PAGE_ERROR = 1
 
-# TODO: Improve no interface support and no interface selected sensitivity
-# Do the same for storage a networks
-
 class vmmHost(gobject.GObject):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
@@ -771,6 +768,20 @@ class vmmHost(gobject.GObject):
         if interface is None:
             return
 
+        do_prompt = self.config.get_confirm_interface()
+
+        if do_prompt:
+            res = self.err.warn_chkbox(
+                    text1=_("Are you sure you want to stop the interface "
+                            "'%s'?" % interface.get_name()),
+                    chktext=_("Don't ask me again for interface start/stop."),
+                    buttons=gtk.BUTTONS_YES_NO)
+
+            response, skip_prompt = res
+            if not response:
+                return
+            self.config.set_confirm_interface(not skip_prompt)
+
         try:
             interface.stop()
         except Exception, e:
@@ -782,6 +793,20 @@ class vmmHost(gobject.GObject):
         interface = self.current_interface()
         if interface is None:
             return
+
+        do_prompt = self.config.get_confirm_interface()
+
+        if do_prompt:
+            res = self.err.warn_chkbox(
+                    text1=_("Are you sure you want to start the interface "
+                            "'%s'?" % interface.get_name()),
+                    chktext=_("Don't ask me again for interface start/stop."),
+                    buttons=gtk.BUTTONS_YES_NO)
+
+            response, skip_prompt = res
+            if not response:
+                return
+            self.config.set_confirm_interface(not skip_prompt)
 
         try:
             interface.start()

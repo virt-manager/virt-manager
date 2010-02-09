@@ -54,6 +54,7 @@ class vmmPreferences(gobject.GObject):
         self.config.on_confirm_poweroff_changed(self.refresh_confirm_poweroff)
         self.config.on_confirm_pause_changed(self.refresh_confirm_pause)
         self.config.on_confirm_removedev_changed(self.refresh_confirm_removedev)
+        self.config.on_confirm_interface_changed(self.refresh_confirm_interface)
 
         self.refresh_view_system_tray()
         self.refresh_update_interval()
@@ -69,6 +70,7 @@ class vmmPreferences(gobject.GObject):
         self.refresh_confirm_poweroff()
         self.refresh_confirm_pause()
         self.refresh_confirm_removedev()
+        self.refresh_confirm_interface()
 
         self.window.signal_autoconnect({
             "on_prefs_system_tray_toggled" : self.change_view_system_tray,
@@ -88,6 +90,7 @@ class vmmPreferences(gobject.GObject):
             "on_prefs_confirm_poweroff_toggled": self.change_confirm_poweroff,
             "on_prefs_confirm_pause_toggled": self.change_confirm_pause,
             "on_prefs_confirm_removedev_toggled": self.change_confirm_removedev,
+            "on_prefs_confirm_interface_toggled": self.change_confirm_interface,
             })
         util.bind_escape_key_close(self)
 
@@ -155,6 +158,9 @@ class vmmPreferences(gobject.GObject):
     def refresh_confirm_removedev(self, ignore1=None, ignore2=None,
                                   ignore3=None, ignore4=None):
         self.window.get_widget("prefs-confirm-removedev").set_active(self.config.get_confirm_removedev())
+    def refresh_confirm_interface(self, ignore1=None, ignore2=None,
+                                  ignore3=None, ignore4=None):
+        self.window.get_widget("prefs-confirm-interface").set_active(self.config.get_confirm_interface())
 
     def change_view_system_tray(self, src):
         self.config.set_view_system_tray(src.get_active())
@@ -189,6 +195,8 @@ class vmmPreferences(gobject.GObject):
         self.config.set_confirm_pause(src.get_active())
     def change_confirm_removedev(self, src):
         self.config.set_confirm_removedev(src.get_active())
+    def change_confirm_interface(self, src):
+        self.config.set_confirm_interface(src.get_active())
 
     def show_help(self, src):
         # From the Preferences window, show the help document from

@@ -326,6 +326,19 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/::PACKAGE::/confirm/interface_power</key>
+      <applyto>/apps/::PACKAGE::/confirm/interface_power</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>bool</type>
+      <default>1</default>
+
+      <locale name="C">
+        <short>Confirm device interface start and stop</short>
+        <long>Whether we require confirmation to start or stop a libvirt virtual interface</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/::PACKAGE::/manager_window_height</key>
       <applyto>/apps/::PACKAGE::/manager_window_height</applyto>
       <owner>::PACKAGE::</owner>
