@@ -291,7 +291,7 @@ class vmmDetails(gobject.GObject):
         self.populate_hw_list()
         self.repopulate_boot_list()
 
-        self.hw_selected(page=0)
+        self.hw_selected()
         self.refresh_vm_info()
 
 
@@ -601,14 +601,19 @@ class vmmDetails(gobject.GObject):
         else:
             return active[0].get_value(active[1], field)
 
-    def hw_selected(self, src=None, page=None, selected=True):
-        pagetype = page
-        if pagetype is None:
-            pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+    def force_get_hw_pagetype(self, page=None):
+        if page:
+            return page
 
-        if pagetype is None:
-            pagetype = HW_LIST_TYPE_GENERAL
+        page = self.get_hw_selection(HW_LIST_COL_TYPE)
+        if page is None:
+            page = HW_LIST_TYPE_GENERAL
             self.window.get_widget("hw-list").get_selection().select_path(0)
+
+        return page
+
+    def hw_selected(self, src=None, page=None, selected=True):
+        pagetype = self.force_get_hw_pagetype(page)
 
         self.window.get_widget("config-remove").set_sensitive(True)
         self.window.get_widget("hw-panel").set_sensitive(True)
