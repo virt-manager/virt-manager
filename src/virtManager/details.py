@@ -433,6 +433,12 @@ class vmmDetails(gobject.GObject):
         hwCol.add_attribute(hw_img, 'icon-name', HW_LIST_COL_ICON_NAME)
         self.window.get_widget("hw-list").append_column(hwCol)
 
+        # Description text view
+        desc = self.window.get_widget("overview-description")
+        buf = gtk.TextBuffer()
+        buf.connect("changed", self.config_enable_apply)
+        desc.set_buffer(buf)
+
         # Clock combo
         clock_combo = self.window.get_widget("overview-clock-combo")
         clock_model = gtk.ListStore(str)
@@ -917,7 +923,7 @@ class vmmDetails(gobject.GObject):
     # Details/Hardware listeners #
     ##############################
 
-    def config_enable_apply(self, ignore):
+    def config_enable_apply(self, ignore1=None, ignore2=None):
         self.window.get_widget("config-apply").set_sensitive(True)
 
     # Overview -> Security
@@ -1018,6 +1024,7 @@ class vmmDetails(gobject.GObject):
 
         info = self.get_hw_selection(HW_LIST_COL_DEVICE)
 
+        print pagetype
         if pagetype is HW_LIST_TYPE_GENERAL:
             ret = self.config_overview_apply()
         elif pagetype is HW_LIST_TYPE_CPU:
@@ -1062,14 +1069,20 @@ class vmmDetails(gobject.GObject):
 
         selabel = self.window.get_widget("security-label").get_text()
 
+        # Description
+        desc_widget = self.window.get_widget("overview-description")
+        desc = desc_widget.get_buffer().get_property("text") or ""
+
         return self._change_config_helper([self.vm.define_acpi,
                                            self.vm.define_apic,
                                            self.vm.define_clock,
-                                           self.vm.define_seclabel],
+                                           self.vm.define_seclabel,
+                                           self.vm.define_description,],
                                           [(enable_acpi,),
                                            (enable_apic,),
                                            (clock,),
-                                           (semodel, setype, selabel)])
+                                           (semodel, setype, selabel),
+                                           (desc,)])
 
     # CPUs
     def config_vcpus_apply(self):
@@ -1317,6 +1330,9 @@ class vmmDetails(gobject.GObject):
         # Basic details
         self.window.get_widget("overview-name").set_text(self.vm.get_name())
         self.window.get_widget("overview-uuid").set_text(self.vm.get_uuid())
+        desc = self.vm.get_description() or ""
+        desc_widget = self.window.get_widget("overview-description")
+        desc_widget.get_buffer().set_text(desc)
 
         # Hypervisor Details
         self.window.get_widget("overview-hv").set_text(self.vm.get_pretty_hv_type())

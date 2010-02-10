@@ -170,6 +170,8 @@ class vmmDomainBase(gobject.GObject):
         raise NotImplementedError()
     def define_clock(self, newvalue):
         raise NotImplementedError()
+    def define_description(self, newvalue):
+        raise NotImplementedError()
 
     def define_disk_readonly(self, dev_id_info, do_readonly):
         raise NotImplementedError()
@@ -251,6 +253,9 @@ class vmmDomainBase(gobject.GObject):
 
     def get_clock(self):
         return vutil.get_xml_path(self.get_xml(), "/domain/clock/@offset")
+
+    def get_description(self):
+        return vutil.get_xml_path(self.get_xml(), "/domain/description")
 
     def vcpu_pinning(self):
         cpuset = vutil.get_xml_path(self.get_xml(), "/domain/vcpu/@cpuset")
@@ -1734,6 +1739,30 @@ class vmmDomain(vmmDomainBase):
 
         return self._redefine(util.xml_parse_wrapper, change_clock, newclock)
 
+    def define_description(self, newvalue):
+        newvalue = vutil.xml_escape(newvalue)
+        if newvalue == self.get_description():
+            return
+
+        def change_desc(doc, ctx, newdesc):
+            desc_node = ctx.xpathEval("/domain/description")
+            desc_node = (desc_node and desc_node[0] or None)
+            dom_node = ctx.xpathEval("/domain")[0]
+
+            if newdesc:
+                if not desc_node:
+                    desc_node = dom_node.newChild(None, "description", None)
+
+                desc_node.setContent(newdesc)
+
+            elif desc_node:
+                desc_node.unlinkNode()
+                desc_node.freeNode()
+
+            return doc.serialize()
+
+        return self._redefine(util.xml_parse_wrapper, change_desc, newvalue)
+
     def _change_disk_param(self, doc, ctx, dev_id_info, node_name, newvalue):
         disk_node = self._get_device_xml_nodes(ctx, "disk", dev_id_info)[0]
 
@@ -2013,6 +2042,11 @@ class vmmDomainVirtinst(vmmDomainBase):
             self._backend.clock.offset = newvalue
         self._redefine(change_clock)
 
+    def define_description(self, newvalue):
+        def change_desc():
+            self._backend.description = newvalue
+        self._redefine(change_desc)
+
     def define_disk_readonly(self, dev_id_info, do_readonly):
         dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_DISK,
                                           dev_id_info)
@@ -2105,7 +2139,7 @@ class vmmDomainVirtinst(vmmDomainBase):
             # This whole process is a little funky, since we need a decent
             # amount of info to determine which specific hostdev to remove
 
-            def found_func(rmdev):
+            def test_func(rmdev):
                 host_type = dev_id_info["type"]
                 addr = dev_id_info.get("address")
                 vend = dev_id_info.get("vendor")
@@ -2136,14 +2170,17 @@ class vmmDomainVirtinst(vmmDomainBase):
 
                 return False
 
+            found_func = test_func
 
         elif dev_type == VirtualDevice.VIRTUAL_DEV_VIDEO:
             model, ram, heads = dev_id_info
 
-            def found_func(rmdev):
+            def test_func(rmdev):
                 return (rmdev.model_type == model and
                         rmdev.vram == ram and
                         rmdev.heads == heads)
+
+            found_func = test_func
 
         else:
             raise RuntimeError(_("Unknown device type '%s'") % dev_type)
