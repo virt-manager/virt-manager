@@ -1492,12 +1492,8 @@ class vmmCreate(gobject.GObject):
             logging.debug("Starting background install process")
 
             guest.conn = util.dup_conn(self.config, self.conn)
-            # FIXME: This is why we need a more unified virtinst device API: so
-            #        we can do things like swap out the connection on all
-            #        devices for a forked one. At least we should get a helper
-            #        method in the Guest API.
-            for disk in guest.disks:
-                disk.conn = guest.conn
+            for dev in guest.get_all_devices():
+                dev.conn = guest.conn
 
             dom = guest.start_install(False, meter = meter)
             if dom == None:
