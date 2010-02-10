@@ -384,6 +384,10 @@ class Sparkline(gtk.DrawingArea):
 
             draw_line(cairo_ct, cell_area, points)
             if self.filled:
+                # XXX: Fixes a fully filled graph from having an oddly
+                #      tapered in end (bug 560913). Need to figure out
+                #      what's really going on.
+                points = [(0, cell_area.height)] + points
                 draw_fill(cairo_ct, cell_area, points, taper=True)
 
         # Stop clipping
