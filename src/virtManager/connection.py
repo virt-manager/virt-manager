@@ -269,6 +269,14 @@ class vmmConnection(gobject.GObject):
         self._caps_xml = self.vmm.getCapabilities()
         self._caps = virtinst.CapabilitiesParser.parse(self._caps_xml)
 
+    def get_capabilities_xml(self):
+        xml = None
+        while xml == None:
+            self._check_caps()
+            xml = self._caps_xml
+
+        return xml
+
     def get_capabilities(self):
         # Make sure we aren't returning None
         caps = None
@@ -276,7 +284,7 @@ class vmmConnection(gobject.GObject):
             self._check_caps()
             caps = self._caps
 
-        return self._caps
+        return caps
 
     def get_max_vcpus(self, _type=None):
         return virtinst.util.get_max_vcpus(self.vmm, _type)
@@ -372,20 +380,11 @@ class vmmConnection(gobject.GObject):
 
     def is_xen(self):
         scheme = virtinst.util.uri_split(self.uri)[0]
-        if scheme.startswith("xen"):
-            return True
-        return False
+        return scheme.startswith("xen")
 
-    def is_kvm_supported(self):
-        if self.is_qemu_session():
-            return False
-
-        caps = self.get_capabilities()
-        for guest in caps.guests:
-            for dom in guest.domains:
-                if dom.hypervisor_type == "kvm":
-                    return True
-        return False
+    def is_qemu(self):
+        scheme = virtinst.util.uri_split(self.uri)[0]
+        return scheme.startswith("qemu")
 
     def is_remote(self):
         return virtinst.util.is_uri_remote(self.uri)
@@ -410,6 +409,21 @@ class vmmConnection(gobject.GObject):
         if scheme.startswith("test"):
             return True
         return False
+
+    # Connection capabilities debug helpers
+    def is_kvm_supported(self):
+        return self.get_capabilities().is_kvm_available()
+
+    def no_install_options(self):
+        return self.get_capabilities().no_install_options()
+
+    def hw_virt_supported(self):
+        return self.get_capabilities().hw_virt_supported()
+
+    def is_bios_virt_disabled(self):
+        return self.get_capabilities().is_bios_virt_disabled()
+
+    # Connection pretty print routines
 
     def _get_pretty_desc(self, active, shorthost):
         def match_whole_string(orig, reg):
@@ -962,8 +976,9 @@ class vmmConnection(gobject.GObject):
             gobject.idle_add(util.idle_emit, self, "state-changed")
 
             if self.state == self.STATE_ACTIVE:
+                caps = self.get_capabilities_xml()
                 logging.debug("%s capabilities:\n%s" %
-                              (self.get_uri(), self.vmm.getCapabilities()))
+                              (self.get_uri(), caps))
 
                 self.tick()
                 # If VMs disappeared since the last time we connected to

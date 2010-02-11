@@ -100,7 +100,7 @@
                       <widget class="GtkVBox" id="vbox4">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">40</property>
+                        <property name="spacing">20</property>
                         <child>
                           <widget class="GtkVBox" id="vbox5">
                             <property name="visible">True</property>
@@ -215,85 +215,18 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkVBox" id="vbox6">
+                          <widget class="GtkHBox" id="startup-error-box">
                             <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
                             <child>
-                              <widget class="GtkVBox" id="install-box">
+                              <widget class="GtkAlignment" id="alignment19">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">8</property>
+                                <property name="left_padding">15</property>
                                 <child>
-                                  <widget class="GtkLabel" id="label12">
+                                  <widget class="GtkImage" id="image1">
                                     <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Choose how you would like to install the operating system</property>
+                                    <property name="stock">gtk-dialog-warning</property>
                                   </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <widget class="GtkAlignment" id="alignment13">
-                                    <property name="visible">True</property>
-                                    <property name="left_padding">15</property>
-                                    <child>
-                                      <widget class="GtkVBox" id="vbox19">
-                                        <property name="visible">True</property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="spacing">3</property>
-                                        <child>
-                                          <widget class="GtkRadioButton" id="method-local">
-                                            <property name="label" translatable="yes">_Local install media (ISO image or CDROM)</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="active">True</property>
-                                            <property name="draw_indicator">True</property>
-                                          </widget>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkRadioButton" id="method-tree">
-                                            <property name="label" translatable="yes">Network _Install (HTTP, FTP, or NFS)</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="draw_indicator">True</property>
-                                            <property name="group">method-local</property>
-                                          </widget>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkRadioButton" id="method-pxe">
-                                            <property name="label" translatable="yes">Network _Boot (PXE)</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="draw_indicator">True</property>
-                                            <property name="group">method-local</property>
-                                          </widget>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="position">2</property>
-                                          </packing>
-                                        </child>
-                                      </widget>
-                                    </child>
-                                  </widget>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
                                 </child>
                               </widget>
                               <packing>
@@ -304,7 +237,7 @@
                             <child>
                               <widget class="GtkLabel" id="startup-error">
                                 <property name="visible">True</property>
-                                <property name="xalign">0.05000000074505806</property>
+                                <property name="xalign">0</property>
                                 <property name="yalign">0</property>
                                 <property name="label" translatable="yes">Error message</property>
                               </widget>
@@ -316,6 +249,89 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkVBox" id="install-box">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">8</property>
+                            <child>
+                              <widget class="GtkLabel" id="label12">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Choose how you would like to install the operating system</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkAlignment" id="alignment13">
+                                <property name="visible">True</property>
+                                <property name="left_padding">15</property>
+                                <child>
+                                  <widget class="GtkVBox" id="vbox19">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">3</property>
+                                    <child>
+                                      <widget class="GtkRadioButton" id="method-local">
+                                        <property name="label" translatable="yes">_Local install media (ISO image or CDROM)</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkRadioButton" id="method-tree">
+                                        <property name="label" translatable="yes">Network _Install (HTTP, FTP, or NFS)</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <property name="group">method-local</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkRadioButton" id="method-pxe">
+                                        <property name="label" translatable="yes">Network _Boot (PXE)</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <property name="group">method-local</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </widget>

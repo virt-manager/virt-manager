@@ -187,12 +187,17 @@ class vmmCreate(gobject.GObject):
 
     # State init methods
     def startup_error(self, error):
-        self.window.get_widget("startup-error").show()
+        self.window.get_widget("startup-error-box").show()
         self.window.get_widget("install-box").hide()
         self.window.get_widget("create-forward").set_sensitive(False)
 
         self.window.get_widget("startup-error").set_text("Error: %s" % error)
         return False
+
+    def startup_warning(self, error):
+        self.window.get_widget("startup-error-box").show()
+        self.window.get_widget("startup-error").set_text("Warning: %s" %
+                                                         error)
 
     def set_initial_state(self):
 
@@ -297,7 +302,7 @@ class vmmCreate(gobject.GObject):
         self.failed_guest = None
         self.window.get_widget("create-pages").set_current_page(PAGE_NAME)
         self.page_changed(None, None, PAGE_NAME)
-        self.window.get_widget("startup-error").hide()
+        self.window.get_widget("startup-error-box").hide()
         self.window.get_widget("install-box").show()
 
         # Name page state
@@ -306,9 +311,16 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("method-local").set_active(True)
         self.window.get_widget("create-conn").set_active(-1)
         activeconn = self.populate_conn_list(urihint)
-        self.set_conn(activeconn)
+
+        try:
+            self.set_conn(activeconn)
+        except Exception, e:
+            logging.exception("Error setting create wizard conn state.")
+            return self.startup_error(str(e))
+
         if not activeconn:
-            return self.startup_error(_("No active connection to install on."))
+            return self.startup_error(
+                                _("No active connection to install on."))
 
         # Everything from this point forward should be connection independent
 
@@ -357,17 +369,43 @@ class vmmCreate(gobject.GObject):
         if self.conn.is_read_only():
             return self.startup_error(_("Connection is read only."))
 
+        if self.conn.no_install_options():
+            error = _("No hypervisor options were found for this\n"
+                      "connection.")
+
+            if self.conn.is_qemu():
+                error += "\n\n"
+                error += _("This usually means that qemu or kvm is not\n"
+                           "installed on your machine. Please ensure they\n"
+                           "are installed as intended.")
+            return self.startup_error(error)
+
         # A bit out of order, but populate arch + hv lists so we can
         # determine a default
         self.caps = self.conn.get_capabilities()
-
-        try:
-            self.change_caps()
-        except Exception, e:
-            logging.exception("Error determining default hypervisor")
-            return self.startup_error(_("No guests are supported for this"
-                                        " connection."))
+        self.change_caps()
         self.populate_hv()
+
+        if self.conn.is_xen():
+            if self.conn.hw_virt_supported():
+                if self.conn.is_bios_virt_disabled():
+                    error = _("Host supports full virtualization, but\n"
+                              "no related install options are available.\n"
+                              "This may mean support is disabled in your\n"
+                              "system BIOS.")
+                    self.startup_warning(error)
+
+            else:
+                error = _("Host does not appear to support hardware\n"
+                          "virtualization. Install options may be limited.")
+                self.startup_warning(error)
+
+        elif self.conn.is_qemu():
+            if not self.conn.is_kvm_supported():
+                error = _("KVM is not available. This may mean the KVM\n"
+                 "package is not installed, or the KVM kernel modules \n"
+                 "are not loaded. Your virtual machines may perform poorly.")
+                self.startup_warning(error)
 
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -658,12 +696,13 @@ class vmmCreate(gobject.GObject):
                     break
 
         (newg,
-         newdom) = virtinst.CapabilitiesParser.guest_lookup(conn=self.conn.vmm,
-                                                            caps=self.caps,
-                                                            os_type = gtype,
-                                                            type = dtype,
-                                                            accelerated=True,
-                                                            arch=arch)
+         newdom) = virtinst.CapabilitiesParser.guest_lookup(
+                                                        conn=self.conn.vmm,
+                                                        caps=self.caps,
+                                                        os_type = gtype,
+                                                        type = dtype,
+                                                        accelerated=True,
+                                                        arch=arch)
 
         if (self.capsguest and self.capsdomain and
             (newg.arch == self.capsguest.arch and
@@ -883,11 +922,16 @@ class vmmCreate(gobject.GObject):
         model = src.get_model()
 
         if idx < 0:
-            self.set_conn(None)
+            conn = None
+        else:
+            uri = model[idx][0]
+            conn = self.engine.connections[uri]["connection"]
+
+        # If we aren't visible, let reset_state handle this for us, which
+        # has a better chance of reporting error
+        if not self.is_visible():
             return
 
-        uri = model[idx][0]
-        conn = self.engine.connections[uri]["connection"]
         self.set_conn(conn)
 
     def hv_changed(self, src):
