@@ -23,6 +23,8 @@ import logging
 
 import virtinst
 
+from virtManager import util
+
 MEDIA_FLOPPY = "floppy"
 MEDIA_CDROM = "cdrom"
 
@@ -136,8 +138,8 @@ class vmmMediaDevice(gobject.GObject):
         if self.poll_signal:
             return
 
-        self.poll_signal = gobject.timeout_add(MEDIA_TIMEOUT * 1000,
-                                               self._poll_for_media)
+        self.poll_signal = util.safe_timeout_add(MEDIA_TIMEOUT * 1000,
+                                                 self._poll_for_media)
 
     def disable_poll_for_media(self):
         self.poll_signal = None

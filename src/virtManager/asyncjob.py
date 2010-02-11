@@ -25,6 +25,8 @@ import gtk.gdk
 import gtk.glade
 import gobject
 
+from virtManager import util
+
 # Displays a progress bar while executing the "callback" method.
 
 class vmmAsyncJob(gobject.GObject):
@@ -61,7 +63,7 @@ class vmmAsyncJob(gobject.GObject):
         self.is_pulsing = True
 
     def run(self):
-        timer = gobject.timeout_add (100, self.exit_if_necessary)
+        timer = util.safe_timeout_add(100, self.exit_if_necessary)
         self.topwin.present()
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
         self.bg_thread.start()
@@ -74,7 +76,7 @@ class vmmAsyncJob(gobject.GObject):
             # async dialog is running. This forces us to clean up properly
             # and not leave a dead process around.
             logging.debug("Forcing main_quit from async job.")
-            self._exit_if_necessary(force_exit=True)
+            self.exit_if_necessary(force_exit=True)
 
         self.topwin.destroy()
 
@@ -132,16 +134,10 @@ class vmmAsyncJob(gobject.GObject):
             return (None, None)
         return self._error_info
 
-    def exit_if_necessary(self):
-        gtk.gdk.threads_enter()
-        try:
-            return self._exit_if_necessary()
-        finally:
-            gtk.gdk.threads_leave()
-
-    def _exit_if_necessary(self, force_exit=False):
+    def exit_if_necessary(self, force_exit=False):
         if self.bg_thread.isAlive() and not force_exit:
-            if(self.is_pulsing):
+            if (self.is_pulsing):
+                # Don't call pulse_pbar: this function is thread wrapped
                 self.pbar.pulse()
             return True
         else:

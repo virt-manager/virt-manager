@@ -349,7 +349,7 @@ class vmmCreate(gobject.GObject):
 
         # Storage
         if not self.host_storage_timer:
-            self.host_storage_timer = gobject.timeout_add(3 * 1000,
+            self.host_storage_timer = util.safe_timeout_add(3 * 1000,
                                                           self.host_space_tick)
         self.window.get_widget("enable-storage").set_active(True)
         self.window.get_widget("config-storage-create").set_active(True)

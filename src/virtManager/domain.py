@@ -1357,7 +1357,7 @@ class vmmDomain(vmmDomainBase):
         if origxml != self._xml:
             # 'tick' to make sure we have the latest time
             self.tick(time.time())
-            gobject.idle_add(util.idle_emit, self, "config-changed")
+            util.safe_idle_add(util.idle_emit, self, "config-changed")
 
     def _redefine(self, xml_func, *args):
         """
@@ -1848,7 +1848,7 @@ class vmmDomain(vmmDomainBase):
                 self._startup_vcpus = None
                 self.vcpu_max_count()
             self.lastStatus = status
-            gobject.idle_add(util.idle_emit, self, "status-changed", status)
+            util.safe_idle_add(util.idle_emit, self, "status-changed", status)
 
 
     def tick(self, now):
@@ -1917,7 +1917,7 @@ class vmmDomain(vmmDomainBase):
 
         self.record.insert(0, newStats)
         self._update_status(info[0])
-        gobject.idle_add(util.idle_emit, self, "resources-sampled")
+        util.safe_idle_add(util.idle_emit, self, "resources-sampled")
 
 
 class vmmDomainVirtinst(vmmDomainBase):

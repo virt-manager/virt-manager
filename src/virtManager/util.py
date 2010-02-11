@@ -18,12 +18,14 @@
 # MA 02110-1301 USA.
 #
 
-import logging
 import gtk
-import libxml2
-import os.path
+import gobject
 
 import libvirt
+import libxml2
+
+import logging
+import os.path
 
 import virtManager
 import virtinst
@@ -244,6 +246,25 @@ def idle_emit(self, signal, *args):
     """
     self.emit(signal, *args)
     return False
+
+def _safe_wrapper(func, *args):
+    gtk.gdk.threads_enter()
+    try:
+        func(*args)
+    finally:
+        gtk.gdk.threads_leave()
+
+def safe_idle_add(func, *args):
+    """
+    Make sure idle functions are run thread safe
+    """
+    return gobject.idle_add(_safe_wrapper, func, *args)
+
+def safe_timeout_add(timeout, func, *args):
+    """
+    Make sure timeout functions are run thread safe
+    """
+    return gobject.timeout_add(timeout, _safe_wrapper, func, *args)
 
 def uuidstr(rawuuid):
     hx = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']

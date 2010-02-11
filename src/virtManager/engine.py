@@ -191,6 +191,8 @@ class vmmEngine(gobject.GObject):
             gobject.source_remove(self.timer)
             self.timer = None
 
+        # No need to use 'safe_timeout_add', the tick should be
+        # manually made thread safe
         self.timer = gobject.timeout_add(interval, self.tick)
 
     def tick(self):
@@ -205,7 +207,7 @@ class vmmEngine(gobject.GObject):
 
         self._tick_thread = threading.Thread(name="Tick thread",
                                             target=self._tick, args=())
-        self._tick_thread.daemon = False
+        self._tick_thread.daemon = True
         self._tick_thread.start()
         return 1
 
@@ -221,7 +223,7 @@ class vmmEngine(gobject.GObject):
                     logging.exception("Could not refresh connection %s." % uri)
                     logging.debug("Closing connection since libvirtd "
                                   "appears to have stopped.")
-                    gobject.idle_add(conn.close)
+                    util.safe_idle_add(conn.close)
                 else:
                     raise
         return 1

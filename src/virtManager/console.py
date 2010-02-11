@@ -33,6 +33,7 @@ import socket
 import logging
 import traceback
 
+from virtManager import util
 from virtManager.error import vmmErrorDialog
 
 # Console pages
@@ -477,7 +478,7 @@ class vmmConsolePages(gobject.GObject):
             logging.error("Too many connection failures, not retrying again")
             return
         logging.warn("Retrying connection in %d ms", self.vncViewerRetryDelay)
-        gobject.timeout_add(self.vncViewerRetryDelay, self.retry_login)
+        util.safe_timeout_add(self.vncViewerRetryDelay, self.retry_login)
         if self.vncViewerRetryDelay < 2000:
             self.vncViewerRetryDelay = self.vncViewerRetryDelay * 2
 
@@ -489,12 +490,8 @@ class vmmConsolePages(gobject.GObject):
                                  libvirt.VIR_DOMAIN_CRASHED ]:
             return
 
-        gtk.gdk.threads_enter()
-        try:
-            self.try_login()
-            return
-        finally:
-            gtk.gdk.threads_leave()
+        self.try_login()
+        return
 
     def open_tunnel(self, server, vncaddr, vncport, username, sshport):
         if self.vncTunnel is not None:
@@ -676,7 +673,7 @@ class vmmConsolePages(gobject.GObject):
 
         def unset_cb(src):
             src.queue_resize_no_redraw()
-            gobject.idle_add(restore_scroll, src)
+            util.safe_idle_add(restore_scroll, src)
             return False
 
         def request_cb(src, req):
@@ -686,7 +683,7 @@ class vmmConsolePages(gobject.GObject):
 
             src.disconnect(signal_id)
 
-            gobject.idle_add(unset_cb, widget)
+            util.safe_idle_add(unset_cb, widget)
             return False
 
         # Disable scroll bars while we resize, since resizing to the VM's
