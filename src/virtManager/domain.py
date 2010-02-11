@@ -191,10 +191,8 @@ class vmmDomainBase(gobject.GObject):
         return self.uuid
 
     def set_handle(self, vm):
-        self._backend = vm
-    def release_handle(self):
         del(self._backend)
-        self._backend = None
+        self._backend = vm
     def get_handle(self):
         return self._backend
 

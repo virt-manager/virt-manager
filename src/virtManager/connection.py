@@ -1326,7 +1326,6 @@ class vmmConnection(gobject.GObject):
                 else:
                     # May be a new VM, we have no choice but
                     # to create the wrapper so we can see
-                    # if its a previously inactive domain.
                     try:
                         vm = self.vmm.lookupByName(name)
                         uuid = util.uuidstr(vm.UUID())
@@ -1348,7 +1347,6 @@ class vmmConnection(gobject.GObject):
                 curUUIDs[uuid] = vm
             else:
                 vm = self.vms[uuid]
-                vm.release_handle()
                 vm.set_handle(rawvm)
                 curUUIDs[uuid] = vm
 
@@ -1403,7 +1401,6 @@ class vmmConnection(gobject.GObject):
             # Update VM states
             for uuid in oldVMs:
                 self.emit("vm-removed", self.uri, uuid)
-                oldVMs[uuid].release_handle()
             for uuid in newVMs:
                 self.emit("vm-added", self.uri, uuid)
             for uuid in startVMs:
