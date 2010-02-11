@@ -21,14 +21,17 @@
 import gobject
 import gtk
 import gtk.glade
+
 import libvirt
-import logging
-import traceback
-import sys
 import dbus
 import gtkvnc
+
 import os
+import sys
+import signal
 import socket
+import logging
+import traceback
 
 from virtManager.error import vmmErrorDialog
 
@@ -533,7 +536,7 @@ class vmmConsolePages(gobject.GObject):
         logging.debug("Shutting down tunnel PID %d FD %d" %
                       (self.vncTunnel[1], self.vncTunnel[0].fileno()))
         self.vncTunnel[0].close()
-        os.waitpid(self.vncTunnel[1], 0)
+        os.kill(self.vncTunnel[1], signal.SIGKILL)
         self.vncTunnel = None
 
     def try_login(self, src=None):
