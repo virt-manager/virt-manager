@@ -447,21 +447,27 @@ class vmmConsolePages(gobject.GObject):
     ########################
 
     def _vnc_disconnected(self, src):
+        errout = ""
         if self.vncTunnel is not None:
+            errout = self.get_tunnel_err_output()
             self.close_tunnel()
+
         self.vnc_connected = False
         logging.debug("VNC disconnected")
-        if self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF,
-                                 libvirt.VIR_DOMAIN_CRASHED ]:
+
+        if (self.skip_connect_attempt() or
+            self.guest_not_avail()):
+            # Exit was probably for legitimate reasons
             self.view_vm_status()
             return
 
-        self.activate_unavailable_page(_("TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"))
+        error = _("Error: VNC connection to hypervisor host got refused "
+                  "or disconnected!")
+        if errout:
+            logging.debug("Error output from closed console: %s" % errout)
+            error += "\n\nError: %s" % errout
 
-        if not self.is_visible():
-            return
-
-        self.schedule_retry()
+        self.activate_unavailable_page(error)
 
     def _vnc_initialized(self, src):
         self.vnc_connected = True
@@ -473,25 +479,14 @@ class vmmConsolePages(gobject.GObject):
         self.vncViewerRetryDelay = 125
 
     def schedule_retry(self):
-        self.vncViewerRetriesScheduled = self.vncViewerRetriesScheduled + 1
         if self.vncViewerRetriesScheduled >= 10:
             logging.error("Too many connection failures, not retrying again")
             return
-        logging.warn("Retrying connection in %d ms", self.vncViewerRetryDelay)
-        util.safe_timeout_add(self.vncViewerRetryDelay, self.retry_login)
+
+        util.safe_timeout_add(self.vncViewerRetryDelay, self.try_login)
+
         if self.vncViewerRetryDelay < 2000:
             self.vncViewerRetryDelay = self.vncViewerRetryDelay * 2
-
-    def retry_login(self):
-        if self.vnc_connected:
-            return
-
-        if self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF,
-                                 libvirt.VIR_DOMAIN_CRASHED ]:
-            return
-
-        self.try_login()
-        return
 
     def open_tunnel(self, server, vncaddr, vncport, username, sshport):
         if self.vncTunnel is not None:
@@ -505,43 +500,84 @@ class vmmConsolePages(gobject.GObject):
         if username:
             argv += ['-l', username]
 
-        argv += [ server, "nc", vncaddr, str(vncport) ]
+        argv += [ server ]
 
-        logging.debug("Creating SSH tunnel: %s" % argv)
+        # Build 'nc' command run on the remote host
+        nc_cmd = [ "nc", vncaddr, str(vncport) ]
 
-        fds = socket.socketpair()
+        argv += nc_cmd
+
+        argv_str = reduce(lambda x, y: x + " " + y, argv[1:])
+        logging.debug("Creating SSH tunnel: %s" % argv_str)
+
+        fds      = socket.socketpair()
+        errorfds = socket.socketpair()
+
         pid = os.fork()
         if pid == 0:
             fds[0].close()
+            errorfds[0].close()
+
             os.close(0)
             os.close(1)
+            os.close(2)
             os.dup(fds[1].fileno())
             os.dup(fds[1].fileno())
+            os.dup(errorfds[1].fileno())
             os.execlp(*argv)
             os._exit(1)
         else:
             fds[1].close()
+            errorfds[1].close()
 
-        logging.debug("Tunnel PID %d FD %d" % (fds[0].fileno(), pid))
-        self.vncTunnel = [fds[0], pid]
+        logging.debug("Tunnel PID=%d OUTFD=%d ERRFD=%d" %
+                      (pid, fds[0].fileno(), errorfds[0].fileno()))
+        self.vncTunnel = [fds[0], errorfds[0], pid]
+
         return fds[0].fileno()
 
     def close_tunnel(self):
         if self.vncTunnel is None:
             return
 
-        logging.debug("Shutting down tunnel PID %d FD %d" %
-                      (self.vncTunnel[1], self.vncTunnel[0].fileno()))
+        logging.debug("Shutting down tunnel PID=%d OUTFD=%d ERRFD=%d" %
+                      (self.vncTunnel[2], self.vncTunnel[0].fileno(),
+                       self.vncTunnel[1].fileno()))
         self.vncTunnel[0].close()
-        os.kill(self.vncTunnel[1], signal.SIGKILL)
+        self.vncTunnel[1].close()
+
+        os.kill(self.vncTunnel[2], signal.SIGKILL)
         self.vncTunnel = None
 
+    def get_tunnel_err_output(self):
+        errfd = self.vncTunnel[1]
+        errout = ""
+        while True:
+            new = errfd.recv(1024)
+            if not new:
+                break
+
+            errout += new
+
+        return errout
+
+    def skip_connect_attempt(self):
+        return (self.vnc_connected or
+                not self.is_visible())
+
+    def guest_not_avail(self):
+        return (not self.vm.get_handle() or
+                self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF,
+                                      libvirt.VIR_DOMAIN_CRASHED ] or
+                self.vm.get_id() < 0)
+
     def try_login(self, src=None):
-        if not self.vm.get_handle():
-            # VM was removed, skip login attempt
+        if self.skip_connect_attempt():
+            # Don't try and login for these cases
             return
 
-        if self.vm.get_id() < 0:
+        if self.guest_not_avail():
+            # Guest isn't running, schedule another try
             self.activate_unavailable_page(_("Guest not running"))
             self.schedule_retry()
             return
@@ -561,7 +597,8 @@ class vmmConsolePages(gobject.GObject):
 
         if protocol is None:
             logging.debug("No graphics configured in guest")
-            self.activate_unavailable_page(_("Graphical console not configured for guest"))
+            self.activate_unavailable_page(
+                            _("Graphical console not configured for guest"))
             return
 
         uri = str(protocol) + "://"
@@ -573,16 +610,20 @@ class vmmConsolePages(gobject.GObject):
 
         if protocol != "vnc":
             logging.debug("Not a VNC console, disabling")
-            self.activate_unavailable_page(_("Graphical console not supported for guest"))
+            self.activate_unavailable_page(
+                            _("Graphical console not supported for guest"))
             return
 
         if int(port) == -1:
-            self.activate_unavailable_page(_("Graphical console is not yet active for guest"))
+            self.activate_unavailable_page(
+                            _("Graphical console is not yet active for guest"))
             self.schedule_retry()
             return
 
-        self.activate_unavailable_page(_("Connecting to graphical console for guest"))
+        self.activate_unavailable_page(
+                _("Connecting to graphical console for guest"))
         logging.debug("Starting connect process for %s %s" % (host, str(port)))
+
         try:
             if trans is not None and trans in ("ssh", "ext"):
                 if self.vncTunnel:
