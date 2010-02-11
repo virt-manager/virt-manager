@@ -534,15 +534,11 @@ class vmmAddHardware(gobject.GObject):
 
     def get_config_partition_size(self):
         try:
-            partition_address = self.get_config_disk_image()
-            fd = open(partition_address,"rb")
-            fd.seek(0,2)
-            block_size = fd.tell() / 1024 / 1024
-            return block_size
-        except Exception:
-            details = "Unable to verify partition size: '%s'" % \
-                      "".join(traceback.format_exc())
-            logging.error(details)
+            d = virtinst.VirtualDisk(conn=self.conn.vmm,
+                                     path=self.get_config_disk_image(),
+                                     readOnly=True)
+            return int(d.size * 1024) or None
+        except Exception, e:
             return None
 
     def get_config_disk_size(self):
