@@ -84,7 +84,10 @@ class vmmDomainBase(gobject.GObject):
         self._disk_io = None
 
         self._stats_net_supported = True
+        self._stats_net_skip = []
+
         self._stats_disk_supported = True
+        self._stats_disk_skip = []
 
     # Info accessors
     def get_name(self):
@@ -885,6 +888,9 @@ class vmmDomainBase(gobject.GObject):
             if not dev:
                 continue
 
+            if dev in self._stats_net_skip:
+                continue
+
             try:
                 io = self.interfaceStats(dev)
                 if io:
@@ -898,6 +904,9 @@ class vmmDomainBase(gobject.GObject):
                     logging.error("Error reading net stats for "
                                   "'%s' dev '%s': %s" %
                                   (self.get_name(), dev, err))
+                    logging.debug("Adding %s to skip list." % dev)
+                    self._stats_net_skip.append(dev)
+
         return rx, tx
 
     def _sample_disk_io_dummy(self):
@@ -914,6 +923,9 @@ class vmmDomainBase(gobject.GObject):
             if not dev:
                 continue
 
+            if dev in self._stats_disk_skip:
+                continue
+
             try:
                 io = self.blockStats(dev)
                 if io:
@@ -927,6 +939,9 @@ class vmmDomainBase(gobject.GObject):
                     logging.error("Error reading disk stats for "
                                   "'%s' dev '%s': %s" %
                                   (self.get_name(), dev, err))
+                    logging.debug("Adding %s to skip list." % dev)
+                    self._stats_disk_skip.append(dev)
+
         return rd, wr
 
     def _get_cur_rate(self, what):
