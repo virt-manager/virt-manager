@@ -1391,6 +1391,10 @@ class vmmConnection(gobject.GObject):
             updates need to go here to enable threading that doesn't block the
             app with long tick operations.
             """
+            # Connection closed out from under us
+            if not self.vmm:
+                return
+
             # Make sure device polling is setup
             if not self.netdev_initialized:
                 self._init_netdev()
@@ -1470,6 +1474,9 @@ class vmmConnection(gobject.GObject):
         return 1
 
     def _recalculate_stats(self, now):
+        if self.vmm is None:
+            return
+
         expected = self.config.get_stats_history_length()
         current = len(self.record)
         if current > expected:
