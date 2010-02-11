@@ -503,7 +503,26 @@ class vmmConsolePages(gobject.GObject):
         argv += [ server ]
 
         # Build 'nc' command run on the remote host
-        nc_cmd = [ "nc", vncaddr, str(vncport) ]
+        #
+        # This ugly thing is a shell script to detect availability of
+        # the -q option for 'nc': debian and suse based distros need this
+        # flag to ensure the remote nc will exit on EOF, so it will go away
+        # when we close the VNC tunnel. If it doesn't go away, subsequent
+        # VNC connection attempts will hang.
+        #
+        # Fedora's 'nc' doesn't have this option, and apparently defaults
+        # to the desired behavior.
+        #
+        nc_params = "%s %s" % (vncaddr, str(vncport))
+        nc_cmd = [\
+            "nc -q 2>&1 | grep -q 'requires an argument';"
+            "if [ $? -eq 0 ] ; then"
+            "   CMD='nc -q 0 %(nc_params)s';"
+            "else"
+            "   CMD='nc %(nc_params)s';"
+            "fi;"
+            "$CMD;" % {'nc_params': nc_params}
+        ]
 
         argv += nc_cmd
 
