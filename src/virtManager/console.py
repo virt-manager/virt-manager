@@ -551,6 +551,7 @@ class vmmConsolePages(gobject.GObject):
 
         logging.debug("Tunnel PID=%d OUTFD=%d ERRFD=%d" %
                       (pid, fds[0].fileno(), errorfds[0].fileno()))
+        errorfds[0].setblocking(0)
         self.vncTunnel = [fds[0], errorfds[0], pid]
 
         return fds[0].fileno()
