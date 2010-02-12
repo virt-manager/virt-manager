@@ -603,17 +603,14 @@ class vmmConsolePages(gobject.GObject):
             return
 
         try:
-            (protocol, host,
-             port, trans, username) = self.vm.get_graphics_console()
+            (protocol, connhost,
+             vncport, trans, username,
+             connport, vncuri) = self.vm.get_graphics_console()
         except Exception, e:
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after
             logging.debug("Getting graphics console failed: %s" % str(e))
             return
-
-        connport = None
-        if host.count(":"):
-            host, connport = host.split(":", 1)
 
         if protocol is None:
             logging.debug("No graphics configured in guest")
@@ -621,18 +618,13 @@ class vmmConsolePages(gobject.GObject):
                             _("Graphical console not configured for guest"))
             return
 
-        uri = str(protocol) + "://"
-        if username:
-            uri = uri + str(username) + '@'
-        uri = uri + str(host) + ":" + str(port)
-
         if protocol != "vnc":
             logging.debug("Not a VNC console, disabling")
             self.activate_unavailable_page(
                             _("Graphical console not supported for guest"))
             return
 
-        if int(port) == -1:
+        if vncport == -1:
             self.activate_unavailable_page(
                             _("Graphical console is not yet active for guest"))
             self.schedule_retry()
@@ -641,20 +633,22 @@ class vmmConsolePages(gobject.GObject):
         self.activate_unavailable_page(
                 _("Connecting to graphical console for guest"))
         logging.debug("Starting connect process for %s: %s %s" %
-                      (uri, host, str(port)))
+                      (vncuri, connhost, str(vncport)))
 
         try:
-            if trans is not None and trans in ("ssh", "ext"):
+            if trans in ("ssh", "ext"):
                 if self.vncTunnel:
-                    logging.debug("Tunnel already open, skipping open_tunnel.")
+                    # Tunnel already open, no need to continue
                     return
 
-                fd = self.open_tunnel(host, "127.0.0.1", port, username,
-                                      connport)
+                fd = self.open_tunnel(connhost, "127.0.0.1", vncport,
+                                      username, connport)
                 if fd >= 0:
                     self.vncViewer.open_fd(fd)
+
             else:
-                self.vncViewer.open_host(host, str(port))
+                self.vncViewer.open_host(connhost, str(vncport))
+
         except:
             (typ, value, stacktrace) = sys.exc_info ()
             details = \

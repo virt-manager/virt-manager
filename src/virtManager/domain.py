@@ -341,24 +341,41 @@ class vmmDomainBase(gobject.GObject):
         return self._parse_device_xml(_parse_serial_consoles)
 
     def get_graphics_console(self):
-        typ = vutil.get_xml_path(self.get_xml(),
-                                "/domain/devices/graphics/@type")
-        port = None
-        if typ == "vnc":
-            port = vutil.get_xml_path(self.get_xml(),
-                                     "/domain/devices/graphics[@type='vnc']/@port")
-            if port is not None:
-                port = int(port)
+        gtype = vutil.get_xml_path(self.get_xml(),
+                                  "/domain/devices/graphics/@type")
+        vncport = vutil.get_xml_path(self.get_xml(),
+                               "/domain/devices/graphics[@type='vnc']/@port")
 
+        if gtype != "vnc":
+            vncport = None
+        else:
+            vncport = int(vncport)
+
+        connhost = self.connection.get_uri_hostname()
         transport, username = self.connection.get_transport()
-        if transport is None:
+
+        if transport == None:
             # Force use of 127.0.0.1, because some (broken) systems don't
             # reliably resolve 'localhost' into 127.0.0.1, either returning
             # the public IP, or an IPv6 addr. Neither work since QEMU only
             # listens on 127.0.0.1 for VNC.
-            return [typ, "127.0.0.1", port, None, None]
-        else:
-            return [typ, self.connection.get_hostname(), port, transport, username]
+            connhost = "127.0.0.1"
+
+        # Parse URI port
+        connport = None
+        if connhost.count(":"):
+            connhost, connport = connhost.split(":", 1)
+
+        # Build VNC uri for debugging
+        vncuri = None
+        if gtype:
+            vncuri = str(gtype) + "://"
+            if username:
+                vncuri = vncuri + str(username) + '@'
+            vncuri += str(connhost) + ":" + str(vncport)
+
+        return [gtype, connhost, vncport, transport, username, connport,
+                vncuri]
 
 
     # ----------------

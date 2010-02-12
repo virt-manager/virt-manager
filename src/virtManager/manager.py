@@ -814,7 +814,7 @@ class vmmManager(gobject.GObject):
         logging.debug("VM %s started" % vm.get_name())
         if self.config.get_console_popup() == 2 and not vm.is_management_domain():
             # user has requested consoles on all vms
-            (gtype, ignore, ignore, ignore, ignore) = vm.get_graphics_console()
+            gtype = vm.get_graphics_console()[0]
             if gtype == "vnc":
                 self.emit("action-show-console", uri, vmuuid)
             elif not connection.is_remote():
