@@ -354,7 +354,7 @@ class vmmDomainBase(gobject.GObject):
         connhost = self.connection.get_uri_hostname()
         transport, username = self.connection.get_transport()
 
-        if transport == None:
+        if connhost == None:
             # Force use of 127.0.0.1, because some (broken) systems don't
             # reliably resolve 'localhost' into 127.0.0.1, either returning
             # the public IP, or an IPv6 addr. Neither work since QEMU only
