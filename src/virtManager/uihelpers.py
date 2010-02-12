@@ -81,8 +81,8 @@ def pretty_network_desc(nettype, source=None, netobj=None):
     return ret
 
 def init_network_list(net_list):
-    # [ network type, source name, label, sensitive? ]
-    net_model = gtk.ListStore(str, str, str, bool)
+    # [ network type, source name, label, sensitive?, net is active ]
+    net_model = gtk.ListStore(str, str, str, bool, bool)
     net_list.set_model(net_model)
 
     if isinstance(net_list, gtk.ComboBox):
@@ -105,6 +105,12 @@ def populate_network_list(net_list, conn):
     bridge_dict = {}
     iface_dict = {}
 
+    def add_row(*args):
+        model.append(build_row(*args))
+
+    def build_row(nettype, name, label, is_sensitive, is_running):
+        return [nettype, name, label, is_sensitive, is_running]
+
     def set_active(idx):
         if isinstance(net_list, gtk.ComboBox):
             net_list.set_active(idx)
@@ -119,7 +125,7 @@ def populate_network_list(net_list, conn):
     # For qemu:///session
     if conn.is_qemu_session():
         nettype = VirtualNetworkInterface.TYPE_USER
-        model.append([nettype, None, pretty_network_desc(nettype), True])
+        add_row(nettype, None, pretty_network_desc(nettype), True)
         set_active(0)
         return
 
@@ -140,7 +146,8 @@ def populate_network_list(net_list, conn):
         if net.get_name() == "default":
             netIdxLabel = label
 
-        vnet_dict[label] = [nettype, net.get_name(), label, True]
+        vnet_dict[label] = build_row(nettype, net.get_name(), label, True,
+                                     net.is_active())
 
         # Build a list of vnet bridges, so we know not to list them
         # in the physical interface list
@@ -150,7 +157,7 @@ def populate_network_list(net_list, conn):
 
     if not hasNet:
         label = _("No virtual networks available")
-        vnet_dict[label] = [None, None, label, False]
+        vnet_dict[label] = build_row(None, None, label, False, False)
 
     # Physical devices
     hasShared = False
@@ -180,7 +187,7 @@ def populate_network_list(net_list, conn):
         if hasShared and not brIdxLabel:
             brIdxLabel = label
 
-        row = [nettype, bridge_name, label, sensitive]
+        row = build_row(nettype, bridge_name, label, sensitive, True)
 
         if sensitive:
             bridge_dict[label] = row
@@ -195,22 +202,29 @@ def populate_network_list(net_list, conn):
     # If not, use 'default' network
     # If not present, use first list entry
     # If list empty, use no network devices
+    return_warn = False
     label = brIdxLabel or netIdxLabel
+
     for idx in range(len(model)):
         row = model[idx]
+        is_inactive = not row[4]
         if label:
             if row[2] == label:
                 default = idx
+                return_warn = is_inactive
                 break
         else:
             if row[3] == True:
                 default = idx
+                return_warn = is_inactive
                 break
     else:
-        model.insert(0, [None, None, _("No networking."), True])
+        return_warn = True
+        model.insert(0, [None, None, _("No networking."), True, False])
         default = 0
 
     set_active(default)
+    return return_warn
 
 def validate_network(parent, conn, nettype, devname, macaddr, model=None):
     set_error_parent(parent)

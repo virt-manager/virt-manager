@@ -171,8 +171,8 @@ class vmmCreate(gobject.GObject):
         except:
             pass
 
-    def set_conn(self, newconn):
-        if self.conn == newconn:
+    def set_conn(self, newconn, force_validate=False):
+        if self.conn == newconn and not force_validate:
             return
 
         if self.conn:
@@ -313,7 +313,7 @@ class vmmCreate(gobject.GObject):
         activeconn = self.populate_conn_list(urihint)
 
         try:
-            self.set_conn(activeconn)
+            self.set_conn(activeconn, force_validate=True)
         except Exception, e:
             logging.exception("Error setting create wizard conn state.")
             return self.startup_error(str(e))
@@ -358,8 +358,8 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("config-storage-nosparse").set_active(True)
 
         # Final page
-        self.window.get_widget("config-advanced-expander").set_expanded(False)
         self.window.get_widget("summary-customize").set_active(False)
+
 
     def set_conn_state(self):
         # Update all state that has some dependency on the current connection
@@ -540,15 +540,21 @@ class vmmCreate(gobject.GObject):
         util.tooltip_wrapper(storage_area, storage_tooltip)
 
         # Networking
+        net_expander = self.window.get_widget("config-advanced-expander")
+        net_expander.hide()
         net_list = self.window.get_widget("config-netdev")
         net_warn = self.window.get_widget("config-netdev-warn")
-        uihelpers.populate_network_list(net_list, self.conn)
+        do_warn = uihelpers.populate_network_list(net_list, self.conn)
 
-        if self.conn.netdev_error:
+        if self.conn.netdev_error or do_warn:
             net_warn.show()
-            util.tooltip_wrapper(net_warn, self.conn.netdev_error)
+            net_expander.set_expanded(True)
+
+            if self.conn.netdev_error:
+                util.tooltip_wrapper(net_warn, self.conn.netdev_error)
         else:
             net_warn.hide()
+            net_expander.set_expanded(False)
 
         newmac = uihelpers.generate_macaddr(self.conn)
         self.window.get_widget("config-set-macaddr").set_active(bool(newmac))
@@ -1111,6 +1117,11 @@ class vmmCreate(gobject.GObject):
             self.detect_media_os()
 
         if pagenum == PAGE_FINISH:
+            # This is hidden in reset_state, so that it doesn't distort
+            # the size of the wizard if it is expanded by default due to
+            # error
+            self.window.get_widget("config-advanced-expander").show()
+
             self.window.get_widget("create-forward").hide()
             self.window.get_widget("create-finish").show()
             self.window.get_widget("create-finish").grab_focus()

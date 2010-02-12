@@ -1006,8 +1006,9 @@ class vmmDomainBase(gobject.GObject):
         vector = []
         stats = self.record
         ceil = float(max(self.maxRecord[name1], self.maxRecord[name2]))
+        maxlen = self.config.get_stats_history_length()
         for n in [ name1, name2 ]:
-            for i in range(self.config.get_stats_history_length()+1):
+            for i in range(maxlen + 1):
                 if i < len(stats):
                     vector.append(float(stats[i][n])/ceil)
                 else:
