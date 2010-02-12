@@ -305,8 +305,9 @@ class vmmHost(gobject.GObject):
         return 0
 
     def close(self,ignore1=None,ignore2=None):
-        self.window.get_widget("vmm-host").hide()
-        self.engine.decrement_window_counter()
+        if self.is_visible():
+            self.window.get_widget("vmm-host").hide()
+            self.engine.decrement_window_counter()
         return 1
 
     def show_help(self, src):
