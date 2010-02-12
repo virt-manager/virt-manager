@@ -1024,7 +1024,6 @@ class vmmDetails(gobject.GObject):
 
         info = self.get_hw_selection(HW_LIST_COL_DEVICE)
 
-        print pagetype
         if pagetype is HW_LIST_TYPE_GENERAL:
             ret = self.config_overview_apply()
         elif pagetype is HW_LIST_TYPE_CPU:
