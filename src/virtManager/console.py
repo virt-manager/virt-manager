@@ -626,8 +626,6 @@ class vmmConsolePages(gobject.GObject):
             uri = uri + str(username) + '@'
         uri = uri + str(host) + ":" + str(port)
 
-        logging.debug("Graphics console configured at " + uri)
-
         if protocol != "vnc":
             logging.debug("Not a VNC console, disabling")
             self.activate_unavailable_page(
@@ -642,7 +640,8 @@ class vmmConsolePages(gobject.GObject):
 
         self.activate_unavailable_page(
                 _("Connecting to graphical console for guest"))
-        logging.debug("Starting connect process for %s %s" % (host, str(port)))
+        logging.debug("Starting connect process for %s: %s %s" %
+                      (uri, host, str(port)))
 
         try:
             if trans is not None and trans in ("ssh", "ext"):
