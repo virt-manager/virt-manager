@@ -454,7 +454,6 @@ class vmmCreate(gobject.GObject):
         self.usepool = False
         try:
             if is_storage_capable:
-                # FIXME: Emit 'pool-added' or something?
                 util.build_default_pool(self.conn.vmm)
                 self.usepool = True
         except Exception, e:
@@ -845,7 +844,6 @@ class vmmCreate(gobject.GObject):
                 return self.failed_guest.disks[0].path
 
         if not self.usepool:
-
             # Use old generating method
             d = self.config.get_default_image_dir(self.conn)
             origf = os.path.join(d, name + ".img")
@@ -860,12 +858,22 @@ class vmmCreate(gobject.GObject):
                 f = origf
 
             path = f
-        else:
-            pool = self.conn.vmm.storagePoolLookupByName(util.DEFAULT_POOL_NAME)
-            path = virtinst.Storage.StorageVolume.find_free_name(name,
-                            pool_object=pool, suffix=".img")
 
-            path = os.path.join(util.DEFAULT_POOL_PATH, path)
+        else:
+            pool = None
+            for uuid in self.conn.list_pool_uuids():
+                p = self.conn.get_pool(uuid)
+                if p.get_name() == util.DEFAULT_POOL_NAME:
+                    pool = p
+
+            if not pool:
+                raise RuntimeError(_("Did not find pool '%s'") %
+                                   util.DEFAULT_POOL_NAME)
+
+            path = virtinst.Storage.StorageVolume.find_free_name(name,
+                            pool_object=pool.pool, suffix=".img")
+
+            path = os.path.join(pool.get_target_path(), path)
 
         return path
 
