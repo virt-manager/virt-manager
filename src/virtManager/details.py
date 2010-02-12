@@ -178,6 +178,7 @@ class vmmDetails(gobject.GObject):
         w, h = self.vm.get_details_window_size()
         self.topwin.set_default_size(w or 800, h or 600)
 
+        self.addhwmenu = None
         self.init_menus()
         self.init_details()
 
@@ -249,6 +250,8 @@ class vmmDetails(gobject.GObject):
             "on_security_label_changed": self.security_label_changed,
             "on_security_type_changed": self.security_type_changed,
             "on_security_model_changed": self.security_model_changed,
+
+            "on_hw_list_button_press_event": self.popup_addhw_menu,
 
             # Listeners stored in vmmConsolePages
             "on_details_menu_view_fullscreen_activate": self.console.toggle_fullscreen,
@@ -350,6 +353,16 @@ class vmmDetails(gobject.GObject):
                      "details-menu-destroy"]:
             image = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
             self.window.get_widget(name).set_image(image)
+
+        # Add HW popup menu
+        self.addhwmenu = gtk.Menu()
+        addHW = gtk.ImageMenuItem(_("Add Hardware"))
+        addHWImg = gtk.Image()
+        addHWImg.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU)
+        addHW.set_image(addHWImg)
+        addHW.show()
+        addHW.connect("activate", self.add_hardware)
+        self.addhwmenu.add(addHW)
 
         # Serial list menu
         smenu = gtk.Menu()
@@ -513,6 +526,12 @@ class vmmDetails(gobject.GObject):
             return
 
         self.vm.set_details_window_size(event.width, event.height)
+
+    def popup_addhw_menu(self, widget, event):
+        if event.button != 3:
+            return
+
+        self.addhwmenu.popup(None, None, None, 0, event.time)
 
     def populate_serial_menu(self, src):
         for ent in src:
