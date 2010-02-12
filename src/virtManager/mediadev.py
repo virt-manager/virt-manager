@@ -101,7 +101,7 @@ class vmmMediaDevice(gobject.GObject):
         media_label = self.get_media_label()
         has_media = self.has_media()
         if not has_media:
-            media_label = _("No media present")
+            media_label = _("No media detected")
         elif not media_label:
             media_label = _("Media Unknown")
 

@@ -33,6 +33,7 @@ OPTICAL_LABEL = 1
 OPTICAL_IS_MEDIA_PRESENT = 2
 OPTICAL_DEV_KEY = 3
 OPTICAL_MEDIA_KEY = 4
+OPTICAL_IS_VALID = 5
 
 # What user we guess the qemu:///system starts the emulator as. Some distros
 # may use a nonroot user, so simply changing this will cause several UI
@@ -303,23 +304,24 @@ def generate_macaddr(conn):
 # Populate media widget (choosecd, create) #
 ############################################
 
-def init_mediadev_combo(widget, empty_sensitive=False):
+def init_mediadev_combo(widget):
     # [Device path, pretty label, has_media?, device key, media key,
-    #  vmmMediaDevice]
-    model = gtk.ListStore(str, str, bool, str, str)
+    #  vmmMediaDevice, is valid device]
+    model = gtk.ListStore(str, str, bool, str, str, bool)
     widget.set_model(model)
     model.clear()
 
     text = gtk.CellRendererText()
     widget.pack_start(text, True)
-    widget.add_attribute(text, 'text', 1)
-    if not empty_sensitive:
-        widget.add_attribute(text, 'sensitive', 2)
+    widget.add_attribute(text, 'text', OPTICAL_LABEL)
+    widget.add_attribute(text, 'sensitive', OPTICAL_IS_VALID)
 
 def populate_mediadev_combo(conn, widget, devtype):
     sigs = []
 
-    widget.get_model().clear()
+    model = widget.get_model()
+    model.clear()
+    set_mediadev_default(model)
 
     sigs.append(conn.connect("mediadev-added", mediadev_added, widget, devtype))
     sigs.append(conn.connect("mediadev-removed", mediadev_removed, widget))
@@ -329,12 +331,17 @@ def populate_mediadev_combo(conn, widget, devtype):
 
     return sigs
 
+def set_mediadev_default(model):
+    if len(model) == 0:
+        model.append([None, _("No device present"), False, None, None, False])
+
 def set_row_from_object(row, obj):
     row[OPTICAL_DEV_PATH] = obj.get_path()
     row[OPTICAL_LABEL] = obj.pretty_label()
     row[OPTICAL_IS_MEDIA_PRESENT] = obj.has_media()
     row[OPTICAL_DEV_KEY] = obj.get_key()
     row[OPTICAL_MEDIA_KEY] = obj.get_media_key()
+    row[OPTICAL_IS_VALID] = True
 
 def mediadev_removed(ignore_helper, key, widget):
     model = widget.get_model()
@@ -353,6 +360,7 @@ def mediadev_removed(ignore_helper, key, widget):
 
         idx += 1
 
+    set_mediadev_default(model)
     mediadev_set_default_selection(widget)
 
 def mediadev_added(ignore_helper, newobj, widget, devtype):
@@ -361,11 +369,15 @@ def mediadev_added(ignore_helper, newobj, widget, devtype):
     if newobj.get_media_type() != devtype:
         return
 
+    if len(model) == 1 and model[0][OPTICAL_IS_VALID] == False:
+        # Only entry is the 'No device' entry
+        model.clear()
+
     newobj.connect("media-added", mediadev_media_changed, widget)
     newobj.connect("media-removed", mediadev_media_changed, widget)
 
     # Brand new device
-    row = [None, None, None, None, None]
+    row = [None, None, None, None, None, None]
     set_row_from_object(row, newobj)
     model.append(row)
 
