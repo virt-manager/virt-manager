@@ -1157,6 +1157,7 @@ class vmmCreate(gobject.GObject):
         # Set up graphics device
         try:
             guest._graphics_dev = virtinst.VirtualGraphics(type=virtinst.VirtualGraphics.TYPE_VNC)
+            guest.add_device(virtinst.VirtualVideoDevice(conn=guest.conn))
         except Exception, e:
             self.err.show_err(_("Error setting up graphics device:") + str(e),
                               "".join(traceback.format_exc()))
@@ -1166,7 +1167,7 @@ class vmmCreate(gobject.GObject):
         guest.sound_devs = []
         try:
             if self.get_config_sound():
-                guest.sound_devs.append(virtinst.VirtualAudio(model="es1370"))
+                guest.sound_devs.append(virtinst.VirtualAudio())
         except Exception, e:
             self.err.show_err(_("Error setting up sound device:") + str(e),
                               "".join(traceback.format_exc()))
