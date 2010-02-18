@@ -250,7 +250,7 @@ def idle_emit(self, signal, *args):
 def _safe_wrapper(func, *args):
     gtk.gdk.threads_enter()
     try:
-        func(*args)
+        return func(*args)
     finally:
         gtk.gdk.threads_leave()
 
