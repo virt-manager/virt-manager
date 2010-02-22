@@ -90,7 +90,7 @@ class vmmErrorDialog (gtk.MessageDialog):
         else:
             self.run()
 
-    def _show_ok(self, dialog_type, text1, text2, title):
+    def _show_ok(self, dialog_type, text1, text2, title, async=True):
         def response_destroy(src, ignore):
             src.destroy()
 
@@ -106,20 +106,24 @@ class vmmErrorDialog (gtk.MessageDialog):
         if text2 is not None:
             self.val_err_box.format_secondary_text(text2)
 
-        self.val_err_box.show()
         self.val_err_box.connect("response", response_destroy)
+        if async:
+            self.val_err_box.show()
+        else:
+            self.val_err_box.run()
+
         return False
 
-    def val_err(self, text1, text2=None, title=None):
+    def val_err(self, text1, text2=None, title=None, async=True):
         logging.debug("Validation Error: %s" % text1)
         if title is None:
             title = _("Input Error")
-        return self._show_ok(gtk.MESSAGE_ERROR, text1, text2, title)
+        return self._show_ok(gtk.MESSAGE_ERROR, text1, text2, title, async)
 
-    def show_info(self, text1, text2=None, title=None):
+    def show_info(self, text1, text2=None, title=None, async=True):
         if title is None:
             title = ""
-        return self._show_ok(gtk.MESSAGE_INFO, text1, text2, title)
+        return self._show_ok(gtk.MESSAGE_INFO, text1, text2, title, async)
 
     def _show_warning(self, buttons, text1, text2):
         message_box = gtk.MessageDialog(self.get_transient_for(),

@@ -265,11 +265,22 @@ class vmmCreateVolume(gobject.GObject):
             if fmt:
                 self.vol.format = fmt
         except ValueError, e:
-            return self.err.val_err(_("Volume Parameter Error"), str(e))
+            return self.val_err(_("Volume Parameter Error"), str(e))
         return True
 
     def show_err(self, info, details):
         async = not self.topwin.get_modal()
         self.err.show_err(info, details, async=async)
+
+    def val_err(self, info, details):
+        modal = self.topwin.get_modal()
+        ret = False
+        try:
+            self.topwin.set_modal(False)
+            ret = self.err.val_err(info, details, async=not modal)
+        finally:
+            self.topwin.set_modal(modal)
+
+        return ret
 
 gobject.type_register(vmmCreateVolume)
