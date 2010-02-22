@@ -113,12 +113,16 @@ class vmmCreateVolume(gobject.GObject):
             return ""
 
         suffix = self.default_suffix()
+        ret = ""
         try:
-            return Storage.StorageVolume.find_free_name(self.name_hint,
+            ret = Storage.StorageVolume.find_free_name(self.name_hint,
                                             pool_object=self.parent_pool.pool,
                                             suffix=suffix)
+            ret = ret.rstrip(suffix)
         except:
-            return ""
+            pass
+
+        return ret
 
     def default_suffix(self):
         suffix = ""
@@ -127,9 +131,13 @@ class vmmCreateVolume(gobject.GObject):
         return suffix
 
     def reset_state(self):
-        self.window.get_widget("vol-name").set_text(self.default_vol_name())
-        self.window.get_widget("vol-name").grab_focus()
+        default_name = self.default_vol_name()
+        self.window.get_widget("vol-name").set_text("")
         self.window.get_widget("vol-create").set_sensitive(False)
+        if default_name:
+            self.window.get_widget("vol-name").set_text(default_name)
+
+        self.window.get_widget("vol-name").grab_focus()
         self.populate_vol_format()
         self.populate_vol_suffix()
 
