@@ -302,7 +302,6 @@ class vmmDetails(gobject.GObject):
         if self.is_visible():
             self.topwin.present()
             return
-        self.topwin.show()
         self.topwin.present()
 
         self.engine.increment_window_counter()

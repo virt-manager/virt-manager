@@ -124,6 +124,8 @@ class vmmManager(gobject.GObject):
                                   0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
                                   _("Unexpected Error"),
                                   _("An unexpected error occurred"))
+        self.topwin = self.window.get_widget("vmm-manager")
+
         self.config = config
         self.engine = engine
 
@@ -136,8 +138,7 @@ class vmmManager(gobject.GObject):
         self.rows = {}
 
         w, h = self.config.get_manager_window_size()
-        self.window.get_widget("vmm-manager").set_default_size(w or 550,
-                                                               h or 550)
+        self.topwin.set_default_size(w or 550, h or 550)
 
         self.init_vmlist()
         self.init_stats()
@@ -221,12 +222,11 @@ class vmmManager(gobject.GObject):
     ##################
 
     def show(self):
-        win = self.window.get_widget("vmm-manager")
         if self.is_visible():
-            win.present()
+            self.topwin.present()
             return
-        win.show()
-        win.present()
+        self.topwin.present()
+
         self.engine.increment_window_counter()
 
         if self.startup_error:

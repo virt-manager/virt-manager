@@ -48,7 +48,6 @@ class vmmAbout:
     def show(self):
         dialog = self.window.get_widget("vmm-about")
         dialog.set_version(self.config.get_appversion())
-        dialog.show_all()
         dialog.present()
 
     def close(self,ignore1=None,ignore2=None):

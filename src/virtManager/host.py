@@ -294,8 +294,10 @@ class vmmHost(gobject.GObject):
 
 
     def show(self):
-        dialog = self.window.get_widget("vmm-host")
-        dialog.present()
+        if self.is_visible():
+            self.topwin.present()
+            return
+        self.topwin.present()
 
         self.engine.increment_window_counter()
 

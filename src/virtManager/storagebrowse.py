@@ -90,7 +90,6 @@ class vmmStorageBrowser(gobject.GObject):
 
     def show(self, conn=None):
         self.reset_state(conn)
-        self.topwin.show()
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):

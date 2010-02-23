@@ -134,7 +134,7 @@ class vmmDomainBase(gobject.GObject):
     def set_autostart(self, val):
         raise NotImplementedError()
 
-    def attach_device(self, devobj):
+    def attach_device(self, devobj, devxml=None):
         raise NotImplementedError()
     def detach_device(self, devtype, dev_id_info):
         raise NotImplementedError()
@@ -1314,13 +1314,17 @@ class vmmDomain(vmmDomainBase):
     def get_id(self):
         return self._backend.ID()
 
-    def attach_device(self, devobj):
+    def attach_device(self, devobj, devxml=None):
         """
         Hotplug device to running guest
         """
-        if self.is_active():
-            xml = devobj.get_xml_config()
-            self._backend.attachDevice(xml)
+        if not self.is_active():
+            return
+
+        if not devxml:
+            devxml = devobj.get_xml_config()
+
+        self._backend.attachDevice(devxml)
 
     def detach_device(self, devtype, dev_id_info):
         """
@@ -1591,7 +1595,7 @@ class vmmDomain(vmmDomainBase):
         ignore, diskxml = util.xml_parse_wrapper(self.get_xml(), func,
                                                  dev_id_info, newpath, _type)
 
-        self.attach_device(diskxml)
+        self.attach_device(None, diskxml)
 
     # VCPU changing
     def define_vcpus(self, vcpus):

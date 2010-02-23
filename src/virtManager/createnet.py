@@ -82,7 +82,6 @@ class vmmCreateNetwork(gobject.GObject):
         self.set_initial_state()
 
     def show(self):
-        self.topwin.show()
         self.reset_state()
         self.topwin.present()
 

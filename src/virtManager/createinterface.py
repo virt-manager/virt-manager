@@ -124,7 +124,6 @@ class vmmCreateInterface(gobject.GObject):
 
     def show(self):
         self.reset_state()
-        self.topwin.show()
         self.topwin.present()
 
     def show_bond_config(self, src):

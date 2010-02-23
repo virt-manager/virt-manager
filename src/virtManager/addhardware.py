@@ -166,7 +166,6 @@ class vmmAddHardware(gobject.GObject):
 
     def show(self):
         self.reset_state()
-        self.topwin.show()
         self.topwin.present()
 
     def close(self, ignore1=None,ignore2=None):

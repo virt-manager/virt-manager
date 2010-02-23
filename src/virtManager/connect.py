@@ -108,7 +108,6 @@ class vmmConnect(gobject.GObject):
 
     def show(self):
         win = self.window.get_widget("vmm-open-connection")
-        win.show_all()
         win.present()
         self.reset_state()
 
