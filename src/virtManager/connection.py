@@ -830,16 +830,29 @@ class vmmConnection(gobject.GObject):
             gtk.gdk.threads_leave()
 
     def _do_creds_dialog_main(self, creds):
-        dialog = gtk.Dialog("Authentication required", None, 0, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
+        dialog = gtk.Dialog("Authentication required", None, 0,
+                            (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                             gtk.STOCK_OK, gtk.RESPONSE_OK))
         label = []
         entry = []
 
         box = gtk.Table(2, len(creds))
+        box.set_border_width(6)
+        box.set_row_spacings(6)
+        box.set_col_spacings(12)
 
         row = 0
         for cred in creds:
-            if cred[0] == libvirt.VIR_CRED_AUTHNAME or cred[0] == libvirt.VIR_CRED_PASSPHRASE:
-                label.append(gtk.Label(cred[1]))
+            if (cred[0] == libvirt.VIR_CRED_AUTHNAME or
+                cred[0] == libvirt.VIR_CRED_PASSPHRASE):
+                prompt = cred[1]
+                if not prompt.endswith(":"):
+                    prompt += ":"
+
+                text_label = gtk.Label(prompt)
+                text_label.set_alignment(0.0, 0.5)
+
+                label.append(text_label)
             else:
                 return -1
 
@@ -848,8 +861,8 @@ class vmmConnection(gobject.GObject):
                 ent.set_visibility(False)
             entry.append(ent)
 
-            box.attach(label[row], 0, 1, row, row+1, 0, 0, 3, 3)
-            box.attach(entry[row], 1, 2, row, row+1, 0, 0, 3, 3)
+            box.attach(label[row], 0, 1, row, row+1, gtk.FILL, 0, 0, 0)
+            box.attach(entry[row], 1, 2, row, row+1, gtk.FILL, 0, 0, 0)
             row = row + 1
 
         vbox = dialog.get_child()
