@@ -900,7 +900,6 @@ class vmmConnection(gobject.GObject):
             self.connectError = ("Failed to get credentials for '%s':\n%s\n%s"
                                  % (str(self.uri), str(e),
                                     "".join(traceback.format_exc())))
-            logging.debug(self.connectError)
             return -1
 
     def _acquire_tgt(self):
@@ -973,8 +972,6 @@ class vmmConnection(gobject.GObject):
                 self.connectError = (("Unable to open connection to hypervisor"
                                       " URI '%s':\n%s\n%s"
                                       % (str(self.uri), value, tb + hint)))
-                logging.error(self.connectError)
-
 
         # We want to kill off this thread asap, so schedule a gobject
         # idle even to inform the UI of result
