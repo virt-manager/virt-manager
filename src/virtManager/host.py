@@ -156,6 +156,8 @@ class vmmHost(gobject.GObject):
 
 
     def init_net_state(self):
+        self.window.get_widget("network-pages").set_show_tabs(False)
+
         # [ unique, label, icon name, icon size, is_active ]
         netListModel = gtk.ListStore(str, str, str, int, bool)
         self.window.get_widget("net-list").set_model(netListModel)
@@ -175,7 +177,14 @@ class vmmHost(gobject.GObject):
 
         self.populate_networks(netListModel)
 
+        if not self.conn.network_capable:
+            self.set_net_error_page(
+                _("Libvirt connection does not support virtual network "
+                  "management."))
+
     def init_storage_state(self):
+        self.window.get_widget("storage-pages").set_show_tabs(False)
+
         self.volmenu = gtk.Menu()
         volCopyPath = gtk.ImageMenuItem(_("Copy Volume Path"))
         volCopyImage = gtk.Image()
@@ -215,6 +224,10 @@ class vmmHost(gobject.GObject):
                        self.pool_selected)
         populate_storage_pools(self.window.get_widget("pool-list"),
                                self.conn)
+
+        if not self.conn.storage_capable:
+            self.set_storage_error_page(
+                _("Libvirt connection does not support storage management."))
 
     def init_interface_state(self):
         self.window.get_widget("interface-pages").set_show_tabs(False)
@@ -264,7 +277,7 @@ class vmmHost(gobject.GObject):
 
         if not self.conn.interface_capable:
             self.set_interface_error_page(
-                _("Libvirt connection does not have interface support."))
+                _("Libvirt connection does not support interface management."))
 
     def init_conn_state(self):
         uri = self.conn.get_uri()
@@ -437,12 +450,19 @@ class vmmHost(gobject.GObject):
             if curruuid == uuid:
                 self.net_selected(sel)
 
+    def set_net_error_page(self, msg):
+        self.reset_net_state()
+        self.window.get_widget("network-pages").set_current_page(1)
+        self.window.get_widget("network-error-label").set_text(msg)
+
     def net_selected(self, src):
         selected = src.get_selected()
         if selected[1] == None or \
            selected[0].get_value(selected[1], 0) == None:
-            self.reset_net_state()
+            self.set_net_error_page(_("No virtual network selected."))
             return
+
+        self.window.get_widget("network-pages").set_current_page(0)
 
         net = self.conn.get_net(selected[0].get_value(selected[1], 0))
         active = net.is_active()
@@ -657,12 +677,19 @@ class vmmHost(gobject.GObject):
                                                            _("Never"))
         self.window.get_widget("pool-apply").set_sensitive(True)
 
+    def set_storage_error_page(self, msg):
+        self.reset_pool_state()
+        self.window.get_widget("storage-pages").set_current_page(1)
+        self.window.get_widget("storage-error-label").set_text(msg)
+
     def pool_selected(self, src):
         selected = src.get_selected()
         if selected[1] is None or \
            selected[0].get_value(selected[1], 0) is None:
-            self.reset_pool_state()
+            self.set_storage_error_page(_("No storage pool selected."))
             return
+
+        self.window.get_widget("storage-pages").set_current_page(0)
 
         uuid = selected[0].get_value(selected[1], 0)
         pool = self.conn.get_pool(uuid)
