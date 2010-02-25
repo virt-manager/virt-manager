@@ -64,6 +64,12 @@ remove_pages = [ HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                  HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
                  HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO]
 
+# Boot device columns
+BOOT_DEV_TYPE = 0
+BOOT_LABEL = 1
+BOOT_ICON = 2
+BOOT_ACTIVE = 3
+
 # Main tab pages
 PAGE_CONSOLE = 0
 PAGE_DETAILS = 1
@@ -230,13 +236,23 @@ class vmmDetails(gobject.GObject):
             "on_overview_acpi_changed": self.config_enable_apply,
             "on_overview_apic_changed": self.config_enable_apply,
             "on_overview_clock_changed": self.config_enable_apply,
+            "on_security_label_changed": self.security_label_changed,
+            "on_security_type_changed": self.security_type_changed,
+            "on_security_model_changed": self.security_model_changed,
+
             "on_config_vcpus_changed": self.config_enable_apply,
+
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
-            "on_config_boot_device_changed": self.config_boot_options_changed,
-            "on_config_autostart_changed": self.config_boot_options_changed,
+
+            "on_config_boot_moveup_clicked" : (self.config_boot_move, True),
+            "on_config_boot_movedown_clicked" : (self.config_boot_move,
+                                                 False),
+            "on_config_autostart_changed": self.config_enable_apply,
+
             "on_disk_readonly_changed": self.config_enable_apply,
             "on_disk_shareable_changed": self.config_enable_apply,
+
             "on_video_model_combo_changed": self.config_enable_apply,
 
             "on_config_apply_clicked": self.config_apply,
@@ -246,10 +262,6 @@ class vmmDetails(gobject.GObject):
             "on_config_cdrom_connect_clicked": self.toggle_storage_media,
             "on_config_remove_clicked": self.remove_xml_dev,
             "on_add_hardware_button_clicked": self.add_hardware,
-
-            "on_security_label_changed": self.security_label_changed,
-            "on_security_type_changed": self.security_type_changed,
-            "on_security_model_changed": self.security_model_changed,
 
             "on_hw_list_button_press_event": self.popup_addhw_menu,
 
@@ -284,7 +296,12 @@ class vmmDetails(gobject.GObject):
         self.vm.connect("status-changed", self.update_widget_states)
         self.vm.connect("resources-sampled", self.refresh_resources)
         self.vm.connect("config-changed", self.refresh_vm_info)
-        self.window.get_widget("hw-list").get_selection().connect("changed", self.hw_selected)
+        self.window.get_widget("hw-list").get_selection().connect(
+                                                        "changed",
+                                                        self.hw_selected)
+        self.window.get_widget("config-boot-list").get_selection().connect(
+                                            "changed",
+                                            self.config_bootdev_selected)
 
         finish_img = gtk.image_new_from_stock(gtk.STOCK_ADD,
                                               gtk.ICON_SIZE_BUTTON)
@@ -499,17 +516,30 @@ class vmmDetails(gobject.GObject):
         pinCol.add_attribute(pin_text, 'text', 2)
 
         # Boot device list
-        boot_list = self.window.get_widget("config-boot-device")
-        # model = [ display name, icon name, boot type (hd, fd, etc) ]
-        boot_list_model = gtk.ListStore(str, str, str)
+        boot_list = self.window.get_widget("config-boot-list")
+        # model = [ XML boot type, display name, icon name, enabled ]
+        boot_list_model = gtk.ListStore(str, str, str, bool)
         boot_list.set_model(boot_list_model)
 
+        chkCol = gtk.TreeViewColumn()
+        txtCol = gtk.TreeViewColumn()
+
+        boot_list.append_column(chkCol)
+        boot_list.append_column(txtCol)
+
+        chk = gtk.CellRendererToggle()
+        chk.connect("toggled", self.config_boot_toggled)
+        chkCol.pack_start(chk, False)
+        chkCol.add_attribute(chk, 'active', BOOT_ACTIVE)
+
         icon = gtk.CellRendererPixbuf()
-        boot_list.pack_start(icon, False)
-        boot_list.add_attribute(icon, 'icon-name', 1)
+        txtCol.pack_start(icon, False)
+        txtCol.add_attribute(icon, 'icon-name', BOOT_ICON)
+
         text = gtk.CellRendererText()
-        boot_list.pack_start(text, True)
-        boot_list.add_attribute(text, 'text', 0)
+        txtCol.pack_start(text, True)
+        txtCol.add_attribute(text, 'text', BOOT_LABEL)
+        txtCol.add_attribute(text, 'sensitive', BOOT_ACTIVE)
 
         # Video model combo
         video_dev = self.window.get_widget("video-model-combo")
@@ -615,6 +645,14 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("toolbar-box").show()
         else:
             self.window.get_widget("toolbar-box").hide()
+
+    def get_boot_selection(self):
+        widget = self.window.get_widget("config-boot-list")
+        selection = widget.get_selection()
+        model, treepath = selection.get_selected()
+        if treepath == None:
+            return None
+        return model[treepath]
 
     def get_hw_selection(self, field):
         vmlist = self.window.get_widget("hw-list")
@@ -936,11 +974,23 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("details-pages").remove_page(page_idx)
         self.serial_tabs.remove(name)
 
+    ############################
+    # Details/Hardware getters #
+    ############################
+
+    def get_config_boot_devs(self):
+        boot_model = self.window.get_widget("config-boot-list").get_model()
+        devs = []
+
+        for row in boot_model:
+            if row[BOOT_ACTIVE]:
+                devs.append(row[BOOT_DEV_TYPE])
+
+        return devs
 
     ##############################
     # Details/Hardware listeners #
     ##############################
-
     def config_enable_apply(self, ignore1=None, ignore2=None):
         self.window.get_widget("config-apply").set_sensitive(True)
 
@@ -996,8 +1046,55 @@ class vmmDetails(gobject.GObject):
         maxadj.lower = mem
 
     # Boot device / Autostart
-    def config_boot_options_changed(self, src):
-        self.window.get_widget("config-apply").set_sensitive(True)
+    def config_bootdev_selected(self, ignore):
+        boot_row = self.get_boot_selection()
+        boot_selection = boot_row and boot_row[BOOT_DEV_TYPE]
+        boot_devs = self.get_config_boot_devs()
+        up_widget = self.window.get_widget("config-boot-moveup")
+        down_widget = self.window.get_widget("config-boot-movedown")
+
+        down_widget.set_sensitive(bool(boot_devs and
+                                       boot_selection and
+                                       boot_selection in boot_devs and
+                                       boot_selection != boot_devs[-1]))
+        up_widget.set_sensitive(bool(boot_devs and boot_selection and
+                                     boot_selection in boot_devs and
+                                     boot_selection != boot_devs[0]))
+
+    def config_boot_toggled(self, ignore, index):
+        boot_model = self.window.get_widget("config-boot-list").get_model()
+        boot_row = boot_model[index]
+        is_active = boot_row[BOOT_ACTIVE]
+
+        boot_row[BOOT_ACTIVE] = not is_active
+
+        self.repopulate_boot_list(self.get_config_boot_devs(),
+                                  boot_row[BOOT_DEV_TYPE])
+        self.config_enable_apply()
+
+    def config_boot_move(self, src, move_up):
+        boot_row = self.get_boot_selection()
+        if not boot_row:
+            return
+
+        boot_selection = boot_row[BOOT_DEV_TYPE]
+        boot_devs = self.get_config_boot_devs()
+        boot_idx = boot_devs.index(boot_selection)
+        if move_up:
+            new_idx = boot_idx - 1
+        else:
+            new_idx = boot_idx + 1
+
+        if new_idx < 0 or new_idx >= len(boot_devs):
+            # Somehow we got out of bounds
+            return
+
+        swap_dev = boot_devs[new_idx]
+        boot_devs[new_idx] = boot_selection
+        boot_devs[boot_idx] = swap_dev
+
+        self.repopulate_boot_list(boot_devs, boot_selection)
+        self.config_enable_apply()
 
     # CDROM Eject/Connect
     def toggle_storage_media(self, src):
@@ -1160,7 +1257,6 @@ class vmmDetails(gobject.GObject):
 
     # Boot device / Autostart
     def config_boot_options_apply(self):
-        boot = self.window.get_widget("config-boot-device")
         auto = self.window.get_widget("config-autostart")
 
         if auto.get_property("sensitive"):
@@ -1171,10 +1267,9 @@ class vmmDetails(gobject.GObject):
                                    str(e)), "".join(traceback.format_exc()))
                 return False
 
-        if boot.get_property("sensitive") and boot.get_active() > -1:
-            bootdev = boot.get_model()[boot.get_active()][2]
-            return self._change_config_helper(self.vm.set_boot_device,
-                                              (bootdev,))
+        bootdevs = self.get_config_boot_devs()
+        return self._change_config_helper(self.vm.set_boot_device,
+                                          (bootdevs,))
 
     # CDROM
     def change_storage_media(self, dev_id_info, newpath, _type=None):
@@ -1797,26 +1892,8 @@ class vmmDetails(gobject.GObject):
             self.window.get_widget("config-autostart").set_active(False)
             self.window.get_widget("config-autostart").set_sensitive(False)
 
-        # Refresh Boot Device list and correct selection
-        boot_combo = self.window.get_widget("config-boot-device")
-        if not self.vm.is_hvm():
-            # Boot dev selection not supported for PV guest
-            boot_combo.set_sensitive(False)
-            boot_combo.set_active(-1)
-            return
-
+        # Refresh Boot Device list
         self.repopulate_boot_list()
-        bootdev = self.vm.get_boot_device()
-        boot_combo = self.window.get_widget("config-boot-device")
-        boot_model = boot_combo.get_model()
-        for i in range(0, len(boot_model)):
-            if bootdev == boot_model[i][2]:
-                boot_combo.set_active(i)
-                break
-
-        if boot_model[0][2] == None:
-            # If no boot devices, select the 'No Device' entry
-            boot_combo.set_active(0)
 
 
     ############################
@@ -1994,39 +2071,63 @@ class vmmDetails(gobject.GObject):
                 # Now actually remove it
                 hw_list_model.remove(_iter)
 
-    def repopulate_boot_list(self):
-        hw_list_model = self.window.get_widget("hw-list").get_model()
-        boot_combo = self.window.get_widget("config-boot-device")
-        boot_model = boot_combo.get_model()
+    def repopulate_boot_list(self, bootdevs=None, dev_select=None):
+        boot_list = self.window.get_widget("config-boot-list")
+        boot_model = boot_list.get_model()
+        old_order = map(lambda x: x[BOOT_DEV_TYPE], boot_model)
         boot_model.clear()
-        found_dev = {}
-        for row in hw_list_model:
-            hwtype = row[HW_LIST_COL_TYPE]
 
-            if hwtype == HW_LIST_TYPE_DISK:
-                diskinfo = row[HW_LIST_COL_DEVICE]
+        if bootdevs == None:
+            bootdevs = self.vm.get_boot_device()
 
-                if diskinfo[4] == virtinst.VirtualDisk.DEVICE_DISK and not \
-                   found_dev.get(virtinst.VirtualDisk.DEVICE_DISK, False):
-                    boot_model.append(["Hard Disk", "drive-harddisk", "hd"])
-                    found_dev[virtinst.VirtualDisk.DEVICE_DISK] = True
-                elif diskinfo[4] == virtinst.VirtualDisk.DEVICE_CDROM and not \
-                     found_dev.get(virtinst.VirtualDisk.DEVICE_CDROM, False):
-                    boot_model.append(["CDROM", "media-optical", "cdrom"])
-                    found_dev[virtinst.VirtualDisk.DEVICE_CDROM] = True
-                elif diskinfo[4] == virtinst.VirtualDisk.DEVICE_FLOPPY and not \
-                     found_dev.get(virtinst.VirtualDisk.DEVICE_FLOPPY, False):
-                    boot_model.append(["Floppy", "media-floppy", "fd"])
-                    found_dev[virtinst.VirtualDisk.DEVICE_FLOPPY] = True
+        boot_rows = {
+            "hd" : ["hd", "Hard Disk", "drive-harddisk", False],
+            "cdrom" : ["cdrom", "CDROM", "media-optical", False],
+            "network" : ["network", "Network (PXE)", "network-idle", False],
+            "fd" : ["fd", "Floppy", "media-floppy", False],
+        }
 
-            elif (hwtype == HW_LIST_TYPE_NIC and not
-                  found_dev.get(HW_LIST_TYPE_NIC, False)):
-                boot_model.append(["Network (PXE)", "network-idle", "network"])
-                found_dev[HW_LIST_TYPE_NIC] = True
+        for dev in bootdevs:
+            foundrow = None
 
-        if len(boot_model) <= 0:
-            boot_model.append([_("No Boot Device"), None, None])
+            for key, row in boot_rows.items():
+                if key == dev:
+                    foundrow = row
+                    del(boot_rows[key])
+                    break
 
-        boot_combo.set_model(boot_model)
+            if not foundrow:
+                # Some boot device listed that we don't know about.
+                foundrow = [dev, "Boot type '%s'" % dev,
+                            "drive-harddisk", True]
+
+            foundrow[BOOT_ACTIVE] = True
+            boot_model.append(foundrow)
+
+        # Append all remaining boot_rows that aren't enabled
+        for dev in old_order:
+            if boot_rows.has_key(dev):
+                boot_model.append(boot_rows[dev])
+                del(boot_rows[dev])
+
+        for row in boot_rows.values():
+            boot_model.append(row)
+
+        boot_list.set_model(boot_model)
+        selection = boot_list.get_selection()
+
+        if dev_select:
+            idx = 0
+            for row in boot_model:
+                if row[BOOT_DEV_TYPE] == dev_select:
+                    break
+                idx += 1
+
+            boot_list.get_selection().select_path(str(idx))
+
+        elif not selection.get_selected()[1]:
+            # Set a default selection
+            selection.select_path("0")
+
 
 gobject.type_register(vmmDetails)

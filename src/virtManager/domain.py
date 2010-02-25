@@ -164,7 +164,7 @@ class vmmDomainBase(gobject.GObject):
     def define_seclabel(self, model, t, label):
         raise NotImplementedError()
 
-    def set_boot_device(self, boot_type):
+    def set_boot_device(self, boot_list):
         raise NotImplementedError()
 
     def define_acpi(self, newvalue):
@@ -275,10 +275,13 @@ class vmmDomainBase(gobject.GObject):
         xml = self.get_xml()
 
         def get_boot_xml(doc, ctx):
-            ret = ctx.xpathEval("/domain/os/boot[1]")
+            ret = ctx.xpathEval("/domain/os/boot")
+            devs = []
             for node in ret:
                 dev = node.prop("dev")
-            return dev
+                if dev:
+                    devs.append(dev)
+            return devs
 
         return util.xml_parse_wrapper(xml, get_boot_xml)
 
@@ -1672,15 +1675,25 @@ class vmmDomain(vmmDomainBase):
         self._redefine(change_mem_xml, memory, maxmem)
 
     # Boot device
-    def set_boot_device(self, boot_type):
-        logging.debug("Setting boot device to type: %s" % boot_type)
+    def set_boot_device(self, boot_list):
+        logging.debug("Setting boot devices to: %s" % boot_list)
 
         def set_boot_xml(doc, ctx):
-            node = ctx.xpathEval("/domain/os/boot[1]")
-            node = (node and node[0] or None)
+            nodes = ctx.xpathEval("/domain/os/boot")
+            os_node = ctx.xpathEval("/domain/os")[0]
+            mappings = map(lambda x, y: (x, y), nodes, boot_list)
 
-            if node and node.prop("dev"):
-                node.setProp("dev", boot_type)
+            for node, boot_dev in mappings:
+                if node:
+                    if boot_dev:
+                        node.setProp("dev", boot_dev)
+                    else:
+                        node.unlinkNode()
+                        node.freeNode()
+                else:
+                    if boot_dev:
+                        node = os_node.newChild(None, "boot", None)
+                    node.setProp("dev", boot_dev)
 
             return doc.serialize()
 
@@ -1698,6 +1711,7 @@ class vmmDomain(vmmDomainBase):
             if not model:
                 if secnode:
                     secnode.unlinkNode()
+                    secnode.freeNode()
 
             elif not secnode:
                 # Need to create new node
@@ -2057,8 +2071,8 @@ class vmmDomainVirtinst(vmmDomainBase):
 
         self._redefine(change_seclabel)
 
-    def set_boot_device(self, boot_type):
-        if not boot_type or boot_type == self.get_boot_device():
+    def set_boot_device(self, boot_list):
+        if not boot_list or boot_list == self.get_boot_device():
             return
 
         raise RuntimeError("Boot device is determined by the install media.")
