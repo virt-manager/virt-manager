@@ -2010,7 +2010,7 @@ class vmmDomainVirtinst(vmmDomainBase):
         self._backend.autostart = bool(val)
         self.emit("config-changed")
 
-    def attach_device(self, devobj):
+    def attach_device(self, devobj, devxml=None):
         return
     def detach_device(self, devtype, dev_id_info):
         return

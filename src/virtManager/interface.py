@@ -98,7 +98,7 @@ class vmmInterface(gobject.GObject):
         if itype == Interface.Interface.INTERFACE_TYPE_VLAN:
             return "VLAN"
         elif itype:
-            return itype.capitalize()
+            return str(itype).capitalize()
         else:
             return "Interface"
 

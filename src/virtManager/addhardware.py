@@ -537,7 +537,7 @@ class vmmAddHardware(gobject.GObject):
                                      path=self.get_config_disk_image(),
                                      readOnly=True)
             return int(d.size * 1024) or None
-        except Exception, e:
+        except:
             return None
 
     def get_config_disk_size(self):
