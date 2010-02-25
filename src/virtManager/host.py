@@ -22,6 +22,7 @@ import gobject
 import gtk
 import gtk.glade
 import traceback
+import logging
 
 from virtinst import Storage
 from virtinst import Interface
@@ -463,10 +464,17 @@ class vmmHost(gobject.GObject):
             return
 
         self.window.get_widget("network-pages").set_current_page(0)
-
+        self.window.get_widget("net-apply").set_sensitive(False)
         net = self.conn.get_net(selected[0].get_value(selected[1], 0))
+
+        try:
+            self.populate_net_state(net)
+        except Exception, e:
+            logging.exception(e)
+            self.set_net_error_page(_("Error selecting network: %s") % e)
+
+    def populate_net_state(self, net):
         active = net.is_active()
-        selected[0].set_value(selected[1], 4, bool(active))
 
         self.window.get_widget("net-details").set_sensitive(True)
         self.window.get_widget("net-name").set_text(net.get_name())
@@ -509,7 +517,6 @@ class vmmHost(gobject.GObject):
         forward_str = net.pretty_forward_mode()
         self.window.get_widget("net-ip4-forwarding").set_text(forward_str)
 
-        self.window.get_widget("net-apply").set_sensitive(False)
 
     def reset_net_state(self):
         self.window.get_widget("net-details").set_sensitive(False)
@@ -690,8 +697,16 @@ class vmmHost(gobject.GObject):
             return
 
         self.window.get_widget("storage-pages").set_current_page(0)
-
+        self.window.get_widget("pool-apply").set_sensitive(False)
         uuid = selected[0].get_value(selected[1], 0)
+
+        try:
+            self.populate_pool_state(uuid)
+        except Exception, e:
+            logging.exception(e)
+            self.set_storage_error_page(_("Error selecting pool: %s") % e)
+
+    def populate_pool_state(self, uuid):
         pool = self.conn.get_pool(uuid)
         auto = pool.get_autostart()
         active = pool.is_active()
@@ -714,7 +729,6 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("pool-delete").set_sensitive(not active)
         self.window.get_widget("pool-stop").set_sensitive(active)
         self.window.get_widget("pool-start").set_sensitive(not active)
-        self.window.get_widget("pool-apply").set_sensitive(False)
         self.window.get_widget("vol-add").set_sensitive(active)
         self.window.get_widget("vol-delete").set_sensitive(False)
 
@@ -924,7 +938,17 @@ class vmmHost(gobject.GObject):
 
         self.window.get_widget("interface-pages").set_current_page(
                                                         INTERFACE_PAGE_INFO)
+        self.window.get_widget("interface-apply").set_sensitive(False)
         name = selected[0].get_value(selected[1], 0)
+
+        try:
+            self.populate_interface_state(name)
+        except Exception, e:
+            logging.exception(e)
+            self.set_interface_error_page(_("Error selecting interface: %s") %
+                                          e)
+
+    def populate_interface_state(self, name):
         interface = self.conn.get_interface(name)
         children = interface.get_slaves()
         itype = interface.get_type()
@@ -953,7 +977,6 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("interface-delete").set_sensitive(not active)
         self.window.get_widget("interface-stop").set_sensitive(active)
         self.window.get_widget("interface-start").set_sensitive(not active)
-        self.window.get_widget("interface-apply").set_sensitive(False)
 
         show_child = (children or
                       itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
