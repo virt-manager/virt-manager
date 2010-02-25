@@ -1435,7 +1435,11 @@ class vmmDetails(gobject.GObject):
         if pagetype is None:
             return
 
-        pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+        if self.window.get_widget("config-apply").get_property("sensitive"):
+            # Apply button sensitive means user is making changes, don't
+            # erase them
+            return
+
         self.hw_selected(page=pagetype)
 
     def refresh_overview_page(self):
