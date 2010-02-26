@@ -189,4 +189,20 @@ class vmmInterface(vmmLibvirtObject):
 
         return [dhcp, autoconf, ret]
 
+    def get_protocol_xml(self):
+        def protocol(ctx):
+            node = ctx.xpathEval("/interface/protocol")
+            node = node and node[0] or None
+
+            ret = None
+            if node:
+                ret = node.serialize()
+
+            return ret
+
+        ret = virtinst.util.get_xml_path(self.get_xml(), func=protocol)
+        if ret:
+            ret = "  %s\n" % ret
+        return ret
+
 gobject.type_register(vmmInterface)

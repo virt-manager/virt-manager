@@ -56,6 +56,10 @@ BOND_PAGE_ARP = 0
 BOND_PAGE_MII = 1
 BOND_PAGE_DEFAULT = 2
 
+IP_DHCP = 0
+IP_STATIC = 1
+IP_NONE = 2
+
 class vmmCreateInterface(gobject.GObject):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
@@ -103,6 +107,25 @@ class vmmCreateInterface(gobject.GObject):
             "on_bond_monitor_mode_changed": self.bond_monitor_mode_changed,
         })
 
+        self.ip_config_win = gtk.glade.XML(self.config.get_glade_dir() + \
+                                           "/vmm-create-interface.glade",
+                                           "ip-config",
+                                           domain="virt-manager")
+        self.ip_config = self.ip_config_win.get_widget("ip-config")
+        self.ip_config_win.signal_autoconnect({
+            "on_ip_config_delete_event": self.ip_config_finish,
+            "on_ip_ok_clicked": self.ip_config_finish,
+
+            "on_ip_copy_interface_toggled": self.ip_copy_interface_toggled,
+
+            "on_ipv4_mode_changed": self.ipv4_mode_changed,
+            "on_ipv6_mode_changed": self.ipv6_mode_changed,
+
+            "on_ipv6_address_add_clicked": self.ipv6_address_add,
+            "on_ipv6_address_remove_clicked": self.ipv6_address_remove,
+        })
+
+        self.ip_manually_changed = False
 
         self.window.signal_autoconnect({
             "on_vmm_create_interface_delete_event" : self.close,
@@ -116,6 +139,7 @@ class vmmCreateInterface(gobject.GObject):
 
             "on_bridge_config_button_clicked": self.show_bridge_config,
             "on_bond_config_button_clicked": self.show_bond_config,
+            "on_ip_config_button_clicked": self.show_ip_config,
             "on_vlan_tag_changed": self.update_interface_name,
         })
         util.bind_escape_key_close(self)
@@ -131,6 +155,10 @@ class vmmCreateInterface(gobject.GObject):
 
     def show_bridge_config(self, src):
         self.bridge_config.show_all()
+
+    def show_ip_config(self, src):
+        self.ip_manually_changed = True
+        self.ip_config.show_all()
 
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
@@ -263,6 +291,46 @@ class vmmCreateInterface(gobject.GObject):
         for m in Interface.InterfaceBond.INTERFACE_BOND_MONITOR_MODE_MII_CARRIER_TYPES:
             carrier_model.append([m])
 
+        # IP config
+        copy_iface = self.ip_config_win.get_widget("ip-copy-interface-combo")
+        copy_model = gtk.ListStore(str, object, bool)
+        copy_iface.set_model(copy_model)
+        txt = gtk.CellRendererText()
+        copy_iface.pack_start(txt, True)
+        copy_iface.add_attribute(txt, "text", 0)
+        copy_iface.add_attribute(txt, "sensitive", 2)
+
+        ip_mode = self.ip_config_win.get_widget("ipv4-mode")
+        ip_model = gtk.ListStore(str)
+        ip_mode.set_model(ip_model)
+        txt = gtk.CellRendererText()
+        ip_mode.pack_start(txt, True)
+        ip_mode.add_attribute(txt, "text", 0)
+        ip_model.insert(IP_DHCP, ["DHCP"])
+        ip_model.insert(IP_STATIC, ["Static"])
+        ip_model.insert(IP_NONE, ["No configuration"])
+
+        ip_mode = self.ip_config_win.get_widget("ipv6-mode")
+        ip_model = gtk.ListStore(str)
+        ip_mode.set_model(ip_model)
+        txt = gtk.CellRendererText()
+        ip_mode.pack_start(txt, True)
+        ip_mode.add_attribute(txt, "text", 0)
+        ip_model.insert(IP_DHCP, ["DHCP"])
+        ip_model.insert(IP_STATIC, ["Static"])
+        ip_model.insert(IP_NONE, ["No configuration"])
+
+        v6_addr = self.ip_config_win.get_widget("ipv6-address-list")
+        addr_model = gtk.ListStore(str)
+        v6_addr.set_model(addr_model)
+        txt_col = gtk.TreeViewColumn("")
+        v6_addr.append_column(txt_col)
+        txt = gtk.CellRendererText()
+        txt.set_property("editable", True)
+        txt.connect("edited", self.ipv6_address_editted)
+        txt_col.pack_start(txt, True)
+        txt_col.add_attribute(txt, "text", 0)
+        v6_addr.get_selection().connect("changed", self.ipv6_address_selected)
 
     def reset_state(self):
 
@@ -293,6 +361,19 @@ class vmmCreateInterface(gobject.GObject):
         self.bond_config_win.get_widget("mii-updelay").set_value(0)
         self.bond_config_win.get_widget("mii-downdelay").set_value(0)
         self.bond_config_win.get_widget("mii-carrier").set_active(0)
+
+        # IP config
+        self.ip_manually_changed = False
+        self.ip_config_win.get_widget("ip-do-manual").set_active(True)
+        self.ip_config_win.get_widget("ip-do-manual-box").set_current_page(0)
+
+        self.ip_config_win.get_widget("ipv4-mode").set_active(IP_DHCP)
+        self.ip_config_win.get_widget("ipv4-address").set_text("")
+        self.ip_config_win.get_widget("ipv4-gateway").set_text("")
+
+        self.ip_config_win.get_widget("ipv6-mode").set_active(IP_NONE)
+        self.ip_config_win.get_widget("ipv6-autoconf").set_active(False)
+        self.ipv6_address_selected()
 
     def populate_details_page(self):
         itype = self.get_config_interface_type()
@@ -325,6 +406,10 @@ class vmmCreateInterface(gobject.GObject):
             self.window.get_widget("%s-box" % value).set_property("visible",
                                                                   do_show)
 
+        show_ip = (itype != Interface.Interface.INTERFACE_TYPE_VLAN)
+        self.window.get_widget("ip-label").set_property("visible", show_ip)
+        self.window.get_widget("ip-box").set_property("visible", show_ip)
+
         if itype == Interface.Interface.INTERFACE_TYPE_BRIDGE:
             self.update_bridge_desc()
 
@@ -334,23 +419,84 @@ class vmmCreateInterface(gobject.GObject):
         # Populate device list
         self.populate_interface_list(itype)
 
-    def interface_item_toggled(self, src, index, slave_list):
+        self.update_ip_config()
+
+    def update_ip_config(self):
+        (is_manual, current_name,
+         ignore, ignore, ignore) = self.get_config_ip_info()
         itype = self.get_config_interface_type()
-        active = src.get_active()
-        model = slave_list.get_model()
+        ifaces = self.get_config_selected_interfaces()
 
-        if itype in [ Interface.Interface.INTERFACE_TYPE_ETHERNET,
-                      Interface.Interface.INTERFACE_TYPE_VLAN ]:
-            # Deselect any selected rows
-            for row in model:
-                if row == model[index]:
-                    continue
-                row[INTERFACE_ROW_SELECT] = False
+        copy_radio = self.ip_config_win.get_widget("ip-copy-interface")
+        copy_combo = self.ip_config_win.get_widget("ip-copy-interface-combo")
+        copy_model = copy_combo.get_model()
 
-        # Toggle the clicked row
-        model[index][INTERFACE_ROW_SELECT] = not active
+        # Only select 'copy from' option if using bridge/bond
+        enable_copy = (itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
+                                 Interface.Interface.INTERFACE_TYPE_BOND])
 
-        self.update_interface_name()
+        # Set defaults if required
+        copy_model.clear()
+        active_rows = []
+        inactive_rows = []
+        for row in ifaces:
+            is_defined = row[INTERFACE_ROW_IS_DEFINED]
+            name = row[INTERFACE_ROW_NAME]
+            label = name
+            sensitive = False
+
+            iface_obj = None
+            if is_defined:
+                iface_obj = self.conn.get_interface(name)
+
+            # We only want configured (aka interface API) interfaces with
+            # actually present <protocol> info
+            if not is_defined or not iface_obj:
+                label += " (Not configured)"
+            elif not iface_obj.get_protocol_xml():
+                label += " (No IP configuration)"
+            else:
+                sensitive = True
+
+            row = [label, iface_obj, sensitive]
+            if sensitive:
+                active_rows.append(row)
+            else:
+                inactive_rows.append(row)
+
+        # Make sure inactive rows are listed after active rows
+        for row in active_rows + inactive_rows:
+            copy_model.append(row)
+
+        if len(copy_model) == 0:
+            copy_model.append(["No child interfaces selected.", None, False])
+
+        if not enable_copy:
+            copy_model.clear()
+            copy_model.append(["", None, False])
+
+        # Find default model selection
+        have_valid_copy = bool(active_rows)
+
+        # Re select previous selection, 0 otherwise
+        idx = 0
+        if not is_manual and current_name:
+            found_idx = 0
+            for row in copy_model:
+                if row[1] == current_name:
+                    idx = found_idx
+                    break
+                found_idx += 1
+        copy_combo.set_active(idx)
+
+        copy_radio.set_sensitive(enable_copy)
+        if not self.ip_manually_changed:
+            if (enable_copy and have_valid_copy):
+                copy_radio.set_active(True)
+            else:
+                self.ip_config_win.get_widget("ip-do-manual").set_active(True)
+
+        self.update_ip_desc()
 
     def populate_interface_list(self, itype):
         iface_list = self.window.get_widget("interface-list")
@@ -489,9 +635,39 @@ class vmmCreateInterface(gobject.GObject):
         stp = self.bridge_config_win.get_widget("bridge-stp").get_active()
         return [delay, stp]
 
+    def get_config_ipv6_address_selection(self):
+        src = self.ip_config_win.get_widget("ipv6-address-list")
+        selection = src.get_selection()
+        ignore, treepath = selection.get_selected()
+        return treepath
+
+    def get_config_ipv6_addresses(self):
+        src = self.ip_config_win.get_widget("ipv6-address-list")
+        model = src.get_model()
+        return map(lambda x: x[0], model)
+
     ################
     # UI Listeners #
     ################
+
+    def interface_item_toggled(self, src, index, slave_list):
+        itype = self.get_config_interface_type()
+        active = src.get_active()
+        model = slave_list.get_model()
+
+        if itype in [ Interface.Interface.INTERFACE_TYPE_ETHERNET,
+                      Interface.Interface.INTERFACE_TYPE_VLAN ]:
+            # Deselect any selected rows
+            for row in model:
+                if row == model[index]:
+                    continue
+                row[INTERFACE_ROW_SELECT] = False
+
+        # Toggle the clicked row
+        model[index][INTERFACE_ROW_SELECT] = not active
+
+        self.update_interface_name()
+        self.update_ip_config()
 
     def update_interface_name(self, ignore1=None, ignore2=None):
         itype = self.get_config_interface_type()
@@ -517,6 +693,20 @@ class vmmCreateInterface(gobject.GObject):
 
         bond_pages.set_current_page(page)
 
+    def ip_copy_interface_toggled(self, src):
+        active = src.get_active()
+
+        self.ip_config_win.get_widget("ip-copy-interface-box").set_sensitive(active)
+        self.ip_config_win.get_widget("ip-do-manual-box").set_sensitive(not active)
+
+    def ipv4_mode_changed(self, src):
+        static = (src.get_active() == IP_STATIC)
+        self.ip_config_win.get_widget("ipv4-static-box").set_sensitive(static)
+
+    def ipv6_mode_changed(self, src):
+        static = (src.get_active() == IP_STATIC)
+        self.ip_config_win.get_widget("ipv6-static-box").set_sensitive(static)
+
     def update_bridge_desc(self):
         delay, stp = self.get_config_bridge_params()
         txt  = "STP %s" % (stp and "on" or "off")
@@ -538,6 +728,142 @@ class vmmCreateInterface(gobject.GObject):
             txt += ", %s" % mon
 
         self.window.get_widget("bond-config-label").set_text(txt)
+
+    def update_ip_desc(self):
+        is_manual, name, ipv4, ipv6, ignore = self.get_config_ip_info()
+        label = ""
+
+        if is_manual:
+            if ipv4:
+                label += "IPv4: %s" % (ipv4.dhcp and "DHCP" or "Static")
+
+            if ipv6:
+                if label:
+                    label += ", "
+                label += "IPv6: "
+
+                mode_label = ""
+                if ipv6.autoconf and ipv6.dhcp:
+                    mode_label += "Autoconf "
+
+                if ipv6.dhcp:
+                    mode_label += "DHCP"
+
+                if not mode_label:
+                    mode_label = "Static"
+
+                label += mode_label
+
+        else:
+            if name:
+                label = "Copy configuration from '%s'" % name
+
+        if not label:
+            label = "No configuration"
+
+        self.window.get_widget("ip-config-label").set_text(label)
+
+    def get_config_ip_info(self):
+        if not self.window.get_widget("ip-label").get_property("visible"):
+            return [True, None, None, None, None]
+
+        if not self.validate_ip_info():
+            return [True, None, None, None, None]
+
+        return self.build_ip_info()
+
+    def build_ip_info(self):
+        def get_row(widget):
+            combo = widget.get_model()
+            active = widget.get_active()
+            if active == -1:
+                return None
+            return combo[active]
+
+        def build_ip(addr_str):
+            if not addr_str:
+                return None
+
+            ret = addr_str.rsplit("/", 1)
+            ip = Interface.InterfaceProtocolIPAddress(ret[0])
+            if len(ret) > 1:
+                ip.prefix = ret[1]
+
+            return ip
+
+        is_manual = self.ip_config_win.get_widget("ip-do-manual").get_active()
+
+        copy_row = get_row(self.ip_config_win.get_widget("ip-copy-interface-combo"))
+
+        v4_mode = self.ip_config_win.get_widget("ipv4-mode").get_active()
+        v4_addr = self.ip_config_win.get_widget("ipv4-address").get_text()
+        v4_gate = self.ip_config_win.get_widget("ipv4-gateway").get_text()
+
+        v6_mode = self.ip_config_win.get_widget("ipv6-mode").get_active()
+        v6_auto = self.ip_config_win.get_widget("ipv6-autoconf").get_active()
+        v6_gate = self.ip_config_win.get_widget("ipv6-gateway").get_text()
+        v6_addrlist = self.get_config_ipv6_addresses()
+
+        copy_name = None
+        proto_xml = None
+        ipv4 = None
+        ipv6 = None
+
+        if not is_manual:
+            if copy_row[1] and copy_row[2]:
+                copy_name = copy_row[1].get_name()
+                proto_xml = copy_row[1].get_protocol_xml()
+
+        else:
+            # Build IPv4 Info
+            if v4_mode != IP_NONE:
+                ipv4 = Interface.InterfaceProtocolIPv4()
+                ipv4.dhcp = bool(v4_mode == IP_DHCP)
+                if not ipv4.dhcp:
+                    if v4_addr:
+                        ipv4.ips.append(build_ip(v4_addr))
+
+                    if v4_gate:
+                        ipv4.gateway = v4_gate
+
+            # Build IPv6 Info
+            if v6_mode != IP_NONE:
+                ipv6 = Interface.InterfaceProtocolIPv6()
+                ipv6.dhcp = bool(v6_mode == IP_DHCP)
+                ipv6.autoconf = bool(v6_auto)
+                if not ipv6.dhcp:
+                    if v6_gate:
+                        ipv6.gateway = v6_gate
+                    if v6_addrlist:
+                        ipv6.ips = map(build_ip, v6_addrlist)
+
+        return [is_manual, copy_name, ipv4, ipv6, proto_xml]
+
+    def ipv6_address_add(self, src):
+        src = self.ip_config_win.get_widget("ipv6-address-list")
+        model = src.get_model()
+        model.append(["Insert address/prefix"])
+
+    def ipv6_address_remove(self, src):
+        treepath = self.get_config_ipv6_address_selection()
+        src = self.ip_config_win.get_widget("ipv6-address-list")
+        model = src.get_model()
+        if treepath != None:
+            del(model[treepath])
+
+    def ipv6_address_editted(self, src, path, new_text):
+        src = self.ip_config_win.get_widget("ipv6-address-list")
+        model = src.get_model()
+        row = model[path]
+        row[0] = new_text
+
+    def ipv6_address_selected(self, src=None):
+        treepath = self.get_config_ipv6_address_selection()
+        has_selection = (treepath != None)
+
+        self.ip_config_win.get_widget("ipv6-address-remove").set_sensitive(
+                                                                has_selection)
+
 
     #######################
     # Notebook navigation #
@@ -647,6 +973,20 @@ class vmmCreateInterface(gobject.GObject):
                 if not ret:
                     return ret
 
+            # Validate IP info (get_config validates for us)
+            (is_manual, copy_name, ipv4,
+             ipv6, proto_xml) = self.get_config_ip_info()
+
+            if is_manual:
+                protos = []
+                if ipv4:
+                    protos.append(ipv4)
+                if ipv6:
+                    protos.append(ipv6)
+                iobj.protocols = protos
+            else:
+                iobj.protocol_xml = proto_xml
+
             if itype == Interface.Interface.INTERFACE_TYPE_BRIDGE:
                 ret = self.validate_bridge(iobj, ifaces)
             elif itype == Interface.Interface.INTERFACE_TYPE_BOND:
@@ -736,6 +1076,17 @@ class vmmCreateInterface(gobject.GObject):
         return True
 
 
+    def validate_ip_info(self):
+        try:
+            self.build_ip_info()
+        except Exception, e:
+            self.err.show_err(_("Error validating IP configuration: %s") %
+                              str(e),
+                              "".join(traceback.format_exc()))
+            return False
+
+        return True
+
     ####################
     # Dialog callbacks #
     ####################
@@ -748,6 +1099,13 @@ class vmmCreateInterface(gobject.GObject):
     def bond_config_finish(self, ignore1=None, ignore2=None):
         self.update_bond_desc()
         self.bond_config.hide()
+        return 1
+
+    def ip_config_finish(self, ignore1=None, ignore2=None):
+        if not self.validate_ip_info():
+            return
+        self.update_ip_desc()
+        self.ip_config.hide()
         return 1
 
     #####################
