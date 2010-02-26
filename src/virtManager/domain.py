@@ -21,7 +21,6 @@
 import gobject
 import libvirt
 import logging
-import time
 import difflib
 
 import virtinst

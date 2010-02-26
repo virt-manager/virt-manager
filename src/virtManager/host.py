@@ -464,7 +464,6 @@ class vmmHost(gobject.GObject):
             return
 
         self.window.get_widget("network-pages").set_current_page(0)
-        self.window.get_widget("net-apply").set_sensitive(False)
         net = self.conn.get_net(selected[0].get_value(selected[1], 0))
 
         try:
@@ -472,6 +471,8 @@ class vmmHost(gobject.GObject):
         except Exception, e:
             logging.exception(e)
             self.set_net_error_page(_("Error selecting network: %s") % e)
+
+        self.window.get_widget("net-apply").set_sensitive(False)
 
     def populate_net_state(self, net):
         active = net.is_active()
@@ -697,7 +698,6 @@ class vmmHost(gobject.GObject):
             return
 
         self.window.get_widget("storage-pages").set_current_page(0)
-        self.window.get_widget("pool-apply").set_sensitive(False)
         uuid = selected[0].get_value(selected[1], 0)
 
         try:
@@ -705,6 +705,8 @@ class vmmHost(gobject.GObject):
         except Exception, e:
             logging.exception(e)
             self.set_storage_error_page(_("Error selecting pool: %s") % e)
+
+        self.window.get_widget("pool-apply").set_sensitive(False)
 
     def populate_pool_state(self, uuid):
         pool = self.conn.get_pool(uuid)
@@ -938,7 +940,6 @@ class vmmHost(gobject.GObject):
 
         self.window.get_widget("interface-pages").set_current_page(
                                                         INTERFACE_PAGE_INFO)
-        self.window.get_widget("interface-apply").set_sensitive(False)
         name = selected[0].get_value(selected[1], 0)
 
         try:
@@ -947,6 +948,8 @@ class vmmHost(gobject.GObject):
             logging.exception(e)
             self.set_interface_error_page(_("Error selecting interface: %s") %
                                           e)
+
+        self.window.get_widget("interface-apply").set_sensitive(False)
 
     def populate_interface_state(self, name):
         interface = self.conn.get_interface(name)
@@ -967,9 +970,23 @@ class vmmHost(gobject.GObject):
         self.window.get_widget("interface-state").set_text(
                                     (active and _("Active")) or _("Inactive"))
 
-        self.window.get_widget("interface-startmode").hide()
-        self.window.get_widget("interface-startmode-label").show()
-        self.window.get_widget("interface-startmode-label").set_text(startmode)
+        # Set start mode
+        start_list = self.window.get_widget("interface-startmode")
+        start_model = start_list.get_model()
+        start_label = self.window.get_widget("interface-startmode-label")
+        start_list.hide()
+        start_label.show()
+        start_label.set_text(startmode)
+
+        idx = 0
+        for row in start_model:
+            if row[0] == startmode:
+                start_list.set_active(idx)
+                start_list.show()
+                start_label.hide()
+                break
+            idx += 1
+
 
         used_by = util.iface_in_use_by(self.conn, name)
         self.window.get_widget("interface-inuseby").set_text(used_by or "-")

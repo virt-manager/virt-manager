@@ -23,6 +23,7 @@ import gobject
 import virtinst
 from virtinst import Interface
 
+from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmInterface(vmmLibvirtObject):
@@ -49,7 +50,7 @@ class vmmInterface(vmmLibvirtObject):
         return self.interface.XMLDesc(flags)
 
     def _define(self, xml):
-        return self.get_connection().interface_define(xml)
+        return self.get_connection().define_interface(xml)
 
     def set_active(self, state):
         self.active = state
@@ -96,8 +97,21 @@ class vmmInterface(vmmLibvirtObject):
     def get_startmode(self):
         return virtinst.util.get_xml_path(self.get_xml(),
                                           "/interface/start/@mode") or "none"
-    def set_startmode(self):
-        return
+    def set_startmode(self, newmode):
+        def set_start_xml(doc, ctx):
+            node = ctx.xpathEval("/interface/start[1]")
+            node = (node and node[0] or None)
+            iface_node = ctx.xpathEval("/interface")[0]
+
+            if not node:
+                node = iface_node.newChild(None, "start", None)
+
+            node.setProp("mode", newmode)
+
+            return doc.serialize()
+
+        self._redefine(util.xml_parse_wrapper, set_start_xml)
+
 
     def get_slaves(self):
         typ = self.get_type()
