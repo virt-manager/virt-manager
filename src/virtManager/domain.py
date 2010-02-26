@@ -30,6 +30,8 @@ import virtinst.util as vutil
 import virtinst.support as support
 from virtinst import VirtualDevice
 
+from virtManager.libvirtobject import vmmLibvirtObject
+
 def safeint(val, fmt="%.3d"):
     try:
         int(val)
@@ -54,7 +56,7 @@ def disk_type_to_target_prop(disk_type):
         return "dir"
     return "file"
 
-class vmmDomainBase(gobject.GObject):
+class vmmDomainBase(vmmLibvirtObject):
     """
     Base class for vmmDomain objects. Provides common set up and methods
     for domain backends (libvirt virDomain, virtinst Guest)
@@ -66,15 +68,11 @@ class vmmDomainBase(gobject.GObject):
         "resources-sampled": (gobject.SIGNAL_RUN_FIRST,
                               gobject.TYPE_NONE,
                               []),
-        "config-changed": (gobject.SIGNAL_RUN_FIRST,
-                           gobject.TYPE_NONE,
-                           []),
         }
 
     def __init__(self, config, connection, backend, uuid):
-        self.__gobject_init__()
-        self.config = config
-        self.connection = connection
+        vmmLibvirtObject.__init__(self, config, connection)
+
         self._backend = backend
         self.uuid = uuid
 
@@ -95,13 +93,6 @@ class vmmDomainBase(gobject.GObject):
     def get_id(self):
         raise NotImplementedError()
     def status(self):
-        raise NotImplementedError()
-
-    def get_xml(self):
-        raise NotImplementedError()
-    def refresh_xml(self):
-        raise NotImplementedError()
-    def _get_inactive_xml(self):
         raise NotImplementedError()
 
     def get_memory(self):
@@ -195,9 +186,6 @@ class vmmDomainBase(gobject.GObject):
         self._backend = vm
     def get_handle(self):
         return self._backend
-
-    def get_connection(self):
-        return self.connection
 
     def is_read_only(self):
         if self.connection.is_read_only():
@@ -1170,9 +1158,6 @@ class vmmDomain(vmmDomainBase):
                            "netRxRate"  : 10.0,
                          }
 
-        self._xml = None
-        self._is_xml_valid = False
-
         self._update_status()
 
         self.config.on_stats_enable_net_poll_changed(self.toggle_sample_network_traffic)
@@ -1186,14 +1171,13 @@ class vmmDomain(vmmDomainBase):
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
-        self._set_dom_flags()
+        (self._inactive_xml_flags,
+         self._active_xml_flags) = self.connection.get_dom_flags(
+                                                            self._backend)
 
     ##########################
     # Internal virDomain API #
     ##########################
-
-    def _set_dom_flags(self):
-        self.connection.set_dom_flags(self._backend)
 
     def _define(self, newxml):
         self.get_connection().define_domain(newxml)
@@ -1359,96 +1343,6 @@ class vmmDomain(vmmDomainBase):
     # XML fetching routines #
     #########################
 
-    def get_xml(self):
-        """
-        Get domain xml. If cached xml is invalid, update.
-        """
-        return self._xml_fetch_helper(refresh_if_necc=True)
-
-    def refresh_xml(self):
-        # Force an xml update. Signal 'config-changed' if domain xml has
-        # changed since last refresh
-
-        flags = libvirt.VIR_DOMAIN_XML_SECURE
-        if not self.connection.has_dom_flags(flags):
-            flags = 0
-
-        origxml = self._xml
-        self._xml = self._XMLDesc(flags)
-        self._is_xml_valid = True
-
-        if origxml != self._xml:
-            # 'tick' to make sure we have the latest time
-            self.tick(time.time())
-            util.safe_idle_add(util.idle_emit, self, "config-changed")
-
-    def _redefine(self, xml_func, *args):
-        """
-        Helper function for altering a redefining VM xml
-
-        @param xml_func: Function to alter the running XML. Takes the
-                         original XML as its first argument.
-        @param args: Extra arguments to pass to xml_func
-        """
-        origxml = self._get_xml_to_define()
-        # Sanitize origxml to be similar to what we will get back
-        origxml = util.xml_parse_wrapper(origxml, lambda d, c: d.serialize())
-
-        newxml = xml_func(origxml, *args)
-
-        if origxml == newxml:
-            logging.debug("Redefinition request XML was no different,"
-                          " redefining anyways")
-        else:
-            diff = "".join(difflib.unified_diff(origxml.splitlines(1),
-                                                newxml.splitlines(1),
-                                                fromfile="Original XML",
-                                                tofile="New XML"))
-            logging.debug("Redefining '%s' with XML diff:\n%s",
-                          self.get_name(), diff)
-
-        self._define(newxml)
-
-        # Invalidate cached XML
-        self._invalidate_xml()
-
-    def _get_xml_no_refresh(self):
-        """
-        Fetch XML, but don't force a refresh. Useful to prevent updating
-        xml in the tick loop when it's not that important (disk/net stats)
-        """
-        return self._xml_fetch_helper(refresh_if_necc=False)
-
-    def _get_xml_to_define(self):
-        if self.is_active():
-            return self._get_inactive_xml()
-        else:
-            self._invalidate_xml()
-            return self.get_xml()
-
-    def _xml_fetch_helper(self, refresh_if_necc):
-        # Helper to fetch xml with various options
-        if self._xml is None:
-            self.refresh_xml()
-        elif refresh_if_necc and not self._is_xml_valid:
-            self.refresh_xml()
-
-        return self._xml
-
-    def _invalidate_xml(self):
-        # Mark cached xml as invalid
-        self._is_xml_valid = False
-
-    def _get_inactive_xml(self):
-        flags = (libvirt.VIR_DOMAIN_XML_INACTIVE |
-                 libvirt.VIR_DOMAIN_XML_SECURE)
-        if not self.connection.has_dom_flags(flags):
-            flags = libvirt.VIR_DOMAIN_XML_INACTIVE
-
-            if not self.connection.has_dom_flags(flags):
-                flags = 0
-
-        return self._XMLDesc(flags)
 
 
     #############################
@@ -1972,11 +1866,12 @@ class vmmDomainVirtinst(vmmDomainBase):
 
     def get_xml(self):
         return self._backend.get_config_xml()
+    def _get_inactive_xml(self):
+        return self.get_xml()
+
     def refresh_xml(self):
         # No caching, so no refresh needed
         return
-    def _get_inactive_xml(self):
-        return self.get_xml()
 
     def get_autostart(self):
         return self._backend.autostart

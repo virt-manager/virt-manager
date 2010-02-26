@@ -21,16 +21,16 @@
 import gobject
 
 import virtinst
-import libvirt
 from virtinst import Interface
 
-class vmmInterface(gobject.GObject):
+from virtManager.libvirtobject import vmmLibvirtObject
+
+class vmmInterface(vmmLibvirtObject):
     __gsignals__ = { }
 
     def __init__(self, config, connection, interface, name, active):
-        self.__gobject_init__()
-        self.config = config
-        self.connection = connection
+        vmmLibvirtObject.__init__(self, config, connection)
+
         self.interface = interface  # Libvirt virInterface object
         self.name = name            # String name
         self.active = active        # bool indicating if it is running
@@ -38,26 +38,25 @@ class vmmInterface(gobject.GObject):
         self._xml = None            # xml cache
         self._xml_flags = None
 
-        self._check_xml_flags()
+        (self._inactive_xml_flags,
+         self._active_xml_flags) = self.connection.get_interface_flags(
+                                                            self.interface)
 
-        self._update_xml()
+        self.refresh_xml()
 
-    def _check_xml_flags(self):
-        self._xml_flags = 0
-        if virtinst.support.check_interface_support(
-                            self.interface,
-                            virtinst.support.SUPPORT_INTERFACE_XML_INACTIVE):
-            self._xml_flags = libvirt.VIR_INTERFACE_XML_INACTIVE
+    # Routines from vmmLibvirtObject
+    def _XMLDesc(self, flags):
+        return self.interface.XMLDesc(flags)
+
+    def _define(self, xml):
+        return self.get_connection().interface_define(xml)
 
     def set_active(self, state):
         self.active = state
-        self._update_xml()
+        self.refresh_xml()
 
     def is_active(self):
         return self.active
-
-    def get_connection(self):
-        return self.connection
 
     def get_name(self):
         return self.name
@@ -68,22 +67,14 @@ class vmmInterface(gobject.GObject):
 
     def start(self):
         self.interface.create(0)
-        self._update_xml()
+        self.refresh_xml()
 
     def stop(self):
         self.interface.destroy(0)
-        self._update_xml()
+        self.refresh_xml()
 
     def delete(self):
         self.interface.undefine()
-
-    def _update_xml(self):
-        self._xml = self.interface.XMLDesc(self._xml_flags)
-
-    def get_xml(self):
-        if self._xml is None:
-            self._update_xml()
-        return self._xml
 
     def is_bridge(self):
         typ = self.get_type()

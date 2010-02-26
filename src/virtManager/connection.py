@@ -125,7 +125,8 @@ class vmmConnection(gobject.GObject):
         self.storage_capable = None
         self.interface_capable = None
         self._nodedev_capable = None
-        self.dom_xml_flags = None
+
+        self._xml_flags = {}
 
         # Physical network interfaces: name -> virtinst.NodeDevice
         self.nodedevs = {}
@@ -488,29 +489,67 @@ class vmmConnection(gobject.GObject):
             self._nodedev_capable = virtinst.NodeDeviceParser.is_nodedev_capable(self.vmm)
         return self._nodedev_capable
 
-    def set_dom_flags(self, vm):
-        if self.dom_xml_flags != None:
-            # Already set
-            return
+    def _get_flags_helper(self, obj, key, check_func):
+        flags_dict = self._xml_flags.get(key)
 
-        self.dom_xml_flags = []
-        for flags in [libvirt.VIR_DOMAIN_XML_SECURE,
-                      libvirt.VIR_DOMAIN_XML_INACTIVE,
-                      (libvirt.VIR_DOMAIN_XML_SECURE |
-                       libvirt.VIR_DOMAIN_XML_INACTIVE )]:
-            try:
-                vm.XMLDesc(flags)
-                self.dom_xml_flags.append(flags)
-            except libvirt.libvirtError, e:
-                logging.debug("%s does not support flags=%d : %s" %
-                              (self.get_uri(), flags, str(e)))
+        if flags_dict == None:
+            # Flags already set
+            inact, act = check_func()
+            flags_dict = {}
+            flags_dict["active"] = act
+            flags_dict["inactive"] = inact
 
-    def has_dom_flags(self, flags):
-        if self.dom_xml_flags == None:
-            return False
+            self._xml_flags[key] = flags_dict
 
-        return bool(self.dom_xml_flags.count(flags))
+        active_flags   = flags_dict["active"]
+        inactive_flags = flags_dict["inactive"]
 
+        return (inactive_flags, active_flags)
+
+    def get_dom_flags(self, vm):
+        key = "domain"
+
+        def check_func():
+            act   = 0
+            inact = 0
+
+            if virtinst.support.check_domain_support(vm,
+                                virtinst.support.SUPPORT_DOMAIN_XML_INACTIVE):
+                inact = libvirt.VIR_DOMAIN_XML_INACTIVE
+            else:
+                logging.debug("Domain XML inactive flag not supported.")
+
+            if virtinst.support.check_domain_support(vm,
+                                virtinst.support.SUPPORT_DOMAIN_XML_SECURE):
+                inact |= libvirt.VIR_DOMAIN_XML_SECURE
+                act = libvirt.VIR_DOMAIN_XML_SECURE
+            else:
+                logging.debug("Domain XML secure flag not supported.")
+
+            return inact, act
+
+        return self._get_flags_helper(vm, key, check_func)
+
+    def get_interface_flags(self, iface):
+        key = "interface"
+
+        def check_func():
+            act   = 0
+            inact = 0
+
+            if virtinst.support.check_interface_support(iface,
+                            virtinst.support.SUPPORT_INTERFACE_XML_INACTIVE):
+                inact = libvirt.VIR_INTERFACE_XML_INACTIVE
+
+                # XXX: We intentionally use 'inactive' XML even for active
+                # interfaces, since active XML doesn't show much info
+                act = inact
+            else:
+                logging.debug("Interface XML inactive flag not supported.")
+
+            return (inact, act)
+
+        return self._get_flags_helper(iface, key, check_func)
 
     ###################################
     # Connection state getter/setters #
@@ -698,6 +737,8 @@ class vmmConnection(gobject.GObject):
 
     def define_domain(self, xml):
         self.vmm.defineXML(xml)
+    def define_interface(self, xml):
+        self.vmm.interfaceDefineXML(xml, 0)
 
     def restore(self, frm):
         self.vmm.restore(frm)
