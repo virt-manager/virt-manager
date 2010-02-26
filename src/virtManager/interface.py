@@ -52,6 +52,9 @@ class vmmInterface(vmmLibvirtObject):
     def _define(self, xml):
         return self.get_connection().define_interface(xml)
 
+    def xpath(self, path):
+        return virtinst.util.get_xml_path(self.get_xml(), path)
+
     def set_active(self, state):
         self.active = state
         self.refresh_xml()
@@ -63,8 +66,7 @@ class vmmInterface(vmmLibvirtObject):
         return self.name
 
     def get_mac(self):
-        return virtinst.util.get_xml_path(self.get_xml(),
-                                          "/interface/mac/@address")
+        return self.xpath("/interface/mac/@address")
 
     def start(self):
         self.interface.create(0)
@@ -95,8 +97,8 @@ class vmmInterface(vmmLibvirtObject):
             return "Interface"
 
     def get_startmode(self):
-        return virtinst.util.get_xml_path(self.get_xml(),
-                                          "/interface/start/@mode") or "none"
+        return self.xpath("/interface/start/@mode") or "none"
+
     def set_startmode(self, newmode):
         def set_start_xml(doc, ctx):
             node = ctx.xpathEval("/interface/start[1]")
@@ -142,5 +144,49 @@ class vmmInterface(vmmLibvirtObject):
         slaves = self.get_slaves()
         return map(lambda x: x[0], slaves)
 
+    def get_ipv4(self):
+        base_xpath = "/interface/protocol[@family='ipv4']"
+        if not self.xpath(base_xpath):
+            return []
+
+        dhcp = bool(self.xpath("count(%s/dhcp)" % base_xpath))
+        addr = self.xpath(base_xpath + "/ip/@address")
+        if addr:
+            prefix = self.xpath(base_xpath + "/ip[@address='%s']/@prefix" %
+                                addr)
+            if prefix:
+                addr += "/%s" % prefix
+
+        return [dhcp, addr]
+
+    def get_ipv6(self):
+        base_xpath = "/interface/protocol[@family='ipv6']"
+        if not self.xpath(base_xpath):
+            return []
+
+        dhcp = bool(self.xpath("count(%s/dhcp)" % base_xpath))
+        autoconf = bool(self.xpath("count(%s/autoconf)" % base_xpath))
+
+        def addr_func(ctx):
+            nodes = ctx.xpathEval(base_xpath + "/ip")
+            nodes = nodes or []
+            ret = []
+
+            for node in nodes:
+                addr = node.prop("address")
+                pref = node.prop("prefix")
+
+                if not addr:
+                    continue
+
+                if pref:
+                    addr += "/%s" % pref
+                ret.append(addr)
+
+            return ret
+
+        ret = virtinst.util.get_xml_path(self.get_xml(), func=addr_func)
+
+        return [dhcp, autoconf, ret]
 
 gobject.type_register(vmmInterface)

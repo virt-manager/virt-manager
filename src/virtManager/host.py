@@ -958,6 +958,8 @@ class vmmHost(gobject.GObject):
         mac = interface.get_mac()
         active = interface.is_active()
         startmode = interface.get_startmode()
+        ipv4 = interface.get_ipv4()
+        ipv6 = interface.get_ipv6()
 
         self.window.get_widget("interface-details").set_sensitive(True)
         self.window.get_widget("interface-name").set_markup(
@@ -987,9 +989,37 @@ class vmmHost(gobject.GObject):
                 break
             idx += 1
 
-
         used_by = util.iface_in_use_by(self.conn, name)
         self.window.get_widget("interface-inuseby").set_text(used_by or "-")
+
+        # IP info
+        self.window.get_widget("interface-ipv4-expander").set_property(
+                                                    "visible", bool(ipv4))
+        self.window.get_widget("interface-ipv6-expander").set_property(
+                                                    "visible", bool(ipv6))
+
+        if ipv4:
+            mode = ipv4[0] and "DHCP" or "Static"
+            addr = ipv4[1] or "-"
+            self.window.get_widget("interface-ipv4-mode").set_text(mode)
+            self.window.get_widget("interface-ipv4-address").set_text(addr)
+
+        if ipv6:
+            mode = ""
+            if ipv6[1]:
+                mode = "Autoconf "
+
+            if ipv6[0]:
+                mode += "DHCP"
+            else:
+                mode = "Static"
+
+            addrstr = "-"
+            if ipv6[2]:
+                addrstr = reduce(lambda x,y: x + "\n" + y, ipv6[2])
+
+            self.window.get_widget("interface-ipv6-mode").set_text(mode)
+            self.window.get_widget("interface-ipv6-address").set_text(addrstr)
 
         self.window.get_widget("interface-delete").set_sensitive(not active)
         self.window.get_widget("interface-stop").set_sensitive(active)
