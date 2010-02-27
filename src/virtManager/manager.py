@@ -937,7 +937,7 @@ class vmmManager(gobject.GObject):
     # State/UI updating methods #
     #############################
 
-    def vm_status_changed(self, vm, status):
+    def vm_status_changed(self, vm, status, ignore):
         parent = self.rows[vm.get_connection().get_uri()].iter
 
         vmlist = self.window.get_widget("vm-list")

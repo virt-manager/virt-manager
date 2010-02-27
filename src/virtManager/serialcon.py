@@ -72,7 +72,7 @@ class vmmSerialConsole(gtk.HBox):
     def handle_unrealize(self, src=None, ignore=None):
         self.closetty()
 
-    def vm_status_changed(self, src, status):
+    def vm_status_changed(self, src, status, ignore):
         if status in [ libvirt.VIR_DOMAIN_RUNNING ]:
             self.opentty()
         else:

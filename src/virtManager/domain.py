@@ -63,7 +63,7 @@ class vmmDomainBase(vmmLibvirtObject):
     __gsignals__ = {
         "status-changed": (gobject.SIGNAL_RUN_FIRST,
                            gobject.TYPE_NONE,
-                           [int]),
+                           [int, int]),
         "resources-sampled": (gobject.SIGNAL_RUN_FIRST,
                               gobject.TYPE_NONE,
                               []),
@@ -1149,7 +1149,7 @@ class vmmDomain(vmmDomainBase):
     def __init__(self, config, connection, backend, uuid):
         vmmDomainBase.__init__(self, config, connection, backend, uuid)
 
-        self.lastStatus = None
+        self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
         self.record = []
         self.maxRecord = { "diskRdRate" : 10.0,
                            "diskWrRate" : 10.0,
@@ -1173,6 +1173,10 @@ class vmmDomain(vmmDomainBase):
         (self._inactive_xml_flags,
          self._active_xml_flags) = self.connection.get_dom_flags(
                                                             self._backend)
+
+        # Hook up our own status listeners
+        self.connect("status-changed", self._update_start_vcpus)
+        self.connect("status-changed", self._check_install_status)
 
     ##########################
     # Internal virDomain API #
@@ -1759,6 +1763,20 @@ class vmmDomain(vmmDomainBase):
     # End XML Altering API #
     ########################
 
+    def _update_start_vcpus(self, ignore, status, oldstatus):
+        if oldstatus not in [ libvirt.VIR_DOMAIN_SHUTDOWN,
+                              libvirt.VIR_DOMAIN_SHUTOFF,
+                              libvirt.VIR_DOMAIN_CRASHED ]:
+            return
+
+        # Want to track the startup vcpu amount, which is the
+        # cap of how many VCPUs can be added
+        self._startup_vcpus = None
+        self.vcpu_max_count()
+
+    def _check_install_status(self, ignore, status, oldstatus):
+        pass
+
     def _update_status(self, status=None):
         if status == None:
             info = self.get_info()
@@ -1766,16 +1784,10 @@ class vmmDomain(vmmDomainBase):
         status = self._normalize_status(status)
 
         if status != self.lastStatus:
-            if self.lastStatus in [ libvirt.VIR_DOMAIN_SHUTDOWN,
-                                    libvirt.VIR_DOMAIN_SHUTOFF,
-                                    libvirt.VIR_DOMAIN_CRASHED ]:
-
-                # Want to track the startup vcpu amount, which is the
-                # cap of how many VCPUs can be added
-                self._startup_vcpus = None
-                self.vcpu_max_count()
+            oldstatus = self.lastStatus
             self.lastStatus = status
-            util.safe_idle_add(util.idle_emit, self, "status-changed", status)
+            util.safe_idle_add(util.idle_emit, self, "status-changed",
+                               oldstatus, status)
 
 
     def tick(self, now):

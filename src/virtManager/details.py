@@ -759,7 +759,7 @@ class vmmDetails(gobject.GObject):
         if newpage == PAGE_CONSOLE or newpage >= PAGE_DYNAMIC_OFFSET:
             self.last_console_page = newpage
 
-    def update_widget_states(self, vm, status):
+    def update_widget_states(self, vm, status, ignore=None):
         self.toggle_toolbar(self.window.get_widget("details-menu-view-toolbar"))
 
         destroy = vm.is_destroyable()
