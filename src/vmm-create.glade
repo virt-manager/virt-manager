@@ -1175,13 +1175,15 @@ User shouldn't see this.</property>
                                               <widget class="GtkSpinButton" id="config-storage-size">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
+                                                <property name="width_chars">5</property>
                                                 <property name="xalign">1</property>
-                                                <property name="adjustment">2 0 1000000 0.10000000000000001 10 0</property>
+                                                <property name="adjustment">0 0 1000000 0.10000000000000001 10 0</property>
                                                 <property name="climb_rate">1</property>
                                                 <property name="digits">1</property>
                                               </widget>
                                               <packing>
                                                 <property name="expand">False</property>
+                                                <property name="fill">False</property>
                                                 <property name="position">0</property>
                                               </packing>
                                             </child>

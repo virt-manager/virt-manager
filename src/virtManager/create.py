@@ -907,7 +907,6 @@ class vmmCreate(gobject.GObject):
                     self.pretty_storage(max_storage))
         hd_label = ("<span color='#484848'>%s</span>" % hd_label)
         self.window.get_widget("phys-hd-label").set_markup(hd_label)
-        self.window.get_widget("config-storage-size").set_range(1, self.host_storage)
 
         return 1
 
