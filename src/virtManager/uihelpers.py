@@ -482,7 +482,8 @@ def check_path_search_for_qemu(parent, config, conn, path):
                     _("The emulator may not have search permissions "
                       "for the path '%s'.") % path,
                     _("Do you want to correct this now?"),
-                    _("Don't ask about these directories again."))
+                    _("Don't ask about these directories again."),
+                    buttons=gtk.BUTTONS_YES_NO)
 
     if chkres:
         config.add_perms_fix_ignore(broken_paths)
