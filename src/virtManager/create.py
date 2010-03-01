@@ -1531,13 +1531,10 @@ class vmmCreate(gobject.GObject):
             self.failed_guest = self.guest
             return
 
-        # Ensure new VM is loaded
-        # FIXME: Hmm, shouldn't we emit a signal here rather than do this?
-        self.conn.tick(noStatsUpdate=True)
+        vm = self.conn.get_vm(guest.uuid)
 
         if self.config.get_console_popup() == 1:
             # user has requested console on new created vms only
-            vm = self.conn.get_vm(guest.uuid)
             gtype = vm.get_graphics_console()[0]
             if gtype == "vnc":
                 self.emit("action-show-console", self.conn.get_uri(),
@@ -1566,6 +1563,22 @@ class vmmCreate(gobject.GObject):
                 logging.error("Guest install did not return a domain")
             else:
                 logging.debug("Install completed")
+
+            # Make sure we pick up the domain object
+            self.conn.tick(noStatsUpdate=True)
+            vm = self.conn.get_vm(guest.uuid)
+
+            if vm.is_shutoff():
+                # Domain is already shutdown, but no error was raised.
+                # Probably means guest had no 'install' phase, as in
+                # for live cds. Try to restart the domain.
+                vm.startup()
+            else:
+                # Register a status listener, which will restart the
+                # guest after the install has finished
+                util.connect_opt_out(vm, "status-changed",
+                                     self.check_install_status, guest)
+
         except:
             (_type, value, stacktrace) = sys.exc_info ()
 
@@ -1577,6 +1590,36 @@ class vmmCreate(gobject.GObject):
 
         if error:
             asyncjob.set_error(error, details)
+
+    def check_install_status(self, vm, ignore1, ignore2, virtinst_guest=None):
+        if vm.is_crashed():
+            logging.debug("VM crashed, cancelling install plans.")
+            return True
+
+        if not vm.is_shutoff():
+            return
+
+        try:
+            if virtinst_guest:
+                continue_inst = virtinst_guest.get_continue_inst()
+
+                if continue_inst:
+                    logging.debug("VM needs a 2 stage install, continuing.")
+                    # Continue the install, then reconnect this opt
+                    # out handler, removing the virtinst_guest which
+                    # will force one final restart.
+                    virtinst_guest.continue_install()
+                    util.connect_opt_out(vm, "status-changed",
+                                         self.check_install_status, None)
+                    return True
+
+            logging.debug("Install should be completed, starting VM.")
+            vm.startup()
+        except Exception, e:
+            self.err.show_err(_("Error continue install: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+        return True
 
     def pretty_storage(self, size):
         return "%.1f Gb" % float(size)

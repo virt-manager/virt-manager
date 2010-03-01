@@ -1051,6 +1051,12 @@ class vmmDomainBase(vmmLibvirtObject):
     def disk_io_vector_limit(self, limit):
         return self.in_out_vector_limit(self.disk_io_vector(), limit)
 
+    def is_shutoff(self):
+        return self.status() == libvirt.VIR_DOMAIN_SHUTOFF
+
+    def is_crashed(self):
+        return self.status() == libvirt.VIR_DOMAIN_CRASHED
+
     def is_stoppable(self):
         return self.status() in [libvirt.VIR_DOMAIN_RUNNING,
                                  libvirt.VIR_DOMAIN_PAUSED]
@@ -1159,8 +1165,10 @@ class vmmDomain(vmmDomainBase):
 
         self._update_status()
 
-        self.config.on_stats_enable_net_poll_changed(self.toggle_sample_network_traffic)
-        self.config.on_stats_enable_disk_poll_changed(self.toggle_sample_disk_io)
+        self.config.on_stats_enable_net_poll_changed(
+                                            self.toggle_sample_network_traffic)
+        self.config.on_stats_enable_disk_poll_changed(
+                                            self.toggle_sample_disk_io)
 
         self.getvcpus_supported = support.check_domain_support(self._backend,
                                             support.SUPPORT_DOMAIN_GETVCPUS)
@@ -1176,7 +1184,6 @@ class vmmDomain(vmmDomainBase):
 
         # Hook up our own status listeners
         self.connect("status-changed", self._update_start_vcpus)
-        self.connect("status-changed", self._check_install_status)
 
     ##########################
     # Internal virDomain API #
@@ -1337,20 +1344,9 @@ class vmmDomain(vmmDomainBase):
         if maxmem != self.maximum_memory():
             self._backend.setMaxMemory(maxmem)
 
-
     ####################
     # End internal API #
     ####################
-
-    #########################
-    # XML fetching routines #
-    #########################
-
-
-
-    #############################
-    # End XML fetching routines #
-    #############################
 
     ###########################
     # XML/Config Altering API #
@@ -1773,9 +1769,6 @@ class vmmDomain(vmmDomainBase):
         # cap of how many VCPUs can be added
         self._startup_vcpus = None
         self.vcpu_max_count()
-
-    def _check_install_status(self, ignore, status, oldstatus):
-        pass
 
     def _update_status(self, status=None):
         if status == None:
