@@ -137,9 +137,6 @@ class vmmEngine(gobject.GObject):
                 self.connect_to_uri(uri)
 
     def connect_to_uri(self, uri, readOnly=None, autoconnect=False):
-        return self._connect_to_uri(None, uri, readOnly, autoconnect)
-
-    def _connect_to_uri(self, connect, uri, readOnly, autoconnect):
         self.windowConnect = None
 
         try:
@@ -316,7 +313,7 @@ class vmmEngine(gobject.GObject):
     def show_connect(self):
         if self.windowConnect == None:
             self.windowConnect = vmmConnect(self.get_config(), self)
-            self.windowConnect.connect("completed", self._connect_to_uri)
+            self.windowConnect.connect("completed", self.connect_to_uri)
             self.windowConnect.connect("cancelled", self._connect_cancelled)
         self.windowConnect.show()
 
