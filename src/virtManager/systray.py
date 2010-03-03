@@ -26,7 +26,6 @@ try:
     import appindicator
 except:
     appindicator = None
-    pass
 
 class vmmSystray(gobject.GObject):
     __gsignals__ = {
