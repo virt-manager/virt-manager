@@ -342,22 +342,58 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkScrolledWindow" id="scrolledwindow1">
+              <widget class="GtkNotebook" id="vm-notebook">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
-                <property name="shadow_type">in</property>
+                <property name="can_focus">True</property>
                 <child>
-                  <widget class="GtkTreeView" id="vm-list">
+                  <widget class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <signal name="button_press_event" handler="on_vm_list_button_press_event"/>
-                    <signal name="row_expanded" handler="on_vm_list_row_expanded"/>
-                    <signal name="key_press_event" handler="on_vm_list_key_press_event"/>
-                    <signal name="row_collapsed" handler="on_vm_list_row_collapsed"/>
-                    <signal name="row_activated" handler="on_vm_list_row_activated"/>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <widget class="GtkTreeView" id="vm-list">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <signal name="button_press_event" handler="on_vm_list_button_press_event"/>
+                        <signal name="row_expanded" handler="on_vm_list_row_expanded"/>
+                        <signal name="key_press_event" handler="on_vm_list_key_press_event"/>
+                        <signal name="row_collapsed" handler="on_vm_list_row_collapsed"/>
+                        <signal name="row_activated" handler="on_vm_list_row_activated"/>
+                      </widget>
+                    </child>
                   </widget>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="label">manager</property>
+                  </widget>
+                  <packing>
+                    <property name="tab_fill">False</property>
+                    <property name="type">tab</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="startup-error-label">
+                    <property name="visible">True</property>
+                    <property name="label">error</property>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="label">error</property>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                    <property name="tab_fill">False</property>
+                    <property name="type">tab</property>
+                  </packing>
                 </child>
               </widget>
               <packing>

@@ -130,7 +130,6 @@ class vmmManager(gobject.GObject):
         self.engine = engine
 
         self.delete_dialog = None
-        self.startup_error = None
         self.ignore_pause = False
 
         # Mapping of VM UUID -> tree model rows to
@@ -207,13 +206,13 @@ class vmmManager(gobject.GObject):
         # Select first list entry
         vmlist = self.window.get_widget("vm-list")
         if len(vmlist.get_model()) == 0:
-            self.startup_error = _("Could not populate a default connection. "
-                                   "Make sure the appropriate virtualization "
-                                   "packages are installed (kvm, qemu, etc.) "
-                                   "and that libvirtd has been restarted to "
-                                   "notice the changes.\n\n"
-                                   "A hypervisor connection can be manually "
-                                   "added via \nFile->Add Connection")
+            msg = _("Could not detect a default hypervisor. Make\n"
+                    "sure the appropriate virtualization packages\n"
+                    "are installed (kvm, qemu, libvirt, etc.), and\n"
+                    "that libvirtd is running.\n\n"
+                    "A hypervisor connection can be manually added\n"
+                    "via File->Add Connection")
+            self.set_startup_error(msg)
         else:
             vmlist.get_selection().select_iter(vmlist.get_model().get_iter_first())
 
@@ -229,10 +228,6 @@ class vmmManager(gobject.GObject):
 
         self.engine.increment_window_counter()
 
-        if self.startup_error:
-            self.err.val_err(_("Error determining default hypervisor."),
-                             self.startup_error, _("Startup Error"))
-            self.startup_error = None
 
     def close(self, src=None, src2=None):
         if self.is_visible():
@@ -246,6 +241,9 @@ class vmmManager(gobject.GObject):
             return 1
         return 0
 
+    def set_startup_error(self, msg):
+        self.window.get_widget("vm-notebook").set_current_page(1)
+        self.window.get_widget("startup-error-label").set_text(msg)
 
     ################
     # Init methods #
@@ -430,6 +428,7 @@ class vmmManager(gobject.GObject):
 
     def init_vmlist(self):
         vmlist = self.window.get_widget("vm-list")
+        self.window.get_widget("vm-notebook").set_show_tabs(False)
 
         # Handle, name, markup, status, status icon, key/uuid, hint, is conn,
         # is conn connected, is vm, is vm running, fg color
@@ -905,6 +904,9 @@ class vmmManager(gobject.GObject):
         return _iter
 
     def _add_connection(self, engine, conn):
+        # Make sure error page isn't showing
+        self.window.get_widget("vm-notebook").set_current_page(0)
+
         if self.rows.has_key(conn.get_uri()):
             return
 
