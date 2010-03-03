@@ -687,34 +687,39 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("hw-panel").set_sensitive(True)
         self.window.get_widget("hw-panel").show_all()
 
-        if pagetype == HW_LIST_TYPE_GENERAL:
-            self.refresh_overview_page()
-        elif pagetype == HW_LIST_TYPE_STATS:
-            self.refresh_stats_page()
-        elif pagetype == HW_LIST_TYPE_CPU:
-            self.refresh_config_cpu()
-        elif pagetype == HW_LIST_TYPE_MEMORY:
-            self.refresh_config_memory()
-        elif pagetype == HW_LIST_TYPE_BOOT:
-            self.refresh_boot_page()
-        elif pagetype == HW_LIST_TYPE_DISK:
-            self.refresh_disk_page()
-        elif pagetype == HW_LIST_TYPE_NIC:
-            self.refresh_network_page()
-        elif pagetype == HW_LIST_TYPE_INPUT:
-            self.refresh_input_page()
-        elif pagetype == HW_LIST_TYPE_GRAPHICS:
-            self.refresh_graphics_page()
-        elif pagetype == HW_LIST_TYPE_SOUND:
-            self.refresh_sound_page()
-        elif pagetype == HW_LIST_TYPE_CHAR:
-            self.refresh_char_page()
-        elif pagetype == HW_LIST_TYPE_HOSTDEV:
-            self.refresh_hostdev_page()
-        elif pagetype == HW_LIST_TYPE_VIDEO:
-            self.refresh_video_page()
-        else:
-            pagetype = -1
+        try:
+            if pagetype == HW_LIST_TYPE_GENERAL:
+                self.refresh_overview_page()
+            elif pagetype == HW_LIST_TYPE_STATS:
+                self.refresh_stats_page()
+            elif pagetype == HW_LIST_TYPE_CPU:
+                self.refresh_config_cpu()
+            elif pagetype == HW_LIST_TYPE_MEMORY:
+                self.refresh_config_memory()
+            elif pagetype == HW_LIST_TYPE_BOOT:
+                self.refresh_boot_page()
+            elif pagetype == HW_LIST_TYPE_DISK:
+                self.refresh_disk_page()
+            elif pagetype == HW_LIST_TYPE_NIC:
+                self.refresh_network_page()
+            elif pagetype == HW_LIST_TYPE_INPUT:
+                self.refresh_input_page()
+            elif pagetype == HW_LIST_TYPE_GRAPHICS:
+                self.refresh_graphics_page()
+            elif pagetype == HW_LIST_TYPE_SOUND:
+                self.refresh_sound_page()
+            elif pagetype == HW_LIST_TYPE_CHAR:
+                self.refresh_char_page()
+            elif pagetype == HW_LIST_TYPE_HOSTDEV:
+                self.refresh_hostdev_page()
+            elif pagetype == HW_LIST_TYPE_VIDEO:
+                self.refresh_video_page()
+            else:
+                pagetype = -1
+        except Exception, e:
+            self.err.show_err(_("Error refreshing hardware page: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return
 
         rem = pagetype in remove_pages
         if selected:
