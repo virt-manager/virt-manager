@@ -288,6 +288,7 @@ class vmmStorageBrowser(gobject.GObject):
         self.emit("storage-browse-finish", path)
         self.close()
 
+
     # Do stuff!
     def populate_storage_volumes(self):
         model = self.window.get_widget("vol-list").get_model()
@@ -305,10 +306,8 @@ class vmmStorageBrowser(gobject.GObject):
             namestr = None
             try:
                 if path:
-                    disk = virtinst.VirtualDisk(conn=self.conn.vmm, path=path,
-                                                size=.001)
-                    names = disk.is_conflict_disk(self.conn.vmm,
-                                                  return_names=True)
+                    names = virtinst.VirtualDisk.path_in_use_by(
+                                                self.conn.vmm, path)
                     namestr = ", ".join(names)
                     if not namestr:
                         namestr = None

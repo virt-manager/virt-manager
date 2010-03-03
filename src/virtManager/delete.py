@@ -370,12 +370,8 @@ def do_we_default(conn, vm_name, vol, path, ro, shared):
     if shared:
         info = append_str(info, _("Storage is marked as shareable."))
 
-    # Check if disk is actually in use by other VMs. For useful err
-    # reporting, we need more info from VirtualDisk is_conflict_disk
     try:
-        d = virtinst.VirtualDisk(conn=conn.vmm, path=path,
-                                 readOnly=ro, shareable=shared)
-        names = d.is_conflict_disk(conn.vmm, return_names=True)
+        names = virtinst.VirtualDisk.path_in_use_by(conn.vmm, path)
 
         if len(names) > 1:
             namestr = ""
