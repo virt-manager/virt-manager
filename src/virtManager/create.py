@@ -823,17 +823,42 @@ class vmmCreate(gobject.GObject):
 
         return (media.strip(), extra.strip(), ks.strip())
 
+    def is_default_storage(self):
+        return self.window.get_widget("config-storage-create").get_active()
+
     def get_storage_info(self):
         path = None
         size = self.window.get_widget("config-storage-size").get_value()
         sparse = not self.window.get_widget("config-storage-nosparse").get_active()
-        if self.window.get_widget("config-storage-create").get_active():
+        if self.is_default_storage():
             path = self.get_default_path(self.guest.name)
             logging.debug("Default storage path is: %s" % path)
         else:
             path = self.window.get_widget("config-storage-entry").get_text()
 
         return (path, size, sparse)
+
+    def get_default_pool(self):
+        pool = None
+        for uuid in self.conn.list_pool_uuids():
+            p = self.conn.get_pool(uuid)
+            if p.get_name() == util.DEFAULT_POOL_NAME:
+                pool = p
+
+        if not pool:
+            raise RuntimeError(_("Did not find pool '%s'") %
+                               util.DEFAULT_POOL_NAME)
+
+        return pool
+
+    def get_ideal_path_info(self, name):
+        pool = self.get_default_pool()
+        suffix = ".img"
+        return (pool.get_target_path(), name, suffix)
+
+    def get_ideal_path(self, name):
+        target, name, suffix = self.get_ideal_path_info(name)
+        return os.path.join(target, name) + suffix
 
     def get_default_path(self, name):
         path = ""
@@ -860,20 +885,13 @@ class vmmCreate(gobject.GObject):
             path = f
 
         else:
-            pool = None
-            for uuid in self.conn.list_pool_uuids():
-                p = self.conn.get_pool(uuid)
-                if p.get_name() == util.DEFAULT_POOL_NAME:
-                    pool = p
-
-            if not pool:
-                raise RuntimeError(_("Did not find pool '%s'") %
-                                   util.DEFAULT_POOL_NAME)
+            pool = self.get_default_pool()
+            target, ignore, suffix = self.get_ideal_path_info(name)
 
             path = virtinst.Storage.StorageVolume.find_free_name(name,
-                            pool_object=pool.pool, suffix=".img")
+                            pool_object=pool.pool, suffix=suffix)
 
-            path = os.path.join(pool.get_target_path(), path)
+            path = os.path.join(target, path)
 
         return path
 
@@ -1352,6 +1370,31 @@ class vmmCreate(gobject.GObject):
         try:
             # This can error out
             diskpath, disksize, sparse = self.get_storage_info()
+
+            if self.is_default_storage() and not revalidate:
+                # See if the ideal disk path (/default/pool/vmname.img)
+                # exists, and if unused, prompt the use for using it
+                ideal = self.get_ideal_path(self.guest.name)
+                do_exist = False
+                ret = True
+
+                try:
+                    do_exist = virtinst.VirtualDisk.path_exists(
+                                                        self.conn.vmm, ideal)
+
+                    ret = virtinst.VirtualDisk.path_in_use_by(self.conn.vmm,
+                                                              ideal)
+                except:
+                    logging.exception("Error checking default path usage")
+
+                if do_exist and not ret:
+                    do_use = self.err.yes_no(
+                        _("The following path already exists, but is not\n"
+                          "in use by any virtual machine:\n\n%s\n\n"
+                          "Would you like to use this path?") % ideal)
+
+                    if do_use:
+                        diskpath = ideal
 
             if not diskpath:
                 return self.verr(_("A storage path must be specified."))
