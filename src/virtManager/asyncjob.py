@@ -27,25 +27,29 @@ import gobject
 
 from virtManager import util
 
+# This thin wrapper only exists so we can put debugging
+# code in the run() method every now & then
+class asyncJobWorker(threading.Thread):
+    def __init__(self, callback, args):
+        threading.Thread.__init__(self, target=callback, args=args)
+
+    def run(self):
+        threading.Thread.run(self)
+
 # Displays a progress bar while executing the "callback" method.
-
 class vmmAsyncJob(gobject.GObject):
-    # This thin wrapper only exists so we can put debugging
-    # code in the run() method every now & then
-    class asyncJobWorker(threading.Thread):
-        def __init__(self, callback, args):
-            threading.Thread.__init__(self, target=callback, args=args)
-
-        def run(self):
-            threading.Thread.run(self)
 
     def __init__(self, config, callback, args=None,
                  text=_("Please wait a few moments..."),
-                 title=_("Operation in progress")):
+                 title=_("Operation in progress"),
+                 run_main=True):
         self.__gobject_init__()
         self.config = config
+        self.run_main = bool(run_main)
 
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-progress.glade", "vmm-progress", domain="virt-manager")
+        self.window = gtk.glade.XML(config.get_glade_dir() + \
+                                    "/vmm-progress.glade",
+                                    "vmm-progress", domain="virt-manager")
         self.window.get_widget("pbar-text").set_text(text)
 
         self.topwin = self.window.get_widget("vmm-progress")
@@ -58,7 +62,7 @@ class vmmAsyncJob(gobject.GObject):
         self.pbar = self.window.get_widget("pbar")
 
         args.append(self)
-        self.bg_thread = vmmAsyncJob.asyncJobWorker(callback, args)
+        self.bg_thread = asyncJobWorker(callback, args)
         self.bg_thread.setDaemon(True)
         self.is_pulsing = True
 
@@ -66,8 +70,13 @@ class vmmAsyncJob(gobject.GObject):
         timer = util.safe_timeout_add(100, self.exit_if_necessary)
         self.topwin.present()
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
-        self.bg_thread.start()
-        gtk.main()
+
+        if self.run_main:
+            self.bg_thread.start()
+            gtk.main()
+        else:
+            self.bg_thread.run()
+
         gobject.source_remove(timer)
         timer = 0
 
@@ -135,12 +144,15 @@ class vmmAsyncJob(gobject.GObject):
         return self._error_info
 
     def exit_if_necessary(self, force_exit=False):
-        if self.bg_thread.isAlive() and not force_exit:
+        thread_active = (self.bg_thread.isAlive() or not self.run_main)
+
+        if thread_active and not force_exit:
             if (self.is_pulsing):
                 # Don't call pulse_pbar: this function is thread wrapped
                 self.pbar.pulse()
             return True
         else:
-            gtk.main_quit()
+            if self.run_main:
+                gtk.main_quit()
             return False
 
