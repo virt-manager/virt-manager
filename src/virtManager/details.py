@@ -105,6 +105,12 @@ def prettyify_disk(devtype, bus, idx):
 
     return "%s %s" % (ret, idx)
 
+def prettyify_bytes(bytes):
+    if bytes > (1024*1024*1024):
+        return "%2.2f GB" % (bytes/(1024.0*1024.0*1024.0))
+    else:
+        return "%2.2f MB" % (bytes/(1024.0*1024.0))
+
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
@@ -1643,6 +1649,18 @@ class vmmDetails(gobject.GObject):
         bus = diskinfo[8]
         idx = diskinfo[9]
 
+        size = _("Unknown")
+        if not path:
+            size = "-"
+        else:
+            vol = self.conn.get_vol_by_path(path)
+            if vol:
+                size = vol.get_pretty_capacity()
+            elif not self.conn.is_remote():
+                ignore, bytes = virtinst.VirtualDisk.stat_local_path(path)
+                if bytes != 0:
+                    size = prettyify_bytes(bytes)
+
         is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
         is_floppy = (devtype == virtinst.VirtualDisk.DEVICE_FLOPPY)
 
@@ -1654,6 +1672,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("disk-readonly").set_active(ro)
         self.window.get_widget("disk-readonly").set_sensitive(not is_cdrom)
         self.window.get_widget("disk-shareable").set_active(share)
+        self.window.get_widget("disk-size").set_text(size)
 
         button = self.window.get_widget("config-cdrom-connect")
         if is_cdrom or is_floppy:
