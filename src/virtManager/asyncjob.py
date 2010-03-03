@@ -58,6 +58,8 @@ class vmmAsyncJob(gobject.GObject):
 
         # Callback sets this if there is an error
         self._error_info = None
+        self._data = None
+
         self.stage = self.window.get_widget("pbar-stage")
         self.pbar = self.window.get_widget("pbar")
 
@@ -142,6 +144,11 @@ class vmmAsyncJob(gobject.GObject):
         if not self._error_info:
             return (None, None)
         return self._error_info
+
+    def set_data(self, data):
+        self._data = data
+    def get_data(self):
+        return self._data
 
     def exit_if_necessary(self, force_exit=False):
         thread_active = (self.bg_thread.isAlive() or not self.run_main)
