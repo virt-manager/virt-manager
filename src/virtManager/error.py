@@ -145,6 +145,9 @@ class vmmErrorDialog (gtk.MessageDialog):
     def ok_cancel(self, text1, text2=None):
         return self._show_warning(gtk.BUTTONS_OK_CANCEL, text1, text2)
 
+    def ok(self, text1, text2=None):
+        return self._show_warning(gtk.BUTTONS_OK, text1, text2)
+
     def warn_chkbox(self, text1, text2=None, chktext=None, buttons=None):
         chkbox = vmmCheckDialog(self.get_transient_for(),
                                 gtk.MESSAGE_WARNING, buttons)

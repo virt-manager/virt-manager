@@ -21,6 +21,7 @@
 import gobject
 import gtk
 import gtk.glade
+
 import logging
 import traceback
 
@@ -205,16 +206,12 @@ class vmmManager(gobject.GObject):
 
         # Select first list entry
         vmlist = self.window.get_widget("vm-list")
-        if len(vmlist.get_model()) == 0:
-            msg = _("Could not detect a default hypervisor. Make\n"
-                    "sure the appropriate virtualization packages\n"
-                    "are installed (kvm, qemu, libvirt, etc.), and\n"
-                    "that libvirtd is running.\n\n"
-                    "A hypervisor connection can be manually added\n"
-                    "via File->Add Connection")
-            self.set_startup_error(msg)
-        else:
-            vmlist.get_selection().select_iter(vmlist.get_model().get_iter_first())
+        if len(vmlist.get_model()) != 0:
+            vmlist.get_selection().select_iter(
+                                        vmlist.get_model().get_iter_first())
+
+        # Queue up the default connection detector
+        util.safe_idle_add(self.engine.add_default_connection)
 
     ##################
     # Common methods #
@@ -227,7 +224,6 @@ class vmmManager(gobject.GObject):
         self.topwin.present()
 
         self.engine.increment_window_counter()
-
 
     def close(self, src=None, src2=None):
         if self.is_visible():

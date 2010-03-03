@@ -203,17 +203,6 @@ def parse_commandline():
 
     return optParser.parse_args()
 
-def default_uri():
-    tryuri = None
-    if os.path.exists("/var/lib/xend") and os.path.exists("/proc/xen"):
-        tryuri = "xen:///"
-    elif (os.path.exists("/usr/bin/qemu") or
-          os.path.exists("/usr/bin/qemu-kvm") or
-          os.path.exists("/usr/bin/kvm")):
-        tryuri = "qemu:///system"
-
-    return tryuri
-
 def launch_specific_window(engine, show, uri, uuid):
     if not engine.wait_for_open(uri):
         # Connection failed, don't attempt to continue
@@ -238,15 +227,10 @@ def show_engine(engine, show, uri, uuid, no_conn_auto):
                                   args=(engine, show, uri, uuid),
                                   name="Launching '%s' window" % show)
         thread.start()
+
     elif show=='summary' or uri:
         engine.connect_to_uri(uri)
     else:
-        if engine.config.get_connections() is None \
-           or len(engine.config.get_connections()) == 0:
-
-            tryuri = default_uri()
-            if tryuri is not None:
-                engine.add_connection(tryuri, autoconnect=True)
         engine.show_manager()
 
     if not no_conn_auto:

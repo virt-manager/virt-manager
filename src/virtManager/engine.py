@@ -24,9 +24,11 @@ import gtk
 import logging
 import traceback
 import threading
+import os
 
 import libvirt
 import virtinst
+import dbus
 
 from virtManager.about import vmmAbout
 from virtManager.halhelper import vmmHalHelper
@@ -43,6 +45,149 @@ from virtManager.host import vmmHost
 from virtManager.error import vmmErrorDialog
 from virtManager.systray import vmmSystray
 import virtManager.util as util
+
+
+# List of packages to look for via packagekit at first startup.
+# If this list is empty, no attempt to contact packagekit is made
+LIBVIRT_DAEMON = "libvirt"
+PACKAGEKIT_PACKAGES = [LIBVIRT_DAEMON, "qemu-system-x86"]
+
+
+def default_uri():
+    tryuri = None
+    if os.path.exists("/var/lib/xend") and os.path.exists("/proc/xen"):
+        tryuri = "xen:///"
+    elif (os.path.exists("/usr/bin/qemu") or
+          os.path.exists("/usr/bin/qemu-kvm") or
+          os.path.exists("/usr/bin/kvm")):
+        tryuri = "qemu:///system"
+
+    return tryuri
+
+#############################
+# PackageKit lookup helpers #
+#############################
+
+def check_packagekit(config, errbox):
+    """
+    Returns None when we determine nothing useful.
+    Returns (success, did we just install libvirt) otherwise.
+    """
+    if not PACKAGEKIT_PACKAGES:
+        return
+
+    logging.debug("Asking PackageKit what's installed locally.")
+    try:
+        session = dbus.SystemBus()
+
+        pk_control = dbus.Interface(
+                        session.get_object("org.freedesktop.PackageKit",
+                                           "/org/freedesktop/PackageKit"),
+                        "org.freedesktop.PackageKit")
+    except Exception:
+        logging.exception("Couldn't connect to packagekit")
+        return
+
+    found = []
+    progWin = vmmAsyncJob(config, _do_async_search,
+                          [session, pk_control],
+                          _("Searching for available hypervisors..."),
+                          run_main=False)
+    progWin.run()
+    error, ignore = progWin.get_error()
+    if error:
+        return
+
+    found = progWin.get_data()
+
+    not_found = filter(lambda x: x not in found, PACKAGEKIT_PACKAGES)
+    logging.debug("Missing packages: %s" % not_found)
+
+    do_install = not_found
+    if not do_install:
+        if not not_found:
+            # Got everything we wanted, try to connect
+            logging.debug("All packages found locally.")
+            return (True, False)
+
+        else:
+            logging.debug("No packages are available for install.")
+            return
+
+    msg = (_("The following packages are not installed:\n%s\n\n"
+             "These are required to create KVM guests locally.\n"
+             "Would you like to install them now?") %
+            reduce(lambda x, y: x + "\n" + y, do_install, ""))
+
+    ret = errbox.yes_no(_("Packages required for KVM usage"), msg)
+
+    if not ret:
+        logging.debug("Package install declined.")
+        return
+
+    try:
+        packagekit_install(do_install)
+    except Exception, e:
+        errbox.show_err(_("Error talking to PackageKit: %s") % str(e),
+                        "".join(traceback.format_exc()))
+        return
+
+    return (True, LIBVIRT_DAEMON in do_install)
+
+def _do_async_search(session, pk_control, asyncjob):
+    found = []
+    try:
+        for name in PACKAGEKIT_PACKAGES:
+            ret_found = packagekit_search(session, pk_control, name)
+            found += ret_found
+
+    except Exception, e:
+        logging.exception("Error searching for installed packages")
+        asyncjob.set_error(str(e), "".join(traceback.format_exc()))
+
+    asyncjob.set_data(found)
+
+def packagekit_install(package_list):
+    session = dbus.SessionBus()
+
+    pk_control = dbus.Interface(
+                    session.get_object("org.freedesktop.PackageKit",
+                                       "/org/freedesktop/PackageKit"),
+                        "org.freedesktop.PackageKit.Modify")
+
+    logging.debug("Installing packages: %s" % package_list)
+    pk_control.InstallPackageNames(0, package_list, "hide-confirm-search")
+
+def packagekit_search(session, pk_control, package_name):
+    tid = pk_control.GetTid()
+    pk_trans = dbus.Interface(
+                    session.get_object("org.freedesktop.PackageKit", tid),
+                    "org.freedesktop.PackageKit.Transaction")
+
+    found = []
+    def package(info, package_id, summary):
+        found_name = str(package_id.split(";")[0])
+        if found_name in PACKAGEKIT_PACKAGES:
+            found.append(found_name)
+
+    def error(code, details):
+        raise RuntimeError("PackageKit search failure: %s %s" %
+                            (code, details))
+
+    def finished(ignore, runtime):
+        gtk.main_quit()
+
+    pk_trans.connect_to_signal('Finished', finished)
+    pk_trans.connect_to_signal('ErrorCode', error)
+    pk_trans.connect_to_signal('Package', package)
+    pk_trans.SearchNames("installed", [package_name])
+
+    # Call main() so this function is synchronous
+    gtk.main()
+
+    return found
+
+
 
 class vmmEngine(gobject.GObject):
     __gsignals__ = {
@@ -96,6 +241,7 @@ class vmmEngine(gobject.GObject):
         self.load_stored_uris()
         self.tick()
 
+
     def init_systray(self):
         if self.systray:
             return
@@ -123,6 +269,60 @@ class vmmEngine(gobject.GObject):
             self.hal_helper = vmmHalHelper()
         return self.hal_helper
 
+
+    # First run helpers
+
+    def add_default_connection(self):
+        # Only add default if no connections are currently known
+        if self.config.get_connections():
+            return
+
+        # Manager fail message
+        msg = _("Could not detect a default hypervisor. Make\n"
+                "sure the appropriate virtualization packages\n"
+                "are installed (kvm, qemu, libvirt, etc.), and\n"
+                "that libvirtd is running.\n\n"
+                "A hypervisor connection can be manually\n"
+                "added via File->Add Connection")
+
+        manager = self.get_manager()
+        logging.debug("Determining default libvirt URI")
+
+        ret = None
+        did_install_libvirt = False
+        try:
+            ret = check_packagekit(self.config, self.err)
+        except:
+            logging.exception("Error talking to PackageKit")
+
+        if ret:
+            # We found the default packages via packagekit: use default URI
+            ignore, did_install_libvirt = ret
+            tryuri = "qemu:///system"
+
+        else:
+            tryuri = default_uri()
+
+        if tryuri is None:
+            manager.set_startup_error(msg)
+            return
+
+        if did_install_libvirt:
+            warnmsg = _(
+                "Libvirt was just installed, so the 'libvirtd' service will\n"
+                "will need to be started. This can be done with one \n"
+                "of the following:\n\n"
+                "- From GNOME menus: System->Administration->Services\n"
+                "- From the terminal: su -c 'service libvirtd restart'\n"
+                "- Restart your computer\n\n"
+                "virt-manager will connect to libvirt on the next application\n"
+                "start up.")
+            self.err.ok(_("Libvirt service must be started"), warnmsg)
+
+        self.connect_to_uri(tryuri, autoconnect=True,
+                            do_start=not did_install_libvirt)
+
+
     def load_stored_uris(self):
         uris = self.config.get_connections()
         if uris != None:
@@ -136,7 +336,8 @@ class vmmEngine(gobject.GObject):
             if conn.get_autoconnect():
                 self.connect_to_uri(uri)
 
-    def connect_to_uri(self, uri, readOnly=None, autoconnect=False):
+    def connect_to_uri(self, uri, readOnly=None, autoconnect=False,
+                       do_start=True):
         self.windowConnect = None
 
         try:
@@ -146,7 +347,8 @@ class vmmEngine(gobject.GObject):
                 conn = self.add_connection(uri, readOnly, autoconnect)
 
             self.show_manager()
-            conn.open()
+            if do_start:
+                conn.open()
             return conn
         except Exception:
             return None
