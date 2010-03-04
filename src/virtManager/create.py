@@ -22,7 +22,7 @@ import gobject
 import gtk
 import gtk.glade
 
-import os, sys, statvfs
+import sys
 import time
 import traceback
 import threading
@@ -80,7 +80,6 @@ class vmmCreate(gobject.GObject):
         self.capsguest = None
         self.capsdomain = None
         self.guest = None
-        self.usepool = False
         self.storage_browser = None
         self.conn_signals = []
 
@@ -100,7 +99,6 @@ class vmmCreate(gobject.GObject):
 
         # Host space polling
         self.host_storage_timer = None
-        self.host_storage = None
 
         # 'Configure before install' window
         self.config_window = None
@@ -289,13 +287,9 @@ class vmmCreate(gobject.GObject):
         hyperList.add_attribute(text, 'sensitive', 3)
         hyperList.set_model(hyperModel)
 
+        # Sparse tooltip
         sparse_info = self.window.get_widget("config-storage-nosparse-info")
-        sparse_str = _("Fully allocating storage will take longer now, "
-                       "but the OS install phase will be quicker. \n\n"
-                       "Skipping allocation can also cause space issues on "
-                       "the host machine, if the maximum image size exceeds "
-                       "available storage space.")
-        util.tooltip_wrapper(sparse_info, sparse_str)
+        uihelpers.set_sparse_tooltip(sparse_info)
 
     def reset_state(self, urihint=None):
 
@@ -348,9 +342,12 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("config-cpus").set_value(1)
 
         # Storage
+        label_widget = self.window.get_widget("phys-hd-label")
         if not self.host_storage_timer:
             self.host_storage_timer = util.safe_timeout_add(3 * 1000,
-                                                          self.host_space_tick)
+                                                    uihelpers.host_space_tick,
+                                                    self.conn, self.config,
+                                                    label_widget)
         self.window.get_widget("enable-storage").set_active(True)
         self.window.get_widget("config-storage-create").set_active(True)
         self.window.get_widget("config-storage-size").set_value(8)
@@ -449,16 +446,6 @@ class vmmCreate(gobject.GObject):
         util.tooltip_wrapper(method_tree, tree_tt)
         util.tooltip_wrapper(method_local, local_tt)
         util.tooltip_wrapper(method_pxe, pxe_tt)
-
-        # Attempt to create the default pool
-        self.usepool = False
-        try:
-            if is_storage_capable:
-                util.build_default_pool(self.conn.vmm)
-                self.usepool = True
-        except Exception, e:
-            logging.debug("Building default pool failed: %s" % str(e))
-
 
         # Install local
         iso_option = self.window.get_widget("install-local-iso")
@@ -823,6 +810,14 @@ class vmmCreate(gobject.GObject):
 
         return (media.strip(), extra.strip(), ks.strip())
 
+    def get_default_path(self, name):
+        # Don't generate a new path if the install failed
+        if self.failed_guest:
+            if len(self.failed_guest.disks) > 0:
+                return self.failed_guest.disks[0].path
+
+        return util.get_default_path(self.conn, self.config, name)
+
     def is_default_storage(self):
         return self.window.get_widget("config-storage-create").get_active()
 
@@ -837,96 +832,6 @@ class vmmCreate(gobject.GObject):
             path = self.window.get_widget("config-storage-entry").get_text()
 
         return (path, size, sparse)
-
-    def get_default_pool(self):
-        pool = None
-        for uuid in self.conn.list_pool_uuids():
-            p = self.conn.get_pool(uuid)
-            if p.get_name() == util.DEFAULT_POOL_NAME:
-                pool = p
-
-        if not pool:
-            raise RuntimeError(_("Did not find pool '%s'") %
-                               util.DEFAULT_POOL_NAME)
-
-        return pool
-
-    def get_ideal_path_info(self, name):
-        pool = self.get_default_pool()
-        suffix = ".img"
-        return (pool.get_target_path(), name, suffix)
-
-    def get_ideal_path(self, name):
-        target, name, suffix = self.get_ideal_path_info(name)
-        return os.path.join(target, name) + suffix
-
-    def get_default_path(self, name):
-        path = ""
-
-        # Don't generate a new path if the install failed
-        if self.failed_guest:
-            if len(self.failed_guest.disks) > 0:
-                return self.failed_guest.disks[0].path
-
-        if not self.usepool:
-            # Use old generating method
-            d = self.config.get_default_image_dir(self.conn)
-            origf = os.path.join(d, name + ".img")
-            f = origf
-
-            n = 1
-            while os.path.exists(f) and n < 100:
-                f = os.path.join(d, self.get_config_name() +
-                                    "-" + str(n) + ".img")
-                n += 1
-            if os.path.exists(f):
-                f = origf
-
-            path = f
-
-        else:
-            pool = self.get_default_pool()
-            target, ignore, suffix = self.get_ideal_path_info(name)
-
-            path = virtinst.Storage.StorageVolume.find_free_name(name,
-                            pool_object=pool.pool, suffix=suffix)
-
-            path = os.path.join(target, path)
-
-        return path
-
-    def host_disk_space(self, path=None):
-        if not path:
-            path = util.DEFAULT_POOL_PATH
-
-        avail = 0
-        if self.usepool:
-            # FIXME: make sure not inactive?
-            # FIXME: use a conn specific function after we send pool-added
-            pool = virtinst.util.lookup_pool_by_path(self.conn.vmm, path)
-            if pool:
-                pool.refresh(0)
-                avail = int(virtinst.util.get_xml_path(pool.XMLDesc(0),
-                                                       "/pool/available"))
-
-        if not avail and not self.conn.is_remote():
-            vfs = os.statvfs(os.path.dirname(path))
-            avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
-
-        return float(avail / 1024.0 / 1024.0 / 1024.0)
-
-    def host_space_tick(self):
-        max_storage = self.host_disk_space()
-        if self.host_storage == max_storage:
-            return 1
-        self.host_storage = max_storage
-
-        hd_label = ("%s available in the default location" %
-                    self.pretty_storage(max_storage))
-        hd_label = ("<span color='#484848'>%s</span>" % hd_label)
-        self.window.get_widget("phys-hd-label").set_markup(hd_label)
-
-        return 1
 
     def get_config_network_info(self):
         netidx = self.window.get_widget("config-netdev").get_active()
@@ -1374,7 +1279,8 @@ class vmmCreate(gobject.GObject):
             if self.is_default_storage() and not revalidate:
                 # See if the ideal disk path (/default/pool/vmname.img)
                 # exists, and if unused, prompt the use for using it
-                ideal = self.get_ideal_path(self.guest.name)
+                ideal = util.get_ideal_path(self.conn, self.config,
+                                            self.guest.name)
                 do_exist = False
                 ret = True
 

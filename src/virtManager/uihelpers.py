@@ -20,12 +20,15 @@
 
 import logging
 import traceback
+import os, statvfs
 
 import gtk
 
+import virtinst
 from virtinst import VirtualNetworkInterface
 from virtinst import VirtualDisk
 
+from virtManager import util
 from virtManager.error import vmmErrorDialog
 
 OPTICAL_DEV_PATH = 0
@@ -54,6 +57,51 @@ def set_error_parent(parent):
     global err_dial
     err_dial.set_parent(parent)
     err_dial = err_dial
+
+############################################################
+# Helpers for shared storage UI between create/addhardware #
+############################################################
+
+def set_sparse_tooltip(widget):
+    sparse_str = _("Fully allocating storage will take longer now, "
+                   "but the OS install phase will be quicker. \n\n"
+                   "Skipping allocation can also cause space issues on "
+                   "the host machine, if the maximum image size exceeds "
+                   "available storage space.")
+    util.tooltip_wrapper(widget, sparse_str)
+
+def host_disk_space(conn, config):
+    pool = util.get_default_pool(conn)
+    path = util.get_default_dir(conn, config)
+
+    avail = 0
+    if pool:
+        # FIXME: make sure not inactive?
+        # FIXME: use a conn specific function after we send pool-added
+        pool = virtinst.util.lookup_pool_by_path(conn.vmm, path)
+        if pool:
+            pool.refresh(0)
+            avail = int(virtinst.util.get_xml_path(pool.XMLDesc(0),
+                                                   "/pool/available"))
+
+    elif not conn.is_remote():
+        vfs = os.statvfs(os.path.dirname(path))
+        avail = vfs[statvfs.F_FRSIZE] * vfs[statvfs.F_BAVAIL]
+
+    return float(avail / 1024.0 / 1024.0 / 1024.0)
+
+def host_space_tick(conn, config, widget):
+    max_storage = host_disk_space(conn, config)
+
+    def pretty_storage(size):
+        return "%.1f Gb" % float(size)
+
+    hd_label = ("%s available in the default location" %
+                pretty_storage(max_storage))
+    hd_label = ("<span color='#484848'>%s</span>" % hd_label)
+    widget.set_markup(hd_label)
+
+    return 1
 
 
 #######################################################################

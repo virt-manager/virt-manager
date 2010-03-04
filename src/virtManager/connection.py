@@ -1139,6 +1139,13 @@ class vmmConnection(gobject.GObject):
                 logging.debug("Connection doesn't seem to support storage "
                               "APIs. Skipping all storage polling.")
 
+            else:
+                # Try to create the default storage pool
+                try:
+                    util.build_default_pool(self.vmm)
+                except Exception, e:
+                    logging.debug("Building default pool failed: %s" % str(e))
+
         if not self.storage_capable:
             return (stopPools, startPools, origPools, newPools, currentPools)
 
@@ -1377,6 +1384,7 @@ class vmmConnection(gobject.GObject):
                 else:
                     # May be a new VM, we have no choice but
                     # to create the wrapper so we can see
+                    # if its a previously inactive domain.
                     try:
                         vm = self.vmm.lookupByName(name)
                         uuid = util.uuidstr(vm.UUID())
@@ -1456,6 +1464,13 @@ class vmmConnection(gobject.GObject):
             # Update VM states
             for uuid in oldVMs:
                 self.emit("vm-removed", self.uri, uuid)
+
+                # This forces the backing virDomain to be deleted and
+                # unreferenced. Not forcing this seems to cause refcount
+                # issues, and if the user creates another domain with the
+                # same name, libvirt will return the original UUID when
+                # requested, causing confusion.
+                oldVMs[uuid].release_handle()
             for uuid in newVMs:
                 self.emit("vm-added", self.uri, uuid)
             for uuid in startVMs:
