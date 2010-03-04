@@ -705,6 +705,9 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("create-forward").show()
 
     def page_changed(self, notebook, page, page_number):
+        devbox = self.window.get_widget("host-device")
+        devbox.hide()
+
         if page_number == PAGE_CHAR:
             devtype = self.window.get_widget("char-device-type")
             self.change_char_device_type(devtype)
@@ -712,6 +715,9 @@ class vmmAddHardware(gobject.GObject):
 
         elif page_number == PAGE_SUMMARY:
             self.populate_summary()
+
+        elif page_number == PAGE_HOSTDEV:
+            devbox.show()
 
         return
 
