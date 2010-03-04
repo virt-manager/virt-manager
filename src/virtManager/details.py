@@ -105,11 +105,11 @@ def prettyify_disk(devtype, bus, idx):
 
     return "%s %s" % (ret, idx)
 
-def prettyify_bytes(bytes):
-    if bytes > (1024*1024*1024):
-        return "%2.2f GB" % (bytes/(1024.0*1024.0*1024.0))
+def prettyify_bytes(val):
+    if val > (1024*1024*1024):
+        return "%2.2f GB" % (val/(1024.0*1024.0*1024.0))
     else:
-        return "%2.2f MB" % (bytes/(1024.0*1024.0))
+        return "%2.2f MB" % (val/(1024.0*1024.0))
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
