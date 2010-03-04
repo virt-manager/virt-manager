@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import os
 import logging
 import traceback
 
@@ -94,6 +93,9 @@ class vmmAddHardware(gobject.GObject):
 
         self.storage_browser = None
 
+        # Host space polling
+        self.host_storage_timer = None
+
         self._dev = None
 
         self.topwin.hide()
@@ -108,10 +110,8 @@ class vmmAddHardware(gobject.GObject):
 
             "on_hardware_type_changed"  : self.hardware_type_changed,
 
-            "on_storage_partition_address_browse_clicked" : self.browse_storage_partition_address,
-            "on_storage_file_address_browse_clicked" : self.browse_storage_file_address,
-            "on_storage_file_address_changed": self.toggle_storage_size,
-            "on_storage_toggled" : self.change_storage_type,
+            "on_config_storage_browse_clicked": self.browse_storage,
+            "on_config_storage_select_toggled": self.toggle_storage_select,
 
             "on_mac_address_clicked" : self.change_macaddr_use,
 
@@ -170,7 +170,16 @@ class vmmAddHardware(gobject.GObject):
 
     def close(self, ignore1=None,ignore2=None):
         self.topwin.hide()
+        self.remove_timers()
         return 1
+
+    def remove_timers(self):
+        try:
+            if self.host_storage_timer:
+                gobject.source_remove(self.host_storage_timer)
+                self.host_storage_timer = None
+        except:
+            pass
 
     def is_visible(self):
         if self.topwin.flags() & gtk.VISIBLE:
@@ -219,7 +228,7 @@ class vmmAddHardware(gobject.GObject):
         netmodel_list.add_attribute(text, 'text', 1)
 
         # Disk device type / bus
-        target_list = self.window.get_widget("target-device")
+        target_list = self.window.get_widget("config-storage-devtype")
         target_model = gtk.ListStore(str, str, str, str, int)
         target_list.set_model(target_model)
         icon = gtk.CellRendererPixbuf()
@@ -230,6 +239,10 @@ class vmmAddHardware(gobject.GObject):
         text.set_property("xpad", 6)
         target_list.pack_start(text, True)
         target_list.add_attribute(text, 'text', 3)
+
+        # Sparse tooltip
+        sparse_info = self.window.get_widget("config-storage-nosparse-info")
+        uihelpers.set_sparse_tooltip(sparse_info)
 
         # Input device type
         input_list = self.window.get_widget("input-type")
@@ -305,6 +318,9 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("char-info-box").modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("grey"))
 
     def reset_state(self):
+        is_local = not self.conn.is_remote()
+        is_storage_capable = self.conn.is_storage_capable()
+
         notebook = self.window.get_widget("create-pages")
         notebook.set_current_page(0)
 
@@ -313,23 +329,29 @@ class vmmAddHardware(gobject.GObject):
         self.window.get_widget("create-forward").show()
         self.window.get_widget("create-forward").grab_focus()
         self.window.get_widget("create-back").set_sensitive(False)
-        self.window.get_widget("storage-file-size").set_sensitive(False)
         self.window.get_widget("create-help").hide()
 
         # Storage init
-        self.change_storage_type()
-        if os.getuid() == 0:
-            self.window.get_widget("storage-partition").set_active(True)
-        else:
-            self.window.get_widget("storage-file-backed").set_active(True)
-        self.window.get_widget("storage-partition-address").set_text("")
-        self.window.get_widget("storage-file-address").set_text("")
-        self.window.get_widget("storage-file-size").set_value(4000)
-        self.window.get_widget("non-sparse").set_active(True)
-        target_list = self.window.get_widget("target-device")
+        label_widget = self.window.get_widget("phys-hd-label")
+        if not self.host_storage_timer:
+            self.host_storage_timer = util.safe_timeout_add(3 * 1000,
+                                                uihelpers.host_space_tick,
+                                                self.conn, self.config,
+                                                label_widget)
+        self.window.get_widget("config-storage-create").set_active(True)
+        self.window.get_widget("config-storage-size").set_value(8)
+        self.window.get_widget("config-storage-entry").set_text("")
+        self.window.get_widget("config-storage-nosparse").set_active(True)
+        target_list = self.window.get_widget("config-storage-devtype")
         self.populate_target_device_model(target_list.get_model())
         if len(target_list.get_model()) > 0:
             target_list.set_active(0)
+
+        have_storage = (is_local or is_storage_capable)
+        storage_tooltip = None
+        if not have_storage:
+            storage_tooltip = _("Connection does not support storage"
+                                " management.")
 
         # Network init
         newmac = uihelpers.generate_macaddr(self.vm.get_connection())
@@ -397,7 +419,8 @@ class vmmAddHardware(gobject.GObject):
         def add_hw_option(name, icon, page, sensitive, tooltip):
             model.append([name, icon, page, sensitive, tooltip])
 
-        add_hw_option("Storage", "drive-harddisk", PAGE_DISK, True, None)
+        add_hw_option("Storage", "drive-harddisk", PAGE_DISK, have_storage,
+                      have_storage and storage_tooltip or None)
         add_hw_option("Network", "network-idle", PAGE_NETWORK, True, None)
         add_hw_option("Input", "input-mouse", PAGE_INPUT, self.vm.is_hvm(),
                       _("Not supported for this guest type."))
@@ -525,42 +548,33 @@ class vmmAddHardware(gobject.GObject):
         return _type.get_model().get_value(_type.get_active_iter(), 2)
 
     # Disk getters
-    def get_config_disk_image(self):
-        if self.window.get_widget("storage-partition").get_active():
-            return self.window.get_widget("storage-partition-address").get_text()
-        else:
-            return self.window.get_widget("storage-file-address").get_text()
+    def is_default_storage(self):
+        return self.window.get_widget("config-storage-create").get_active()
 
-    def get_config_partition_size(self):
-        try:
-            d = virtinst.VirtualDisk(conn=self.conn.vmm,
-                                     path=self.get_config_disk_image(),
-                                     readOnly=True)
-            return int(d.size * 1024) or None
-        except:
-            return None
+    def get_storage_info(self):
+        path = None
+        size = self.window.get_widget("config-storage-size").get_value()
+        sparse = not self.window.get_widget("config-storage-nosparse").get_active()
 
-    def get_config_disk_size(self):
-        if self.window.get_widget("storage-partition").get_active():
-            return self.get_config_partition_size()
-        if not self.window.get_widget("storage-file-backed").get_active():
-            return None
-        if not self.window.get_widget("storage-file-size").get_editable():
-            return None
+        if self.is_default_storage():
+            path = util.get_default_path(self.conn, self.config,
+                                         self.vm.get_name())
+            logging.debug("Default storage path is: %s" % path)
         else:
-            return self.window.get_widget("storage-file-size").get_value()
+            path = self.window.get_widget("config-storage-entry").get_text()
+
+        return (path, size, sparse)
 
     def get_config_disk_target(self):
-        target = self.window.get_widget("target-device")
-        bus = target.get_model().get_value(target.get_active_iter(), 0)
-        device = target.get_model().get_value(target.get_active_iter(), 1)
-        return bus, device
+        target = self.window.get_widget("config-storage-devtype")
+        model = target.get_model()
+        idx = target.get_active()
+        if idx == -1:
+            return None, None
 
-    def is_sparse_file(self):
-        if self.window.get_widget("non-sparse").get_active():
-            return False
-        else:
-            return True
+        bus = model[idx][0]
+        device = model[idx][1]
+        return bus, device
 
     # Input getters
     def get_config_input(self):
@@ -748,14 +762,14 @@ class vmmAddHardware(gobject.GObject):
             summary_table.show_all()
 
         if hwpage == PAGE_DISK:
-            size = self.get_config_disk_size()
-            bus, target = self.get_config_disk_target()
+            size_str = (self._dev.size and ("%2.2f GB" % self._dev.size)
+                                       or "-")
 
             info_list = [
-                (_("Disk image:"),  self.get_config_disk_image()),
-                (_("Disk size:"),   size != None and "%s MB" % size or "-"),
-                (_("Device type:"), target),
-                (_("Bus type:"),    bus),
+                (_("Disk image:"),  self._dev.path),
+                (_("Disk size:"),   size_str),
+                (_("Device type:"), self._dev.device),
+                (_("Bus type:"),    self._dev.bus),
             ]
             title = _("Storage")
 
@@ -889,46 +903,15 @@ class vmmAddHardware(gobject.GObject):
             self.close()
 
     # Storage listeners
-    def browse_storage_partition_address(self, src, ignore=None):
-        textent = self.window.get_widget("storage-partition-address")
+    def browse_storage(self, ignore1):
+        self._browse_file(self.window.get_widget("config-storage-entry"))
 
-        self._browse_file(textent)
+    def toggle_storage_select(self, src):
+        act = src.get_active()
+        self.window.get_widget("config-storage-browse-box").set_sensitive(act)
 
-    def browse_storage_file_address(self, src, ignore=None):
-        textent = self.window.get_widget("storage-file-address")
-
-        self._browse_file(textent, confirm_overwrite=True)
-
-    def toggle_storage_size(self, ignore1=None, ignore2=None):
-        filename = self.get_config_disk_image()
-        if filename != None and len(filename) > 0 and \
-           (self.vm.get_connection().is_remote() or
-            not os.path.exists(filename)):
-            self.window.get_widget("storage-file-size").set_sensitive(True)
-            self.window.get_widget("non-sparse").set_sensitive(True)
-            size = self.get_config_disk_size()
-            if size == None:
-                size = 4000
-            self.window.get_widget("storage-file-size").set_value(size)
-        else:
-            self.window.get_widget("storage-file-size").set_sensitive(False)
-            self.window.get_widget("non-sparse").set_sensitive(False)
-            if os.path.isfile(filename):
-                size = os.path.getsize(filename)/(1024*1024)
-                self.window.get_widget("storage-file-size").set_value(size)
-            else:
-                self.window.get_widget("storage-file-size").set_value(0)
-
-    def change_storage_type(self, ignore=None):
-        if self.window.get_widget("storage-partition").get_active():
-            self.window.get_widget("storage-partition-box").set_sensitive(True)
-            self.window.get_widget("storage-file-box").set_sensitive(False)
-            self.window.get_widget("storage-file-size").set_sensitive(False)
-            self.window.get_widget("non-sparse").set_sensitive(False)
-        else:
-            self.window.get_widget("storage-partition-box").set_sensitive(False)
-            self.window.get_widget("storage-file-box").set_sensitive(True)
-            self.toggle_storage_size()
+    def set_disk_storage_path(self, ignore, path):
+        self.window.get_widget("config-storage-entry").set_text(path)
 
     # Network listeners
     def change_macaddr_use(self, ignore=None):
@@ -1124,57 +1107,60 @@ class vmmAddHardware(gobject.GObject):
         self._dev = None
 
     def validate_page_storage(self):
-        path = self.get_config_disk_image()
-        if not path:
-            return self.err.val_err(_("Storage Path Required"),
-                _("You must specify a partition or a file for disk storage."))
-
-        if self.window.get_widget("target-device").get_active() == -1:
-            return self.err.val_err(_("Target Device Required"),
-                        _("You must select a target device for the disk."))
-
         bus, device = self.get_config_disk_target()
 
-        # Build disk object
-        filesize = self.get_config_disk_size()
-        if self.get_config_disk_size() != None:
-            filesize = self.get_config_disk_size() / 1024.0
         readonly = False
         if device == virtinst.VirtualDisk.DEVICE_CDROM:
             readonly=True
 
         try:
-            if (os.path.dirname(os.path.abspath(path)) ==
-                util.DEFAULT_POOL_PATH):
-                util.build_default_pool(self.vm.get_connection().vmm)
+            # This can error out
+            diskpath, disksize, sparse = self.get_storage_info()
 
-            self._dev = virtinst.VirtualDisk(self.get_config_disk_image(),
-                                             filesize,
-                                             sparse=self.is_sparse_file(),
-                                             readOnly=readonly,
-                                             device=device,
-                                             bus=bus,
-                                             conn=self.vm.get_connection().vmm)
+            if self.is_default_storage():
+                # See if the ideal disk path (/default/pool/vmname.img)
+                # exists, and if unused, prompt the use for using it
+                ideal = util.get_ideal_path(self.conn, self.config,
+                                            self.vm.get_name())
+                do_exist = False
+                ret = True
 
-            if (self._dev.type == virtinst.VirtualDisk.TYPE_FILE and
-                not self.vm.is_hvm() and virtinst.util.is_blktap_capable()):
-                self._dev.driver_name = virtinst.VirtualDisk.DRIVER_TAP
+                try:
+                    do_exist = virtinst.VirtualDisk.path_exists(
+                                                        self.conn.vmm, ideal)
 
-        except ValueError, e:
-            return self.err.val_err(_("Invalid Storage Parameters"), str(e))
+                    ret = virtinst.VirtualDisk.path_in_use_by(self.conn.vmm,
+                                                              ideal)
+                except:
+                    logging.exception("Error checking default path usage")
 
-        ret = self._dev.is_size_conflict()
-        if not ret[0] and ret[1]:
-            res = self.err.ok_cancel(_("Not Enough Free Space"), ret[1])
-            if not res:
-                return False
+                if do_exist and not ret:
+                    do_use = self.err.yes_no(
+                        _("The following path already exists, but is not\n"
+                          "in use by any virtual machine:\n\n%s\n\n"
+                          "Would you like to use this path?") % ideal)
 
-        if self._dev.is_conflict_disk(self.vm.get_connection().vmm) is True:
-            res = self.err.yes_no(
-                _('Disk "%s" is already in use by another guest!' % self._dev),
-                _("Do you really want to use the disk?"))
-            if not res:
-                return False
+                    if do_use:
+                        diskpath = ideal
+
+            if not diskpath:
+                return self.err.val_err(_("A storage path must be specified."))
+
+            disk = virtinst.VirtualDisk(conn = self.conn.vmm,
+                                        path = diskpath,
+                                        size = disksize,
+                                        sparse = sparse,
+                                        readOnly = readonly,
+                                        device = device,
+                                        bus = bus)
+
+            if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
+                not self.vm.is_hvm() and
+                virtinst.util.is_blktap_capable()):
+                disk.driver_name = virtinst.VirtualDisk.DRIVER_TAP
+
+        except Exception, e:
+            return self.err.val_err(_("Storage parameter error."), str(e))
 
         # Generate target
         used = []
@@ -1183,10 +1169,28 @@ class vmmAddHardware(gobject.GObject):
         for d in disks:
             used.append(d[2])
 
-        self._dev.generate_target(used)
+        disk.generate_target(used)
+
+        isfatal, errmsg = disk.is_size_conflict()
+        if not isfatal and errmsg:
+            # Fatal errors are reported when setting 'size'
+            res = self.err.ok_cancel(_("Not Enough Free Space"), errmsg)
+            if not res:
+                return False
+
+        # Disk collision
+        if disk.is_conflict_disk(self.conn.vmm):
+            res = self.err.yes_no(_('Disk "%s" is already in use by another '
+                                    'guest!' %  disk.path),
+                                  _("Do you really want to use the disk?"))
+            if not res:
+                return False
 
         uihelpers.check_path_search_for_qemu(self.topwin, self.config,
-                                             self.conn, self._dev.path)
+                                             self.conn, disk.path)
+
+        self._dev = disk
+        return True
 
 
     def validate_page_network(self):
@@ -1312,19 +1316,10 @@ class vmmAddHardware(gobject.GObject):
     # Unsorted helpers #
     ####################
 
-    def _browse_file(self, textent, confirm_overwrite=False):
-        def confirm_cb(chooser):
-            # Only called when the user has chosen an existing file
-            self.window.get_widget("storage-file-size").set_sensitive(False)
-            return gtk.FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME
-
+    def _browse_file(self, textent):
         def set_storage_cb(src, path):
             if path:
                 textent.set_text(path)
-
-        confirm_func = None
-        if confirm_overwrite:
-            confirm_func = confirm_cb
 
         conn = self.vm.get_connection()
         if self.storage_browser == None:
@@ -1332,7 +1327,6 @@ class vmmAddHardware(gobject.GObject):
 
         self.storage_browser.set_finish_cb(set_storage_cb)
         self.storage_browser.set_browse_reason(self.config.CONFIG_DIR_IMAGE)
-        self.storage_browser.set_local_arg("confirm_func", confirm_func)
 
         self.storage_browser.show(conn)
 
