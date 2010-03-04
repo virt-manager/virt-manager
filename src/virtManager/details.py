@@ -1768,7 +1768,7 @@ class vmmDetails(gobject.GObject):
 
         address = (is_vnc and (gfxinfo[3] or "127.0.0.1") or _("N/A"))
         passwd  = (is_vnc and "-" or _("N/A"))
-        keymap  = (is_vnc and (gfxinfo[5] or "en-us") or _("N/A"))
+        keymap  = (is_vnc and (gfxinfo[5] or _("None")) or _("N/A"))
 
         self.window.get_widget("graphics-type").set_text(gtype)
         self.window.get_widget("graphics-address").set_text(address)
