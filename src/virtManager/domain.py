@@ -181,8 +181,10 @@ class vmmDomainBase(vmmLibvirtObject):
         return self.uuid
 
     def set_handle(self, vm):
-        del(self._backend)
         self._backend = vm
+    def release_handle(self):
+        del(self._backend)
+        self._backend = None
     def get_handle(self):
         return self._backend
 
