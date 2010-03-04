@@ -1662,9 +1662,9 @@ class vmmDetails(gobject.GObject):
             if vol:
                 size = vol.get_pretty_capacity()
             elif not self.conn.is_remote():
-                ignore, bytes = virtinst.VirtualDisk.stat_local_path(path)
-                if bytes != 0:
-                    size = prettyify_bytes(bytes)
+                ignore, val = virtinst.VirtualDisk.stat_local_path(path)
+                if val != 0:
+                    size = prettyify_bytes(val)
 
         is_cdrom = (devtype == virtinst.VirtualDisk.DEVICE_CDROM)
         is_floppy = (devtype == virtinst.VirtualDisk.DEVICE_FLOPPY)
