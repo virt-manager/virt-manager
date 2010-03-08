@@ -38,6 +38,8 @@ class vmmStoragePool(gobject.GObject):
         self._volumes = {}          # UUID->vmmStorageVolume mapping of the
                                     # pools associated volumes
         self._xml = None            # xml cache
+
+        self.refresh()
         self._update_xml()
         self.update_volumes()
 
@@ -118,8 +120,9 @@ class vmmStoragePool(gobject.GObject):
         return self._volumes[uuid]
 
     def refresh(self):
-        self.pool.refresh(0)
-        self._update_xml()
+        if self.active:
+            self.pool.refresh(0)
+            self._update_xml()
 
     def update_volumes(self):
         if not self.is_active():
