@@ -357,7 +357,7 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["hsep1"].show()
         self.vmmenu.add(self.vmmenu_items["hsep1"])
 
-        self.vmmenu_items["clone"] = gtk.ImageMenuItem("_Clone")
+        self.vmmenu_items["clone"] = gtk.ImageMenuItem(_("_Clone"))
         self.vmmenu_items["clone"].show()
         self.vmmenu_items["clone"].connect("activate", self.open_clone_window)
         self.vmmenu.add(self.vmmenu_items["clone"])
@@ -367,7 +367,7 @@ class vmmManager(gobject.GObject):
         self.vmmenu_items["migrate"].connect("activate", self.migrate_vm)
         self.vmmenu.add(self.vmmenu_items["migrate"])
 
-        self.vmmenu_items["delete"] = gtk.ImageMenuItem("_Delete")
+        self.vmmenu_items["delete"] = gtk.ImageMenuItem(_("_Delete"))
         self.vmmenu_items["delete"].set_image(delete_icon)
         self.vmmenu_items["delete"].show()
         self.vmmenu_items["delete"].connect("activate", self.do_delete)
