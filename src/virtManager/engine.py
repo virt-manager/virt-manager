@@ -834,10 +834,30 @@ class vmmEngine(gobject.GObject):
             self.config.set_confirm_poweroff(not skip_prompt)
 
         logging.debug("Rebooting vm '%s'." % vm.get_name())
+        no_support = False
+        reboot_err = None
         try:
             vm.reboot()
-        except Exception, e:
-            self.err.show_err(_("Error shutting down domain: %s" % str(e)),
+        except Exception, reboot_err:
+            no_support = virtinst.support.is_error_nosupport(reboot_err)
+            if not no_support:
+                self.err.show_err(_("Error rebooting domain: %s" %
+                                  str(reboot_err)),
+                                  "".join(traceback.format_exc()))
+
+        if not no_support:
+            return
+
+        # Reboot isn't supported. Let's try to emulate it
+        logging.debug("Hypervisor doesn't support reboot, let's fake it")
+        try:
+            vm.manual_reboot()
+        except:
+            logging.exception("Could not fake a reboot")
+
+            # Raise the original error message
+            self.err.show_err(_("Error rebooting domain: %s" %
+                              str(reboot_err)),
                               "".join(traceback.format_exc()))
 
     def migrate_domain(self, uri, uuid):

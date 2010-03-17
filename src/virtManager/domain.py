@@ -1178,6 +1178,8 @@ class vmmDomain(vmmDomainBase):
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
 
+        self.reboot_listener = None
+
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
         (self._inactive_xml_flags,
@@ -1231,7 +1233,47 @@ class vmmDomain(vmmDomainBase):
     def disk_write_rate(self):
         return self._get_record_helper("diskWrRate")
 
+    def _unregister_reboot_listener(self):
+        if self.reboot_listener == None:
+            return
+
+        try:
+            self.disconnect(self.reboot_listener)
+            self.reboot_listener = None
+        except:
+            pass
+
+    def manual_reboot(self):
+        # Attempt a manual reboot via 'shutdown' followed by startup
+        def reboot_listener(vm, ignore1, ignore2, self):
+            if vm.is_crashed():
+                # Abandon reboot plans
+                self.reboot_listener = None
+                return True
+
+            if not vm.is_shutoff():
+                # Not shutoff, continue waiting
+                return
+
+            try:
+                logging.debug("Fake reboot detected shutdown. Restarting VM")
+                vm.startup()
+            except:
+                logging.exception("Fake reboot startup failed")
+
+            self.reboot_listener = None
+            return True
+
+        self._unregister_reboot_listener()
+
+        # Request a shutdown
+        self.shutdown()
+
+        self.reboot_listener = util.connect_opt_out(self, "status-changed",
+                                                    reboot_listener, self)
+
     def shutdown(self):
+        self._unregister_reboot_listener()
         self._backend.shutdown()
         self._update_status()
 
@@ -1265,7 +1307,9 @@ class vmmDomain(vmmDomainBase):
         self._update_status()
 
     def destroy(self):
+        self._unregister_reboot_listener()
         self._backend.destroy()
+        self._update_status()
 
     def interfaceStats(self, device):
         return self._backend.interfaceStats(device)
