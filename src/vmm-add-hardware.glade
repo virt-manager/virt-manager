@@ -675,32 +675,82 @@
                               <widget class="GtkLabel" id="label22">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Host device:</property>
+                                <property name="yalign">0.23999999463558197</property>
+                                <property name="label" translatable="yes">_Host device:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">net-list</property>
                               </widget>
                               <packing>
                                 <property name="x_options">GTK_FILL</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkHBox" id="hbox6">
+                              <widget class="GtkVBox" id="vbox11">
                                 <property name="visible">True</property>
-                                <property name="spacing">6</property>
+                                <property name="orientation">vertical</property>
                                 <child>
-                                  <widget class="GtkComboBox" id="net-list">
+                                  <widget class="GtkHBox" id="hbox6">
                                     <property name="visible">True</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <widget class="GtkComboBox" id="net-list">
+                                        <property name="visible">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkImage" id="net-list-warn">
+                                        <property name="visible">True</property>
+                                        <property name="stock">gtk-dialog-warning</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
                                   </widget>
                                   <packing>
-                                    <property name="expand">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkImage" id="net-list-warn">
+                                  <widget class="GtkAlignment" id="alignment17">
                                     <property name="visible">True</property>
-                                    <property name="stock">gtk-dialog-warning</property>
+                                    <property name="top_padding">6</property>
+                                    <child>
+                                      <widget class="GtkHBox" id="net-bridge-box">
+                                        <property name="visible">True</property>
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <widget class="GtkLabel" id="label1">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">_Bridge name:</property>
+                                            <property name="use_underline">True</property>
+                                            <property name="mnemonic_widget">net-bridge</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkEntry" id="net-bridge">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="invisible_char">&#x25CF;</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                    </child>
                                   </widget>
                                   <packing>
-                                    <property name="expand">False</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>

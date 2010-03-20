@@ -217,7 +217,8 @@ class vmmAddHardware(gobject.GObject):
 
         # Virtual network list
         net_list = self.window.get_widget("net-list")
-        uihelpers.init_network_list(net_list)
+        bridge_box = self.window.get_widget("net-bridge-box")
+        uihelpers.init_network_list(net_list, bridge_box)
 
         # Network model list
         netmodel_list  = self.window.get_widget("net-model")
@@ -618,17 +619,12 @@ class vmmAddHardware(gobject.GObject):
     # Network getters
     def get_config_network(self):
         net_list = self.window.get_widget("net-list")
-        selection = net_list.get_active()
-        model = net_list.get_model()
+        bridge_ent = self.window.get_widget("net-bridge")
 
-        nettype = None
-        devname = None
-        if selection >= 0:
-            row = model[selection]
-            nettype = row[0]
-            devname = row[1]
+        net_type, net_src = uihelpers.get_network_selection(net_list,
+                                                            bridge_ent)
 
-        return (nettype, devname)
+        return net_type, net_src
 
     def get_config_net_model(self):
         model = self.window.get_widget("net-model")

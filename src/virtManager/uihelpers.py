@@ -129,21 +129,40 @@ def pretty_network_desc(nettype, source=None, netobj=None):
 
     return ret
 
-def init_network_list(net_list):
-    # [ network type, source name, label, sensitive?, net is active ]
-    net_model = gtk.ListStore(str, str, str, bool, bool)
+def init_network_list(net_list, bridge_box):
+    # [ network type, source name, label, sensitive?, net is active,
+    #   manual bridge]
+    net_model = gtk.ListStore(str, str, str, bool, bool, bool)
     net_list.set_model(net_model)
 
-    if isinstance(net_list, gtk.ComboBox):
-        net_col = net_list
-    else:
-        net_col = gtk.TreeViewColumn()
-        net_list.append_column(net_col)
+    net_list.connect("changed", net_list_changed, bridge_box)
 
     text = gtk.CellRendererText()
-    net_col.pack_start(text, True)
-    net_col.add_attribute(text, 'text', 2)
-    net_col.add_attribute(text, 'sensitive', 3)
+    net_list.pack_start(text, True)
+    net_list.add_attribute(text, 'text', 2)
+    net_list.add_attribute(text, 'sensitive', 3)
+
+def net_list_changed(net_list, bridge_box):
+    active = net_list.get_active()
+    if active < 0:
+        return
+
+    row = net_list.get_model()[active]
+    show_bridge = row[5]
+
+    bridge_box.set_property("visible", show_bridge)
+
+def get_network_selection(net_list, bridge_entry):
+    row = net_list.get_model()[net_list.get_active()]
+    net_type = row[0]
+    net_src = row[1]
+    net_check_bridge = row[5]
+
+    if net_check_bridge:
+        net_type = VirtualNetworkInterface.TYPE_BRIDGE
+        net_src = bridge_entry.get_text()
+
+    return net_type, net_src
 
 def populate_network_list(net_list, conn):
     model = net_list.get_model()
@@ -157,12 +176,12 @@ def populate_network_list(net_list, conn):
     def add_row(*args):
         model.append(build_row(*args))
 
-    def build_row(nettype, name, label, is_sensitive, is_running):
-        return [nettype, name, label, is_sensitive, is_running]
+    def build_row(nettype, name, label, is_sensitive, is_running,
+                  manual_bridge=False):
+        return [nettype, name, label, is_sensitive, is_running, manual_bridge]
 
     def set_active(idx):
-        if isinstance(net_list, gtk.ComboBox):
-            net_list.set_active(idx)
+        net_list.set_active(idx)
 
     def add_dict(indict, model):
         keylist = indict.keys()
@@ -269,8 +288,14 @@ def populate_network_list(net_list, conn):
                 break
     else:
         return_warn = True
-        model.insert(0, [None, None, _("No networking."), True, False])
+        row = build_row(None, None, _("No networking."), True, False)
+        model.insert(0, row)
         default = 0
+
+    # After all is said and done, add a manual bridge option
+    manual_row = build_row(None, None, _("Specify shared device name"),
+                           True, False, manual_bridge=True)
+    model.append(manual_row)
 
     set_active(default)
     return return_warn

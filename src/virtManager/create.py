@@ -269,7 +269,8 @@ class vmmCreate(gobject.GObject):
         # Networking
         # [ interface type, device name, label, sensitive ]
         net_list = self.window.get_widget("config-netdev")
-        uihelpers.init_network_list(net_list)
+        bridge_box = self.window.get_widget("config-netdev-bridge-box")
+        uihelpers.init_network_list(net_list, bridge_box)
 
         # Archtecture
         archModel = gtk.ListStore(str)
@@ -834,11 +835,14 @@ class vmmCreate(gobject.GObject):
         return (path, size, sparse)
 
     def get_config_network_info(self):
-        netidx = self.window.get_widget("config-netdev").get_active()
-        netinfo = self.window.get_widget("config-netdev").get_model()[netidx]
+        net_list = self.window.get_widget("config-netdev")
+        bridge_ent = self.window.get_widget("config-netdev-bridge")
         macaddr = self.window.get_widget("config-macaddr").get_text()
 
-        return netinfo[0], netinfo[1], macaddr.strip()
+        net_type, net_src = uihelpers.get_network_selection(net_list,
+                                                            bridge_ent)
+
+        return net_type, net_src, macaddr.strip()
 
     def get_config_sound(self):
         if self.conn.is_remote():
