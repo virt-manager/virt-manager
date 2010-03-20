@@ -178,11 +178,6 @@ class vmmHost(gobject.GObject):
 
         self.populate_networks(netListModel)
 
-        if not self.conn.network_capable:
-            self.set_net_error_page(
-                _("Libvirt connection does not support virtual network "
-                  "management."))
-
     def init_storage_state(self):
         self.window.get_widget("storage-pages").set_show_tabs(False)
 
@@ -225,10 +220,6 @@ class vmmHost(gobject.GObject):
                        self.pool_selected)
         populate_storage_pools(self.window.get_widget("pool-list"),
                                self.conn)
-
-        if not self.conn.storage_capable:
-            self.set_storage_error_page(
-                _("Libvirt connection does not support storage management."))
 
     def init_interface_state(self):
         self.window.get_widget("interface-pages").set_show_tabs(False)
@@ -275,10 +266,6 @@ class vmmHost(gobject.GObject):
         childListModel.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
         self.populate_interfaces(interfaceListModel)
-
-        if not self.conn.interface_capable:
-            self.set_interface_error_page(
-                _("Libvirt connection does not support interface management."))
 
     def init_conn_state(self):
         uri = self.conn.get_uri()
@@ -361,6 +348,27 @@ class vmmHost(gobject.GObject):
         state = (self.conn.get_state() == vmmConnection.STATE_ACTIVE)
         self.window.get_widget("net-add").set_sensitive(state)
         self.window.get_widget("pool-add").set_sensitive(state)
+
+        # Set error pages
+        if not state:
+            self.set_net_error_page(_("Connection not active."))
+            self.set_storage_error_page(_("Connection not active."))
+            self.set_interface_error_page(_("Connection not active."))
+            return
+
+        if not self.conn.network_capable:
+            self.set_net_error_page(
+                _("Libvirt connection does not support virtual network "
+                  "management."))
+
+        if not self.conn.storage_capable:
+            self.set_storage_error_page(
+                _("Libvirt connection does not support storage management."))
+
+        if not self.conn.interface_capable:
+            self.set_interface_error_page(
+                _("Libvirt connection does not support interface management."))
+
 
     def toggle_autoconnect(self, src):
         self.conn.set_autoconnect(src.get_active())
