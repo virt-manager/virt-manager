@@ -54,7 +54,7 @@ PAGE_FINISH = 4
 INSTALL_PAGE_ISO = 0
 INSTALL_PAGE_URL = 1
 INSTALL_PAGE_PXE = 2
-
+INSTALL_PAGE_IMPORT = 3
 
 
 class vmmCreate(gobject.GObject):
@@ -122,6 +122,7 @@ class vmmCreate(gobject.GObject):
             "on_install_local_cdrom_combo_changed": self.detect_media_os,
             "on_install_local_box_changed": self.detect_media_os,
             "on_install_local_browse_clicked": self.browse_iso,
+            "on_install_import_browse_clicked": self.browse_import,
 
             "on_install_detect_os_toggled": self.toggle_detect_os,
             "on_install_os_type_changed": self.change_os_type,
@@ -337,6 +338,9 @@ class vmmCreate(gobject.GObject):
         ksmodel  = self.window.get_widget("install-ks-box").get_model()
         self.populate_media_model(urlmodel, self.config.get_media_urls())
         self.populate_media_model(ksmodel, self.config.get_kickstart_urls())
+
+        # Install import
+        self.window.get_widget("install-import-entry").set_text("")
 
         # Mem / CPUs
         self.window.get_widget("config-mem").set_value(512)
@@ -577,8 +581,8 @@ class vmmCreate(gobject.GObject):
                 if gtype == "xen":
                     if (instmethod == INSTALL_PAGE_PXE or
                         instmethod == INSTALL_PAGE_ISO):
-                        tooltip = _("Only URL installs are supported for "
-                                    "paravirt.")
+                        tooltip = _("Only URL or import installs are supported "
+                                    "for paravirt.")
 
                 model.append([label, gtype, domtype, not bool(tooltip)])
 
@@ -723,6 +727,8 @@ class vmmCreate(gobject.GObject):
             install = _("URL Install Tree")
         elif instmethod == INSTALL_PAGE_PXE:
             install = _("PXE Install")
+        elif instmethod == INSTALL_PAGE_IMPORT:
+            install = _("Import existing OS image")
 
         if len(self.guest.disks) == 0:
             storage = _("None")
@@ -761,6 +767,8 @@ class vmmCreate(gobject.GObject):
             return INSTALL_PAGE_URL
         elif self.window.get_widget("method-pxe").get_active():
             return INSTALL_PAGE_PXE
+        elif self.window.get_widget("method-import").get_active():
+            return INSTALL_PAGE_IMPORT
 
     def get_config_os_info(self):
         d_list = self.window.get_widget("install-os-type")
@@ -796,6 +804,8 @@ class vmmCreate(gobject.GObject):
             media = self.get_config_local_media()
         elif instpage == INSTALL_PAGE_URL:
             media = self.window.get_widget("install-url-box").get_active_text()
+        elif instpage == INSTALL_PAGE_IMPORT:
+            media = self.window.get_widget("install-import-entry").get_text()
 
         return media
 
@@ -810,6 +820,9 @@ class vmmCreate(gobject.GObject):
             self.config.add_kickstart_url(ks)
 
         return (media.strip(), extra.strip(), ks.strip())
+
+    def get_config_import_path(self):
+        return self.window.get_widget("install-import-entry").get_text()
 
     def get_default_path(self, name):
         # Don't generate a new path if the install failed
@@ -826,7 +839,13 @@ class vmmCreate(gobject.GObject):
         path = None
         size = self.window.get_widget("config-storage-size").get_value()
         sparse = not self.window.get_widget("config-storage-nosparse").get_active()
-        if self.is_default_storage():
+
+        if self.get_config_install_page() == INSTALL_PAGE_IMPORT:
+            path = self.get_config_import_path()
+            size = None
+            sparse = False
+
+        elif self.is_default_storage():
             path = self.get_default_path(self.guest.name)
             logging.debug("Default storage path is: %s" % path)
         else:
@@ -958,16 +977,27 @@ class vmmCreate(gobject.GObject):
         else:
             nodetect_label.show()
 
+    def browse_import(self, ignore1=None, ignore2=None):
+        def set_import_path(ignore, path):
+            self.window.get_widget("install-import-entry").set_text(path)
+
+        self._browse_file(set_import_path, is_media=False)
+
     def browse_iso(self, ignore1=None, ignore2=None):
-        self._browse_file(self.set_iso_storage_path,
-                          is_media=True)
+        def set_iso_storage_path(ignore, path):
+            self.window.get_widget("install-local-box").child.set_text(path)
+
+        self._browse_file(set_iso_storage_path, is_media=True)
         self.window.get_widget("install-local-box").activate()
 
     def toggle_enable_storage(self, src):
         self.window.get_widget("config-storage-box").set_sensitive(src.get_active())
 
     def browse_storage(self, ignore1):
-        self._browse_file(self.set_disk_storage_path,
+        def set_disk_storage_path(ignore, path):
+            self.window.get_widget("config-storage-entry").set_text(path)
+
+        self._browse_file(set_disk_storage_path,
                           is_media=False)
 
     def toggle_storage_select(self, src):
@@ -976,12 +1006,6 @@ class vmmCreate(gobject.GObject):
 
     def toggle_macaddr(self, src):
         self.window.get_widget("config-macaddr").set_sensitive(src.get_active())
-
-    def set_iso_storage_path(self, ignore, path):
-        self.window.get_widget("install-local-box").child.set_text(path)
-
-    def set_disk_storage_path(self, ignore, path):
-        self.window.get_widget("config-storage-entry").set_text(path)
 
     # Navigation methods
     def set_install_page(self):
@@ -1019,6 +1043,7 @@ class vmmCreate(gobject.GObject):
     def forward(self, ignore):
         notebook = self.window.get_widget("create-pages")
         curpage = notebook.get_current_page()
+        is_import = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
 
         if self.validate(notebook.get_current_page()) != True:
             return
@@ -1026,12 +1051,15 @@ class vmmCreate(gobject.GObject):
         if curpage == PAGE_NAME:
             self.set_install_page()
             # See if we need to alter our default HV based on install method
-            # FIXME: URL installs also come into play with whether we want
-            # PV or FV
             self.guest_from_install_type()
 
+        next_page = curpage + 1
+        if next_page == PAGE_STORAGE and is_import:
+            # Skip storage page for import installs
+            next_page += 1
+
         self.window.get_widget("create-forward").grab_focus()
-        notebook.set_current_page(curpage + 1)
+        notebook.set_current_page(next_page)
 
     def page_changed(self, ignore1, ignore2, pagenum):
 
@@ -1158,6 +1186,7 @@ class vmmCreate(gobject.GObject):
         extra = None
         ks = None
         cdrom = False
+        is_import = False
         distro, variant, ignore1, ignore2 = self.get_config_os_info()
 
 
@@ -1188,6 +1217,13 @@ class vmmCreate(gobject.GObject):
         elif instmethod == INSTALL_PAGE_PXE:
             instclass = virtinst.PXEInstaller
 
+        elif instmethod == INSTALL_PAGE_IMPORT:
+            instclass = virtinst.ImportInstaller
+            is_import = True
+
+            import_path = self.get_config_import_path()
+            if not import_path:
+                return self.verr(_("A storage path to import is required."))
 
         # Build the installer and Guest instance
         try:
@@ -1227,6 +1263,12 @@ class vmmCreate(gobject.GObject):
         except ValueError, e:
             return self.err.val_err(_("Error setting OS information."),
                                     str(e))
+
+        # Kind of wonky, run storage validation now, which will assign
+        # the import path. Import installer skips the storage page.
+        if is_import:
+            if not self.validate_storage_page(revalidate):
+                return False
 
         if not revalidate:
             if self.guest.installer.scratchdir_required():
