@@ -26,6 +26,15 @@ dnl ====================================
 
 AC_OUTPUT(Makefile
           pixmaps/Makefile
+          pixmaps/hicolor/Makefile
+          pixmaps/hicolor/16x16/Makefile
+          pixmaps/hicolor/16x16/actions/Makefile
+          pixmaps/hicolor/22x22/Makefile
+          pixmaps/hicolor/22x22/actions/Makefile
+          pixmaps/hicolor/24x24/Makefile
+          pixmaps/hicolor/24x24/actions/Makefile
+          pixmaps/hicolor/32x32/Makefile
+          pixmaps/hicolor/32x32/actions/Makefile
           po/Makefile.in
           src/Makefile
           src/virtManager/Makefile

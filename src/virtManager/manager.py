@@ -268,16 +268,8 @@ class vmmManager(gobject.GObject):
                             self.config.is_vmlist_network_traffic_visible())
 
     def init_toolbar(self):
-        def set_toolbar_image(widget, iconfile, l, w):
-            filename = self.config.get_icon_dir() + "/%s" % iconfile
-            pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(filename, l, w)
-            image = gtk.Image()
-            image.set_from_pixbuf(pixbuf)
-            image.show_all()
-            self.window.get_widget(widget).set_icon_widget(image)
-
-        set_toolbar_image("vm-new", "vm_new_wizard.png", 28, 28)
-        set_toolbar_image("vm-open", "icon_console.png", 24, 24)
+        self.window.get_widget("vm-new").set_icon_name("vm_new")
+        self.window.get_widget("vm-open").set_icon_name("icon_console")
         uihelpers.build_shutdown_button_menu(
                                    self.config,
                                    self.window.get_widget("vm-shutdown"),
