@@ -171,6 +171,10 @@ class vmmDomainBase(vmmLibvirtObject):
     def define_disk_shareable(self, dev_id_info, do_shareable):
         raise NotImplementedError()
 
+    def define_network_model(self, dev_id_info, newmodel):
+        raise NotImplementedError()
+    def define_sound_model(self, dev_id_info, newmodel):
+        raise NotImplementedError()
     def define_video_model(self, dev_id_info, newmodel):
         raise NotImplementedError()
 
@@ -1785,6 +1789,46 @@ class vmmDomain(vmmDomainBase):
         return self._redefine(util.xml_parse_wrapper, self._change_disk_param,
                              dev_id_info, "shareable", do_shareable)
 
+    # Network properties
+    def define_network_model(self, dev_id_info, newmodel):
+        devtype = "interface"
+        if not self._check_device_is_present(devtype, dev_id_info):
+            return
+
+        def change_model(doc, ctx):
+            dev_node = self._get_device_xml_nodes(ctx, devtype, dev_id_info)[0]
+            model_node = dev_node.xpathEval("./model")
+            model_node = model_node and model_node[0] or None
+
+            if not model_node:
+                if newmodel:
+                    model_node = dev_node.newChild(None, "model", None)
+
+            if newmodel:
+                model_node.setProp("type", newmodel)
+            else:
+                model_node.unlinkNode()
+                model_node.freeNode()
+
+            return doc.serialize()
+
+        return self._redefine(util.xml_parse_wrapper, change_model)
+
+    # Sound properties
+    def define_sound_model(self, dev_id_info, newmodel):
+        devtype = "sound"
+        if not self._check_device_is_present(devtype, dev_id_info):
+            return
+
+        def change_model(doc, ctx):
+            dev_node = self._get_device_xml_nodes(ctx, devtype, dev_id_info)[0]
+            dev_node.setProp("model", newmodel)
+
+            return doc.serialize()
+
+        return self._redefine(util.xml_parse_wrapper, change_model)
+
+    # Video properties
     def define_video_model(self, dev_id_info, newmodel):
         if not self._check_device_is_present("video", dev_id_info):
             return
@@ -1799,7 +1843,7 @@ class vmmDomain(vmmDomainBase):
             return doc.serialize()
 
         return self._redefine(util.xml_parse_wrapper, change_model,
-                             dev_id_info, newmodel)
+                              dev_id_info, newmodel)
 
     ########################
     # End XML Altering API #
@@ -2055,6 +2099,20 @@ class vmmDomainVirtinst(vmmDomainBase):
         def change_shareable():
             dev.shareable = do_shareable
         self._redefine(change_shareable)
+
+    def define_network_model(self, dev_id_info, newmodel):
+        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_NET,
+                                          dev_id_info)
+        def change_model():
+            dev.model = newmodel
+        self._redefine(change_model)
+
+    def define_sound_model(self, dev_id_info, newmodel):
+        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_AUDIO,
+                                          dev_id_info)
+        def change_model():
+            dev.model = newmodel
+        self._redefine(change_model)
 
     def define_video_model(self, dev_id_info, newmodel):
         dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_VIDEO,

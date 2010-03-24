@@ -103,6 +103,67 @@ def host_space_tick(conn, config, widget):
 
     return 1
 
+#####################################################
+# Hardware model list building (for details, addhw) #
+#####################################################
+def build_video_combo(vm, video_dev, no_default=False):
+    video_dev_model = gtk.ListStore(str)
+    video_dev.set_model(video_dev_model)
+    text = gtk.CellRendererText()
+    video_dev.pack_start(text, True)
+    video_dev.add_attribute(text, 'text', 0)
+    video_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
+    tmpdev = virtinst.VirtualVideoDevice(vm.get_connection().vmm)
+    for m in tmpdev.model_types:
+        if m == tmpdev.MODEL_DEFAULT and no_default:
+            continue
+        video_dev_model.append([m])
+    if len(video_dev_model) > 0:
+        video_dev.set_active(0)
+
+def build_sound_combo(vm, combo, no_default=False):
+    dev_model = gtk.ListStore(str)
+    combo.set_model(dev_model)
+    text = gtk.CellRendererText()
+    combo.pack_start(text, True)
+    combo.add_attribute(text, 'text', 0)
+    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
+    for m in virtinst.VirtualAudio.MODELS:
+        if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
+            continue
+        dev_model.append([m])
+    if len(dev_model) > 0:
+        combo.set_active(0)
+
+def build_netmodel_combo(vm, combo):
+    dev_model = gtk.ListStore(str, str)
+    combo.set_model(dev_model)
+    text = gtk.CellRendererText()
+    combo.pack_start(text, True)
+    combo.add_attribute(text, 'text', 1)
+    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
+    populate_netmodel_combo(vm, combo)
+    combo.set_active(0)
+
+def populate_netmodel_combo(vm, combo):
+    model = combo.get_model()
+    model.clear()
+
+    # [xml value, label]
+    model.append([None, _("Hypervisor default")])
+    if vm.is_hvm():
+        mod_list = [ "rtl8139", "ne2k_pci", "pcnet" ]
+        if vm.get_hv_type() == "kvm":
+            mod_list.append("e1000")
+            mod_list.append("virtio")
+        mod_list.sort()
+
+        for m in mod_list:
+            model.append([m, m])
+
 
 #######################################################################
 # Widgets for listing network device options (in create, addhardware) #

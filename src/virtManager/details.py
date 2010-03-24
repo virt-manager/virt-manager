@@ -26,7 +26,6 @@ import logging
 import traceback
 import os
 
-import virtManager.addhardware
 import virtManager.uihelpers as uihelpers
 from virtManager.error import vmmErrorDialog
 from virtManager.addhardware import vmmAddHardware
@@ -258,6 +257,10 @@ class vmmDetails(gobject.GObject):
 
             "on_disk_readonly_changed": self.config_enable_apply,
             "on_disk_shareable_changed": self.config_enable_apply,
+
+            "on_network_model_combo_changed": self.config_enable_apply,
+
+            "on_sound_model_combo_changed": self.config_enable_apply,
 
             "on_video_model_combo_changed": self.config_enable_apply,
 
@@ -547,9 +550,33 @@ class vmmDetails(gobject.GObject):
         txtCol.add_attribute(text, 'text', BOOT_LABEL)
         txtCol.add_attribute(text, 'sensitive', BOOT_ACTIVE)
 
+        no_default= not self.is_customize_dialog
+        # Network model
+        net_model = self.window.get_widget("network-model-combo")
+        uihelpers.build_netmodel_combo(self.vm, net_model)
+
+        # Sound model
+        sound_dev = self.window.get_widget("sound-model-combo")
+        uihelpers.build_sound_combo(self.vm, sound_dev, no_default=no_default)
+
         # Video model combo
         video_dev = self.window.get_widget("video-model-combo")
-        virtManager.addhardware.build_video_combo(self.vm, video_dev)
+        uihelpers.build_video_combo(self.vm, video_dev, no_default=no_default)
+
+    # Helper function to handle the combo/label pattern used for
+    # video model, sound model, network model, etc.
+    def set_combo_label(self, prefix, model_idx, value):
+        model_label = self.window.get_widget(prefix + "-label")
+        model_combo = self.window.get_widget(prefix + "-combo")
+        model_list = map(lambda x: x[model_idx], model_combo.get_model())
+        model_in_list = (value in model_list)
+
+        model_label.set_property("visible", not model_in_list)
+        model_combo.set_property("visible", model_in_list)
+        model_label.set_text(value or "")
+
+        if model_in_list:
+            model_combo.set_active(model_list.index(value))
 
     ##########################
     # Window state listeners #
@@ -1160,6 +1187,10 @@ class vmmDetails(gobject.GObject):
             ret = self.config_boot_options_apply()
         elif pagetype is HW_LIST_TYPE_DISK:
             ret = self.config_disk_apply(info[1])
+        elif pagetype is HW_LIST_TYPE_NIC:
+            ret = self.config_network_apply(info[1])
+        elif pagetype is HW_LIST_TYPE_SOUND:
+            ret = self.config_sound_apply(info[1])
         elif pagetype is HW_LIST_TYPE_VIDEO:
             ret = self.config_video_apply(info[1])
         else:
@@ -1167,6 +1198,16 @@ class vmmDetails(gobject.GObject):
 
         if ret is not False:
             self.window.get_widget("config-apply").set_sensitive(False)
+
+    # Helper for accessing value of combo/label pattern
+    def get_combo_label_value(self, prefix, model_idx=0):
+        combo = self.window.get_widget(prefix + "-combo")
+        value = None
+
+        if combo.get_property("visible"):
+            value = combo.get_model()[combo.get_active()][model_idx]
+
+        return value
 
     # Overview section
     def config_overview_apply(self):
@@ -1299,14 +1340,22 @@ class vmmDetails(gobject.GObject):
                                           [(dev_id_info, do_readonly),
                                            (dev_id_info, do_shareable)])
 
+    # Audio options
+    def config_sound_apply(self, dev_id_info):
+        model = self.get_combo_label_value("sound-model")
+        if model:
+            return self._change_config_helper(self.vm.define_sound_model,
+                                              (dev_id_info, model))
+
+    # Network options
+    def config_network_apply(self, dev_id_info):
+        model = self.get_combo_label_value("network-model")
+        return self._change_config_helper(self.vm.define_network_model,
+                                          (dev_id_info, model))
+
     # Video options
     def config_video_apply(self, dev_id_info):
-        model_combo = self.window.get_widget("video-model-combo")
-
-        model = None
-        if model_combo.get_property("visible"):
-            model = model_combo.get_model()[model_combo.get_active()][0]
-
+        model = self.get_combo_label_value("video-model")
         if model:
             return self._change_config_helper(self.vm.define_video_model,
                                               (dev_id_info, model))
@@ -1475,20 +1524,10 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("overview-acpi").set_active(acpi)
         self.window.get_widget("overview-apic").set_active(apic)
+
         if not clock:
             clock = _("Same as host")
-
-        clock_combo = self.window.get_widget("overview-clock-combo")
-        clock_label = self.window.get_widget("overview-clock-label")
-        clock_list = map(lambda x: x[0], clock_combo.get_model())
-        clock_in_combo = (clock in clock_list)
-
-        clock_combo.set_property("visible", clock_in_combo)
-        clock_label.set_property("visible", not clock_in_combo)
-        if clock_in_combo:
-            clock_combo.set_active(clock_list.index(clock))
-        else:
-            clock_label.set_text(clock)
+        self.set_combo_label("overview-clock", 0, clock)
 
         # Security details
         vmmodel, ignore, vmlabel = self.vm.get_seclabel()
@@ -1697,6 +1736,7 @@ class vmmDetails(gobject.GObject):
 
         nettype = netinfo[5]
         source = netinfo[3]
+        model = netinfo[6] or None
 
         netobj = None
         if nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
@@ -1714,8 +1754,9 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("network-mac-address").set_text(netinfo[2])
         self.window.get_widget("network-source-device").set_text(desc)
 
-        model = netinfo[6] or _("Hypervisor default")
-        self.window.get_widget("network-source-model").set_text(model)
+        uihelpers.populate_netmodel_combo(self.vm,
+                            self.window.get_widget("network-model-combo"))
+        self.set_combo_label("network-model", 0, model)
 
     def refresh_input_page(self):
         inputinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -1781,7 +1822,9 @@ class vmmDetails(gobject.GObject):
         if not soundinfo:
             return
 
-        self.window.get_widget("sound-model").set_text(soundinfo[2])
+        model = soundinfo[2]
+
+        self.set_combo_label("sound-model", 0, model)
 
     def refresh_char_page(self):
         charinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -1892,17 +1935,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("video-ram").set_text(ramlabel)
         self.window.get_widget("video-heads").set_text(heads and heads or "-")
 
-        model_label = self.window.get_widget("video-model-label")
-        model_combo = self.window.get_widget("video-model-combo")
-        model_list = map(lambda x: x[0], model_combo.get_model())
-        model_in_list = (model in model_list)
-
-        model_label.set_property("visible", not model_in_list)
-        model_combo.set_property("visible", model_in_list)
-        model_label.set_text(model)
-
-        if model_in_list:
-            model_combo.set_active(model_list.index(model))
+        self.set_combo_label("video-model", 0, model)
 
     def refresh_boot_page(self):
         # Refresh autostart

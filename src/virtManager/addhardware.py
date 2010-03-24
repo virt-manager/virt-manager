@@ -62,18 +62,6 @@ char_widget_mappings = {
     "protocol" : "char-use-telnet",
 }
 
-def build_video_combo(vm, video_dev):
-    video_dev_model = gtk.ListStore(str)
-    video_dev.set_model(video_dev_model)
-    text = gtk.CellRendererText()
-    video_dev.pack_start(text, True)
-    video_dev.add_attribute(text, 'text', 0)
-    video_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
-    for m in VirtualVideoDevice(vm.get_connection().vmm).model_types:
-        video_dev_model.append([m])
-    if len(video_dev_model) > 0:
-        video_dev.set_active(0)
-
 class vmmAddHardware(gobject.GObject):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
@@ -222,11 +210,7 @@ class vmmAddHardware(gobject.GObject):
 
         # Network model list
         netmodel_list  = self.window.get_widget("net-model")
-        netmodel_model = gtk.ListStore(str, str)
-        netmodel_list.set_model(netmodel_model)
-        text = gtk.CellRendererText()
-        netmodel_list.pack_start(text, True)
-        netmodel_list.add_attribute(text, 'text', 1)
+        uihelpers.build_netmodel_combo(self.vm, netmodel_list)
 
         # Disk device type / bus
         target_list = self.window.get_widget("config-storage-devtype")
@@ -264,11 +248,7 @@ class vmmAddHardware(gobject.GObject):
 
         # Sound model list
         sound_list = self.window.get_widget("sound-model")
-        sound_lmodel = gtk.ListStore(str)
-        sound_list.set_model(sound_lmodel)
-        text = gtk.CellRendererText()
-        sound_list.pack_start(text, True)
-        sound_list.add_attribute(text, 'text', 0)
+        uihelpers.build_sound_combo(self.vm, sound_list)
 
         host_devtype = self.window.get_widget("host-device-type")
         # Description, nodedev type, specific type capability, sub type,
@@ -290,7 +270,7 @@ class vmmAddHardware(gobject.GObject):
 
         # Video device
         video_dev = self.window.get_widget("video-model")
-        build_video_combo(self.vm, video_dev)
+        uihelpers.build_video_combo(self.vm, video_dev)
 
         char_devtype = self.window.get_widget("char-device-type")
         # Type name, desc
@@ -372,9 +352,8 @@ class vmmAddHardware(gobject.GObject):
             net_warn.hide()
 
         netmodel = self.window.get_widget("net-model")
-        self.populate_network_model_model(netmodel.get_model())
-        if len(netmodel.get_model()) > 0:
-            netmodel.set_active(0)
+        uihelpers.populate_netmodel_combo(self.vm, netmodel)
+        netmodel.set_active(0)
 
         # Input device init
         input_box = self.window.get_widget("input-type")
@@ -394,9 +373,8 @@ class vmmAddHardware(gobject.GObject):
 
         # Sound init
         sound_box = self.window.get_widget("sound-model")
-        self.populate_sound_model_model(sound_box.get_model())
         sound_box.set_active(0)
-
+                
         # Hostdev init
         host_devtype = self.window.get_widget("host-device-type")
         self.populate_host_device_type_model(host_devtype.get_model())
@@ -452,21 +430,6 @@ class vmmAddHardware(gobject.GObject):
     # UI population methods #
     #########################
 
-    def populate_network_model_model(self, model):
-        model.clear()
-
-        # [xml value, label]
-        model.append([None, _("Hypervisor default")])
-        if self.vm.is_hvm():
-            mod_list = [ "rtl8139", "ne2k_pci", "pcnet" ]
-            if self.vm.get_hv_type() == "kvm":
-                mod_list.append("e1000")
-                mod_list.append("virtio")
-            mod_list.sort()
-
-            for m in mod_list:
-                model.append([m, m])
-
     def populate_target_device_model(self, model):
         model.clear()
         #[bus, device, icon, desc, iconsize]
@@ -502,13 +465,6 @@ class vmmAddHardware(gobject.GObject):
         model.clear()
         model.append([_("VNC server"), "vnc"])
         model.append([_("Local SDL window"), "sdl"])
-
-    def populate_sound_model_model(self, model):
-        model.clear()
-        lst = virtinst.VirtualAudio.MODELS
-        lst.sort()
-        for m in lst:
-            model.append([m])
 
     def populate_host_device_type_model(self, model):
         model.clear()
