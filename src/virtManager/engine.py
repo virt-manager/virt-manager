@@ -49,8 +49,17 @@ import virtManager.util as util
 
 # List of packages to look for via packagekit at first startup.
 # If this list is empty, no attempt to contact packagekit is made
-LIBVIRT_DAEMON = "libvirt"
-PACKAGEKIT_PACKAGES = [LIBVIRT_DAEMON, "qemu-system-x86"]
+LIBVIRT_DAEMON = ""
+HV_PACKAGE = ""
+OTHER_PACKAGES = []
+PACKAGEKIT_PACKAGES = []
+
+if LIBVIRT_DAEMON:
+    PACKAGEKIT_PACKAGES.append(LIBVIRT_DAEMON)
+if HV_PACKAGE:
+    PACKAGEKIT_PACKAGES.append(HV_PACKAGE)
+if OTHER_PACKAGES:
+    PACKAGEKIT_PACKAGES.extend(OTHER_PACKAGES)
 
 
 def default_uri():
