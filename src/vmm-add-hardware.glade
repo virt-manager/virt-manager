@@ -2151,6 +2151,141 @@ to connect to the virtual machine.</property>
               </packing>
             </child>
             <child>
+              <widget class="GtkVBox" id="vbox12">
+                <property name="visible">True</property>
+                <property name="border_width">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <widget class="GtkEventBox" id="page9-title">
+                    <property name="visible">True</property>
+                    <child>
+                      <widget class="GtkLabel" id="label19">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
+                        <property name="xpad">5</property>
+                        <property name="ypad">6</property>
+                        <property name="label" translatable="yes">&lt;span weight="heavy" size="xx-large" foreground="#FFF"&gt;Watchdog Device&lt;/span&gt;</property>
+                        <property name="use_markup">True</property>
+                        <property name="justify">fill</property>
+                      </widget>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkVBox" id="vbox13">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <widget class="GtkLabel" id="label24">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="xpad">20</property>
+                        <property name="ypad">10</property>
+                        <property name="label" translatable="yes">Please indicate what watchdog device type
+and default action should be used.</property>
+                        <property name="use_markup">True</property>
+                        <property name="wrap">True</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkAlignment" id="alignment18">
+                        <property name="visible">True</property>
+                        <property name="left_padding">20</property>
+                        <property name="right_padding">15</property>
+                        <child>
+                          <widget class="GtkTable" id="table6">
+                            <property name="visible">True</property>
+                            <property name="n_rows">2</property>
+                            <property name="n_columns">2</property>
+                            <property name="column_spacing">12</property>
+                            <property name="row_spacing">12</property>
+                            <child>
+                              <widget class="GtkComboBox" id="watchdog-model">
+                                <property name="visible">True</property>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label26">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">_Model:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">watchdog-model</property>
+                              </widget>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label27">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Ac_tion:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">watchdog-action</property>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkComboBox" id="watchdog-action">
+                                <property name="visible">True</property>
+                              </widget>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="position">9</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label11">
+                <property name="visible">True</property>
+                <property name="label">wdog</property>
+              </widget>
+              <packing>
+                <property name="position">10</property>
+                <property name="tab_fill">False</property>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
               <widget class="GtkVBox" id="vbox41">
                 <property name="visible">True</property>
                 <property name="border_width">1</property>
@@ -2160,7 +2295,7 @@ to connect to the virtual machine.</property>
                   <widget class="GtkAlignment" id="alignment95">
                     <property name="visible">True</property>
                     <child>
-                      <widget class="GtkEventBox" id="page9-title">
+                      <widget class="GtkEventBox" id="page10-title">
                         <property name="visible">True</property>
                         <child>
                           <widget class="GtkLabel" id="label247">
@@ -2291,7 +2426,7 @@ to connect to the virtual machine.</property>
                 </child>
               </widget>
               <packing>
-                <property name="position">9</property>
+                <property name="position">10</property>
               </packing>
             </child>
             <child>
@@ -2300,7 +2435,7 @@ to connect to the virtual machine.</property>
                 <property name="label">finish</property>
               </widget>
               <packing>
-                <property name="position">9</property>
+                <property name="position">10</property>
                 <property name="tab_fill">False</property>
                 <property name="type">tab</property>
               </packing>

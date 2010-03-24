@@ -27,7 +27,8 @@ import gtk.gdk
 import gtk.glade
 
 import virtinst
-from virtinst import VirtualCharDevice, VirtualDevice, VirtualVideoDevice
+from virtinst import (VirtualCharDevice, VirtualDevice, VirtualVideoDevice,
+                      VirtualWatchdog)
 
 import virtManager.util as util
 import virtManager.uihelpers as uihelpers
@@ -50,7 +51,8 @@ PAGE_SOUND = 5
 PAGE_HOSTDEV = 6
 PAGE_CHAR = 7
 PAGE_VIDEO = 8
-PAGE_SUMMARY = 9
+PAGE_WATCHDOG = 9
+PAGE_SUMMARY = 10
 
 char_widget_mappings = {
     "source_path" : "char-path",
@@ -298,6 +300,14 @@ class vmmAddHardware(gobject.GObject):
 
         self.window.get_widget("char-info-box").modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("grey"))
 
+        # Watchdog widgets
+        combo = self.window.get_widget("watchdog-model")
+        uihelpers.build_watchdogmodel_combo(self.vm, combo)
+
+        combo = self.window.get_widget("watchdog-action")
+        uihelpers.build_watchdogaction_combo(self.vm, combo)
+
+
     def reset_state(self):
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -423,6 +433,9 @@ class vmmAddHardware(gobject.GObject):
                             self.vm.get_connection().vmm,
                             virtinst.support.SUPPORT_CONN_DOMAIN_VIDEO),
                       _("Libvirt version does not support video devices."))
+        add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
+                      self.vm.is_hvm(),
+                      _("Not supported for this guest type."))
 
         self.window.get_widget("hardware-type").set_active(0)
 
@@ -617,6 +630,13 @@ class vmmAddHardware(gobject.GObject):
         modbox = self.window.get_widget("video-model")
         return modbox.get_model()[modbox.get_active()][0]
 
+    # Watchdog getters
+    def get_config_watchdog_model(self):
+        modbox = self.window.get_widget("watchdog-model")
+        return modbox.get_model()[modbox.get_active()][0]
+    def get_config_watchdog_action(self):
+        modbox = self.window.get_widget("watchdog-action")
+        return modbox.get_model()[modbox.get_active()][0]
 
     ################
     # UI listeners #
@@ -829,6 +849,13 @@ class vmmAddHardware(gobject.GObject):
                 (_("Model:"), self._dev.model_type),
             ]
             title = _("Video")
+
+        elif hwpage == PAGE_WATCHDOG:
+            title = _("Watchdog")
+            info_list = [
+                (_("Model:"), self._dev.model),
+                (_("Action:"), self._dev.get_action_desc(self._dev.action))
+            ]
 
         set_table(title, info_list)
 
@@ -1051,6 +1078,8 @@ class vmmAddHardware(gobject.GObject):
             return self.validate_page_char()
         elif page_num == PAGE_VIDEO:
             return self.validate_page_video()
+        elif page_num == PAGE_WATCHDOG:
+            return self.validate_page_watchdog()
 
     def validate_page_intro(self):
         if self.get_config_hardware_type() == None:
@@ -1248,7 +1277,7 @@ class vmmAddHardware(gobject.GObject):
             # Dump XML for sanity checking
             self._dev.get_xml_config()
         except Exception, e:
-            return self.err.val_err(_("%s device parameter error.") %
+            return self.err.val_err(_("%s device parameter error") %
                                     chartype.capitalize(), str(e))
 
     def validate_page_video(self):
@@ -1259,7 +1288,20 @@ class vmmAddHardware(gobject.GObject):
             self._dev = VirtualVideoDevice(conn=conn)
             self._dev.model_type = model
         except Exception, e:
-            return self.err.val_err(_("Video device parameter error.") %
+            return self.err.val_err(_("Video device parameter error"),
+                                    str(e))
+
+    def validate_page_watchdog(self):
+        conn = self.vm.get_connection().vmm
+        model = self.get_config_watchdog_model()
+        action = self.get_config_watchdog_action()
+
+        try:
+            self._dev = VirtualWatchdog(conn=conn)
+            self._dev.model = model
+            self._dev.action = action
+        except Exception, e:
+            return self.err.val_err(_("Watchdog parameter error"),
                                     str(e))
 
 

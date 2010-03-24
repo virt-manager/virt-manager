@@ -173,9 +173,16 @@ class vmmDomainBase(vmmLibvirtObject):
 
     def define_network_model(self, dev_id_info, newmodel):
         raise NotImplementedError()
+
     def define_sound_model(self, dev_id_info, newmodel):
         raise NotImplementedError()
+
     def define_video_model(self, dev_id_info, newmodel):
+        raise NotImplementedError()
+
+    def define_watchdog_model(self, dev_id_info, newmodel):
+        raise NotImplementedError()
+    def define_watchdog_action(self, dev_id_info, newmodel):
         raise NotImplementedError()
 
     ########################
@@ -716,6 +723,24 @@ class vmmDomainBase(vmmLibvirtObject):
             return hostdevs
         return self._parse_device_xml(_parse_hostdev_devs)
 
+    def get_watchdog_devices(self):
+        def _parse_devs(ctx):
+            vids = []
+            devs = ctx.xpathEval("/domain/devices/watchdog")
+            count = 0
+
+            for dev in devs:
+                model = dev.prop("model")
+                action = dev.prop("action")
+
+                unique = count
+                count += 1
+
+                row = ["watchdog", unique, model, action]
+                vids.append(row)
+
+            return vids
+        return self._parse_device_xml(_parse_devs)
 
     def _parse_device_xml(self, parse_function, refresh_if_necc=True,
                           inactive=False):
@@ -776,6 +801,9 @@ class vmmDomainBase(vmmLibvirtObject):
 
         elif dev_type == "video":
             xpath = "/domain/devices/video[%s]" % (int(dev_id_info) + 1)
+
+        elif dev_type == "watchdog":
+            xpath = "/domain/devices/watchdog[%s]" % (int(dev_id_info) + 1)
 
         else:
             raise RuntimeError(_("Unknown device type '%s'") % dev_type)
@@ -1814,6 +1842,34 @@ class vmmDomain(vmmDomainBase):
         return self._redefine(util.xml_parse_wrapper, change_model,
                               dev_id_info, newmodel)
 
+    def define_watchdog_model(self, dev_id_info, newval):
+        devtype = "watchdog"
+        if not self._check_device_is_present(devtype, dev_id_info):
+            return
+
+        def change(doc, ctx):
+            dev_node = self._get_device_xml_nodes(ctx, devtype, dev_id_info)[0]
+            if newval:
+                dev_node.setProp("model", newval)
+
+            return doc.serialize()
+
+        return self._redefine(util.xml_parse_wrapper, change)
+
+    def define_watchdog_action(self, dev_id_info, newval):
+        devtype = "watchdog"
+        if not self._check_device_is_present(devtype, dev_id_info):
+            return
+
+        def change(doc, ctx):
+            dev_node = self._get_device_xml_nodes(ctx, devtype, dev_id_info)[0]
+            if newval:
+                dev_node.setProp("action", newval)
+
+            return doc.serialize()
+
+        return self._redefine(util.xml_parse_wrapper, change)
+
     ########################
     # End XML Altering API #
     ########################
@@ -2091,6 +2147,22 @@ class vmmDomainVirtinst(vmmDomainBase):
             dev.model_type = newmodel
         self._redefine(change_video_model)
 
+    def define_watchdog_model(self, dev_id_info, newval):
+        devtype = VirtualDevice.VIRTUAL_DEV_WATCHDOG
+        dev = self._get_device_xml_object(devtype, dev_id_info)
+        def change():
+            dev.model = newval
+
+        self._redefine(change)
+
+    def define_watchdog_action(self, dev_id_info, newval):
+        devtype = VirtualDevice.VIRTUAL_DEV_WATCHDOG
+        dev = self._get_device_xml_object(devtype, dev_id_info)
+        def change():
+            dev.action = newval
+
+        self._redefine(change)
+
     # Helper functions
     def _redefine(self, alter_func):
         origxml = self.get_xml()
@@ -2160,6 +2232,9 @@ class vmmDomainVirtinst(vmmDomainBase):
             count = int(dev_id_info)
 
         elif dev_type == VirtualDevice.VIRTUAL_DEV_VIDEO:
+            count = int(dev_id_info)
+
+        elif dev_type == VirtualDevice.VIRTUAL_DEV_WATCHDOG:
             count = int(dev_id_info)
 
         else:

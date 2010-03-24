@@ -58,10 +58,12 @@ HW_LIST_TYPE_SOUND = 9
 HW_LIST_TYPE_CHAR = 10
 HW_LIST_TYPE_HOSTDEV = 11
 HW_LIST_TYPE_VIDEO = 12
+HW_LIST_TYPE_WATCHDOG = 13
 
 remove_pages = [ HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                  HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
-                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO]
+                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO,
+                 HW_LIST_TYPE_WATCHDOG]
 
 # Boot device columns
 BOOT_DEV_TYPE = 0
@@ -263,6 +265,9 @@ class vmmDetails(gobject.GObject):
             "on_sound_model_combo_changed": self.config_enable_apply,
 
             "on_video_model_combo_changed": self.config_enable_apply,
+
+            "on_watchdog_model_combo_changed": self.config_enable_apply,
+            "on_watchdog_action_combo_changed": self.config_enable_apply,
 
             "on_config_apply_clicked": self.config_apply,
 
@@ -563,6 +568,16 @@ class vmmDetails(gobject.GObject):
         video_dev = self.window.get_widget("video-model-combo")
         uihelpers.build_video_combo(self.vm, video_dev, no_default=no_default)
 
+        # Watchdog model combo
+        combo = self.window.get_widget("watchdog-model-combo")
+        uihelpers.build_watchdogmodel_combo(self.vm, combo,
+                                            no_default=no_default)
+
+        # Watchdog action combo
+        combo = self.window.get_widget("watchdog-action-combo")
+        uihelpers.build_watchdogaction_combo(self.vm, combo,
+                                             no_default=no_default)
+
     # Helper function to handle the combo/label pattern used for
     # video model, sound model, network model, etc.
     def set_combo_label(self, prefix, model_idx, value):
@@ -741,6 +756,8 @@ class vmmDetails(gobject.GObject):
                 self.refresh_hostdev_page()
             elif pagetype == HW_LIST_TYPE_VIDEO:
                 self.refresh_video_page()
+            elif pagetype == HW_LIST_TYPE_WATCHDOG:
+                self.refresh_watchdog_page()
             else:
                 pagetype = -1
         except Exception, e:
@@ -1193,6 +1210,8 @@ class vmmDetails(gobject.GObject):
             ret = self.config_sound_apply(info[1])
         elif pagetype is HW_LIST_TYPE_VIDEO:
             ret = self.config_video_apply(info[1])
+        elif pagetype is HW_LIST_TYPE_WATCHDOG:
+            ret = self.config_watchdog_apply(info[1])
         else:
             ret = False
 
@@ -1359,6 +1378,16 @@ class vmmDetails(gobject.GObject):
         if model:
             return self._change_config_helper(self.vm.define_video_model,
                                               (dev_id_info, model))
+
+    # Watchdog options
+    def config_watchdog_apply(self, dev_id_info):
+        model = self.get_combo_label_value("watchdog-model")
+        action = self.get_combo_label_value("watchdog-action")
+        if model or action:
+            return self._change_config_helper([self.vm.define_watchdog_model,
+                                               self.vm.define_watchdog_action],
+                                               [(dev_id_info, model),
+                                                (dev_id_info, action)])
 
     # Device removal
     def remove_device(self, dev_type, dev_id_info):
@@ -1937,6 +1966,16 @@ class vmmDetails(gobject.GObject):
 
         self.set_combo_label("video-model", 0, model)
 
+    def refresh_watchdog_page(self):
+        watchinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not watchinfo:
+            return
+
+        ignore, ignore, model, action = watchinfo
+
+        self.set_combo_label("watchdog-model", 0, model)
+        self.set_combo_label("watchdog-action", 0, action)
+
     def refresh_boot_page(self):
         # Refresh autostart
         try:
@@ -1992,6 +2031,7 @@ class vmmDetails(gobject.GObject):
         currentChars = {}
         currentHostdevs = {}
         currentVids = {}
+        currentWatchdogs = {}
 
         def add_hw_list_option(idx, name, page_id, info, icon_name):
             hw_list_model.insert(idx, [name, icon_name,
@@ -2094,6 +2134,11 @@ class vmmDetails(gobject.GObject):
             update_hwlist(HW_LIST_TYPE_VIDEO, vidinfo, _("Video"),
                           "video-display")
 
+        for watchinfo in self.vm.get_watchdog_devices():
+            currentWatchdogs[watchinfo[1]] = 1
+            update_hwlist(HW_LIST_TYPE_WATCHDOG, watchinfo, _("Watchdog"),
+                          "device_pci")
+
         # Now remove any no longer current devs
         devs = range(len(hw_list_model))
         devs.reverse()
@@ -2111,6 +2156,7 @@ class vmmDetails(gobject.GObject):
                 HW_LIST_TYPE_CHAR       : currentChars,
                 HW_LIST_TYPE_HOSTDEV    : currentHostdevs,
                 HW_LIST_TYPE_VIDEO      : currentVids,
+                HW_LIST_TYPE_WATCHDOG   : currentWatchdogs,
             }
 
 

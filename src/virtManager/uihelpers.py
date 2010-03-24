@@ -137,6 +137,36 @@ def build_sound_combo(vm, combo, no_default=False):
     if len(dev_model) > 0:
         combo.set_active(0)
 
+def build_watchdogmodel_combo(vm, combo, no_default=False):
+    dev_model = gtk.ListStore(str)
+    combo.set_model(dev_model)
+    text = gtk.CellRendererText()
+    combo.pack_start(text, True)
+    combo.add_attribute(text, 'text', 0)
+    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
+    for m in virtinst.VirtualWatchdog.MODELS:
+        if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
+            continue
+        dev_model.append([m])
+    if len(dev_model) > 0:
+        combo.set_active(0)
+
+def build_watchdogaction_combo(vm, combo, no_default=False):
+    dev_model = gtk.ListStore(str, str)
+    combo.set_model(dev_model)
+    text = gtk.CellRendererText()
+    combo.pack_start(text, True)
+    combo.add_attribute(text, 'text', 1)
+    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
+    for m in virtinst.VirtualWatchdog.ACTIONS:
+        if m == virtinst.VirtualWatchdog.ACTION_DEFAULT and no_default:
+            continue
+        dev_model.append([m, virtinst.VirtualWatchdog.get_action_desc(m)])
+    if len(dev_model) > 0:
+        combo.set_active(0)
+
 def build_netmodel_combo(vm, combo):
     dev_model = gtk.ListStore(str, str)
     combo.set_model(dev_model)
