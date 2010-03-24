@@ -1,10 +1,680 @@
+2010-03-24  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/engine.py:
+	Remove fedora specific packages from packagekit list
+	[de3a4e7ef02d] [tip]
+
+	* src/virtManager/systray.py:
+	systray: Sort connection rows
+	[c105c9ca06d7]
+
+	* src/virtManager/engine.py:
+	Fix 'Open Connection' dialog
+	[f7d7a9107050]
+
+	* src/virt-manager.py.in:
+	Log a message when we connect to an already running instance
+	[3ae371c1a9fb]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/virtManager/uihelpers.py, src/vmm-
+	add-hardware.glade, src/vmm-details.glade:
+	watchdog support: Add, remove, edit in place, and enumerate existing
+	devs
+	[e85ba7c9a8c2]
+
+2010-03-23  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py:
+	domain: Fix device indexing to use a much simpler scheme
+	[0fb2fab0ea7a]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/virtManager/uihelpers.py, src/vmm-
+	details.glade:
+	details: Allow changing network and sound model on the fly
+	[6f2df3b53f72]
+
+	* pixmaps/hicolor/16x16/Makefile.am,
+	pixmaps/hicolor/16x16/actions/Makefile.am,
+	pixmaps/hicolor/22x22/Makefile.am,
+	pixmaps/hicolor/22x22/actions/Makefile.am,
+	pixmaps/hicolor/24x24/Makefile.am,
+	pixmaps/hicolor/24x24/actions/Makefile.am,
+	pixmaps/hicolor/32x32/Makefile.am,
+	pixmaps/hicolor/32x32/actions/Makefile.am,
+	pixmaps/hicolor/Makefile.am:
+	Add Makefile.am for new icons
+	[4b066023a469]
+
+	* configure.ac, pixmaps/Makefile.am,
+	pixmaps/hicolor/16x16/actions/icon_console.png,
+	pixmaps/hicolor/16x16/actions/vm_new.png,
+	pixmaps/hicolor/22x22/actions/icon_console.png,
+	pixmaps/hicolor/22x22/actions/vm_new.png,
+	pixmaps/hicolor/24x24/actions/icon_console.png,
+	pixmaps/hicolor/24x24/actions/vm_new.png,
+	pixmaps/hicolor/32x32/actions/icon_console.png,
+	pixmaps/hicolor/32x32/actions/vm_new.png, pixmaps/icon_console.png,
+	pixmaps/vm_new.png, pixmaps/vm_new_large.png,
+	src/virtManager/manager.py, virt-manager.spec.in:
+	Use properly sized icons
+	[b82d554d5367]
+
+2010-03-23  kkrothap  <kkrothap@fedoraproject.org>
+
+	* po/te.po:
+	l10n: Updates to Telugu (te) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[a4d2b54d380a]
+
+2010-03-23  dvd  <dvd@fedoraproject.org>
+
+	* po/ru.po:
+	l10n: Updates to Russian (ru) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[2b1f57b586ff]
+
+2010-03-22  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	create: Add 'Import' option for an existing disk image
+	[fbf657ae6dec]
+
+2010-03-20  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/host.py:
+	host: Properly set network/storage/interface error pages for
+	inactive conn
+	[2eb192efc001]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py,
+	src/virtManager/uihelpers.py, src/vmm-add-hardware.glade, src/vmm-
+	create.glade:
+	Allow user to manually specify a shared device name
+
+	This allows using remote bridge devices where netcf isn't supported.
+	[a48333f1439d]
+
+2010-03-22  dvd  <dvd@fedoraproject.org>
+
+	* po/ru.po:
+	l10n: Updates to Russian (ru) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[f78e8445f0e3]
+
+2010-03-22  raven  <raven@fedoraproject.org>
+
+	* po/pl.po:
+	l10n: Updates to Polish (pl) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[305d2c9aeabf]
+
+2010-03-22  logan  <logan@fedoraproject.org>
+
+	* po/es.po:
+	l10n: Updates to Spanish (Castilian) (es) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[68a6a2dbff73]
+
+2010-03-22  mvdz  <mvdz@fedoraproject.org>
+
+	* po/uk.po:
+	l10n: Updates to Ukrainian (uk) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[6ce03d5da165]
+
+2010-03-22  dvd  <dvd@fedoraproject.org>
+
+	* po/ru.po:
+	l10n: Updates to Russian (ru) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[6e07c0f340e0]
+
+2010-03-21  Cole Robinson  <crobinso@redhat.com>
+
+	* po/de.po:
+	Fix some german translations (Peter Bieringer)
+	[ba45868ba3d7]
+
+	* po/virt-manager.pot:
+	Update virt-manager.pot
+	[c2cbba74520f]
+
+2010-03-17  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py, src/virtManager/engine.py:
+	Attempt to 'fake' reboot if it isn't supported
+
+	We do this by attempting vm.shutdown(), followed by a vm.start()
+	when the vm actually stops. Any manual 'shutdown' or 'destroy' call
+	will undo the reboot command, similar to how xen acts (on RHEL5 at
+	least).
+	[fc1360e7ded9]
+
+2010-03-17  dvd  <dvd@fedoraproject.org>
+
+	* po/ru.po:
+	l10n: Updates to Russian (ru) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[91818a16657c]
+
+2010-03-15  Cole Robinson  <crobinso@redhat.com>
+
+	* omf.make, xmldocs.make:
+	Update omf.make and xmldocs.make to fix distcheck
+	[5fd527b97bb7]
+
+2010-03-15  Dmitry Drozdov  <dmi3652@gmail.com>
+
+	* src/virtManager/manager.py, src/vmm-manager.glade:
+	Mark some strings as translatable
+	[36a181b926bb]
+
+2010-03-14  dvd  <dvd@fedoraproject.org>
+
+	* po/ru.po:
+	l10n: Updates to Russian (ru) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[4504cc66d181]
+
+2010-03-13  mvdz  <mvdz@fedoraproject.org>
+
+	* po/uk.po:
+	l10n: Updates to Ukrainian (uk) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[e3e68f0ba811]
+
+2010-03-08  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/storagepool.py:
+	storagepool: Refresh pool at create time
+	[ef51b72fb546]
+
+2010-03-04  Marc Deslauriers  <marc.deslauriers@ubuntu.com>
+
+	* src/virtManager/details.py:
+	details: Don't lie about en-us keymap if none specified
+	[3d0198e029c2]
+
+2010-03-04  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py:
+	More pylint.
+	[fc6cf074e27c]
+
+	* src/virtManager/addhardware.py, src/vmm-add-hardware.glade:
+	addhw: Make disk page look more like create wizard storage page
+	[9a81e1395a2d]
+
+	* src/virtManager/connection.py, src/virtManager/create.py,
+	src/virtManager/uihelpers.py, src/virtManager/util.py:
+	create: Break out storage helpers for use in addhw
+	[fbbc6f112a52]
+
+	* src/virtManager/details.py:
+	Fix some pylint.
+	[b92c2b42934d]
+
+	* src/virtManager/addhardware.py, src/vmm-add-hardware.glade:
+	addhw: Some UI cleanup and simplification
+	[1f5bbbddcce6]
+
+	* src/virtManager/domain.py:
+	Revert 1548: add a comment why we need to release the domain handle.
+	[b7e39939c4bf]
+
+2010-03-03  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py:
+	details: Display errors caught refreshing HW pages
+	[0ff0cd98827c]
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	details: Show disk size if available
+	[78c31a870744]
+
+	* src/virtManager/create.py:
+	create: Offer to reuse an existing disk image
+
+	If the disk image has the expected name
+	/var/lib/libvirt/images/VMNAME.img, and is unused by any guests, ask
+	the user if they want to use it.
+	[a42fc22785af]
+
+	* src/virtManager/delete.py, src/virtManager/storagebrowse.py:
+	Use new VirtualDisk path_in_use_by helper
+	[0c381de3d89a]
+
+	* src/virt-manager.py.in, src/virtManager/engine.py,
+	src/virtManager/error.py, src/virtManager/manager.py:
+	PackageKit integration for first start hypervisor detection
+
+	Check to make sure the expected local packages are installed for the
+	default connection (KVM).
+	[437cb7da4c97]
+
+	* src/virtManager/systray.py:
+	Remove pylint
+	[711c94d23f4c]
+
+	* src/virtManager/asyncjob.py:
+	progress: Allow storing return data with the async class
+	[73fee0c482b4]
+
+	* src/virtManager/asyncjob.py:
+	progress: Allow running a thread which calls its own gtk.main()
+	[117b3ce21f04]
+
+2010-03-02  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/manager.py, src/vmm-manager.glade:
+	manager: Improve startup error when no default connection.
+	[a52c2654d7db]
+
+	* src/virtManager/engine.py:
+	engine: Remove redundant function
+	[da1c16209466]
+
+	* src/virt-manager.py.in:
+	virt-manager.py: Reindent some code
+	[7473bf514f91]
+
+2010-02-28  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py, src/vmm-create.glade:
+	create: Don't cap storage size, just defer to warnings.
+	[df8336a5c50b]
+
+	* src/virtManager/uihelpers.py:
+	uihelpers: Use Yes/No dialog for permission changing
+	[d4fbabe05ade]
+
+2010-02-28  Marc Deslauriers  <marc.deslauriers@ubuntu.com>
+
+	* src/virtManager/systray.py:
+	systray: Support 'appindicator'
+
+	More info can be found here:
+
+	https://wiki.ubuntu.com/DesktopExperienceTeam/ApplicationIndicators
+	[1cfeb4fd523d]
+
+2010-02-28  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py, src/virtManager/domain.py,
+	src/virtManager/util.py:
+	create: Make sure we restart new VMs the correct number of times
+
+	This means booting live cd's after initial creation, doing a post
+	install boot for most other installs, and booting windows twice for
+	the 2 stage install.
+	[976f202f5dbd]
+
+2010-02-27  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py,
+	src/virtManager/manager.py, src/virtManager/serialcon.py,
+	src/virtManager/systray.py:
+	domain: Send 'oldstatus' in status-changed signal
+
+	We can then use this to hook up internal signal handlers to do
+	needed things on status update (rather than bog down
+	_update_status).
+	[c9d3c8dec04f]
+
+2010-02-26  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/clone.py:
+	clone: Improve error message if block device can't be cloned.
+	[eadfbe9ace80]
+
+	* src/virtManager/createinterface.py, src/virtManager/interface.py,
+	src/vmm-create-interface.glade:
+	createinterface: Enable specifying IP protocol info
+
+	By default, we try to copy the protocol information from a selected
+	child interface (if applicable), otherwise assume IPv4 DHCP.
+	[dd3f3ff12e37]
+
+2010-02-25  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/host.py, src/virtManager/interface.py, src/vmm-
+	host.glade:
+	host: interface: Display IP configuration
+	[a3971396f19b]
+
+	* src/virtManager/domain.py, src/virtManager/host.py,
+	src/virtManager/interface.py, src/vmm-host.glade:
+	host: interface: Allow changing start mode.
+	[b7f0a554c175]
+
+	* src/virtManager/connection.py, src/virtManager/domain.py,
+	src/virtManager/interface.py, src/virtManager/libvirtobject.py:
+	Factor out a common 'libvirt object' class.
+
+	Use simply now for some common XML routines.
+	[7e7047b57c23]
+
+	* src/virtManager/host.py:
+	host: Show errors encountered when populating net/pool/iface state
+	[28a7f5d7beab]
+
+	* src/virtManager/host.py, src/vmm-host.glade:
+	host: Add 'error' page for virtual net and storage
+
+	Display a proper error if connection doesn't support network or
+	storage management.
+	[4fa1b2574f20]
+
+2010-02-24  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py:
+	details: Don't overwrite user input on XML update
+	[301b621f3caa]
+
+	* src/virtManager/addhardware.py, src/virtManager/domain.py,
+	src/virtManager/interface.py:
+	Fix some pylint.
+	[8f9fa79004c8]
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	details: Multiple boot device support
+
+	Allows viewing, adding, removing, and reordering the boot device
+	list.
+	[f47d59365f81]
+
+	* src/virtManager/connection.py:
+	connection: Remove redundant logging
+	[fa3ee4fc3804]
+
+	* src/virtManager/connection.py:
+	connection: Make SASL auth dialog a bit cleaner
+	[590bfa4e2231]
+
+2010-02-23  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-details.glade:
+	details: Make 'enter' activate VNC password auth
+
+	Not sure why this keeps regressing. I blame glade.
+	[ade249ba8e2c]
+
+	* src/virtManager/about.py, src/virtManager/addhardware.py,
+	src/virtManager/clone.py, src/virtManager/connect.py,
+	src/virtManager/createinterface.py, src/virtManager/createnet.py,
+	src/virtManager/createpool.py, src/virtManager/createvol.py,
+	src/virtManager/delete.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/virtManager/host.py,
+	src/virtManager/manager.py, src/virtManager/preferences.py,
+	src/virtManager/storagebrowse.py:
+	Drop redundant calls to window.show()
+	[962e52a4b4c0]
+
+2010-02-23  snicore  <snicore@fedoraproject.org>
+
+	* po/hu.po:
+	Sending translation for Hungarian
+	[4e4e674d4921]
+
+	* po/hu.po:
+	Sending translation for Hungarian
+	[629ea4059d9c]
+
+2010-02-22  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/createvol.py, src/virtManager/error.py:
+	createvol: Make sure error boxes run synchronous if we are modal.
+	[1bfbfa41db2a]
+
+	* src/virtManager/createvol.py:
+	createvol: Sensitize 'Finish' if default name suggested
+	[1eea5c799a32]
+
+2010-02-21  aguskov  <aguskov@fedoraproject.org>
+
+	* po/ru.po:
+	Sending translation for Russian
+	[f7f39e05fafc]
+
+2010-02-19  runab  <runab@fedoraproject.org>
+
+	* po/bn_IN.po:
+	Sending translation for Bengali (India)
+	[50b5a6406024]
+
+2010-02-18  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/util.py:
+	util: Fix return value of safe idle timeouts
+	[6124400e5d9f]
+
+2010-02-17  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	create: Make sure audio and video devices use OS recommended
+	defaults
+	[cea6cdd27c83]
+
+2010-02-15  aron  <aron@fedoraproject.org>
+
+	* po/zh_CN.po:
+	Sending translation for Chinese (Simplified)
+	[3210b7d32cb1]
+
+2010-02-12  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	domain: Fix connecting to VNC on ESX servers
+
+	ESX libvirt URIs don't use have a 'transport' section (like the ssh
+	in qemu+ssh). If virt-manager didn't see a transport, we assumed the
+	host is localhost, and used 127.0.0.1 when connecting to VNC.
+
+	Fix this check to only use 127.0.0.1 if there is no hostname
+	specified in the libvirt URI.
+	[513f3ced040d]
+
+	* src/virtManager/console.py, src/virtManager/create.py,
+	src/virtManager/domain.py, src/virtManager/manager.py:
+	domain: Have get_graphical_console provide more info
+	[896a6310b6e0]
+
+	* src/virtManager/console.py:
+	console: Condense some debugging output
+	[5895ad4045a0]
+
+	* src/virtManager/create.py:
+	create: Allow using a manually created 'default' pool
+	[831fa7210e04]
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	details: Pop up 'Add Hardware' option on hw list right click
+	[9fb588002653]
+
+	* src/vmm-create.glade:
+	create: Fix page 1 spacing
+	[ed32c2c625fd]
+
+	* src/virtManager/mediadev.py, src/virtManager/uihelpers.py:
+	Allow selecting CDROM devices with no detected media.
+
+	We may have incorrect detection, and we hypervisors should be able
+	to handle empty CDROM devices, so allow the option, just don't
+	select it by default.
+	[824996cec205]
+
+	* src/virtManager/create.py, src/virtManager/domain.py,
+	src/virtManager/uihelpers.py:
+	create: Expand 'advanced' options on networking issue
+
+	This way the user is informed that there is no default network
+	device, or the default device is inactive.
+	[c42eaab3859c]
+
+	* src/virtManager/host.py:
+	host: Only decrement window counter if host isn't visible
+	[1f8ebc1a7aec]
+
+	* src/virtManager/console.py:
+	console: Make sure error socket is non blocking
+	[40e108df61bc]
+
+	* src/virtManager/details.py:
+	details: Remove debug print
+	[dc0a7ba5896b]
+
+2010-02-11  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py:
+	addhw: Use VirtualDisk to determine block device size.
+	[11b61f03d5c1]
+
+	* src/virtManager/console.py:
+	console: Try to detect debian/fedora nc incompatibilities
+	[1f781890ea4a]
+
+2010-02-12  trash  <trash@fedoraproject.org>
+
+	* po/fr.po:
+	Sending translation for French
+	[a162da4404c7]
+
+2010-02-11  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py:
+	connection: Don't show harmless backtraces on conn disconnect
+	[dfcf2a86ca24]
+
+	* src/virtManager/console.py:
+	console: Show SSH error output for remote VNC connections.
+	[31938db75bc5]
+
+	* src/virtManager/connection.py, src/virtManager/domain.py:
+	domain: Remove unneeded release_handle command
+
+	Not really sure if we even still need to manually change the backing
+	value, but this was apparently a performance optimization once upon
+	a time.
+	[2eaaf6096fac]
+
+	* src/virtManager/asyncjob.py, src/virtManager/connection.py,
+	src/virtManager/console.py, src/virtManager/create.py,
+	src/virtManager/domain.py, src/virtManager/engine.py,
+	src/virtManager/mediadev.py, src/virtManager/util.py:
+	Make sure all idle and timeout routines are thread safe.
+
+	Unbeknownst to me, these functions are not run thread safe:
+
+	http://library.gnome.org/devel/gdk/unstable/gdk-Threads.html
+
+	However since they are run from the main loop, the chance of them
+	conflicting with another running thread is slim, since we have very
+	few threads that actually update the UI.
+	[2a65e0b160a9]
+
+	* src/virtManager/console.py:
+	console: Don't wait for 'nc' to exit, just kill the process.
+
+	Certain nc versions don't handle disconnects very well or require
+	specific incompatible cli options to operate nicely, and a hung 'nc'
+	connection can lock up virt-manager. Just kill the tunnel process,
+	rather than waitpid it.
+	[40fb60222e4e]
+
+	* src/virtManager/domain.py:
+	domain: Don't flood logs if polling disk/net stats fails
+	[c283c745ac22]
+
+2010-02-10  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-host.glade:
+	host: Fix interface tooltips
+	[b3730723da2c]
+
+	* src/virtManager/connection.py, src/virtManager/create.py, src/vmm-
+	create.glade:
+	create: Give more warning if conn capabilities are sub optimal
+
+	Warn if HVM is available but disabled, no guest options are
+	available, and if KVM isn't around.
+	[a79f98bb6b67]
+
+	* src/virtManager/connection.py:
+	connection: Make sure capabilities are refreshed as needed
+	[66e76b6cc40d]
+
+	* src/virtManager/create.py:
+	create: Use virtinst unified device API as requested via comment
+	[821db36fa74d]
+
+	* src/virtManager/graphwidgets.py:
+	graphwidgets: Don't draw over the border with the tick lines
+	[dd72c97c1b5b]
+
+2010-02-10  Jan ONDREJ  <ondrejj@salstar.sk>
+
+	* src/virtManager/graphwidgets.py:
+	Fix tapering issue for fully filled graph
+	[ce8158e89bc1]
+
+2010-02-10  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py, src/virtManager/domain.py, src/vmm-
+	details.glade:
+	Allow viewing and setting domain 'description' field.
+	[849c82685d0e]
+
+	* src/virtManager/details.py:
+	details: Make sure a HW selection is forced at startup
+	[f112b507f942]
+
+2010-02-09  raven  <raven@fedoraproject.org>
+
+	* po/pl.po:
+	Sending translation for Polish
+	[48ad63f61f33]
+
+2010-02-09  logan  <logan@fedoraproject.org>
+
+	* po/es.po:
+	Sending translation for Spanish
+	[c94f08fc0377]
+
 2010-02-08  Cole Robinson  <crobinso@redhat.com>
+
+	* .hgtags:
+	Added tag RELEASE-0.8.3-1 for changeset ed7cef150f91
+	[efbc0efdde6b]
+
+	* ChangeLog, NEWS, configure.ac, po/as.po, po/bg.po, po/bn_IN.po,
+	po/bs.po, po/ca.po, po/cs.po, po/da.po, po/de.po, po/es.po,
+	po/fi.po, po/fr.po, po/gu.po, po/hi.po, po/hr.po, po/hu.po,
+	po/is.po, po/it.po, po/ja.po, po/kn.po, po/ko.po, po/ml.po,
+	po/mr.po, po/ms.po, po/nb.po, po/nl.po, po/or.po, po/pa.po,
+	po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po, po/ru.po, po/sr.po,
+	po/sr@latin.po, po/sv.po, po/ta.po, po/te.po, po/tr.po, po/uk.po,
+	po/zh_CN.po, po/zh_TW.po, virt-manager.spec.in:
+	Prep for release.
+	[ed7cef150f91] [RELEASE-0.8.3-1]
 
 	* src/virt-manager.schemas.in, src/virtManager/config.py,
 	src/virtManager/host.py, src/virtManager/preferences.py, src/vmm-
 	preferences.glade:
 	host: Confirm before starting/stopping interfaces
-	[fe06b37592f8] [tip]
+	[fe06b37592f8]
 
 	* tests/Makefile.am:
 	Fix 'tests' install to not end up in RPM
@@ -5910,7 +6580,7 @@
 	src/vncViewer/__init__.py, src/vncViewer/crippled_des.py,
 	src/vncViewer/rfb.py, src/vncViewer/vnc.py, virt-manager.spec.in:
 	Merge heads
-	[1bc43bf346a8]
+	[1bc43bf346a8] <multiple-connection-ui>
 
 2007-08-15  "Daniel P. Berrange  <berrange@redhat.com>
 
@@ -5950,7 +6620,7 @@
 	manager.pod:
 	Fixed a number of typos in manual page & documentation (Atsushi
 	SAKAI)
-	[d665d55a303c]
+	[d665d55a303c] <multiple-connection-ui>
 
 2007-08-14  "Hugh O. Brock  <hbrock@redhat.com>
 
@@ -5960,18 +6630,18 @@
 	standing bug where the default Xen URI from the connect dialog was
 	'xen://', which is invalid (valid uris are 'xen' or 'xen:///'). Fix
 	a couple of other minor issues.
-	[057f80a1854c]
+	[057f80a1854c] <multiple-connection-ui>
 
 	* src/virtManager/engine.py, src/virtManager/manager.py:
 	Keep connections around after they are disconnected. Add a connect
 	item to the popup menus for connections.
-	[1732f41c3eea]
+	[1732f41c3eea] <multiple-connection-ui>
 
 	* src/virtManager/connection.py, src/virtManager/manager.py, src/vmm-
 	manager.glade:
 	Hook up active/inactive widget and make connection display resource
 	graphs.
-	[afa397cafefa]
+	[afa397cafefa] <multiple-connection-ui>
 
 2007-08-13  "Hugh O. Brock  <hbrock@redhat.com>
 
@@ -5980,7 +6650,7 @@
 	Add new popup menu for connection line. Remove 'create' button from
 	bottom row since it is now in the connection line. Hook up the
 	'disconnect' action from the popup menu as well.
-	[d11d4eb7485f]
+	[d11d4eb7485f] <multiple-connection-ui>
 
 2007-08-09  "Hugh O. Brock  <hbrock@redhat.com>
 
@@ -5989,7 +6659,7 @@
 	src/virtManager/manager.py:
 	First crack at multiple connections UI. Basic idea is there but
 	popup menus, buttons, create wizard still not right.
-	[f14cb3be0654]
+	[f14cb3be0654] <multiple-connection-ui>
 
 2007-08-02  "Hugh O. Brock  <hbrock@redhat.com>
 

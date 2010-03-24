@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-08 22:47-0500\n"
+"POT-Creation-Date: 2010-03-24 11:50-0400\n"
 "PO-Revision-Date: 2008-02-05 23:28+0200\n"
 "Last-Translator: Ville-Pekka Vainio <vpivaini@cs.helsinki.fi>\n"
 "Language-Team: Finnish <laatu@lokalisointi.org>\n"
@@ -19,8 +19,8 @@ msgstr ""
 msgid "Manage virtual machines"
 msgstr "Hallitse virtuaalikoneita"
 
-#: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:108
-#: ../src/vmm-manager.glade.h:8
+#: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:136
+#: ../src/vmm-manager.glade.h:9
 msgid "Virtual Machine Manager"
 msgstr "Virtuaalikoneiden hallitsin"
 
@@ -31,7 +31,7 @@ msgstr "Virtuaalikoneiden hallitsin"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:305
+#: ../src/virt-manager.py.in:289
 #, fuzzy, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "Ei voida alustaa GTK:ta: "
@@ -281,361 +281,377 @@ msgid ""
 "Whether we require confirmation to start or stop a libvirt virtual interface"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:92 ../src/virtManager/choosecd.py:49
-#: ../src/virtManager/clone.py:108 ../src/virtManager/console.py:59
-#: ../src/virtManager/create.py:90 ../src/virtManager/createinterface.py:78
+#: ../src/virtManager/addhardware.py:81 ../src/virtManager/choosecd.py:49
+#: ../src/virtManager/clone.py:108 ../src/virtManager/console.py:63
+#: ../src/virtManager/create.py:89 ../src/virtManager/createinterface.py:82
 #: ../src/virtManager/createnet.py:55 ../src/virtManager/createpool.py:53
 #: ../src/virtManager/createvol.py:54 ../src/virtManager/delete.py:61
-#: ../src/virtManager/details.py:148 ../src/virtManager/engine.py:70
-#: ../src/virtManager/host.py:64 ../src/virtManager/manager.py:125
+#: ../src/virtManager/details.py:161 ../src/virtManager/engine.py:224
+#: ../src/virtManager/host.py:65 ../src/virtManager/manager.py:126
 #: ../src/virtManager/migrate.py:65 ../src/virtManager/storagebrowse.py:57
-#: ../src/virtManager/uihelpers.py:49
+#: ../src/virtManager/uihelpers.py:53
 msgid "Unexpected Error"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:93 ../src/virtManager/choosecd.py:50
-#: ../src/virtManager/clone.py:109 ../src/virtManager/console.py:60
-#: ../src/virtManager/create.py:91 ../src/virtManager/createinterface.py:79
+#: ../src/virtManager/addhardware.py:82 ../src/virtManager/choosecd.py:50
+#: ../src/virtManager/clone.py:109 ../src/virtManager/console.py:64
+#: ../src/virtManager/create.py:90 ../src/virtManager/createinterface.py:83
 #: ../src/virtManager/createnet.py:56 ../src/virtManager/createpool.py:54
 #: ../src/virtManager/createvol.py:55 ../src/virtManager/delete.py:62
-#: ../src/virtManager/details.py:149 ../src/virtManager/engine.py:71
-#: ../src/virtManager/host.py:65 ../src/virtManager/manager.py:126
+#: ../src/virtManager/details.py:162 ../src/virtManager/engine.py:225
+#: ../src/virtManager/host.py:66 ../src/virtManager/manager.py:127
 #: ../src/virtManager/migrate.py:66 ../src/virtManager/storagebrowse.py:58
-#: ../src/virtManager/uihelpers.py:50
+#: ../src/virtManager/uihelpers.py:54
 msgid "An unexpected error occurred"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:404 ../src/virtManager/addhardware.py:409
-#: ../src/virtManager/addhardware.py:412 ../src/virtManager/addhardware.py:415
+#: ../src/virtManager/addhardware.py:344 ../src/virtManager/create.py:436
+#: ../src/virtManager/create.py:528
+#, fuzzy
+msgid "Connection does not support storage management."
+msgstr "Vierasjärjestelmän konsolia ei tueta"
+
+#: ../src/virtManager/addhardware.py:415 ../src/virtManager/addhardware.py:420
+#: ../src/virtManager/addhardware.py:423 ../src/virtManager/addhardware.py:426
+#: ../src/virtManager/addhardware.py:438
 #, fuzzy
 msgid "Not supported for this guest type."
 msgstr "Vierasjärjestelmän konsolia ei tueta"
 
-#: ../src/virtManager/addhardware.py:418
+#: ../src/virtManager/addhardware.py:429
 #, fuzzy
 msgid "Connection does not support host device enumeration"
 msgstr "Vierasjärjestelmän konsolia ei tueta"
 
-#: ../src/virtManager/addhardware.py:424
+#: ../src/virtManager/addhardware.py:435
 msgid "Libvirt version does not support video devices."
 msgstr ""
 
-#. [xml value, label]
-#: ../src/virtManager/addhardware.py:436 ../src/virtManager/details.py:1556
-#, fuzzy
-msgid "Hypervisor default"
-msgstr "Hypervisorin valinta"
-
-#: ../src/virtManager/addhardware.py:472 ../src/virtManager/details.py:1565
+#: ../src/virtManager/addhardware.py:471 ../src/virtManager/details.py:1796
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB -piirtopöytä"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:476 ../src/virtManager/details.py:1567
+#: ../src/virtManager/addhardware.py:475 ../src/virtManager/details.py:1798
 msgid "Generic USB Mouse"
 msgstr "Yleinen USB-hiiri"
 
-#: ../src/virtManager/addhardware.py:480 ../src/virtManager/addhardware.py:793
-#: ../src/virtManager/details.py:1599
+#: ../src/virtManager/addhardware.py:479 ../src/virtManager/addhardware.py:780
+#: ../src/virtManager/details.py:1830
 msgid "VNC server"
 msgstr "VNC-palvelin"
 
-#: ../src/virtManager/addhardware.py:481 ../src/virtManager/addhardware.py:793
-#: ../src/virtManager/details.py:1604
+#: ../src/virtManager/addhardware.py:480 ../src/virtManager/addhardware.py:780
+#: ../src/virtManager/details.py:1835
 msgid "Local SDL window"
 msgstr "Paikallinen SDL-ikkuna"
 
-#: ../src/virtManager/addhardware.py:515
+#: ../src/virtManager/addhardware.py:507
 #, fuzzy
 msgid "No Devices Available"
 msgstr "Yhteyden valinta"
 
-#: ../src/virtManager/addhardware.py:684
+#: ../src/virtManager/addhardware.py:665
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:754
+#: ../src/virtManager/addhardware.py:741
 msgid "Disk image:"
 msgstr "Levykuva:"
 
-#: ../src/virtManager/addhardware.py:755
+#: ../src/virtManager/addhardware.py:742
 msgid "Disk size:"
 msgstr "Levyn koko:"
 
-#: ../src/virtManager/addhardware.py:756
+#: ../src/virtManager/addhardware.py:743
 msgid "Device type:"
 msgstr "Laitetyyppi:"
 
-#: ../src/virtManager/addhardware.py:757
+#: ../src/virtManager/addhardware.py:744
 #, fuzzy
 msgid "Bus type:"
 msgstr "Lähteen tyyppi:"
 
-#: ../src/virtManager/addhardware.py:759 ../src/vmm-create.glade.h:38
-#: ../src/vmm-host.glade.h:42
+#: ../src/virtManager/addhardware.py:746 ../src/vmm-create.glade.h:40
+#: ../src/vmm-host.glade.h:50
 #, fuzzy
 msgid "Storage"
 msgstr "Massamuistivarannot"
 
-#: ../src/virtManager/addhardware.py:769
+#: ../src/virtManager/addhardware.py:756
 #, fuzzy
 msgid "Network type:"
 msgstr "Verkon nimi:"
 
-#: ../src/virtManager/addhardware.py:770
+#: ../src/virtManager/addhardware.py:757
 msgid "Target:"
 msgstr "Kohde:"
 
-#: ../src/virtManager/addhardware.py:771 ../src/vmm-details.glade.h:55
+#: ../src/virtManager/addhardware.py:758 ../src/vmm-details.glade.h:55
 msgid "MAC address:"
 msgstr "MAC-osoite:"
 
-#: ../src/virtManager/addhardware.py:772 ../src/virtManager/addhardware.py:820
-#: ../src/virtManager/addhardware.py:862
+#: ../src/virtManager/addhardware.py:759 ../src/virtManager/addhardware.py:807
+#: ../src/virtManager/addhardware.py:849 ../src/virtManager/addhardware.py:856
 #, fuzzy
 msgid "Model:"
 msgstr "Tila: "
 
-#: ../src/virtManager/addhardware.py:774
+#: ../src/virtManager/addhardware.py:761
 msgid "Network"
 msgstr "Verkko"
 
-#: ../src/virtManager/addhardware.py:779
+#: ../src/virtManager/addhardware.py:766
 msgid "Absolute movement"
 msgstr "Absoluuttinen liike"
 
-#: ../src/virtManager/addhardware.py:781
+#: ../src/virtManager/addhardware.py:768
 msgid "Relative movement"
 msgstr "Suhteellinen liike"
 
-#: ../src/virtManager/addhardware.py:784 ../src/virtManager/addhardware.py:810
-#: ../src/virtManager/addhardware.py:828 ../src/virtManager/addhardware.py:855
-#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:99
+#: ../src/virtManager/addhardware.py:771 ../src/virtManager/addhardware.py:797
+#: ../src/virtManager/addhardware.py:815 ../src/virtManager/addhardware.py:842
+#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:100
 msgid "Type:"
 msgstr "Tyyppi:"
 
-#: ../src/virtManager/addhardware.py:785 ../src/vmm-details.glade.h:65
+#: ../src/virtManager/addhardware.py:772 ../src/vmm-details.glade.h:65
+#: ../src/vmm-host.glade.h:35
 msgid "Mode:"
 msgstr "Tila: "
 
-#: ../src/virtManager/addhardware.py:787
+#: ../src/virtManager/addhardware.py:774
 #, fuzzy
 msgid "Pointer"
 msgstr "<b>Osoitin</b>"
 
-#: ../src/virtManager/addhardware.py:794 ../src/virtManager/addhardware.py:795
-#: ../src/virtManager/addhardware.py:796 ../src/virtManager/addhardware.py:797
-#: ../src/virtManager/details.py:1597 ../src/virtManager/details.py:1608
-#: ../src/virtManager/details.py:1609 ../src/virtManager/details.py:1610
+#: ../src/virtManager/addhardware.py:781 ../src/virtManager/addhardware.py:782
+#: ../src/virtManager/addhardware.py:783 ../src/virtManager/addhardware.py:784
+#: ../src/virtManager/details.py:1828 ../src/virtManager/details.py:1839
+#: ../src/virtManager/details.py:1840 ../src/virtManager/details.py:1841
 msgid "N/A"
 msgstr "N/A"
 
-#: ../src/virtManager/addhardware.py:806
+#: ../src/virtManager/addhardware.py:793
 msgid "Yes"
 msgstr "Kyllä"
 
-#: ../src/virtManager/addhardware.py:806
+#: ../src/virtManager/addhardware.py:793
 msgid "No"
 msgstr "Ei"
 
-#: ../src/virtManager/addhardware.py:807 ../src/virtManager/details.py:1331
-#: ../src/vmm-add-hardware.glade.h:55
+#: ../src/virtManager/addhardware.py:794 ../src/virtManager/details.py:1558
+#: ../src/vmm-add-hardware.glade.h:42
 msgid "Same as host"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:811 ../src/vmm-details.glade.h:23
+#: ../src/virtManager/addhardware.py:798 ../src/vmm-details.glade.h:24
+#: ../src/vmm-host.glade.h:15
 msgid "Address:"
 msgstr "Osoite:"
 
-#: ../src/virtManager/addhardware.py:812 ../src/vmm-details.glade.h:74
+#: ../src/virtManager/addhardware.py:799 ../src/vmm-details.glade.h:74
 msgid "Port:"
 msgstr "Portti:"
 
-#: ../src/virtManager/addhardware.py:813 ../src/vmm-details.glade.h:71
+#: ../src/virtManager/addhardware.py:800 ../src/vmm-details.glade.h:71
 msgid "Password:"
 msgstr "Salasana:"
 
-#: ../src/virtManager/addhardware.py:814 ../src/vmm-details.glade.h:54
+#: ../src/virtManager/addhardware.py:801 ../src/vmm-details.glade.h:54
 msgid "Keymap:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:816
+#: ../src/virtManager/addhardware.py:803
 #, fuzzy
 msgid "Graphics"
 msgstr "_Graafinen konsoli"
 
-#: ../src/virtManager/addhardware.py:822 ../src/vmm-details.glade.h:88
+#: ../src/virtManager/addhardware.py:809 ../src/vmm-details.glade.h:88
 msgid "Sound"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:849
+#: ../src/virtManager/addhardware.py:836
 #, fuzzy
 msgid "Protocol:"
 msgstr "Prosessori"
 
-#: ../src/virtManager/addhardware.py:856 ../src/vmm-details.glade.h:41
-#: ../src/vmm-host.glade.h:19
+#: ../src/virtManager/addhardware.py:843 ../src/vmm-details.glade.h:41
+#: ../src/vmm-host.glade.h:24
 msgid "Device:"
 msgstr "Laite:"
 
-#: ../src/virtManager/addhardware.py:858
+#: ../src/virtManager/addhardware.py:845
 #, fuzzy
 msgid "Physical Host Device"
 msgstr "<b>Osoitin</b>"
 
-#: ../src/virtManager/addhardware.py:864 ../src/virtManager/details.py:1918
+#: ../src/virtManager/addhardware.py:851 ../src/virtManager/details.py:2134
 #, fuzzy
 msgid "Video"
 msgstr "demo"
 
-#: ../src/virtManager/addhardware.py:878
+#: ../src/virtManager/addhardware.py:854 ../src/virtManager/details.py:2139
+msgid "Watchdog"
+msgstr ""
+
+#: ../src/virtManager/addhardware.py:857
+#, fuzzy
+msgid "Action:"
+msgstr "Sijainti:"
+
+#: ../src/virtManager/addhardware.py:872
 #, fuzzy, python-format
 msgid "Unable to add device: %s"
 msgstr "Ei voida alustaa GTK:ta: "
 
-#: ../src/virtManager/addhardware.py:1028
+#: ../src/virtManager/addhardware.py:991
 msgid "Creating Storage File"
 msgstr "Luodaan massamuistitiedosto"
 
-#: ../src/virtManager/addhardware.py:1029
+#: ../src/virtManager/addhardware.py:992
 #, fuzzy
 msgid "Allocation of disk storage may take a few minutes to complete."
 msgstr "Levytilan varaaminenvoi viedä muutaman minuutin"
 
-#: ../src/virtManager/addhardware.py:1058
+#: ../src/virtManager/addhardware.py:1021
 #, fuzzy
 msgid "Are you sure you want to add this device?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/addhardware.py:1060
+#: ../src/virtManager/addhardware.py:1023
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next VM shutdown?"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1070
+#: ../src/virtManager/addhardware.py:1033
 #, fuzzy, python-format
 msgid "Error adding device: %s"
 msgstr "Virhe poistettaessa laitetta: %s"
 
-#: ../src/virtManager/addhardware.py:1089
-#: ../src/virtManager/addhardware.py:1091 ../src/virtManager/create.py:1516
+#: ../src/virtManager/addhardware.py:1052
+#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1583
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Asennus ei onnistu: ”%s”"
 
-#: ../src/virtManager/addhardware.py:1121
+#: ../src/virtManager/addhardware.py:1086
 msgid "Hardware Type Required"
 msgstr "Laitetyyppi vaaditaan"
 
-#: ../src/virtManager/addhardware.py:1122
+#: ../src/virtManager/addhardware.py:1087
 #, fuzzy
 msgid "You must specify what type of hardware to add."
 msgstr "Lisättävän laitteen tyyppi on määritettävä"
 
-#: ../src/virtManager/addhardware.py:1128
-msgid "Storage Path Required"
-msgstr "Massamuistin sijainti vaaditaan"
+#: ../src/virtManager/addhardware.py:1120 ../src/virtManager/create.py:1344
+#, python-format
+msgid ""
+"The following path already exists, but is not\n"
+"in use by any virtual machine:\n"
+"\n"
+"%s\n"
+"\n"
+"Would you like to use this path?"
+msgstr ""
 
-#: ../src/virtManager/addhardware.py:1129
-msgid "You must specify a partition or a file for disk storage."
-msgstr "On määritettävä osio tai tiedosto tallennustilaksi."
+#: ../src/virtManager/addhardware.py:1128 ../src/virtManager/create.py:1352
+msgid "A storage path must be specified."
+msgstr ""
 
-#: ../src/virtManager/addhardware.py:1132
-msgid "Target Device Required"
-msgstr "Kohdelaite vaaditaan"
-
-#: ../src/virtManager/addhardware.py:1133
+#: ../src/virtManager/addhardware.py:1144 ../src/virtManager/create.py:1361
 #, fuzzy
-msgid "You must select a target device for the disk."
-msgstr "Levylle on valittava kohdelaite"
-
-#: ../src/virtManager/addhardware.py:1163
-msgid "Invalid Storage Parameters"
-msgstr "Virheelliset massamuistiparametrit"
+msgid "Storage parameter error."
+msgstr "Verkkoparametrivirhe"
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:1167 ../src/virtManager/create.py:1308
+#: ../src/virtManager/addhardware.py:1158 ../src/virtManager/create.py:1366
 msgid "Not Enough Free Space"
 msgstr "Ei tarpeeksi levytilaa vapaana"
 
-#: ../src/virtManager/addhardware.py:1173 ../src/virtManager/create.py:1314
+#: ../src/virtManager/addhardware.py:1164 ../src/virtManager/create.py:1372
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "Toinen vieras käyttää jo levyä ”%s”!"
 
-#: ../src/virtManager/addhardware.py:1174 ../src/virtManager/create.py:1316
+#: ../src/virtManager/addhardware.py:1166 ../src/virtManager/create.py:1374
 #, fuzzy
 msgid "Do you really want to use the disk?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/addhardware.py:1197
+#: ../src/virtManager/addhardware.py:1183
 #, fuzzy
 msgid "Network selection error."
 msgstr "Verkon valinta"
 
-#: ../src/virtManager/addhardware.py:1198
+#: ../src/virtManager/addhardware.py:1184
 msgid "A network source must be selected."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1201
+#: ../src/virtManager/addhardware.py:1187
 msgid "Invalid MAC address"
 msgstr "Virheellinen MAC-osoite"
 
-#: ../src/virtManager/addhardware.py:1202
+#: ../src/virtManager/addhardware.py:1188
 msgid "A MAC address must be entered."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1233
+#: ../src/virtManager/addhardware.py:1219
 msgid "Graphics device parameter error"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1240
+#: ../src/virtManager/addhardware.py:1226
 #, fuzzy
 msgid "Sound device parameter error"
 msgstr "Verkkoparametrivirhe"
 
-#: ../src/virtManager/addhardware.py:1246
+#: ../src/virtManager/addhardware.py:1232
 #, fuzzy
 msgid "Physical Device Requried"
 msgstr "Fyysinen laite vaaditaan"
 
-#: ../src/virtManager/addhardware.py:1247
+#: ../src/virtManager/addhardware.py:1233
 msgid "A device must be selected."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1254
+#: ../src/virtManager/addhardware.py:1240
 #, fuzzy
 msgid "Host device parameter error"
 msgstr "Verkkoparametrivirhe"
 
-#: ../src/virtManager/addhardware.py:1294
+#: ../src/virtManager/addhardware.py:1280
 #, fuzzy, python-format
-msgid "%s device parameter error."
+msgid "%s device parameter error"
 msgstr "Verkkoparametrivirhe"
 
-#: ../src/virtManager/addhardware.py:1305
+#: ../src/virtManager/addhardware.py:1291
 #, fuzzy
-msgid "Video device parameter error."
+msgid "Video device parameter error"
 msgstr "Verkkoparametrivirhe"
 
-#: ../src/virtManager/asyncjob.py:41 ../src/vmm-progress.glade.h:2
+#: ../src/virtManager/addhardware.py:1304
+#, fuzzy
+msgid "Watchdog parameter error"
+msgstr "Verkkoparametrivirhe"
+
+#: ../src/virtManager/asyncjob.py:43 ../src/vmm-progress.glade.h:2
 msgid "Please wait a few moments..."
 msgstr "Odota hetki..."
 
-#: ../src/virtManager/asyncjob.py:42 ../src/vmm-progress.glade.h:1
+#: ../src/virtManager/asyncjob.py:44 ../src/vmm-progress.glade.h:1
 msgid "Operation in progress"
 msgstr "Toiminto käynnissä"
 
-#: ../src/virtManager/asyncjob.py:89 ../src/virtManager/asyncjob.py:102
+#: ../src/virtManager/asyncjob.py:102 ../src/virtManager/asyncjob.py:115
 #: ../src/vmm-progress.glade.h:3
 msgid "Processing..."
 msgstr "Käsitellään..."
 
-#: ../src/virtManager/asyncjob.py:121
+#: ../src/virtManager/asyncjob.py:134
 msgid "Completed"
 msgstr "Valmis"
 
@@ -656,67 +672,67 @@ msgstr ""
 msgid "Floppy _Image"
 msgstr ""
 
-#: ../src/virtManager/clone.py:222 ../src/virtManager/clone.py:438
+#: ../src/virtManager/clone.py:221 ../src/virtManager/clone.py:437
 #, fuzzy
 msgid "Details..."
 msgstr "Yksityiskohdat"
 
-#: ../src/virtManager/clone.py:253
+#: ../src/virtManager/clone.py:252
 #, fuzzy
 msgid "Usermode"
 msgstr "Konenimi:"
 
-#: ../src/virtManager/clone.py:265
+#: ../src/virtManager/clone.py:264
 #, fuzzy
 msgid "Virtual Network"
 msgstr "Virtuaalilaitteet"
 
-#: ../src/virtManager/clone.py:337
+#: ../src/virtManager/clone.py:336
 msgid "Nothing to clone."
 msgstr ""
 
-#: ../src/virtManager/clone.py:430
+#: ../src/virtManager/clone.py:429
 msgid "Clone this disk"
 msgstr ""
 
-#: ../src/virtManager/clone.py:434
+#: ../src/virtManager/clone.py:433
 #, python-format
 msgid "Share disk with %s"
 msgstr ""
 
-#: ../src/virtManager/clone.py:446
+#: ../src/virtManager/clone.py:445
 msgid "Storage cannot be shared or cloned."
 msgstr ""
 
-#: ../src/virtManager/clone.py:499
+#: ../src/virtManager/clone.py:498
 msgid "One or more disks cannot be cloned or shared."
 msgstr ""
 
-#: ../src/virtManager/clone.py:600
+#: ../src/virtManager/clone.py:599
 #, fuzzy, python-format
 msgid "Error changing MAC address: %s"
 msgstr "Virhe tallennettaessa toimialuetta: %s"
 
-#: ../src/virtManager/clone.py:628
+#: ../src/virtManager/clone.py:627
 msgid "Cloning will overwrite the existing file"
 msgstr ""
 
-#: ../src/virtManager/clone.py:630
+#: ../src/virtManager/clone.py:629
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
 msgstr ""
 
-#: ../src/virtManager/clone.py:641
+#: ../src/virtManager/clone.py:640
 #, fuzzy, python-format
 msgid "Error changing storage path: %s"
 msgstr "Virhe tallennettaessa toimialuetta: %s"
 
-#: ../src/virtManager/clone.py:692
+#: ../src/virtManager/clone.py:691
 msgid "Skipping disks may cause data to be overwritten."
 msgstr ""
 
-#: ../src/virtManager/clone.py:693
+#: ../src/virtManager/clone.py:692
 #, python-format
 msgid ""
 "The following disk devices will not be cloned:\n"
@@ -725,32 +741,32 @@ msgid ""
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
 
-#: ../src/virtManager/clone.py:713 ../src/virtManager/createpool.py:394
-#: ../src/virtManager/createvol.py:200 ../src/virtManager/migrate.py:413
+#: ../src/virtManager/clone.py:712 ../src/virtManager/createpool.py:393
+#: ../src/virtManager/createvol.py:207 ../src/virtManager/migrate.py:413
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr ""
 
-#: ../src/virtManager/clone.py:720
+#: ../src/virtManager/clone.py:719
 #, fuzzy, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "Luodaan virtuaalikonetta"
 
-#: ../src/virtManager/clone.py:724 ../src/virtManager/delete.py:145
+#: ../src/virtManager/clone.py:723 ../src/virtManager/delete.py:144
 msgid " and selected storage (this may take a while)"
 msgstr ""
 
-#: ../src/virtManager/clone.py:758
+#: ../src/virtManager/clone.py:757
 #, fuzzy, python-format
 msgid "Error creating virtual machine clone '%s': %s"
 msgstr "Virhe poistettaessa verkkoa: %s"
 
-#: ../src/virtManager/clone.py:790
+#: ../src/virtManager/clone.py:789
 #, fuzzy
 msgid "No storage to clone."
 msgstr "Massamuistisijainti"
 
-#: ../src/virtManager/clone.py:796
+#: ../src/virtManager/clone.py:795
 #, fuzzy
 msgid "Connection does not support managed storage cloning."
 msgstr "Vierasjärjestelmän konsolia ei tueta"
@@ -759,28 +775,34 @@ msgstr "Vierasjärjestelmän konsolia ei tueta"
 msgid "Cannot clone unmanaged remote storage."
 msgstr ""
 
-#: ../src/virtManager/clone.py:801 ../src/virtManager/delete.py:345
+#: ../src/virtManager/clone.py:802
+msgid ""
+"Block devices to clone should be managed\n"
+"storage volumes."
+msgstr ""
+
+#: ../src/virtManager/clone.py:805 ../src/virtManager/delete.py:344
 msgid "No write access to parent directory."
 msgstr ""
 
-#: ../src/virtManager/clone.py:803 ../src/virtManager/delete.py:343
+#: ../src/virtManager/clone.py:807 ../src/virtManager/delete.py:342
 #, fuzzy
 msgid "Path does not exist."
 msgstr "Massamuistipolkua ei ole olemassa"
 
-#: ../src/virtManager/clone.py:824
+#: ../src/virtManager/clone.py:828
 msgid "Removable"
 msgstr ""
 
-#: ../src/virtManager/clone.py:827
+#: ../src/virtManager/clone.py:831
 msgid "Read Only"
 msgstr ""
 
-#: ../src/virtManager/clone.py:829
+#: ../src/virtManager/clone.py:833
 msgid "No write access"
 msgstr ""
 
-#: ../src/virtManager/clone.py:832
+#: ../src/virtManager/clone.py:836
 msgid "Shareable"
 msgstr ""
 
@@ -803,89 +825,90 @@ msgstr "Etsi ISO-levykuva"
 msgid "Locate ISO media"
 msgstr "Etsi ISO-levykuva"
 
-#: ../src/virtManager/connect.py:77 ../src/virtManager/createinterface.py:195
-#: ../src/virtManager/manager.py:445 ../src/virtManager/storagebrowse.py:126
+#: ../src/virtManager/connect.py:77 ../src/virtManager/createinterface.py:222
+#: ../src/virtManager/manager.py:432 ../src/virtManager/storagebrowse.py:125
 #: ../src/vmm-create-net.glade.h:29 ../src/vmm-create-pool.glade.h:9
-#: ../src/vmm-create.glade.h:29
+#: ../src/vmm-create.glade.h:30
 msgid "Name"
 msgstr "Nimi"
 
-#: ../src/virtManager/connection.py:181
+#: ../src/virtManager/connection.py:185
 #, python-format
 msgid "Could not build physical interface list via libvirt: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:187
+#: ../src/virtManager/connection.py:191
 #, fuzzy
 msgid "Libvirt version does not support physical interface listing"
 msgstr "Vierasjärjestelmän konsolia ei tueta"
 
-#: ../src/virtManager/connection.py:197
+#: ../src/virtManager/connection.py:201
 #, python-format
 msgid "Could not initialize HAL for interface listing: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:200
+#: ../src/virtManager/connection.py:204
 #, fuzzy
 msgid "Libvirt version does not support physical interface listing."
 msgstr "Vierasjärjestelmän konsolia ei tueta"
 
-#: ../src/virtManager/connection.py:219
+#: ../src/virtManager/connection.py:223
 #, python-format
 msgid "Could not build media list via libvirt: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:226 ../src/virtManager/connection.py:239
+#: ../src/virtManager/connection.py:230 ../src/virtManager/connection.py:243
 #, fuzzy
 msgid "Libvirt version does not support media listing."
 msgstr "Vierasjärjestelmän konsolia ei tueta"
 
-#: ../src/virtManager/connection.py:236
+#: ../src/virtManager/connection.py:240
 #, python-format
 msgid "Could not initialize HAL for media listing: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:498
+#: ../src/virtManager/connection.py:568
 msgid "Disconnected"
 msgstr "Katkaistu"
 
-#: ../src/virtManager/connection.py:500
+#: ../src/virtManager/connection.py:570
 msgid "Connecting"
 msgstr "Yhdistää"
 
-#: ../src/virtManager/connection.py:503
+#: ../src/virtManager/connection.py:573
 #, fuzzy
 msgid "Active (RO)"
 msgstr "Aktiivinen"
 
-#: ../src/virtManager/connection.py:505 ../src/virtManager/host.py:452
-#: ../src/virtManager/host.py:677 ../src/virtManager/host.py:914
-#: ../src/vmm-host.glade.h:9
+#: ../src/virtManager/connection.py:575 ../src/virtManager/host.py:492
+#: ../src/virtManager/host.py:732 ../src/virtManager/host.py:981
+#: ../src/vmm-host.glade.h:11
 msgid "Active"
 msgstr "Aktiivinen"
 
-#: ../src/virtManager/connection.py:507 ../src/virtManager/host.py:452
-#: ../src/virtManager/host.py:496 ../src/virtManager/host.py:677
-#: ../src/virtManager/host.py:709 ../src/virtManager/host.py:914
-#: ../src/virtManager/uihelpers.py:135
+#: ../src/virtManager/connection.py:577 ../src/virtManager/host.py:492
+#: ../src/virtManager/host.py:535 ../src/virtManager/host.py:732
+#: ../src/virtManager/host.py:763 ../src/virtManager/host.py:981
+#: ../src/virtManager/uihelpers.py:300
 msgid "Inactive"
 msgstr "Passiivinen"
 
-#: ../src/virtManager/connection.py:509 ../src/virtManager/create.py:1586
-#: ../src/virtManager/create.py:1587 ../src/virtManager/create.py:1589
-#: ../src/virtManager/details.py:1318 ../src/virtManager/host.py:909
+#: ../src/virtManager/connection.py:579 ../src/virtManager/create.py:1683
+#: ../src/virtManager/create.py:1684 ../src/virtManager/create.py:1686
+#: ../src/virtManager/details.py:1544 ../src/virtManager/details.py:1725
+#: ../src/virtManager/host.py:976
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: ../src/virtManager/console.py:161
+#: ../src/virtManager/console.py:165
 msgid "Press Ctrl+Alt to release pointer."
 msgstr "Paina Ctrl+Alt osoittimen vapauttamiseksi."
 
-#: ../src/virtManager/console.py:177
+#: ../src/virtManager/console.py:181
 msgid "Pointer grabbed"
 msgstr "Osoitin kaapattu"
 
-#: ../src/virtManager/console.py:178
+#: ../src/virtManager/console.py:182
 #, fuzzy
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
@@ -894,309 +917,332 @@ msgstr ""
 "Hiiriosoitin on rajoitettu virtuaalikonsoli-ikkunaan. Vapauttaaksesi "
 "osoittimen paina näppäinparia Ctrl+Alt"
 
-#: ../src/virtManager/console.py:179
+#: ../src/virtManager/console.py:183
 #, fuzzy
 msgid "Do not show this notification in the future."
 msgstr "Älä näytä tätä ilmoitusta jatkossa"
 
-#: ../src/virtManager/console.py:362 ../src/virtManager/console.py:545
+#. Guest isn't running, schedule another try
+#: ../src/virtManager/console.py:366 ../src/virtManager/console.py:601
 msgid "Guest not running"
 msgstr "Vierasjärjestelmä ei ole käynnissä"
 
-#: ../src/virtManager/console.py:365
+#: ../src/virtManager/console.py:369
 msgid "Guest has crashed"
 msgstr "Vierasjärjestelmä on kaatunut"
 
-#: ../src/virtManager/console.py:455
-msgid ""
-"TCP/IP error: VNC connection to hypervisor host got refused or disconnected!"
+#: ../src/virtManager/console.py:464
+#, fuzzy
+msgid "Error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 "TCP/IP-virhe: VNC-yhteys hypervisoriin katkaistiin tai siitä kieltäydyttiin!"
 
-#: ../src/virtManager/console.py:564
+#: ../src/virtManager/console.py:618
 #, fuzzy
 msgid "Graphical console not configured for guest"
 msgstr "Vierasjärjestelmän konsolia ei ole asetettu"
 
-#: ../src/virtManager/console.py:576
+#: ../src/virtManager/console.py:624
 #, fuzzy
 msgid "Graphical console not supported for guest"
 msgstr "Vierasjärjestelmän konsolia ei tueta"
 
-#: ../src/virtManager/console.py:580
+#: ../src/virtManager/console.py:629
 #, fuzzy
 msgid "Graphical console is not yet active for guest"
 msgstr "Vierasjärjestelmän konsoli ei ole vielä aktiivinen"
 
-#: ../src/virtManager/console.py:584
+#: ../src/virtManager/console.py:634
 #, fuzzy
 msgid "Connecting to graphical console for guest"
 msgstr "Kytkeydytään vierasjärjestelmän konsoliin"
 
-#: ../src/virtManager/console.py:625
+#: ../src/virtManager/console.py:679
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr ""
 
-#: ../src/virtManager/console.py:626
+#: ../src/virtManager/console.py:680
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr ""
 
-#: ../src/virtManager/console.py:627
+#: ../src/virtManager/console.py:681
 #, fuzzy
 msgid "Unable to authenticate"
 msgstr "Ei voida alustaa GTK:ta: "
 
-#: ../src/virtManager/console.py:631
+#: ../src/virtManager/console.py:685
 msgid "Unsupported console authentication type"
 msgstr "Konsolin todennustyyppiä ei tueta"
 
-#: ../src/virtManager/create.py:288
-msgid ""
-"Fully allocating storage will take longer now, but the OS install phase will "
-"be quicker. \n"
-"\n"
-"Skipping allocation can also cause space issues on the host machine, if the "
-"maximum image size exceeds available storage space."
-msgstr ""
-
-#: ../src/virtManager/create.py:311
+#: ../src/virtManager/create.py:319
 #, fuzzy
 msgid "No active connection to install on."
 msgstr "Yhteyden valinta"
 
-#: ../src/virtManager/create.py:358
+#: ../src/virtManager/create.py:372
 #, fuzzy
 msgid "Connection is read only."
 msgstr "Yhteyden valinta"
 
-#: ../src/virtManager/create.py:368
-msgid "No guests are supported for this connection."
+#: ../src/virtManager/create.py:375
+msgid ""
+"No hypervisor options were found for this\n"
+"connection."
 msgstr ""
 
-#: ../src/virtManager/create.py:390
+#: ../src/virtManager/create.py:380
+msgid ""
+"This usually means that qemu or kvm is not\n"
+"installed on your machine. Please ensure they\n"
+"are installed as intended."
+msgstr ""
+
+#: ../src/virtManager/create.py:394
+msgid ""
+"Host supports full virtualization, but\n"
+"no related install options are available.\n"
+"This may mean support is disabled in your\n"
+"system BIOS."
+msgstr ""
+
+#: ../src/virtManager/create.py:401
+msgid ""
+"Host does not appear to support hardware\n"
+"virtualization. Install options may be limited."
+msgstr ""
+
+#: ../src/virtManager/create.py:407
+msgid ""
+"KVM is not available. This may mean the KVM\n"
+"package is not installed, or the KVM kernel modules \n"
+"are not loaded. Your virtual machines may perform poorly."
+msgstr ""
+
+#: ../src/virtManager/create.py:430
 #, fuzzy, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "Konsoli ei ole käytettävissä, kun järjestelmä on taukotilassa"
 
-#: ../src/virtManager/create.py:394
+#: ../src/virtManager/create.py:434
 msgid "URL installs not available for remote connections."
 msgstr ""
 
-#: ../src/virtManager/create.py:396 ../src/virtManager/create.py:499
-#, fuzzy
-msgid "Connection does not support storage management."
-msgstr "Vierasjärjestelmän konsolia ei tueta"
-
-#: ../src/virtManager/create.py:408
+#: ../src/virtManager/create.py:448
 msgid "No install options available for this connection."
 msgstr ""
 
-#: ../src/virtManager/create.py:459
+#: ../src/virtManager/create.py:488
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr ""
 
-#: ../src/virtManager/create.py:473
+#: ../src/virtManager/create.py:502
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
 msgstr ""
 
-#: ../src/virtManager/create.py:483
+#: ../src/virtManager/create.py:512
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr ""
 
-#: ../src/virtManager/create.py:549
-msgid "Only URL installs are supported for paravirt."
+#: ../src/virtManager/create.py:584
+msgid "Only URL or import installs are supported for paravirt."
 msgstr ""
 
-#: ../src/virtManager/create.py:626 ../src/virtManager/create.py:635
-#: ../src/virtManager/create.py:705 ../src/virtManager/create.py:707
+#: ../src/virtManager/create.py:661 ../src/virtManager/create.py:670
+#: ../src/virtManager/create.py:743 ../src/virtManager/create.py:745
 msgid "Generic"
 msgstr ""
 
-#: ../src/virtManager/create.py:689
+#: ../src/virtManager/create.py:725
 #, fuzzy
 msgid "Local CDROM/ISO"
 msgstr "_Paikallinen kone"
 
-#: ../src/virtManager/create.py:691
+#: ../src/virtManager/create.py:727
 #, fuzzy
 msgid "URL Install Tree"
 msgstr "Asennus-URL-kenttä"
 
-#: ../src/virtManager/create.py:693
+#: ../src/virtManager/create.py:729
 #, fuzzy
 msgid "PXE Install"
 msgstr "PV-asennus"
 
-#: ../src/virtManager/create.py:696 ../src/virtManager/details.py:1319
+#: ../src/virtManager/create.py:731
+msgid "Import existing OS image"
+msgstr ""
+
+#: ../src/virtManager/create.py:734 ../src/virtManager/details.py:1545
+#: ../src/virtManager/details.py:1841
 #, fuzzy
 msgid "None"
 msgstr "Ei"
 
-#: ../src/virtManager/create.py:1056 ../src/virtManager/createinterface.py:566
+#: ../src/virtManager/create.py:1068 ../src/virtManager/createinterface.py:891
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr ""
 
-#: ../src/virtManager/create.py:1090
+#: ../src/virtManager/create.py:1107
 #, fuzzy, python-format
 msgid "Error setting UUID: %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/create.py:1098
+#: ../src/virtManager/create.py:1116
 msgid "Error setting up graphics device:"
 msgstr ""
 
-#: ../src/virtManager/create.py:1108
+#: ../src/virtManager/create.py:1126
 #, fuzzy
 msgid "Error setting up sound device:"
 msgstr "Virhe suljettaessa toimialuetta: %s"
 
-#: ../src/virtManager/create.py:1148 ../src/virtManager/createinterface.py:595
+#: ../src/virtManager/create.py:1166 ../src/virtManager/createinterface.py:920
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr ""
 
-#: ../src/virtManager/create.py:1160
+#: ../src/virtManager/create.py:1178
 msgid "Invalid System Name"
 msgstr "Virheellinen järjestelmänimi"
 
-#: ../src/virtManager/create.py:1184
+#: ../src/virtManager/create.py:1203
 msgid "An install media selection is required."
 msgstr ""
 
-#: ../src/virtManager/create.py:1194
+#: ../src/virtManager/create.py:1213
 msgid "An install tree is required."
 msgstr ""
 
-#: ../src/virtManager/create.py:1210
+#: ../src/virtManager/create.py:1226
+#, fuzzy
+msgid "A storage path to import is required."
+msgstr "Massamuistin sijainti vaaditaan"
+
+#: ../src/virtManager/create.py:1236
 #, fuzzy
 msgid "Error setting installer parameters."
 msgstr "Virhe suljettaessa toimialuetta: %s"
 
-#: ../src/virtManager/create.py:1228
+#: ../src/virtManager/create.py:1254
 #, fuzzy
 msgid "Error setting install media location."
 msgstr "Virhe suljettaessa toimialuetta: %s"
 
-#: ../src/virtManager/create.py:1238
+#: ../src/virtManager/create.py:1264
 #, fuzzy
 msgid "Error setting OS information."
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/create.py:1269
+#: ../src/virtManager/create.py:1301
 #, fuzzy
 msgid "Error setting CPUs."
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/create.py:1276
+#: ../src/virtManager/create.py:1308
 #, fuzzy
 msgid "Error setting guest memory."
 msgstr "Virhe suljettaessa toimialuetta: %s"
 
-#: ../src/virtManager/create.py:1294
-msgid "A storage path must be specified."
-msgstr ""
-
-#: ../src/virtManager/create.py:1303
-#, fuzzy
-msgid "Storage parameter error."
-msgstr "Verkkoparametrivirhe"
-
-#: ../src/virtManager/create.py:1341
+#: ../src/virtManager/create.py:1399
 #, python-format
 msgid "Network device required for %s install."
 msgstr ""
 
-#: ../src/virtManager/create.py:1420
+#: ../src/virtManager/create.py:1478
 #, fuzzy
 msgid "Error launching customize dialog: "
 msgstr "Virhe asetettaessa toimialuetta taukotilaan: %s"
 
-#: ../src/virtManager/create.py:1451
+#: ../src/virtManager/create.py:1509
 msgid "Creating Virtual Machine"
 msgstr "Luodaan virtuaalikonetta"
 
-#: ../src/virtManager/create.py:1452
+#: ../src/virtManager/create.py:1510
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
 
-#: ../src/virtManager/create.py:1504
+#: ../src/virtManager/create.py:1555
 msgid "Guest installation failed to complete"
 msgstr "Vierasasennus ei onnistunut"
 
-#: ../src/virtManager/create.py:1625
+#: ../src/virtManager/create.py:1613
+#, fuzzy, python-format
+msgid "Error continue install: %s"
+msgstr "Virhe käynnistettäessä toimialuetta: %s"
+
+#: ../src/virtManager/create.py:1722
 #, fuzzy
 msgid "Detecting"
 msgstr "Yhdistää"
 
-#: ../src/virtManager/createinterface.py:174
-#: ../src/virtManager/uihelpers.py:68
+#: ../src/virtManager/createinterface.py:201
+#: ../src/virtManager/uihelpers.py:208
 msgid "Bridge"
 msgstr "Silta"
 
-#: ../src/virtManager/createinterface.py:176
+#: ../src/virtManager/createinterface.py:203
 msgid "Bond"
 msgstr ""
 
-#: ../src/virtManager/createinterface.py:178
+#: ../src/virtManager/createinterface.py:205
 #, fuzzy
 msgid "Ethernet"
 msgstr "Muu"
 
-#: ../src/virtManager/createinterface.py:180
+#: ../src/virtManager/createinterface.py:207
 msgid "VLAN"
 msgstr ""
 
-#: ../src/virtManager/createinterface.py:196
+#: ../src/virtManager/createinterface.py:223
 msgid "Type"
 msgstr "Tyyppi"
 
-#: ../src/virtManager/createinterface.py:197
+#: ../src/virtManager/createinterface.py:224
 msgid "In use by"
 msgstr ""
 
-#: ../src/virtManager/createinterface.py:235
-#: ../src/virtManager/createinterface.py:245
+#: ../src/virtManager/createinterface.py:262
+#: ../src/virtManager/createinterface.py:272
 #, fuzzy
 msgid "System default"
 msgstr "Hypervisorin valinta"
 
-#: ../src/virtManager/createinterface.py:366
+#: ../src/virtManager/createinterface.py:511
 msgid "Choose interface(s) to bridge:"
 msgstr ""
 
-#: ../src/virtManager/createinterface.py:369
+#: ../src/virtManager/createinterface.py:514
 msgid "Choose parent interface:"
 msgstr ""
 
-#: ../src/virtManager/createinterface.py:371
+#: ../src/virtManager/createinterface.py:516
 msgid "Choose interfaces to bond:"
 msgstr ""
 
-#: ../src/virtManager/createinterface.py:373
+#: ../src/virtManager/createinterface.py:518
 msgid "Choose an unconfigured interface:"
 msgstr ""
 
-#: ../src/virtManager/createinterface.py:428
+#: ../src/virtManager/createinterface.py:573
 #, fuzzy
 msgid "No interface selected"
 msgstr "Verkkoliikenne"
 
-#: ../src/virtManager/createinterface.py:608
+#: ../src/virtManager/createinterface.py:933
 msgid "An interface name is required."
 msgstr ""
 
-#: ../src/virtManager/createinterface.py:612
+#: ../src/virtManager/createinterface.py:937
 msgid "An interface must be selected"
 msgstr ""
 
-#: ../src/virtManager/createinterface.py:643
+#: ../src/virtManager/createinterface.py:968
 #, python-format
 msgid ""
 "The following interface(s) are already configured:\n"
@@ -1207,120 +1253,125 @@ msgid ""
 "want to use the selected interface(s)?"
 msgstr ""
 
-#: ../src/virtManager/createinterface.py:667
+#: ../src/virtManager/createinterface.py:1006
 #, fuzzy
 msgid "Error setting interface parameters."
 msgstr "Virhe suljettaessa toimialuetta: %s"
 
-#: ../src/virtManager/createinterface.py:772
+#: ../src/virtManager/createinterface.py:1083
+#, fuzzy, python-format
+msgid "Error validating IP configuration: %s"
+msgstr "Virhe tallennettaessa toimialuetta: %s"
+
+#: ../src/virtManager/createinterface.py:1129
 #, fuzzy
 msgid "Creating virtual interface"
 msgstr "Luodaan virtuaalikonetta"
 
-#: ../src/virtManager/createinterface.py:773
+#: ../src/virtManager/createinterface.py:1130
 #, fuzzy
 msgid "The virtual interface is now being created."
 msgstr "Virtuaalikonetta luodaan."
 
-#: ../src/virtManager/createinterface.py:808
+#: ../src/virtManager/createinterface.py:1165
 #, fuzzy, python-format
 msgid "Error creating interface: '%s'"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/createnet.py:106
+#: ../src/virtManager/createnet.py:105
 #, fuzzy
 msgid "Any physical device"
 msgstr "NAT mihin tahansa fyysiseen laitteeseen"
 
-#: ../src/virtManager/createnet.py:109
+#: ../src/virtManager/createnet.py:108
 #, fuzzy, python-format
 msgid "Physical device %s"
 msgstr "NAT fyysiseen laitteeseen %s"
 
-#: ../src/virtManager/createnet.py:120 ../src/virtManager/network.py:36
+#: ../src/virtManager/createnet.py:119 ../src/virtManager/network.py:36
 #, fuzzy
 msgid "NAT"
 msgstr "N/A"
 
-#: ../src/virtManager/createnet.py:121
+#: ../src/virtManager/createnet.py:120
 msgid "Routed"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:182
+#: ../src/virtManager/createnet.py:181
 #, python-format
 msgid "%d addresses"
 msgstr "%d osoitetta"
 
-#: ../src/virtManager/createnet.py:184
+#: ../src/virtManager/createnet.py:183
 msgid "Public"
 msgstr "Julkinen"
 
-#: ../src/virtManager/createnet.py:186 ../src/vmm-create-net.glade.h:40
+#: ../src/virtManager/createnet.py:185 ../src/vmm-create-net.glade.h:40
 msgid "Private"
 msgstr "Yksityinen"
 
-#: ../src/virtManager/createnet.py:188
+#: ../src/virtManager/createnet.py:187
 msgid "Reserved"
 msgstr "Varattu"
 
-#: ../src/virtManager/createnet.py:190
+#: ../src/virtManager/createnet.py:189
 msgid "Other"
 msgstr "Muu"
 
-#: ../src/virtManager/createnet.py:293 ../src/vmm-create-net.glade.h:43
+#: ../src/virtManager/createnet.py:292 ../src/vmm-create-net.glade.h:43
 msgid "Start address:"
 msgstr "Alkuosoite:"
 
-#: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:94
+#: ../src/virtManager/createnet.py:298 ../src/vmm-details.glade.h:94
 msgid "Status:"
 msgstr "Tila:"
 
-#: ../src/virtManager/createnet.py:300 ../src/virtManager/details.py:1375
-#: ../src/virtManager/details.py:1376 ../src/virtManager/details.py:1377
-#: ../src/virtManager/details.py:1378 ../src/virtManager/host.py:474
-#: ../src/virtManager/host.py:475
+#: ../src/virtManager/createnet.py:299 ../src/virtManager/details.py:1591
+#: ../src/virtManager/details.py:1592 ../src/virtManager/details.py:1593
+#: ../src/virtManager/details.py:1594 ../src/virtManager/host.py:514
+#: ../src/virtManager/host.py:515
 msgid "Disabled"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:352
+#: ../src/virtManager/createnet.py:351
 #, fuzzy, python-format
 msgid "Error creating virtual network: %s"
 msgstr "Virhe poistettaessa verkkoa: %s"
 
-#: ../src/virtManager/createnet.py:363 ../src/virtManager/createnet.py:366
+#: ../src/virtManager/createnet.py:362 ../src/virtManager/createnet.py:365
 msgid "Invalid Network Name"
 msgstr "Virheellinen verkon nimi"
 
-#: ../src/virtManager/createnet.py:364
+#: ../src/virtManager/createnet.py:363
 msgid "Network name must be non-blank and less than 50 characters"
 msgstr "Verkon nimi ei saa olla tyhjä ja sen täytyy olla alle 50 merkkiä pitkä"
 
-#: ../src/virtManager/createnet.py:367
+#: ../src/virtManager/createnet.py:366
 msgid "Network name may contain alphanumeric and '_' characters only"
 msgstr "Verkon nimi voi sisältää vain aakkosnumeerisia ja ”_”-merkkejä"
 
-#: ../src/virtManager/createnet.py:373 ../src/virtManager/createnet.py:377
-#: ../src/virtManager/createnet.py:381
+#: ../src/virtManager/createnet.py:372 ../src/virtManager/createnet.py:376
+#: ../src/virtManager/createnet.py:380
 msgid "Invalid Network Address"
 msgstr "Virheellinen verkon osoite"
 
-#: ../src/virtManager/createnet.py:374
+#: ../src/virtManager/createnet.py:373
 msgid "The network address could not be understood"
 msgstr "Verkko-osoitetta ei ymmärretty"
 
-#: ../src/virtManager/createnet.py:378
+#: ../src/virtManager/createnet.py:377
 msgid "The network must be an IPv4 address"
 msgstr "Verkon on oltava IPv4-osoite"
 
-#: ../src/virtManager/createnet.py:382
+#: ../src/virtManager/createnet.py:381
 msgid "The network prefix must be at least /4 (16 addresses)"
 msgstr "Verkon etuliite on oltava vähintään /4 (16 osoitetta)"
 
-#: ../src/virtManager/createnet.py:385
+#: ../src/virtManager/createnet.py:384
 msgid "Check Network Address"
 msgstr "Tarkista verkko-osoite"
 
-#: ../src/virtManager/createnet.py:386
+#: ../src/virtManager/createnet.py:385
 msgid ""
 "The network should normally use a private IPv4 address. Use this non-private "
 "address anyway?"
@@ -1328,240 +1379,250 @@ msgstr ""
 "Verkon pitäisi tavallisesti käyttää yksityistä IPv4-osoitetta. Käytetäänkö "
 "tätä julkista osoitetta silti?"
 
-#: ../src/virtManager/createnet.py:395 ../src/virtManager/createnet.py:398
-#: ../src/virtManager/createnet.py:402 ../src/virtManager/createnet.py:405
+#: ../src/virtManager/createnet.py:394 ../src/virtManager/createnet.py:397
+#: ../src/virtManager/createnet.py:401 ../src/virtManager/createnet.py:404
 msgid "Invalid DHCP Address"
 msgstr "Virheellinen DHCP-osoite"
 
-#: ../src/virtManager/createnet.py:396
+#: ../src/virtManager/createnet.py:395
 msgid "The DHCP start address could not be understood"
 msgstr "DHCP-aloitusosoitetta ei ymmärretty"
 
-#: ../src/virtManager/createnet.py:399
+#: ../src/virtManager/createnet.py:398
 msgid "The DHCP end address could not be understood"
 msgstr "DHCP-lopetusosoitetta ei ymmärretty"
 
-#: ../src/virtManager/createnet.py:403
+#: ../src/virtManager/createnet.py:402
 #, python-format
 msgid "The DHCP start address is not with the network %s"
 msgstr "DHCP-aloitusosoite ei ole verkossa %s"
 
-#: ../src/virtManager/createnet.py:406
+#: ../src/virtManager/createnet.py:405
 #, python-format
 msgid "The DHCP end address is not with the network %s"
 msgstr "DHCP-lopetusosoite ei ole verkossa %s"
 
-#: ../src/virtManager/createnet.py:411
+#: ../src/virtManager/createnet.py:410
 msgid "Invalid forwarding mode"
 msgstr "Virheellinen välitystila"
 
-#: ../src/virtManager/createnet.py:412
+#: ../src/virtManager/createnet.py:411
 msgid "Please select where the traffic should be forwarded"
 msgstr "Valitse minne liikenne pitäisi välittää"
 
-#: ../src/virtManager/createpool.py:370
+#: ../src/virtManager/createpool.py:369
 #, fuzzy
 msgid "Choose source path"
 msgstr "Lähteen polku:"
 
-#: ../src/virtManager/createpool.py:376
+#: ../src/virtManager/createpool.py:375
 msgid "Choose target directory"
 msgstr ""
 
-#: ../src/virtManager/createpool.py:408
+#: ../src/virtManager/createpool.py:407
 #, fuzzy
 msgid "Creating storage pool..."
 msgstr "Luodaan massamuistitiedosto"
 
-#: ../src/virtManager/createpool.py:409
+#: ../src/virtManager/createpool.py:408
 msgid "Creating the storage pool may take a while..."
 msgstr ""
 
-#: ../src/virtManager/createpool.py:437
+#: ../src/virtManager/createpool.py:436
 #, fuzzy, python-format
 msgid "Error creating pool: %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/createpool.py:486 ../src/virtManager/createpool.py:508
+#: ../src/virtManager/createpool.py:485 ../src/virtManager/createpool.py:507
 #, fuzzy
 msgid "Pool Parameter Error"
 msgstr "Verkkoparametrivirhe"
 
-#: ../src/virtManager/createpool.py:513
+#: ../src/virtManager/createpool.py:512
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
 msgstr ""
 
-#: ../src/virtManager/createpool.py:527
+#: ../src/virtManager/createpool.py:526
 #, fuzzy
 msgid "Format the source device."
 msgstr "Lähdelaite:"
 
-#: ../src/virtManager/createpool.py:529
+#: ../src/virtManager/createpool.py:528
 msgid "Create a logical volume group from the source device."
 msgstr ""
 
-#: ../src/virtManager/createvol.py:211
+#: ../src/virtManager/createvol.py:218
 #, fuzzy
 msgid "Creating storage volume..."
 msgstr "Luodaan massamuistitiedosto"
 
-#: ../src/virtManager/createvol.py:212
+#: ../src/virtManager/createvol.py:219
 msgid "Creating the storage volume may take a while..."
 msgstr ""
 
-#: ../src/virtManager/createvol.py:240
+#: ../src/virtManager/createvol.py:247
 #, fuzzy, python-format
 msgid "Error creating vol: %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/createvol.py:260
+#: ../src/virtManager/createvol.py:267
 #, fuzzy
 msgid "Volume Parameter Error"
 msgstr "Verkkoparametrivirhe"
 
-#: ../src/virtManager/delete.py:99
+#: ../src/virtManager/delete.py:98
 #, fuzzy
 msgid "Delete"
 msgstr "Poista kone"
 
-#: ../src/virtManager/delete.py:142
+#: ../src/virtManager/delete.py:141
 #, fuzzy, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "Palauta virtuaalikone"
 
-#: ../src/virtManager/delete.py:177
+#: ../src/virtManager/delete.py:176
 #, python-format
 msgid "Deleting path '%s'"
 msgstr ""
 
-#: ../src/virtManager/delete.py:188
+#: ../src/virtManager/delete.py:187
 #, fuzzy, python-format
 msgid "Error deleting virtual machine '%s': %s"
 msgstr "Virhe poistettaessa toimialuetta: %s"
 
-#: ../src/virtManager/delete.py:204
+#: ../src/virtManager/delete.py:203
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 
-#: ../src/virtManager/delete.py:208
+#: ../src/virtManager/delete.py:207
 msgid "Errors encountered while removing certain storage devices."
 msgstr ""
 
-#: ../src/virtManager/delete.py:289
+#: ../src/virtManager/delete.py:288
 #, fuzzy
 msgid "Storage Path"
 msgstr "Lähteen polku:"
 
-#: ../src/virtManager/delete.py:290
+#: ../src/virtManager/delete.py:289
 #, fuzzy
 msgid "Target"
 msgstr "Kohde:"
 
-#: ../src/virtManager/delete.py:338
+#: ../src/virtManager/delete.py:337
 msgid "Cannot delete iscsi share."
 msgstr ""
 
-#: ../src/virtManager/delete.py:341
+#: ../src/virtManager/delete.py:340
 msgid "Cannot delete unmanaged remote storage."
 msgstr ""
 
-#: ../src/virtManager/delete.py:347
+#: ../src/virtManager/delete.py:346
 msgid "Cannot delete unmanaged block device."
 msgstr ""
 
-#: ../src/virtManager/delete.py:367
+#: ../src/virtManager/delete.py:366
 #, fuzzy
 msgid "Storage is read-only."
 msgstr "Yhteyden valinta"
 
-#: ../src/virtManager/delete.py:369
+#: ../src/virtManager/delete.py:368
 msgid "No write access to path."
 msgstr ""
 
-#: ../src/virtManager/delete.py:372
+#: ../src/virtManager/delete.py:371
 msgid "Storage is marked as shareable."
 msgstr ""
 
-#: ../src/virtManager/delete.py:386
+#: ../src/virtManager/delete.py:381
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
 "- %s "
 msgstr ""
 
-#: ../src/virtManager/details.py:382
+#: ../src/virtManager/details.py:389
+#, fuzzy
+msgid "Add Hardware"
+msgstr "Laitteisto"
+
+#: ../src/virtManager/details.py:425
 msgid "Close tab"
 msgstr ""
 
-#: ../src/virtManager/details.py:449
+#: ../src/virtManager/details.py:498
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
 "with the specified label. The administrator is responsible for making sure "
 "the images are labeled corectly on disk."
 msgstr ""
 
-#: ../src/virtManager/details.py:451
+#: ../src/virtManager/details.py:500
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
 "unique label for the guest process and guest image, ensuring total isolation "
 "of the guest. (Default)"
 msgstr ""
 
-#: ../src/virtManager/details.py:459
+#: ../src/virtManager/details.py:508
 #, fuzzy
 msgid "VCPU"
 msgstr "Virtuaalisuorittimet"
 
-#: ../src/virtManager/details.py:460
+#: ../src/virtManager/details.py:509
 #, fuzzy
 msgid "On CPU"
 msgstr "Virtuaalisuorittimet"
 
-#: ../src/virtManager/details.py:461
+#: ../src/virtManager/details.py:510
 #, fuzzy
 msgid "Pinning"
 msgstr "Käynnissä"
 
-#: ../src/virtManager/details.py:517
+#: ../src/virtManager/details.py:619
 #, fuzzy
 msgid "No serial devices found"
 msgstr "NAT fyysiseen laitteeseen %s"
 
-#: ../src/virtManager/details.py:539
+#: ../src/virtManager/details.py:641
 msgid "Serial console not yet supported over remote connection."
 msgstr ""
 
-#: ../src/virtManager/details.py:542
+#: ../src/virtManager/details.py:644
 #, fuzzy
 msgid "Serial console not available for inactive guest."
 msgstr "Konsoli ei ole käytettävissä, kun järjestelmä on taukotilassa"
 
-#: ../src/virtManager/details.py:544
+#: ../src/virtManager/details.py:646
 #, python-format
 msgid "Console for device type '%s' not yet supported."
 msgstr ""
 
-#: ../src/virtManager/details.py:547
+#: ../src/virtManager/details.py:649
 #, python-format
 msgid "Can not access console path '%s'."
 msgstr ""
 
-#: ../src/virtManager/details.py:565
+#: ../src/virtManager/details.py:667
 msgid "No graphics console found."
 msgstr ""
 
-#: ../src/virtManager/details.py:570
+#: ../src/virtManager/details.py:672
 #, fuzzy, python-format
 msgid "Graphical Console %s"
 msgstr "_Graafinen konsoli"
 
-#: ../src/virtManager/details.py:816
+#: ../src/virtManager/details.py:764
+#, fuzzy, python-format
+msgid "Error refreshing hardware page: %s"
+msgstr "Virhe tallennettaessa toimialuetta: %s"
+
+#: ../src/virtManager/details.py:938
 msgid "Save Virtual Machine Screenshot"
 msgstr "Tallenna virtuaalikoneen kuvankaappaus"
 
-#: ../src/virtManager/details.py:841
+#: ../src/virtManager/details.py:963
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1570,203 +1631,252 @@ msgstr ""
 "Kuvakaappaus tallennettiin kohteeseen:\n"
 "%s"
 
-#: ../src/virtManager/details.py:843
+#: ../src/virtManager/details.py:965
 msgid "Screenshot saved"
 msgstr "Kuvakaappaus tallennettu"
 
-#: ../src/virtManager/details.py:1094
+#: ../src/virtManager/details.py:1297
 #, fuzzy, python-format
 msgid "Error building pin list: %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/details.py:1100
+#: ../src/virtManager/details.py:1303
 #, fuzzy, python-format
 msgid "Error pinning vcpus: %s"
 msgstr "Virhe tallennettaessa toimialuetta: %s"
 
-#: ../src/virtManager/details.py:1135
+#: ../src/virtManager/details.py:1337
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr ""
 
-#: ../src/virtManager/details.py:1180
+#: ../src/virtManager/details.py:1399
 #, fuzzy
 msgid "Are you sure you want to remove this device?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/details.py:1181 ../src/virtManager/engine.py:533
-#: ../src/virtManager/engine.py:557 ../src/virtManager/engine.py:603
-#: ../src/virtManager/engine.py:627
+#: ../src/virtManager/details.py:1400 ../src/virtManager/engine.py:752
+#: ../src/virtManager/engine.py:776 ../src/virtManager/engine.py:822
+#: ../src/virtManager/engine.py:846
 msgid "Don't ask me again."
 msgstr ""
 
-#: ../src/virtManager/details.py:1193
+#: ../src/virtManager/details.py:1412
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Virhe poistettaessa laitetta: %s"
 
-#: ../src/virtManager/details.py:1208
+#: ../src/virtManager/details.py:1427
 msgid "Device could not be removed from the running machine."
 msgstr ""
 
-#: ../src/virtManager/details.py:1209
+#: ../src/virtManager/details.py:1428
 msgid "This change will take effect after the next VM reboot"
 msgstr ""
 
-#: ../src/virtManager/details.py:1257
+#: ../src/virtManager/details.py:1476
 #, fuzzy, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Virhe tallennettaessa toimialuetta: %s"
 
-#: ../src/virtManager/details.py:1264
+#: ../src/virtManager/details.py:1483
 msgid "Some changes may require a guest reboot to take effect."
 msgstr ""
 
-#: ../src/virtManager/details.py:1267
+#: ../src/virtManager/details.py:1486
 msgid "These changes will take effect after the next guest reboot."
 msgstr ""
 
-#: ../src/virtManager/details.py:1440
+#: ../src/virtManager/details.py:1656
 msgid "VCPU info only available for running domain."
 msgstr ""
 
-#: ../src/virtManager/details.py:1442
+#: ../src/virtManager/details.py:1658
 msgid "Virtual machine does not support runtime VPCU info."
 msgstr ""
 
-#: ../src/virtManager/details.py:1447
+#: ../src/virtManager/details.py:1663
 #, fuzzy, python-format
 msgid "Error getting VCPU info: %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/details.py:1569
+#: ../src/virtManager/details.py:1800
 msgid "Xen Mouse"
 msgstr "Xen-hiiri"
 
-#: ../src/virtManager/details.py:1571
+#: ../src/virtManager/details.py:1802
 msgid "PS/2 Mouse"
 msgstr "PS/2-hiiri"
 
-#: ../src/virtManager/details.py:1576
+#: ../src/virtManager/details.py:1807
 msgid "Absolute Movement"
 msgstr "Absoluuttinen liikkuminen"
 
-#: ../src/virtManager/details.py:1578
+#: ../src/virtManager/details.py:1809
 msgid "Relative Movement"
 msgstr "Suhteellinen liikkuminen"
 
-#: ../src/virtManager/details.py:1601
+#: ../src/virtManager/details.py:1832
 msgid "Automatically allocated"
 msgstr "Automaattisesti varattu"
 
-#: ../src/virtManager/details.py:1640
+#: ../src/virtManager/details.py:1873
 #, fuzzy
 msgid "Primary Console"
 msgstr "_Sarjakonsoli"
 
-#: ../src/virtManager/details.py:1873
+#: ../src/virtManager/details.py:2089
 msgid "Tablet"
 msgstr "Piirtopöytä"
 
-#: ../src/virtManager/details.py:1876
+#: ../src/virtManager/details.py:2092
 msgid "Mouse"
 msgstr "Hiiri"
 
-#: ../src/virtManager/details.py:1878 ../src/vmm-details.glade.h:53
+#: ../src/virtManager/details.py:2094 ../src/vmm-details.glade.h:53
 msgid "Input"
 msgstr "Syöte"
 
-#: ../src/virtManager/details.py:1886
+#: ../src/virtManager/details.py:2102
 #, fuzzy, python-format
 msgid "Display %s"
 msgstr "Näyttö"
 
-#: ../src/virtManager/details.py:1893
+#: ../src/virtManager/details.py:2109
 #, python-format
 msgid "Sound: %s"
 msgstr ""
 
-#: ../src/virtManager/details.py:1990
-#, fuzzy
-msgid "No Boot Device"
-msgstr "Verkkolaite"
-
-#: ../src/virtManager/domain.py:793 ../src/virtManager/domain.py:2149
+#: ../src/virtManager/domain.py:809 ../src/virtManager/domain.py:2241
 #, python-format
 msgid "Unknown device type '%s'"
 msgstr ""
 
-#: ../src/virtManager/domain.py:796
+#: ../src/virtManager/domain.py:812
 #, python-format
 msgid "Couldn't build xpath for device %s:%s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:821
+#: ../src/virtManager/domain.py:837
 #, fuzzy, python-format
 msgid "Could not find device %s"
 msgstr "Ei voida alustaa GTK:ta: "
 
-#: ../src/virtManager/domain.py:1051
+#: ../src/virtManager/domain.py:1086
 msgid "Running"
 msgstr "Käynnissä"
 
-#: ../src/virtManager/domain.py:1053
+#: ../src/virtManager/domain.py:1088
 msgid "Paused"
 msgstr "Taukotilassa"
 
-#: ../src/virtManager/domain.py:1055
+#: ../src/virtManager/domain.py:1090
 #, fuzzy
 msgid "Shuting Down"
 msgstr "Sammuta"
 
-#: ../src/virtManager/domain.py:1057
+#: ../src/virtManager/domain.py:1092
 msgid "Shutoff"
 msgstr "Sammuta"
 
-#: ../src/virtManager/domain.py:1059
+#: ../src/virtManager/domain.py:1094
 msgid "Crashed"
 msgstr "Kaatui"
 
-#: ../src/virtManager/domain.py:2158
+#: ../src/virtManager/domain.py:2250
 #, fuzzy
 msgid "Did not find selected device."
 msgstr "Ei voida alustaa GTK:ta: "
 
-#: ../src/virtManager/engine.py:372
+#: ../src/virtManager/engine.py:103
+msgid "Searching for available hypervisors..."
+msgstr ""
+
+#: ../src/virtManager/engine.py:126
+#, python-format
+msgid ""
+"The following packages are not installed:\n"
+"%s\n"
+"\n"
+"These are required to create KVM guests locally.\n"
+"Would you like to install them now?"
+msgstr ""
+
+#: ../src/virtManager/engine.py:131
+msgid "Packages required for KVM usage"
+msgstr ""
+
+#: ../src/virtManager/engine.py:140
+#, fuzzy, python-format
+msgid "Error talking to PackageKit: %s"
+msgstr "Virhe käynnistettäessä toimialuetta: %s"
+
+#. Manager fail message
+#: ../src/virtManager/engine.py:290
+msgid ""
+"Could not detect a default hypervisor. Make\n"
+"sure the appropriate virtualization packages\n"
+"are installed (kvm, qemu, libvirt, etc.), and\n"
+"that libvirtd is running.\n"
+"\n"
+"A hypervisor connection can be manually\n"
+"added via File->Add Connection"
+msgstr ""
+
+#: ../src/virtManager/engine.py:321
+msgid ""
+"Libvirt was just installed, so the 'libvirtd' service will\n"
+"will need to be started. This can be done with one \n"
+"of the following:\n"
+"\n"
+"- From GNOME menus: System->Administration->Services\n"
+"- From the terminal: su -c 'service libvirtd restart'\n"
+"- Restart your computer\n"
+"\n"
+"virt-manager will connect to libvirt on the next application\n"
+"start up."
+msgstr ""
+
+#: ../src/virtManager/engine.py:329
+#, fuzzy
+msgid "Libvirt service must be started"
+msgstr " - Xen-palvelu on käynnistetty\n"
+
+#: ../src/virtManager/engine.py:586
 #, fuzzy, python-format
 msgid "Error bringing up domain details: %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
 # Vai avoin yhteys?
-#: ../src/virtManager/engine.py:485
+#: ../src/virtManager/engine.py:705
 #, fuzzy, python-format
 msgid "Unknown connection URI %s"
 msgstr "Avaa yhteys"
 
 #. FIXME: This should work with remote storage stuff
-#: ../src/virtManager/engine.py:493
+#: ../src/virtManager/engine.py:712
 msgid "Saving virtual machines over remote connections is not yet supported."
 msgstr "Virtuaalikoneiden tallentamista etäyhteyksien yli ei vielä tueta."
 
-#: ../src/virtManager/engine.py:500
+#: ../src/virtManager/engine.py:719
 msgid "Save Virtual Machine"
 msgstr "Tallenna virtuaalikone"
 
-#: ../src/virtManager/engine.py:509
+#: ../src/virtManager/engine.py:728
 msgid "Saving Virtual Machine"
 msgstr "Tallennetaan virtuaalikone"
 
-#: ../src/virtManager/engine.py:514
+#: ../src/virtManager/engine.py:733
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "Virhe tallennettaessa toimialuetta: %s"
 
-#: ../src/virtManager/engine.py:529
+#: ../src/virtManager/engine.py:748
 #, fuzzy, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/engine.py:531
+#: ../src/virtManager/engine.py:750
 #, fuzzy
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
@@ -1775,43 +1885,48 @@ msgstr ""
 "Tämä tuhoaa virtuaalikoneen välittömästi ja voi vioittaa sen levykuvan. "
 "Oletko varma?"
 
-#: ../src/virtManager/engine.py:545 ../src/virtManager/engine.py:615
-#: ../src/virtManager/engine.py:639
+#: ../src/virtManager/engine.py:764 ../src/virtManager/engine.py:834
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "Virhe suljettaessa toimialuetta: %s"
 
-#: ../src/virtManager/engine.py:555
+#: ../src/virtManager/engine.py:774
 #, fuzzy, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Haluatko varmasti käyttää MAC-osoitetta?"
 
-#: ../src/virtManager/engine.py:569
+#: ../src/virtManager/engine.py:788
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "Virhe asetettaessa toimialuetta taukotilaan: %s"
 
-#: ../src/virtManager/engine.py:580
+#: ../src/virtManager/engine.py:799
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "Virhe poistettaessa toimialuetta taukotilasta: %s"
 
-#: ../src/virtManager/engine.py:591
+#: ../src/virtManager/engine.py:810
 #, python-format
 msgid "Error starting domain: %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/engine.py:601
+#: ../src/virtManager/engine.py:820
 #, fuzzy, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/engine.py:625
+#: ../src/virtManager/engine.py:844
 #, fuzzy, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/engine.py:667
+#. Raise the original error message
+#: ../src/virtManager/engine.py:862 ../src/virtManager/engine.py:877
+#, fuzzy, python-format
+msgid "Error rebooting domain: %s"
+msgstr "Virhe käynnistettäessä toimialuetta: %s"
+
+#: ../src/virtManager/engine.py:906
 #, fuzzy, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "Virhe suljettaessa toimialuetta: %s"
@@ -1822,261 +1937,293 @@ msgid "Error"
 msgstr "UUID-virhe"
 
 #. Expander section with details.
-#: ../src/virtManager/error.py:53 ../src/vmm-details.glade.h:36
+#: ../src/virtManager/error.py:53 ../src/vmm-details.glade.h:38
 msgid "Details"
 msgstr "Yksityiskohdat"
 
-#: ../src/virtManager/error.py:116
+#: ../src/virtManager/error.py:120
 #, fuzzy
 msgid "Input Error"
 msgstr "UUID-virhe"
 
-#: ../src/virtManager/host.py:180
+#: ../src/virtManager/host.py:185
 msgid "Copy Volume Path"
 msgstr ""
 
-#: ../src/virtManager/host.py:267
-#, fuzzy
-msgid "Libvirt connection does not have interface support."
-msgstr "Vierasjärjestelmän konsolia ei tueta"
-
-#: ../src/virtManager/host.py:333
+#: ../src/virtManager/host.py:337
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr ""
 
-#: ../src/virtManager/host.py:360
+#: ../src/virtManager/host.py:354 ../src/virtManager/host.py:355
+#: ../src/virtManager/host.py:356
+#, fuzzy
+msgid "Connection not active."
+msgstr "Yhteystyyppi:"
+
+#: ../src/virtManager/host.py:361
+#, fuzzy
+msgid "Libvirt connection does not support virtual network management."
+msgstr "Vierasjärjestelmän konsolia ei tueta"
+
+#: ../src/virtManager/host.py:366
+#, fuzzy
+msgid "Libvirt connection does not support storage management."
+msgstr "Vierasjärjestelmän konsolia ei tueta"
+
+#: ../src/virtManager/host.py:370
+#, fuzzy
+msgid "Libvirt connection does not support interface management."
+msgstr "Vierasjärjestelmän konsolia ei tueta"
+
+#: ../src/virtManager/host.py:385
 #, fuzzy, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/host.py:367
+#: ../src/virtManager/host.py:392
 #, fuzzy, python-format
 msgid "Error deleting network: %s"
 msgstr "Virhe poistettaessa verkkoa: %s"
 
-#: ../src/virtManager/host.py:378
+#: ../src/virtManager/host.py:403
 #, fuzzy, python-format
 msgid "Error starting network: %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/host.py:389
+#: ../src/virtManager/host.py:414
 #, fuzzy, python-format
 msgid "Error stopping network: %s"
 msgstr "Virhe poistettaessa verkkoa: %s"
 
-#: ../src/virtManager/host.py:398
+#: ../src/virtManager/host.py:423
 #, fuzzy, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Virhe poistettaessa verkkoa: %s"
 
-#: ../src/virtManager/host.py:409
+#: ../src/virtManager/host.py:434
 #, fuzzy, python-format
 msgid "Error setting net autostart: %s"
 msgstr "Virhe suljettaessa toimialuetta: %s"
 
-#: ../src/virtManager/host.py:417 ../src/virtManager/host.py:466
-#: ../src/virtManager/host.py:653 ../src/virtManager/host.py:678
+#: ../src/virtManager/host.py:442 ../src/virtManager/host.py:506
+#: ../src/virtManager/host.py:692 ../src/virtManager/host.py:733
 #, fuzzy
 msgid "On Boot"
 msgstr "Käynnistyksessä"
 
-#: ../src/virtManager/host.py:418 ../src/virtManager/host.py:466
-#: ../src/virtManager/host.py:501 ../src/virtManager/host.py:654
-#: ../src/virtManager/host.py:678 ../src/virtManager/host.py:711
+#: ../src/virtManager/host.py:443 ../src/virtManager/host.py:506
+#: ../src/virtManager/host.py:540 ../src/virtManager/host.py:693
+#: ../src/virtManager/host.py:733 ../src/virtManager/host.py:765
 msgid "Never"
 msgstr "Ei koskaan"
 
-#: ../src/virtManager/host.py:507
+#: ../src/virtManager/host.py:471
+#, fuzzy
+msgid "No virtual network selected."
+msgstr "Valitse virtuaaliverkko"
+
+#: ../src/virtManager/host.py:481
+#, fuzzy, python-format
+msgid "Error selecting network: %s"
+msgstr "Virhe poistettaessa verkkoa: %s"
+
+#: ../src/virtManager/host.py:546
 msgid "Isolated virtual network"
 msgstr "Eristetty virtuaaliverkko"
 
-#: ../src/virtManager/host.py:539 ../src/virtManager/host.py:549
+#: ../src/virtManager/host.py:578 ../src/virtManager/host.py:588
 #, fuzzy, python-format
 msgid "Error starting pool '%s': %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/host.py:558
+#: ../src/virtManager/host.py:597
 #, fuzzy, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/host.py:565
+#: ../src/virtManager/host.py:604
 #, fuzzy, python-format
 msgid "Error deleting pool: %s"
 msgstr "Virhe poistettaessa toimialuetta: %s"
 
-#: ../src/virtManager/host.py:573
+#: ../src/virtManager/host.py:612
 #, fuzzy, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/host.py:582
+#: ../src/virtManager/host.py:621
 #, fuzzy, python-format
 msgid "Error deleting volume: %s"
 msgstr "Virhe poistettaessa toimialuetta: %s"
 
-#: ../src/virtManager/host.py:593
+#: ../src/virtManager/host.py:632
 #, fuzzy, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Virhe asetettaessa toimialuetta taukotilaan: %s"
 
-#: ../src/virtManager/host.py:608 ../src/virtManager/storagebrowse.py:274
+#: ../src/virtManager/host.py:647 ../src/virtManager/storagebrowse.py:273
 #, fuzzy, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Virhe asetettaessa toimialuetta taukotilaan: %s"
 
-#: ../src/virtManager/host.py:645
+#: ../src/virtManager/host.py:684
 #, fuzzy, python-format
 msgid "Error setting pool autostart: %s"
 msgstr "Virhe suljettaessa toimialuetta: %s"
 
-#: ../src/virtManager/host.py:775
+#: ../src/virtManager/host.py:705
+#, fuzzy
+msgid "No storage pool selected."
+msgstr "Verkkoliikenne"
+
+#: ../src/virtManager/host.py:715
+#, fuzzy, python-format
+msgid "Error selecting pool: %s"
+msgstr "Virhe poistettaessa toimialuetta: %s"
+
+#: ../src/virtManager/host.py:829
 #, fuzzy, python-format
 msgid "Are you sure you want to stop the interface '%s'?"
 msgstr "Haluatko varmasti käyttää MAC-osoitetta?"
 
-#: ../src/virtManager/host.py:777 ../src/virtManager/host.py:803
+#: ../src/virtManager/host.py:831 ../src/virtManager/host.py:857
 msgid "Don't ask me again for interface start/stop."
 msgstr ""
 
-#: ../src/virtManager/host.py:788
+#: ../src/virtManager/host.py:842
 #, fuzzy, python-format
 msgid "Error stopping interface '%s': %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/host.py:801
+#: ../src/virtManager/host.py:855
 #, fuzzy, python-format
 msgid "Are you sure you want to start the interface '%s'?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/host.py:814
+#: ../src/virtManager/host.py:868
 #, fuzzy, python-format
 msgid "Error starting interface '%s': %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/host.py:823
+#: ../src/virtManager/host.py:877
 #, fuzzy, python-format
 msgid "Are you sure you want to permanently delete the interface %s?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/host.py:832
+#: ../src/virtManager/host.py:886
 #, fuzzy, python-format
 msgid "Error deleting interface: %s"
 msgstr "Virhe poistettaessa verkkoa: %s"
 
-#: ../src/virtManager/host.py:841
+#: ../src/virtManager/host.py:895
 #, fuzzy, python-format
 msgid "Error launching interface wizard: %s"
 msgstr "Virhe poistettaessa verkkoa: %s"
 
-#: ../src/virtManager/host.py:872
+#: ../src/virtManager/host.py:926
 #, fuzzy, python-format
 msgid "Error setting interface startmode: %s"
 msgstr "Virhe suljettaessa toimialuetta: %s"
 
-#: ../src/virtManager/host.py:892
+#: ../src/virtManager/host.py:946
 #, fuzzy
 msgid "No interface selected."
 msgstr "Verkkoliikenne"
 
-#: ../src/virtManager/manager.py:209
-msgid ""
-"Could not populate a default connection. Make sure the appropriate "
-"virtualization packages are installed (kvm, qemu, etc.) and that libvirtd "
-"has been restarted to notice the changes.\n"
-"\n"
-"A hypervisor connection can be manually added via \n"
-"File->Add Connection"
-msgstr ""
+#: ../src/virtManager/host.py:957
+#, fuzzy, python-format
+msgid "Error selecting interface: %s"
+msgstr "Virhe poistettaessa verkkoa: %s"
 
-#: ../src/virtManager/manager.py:233
-msgid "Error determining default hypervisor."
-msgstr ""
-
-#: ../src/virtManager/manager.py:234
-#, fuzzy
-msgid "Startup Error"
-msgstr "Kickstart-URL-virhe"
-
-#: ../src/virtManager/manager.py:316 ../src/virtManager/systray.py:137
-#: ../src/vmm-details.glade.h:125 ../src/vmm-manager.glade.h:19
+#: ../src/virtManager/manager.py:302 ../src/virtManager/systray.py:171
+#: ../src/vmm-details.glade.h:126 ../src/vmm-manager.glade.h:21
 msgid "_Run"
 msgstr "_Suorita"
 
-#: ../src/virtManager/manager.py:322 ../src/virtManager/systray.py:124
-#: ../src/vmm-details.glade.h:122 ../src/vmm-manager.glade.h:18
+#: ../src/virtManager/manager.py:308 ../src/virtManager/systray.py:158
+#: ../src/vmm-details.glade.h:123 ../src/vmm-manager.glade.h:20
 msgid "_Pause"
 msgstr "_Taukotilaan"
 
-#: ../src/virtManager/manager.py:329
+#: ../src/virtManager/manager.py:315
 msgid "R_esume"
 msgstr ""
 
-#: ../src/virtManager/manager.py:336 ../src/virtManager/manager.py:348
-#: ../src/virtManager/systray.py:151 ../src/virtManager/systray.py:169
-#: ../src/virtManager/uihelpers.py:422
+#: ../src/virtManager/manager.py:322 ../src/virtManager/manager.py:334
+#: ../src/virtManager/systray.py:185 ../src/virtManager/systray.py:203
+#: ../src/virtManager/uihelpers.py:612
 #, fuzzy
 msgid "_Shut Down"
 msgstr "Sammuta"
 
 #. Shutdown menu
-#: ../src/virtManager/manager.py:342 ../src/virtManager/systray.py:144
-#: ../src/virtManager/uihelpers.py:416 ../src/vmm-details.glade.h:123
+#: ../src/virtManager/manager.py:328 ../src/virtManager/systray.py:178
+#: ../src/virtManager/uihelpers.py:606 ../src/vmm-details.glade.h:124
 #, fuzzy
 msgid "_Reboot"
 msgstr "Käynnistyksessä"
 
-#: ../src/virtManager/manager.py:355 ../src/virtManager/systray.py:158
-#: ../src/virtManager/uihelpers.py:428 ../src/vmm-details.glade.h:113
+#: ../src/virtManager/manager.py:341 ../src/virtManager/systray.py:192
+#: ../src/virtManager/uihelpers.py:618 ../src/vmm-details.glade.h:114
 msgid "_Force Off"
 msgstr ""
 
-#: ../src/virtManager/manager.py:371 ../src/vmm-details.glade.h:118
+#: ../src/virtManager/manager.py:352 ../src/vmm-details.glade.h:110
+#, fuzzy
+msgid "_Clone"
+msgstr "_Selaa..."
+
+#: ../src/virtManager/manager.py:357 ../src/vmm-details.glade.h:119
 msgid "_Migrate..."
 msgstr ""
 
-#: ../src/virtManager/manager.py:424 ../src/vmm-details.glade.h:111
+#: ../src/virtManager/manager.py:362
+#, fuzzy
+msgid "_Delete"
+msgstr "Poista kone"
+
+#: ../src/virtManager/manager.py:410 ../src/vmm-details.glade.h:112
 msgid "_Details"
 msgstr "_Yksityiskohdat"
 
-#: ../src/virtManager/manager.py:448
+#: ../src/virtManager/manager.py:435
 msgid "CPU usage"
 msgstr "Suorittimen käyttö:"
 
-#: ../src/virtManager/manager.py:449
+#: ../src/virtManager/manager.py:436
 #, fuzzy
 msgid "Disk I/O"
 msgstr "Levy"
 
-#: ../src/virtManager/manager.py:450
+#: ../src/virtManager/manager.py:437
 #, fuzzy
 msgid "Network I/O"
 msgstr "Verkko"
 
-#: ../src/virtManager/manager.py:627
+#: ../src/virtManager/manager.py:614
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr "Virtuaalikoneiden palautaamista etäyhteyksien yli ei vielä tueta"
 
-#: ../src/virtManager/manager.py:632
+#: ../src/virtManager/manager.py:619
 msgid "Restore Virtual Machine"
 msgstr "Palauta virtuaalikone"
 
-#: ../src/virtManager/manager.py:640
+#: ../src/virtManager/manager.py:627
 msgid "Restoring Virtual Machine"
 msgstr "Palautetaan virtuaalikone"
 
-#: ../src/virtManager/manager.py:646
+#: ../src/virtManager/manager.py:633
 #, fuzzy
 msgid "Error restoring domain"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/manager.py:654
+#: ../src/virtManager/manager.py:641
 #, fuzzy, python-format
 msgid "Error restoring domain '%s': %s"
 msgstr "Virhe käynnistettäessä toimialuetta: %s"
 
-#: ../src/virtManager/manager.py:671
+#: ../src/virtManager/manager.py:658
 #, fuzzy, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -2086,17 +2233,17 @@ msgid ""
 "Are you sure?"
 msgstr "Tämä poistaa pysyvästi yhteyden ”%s”, oletko varma?"
 
-#: ../src/virtManager/manager.py:766
+#: ../src/virtManager/manager.py:753
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr "Ei voi avata yhteyttä Xen-hypervisoriin/-taustaprosessiin.\n"
 
-#: ../src/virtManager/manager.py:771 ../src/virtManager/manager.py:779
+#: ../src/virtManager/manager.py:758 ../src/virtManager/manager.py:766
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Virtuaalikonehallitsimen yhteysvirhe"
 
-#: ../src/virtManager/manager.py:773
+#: ../src/virtManager/manager.py:760
 msgid ""
 "Unable to open a connection to the libvirt management daemon.\n"
 "\n"
@@ -2104,19 +2251,20 @@ msgstr ""
 "Ei voi avata yhteyttä libvirt-hallintataustaprosessiin.\n"
 "\n"
 
-#: ../src/virtManager/manager.py:828
+#: ../src/virtManager/manager.py:815
 msgid "Double click to connect"
 msgstr ""
 
-#: ../src/virtManager/manager.py:1126
+#: ../src/virtManager/manager.py:1116
 msgid "Disabled in preferences dialog."
 msgstr ""
 
-#: ../src/virtManager/mediadev.py:102
-msgid "No media present"
+#: ../src/virtManager/mediadev.py:104
+#, fuzzy
+msgid "No media detected"
 msgstr "Ei mediaa"
 
-#: ../src/virtManager/mediadev.py:104
+#: ../src/virtManager/mediadev.py:106
 #, fuzzy
 msgid "Media Unknown"
 msgstr "Tuntematon"
@@ -2200,119 +2348,144 @@ msgstr "Eristetty virtuaaliverkko"
 msgid "Isolated network"
 msgstr "Eristetty virtuaaliverkko"
 
-#: ../src/virtManager/storagebrowse.py:133
+#: ../src/virtManager/storagebrowse.py:132
 #, fuzzy
 msgid "Size"
 msgstr "Koko:"
 
-#: ../src/virtManager/storagebrowse.py:140 ../src/vmm-create-pool.glade.h:7
+#: ../src/virtManager/storagebrowse.py:139 ../src/vmm-create-pool.glade.h:7
 msgid "Format"
 msgstr ""
 
-#: ../src/virtManager/storagebrowse.py:147
+#: ../src/virtManager/storagebrowse.py:146
 msgid "Used By"
 msgstr ""
 
-#: ../src/virtManager/storagebrowse.py:187
+#: ../src/virtManager/storagebrowse.py:186
 msgid "Cannot use local storage on remote connection."
 msgstr ""
 
-#: ../src/virtManager/systray.py:130
+#: ../src/virtManager/systray.py:164
 msgid "_Resume"
 msgstr ""
 
-#: ../src/virtManager/systray.py:285
+#: ../src/virtManager/systray.py:344
 #, fuzzy
 msgid "No virtual machines"
 msgstr "Hallitse virtuaalikoneita"
 
-#: ../src/virtManager/systray.py:334
+#: ../src/virtManager/systray.py:396
 #, fuzzy
 msgid "No VMs available"
 msgstr "Yhteyden valinta"
 
-#: ../src/virtManager/uihelpers.py:64
+#: ../src/virtManager/uihelpers.py:66
+msgid ""
+"Fully allocating storage will take longer now, but the OS install phase will "
+"be quicker. \n"
+"\n"
+"Skipping allocation can also cause space issues on the host machine, if the "
+"maximum image size exceeds available storage space."
+msgstr ""
+
+#. [xml value, label]
+#: ../src/virtManager/uihelpers.py:186
+#, fuzzy
+msgid "Hypervisor default"
+msgstr "Hypervisorin valinta"
+
+#: ../src/virtManager/uihelpers.py:204
 msgid "Usermode networking"
 msgstr "Käyttäjätilan verkotus"
 
-#: ../src/virtManager/uihelpers.py:70
+#: ../src/virtManager/uihelpers.py:210
 msgid "Virtual network"
 msgstr "Virtuaaliverkko"
 
-#: ../src/virtManager/uihelpers.py:152
+#: ../src/virtManager/uihelpers.py:318
 #, fuzzy
 msgid "No virtual networks available"
 msgstr "Yhteyden valinta"
 
-#: ../src/virtManager/uihelpers.py:174
+#: ../src/virtManager/uihelpers.py:340
 #, fuzzy
 msgid "(Empty bridge)"
 msgstr "Ei sillattu"
 
-#: ../src/virtManager/uihelpers.py:177
+#: ../src/virtManager/uihelpers.py:343
 msgid "Not bridged"
 msgstr "Ei sillattu"
 
-#: ../src/virtManager/uihelpers.py:179
+#: ../src/virtManager/uihelpers.py:345
 #, python-format
 msgid "Host device %s %s"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:210
+#: ../src/virtManager/uihelpers.py:382
 #, fuzzy
 msgid "No networking."
 msgstr "Käyttäjätilan verkotus"
 
-#: ../src/virtManager/uihelpers.py:227
+#. After all is said and done, add a manual bridge option
+#: ../src/virtManager/uihelpers.py:387
+msgid "Specify shared device name"
+msgstr ""
+
+#: ../src/virtManager/uihelpers.py:406
 #, fuzzy
 msgid "Virtual Network is not active."
 msgstr "Virtuaalilaitteet"
 
-#: ../src/virtManager/uihelpers.py:228
+#: ../src/virtManager/uihelpers.py:407
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:240
+#: ../src/virtManager/uihelpers.py:419
 #, fuzzy, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "Virhe poistettaessa verkkoa: %s"
 
-#: ../src/virtManager/uihelpers.py:261
+#: ../src/virtManager/uihelpers.py:440
 #, fuzzy
 msgid "Error with network parameters."
 msgstr "Virheellinen verkkoparametri"
 
-#: ../src/virtManager/uihelpers.py:266 ../src/virtManager/uihelpers.py:268
+#: ../src/virtManager/uihelpers.py:445 ../src/virtManager/uihelpers.py:447
 msgid "Mac address collision."
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:269
+#: ../src/virtManager/uihelpers.py:448
 #, fuzzy, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "Haluatko varmasti käyttää MAC-osoitetta?"
 
-#: ../src/virtManager/uihelpers.py:456
+#: ../src/virtManager/uihelpers.py:500
+#, fuzzy
+msgid "No device present"
+msgstr "Ei mediaa"
+
+#: ../src/virtManager/uihelpers.py:646
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:458
+#: ../src/virtManager/uihelpers.py:648
 #, fuzzy
 msgid "Do you want to correct this now?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../src/virtManager/uihelpers.py:459 ../src/virtManager/uihelpers.py:482
+#: ../src/virtManager/uihelpers.py:649 ../src/virtManager/uihelpers.py:673
 msgid "Don't ask about these directories again."
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:471
+#: ../src/virtManager/uihelpers.py:662
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr ""
 
-#: ../src/virtManager/util.py:59
+#: ../src/virtManager/util.py:64
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr ""
@@ -2343,41 +2516,6 @@ msgstr "<b>Osoitin</b>"
 
 #: ../src/vmm-add-hardware.glade.h:3
 #, fuzzy
-msgid "<b>Physical Host Device</b>"
-msgstr "<b>Osoitin</b>"
-
-#: ../src/vmm-add-hardware.glade.h:4 ../src/vmm-details.glade.h:13
-#, fuzzy
-msgid "<b>Sound Device</b>"
-msgstr "<b>Lähde:</b>"
-
-#: ../src/vmm-add-hardware.glade.h:5
-msgid "<b>Source:</b>"
-msgstr "<b>Lähde:</b>"
-
-#: ../src/vmm-add-hardware.glade.h:6
-msgid "<b>Target:</b>"
-msgstr "<b>Kohde:</b>"
-
-#: ../src/vmm-add-hardware.glade.h:7
-#, fuzzy
-msgid "<b>Video Device</b>"
-msgstr "<b>Osoitin</b>"
-
-#: ../src/vmm-add-hardware.glade.h:8
-msgid "<b>Virtual display</b>"
-msgstr "<b>Virtuaalinen näyttö</b>"
-
-#: ../src/vmm-add-hardware.glade.h:9
-msgid "<b>Virtual pointer</b>"
-msgstr "<v>Virtuaalinen osoitin</b>"
-
-#: ../src/vmm-add-hardware.glade.h:10
-msgid "<small><b>Example:</b> /dev/hdc2</small>"
-msgstr "<small><b>Esimerkki:</b> /dev/hdc2</small>"
-
-#: ../src/vmm-add-hardware.glade.h:11
-#, fuzzy
 msgid ""
 "<small><b>Tip:</b> Automatically allocating the port ensures that every "
 "virtual machine uses a unique port. If two machines try to use the same "
@@ -2387,7 +2525,7 @@ msgstr ""
 "jokainen virtuaalikone käyttää eri porttia. Jos kaksi konetta yrittää "
 "käyttää samaa porttia, toinen ei käynnisty.</small>"
 
-#: ../src/vmm-add-hardware.glade.h:12
+#: ../src/vmm-add-hardware.glade.h:4
 #, fuzzy
 msgid ""
 "<small><b>Tip:</b> VNC server is strongly recommended because it allows the "
@@ -2398,7 +2536,7 @@ msgstr ""
 "mahdollista upottaa vierasjärjestelmän konsoli-ikkuna tähän ohjelmaan. Sen "
 "avulla voidaan myös sallia vieraskonsolin käyttö etäkoneelta."
 
-#: ../src/vmm-add-hardware.glade.h:13
+#: ../src/vmm-add-hardware.glade.h:5
 #, fuzzy
 msgid ""
 "<small><b>Tip:</b>Adding a graphics tablet (and configuring it as the "
@@ -2409,20 +2547,7 @@ msgstr ""
 "oletusosoittimeksi vieraskäyttöjärjestelmässä varmistaa, että virtuaalinen "
 "kursori liikkuu yhtäaikaisesti paikallisen työpöydän kursorin kanssa.</small>"
 
-#: ../src/vmm-add-hardware.glade.h:14
-#, fuzzy
-msgid ""
-"<small><b>Warning:</b>If you do not allocate the entire disk now, space will "
-"be allocated as needed while the virtual machine is running. If sufficient "
-"free space is not available on the host, this may result in data corruption "
-"on the virtual machine.</small>"
-msgstr ""
-"<small><b>Varoitus:</b> Jos koko levyä ei varata virtuaalikoneen luomisen "
-"yhteydessä, tilaa varataan tarvittaessa vierasjärjestelmän ollessa "
-"suorituksessa. Jos isännällä ei ole riittävästi vapaata tilaa, siitä saattaa "
-"seurata vierasjärjestelmän tietojen vioittumista.</small>"
-
-#: ../src/vmm-add-hardware.glade.h:15
+#: ../src/vmm-add-hardware.glade.h:6
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Adding Virtual "
@@ -2431,7 +2556,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Uuden "
 "virtuaalilaitteen lisäys </span>"
 
-#: ../src/vmm-add-hardware.glade.h:16
+#: ../src/vmm-add-hardware.glade.h:7
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Finish Adding "
@@ -2440,7 +2565,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Uuden "
 "virtuaalilaitteen lisäys </span>"
 
-#: ../src/vmm-add-hardware.glade.h:17
+#: ../src/vmm-add-hardware.glade.h:8
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Graphics</span>"
@@ -2448,7 +2573,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Tallennustilan "
 "asettaminen</span>"
 
-#: ../src/vmm-add-hardware.glade.h:18
+#: ../src/vmm-add-hardware.glade.h:9
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Host Device</"
@@ -2457,7 +2582,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Tallennustilan "
 "asettaminen</span>"
 
-#: ../src/vmm-add-hardware.glade.h:19
+#: ../src/vmm-add-hardware.glade.h:10
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Input</span>"
@@ -2465,7 +2590,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">DHCP-alueen "
 "valitseminen</span>"
 
-#: ../src/vmm-add-hardware.glade.h:20
+#: ../src/vmm-add-hardware.glade.h:11
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Network</span>"
@@ -2473,7 +2598,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Yhdistä "
 "isäntäverkkoon</span>"
 
-#: ../src/vmm-add-hardware.glade.h:21
+#: ../src/vmm-add-hardware.glade.h:12
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sound</span>"
@@ -2481,7 +2606,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Varaa muistia "
 "ja prosessoreita</span>"
 
-#: ../src/vmm-add-hardware.glade.h:22
+#: ../src/vmm-add-hardware.glade.h:13
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Storage</span>"
@@ -2489,7 +2614,7 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Tallennustilan "
 "asettaminen</span>"
 
-#: ../src/vmm-add-hardware.glade.h:23
+#: ../src/vmm-add-hardware.glade.h:14
 #, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Video Device</"
@@ -2498,107 +2623,85 @@ msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Tallennustilan "
 "asettaminen</span>"
 
-#: ../src/vmm-add-hardware.glade.h:24
+#: ../src/vmm-add-hardware.glade.h:15
+#, fuzzy
+msgid ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Watchdog "
+"Device</span>"
+msgstr ""
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Tallennustilan "
+"asettaminen</span>"
+
+#: ../src/vmm-add-hardware.glade.h:16
 #, fuzzy
 msgid "A_utomatically allocated"
 msgstr "Automaattisesti varattu"
 
-#: ../src/vmm-add-hardware.glade.h:25
+#: ../src/vmm-add-hardware.glade.h:17
+#, fuzzy
+msgid "Ac_tion:"
+msgstr "Sijainti:"
+
+#: ../src/vmm-add-hardware.glade.h:18
 msgid "Add new virtual hardware"
 msgstr "Lisää uusi virtuaalilaite"
 
-#: ../src/vmm-add-hardware.glade.h:26
+#: ../src/vmm-add-hardware.glade.h:19 ../src/vmm-create.glade.h:10
 #, fuzzy
-msgid "Allocate entire virtual disk now"
-msgstr "Varataanko koko virtuaalilevy nyt?"
-
-#: ../src/vmm-add-hardware.glade.h:27
-msgid "B_lock device (partition):"
-msgstr ""
-
-#: ../src/vmm-add-hardware.glade.h:28
-msgid "Browse..."
+msgid "B_rowse..."
 msgstr "Selaa..."
 
-#: ../src/vmm-add-hardware.glade.h:29
+#: ../src/vmm-add-hardware.glade.h:20 ../src/vmm-create.glade.h:14
+msgid "C_reate a disk image on the computer's hard drive"
+msgstr ""
+
+#: ../src/vmm-add-hardware.glade.h:21
 #, fuzzy
 msgid "D_evice model:"
 msgstr "Laitetyyppi:"
 
-#: ../src/vmm-add-hardware.glade.h:30
+#: ../src/vmm-add-hardware.glade.h:22
 msgid "Device Type Field"
 msgstr "Laitetyyppi-kenttä"
 
-#: ../src/vmm-add-hardware.glade.h:31
+#: ../src/vmm-add-hardware.glade.h:23
 #, fuzzy
 msgid "Device _Type:"
 msgstr "Laitetyyppi:"
 
-#: ../src/vmm-add-hardware.glade.h:32
-#, fuzzy
-msgid "F_ile (disk image):"
-msgstr "Levykuva:"
-
-#: ../src/vmm-add-hardware.glade.h:33
-msgid "File Location Field"
-msgstr "Tiedoston sijainti -kenttä"
-
-#: ../src/vmm-add-hardware.glade.h:34
-msgid "File Size Field"
-msgstr "Tiedoston koko -kenttä"
-
-#: ../src/vmm-add-hardware.glade.h:35
+#: ../src/vmm-add-hardware.glade.h:24
 #, fuzzy
 msgid "H_ost:"
 msgstr "_Isäntä:"
 
-#: ../src/vmm-add-hardware.glade.h:36
+#: ../src/vmm-add-hardware.glade.h:25
 #, fuzzy
 msgid "Ha_rdware type:"
 msgstr "Laitetyyppi:"
 
-#: ../src/vmm-add-hardware.glade.h:37
+#: ../src/vmm-add-hardware.glade.h:26
 msgid "Hardware Type Select"
 msgstr "Laitetyypin valinta"
 
-#: ../src/vmm-add-hardware.glade.h:38
-#, fuzzy
-msgid "Host device:"
-msgstr "Lähdelaite:"
-
-#: ../src/vmm-add-hardware.glade.h:39
+#: ../src/vmm-add-hardware.glade.h:27
 msgid "Listen on all public network interfaces "
 msgstr "Kuuntele kaikkia julkisia verkkoliitäntöjä "
 
-#: ../src/vmm-add-hardware.glade.h:40
-#, fuzzy
-msgid "Loc_ation:"
-msgstr "Sijainti:"
-
-#: ../src/vmm-add-hardware.glade.h:41
+#: ../src/vmm-add-hardware.glade.h:28
 msgid "MAC Address Field"
 msgstr "MAC-osoite-kenttä"
 
-#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-create-vol.glade.h:19
-#: ../src/vmm-create.glade.h:27 ../src/vmm-details.glade.h:56
-msgid "MB"
-msgstr "Mt"
-
-#: ../src/vmm-add-hardware.glade.h:43
+#: ../src/vmm-add-hardware.glade.h:29
 #, fuzzy
 msgid "Pa_ssword:"
 msgstr "Salasana:"
 
-#: ../src/vmm-add-hardware.glade.h:44
-msgid "Partition Location Field"
-msgstr "Osion sijainti -kenttä"
-
-#: ../src/vmm-add-hardware.glade.h:45
+#: ../src/vmm-add-hardware.glade.h:30
 #, fuzzy
 msgid "Please indicate how you would like to view the virtual display."
 msgstr "Kuinka haluat katsoa vierasjärjestelmän näyttöä?"
 
-#: ../src/vmm-add-hardware.glade.h:46
+#: ../src/vmm-add-hardware.glade.h:31
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual storage device."
@@ -2606,45 +2709,56 @@ msgstr ""
 "Kuinka haluat varata tilaa tältä fyysiseltä isäntäjärjestelmältä uudelle "
 "virtuaaliselle tallennusjärjestelmälle?"
 
-#: ../src/vmm-add-hardware.glade.h:47
+#: ../src/vmm-add-hardware.glade.h:32
 msgid ""
 "Please indicate how you'd like to connect your new virtual network device to "
 "the host network."
 msgstr "Kunka uusi virtuaalinen verkkolaite kytketään isäntäverkkoon?"
 
-#: ../src/vmm-add-hardware.glade.h:48
+#: ../src/vmm-add-hardware.glade.h:33
 #, fuzzy
 msgid ""
 "Please indicate what kind of pointer device to connect to the virtual "
 "machine."
 msgstr "Millainen osoitinlaite yhdistetään vierasjärjestelmään?"
 
-#: ../src/vmm-add-hardware.glade.h:49
+#: ../src/vmm-add-hardware.glade.h:34
 #, fuzzy
 msgid ""
 "Please indicate what physical device\n"
 "to connect to the virtual machine."
 msgstr "Millainen osoitinlaite yhdistetään vierasjärjestelmään?"
 
-#: ../src/vmm-add-hardware.glade.h:51
+#: ../src/vmm-add-hardware.glade.h:36
 #, fuzzy
 msgid ""
 "Please indicate what sound device type to connect to the virtual machine."
 msgstr "Millainen osoitinlaite yhdistetään vierasjärjestelmään?"
 
-#: ../src/vmm-add-hardware.glade.h:52
+#: ../src/vmm-add-hardware.glade.h:37
 #, fuzzy
 msgid ""
 "Please indicate what video device type\n"
 "to connect to the virtual machine."
 msgstr "Millainen osoitinlaite yhdistetään vierasjärjestelmään?"
 
-#: ../src/vmm-add-hardware.glade.h:54
+#: ../src/vmm-add-hardware.glade.h:39
+#, fuzzy
+msgid ""
+"Please indicate what watchdog device type\n"
+"and default action should be used."
+msgstr "Millainen osoitinlaite yhdistetään vierasjärjestelmään?"
+
+#: ../src/vmm-add-hardware.glade.h:41
 #, fuzzy
 msgid "Po_rt:"
 msgstr "Portti:"
 
-#: ../src/vmm-add-hardware.glade.h:56
+#: ../src/vmm-add-hardware.glade.h:43 ../src/vmm-create.glade.h:38
+msgid "Select _managed or other existing storage"
+msgstr ""
+
+#: ../src/vmm-add-hardware.glade.h:44
 msgid ""
 "This assistant will guide you through adding a new piece of virtual "
 "hardware. First select what type of hardware you wish to add:"
@@ -2652,88 +2766,101 @@ msgstr ""
 "Tämä avustin opastaa uuden virtuaalilaitteen lisäämisessä. Valitse "
 "ensimmäiseksi lisättävän laitteen tyyppi:"
 
-#: ../src/vmm-add-hardware.glade.h:57
+#: ../src/vmm-add-hardware.glade.h:45
 #, fuzzy
 msgid "Use Te_lnet:"
 msgstr "Konenimi:"
 
-#: ../src/vmm-add-hardware.glade.h:58 ../src/vmm-migrate.glade.h:9
+#: ../src/vmm-add-hardware.glade.h:46 ../src/vmm-create-interface.glade.h:34
+#: ../src/vmm-migrate.glade.h:9
 #, fuzzy
 msgid "_Address:"
 msgstr "Osoite:"
 
-#: ../src/vmm-add-hardware.glade.h:59
+#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create.glade.h:46
+#, fuzzy
+msgid "_Allocate entire disk now"
+msgstr "Varataanko koko virtuaalilevy nyt?"
+
+#: ../src/vmm-add-hardware.glade.h:48
 #, fuzzy
 msgid "_Bind Host:"
 msgstr "_Isäntä:"
 
-#: ../src/vmm-add-hardware.glade.h:60
+#: ../src/vmm-add-hardware.glade.h:49 ../src/vmm-create.glade.h:48
+#, fuzzy
+msgid "_Bridge name:"
+msgstr "Silta"
+
+#: ../src/vmm-add-hardware.glade.h:50
 #, fuzzy
 msgid "_Device type:"
 msgstr "Laitetyyppi:"
 
-#: ../src/vmm-add-hardware.glade.h:61
+#: ../src/vmm-add-hardware.glade.h:51
 msgid "_Device:"
 msgstr "_Laite:"
 
-#: ../src/vmm-add-hardware.glade.h:62 ../src/vmm-create-interface.glade.h:25
+#: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create-interface.glade.h:37
 #: ../src/vmm-create-net.glade.h:52 ../src/vmm-create-pool.glade.h:13
-#: ../src/vmm-create-vol.glade.h:22 ../src/vmm-create.glade.h:47
+#: ../src/vmm-create-vol.glade.h:22 ../src/vmm-create.glade.h:50
 msgid "_Finish"
 msgstr "_Lopeta"
 
-#: ../src/vmm-add-hardware.glade.h:63
+#: ../src/vmm-add-hardware.glade.h:53 ../src/vmm-create.glade.h:51
+#, fuzzy
+msgid "_GB"
+msgstr "5 Gt"
+
+#: ../src/vmm-add-hardware.glade.h:54
+#, fuzzy
+msgid "_Host device:"
+msgstr "Lähdelaite:"
+
+#: ../src/vmm-add-hardware.glade.h:55
 msgid "_Keymap:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:64 ../src/vmm-choose-cd.glade.h:7
-#, fuzzy
-msgid "_Location:"
-msgstr "Sijainti:"
-
-#: ../src/vmm-add-hardware.glade.h:65
+#: ../src/vmm-add-hardware.glade.h:56
 msgid "_MAC address:"
 msgstr "_MAC-osoite:"
 
-#: ../src/vmm-add-hardware.glade.h:66 ../src/vmm-create-net.glade.h:54
+#: ../src/vmm-add-hardware.glade.h:57 ../src/vmm-create-interface.glade.h:40
+#: ../src/vmm-create-net.glade.h:54
 #, fuzzy
 msgid "_Mode:"
 msgstr "Tila: "
 
-#: ../src/vmm-add-hardware.glade.h:67
+#: ../src/vmm-add-hardware.glade.h:58
 #, fuzzy
 msgid "_Model:"
 msgstr "Tila: "
 
-#: ../src/vmm-add-hardware.glade.h:68
+#: ../src/vmm-add-hardware.glade.h:59
 #, fuzzy
 msgid "_Other:"
 msgstr "Muu"
 
-#: ../src/vmm-add-hardware.glade.h:69
+#: ../src/vmm-add-hardware.glade.h:60
 #, fuzzy
 msgid "_Path:"
 msgstr "Portti:"
 
-#: ../src/vmm-add-hardware.glade.h:70 ../src/vmm-migrate.glade.h:12
+#: ../src/vmm-add-hardware.glade.h:61 ../src/vmm-migrate.glade.h:12
 #, fuzzy
 msgid "_Port:"
 msgstr "Portti:"
 
-#: ../src/vmm-add-hardware.glade.h:71
-msgid "_Size:"
-msgstr "_Koko:"
-
-#: ../src/vmm-add-hardware.glade.h:72 ../src/vmm-create-pool.glade.h:17
+#: ../src/vmm-add-hardware.glade.h:62 ../src/vmm-create-pool.glade.h:17
 #, fuzzy
 msgid "_Type:"
 msgstr "Tyyppi:"
 
-#: ../src/vmm-add-hardware.glade.h:73
+#: ../src/vmm-add-hardware.glade.h:63
 msgid "aa:bb:cc:dd:ee:ff"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:74 ../src/vmm-create-pool.glade.h:18
+#: ../src/vmm-add-hardware.glade.h:64 ../src/vmm-create-pool.glade.h:18
 msgid "label"
 msgstr ""
 
@@ -2765,6 +2892,11 @@ msgstr "Laitetyyppi:"
 #, fuzzy
 msgid "_ISO Image Location"
 msgstr "_ISO-kuvatiedoston sijainti:"
+
+#: ../src/vmm-choose-cd.glade.h:7
+#, fuzzy
+msgid "_Location:"
+msgstr "Sijainti:"
 
 #: ../src/vmm-clone.glade.h:1
 msgid "<span color='#484848'>MAC:</span>"
@@ -2882,124 +3014,187 @@ msgstr "<b>IPv4-asetukset</b>"
 
 #: ../src/vmm-create-interface.glade.h:4
 #, fuzzy
+msgid "<b>IP Configuration</b>"
+msgstr "<b>IPv4-asetukset</b>"
+
+#: ../src/vmm-create-interface.glade.h:5
+#, fuzzy
 msgid "<b>MII settings</b>"
 msgstr "<b>Perustiedot</b>"
 
-#: ../src/vmm-create-interface.glade.h:5
+#: ../src/vmm-create-interface.glade.h:6
 #, fuzzy
 msgid "<span size='large' color='white'>Configure network interface</span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Uuden "
 "virtuaaliverkon luonti</span>"
 
-#: ../src/vmm-create-interface.glade.h:6
+#: ../src/vmm-create-interface.glade.h:7
+#, fuzzy
+msgid "A_utoconf"
+msgstr "Yhteys:"
+
+#: ../src/vmm-create-interface.glade.h:8
+#, fuzzy
+msgid "Addresses:"
+msgstr "Osoite:"
+
+#: ../src/vmm-create-interface.glade.h:9
 #, fuzzy
 msgid "Bond mode:"
 msgstr "Lähdelaite:"
 
-#: ../src/vmm-create-interface.glade.h:7
-msgid "Bond monitor mode:"
-msgstr ""
-
-#: ../src/vmm-create-interface.glade.h:8
-#, fuzzy
-msgid "Bonding configuration"
-msgstr "Virhe tallennettaessa toimialuetta: %s"
-
-#: ../src/vmm-create-interface.glade.h:9
-#, fuzzy
-msgid "Bridge configuration"
-msgstr "<b>IPv4-asetukset</b>"
-
 #: ../src/vmm-create-interface.glade.h:10
-msgid "Bridge settings:"
+msgid "Bond monitor mode:"
 msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:11
 #, fuzzy
+msgid "Bonding configuration"
+msgstr "Virhe tallennettaessa toimialuetta: %s"
+
+#: ../src/vmm-create-interface.glade.h:12
+#, fuzzy
+msgid "Bridge configuration"
+msgstr "<b>IPv4-asetukset</b>"
+
+#: ../src/vmm-create-interface.glade.h:13
+msgid "Bridge settings:"
+msgstr ""
+
+#: ../src/vmm-create-interface.glade.h:14
+#, fuzzy
 msgid "C_onfigure"
 msgstr "_Selaa..."
 
-#: ../src/vmm-create-interface.glade.h:12
+#: ../src/vmm-create-interface.glade.h:15
 #, fuzzy
 msgid "Carrier type:"
 msgstr "Kohteen tyyppi:"
 
-#: ../src/vmm-create-interface.glade.h:13
+#: ../src/vmm-create-interface.glade.h:16
 #, fuzzy
 msgid "Configure network interface"
 msgstr "Verkkoliikenne"
 
-#: ../src/vmm-create-interface.glade.h:14
+#: ../src/vmm-create-interface.glade.h:17
 msgid "Down delay:"
 msgstr ""
 
-#: ../src/vmm-create-interface.glade.h:15
-msgid "Enable STP:"
-msgstr ""
-
-#: ../src/vmm-create-interface.glade.h:16
-#, fuzzy
-msgid "Forward delay:"
-msgstr "Välitys:"
-
-#: ../src/vmm-create-interface.glade.h:17
-msgid "Frequency:"
-msgstr ""
-
 #: ../src/vmm-create-interface.glade.h:18
-msgid "Insert list desc:"
+msgid "Enable STP:"
 msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:19
 #, fuzzy
-msgid "Interval:"
-msgstr "Tilantarkistustiheys"
+msgid "Forward delay:"
+msgstr "Välitys:"
 
 #: ../src/vmm-create-interface.glade.h:20
-msgid "Select the interface type you would like to configure."
+msgid "Frequency:"
 msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:21
 #, fuzzy
+msgid "IP Configuration"
+msgstr "<b>IPv4-asetukset</b>"
+
+#: ../src/vmm-create-interface.glade.h:22
+#, fuzzy
+msgid "IP settings:"
+msgstr "<b>Perustiedot</b>"
+
+#: ../src/vmm-create-interface.glade.h:23 ../src/vmm-create-net.glade.h:26
+msgid "IPv4"
+msgstr "IPv4"
+
+#: ../src/vmm-create-interface.glade.h:24
+#, fuzzy
+msgid "IPv6"
+msgstr "IPv4"
+
+#: ../src/vmm-create-interface.glade.h:25
+msgid "Insert list desc:"
+msgstr ""
+
+#: ../src/vmm-create-interface.glade.h:26
+#, fuzzy
+msgid "Interval:"
+msgstr "Tilantarkistustiheys"
+
+#: ../src/vmm-create-interface.glade.h:27
+#, fuzzy
+msgid "Ma_nually configure:"
+msgstr "_Selaa..."
+
+#: ../src/vmm-create-interface.glade.h:28
+msgid "Select the interface type you would like to configure."
+msgstr ""
+
+#: ../src/vmm-create-interface.glade.h:29
+#, fuzzy
+msgid "Static configuration:"
+msgstr "<b>IPv4-asetukset</b>"
+
+#: ../src/vmm-create-interface.glade.h:30
+#, fuzzy
 msgid "Target address:"
 msgstr "Alkuosoite:"
 
-#: ../src/vmm-create-interface.glade.h:22
+#: ../src/vmm-create-interface.glade.h:31
 msgid "Up delay:"
 msgstr ""
 
-#: ../src/vmm-create-interface.glade.h:23
+#: ../src/vmm-create-interface.glade.h:32
 #, fuzzy
 msgid "Validate mode:"
 msgstr "Virtualisointimenetelmä"
 
-#: ../src/vmm-create-interface.glade.h:24
+#: ../src/vmm-create-interface.glade.h:33
 #, fuzzy
 msgid "_Activate now:"
 msgstr "Aktiivinen"
 
-#: ../src/vmm-create-interface.glade.h:26
+#: ../src/vmm-create-interface.glade.h:35
+#, fuzzy
+msgid "_Configure"
+msgstr "_Selaa..."
+
+#: ../src/vmm-create-interface.glade.h:36
+#, fuzzy
+msgid "_Copy interface configuration from:"
+msgstr "Virhe tallennettaessa toimialuetta: %s"
+
+#: ../src/vmm-create-interface.glade.h:38
+#, fuzzy
+msgid "_Gateway:"
+msgstr "Yhdyskäytävä:"
+
+#: ../src/vmm-create-interface.glade.h:39
 #, fuzzy
 msgid "_Interface type:"
 msgstr "Laitetyyppi:"
 
-#: ../src/vmm-create-interface.glade.h:27 ../src/vmm-create-pool.glade.h:14
-#: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:51
+#: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:14
+#: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:54
 #, fuzzy
 msgid "_Name:"
 msgstr "Nimi:"
 
-#: ../src/vmm-create-interface.glade.h:28
+#: ../src/vmm-create-interface.glade.h:42
 #, fuzzy
 msgid "_Start mode:"
 msgstr "Alku"
 
-#: ../src/vmm-create-interface.glade.h:29
+#: ../src/vmm-create-interface.glade.h:43
 msgid "_VLAN tag:"
 msgstr ""
 
-#: ../src/vmm-create-interface.glade.h:30 ../src/vmm-preferences.glade.h:38
+#: ../src/vmm-create-interface.glade.h:44
+msgid "ip desc"
+msgstr ""
+
+#: ../src/vmm-create-interface.glade.h:45 ../src/vmm-preferences.glade.h:38
 msgid "seconds"
 msgstr "sekuntia"
 
@@ -3140,16 +3335,12 @@ msgstr "Välitys"
 msgid "Gateway:"
 msgstr "Yhdyskäytävä:"
 
-#: ../src/vmm-create-net.glade.h:26
-msgid "IPv4"
-msgstr "IPv4"
-
 # Tarkista
 #: ../src/vmm-create-net.glade.h:27
 msgid "Intro"
 msgstr "Johdanto"
 
-#: ../src/vmm-create-net.glade.h:28 ../src/vmm-host.glade.h:30
+#: ../src/vmm-create-net.glade.h:28 ../src/vmm-host.glade.h:36
 msgid "NAT to any physical device"
 msgstr "NAT mihin tahansa fyysiseen laitteeseen"
 
@@ -3173,7 +3364,7 @@ msgstr "Verkon _nimi:"
 msgid "Network name:"
 msgstr "Verkon nimi:"
 
-#: ../src/vmm-create-net.glade.h:35 ../src/vmm-host.glade.h:33
+#: ../src/vmm-create-net.glade.h:35 ../src/vmm-host.glade.h:39
 msgid "Network:"
 msgstr "Verkko:"
 
@@ -3351,6 +3542,11 @@ msgstr "Massamuistinimi"
 msgid "Create a storage unit that can be used directly by a virtual machine."
 msgstr ""
 
+#: ../src/vmm-create-vol.glade.h:19 ../src/vmm-create.glade.h:28
+#: ../src/vmm-details.glade.h:56
+msgid "MB"
+msgstr "Mt"
+
 #: ../src/vmm-create-vol.glade.h:20
 msgid "Max Ca_pacity:"
 msgstr ""
@@ -3407,11 +3603,6 @@ msgstr ""
 msgid "Advanced options"
 msgstr "Yhteys:"
 
-#: ../src/vmm-create.glade.h:10
-#, fuzzy
-msgid "B_rowse..."
-msgstr "Selaa..."
-
 #: ../src/vmm-create.glade.h:11
 #, fuzzy
 msgid "Bro_wse..."
@@ -3426,10 +3617,6 @@ msgstr "Virtuaalisuorittimet"
 #, fuzzy
 msgid "C_onnection:"
 msgstr "Yhteys:"
-
-#: ../src/vmm-create.glade.h:14
-msgid "C_reate a disk image on the computer's hard drive"
-msgstr ""
 
 #: ../src/vmm-create.glade.h:15
 msgid "C_ustomize configuration before install"
@@ -3467,125 +3654,120 @@ msgid "ISO"
 msgstr ""
 
 #: ../src/vmm-create.glade.h:23
+msgid "Import _existing disk image"
+msgstr ""
+
+#: ../src/vmm-create.glade.h:24
 #, fuzzy
 msgid "Install"
 msgstr "PV-asennus"
 
-#: ../src/vmm-create.glade.h:24
+#: ../src/vmm-create.glade.h:25
 #, fuzzy
 msgid "Kernel options:"
 msgstr "_Ytimen parametrit:"
 
-#: ../src/vmm-create.glade.h:25
+#: ../src/vmm-create.glade.h:26
 #, fuzzy
 msgid "Kickstart URL:"
 msgstr "Kickstart-osoite:"
 
-#: ../src/vmm-create.glade.h:26
+#: ../src/vmm-create.glade.h:27
 #, fuzzy
 msgid "Locate your install media"
 msgstr "Asennusmedian _polku:"
 
-#: ../src/vmm-create.glade.h:28
+#: ../src/vmm-create.glade.h:29
 #, fuzzy
 msgid "Memory"
 msgstr "Muisti:"
 
-#: ../src/vmm-create.glade.h:30
+#: ../src/vmm-create.glade.h:31
 #, fuzzy
 msgid "Network _Boot (PXE)"
 msgstr "_Verkko-PXE-käynnistys"
 
-#: ../src/vmm-create.glade.h:31
+#: ../src/vmm-create.glade.h:32
 msgid "Network _Install (HTTP, FTP, or NFS)"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:32
+#: ../src/vmm-create.glade.h:33
 #, fuzzy
 msgid "New VM"
 msgstr "<b>Verkko</b>"
 
-#: ../src/vmm-create.glade.h:33
+#: ../src/vmm-create.glade.h:34
 #, fuzzy
 msgid "OS _type:"
 msgstr "Käyttöjärjestelmän _tyyppi:"
 
-#: ../src/vmm-create.glade.h:34
+#: ../src/vmm-create.glade.h:35
 msgid "PXE"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:35
+#: ../src/vmm-create.glade.h:36
+#, fuzzy
+msgid "Provide the existing storage path:"
+msgstr "Virhe tallennettaessa toimialuetta: %s"
+
+#: ../src/vmm-create.glade.h:37
 #, fuzzy
 msgid "Provide the operating system install URL"
 msgstr "Käyttöjärjestelmä:"
 
-#: ../src/vmm-create.glade.h:36
-msgid "Select _managed or other existing storage"
-msgstr ""
-
-#: ../src/vmm-create.glade.h:37
+#: ../src/vmm-create.glade.h:39
 #, fuzzy
 msgid "Set a fixed _MAC address"
 msgstr "Virheellinen tallennusosoite"
 
-#: ../src/vmm-create.glade.h:39
-msgid "URL"
-msgstr ""
-
-#: ../src/vmm-create.glade.h:40
-#, fuzzy
-msgid "URL Options"
-msgstr "_Ytimen parametrit:"
-
 #: ../src/vmm-create.glade.h:41
-msgid "URL:"
+msgid "URL"
 msgstr ""
 
 #: ../src/vmm-create.glade.h:42
 #, fuzzy
+msgid "URL Options"
+msgstr "_Ytimen parametrit:"
+
+#: ../src/vmm-create.glade.h:43
+msgid "URL:"
+msgstr ""
+
+#: ../src/vmm-create.glade.h:44
+#, fuzzy
 msgid "Use CD_ROM or DVD"
 msgstr "_CD-ROM tai DVD:"
 
-#: ../src/vmm-create.glade.h:43
+#: ../src/vmm-create.glade.h:45
 #, fuzzy
 msgid "Use _ISO image:"
 msgstr "Etsi ISO-levykuva"
 
-#: ../src/vmm-create.glade.h:44
-#, fuzzy
-msgid "_Allocate entire disk now"
-msgstr "Varataanko koko virtuaalilevy nyt?"
-
-#: ../src/vmm-create.glade.h:45
+#: ../src/vmm-create.glade.h:47
 #, fuzzy
 msgid "_Architecture:"
 msgstr "Arkkitehtuuri:"
 
-#: ../src/vmm-create.glade.h:46
+#: ../src/vmm-create.glade.h:49
 #, fuzzy
 msgid "_Enable storage for this virtual machine"
 msgstr "Hallitse virtuaalikoneita"
 
-#: ../src/vmm-create.glade.h:48
-#, fuzzy
-msgid "_GB"
-msgstr "5 Gt"
-
-#: ../src/vmm-create.glade.h:49
+#: ../src/vmm-create.glade.h:52
 msgid "_Local install media (ISO image or CDROM)"
 msgstr ""
 
-#: ../src/vmm-create.glade.h:50
+#: ../src/vmm-create.glade.h:53
 #, fuzzy
 msgid "_Memory (RAM):"
 msgstr "Virtuaalikoneen _enimmäismuisti (Mt):"
 
-#: ../src/vmm-create.glade.h:52
+#: ../src/vmm-create.glade.h:55
 #, fuzzy
 msgid "_Version:"
 msgstr "Oikeudet:"
 
-#: ../src/vmm-create.glade.h:53
+#: ../src/vmm-create.glade.h:56
 #, fuzzy
 msgid "_Virt Type:"
 msgstr "Tyyppi:"
@@ -3617,7 +3799,7 @@ msgstr "<b>Perustiedot</b>"
 
 #: ../src/vmm-details.glade.h:5
 #, fuzzy
-msgid "<b>Boot Device</b>"
+msgid "<b>Boot device order</b>"
 msgstr "<b>Osoitin</b>"
 
 #: ../src/vmm-details.glade.h:6
@@ -3643,7 +3825,7 @@ msgstr "<b>Perustiedot</b>"
 msgid "<b>Memory</b>"
 msgstr "<b>Muisti</b>"
 
-#: ../src/vmm-details.glade.h:11 ../src/vmm-host.glade.h:4
+#: ../src/vmm-details.glade.h:11 ../src/vmm-host.glade.h:6
 msgid "<b>Performance</b>"
 msgstr "<b>Suorituskyky</b>"
 
@@ -3651,6 +3833,11 @@ msgstr "<b>Suorituskyky</b>"
 #, fuzzy
 msgid "<b>Security</b>"
 msgstr "<b>Yhteenveto</b>"
+
+#: ../src/vmm-details.glade.h:13
+#, fuzzy
+msgid "<b>Sound Device</b>"
+msgstr "<b>Lähde:</b>"
 
 #: ../src/vmm-details.glade.h:14
 msgid "<b>The console is currently unavailable</b>"
@@ -3697,79 +3884,79 @@ msgstr "<b>Osoitin</b>"
 
 #: ../src/vmm-details.glade.h:22
 #, fuzzy
+msgid "A_ction:"
+msgstr "Sijainti:"
+
+#: ../src/vmm-details.glade.h:23
+#, fuzzy
 msgid "A_dd Hardware"
 msgstr "Laitteisto"
 
-#: ../src/vmm-details.glade.h:24 ../src/vmm-host.glade.h:12
+#: ../src/vmm-details.glade.h:25 ../src/vmm-host.glade.h:16
 msgid "Architecture:"
 msgstr "Arkkitehtuuri:"
 
-#: ../src/vmm-details.glade.h:25
+#: ../src/vmm-details.glade.h:26
 msgid "Auth"
 msgstr "Valtuutus"
 
-#: ../src/vmm-details.glade.h:26
+#: ../src/vmm-details.glade.h:27
 #, fuzzy
 msgid "Boot"
 msgstr "Käynnistyksessä"
 
-#: ../src/vmm-details.glade.h:27
+#: ../src/vmm-details.glade.h:28
 #, fuzzy
 msgid ""
 "CPU\n"
 "usage:"
 msgstr "Prosessorin käyttö: "
 
-#: ../src/vmm-details.glade.h:29
+#: ../src/vmm-details.glade.h:30
 msgid "C_lock Offset:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:30
+#: ../src/vmm-details.glade.h:31
 #, fuzzy
 msgid "Change a_llocation:"
 msgstr "Vaihda varausta:"
 
-#: ../src/vmm-details.glade.h:31
+#: ../src/vmm-details.glade.h:32
 msgid "Char"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:32
+#: ../src/vmm-details.glade.h:33
 #, fuzzy
 msgid "Connect or disconnect media"
 msgstr "Yhteyden valinta"
 
-#: ../src/vmm-details.glade.h:33
+#: ../src/vmm-details.glade.h:34
 #, fuzzy
 msgid "Console"
 msgstr "Automaattinen konsoli"
 
-#: ../src/vmm-details.glade.h:34
+#: ../src/vmm-details.glade.h:35
 msgid "Current allocation:"
 msgstr "Nykyinen varaus:"
 
-#: ../src/vmm-details.glade.h:35
+#: ../src/vmm-details.glade.h:36
 msgid "D_ynamic"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:37
 #, fuzzy
-msgid "Device Model:"
-msgstr "Laitetyyppi:"
+msgid "Description:"
+msgstr "Kohde:"
 
-#: ../src/vmm-details.glade.h:38
+#: ../src/vmm-details.glade.h:39
 #, fuzzy
 msgid "Device Type:"
 msgstr "Laitetyyppi:"
 
-#: ../src/vmm-details.glade.h:39
-#, fuzzy
-msgid "Device model:"
-msgstr "Laitetyyppi:"
-
 #: ../src/vmm-details.glade.h:40
 #, fuzzy
-msgid "Device virtual machine will _boot from:"
-msgstr "Tallenna virtuaalikoneen kuvankaappaus"
+msgid "Device m_odel:"
+msgstr "Laitetyyppi:"
 
 #: ../src/vmm-details.glade.h:42
 msgid "Disk"
@@ -3808,7 +3995,7 @@ msgstr ""
 msgid "Host CPUs:"
 msgstr "Virtuaalisuorittimet"
 
-#: ../src/vmm-details.glade.h:51 ../src/vmm-host.glade.h:23
+#: ../src/vmm-details.glade.h:51 ../src/vmm-host.glade.h:28
 msgid "Hypervisor:"
 msgstr "Hypervisor:"
 
@@ -3850,7 +4037,7 @@ msgstr "Muistinkulutus:"
 msgid "Memory Select"
 msgstr "Muistin valinta"
 
-#: ../src/vmm-details.glade.h:66 ../src/vmm-host.glade.h:31
+#: ../src/vmm-details.glade.h:66 ../src/vmm-host.glade.h:37
 msgid "Name:"
 msgstr "Nimi:"
 
@@ -3935,7 +4122,7 @@ msgstr "Sammuta"
 msgid "Shut down"
 msgstr "Sammuta"
 
-#: ../src/vmm-details.glade.h:87 ../src/vmm-manager.glade.h:7
+#: ../src/vmm-details.glade.h:87 ../src/vmm-manager.glade.h:8
 #, fuzzy
 msgid "Shutdown the virtual machine"
 msgstr "Palauta virtuaalikone"
@@ -3964,155 +4151,155 @@ msgid "Stats"
 msgstr "Tila"
 
 #: ../src/vmm-details.glade.h:95
+#, fuzzy
+msgid "Storage size:"
+msgstr "Massamuistivarannot"
+
+#: ../src/vmm-details.glade.h:96
 msgid "Switch to fullscreen view"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:96
+#: ../src/vmm-details.glade.h:97
 #, fuzzy
 msgid "T_oolbar"
 msgstr "Työkalurivi"
 
-#: ../src/vmm-details.glade.h:97
+#: ../src/vmm-details.glade.h:98
 msgid "Target device:"
 msgstr "Kohdelaite:"
 
-#: ../src/vmm-details.glade.h:98
+#: ../src/vmm-details.glade.h:99
 #, fuzzy
 msgid "Total host memory:"
 msgstr "Muisti alussa:"
 
-#: ../src/vmm-details.glade.h:100
+#: ../src/vmm-details.glade.h:101
 msgid "UUID:"
 msgstr "UUID:"
 
 # Tarkista
-#: ../src/vmm-details.glade.h:101
+#: ../src/vmm-details.glade.h:102
 msgid "Unavailable"
 msgstr "Ei saatavilla"
 
-#: ../src/vmm-details.glade.h:102
+#: ../src/vmm-details.glade.h:103
 msgid "VNC"
 msgstr "VNC"
 
-#: ../src/vmm-details.glade.h:103
+#: ../src/vmm-details.glade.h:104
 msgid "Vid"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:104
+#: ../src/vmm-details.glade.h:105
 #, fuzzy
 msgid "Virtual CPU Affinity Select"
 msgstr "VCPU-valinta"
 
-#: ../src/vmm-details.glade.h:105
+#: ../src/vmm-details.glade.h:106
 #, fuzzy
 msgid "Virtual CPU Select"
 msgstr "VCPU-valinta"
 
-#: ../src/vmm-details.glade.h:106
+#: ../src/vmm-details.glade.h:107
 #, fuzzy
 msgid "Virtual Machine"
 msgstr "_Virtuaalikone"
 
-#: ../src/vmm-details.glade.h:107
+#: ../src/vmm-details.glade.h:108
 msgid "Virtual _Machine"
 msgstr "_Virtuaalikone"
 
-#: ../src/vmm-details.glade.h:108
+#: ../src/vmm-details.glade.h:109
 msgid "_Always"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:109
-#, fuzzy
-msgid "_Clone"
-msgstr "_Selaa..."
-
-#: ../src/vmm-details.glade.h:110
+#: ../src/vmm-details.glade.h:111
 #, fuzzy
 msgid "_Console"
 msgstr "Automaattinen konsoli"
 
-#: ../src/vmm-details.glade.h:112 ../src/vmm-host.glade.h:45
-#: ../src/vmm-manager.glade.h:12
+#: ../src/vmm-details.glade.h:113 ../src/vmm-host.glade.h:53
+#: ../src/vmm-manager.glade.h:14
 msgid "_File"
 msgstr "_Tiedosto"
 
-#: ../src/vmm-details.glade.h:114
+#: ../src/vmm-details.glade.h:115
 #, fuzzy
 msgid "_Fullscreen"
 msgstr "_Kokoruutu"
 
-#: ../src/vmm-details.glade.h:115 ../src/vmm-host.glade.h:46
-#: ../src/vmm-manager.glade.h:14
+#: ../src/vmm-details.glade.h:116 ../src/vmm-host.glade.h:54
+#: ../src/vmm-manager.glade.h:16
 msgid "_Help"
 msgstr "O_hje"
 
-#: ../src/vmm-details.glade.h:116
+#: ../src/vmm-details.glade.h:117
 #, fuzzy
 msgid "_Label:"
 msgstr "Nimi:"
 
-#: ../src/vmm-details.glade.h:117
+#: ../src/vmm-details.glade.h:118
 #, fuzzy
 msgid "_Login"
 msgstr "Sisäänkirjautuminen"
 
-#: ../src/vmm-details.glade.h:119
+#: ../src/vmm-details.glade.h:120
 #, fuzzy
 msgid "_Never"
 msgstr "Ei koskaan"
 
-#: ../src/vmm-details.glade.h:120
+#: ../src/vmm-details.glade.h:121
 #, fuzzy
 msgid "_Only when Fullscreen"
 msgstr "_Kokoruutu"
 
-#: ../src/vmm-details.glade.h:121
+#: ../src/vmm-details.glade.h:122
 #, fuzzy
 msgid "_Password:"
 msgstr "Salasana:"
 
-#: ../src/vmm-details.glade.h:124
+#: ../src/vmm-details.glade.h:125
 msgid "_Resize to VM"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:126
+#: ../src/vmm-details.glade.h:127
 msgid "_Save"
 msgstr "_Tallenna"
 
-#: ../src/vmm-details.glade.h:127
+#: ../src/vmm-details.glade.h:128
 #, fuzzy
 msgid "_Save this password in your keyring"
 msgstr "Tallenna tämä salasana avainrenkaaseesi"
 
-#: ../src/vmm-details.glade.h:128
+#: ../src/vmm-details.glade.h:129
 #, fuzzy
 msgid "_Scale Display"
 msgstr "Näyttö"
 
-#: ../src/vmm-details.glade.h:129
+#: ../src/vmm-details.glade.h:130
 #, fuzzy
 msgid "_Static"
 msgstr "Tila"
 
-#: ../src/vmm-details.glade.h:130
+#: ../src/vmm-details.glade.h:131
 msgid "_Take Screenshot"
 msgstr "Ota _kuvakaappaus"
 
-#: ../src/vmm-details.glade.h:131
+#: ../src/vmm-details.glade.h:132
 #, fuzzy
 msgid "_Text Consoles"
 msgstr "Automaattinen konsoli"
 
-#: ../src/vmm-details.glade.h:132
+#: ../src/vmm-details.glade.h:133
 #, fuzzy
 msgid "_Username:"
 msgstr "Konenimi:"
 
-#: ../src/vmm-details.glade.h:133 ../src/vmm-manager.glade.h:21
+#: ../src/vmm-details.glade.h:134 ../src/vmm-manager.glade.h:23
 msgid "_View"
 msgstr "_Näytä"
 
-#: ../src/vmm-details.glade.h:134 ../src/vmm-host.glade.h:48
+#: ../src/vmm-details.glade.h:135 ../src/vmm-host.glade.h:56
 #, fuzzy
 msgid "_View Manager"
 msgstr "Virtuaalikoneiden hallitsin"
@@ -4122,158 +4309,188 @@ msgid "<b>Basic details</b>"
 msgstr "<b>Perustiedot</b>"
 
 #: ../src/vmm-host.glade.h:2
-msgid "<b>IPv4 configuration</b>"
+#, fuzzy
+msgid "<b>IPv4 Configuration</b>"
 msgstr "<b>IPv4-asetukset</b>"
 
 #: ../src/vmm-host.glade.h:3
+msgid "<b>IPv4 configuration</b>"
+msgstr "<b>IPv4-asetukset</b>"
+
+#: ../src/vmm-host.glade.h:4
+#, fuzzy
+msgid "<b>IPv6 Configuration</b>"
+msgstr "<b>IPv4-asetukset</b>"
+
+#: ../src/vmm-host.glade.h:5
 #, fuzzy
 msgid "<b>Name</b>"
 msgstr "<b>Kohde:</b>"
 
-#: ../src/vmm-host.glade.h:5
+#: ../src/vmm-host.glade.h:7
 #, fuzzy
 msgid "<b>Slave Interfaces</b>"
 msgstr "<b>Virtuaalinen verkkoliitäntä</b>"
 
-#: ../src/vmm-host.glade.h:6
+#: ../src/vmm-host.glade.h:8
 #, fuzzy
 msgid "<b>Volumes</b>"
 msgstr "<b>Konsolit</b>"
 
-#: ../src/vmm-host.glade.h:7 ../src/vmm-open-connection.glade.h:1
+#: ../src/vmm-host.glade.h:9 ../src/vmm-open-connection.glade.h:1
 #, fuzzy
 msgid "A_utoconnect:"
 msgstr "Yhteys:"
 
-#: ../src/vmm-host.glade.h:8
+#: ../src/vmm-host.glade.h:10
 #, fuzzy
 msgid "A_utostart:"
 msgstr "Automaattikäynnistys:"
 
-#: ../src/vmm-host.glade.h:10
+#: ../src/vmm-host.glade.h:12
+#, fuzzy
+msgid "Add Interface"
+msgstr "Verkkoliikenne"
+
+#: ../src/vmm-host.glade.h:13
 #, fuzzy
 msgid "Add Network"
 msgstr "Verkko"
 
-#: ../src/vmm-host.glade.h:11
+#: ../src/vmm-host.glade.h:14
 msgid "Add Pool"
 msgstr ""
 
-#: ../src/vmm-host.glade.h:13
+#: ../src/vmm-host.glade.h:17
 msgid "CPU usage:"
 msgstr "Prosessorin käyttö: "
 
-#: ../src/vmm-host.glade.h:14
+#: ../src/vmm-host.glade.h:18
 msgid "Connection:"
 msgstr "Yhteys:"
 
-#: ../src/vmm-host.glade.h:15
+#: ../src/vmm-host.glade.h:19
 msgid "DHCP end:"
 msgstr "DHCP loppu:"
 
-#: ../src/vmm-host.glade.h:16
+#: ../src/vmm-host.glade.h:20
 msgid "DHCP start:"
 msgstr "DHCP alku:"
 
-#: ../src/vmm-host.glade.h:17
+#: ../src/vmm-host.glade.h:21
+#, fuzzy
+msgid "Delete Interface"
+msgstr "Verkkoliikenne"
+
+#: ../src/vmm-host.glade.h:22
 #, fuzzy
 msgid "Delete Network"
 msgstr "Verkko"
 
-#: ../src/vmm-host.glade.h:18
+#: ../src/vmm-host.glade.h:23
 msgid "Delete Pool"
 msgstr ""
 
-#: ../src/vmm-host.glade.h:20
+#: ../src/vmm-host.glade.h:25
 msgid "Forwarding:"
 msgstr "Välitys:"
 
-#: ../src/vmm-host.glade.h:21
+#: ../src/vmm-host.glade.h:26
 msgid "Host Details"
 msgstr "Koneen tiedot"
 
-#: ../src/vmm-host.glade.h:22
+#: ../src/vmm-host.glade.h:27
 msgid "Hostname:"
 msgstr "Konenimi:"
 
-#: ../src/vmm-host.glade.h:24
+#: ../src/vmm-host.glade.h:29
 msgid "In use by:"
 msgstr ""
 
-#: ../src/vmm-host.glade.h:25
+#: ../src/vmm-host.glade.h:30
 msgid "Location:"
 msgstr "Sijainti:"
 
-#: ../src/vmm-host.glade.h:26
+#: ../src/vmm-host.glade.h:31
 msgid "Logical CPUs:"
 msgstr "Loogisia suorittimia:"
 
-#: ../src/vmm-host.glade.h:27
+#: ../src/vmm-host.glade.h:32
 #, fuzzy
 msgid "MAC:"
 msgstr "<b>Verkko</b>"
 
-#: ../src/vmm-host.glade.h:28
+#: ../src/vmm-host.glade.h:33
 msgid "Memory usage:"
 msgstr "Muistinkulutus:"
 
-#: ../src/vmm-host.glade.h:29
+#: ../src/vmm-host.glade.h:34
 msgid "Memory:"
 msgstr "Muisti:"
 
-#: ../src/vmm-host.glade.h:32
+#: ../src/vmm-host.glade.h:38
 #, fuzzy
 msgid "Network Interfaces"
 msgstr "Verkkoliikenne"
 
-#: ../src/vmm-host.glade.h:34
+#: ../src/vmm-host.glade.h:40
 msgid "Overview"
 msgstr "Yleistiedot"
 
-#: ../src/vmm-host.glade.h:35
+#: ../src/vmm-host.glade.h:41
 #, fuzzy
 msgid "Pool Type:"
 msgstr "Tyyppi:"
 
-#: ../src/vmm-host.glade.h:36
+#: ../src/vmm-host.glade.h:42
+#, fuzzy
+msgid "Start Interface"
+msgstr "Verkkoliikenne"
+
+#: ../src/vmm-host.glade.h:43
 #, fuzzy
 msgid "Start Network"
 msgstr "Verkko"
 
-#: ../src/vmm-host.glade.h:37
+#: ../src/vmm-host.glade.h:44
 #, fuzzy
 msgid "Start Pool"
 msgstr "Massamuistivarannot"
 
-#: ../src/vmm-host.glade.h:38
+#: ../src/vmm-host.glade.h:45
 #, fuzzy
 msgid "Start mode:"
 msgstr "Alkuosoite:"
 
-#: ../src/vmm-host.glade.h:39
+#: ../src/vmm-host.glade.h:46
 msgid "State:"
 msgstr "Tila:"
 
-#: ../src/vmm-host.glade.h:40
+#: ../src/vmm-host.glade.h:47
+#, fuzzy
+msgid "Stop Interface"
+msgstr "Verkkoliikenne"
+
+#: ../src/vmm-host.glade.h:48
 #, fuzzy
 msgid "Stop Network"
 msgstr "Verkko"
 
-#: ../src/vmm-host.glade.h:41
+#: ../src/vmm-host.glade.h:49
 #, fuzzy
 msgid "Stop Pool"
 msgstr "Massamuistivarannot"
 
-#: ../src/vmm-host.glade.h:43
+#: ../src/vmm-host.glade.h:51
 msgid "Virtual Networks"
 msgstr "Virtuaalilaitteet"
 
-#: ../src/vmm-host.glade.h:44
+#: ../src/vmm-host.glade.h:52
 #, fuzzy
 msgid "_Delete Volume"
 msgstr "Poista kone"
 
-#: ../src/vmm-host.glade.h:47 ../src/vmm-storage-browse.glade.h:4
+#: ../src/vmm-host.glade.h:55 ../src/vmm-storage-browse.glade.h:4
 #, fuzzy
 msgid "_New Volume"
 msgstr "Poista kone"
@@ -4289,51 +4506,66 @@ msgid "New"
 msgstr "_Näytä"
 
 #: ../src/vmm-manager.glade.h:5
+#, fuzzy
+msgid "Restore Saved Machine..."
+msgstr "Palauta tallennettu kone..."
+
+#: ../src/vmm-manager.glade.h:6
 msgid "Restore a saved machine from a filesystem image"
 msgstr "Palauta tallennettu kone tiedostojärjestelmäkuvasta"
 
-#: ../src/vmm-manager.glade.h:6
+#: ../src/vmm-manager.glade.h:7
 #, fuzzy
 msgid "Show the virtual machine console and details"
 msgstr "Virtuaalikoneen tiedot"
 
-#: ../src/vmm-manager.glade.h:9
+#: ../src/vmm-manager.glade.h:10
+#, fuzzy
+msgid "_Add Connection..."
+msgstr "Avaa yhteys..."
+
+#: ../src/vmm-manager.glade.h:11
 #, fuzzy
 msgid "_CPU Usage"
 msgstr "Suorittimen käyttö:"
 
-#: ../src/vmm-manager.glade.h:10 ../src/vmm-preferences.glade.h:29
+#: ../src/vmm-manager.glade.h:12 ../src/vmm-preferences.glade.h:29
 #, fuzzy
 msgid "_Disk I/O"
 msgstr "Levy"
 
-#: ../src/vmm-manager.glade.h:11
+#: ../src/vmm-manager.glade.h:13
 msgid "_Edit"
 msgstr "_Muokkaa"
 
-#: ../src/vmm-manager.glade.h:13
+#: ../src/vmm-manager.glade.h:15
 #, fuzzy
 msgid "_Graph"
 msgstr "_Graafinen konsoli"
 
-#: ../src/vmm-manager.glade.h:15
+#: ../src/vmm-manager.glade.h:17
 #, fuzzy
 msgid "_Host Details"
 msgstr "Koneen tiedot"
 
-#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:33
+#: ../src/vmm-manager.glade.h:18 ../src/vmm-preferences.glade.h:33
 #, fuzzy
 msgid "_Network I/O"
 msgstr "Verkko"
 
-#: ../src/vmm-manager.glade.h:17
+#: ../src/vmm-manager.glade.h:19
 msgid "_Open"
 msgstr ""
 
-#: ../src/vmm-manager.glade.h:20
+#: ../src/vmm-manager.glade.h:22
 #, fuzzy
 msgid "_Shutdown"
 msgstr "Sammuttaminen"
+
+#: ../src/vmm-manager.glade.h:24
+#, fuzzy
+msgid "_Virtual Machine Details"
+msgstr "Virtuaalikoneen tiedot"
 
 #: ../src/vmm-migrate.glade.h:1
 #, fuzzy
@@ -4594,6 +4826,97 @@ msgstr "Lähteen polku:"
 msgid "_Browse Local"
 msgstr "Selaa..."
 
+#~ msgid "You must specify a partition or a file for disk storage."
+#~ msgstr "On määritettävä osio tai tiedosto tallennustilaksi."
+
+#~ msgid "Target Device Required"
+#~ msgstr "Kohdelaite vaaditaan"
+
+#, fuzzy
+#~ msgid "You must select a target device for the disk."
+#~ msgstr "Levylle on valittava kohdelaite"
+
+#~ msgid "Invalid Storage Parameters"
+#~ msgstr "Virheelliset massamuistiparametrit"
+
+#, fuzzy
+#~ msgid "No Boot Device"
+#~ msgstr "Verkkolaite"
+
+#, fuzzy
+#~ msgid "Libvirt connection does not have interface support."
+#~ msgstr "Vierasjärjestelmän konsolia ei tueta"
+
+#, fuzzy
+#~ msgid "Startup Error"
+#~ msgstr "Kickstart-URL-virhe"
+
+#, fuzzy
+#~ msgid "<b>Physical Host Device</b>"
+#~ msgstr "<b>Osoitin</b>"
+
+#~ msgid "<b>Source:</b>"
+#~ msgstr "<b>Lähde:</b>"
+
+#~ msgid "<b>Target:</b>"
+#~ msgstr "<b>Kohde:</b>"
+
+#, fuzzy
+#~ msgid "<b>Video Device</b>"
+#~ msgstr "<b>Osoitin</b>"
+
+#~ msgid "<b>Virtual display</b>"
+#~ msgstr "<b>Virtuaalinen näyttö</b>"
+
+#~ msgid "<b>Virtual pointer</b>"
+#~ msgstr "<v>Virtuaalinen osoitin</b>"
+
+#~ msgid "<small><b>Example:</b> /dev/hdc2</small>"
+#~ msgstr "<small><b>Esimerkki:</b> /dev/hdc2</small>"
+
+#, fuzzy
+#~ msgid ""
+#~ "<small><b>Warning:</b>If you do not allocate the entire disk now, space "
+#~ "will be allocated as needed while the virtual machine is running. If "
+#~ "sufficient free space is not available on the host, this may result in "
+#~ "data corruption on the virtual machine.</small>"
+#~ msgstr ""
+#~ "<small><b>Varoitus:</b> Jos koko levyä ei varata virtuaalikoneen luomisen "
+#~ "yhteydessä, tilaa varataan tarvittaessa vierasjärjestelmän ollessa "
+#~ "suorituksessa. Jos isännällä ei ole riittävästi vapaata tilaa, siitä "
+#~ "saattaa seurata vierasjärjestelmän tietojen vioittumista.</small>"
+
+#, fuzzy
+#~ msgid "Allocate entire virtual disk now"
+#~ msgstr "Varataanko koko virtuaalilevy nyt?"
+
+#~ msgid "Browse..."
+#~ msgstr "Selaa..."
+
+#, fuzzy
+#~ msgid "F_ile (disk image):"
+#~ msgstr "Levykuva:"
+
+#~ msgid "File Location Field"
+#~ msgstr "Tiedoston sijainti -kenttä"
+
+#~ msgid "File Size Field"
+#~ msgstr "Tiedoston koko -kenttä"
+
+#~ msgid "Partition Location Field"
+#~ msgstr "Osion sijainti -kenttä"
+
+#~ msgid "_Size:"
+#~ msgstr "_Koko:"
+
+#, fuzzy
+#~ msgid "Device Model:"
+#~ msgstr "Laitetyyppi:"
+
+#, fuzzy
+#~ msgid "Device virtual machine will _boot from:"
+#~ msgstr "Tallenna virtuaalikoneen kuvankaappaus"
+
 #~ msgid "Unknown status code"
 #~ msgstr "Tuntematon tilakoodi"
 
@@ -4699,9 +5022,6 @@ msgstr "Selaa..."
 #~ msgid "Set fixed MAC _address for this NIC?"
 #~ msgstr "Aseta _kiinteä MAC-osoite tälle verkkokortille?"
 
-#~ msgid "Virtual Network Select"
-#~ msgstr "Valitse virtuaaliverkko"
-
 #~ msgid "_Shared physical device"
 #~ msgstr "_Jaettu fyysinen laite"
 
@@ -4772,18 +5092,8 @@ msgstr "Selaa..."
 #~ msgstr "_Sisältö"
 
 #, fuzzy
-#~ msgid "Add Connection..."
-#~ msgstr "Avaa yhteys..."
-
-#, fuzzy
 #~ msgid "Delete Virtual Machine"
 #~ msgstr "Palauta virtuaalikone"
-
-#~ msgid "Restore saved machine..."
-#~ msgstr "Palauta tallennettu kone..."
-
-#~ msgid "Virtual Machine Details"
-#~ msgstr "Virtuaalikoneen tiedot"
 
 #, fuzzy
 #~ msgid "Poll memory usage stats"
@@ -4856,9 +5166,6 @@ msgstr "Selaa..."
 #, fuzzy
 #~ msgid "Absolute"
 #~ msgstr "Absoluuttiset symbooliset linkit"
-
-#~ msgid "Connection type:"
-#~ msgstr "Yhteystyyppi:"
 
 #~ msgid "EvTouch Tablet"
 #~ msgstr "EvTouch-piirtopöytä"
@@ -5831,9 +6138,6 @@ msgstr "Selaa..."
 
 #~ msgid " - A Xen host kernel was booted\n"
 #~ msgstr " - Xen-isäntäydin käynnistettiin\n"
-
-#~ msgid " - The Xen service has been started\n"
-#~ msgstr " - Xen-palvelu on käynnistetty\n"
 
 #~ msgid " - The 'libvirtd' daemon has been started\n"
 #~ msgstr " - ”libvirtd”-taustaprosessi on käynnistetty\n"
