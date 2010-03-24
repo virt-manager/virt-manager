@@ -260,6 +260,22 @@ class vmmSystray(gobject.GObject):
         self.systray_menu.popup(None, None, gtk.status_icon_position_menu,
                                 0, event_time, self.systray_icon)
 
+    def repopulate_menu_list(self):
+        # Build sorted connection list
+        connsort = self.conn_menuitems.keys()
+        connsort.sort()
+        connsort.reverse()
+
+        # Empty conn list
+        for child in self.systray_menu.get_children():
+            if child in self.conn_menuitems.values():
+                self.systray_menu.remove(child)
+
+        # Build sorted conn list
+        for uri in connsort:
+            self.systray_menu.insert(self.conn_menuitems[uri], 0)
+
+
     def conn_added(self, engine, conn):
         conn.connect("vm-added", self.vm_added)
         conn.connect("vm-removed", self.vm_removed)
@@ -277,14 +293,7 @@ class vmmSystray(gobject.GObject):
         self.conn_menuitems[conn.get_uri()] = menu_item
         self.conn_vm_menuitems[conn.get_uri()] = {}
 
-        if self.systray_indicator:
-            # Insert conn in list before 'Show' and 'Quit' items
-            idx = len(self.systray_menu) - 3
-        else:
-            # Insert conn in list before 'Quit' item
-            idx = len(self.systray_menu) - 2
-
-        self.systray_menu.insert(menu_item, idx)
+        self.repopulate_menu_list()
 
         self.conn_state_changed(conn)
         self.populate_vm_list(conn)
@@ -300,6 +309,8 @@ class vmmSystray(gobject.GObject):
         self.systray_menu.remove(menu_item)
         del(self.conn_menuitems[conn.get_uri()])
         self.conn_vm_menuitems[conn.get_uri()] = {}
+
+        self.repopulate_menu_list()
 
         if self.systray_indicator:
             self.systray_icon.set_menu (self.systray_menu)
