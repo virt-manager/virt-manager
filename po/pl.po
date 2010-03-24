@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-24 11:50-0400\n"
-"PO-Revision-Date: 2010-03-22 17:21+0100\n"
+"PO-Revision-Date: 2010-03-24 18:15+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <trans-pl@lists.fedoraproject.org>\n"
 "MIME-Version: 1.0\n"
@@ -483,12 +483,11 @@ msgstr "Obraz"
 
 #: ../src/virtManager/addhardware.py:854 ../src/virtManager/details.py:2139
 msgid "Watchdog"
-msgstr ""
+msgstr "Watchdog"
 
 #: ../src/virtManager/addhardware.py:857
-#, fuzzy
 msgid "Action:"
-msgstr "Położenie:"
+msgstr "Czynność:"
 
 #: ../src/virtManager/addhardware.py:872
 #, python-format
@@ -610,19 +609,17 @@ msgid "Host device parameter error"
 msgstr "Błąd parametru urządzenia gospodarza"
 
 #: ../src/virtManager/addhardware.py:1280
-#, fuzzy, python-format
+#, python-format
 msgid "%s device parameter error"
-msgstr "Błąd parametru urządzenia %s."
+msgstr "Błąd parametru urządzenia %s"
 
 #: ../src/virtManager/addhardware.py:1291
-#, fuzzy
 msgid "Video device parameter error"
-msgstr "Błąd parametru urządzenia graficznego."
+msgstr "Błąd parametru urządzenia graficznego"
 
 #: ../src/virtManager/addhardware.py:1304
-#, fuzzy
 msgid "Watchdog parameter error"
-msgstr "Błąd parametru pamięci masowej."
+msgstr "Błąd parametru watchdoga"
 
 #: ../src/virtManager/asyncjob.py:43 ../src/vmm-progress.glade.h:2
 msgid "Please wait a few moments..."
@@ -1038,9 +1035,10 @@ msgid "Up to %(numcpus)d available"
 msgstr "Do %(numcpus)d dostępnych"
 
 #: ../src/virtManager/create.py:584
-#, fuzzy
 msgid "Only URL or import installs are supported for paravirt."
-msgstr "Tylko instalacje z adresu URL są obsługiwane dla parawirtualizacji."
+msgstr ""
+"Tylko instalacje z adresu URL lub importowane są obsługiwane przez "
+"parawirtualizację."
 
 #: ../src/virtManager/create.py:661 ../src/virtManager/create.py:670
 #: ../src/virtManager/create.py:743 ../src/virtManager/create.py:745
@@ -1060,9 +1058,8 @@ msgid "PXE Install"
 msgstr "Instalacja PXE"
 
 #: ../src/virtManager/create.py:731
-#, fuzzy
 msgid "Import existing OS image"
-msgstr "Ustalenie położenia istniejącej pamięci masowej"
+msgstr "Import istniejącego obrazu systemu operacyjnego"
 
 #: ../src/virtManager/create.py:734 ../src/virtManager/details.py:1545
 #: ../src/virtManager/details.py:1841
@@ -1105,9 +1102,8 @@ msgid "An install tree is required."
 msgstr "Wymagane jest drzewo instalacji."
 
 #: ../src/virtManager/create.py:1226
-#, fuzzy
 msgid "A storage path to import is required."
-msgstr "Należy podać ścieżkę do pamięci masowej."
+msgstr "Wymagana jest ścieżka pamięci masowej do importu."
 
 #: ../src/virtManager/create.py:1236
 msgid "Error setting installer parameters."
@@ -1957,9 +1953,8 @@ msgstr "%(currentmem)s z %(maxmem)s"
 
 #: ../src/virtManager/host.py:354 ../src/virtManager/host.py:355
 #: ../src/virtManager/host.py:356
-#, fuzzy
 msgid "Connection not active."
-msgstr "Wybór połączenia"
+msgstr "Połączenie jest nieaktywne."
 
 #: ../src/virtManager/host.py:361
 msgid "Libvirt connection does not support virtual network management."
@@ -2419,7 +2414,7 @@ msgstr "Brak sieci."
 #. After all is said and done, add a manual bridge option
 #: ../src/virtManager/uihelpers.py:387
 msgid "Specify shared device name"
-msgstr ""
+msgstr "Proszę podać nazwę urządzenia współdzielonego"
 
 #: ../src/virtManager/uihelpers.py:406
 msgid "Virtual Network is not active."
@@ -2593,22 +2588,20 @@ msgstr ""
 "graficzne</span>"
 
 #: ../src/vmm-add-hardware.glade.h:15
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Watchdog "
 "Device</span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Urządzenie "
-"graficzne</span>"
+"watchdog</span>"
 
 #: ../src/vmm-add-hardware.glade.h:16
 msgid "A_utomatically allocated"
 msgstr "A_utomatycznie przydzielone"
 
 #: ../src/vmm-add-hardware.glade.h:17
-#, fuzzy
 msgid "Ac_tion:"
-msgstr "Położenie:"
+msgstr "_Czynność:"
 
 #: ../src/vmm-add-hardware.glade.h:18
 msgid "Add new virtual hardware"
@@ -2710,13 +2703,12 @@ msgstr ""
 "połączyć się z maszyną wirtualną."
 
 #: ../src/vmm-add-hardware.glade.h:39
-#, fuzzy
 msgid ""
 "Please indicate what watchdog device type\n"
 "and default action should be used."
 msgstr ""
-"Proszę wskazać, jakim typem urządzenia graficznego\n"
-"połączyć się z maszyną wirtualną."
+"Proszę wskazać, jaki typ watchdoga\n"
+"i domyślna czynność powinny zostać użyte."
 
 #: ../src/vmm-add-hardware.glade.h:41
 msgid "Po_rt:"
@@ -2752,9 +2744,8 @@ msgid "_Bind Host:"
 msgstr "_Dowiązanie gospodarza:"
 
 #: ../src/vmm-add-hardware.glade.h:49 ../src/vmm-create.glade.h:48
-#, fuzzy
 msgid "_Bridge name:"
-msgstr "Mostek"
+msgstr "Nazwa _mostka:"
 
 #: ../src/vmm-add-hardware.glade.h:50
 msgid "_Device type:"
@@ -2768,16 +2759,15 @@ msgstr "Urzą_dzenie:"
 #: ../src/vmm-create-net.glade.h:52 ../src/vmm-create-pool.glade.h:13
 #: ../src/vmm-create-vol.glade.h:22 ../src/vmm-create.glade.h:50
 msgid "_Finish"
-msgstr "_Zakończ"
+msgstr "_Ukończ"
 
 #: ../src/vmm-add-hardware.glade.h:53 ../src/vmm-create.glade.h:51
 msgid "_GB"
 msgstr "_GB"
 
 #: ../src/vmm-add-hardware.glade.h:54
-#, fuzzy
 msgid "_Host device:"
-msgstr "Urządzenie gospodarza:"
+msgstr "_Urządzenie gospodarza:"
 
 #: ../src/vmm-add-hardware.glade.h:55
 msgid "_Keymap:"
@@ -3205,7 +3195,7 @@ msgstr "Rozgłaszanie:"
 
 #: ../src/vmm-create-net.glade.h:16
 msgid "Complete"
-msgstr "Zakończ"
+msgstr "Ukończ"
 
 #: ../src/vmm-create-net.glade.h:17
 msgid "Connectivity:"
@@ -3550,16 +3540,15 @@ msgstr "Komunikat błędu"
 
 #: ../src/vmm-create.glade.h:21
 msgid "Finish"
-msgstr "Zakończ"
+msgstr "Ukończ"
 
 #: ../src/vmm-create.glade.h:22
 msgid "ISO"
 msgstr "ISO"
 
 #: ../src/vmm-create.glade.h:23
-#, fuzzy
 msgid "Import _existing disk image"
-msgstr "Ustalenie położenia istniejącej pamięci masowej"
+msgstr "Import istni_ejącego obrazu dysku"
 
 #: ../src/vmm-create.glade.h:24
 msgid "Install"
@@ -3602,9 +3591,8 @@ msgid "PXE"
 msgstr "PXE"
 
 #: ../src/vmm-create.glade.h:36
-#, fuzzy
 msgid "Provide the existing storage path:"
-msgstr "Ustalenie położenia istniejącej pamięci masowej"
+msgstr "Proszę podać ścieżkę do istniejącej pamięci masowej:"
 
 #: ../src/vmm-create.glade.h:37
 msgid "Provide the operating system install URL"
@@ -3761,9 +3749,8 @@ msgid "<b>insert type</b>"
 msgstr "<b>proszę podać typ</b>"
 
 #: ../src/vmm-details.glade.h:22
-#, fuzzy
 msgid "A_ction:"
-msgstr "_Położenie:"
+msgstr "_Czynność:"
 
 #: ../src/vmm-details.glade.h:23
 msgid "A_dd Hardware"
@@ -3826,9 +3813,8 @@ msgid "Device Type:"
 msgstr "Typ urządzenia:"
 
 #: ../src/vmm-details.glade.h:40
-#, fuzzy
 msgid "Device m_odel:"
-msgstr "Model urządzenia:"
+msgstr "M_odel urządzenia:"
 
 #: ../src/vmm-details.glade.h:42
 msgid "Disk"
@@ -4601,6 +4587,3 @@ msgstr "Wybierz _wolumin"
 #: ../src/vmm-storage-browse.glade.h:3
 msgid "_Browse Local"
 msgstr "_Przeglądaj lokalne"
-
-#~ msgid "Device Model:"
-#~ msgstr "Model urządzenia:"
