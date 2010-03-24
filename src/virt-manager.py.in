@@ -375,6 +375,7 @@ def main():
                             options.uri, options.uuid)
 
                 # yes, we exit completely now - remote service is in charge
+                logging.debug("Connected to already running instance.")
                 return
 
             else:
