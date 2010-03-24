@@ -341,9 +341,9 @@ class vmmEngine(gobject.GObject):
         self.windowConnect = None
 
         try:
-            try:
-                conn = self._lookup_connection(uri)
-            except Exception:
+            conn = self._check_connection(uri)
+            if not conn:
+                # Unknown connection, add it
                 conn = self.add_connection(uri, readOnly, autoconnect)
 
             self.show_manager()
@@ -351,6 +351,7 @@ class vmmEngine(gobject.GObject):
                 conn.open()
             return conn
         except Exception:
+            logging.exception("Error connecting to %s" % uri)
             return None
 
     def _connect_cancelled(self, connect):
@@ -513,9 +514,12 @@ class vmmEngine(gobject.GObject):
         self.connections[uri]["windowHost"].show()
 
     def show_connect(self):
+        def connect_wrap(src, *args):
+            return self.connect_to_uri(*args)
+
         if self.windowConnect == None:
             self.windowConnect = vmmConnect(self.get_config(), self)
-            self.windowConnect.connect("completed", self.connect_to_uri)
+            self.windowConnect.connect("completed", connect_wrap)
             self.windowConnect.connect("cancelled", self._connect_cancelled)
         self.windowConnect.show()
 
@@ -680,12 +684,17 @@ class vmmEngine(gobject.GObject):
 
         return handle_id
 
-    def _lookup_connection(self, uri):
+    def _check_connection(self, uri):
         conn = self.connections.get(uri)
+        if conn:
+            return conn["connection"]
+        return None
+
+    def _lookup_connection(self, uri):
+        conn = self._check_connection(uri)
         if not conn:
             raise RuntimeError(_("Unknown connection URI %s") % uri)
-
-        return conn["connection"]
+        return conn
 
     def save_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
