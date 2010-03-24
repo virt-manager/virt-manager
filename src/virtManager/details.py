@@ -1867,7 +1867,7 @@ class vmmDetails(gobject.GObject):
                 return None
             return getattr(node, attr)
 
-        devinfo = hostdevinfo[1]
+        devinfo = hostdevinfo[6]
         vendor_id = -1
         product_id = -1
         device = 0
@@ -2006,7 +2006,7 @@ class vmmDetails(gobject.GObject):
             insertAt = 0
             for row in hw_list_model:
                 if (row[HW_LIST_COL_TYPE] == hwtype and
-                    row[HW_LIST_COL_DEVICE][2] == info[2]):
+                    row[HW_LIST_COL_DEVICE][1] == info[1]):
 
                     # Update existing HW info
                     row[HW_LIST_COL_DEVICE] = info
@@ -2021,7 +2021,7 @@ class vmmDetails(gobject.GObject):
 
         # Populate list of disks
         for diskinfo in self.vm.get_disk_devices():
-            currentDisks[diskinfo[2]] = 1
+            currentDisks[diskinfo[1]] = 1
             icon = "drive-harddisk"
             if diskinfo[4] == "cdrom":
                 icon = "media-optical"
@@ -2037,13 +2037,13 @@ class vmmDetails(gobject.GObject):
 
         # Populate list of NICs
         for netinfo in self.vm.get_network_devices():
-            currentNICs[netinfo[2]] = 1
+            currentNICs[netinfo[1]] = 1
             update_hwlist(HW_LIST_TYPE_NIC, netinfo,
                           "NIC %s" % netinfo[2][-9:], "network-idle")
 
         # Populate list of input devices
         for inputinfo in self.vm.get_input_devices():
-            currentInputs[inputinfo[2]] = 1
+            currentInputs[inputinfo[1]] = 1
             icon = "input-mouse"
             if inputinfo[4] == "tablet":
                 label = _("Tablet")
@@ -2057,20 +2057,20 @@ class vmmDetails(gobject.GObject):
 
         # Populate list of graphics devices
         for gfxinfo in self.vm.get_graphics_devices():
-            currentGraphics[gfxinfo[2]] = 1
+            currentGraphics[gfxinfo[1]] = 1
             update_hwlist(HW_LIST_TYPE_GRAPHICS, gfxinfo,
                           _("Display %s") % gfxinfo[1],
                           "video-display")
 
         # Populate list of sound devices
         for soundinfo in self.vm.get_sound_devices():
-            currentSounds[soundinfo[2]] = 1
+            currentSounds[soundinfo[1]] = 1
             update_hwlist(HW_LIST_TYPE_SOUND, soundinfo,
                           _("Sound: %s" % soundinfo[2]), "audio-card")
 
         # Populate list of char devices
         for charinfo in self.vm.get_char_devices():
-            currentChars[charinfo[2]] = 1
+            currentChars[charinfo[1]] = 1
             label = charinfo[0].capitalize()
             if charinfo[0] != "console":
                 label += " %s" % charinfo[3] # Don't show port for console
@@ -2080,7 +2080,7 @@ class vmmDetails(gobject.GObject):
 
         # Populate host devices
         for hostdevinfo in self.vm.get_hostdev_devices():
-            currentHostdevs[hostdevinfo[2]] = 1
+            currentHostdevs[hostdevinfo[1]] = 1
             if hostdevinfo[4] == "usb":
                 icon = "device_usb"
             else:
@@ -2090,7 +2090,7 @@ class vmmDetails(gobject.GObject):
 
         # Populate video devices
         for vidinfo in self.vm.get_video_devices():
-            currentVids[vidinfo[2]] = 1
+            currentVids[vidinfo[1]] = 1
             update_hwlist(HW_LIST_TYPE_VIDEO, vidinfo, _("Video"),
                           "video-display")
 
@@ -2116,7 +2116,7 @@ class vmmDetails(gobject.GObject):
 
             hwtype   = row[HW_LIST_COL_TYPE]
             if (mapping.has_key(hwtype) and not
-                mapping[hwtype].has_key(row[HW_LIST_COL_DEVICE][2])):
+                mapping[hwtype].has_key(row[HW_LIST_COL_DEVICE][1])):
                 removeIt = True
 
             if removeIt:

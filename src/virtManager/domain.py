@@ -493,7 +493,9 @@ class vmmDomainBase(vmmLibvirtObject):
     def get_graphics_devices(self):
         def _parse_graphics_devs(ctx):
             graphics = []
+            count = 0
             ret = ctx.xpathEval("/domain/devices/graphics")
+
             for node in ret:
                 typ = node.prop("type")
                 listen = None
@@ -504,9 +506,12 @@ class vmmDomainBase(vmmLibvirtObject):
                     port = node.prop("port")
                     keymap = node.prop("keymap")
 
+                unique = count
+                count += 1
+
                 # [device type, unique, graphics type, listen addr, port,
                 #  keymap ]
-                graphics.append(["graphics", typ, typ, listen, port, keymap])
+                graphics.append(["graphics", unique, typ, listen, port, keymap])
             return graphics
 
         return self._parse_device_xml(_parse_graphics_devs)
@@ -514,12 +519,17 @@ class vmmDomainBase(vmmLibvirtObject):
     def get_sound_devices(self):
         def _parse_sound_devs(ctx):
             sound = []
+            count = 0
             ret = ctx.xpathEval("/domain/devices/sound")
+
             for node in ret:
                 model = node.prop("model")
 
+                unique = count
+                count += 1
+
                 # [device type, unique, sound model]
-                sound.append(["sound", model, model])
+                sound.append(["sound", unique, model])
             return sound
 
         return self._parse_device_xml(_parse_sound_devs)
@@ -590,6 +600,7 @@ class vmmDomainBase(vmmLibvirtObject):
         def _parse_video_devs(ctx):
             vids = []
             devs = ctx.xpathEval("/domain/devices/video")
+            count = 0
 
             for dev in devs:
                 model = None
@@ -605,7 +616,9 @@ class vmmDomainBase(vmmLibvirtObject):
                         if ram:
                             ram = safeint(ram, "%d")
 
-                unique = [model, ram, heads]
+                unique = count
+                count += 1
+
                 row = ["video", unique, model, ram, heads]
                 vids.append(row)
 
@@ -616,6 +629,7 @@ class vmmDomainBase(vmmLibvirtObject):
         def _parse_hostdev_devs(ctx):
             hostdevs = []
             devs = ctx.xpathEval("/domain/devices/hostdev")
+            count = 0
 
             for dev in devs:
                 vendor  = None
@@ -691,10 +705,13 @@ class vmmDomainBase(vmmLibvirtObject):
                     # device since we have no way to determine uniqueness
                     continue
 
+                index = count
+                count += 1
+
                 # [device type, unique, hwlist label, hostdev mode,
                 #  hostdev type, source desc label]
-                hostdevs.append(["hostdev", unique, hwlabel, mode, typ,
-                                 srclabel])
+                hostdevs.append(["hostdev", index, hwlabel, mode, typ,
+                                 srclabel, unique])
 
             return hostdevs
         return self._parse_device_xml(_parse_hostdev_devs)
@@ -743,10 +760,10 @@ class vmmDomainBase(vmmLibvirtObject):
                      (typ, bus))
 
         elif dev_type=="graphics":
-            xpath = "/domain/devices/graphics[@type='%s'][1]" % dev_id_info
+            xpath = "/domain/devices/graphics[%s]" % (int(dev_id_info) + 1)
 
         elif dev_type == "sound":
-            xpath = "/domain/devices/sound[@model='%s'][1]" % dev_id_info
+            xpath = "/domain/devices/sound[%s]" % (int(dev_id_info) + 1)
 
         elif (dev_type == "parallel" or
               dev_type == "console" or
@@ -755,58 +772,10 @@ class vmmDomainBase(vmmLibvirtObject):
                      (dev_type, dev_id_info))
 
         elif dev_type == "hostdev":
-            # This whole process is a little funky, since we need a decent
-            # amount of info to determine which specific hostdev to remove
-
-            xmlbase = "/domain/devices/hostdev[@type='%s' and " % \
-                      dev_id_info["type"]
-            xpath = ""
-
-            addr = dev_id_info.get("address")
-            vend = dev_id_info.get("vendor")
-            prod = dev_id_info.get("product")
-            if addr:
-                bus = addr.get("bus")
-                dev = addr.get("device")
-                slot = addr.get("slot")
-                funct = addr.get("function")
-                dom = addr.get("domain")
-
-                if bus and dev:
-                    # USB by bus and dev
-                    xpath = (xmlbase + "source/address/@bus='%s' and "
-                                       "source/address/@device='%s']" %
-                                       (bus, dev))
-                elif bus and slot and funct and dom:
-                    # PCI by bus,slot,funct,dom
-                    xpath = (xmlbase + "source/address/@bus='%s' and "
-                                       "source/address/@slot='%s' and "
-                                       "source/address/@function='%s' and "
-                                       "source/address/@domain='%s']" %
-                                       (bus, slot, funct, dom))
-
-            elif vend.get("id") and prod.get("id"):
-                # USB by vendor and product
-                xpath = (xmlbase + "source/vendor/@id='%s' and "
-                                   "source/product/@id='%s']" %
-                                   (vend.get("id"), prod.get("id")))
-
-            if xpath:
-                # Log this, since we could hit issues with unexpected
-                # xml parameters in the future
-                xpath += "[1]"
-                logging.debug("Hostdev xpath string: %s" % xpath)
+            xpath = "/domain/devices/hostdev[%s]" % (int(dev_id_info) + 1)
 
         elif dev_type == "video":
-            model, ram, heads = dev_id_info
-            xpath = "/domain/devices/video"
-
-            xpath += "[model/@type='%s'" % model
-            if ram:
-                xpath += " and model/@vram='%s'" % ram
-            if heads:
-                xpath += " and model/@heads='%s'" % heads
-            xpath += "][1]"
+            xpath = "/domain/devices/video[%s]" % (int(dev_id_info) + 1)
 
         else:
             raise RuntimeError(_("Unknown device type '%s'") % dev_type)
@@ -2177,10 +2146,10 @@ class vmmDomainVirtinst(vmmDomainBase):
                                      x.bus  == dev_id_info[1]))
 
         elif dev_type == VirtualDevice.VIRTUAL_DEV_GRAPHICS:
-            found_func = (lambda x: x.type == dev_id_info)
+            count = int(dev_id_info)
 
         elif dev_type == VirtualDevice.VIRTUAL_DEV_AUDIO:
-            found_func = (lambda x: x.model == dev_id_info)
+            count = int(dev_id_info)
 
         elif (dev_type == VirtualDevice.VIRTUAL_DEV_PARALLEL or
               dev_type == VirtualDevice.VIRTUAL_DEV_SERIAL or
@@ -2188,51 +2157,10 @@ class vmmDomainVirtinst(vmmDomainBase):
             count = int(dev_id_info)
 
         elif dev_type == VirtualDevice.VIRTUAL_DEV_HOSTDEV:
-            # This whole process is a little funky, since we need a decent
-            # amount of info to determine which specific hostdev to remove
-
-            def test_func(rmdev):
-                host_type = dev_id_info["type"]
-                addr = dev_id_info.get("address")
-                vend = dev_id_info.get("vendor")
-                prod = dev_id_info.get("product")
-
-                if rmdev.type != host_type:
-                    return False
-
-                if addr:
-                    bus = addr.get("bus")
-                    dev = addr.get("device")
-                    slot = addr.get("slot")
-                    funct = addr.get("function")
-                    dom = addr.get("domain")
-
-                    if bus and dev:
-                        return (rmdev.bus == bus and rmdev.device == dev)
-
-                    elif bus and slot and funct and dom:
-                        return (rmdev.bus == bus and
-                                rmdev.slot == slot and
-                                rmdev.function == funct and
-                                rmdev.domain == dom)
-
-                elif vend.get("id") and prod.get("id"):
-                    return (rmdev.vendor == vend.get("id") and
-                            rmdev.product == prod.get("id"))
-
-                return False
-
-            found_func = test_func
+            count = int(dev_id_info)
 
         elif dev_type == VirtualDevice.VIRTUAL_DEV_VIDEO:
-            model, ram, heads = dev_id_info
-
-            def test_func(rmdev):
-                return (rmdev.model_type == model and
-                        rmdev.vram == ram and
-                        rmdev.heads == heads)
-
-            found_func = test_func
+            count = int(dev_id_info)
 
         else:
             raise RuntimeError(_("Unknown device type '%s'") % dev_type)
