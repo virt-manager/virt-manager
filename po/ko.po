@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: virt-manager.ko\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-24 11:50-0400\n"
-"PO-Revision-Date: 2010-04-01 14:02+1000\n"
+"PO-Revision-Date: 2010-04-01 14:36+1000\n"
 "Last-Translator: Hyunsok Oh <hoh@redhat.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,16 +21,16 @@ msgstr ""
 
 #: ../src/virt-manager.desktop.in.in.h:1
 msgid "Manage virtual machines"
-msgstr "가상 장치 관리  "
+msgstr "가상 머신 관리  "
 
 #: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:136
 #: ../src/vmm-manager.glade.h:9
 msgid "Virtual Machine Manager"
-msgstr "가상 장치 관리자"
+msgstr "가상 머신 관리자"
 
 #: ../src/virt-manager.py.in:64
 msgid "Error starting Virtual Machine Manager"
-msgstr "가상 장치 관리자 시작 오류  "
+msgstr "가상 머신 관리자 시작 오류  "
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
@@ -1495,7 +1495,7 @@ msgid ""
 "with the specified label. The administrator is responsible for making sure "
 "the images are labeled corectly on disk."
 msgstr ""
-"정적 SELinux 보안 타입에 따라 libvert는 항상 지정된 레이블로 게스트 프로세스를 "
+"고정 SELinux 보안 타입에 따라 libvert는 항상 지정된 레이블로 게스트 프로세스를 "
 "시작할 것입니다. 관리자는 디스크에 있는 이미지가 제대로 레이블이 붙었는지 "
 "확인해야할 책임이 있습니다."
 
@@ -2178,7 +2178,7 @@ msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr ""
-"Xen 하이퍼바이저/데몬에 연결할 수 없습니다.\n"
+"Xen hypervisor/데몬에 연결할 수 없습니다.\n"
 "\n"
 
 #: ../src/virtManager/manager.py:758 ../src/virtManager/manager.py:766
@@ -2327,7 +2327,7 @@ msgstr ""
 #. [xml value, label]
 #: ../src/virtManager/uihelpers.py:186
 msgid "Hypervisor default"
-msgstr "hypervisro 기본값"
+msgstr "hypervisor 기본값"
 
 #: ../src/virtManager/uihelpers.py:204
 msgid "Usermode networking"
@@ -2961,7 +2961,7 @@ msgstr "설정하려는 인터페이스 유형을 선택하십시오."
 
 #: ../src/vmm-create-interface.glade.h:29
 msgid "Static configuration:"
-msgstr "정적 설정:"
+msgstr "고정 설정:"
 
 #: ../src/vmm-create-interface.glade.h:30
 msgid "Target address:"
@@ -3051,7 +3051,7 @@ msgid ""
 "network configuration in virtual machines, these parameters can be left with "
 "their default values."
 msgstr ""
-"<b>팁:</b> 가상 머신에서 정적인 네트워크 설정을 허용하기 위해 몇몇 주소를 예약하고 싶지 "
+"<b>팁:</b> 가상 머신에서 고정 네트워크 설정을 허용하기 위해 몇몇 주소를 예약하고 싶지 "
 "않다면, 이 매개 변수의 초기 값을 그대로 남겨둘 수 있습니다."
 
 #: ../src/vmm-create-net.glade.h:8
@@ -3760,13 +3760,12 @@ msgid "M_odel:"
 msgstr "모델(_O):"
 
 #: ../src/vmm-details.glade.h:58
-#, fuzzy
 msgid "Ma_ximum allocation:"
-msgstr "최대 할당:"
+msgstr "최대 할당(_X):"
 
 #: ../src/vmm-details.glade.h:59
 msgid "Max Memory Select"
-msgstr ""
+msgstr "최대 메모리 선택"
 
 #: ../src/vmm-details.glade.h:60
 msgid "Maximum allocation:"
@@ -3778,16 +3777,16 @@ msgid "Mem"
 msgstr "메모리"
 
 #: ../src/vmm-details.glade.h:62
-#, fuzzy
 msgid ""
 "Memory\n"
 "usage:"
-msgstr "메모리 사용량:"
+msgstr ""
+"메모리\n"
+"사용량:"
 
 #: ../src/vmm-details.glade.h:64
-#, fuzzy
 msgid "Memory Select"
-msgstr "메모리 사용량"
+msgstr "메모리 선택"
 
 #: ../src/vmm-details.glade.h:66 ../src/vmm-host.glade.h:37
 msgid "Name:"
@@ -3799,75 +3798,66 @@ msgid "Net"
 msgstr "네트워크"
 
 #: ../src/vmm-details.glade.h:68
-#, fuzzy
 msgid ""
 "Network\n"
 "I/O:"
-msgstr "네트워크"
+msgstr ""
+"네트워크\n"
+"I/O:"
 
 #: ../src/vmm-details.glade.h:70
-#, fuzzy
 msgid "Over"
-msgstr "개요"
+msgstr "상"
 
 #: ../src/vmm-details.glade.h:72
 msgid "Pause"
-msgstr "정지"
+msgstr "일시정지"
 
 #: ../src/vmm-details.glade.h:73 ../src/vmm-manager.glade.h:3
-#, fuzzy
 msgid "Pause the virtual machine"
-msgstr "가상 장치 복구"
+msgstr "가상 머신 일시 정지"
 
 #: ../src/vmm-details.glade.h:75 ../src/vmm-manager.glade.h:4
-#, fuzzy
 msgid "Power on the virtual machine"
-msgstr "가상 장치 복구"
+msgstr "가상 머신 전원 차단"
 
 #: ../src/vmm-details.glade.h:76
-#, fuzzy
 msgid "Proc"
-msgstr "프로세서"
+msgstr "프로세스"
 
 #: ../src/vmm-details.glade.h:77
 msgid "RAM:"
-msgstr ""
+msgstr "램:"
 
 #: ../src/vmm-details.glade.h:78
-#, fuzzy
 msgid "R_eadonly:"
-msgstr "읽기 전용  "
+msgstr "읽기 전용(_E):"
 
 #: ../src/vmm-details.glade.h:79
 msgid "Run"
 msgstr "실행"
 
 #: ../src/vmm-details.glade.h:80
-#, fuzzy
 msgid "S_hut Down"
-msgstr "종료"
+msgstr "종료(_H)"
 
 #: ../src/vmm-details.glade.h:81
 msgid "Send _Key"
-msgstr ""
+msgstr "키 보내기(_K)"
 
 #: ../src/vmm-details.glade.h:82
-#, fuzzy
 msgid "Sharea_ble:"
-msgstr "공유 가능  "
+msgstr "공유 가능(_B):"
 
 #: ../src/vmm-details.glade.h:83
-#, fuzzy
 msgid "Show the graphical console"
-msgstr "그래픽형식 콘솔(_G)"
+msgstr "그래픽 콘솔 표시"
 
 #: ../src/vmm-details.glade.h:84
-#, fuzzy
 msgid "Show virtual hardware details"
-msgstr "가상 장치 정보"
+msgstr "가상 머신 상세 정보 표시"
 
 #: ../src/vmm-details.glade.h:85
-#, fuzzy
 msgid "Shut Down"
 msgstr "종료"
 
@@ -3876,53 +3866,48 @@ msgid "Shut down"
 msgstr "종료"
 
 #: ../src/vmm-details.glade.h:87 ../src/vmm-manager.glade.h:8
-#, fuzzy
 msgid "Shutdown the virtual machine"
-msgstr "가상 장치 복구"
+msgstr "가상 머신 종료"
 
 #: ../src/vmm-details.glade.h:89
 msgid "Source Path:"
-msgstr ""
+msgstr "원본 경로:"
 
 #: ../src/vmm-details.glade.h:90
 msgid "Source device:"
-msgstr ""
+msgstr "원본 장치:"
 
 #: ../src/vmm-details.glade.h:91
 msgid "Source path:"
-msgstr ""
+msgstr "원본 경로:"
 
 #: ../src/vmm-details.glade.h:92
-#, fuzzy
 msgid "Start virt_ual machine on host boot up"
-msgstr "가상 기계장치 스크린샷 저장"
+msgstr "호스트 부팅시 가상 머신 시작(_U)"
 
 #: ../src/vmm-details.glade.h:93 ../src/vmm-preferences.glade.h:27
-#, fuzzy
 msgid "Stats"
 msgstr "상태"
 
 #: ../src/vmm-details.glade.h:95
-#, fuzzy
 msgid "Storage size:"
-msgstr "저장  "
+msgstr "저장소 크기:"
 
 #: ../src/vmm-details.glade.h:96
 msgid "Switch to fullscreen view"
-msgstr ""
+msgstr "전체화면 보기로 전환"
 
 #: ../src/vmm-details.glade.h:97
-#, fuzzy
 msgid "T_oolbar"
-msgstr "툴바"
+msgstr "툴바(_O)"
 
 #: ../src/vmm-details.glade.h:98
 msgid "Target device:"
-msgstr ""
+msgstr "목적 디바이스:"
 
 #: ../src/vmm-details.glade.h:99
 msgid "Total host memory:"
-msgstr ""
+msgstr "전체 호스트 메모리:"
 
 #: ../src/vmm-details.glade.h:101
 msgid "UUID:"
@@ -3938,35 +3923,31 @@ msgstr "VNC"
 
 #: ../src/vmm-details.glade.h:104
 msgid "Vid"
-msgstr ""
+msgstr "Vid"
 
 #: ../src/vmm-details.glade.h:105
-#, fuzzy
 msgid "Virtual CPU Affinity Select"
-msgstr "가상 CPU 통지"
+msgstr "가상 CPU 친화도 선택"
 
 #: ../src/vmm-details.glade.h:106
-#, fuzzy
 msgid "Virtual CPU Select"
-msgstr "가상 CPU 통지"
+msgstr "가상 CPU 선택"
 
 #: ../src/vmm-details.glade.h:107
-#, fuzzy
 msgid "Virtual Machine"
-msgstr "가상 장치(_M)"
+msgstr "가상 머신"
 
 #: ../src/vmm-details.glade.h:108
 msgid "Virtual _Machine"
-msgstr "가상 장치(_M)"
+msgstr "가상 머신(_M)"
 
 #: ../src/vmm-details.glade.h:109
 msgid "_Always"
-msgstr ""
+msgstr "항상(_A)"
 
 #: ../src/vmm-details.glade.h:111
-#, fuzzy
 msgid "_Console"
-msgstr "직렬 콘솔(_S)"
+msgstr "콘솔(_C)"
 
 #: ../src/vmm-details.glade.h:113 ../src/vmm-host.glade.h:53
 #: ../src/vmm-manager.glade.h:14
@@ -3985,236 +3966,203 @@ msgstr "도움말(_H)"
 
 #: ../src/vmm-details.glade.h:117
 msgid "_Label:"
-msgstr ""
+msgstr "레이블(_L):"
 
 #: ../src/vmm-details.glade.h:118
-#, fuzzy
 msgid "_Login"
-msgstr "로그인"
+msgstr "로그인(_L)"
 
 #: ../src/vmm-details.glade.h:120
-#, fuzzy
 msgid "_Never"
-msgstr "VNC 서버  "
+msgstr "하지않음(_N)"
 
 #: ../src/vmm-details.glade.h:121
-#, fuzzy
 msgid "_Only when Fullscreen"
-msgstr "전체 화면(_F)"
+msgstr "전체 화면의 경우만(_O)"
 
 #: ../src/vmm-details.glade.h:122
-#, fuzzy
 msgid "_Password:"
-msgstr "암호:"
+msgstr "암호(_P):"
 
 #: ../src/vmm-details.glade.h:125
 msgid "_Resize to VM"
-msgstr ""
+msgstr "VM에 맞게 재조정(_R)"
 
 #: ../src/vmm-details.glade.h:127
 msgid "_Save"
 msgstr "저장(_S)"
 
 #: ../src/vmm-details.glade.h:128
-#, fuzzy
 msgid "_Save this password in your keyring"
-msgstr "키링에 암호 저장"
+msgstr "키링에 암호 저장(_S)"
 
 #: ../src/vmm-details.glade.h:129
 msgid "_Scale Display"
-msgstr ""
+msgstr "디스플레이 크기변경(_S)"
 
 #: ../src/vmm-details.glade.h:130
-#, fuzzy
 msgid "_Static"
-msgstr "상태"
+msgstr "고정(_S)"
 
 #: ../src/vmm-details.glade.h:131
 msgid "_Take Screenshot"
 msgstr "스크린샷 찍기(_T)"
 
 #: ../src/vmm-details.glade.h:132
-#, fuzzy
 msgid "_Text Consoles"
-msgstr "직렬 콘솔(_S)"
+msgstr "문자 콘솔(_T)"
 
 #: ../src/vmm-details.glade.h:133
-#, fuzzy
 msgid "_Username:"
-msgstr "호스트(_H):"
+msgstr "사용자명(_U):"
 
 #: ../src/vmm-details.glade.h:134 ../src/vmm-manager.glade.h:23
 msgid "_View"
 msgstr "보기(_V)"
 
 #: ../src/vmm-details.glade.h:135 ../src/vmm-host.glade.h:56
-#, fuzzy
 msgid "_View Manager"
-msgstr "가상 장치 관리자"
+msgstr "보기 관리(_V)"
 
 #: ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
 msgstr "<b>기본 정보</b>"
 
 #: ../src/vmm-host.glade.h:2
-#, fuzzy
 msgid "<b>IPv4 Configuration</b>"
-msgstr "<b>콘솔</b>"
+msgstr "<b>IPv4 설정</b>"
 
 #: ../src/vmm-host.glade.h:3
 msgid "<b>IPv4 configuration</b>"
-msgstr ""
+msgstr "<b>IPv4 설정</b>"
 
 #: ../src/vmm-host.glade.h:4
-#, fuzzy
 msgid "<b>IPv6 Configuration</b>"
-msgstr "<b>콘솔</b>"
+msgstr "<b>IPv6 설정</b>"
 
 #: ../src/vmm-host.glade.h:5
-#, fuzzy
 msgid "<b>Name</b>"
-msgstr "<b>저장</b>"
+msgstr "<b>이름</b>"
 
 #: ../src/vmm-host.glade.h:7
-#, fuzzy
 msgid "<b>Slave Interfaces</b>"
-msgstr "<b>네트워크</b>"
+msgstr "<b>슬레이브 인터페이스</b>"
 
 #: ../src/vmm-host.glade.h:8
-#, fuzzy
 msgid "<b>Volumes</b>"
-msgstr "<b>콘솔</b>"
+msgstr "<b>볼륨</b>"
 
 #: ../src/vmm-host.glade.h:9 ../src/vmm-open-connection.glade.h:1
-#, fuzzy
 msgid "A_utoconnect:"
-msgstr "연결(_n)"
+msgstr "자동연결(_U):"
 
 #: ../src/vmm-host.glade.h:10
-#, fuzzy
 msgid "A_utostart:"
-msgstr "<b>요약:</b>"
+msgstr "자동시작(_U):"
 
 #: ../src/vmm-host.glade.h:12
-#, fuzzy
 msgid "Add Interface"
-msgstr "네트워크 사용량:"
+msgstr "인터페이스 추가"
 
 #: ../src/vmm-host.glade.h:13
-#, fuzzy
 msgid "Add Network"
-msgstr "네트워크"
+msgstr "네트워크 추가"
 
 #: ../src/vmm-host.glade.h:14
 msgid "Add Pool"
-msgstr ""
+msgstr "풀 추가"
 
 #: ../src/vmm-host.glade.h:17
 msgid "CPU usage:"
 msgstr "CPU 사용량:"
 
 #: ../src/vmm-host.glade.h:18
-#, fuzzy
 msgid "Connection:"
-msgstr "연결(_n)"
+msgstr "연결:"
 
 #: ../src/vmm-host.glade.h:19
 msgid "DHCP end:"
-msgstr ""
+msgstr "DHCP 끝:"
 
 #: ../src/vmm-host.glade.h:20
 msgid "DHCP start:"
-msgstr ""
+msgstr "DHCP 시작:"
 
 #: ../src/vmm-host.glade.h:21
-#, fuzzy
 msgid "Delete Interface"
-msgstr "네트워크 사용량:"
+msgstr "인터페이스 삭제"
 
 #: ../src/vmm-host.glade.h:22
-#, fuzzy
 msgid "Delete Network"
-msgstr "네트워크"
+msgstr "네트워크 삭제"
 
 #: ../src/vmm-host.glade.h:23
 msgid "Delete Pool"
-msgstr ""
+msgstr "풀 삭제"
 
 #: ../src/vmm-host.glade.h:25
 msgid "Forwarding:"
-msgstr ""
+msgstr "포워딩:"
 
 #: ../src/vmm-host.glade.h:26
-#, fuzzy
 msgid "Host Details"
-msgstr "정보(_t)"
+msgstr "호스트 상세정보"
 
 #: ../src/vmm-host.glade.h:27
-#, fuzzy
 msgid "Hostname:"
-msgstr "호스트(_H):"
+msgstr "호스트명:"
 
 #: ../src/vmm-host.glade.h:29
 msgid "In use by:"
-msgstr ""
+msgstr "다음이 사용중:"
 
 #: ../src/vmm-host.glade.h:30
-#, fuzzy
 msgid "Location:"
-msgstr "ISO 위치(_L):"
+msgstr "위치:"
 
 #: ../src/vmm-host.glade.h:31
-#, fuzzy
 msgid "Logical CPUs:"
-msgstr "논리적 호스트 CPU:"
+msgstr "논리적 CPU:"
 
 #: ../src/vmm-host.glade.h:32
-#, fuzzy
 msgid "MAC:"
-msgstr "<b>네트워크</b>"
+msgstr "MAC:"
 
 #: ../src/vmm-host.glade.h:33
 msgid "Memory usage:"
 msgstr "메모리 사용량:"
 
 #: ../src/vmm-host.glade.h:34
-#, fuzzy
 msgid "Memory:"
-msgstr "메모리"
+msgstr "메모리:"
 
 #: ../src/vmm-host.glade.h:38
-#, fuzzy
 msgid "Network Interfaces"
-msgstr "네트워크 사용량:"
+msgstr "네트워크 인터페이스"
 
 #: ../src/vmm-host.glade.h:40
 msgid "Overview"
 msgstr "개요"
 
 #: ../src/vmm-host.glade.h:41
-#, fuzzy
 msgid "Pool Type:"
-msgstr "종류"
+msgstr "풀 종류:"
 
 #: ../src/vmm-host.glade.h:42
-#, fuzzy
 msgid "Start Interface"
-msgstr "네트워크 사용량:"
+msgstr "인터페이스 시작"
 
 #: ../src/vmm-host.glade.h:43
-#, fuzzy
 msgid "Start Network"
-msgstr "네트워크"
+msgstr "네트워크 시작"
 
 #: ../src/vmm-host.glade.h:44
-#, fuzzy
 msgid "Start Pool"
-msgstr "상태"
+msgstr "풀 시작"
 
 #: ../src/vmm-host.glade.h:45
-#, fuzzy
 msgid "Start mode:"
-msgstr "MAC 주소"
+msgstr "스타트 모드:"
 
 #: ../src/vmm-host.glade.h:46
 #, fuzzy
@@ -4222,180 +4170,156 @@ msgid "State:"
 msgstr "상태:"
 
 #: ../src/vmm-host.glade.h:47
-#, fuzzy
 msgid "Stop Interface"
-msgstr "네트워크 사용량:"
+msgstr "인터페이스 중단"
 
 #: ../src/vmm-host.glade.h:48
-#, fuzzy
 msgid "Stop Network"
-msgstr "네트워크"
+msgstr "네트워크 중단"
 
 #: ../src/vmm-host.glade.h:49
 msgid "Stop Pool"
-msgstr ""
+msgstr "풀 중단"
 
 #: ../src/vmm-host.glade.h:51
-#, fuzzy
 msgid "Virtual Networks"
-msgstr "가상 CPU"
+msgstr "가상 네트워크"
 
 #: ../src/vmm-host.glade.h:52
-#, fuzzy
 msgid "_Delete Volume"
-msgstr "장치 삭제"
+msgstr "볼륨 삭제(_D)"
 
 #: ../src/vmm-host.glade.h:55 ../src/vmm-storage-browse.glade.h:4
-#, fuzzy
 msgid "_New Volume"
-msgstr "장치 삭제"
+msgstr "새 볼륨(_N)"
 
 #: ../src/vmm-manager.glade.h:1
-#, fuzzy
 msgid "Create a new virtual machine"
-msgstr "새 가상 시스템 생성"
+msgstr "새 가상 머신 생성"
 
 #: ../src/vmm-manager.glade.h:2
-#, fuzzy
 msgid "New"
-msgstr "보기(_V)"
+msgstr "새"
 
 #: ../src/vmm-manager.glade.h:5
-#, fuzzy
 msgid "Restore Saved Machine..."
-msgstr "저장된 장치 복구"
+msgstr "저장된 머신 복구..."
 
 #: ../src/vmm-manager.glade.h:6
 msgid "Restore a saved machine from a filesystem image"
-msgstr "파일 시스템 이미지에서 저장된 장치 복구"
+msgstr "파일 시스템 이미지에 저장된 머신 복구"
 
 #: ../src/vmm-manager.glade.h:7
-#, fuzzy
 msgid "Show the virtual machine console and details"
-msgstr "가상 장치 정보"
+msgstr "가상 머신 콘솔과 상세 정보 표시"
 
 #: ../src/vmm-manager.glade.h:10
-#, fuzzy
 msgid "_Add Connection..."
-msgstr "연결하기"
+msgstr "연결 추가...(_A)"
 
 #: ../src/vmm-manager.glade.h:11
-#, fuzzy
 msgid "_CPU Usage"
-msgstr "CPU 사용량"
+msgstr "CPU 사용량(_C)"
 
 #: ../src/vmm-manager.glade.h:12 ../src/vmm-preferences.glade.h:29
-#, fuzzy
 msgid "_Disk I/O"
-msgstr "디스크"
+msgstr "디스크 I/O(_D)"
 
 #: ../src/vmm-manager.glade.h:13
 msgid "_Edit"
 msgstr "편집(_E)"
 
 #: ../src/vmm-manager.glade.h:15
-#, fuzzy
 msgid "_Graph"
-msgstr "그래픽형식 콘솔(_G)"
+msgstr "그래프(_G)"
 
 #: ../src/vmm-manager.glade.h:17
-#, fuzzy
 msgid "_Host Details"
-msgstr "정보(_t)"
+msgstr "호스트 정보(_H)"
 
 #: ../src/vmm-manager.glade.h:18 ../src/vmm-preferences.glade.h:33
-#, fuzzy
 msgid "_Network I/O"
-msgstr "네트워크"
+msgstr "네트워크 I/O(_N)"
 
 #: ../src/vmm-manager.glade.h:19
 msgid "_Open"
-msgstr ""
+msgstr "열기(_O)"
 
 #: ../src/vmm-manager.glade.h:22
 msgid "_Shutdown"
 msgstr "종료(_S)"
 
 #: ../src/vmm-manager.glade.h:24
-#, fuzzy
 msgid "_Virtual Machine Details"
-msgstr "가상 장치 정보"
+msgstr "가상 머신 정보(_V)"
 
 #: ../src/vmm-migrate.glade.h:1
-#, fuzzy
 msgid "<b>Connectivity</b>"
-msgstr "연결(_n)"
+msgstr "<b>연결</b>"
 
 #: ../src/vmm-migrate.glade.h:2
 msgid "<span color='#484848'>Migrate _offline:</span>"
-msgstr ""
+msgstr "<span color='#484848'>오프라인 이식(_O):</span>"
 
 #: ../src/vmm-migrate.glade.h:3
 msgid "<span color='#484848'>Name:</span>"
-msgstr ""
+msgstr "<span color='#484848'>이름:</span>"
 
 #: ../src/vmm-migrate.glade.h:4
 msgid "<span color='#484848'>New host:</span>"
-msgstr ""
+msgstr "<span color='#484848'>새 호스트:</span>"
 
 #: ../src/vmm-migrate.glade.h:5
 msgid "<span color='#484848'>Original host:</span>"
-msgstr ""
+msgstr "<span color='#484848'>원래 host:</span>"
 
 #: ../src/vmm-migrate.glade.h:7
 msgid "Mbps"
-msgstr ""
+msgstr "Mbps"
 
 #: ../src/vmm-migrate.glade.h:8
-#, fuzzy
 msgid "Migrate the virtual machine"
-msgstr "가상 장치 복구"
+msgstr "가상 머신 이식"
 
 #: ../src/vmm-migrate.glade.h:10
 msgid "_Bandwidth:"
-msgstr ""
+msgstr "대역폭(_B):"
 
 #: ../src/vmm-migrate.glade.h:11
 msgid "_Migrate"
-msgstr ""
+msgstr "이식(_M)"
 
 #: ../src/vmm-migrate.glade.h:13
 msgid "_Tunnel migration through libvirt's daemon:"
-msgstr ""
+msgstr "libvirt 데몬을 통한 이식 터널링(_T):"
 
 #: ../src/vmm-open-connection.glade.h:2
-#, fuzzy
 msgid "Add Connection"
-msgstr "연결(_n)"
+msgstr "연결 추가"
 
 #: ../src/vmm-open-connection.glade.h:3
 msgid "Co_nnect"
 msgstr "연결(_n)"
 
 #: ../src/vmm-open-connection.glade.h:4
-#, fuzzy
 msgid "Connec_tion:"
-msgstr "연결(_n)"
+msgstr "연결(_t):"
 
 #: ../src/vmm-open-connection.glade.h:5
-#, fuzzy
 msgid "Connection Select"
-msgstr "연결(_n)"
+msgstr "연결 선택"
 
 #: ../src/vmm-open-connection.glade.h:6
-#, fuzzy
 msgid "H_ostname:"
-msgstr "호스트(_H):"
+msgstr "호스트명(_O):"
 
 #: ../src/vmm-open-connection.glade.h:7
-#, fuzzy
 msgid "Hostname Field"
-msgstr "호스트(_H):"
+msgstr "호스트명 항목"
 
 #: ../src/vmm-open-connection.glade.h:8
-#, fuzzy
 msgid "Hypervisor Select"
-msgstr "다른 하이퍼바이저(_O)"
+msgstr "hypervisor 선택"
 
 #: ../src/vmm-open-connection.glade.h:9
 msgid ""
@@ -4404,100 +4328,92 @@ msgid ""
 "Remote SSL/TLS with x509 certificate\n"
 "Remote tunnel over SSH"
 msgstr ""
+"로컬\n"
+"원격 암호 또는 커베로스\n"
+"원격 SSL/TLS(x509 인증과 함께)\n"
+"SSH를 통한 원격 터널링"
 
 #: ../src/vmm-open-connection.glade.h:13
 msgid ""
 "Xen\n"
 "QEMU/KVM"
 msgstr ""
+"Xen\n"
+"QEMU/KVM"
 
 #: ../src/vmm-open-connection.glade.h:15
-#, fuzzy
 msgid "_Hypervisor:"
-msgstr "다른 하이퍼바이저(_O)"
+msgstr "_Hypervisor:"
 
 #: ../src/vmm-preferences.glade.h:1
-#, fuzzy
 msgid "<b>Confirmations</b>"
-msgstr "<b>콘솔</b>"
+msgstr "<b>확인</b>"
 
 #: ../src/vmm-preferences.glade.h:2
 msgid "<b>Consoles</b>"
 msgstr "<b>콘솔</b>"
 
 #: ../src/vmm-preferences.glade.h:3
-#, fuzzy
 msgid "<b>Enable Stats Polling</b>"
-msgstr "<b>상태 모니터링</b>"
+msgstr "<b>상태 풀링 활성화</b>"
 
 #: ../src/vmm-preferences.glade.h:4
-#, fuzzy
 msgid "<b>General</b>"
-msgstr "<b>콘솔</b>"
+msgstr "<b>일반</b>"
 
 #: ../src/vmm-preferences.glade.h:5
-#, fuzzy
 msgid "<b>New VM</b>"
-msgstr "<b>네트워크</b>"
+msgstr "<b>새 VM</b>"
 
 #: ../src/vmm-preferences.glade.h:6
-#, fuzzy
 msgid "<b>Stats Options</b>"
-msgstr "<b>상태 모니터링</b>"
+msgstr "<b>상태 옵션</b>"
 
 #: ../src/vmm-preferences.glade.h:7
-#, fuzzy
 msgid "Automatically _open consoles:"
-msgstr "자동으로 콘솔을 엽니다:"
+msgstr "자동으로 콘솔을 엽니다(_O):"
 
 #: ../src/vmm-preferences.glade.h:8
-#, fuzzy
 msgid "Device re_moval:"
-msgstr "종류"
+msgstr "장치 제거(_M):"
 
 #: ../src/vmm-preferences.glade.h:9
-#, fuzzy
 msgid "Enable _system tray icon"
-msgstr "시스템 트레이 아이콘 표시  "
+msgstr "시스템 트레이 아이콘 활성화(_S)"
 
 #: ../src/vmm-preferences.glade.h:10
 msgid "Feedback"
-msgstr ""
+msgstr "피드백"
 
 #: ../src/vmm-preferences.glade.h:11
 msgid "General"
-msgstr ""
+msgstr "일반"
 
 #: ../src/vmm-preferences.glade.h:12
-#, fuzzy
 msgid "Grab _keyboard input:"
-msgstr "키보드 입력 설정:"
+msgstr "키보드 입력 강제 고정(_K):"
 
 #: ../src/vmm-preferences.glade.h:13
-#, fuzzy
 msgid "Graphical console _scaling:"
-msgstr "그래픽형식 콘솔(_G)"
+msgstr "그래픽 콘솔 크기조정(_S):"
 
 #: ../src/vmm-preferences.glade.h:14
-#, fuzzy
 msgid "Install Audio Device:"
-msgstr "<b>설치 소스:</b>"
+msgstr "오디오 장치 설치:"
 
 #: ../src/vmm-preferences.glade.h:15
-#, fuzzy
 msgid "Maintain h_istory of"
-msgstr "히스토리 보존"
+msgstr "다음의 기록 보존(_I)"
 
 #: ../src/vmm-preferences.glade.h:16
-#, fuzzy
 msgid ""
 "Never\n"
 "For all new domains\n"
 "For all domains"
 msgstr ""
-"사용하지 않음\n"
-"새 도메인에서 사용\n"
-"모든 도메인에서 사용"
+"하지 않음\n"
+"모든 새 도메인에 사용\n"
+"모든 도메인에 사용"
 
 #: ../src/vmm-preferences.glade.h:19
 msgid ""
@@ -4505,6 +4421,9 @@ msgid ""
 "Fullscreen only\n"
 "Always"
 msgstr ""
+"하지 않음\n"
+"전체화면에서만 사용\n"
+"항상"
 
 #: ../src/vmm-preferences.glade.h:22
 msgid ""
@@ -4512,66 +4431,59 @@ msgid ""
 "When fullscreen\n"
 "On mouse over"
 msgstr ""
-"사용하지 않음\n"
-"전체 화면에서 사용\n"
-"마우스를 올렸을 때 사용"
+"하지 않음\n"
+"전체화면에서만 사용\n"
+"마우스가 위에 있을 때만 사용"
 
 #: ../src/vmm-preferences.glade.h:25
 msgid "Poweroff/_Reboot:"
-msgstr ""
+msgstr "전원끄기/리부트(_R):"
 
 #: ../src/vmm-preferences.glade.h:26
 msgid "Preferences"
-msgstr ""
+msgstr "환경설정"
 
 #: ../src/vmm-preferences.glade.h:28
-#, fuzzy
 msgid "VM Details"
-msgstr "상세정보(_D)"
+msgstr "VM 상세정보"
 
 #: ../src/vmm-preferences.glade.h:30
 msgid "_Force Poweroff:"
-msgstr ""
+msgstr "강제 전원 차단(_F):"
 
 #: ../src/vmm-preferences.glade.h:31
 msgid "_Interface start/stop:"
-msgstr ""
+msgstr "인터페이스 시작/종료(_I):"
 
 #: ../src/vmm-preferences.glade.h:32
-#, fuzzy
 msgid "_Local virtual machine"
-msgstr "가상 장치 저장"
+msgstr "로컬 가상 머신(_L)"
 
 #: ../src/vmm-preferences.glade.h:34
-#, fuzzy
 msgid "_Pause:"
-msgstr "정지(_P)"
+msgstr "일시정지(_P):"
 
 #: ../src/vmm-preferences.glade.h:35
-#, fuzzy
 msgid "_Remote virtual machine"
-msgstr "가상 장치 복구"
+msgstr "원격 가상 머신(_R)"
 
 #: ../src/vmm-preferences.glade.h:36
-#, fuzzy
 msgid "_Update status every"
-msgstr "매번 상태 업데이트"
+msgstr "매번 상태 업데이트(_U)"
 
 #: ../src/vmm-preferences.glade.h:37
 msgid "samples"
 msgstr "예"
 
 #: ../src/vmm-storage-browse.glade.h:1
-#, fuzzy
 msgid "Choose Storage Volume"
-msgstr "시스템 이름(_N):"
+msgstr "저장소 볼륨 선택"
 
 #: ../src/vmm-storage-browse.glade.h:2
 msgid "Choose _Volume"
-msgstr ""
+msgstr "볼륨 선택(_V)"
 
 #: ../src/vmm-storage-browse.glade.h:3
-#, fuzzy
 msgid "_Browse Local"
-msgstr "검색"
+msgstr "로컬 검색(_B)"
 
