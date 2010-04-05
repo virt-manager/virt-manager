@@ -63,7 +63,7 @@ def set_error_parent(parent):
 ############################################################
 
 def set_sparse_tooltip(widget):
-    sparse_str = _("Fully allocating storage will take longer now, "
+    sparse_str = _("Fully allocating storage may take longer now, "
                    "but the OS install phase will be quicker. \n\n"
                    "Skipping allocation can also cause space issues on "
                    "the host machine, if the maximum image size exceeds "
