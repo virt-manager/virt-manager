@@ -1087,7 +1087,7 @@ class vmmDomainBase(vmmLibvirtObject):
         elif self.status() == libvirt.VIR_DOMAIN_PAUSED:
             return _("Paused")
         elif self.status() == libvirt.VIR_DOMAIN_SHUTDOWN:
-            return _("Shuting Down")
+            return _("Shutting Down")
         elif self.status() == libvirt.VIR_DOMAIN_SHUTOFF:
             return _("Shutoff")
         elif self.status() == libvirt.VIR_DOMAIN_CRASHED:

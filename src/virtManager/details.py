@@ -495,7 +495,7 @@ class vmmDetails(gobject.GObject):
 
         # Security info tooltips
         util.tooltip_wrapper(self.window.get_widget("security-static-info"),
-            _("Static SELinux security type tells libvirt to always start the guest process with the specified label. The administrator is responsible for making sure the images are labeled corectly on disk."))
+            _("Static SELinux security type tells libvirt to always start the guest process with the specified label. The administrator is responsible for making sure the images are labeled correctly on disk."))
         util.tooltip_wrapper(self.window.get_widget("security-dynamic-info"),
             _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
 

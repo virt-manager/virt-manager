@@ -1229,7 +1229,7 @@ class vmmAddHardware(gobject.GObject):
         ignore, nodedev_name = self.get_config_host_device_info()
 
         if nodedev_name == None:
-            return self.err.val_err(_("Physical Device Requried"),
+            return self.err.val_err(_("Physical Device Required"),
                                     _("A device must be selected."))
 
         try:
