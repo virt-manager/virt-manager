@@ -1581,6 +1581,8 @@ class vmmConnection(gobject.GObject):
                 pcentCpuTime = 0.0
 
         pcentMem = mem * 100.0 / self.host_memory_size()
+        if pcentMem > 100.0:
+            pcentMem = 100.0
 
         newStats = {
             "timestamp": now,

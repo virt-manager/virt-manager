@@ -850,6 +850,12 @@ class vmmDomainBase(vmmLibvirtObject):
     def _sample_mem_stats(self, info):
         pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
         pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
+
+        if pcentCurrMem > 100:
+            pcentCurrMem = 100.0
+        if pcentMaxMem > 100:
+            pcentMaxMem = 100.0
+
         return pcentCurrMem, pcentMaxMem
 
     def _sample_cpu_stats(self, info, now):
