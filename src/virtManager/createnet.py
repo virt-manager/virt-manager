@@ -160,6 +160,8 @@ class vmmCreateNetwork(gobject.GObject):
         red = gtk.gdk.color_parse("#ffc0c0")
         black = gtk.gdk.color_parse("#000000")
         src.modify_text(gtk.STATE_NORMAL, black)
+
+        # No IP specified or invalid IP
         if ip is None or ip.version() != 4:
             src.modify_base(gtk.STATE_NORMAL, red)
             self.window.get_widget("net-info-netmask").set_text("")
@@ -167,26 +169,32 @@ class vmmCreateNetwork(gobject.GObject):
             self.window.get_widget("net-info-gateway").set_text("")
             self.window.get_widget("net-info-size").set_text("")
             self.window.get_widget("net-info-type").set_text("")
+            return
+
+        # We've got a valid IP
+        if ip.len() < 16 or ip.iptype() != "PRIVATE":
+            src.modify_base(gtk.STATE_NORMAL, red)
         else:
-            if ip.len() < 16 or ip.iptype() != "PRIVATE":
-                src.modify_base(gtk.STATE_NORMAL, red)
-            else:
-                src.modify_base(gtk.STATE_NORMAL, green)
-            self.window.get_widget("net-info-netmask").set_text(str(ip.netmask()))
-            self.window.get_widget("net-info-broadcast").set_text(str(ip.broadcast()))
-            if ip.len() <= 1:
-                self.window.get_widget("net-info-gateway").set_text("")
-            else:
-                self.window.get_widget("net-info-gateway").set_text(str(ip[1]))
-            self.window.get_widget("net-info-size").set_text(_("%d addresses") % (ip.len()))
-            if ip.iptype() == "PUBLIC":
-                self.window.get_widget("net-info-type").set_text(_("Public"))
-            elif ip.iptype() == "PRIVATE":
-                self.window.get_widget("net-info-type").set_text(_("Private"))
-            elif ip.iptype() == "RESERVED":
-                self.window.get_widget("net-info-type").set_text(_("Reserved"))
-            else:
-                self.window.get_widget("net-info-type").set_text(_("Other"))
+            src.modify_base(gtk.STATE_NORMAL, green)
+        self.window.get_widget("net-info-netmask").set_text(str(ip.netmask()))
+        self.window.get_widget("net-info-broadcast").set_text(
+                                                        str(ip.broadcast()))
+
+        if ip.len() <= 1:
+            self.window.get_widget("net-info-gateway").set_text("")
+        else:
+            self.window.get_widget("net-info-gateway").set_text(str(ip[1]))
+        self.window.get_widget("net-info-size").set_text(_("%d addresses") %
+                                                         (ip.len()))
+
+        if ip.iptype() == "PUBLIC":
+            self.window.get_widget("net-info-type").set_text(_("Public"))
+        elif ip.iptype() == "PRIVATE":
+            self.window.get_widget("net-info-type").set_text(_("Private"))
+        elif ip.iptype() == "RESERVED":
+            self.window.get_widget("net-info-type").set_text(_("Reserved"))
+        else:
+            self.window.get_widget("net-info-type").set_text(_("Other"))
 
     def change_dhcp_enable(self, src):
         val = src.get_active()
