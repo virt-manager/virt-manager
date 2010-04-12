@@ -521,7 +521,7 @@ class vmmConsolePages(gobject.GObject):
             "else"
             "   CMD='nc %(nc_params)s';"
             "fi;"
-            "sh -c $CMD;" % {'nc_params': nc_params}
+            "sh -c \"$CMD\";" % {'nc_params': nc_params}
         ]
 
         argv += nc_cmd
