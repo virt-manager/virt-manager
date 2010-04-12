@@ -268,6 +268,9 @@ def main():
     setup_i18n()
     setup_pypath()
 
+    # Need to do this before GTK strips args like --sync
+    origargs = " ".join(sys.argv[:])
+
     # Urgh, pygtk merely logs a warning when failing to open
     # the X11 display connection, and lets everything carry
     # on as if all were fine. Ultimately bad stuff happens,
@@ -291,6 +294,8 @@ def main():
 
     (options, ignore) = parse_commandline()
     setup_logging(options.debug)
+
+    logging.debug("Launched as: %s" % origargs)
 
     # Make sure we have a sufficiently new virtinst version, since we are
     # very closely tied to the lib
