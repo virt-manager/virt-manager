@@ -573,7 +573,11 @@ class vmmConsolePages(gobject.GObject):
         errfd = self.vncTunnel[1]
         errout = ""
         while True:
-            new = errfd.recv(1024)
+            try:
+                new = errfd.recv(1024)
+            except:
+                break
+
             if not new:
                 break
 
