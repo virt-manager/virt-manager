@@ -1,3 +1,4 @@
+# translation of ml.po to
 # translation of virt-manager.tip.ml.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
@@ -5,10 +6,10 @@
 # Ani Peter <apeter@redhat.com>, 2006, 2007, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: virt-manager.tip.ml\n"
+"Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-24 11:50-0400\n"
-"PO-Revision-Date: 2009-12-11 16:22+0530\n"
+"POT-Creation-Date: 2010-03-29 15:04+0530\n"
+"PO-Revision-Date: 2010-04-13 10:10+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,9 +41,8 @@ msgid "Unable to initialize GTK: %s"
 msgstr "GTK ഇനിഷ്യലൈസ് ചെയ്യുവാന്‍ അസാധ്യം: %s"
 
 #: ../src/virt-manager.schemas.in.h:1
-#, fuzzy
 msgid "Confirm device interface start and stop"
-msgstr "ഡിവൈസ് നീക്കം ചെയ്യുന്ന ആവശ്യം ഉറപ്പാക്കുക"
+msgstr "ഡിവൈസ് ഇന്റര്‍ഫെയിസിന്റെ ആരംഭവും അവസാനവും ഉറപ്പാക്കുക"
 
 #: ../src/virt-manager.schemas.in.h:2
 msgid "Confirm device removal request"
@@ -165,8 +165,7 @@ msgid "The number of samples to keep in the statistics history"
 msgstr "സ്ഥിതിവിവരക്കണക്കുകളുടെ ഹിസ്റ്ററിയിലുള്ള മാതൃകകളുടെ എണ്ണം"
 
 #: ../src/virt-manager.schemas.in.h:32
-msgid ""
-"The number of urls to keep in the history for the install media address page."
+msgid "The number of urls to keep in the history for the install media address page."
 msgstr "ഇന്‍സ്റ്റോള്‍ മീഡിയ വിലാസത്തിനുള്ള താളിന്റെ ഹിസ്റ്ററിയില്‍ സൂക്ഷിക്കേണ്ട യുആര്‍എലുകളുടെ എണ്ണം."
 
 #: ../src/virt-manager.schemas.in.h:33
@@ -242,10 +241,8 @@ msgid "Whether to show notification when grabbing mouse"
 msgstr "മൌസ് കൈയിലെടുക്കുമ്പോള്‍ മുന്നറിയിപ്പു് നല്‍കുക"
 
 #: ../src/virt-manager.schemas.in.h:48
-msgid ""
-"Whether to show the notification hint when grabbing the mouse in the console"
-msgstr ""
-"Whether to show the notification hint when grabbing the mouse in the console"
+msgid "Whether to show the notification hint when grabbing the mouse in the console"
+msgstr "Whether to show the notification hint when grabbing the mouse in the console"
 
 #: ../src/virt-manager.schemas.in.h:49
 msgid ""
@@ -272,10 +269,8 @@ msgid "Whether we require confirmation to remove a virtual device"
 msgstr "ഒരു വിര്‍ച്ച്വല്‍ ഡിവൈസ് നീക്കം ചെയ്യുന്നതു് ഉറപ്പാക്കണമോ"
 
 #: ../src/virt-manager.schemas.in.h:54
-#, fuzzy
-msgid ""
-"Whether we require confirmation to start or stop a libvirt virtual interface"
-msgstr "ഒരു വിര്‍ച്ച്വല്‍ ഡിവൈസ് നീക്കം ചെയ്യുന്നതു് ഉറപ്പാക്കണമോ"
+msgid "Whether we require confirmation to start or stop a libvirt virtual interface"
+msgstr "ഒരു libvrt വിര്‍ച്ച്വല്‍ ഇന്റര്‍ഫെയിസ് ആരംഭിക്കുന്നതിനോ നിര്‍ത്തുന്നതിനോ ഉറപ്പാക്കല്‍ ആവശ്യമുണ്ടോ എന്നു്"
 
 #: ../src/virtManager/addhardware.py:81 ../src/virtManager/choosecd.py:49
 #: ../src/virtManager/clone.py:108 ../src/virtManager/console.py:63
@@ -479,12 +474,11 @@ msgstr "വീഡിയോ"
 
 #: ../src/virtManager/addhardware.py:854 ../src/virtManager/details.py:2139
 msgid "Watchdog"
-msgstr ""
+msgstr "വാച്ച്ഡോഗ്"
 
 #: ../src/virtManager/addhardware.py:857
-#, fuzzy
 msgid "Action:"
-msgstr "സ്ഥാനം:"
+msgstr "പ്രവര്‍ത്തനം:"
 
 #: ../src/virtManager/addhardware.py:872
 #, python-format
@@ -540,6 +534,12 @@ msgid ""
 "\n"
 "Would you like to use this path?"
 msgstr ""
+"ഈ പാഥ് നിലവിലുണ്ടു്, പക്ഷേ വിര്‍ച്ച്വല്‍\n"
+"മഷീനുകളൊന്നും ഇതുപയോഗിക്കുന്നില്ല:\n"
+"\n"
+"%s\n"
+"\n"
+"നിങ്ങള്‍ക്കു് ഈ പാഥ് ഉപയോഗിക്കണമോ?"
 
 #: ../src/virtManager/addhardware.py:1128 ../src/virtManager/create.py:1352
 msgid "A storage path must be specified."
@@ -600,19 +600,17 @@ msgid "Host device parameter error"
 msgstr "ഹോസ്റ്റ് ഡിവൈസ് പരാമീറ്ററില്‍ പിശക്"
 
 #: ../src/virtManager/addhardware.py:1280
-#, fuzzy, python-format
+#, python-format
 msgid "%s device parameter error"
-msgstr "%s ഡിവൈസ് പരാമീറ്ററില്‍ പിശക്."
+msgstr "%s ഡിവൈസ് പരാമീറ്ററില്‍ പിശക്"
 
 #: ../src/virtManager/addhardware.py:1291
-#, fuzzy
 msgid "Video device parameter error"
-msgstr "വീഡിയോ ഡിവൈസ് പരാമീറ്ററില്‍ പിശക്."
+msgstr "വീഡിയോ ഡിവൈസ് പരാമീറ്ററില്‍ പിശക്"
 
 #: ../src/virtManager/addhardware.py:1304
-#, fuzzy
 msgid "Watchdog parameter error"
-msgstr "സ്റ്റോറേജ് പരാമീറ്റര്‍ പിശക്."
+msgstr "വാച്ച്ഡോഗ് പരാമീറ്റര്‍ പിശക്"
 
 #: ../src/virtManager/asyncjob.py:43 ../src/vmm-progress.glade.h:2
 msgid "Please wait a few moments..."
@@ -641,11 +639,11 @@ msgstr "മീഡിയയ്ക്കുള്ള പാഥ് നല്‍ക�
 
 #: ../src/virtManager/choosecd.py:158
 msgid "Floppy D_rive"
-msgstr ""
+msgstr "ഫ്ലോപ്പി ഡ്രൈ_വ്"
 
 #: ../src/virtManager/choosecd.py:159
 msgid "Floppy _Image"
-msgstr ""
+msgstr "ഫ്ലോപ്പി _ഇമേജ്"
 
 #: ../src/virtManager/clone.py:221 ../src/virtManager/clone.py:437
 msgid "Details..."
@@ -756,6 +754,8 @@ msgid ""
 "Block devices to clone should be managed\n"
 "storage volumes."
 msgstr ""
+"ക്ലോണ്‍ ചെയ്യുവാനുള്ള ബ്ലോക്ക് ഡിവൈസുകള്‍\n"
+"കൈകാര്യം ചെയ്യണം."
 
 #: ../src/virtManager/clone.py:805 ../src/virtManager/delete.py:344
 msgid "No write access to parent directory."
@@ -898,10 +898,8 @@ msgid "Guest has crashed"
 msgstr "ഗസ്റ്റിനു് തകരാറു സംഭവിച്ചിരിക്കുന്നു"
 
 #: ../src/virtManager/console.py:464
-#, fuzzy
 msgid "Error: VNC connection to hypervisor host got refused or disconnected!"
-msgstr ""
-"ടിസിപി/ഐപി പിശക്: ഹൈപ്പര്‍വൈസര്‍ലേക്കുള്ള വിഎന്‍സി കണക്ഷന്‍ നിരസിച്ചു അല്ലെങ്കില്‍ വേര്‍പെട്ടു!"
+msgstr "പിശക്: ഹൈപ്പര്‍വൈസര്‍ലേക്കുള്ള വിഎന്‍സി കണക്ഷന്‍ നിരസിച്ചു അല്ലെങ്കില്‍ വേര്‍പെട്ടു!"
 
 #: ../src/virtManager/console.py:618
 msgid "Graphical console not configured for guest"
@@ -945,11 +943,12 @@ msgid "Connection is read only."
 msgstr "കണക്ഷന്‍ റീഡ് ഒണ്‍ലി ആണു്."
 
 #: ../src/virtManager/create.py:375
-#, fuzzy
 msgid ""
 "No hypervisor options were found for this\n"
 "connection."
-msgstr "ഈ കണക്ഷനു് ഇന്‍സ്റ്റോള്‍ ഉപാധികള്‍ ലഭ്യമല്ല."
+msgstr ""
+"ഈ കണക്ഷനുള്ള ഹൈപ്പര്‍വൈസര്‍ ഉപാധികള്‍\n"
+"ലഭ്യമല്ല."
 
 #: ../src/virtManager/create.py:380
 msgid ""
@@ -957,6 +956,9 @@ msgid ""
 "installed on your machine. Please ensure they\n"
 "are installed as intended."
 msgstr ""
+"ഇതിനര്‍ത്ഥം, നിങ്ങളുടെ സിസ്റ്റത്തില്‍ qemu അല്ലെങ്കില്‍ kvm\n"
+"സിസ്റ്റത്തില്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ലെന്നാണു്. ദയവായി ഇവ\n"
+"ഇന്‍സ്റ്റോള്‍ ചെയ്തെന്നുറപ്പാക്കുക."
 
 #: ../src/virtManager/create.py:394
 msgid ""
@@ -965,12 +967,18 @@ msgid ""
 "This may mean support is disabled in your\n"
 "system BIOS."
 msgstr ""
+"ഹോസ്റ്റ് പൂര്‍ണ്ണ വിര്‍ച്ച്വലൈസേഷന്‍ പിന്തുണയ്ക്കുന്നു,\n"
+"പക്ഷേ ഇതിനുള്ള ഇന്‍സ്റ്റോള്‍ ഉപാധികള്‍ ലഭ്യമല്ല.\n"
+"ഒരു പക്ഷേ, നിങ്ങളുടെ സിസ്റ്റം ബയോസില്‍ പിന്തുണ "
+"പ്രവര്‍ത്തന രഹിതമാവാം."
 
 #: ../src/virtManager/create.py:401
 msgid ""
 "Host does not appear to support hardware\n"
 "virtualization. Install options may be limited."
 msgstr ""
+"ഹോസ്റ്റ് ഹാര്‍ഡ്‌വെയര്‍ വിര്‍ച്ച്വലൈസേഷന്‍ പിന്തുണയ്ക്കുന്നില്ല. \n"
+"ഇന്‍സ്റ്റോള്‍ ഉപാധികള്‍ അധികമുണ്ടാവില്ല."
 
 #: ../src/virtManager/create.py:407
 msgid ""
@@ -978,6 +986,9 @@ msgid ""
 "package is not installed, or the KVM kernel modules \n"
 "are not loaded. Your virtual machines may perform poorly."
 msgstr ""
+"കെവിഎം ലഭ്യമല്ല. ഇതിനര്‍ത്ഥം, ഒന്നുകില്‍ കെവിഎം പാക്കേജ് ഇന്‍സ്റ്റോള്‍\n"
+"ചെയ്തിട്ടില്ല, അല്ലെങ്കില്‍ കെവിഎം കേര്‍ണല്‍ ഘടകങ്ങള്‍ ലഭ്യമാക്കിയിട്ടില്ല. \n"
+"ഇതിനാല്‍ നിങ്ങളുടെ വിര്‍ച്ച്വല്‍ മഷീനുകളുടെ പ്രവര്‍ത്തനം മെച്ചപ്പെട്ടതാവില്ല."
 
 #: ../src/virtManager/create.py:430
 #, python-format
@@ -1008,9 +1019,8 @@ msgid "Up to %(numcpus)d available"
 msgstr "%(numcpus)d വരെ ലഭ്യമാണു്"
 
 #: ../src/virtManager/create.py:584
-#, fuzzy
 msgid "Only URL or import installs are supported for paravirt."
-msgstr "paravirt-ല്‍ URL ഇന്‍സ്റ്റോളുകള്‍ മാത്രം പിന്തുണയ്ക്കുന്നു."
+msgstr "paravirt-ല്‍ URL, ഇന്‍സ്റ്റോളുകള്‍ ഇംപോര്‍ട്ട് ചെയ്യുന്നതു് എന്നിവ മാത്രം പിന്തുണയ്ക്കുന്നു."
 
 #: ../src/virtManager/create.py:661 ../src/virtManager/create.py:670
 #: ../src/virtManager/create.py:743 ../src/virtManager/create.py:745
@@ -1030,9 +1040,8 @@ msgid "PXE Install"
 msgstr "PXE ഇന്‍സ്റ്റോള്‍"
 
 #: ../src/virtManager/create.py:731
-#, fuzzy
 msgid "Import existing OS image"
-msgstr "നിലവിലുള്ള സംഭരണം കണ്ടുപിടിക്കുക"
+msgstr "നിലവിലുള്ള ഒഎസ് ഇമേജ് ഇംപോര്‍ട്ട് ചെയ്യുക"
 
 #: ../src/virtManager/create.py:734 ../src/virtManager/details.py:1545
 #: ../src/virtManager/details.py:1841
@@ -1075,9 +1084,8 @@ msgid "An install tree is required."
 msgstr "ഒരു ഇന്‍സ്റ്റോള്‍ ട്രീ ആവശ്യമുണ്ടു്."
 
 #: ../src/virtManager/create.py:1226
-#, fuzzy
 msgid "A storage path to import is required."
-msgstr "ഒരു സ്റ്റോറേജ് പാഥ് നല്‍കേണ്ടതുണ്ടു്."
+msgstr "ഇംപോര്‍ട്ട് ചെയ്യുന്നതിനായി ഒരു സ്റ്റോറേജ് പാഥ് നല്‍കേണ്ടതുണ്ടു്."
 
 #: ../src/virtManager/create.py:1236
 msgid "Error setting installer parameters."
@@ -1105,9 +1113,8 @@ msgid "Network device required for %s install."
 msgstr "%s ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനായി നെറ്റ്‌വര്‍ക്ക് ഡിവൈസ് ആവശ്യമുണ്ടു്."
 
 #: ../src/virtManager/create.py:1478
-#, fuzzy
 msgid "Error launching customize dialog: "
-msgstr "വോള്യം വിസാര്‍ഡ് ലഭ്യമാക്കുന്നതില്‍ പിശക് %s"
+msgstr "യഥേഷ്ടമുള്ള ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക് %s"
 
 #: ../src/virtManager/create.py:1509
 msgid "Creating Virtual Machine"
@@ -1126,9 +1133,9 @@ msgid "Guest installation failed to complete"
 msgstr "ഗസ്റ്റ് ഇന്‍സ്റ്റലേഷന്‍ പൂറ്‍ത്തിയാക്കുന്നതില്‍ പരാജയപ്പെട്ടു"
 
 #: ../src/virtManager/create.py:1613
-#, fuzzy, python-format
+#, python-format
 msgid "Error continue install: %s"
-msgstr "വോള്യം ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
+msgstr "ഇന്‍സ്റ്റോള്‍ തുടരുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/create.py:1722
 msgid "Detecting"
@@ -1140,65 +1147,57 @@ msgid "Bridge"
 msgstr "ബ്രിഡ്ജ്"
 
 #: ../src/virtManager/createinterface.py:203
-#, fuzzy
 msgid "Bond"
-msgstr "ശബ്ദം"
+msgstr "ബോണ്ട്"
 
 #: ../src/virtManager/createinterface.py:205
-#, fuzzy
 msgid "Ethernet"
-msgstr "മറ്റ് പലത്"
+msgstr "ഇഥര്‍നെറ്റ്"
 
 #: ../src/virtManager/createinterface.py:207
 msgid "VLAN"
-msgstr ""
+msgstr "VLAN"
 
 #: ../src/virtManager/createinterface.py:223
-#, fuzzy
 msgid "Type"
-msgstr "ഏത് തരം:"
+msgstr "ഏത് തരം"
 
 #: ../src/virtManager/createinterface.py:224
 msgid "In use by"
-msgstr ""
+msgstr "ഉപയോഗിക്കുന്നതു്"
 
 #: ../src/virtManager/createinterface.py:262
 #: ../src/virtManager/createinterface.py:272
-#, fuzzy
 msgid "System default"
-msgstr "ഹൈപ്പര്‍വൈസര്‍ ഡിഫോള്‍ട്ട്"
+msgstr "സിസ്റ്റത്തില്‍ സഹജമായതു്"
 
 #: ../src/virtManager/createinterface.py:511
 msgid "Choose interface(s) to bridge:"
-msgstr ""
+msgstr "ബ്രിഡ്ജ് ചെയ്യുവാനുള്ള ഇന്റര്‍ഫെയിസ് തെരഞ്ഞെടുക്കുക:"
 
 #: ../src/virtManager/createinterface.py:514
-#, fuzzy
 msgid "Choose parent interface:"
-msgstr "ലക്ഷ്യസ്ഥാനത്തുള്ള ഡയറക്ടറി തെരഞ്ഞെടുക്കുക"
+msgstr "പേരന്റ് ഇന്റര്‍ഫെയിസ് തെരഞ്ഞെടുക്കുക:"
 
 #: ../src/virtManager/createinterface.py:516
 msgid "Choose interfaces to bond:"
-msgstr ""
+msgstr "ബോണ്ട് ചെയ്യുവാനുള്ള ഇന്റര്‍ഫെയിസുകള്‍ തെരഞ്ഞെടുക്കുക:"
 
 #: ../src/virtManager/createinterface.py:518
 msgid "Choose an unconfigured interface:"
-msgstr ""
+msgstr "ക്രമീകരിച്ചിട്ടില്ലാത്ത ഇന്റര്‍ഫെയിസ് തെരഞ്ഞെടുക്കുക:"
 
 #: ../src/virtManager/createinterface.py:573
-#, fuzzy
 msgid "No interface selected"
-msgstr "ഒരു ഇന്റര്‍ഫെയിസ് നല്‍കേണ്ടതുണ്ടു്."
+msgstr "ഇന്റര്‍ഫെയിസ് തെരഞ്ഞെടുത്തിട്ടില്ല"
 
 #: ../src/virtManager/createinterface.py:933
-#, fuzzy
 msgid "An interface name is required."
-msgstr "ഒരു ഇന്‍സ്റ്റോള്‍ ട്രീ ആവശ്യമുണ്ടു്."
+msgstr "ഒരു ഇന്റര്‍ഫെയിസ് നാമം ആവശ്യമുണ്ടു്."
 
 #: ../src/virtManager/createinterface.py:937
-#, fuzzy
 msgid "An interface must be selected"
-msgstr "ഒരു ഇന്റര്‍ഫെയിസ് നല്‍കേണ്ടതുണ്ടു്."
+msgstr "ഒരു ഇന്റര്‍ഫെയിസ് നല്‍കേണ്ടതുണ്ടു്"
 
 #: ../src/virtManager/createinterface.py:968
 #, python-format
@@ -1210,30 +1209,34 @@ msgid ""
 "Using these may overwrite their existing configuration. Are you sure you "
 "want to use the selected interface(s)?"
 msgstr ""
+"ഈ ഇന്റര്‍ഫെയിസുകള്‍ നിലവില്‍ ക്രമീകരിച്ചിരിക്കുന്നു:\n"
+"\n"
+"%s\n"
+"\n"
+"ഇവ ഉപയോഗിക്കുന്നതു് നിലവിലുള്ള ക്രമീകരണം തിരുത്തിയെഴുതുന്നു. തെരഞ്ഞെടുത്ത "
+"ഇന്റര്‍ഫെയിസുകള്‍ ഉപയോഗിക്കണമെന്നുറപ്പാണോ?"
 
 #: ../src/virtManager/createinterface.py:1006
-#, fuzzy
 msgid "Error setting interface parameters."
-msgstr "ഇന്‍സ്റ്റോളര്‍ പരാമീറ്ററുകള്‍ ക്രമീകരിക്കുന്നതില്‍ പിശക്."
+msgstr "ഇന്റര്‍ഫെയിസ് പരാമീറ്ററുകള്‍ ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
 #: ../src/virtManager/createinterface.py:1083
-#, fuzzy, python-format
+#, python-format
 msgid "Error validating IP configuration: %s"
-msgstr "VM ക്രമീകരണം മാറ്റുന്നതില്‍ പിശക്: %s"
+msgstr "ഐപി ക്രമീകരണം ഉറപ്പാക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/createinterface.py:1129
-#, fuzzy
 msgid "Creating virtual interface"
-msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ ഉണ്ടാക്കുന്നു"
+msgstr "വിര്‍ച്ച്വല്‍ ഇന്റര്‍ഫെയിസ് ഉണ്ടാക്കുന്നു"
 
 #: ../src/virtManager/createinterface.py:1130
 msgid "The virtual interface is now being created."
-msgstr ""
+msgstr "വിര്‍ച്ച്വല്‍ ഇന്റര്‍ഫെയിസ് ഇപ്പോള്‍ സജ്ജമാക്കുന്നു."
 
 #: ../src/virtManager/createinterface.py:1165
-#, fuzzy, python-format
+#, python-format
 msgid "Error creating interface: '%s'"
-msgstr "വോള്യം ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
+msgstr "ഇന്റര്‍ഫെയിസ് ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/createnet.py:105
 msgid "Any physical device"
@@ -1494,9 +1497,8 @@ msgstr ""
 "- %s "
 
 #: ../src/virtManager/details.py:389
-#, fuzzy
 msgid "Add Hardware"
-msgstr "ഹാര്‍ഡ്‌വെയര്‍ _ചേര്‍ക്കുക"
+msgstr "ഹാര്‍ഡ്‌വെയര്‍ ചേര്‍ക്കുക"
 
 #: ../src/virtManager/details.py:425
 msgid "Close tab"
@@ -1565,9 +1567,9 @@ msgid "Graphical Console %s"
 msgstr "ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ %s"
 
 #: ../src/virtManager/details.py:764
-#, fuzzy, python-format
+#, python-format
 msgid "Error refreshing hardware page: %s"
-msgstr "സംഭരണ പാഥ് മാറ്റുന്നതില്‍ പിശക്: %s"
+msgstr "ഹാര്‍ഡ്‌വെയര്‍ താള്‍ പുതുക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/details.py:938
 msgid "Save Virtual Machine Screenshot"
@@ -1732,13 +1734,12 @@ msgid "Crashed"
 msgstr "തകര്‍ന്നിരിക്കുന്നു"
 
 #: ../src/virtManager/domain.py:2250
-#, fuzzy
 msgid "Did not find selected device."
-msgstr "ഡിവൈസ് %s ലഭ്യമാക്കുവാന്‍ സാധ്യമല്ല"
+msgstr "തെരഞ്ഞെടുത്ത ഡിവൈസ് ലഭ്യമായില്ല."
 
 #: ../src/virtManager/engine.py:103
 msgid "Searching for available hypervisors..."
-msgstr ""
+msgstr "ലഭ്യമായ ഹൈപ്പര്‍വൈസറുകള്‍ക്കായി തെരയുന്നു..."
 
 #: ../src/virtManager/engine.py:126
 #, python-format
@@ -1749,19 +1750,23 @@ msgid ""
 "These are required to create KVM guests locally.\n"
 "Would you like to install them now?"
 msgstr ""
+"ഈ പാക്കേജുകള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല:\n"
+"%s\n"
+"\n"
+"കെവിഎം ഗസ്റ്റുകള്‍ ലോക്കലായി സജ്ജമാക്കുന്നതിനു് ഇവ ആവശ്യമുണ്ടു്.\n"
+"ഇവ ഉടന്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്യണമോ?"
 
 #: ../src/virtManager/engine.py:131
 msgid "Packages required for KVM usage"
-msgstr ""
+msgstr "കെവിഎം ഉപയോഗത്തിനുള്ള പാക്കേജുകള്‍"
 
 #: ../src/virtManager/engine.py:140
-#, fuzzy, python-format
+#, python-format
 msgid "Error talking to PackageKit: %s"
-msgstr "ഡൊമെയിന്‍ ആരംഭിക്കുന്നതില്‍ പിശക്: %s"
+msgstr "പാക്കേജ്കിറ്റുമായി ബന്ധപ്പെടുന്നതില്‍ പിശക്: %s"
 
 #. Manager fail message
 #: ../src/virtManager/engine.py:290
-#, fuzzy
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1771,8 +1776,9 @@ msgid ""
 "A hypervisor connection can be manually\n"
 "added via File->Add Connection"
 msgstr ""
-"സ്വതവേയുള്ള കണക്ഷന്‍ ഉപയോഗത്തിലാക്കുവാന്‍ സാധിച്ചില്ല. ശരിയായ വിര്‍ച്ച്വലൈസേഷന്‍ പാക്കേജുകള്‍ (kvm, "
-"qemu, എന്നിവ.) ഇന്‍സ്റ്റോള്‍ ചെയ്തെന്നും മാറ്റങ്ങളനുസരിച്ചു് libvirtd വീണ്ടും ആരംഭിച്ചെന്നും "
+"സ്വതവേയുള്ളൊരു ഹൈപ്പര്‍വൈസര്‍ ലഭ്യമാക്കുവാന്‍ സാധിച്ചില്ല.\n"
+"ശരിയായ വിര്‍ച്ച്വലൈസേഷന്‍ പാക്കേജുകള്‍ (kvm, qemu, libvrt എന്നിവ.)\n"
+"ഇന്‍സ്റ്റോള്‍ ചെയ്തെന്നും libvirtd പ്രവര്‍ത്തനത്തിലാണെന്നും\n"
 "ഉറപ്പാക്കുക.\n"
 "\n"
 "ഒരു ഹൈപ്പര്‍വൈസര്‍ കണക്ഷന്‍ നിങ്ങള്‍ക്ക് ചേര്‍ക്കാം: \n"
@@ -1791,11 +1797,20 @@ msgid ""
 "virt-manager will connect to libvirt on the next application\n"
 "start up."
 msgstr ""
+"Libvirt ഇപ്പോള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടുള്ളൂ, അതിനാല്‍ 'libvirtd' സര്‍വീസ് \n"
+"വീണ്ടും ആരംഭിക്കേണ്ടതുണ്ടു്. ഇതിനായി താഴെ പറയുന്ന ഒരു രീതി\n"
+"പാലിയ്ക്കുക:\n"
+"\n"
+"- ഗ്നോം മെനുവില്‍ : സിസ്റ്റം->അഡ്മിനിസ്ട്രേഷന്‍->സര്‍വീസുകള്‍\n"
+"- ടെര്‍മിനലില്‍: su -c 'service libvirtd restart'\n"
+"- കമ്പ്യൂട്ടര്‍ വീണ്ടും ആരംഭിക്കുക\n"
+"\n"
+"അടുത്ത തവണ പ്രയോഗം ആരംഭിക്കുമ്പോള്‍, virt-manager libvirt-ലേക്ക്\n"
+"കണക്ട് ചെയ്യുന്നു."
 
 #: ../src/virtManager/engine.py:329
-#, fuzzy
 msgid "Libvirt service must be started"
-msgstr "ഒരു ഡിവൈസ് തെരഞ്ഞെടുക്കണം."
+msgstr "Libvrt സര്‍വീസ് ആരംഭിക്കണം"
 
 #: ../src/virtManager/engine.py:586
 #, python-format
@@ -1875,9 +1890,9 @@ msgstr "നിങ്ങള്‍ക്ക് '%s' റീബൂട്ട് ച�
 
 #. Raise the original error message
 #: ../src/virtManager/engine.py:862 ../src/virtManager/engine.py:877
-#, fuzzy, python-format
+#, python-format
 msgid "Error rebooting domain: %s"
-msgstr "ഡൊമെയിന്‍ ആരംഭിക്കുന്നതില്‍ പിശക്: %s"
+msgstr "ഡൊമെയിന്‍ റീബൂട്ട് ചെയ്യുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/engine.py:906
 #, python-format
@@ -1908,24 +1923,20 @@ msgstr "%(currentmem)s of %(maxmem)s"
 
 #: ../src/virtManager/host.py:354 ../src/virtManager/host.py:355
 #: ../src/virtManager/host.py:356
-#, fuzzy
 msgid "Connection not active."
-msgstr "ഏത് തരം കണക്ഷന്‍"
+msgstr "കണക്ഷന്‍ സജീവമല്ല."
 
 #: ../src/virtManager/host.py:361
-#, fuzzy
 msgid "Libvirt connection does not support virtual network management."
-msgstr "കണക്ഷന്‍ സ്റ്റോറേജ് മാനേജ്മെന്റ് പിന്തുണയ്ക്കുന്നില്ല."
+msgstr "Libvrt കണക്ഷന്‍ വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് മാനേജ്മെന്റ് പിന്തുണയ്ക്കുന്നില്ല."
 
 #: ../src/virtManager/host.py:366
-#, fuzzy
 msgid "Libvirt connection does not support storage management."
-msgstr "കണക്ഷന്‍ സ്റ്റോറേജ് മാനേജ്മെന്റ് പിന്തുണയ്ക്കുന്നില്ല."
+msgstr "Libvrt കണക്ഷന്‍ സ്റ്റോറേജ് മാനേജ്മെന്റ് പിന്തുണയ്ക്കുന്നില്ല."
 
 #: ../src/virtManager/host.py:370
-#, fuzzy
 msgid "Libvirt connection does not support interface management."
-msgstr "കണക്ഷന്‍ സ്റ്റോറേജ് മാനേജ്മെന്റ് പിന്തുണയ്ക്കുന്നില്ല."
+msgstr "Libvrt കണക്ഷന്‍ ഇന്റര്‍ഫെയിസ് മാനേജ്മെന്റ് പിന്തുണയ്ക്കുന്നില്ല."
 
 #: ../src/virtManager/host.py:385
 #, python-format
@@ -1969,14 +1980,13 @@ msgid "Never"
 msgstr "ഒരിക്കലും ഇല്ല"
 
 #: ../src/virtManager/host.py:471
-#, fuzzy
 msgid "No virtual network selected."
-msgstr "ഒരു വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്കുകളും ലഭ്യമല്ല"
+msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് തെരഞ്ഞെടുത്തിട്ടില്ല."
 
 #: ../src/virtManager/host.py:481
-#, fuzzy, python-format
+#, python-format
 msgid "Error selecting network: %s"
-msgstr "നെറ്റ്‌വര്‍ക്ക് വെട്ടി നീക്കുന്നതില്‍ പിശക്: %s"
+msgstr "നെറ്റ്‌വര്‍ക്ക് തെരഞ്ഞെടുക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/host.py:546
 msgid "Isolated virtual network"
@@ -2023,69 +2033,66 @@ msgid "Error setting pool autostart: %s"
 msgstr "പൂള്‍ ഓട്ടോസ്റ്റാര്‍ട്ട് ക്രമികരിക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/host.py:705
-#, fuzzy
 msgid "No storage pool selected."
-msgstr "ഒരു ഇന്റര്‍ഫെയിസ് നല്‍കേണ്ടതുണ്ടു്."
+msgstr "സ്റ്റോറേജ് പൂള്‍ തെരഞ്ഞെടുത്തിട്ടില്ല."
 
 #: ../src/virtManager/host.py:715
-#, fuzzy, python-format
+#, python-format
 msgid "Error selecting pool: %s"
-msgstr "പൂള്‍ വെട്ടി നീക്കുന്നതില്‍ പിശക്: %s"
+msgstr "പൂള്‍ തെരഞ്ഞെടുക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/host.py:829
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to stop the interface '%s'?"
-msgstr "നിങ്ങള്‍ '%s' നല്‍ക്കാലത്തേക്കു് നിര്‍ത്തണമോ?"
+msgstr "നിങ്ങള്‍ '%s' ഇന്റര്‍ഫെയിസ് നിര്‍ത്തണമെന്നുറപ്പാണോ?"
 
 #: ../src/virtManager/host.py:831 ../src/virtManager/host.py:857
-#, fuzzy
 msgid "Don't ask me again for interface start/stop."
-msgstr "ഇനി ചോദിക്കരുതു്."
+msgstr "ഇന്റര്‍ഫെയിസ് ആരംഭം/അവസാനം ഇനി ചോദിക്കരുതു്."
 
 #: ../src/virtManager/host.py:842
-#, fuzzy, python-format
+#, python-format
 msgid "Error stopping interface '%s': %s"
-msgstr "ഡൊമെയിന്‍'%s'വീണ്ടെടുക്കുന്നതില്‍ പിശക്: %s"
+msgstr "ഇന്റര്‍ഫെയിസ്'%s'നിര്‍ത്തുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/host.py:855
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to start the interface '%s'?"
-msgstr "നിങ്ങള്‍ക്ക് '%s' റീബൂട്ട് ചെയ്യണമെന്നുറപ്പാണോ?"
+msgstr "നിങ്ങള്‍ക്ക് '%s' ഇന്റര്‍ഫെയിസ് ആരംഭിക്കണമെന്നുറപ്പാണോ?"
 
 #: ../src/virtManager/host.py:868
-#, fuzzy, python-format
+#, python-format
 msgid "Error starting interface '%s': %s"
-msgstr "പൂള്‍ '%s' ആരംഭിക്കുന്നതില്‍ പിശക്: %s"
+msgstr "ഇന്റര്‍ഫെയിസ് '%s' ആരംഭിക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/host.py:877
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to permanently delete the interface %s?"
-msgstr "നിങ്ങള്‍ക്ക് %s നെറ്റ്‌വര്‍ക്ക് എന്നേക്കുമായി ഇല്ലാതാക്കണമെന്നുറപ്പാണോ?"
+msgstr "നിങ്ങള്‍ക്ക് %s ഇന്റര്‍ഫെയിസ് എന്നേക്കുമായി ഇല്ലാതാക്കണമെന്നുറപ്പാണോ?"
 
 #: ../src/virtManager/host.py:886
-#, fuzzy, python-format
+#, python-format
 msgid "Error deleting interface: %s"
-msgstr "നെറ്റ്‌വര്‍ക്ക് വെട്ടി നീക്കുന്നതില്‍ പിശക്: %s"
+msgstr "ഇന്റര്‍ഫെയിസ് വെട്ടി നീക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/host.py:895
-#, fuzzy, python-format
+#, python-format
 msgid "Error launching interface wizard: %s"
-msgstr "നെറ്റ്‌വര്‍ക്ക് വിസാര്‍ഡ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
+msgstr "ഇന്റര്‍ഫെയിസ് വിസാര്‍ഡ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/host.py:926
-#, fuzzy, python-format
+#, python-format
 msgid "Error setting interface startmode: %s"
-msgstr "നെറ്റ് ഓട്ടോസ്റ്റാര്‍ട്ട് ക്രമികരിക്കുന്നതില്‍ പിശക്: %s"
+msgstr "ഇന്റര്‍ഫെയിസിനുള്ള സ്റ്റാര്‍ട്ട്മോഡ് സജ്ജമാക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/host.py:946
-#, fuzzy
 msgid "No interface selected."
-msgstr "ഒരു ഇന്റര്‍ഫെയിസ് നല്‍കേണ്ടതുണ്ടു്."
+msgstr "ഇന്റര്‍ഫെയിസ് തെരഞ്ഞെടുത്തിട്ടില്ല."
 
 #: ../src/virtManager/host.py:957
-#, fuzzy, python-format
+#, python-format
 msgid "Error selecting interface: %s"
-msgstr "നെറ്റ്‌വര്‍ക്ക് വെട്ടി നീക്കുന്നതില്‍ പിശക്: %s"
+msgstr "ഇന്റര്‍ഫെയിസ് തെരഞ്ഞെടുക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/manager.py:302 ../src/virtManager/systray.py:171
 #: ../src/vmm-details.glade.h:126 ../src/vmm-manager.glade.h:21
@@ -2127,9 +2134,8 @@ msgid "_Migrate..."
 msgstr "_നീക്കുക..."
 
 #: ../src/virtManager/manager.py:362
-#, fuzzy
 msgid "_Delete"
-msgstr "വെട്ടി മാറ്റുക"
+msgstr "_വെട്ടി മാറ്റുക"
 
 #: ../src/virtManager/manager.py:410 ../src/vmm-details.glade.h:112
 msgid "_Details"
@@ -2211,7 +2217,6 @@ msgid "Disabled in preferences dialog."
 msgstr "മുന്‍ഗണനകള്‍ക്കുള്ള ഡയലോഗില്‍ പ്രവര്‍ത്തന രഹിതമാക്കിയിരിക്കുന്നു."
 
 #: ../src/virtManager/mediadev.py:104
-#, fuzzy
 msgid "No media detected"
 msgstr "മീഡിയാ ലഭ്യമല്ല"
 
@@ -2237,10 +2242,8 @@ msgstr "ഒരു ശരിയായ ലക്ഷ്യം തെരഞ്ഞെ
 #. give us is localhost. Remember, the dest machine can actually
 #. be our local machine so we may not already know its hostname
 #: ../src/virtManager/migrate.py:242
-msgid ""
-"Could not determine remotely accessible hostname for destination connection."
-msgstr ""
-"Could not determine remotely accessible hostname for destination connection."
+msgid "Could not determine remotely accessible hostname for destination connection."
+msgstr "Could not determine remotely accessible hostname for destination connection."
 
 #: ../src/virtManager/migrate.py:298
 msgid "No connections available."
@@ -2373,7 +2376,7 @@ msgstr "നെറ്റ്‌വര്‍ക്കിങ് ലഭ്യമല�
 #. After all is said and done, add a manual bridge option
 #: ../src/virtManager/uihelpers.py:387
 msgid "Specify shared device name"
-msgstr ""
+msgstr "പങ്കിടുന്ന ഡിവൈസ് നാമം വ്യക്തമാക്കുക"
 
 #: ../src/virtManager/uihelpers.py:406
 msgid "Virtual Network is not active."
@@ -2381,8 +2384,7 @@ msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്�
 
 #: ../src/virtManager/uihelpers.py:407
 #, python-format
-msgid ""
-"Virtual Network '%s' is not active. Would you like to start the network now?"
+msgid "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് '%s' സജീവമല്ല. നിങ്ങള്‍ക്കു് ഉടന്‍ നെറ്റ്‌വര്‍ക്ക് ആരംഭിക്കണമോ?"
 
 #: ../src/virtManager/uihelpers.py:419
@@ -2404,9 +2406,8 @@ msgid "%s Are you sure you want to use this address?"
 msgstr "%s ഈ വിലാസമുപയോഗിക്കണമെന്നു് നിങ്ങള്‍ക്കുറപ്പാണോ?"
 
 #: ../src/virtManager/uihelpers.py:500
-#, fuzzy
 msgid "No device present"
-msgstr "മീഡിയാ ലഭ്യമല്ല"
+msgstr "ഡിവൈസ് ലഭ്യമല്ല"
 
 #: ../src/virtManager/uihelpers.py:646
 #, python-format
@@ -2422,8 +2423,7 @@ msgid "Don't ask about these directories again."
 msgstr "ഈ ഡയറക്ടറികളെപ്പറ്റി ഇനി ചോദിക്കരുതു്."
 
 #: ../src/virtManager/uihelpers.py:662
-msgid ""
-"Errors were encountered changing permissions for the following directories:"
+msgid "Errors were encountered changing permissions for the following directories:"
 msgstr "ഈ ഡയറക്ടറികള്‍ക്കു് അനുവാദങ്ങള്‍ മാറ്റുന്നതില്‍ പിശകുകള്‍ നേരിട്ടിരിക്കുന്നു:"
 
 #: ../src/virtManager/util.py:64
@@ -2499,10 +2499,8 @@ msgstr ""
 "നെറ്റ്‌വര്‍ക്ക് ചേര്‍ക്കുന്നതു് പൂര്‍ത്തിയായി</span>"
 
 #: ../src/vmm-add-hardware.glade.h:8
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Graphics</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ഗ്രാഫിക്സ്</span>"
+msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Graphics</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ഗ്രാഫിക്സ്</span>"
 
 #: ../src/vmm-add-hardware.glade.h:9
 msgid ""
@@ -2513,28 +2511,20 @@ msgstr ""
 "span>"
 
 #: ../src/vmm-add-hardware.glade.h:10
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Input</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ഇന്‍പുട്ട്</span>"
+msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Input</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ഇന്‍പുട്ട്</span>"
 
 #: ../src/vmm-add-hardware.glade.h:11
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Network</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">നെറ്റ്‌വര്‍ക്ക്</span>"
+msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Network</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">നെറ്റ്‌വര്‍ക്ക്</span>"
 
 #: ../src/vmm-add-hardware.glade.h:12
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sound</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ശബ്ദം</span>"
+msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sound</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">ശബ്ദം</span>"
 
 #: ../src/vmm-add-hardware.glade.h:13
-msgid ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Storage</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">സംഭരണം</span>"
+msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Storage</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">സംഭരണം</span>"
 
 #: ../src/vmm-add-hardware.glade.h:14
 msgid ""
@@ -2545,22 +2535,20 @@ msgstr ""
 "span>"
 
 #: ../src/vmm-add-hardware.glade.h:15
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Watchdog "
 "Device</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">വീഡിയോ ഡിവൈസ്</"
-"span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">വാച്ച്ഡോഗ് "
+"ഡിവൈസ്</span>"
 
 #: ../src/vmm-add-hardware.glade.h:16
 msgid "A_utomatically allocated"
 msgstr "_സ്വയമായി ലഭ്യമാക്കുന്നു"
 
 #: ../src/vmm-add-hardware.glade.h:17
-#, fuzzy
 msgid "Ac_tion:"
-msgstr "_സ്ഥാനം:"
+msgstr "_പ്രവര്‍ത്തി:"
 
 #: ../src/vmm-add-hardware.glade.h:18
 msgid "Add new virtual hardware"
@@ -2645,8 +2633,7 @@ msgstr ""
 "ഡിവൈസാണെന്നു് സൂചിപ്പിക്കുക."
 
 #: ../src/vmm-add-hardware.glade.h:36
-msgid ""
-"Please indicate what sound device type to connect to the virtual machine."
+msgid "Please indicate what sound device type to connect to the virtual machine."
 msgstr "വിര്‍ച്ച്വല്‍ മഷീനില്‍ ബന്ധിപ്പിക്കേണ്ടതു് ഏതു് തരത്തിലുള്ള ശബ്ദ ഡിവൈസാണെന്നു് സൂചിപ്പിക്കുക."
 
 #: ../src/vmm-add-hardware.glade.h:37
@@ -2658,13 +2645,12 @@ msgstr ""
 "ഡിവൈസാണെന്നു് സൂചിപ്പിക്കുക."
 
 #: ../src/vmm-add-hardware.glade.h:39
-#, fuzzy
 msgid ""
 "Please indicate what watchdog device type\n"
 "and default action should be used."
 msgstr ""
-"വിര്‍ച്ച്വല്‍ മഷീനില്‍ ബന്ധിപ്പിക്കേണ്ടതു് ഏതു് തരത്തിലുള്ള വീഡിയോ\n"
-"ഡിവൈസാണെന്നു് സൂചിപ്പിക്കുക."
+"ദയവായി വാച്ച്ഡോഗ് ഡിവൈസ് തരവും സ്വതവേയുള്ള \n"
+"പ്രവര്‍ത്തനവും വ്യക്തമാക്കുക."
 
 #: ../src/vmm-add-hardware.glade.h:41
 msgid "Po_rt:"
@@ -2700,9 +2686,8 @@ msgid "_Bind Host:"
 msgstr "_Bind Host:"
 
 #: ../src/vmm-add-hardware.glade.h:49 ../src/vmm-create.glade.h:48
-#, fuzzy
 msgid "_Bridge name:"
-msgstr "ബ്രിഡ്ജ്"
+msgstr "_ബ്രിഡ്ജ് നാമം:"
 
 #: ../src/vmm-add-hardware.glade.h:50
 msgid "_Device type:"
@@ -2723,9 +2708,8 @@ msgid "_GB"
 msgstr "_GB"
 
 #: ../src/vmm-add-hardware.glade.h:54
-#, fuzzy
 msgid "_Host device:"
-msgstr "ഹോസ്റ്റ് ‍ഡിവൈസ്:"
+msgstr "_ഹോസ്റ്റ് ‍ഡിവൈസ്:"
 
 #: ../src/vmm-add-hardware.glade.h:55
 msgid "_Keymap:"
@@ -2769,18 +2753,16 @@ msgid "label"
 msgstr "ീലേബല്‍"
 
 #: ../src/vmm-choose-cd.glade.h:1
-#, fuzzy
 msgid "<b>Choose Source Device or File</b>"
-msgstr "<b>സിഡി സോഴ്സ് ഡിവൈസ് അല്ലെങ്കില്‍ ഫയല്‍</b>"
+msgstr "<b>സോഴ്സ് ഡിവൈസ് അല്ലെങ്കില്‍ ഫയല്‍ തെരഞ്ഞെടുക്കുക</b>"
 
 #: ../src/vmm-choose-cd.glade.h:2
 msgid "CD-_ROM or DVD"
 msgstr "_CD-ROM അല്ലെങ്കില്‍ DVD"
 
 #: ../src/vmm-choose-cd.glade.h:3
-#, fuzzy
 msgid "Choose Media"
-msgstr "ഒരു സിഡി മീഡിയാ തെരഞ്ഞെടുക്കുക"
+msgstr "മീഡിയാ തെരഞ്ഞെടുക്കുക"
 
 #: ../src/vmm-choose-cd.glade.h:4 ../src/vmm-clone.glade.h:23
 msgid "_Browse..."
@@ -2890,180 +2872,152 @@ msgid "No storage to clone"
 msgstr "ക്ലോണ്‍ ചെയ്യുവാന്‍ സംഭരണം ലഭ്യമല്ല"
 
 #: ../src/vmm-create-interface.glade.h:1
-#, fuzzy
 msgid "<b>ARP settings</b>"
-msgstr "<b>മഷീന്‍ സജ്ജീകരണങ്ങള്‍</b>"
+msgstr "<b>എആര്‍പി സജ്ജീകരണങ്ങള്‍</b>"
 
 #: ../src/vmm-create-interface.glade.h:2
-#, fuzzy
 msgid "<b>Bond configuration</b>"
-msgstr "<b>IPv4 കോണ്‍ഫിഗറേഷന്‍</b>"
+msgstr "<b>ബോണ്ട് ക്രമീകരണം</b>"
 
 #: ../src/vmm-create-interface.glade.h:3
-#, fuzzy
 msgid "<b>Bridge configuration</b>"
-msgstr "<b>IPv4 കോണ്‍ഫിഗറേഷന്‍</b>"
+msgstr "<b>ബ്രിഡ്ജ് ക്രമീകരണം</b>"
 
 #: ../src/vmm-create-interface.glade.h:4
-#, fuzzy
 msgid "<b>IP Configuration</b>"
-msgstr "<b>IPv4 കോണ്‍ഫിഗറേഷന്‍</b>"
+msgstr "<b>IP ക്രമീകരണം</b>"
 
 #: ../src/vmm-create-interface.glade.h:5
-#, fuzzy
 msgid "<b>MII settings</b>"
-msgstr "<b>മഷീന്‍ സജ്ജീകരണങ്ങള്‍</b>"
+msgstr "<b>എംഐഐ സജ്ജീകരണങ്ങള്‍</b>"
 
 #: ../src/vmm-create-interface.glade.h:6
-#, fuzzy
 msgid "<span size='large' color='white'>Configure network interface</span>"
-msgstr "<span size='large' color='white'>ഒരു പുതിയ വിര്‍ച്ച്വല്‍ മഷീന്‍ ഉണ്ടാക്കുക</span>"
+msgstr "<span size='large' color='white'>നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസ് ക്രമീകരിക്കുക</span>"
 
 #: ../src/vmm-create-interface.glade.h:7
-#, fuzzy
 msgid "A_utoconf"
-msgstr "_സ്വയം കണക്ട് ചെയ്യുക:"
+msgstr "A_utoconf"
 
 #: ../src/vmm-create-interface.glade.h:8
-#, fuzzy
 msgid "Addresses:"
-msgstr "വിലാസം:"
+msgstr "വിലാസങ്ങള്‍:"
 
 #: ../src/vmm-create-interface.glade.h:9
 msgid "Bond mode:"
-msgstr ""
+msgstr "ബോണ്ട് മോഡ്:"
 
 #: ../src/vmm-create-interface.glade.h:10
 msgid "Bond monitor mode:"
-msgstr ""
+msgstr "ബോണ്ട മോണിറ്റര്‍ മോഡ്:"
 
 #: ../src/vmm-create-interface.glade.h:11
-#, fuzzy
 msgid "Bonding configuration"
-msgstr "VM ക്രമീകരണം മാറ്റുന്നതില്‍ പിശക്: %s"
+msgstr "ബോണ്ടിങ് ക്രമീകരണം"
 
 #: ../src/vmm-create-interface.glade.h:12
-#, fuzzy
 msgid "Bridge configuration"
-msgstr "<b>IPv4 കോണ്‍ഫിഗറേഷന്‍</b>"
+msgstr "ബ്രിഡ്ജ് ക്രമീകരണം"
 
 #: ../src/vmm-create-interface.glade.h:13
 msgid "Bridge settings:"
-msgstr ""
+msgstr "ബ്രിഡ്ജ് സജ്ജീകരണങ്ങള്‍:"
 
 #: ../src/vmm-create-interface.glade.h:14
-#, fuzzy
 msgid "C_onfigure"
-msgstr "_ക്ലോണ്‍"
+msgstr "ക്രമീ_കരിക്കുക"
 
 #: ../src/vmm-create-interface.glade.h:15
-#, fuzzy
 msgid "Carrier type:"
-msgstr "ഏത് തരം _ഹാര്‍ഡ്‌വെയര്‍:"
+msgstr "ഏത് തരം കാരിയര്‍:"
 
 #: ../src/vmm-create-interface.glade.h:16
-#, fuzzy
 msgid "Configure network interface"
-msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസുകള്‍"
+msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസ് ക്രമീകരിക്കുക"
 
 #: ../src/vmm-create-interface.glade.h:17
 msgid "Down delay:"
-msgstr ""
+msgstr "ഡൌണ്‍ ഡിലേ:"
 
 #: ../src/vmm-create-interface.glade.h:18
-#, fuzzy
 msgid "Enable STP:"
-msgstr "DHCP _സജ്ജമാക്കുക:"
+msgstr "എസ്‌ടിപി സജ്ജമാക്കുക:"
 
 #: ../src/vmm-create-interface.glade.h:19
-#, fuzzy
 msgid "Forward delay:"
-msgstr "ഫോറ്‍വേറ്‍ഡിങ്:"
+msgstr "ഫോര്‍വേഡ് ഡിലേ:"
 
 #: ../src/vmm-create-interface.glade.h:20
 msgid "Frequency:"
-msgstr ""
+msgstr "ഫ്രീക്വന്‍സി:"
 
 #: ../src/vmm-create-interface.glade.h:21
-#, fuzzy
 msgid "IP Configuration"
-msgstr "<b>IPv4 കോണ്‍ഫിഗറേഷന്‍</b>"
+msgstr "IP ക്രമീകരണം"
 
 #: ../src/vmm-create-interface.glade.h:22
-#, fuzzy
 msgid "IP settings:"
-msgstr "<b>മഷീന്‍ സജ്ജീകരണങ്ങള്‍</b>"
+msgstr "IP സജ്ജീകരണങ്ങള്‍:"
 
 #: ../src/vmm-create-interface.glade.h:23 ../src/vmm-create-net.glade.h:26
 msgid "IPv4"
 msgstr "IPv4"
 
 #: ../src/vmm-create-interface.glade.h:24
-#, fuzzy
 msgid "IPv6"
-msgstr "IPv4"
+msgstr "IPv6"
 
 #: ../src/vmm-create-interface.glade.h:25
-#, fuzzy
 msgid "Insert list desc:"
-msgstr "(ഹോസ്റ്റ് മെമ്മറി ചേര്‍ക്കുക)"
+msgstr "മുകളില്‍ നിന്നും താഴേക്കുള്ള പട്ടിക ചേര്‍ക്കുക:"
 
 #: ../src/vmm-create-interface.glade.h:26
-#, fuzzy
 msgid "Interval:"
-msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്യുക"
+msgstr "ഇടവേള:"
 
 #: ../src/vmm-create-interface.glade.h:27
-#, fuzzy
 msgid "Ma_nually configure:"
-msgstr "_ക്ലോണ്‍"
+msgstr "_മാനുവലായി ക്രമീകരിക്കുക:"
 
 #: ../src/vmm-create-interface.glade.h:28
 msgid "Select the interface type you would like to configure."
-msgstr ""
+msgstr "ക്രമീകരിക്കേണ്ട ഇന്റര്‍ഫെയിസ് തരം തെരഞ്ഞെടുക്കുക."
 
 #: ../src/vmm-create-interface.glade.h:29
-#, fuzzy
 msgid "Static configuration:"
-msgstr "<b>IPv4 കോണ്‍ഫിഗറേഷന്‍</b>"
+msgstr "സ്റ്റാറ്റിക് ക്രമീകരണം:"
 
 #: ../src/vmm-create-interface.glade.h:30
-#, fuzzy
 msgid "Target address:"
-msgstr "ആരംഭിക്കുന്ന വിലാസം:"
+msgstr "ലക്ഷ്യസ്ഥാനത്തിന്റെ വിലാസം:"
 
 #: ../src/vmm-create-interface.glade.h:31
 msgid "Up delay:"
-msgstr ""
+msgstr "അപ്പ് ഡിലേ:"
 
 #: ../src/vmm-create-interface.glade.h:32
 msgid "Validate mode:"
-msgstr ""
+msgstr "മോഡ് ഉറപ്പാക്കുക:"
 
 #: ../src/vmm-create-interface.glade.h:33
-#, fuzzy
 msgid "_Activate now:"
-msgstr "സജീവം"
+msgstr "ഉടന്‍ _സജീവമാക്കുക:"
 
 #: ../src/vmm-create-interface.glade.h:35
-#, fuzzy
 msgid "_Configure"
-msgstr "_ക്ലോണ്‍"
+msgstr "ക്ര_മീകരിക്കുക"
 
 #: ../src/vmm-create-interface.glade.h:36
-#, fuzzy
 msgid "_Copy interface configuration from:"
-msgstr "VM ക്രമീകരണം മാറ്റുന്നതില്‍ പിശക്: %s"
+msgstr "ഇന്റര്‍ഫെയിസ് ക്രമീകരണം _പകര്‍ത്തേണ്ടതു് ഇവിടെ നിന്നു്:"
 
 #: ../src/vmm-create-interface.glade.h:38
-#, fuzzy
 msgid "_Gateway:"
-msgstr "ഗേറ്റ് വേ:"
+msgstr "_ഗേറ്റ്‌വേ:"
 
 #: ../src/vmm-create-interface.glade.h:39
-#, fuzzy
 msgid "_Interface type:"
-msgstr "ഏതു തരം _ഡിവൈസ്:"
+msgstr "ഏതു തരം _ഇന്റര്‍ഫെയിസ്:"
 
 #: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:14
 #: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:54
@@ -3071,17 +3025,16 @@ msgid "_Name:"
 msgstr "_പേര്:"
 
 #: ../src/vmm-create-interface.glade.h:42
-#, fuzzy
 msgid "_Start mode:"
-msgstr "_ആരംഭം:"
+msgstr "_ആരംഭ മോഡ്:"
 
 #: ../src/vmm-create-interface.glade.h:43
 msgid "_VLAN tag:"
-msgstr ""
+msgstr "_VLAN റ്റാഗ്:"
 
 #: ../src/vmm-create-interface.glade.h:44
 msgid "ip desc"
-msgstr ""
+msgstr "ip desc"
 
 #: ../src/vmm-create-interface.glade.h:45 ../src/vmm-preferences.glade.h:38
 msgid "seconds"
@@ -3309,8 +3262,7 @@ msgstr "ഫിസിക്കല്‍ നെറ്റ്‌വര്‍ക്�
 
 #: ../src/vmm-create-net.glade.h:49
 msgid "You will need to choose an IPv4 address space for the virtual network:"
-msgstr ""
-"വിറ്‍ച്ച്വല്‍ നെറ്റ്‌വറ്‍ക്കിനായി നിങ്ങള്‍ ഒരു IPv4 വിലാസത്തിനുളള സ്പെയിസ് തിരഞ്ഞെടുക്കേണ്ടതുണ്ട്:"
+msgstr "വിറ്‍ച്ച്വല്‍ നെറ്റ്‌വറ്‍ക്കിനായി നിങ്ങള്‍ ഒരു IPv4 വിലാസത്തിനുളള സ്പെയിസ് തിരഞ്ഞെടുക്കേണ്ടതുണ്ട്:"
 
 #: ../src/vmm-create-net.glade.h:50
 msgid "_Destination:"
@@ -3361,8 +3313,7 @@ msgid "Host Na_me:"
 msgstr "_ഹോസ്റ്റ്നെയിം:"
 
 #: ../src/vmm-create-pool.glade.h:10
-msgid ""
-"Specify a storage location to be later split into virtual machine storage."
+msgid "Specify a storage location to be later split into virtual machine storage."
 msgstr "പിന്നീട് വിര്‍ച്ച്വല്‍ മഷീന്‍ സ്റ്റോറേജായി വേര്‍തിരിക്കേണ്ട ഒരു സ്റ്റോറേജ് സ്ഥലം വ്യക്തമാക്കുക."
 
 #: ../src/vmm-create-pool.glade.h:11
@@ -3496,7 +3447,7 @@ msgstr "_കണക്ഷന്‍:"
 
 #: ../src/vmm-create.glade.h:15
 msgid "C_ustomize configuration before install"
-msgstr ""
+msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനു് മുമ്പു് ക്രമീകരണം _യഥേഷ്ടമാക്കുക"
 
 #: ../src/vmm-create.glade.h:16
 msgid "Choose Memory and CPU settings"
@@ -3527,9 +3478,8 @@ msgid "ISO"
 msgstr "ISO"
 
 #: ../src/vmm-create.glade.h:23
-#, fuzzy
 msgid "Import _existing disk image"
-msgstr "നിലവിലുള്ള സംഭരണം കണ്ടുപിടിക്കുക"
+msgstr "_നിലവിലുള്ള ‍ഡിസ്ക് ഇമേജ് ഇംപോര്‍ട്ട് ചെയ്യുക"
 
 #: ../src/vmm-create.glade.h:24
 msgid "Install"
@@ -3572,9 +3522,8 @@ msgid "PXE"
 msgstr "PXE"
 
 #: ../src/vmm-create.glade.h:36
-#, fuzzy
 msgid "Provide the existing storage path:"
-msgstr "നിലവിലുള്ള സംഭരണം കണ്ടുപിടിക്കുക"
+msgstr "നിലവിലുള്ള സംഭരണത്തിന്റെ പാഥ് നല്‍കുക:"
 
 #: ../src/vmm-create.glade.h:37
 msgid "Provide the operating system install URL"
@@ -3653,9 +3602,8 @@ msgid "<b>Basic Details</b>"
 msgstr "<b>അടിസ്ഥാന വിവരങ്ങള്‍</b>"
 
 #: ../src/vmm-details.glade.h:5
-#, fuzzy
 msgid "<b>Boot device order</b>"
-msgstr "<b>ബൂട്ട് ഡിവൈസ്</b>"
+msgstr "<b>ബൂട്ട് ഡിവൈസിന്റെ ക്രമം</b>"
 
 #: ../src/vmm-details.glade.h:6
 msgid "<b>CPU Pinning</b>"
@@ -3697,8 +3645,7 @@ msgstr "<b>കണ്‍സോള്‍ നിലവില്‍ ലഭ്യമ�
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
-msgstr ""
-"<b>സൂചന:</b> 'സോഴ്സ്'- ഹോസ്റ്റ് ഒഎസിലുള്ള വിവരങ്ങള്‍, 'ടാര്‍ഗറ്റ്' - ഗസ്റ്റ് ഒഎസിലുള്ള വിവരങ്ങള്‍."
+msgstr "<b>സൂചന:</b> 'സോഴ്സ്'- ഹോസ്റ്റ് ഒഎസിലുള്ള വിവരങ്ങള്‍, 'ടാര്‍ഗറ്റ്' - ഗസ്റ്റ് ഒഎസിലുള്ള വിവരങ്ങള്‍."
 
 #: ../src/vmm-details.glade.h:16
 msgid ""
@@ -3730,9 +3677,8 @@ msgid "<b>insert type</b>"
 msgstr "<b>insert type</b>"
 
 #: ../src/vmm-details.glade.h:22
-#, fuzzy
 msgid "A_ction:"
-msgstr "_സ്ഥാനം:"
+msgstr "പ്ര_വര്‍ത്തി:"
 
 #: ../src/vmm-details.glade.h:23
 msgid "A_dd Hardware"
@@ -3787,18 +3733,16 @@ msgid "D_ynamic"
 msgstr "_ഡൈനാമിക്"
 
 #: ../src/vmm-details.glade.h:37
-#, fuzzy
 msgid "Description:"
-msgstr "_ലക്ഷ്യസ്ഥാനം:"
+msgstr "വിശദീകരണം:"
 
 #: ../src/vmm-details.glade.h:39
 msgid "Device Type:"
 msgstr "ഡിവൈസ് തരം :"
 
 #: ../src/vmm-details.glade.h:40
-#, fuzzy
 msgid "Device m_odel:"
-msgstr "ഡിവൈസ് മാതൃക:"
+msgstr "ഡിവൈസ് _മാതൃക:"
 
 #: ../src/vmm-details.glade.h:42
 msgid "Disk"
@@ -3825,9 +3769,8 @@ msgid "Enable A_PIC:"
 msgstr "A_PIC സജ്ജമാക്കുക:"
 
 #: ../src/vmm-details.glade.h:48
-#, fuzzy
 msgid "Finish Install"
-msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്യുക"
+msgstr "ഇന്‍സ്റ്റോള്‍ പൂര്‍ത്തിയാക്കുക"
 
 #: ../src/vmm-details.glade.h:49
 msgid "Heads:"
@@ -3978,9 +3921,8 @@ msgid "Stats"
 msgstr "അവസ്ഥ"
 
 #: ../src/vmm-details.glade.h:95
-#, fuzzy
 msgid "Storage size:"
-msgstr "സംഭരണം"
+msgstr "സംഭരണത്തിന്റെ വ്യാപ്തി:"
 
 #: ../src/vmm-details.glade.h:96
 msgid "Switch to fullscreen view"
@@ -4117,28 +4059,24 @@ msgid "<b>Basic details</b>"
 msgstr "<b>അടിസ്ഥാന വിവരങ്ങള്‍</b>"
 
 #: ../src/vmm-host.glade.h:2
-#, fuzzy
 msgid "<b>IPv4 Configuration</b>"
-msgstr "<b>IPv4 കോണ്‍ഫിഗറേഷന്‍</b>"
+msgstr "<b>IPv4 ക്രമീകരണം</b>"
 
 #: ../src/vmm-host.glade.h:3
 msgid "<b>IPv4 configuration</b>"
 msgstr "<b>IPv4 കോണ്‍ഫിഗറേഷന്‍</b>"
 
 #: ../src/vmm-host.glade.h:4
-#, fuzzy
 msgid "<b>IPv6 Configuration</b>"
-msgstr "<b>IPv4 കോണ്‍ഫിഗറേഷന്‍</b>"
+msgstr "<b>IPv6 ക്രമീകരണം</b>"
 
 #: ../src/vmm-host.glade.h:5
-#, fuzzy
 msgid "<b>Name</b>"
-msgstr "<b>നാമം:</b>"
+msgstr "<b>നാമം</b>"
 
 #: ../src/vmm-host.glade.h:7
-#, fuzzy
 msgid "<b>Slave Interfaces</b>"
-msgstr "<b>വിറ്‍ച്ച്വല്‍ നെറ്റ്‌വറ്‍ക്ക് ഇന്‍ററ്‍ഫെയിസ്</b>"
+msgstr "<b>സ്ലേവ് ഇന്റര്‍ഫെയിസുകള്‍</b>"
 
 #: ../src/vmm-host.glade.h:8
 msgid "<b>Volumes</b>"
@@ -4153,9 +4091,8 @@ msgid "A_utostart:"
 msgstr "_ഓട്ടോസ്റ്റാര്‍ട്ട്:"
 
 #: ../src/vmm-host.glade.h:12
-#, fuzzy
 msgid "Add Interface"
-msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസുകള്‍"
+msgstr "ഇന്റര്‍ഫെയിസ് ചേര്‍ക്കുക"
 
 #: ../src/vmm-host.glade.h:13
 msgid "Add Network"
@@ -4182,9 +4119,8 @@ msgid "DHCP start:"
 msgstr "DHCP തുടക്കം:"
 
 #: ../src/vmm-host.glade.h:21
-#, fuzzy
 msgid "Delete Interface"
-msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസുകള്‍"
+msgstr "ഇന്റര്‍ഫെയിസ് വെട്ടി നീക്കുക"
 
 #: ../src/vmm-host.glade.h:22
 msgid "Delete Network"
@@ -4208,7 +4144,7 @@ msgstr "ഹോസ്റ്റ്നെയിം:"
 
 #: ../src/vmm-host.glade.h:29
 msgid "In use by:"
-msgstr ""
+msgstr "ഉപയോഗിക്കുന്നതു്:"
 
 #: ../src/vmm-host.glade.h:30
 msgid "Location:"
@@ -4243,9 +4179,8 @@ msgid "Pool Type:"
 msgstr "ഏത് തരം പൂള്‍:"
 
 #: ../src/vmm-host.glade.h:42
-#, fuzzy
 msgid "Start Interface"
-msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസുകള്‍"
+msgstr "ഇന്റര്‍ഫെയിസ് ആരംഭിക്കുക"
 
 #: ../src/vmm-host.glade.h:43
 msgid "Start Network"
@@ -4256,18 +4191,16 @@ msgid "Start Pool"
 msgstr "പൂള്‍ ആരംഭിക്കുക"
 
 #: ../src/vmm-host.glade.h:45
-#, fuzzy
 msgid "Start mode:"
-msgstr "ആരംഭിക്കുന്ന വിലാസം:"
+msgstr "ആരംഭിക്കുന്ന മോഡ്:"
 
 #: ../src/vmm-host.glade.h:46
 msgid "State:"
 msgstr "അവസ്ഥ: "
 
 #: ../src/vmm-host.glade.h:47
-#, fuzzy
 msgid "Stop Interface"
-msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസുകള്‍"
+msgstr "ഇന്റര്‍ഫെയിസ് നിര്‍ത്തുക"
 
 #: ../src/vmm-host.glade.h:48
 msgid "Stop Network"
@@ -4298,9 +4231,8 @@ msgid "New"
 msgstr "പുതിയ"
 
 #: ../src/vmm-manager.glade.h:5
-#, fuzzy
 msgid "Restore Saved Machine..."
-msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ വീണ്ടെടുക്കുക"
+msgstr "സൂക്ഷിച്ച മഷീന്‍ വീണ്ടെടുക്കുക..."
 
 #: ../src/vmm-manager.glade.h:6
 msgid "Restore a saved machine from a filesystem image"
@@ -4311,9 +4243,8 @@ msgid "Show the virtual machine console and details"
 msgstr "നിങ്ങളുടെ വിര്‍ച്ച്വല്‍ മഷീന്‍ കണ്‍സോളും വിശദാംശങ്ങളും കാണിക്കുക"
 
 #: ../src/vmm-manager.glade.h:10
-#, fuzzy
 msgid "_Add Connection..."
-msgstr "കണക്ഷന്‍ ചേര്‍ക്കുക"
+msgstr "കണക്ഷന്‍ _ചേര്‍ക്കുക..."
 
 #: ../src/vmm-manager.glade.h:11
 msgid "_CPU Usage"
@@ -4348,9 +4279,8 @@ msgid "_Shutdown"
 msgstr "_പുറത്തു് കടക്കുക"
 
 #: ../src/vmm-manager.glade.h:24
-#, fuzzy
 msgid "_Virtual Machine Details"
-msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ "
+msgstr "_വിര്‍ച്ച്വല്‍ മഷീന്‍ വിശദാംശങ്ങള്‍"
 
 #: ../src/vmm-migrate.glade.h:1
 msgid "<b>Connectivity</b>"
@@ -4552,7 +4482,7 @@ msgstr "_നിര്‍ബന്ധിച്ചു് പവര്‍ ഓഫ്
 
 #: ../src/vmm-preferences.glade.h:31
 msgid "_Interface start/stop:"
-msgstr ""
+msgstr "_ഇന്റര്‍ഫെയിസ് ആരംഭം/അവസാനം:"
 
 #: ../src/vmm-preferences.glade.h:32
 msgid "_Local virtual machine"
@@ -4586,103 +4516,3 @@ msgstr "_വോള്യം തെരഞ്ഞെടുക്കുക"
 msgid "_Browse Local"
 msgstr "ലോക്കല്‍ _തെരയുക"
 
-#~ msgid "Storage Path Required"
-#~ msgstr "സ്റ്റോറേജ് പാഥ് ആവശ്യമുണ്ട്"
-
-#~ msgid "You must specify a partition or a file for disk storage."
-#~ msgstr "ഡിസ്ക് സ്റ്റോറേജിനായി നിങ്ങള്‍ ഒരു ഫയല്‍ അല്ലെങ്കില്‍ ഒരു പാര്‍ട്ടീഷന്‍ വ്യക്തമാക്കേണ്ടതുണ്ട്."
-
-#~ msgid "Target Device Required"
-#~ msgstr "ലക്ഷ്യസ്ഥാനത്തുള്ല ഡിവൈസ് ആവശ്യമുണ്ട്"
-
-#~ msgid "You must select a target device for the disk."
-#~ msgstr "ഡിസ്കിനുള്ള ഒരു ഡിവൈസ് തിരഞ്ഞെടുക്കേണ്ടതുണ്ടു്."
-
-#~ msgid "Invalid Storage Parameters"
-#~ msgstr "തെറ്റായ സ്റ്റോറേജ് പരാമീറ്ററുകള്‍"
-
-#~ msgid "No guests are supported for this connection."
-#~ msgstr "ഈ കണക്ഷനു് ഗസ്റ്റുകള്‍ പിന്തുണയ്ക്കുന്നില്ല."
-
-#~ msgid "No Boot Device"
-#~ msgstr "ബൂട്ട് ഡിവൈസ് ലഭ്യമല്ല"
-
-#, fuzzy
-#~ msgid "Libvirt connection does not have interface support."
-#~ msgstr "Libvirt പതിപ്പ് ഫിസിക്കല്‍ ഇന്റര്‍ഫെയിസ് ലഭ്യമാക്കല്‍ പിന്തുണയ്ക്കുന്നില്ല."
-
-#~ msgid "Error determining default hypervisor."
-#~ msgstr "സ്വതവേയുള്ള ഹൈപ്പര്‍വൈസര്‍ കണ്ടുപിടിക്കുന്നതില്‍ പിശക്."
-
-#~ msgid "Startup Error"
-#~ msgstr "ആരംഭത്തില്‍ പിശക്"
-
-#~ msgid "<b>Physical Host Device</b>"
-#~ msgstr "<b>ഫിസിക്കല്‍ ഹോസ്റ്റ് ഡിവൈസ്</b>"
-
-#~ msgid "<b>Source:</b>"
-#~ msgstr "<b>ശ്രോതസ്സ്:</b>"
-
-#~ msgid "<b>Target:</b>"
-#~ msgstr "<b>ലക്ഷ്യം:</b>"
-
-#~ msgid "<b>Video Device</b>"
-#~ msgstr "<b>വീഡിയോ ഡിവൈസ്</b>"
-
-#~ msgid "<b>Virtual display</b>"
-#~ msgstr "<b>വിര്‍ച്ച്വല്‍ ഡിസ്പ്ലെ</b>"
-
-#~ msgid "<b>Virtual pointer</b>"
-#~ msgstr "<b>വിര്‍ച്ച്വല്‍ പോയിന്റര്‍</b>"
-
-#~ msgid "<small><b>Example:</b> /dev/hdc2</small>"
-#~ msgstr "<small><b>ഉദാഹരണം:</b> /dev/hdc2</small>"
-
-#~ msgid ""
-#~ "<small><b>Warning:</b>If you do not allocate the entire disk now, space "
-#~ "will be allocated as needed while the virtual machine is running. If "
-#~ "sufficient free space is not available on the host, this may result in "
-#~ "data corruption on the virtual machine.</small>"
-#~ msgstr ""
-#~ "<small><b>മുന്നറിയിപ്പു്:</b>നിങ്ങളിപ്പോള്‍ ഡിസ്ക് പൂര്‍ണ്ണമായും ലഭ്യമാക്കിയില്ലെങ്കില്‍, "
-#~ "വിര്‍ച്ച്വല്‍ മഷീന്‍ പ്രവര്‍ത്തനസമയത്തു് ആവശ്യമനുസരിച്ചു് സ്ഥലം ലഭ്യമാക്കുന്നു. ഹോസ്റ്റില്‍ ആവശ്യമുള്ള "
-#~ "സ്ഥലം ലഭ്യമല്ലെങ്കില്‍, വിര്‍ച്ച്വല്‍ മഷീനില്‍ ഡേറ്റാ തകരാര്‍ സംഭവിക്കുന്നു.</small>"
-
-#~ msgid "Allocate entire virtual disk now"
-#~ msgstr "ഉടന്‍ വിര്‍ച്ച്വല്‍ ഡിസ്ക് പൂര്‍ണ്ണമായി ലഭ്യമാക്കുക"
-
-#~ msgid "B_lock device (partition):"
-#~ msgstr "_ബ്ലോക്ക് ‍ഡിവൈസ് (പാര്‍ട്ടീഷന്‍):"
-
-#~ msgid "Browse..."
-#~ msgstr "തിരയുക..."
-
-#~ msgid "F_ile (disk image):"
-#~ msgstr "ഫ_യല്‍ (ഡിസ്ക് ഇമേജ്):"
-
-#~ msgid "File Location Field"
-#~ msgstr "ഫയല്‍ സ്ഥാനത്തിനുള്ള ഫീള്‍ഡ്"
-
-#~ msgid "File Size Field"
-#~ msgstr "ഫയല്‍ വ്യാപ്തിയ്ക്കുള്ള ഫീള്‍ഡ്"
-
-#~ msgid "Partition Location Field"
-#~ msgstr "പാര്‍ട്ടീഷന്‍ ലൊക്കേഷന്‍ ഫീള്‍ഡ്"
-
-#~ msgid "_Size:"
-#~ msgstr "_വലിപ്പം: "
-
-#~ msgid "Device Model:"
-#~ msgstr "ഡിവൈസ് മാതൃക:"
-
-#~ msgid "Device virtual machine will _boot from:"
-#~ msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ ബൂട്ട് ചെയ്യുന്ന ഡിവൈസ്: "
-
-#~ msgid "Unknown status code"
-#~ msgstr "അപരിചിതമായ സ്റ്റേറ്റസ് കോഡ്"
-
-#~ msgid "insert type"
-#~ msgstr "insert type"
-
-#~ msgid "ISO _Location:"
-#~ msgstr "ISO-യുടെ സ്ഥാനം: (_L)"
