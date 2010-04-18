@@ -459,6 +459,8 @@ class vmmConnection(gobject.GObject):
             hv = "QEMU"
             if active and self.is_kvm_supported():
                 hv += "/KVM"
+        elif scheme in ('esx', 'gsx'):
+            hv = scheme.upper()
         else:
             hv = scheme.capitalize()
 
