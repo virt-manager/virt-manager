@@ -150,14 +150,19 @@ class vmmConsolePages(gobject.GObject):
         self.vncViewer.connect("vnc-auth-credential", self._vnc_auth_credential)
         self.vncViewer.connect("vnc-initialized", self._vnc_initialized)
         self.vncViewer.connect("vnc-disconnected", self._vnc_disconnected)
-        self.vncViewer.connect("vnc-keyboard-grab", self._disable_modifiers)
-        self.vncViewer.connect("vnc-keyboard-ungrab", self._enable_modifiers)
+        self.vncViewer.connect("vnc-keyboard-grab", self.keyboard_grabbed)
+        self.vncViewer.connect("vnc-keyboard-ungrab", self.keyboard_ungrabbed)
         self.vncViewer.connect("vnc-desktop-resize", self.desktop_resize)
         self.vncViewer.show()
 
     #############
     # Listeners #
     #############
+
+    def keyboard_grabbed(self, src):
+        self._disable_modifiers()
+    def keyboard_ungrabbed(self, src):
+        self._enable_modifiers()
 
     def notify_grabbed(self, src):
         self.topwin.set_title(_("Press Ctrl+Alt to release pointer.") +
@@ -200,7 +205,7 @@ class vmmConsolePages(gobject.GObject):
             self.config.set_console_grab_notify(False)
 
 
-    def _disable_modifiers(self, ignore=None):
+    def _disable_modifiers(self):
         if self.gtk_settings_accel is not None:
             return
 
@@ -216,7 +221,7 @@ class vmmConsolePages(gobject.GObject):
             settings.set_property("gtk-enable-mnemonics", False)
 
 
-    def _enable_modifiers(self, ignore=None):
+    def _enable_modifiers(self):
         if self.gtk_settings_accel is None:
             return
 
