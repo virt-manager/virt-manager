@@ -24,7 +24,6 @@ EXCEPTHOOK="no '__excepthook__' member"
 CONNECT_VAR="no 'connect' member"
 DISCONNECT_VAR="no 'disconnect' member"
 UNABLE_IMPORT="Unable to import 'gtk.gdk.*|Unable to import 'sparkline"
-MAX_RECURSION="maximum recursion depth"
 
 # os._exit is needed for forked processes.
 OS_EXIT="protected member _exit of a client class"
@@ -105,7 +104,6 @@ pylint --ignore=IPy.py $FILES \
         -ve "$BUILTIN_TYPE" \
         -ve "$ERROR_VBOX" \
         -ve "$UNABLE_IMPORT" \
-        -ve "$MAX_RECURSION" \
         -ve "$EXCEPTHOOK" | \
 $AWK '\
 # Strip out any "*** Module name" lines if we dont list any errors for them
