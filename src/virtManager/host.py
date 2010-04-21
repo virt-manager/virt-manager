@@ -128,6 +128,7 @@ class vmmHost(gobject.GObject):
             "on_pool_stop_clicked": self.stop_pool,
             "on_pool_start_clicked": self.start_pool,
             "on_pool_delete_clicked": self.delete_pool,
+            "on_pool_refresh_clicked": self.pool_refresh,
             "on_pool_autostart_toggled": self.pool_autostart_changed,
             "on_vol_delete_clicked": self.delete_vol,
             "on_vol_list_button_press_event": self.popup_vol_menu,
@@ -603,6 +604,19 @@ class vmmHost(gobject.GObject):
         except Exception, e:
             self.err.show_err(_("Error deleting pool: %s") % str(e),
                               "".join(traceback.format_exc()))
+
+    def pool_refresh(self, src):
+        pool = self.current_pool()
+        if pool is None:
+            return
+
+        try:
+            pool.refresh()
+            self.refresh_current_pool()
+        except Exception, e:
+            self.err.show_err(_("Error refreshing pool '%s': %s") % \
+                               (pool.get_name(), str(e)),
+                               "".join(traceback.format_exc()))
 
     def delete_vol(self, src):
         vol = self.current_vol()

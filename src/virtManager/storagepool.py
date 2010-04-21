@@ -25,7 +25,9 @@ import virtinst.util as util
 from virtManager.storagevol import vmmStorageVolume
 
 class vmmStoragePool(gobject.GObject):
-    __gsignals__ = { }
+    __gsignals__ = {
+        "refreshed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
+    }
 
     def __init__(self, config, connection, pool, uuid, active):
         self.__gobject_init__()
@@ -40,8 +42,6 @@ class vmmStoragePool(gobject.GObject):
         self._xml = None            # xml cache
 
         self.refresh()
-        self._update_xml()
-        self.update_volumes()
 
     def set_active(self, state):
         self.active = state
@@ -120,9 +120,13 @@ class vmmStoragePool(gobject.GObject):
         return self._volumes[uuid]
 
     def refresh(self):
-        if self.active:
-            self.pool.refresh(0)
-            self._update_xml()
+        if not self.active:
+            return
+
+        self.pool.refresh(0)
+        self._update_xml()
+        self.update_volumes()
+        self.emit("refreshed")
 
     def update_volumes(self):
         if not self.is_active():
