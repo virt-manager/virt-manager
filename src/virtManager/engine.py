@@ -428,7 +428,8 @@ class vmmEngine(gobject.GObject):
             except KeyboardInterrupt:
                 raise
             except libvirt.libvirtError, e:
-                if e.get_error_code() == libvirt.VIR_ERR_SYSTEM_ERROR:
+                if (e.get_error_domain() == libvirt.VIR_FROM_REMOTE and
+                    e.get_error_code() == libvirt.VIR_ERR_SYSTEM_ERROR):
                     logging.exception("Could not refresh connection %s." % uri)
                     logging.debug("Closing connection since libvirtd "
                                   "appears to have stopped.")
