@@ -138,10 +138,8 @@ class vmmConsolePages(gobject.GObject):
         self.vm.on_console_scaling_changed(self.refresh_scaling)
         self.refresh_scaling()
 
-        if self.config.get_console_keygrab() == 2:
-            self.vncViewer.set_keyboard_grab(True)
-        else:
-            self.vncViewer.set_keyboard_grab(False)
+        self.set_keyboard_grab()
+        self.config.on_console_keygrab_changed(self.set_keyboard_grab)
         self.vncViewer.set_pointer_grab(True)
 
         scroll = self.window.get_widget("console-vnc-scroll")
@@ -233,11 +231,10 @@ class vmmConsolePages(gobject.GObject):
         for g in self.accel_groups:
             self.topwin.add_accel_group(g)
 
-    def keygrab_changed(self, src, ignore1=None,ignore2=None,ignore3=None):
-        if self.config.get_console_keygrab() == 2:
-            self.vncViewer.set_keyboard_grab(True)
-        else:
-            self.vncViewer.set_keyboard_grab(False)
+    def set_keyboard_grab(self, ignore=None, ignore1=None,
+                          ignore2=None, ignore3=None):
+        grab = self.config.get_console_keygrab() == 2
+        self.vncViewer.set_keyboard_grab(grab)
 
     def refresh_scaling(self,ignore1=None, ignore2=None, ignore3=None,
                         ignore4=None):
