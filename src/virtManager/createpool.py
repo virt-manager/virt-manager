@@ -193,10 +193,9 @@ class vmmCreatePool(gobject.GObject):
         for typ in types:
             model.append([typ, "%s: %s" % (typ, Storage.StoragePool.get_pool_type_desc(typ))])
 
-    def populate_pool_format(self):
+    def populate_pool_format(self, formats):
         model = self.window.get_widget("pool-format").get_model()
         model.clear()
-        formats = self._pool.formats
         for f in formats:
             model.append([f, f])
 
@@ -292,7 +291,7 @@ class vmmCreatePool(gobject.GObject):
         self.window.get_widget("pool-format").set_active(-1)
 
         if fmt:
-            self.populate_pool_format()
+            self.populate_pool_format(getattr(self._pool, "formats"))
             self.window.get_widget("pool-format").set_active(0)
 
         self.populate_pool_sources()

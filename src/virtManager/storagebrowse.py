@@ -319,6 +319,6 @@ class vmmStorageBrowser(gobject.GObject):
                           vol.get_format() or "", namestr])
 
     def show_err(self, info, details):
-        self.show_err(info, details, async=False)
+        self.err.show_err(info, details, async=False)
 
 gobject.type_register(vmmStorageBrowser)
