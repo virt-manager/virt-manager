@@ -1123,7 +1123,7 @@ class vmmCreate(gobject.GObject):
         guest.sound_devs = []
         try:
             if self.get_config_sound():
-                guest.sound_devs.append(virtinst.VirtualAudio())
+                guest.sound_devs.append(virtinst.VirtualAudio(conn=guest.conn))
         except Exception, e:
             self.err.show_err(_("Error setting up sound device:") + str(e),
                               "".join(traceback.format_exc()))

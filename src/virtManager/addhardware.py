@@ -1222,7 +1222,8 @@ class vmmAddHardware(gobject.GObject):
     def validate_page_sound(self):
         smodel = self.get_config_sound_model()
         try:
-            self._dev = virtinst.VirtualAudio(model=smodel)
+            self._dev = virtinst.VirtualAudio(conn=self.conn.vmm,
+                                              model=smodel)
         except Exception, e:
             return self.err.val_err(_("Sound device parameter error"), str(e))
 

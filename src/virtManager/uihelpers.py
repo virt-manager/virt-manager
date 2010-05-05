@@ -431,7 +431,8 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         elif nettype == VirtualNetworkInterface.TYPE_USER:
             pass
 
-        net = VirtualNetworkInterface(type = nettype,
+        net = VirtualNetworkInterface(conn = conn.vmm,
+                                      type = nettype,
                                       bridge = bridge,
                                       network = netname,
                                       macaddr = macaddr,
