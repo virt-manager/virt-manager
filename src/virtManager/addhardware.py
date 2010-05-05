@@ -1209,7 +1209,8 @@ class vmmAddHardware(gobject.GObject):
         else:
             _type = virtinst.VirtualGraphics.TYPE_SDL
 
-        self._dev = virtinst.VirtualGraphics(type=_type)
+        self._dev = virtinst.VirtualGraphics(type=_type,
+                                             conn=self.vm.get_connection().vmm)
         try:
             self._dev.port   = self.get_config_vnc_port()
             self._dev.passwd = self.get_config_vnc_password()
