@@ -1990,7 +1990,10 @@ class vmmDomainVirtinst(vmmDomainBase):
         return libvirt.VIR_DOMAIN_SHUTOFF
 
     def get_xml(self):
-        return self._backend.get_config_xml()
+        xml = self._backend.get_config_xml()
+        if not xml:
+            xml = self._backend.get_config_xml(install=False)
+        return xml
     def _get_inactive_xml(self):
         return self.get_xml()
 
