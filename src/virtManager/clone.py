@@ -799,8 +799,8 @@ def can_we_clone(conn, vol, path):
             msg = _("Cannot clone unmanaged remote storage.")
         elif not os.access(path, os.R_OK):
             if is_dev:
-                msg = _("Block devices to clone should be managed\n"
-                        "storage volumes.")
+                msg = _("Block devices to clone must be libvirt\n"
+                        "managed storage volumes.")
             else:
                 msg = _("No write access to parent directory.")
         elif not os.path.exists(path):
