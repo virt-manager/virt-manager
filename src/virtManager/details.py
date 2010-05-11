@@ -2099,7 +2099,7 @@ class vmmDetails(gobject.GObject):
         for gfxinfo in self.vm.get_graphics_devices():
             currentGraphics[gfxinfo[1]] = 1
             update_hwlist(HW_LIST_TYPE_GRAPHICS, gfxinfo,
-                          _("Display %s") % gfxinfo[1],
+                          _("Display %s") % (int(gfxinfo[1]) + 1),
                           "video-display")
 
         # Populate list of sound devices
@@ -2113,7 +2113,8 @@ class vmmDetails(gobject.GObject):
             currentChars[charinfo[1]] = 1
             label = charinfo[0].capitalize()
             if charinfo[0] != "console":
-                label += " %s" % charinfo[3] # Don't show port for console
+                # Don't show port for console
+                label += " %s" % (int(charinfo[3]) + 1)
 
             update_hwlist(HW_LIST_TYPE_CHAR, charinfo, label,
                           "device_serial")
