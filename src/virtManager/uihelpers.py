@@ -22,6 +22,7 @@ import logging
 import traceback
 import os, statvfs
 
+import libvirt
 import gtk
 
 import virtinst
@@ -79,7 +80,7 @@ def host_disk_space(conn, config):
         # FIXME: make sure not inactive?
         # FIXME: use a conn specific function after we send pool-added
         pool = virtinst.util.lookup_pool_by_path(conn.vmm, path)
-        if pool:
+        if pool and pool.info()[0] == libvirt.VIR_STORAGE_POOL_RUNNING:
             pool.refresh(0)
             avail = int(virtinst.util.get_xml_path(pool.XMLDesc(0),
                                                    "/pool/available"))
