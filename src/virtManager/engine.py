@@ -708,13 +708,26 @@ class vmmEngine(gobject.GObject):
 
     def save_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
+        vm = conn.get_vm(uuid)
+        do_prompt = self.config.get_confirm_poweroff()
+
         if conn.is_remote():
             # FIXME: This should work with remote storage stuff
             self.err.val_err(_("Saving virtual machines over remote "
                                "connections is not yet supported."))
             return
 
-        vm = conn.get_vm(uuid)
+        if do_prompt:
+            res = self.err.warn_chkbox(
+                    text1=_("Are you sure you want to save "
+                            "'%s'?" % vm.get_name()),
+                    chktext=_("Don't ask me again."),
+                    buttons=gtk.BUTTONS_YES_NO)
+
+            response, skip_prompt = res
+            if not response:
+                return
+            self.config.set_confirm_poweroff(not skip_prompt)
 
         path = util.browse_local(src.window.get_widget("vmm-details"),
                                  _("Save Virtual Machine"),
