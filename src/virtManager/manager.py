@@ -23,12 +23,10 @@ import gtk
 import gtk.glade
 
 import logging
-import traceback
 
 import virtManager.config as cfg
 import virtManager.uihelpers as uihelpers
 from virtManager.connection import vmmConnection
-from virtManager.asyncjob import vmmAsyncJob
 from virtManager.error import vmmErrorDialog
 from virtManager.delete import vmmDeleteDialog
 from virtManager.graphwidgets import CellRendererSparkline
@@ -105,6 +103,8 @@ class vmmManager(gobject.GObject):
                                  gobject.TYPE_NONE, (str, str)),
         "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
                                   gobject.TYPE_NONE, (str, str)),
+        "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
+                               gobject.TYPE_NONE, (str, str)),
         "action-connect": (gobject.SIGNAL_RUN_FIRST,
                            gobject.TYPE_NONE, [str]),
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
@@ -165,7 +165,6 @@ class vmmManager(gobject.GObject):
             "on_menu_file_add_connection_activate": self.new_connection,
             "on_menu_file_quit_activate": self.exit_app,
             "on_menu_file_close_activate": self.close,
-            "on_menu_restore_saved_activate": self.restore_saved,
             "on_vmm_close_clicked": self.close,
             "on_vm_open_clicked": self.open_vm_console,
             "on_vm_run_clicked": self.start_vm,
@@ -275,7 +274,8 @@ class vmmManager(gobject.GObject):
                                    self.window.get_widget("vm-shutdown"),
                                    self.poweroff_vm,
                                    self.reboot_vm,
-                                   self.destroy_vm)
+                                   self.destroy_vm,
+                                   self.save_vm)
 
         tool = self.window.get_widget("vm-toolbar")
         util.safe_set_prop(tool, "icon-size", gtk.ICON_SIZE_LARGE_TOOLBAR)
@@ -296,6 +296,7 @@ class vmmManager(gobject.GObject):
         destroy_icon        = build_icon(icon_name)
         run_icon            = build_stock(gtk.STOCK_MEDIA_PLAY)
         pause_icon          = build_stock(gtk.STOCK_MEDIA_PAUSE)
+        save_icon           = build_stock(gtk.STOCK_SAVE)
         resume_icon         = build_stock(gtk.STOCK_MEDIA_PAUSE)
         delete_icon         = build_stock(gtk.STOCK_DELETE)
 
@@ -344,6 +345,16 @@ class vmmManager(gobject.GObject):
         self.vmmenushutdown_items["forcepoweroff"].connect("activate",
                                                            self.destroy_vm)
         self.vmmenushutdown.add(self.vmmenushutdown_items["forcepoweroff"])
+
+        self.vmmenushutdown_items["sep"] = gtk.SeparatorMenuItem()
+        self.vmmenushutdown_items["sep"].show()
+        self.vmmenushutdown.add(self.vmmenushutdown_items["sep"])
+
+        self.vmmenushutdown_items["save"] = gtk.ImageMenuItem(_("Sa_ve"))
+        self.vmmenushutdown_items["save"].set_image(save_icon)
+        self.vmmenushutdown_items["save"].show()
+        self.vmmenushutdown_items["save"].connect("activate", self.save_vm)
+        self.vmmenushutdown.add(self.vmmenushutdown_items["save"])
 
         self.vmmenu_items["hsep1"] = gtk.SeparatorMenuItem()
         self.vmmenu_items["hsep1"].show()
@@ -608,41 +619,6 @@ class vmmManager(gobject.GObject):
             self.emit("action-show-console",
                       conn.get_uri(), self.vm.get_uuid())
 
-    def restore_saved(self, src=None):
-        conn = self.current_connection()
-        if conn.is_remote():
-            self.err.val_err(_("Restoring virtual machines over remote "
-                               "connections is not yet supported"))
-            return
-
-        path = util.browse_local(self.window.get_widget("vmm-manager"),
-                                 _("Restore Virtual Machine"),
-                                 self.config, conn,
-                                 browse_reason=self.config.CONFIG_DIR_RESTORE)
-
-        if not path:
-            return
-
-        progWin = vmmAsyncJob(self.config, self.restore_saved_callback,
-                              [path], _("Restoring Virtual Machine"))
-        progWin.run()
-        error, details = progWin.get_error()
-
-        if error is not None:
-            self.err.show_err(error, details,
-                              title=_("Error restoring domain"))
-
-    def restore_saved_callback(self, file_to_load, asyncjob):
-        try:
-            newconn = util.dup_conn(self.config, self.current_connection(),
-                                    return_conn_class=True)
-            newconn.restore(file_to_load)
-        except Exception, e:
-            err = (_("Error restoring domain '%s': %s") %
-                                  (file_to_load, str(e)))
-            details = "".join(traceback.format_exc())
-            asyncjob.set_error(err, details)
-
     def do_delete(self, ignore=None):
         conn = self.current_connection()
         vm = self.current_vm()
@@ -717,6 +693,12 @@ class vmmManager(gobject.GObject):
         vm = self.current_vm()
         if vm is not None:
             self.emit("action-destroy-domain",
+                      vm.get_connection().get_uri(), vm.get_uuid())
+
+    def save_vm(self, ignore):
+        vm = self.current_vm()
+        if vm is not None:
+            self.emit("action-save-domain",
                       vm.get_connection().get_uri(), vm.get_uuid())
 
     def pause_vm(self, ignore):
@@ -1004,7 +986,6 @@ class vmmManager(gobject.GObject):
         else:
             show_pause = bool(vm and vm.is_pauseable())
         show_shutdown = bool(vm and vm.is_stoppable())
-        restore = bool(conn and conn.get_state() == vmmConnection.STATE_ACTIVE)
 
         self.window.get_widget("vm-open").set_sensitive(show_open)
         self.window.get_widget("vm-run").set_sensitive(show_run)
@@ -1015,7 +996,6 @@ class vmmManager(gobject.GObject):
         self.window.get_widget("menu_edit_details").set_sensitive(show_details)
         self.window.get_widget("menu_host_details").set_sensitive(host_details)
         self.window.get_widget("menu_edit_delete").set_sensitive(delete)
-        self.window.get_widget("menu_file_restore_saved").set_sensitive(restore)
 
     def popup_vm_menu_key(self, widget, event):
         if gtk.gdk.keyval_name(event.keyval) != "Menu":
@@ -1065,6 +1045,7 @@ class vmmManager(gobject.GObject):
             self.vmmenushutdown_items["poweroff"].set_sensitive(stop)
             self.vmmenushutdown_items["reboot"].set_sensitive(stop)
             self.vmmenushutdown_items["forcepoweroff"].set_sensitive(destroy)
+            self.vmmenushutdown_items["save"].set_sensitive(destroy)
             self.vmmenu.popup(None, None, None, 0, event.time)
         else:
             # Pop up connection menu

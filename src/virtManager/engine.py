@@ -471,6 +471,8 @@ class vmmEngine(gobject.GObject):
         self.refresh_console(uri, uuid)
     def _do_save_domain(self, src, uri, uuid):
         self.save_domain(src, uri, uuid)
+    def _do_restore_domain(self, src, uri):
+        self.restore_domain(src, uri)
     def _do_destroy_domain(self, src, uri, uuid):
         self.destroy_domain(src, uri, uuid)
     def _do_suspend_domain(self, src, uri, uuid):
@@ -520,6 +522,7 @@ class vmmEngine(gobject.GObject):
             manager.connect("action-show-help", self._do_show_help)
             manager.connect("action-exit-app", self._do_exit_app)
             manager.connect("action-view-manager", self._do_show_manager)
+            manager.connect("action-restore-domain", self._do_restore_domain)
             self.connections[uri]["windowHost"] = manager
         self.connections[uri]["windowHost"].show()
 
@@ -601,6 +604,7 @@ class vmmEngine(gobject.GObject):
             self.windowManager.connect("action-shutdown-domain", self._do_shutdown_domain)
             self.windowManager.connect("action-reboot-domain", self._do_reboot_domain)
             self.windowManager.connect("action-destroy-domain", self._do_destroy_domain)
+            self.windowManager.connect("action-save-domain", self._do_save_domain)
             self.windowManager.connect("action-migrate-domain", self._do_migrate_domain)
             self.windowManager.connect("action-clone-domain", self._do_clone_domain)
             self.windowManager.connect("action-show-console", self._do_show_console)
@@ -751,6 +755,41 @@ class vmmEngine(gobject.GObject):
             vm.save(file_to_save)
         except Exception, e:
             asyncjob.set_error(str(e), "".join(traceback.format_exc()))
+
+    def restore_domain(self, src, uri):
+        conn = self._lookup_connection(uri)
+        if conn.is_remote():
+            self.err.val_err(_("Restoring virtual machines over remote "
+                               "connections is not yet supported"))
+            return
+
+        path = util.browse_local(src.window.get_widget("vmm-manager"),
+                                 _("Restore Virtual Machine"),
+                                 self.config, conn,
+                                 browse_reason=self.config.CONFIG_DIR_RESTORE)
+
+        if not path:
+            return
+
+        progWin = vmmAsyncJob(self.config, self.restore_saved_callback,
+                              [path, conn], _("Restoring Virtual Machine"))
+        progWin.run()
+        error, details = progWin.get_error()
+
+        if error is not None:
+            self.err.show_err(error, details,
+                              title=_("Error restoring domain"))
+
+    def restore_saved_callback(self, file_to_load, conn, asyncjob):
+        try:
+            newconn = util.dup_conn(self.config, conn,
+                                    return_conn_class=True)
+            newconn.restore(file_to_load)
+        except Exception, e:
+            err = (_("Error restoring domain '%s': %s") %
+                                  (file_to_load, str(e)))
+            details = "".join(traceback.format_exc())
+            asyncjob.set_error(err, details)
 
     def destroy_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)

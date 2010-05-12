@@ -48,6 +48,8 @@ class vmmHost(gobject.GObject):
                             gobject.TYPE_NONE, []),
         "action-view-manager": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, []),
+        "action-restore-domain": (gobject.SIGNAL_RUN_FIRST,
+                                  gobject.TYPE_NONE, (str,)),
         }
     def __init__(self, config, conn, engine):
         self.__gobject_init__()
@@ -114,6 +116,7 @@ class vmmHost(gobject.GObject):
             "on_menu_file_close_activate": self.close,
             "on_vmm_host_delete_event": self.close,
 
+            "on_menu_restore_saved_activate": self.restore_domain,
             "on_menu_help_contents_activate": self.show_help,
 
             "on_net_add_clicked": self.add_network,
@@ -320,6 +323,9 @@ class vmmHost(gobject.GObject):
     def view_manager(self, src):
         self.emit("action-view-manager")
 
+    def restore_domain(self, src):
+        self.emit("action-restore-domain", self.conn.get_uri())
+
     def exit_app(self, src):
         self.emit("action-exit-app")
 
@@ -347,6 +353,7 @@ class vmmHost(gobject.GObject):
 
     def conn_state_changed(self, ignore1=None):
         state = (self.conn.get_state() == vmmConnection.STATE_ACTIVE)
+        self.window.get_widget("menu_file_restore_saved").set_sensitive(state)
         self.window.get_widget("net-add").set_sensitive(state)
         self.window.get_widget("pool-add").set_sensitive(state)
 

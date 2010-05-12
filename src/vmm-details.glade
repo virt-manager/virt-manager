@@ -142,6 +142,26 @@
                                 </child>
                               </widget>
                             </child>
+                            <child>
+                              <widget class="GtkSeparatorMenuItem" id="menuitem3">
+                                <property name="visible">True</property>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkImageMenuItem" id="details-menu-save">
+                                <property name="label">_Save</property>
+                                <property name="visible">True</property>
+                                <property name="use_underline">True</property>
+                                <property name="use_stock">False</property>
+                                <signal name="activate" handler="on_details_menu_save_activate"/>
+                                <child internal-child="image">
+                                  <widget class="GtkImage" id="image123">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-save</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                            </child>
                           </widget>
                         </child>
                         <child internal-child="image">
@@ -150,14 +170,6 @@
                             <property name="stock">gtk-missing-image</property>
                           </widget>
                         </child>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkMenuItem" id="details-menu-save">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Save</property>
-                        <property name="use_underline">True</property>
-                        <signal name="activate" handler="on_details_menu_save_activate"/>
                       </widget>
                     </child>
                     <child>

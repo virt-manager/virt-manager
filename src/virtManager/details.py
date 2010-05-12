@@ -226,7 +226,7 @@ class vmmDetails(gobject.GObject):
             "on_details_menu_run_activate": self.control_vm_run,
             "on_details_menu_poweroff_activate": self.control_vm_shutdown,
             "on_details_menu_reboot_activate": self.control_vm_reboot,
-            "on_details_menu_save_activate": self.control_vm_save_domain,
+            "on_details_menu_save_activate": self.control_vm_save,
             "on_details_menu_destroy_activate": self.control_vm_destroy,
             "on_details_menu_pause_activate": self.control_vm_pause,
             "on_details_menu_clone_activate": self.control_vm_clone,
@@ -374,7 +374,8 @@ class vmmDetails(gobject.GObject):
                                    self.window.get_widget("control-shutdown"),
                                    self.control_vm_shutdown,
                                    self.control_vm_reboot,
-                                   self.control_vm_destroy)
+                                   self.control_vm_destroy,
+                                   self.control_vm_save)
 
         icon_name = self.config.get_shutdown_icon_name()
         for name in ["details-menu-shutdown",
@@ -917,7 +918,7 @@ class vmmDetails(gobject.GObject):
     def control_vm_console(self, src):
         self.emit("action-show-console", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_save_domain(self, src):
+    def control_vm_save(self, src):
         self.emit("action-save-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
     def control_vm_destroy(self, src):

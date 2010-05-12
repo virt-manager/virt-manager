@@ -595,7 +595,7 @@ def mediadev_set_default_selection(widget):
 ####################################################################
 
 def build_shutdown_button_menu(config, widget, shutdown_cb, reboot_cb,
-                               destroy_cb):
+                               destroy_cb, save_cb):
     icon_name = config.get_shutdown_icon_name()
     widget.set_icon_name(icon_name)
     menu = gtk.Menu()
@@ -604,6 +604,7 @@ def build_shutdown_button_menu(config, widget, shutdown_cb, reboot_cb,
     rebootimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
     shutdownimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
     destroyimg = gtk.image_new_from_icon_name(icon_name, gtk.ICON_SIZE_MENU)
+    saveimg = gtk.image_new_from_icon_name(gtk.STOCK_SAVE, gtk.ICON_SIZE_MENU)
 
     reboot = gtk.ImageMenuItem(_("_Reboot"))
     reboot.set_image(rebootimg)
@@ -622,6 +623,16 @@ def build_shutdown_button_menu(config, widget, shutdown_cb, reboot_cb,
     destroy.show()
     destroy.connect("activate", destroy_cb)
     menu.add(destroy)
+
+    sep = gtk.SeparatorMenuItem()
+    sep.show()
+    menu.add(sep)
+
+    save = gtk.ImageMenuItem(_("Sa_ve"))
+    save.set_image(saveimg)
+    save.show()
+    save.connect("activate", save_cb)
+    menu.add(save)
 
 #####################################
 # Path permissions checker for qemu #

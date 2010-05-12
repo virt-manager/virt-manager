@@ -24,28 +24,6 @@
                 <child>
                   <widget class="GtkMenu" id="menuitem4_menu">
                     <child>
-                      <widget class="GtkImageMenuItem" id="menu_file_restore_saved">
-                        <property name="label" translatable="yes">Restore Saved Machine...</property>
-                        <property name="visible">True</property>
-                        <property name="tooltip" translatable="yes">Restore a saved machine from a filesystem image</property>
-                        <property name="use_underline">True</property>
-                        <property name="use_stock">False</property>
-                        <signal name="activate" handler="on_menu_restore_saved_activate"/>
-                        <accelerator key="r" signal="activate" modifiers="GDK_MOD1_MASK"/>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="image3">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-open</property>
-                          </widget>
-                        </child>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkSeparatorMenuItem" id="separator4">
-                        <property name="visible">True</property>
-                      </widget>
-                    </child>
-                    <child>
                       <widget class="GtkImageMenuItem" id="open_connection">
                         <property name="label" translatable="yes">_Add Connection...</property>
                         <property name="visible">True</property>
