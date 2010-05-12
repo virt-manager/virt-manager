@@ -161,7 +161,7 @@ class vmmConsolePages(gobject.GObject):
 
     def keyboard_grabbed(self, src):
         self._disable_modifiers()
-    def keyboard_ungrabbed(self, src):
+    def keyboard_ungrabbed(self, src=None):
         self._enable_modifiers()
 
     def notify_grabbed(self, src):
@@ -456,6 +456,7 @@ class vmmConsolePages(gobject.GObject):
 
         self.vnc_connected = False
         logging.debug("VNC disconnected")
+        self.keyboard_ungrabbed()
 
         if (self.skip_connect_attempt() or
             self.guest_not_avail()):
