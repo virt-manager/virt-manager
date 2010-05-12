@@ -66,9 +66,11 @@ def default_uri():
     tryuri = None
     if os.path.exists("/var/lib/xend") and os.path.exists("/proc/xen"):
         tryuri = "xen:///"
-    elif (os.path.exists("/usr/bin/qemu") or
+    elif (os.path.exists("/dev/kvm") or
+          os.path.exists("/usr/bin/qemu") or
           os.path.exists("/usr/bin/qemu-kvm") or
-          os.path.exists("/usr/bin/kvm")):
+          os.path.exists("/usr/bin/kvm") or
+          os.path.exists("/usr/libexec/qemu-kvm")):
         tryuri = "qemu:///system"
 
     return tryuri
