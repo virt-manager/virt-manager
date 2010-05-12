@@ -815,6 +815,16 @@ class vmmDetails(gobject.GObject):
         if newpage == PAGE_CONSOLE or newpage >= PAGE_DYNAMIC_OFFSET:
             self.last_console_page = newpage
 
+    def change_run_text(self, can_restore):
+        if can_restore:
+            text = _("_Restore")
+        else:
+            text = _("_Run")
+        strip_text = text.replace("_", "")
+
+        self.window.get_widget("details-menu-run").get_child().set_label(text)
+        self.window.get_widget("control-run").set_label(strip_text)
+
     def update_widget_states(self, vm, status, ignore=None):
         self.toggle_toolbar(self.window.get_widget("details-menu-view-toolbar"))
 
@@ -823,6 +833,9 @@ class vmmDetails(gobject.GObject):
         stop    = vm.is_stoppable()
         paused  = vm.is_paused()
         ro      = vm.is_read_only()
+
+        if vm.managedsave_supported:
+            self.change_run_text(vm.hasSavedImage())
 
         self.window.get_widget("details-menu-destroy").set_sensitive(destroy)
         self.window.get_widget("control-run").set_sensitive(run)

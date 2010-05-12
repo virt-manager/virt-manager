@@ -969,6 +969,15 @@ class vmmManager(gobject.GObject):
                     child = model.iter_children(parent)
         model.row_changed(row.path, row.iter)
 
+    def change_run_text(self, can_restore):
+        if can_restore:
+            text = _("_Restore")
+        else:
+            text = _("_Run")
+        strip_text = text.replace("_", "")
+
+        self.vmmenu_items["run"].get_child().set_label(text)
+        self.window.get_widget("vm-run").set_label(strip_text)
 
     def vm_selected(self, ignore=None):
         conn = self.current_connection()
@@ -986,6 +995,9 @@ class vmmManager(gobject.GObject):
         else:
             show_pause = bool(vm and vm.is_pauseable())
         show_shutdown = bool(vm and vm.is_stoppable())
+
+        if vm and vm.managedsave_supported:
+            self.change_run_text(vm.hasSavedImage())
 
         self.window.get_widget("vm-open").set_sensitive(show_open)
         self.window.get_widget("vm-run").set_sensitive(show_run)

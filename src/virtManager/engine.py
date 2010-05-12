@@ -713,12 +713,13 @@ class vmmEngine(gobject.GObject):
     def save_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
+        managed = bool(vm.managedsave_supported)
         do_prompt = self.config.get_confirm_poweroff()
 
-        if conn.is_remote():
-            # FIXME: This should work with remote storage stuff
+        if managed and conn.is_remote():
             self.err.val_err(_("Saving virtual machines over remote "
-                               "connections is not yet supported."))
+                               "connections is not supported with this "
+                               "libvirt version or hypervisor."))
             return
 
         if do_prompt:
@@ -733,16 +734,18 @@ class vmmEngine(gobject.GObject):
                 return
             self.config.set_confirm_poweroff(not skip_prompt)
 
-        path = util.browse_local(src.window.get_widget("vmm-details"),
-                                 _("Save Virtual Machine"),
-                                 self.config, conn,
-                                 dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE,
-                                 browse_reason=self.config.CONFIG_DIR_SAVE)
+        path = None
+        if not managed:
+            path = util.browse_local(src.window.get_widget("vmm-details"),
+                                     _("Save Virtual Machine"),
+                                     self.config, conn,
+                                     dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE,
+                                     browse_reason=self.config.CONFIG_DIR_SAVE)
+            if not path:
+                return
 
-        if not path:
-            return
-
-        progWin = vmmAsyncJob(self.config, self._save_callback, [vm, path],
+        progWin = vmmAsyncJob(self.config, self._save_callback,
+                              [vm, path],
                               _("Saving Virtual Machine"))
         progWin.run()
         error, details = progWin.get_error()
@@ -752,7 +755,11 @@ class vmmEngine(gobject.GObject):
 
     def _save_callback(self, vm, file_to_save, asyncjob):
         try:
-            vm.save(file_to_save)
+            conn = util.dup_conn(self.config, vm.connection,
+                                 return_conn_class=True)
+            newvm = conn.get_vm(vm.get_uuid())
+
+            newvm.save(file_to_save)
         except Exception, e:
             asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 

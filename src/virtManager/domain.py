@@ -77,6 +77,8 @@ class vmmDomainBase(vmmLibvirtObject):
 
         self._startup_vcpus = None
 
+        self.managedsave_supported = False
+
         self._network_traffic = None
         self._disk_io = None
 
@@ -227,6 +229,9 @@ class vmmDomainBase(vmmLibvirtObject):
         if i < 0:
             return "-"
         return str(i)
+
+    def hasSavedImage(self):
+        return False
 
     def get_abi_type(self):
         return str(vutil.get_xml_path(self.get_xml(),
@@ -1181,6 +1186,7 @@ class vmmDomain(vmmDomainBase):
 
         self.getvcpus_supported = support.check_domain_support(self._backend,
                                             support.SUPPORT_DOMAIN_GETVCPUS)
+        self.managedsave_supported = self.connection.get_dom_managedsave_supported(self._backend)
 
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
@@ -1303,14 +1309,16 @@ class vmmDomain(vmmDomainBase):
         self._backend.resume()
         self._update_status()
 
-    def save(self, filename, background=True):
-        if background:
-            conn = util.dup_conn(self.config, self.connection)
-            vm = conn.lookupByID(self.get_id())
-        else:
-            vm = self._backend
+    def hasSavedImage(self):
+        if not self.managedsave_supported:
+            return False
+        return self._backend.hasManagedSaveImage(0)
 
-        vm.save(filename)
+    def save(self, filename=None):
+        if not self.managedsave_supported:
+            self._backend.save(filename)
+        else:
+            self._backend.managedSave(0)
         self._update_status()
 
     def destroy(self):
