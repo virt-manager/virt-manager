@@ -85,6 +85,7 @@ def check_packagekit(config, errbox):
     Returns (success, did we just install libvirt) otherwise.
     """
     if not PACKAGEKIT_PACKAGES:
+        logging.debug("No PackageKit packages to search for.")
         return
 
     logging.debug("Asking PackageKit what's installed locally.")
@@ -191,7 +192,14 @@ def packagekit_search(session, pk_control, package_name):
     pk_trans.connect_to_signal('Finished', finished)
     pk_trans.connect_to_signal('ErrorCode', error)
     pk_trans.connect_to_signal('Package', package)
-    pk_trans.SearchNames("installed", [package_name])
+    try:
+        pk_trans.SearchNames("installed", [package_name])
+    except dbus.exceptions.DBusException, e:
+        if e.get_dbus_name() != "org.freedesktop.DBus.Error.UnknownMethod":
+            raise
+
+        # Try older search API
+        pk_trans.SearchName("installed", package_name)
 
     # Call main() so this function is synchronous
     gtk.main()
