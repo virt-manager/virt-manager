@@ -76,6 +76,7 @@ class vmmDomainBase(vmmLibvirtObject):
         self.uuid = uuid
         self.cloning = False
 
+        self._install_abort = False
         self._startup_vcpus = None
 
         self.managedsave_supported = False
@@ -127,6 +128,13 @@ class vmmDomainBase(vmmLibvirtObject):
         return self.cloning
     def set_cloning(self, val):
         self.cloning = bool(val)
+
+    # If manual shutdown or destroy specified, make sure we don't continue
+    # install process
+    def set_install_abort(self, val):
+        self._install_abort = bool(val)
+    def get_install_abort(self):
+        return bool(self._install_abort)
 
     # Device/XML altering API
     def set_autostart(self, val):
@@ -1292,11 +1300,13 @@ class vmmDomain(vmmDomainBase):
                                                     reboot_listener, self)
 
     def shutdown(self):
+        self.set_install_abort(True)
         self._unregister_reboot_listener()
         self._backend.shutdown()
         self._update_status()
 
     def reboot(self):
+        self.set_install_abort(True)
         self._backend.reboot(0)
         self._update_status()
 
@@ -1328,6 +1338,7 @@ class vmmDomain(vmmDomainBase):
         return self._backend.hasManagedSaveImage(0)
 
     def save(self, filename=None):
+        self.set_install_abort(True)
         if not self.managedsave_supported:
             self._backend.save(filename)
         else:
@@ -1335,6 +1346,7 @@ class vmmDomain(vmmDomainBase):
         self._update_status()
 
     def destroy(self):
+        self.set_install_abort(True)
         self._unregister_reboot_listener()
         self._backend.destroy()
         self._update_status()

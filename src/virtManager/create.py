@@ -1611,9 +1611,15 @@ class vmmCreate(gobject.GObject):
                     # out handler, removing the virtinst_guest which
                     # will force one final restart.
                     virtinst_guest.continue_install()
+
                     util.connect_opt_out(vm, "status-changed",
                                          self.check_install_status, None)
                     return True
+
+            if vm.get_install_abort():
+                logging.debug("User manually shutdown VM, not restarting "
+                              "guest after install.")
+                return True
 
             logging.debug("Install should be completed, starting VM.")
             vm.startup()
