@@ -247,7 +247,7 @@ class vmmDetails(gobject.GObject):
             "on_security_type_changed": self.security_type_changed,
             "on_security_model_changed": self.security_model_changed,
 
-            "on_config_vcpus_changed": self.config_enable_apply,
+            "on_config_vcpus_changed": self.config_vcpus_changed,
 
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
@@ -1114,6 +1114,19 @@ class vmmDetails(gobject.GObject):
             maxadj.value = mem
         maxadj.lower = mem
 
+    # VCPUS
+    def config_vcpus_changed(self, ignore):
+        conn = self.vm.get_connection()
+        host_active_count = conn.host_active_processor_count()
+        vcpus_adj = self.window.get_widget("config-vcpus").get_adjustment()
+
+        # Warn about overcommit
+        warn = bool(vcpus_adj.value > host_active_count)
+        self.window.get_widget("config-vcpus-warn-box").set_property(
+                                                            "visible", warn)
+
+        self.config_enable_apply()
+
     # Boot device / Autostart
     def config_bootdev_selected(self, ignore):
         boot_row = self.get_boot_selection()
@@ -1657,6 +1670,11 @@ class vmmDetails(gobject.GObject):
             vcpus_adj.value = curvcpus
 
         self.window.get_widget("state-vm-vcpus").set_text(str(curvcpus))
+
+        # Warn about overcommit
+        warn = bool(vcpus_adj.value > host_active_count)
+        self.window.get_widget("config-vcpus-warn-box").set_property(
+                                                            "visible", warn)
 
         # Populate VCPU pinning
         self.window.get_widget("config-vcpupin").set_text(vcpupin)
