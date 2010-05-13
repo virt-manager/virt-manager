@@ -742,17 +742,23 @@ class vmmCloneVM(gobject.GObject):
         details = None
 
         try:
-            # Open a seperate connection to install on since this is async
-            logging.debug("Threading off connection to clone VM.")
-            newconn = util.dup_conn(self.config, self.conn)
-            meter = vmmCreateMeter(asyncjob)
+            try:
+                self.orig_vm.set_cloning(True)
 
-            self.clone_design.orig_connection = newconn
-            for d in self.clone_design.clone_virtual_disks:
-                d.conn = newconn
+                # Open a seperate connection to install on since this is async
+                logging.debug("Threading off connection to clone VM.")
+                newconn = util.dup_conn(self.config, self.conn)
+                meter = vmmCreateMeter(asyncjob)
 
-            self.clone_design.setup()
-            CloneManager.start_duplicate(self.clone_design, meter)
+                self.clone_design.orig_connection = newconn
+                for d in self.clone_design.clone_virtual_disks:
+                    d.conn = newconn
+
+                self.clone_design.setup()
+                CloneManager.start_duplicate(self.clone_design, meter)
+            finally:
+                self.orig_vm.set_cloning(False)
+
         except Exception, e:
             error = (_("Error creating virtual machine clone '%s': %s") %
                       (self.clone_design.clone_name, str(e)))

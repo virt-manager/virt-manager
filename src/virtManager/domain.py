@@ -74,6 +74,7 @@ class vmmDomainBase(vmmLibvirtObject):
 
         self._backend = backend
         self.uuid = uuid
+        self.cloning = False
 
         self._startup_vcpus = None
 
@@ -121,6 +122,11 @@ class vmmDomainBase(vmmLibvirtObject):
 
     def get_autostart(self):
         raise NotImplementedError()
+
+    def get_cloning(self):
+        return self.cloning
+    def set_cloning(self, val):
+        self.cloning = bool(val)
 
     # Device/XML altering API
     def set_autostart(self, val):
@@ -1295,6 +1301,9 @@ class vmmDomain(vmmDomainBase):
         self._update_status()
 
     def startup(self):
+        if self.get_cloning():
+            raise RuntimeError(_("Cannot start guest while cloning "
+                                 "operation in progress"))
         self._backend.create()
         self._update_status()
 
@@ -1306,6 +1315,10 @@ class vmmDomain(vmmDomainBase):
         self._backend.undefine()
 
     def resume(self):
+        if self.get_cloning():
+            raise RuntimeError(_("Cannot resume guest while cloning "
+                                 "operation in progress"))
+
         self._backend.resume()
         self._update_status()
 
