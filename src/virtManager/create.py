@@ -1320,6 +1320,12 @@ class vmmCreate(gobject.GObject):
         if not use_storage:
             return True
 
+        # Make sure default pool is running
+        if self.is_default_storage():
+            ret = uihelpers.check_default_pool_active(self.topwin, self.conn)
+            if not ret:
+                return False
+
         try:
             # This can error out
             diskpath, disksize, sparse = self.get_storage_info()

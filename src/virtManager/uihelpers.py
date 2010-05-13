@@ -104,6 +104,27 @@ def host_space_tick(conn, config, widget):
 
     return 1
 
+def check_default_pool_active(topwin, conn):
+    default_pool = util.get_default_pool(conn)
+    if default_pool and not default_pool.is_active():
+        res = err_dial.yes_no(_("Default pool is not active."),
+                              _("Storage pool '%s' is not active. "
+                                "Would you like to start the pool "
+                                "now?") % default_pool.get_name())
+        if not res:
+            return False
+
+        # Try to start the pool
+        try:
+            default_pool.start()
+            logging.info("Started pool '%s'." % default_pool.get_name())
+        except Exception, e:
+            return topwin.err.show_err(_("Could not start storage_pool "
+                                         "'%s': %s") %
+                                         (default_pool.get_name(), str(e)),
+                                         "".join(traceback.format_exc()))
+    return True
+
 #####################################################
 # Hardware model list building (for details, addhw) #
 #####################################################

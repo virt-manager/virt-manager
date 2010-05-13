@@ -1090,6 +1090,12 @@ class vmmAddHardware(gobject.GObject):
     def validate_page_storage(self):
         bus, device = self.get_config_disk_target()
 
+        # Make sure default pool is running
+        if self.is_default_storage():
+            ret = uihelpers.check_default_pool_active(self.topwin, self.conn)
+            if not ret:
+                return False
+
         readonly = False
         if device == virtinst.VirtualDisk.DEVICE_CDROM:
             readonly=True
