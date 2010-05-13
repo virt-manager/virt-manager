@@ -39,6 +39,8 @@ OPTICAL_DEV_KEY = 3
 OPTICAL_MEDIA_KEY = 4
 OPTICAL_IS_VALID = 5
 
+SUPPORTED_SOUND_MODELS = None
+
 # What user we guess the qemu:///system starts the emulator as. Some distros
 # may use a nonroot user, so simply changing this will cause several UI
 # pieces to attempt to verify that permissions are correct. Eventually this
@@ -155,6 +157,11 @@ def build_sound_combo(vm, combo, no_default=False):
     for m in virtinst.VirtualAudio.MODELS:
         if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
             continue
+
+        if (SUPPORTED_SOUND_MODELS is not None and
+            m not in SUPPORTED_SOUND_MODELS):
+            continue
+
         dev_model.append([m])
     if len(dev_model) > 0:
         combo.set_active(0)
