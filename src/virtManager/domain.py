@@ -1913,7 +1913,7 @@ class vmmDomain(vmmDomainBase):
     # End XML Altering API #
     ########################
 
-    def _update_start_vcpus(self, ignore, status, oldstatus):
+    def _update_start_vcpus(self, ignore, oldstatus, status):
         if oldstatus not in [ libvirt.VIR_DOMAIN_SHUTDOWN,
                               libvirt.VIR_DOMAIN_SHUTOFF,
                               libvirt.VIR_DOMAIN_CRASHED ]:
