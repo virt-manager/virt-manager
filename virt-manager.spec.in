@@ -103,12 +103,14 @@ gconftool-2 --makefile-install-rule \
 
 update-desktop-database %{_datadir}/applications
 
-if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update -q -o %{_datadir}/omf/%{name}; fi
+# Revive when we update help docs
+#if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update -q -o %{_datadir}/omf/%{name}; fi
 
 %postun
 update-desktop-database %{_datadir}/applications
 
-if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update -q; fi
+# Revive when we update help docs
+#if which scrollkeeper-update>/dev/null 2>&1; then scrollkeeper-update -q; fi
 
 %preun
 if [ "$1" -eq 0 ]; then
@@ -144,8 +146,9 @@ fi
 
 %{_datadir}/%{name}/virtManager/*.py*
 
-%{_datadir}/omf/%{name}/
-%{_datadir}/gnome/help/%{name}
+# Revive when we update help docs
+#%{_datadir}/omf/%{name}/
+#%{_datadir}/gnome/help/%{name}
 
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/dbus-1/services/%{name}.service

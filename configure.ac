@@ -16,13 +16,18 @@ AC_SUBST([VIRTINST_VERSION])
 dnl ====================================
 dnl = Begin tests for scrollkeeper
 dnl ====================================
-AC_PATH_PROG(SCROLLKEEPER_CONFIG, scrollkeeper-config,no)
-if test x$SCROLLKEEPER_CONFIG = xno; then
-  AC_MSG_ERROR(Couldn't find scrollkeeper-config. Please install the scrollkeeper package: http://scrollkeeper.sourceforge.net)
-fi
+# Help is so outdated, don't even distribute it
+#help/Makefile
+#help/virt-manager/Makefile
+#help/virt-manager/C/Makefile
+#AC_PATH_PROG(SCROLLKEEPER_CONFIG, scrollkeeper-config,no)
+#if test x$SCROLLKEEPER_CONFIG = xno; then
+#  AC_MSG_ERROR(Couldn't find scrollkeeper-config. Please install the scrollkeeper package: http://scrollkeeper.sourceforge.net)
+#fi
 dnl ====================================
 dnl = End tests for scrollkeeper
 dnl ====================================
+
 
 AC_OUTPUT(Makefile
           pixmaps/Makefile
@@ -40,7 +45,5 @@ AC_OUTPUT(Makefile
           src/virtManager/Makefile
           man/Makefile
           tests/Makefile
-          virt-manager.spec
-          help/Makefile
-          help/virt-manager/Makefile
-          help/virt-manager/C/Makefile)
+          virt-manager.spec)
+
