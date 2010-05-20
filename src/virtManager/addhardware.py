@@ -227,6 +227,10 @@ class vmmAddHardware(gobject.GObject):
         target_list.pack_start(text, True)
         target_list.add_attribute(text, 'text', 3)
 
+        # Disk cache mode
+        cache_list = self.window.get_widget("config-storage-cache")
+        uihelpers.build_cache_combo(self.vm, cache_list)
+
         # Sparse tooltip
         sparse_info = self.window.get_widget("config-storage-nosparse-info")
         uihelpers.set_sparse_tooltip(sparse_info)
@@ -546,6 +550,13 @@ class vmmAddHardware(gobject.GObject):
         device = model[idx][1]
         return bus, device
 
+    def get_config_disk_cache(self, label=False):
+        cache = self.window.get_widget("config-storage-cache")
+        idx = 0
+        if label:
+            idx = 1
+        return cache.get_model()[cache.get_active()][idx]
+
     # Input getters
     def get_config_input(self):
         target = self.window.get_widget("input-type")
@@ -742,6 +753,7 @@ class vmmAddHardware(gobject.GObject):
                 (_("Disk size:"),   size_str),
                 (_("Device type:"), self._dev.device),
                 (_("Bus type:"),    self._dev.bus),
+                (_("Cache mode:"),  self.get_config_disk_cache(label=True)),
             ]
             title = _("Storage")
 
@@ -1089,6 +1101,7 @@ class vmmAddHardware(gobject.GObject):
 
     def validate_page_storage(self):
         bus, device = self.get_config_disk_target()
+        cache = self.get_config_disk_cache()
 
         # Make sure default pool is running
         if self.is_default_storage():
@@ -1139,7 +1152,8 @@ class vmmAddHardware(gobject.GObject):
                                         sparse = sparse,
                                         readOnly = readonly,
                                         device = device,
-                                        bus = bus)
+                                        bus = bus,
+                                        driverCache = cache)
 
             if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
                 not self.vm.is_hvm() and

@@ -223,6 +223,21 @@ def populate_netmodel_combo(vm, combo):
         for m in mod_list:
             model.append([m, m])
 
+def build_cache_combo(vm, combo, no_default=False):
+    dev_model = gtk.ListStore(str, str)
+    combo.set_model(dev_model)
+    text = gtk.CellRendererText()
+    combo.pack_start(text, True)
+    combo.add_attribute(text, 'text', 1)
+    dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+
+    combo.set_active(-1)
+    for m in virtinst.VirtualDisk.cache_types:
+        dev_model.append([m, m])
+
+    if not no_default:
+        dev_model.append([None, "default"])
+    combo.set_active(0)
 
 #######################################################################
 # Widgets for listing network device options (in create, addhardware) #

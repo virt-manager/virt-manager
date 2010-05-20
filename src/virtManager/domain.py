@@ -418,6 +418,7 @@ class vmmDomainBase(vmmLibvirtObject):
                 readonly = False
                 sharable = False
                 devtype = node.prop("device")
+                cache = None
                 if devtype == None:
                     devtype = "disk"
                 for child in node.children:
@@ -431,6 +432,8 @@ class vmmDomainBase(vmmLibvirtObject):
                         readonly = True
                     elif child.name == "shareable":
                         sharable = True
+                    elif child.name == "driver":
+                        cache = child.prop("cache")
 
                 if srcpath == None:
                     if devtype == "cdrom" or devtype == "floppy":
@@ -440,7 +443,7 @@ class vmmDomainBase(vmmLibvirtObject):
                 #   disk device type, disk type, readonly?, sharable?,
                 #   bus type, disk idx ]
                 disks.append(["disk", devdst, devdst, srcpath, devtype, typ,
-                              readonly, sharable, bus, 0])
+                              readonly, sharable, bus, 0, cache])
 
             # Iterate through all disks and calculate what number they are
             idx_mapping = {}
@@ -1824,6 +1827,29 @@ class vmmDomain(vmmDomainBase):
 
         return self._redefine(util.xml_parse_wrapper, self._change_disk_param,
                              dev_id_info, "shareable", do_shareable)
+
+    def define_disk_cache(self, dev_id_info, new_cache):
+        devtype = "disk"
+        if not self._check_device_is_present(devtype, dev_id_info):
+            return
+
+        def change_cache(doc, ctx):
+            dev_node = self._get_device_xml_nodes(ctx, devtype, dev_id_info)[0]
+            tmpnode = dev_node.xpathEval("./driver")
+            node = tmpnode and tmpnode[0] or None
+
+            if not node:
+                if new_cache:
+                    node = dev_node.newChild(None, "driver", None)
+
+            if new_cache:
+                node.setProp("cache", new_cache)
+            else:
+                node.unsetProp("cache")
+
+            return doc.serialize()
+
+        return self._redefine(util.xml_parse_wrapper, change_cache)
 
     # Network properties
     def define_network_model(self, dev_id_info, newmodel):

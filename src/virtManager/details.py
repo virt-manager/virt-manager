@@ -259,6 +259,7 @@ class vmmDetails(gobject.GObject):
 
             "on_disk_readonly_changed": self.config_enable_apply,
             "on_disk_shareable_changed": self.config_enable_apply,
+            "on_disk_cache_combo_changed": self.config_enable_apply,
 
             "on_network_model_combo_changed": self.config_enable_apply,
 
@@ -557,6 +558,10 @@ class vmmDetails(gobject.GObject):
         txtCol.add_attribute(text, 'sensitive', BOOT_ACTIVE)
 
         no_default= not self.is_customize_dialog
+        # Disk cache combo
+        disk_cache = self.window.get_widget("disk-cache-combo")
+        uihelpers.build_cache_combo(self.vm, disk_cache)
+
         # Network model
         net_model = self.window.get_widget("network-model-combo")
         uihelpers.build_netmodel_combo(self.vm, net_model)
@@ -1248,10 +1253,13 @@ class vmmDetails(gobject.GObject):
     # Helper for accessing value of combo/label pattern
     def get_combo_label_value(self, prefix, model_idx=0):
         combo = self.window.get_widget(prefix + "-combo")
+        label = self.window.get_widget(prefix + "-label")
         value = None
 
         if combo.get_property("visible"):
             value = combo.get_model()[combo.get_active()][model_idx]
+        else:
+            value = label.get_text()
 
         return value
 
@@ -1380,11 +1388,14 @@ class vmmDetails(gobject.GObject):
     def config_disk_apply(self, dev_id_info):
         do_readonly = self.window.get_widget("disk-readonly").get_active()
         do_shareable = self.window.get_widget("disk-shareable").get_active()
+        cache = self.get_combo_label_value("disk-cache")
 
         return self._change_config_helper([self.vm.define_disk_readonly,
-                                           self.vm.define_disk_shareable],
+                                           self.vm.define_disk_shareable,
+                                           self.vm.define_disk_cache],
                                           [(dev_id_info, do_readonly),
-                                           (dev_id_info, do_shareable)])
+                                           (dev_id_info, do_shareable),
+                                           (dev_id_info, cache)])
 
     # Audio options
     def config_sound_apply(self, dev_id_info):
@@ -1753,6 +1764,7 @@ class vmmDetails(gobject.GObject):
         share = diskinfo[7]
         bus = diskinfo[8]
         idx = diskinfo[9]
+        cache = diskinfo[10]
 
         size = _("Unknown")
         if not path:
@@ -1778,6 +1790,7 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("disk-readonly").set_sensitive(not is_cdrom)
         self.window.get_widget("disk-shareable").set_active(share)
         self.window.get_widget("disk-size").set_text(size)
+        self.set_combo_label("disk-cache", 0, cache)
 
         button = self.window.get_widget("config-cdrom-connect")
         if is_cdrom or is_floppy:
