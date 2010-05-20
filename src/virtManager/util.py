@@ -212,7 +212,7 @@ def browse_local(parent, dialog_name, config, conn, start_folder=None,
         start_folder = config.get_default_directory(conn, browse_reason)
 
     if start_folder != None:
-        if not os.access(start_folder, os.R_OK):
+        if os.access(start_folder, os.R_OK):
             fcdialog.set_current_folder(start_folder)
 
     # Run the dialog and parse the response
