@@ -368,7 +368,7 @@ class vmmCreatePool(gobject.GObject):
         source = self._browse_file(_("Choose source path"),
                                    startfolder="/dev", foldermode=False)
         if source:
-            self.window.get_widget("pool-source-path").set_text(source)
+            self.window.get_widget("pool-source-path").child.set_text(source)
 
     def browse_target_path(self, ignore1=None):
         target = self._browse_file(_("Choose target directory"),
