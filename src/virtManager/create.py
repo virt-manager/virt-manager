@@ -1433,12 +1433,11 @@ class vmmCreate(gobject.GObject):
         if not self.conn.is_xen() and not self.conn.is_test_conn():
             return
 
-        conntype = self.conn.get_driver()
         # FIXME: some things are dependent on domain type (vcpu max)
         if instmeth == INSTALL_PAGE_URL:
-            self.change_caps(gtype = "xen", dtype = conntype)
+            self.change_caps(gtype = "xen")
         else:
-            self.change_caps(gtype = "hvm", dtype = conntype)
+            self.change_caps(gtype = "hvm")
 
     def reset_guest_type(self):
         self.change_caps()
