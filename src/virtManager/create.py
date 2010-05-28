@@ -564,6 +564,7 @@ class vmmCreate(gobject.GObject):
             for dom in guest.domains:
                 domtype = dom.hypervisor_type
                 label = util.pretty_hv(gtype, domtype)
+                sensitive = True
 
                 # Don't add multiple rows for each arch
                 for m in model:
@@ -581,10 +582,11 @@ class vmmCreate(gobject.GObject):
                 if gtype == "xen":
                     if (instmethod == INSTALL_PAGE_PXE or
                         instmethod == INSTALL_PAGE_ISO):
+                        sensitive = False
                         tooltip = _("Only URL or import installs are supported "
                                     "for paravirt.")
 
-                model.append([label, gtype, domtype, not bool(tooltip)])
+                model.append([label, gtype, domtype, sensitive])
 
         hv_info = self.window.get_widget("config-hv-info")
         if tooltip:
