@@ -1036,11 +1036,16 @@ class vmmCreate(gobject.GObject):
     def back(self, src):
         notebook = self.window.get_widget("create-pages")
         curpage = notebook.get_current_page()
+        is_import = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
+        next_page = curpage - 1
 
         if curpage == PAGE_INSTALL:
             self.reset_guest_type()
+        elif curpage == PAGE_FINISH and is_import:
+            # Skip over storage page
+            next_page -= 1
 
-        notebook.set_current_page(curpage - 1)
+        notebook.set_current_page(next_page)
 
     def forward(self, ignore):
         notebook = self.window.get_widget("create-pages")
