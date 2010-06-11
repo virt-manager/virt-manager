@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-27 11:50-0400\n"
-"PO-Revision-Date: 2010-06-09 22:30+0900\n"
+"PO-Revision-Date: 2010-06-10 16:11+0900\n"
 "Last-Translator: Hajime Taira <htaira@redhat.com>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1215,7 +1215,7 @@ msgstr "ハイパーバイザーのデフォルト"
 
 #: ../src/virtManager/createinterface.py:511
 msgid "Choose interface(s) to bridge:"
-msgstr ""
+msgstr "ブリッジに接続するインタフェースを選択:"
 
 #: ../src/virtManager/createinterface.py:514
 #, fuzzy
@@ -1224,11 +1224,11 @@ msgstr "ターゲットディレクトリの選択"
 
 #: ../src/virtManager/createinterface.py:516
 msgid "Choose interfaces to bond:"
-msgstr ""
+msgstr "Bondに登録するインタフェースを選択:"
 
 #: ../src/virtManager/createinterface.py:518
 msgid "Choose an unconfigured interface:"
-msgstr ""
+msgstr "未設定のインタフェースを選択:"
 
 #: ../src/virtManager/createinterface.py:573
 #, fuzzy
@@ -1776,7 +1776,7 @@ msgstr "デバイス %s を見つけることができません"
 
 #: ../src/virtManager/engine.py:103
 msgid "Searching for available hypervisors..."
-msgstr ""
+msgstr "利用可能なハイパーバイザーを探索中..."
 
 #: ../src/virtManager/engine.py:126
 #, python-format
@@ -1790,7 +1790,7 @@ msgstr ""
 
 #: ../src/virtManager/engine.py:131
 msgid "Packages required for KVM usage"
-msgstr ""
+msgstr "KVMを利用するには次のパッケージが必要です。"
 
 #: ../src/virtManager/engine.py:140
 #, fuzzy, python-format
@@ -2314,7 +2314,7 @@ msgstr "転送レートは 0 より大きな数にして下さい。"
 
 #: ../src/virtManager/migrate.py:393
 msgid "Port must be greater than 0."
-msgstr ""
+msgstr "ポートは0以上の数値でなければなりません。"
 
 #: ../src/virtManager/migrate.py:422
 #, python-format
@@ -2476,7 +2476,7 @@ msgstr "本当にこのディスクを使用しますか?"
 #: ../src/virtManager/uihelpers.py:649
 #: ../src/virtManager/uihelpers.py:673
 msgid "Don't ask about these directories again."
-msgstr ""
+msgstr "これらのディレクトリーについてについて二度と質問しない。"
 
 #: ../src/virtManager/uihelpers.py:662
 msgid "Errors were encountered changing permissions for the following directories:"
@@ -2681,7 +2681,7 @@ msgstr "ポート:"
 #: ../src/vmm-add-hardware.glade.h:43
 #: ../src/vmm-create.glade.h:38
 msgid "Select _managed or other existing storage"
-msgstr ""
+msgstr "マネッジドストレージもしくは既存のストレージを選択"
 
 #: ../src/vmm-add-hardware.glade.h:44
 msgid "This assistant will guide you through adding a new piece of virtual hardware. First select what type of hardware you wish to add:"
@@ -2689,7 +2689,7 @@ msgstr "この助手は個々の仮想ハードウェアを追加することを
 
 #: ../src/vmm-add-hardware.glade.h:45
 msgid "Use Te_lnet:"
-msgstr ""
+msgstr "Telnet を使用 (L):"
 
 #: ../src/vmm-add-hardware.glade.h:46
 #: ../src/vmm-create-interface.glade.h:34
@@ -2823,24 +2823,24 @@ msgstr "<span color='#484848'>ネットワーク:</span>"
 
 #: ../src/vmm-clone.glade.h:3
 msgid "<span color='#484848'>New _Path:</span>"
-msgstr ""
+msgstr "<span color='#484848'>新しいパス (_P):</span>"
 
 #: ../src/vmm-clone.glade.h:4
 msgid "<span color='#484848'>Path:</span>"
-msgstr ""
+msgstr "<span color='#484848'>パス:</span>"
 
 #: ../src/vmm-clone.glade.h:5
 msgid "<span color='#484848'>Size:</span>"
-msgstr ""
+msgstr "<span color='#484848'>サイズ:</span>"
 
 #: ../src/vmm-clone.glade.h:6
 #: ../src/vmm-create.glade.h:6
 msgid "<span color='#484848'>Storage:</span>"
-msgstr ""
+msgstr "<span color='#484848'>ストレージ:</span>"
 
 #: ../src/vmm-clone.glade.h:7
 msgid "<span color='#484848'>Target:</span>"
-msgstr ""
+msgstr "<span color='#484848'>ターゲット:</span>"
 
 #: ../src/vmm-clone.glade.h:8
 msgid "<span color='#484848'>Type:</span>"
@@ -3467,7 +3467,7 @@ msgstr "仮想マシンの情報を入力してください。"
 
 #: ../src/vmm-create.glade.h:20
 msgid "Error message"
-msgstr ""
+msgstr "エラーメッセージ"
 
 #: ../src/vmm-create.glade.h:21
 msgid "Finish"
@@ -3564,23 +3564,20 @@ msgid "_Enable storage for this virtual machine"
 msgstr "仮想マシンを管理する"
 
 #: ../src/vmm-create.glade.h:52
-#, fuzzy
 msgid "_Local install media (ISO image or CDROM)"
-msgstr "ローカルインストールのメディア (ISO イメージ、又は CDROM)（_L）"
+msgstr "ローカルのインストールメディア (ISO イメージ、または CD-ROMドライブ)（_L）"
 
 #: ../src/vmm-create.glade.h:53
-#, fuzzy
 msgid "_Memory (RAM):"
-msgstr "最大メモリー (MB) (_M):"
+msgstr "メモリー (MB) (_M):"
 
 #: ../src/vmm-create.glade.h:55
 msgid "_Version:"
 msgstr "バージョン (_V):"
 
 #: ../src/vmm-create.glade.h:56
-#, fuzzy
 msgid "_Virt Type:"
-msgstr "タイプ:"
+msgstr "仮想化の種類 (_V):"
 
 #: ../src/vmm-delete.glade.h:1
 #, fuzzy
@@ -3683,7 +3680,7 @@ msgstr "場所 (_L):"
 
 #: ../src/vmm-details.glade.h:23
 msgid "A_dd Hardware"
-msgstr ""
+msgstr "ハードウェアの追加"
 
 #: ../src/vmm-details.glade.h:25
 #: ../src/vmm-host.glade.h:16
@@ -3737,18 +3734,16 @@ msgid "D_ynamic"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:37
-#, fuzzy
 msgid "Description:"
-msgstr "目的地:"
+msgstr "宛先:"
 
 #: ../src/vmm-details.glade.h:39
 msgid "Device Type:"
 msgstr "デバイスタイプ:"
 
 #: ../src/vmm-details.glade.h:40
-#, fuzzy
 msgid "Device m_odel:"
-msgstr "デバイスモデル:"
+msgstr "デバイスモデル (_O):"
 
 #: ../src/vmm-details.glade.h:42
 msgid "Disk"
@@ -3767,28 +3762,25 @@ msgid "Emulator:"
 msgstr "エミュレーター:"
 
 #: ../src/vmm-details.glade.h:46
-#, fuzzy
 msgid "Enable A_CPI:"
-msgstr "オーディオを有効にする:"
+msgstr "ACPIを有効化 (_C):"
 
 #: ../src/vmm-details.glade.h:47
-#, fuzzy
 msgid "Enable A_PIC:"
-msgstr "オーディオを有効にする:"
+msgstr "APICを有効化 (_P):"
 
 #: ../src/vmm-details.glade.h:48
-#, fuzzy
 msgid "Finish Install"
-msgstr "PXE インストール"
+msgstr "インストール完了"
 
 #: ../src/vmm-details.glade.h:49
+#, fuzzy
 msgid "Heads:"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:50
-#, fuzzy
 msgid "Host CPUs:"
-msgstr "論理ホストの CPU:"
+msgstr "ホストの CPU数:"
 
 #: ../src/vmm-details.glade.h:51
 #: ../src/vmm-host.glade.h:28
@@ -3800,14 +3792,12 @@ msgid "Initial _pinning:"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:57
-#, fuzzy
 msgid "M_odel:"
 msgstr "モデル:"
 
 #: ../src/vmm-details.glade.h:58
-#, fuzzy
 msgid "Ma_ximum allocation:"
-msgstr "最大割り当て:"
+msgstr "最大割り当て (_X):"
 
 #: ../src/vmm-details.glade.h:59
 msgid "Max Memory Select"
@@ -3853,7 +3843,7 @@ msgstr ""
 #: ../src/vmm-details.glade.h:70
 #, fuzzy
 msgid "Over"
-msgstr "他"
+msgstr "超える"
 
 #: ../src/vmm-details.glade.h:72
 msgid "Pause"
@@ -3861,15 +3851,13 @@ msgstr "一時停止"
 
 #: ../src/vmm-details.glade.h:73
 #: ../src/vmm-manager.glade.h:3
-#, fuzzy
 msgid "Pause the virtual machine"
-msgstr "リモートの仮想マシン"
+msgstr "仮想マシンの一時停止"
 
 #: ../src/vmm-details.glade.h:75
 #: ../src/vmm-manager.glade.h:4
-#, fuzzy
 msgid "Power on the virtual machine"
-msgstr "リモートの仮想マシン"
+msgstr "仮想マシンを電源オン"
 
 #: ../src/vmm-details.glade.h:76
 msgid "Proc"
@@ -3905,9 +3893,8 @@ msgid "Show the graphical console"
 msgstr "VM グラフィカルコンソールの縮小拡大に関して"
 
 #: ../src/vmm-details.glade.h:84
-#, fuzzy
 msgid "Show virtual hardware details"
-msgstr "新しい仮想ハードウェアを追加"
+msgstr "仮想マシンの情報を表示"
 
 #: ../src/vmm-details.glade.h:85
 msgid "Shut Down"
@@ -3919,9 +3906,8 @@ msgstr "シャットダウン"
 
 #: ../src/vmm-details.glade.h:87
 #: ../src/vmm-manager.glade.h:8
-#, fuzzy
 msgid "Shutdown the virtual machine"
-msgstr "リモートの仮想マシン"
+msgstr "仮想マシンをシャットダウン"
 
 #: ../src/vmm-details.glade.h:89
 msgid "Source Path:"
@@ -3936,9 +3922,8 @@ msgid "Source path:"
 msgstr "ソースパス:"
 
 #: ../src/vmm-details.glade.h:92
-#, fuzzy
 msgid "Start virt_ual machine on host boot up"
-msgstr "ホストの起動時に仮想マシンを開始しますか？"
+msgstr "仮想マシンをこのホストで起動 (_U)"
 
 #: ../src/vmm-details.glade.h:93
 #: ../src/vmm-preferences.glade.h:27
@@ -3946,9 +3931,8 @@ msgid "Stats"
 msgstr "状態"
 
 #: ../src/vmm-details.glade.h:95
-#, fuzzy
 msgid "Storage size:"
-msgstr "ストレージ"
+msgstr "ストレージサイズ:"
 
 #: ../src/vmm-details.glade.h:96
 msgid "Switch to fullscreen view"
@@ -3963,9 +3947,8 @@ msgid "Target device:"
 msgstr "ターゲットデバイス:"
 
 #: ../src/vmm-details.glade.h:99
-#, fuzzy
 msgid "Total host memory:"
-msgstr "初期メモリー:"
+msgstr "ホストの搭載メモリー:"
 
 #: ../src/vmm-details.glade.h:101
 msgid "UUID:"
@@ -3984,9 +3967,8 @@ msgid "Vid"
 msgstr "Vid"
 
 #: ../src/vmm-details.glade.h:105
-#, fuzzy
 msgid "Virtual CPU Affinity Select"
-msgstr "仮想 CPU の選択"
+msgstr "仮想 CPU 指定の選択"
 
 #: ../src/vmm-details.glade.h:106
 msgid "Virtual CPU Select"
@@ -4005,9 +3987,8 @@ msgid "_Always"
 msgstr "常に (_A)"
 
 #: ../src/vmm-details.glade.h:111
-#, fuzzy
 msgid "_Console"
-msgstr "コンソール"
+msgstr "コンソール (_C)"
 
 #: ../src/vmm-details.glade.h:113
 #: ../src/vmm-host.glade.h:53
@@ -4026,9 +4007,8 @@ msgid "_Help"
 msgstr "ヘルプ (_H)"
 
 #: ../src/vmm-details.glade.h:117
-#, fuzzy
 msgid "_Label:"
-msgstr "レベル"
+msgstr "ラベル (_L):"
 
 #: ../src/vmm-details.glade.h:118
 msgid "_Login"
@@ -4055,9 +4035,8 @@ msgid "_Save"
 msgstr "保存 (_S)"
 
 #: ../src/vmm-details.glade.h:128
-#, fuzzy
 msgid "_Save this password in your keyring"
-msgstr "キーリングにこのパスワードを保存します"
+msgstr "キーリングにこのパスワードを保存します (_S)"
 
 #: ../src/vmm-details.glade.h:129
 msgid "_Scale Display"
@@ -4077,9 +4056,8 @@ msgid "_Text Consoles"
 msgstr "コンソール (_T)"
 
 #: ../src/vmm-details.glade.h:133
-#, fuzzy
 msgid "_Username:"
-msgstr "ホスト名:"
+msgstr "ユーザー名 (_U):"
 
 #: ../src/vmm-details.glade.h:134
 #: ../src/vmm-manager.glade.h:23
@@ -4330,7 +4308,7 @@ msgstr "<b>接続性</b>"
 
 #: ../src/vmm-migrate.glade.h:2
 msgid "<span color='#484848'>Migrate _offline:</span>"
-msgstr ""
+msgstr "<span color='#484848'>マイグレーションができません。</span>"
 
 #: ../src/vmm-migrate.glade.h:3
 msgid "<span color='#484848'>Name:</span>"
@@ -4442,9 +4420,8 @@ msgid "<b>Stats Options</b>"
 msgstr "<b>状態のオプション</b>"
 
 #: ../src/vmm-preferences.glade.h:7
-#, fuzzy
 msgid "Automatically _open consoles:"
-msgstr "自動的に開くコンソール:"
+msgstr "自動的に開くコンソール (_O):"
 
 #: ../src/vmm-preferences.glade.h:8
 #, fuzzy
@@ -4531,7 +4508,7 @@ msgstr "電源オフを強制"
 
 #: ../src/vmm-preferences.glade.h:31
 msgid "_Interface start/stop:"
-msgstr ""
+msgstr "インターネットを開始および終了"
 
 #: ../src/vmm-preferences.glade.h:32
 #, fuzzy
