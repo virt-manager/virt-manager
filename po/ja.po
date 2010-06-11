@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-27 11:50-0400\n"
-"PO-Revision-Date: 2010-06-12 06:41+0900\n"
+"PO-Revision-Date: 2010-06-12 07:21+0900\n"
 "Last-Translator: Hajime Taira <htaira@redhat.com>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -213,11 +213,11 @@ msgstr "ゲストコンソール用にキーボード入力を取得するかど
 
 #: ../src/virt-manager.schemas.in.h:43
 msgid "Whether to install a sound device for local VMs or not"
-msgstr "ローカル VM 用のサウンドデバイスをインストールするかどうか"
+msgstr "ローカルの仮想マシン用のサウンドデバイスをインストールするかどうか"
 
 #: ../src/virt-manager.schemas.in.h:44
 msgid "Whether to install a sound device for remote VMs or not"
-msgstr "リモート VM 用のサウンドデバイスをインストールするかどうか"
+msgstr "リモートの仮想マシン用のサウンドデバイスをインストールするかどうか"
 
 #: ../src/virt-manager.schemas.in.h:45
 msgid "Whether to pop up a console for a guest. 0 = never, 1 = only on creation of a new guest, 2 = On creation of any guest"
@@ -241,19 +241,19 @@ msgstr "詳細ディスプレイの中に仮想マシンのアクションボタ
 
 #: ../src/virt-manager.schemas.in.h:50
 msgid "Whether we require confirmation to forcepoweroff a VM"
-msgstr "VM の強制電源オフに確定が必要かどうか"
+msgstr "仮想マシンの強制電源オフに確認が必要かどうか"
 
 #: ../src/virt-manager.schemas.in.h:51
 msgid "Whether we require confirmation to pause a VM"
-msgstr "VM の一時停止に確定が必要かどうか"
+msgstr "仮想マシンの一時停止に確認が必要かどうか"
 
 #: ../src/virt-manager.schemas.in.h:52
 msgid "Whether we require confirmation to poweroff/reboot a VM"
-msgstr "VM の電源オフ/再起動に確定が必要かどうか"
+msgstr "仮想マシンの電源オフ/再起動に確認が必要かどうか"
 
 #: ../src/virt-manager.schemas.in.h:53
 msgid "Whether we require confirmation to remove a virtual device"
-msgstr "仮想デバイスの削除に確定が必要かどうか"
+msgstr "仮想デバイスの削除に確認が必要かどうか"
 
 #: ../src/virt-manager.schemas.in.h:54
 #, fuzzy
@@ -473,7 +473,7 @@ msgstr "パスワード:"
 #: ../src/virtManager/addhardware.py:801
 #: ../src/vmm-details.glade.h:54
 msgid "Keymap:"
-msgstr "キーマップ:"
+msgstr "キー配列:"
 
 #: ../src/virtManager/addhardware.py:803
 msgid "Graphics"
@@ -552,7 +552,7 @@ msgstr "インストールを完了できません: '%s'"
 
 #: ../src/virtManager/addhardware.py:1086
 msgid "Hardware Type Required"
-msgstr "ハードウェアタイプ必要です"
+msgstr "ハードウェアの種類が必要です"
 
 #: ../src/virtManager/addhardware.py:1087
 msgid "You must specify what type of hardware to add."
@@ -1189,7 +1189,7 @@ msgstr "Bond"
 
 #: ../src/virtManager/createinterface.py:205
 msgid "Ethernet"
-msgstr "Ethernet"
+msgstr "イーサーネット"
 
 #: ../src/virtManager/createinterface.py:207
 msgid "VLAN"
@@ -1288,7 +1288,7 @@ msgstr "NAT"
 
 #: ../src/virtManager/createnet.py:120
 msgid "Routed"
-msgstr "ルート済み"
+msgstr "ルーティング"
 
 #: ../src/virtManager/createnet.py:181
 #, python-format
@@ -1297,12 +1297,12 @@ msgstr "%d アドレス"
 
 #: ../src/virtManager/createnet.py:183
 msgid "Public"
-msgstr "公開"
+msgstr "パブリック"
 
 #: ../src/virtManager/createnet.py:185
 #: ../src/vmm-create-net.glade.h:40
 msgid "Private"
-msgstr "私用"
+msgstr "プライベート"
 
 #: ../src/virtManager/createnet.py:187
 msgid "Reserved"
@@ -1927,7 +1927,7 @@ msgstr "ボリュームのパスをコピー"
 #: ../src/virtManager/host.py:337
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
-msgstr "%(maxmem)s の内の %(currentmem)s "
+msgstr "%(maxmem)s 中 %(currentmem)s 使用"
 
 #: ../src/virtManager/host.py:354
 #: ../src/virtManager/host.py:355
@@ -1986,7 +1986,7 @@ msgstr "net autostart の設定中にエラー: %s"
 #: ../src/virtManager/host.py:692
 #: ../src/virtManager/host.py:733
 msgid "On Boot"
-msgstr "ブート時"
+msgstr "システム起動と共に"
 
 #: ../src/virtManager/host.py:443
 #: ../src/virtManager/host.py:506
@@ -2167,7 +2167,7 @@ msgstr "クローン (_C)"
 #: ../src/virtManager/manager.py:357
 #: ../src/vmm-details.glade.h:119
 msgid "_Migrate..."
-msgstr "移行 (_M)..."
+msgstr "マイグレーション (_M)..."
 
 #: ../src/virtManager/manager.py:362
 msgid "_Delete"
@@ -2269,7 +2269,7 @@ msgstr "マイグレート"
 
 #: ../src/virtManager/migrate.py:156
 msgid "Libvirt version does not support tunnelled migration."
-msgstr "Libvirt バージョンはトンネル化した移行をサポートしません。"
+msgstr "Libvirt バージョンはトンネル化したマイグレーションをサポートしません。"
 
 #: ../src/virtManager/migrate.py:173
 msgid "A valid destination connection must be selected."
@@ -2329,14 +2329,12 @@ msgid "Route to %s"
 msgstr "%s へルーティング"
 
 #: ../src/virtManager/network.py:41
-#, fuzzy
 msgid "Routed network"
-msgstr "分離された仮想ネットワーク"
+msgstr "ルーティングされたネットワーク"
 
 #: ../src/virtManager/network.py:48
-#, fuzzy
 msgid "Isolated network"
-msgstr "分離された仮想ネットワーク"
+msgstr "隔離されたネットワーク"
 
 #: ../src/virtManager/storagebrowse.py:132
 msgid "Size"
@@ -2374,9 +2372,9 @@ msgid ""
 "\n"
 "Skipping allocation can also cause space issues on the host machine, if the maximum image size exceeds available storage space."
 msgstr ""
-"完全に割り当て済みのストレージは現在より時間がかかります。しかし OS の インストール段階はより速くなります。\n"
+"容量を完全に割り当てたディスクイメージは作成にしばらく時間がかかります。しかしその方が OS のパフォーマンスは高速になります。\n"
 "\n"
-"最大イメージサイズが使用可能なストレージ容量を超過する場合は、割り当てを スキップするとホストマシン上の容量問題の原因になる可能性があります。"
+"最大ディスクイメージのサイズが使用可能なディスク容量を超える場合には、割り当てをスキップするとホストマシン上でディスク容量不足になる場合があります。"
 
 #. [xml value, label]
 #: ../src/virtManager/uihelpers.py:186
@@ -2574,7 +2572,7 @@ msgstr "閲覧 (_B)"
 #: ../src/vmm-add-hardware.glade.h:20
 #: ../src/vmm-create.glade.h:14
 msgid "C_reate a disk image on the computer's hard drive"
-msgstr ""
+msgstr "このコンピューターのハードディスク上にディスクイメージを作成"
 
 #: ../src/vmm-add-hardware.glade.h:21
 msgid "D_evice model:"
@@ -2654,12 +2652,11 @@ msgstr ""
 "の種類を示してください。"
 
 #: ../src/vmm-add-hardware.glade.h:39
-#, fuzzy
 msgid ""
 "Please indicate what watchdog device type\n"
 "and default action should be used."
 msgstr ""
-"仮想マシンに接続するポインタデバイス\n"
+"仮想マシンに接続するWatchdogデバイス\n"
 "の種類を示してください。"
 
 #: ../src/vmm-add-hardware.glade.h:41
@@ -2728,7 +2725,7 @@ msgstr "ホストデバイス (_H):"
 
 #: ../src/vmm-add-hardware.glade.h:55
 msgid "_Keymap:"
-msgstr "キー配列:"
+msgstr "キー配列 (_K):"
 
 #: ../src/vmm-add-hardware.glade.h:56
 msgid "_MAC address:"
@@ -3068,16 +3065,15 @@ msgstr "<b>DHCP</b>"
 
 #: ../src/vmm-create-net.glade.h:2
 msgid "<b>Example:</b> network1"
-msgstr "<b>例:</b> ネットワーク1"
+msgstr "<b>例:</b> network1"
 
 #: ../src/vmm-create-net.glade.h:3
 msgid "<b>Forwarding</b>"
 msgstr "<b>フォワーディング</b>"
 
 #: ../src/vmm-create-net.glade.h:4
-#, fuzzy
 msgid "<b>Hint:</b> The network should be chosen from one of the IPv4 private address ranges. eg 10.0.0.0/8,  172.16.0.0/12, or 192.168.0.0/16"
-msgstr "<b>ヒント:</b> ネットワークは 10.0.0.0/8 や、172.16.0.0/12、192.168.0.0/16 のような IPv4 プライベートアドレス範囲から選ばなければなりません。"
+msgstr "<b>注意:</b> ネットワークは 10.0.0.0/8 や、172.16.0.0/12、192.168.0.0/16 のような IPv4 プライベートアドレスの範囲から選ばなければなりません。"
 
 #: ../src/vmm-create-net.glade.h:5
 msgid "<b>IPv4 network</b>"
@@ -3085,15 +3081,15 @@ msgstr "<b>IPv4 ネットワーク</b>"
 
 #: ../src/vmm-create-net.glade.h:6
 msgid "<b>Summary</b>"
-msgstr "<b>要約</b>"
+msgstr "<b>サマリー</b>"
 
 #: ../src/vmm-create-net.glade.h:7
 msgid "<b>Tip:</b> Unless you wish to reserve some addresses to allow static network configuration in virtual machines, these parameters can be left with their default values."
-msgstr "<b>ヒント:</b>仮想マシンの中で静的ネットワーク構成を認めるためにいくつかのアドレスを予約しておきたい場合を除き、これらのパラメーターは省略値のままにすることができます。"
+msgstr "<b>注意:</b>仮想マシンの中で静的IPアドレスの構成を行うためにいくつかのアドレスを予約しておきたい場合を除き、これらのパラメーターはデフォルト値のままで構いません。"
 
 #: ../src/vmm-create-net.glade.h:8
 msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing an IPv4 address space</span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv4 アドレス領域を選択中</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">IPv4 アドレス提供範囲を指定</span>"
 
 #: ../src/vmm-create-net.glade.h:9
 msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting to physical network</span>"
@@ -3105,7 +3101,7 @@ msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">新しい�
 
 #: ../src/vmm-create-net.glade.h:11
 msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your virtual network </span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">仮想ネットワークの名前を指定中</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">仮想ネットワークの名前を指定</span>"
 
 #: ../src/vmm-create-net.glade.h:12
 msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create network</span>"
@@ -3152,9 +3148,8 @@ msgid "End address:"
 msgstr "終了アドレス:"
 
 #: ../src/vmm-create-net.glade.h:23
-#, fuzzy
 msgid "For_warding to physical network"
-msgstr "物理ネットワークにフォワーディング"
+msgstr "物理ネットワークにパケットを転送 (_R)"
 
 #: ../src/vmm-create-net.glade.h:24
 msgid "Forwarding"
@@ -3236,7 +3231,7 @@ msgstr "このアシスタントは仮想ネットワークを追加すること
 
 #: ../src/vmm-create-net.glade.h:48
 msgid "Whether to <b>forward</b> traffic to the physical network"
-msgstr "どの物理ネットワークにトラフィックを<b>フォワード</b>しますか"
+msgstr "どの物理ネットワークにトラフィックを<b>転送</b>しますか"
 
 #: ../src/vmm-create-net.glade.h:49
 msgid "You will need to choose an IPv4 address space for the virtual network:"
@@ -3251,9 +3246,8 @@ msgid "_Enable DHCP:"
 msgstr "DHCPを有効化 (_E)"
 
 #: ../src/vmm-create-net.glade.h:53
-#, fuzzy
 msgid "_Isolated virtual network"
-msgstr "分離された仮想ネットワーク"
+msgstr "隔離された仮想ネットワーク (_I)"
 
 #: ../src/vmm-create-net.glade.h:55
 msgid "_Network:"
@@ -3535,14 +3529,12 @@ msgid "Use _ISO image:"
 msgstr "ISO イメージを使用:"
 
 #: ../src/vmm-create.glade.h:47
-#, fuzzy
 msgid "_Architecture:"
-msgstr "アーキテクチャー:"
+msgstr "アーキテクチャー (_A):"
 
 #: ../src/vmm-create.glade.h:49
-#, fuzzy
 msgid "_Enable storage for this virtual machine"
-msgstr "仮想マシンを管理する"
+msgstr "この仮想マシンにディスクを提供 (_E)"
 
 #: ../src/vmm-create.glade.h:52
 msgid "_Local install media (ISO image or CDROM)"
@@ -3561,9 +3553,8 @@ msgid "_Virt Type:"
 msgstr "仮想化の種類 (_V):"
 
 #: ../src/vmm-delete.glade.h:1
-#, fuzzy
 msgid "Delete Confirmation"
-msgstr "プールを削除"
+msgstr "削除時に確認"
 
 #: ../src/vmm-delete.glade.h:2
 msgid "Delete _associated storage files"
@@ -3689,9 +3680,8 @@ msgid "C_lock Offset:"
 msgstr "時刻帯オフセット: (_C)"
 
 #: ../src/vmm-details.glade.h:31
-#, fuzzy
 msgid "Change a_llocation:"
-msgstr "割り当て変更:"
+msgstr "割り当て変更 (_A):"
 
 #: ../src/vmm-details.glade.h:32
 msgid "Char"
@@ -3766,7 +3756,7 @@ msgstr "ホストの CPU数:"
 #: ../src/vmm-details.glade.h:51
 #: ../src/vmm-host.glade.h:28
 msgid "Hypervisor:"
-msgstr "ハイパーバイザー :"
+msgstr "ハイパーバイザー:"
 
 #: ../src/vmm-details.glade.h:52
 msgid "Initial _pinning:"
@@ -3807,7 +3797,7 @@ msgstr "メモリーの選択"
 #: ../src/vmm-details.glade.h:66
 #: ../src/vmm-host.glade.h:37
 msgid "Name:"
-msgstr "名前"
+msgstr "名前:"
 
 #: ../src/vmm-details.glade.h:67
 msgid "Net"
@@ -3869,9 +3859,8 @@ msgid "Sharea_ble:"
 msgstr "共有可能 (_B):"
 
 #: ../src/vmm-details.glade.h:83
-#, fuzzy
 msgid "Show the graphical console"
-msgstr "VM グラフィカルコンソールの縮小拡大に関して"
+msgstr "グラフィカルコンソールの表示"
 
 #: ../src/vmm-details.glade.h:84
 msgid "Show virtual hardware details"
@@ -4048,7 +4037,7 @@ msgstr "表示 (_V)"
 #: ../src/vmm-details.glade.h:135
 #: ../src/vmm-host.glade.h:56
 msgid "_View Manager"
-msgstr "表示マネージャー (_V)"
+msgstr "マネージャーを表示 (_V)"
 
 #: ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
@@ -4141,7 +4130,7 @@ msgstr "ホスト名:"
 
 #: ../src/vmm-host.glade.h:29
 msgid "In use by:"
-msgstr ""
+msgstr "使用中:"
 
 #: ../src/vmm-host.glade.h:30
 msgid "Location:"
