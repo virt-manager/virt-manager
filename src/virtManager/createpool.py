@@ -443,7 +443,6 @@ class vmmCreatePool(gobject.GObject):
             self.window.get_widget("pool-forward").show()
             self.window.get_widget("pool-forward").grab_focus()
         elif page_number == PAGE_FORMAT:
-            self.show_options_by_pool()
             self.window.get_widget("pool-target-path").child.set_text(self._pool.target_path)
             self.window.get_widget("pool-back").set_sensitive(True)
             buildret = self.get_build_default()
@@ -452,6 +451,7 @@ class vmmCreatePool(gobject.GObject):
             self.window.get_widget("pool-finish").show()
             self.window.get_widget("pool-finish").grab_focus()
             self.window.get_widget("pool-forward").hide()
+            self.show_options_by_pool()
 
     def get_pool_to_validate(self):
         """
