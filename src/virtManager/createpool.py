@@ -508,9 +508,12 @@ class vmmCreatePool(gobject.GObject):
             buildval = self.window.get_widget("pool-build").get_active()
             buildsen = self.window.get_widget("pool-build").get_property("sensitive")
             if buildsen and buildval:
-                return self.err.yes_no(_("Building a pool of this type will "
+                ret =  self.err.yes_no(_("Building a pool of this type will "
                                          "format the source device. Are you "
                                          "sure you want to 'build' this pool?"))
+                if not ret:
+                    return ret
+
             self._pool = tmppool
             return True
 
