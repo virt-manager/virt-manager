@@ -2144,7 +2144,7 @@ class vmmDetails(gobject.GObject):
         for gfxinfo in self.vm.get_graphics_devices():
             currentGraphics[gfxinfo[1]] = 1
             update_hwlist(HW_LIST_TYPE_GRAPHICS, gfxinfo,
-                          _("Display %s") % (int(gfxinfo[1]) + 1),
+                          _("Display %s") % (str(gfxinfo[2]).upper()),
                           "video-display")
 
         # Populate list of sound devices
