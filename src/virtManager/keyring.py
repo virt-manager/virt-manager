@@ -37,11 +37,15 @@ class vmmKeyring:
             return
 
         try:
-            if not("default" in gnomekeyring.list_keyring_names_sync()):
-                gnomekeyring.create_sync("default", None)
             self.keyring = gnomekeyring.get_default_keyring_sync()
             if self.keyring == None:
-                logging.warning("Failed to create default keyring")
+                # Code borrowed from
+                # http://trac.gajim.org/browser/src/common/passwords.py
+                self.keyring = 'default'
+                try:
+                    gnomekeyring.create_sync(self.keyring, None)
+                except gnomekeyring.AlreadyExistsError:
+                    pass
         except:
             logging.exception("Error determining keyring")
             self.keyring = None
