@@ -6,21 +6,22 @@
 # Noriko Mizumoto <noriko@redhat.com>, 2006, 2007, 2009.
 # kiyoto james hashida <khashida@brisbane.redhat.com>, 2007.
 # Hyu_gabaru Ryu_ichi <hyu_gabaru@yahoo.co.jp>, 2007.
-# Kiyoto Hashida <khashida@redhat.com>, 2008, 2009.
+# Kiyoto Hashida <khashida@redhat.com>, 2008, 2009, 2010.
 # Hajime Taira <htaira@redhat.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-27 11:50-0400\n"
-"PO-Revision-Date: 2010-06-12 07:21+0900\n"
-"Last-Translator: Hajime Taira <htaira@redhat.com>\n"
+"PO-Revision-Date: 2010-06-15 16:16+0900\n"
+"Last-Translator: Kiyoto Hashida <khashida@redhat.com>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 
 #: ../src/virt-manager.desktop.in.in.h:1
 msgid "Manage virtual machines"
@@ -256,9 +257,8 @@ msgid "Whether we require confirmation to remove a virtual device"
 msgstr "仮想デバイスの削除に確認が必要かどうか"
 
 #: ../src/virt-manager.schemas.in.h:54
-#, fuzzy
 msgid "Whether we require confirmation to start or stop a libvirt virtual interface"
-msgstr "仮想デバイスの削除に確定が必要かどうか"
+msgstr "libvirt 仮想インターフェイスの開始か停止の確認が必要かどうか"
 
 #: ../src/virtManager/addhardware.py:81
 #: ../src/virtManager/choosecd.py:49
@@ -509,9 +509,8 @@ msgid "Watchdog"
 msgstr "Watchdog"
 
 #: ../src/virtManager/addhardware.py:857
-#, fuzzy
 msgid "Action:"
-msgstr "場所:"
+msgstr "アクション:"
 
 #: ../src/virtManager/addhardware.py:872
 #, python-format
@@ -531,12 +530,8 @@ msgid "Are you sure you want to add this device?"
 msgstr "本当にこのデバイスを追加しますか?"
 
 #: ../src/virtManager/addhardware.py:1023
-#, fuzzy
 msgid "This device could not be attached to the running machine. Would you like to make the device available after the next VM shutdown?"
-msgstr ""
-"このデバイスは実行中のマシンには取り付けできません。次の VM シャットダウンの 後にこのデバイスが利用できるようにしますか?\n"
-"\n"
-"警告: この操作は VM の再起動を必要とする他の変更を上書きします。"
+msgstr "このデバイスは実行中のマシンには取り付けできません。次の VM シャットダウンの 後にこのデバイスが利用できるようにしますか?"
 
 #: ../src/virtManager/addhardware.py:1033
 #, python-format
@@ -602,18 +597,16 @@ msgid "Network selection error."
 msgstr "ネットワークの選択時にエラー"
 
 #: ../src/virtManager/addhardware.py:1184
-#, fuzzy
 msgid "A network source must be selected."
-msgstr "メディアパスを指定してください。"
+msgstr "ネットワークソースを指定してください。"
 
 #: ../src/virtManager/addhardware.py:1187
 msgid "Invalid MAC address"
 msgstr "無効な MAC アドレスです"
 
 #: ../src/virtManager/addhardware.py:1188
-#, fuzzy
 msgid "A MAC address must be entered."
-msgstr "メディアパスを指定してください。"
+msgstr "MAC アドレスを入力してください。"
 
 #: ../src/virtManager/addhardware.py:1219
 msgid "Graphics device parameter error"
@@ -1153,9 +1146,8 @@ msgid "Network device required for %s install."
 msgstr "%s インストールにネットワークデバイスが必要です。"
 
 #: ../src/virtManager/create.py:1478
-#, fuzzy
 msgid "Error launching customize dialog: "
-msgstr "ボリュームウィザードの起動中にエラー: %s"
+msgstr "カスタマイズダイアログの起動中にエラー: "
 
 #: ../src/virtManager/create.py:1509
 msgid "Creating Virtual Machine"
@@ -1225,19 +1217,16 @@ msgid "Choose an unconfigured interface:"
 msgstr "未設定のインタフェースを選択:"
 
 #: ../src/virtManager/createinterface.py:573
-#, fuzzy
 msgid "No interface selected"
-msgstr "インターフェイスを指定する必要があります。"
+msgstr "インターフェイスが選択されていません"
 
 #: ../src/virtManager/createinterface.py:933
-#, fuzzy
 msgid "An interface name is required."
-msgstr "インストールツリーが必要です。"
+msgstr "インターフェイス名が必要です。"
 
 #: ../src/virtManager/createinterface.py:937
-#, fuzzy
 msgid "An interface must be selected"
-msgstr "インターフェイスを指定する必要があります。"
+msgstr "インターフェイスを選択して下さい"
 
 #: ../src/virtManager/createinterface.py:968
 #, python-format
@@ -1250,14 +1239,13 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/createinterface.py:1006
-#, fuzzy
 msgid "Error setting interface parameters."
-msgstr "インストールパラメータ設定中にエラー。"
+msgstr "インターフェイスパラメータ設定中にエラー。"
 
 #: ../src/virtManager/createinterface.py:1083
-#, fuzzy, python-format
+#, python-format
 msgid "Error validating IP configuration: %s"
-msgstr "VM 設定の変更中にエラー: %s"
+msgstr "IP 設定の確証中にエラー: %s"
 
 #: ../src/virtManager/createinterface.py:1129
 msgid "Creating virtual interface"
@@ -1265,7 +1253,7 @@ msgstr "仮想インタフェースを作成中"
 
 #: ../src/virtManager/createinterface.py:1130
 msgid "The virtual interface is now being created."
-msgstr ""
+msgstr "仮想インターフェイスを今作成中です。"
 
 #: ../src/virtManager/createinterface.py:1165
 #, python-format
@@ -1780,6 +1768,11 @@ msgid ""
 "These are required to create KVM guests locally.\n"
 "Would you like to install them now?"
 msgstr ""
+"以下のパッケージがインストールされていません:\n"
+"%s\n"
+"\n"
+"これらは KVM ゲストをローカルで作成する為に必要です。\n"
+"これらを今インストールしますか？"
 
 #: ../src/virtManager/engine.py:131
 msgid "Packages required for KVM usage"
@@ -1801,6 +1794,13 @@ msgid ""
 "A hypervisor connection can be manually\n"
 "added via File->Add Connection"
 msgstr ""
+"デフォルトの hypervisor を検出できませんでした。適切な \n"
+"仮想化パッケージがインストールされていること\n"
+"(kvm, qemu, libvirt, など)、そして libvirtd が稼働している \n"
+"ことを確認して下さい。\n"
+"\n"
+"hypervisor 接続は、「ファイル」 -> 「接続を追加」 のように\n "
+"移動して手動で追加できます。"
 
 #: ../src/virtManager/engine.py:321
 msgid ""
@@ -1815,6 +1815,16 @@ msgid ""
 "virt-manager will connect to libvirt on the next application\n"
 "start up."
 msgstr ""
+"Libvirt はちょうどインストールされたばかりです。そのため、'libvirtd' \n"
+"サービスを開始する必要があります。これは以下の内の１つで \n"
+"実行できます:\n"
+" \n"
+"- GNOME メニューから: システム -> 管理 -> サービスと移動します。\n"
+"- ターミナルから: su -c 'service libvirtd restart' と入力します。\n"
+"- コンピュータを再起動します。\n"
+"\n"
+"virt-manager は次回のアプリケーション開始時に libvirt に \n"
+"接続します。"
 
 #: ../src/virtManager/engine.py:329
 #, fuzzy
@@ -2347,7 +2357,7 @@ msgstr "フォーマット"
 
 #: ../src/virtManager/storagebrowse.py:146
 msgid "Used By"
-msgstr ""
+msgstr "以下によって使用"
 
 #: ../src/virtManager/storagebrowse.py:186
 #, fuzzy
@@ -2414,7 +2424,7 @@ msgstr "ネットワークがありません。"
 #. After all is said and done, add a manual bridge option
 #: ../src/virtManager/uihelpers.py:387
 msgid "Specify shared device name"
-msgstr ""
+msgstr "共有デバイス名を指定"
 
 #: ../src/virtManager/uihelpers.py:406
 #, fuzzy
@@ -4507,111 +4517,3 @@ msgstr "ボリュームを選択 (_V)"
 msgid "_Browse Local"
 msgstr "閲覧 (_B)"
 
-#~ msgid "Storage Path Required"
-#~ msgstr "ストレージパスが必要です"
-
-#~ msgid "You must specify a partition or a file for disk storage."
-#~ msgstr ""
-#~ "ディスクストレージ用のファイルまたはパーティションを指定しなければなりませ"
-#~ "ん"
-
-#~ msgid "Target Device Required"
-#~ msgstr "目的のデバイスが必要です"
-
-#~ msgid "You must select a target device for the disk."
-#~ msgstr "ディスク用の目的デバイスを選択しなければなりません"
-
-#~ msgid "Invalid Storage Parameters"
-#~ msgstr "無効なストレージパラメータです"
-
-#~ msgid "No guests are supported for this connection."
-#~ msgstr "この接続にはゲストへのサポートがありません。"
-
-#~ msgid "No Boot Device"
-#~ msgstr "ブートデバイスがありません"
-
-#, fuzzy
-#~ msgid "Libvirt connection does not have interface support."
-#~ msgstr ""
-#~ "Libvirt バージョンは物理インターフェイスの一覧表示をサポートしません"
-
-#~ msgid "Error determining default hypervisor."
-#~ msgstr "デフォルトの hypervisor を決定中にエラー"
-
-#~ msgid "Startup Error"
-#~ msgstr "スタートアップエラー"
-
-#, fuzzy
-#~ msgid "<b>Physical Host Device</b>"
-#~ msgstr "<b>起動デバイス</b>"
-
-#~ msgid "<b>Source:</b>"
-#~ msgstr "<b>ソース:</b>"
-
-#~ msgid "<b>Target:</b>"
-#~ msgstr "<b>ターゲット:</b>"
-
-#, fuzzy
-#~ msgid "<b>Video Device</b>"
-#~ msgstr "<b>起動デバイス</b>"
-
-#~ msgid "<b>Virtual display</b>"
-#~ msgstr "<b>仮想ディスプレイ</b>"
-
-#~ msgid "<b>Virtual pointer</b>"
-#~ msgstr "<b>仮想ポインタ</b>"
-
-#~ msgid "<small><b>Example:</b> /dev/hdc2</small>"
-#~ msgstr "<small><b>例:</b> /dev/hdc2</small>"
-
-#~ msgid ""
-#~ "<small><b>Warning:</b>If you do not allocate the entire disk now, space "
-#~ "will be allocated as needed while the virtual machine is running. If "
-#~ "sufficient free space is not available on the host, this may result in "
-#~ "data corruption on the virtual machine.</small>"
-#~ msgstr ""
-#~ "<small><b>警告:</b> ここで全ディスクを割り当てないと仮想マシンの実行中に必"
-#~ "要に応じて領域が割り当てられるようになります。 ホストに十分な空き領域がな"
-#~ "いと仮想マシン上でデータ破損となる恐れがあります。</small>"
-
-#~ msgid "Allocate entire virtual disk now"
-#~ msgstr "すぐに仮想ディスク全体を割り当てる"
-
-#, fuzzy
-#~ msgid "B_lock device (partition):"
-#~ msgstr "ブロックデバイス (パーティション) (_B):"
-
-#~ msgid "Browse..."
-#~ msgstr "閲覧..."
-
-#~ msgid "F_ile (disk image):"
-#~ msgstr "ファイル (ディスクイメージ) (_I):"
-
-#~ msgid "File Location Field"
-#~ msgstr "ファイルの場所のフィールド"
-
-#~ msgid "File Size Field"
-#~ msgstr "ファイルサイズフィールド"
-
-#~ msgid "Partition Location Field"
-#~ msgstr "パーティションの場所の領域"
-
-#~ msgid "_Size:"
-#~ msgstr "サイズ (_S):"
-
-#~ msgid "Device Model:"
-#~ msgstr "デバイスモデル:"
-
-#, fuzzy
-#~ msgid "Device virtual machine will _boot from:"
-#~ msgstr "デバイス仮想マシンは以下から起動します:"
-
-#~ msgid "Unknown status code"
-#~ msgstr "不明な状態コード"
-
-#, fuzzy
-#~ msgid "insert type"
-#~ msgstr "<b>挿入タイプ</b>"
-
-#~ msgid "ISO _Location:"
-#~ msgstr "ISO の場所 (_L):"
