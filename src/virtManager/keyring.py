@@ -19,7 +19,6 @@
 #
 from virtManager.secret import vmmSecret
 
-import sys
 import logging
 
 haveKeyring = False
@@ -28,31 +27,30 @@ try:
     import gnomekeyring
     haveKeyring = True
 except:
-    logging.warning("No support for gnome-keyring")
+    logging.warning("gnomekeyring bindings not installed, no keyring support")
 
 class vmmKeyring:
 
     def __init__(self):
-        if haveKeyring:
-            try:
-                if not("default" in gnomekeyring.list_keyring_names_sync()):
-                    gnomekeyring.create_sync("default", None)
-                self.keyring = gnomekeyring.get_default_keyring_sync()
-                if self.keyring == None:
-                    logging.warning("Failed to create default keyring")
-            except:
-                logging.warning(("Keyring unavailable: '%s'") % (str((sys.exc_info())[0]) + " "  + str((sys.exc_info())[1])))
-                self.keyring = None
-        else:
+        self.keyring = None
+        if not haveKeyring:
+            return
+
+        try:
+            if not("default" in gnomekeyring.list_keyring_names_sync()):
+                gnomekeyring.create_sync("default", None)
+            self.keyring = gnomekeyring.get_default_keyring_sync()
+            if self.keyring == None:
+                logging.warning("Failed to create default keyring")
+        except:
+            logging.exception("Error determining keyring")
             self.keyring = None
 
-
     def is_available(self):
-        if self.keyring == None:
-            return False
-        return True
+        return not (self.keyring == None)
 
     def add_secret(self, secret):
+        _id = None
         try:
             _id = gnomekeyring.item_create_sync(self.keyring,
                                                gnomekeyring.ITEM_GENERIC_SECRET,
@@ -61,21 +59,21 @@ class vmmKeyring:
                                                secret.get_secret(),
                                                True)
 
-            return _id
         except:
-            logging.warning(("Failed to add secret: '%s'") % (str((sys.exc_info())[0]) + " "  + str((sys.exc_info())[1])))
-            return None
+            logging.exception("Failed to add keyring secret")
+
+        return _id
 
     def get_secret(self, _id):
+        sec = None
         try:
             item = gnomekeyring.item_get_info_sync(self.keyring, _id)
-
             attrs = gnomekeyring.item_get_attributes_sync(self.keyring, _id)
-
-            return vmmSecret(item.get_display_name(), item.get_secret(), attrs)
+            sec = vmmSecret(item.get_display_name(), item.get_secret(), attrs)
         except:
-            return None
+            pass
 
+        return sec
 
     def clear_secret(self, _id):
         try:
