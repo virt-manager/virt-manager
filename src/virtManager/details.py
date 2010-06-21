@@ -461,6 +461,8 @@ class vmmDetails(gobject.GObject):
                                                      0x29, 0x5C, 0x45]))
         graph_table.attach(self.network_traffic_graph, 1, 2, 3, 4)
 
+        graph_table.show_all()
+
     def init_details(self):
         # Hardware list
         # [ label, icon name, icon size, hw type, hw data ]
