@@ -248,6 +248,8 @@ class vmmDetails(gobject.GObject):
             "on_security_model_changed": self.security_model_changed,
 
             "on_config_vcpus_changed": self.config_vcpus_changed,
+            "on_config_vcpupin_changed": self.config_vcpus_changed,
+            "on_config_vcpupin_generate_clicked": self.config_vcpupin_generate,
 
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
@@ -502,6 +504,15 @@ class vmmDetails(gobject.GObject):
             _("The dynamic SELinux security type tells libvirt to automatically pick a unique label for the guest process and guest image, ensuring total isolation of the guest. (Default)"))
 
         # VCPU Pinning list
+        generate_cpuset = self.window.get_widget("config-vcpupin-generate")
+        generate_warn = self.window.get_widget("config-vcpupin-generate-err")
+        if not self.conn.get_capabilities().host.topology:
+            generate_cpuset.set_sensitive(False)
+            generate_warn.show()
+            util.tooltip_wrapper(generate_warn,
+                                 _("Libvirt did not detect NUMA capabilities."))
+
+
         # [ VCPU #, Currently running on Phys CPU #, CPU Pinning list ]
         vcpu_list = self.window.get_widget("config-vcpu-list")
         vcpu_model = gtk.ListStore(str, str, str)
@@ -733,7 +744,7 @@ class vmmDetails(gobject.GObject):
 
         self.window.get_widget("config-remove").set_sensitive(True)
         self.window.get_widget("hw-panel").set_sensitive(True)
-        self.window.get_widget("hw-panel").show_all()
+        self.window.get_widget("hw-panel").show()
 
         try:
             if pagetype == HW_LIST_TYPE_GENERAL:
@@ -1119,7 +1130,21 @@ class vmmDetails(gobject.GObject):
             maxadj.value = mem
         maxadj.lower = mem
 
+    def generate_cpuset(self):
+        mem = int(self.vm.get_memory()) / 1024 / 1024
+        return virtinst.Guest.generate_cpuset(self.conn.vmm, mem)
+
     # VCPUS
+    def config_vcpupin_generate(self, ignore):
+        try:
+            pinstr = self.generate_cpuset()
+        except Exception, e:
+            return self.err.val_err(
+                _("Error generating CPU configuration: %s") % str(e))
+
+        self.window.get_widget("config-vcpupin").set_text("")
+        self.window.get_widget("config-vcpupin").set_text(pinstr)
+
     def config_vcpus_changed(self, ignore):
         conn = self.vm.get_connection()
         host_active_count = conn.host_active_processor_count()
