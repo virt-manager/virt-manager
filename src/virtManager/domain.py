@@ -1194,8 +1194,6 @@ class vmmDomain(vmmDomainBase):
                            "netRxRate"  : 10.0,
                          }
 
-        self._update_status()
-
         self.config.on_stats_enable_net_poll_changed(
                                             self.toggle_sample_network_traffic)
         self.config.on_stats_enable_disk_poll_changed(
@@ -1217,6 +1215,7 @@ class vmmDomain(vmmDomainBase):
                                                             self._backend)
 
         # Hook up our own status listeners
+        self._update_status()
         self.connect("status-changed", self._update_start_vcpus)
 
     ##########################
@@ -1959,6 +1958,11 @@ class vmmDomain(vmmDomainBase):
         if status != self.lastStatus:
             oldstatus = self.lastStatus
             self.lastStatus = status
+
+            # Send 'config-changed' before a status-update, so users
+            # are operating with fresh XML
+            self.refresh_xml()
+
             util.safe_idle_add(util.idle_emit, self, "status-changed",
                                oldstatus, status)
 
