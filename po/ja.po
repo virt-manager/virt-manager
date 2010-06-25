@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-27 11:50-0400\n"
-"PO-Revision-Date: 2010-06-25 14:19+0900\n"
+"PO-Revision-Date: 2010-06-25 14:34+0900\n"
 "Last-Translator: Hajime Taira <htaira@redhat.com>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1236,7 +1236,7 @@ msgid "An interface must be selected"
 msgstr "インターフェイスを選択して下さい"
 
 #: ../src/virtManager/createinterface.py:968
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "The following interface(s) are already configured:\n"
 "\n"
@@ -1244,6 +1244,11 @@ msgid ""
 "\n"
 "Using these may overwrite their existing configuration. Are you sure you want to use the selected interface(s)?"
 msgstr ""
+"次のインターフェースはすでに構成済みです。\n"
+"\n"
+"%s\n"
+"\n"
+"現在の設定を変更する場合、変更したいインターフェースを選択してください。"
 
 #: ../src/virtManager/createinterface.py:1006
 msgid "Error setting interface parameters."
@@ -2457,7 +2462,7 @@ msgstr "デバイスが接続されていません"
 #: ../src/virtManager/uihelpers.py:646
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
-msgstr ""
+msgstr "エミュレーターはパス '%s' を検索する権限を持っていません。"
 
 #: ../src/virtManager/uihelpers.py:648
 msgid "Do you want to correct this now?"
@@ -2829,11 +2834,11 @@ msgstr "<span color='#484848'>ターゲット:</span>"
 
 #: ../src/vmm-clone.glade.h:8
 msgid "<span color='#484848'>Type:</span>"
-msgstr ""
+msgstr "<span color='#484848'>種類:</span>"
 
 #: ../src/vmm-clone.glade.h:9
 msgid "<span color='#484848'>_Name:</span>"
-msgstr ""
+msgstr "<span color='#484848'>名前:</span>"
 
 #: ../src/vmm-clone.glade.h:10
 msgid "<span size='large' color='white'>Clone virtual machine</span>"
@@ -2886,7 +2891,7 @@ msgstr "ネットワークデバイスがありません"
 
 #: ../src/vmm-clone.glade.h:22
 msgid "No storage to clone"
-msgstr ""
+msgstr "クローンするストレージがありません"
 
 #: ../src/vmm-create-interface.glade.h:1
 msgid "<b>ARP settings</b>"
@@ -2999,7 +3004,7 @@ msgstr "手動設定 (_N):"
 
 #: ../src/vmm-create-interface.glade.h:28
 msgid "Select the interface type you would like to configure."
-msgstr ""
+msgstr "構成したいインターフェースの種類を選択してください。"
 
 #: ../src/vmm-create-interface.glade.h:29
 msgid "Static configuration:"
@@ -4393,9 +4398,8 @@ msgid "Automatically _open consoles:"
 msgstr "自動的に開くコンソール (_O):"
 
 #: ../src/vmm-preferences.glade.h:8
-#, fuzzy
 msgid "Device re_moval:"
-msgstr "デバイスモデル:"
+msgstr "デバイスの取り外し:"
 
 #: ../src/vmm-preferences.glade.h:9
 msgid "Enable _system tray icon"
