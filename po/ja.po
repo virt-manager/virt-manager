@@ -13,15 +13,14 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-27 11:50-0400\n"
-"PO-Revision-Date: 2010-06-15 16:16+0900\n"
-"Last-Translator: Kiyoto Hashida <khashida@redhat.com>\n"
+"PO-Revision-Date: 2010-06-25 14:19+0900\n"
+"Last-Translator: Hajime Taira <htaira@redhat.com>\n"
 "Language-Team: Japanese <jp@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
-"\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #: ../src/virt-manager.desktop.in.in.h:1
 msgid "Manage virtual machines"
@@ -46,7 +45,7 @@ msgstr "GTK を初期化できません: %s"
 
 #: ../src/virt-manager.schemas.in.h:1
 msgid "Confirm device interface start and stop"
-msgstr "インタフェースの開始と停止を確認しますか？"
+msgstr "インターフェースの開始と停止を確認しますか？"
 
 #: ../src/virt-manager.schemas.in.h:2
 msgid "Confirm device removal request"
@@ -564,6 +563,12 @@ msgid ""
 "\n"
 "Would you like to use this path?"
 msgstr ""
+"次のパスはすでに存在しています。\n"
+"しかし、いずれの仮想マシンからも利用されていません。\n"
+"\n"
+"%s\n"
+"\n"
+"このパスは使われますか？"
 
 #: ../src/virtManager/addhardware.py:1128
 #: ../src/virtManager/create.py:1352
@@ -787,6 +792,8 @@ msgid ""
 "Block devices to clone should be managed\n"
 "storage volumes."
 msgstr ""
+"クローニングするブロックデバイスはマネジッドストレージ\n"
+"ボリュームでなければなりません。"
 
 #: ../src/virtManager/clone.py:805
 #: ../src/virtManager/delete.py:344
@@ -1202,19 +1209,19 @@ msgstr "このシステムのデフォルト"
 
 #: ../src/virtManager/createinterface.py:511
 msgid "Choose interface(s) to bridge:"
-msgstr "ブリッジに接続するインタフェースを選択:"
+msgstr "ブリッジに接続するインターフェースを選択:"
 
 #: ../src/virtManager/createinterface.py:514
 msgid "Choose parent interface:"
-msgstr "親となるインタフェースを選択"
+msgstr "親となるインターフェースを選択"
 
 #: ../src/virtManager/createinterface.py:516
 msgid "Choose interfaces to bond:"
-msgstr "Bondに登録するインタフェースを選択:"
+msgstr "Bondに登録するインターフェースを選択:"
 
 #: ../src/virtManager/createinterface.py:518
 msgid "Choose an unconfigured interface:"
-msgstr "未設定のインタフェースを選択:"
+msgstr "未設定のインターフェースを選択:"
 
 #: ../src/virtManager/createinterface.py:573
 msgid "No interface selected"
@@ -1249,7 +1256,7 @@ msgstr "IP 設定の確証中にエラー: %s"
 
 #: ../src/virtManager/createinterface.py:1129
 msgid "Creating virtual interface"
-msgstr "仮想インタフェースを作成中"
+msgstr "仮想インターフェースを作成中"
 
 #: ../src/virtManager/createinterface.py:1130
 msgid "The virtual interface is now being created."
@@ -1751,9 +1758,8 @@ msgid "Crashed"
 msgstr "クラッシュ"
 
 #: ../src/virtManager/domain.py:2250
-#, fuzzy
 msgid "Did not find selected device."
-msgstr "デバイス %s を見つけることができません"
+msgstr "指定されているデバイスが見つかりません"
 
 #: ../src/virtManager/engine.py:103
 msgid "Searching for available hypervisors..."
@@ -1799,8 +1805,8 @@ msgstr ""
 "(kvm, qemu, libvirt, など)、そして libvirtd が稼働している \n"
 "ことを確認して下さい。\n"
 "\n"
-"hypervisor 接続は、「ファイル」 -> 「接続を追加」 のように\n "
-"移動して手動で追加できます。"
+"hypervisor 接続は、「ファイル」 -> 「接続を追加」 のように\n"
+" 移動して手動で追加できます。"
 
 #: ../src/virtManager/engine.py:321
 msgid ""
@@ -1827,9 +1833,8 @@ msgstr ""
 "接続します。"
 
 #: ../src/virtManager/engine.py:329
-#, fuzzy
 msgid "Libvirt service must be started"
-msgstr "メディアパスを指定してください。"
+msgstr "libvirtサービスが開始されてなければなりません"
 
 #: ../src/virtManager/engine.py:586
 #, python-format
@@ -1907,9 +1912,9 @@ msgstr "本当に '%s' を再起動しますか？"
 #. Raise the original error message
 #: ../src/virtManager/engine.py:862
 #: ../src/virtManager/engine.py:877
-#, fuzzy, python-format
+#, python-format
 msgid "Error rebooting domain: %s"
-msgstr "ドメインの開始中にエラー発生: %s"
+msgstr "ドメインの再起動中にエラー: %s"
 
 #: ../src/virtManager/engine.py:906
 #, python-format
@@ -1942,24 +1947,20 @@ msgstr "%(maxmem)s 中 %(currentmem)s 使用"
 #: ../src/virtManager/host.py:354
 #: ../src/virtManager/host.py:355
 #: ../src/virtManager/host.py:356
-#, fuzzy
 msgid "Connection not active."
-msgstr "接続の選択"
+msgstr "接続は非アクティブです。"
 
 #: ../src/virtManager/host.py:361
-#, fuzzy
 msgid "Libvirt connection does not support virtual network management."
-msgstr "接続はストレージ管理をサポートしていません。"
+msgstr "この libvirt 接続はネットワーク管理をサポートしていません。"
 
 #: ../src/virtManager/host.py:366
-#, fuzzy
 msgid "Libvirt connection does not support storage management."
-msgstr "接続はストレージ管理をサポートしていません。"
+msgstr "この libvirt 接続はストレージ管理をサポートしていません。"
 
 #: ../src/virtManager/host.py:370
-#, fuzzy
 msgid "Libvirt connection does not support interface management."
-msgstr "接続はストレージ管理をサポートしていません。"
+msgstr "この libvirt 接続はインターフェース管理をサポートしていません。"
 
 #: ../src/virtManager/host.py:385
 #, python-format
@@ -2008,14 +2009,13 @@ msgid "Never"
 msgstr "しない"
 
 #: ../src/virtManager/host.py:471
-#, fuzzy
 msgid "No virtual network selected."
-msgstr "使用可能な接続はありません。"
+msgstr "仮想ネットワークが選択されていません。"
 
 #: ../src/virtManager/host.py:481
-#, fuzzy, python-format
+#, python-format
 msgid "Error selecting network: %s"
-msgstr "ネットワークの削除中にエラー: %s"
+msgstr "ネットワークの選択中にエラー: %s"
 
 #: ../src/virtManager/host.py:546
 msgid "Isolated virtual network"
@@ -2064,14 +2064,13 @@ msgid "Error setting pool autostart: %s"
 msgstr "pool autostart の設定中にエラー: %s"
 
 #: ../src/virtManager/host.py:705
-#, fuzzy
 msgid "No storage pool selected."
-msgstr "インターフェイスを指定する必要があります。"
+msgstr "ストレージプールが選択されていません。"
 
 #: ../src/virtManager/host.py:715
-#, fuzzy, python-format
+#, python-format
 msgid "Error selecting pool: %s"
-msgstr "プールを削除中にエラー: %s"
+msgstr "プールの選択中にエラー: %s"
 
 #: ../src/virtManager/host.py:829
 #, fuzzy, python-format
@@ -2081,22 +2080,22 @@ msgstr "本当に '%s' を一時停止したいのですか?"
 #: ../src/virtManager/host.py:831
 #: ../src/virtManager/host.py:857
 msgid "Don't ask me again for interface start/stop."
-msgstr "インタフェースの開始と停止について二度と尋ねない。"
+msgstr "インターフェースの開始と停止について二度と尋ねない。"
 
 #: ../src/virtManager/host.py:842
-#, fuzzy, python-format
+#, python-format
 msgid "Error stopping interface '%s': %s"
-msgstr "ドメイン '%s' の復元中にエラー発生: %s"
+msgstr "インターフェース '%s' の停止中にエラー: %s"
 
 #: ../src/virtManager/host.py:855
 #, python-format
 msgid "Are you sure you want to start the interface '%s'?"
-msgstr "本当にインタフェース '%s' を開始しますか？"
+msgstr "本当にインターフェース '%s' を開始しますか？"
 
 #: ../src/virtManager/host.py:868
 #, python-format
 msgid "Error starting interface '%s': %s"
-msgstr "インタフェース '%s' の開始中にエラー: %s"
+msgstr "インターフェース '%s' の開始中にエラー: %s"
 
 #: ../src/virtManager/host.py:877
 #, fuzzy, python-format
@@ -2106,12 +2105,12 @@ msgstr "本当にこのネットワーク %s を永久に削除してもよい�
 #: ../src/virtManager/host.py:886
 #, python-format
 msgid "Error deleting interface: %s"
-msgstr "インタフェースの削除中にエラー: %s"
+msgstr "インターフェースの削除中にエラー: %s"
 
 #: ../src/virtManager/host.py:895
-#, fuzzy, python-format
+#, python-format
 msgid "Error launching interface wizard: %s"
-msgstr "ネットワークウィザードの起動中にエラー: %s"
+msgstr "インターフェースウィザードの起動中にエラー: %s"
 
 #: ../src/virtManager/host.py:926
 #, python-format
@@ -2119,14 +2118,13 @@ msgid "Error setting interface startmode: %s"
 msgstr "スタートモードの設定時にエラー: %s"
 
 #: ../src/virtManager/host.py:946
-#, fuzzy
 msgid "No interface selected."
-msgstr "インターフェイスを指定する必要があります。"
+msgstr "インターフェースが選択されていません。"
 
 #: ../src/virtManager/host.py:957
-#, fuzzy, python-format
+#, python-format
 msgid "Error selecting interface: %s"
-msgstr "ネットワークの削除中にエラー: %s"
+msgstr "インターフェースの選択中にエラー: %s"
 
 #: ../src/virtManager/manager.py:302
 #: ../src/virtManager/systray.py:171
@@ -2360,9 +2358,8 @@ msgid "Used By"
 msgstr "以下によって使用"
 
 #: ../src/virtManager/storagebrowse.py:186
-#, fuzzy
 msgid "Cannot use local storage on remote connection."
-msgstr "同じ接続に移動できません。"
+msgstr "リモート接続ではローカルストレージは利用できません。"
 
 #: ../src/virtManager/systray.py:164
 msgid "_Resume"
@@ -2404,9 +2401,8 @@ msgid "No virtual networks available"
 msgstr "使用可能な仮想ネットワークがありません"
 
 #: ../src/virtManager/uihelpers.py:340
-#, fuzzy
 msgid "(Empty bridge)"
-msgstr "ブリッジなし"
+msgstr "(ブリッジなし)"
 
 #: ../src/virtManager/uihelpers.py:343
 msgid "Not bridged"
@@ -2427,9 +2423,8 @@ msgid "Specify shared device name"
 msgstr "共有デバイス名を指定"
 
 #: ../src/virtManager/uihelpers.py:406
-#, fuzzy
 msgid "Virtual Network is not active."
-msgstr "仮想ネットワークは停止中"
+msgstr "仮想ネットワークは非稼働です。"
 
 #: ../src/virtManager/uihelpers.py:407
 #, python-format
@@ -2437,14 +2432,13 @@ msgid "Virtual Network '%s' is not active. Would you like to start the network n
 msgstr "仮想ネットワーク '%s' はアクティブではありません。このネットワークを今起動しますか?"
 
 #: ../src/virtManager/uihelpers.py:419
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start virtual network '%s': %s"
-msgstr "仮想ネットワークの作成中にエラー発生: %s"
+msgstr "仮想ネットワーク '%s' の開始時にエラーが発生: %s"
 
 #: ../src/virtManager/uihelpers.py:440
-#, fuzzy
 msgid "Error with network parameters."
-msgstr "無効なネットワークパラメータ"
+msgstr "ネットワークパラメータにエラーがあります"
 
 #: ../src/virtManager/uihelpers.py:445
 #: ../src/virtManager/uihelpers.py:447
@@ -2452,14 +2446,13 @@ msgid "Mac address collision."
 msgstr "MACアドレスが競合しました。"
 
 #: ../src/virtManager/uihelpers.py:448
-#, fuzzy, python-format
+#, python-format
 msgid "%s Are you sure you want to use this address?"
-msgstr "本当にこのアドレスを使いたいのですか?"
+msgstr "%s 本当にこのアドレスを使いたいのですか？"
 
 #: ../src/virtManager/uihelpers.py:500
-#, fuzzy
 msgid "No device present"
-msgstr "メディアがありません。"
+msgstr "デバイスが接続されていません"
 
 #: ../src/virtManager/uihelpers.py:646
 #, python-format
@@ -2467,9 +2460,8 @@ msgid "The emulator may not have search permissions for the path '%s'."
 msgstr ""
 
 #: ../src/virtManager/uihelpers.py:648
-#, fuzzy
 msgid "Do you want to correct this now?"
-msgstr "本当にこのディスクを使用しますか?"
+msgstr "変更をすぐに適用しますか？"
 
 #: ../src/virtManager/uihelpers.py:649
 #: ../src/virtManager/uihelpers.py:673
@@ -2698,9 +2690,8 @@ msgid "_Allocate entire disk now"
 msgstr "すぐに仮想ディスク全体を割り当てる (_A)"
 
 #: ../src/vmm-add-hardware.glade.h:48
-#, fuzzy
 msgid "_Bind Host:"
-msgstr "ホスト名:"
+msgstr "割当てホスト名:"
 
 #: ../src/vmm-add-hardware.glade.h:49
 #: ../src/vmm-create.glade.h:48
@@ -2849,10 +2840,13 @@ msgid "<span size='large' color='white'>Clone virtual machine</span>"
 msgstr "<span size='large' color='white'>仮想マシンのクローン</span>"
 
 #: ../src/vmm-clone.glade.h:11
+#, fuzzy
 msgid ""
 "<span size='small'>Cloning creates a new, independent copy of the original disk. Sharing\n"
 "uses the existing disk image for both the original and the new machine.</span>"
 msgstr ""
+"<span size='small'>Cloning creates a new, independent copy of the original disk. Sharing\n"
+"uses the existing disk image for both the original and the new machine.</span>"
 
 #: ../src/vmm-clone.glade.h:13
 msgid "C_lone"
@@ -2916,7 +2910,7 @@ msgstr "<b>MIIの設定</b>"
 
 #: ../src/vmm-create-interface.glade.h:6
 msgid "<span size='large' color='white'>Configure network interface</span>"
-msgstr "<span size='large' color='white'>ネットワークインタフェースの構成</span>"
+msgstr "<span size='large' color='white'>ネットワークインターフェースの構成</span>"
 
 #: ../src/vmm-create-interface.glade.h:7
 msgid "A_utoconf"
@@ -2956,7 +2950,7 @@ msgstr "キャリアの種類:"
 
 #: ../src/vmm-create-interface.glade.h:16
 msgid "Configure network interface"
-msgstr "ネットワークインタフェースを構成"
+msgstr "ネットワークインターフェースを構成"
 
 #: ../src/vmm-create-interface.glade.h:17
 msgid "Down delay:"
@@ -3012,17 +3006,17 @@ msgid "Static configuration:"
 msgstr "静的な構成:"
 
 #: ../src/vmm-create-interface.glade.h:30
-#, fuzzy
 msgid "Target address:"
-msgstr "開始アドレス"
+msgstr "ターゲットアドレス"
 
 #: ../src/vmm-create-interface.glade.h:31
 msgid "Up delay:"
 msgstr "リンクアップ遅延:"
 
 #: ../src/vmm-create-interface.glade.h:32
+#, fuzzy
 msgid "Validate mode:"
-msgstr ""
+msgstr "認証モード:"
 
 #: ../src/vmm-create-interface.glade.h:33
 msgid "_Activate now:"
@@ -3043,7 +3037,7 @@ msgstr "ゲートウェイ (_G):"
 
 #: ../src/vmm-create-interface.glade.h:39
 msgid "_Interface type:"
-msgstr "インタフェースの種類 (_I):"
+msgstr "インターフェースの種類 (_I):"
 
 #: ../src/vmm-create-interface.glade.h:41
 #: ../src/vmm-create-pool.glade.h:14
@@ -3698,9 +3692,8 @@ msgid "Char"
 msgstr "文字"
 
 #: ../src/vmm-details.glade.h:33
-#, fuzzy
 msgid "Connect or disconnect media"
-msgstr "接続が切断されます。"
+msgstr "メディア接続/切断"
 
 #: ../src/vmm-details.glade.h:34
 msgid "Console"
@@ -3757,7 +3750,7 @@ msgstr "インストール完了"
 #: ../src/vmm-details.glade.h:49
 #, fuzzy
 msgid "Heads:"
-msgstr ""
+msgstr "ヘッド:"
 
 #: ../src/vmm-details.glade.h:50
 msgid "Host CPUs:"
@@ -3822,7 +3815,6 @@ msgstr ""
 "I/O:"
 
 #: ../src/vmm-details.glade.h:70
-#, fuzzy
 msgid "Over"
 msgstr "超える"
 
@@ -4023,9 +4015,8 @@ msgid "_Scale Display"
 msgstr "画面の縮小拡大 (_S)"
 
 #: ../src/vmm-details.glade.h:130
-#, fuzzy
 msgid "_Static"
-msgstr "状態"
+msgstr "状態(_S)"
 
 #: ../src/vmm-details.glade.h:131
 msgid "_Take Screenshot"
@@ -4088,7 +4079,7 @@ msgstr "自動起動 (_U):"
 
 #: ../src/vmm-host.glade.h:12
 msgid "Add Interface"
-msgstr "インタフェースの追加:"
+msgstr "インターフェースの追加:"
 
 #: ../src/vmm-host.glade.h:13
 msgid "Add Network"
@@ -4116,7 +4107,7 @@ msgstr "DHCP 開始:"
 
 #: ../src/vmm-host.glade.h:21
 msgid "Delete Interface"
-msgstr "インタフェースの削除:"
+msgstr "インターフェースの削除:"
 
 #: ../src/vmm-host.glade.h:22
 msgid "Delete Network"
@@ -4164,7 +4155,7 @@ msgstr "メモリー:"
 
 #: ../src/vmm-host.glade.h:38
 msgid "Network Interfaces"
-msgstr "ネットワークインタフェース"
+msgstr "ネットワークインターフェース"
 
 #: ../src/vmm-host.glade.h:40
 msgid "Overview"
@@ -4176,7 +4167,7 @@ msgstr "プールタイプ:"
 
 #: ../src/vmm-host.glade.h:42
 msgid "Start Interface"
-msgstr "インタフェースの開始"
+msgstr "インターフェースの開始"
 
 #: ../src/vmm-host.glade.h:43
 msgid "Start Network"
@@ -4196,7 +4187,7 @@ msgstr "状態:"
 
 #: ../src/vmm-host.glade.h:47
 msgid "Stop Interface"
-msgstr "インタフェースの停止"
+msgstr "インターフェースの停止"
 
 #: ../src/vmm-host.glade.h:48
 msgid "Stop Network"
@@ -4236,9 +4227,8 @@ msgid "Restore a saved machine from a filesystem image"
 msgstr "ディスクイメージから仮想マシンを復元"
 
 #: ../src/vmm-manager.glade.h:7
-#, fuzzy
 msgid "Show the virtual machine console and details"
-msgstr "仮想マシンの詳細"
+msgstr "仮想マシンのコンソールと詳細情報を表示"
 
 #: ../src/vmm-manager.glade.h:10
 msgid "_Add Connection..."
@@ -4483,7 +4473,7 @@ msgstr "強制電源オフ (_F):"
 
 #: ../src/vmm-preferences.glade.h:31
 msgid "_Interface start/stop:"
-msgstr "インタフェースの開始/停止"
+msgstr "インターフェースの開始/停止"
 
 #: ../src/vmm-preferences.glade.h:32
 msgid "_Local virtual machine"
