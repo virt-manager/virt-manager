@@ -298,9 +298,6 @@ class vmmSystray(gobject.GObject):
         self.conn_state_changed(conn)
         self.populate_vm_list(conn)
 
-        if self.systray_indicator:
-            self.systray_icon.set_menu (self.systray_menu)
-
     def conn_removed(self, engine, conn):
         if not self.conn_menuitems.has_key(conn.get_uri()):
             return
@@ -312,17 +309,11 @@ class vmmSystray(gobject.GObject):
 
         self.repopulate_menu_list()
 
-        if self.systray_indicator:
-            self.systray_icon.set_menu (self.systray_menu)
-
     def conn_state_changed(self, conn):
         # XXX: Even 'paused' conn?
         sensitive = conn.is_active()
         menu_item = self.conn_menuitems[conn.get_uri()]
         menu_item.set_sensitive(sensitive)
-
-        if self.systray_indicator:
-            self.systray_icon.set_menu (self.systray_menu)
 
     def populate_vm_list(self, conn):
         uri = conn.get_uri()
@@ -377,9 +368,6 @@ class vmmSystray(gobject.GObject):
         self.vm_state_changed(vm)
         menu_item.show()
 
-        if self.systray_indicator:
-            self.systray_icon.set_menu (self.systray_menu)
-
     def vm_removed(self, conn, uri, uuid):
         vm_mappings = self.conn_vm_menuitems[uri]
         if not vm_mappings:
@@ -397,9 +385,6 @@ class vmmSystray(gobject.GObject):
                 placeholder.show()
                 placeholder.set_sensitive(False)
                 vm_menu.add(placeholder)
-
-            if self.systray_indicator:
-                self.systray_icon.set_menu (self.systray_menu)
 
     def vm_state_changed(self, vm, ignore=None, ignore2=None):
         menu_item = self._get_vm_menu_item(vm)
@@ -422,9 +407,6 @@ class vmmSystray(gobject.GObject):
 
         actions["pause"].set_property("visible", not is_paused)
         actions["resume"].set_property("visible", is_paused)
-
-        if self.systray_indicator:
-            self.systray_icon.set_menu (self.systray_menu)
 
     def run_vm_action(self, ignore, signal_name, uuid):
         uri = None
