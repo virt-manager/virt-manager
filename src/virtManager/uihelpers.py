@@ -308,9 +308,6 @@ def populate_network_list(net_list, conn):
     bridge_dict = {}
     iface_dict = {}
 
-    def add_row(*args):
-        model.append(build_row(*args))
-
     def build_row(nettype, name, label, is_sensitive, is_running,
                   manual_bridge=False):
         return [nettype, name, label, is_sensitive, is_running, manual_bridge]
@@ -328,7 +325,8 @@ def populate_network_list(net_list, conn):
     # For qemu:///session
     if conn.is_qemu_session():
         nettype = VirtualNetworkInterface.TYPE_USER
-        add_row(nettype, None, pretty_network_desc(nettype), True)
+        r = build_row(nettype, None, pretty_network_desc(nettype), True, True)
+        model.append(r)
         set_active(0)
         return
 
