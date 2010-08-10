@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: virt-manager.tip.de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-24 11:50-0400\n"
-"PO-Revision-Date: 2010-04-25 12:28+0100\n"
+"PO-Revision-Date: 2010-08-10 16:01+0100\n"
 "Last-Translator: Fabian Affolter <fab@fedoraproject.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1213,7 +1213,7 @@ msgstr "System-Standard"
 
 #: ../src/virtManager/createinterface.py:511
 msgid "Choose interface(s) to bridge:"
-msgstr ""
+msgstr "Schnittstelle(n) für Bridge auswählen:"
 
 #: ../src/virtManager/createinterface.py:514
 #, fuzzy
@@ -1222,11 +1222,11 @@ msgstr "Zielverzeichnis auswählen"
 
 #: ../src/virtManager/createinterface.py:516
 msgid "Choose interfaces to bond:"
-msgstr ""
+msgstr "Schnittstelle für Bond auswählen:"
 
 #: ../src/virtManager/createinterface.py:518
 msgid "Choose an unconfigured interface:"
-msgstr ""
+msgstr "Unkonfigurierte Schnittstelle auswählen:"
 
 #: ../src/virtManager/createinterface.py:573
 msgid "No interface selected"
@@ -2117,9 +2117,8 @@ msgid "Error setting interface startmode: %s"
 msgstr "Fehler beim Einrichten des automatischen Netzwerkstarts: %s"
 
 #: ../src/virtManager/host.py:946
-#, fuzzy
 msgid "No interface selected."
-msgstr "Eine Schnittstelle muss angegeben sein."
+msgstr "Keine Schnittstelle ausgewählt."
 
 #: ../src/virtManager/host.py:957
 #, fuzzy, python-format
@@ -2264,9 +2263,8 @@ msgid "Disabled in preferences dialog."
 msgstr "Deaktiviert im Einstellungsdialog."
 
 #: ../src/virtManager/mediadev.py:104
-#, fuzzy
 msgid "No media detected"
-msgstr "Kein Medium vorhanden"
+msgstr "Kein Medium erkannt"
 
 #: ../src/virtManager/mediadev.py:106
 msgid "Media Unknown"
@@ -2452,9 +2450,8 @@ msgid "%s Are you sure you want to use this address?"
 msgstr "%s Wollen Sie diese Adresse wirklich verwenden?"
 
 #: ../src/virtManager/uihelpers.py:500
-#, fuzzy
 msgid "No device present"
-msgstr "Kein Medium vorhanden"
+msgstr "Kein Gerät vorhanden"
 
 #: ../src/virtManager/uihelpers.py:646
 #, python-format
@@ -2553,9 +2550,8 @@ msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Video Device
 msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Videogerät</span>"
 
 #: ../src/vmm-add-hardware.glade.h:15
-#, fuzzy
 msgid "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Watchdog Device</span>"
-msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Videogerät</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Watchdog-Gerät</span>"
 
 #: ../src/vmm-add-hardware.glade.h:16
 msgid "A_utomatically allocated"
@@ -2774,9 +2770,8 @@ msgid "CD-_ROM or DVD"
 msgstr "CD-ROM oder DVD:"
 
 #: ../src/vmm-choose-cd.glade.h:3
-#, fuzzy
 msgid "Choose Media"
-msgstr "CD-Quellgerät"
+msgstr "Medium wählen"
 
 #: ../src/vmm-choose-cd.glade.h:4
 #: ../src/vmm-clone.glade.h:23
@@ -2885,29 +2880,24 @@ msgid "No storage to clone"
 msgstr "Kein Speicher zu klonen"
 
 #: ../src/vmm-create-interface.glade.h:1
-#, fuzzy
 msgid "<b>ARP settings</b>"
-msgstr "<b>Maschineneinstellungen</b>"
+msgstr "<b>ARP-Einstellungen</b>"
 
 #: ../src/vmm-create-interface.glade.h:2
-#, fuzzy
 msgid "<b>Bond configuration</b>"
-msgstr "<b>IPv4-Konfiguration</b>"
+msgstr "<b>Bond-Konfiguration</b>"
 
 #: ../src/vmm-create-interface.glade.h:3
-#, fuzzy
 msgid "<b>Bridge configuration</b>"
-msgstr "<b>IPv4-Konfiguration</b>"
+msgstr "<b>Bridge-Konfiguration</b>"
 
 #: ../src/vmm-create-interface.glade.h:4
-#, fuzzy
 msgid "<b>IP Configuration</b>"
-msgstr "<b>IPv4-Konfiguration</b>"
+msgstr "<b>IP-Konfiguration</b>"
 
 #: ../src/vmm-create-interface.glade.h:5
-#, fuzzy
 msgid "<b>MII settings</b>"
-msgstr "<b>Maschineneinstellungen</b>"
+msgstr "<b>MII-Einstellungen</b>"
 
 #: ../src/vmm-create-interface.glade.h:6
 #, fuzzy
@@ -2942,7 +2932,7 @@ msgstr "<b>IPv4-Konfiguration</b>"
 
 #: ../src/vmm-create-interface.glade.h:13
 msgid "Bridge settings:"
-msgstr ""
+msgstr "Bridge-Einstellungen:"
 
 #: ../src/vmm-create-interface.glade.h:14
 msgid "C_onfigure"
@@ -2975,14 +2965,12 @@ msgid "Frequency:"
 msgstr "Frequenz:"
 
 #: ../src/vmm-create-interface.glade.h:21
-#, fuzzy
 msgid "IP Configuration"
-msgstr "<b>IPv4-Konfiguration</b>"
+msgstr "IP-Konfiguration"
 
 #: ../src/vmm-create-interface.glade.h:22
-#, fuzzy
 msgid "IP settings:"
-msgstr "<b>Maschineneinstellungen</b>"
+msgstr "IP-Einstellungen"
 
 #: ../src/vmm-create-interface.glade.h:23
 #: ../src/vmm-create-net.glade.h:26
@@ -3064,8 +3052,9 @@ msgid "_VLAN tag:"
 msgstr "_VLAN-Tag:"
 
 #: ../src/vmm-create-interface.glade.h:44
+#, fuzzy
 msgid "ip desc"
-msgstr ""
+msgstr "ip desc"
 
 #: ../src/vmm-create-interface.glade.h:45
 #: ../src/vmm-preferences.glade.h:38
@@ -3592,9 +3581,8 @@ msgid "<b>Basic Details</b>"
 msgstr "<b>Grundlegende Details</b>"
 
 #: ../src/vmm-details.glade.h:5
-#, fuzzy
 msgid "<b>Boot device order</b>"
-msgstr "<b>Boot-Gerät</b>"
+msgstr "<b>Boot-Gerät-Reihenfolge</b>"
 
 #: ../src/vmm-details.glade.h:6
 msgid "<b>CPU Pinning</b>"
@@ -3727,9 +3715,8 @@ msgid "Device Type:"
 msgstr "Gerätetyp:"
 
 #: ../src/vmm-details.glade.h:40
-#, fuzzy
 msgid "Device m_odel:"
-msgstr "Gerätemodell:"
+msgstr "Gerätem_odell:"
 
 #: ../src/vmm-details.glade.h:42
 msgid "Disk"
@@ -4072,9 +4059,8 @@ msgid "<b>Name</b>"
 msgstr "<b>Name</b>"
 
 #: ../src/vmm-host.glade.h:7
-#, fuzzy
 msgid "<b>Slave Interfaces</b>"
-msgstr "<b>Virtuelle Netzwerkschnittstelle</b>"
+msgstr "<b>Untergeordnete Schnittstelle (Slave)</b>"
 
 #: ../src/vmm-host.glade.h:8
 msgid "<b>Volumes</b>"
@@ -4231,9 +4217,8 @@ msgid "New"
 msgstr "Neu"
 
 #: ../src/vmm-manager.glade.h:5
-#, fuzzy
 msgid "Restore Saved Machine..."
-msgstr "Virtuelle Maschine wiederherstellen"
+msgstr "Virtuelle Maschine wiederherstellen ..."
 
 #: ../src/vmm-manager.glade.h:6
 msgid "Restore a saved machine from a filesystem image"
@@ -4521,23 +4506,17 @@ msgstr "_Lokal durchsuchen"
 
 #~ msgid "Storage Path Required"
 #~ msgstr "Speicherungspfad benötigt"
-
 #~ msgid "You must specify a partition or a file for disk storage."
 #~ msgstr ""
 #~ "Sie müssen eine Partition oder eine Datei für die Speicherung angeben."
-
 #~ msgid "Target Device Required"
 #~ msgstr "Zielgerät benötigt"
-
 #~ msgid "You must select a target device for the disk."
 #~ msgstr "Sie müssen ein Zielgerät für die Festplatte auswählen."
-
 #~ msgid "Invalid Storage Parameters"
 #~ msgstr "Ungültige Speicher-Parameter"
-
 #~ msgid "No guests are supported for this connection."
 #~ msgstr "Für diese Verbindung werden keine Gäste unterstützt."
-
 #~ msgid "No Boot Device"
 #~ msgstr "Kein Boot-Gerät"
 
@@ -4545,34 +4524,24 @@ msgstr "_Lokal durchsuchen"
 #~ msgid "Libvirt connection does not have interface support."
 #~ msgstr ""
 #~ "Libvirt-Version unterstützt nicht das Listing physischer Schnittstellen."
-
 #~ msgid "Error determining default hypervisor."
 #~ msgstr "Fehler bei der Bestimmung des Standard-Hypervisors."
-
 #~ msgid "Startup Error"
 #~ msgstr "Startfehler"
-
 #~ msgid "<b>Physical Host Device</b>"
 #~ msgstr "<b>Physisches Host-Gerät</b>"
-
 #~ msgid "<b>Source:</b>"
 #~ msgstr "<b>Quelle:</b>"
-
 #~ msgid "<b>Target:</b>"
 #~ msgstr "<b>Ziel:</b>"
-
 #~ msgid "<b>Video Device</b>"
 #~ msgstr "<b>Videogerät</b>"
-
 #~ msgid "<b>Virtual display</b>"
 #~ msgstr "<b>Virtuelle Anzeige</b>"
-
 #~ msgid "<b>Virtual pointer</b>"
 #~ msgstr "<b>Virtueller Zeiger</b>"
-
 #~ msgid "<small><b>Example:</b> /dev/hdc2</small>"
 #~ msgstr "<small><b>Beispiel:</b> /dev/hdc2</small>"
-
 #~ msgid ""
 #~ "<small><b>Warning:</b>If you do not allocate the entire disk now, space "
 #~ "will be allocated as needed while the virtual machine is running. If "
@@ -4584,42 +4553,30 @@ msgstr "_Lokal durchsuchen"
 #~ "Bedarf zugewiesen. Falls nicht genügend Platz auf dem Host zur Verfügung "
 #~ "steht, kann dies gegebenenfalls zu einer Beschädigung der Daten auf dem "
 #~ "Gast führen.</small>"
-
 #~ msgid "Allocate entire virtual disk now"
 #~ msgstr "Die gesamte virtuelle Platte jetzt zuweisen"
-
 #~ msgid "B_lock device (partition):"
 #~ msgstr "B_lockgerät (Partition):"
-
 #~ msgid "Browse..."
 #~ msgstr "Durchsuchen ..."
-
 #~ msgid "F_ile (disk image):"
 #~ msgstr "Date_i (Festplattenabbild):"
-
 #~ msgid "File Location Field"
 #~ msgstr "Dateiort-Feld"
-
 #~ msgid "File Size Field"
 #~ msgstr "Dateigrössen-Feld"
-
 #~ msgid "Partition Location Field"
 #~ msgstr "Partitionsort-Feld"
-
 #~ msgid "_Size:"
 #~ msgstr "_Grösse:"
-
 #~ msgid "Device Model:"
 #~ msgstr "Gerätemodell:"
-
 #~ msgid "Device virtual machine will _boot from:"
 #~ msgstr "Gerät, von dem die virtuelle Maschine _starten wird:"
-
 #~ msgid "Unknown status code"
 #~ msgstr "Unbekannter Status-Code"
-
 #~ msgid "insert type"
 #~ msgstr "Typ eingeben"
-
 #~ msgid "ISO _Location:"
 #~ msgstr "ISO-O_rt:"
+
