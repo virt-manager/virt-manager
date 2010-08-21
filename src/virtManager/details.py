@@ -1650,8 +1650,14 @@ class vmmDetails(gobject.GObject):
         semodel_combo.emit("changed")
 
     def refresh_stats_page(self):
-        def _rx_tx_text(rx, tx, unit):
-            return '<span color="#82003B">%(rx)d %(unit)s in</span>\n<span color="#295C45">%(tx)d %(unit)s out</span>' % locals()
+        def _dsk_rx_tx_text(rx, tx, unit):
+            return ('<span color="#82003B">%(rx)d %(unit)s read</span>\n'
+                    '<span color="#295C45">%(tx)d %(unit)s write</span>' %
+                    locals())
+        def _net_rx_tx_text(rx, tx, unit):
+            return ('<span color="#82003B">%(rx)d %(unit)s in</span>\n'
+                    '<span color="#295C45">%(tx)d %(unit)s out</span>' %
+                    locals())
 
         cpu_txt = _("Disabled")
         mem_txt = _("Disabled")
@@ -1666,12 +1672,12 @@ class vmmDetails(gobject.GObject):
                                       int(round(host_memory/1024.0)))
 
         if self.config.get_stats_enable_disk_poll():
-            dsk_txt = _rx_tx_text(self.vm.disk_read_rate(),
-                                  self.vm.disk_write_rate(), "KB/s")
+            dsk_txt = _dsk_rx_tx_text(self.vm.disk_read_rate(),
+                                      self.vm.disk_write_rate(), "KB/s")
 
         if self.config.get_stats_enable_net_poll():
-            net_txt = _rx_tx_text(self.vm.network_rx_rate(),
-                                  self.vm.network_tx_rate(), "KB/s")
+            net_txt = _net_rx_tx_text(self.vm.network_rx_rate(),
+                                      self.vm.network_tx_rate(), "KB/s")
 
         self.window.get_widget("overview-cpu-usage-text").set_text(cpu_txt)
         self.window.get_widget("overview-memory-usage-text").set_text(mem_txt)
