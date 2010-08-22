@@ -18,7 +18,7 @@
           <widget class="GtkTable" id="table1">
             <property name="visible">True</property>
             <property name="border_width">6</property>
-            <property name="n_rows">5</property>
+            <property name="n_rows">4</property>
             <property name="n_columns">2</property>
             <property name="column_spacing">6</property>
             <property name="row_spacing">6</property>
@@ -33,8 +33,8 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
-                <property name="top_attach">4</property>
-                <property name="bottom_attach">5</property>
+                <property name="top_attach">3</property>
+                <property name="bottom_attach">4</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
               </packing>
@@ -48,26 +48,9 @@
                 <property name="mnemonic_widget">autoconnect</property>
               </widget>
               <packing>
-                <property name="top_attach">4</property>
-                <property name="bottom_attach">5</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkEntry" id="hostname">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">&#x25CF;</property>
-                <accessibility>
-                  <atkproperty name="AtkObject::accessible-name" translatable="yes">Hostname Field</atkproperty>
-                </accessibility>
-              </widget>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
                 <property name="top_attach">3</property>
                 <property name="bottom_attach">4</property>
+                <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
               </packing>
             </child>
@@ -77,11 +60,10 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">H_ostname:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">hostname</property>
               </widget>
               <packing>
-                <property name="top_attach">3</property>
-                <property name="bottom_attach">4</property>
+                <property name="top_attach">2</property>
+                <property name="bottom_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
               </packing>
@@ -153,26 +135,16 @@ Remote tunnel over SSH</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkScrolledWindow" id="scrolledwindow1">
-                <property name="width_request">70</property>
-                <property name="height_request">220</property>
+              <widget class="GtkComboBoxEntry" id="hostname">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">3</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <widget class="GtkTreeView" id="conn-list">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                  </widget>
-                </child>
+                <signal name="changed" handler="on_hostname_combo_changed"/>
               </widget>
               <packing>
+                <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
+                <property name="y_options">GTK_FILL</property>
               </packing>
             </child>
           </widget>

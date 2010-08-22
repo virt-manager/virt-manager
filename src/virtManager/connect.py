@@ -49,6 +49,9 @@ class vmmConnect(gobject.GObject):
 
         self.window.signal_autoconnect({
             "on_connection_changed": self.update_widget_states,
+
+            "on_hostname_combo_changed": self.hostname_combo_changed,
+
             "on_cancel_clicked": self.cancel,
             "on_connect_clicked": self.open_connection,
             "on_vmm_open_connection_delete_event": self.cancel,
@@ -72,24 +75,19 @@ class vmmConnect(gobject.GObject):
         self.window.get_widget("autoconnect").set_active(True)
 
         connListModel = gtk.ListStore(str, str, str)
-        self.window.get_widget("conn-list").set_model(connListModel)
-
-        nameCol = gtk.TreeViewColumn(_("Name"))
-        name_txt = gtk.CellRendererText()
-        nameCol.pack_start(name_txt, True)
-        nameCol.add_attribute(name_txt, "text", 2)
-        nameCol.set_sort_column_id(2)
-        self.window.get_widget("conn-list").append_column(nameCol)
+        host = self.window.get_widget("hostname")
+        host.set_model(connListModel)
+        host.set_text_column(2)
         connListModel.set_sort_column_id(2, gtk.SORT_ASCENDING)
-
-        self.window.get_widget("conn-list").get_selection().connect("changed", self.conn_selected)
 
         self.bus = None
         self.server = None
         self.can_browse = False
         try:
             self.bus = dbus.SystemBus()
-            self.server = dbus.Interface(self.bus.get_object("org.freedesktop.Avahi", "/"), "org.freedesktop.Avahi.Server")
+            self.server = dbus.Interface(
+                            self.bus.get_object("org.freedesktop.Avahi", "/"),
+                            "org.freedesktop.Avahi.Server")
             self.can_browse = True
         except Exception, e:
             logging.debug("Couldn't contact avahi: %s" % str(e))
@@ -115,9 +113,8 @@ class vmmConnect(gobject.GObject):
         self.set_default_hypervisor()
         self.window.get_widget("autoconnect").set_sensitive(True)
         self.window.get_widget("autoconnect").set_active(True)
-        self.window.get_widget("conn-list").set_sensitive(False)
-        self.window.get_widget("conn-list").get_model().clear()
-        self.window.get_widget("hostname").set_text("")
+        self.window.get_widget("hostname").get_model().clear()
+        self.window.get_widget("hostname").child.set_text("")
         self.stop_browse()
 
     def set_default_hypervisor(self):
@@ -135,12 +132,10 @@ class vmmConnect(gobject.GObject):
             self.window.get_widget("autoconnect").set_active(False)
             self.window.get_widget("autoconnect").set_sensitive(True)
             if self.can_browse:
-                self.window.get_widget("conn-list").set_sensitive(True)
                 self.start_browse()
         else:
-            self.window.get_widget("conn-list").set_sensitive(False)
             self.window.get_widget("hostname").set_sensitive(False)
-            self.window.get_widget("hostname").set_text("")
+            self.window.get_widget("hostname").child.set_text("")
             self.window.get_widget("autoconnect").set_sensitive(True)
             self.window.get_widget("autoconnect").set_active(True)
             self.stop_browse()
@@ -162,7 +157,7 @@ class vmmConnect(gobject.GObject):
 
     def remove_service(self, interface, protocol, name, type, domain, flags):
         try:
-            model = self.window.get_widget("conn-list").get_model()
+            model = self.window.get_widget("hostname").get_model()
             name = str(name)
             for row in model:
                 if row[0] == name:
@@ -173,14 +168,14 @@ class vmmConnect(gobject.GObject):
     def add_conn_to_list(self, interface, protocol, name, type, domain,
                          host, aprotocol, address, port, text, flags):
         try:
-            model = self.window.get_widget("conn-list").get_model()
+            model = self.window.get_widget("hostname").get_model()
             for row in model:
                 if row[2] == str(name):
                     # Already present in list
                     return
+
             host = self.sanitize_hostname(str(host))
-            model.append([str(address), self.sanitize_hostname(str(host)),
-                          str(name)])
+            model.append([str(address), str(host), str(name)])
         except Exception, e:
             logging.exception(e)
 
@@ -209,22 +204,31 @@ class vmmConnect(gobject.GObject):
             del(self.browser)
             self.browser = None
 
-    def conn_selected(self, src):
-        active = src.get_selected()
-        if active[1] == None:
+    def hostname_combo_changed(self, src):
+        model = src.get_model()
+        txt = src.child.get_text()
+        row = None
+
+        for currow in model:
+            if currow[2] == txt:
+                row = currow
+                break
+
+        if not row:
             return
-        ip = active[0].get_value(active[1], 0)
-        host = active[0].get_value(active[1], 1)
-        host = self.sanitize_hostname(host)
+
+        ip = row[0]
+        host = row[1]
         entry = host
         if not entry:
             entry = ip
-        self.window.get_widget("hostname").set_text(entry)
+
+        self.window.get_widget("hostname").child.set_text(entry)
 
     def open_connection(self, src):
         hv = self.window.get_widget("hypervisor").get_active()
         conn = self.window.get_widget("connection").get_active()
-        host = self.window.get_widget("hostname").get_text()
+        host = self.window.get_widget("hostname").child.get_text()
         auto = False
         if self.window.get_widget("autoconnect").get_property("sensitive"):
             auto = self.window.get_widget("autoconnect").get_active()
