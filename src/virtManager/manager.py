@@ -491,11 +491,21 @@ class vmmManager(gobject.GObject):
             return None
         return vm.get_uuid()
 
-    def current_connection_uri(self):
+    def current_connection_uri(self, default_selection=False):
+        vmlist = self.window.get_widget("vm-list")
+        model = vmlist.get_model()
+
         conn = self.current_connection()
-        if conn is None:
-            return None
-        return conn.get_uri()
+        if conn is None and default_selection:
+            # Nothing selected, use first connection row
+            for row in model:
+                if row[ROW_IS_CONN]:
+                    conn = row[ROW_HANDLE]
+                    break
+
+        if conn:
+            return conn.get_uri()
+        return None
 
     ####################
     # Action listeners #
@@ -527,7 +537,8 @@ class vmmManager(gobject.GObject):
         self.emit("action-show-preferences")
 
     def show_host(self, src):
-        self.emit("action-show-host", self.current_connection_uri())
+        uri = self.current_connection_uri(default_selection=True)
+        self.emit("action-show-host", uri)
 
     def open_vm_console(self,ignore,ignore2=None,ignore3=None):
         if self.current_vmuuid():
@@ -919,7 +930,8 @@ class vmmManager(gobject.GObject):
 
         show_open = bool(vm)
         show_details = bool(vm)
-        host_details = bool(vm or conn)
+        host_details = bool(len(self.rows))
+
         delete = bool((vm and vm.is_runable()) or
                       (not vm and conn))
         show_run = bool(vm and vm.is_runable())
