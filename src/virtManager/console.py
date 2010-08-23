@@ -84,6 +84,21 @@ class vmmConsolePages(gobject.GObject):
         self.vncViewer = gtkvnc.Display()
         self.window.get_widget("console-vnc-viewport").add(self.vncViewer)
 
+        # Set default grab key combination if found and supported
+        if self.config.grab_keys_supported():
+            try:
+                grab_keys = self.config.get_keys_combination(True)
+                if grab_keys is not None:
+                    # If somebody edited this in GConf it would fail so
+                    # we encapsulate this into try/except block
+                    try:
+                        keys = map(int, grab_keys.split(','))
+                        self.vncViewer.set_grab_keys( keys )
+                    except:
+                        logging.debug("Error in grab_keys configuration in GConf")
+            except Exception, e:
+                logging.debug("Error when getting the grab keys combination: %s" % str(e))
+
         self.init_vnc()
 
         finish_img = gtk.image_new_from_stock(gtk.STOCK_YES,
@@ -165,7 +180,24 @@ class vmmConsolePages(gobject.GObject):
         self._enable_modifiers()
 
     def notify_grabbed(self, src):
-        self.topwin.set_title(_("Press Ctrl+Alt to release pointer.") +
+        keystr = None
+        if self.config.grab_keys_supported():
+            try:
+                keys = src.get_grab_keys()
+                for k in keys:
+                    if keystr is None:
+                        keystr = gtk.gdk.keyval_name(k)
+                    else:
+                        keystr = keystr + "+" + gtk.gdk.keyval_name(k)
+            except:
+                pass
+
+        # If grab keys are set to None then preserve old behaviour since
+        # the GTK-VNC - we're using older version of GTK-VNC
+        if keystr is None:
+            keystr = "Control_L+Alt_L"
+
+        self.topwin.set_title(_("Press %s to release pointer.") % keystr +
                               " " + self.title)
 
         if (not self.config.show_console_grab_notify() or
@@ -182,7 +214,7 @@ class vmmConsolePages(gobject.GObject):
                                                         0,
                                                         '',
                                                         _("Pointer grabbed"),
-                                                        _("The mouse pointer has been restricted to the virtual console window. To release the pointer, press the key pair: Ctrl+Alt"),
+                                                        _("The mouse pointer has been restricted to the virtual console window. To release the pointer, press the key pair") + " " + keystr,
                                                         ["dismiss", _("Do not show this notification in the future.")],
                                                         {"desktop-entry": "virt-manager",
                                                         "x": x+200, "y": y},

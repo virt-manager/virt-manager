@@ -326,7 +326,7 @@
                         <child>
                           <widget class="GtkTable" id="table3">
                             <property name="visible">True</property>
-                            <property name="n_rows">6</property>
+                            <property name="n_rows">7</property>
                             <property name="row_spacing">3</property>
                             <child>
                               <widget class="GtkComboBox" id="prefs-console-scaling">
@@ -383,15 +383,6 @@ On mouse over</property>
                               </packing>
                             </child>
                             <child>
-                              <widget class="GtkLabel" id="label5">
-                                <property name="visible">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Automatically _open consoles:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">prefs-console-popup</property>
-                              </widget>
-                            </child>
-                            <child>
                               <widget class="GtkComboBox" id="prefs-console-popup">
                                 <property name="visible">True</property>
                                 <property name="items" translatable="yes">Never
@@ -403,6 +394,59 @@ For all domains</property>
                                 <property name="top_attach">1</property>
                                 <property name="bottom_attach">2</property>
                                 <property name="x_padding">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label5">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Automatically _open consoles:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">prefs-console-popup</property>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkHBox" id="hbox2">
+                                <property name="visible">True</property>
+                                <child>
+                                  <widget class="GtkLabel" id="label24">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">Grab keys:</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkLabel" id="prefs-keys-grab-sequence">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">Not supported</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="padding">8</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkButton" id="prefs-keys-grab-changebtn">
+                                    <property name="label" translatable="yes">Change...</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <signal name="clicked" handler="on_prefs_btn_keys_define_clicked"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="top_attach">6</property>
+                                <property name="bottom_attach">7</property>
                               </packing>
                             </child>
                           </widget>

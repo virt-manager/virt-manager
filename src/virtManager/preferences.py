@@ -65,6 +65,7 @@ class vmmPreferences(gobject.GObject):
         self.refresh_sound_remote()
         self.refresh_disk_poll()
         self.refresh_net_poll()
+        self.refresh_grabkeys_combination()
         self.refresh_confirm_forcepoweroff()
         self.refresh_confirm_poweroff()
         self.refresh_confirm_pause()
@@ -90,6 +91,7 @@ class vmmPreferences(gobject.GObject):
             "on_prefs_confirm_pause_toggled": self.change_confirm_pause,
             "on_prefs_confirm_removedev_toggled": self.change_confirm_removedev,
             "on_prefs_confirm_interface_toggled": self.change_confirm_interface,
+            "on_prefs_btn_keys_define_clicked": self.change_grab_keys,
             })
         util.bind_escape_key_close(self)
 
@@ -144,6 +146,20 @@ class vmmPreferences(gobject.GObject):
                          ignore4=None):
         self.window.get_widget("prefs-stats-enable-net").set_active(self.config.get_stats_enable_net_poll())
 
+    def refresh_grabkeys_combination(self, ignore1=None, ignore2=None,
+                           ignore3=None, ignore4=None):
+        val = self.config.get_keys_combination()
+        if val is None:
+            val = "Control_L+Alt_L"
+
+        prefs_button = self.window.get_widget("prefs-keys-grab-changebtn")
+        self.window.get_widget("prefs-keys-grab-sequence").set_text(val)
+        if not self.config.grab_keys_supported():
+            util.tooltip_wrapper(prefs_button,
+                                 _("Installed version of GTK-VNC doesn't "
+                                   "support configurable grab keys"))
+            prefs_button.set_sensitive(False)
+
     def refresh_confirm_forcepoweroff(self, ignore1=None, ignore2=None,
                                       ignore3=None, ignore4=None):
         self.window.get_widget("prefs-confirm-forcepoweroff").set_active(self.config.get_confirm_forcepoweroff())
@@ -159,6 +175,54 @@ class vmmPreferences(gobject.GObject):
     def refresh_confirm_interface(self, ignore1=None, ignore2=None,
                                   ignore3=None, ignore4=None):
         self.window.get_widget("prefs-confirm-interface").set_active(self.config.get_confirm_interface())
+
+    def grabkeys_get_string(self, keysyms):
+        keystr = None
+        for k in keysyms:
+            if keystr is None:
+                keystr = gtk.gdk.keyval_name(k)
+            else:
+                keystr = keystr + "+" + gtk.gdk.keyval_name(k)
+        # Disallow none
+        if keystr is None:
+            keystr = ""
+        return keystr
+
+    def grabkeys_dlg_press(self, src, ev, defs):
+        label = defs['label']
+        # Try to get the index, it fails when not found
+        try:
+            defs['keysyms'].index(ev.keyval)
+        except:
+            defs['keysyms'].append(ev.keyval)
+
+        label.set_text( self.grabkeys_get_string(defs['keysyms']) )
+
+    def grabkeys_dlg_release(self, src, ev, defs):
+        label = defs['label']
+        defs['keysyms'].remove(ev.keyval)
+        label.set_text( self.grabkeys_get_string(defs['keysyms']) )
+
+    def change_grab_keys(self, src):
+        dialog = gtk.Dialog ( _("Configure key combination"),
+                              None,
+                              gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+                              (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
+                               gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+        label = gtk.Label( _("Please press desired grab key combination") )
+        dialog.set_size_request(300, 100)
+        (dialog.get_content_area()).add(label)
+        defs = { 'label': label, 'keysyms': [] }
+        dialog.connect("key-press-event", self.grabkeys_dlg_press, defs)
+        dialog.connect("key-release-event", self.grabkeys_dlg_release, defs)
+        dialog.show_all()
+        result = dialog.run()
+
+        if result == gtk.RESPONSE_ACCEPT:
+            self.config.set_keys_combination( defs['keysyms'] )
+
+        self.refresh_grabkeys_combination()
+        dialog.destroy()
 
     def change_view_system_tray(self, src):
         self.config.set_view_system_tray(src.get_active())
