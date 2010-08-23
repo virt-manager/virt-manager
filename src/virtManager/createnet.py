@@ -397,18 +397,19 @@ class vmmCreateNetwork(gobject.GObject):
             ip = self.get_config_ip4()
             start = self.get_config_dhcp_start()
             end = self.get_config_dhcp_end()
+            enabled = self.window.get_widget("net-dhcp-enable").get_active()
 
-            if start is None:
+            if enabled and start is None:
                 return self.err.val_err(_("Invalid DHCP Address"), \
                                         _("The DHCP start address could not be understood"))
-            if end is None:
+            if enabled and end is None:
                 return self.err.val_err(_("Invalid DHCP Address"), \
                                         _("The DHCP end address could not be understood"))
 
-            if not ip.overlaps(start):
+            if enabled and not ip.overlaps(start):
                 return self.err.val_err(_("Invalid DHCP Address"), \
                                         _("The DHCP start address is not with the network %s") % (str(ip)))
-            if not ip.overlaps(end):
+            if enabled and not ip.overlaps(end):
                 return self.err.val_err(_("Invalid DHCP Address"), \
                                         _("The DHCP end address is not with the network %s") % (str(ip)))
         elif page_num == PAGE_FORWARDING:
