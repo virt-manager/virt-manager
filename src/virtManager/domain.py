@@ -186,6 +186,8 @@ class vmmDomainBase(vmmLibvirtObject):
         raise NotImplementedError()
     def define_disk_shareable(self, dev_id_info, do_shareable):
         raise NotImplementedError()
+    def define_disk_cache(self, dev_id_info, new_cache):
+        raise NotImplementedError()
 
     def define_network_model(self, dev_id_info, newmodel):
         raise NotImplementedError()
@@ -2196,6 +2198,13 @@ class vmmDomainVirtinst(vmmDomainBase):
         def change_shareable():
             dev.shareable = do_shareable
         self._redefine(change_shareable)
+    def define_disk_cache(self, dev_id_info, new_cache):
+        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_DISK,
+                                          dev_id_info)
+
+        def change_cache():
+            dev.driver_cache = new_cache or None
+        self._redefine(change_cache)
 
     def define_network_model(self, dev_id_info, newmodel):
         dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_NET,
