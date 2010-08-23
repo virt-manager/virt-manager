@@ -549,17 +549,18 @@ class vmmConsolePages(gobject.GObject):
         # to the desired behavior.
         #
         nc_params = "%s %s" % (vncaddr, str(vncport))
-        nc_cmd = [\
-            "nc -q 2>&1 | grep -q 'requires an argument';"
-            "if [ $? -eq 0 ] ; then"
-            "   CMD='nc -q 0 %(nc_params)s';"
-            "else"
-            "   CMD='nc %(nc_params)s';"
-            "fi;"
-            "sh -c \"$CMD\";" % {'nc_params': nc_params}
-        ]
+        nc_cmd = (
+            """nc -q 2>&1 | grep -q "requires an argument";"""
+            """if [ $? -eq 0 ] ; then"""
+            """   CMD="nc -q 0 %(nc_params)s";"""
+            """else"""
+            """   CMD="nc %(nc_params)s";"""
+            """fi;"""
+            """eval "$CMD";""" %
+            {'nc_params': nc_params})
 
-        argv += nc_cmd
+        argv.append("sh -c")
+        argv.append("'%s'" % nc_cmd)
 
         argv_str = reduce(lambda x, y: x + " " + y, argv[1:])
         logging.debug("Creating SSH tunnel: %s" % argv_str)
