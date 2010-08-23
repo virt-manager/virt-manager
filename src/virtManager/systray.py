@@ -27,6 +27,17 @@ try:
 except:
     appindicator = None
 
+def build_image_menu_item(label):
+    hasfunc = hasattr(gtk.ImageMenuItem, "set_use_underline")
+    if hasfunc:
+        label.replace("_", "__")
+
+    menu_item = gtk.ImageMenuItem(label)
+    if hasfunc:
+        menu_item.set_use_underline(False)
+
+    return menu_item
+
 class vmmSystray(gobject.GObject):
     __gsignals__ = {
         "action-toggle-manager": (gobject.SIGNAL_RUN_FIRST,
@@ -284,7 +295,7 @@ class vmmSystray(gobject.GObject):
         if self.conn_menuitems.has_key(conn.get_uri()):
             return
 
-        menu_item = gtk.MenuItem(conn.get_pretty_desc_inactive())
+        menu_item = gtk.MenuItem(conn.get_pretty_desc_inactive(), False)
         menu_item.show()
         vm_submenu = gtk.Menu()
         vm_submenu.show()
@@ -355,7 +366,7 @@ class vmmSystray(gobject.GObject):
             return
 
         # Build VM list entry
-        menu_item = gtk.ImageMenuItem(vm.get_name())
+        menu_item = build_image_menu_item(vm.get_name())
         vm_mappings[uuid] = menu_item
         vm_action_menu, vm_action_dict = self.build_vm_menu(vm)
         menu_item.set_submenu(vm_action_menu)
@@ -381,7 +392,7 @@ class vmmSystray(gobject.GObject):
             del(vm_mappings[uuid])
 
             if len(vm_menu.get_children()) == 0:
-                placeholder = gtk.MenuItem(_("No VMs available"))
+                placeholder = gtk.MenuItem(_("No virtual machines"))
                 placeholder.show()
                 placeholder.set_sensitive(False)
                 vm_menu.add(placeholder)
