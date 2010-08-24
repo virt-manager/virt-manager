@@ -34,6 +34,18 @@ CONN_SSH = 0
 CONN_TCP = 1
 CONN_TLS = 2
 
+def current_user():
+    try:
+        import getpass
+        return getpass.getuser()
+    except:
+        return ""
+
+def default_conn_user(conn):
+    if conn == CONN_SSH:
+        return "root"
+    return current_user()
+
 class vmmConnect(gobject.GObject):
     __gsignals__ = {
         "completed": (gobject.SIGNAL_RUN_FIRST,
@@ -59,6 +71,7 @@ class vmmConnect(gobject.GObject):
             "on_connection_changed": self.connection_changed,
             "on_hostname_combo_changed": self.hostname_combo_changed,
             "on_connect_remote_toggled": self.connect_remote_toggled,
+            "on_username_entry_changed": self.username_changed,
 
             "on_cancel_clicked": self.cancel,
             "on_connect_clicked": self.open_connection,
@@ -128,6 +141,7 @@ class vmmConnect(gobject.GObject):
         self.window.get_widget("hostname").get_model().clear()
         self.window.get_widget("hostname").child.set_text("")
         self.window.get_widget("connect-remote").set_active(False)
+        self.window.get_widget("username-entry").set_text("")
         self.stop_browse()
         self.connect_remote_toggled(self.window.get_widget("connect-remote"))
         self.populate_uri()
@@ -236,34 +250,42 @@ class vmmConnect(gobject.GObject):
     def hypervisor_changed(self, src):
         self.populate_uri()
 
+    def username_changed(self, src):
+        self.populate_uri()
+
     def connect_remote_toggled(self, src):
         is_remote = self.is_remote()
         self.window.get_widget("hostname").set_sensitive(is_remote)
         self.window.get_widget("connection").set_sensitive(is_remote)
         self.window.get_widget("autoconnect").set_active(not is_remote)
+        self.window.get_widget("username-entry").set_sensitive(is_remote)
         if is_remote and self.can_browse:
             self.start_browse()
         else:
             self.stop_browse()
 
+        self.populate_default_user()
         self.populate_uri()
 
     def connection_changed(self, src):
+        self.populate_default_user()
         self.populate_uri()
 
     def populate_uri(self):
         uri = self.generate_uri()
         self.window.get_widget("uri-entry").set_text(uri)
 
+    def populate_default_user(self):
+        conn = self.window.get_widget("connection").get_active()
+        default_user = default_conn_user(conn)
+        self.window.get_widget("username-entry").set_text(default_user)
+
     def generate_uri(self):
         hv = self.window.get_widget("hypervisor").get_active()
         conn = self.window.get_widget("connection").get_active()
         host = self.window.get_widget("hostname").child.get_text()
+        user = self.window.get_widget("username-entry").get_text()
         is_remote = self.is_remote()
-
-        user = "root"
-        if conn == CONN_SSH and '@' in host:
-            user, host = host.split('@',1)
 
         hvstr = ""
         if hv == HV_XEN:
@@ -271,15 +293,22 @@ class vmmConnect(gobject.GObject):
         else:
             hvstr = "qemu"
 
+        addrstr = ""
+        if user:
+            addrstr += user + "@"
+        addrstr += host
+
         hoststr = ""
         if not is_remote:
             hoststr = ":///"
-        elif conn == CONN_TLS:
-            hoststr = "+tls://" + host + "/"
-        elif conn == CONN_SSH:
-            hoststr = "+ssh://" + user + "@" + host + "/"
-        elif conn == CONN_TCP:
-            hoststr = "+tcp://" + host + "/"
+        else:
+            if conn == CONN_TLS:
+                hoststr = "+tls://"
+            if conn == CONN_SSH:
+                hoststr = "+ssh://"
+            if conn == CONN_TCP:
+                hoststr = "+tcp://"
+            hoststr += addrstr + "/"
 
         uri = hvstr + hoststr
         if hv == HV_QEMU:

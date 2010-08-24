@@ -18,7 +18,7 @@
           <widget class="GtkTable" id="table1">
             <property name="visible">True</property>
             <property name="border_width">6</property>
-            <property name="n_rows">7</property>
+            <property name="n_rows">8</property>
             <property name="n_columns">2</property>
             <property name="column_spacing">6</property>
             <property name="row_spacing">6</property>
@@ -80,8 +80,8 @@ SSL/TLS with certificates</property>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
-                <property name="top_attach">3</property>
-                <property name="bottom_attach">4</property>
+                <property name="top_attach">4</property>
+                <property name="bottom_attach">5</property>
                 <property name="y_options">GTK_FILL</property>
               </packing>
             </child>
@@ -91,8 +91,8 @@ SSL/TLS with certificates</property>
               </widget>
               <packing>
                 <property name="right_attach">2</property>
-                <property name="top_attach">4</property>
-                <property name="bottom_attach">5</property>
+                <property name="top_attach">5</property>
+                <property name="bottom_attach">6</property>
               </packing>
             </child>
             <child>
@@ -102,8 +102,9 @@ SSL/TLS with certificates</property>
                 <property name="label" translatable="yes">Generated URI:</property>
               </widget>
               <packing>
-                <property name="top_attach">6</property>
-                <property name="bottom_attach">7</property>
+                <property name="top_attach">7</property>
+                <property name="bottom_attach">8</property>
+                <property name="x_options">GTK_FILL</property>
               </packing>
             </child>
             <child>
@@ -115,8 +116,8 @@ SSL/TLS with certificates</property>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
-                <property name="top_attach">6</property>
-                <property name="bottom_attach">7</property>
+                <property name="top_attach">7</property>
+                <property name="bottom_attach">8</property>
               </packing>
             </child>
             <child>
@@ -170,8 +171,8 @@ SSL/TLS with certificates</property>
                 </child>
               </widget>
               <packing>
-                <property name="top_attach">3</property>
-                <property name="bottom_attach">4</property>
+                <property name="top_attach">4</property>
+                <property name="bottom_attach">5</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
               </packing>
@@ -180,13 +181,13 @@ SSL/TLS with certificates</property>
               <widget class="GtkLabel" id="label90">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">A_utoconnect:</property>
+                <property name="label" translatable="yes">_Autoconnect:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">autoconnect</property>
               </widget>
               <packing>
-                <property name="top_attach">5</property>
-                <property name="bottom_attach">6</property>
+                <property name="top_attach">6</property>
+                <property name="bottom_attach">7</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
               </packing>
@@ -202,10 +203,47 @@ SSL/TLS with certificates</property>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">2</property>
-                <property name="top_attach">5</property>
-                <property name="bottom_attach">6</property>
+                <property name="top_attach">6</property>
+                <property name="bottom_attach">7</property>
                 <property name="x_options">GTK_FILL</property>
                 <property name="y_options"></property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkAlignment" id="alignment3">
+                <property name="visible">True</property>
+                <property name="left_padding">22</property>
+                <child>
+                  <widget class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0.51999998092651367</property>
+                    <property name="ypad">2</property>
+                    <property name="label" translatable="yes">_Username:</property>
+                    <property name="use_markup">True</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">username-entry</property>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="top_attach">3</property>
+                <property name="bottom_attach">4</property>
+                <property name="x_options">GTK_FILL</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkEntry" id="username-entry">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="invisible_char">&#x25CF;</property>
+                <signal name="changed" handler="on_username_entry_changed"/>
+              </widget>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+                <property name="top_attach">3</property>
+                <property name="bottom_attach">4</property>
               </packing>
             </child>
           </widget>
