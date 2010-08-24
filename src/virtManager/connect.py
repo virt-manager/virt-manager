@@ -30,10 +30,9 @@ from virtManager.error import vmmErrorDialog
 HV_XEN = 0
 HV_QEMU = 1
 
-CONN_LOCAL = 0
+CONN_SSH = 0
 CONN_TCP = 1
 CONN_TLS = 2
-CONN_SSH = 3
 
 class vmmConnect(gobject.GObject):
     __gsignals__ = {
@@ -59,6 +58,7 @@ class vmmConnect(gobject.GObject):
             "on_hypervisor_changed": self.hypervisor_changed,
             "on_connection_changed": self.connection_changed,
             "on_hostname_combo_changed": self.hostname_combo_changed,
+            "on_connect_remote_toggled": self.connect_remote_toggled,
 
             "on_cancel_clicked": self.cancel,
             "on_connect_clicked": self.open_connection,
@@ -75,20 +75,7 @@ class vmmConnect(gobject.GObject):
         # Plain hostname resolve failed, means we should just use IP addr
         self.can_resolve_hostname = None
 
-        stock_img = gtk.image_new_from_stock(gtk.STOCK_CONNECT,
-                                             gtk.ICON_SIZE_BUTTON)
-        self.window.get_widget("connect").set_image(stock_img)
-        self.window.get_widget("connection").set_active(0)
-        self.window.get_widget("connect").grab_default()
-        self.window.get_widget("autoconnect").set_active(True)
-        self.window.get_widget("hostname").child.connect("changed",
-                                                         self.hostname_changed)
-
-        connListModel = gtk.ListStore(str, str, str)
-        host = self.window.get_widget("hostname")
-        host.set_model(connListModel)
-        host.set_text_column(2)
-        connListModel.set_sort_column_id(2, gtk.SORT_ASCENDING)
+        self.set_initial_state()
 
         self.bus = None
         self.server = None
@@ -104,7 +91,6 @@ class vmmConnect(gobject.GObject):
 
         self.reset_state()
 
-
     def cancel(self,ignore1=None,ignore2=None):
         self.close()
         self.emit("cancelled")
@@ -119,14 +105,36 @@ class vmmConnect(gobject.GObject):
         win.present()
         self.reset_state()
 
+    def set_initial_state(self):
+        stock_img = gtk.image_new_from_stock(gtk.STOCK_CONNECT,
+                                             gtk.ICON_SIZE_BUTTON)
+        self.window.get_widget("connect").set_image(stock_img)
+        self.window.get_widget("connect").grab_default()
+
+        # Hostname combo box entry
+        hostListModel = gtk.ListStore(str, str, str)
+        host = self.window.get_widget("hostname")
+        host.set_model(hostListModel)
+        host.set_text_column(2)
+        hostListModel.set_sort_column_id(2, gtk.SORT_ASCENDING)
+        self.window.get_widget("hostname").child.connect("changed",
+                                                         self.hostname_changed)
+
     def reset_state(self):
         self.set_default_hypervisor()
+        self.window.get_widget("connection").set_active(0)
         self.window.get_widget("autoconnect").set_sensitive(True)
         self.window.get_widget("autoconnect").set_active(True)
         self.window.get_widget("hostname").get_model().clear()
         self.window.get_widget("hostname").child.set_text("")
+        self.window.get_widget("connect-remote").set_active(False)
         self.stop_browse()
+        self.connect_remote_toggled(self.window.get_widget("connect-remote"))
         self.populate_uri()
+
+    def is_remote(self):
+        # Whether user is requesting a remote connection
+        return self.window.get_widget("connect-remote").get_active()
 
     def set_default_hypervisor(self):
         default = virtinst.util.default_connection()
@@ -228,16 +236,19 @@ class vmmConnect(gobject.GObject):
     def hypervisor_changed(self, src):
         self.populate_uri()
 
-    def connection_changed(self, src):
-        is_remote = (self.window.get_widget("connection").get_active() > 0)
+    def connect_remote_toggled(self, src):
+        is_remote = self.is_remote()
         self.window.get_widget("hostname").set_sensitive(is_remote)
+        self.window.get_widget("connection").set_sensitive(is_remote)
         self.window.get_widget("autoconnect").set_active(not is_remote)
-
         if is_remote and self.can_browse:
             self.start_browse()
         else:
             self.stop_browse()
 
+        self.populate_uri()
+
+    def connection_changed(self, src):
         self.populate_uri()
 
     def populate_uri(self):
@@ -248,6 +259,7 @@ class vmmConnect(gobject.GObject):
         hv = self.window.get_widget("hypervisor").get_active()
         conn = self.window.get_widget("connection").get_active()
         host = self.window.get_widget("hostname").child.get_text()
+        is_remote = self.is_remote()
 
         user = "root"
         if conn == CONN_SSH and '@' in host:
@@ -260,7 +272,7 @@ class vmmConnect(gobject.GObject):
             hvstr = "qemu"
 
         hoststr = ""
-        if conn == CONN_LOCAL:
+        if not is_remote:
             hoststr = ":///"
         elif conn == CONN_TLS:
             hoststr = "+tls://" + host + "/"
@@ -276,10 +288,10 @@ class vmmConnect(gobject.GObject):
         return uri
 
     def validate(self):
-        conn = self.window.get_widget("connection").get_active()
+        is_remote = self.is_remote()
         host = self.window.get_widget("hostname").child.get_text()
 
-        if conn != CONN_LOCAL and not host:
+        if is_remote and not host:
             return self.err.val_err(_("A hostname is required for "
                                       "remote connections."))
 
