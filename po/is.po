@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-24 11:50-0400\n"
+"POT-Creation-Date: 2010-08-24 17:10-0400\n"
 "PO-Revision-Date: 2006-12-08 16:17-0000\n"
 "Last-Translator: Richard Allen <ra@ra.is>\n"
 "Language-Team: is <kde-isl@molar.is>\n"
@@ -20,8 +20,8 @@ msgstr ""
 msgid "Manage virtual machines"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:136
-#: ../src/vmm-manager.glade.h:9
+#: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:147
+#: ../src/vmm-manager.glade.h:7
 msgid "Virtual Machine Manager"
 msgstr ""
 
@@ -32,7 +32,7 @@ msgstr "Bý til sýndarvél"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:289
+#: ../src/virt-manager.py.in:294
 #, fuzzy, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "Get ekki frumstillt GTK: "
@@ -267,267 +267,272 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/addhardware.py:81 ../src/virtManager/choosecd.py:49
-#: ../src/virtManager/clone.py:108 ../src/virtManager/console.py:63
-#: ../src/virtManager/create.py:89 ../src/virtManager/createinterface.py:82
-#: ../src/virtManager/createnet.py:55 ../src/virtManager/createpool.py:53
-#: ../src/virtManager/createvol.py:54 ../src/virtManager/delete.py:61
-#: ../src/virtManager/details.py:161 ../src/virtManager/engine.py:224
-#: ../src/virtManager/host.py:65 ../src/virtManager/manager.py:126
-#: ../src/virtManager/migrate.py:65 ../src/virtManager/storagebrowse.py:57
-#: ../src/virtManager/uihelpers.py:53
+#: ../src/virtManager/clone.py:108 ../src/virtManager/connect.py:64
+#: ../src/virtManager/console.py:63 ../src/virtManager/create.py:89
+#: ../src/virtManager/createinterface.py:82 ../src/virtManager/createnet.py:55
+#: ../src/virtManager/createpool.py:53 ../src/virtManager/createvol.py:54
+#: ../src/virtManager/delete.py:61 ../src/virtManager/details.py:161
+#: ../src/virtManager/engine.py:234 ../src/virtManager/host.py:67
+#: ../src/virtManager/manager.py:126 ../src/virtManager/migrate.py:65
+#: ../src/virtManager/storagebrowse.py:57 ../src/virtManager/uihelpers.py:56
 msgid "Unexpected Error"
 msgstr ""
 
 #: ../src/virtManager/addhardware.py:82 ../src/virtManager/choosecd.py:50
-#: ../src/virtManager/clone.py:109 ../src/virtManager/console.py:64
-#: ../src/virtManager/create.py:90 ../src/virtManager/createinterface.py:83
-#: ../src/virtManager/createnet.py:56 ../src/virtManager/createpool.py:54
-#: ../src/virtManager/createvol.py:55 ../src/virtManager/delete.py:62
-#: ../src/virtManager/details.py:162 ../src/virtManager/engine.py:225
-#: ../src/virtManager/host.py:66 ../src/virtManager/manager.py:127
-#: ../src/virtManager/migrate.py:66 ../src/virtManager/storagebrowse.py:58
-#: ../src/virtManager/uihelpers.py:54
+#: ../src/virtManager/clone.py:109 ../src/virtManager/connect.py:65
+#: ../src/virtManager/console.py:64 ../src/virtManager/create.py:90
+#: ../src/virtManager/createinterface.py:83 ../src/virtManager/createnet.py:56
+#: ../src/virtManager/createpool.py:54 ../src/virtManager/createvol.py:55
+#: ../src/virtManager/delete.py:62 ../src/virtManager/details.py:162
+#: ../src/virtManager/engine.py:235 ../src/virtManager/host.py:68
+#: ../src/virtManager/manager.py:127 ../src/virtManager/migrate.py:66
+#: ../src/virtManager/storagebrowse.py:58 ../src/virtManager/uihelpers.py:57
 msgid "An unexpected error occurred"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:344 ../src/virtManager/create.py:436
+#: ../src/virtManager/addhardware.py:348 ../src/virtManager/create.py:436
 #: ../src/virtManager/create.py:528
 msgid "Connection does not support storage management."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:415 ../src/virtManager/addhardware.py:420
-#: ../src/virtManager/addhardware.py:423 ../src/virtManager/addhardware.py:426
-#: ../src/virtManager/addhardware.py:438
+#: ../src/virtManager/addhardware.py:419 ../src/virtManager/addhardware.py:424
+#: ../src/virtManager/addhardware.py:427 ../src/virtManager/addhardware.py:430
+#: ../src/virtManager/addhardware.py:442
 msgid "Not supported for this guest type."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:429
+#: ../src/virtManager/addhardware.py:433
 msgid "Connection does not support host device enumeration"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:435
+#: ../src/virtManager/addhardware.py:439
 msgid "Libvirt version does not support video devices."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:471 ../src/virtManager/details.py:1796
+#: ../src/virtManager/addhardware.py:475 ../src/virtManager/details.py:1874
 msgid "EvTouch USB Graphics Tablet"
 msgstr ""
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:475 ../src/virtManager/details.py:1798
+#: ../src/virtManager/addhardware.py:479 ../src/virtManager/details.py:1876
 msgid "Generic USB Mouse"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:479 ../src/virtManager/addhardware.py:780
-#: ../src/virtManager/details.py:1830
+#: ../src/virtManager/addhardware.py:483 ../src/virtManager/addhardware.py:792
+#: ../src/virtManager/details.py:1908
 msgid "VNC server"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:480 ../src/virtManager/addhardware.py:780
-#: ../src/virtManager/details.py:1835
+#: ../src/virtManager/addhardware.py:484 ../src/virtManager/addhardware.py:792
+#: ../src/virtManager/details.py:1913
 msgid "Local SDL window"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:507
+#: ../src/virtManager/addhardware.py:511
 #, fuzzy
 msgid "No Devices Available"
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/virtManager/addhardware.py:665
+#: ../src/virtManager/addhardware.py:676
 #, python-format
 msgid "Uncaught error validating hardware input: %s"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:741
+#: ../src/virtManager/addhardware.py:752
 msgid "Disk image:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:742
+#: ../src/virtManager/addhardware.py:753
 msgid "Disk size:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:743
+#: ../src/virtManager/addhardware.py:754
 msgid "Device type:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:744
+#: ../src/virtManager/addhardware.py:755
 msgid "Bus type:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:746 ../src/vmm-create.glade.h:40
-#: ../src/vmm-host.glade.h:50
+#: ../src/virtManager/addhardware.py:756
+#, fuzzy
+msgid "Cache mode:"
+msgstr "Gerð"
+
+#: ../src/virtManager/addhardware.py:758 ../src/vmm-create.glade.h:40
+#: ../src/vmm-host.glade.h:53
 #, fuzzy
 msgid "Storage"
 msgstr "Staða:"
 
-#: ../src/virtManager/addhardware.py:756
+#: ../src/virtManager/addhardware.py:768
 #, fuzzy
 msgid "Network type:"
 msgstr "Ógilt vélarheiti"
 
-#: ../src/virtManager/addhardware.py:757
+#: ../src/virtManager/addhardware.py:769
 msgid "Target:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:758 ../src/vmm-details.glade.h:55
+#: ../src/virtManager/addhardware.py:770 ../src/vmm-details.glade.h:58
 msgid "MAC address:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:759 ../src/virtManager/addhardware.py:807
-#: ../src/virtManager/addhardware.py:849 ../src/virtManager/addhardware.py:856
+#: ../src/virtManager/addhardware.py:771 ../src/virtManager/addhardware.py:819
+#: ../src/virtManager/addhardware.py:861 ../src/virtManager/addhardware.py:868
 msgid "Model:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:761
+#: ../src/virtManager/addhardware.py:773
 #, fuzzy
 msgid "Network"
 msgstr "Ógilt vélarheiti"
 
-#: ../src/virtManager/addhardware.py:766
+#: ../src/virtManager/addhardware.py:778
 msgid "Absolute movement"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:768
+#: ../src/virtManager/addhardware.py:780
 msgid "Relative movement"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:771 ../src/virtManager/addhardware.py:797
-#: ../src/virtManager/addhardware.py:815 ../src/virtManager/addhardware.py:842
-#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:100
+#: ../src/virtManager/addhardware.py:783 ../src/virtManager/addhardware.py:809
+#: ../src/virtManager/addhardware.py:827 ../src/virtManager/addhardware.py:854
+#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:104
 #, fuzzy
 msgid "Type:"
 msgstr "Gerð"
 
-#: ../src/virtManager/addhardware.py:772 ../src/vmm-details.glade.h:65
+#: ../src/virtManager/addhardware.py:784 ../src/vmm-details.glade.h:68
 #: ../src/vmm-host.glade.h:35
 msgid "Mode:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:774
+#: ../src/virtManager/addhardware.py:786
 msgid "Pointer"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:781 ../src/virtManager/addhardware.py:782
-#: ../src/virtManager/addhardware.py:783 ../src/virtManager/addhardware.py:784
-#: ../src/virtManager/details.py:1828 ../src/virtManager/details.py:1839
-#: ../src/virtManager/details.py:1840 ../src/virtManager/details.py:1841
+#: ../src/virtManager/addhardware.py:793 ../src/virtManager/addhardware.py:794
+#: ../src/virtManager/addhardware.py:795 ../src/virtManager/addhardware.py:796
+#: ../src/virtManager/details.py:1906 ../src/virtManager/details.py:1917
+#: ../src/virtManager/details.py:1918 ../src/virtManager/details.py:1919
 msgid "N/A"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:793
+#: ../src/virtManager/addhardware.py:805
 msgid "Yes"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:793
+#: ../src/virtManager/addhardware.py:805
 msgid "No"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:794 ../src/virtManager/details.py:1558
-#: ../src/vmm-add-hardware.glade.h:42
+#: ../src/virtManager/addhardware.py:806 ../src/virtManager/details.py:1623
+#: ../src/vmm-add-hardware.glade.h:43
 msgid "Same as host"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:798 ../src/vmm-details.glade.h:24
+#: ../src/virtManager/addhardware.py:810 ../src/vmm-details.glade.h:25
 #: ../src/vmm-host.glade.h:15
 #, fuzzy
 msgid "Address:"
 msgstr "Ógilt geymsluvistfang"
 
-#: ../src/virtManager/addhardware.py:799 ../src/vmm-details.glade.h:74
+#: ../src/virtManager/addhardware.py:811 ../src/vmm-details.glade.h:77
 #, fuzzy
 msgid "Port:"
 msgstr "_Gátt:"
 
-#: ../src/virtManager/addhardware.py:800 ../src/vmm-details.glade.h:71
+#: ../src/virtManager/addhardware.py:812 ../src/vmm-details.glade.h:74
 msgid "Password:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:801 ../src/vmm-details.glade.h:54
+#: ../src/virtManager/addhardware.py:813 ../src/vmm-details.glade.h:56
 msgid "Keymap:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:803
+#: ../src/virtManager/addhardware.py:815
 #, fuzzy
 msgid "Graphics"
 msgstr "_Myndrænn stjórnskjár"
 
-#: ../src/virtManager/addhardware.py:809 ../src/vmm-details.glade.h:88
+#: ../src/virtManager/addhardware.py:821 ../src/vmm-details.glade.h:92
 msgid "Sound"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:836
+#: ../src/virtManager/addhardware.py:848
 msgid "Protocol:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:843 ../src/vmm-details.glade.h:41
+#: ../src/virtManager/addhardware.py:855 ../src/vmm-details.glade.h:44
 #: ../src/vmm-host.glade.h:24
 msgid "Device:"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:845
+#: ../src/virtManager/addhardware.py:857
 msgid "Physical Host Device"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:851 ../src/virtManager/details.py:2134
+#: ../src/virtManager/addhardware.py:863 ../src/virtManager/details.py:2213
 #, fuzzy
 msgid "Video"
 msgstr "_Sýn"
 
-#: ../src/virtManager/addhardware.py:854 ../src/virtManager/details.py:2139
+#: ../src/virtManager/addhardware.py:866 ../src/virtManager/details.py:2218
 msgid "Watchdog"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:857
+#: ../src/virtManager/addhardware.py:869
 #, fuzzy
 msgid "Action:"
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/virtManager/addhardware.py:872
+#: ../src/virtManager/addhardware.py:884
 #, fuzzy, python-format
 msgid "Unable to add device: %s"
 msgstr "Get ekki frumstillt GTK: "
 
-#: ../src/virtManager/addhardware.py:991
+#: ../src/virtManager/addhardware.py:1003
 #, fuzzy
 msgid "Creating Storage File"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/addhardware.py:992
+#: ../src/virtManager/addhardware.py:1004
 msgid "Allocation of disk storage may take a few minutes to complete."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1021
+#: ../src/virtManager/addhardware.py:1033
 msgid "Are you sure you want to add this device?"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1023
+#: ../src/virtManager/addhardware.py:1035
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next VM shutdown?"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1033
+#: ../src/virtManager/addhardware.py:1045
 #, fuzzy, python-format
 msgid "Error adding device: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/addhardware.py:1052
-#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1583
+#: ../src/virtManager/addhardware.py:1064
+#: ../src/virtManager/addhardware.py:1066 ../src/virtManager/create.py:1597
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1086
+#: ../src/virtManager/addhardware.py:1098
 msgid "Hardware Type Required"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1087
+#: ../src/virtManager/addhardware.py:1099
 msgid "You must specify what type of hardware to add."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1120 ../src/virtManager/create.py:1344
+#: ../src/virtManager/addhardware.py:1139 ../src/virtManager/create.py:1359
 #, python-format
 msgid ""
 "The following path already exists, but is not\n"
@@ -538,77 +543,77 @@ msgid ""
 "Would you like to use this path?"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1128 ../src/virtManager/create.py:1352
+#: ../src/virtManager/addhardware.py:1147 ../src/virtManager/create.py:1367
 msgid "A storage path must be specified."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1144 ../src/virtManager/create.py:1361
+#: ../src/virtManager/addhardware.py:1164 ../src/virtManager/create.py:1376
 #, fuzzy
 msgid "Storage parameter error."
 msgstr "Ógilt geymsluvistfang"
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:1158 ../src/virtManager/create.py:1366
+#: ../src/virtManager/addhardware.py:1178 ../src/virtManager/create.py:1381
 msgid "Not Enough Free Space"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1164 ../src/virtManager/create.py:1372
+#: ../src/virtManager/addhardware.py:1184 ../src/virtManager/create.py:1387
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1166 ../src/virtManager/create.py:1374
+#: ../src/virtManager/addhardware.py:1186 ../src/virtManager/create.py:1389
 msgid "Do you really want to use the disk?"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1183
+#: ../src/virtManager/addhardware.py:1203
 msgid "Network selection error."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1184
+#: ../src/virtManager/addhardware.py:1204
 msgid "A network source must be selected."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1187
+#: ../src/virtManager/addhardware.py:1207
 #, fuzzy
 msgid "Invalid MAC address"
 msgstr "Ógilt geymsluvistfang"
 
-#: ../src/virtManager/addhardware.py:1188
+#: ../src/virtManager/addhardware.py:1208
 msgid "A MAC address must be entered."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1219
+#: ../src/virtManager/addhardware.py:1240
 msgid "Graphics device parameter error"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1226
+#: ../src/virtManager/addhardware.py:1248
 msgid "Sound device parameter error"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1232
-msgid "Physical Device Requried"
+#: ../src/virtManager/addhardware.py:1254
+msgid "Physical Device Required"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1233
+#: ../src/virtManager/addhardware.py:1255
 msgid "A device must be selected."
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1240
+#: ../src/virtManager/addhardware.py:1262
 msgid "Host device parameter error"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1280
+#: ../src/virtManager/addhardware.py:1302
 #, fuzzy, python-format
 msgid "%s device parameter error"
 msgstr "Ógilt geymsluvistfang"
 
-#: ../src/virtManager/addhardware.py:1291
+#: ../src/virtManager/addhardware.py:1313
 #, fuzzy
 msgid "Video device parameter error"
 msgstr "Ógilt geymsluvistfang"
 
-#: ../src/virtManager/addhardware.py:1304
+#: ../src/virtManager/addhardware.py:1326
 #, fuzzy
 msgid "Watchdog parameter error"
 msgstr "Ógilt geymsluvistfang"
@@ -716,7 +721,7 @@ msgid ""
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
 
-#: ../src/virtManager/clone.py:712 ../src/virtManager/createpool.py:393
+#: ../src/virtManager/clone.py:712 ../src/virtManager/createpool.py:392
 #: ../src/virtManager/createvol.py:207 ../src/virtManager/migrate.py:413
 #, python-format
 msgid "Uncaught error validating input: %s"
@@ -731,51 +736,51 @@ msgstr "Bý til sýndarvél"
 msgid " and selected storage (this may take a while)"
 msgstr ""
 
-#: ../src/virtManager/clone.py:757
+#: ../src/virtManager/clone.py:763
 #, fuzzy, python-format
 msgid "Error creating virtual machine clone '%s': %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/clone.py:789
+#: ../src/virtManager/clone.py:795
 #, fuzzy
 msgid "No storage to clone."
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/virtManager/clone.py:795
+#: ../src/virtManager/clone.py:801
 msgid "Connection does not support managed storage cloning."
 msgstr ""
 
-#: ../src/virtManager/clone.py:799
+#: ../src/virtManager/clone.py:805
 msgid "Cannot clone unmanaged remote storage."
 msgstr ""
 
-#: ../src/virtManager/clone.py:802
+#: ../src/virtManager/clone.py:808
 msgid ""
-"Block devices to clone should be managed\n"
-"storage volumes."
+"Block devices to clone must be libvirt\n"
+"managed storage volumes."
 msgstr ""
 
-#: ../src/virtManager/clone.py:805 ../src/virtManager/delete.py:344
+#: ../src/virtManager/clone.py:811 ../src/virtManager/delete.py:344
 msgid "No write access to parent directory."
 msgstr ""
 
-#: ../src/virtManager/clone.py:807 ../src/virtManager/delete.py:342
+#: ../src/virtManager/clone.py:813 ../src/virtManager/delete.py:342
 msgid "Path does not exist."
 msgstr ""
 
-#: ../src/virtManager/clone.py:828
+#: ../src/virtManager/clone.py:834
 msgid "Removable"
 msgstr ""
 
-#: ../src/virtManager/clone.py:831
+#: ../src/virtManager/clone.py:837
 msgid "Read Only"
 msgstr ""
 
-#: ../src/virtManager/clone.py:833
+#: ../src/virtManager/clone.py:839
 msgid "No write access"
 msgstr ""
 
-#: ../src/virtManager/clone.py:836
+#: ../src/virtManager/clone.py:842
 msgid "Shareable"
 msgstr ""
 
@@ -797,140 +802,138 @@ msgstr ""
 msgid "Locate ISO media"
 msgstr "_Slóð að uppsetningarmiðli:"
 
-#: ../src/virtManager/connect.py:77 ../src/virtManager/createinterface.py:222
-#: ../src/virtManager/manager.py:432 ../src/virtManager/storagebrowse.py:125
-#: ../src/vmm-create-net.glade.h:29 ../src/vmm-create-pool.glade.h:9
-#: ../src/vmm-create.glade.h:30
-msgid "Name"
+#: ../src/virtManager/connect.py:324
+msgid "A hostname is required for remote connections."
 msgstr ""
 
-#: ../src/virtManager/connection.py:185
+#: ../src/virtManager/connection.py:186
 #, python-format
 msgid "Could not build physical interface list via libvirt: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:191
+#: ../src/virtManager/connection.py:192
 msgid "Libvirt version does not support physical interface listing"
 msgstr ""
 
-#: ../src/virtManager/connection.py:201
+#: ../src/virtManager/connection.py:202
 #, python-format
 msgid "Could not initialize HAL for interface listing: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:204
+#: ../src/virtManager/connection.py:205
 msgid "Libvirt version does not support physical interface listing."
 msgstr ""
 
-#: ../src/virtManager/connection.py:223
+#: ../src/virtManager/connection.py:224
 #, python-format
 msgid "Could not build media list via libvirt: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:230 ../src/virtManager/connection.py:243
+#: ../src/virtManager/connection.py:231 ../src/virtManager/connection.py:244
 msgid "Libvirt version does not support media listing."
 msgstr ""
 
-#: ../src/virtManager/connection.py:240
+#: ../src/virtManager/connection.py:241
 #, python-format
 msgid "Could not initialize HAL for media listing: %s"
 msgstr ""
 
-#: ../src/virtManager/connection.py:568
+#: ../src/virtManager/connection.py:580
 msgid "Disconnected"
 msgstr ""
 
-#: ../src/virtManager/connection.py:570
+#: ../src/virtManager/connection.py:582
 #, fuzzy
 msgid "Connecting"
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/virtManager/connection.py:573
+#: ../src/virtManager/connection.py:585
 msgid "Active (RO)"
 msgstr ""
 
-#: ../src/virtManager/connection.py:575 ../src/virtManager/host.py:492
-#: ../src/virtManager/host.py:732 ../src/virtManager/host.py:981
+#: ../src/virtManager/connection.py:587 ../src/virtManager/host.py:500
+#: ../src/virtManager/host.py:753 ../src/virtManager/host.py:1002
 #: ../src/vmm-host.glade.h:11
 msgid "Active"
 msgstr ""
 
-#: ../src/virtManager/connection.py:577 ../src/virtManager/host.py:492
-#: ../src/virtManager/host.py:535 ../src/virtManager/host.py:732
-#: ../src/virtManager/host.py:763 ../src/virtManager/host.py:981
-#: ../src/virtManager/uihelpers.py:300
+#: ../src/virtManager/connection.py:589 ../src/virtManager/host.py:500
+#: ../src/virtManager/host.py:543 ../src/virtManager/host.py:753
+#: ../src/virtManager/host.py:784 ../src/virtManager/host.py:1002
+#: ../src/virtManager/uihelpers.py:342
 msgid "Inactive"
 msgstr ""
 
-#: ../src/virtManager/connection.py:579 ../src/virtManager/create.py:1683
-#: ../src/virtManager/create.py:1684 ../src/virtManager/create.py:1686
-#: ../src/virtManager/details.py:1544 ../src/virtManager/details.py:1725
-#: ../src/virtManager/host.py:976
+#: ../src/virtManager/connection.py:591 ../src/virtManager/create.py:1703
+#: ../src/virtManager/create.py:1704 ../src/virtManager/create.py:1706
+#: ../src/virtManager/details.py:1609 ../src/virtManager/details.py:1802
+#: ../src/virtManager/host.py:997
 msgid "Unknown"
 msgstr ""
 
-#: ../src/virtManager/console.py:165
-msgid "Press Ctrl+Alt to release pointer."
+#: ../src/virtManager/console.py:200
+#, python-format
+msgid "Press %s to release pointer."
 msgstr ""
 
-#: ../src/virtManager/console.py:181
+#: ../src/virtManager/console.py:216
 msgid "Pointer grabbed"
 msgstr ""
 
-#: ../src/virtManager/console.py:182
+#: ../src/virtManager/console.py:217
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
-"release the pointer, press the key pair: Ctrl+Alt"
+"release the pointer, press the key pair"
 msgstr ""
 
-#: ../src/virtManager/console.py:183
+#: ../src/virtManager/console.py:218
 msgid "Do not show this notification in the future."
 msgstr ""
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:366 ../src/virtManager/console.py:601
+#: ../src/virtManager/console.py:400 ../src/virtManager/console.py:641
 msgid "Guest not running"
 msgstr ""
 
-#: ../src/virtManager/console.py:369
+#: ../src/virtManager/console.py:403
 msgid "Guest has crashed"
 msgstr ""
 
-#: ../src/virtManager/console.py:464
+#: ../src/virtManager/console.py:499
 msgid "Error: VNC connection to hypervisor host got refused or disconnected!"
 msgstr ""
 
-#: ../src/virtManager/console.py:618
+#: ../src/virtManager/console.py:658
 msgid "Graphical console not configured for guest"
 msgstr ""
 
-#: ../src/virtManager/console.py:624
+#: ../src/virtManager/console.py:664
 msgid "Graphical console not supported for guest"
 msgstr ""
 
-#: ../src/virtManager/console.py:629
+#: ../src/virtManager/console.py:669
 msgid "Graphical console is not yet active for guest"
 msgstr ""
 
-#: ../src/virtManager/console.py:634
+#: ../src/virtManager/console.py:674
 msgid "Connecting to graphical console for guest"
 msgstr ""
 
-#: ../src/virtManager/console.py:679
+#: ../src/virtManager/console.py:719
 msgid "Unable to provide requested credentials to the VNC server"
 msgstr ""
 
-#: ../src/virtManager/console.py:680
+#: ../src/virtManager/console.py:720
 #, python-format
 msgid "The credential type %s is not supported"
 msgstr ""
 
-#: ../src/virtManager/console.py:681
+#: ../src/virtManager/console.py:721
 #, fuzzy
 msgid "Unable to authenticate"
 msgstr "Get ekki frumstillt GTK: "
 
-#: ../src/virtManager/console.py:685
+#: ../src/virtManager/console.py:725
 msgid "Unsupported console authentication type"
 msgstr ""
 
@@ -1005,134 +1008,134 @@ msgstr ""
 msgid "Up to %(numcpus)d available"
 msgstr ""
 
-#: ../src/virtManager/create.py:584
+#: ../src/virtManager/create.py:586
 msgid "Only URL or import installs are supported for paravirt."
 msgstr ""
 
-#: ../src/virtManager/create.py:661 ../src/virtManager/create.py:670
-#: ../src/virtManager/create.py:743 ../src/virtManager/create.py:745
+#: ../src/virtManager/create.py:663 ../src/virtManager/create.py:672
+#: ../src/virtManager/create.py:745 ../src/virtManager/create.py:747
 msgid "Generic"
 msgstr ""
 
-#: ../src/virtManager/create.py:725
+#: ../src/virtManager/create.py:727
 #, fuzzy
 msgid "Local CDROM/ISO"
 msgstr "_Staðbundin Xen vél"
 
-#: ../src/virtManager/create.py:727
+#: ../src/virtManager/create.py:729
 msgid "URL Install Tree"
 msgstr ""
 
-#: ../src/virtManager/create.py:729
+#: ../src/virtManager/create.py:731
 msgid "PXE Install"
 msgstr ""
 
-#: ../src/virtManager/create.py:731
+#: ../src/virtManager/create.py:733
 msgid "Import existing OS image"
 msgstr ""
 
-#: ../src/virtManager/create.py:734 ../src/virtManager/details.py:1545
-#: ../src/virtManager/details.py:1841
+#: ../src/virtManager/create.py:736 ../src/virtManager/details.py:1610
+#: ../src/virtManager/details.py:1919
 msgid "None"
 msgstr ""
 
-#: ../src/virtManager/create.py:1068 ../src/virtManager/createinterface.py:891
+#: ../src/virtManager/create.py:1075 ../src/virtManager/createinterface.py:891
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr ""
 
-#: ../src/virtManager/create.py:1107
+#: ../src/virtManager/create.py:1114
 #, fuzzy, python-format
 msgid "Error setting UUID: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/create.py:1116
+#: ../src/virtManager/create.py:1125
 msgid "Error setting up graphics device:"
 msgstr ""
 
-#: ../src/virtManager/create.py:1126
+#: ../src/virtManager/create.py:1135
 msgid "Error setting up sound device:"
 msgstr ""
 
-#: ../src/virtManager/create.py:1166 ../src/virtManager/createinterface.py:920
+#: ../src/virtManager/create.py:1175 ../src/virtManager/createinterface.py:920
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr ""
 
-#: ../src/virtManager/create.py:1178
+#: ../src/virtManager/create.py:1187
 msgid "Invalid System Name"
 msgstr ""
 
-#: ../src/virtManager/create.py:1203
+#: ../src/virtManager/create.py:1212
 msgid "An install media selection is required."
 msgstr ""
 
-#: ../src/virtManager/create.py:1213
+#: ../src/virtManager/create.py:1222
 msgid "An install tree is required."
 msgstr ""
 
-#: ../src/virtManager/create.py:1226
+#: ../src/virtManager/create.py:1235
 #, fuzzy
 msgid "A storage path to import is required."
 msgstr "Vélar_heiti:"
 
-#: ../src/virtManager/create.py:1236
+#: ../src/virtManager/create.py:1245
 #, fuzzy
 msgid "Error setting installer parameters."
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/create.py:1254
+#: ../src/virtManager/create.py:1263
 msgid "Error setting install media location."
 msgstr ""
 
-#: ../src/virtManager/create.py:1264
+#: ../src/virtManager/create.py:1273
 msgid "Error setting OS information."
 msgstr ""
 
-#: ../src/virtManager/create.py:1301
+#: ../src/virtManager/create.py:1310
 msgid "Error setting CPUs."
 msgstr ""
 
-#: ../src/virtManager/create.py:1308
+#: ../src/virtManager/create.py:1317
 msgid "Error setting guest memory."
 msgstr ""
 
-#: ../src/virtManager/create.py:1399
+#: ../src/virtManager/create.py:1414
 #, python-format
 msgid "Network device required for %s install."
 msgstr ""
 
-#: ../src/virtManager/create.py:1478
+#: ../src/virtManager/create.py:1492
 #, fuzzy
 msgid "Error launching customize dialog: "
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/create.py:1509
+#: ../src/virtManager/create.py:1523
 msgid "Creating Virtual Machine"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/create.py:1510
+#: ../src/virtManager/create.py:1524
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
 
-#: ../src/virtManager/create.py:1555
+#: ../src/virtManager/create.py:1569
 msgid "Guest installation failed to complete"
 msgstr ""
 
-#: ../src/virtManager/create.py:1613
+#: ../src/virtManager/create.py:1633
 #, fuzzy, python-format
 msgid "Error continue install: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/create.py:1722
+#: ../src/virtManager/create.py:1742
 #, fuzzy
 msgid "Detecting"
 msgstr "Staðsetning _ISO myndar:"
 
 #: ../src/virtManager/createinterface.py:201
-#: ../src/virtManager/uihelpers.py:208
+#: ../src/virtManager/uihelpers.py:252
 msgid "Bridge"
 msgstr ""
 
@@ -1146,6 +1149,12 @@ msgstr ""
 
 #: ../src/virtManager/createinterface.py:207
 msgid "VLAN"
+msgstr ""
+
+#: ../src/virtManager/createinterface.py:222 ../src/virtManager/manager.py:377
+#: ../src/virtManager/storagebrowse.py:125 ../src/vmm-create-net.glade.h:29
+#: ../src/vmm-create-pool.glade.h:9 ../src/vmm-create.glade.h:30
+msgid "Name"
 msgstr ""
 
 #: ../src/virtManager/createinterface.py:223
@@ -1242,159 +1251,159 @@ msgstr ""
 msgid "Routed"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:181
+#: ../src/virtManager/createnet.py:187
 #, python-format
 msgid "%d addresses"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:183
+#: ../src/virtManager/createnet.py:191
 msgid "Public"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:185 ../src/vmm-create-net.glade.h:40
+#: ../src/virtManager/createnet.py:193 ../src/vmm-create-net.glade.h:40
 msgid "Private"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:187
+#: ../src/virtManager/createnet.py:195
 msgid "Reserved"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:189
+#: ../src/virtManager/createnet.py:197
 msgid "Other"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:292 ../src/vmm-create-net.glade.h:43
+#: ../src/virtManager/createnet.py:300 ../src/vmm-create-net.glade.h:43
 msgid "Start address:"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:298 ../src/vmm-details.glade.h:94
+#: ../src/virtManager/createnet.py:306 ../src/vmm-details.glade.h:98
 msgid "Status:"
 msgstr "Staða:"
 
-#: ../src/virtManager/createnet.py:299 ../src/virtManager/details.py:1591
-#: ../src/virtManager/details.py:1592 ../src/virtManager/details.py:1593
-#: ../src/virtManager/details.py:1594 ../src/virtManager/host.py:514
-#: ../src/virtManager/host.py:515
+#: ../src/virtManager/createnet.py:307 ../src/virtManager/details.py:1662
+#: ../src/virtManager/details.py:1663 ../src/virtManager/details.py:1664
+#: ../src/virtManager/details.py:1665 ../src/virtManager/host.py:522
+#: ../src/virtManager/host.py:523
 msgid "Disabled"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:351
+#: ../src/virtManager/createnet.py:359
 #, fuzzy, python-format
 msgid "Error creating virtual network: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/createnet.py:362 ../src/virtManager/createnet.py:365
+#: ../src/virtManager/createnet.py:370 ../src/virtManager/createnet.py:373
 #, fuzzy
 msgid "Invalid Network Name"
 msgstr "Ógilt vélarheiti"
 
-#: ../src/virtManager/createnet.py:363
+#: ../src/virtManager/createnet.py:371
 msgid "Network name must be non-blank and less than 50 characters"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:366
+#: ../src/virtManager/createnet.py:374
 msgid "Network name may contain alphanumeric and '_' characters only"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:372 ../src/virtManager/createnet.py:376
-#: ../src/virtManager/createnet.py:380
+#: ../src/virtManager/createnet.py:380 ../src/virtManager/createnet.py:384
+#: ../src/virtManager/createnet.py:388
 #, fuzzy
 msgid "Invalid Network Address"
 msgstr "Ógilt geymsluvistfang"
 
-#: ../src/virtManager/createnet.py:373
+#: ../src/virtManager/createnet.py:381
 msgid "The network address could not be understood"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:377
+#: ../src/virtManager/createnet.py:385
 msgid "The network must be an IPv4 address"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:381
+#: ../src/virtManager/createnet.py:389
 msgid "The network prefix must be at least /4 (16 addresses)"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:384
+#: ../src/virtManager/createnet.py:392
 #, fuzzy
 msgid "Check Network Address"
 msgstr "Ógilt geymsluvistfang"
 
-#: ../src/virtManager/createnet.py:385
+#: ../src/virtManager/createnet.py:393
 msgid ""
 "The network should normally use a private IPv4 address. Use this non-private "
 "address anyway?"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:394 ../src/virtManager/createnet.py:397
-#: ../src/virtManager/createnet.py:401 ../src/virtManager/createnet.py:404
+#: ../src/virtManager/createnet.py:403 ../src/virtManager/createnet.py:406
+#: ../src/virtManager/createnet.py:410 ../src/virtManager/createnet.py:413
 #, fuzzy
 msgid "Invalid DHCP Address"
 msgstr "Ógilt geymsluvistfang"
 
-#: ../src/virtManager/createnet.py:395
+#: ../src/virtManager/createnet.py:404
 msgid "The DHCP start address could not be understood"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:398
+#: ../src/virtManager/createnet.py:407
 msgid "The DHCP end address could not be understood"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:402
+#: ../src/virtManager/createnet.py:411
 #, python-format
 msgid "The DHCP start address is not with the network %s"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:405
+#: ../src/virtManager/createnet.py:414
 #, python-format
 msgid "The DHCP end address is not with the network %s"
 msgstr ""
 
-#: ../src/virtManager/createnet.py:410
+#: ../src/virtManager/createnet.py:419
 #, fuzzy
 msgid "Invalid forwarding mode"
 msgstr "Ógilt geymsluvistfang"
 
-#: ../src/virtManager/createnet.py:411
+#: ../src/virtManager/createnet.py:420
 msgid "Please select where the traffic should be forwarded"
 msgstr ""
 
-#: ../src/virtManager/createpool.py:369
+#: ../src/virtManager/createpool.py:368
 msgid "Choose source path"
 msgstr ""
 
-#: ../src/virtManager/createpool.py:375
+#: ../src/virtManager/createpool.py:374
 msgid "Choose target directory"
 msgstr ""
 
-#: ../src/virtManager/createpool.py:407
+#: ../src/virtManager/createpool.py:406
 #, fuzzy
 msgid "Creating storage pool..."
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/createpool.py:408
+#: ../src/virtManager/createpool.py:407
 msgid "Creating the storage pool may take a while..."
 msgstr ""
 
-#: ../src/virtManager/createpool.py:436
+#: ../src/virtManager/createpool.py:435
 #, python-format
 msgid "Error creating pool: %s"
 msgstr ""
 
-#: ../src/virtManager/createpool.py:485 ../src/virtManager/createpool.py:507
+#: ../src/virtManager/createpool.py:484 ../src/virtManager/createpool.py:506
 msgid "Pool Parameter Error"
 msgstr ""
 
-#: ../src/virtManager/createpool.py:512
+#: ../src/virtManager/createpool.py:511
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
 msgstr ""
 
-#: ../src/virtManager/createpool.py:526
+#: ../src/virtManager/createpool.py:528
 msgid "Format the source device."
 msgstr ""
 
-#: ../src/virtManager/createpool.py:528
+#: ../src/virtManager/createpool.py:530
 msgid "Create a logical volume group from the source device."
 msgstr ""
 
@@ -1484,83 +1493,98 @@ msgid ""
 "- %s "
 msgstr ""
 
-#: ../src/virtManager/details.py:389
+#: ../src/virtManager/details.py:393
 msgid "Add Hardware"
 msgstr ""
 
-#: ../src/virtManager/details.py:425
+#: ../src/virtManager/details.py:429
 msgid "Close tab"
 msgstr ""
 
-#: ../src/virtManager/details.py:498
+#: ../src/virtManager/details.py:504
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
 "with the specified label. The administrator is responsible for making sure "
-"the images are labeled corectly on disk."
+"the images are labeled correctly on disk."
 msgstr ""
 
-#: ../src/virtManager/details.py:500
+#: ../src/virtManager/details.py:506
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
 "unique label for the guest process and guest image, ensuring total isolation "
 "of the guest. (Default)"
 msgstr ""
 
-#: ../src/virtManager/details.py:508
+#: ../src/virtManager/details.py:515
+msgid "Libvirt did not detect NUMA capabilities."
+msgstr ""
+
+#: ../src/virtManager/details.py:523
 #, fuzzy
 msgid "VCPU"
 msgstr "_VCPUs:"
 
-#: ../src/virtManager/details.py:509
+#: ../src/virtManager/details.py:524
 #, fuzzy
 msgid "On CPU"
 msgstr "_VCPUs:"
 
-#: ../src/virtManager/details.py:510
+#: ../src/virtManager/details.py:525
 msgid "Pinning"
 msgstr ""
 
-#: ../src/virtManager/details.py:619
+#: ../src/virtManager/details.py:638
 msgid "No serial devices found"
 msgstr ""
 
-#: ../src/virtManager/details.py:641
+#: ../src/virtManager/details.py:660
 msgid "Serial console not yet supported over remote connection."
 msgstr ""
 
-#: ../src/virtManager/details.py:644
+#: ../src/virtManager/details.py:663
 msgid "Serial console not available for inactive guest."
 msgstr ""
 
-#: ../src/virtManager/details.py:646
+#: ../src/virtManager/details.py:665
 #, python-format
 msgid "Console for device type '%s' not yet supported."
 msgstr ""
 
-#: ../src/virtManager/details.py:649
+#: ../src/virtManager/details.py:668
 #, python-format
 msgid "Can not access console path '%s'."
 msgstr ""
 
-#: ../src/virtManager/details.py:667
+#: ../src/virtManager/details.py:686
 msgid "No graphics console found."
 msgstr ""
 
-#: ../src/virtManager/details.py:672
+#: ../src/virtManager/details.py:691
 #, fuzzy, python-format
 msgid "Graphical Console %s"
 msgstr "_Myndrænn stjórnskjár"
 
-#: ../src/virtManager/details.py:764
+#: ../src/virtManager/details.py:783
 #, fuzzy, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/details.py:938
+#: ../src/virtManager/details.py:838 ../src/virtManager/manager.py:919
+msgid "_Restore"
+msgstr ""
+
+#. Build VM context menu
+#: ../src/virtManager/details.py:840 ../src/virtManager/manager.py:328
+#: ../src/virtManager/manager.py:921 ../src/virtManager/systray.py:182
+#: ../src/vmm-details.glade.h:131 ../src/vmm-manager.glade.h:19
+msgid "_Run"
+msgstr "_Keyra"
+
+#: ../src/virtManager/details.py:970
 msgid "Save Virtual Machine Screenshot"
 msgstr "Vista skjáskoti af sýndarvél"
 
-#: ../src/virtManager/details.py:963
+#: ../src/virtManager/details.py:995
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1569,167 +1593,180 @@ msgstr ""
 "Skjáskotið hefur verið vistað á:\n"
 "%s"
 
-#: ../src/virtManager/details.py:965
+#: ../src/virtManager/details.py:997
 msgid "Screenshot saved"
 msgstr "Skjáskot vistað"
 
-#: ../src/virtManager/details.py:1297
+#: ../src/virtManager/details.py:1145
+#, fuzzy, python-format
+msgid "Error generating CPU configuration: %s"
+msgstr "Bý til sýndarvél"
+
+#: ../src/virtManager/details.py:1359
 #, fuzzy, python-format
 msgid "Error building pin list: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/details.py:1303
+#: ../src/virtManager/details.py:1365
 #, fuzzy, python-format
 msgid "Error pinning vcpus: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/details.py:1337
+#: ../src/virtManager/details.py:1399
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr ""
 
-#: ../src/virtManager/details.py:1399
+#: ../src/virtManager/details.py:1464
 msgid "Are you sure you want to remove this device?"
 msgstr ""
 
-#: ../src/virtManager/details.py:1400 ../src/virtManager/engine.py:752
-#: ../src/virtManager/engine.py:776 ../src/virtManager/engine.py:822
-#: ../src/virtManager/engine.py:846
+#: ../src/virtManager/details.py:1465 ../src/virtManager/engine.py:739
+#: ../src/virtManager/engine.py:822 ../src/virtManager/engine.py:846
+#: ../src/virtManager/engine.py:892 ../src/virtManager/engine.py:916
 msgid "Don't ask me again."
 msgstr ""
 
-#: ../src/virtManager/details.py:1412
+#: ../src/virtManager/details.py:1477
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr ""
 
-#: ../src/virtManager/details.py:1427
+#: ../src/virtManager/details.py:1492
 msgid "Device could not be removed from the running machine."
 msgstr ""
 
-#: ../src/virtManager/details.py:1428
+#: ../src/virtManager/details.py:1493
 msgid "This change will take effect after the next VM reboot"
 msgstr ""
 
-#: ../src/virtManager/details.py:1476
+#: ../src/virtManager/details.py:1541
 #, fuzzy, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/details.py:1483
+#: ../src/virtManager/details.py:1548
 msgid "Some changes may require a guest reboot to take effect."
 msgstr ""
 
-#: ../src/virtManager/details.py:1486
+#: ../src/virtManager/details.py:1551
 msgid "These changes will take effect after the next guest reboot."
 msgstr ""
 
-#: ../src/virtManager/details.py:1656
+#: ../src/virtManager/details.py:1732
 msgid "VCPU info only available for running domain."
 msgstr ""
 
-#: ../src/virtManager/details.py:1658
+#: ../src/virtManager/details.py:1734
 msgid "Virtual machine does not support runtime VPCU info."
 msgstr ""
 
-#: ../src/virtManager/details.py:1663
+#: ../src/virtManager/details.py:1739
 #, fuzzy, python-format
 msgid "Error getting VCPU info: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/details.py:1800
+#: ../src/virtManager/details.py:1878
 msgid "Xen Mouse"
 msgstr ""
 
-#: ../src/virtManager/details.py:1802
+#: ../src/virtManager/details.py:1880
 msgid "PS/2 Mouse"
 msgstr ""
 
-#: ../src/virtManager/details.py:1807
+#: ../src/virtManager/details.py:1885
 msgid "Absolute Movement"
 msgstr ""
 
-#: ../src/virtManager/details.py:1809
+#: ../src/virtManager/details.py:1887
 msgid "Relative Movement"
 msgstr ""
 
-#: ../src/virtManager/details.py:1832
+#: ../src/virtManager/details.py:1910
 msgid "Automatically allocated"
 msgstr ""
 
-#: ../src/virtManager/details.py:1873
+#: ../src/virtManager/details.py:1951
 #, fuzzy
 msgid "Primary Console"
 msgstr "_Raðtengdur stjórnskjár"
 
-#: ../src/virtManager/details.py:2089
+#: ../src/virtManager/details.py:2167
 msgid "Tablet"
 msgstr ""
 
-#: ../src/virtManager/details.py:2092
+#: ../src/virtManager/details.py:2170
 msgid "Mouse"
 msgstr ""
 
-#: ../src/virtManager/details.py:2094 ../src/vmm-details.glade.h:53
+#: ../src/virtManager/details.py:2172 ../src/vmm-details.glade.h:55
 msgid "Input"
 msgstr ""
 
-#: ../src/virtManager/details.py:2102
+#: ../src/virtManager/details.py:2180
 #, python-format
 msgid "Display %s"
 msgstr ""
 
-#: ../src/virtManager/details.py:2109
+#: ../src/virtManager/details.py:2187
 #, python-format
 msgid "Sound: %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:809 ../src/virtManager/domain.py:2241
+#: ../src/virtManager/domain.py:833 ../src/virtManager/domain.py:2322
 #, python-format
 msgid "Unknown device type '%s'"
 msgstr ""
 
-#: ../src/virtManager/domain.py:812
+#: ../src/virtManager/domain.py:836
 #, python-format
 msgid "Couldn't build xpath for device %s:%s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:837
+#: ../src/virtManager/domain.py:861
 #, fuzzy, python-format
 msgid "Could not find device %s"
 msgstr "Get ekki frumstillt GTK: "
 
-#: ../src/virtManager/domain.py:1086
+#: ../src/virtManager/domain.py:1116
 msgid "Running"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1088
+#: ../src/virtManager/domain.py:1118
 msgid "Paused"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1090
+#: ../src/virtManager/domain.py:1120
 #, fuzzy
-msgid "Shuting Down"
+msgid "Shutting Down"
 msgstr "_Slökkva"
 
-#: ../src/virtManager/domain.py:1092
+#: ../src/virtManager/domain.py:1122
 msgid "Shutoff"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1094
+#: ../src/virtManager/domain.py:1124
 msgid "Crashed"
 msgstr ""
 
-#: ../src/virtManager/domain.py:2250
+#: ../src/virtManager/domain.py:1319
+msgid "Cannot start guest while cloning operation in progress"
+msgstr ""
+
+#: ../src/virtManager/domain.py:1333
+msgid "Cannot resume guest while cloning operation in progress"
+msgstr ""
+
+#: ../src/virtManager/domain.py:2331
 #, fuzzy
 msgid "Did not find selected device."
 msgstr "Get ekki frumstillt GTK: "
 
-#: ../src/virtManager/engine.py:103
+#: ../src/virtManager/engine.py:106
 msgid "Searching for available hypervisors..."
 msgstr ""
 
-#: ../src/virtManager/engine.py:126
+#: ../src/virtManager/engine.py:129
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -1739,17 +1776,17 @@ msgid ""
 "Would you like to install them now?"
 msgstr ""
 
-#: ../src/virtManager/engine.py:131
+#: ../src/virtManager/engine.py:134
 msgid "Packages required for KVM usage"
 msgstr ""
 
-#: ../src/virtManager/engine.py:140
+#: ../src/virtManager/engine.py:143
 #, fuzzy, python-format
 msgid "Error talking to PackageKit: %s"
 msgstr "Bý til sýndarvél"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:290
+#: ../src/virtManager/engine.py:300
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1760,7 +1797,7 @@ msgid ""
 "added via File->Add Connection"
 msgstr ""
 
-#: ../src/virtManager/engine.py:321
+#: ../src/virtManager/engine.py:331
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1774,91 +1811,118 @@ msgid ""
 "start up."
 msgstr ""
 
-#: ../src/virtManager/engine.py:329
+#: ../src/virtManager/engine.py:339
 msgid "Libvirt service must be started"
 msgstr ""
 
-#: ../src/virtManager/engine.py:586
+#: ../src/virtManager/engine.py:600
 #, python-format
 msgid "Error bringing up domain details: %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:705
+#: ../src/virtManager/engine.py:720
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr ""
 
-#. FIXME: This should work with remote storage stuff
-#: ../src/virtManager/engine.py:712
-msgid "Saving virtual machines over remote connections is not yet supported."
+#: ../src/virtManager/engine.py:730
+msgid ""
+"Saving virtual machines over remote connections is not supported with this "
+"libvirt version or hypervisor."
 msgstr ""
 
-#: ../src/virtManager/engine.py:719
+#: ../src/virtManager/engine.py:737
+#, python-format
+msgid "Are you sure you want to save '%s'?"
+msgstr ""
+
+#: ../src/virtManager/engine.py:750
 msgid "Save Virtual Machine"
 msgstr ""
 
-#: ../src/virtManager/engine.py:728
+#: ../src/virtManager/engine.py:759
 msgid "Saving Virtual Machine"
 msgstr ""
 
-#: ../src/virtManager/engine.py:733
+#: ../src/virtManager/engine.py:764
 #, python-format
 msgid "Error saving domain: %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:748
+#: ../src/virtManager/engine.py:779
+msgid "Restoring virtual machines over remote connections is not yet supported"
+msgstr ""
+
+#: ../src/virtManager/engine.py:784
+msgid "Restore Virtual Machine"
+msgstr ""
+
+#: ../src/virtManager/engine.py:792
+msgid "Restoring Virtual Machine"
+msgstr ""
+
+#: ../src/virtManager/engine.py:798
+msgid "Error restoring domain"
+msgstr ""
+
+#: ../src/virtManager/engine.py:806
+#, python-format
+msgid "Error restoring domain '%s': %s"
+msgstr ""
+
+#: ../src/virtManager/engine.py:818
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr ""
 
-#: ../src/virtManager/engine.py:750
+#: ../src/virtManager/engine.py:820
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
 
-#: ../src/virtManager/engine.py:764 ../src/virtManager/engine.py:834
+#: ../src/virtManager/engine.py:834 ../src/virtManager/engine.py:904
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:774
+#: ../src/virtManager/engine.py:844
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr ""
 
-#: ../src/virtManager/engine.py:788
+#: ../src/virtManager/engine.py:858
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:799
+#: ../src/virtManager/engine.py:869
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:810
+#: ../src/virtManager/engine.py:880
 #, python-format
 msgid "Error starting domain: %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:820
+#: ../src/virtManager/engine.py:890
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr ""
 
-#: ../src/virtManager/engine.py:844
+#: ../src/virtManager/engine.py:914
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr ""
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:862 ../src/virtManager/engine.py:877
+#: ../src/virtManager/engine.py:932 ../src/virtManager/engine.py:947
 #, fuzzy, python-format
 msgid "Error rebooting domain: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/engine.py:906
+#: ../src/virtManager/engine.py:976
 #, fuzzy, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "Bý til sýndarvél"
@@ -1868,7 +1932,7 @@ msgid "Error"
 msgstr ""
 
 #. Expander section with details.
-#: ../src/virtManager/error.py:53 ../src/vmm-details.glade.h:38
+#: ../src/virtManager/error.py:53 ../src/vmm-details.glade.h:41
 #, fuzzy
 msgid "Details"
 msgstr "_Upplýsingar"
@@ -1877,277 +1941,261 @@ msgstr "_Upplýsingar"
 msgid "Input Error"
 msgstr ""
 
-#: ../src/virtManager/host.py:185
+#: ../src/virtManager/host.py:189
 msgid "Copy Volume Path"
 msgstr ""
 
-#: ../src/virtManager/host.py:337
+#: ../src/virtManager/host.py:344
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr ""
 
-#: ../src/virtManager/host.py:354 ../src/virtManager/host.py:355
-#: ../src/virtManager/host.py:356
+#: ../src/virtManager/host.py:362 ../src/virtManager/host.py:363
+#: ../src/virtManager/host.py:364
 #, fuzzy
 msgid "Connection not active."
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/virtManager/host.py:361
+#: ../src/virtManager/host.py:369
 msgid "Libvirt connection does not support virtual network management."
 msgstr ""
 
-#: ../src/virtManager/host.py:366
+#: ../src/virtManager/host.py:374
 msgid "Libvirt connection does not support storage management."
 msgstr ""
 
-#: ../src/virtManager/host.py:370
+#: ../src/virtManager/host.py:378
 msgid "Libvirt connection does not support interface management."
 msgstr ""
 
-#: ../src/virtManager/host.py:385
+#: ../src/virtManager/host.py:393
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr ""
 
-#: ../src/virtManager/host.py:392
+#: ../src/virtManager/host.py:400
 #, python-format
 msgid "Error deleting network: %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:403
+#: ../src/virtManager/host.py:411
 #, python-format
 msgid "Error starting network: %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:414
+#: ../src/virtManager/host.py:422
 #, python-format
 msgid "Error stopping network: %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:423
+#: ../src/virtManager/host.py:431
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:434
+#: ../src/virtManager/host.py:442
 #, python-format
 msgid "Error setting net autostart: %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:442 ../src/virtManager/host.py:506
-#: ../src/virtManager/host.py:692 ../src/virtManager/host.py:733
+#: ../src/virtManager/host.py:450 ../src/virtManager/host.py:514
+#: ../src/virtManager/host.py:713 ../src/virtManager/host.py:754
 msgid "On Boot"
 msgstr ""
 
-#: ../src/virtManager/host.py:443 ../src/virtManager/host.py:506
-#: ../src/virtManager/host.py:540 ../src/virtManager/host.py:693
-#: ../src/virtManager/host.py:733 ../src/virtManager/host.py:765
+#: ../src/virtManager/host.py:451 ../src/virtManager/host.py:514
+#: ../src/virtManager/host.py:548 ../src/virtManager/host.py:714
+#: ../src/virtManager/host.py:754 ../src/virtManager/host.py:786
 msgid "Never"
 msgstr ""
 
-#: ../src/virtManager/host.py:471
+#: ../src/virtManager/host.py:479
 #, fuzzy
 msgid "No virtual network selected."
 msgstr "Sýndar_vél"
 
-#: ../src/virtManager/host.py:481
+#: ../src/virtManager/host.py:489
 #, fuzzy, python-format
 msgid "Error selecting network: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/host.py:546
+#: ../src/virtManager/host.py:554
 msgid "Isolated virtual network"
 msgstr ""
 
-#: ../src/virtManager/host.py:578 ../src/virtManager/host.py:588
+#: ../src/virtManager/host.py:586 ../src/virtManager/host.py:596
 #, python-format
 msgid "Error starting pool '%s': %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:597
+#: ../src/virtManager/host.py:605
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr ""
 
-#: ../src/virtManager/host.py:604
+#: ../src/virtManager/host.py:612
 #, python-format
 msgid "Error deleting pool: %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:612
+#: ../src/virtManager/host.py:624
+#, fuzzy, python-format
+msgid "Error refreshing pool '%s': %s"
+msgstr "Bý til sýndarvél"
+
+#: ../src/virtManager/host.py:633
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr ""
 
-#: ../src/virtManager/host.py:621
+#: ../src/virtManager/host.py:642
 #, python-format
 msgid "Error deleting volume: %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:632
+#: ../src/virtManager/host.py:653
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:647 ../src/virtManager/storagebrowse.py:273
+#: ../src/virtManager/host.py:668 ../src/virtManager/storagebrowse.py:273
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:684
+#: ../src/virtManager/host.py:705
 #, python-format
 msgid "Error setting pool autostart: %s"
 msgstr ""
 
-#: ../src/virtManager/host.py:705
+#: ../src/virtManager/host.py:726
 #, fuzzy
 msgid "No storage pool selected."
 msgstr "Ógilt vélarheiti"
 
-#: ../src/virtManager/host.py:715
+#: ../src/virtManager/host.py:736
 #, fuzzy, python-format
 msgid "Error selecting pool: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/host.py:829
+#: ../src/virtManager/host.py:850
 #, python-format
 msgid "Are you sure you want to stop the interface '%s'?"
 msgstr ""
 
-#: ../src/virtManager/host.py:831 ../src/virtManager/host.py:857
+#: ../src/virtManager/host.py:852 ../src/virtManager/host.py:878
 msgid "Don't ask me again for interface start/stop."
 msgstr ""
 
-#: ../src/virtManager/host.py:842
+#: ../src/virtManager/host.py:863
 #, fuzzy, python-format
 msgid "Error stopping interface '%s': %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/host.py:855
+#: ../src/virtManager/host.py:876
 #, python-format
 msgid "Are you sure you want to start the interface '%s'?"
 msgstr ""
 
-#: ../src/virtManager/host.py:868
+#: ../src/virtManager/host.py:889
 #, fuzzy, python-format
 msgid "Error starting interface '%s': %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/host.py:877
+#: ../src/virtManager/host.py:898
 #, python-format
 msgid "Are you sure you want to permanently delete the interface %s?"
 msgstr ""
 
-#: ../src/virtManager/host.py:886
+#: ../src/virtManager/host.py:907
 #, fuzzy, python-format
 msgid "Error deleting interface: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/host.py:895
+#: ../src/virtManager/host.py:916
 #, fuzzy, python-format
 msgid "Error launching interface wizard: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/host.py:926
+#: ../src/virtManager/host.py:947
 #, fuzzy, python-format
 msgid "Error setting interface startmode: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/host.py:946
+#: ../src/virtManager/host.py:967
 #, fuzzy
 msgid "No interface selected."
 msgstr "Ógilt vélarheiti"
 
-#: ../src/virtManager/host.py:957
+#: ../src/virtManager/host.py:978
 #, fuzzy, python-format
 msgid "Error selecting interface: %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/manager.py:302 ../src/virtManager/systray.py:171
-#: ../src/vmm-details.glade.h:126 ../src/vmm-manager.glade.h:21
-msgid "_Run"
-msgstr "_Keyra"
-
-#: ../src/virtManager/manager.py:308 ../src/virtManager/systray.py:158
-#: ../src/vmm-details.glade.h:123 ../src/vmm-manager.glade.h:20
+#: ../src/virtManager/manager.py:329 ../src/virtManager/systray.py:169
+#: ../src/vmm-details.glade.h:128 ../src/vmm-manager.glade.h:18
 msgid "_Pause"
 msgstr "Í _bið"
 
-#: ../src/virtManager/manager.py:315
+#: ../src/virtManager/manager.py:330
 msgid "R_esume"
 msgstr ""
 
-#: ../src/virtManager/manager.py:322 ../src/virtManager/manager.py:334
-#: ../src/virtManager/systray.py:185 ../src/virtManager/systray.py:203
-#: ../src/virtManager/uihelpers.py:612
+#: ../src/virtManager/manager.py:332 ../src/virtManager/manager.py:335
+#: ../src/virtManager/systray.py:196 ../src/virtManager/systray.py:214
+#: ../src/virtManager/uihelpers.py:656
 #, fuzzy
 msgid "_Shut Down"
 msgstr "_Slökkva"
 
 #. Shutdown menu
-#: ../src/virtManager/manager.py:328 ../src/virtManager/systray.py:178
-#: ../src/virtManager/uihelpers.py:606 ../src/vmm-details.glade.h:124
+#: ../src/virtManager/manager.py:334 ../src/virtManager/systray.py:189
+#: ../src/virtManager/uihelpers.py:650 ../src/vmm-details.glade.h:129
 msgid "_Reboot"
 msgstr ""
 
-#: ../src/virtManager/manager.py:341 ../src/virtManager/systray.py:192
-#: ../src/virtManager/uihelpers.py:618 ../src/vmm-details.glade.h:114
+#: ../src/virtManager/manager.py:337 ../src/virtManager/systray.py:203
+#: ../src/virtManager/uihelpers.py:662 ../src/vmm-details.glade.h:119
 msgid "_Force Off"
 msgstr ""
 
-#: ../src/virtManager/manager.py:352 ../src/vmm-details.glade.h:110
+#: ../src/virtManager/manager.py:340 ../src/virtManager/uihelpers.py:672
 #, fuzzy
-msgid "_Clone"
+msgid "Sa_ve"
+msgstr "_Vista"
+
+#: ../src/virtManager/manager.py:343
+#, fuzzy
+msgid "_Clone..."
 msgstr "_Flakka..."
 
-#: ../src/virtManager/manager.py:357 ../src/vmm-details.glade.h:119
+#: ../src/virtManager/manager.py:344 ../src/vmm-details.glade.h:124
 msgid "_Migrate..."
 msgstr ""
 
-#: ../src/virtManager/manager.py:362
+#: ../src/virtManager/manager.py:345
 #, fuzzy
 msgid "_Delete"
 msgstr "Sýndar_vél"
 
-#: ../src/virtManager/manager.py:410 ../src/vmm-details.glade.h:112
+#: ../src/virtManager/manager.py:359 ../src/vmm-details.glade.h:117
 msgid "_Details"
 msgstr "_Upplýsingar"
 
-#: ../src/virtManager/manager.py:435
+#: ../src/virtManager/manager.py:380
 msgid "CPU usage"
 msgstr ""
 
-#: ../src/virtManager/manager.py:436
+#: ../src/virtManager/manager.py:381
 msgid "Disk I/O"
 msgstr ""
 
-#: ../src/virtManager/manager.py:437
+#: ../src/virtManager/manager.py:382
 #, fuzzy
 msgid "Network I/O"
 msgstr "Ógilt vélarheiti"
 
-#: ../src/virtManager/manager.py:614
-msgid "Restoring virtual machines over remote connections is not yet supported"
-msgstr ""
-
-#: ../src/virtManager/manager.py:619
-msgid "Restore Virtual Machine"
-msgstr ""
-
-#: ../src/virtManager/manager.py:627
-msgid "Restoring Virtual Machine"
-msgstr ""
-
-#: ../src/virtManager/manager.py:633
-msgid "Error restoring domain"
-msgstr ""
-
-#: ../src/virtManager/manager.py:641
-#, python-format
-msgid "Error restoring domain '%s': %s"
-msgstr ""
-
-#: ../src/virtManager/manager.py:658
+#: ../src/virtManager/manager.py:579
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -2157,27 +2205,27 @@ msgid ""
 "Are you sure?"
 msgstr ""
 
-#: ../src/virtManager/manager.py:753
+#: ../src/virtManager/manager.py:680
 msgid ""
 "Unable to open a connection to the Xen hypervisor/daemon.\n"
 "\n"
 msgstr ""
 
-#: ../src/virtManager/manager.py:758 ../src/virtManager/manager.py:766
+#: ../src/virtManager/manager.py:685 ../src/virtManager/manager.py:693
 msgid "Virtual Machine Manager Connection Failure"
 msgstr ""
 
-#: ../src/virtManager/manager.py:760
+#: ../src/virtManager/manager.py:687
 msgid ""
 "Unable to open a connection to the libvirt management daemon.\n"
 "\n"
 msgstr ""
 
-#: ../src/virtManager/manager.py:815
+#: ../src/virtManager/manager.py:742
 msgid "Double click to connect"
 msgstr ""
 
-#: ../src/virtManager/manager.py:1116
+#: ../src/virtManager/manager.py:1055
 msgid "Disabled in preferences dialog."
 msgstr ""
 
@@ -2267,6 +2315,19 @@ msgstr "Sýndar_vél"
 msgid "Isolated network"
 msgstr "Sýndar_vél"
 
+#: ../src/virtManager/preferences.py:159
+msgid "Installed version of GTK-VNC doesn't support configurable grab keys"
+msgstr ""
+
+#: ../src/virtManager/preferences.py:207
+#, fuzzy
+msgid "Configure key combination"
+msgstr "Bý til sýndarvél"
+
+#: ../src/virtManager/preferences.py:212
+msgid "Please press desired grab key combination"
+msgstr ""
+
 #: ../src/virtManager/storagebrowse.py:132
 #, fuzzy
 msgid "Size"
@@ -2284,120 +2345,130 @@ msgstr ""
 msgid "Cannot use local storage on remote connection."
 msgstr ""
 
-#: ../src/virtManager/systray.py:164
+#: ../src/virtManager/systray.py:175
 msgid "_Resume"
 msgstr ""
 
-#: ../src/virtManager/systray.py:344
+#: ../src/virtManager/systray.py:346 ../src/virtManager/systray.py:395
 #, fuzzy
 msgid "No virtual machines"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/systray.py:396
-#, fuzzy
-msgid "No VMs available"
-msgstr "Staðsetning _ISO myndar:"
-
-#: ../src/virtManager/uihelpers.py:66
+#: ../src/virtManager/uihelpers.py:69
 msgid ""
-"Fully allocating storage will take longer now, but the OS install phase will "
+"Fully allocating storage may take longer now, but the OS install phase will "
 "be quicker. \n"
 "\n"
 "Skipping allocation can also cause space issues on the host machine, if the "
 "maximum image size exceeds available storage space."
 msgstr ""
 
+#: ../src/virtManager/uihelpers.py:112
+#, fuzzy
+msgid "Default pool is not active."
+msgstr "Sýndar_vél"
+
+#: ../src/virtManager/uihelpers.py:113
+#, python-format
+msgid "Storage pool '%s' is not active. Would you like to start the pool now?"
+msgstr ""
+
+#: ../src/virtManager/uihelpers.py:124
+#, fuzzy, python-format
+msgid "Could not start storage_pool '%s': %s"
+msgstr "Bý til sýndarvél"
+
 #. [xml value, label]
-#: ../src/virtManager/uihelpers.py:186
+#: ../src/virtManager/uihelpers.py:215
 msgid "Hypervisor default"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:204
+#: ../src/virtManager/uihelpers.py:248
 #, fuzzy
 msgid "Usermode networking"
 msgstr "Sýndar_vél"
 
-#: ../src/virtManager/uihelpers.py:210
+#: ../src/virtManager/uihelpers.py:254
 #, fuzzy
 msgid "Virtual network"
 msgstr "Sýndar_vél"
 
-#: ../src/virtManager/uihelpers.py:318
+#: ../src/virtManager/uihelpers.py:360
 #, fuzzy
 msgid "No virtual networks available"
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/virtManager/uihelpers.py:340
+#: ../src/virtManager/uihelpers.py:382
 msgid "(Empty bridge)"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:343
+#: ../src/virtManager/uihelpers.py:385
 msgid "Not bridged"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:345
+#: ../src/virtManager/uihelpers.py:387
 #, python-format
 msgid "Host device %s %s"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:382
+#: ../src/virtManager/uihelpers.py:424
 #, fuzzy
 msgid "No networking."
 msgstr "Ógilt vélarheiti"
 
 #. After all is said and done, add a manual bridge option
-#: ../src/virtManager/uihelpers.py:387
+#: ../src/virtManager/uihelpers.py:429
 msgid "Specify shared device name"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:406
+#: ../src/virtManager/uihelpers.py:448
 #, fuzzy
 msgid "Virtual Network is not active."
 msgstr "Sýndar_vél"
 
-#: ../src/virtManager/uihelpers.py:407
+#: ../src/virtManager/uihelpers.py:449
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:419
+#: ../src/virtManager/uihelpers.py:461
 #, fuzzy, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "Bý til sýndarvél"
 
-#: ../src/virtManager/uihelpers.py:440
+#: ../src/virtManager/uihelpers.py:483
 #, fuzzy
 msgid "Error with network parameters."
 msgstr "Ógilt vélarheiti"
 
-#: ../src/virtManager/uihelpers.py:445 ../src/virtManager/uihelpers.py:447
+#: ../src/virtManager/uihelpers.py:488 ../src/virtManager/uihelpers.py:490
 msgid "Mac address collision."
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:448
+#: ../src/virtManager/uihelpers.py:491
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:500
+#: ../src/virtManager/uihelpers.py:543
 msgid "No device present"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:646
+#: ../src/virtManager/uihelpers.py:700
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:648
+#: ../src/virtManager/uihelpers.py:702
 msgid "Do you want to correct this now?"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:649 ../src/virtManager/uihelpers.py:673
+#: ../src/virtManager/uihelpers.py:703 ../src/virtManager/uihelpers.py:727
 msgid "Don't ask about these directories again."
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:662
+#: ../src/virtManager/uihelpers.py:716
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr ""
@@ -2529,193 +2600,198 @@ msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:21
 #, fuzzy
-msgid "D_evice model:"
+msgid "Cache _mode:"
 msgstr "Gerð"
 
 #: ../src/vmm-add-hardware.glade.h:22
+#, fuzzy
+msgid "D_evice model:"
+msgstr "Gerð"
+
+#: ../src/vmm-add-hardware.glade.h:23
 msgid "Device Type Field"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:23
+#: ../src/vmm-add-hardware.glade.h:24
 #, fuzzy
 msgid "Device _Type:"
 msgstr "Gerð"
 
-#: ../src/vmm-add-hardware.glade.h:24
+#: ../src/vmm-add-hardware.glade.h:25
 #, fuzzy
 msgid "H_ost:"
 msgstr "_Vél:"
 
-#: ../src/vmm-add-hardware.glade.h:25
+#: ../src/vmm-add-hardware.glade.h:26
 msgid "Ha_rdware type:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:26
+#: ../src/vmm-add-hardware.glade.h:27
 msgid "Hardware Type Select"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:27
+#: ../src/vmm-add-hardware.glade.h:28
 msgid "Listen on all public network interfaces "
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:28
+#: ../src/vmm-add-hardware.glade.h:29
 msgid "MAC Address Field"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:29
+#: ../src/vmm-add-hardware.glade.h:30
 msgid "Pa_ssword:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:30
+#: ../src/vmm-add-hardware.glade.h:31
 msgid "Please indicate how you would like to view the virtual display."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:31
+#: ../src/vmm-add-hardware.glade.h:32
 msgid ""
 "Please indicate how you'd like to assign space on this physical host system "
 "for your new virtual storage device."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:32
+#: ../src/vmm-add-hardware.glade.h:33
 msgid ""
 "Please indicate how you'd like to connect your new virtual network device to "
 "the host network."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:33
+#: ../src/vmm-add-hardware.glade.h:34
 msgid ""
 "Please indicate what kind of pointer device to connect to the virtual "
 "machine."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:35
 msgid ""
 "Please indicate what physical device\n"
 "to connect to the virtual machine."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:36
+#: ../src/vmm-add-hardware.glade.h:37
 msgid ""
 "Please indicate what sound device type to connect to the virtual machine."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:37
+#: ../src/vmm-add-hardware.glade.h:38
 msgid ""
 "Please indicate what video device type\n"
 "to connect to the virtual machine."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:39
+#: ../src/vmm-add-hardware.glade.h:40
 msgid ""
 "Please indicate what watchdog device type\n"
 "and default action should be used."
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:41
+#: ../src/vmm-add-hardware.glade.h:42
 #, fuzzy
 msgid "Po_rt:"
 msgstr "_Gátt:"
 
-#: ../src/vmm-add-hardware.glade.h:43 ../src/vmm-create.glade.h:38
+#: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-create.glade.h:38
 msgid "Select _managed or other existing storage"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:44
+#: ../src/vmm-add-hardware.glade.h:45
 msgid ""
 "This assistant will guide you through adding a new piece of virtual "
 "hardware. First select what type of hardware you wish to add:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:45
+#: ../src/vmm-add-hardware.glade.h:46
 #, fuzzy
 msgid "Use Te_lnet:"
 msgstr "_Vél:"
 
-#: ../src/vmm-add-hardware.glade.h:46 ../src/vmm-create-interface.glade.h:34
+#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create-interface.glade.h:34
 #: ../src/vmm-migrate.glade.h:9
 #, fuzzy
 msgid "_Address:"
 msgstr "Ógilt geymsluvistfang"
 
-#: ../src/vmm-add-hardware.glade.h:47 ../src/vmm-create.glade.h:46
+#: ../src/vmm-add-hardware.glade.h:48 ../src/vmm-create.glade.h:46
 msgid "_Allocate entire disk now"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:48
+#: ../src/vmm-add-hardware.glade.h:49
 #, fuzzy
 msgid "_Bind Host:"
 msgstr "_Vél:"
 
-#: ../src/vmm-add-hardware.glade.h:49 ../src/vmm-create.glade.h:48
+#: ../src/vmm-add-hardware.glade.h:50 ../src/vmm-create.glade.h:48
 #, fuzzy
 msgid "_Bridge name:"
 msgstr "_Vél:"
 
-#: ../src/vmm-add-hardware.glade.h:50
+#: ../src/vmm-add-hardware.glade.h:51
 #, fuzzy
 msgid "_Device type:"
 msgstr "Gerð"
 
-#: ../src/vmm-add-hardware.glade.h:51
+#: ../src/vmm-add-hardware.glade.h:52
 msgid "_Device:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create-interface.glade.h:37
+#: ../src/vmm-add-hardware.glade.h:53 ../src/vmm-create-interface.glade.h:37
 #: ../src/vmm-create-net.glade.h:52 ../src/vmm-create-pool.glade.h:13
 #: ../src/vmm-create-vol.glade.h:22 ../src/vmm-create.glade.h:50
 msgid "_Finish"
 msgstr "_Ljúka"
 
-#: ../src/vmm-add-hardware.glade.h:53 ../src/vmm-create.glade.h:51
+#: ../src/vmm-add-hardware.glade.h:54 ../src/vmm-create.glade.h:51
 msgid "_GB"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:54
+#: ../src/vmm-add-hardware.glade.h:55
 #, fuzzy
 msgid "_Host device:"
 msgstr "_Vél:"
 
-#: ../src/vmm-add-hardware.glade.h:55
+#: ../src/vmm-add-hardware.glade.h:56
 msgid "_Keymap:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:56
+#: ../src/vmm-add-hardware.glade.h:57
 msgid "_MAC address:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:57 ../src/vmm-create-interface.glade.h:40
+#: ../src/vmm-add-hardware.glade.h:58 ../src/vmm-create-interface.glade.h:40
 #: ../src/vmm-create-net.glade.h:54
 msgid "_Mode:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:58
+#: ../src/vmm-add-hardware.glade.h:59
 msgid "_Model:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:59
+#: ../src/vmm-add-hardware.glade.h:60
 msgid "_Other:"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:60
+#: ../src/vmm-add-hardware.glade.h:61
 #, fuzzy
 msgid "_Path:"
 msgstr "_Gátt:"
 
-#: ../src/vmm-add-hardware.glade.h:61 ../src/vmm-migrate.glade.h:12
+#: ../src/vmm-add-hardware.glade.h:62 ../src/vmm-migrate.glade.h:12
 #, fuzzy
 msgid "_Port:"
 msgstr "_Gátt:"
 
-#: ../src/vmm-add-hardware.glade.h:62 ../src/vmm-create-pool.glade.h:17
+#: ../src/vmm-add-hardware.glade.h:63 ../src/vmm-create-pool.glade.h:17
 #, fuzzy
 msgid "_Type:"
 msgstr "Gerð"
 
-#: ../src/vmm-add-hardware.glade.h:63
+#: ../src/vmm-add-hardware.glade.h:64
 msgid "aa:bb:cc:dd:ee:ff"
 msgstr ""
 
-#: ../src/vmm-add-hardware.glade.h:64 ../src/vmm-create-pool.glade.h:18
+#: ../src/vmm-add-hardware.glade.h:65 ../src/vmm-create-pool.glade.h:18
 msgid "label"
 msgstr ""
 
@@ -3034,7 +3110,7 @@ msgstr ""
 msgid "ip desc"
 msgstr ""
 
-#: ../src/vmm-create-interface.glade.h:45 ../src/vmm-preferences.glade.h:38
+#: ../src/vmm-create-interface.glade.h:45 ../src/vmm-preferences.glade.h:41
 msgid "seconds"
 msgstr ""
 
@@ -3360,7 +3436,7 @@ msgid "Create a storage unit that can be used directly by a virtual machine."
 msgstr ""
 
 #: ../src/vmm-create-vol.glade.h:19 ../src/vmm-create.glade.h:28
-#: ../src/vmm-details.glade.h:56
+#: ../src/vmm-details.glade.h:59
 msgid "MB"
 msgstr ""
 
@@ -3439,7 +3515,7 @@ msgid "Choose Memory and CPU settings"
 msgstr ""
 
 #: ../src/vmm-create.glade.h:17
-msgid "Choose an operating systen type and version"
+msgid "Choose an operating system type and version"
 msgstr ""
 
 #: ../src/vmm-create.glade.h:18
@@ -3677,403 +3753,426 @@ msgid "<b>insert type</b>"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:22
+msgid "<small>Overcommitting vCPUs can hurt performance</small>"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:23
 #, fuzzy
 msgid "A_ction:"
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/vmm-details.glade.h:23
+#: ../src/vmm-details.glade.h:24
 msgid "A_dd Hardware"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:25 ../src/vmm-host.glade.h:16
+#: ../src/vmm-details.glade.h:26 ../src/vmm-host.glade.h:16
 msgid "Architecture:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:26
+#: ../src/vmm-details.glade.h:27
 msgid "Auth"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:27
+#: ../src/vmm-details.glade.h:28
+#, fuzzy
+msgid "Begin Installation"
+msgstr "_Ljúka"
+
+#: ../src/vmm-details.glade.h:29
 msgid "Boot"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:28
+#: ../src/vmm-details.glade.h:30
 msgid ""
 "CPU\n"
 "usage:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:30
-msgid "C_lock Offset:"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:31
-#, fuzzy
-msgid "Change a_llocation:"
-msgstr "Staðsetning _ISO myndar:"
-
 #: ../src/vmm-details.glade.h:32
-msgid "Char"
+msgid "C_lock Offset:"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:33
 #, fuzzy
+msgid "Cac_he mode:"
+msgstr "Gerð"
+
+#: ../src/vmm-details.glade.h:34
+#, fuzzy
+msgid "Change a_llocation:"
+msgstr "Staðsetning _ISO myndar:"
+
+#: ../src/vmm-details.glade.h:35
+msgid "Char"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:36
+#, fuzzy
 msgid "Connect or disconnect media"
 msgstr "_Slóð að uppsetningarmiðli:"
 
-#: ../src/vmm-details.glade.h:34
+#: ../src/vmm-details.glade.h:37
 #, fuzzy
 msgid "Console"
 msgstr "_Raðtengdur stjórnskjár"
 
-#: ../src/vmm-details.glade.h:35
+#: ../src/vmm-details.glade.h:38
 msgid "Current allocation:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:36
+#: ../src/vmm-details.glade.h:39
 msgid "D_ynamic"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:37
+#: ../src/vmm-details.glade.h:40
 #, fuzzy
 msgid "Description:"
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/vmm-details.glade.h:39
+#: ../src/vmm-details.glade.h:42
 #, fuzzy
 msgid "Device Type:"
 msgstr "Gerð"
 
-#: ../src/vmm-details.glade.h:40
+#: ../src/vmm-details.glade.h:43
 #, fuzzy
 msgid "Device m_odel:"
 msgstr "Gerð"
 
-#: ../src/vmm-details.glade.h:42
+#: ../src/vmm-details.glade.h:45
 msgid "Disk"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:43
+#: ../src/vmm-details.glade.h:46
 msgid ""
 "Disk\n"
 "I/O:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:45
+#: ../src/vmm-details.glade.h:48
 msgid "Emulator:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:46
+#: ../src/vmm-details.glade.h:49
 msgid "Enable A_CPI:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:47
+#: ../src/vmm-details.glade.h:50
 msgid "Enable A_PIC:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:48
-#, fuzzy
-msgid "Finish Install"
-msgstr "_Ljúka"
-
-#: ../src/vmm-details.glade.h:49
-msgid "Heads:"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:50
-#, fuzzy
-msgid "Host CPUs:"
-msgstr "_VCPUs:"
-
-#: ../src/vmm-details.glade.h:51 ../src/vmm-host.glade.h:28
-msgid "Hypervisor:"
+#: ../src/vmm-details.glade.h:51
+msgid "Generate from host _NUMA configuration"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:52
+msgid "Heads:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:53 ../src/vmm-host.glade.h:28
+msgid "Hypervisor:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:54
 msgid "Initial _pinning:"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:57
+#, fuzzy
+msgid "Logical host CPUs:"
+msgstr "_VCPUs:"
+
+#: ../src/vmm-details.glade.h:60
 msgid "M_odel:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:58
+#: ../src/vmm-details.glade.h:61
 #, fuzzy
 msgid "Ma_ximum allocation:"
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/vmm-details.glade.h:59
+#: ../src/vmm-details.glade.h:62
 msgid "Max Memory Select"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:60
+#: ../src/vmm-details.glade.h:63
 msgid "Maximum allocation:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:61
+#: ../src/vmm-details.glade.h:64
 msgid "Mem"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:62
+#: ../src/vmm-details.glade.h:65
 msgid ""
 "Memory\n"
 "usage:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:64
+#: ../src/vmm-details.glade.h:67
 msgid "Memory Select"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:66 ../src/vmm-host.glade.h:37
+#: ../src/vmm-details.glade.h:69 ../src/vmm-host.glade.h:37
 msgid "Name:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:67
+#: ../src/vmm-details.glade.h:70
 msgid "Net"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:68
+#: ../src/vmm-details.glade.h:71
 msgid ""
 "Network\n"
 "I/O:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:70
+#: ../src/vmm-details.glade.h:73
 msgid "Over"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:72
+#: ../src/vmm-details.glade.h:75
 msgid "Pause"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:73 ../src/vmm-manager.glade.h:3
+#: ../src/vmm-details.glade.h:76 ../src/vmm-manager.glade.h:3
 #, fuzzy
 msgid "Pause the virtual machine"
 msgstr "Bý til sýndarvél"
 
-#: ../src/vmm-details.glade.h:75 ../src/vmm-manager.glade.h:4
+#: ../src/vmm-details.glade.h:78 ../src/vmm-manager.glade.h:4
 #, fuzzy
 msgid "Power on the virtual machine"
 msgstr "Bý til sýndarvél"
 
-#: ../src/vmm-details.glade.h:76
+#: ../src/vmm-details.glade.h:79
 msgid "Proc"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:77
+#: ../src/vmm-details.glade.h:80
 msgid "RAM:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:78
+#: ../src/vmm-details.glade.h:81
 msgid "R_eadonly:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:79
+#: ../src/vmm-details.glade.h:82
+msgid "R_untime pinning:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:83
 msgid "Run"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:80
+#: ../src/vmm-details.glade.h:84
 #, fuzzy
 msgid "S_hut Down"
 msgstr "_Slökkva"
 
-#: ../src/vmm-details.glade.h:81
+#: ../src/vmm-details.glade.h:85
 msgid "Send _Key"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:82
+#: ../src/vmm-details.glade.h:86
 msgid "Sharea_ble:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:83
+#: ../src/vmm-details.glade.h:87
 #, fuzzy
 msgid "Show the graphical console"
 msgstr "_Myndrænn stjórnskjár"
 
-#: ../src/vmm-details.glade.h:84
+#: ../src/vmm-details.glade.h:88
 #, fuzzy
 msgid "Show virtual hardware details"
 msgstr "Sýndar_vél"
 
-#: ../src/vmm-details.glade.h:85
+#: ../src/vmm-details.glade.h:89
 #, fuzzy
 msgid "Shut Down"
 msgstr "_Slökkva"
 
-#: ../src/vmm-details.glade.h:86
+#: ../src/vmm-details.glade.h:90
 msgid "Shut down"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:87 ../src/vmm-manager.glade.h:8
+#: ../src/vmm-details.glade.h:91 ../src/vmm-manager.glade.h:6
 #, fuzzy
 msgid "Shutdown the virtual machine"
 msgstr "Bý til sýndarvél"
 
-#: ../src/vmm-details.glade.h:89
+#: ../src/vmm-details.glade.h:93
 msgid "Source Path:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:90
+#: ../src/vmm-details.glade.h:94
 msgid "Source device:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:91
+#: ../src/vmm-details.glade.h:95
 msgid "Source path:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:92
+#: ../src/vmm-details.glade.h:96
 #, fuzzy
 msgid "Start virt_ual machine on host boot up"
 msgstr "Vista skjáskoti af sýndarvél"
 
-#: ../src/vmm-details.glade.h:93 ../src/vmm-preferences.glade.h:27
+#: ../src/vmm-details.glade.h:97 ../src/vmm-preferences.glade.h:30
 #, fuzzy
 msgid "Stats"
 msgstr "Staða:"
 
-#: ../src/vmm-details.glade.h:95
+#: ../src/vmm-details.glade.h:99
 #, fuzzy
 msgid "Storage size:"
 msgstr "Staða:"
 
-#: ../src/vmm-details.glade.h:96
+#: ../src/vmm-details.glade.h:100
 msgid "Switch to fullscreen view"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:97
+#: ../src/vmm-details.glade.h:101
 #, fuzzy
 msgid "T_oolbar"
 msgstr "Tækjaslá"
 
-#: ../src/vmm-details.glade.h:98
+#: ../src/vmm-details.glade.h:102
 msgid "Target device:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:99
+#: ../src/vmm-details.glade.h:103
 msgid "Total host memory:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:101
+#: ../src/vmm-details.glade.h:105
 msgid "UUID:"
 msgstr "UUID:"
 
-#: ../src/vmm-details.glade.h:102
+#: ../src/vmm-details.glade.h:106
 msgid "Unavailable"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:103
+#: ../src/vmm-details.glade.h:107
 msgid "VNC"
 msgstr "VNC"
 
-#: ../src/vmm-details.glade.h:104
+#: ../src/vmm-details.glade.h:108
 msgid "Vid"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:105
+#: ../src/vmm-details.glade.h:109
 #, fuzzy
 msgid "Virtual CPU Affinity Select"
 msgstr "Sýndar_vél"
 
-#: ../src/vmm-details.glade.h:106
+#: ../src/vmm-details.glade.h:110
 #, fuzzy
 msgid "Virtual CPU Select"
 msgstr "Sýndar_vél"
 
-#: ../src/vmm-details.glade.h:107
+#: ../src/vmm-details.glade.h:111
 #, fuzzy
 msgid "Virtual Machine"
 msgstr "Sýndar_vél"
 
-#: ../src/vmm-details.glade.h:108
+#: ../src/vmm-details.glade.h:112
 msgid "Virtual _Machine"
 msgstr "Sýndar_vél"
 
-#: ../src/vmm-details.glade.h:109
+#: ../src/vmm-details.glade.h:113
 msgid "_Always"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:111
+#: ../src/vmm-details.glade.h:114
+#, fuzzy
+msgid "_Begin Installation"
+msgstr "_Ljúka"
+
+#: ../src/vmm-details.glade.h:115
+#, fuzzy
+msgid "_Clone"
+msgstr "_Flakka..."
+
+#: ../src/vmm-details.glade.h:116
 #, fuzzy
 msgid "_Console"
 msgstr "_Raðtengdur stjórnskjár"
 
-#: ../src/vmm-details.glade.h:113 ../src/vmm-host.glade.h:53
-#: ../src/vmm-manager.glade.h:14
+#: ../src/vmm-details.glade.h:118 ../src/vmm-host.glade.h:56
+#: ../src/vmm-manager.glade.h:13
 msgid "_File"
 msgstr "_Skrá"
 
-#: ../src/vmm-details.glade.h:115
+#: ../src/vmm-details.glade.h:120
 msgid "_Fullscreen"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:116 ../src/vmm-host.glade.h:54
-#: ../src/vmm-manager.glade.h:16
+#: ../src/vmm-details.glade.h:121 ../src/vmm-host.glade.h:57
+#: ../src/vmm-manager.glade.h:15
 msgid "_Help"
 msgstr "_Hjálp"
 
-#: ../src/vmm-details.glade.h:117
+#: ../src/vmm-details.glade.h:122
 #, fuzzy
 msgid "_Label:"
 msgstr "Vélar_heiti:"
 
-#: ../src/vmm-details.glade.h:118
+#: ../src/vmm-details.glade.h:123
 #, fuzzy
 msgid "_Login"
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/vmm-details.glade.h:120
+#: ../src/vmm-details.glade.h:125
 #, fuzzy
 msgid "_Never"
 msgstr "_Sýn"
 
-#: ../src/vmm-details.glade.h:121
+#: ../src/vmm-details.glade.h:126
 msgid "_Only when Fullscreen"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:122
+#: ../src/vmm-details.glade.h:127
 msgid "_Password:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:125
+#: ../src/vmm-details.glade.h:130
 msgid "_Resize to VM"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:127
-msgid "_Save"
-msgstr "_Vista"
-
-#: ../src/vmm-details.glade.h:128
+#: ../src/vmm-details.glade.h:132
 msgid "_Save this password in your keyring"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:129
+#: ../src/vmm-details.glade.h:133
 msgid "_Scale Display"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:130
+#: ../src/vmm-details.glade.h:134
 #, fuzzy
 msgid "_Static"
 msgstr "Staða:"
 
-#: ../src/vmm-details.glade.h:131
+#: ../src/vmm-details.glade.h:135
 msgid "_Take Screenshot"
 msgstr "_Vista skjáskot"
 
-#: ../src/vmm-details.glade.h:132
+#: ../src/vmm-details.glade.h:136
 #, fuzzy
 msgid "_Text Consoles"
 msgstr "_Raðtengdur stjórnskjár"
 
-#: ../src/vmm-details.glade.h:133
+#: ../src/vmm-details.glade.h:137 ../src/vmm-open-connection.glade.h:16
 #, fuzzy
 msgid "_Username:"
 msgstr "_Vél:"
 
-#: ../src/vmm-details.glade.h:134 ../src/vmm-manager.glade.h:23
+#: ../src/vmm-details.glade.h:138 ../src/vmm-manager.glade.h:21
 msgid "_View"
 msgstr "_Sýn"
 
-#: ../src/vmm-details.glade.h:135 ../src/vmm-host.glade.h:56
+#: ../src/vmm-details.glade.h:139 ../src/vmm-host.glade.h:59
 msgid "_View Manager"
 msgstr ""
 
@@ -4109,7 +4208,7 @@ msgstr "Sýndar_vél"
 msgid "<b>Volumes</b>"
 msgstr ""
 
-#: ../src/vmm-host.glade.h:9 ../src/vmm-open-connection.glade.h:1
+#: ../src/vmm-host.glade.h:9
 #, fuzzy
 msgid "A_utoconnect:"
 msgstr "Staðsetning _ISO myndar:"
@@ -4216,53 +4315,65 @@ msgid "Pool Type:"
 msgstr "Gerð"
 
 #: ../src/vmm-host.glade.h:42
+msgid "Refresh volume list"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:43
+msgid "Restore Saved Machine..."
+msgstr ""
+
+#: ../src/vmm-host.glade.h:44
+msgid "Restore a saved machine from a filesystem image"
+msgstr ""
+
+#: ../src/vmm-host.glade.h:45
 #, fuzzy
 msgid "Start Interface"
 msgstr "Ógilt vélarheiti"
 
-#: ../src/vmm-host.glade.h:43
+#: ../src/vmm-host.glade.h:46
 #, fuzzy
 msgid "Start Network"
 msgstr "Sýndar_vél"
 
-#: ../src/vmm-host.glade.h:44
+#: ../src/vmm-host.glade.h:47
 #, fuzzy
 msgid "Start Pool"
 msgstr "Staða:"
 
-#: ../src/vmm-host.glade.h:45
+#: ../src/vmm-host.glade.h:48
 #, fuzzy
 msgid "Start mode:"
 msgstr "Staða:"
 
-#: ../src/vmm-host.glade.h:46
+#: ../src/vmm-host.glade.h:49
 #, fuzzy
 msgid "State:"
 msgstr "Staða:"
 
-#: ../src/vmm-host.glade.h:47
+#: ../src/vmm-host.glade.h:50
 #, fuzzy
 msgid "Stop Interface"
 msgstr "Ógilt vélarheiti"
 
-#: ../src/vmm-host.glade.h:48
+#: ../src/vmm-host.glade.h:51
 msgid "Stop Network"
 msgstr ""
 
-#: ../src/vmm-host.glade.h:49
+#: ../src/vmm-host.glade.h:52
 msgid "Stop Pool"
 msgstr ""
 
-#: ../src/vmm-host.glade.h:51
+#: ../src/vmm-host.glade.h:54
 msgid "Virtual Networks"
 msgstr ""
 
-#: ../src/vmm-host.glade.h:52
+#: ../src/vmm-host.glade.h:55
 #, fuzzy
 msgid "_Delete Volume"
 msgstr "Sýndar_vél"
 
-#: ../src/vmm-host.glade.h:55 ../src/vmm-storage-browse.glade.h:4
+#: ../src/vmm-host.glade.h:58 ../src/vmm-storage-browse.glade.h:4
 msgid "_New Volume"
 msgstr ""
 
@@ -4277,60 +4388,52 @@ msgid "New"
 msgstr "_Sýn"
 
 #: ../src/vmm-manager.glade.h:5
-msgid "Restore Saved Machine..."
-msgstr ""
-
-#: ../src/vmm-manager.glade.h:6
-msgid "Restore a saved machine from a filesystem image"
-msgstr ""
-
-#: ../src/vmm-manager.glade.h:7
 #, fuzzy
 msgid "Show the virtual machine console and details"
 msgstr "Sýndar_vél"
 
-#: ../src/vmm-manager.glade.h:10
+#: ../src/vmm-manager.glade.h:8
 #, fuzzy
 msgid "_Add Connection..."
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/vmm-manager.glade.h:11
+#: ../src/vmm-manager.glade.h:9
 msgid "_CPU Usage"
 msgstr ""
 
-#: ../src/vmm-manager.glade.h:12 ../src/vmm-preferences.glade.h:29
+#: ../src/vmm-manager.glade.h:10
+#, fuzzy
+msgid "_Connection Details"
+msgstr "_Upplýsingar"
+
+#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:32
 msgid "_Disk I/O"
 msgstr ""
 
-#: ../src/vmm-manager.glade.h:13
+#: ../src/vmm-manager.glade.h:12
 msgid "_Edit"
 msgstr "_Sýsla"
 
-#: ../src/vmm-manager.glade.h:15
+#: ../src/vmm-manager.glade.h:14
 #, fuzzy
 msgid "_Graph"
 msgstr "_Myndrænn stjórnskjár"
 
-#: ../src/vmm-manager.glade.h:17
-#, fuzzy
-msgid "_Host Details"
-msgstr "_Upplýsingar"
-
-#: ../src/vmm-manager.glade.h:18 ../src/vmm-preferences.glade.h:33
+#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:36
 #, fuzzy
 msgid "_Network I/O"
 msgstr "Ógilt vélarheiti"
 
-#: ../src/vmm-manager.glade.h:19
+#: ../src/vmm-manager.glade.h:17
 msgid "_Open"
 msgstr ""
 
-#: ../src/vmm-manager.glade.h:22
+#: ../src/vmm-manager.glade.h:20
 #, fuzzy
 msgid "_Shutdown"
 msgstr "_Slökkva"
 
-#: ../src/vmm-manager.glade.h:24
+#: ../src/vmm-manager.glade.h:22
 #, fuzzy
 msgid "_Virtual Machine Details"
 msgstr "Sýndar_vél"
@@ -4376,22 +4479,25 @@ msgstr ""
 msgid "_Tunnel migration through libvirt's daemon:"
 msgstr ""
 
-#: ../src/vmm-open-connection.glade.h:2
+#: ../src/vmm-open-connection.glade.h:1
 #, fuzzy
 msgid "Add Connection"
 msgstr "Staðsetning _ISO myndar:"
 
-#: ../src/vmm-open-connection.glade.h:3
+#: ../src/vmm-open-connection.glade.h:2
 msgid "Co_nnect"
 msgstr ""
 
+#: ../src/vmm-open-connection.glade.h:3
+msgid "Connect to _remote host"
+msgstr ""
+
 #: ../src/vmm-open-connection.glade.h:4
-#, fuzzy
-msgid "Connec_tion:"
-msgstr "Staðsetning _ISO myndar:"
+msgid "Connection Select"
+msgstr ""
 
 #: ../src/vmm-open-connection.glade.h:5
-msgid "Connection Select"
+msgid "Generated URI:"
 msgstr ""
 
 #: ../src/vmm-open-connection.glade.h:6
@@ -4400,27 +4506,30 @@ msgid "H_ostname:"
 msgstr "_Vél:"
 
 #: ../src/vmm-open-connection.glade.h:7
-#, fuzzy
-msgid "Hostname Field"
-msgstr "_Vél:"
+msgid "Hypervisor Select"
+msgstr ""
 
 #: ../src/vmm-open-connection.glade.h:8
-msgid "Hypervisor Select"
+msgid "Me_thod:"
 msgstr ""
 
 #: ../src/vmm-open-connection.glade.h:9
 msgid ""
-"Local\n"
-"Remote Password or Kerberos\n"
-"Remote SSL/TLS with x509 certificate\n"
-"Remote tunnel over SSH"
+"SSH\n"
+"TCP (SASL, Kerberos, ...)\n"
+"SSL/TLS with certificates"
 msgstr ""
 
-#: ../src/vmm-open-connection.glade.h:13
+#: ../src/vmm-open-connection.glade.h:12
 msgid ""
 "Xen\n"
 "QEMU/KVM"
 msgstr ""
+
+#: ../src/vmm-open-connection.glade.h:14
+#, fuzzy
+msgid "_Autoconnect:"
+msgstr "Staðsetning _ISO myndar:"
 
 #: ../src/vmm-open-connection.glade.h:15
 msgid "_Hypervisor:"
@@ -4432,17 +4541,18 @@ msgid "<b>Confirmations</b>"
 msgstr "Sýndar_vél"
 
 #: ../src/vmm-preferences.glade.h:2
-msgid "<b>Consoles</b>"
-msgstr ""
-
-#: ../src/vmm-preferences.glade.h:3
 msgid "<b>Enable Stats Polling</b>"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:4
+#: ../src/vmm-preferences.glade.h:3
 #, fuzzy
 msgid "<b>General</b>"
 msgstr "Sýndar_vél"
+
+#: ../src/vmm-preferences.glade.h:4
+#, fuzzy
+msgid "<b>Graphical Consoles</b>"
+msgstr "_Myndrænn stjórnskjár"
 
 #: ../src/vmm-preferences.glade.h:5
 msgid "<b>New VM</b>"
@@ -4457,101 +4567,113 @@ msgid "Automatically _open consoles:"
 msgstr ""
 
 #: ../src/vmm-preferences.glade.h:8
+msgid "Change..."
+msgstr ""
+
+#: ../src/vmm-preferences.glade.h:9
 #, fuzzy
 msgid "Device re_moval:"
 msgstr "Gerð"
 
-#: ../src/vmm-preferences.glade.h:9
+#: ../src/vmm-preferences.glade.h:10
 msgid "Enable _system tray icon"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:10
+#: ../src/vmm-preferences.glade.h:11
 msgid "Feedback"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:11
+#: ../src/vmm-preferences.glade.h:12
 msgid "General"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:12
-msgid "Grab _keyboard input:"
+#: ../src/vmm-preferences.glade.h:13
+msgid "Grab _keyboard accelerators:"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:13
+#: ../src/vmm-preferences.glade.h:14
+msgid "Grab keys:"
+msgstr ""
+
+#: ../src/vmm-preferences.glade.h:15
 #, fuzzy
 msgid "Graphical console _scaling:"
 msgstr "_Myndrænn stjórnskjár"
 
-#: ../src/vmm-preferences.glade.h:14
+#: ../src/vmm-preferences.glade.h:16
 msgid "Install Audio Device:"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:15
+#: ../src/vmm-preferences.glade.h:17
 msgid "Maintain h_istory of"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:16
+#: ../src/vmm-preferences.glade.h:18
 msgid ""
 "Never\n"
 "For all new domains\n"
 "For all domains"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:19
+#: ../src/vmm-preferences.glade.h:21
 msgid ""
 "Never\n"
 "Fullscreen only\n"
 "Always"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:22
+#: ../src/vmm-preferences.glade.h:24
 msgid ""
 "Never\n"
 "When fullscreen\n"
 "On mouse over"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:25
-msgid "Poweroff/_Reboot:"
-msgstr ""
-
-#: ../src/vmm-preferences.glade.h:26
-msgid "Preferences"
+#: ../src/vmm-preferences.glade.h:27
+msgid "Not supported"
 msgstr ""
 
 #: ../src/vmm-preferences.glade.h:28
+msgid "Poweroff/_Reboot/Save:"
+msgstr ""
+
+#: ../src/vmm-preferences.glade.h:29
+msgid "Preferences"
+msgstr ""
+
+#: ../src/vmm-preferences.glade.h:31
 #, fuzzy
 msgid "VM Details"
 msgstr "_Upplýsingar"
 
-#: ../src/vmm-preferences.glade.h:30
+#: ../src/vmm-preferences.glade.h:33
 msgid "_Force Poweroff:"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:31
+#: ../src/vmm-preferences.glade.h:34
 msgid "_Interface start/stop:"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:32
+#: ../src/vmm-preferences.glade.h:35
 #, fuzzy
 msgid "_Local virtual machine"
 msgstr "Bý til sýndarvél"
 
-#: ../src/vmm-preferences.glade.h:34
+#: ../src/vmm-preferences.glade.h:37
 #, fuzzy
 msgid "_Pause:"
 msgstr "Í _bið"
 
-#: ../src/vmm-preferences.glade.h:35
+#: ../src/vmm-preferences.glade.h:38
 #, fuzzy
 msgid "_Remote virtual machine"
 msgstr "Bý til sýndarvél"
 
-#: ../src/vmm-preferences.glade.h:36
+#: ../src/vmm-preferences.glade.h:39
 msgid "_Update status every"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:37
+#: ../src/vmm-preferences.glade.h:40
 msgid "samples"
 msgstr ""
 
@@ -4568,6 +4690,18 @@ msgstr ""
 #, fuzzy
 msgid "_Browse Local"
 msgstr "_Flakka..."
+
+#, fuzzy
+#~ msgid "No VMs available"
+#~ msgstr "Staðsetning _ISO myndar:"
+
+#, fuzzy
+#~ msgid "Connec_tion:"
+#~ msgstr "Staðsetning _ISO myndar:"
+
+#, fuzzy
+#~ msgid "Hostname Field"
+#~ msgstr "_Vél:"
 
 #, fuzzy
 #~ msgid "Invalid Storage Parameters"

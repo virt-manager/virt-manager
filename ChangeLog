@@ -1,8 +1,818 @@
+2010-08-24  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-details.glade:
+	details: 'Customize' toolbar cleanups
+
+	Add a tooltip, make sure button text is always shown.
+	[8a64d80c04e9] [tip]
+
+	* src/vmm-manager.glade:
+	manager: s/host details/connection details/g
+
+	Revert to the old wording from a while back, since it's really the
+	most accurate.
+	[fe01a331419d]
+
+	* src/vmm-open-connection.glade:
+	addconn: s/Connection/Method/g for transport combo box
+	[5744352a7887]
+
+	* src/virtManager/connect.py, src/vmm-open-connection.glade:
+	addconn: Add explicit UI for connection username
+
+	There have been numerous complaints about the auto-magic nature of
+	usernames and URIs, so let's make it explicit.
+	[36e6e8b7a23b]
+
+	* src/virtManager/connect.py, src/vmm-open-connection.glade:
+	addconn: Simplify remote connection choices
+
+	Remove vs. local is a boolean choice, so wrap it in a checkbox. Keep
+	the connection combo for simply choosing the auth method, and have
+	it default to SSH which is far and away the common case.
+	[b5cdb7c953d3]
+
+	* src/virtManager/connection.py:
+	connection: Clean up connection startup error message
+
+	- Drop SSH askpass reference: latest libvirt should return SSH
+	connection errors to us, which will make clear that ssh-askpass
+	isn't available.
+	- Print error message up front, traceback afterwards, and clearly
+	separate.
+	[8b0c2c0c1ecb]
+
+	* src/virtManager/connect.py, src/vmm-open-connection.glade:
+	addconn: Show generated URI as user changes options
+	[f6eea970eceb]
+
+2010-08-23  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py:
+	console: Hopefully fix remote SSH shell portability issues
+	[16fcbf77e47e]
+
+	* src/virtManager/domain.py:
+	details: Fixing setting disk cache mode during VM install
+	[d8859f0871be]
+
+2010-08-23  Michal Novotny  <minovotn@redhat.com>
+
+	* src/virtManager/config.py, src/virtManager/console.py,
+	src/virtManager/preferences.py, src/vmm-preferences.glade:
+	Support GTK-VNC configurable grab key combination
+	[3abc928b2fba]
+
+2010-08-23  Cole Robinson  <crobinso@redhat.com>
+
+	* AUTHORS:
+	Update AUTHORS
+	[d13a127ff6fd]
+
+	* src/virtManager/systray.py:
+	systray: Don't underline VM or connection names
+	[f5b1d2706f7e]
+
+2010-07-09  Marc Deslauriers  <marc.deslauriers@ubuntu.com>
+
+	* src/virtManager/systray.py:
+	Remove AppIndicator workarounds
+	[e8b8455b9a9a]
+
+2010-08-23  Niels de Vos  <ndevos@redhat.com>
+
+	* src/virtManager/createnet.py:
+	createnet: Wizard complains about wrong DHCP network when DHCP is
+	turned off
+
+	Add an extra check to only check the range of the DHCP network if
+	DHCP is enabled. : Enter commit message. Lines beginning with 'HG:'
+	are removed.
+	[4cd962f6722b]
+
+2010-08-23  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-host.glade:
+	host: Add pool refresh tooltip
+	[d616a444a4b2]
+
+2010-08-19  Cole Robinson  <crobinso@redhat.com>
+
+	* .hgignore:
+	.hgignore: Fix recent changes to ignore virt-manager-launch
+	[c431b6b28678]
+
+2010-08-22  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connect.py, src/vmm-open-connection.glade:
+	addconn: Use a combo box entry for hostname + avahi
+
+	Shrinks the UI a whole bunch, and the always visible list wasn't
+	useful since the vast majority of people aren't using the
+	functionality
+	[c297827fd677]
+
+	* src/virtManager/manager.py:
+	manager: Don't require a list selection to show host details
+
+	Just default to the first listed connection.
+	[893719381d33]
+
+2010-08-21  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py:
+	details: Use 'read/write' for disk graph rather than in/out
+	[90380f46153f]
+
+2010-08-19  Darryl L. Pierce  <dpierce@redhat.com>
+
+	* src/virtManagerTui/__init__.py, src/virtManagerTui/adddomain.py,
+	src/virtManagerTui/addhost.py, src/virtManagerTui/addpool.py,
+	src/virtManagerTui/addvolume.py, src/virtManagerTui/changehost.py,
+	src/virtManagerTui/configscreen.py,
+	src/virtManagerTui/createmeter.py,
+	src/virtManagerTui/createnetwork.py,
+	src/virtManagerTui/createuser.py, src/virtManagerTui/definenet.py,
+	src/virtManagerTui/destroynetwork.py,
+	src/virtManagerTui/domainconfig.py, src/virtManagerTui/halworker.py,
+	src/virtManagerTui/hostconnect.py, src/virtManagerTui/hostmenu.py,
+	src/virtManagerTui/libvirtworker.py,
+	src/virtManagerTui/listdomains.py,
+	src/virtManagerTui/listnetworks.py, src/virtManagerTui/listpools.py,
+	src/virtManagerTui/mainmenu.py, src/virtManagerTui/menuscreen.py,
+	src/virtManagerTui/migratedomain.py, src/virtManagerTui/netmenu.py,
+	src/virtManagerTui/networkconfig.py,
+	src/virtManagerTui/nodeadmin.py, src/virtManagerTui/nodemenu.py,
+	src/virtManagerTui/poolconfig.py,
+	src/virtManagerTui/removedomain.py,
+	src/virtManagerTui/removehost.py, src/virtManagerTui/removepool.py,
+	src/virtManagerTui/removevolume.py, src/virtManagerTui/setup.py,
+	src/virtManagerTui/startdomain.py, src/virtManagerTui/startpool.py,
+	src/virtManagerTui/stopdomain.py, src/virtManagerTui/stoppool.py,
+	src/virtManagerTui/storagemenu.py,
+	src/virtManagerTui/undefinenetwork.py,
+	src/virtManagerTui/userworker.py, src/virtManagerTui/utils.py,
+	src/virtManagerTui/volumeconfig.py:
+	Add code for virt-manager TUI from OVirt node project
+
+	This code is taken from the ovirt node project. Overtime the plan is
+	to share lots of code between the GUI and TUI. This is step 1
+	though.
+
+	Code can be invoked with:
+
+	cd src/virtManagerTui python nodeadmin.py
+
+	Additional requirements beyond plain virt-manager are a system
+	installed IPy and newt-python (or whatever package provides the
+	'snack' module)
+	[25507d46ecbb]
+
+2010-08-19  Cole Robinson  <crobinso@redhat.com>
+
+	* .hgignore:
+	Slightly refactor hgignore
+	[25cbe53cf0ee]
+
+2010-08-10  bozzo  <bozzo@fedoraproject.org>
+
+	* po/fr.po:
+	l10n: Updates to French (fr) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[a6184d2d4052]
+
+2010-08-10  fab  <fab@fedoraproject.org>
+
+	* po/de.po:
+	l10n: Updates to German (de) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[80ab2aa974f9]
+
+2010-08-07  warrink  <warrink@fedoraproject.org>
+
+	* po/nl.po:
+	l10n: Updates to Dutch (Flemish) (nl) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[17c8e3d3ee10]
+
+2010-07-24  Matthias Schmitz  <matthias@sigxcpu.org>
+
+	* po/de.po:
+	Remove superfluous word in german translation file.
+
+	* There was a superflous word in the german translation. The
+	checkbox "Enable APIC" in a virtual machine's "Overview" ->
+	"Machine Settings" screen reads "APIC aktivierenAudio" instead of
+	"APIC aktivieren".
+	[3cac26a86fd2]
+
+2010-07-26  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/uihelpers.py:
+	create: Fix error launching create wizard on qemu:///session
+	[ea94314da7d5]
+
+2010-07-26  elsupergomez  <elsupergomez@fedoraproject.org>
+
+	* po/es.po:
+	l10n: Updates to Spanish (Castilian) (es) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[0e01d53ab960]
+
+2010-07-26  sandeeps  <sandeeps@fedoraproject.org>
+
+	* po/mr.po:
+	l10n: Updates to Marathi (mr) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[7c6092e0932f]
+
+2010-07-22  mmahut  <mmahut@fedoraproject.org>
+
+	* po/sk.po:
+	l10n: Adding Slovak Translation. Author: Peter Mráz
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[cd25c7111b82]
+
+2010-07-02  htaira  <htaira@fedoraproject.org>
+
+	* po/ja.po:
+	l10n: Updates to Japanese (ja) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[6b82807019e6]
+
+	* po/ja.po:
+	l10n: Updates to Japanese (ja) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[c3bbfc4bf798]
+
+2010-06-25  htaira  <htaira@fedoraproject.org>
+
+	* po/ja.po:
+	l10n: Updates to Japanese (ja) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[a9f7cef75ff1]
+
+	* po/ja.po:
+	l10n: Updates to Japanese (ja) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[87a85605343c]
+
+2010-06-23  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py, src/virtManager/serialcon.py:
+	serialcon: Fix serial reopening when VM reboots
+	[c5e8d9b143a2]
+
+2010-06-21  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/details.py:
+	details: Make sure performance graphs are shown
+	[08302be29d59]
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	details: cpuset: Add option to auto-configure cpuset based on host
+	NUMA
+
+	We use the recently exported --cpuset=auto logic from virt-install.
+	[25a2a8ba82e3]
+
+2010-06-15  Cole Robinson  <crobinso@redhat.com>
+
+	* AUTHORS, src/virtManager/keyring.py:
+	keyring: Fix default keyring usage
+	[416206ef3db0]
+
+	* AUTHORS:
+	Update AUTHORS
+	[aac824852d1b]
+
+	* src/virtManager/keyring.py:
+	keyring: Minor code cleanup
+	[b3e57dcc676a]
+
+2010-06-15  khasida  <khasida@fedoraproject.org>
+
+	* po/ja.po:
+	l10n: Updates to Japanese (ja) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[f80a1dfcd5d9]
+
+2010-06-14  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/createpool.py:
+	createpool: Fix destructive pool building
+
+	Any time we would prompt when building a pool, we weren't properly
+	setting up the Pool object, so build/install would always fail.
+	[d23b35a17efc]
+
+	* src/virtManager/createpool.py:
+	createpool: Fix setting default values if enumerating sources
+	[5a81cad341a5]
+
+	* src/virtManager/details.py:
+	details: List 'Display SDL/VNC/etc' instead of 'Display 0/1/etc'
+	[a7ded5a9c264]
+
+2010-06-11  htaira  <htaira@fedoraproject.org>
+
+	* po/ja.po:
+	l10n: Updates to Japanese (ja) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[fbb3bd7d7beb]
+
+	* po/ja.po:
+	l10n: Updates to Japanese (ja) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[e84926085c16]
+
+	* po/ja.po:
+	l10n: Updates to Japanese (ja) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[1e5e0a6b30be]
+
+2010-06-09  htaira  <htaira@fedoraproject.org>
+
+	* po/ja.po:
+	l10n: Updates to Japanese (ja) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[a20ddac31acf]
+
+2010-06-02  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	create: Don't show storage page when using back button for import
+	installs.
+	[ba7a6a718169]
+
+2010-05-28  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/create.py:
+	create: Don't erroneously desensitize guest/dom options
+	[490caf506693]
+
+	* src/virtManager/create.py:
+	create: Drop needed caps check
+	[427faa488e4e]
+
+2010-05-20  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/createpool.py:
+	createpool: Fix browsing to set source device path
+	[da43deb6c035]
+
+	* src/virtManager/util.py:
+	util: Fix setting start folder in browse_file
+	[1d917ccdf973]
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/virtManager/uihelpers.py, src/vmm-
+	add-hardware.glade, src/vmm-details.glade:
+	Enable viewing and changing disk cache mode
+	[0241648684d1]
+
+2010-05-13  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/uihelpers.py:
+	Add infrastructure for limiting supported sound models
+	[622696bd0241]
+
+	* src/virtManager/details.py, src/vmm-details.glade:
+	details: Pop up warning about overcommit performance impact
+	[b5582807a1b6]
+
+	* src/virtManager/domain.py:
+	domain: Fix startup vcpus reporting
+	[c0d9925207d0]
+
+	* Makefile.am, configure.ac, virt-manager.spec.in:
+	Don't install the help docs, they are too outdated.
+	[1ddef3c003fd]
+
+	* help/virt-manager/C/virt-manager-C.omf:
+	help: Use a valid category
+	[d30e78e581f5]
+
+	* src/virtManager/create.py, src/virtManager/domain.py:
+	create: Skip post-install restart if user destroys VM
+	[d8c0607c68dc]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py,
+	src/virtManager/uihelpers.py:
+	create: Ask to start default pool if it is inactive
+	[705e6a8bf277]
+
+	* src/virtManager/clone.py, src/virtManager/domain.py:
+	clone: Disable domain startup and unpause while cloning
+	[104f0ec02b43]
+
+2010-05-12  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py:
+	console: Force re-enable modifiers when VNC disconnects
+	[219640fabf7c]
+
+	* src/virtManager/manager.py:
+	manager: Clean up context menu building
+	[38d63063837f]
+
+	* src/virtManager/engine.py:
+	engine: Allow using older PackageKit search API
+	[18cffe6151ff]
+
+	* src/virtManager/engine.py:
+	engine: Add some more kvm default URI checks
+	[45ba3080783a]
+
+	* src/virtManager/connection.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/virtManager/engine.py,
+	src/virtManager/manager.py:
+	Support libvirt managed save/restore
+
+	If a VM has a saved image, we s/Run/Restore/g for all the Run UI so
+	the user is aware they will be restoring from a saved state.
+	[affa97c8ae9a]
+
+	* src/virtManager/details.py, src/virtManager/engine.py,
+	src/virtManager/host.py, src/virtManager/manager.py,
+	src/virtManager/uihelpers.py, src/vmm-details.glade, src/vmm-
+	host.glade, src/vmm-manager.glade:
+	Improve save/restore UI
+
+	Make the save command a member of the 'Shutdown' menu, and place
+	'restore' out of the way in Host details -> File. Emphasis on the
+	old 'restore' will be diminished once we support managed save.
+	[d2c1b327de0c]
+
+2010-05-11  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/engine.py, src/vmm-preferences.glade:
+	engine: Use poweroff confirm setting before saving a VM
+	[3bf35eddc1a3]
+
+2010-05-12  trash  <trash@fedoraproject.org>
+
+	* po/fr.po:
+	l10n: Updates to French (fr) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[1f78c4ea0692]
+
+2010-05-11  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/uihelpers.py:
+	create: Make sure pool is running in host space tick function
+	[bec66ca62ab5]
+
+	* src/virtManager/details.py:
+	details: Don't list display indexes starting at 0
+	[c57f0a85f8ec]
+
+2010-05-10  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/clone.py:
+	clone: Clarify diagnostic message
+	[450089ae42ec]
+
+	* src/vmm-manager.glade:
+	manager: Remove borders from VM list
+	[b2a12e3e2691]
+
+2010-05-06  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/domain.py:
+	Fix livecd 'customize before install' traceback
+	[f2d3931243fe]
+
+2010-05-05  Cole Robinson  <crobinso@redhat.com>
+
+	* src/vmm-details.glade:
+	details: s/Host CPUs/Logical host CPUs/
+	[beb2272277ee]
+
+	* src/virtManager/createpool.py, src/virtManager/storagebrowse.py,
+	tests/pylint-virt-manager.sh:
+	Clean up pylint
+	[5d02f3c07a2e]
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py,
+	src/virtManager/uihelpers.py:
+	Specify connection when building all virtinst devices
+	[7b09131ffffc]
+
+2010-05-05  Marc Deslauriers  <marc.deslauriers@ubuntu.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/create.py:
+	Add conn info to virtinst.VirtualGraphics
+	[99cf13a133f3]
+
+2010-04-28  enshahar  <enshahar@fedoraproject.org>
+
+	* po/ko.po:
+	l10n: Updates to Korean (ko) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[5dcc284b39e9]
+
+2010-04-27  htaira  <htaira@fedoraproject.org>
+
+	* po/ja.po:
+	l10n: Updates to Japanese (ja) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[47ccf374c83e]
+
+2010-04-25  fab  <fab@fedoraproject.org>
+
+	* po/de.po:
+	l10n: Updates to German (de) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[73d3ff530cd2]
+
+2010-04-23  shanky  <shanky@fedoraproject.org>
+
+	* po/kn.po:
+	l10n: Updates to Kannada (kn) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[c4a1ee3075ca]
+
+2010-04-21  Cole Robinson  <crobinso@redhat.com>
+
+	* tests/pylint-virt-manager.sh:
+	Drop no longer needed pylint check.
+	[4bb7b383239e]
+
+	* src/vmm-preferences.glade:
+	prefs: Attempt to clarify 'keyboard grab' option
+	[c59b9851a833]
+
+	* src/virtManager/console.py:
+	console: Small readability cleanup
+	[fe67ee0554ae]
+
+	* src/virtManager/console.py:
+	console: Listen for Prefs->Keygrab changes
+	[aca5e6129c46]
+
+	* src/virtManager/host.py, src/virtManager/storagepool.py, src/vmm-
+	host.glade:
+	host: storage: Add pool refresh button
+	[679b824e92dc]
+
+	* src/virtManager/engine.py:
+	Only close connection on error from 'remote' error domain.
+	[33ec21628630]
+
+2010-04-18  "Richard Laager  <rlaager@wiktel.com>
+
+	* README:
+	et-mgmt-tools -> virt-tools-list
+	[41182500ddef]
+
+	* README:
+	Properly case VMware
+	[f10cad1c478a]
+
+	* src/virtManager/connection.py:
+	Uppercase ESX and GSX (from the esx driver)
+	[ca7300805d2c]
+
+2010-04-15  mgiri  <mgiri@fedoraproject.org>
+
+	* po/or.po:
+	l10n: Updates to Oriya (or) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[16cc1aa7bffc]
+
+2010-04-14  mvdz  <mvdz@fedoraproject.org>
+
+	* po/uk.po:
+	l10n: Updates to Ukrainian (uk) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[0f735fb5f4c8]
+
+2010-04-13  anipeter  <anipeter@fedoraproject.org>
+
+	* po/ml.po:
+	l10n: Updates to Malayalam (ml) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[96729df63805]
+
+2010-04-12  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/console.py:
+	console: Actually fix SSH with zsh
+	[907ee61e5558]
+
+	* src/virtManager/console.py:
+	console: Don't through traceback if we can't read error fd.
+
+	This is racy and best effort, so don't log errors if we fail.
+	[c206b12a8c7a]
+
+	* src/virtManager/console.py:
+	console: Fix VNC over ssh when using zsh on remote machine
+	[f09702cfdb03]
+
+	* src/virt-manager.py.in:
+	Don't throw odd traceback on app close from thread cleanup issues.
+	[82cef5edeb6e]
+
+	* src/virt-manager.py.in:
+	Log command line at app startup
+	[b1a0de5887d6]
+
+2010-04-09  kkrothap  <kkrothap@fedoraproject.org>
+
+	* po/te.po:
+	l10n: Updates to Telugu (te) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[7f8995e9f719]
+
+2010-04-08  Cole Robinson  <crobinso@redhat.com>
+
+	* pixmaps/hicolor/16x16/actions/Makefile.am,
+	pixmaps/hicolor/22x22/actions/Makefile.am,
+	pixmaps/hicolor/24x24/actions/Makefile.am,
+	pixmaps/hicolor/32x32/actions/Makefile.am:
+	Fix custom icon installation.
+	[5e11e6b33fec]
+
+2010-04-08  sandeeps  <sandeeps@fedoraproject.org>
+
+	* po/mr.po:
+	l10n: Updates to Marathi (mr) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[4c80ef09e3f0]
+
+2010-04-08  runab  <runab@fedoraproject.org>
+
+	* po/bn_IN.po:
+	l10n: Updates to Bengali (India) (bn_IN) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[dd8c02cfd17d]
+
+2010-04-07  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/connection.py, src/virtManager/domain.py:
+	Don't list memory percentages over 100
+
+	This upsets widgets. Any attempt at expressing memory overcommit
+	will need a bit more thought anyways.
+	[5539e6296179]
+
+	* src/virtManager/IPy.py, src/virtManager/createnet.py:
+	Update IPy, cleanup some code in createnet
+	[af93d2c0a4d7]
+
+2010-04-06  runab  <runab@fedoraproject.org>
+
+	* po/bn_IN.po:
+	l10n: Updates to Bengali (India) (bn_IN) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[91c178665a3b]
+
+2010-04-06  ypoyarko  <ypoyarko@fedoraproject.org>
+
+	* po/ru.po:
+	l10n: Updates to Russian (ru) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[7a22c3ddb520]
+
+2010-04-05  Cole Robinson  <crobinso@redhat.com>
+
+	* src/virtManager/addhardware.py, src/virtManager/details.py,
+	src/virtManager/domain.py, src/vmm-create.glade:
+	Fix some UI typos.
+	[3282fcd22bc2]
+
+	* src/virtManager/uihelpers.py:
+	Tweak sparse allocation tooltip: may not always take longer.
+	[091b178f3948]
+
+2010-04-05  swkothar  <swkothar@fedoraproject.org>
+
+	* po/gu.po:
+	l10n: Updates to Gujarati (gu) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[d2837b6a5e31]
+
+2010-04-01  enshahar  <enshahar@fedoraproject.org>
+
+	* po/ko.po:
+	l10n: Updates to Korean (ko) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[1eeedb369b4f]
+
+	* po/ko.po:
+	l10n: Updates to Korean (ko) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[f5e1d4bcdc76]
+
+	* po/ko.po:
+	l10n: Updates to Korean (ko) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[80afbd7ad49d]
+
+2010-03-30  jassy  <jassy@fedoraproject.org>
+
+	* po/pa.po:
+	l10n: Updates to Panjabi (Punjabi) (pa) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[91c8fed75ebe]
+
+2010-03-26  elsupergomez  <elsupergomez@fedoraproject.org>
+
+	* po/es.po:
+	l10n: Updates to Spanish (Castilian) (es) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[f83c4383f0db]
+
+2010-03-25  logan  <logan@fedoraproject.org>
+
+	* po/es.po:
+	l10n: Updates to Spanish (Castilian) (es) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[31d40254569d]
+
+2010-03-25  jassy  <jassy@fedoraproject.org>
+
+	* po/pa.po:
+	l10n: Updates to Panjabi (Punjabi) (pa) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[4cbc0280be97]
+
 2010-03-24  Cole Robinson  <crobinso@redhat.com>
+
+	* docs/RELEASE-PROCESS.txt:
+	Small update to release process doc
+	[82f33a146d44]
+
+2010-03-24  raven  <raven@fedoraproject.org>
+
+	* po/pl.po:
+	l10n: Updates to Polish (pl) translation
+
+	Transmitted-via: Transifex (translate.fedoraproject.org)
+	[08fb99f576c6]
+
+2010-03-24  Cole Robinson  <crobinso@redhat.com>
+
+	* virt-manager.spec.in:
+	Small spec file fix
+	[a22e86744ab7]
+
+	* .hgtags:
+	Added tag RELEASE-0.8.4-1 for changeset d5372f28ae9a
+	[09487a6658a6]
+
+	* ChangeLog, NEWS, configure.ac, po/as.po, po/bg.po, po/bn_IN.po,
+	po/bs.po, po/ca.po, po/cs.po, po/da.po, po/de.po, po/es.po,
+	po/fi.po, po/fr.po, po/gu.po, po/hi.po, po/hr.po, po/hu.po,
+	po/is.po, po/it.po, po/ja.po, po/kn.po, po/ko.po, po/ml.po,
+	po/mr.po, po/ms.po, po/nb.po, po/nl.po, po/or.po, po/pa.po,
+	po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po, po/ru.po, po/sr.po,
+	po/sr@latin.po, po/sv.po, po/ta.po, po/te.po, po/tr.po, po/uk.po, po
+	/virt-manager.pot, po/zh_CN.po, po/zh_TW.po, virt-manager.spec.in:
+	Prep for release
+	[d5372f28ae9a] [RELEASE-0.8.4-1]
 
 	* src/virtManager/engine.py:
 	Remove fedora specific packages from packagekit list
-	[de3a4e7ef02d] [tip]
+	[de3a4e7ef02d]
 
 	* src/virtManager/systray.py:
 	systray: Sort connection rows
