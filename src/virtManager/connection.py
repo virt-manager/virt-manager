@@ -999,32 +999,22 @@ class vmmConnection(gobject.GObject):
 
             if not open_error:
                 self.state = self.STATE_ACTIVE
-            else:
-                self.state = self.STATE_DISCONNECTED
+                continue
 
-                if self.uri.find("+ssh://") > 0:
-                    hint = "\nMaybe you need to install ssh-askpass " + \
-                           "in order to authenticate."
-                else:
-                    hint = ""
+            self.state = self.STATE_DISCONNECTED
+            (_type, value, stacktrace) = open_error
 
-                (_type, value, stacktrace) = open_error
+            if (_type == libvirt.libvirtError and
+                value.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
+                "GSSAPI Error" in value.get_error_message() and
+                "No credentials cache found" in value.get_error_message()):
+                if self._acquire_tgt():
+                    done = False
+                    continue
 
-                if (type(_type) == libvirt.libvirtError and
-                    value.get_error_code() == libvirt.VIR_ERR_AUTH_FAILED and
-                    "GSSAPI Error" in value.get_error_message() and
-                    "No credentials cache found" in value.get_error_message()):
-                    if self._acquire_tgt():
-                        done = False
-                        continue
+            tb = "".join(traceback.format_exception(_type, value, stacktrace))
 
-                tb = "".join(traceback.format_exception(_type, value,
-                                                        stacktrace))
-
-                # Detailed error message, in English so it can be Googled.
-                self.connectError = (("Unable to open connection to hypervisor"
-                                      " URI '%s':\n%s\n%s"
-                                      % (str(self.uri), value, tb + hint)))
+            self.connectError = "%s\n\n%s" % (str(value), str(tb))
 
         # We want to kill off this thread asap, so schedule a gobject
         # idle even to inform the UI of result
