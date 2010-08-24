@@ -18,7 +18,7 @@
           <widget class="GtkTable" id="table1">
             <property name="visible">True</property>
             <property name="border_width">6</property>
-            <property name="n_rows">4</property>
+            <property name="n_rows">6</property>
             <property name="n_columns">2</property>
             <property name="column_spacing">6</property>
             <property name="row_spacing">6</property>
@@ -76,7 +76,7 @@ QEMU/KVM</property>
                 <accessibility>
                   <atkproperty name="AtkObject::accessible-name" translatable="yes">Hypervisor Select</atkproperty>
                 </accessibility>
-                <signal name="changed" handler="on_type_hypervisor_changed"/>
+                <signal name="changed" handler="on_hypervisor_changed"/>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -145,6 +145,39 @@ Remote tunnel over SSH</property>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
                 <property name="y_options">GTK_FILL</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkHSeparator" id="hseparator1">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="right_attach">2</property>
+                <property name="top_attach">4</property>
+                <property name="bottom_attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Generated URI:</property>
+              </widget>
+              <packing>
+                <property name="top_attach">5</property>
+                <property name="bottom_attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="uri-entry">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+              </widget>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
+                <property name="top_attach">5</property>
+                <property name="bottom_attach">6</property>
               </packing>
             </child>
           </widget>

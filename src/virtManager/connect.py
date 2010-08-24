@@ -25,6 +25,8 @@ import logging
 import dbus
 import socket
 
+from virtManager.error import vmmErrorDialog
+
 HV_XEN = 0
 HV_QEMU = 1
 
@@ -43,13 +45,19 @@ class vmmConnect(gobject.GObject):
 
     def __init__(self, config, engine):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-open-connection.glade", "vmm-open-connection", domain="virt-manager")
+        self.window = gtk.glade.XML(
+                        config.get_glade_dir() + "/vmm-open-connection.glade",
+                        "vmm-open-connection", domain="virt-manager")
+        self.err = vmmErrorDialog(self.window.get_widget("vmm-open-connection"),
+                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
+                                  _("Unexpected Error"),
+                                  _("An unexpected error occurred"))
         self.engine = engine
         self.window.get_widget("vmm-open-connection").hide()
 
         self.window.signal_autoconnect({
-            "on_connection_changed": self.update_widget_states,
-
+            "on_hypervisor_changed": self.hypervisor_changed,
+            "on_connection_changed": self.connection_changed,
             "on_hostname_combo_changed": self.hostname_combo_changed,
 
             "on_cancel_clicked": self.cancel,
@@ -73,6 +81,8 @@ class vmmConnect(gobject.GObject):
         self.window.get_widget("connection").set_active(0)
         self.window.get_widget("connect").grab_default()
         self.window.get_widget("autoconnect").set_active(True)
+        self.window.get_widget("hostname").child.connect("changed",
+                                                         self.hostname_changed)
 
         connListModel = gtk.ListStore(str, str, str)
         host = self.window.get_widget("hostname")
@@ -116,6 +126,7 @@ class vmmConnect(gobject.GObject):
         self.window.get_widget("hostname").get_model().clear()
         self.window.get_widget("hostname").child.set_text("")
         self.stop_browse()
+        self.populate_uri()
 
     def set_default_hypervisor(self):
         default = virtinst.util.default_connection()
@@ -125,20 +136,6 @@ class vmmConnect(gobject.GObject):
             self.window.get_widget("hypervisor").set_active(0)
         elif default.startswith("qemu"):
             self.window.get_widget("hypervisor").set_active(1)
-
-    def update_widget_states(self, src):
-        if src.get_active() > 0:
-            self.window.get_widget("hostname").set_sensitive(True)
-            self.window.get_widget("autoconnect").set_active(False)
-            self.window.get_widget("autoconnect").set_sensitive(True)
-            if self.can_browse:
-                self.start_browse()
-        else:
-            self.window.get_widget("hostname").set_sensitive(False)
-            self.window.get_widget("hostname").child.set_text("")
-            self.window.get_widget("autoconnect").set_sensitive(True)
-            self.window.get_widget("autoconnect").set_active(True)
-            self.stop_browse()
 
     def add_service(self, interface, protocol, name, type, domain, flags):
         try:
@@ -225,46 +222,83 @@ class vmmConnect(gobject.GObject):
 
         self.window.get_widget("hostname").child.set_text(entry)
 
-    def open_connection(self, src):
+    def hostname_changed(self, src):
+        self.populate_uri()
+
+    def hypervisor_changed(self, src):
+        self.populate_uri()
+
+    def connection_changed(self, src):
+        is_remote = (self.window.get_widget("connection").get_active() > 0)
+        self.window.get_widget("hostname").set_sensitive(is_remote)
+        self.window.get_widget("autoconnect").set_active(not is_remote)
+
+        if is_remote and self.can_browse:
+            self.start_browse()
+        else:
+            self.stop_browse()
+
+        self.populate_uri()
+
+    def populate_uri(self):
+        uri = self.generate_uri()
+        self.window.get_widget("uri-entry").set_text(uri)
+
+    def generate_uri(self):
         hv = self.window.get_widget("hypervisor").get_active()
         conn = self.window.get_widget("connection").get_active()
         host = self.window.get_widget("hostname").child.get_text()
+
+        user = "root"
+        if conn == CONN_SSH and '@' in host:
+            user, host = host.split('@',1)
+
+        hvstr = ""
+        if hv == HV_XEN:
+            hvstr = "xen"
+        else:
+            hvstr = "qemu"
+
+        hoststr = ""
+        if conn == CONN_LOCAL:
+            hoststr = ":///"
+        elif conn == CONN_TLS:
+            hoststr = "+tls://" + host + "/"
+        elif conn == CONN_SSH:
+            hoststr = "+ssh://" + user + "@" + host + "/"
+        elif conn == CONN_TCP:
+            hoststr = "+tcp://" + host + "/"
+
+        uri = hvstr + hoststr
+        if hv == HV_QEMU:
+            uri += "system"
+
+        return uri
+
+    def validate(self):
+        conn = self.window.get_widget("connection").get_active()
+        host = self.window.get_widget("hostname").child.get_text()
+
+        if conn != CONN_LOCAL and not host:
+            return self.err.val_err(_("A hostname is required for "
+                                      "remote connections."))
+
+        return True
+
+    def open_connection(self, ignore):
+        if not self.validate():
+            return
+
+        readonly = False
         auto = False
         if self.window.get_widget("autoconnect").get_property("sensitive"):
             auto = self.window.get_widget("autoconnect").get_active()
-        uri = None
+        uri = self.generate_uri()
 
-        if conn == CONN_SSH and '@' in host:
-            user, host = host.split('@',1)
-        else:
-            user = "root"
-
-        readOnly = None
-        if hv == -1:
-            pass
-        elif hv == HV_XEN:
-            if conn == CONN_LOCAL:
-                uri = "xen:///"
-            elif conn == CONN_TLS:
-                uri = "xen+tls://" + host + "/"
-            elif conn == CONN_SSH:
-
-                uri = "xen+ssh://" + user + "@" + host + "/"
-            elif conn == CONN_TCP:
-                uri = "xen+tcp://" + host + "/"
-        else:
-            if conn == CONN_LOCAL:
-                uri = "qemu:///system"
-            elif conn == CONN_TLS:
-                uri = "qemu+tls://" + host + "/system"
-            elif conn == CONN_SSH:
-                uri = "qemu+ssh://" + user + "@" + host + "/system"
-            elif conn == CONN_TCP:
-                uri = "qemu+tcp://" + host + "/system"
-
-        logging.debug("Connection to open is %s" % uri)
+        logging.debug("Generate URI=%s, auto=%s, readonly=%s" %
+                      (uri, auto, readonly))
         self.close()
-        self.emit("completed", uri, readOnly, auto)
+        self.emit("completed", uri, readonly, auto)
 
     def sanitize_hostname(self, host):
         if host == "linux" or host == "localhost":
