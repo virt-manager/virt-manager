@@ -615,10 +615,13 @@
             </child>
             <child>
               <widget class="GtkToolbar" id="customize-toolbar">
+                <property name="toolbar_style">both-horiz</property>
                 <child>
                   <widget class="GtkToolButton" id="details-finish-customize">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Finish Install</property>
+                    <property name="tooltip" translatable="yes">Begin Installation</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">_Begin Installation</property>
                     <property name="use_underline">True</property>
                     <property name="stock_id">gtk-apply</property>
                     <signal name="clicked" handler="on_details_customize_finish_clicked"/>
