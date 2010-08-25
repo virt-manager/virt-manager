@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-25 09:36-0400\n"
-"PO-Revision-Date: 2010-08-07 17:39+0200\n"
+"PO-Revision-Date: 2010-08-25 19:43+0200\n"
 "Last-Translator: Geert Warrink <geert.warrink@onsnet.nu>\n"
 "Language-Team: Fedora\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.6.1\n"
 
@@ -368,9 +368,8 @@ msgid "Bus type:"
 msgstr "Bus type:"
 
 #: ../src/virtManager/addhardware.py:756
-#, fuzzy
 msgid "Cache mode:"
-msgstr "_Apparaat model:"
+msgstr "Cache model:"
 
 #: ../src/virtManager/addhardware.py:758 ../src/vmm-create.glade.h:40
 #: ../src/vmm-host.glade.h:53
@@ -599,7 +598,6 @@ msgid "Sound device parameter error"
 msgstr "Geluid apparaat parameter fout"
 
 #: ../src/virtManager/addhardware.py:1254
-#, fuzzy
 msgid "Physical Device Required"
 msgstr "Fysiek apparaat vereist"
 
@@ -762,13 +760,12 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "Kan onbeheerde opslag op afstand niet klonen."
 
 #: ../src/virtManager/clone.py:808
-#, fuzzy
 msgid ""
 "Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
-"Te klonen blok apparaten moeten beheerde\n"
-"opslag volumes zijn. "
+"Te klonen blok apparaten moeten libvirt\n"
+"beheerde opslag volumes zijn. "
 
 #: ../src/virtManager/clone.py:811 ../src/virtManager/delete.py:344
 msgid "No write access to parent directory."
@@ -811,9 +808,8 @@ msgid "Locate ISO media"
 msgstr "ISO media lokaliseren"
 
 #: ../src/virtManager/connect.py:324
-#, fuzzy
 msgid "A hostname is required for remote connections."
-msgstr "URL installaties niet beschikbaar voor verbindingen op afstand."
+msgstr "Een host naam wordt vereist voor verbindingen op afstand."
 
 #: ../src/virtManager/connection.py:186
 #, python-format
@@ -880,22 +876,21 @@ msgid "Unknown"
 msgstr "Onbekend"
 
 #: ../src/virtManager/console.py:200
-#, fuzzy, python-format
+#, python-format
 msgid "Press %s to release pointer."
-msgstr "Druk op Ctrl+Alt om aanwijzer vrij te geven."
+msgstr "Druk op %s om aanwijzer vrij te geven."
 
 #: ../src/virtManager/console.py:216
 msgid "Pointer grabbed"
 msgstr "Aanwijzer gepakt"
 
 #: ../src/virtManager/console.py:217
-#, fuzzy
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair"
 msgstr ""
 "De muisaanwijzer is beperkt tot het virtuele console venster. Om de "
-"aanwijzer vrij te geven druk je op het toetsen paar: Ctrl+Alt"
+"aanwijzer vrij te geven druk je op het toetsen paar"
 
 #: ../src/virtManager/console.py:218
 msgid "Do not show this notification in the future."
@@ -1525,15 +1520,14 @@ msgid "Close tab"
 msgstr "Tab sluiten"
 
 #: ../src/virtManager/details.py:504
-#, fuzzy
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
 "with the specified label. The administrator is responsible for making sure "
 "the images are labeled correctly on disk."
 msgstr ""
-"Statische SELinux beveiliging type zegt libvirt om de gast altijd op te "
-"starten met het gespecificeerde label. De beheerder is verantwoordelijk voor "
-"ervoor te zorgen dat de images op de schijf correct gelabeld worden."
+"Statische SELinux beveiliging type zegt libvirt om het gast proces altijd op "
+"te starten met het gespecificeerde label. De beheerder is verantwoordelijk "
+"om ervoor te zorgen dat de images op de schijf correct gelabeld worden."
 
 #: ../src/virtManager/details.py:506
 msgid ""
@@ -1547,7 +1541,7 @@ msgstr ""
 
 #: ../src/virtManager/details.py:515
 msgid "Libvirt did not detect NUMA capabilities."
-msgstr ""
+msgstr "Libvirt ontdekte geen NUMA mogelijkheden."
 
 #: ../src/virtManager/details.py:523
 msgid "VCPU"
@@ -1598,9 +1592,8 @@ msgid "Error refreshing hardware page: %s"
 msgstr "Fout bij verversen van hardware pagina: %s"
 
 #: ../src/virtManager/details.py:838 ../src/virtManager/manager.py:919
-#, fuzzy
 msgid "_Restore"
-msgstr "_Vervolgen"
+msgstr "_Herladen"
 
 #. Build VM context menu
 #: ../src/virtManager/details.py:840 ../src/virtManager/manager.py:328
@@ -1627,9 +1620,9 @@ msgid "Screenshot saved"
 msgstr "Schermafdruk opgeslagen"
 
 #: ../src/virtManager/details.py:1145
-#, fuzzy, python-format
+#, python-format
 msgid "Error generating CPU configuration: %s"
-msgstr "Fout bij het valideren IP configuratie: %s"
+msgstr "Fout bij het valideren CPU configuratie: %s"
 
 #: ../src/virtManager/details.py:1359
 #, python-format
@@ -1767,9 +1760,8 @@ msgid "Paused"
 msgstr "Gepauzeerd"
 
 #: ../src/virtManager/domain.py:1120
-#, fuzzy
 msgid "Shutting Down"
-msgstr "Afsluiten"
+msgstr "Bezig met afsluiten"
 
 #: ../src/virtManager/domain.py:1122
 msgid "Shutoff"
@@ -1781,11 +1773,11 @@ msgstr "Gecrasht"
 
 #: ../src/virtManager/domain.py:1319
 msgid "Cannot start guest while cloning operation in progress"
-msgstr ""
+msgstr "Kan gast niet starten zolang het kloon proces nog bezig is"
 
 #: ../src/virtManager/domain.py:1333
 msgid "Cannot resume guest while cloning operation in progress"
-msgstr ""
+msgstr "Kan gast niet hervatten zolang het kloon proces nog bezig is"
 
 #: ../src/virtManager/domain.py:2331
 msgid "Did not find selected device."
@@ -1877,18 +1869,17 @@ msgid "Unknown connection URI %s"
 msgstr "Onbekende verbinding URI %s"
 
 #: ../src/virtManager/engine.py:730
-#, fuzzy
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr ""
-"Opslaan van virtuele machines via verbindingen op afstand wordt nog niet "
-"ondersteund."
+"Opslaan van virtuele machines via verbindingen op afstand wordt niet "
+"ondersteund met deze libvirt versie of hypervisor."
 
 #: ../src/virtManager/engine.py:737
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to save '%s'?"
-msgstr "Weet je zeker dat je '%s' wilt pauzeren?"
+msgstr "Weet je zeker dat je '%s' wilt opslaan?"
 
 #: ../src/virtManager/engine.py:750
 msgid "Save Virtual Machine"
@@ -2094,9 +2085,9 @@ msgid "Error deleting pool: %s"
 msgstr "Fout bij het verwijderen van pool: %s"
 
 #: ../src/virtManager/host.py:624
-#, fuzzy, python-format
+#, python-format
 msgid "Error refreshing pool '%s': %s"
-msgstr "Fout bij het starten van pool '%s': %s"
+msgstr "Fout bij het verversen van pool '%s': %s"
 
 #: ../src/virtManager/host.py:633
 #, python-format
@@ -2212,14 +2203,12 @@ msgid "_Force Off"
 msgstr "Uitschakelen _forceren"
 
 #: ../src/virtManager/manager.py:340 ../src/virtManager/uihelpers.py:672
-#, fuzzy
 msgid "Sa_ve"
 msgstr "_Opslaan"
 
 #: ../src/virtManager/manager.py:343
-#, fuzzy
 msgid "_Clone..."
-msgstr "_Kloon"
+msgstr "_Kloon..."
 
 #: ../src/virtManager/manager.py:344 ../src/vmm-details.glade.h:124
 msgid "_Migrate..."
@@ -2375,15 +2364,15 @@ msgstr "Geïsoleerd netwerk"
 #: ../src/virtManager/preferences.py:159
 msgid "Installed version of GTK-VNC doesn't support configurable grab keys"
 msgstr ""
+"Geïnstalleerde versie van GTK-VNC ondersteunt instelbare grijp toetsen niet"
 
 #: ../src/virtManager/preferences.py:207
-#, fuzzy
 msgid "Configure key combination"
-msgstr "IP configuratie"
+msgstr "Configureer toetsen combinatie"
 
 #: ../src/virtManager/preferences.py:212
 msgid "Please press desired grab key combination"
-msgstr ""
+msgstr "Druk op de gewenste grijp toets combinatie"
 
 #: ../src/virtManager/storagebrowse.py:132
 msgid "Size"
@@ -2410,7 +2399,6 @@ msgid "No virtual machines"
 msgstr "Geen virtuele machines"
 
 #: ../src/virtManager/uihelpers.py:69
-#, fuzzy
 msgid ""
 "Fully allocating storage may take longer now, but the OS install phase will "
 "be quicker. \n"
@@ -2426,19 +2414,18 @@ msgstr ""
 "overschrijdt."
 
 #: ../src/virtManager/uihelpers.py:112
-#, fuzzy
 msgid "Default pool is not active."
-msgstr "Virtueel netwerk is niet actief."
+msgstr "De standaard pool is niet actief."
 
 #: ../src/virtManager/uihelpers.py:113
-#, fuzzy, python-format
+#, python-format
 msgid "Storage pool '%s' is not active. Would you like to start the pool now?"
-msgstr "Virtueel netwerk '%s' is niet actief. Wil je het netwerk nu starten?"
+msgstr "Opslag pool '%s' is niet actief. Wil je de pool nu starten?"
 
 #: ../src/virtManager/uihelpers.py:124
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start storage_pool '%s': %s"
-msgstr "Kon standaard opslag pool '%s' niet aanmaken: %s"
+msgstr "Kon opslag pool '%s' niet starten: %s"
 
 #. [xml value, label]
 #: ../src/virtManager/uihelpers.py:215
@@ -2680,9 +2667,8 @@ msgid "C_reate a disk image on the computer's hard drive"
 msgstr "C_reëer een schijf image op de vaste schijf van de computer"
 
 #: ../src/vmm-add-hardware.glade.h:21
-#, fuzzy
 msgid "Cache _mode:"
-msgstr "_Apparaat model:"
+msgstr "Cache _mode:"
 
 #: ../src/vmm-add-hardware.glade.h:22
 msgid "D_evice model:"
@@ -3588,9 +3574,8 @@ msgid "Choose Memory and CPU settings"
 msgstr "Geheugen en CPU instellingen kiezen"
 
 #: ../src/vmm-create.glade.h:17
-#, fuzzy
 msgid "Choose an operating system type and version"
-msgstr "Een besturingssysteem type en versie kiezen"
+msgstr "Kies een besturingssysteem type en versie"
 
 #: ../src/vmm-create.glade.h:18
 msgid "Choose how you would like to install the operating system"
@@ -3816,7 +3801,7 @@ msgstr "<b>type invoegen</b>"
 
 #: ../src/vmm-details.glade.h:22
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
-msgstr ""
+msgstr "<small>Overcommit van vCPUs kan de performance verlagen</small>"
 
 #: ../src/vmm-details.glade.h:23
 msgid "A_ction:"
@@ -3835,9 +3820,8 @@ msgid "Auth"
 msgstr "Authenticatie"
 
 #: ../src/vmm-details.glade.h:28
-#, fuzzy
 msgid "Begin Installation"
-msgstr "Installatiebron:"
+msgstr "Begin met installatie"
 
 #: ../src/vmm-details.glade.h:29
 msgid "Boot"
@@ -3856,9 +3840,8 @@ msgid "C_lock Offset:"
 msgstr "K_lok Offset:"
 
 #: ../src/vmm-details.glade.h:33
-#, fuzzy
 msgid "Cac_he mode:"
-msgstr "_Apparaat model:"
+msgstr "Cac_he mode:"
 
 #: ../src/vmm-details.glade.h:34
 msgid "Change a_llocation:"
@@ -3922,7 +3905,7 @@ msgstr "A_CPI inschakelen:"
 
 #: ../src/vmm-details.glade.h:51
 msgid "Generate from host _NUMA configuration"
-msgstr ""
+msgstr "Genereren van _NUMA host configuratie"
 
 #: ../src/vmm-details.glade.h:52
 msgid "Heads:"
@@ -3937,9 +3920,8 @@ msgid "Initial _pinning:"
 msgstr "Initieel _vastzetten:"
 
 #: ../src/vmm-details.glade.h:57
-#, fuzzy
 msgid "Logical host CPUs:"
-msgstr "Logische CPU's:"
+msgstr "Logische host CPU's:"
 
 #: ../src/vmm-details.glade.h:60
 msgid "M_odel:"
@@ -4018,9 +4000,8 @@ msgid "R_eadonly:"
 msgstr "All_een-lezen"
 
 #: ../src/vmm-details.glade.h:82
-#, fuzzy
 msgid "R_untime pinning:"
-msgstr "Initieel _vastzetten:"
+msgstr "R_un-time vastzetten:"
 
 #: ../src/vmm-details.glade.h:83
 msgid "Run"
@@ -4135,9 +4116,8 @@ msgid "_Always"
 msgstr "_Altijd"
 
 #: ../src/vmm-details.glade.h:114
-#, fuzzy
 msgid "_Begin Installation"
-msgstr "Installatiebron:"
+msgstr "Be_gin met installatie"
 
 #: ../src/vmm-details.glade.h:115
 msgid "_Clone"
@@ -4343,7 +4323,7 @@ msgstr "Pool type:"
 
 #: ../src/vmm-host.glade.h:42
 msgid "Refresh volume list"
-msgstr ""
+msgstr "Ververs volume lijst"
 
 #: ../src/vmm-host.glade.h:43
 msgid "Restore Saved Machine..."
@@ -4418,9 +4398,8 @@ msgid "_CPU Usage"
 msgstr "_CPU gebruik"
 
 #: ../src/vmm-manager.glade.h:10
-#, fuzzy
 msgid "_Connection Details"
-msgstr "Verbinding selecteren"
+msgstr "Verbinding _details"
 
 #: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:32
 msgid "_Disk I/O"
@@ -4499,9 +4478,8 @@ msgid "Co_nnect"
 msgstr "Ver_binden"
 
 #: ../src/vmm-open-connection.glade.h:3
-#, fuzzy
 msgid "Connect to _remote host"
-msgstr "Verbinding selecteren"
+msgstr "Verbinden met host op _afstand"
 
 #: ../src/vmm-open-connection.glade.h:4
 msgid "Connection Select"
@@ -4509,7 +4487,7 @@ msgstr "Verbinding selecteren"
 
 #: ../src/vmm-open-connection.glade.h:5
 msgid "Generated URI:"
-msgstr ""
+msgstr "Gegenereerde URI:"
 
 #: ../src/vmm-open-connection.glade.h:6
 msgid "H_ostname:"
@@ -4520,9 +4498,8 @@ msgid "Hypervisor Select"
 msgstr "Hypervisor selecteren"
 
 #: ../src/vmm-open-connection.glade.h:8
-#, fuzzy
 msgid "Me_thod:"
-msgstr "Methode"
+msgstr "Me_thode"
 
 #: ../src/vmm-open-connection.glade.h:9
 msgid ""
@@ -4530,6 +4507,9 @@ msgid ""
 "TCP (SASL, Kerberos, ...)\n"
 "SSL/TLS with certificates"
 msgstr ""
+"SSH\n"
+"TCP (SASL, Kerberos, ...)\n"
+"SSL/TLS met certificaten"
 
 #: ../src/vmm-open-connection.glade.h:12
 msgid ""
@@ -4540,9 +4520,8 @@ msgstr ""
 "QEMU/KVM"
 
 #: ../src/vmm-open-connection.glade.h:14
-#, fuzzy
 msgid "_Autoconnect:"
-msgstr "Automatisch verbinden:"
+msgstr "_Automatisch verbinden:"
 
 #: ../src/vmm-open-connection.glade.h:15
 msgid "_Hypervisor:"
@@ -4561,9 +4540,8 @@ msgid "<b>General</b>"
 msgstr "<b>Algemeen</b>"
 
 #: ../src/vmm-preferences.glade.h:4
-#, fuzzy
 msgid "<b>Graphical Consoles</b>"
-msgstr "Grafische console %s"
+msgstr "<b>Grafische consoles</b>"
 
 #: ../src/vmm-preferences.glade.h:5
 msgid "<b>New VM</b>"
@@ -4579,7 +4557,7 @@ msgstr "Automatisch consoles _openen:"
 
 #: ../src/vmm-preferences.glade.h:8
 msgid "Change..."
-msgstr ""
+msgstr "Veranderen..."
 
 #: ../src/vmm-preferences.glade.h:9
 msgid "Device re_moval:"
@@ -4598,13 +4576,12 @@ msgid "General"
 msgstr "Algemeen"
 
 #: ../src/vmm-preferences.glade.h:13
-#, fuzzy
 msgid "Grab _keyboard accelerators:"
-msgstr "Pak _toetsenbord input:"
+msgstr "Grijp _toetsenbord sneltoetsen:"
 
 #: ../src/vmm-preferences.glade.h:14
 msgid "Grab keys:"
-msgstr ""
+msgstr "Grijp toetsen:"
 
 #: ../src/vmm-preferences.glade.h:15
 msgid "Graphical console _scaling:"
@@ -4650,12 +4627,11 @@ msgstr ""
 
 #: ../src/vmm-preferences.glade.h:27
 msgid "Not supported"
-msgstr ""
+msgstr "Niet ondersteund"
 
 #: ../src/vmm-preferences.glade.h:28
-#, fuzzy
 msgid "Poweroff/_Reboot/Save:"
-msgstr "Afsluiten/Opnieuw opsta_rten"
+msgstr "Afsluiten/Opnieuw opsta_rten/Opslaan"
 
 #: ../src/vmm-preferences.glade.h:29
 msgid "Preferences"
