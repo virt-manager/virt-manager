@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-25 09:36-0400\n"
-"PO-Revision-Date: 2010-03-24 18:15+0100\n"
+"PO-Revision-Date: 2010-08-25 20:09+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <trans-pl@lists.fedoraproject.org>\n"
 "MIME-Version: 1.0\n"
@@ -371,9 +371,8 @@ msgid "Bus type:"
 msgstr "Typ magistrali:"
 
 #: ../src/virtManager/addhardware.py:756
-#, fuzzy
 msgid "Cache mode:"
-msgstr "Mod_el urządzenia:"
+msgstr "Tryb pamięci podręcznej:"
 
 #: ../src/virtManager/addhardware.py:758 ../src/vmm-create.glade.h:40
 #: ../src/vmm-host.glade.h:53
@@ -602,7 +601,6 @@ msgid "Sound device parameter error"
 msgstr "Błąd parametru urządzenia dźwiękowego"
 
 #: ../src/virtManager/addhardware.py:1254
-#, fuzzy
 msgid "Physical Device Required"
 msgstr "Wymagane jest urządzenie fizyczne"
 
@@ -765,13 +763,13 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "Nie można sklonować niezarządzanej zdalnej pamięci masowej."
 
 #: ../src/virtManager/clone.py:808
-#, fuzzy
 msgid ""
 "Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
 "Urządzenia blokowe do klonowania powinny\n"
-"być zarządzanymi woluminami pamięci masowych."
+"być woluminami pamięci masowych zarządzanymi\n"
+"przez bibliotekę libvirt."
 
 #: ../src/virtManager/clone.py:811 ../src/virtManager/delete.py:344
 msgid "No write access to parent directory."
@@ -814,9 +812,8 @@ msgid "Locate ISO media"
 msgstr "Ustalenie położenia nośnika ISO"
 
 #: ../src/virtManager/connect.py:324
-#, fuzzy
 msgid "A hostname is required for remote connections."
-msgstr "Instalacje z adresu URL nie są dostępne dla zdalnych połączeń."
+msgstr "Wymagana jest nazwa gospodarza dla zdalnych połączeń."
 
 #: ../src/virtManager/connection.py:186
 #, python-format
@@ -889,22 +886,21 @@ msgid "Unknown"
 msgstr "Nieznane"
 
 #: ../src/virtManager/console.py:200
-#, fuzzy, python-format
+#, python-format
 msgid "Press %s to release pointer."
-msgstr "Naciśnięcie Ctrl+Alt uwalnia wskaźnik."
+msgstr "Naciśnięcie %s uwalnia wskaźnik."
 
 #: ../src/virtManager/console.py:216
 msgid "Pointer grabbed"
 msgstr "Przechwycono wskaźnik"
 
 #: ../src/virtManager/console.py:217
-#, fuzzy
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair"
 msgstr ""
 "Wskaźnik myszy został ograniczony do okna konsoli wirtualnej. Aby go "
-"uwolnić, należy nacisnąć parę klawiszy Ctrl+Alt"
+"uwolnić, należy nacisnąć parę klawiszy"
 
 #: ../src/virtManager/console.py:218
 msgid "Do not show this notification in the future."
@@ -1535,7 +1531,6 @@ msgid "Close tab"
 msgstr "Zamknij kartę"
 
 #: ../src/virtManager/details.py:504
-#, fuzzy
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
 "with the specified label. The administrator is responsible for making sure "
@@ -1558,7 +1553,7 @@ msgstr ""
 
 #: ../src/virtManager/details.py:515
 msgid "Libvirt did not detect NUMA capabilities."
-msgstr ""
+msgstr "Biblioteka libvirt nie wykryła możliwości NUMA."
 
 #: ../src/virtManager/details.py:523
 msgid "VCPU"
@@ -1610,9 +1605,8 @@ msgid "Error refreshing hardware page: %s"
 msgstr "Błąd podczas odświeżania strony sprzętu: %s"
 
 #: ../src/virtManager/details.py:838 ../src/virtManager/manager.py:919
-#, fuzzy
 msgid "_Restore"
-msgstr "W_znów"
+msgstr "P_rzywróć"
 
 #. Build VM context menu
 #: ../src/virtManager/details.py:840 ../src/virtManager/manager.py:328
@@ -1639,9 +1633,9 @@ msgid "Screenshot saved"
 msgstr "Zrzut ekranu został zapisany"
 
 #: ../src/virtManager/details.py:1145
-#, fuzzy, python-format
+#, python-format
 msgid "Error generating CPU configuration: %s"
-msgstr "Błąd podczas sprawdzania konfiguracji IP: %s"
+msgstr "Błąd podczas tworzenia konfiguracji procesora: %s"
 
 #: ../src/virtManager/details.py:1359
 #, python-format
@@ -1786,7 +1780,6 @@ msgid "Paused"
 msgstr "Wstrzymane"
 
 #: ../src/virtManager/domain.py:1120
-#, fuzzy
 msgid "Shutting Down"
 msgstr "Wyłączanie"
 
@@ -1800,11 +1793,11 @@ msgstr "Zawieszone"
 
 #: ../src/virtManager/domain.py:1319
 msgid "Cannot start guest while cloning operation in progress"
-msgstr ""
+msgstr "Nie można uruchomić gościa podczas trwania działania klonowania"
 
 #: ../src/virtManager/domain.py:1333
 msgid "Cannot resume guest while cloning operation in progress"
-msgstr ""
+msgstr "Nie można wznowić gościa podczas trwania działania klonowania"
 
 #: ../src/virtManager/domain.py:2331
 msgid "Did not find selected device."
@@ -1895,18 +1888,17 @@ msgid "Unknown connection URI %s"
 msgstr "Nieznany adres URI połączenia %s"
 
 #: ../src/virtManager/engine.py:730
-#, fuzzy
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr ""
 "Zapisywanie maszyn wirtualnych przez zdalne połączenia nie jest jeszcze "
-"obsługiwane."
+"obsługiwane przez tę wersję biblioteki libvirt lub nadzorcy."
 
 #: ../src/virtManager/engine.py:737
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to save '%s'?"
-msgstr "Na pewno wstrzymać \"%s\"?"
+msgstr "Na pewno zapisać \"%s\"?"
 
 #: ../src/virtManager/engine.py:750
 msgid "Save Virtual Machine"
@@ -2113,9 +2105,9 @@ msgid "Error deleting pool: %s"
 msgstr "Błąd podczas usuwania puli: %s"
 
 #: ../src/virtManager/host.py:624
-#, fuzzy, python-format
+#, python-format
 msgid "Error refreshing pool '%s': %s"
-msgstr "Błąd podczas uruchamiania puli \"%s\": %s"
+msgstr "Błąd podczas odświeżania puli \"%s\": %s"
 
 #: ../src/virtManager/host.py:633
 #, python-format
@@ -2231,14 +2223,12 @@ msgid "_Force Off"
 msgstr "Wy_muś wyłączenie"
 
 #: ../src/virtManager/manager.py:340 ../src/virtManager/uihelpers.py:672
-#, fuzzy
 msgid "Sa_ve"
 msgstr "Zapi_sz"
 
 #: ../src/virtManager/manager.py:343
-#, fuzzy
 msgid "_Clone..."
-msgstr "S_klonuj"
+msgstr "S_klonuj..."
 
 #: ../src/virtManager/manager.py:344 ../src/vmm-details.glade.h:124
 msgid "_Migrate..."
@@ -2394,15 +2384,16 @@ msgstr "Odosobniona sieć"
 #: ../src/virtManager/preferences.py:159
 msgid "Installed version of GTK-VNC doesn't support configurable grab keys"
 msgstr ""
+"Zainstalowana wersja biblioteki GTK-VNC nie obsługuje konfigurowalnych "
+"klawiszy przechwycenia"
 
 #: ../src/virtManager/preferences.py:207
-#, fuzzy
 msgid "Configure key combination"
-msgstr "Konfiguracja IP"
+msgstr "Połączenie kluczy konfiguracji"
 
 #: ../src/virtManager/preferences.py:212
 msgid "Please press desired grab key combination"
-msgstr ""
+msgstr "Proszę nacisnąć żądane połączenie klawiszy przechwycenia"
 
 #: ../src/virtManager/storagebrowse.py:132
 msgid "Size"
@@ -2429,7 +2420,6 @@ msgid "No virtual machines"
 msgstr "Brak maszyn wirtualnych"
 
 #: ../src/virtManager/uihelpers.py:69
-#, fuzzy
 msgid ""
 "Fully allocating storage may take longer now, but the OS install phase will "
 "be quicker. \n"
@@ -2441,23 +2431,22 @@ msgstr ""
 "systemu operacyjnego będzie krótsza. \n"
 "\n"
 "Pominięcie przydzielenie spowoduje także problemy z przestrzenią na "
-"komputerze gospodarza, jeśli maksymalny rozmiar obrazu przekracza dostępną "
-"przestrzeń pamięci masowej."
+"komputerze gospodarza, jeśli maksymalny rozmiar obrazu przekracza dostępne "
+"miejsce na pamięci masowej."
 
 #: ../src/virtManager/uihelpers.py:112
-#, fuzzy
 msgid "Default pool is not active."
-msgstr "Sieć wirtualna jest nieaktywna."
+msgstr "Domyślna pula jest nieaktywna."
 
 #: ../src/virtManager/uihelpers.py:113
-#, fuzzy, python-format
+#, python-format
 msgid "Storage pool '%s' is not active. Would you like to start the pool now?"
-msgstr "Sieć wirtualna \"%s\" jest nieaktywna. Uruchomić sieć teraz?"
+msgstr "Pula pamięci masowej \"%s\" jest nieaktywna. Uruchomić pulę teraz?"
 
 #: ../src/virtManager/uihelpers.py:124
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start storage_pool '%s': %s"
-msgstr "Nie można utworzyć domyślnej puli pamięci masowej \"%s\": %s"
+msgstr "Nie można uruchomić puli pamięci masowej \"%s\": %s"
 
 #. [xml value, label]
 #: ../src/virtManager/uihelpers.py:215
@@ -2698,9 +2687,8 @@ msgid "C_reate a disk image on the computer's hard drive"
 msgstr "Utwo_rzenie obrazu dysku na dysku twardym komputera"
 
 #: ../src/vmm-add-hardware.glade.h:21
-#, fuzzy
 msgid "Cache _mode:"
-msgstr "Mod_el urządzenia:"
+msgstr "Tryb pa_mięci podręcznej:"
 
 #: ../src/vmm-add-hardware.glade.h:22
 msgid "D_evice model:"
@@ -3606,7 +3594,6 @@ msgid "Choose Memory and CPU settings"
 msgstr "Proszę wybrać ustawienia pamięci i procesora"
 
 #: ../src/vmm-create.glade.h:17
-#, fuzzy
 msgid "Choose an operating system type and version"
 msgstr "Proszę wybrać typ i wersję systemu operacyjnego"
 
@@ -3835,6 +3822,8 @@ msgstr "<b>proszę podać typ</b>"
 #: ../src/vmm-details.glade.h:22
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr ""
+"<small>Wpisanie za dużej ilości wirtualnych procesorów może zmniejszyć "
+"wydajność</small>"
 
 #: ../src/vmm-details.glade.h:23
 msgid "A_ction:"
@@ -3853,9 +3842,8 @@ msgid "Auth"
 msgstr "Uwierzytelnianie"
 
 #: ../src/vmm-details.glade.h:28
-#, fuzzy
 msgid "Begin Installation"
-msgstr "Ukończ instalację"
+msgstr "Rozpocznij instalację"
 
 #: ../src/vmm-details.glade.h:29
 msgid "Boot"
@@ -3874,9 +3862,8 @@ msgid "C_lock Offset:"
 msgstr "_Wyrównanie zegara:"
 
 #: ../src/vmm-details.glade.h:33
-#, fuzzy
 msgid "Cac_he mode:"
-msgstr "Mod_el urządzenia:"
+msgstr "_Tryb pamięci podręcznej:"
 
 #: ../src/vmm-details.glade.h:34
 msgid "Change a_llocation:"
@@ -3940,7 +3927,7 @@ msgstr "Włączenie A_PIC:"
 
 #: ../src/vmm-details.glade.h:51
 msgid "Generate from host _NUMA configuration"
-msgstr ""
+msgstr "Utworzenie z konfiguracji _NUMA gospodarza"
 
 #: ../src/vmm-details.glade.h:52
 msgid "Heads:"
@@ -3955,9 +3942,8 @@ msgid "Initial _pinning:"
 msgstr "_Początkowe przypinanie:"
 
 #: ../src/vmm-details.glade.h:57
-#, fuzzy
 msgid "Logical host CPUs:"
-msgstr "Logiczne procesory:"
+msgstr "Logiczne procesory gospodarza:"
 
 #: ../src/vmm-details.glade.h:60
 msgid "M_odel:"
@@ -4036,9 +4022,8 @@ msgid "R_eadonly:"
 msgstr "_Tylko do odczytu"
 
 #: ../src/vmm-details.glade.h:82
-#, fuzzy
 msgid "R_untime pinning:"
-msgstr "_Początkowe przypinanie:"
+msgstr "_Przypinanie w czasie uruchamiania:"
 
 #: ../src/vmm-details.glade.h:83
 msgid "Run"
@@ -4153,9 +4138,8 @@ msgid "_Always"
 msgstr "Z_awsze"
 
 #: ../src/vmm-details.glade.h:114
-#, fuzzy
 msgid "_Begin Installation"
-msgstr "Ukończ instalację"
+msgstr "_Rozpocznij instalację"
 
 #: ../src/vmm-details.glade.h:115
 msgid "_Clone"
@@ -4361,7 +4345,7 @@ msgstr "Typ puli:"
 
 #: ../src/vmm-host.glade.h:42
 msgid "Refresh volume list"
-msgstr ""
+msgstr "Odświeża listę woluminów"
 
 #: ../src/vmm-host.glade.h:43
 msgid "Restore Saved Machine..."
@@ -4436,9 +4420,8 @@ msgid "_CPU Usage"
 msgstr "Uży_cie procesora"
 
 #: ../src/vmm-manager.glade.h:10
-#, fuzzy
 msgid "_Connection Details"
-msgstr "Wybór połączenia"
+msgstr "Sz_czegóły połączenia"
 
 #: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:32
 msgid "_Disk I/O"
@@ -4517,9 +4500,8 @@ msgid "Co_nnect"
 msgstr "_Połącz"
 
 #: ../src/vmm-open-connection.glade.h:3
-#, fuzzy
 msgid "Connect to _remote host"
-msgstr "Wybór połączenia"
+msgstr "Połączenie ze zdalnym gospoda_rzem"
 
 #: ../src/vmm-open-connection.glade.h:4
 msgid "Connection Select"
@@ -4527,7 +4509,7 @@ msgstr "Wybór połączenia"
 
 #: ../src/vmm-open-connection.glade.h:5
 msgid "Generated URI:"
-msgstr ""
+msgstr "Utworzony adres URI:"
 
 #: ../src/vmm-open-connection.glade.h:6
 msgid "H_ostname:"
@@ -4538,9 +4520,8 @@ msgid "Hypervisor Select"
 msgstr "Wybór nadzorcy"
 
 #: ../src/vmm-open-connection.glade.h:8
-#, fuzzy
 msgid "Me_thod:"
-msgstr "M_odel:"
+msgstr "_Metoda:"
 
 #: ../src/vmm-open-connection.glade.h:9
 msgid ""
@@ -4548,6 +4529,9 @@ msgid ""
 "TCP (SASL, Kerberos, ...)\n"
 "SSL/TLS with certificates"
 msgstr ""
+"SSH\n"
+"TCP (SASL, Kerberos...)\n"
+"SSL/TLS za pomocą certyfikatów"
 
 #: ../src/vmm-open-connection.glade.h:12
 msgid ""
@@ -4558,9 +4542,8 @@ msgstr ""
 "QEMU/KVM"
 
 #: ../src/vmm-open-connection.glade.h:14
-#, fuzzy
 msgid "_Autoconnect:"
-msgstr "A_utomatyczne połączenie:"
+msgstr "_Automatyczne połączenie:"
 
 #: ../src/vmm-open-connection.glade.h:15
 msgid "_Hypervisor:"
@@ -4579,9 +4562,8 @@ msgid "<b>General</b>"
 msgstr "<b>Ogólne</b>"
 
 #: ../src/vmm-preferences.glade.h:4
-#, fuzzy
 msgid "<b>Graphical Consoles</b>"
-msgstr "Konsola graficzna %s"
+msgstr "<b>Konsole graficzne</b>"
 
 #: ../src/vmm-preferences.glade.h:5
 msgid "<b>New VM</b>"
@@ -4597,7 +4579,7 @@ msgstr "Automatyczne _otwarcie konsol:"
 
 #: ../src/vmm-preferences.glade.h:8
 msgid "Change..."
-msgstr ""
+msgstr "Zmień..."
 
 #: ../src/vmm-preferences.glade.h:9
 msgid "Device re_moval:"
@@ -4616,13 +4598,12 @@ msgid "General"
 msgstr "Ogólne"
 
 #: ../src/vmm-preferences.glade.h:13
-#, fuzzy
 msgid "Grab _keyboard accelerators:"
-msgstr "Przechwycenie wejścia _klawiatury:"
+msgstr "Skróty przechwycenia _klawiatury:"
 
 #: ../src/vmm-preferences.glade.h:14
 msgid "Grab keys:"
-msgstr ""
+msgstr "Klawisze przechwycenia:"
 
 #: ../src/vmm-preferences.glade.h:15
 msgid "Graphical console _scaling:"
@@ -4668,12 +4649,11 @@ msgstr ""
 
 #: ../src/vmm-preferences.glade.h:27
 msgid "Not supported"
-msgstr ""
+msgstr "Nieobsługiwane"
 
 #: ../src/vmm-preferences.glade.h:28
-#, fuzzy
 msgid "Poweroff/_Reboot/Save:"
-msgstr "Wyłączenie/ponowne u_ruchomienie:"
+msgstr "Wyłączenie/ponowne u_ruchomienie/zapisanie:"
 
 #: ../src/vmm-preferences.glade.h:29
 msgid "Preferences"
@@ -4722,35 +4702,3 @@ msgstr "Wybierz _wolumin"
 #: ../src/vmm-storage-browse.glade.h:3
 msgid "_Browse Local"
 msgstr "_Przeglądaj lokalne"
-
-#~ msgid "ip desc"
-#~ msgstr "opis IP"
-
-#~ msgid "No VMs available"
-#~ msgstr "Brak dostępnych maszyn wirtualnych"
-
-#~ msgid "Host CPUs:"
-#~ msgstr "Procesory gospodarza:"
-
-#~ msgid "_Host Details"
-#~ msgstr "Szczegóły g_ospodarza"
-
-#~ msgid "Connec_tion:"
-#~ msgstr "_Połączenie:"
-
-#~ msgid "Hostname Field"
-#~ msgstr "Pole nazwy gospodarza"
-
-#~ msgid ""
-#~ "Local\n"
-#~ "Remote Password or Kerberos\n"
-#~ "Remote SSL/TLS with x509 certificate\n"
-#~ "Remote tunnel over SSH"
-#~ msgstr ""
-#~ "Lokalnie\n"
-#~ "Zdalne hasło lub Kerberos\n"
-#~ "Zdalny SSL/TLS za pomocą certyfikatu x509\n"
-#~ "Zdalny tunel przez SSH"
-
-#~ msgid "<b>Consoles</b>"
-#~ msgstr "<b>Konsole</b>"
