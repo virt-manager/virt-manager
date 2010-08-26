@@ -49,7 +49,8 @@ Requires: scrollkeeper
 # For console widget
 Requires: gtk-vnc-python >= 0.3.8
 # For local authentication against PolicyKit
-%if 0%{?fedora} >= 11
+# Fedora 12 has no need for a client agent
+%if 0%{?fedora} == 11
 Requires: PolicyKit-authentication-agent
 %endif
 %if 0%{?fedora} >= 9 && 0%{?fedora} < 11
@@ -130,7 +131,6 @@ fi
 
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/*.glade
-
 %{_datadir}/%{name}/*.py*
 
 %dir %{_datadir}/%{name}/pixmaps/
@@ -143,7 +143,6 @@ fi
 %{_datadir}/%{name}/pixmaps/hicolor/*/*/*.png
 
 %dir %{_datadir}/%{name}/virtManager/
-
 %{_datadir}/%{name}/virtManager/*.py*
 
 # Revive when we update help docs
