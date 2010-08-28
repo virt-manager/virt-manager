@@ -894,6 +894,14 @@ class vmmConnection(gobject.GObject):
         box.set_row_spacings(6)
         box.set_col_spacings(12)
 
+        def _on_ent_activate(ent):
+            idx = entry.index(ent)
+
+            if idx < len(entry) - 1:
+                entry[idx + 1].grab_focus()
+            else:
+                dialog.response(gtk.RESPONSE_OK)
+
         row = 0
         for cred in creds:
             if (cred[0] == libvirt.VIR_CRED_AUTHNAME or
@@ -912,6 +920,7 @@ class vmmConnection(gobject.GObject):
             ent = gtk.Entry()
             if cred[0] == libvirt.VIR_CRED_PASSPHRASE:
                 ent.set_visibility(False)
+            ent.connect("activate", _on_ent_activate)
             entry.append(ent)
 
             box.attach(label[row], 0, 1, row, row+1, gtk.FILL, 0, 0, 0)
