@@ -1209,6 +1209,7 @@ class vmmDomain(vmmDomainBase):
         self.toggle_sample_disk_io()
 
         self.reboot_listener = None
+        self._guest = None
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
@@ -1219,6 +1220,7 @@ class vmmDomain(vmmDomainBase):
         # Hook up our own status listeners
         self._update_status()
         self.connect("status-changed", self._update_start_vcpus)
+        self.connect("config-changed", self._reparse_xml)
 
     ##########################
     # Internal virDomain API #
@@ -1441,6 +1443,23 @@ class vmmDomain(vmmDomainBase):
     ###########################
     # XML/Config Altering API #
     ###########################
+
+    def _get_domain_xml(self):
+        return vmmLibvirtObject.get_xml(self)
+
+    def get_xml(self):
+        # Do this to make sure we have latest XML
+        self._get_domain_xml()
+        return self._get_guest().get_xml_config()
+
+    def _get_guest(self):
+        if not self._guest:
+            self._reparse_xml()
+        return self._guest
+
+    def _reparse_xml(self, ignore=None):
+        self._guest = virtinst.Guest(connection=self.connection.vmm,
+                                     parsexml=self._get_domain_xml())
 
     def _check_device_is_present(self, dev_type, dev_id_info):
         """
