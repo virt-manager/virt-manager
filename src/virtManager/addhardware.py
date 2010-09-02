@@ -149,8 +149,9 @@ class vmmAddHardware(gobject.GObject):
             doc = doctmpl % (docstr)
         elif self._dev:
             devclass = self._dev.__class__
-            if hasattr(devclass, param):
-                doc = doctmpl % (getattr(devclass, param).__doc__)
+            paramdoc = getattr(devclass, param).__doc__
+            if paramdoc:
+                doc = doctmpl % paramdoc
 
         return doc
 
@@ -827,23 +828,23 @@ class vmmAddHardware(gobject.GObject):
                 (_("Type:"), VirtualCharDevice.get_char_type_desc(self._dev.char_type)),
             ]
 
-            if hasattr(self._dev, "source_mode"):
+            if self._dev.supports_property("source_mode"):
                 mode = self._dev.source_mode.capitalize()
-            if hasattr(self._dev, "source_path"):
+            if self._dev.supports_property("source_path"):
                 path = self._dev.source_path
                 label = "%sPath:" % (mode and mode + " " or "")
                 info_list.append((label, path))
 
-            if hasattr(self._dev, "source_host"):
+            if self._dev.supports_property("source_host"):
                 host = "%s:%s" % (self._dev.source_host, self._dev.source_port)
                 label = "%sHost:" % (mode and mode + " " or "")
                 info_list.append((label, host))
 
-            if hasattr(self._dev, "bind_host"):
+            if self._dev.supports_property("bind_host"):
                 bind_host = "%s:%s" % (self._dev.bind_host,
                                        self._dev.bind_port)
                 info_list.append(("Bind Host:", bind_host))
-            if hasattr(self._dev, "protocol"):
+            if self._dev.supports_property("protocol"):
                 proto = self._dev.protocol
                 info_list.append((_("Protocol:"), proto))
 
@@ -982,10 +983,10 @@ class vmmAddHardware(gobject.GObject):
                                                        devtype)
 
         for param_name, widget_name in char_widget_mappings.items():
-            make_visible = hasattr(self._dev, param_name)
+            make_visible = self._dev.supports_property(param_name)
             self.window.get_widget(widget_name).set_sensitive(make_visible)
 
-        has_mode = hasattr(self._dev, "source_mode")
+        has_mode = self._dev.supports_property("source_mode")
 
         if has_mode and self.window.get_widget("char-mode").get_active() == -1:
             self.window.get_widget("char-mode").set_active(0)
@@ -1293,7 +1294,7 @@ class vmmAddHardware(gobject.GObject):
             self._dev = devclass
 
             for param_name, val in value_mappings.items():
-                if hasattr(self._dev, param_name):
+                if self._dev.supports_property(param_name):
                     setattr(self._dev, param_name, val)
 
             # Dump XML for sanity checking
