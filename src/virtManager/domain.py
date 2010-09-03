@@ -603,8 +603,8 @@ class vmmDomainBase(vmmLibvirtObject):
 
                 # [device type, unique, display string, target_port,
                 #  char device type, source_path, is_console_dup_of_serial?
-                dev = [char_type, target_port,
-                       "%s:%s" % (char_type, target_port), target_port,
+                disp = "%s:%s" % (char_type, target_port)
+                dev = [char_type, disp, disp, target_port,
                        dev_type, source_path, False]
 
                 if node.name == "console":
@@ -811,6 +811,8 @@ class vmmDomainBase(vmmLibvirtObject):
         elif (dev_type == "parallel" or
               dev_type == "console" or
               dev_type == "serial"):
+            if dev_id_info.count(":"):
+                ignore, dev_id_info = dev_id_info.split(":")
             xpath = ("/domain/devices/%s[target/@port='%s'][1]" %
                      (dev_type, dev_id_info))
 
