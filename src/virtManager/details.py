@@ -640,7 +640,7 @@ class vmmDetails(gobject.GObject):
 
         devs = self.vm.get_serial_devs()
         if len(devs) == 0:
-            item = gtk.MenuItem(_("No serial devices found"))
+            item = gtk.MenuItem(_("No text console available"))
             item.set_sensitive(False)
             src.add(item)
 
@@ -688,18 +688,20 @@ class vmmDetails(gobject.GObject):
 
         devs = self.vm.get_graphics_devices()
         if len(devs) == 0:
-            item = gtk.MenuItem(_("No graphics console found."))
+            item = gtk.MenuItem(_("No graphical console available"))
             item.set_sensitive(False)
             src.add(item)
         else:
             dev = devs[0]
-            item = gtk.RadioMenuItem(group, _("Graphical Console %s") % dev[2])
+            item = gtk.RadioMenuItem(group, _("Graphical Console %s") %
+                                     dev.type.upper())
             if group == None:
                 group = item
 
             if on_graphics:
                 item.set_active(True)
-            item.connect("toggled", self.control_serial_tab, dev[0], dev[2])
+            item.connect("toggled", self.control_serial_tab,
+                         dev.virtual_device_type, dev.type)
             src.add(item)
 
         src.show_all()
@@ -1940,19 +1942,19 @@ class vmmDetails(gobject.GObject):
         self.set_combo_label("sound-model", 0, sound.model)
 
     def refresh_char_page(self):
-        charinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not charinfo:
+        chardev = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not chardev:
             return
 
-        char_type = charinfo[0].capitalize()
-        target_port = charinfo[3]
-        dev_type = charinfo[4] or "pty"
-        src_path = charinfo[5]
-        primary = charinfo[6]
+        char_type = chardev.virtual_device_type.capitalize()
+        target_port = chardev.index
+        dev_type = chardev.char_type or "pty"
+        src_path = chardev.source_path
+        primary = hasattr(chardev, "console_dup")
 
         typelabel = "%s Device" % char_type
-        if target_port:
-            typelabel += " %s" % target_port
+        if target_port is not None:
+            typelabel += " %s" % (int(target_port) + 1)
         if primary:
             typelabel += " (%s)" % _("Primary Console")
         typelabel = "<b>%s</b>" % typelabel
@@ -2215,18 +2217,19 @@ class vmmDetails(gobject.GObject):
                           _("Sound: %s" % model), "audio-card", key)
 
         # Populate list of char devices
-        for charinfo in self.vm.get_char_devices():
-            key = str(charinfo[1])
-            devtype = charinfo[0]
-            port = charinfo[3]
+        for chardev in self.vm.get_char_devices():
+            devtype = chardev.virtual_device_type
+            port = chardev.index
+            key = str(devtype + ":" + str(port))
 
             currentChars[key] = 1
+
             label = devtype.capitalize()
             if devtype != "console":
                 # Don't show port for console
                 label += " %s" % (int(port) + 1)
 
-            update_hwlist(HW_LIST_TYPE_CHAR, charinfo, label,
+            update_hwlist(HW_LIST_TYPE_CHAR, chardev, label,
                           "device_serial", key)
 
         # Populate host devices

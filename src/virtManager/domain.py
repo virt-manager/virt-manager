@@ -317,66 +317,35 @@ class vmmDomainBase(vmmLibvirtObject):
     # Device listing
 
     def get_serial_devs(self):
-        def _parse_serial_consoles(ctx):
-            # [ Name, device type, source path
-            serial_list = []
-            sdevs = ctx.xpathEval("/domain/devices/serial")
-            cdevs = ctx.xpathEval("/domain/devices/console")
-            for node in sdevs:
-                name = "Serial "
-                dev_type = node.prop("type")
-                source_path = None
+        devs = self.get_char_devices()
+        devlist = []
 
-                for child in node.children:
-                    if child.name == "target":
-                        target_port = child.prop("port")
-                        if target_port:
-                            name += str(target_port)
-                    if child.name == "source":
-                        source_path = child.prop("path")
+        serials  = filter(lambda x: x.virtual_device_type == "serial", devs)
+        consoles = filter(lambda x: x.virtual_device_type == "console", devs)
 
-                serial_list.append([name, dev_type, source_path, target_port])
+        for dev in serials:
+            devlist.append(["Serial %s" % (dev.index + 1), dev.char_type,
+                            dev.source_path, dev.index])
 
-            for node in cdevs:
-                name = "Serial Console"
-                dev_type = "pty"
-                source_path = None
-                target_port = -1
-                inuse = False
+        for dev in consoles:
+            devlist.append(["Text Console %s" % (dev.index + 1),
+                            dev.char_type, dev.source_path, dev.index])
 
-                for child in node.children:
-                    if child.name == "source":
-                        source_path = child.prop("path")
-
-                    if child.name == "target":
-                        target_port = child.prop("port")
-
-                if target_port != -1:
-                    for dev in serial_list:
-                        if target_port == dev[3]:
-                            inuse = True
-                            break
-
-                if not inuse:
-                    serial_list.append([name, dev_type, source_path,
-                                       target_port])
-
-            return serial_list
-        return self._parse_device_xml(_parse_serial_consoles)
+        return devlist
 
     def get_graphics_console(self):
-        gtype = vutil.get_xml_path(self.get_xml(),
-                                  "/domain/devices/graphics/@type")
-        vncport = vutil.get_xml_path(self.get_xml(),
-                               "/domain/devices/graphics[@type='vnc']/@port")
-
-        if gtype != "vnc":
-            vncport = None
-        else:
-            vncport = int(vncport)
-
+        gdevs = self.get_graphics_devices()
         connhost = self.connection.get_uri_hostname()
         transport, username = self.connection.get_transport()
+        vncport = None
+        gport = None
+        gtype = None
+        if gdevs:
+            gport = gdevs[0].port
+            gtype = gdevs[0].type
+
+        if gtype == 'vnc':
+            vncport = int(gport)
 
         if connhost == None:
             # Force use of 127.0.0.1, because some (broken) systems don't
@@ -392,7 +361,7 @@ class vmmDomainBase(vmmLibvirtObject):
 
         # Build VNC uri for debugging
         vncuri = None
-        if gtype:
+        if gtype == 'vnc':
             vncuri = str(gtype) + "://"
             if username:
                 vncuri = vncuri + str(username) + '@'
@@ -401,12 +370,6 @@ class vmmDomainBase(vmmLibvirtObject):
         return [gtype, connhost, vncport, transport, username, connport,
                 vncuri]
 
-
-    # ----------------
-    # get_X_devices functions: return a list of lists. Each sublist represents
-    # a device, of the format:
-    # [ device_type, unique_attribute(s), hw column label, attr1, attr2, ... ]
-    # ----------------
 
     def get_disk_devices(self, refresh_if_necc=True, inactive=False):
         device_type = "disk"
@@ -466,66 +429,32 @@ class vmmDomainBase(vmmLibvirtObject):
         return devs
 
     def get_char_devices(self):
-        def _parse_char_devs(ctx):
-            chars = []
-            devs  = []
-            devs.extend(ctx.xpathEval("/domain/devices/console"))
-            devs.extend(ctx.xpathEval("/domain/devices/parallel"))
-            devs.extend(ctx.xpathEval("/domain/devices/serial"))
+        devs = []
+        guest = self._get_guest()
 
-            # Since there is only one 'console' device ever in the xml
-            # find its port (if present) and path
-            cons_port = None
-            cons_dev = None
-            list_cons = True
-            count_dict = {}
+        serials     = guest.get_devices("serial")
+        parallels   = guest.get_devices("parallel")
+        consoles    = guest.get_devices("console")
 
-            for node in devs:
-                char_type = node.name
-                dev_type = node.prop("type")
-                target_port = None
-                source_path = None
+        for devicelist in [serials, parallels, consoles]:
+            count = 0
+            for dev in devicelist:
+                dev.index = count
+                count += 1
 
-                for child in node.children or []:
-                    if child.name == "source":
-                        source_path = child.prop("path")
+            devs.extend(devicelist)
 
-                if not source_path:
-                    source_path = node.prop("tty")
+        # Don't display <console> if it's just a duplicate of <serial>
+        if (len(consoles) > 0 and len(serials) > 0):
+            con = consoles[0]
+            ser = serials[0]
 
-                # Rather than parse the target port, just calculate it
-                # ourselves. This helps device removal when customizing
-                # installs
-                if count_dict.get(char_type) == None:
-                    count_dict[char_type] = -1
-                count_dict[char_type] += 1
-                target_port = str(count_dict[char_type])
+            if (con.char_type == ser.char_type and
+                con.target_type is None or con.target_type == "serial"):
+                ser.console_dup = True
+                devs.remove(con)
 
-                # [device type, unique, display string, target_port,
-                #  char device type, source_path, is_console_dup_of_serial?
-                disp = "%s:%s" % (char_type, target_port)
-                dev = [char_type, disp, disp, target_port,
-                       dev_type, source_path, False]
-
-                if node.name == "console":
-                    cons_port = target_port
-                    cons_dev = dev
-                    dev[6] = True
-                    continue
-                elif node.name == "serial" and cons_port \
-                   and target_port == cons_port:
-                    # Console is just a dupe of this serial device
-                    dev[6] = True
-                    list_cons = False
-
-                chars.append(dev)
-
-            if cons_dev and list_cons:
-                chars.append(cons_dev)
-
-            return chars
-
-        return self._parse_device_xml(_parse_char_devs)
+        return devs
 
     def get_video_devices(self):
         device_type = "video"
