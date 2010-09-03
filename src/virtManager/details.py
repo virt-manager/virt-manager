@@ -43,6 +43,8 @@ HW_LIST_COL_ICON_NAME = 1
 HW_LIST_COL_ICON_SIZE = 2
 HW_LIST_COL_TYPE = 3
 HW_LIST_COL_DEVICE = 4
+HW_LIST_COL_KEY = 5
+HW_LIST_COL_DEVTYPE = 6
 
 # Types for the hw list model: numbers specify what order they will be listed
 HW_LIST_TYPE_GENERAL = 0
@@ -465,9 +467,10 @@ class vmmDetails(gobject.GObject):
 
     def init_details(self):
         # Hardware list
-        # [ label, icon name, icon size, hw type, hw data ]
+        # [ label, icon name, icon size, hw type, hw data, hw key,
+        #   dev type name]
         hw_list_model = gtk.ListStore(str, str, int, int,
-                                      gobject.TYPE_PYOBJECT)
+                                      gobject.TYPE_PYOBJECT, str, str)
         self.window.get_widget("hw-list").set_model(hw_list_model)
 
         hwCol = gtk.TreeViewColumn("Hardware")
@@ -924,7 +927,10 @@ class vmmDetails(gobject.GObject):
         if not info:
             return
 
-        self.remove_device(info[0], info[1])
+        devtype = self.get_hw_selection(HW_LIST_COL_DEVTYPE)
+        key = self.get_hw_selection(HW_LIST_COL_KEY)
+
+        self.remove_device(devtype, key)
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -1249,9 +1255,8 @@ class vmmDetails(gobject.GObject):
 
     def config_apply(self, ignore):
         pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
+        key = self.get_hw_selection(HW_LIST_COL_KEY)
         ret = False
-
-        info = self.get_hw_selection(HW_LIST_COL_DEVICE)
 
         if pagetype is HW_LIST_TYPE_GENERAL:
             ret = self.config_overview_apply()
@@ -1262,15 +1267,15 @@ class vmmDetails(gobject.GObject):
         elif pagetype is HW_LIST_TYPE_BOOT:
             ret = self.config_boot_options_apply()
         elif pagetype is HW_LIST_TYPE_DISK:
-            ret = self.config_disk_apply(info[1])
+            ret = self.config_disk_apply(key)
         elif pagetype is HW_LIST_TYPE_NIC:
-            ret = self.config_network_apply(info[1])
+            ret = self.config_network_apply(key)
         elif pagetype is HW_LIST_TYPE_SOUND:
-            ret = self.config_sound_apply(info[1])
+            ret = self.config_sound_apply(key)
         elif pagetype is HW_LIST_TYPE_VIDEO:
-            ret = self.config_video_apply(info[1])
+            ret = self.config_video_apply(key)
         elif pagetype is HW_LIST_TYPE_WATCHDOG:
-            ret = self.config_watchdog_apply(info[1])
+            ret = self.config_watchdog_apply(key)
         else:
             ret = False
 
@@ -2085,7 +2090,7 @@ class vmmDetails(gobject.GObject):
         def add_hw_list_option(title, page_id, data, icon_name):
             hw_list_model.append([title, icon_name,
                                   gtk.ICON_SIZE_LARGE_TOOLBAR,
-                                  page_id, data])
+                                  page_id, data, None, None])
 
         add_hw_list_option("Overview", HW_LIST_TYPE_GENERAL, [], "computer")
         if not self.is_customize_dialog:
@@ -2111,12 +2116,12 @@ class vmmDetails(gobject.GObject):
         currentVids = {}
         currentWatchdogs = {}
 
-        def add_hw_list_option(idx, name, page_id, info, icon_name):
+        def add_hw_list_option(idx, name, page_id, info, icon_name, key, dev):
             hw_list_model.insert(idx, [name, icon_name,
                                        gtk.ICON_SIZE_LARGE_TOOLBAR,
-                                       page_id, info])
+                                       page_id, info, key, dev])
 
-        def update_hwlist(hwtype, info, name, icon_name):
+        def update_hwlist(hwtype, info, name, icon_name, key):
             """
             See if passed hw is already in list, and if so, update info.
             If not in list, add it!
@@ -2124,7 +2129,7 @@ class vmmDetails(gobject.GObject):
             insertAt = 0
             for row in hw_list_model:
                 if (row[HW_LIST_COL_TYPE] == hwtype and
-                    row[HW_LIST_COL_DEVICE][1] == info[1]):
+                    row[HW_LIST_COL_KEY] == key):
 
                     # Update existing HW info
                     row[HW_LIST_COL_DEVICE] = info
@@ -2135,88 +2140,116 @@ class vmmDetails(gobject.GObject):
                     insertAt += 1
 
             # Add the new HW row
-            add_hw_list_option(insertAt, name, hwtype, info, icon_name)
+            devtype = info[0]
+            add_hw_list_option(insertAt, name, hwtype, info, icon_name, key,
+                               devtype)
 
         # Populate list of disks
         for diskinfo in self.vm.get_disk_devices():
-            currentDisks[diskinfo[1]] = 1
-            icon = "drive-harddisk"
-            if diskinfo[4] == "cdrom":
-                icon = "media-optical"
-            elif diskinfo[4] == "floppy":
-                icon = "media-floppy"
-
+            key = str(diskinfo[1])
             devtype = diskinfo[4]
             bus = diskinfo[8]
             idx = diskinfo[9]
+
+            currentDisks[key] = 1
+            icon = "drive-harddisk"
+            if devtype == "cdrom":
+                icon = "media-optical"
+            elif devtype == "floppy":
+                icon = "media-floppy"
+
             label = prettyify_disk(devtype, bus, idx)
 
-            update_hwlist(HW_LIST_TYPE_DISK, diskinfo, label, icon)
+            update_hwlist(HW_LIST_TYPE_DISK, diskinfo, label, icon, key)
 
         # Populate list of NICs
         for netinfo in self.vm.get_network_devices():
-            currentNICs[netinfo[1]] = 1
+            key = str(netinfo[1])
+            mac = netinfo[2]
+
+            currentNICs[key] = 1
             update_hwlist(HW_LIST_TYPE_NIC, netinfo,
-                          "NIC %s" % netinfo[2][-9:], "network-idle")
+                          "NIC %s" % mac[-9:], "network-idle", key)
 
         # Populate list of input devices
         for inputinfo in self.vm.get_input_devices():
-            currentInputs[inputinfo[1]] = 1
+            key = str(inputinfo[1])
+            inptype = inputinfo[4]
+
+            currentInputs[key] = 1
             icon = "input-mouse"
-            if inputinfo[4] == "tablet":
+            if inptype == "tablet":
                 label = _("Tablet")
                 icon = "input-tablet"
-            elif inputinfo[4] == "mouse":
+            elif inptype == "mouse":
                 label = _("Mouse")
             else:
                 label = _("Input")
 
-            update_hwlist(HW_LIST_TYPE_INPUT, inputinfo, label, icon)
+            update_hwlist(HW_LIST_TYPE_INPUT, inputinfo, label, icon, key)
 
         # Populate list of graphics devices
         for gfxinfo in self.vm.get_graphics_devices():
-            currentGraphics[gfxinfo[1]] = 1
+            key = str(gfxinfo[1])
+            gfxtype = gfxinfo[2]
+
+            currentGraphics[key] = 1
             update_hwlist(HW_LIST_TYPE_GRAPHICS, gfxinfo,
-                          _("Display %s") % (str(gfxinfo[2]).upper()),
-                          "video-display")
+                          _("Display %s") % (gfxtype.upper()),
+                          "video-display", key)
 
         # Populate list of sound devices
         for soundinfo in self.vm.get_sound_devices():
-            currentSounds[soundinfo[1]] = 1
+            key = str(soundinfo[1])
+            model = soundinfo[2]
+
+            currentSounds[key] = 1
             update_hwlist(HW_LIST_TYPE_SOUND, soundinfo,
-                          _("Sound: %s" % soundinfo[2]), "audio-card")
+                          _("Sound: %s" % model), "audio-card", key)
 
         # Populate list of char devices
         for charinfo in self.vm.get_char_devices():
-            currentChars[charinfo[1]] = 1
-            label = charinfo[0].capitalize()
-            if charinfo[0] != "console":
+            key = str(charinfo[1])
+            devtype = charinfo[0]
+            port = charinfo[3]
+
+            currentChars[key] = 1
+            label = devtype.capitalize()
+            if devtype != "console":
                 # Don't show port for console
-                label += " %s" % (int(charinfo[3]) + 1)
+                label += " %s" % (int(port) + 1)
 
             update_hwlist(HW_LIST_TYPE_CHAR, charinfo, label,
-                          "device_serial")
+                          "device_serial", key)
 
         # Populate host devices
         for hostdevinfo in self.vm.get_hostdev_devices():
-            currentHostdevs[hostdevinfo[1]] = 1
-            if hostdevinfo[4] == "usb":
+            key = str(hostdevinfo[1])
+            devtype = hostdevinfo[4]
+            label = hostdevinfo[2]
+
+            currentHostdevs[key] = 1
+            if devtype == "usb":
                 icon = "device_usb"
             else:
                 icon = "device_pci"
-            update_hwlist(HW_LIST_TYPE_HOSTDEV, hostdevinfo, hostdevinfo[2],
-                          icon)
+            update_hwlist(HW_LIST_TYPE_HOSTDEV, hostdevinfo, label,
+                          icon, key)
 
         # Populate video devices
         for vidinfo in self.vm.get_video_devices():
-            currentVids[vidinfo[1]] = 1
+            key = str(vidinfo[1])
+
+            currentVids[key] = 1
             update_hwlist(HW_LIST_TYPE_VIDEO, vidinfo, _("Video"),
-                          "video-display")
+                          "video-display", key)
 
         for watchinfo in self.vm.get_watchdog_devices():
-            currentWatchdogs[watchinfo[1]] = 1
+            key = str(watchinfo[1])
+
+            currentWatchdogs[key] = 1
             update_hwlist(HW_LIST_TYPE_WATCHDOG, watchinfo, _("Watchdog"),
-                          "device_pci")
+                          "device_pci", key)
 
         # Now remove any no longer current devs
         devs = range(len(hw_list_model))
@@ -2241,7 +2274,7 @@ class vmmDetails(gobject.GObject):
 
             hwtype   = row[HW_LIST_COL_TYPE]
             if (mapping.has_key(hwtype) and not
-                mapping[hwtype].has_key(row[HW_LIST_COL_DEVICE][1])):
+                mapping[hwtype].has_key(row[HW_LIST_COL_KEY])):
                 removeIt = True
 
             if removeIt:
@@ -2249,10 +2282,11 @@ class vmmDetails(gobject.GObject):
                 # we're about to remove
                 (selModel, selIter) = hw_list.get_selection().get_selected()
                 selType = selModel.get_value(selIter, HW_LIST_COL_TYPE)
-                selInfo = selModel.get_value(selIter, HW_LIST_COL_DEVICE)
+                selKey = selModel.get_value(selIter, HW_LIST_COL_KEY)
                 if (selType == row[HW_LIST_COL_TYPE] and
-                    selInfo[2] == row[HW_LIST_COL_DEVICE][2]):
-                    hw_list.get_selection().select_iter(selModel.iter_nth_child(None, 0))
+                    selKey == row[HW_LIST_COL_KEY]):
+                    hw_list.get_selection().select_iter(
+                                            selModel.iter_nth_child(None, 0))
 
                 # Now actually remove it
                 hw_list_model.remove(_iter)
