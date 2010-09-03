@@ -409,61 +409,30 @@ class vmmDomainBase(vmmLibvirtObject):
     # ----------------
 
     def get_disk_devices(self, refresh_if_necc=True, inactive=False):
-        def _parse_disk_devs(ctx):
-            disks = []
-            ret = ctx.xpathEval("/domain/devices/disk")
-            for node in ret:
-                typ = node.prop("type")
-                srcpath = None
-                devdst = None
-                bus = None
-                readonly = False
-                sharable = False
-                devtype = node.prop("device")
-                cache = None
-                if devtype == None:
-                    devtype = "disk"
-                for child in node.children:
-                    if child.name == "source":
-                        propname = disk_type_to_target_prop(typ)
-                        srcpath = child.prop(propname)
-                    elif child.name == "target":
-                        devdst = child.prop("dev")
-                        bus = child.prop("bus")
-                    elif child.name == "readonly":
-                        readonly = True
-                    elif child.name == "shareable":
-                        sharable = True
-                    elif child.name == "driver":
-                        cache = child.prop("cache")
+        device_type = "disk"
+        guest = self._get_guest(refresh_if_necc, inactive)
 
-                if srcpath == None:
-                    if devtype == "cdrom" or devtype == "floppy":
-                        typ = "block"
+        # [ devicetype, unique, device target, source path,
+        #   disk device type, disk type, readonly?, sharable?,
+        #   bus type, disk idx ]
 
-                # [ devicetype, unique, device target, source path,
-                #   disk device type, disk type, readonly?, sharable?,
-                #   bus type, disk idx ]
-                disks.append(["disk", devdst, devdst, srcpath, devtype, typ,
-                              readonly, sharable, bus, 0, cache])
+        disks = guest.get_devices(device_type)
 
-            # Iterate through all disks and calculate what number they are
-            idx_mapping = {}
-            for disk in disks:
-                devtype = disk[4]
-                bus = disk[8]
-                key = devtype + (bus or "")
+        # Iterate through all disks and calculate what number they are
+        # HACK: We are making a variable in VirtualDisk to store the index
+        idx_mapping = {}
+        for disk in disks:
+            devtype = disk.device
+            bus = disk.bus
+            key = devtype + (bus or "")
 
-                if not idx_mapping.has_key(key):
-                    idx_mapping[key] = 1
+            if not idx_mapping.has_key(key):
+                idx_mapping[key] = 1
 
-                disk[9] = idx_mapping[key]
-                idx_mapping[key] += 1
+            disk.disk_bus_index = idx_mapping[key]
+            idx_mapping[key] += 1
 
-            return disks
-
-        return self._parse_device_xml(_parse_disk_devs, refresh_if_necc,
-                                      inactive)
+        return disks
 
     def get_network_devices(self, refresh_if_necc=True):
         def _parse_network_devs(ctx):
@@ -953,7 +922,7 @@ class vmmDomainBase(vmmLibvirtObject):
             return rd, wr
 
         for disk in self.get_disk_devices(refresh_if_necc=False):
-            dev = disk[2]
+            dev = disk.target
             if not dev:
                 continue
 

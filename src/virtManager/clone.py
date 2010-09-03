@@ -289,11 +289,11 @@ class vmmCloneVM(gobject.GObject):
         all_targets = map(lambda d: d[1], diskinfos)
 
         for disk in diskinfos:
-            force_target = disk[1]
-            path = disk[3]
-            ro = disk[6]
-            shared = disk[7]
-            devtype = disk[4]
+            force_target = disk.target
+            path = disk.path
+            ro = disk.read_only
+            shared = disk.shareable
+            devtype = disk.device
 
             size = None
             clone_path = None

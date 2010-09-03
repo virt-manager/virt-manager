@@ -1218,13 +1218,13 @@ class vmmDetails(gobject.GObject):
 
     # CDROM Eject/Connect
     def toggle_storage_media(self, src):
-        diskinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not diskinfo:
+        disk = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not disk:
             return
 
-        dev_id_info = diskinfo[1]
-        curpath = diskinfo[3]
-        devtype = diskinfo[4]
+        dev_id_info = disk.target
+        curpath = disk.path
+        devtype = disk.device
 
         if curpath:
             # Disconnect cdrom
@@ -1792,17 +1792,17 @@ class vmmDetails(gobject.GObject):
 
 
     def refresh_disk_page(self):
-        diskinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not diskinfo:
+        disk = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not disk:
             return
 
-        path = diskinfo[3]
-        devtype = diskinfo[4]
-        ro = diskinfo[6]
-        share = diskinfo[7]
-        bus = diskinfo[8]
-        idx = diskinfo[9]
-        cache = diskinfo[10]
+        path = disk.path
+        devtype = disk.device
+        ro = disk.read_only
+        share = disk.shareable
+        bus = disk.bus
+        idx = disk.disk_bus_index
+        cache = disk.driver_cache
 
         size = _("Unknown")
         if not path:
@@ -2140,16 +2140,19 @@ class vmmDetails(gobject.GObject):
                     insertAt += 1
 
             # Add the new HW row
-            devtype = info[0]
+            if type(info) is list:
+                devtype = info[0]
+            else:
+                devtype = info.virtual_device_type
             add_hw_list_option(insertAt, name, hwtype, info, icon_name, key,
                                devtype)
 
         # Populate list of disks
-        for diskinfo in self.vm.get_disk_devices():
-            key = str(diskinfo[1])
-            devtype = diskinfo[4]
-            bus = diskinfo[8]
-            idx = diskinfo[9]
+        for disk in self.vm.get_disk_devices():
+            key = disk.target
+            devtype = disk.device
+            bus = disk.bus
+            idx = disk.disk_bus_index
 
             currentDisks[key] = 1
             icon = "drive-harddisk"
@@ -2160,7 +2163,7 @@ class vmmDetails(gobject.GObject):
 
             label = prettyify_disk(devtype, bus, idx)
 
-            update_hwlist(HW_LIST_TYPE_DISK, diskinfo, label, icon, key)
+            update_hwlist(HW_LIST_TYPE_DISK, disk, label, icon, key)
 
         # Populate list of NICs
         for netinfo in self.vm.get_network_devices():

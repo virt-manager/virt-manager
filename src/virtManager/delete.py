@@ -232,10 +232,10 @@ def populate_storage_list(storage_list, vm, conn):
     for disk in vm.get_disk_devices():
         vol = None
 
-        target = disk[1]
-        path = disk[3]
-        ro = disk[6]
-        shared = disk[7]
+        target = disk.target
+        path = disk.path
+        ro = disk.read_only
+        shared = disk.shareable
 
         # There are a few pieces here
         # 1) Can we even delete the storage? If not, make the checkbox
