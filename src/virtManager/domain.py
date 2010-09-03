@@ -434,67 +434,36 @@ class vmmDomainBase(vmmLibvirtObject):
         device_type = "interface"
         guest = self._get_guest(refresh_if_necc=refresh_if_necc)
         devs = guest.get_devices(device_type)
-
         return devs
 
     def get_input_devices(self):
-        def _parse_input_devs(ctx):
-            inputs = []
-            ret = ctx.xpathEval("/domain/devices/input")
+        device_type = "input"
+        guest = self._get_guest()
+        devs = guest.get_devices(device_type)
 
-            for node in ret:
-                typ = node.prop("type")
-                bus = node.prop("bus")
-
-                # [device type, unique, display string, bus type, input type]
-                inputs.append(["input", (typ, bus), typ + ":" + bus, bus, typ])
-            return inputs
-
-        return self._parse_device_xml(_parse_input_devs)
+        return devs
 
     def get_graphics_devices(self):
-        def _parse_graphics_devs(ctx):
-            graphics = []
-            count = 0
-            ret = ctx.xpathEval("/domain/devices/graphics")
+        device_type = "graphics"
+        guest = self._get_guest()
+        devs = guest.get_devices(device_type)
+        count = 0
+        for dev in devs:
+            dev.index = count
+            count += 1
 
-            for node in ret:
-                typ = node.prop("type")
-                listen = None
-                port = None
-                keymap = None
-                if typ == "vnc":
-                    listen = node.prop("listen")
-                    port = node.prop("port")
-                    keymap = node.prop("keymap")
-
-                unique = count
-                count += 1
-
-                # [device type, unique, graphics type, listen addr, port,
-                #  keymap ]
-                graphics.append(["graphics", unique, typ, listen, port, keymap])
-            return graphics
-
-        return self._parse_device_xml(_parse_graphics_devs)
+        return devs
 
     def get_sound_devices(self):
-        def _parse_sound_devs(ctx):
-            sound = []
-            count = 0
-            ret = ctx.xpathEval("/domain/devices/sound")
-
-            for node in ret:
-                model = node.prop("model")
-
-                unique = count
-                count += 1
-
-                # [device type, unique, sound model]
-                sound.append(["sound", unique, model])
-            return sound
-
-        return self._parse_device_xml(_parse_sound_devs)
+        device_type = "sound"
+        guest = self._get_guest()
+        devs = guest.get_devices(device_type)
+        count = 0
+        for dev in devs:
+            dev.index = count
+            count += 1
+        
+        return devs
 
     def get_char_devices(self):
         def _parse_char_devs(ctx):
@@ -559,33 +528,15 @@ class vmmDomainBase(vmmLibvirtObject):
         return self._parse_device_xml(_parse_char_devs)
 
     def get_video_devices(self):
-        def _parse_video_devs(ctx):
-            vids = []
-            devs = ctx.xpathEval("/domain/devices/video")
-            count = 0
-
-            for dev in devs:
-                model = None
-                ram   = None
-                heads = None
-
-                for node in dev.children or []:
-                    if node.name == "model":
-                        model = node.prop("type")
-                        ram = node.prop("vram")
-                        heads = node.prop("heads")
-
-                        if ram:
-                            ram = safeint(ram, "%d")
-
-                unique = count
-                count += 1
-
-                row = ["video", unique, model, ram, heads]
-                vids.append(row)
-
-            return vids
-        return self._parse_device_xml(_parse_video_devs)
+        device_type = "video"
+        guest = self._get_guest()
+        devs = guest.get_devices(device_type)
+        count = 0
+        for dev in devs:
+            dev.index = count
+            count += 1
+        
+        return devs
 
     def get_hostdev_devices(self):
         def _parse_hostdev_devs(ctx):
@@ -679,23 +630,15 @@ class vmmDomainBase(vmmLibvirtObject):
         return self._parse_device_xml(_parse_hostdev_devs)
 
     def get_watchdog_devices(self):
-        def _parse_devs(ctx):
-            vids = []
-            devs = ctx.xpathEval("/domain/devices/watchdog")
-            count = 0
-
-            for dev in devs:
-                model = dev.prop("model")
-                action = dev.prop("action")
-
-                unique = count
-                count += 1
-
-                row = ["watchdog", unique, model, action]
-                vids.append(row)
-
-            return vids
-        return self._parse_device_xml(_parse_devs)
+        device_type = "watchdog"
+        guest = self._get_guest()
+        devs = guest.get_devices(device_type)
+        count = 0
+        for dev in devs:
+            dev.index = count
+            count += 1
+        
+        return devs
 
     def _parse_device_xml(self, parse_function):
         def parse_wrap_func(doc, ctx):
@@ -728,7 +671,7 @@ class vmmDomainBase(vmmLibvirtObject):
             xpath = "/domain/devices/disk[target/@dev='%s'][1]" % dev_id_info
 
         elif dev_type=="input":
-            typ, bus = dev_id_info
+            typ, bus = dev_id_info.split(":")
             xpath = ("/domain/devices/input[@type='%s' and @bus='%s'][1]" %
                      (typ, bus))
 

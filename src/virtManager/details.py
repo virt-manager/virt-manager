@@ -1873,22 +1873,23 @@ class vmmDetails(gobject.GObject):
         self.set_combo_label("network-model", 0, model)
 
     def refresh_input_page(self):
-        inputinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not inputinfo:
+        inp = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not inp:
             return
 
-        if inputinfo[2] == "tablet:usb":
+        ident = "%s:%s" % (inp.type, inp.bus)
+        if   ident == "tablet:usb":
             dev = _("EvTouch USB Graphics Tablet")
-        elif inputinfo[2] == "mouse:usb":
+        elif ident == "mouse:usb":
             dev = _("Generic USB Mouse")
-        elif inputinfo[2] == "mouse:xen":
+        elif ident == "mouse:xen":
             dev = _("Xen Mouse")
-        elif inputinfo[2] == "mouse:ps2":
+        elif ident == "mouse:ps2":
             dev = _("PS/2 Mouse")
         else:
-            dev = inputinfo[4] + " " + inputinfo[3]
+            dev = inp.bus + " " + inp.type
 
-        if inputinfo[4] == "tablet":
+        if inp.type == "tablet":
             mode = _("Absolute Movement")
         else:
             mode = _("Relative Movement")
@@ -1897,33 +1898,33 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("input-dev-mode").set_text(mode)
 
         # Can't remove primary Xen or PS/2 mice
-        if inputinfo[4] == "mouse" and inputinfo[3] in ("xen", "ps2"):
+        if inp.type == "mouse" and inp.bus in ("xen", "ps2"):
             self.window.get_widget("config-remove").set_sensitive(False)
         else:
             self.window.get_widget("config-remove").set_sensitive(True)
 
     def refresh_graphics_page(self):
-        gfxinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not gfxinfo:
+        gfx = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not gfx:
             return
 
-        is_vnc = (gfxinfo[2] == "vnc")
-        is_sdl = (gfxinfo[2] == "sdl")
+        is_vnc = (gfx.type == "vnc")
+        is_sdl = (gfx.type == "sdl")
 
         port = _("N/A")
         if is_vnc:
             gtype = _("VNC server")
-            port  = (gfxinfo[4] == "-1" and
+            port  = (gfx.port == -1 and
                      _("Automatically allocated") or
-                     gfxinfo[4])
+                     str(gfx.port))
         elif is_sdl:
             gtype = _("Local SDL window")
         else:
-            gtype = gfxinfo[2]
+            gtype = gfx.type
 
-        address = (is_vnc and (gfxinfo[3] or "127.0.0.1") or _("N/A"))
+        address = (is_vnc and (gfx.listen or "127.0.0.1") or _("N/A"))
         passwd  = (is_vnc and "-" or _("N/A"))
-        keymap  = (is_vnc and (gfxinfo[5] or _("None")) or _("N/A"))
+        keymap  = (is_vnc and (gfx.keymap or _("None")) or _("N/A"))
 
         self.window.get_widget("graphics-type").set_text(gtype)
         self.window.get_widget("graphics-address").set_text(address)
@@ -1932,13 +1933,11 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("graphics-keymap").set_text(keymap)
 
     def refresh_sound_page(self):
-        soundinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not soundinfo:
+        sound = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not sound:
             return
 
-        model = soundinfo[2]
-
-        self.set_combo_label("sound-model", 0, model)
+        self.set_combo_label("sound-model", 0, sound.model)
 
     def refresh_char_page(self):
         charinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -2036,11 +2035,13 @@ class vmmDetails(gobject.GObject):
                                                           "-")
 
     def refresh_video_page(self):
-        vidinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not vidinfo:
+        vid = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not vid:
             return
 
-        ignore, ignore, model, ram, heads = vidinfo
+        model = vid.model_type
+        ram = vid.vram
+        heads = vid.heads
         try:
             ramlabel = ram and "%d MB" % (int(ram) / 1024) or "-"
         except:
@@ -2052,11 +2053,12 @@ class vmmDetails(gobject.GObject):
         self.set_combo_label("video-model", 0, model)
 
     def refresh_watchdog_page(self):
-        watchinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not watchinfo:
+        watch = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not watch:
             return
 
-        ignore, ignore, model, action = watchinfo
+        model = watch.model
+        action = watch.action
 
         self.set_combo_label("watchdog-model", 0, model)
         self.set_combo_label("watchdog-action", 0, action)
@@ -2177,9 +2179,9 @@ class vmmDetails(gobject.GObject):
                           "NIC %s" % mac[-9:], "network-idle", key)
 
         # Populate list of input devices
-        for inputinfo in self.vm.get_input_devices():
-            key = str(inputinfo[1])
-            inptype = inputinfo[4]
+        for inp in self.vm.get_input_devices():
+            key = str("%s:%s" % (inp.type, inp.bus))
+            inptype = inp.type
 
             currentInputs[key] = 1
             icon = "input-mouse"
@@ -2191,25 +2193,25 @@ class vmmDetails(gobject.GObject):
             else:
                 label = _("Input")
 
-            update_hwlist(HW_LIST_TYPE_INPUT, inputinfo, label, icon, key)
+            update_hwlist(HW_LIST_TYPE_INPUT, inp, label, icon, key)
 
         # Populate list of graphics devices
-        for gfxinfo in self.vm.get_graphics_devices():
-            key = str(gfxinfo[1])
-            gfxtype = gfxinfo[2]
+        for gfx in self.vm.get_graphics_devices():
+            key = str(gfx.index)
+            gfxtype = gfx.type
 
             currentGraphics[key] = 1
-            update_hwlist(HW_LIST_TYPE_GRAPHICS, gfxinfo,
+            update_hwlist(HW_LIST_TYPE_GRAPHICS, gfx,
                           _("Display %s") % (gfxtype.upper()),
                           "video-display", key)
 
         # Populate list of sound devices
-        for soundinfo in self.vm.get_sound_devices():
-            key = str(soundinfo[1])
-            model = soundinfo[2]
+        for sound in self.vm.get_sound_devices():
+            key = str(sound.index)
+            model = sound.model
 
             currentSounds[key] = 1
-            update_hwlist(HW_LIST_TYPE_SOUND, soundinfo,
+            update_hwlist(HW_LIST_TYPE_SOUND, sound,
                           _("Sound: %s" % model), "audio-card", key)
 
         # Populate list of char devices
@@ -2242,18 +2244,18 @@ class vmmDetails(gobject.GObject):
                           icon, key)
 
         # Populate video devices
-        for vidinfo in self.vm.get_video_devices():
-            key = str(vidinfo[1])
+        for vid in self.vm.get_video_devices():
+            key = str(vid.index)
 
             currentVids[key] = 1
-            update_hwlist(HW_LIST_TYPE_VIDEO, vidinfo, _("Video"),
+            update_hwlist(HW_LIST_TYPE_VIDEO, vid, _("Video"),
                           "video-display", key)
 
-        for watchinfo in self.vm.get_watchdog_devices():
-            key = str(watchinfo[1])
+        for watch in self.vm.get_watchdog_devices():
+            key = str(watch.index)
 
             currentWatchdogs[key] = 1
-            update_hwlist(HW_LIST_TYPE_WATCHDOG, watchinfo, _("Watchdog"),
+            update_hwlist(HW_LIST_TYPE_WATCHDOG, watch, _("Watchdog"),
                           "device_pci", key)
 
         # Now remove any no longer current devs
