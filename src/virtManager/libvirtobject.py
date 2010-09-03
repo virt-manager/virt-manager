@@ -20,7 +20,6 @@
 
 import gobject
 
-import time
 import difflib
 import logging
 
@@ -67,11 +66,27 @@ class vmmLibvirtObject(gobject.GObject):
     # Public XML API #
     ##################
 
-    def get_xml(self):
+    def get_xml(self, inactive=False, refresh_if_necc=True):
         """
         Get domain xml. If cached xml is invalid, update.
+
+        @param inactive: Return persistent XML, not the running config.
+                    No effect if domain is not running. Use this flag
+                    if the XML will be used for redefining a guest
+        @param refresh_if_necc: Check if XML is out of date, and if so,
+                    refresh it (default behavior). Skipping a refresh is
+                    useful to prevent updating xml in the tick loop when
+                    it's not that important (disk/net stats)
         """
-        return self._xml_fetch_helper(refresh_if_necc=True)
+        if inactive:
+            return self._XMLDesc(self._inactive_xml_flags)
+
+        if self._xml is None:
+            self.refresh_xml()
+        elif refresh_if_necc and not self._is_xml_valid:
+            self.refresh_xml()
+
+        return self._xml
 
     def refresh_xml(self):
         # Force an xml update. Signal 'config-changed' if domain xml has
@@ -82,43 +97,15 @@ class vmmLibvirtObject(gobject.GObject):
         self._is_xml_valid = True
 
         if origxml != self._xml:
-            # 'tick' to make sure we have the latest time
-            self.tick(time.time())
             util.safe_idle_add(util.idle_emit, self, "config-changed")
 
     ######################################
     # Internal XML cache/update routines #
     ######################################
 
-    def _get_xml_no_refresh(self):
-        """
-        Fetch XML, but don't force a refresh. Useful to prevent updating
-        xml in the tick loop when it's not that important (disk/net stats)
-        """
-        return self._xml_fetch_helper(refresh_if_necc=False)
-
-    def _get_xml_to_define(self):
-        if self.is_active():
-            return self._get_inactive_xml()
-        else:
-            self._invalidate_xml()
-            return self.get_xml()
-
     def _invalidate_xml(self):
         # Mark cached xml as invalid
         self._is_xml_valid = False
-
-    def _xml_fetch_helper(self, refresh_if_necc):
-        # Helper to fetch xml with various options
-        if self._xml is None:
-            self.refresh_xml()
-        elif refresh_if_necc and not self._is_xml_valid:
-            self.refresh_xml()
-
-        return self._xml
-
-    def _get_inactive_xml(self):
-        return self._XMLDesc(self._inactive_xml_flags)
 
     ##########################
     # Internal API functions #
@@ -132,7 +119,7 @@ class vmmLibvirtObject(gobject.GObject):
                          original XML as its first argument.
         @param args: Extra arguments to pass to xml_func
         """
-        origxml = self._get_xml_to_define()
+        origxml = self.get_xml(inactive=True)
         # Sanitize origxml to be similar to what we will get back
         origxml = util.xml_parse_wrapper(origxml, lambda d, c: d.serialize())
 

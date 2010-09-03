@@ -771,13 +771,7 @@ class vmmDomainBase(vmmLibvirtObject):
         def parse_wrap_func(doc, ctx):
             return parse_function(ctx)
 
-        if inactive:
-            xml = self._get_inactive_xml()
-        elif refresh_if_necc:
-            xml = self.get_xml()
-        else:
-            xml = self._get_xml_no_refresh()
-
+        xml = self.get_xml(inactive=inactive, refresh_if_necc=refresh_if_necc)
         return util.xml_parse_wrapper(xml, parse_wrap_func)
 
     def _get_device_xml(self, dev_type, dev_id_info):
@@ -1210,6 +1204,7 @@ class vmmDomain(vmmDomainBase):
 
         self.reboot_listener = None
         self._guest = None
+        self._reparse_xml()
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
@@ -1390,7 +1385,7 @@ class vmmDomain(vmmDomainBase):
             flags |= libvirt.VIR_MIGRATE_PEER2PEER
             flags |= libvirt.VIR_MIGRATE_TUNNELLED
 
-        newxml = self._get_xml_to_define()
+        newxml = self.get_xml(inactive=True)
 
         logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s rate=%s" %
                       (destconn.vmm, flags, newname, interface, rate))
@@ -1444,22 +1439,26 @@ class vmmDomain(vmmDomainBase):
     # XML/Config Altering API #
     ###########################
 
-    def _get_domain_xml(self):
-        return vmmLibvirtObject.get_xml(self)
+    def _get_domain_xml(self, inactive=False, refresh_if_necc=True):
+        return vmmLibvirtObject.get_xml(self, inactive, refresh_if_necc)
 
-    def get_xml(self):
-        # Do this to make sure we have latest XML
-        self._get_domain_xml()
-        return self._get_guest().get_xml_config()
+    def get_xml(self, inactive=False, refresh_if_necc=True):
+        return self._get_guest(inactive, refresh_if_necc).get_xml_config()
 
-    def _get_guest(self):
-        if not self._guest:
-            self._reparse_xml()
+    def _get_guest(self, inactive=False, refresh_if_necc=True):
+        xml = self._get_domain_xml(inactive, refresh_if_necc)
+
+        if not self.is_active() and inactive:
+            # We don't cache a guest for 'inactive' XML, so just return it
+            return self._build_guest(xml)
+
         return self._guest
 
+    def _build_guest(self, xml):
+        return virtinst.Guest(connection=self.connection.vmm, parsexml=xml)
+
     def _reparse_xml(self, ignore=None):
-        self._guest = virtinst.Guest(connection=self.connection.vmm,
-                                     parsexml=self._get_domain_xml())
+        self._guest = self._build_guest(self._get_domain_xml())
 
     def _check_device_is_present(self, dev_type, dev_id_info):
         """
@@ -1471,7 +1470,7 @@ class vmmDomain(vmmDomainBase):
         of the inactive XML. If the device can't be found, make no change
         and return success.
         """
-        vmxml = self._get_inactive_xml()
+        vmxml = self.get_xml(inactive=True)
 
         def find_dev(doc, ctx, dev_type, dev_id_info):
             ret = self._get_device_xml_nodes(ctx, dev_type, dev_id_info)
@@ -2073,13 +2072,14 @@ class vmmDomainVirtinst(vmmDomainBase):
     def status(self):
         return libvirt.VIR_DOMAIN_SHUTOFF
 
-    def get_xml(self):
+    def get_xml(self, inactive=False, refresh_if_necc=True):
+        ignore = inactive
+        ignore = refresh_if_necc
+
         xml = self._backend.get_config_xml()
         if not xml:
             xml = self._backend.get_config_xml(install=False)
         return xml
-    def _get_inactive_xml(self):
-        return self.get_xml()
 
     def refresh_xml(self):
         # No caching, so no refresh needed
