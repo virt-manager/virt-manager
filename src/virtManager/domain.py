@@ -410,70 +410,32 @@ class vmmDomainBase(vmmLibvirtObject):
 
     def get_disk_devices(self, refresh_if_necc=True, inactive=False):
         device_type = "disk"
-        guest = self._get_guest(refresh_if_necc, inactive)
-
-        # [ devicetype, unique, device target, source path,
-        #   disk device type, disk type, readonly?, sharable?,
-        #   bus type, disk idx ]
-
-        disks = guest.get_devices(device_type)
+        guest = self._get_guest(refresh_if_necc=refresh_if_necc,
+                                inactive=inactive)
+        devs = guest.get_devices(device_type)
 
         # Iterate through all disks and calculate what number they are
         # HACK: We are making a variable in VirtualDisk to store the index
         idx_mapping = {}
-        for disk in disks:
-            devtype = disk.device
-            bus = disk.bus
+        for dev in devs:
+            devtype = dev.device
+            bus = dev.bus
             key = devtype + (bus or "")
 
             if not idx_mapping.has_key(key):
                 idx_mapping[key] = 1
 
-            disk.disk_bus_index = idx_mapping[key]
+            dev.disk_bus_index = idx_mapping[key]
             idx_mapping[key] += 1
 
-        return disks
+        return devs
 
     def get_network_devices(self, refresh_if_necc=True):
-        def _parse_network_devs(ctx):
-            nics = []
-            ret = ctx.xpathEval("/domain/devices/interface")
+        device_type = "interface"
+        guest = self._get_guest(refresh_if_necc=refresh_if_necc)
+        devs = guest.get_devices(device_type)
 
-            for node in ret:
-                typ = node.prop("type")
-                devmac = None
-                source = None
-                target = None
-                model = None
-                for child in node.children:
-                    if child.name == "source":
-                        if typ == "bridge":
-                            source = child.prop("bridge")
-                        elif typ == "ethernet":
-                            source = child.prop("dev")
-                        elif typ == "network":
-                            source = child.prop("network")
-                        elif typ == "user":
-                            source = None
-                        else:
-                            source = None
-                    elif child.name == "mac":
-                        devmac = child.prop("address")
-                    elif child.name == "target":
-                        target = child.prop("dev")
-                    elif child.name == "model":
-                        model = child.prop("type")
-                # XXX Hack - ignore devs without a MAC, since we
-                # need mac for uniqueness. Some reason XenD doesn't
-                # always complete kill the NIC record
-                if devmac != None:
-                    # [device type, unique, mac addr, source, target dev,
-                    #  net type, net model]
-                    nics.append(["interface", devmac, devmac, source, target,
-                                 typ, model])
-            return nics
-
-        return self._parse_device_xml(_parse_network_devs, refresh_if_necc)
+        return devs
 
     def get_input_devices(self):
         def _parse_input_devs(ctx):
@@ -735,12 +697,11 @@ class vmmDomainBase(vmmLibvirtObject):
             return vids
         return self._parse_device_xml(_parse_devs)
 
-    def _parse_device_xml(self, parse_function, refresh_if_necc=True,
-                          inactive=False):
+    def _parse_device_xml(self, parse_function):
         def parse_wrap_func(doc, ctx):
             return parse_function(ctx)
 
-        xml = self.get_xml(inactive=inactive, refresh_if_necc=refresh_if_necc)
+        xml = self.get_xml()
         return util.xml_parse_wrapper(xml, parse_wrap_func)
 
     def _get_device_xml(self, dev_type, dev_id_info):
@@ -887,7 +848,7 @@ class vmmDomainBase(vmmLibvirtObject):
             return rx, tx
 
         for netdev in self.get_network_devices(refresh_if_necc=False):
-            dev = netdev[4]
+            dev = netdev.target_dev
             if not dev:
                 continue
 

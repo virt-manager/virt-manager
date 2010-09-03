@@ -470,7 +470,9 @@ class vmmDetails(gobject.GObject):
         # [ label, icon name, icon size, hw type, hw data, hw key,
         #   dev type name]
         hw_list_model = gtk.ListStore(str, str, int, int,
-                                      gobject.TYPE_PYOBJECT, str, str)
+                                      gobject.TYPE_PYOBJECT,
+                                      gobject.TYPE_PYOBJECT,
+                                      str)
         self.window.get_widget("hw-list").set_model(hw_list_model)
 
         hwCol = gtk.TreeViewColumn("Hardware")
@@ -1842,28 +1844,28 @@ class vmmDetails(gobject.GObject):
             button.hide()
 
     def refresh_network_page(self):
-        netinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not netinfo:
+        net = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not net:
             return
 
-        nettype = netinfo[5]
-        source = netinfo[3]
-        model = netinfo[6] or None
+        nettype = net.type
+        source = net.get_source()
+        model = net.model
 
         netobj = None
         if nettype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
             name_dict = {}
             for uuid in self.conn.list_net_uuids():
-                net = self.conn.get_net(uuid)
-                name = net.get_name()
-                name_dict[name] = net
+                vnet = self.conn.get_net(uuid)
+                name = vnet.get_name()
+                name_dict[name] = vnet
 
             if source and name_dict.has_key(source):
                 netobj = name_dict[source]
 
         desc = uihelpers.pretty_network_desc(nettype, source, netobj)
 
-        self.window.get_widget("network-mac-address").set_text(netinfo[2])
+        self.window.get_widget("network-mac-address").set_text(net.macaddr)
         self.window.get_widget("network-source-device").set_text(desc)
 
         uihelpers.populate_netmodel_combo(self.vm,
@@ -2166,12 +2168,12 @@ class vmmDetails(gobject.GObject):
             update_hwlist(HW_LIST_TYPE_DISK, disk, label, icon, key)
 
         # Populate list of NICs
-        for netinfo in self.vm.get_network_devices():
-            key = str(netinfo[1])
-            mac = netinfo[2]
+        for net in self.vm.get_network_devices():
+            key = str(net.macaddr)
+            mac = net.macaddr
 
             currentNICs[key] = 1
-            update_hwlist(HW_LIST_TYPE_NIC, netinfo,
+            update_hwlist(HW_LIST_TYPE_NIC, net,
                           "NIC %s" % mac[-9:], "network-idle", key)
 
         # Populate list of input devices

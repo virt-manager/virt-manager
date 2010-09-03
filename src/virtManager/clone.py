@@ -236,9 +236,9 @@ class vmmCloneVM(gobject.GObject):
             self.mac_list.append(origmac)
 
         for net in self.orig_vm.get_network_devices():
-            mac = net[2]
-            net_dev = net[3]
-            net_type = net[5]
+            mac = net.macaddr
+            net_dev = net.get_source()
+            net_type = net.type
 
             # Generate a new MAC
             obj = VirtualNetworkInterface(conn=self.conn.vmm,
@@ -267,7 +267,7 @@ class vmmCloneVM(gobject.GObject):
             else:
                 # 'bridge' or anything else
                 label = (net_type.capitalize() +
-                         net_dev and " %s" % net_dev or "")
+                         (net_dev and (" %s" % net_dev) or ""))
 
             build_net_row(label, mac, newmac)
 
@@ -286,7 +286,7 @@ class vmmCloneVM(gobject.GObject):
         storage_list = {}
 
         # We need to determine which disks fail (and why).
-        all_targets = map(lambda d: d[1], diskinfos)
+        all_targets = map(lambda d: d.target, diskinfos)
 
         for disk in diskinfos:
             force_target = disk.target
