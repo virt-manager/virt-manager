@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: virt-manager.tip\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-25 09:36-0400\n"
-"PO-Revision-Date: 2010-08-03 19:15+0200\n"
-"Last-Translator: Boris BARNIER <b.barnier@gmail.com>\n"
+"PO-Revision-Date: 2010-08-28 15:30+0200\n"
+"Last-Translator: Laurent Léonard <laurent@open-minds.org>\n"
 "Language-Team: French <trans-fr@lists.fedoraproject.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -173,8 +173,7 @@ msgstr "La longueur de la liste d'URL"
 
 #: ../src/virt-manager.schemas.in.h:31
 msgid "The number of samples to keep in the statistics history"
-msgstr ""
-"Le nombre d'échantillons à conserver dans l'historique des statistiques"
+msgstr "Le nombre d'échantillons à conserver dans l'historique des statistiques"
 
 #: ../src/virt-manager.schemas.in.h:32
 msgid ""
@@ -240,8 +239,7 @@ msgstr "S'il faut ou non installer un périphérique de son pour les MV locales"
 
 #: ../src/virt-manager.schemas.in.h:44
 msgid "Whether to install a sound device for remote VMs or not"
-msgstr ""
-"S'il faut ou non installer un périphérique de son pour les MV distantes"
+msgstr "S'il faut ou non installer un périphérique de son pour les MV distantes"
 
 #: ../src/virt-manager.schemas.in.h:45
 msgid ""
@@ -292,8 +290,7 @@ msgstr "Si une confirmation est requise afin d'éteindre/redémarrer une MV"
 
 #: ../src/virt-manager.schemas.in.h:53
 msgid "Whether we require confirmation to remove a virtual device"
-msgstr ""
-"Si une confirmation est requise afin de retirer un périphérique virtuel"
+msgstr "Si une confirmation est requise afin de retirer un périphérique virtuel"
 
 #: ../src/virt-manager.schemas.in.h:54
 msgid ""
@@ -393,9 +390,8 @@ msgid "Bus type:"
 msgstr "Type du bus :"
 
 #: ../src/virtManager/addhardware.py:756
-#, fuzzy
 msgid "Cache mode:"
-msgstr "Nom de la machine :"
+msgstr "Mode de cache :"
 
 #: ../src/virtManager/addhardware.py:758 ../src/vmm-create.glade.h:40
 #: ../src/vmm-host.glade.h:53
@@ -788,13 +784,12 @@ msgid "Cannot clone unmanaged remote storage."
 msgstr "Ne peut cloner le stockage non-géré distant."
 
 #: ../src/virtManager/clone.py:808
-#, fuzzy
 msgid ""
 "Block devices to clone must be libvirt\n"
 "managed storage volumes."
 msgstr ""
-"Les périphériques blocs à cloner devraient être des volumes\n"
-"de stockage gérés."
+"Les périphériques blocs à cloner doivent\n"
+"être des volumes de stockage gérés par libvirt."
 
 #: ../src/virtManager/clone.py:811 ../src/virtManager/delete.py:344
 msgid "No write access to parent directory."
@@ -837,9 +832,8 @@ msgid "Locate ISO media"
 msgstr "Localiser le média ISO"
 
 #: ../src/virtManager/connect.py:324
-#, fuzzy
 msgid "A hostname is required for remote connections."
-msgstr "Installations URL non disponibles pour les connexions distantes."
+msgstr "Un nom d'hôte est requis pour les connexions distantes."
 
 #: ../src/virtManager/connection.py:186
 #, python-format
@@ -912,23 +906,22 @@ msgid "Unknown"
 msgstr "Inconnu"
 
 #: ../src/virtManager/console.py:200
-#, fuzzy, python-format
+#, python-format
 msgid "Press %s to release pointer."
-msgstr "Appuyer simultanément sur Ctrl+Alt pour libérer le pointeur."
+msgstr "Appuyez sur %s pour libérer le pointeur."
 
 #: ../src/virtManager/console.py:216
 msgid "Pointer grabbed"
 msgstr "Curseur approprié"
 
 #: ../src/virtManager/console.py:217
-#, fuzzy
 msgid ""
 "The mouse pointer has been restricted to the virtual console window. To "
 "release the pointer, press the key pair"
 msgstr ""
 "L'utilisation du pointeur de la souris a été restreinte à la fenêtre de la "
-"console virtuelle. Pour libérer le pointeur, appuyez simultanément sur Ctrl "
-"+ Alt"
+"console virtuelle. Pour libérer le pointeur, appuyez sur la combinaison de "
+"touches"
 
 #: ../src/virtManager/console.py:218
 msgid "Do not show this notification in the future."
@@ -1571,7 +1564,6 @@ msgid "Close tab"
 msgstr "Fermer l'onglet"
 
 #: ../src/virtManager/details.py:504
-#, fuzzy
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
 "with the specified label. The administrator is responsible for making sure "
@@ -1594,7 +1586,7 @@ msgstr ""
 
 #: ../src/virtManager/details.py:515
 msgid "Libvirt did not detect NUMA capabilities."
-msgstr ""
+msgstr "Libvirt n'a pas détecté de capacités NUMA."
 
 #: ../src/virtManager/details.py:523
 msgid "VCPU"
@@ -1646,9 +1638,8 @@ msgid "Error refreshing hardware page: %s"
 msgstr "Erreur lors du rafraîchissement de la page du matériel : %s"
 
 #: ../src/virtManager/details.py:838 ../src/virtManager/manager.py:919
-#, fuzzy
 msgid "_Restore"
-msgstr "_Reprendre"
+msgstr "_Restaurer"
 
 #. Build VM context menu
 #: ../src/virtManager/details.py:840 ../src/virtManager/manager.py:328
@@ -1675,10 +1666,9 @@ msgid "Screenshot saved"
 msgstr "Capture d'écran enregistrée"
 
 #: ../src/virtManager/details.py:1145
-#, fuzzy, python-format
+#, python-format
 msgid "Error generating CPU configuration: %s"
-msgstr ""
-"Erreur lors de la validation de la configuration de la configuration IP : %s"
+msgstr "Erreur lors de la génération de la configuration du CPU : %s"
 
 #: ../src/virtManager/details.py:1359
 #, python-format
@@ -1825,7 +1815,6 @@ msgid "Paused"
 msgstr "Suspendue"
 
 #: ../src/virtManager/domain.py:1120
-#, fuzzy
 msgid "Shutting Down"
 msgstr "Extinction"
 
@@ -1839,11 +1828,12 @@ msgstr "Plantée"
 
 #: ../src/virtManager/domain.py:1319
 msgid "Cannot start guest while cloning operation in progress"
-msgstr ""
+msgstr "Ne peut démarrer un invité lorsqu'une opération de clonage est en cours"
 
 #: ../src/virtManager/domain.py:1333
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr ""
+"Ne peut reprendre un invité lorsqu'une opération de clonage est en cours"
 
 #: ../src/virtManager/domain.py:2331
 msgid "Did not find selected device."
@@ -1935,18 +1925,17 @@ msgid "Unknown connection URI %s"
 msgstr "URI de connexion %s inconnue"
 
 #: ../src/virtManager/engine.py:730
-#, fuzzy
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr ""
 "La sauvegarde de machines virtuelles à travers une connexion distante n'est "
-"pas encore prise en charge."
+"pas prise en charge par cette version de libvirt ou par l'hyperviseur."
 
 #: ../src/virtManager/engine.py:737
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to save '%s'?"
-msgstr "Êtes-vous certain de vouloir suspendre « %s » ?"
+msgstr "Êtes-vous certain de vouloir sauvegarder « %s » ?"
 
 #: ../src/virtManager/engine.py:750
 msgid "Save Virtual Machine"
@@ -2156,9 +2145,9 @@ msgid "Error deleting pool: %s"
 msgstr "Erreur lors de la suppression de la réserve : %s"
 
 #: ../src/virtManager/host.py:624
-#, fuzzy, python-format
+#, python-format
 msgid "Error refreshing pool '%s': %s"
-msgstr "Erreur lors du démarrage de la réserve « %s » : %s"
+msgstr "Erreur lors du rafraîchissement de la réserve « %s » : %s"
 
 #: ../src/virtManager/host.py:633
 #, python-format
@@ -2279,14 +2268,12 @@ msgid "_Force Off"
 msgstr "_Forcer l'extinction"
 
 #: ../src/virtManager/manager.py:340 ../src/virtManager/uihelpers.py:672
-#, fuzzy
 msgid "Sa_ve"
-msgstr "_Sauvegarder"
+msgstr "Sau_vegarder"
 
 #: ../src/virtManager/manager.py:343
-#, fuzzy
 msgid "_Clone..."
-msgstr "_Cloner"
+msgstr "_Cloner..."
 
 #: ../src/virtManager/manager.py:344 ../src/vmm-details.glade.h:124
 msgid "_Migrate..."
@@ -2444,15 +2431,17 @@ msgstr "Réseau isolé"
 #: ../src/virtManager/preferences.py:159
 msgid "Installed version of GTK-VNC doesn't support configurable grab keys"
 msgstr ""
+"La version de GTK-VNC installée ne prend pas en charge les touches "
+"d'appropriation configurables"
 
 #: ../src/virtManager/preferences.py:207
-#, fuzzy
 msgid "Configure key combination"
-msgstr "Configuration IP"
+msgstr "Configurer la combinaison de touches"
 
 #: ../src/virtManager/preferences.py:212
 msgid "Please press desired grab key combination"
 msgstr ""
+"Veuillez appuyer sur la combinaison désirée pour les touches d'appropriation"
 
 #: ../src/virtManager/storagebrowse.py:132
 msgid "Size"
@@ -2479,7 +2468,6 @@ msgid "No virtual machines"
 msgstr "Aucune machine virtuelle"
 
 #: ../src/virtManager/uihelpers.py:69
-#, fuzzy
 msgid ""
 "Fully allocating storage may take longer now, but the OS install phase will "
 "be quicker. \n"
@@ -2487,29 +2475,28 @@ msgid ""
 "Skipping allocation can also cause space issues on the host machine, if the "
 "maximum image size exceeds available storage space."
 msgstr ""
-"L'allocation complète du stockage durera plus longtemps, cependant l'étape "
-"d'installation du SE sera plus rapide.\n"
+"L'allocation complète du stockage peut prendre plus de temps maintenant, mais "
+"l'étape d'installation du SE sera plus rapide.\n"
 "\n"
 "L'omission de l'allocation peut également occasionner des problèmes de place "
 "sur la machine hôte si la taille maximale de l'image dépasse l'espace de "
 "stockage disponible."
 
 #: ../src/virtManager/uihelpers.py:112
-#, fuzzy
 msgid "Default pool is not active."
-msgstr "Le réseau virtuel n'est pas actif."
+msgstr "La réserve par défaut n'est pas active."
 
 #: ../src/virtManager/uihelpers.py:113
-#, fuzzy, python-format
+#, python-format
 msgid "Storage pool '%s' is not active. Would you like to start the pool now?"
 msgstr ""
-"Le réseau virtuel « %s » n'est pas actif. Souhaitez-vous démarrer le réseau "
+"La réserve de stockage « %s » n'est pas active. Souhaitez-vous la démarrer "
 "maintenant ?"
 
 #: ../src/virtManager/uihelpers.py:124
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start storage_pool '%s': %s"
-msgstr "N'a pas pu créer la réserve de stockage par défaut « %s » : %s"
+msgstr "La réserve de stockage « %s » ne peut pas être démarrée : %s"
 
 #. [xml value, label]
 #: ../src/virtManager/uihelpers.py:215
@@ -2559,7 +2546,7 @@ msgstr "Le réseau virtuel n'est pas actif."
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr ""
-"Le réseau virtuel « %s » n'est pas actif. Souhaitez-vous démarrer le réseau "
+"Le réseau virtuel « %s » n'est pas actif. Souhaitez-vous le démarrer "
 "maintenant ?"
 
 #: ../src/virtManager/uihelpers.py:461
@@ -2714,8 +2701,7 @@ msgstr ""
 #: ../src/vmm-add-hardware.glade.h:12
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Sound</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Son</span>"
+msgstr "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Son</span>"
 
 #: ../src/vmm-add-hardware.glade.h:13
 msgid ""
@@ -2760,9 +2746,8 @@ msgid "C_reate a disk image on the computer's hard drive"
 msgstr "C_réer une image disque sur le disque dur de l'ordinateur"
 
 #: ../src/vmm-add-hardware.glade.h:21
-#, fuzzy
 msgid "Cache _mode:"
-msgstr "Nom de la machine :"
+msgstr "_Mode de cache :"
 
 #: ../src/vmm-add-hardware.glade.h:22
 msgid "D_evice model:"
@@ -3472,8 +3457,7 @@ msgstr "S'il faut <b>réacheminer</b> le trafic vers le réseau physique"
 
 #: ../src/vmm-create-net.glade.h:49
 msgid "You will need to choose an IPv4 address space for the virtual network:"
-msgstr ""
-"Vous devrez choisir un espace d'adressage IPv4 pour le réseau virtuel :"
+msgstr "Vous devrez choisir un espace d'adressage IPv4 pour le réseau virtuel :"
 
 #: ../src/vmm-create-net.glade.h:50
 msgid "_Destination:"
@@ -3673,7 +3657,6 @@ msgid "Choose Memory and CPU settings"
 msgstr "Choisissez les paramètres mémoire et CPU"
 
 #: ../src/vmm-create.glade.h:17
-#, fuzzy
 msgid "Choose an operating system type and version"
 msgstr "Choisissez un type et une version de système d'exploitation"
 
@@ -3904,6 +3887,8 @@ msgstr "<b>insérer type</b>"
 #: ../src/vmm-details.glade.h:22
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr ""
+"<small>L'utilisation d'un nombre trop important de VCPU peut affecter la "
+"performance</small>"
 
 #: ../src/vmm-details.glade.h:23
 msgid "A_ction:"
@@ -3922,9 +3907,8 @@ msgid "Auth"
 msgstr "Authentification"
 
 #: ../src/vmm-details.glade.h:28
-#, fuzzy
 msgid "Begin Installation"
-msgstr "Source d'installation"
+msgstr "Commencer l'installation"
 
 #: ../src/vmm-details.glade.h:29
 msgid "Boot"
@@ -3943,9 +3927,8 @@ msgid "C_lock Offset:"
 msgstr "Décalage de l'hor_loge"
 
 #: ../src/vmm-details.glade.h:33
-#, fuzzy
 msgid "Cac_he mode:"
-msgstr "Nom de la machine :"
+msgstr "Mode de cac_he :"
 
 #: ../src/vmm-details.glade.h:34
 msgid "Change a_llocation:"
@@ -4009,7 +3992,7 @@ msgstr "Activer l'A_PIC :"
 
 #: ../src/vmm-details.glade.h:51
 msgid "Generate from host _NUMA configuration"
-msgstr ""
+msgstr "Générer à partir de la configuration _NUMA de l'hôte"
 
 #: ../src/vmm-details.glade.h:52
 msgid "Heads:"
@@ -4021,7 +4004,7 @@ msgstr "Hyperviseur :"
 
 #: ../src/vmm-details.glade.h:54
 msgid "Initial _pinning:"
-msgstr "_Affinité initiale :"
+msgstr "_Affinités initiales :"
 
 #: ../src/vmm-details.glade.h:57
 msgid "Logical host CPUs:"
@@ -4104,9 +4087,8 @@ msgid "R_eadonly:"
 msgstr "L_ecture seule"
 
 #: ../src/vmm-details.glade.h:82
-#, fuzzy
 msgid "R_untime pinning:"
-msgstr "_Affinité initiale :"
+msgstr "Affinités lors de l'exéc_ution :"
 
 #: ../src/vmm-details.glade.h:83
 msgid "Run"
@@ -4221,9 +4203,8 @@ msgid "_Always"
 msgstr "_Toujours"
 
 #: ../src/vmm-details.glade.h:114
-#, fuzzy
 msgid "_Begin Installation"
-msgstr "Source d'installation"
+msgstr "_Commencer l'installation"
 
 #: ../src/vmm-details.glade.h:115
 msgid "_Clone"
@@ -4429,7 +4410,7 @@ msgstr "Type de réserve :"
 
 #: ../src/vmm-host.glade.h:42
 msgid "Refresh volume list"
-msgstr ""
+msgstr "Rafraîchir la liste des volumes"
 
 #: ../src/vmm-host.glade.h:43
 msgid "Restore Saved Machine..."
@@ -4505,9 +4486,8 @@ msgid "_CPU Usage"
 msgstr "Utilisation _CPU"
 
 #: ../src/vmm-manager.glade.h:10
-#, fuzzy
 msgid "_Connection Details"
-msgstr "Sélection de la connexion"
+msgstr "Détails de la _connexion"
 
 #: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:32
 msgid "_Disk I/O"
@@ -4586,9 +4566,8 @@ msgid "Co_nnect"
 msgstr "Co_nnecter"
 
 #: ../src/vmm-open-connection.glade.h:3
-#, fuzzy
 msgid "Connect to _remote host"
-msgstr "Sélection de la connexion"
+msgstr "Connexion à un hôte _distant"
 
 #: ../src/vmm-open-connection.glade.h:4
 msgid "Connection Select"
@@ -4596,7 +4575,7 @@ msgstr "Sélection de la connexion"
 
 #: ../src/vmm-open-connection.glade.h:5
 msgid "Generated URI:"
-msgstr ""
+msgstr "URI générée :"
 
 #: ../src/vmm-open-connection.glade.h:6
 msgid "H_ostname:"
@@ -4607,9 +4586,8 @@ msgid "Hypervisor Select"
 msgstr "Sélection de l'hyperviseur"
 
 #: ../src/vmm-open-connection.glade.h:8
-#, fuzzy
 msgid "Me_thod:"
-msgstr "eth0"
+msgstr "Mé_thode :"
 
 #: ../src/vmm-open-connection.glade.h:9
 msgid ""
@@ -4617,6 +4595,9 @@ msgid ""
 "TCP (SASL, Kerberos, ...)\n"
 "SSL/TLS with certificates"
 msgstr ""
+"SSH\n"
+"TCP (SASL, Kerberos, ...)\n"
+"SSL/TLS avec certificats"
 
 #: ../src/vmm-open-connection.glade.h:12
 msgid ""
@@ -4627,9 +4608,8 @@ msgstr ""
 "QEMU/KVM"
 
 #: ../src/vmm-open-connection.glade.h:14
-#, fuzzy
 msgid "_Autoconnect:"
-msgstr "Connexion a_utomatique :"
+msgstr "Connexion _automatique :"
 
 #: ../src/vmm-open-connection.glade.h:15
 msgid "_Hypervisor:"
@@ -4648,9 +4628,8 @@ msgid "<b>General</b>"
 msgstr "<b>Général</b>"
 
 #: ../src/vmm-preferences.glade.h:4
-#, fuzzy
 msgid "<b>Graphical Consoles</b>"
-msgstr "Console graphique %s"
+msgstr "<b>Consoles graphiques</b>"
 
 #: ../src/vmm-preferences.glade.h:5
 msgid "<b>New VM</b>"
@@ -4666,7 +4645,7 @@ msgstr "_Ouvrir les consoles automatiquement :"
 
 #: ../src/vmm-preferences.glade.h:8
 msgid "Change..."
-msgstr ""
+msgstr "Modifier..."
 
 #: ../src/vmm-preferences.glade.h:9
 msgid "Device re_moval:"
@@ -4685,14 +4664,12 @@ msgid "General"
 msgstr "Général"
 
 #: ../src/vmm-preferences.glade.h:13
-#, fuzzy
 msgid "Grab _keyboard accelerators:"
-msgstr "S'approprier les entrées du _clavier :"
+msgstr "S'approprier les accélérateurs du _clavier :"
 
 #: ../src/vmm-preferences.glade.h:14
-#, fuzzy
 msgid "Grab keys:"
-msgstr "S'approprier les entrées clavier"
+msgstr "Touches d'appropriation :"
 
 #: ../src/vmm-preferences.glade.h:15
 msgid "Graphical console _scaling:"
@@ -4738,12 +4715,11 @@ msgstr ""
 
 #: ../src/vmm-preferences.glade.h:27
 msgid "Not supported"
-msgstr ""
+msgstr "Non pris en charge"
 
 #: ../src/vmm-preferences.glade.h:28
-#, fuzzy
 msgid "Poweroff/_Reboot/Save:"
-msgstr "Éteindre/_Redémarrer :"
+msgstr "Éteindre/_Redémarrer/Sauvegarder :"
 
 #: ../src/vmm-preferences.glade.h:29
 msgid "Preferences"
@@ -4794,7 +4770,7 @@ msgid "_Browse Local"
 msgstr "_Parcourir en local"
 
 #~ msgid "ip desc"
-#~ msgstr "desc ip"
+#~ msgstr ""
 
 #~ msgid "Physical Device Requried"
 #~ msgstr "Périphérique physique requis"
