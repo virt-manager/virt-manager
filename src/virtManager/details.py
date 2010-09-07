@@ -108,11 +108,115 @@ def prettyify_disk(devtype, bus, idx):
 
     return "%s %s" % (ret, idx)
 
+def safeint(val, fmt="%.3d"):
+    try:
+        int(val)
+    except:
+        return str(val)
+    return fmt % int(val)
+
 def prettyify_bytes(val):
     if val > (1024*1024*1024):
         return "%2.2f GB" % (val/(1024.0*1024.0*1024.0))
     else:
         return "%2.2f MB" % (val/(1024.0*1024.0))
+
+def build_hostdev_label(hostdev):
+    # String shown in the devices details section
+    srclabel = ""
+    # String shown in the VMs hardware list
+    hwlabel = ""
+
+    typ = hostdev.type
+    vendor = hostdev.vendor
+    product = hostdev.product
+    addrbus = hostdev.bus
+    addrdev = hostdev.device
+    addrslt = hostdev.slot
+    addrfun = hostdev.function
+    addrdom = hostdev.domain
+
+    def dehex(val):
+        if val.startswith("0x"):
+            val = val[2:]
+        return val
+
+    hwlabel = typ.upper()
+    srclabel = typ.upper()
+
+    if vendor and product:
+        # USB by vendor + product
+        devstr = " %s:%s" % (dehex(vendor), dehex(product))
+        srclabel += devstr
+        hwlabel += devstr
+
+    elif addrbus and addrdev:
+        # USB by bus + dev
+        srclabel += (" Bus %s Device %s" %
+                     (safeint(addrbus), safeint(addrdev)))
+        hwlabel += " %s:%s" % (safeint(addrbus), safeint(addrdev))
+
+    elif addrbus and addrslt and addrfun and addrdom:
+        # PCI by bus:slot:function
+        devstr = (" %s:%s:%s.%s" %
+                  (dehex(addrdom), dehex(addrbus),
+                   dehex(addrslt), dehex(addrfun)))
+        srclabel += devstr
+        hwlabel += devstr
+
+    return srclabel, hwlabel
+
+def lookup_nodedev(vmmconn, hostdev):
+    def intify(val, do_hex=False):
+        try:
+            if do_hex:
+                return int(val or '0x00', 16)
+            else:
+                return int(val)
+        except:
+            return -1
+
+    def attrVal(node, attr):
+        if not hasattr(node, attr):
+            return None
+        return getattr(node, attr)
+
+    devtype     = hostdev.type
+    vendor_id   = hostdev.vendor or -1
+    product_id  = hostdev.product or -1
+    device      = intify(hostdev.device, True)
+    bus         = intify(hostdev.bus, True)
+    domain      = intify(hostdev.domain, True)
+    func        = intify(hostdev.function, True)
+    slot        = intify(hostdev.slot, True)
+    found_dev = None
+
+    # For USB we want a device, not a bus
+    if devtype == 'usb':
+        devtype = 'usb_device'
+
+    devs = vmmconn.get_devices(devtype, None)
+    for dev in devs:
+        # Try to get info from {product|vendor}_id
+        if (attrVal(dev, "product_id") == product_id and
+            attrVal(dev, "vendor_id") == vendor_id):
+            found_dev = dev
+            break
+        else:
+            # Try to get info from bus/addr
+            dev_id = intify(attrVal(dev, "device"))
+            bus_id = intify(attrVal(dev, "bus"))
+            dom_id = intify(attrVal(dev, "domain"))
+            func_id = intify(attrVal(dev, "function"))
+            slot_id = intify(attrVal(dev, "slot"))
+
+            if ((dev_id == device and bus_id == bus) or
+                (dom_id == domain and func_id == func and
+                 bus_id == bus and slot_id == slot)):
+                found_dev = dev
+                break
+
+    return found_dev
 
 class vmmDetails(gobject.GObject):
     __gsignals__ = {
@@ -1964,77 +2068,22 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("char-source-path").set_text(src_path or "-")
 
     def refresh_hostdev_page(self):
-        hostdevinfo = self.get_hw_selection(HW_LIST_COL_DEVICE)
-        if not hostdevinfo:
+        hostdev = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not hostdev:
             return
 
-        def intify(val, do_hex=False):
-            try:
-                if do_hex:
-                    return int(val or '0x00', 16)
-                else:
-                    return int(val)
-            except:
-                return -1
+        devtype = hostdev.type
+        pretty_name = None
+        nodedev = lookup_nodedev(self.vm.get_connection(), hostdev)
+        if nodedev:
+            pretty_name = nodedev.pretty_name()
 
-        def attrVal(node, attr):
-            if not hasattr(node, attr):
-                return None
-            return getattr(node, attr)
+        if not pretty_name:
+            pretty_name = build_hostdev_label(hostdev)[0] or "-"
 
-        devinfo = hostdevinfo[6]
-        vendor_id = -1
-        product_id = -1
-        device = 0
-        bus = 0
-        domain = 0
-        func = 0
-        slot = 0
-
-        if devinfo.get("vendor") and devinfo.get("product"):
-            vendor_id = devinfo["vendor"].get("id") or -1
-            product_id = devinfo["product"].get("id") or -1
-
-        elif devinfo.get("address"):
-            device = intify(devinfo["address"].get("device"), True)
-            bus = intify(devinfo["address"].get("bus"), True)
-            domain = intify(devinfo["address"].get("domain"), True)
-            func = intify(devinfo["address"].get("function"), True)
-            slot = intify(devinfo["address"].get("slot"), True)
-
-        typ = devinfo.get("type")
-        # For USB we want a device, not a bus
-        if typ == 'usb':
-            typ = 'usb_device'
-        dev_pretty_name = None
-        devs = self.vm.get_connection().get_devices( typ, None )
-
-        # Get device pretty name
-        for dev in devs:
-            # Try to get info from {product|vendor}_id
-            if (attrVal(dev, "product_id") == product_id and
-                attrVal(dev, "vendor_id") == vendor_id):
-                dev_pretty_name = dev.pretty_name()
-                break
-            else:
-                # Try to get info from bus/addr
-                dev_id = intify(attrVal(dev, "device"))
-                bus_id = intify(attrVal(dev, "bus"))
-                dom_id = intify(attrVal(dev, "domain"))
-                func_id = intify(attrVal(dev, "function"))
-                slot_id = intify(attrVal(dev, "slot"))
-
-                if ((dev_id == device and bus_id == bus) or
-                    (dom_id == domain and func_id == func and
-                     bus_id == bus and slot_id == slot)):
-                    dev_pretty_name = dev.pretty_name()
-                    break
-
-        devlabel = "<b>Physical %s Device</b>" % hostdevinfo[4].upper()
-
+        devlabel = "<b>Physical %s Device</b>" % devtype.upper()
         self.window.get_widget("hostdev-title").set_markup(devlabel)
-        self.window.get_widget("hostdev-source").set_text(dev_pretty_name or
-                                                          "-")
+        self.window.get_widget("hostdev-source").set_text(pretty_name)
 
     def refresh_video_page(self):
         vid = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -2233,18 +2282,17 @@ class vmmDetails(gobject.GObject):
                           "device_serial", key)
 
         # Populate host devices
-        for hostdevinfo in self.vm.get_hostdev_devices():
-            key = str(hostdevinfo[1])
-            devtype = hostdevinfo[4]
-            label = hostdevinfo[2]
+        for hostdev in self.vm.get_hostdev_devices():
+            key = str(hostdev.index)
+            devtype = hostdev.type
+            label = build_hostdev_label(hostdev)[1]
 
             currentHostdevs[key] = 1
             if devtype == "usb":
                 icon = "device_usb"
             else:
                 icon = "device_pci"
-            update_hwlist(HW_LIST_TYPE_HOSTDEV, hostdevinfo, label,
-                          icon, key)
+            update_hwlist(HW_LIST_TYPE_HOSTDEV, hostdev, label, icon, key)
 
         # Populate video devices
         for vid in self.vm.get_video_devices():

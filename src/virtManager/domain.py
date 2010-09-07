@@ -31,13 +31,6 @@ from virtinst import VirtualDevice
 
 from virtManager.libvirtobject import vmmLibvirtObject
 
-def safeint(val, fmt="%.3d"):
-    try:
-        int(val)
-    except:
-        return str(val)
-    return fmt % int(val)
-
 def disk_type_to_xen_driver_name(disk_type):
     if disk_type == "block":
         return "phy"
@@ -425,7 +418,7 @@ class vmmDomainBase(vmmLibvirtObject):
         for dev in devs:
             dev.index = count
             count += 1
-        
+
         return devs
 
     def get_char_devices(self):
@@ -464,99 +457,27 @@ class vmmDomainBase(vmmLibvirtObject):
         for dev in devs:
             dev.index = count
             count += 1
-        
+
         return devs
 
     def get_hostdev_devices(self):
-        def _parse_hostdev_devs(ctx):
-            hostdevs = []
-            devs = ctx.xpathEval("/domain/devices/hostdev")
-            count = 0
+        device_type = "hostdev"
+        guest = self._get_guest()
+        devs = guest.get_devices(device_type)
+        count = 0
+        for dev in devs:
+            dev.index = count
+            count += 1
 
-            for dev in devs:
-                vendor  = None
-                product = None
-                addrbus = None
-                addrdev = None
-                unique = {}
 
-                # String shown in the devices details section
-                srclabel = ""
-                # String shown in the VMs hardware list
-                hwlabel = ""
+        # [device type, unique, hwlist label, hostdev mode,
+        #  hostdev type, source desc label]
+        #hostdevs.append(["hostdev", index, hwlabel, mode, typ,
+        #                 srclabel, unique])
 
-                def dehex(val):
-                    if val.startswith("0x"):
-                        val = val[2:]
-                    return val
 
-                def set_uniq(baseent, propname, node):
-                    val = node.prop(propname)
-                    if not unique.has_key(baseent):
-                        unique[baseent] = {}
-                    unique[baseent][propname] = val
-                    return val
+        return devs
 
-                mode = dev.prop("mode")
-                typ  = dev.prop("type")
-                unique["type"] = typ
-
-                hwlabel = typ.upper()
-                srclabel = typ.upper()
-
-                for node in dev.children:
-                    if node.name == "source":
-                        for child in node.children:
-                            if child.name == "address":
-                                addrbus = set_uniq("address", "bus", child)
-
-                                # For USB
-                                addrdev = set_uniq("address", "device", child)
-
-                                # For PCI
-                                addrdom = set_uniq("address", "domain", child)
-                                addrslt = set_uniq("address", "slot", child)
-                                addrfun = set_uniq("address", "function", child)
-                            elif child.name == "vendor":
-                                vendor = set_uniq("vendor", "id", child)
-                            elif child.name == "product":
-                                product = set_uniq("product", "id", child)
-
-                if vendor and product:
-                    # USB by vendor + product
-                    devstr = " %s:%s" % (dehex(vendor), dehex(product))
-                    srclabel += devstr
-                    hwlabel += devstr
-
-                elif addrbus and addrdev:
-                    # USB by bus + dev
-                    srclabel += " Bus %s Device %s" % \
-                                (safeint(addrbus), safeint(addrdev))
-                    hwlabel += " %s:%s" % (safeint(addrbus), safeint(addrdev))
-
-                elif addrbus and addrslt and addrfun and addrdom:
-                    # PCI by bus:slot:function
-                    devstr = " %s:%s:%s.%s" % \
-                              (dehex(addrdom), dehex(addrbus),
-                               dehex(addrslt), dehex(addrfun))
-                    srclabel += devstr
-                    hwlabel += devstr
-
-                else:
-                    # If we can't determine source info, skip these
-                    # device since we have no way to determine uniqueness
-                    continue
-
-                index = count
-                count += 1
-
-                # [device type, unique, hwlist label, hostdev mode,
-                #  hostdev type, source desc label]
-                hostdevs.append(["hostdev", index, hwlabel, mode, typ,
-                                 srclabel, unique])
-
-            return hostdevs
-        return self._parse_device_xml(_parse_hostdev_devs)
 
     def get_watchdog_devices(self):
         device_type = "watchdog"
@@ -566,15 +487,8 @@ class vmmDomainBase(vmmLibvirtObject):
         for dev in devs:
             dev.index = count
             count += 1
-        
+
         return devs
-
-    def _parse_device_xml(self, parse_function):
-        def parse_wrap_func(doc, ctx):
-            return parse_function(ctx)
-
-        xml = self.get_xml()
-        return util.xml_parse_wrapper(xml, parse_wrap_func)
 
     def _get_device_xml(self, dev_type, dev_id_info):
         vmxml = self.get_xml()
