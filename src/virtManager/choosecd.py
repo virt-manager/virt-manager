@@ -32,7 +32,8 @@ class vmmChooseCD(gobject.GObject):
     __gsignals__ = {
         "cdrom-chosen": (gobject.SIGNAL_RUN_FIRST,
                          gobject.TYPE_NONE,
-                         (str, str, str)), # type, source, target
+                         # dev, source, target
+                         (gobject.TYPE_PYOBJECT, str, str)),
     }
 
     IS_FLOPPY = 1

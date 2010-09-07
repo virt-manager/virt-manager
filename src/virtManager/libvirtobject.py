@@ -139,6 +139,6 @@ class vmmLibvirtObject(gobject.GObject):
         self._define(newxml)
 
         # Invalidate cached XML
-        self._invalidate_xml()
+        self.refresh_xml()
 
 gobject.type_register(vmmLibvirtObject)

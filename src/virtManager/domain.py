@@ -27,7 +27,6 @@ import virtinst
 from virtManager import util
 import virtinst.util as vutil
 import virtinst.support as support
-from virtinst import VirtualDevice
 
 from virtManager.libvirtobject import vmmLibvirtObject
 
@@ -135,17 +134,17 @@ class vmmDomainBase(vmmLibvirtObject):
 
     def attach_device(self, devobj, devxml=None):
         raise NotImplementedError()
-    def detach_device(self, devtype, dev_id_info):
+    def detach_device(self, devtype, devobj):
         raise NotImplementedError()
 
     def add_device(self, devobj):
         raise NotImplementedError()
-    def remove_device(self, dev_type, dev_id_info):
+    def remove_device(self, dev_type, devobj):
         raise NotImplementedError()
 
-    def define_storage_media(self, dev_id_info, newpath, _type=None):
+    def define_storage_media(self, devobj, newpath, _type=None):
         raise NotImplementedError()
-    def hotplug_storage_media(self, dev_id_info, newpath, _type=None):
+    def hotplug_storage_media(self, devobj, newpath, _type=None):
         raise NotImplementedError()
 
     def define_vcpus(self, vcpus):
@@ -175,25 +174,25 @@ class vmmDomainBase(vmmLibvirtObject):
     def define_description(self, newvalue):
         raise NotImplementedError()
 
-    def define_disk_readonly(self, dev_id_info, do_readonly):
+    def define_disk_readonly(self, devobj, do_readonly):
         raise NotImplementedError()
-    def define_disk_shareable(self, dev_id_info, do_shareable):
+    def define_disk_shareable(self, devobj, do_shareable):
         raise NotImplementedError()
-    def define_disk_cache(self, dev_id_info, new_cache):
-        raise NotImplementedError()
-
-    def define_network_model(self, dev_id_info, newmodel):
+    def define_disk_cache(self, devobj, new_cache):
         raise NotImplementedError()
 
-    def define_sound_model(self, dev_id_info, newmodel):
+    def define_network_model(self, devobj, newmodel):
         raise NotImplementedError()
 
-    def define_video_model(self, dev_id_info, newmodel):
+    def define_sound_model(self, devobj, newmodel):
         raise NotImplementedError()
 
-    def define_watchdog_model(self, dev_id_info, newmodel):
+    def define_video_model(self, devobj, newmodel):
         raise NotImplementedError()
-    def define_watchdog_action(self, dev_id_info, newmodel):
+
+    def define_watchdog_model(self, devobj, newmodel):
+        raise NotImplementedError()
+    def define_watchdog_action(self, devobj, newmodel):
         raise NotImplementedError()
 
     ########################
@@ -364,11 +363,36 @@ class vmmDomainBase(vmmLibvirtObject):
                 vncuri]
 
 
-    def get_disk_devices(self, refresh_if_necc=True, inactive=False):
-        device_type = "disk"
+    def _build_device_list(self, device_type,
+                           refresh_if_necc=True, inactive=False):
         guest = self._get_guest(refresh_if_necc=refresh_if_necc,
                                 inactive=inactive)
         devs = guest.get_devices(device_type)
+
+        count = 0
+        for dev in devs:
+            dev.index = count
+            count += 1
+
+        return devs
+
+    def get_network_devices(self, refresh_if_necc=True):
+        return self._build_device_list("interface", refresh_if_necc)
+    def get_video_devices(self):
+        return self._build_device_list("video")
+    def get_hostdev_devices(self):
+        return self._build_device_list("hostdev")
+    def get_watchdog_devices(self):
+        return self._build_device_list("watchdog")
+    def get_input_devices(self):
+        return self._build_device_list("input")
+    def get_graphics_devices(self):
+        return self._build_device_list("graphics")
+    def get_sound_devices(self):
+        return self._build_device_list("sound")
+
+    def get_disk_devices(self, refresh_if_necc=True, inactive=False):
+        devs = self._build_device_list("disk", refresh_if_necc, inactive)
 
         # Iterate through all disks and calculate what number they are
         # HACK: We are making a variable in VirtualDisk to store the index
@@ -386,55 +410,13 @@ class vmmDomainBase(vmmLibvirtObject):
 
         return devs
 
-    def get_network_devices(self, refresh_if_necc=True):
-        device_type = "interface"
-        guest = self._get_guest(refresh_if_necc=refresh_if_necc)
-        devs = guest.get_devices(device_type)
-        return devs
-
-    def get_input_devices(self):
-        device_type = "input"
-        guest = self._get_guest()
-        devs = guest.get_devices(device_type)
-
-        return devs
-
-    def get_graphics_devices(self):
-        device_type = "graphics"
-        guest = self._get_guest()
-        devs = guest.get_devices(device_type)
-        count = 0
-        for dev in devs:
-            dev.index = count
-            count += 1
-
-        return devs
-
-    def get_sound_devices(self):
-        device_type = "sound"
-        guest = self._get_guest()
-        devs = guest.get_devices(device_type)
-        count = 0
-        for dev in devs:
-            dev.index = count
-            count += 1
-
-        return devs
-
     def get_char_devices(self):
         devs = []
-        guest = self._get_guest()
-
-        serials     = guest.get_devices("serial")
-        parallels   = guest.get_devices("parallel")
-        consoles    = guest.get_devices("console")
+        serials     = self._build_device_list("serial")
+        parallels   = self._build_device_list("parallel")
+        consoles    = self._build_device_list("console")
 
         for devicelist in [serials, parallels, consoles]:
-            count = 0
-            for dev in devicelist:
-                dev.index = count
-                count += 1
-
             devs.extend(devicelist)
 
         # Don't display <console> if it's just a duplicate of <serial>
@@ -444,132 +426,38 @@ class vmmDomainBase(vmmLibvirtObject):
 
             if (con.char_type == ser.char_type and
                 con.target_type is None or con.target_type == "serial"):
-                ser.console_dup = True
+                ser.virtmanager_console_dup = con
                 devs.remove(con)
 
         return devs
 
-    def get_video_devices(self):
-        device_type = "video"
-        guest = self._get_guest()
-        devs = guest.get_devices(device_type)
-        count = 0
-        for dev in devs:
-            dev.index = count
-            count += 1
-
-        return devs
-
-    def get_hostdev_devices(self):
-        device_type = "hostdev"
-        guest = self._get_guest()
-        devs = guest.get_devices(device_type)
-        count = 0
-        for dev in devs:
-            dev.index = count
-            count += 1
-
-
-        # [device type, unique, hwlist label, hostdev mode,
-        #  hostdev type, source desc label]
-        #hostdevs.append(["hostdev", index, hwlabel, mode, typ,
-        #                 srclabel, unique])
-
-
-        return devs
-
-
-    def get_watchdog_devices(self):
-        device_type = "watchdog"
-        guest = self._get_guest()
-        devs = guest.get_devices(device_type)
-        count = 0
-        for dev in devs:
-            dev.index = count
-            count += 1
-
-        return devs
-
-    def _get_device_xml(self, dev_type, dev_id_info):
+    def _get_device_xml(self, dev_type, devobj):
         vmxml = self.get_xml()
 
         def dev_xml_serialize(doc, ctx):
-            nodes = self._get_device_xml_nodes(ctx, dev_type, dev_id_info)
+            nodes = self._get_device_xml_nodes(ctx, dev_type, devobj)
             if nodes:
                 return nodes[0].serialize()
 
         return util.xml_parse_wrapper(vmxml, dev_xml_serialize)
 
-    def _get_device_xml_xpath(self, dev_type, dev_id_info):
-        """
-        Generate the XPath needed to lookup the passed device info
-        """
-        xpath = None
-
-        if dev_type=="interface":
-            xpath = ("/domain/devices/interface[mac/@address='%s'][1]" %
-                     dev_id_info)
-
-        elif dev_type=="disk":
-            xpath = "/domain/devices/disk[target/@dev='%s'][1]" % dev_id_info
-
-        elif dev_type=="input":
-            typ, bus = dev_id_info.split(":")
-            xpath = ("/domain/devices/input[@type='%s' and @bus='%s'][1]" %
-                     (typ, bus))
-
-        elif dev_type=="graphics":
-            xpath = "/domain/devices/graphics[%s]" % (int(dev_id_info) + 1)
-
-        elif dev_type == "sound":
-            xpath = "/domain/devices/sound[%s]" % (int(dev_id_info) + 1)
-
-        elif (dev_type == "parallel" or
-              dev_type == "console" or
-              dev_type == "serial"):
-            if dev_id_info.count(":"):
-                ignore, dev_id_info = dev_id_info.split(":")
-            xpath = ("/domain/devices/%s[target/@port='%s'][1]" %
-                     (dev_type, dev_id_info))
-
-        elif dev_type == "hostdev":
-            xpath = "/domain/devices/hostdev[%s]" % (int(dev_id_info) + 1)
-
-        elif dev_type == "video":
-            xpath = "/domain/devices/video[%s]" % (int(dev_id_info) + 1)
-
-        elif dev_type == "watchdog":
-            xpath = "/domain/devices/watchdog[%s]" % (int(dev_id_info) + 1)
-
-        else:
-            raise RuntimeError(_("Unknown device type '%s'") % dev_type)
-
-        if not xpath:
-            raise RuntimeError(_("Couldn't build xpath for device %s:%s") %
-                               (dev_type, dev_id_info))
-
-        return xpath
-
-    def _get_device_xml_nodes(self, ctx, dev_type, dev_id_info):
+    def _get_device_xml_nodes(self, ctx, dev_type, devobj):
         """
         Return nodes needed to alter/remove the desired device
         """
-        xpath = self._get_device_xml_xpath(dev_type, dev_id_info)
-
+        xpath = devobj.get_xml_node_path()
         ret = ctx.xpathEval(xpath)
 
-        # If serial and console are both present, console is
-        # probably (always?) just a dup of the 'primary' serial
-        # device. Try and find an associated console device with
-        # the same port and remove that as well, otherwise the
-        # removal doesn't go through on libvirt <= 0.4.4
-        if dev_type == "serial":
-            con = ctx.xpathEval("/domain/devices/console[target/@port='%s'][1]"
-                                % dev_id_info)
-            if con and len(con) > 0 and ret:
-                ret.append(con[0])
+        # HACK: If serial and console are both present, they both need
+        # to be removed at the same time
+        if hasattr(devobj, "virtmanager_console_dup"):
+            con =  getattr(devobj, "virtmanager_console_dup")
+            connode = ctx.xpathEval(con.get_xml_node_path())
+            connode = connode and connode[0] or None
+            if connode and ret:
+                ret.append(connode)
 
-        if not ret or len(ret) <= 0:
+        if not ret:
             raise RuntimeError(_("Could not find device %s") % xpath)
 
         return ret
@@ -1128,11 +1016,11 @@ class vmmDomain(vmmDomainBase):
 
         self._backend.attachDevice(devxml)
 
-    def detach_device(self, devtype, dev_id_info):
+    def detach_device(self, devtype, devobj):
         """
         Hotunplug device from running guest
         """
-        xml = self._get_device_xml(devtype, dev_id_info)
+        xml = self._get_device_xml(devtype, devobj)
         if self.is_active():
             self._backend.detachDevice(xml)
 
@@ -1178,7 +1066,7 @@ class vmmDomain(vmmDomainBase):
     def _reparse_xml(self, ignore=None):
         self._guest = self._build_guest(self._get_domain_xml())
 
-    def _check_device_is_present(self, dev_type, dev_id_info):
+    def _check_device_is_present(self, dev_type, devobj):
         """
         Return True if device is present in the inactive XML, False otherwise.
         If device can not be found in either the active or inactive XML,
@@ -1190,12 +1078,12 @@ class vmmDomain(vmmDomainBase):
         """
         vmxml = self.get_xml(inactive=True)
 
-        def find_dev(doc, ctx, dev_type, dev_id_info):
-            ret = self._get_device_xml_nodes(ctx, dev_type, dev_id_info)
+        def find_dev(doc, ctx, dev_type, devobj):
+            ret = self._get_device_xml_nodes(ctx, dev_type, devobj)
             return ret is not None
 
         try:
-            util.xml_parse_wrapper(vmxml, find_dev, dev_type, dev_id_info)
+            util.xml_parse_wrapper(vmxml, find_dev, dev_type, devobj)
             return True
         except Exception, e:
             # If we are removing multiple dev from an active VM, a double
@@ -1203,7 +1091,7 @@ class vmmDomain(vmmDomainBase):
             # in the active XML, assume all is good.
             try:
                 util.xml_parse_wrapper(self.get_xml(), find_dev,
-                                       dev_type, dev_id_info)
+                                       dev_type, devobj)
                 return False
             except:
                 raise e
@@ -1221,18 +1109,18 @@ class vmmDomain(vmmDomainBase):
 
         self._redefine(_add_xml_device, devxml)
 
-    def remove_device(self, dev_type, dev_id_info):
+    def remove_device(self, dev_type, devobj):
         """
-        Remove device of type 'dev_type' with unique info 'dev_id_info' from
+        Remove device of type 'dev_type' with unique info 'devobj' from
         the inactive guest XML
         """
-        if not self._check_device_is_present(dev_type, dev_id_info):
+        if not self._check_device_is_present(dev_type, devobj):
             return
 
-        def _remove_xml_device(vmxml, dev_type, dev_id_info):
+        def _remove_xml_device(vmxml, dev_type, devobj):
 
             def unlink_dev_node(doc, ctx):
-                ret = self._get_device_xml_nodes(ctx, dev_type, dev_id_info)
+                ret = self._get_device_xml_nodes(ctx, dev_type, devobj)
 
                 for node in ret:
                     node.unlinkNode()
@@ -1243,14 +1131,14 @@ class vmmDomain(vmmDomainBase):
 
             return util.xml_parse_wrapper(vmxml, unlink_dev_node)
 
-        self._redefine(_remove_xml_device, dev_type, dev_id_info)
+        self._redefine(_remove_xml_device, dev_type, devobj)
 
     # Media change
 
     # Helper for connecting a new source path to an existing disk
-    def _media_xml_connect(self, doc, ctx, dev_id_info, newpath, _type):
+    def _media_xml_connect(self, doc, ctx, devobj, newpath, _type):
         disk_fragment = self._get_device_xml_nodes(ctx, "disk",
-                                                   dev_id_info)[0]
+                                                   devobj)[0]
         driver_fragment = None
 
         for child in disk_fragment.children or []:
@@ -1275,9 +1163,9 @@ class vmmDomain(vmmDomainBase):
         return doc.serialize(), disk_fragment.serialize()
 
     # Helper for disconnecting a path from an existing disk
-    def _media_xml_disconnect(self, doc, ctx, dev_id_info, newpath, _type):
+    def _media_xml_disconnect(self, doc, ctx, devobj, newpath, _type):
         disk_fragment = self._get_device_xml_nodes(ctx, "disk",
-                                                   dev_id_info)[0]
+                                                   devobj)[0]
         sourcenode = None
 
         for child in disk_fragment.children:
@@ -1293,8 +1181,8 @@ class vmmDomain(vmmDomainBase):
 
         return doc.serialize(), disk_fragment.serialize()
 
-    def define_storage_media(self, dev_id_info, newpath, _type=None):
-        if not self._check_device_is_present("disk", dev_id_info):
+    def define_storage_media(self, devobj, newpath, _type=None):
+        if not self._check_device_is_present("disk", devobj):
             return
 
         if not newpath:
@@ -1303,19 +1191,19 @@ class vmmDomain(vmmDomainBase):
             func = self._media_xml_connect
 
         def change_storage_helper(origxml):
-            vmxml, ignore = util.xml_parse_wrapper(origxml, func, dev_id_info,
+            vmxml, ignore = util.xml_parse_wrapper(origxml, func, devobj,
                                                    newpath, _type)
             return vmxml
         self._redefine(change_storage_helper)
 
-    def hotplug_storage_media(self, dev_id_info, newpath, _type=None):
+    def hotplug_storage_media(self, devobj, newpath, _type=None):
         if not newpath:
             func = self._media_xml_disconnect
         else:
             func = self._media_xml_connect
 
         ignore, diskxml = util.xml_parse_wrapper(self.get_xml(), func,
-                                                 dev_id_info, newpath, _type)
+                                                 devobj, newpath, _type)
 
         self.attach_device(None, diskxml)
 
@@ -1531,8 +1419,8 @@ class vmmDomain(vmmDomainBase):
 
         return self._redefine(util.xml_parse_wrapper, change_desc, newvalue)
 
-    def _change_disk_param(self, doc, ctx, dev_id_info, node_name, newvalue):
-        disk_node = self._get_device_xml_nodes(ctx, "disk", dev_id_info)[0]
+    def _change_disk_param(self, doc, ctx, devobj, node_name, newvalue):
+        disk_node = self._get_device_xml_nodes(ctx, "disk", devobj)[0]
 
         found_node = None
         for child in disk_node.children:
@@ -1551,27 +1439,27 @@ class vmmDomain(vmmDomainBase):
         return doc.serialize()
 
     # Disk properties
-    def define_disk_readonly(self, dev_id_info, do_readonly):
-        if not self._check_device_is_present("disk", dev_id_info):
+    def define_disk_readonly(self, devobj, do_readonly):
+        if not self._check_device_is_present("disk", devobj):
             return
 
         return self._redefine(util.xml_parse_wrapper, self._change_disk_param,
-                             dev_id_info, "readonly", do_readonly)
+                             devobj, "readonly", do_readonly)
 
-    def define_disk_shareable(self, dev_id_info, do_shareable):
-        if not self._check_device_is_present("disk", dev_id_info):
+    def define_disk_shareable(self, devobj, do_shareable):
+        if not self._check_device_is_present("disk", devobj):
             return
 
         return self._redefine(util.xml_parse_wrapper, self._change_disk_param,
-                             dev_id_info, "shareable", do_shareable)
+                             devobj, "shareable", do_shareable)
 
-    def define_disk_cache(self, dev_id_info, new_cache):
+    def define_disk_cache(self, devobj, new_cache):
         devtype = "disk"
-        if not self._check_device_is_present(devtype, dev_id_info):
+        if not self._check_device_is_present(devtype, devobj):
             return
 
         def change_cache(doc, ctx):
-            dev_node = self._get_device_xml_nodes(ctx, devtype, dev_id_info)[0]
+            dev_node = self._get_device_xml_nodes(ctx, devtype, devobj)[0]
             tmpnode = dev_node.xpathEval("./driver")
             node = tmpnode and tmpnode[0] or None
 
@@ -1589,13 +1477,13 @@ class vmmDomain(vmmDomainBase):
         return self._redefine(util.xml_parse_wrapper, change_cache)
 
     # Network properties
-    def define_network_model(self, dev_id_info, newmodel):
+    def define_network_model(self, devobj, newmodel):
         devtype = "interface"
-        if not self._check_device_is_present(devtype, dev_id_info):
+        if not self._check_device_is_present(devtype, devobj):
             return
 
         def change_model(doc, ctx):
-            dev_node = self._get_device_xml_nodes(ctx, devtype, dev_id_info)[0]
+            dev_node = self._get_device_xml_nodes(ctx, devtype, devobj)[0]
             model_node = dev_node.xpathEval("./model")
             model_node = model_node and model_node[0] or None
 
@@ -1614,13 +1502,13 @@ class vmmDomain(vmmDomainBase):
         return self._redefine(util.xml_parse_wrapper, change_model)
 
     # Sound properties
-    def define_sound_model(self, dev_id_info, newmodel):
+    def define_sound_model(self, devobj, newmodel):
         devtype = "sound"
-        if not self._check_device_is_present(devtype, dev_id_info):
+        if not self._check_device_is_present(devtype, devobj):
             return
 
         def change_model(doc, ctx):
-            dev_node = self._get_device_xml_nodes(ctx, devtype, dev_id_info)[0]
+            dev_node = self._get_device_xml_nodes(ctx, devtype, devobj)[0]
             dev_node.setProp("model", newmodel)
 
             return doc.serialize()
@@ -1628,13 +1516,13 @@ class vmmDomain(vmmDomainBase):
         return self._redefine(util.xml_parse_wrapper, change_model)
 
     # Video properties
-    def define_video_model(self, dev_id_info, newmodel):
-        if not self._check_device_is_present("video", dev_id_info):
+    def define_video_model(self, devobj, newmodel):
+        if not self._check_device_is_present("video", devobj):
             return
 
-        def change_model(doc, ctx, dev_id_info, newmodel):
+        def change_model(doc, ctx, devobj, newmodel):
             vid_node = self._get_device_xml_nodes(ctx, "video",
-                                                  dev_id_info)[0]
+                                                  devobj)[0]
 
             model_node = vid_node.xpathEval("./model")[0]
             model_node.setProp("type", newmodel)
@@ -1642,15 +1530,15 @@ class vmmDomain(vmmDomainBase):
             return doc.serialize()
 
         return self._redefine(util.xml_parse_wrapper, change_model,
-                              dev_id_info, newmodel)
+                              devobj, newmodel)
 
-    def define_watchdog_model(self, dev_id_info, newval):
+    def define_watchdog_model(self, devobj, newval):
         devtype = "watchdog"
-        if not self._check_device_is_present(devtype, dev_id_info):
+        if not self._check_device_is_present(devtype, devobj):
             return
 
         def change(doc, ctx):
-            dev_node = self._get_device_xml_nodes(ctx, devtype, dev_id_info)[0]
+            dev_node = self._get_device_xml_nodes(ctx, devtype, devobj)[0]
             if newval:
                 dev_node.setProp("model", newval)
 
@@ -1658,13 +1546,13 @@ class vmmDomain(vmmDomainBase):
 
         return self._redefine(util.xml_parse_wrapper, change)
 
-    def define_watchdog_action(self, dev_id_info, newval):
+    def define_watchdog_action(self, devobj, newval):
         devtype = "watchdog"
-        if not self._check_device_is_present(devtype, dev_id_info):
+        if not self._check_device_is_present(devtype, devobj):
             return
 
         def change(doc, ctx):
-            dev_node = self._get_device_xml_nodes(ctx, devtype, dev_id_info)[0]
+            dev_node = self._get_device_xml_nodes(ctx, devtype, devobj)[0]
             if newval:
                 dev_node.setProp("action", newval)
 
@@ -1799,6 +1687,9 @@ class vmmDomainVirtinst(vmmDomainBase):
             xml = self._backend.get_config_xml(install=False)
         return xml
 
+    def _get_guest(self, inactive=False, refresh_if_necc=True):
+        return self._backend
+
     def refresh_xml(self):
         # No caching, so no refresh needed
         return
@@ -1837,28 +1728,20 @@ class vmmDomainVirtinst(vmmDomainBase):
 
     def attach_device(self, devobj, devxml=None):
         return
-    def detach_device(self, devtype, dev_id_info):
+    def detach_device(self, devtype, devobj):
         return
 
     def add_device(self, devobj):
         def add_dev():
             self._backend.add_device(devobj)
         self._redefine(add_dev)
-    def remove_device(self, dev_type, dev_id_info):
-        dev = self._get_device_xml_object(dev_type, dev_id_info)
-
+    def remove_device(self, dev_type, devobj):
+        ignore = dev_type
         def rm_dev():
-            self._backend.remove_device(dev)
+            self._backend.remove_device(devobj)
         self._redefine(rm_dev)
 
-    def define_storage_media(self, dev_id_info, newpath, _type=None):
-        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_DISK,
-                                          dev_id_info)
-
-        def change_path():
-            dev.path = newpath
-        self._redefine(change_path)
-    def hotplug_storage_media(self, dev_id_info, newpath, _type=None):
+    def hotplug_storage_media(self, devobj, newpath, _type=None):
         return
 
     def define_vcpus(self, vcpus):
@@ -1921,63 +1804,47 @@ class vmmDomainVirtinst(vmmDomainBase):
             self._backend.description = newvalue
         self._redefine(change_desc)
 
-    def define_disk_readonly(self, dev_id_info, do_readonly):
-        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_DISK,
-                                          dev_id_info)
-
+    def define_storage_media(self, devobj, newpath, _type=None):
+        def change_path():
+            devobj.path = newpath
+        self._redefine(change_path)
+    def define_disk_readonly(self, devobj, do_readonly):
         def change_readonly():
-            dev.read_only = do_readonly
+            devobj.read_only = do_readonly
         self._redefine(change_readonly)
-    def define_disk_shareable(self, dev_id_info, do_shareable):
-        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_DISK,
-                                          dev_id_info)
-
+    def define_disk_shareable(self, devobj, do_shareable):
         def change_shareable():
-            dev.shareable = do_shareable
+            devobj.shareable = do_shareable
         self._redefine(change_shareable)
-    def define_disk_cache(self, dev_id_info, new_cache):
-        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_DISK,
-                                          dev_id_info)
-
+    def define_disk_cache(self, devobj, new_cache):
         def change_cache():
-            dev.driver_cache = new_cache or None
+            devobj.driver_cache = new_cache or None
         self._redefine(change_cache)
 
-    def define_network_model(self, dev_id_info, newmodel):
-        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_NET,
-                                          dev_id_info)
+    def define_network_model(self, devobj, newmodel):
         def change_model():
-            dev.model = newmodel
+            devobj.model = newmodel
         self._redefine(change_model)
 
-    def define_sound_model(self, dev_id_info, newmodel):
-        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_AUDIO,
-                                          dev_id_info)
+    def define_sound_model(self, devobj, newmodel):
         def change_model():
-            dev.model = newmodel
+            devobj.model = newmodel
         self._redefine(change_model)
 
-    def define_video_model(self, dev_id_info, newmodel):
-        dev = self._get_device_xml_object(VirtualDevice.VIRTUAL_DEV_VIDEO,
-                                          dev_id_info)
-
+    def define_video_model(self, devobj, newmodel):
         def change_video_model():
-            dev.model_type = newmodel
+            devobj.model_type = newmodel
         self._redefine(change_video_model)
 
-    def define_watchdog_model(self, dev_id_info, newval):
-        devtype = VirtualDevice.VIRTUAL_DEV_WATCHDOG
-        dev = self._get_device_xml_object(devtype, dev_id_info)
+    def define_watchdog_model(self, devobj, newval):
         def change():
-            dev.model = newval
+            devobj.model = newval
 
         self._redefine(change)
 
-    def define_watchdog_action(self, dev_id_info, newval):
-        devtype = VirtualDevice.VIRTUAL_DEV_WATCHDOG
-        dev = self._get_device_xml_object(devtype, dev_id_info)
+    def define_watchdog_action(self, devobj, newval):
         def change():
-            dev.action = newval
+            devobj.action = newval
 
         self._redefine(change)
 
@@ -2002,72 +1869,6 @@ class vmmDomainVirtinst(vmmDomainBase):
                           self.get_name(), diff)
 
         self.emit("config-changed")
-
-    def _get_device_xml_object(self, dev_type, dev_id_info):
-        """
-        Find the virtinst device for the passed id info
-        """
-        def device_iter(try_func):
-            devs = self._backend.get_devices(dev_type)
-            for dev in devs:
-                if try_func(dev):
-                    return dev
-
-        def count_func(count):
-            devs = self._backend.get_devices(dev_type)
-            tmpcount = -1
-            for dev in devs:
-                tmpcount += 1
-                if count == tmpcount:
-                    return dev
-            return None
-
-        found_func = None
-        count = None
-
-        if dev_type == VirtualDevice.VIRTUAL_DEV_NET:
-            found_func = (lambda x: x.macaddr == dev_id_info)
-
-        elif dev_type == VirtualDevice.VIRTUAL_DEV_DISK:
-            found_func = (lambda x: x.target == dev_id_info)
-
-        elif dev_type == VirtualDevice.VIRTUAL_DEV_INPUT:
-            found_func = (lambda x: (x.type == dev_id_info[0] and
-                                     x.bus  == dev_id_info[1]))
-
-        elif dev_type == VirtualDevice.VIRTUAL_DEV_GRAPHICS:
-            count = int(dev_id_info)
-
-        elif dev_type == VirtualDevice.VIRTUAL_DEV_AUDIO:
-            count = int(dev_id_info)
-
-        elif (dev_type == VirtualDevice.VIRTUAL_DEV_PARALLEL or
-              dev_type == VirtualDevice.VIRTUAL_DEV_SERIAL or
-              dev_type == VirtualDevice.VIRTUAL_DEV_CONSOLE):
-            count = int(dev_id_info)
-
-        elif dev_type == VirtualDevice.VIRTUAL_DEV_HOSTDEV:
-            count = int(dev_id_info)
-
-        elif dev_type == VirtualDevice.VIRTUAL_DEV_VIDEO:
-            count = int(dev_id_info)
-
-        elif dev_type == VirtualDevice.VIRTUAL_DEV_WATCHDOG:
-            count = int(dev_id_info)
-
-        else:
-            raise RuntimeError(_("Unknown device type '%s'") % dev_type)
-
-        if count != None:
-            # We are looking up devices by a simple index
-            found_dev = count_func(count)
-        else:
-            found_dev = device_iter(found_func)
-
-        if not found_dev:
-            raise RuntimeError(_("Did not find selected device."))
-
-        return found_dev
 
 gobject.type_register(vmmDomainVirtinst)
 gobject.type_register(vmmDomainBase)

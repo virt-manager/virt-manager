@@ -43,8 +43,6 @@ HW_LIST_COL_ICON_NAME = 1
 HW_LIST_COL_ICON_SIZE = 2
 HW_LIST_COL_TYPE = 3
 HW_LIST_COL_DEVICE = 4
-HW_LIST_COL_KEY = 5
-HW_LIST_COL_DEVTYPE = 6
 
 # Types for the hw list model: numbers specify what order they will be listed
 HW_LIST_TYPE_GENERAL = 0
@@ -571,12 +569,9 @@ class vmmDetails(gobject.GObject):
 
     def init_details(self):
         # Hardware list
-        # [ label, icon name, icon size, hw type, hw data, hw key,
-        #   dev type name]
+        # [ label, icon name, icon size, hw type, hw data/class]
         hw_list_model = gtk.ListStore(str, str, int, int,
-                                      gobject.TYPE_PYOBJECT,
-                                      gobject.TYPE_PYOBJECT,
-                                      str)
+                                      gobject.TYPE_PYOBJECT)
         self.window.get_widget("hw-list").set_model(hw_list_model)
 
         hwCol = gtk.TreeViewColumn("Hardware")
@@ -1035,10 +1030,8 @@ class vmmDetails(gobject.GObject):
         if not info:
             return
 
-        devtype = self.get_hw_selection(HW_LIST_COL_DEVTYPE)
-        key = self.get_hw_selection(HW_LIST_COL_KEY)
-
-        self.remove_device(devtype, key)
+        devtype = info.virtual_device_type
+        self.remove_device(devtype, info)
 
     def control_vm_pause(self, src):
         if self.ignorePause:
@@ -1330,7 +1323,7 @@ class vmmDetails(gobject.GObject):
         if not disk:
             return
 
-        dev_id_info = disk.target
+        dev_id_info = disk
         curpath = disk.path
         devtype = disk.device
 
@@ -1363,7 +1356,8 @@ class vmmDetails(gobject.GObject):
 
     def config_apply(self, ignore):
         pagetype = self.get_hw_selection(HW_LIST_COL_TYPE)
-        key = self.get_hw_selection(HW_LIST_COL_KEY)
+        devobj = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        key = devobj
         ret = False
 
         if pagetype is HW_LIST_TYPE_GENERAL:
@@ -2054,7 +2048,7 @@ class vmmDetails(gobject.GObject):
         target_port = chardev.index
         dev_type = chardev.char_type or "pty"
         src_path = chardev.source_path
-        primary = hasattr(chardev, "console_dup")
+        primary = hasattr(chardev, "virtmanager_console_dup")
 
         typelabel = "%s Device" % char_type
         if target_port is not None:
@@ -2145,7 +2139,7 @@ class vmmDetails(gobject.GObject):
         def add_hw_list_option(title, page_id, data, icon_name):
             hw_list_model.append([title, icon_name,
                                   gtk.ICON_SIZE_LARGE_TOOLBAR,
-                                  page_id, data, None, None])
+                                  page_id, data])
 
         add_hw_list_option("Overview", HW_LIST_TYPE_GENERAL, [], "computer")
         if not self.is_customize_dialog:
@@ -2161,55 +2155,54 @@ class vmmDetails(gobject.GObject):
         hw_list = self.window.get_widget("hw-list")
         hw_list_model = hw_list.get_model()
 
-        currentDisks = {}
-        currentNICs = {}
-        currentInputs = {}
-        currentGraphics = {}
-        currentSounds = {}
-        currentChars = {}
-        currentHostdevs = {}
-        currentVids = {}
-        currentWatchdogs = {}
+        currentDevices = []
 
-        def add_hw_list_option(idx, name, page_id, info, icon_name, key, dev):
+        def dev_cmp(origdev, newdev):
+            if not origdev:
+                return False
+
+            if origdev == newdev:
+                return True
+
+            if not origdev.get_xml_node_path():
+                return False
+
+            return origdev.get_xml_node_path() == newdev.get_xml_node_path()
+
+        def add_hw_list_option(idx, name, page_id, info, icon_name):
             hw_list_model.insert(idx, [name, icon_name,
                                        gtk.ICON_SIZE_LARGE_TOOLBAR,
-                                       page_id, info, key, dev])
+                                       page_id, info])
 
-        def update_hwlist(hwtype, info, name, icon_name, key):
+        def update_hwlist(hwtype, info, name, icon_name):
             """
             See if passed hw is already in list, and if so, update info.
             If not in list, add it!
             """
+            currentDevices.append(info)
+
             insertAt = 0
             for row in hw_list_model:
-                if (row[HW_LIST_COL_TYPE] == hwtype and
-                    row[HW_LIST_COL_KEY] == key):
-
+                rowdev = row[HW_LIST_COL_DEVICE]
+                if dev_cmp(rowdev, info):
                     # Update existing HW info
                     row[HW_LIST_COL_DEVICE] = info
                     row[HW_LIST_COL_LABEL] = name
+                    row[HW_LIST_COL_ICON_NAME] = icon_name
                     return
 
                 if row[HW_LIST_COL_TYPE] <= hwtype:
                     insertAt += 1
 
             # Add the new HW row
-            if type(info) is list:
-                devtype = info[0]
-            else:
-                devtype = info.virtual_device_type
-            add_hw_list_option(insertAt, name, hwtype, info, icon_name, key,
-                               devtype)
+            add_hw_list_option(insertAt, name, hwtype, info, icon_name)
 
         # Populate list of disks
         for disk in self.vm.get_disk_devices():
-            key = disk.target
             devtype = disk.device
             bus = disk.bus
             idx = disk.disk_bus_index
 
-            currentDisks[key] = 1
             icon = "drive-harddisk"
             if devtype == "cdrom":
                 icon = "media-optical"
@@ -2218,23 +2211,19 @@ class vmmDetails(gobject.GObject):
 
             label = prettyify_disk(devtype, bus, idx)
 
-            update_hwlist(HW_LIST_TYPE_DISK, disk, label, icon, key)
+            update_hwlist(HW_LIST_TYPE_DISK, disk, label, icon)
 
         # Populate list of NICs
         for net in self.vm.get_network_devices():
-            key = str(net.macaddr)
             mac = net.macaddr
 
-            currentNICs[key] = 1
             update_hwlist(HW_LIST_TYPE_NIC, net,
-                          "NIC %s" % mac[-9:], "network-idle", key)
+                          "NIC %s" % mac[-9:], "network-idle")
 
         # Populate list of input devices
         for inp in self.vm.get_input_devices():
-            key = str("%s:%s" % (inp.type, inp.bus))
             inptype = inp.type
 
-            currentInputs[key] = 1
             icon = "input-mouse"
             if inptype == "tablet":
                 label = _("Tablet")
@@ -2244,34 +2233,23 @@ class vmmDetails(gobject.GObject):
             else:
                 label = _("Input")
 
-            update_hwlist(HW_LIST_TYPE_INPUT, inp, label, icon, key)
+            update_hwlist(HW_LIST_TYPE_INPUT, inp, label, icon)
 
         # Populate list of graphics devices
         for gfx in self.vm.get_graphics_devices():
-            key = str(gfx.index)
-            gfxtype = gfx.type
-
-            currentGraphics[key] = 1
             update_hwlist(HW_LIST_TYPE_GRAPHICS, gfx,
-                          _("Display %s") % (gfxtype.upper()),
-                          "video-display", key)
+                          _("Display %s") % (gfx.type.upper()),
+                          "video-display")
 
         # Populate list of sound devices
         for sound in self.vm.get_sound_devices():
-            key = str(sound.index)
-            model = sound.model
-
-            currentSounds[key] = 1
             update_hwlist(HW_LIST_TYPE_SOUND, sound,
-                          _("Sound: %s" % model), "audio-card", key)
+                          _("Sound: %s" % sound.model), "audio-card")
 
         # Populate list of char devices
         for chardev in self.vm.get_char_devices():
             devtype = chardev.virtual_device_type
             port = chardev.index
-            key = str(devtype + ":" + str(port))
-
-            currentChars[key] = 1
 
             label = devtype.capitalize()
             if devtype != "console":
@@ -2279,75 +2257,38 @@ class vmmDetails(gobject.GObject):
                 label += " %s" % (int(port) + 1)
 
             update_hwlist(HW_LIST_TYPE_CHAR, chardev, label,
-                          "device_serial", key)
+                          "device_serial")
 
         # Populate host devices
         for hostdev in self.vm.get_hostdev_devices():
-            key = str(hostdev.index)
             devtype = hostdev.type
             label = build_hostdev_label(hostdev)[1]
 
-            currentHostdevs[key] = 1
             if devtype == "usb":
                 icon = "device_usb"
             else:
                 icon = "device_pci"
-            update_hwlist(HW_LIST_TYPE_HOSTDEV, hostdev, label, icon, key)
+            update_hwlist(HW_LIST_TYPE_HOSTDEV, hostdev, label, icon)
 
         # Populate video devices
         for vid in self.vm.get_video_devices():
-            key = str(vid.index)
-
-            currentVids[key] = 1
-            update_hwlist(HW_LIST_TYPE_VIDEO, vid, _("Video"),
-                          "video-display", key)
+            update_hwlist(HW_LIST_TYPE_VIDEO, vid, _("Video"), "video-display")
 
         for watch in self.vm.get_watchdog_devices():
-            key = str(watch.index)
-
-            currentWatchdogs[key] = 1
             update_hwlist(HW_LIST_TYPE_WATCHDOG, watch, _("Watchdog"),
-                          "device_pci", key)
+                          "device_pci")
 
-        # Now remove any no longer current devs
         devs = range(len(hw_list_model))
         devs.reverse()
         for i in devs:
             _iter = hw_list_model.iter_nth_child(None, i)
-            row = hw_list_model[i]
-            removeIt = False
+            olddev = hw_list_model[i][HW_LIST_COL_DEVICE]
 
-            mapping = {
-                HW_LIST_TYPE_DISK       : currentDisks,
-                HW_LIST_TYPE_NIC        : currentNICs,
-                HW_LIST_TYPE_INPUT      : currentInputs,
-                HW_LIST_TYPE_GRAPHICS   : currentGraphics,
-                HW_LIST_TYPE_SOUND      : currentSounds,
-                HW_LIST_TYPE_CHAR       : currentChars,
-                HW_LIST_TYPE_HOSTDEV    : currentHostdevs,
-                HW_LIST_TYPE_VIDEO      : currentVids,
-                HW_LIST_TYPE_WATCHDOG   : currentWatchdogs,
-            }
+            # Existing device, don't remove it
+            if not olddev or olddev in currentDevices:
+                continue
 
-
-            hwtype   = row[HW_LIST_COL_TYPE]
-            if (mapping.has_key(hwtype) and not
-                mapping[hwtype].has_key(row[HW_LIST_COL_KEY])):
-                removeIt = True
-
-            if removeIt:
-                # Re-select the first row, if we're viewing the device
-                # we're about to remove
-                (selModel, selIter) = hw_list.get_selection().get_selected()
-                selType = selModel.get_value(selIter, HW_LIST_COL_TYPE)
-                selKey = selModel.get_value(selIter, HW_LIST_COL_KEY)
-                if (selType == row[HW_LIST_COL_TYPE] and
-                    selKey == row[HW_LIST_COL_KEY]):
-                    hw_list.get_selection().select_iter(
-                                            selModel.iter_nth_child(None, 0))
-
-                # Now actually remove it
-                hw_list_model.remove(_iter)
+            hw_list_model.remove(_iter)
 
     def repopulate_boot_list(self, bootdevs=None, dev_select=None):
         boot_list = self.window.get_widget("config-boot-list")
