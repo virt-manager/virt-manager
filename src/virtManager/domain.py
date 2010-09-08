@@ -21,7 +21,6 @@
 import gobject
 import libvirt
 import logging
-import difflib
 
 import virtinst
 from virtManager import util
@@ -30,22 +29,48 @@ import virtinst.support as support
 
 from virtManager.libvirtobject import vmmLibvirtObject
 
-def disk_type_to_xen_driver_name(disk_type):
-    if disk_type == "block":
-        return "phy"
-    elif disk_type == "file":
-        return "file"
+def compare_device(origdev, newdev, idx):
+    devprops = {
+        "disk"      : ["target", "bus"],
+        "interface" : ["macaddr", "vmmindex"],
+        "input"     : ["bus", "type", "vmmindex"],
+        "sound"     : ["model", "vmmindex"],
+        "video"     : ["model_type", "vmmindex"],
+        "watchdog"  : ["vmmindex"],
+        "hostdev"   : ["vendor", "product", "bus", "device",
+                       "type", "function", "domain", "slot", "managed"],
+        "serial"    : ["char_type", "target_port"],
+        "parallel"  : ["char_type", "target_port"],
+        "console"   : ["char_type", "target_type", "target_port"],
+        "graphics"  : ["type", "vmmindex"],
+    }
 
-    return "file"
+    if id(origdev) == id(newdev):
+        return True
 
-def disk_type_to_target_prop(disk_type):
-    if disk_type == "file":
-        return "file"
-    elif disk_type == "block":
-        return "dev"
-    elif disk_type == "dir":
-        return "dir"
-    return "file"
+    if type(origdev) is not type(newdev):
+        return False
+
+    for devprop in devprops[origdev.virtual_device_type]:
+        origval = getattr(origdev, devprop)
+        if devprop == "vmmindex":
+            newval = idx
+        else:
+            newval = getattr(newdev, devprop)
+
+        if origval != newval:
+            return False
+
+    return True
+
+def find_device(guest, origdev):
+    devlist = guest.get_devices(origdev.virtual_device_type)
+    for idx in range(len(devlist)):
+        dev = devlist[idx]
+        if compare_device(origdev, dev, idx):
+            return dev
+
+    return None
 
 class vmmDomainBase(vmmLibvirtObject):
     """
@@ -73,12 +98,13 @@ class vmmDomainBase(vmmLibvirtObject):
 
         self.managedsave_supported = False
 
-        self._network_traffic = None
-        self._disk_io = None
+        self._guest_to_define = None
 
+        self._network_traffic = None
         self._stats_net_supported = True
         self._stats_net_skip = []
 
+        self._disk_io = None
         self._stats_disk_supported = True
         self._stats_disk_skip = []
 
@@ -128,72 +154,189 @@ class vmmDomainBase(vmmLibvirtObject):
     def get_install_abort(self):
         return bool(self._install_abort)
 
-    # Device/XML altering API
+    # Device/XML hotplug API
     def set_autostart(self, val):
         raise NotImplementedError()
 
-    def attach_device(self, devobj, devxml=None):
+    def attach_device(self, devobj):
         raise NotImplementedError()
-    def detach_device(self, devtype, devobj):
-        raise NotImplementedError()
-
-    def add_device(self, devobj):
-        raise NotImplementedError()
-    def remove_device(self, dev_type, devobj):
+    def detach_device(self, devobj):
         raise NotImplementedError()
 
-    def define_storage_media(self, devobj, newpath, _type=None):
-        raise NotImplementedError()
-    def hotplug_storage_media(self, devobj, newpath, _type=None):
+    def hotplug_storage_media(self, devobj, newpath):
         raise NotImplementedError()
 
-    def define_vcpus(self, vcpus):
-        raise NotImplementedError()
     def hotplug_vcpus(self, vcpus):
         raise NotImplementedError()
-    def define_cpuset(self, cpuset):
-        raise NotImplementedError()
 
-    def define_both_mem(self, memory, maxmem):
-        raise NotImplementedError()
     def hotplug_both_mem(self, memory, maxmem):
         raise NotImplementedError()
 
-    def define_seclabel(self, model, t, label):
-        raise NotImplementedError()
+    def _invalidate_xml(self):
+        vmmLibvirtObject._invalidate_xml(self)
+        self._guest_to_define = None
 
-    def set_boot_device(self, boot_list):
-        raise NotImplementedError()
+    def _get_guest_to_define(self):
+        if not self._guest_to_define:
+            self._guest_to_define = self._get_guest(inactive=True)
+        return self._guest_to_define
+
+    def _redefine_guest(self, cb):
+        guest = self._get_guest_to_define()
+        return cb(guest)
+
+    def _redefine_device(self, cb, origdev):
+        defguest = self._get_guest_to_define()
+        dev = find_device(defguest, origdev)
+        if dev:
+            return cb(dev)
+
+        # If we are removing multiple dev from an active VM, a double
+        # attempt may result in a lookup failure. If device is present
+        # in the active XML, assume all is good.
+        if find_device(self._get_guest(), origdev):
+            return
+
+        raise RuntimeError(_("Could not find specified device in the "
+                             "inactive VM configuration: %s") % repr(origdev))
+
+    def redefine_cached(self):
+        if not self._guest_to_define:
+            logging.debug("No cached XML to define, skipping.")
+            return
+
+        guest = self._get_guest_to_define()
+        xml = guest.get_xml_config(install=False)
+        self._redefine_xml(xml)
+
+    # virtinst.Guest XML persistent change Impls
+    def add_device(self, devobj):
+        """
+        Redefine guest with appended device XML 'devxml'
+        """
+        def change(guest):
+            guest.add_device(devobj)
+        ret = self._redefine_guest(change)
+        self.redefine_cached()
+        return ret
+
+    def remove_device(self, devobj):
+        """
+        Remove passed device from the inactive guest XML
+        """
+        # HACK: If serial and console are both present, they both need
+        # to be removed at the same time
+        con = None
+        if hasattr(devobj, "virtmanager_console_dup"):
+            con = getattr(devobj, "virtmanager_console_dup")
+
+        def change(guest):
+            def rmdev(editdev):
+                if con:
+                    rmcon = find_device(guest, con)
+                    if rmcon:
+                        guest.remove_device(rmcon)
+
+                guest.remove_device(editdev)
+            return self._redefine_device(rmdev, devobj)
+
+        ret = self._redefine_guest(change)
+        self.redefine_cached()
+        return ret
+
+    def define_vcpus(self, vcpus):
+        def change(guest):
+            self._backend.vcpus = int(vcpus)
+        return self._redefine_guest(change)
+    def define_cpuset(self, cpuset):
+        def change(guest):
+            self._backend.cpuset = cpuset
+        return self._redefine_guest(change)
+
+    def define_both_mem(self, memory, maxmem):
+        def change(guest):
+            guest.memory = int(int(memory) / 1024)
+            guest.maxmemory = int(int(maxmem) / 1024)
+        return self._redefine_guest(change)
+
+    def define_seclabel(self, model, t, label):
+        def change(guest):
+            seclabel = guest.seclabel
+            seclabel.model = model or None
+            if not model:
+                return
+
+            seclabel.type = t
+            if label:
+                seclabel.label = label
+
+        return self._redefine_guest(change)
 
     def define_acpi(self, newvalue):
-        raise NotImplementedError()
+        def change(guest):
+            guest.features["acpi"] = bool(newvalue)
+        return self._redefine_guest(change)
     def define_apic(self, newvalue):
-        raise NotImplementedError()
-    def define_clock(self, newvalue):
-        raise NotImplementedError()
-    def define_description(self, newvalue):
-        raise NotImplementedError()
+        def change(guest):
+            guest.features["apic"] = bool(newvalue)
+        return self._redefine_guest(change)
 
+    def define_clock(self, newvalue):
+        def change(guest):
+            guest.clock.offset = newvalue
+        return self._redefine_guest(change)
+
+    def define_description(self, newvalue):
+        def change(guest):
+            guest.description = newvalue or None
+        return self._redefine_guest(change)
+
+    def set_boot_device(self, boot_list):
+        def change(guest):
+            guest.installer.bootconfig.bootorder = boot_list
+        return self._redefine_guest(change)
+
+    # virtinst.VirtualDevice XML persistent change Impls
+    def define_storage_media(self, devobj, newpath):
+        def change(editdev):
+            editdev.path = newpath
+        return self._redefine_device(change, devobj)
     def define_disk_readonly(self, devobj, do_readonly):
-        raise NotImplementedError()
+        def change(editdev):
+            editdev.read_only = do_readonly
+        return self._redefine_device(change, devobj)
     def define_disk_shareable(self, devobj, do_shareable):
-        raise NotImplementedError()
+        def change(editdev):
+            editdev.shareable = do_shareable
+        return self._redefine_device(change, devobj)
     def define_disk_cache(self, devobj, new_cache):
-        raise NotImplementedError()
+        def change(editdev):
+            editdev.driver_cache = new_cache or None
+        return self._redefine_device(change, devobj)
 
     def define_network_model(self, devobj, newmodel):
-        raise NotImplementedError()
+        def change(editdev):
+            editdev.model = newmodel
+        return self._redefine_device(change, devobj)
 
     def define_sound_model(self, devobj, newmodel):
-        raise NotImplementedError()
+        def change(editdev):
+            editdev.model = newmodel
+        return self._redefine_device(change, devobj)
 
     def define_video_model(self, devobj, newmodel):
-        raise NotImplementedError()
+        def change(editdev):
+            editdev.model_type = newmodel
+        return self._redefine_device(change, devobj)
 
-    def define_watchdog_model(self, devobj, newmodel):
-        raise NotImplementedError()
-    def define_watchdog_action(self, devobj, newmodel):
-        raise NotImplementedError()
+    def define_watchdog_model(self, devobj, newval):
+        def change(editdev):
+            editdev.model = newval
+        return self._redefine_device(change, devobj)
+    def define_watchdog_action(self, devobj, newval):
+        def change(editdev):
+            editdev.action = newval
+        return self._redefine_device(change, devobj)
 
     ########################
     # XML Parsing routines #
@@ -371,7 +514,7 @@ class vmmDomainBase(vmmLibvirtObject):
 
         count = 0
         for dev in devs:
-            dev.index = count
+            dev.vmmindex = count
             count += 1
 
         return devs
@@ -430,38 +573,6 @@ class vmmDomainBase(vmmLibvirtObject):
                 devs.remove(con)
 
         return devs
-
-    def _get_device_xml(self, dev_type, devobj):
-        vmxml = self.get_xml()
-
-        def dev_xml_serialize(doc, ctx):
-            nodes = self._get_device_xml_nodes(ctx, dev_type, devobj)
-            if nodes:
-                return nodes[0].serialize()
-
-        return util.xml_parse_wrapper(vmxml, dev_xml_serialize)
-
-    def _get_device_xml_nodes(self, ctx, dev_type, devobj):
-        """
-        Return nodes needed to alter/remove the desired device
-        """
-        xpath = devobj.get_xml_node_path()
-        ret = ctx.xpathEval(xpath)
-
-        # HACK: If serial and console are both present, they both need
-        # to be removed at the same time
-        if hasattr(devobj, "virtmanager_console_dup"):
-            con =  getattr(devobj, "virtmanager_console_dup")
-            connode = ctx.xpathEval(con.get_xml_node_path())
-            connode = connode and connode[0] or None
-            if connode and ret:
-                ret.append(connode)
-
-        if not ret:
-            raise RuntimeError(_("Could not find device %s") % xpath)
-
-        return ret
-
 
     # Stats accessors
     def _normalize_status(self, status):
@@ -1004,25 +1115,26 @@ class vmmDomain(vmmDomainBase):
     def get_id(self):
         return self._backend.ID()
 
-    def attach_device(self, devobj, devxml=None):
+    # Hotplug routines
+    def attach_device(self, devobj):
         """
         Hotplug device to running guest
         """
         if not self.is_active():
             return
 
-        if not devxml:
-            devxml = devobj.get_xml_config()
-
+        devxml = devobj.get_xml_config()
         self._backend.attachDevice(devxml)
 
-    def detach_device(self, devtype, devobj):
+    def detach_device(self, devobj):
         """
         Hotunplug device from running guest
         """
-        xml = self._get_device_xml(devtype, devobj)
-        if self.is_active():
-            self._backend.detachDevice(xml)
+        if not self.is_active():
+            return
+
+        xml = devobj.get_xml_config()
+        self._backend.detachDevice(xml)
 
     def hotplug_vcpus(self, vcpus):
         vcpus = int(vcpus)
@@ -1037,213 +1149,6 @@ class vmmDomain(vmmDomainBase):
         if maxmem != self.maximum_memory():
             self._backend.setMaxMemory(maxmem)
 
-    ####################
-    # End internal API #
-    ####################
-
-    ###########################
-    # XML/Config Altering API #
-    ###########################
-
-    def _get_domain_xml(self, inactive=False, refresh_if_necc=True):
-        return vmmLibvirtObject.get_xml(self, inactive, refresh_if_necc)
-
-    def get_xml(self, inactive=False, refresh_if_necc=True):
-        return self._get_guest(inactive, refresh_if_necc).get_xml_config()
-
-    def _get_guest(self, inactive=False, refresh_if_necc=True):
-        xml = self._get_domain_xml(inactive, refresh_if_necc)
-
-        if not self.is_active() and inactive:
-            # We don't cache a guest for 'inactive' XML, so just return it
-            return self._build_guest(xml)
-
-        return self._guest
-
-    def _build_guest(self, xml):
-        return virtinst.Guest(connection=self.connection.vmm, parsexml=xml)
-
-    def _reparse_xml(self, ignore=None):
-        self._guest = self._build_guest(self._get_domain_xml())
-
-    def _check_device_is_present(self, dev_type, devobj):
-        """
-        Return True if device is present in the inactive XML, False otherwise.
-        If device can not be found in either the active or inactive XML,
-        raise an exception (which should not be caught in any domain.py func)
-
-        We need to make this check every time we are altering device props
-        of the inactive XML. If the device can't be found, make no change
-        and return success.
-        """
-        vmxml = self.get_xml(inactive=True)
-
-        def find_dev(doc, ctx, dev_type, devobj):
-            ret = self._get_device_xml_nodes(ctx, dev_type, devobj)
-            return ret is not None
-
-        try:
-            util.xml_parse_wrapper(vmxml, find_dev, dev_type, devobj)
-            return True
-        except Exception, e:
-            # If we are removing multiple dev from an active VM, a double
-            # attempt may result in a lookup failure. If device is present
-            # in the active XML, assume all is good.
-            try:
-                util.xml_parse_wrapper(self.get_xml(), find_dev,
-                                       dev_type, devobj)
-                return False
-            except:
-                raise e
-
-
-    # Generic device Add/Remove
-    def add_device(self, devobj):
-        """
-        Redefine guest with appended device XML 'devxml'
-        """
-        devxml = devobj.get_xml_config()
-        def _add_xml_device(xml, devxml):
-            index = xml.find("</devices>")
-            return xml[0:index] + devxml + xml[index:]
-
-        self._redefine(_add_xml_device, devxml)
-
-    def remove_device(self, dev_type, devobj):
-        """
-        Remove device of type 'dev_type' with unique info 'devobj' from
-        the inactive guest XML
-        """
-        if not self._check_device_is_present(dev_type, devobj):
-            return
-
-        def _remove_xml_device(vmxml, dev_type, devobj):
-
-            def unlink_dev_node(doc, ctx):
-                ret = self._get_device_xml_nodes(ctx, dev_type, devobj)
-
-                for node in ret:
-                    node.unlinkNode()
-                    node.freeNode()
-
-                newxml = doc.serialize()
-                return newxml
-
-            return util.xml_parse_wrapper(vmxml, unlink_dev_node)
-
-        self._redefine(_remove_xml_device, dev_type, devobj)
-
-    # Media change
-
-    # Helper for connecting a new source path to an existing disk
-    def _media_xml_connect(self, doc, ctx, devobj, newpath, _type):
-        disk_fragment = self._get_device_xml_nodes(ctx, "disk",
-                                                   devobj)[0]
-        driver_fragment = None
-
-        for child in disk_fragment.children or []:
-            if child.name == "driver":
-                driver_fragment = child
-
-        disk_fragment.setProp("type", _type)
-        elem = disk_fragment.newChild(None, "source", None)
-
-        targetprop = disk_type_to_target_prop(_type)
-        elem.setProp(targetprop, newpath)
-        driver_name = disk_type_to_xen_driver_name(_type)
-
-        if driver_fragment:
-            orig_name = driver_fragment.prop("name")
-
-            # For Xen, the driver name is dependent on the storage type
-            # (file or phys).
-            if orig_name and orig_name in [ "file", "phy" ]:
-                driver_fragment.setProp("name", driver_name)
-
-        return doc.serialize(), disk_fragment.serialize()
-
-    # Helper for disconnecting a path from an existing disk
-    def _media_xml_disconnect(self, doc, ctx, devobj, newpath, _type):
-        disk_fragment = self._get_device_xml_nodes(ctx, "disk",
-                                                   devobj)[0]
-        sourcenode = None
-
-        for child in disk_fragment.children:
-            if child.name == "source":
-                sourcenode = child
-                break
-            else:
-                continue
-
-        if sourcenode:
-            sourcenode.unlinkNode()
-            sourcenode.freeNode()
-
-        return doc.serialize(), disk_fragment.serialize()
-
-    def define_storage_media(self, devobj, newpath, _type=None):
-        if not self._check_device_is_present("disk", devobj):
-            return
-
-        if not newpath:
-            func = self._media_xml_disconnect
-        else:
-            func = self._media_xml_connect
-
-        def change_storage_helper(origxml):
-            vmxml, ignore = util.xml_parse_wrapper(origxml, func, devobj,
-                                                   newpath, _type)
-            return vmxml
-        self._redefine(change_storage_helper)
-
-    def hotplug_storage_media(self, devobj, newpath, _type=None):
-        if not newpath:
-            func = self._media_xml_disconnect
-        else:
-            func = self._media_xml_connect
-
-        ignore, diskxml = util.xml_parse_wrapper(self.get_xml(), func,
-                                                 devobj, newpath, _type)
-
-        self.attach_device(None, diskxml)
-
-    # VCPU changing
-    def define_vcpus(self, vcpus):
-        vcpus = int(vcpus)
-
-        def set_node(doc, ctx, vcpus, xpath):
-            node = ctx.xpathEval(xpath)
-            node = (node and node[0] or None)
-
-            if node:
-                node.setContent(str(vcpus))
-
-            return doc.serialize()
-
-        def change_vcpu_xml(xml, vcpus):
-            return util.xml_parse_wrapper(xml, set_node, vcpus,
-                                          "/domain/vcpu[1]")
-
-        self._redefine(change_vcpu_xml, vcpus)
-
-    def define_cpuset(self, cpuset):
-        def set_node(doc, ctx, xpath):
-            node = ctx.xpathEval(xpath)
-            node = (node and node[0] or None)
-
-            if node:
-                if cpuset:
-                    node.setProp("cpuset", cpuset)
-                else:
-                    node.unsetProp("cpuset")
-            return doc.serialize()
-
-        def change_cpuset_xml(xml):
-            return util.xml_parse_wrapper(xml, set_node, "/domain/vcpu[1]")
-
-        self._redefine(change_cpuset_xml)
-
-    # Memory routines
     def hotplug_both_mem(self, memory, maxmem):
         logging.info("Hotplugging curmem=%s maxmem=%s for VM '%s'" %
                      (memory, maxmem, self.get_name()))
@@ -1261,304 +1166,42 @@ class vmmDomain(vmmDomainBase):
             else:
                 self.hotplug_maxmem(maxmem)
 
-    def define_both_mem(self, memory, maxmem):
-        def set_mem_node(doc, ctx, memval, xpath):
-            node = ctx.xpathEval(xpath)
-            node = (node and node[0] or None)
+    def hotplug_storage_media(self, devobj, newpath):
+        devobj.path = newpath
+        self.attach_device(devobj)
 
-            if node:
-                node.setContent(str(memval))
-            return doc.serialize()
+    ####################
+    # End internal API #
+    ####################
 
-        def change_mem_xml(xml, memory, maxmem):
-            if memory:
-                xml = util.xml_parse_wrapper(xml, set_mem_node, memory,
-                                             "/domain/currentMemory[1]")
-            if maxmem:
-                xml = util.xml_parse_wrapper(xml, set_mem_node, maxmem,
-                                             "/domain/memory[1]")
-            return xml
+    ###########################
+    # XML/Config Altering API #
+    ###########################
 
-        self._redefine(change_mem_xml, memory, maxmem)
+    def _get_domain_xml(self, inactive=False, refresh_if_necc=True):
+        return vmmLibvirtObject.get_xml(self,
+                                        inactive=inactive,
+                                        refresh_if_necc=refresh_if_necc)
 
-    # Boot device
-    def set_boot_device(self, boot_list):
-        logging.debug("Setting boot devices to: %s" % boot_list)
+    def get_xml(self, inactive=False, refresh_if_necc=True):
+        guest = self._get_guest(inactive=inactive,
+                                refresh_if_necc=refresh_if_necc)
+        return guest.get_xml_config(install=False)
 
-        def set_boot_xml(doc, ctx):
-            nodes = ctx.xpathEval("/domain/os/boot")
-            os_node = ctx.xpathEval("/domain/os")[0]
-            mappings = map(lambda x, y: (x, y), nodes, boot_list)
+    def _get_guest(self, inactive=False, refresh_if_necc=True):
+        xml = self._get_domain_xml(inactive, refresh_if_necc)
 
-            for node, boot_dev in mappings:
-                if node:
-                    if boot_dev:
-                        node.setProp("dev", boot_dev)
-                    else:
-                        node.unlinkNode()
-                        node.freeNode()
-                else:
-                    if boot_dev:
-                        node = os_node.newChild(None, "boot", None)
-                    node.setProp("dev", boot_dev)
+        if not self.is_active() or inactive:
+            # We don't cache a guest for 'inactive' XML, so just return it
+            return self._build_guest(xml)
 
-            return doc.serialize()
+        return self._guest
 
-        self._redefine(util.xml_parse_wrapper, set_boot_xml)
+    def _build_guest(self, xml):
+        return virtinst.Guest(connection=self.connection.vmm, parsexml=xml)
 
-    # Security label
-    def define_seclabel(self, model, t, label):
-        logging.debug("Changing seclabel with model=%s t=%s label=%s" %
-                      (model, t, label))
-
-        def change_label(doc, ctx):
-            secnode = ctx.xpathEval("/domain/seclabel")
-            secnode = (secnode and secnode[0] or None)
-
-            if not model:
-                if secnode:
-                    secnode.unlinkNode()
-                    secnode.freeNode()
-
-            elif not secnode:
-                # Need to create new node
-                domain = ctx.xpathEval("/domain")[0]
-                seclabel = domain.newChild(None, "seclabel", None)
-                seclabel.setProp("model", model)
-                seclabel.setProp("type", t)
-                seclabel.newChild(None, "label", label)
-
-            else:
-                # Change existing label info
-                secnode.setProp("model", model)
-                secnode.setProp("type", t)
-                l = ctx.xpathEval("/domain/seclabel/label")
-                if len(l) > 0:
-                    l[0].setContent(label)
-                else:
-                    secnode.newChild(None, "label", label)
-
-            return doc.serialize()
-
-        self._redefine(util.xml_parse_wrapper, change_label)
-
-    # Helper function for changing ACPI/APIC
-    def _change_features_helper(self, xml, feature_name, do_enable):
-        def change_feature(doc, ctx):
-            feature_node = ctx.xpathEval("/domain/features")
-            feature_node = (feature_node and feature_node[0] or None)
-
-            if not feature_node:
-                if do_enable:
-                    domain_node = ctx.xpathEval("/domain")[0]
-                    feature_node = domain_node.newChild(None, "features", None)
-
-            if feature_node:
-                node = ctx.xpathEval("/domain/features/%s" % feature_name)
-                node = (node and node[0] or None)
-
-                if node:
-                    if not do_enable:
-                        node.unlinkNode()
-                        node.freeNode()
-                else:
-                    if do_enable:
-                        feature_node.newChild(None, feature_name, None)
-
-            return doc.serialize()
-
-        return util.xml_parse_wrapper(xml, change_feature)
-
-    # 'Overview' section settings
-    def define_acpi(self, do_enable):
-        if do_enable == self.get_acpi():
-            return
-        self._redefine(self._change_features_helper, "acpi", do_enable)
-
-    def define_apic(self, do_enable):
-        if do_enable == self.get_apic():
-            return
-        self._redefine(self._change_features_helper, "apic", do_enable)
-
-    def define_clock(self, newclock):
-        if newclock == self.get_clock():
-            return
-
-        def change_clock(doc, ctx, newclock):
-            clock_node = ctx.xpathEval("/domain/clock")
-            clock_node = (clock_node and clock_node[0] or None)
-
-            if clock_node:
-                clock_node.setProp("offset", newclock)
-
-            return doc.serialize()
-
-        return self._redefine(util.xml_parse_wrapper, change_clock, newclock)
-
-    def define_description(self, newvalue):
-        newvalue = vutil.xml_escape(newvalue)
-        if newvalue == self.get_description():
-            return
-
-        def change_desc(doc, ctx, newdesc):
-            desc_node = ctx.xpathEval("/domain/description")
-            desc_node = (desc_node and desc_node[0] or None)
-            dom_node = ctx.xpathEval("/domain")[0]
-
-            if newdesc:
-                if not desc_node:
-                    desc_node = dom_node.newChild(None, "description", None)
-
-                desc_node.setContent(newdesc)
-
-            elif desc_node:
-                desc_node.unlinkNode()
-                desc_node.freeNode()
-
-            return doc.serialize()
-
-        return self._redefine(util.xml_parse_wrapper, change_desc, newvalue)
-
-    def _change_disk_param(self, doc, ctx, devobj, node_name, newvalue):
-        disk_node = self._get_device_xml_nodes(ctx, "disk", devobj)[0]
-
-        found_node = None
-        for child in disk_node.children:
-            if child.name == node_name:
-                found_node = child
-                break
-            child = child.next
-
-        if bool(found_node) != newvalue:
-            if not newvalue:
-                found_node.unlinkNode()
-                found_node.freeNode()
-            else:
-                disk_node.newChild(None, node_name, None)
-
-        return doc.serialize()
-
-    # Disk properties
-    def define_disk_readonly(self, devobj, do_readonly):
-        if not self._check_device_is_present("disk", devobj):
-            return
-
-        return self._redefine(util.xml_parse_wrapper, self._change_disk_param,
-                             devobj, "readonly", do_readonly)
-
-    def define_disk_shareable(self, devobj, do_shareable):
-        if not self._check_device_is_present("disk", devobj):
-            return
-
-        return self._redefine(util.xml_parse_wrapper, self._change_disk_param,
-                             devobj, "shareable", do_shareable)
-
-    def define_disk_cache(self, devobj, new_cache):
-        devtype = "disk"
-        if not self._check_device_is_present(devtype, devobj):
-            return
-
-        def change_cache(doc, ctx):
-            dev_node = self._get_device_xml_nodes(ctx, devtype, devobj)[0]
-            tmpnode = dev_node.xpathEval("./driver")
-            node = tmpnode and tmpnode[0] or None
-
-            if not node:
-                if new_cache:
-                    node = dev_node.newChild(None, "driver", None)
-
-            if new_cache:
-                node.setProp("cache", new_cache)
-            else:
-                node.unsetProp("cache")
-
-            return doc.serialize()
-
-        return self._redefine(util.xml_parse_wrapper, change_cache)
-
-    # Network properties
-    def define_network_model(self, devobj, newmodel):
-        devtype = "interface"
-        if not self._check_device_is_present(devtype, devobj):
-            return
-
-        def change_model(doc, ctx):
-            dev_node = self._get_device_xml_nodes(ctx, devtype, devobj)[0]
-            model_node = dev_node.xpathEval("./model")
-            model_node = model_node and model_node[0] or None
-
-            if not model_node:
-                if newmodel:
-                    model_node = dev_node.newChild(None, "model", None)
-
-            if newmodel:
-                model_node.setProp("type", newmodel)
-            else:
-                model_node.unlinkNode()
-                model_node.freeNode()
-
-            return doc.serialize()
-
-        return self._redefine(util.xml_parse_wrapper, change_model)
-
-    # Sound properties
-    def define_sound_model(self, devobj, newmodel):
-        devtype = "sound"
-        if not self._check_device_is_present(devtype, devobj):
-            return
-
-        def change_model(doc, ctx):
-            dev_node = self._get_device_xml_nodes(ctx, devtype, devobj)[0]
-            dev_node.setProp("model", newmodel)
-
-            return doc.serialize()
-
-        return self._redefine(util.xml_parse_wrapper, change_model)
-
-    # Video properties
-    def define_video_model(self, devobj, newmodel):
-        if not self._check_device_is_present("video", devobj):
-            return
-
-        def change_model(doc, ctx, devobj, newmodel):
-            vid_node = self._get_device_xml_nodes(ctx, "video",
-                                                  devobj)[0]
-
-            model_node = vid_node.xpathEval("./model")[0]
-            model_node.setProp("type", newmodel)
-
-            return doc.serialize()
-
-        return self._redefine(util.xml_parse_wrapper, change_model,
-                              devobj, newmodel)
-
-    def define_watchdog_model(self, devobj, newval):
-        devtype = "watchdog"
-        if not self._check_device_is_present(devtype, devobj):
-            return
-
-        def change(doc, ctx):
-            dev_node = self._get_device_xml_nodes(ctx, devtype, devobj)[0]
-            if newval:
-                dev_node.setProp("model", newval)
-
-            return doc.serialize()
-
-        return self._redefine(util.xml_parse_wrapper, change)
-
-    def define_watchdog_action(self, devobj, newval):
-        devtype = "watchdog"
-        if not self._check_device_is_present(devtype, devobj):
-            return
-
-        def change(doc, ctx):
-            dev_node = self._get_device_xml_nodes(ctx, devtype, devobj)[0]
-            if newval:
-                dev_node.setProp("action", newval)
-
-            return doc.serialize()
-
-        return self._redefine(util.xml_parse_wrapper, change)
+    def _reparse_xml(self, ignore=None):
+        self._guest = self._build_guest(self._get_domain_xml())
 
     ########################
     # End XML Altering API #
@@ -1671,6 +1314,8 @@ class vmmDomainVirtinst(vmmDomainBase):
     def __init__(self, config, connection, backend, uuid):
         vmmDomainBase.__init__(self, config, connection, backend, uuid)
 
+        self._orig_xml = None
+
     def get_name(self):
         return self._backend.name
     def get_id(self):
@@ -1682,15 +1327,27 @@ class vmmDomainVirtinst(vmmDomainBase):
         ignore = inactive
         ignore = refresh_if_necc
 
-        xml = self._backend.get_config_xml()
-        if not xml:
-            xml = self._backend.get_config_xml(install=False)
+        xml = self._backend.get_xml_config(install=False)
+        if not self._orig_xml:
+            self._orig_xml = xml
         return xml
 
+    # Internal XML implementations
     def _get_guest(self, inactive=False, refresh_if_necc=True):
+        # Make sure XML is up2date
+        self.get_xml()
         return self._backend
 
-    def refresh_xml(self):
+    def _define(self, newxml):
+        self._orig_xml = None
+        util.safe_idle_add(util.idle_emit, self, "config-changed")
+
+    def _redefine_xml(self, newxml):
+        # We need to cache origxml in order to have something to diff against
+        origxml = self._orig_xml or self.get_xml(inactive=True)
+        return self._redefine_helper(origxml, newxml)
+
+    def refresh_xml(self, forcesignal=False):
         # No caching, so no refresh needed
         return
 
@@ -1721,154 +1378,21 @@ class vmmDomainVirtinst(vmmDomainBase):
         return 0
 
 
-    # Device/XML altering implementations
+    # Device/XML hotplug implementations
     def set_autostart(self, val):
         self._backend.autostart = bool(val)
-        self.emit("config-changed")
+        util.safe_idle_add(util.idle_emit, self, "config-changed")
 
-    def attach_device(self, devobj, devxml=None):
+    def attach_device(self, devobj):
         return
-    def detach_device(self, devtype, devobj):
+    def detach_device(self, devobj):
         return
-
-    def add_device(self, devobj):
-        def add_dev():
-            self._backend.add_device(devobj)
-        self._redefine(add_dev)
-    def remove_device(self, dev_type, devobj):
-        ignore = dev_type
-        def rm_dev():
-            self._backend.remove_device(devobj)
-        self._redefine(rm_dev)
-
-    def hotplug_storage_media(self, devobj, newpath, _type=None):
+    def hotplug_storage_media(self, devobj, newpath):
         return
-
-    def define_vcpus(self, vcpus):
-        def change_vcpu():
-            self._backend.vcpus = int(vcpus)
-        self._redefine(change_vcpu)
     def hotplug_vcpus(self, vcpus):
-        return
-    def define_cpuset(self, cpuset):
-        def change_cpuset():
-            self._backend.cpuset = cpuset
-        self._redefine(change_cpuset)
-
-    def define_both_mem(self, memory, maxmem):
-        def change_mem():
-            self._backend.memory = int(int(memory) / 1024)
-            self._backend.maxmemory = int(int(maxmem) / 1024)
-        self._redefine(change_mem)
+        raise NotImplementedError()
     def hotplug_both_mem(self, memory, maxmem):
-        return
-
-    def define_seclabel(self, model, t, label):
-        def change_seclabel():
-            if not model:
-                self._backend.seclabel = None
-                return
-
-            seclabel = virtinst.Seclabel(self.get_connection().vmm)
-            seclabel.type = t
-            seclabel.model = model
-            if label:
-                seclabel.label = label
-
-            self._backend.seclabel = seclabel
-
-        self._redefine(change_seclabel)
-
-    def set_boot_device(self, boot_list):
-        if not boot_list or boot_list == self.get_boot_device():
-            return
-
-        raise RuntimeError("Boot device is determined by the install media.")
-
-    def define_acpi(self, newvalue):
-        def change_acpi():
-            self._backend.features["acpi"] = bool(newvalue)
-        self._redefine(change_acpi)
-    def define_apic(self, newvalue):
-        def change_apic():
-            self._backend.features["apic"] = bool(newvalue)
-        self._redefine(change_apic)
-
-    def define_clock(self, newvalue):
-        def change_clock():
-            self._backend.clock.offset = newvalue
-        self._redefine(change_clock)
-
-    def define_description(self, newvalue):
-        def change_desc():
-            self._backend.description = newvalue
-        self._redefine(change_desc)
-
-    def define_storage_media(self, devobj, newpath, _type=None):
-        def change_path():
-            devobj.path = newpath
-        self._redefine(change_path)
-    def define_disk_readonly(self, devobj, do_readonly):
-        def change_readonly():
-            devobj.read_only = do_readonly
-        self._redefine(change_readonly)
-    def define_disk_shareable(self, devobj, do_shareable):
-        def change_shareable():
-            devobj.shareable = do_shareable
-        self._redefine(change_shareable)
-    def define_disk_cache(self, devobj, new_cache):
-        def change_cache():
-            devobj.driver_cache = new_cache or None
-        self._redefine(change_cache)
-
-    def define_network_model(self, devobj, newmodel):
-        def change_model():
-            devobj.model = newmodel
-        self._redefine(change_model)
-
-    def define_sound_model(self, devobj, newmodel):
-        def change_model():
-            devobj.model = newmodel
-        self._redefine(change_model)
-
-    def define_video_model(self, devobj, newmodel):
-        def change_video_model():
-            devobj.model_type = newmodel
-        self._redefine(change_video_model)
-
-    def define_watchdog_model(self, devobj, newval):
-        def change():
-            devobj.model = newval
-
-        self._redefine(change)
-
-    def define_watchdog_action(self, devobj, newval):
-        def change():
-            devobj.action = newval
-
-        self._redefine(change)
-
-    # Helper functions
-    def _redefine(self, alter_func):
-        origxml = self.get_xml()
-
-        # Make change
-        alter_func()
-
-        newxml = self.get_xml()
-
-        if origxml == newxml:
-            logging.debug("Redefinition request XML was no different,"
-                          " redefining anyways")
-        else:
-            diff = "".join(difflib.unified_diff(origxml.splitlines(1),
-                                                newxml.splitlines(1),
-                                                fromfile="Original XML",
-                                                tofile="New XML"))
-            logging.debug("Redefining '%s' with XML diff:\n%s",
-                          self.get_name(), diff)
-
-        self.emit("config-changed")
+        raise NotImplementedError()
 
 gobject.type_register(vmmDomainVirtinst)
 gobject.type_register(vmmDomainBase)

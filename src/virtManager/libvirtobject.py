@@ -23,7 +23,18 @@ import gobject
 import difflib
 import logging
 
+import libxml2
+
 from virtManager import util
+
+def _sanitize_xml(xml):
+    xml = libxml2.parseDoc(xml).serialize()
+    # Strip starting <?...> line
+    if xml.startswith("<?"):
+        ignore, xml = xml.split("\n", 1)
+    if not xml.endswith("\n") and xml.count("\n"):
+        xml += "\n"
+    return xml
 
 class vmmLibvirtObject(gobject.GObject):
     __gsignals__ = {
@@ -39,6 +50,9 @@ class vmmLibvirtObject(gobject.GObject):
 
         self._xml = None
         self._is_xml_valid = False
+
+        # Cached XML that accumulates changes to define
+        self._xml_to_define = None
 
         # These should be set by the child classes if necessary
         self._inactive_xml_flags = 0
@@ -88,15 +102,16 @@ class vmmLibvirtObject(gobject.GObject):
 
         return self._xml
 
-    def refresh_xml(self):
+    def refresh_xml(self, forcesignal=False):
         # Force an xml update. Signal 'config-changed' if domain xml has
         # changed since last refresh
 
         origxml = self._xml
+        self._invalidate_xml()
         self._xml = self._XMLDesc(self._active_xml_flags)
         self._is_xml_valid = True
 
-        if origxml != self._xml:
+        if origxml != self._xml or forcesignal:
             util.safe_idle_add(util.idle_emit, self, "config-changed")
 
     ######################################
@@ -111,24 +126,13 @@ class vmmLibvirtObject(gobject.GObject):
     # Internal API functions #
     ##########################
 
-    def _redefine(self, xml_func, *args):
-        """
-        Helper function for altering a redefining VM xml
+    def __xml_to_redefine(self):
+        return _sanitize_xml(self.get_xml(inactive=True))
 
-        @param xml_func: Function to alter the running XML. Takes the
-                         original XML as its first argument.
-        @param args: Extra arguments to pass to xml_func
-        """
-        origxml = self.get_xml(inactive=True)
-        # Sanitize origxml to be similar to what we will get back
-        origxml = util.xml_parse_wrapper(origxml, lambda d, c: d.serialize())
-
-        newxml = xml_func(origxml, *args)
-
-        if origxml == newxml:
-            logging.debug("Redefinition request XML was no different,"
-                          " redefining anyways")
-        else:
+    def _redefine_helper(self, origxml, newxml):
+        origxml = _sanitize_xml(origxml)
+        newxml  = _sanitize_xml(newxml)
+        if origxml != newxml:
             diff = "".join(difflib.unified_diff(origxml.splitlines(1),
                                                 newxml.splitlines(1),
                                                 fromfile="Original XML",
@@ -136,9 +140,14 @@ class vmmLibvirtObject(gobject.GObject):
             logging.debug("Redefining '%s' with XML diff:\n%s",
                           self.get_name(), diff)
 
-        self._define(newxml)
+            self._define(newxml)
 
-        # Invalidate cached XML
-        self.refresh_xml()
+        # Make sure we have latest XML
+        self.refresh_xml(forcesignal=True)
+        return
+
+    def _redefine_xml(self, newxml):
+        origxml = self.__xml_to_redefine()
+        return self._redefine_helper(origxml, newxml)
 
 gobject.type_register(vmmLibvirtObject)

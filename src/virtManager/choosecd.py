@@ -20,8 +20,6 @@
 import gtk.glade
 import gobject
 
-import virtinst
-
 import virtManager.uihelpers as uihelpers
 import virtManager.util as util
 from virtManager.mediadev import MEDIA_FLOPPY
@@ -32,16 +30,15 @@ class vmmChooseCD(gobject.GObject):
     __gsignals__ = {
         "cdrom-chosen": (gobject.SIGNAL_RUN_FIRST,
                          gobject.TYPE_NONE,
-                         # dev, source, target
-                         (gobject.TYPE_PYOBJECT, str, str)),
+                         # dev, new path
+                         (gobject.TYPE_PYOBJECT, str)),
     }
-
-    IS_FLOPPY = 1
-    IS_CDROM  = 2
 
     def __init__(self, config, dev_id_info, connection, media_type):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-choose-cd.glade", "vmm-choose-cd", domain="virt-manager")
+        self.window = gtk.glade.XML(
+                            config.get_glade_dir() + "/vmm-choose-cd.glade",
+                            "vmm-choose-cd", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-choose-cd")
         self.topwin.hide()
 
@@ -108,18 +105,14 @@ class vmmChooseCD(gobject.GObject):
                                     _("A media path must be specified."))
 
         try:
-            dev=virtinst.VirtualDisk.DEVICE_CDROM
-            disk = virtinst.VirtualDisk(path=path,
-                                        device=dev,
-                                        readOnly=True,
-                                        conn=self.conn.vmm)
+            self.dev_id_info.path = path
         except Exception, e:
             return self.err.val_err(_("Invalid Media Path"), str(e))
 
         uihelpers.check_path_search_for_qemu(self.topwin, self.config,
                                              self.conn, path)
 
-        self.emit("cdrom-chosen", self.dev_id_info, disk.path, disk.type)
+        self.emit("cdrom-chosen", self.dev_id_info, path)
         self.cancel()
 
     def media_toggled(self, ignore1=None, ignore2=None):

@@ -1329,26 +1329,25 @@ class vmmDetails(gobject.GObject):
 
         if curpath:
             # Disconnect cdrom
-            self.change_storage_media(dev_id_info, None, _type=None)
+            self.change_storage_media(dev_id_info, None)
+            return
 
-        else:
-            def change_cdrom_wrapper(src, dev_id_info, newpath,
-                                     _type=None):
-                return self.change_storage_media(dev_id_info, newpath, _type)
+        def change_cdrom_wrapper(src, dev_id_info, newpath):
+            return self.change_storage_media(dev_id_info, newpath)
 
-            # Launch 'Choose CD' dialog
-            if self.media_choosers[devtype] is None:
-                ret = vmmChooseCD(self.config,
-                                  dev_id_info,
-                                  self.vm.get_connection(),
-                                  devtype)
+        # Launch 'Choose CD' dialog
+        if self.media_choosers[devtype] is None:
+            ret = vmmChooseCD(self.config,
+                              dev_id_info,
+                              self.vm.get_connection(),
+                              devtype)
 
-                ret.connect("cdrom-chosen", change_cdrom_wrapper)
-                self.media_choosers[devtype] = ret
+            ret.connect("cdrom-chosen", change_cdrom_wrapper)
+            self.media_choosers[devtype] = ret
 
-            dialog = self.media_choosers[devtype]
-            dialog.dev_id_info = dev_id_info
-            dialog.show()
+        dialog = self.media_choosers[devtype]
+        dialog.dev_id_info = dev_id_info
+        dialog.show()
 
     ##################################################
     # Details/Hardware config changes (apply button) #
@@ -1512,11 +1511,11 @@ class vmmDetails(gobject.GObject):
                                           (bootdevs,))
 
     # CDROM
-    def change_storage_media(self, dev_id_info, newpath, _type=None):
+    def change_storage_media(self, dev_id_info, newpath):
         return self._change_config_helper(self.vm.define_storage_media,
-                                          (dev_id_info, newpath, _type),
+                                          (dev_id_info, newpath),
                                           self.vm.hotplug_storage_media,
-                                          (dev_id_info, newpath, _type))
+                                          (dev_id_info, newpath))
 
     # Disk options
     def config_disk_apply(self, dev_id_info):
@@ -1579,7 +1578,7 @@ class vmmDetails(gobject.GObject):
 
         # Define the change
         try:
-            self.vm.remove_device(dev_type, dev_id_info)
+            self.vm.remove_device(dev_id_info)
         except Exception, e:
             self.err.show_err(_("Error Removing Device: %s" % str(e)),
                               "".join(traceback.format_exc()))
@@ -1589,7 +1588,7 @@ class vmmDetails(gobject.GObject):
         detach_err = False
         try:
             if self.vm.is_active():
-                self.vm.detach_device(dev_type, dev_id_info)
+                self.vm.detach_device(dev_id_info)
         except Exception, e:
             logging.debug("Device could not be hotUNplugged: %s" % str(e))
             detach_err = True
@@ -1639,15 +1638,20 @@ class vmmDetails(gobject.GObject):
                     hotplug_err = True
 
         # Persistent config change
-        for idx in range(len(define_funcs)):
-            func = define_funcs[idx]
-            args = define_funcs_args[idx]
-            try:
+        try:
+            for idx in range(len(define_funcs)):
+                func = define_funcs[idx]
+                args = define_funcs_args[idx]
                 func(*args)
-            except Exception, e:
-                self.err.show_err((_("Error changing VM configuration: %s") %
-                                   str(e)), "".join(traceback.format_exc()))
-                return False
+            if define_funcs:
+                self.vm.redefine_cached()
+        except Exception, e:
+            self.err.show_err((_("Error changing VM configuration: %s") %
+                              str(e)), "".join(traceback.format_exc()))
+            # If we fail, make sure we flush the cache
+            self.vm.refresh_xml()
+            return False
+
 
         if (hotplug_err or
             (active and not len(hotplug_funcs) == len(define_funcs))):
@@ -2045,7 +2049,7 @@ class vmmDetails(gobject.GObject):
             return
 
         char_type = chardev.virtual_device_type.capitalize()
-        target_port = chardev.index
+        target_port = chardev.target_port
         dev_type = chardev.char_type or "pty"
         src_path = chardev.source_path
         primary = hasattr(chardev, "virtmanager_console_dup")
@@ -2249,7 +2253,7 @@ class vmmDetails(gobject.GObject):
         # Populate list of char devices
         for chardev in self.vm.get_char_devices():
             devtype = chardev.virtual_device_type
-            port = chardev.index
+            port = chardev.target_port
 
             label = devtype.capitalize()
             if devtype != "console":
