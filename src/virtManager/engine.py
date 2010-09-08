@@ -726,7 +726,7 @@ class vmmEngine(gobject.GObject):
         managed = bool(vm.managedsave_supported)
         do_prompt = self.config.get_confirm_poweroff()
 
-        if managed and conn.is_remote():
+        if not managed and conn.is_remote():
             self.err.val_err(_("Saving virtual machines over remote "
                                "connections is not supported with this "
                                "libvirt version or hypervisor."))
