@@ -2054,7 +2054,18 @@ class vmmDetails(gobject.GObject):
         src_path = chardev.source_path
         primary = hasattr(chardev, "virtmanager_console_dup")
 
-        typelabel = "%s Device" % char_type
+        typelabel = ""
+        if char_type == "serial":
+            typelabel = _("Serial Device")
+        elif char_type == "parallel":
+            typelabel = _("Parallel Device")
+        elif char_type == "console":
+            typelabel = _("Console Device")
+        elif char_type == "channel":
+            typelabel = _("Channel Device")
+        else:
+            typelabel = _("%s Device") % char_type.capitalize()
+
         if target_port is not None:
             typelabel += " %s" % (int(target_port) + 1)
         if primary:
