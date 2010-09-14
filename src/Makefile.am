@@ -1,12 +1,12 @@
 
-SUBDIRS = virtManager
+SUBDIRS = virtManager virtManagerTui
 
-bin_SCRIPTS_IN = virt-manager.in
-bin_SCRIPTS = virt-manager
+bin_SCRIPTS_IN = virt-manager.in virt-manager-tui.in
+bin_SCRIPTS = virt-manager virt-manager-tui
 
 pythondir = $(pkgdatadir)
-python_DATA_IN = $(PACKAGE).py.in
-python_DATA = $(PACKAGE).py
+python_DATA_IN = $(PACKAGE).py.in $(PACKAGE)-tui.py.in
+python_DATA = $(PACKAGE).py $(PACKAGE)-tui.py
 
 libexec_DATA_IN = $(PACKAGE)-launch.in
 libexec_SCRIPTS = $(PACKAGE)-launch
@@ -53,6 +53,9 @@ EXTRA_DIST = $(bin_SCRIPTS_IN) $(desktop_DATA_IN) $(dbus_DATA_IN) $(python_DATA_
 
 $(PACKAGE): $(srcdir)/$(PACKAGE).in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PYTHONDIR::,$(pkgdatadir)," < $< > $@
+
+$(PACKAGE)-tui: $(srcdir)/$(PACKAGE)-tui.in
+	sed -e "s,::PACKAGE::,$(PACKAGE)-tui," -e "s,::PYTHONDIR::,$(pkgdatadir)," < $< > $@
 
 $(PACKAGE)-launch: $(srcdir)/$(PACKAGE)-launch.in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PYTHONDIR::,$(pkgdatadir)," < $< > $@

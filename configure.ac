@@ -44,6 +44,7 @@ AC_OUTPUT(Makefile
           po/Makefile.in
           src/Makefile
           src/virtManager/Makefile
+          src/virtManagerTui/Makefile
           man/Makefile
           tests/Makefile
           virt-manager.spec)

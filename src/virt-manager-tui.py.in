@@ -1,0 +1,147 @@
+# virt-manager-tui.py - Copyright (C) 2010 Red Hat, Inc.
+# Written by Darryl L. Pierce, <dpierce@redhat.com>.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301 USA.
+#
+
+from newt_syrup.dialogscreen import DialogScreen
+from optparse import OptionParser, OptionValueError
+
+import gettext
+import locale
+import logging
+import os
+import sys
+import traceback
+
+# These are substituted into code based on --prefix given to configure
+appname = "::PACKAGE::"
+appversion = "::VERSION::"
+gettext_app = "virt-manager"
+gettext_dir = "::GETTEXTDIR::"
+virtinst_str = "::VIRTINST_VERSION::"
+virtinst_version = tuple([ int(num) for num in virtinst_str.split('.')])
+
+gconf_dir = "/apps/" + appname
+asset_dir = "::ASSETDIR::"
+glade_dir = asset_dir
+icon_dir = asset_dir + "/pixmaps"
+pylib_dir = "::PYLIBDIR::"
+pyarchlib_dir = "::PYARCHLIBDIR::"
+data_dir = "::DATADIR::"
+
+def setup_i18n():
+    locale.setlocale(locale.LC_ALL, '')
+    gettext.install(gettext_app, gettext_dir)
+    gettext.bindtextdomain(gettext_app, gettext_dir)
+
+def setup_pypath():
+    global glade_dir, icon_dir, data_dir
+    # Hacks for find assets in local dir for dev purposes
+    if os.path.exists(os.getcwd() + "/src/vmm-about.glade"):
+        glade_dir = os.getcwd() + "/src"
+    if os.path.exists(os.getcwd() + "/pixmaps/state_running.png"):
+        icon_dir = os.getcwd() + "/pixmaps"
+    if os.path.exists(os.getcwd() + "../gnome/help/virt-manager/C/virt-manager.xml"):
+        data_dir = os.getcwd() + "../"
+
+    # First 2 hacks are to point python to local dir for source files in dev,
+    # the third is the main path if you have  normal install
+    if os.path.exists(os.getcwd() + "/src/virt-manager.py"):
+        pass
+    elif os.path.exists(os.getcwd() + "/build/src/virt-manager.py"):
+        sys.path.insert(0, os.getcwd() + "/src")
+    else:
+        sys.path.insert(0, pylib_dir)
+        sys.path.insert(0, pyarchlib_dir)
+
+def parse_commandline():
+    optParser = OptionParser(version=appversion)
+    optParser.add_option("--profile", dest="profile", help="Generate runtime performance profile stats", metavar="FILE")
+    optParser.set_defaults(uuid=None)
+    optParser.add_option("-c", "--connect", dest="uri",
+        help="Connect to hypervisor at URI", metavar="URI")
+    optParser.add_option("--debug", action="store_true", dest="debug",
+        help="Print debug output to stdout (implies --no-fork)",
+        default=False)
+    optParser.add_option("--no-dbus", action="store_true", dest="nodbus",
+        help="Disable DBus service for controlling UI")
+    optParser.add_option("--no-fork", action="store_true", dest="nofork",
+        help="Don't fork into background on startup")
+    optParser.add_option("--no-conn-autostart", action="store_true",
+                         dest="no_conn_auto",
+                         help="Do not autostart connections")
+    optParser.add_option("--show-domain-creator", action="callback",
+        callback=opt_show_cb, dest="show", help="Create a new virtual machine")
+    optParser.add_option("--show-domain-editor",  type="string", metavar="UUID",
+        action="callback", callback=opt_show_cb, help="Edit a domain configuration")
+    optParser.add_option("--show-domain-performance", type="string", metavar="UUID",
+        action="callback", callback=opt_show_cb, help="Show a domain performance")
+    optParser.add_option("--show-domain-console", type="string", metavar="UUID",
+        action="callback", callback=opt_show_cb, help="Show a domain console")
+    optParser.add_option("--show-host-summary", action="callback",
+       callback=opt_show_cb, help="Show a host summary")
+
+    return optParser.parse_args()
+
+def opt_show_cb(option, opt_str, value, parser):
+    if option.metavar=="UUID":
+        setattr(parser.values, "uuid", value)
+    s = str(option)
+    show = s[s.rindex('-')+1:]
+    setattr(parser.values, "show", show)
+
+def _show_startup_error(message, details):
+    errordlg = DialogScreen("Error Starting Virtual Machine Manager", message)
+    errordlg.show()
+
+def main():
+    setup_i18n()
+    setup_pypath()
+
+    (options, ignore) = parse_commandline()
+
+    # Make sure we have a sufficiently new virtinst version, since we are
+    # very closely tied to the lib
+    msg = ("virt-manager requires the python-virtinst library version " +
+            virtinst_str + " or greater. This can be downloaded at:"
+            "\n\nhttp://virt-manager.org/download.html")
+    try:
+        import virtinst
+        ignore = virtinst.__version__
+        ignore = virtinst.__version_info__
+    except Exception, e:
+        logging.exception("Error import virtinst")
+        raise RuntimeError(str(e) + "\n\n" + msg)
+
+    if virtinst.__version_info__ < virtinst_version:
+        raise RuntimeError("virtinst version %s is too old." %
+                            (virtinst.__version__) +
+                           "\n\n" + msg)
+
+    # start the app
+    from virtManagerTui.mainmenu import MainMenu
+    MainMenu()
+
+if __name__ == "__main__":
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception, error:
+        logging.exception(error)
+        _show_startup_error(str(error), "".join(traceback.format_exc()))
+
