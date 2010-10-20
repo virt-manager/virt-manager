@@ -6,7 +6,7 @@ set -e
 touch config.rpath
 
 # Make makefiles.
-rm config.status
+rm -f config.status
 intltoolize --automake --copy --force
 perl -i -p -e 's,^DATADIRNAME.*$,DATADIRNAME = share,' po/Makefile.in.in
 perl -i -p -e 's,^GETTEXT_PACKAGE.*$,GETTEXT_PACKAGE = virt-manager,' po/Makefile.in.in
