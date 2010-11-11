@@ -57,12 +57,15 @@ pylib_dir = "::PYLIBDIR::"
 pyarchlib_dir = "::PYARCHLIBDIR::"
 data_dir = "::DATADIR::"
 
+logging_setup = False
+
 def _show_startup_error(msg, details):
     import gtk
     from virtManager.error import vmmErrorDialog
     err = vmmErrorDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE, "", "")
     title = _("Error starting Virtual Machine Manager")
-    err.show_err(title + ": " +  msg, details, title, async=False)
+    err.show_err(title + ": " +  msg, details, title, async=False,
+                 debug=False)
 
 def setup_i18n():
     locale.setlocale(locale.LC_ALL, '')
@@ -128,7 +131,8 @@ def setup_logging(debug_stdout):
     DIR_NAME      = ".virt-manager"
     FILE_NAME     = "virt-manager.log"
     FILE_MODE     = 'a'
-    FILE_FORMAT   = "[%(asctime)s virt-manager %(process)d] %(levelname)s (%(module)s:%(lineno)d) %(message)s"
+    FILE_FORMAT   = ("[%(asctime)s virt-manager %(process)d] "
+                     "%(levelname)s (%(module)s:%(lineno)d) %(message)s")
     DATEFMT       = "%a, %d %b %Y %H:%M:%S"
 
     # set up logging
@@ -143,21 +147,23 @@ def setup_logging(debug_stdout):
             raise RuntimeError("Could not create directory %s: %s" %
                                (vm_dir, e))
 
-    # XXX should we get logging level from gconf, or command line args ?
     filename = "%s/%s" % (vm_dir, FILE_NAME)
     rootLogger = logging.getLogger()
     rootLogger.setLevel(logging.DEBUG)
-    fileHandler = logging.handlers.RotatingFileHandler(filename, FILE_MODE, MAX_LOGSIZE, ROTATE_NUM)
+    fileHandler = logging.handlers.RotatingFileHandler(filename,
+                                    FILE_MODE, MAX_LOGSIZE, ROTATE_NUM)
     fileHandler.setFormatter(logging.Formatter(FILE_FORMAT, DATEFMT))
     rootLogger.addHandler(fileHandler)
 
     if debug_stdout:
         streamHandler = logging.StreamHandler(sys.stderr)
         streamHandler.setLevel(logging.DEBUG)
-        streamHandler.setFormatter(logging.Formatter("%(asctime)s (%(module)s:%(lineno)d): %(message)s"))
+        streamHandler.setFormatter(logging.Formatter(
+                        "%(asctime)s (%(module)s:%(lineno)d): %(message)s"))
         rootLogger.addHandler(streamHandler)
 
-
+    global logging_setup
+    logging_setup = True
     logging.info("Application startup")
 
     # Register libvirt handler
@@ -423,5 +429,8 @@ if __name__ == "__main__":
     except SystemExit:
         raise
     except Exception, run_e:
-        logging.exception(run_e)
+        if logging_setup:
+            logging.exception(run_e)
+        if "gtk" not in globals():
+            raise
         _show_startup_error(str(run_e), "".join(traceback.format_exc()))
