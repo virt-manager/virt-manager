@@ -91,8 +91,8 @@ pylint --ignore=IPy.py $FILES \
   --reports=$SHOW_REPORT \
   --output-format=colorized \
   --dummy-variables-rgx="dummy|ignore*" \
-  --disable-msg=${DMSG}\
-  --disable-checker=${DCHECKERS} 2>&1 | \
+  --disable=${DMSG}\
+  --disable=${DCHECKERS} 2>&1 | \
   egrep -ve "$NO_PYL_CONFIG" \
         -ve "$GOBJECT_VAR" \
         -ve "$GOBJECT_INIT" \
