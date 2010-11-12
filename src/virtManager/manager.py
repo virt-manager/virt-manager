@@ -721,7 +721,7 @@ class vmmManager(vmmGObjectUI):
         if self.config.get_console_popup() == 2 and not vm.is_management_domain():
             # user has requested consoles on all vms
             gtype = vm.get_graphics_console()[0]
-            if gtype == "vnc":
+            if gtype in ["vnc", "spice"]:
                 self.emit("action-show-console", uri, vmuuid)
             elif not connection.is_remote():
                 self.emit("action-show-terminal", uri, vmuuid)
