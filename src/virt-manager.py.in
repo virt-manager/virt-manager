@@ -130,7 +130,7 @@ def setup_logging(debug_stdout):
     ROTATE_NUM    = 5
     DIR_NAME      = ".virt-manager"
     FILE_NAME     = "virt-manager.log"
-    FILE_MODE     = 'a'
+    FILE_MODE     = 'ae'
     FILE_FORMAT   = ("[%(asctime)s virt-manager %(process)d] "
                      "%(levelname)s (%(module)s:%(lineno)d) %(message)s")
     DATEFMT       = "%a, %d %b %Y %H:%M:%S"
