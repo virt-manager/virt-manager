@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: virt-manager.tip.de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-25 09:36-0400\n"
-"PO-Revision-Date: 2010-11-23 10:12+0100\n"
+"PO-Revision-Date: 2010-11-23 10:19+0100\n"
 "Last-Translator: Fabian Affolter <fab@fedoraproject.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1557,7 +1557,7 @@ msgstr "Der dynamische SELinux-Sicherheitstyp veranlasst libvirt, automatisch ei
 
 #: ../src/virtManager/details.py:515
 msgid "Libvirt did not detect NUMA capabilities."
-msgstr ""
+msgstr "Libvirt hat keine NUMA-Möglichkeiten entdeckt."
 
 #: ../src/virtManager/details.py:523
 msgid "VCPU"
@@ -1605,7 +1605,7 @@ msgstr "Grafische Konsole %s"
 #: ../src/virtManager/details.py:783
 #, fuzzy, python-format
 msgid "Error refreshing hardware page: %s"
-msgstr "Fehler beim Wechseln des Speicherpfads: %s"
+msgstr "Fehler beim Aktualisieren der Hardware-Seite: %s"
 
 #: ../src/virtManager/details.py:838
 #: ../src/virtManager/manager.py:919
@@ -1640,9 +1640,9 @@ msgid "Screenshot saved"
 msgstr "Bildschirmfoto gespeichert"
 
 #: ../src/virtManager/details.py:1145
-#, fuzzy, python-format
+#, python-format
 msgid "Error generating CPU configuration: %s"
-msgstr "Fehler beim Ändern der VM-Konfiguration: %s"
+msgstr "Fehler beim Erzeugen der CPU-Konfiguration: %s"
 
 #: ../src/virtManager/details.py:1359
 #, python-format
@@ -1803,9 +1803,8 @@ msgid "Cannot resume guest while cloning operation in progress"
 msgstr ""
 
 #: ../src/virtManager/domain.py:2331
-#, fuzzy
 msgid "Did not find selected device."
-msgstr "Gerät %s konnte nicht gefunden werden"
+msgstr "Ausgewähltes Gerät nicht gefunden."
 
 #: ../src/virtManager/engine.py:106
 msgid "Searching for available hypervisors..."
@@ -1862,9 +1861,8 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/engine.py:339
-#, fuzzy
 msgid "Libvirt service must be started"
-msgstr "Ein Gerät muss gewählt sein."
+msgstr "Libvirt muss gestartet sein"
 
 #: ../src/virtManager/engine.py:600
 #, python-format
@@ -2007,19 +2005,16 @@ msgid "Connection not active."
 msgstr "Verbindung nicht aktiv."
 
 #: ../src/virtManager/host.py:369
-#, fuzzy
 msgid "Libvirt connection does not support virtual network management."
-msgstr "Verbindung unterstützt keine Speicherverwaltung."
+msgstr "Libvirt-Verbindungen unterstützen keine virtuelle Netzwerkverwaltung."
 
 #: ../src/virtManager/host.py:374
-#, fuzzy
 msgid "Libvirt connection does not support storage management."
-msgstr "Verbindung unterstützt keine Speicherverwaltung."
+msgstr "Libvirt-Verbindungen unterstützen keine Speicherverwaltung."
 
 #: ../src/virtManager/host.py:378
-#, fuzzy
 msgid "Libvirt connection does not support interface management."
-msgstr "Verbindung unterstützt keine Speicherverwaltung."
+msgstr "Libvirt-Verbindungen unterstützen keine Schnittstellenverwaltung."
 
 #: ../src/virtManager/host.py:393
 #, python-format
@@ -2097,9 +2092,9 @@ msgid "Error deleting pool: %s"
 msgstr "Fehler beim Löschen des Pools: %s"
 
 #: ../src/virtManager/host.py:624
-#, fuzzy, python-format
+#, python-format
 msgid "Error refreshing pool '%s': %s"
-msgstr "Fehler beim Starten des Pools '%s': %s"
+msgstr "Fehler beim Aktualisieren des Pools '%s': %s"
 
 #: ../src/virtManager/host.py:633
 #, python-format
@@ -2128,19 +2123,18 @@ msgid "Error setting pool autostart: %s"
 msgstr "Fehler beim Einrichten des automatischen Pool-Starts: %s"
 
 #: ../src/virtManager/host.py:726
-#, fuzzy
 msgid "No storage pool selected."
-msgstr "Eine Schnittstelle muss angegeben sein."
+msgstr "Kein Speicher-Pool ausgewählt."
 
 #: ../src/virtManager/host.py:736
-#, fuzzy, python-format
+#, python-format
 msgid "Error selecting pool: %s"
-msgstr "Fehler beim Löschen des Pools: %s"
+msgstr "Fehler beim Auswählen des Pools: %s"
 
 #: ../src/virtManager/host.py:850
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to stop the interface '%s'?"
-msgstr "Sind Sie sicher, dass Sie '%s' pausieren wollen?"
+msgstr "Sind Sie sicher, dass Sie '%s' stoppen wollen?"
 
 #: ../src/virtManager/host.py:852
 #: ../src/virtManager/host.py:878
@@ -2174,14 +2168,14 @@ msgid "Error deleting interface: %s"
 msgstr "Fehler beim Löschen des Netzwerks: %s"
 
 #: ../src/virtManager/host.py:916
-#, fuzzy, python-format
+#, python-format
 msgid "Error launching interface wizard: %s"
 msgstr "Fehler beim Starten des Netzwerkassistenten: %s"
 
 #: ../src/virtManager/host.py:947
-#, fuzzy, python-format
+#, python-format
 msgid "Error setting interface startmode: %s"
-msgstr "Fehler beim Einrichten des automatischen Netzwerkstarts: %s"
+msgstr "Fehler beim Setzen des Startmodus: %s"
 
 #: ../src/virtManager/host.py:967
 msgid "No interface selected."
@@ -2485,8 +2479,9 @@ msgstr "Kein Netzwerk."
 
 #. After all is said and done, add a manual bridge option
 #: ../src/virtManager/uihelpers.py:429
+#, fuzzy
 msgid "Specify shared device name"
-msgstr ""
+msgstr "Geteilter Geräte-Namen angeben"
 
 #: ../src/virtManager/uihelpers.py:448
 msgid "Virtual Network is not active."
@@ -3488,7 +3483,7 @@ msgstr "_Verbindung:"
 
 #: ../src/vmm-create.glade.h:15
 msgid "C_ustomize configuration before install"
-msgstr ""
+msgstr "Konfiguration bearbeiten vor der Installation"
 
 #: ../src/vmm-create.glade.h:16
 msgid "Choose Memory and CPU settings"
