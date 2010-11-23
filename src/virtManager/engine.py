@@ -288,8 +288,13 @@ class vmmEngine(gobject.GObject):
             self.hal_helper = vmmHalHelper()
         return self.hal_helper
 
+    def get_config(self):
+        return self.config
 
-    # First run helpers
+
+    ########################
+    # First run PackageKit #
+    ########################
 
     def add_default_connection(self):
         # Only add default if no connections are currently known
@@ -448,12 +453,9 @@ class vmmEngine(gobject.GObject):
                     raise
         return 1
 
-    def change_timer_interval(self,ignore1,ignore2,ignore3,ignore4):
+    def change_timer_interval(self, ignore1, ignore2, ignore3, ignore4):
         gobject.source_remove(self.timer)
         self.schedule_timer()
-
-    def get_config(self):
-        return self.config
 
     def _do_show_about(self, src):
         self.show_about()
@@ -496,64 +498,16 @@ class vmmEngine(gobject.GObject):
     def _do_reboot_domain(self, src, uri, uuid):
         self.reboot_domain(src, uri, uuid)
     def _do_migrate_domain(self, src, uri, uuid):
-        self.migrate_domain(uri, uuid)
+        self.show_migrate(uri, uuid)
     def _do_clone_domain(self, src, uri, uuid):
-        self.clone_domain(uri, uuid)
+        self.show_clone(uri, uuid)
     def _do_exit_app(self, src):
         self.exit_app()
 
-    def show_about(self):
-        if self.windowAbout == None:
-            self.windowAbout = vmmAbout(self.get_config())
-        self.windowAbout.show()
-
-    def show_help(self, index):
-        try:
-            uri = "ghelp:%s" % self.config.get_appname()
-            if index:
-                uri += "#%s" % index
-
-            logging.debug("Showing help for %s" % uri)
-            gtk.show_uri(None, uri, gtk.get_current_event_time())
-        except gobject.GError, e:
-            logging.error(("Unable to display documentation:\n%s") % e)
-
-    def show_preferences(self):
-        if self.windowPreferences == None:
-            self.windowPreferences = vmmPreferences(self.get_config())
-            self.windowPreferences.connect("action-show-help", self._do_show_help)
-        self.windowPreferences.show()
-
-    def show_host(self, uri):
-        con = self._lookup_connection(uri)
-
-        if self.connections[uri]["windowHost"] == None:
-            manager = vmmHost(self.get_config(), con, self)
-            manager.connect("action-show-help", self._do_show_help)
-            manager.connect("action-exit-app", self._do_exit_app)
-            manager.connect("action-view-manager", self._do_show_manager)
-            manager.connect("action-restore-domain", self._do_restore_domain)
-            self.connections[uri]["windowHost"] = manager
-        self.connections[uri]["windowHost"].show()
-
-    def show_connect(self):
-        def connect_wrap(src, *args):
-            return self.connect_to_uri(*args)
-
-        if self.windowConnect == None:
-            self.windowConnect = vmmConnect(self.get_config(), self)
-            self.windowConnect.connect("completed", connect_wrap)
-            self.windowConnect.connect("cancelled", self._connect_cancelled)
-        self.windowConnect.show()
-
-    def show_console(self, uri, uuid):
-        win = self.show_details(uri, uuid)
-        if not win:
-            return
-
-        win.activate_console_page()
-
     def refresh_console(self, uri, uuid):
+        """
+        Present VM console if recently started
+        """
         if not(self.connections[uri]["windowConsole"].has_key(uuid)):
             return
 
@@ -562,81 +516,6 @@ class vmmEngine(gobject.GObject):
             return
 
         console.show()
-
-    def show_details_performance(self, uri, uuid):
-        win = self.show_details(uri, uuid)
-        if not win:
-            return
-
-        win.activate_performance_page()
-
-    def show_details_config(self, uri, uuid):
-        win = self.show_details(uri, uuid)
-        if not win:
-            return
-
-        win.activate_config_page()
-
-    def show_details(self, uri, uuid):
-        con = self._lookup_connection(uri)
-
-        if not(self.connections[uri]["windowDetails"].has_key(uuid)):
-            try:
-                details = vmmDetails(self.get_config(), con.get_vm(uuid), self)
-                details.connect("action-save-domain", self._do_save_domain)
-                details.connect("action-destroy-domain", self._do_destroy_domain)
-                details.connect("action-show-help", self._do_show_help)
-                details.connect("action-suspend-domain", self._do_suspend_domain)
-                details.connect("action-resume-domain", self._do_resume_domain)
-                details.connect("action-run-domain", self._do_run_domain)
-                details.connect("action-shutdown-domain", self._do_shutdown_domain)
-                details.connect("action-reboot-domain", self._do_reboot_domain)
-                details.connect("action-exit-app", self._do_exit_app)
-                details.connect("action-view-manager", self._do_show_manager)
-                details.connect("action-migrate-domain", self._do_migrate_domain)
-                details.connect("action-clone-domain", self._do_clone_domain)
-
-            except Exception, e:
-                self.err.show_err(_("Error bringing up domain details: %s") % str(e),
-                                  "".join(traceback.format_exc()))
-                return None
-
-            self.connections[uri]["windowDetails"][uuid] = details
-        self.connections[uri]["windowDetails"][uuid].show()
-        return self.connections[uri]["windowDetails"][uuid]
-
-    def get_manager(self):
-        if self.windowManager == None:
-            self.windowManager = vmmManager(self.get_config(), self)
-            self.windowManager.connect("action-suspend-domain", self._do_suspend_domain)
-            self.windowManager.connect("action-resume-domain", self._do_resume_domain)
-            self.windowManager.connect("action-run-domain", self._do_run_domain)
-            self.windowManager.connect("action-shutdown-domain", self._do_shutdown_domain)
-            self.windowManager.connect("action-reboot-domain", self._do_reboot_domain)
-            self.windowManager.connect("action-destroy-domain", self._do_destroy_domain)
-            self.windowManager.connect("action-save-domain", self._do_save_domain)
-            self.windowManager.connect("action-migrate-domain", self._do_migrate_domain)
-            self.windowManager.connect("action-clone-domain", self._do_clone_domain)
-            self.windowManager.connect("action-show-console", self._do_show_console)
-            self.windowManager.connect("action-show-details", self._do_show_details)
-            self.windowManager.connect("action-show-preferences", self._do_show_preferences)
-            self.windowManager.connect("action-show-create", self._do_show_create)
-            self.windowManager.connect("action-show-help", self._do_show_help)
-            self.windowManager.connect("action-show-about", self._do_show_about)
-            self.windowManager.connect("action-show-host", self._do_show_host)
-            self.windowManager.connect("action-show-connect", self._do_show_connect)
-            self.windowManager.connect("action-connect", self._do_connect)
-            self.windowManager.connect("action-refresh-console", self._do_refresh_console)
-            self.windowManager.connect("action-exit-app", self._do_exit_app)
-        return self.windowManager
-
-    def toggle_manager(self):
-        manager = self.get_manager()
-        if not manager.close():
-            manager.show()
-
-    def show_manager(self):
-        self.get_manager().show()
 
     def increment_window_counter(self):
         self.windows += 1
@@ -665,14 +544,6 @@ class vmmEngine(gobject.GObject):
             return False
         return True
 
-    def show_create(self, uri):
-        if self.windowCreate == None:
-            create = vmmCreate(self.get_config(), self)
-            create.connect("action-show-console", self._do_show_console)
-            create.connect("action-show-help", self._do_show_help)
-            self.windowCreate = create
-        self.windowCreate.show(uri)
-
     def add_connection(self, uri, readOnly=None, autoconnect=False):
         conn = vmmConnection(self.get_config(), uri, readOnly, self)
         self.connections[uri] = {
@@ -682,11 +553,13 @@ class vmmEngine(gobject.GObject):
             "windowConsole": {},
             "windowClone": None,
             }
-        self.connections[uri]["connection"].connect("vm-removed", self._do_vm_removed)
-        self.connections[uri]["connection"].connect("state-changed", self._do_connection_changed)
-        self.connections[uri]["connection"].tick()
+
+        conn.connect("vm-removed", self._do_vm_removed)
+        conn.connect("state-changed", self._do_connection_changed)
+        conn.tick()
         self.emit("connection-added", conn)
         self.config.add_connection(conn.get_uri())
+
         if autoconnect:
             conn.set_autoconnect(True)
 
@@ -719,6 +592,233 @@ class vmmEngine(gobject.GObject):
         if not conn:
             raise RuntimeError(_("Unknown connection URI %s") % uri)
         return conn
+
+    ####################
+    # Dialog launchers #
+    ####################
+
+    def show_about(self):
+        try:
+            if self.windowAbout == None:
+                self.windowAbout = vmmAbout(self.get_config())
+            self.windowAbout.show()
+        except Exception, e:
+            self.err.show_err(_("Error launching 'About' dialog: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+    def show_help(self, index):
+        try:
+            uri = "ghelp:%s" % self.config.get_appname()
+            if index:
+                uri += "#%s" % index
+
+            logging.debug("Showing help for %s" % uri)
+            gtk.show_uri(None, uri, gtk.get_current_event_time())
+        except Exception, e:
+            self.err.show_err(_("Unable to display documentation: %s") % e,
+                              "".join(traceback.format_exc()))
+
+    def _get_preferences(self):
+        if self.windowPreferences:
+            return self.windowPreferences
+
+        obj = vmmPreferences(self.get_config())
+        obj.connect("action-show-help", self._do_show_help)
+        self.windowPreferences = obj
+        return self.windowPreferences
+
+    def show_preferences(self):
+        try:
+            self._get_preferences().show()
+        except Exception, e:
+            self.err.show_err(_("Error launching preferences: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+    def _get_host_dialog(self, uri):
+        if self.connections[uri]["windowHost"]:
+            return self.connections[uri]["windowHost"]
+
+        con = self._lookup_connection(uri)
+        obj = vmmHost(self.get_config(), con, self)
+        obj.connect("action-show-help", self._do_show_help)
+        obj.connect("action-exit-app", self._do_exit_app)
+        obj.connect("action-view-manager", self._do_show_manager)
+        obj.connect("action-restore-domain", self._do_restore_domain)
+        self.connections[uri]["windowHost"] = obj
+        return self.connections[uri]["windowHost"]
+
+    def show_host(self, uri):
+        try:
+            self._get_host_dialog(uri).show()
+        except Exception, e:
+            self.err.show_err(_("Error launching host dialog: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+    def _get_connect_dialog(self):
+        if self.windowConnect:
+            return self.windowConnect
+
+        def connect_wrap(src, *args):
+            return self.connect_to_uri(*args)
+
+        obj = vmmConnect(self.get_config(), self)
+        obj.connect("completed", connect_wrap)
+        obj.connect("cancelled", self._connect_cancelled)
+        self.windowConnect = obj
+        return self.windowConnect
+
+    def show_connect(self):
+        try:
+            self._get_connect_dialog().show()
+        except Exception, e:
+            self.err.show_err(_("Error launching connect dialog: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+    def _get_details_dialog(self, uri, uuid):
+        if uuid in self.connections[uri]["windowDetails"]:
+            return self.connections[uri]["windowDetails"][uuid]
+
+        con = self._lookup_connection(uri)
+
+        obj = vmmDetails(self.get_config(), con.get_vm(uuid), self)
+        obj.connect("action-save-domain", self._do_save_domain)
+        obj.connect("action-destroy-domain", self._do_destroy_domain)
+        obj.connect("action-show-help", self._do_show_help)
+        obj.connect("action-suspend-domain", self._do_suspend_domain)
+        obj.connect("action-resume-domain", self._do_resume_domain)
+        obj.connect("action-run-domain", self._do_run_domain)
+        obj.connect("action-shutdown-domain", self._do_shutdown_domain)
+        obj.connect("action-reboot-domain", self._do_reboot_domain)
+        obj.connect("action-exit-app", self._do_exit_app)
+        obj.connect("action-view-manager", self._do_show_manager)
+        obj.connect("action-migrate-domain", self._do_migrate_domain)
+        obj.connect("action-clone-domain", self._do_clone_domain)
+
+        self.connections[uri]["windowDetails"][uuid] = obj
+        self.connections[uri]["windowDetails"][uuid].show()
+        return self.connections[uri]["windowDetails"][uuid]
+
+    def show_details(self, uri, uuid):
+        try:
+            details = self._get_details_dialog(uri, uuid)
+            details.show()
+            return details
+        except Exception, e:
+            self.err.show_err(_("Error launching details: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+    def show_console(self, uri, uuid):
+        win = self.show_details(uri, uuid)
+        if not win:
+            return
+        win.activate_console_page()
+
+    def show_details_performance(self, uri, uuid):
+        win = self.show_details(uri, uuid)
+        if not win:
+            return
+        win.activate_performance_page()
+
+    def show_details_config(self, uri, uuid):
+        win = self.show_details(uri, uuid)
+        if not win:
+            return
+        win.activate_config_page()
+
+    def get_manager(self):
+        if self.windowManager:
+            return self.windowManager
+
+        obj = vmmManager(self.get_config(), self)
+        obj.connect("action-suspend-domain", self._do_suspend_domain)
+        obj.connect("action-resume-domain", self._do_resume_domain)
+        obj.connect("action-run-domain", self._do_run_domain)
+        obj.connect("action-shutdown-domain", self._do_shutdown_domain)
+        obj.connect("action-reboot-domain", self._do_reboot_domain)
+        obj.connect("action-destroy-domain", self._do_destroy_domain)
+        obj.connect("action-save-domain", self._do_save_domain)
+        obj.connect("action-migrate-domain", self._do_migrate_domain)
+        obj.connect("action-clone-domain", self._do_clone_domain)
+        obj.connect("action-show-console", self._do_show_console)
+        obj.connect("action-show-details", self._do_show_details)
+        obj.connect("action-show-preferences", self._do_show_preferences)
+        obj.connect("action-show-create", self._do_show_create)
+        obj.connect("action-show-help", self._do_show_help)
+        obj.connect("action-show-about", self._do_show_about)
+        obj.connect("action-show-host", self._do_show_host)
+        obj.connect("action-show-connect", self._do_show_connect)
+        obj.connect("action-connect", self._do_connect)
+        obj.connect("action-refresh-console", self._do_refresh_console)
+        obj.connect("action-exit-app", self._do_exit_app)
+
+        self.windowManager = obj
+        return self.windowManager
+
+    def toggle_manager(self):
+        manager = self.get_manager()
+        if not manager.close():
+            manager.show()
+
+    def show_manager(self):
+        try:
+            self.get_manager().show()
+        except Exception, e:
+            self.err.show_err(_("Error launching manager: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+    def _get_create_dialog(self):
+        if self.windowCreate:
+            return self.windowCreate
+
+        obj = vmmCreate(self.get_config(), self)
+        obj.connect("action-show-console", self._do_show_console)
+        obj.connect("action-show-help", self._do_show_help)
+        self.windowCreate = obj
+        return self.windowCreate
+
+    def show_create(self, uri):
+        try:
+            self._get_create_dialog.show(uri)
+        except Exception, e:
+            self.err.show_err(_("Error launching manager: %s") % str(e),
+                              "".join(traceback.format_exc()))
+
+    def show_migrate(self, uri, uuid):
+        try:
+            conn = self._lookup_connection(uri)
+            vm = conn.get_vm(uuid)
+
+            if not self.windowMigrate:
+                self.windowMigrate = vmmMigrateDialog(self.config, vm, self)
+
+            self.windowMigrate.set_state(vm)
+            self.windowMigrate.show()
+        except Exception, e:
+            self.err.show_err(_("Error launching migrate dialog: %s") %
+                              str(e), "".join(traceback.format_exc()))
+
+    def show_clone(self, uri, uuid):
+        con = self._lookup_connection(uri)
+        orig_vm = con.get_vm(uuid)
+        clone_window = self.connections[uri]["windowClone"]
+
+        try:
+            if clone_window == None:
+                clone_window = vmmCloneVM(self.get_config(), orig_vm)
+                clone_window.connect("action-show-help", self._do_show_help)
+                self.connections[uri]["windowClone"] = clone_window
+            else:
+                clone_window.set_orig_vm(orig_vm)
+
+            clone_window.show()
+        except Exception, e:
+            self.err.show_err(_("Error setting clone parameters: %s") %
+                              str(e), "".join(traceback.format_exc()))
+
+
+    #######################################
+    # Domain actions run/destroy/save ... #
+    #######################################
 
     def save_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
@@ -947,34 +1047,5 @@ class vmmEngine(gobject.GObject):
             self.err.show_err(_("Error rebooting domain: %s" %
                               str(reboot_err)),
                               "".join(traceback.format_exc()))
-
-    def migrate_domain(self, uri, uuid):
-        conn = self._lookup_connection(uri)
-        vm = conn.get_vm(uuid)
-
-        if not self.windowMigrate:
-            self.windowMigrate = vmmMigrateDialog(self.config, vm, self)
-
-        self.windowMigrate.set_state(vm)
-        self.windowMigrate.show()
-
-    def clone_domain(self, uri, uuid):
-        con = self._lookup_connection(uri)
-        orig_vm = con.get_vm(uuid)
-        clone_window = self.connections[uri]["windowClone"]
-
-        try:
-            if clone_window == None:
-                clone_window = vmmCloneVM(self.get_config(), orig_vm)
-                clone_window.connect("action-show-help", self._do_show_help)
-                self.connections[uri]["windowClone"] = clone_window
-            else:
-                clone_window.set_orig_vm(orig_vm)
-
-            clone_window.show()
-        except Exception, e:
-            self.err.show_err(_("Error setting clone parameters: %s") %
-                              str(e), "".join(traceback.format_exc()))
-
 
 gobject.type_register(vmmEngine)
