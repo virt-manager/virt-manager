@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.16 -->
   <!-- interface-naming-policy toplevel-contextual -->
@@ -12,12 +12,10 @@
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
     <property name="gravity">center</property>
-    <property name="has_separator">False</property>
     <signal name="delete_event" handler="on_vmm_choose_cd_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
           <widget class="GtkFrame" id="frame1">
             <property name="visible">True</property>
@@ -44,7 +42,7 @@
                           <widget class="GtkEntry" id="iso-path">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">&#x25CF;</property>
+                            <property name="invisible_char">●</property>
                           </widget>
                           <packing>
                             <property name="position">0</property>

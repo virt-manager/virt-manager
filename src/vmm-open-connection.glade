@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.6 -->
   <!-- interface-naming-policy toplevel-contextual -->
@@ -7,12 +7,10 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Add Connection</property>
     <property name="type_hint">dialog</property>
-    <property name="has_separator">False</property>
     <signal name="delete_event" handler="on_vmm_open_connection_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <widget class="GtkTable" id="table1">
@@ -236,7 +234,7 @@ SSL/TLS with certificates</property>
               <widget class="GtkEntry" id="username-entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">&#x25CF;</property>
+                <property name="invisible_char">●</property>
                 <signal name="changed" handler="on_username_entry_changed"/>
               </widget>
               <packing>

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.6 -->
   <!-- interface-naming-policy toplevel-contextual -->
@@ -13,7 +13,6 @@
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
         <property name="border_width">12</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <widget class="GtkNotebook" id="pool-pages">
@@ -24,7 +23,6 @@
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
                   <widget class="GtkHBox" id="hbox5">
@@ -32,7 +30,6 @@
                     <child>
                       <widget class="GtkVBox" id="vbox3">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
                         <property name="spacing">3</property>
                         <child>
                           <widget class="GtkHBox" id="hbox6">
@@ -149,7 +146,7 @@
                           <widget class="GtkEntry" id="pool-name">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">&#x25CF;</property>
+                            <property name="invisible_char">●</property>
                             <signal name="focus_in_event" handler="on_pool_name_focus_in_event"/>
                             <signal name="activate" handler="on_pool_name_activate"/>
                           </widget>
@@ -223,7 +220,6 @@
               <widget class="GtkVBox" id="vbox4">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
                   <widget class="GtkHBox" id="hbox10">
@@ -232,7 +228,6 @@
                     <child>
                       <widget class="GtkVBox" id="vbox5">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
                         <property name="spacing">3</property>
                         <child>
                           <widget class="GtkHBox" id="hbox11">
@@ -490,7 +485,7 @@
                           <widget class="GtkEntry" id="pool-hostname">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">&#x25CF;</property>
+                            <property name="invisible_char">●</property>
                             <signal name="focus_in_event" handler="on_pool_hostname_focus_in_event"/>
                             <signal name="activate" handler="on_pool_hostname_activate"/>
                           </widget>

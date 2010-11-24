@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.6 -->
   <!-- interface-naming-policy toplevel-contextual -->
@@ -13,7 +13,6 @@
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">15</property>
         <child>
           <widget class="GtkAlignment" id="alignment2">
@@ -22,12 +21,10 @@
             <child>
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <widget class="GtkVBox" id="vbox3">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
                     <property name="spacing">3</property>
                     <child>
                       <widget class="GtkHBox" id="hbox4">
@@ -89,7 +86,6 @@
                     <child>
                       <widget class="GtkVBox" id="vbox4">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
                         <property name="spacing">24</property>
                         <child>
                           <widget class="GtkTable" id="table1">
@@ -106,7 +102,7 @@
                                   <widget class="GtkEntry" id="vol-name">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">&#x25CF;</property>
+                                    <property name="invisible_char">●</property>
                                     <signal name="changed" handler="on_vol_name_changed"/>
                                   </widget>
                                   <packing>
@@ -181,12 +177,10 @@
                         <child>
                           <widget class="GtkVBox" id="vbox5">
                             <property name="visible">True</property>
-                            <property name="orientation">vertical</property>
                             <property name="spacing">5</property>
                             <child>
                               <widget class="GtkVBox" id="vbox6">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <child>
                                   <widget class="GtkLabel" id="label10">
                                     <property name="visible">True</property>
@@ -264,7 +258,7 @@
                                   <widget class="GtkSpinButton" id="vol-capacity">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">&#x25CF;</property>
+                                    <property name="invisible_char">●</property>
                                     <property name="adjustment">1 0 100000 1 1000 0</property>
                                     <property name="climb_rate">10</property>
                                     <signal name="value_changed" handler="on_vol_capacity_value_changed"/>
@@ -280,7 +274,7 @@
                                   <widget class="GtkSpinButton" id="vol-allocation">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="invisible_char">&#x25CF;</property>
+                                    <property name="invisible_char">●</property>
                                     <property name="adjustment">1 0 100000 1 1000 0</property>
                                     <property name="climb_rate">10</property>
                                     <signal name="value_changed" handler="on_vol_allocation_value_changed"/>

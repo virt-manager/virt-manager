@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <glade-interface>
   <!-- interface-requires gtk+ 2.6 -->
   <!-- interface-naming-policy toplevel-contextual -->
@@ -10,7 +10,6 @@
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <widget class="GtkNotebook" id="prefs-pages">
@@ -20,7 +19,6 @@
               <widget class="GtkVBox" id="vbox5">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
-                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkFrame" id="frame5">
                     <property name="visible">True</property>
@@ -85,7 +83,6 @@
               <widget class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">8</property>
                 <child>
                   <widget class="GtkFrame" id="frame1">
@@ -131,7 +128,7 @@
                               <widget class="GtkSpinButton" id="prefs-stats-history-len">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="invisible_char">●</property>
                                 <property name="adjustment">0 0 300 5 5 0</property>
                                 <property name="climb_rate">0.01</property>
                                 <signal name="value_changed" handler="on_prefs_stats_history_length_changed"/>
@@ -148,7 +145,7 @@
                               <widget class="GtkSpinButton" id="prefs-stats-update-interval">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="invisible_char">&#x25CF;</property>
+                                <property name="invisible_char">●</property>
                                 <property name="adjustment">0 0 60 1 5 0</property>
                                 <signal name="value_changed" handler="on_prefs_stats_update_interval_changed"/>
                               </widget>
@@ -312,7 +309,6 @@
               <widget class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">8</property>
                 <child>
                   <widget class="GtkFrame" id="frame3">
@@ -490,7 +486,6 @@ For all domains</property>
                                 <child>
                                   <widget class="GtkVBox" id="vbox4">
                                     <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
                                     <child>
                                       <widget class="GtkCheckButton" id="prefs-sound-local">
                                         <property name="label" translatable="yes">_Local virtual machine</property>
@@ -574,7 +569,6 @@ For all domains</property>
               <widget class="GtkVBox" id="vbox6">
                 <property name="visible">True</property>
                 <property name="border_width">12</property>
-                <property name="orientation">vertical</property>
                 <child>
                   <widget class="GtkFrame" id="frame6">
                     <property name="visible">True</property>
