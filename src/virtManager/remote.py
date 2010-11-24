@@ -28,23 +28,23 @@ class vmmRemote(dbus.service.Object):
 
     @dbus.service.method("com.redhat.virt.manager", in_signature="s")
     def show_domain_creator(self, uri):
-        self.engine.show_create(uri)
+        self.engine.show_domain_creator(str(uri))
 
     @dbus.service.method("com.redhat.virt.manager", in_signature="ss")
     def show_domain_editor(self, uri, uuid):
-        self.engine.show_details_config(uri, uuid)
+        self.engine.show_domain_editor(str(uri), str(uuid))
 
     @dbus.service.method("com.redhat.virt.manager", in_signature="ss")
     def show_domain_performance(self, uri, uuid):
-        self.engine.show_details_performance(uri, uuid)
+        self.engine.show_domain_performance(str(uri), str(uuid))
 
     @dbus.service.method("com.redhat.virt.manager", in_signature="ss")
     def show_domain_console(self, uri, uuid):
-        self.engine.show_console(uri, uuid)
+        self.engine.show_domain_console(str(uri), str(uuid))
 
     @dbus.service.method("com.redhat.virt.manager", in_signature="s")
     def show_host_summary(self, uri):
-        self.engine.show_host(uri)
+        self.engine.show_host_summary(str(uri))
 
     @dbus.service.method("com.redhat.virt.manager", in_signature="")
     def show_manager(self):

@@ -107,8 +107,6 @@ class vmmConnection(gobject.GObject):
         self.engine = engine
 
         self.connectThread = None
-        self.connectThreadEvent = threading.Event()
-        self.connectThreadEvent.set()
         self.connectError = None
         self.uri = uri
         if self.uri is None or self.uri.lower() == "xen":
@@ -846,7 +844,6 @@ class vmmConnection(gobject.GObject):
         self._change_state(self.STATE_CONNECTING)
 
         logging.debug("Scheduling background open thread for " + self.uri)
-        self.connectThreadEvent.clear()
         self.connectThread = threading.Thread(target = self._open_thread,
                                               name = "Connect %s" % self.uri)
         self.connectThread.setDaemon(True)
@@ -1034,27 +1031,24 @@ class vmmConnection(gobject.GObject):
     def _open_notify(self):
         logging.debug("Notifying open result")
 
-        try:
-            util.safe_idle_add(util.idle_emit, self, "state-changed")
+        util.safe_idle_add(util.idle_emit, self, "state-changed")
 
-            if self.state == self.STATE_ACTIVE:
-                caps = self.get_capabilities_xml()
-                logging.debug("%s capabilities:\n%s" %
-                              (self.get_uri(), caps))
+        if self.state == self.STATE_ACTIVE:
+            caps = self.get_capabilities_xml()
+            logging.debug("%s capabilities:\n%s" %
+                          (self.get_uri(), caps))
 
-                self.tick()
-                # If VMs disappeared since the last time we connected to
-                # this uri, remove their gconf entries so we don't pollute
-                # the database
-                self.config.reconcile_vm_entries(self.get_uri(),
-                                                 self.vms.keys())
+            self.tick()
+            # If VMs disappeared since the last time we connected to
+            # this uri, remove their gconf entries so we don't pollute
+            # the database
+            self.config.reconcile_vm_entries(self.get_uri(),
+                                             self.vms.keys())
 
-            if self.state == self.STATE_DISCONNECTED:
-                util.safe_idle_add(util.idle_emit, self, "connect-error",
-                                   self.connectError)
-                self.connectError = None
-        finally:
-            self.connectThreadEvent.set()
+        if self.state == self.STATE_DISCONNECTED:
+            util.safe_idle_add(util.idle_emit, self, "connect-error",
+                               self.connectError)
+            self.connectError = None
 
 
     #######################

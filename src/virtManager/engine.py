@@ -491,15 +491,6 @@ class vmmEngine(gobject.GObject):
         logging.debug("Exiting app normally.")
         gtk.main_quit()
 
-    def wait_for_open(self, uri):
-        # Used to ensure connection fully starts before running
-        # ONLY CALL FROM WITHIN A THREAD
-        conn = self.connect_to_uri(uri)
-        conn.connectThreadEvent.wait()
-        if conn.state != conn.STATE_ACTIVE:
-            return False
-        return True
-
     def add_connection(self, uri, readOnly=None, autoconnect=False):
         conn = vmmConnection(self.get_config(), uri, readOnly, self)
         self.connections[uri] = {
@@ -768,29 +759,32 @@ class vmmEngine(gobject.GObject):
     def show_manager(self):
         self._do_show_manager(None)
 
-    def show_create(self, uri):
-        win = self._do_show_create(self.get_manager(), uri)
-        if not win:
-            return
-        win.show()
+    def show_connect(self):
+        self._do_show_connect(self.get_manager())
 
-    def show_console(self, uri, uuid):
+    def show_host_summary(self, uri):
+        self._do_show_host(self.get_manager(), uri)
+
+    def show_domain_creator(self, uri):
+        self._do_show_create(self.get_manager(), uri)
+
+    def show_domain_console(self, uri, uuid):
         win = self._do_show_details(self.get_manager(), uri, uuid)
         if not win:
             return
         win.activate_console_page()
 
-    def show_details_performance(self, uri, uuid):
-        win = self._do_show_details(self.get_manager(), uri, uuid)
-        if not win:
-            return
-        win.activate_performance_page()
-
-    def show_details_config(self, uri, uuid):
+    def show_domain_editor(self, uri, uuid):
         win = self._do_show_details(self.get_manager(), uri, uuid)
         if not win:
             return
         win.activate_config_page()
+
+    def show_domain_performance(self, uri, uuid):
+        win = self._do_show_details(self.get_manager(), uri, uuid)
+        if not win:
+            return
+        win.activate_performance_page()
 
     #######################################
     # Domain actions run/destroy/save ... #
