@@ -724,7 +724,7 @@ class vmmEngine(gobject.GObject):
 
     def _do_show_create(self, src, uri):
         try:
-            self._get_create_dialog.show(uri)
+            self._get_create_dialog().show(uri)
         except Exception, e:
             src.err.show_err(_("Error launching manager: %s") % str(e),
                              "".join(traceback.format_exc()))
