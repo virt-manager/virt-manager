@@ -275,7 +275,7 @@ class vmmEngine(gobject.GObject):
         self.systray.connect("action-destroy-domain", self._do_destroy_domain)
         self.systray.connect("action-show-console", self._do_show_console)
         self.systray.connect("action-show-details", self._do_show_details)
-        self.systray.connect("action-exit-app", self._do_exit_app)
+        self.systray.connect("action-exit-app", self.exit_app)
 
     def system_tray_changed(self, *ignore):
         systray_enabled = self.config.get_view_system_tray()
@@ -378,6 +378,9 @@ class vmmEngine(gobject.GObject):
             logging.exception("Error connecting to %s" % uri)
             return None
 
+    def _do_connect(self, src, uri):
+        return self.connect_to_uri(uri)
+
     def _connect_cancelled(self, connect):
         self.windowConnect = None
         if len(self.connections.keys()) == 0:
@@ -457,54 +460,7 @@ class vmmEngine(gobject.GObject):
         gobject.source_remove(self.timer)
         self.schedule_timer()
 
-    def _do_show_about(self, src):
-        self.show_about()
-    def _do_show_preferences(self, src):
-        self.show_preferences()
-    def _do_show_host(self, src, uri):
-        self.show_host(uri)
-    def _do_show_connect(self, src):
-        self.show_connect()
-    def _do_connect(self, src, uri):
-        self.connect_to_uri(uri)
-    def _do_show_details(self, src, uri, uuid):
-        self.show_details(uri, uuid)
-    def _do_show_create(self, src, uri):
-        self.show_create(uri)
-    def _do_show_help(self, src, index):
-        self.show_help(index)
-    def _do_show_console(self, src, uri, uuid):
-        self.show_console(uri, uuid)
-    def _do_toggle_manager(self, src):
-        self.toggle_manager()
-    def _do_show_manager(self, src):
-        self.show_manager()
-    def _do_refresh_console(self, src, uri, uuid):
-        self.refresh_console(uri, uuid)
-    def _do_save_domain(self, src, uri, uuid):
-        self.save_domain(src, uri, uuid)
-    def _do_restore_domain(self, src, uri):
-        self.restore_domain(src, uri)
-    def _do_destroy_domain(self, src, uri, uuid):
-        self.destroy_domain(src, uri, uuid)
-    def _do_suspend_domain(self, src, uri, uuid):
-        self.suspend_domain(src, uri, uuid)
-    def _do_resume_domain(self, src, uri, uuid):
-        self.resume_domain(src, uri, uuid)
-    def _do_run_domain(self, src, uri, uuid):
-        self.run_domain(src, uri, uuid)
-    def _do_shutdown_domain(self, src, uri, uuid):
-        self.shutdown_domain(src, uri, uuid)
-    def _do_reboot_domain(self, src, uri, uuid):
-        self.reboot_domain(src, uri, uuid)
-    def _do_migrate_domain(self, src, uri, uuid):
-        self.show_migrate(uri, uuid)
-    def _do_clone_domain(self, src, uri, uuid):
-        self.show_clone(uri, uuid)
-    def _do_exit_app(self, src):
-        self.exit_app()
-
-    def refresh_console(self, uri, uuid):
+    def refresh_console(self, ignore, uri, uuid):
         """
         Present VM console if recently started
         """
@@ -528,7 +484,7 @@ class vmmEngine(gobject.GObject):
         if self.windows <= 0 and not self.systray.is_visible():
             self.exit_app()
 
-    def exit_app(self):
+    def exit_app(self, ignore_src=None):
         conns = self.connections.values()
         for conn in conns:
             conn["connection"].close()
@@ -597,16 +553,16 @@ class vmmEngine(gobject.GObject):
     # Dialog launchers #
     ####################
 
-    def show_about(self):
+    def _do_show_about(self, src):
         try:
             if self.windowAbout == None:
                 self.windowAbout = vmmAbout(self.get_config())
             self.windowAbout.show()
         except Exception, e:
-            self.err.show_err(_("Error launching 'About' dialog: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching 'About' dialog: %s") % str(e),
+                             "".join(traceback.format_exc()))
 
-    def show_help(self, index):
+    def _do_show_help(self, src, index):
         try:
             uri = "ghelp:%s" % self.config.get_appname()
             if index:
@@ -615,8 +571,8 @@ class vmmEngine(gobject.GObject):
             logging.debug("Showing help for %s" % uri)
             gtk.show_uri(None, uri, gtk.get_current_event_time())
         except Exception, e:
-            self.err.show_err(_("Unable to display documentation: %s") % e,
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Unable to display documentation: %s") % e,
+                             "".join(traceback.format_exc()))
 
     def _get_preferences(self):
         if self.windowPreferences:
@@ -627,12 +583,12 @@ class vmmEngine(gobject.GObject):
         self.windowPreferences = obj
         return self.windowPreferences
 
-    def show_preferences(self):
+    def _do_show_preferences(self, src):
         try:
             self._get_preferences().show()
         except Exception, e:
-            self.err.show_err(_("Error launching preferences: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching preferences: %s") % str(e),
+                             "".join(traceback.format_exc()))
 
     def _get_host_dialog(self, uri):
         if self.connections[uri]["windowHost"]:
@@ -641,18 +597,18 @@ class vmmEngine(gobject.GObject):
         con = self._lookup_connection(uri)
         obj = vmmHost(self.get_config(), con, self)
         obj.connect("action-show-help", self._do_show_help)
-        obj.connect("action-exit-app", self._do_exit_app)
+        obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
         obj.connect("action-restore-domain", self._do_restore_domain)
         self.connections[uri]["windowHost"] = obj
         return self.connections[uri]["windowHost"]
 
-    def show_host(self, uri):
+    def _do_show_host(self, src, uri):
         try:
             self._get_host_dialog(uri).show()
         except Exception, e:
-            self.err.show_err(_("Error launching host dialog: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching host dialog: %s") % str(e),
+                             "".join(traceback.format_exc()))
 
     def _get_connect_dialog(self):
         if self.windowConnect:
@@ -667,12 +623,12 @@ class vmmEngine(gobject.GObject):
         self.windowConnect = obj
         return self.windowConnect
 
-    def show_connect(self):
+    def _do_show_connect(self, src):
         try:
             self._get_connect_dialog().show()
         except Exception, e:
-            self.err.show_err(_("Error launching connect dialog: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching connect dialog: %s") % str(e),
+                             "".join(traceback.format_exc()))
 
     def _get_details_dialog(self, uri, uuid):
         if uuid in self.connections[uri]["windowDetails"]:
@@ -689,41 +645,29 @@ class vmmEngine(gobject.GObject):
         obj.connect("action-run-domain", self._do_run_domain)
         obj.connect("action-shutdown-domain", self._do_shutdown_domain)
         obj.connect("action-reboot-domain", self._do_reboot_domain)
-        obj.connect("action-exit-app", self._do_exit_app)
+        obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
-        obj.connect("action-migrate-domain", self._do_migrate_domain)
-        obj.connect("action-clone-domain", self._do_clone_domain)
+        obj.connect("action-migrate-domain", self._do_show_migrate)
+        obj.connect("action-clone-domain", self._do_show_clone)
 
         self.connections[uri]["windowDetails"][uuid] = obj
         self.connections[uri]["windowDetails"][uuid].show()
         return self.connections[uri]["windowDetails"][uuid]
 
-    def show_details(self, uri, uuid):
+    def _do_show_details(self, src, uri, uuid):
         try:
             details = self._get_details_dialog(uri, uuid)
             details.show()
             return details
         except Exception, e:
-            self.err.show_err(_("Error launching details: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching details: %s") % str(e),
+                             "".join(traceback.format_exc()))
 
-    def show_console(self, uri, uuid):
-        win = self.show_details(uri, uuid)
+    def _do_show_console(self, src, uri, uuid):
+        win = self._do_show_details(src, uri, uuid)
         if not win:
             return
         win.activate_console_page()
-
-    def show_details_performance(self, uri, uuid):
-        win = self.show_details(uri, uuid)
-        if not win:
-            return
-        win.activate_performance_page()
-
-    def show_details_config(self, uri, uuid):
-        win = self.show_details(uri, uuid)
-        if not win:
-            return
-        win.activate_config_page()
 
     def get_manager(self):
         if self.windowManager:
@@ -737,8 +681,8 @@ class vmmEngine(gobject.GObject):
         obj.connect("action-reboot-domain", self._do_reboot_domain)
         obj.connect("action-destroy-domain", self._do_destroy_domain)
         obj.connect("action-save-domain", self._do_save_domain)
-        obj.connect("action-migrate-domain", self._do_migrate_domain)
-        obj.connect("action-clone-domain", self._do_clone_domain)
+        obj.connect("action-migrate-domain", self._do_show_migrate)
+        obj.connect("action-clone-domain", self._do_show_clone)
         obj.connect("action-show-console", self._do_show_console)
         obj.connect("action-show-details", self._do_show_details)
         obj.connect("action-show-preferences", self._do_show_preferences)
@@ -748,23 +692,25 @@ class vmmEngine(gobject.GObject):
         obj.connect("action-show-host", self._do_show_host)
         obj.connect("action-show-connect", self._do_show_connect)
         obj.connect("action-connect", self._do_connect)
-        obj.connect("action-refresh-console", self._do_refresh_console)
-        obj.connect("action-exit-app", self._do_exit_app)
+        obj.connect("action-refresh-console", self.refresh_console)
+        obj.connect("action-exit-app", self.exit_app)
 
         self.windowManager = obj
         return self.windowManager
 
-    def toggle_manager(self):
+    def _do_toggle_manager(self, ignore):
         manager = self.get_manager()
         if not manager.close():
             manager.show()
 
-    def show_manager(self):
+    def _do_show_manager(self, src):
         try:
             self.get_manager().show()
         except Exception, e:
-            self.err.show_err(_("Error launching manager: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            if not src:
+                raise
+            src.err.show_err(_("Error launching manager: %s") % str(e),
+                             "".join(traceback.format_exc()))
 
     def _get_create_dialog(self):
         if self.windowCreate:
@@ -776,14 +722,14 @@ class vmmEngine(gobject.GObject):
         self.windowCreate = obj
         return self.windowCreate
 
-    def show_create(self, uri):
+    def _do_show_create(self, src, uri):
         try:
             self._get_create_dialog.show(uri)
         except Exception, e:
-            self.err.show_err(_("Error launching manager: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching manager: %s") % str(e),
+                             "".join(traceback.format_exc()))
 
-    def show_migrate(self, uri, uuid):
+    def _do_show_migrate(self, src, uri, uuid):
         try:
             conn = self._lookup_connection(uri)
             vm = conn.get_vm(uuid)
@@ -794,10 +740,10 @@ class vmmEngine(gobject.GObject):
             self.windowMigrate.set_state(vm)
             self.windowMigrate.show()
         except Exception, e:
-            self.err.show_err(_("Error launching migrate dialog: %s") %
-                              str(e), "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching migrate dialog: %s") %
+                             str(e), "".join(traceback.format_exc()))
 
-    def show_clone(self, uri, uuid):
+    def _do_show_clone(self, src, uri, uuid):
         con = self._lookup_connection(uri)
         orig_vm = con.get_vm(uuid)
         clone_window = self.connections[uri]["windowClone"]
@@ -812,28 +758,58 @@ class vmmEngine(gobject.GObject):
 
             clone_window.show()
         except Exception, e:
-            self.err.show_err(_("Error setting clone parameters: %s") %
-                              str(e), "".join(traceback.format_exc()))
+            src.err.show_err(_("Error setting clone parameters: %s") %
+                             str(e), "".join(traceback.format_exc()))
 
+    ##########################################
+    # Window launchers from virt-manager cli #
+    ##########################################
+
+    def show_manager(self):
+        self._do_show_manager(None)
+
+    def show_create(self, uri):
+        win = self._do_show_create(self.get_manager(), uri)
+        if not win:
+            return
+        win.show()
+
+    def show_console(self, uri, uuid):
+        win = self._do_show_details(self.get_manager(), uri, uuid)
+        if not win:
+            return
+        win.activate_console_page()
+
+    def show_details_performance(self, uri, uuid):
+        win = self._do_show_details(self.get_manager(), uri, uuid)
+        if not win:
+            return
+        win.activate_performance_page()
+
+    def show_details_config(self, uri, uuid):
+        win = self._do_show_details(self.get_manager(), uri, uuid)
+        if not win:
+            return
+        win.activate_config_page()
 
     #######################################
     # Domain actions run/destroy/save ... #
     #######################################
 
-    def save_domain(self, src, uri, uuid):
+    def _do_save_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
         managed = bool(vm.managedsave_supported)
         do_prompt = self.config.get_confirm_poweroff()
 
         if not managed and conn.is_remote():
-            self.err.val_err(_("Saving virtual machines over remote "
-                               "connections is not supported with this "
-                               "libvirt version or hypervisor."))
+            src.err.val_err(_("Saving virtual machines over remote "
+                              "connections is not supported with this "
+                              "libvirt version or hypervisor."))
             return
 
         if do_prompt:
-            res = self.err.warn_chkbox(
+            res = src.err.warn_chkbox(
                     text1=_("Are you sure you want to save "
                             "'%s'?" % vm.get_name()),
                     chktext=_("Don't ask me again."),
@@ -846,7 +822,7 @@ class vmmEngine(gobject.GObject):
 
         path = None
         if not managed:
-            path = util.browse_local(src.window.get_widget("vmm-details"),
+            path = util.browse_local(src.topwin,
                                      _("Save Virtual Machine"),
                                      self.config, conn,
                                      dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE,
@@ -861,7 +837,7 @@ class vmmEngine(gobject.GObject):
         error, details = progWin.get_error()
 
         if error is not None:
-            self.err.show_err(_("Error saving domain: %s") % error, details)
+            src.err.show_err(_("Error saving domain: %s") % error, details)
 
     def _save_callback(self, vm, file_to_save, asyncjob):
         try:
@@ -873,14 +849,14 @@ class vmmEngine(gobject.GObject):
         except Exception, e:
             asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
-    def restore_domain(self, src, uri):
+    def _do_restore_domain(self, src, uri):
         conn = self._lookup_connection(uri)
         if conn.is_remote():
-            self.err.val_err(_("Restoring virtual machines over remote "
-                               "connections is not yet supported"))
+            src.err.val_err(_("Restoring virtual machines over remote "
+                              "connections is not yet supported"))
             return
 
-        path = util.browse_local(src.window.get_widget("vmm-manager"),
+        path = util.browse_local(src.topwin,
                                  _("Restore Virtual Machine"),
                                  self.config, conn,
                                  browse_reason=self.config.CONFIG_DIR_RESTORE)
@@ -888,16 +864,16 @@ class vmmEngine(gobject.GObject):
         if not path:
             return
 
-        progWin = vmmAsyncJob(self.config, self.restore_saved_callback,
+        progWin = vmmAsyncJob(self.config, self._restore_saved_callback,
                               [path, conn], _("Restoring Virtual Machine"))
         progWin.run()
         error, details = progWin.get_error()
 
         if error is not None:
-            self.err.show_err(error, details,
-                              title=_("Error restoring domain"))
+            src.err.show_err(error, details,
+                             title=_("Error restoring domain"))
 
-    def restore_saved_callback(self, file_to_load, conn, asyncjob):
+    def _restore_saved_callback(self, file_to_load, conn, asyncjob):
         try:
             newconn = util.dup_conn(self.config, conn,
                                     return_conn_class=True)
@@ -908,13 +884,13 @@ class vmmEngine(gobject.GObject):
             details = "".join(traceback.format_exc())
             asyncjob.set_error(err, details)
 
-    def destroy_domain(self, src, uri, uuid):
+    def _do_destroy_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
         do_prompt = self.config.get_confirm_forcepoweroff()
 
         if do_prompt:
-            res = self.err.warn_chkbox(
+            res = src.err.warn_chkbox(
                     text1=(_("Are you sure you want to force poweroff '%s'?") %
                            vm.get_name()),
                     text2=_("This will immediately poweroff the VM without "
@@ -931,16 +907,16 @@ class vmmEngine(gobject.GObject):
         try:
             vm.destroy()
         except Exception, e:
-            self.err.show_err(_("Error shutting down domain: %s" % str(e)),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error shutting down domain: %s" % str(e)),
+                             "".join(traceback.format_exc()))
 
-    def suspend_domain(self, src, uri, uuid):
+    def _do_suspend_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
         do_prompt = self.config.get_confirm_pause()
 
         if do_prompt:
-            res = self.err.warn_chkbox(
+            res = src.err.warn_chkbox(
                     text1=_("Are you sure you want to pause "
                             "'%s'?" % vm.get_name()),
                     chktext=_("Don't ask me again."),
@@ -955,10 +931,10 @@ class vmmEngine(gobject.GObject):
         try:
             vm.suspend()
         except Exception, e:
-            self.err.show_err(_("Error pausing domain: %s" % str(e)),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error pausing domain: %s" % str(e)),
+                             "".join(traceback.format_exc()))
 
-    def resume_domain(self, src, uri, uuid):
+    def _do_resume_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
 
@@ -966,10 +942,10 @@ class vmmEngine(gobject.GObject):
         try:
             vm.resume()
         except Exception, e:
-            self.err.show_err(_("Error unpausing domain: %s" % str(e)),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error unpausing domain: %s" % str(e)),
+                             "".join(traceback.format_exc()))
 
-    def run_domain(self, src, uri, uuid):
+    def _do_run_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
 
@@ -977,16 +953,16 @@ class vmmEngine(gobject.GObject):
         try:
             vm.startup()
         except Exception, e:
-            self.err.show_err(_("Error starting domain: %s" % str(e)),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error starting domain: %s" % str(e)),
+                             "".join(traceback.format_exc()))
 
-    def shutdown_domain(self, src, uri, uuid):
+    def _do_shutdown_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
         do_prompt = self.config.get_confirm_poweroff()
 
         if do_prompt:
-            res = self.err.warn_chkbox(
+            res = src.err.warn_chkbox(
                     text1=_("Are you sure you want to poweroff "
                             "'%s'?" % vm.get_name()),
                     chktext=_("Don't ask me again."),
@@ -1001,16 +977,16 @@ class vmmEngine(gobject.GObject):
         try:
             vm.shutdown()
         except Exception, e:
-            self.err.show_err(_("Error shutting down domain: %s" % str(e)),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error shutting down domain: %s" % str(e)),
+                             "".join(traceback.format_exc()))
 
-    def reboot_domain(self, src, uri, uuid):
+    def _do_reboot_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
         do_prompt = self.config.get_confirm_poweroff()
 
         if do_prompt:
-            res = self.err.warn_chkbox(
+            res = src.err.warn_chkbox(
                     text1=_("Are you sure you want to reboot "
                             "'%s'?" % vm.get_name()),
                     chktext=_("Don't ask me again."),
@@ -1029,9 +1005,9 @@ class vmmEngine(gobject.GObject):
         except Exception, reboot_err:
             no_support = virtinst.support.is_error_nosupport(reboot_err)
             if not no_support:
-                self.err.show_err(_("Error rebooting domain: %s" %
-                                  str(reboot_err)),
-                                  "".join(traceback.format_exc()))
+                src.err.show_err(_("Error rebooting domain: %s" %
+                                 str(reboot_err)),
+                                 "".join(traceback.format_exc()))
 
         if not no_support:
             return
@@ -1044,8 +1020,8 @@ class vmmEngine(gobject.GObject):
             logging.exception("Could not fake a reboot")
 
             # Raise the original error message
-            self.err.show_err(_("Error rebooting domain: %s" %
-                              str(reboot_err)),
-                              "".join(traceback.format_exc()))
+            src.err.show_err(_("Error rebooting domain: %s" %
+                             str(reboot_err)),
+                             "".join(traceback.format_exc()))
 
 gobject.type_register(vmmEngine)
