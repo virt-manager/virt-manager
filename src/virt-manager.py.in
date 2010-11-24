@@ -294,6 +294,7 @@ def main():
             gobject.set_prgname(appname)
 
         import gtk
+        globals()["gtk"] = gtk
     except Warning, e:
         # ...the risk is we catch too much though
         # Damned if we do, damned if we dont :-)(
