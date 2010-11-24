@@ -827,14 +827,18 @@ class vmmDetails(gobject.GObject):
             return None
         return model[treepath]
 
+    def set_hw_selection(self, page):
+        hwlist = self.window.get_widget("hw-list")
+        selection = hwlist.get_selection()
+        selection.select_path(str(page))
+
     def get_hw_selection(self, field):
         vmlist = self.window.get_widget("hw-list")
         selection = vmlist.get_selection()
         active = selection.get_selected()
         if active[1] == None:
             return None
-        else:
-            return active[0].get_value(active[1], field)
+        return active[0].get_value(active[1], field)
 
     def force_get_hw_pagetype(self, page=None):
         if page:
@@ -1014,7 +1018,7 @@ class vmmDetails(gobject.GObject):
 
     def activate_performance_page(self):
         self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
-        self.window.get_widget("hw-panel").set_current_page(HW_LIST_TYPE_STATS)
+        self.set_hw_selection(HW_LIST_TYPE_STATS)
 
     def activate_config_page(self):
         self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
