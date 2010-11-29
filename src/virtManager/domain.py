@@ -116,19 +116,13 @@ class vmmDomainBase(vmmLibvirtObject):
     def status(self):
         raise NotImplementedError()
 
-    def get_memory(self):
-        raise NotImplementedError()
     def get_memory_percentage(self):
-        raise NotImplementedError()
-    def maximum_memory(self):
         raise NotImplementedError()
     def maximum_memory_percentage(self):
         raise NotImplementedError()
     def cpu_time(self):
         raise NotImplementedError()
     def cpu_time_percentage(self):
-        raise NotImplementedError()
-    def vcpu_count(self):
         raise NotImplementedError()
     def network_rx_rate(self):
         raise NotImplementedError()
@@ -246,11 +240,11 @@ class vmmDomainBase(vmmLibvirtObject):
 
     def define_vcpus(self, vcpus):
         def change(guest):
-            self._backend.vcpus = int(vcpus)
+            guest.vcpus = int(vcpus)
         return self._redefine_guest(change)
     def define_cpuset(self, cpuset):
         def change(guest):
-            self._backend.cpuset = cpuset
+            guest.cpuset = cpuset
         return self._redefine_guest(change)
 
     def define_both_mem(self, memory, maxmem):
@@ -414,18 +408,27 @@ class vmmDomainBase(vmmLibvirtObject):
     def get_description(self):
         return vutil.get_xml_path(self.get_xml(), "/domain/description")
 
-    def vcpu_pinning(self):
-        cpuset = vutil.get_xml_path(self.get_xml(), "/domain/vcpu/@cpuset")
-        # We need to set it to empty string not to show None in the entry
-        if cpuset is None:
-            cpuset = ""
-        return cpuset
+    def get_memory(self):
+        return int(vutil.get_xml_path(self.get_xml(), "/domain/currentMemory"))
+
+    def maximum_memory(self):
+        return int(vutil.get_xml_path(self.get_xml(), "/domain/memory"))
+
+    def vcpu_count(self):
+        return int(vutil.get_xml_path(self.get_xml(), "/domain/vcpu"))
 
     def vcpu_max_count(self):
         if self._startup_vcpus == None:
             self._startup_vcpus = int(vutil.get_xml_path(self.get_xml(),
                                       "/domain/vcpu"))
         return int(self._startup_vcpus)
+
+    def vcpu_pinning(self):
+        cpuset = vutil.get_xml_path(self.get_xml(), "/domain/vcpu/@cpuset")
+        # We need to set it to empty string not to show None in the entry
+        if cpuset is None:
+            cpuset = ""
+        return cpuset
 
     def get_boot_device(self):
         xml = self.get_xml()
@@ -955,20 +958,14 @@ class vmmDomain(vmmDomainBase):
             return 0
         return self.record[0][record_name]
 
-    def get_memory(self):
-        return self._get_record_helper("currMem")
     def get_memory_percentage(self):
         return self._get_record_helper("currMemPercent")
-    def maximum_memory(self):
-        return self._get_record_helper("maxMem")
     def maximum_memory_percentage(self):
         return self._get_record_helper("maxMemPercent")
     def cpu_time(self):
         return self._get_record_helper("cpuTime")
     def cpu_time_percentage(self):
         return self._get_record_helper("cpuTimePercent")
-    def vcpu_count(self):
-        return self._get_record_helper("vcpuCount")
     def network_rx_rate(self):
         return self._get_record_helper("netRxRate")
     def network_tx_rate(self):
@@ -1266,10 +1263,7 @@ class vmmDomain(vmmDomainBase):
                      "cpuTime": cpuTime,
                      "cpuTimeAbs": cpuTimeAbs,
                      "cpuTimePercent": pcentCpuTime,
-                     "currMem": info[2],
                      "currMemPercent": pcentCurrMem,
-                     "vcpuCount": info[3],
-                     "maxMem": info[1],
                      "maxMemPercent": pcentMaxMem,
                      "diskRdKB": rdBytes / 1024,
                      "diskWrKB": wrBytes / 1024,
@@ -1354,20 +1348,15 @@ class vmmDomainVirtinst(vmmDomainBase):
     def get_autostart(self):
         return self._backend.autostart
 
-    def get_memory(self):
-        return int(self._backend.memory * 1024.0)
+    # Stats stubs
     def get_memory_percentage(self):
         return 0
-    def maximum_memory(self):
-        return int(self._backend.maxmemory * 1024.0)
     def maximum_memory_percentage(self):
         return 0
     def cpu_time(self):
         return 0
     def cpu_time_percentage(self):
         return 0
-    def vcpu_count(self):
-        return self._backend.vcpus
     def network_rx_rate(self):
         return 0
     def network_tx_rate(self):
@@ -1376,7 +1365,6 @@ class vmmDomainVirtinst(vmmDomainBase):
         return 0
     def disk_write_rate(self):
         return 0
-
 
     # Device/XML hotplug implementations
     def set_autostart(self, val):
