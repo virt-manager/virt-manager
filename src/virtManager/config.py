@@ -445,13 +445,6 @@ class vmmConfig:
     def set_console_scaling(self, pref):
         self.conf.set_int(self.conf_dir + "/console/scaling", pref)
 
-    # VNC console pointer grab notification
-    def show_console_grab_notify(self):
-        return self.conf.get_bool(self.conf_dir + "/console/grab-notify")
-    def set_console_grab_notify(self, state):
-        self.conf.set_bool(self.conf_dir + "/console/grab-notify", state)
-
-
     # Show VM details toolbar
     def get_details_show_toolbar(self):
         res = self.conf.get_bool(self.conf_dir + "/details/show-toolbar")

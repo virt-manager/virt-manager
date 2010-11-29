@@ -105,10 +105,6 @@ class vmmConsolePages(gobject.GObject):
                                               gtk.ICON_SIZE_BUTTON)
         self.window.get_widget("console-auth-login").set_image(finish_img)
 
-        self.notifyID = None
-        self.notifyInterface = None
-        self.init_dbus()
-
         # Make VNC widget background always be black
         black = gtk.gdk.Color(0, 0, 0)
         self.window.get_widget("console-vnc-viewport").modify_bg(
@@ -127,21 +123,6 @@ class vmmConsolePages(gobject.GObject):
     ##########################
     # Initialization helpers #
     ##########################
-
-    def init_dbus(self):
-        try:
-            bus = dbus.SessionBus()
-            notifyObject = bus.get_object("org.freedesktop.Notifications",
-                                          "/org/freedesktop/Notifications")
-            self.notifyInterface = dbus.Interface(notifyObject,
-                                                  "org.freedesktop.Notifications")
-            self.notifyInterface.connect_to_signal("ActionInvoked",
-                                                   self.notify_action)
-            self.notifyInterface.connect_to_signal("NotificationClosed",
-                                                   self.notify_closed)
-        except Exception, e:
-            logging.error("Cannot initialize notification system" + str(e))
-
 
     def init_vnc(self):
         self.vncViewer.realize()
@@ -200,42 +181,8 @@ class vmmConsolePages(gobject.GObject):
         self.topwin.set_title(_("Press %s to release pointer.") % keystr +
                               " " + self.title)
 
-        if (not self.config.show_console_grab_notify() or
-            not self.notifyInterface):
-            return
-
-        try:
-            if self.notifyID is not None:
-                self.notifyInterface.CloseNotification(self.notifyID)
-                self.notifyID = None
-
-            (x, y) = self.topwin.window.get_origin()
-            self.notifyID = self.notifyInterface.Notify(self.topwin.get_title(),
-                                                        0,
-                                                        '',
-                                                        _("Pointer grabbed"),
-                                                        _("The mouse pointer has been restricted to the virtual console window. To release the pointer, press the key pair") + " " + keystr,
-                                                        ["dismiss", _("Do not show this notification in the future.")],
-                                                        {"desktop-entry": "virt-manager",
-                                                        "x": x+200, "y": y},
-                                                        8 * 1000)
-        except Exception, e:
-            logging.error("Cannot popup notification " + str(e))
-
     def notify_ungrabbed(self, src):
         self.topwin.set_title(self.title)
-
-    def notify_closed(self, i, reason=None):
-        if self.notifyID is not None and self.notifyID == i:
-            self.notifyID = None
-
-    def notify_action(self, i, action):
-        if self.notifyID is None or self.notifyID != i:
-            return
-
-        if action == "dismiss":
-            self.config.set_console_grab_notify(False)
-
 
     def _disable_modifiers(self):
         if self.gtk_settings_accel is not None:
