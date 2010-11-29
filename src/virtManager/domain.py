@@ -637,76 +637,6 @@ class vmmDomainBase(vmmLibvirtObject):
 
         return cpuTime, cpuTimeAbs, pcentCpuTime
 
-    def _sample_network_traffic_dummy(self):
-        return 0, 0
-
-    def _sample_network_traffic(self):
-        rx = 0
-        tx = 0
-        if not self._stats_net_supported or not self.is_active():
-            return rx, tx
-
-        for netdev in self.get_network_devices(refresh_if_necc=False):
-            dev = netdev.target_dev
-            if not dev:
-                continue
-
-            if dev in self._stats_net_skip:
-                continue
-
-            try:
-                io = self.interfaceStats(dev)
-                if io:
-                    rx += io[0]
-                    tx += io[4]
-            except libvirt.libvirtError, err:
-                if support.is_error_nosupport(err):
-                    logging.debug("Net stats not supported: %s" % err)
-                    self._stats_net_supported = False
-                else:
-                    logging.error("Error reading net stats for "
-                                  "'%s' dev '%s': %s" %
-                                  (self.get_name(), dev, err))
-                    logging.debug("Adding %s to skip list." % dev)
-                    self._stats_net_skip.append(dev)
-
-        return rx, tx
-
-    def _sample_disk_io_dummy(self):
-        return 0, 0
-
-    def _sample_disk_io(self):
-        rd = 0
-        wr = 0
-        if not self._stats_disk_supported or not self.is_active():
-            return rd, wr
-
-        for disk in self.get_disk_devices(refresh_if_necc=False):
-            dev = disk.target
-            if not dev:
-                continue
-
-            if dev in self._stats_disk_skip:
-                continue
-
-            try:
-                io = self.blockStats(dev)
-                if io:
-                    rd += io[1]
-                    wr += io[3]
-            except libvirt.libvirtError, err:
-                if support.is_error_nosupport(err):
-                    logging.debug("Disk stats not supported: %s" % err)
-                    self._stats_disk_supported = False
-                else:
-                    logging.error("Error reading disk stats for "
-                                  "'%s' dev '%s': %s" %
-                                  (self.get_name(), dev, err))
-                    logging.debug("Adding %s to skip list." % dev)
-                    self._stats_disk_skip.append(dev)
-
-        return rd, wr
-
     def _get_cur_rate(self, what):
         if len(self.record) > 1:
             ret = (float(self.record[0][what] -
@@ -855,33 +785,6 @@ class vmmDomainBase(vmmLibvirtObject):
     def run_status_icon_large(self):
         return self.config.get_vm_status_icon_large(self.status())
 
-    def toggle_sample_network_traffic(self, ignore1=None, ignore2=None,
-                                      ignore3=None, ignore4=None):
-        if self.config.get_stats_enable_net_poll():
-            if len(self.record) > 1:
-                # resample the current value before calculating the rate in
-                # self.tick() otherwise we'd get a huge spike when switching
-                # from 0 to bytes_transfered_so_far
-                rxBytes, txBytes = self._sample_network_traffic()
-                self.record[0]["netRxKB"] = rxBytes / 1024
-                self.record[0]["netTxKB"] = txBytes / 1024
-            self._network_traffic = self._sample_network_traffic
-        else:
-            self._network_traffic = self._sample_network_traffic_dummy
-
-    def toggle_sample_disk_io(self, ignore1=None, ignore2=None,
-                              ignore3=None, ignore4=None):
-        if self.config.get_stats_enable_disk_poll():
-            if len(self.record) > 1:
-                # resample the current value before calculating the rate in
-                # self.tick() otherwise we'd get a huge spike when switching
-                # from 0 to bytes_transfered_so_far
-                rdBytes, wrBytes = self._sample_disk_io()
-                self.record[0]["diskRdKB"] = rdBytes / 1024
-                self.record[0]["diskWrKB"] = wrBytes / 1024
-            self._disk_io = self._sample_disk_io
-        else:
-            self._disk_io = self._sample_disk_io_dummy
 
     # GConf specific wranglings
     def set_console_scaling(self, value):
@@ -1239,6 +1142,104 @@ class vmmDomain(vmmDomainBase):
             util.safe_idle_add(util.idle_emit, self, "status-changed",
                                oldstatus, status)
 
+    ##################
+    # Stats handling #
+    ##################
+
+    def toggle_sample_network_traffic(self, ignore1=None, ignore2=None,
+                                      ignore3=None, ignore4=None):
+        if not self.config.get_stats_enable_net_poll():
+            self._network_traffic = lambda: (0, 0)
+            return
+
+        if len(self.record) > 1:
+            # resample the current value before calculating the rate in
+            # self.tick() otherwise we'd get a huge spike when switching
+            # from 0 to bytes_transfered_so_far
+            rxBytes, txBytes = self._sample_network_traffic()
+            self.record[0]["netRxKB"] = rxBytes / 1024
+            self.record[0]["netTxKB"] = txBytes / 1024
+        self._network_traffic = self._sample_network_traffic
+
+    def toggle_sample_disk_io(self, ignore1=None, ignore2=None,
+                              ignore3=None, ignore4=None):
+        if not self.config.get_stats_enable_disk_poll():
+            self._disk_io = lambda: (0, 0)
+            return
+
+        if len(self.record) > 1:
+            # resample the current value before calculating the rate in
+            # self.tick() otherwise we'd get a huge spike when switching
+            # from 0 to bytes_transfered_so_far
+            rdBytes, wrBytes = self._sample_disk_io()
+            self.record[0]["diskRdKB"] = rdBytes / 1024
+            self.record[0]["diskWrKB"] = wrBytes / 1024
+        self._disk_io = self._sample_disk_io
+
+
+    def _sample_network_traffic(self):
+        rx = 0
+        tx = 0
+        if not self._stats_net_supported or not self.is_active():
+            return rx, tx
+
+        for netdev in self.get_network_devices(refresh_if_necc=False):
+            dev = netdev.target_dev
+            if not dev:
+                continue
+
+            if dev in self._stats_net_skip:
+                continue
+
+            try:
+                io = self.interfaceStats(dev)
+                if io:
+                    rx += io[0]
+                    tx += io[4]
+            except libvirt.libvirtError, err:
+                if support.is_error_nosupport(err):
+                    logging.debug("Net stats not supported: %s" % err)
+                    self._stats_net_supported = False
+                else:
+                    logging.error("Error reading net stats for "
+                                  "'%s' dev '%s': %s" %
+                                  (self.get_name(), dev, err))
+                    logging.debug("Adding %s to skip list." % dev)
+                    self._stats_net_skip.append(dev)
+
+        return rx, tx
+
+    def _sample_disk_io(self):
+        rd = 0
+        wr = 0
+        if not self._stats_disk_supported or not self.is_active():
+            return rd, wr
+
+        for disk in self.get_disk_devices(refresh_if_necc=False):
+            dev = disk.target
+            if not dev:
+                continue
+
+            if dev in self._stats_disk_skip:
+                continue
+
+            try:
+                io = self.blockStats(dev)
+                if io:
+                    rd += io[1]
+                    wr += io[3]
+            except libvirt.libvirtError, err:
+                if support.is_error_nosupport(err):
+                    logging.debug("Disk stats not supported: %s" % err)
+                    self._stats_disk_supported = False
+                else:
+                    logging.error("Error reading disk stats for "
+                                  "'%s' dev '%s': %s" %
+                                  (self.get_name(), dev, err))
+                    logging.debug("Adding %s to skip list." % dev)
+                    self._stats_disk_skip.append(dev)
+
+        return rd, wr
 
     def tick(self, now):
         if self.connection.get_state() != self.connection.STATE_ACTIVE:
