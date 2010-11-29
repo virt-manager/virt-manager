@@ -183,7 +183,8 @@ def setup_logging(debug_stdout):
 
 def parse_commandline():
     optParser = OptionParser(version=appversion)
-    optParser.add_option("--profile", dest="profile", help="Generate runtime performance profile stats", metavar="FILE")
+    optParser.add_option("--profile", dest="profile",
+        help="Generate runtime performance profile stats", metavar="FILE")
     optParser.set_defaults(uuid=None)
     optParser.add_option("-c", "--connect", dest="uri",
         help="Connect to hypervisor at URI", metavar="URI")
@@ -199,12 +200,15 @@ def parse_commandline():
                          help="Do not autostart connections")
     optParser.add_option("--show-domain-creator", action="callback",
         callback=opt_show_cb, dest="show", help="Create a new virtual machine")
-    optParser.add_option("--show-domain-editor",  type="string", metavar="UUID",
-        action="callback", callback=opt_show_cb, help="Edit a domain configuration")
-    optParser.add_option("--show-domain-performance", type="string", metavar="UUID",
-        action="callback", callback=opt_show_cb, help="Show a domain performance")
-    optParser.add_option("--show-domain-console", type="string", metavar="UUID",
-        action="callback", callback=opt_show_cb, help="Show a domain console")
+    optParser.add_option("--show-domain-editor",  type="string",
+        metavar="UUID", action="callback", callback=opt_show_cb,
+        help="Edit a domain configuration")
+    optParser.add_option("--show-domain-performance", type="string",
+        metavar="UUID", action="callback", callback=opt_show_cb,
+        help="Show a domain performance")
+    optParser.add_option("--show-domain-console", type="string",
+        metavar="UUID", action="callback", callback=opt_show_cb,
+        help="Show a domain console")
     optParser.add_option("--show-host-summary", action="callback",
        callback=opt_show_cb, help="Show a host summary")
 
@@ -294,7 +298,7 @@ def dbus_config(engine):
 # This routine stores UUID to options.uuid for all --show-* options
 # where is metavar="UUID" and also sets options.show
 def opt_show_cb(option, opt_str, value, parser):
-    if option.metavar=="UUID":
+    if option.metavar == "UUID":
         setattr(parser.values, "uuid", value)
     s = str(option)
     show = s[s.rindex('-')+1:]

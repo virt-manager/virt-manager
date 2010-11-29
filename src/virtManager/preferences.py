@@ -114,19 +114,25 @@ class vmmPreferences(gobject.GObject):
         val = self.config.get_view_system_tray()
         self.window.get_widget("prefs-system-tray").set_active(bool(val))
 
-    def refresh_update_interval(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
-        self.window.get_widget("prefs-stats-update-interval").set_value(self.config.get_stats_update_interval())
-    def refresh_history_length(self, ignore1=None,ignore2=None,ignore3=None,ignore4=None):
-        self.window.get_widget("prefs-stats-history-len").set_value(self.config.get_stats_history_length())
+    def refresh_update_interval(self, ignore1=None, ignore2=None,
+                                ignore3=None, ignore4=None):
+        self.window.get_widget("prefs-stats-update-interval").set_value(
+            self.config.get_stats_update_interval())
+    def refresh_history_length(self, ignore1=None, ignore2=None,
+                               ignore3=None,ignore4=None):
+        self.window.get_widget("prefs-stats-history-len").set_value(
+            self.config.get_stats_history_length())
 
-    def refresh_console_popup(self,ignore1=None,ignore2=None,ignore3=None,
-                              ignore4=None):
-        self.window.get_widget("prefs-console-popup").set_active(self.config.get_console_popup())
-    def refresh_console_keygrab(self,ignore1=None,ignore2=None,ignore3=None,
-                                ignore4=None):
-        self.window.get_widget("prefs-console-keygrab").set_active(self.config.get_console_keygrab())
-    def refresh_console_scaling(self,ignore1=None,ignore2=None,ignore3=None,
-                                ignore4=None):
+    def refresh_console_popup(self, ignore1=None, ignore2=None,
+                              ignore3=None, ignore4=None):
+        self.window.get_widget("prefs-console-popup").set_active(
+            self.config.get_console_popup())
+    def refresh_console_keygrab(self, ignore1=None, ignore2=None,
+                                ignore3=None, ignore4=None):
+        self.window.get_widget("prefs-console-keygrab").set_active(
+            self.config.get_console_keygrab())
+    def refresh_console_scaling(self, ignore1=None, ignore2=None,
+                                ignore3=None, ignore4=None):
         val = self.config.get_console_scaling()
         if val == None:
             val = 0
@@ -134,17 +140,21 @@ class vmmPreferences(gobject.GObject):
 
     def refresh_sound_local(self, ignore1=None, ignore2=None, ignore=None,
                             ignore4=None):
-        self.window.get_widget("prefs-sound-local").set_active(self.config.get_local_sound())
+        self.window.get_widget("prefs-sound-local").set_active(
+            self.config.get_local_sound())
     def refresh_sound_remote(self, ignore1=None, ignore2=None, ignore=None,
                              ignore4=None):
-        self.window.get_widget("prefs-sound-remote").set_active(self.config.get_remote_sound())
+        self.window.get_widget("prefs-sound-remote").set_active(
+            self.config.get_remote_sound())
 
     def refresh_disk_poll(self, ignore1=None, ignore2=None, ignore3=None,
                           ignore4=None):
-        self.window.get_widget("prefs-stats-enable-disk").set_active(self.config.get_stats_enable_disk_poll())
+        self.window.get_widget("prefs-stats-enable-disk").set_active(
+            self.config.get_stats_enable_disk_poll())
     def refresh_net_poll(self, ignore1=None, ignore2=None, ignore3=None,
                          ignore4=None):
-        self.window.get_widget("prefs-stats-enable-net").set_active(self.config.get_stats_enable_net_poll())
+        self.window.get_widget("prefs-stats-enable-net").set_active(
+            self.config.get_stats_enable_net_poll())
 
     def refresh_grabkeys_combination(self, ignore1=None, ignore2=None,
                            ignore3=None, ignore4=None):

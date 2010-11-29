@@ -470,8 +470,10 @@ class vmmCloneVM(gobject.GObject):
         storage_box.show_all()
 
         no_storage = not bool(len(self.target_list))
-        self.window.get_widget("clone-storage-box").set_property("visible",not no_storage)
-        self.window.get_widget("clone-no-storage-pass").set_property("visible", no_storage)
+        self.window.get_widget("clone-storage-box").set_property("visible", 
+                                                                not no_storage)
+        self.window.get_widget("clone-no-storage-pass").set_property("visible", 
+                                                                no_storage)
 
         skip_targets = []
         new_disks = []

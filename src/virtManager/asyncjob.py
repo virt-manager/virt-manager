@@ -108,7 +108,7 @@ class vmmAsyncJob(gobject.GObject):
         # callback for progress meter when file size is known
         gtk.gdk.threads_enter()
         try:
-            self.is_pulsing=False
+            self.is_pulsing = False
             if stage is not None:
                 self.stage.set_text(stage)
             else:
@@ -127,7 +127,7 @@ class vmmAsyncJob(gobject.GObject):
         #callback for progress meter when progress is done
         gtk.gdk.threads_enter()
         try:
-            self.is_pulsing=False
+            self.is_pulsing = False
             if stage is not None:
                 self.stage.set_text(stage)
             else:

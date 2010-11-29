@@ -698,11 +698,13 @@ class vmmDomainBase(vmmLibvirtObject):
 
     def _get_cur_rate(self, what):
         if len(self.record) > 1:
-            ret = float(self.record[0][what] - self.record[1][what]) / \
-                      float(self.record[0]["timestamp"] - self.record[1]["timestamp"])
+            ret = (float(self.record[0][what] -
+                         self.record[1][what]) /
+                   float(self.record[0]["timestamp"] -
+                         self.record[1]["timestamp"]))
         else:
             ret = 0.0
-        return max(ret, 0,0) # avoid negative values at poweroff
+        return max(ret, 0, 0) # avoid negative values at poweroff
 
     def _set_max_rate(self, record, what):
         if record[what] > self.maxRecord[what]:
@@ -774,7 +776,7 @@ class vmmDomainBase(vmmLibvirtObject):
         end = [l, limit][l > limit]
         if l > limit:
             data = data[0:end] + data[l:l+end]
-        d = map(lambda x,y: (x + y)/2, data[0:end], data[end:end*2])
+        d = map(lambda x, y: (x + y) / 2, data[0:end], data[end:end * 2])
         return d
 
     def cpu_time_vector(self):

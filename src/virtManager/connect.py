@@ -104,7 +104,7 @@ class vmmConnect(gobject.GObject):
 
         self.reset_state()
 
-    def cancel(self,ignore1=None,ignore2=None):
+    def cancel(self, ignore1=None, ignore2=None):
         self.close()
         self.emit("cancelled")
         return 1

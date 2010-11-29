@@ -92,7 +92,7 @@ class vmmCreateNetwork(gobject.GObject):
         black = gtk.gdk.color_parse("#000")
         for num in range(PAGE_SUMMARY+1):
             name = "page" + str(num) + "-title"
-            self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL,black)
+            self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL, black)
 
         fw_list = self.window.get_widget("net-forward")
         # [ label, dev name ]
@@ -317,7 +317,7 @@ class vmmCreateNetwork(gobject.GObject):
             self.window.get_widget("create-finish").show()
             self.window.get_widget("create-finish").grab_focus()
 
-    def close(self, ignore1=None,ignore2=None):
+    def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
         return 1
 

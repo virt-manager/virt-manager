@@ -159,7 +159,7 @@ class vmmAddHardware(gobject.GObject):
         self.reset_state()
         self.topwin.present()
 
-    def close(self, ignore1=None,ignore2=None):
+    def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
         self.remove_timers()
         return 1
@@ -189,7 +189,7 @@ class vmmAddHardware(gobject.GObject):
         black = gtk.gdk.color_parse("#000")
         for num in range(PAGE_SUMMARY+1):
             name = "page" + str(num) + "-title"
-            self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL,black)
+            self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL, black)
 
         # Main HW list
         hw_list = self.window.get_widget("hardware-type")
@@ -247,7 +247,7 @@ class vmmAddHardware(gobject.GObject):
 
         # Graphics type
         graphics_list = self.window.get_widget("graphics-type")
-        graphics_model = gtk.ListStore(str,str)
+        graphics_model = gtk.ListStore(str, str)
         graphics_list.set_model(graphics_model)
         text = gtk.CellRendererText()
         graphics_list.pack_start(text, True)
@@ -461,11 +461,11 @@ class vmmAddHardware(gobject.GObject):
             model.append([bus, device, icon, desc, gtk.ICON_SIZE_BUTTON])
 
         if self.vm.is_hvm():
-            add_dev("ide", virtinst.VirtualDisk.DEVICE_DISK, "IDE disk")
-            add_dev("ide", virtinst.VirtualDisk.DEVICE_CDROM, "IDE cdrom")
-            add_dev("fdc", virtinst.VirtualDisk.DEVICE_FLOPPY, "Floppy disk")
-            add_dev("scsi",virtinst.VirtualDisk.DEVICE_DISK, "SCSI disk")
-            add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
+            add_dev("ide",  virtinst.VirtualDisk.DEVICE_DISK, "IDE disk")
+            add_dev("ide",  virtinst.VirtualDisk.DEVICE_CDROM, "IDE cdrom")
+            add_dev("fdc",  virtinst.VirtualDisk.DEVICE_FLOPPY, "Floppy disk")
+            add_dev("scsi", virtinst.VirtualDisk.DEVICE_DISK, "SCSI disk")
+            add_dev("usb",  virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
         if self.vm.get_hv_type() == "kvm":
             add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK, "Virtio Disk")
         if self.vm.get_connection().is_xen():
@@ -913,7 +913,7 @@ class vmmAddHardware(gobject.GObject):
             self.window.get_widget("create-mac-address").set_sensitive(False)
 
     # Graphics listeners
-    def change_graphics_type(self,ignore=None):
+    def change_graphics_type(self, ignore=None):
         graphics = self.get_config_graphics()
         if graphics == "vnc":
             self.window.get_widget("graphics-port-auto").set_sensitive(True)
@@ -929,7 +929,7 @@ class vmmAddHardware(gobject.GObject):
             self.window.get_widget("graphics-keymap-chk").set_sensitive(False)
             self.window.get_widget("graphics-keymap").set_sensitive(False)
 
-    def change_port_auto(self,ignore=None):
+    def change_port_auto(self, ignore=None):
         if self.window.get_widget("graphics-port-auto").get_active():
             self.window.get_widget("graphics-port").set_sensitive(False)
         else:
@@ -1112,7 +1112,7 @@ class vmmAddHardware(gobject.GObject):
 
         readonly = False
         if device == virtinst.VirtualDisk.DEVICE_CDROM:
-            readonly=True
+            readonly = True
 
         try:
             # This can error out

@@ -408,7 +408,7 @@ class vmmEngine(gobject.GObject):
             self.windowCreate.conn.get_uri() == hvuri):
             self.windowCreate.close()
 
-    def reschedule_timer(self, ignore1,ignore2,ignore3,ignore4):
+    def reschedule_timer(self, ignore1, ignore2, ignore3, ignore4):
         self.schedule_timer()
 
     def schedule_timer(self):

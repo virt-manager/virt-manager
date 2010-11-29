@@ -311,7 +311,7 @@ class vmmHost(gobject.GObject):
             return 1
         return 0
 
-    def close(self,ignore1=None,ignore2=None):
+    def close(self, ignore1=None, ignore2=None):
         if self.is_visible():
             self.window.get_widget("vmm-host").hide()
             self.engine.decrement_window_counter()
@@ -1045,7 +1045,7 @@ class vmmHost(gobject.GObject):
 
             addrstr = "-"
             if ipv6[2]:
-                addrstr = reduce(lambda x,y: x + "\n" + y, ipv6[2])
+                addrstr = reduce(lambda x, y: x + "\n" + y, ipv6[2])
 
             self.window.get_widget("interface-ipv6-mode").set_text(mode)
             self.window.get_widget("interface-ipv6-address").set_text(addrstr)

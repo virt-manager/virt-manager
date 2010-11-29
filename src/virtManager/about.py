@@ -50,6 +50,6 @@ class vmmAbout:
         dialog.set_version(self.config.get_appversion())
         dialog.present()
 
-    def close(self,ignore1=None,ignore2=None):
+    def close(self, ignore1=None, ignore2=None):
         self.window.get_widget("vmm-about").hide()
         return 1

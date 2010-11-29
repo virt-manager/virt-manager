@@ -488,7 +488,7 @@ class vmmConfig:
 
         if urls.count(url) == 0 and len(url) > 0 and not url.isspace():
             # The url isn't already in the list, so add it
-            urls.insert(0,url)
+            urls.insert(0, url)
             length = self.get_url_list_length()
             if len(urls) > length:
                 del urls[len(urls) -1]

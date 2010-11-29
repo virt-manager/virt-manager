@@ -23,7 +23,6 @@ import gtk
 import gtk.glade
 
 import libvirt
-import dbus
 import gtkvnc
 
 import os
@@ -220,12 +219,15 @@ class vmmConsolePages(gobject.GObject):
         grab = self.config.get_console_keygrab() == 2
         self.vncViewer.set_keyboard_grab(grab)
 
-    def refresh_scaling(self,ignore1=None, ignore2=None, ignore3=None,
+    def refresh_scaling(self, ignore1=None, ignore2=None, ignore3=None,
                         ignore4=None):
         self.scale_type = self.vm.get_console_scaling()
-        self.window.get_widget("details-menu-view-scale-always").set_active(self.scale_type == self.config.CONSOLE_SCALE_ALWAYS)
-        self.window.get_widget("details-menu-view-scale-never").set_active(self.scale_type == self.config.CONSOLE_SCALE_NEVER)
-        self.window.get_widget("details-menu-view-scale-fullscreen").set_active(self.scale_type == self.config.CONSOLE_SCALE_FULLSCREEN)
+        self.window.get_widget("details-menu-view-scale-always").set_active(
+            self.scale_type == self.config.CONSOLE_SCALE_ALWAYS)
+        self.window.get_widget("details-menu-view-scale-never").set_active(
+            self.scale_type == self.config.CONSOLE_SCALE_NEVER)
+        self.window.get_widget("details-menu-view-scale-fullscreen").set_active(
+            self.scale_type == self.config.CONSOLE_SCALE_FULLSCREEN)
 
         self.update_scaling()
 

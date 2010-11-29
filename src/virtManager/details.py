@@ -674,7 +674,7 @@ class vmmDetails(gobject.GObject):
         txtCol.add_attribute(text, 'text', BOOT_LABEL)
         txtCol.add_attribute(text, 'sensitive', BOOT_ACTIVE)
 
-        no_default= not self.is_customize_dialog
+        no_default = not self.is_customize_dialog
         # Disk cache combo
         disk_cache = self.window.get_widget("disk-cache-combo")
         uihelpers.build_cache_combo(self.vm, disk_cache)

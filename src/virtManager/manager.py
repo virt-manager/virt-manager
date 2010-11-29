@@ -540,7 +540,7 @@ class vmmManager(gobject.GObject):
         uri = self.current_connection_uri(default_selection=True)
         self.emit("action-show-host", uri)
 
-    def open_vm_console(self,ignore,ignore2=None,ignore3=None):
+    def open_vm_console(self, ignore, ignore2=None, ignore3=None):
         if self.current_vmuuid():
             self.emit("action-show-console",
                       self.current_connection_uri(), self.current_vmuuid())
@@ -553,7 +553,7 @@ class vmmManager(gobject.GObject):
             self.emit("action-clone-domain", self.current_connection_uri(),
                       self.current_vmuuid())
 
-    def show_vm_details(self,ignore):
+    def show_vm_details(self, ignore):
         conn = self.current_connection()
         if conn is None:
             return

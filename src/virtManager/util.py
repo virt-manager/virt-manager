@@ -354,7 +354,8 @@ def safe_timeout_add(timeout, func, *args):
     return gobject.timeout_add(timeout, _safe_wrapper, func, *args)
 
 def uuidstr(rawuuid):
-    hx = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+    hx = ['0', '1', '2', '3', '4', '5', '6', '7',
+          '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
     uuid = []
     for i in range(16):
         uuid.append(hx[((ord(rawuuid[i]) >> 4) & 0xf)])

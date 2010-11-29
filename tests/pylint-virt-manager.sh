@@ -57,9 +57,7 @@ addmsg "C0103"      # C0103: Name doesn't match some style regex
 addmsg "C0111"      # C0111: No docstring
 addmsg "C0301"      # C0301: Line too long
 addmsg "C0302"      # C0302: Too many lines in module
-addmsg "C0324"      # C0324: *Comma not followed by a space*
 addmsg "R0201"      # R0201: Method could be a function
-addmsg "W0105"      # W0105: String statement has no effect
 addmsg "W0141"      # W0141: Complaining about 'map' and 'filter'
 addmsg "W0142"      # W0142: *Used * or ** magic*
 addmsg "W0403"      # W0403: Relative imports
@@ -69,8 +67,6 @@ addmsg "W0703"      # W0703: Catch 'Exception'
 addmsg "W0704"      # W0704: Exception doesn't do anything
 
 # Potentially useful messages, disabled for now
-addmsg "C0322"      # C0322: *Operator not preceded by a space*
-addmsg "C0323"      # C0323: *Operator not followed by a space*
 addmsg "W0511"      # W0511: FIXME and XXX: messages
 addmsg "W0613"      # W0613: Unused arguments
 addmsg_support "W6501"      # W6501: Using string formatters in logging message

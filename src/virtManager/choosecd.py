@@ -67,11 +67,11 @@ class vmmChooseCD(gobject.GObject):
         self.initialize_opt_media()
         self.reset_state()
 
-    def close(self,ignore1=None,ignore2=None):
+    def close(self, ignore1=None, ignore2=None):
         self.window.get_widget("vmm-choose-cd").hide()
         return 1
 
-    def cancel(self,ignore1=None,ignore2=None):
+    def cancel(self, ignore1=None, ignore2=None):
         self.window.get_widget("vmm-choose-cd").hide()
 
     def show(self):
@@ -88,7 +88,7 @@ class vmmChooseCD(gobject.GObject):
         else:
             self.window.get_widget("iso-image").set_active(True)
 
-    def ok(self,ignore1=None, ignore2=None):
+    def ok(self, ignore1=None, ignore2=None):
         path = None
 
         if self.window.get_widget("iso-image").get_active():
