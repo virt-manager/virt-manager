@@ -34,8 +34,8 @@ BTYPE_LIST="(vmmConnect.add_service|vmmConnect.remove_service|vmmConnect.add_con
 BUILTIN_TYPE="${BTYPE_LIST}.*Redefining built-in 'type'"
 
 # Types can't be inferred errors
-INFER_LIST="(MenuItem|StatusIcon)"
-INFER_ERRORS="Instance of '${INFER_LIST}'.*not be inferred"
+INFER_LIST="(MenuItem|StatusIcon|.*storagePoolLookupByName)"
+INFER_ERRORS="Instance of '${INFER_LIST}.*not be inferred"
 
 DMSG=""
 addmsg() {
