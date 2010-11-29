@@ -492,6 +492,10 @@ class vmmEngine(gobject.GObject):
         gtk.main_quit()
 
     def add_connection(self, uri, readOnly=None, autoconnect=False):
+        conn = self._check_connection(uri)
+        if conn:
+            return conn
+
         conn = vmmConnection(self.get_config(), uri, readOnly, self)
         self.connections[uri] = {
             "connection": conn,
