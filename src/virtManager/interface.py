@@ -23,7 +23,6 @@ import gobject
 import virtinst
 from virtinst import Interface
 
-from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmInterface(vmmLibvirtObject):
@@ -112,7 +111,7 @@ class vmmInterface(vmmLibvirtObject):
 
             return doc.serialize()
 
-        self._redefine(util.xml_parse_wrapper, set_start_xml)
+        self._redefine_xml(set_start_xml)
 
 
     def get_slaves(self):

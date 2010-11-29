@@ -33,8 +33,9 @@ OS_EXIT="protected member _exit of a client class"
 BTYPE_LIST="(vmmConnect.add_service|vmmConnect.remove_service|vmmConnect.add_conn_to_list)"
 BUILTIN_TYPE="${BTYPE_LIST}.*Redefining built-in 'type'"
 
-# Bogus 'unable to import' warnings
-
+# Types can't be inferred errors
+INFER_LIST="(MenuItem|StatusIcon)"
+INFER_ERRORS="Instance of '${INFER_LIST}'.*not be inferred"
 
 DMSG=""
 addmsg() {
@@ -46,7 +47,7 @@ addchecker() {
 }
 
 addmsg_support() {
-    out=`pylint --list-msgs`
+    out=`pylint --list-msgs 2>&1`
     if `echo $out | grep -q $1` ; then
         addmsg "$1"
     fi
@@ -83,7 +84,7 @@ SHOW_REPORT="n"
 AWK=awk
 [ `uname -s` = 'SunOS' ] && AWK=nawk
 
-pylint --ignore=IPy.py $FILES \
+pylint --ignore=$IGNOREFILES $FILES \
   --reports=$SHOW_REPORT \
   --output-format=colorized \
   --dummy-variables-rgx="dummy|ignore*" \
@@ -100,6 +101,7 @@ pylint --ignore=IPy.py $FILES \
         -ve "$BUILTIN_TYPE" \
         -ve "$ERROR_VBOX" \
         -ve "$UNABLE_IMPORT" \
+        -ve "$INFER_ERRORS" \
         -ve "$EXCEPTHOOK" | \
 $AWK '\
 # Strip out any "*** Module name" lines if we dont list any errors for them

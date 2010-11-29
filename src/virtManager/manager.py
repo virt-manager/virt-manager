@@ -562,7 +562,7 @@ class vmmManager(gobject.GObject):
             self.emit("action-show-host", conn.get_uri())
         else:
             self.emit("action-show-console",
-                      conn.get_uri(), self.vm.get_uuid())
+                      conn.get_uri(), vm.get_uuid())
 
     def do_delete(self, ignore=None):
         conn = self.current_connection()

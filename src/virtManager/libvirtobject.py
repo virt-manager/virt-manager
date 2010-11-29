@@ -65,6 +65,9 @@ class vmmLibvirtObject(gobject.GObject):
     # Functions that should probably be overridden in sub class #
     #############################################################
 
+    def get_name(self):
+        raise NotImplementedError()
+
     def _XMLDesc(self, flags):
         ignore = flags
         return

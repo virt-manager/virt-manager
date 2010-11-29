@@ -93,6 +93,14 @@ class vmmDomainBase(vmmLibvirtObject):
         self.uuid = uuid
         self.cloning = False
 
+        self.record = []
+        self.maxRecord = {
+            "diskRdRate" : 10.0,
+            "diskWrRate" : 10.0,
+            "netTxRate"  : 10.0,
+            "netRxRate"  : 10.0,
+        }
+
         self._install_abort = False
         self._startup_vcpus = None
 
@@ -164,6 +172,9 @@ class vmmDomainBase(vmmLibvirtObject):
         raise NotImplementedError()
 
     def hotplug_both_mem(self, memory, maxmem):
+        raise NotImplementedError()
+
+    def _get_guest(self, inactive=False, refresh_if_necc=True):
         raise NotImplementedError()
 
     def _invalidate_xml(self):
@@ -905,12 +916,6 @@ class vmmDomain(vmmDomainBase):
         vmmDomainBase.__init__(self, config, connection, backend, uuid)
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
-        self.record = []
-        self.maxRecord = { "diskRdRate" : 10.0,
-                           "diskWrRate" : 10.0,
-                           "netTxRate"  : 10.0,
-                           "netRxRate"  : 10.0,
-                         }
 
         self.config.on_stats_enable_net_poll_changed(
                                             self.toggle_sample_network_traffic)
