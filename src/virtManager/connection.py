@@ -837,17 +837,22 @@ class vmmConnection(gobject.GObject):
         self.record = []
         self._change_state(self.STATE_DISCONNECTED)
 
-    def open(self):
+    def open(self, sync=False):
         if self.state != self.STATE_DISCONNECTED:
             return
 
+        self.connectError = None
         self._change_state(self.STATE_CONNECTING)
 
-        logging.debug("Scheduling background open thread for " + self.uri)
-        self.connectThread = threading.Thread(target = self._open_thread,
-                                              name = "Connect %s" % self.uri)
-        self.connectThread.setDaemon(True)
-        self.connectThread.start()
+        if sync:
+            logging.debug("Opening connection synchronously: %s" % self.uri)
+            self._open_thread()
+        else:
+            logging.debug("Scheduling background open thread for " + self.uri)
+            self.connectThread = threading.Thread(target = self._open_thread,
+                                                name = "Connect %s" % self.uri)
+            self.connectThread.setDaemon(True)
+            self.connectThread.start()
 
     def _do_creds_polkit(self, action):
         if os.getuid() == 0:

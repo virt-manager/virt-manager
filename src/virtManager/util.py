@@ -266,8 +266,7 @@ def _dup_all_conn(config, conn, libconn, return_conn_class):
 
     logging.debug("Duplicating connection for async operation.")
     newconn = virtManager.connection.vmmConnection(config, uri, is_readonly)
-    newconn.open()
-    newconn.connectThreadEvent.wait()
+    newconn.open(sync=True)
 
     if return_conn_class:
         return newconn
