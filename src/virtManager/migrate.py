@@ -146,6 +146,15 @@ class vmmMigrateDialog(gobject.GObject):
         self.window.get_widget("migrate-rate").set_value(0)
         self.window.get_widget("migrate-secure").set_active(False)
 
+        downtime_box = self.window.get_widget("migrate-maxdowntime-box")
+        support_downtime = self.vm.support_downtime()
+        downtime_tooltip = ""
+        if not support_downtime:
+            downtime_tooltip = _("Libvirt version does not support setting "
+                                 "downtime.")
+        downtime_box.set_sensitive(support_downtime)
+        util.tooltip_wrapper(downtime_box, downtime_tooltip)
+
         if self.conn.is_xen():
             # Default xen port is 8002
             self.window.get_widget("migrate-port").set_value(8002)
@@ -493,13 +502,9 @@ class vmmMigrateDialog(gobject.GObject):
                 logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
                               srcconn.get_uri(), dstconn.get_uri())
                 timer = None
-                if max_downtime != 0 and vm.support_downtime():
+                if max_downtime != 0:
                     # 0 means that the spin box migrate-max-downtime does not
                     # be enabled.
-                    #
-                    # We should check whether the domain supports downtime
-                    # early, but vm.support_downtime() has side effect, so
-                    # we check it only when user needs to modify downtime...
                     current_thread = threading.currentThread()
                     timer = util.safe_timeout_add(100,
                                                   self._async_set_max_downtime,

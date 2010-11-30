@@ -858,8 +858,6 @@ class vmmDomain(vmmDomainBase):
         return self._backend.XMLDesc(flags)
 
     def support_downtime(self):
-        # Note: this function has side effect
-        # if domain supports downtime, the downtime may be overriden to 30ms
         return support.check_domain_support(self._backend,
                         support.SUPPORT_DOMAIN_MIGRATE_DOWNTIME)
 
