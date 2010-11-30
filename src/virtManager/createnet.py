@@ -20,8 +20,6 @@
 
 import gobject
 import gtk
-import gtk.gdk
-import gtk.glade
 import logging
 import re
 import traceback

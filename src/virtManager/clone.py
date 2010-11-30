@@ -23,7 +23,7 @@ import logging
 import os
 
 import gobject
-import gtk.glade
+import gtk
 
 from virtManager.error import vmmErrorDialog
 from virtManager.asyncjob import vmmAsyncJob

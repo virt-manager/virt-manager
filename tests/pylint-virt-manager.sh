@@ -15,13 +15,8 @@ NO_PYL_CONFIG=".*No config file found.*"
 # The gettext function is installed in the builtin namespace
 GETTEXT_VAR="Undefined variable '_'"
 
-# These all work fine and are legit, just false positives
-EMIT_VAR="has no 'emit' member"
-ERROR_VBOX="Class 'vbox' has no 'pack_start' member"
-EXCEPTHOOK="no '__excepthook__' member"
-CONNECT_VAR="no 'connect' member"
-DISCONNECT_VAR="no 'disconnect' member"
-UNABLE_IMPORT="Unable to import '(gtk.gdk.*|sparkline|appindicator)"
+# Optional modules that may not be available
+UNABLE_IMPORT="Unable to import '(appindicator)"
 
 # os._exit is needed for forked processes.
 OS_EXIT="protected member _exit of a client class"
@@ -89,16 +84,11 @@ pylint --ignore=$IGNOREFILES $FILES \
   --disable=${DMSG}\
   --disable=${DCHECKERS} 2>&1 | \
   egrep -ve "$NO_PYL_CONFIG" \
-        -ve "$EMIT_VAR" \
-        -ve "$CONNECT_VAR" \
-        -ve "$DISCONNECT_VAR" \
         -ve "$GETTEXT_VAR" \
         -ve "$OS_EXIT" \
         -ve "$BUILTIN_TYPE" \
-        -ve "$ERROR_VBOX" \
-        -ve "$UNABLE_IMPORT" \
         -ve "$INFER_ERRORS" \
-        -ve "$EXCEPTHOOK" | \
+        -ve "$UNABLE_IMPORT" | \
 $AWK '\
 # Strip out any "*** Module name" lines if we dont list any errors for them
 BEGIN { found=0; cur_line="" }

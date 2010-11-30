@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 #
-import gtk.glade
+import gtk
 import gobject
 
 import virtManager.uihelpers as uihelpers

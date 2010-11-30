@@ -18,8 +18,8 @@
 # MA 02110-1301 USA.
 #
 
-import gtk.glade
 import gobject
+import gtk
 
 import virtManager.util as util
 

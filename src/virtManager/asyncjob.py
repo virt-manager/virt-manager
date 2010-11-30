@@ -21,8 +21,6 @@
 import logging
 import threading
 import gtk
-import gtk.gdk
-import gtk.glade
 import gobject
 
 from virtManager import util

@@ -16,7 +16,7 @@
 #
 
 import gobject
-import gtk.glade
+import gtk
 import cairo
 
 # For debugging

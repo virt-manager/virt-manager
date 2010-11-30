@@ -20,7 +20,7 @@
 import gconf
 import os
 
-import gtk.gdk
+import gtk
 import libvirt
 import virtinst
 import logging

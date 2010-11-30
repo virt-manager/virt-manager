@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 
 import gtk
-import gtk.glade
 
 import logging
 

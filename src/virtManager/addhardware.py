@@ -23,8 +23,6 @@ import traceback
 
 import gobject
 import gtk
-import gtk.gdk
-import gtk.glade
 
 import virtinst
 from virtinst import (VirtualCharDevice, VirtualDevice, VirtualVideoDevice,

@@ -20,7 +20,6 @@
 
 import gobject
 import gtk
-import gtk.glade
 
 from virtManager.error import vmmErrorDialog
 

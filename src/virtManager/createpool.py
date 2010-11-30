@@ -19,7 +19,7 @@
 #
 
 import gobject
-import gtk.glade
+import gtk
 
 import copy
 import traceback

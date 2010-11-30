@@ -19,7 +19,6 @@
 #
 
 import gtk
-import gtk.glade
 
 def on_email(about, mail):
     if hasattr(gtk, "show_uri"):
