@@ -1,12 +1,12 @@
 
-SUBDIRS = virtManager virtManagerTui
+SUBDIRS = virtManager
 
-bin_SCRIPTS_IN = virt-manager.in virt-manager-tui.in
-bin_SCRIPTS = virt-manager virt-manager-tui
+bin_SCRIPTS_IN = virt-manager.in
+bin_SCRIPTS = virt-manager
 
 pythondir = $(pkgdatadir)
-python_DATA_IN = $(PACKAGE).py.in $(PACKAGE)-tui.py.in
-python_DATA = $(PACKAGE).py $(PACKAGE)-tui.py
+python_DATA_IN = $(PACKAGE).py.in
+python_DATA = $(PACKAGE).py
 
 libexec_DATA_IN = $(PACKAGE)-launch.in
 libexec_SCRIPTS = $(PACKAGE)-launch
@@ -26,9 +26,19 @@ schemadir = $(sysconfdir)/gconf/schemas
 schema_DATA_IN = $(PACKAGE).schemas.in
 schema_DATA = $(PACKAGE).schemas
 
-CLEANFILES = $(bin_SCRIPTS) $(desktop_DATA) $(dbus_DATA) $(python_DATA)  $(libexec_SCRIPTS) $(schema_DATA) $(PACKAGE).desktop.in
+CLEANFILES = $(bin_SCRIPTS) $(desktop_DATA) $(dbus_DATA) $(python_DATA) $(libexec_SCRIPTS) $(schema_DATA) $(PACKAGE).desktop.in
 
 EXTRA_DIST = $(bin_SCRIPTS_IN) $(desktop_DATA_IN) $(dbus_DATA_IN) $(python_DATA_IN) $(glade_DATA) $(libexec_DATA_IN) $(schema_DATA_IN)
+
+if INSTALL_TUI
+SUBDIRS += virtManagerTui
+
+bin_SCRIPTS_IN += virt-manager-tui.in
+bin_SCRIPTS += virt-manager-tui
+
+python_DATA_IN += $(PACKAGE)-tui.py.in
+python_DATA = $(PACKAGE)-tui.py
+endif
 
 @INTLTOOL_DESKTOP_RULE@
 

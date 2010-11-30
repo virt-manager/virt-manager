@@ -30,6 +30,15 @@ dnl ====================================
 dnl = End tests for scrollkeeper
 dnl ====================================
 
+dnl Avahi library
+AC_ARG_WITH([tui],
+  AC_HELP_STRING(
+    [--with-tui],
+    [install virt-manager command line interface @<:@default=yes@:>@]),
+  [],
+  [with_tui=yes])
+
+AM_CONDITIONAL([INSTALL_TUI], [test "x$with_tui" = "xyes"])
 
 AC_OUTPUT(Makefile
           pixmaps/Makefile
