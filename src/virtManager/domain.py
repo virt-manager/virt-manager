@@ -857,6 +857,12 @@ class vmmDomain(vmmDomainBase):
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
 
+    def support_downtime(self):
+        # Note: this function has side effect
+        # if domain supports downtime, the downtime may be overriden to 30ms
+        return support.check_domain_support(self._backend,
+                        support.SUPPORT_DOMAIN_MIGRATE_DOWNTIME)
+
     def get_info(self):
         return self._backend.info()
 
@@ -996,6 +1002,9 @@ class vmmDomain(vmmDomainBase):
     def set_autostart(self, val):
         if self.get_autostart() != val:
             self._backend.setAutostart(val)
+
+    def migrate_set_max_downtime(self, max_downtime, flag=0):
+        self._backend.migrateSetMaxDowntime(max_downtime, flag)
 
     def migrate(self, destconn, interface=None, rate=0,
                 live=False, secure=False):

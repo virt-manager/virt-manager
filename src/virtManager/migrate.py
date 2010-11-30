@@ -23,6 +23,7 @@ import gtk.glade
 
 import traceback
 import logging
+import threading
 
 import virtinst
 import libvirt
@@ -78,6 +79,7 @@ class vmmMigrateDialog(gobject.GObject):
             "on_migrate_set_rate_toggled" : self.toggle_set_rate,
             "on_migrate_set_interface_toggled" : self.toggle_set_interface,
             "on_migrate_set_port_toggled" : self.toggle_set_port,
+            "on_migrate_set_maxdowntime_toggled" : self.toggle_set_maxdowntime,
         })
         util.bind_escape_key_close(self)
 
@@ -134,6 +136,8 @@ class vmmMigrateDialog(gobject.GObject):
         self.window.get_widget("migrate-set-interface").set_active(False)
         self.window.get_widget("migrate-set-rate").set_active(False)
         self.window.get_widget("migrate-set-port").set_active(False)
+        self.window.get_widget("migrate-set-maxdowntime").set_active(False)
+        self.window.get_widget("migrate-max-downtime").set_value(30)
 
         running = self.vm.is_active()
         self.window.get_widget("migrate-offline").set_active(not running)
@@ -187,6 +191,10 @@ class vmmMigrateDialog(gobject.GObject):
         self.window.get_widget("migrate-port").set_sensitive(enable and
                                                              port_enable)
 
+    def toggle_set_maxdowntime(self, src):
+        enable = src.get_active()
+        self.window.get_widget("migrate-max-downtime").set_sensitive(enable)
+
     def toggle_set_port(self, src):
         enable = src.get_active()
         self.window.get_widget("migrate-port").set_sensitive(enable)
@@ -207,8 +215,17 @@ class vmmMigrateDialog(gobject.GObject):
 
     def get_config_offline(self):
         return self.window.get_widget("migrate-offline").get_active()
+
+    def get_config_max_downtime(self):
+        if not self.get_config_max_downtime_enabled():
+            return 0
+        return int(self.window.get_widget("migrate-max-downtime").get_value())
+
     def get_config_secure(self):
         return self.window.get_widget("migrate-secure").get_active()
+
+    def get_config_max_downtime_enabled(self):
+        return self.window.get_widget("migrate-max-downtime").get_property("sensitive")
 
     def get_config_rate_enabled(self):
         return self.window.get_widget("migrate-rate").get_property("sensitive")
@@ -382,6 +399,10 @@ class vmmMigrateDialog(gobject.GObject):
         interface = self.get_config_interface()
         rate = self.get_config_rate()
         port = self.get_config_port()
+        max_downtime = self.get_config_max_downtime()
+
+        if self.get_config_max_downtime_enabled() and max_downtime == 0:
+            return self.err.val_err(_("max downtime must be greater than 0."))
 
         if self.get_config_interface_enabled() and interface == None:
             return self.err.val_err(_("An interface must be specified."))
@@ -402,6 +423,7 @@ class vmmMigrateDialog(gobject.GObject):
             destconn = self.get_config_destconn()
             srchost = self.vm.get_connection().get_hostname()
             dsthost = destconn.get_qualified_hostname()
+            max_downtime = self.get_config_max_downtime()
             live = not self.get_config_offline()
             secure = self.get_config_secure()
             uri = self.build_migrate_uri(destconn)
@@ -418,7 +440,8 @@ class vmmMigrateDialog(gobject.GObject):
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
         progWin = vmmAsyncJob(self.config, self._async_migrate,
-                              [self.vm, destconn, uri, rate, live, secure],
+                              [self.vm, destconn, uri, rate, live, secure,
+                               max_downtime],
                               title=_("Migrating VM '%s'" % self.vm.get_name()),
                               text=(_("Migrating VM '%s' from %s to %s. "
                                       "This may take awhile.") %
@@ -437,8 +460,23 @@ class vmmMigrateDialog(gobject.GObject):
             destconn.tick(noStatsUpdate=True)
             self.close()
 
+    def _async_set_max_downtime(self, vm, max_downtime, migrate_thread):
+        if not migrate_thread.isAlive():
+            return False
+        try:
+            vm.migrate_set_max_downtime(max_downtime, 0)
+            return False
+        except libvirt.libvirtError, e:
+            if (isinstance(e, libvirt.libvirtError) and
+                e.get_error_code() == libvirt.VIR_ERR_OPERATION_INVALID):
+                # migration has not been started, wait 100 milliseconds
+                return True
+
+            logging.warning("Error setting migrate downtime: %s" % e)
+            return False
+
     def _async_migrate(self, origvm, origdconn, migrate_uri, rate, live,
-                       secure, asyncjob):
+                       secure, max_downtime, asyncjob):
         errinfo = None
         try:
             try:
@@ -454,7 +492,22 @@ class vmmMigrateDialog(gobject.GObject):
 
                 logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
                               srcconn.get_uri(), dstconn.get_uri())
+                timer = None
+                if max_downtime != 0 and vm.support_downtime():
+                    # 0 means that the spin box migrate-max-downtime does not
+                    # be enabled.
+                    #
+                    # We should check whether the domain supports downtime
+                    # early, but vm.support_downtime() has side effect, so
+                    # we check it only when user needs to modify downtime...
+                    current_thread = threading.currentThread()
+                    timer = util.safe_timeout_add(100,
+                                                  self._async_set_max_downtime,
+                                                  vm, max_downtime,
+                                                  current_thread)
                 vm.migrate(dstconn, migrate_uri, rate, live, secure)
+                if timer:
+                    gobject.source_remove(timer)
             except Exception, e:
                 errinfo = (str(e), ("Unable to migrate guest:\n %s" %
                                     "".join(traceback.format_exc())))

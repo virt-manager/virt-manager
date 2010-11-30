@@ -246,6 +246,99 @@
                           </packing>
                         </child>
                         <child>
+                          <widget class="GtkHBox" id="migrate-maxdowntime-box">
+                            <property name="visible">True</property>
+                            <property name="spacing">3</property>
+                            <child>
+                              <widget class="GtkLabel" id="label15">
+                                <property name="visible">True</property>
+                                <property name="xalign">1</property>
+                                <property name="label" translatable="yes">Max downtime:</property>
+                                <property name="use_markup">True</property>
+                                <property name="use_underline">True</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="migrate-set-maxdowntime">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="on_migrate_set_maxdowntime_toggled"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkHBox" id="hbox8">
+                                <property name="visible">True</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <widget class="GtkHBox" id="hbox9">
+                                    <property name="visible">True</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <widget class="GtkSpinButton" id="migrate-max-downtime">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="invisible_char">&#x25CF;</property>
+                                        <property name="adjustment">30 0 1000000 1 1000 0</property>
+                                        <property name="snap_to_ticks">True</property>
+                                        <property name="numeric">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="label16">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">ms</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkAlignment" id="alignment6">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <widget class="GtkFrame" id="frame1">
                             <property name="visible">True</property>
                             <property name="label_xalign">0</property>
@@ -471,7 +564,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </widget>
