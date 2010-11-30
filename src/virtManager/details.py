@@ -414,9 +414,9 @@ class vmmDetails(gobject.GObject):
         })
 
         # Deliberately keep all this after signal connection
-        self.vm.connect("status-changed", self.update_widget_states)
+        self.vm.connect("status-changed", self.refresh_vm_state)
+        self.vm.connect("config-changed", self.refresh_vm_state)
         self.vm.connect("resources-sampled", self.refresh_resources)
-        self.vm.connect("config-changed", self.refresh_vm_info)
         self.window.get_widget("hw-list").get_selection().connect(
                                                         "changed",
                                                         self.hw_selected)
@@ -427,13 +427,12 @@ class vmmDetails(gobject.GObject):
         finish_img = gtk.image_new_from_stock(gtk.STOCK_ADD,
                                               gtk.ICON_SIZE_BUTTON)
         self.window.get_widget("add-hardware-button").set_image(finish_img)
-        self.update_widget_states(self.vm, self.vm.status())
 
         self.populate_hw_list()
         self.repopulate_boot_list()
 
         self.hw_selected()
-        self.refresh_vm_info()
+        self.refresh_vm_state()
 
 
     def show(self):
@@ -443,7 +442,7 @@ class vmmDetails(gobject.GObject):
         self.topwin.present()
 
         self.engine.increment_window_counter()
-        self.update_widget_states(self.vm, self.vm.status())
+        self.refresh_vm_state()
 
     def close(self, ignore1=None, ignore2=None):
         fs = self.window.get_widget("details-menu-view-fullscreen")
@@ -953,8 +952,12 @@ class vmmDetails(gobject.GObject):
         self.window.get_widget("details-menu-run").get_child().set_label(text)
         self.window.get_widget("control-run").set_label(strip_text)
 
-    def update_widget_states(self, vm, status, ignore=None):
-        self.toggle_toolbar(self.window.get_widget("details-menu-view-toolbar"))
+    def refresh_vm_state(self, ignore1=None, ignore2=None, ignore3=None):
+        vm = self.vm
+        status = self.vm.status()
+
+        self.toggle_toolbar(
+            self.window.get_widget("details-menu-view-toolbar"))
 
         destroy = vm.is_destroyable()
         run     = vm.is_runable()
@@ -996,8 +999,13 @@ class vmmDetails(gobject.GObject):
 
         self.console.update_widget_states(vm, status)
 
-        self.window.get_widget("overview-status-text").set_text(self.vm.run_status())
-        self.window.get_widget("overview-status-icon").set_from_pixbuf(self.vm.run_status_icon())
+        self.window.get_widget("overview-status-text").set_text(
+                                                    self.vm.run_status())
+        self.window.get_widget("overview-status-icon").set_from_pixbuf(
+                                                    self.vm.run_status_icon())
+
+        details = self.window.get_widget("details-pages")
+        self.page_refresh(details.get_current_page())
 
 
     #############################
@@ -1045,8 +1053,6 @@ class vmmDetails(gobject.GObject):
             self.emit("action-suspend-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
         else:
             self.emit("action-resume-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
-
-        self.update_widget_states(self.vm, self.vm.status())
 
     def control_vm_run(self, src):
         self.emit("action-run-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
@@ -1684,10 +1690,6 @@ class vmmDetails(gobject.GObject):
         if (page == PAGE_DETAILS and
             self.get_hw_selection(HW_LIST_COL_TYPE) == HW_LIST_TYPE_STATS):
             self.refresh_stats_page()
-
-    def refresh_vm_info(self, ignore=None):
-        details = self.window.get_widget("details-pages")
-        self.page_refresh(details.get_current_page())
 
     def page_refresh(self, page):
         if page != PAGE_DETAILS:
