@@ -78,7 +78,7 @@ management API.
 %setup -q
 
 %build
-%configure
+%configure --without-tui
 make %{?_smp_mflags}
 
 
