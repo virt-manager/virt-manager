@@ -56,15 +56,15 @@ class vmmConnect(gobject.GObject):
 
     def __init__(self, config, engine):
         self.__gobject_init__()
+        self.engine = engine
+
         self.window = gtk.glade.XML(
                         config.get_glade_dir() + "/vmm-open-connection.glade",
                         "vmm-open-connection", domain="virt-manager")
-        self.err = vmmErrorDialog(self.window.get_widget("vmm-open-connection"),
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
-        self.engine = engine
-        self.window.get_widget("vmm-open-connection").hide()
+        self.topwin = self.window.get_widget("vmm-open-connection")
+
+        self.err = vmmErrorDialog(self.topwin)
+        self.topwin.hide()
 
         self.window.signal_autoconnect({
             "on_hypervisor_changed": self.hypervisor_changed,
@@ -110,12 +110,11 @@ class vmmConnect(gobject.GObject):
         return 1
 
     def close(self):
-        self.window.get_widget("vmm-open-connection").hide()
+        self.topwin.hide()
         self.stop_browse()
 
     def show(self):
-        win = self.window.get_widget("vmm-open-connection")
-        win.present()
+        self.topwin.present()
         self.reset_state()
 
     def set_initial_state(self):

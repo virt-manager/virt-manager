@@ -41,22 +41,19 @@ class vmmStorageBrowser(gobject.GObject):
 
     def __init__(self, config, conn):
         self.__gobject_init__()
+        self.config = config
+        self.conn = conn
+
         self.window = gtk.glade.XML(config.get_glade_dir() + \
                                     "/vmm-storage-browse.glade",
                                     "vmm-storage-browse",
                                     domain="virt-manager")
-        self.config = config
-        self.conn = conn
+        self.topwin = self.window.get_widget("vmm-storage-browse")
+        self.err = vmmErrorDialog(self.topwin)
+        self.topwin.hide()
 
         self.conn_signal_ids = []
         self.finish_cb_id = None
-
-        self.topwin = self.window.get_widget("vmm-storage-browse")
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
-        self.topwin.hide()
 
         # Add Volume wizard
         self.addvol = None

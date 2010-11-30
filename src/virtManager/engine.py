@@ -229,10 +229,7 @@ class vmmEngine(gobject.GObject):
         self.windowMigrate = None
 
         self.connections = {}
-        self.err = vmmErrorDialog(None,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog()
 
         self.timer = None
         self.last_timeout = 0

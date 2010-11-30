@@ -74,10 +74,7 @@ class vmmSystray(gobject.GObject):
         self.config = config
         self.engine = engine
         self.topwin = None
-        self.err = vmmErrorDialog(None,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog()
 
         self.conn_menuitems = {}
         self.conn_vm_menuitems = {}

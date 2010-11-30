@@ -74,12 +74,11 @@ class vmmAddHardware(gobject.GObject):
         self.config = config
         self.vm = vm
         self.conn = vm.get_connection()
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-add-hardware.glade", "vmm-add-hardware", domain="virt-manager")
+        self.window = gtk.glade.XML(
+                        config.get_glade_dir() + "/vmm-add-hardware.glade",
+                        "vmm-add-hardware", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-add-hardware")
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog(self.topwin)
 
         self.storage_browser = None
 

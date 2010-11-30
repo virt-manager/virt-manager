@@ -68,19 +68,16 @@ class vmmCreateInterface(gobject.GObject):
 
     def __init__(self, config, conn):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-create-interface.glade",
-                                    "vmm-create-interface",
-                                    domain="virt-manager")
         self.config = config
         self.conn = conn
         self.interface = None
 
+        self.window = gtk.glade.XML(config.get_glade_dir() + \
+                                    "/vmm-create-interface.glade",
+                                    "vmm-create-interface",
+                                    domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-create-interface")
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog(self.topwin)
 
         # Bridge configuration dialog
         self.bridge_config_win = gtk.glade.XML(self.config.get_glade_dir() + \

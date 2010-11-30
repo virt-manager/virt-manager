@@ -48,13 +48,14 @@ class vmmCreateNetwork(gobject.GObject):
         self.__gobject_init__()
         self.config = config
         self.conn = conn
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-create-net.glade", "vmm-create-net", domain="virt-manager")
+
+        self.window = gtk.glade.XML(
+                        config.get_glade_dir() + "/vmm-create-net.glade",
+                        "vmm-create-net", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-create-net")
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog(self.topwin)
         self.topwin.hide()
+
         self.window.signal_autoconnect({
             "on_create_pages_switch_page" : self.page_changed,
             "on_create_cancel_clicked" : self.close,

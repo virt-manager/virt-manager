@@ -52,19 +52,16 @@ class vmmMigrateDialog(gobject.GObject):
 
     def __init__(self, config, vm, engine):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-migrate.glade",
-                                    "vmm-migrate", domain="virt-manager")
         self.config = config
         self.vm = vm
         self.conn = vm.connection
         self.engine = engine
 
+        self.window = gtk.glade.XML(config.get_glade_dir() + \
+                                    "/vmm-migrate.glade",
+                                    "vmm-migrate", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-migrate")
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog(self.topwin)
         self.topwin.hide()
 
         self.destconn_rows = []

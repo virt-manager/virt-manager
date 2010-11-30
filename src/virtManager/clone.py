@@ -103,10 +103,7 @@ class vmmCloneVM(gobject.GObject):
             "on_change_storage_browse_clicked" : self.change_storage_browse,
         })
 
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog(self.topwin)
         self.topwin.hide()
 
         self.conn = self.orig_vm.connection

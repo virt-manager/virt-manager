@@ -57,10 +57,7 @@ class vmmConsolePages(gobject.GObject):
         self.window = window
 
         self.topwin = self.window.get_widget("vmm-details")
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog(self.topwin)
 
         self.title = vm.get_name() + " " + self.topwin.get_title()
         self.topwin.set_title(self.title)

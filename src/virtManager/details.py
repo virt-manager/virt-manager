@@ -251,19 +251,16 @@ class vmmDetails(gobject.GObject):
 
     def __init__(self, config, vm, engine, parent=None):
         self.__gobject_init__()
-        self.window = gtk.glade.XML((config.get_glade_dir() +
-                                     "/vmm-details.glade"),
-                                     "vmm-details", domain="virt-manager")
         self.config = config
         self.vm = vm
         self.conn = self.vm.get_connection()
         self.engine = engine
 
+        self.window = gtk.glade.XML((config.get_glade_dir() +
+                                     "/vmm-details.glade"),
+                                     "vmm-details", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-details")
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog(self.topwin)
 
         self.is_customize_dialog = False
         if parent:
@@ -1605,8 +1602,8 @@ class vmmDetails(gobject.GObject):
 
         if detach_err:
             self.err.show_info(
-                _("Device could not be removed from the running machine."),
-                _("This change will take effect after the next VM reboot"))
+                _("Device could not be removed from the running machine"),
+                _("This change will take effect after the next VM reboot."))
 
     # Generic config change helpers
     def _change_config_helper(self,

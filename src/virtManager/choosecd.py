@@ -42,10 +42,7 @@ class vmmChooseCD(gobject.GObject):
         self.topwin = self.window.get_widget("vmm-choose-cd")
         self.topwin.hide()
 
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog(self.topwin)
 
         self.config = config
         self.dev_id_info = dev_id_info

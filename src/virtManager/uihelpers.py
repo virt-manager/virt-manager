@@ -51,10 +51,7 @@ QEMU_SYSTEM_EMULATOR_USER = "root"
 # Initialize an error object to use for validation functions #
 ##############################################################
 
-err_dial = vmmErrorDialog(None,
-                          0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                          _("Unexpected Error"),
-                          _("An unexpected error occurred"))
+err_dial = vmmErrorDialog()
 
 def set_error_parent(parent):
     global err_dial

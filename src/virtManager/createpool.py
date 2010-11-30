@@ -41,17 +41,14 @@ class vmmCreatePool(gobject.GObject):
 
     def __init__(self, config, conn):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-create-pool.glade",
-                                    "vmm-create-pool", domain="virt-manager")
         self.conn = conn
         self.config = config
 
+        self.window = gtk.glade.XML(config.get_glade_dir() + \
+                                    "/vmm-create-pool.glade",
+                                    "vmm-create-pool", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-create-pool")
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog(self.topwin)
         self.topwin.hide()
 
         self._pool = None

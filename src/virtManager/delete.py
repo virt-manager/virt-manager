@@ -48,18 +48,15 @@ class vmmDeleteDialog(gobject.GObject):
 
     def __init__(self, config, vm):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-delete.glade",
-                                    "vmm-delete", domain="virt-manager")
         self.config = config
         self.vm = vm
         self.conn = vm.connection
 
+        self.window = gtk.glade.XML(config.get_glade_dir() + \
+                                    "/vmm-delete.glade",
+                                    "vmm-delete", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-delete")
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
+        self.err = vmmErrorDialog(self.topwin)
         self.topwin.hide()
 
         self.window.signal_autoconnect({

@@ -53,19 +53,15 @@ class vmmHost(gobject.GObject):
         }
     def __init__(self, config, conn, engine):
         self.__gobject_init__()
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-host.glade",
-                                    "vmm-host", domain="virt-manager")
         self.config = config
         self.conn = conn
         self.engine = engine
 
+        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-host.glade",
+                                    "vmm-host", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-host")
+        self.err = vmmErrorDialog(self.topwin)
         self.topwin.hide()
-
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
 
         self.title = conn.get_short_hostname() + " " + self.topwin.get_title()
         self.topwin.set_title(self.title)

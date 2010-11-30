@@ -69,11 +69,14 @@ class vmmCreate(gobject.GObject):
 
     def __init__(self, config, engine):
         self.__gobject_init__()
+        self.config = config
+        self.engine = engine
+
         self.window = gtk.glade.XML(config.get_glade_dir() + \
                                     "/vmm-create.glade",
                                     "vmm-create", domain="virt-manager")
-        self.config = config
-        self.engine = engine
+        self.topwin = self.window.get_widget("vmm-create")
+        self.err = vmmErrorDialog(self.topwin)
 
         self.conn = None
         self.caps = None
@@ -82,12 +85,6 @@ class vmmCreate(gobject.GObject):
         self.guest = None
         self.storage_browser = None
         self.conn_signals = []
-
-        self.topwin = self.window.get_widget("vmm-create")
-        self.err = vmmErrorDialog(self.topwin,
-                                  0, gtk.MESSAGE_ERROR, gtk.BUTTONS_CLOSE,
-                                  _("Unexpected Error"),
-                                  _("An unexpected error occurred"))
 
         # Distro detection state variables
         self.detectThread = None

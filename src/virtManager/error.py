@@ -25,15 +25,20 @@ import logging
 import virtManager.util as util
 
 def safe_set_text(self, text):
-    # pygtk < 2.10 doesn't support test property
+    # pygtk < 2.10 doesn't support text property
     if not util.safe_set_prop(self, "text", text):
         self.set_markup(text)
 
 
 class vmmErrorDialog (gtk.MessageDialog):
-    def __init__ (self, parent=None, flags=0, typ=gtk.MESSAGE_INFO,
-                  buttons=gtk.BUTTONS_NONE, message_format=None,
-                  message_details=None, default_title=_("Error")):
+    def __init__ (self, parent=None):
+        typ = gtk.MESSAGE_ERROR
+        message_format = _("Unexpected Error")
+        message_details = _("An unexpected error occurred")
+        buttons = gtk.BUTTONS_CLOSE
+        default_title = _("Error")
+        flags = 0
+
         gtk.MessageDialog.__init__ (self,
                                     parent, flags, typ, buttons,
                                     message_format)
@@ -75,7 +80,8 @@ class vmmErrorDialog (gtk.MessageDialog):
     def response_cb(self, src, ignore):
         src.hide()
 
-    def show_err(self, summary, details, title=None, async=True, debug=True):
+    def show_err(self, summary, details, title=None,
+                 async=True, debug=True):
         self.hide()
 
         if title is None:
