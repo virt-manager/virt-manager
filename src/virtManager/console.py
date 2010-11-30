@@ -140,8 +140,8 @@ class vmmConsolePages(gobject.GObject):
         scroll = self.window.get_widget("console-vnc-scroll")
         scroll.connect("size-allocate", self.scroll_size_allocate)
 
-        self.vncViewer.connect("vnc-pointer-grab", self.notify_grabbed)
-        self.vncViewer.connect("vnc-pointer-ungrab", self.notify_ungrabbed)
+        self.vncViewer.connect("vnc-pointer-grab", self.pointer_grabbed)
+        self.vncViewer.connect("vnc-pointer-ungrab", self.pointer_ungrabbed)
         self.vncViewer.connect("vnc-auth-credential", self._vnc_auth_credential)
         self.vncViewer.connect("vnc-initialized", self._vnc_initialized)
         self.vncViewer.connect("vnc-disconnected", self._vnc_disconnected)
@@ -159,7 +159,7 @@ class vmmConsolePages(gobject.GObject):
     def keyboard_ungrabbed(self, src=None):
         self._enable_modifiers()
 
-    def notify_grabbed(self, src):
+    def pointer_grabbed(self, src):
         keystr = None
         if self.config.grab_keys_supported():
             try:
@@ -180,7 +180,7 @@ class vmmConsolePages(gobject.GObject):
         self.topwin.set_title(_("Press %s to release pointer.") % keystr +
                               " " + self.title)
 
-    def notify_ungrabbed(self, src):
+    def pointer_ungrabbed(self, src):
         self.topwin.set_title(self.title)
 
     def _disable_modifiers(self):
