@@ -23,7 +23,7 @@ class vmmNetDevice(gobject.GObject):
     __gsignals__ = {}
 
     def __init__(self, name, mac, is_shared, bridge=None, hal_path=None):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
 
         self.name = name
         self.mac = mac

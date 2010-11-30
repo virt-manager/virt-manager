@@ -101,7 +101,7 @@ class vmmConnection(gobject.GObject):
     STATE_INACTIVE = 3
 
     def __init__(self, config, uri, readOnly=None, engine=None):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
 
         self.config = config
         self.engine = engine

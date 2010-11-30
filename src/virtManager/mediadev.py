@@ -62,7 +62,7 @@ class vmmMediaDevice(gobject.GObject):
 
     def __init__(self, path, key, has_media, media_label, media_key,
                  nodedev_obj = None, media_type = MEDIA_CDROM):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
 
         self.path = path
         self.key = key

@@ -25,7 +25,7 @@ class vmmStorageVolume(gobject.GObject):
     __gsignals__ = { }
 
     def __init__(self, config, connection, vol, name):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.config = config
         self.connection = connection
         self.vol = vol              # Libvirt storage volume object

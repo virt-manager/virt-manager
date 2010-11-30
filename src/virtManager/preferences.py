@@ -32,7 +32,7 @@ class vmmPreferences(gobject.GObject):
                              gobject.TYPE_NONE, [str]),
         }
     def __init__(self, config):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-preferences.glade", "vmm-preferences", domain="virt-manager")
         self.config = config
 

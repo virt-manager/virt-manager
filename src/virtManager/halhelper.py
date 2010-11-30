@@ -42,7 +42,7 @@ class vmmHalHelper(gobject.GObject):
     }
 
     def __init__(self):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
 
         self.bus = None
         self.hal_iface = None

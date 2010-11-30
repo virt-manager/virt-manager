@@ -70,7 +70,7 @@ class vmmAddHardware(gobject.GObject):
                                 gobject.TYPE_NONE, [str]),
         }
     def __init__(self, config, vm):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.config = config
         self.vm = vm
         self.conn = vm.get_connection()

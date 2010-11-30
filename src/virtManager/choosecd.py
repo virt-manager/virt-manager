@@ -35,7 +35,7 @@ class vmmChooseCD(gobject.GObject):
     }
 
     def __init__(self, config, dev_id_info, connection, media_type):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.window = gtk.glade.XML(
                             config.get_glade_dir() + "/vmm-choose-cd.glade",
                             "vmm-choose-cd", domain="virt-manager")

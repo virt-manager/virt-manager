@@ -16,8 +16,6 @@ NO_PYL_CONFIG=".*No config file found.*"
 GETTEXT_VAR="Undefined variable '_'"
 
 # These all work fine and are legit, just false positives
-GOBJECT_VAR="has no '__gobject_init__' member"
-GOBJECT_INIT="__init__ method from base class 'GObject' is not called"
 EMIT_VAR="has no 'emit' member"
 ERROR_VBOX="Class 'vbox' has no 'pack_start' member"
 EXCEPTHOOK="no '__excepthook__' member"
@@ -91,8 +89,6 @@ pylint --ignore=$IGNOREFILES $FILES \
   --disable=${DMSG}\
   --disable=${DCHECKERS} 2>&1 | \
   egrep -ve "$NO_PYL_CONFIG" \
-        -ve "$GOBJECT_VAR" \
-        -ve "$GOBJECT_INIT" \
         -ve "$EMIT_VAR" \
         -ve "$CONNECT_VAR" \
         -ve "$DISCONNECT_VAR" \

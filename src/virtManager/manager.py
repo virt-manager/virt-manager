@@ -117,7 +117,7 @@ class vmmManager(gobject.GObject):
                             gobject.TYPE_NONE, []),}
 
     def __init__(self, config, engine):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.config = config
         self.engine = engine
 

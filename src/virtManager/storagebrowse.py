@@ -40,7 +40,7 @@ class vmmStorageBrowser(gobject.GObject):
     }
 
     def __init__(self, config, conn):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.config = config
         self.conn = conn
 

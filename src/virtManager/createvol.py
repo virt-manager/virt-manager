@@ -40,7 +40,7 @@ class vmmCreateVolume(gobject.GObject):
     }
 
     def __init__(self, config, conn, parent_pool):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.conn = conn
         self.parent_pool = parent_pool
         self.config = config

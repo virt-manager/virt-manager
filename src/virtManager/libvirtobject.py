@@ -44,7 +44,7 @@ class vmmLibvirtObject(gobject.GObject):
     }
 
     def __init__(self, config, connection):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.config = config
         self.connection = connection
 

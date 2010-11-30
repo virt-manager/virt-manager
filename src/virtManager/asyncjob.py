@@ -43,7 +43,7 @@ class vmmAsyncJob(gobject.GObject):
                  text=_("Please wait a few moments..."),
                  title=_("Operation in progress"),
                  run_main=True):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.config = config
         self.run_main = bool(run_main)
 

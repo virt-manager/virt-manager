@@ -50,7 +50,7 @@ class vmmNetwork(gobject.GObject):
         return desc
 
     def __init__(self, config, connection, net, uuid, active):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.config = config
         self.connection = connection
         self.net = net

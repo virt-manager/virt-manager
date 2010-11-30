@@ -69,7 +69,7 @@ class vmmCloneVM(gobject.GObject):
     }
 
     def __init__(self, config, orig_vm):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.config = config
         self.orig_vm = orig_vm
 

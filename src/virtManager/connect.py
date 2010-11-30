@@ -55,7 +55,7 @@ class vmmConnect(gobject.GObject):
         }
 
     def __init__(self, config, engine):
-        self.__gobject_init__()
+        gobject.GObject.__init__(self)
         self.engine = engine
 
         self.window = gtk.glade.XML(
