@@ -1597,12 +1597,16 @@ class vmmDetails(gobject.GObject):
                 self.vm.detach_device(dev_id_info)
         except Exception, e:
             logging.debug("Device could not be hotUNplugged: %s" % str(e))
-            detach_err = True
+            detach_err = (str(e), "".join(traceback.format_exc()))
 
-        if detach_err:
-            self.err.show_info(
-                _("Device could not be removed from the running machine"),
-                _("This change will take effect after the next VM reboot."))
+        if not detach_err:
+            return
+
+        self.err.show_err(
+            _("Device could not be removed from the running machine"),
+            detach_err[0] + "\n\n" + detach_err[1],
+            text2=_("This change will take effect after the next VM reboot."),
+            dialog_type=gtk.MESSAGE_INFO)
 
     # Generic config change helpers
     def _change_config_helper(self,
@@ -1627,7 +1631,7 @@ class vmmDetails(gobject.GObject):
         hotplug_funcs = listify(hotplug_funcs)
         hotplug_funcs_args = listify(hotplug_funcs_args)
 
-        hotplug_err = False
+        hotplug_err = []
         active = self.vm.is_active()
 
         # Hotplug change
@@ -1641,7 +1645,8 @@ class vmmDetails(gobject.GObject):
                 except Exception, e:
                     logging.debug("Hotplug failed: func=%s: %s" % (func,
                                                                    str(e)))
-                    hotplug_err = True
+                    hotplug_err.append((str(e),
+                                        "".join(traceback.format_exc())))
 
         # Persistent config change
         try:
@@ -1662,11 +1667,21 @@ class vmmDetails(gobject.GObject):
         if (hotplug_err or
             (active and not len(hotplug_funcs) == len(define_funcs))):
             if len(define_funcs) > 1:
-                self.err.show_info(_("Some changes may require a guest reboot "
-                                     "to take effect."))
+                msg = _("Some changes may require a guest reboot "
+                        "to take effect.")
             else:
-                self.err.show_info(_("These changes will take effect after "
-                                     "the next guest reboot."))
+                msg = _("These changes will take effect after "
+                        "the next guest reboot.")
+
+            dtype = hotplug_err and gtk.MESSAGE_WARNING or gtk.MESSAGE_INFO
+            hotplug_msg = ""
+            for err1, tb in hotplug_err:
+                hotplug_msg += (err1 + "\n\n" + tb + "\n")
+
+            self.err.show_err(msg, details=hotplug_msg,
+                              buttons=gtk.BUTTONS_YES_NO,
+                              dialog_type=dtype)
+
         return True
 
     ########################

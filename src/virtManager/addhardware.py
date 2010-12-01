@@ -1025,15 +1025,20 @@ class vmmAddHardware(gobject.GObject):
             self.vm.attach_device(self._dev)
         except Exception, e:
             logging.debug("Device could not be hotplugged: %s" % str(e))
-            attach_err = True
+            attach_err = (str(e), "".join(traceback.format_exc()))
 
         if attach_err:
-            if not self.err.yes_no(_("Are you sure you want to add this "
-                                     "device?"),
-                                   _("This device could not be attached to "
-                                     "the running machine. Would you like to "
-                                     "make the device available after the "
-                                     "next VM shutdown?")):
+            res = self.err.show_err(
+                _("Are you sure you want to add this device?"),
+                attach_err[0] + "\n\n" + attach_err[1],
+                text2=(
+                _("This device could not be attached to the running machine. "
+                  "Would you like to make the device available after the "
+                  "next VM shutdown?")),
+                dialog_type=gtk.MESSAGE_WARNING,
+                buttons=gtk.BUTTONS_YES_NO)
+
+            if not res:
                 return (False, None)
 
         # Alter persistent config
