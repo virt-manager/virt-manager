@@ -740,13 +740,13 @@ class vmmManager(gobject.GObject):
 
     def _build_conn_markup(self, conn, row):
         if conn.state == conn.STATE_DISCONNECTED:
-            markup = ("<span font_desc='9'>%s - "
-                      "Not Connected</span>" % row[ROW_NAME])
+            text = str(row[ROW_NAME]) + " - " + _("Not Connected")
         elif conn.state == conn.STATE_CONNECTING:
-            markup = ("<span font_desc='9'>%s - "
-                      "Connecting...</span>" % row[ROW_NAME])
+            text = str(row[ROW_NAME]) + " - " + _("Connecting...")
         else:
-            markup = ("<span font_desc='9'>%s</span>" % row[ROW_NAME])
+            text = str(row[ROW_NAME])
+
+        markup = "<span size='smaller'>%s</span>" % text
         return markup
 
     def _build_conn_color(self, conn):
@@ -759,10 +759,10 @@ class vmmManager(gobject.GObject):
         return color
 
     def _build_vm_markup(self, vm, row):
-        markup = ("<span font_desc='10'>%s</span>\n"
-                  "<span font_desc='8'>%s</span>" %
-                  (row[ROW_NAME], row[ROW_STATUS]))
-        return markup
+        domtext     = ("<span size='smaller' weight='bold'>%s</span>" %
+                       row[ROW_NAME])
+        statetext   = "<span size='smaller'>%s</span>" % row[ROW_STATUS]
+        return domtext + "\n" + statetext
 
     def _append_vm(self, model, vm, conn):
         row_key = self.vm_row_key(vm)
@@ -797,7 +797,7 @@ class vmmManager(gobject.GObject):
         row.insert(ROW_HANDLE, conn)
         row.insert(ROW_NAME, conn.get_pretty_desc_inactive(False))
         row.insert(ROW_MARKUP, self._build_conn_markup(conn, row))
-        row.insert(ROW_STATUS, ("<span font_desc='9'>%s</span>" %
+        row.insert(ROW_STATUS, ("<span size='smaller'>%s</span>" %
                                 conn.get_state_text()))
         row.insert(ROW_STATUS_ICON, None)
         row.insert(ROW_KEY, conn.get_uri())
@@ -893,7 +893,8 @@ class vmmManager(gobject.GObject):
         row = self.rows[conn.get_uri()]
 
         row[ROW_MARKUP] = self._build_conn_markup(conn, row)
-        row[ROW_STATUS] = "<span font_desc='9'>%s</span>" % conn.get_state_text()
+        row[ROW_STATUS] = ("<span size='smaller'>%s</span>" %
+                           conn.get_state_text())
         row[ROW_IS_CONN_CONNECTED] = conn.state != conn.STATE_DISCONNECTED
         row[ROW_HINT] = self._build_conn_hint(conn)
         row[ROW_COLOR] = self._build_conn_color(conn)
