@@ -51,8 +51,17 @@ class vmmInterface(vmmLibvirtObject):
     def _define(self, xml):
         return self.get_connection().define_interface(xml)
 
-    def xpath(self, path):
-        return virtinst.util.get_xml_path(self.get_xml(), path)
+    def xpath(self, *args, **kwargs):
+        # Must use this function for ALL XML parsing
+        ret = virtinst.util.get_xml_path(self.get_xml(), *args, **kwargs)
+        if ret:
+            return ret
+        if not self.is_active():
+            return ret
+
+        # The running config did not have the info requested
+        return virtinst.util.get_xml_path(self.get_xml(inactive=True),
+                                          *args, **kwargs)
 
     def set_active(self, state):
         self.active = state
@@ -83,7 +92,7 @@ class vmmInterface(vmmLibvirtObject):
         return typ == "bridge"
 
     def get_type(self):
-        return virtinst.util.get_xml_path(self.get_xml(), "/interface/@type")
+        return self.xpath("/interface/@type")
 
     def get_pretty_type(self):
         itype = self.get_type()
@@ -132,7 +141,7 @@ class vmmInterface(vmmLibvirtObject):
 
             return ret
 
-        ret = virtinst.util.get_xml_path(self.get_xml(), func=node_func)
+        ret = self.xpath(func=node_func)
 
         if not ret:
             return []
@@ -184,7 +193,7 @@ class vmmInterface(vmmLibvirtObject):
 
             return ret
 
-        ret = virtinst.util.get_xml_path(self.get_xml(), func=addr_func)
+        ret = self.xpath(func=addr_func)
 
         return [dhcp, autoconf, ret]
 
@@ -199,7 +208,7 @@ class vmmInterface(vmmLibvirtObject):
 
             return ret
 
-        ret = virtinst.util.get_xml_path(self.get_xml(), func=protocol)
+        ret = self.xpath(func=protocol)
         if ret:
             ret = "  %s\n" % ret
         return ret

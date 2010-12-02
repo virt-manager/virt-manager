@@ -550,10 +550,6 @@ class vmmConnection(gobject.GObject):
             if virtinst.support.check_interface_support(iface,
                             virtinst.support.SUPPORT_INTERFACE_XML_INACTIVE):
                 inact = libvirt.VIR_INTERFACE_XML_INACTIVE
-
-                # XXX: We intentionally use 'inactive' XML even for active
-                # interfaces, since active XML doesn't show much info
-                act = inact
             else:
                 logging.debug("Interface XML inactive flag not supported.")
 
