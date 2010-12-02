@@ -425,15 +425,16 @@ class vmmConfig:
     def set_console_popup(self, pref):
         self.conf.set_int(self.conf_dir + "/console/popup", pref)
 
-    def on_console_keygrab_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/console/keygrab", callback)
-    def get_console_keygrab(self):
-        console_pref = self.conf.get_int(self.conf_dir + "/console/keygrab")
+    def on_console_accels_changed(self, callback):
+        self.conf.notify_add(self.conf_dir + "/console/enable-accels", callback)
+    def get_console_accels(self):
+        console_pref = self.conf.get_bool(self.conf_dir +
+                                          "/console/enable-accels")
         if console_pref == None:
-            console_pref = 0
+            console_pref = False
         return console_pref
-    def set_console_keygrab(self, pref):
-        self.conf.set_int(self.conf_dir + "/console/keygrab", pref)
+    def set_console_accels(self, pref):
+        self.conf.set_bool(self.conf_dir + "/console/enable-accels", pref)
 
     def on_console_scaling_changed(self, callback):
         self.conf.notify_add(self.conf_dir + "/console/scaling", callback)

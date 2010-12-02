@@ -75,6 +75,7 @@ class vmmConsolePages(gobject.GObject):
         self.vncViewerRetriesScheduled = 0
         self.vncViewerRetryDelay = 125
         self.vnc_connected = False
+        self.modifiers_enabled = True
 
         self.vncViewer = gtkvnc.Display()
         self.window.get_widget("console-vnc-viewport").add(self.vncViewer)
@@ -129,9 +130,11 @@ class vmmConsolePages(gobject.GObject):
         self.vm.on_console_scaling_changed(self.refresh_scaling)
         self.refresh_scaling()
 
-        self.set_keyboard_grab()
-        self.config.on_console_keygrab_changed(self.set_keyboard_grab)
+        self.vncViewer.set_keyboard_grab(False)
         self.vncViewer.set_pointer_grab(True)
+
+        self.set_enable_accel()
+        self.config.on_console_accels_changed(self.set_enable_accel)
 
         scroll = self.window.get_widget("console-vnc-scroll")
         scroll.connect("size-allocate", self.scroll_size_allocate)
@@ -141,19 +144,25 @@ class vmmConsolePages(gobject.GObject):
         self.vncViewer.connect("vnc-auth-credential", self._vnc_auth_credential)
         self.vncViewer.connect("vnc-initialized", self._vnc_initialized)
         self.vncViewer.connect("vnc-disconnected", self._vnc_disconnected)
-        self.vncViewer.connect("vnc-keyboard-grab", self.keyboard_grabbed)
-        self.vncViewer.connect("vnc-keyboard-ungrab", self.keyboard_ungrabbed)
         self.vncViewer.connect("vnc-desktop-resize", self.desktop_resize)
+        self.vncViewer.connect("focus-in-event", self._vnc_focus_changed)
+        self.vncViewer.connect("focus-out-event", self._vnc_focus_changed)
         self.vncViewer.show()
 
     #############
     # Listeners #
     #############
 
-    def keyboard_grabbed(self, src):
-        self._disable_modifiers()
-    def keyboard_ungrabbed(self, src=None):
-        self._enable_modifiers()
+    def _vnc_focus_changed(self, ignore1=None, ignore2=None):
+        has_focus = self.vncViewer.get_property("has-focus")
+        force_accel = self.config.get_console_accels()
+
+        if force_accel:
+            self._enable_modifiers()
+        elif has_focus and self.vnc_connected:
+            self._disable_modifiers()
+        else:
+            self._enable_modifiers()
 
     def pointer_grabbed(self, src):
         keystr = None
@@ -191,9 +200,9 @@ class vmmConsolePages(gobject.GObject):
         settings.set_property('gtk-menu-bar-accel', None)
 
         if has_property(settings, "gtk-enable-mnemonics"):
-            self.gtk_settings_mnemonic = settings.get_property("gtk-enable-mnemonics")
+            self.gtk_settings_mnemonic = settings.get_property(
+                                                        "gtk-enable-mnemonics")
             settings.set_property("gtk-enable-mnemonics", False)
-
 
     def _enable_modifiers(self):
         if self.gtk_settings_accel is None:
@@ -210,10 +219,10 @@ class vmmConsolePages(gobject.GObject):
         for g in self.accel_groups:
             self.topwin.add_accel_group(g)
 
-    def set_keyboard_grab(self, ignore=None, ignore1=None,
-                          ignore2=None, ignore3=None):
-        grab = self.config.get_console_keygrab() == 2
-        self.vncViewer.set_keyboard_grab(grab)
+    def set_enable_accel(self, ignore=None, ignore1=None,
+                         ignore2=None, ignore3=None):
+        # Make sure modifiers are up to date
+        self._vnc_focus_changed()
 
     def refresh_scaling(self, ignore1=None, ignore2=None, ignore3=None,
                         ignore4=None):
@@ -270,17 +279,8 @@ class vmmConsolePages(gobject.GObject):
 
         if do_fullscreen:
             self.topwin.fullscreen()
-
-            if self.config.get_console_keygrab() == 1:
-                gtk.gdk.keyboard_grab(self.vncViewer.window, False, 0L)
-                self._disable_modifiers()
-
             self.window.get_widget("toolbar-box").hide()
         else:
-            if self.config.get_console_keygrab() == 1:
-                self._enable_modifiers()
-                gtk.gdk.keyboard_ungrab(0L)
-
             self.topwin.unfullscreen()
 
             if self.window.get_widget("details-menu-view-toolbar").get_active():
@@ -433,7 +433,9 @@ class vmmConsolePages(gobject.GObject):
 
         self.vnc_connected = False
         logging.debug("VNC disconnected")
-        self.keyboard_ungrabbed()
+
+        # Make sure modifiers are set correctly
+        self._vnc_focus_changed()
 
         if (self.skip_connect_attempt() or
             self.guest_not_avail()):
@@ -457,6 +459,9 @@ class vmmConsolePages(gobject.GObject):
         # Had a succesfull connect, so reset counters now
         self.vncViewerRetriesScheduled = 0
         self.vncViewerRetryDelay = 125
+
+        # Make sure modifiers are set correctly
+        self._vnc_focus_changed()
 
     def schedule_retry(self):
         if self.vncViewerRetriesScheduled >= 10:

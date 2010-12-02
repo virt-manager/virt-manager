@@ -118,15 +118,15 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/::PACKAGE::/console/keygrab</key>
-      <applyto>/apps/::PACKAGE::/console/keygrab</applyto>
+      <key>/schemas/apps/::PACKAGE::/console/enable-accels</key>
+      <applyto>/apps/::PACKAGE::/console/enable-accels</applyto>
       <owner>::PACKAGE::</owner>
-      <type>int</type>
-      <default>2</default>
+      <type>bool</type>
+      <default>false</default>
 
       <locale name="C">
-        <short>When to grab keyboard input for the console</short>
-        <long>Whether to grab keyboard input for a guest console. 0 = never, 1 = only when in full screen mode, 2 = when mouse is over console</long>
+        <short>Enable menu accelerators in console window</short>
+        <long>Whether to enable menu accelerators while connected to the guest graphical console.</long>
       </locale>
     </schema>
 

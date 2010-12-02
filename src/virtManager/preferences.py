@@ -33,14 +33,16 @@ class vmmPreferences(gobject.GObject):
         }
     def __init__(self, config):
         gobject.GObject.__init__(self)
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-preferences.glade", "vmm-preferences", domain="virt-manager")
+        self.window = gtk.glade.XML(
+                        config.get_glade_dir() + "/vmm-preferences.glade",
+                        "vmm-preferences", domain="virt-manager")
         self.config = config
 
         self.topwin = self.window.get_widget("vmm-preferences")
 
         self.config.on_view_system_tray_changed(self.refresh_view_system_tray)
         self.config.on_console_popup_changed(self.refresh_console_popup)
-        self.config.on_console_keygrab_changed(self.refresh_console_keygrab)
+        self.config.on_console_accels_changed(self.refresh_console_accels)
         self.config.on_console_scaling_changed(self.refresh_console_scaling)
         self.config.on_stats_update_interval_changed(self.refresh_update_interval)
         self.config.on_stats_history_length_changed(self.refresh_history_length)
@@ -59,7 +61,7 @@ class vmmPreferences(gobject.GObject):
         self.refresh_update_interval()
         self.refresh_history_length()
         self.refresh_console_popup()
-        self.refresh_console_keygrab()
+        self.refresh_console_accels()
         self.refresh_console_scaling()
         self.refresh_sound_local()
         self.refresh_sound_remote()
@@ -77,7 +79,7 @@ class vmmPreferences(gobject.GObject):
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
             "on_prefs_stats_history_length_changed": self.change_history_length,
             "on_prefs_console_popup_changed": self.change_console_popup,
-            "on_prefs_console_keygrab_changed": self.change_console_keygrab,
+            "on_prefs_console_accels_toggled": self.change_console_accels,
             "on_prefs_console_scaling_changed": self.change_console_scaling,
             "on_prefs_close_clicked": self.close,
             "on_vmm_preferences_delete_event": self.close,
@@ -127,10 +129,10 @@ class vmmPreferences(gobject.GObject):
                               ignore3=None, ignore4=None):
         self.window.get_widget("prefs-console-popup").set_active(
             self.config.get_console_popup())
-    def refresh_console_keygrab(self, ignore1=None, ignore2=None,
+    def refresh_console_accels(self, ignore1=None, ignore2=None,
                                 ignore3=None, ignore4=None):
-        self.window.get_widget("prefs-console-keygrab").set_active(
-            self.config.get_console_keygrab())
+        self.window.get_widget("prefs-console-accels").set_active(
+            self.config.get_console_accels())
     def refresh_console_scaling(self, ignore1=None, ignore2=None,
                                 ignore3=None, ignore4=None):
         val = self.config.get_console_scaling()
@@ -249,8 +251,8 @@ class vmmPreferences(gobject.GObject):
 
     def change_console_popup(self, box):
         self.config.set_console_popup(box.get_active())
-    def change_console_keygrab(self, box):
-        self.config.set_console_keygrab(box.get_active())
+    def change_console_accels(self, src):
+        self.config.set_console_accels(src.get_active())
     def change_console_scaling(self, box):
         self.config.set_console_scaling(box.get_active())
 
