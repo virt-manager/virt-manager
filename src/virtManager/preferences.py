@@ -214,13 +214,18 @@ class vmmPreferences(gobject.GObject):
         label.set_text( self.grabkeys_get_string(defs['keysyms']) )
 
     def change_grab_keys(self, src):
-        dialog = gtk.Dialog ( _("Configure key combination"),
+        dialog = gtk.Dialog ( _("Configure grab key combination"),
                               None,
                               gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
                               (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
                                gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
         label = gtk.Label( _("Please press desired grab key combination") )
-        dialog.set_size_request(300, 100)
+        dialog.set_size_request(325, 160)
+        (dialog.get_content_area()).add(
+            gtk.Label( _("You can now define grab keys by pressing them.\n"
+                         "To confirm your selection please click OK button\n"
+                         "while you have desired keys pressed.") )
+        )
         (dialog.get_content_area()).add(label)
         defs = { 'label': label, 'keysyms': [] }
         dialog.connect("key-press-event", self.grabkeys_dlg_press, defs)
