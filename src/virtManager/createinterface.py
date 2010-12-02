@@ -402,10 +402,6 @@ class vmmCreateInterface(gobject.GObject):
             self.window.get_widget("%s-box" % value).set_property("visible",
                                                                   do_show)
 
-        show_ip = (itype != Interface.Interface.INTERFACE_TYPE_VLAN)
-        self.window.get_widget("ip-label").set_property("visible", show_ip)
-        self.window.get_widget("ip-box").set_property("visible", show_ip)
-
         if itype == Interface.Interface.INTERFACE_TYPE_BRIDGE:
             self.update_bridge_desc()
 
@@ -427,9 +423,10 @@ class vmmCreateInterface(gobject.GObject):
         copy_combo = self.ip_config_win.get_widget("ip-copy-interface-combo")
         copy_model = copy_combo.get_model()
 
-        # Only select 'copy from' option if using bridge/bond
+        # Only select 'copy from' option if using bridge/bond/vlan
         enable_copy = (itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
-                                 Interface.Interface.INTERFACE_TYPE_BOND])
+                                 Interface.Interface.INTERFACE_TYPE_BOND,
+                                 Interface.Interface.INTERFACE_TYPE_VLAN])
 
         # Set defaults if required
         copy_model.clear()
