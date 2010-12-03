@@ -834,7 +834,9 @@ class vmmCreate(gobject.GObject):
         return util.get_default_path(self.conn, self.config, name)
 
     def is_default_storage(self):
-        return self.window.get_widget("config-storage-create").get_active()
+        usedef = self.window.get_widget("config-storage-create").get_active()
+        isimport = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
+        return usedef and not isimport
 
     def get_storage_info(self):
         path = None
