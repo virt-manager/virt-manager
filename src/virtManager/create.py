@@ -86,9 +86,10 @@ class vmmCreate(gobject.GObject):
         self.conn_signals = []
 
         # Distro detection state variables
-        self.detectThread = None
         self.detectedDistro = None
-        self.detectThreadLock = threading.Lock()
+        self.detectThreadEvent = threading.Event()
+        self.detectThreadEvent.set()
+        self.mediaDetected = False
 
         # 'Guest' class from the previous failed install
         self.failed_guest = None
@@ -230,14 +231,16 @@ class vmmCreate(gobject.GObject):
         iso_model = gtk.ListStore(str)
         iso_list.set_model(iso_model)
         iso_list.set_text_column(0)
-        self.window.get_widget("install-local-box").child.connect("activate", self.detect_media_os)
+        self.window.get_widget("install-local-box").child.connect("activate",
+                                                    self.detect_media_os)
 
         # Lists for the install urls
         media_url_list = self.window.get_widget("install-url-box")
         media_url_model = gtk.ListStore(str)
         media_url_list.set_model(media_url_model)
         media_url_list.set_text_column(0)
-        self.window.get_widget("install-url-box").child.connect("activate", self.detect_media_os)
+        self.window.get_widget("install-url-box").child.connect("activate",
+                                                    self.detect_media_os)
 
         ks_url_list = self.window.get_widget("install-ks-box")
         ks_url_model = gtk.ListStore(str)
@@ -914,14 +917,19 @@ class vmmCreate(gobject.GObject):
     def url_box_changed(self, ignore):
         # If the url_entry has focus, don't fire detect_media_os, it means
         # the user is probably typing
-        if self.window.get_widget("install-url-box").child.flags() & gtk.HAS_FOCUS:
+        self.mediaDetected = False
+        if (self.window.get_widget("install-url-box").child.flags() &
+            gtk.HAS_FOCUS):
             return
         self.detect_media_os()
 
-    def detect_media_os(self, ignore1=None):
-        curpage = self.window.get_widget("create-pages").get_current_page()
-        if self.is_detect_active() and curpage == PAGE_INSTALL:
-            self.detect_os_distro()
+    def should_detect_media(self):
+        return (self.is_detect_active() and not self.mediaDetected)
+
+    def detect_media_os(self, ignore1=None, forward=False):
+        if not self.should_detect_media():
+            return
+        self.start_detect_thread(forward=forward)
 
     def toggle_detect_os(self, src):
         dodetect = src.get_active()
@@ -1043,10 +1051,15 @@ class vmmCreate(gobject.GObject):
 
         notebook.set_current_page(next_page)
 
-    def forward(self, ignore):
+    def forward(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
         curpage = notebook.get_current_page()
         is_import = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
+
+        if curpage == PAGE_INSTALL and self.should_detect_media():
+            # Make sure we have detected the OS before validating the page
+            self.detect_media_os(forward=True)
+            return
 
         if self.validate(notebook.get_current_page()) != True:
             return
@@ -1639,26 +1652,18 @@ class vmmCreate(gobject.GObject):
 
     # Distro detection methods
 
-    # Clear global detection thread state
-    def _clear_detect_thread(self):
-        self.detectThreadLock.acquire()
-        self.detectThread = None
-        self.detectThreadLock.release()
-
     # Create and launch a detection thread (if no detection already running)
-    def detect_os_distro(self):
-        self.detectThreadLock.acquire()
-        if self.detectThread is not None:
+    def start_detect_thread(self, forward):
+        if not self.detectThreadEvent.isSet():
             # We are already checking (some) media, so let that continue
-            self.detectThreadLock.release()
             return
 
-        self.detectThread = threading.Thread(target=self.do_detect,
-                                             name="Detect OS")
-        self.detectThread.setDaemon(True)
-        self.detectThreadLock.release()
-
-        self.detectThread.start()
+        self.detectThreadEvent.clear()
+        detectThread = threading.Thread(target=self.do_detect,
+                                        args=(forward,),
+                                        name="Detect OS")
+        detectThread.setDaemon(True)
+        detectThread.start()
 
     def set_distro_labels(self, distro, ver):
         # Helper to set auto detect result labels
@@ -1718,7 +1723,7 @@ class vmmCreate(gobject.GObject):
         self.window.get_widget("create-forward").set_sensitive(val)
 
     # The actual detection routine
-    def do_detect(self):
+    def do_detect(self, forward):
         try:
             media = self._safe_wrapper(self.get_config_detectable_media, ())
             if not media:
@@ -1750,9 +1755,12 @@ class vmmCreate(gobject.GObject):
 
             self._safe_wrapper(self.set_distro_selection, results)
         finally:
-            self._clear_detect_thread()
             self._safe_wrapper(self._set_forward_sensitive, (True,))
+            self.detectThreadEvent.set()
+            self.mediaDetected = True
             logging.debug("Leaving OS detection thread.")
+            if forward:
+                util.safe_idle_add(self.forward, ())
 
         return
 
