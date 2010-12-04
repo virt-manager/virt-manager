@@ -263,8 +263,8 @@ def pretty_network_desc(nettype, source=None, netobj=None):
 
 def init_network_list(net_list, bridge_box):
     # [ network type, source name, label, sensitive?, net is active,
-    #   manual bridge]
-    net_model = gtk.ListStore(str, str, str, bool, bool, bool)
+    #   manual bridge, net instance]
+    net_model = gtk.ListStore(str, str, str, bool, bool, bool, object)
     net_list.set_model(net_model)
 
     net_list.connect("changed", net_list_changed, bridge_box)
@@ -306,8 +306,10 @@ def populate_network_list(net_list, conn):
     iface_dict = {}
 
     def build_row(nettype, name, label, is_sensitive, is_running,
-                  manual_bridge=False):
-        return [nettype, name, label, is_sensitive, is_running, manual_bridge]
+                  manual_bridge=False, obj=None):
+        return [nettype, name, label,
+                is_sensitive, is_running, manual_bridge,
+                obj]
 
     def set_active(idx):
         net_list.set_active(idx)
@@ -345,7 +347,7 @@ def populate_network_list(net_list, conn):
             netIdxLabel = label
 
         vnet_dict[label] = build_row(nettype, net.get_name(), label, True,
-                                     net.is_active())
+                                     net.is_active(), obj=net)
 
         # Build a list of vnet bridges, so we know not to list them
         # in the physical interface list
@@ -385,7 +387,7 @@ def populate_network_list(net_list, conn):
         if hasShared and not brIdxLabel:
             brIdxLabel = label
 
-        row = build_row(nettype, bridge_name, label, sensitive, True)
+        row = build_row(nettype, bridge_name, label, sensitive, True, obj=br)
 
         if sensitive:
             bridge_dict[label] = row

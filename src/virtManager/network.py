@@ -140,9 +140,9 @@ class vmmNetwork(gobject.GObject):
         forward, forwardDev = self.get_ipv4_forward()
         return vmmNetwork.pretty_desc(forward, forwardDev)
 
-    def is_read_only(self):
-        if self.connection.is_read_only():
-            return True
-        return False
+    def can_pxe(self):
+        xml = self.get_xml()
+        return (util.get_xml_path(xml, "/network/forward/@mode") == "route" or
+                util.get_xml_path(xml, "/network/ip/dhcp/bootp/@file"))
 
 gobject.type_register(vmmNetwork)

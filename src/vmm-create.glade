@@ -1657,6 +1657,35 @@ User shouldn't see this.</property>
                                         <property name="visible">True</property>
                                         <property name="spacing">6</property>
                                         <child>
+                                          <widget class="GtkHBox" id="config-netdev-warn-box">
+                                            <property name="visible">True</property>
+                                            <property name="spacing">6</property>
+                                            <child>
+                                              <widget class="GtkImage" id="image2">
+                                                <property name="visible">True</property>
+                                                <property name="stock">gtk-dialog-warning</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="config-netdev-warn-label">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="label">warn</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
                                           <widget class="GtkVBox" id="vbox6">
                                             <property name="visible">True</property>
                                             <child>
@@ -1666,6 +1695,7 @@ User shouldn't see this.</property>
                                                 <child>
                                                   <widget class="GtkComboBox" id="config-netdev">
                                                     <property name="visible">True</property>
+                                                    <signal name="changed" handler="on_config_netdev_changed"/>
                                                   </widget>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -1674,7 +1704,7 @@ User shouldn't see this.</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <widget class="GtkImage" id="config-netdev-warn">
+                                                  <widget class="GtkImage" id="config-netdev-warn-icon">
                                                     <property name="visible">True</property>
                                                     <property name="stock">gtk-dialog-warning</property>
                                                   </widget>
@@ -1733,7 +1763,7 @@ User shouldn't see this.</property>
                                           <packing>
                                             <property name="expand">False</property>
                                             <property name="fill">False</property>
-                                            <property name="position">0</property>
+                                            <property name="position">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1749,12 +1779,13 @@ User shouldn't see this.</property>
                                           <packing>
                                             <property name="expand">False</property>
                                             <property name="fill">False</property>
-                                            <property name="position">1</property>
+                                            <property name="position">2</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <widget class="GtkHBox" id="hbox13">
                                             <property name="visible">True</property>
+                                            <property name="spacing">6</property>
                                             <child>
                                               <widget class="GtkEntry" id="config-macaddr">
                                                 <property name="visible">True</property>
@@ -1778,7 +1809,7 @@ User shouldn't see this.</property>
                                             </child>
                                           </widget>
                                           <packing>
-                                            <property name="position">2</property>
+                                            <property name="position">3</property>
                                           </packing>
                                         </child>
                                       </widget>

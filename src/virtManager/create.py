@@ -131,6 +131,7 @@ class vmmCreate(gobject.GObject):
             "on_config_storage_browse_clicked": self.browse_storage,
             "on_config_storage_select_toggled": self.toggle_storage_select,
 
+            "on_config_netdev_changed": self.netdev_changed,
             "on_config_set_macaddr_toggled": self.toggle_macaddr,
 
             "on_config_hv_changed": self.hv_changed,
@@ -530,25 +531,40 @@ class vmmCreate(gobject.GObject):
         util.tooltip_wrapper(storage_area, storage_tooltip)
 
         # Networking
-        net_expander = self.window.get_widget("config-advanced-expander")
+        net_expander    = self.window.get_widget("config-advanced-expander")
+        net_list        = self.window.get_widget("config-netdev")
+        net_warn_icon   = self.window.get_widget("config-netdev-warn-icon")
+        net_warn_box    = self.window.get_widget("config-netdev-warn-box")
         net_expander.hide()
-        net_list = self.window.get_widget("config-netdev")
-        net_warn = self.window.get_widget("config-netdev-warn")
+        net_warn_icon.hide()
+        net_warn_box.hide()
+        net_expander.set_expanded(False)
+
         do_warn = uihelpers.populate_network_list(net_list, self.conn)
-
-        if self.conn.netdev_error or do_warn:
-            net_warn.show()
-            net_expander.set_expanded(True)
-
-            if self.conn.netdev_error:
-                util.tooltip_wrapper(net_warn, self.conn.netdev_error)
-        else:
-            net_warn.hide()
-            net_expander.set_expanded(False)
+        self.set_net_warn(self.conn.netdev_error or do_warn,
+                          self.conn.netdev_error, True)
 
         newmac = uihelpers.generate_macaddr(self.conn)
         self.window.get_widget("config-set-macaddr").set_active(bool(newmac))
         self.window.get_widget("config-macaddr").set_text(newmac)
+
+    def set_net_warn(self, show_warn, msg, do_tooltip):
+        net_warn_icon   = self.window.get_widget("config-netdev-warn-icon")
+        net_warn_box    = self.window.get_widget("config-netdev-warn-box")
+        net_warn_label  = self.window.get_widget("config-netdev-warn-label")
+        net_expander    = self.window.get_widget("config-advanced-expander")
+
+        if show_warn:
+            net_expander.set_expanded(True)
+
+        if do_tooltip:
+            net_warn_icon.set_property("visible", show_warn)
+            if msg:
+                util.tooltip_wrapper(net_warn_icon, show_warn and msg or "")
+        else:
+            net_warn_box.set_property("visible", show_warn)
+            markup = show_warn and ("<small>%s</small>" % msg) or ""
+            net_warn_label.set_markup(markup)
 
     def populate_hv(self):
         hv_list = self.window.get_widget("config-hv")
@@ -896,6 +912,27 @@ class vmmCreate(gobject.GObject):
 
         self.set_conn(conn)
 
+    def netdev_changed(self, ignore):
+        self.check_network_selection()
+
+    def check_network_selection(self):
+        src = self.window.get_widget("config-netdev")
+        idx = src.get_active()
+        show_pxe_warn = True
+
+        if not idx < 0:
+            row = src.get_model()[idx]
+            ntype = row[0]
+            obj = row[6]
+
+            show_pxe_warn = (
+                (ntype == virtinst.VirtualNetworkInterface.TYPE_USER or
+                 (ntype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL and
+                  not obj.can_pxe())))
+
+        self.set_net_warn(show_pxe_warn,
+                          _("Network selection does not support PXE"), False)
+
     def hv_changed(self, src):
         idx = src.get_active()
         if idx < 0:
@@ -1096,23 +1133,31 @@ class vmmCreate(gobject.GObject):
         if pagenum == PAGE_INSTALL:
             self.detect_media_os()
 
-        if pagenum == PAGE_FINISH:
-            # This is hidden in reset_state, so that it doesn't distort
-            # the size of the wizard if it is expanded by default due to
-            # error
-            self.window.get_widget("config-advanced-expander").show()
-
-            self.window.get_widget("create-forward").hide()
-            self.window.get_widget("create-finish").show()
-            self.window.get_widget("create-finish").grab_focus()
-            self.populate_summary()
-
-            # Repopulate the HV list, so we can make install method relevant
-            # changes
-            self.populate_hv()
-        else:
+        if pagenum != PAGE_FINISH:
             self.window.get_widget("create-forward").show()
             self.window.get_widget("create-finish").hide()
+            return
+
+        # PAGE_FINISH
+        # This is hidden in reset_state, so that it doesn't distort
+        # the size of the wizard if it is expanded by default due to
+        # error
+        self.window.get_widget("config-advanced-expander").show()
+
+        self.window.get_widget("create-forward").hide()
+        self.window.get_widget("create-finish").show()
+        self.window.get_widget("create-finish").grab_focus()
+        self.populate_summary()
+
+        # Repopulate the HV list, so we can make install method relevant
+        # changes
+        self.populate_hv()
+
+        # Make sure the networking selection takes into account
+        # the install method, so we can warn if trying to PXE boot with
+        # insufficient network option
+        self.check_network_selection()
+
 
     def build_guest(self, installer, name):
         guest = installer.guest_from_installer()
