@@ -361,6 +361,13 @@ class vmmCreate(gobject.GObject):
 
         # Final page
         self.window.get_widget("summary-customize").set_active(False)
+        net_expander    = self.window.get_widget("config-advanced-expander")
+        net_warn_icon   = self.window.get_widget("config-netdev-warn-icon")
+        net_warn_box    = self.window.get_widget("config-netdev-warn-box")
+        net_expander.hide()
+        net_warn_icon.hide()
+        net_warn_box.hide()
+        net_expander.set_expanded(False)
 
 
     def set_conn_state(self):
@@ -531,14 +538,7 @@ class vmmCreate(gobject.GObject):
         util.tooltip_wrapper(storage_area, storage_tooltip)
 
         # Networking
-        net_expander    = self.window.get_widget("config-advanced-expander")
         net_list        = self.window.get_widget("config-netdev")
-        net_warn_icon   = self.window.get_widget("config-netdev-warn-icon")
-        net_warn_box    = self.window.get_widget("config-netdev-warn-box")
-        net_expander.hide()
-        net_warn_icon.hide()
-        net_warn_box.hide()
-        net_expander.set_expanded(False)
 
         do_warn = uihelpers.populate_network_list(net_list, self.conn)
         self.set_net_warn(self.conn.netdev_error or do_warn,
@@ -777,6 +777,11 @@ class vmmCreate(gobject.GObject):
     def get_config_name(self):
         return self.window.get_widget("create-vm-name").get_text()
 
+    def is_install_page(self):
+        notebook = self.window.get_widget("create-pages")
+        curpage = notebook.get_current_page()
+        return curpage == PAGE_INSTALL
+
     def get_config_install_page(self):
         if self.window.get_widget("method-local").get_active():
             return INSTALL_PAGE_ISO
@@ -968,6 +973,8 @@ class vmmCreate(gobject.GObject):
     def detect_media_os(self, ignore1=None, forward=False):
         if not self.should_detect_media():
             return
+        if not self.is_install_page():
+            return
         self.start_detect_thread(forward=forward)
 
     def toggle_detect_os(self, src):
@@ -978,6 +985,7 @@ class vmmCreate(gobject.GObject):
             self.window.get_widget("install-os-version-label").show()
             self.window.get_widget("install-os-type").hide()
             self.window.get_widget("install-os-version").hide()
+            self.mediaDetected = False
             self.detect_media_os() # Run detection
         else:
             self.window.get_widget("install-os-type-label").hide()
@@ -1728,30 +1736,25 @@ class vmmCreate(gobject.GObject):
 
         for idx in range(0, len(model)):
             row = model[idx]
-            if row[0] == value:
+            if value and row[0] == value:
                 break
 
             if idx == len(os_widget.get_model()) - 1:
                 idx = -1
 
         os_widget.set_active(idx)
+        if idx == -1:
+            os_widget.set_active(0)
 
         if idx >= 0:
             return row[1]
-        else:
-            return value
+        return _("Unknown")
 
     def set_distro_selection(self, distro, ver):
         # Wrapper to change OS Type/Variant values, and update the distro
         # detection labels
         if not self.is_detect_active():
             return
-
-        if not distro:
-            distro = _("Unknown")
-            ver = _("Unknown")
-        elif not ver:
-            ver = _("Unknown")
 
         dl = self.set_os_val(self.window.get_widget("install-os-type"),
                              distro)
