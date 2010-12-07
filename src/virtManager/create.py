@@ -1223,16 +1223,6 @@ class vmmCreate(gobject.GObject):
                 return self.validate_storage_page(revalidate=False)
 
             elif pagenum == PAGE_FINISH:
-                # Since we allow the user to change to change HV type + arch
-                # on the last page, we need to revalidate everything
-                if not self.validate_name_page():
-                    return False
-                elif not self.validate_install_page():
-                    return False
-                elif not self.validate_mem_page():
-                    return False
-                elif not self.validate_storage_page():
-                    return False
                 return self.validate_final_page()
 
         except Exception, e:
@@ -1461,6 +1451,11 @@ class vmmCreate(gobject.GObject):
         return True
 
     def validate_final_page(self):
+        # HV + Arch selection
+        self.guest.installer.type = self.capsdomain.hypervisor_type
+        self.guest.installer.os_type = self.capsguest.os_type
+        self.guest.installer.arch = self.capsguest.arch
+
         nettype, devname, macaddr = self.get_config_network_info()
 
         self.guest.nics = []
@@ -1541,25 +1536,27 @@ class vmmCreate(gobject.GObject):
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
-        if not self.get_config_customize():
-            self.start_install(guest)
-            return
+        def start_install():
+            if not self.get_config_customize():
+                self.start_install(guest)
+                return
 
-        # Customize will start the install when the dialog is closed
-        try:
             self.customize(guest)
+
+        self._check_start_error(start_install)
+
+    def _check_start_error(self, cb, *args, **kwargs):
+        try:
+            cb(*args, **kwargs)
         except Exception, e:
             self.topwin.set_sensitive(True)
             self.topwin.window.set_cursor(
                                     gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
-            self.err.show_err(_("Error launching customize dialog: ") + str(e),
+            self.err.show_err(_("Error starting installation: ") + str(e),
                               "".join(traceback.format_exc()))
 
-
     def customize(self, guest):
-        guest.set_defaults()
-
         virtinst_guest = vmmDomainVirtinst(self.config, self.conn, guest,
                                            self.guest.uuid)
 
@@ -1569,8 +1566,10 @@ class vmmCreate(gobject.GObject):
             del(self.config_window)
 
         def start_install_wrapper(ignore, guest):
-            if self.is_visible():
-                self.start_install(guest)
+            if not self.is_visible():
+                return
+            self._check_start_error(self.start_install, guest)
+
 
         self.config_window = vmmDetails(self.config,
                                         virtinst_guest,
