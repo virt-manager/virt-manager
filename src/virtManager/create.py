@@ -81,7 +81,11 @@ class vmmCreate(gobject.GObject):
         self.caps = None
         self.capsguest = None
         self.capsdomain = None
+
         self.guest = None
+        self.disk = None
+        self.nic = None
+
         self.storage_browser = None
         self.conn_signals = []
 
@@ -296,6 +300,10 @@ class vmmCreate(gobject.GObject):
     def reset_state(self, urihint=None):
 
         self.failed_guest = None
+        self.guest = None
+        self.disk = None
+        self.nic = None
+
         self.window.get_widget("create-pages").set_current_page(PAGE_NAME)
         self.page_changed(None, None, PAGE_NAME)
         self.window.get_widget("startup-error-box").hide()
@@ -1361,11 +1369,13 @@ class vmmCreate(gobject.GObject):
         use_storage = self.window.get_widget("enable-storage").get_active()
         instcd = self.get_config_install_page() == INSTALL_PAGE_ISO
 
-        self.guest.disks = []
-
         # CD/ISO install and no disks implies LiveCD
         if instcd:
             self.guest.installer.livecd = not use_storage
+
+        if self.disk and self.disk in self.guest.get_devices("disk"):
+            self.guest.remove_device(self.disk)
+        self.disk = None
 
         # Validate storage
         if not use_storage:
@@ -1415,7 +1425,6 @@ class vmmCreate(gobject.GObject):
                                         size = disksize,
                                         sparse = sparse)
 
-            self.guest.disks.append(disk)
         except Exception, e:
             return self.verr(_("Storage parameter error."), str(e))
 
@@ -1438,6 +1447,9 @@ class vmmCreate(gobject.GObject):
             uihelpers.check_path_search_for_qemu(self.topwin, self.config,
                                                  self.conn, disk.path)
 
+        self.disk = disk
+        self.guest.add_device(self.disk)
+
         return True
 
     def validate_final_page(self):
@@ -1447,8 +1459,6 @@ class vmmCreate(gobject.GObject):
         self.guest.installer.arch = self.capsguest.arch
 
         nettype, devname, macaddr = self.get_config_network_info()
-
-        self.guest.nics = []
 
         if nettype is None:
             # No network device available
@@ -1463,13 +1473,15 @@ class vmmCreate(gobject.GObject):
                 return self.verr(_("Network device required for %s install.") %
                                  methname)
 
-        ret = uihelpers.validate_network(self.topwin,
+        nic = uihelpers.validate_network(self.topwin,
                                          self.conn, nettype, devname, macaddr)
-        if ret == False:
+        if nic == False:
             return False
 
-        if ret != None:
-            self.guest.nics.append(ret)
+        if self.nic and self.nic in self.guest.get_devices("interface"):
+            self.guest.remove_device(self.nic)
+        self.nic = nic
+        self.guest.add_device(self.nic)
 
         return True
 
