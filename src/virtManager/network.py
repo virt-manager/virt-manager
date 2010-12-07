@@ -142,7 +142,9 @@ class vmmNetwork(gobject.GObject):
 
     def can_pxe(self):
         xml = self.get_xml()
-        return (util.get_xml_path(xml, "/network/forward/@mode") == "route" or
-                util.get_xml_path(xml, "/network/ip/dhcp/bootp/@file"))
+        forward = self.get_ipv4_forward()[0]
+        if forward and forward != "nat":
+            return True
+        return bool(util.get_xml_path(xml, "/network/ip/dhcp/bootp/@file"))
 
 gobject.type_register(vmmNetwork)
