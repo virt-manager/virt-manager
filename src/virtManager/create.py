@@ -1211,17 +1211,7 @@ class vmmCreate(gobject.GObject):
             elif pagenum == PAGE_MEM:
                 return self.validate_mem_page()
             elif pagenum == PAGE_STORAGE:
-                # If the user selects 'no storage' and they used cd/iso install
-                # media, we want to go back and change the installer to
-                # LiveCDInstaller, which means re-validate everything
-                if not self.validate_name_page():
-                    return False
-                elif not self.validate_install_page():
-                    return False
-                elif not self.validate_mem_page():
-                    return False
                 return self.validate_storage_page(revalidate=False)
-
             elif pagenum == PAGE_FINISH:
                 return self.validate_final_page()
 
@@ -1254,12 +1244,7 @@ class vmmCreate(gobject.GObject):
 
 
         if instmethod == INSTALL_PAGE_ISO:
-            if self.window.get_widget("enable-storage").get_active():
-                instclass = virtinst.DistroInstaller
-            else:
-                # CD/ISO install and no disks implies LiveCD
-                instclass = virtinst.LiveCDInstaller
-
+            instclass = virtinst.DistroInstaller
             media = self.get_config_local_media()
 
             if not media:
@@ -1374,8 +1359,13 @@ class vmmCreate(gobject.GObject):
 
     def validate_storage_page(self, revalidate=True):
         use_storage = self.window.get_widget("enable-storage").get_active()
+        instcd = self.get_config_install_page() == INSTALL_PAGE_ISO
 
         self.guest.disks = []
+
+        # CD/ISO install and no disks implies LiveCD
+        if instcd:
+            self.guest.installer.livecd = not use_storage
 
         # Validate storage
         if not use_storage:
