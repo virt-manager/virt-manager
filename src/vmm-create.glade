@@ -5,7 +5,7 @@
   <widget class="GtkWindow" id="vmm-create">
     <property name="title" translatable="yes">New VM</property>
     <property name="type_hint">dialog</property>
-    <signal name="delete_event" handler="on_vmm_newcreate_delete_event"/>
+    <signal name="delete_event" handler="on_vmm_newcreate_delete_event" swapped="no"/>
     <child>
       <widget class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -92,7 +92,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="show_border">False</property>
-                    <signal name="switch_page" handler="on_create_pages_switch_page"/>
+                    <signal name="switch_page" handler="on_create_pages_switch_page" swapped="no"/>
                     <child>
                       <widget class="GtkVBox" id="vbox4">
                         <property name="visible">True</property>
@@ -125,9 +125,10 @@
                                     <property name="row_spacing">4</property>
                                     <child>
                                       <widget class="GtkEntry" id="create-vm-name">
+                                        <property name="width_request">250</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <signal name="activate" handler="on_create_vm_name_activate"/>
+                                        <signal name="activate" handler="on_create_vm_name_activate" swapped="no"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -167,7 +168,7 @@
                                         <child>
                                           <widget class="GtkComboBox" id="create-conn">
                                             <property name="visible">True</property>
-                                            <signal name="changed" handler="on_create_conn_changed"/>
+                                            <signal name="changed" handler="on_create_conn_changed" swapped="no"/>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -179,9 +180,9 @@
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label">conn label</property>
+                                            <property name="ellipsize">end</property>
                                           </widget>
                                           <packing>
-                                            <property name="expand">False</property>
                                             <property name="position">1</property>
                                           </packing>
                                         </child>
@@ -412,7 +413,7 @@
                                                     <property name="use_underline">True</property>
                                                     <property name="active">True</property>
                                                     <property name="draw_indicator">True</property>
-                                                    <signal name="toggled" handler="on_install_local_cdrom_toggled"/>
+                                                    <signal name="toggled" handler="on_install_local_cdrom_toggled" swapped="no"/>
                                                   </widget>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -430,7 +431,7 @@
                                                         <child>
                                                           <widget class="GtkComboBox" id="install-local-cdrom-combo">
                                                             <property name="visible">True</property>
-                                                            <signal name="changed" handler="on_install_local_cdrom_combo_changed"/>
+                                                            <signal name="changed" handler="on_install_local_cdrom_combo_changed" swapped="no"/>
                                                           </widget>
                                                           <packing>
                                                             <property name="expand">False</property>
@@ -474,7 +475,7 @@
                                                 <property name="active">True</property>
                                                 <property name="draw_indicator">True</property>
                                                 <property name="group">install-local-cdrom</property>
-                                                <signal name="toggled" handler="on_install_local_iso_toggled"/>
+                                                <signal name="toggled" handler="on_install_local_iso_toggled" swapped="no"/>
                                               </widget>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -492,7 +493,7 @@
                                                     <child>
                                                       <widget class="GtkComboBoxEntry" id="install-local-box">
                                                         <property name="visible">True</property>
-                                                        <signal name="changed" handler="on_install_local_box_changed"/>
+                                                        <signal name="changed" handler="on_install_local_box_changed" swapped="no"/>
                                                       </widget>
                                                     </child>
                                                   </widget>
@@ -508,7 +509,7 @@
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
                                                     <property name="use_underline">True</property>
-                                                    <signal name="clicked" handler="on_install_local_browse_clicked"/>
+                                                    <signal name="clicked" handler="on_install_local_browse_clicked" swapped="no"/>
                                                   </widget>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -570,7 +571,7 @@
                                         <child>
                                           <widget class="GtkComboBoxEntry" id="install-url-box">
                                             <property name="visible">True</property>
-                                            <signal name="changed" handler="on_install_url_box_changed"/>
+                                            <signal name="changed" handler="on_install_url_box_changed" swapped="no"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -784,7 +785,7 @@ User shouldn't see this.</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">True</property>
                                             <property name="use_underline">True</property>
-                                            <signal name="clicked" handler="on_install_import_browse_clicked"/>
+                                            <signal name="clicked" handler="on_install_import_browse_clicked" swapped="no"/>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -829,8 +830,8 @@ User shouldn't see this.</property>
                             <child>
                               <widget class="GtkVBox" id="install-detect-os-box">
                                 <property name="visible">True</property>
-                                <signal name="hide" handler="on_install_detect_os_box_hide"/>
-                                <signal name="show" handler="on_install_detect_os_box_show"/>
+                                <signal name="hide" handler="on_install_detect_os_box_hide" swapped="no"/>
+                                <signal name="show" handler="on_install_detect_os_box_show" swapped="no"/>
                                 <child>
                                   <widget class="GtkCheckButton" id="install-detect-os">
                                     <property name="label" translatable="yes">A_utomatically detect operating system based on install media</property>
@@ -840,7 +841,7 @@ User shouldn't see this.</property>
                                     <property name="use_underline">True</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
-                                    <signal name="toggled" handler="on_install_detect_os_toggled"/>
+                                    <signal name="toggled" handler="on_install_detect_os_toggled" swapped="no"/>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
@@ -916,7 +917,7 @@ User shouldn't see this.</property>
                                     <child>
                                       <widget class="GtkComboBox" id="install-os-type">
                                         <property name="visible">True</property>
-                                        <signal name="changed" handler="on_install_os_type_changed"/>
+                                        <signal name="changed" handler="on_install_os_type_changed" swapped="no"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -1198,7 +1199,7 @@ User shouldn't see this.</property>
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="on_enable_storage_toggled"/>
+                            <signal name="toggled" handler="on_enable_storage_toggled" swapped="no"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -1354,7 +1355,7 @@ User shouldn't see this.</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">config-storage-create</property>
-                                        <signal name="toggled" handler="on_config_storage_select_toggled"/>
+                                        <signal name="toggled" handler="on_config_storage_select_toggled" swapped="no"/>
                                         <child>
                                           <widget class="GtkLabel" id="label124">
                                             <property name="visible">True</property>
@@ -1387,7 +1388,7 @@ User shouldn't see this.</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="use_underline">True</property>
-                                        <signal name="clicked" handler="on_config_storage_browse_clicked"/>
+                                        <signal name="clicked" handler="on_config_storage_browse_clicked" swapped="no"/>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
@@ -1699,7 +1700,7 @@ User shouldn't see this.</property>
                                                 <child>
                                                   <widget class="GtkComboBox" id="config-netdev">
                                                     <property name="visible">True</property>
-                                                    <signal name="changed" handler="on_config_netdev_changed"/>
+                                                    <signal name="changed" handler="on_config_netdev_changed" swapped="no"/>
                                                   </widget>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -1778,7 +1779,7 @@ User shouldn't see this.</property>
                                             <property name="receives_default">False</property>
                                             <property name="use_underline">True</property>
                                             <property name="draw_indicator">True</property>
-                                            <signal name="toggled" handler="on_config_set_macaddr_toggled"/>
+                                            <signal name="toggled" handler="on_config_set_macaddr_toggled" swapped="no"/>
                                           </widget>
                                           <packing>
                                             <property name="expand">False</property>
@@ -1857,7 +1858,7 @@ User shouldn't see this.</property>
                                         <child>
                                           <widget class="GtkComboBox" id="config-arch">
                                             <property name="visible">True</property>
-                                            <signal name="changed" handler="on_config_arch_changed"/>
+                                            <signal name="changed" handler="on_config_arch_changed" swapped="no"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1871,7 +1872,7 @@ User shouldn't see this.</property>
                                         <child>
                                           <widget class="GtkComboBox" id="config-hv">
                                             <property name="visible">True</property>
-                                            <signal name="changed" handler="on_config_hv_changed"/>
+                                            <signal name="changed" handler="on_config_hv_changed" swapped="no"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1966,7 +1967,7 @@ User shouldn't see this.</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_create_help_clicked"/>
+                    <signal name="clicked" handler="on_create_help_clicked" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -1982,7 +1983,7 @@ User shouldn't see this.</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_create_cancel_clicked"/>
+                    <signal name="clicked" handler="on_create_cancel_clicked" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -1998,7 +1999,7 @@ User shouldn't see this.</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_create_back_clicked"/>
+                    <signal name="clicked" handler="on_create_back_clicked" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -2013,7 +2014,7 @@ User shouldn't see this.</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_stock">True</property>
-                    <signal name="clicked" handler="on_create_forward_clicked"/>
+                    <signal name="clicked" handler="on_create_forward_clicked" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -2027,7 +2028,7 @@ User shouldn't see this.</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
-                    <signal name="clicked" handler="on_create_finish_clicked"/>
+                    <signal name="clicked" handler="on_create_finish_clicked" swapped="no"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
