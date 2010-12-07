@@ -833,6 +833,24 @@ class vmmConnection(gobject.GObject):
         self.record = []
         self._change_state(self.STATE_DISCONNECTED)
 
+    def _open_dev_conn(self, uri):
+        """
+        Allow using virtinsts connection hacking to fake capabilities
+        and other reproducible/testable behavior
+        """
+        try:
+            import virtinst.cli as cli
+            if not cli._is_virtinst_test_uri(uri):
+                return
+        except:
+            return
+
+        try:
+            return cli._open_test_uri(uri)
+        except:
+            logging.exception("Trouble opening test URI")
+        return
+
     def open(self, sync=False):
         if self.state != self.STATE_DISCONNECTED:
             return
@@ -977,6 +995,12 @@ class vmmConnection(gobject.GObject):
     def _try_open(self):
         try:
             flags = 0
+
+            tmp = self._open_dev_conn(self.uri)
+            if tmp:
+                self.vmm = tmp
+                return
+
             if self.readOnly:
                 logging.info("Caller requested read only connection")
                 flags = libvirt.VIR_CONNECT_RO

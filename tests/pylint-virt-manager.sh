@@ -30,6 +30,9 @@ BUILTIN_TYPE="${BTYPE_LIST}.*Redefining built-in 'type'"
 INFER_LIST="(MenuItem|StatusIcon|.*storagePoolLookupByName)"
 INFER_ERRORS="Instance of '${INFER_LIST}.*not be inferred"
 
+# Hacks for testing
+TEST_HACKS="protected member (_is_virtinst_test_uri|_open_test_uri)"
+
 DMSG=""
 addmsg() {
     DMSG="${DMSG},$1"
@@ -88,6 +91,7 @@ pylint --ignore=$IGNOREFILES $FILES \
         -ve "$OS_EXIT" \
         -ve "$BUILTIN_TYPE" \
         -ve "$INFER_ERRORS" \
+        -ve "$TEST_HACKS" \
         -ve "$UNABLE_IMPORT" | \
 $AWK '\
 # Strip out any "*** Module name" lines if we dont list any errors for them
