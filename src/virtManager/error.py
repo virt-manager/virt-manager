@@ -50,6 +50,7 @@ def _launch_dialog(dialog, primary_text, secondary_text, title,
 class vmmErrorDialog (object):
     def __init__ (self, parent=None):
         self._parent = parent
+        self._simple = None
 
     def set_parent(self, parent):
         self._parent = parent
@@ -82,8 +83,11 @@ class vmmErrorDialog (object):
         dialog = gtk.MessageDialog(self.get_parent(),
                                    gtk.DIALOG_DESTROY_WITH_PARENT,
                                    type=dialog_type, buttons=buttons)
+        if self._simple:
+            self._simple.destroy()
+        self._simple = dialog
 
-        return _launch_dialog(dialog,
+        return _launch_dialog(self._simple,
                               text1, text2 or "", title or "",
                               sync=not async)
 
