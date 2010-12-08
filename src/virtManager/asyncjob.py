@@ -82,7 +82,9 @@ class vmmAsyncJob(gobject.GObject):
     def run(self):
         timer = util.safe_timeout_add(100, self.exit_if_necessary)
         self.topwin.present()
-        self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+
+        if not self.cancel_job:
+            self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
         if self.run_main:
             self.bg_thread.start()
