@@ -24,7 +24,6 @@ import gtk
 import gobject
 
 from virtManager import util
-from virtManager.error import vmmErrorDialog
 
 # This thin wrapper only exists so we can put debugging
 # code in the run() method every now & then
@@ -50,11 +49,14 @@ class vmmAsyncJob(gobject.GObject):
                                     "/vmm-progress.glade",
                                     "vmm-progress", domain="virt-manager")
         self.topwin = self.window.get_widget("vmm-progress")
-        self.err = vmmErrorDialog(self.topwin)
+        self.topwin.set_title(title)
+        self.topwin.hide()
+
         self.window.signal_autoconnect({
             "on_async_job_delete_event" : self.delete,
             "on_async_job_cancel_clicked" : self.cancel,
         })
+
         self.cancel_job = cancel_back
         self.cancel_args = cancel_args or []
         self.cancel_args.append(self)
@@ -63,11 +65,6 @@ class vmmAsyncJob(gobject.GObject):
         else:
             self.window.get_widget("cancel-async-job").hide()
         self.job_canceled = False
-        self.window.get_widget("pbar-text").set_text(text)
-
-        self.topwin = self.window.get_widget("vmm-progress")
-        self.topwin.set_title(title)
-        self.topwin.hide()
 
         # Callback sets this if there is an error
         self._error_info = None
@@ -75,6 +72,7 @@ class vmmAsyncJob(gobject.GObject):
 
         self.stage = self.window.get_widget("pbar-stage")
         self.pbar = self.window.get_widget("pbar")
+        self.window.get_widget("pbar-text").set_text(text)
 
         args.append(self)
         self.bg_thread = asyncJobWorker(callback, args)
@@ -117,22 +115,34 @@ class vmmAsyncJob(gobject.GObject):
                 if thread_active:
                     self.cancel()
 
+    def set_stage_text(self, text, canceling=False):
+        if self.job_canceled and not canceling:
+            return
+        self.stage.set_text(text)
+
+    def hide_warning(self):
+        self.window.get_widget("warning-box").hide()
+
     def show_warning(self, summary):
-        self.err.ok(summary)
+        markup = "<small>%s</small>" % summary
+        self.window.get_widget("warning-box").show()
+        self.window.get_widget("warning-text").set_markup(markup)
 
     def cancel(self, ignore1=None, ignore2=None):
-        if self.cancel_job:
-            self.cancel_job(*self.cancel_args)
+        if not self.cancel_job:
+            return
+
+        self.cancel_job(*self.cancel_args)
+        if self.job_canceled:
+            self.hide_warning()
+            self.set_stage_text(_("Cancelling job..."), canceling=True)
 
     def pulse_pbar(self, progress="", stage=None):
         gtk.gdk.threads_enter()
         try:
             self.is_pulsing = True
             self.pbar.set_text(progress)
-            if stage is not None:
-                self.stage.set_text(stage)
-            else:
-                self.stage.set_text(_("Processing..."))
+            self.set_stage_text(stage or _("Processing..."))
         finally:
             gtk.gdk.threads_leave()
 
@@ -142,11 +152,9 @@ class vmmAsyncJob(gobject.GObject):
         gtk.gdk.threads_enter()
         try:
             self.is_pulsing = False
-            if stage is not None:
-                self.stage.set_text(stage)
-            else:
-                self.stage.set_text(_("Processing..."))
+            self.set_stage_text(stage or _("Processing..."))
             self.pbar.set_text(progress)
+
             if frac > 1:
                 frac = 1.0
             if frac < 0:
@@ -161,10 +169,7 @@ class vmmAsyncJob(gobject.GObject):
         gtk.gdk.threads_enter()
         try:
             self.is_pulsing = False
-            if stage is not None:
-                self.stage.set_text(stage)
-            else:
-                self.stage.set_text(_("Completed"))
+            self.set_stage_text(stage or _("Completed"))
             self.pbar.set_text(progress)
             self.pbar.set_fraction(1)
         finally:

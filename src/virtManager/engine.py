@@ -844,13 +844,15 @@ class vmmEngine(gobject.GObject):
             src.err.show_err(_("Error saving domain: %s") % error, details)
 
     def _save_cancel(self, vm, asyncjob):
+        logging.debug("Cancelling save job")
         if not vm:
             return
 
         try:
             vm.abort_job()
         except Exception, e:
-            asyncjob.show_warning(str(e))
+            logging.exception("Error cancelling save job")
+            asyncjob.show_warning(_("Error cancelling save job: %s") %  str(e))
             return
 
         asyncjob.job_canceled = True

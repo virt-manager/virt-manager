@@ -491,13 +491,15 @@ class vmmMigrateDialog(gobject.GObject):
             return False
 
     def cancel_migration(self, vm, asyncjob):
+        logging.debug("Cancelling migrate job")
         if not vm:
             return
 
         try:
             vm.abort_job()
         except Exception, e:
-            asyncjob.show_warning(str(e))
+            logging.exception("Error cancelling migrate job")
+            asyncjob.show_warning(_("Error cancelling migrate job: %s") % e)
             return
 
         asyncjob.job_canceled = True

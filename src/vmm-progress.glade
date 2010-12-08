@@ -43,8 +43,6 @@
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
-                    <property name="xpad">10</property>
-                    <property name="ypad">10</property>
                     <property name="label" translatable="yes">Please wait a few moments...</property>
                     <property name="wrap">True</property>
                   </widget>
@@ -55,6 +53,38 @@
               </widget>
               <packing>
                 <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkHBox" id="warning-box">
+                <property name="spacing">6</property>
+                <child>
+                  <widget class="GtkImage" id="warning-icon">
+                    <property name="visible">True</property>
+                    <property name="xpad">3</property>
+                    <property name="stock">gtk-dialog-warning</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="warning-text">
+                    <property name="width_request">400</property>
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label">some warning</property>
+                    <property name="wrap">True</property>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -69,7 +99,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -80,7 +110,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -114,7 +144,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </widget>
