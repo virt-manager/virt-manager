@@ -63,7 +63,7 @@ class vmmErrorDialog (object):
                  buttons=gtk.BUTTONS_CLOSE,
                  text2=None):
         if debug:
-            logging.debug("Uncaught Error: %s : %s" % (summary, details))
+            logging.debug("dialog message: %s : %s" % (summary, details))
 
         dialog = _errorDialog(parent=self.get_parent(),
                               type=dialog_type, buttons=buttons)
@@ -205,7 +205,7 @@ class _errorDialog (gtk.MessageDialog):
 
         if details:
             self.buffer.set_text(details)
-            title = title or _("Error")
+            title = title or ""
             self.buf_expander.show()
 
         if chktext:

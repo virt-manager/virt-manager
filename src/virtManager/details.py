@@ -1606,6 +1606,7 @@ class vmmDetails(gobject.GObject):
             _("Device could not be removed from the running machine"),
             detach_err[0] + "\n\n" + detach_err[1],
             text2=_("This change will take effect after the next VM reboot."),
+            buttons=gtk.BUTTONS_OK,
             dialog_type=gtk.MESSAGE_INFO)
 
     # Generic config change helpers
@@ -1679,7 +1680,7 @@ class vmmDetails(gobject.GObject):
                 hotplug_msg += (err1 + "\n\n" + tb + "\n")
 
             self.err.show_err(msg, details=hotplug_msg,
-                              buttons=gtk.BUTTONS_YES_NO,
+                              buttons=gtk.BUTTONS_OK,
                               dialog_type=dtype)
 
         return True
