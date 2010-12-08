@@ -22,23 +22,18 @@ import gobject
 import gtk
 
 import virtManager.util as util
+from virtManager.baseclass import vmmGObjectUI
 
 PREFS_PAGE_STATS    = 0
 PREFS_PAGE_VM_PREFS = 1
 
-class vmmPreferences(gobject.GObject):
+class vmmPreferences(vmmGObjectUI):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                              gobject.TYPE_NONE, [str]),
         }
-    def __init__(self, config):
-        gobject.GObject.__init__(self)
-        self.window = gtk.glade.XML(
-                        config.get_glade_dir() + "/vmm-preferences.glade",
-                        "vmm-preferences", domain="virt-manager")
-        self.config = config
-
-        self.topwin = self.window.get_widget("vmm-preferences")
+    def __init__(self):
+        vmmGObjectUI.__init__(self, "vmm-preferences.glade", "vmm-preferences")
 
         self.config.on_view_system_tray_changed(self.refresh_view_system_tray)
         self.config.on_console_popup_changed(self.refresh_console_popup)

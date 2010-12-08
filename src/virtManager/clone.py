@@ -25,7 +25,8 @@ import os
 import gobject
 import gtk
 
-from virtManager.error import vmmErrorDialog
+
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
 from virtManager.storagebrowse import vmmStorageBrowser
@@ -62,24 +63,17 @@ NETWORK_INFO_NEW_MAC = 2
 # XXX: What to do for cleanup if clone fails?
 # XXX: Disable mouse scroll for combo boxes
 
-class vmmCloneVM(gobject.GObject):
+class vmmCloneVM(vmmGObjectUI):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                              gobject.TYPE_NONE, [str]),
     }
 
-    def __init__(self, config, orig_vm):
-        gobject.GObject.__init__(self)
-        self.config = config
+    def __init__(self, orig_vm):
+        vmmGObjectUI.__init__(self, "vmm-clone.glade", "vmm-clone")
         self.orig_vm = orig_vm
 
-        self.window = gtk.glade.XML(self.config.get_glade_dir() + \
-                                    "/vmm-clone.glade",
-                                    "vmm-clone", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-clone")
-
-        self.change_mac_window = gtk.glade.XML(self.config.get_glade_dir() + \
-                                               "/vmm-clone.glade",
+        self.change_mac_window = gtk.glade.XML(self.gladefile,
                                                "vmm-change-mac",
                                                domain="virt-manager")
         self.change_mac = self.change_mac_window.get_widget("vmm-change-mac")
@@ -89,8 +83,7 @@ class vmmCloneVM(gobject.GObject):
             "on_change_mac_ok_clicked" : self.change_mac_finish,
         })
 
-        self.change_storage_window = gtk.glade.XML(self.config.get_glade_dir()\
-                                                   + "/vmm-clone.glade",
+        self.change_storage_window = gtk.glade.XML(self.gladefile,
                                                    "vmm-change-storage",
                                                    domain="virt-manager")
         self.change_storage = self.change_storage_window.get_widget("vmm-change-storage")
@@ -102,9 +95,6 @@ class vmmCloneVM(gobject.GObject):
 
             "on_change_storage_browse_clicked" : self.change_storage_browse,
         })
-
-        self.err = vmmErrorDialog(self.topwin)
-        self.topwin.hide()
 
         self.conn = self.orig_vm.connection
         self.clone_design = None
@@ -774,7 +764,7 @@ class vmmCloneVM(gobject.GObject):
             cs.get_widget("change-storage-new").set_text(txt)
 
         if self.storage_browser == None:
-            self.storage_browser = vmmStorageBrowser(self.config, self.conn)
+            self.storage_browser = vmmStorageBrowser(self.conn)
             self.storage_browser.connect("storage-browse-finish", callback)
 
         self.storage_browser.show(self.conn)
@@ -783,7 +773,7 @@ class vmmCloneVM(gobject.GObject):
         # Nothing yet
         return
 
-gobject.type_register(vmmCloneVM)
+vmmGObjectUI.type_register(vmmCloneVM)
 
 def can_we_clone(conn, vol, path):
     """Is the passed path even clone-able"""

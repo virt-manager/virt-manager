@@ -24,6 +24,7 @@ import gtk
 import gobject
 
 from virtManager import util
+from virtManager.baseclass import vmmGObjectUI
 
 # This thin wrapper only exists so we can put debugging
 # code in the run() method every now & then
@@ -35,28 +36,22 @@ class asyncJobWorker(threading.Thread):
         threading.Thread.run(self)
 
 # Displays a progress bar while executing the "callback" method.
-class vmmAsyncJob(gobject.GObject):
+class vmmAsyncJob(vmmGObjectUI):
 
     def __init__(self, config, callback, args=None,
                  text=_("Please wait a few moments..."),
                  title=_("Operation in progress"),
                  run_main=True, cancel_back=None, cancel_args=None):
-        gobject.GObject.__init__(self)
-        self.config = config
-        self.run_main = bool(run_main)
+        vmmGObjectUI.__init__(self, "vmm-progress.glade", "vmm-progress")
 
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-progress.glade",
-                                    "vmm-progress", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-progress")
         self.topwin.set_title(title)
-        self.topwin.hide()
 
         self.window.signal_autoconnect({
             "on_async_job_delete_event" : self.delete,
             "on_async_job_cancel_clicked" : self.cancel,
         })
 
+        self.run_main = bool(run_main)
         self.cancel_job = cancel_back
         self.cancel_args = cancel_args or []
         self.cancel_args.append(self)

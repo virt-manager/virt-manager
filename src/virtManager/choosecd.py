@@ -17,16 +17,15 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 #
-import gtk
 import gobject
 
 import virtManager.uihelpers as uihelpers
 import virtManager.util as util
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.mediadev import MEDIA_FLOPPY
 from virtManager.storagebrowse import vmmStorageBrowser
-from virtManager.error import vmmErrorDialog
 
-class vmmChooseCD(gobject.GObject):
+class vmmChooseCD(vmmGObjectUI):
     __gsignals__ = {
         "cdrom-chosen": (gobject.SIGNAL_RUN_FIRST,
                          gobject.TYPE_NONE,
@@ -34,17 +33,9 @@ class vmmChooseCD(gobject.GObject):
                          (gobject.TYPE_PYOBJECT, str)),
     }
 
-    def __init__(self, config, dev_id_info, connection, media_type):
-        gobject.GObject.__init__(self)
-        self.window = gtk.glade.XML(
-                            config.get_glade_dir() + "/vmm-choose-cd.glade",
-                            "vmm-choose-cd", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-choose-cd")
-        self.topwin.hide()
+    def __init__(self, dev_id_info, connection, media_type):
+        vmmGObjectUI.__init__(self, "vmm-choose-cd.glade", "vmm-choose-cd")
 
-        self.err = vmmErrorDialog(self.topwin)
-
-        self.config = config
         self.dev_id_info = dev_id_info
         self.conn = connection
         self.storage_browser = None
@@ -65,16 +56,15 @@ class vmmChooseCD(gobject.GObject):
         self.reset_state()
 
     def close(self, ignore1=None, ignore2=None):
-        self.window.get_widget("vmm-choose-cd").hide()
+        self.topwin.hide()
         return 1
 
     def cancel(self, ignore1=None, ignore2=None):
-        self.window.get_widget("vmm-choose-cd").hide()
+        self.topwin.hide()
 
     def show(self):
-        win = self.window.get_widget("vmm-choose-cd")
         self.reset_state()
-        win.show()
+        self.topwin.show()
 
     def reset_state(self):
         cd_path = self.window.get_widget("cd-path")
@@ -154,11 +144,11 @@ class vmmChooseCD(gobject.GObject):
 
     def _browse_file(self):
         if self.storage_browser == None:
-            self.storage_browser = vmmStorageBrowser(self.config, self.conn)
+            self.storage_browser = vmmStorageBrowser(self.conn)
             self.storage_browser.connect("storage-browse-finish",
                                          self.set_storage_path)
 
         self.storage_browser.set_browse_reason(self.config.CONFIG_DIR_MEDIA)
         self.storage_browser.show(self.conn)
 
-gobject.type_register(vmmChooseCD)
+vmmGObjectUI.type_register(vmmChooseCD)

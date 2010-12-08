@@ -30,27 +30,20 @@ import virtManager.host
 import virtManager.util as util
 from virtManager.createvol import vmmCreateVolume
 from virtManager.config import vmmConfig
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 
-class vmmStorageBrowser(gobject.GObject):
+class vmmStorageBrowser(vmmGObjectUI):
     __gsignals__ = {
         #"vol-created": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
         "storage-browse-finish": (gobject.SIGNAL_RUN_FIRST,
                                   gobject.TYPE_NONE, [str]),
     }
 
-    def __init__(self, config, conn):
-        gobject.GObject.__init__(self)
-        self.config = config
+    def __init__(self, conn):
+        vmmGObjectUI.__init__(self,
+                            "vmm-storage-browse.glade",
+                            "vmm-storage-browse")
         self.conn = conn
-
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-storage-browse.glade",
-                                    "vmm-storage-browse",
-                                    domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-storage-browse")
-        self.err = vmmErrorDialog(self.topwin)
-        self.topwin.hide()
 
         self.conn_signal_ids = []
         self.finish_cb_id = None
@@ -259,7 +252,7 @@ class vmmStorageBrowser(gobject.GObject):
 
         try:
             if self.addvol is None:
-                self.addvol = vmmCreateVolume(self.config, self.conn, pool)
+                self.addvol = vmmCreateVolume(self.conn, pool)
                 self.addvol.connect("vol-created", self.refresh_current_pool)
             else:
                 self.addvol.set_parent_pool(pool)
@@ -318,4 +311,4 @@ class vmmStorageBrowser(gobject.GObject):
     def show_err(self, info, details):
         self.err.show_err(info, details, async=False)
 
-gobject.type_register(vmmStorageBrowser)
+vmmGObjectUI.type_register(vmmStorageBrowser)

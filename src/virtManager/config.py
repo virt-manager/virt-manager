@@ -46,7 +46,9 @@ DEFAULT_XEN_SAVE_DIR = "/var/lib/xen/dump"
 DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
 DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
 
-class vmmConfig:
+running_config = None
+
+class vmmConfig(object):
 
     # GConf directory names for saving last used paths
     CONFIG_DIR_IMAGE = "image"

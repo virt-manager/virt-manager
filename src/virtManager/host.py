@@ -33,13 +33,13 @@ from virtManager.createnet import vmmCreateNetwork
 from virtManager.createpool import vmmCreatePool
 from virtManager.createvol import vmmCreateVolume
 from virtManager.createinterface import vmmCreateInterface
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.graphwidgets import Sparkline
 
 INTERFACE_PAGE_INFO = 0
 INTERFACE_PAGE_ERROR = 1
 
-class vmmHost(gobject.GObject):
+class vmmHost(vmmGObjectUI):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),
@@ -50,17 +50,10 @@ class vmmHost(gobject.GObject):
         "action-restore-domain": (gobject.SIGNAL_RUN_FIRST,
                                   gobject.TYPE_NONE, (str,)),
         }
-    def __init__(self, config, conn, engine):
-        gobject.GObject.__init__(self)
-        self.config = config
+    def __init__(self, conn, engine):
+        vmmGObjectUI.__init__(self, "vmm-host.glade", "vmm-host")
         self.conn = conn
         self.engine = engine
-
-        self.window = gtk.glade.XML(config.get_glade_dir() + "/vmm-host.glade",
-                                    "vmm-host", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-host")
-        self.err = vmmErrorDialog(self.topwin)
-        self.topwin.hide()
 
         self.title = conn.get_short_hostname() + " " + self.topwin.get_title()
         self.topwin.set_title(self.title)
@@ -294,22 +287,22 @@ class vmmHost(gobject.GObject):
 
 
     def show(self):
-        if self.is_visible():
-            self.topwin.present()
-            return
+        vis = self.is_visible()
         self.topwin.present()
+        if vis:
+            return
 
         self.engine.increment_window_counter()
 
     def is_visible(self):
-        if self.window.get_widget("vmm-host").flags() & gtk.VISIBLE:
-            return 1
-        return 0
+        return bool(self.topwin.flags() & gtk.VISIBLE)
 
     def close(self, ignore1=None, ignore2=None):
-        if self.is_visible():
-            self.window.get_widget("vmm-host").hide()
-            self.engine.decrement_window_counter()
+        if not self.is_visible():
+            return
+
+        self.topwin.hide()
+        self.engine.decrement_window_counter()
         return 1
 
     def show_help(self, src):
@@ -420,7 +413,7 @@ class vmmHost(gobject.GObject):
     def add_network(self, src):
         try:
             if self.addnet is None:
-                self.addnet = vmmCreateNetwork(self.config, self.conn)
+                self.addnet = vmmCreateNetwork(self.conn)
             self.addnet.show()
         except Exception, e:
             self.err.show_err(_("Error launching network wizard: %s") % str(e),
@@ -642,7 +635,7 @@ class vmmHost(gobject.GObject):
     def add_pool(self, src):
         try:
             if self.addpool is None:
-                self.addpool = vmmCreatePool(self.config, self.conn)
+                self.addpool = vmmCreatePool(self.conn)
             self.addpool.show()
         except Exception, e:
             self.err.show_err(_("Error launching pool wizard: %s") % str(e),
@@ -654,7 +647,7 @@ class vmmHost(gobject.GObject):
             return
         try:
             if self.addvol is None:
-                self.addvol = vmmCreateVolume(self.config, self.conn, pool)
+                self.addvol = vmmCreateVolume(self.conn, pool)
                 self.addvol.connect("vol-created", self.refresh_current_pool)
             else:
                 self.addvol.set_parent_pool(pool)
@@ -905,7 +898,7 @@ class vmmHost(gobject.GObject):
     def add_interface(self, src):
         try:
             if self.addinterface is None:
-                self.addinterface = vmmCreateInterface(self.config, self.conn)
+                self.addinterface = vmmCreateInterface(self.conn)
             self.addinterface.show()
         except Exception, e:
             self.err.show_err(_("Error launching interface wizard: %s") %
@@ -1167,4 +1160,4 @@ def get_pool_size_percent(conn, uuid):
         per = int(((float(alloc) / float(cap)) * 100))
     return "<span size='small' color='#484848'>%s%%</span>" % int(per)
 
-gobject.type_register(vmmHost)
+vmmGObjectUI.type_register(vmmHost)

@@ -25,7 +25,7 @@ import traceback
 import logging
 
 from virtManager import util
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
 
@@ -34,23 +34,15 @@ from virtinst import Storage
 DEFAULT_ALLOC = 0
 DEFAULT_CAP   = 1000
 
-class vmmCreateVolume(gobject.GObject):
+class vmmCreateVolume(vmmGObjectUI):
     __gsignals__ = {
         "vol-created": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
     }
 
-    def __init__(self, config, conn, parent_pool):
-        gobject.GObject.__init__(self)
+    def __init__(self, conn, parent_pool):
+        vmmGObjectUI.__init__(self, "vmm-create-vol.glade", "vmm-create-vol")
         self.conn = conn
         self.parent_pool = parent_pool
-        self.config = config
-
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-create-vol.glade",
-                                    "vmm-create-vol", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-create-vol")
-        self.err = vmmErrorDialog(self.topwin)
-        self.topwin.hide()
 
         self.name_hint = None
         self.vol = None
@@ -279,4 +271,4 @@ class vmmCreateVolume(gobject.GObject):
 
         return ret
 
-gobject.type_register(vmmCreateVolume)
+vmmGObjectUI.type_register(vmmCreateVolume)

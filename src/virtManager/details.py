@@ -26,7 +26,7 @@ import traceback
 import os
 
 import virtManager.uihelpers as uihelpers
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
 from virtManager.console import vmmConsolePages
@@ -215,7 +215,7 @@ def lookup_nodedev(vmmconn, hostdev):
 
     return found_dev
 
-class vmmDetails(gobject.GObject):
+class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
@@ -248,18 +248,11 @@ class vmmDetails(gobject.GObject):
         }
 
 
-    def __init__(self, config, vm, engine, parent=None):
-        gobject.GObject.__init__(self)
-        self.config = config
+    def __init__(self, vm, engine, parent=None):
+        vmmGObjectUI.__init__(self, "vmm-details.glade", "vmm-details")
         self.vm = vm
         self.conn = self.vm.get_connection()
         self.engine = engine
-
-        self.window = gtk.glade.XML((config.get_glade_dir() +
-                                     "/vmm-details.glade"),
-                                     "vmm-details", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-details")
-        self.err = vmmErrorDialog(self.topwin)
 
         self.is_customize_dialog = False
         if parent:
@@ -284,8 +277,7 @@ class vmmDetails(gobject.GObject):
         self.ignorePause = False
         self.ignoreDetails = False
 
-        self.console = vmmConsolePages(self.config, self.vm, self.engine,
-                                       self.window)
+        self.console = vmmConsolePages(self.vm, self.window)
 
         # Set default window size
         w, h = self.vm.get_details_window_size()
@@ -432,10 +424,10 @@ class vmmDetails(gobject.GObject):
 
 
     def show(self):
-        if self.is_visible():
-            self.topwin.present()
-            return
+        vis = self.is_visible()
         self.topwin.present()
+        if vis:
+            return
 
         self.engine.increment_window_counter()
         self.refresh_vm_state()
@@ -460,9 +452,7 @@ class vmmDetails(gobject.GObject):
         return 1
 
     def is_visible(self):
-        if self.topwin.flags() & gtk.VISIBLE:
-            return 1
-        return 0
+        return bool(self.topwin.flags() & gtk.VISIBLE)
 
 
     ##########################
@@ -1029,7 +1019,7 @@ class vmmDetails(gobject.GObject):
 
     def add_hardware(self, src):
         if self.addhw is None:
-            self.addhw = vmmAddHardware(self.config, self.vm)
+            self.addhw = vmmAddHardware(self.vm)
 
         self.addhw.show()
 
@@ -1343,8 +1333,7 @@ class vmmDetails(gobject.GObject):
 
         # Launch 'Choose CD' dialog
         if self.media_choosers[devtype] is None:
-            ret = vmmChooseCD(self.config,
-                              dev_id_info,
+            ret = vmmChooseCD(dev_id_info,
                               self.vm.get_connection(),
                               devtype)
 
@@ -2382,4 +2371,4 @@ class vmmDetails(gobject.GObject):
             selection.select_path("0")
 
 
-gobject.type_register(vmmDetails)
+vmmGObjectUI.type_register(vmmDetails)

@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
 import gtk
 
 import libvirt
@@ -32,6 +31,7 @@ import logging
 import traceback
 
 from virtManager import util
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.error import vmmErrorDialog
 
 # Console pages
@@ -46,16 +46,15 @@ def has_property(obj, setting):
         return False
     return True
 
-class vmmConsolePages(gobject.GObject):
-    def __init__(self, config, vm, engine, window):
-        gobject.GObject.__init__(self)
+class vmmConsolePages(vmmGObjectUI):
+    def __init__(self, vm, window):
+        vmmGObjectUI.__init__(self, None, None)
 
-        self.config = config
         self.vm = vm
-        self.engine = engine
-        self.window = window
 
-        self.topwin = self.window.get_widget("vmm-details")
+        self.windowname = "vmm-details"
+        self.window = window
+        self.topwin = self.window.get_widget(self.windowname)
         self.err = vmmErrorDialog(self.topwin)
 
         self.title = vm.get_name() + " " + self.topwin.get_title()
@@ -784,4 +783,4 @@ class vmmConsolePages(gobject.GObject):
 
         self.vncViewer.size_allocate(vnc_alloc)
 
-gobject.type_register(vmmConsolePages)
+vmmGObjectUI.type_register(vmmConsolePages)

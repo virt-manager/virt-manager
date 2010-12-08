@@ -31,9 +31,9 @@ from virtinst import (VirtualCharDevice, VirtualDevice, VirtualVideoDevice,
 import virtManager.util as util
 import virtManager.uihelpers as uihelpers
 from virtManager.asyncjob import vmmAsyncJob
-from virtManager.error import vmmErrorDialog
 from virtManager.createmeter import vmmCreateMeter
 from virtManager.storagebrowse import vmmStorageBrowser
+from virtManager.baseclass import vmmGObjectUI
 
 VM_STORAGE_PARTITION = 1
 VM_STORAGE_FILE = 2
@@ -62,21 +62,17 @@ char_widget_mappings = {
     "protocol" : "char-use-telnet",
 }
 
-class vmmAddHardware(gobject.GObject):
+class vmmAddHardware(vmmGObjectUI):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, [str]),
         }
-    def __init__(self, config, vm):
-        gobject.GObject.__init__(self)
-        self.config = config
+    def __init__(self, vm):
+        vmmGObjectUI.__init__(self,
+                              "vmm-add-hardware.glade", "vmm-add-hardware")
+
         self.vm = vm
         self.conn = vm.get_connection()
-        self.window = gtk.glade.XML(
-                        config.get_glade_dir() + "/vmm-add-hardware.glade",
-                        "vmm-add-hardware", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-add-hardware")
-        self.err = vmmErrorDialog(self.topwin)
 
         self.storage_browser = None
 
@@ -85,7 +81,6 @@ class vmmAddHardware(gobject.GObject):
 
         self._dev = None
 
-        self.topwin.hide()
         self.window.signal_autoconnect({
             "on_create_pages_switch_page" : self.page_changed,
             "on_create_cancel_clicked" : self.close,
@@ -1342,7 +1337,7 @@ class vmmAddHardware(gobject.GObject):
 
         conn = self.vm.get_connection()
         if self.storage_browser == None:
-            self.storage_browser = vmmStorageBrowser(self.config, conn)
+            self.storage_browser = vmmStorageBrowser(conn)
 
         self.storage_browser.set_finish_cb(set_storage_cb)
         self.storage_browser.set_browse_reason(self.config.CONFIG_DIR_IMAGE)

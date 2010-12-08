@@ -29,7 +29,7 @@ from virtinst import Interface
 
 from virtManager import util
 from virtManager import uihelpers
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
 
@@ -59,28 +59,21 @@ IP_DHCP = 0
 IP_STATIC = 1
 IP_NONE = 2
 
-class vmmCreateInterface(gobject.GObject):
+class vmmCreateInterface(vmmGObjectUI):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                              gobject.TYPE_NONE, [str]),
     }
 
-    def __init__(self, config, conn):
-        gobject.GObject.__init__(self)
-        self.config = config
+    def __init__(self, conn):
+        vmmGObjectUI.__init__(self,
+                              "vmm-create-interface.glade",
+                              "vmm-create-interface")
         self.conn = conn
         self.interface = None
 
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-create-interface.glade",
-                                    "vmm-create-interface",
-                                    domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-create-interface")
-        self.err = vmmErrorDialog(self.topwin)
-
         # Bridge configuration dialog
-        self.bridge_config_win = gtk.glade.XML(self.config.get_glade_dir() + \
-                                               "/vmm-create-interface.glade",
+        self.bridge_config_win = gtk.glade.XML(self.gladefile,
                                                "bridge-config",
                                                domain="virt-manager")
         self.bridge_config = self.bridge_config_win.get_widget(
@@ -91,8 +84,7 @@ class vmmCreateInterface(gobject.GObject):
         })
 
         # Bond configuration dialog
-        self.bond_config_win = gtk.glade.XML(self.config.get_glade_dir() + \
-                                             "/vmm-create-interface.glade",
+        self.bond_config_win = gtk.glade.XML(self.gladefile,
                                              "bond-config",
                                              domain="virt-manager")
         self.bond_config = self.bond_config_win.get_widget("bond-config")
@@ -103,8 +95,7 @@ class vmmCreateInterface(gobject.GObject):
             "on_bond_monitor_mode_changed": self.bond_monitor_mode_changed,
         })
 
-        self.ip_config_win = gtk.glade.XML(self.config.get_glade_dir() + \
-                                           "/vmm-create-interface.glade",
+        self.ip_config_win = gtk.glade.XML(self.gladefile,
                                            "ip-config",
                                            domain="virt-manager")
         self.ip_config = self.ip_config_win.get_widget("ip-config")
@@ -1165,4 +1156,4 @@ class vmmCreateInterface(gobject.GObject):
         # No help available yet.
         pass
 
-gobject.type_register(vmmCreateInterface)
+vmmGObjectUI.type_register(vmmCreateInterface)

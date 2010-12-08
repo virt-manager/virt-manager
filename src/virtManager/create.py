@@ -32,7 +32,7 @@ import virtinst
 import virtManager.uihelpers as uihelpers
 from virtManager import util
 from virtManager.mediadev import MEDIA_CDROM
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
 from virtManager.storagebrowse import vmmStorageBrowser
@@ -56,7 +56,7 @@ INSTALL_PAGE_PXE = 2
 INSTALL_PAGE_IMPORT = 3
 
 
-class vmmCreate(gobject.GObject):
+class vmmCreate(vmmGObjectUI):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str,str)),
@@ -66,16 +66,9 @@ class vmmCreate(gobject.GObject):
                              gobject.TYPE_NONE, [str]),
     }
 
-    def __init__(self, config, engine):
-        gobject.GObject.__init__(self)
-        self.config = config
+    def __init__(self, engine):
+        vmmGObjectUI.__init__(self, "vmm-create.glade", "vmm-create")
         self.engine = engine
-
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-create.glade",
-                                    "vmm-create", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-create")
-        self.err = vmmErrorDialog(self.topwin)
 
         self.conn = None
         self.caps = None
@@ -1574,8 +1567,7 @@ class vmmCreate(gobject.GObject):
             self._check_start_error(self.start_install, guest)
 
 
-        self.config_window = vmmDetails(self.config,
-                                        virtinst_guest,
+        self.config_window = vmmDetails(virtinst_guest,
                                         self.engine,
                                         self.topwin)
         self.config_window_signal = self.config_window.connect(
@@ -1833,7 +1825,7 @@ class vmmCreate(gobject.GObject):
             reason = self.config.CONFIG_DIR_IMAGE
 
         if self.storage_browser == None:
-            self.storage_browser = vmmStorageBrowser(self.config, self.conn)
+            self.storage_browser = vmmStorageBrowser(self.conn)
 
         self.storage_browser.set_vm_name(self.get_config_name())
         self.storage_browser.set_finish_cb(callback)
@@ -1847,4 +1839,4 @@ class vmmCreate(gobject.GObject):
     def verr(self, msg, extra=None):
         return self.err.val_err(msg, extra)
 
-gobject.type_register(vmmCreate)
+vmmGObjectUI.type_register(vmmCreate)

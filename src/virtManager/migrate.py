@@ -29,7 +29,7 @@ import virtinst
 import libvirt
 
 from virtManager import util
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
 from virtManager.domain import vmmDomain
@@ -46,23 +46,15 @@ def uri_join(uri_tuple):
     return "%s://%s%s%s%s%s" % (scheme, user, host, path, fragment, query)
 
 
-class vmmMigrateDialog(gobject.GObject):
+class vmmMigrateDialog(vmmGObjectUI):
     __gsignals__ = {
     }
 
     def __init__(self, config, vm, engine):
-        gobject.GObject.__init__(self)
-        self.config = config
+        vmmGObjectUI.__init__(self, "vmm-migrate.glade", "vmm-migrate")
         self.vm = vm
         self.conn = vm.connection
         self.engine = engine
-
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-migrate.glade",
-                                    "vmm-migrate", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-migrate")
-        self.err = vmmErrorDialog(self.topwin)
-        self.topwin.hide()
 
         self.destconn_rows = []
 
@@ -546,4 +538,4 @@ class vmmMigrateDialog(gobject.GObject):
                 asyncjob.set_error(errinfo[0], errinfo[1])
 
 
-gobject.type_register(vmmMigrateDialog)
+vmmGObjectUI.type_register(vmmMigrateDialog)

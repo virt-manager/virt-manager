@@ -27,7 +27,7 @@ import traceback
 import virtManager.util as util
 from virtManager.IPy import IP
 from virtManager.network import vmmNetwork
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 
 PAGE_INTRO = 0
 PAGE_NAME = 1
@@ -37,22 +37,14 @@ PAGE_FORWARDING = 4
 PAGE_SUMMARY = 5
 
 
-class vmmCreateNetwork(gobject.GObject):
+class vmmCreateNetwork(vmmGObjectUI):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, [str]),
         }
-    def __init__(self, config, conn):
-        gobject.GObject.__init__(self)
-        self.config = config
+    def __init__(self, conn):
+        vmmGObjectUI.__init__(self, "vmm-create-net.glade", "vmm-create-net")
         self.conn = conn
-
-        self.window = gtk.glade.XML(
-                        config.get_glade_dir() + "/vmm-create-net.glade",
-                        "vmm-create-net", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-create-net")
-        self.err = vmmErrorDialog(self.topwin)
-        self.topwin.hide()
 
         self.window.signal_autoconnect({
             "on_create_pages_switch_page" : self.page_changed,
@@ -438,3 +430,4 @@ class vmmCreateNetwork(gobject.GObject):
         elif page == PAGE_SUMMARY:
             self.emit("action-show-help", "virt-manager-create-net-sumary")
 
+vmmGObjectUI.type_register(vmmCreateNetwork)

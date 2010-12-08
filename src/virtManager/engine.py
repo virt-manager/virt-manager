@@ -548,7 +548,7 @@ class vmmEngine(gobject.GObject):
     def _do_show_about(self, src):
         try:
             if self.windowAbout == None:
-                self.windowAbout = vmmAbout(self.get_config())
+                self.windowAbout = vmmAbout()
             self.windowAbout.show()
         except Exception, e:
             src.err.show_err(_("Error launching 'About' dialog: %s") % str(e),
@@ -570,7 +570,7 @@ class vmmEngine(gobject.GObject):
         if self.windowPreferences:
             return self.windowPreferences
 
-        obj = vmmPreferences(self.get_config())
+        obj = vmmPreferences()
         obj.connect("action-show-help", self._do_show_help)
         self.windowPreferences = obj
         return self.windowPreferences
@@ -587,7 +587,7 @@ class vmmEngine(gobject.GObject):
             return self.connections[uri]["windowHost"]
 
         con = self._lookup_connection(uri)
-        obj = vmmHost(self.get_config(), con, self)
+        obj = vmmHost(con, self)
         obj.connect("action-show-help", self._do_show_help)
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
@@ -609,7 +609,7 @@ class vmmEngine(gobject.GObject):
         def connect_wrap(src, *args):
             return self.connect_to_uri(*args)
 
-        obj = vmmConnect(self.get_config(), self)
+        obj = vmmConnect()
         obj.connect("completed", connect_wrap)
         obj.connect("cancelled", self._connect_cancelled)
         self.windowConnect = obj
@@ -628,7 +628,7 @@ class vmmEngine(gobject.GObject):
 
         con = self._lookup_connection(uri)
 
-        obj = vmmDetails(self.get_config(), con.get_vm(uuid), self)
+        obj = vmmDetails(con.get_vm(uuid), self)
         obj.connect("action-save-domain", self._do_save_domain)
         obj.connect("action-destroy-domain", self._do_destroy_domain)
         obj.connect("action-show-help", self._do_show_help)
@@ -665,7 +665,7 @@ class vmmEngine(gobject.GObject):
         if self.windowManager:
             return self.windowManager
 
-        obj = vmmManager(self.get_config(), self)
+        obj = vmmManager(self)
         obj.connect("action-suspend-domain", self._do_suspend_domain)
         obj.connect("action-resume-domain", self._do_resume_domain)
         obj.connect("action-run-domain", self._do_run_domain)
@@ -708,7 +708,7 @@ class vmmEngine(gobject.GObject):
         if self.windowCreate:
             return self.windowCreate
 
-        obj = vmmCreate(self.get_config(), self)
+        obj = vmmCreate(self)
         obj.connect("action-show-console", self._do_show_console)
         obj.connect("action-show-help", self._do_show_help)
         self.windowCreate = obj
@@ -727,7 +727,7 @@ class vmmEngine(gobject.GObject):
             vm = conn.get_vm(uuid)
 
             if not self.windowMigrate:
-                self.windowMigrate = vmmMigrateDialog(self.config, vm, self)
+                self.windowMigrate = vmmMigrateDialog(vm, self)
 
             self.windowMigrate.set_state(vm)
             self.windowMigrate.show()
@@ -742,7 +742,7 @@ class vmmEngine(gobject.GObject):
 
         try:
             if clone_window == None:
-                clone_window = vmmCloneVM(self.get_config(), orig_vm)
+                clone_window = vmmCloneVM(orig_vm)
                 clone_window.connect("action-show-help", self._do_show_help)
                 self.connections[uri]["windowClone"] = clone_window
             else:

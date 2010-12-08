@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
 import gtk
 
 import os, stat
@@ -28,7 +27,7 @@ import logging
 import virtinst
 
 from virtManager import util
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
 
@@ -41,23 +40,14 @@ STORAGE_ROW_ICON = 5
 STORAGE_ROW_ICON_SIZE = 6
 STORAGE_ROW_TOOLTIP = 7
 
-class vmmDeleteDialog(gobject.GObject):
+class vmmDeleteDialog(vmmGObjectUI):
     __gsignals__ = {
-        #"vol-created": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
     }
 
     def __init__(self, config, vm):
-        gobject.GObject.__init__(self)
-        self.config = config
+        vmmGObjectUI.__init__(self, "vmm-delete.glade", "vmm-delete")
         self.vm = vm
         self.conn = vm.connection
-
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-delete.glade",
-                                    "vmm-delete", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-delete")
-        self.err = vmmErrorDialog(self.topwin)
-        self.topwin.hide()
 
         self.window.signal_autoconnect({
             "on_vmm_delete_delete_event" : self.close,
@@ -382,4 +372,4 @@ def do_we_default(conn, vm_name, vol, path, ro, shared):
 
     return (not info, info)
 
-gobject.type_register(vmmDeleteDialog)
+vmmGObjectUI.type_register(vmmDeleteDialog)

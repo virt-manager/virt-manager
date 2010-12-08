@@ -25,7 +25,7 @@ import logging
 import dbus
 import socket
 
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 
 HV_XEN = 0
 HV_QEMU = 1
@@ -46,7 +46,7 @@ def default_conn_user(conn):
         return "root"
     return current_user()
 
-class vmmConnect(gobject.GObject):
+class vmmConnect(vmmGObjectUI):
     __gsignals__ = {
         "completed": (gobject.SIGNAL_RUN_FIRST,
                       gobject.TYPE_NONE, (str,object,object)),
@@ -54,17 +54,10 @@ class vmmConnect(gobject.GObject):
                       gobject.TYPE_NONE, ())
         }
 
-    def __init__(self, config, engine):
-        gobject.GObject.__init__(self)
-        self.engine = engine
-
-        self.window = gtk.glade.XML(
-                        config.get_glade_dir() + "/vmm-open-connection.glade",
-                        "vmm-open-connection", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-open-connection")
-
-        self.err = vmmErrorDialog(self.topwin)
-        self.topwin.hide()
+    def __init__(self):
+        vmmGObjectUI.__init__(self,
+                              "vmm-open-connection.glade",
+                              "vmm-open-connection")
 
         self.window.signal_autoconnect({
             "on_hypervisor_changed": self.hypervisor_changed,
@@ -393,4 +386,4 @@ class vmmConnect(gobject.GObject):
         return host
 
 
-gobject.type_register(vmmConnect)
+vmmGObjectUI.type_register(vmmConnect)

@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
 import gtk
 
 import copy
@@ -26,7 +25,7 @@ import traceback
 import logging
 
 from virtManager import util
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
 from virtManager.createmeter import vmmCreateMeter
 
@@ -35,21 +34,15 @@ from virtinst import Storage
 PAGE_NAME   = 0
 PAGE_FORMAT = 1
 
-class vmmCreatePool(gobject.GObject):
+class vmmCreatePool(vmmGObjectUI):
     __gsignals__ = {
     }
 
-    def __init__(self, config, conn):
-        gobject.GObject.__init__(self)
+    def __init__(self, conn):
+        vmmGObjectUI.__init__(self,
+                              "vmm-create-pool.glade",
+                              "vmm-create-pool")
         self.conn = conn
-        self.config = config
-
-        self.window = gtk.glade.XML(config.get_glade_dir() + \
-                                    "/vmm-create-pool.glade",
-                                    "vmm-create-pool", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-create-pool")
-        self.err = vmmErrorDialog(self.topwin)
-        self.topwin.hide()
 
         self._pool = None
         self._pool_class = Storage.StoragePool
@@ -557,4 +550,4 @@ class vmmCreatePool(gobject.GObject):
                                  dialog_type=mode,
                                  start_folder=startfolder)
 
-gobject.type_register(vmmCreatePool)
+vmmGObjectUI.type_register(vmmCreatePool)

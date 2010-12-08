@@ -26,7 +26,7 @@ import logging
 import virtManager.config as cfg
 import virtManager.uihelpers as uihelpers
 from virtManager.connection import vmmConnection
-from virtManager.error import vmmErrorDialog
+from virtManager.baseclass import vmmGObjectUI
 from virtManager.delete import vmmDeleteDialog
 from virtManager.graphwidgets import CellRendererSparkline
 from virtManager import util as util
@@ -68,7 +68,7 @@ class "GtkTreeView" style "treeview-style"
 gtk.rc_parse_string(rcstring)
 
 
-class vmmManager(gobject.GObject):
+class vmmManager(vmmGObjectUI):
     __gsignals__ = {
         "action-show-connect":(gobject.SIGNAL_RUN_FIRST,
                                   gobject.TYPE_NONE, []),
@@ -115,16 +115,9 @@ class vmmManager(gobject.GObject):
         "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
                             gobject.TYPE_NONE, []),}
 
-    def __init__(self, config, engine):
-        gobject.GObject.__init__(self)
-        self.config = config
+    def __init__(self, engine):
+        vmmGObjectUI.__init__(self, "vmm-manager.glade", "vmm-manager")
         self.engine = engine
-
-        self.window = gtk.glade.XML((config.get_glade_dir() +
-                                     "/vmm-manager.glade"),
-                                     "vmm-manager", domain="virt-manager")
-        self.topwin = self.window.get_widget("vmm-manager")
-        self.err = vmmErrorDialog(self.topwin)
 
         self.delete_dialog = None
         self.ignore_pause = False
@@ -213,24 +206,23 @@ class vmmManager(gobject.GObject):
     ##################
 
     def show(self):
-        if self.is_visible():
-            self.topwin.present()
-            return
+        vis = self.is_visible()
         self.topwin.present()
+        if vis:
+            return
 
         self.engine.increment_window_counter()
 
     def close(self, src=None, src2=None):
-        if self.is_visible():
-            win = self.window.get_widget("vmm-manager")
-            win.hide()
-            self.engine.decrement_window_counter()
-            return 1
+        if not self.is_visible():
+            return
+
+        self.topwin.hide()
+        self.engine.decrement_window_counter()
+        return 1
 
     def is_visible(self):
-        if self.window.get_widget("vmm-manager").flags() & gtk.VISIBLE:
-            return 1
-        return 0
+        return bool(self.topwin.flags() & gtk.VISIBLE)
 
     def set_startup_error(self, msg):
         self.window.get_widget("vm-notebook").set_current_page(1)
@@ -583,7 +575,7 @@ class vmmManager(gobject.GObject):
             return
 
         if not self.delete_dialog:
-            self.delete_dialog = vmmDeleteDialog(self.config, vm)
+            self.delete_dialog = vmmDeleteDialog(vm)
         else:
             self.delete_dialog.set_vm(vm)
 
@@ -1095,4 +1087,4 @@ class vmmManager(gobject.GObject):
         data = model.get_value(_iter, ROW_HANDLE).network_traffic_vector_limit(40)
         cell.set_property('data_array', data)
 
-gobject.type_register(vmmManager)
+vmmGObjectUI.type_register(vmmManager)
