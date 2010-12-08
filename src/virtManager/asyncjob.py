@@ -24,6 +24,7 @@ import gtk
 import gobject
 
 from virtManager import util
+from virtManager.error import vmmErrorDialog
 
 # This thin wrapper only exists so we can put debugging
 # code in the run() method every now & then
@@ -40,7 +41,7 @@ class vmmAsyncJob(gobject.GObject):
     def __init__(self, config, callback, args=None,
                  text=_("Please wait a few moments..."),
                  title=_("Operation in progress"),
-                 run_main=True):
+                 run_main=True, cancel_back=None, cancel_args=None):
         gobject.GObject.__init__(self)
         self.config = config
         self.run_main = bool(run_main)
@@ -48,6 +49,20 @@ class vmmAsyncJob(gobject.GObject):
         self.window = gtk.glade.XML(config.get_glade_dir() + \
                                     "/vmm-progress.glade",
                                     "vmm-progress", domain="virt-manager")
+        self.topwin = self.window.get_widget("vmm-progress")
+        self.err = vmmErrorDialog(self.topwin)
+        self.window.signal_autoconnect({
+            "on_async_job_delete_event" : self.delete,
+            "on_async_job_cancel_clicked" : self.cancel,
+        })
+        self.cancel_job = cancel_back
+        self.cancel_args = cancel_args or []
+        self.cancel_args.append(self)
+        if self.cancel_job:
+            self.window.get_widget("cancel-async-job").show()
+        else:
+            self.window.get_widget("cancel-async-job").hide()
+        self.job_canceled = False
         self.window.get_widget("pbar-text").set_text(text)
 
         self.topwin = self.window.get_widget("vmm-progress")
@@ -88,6 +103,26 @@ class vmmAsyncJob(gobject.GObject):
             self.exit_if_necessary(force_exit=True)
 
         self.topwin.destroy()
+
+    def delete(self, ignore1=None, ignore2=None):
+        thread_active = (self.bg_thread.isAlive() or not self.run_main)
+        if self.cancel_job and thread_active:
+            res = self.err.warn_chkbox(
+                    text1=_("Cancel the job before closing window?"),
+                    buttons=gtk.BUTTONS_YES_NO)
+            if res:
+                # The job may end after we click 'Yes', so check whether the
+                # thread is active again
+                thread_active = (self.bg_thread.isAlive() or not self.run_main)
+                if thread_active:
+                    self.cancel()
+
+    def show_warning(self, summary):
+        self.err.ok(summary)
+
+    def cancel(self, ignore1=None, ignore2=None):
+        if self.cancel_job:
+            self.cancel_job(*self.cancel_args)
 
     def pulse_pbar(self, progress="", stage=None):
         gtk.gdk.threads_enter()

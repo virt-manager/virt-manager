@@ -825,14 +825,36 @@ class vmmEngine(gobject.GObject):
             if not path:
                 return
 
+        if vm.getjobinfo_supported:
+            _cancel_back = self._save_cancel
+            _cancel_args = [vm]
+        else:
+            _cancel_back = None
+            _cancel_args = [None]
+
         progWin = vmmAsyncJob(self.config, self._save_callback,
                               [vm, path],
-                              _("Saving Virtual Machine"))
+                              _("Saving Virtual Machine"),
+                              cancel_back=_cancel_back,
+                              cancel_args=_cancel_args)
         progWin.run()
         error, details = progWin.get_error()
 
         if error is not None:
             src.err.show_err(_("Error saving domain: %s") % error, details)
+
+    def _save_cancel(self, vm, asyncjob):
+        if not vm:
+            return
+
+        try:
+            vm.abort_job()
+        except Exception, e:
+            asyncjob.show_warning(str(e))
+            return
+
+        asyncjob.job_canceled = True
+        return
 
     def _save_callback(self, vm, file_to_save, asyncjob):
         try:
@@ -842,7 +864,11 @@ class vmmEngine(gobject.GObject):
 
             newvm.save(file_to_save)
         except Exception, e:
-            asyncjob.set_error(str(e), "".join(traceback.format_exc()))
+            if not (isinstance(e, libvirt.libvirtError) and
+                    asyncjob.job_canceled):
+                # If job is cancelled, we should not report the error
+                # to user.
+                asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
     def _do_restore_domain(self, src, uri):
         conn = self._lookup_connection(uri)

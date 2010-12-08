@@ -445,13 +445,22 @@ class vmmMigrateDialog(gobject.GObject):
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
+        if self.vm.getjobinfo_supported:
+            _cancel_back = self.cancel_migration
+            _cancel_args = [self.vm]
+        else:
+            _cancel_back = None
+            _cancel_args = [None]
+
         progWin = vmmAsyncJob(self.config, self._async_migrate,
                               [self.vm, destconn, uri, rate, live, secure,
                                max_downtime],
                               title=_("Migrating VM '%s'" % self.vm.get_name()),
                               text=(_("Migrating VM '%s' from %s to %s. "
                                       "This may take awhile.") %
-                                      (self.vm.get_name(), srchost, dsthost)))
+                                      (self.vm.get_name(), srchost, dsthost)),
+                              cancel_back=_cancel_back,
+                              cancel_args=_cancel_args)
         progWin.run()
         error, details = progWin.get_error()
 
@@ -480,6 +489,19 @@ class vmmMigrateDialog(gobject.GObject):
 
             logging.warning("Error setting migrate downtime: %s" % e)
             return False
+
+    def cancel_migration(self, vm, asyncjob):
+        if not vm:
+            return
+
+        try:
+            vm.abort_job()
+        except Exception, e:
+            asyncjob.show_warning(str(e))
+            return
+
+        asyncjob.job_canceled = True
+        return
 
     def _async_migrate(self, origvm, origdconn, migrate_uri, rate, live,
                        secure, max_downtime, asyncjob):
@@ -511,8 +533,12 @@ class vmmMigrateDialog(gobject.GObject):
                 if timer:
                     gobject.source_remove(timer)
             except Exception, e:
-                errinfo = (str(e), ("Unable to migrate guest:\n %s" %
-                                    "".join(traceback.format_exc())))
+                if not (isinstance(e, libvirt.libvirtError) and
+                        asyncjob.job_canceled):
+                    # If job is cancelled, we should not report the error
+                    # to user.
+                    errinfo = (str(e), ("Unable to migrate guest:\n %s" %
+                                        "".join(traceback.format_exc())))
         finally:
             if errinfo:
                 asyncjob.set_error(errinfo[0], errinfo[1])

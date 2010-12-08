@@ -828,6 +828,8 @@ class vmmDomain(vmmDomainBase):
         self.getvcpus_supported = support.check_domain_support(self._backend,
                                             support.SUPPORT_DOMAIN_GETVCPUS)
         self.managedsave_supported = self.connection.get_dom_managedsave_supported(self._backend)
+        self.getjobinfo_supported = support.check_domain_support(self._backend,
+                                            support.SUPPORT_DOMAIN_JOB_INFO)
 
         self.toggle_sample_network_traffic()
         self.toggle_sample_disk_io()
@@ -1000,6 +1002,9 @@ class vmmDomain(vmmDomainBase):
     def set_autostart(self, val):
         if self.get_autostart() != val:
             self._backend.setAutostart(val)
+
+    def abort_job(self):
+        self._backend.abortJob()
 
     def migrate_set_max_downtime(self, max_downtime, flag=0):
         self._backend.migrateSetMaxDowntime(max_downtime, flag)
