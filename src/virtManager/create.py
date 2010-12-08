@@ -1190,9 +1190,9 @@ class vmmCreate(gobject.GObject):
 
         # Set up graphics device
         try:
-            guest._graphics_dev = virtinst.VirtualGraphics(
+            guest.add_device(virtinst.VirtualGraphics(
                                         type=virtinst.VirtualGraphics.TYPE_VNC,
-                                        conn=guest.conn)
+                                        conn=guest.conn))
             guest.add_device(virtinst.VirtualVideoDevice(conn=guest.conn))
         except Exception, e:
             self.err.show_err(_("Error setting up graphics device:") + str(e),
