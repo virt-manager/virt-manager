@@ -1112,7 +1112,9 @@ class vmmDomain(vmmDomainBase):
         return self._guest
 
     def _build_guest(self, xml):
-        return virtinst.Guest(connection=self.connection.vmm, parsexml=xml)
+        return virtinst.Guest(connection=self.connection.vmm,
+                              parsexml=xml,
+                              caps=self.connection.get_capabilities())
 
     def _reparse_xml(self, ignore=None):
         self._guest = self._build_guest(self._get_domain_xml())

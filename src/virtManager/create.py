@@ -399,6 +399,7 @@ class vmmCreate(gobject.GObject):
 
         # A bit out of order, but populate arch + hv lists so we can
         # determine a default
+        self.conn.invalidate_caps()
         self.caps = self.conn.get_capabilities()
         self.change_caps()
         self.populate_hv()

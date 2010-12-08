@@ -261,30 +261,24 @@ class vmmConnection(gobject.GObject):
     def get_uri(self):
         return self.uri
 
-    def _invalidate_caps(self):
+    def invalidate_caps(self):
         self._caps_xml = None
         self._caps = None
 
     def _check_caps(self):
-        self._caps_xml = self.vmm.getCapabilities()
-        self._caps = virtinst.CapabilitiesParser.parse(self._caps_xml)
+        if not (self._caps_xml or self._caps):
+            self._caps_xml = self.vmm.getCapabilities()
+            self._caps = virtinst.CapabilitiesParser.parse(self._caps_xml)
 
     def get_capabilities_xml(self):
-        xml = None
-        while xml == None:
+        if not self._caps_xml:
             self._check_caps()
-            xml = self._caps_xml
-
-        return xml
+        return self._caps_xml
 
     def get_capabilities(self):
-        # Make sure we aren't returning None
-        caps = None
-        while caps == None:
+        if not self._caps:
             self._check_caps()
-            caps = self._caps
-
-        return caps
+        return self._caps
 
     def get_max_vcpus(self, _type=None):
         return virtinst.util.get_max_vcpus(self.vmm, _type)
@@ -1453,7 +1447,6 @@ class vmmConnection(gobject.GObject):
             return
 
         self.hostinfo = self.vmm.getInfo()
-        self._invalidate_caps()
 
         # Poll for new virtual network objects
         (startNets, stopNets, newNets,
