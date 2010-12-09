@@ -29,7 +29,6 @@ import virtinst
 import virtManager.host
 import virtManager.util as util
 from virtManager.createvol import vmmCreateVolume
-from virtManager.config import vmmConfig
 from virtManager.baseclass import vmmGObjectUI
 
 class vmmStorageBrowser(vmmGObjectUI):
@@ -179,14 +178,14 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         # Set data based on browse type
         self.local_args["browse_reason"] = self.browse_reason
-        if not vmmConfig.browse_reason_data.has_key(self.browse_reason):
-            return
+        allow_create = True
 
-        data = vmmConfig.browse_reason_data[self.browse_reason]
-        self.topwin.set_title(data["storage_title"])
-        self.local_args["dialog_name"] = data["local_title"]
+        data = self.config.browse_reason_data.get(self.browse_reason)
+        if data:
+            self.topwin.set_title(data["storage_title"])
+            self.local_args["dialog_name"] = data["local_title"]
+            allow_create = data["enable_create"]
 
-        allow_create = data["enable_create"]
         self.window.get_widget("new-volume").set_sensitive(allow_create)
 
     # Convenience helpers
@@ -264,6 +263,9 @@ class vmmStorageBrowser(vmmGObjectUI):
                           "".join(traceback.format_exc()))
 
     def browse_local(self, src_ignore):
+        if not self.local_args.get("dialog_name"):
+            self.local_args["dialog_name"] = None
+
         filename = util.browse_local(parent=self.topwin,
                                      conn=self.conn,
                                      **self.local_args)
