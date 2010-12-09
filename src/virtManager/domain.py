@@ -86,8 +86,8 @@ class vmmDomainBase(vmmLibvirtObject):
                               []),
         }
 
-    def __init__(self, config, connection, backend, uuid):
-        vmmLibvirtObject.__init__(self, config, connection)
+    def __init__(self, connection, backend, uuid):
+        vmmLibvirtObject.__init__(self, connection)
 
         self._backend = backend
         self.uuid = uuid
@@ -816,8 +816,8 @@ class vmmDomain(vmmDomainBase):
     Domain class backed by a libvirt virDomain
     """
 
-    def __init__(self, config, connection, backend, uuid):
-        vmmDomainBase.__init__(self, config, connection, backend, uuid)
+    def __init__(self, connection, backend, uuid):
+        vmmDomainBase.__init__(self, connection, backend, uuid)
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
 
@@ -1331,8 +1331,8 @@ class vmmDomainVirtinst(vmmDomainBase):
 
     Used for launching a details window for customizing a VM before install.
     """
-    def __init__(self, config, connection, backend, uuid):
-        vmmDomainBase.__init__(self, config, connection, backend, uuid)
+    def __init__(self, connection, backend, uuid):
+        vmmDomainBase.__init__(self, connection, backend, uuid)
 
         self._orig_xml = None
 
@@ -1409,6 +1409,6 @@ class vmmDomainVirtinst(vmmDomainBase):
     def hotplug_both_mem(self, memory, maxmem):
         raise NotImplementedError()
 
-gobject.type_register(vmmDomainVirtinst)
-gobject.type_register(vmmDomainBase)
-gobject.type_register(vmmDomain)
+vmmLibvirtObject.type_register(vmmDomainVirtinst)
+vmmLibvirtObject.type_register(vmmDomainBase)
+vmmLibvirtObject.type_register(vmmDomain)

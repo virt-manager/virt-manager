@@ -1109,7 +1109,7 @@ class vmmCreateInterface(vmmGObjectUI):
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
-        progWin = vmmAsyncJob(self.config, self.do_install, [activate],
+        progWin = vmmAsyncJob(self.do_install, [activate],
                               title=_("Creating virtual interface"),
                               text=_("The virtual interface is now being "
                                      "created."))

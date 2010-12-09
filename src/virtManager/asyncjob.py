@@ -38,7 +38,7 @@ class asyncJobWorker(threading.Thread):
 # Displays a progress bar while executing the "callback" method.
 class vmmAsyncJob(vmmGObjectUI):
 
-    def __init__(self, config, callback, args=None,
+    def __init__(self, callback, args=None,
                  text=_("Please wait a few moments..."),
                  title=_("Operation in progress"),
                  run_main=True, cancel_back=None, cancel_args=None):

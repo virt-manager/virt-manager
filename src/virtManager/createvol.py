@@ -202,7 +202,7 @@ class vmmCreateVolume(vmmGObjectUI):
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
-        progWin = vmmAsyncJob(self.config, self._async_vol_create, [],
+        progWin = vmmAsyncJob(self._async_vol_create, [],
                               title=_("Creating storage volume..."),
                               text=_("Creating the storage volume may take a "
                                      "while..."))

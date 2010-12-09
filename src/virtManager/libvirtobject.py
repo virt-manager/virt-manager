@@ -26,6 +26,7 @@ import logging
 import libxml2
 
 from virtManager import util
+from virtManager.baseclass import vmmGObject
 
 def _sanitize_xml(xml):
     xml = libxml2.parseDoc(xml).serialize()
@@ -36,16 +37,15 @@ def _sanitize_xml(xml):
         xml += "\n"
     return xml
 
-class vmmLibvirtObject(gobject.GObject):
+class vmmLibvirtObject(vmmGObject):
     __gsignals__ = {
         "config-changed": (gobject.SIGNAL_RUN_FIRST,
                            gobject.TYPE_NONE,
                            []),
     }
 
-    def __init__(self, config, connection):
-        gobject.GObject.__init__(self)
-        self.config = config
+    def __init__(self, connection):
+        vmmGObject.__init__(self)
         self.connection = connection
 
         self._xml = None
@@ -69,8 +69,7 @@ class vmmLibvirtObject(gobject.GObject):
         raise NotImplementedError()
 
     def _XMLDesc(self, flags):
-        ignore = flags
-        return
+        raise NotImplementedError()
 
     def _define(self, xml):
         ignore = xml
@@ -153,4 +152,4 @@ class vmmLibvirtObject(gobject.GObject):
         origxml = self.__xml_to_redefine()
         return self._redefine_helper(origxml, newxml)
 
-gobject.type_register(vmmLibvirtObject)
+vmmGObject.type_register(vmmLibvirtObject)

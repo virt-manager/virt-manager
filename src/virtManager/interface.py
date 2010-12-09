@@ -18,18 +18,16 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-
 import virtinst
 from virtinst import Interface
 
 from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmInterface(vmmLibvirtObject):
-    __gsignals__ = { }
+    __gsignals__ = {}
 
-    def __init__(self, config, connection, interface, name, active):
-        vmmLibvirtObject.__init__(self, config, connection)
+    def __init__(self, connection, interface, name, active):
+        vmmLibvirtObject.__init__(self, connection)
 
         self.interface = interface  # Libvirt virInterface object
         self.name = name            # String name
@@ -213,4 +211,4 @@ class vmmInterface(vmmLibvirtObject):
             ret = "  %s\n" % ret
         return ret
 
-gobject.type_register(vmmInterface)
+vmmLibvirtObject.type_register(vmmInterface)

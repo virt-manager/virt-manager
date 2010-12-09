@@ -17,13 +17,13 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
+from virtManager.baseclass import vmmGObject
 
-class vmmNetDevice(gobject.GObject):
+class vmmNetDevice(vmmGObject):
     __gsignals__ = {}
 
     def __init__(self, name, mac, is_shared, bridge=None, hal_path=None):
-        gobject.GObject.__init__(self)
+        vmmGObject.__init__(self)
 
         self.name = name
         self.mac = mac
@@ -48,4 +48,4 @@ class vmmNetDevice(gobject.GObject):
     def get_hal_path(self):
         return self.hal_path
 
-gobject.type_register(vmmNetDevice)
+vmmGObject.type_register(vmmNetDevice)

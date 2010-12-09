@@ -18,26 +18,24 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
 import virtinst.util as util
 
-class vmmStorageVolume(gobject.GObject):
+from virtManager.libvirtobject import vmmLibvirtObject
+
+class vmmStorageVolume(vmmLibvirtObject):
     __gsignals__ = { }
 
-    def __init__(self, config, connection, vol, name):
-        gobject.GObject.__init__(self)
-        self.config = config
-        self.connection = connection
-        self.vol = vol              # Libvirt storage volume object
+    def __init__(self, connection, vol, name):
+        vmmLibvirtObject.__init__(self, connection)
+
+        self.vol = vol      # Libvirt storage volume object
         self.name = name
-        self._xml = None             # Cache xml rather than repeated lookups
-        self._update_xml()
 
-    def get_connection(self):
-        return self.connection
-
+    # Required class methods
     def get_name(self):
         return self.name
+    def _XMLDesc(self, flags):
+        return self.vol.XMLDesc(flags)
 
     def get_path(self):
         return self.vol.path()
@@ -49,11 +47,6 @@ class vmmStorageVolume(gobject.GObject):
     def delete(self):
         self.vol.delete(0)
         del(self.vol)
-
-    def get_xml(self):
-        if self._xml is None:
-            self._update_xml()
-        return self._xml
 
     def get_target_path(self):
         return util.get_xml_path(self.get_xml(),"/volume/target/path")
@@ -74,13 +67,10 @@ class vmmStorageVolume(gobject.GObject):
     def get_type(self):
         return util.get_xml_path(self.get_xml(),"/volume/format/@type")
 
-    def _update_xml(self):
-        self._xml = self.vol.XMLDesc(0)
-
     def _prettyify(self, val):
         if val > (1024*1024*1024):
             return "%2.2f GB" % (val/(1024.0*1024.0*1024.0))
         else:
             return "%2.2f MB" % (val/(1024.0*1024.0))
 
-gobject.type_register(vmmStorageVolume)
+vmmLibvirtObject.type_register(vmmStorageVolume)

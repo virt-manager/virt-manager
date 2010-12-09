@@ -444,7 +444,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             _cancel_back = None
             _cancel_args = [None]
 
-        progWin = vmmAsyncJob(self.config, self._async_migrate,
+        progWin = vmmAsyncJob(self._async_migrate,
                               [self.vm, destconn, uri, rate, live, secure,
                                max_downtime],
                               title=_("Migrating VM '%s'" % self.vm.get_name()),

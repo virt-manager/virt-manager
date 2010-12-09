@@ -393,7 +393,7 @@ def main():
     if options.show and options.uri == None:
         raise OptionValueError("can't use --show-* options without --connect")
 
-    engine = vmmEngine(config)
+    engine = vmmEngine()
 
     if (not (options.nodbus) and
         not ((os.getenv("DBUS_SESSION_BUS_ADDRESS") is None) and

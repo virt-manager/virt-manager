@@ -31,6 +31,7 @@ import virtinst
 import dbus
 
 from virtManager.about import vmmAbout
+from virtManager.baseclass import vmmGObject
 from virtManager.halhelper import vmmHalHelper
 from virtManager.clone import vmmCloneVM
 from virtManager.connect import vmmConnect
@@ -79,7 +80,7 @@ def default_uri():
 # PackageKit lookup helpers #
 #############################
 
-def check_packagekit(config, errbox):
+def check_packagekit(errbox):
     """
     Returns None when we determine nothing useful.
     Returns (success, did we just install libvirt) otherwise.
@@ -101,7 +102,7 @@ def check_packagekit(config, errbox):
         return
 
     found = []
-    progWin = vmmAsyncJob(config, _do_async_search,
+    progWin = vmmAsyncJob(_do_async_search,
                           [session, pk_control],
                           _("Searching for available hypervisors..."),
                           run_main=False)
@@ -211,7 +212,7 @@ def packagekit_search(session, pk_control, package_name):
 
 
 
-class vmmEngine(gobject.GObject):
+class vmmEngine(vmmGObject):
     __gsignals__ = {
         "connection-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                              [object]),
@@ -219,10 +220,8 @@ class vmmEngine(gobject.GObject):
                                [object])
         }
 
-    def __init__(self, config):
-        gobject.GObject.__init__(self)
-
-        self.config = config
+    def __init__(self):
+        vmmGObject.__init__(self)
 
         self.windowConnect = None
         self.windowPreferences = None
@@ -315,7 +314,7 @@ class vmmEngine(gobject.GObject):
         ret = None
         did_install_libvirt = False
         try:
-            ret = check_packagekit(self.config, self.err)
+            ret = check_packagekit(self.err)
         except:
             logging.exception("Error talking to PackageKit")
 
@@ -497,7 +496,7 @@ class vmmEngine(gobject.GObject):
         if conn:
             return conn
 
-        conn = vmmConnection(self.get_config(), uri, readOnly, self)
+        conn = vmmConnection(uri, readOnly, self)
         self.connections[uri] = {
             "connection": conn,
             "windowHost": None,
@@ -836,7 +835,7 @@ class vmmEngine(gobject.GObject):
             _cancel_back = None
             _cancel_args = [None]
 
-        progWin = vmmAsyncJob(self.config, self._save_callback,
+        progWin = vmmAsyncJob(self._save_callback,
                               [vm, path],
                               _("Saving Virtual Machine"),
                               cancel_back=_cancel_back,
@@ -891,7 +890,7 @@ class vmmEngine(gobject.GObject):
         if not path:
             return
 
-        progWin = vmmAsyncJob(self.config, self._restore_saved_callback,
+        progWin = vmmAsyncJob(self._restore_saved_callback,
                               [path, conn], _("Restoring Virtual Machine"))
         progWin.run()
         error, details = progWin.get_error()
@@ -1051,4 +1050,4 @@ class vmmEngine(gobject.GObject):
                              str(reboot_err)),
                              "".join(traceback.format_exc()))
 
-gobject.type_register(vmmEngine)
+vmmGObject.type_register(vmmEngine)

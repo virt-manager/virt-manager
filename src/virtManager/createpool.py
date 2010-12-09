@@ -392,7 +392,7 @@ class vmmCreatePool(vmmGObjectUI):
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
-        progWin = vmmAsyncJob(self.config, self._async_pool_create, [],
+        progWin = vmmAsyncJob(self._async_pool_create, [],
                               title=_("Creating storage pool..."),
                               text=_("Creating the storage pool may take a "
                                      "while..."))

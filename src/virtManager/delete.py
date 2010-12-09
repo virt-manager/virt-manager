@@ -130,7 +130,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         if devs:
             text = title + _(" and selected storage (this may take a while)")
 
-        progWin = vmmAsyncJob(self.config, self._async_delete, [devs],
+        progWin = vmmAsyncJob(self._async_delete, [devs],
                               title=title, text=text)
         progWin.run()
         error, details = progWin.get_error()

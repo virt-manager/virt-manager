@@ -24,13 +24,14 @@ import logging
 import virtinst
 
 from virtManager import util
+from virtManager.baseclass import vmmGObject
 
 MEDIA_FLOPPY = "floppy"
 MEDIA_CDROM = "cdrom"
 
 MEDIA_TIMEOUT = 3
 
-class vmmMediaDevice(gobject.GObject):
+class vmmMediaDevice(vmmGObject):
     __gsignals__ = {
         "media-added"  : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                           []),
@@ -62,7 +63,7 @@ class vmmMediaDevice(gobject.GObject):
 
     def __init__(self, path, key, has_media, media_label, media_key,
                  nodedev_obj = None, media_type = MEDIA_CDROM):
-        gobject.GObject.__init__(self)
+        vmmGObject.__init__(self)
 
         self.path = path
         self.key = key
@@ -173,4 +174,4 @@ class vmmMediaDevice(gobject.GObject):
 
         return True
 
-gobject.type_register(vmmMediaDevice)
+vmmGObject.type_register(vmmMediaDevice)

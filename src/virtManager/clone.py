@@ -710,7 +710,7 @@ class vmmCloneVM(vmmGObjectUI):
         if self.clone_design.clone_devices:
             text = title + _(" and selected storage (this may take a while)")
 
-        progWin = vmmAsyncJob(self.config, self._async_clone, [],
+        progWin = vmmAsyncJob(self._async_clone, [],
                               title=title, text=text)
         progWin.run()
         error, details = progWin.get_error()

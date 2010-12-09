@@ -991,7 +991,7 @@ class vmmAddHardware(vmmGObjectUI):
     def setup_device(self):
         if (self._dev.virtual_device_type ==
             virtinst.VirtualDevice.VIRTUAL_DEV_DISK):
-            progWin = vmmAsyncJob(self.config, self.do_file_allocate,
+            progWin = vmmAsyncJob(self.do_file_allocate,
                                   [self._dev],
                                   title=_("Creating Storage File"),
                                   text=_("Allocation of disk storage may take "

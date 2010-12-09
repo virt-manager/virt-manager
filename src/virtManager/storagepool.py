@@ -22,26 +22,34 @@ import gobject
 import virtinst
 import virtinst.util as util
 
+from virtManager.libvirtobject import vmmLibvirtObject
 from virtManager.storagevol import vmmStorageVolume
 
-class vmmStoragePool(gobject.GObject):
+class vmmStoragePool(vmmLibvirtObject):
     __gsignals__ = {
         "refreshed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
     }
 
-    def __init__(self, config, connection, pool, uuid, active):
-        gobject.GObject.__init__(self)
-        self.config = config
-        self.connection = connection
+    def __init__(self, connection, pool, uuid, active):
+        vmmLibvirtObject.__init__(self, connection)
+
         self.pool = pool            # Libvirt pool object
         self.uuid = uuid            # String UUID
         self.active = active        # bool indicating if it is running
 
         self._volumes = {}          # UUID->vmmStorageVolume mapping of the
                                     # pools associated volumes
-        self._xml = None            # xml cache
 
         self.refresh()
+
+    # Required class methods
+    def get_name(self):
+        return self.pool.name()
+    def _XMLDesc(self, flags):
+        return self.pool.XMLDesc(flags)
+    def _define(self, xml):
+        return self.get_connection().vmm.storagePoolDefineXML(xml, 0)
+
 
     def set_active(self, state):
         self.active = state
@@ -53,12 +61,6 @@ class vmmStoragePool(gobject.GObject):
     def can_change_alloc(self):
         typ = self.get_type()
         return (typ in [virtinst.Storage.StoragePool.TYPE_LOGICAL])
-
-    def get_connection(self):
-        return self.connection
-
-    def get_name(self):
-        return self.pool.name()
 
     def get_uuid(self):
         return self.uuid
@@ -77,14 +79,6 @@ class vmmStoragePool(gobject.GObject):
         else:
             self.pool.delete(0)
         del(self.pool)
-
-    def _update_xml(self):
-        self._xml = self.pool.XMLDesc(0)
-
-    def get_xml(self):
-        if self._xml is None:
-            self._update_xml()
-        return self._xml
 
     def set_autostart(self, value):
         self.pool.setAutostart(value)
@@ -124,7 +118,7 @@ class vmmStoragePool(gobject.GObject):
             return
 
         self.pool.refresh(0)
-        self._update_xml()
+        self.refresh_xml()
         self.update_volumes()
         self.emit("refreshed")
 
@@ -140,10 +134,9 @@ class vmmStoragePool(gobject.GObject):
             if self._volumes.has_key(volname):
                 new_vol_list[volname] = self._volumes[volname]
             else:
-                new_vol_list[volname] = vmmStorageVolume(self.config,
-                                                         self.connection,
-                                                         self.pool.storageVolLookupByName(volname),
-                                                         volname)
+                new_vol_list[volname] = vmmStorageVolume(self.connection,
+                                    self.pool.storageVolLookupByName(volname),
+                                    volname)
         self._volumes = new_vol_list
 
 
@@ -153,4 +146,4 @@ class vmmStoragePool(gobject.GObject):
         else:
             return "%2.2f MB" % (val/(1024.0*1024.0))
 
-gobject.type_register(vmmStoragePool)
+vmmLibvirtObject.type_register(vmmStoragePool)

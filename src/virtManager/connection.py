@@ -40,8 +40,9 @@ from virtManager.storagepool import vmmStoragePool
 from virtManager.interface import vmmInterface
 from virtManager.netdev import vmmNetDevice
 from virtManager.mediadev import vmmMediaDevice
+from virtManager.baseclass import vmmGObject
 
-class vmmConnection(gobject.GObject):
+class vmmConnection(vmmGObject):
     __gsignals__ = {
         "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                      [str, str]),
@@ -100,12 +101,10 @@ class vmmConnection(gobject.GObject):
     STATE_ACTIVE = 2
     STATE_INACTIVE = 3
 
-    def __init__(self, config, uri, readOnly=None, engine=None):
-        gobject.GObject.__init__(self)
+    def __init__(self, uri, readOnly=None, engine=None):
+        vmmGObject.__init__(self)
 
-        self.config = config
         self.engine = engine
-
         self.connectThread = None
         self.connectError = None
         self.uri = uri
@@ -1116,8 +1115,7 @@ class vmmConnection(gobject.GObject):
                 uuid = util.uuidstr(net.UUID())
                 if not origNets.has_key(uuid):
                     # Brand new network
-                    currentNets[uuid] = vmmNetwork(self.config, self, net,
-                                                   uuid, True)
+                    currentNets[uuid] = vmmNetwork(self, net, uuid, True)
                     newNets.append(uuid)
                     startNets.append(uuid)
                 else:
@@ -1136,8 +1134,7 @@ class vmmConnection(gobject.GObject):
                 net = self.vmm.networkLookupByName(name)
                 uuid = util.uuidstr(net.UUID())
                 if not origNets.has_key(uuid):
-                    currentNets[uuid] = vmmNetwork(self.config, self, net,
-                                                 uuid, False)
+                    currentNets[uuid] = vmmNetwork(self, net, uuid, False)
                     newNets.append(uuid)
                 else:
                     currentNets[uuid] = origNets[uuid]
@@ -1190,8 +1187,7 @@ class vmmConnection(gobject.GObject):
                 pool = self.vmm.storagePoolLookupByName(name)
                 uuid = util.uuidstr(pool.UUID())
                 if not origPools.has_key(uuid):
-                    currentPools[uuid] = vmmStoragePool(self.config, self,
-                                                        pool, uuid, True)
+                    currentPools[uuid] = vmmStoragePool(self, pool, uuid, True)
                     newPools.append(uuid)
                     startPools.append(uuid)
                 else:
@@ -1208,8 +1204,7 @@ class vmmConnection(gobject.GObject):
                 pool = self.vmm.storagePoolLookupByName(name)
                 uuid = util.uuidstr(pool.UUID())
                 if not origPools.has_key(uuid):
-                    currentPools[uuid] = vmmStoragePool(self.config, self,
-                                                        pool, uuid, False)
+                    currentPools[uuid] = vmmStoragePool(self, pool, uuid, False)
                     newPools.append(uuid)
                 else:
                     currentPools[uuid] = origPools[uuid]
@@ -1256,8 +1251,7 @@ class vmmConnection(gobject.GObject):
             if not orig.has_key(key):
                 obj = self.vmm.interfaceLookupByName(name)
                 # Object is brand new this tick period
-                current[key] = vmmInterface(self.config, self, obj, key,
-                                            is_active)
+                current[key] = vmmInterface(self, obj, key, is_active)
                 new.append(key)
 
                 if is_active:
@@ -1428,7 +1422,7 @@ class vmmConnection(gobject.GObject):
         for uuid in maybeNewUUIDs.keys():
             rawvm = maybeNewUUIDs[uuid]
             if not(self.vms.has_key(uuid)):
-                vm = vmmDomain(self.config, self, rawvm, uuid)
+                vm = vmmDomain(self, rawvm, uuid)
                 newUUIDs.append(uuid)
                 curUUIDs[uuid] = vm
             else:

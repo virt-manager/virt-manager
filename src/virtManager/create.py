@@ -1553,8 +1553,7 @@ class vmmCreate(vmmGObjectUI):
                               "".join(traceback.format_exc()))
 
     def customize(self, guest):
-        virtinst_guest = vmmDomainVirtinst(self.config, self.conn, guest,
-                                           self.guest.uuid)
+        virtinst_guest = vmmDomainVirtinst(self.conn, guest, self.guest.uuid)
 
         if self.config_window:
             self.config_window.disconnect(self.config_window_signal)
@@ -1577,7 +1576,7 @@ class vmmCreate(vmmGObjectUI):
         self.config_window.show()
 
     def start_install(self, guest):
-        progWin = vmmAsyncJob(self.config, self.do_install, [guest],
+        progWin = vmmAsyncJob(self.do_install, [guest],
                               title=_("Creating Virtual Machine"),
                               text=_("The virtual machine is now being "
                                      "created. Allocation of disk storage "
