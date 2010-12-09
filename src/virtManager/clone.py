@@ -147,7 +147,6 @@ class vmmCloneVM(vmmGObjectUI):
     # First time setup
 
     def set_initial_state(self):
-
         blue = gtk.gdk.color_parse("#0072A8")
         self.window.get_widget("clone-header").modify_bg(gtk.STATE_NORMAL,
                                                          blue)
@@ -735,7 +734,7 @@ class vmmCloneVM(vmmGObjectUI):
 
                 # Open a seperate connection to install on since this is async
                 logging.debug("Threading off connection to clone VM.")
-                newconn = util.dup_conn(self.conn)
+                newconn = util.dup_conn(self.conn).vmm
                 meter = vmmCreateMeter(asyncjob)
 
                 self.clone_design.orig_connection = newconn

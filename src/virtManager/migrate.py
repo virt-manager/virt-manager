@@ -504,10 +504,8 @@ class vmmMigrateDialog(vmmGObjectUI):
             try:
                 ignore = vmmCreateMeter(asyncjob)
 
-                srcconn = util.dup_conn(origvm.get_connection(),
-                                        return_conn_class=True)
-                dstconn = util.dup_conn(origdconn,
-                                        return_conn_class=True)
+                srcconn = util.dup_conn(origvm.get_connection())
+                dstconn = util.dup_conn(origdconn)
 
                 vminst = srcconn.vmm.lookupByName(origvm.get_name())
                 vm = vmmDomain(srcconn, vminst, vminst.UUID())

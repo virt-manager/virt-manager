@@ -852,8 +852,7 @@ class vmmEngine(vmmGObject):
 
     def _save_callback(self, vm, file_to_save, asyncjob):
         try:
-            conn = util.dup_conn(vm.connection,
-                                 return_conn_class=True)
+            conn = util.dup_conn(vm.connection)
             newvm = conn.get_vm(vm.get_uuid())
 
             newvm.save(file_to_save)
@@ -890,8 +889,7 @@ class vmmEngine(vmmGObject):
 
     def _restore_saved_callback(self, file_to_load, conn, asyncjob):
         try:
-            newconn = util.dup_conn(conn,
-                                    return_conn_class=True)
+            newconn = util.dup_conn(conn)
             newconn.restore(file_to_load)
         except Exception, e:
             err = (_("Error restoring domain '%s': %s") %

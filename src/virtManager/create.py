@@ -1617,7 +1617,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             logging.debug("Starting background install process")
 
-            guest.conn = util.dup_conn(self.conn)
+            guest.conn = util.dup_conn(self.conn).vmm
             for dev in guest.get_all_devices():
                 dev.conn = guest.conn
 

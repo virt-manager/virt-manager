@@ -154,7 +154,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         try:
             # Open a seperate connection to install on since this is async
             logging.debug("Threading off connection to delete vol.")
-            newconn = util.dup_conn(self.conn)
+            newconn = util.dup_conn(self.conn).vmm
             meter = vmmCreateMeter(asyncjob)
 
             for path in paths:

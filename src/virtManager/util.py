@@ -234,14 +234,13 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
     return ret
 
 def dup_lib_conn(libconn):
-    return _dup_all_conn(None, libconn=libconn,
-                         return_conn_class=False)
+    vmmconn = _dup_all_conn(None, libconn)
+    return vmmconn.vmm
 
-def dup_conn(conn, return_conn_class=False):
-    return _dup_all_conn(conn, None,
-                         return_conn_class=return_conn_class)
+def dup_conn(conn):
+    return _dup_all_conn(conn, None)
 
-def _dup_all_conn(conn, libconn, return_conn_class):
+def _dup_all_conn(conn, libconn):
 
     is_readonly = False
 
@@ -258,21 +257,18 @@ def _dup_all_conn(conn, libconn, return_conn_class):
     if is_test:
         # Skip duplicating a test conn, since it doesn't maintain state
         # between instances
-        return return_conn_class and conn or vmm
+        return conn or vmm
 
     if virtinst.support.support_threading():
         # Libvirt 0.6.0 implemented client side request threading: this
         # removes the need to actually duplicate the connection.
-        return return_conn_class and conn or vmm
+        return conn or vmm
 
     logging.debug("Duplicating connection for async operation.")
     newconn = virtManager.connection.vmmConnection(uri, readOnly=is_readonly)
     newconn.open(sync=True)
 
-    if return_conn_class:
-        return newconn
-    else:
-        return newconn.vmm
+    return newconn
 
 def pretty_hv(gtype, domtype):
     """

@@ -1137,7 +1137,7 @@ class vmmCreateInterface(vmmGObjectUI):
         error = None
         details = None
         try:
-            self.interface.conn = util.dup_conn(self.conn)
+            self.interface.conn = util.dup_conn(self.conn).vmm
 
             self.interface.install(meter, create=activate)
             logging.debug("Install completed")
