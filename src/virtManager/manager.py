@@ -258,7 +258,6 @@ class vmmManager(vmmGObjectUI):
         self.window.get_widget("vm-new").set_icon_name("vm_new")
         self.window.get_widget("vm-open").set_icon_name("icon_console")
         uihelpers.build_shutdown_button_menu(
-                                   self.config,
                                    self.window.get_widget("vm-shutdown"),
                                    self.poweroff_vm,
                                    self.reboot_vm,

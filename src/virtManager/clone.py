@@ -735,7 +735,7 @@ class vmmCloneVM(vmmGObjectUI):
 
                 # Open a seperate connection to install on since this is async
                 logging.debug("Threading off connection to clone VM.")
-                newconn = util.dup_conn(self.config, self.conn)
+                newconn = util.dup_conn(self.conn)
                 meter = vmmCreateMeter(asyncjob)
 
                 self.clone_design.orig_connection = newconn

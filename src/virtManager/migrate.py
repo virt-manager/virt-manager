@@ -504,13 +504,13 @@ class vmmMigrateDialog(vmmGObjectUI):
             try:
                 ignore = vmmCreateMeter(asyncjob)
 
-                srcconn = util.dup_conn(self.config, origvm.get_connection(),
+                srcconn = util.dup_conn(origvm.get_connection(),
                                         return_conn_class=True)
-                dstconn = util.dup_conn(self.config, origdconn,
+                dstconn = util.dup_conn(origdconn,
                                         return_conn_class=True)
 
                 vminst = srcconn.vmm.lookupByName(origvm.get_name())
-                vm = vmmDomain(self.config, srcconn, vminst, vminst.UUID())
+                vm = vmmDomain(srcconn, vminst, vminst.UUID())
 
                 logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
                               srcconn.get_uri(), dstconn.get_uri())

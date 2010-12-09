@@ -324,7 +324,7 @@ class vmmAddHardware(vmmGObjectUI):
         if not self.host_storage_timer:
             self.host_storage_timer = util.safe_timeout_add(3 * 1000,
                                                 uihelpers.host_space_tick,
-                                                self.conn, self.config,
+                                                self.conn,
                                                 label_widget)
         self.window.get_widget("config-storage-create").set_active(True)
         self.window.get_widget("config-storage-size").set_value(8)
@@ -524,7 +524,7 @@ class vmmAddHardware(vmmGObjectUI):
         sparse = not self.window.get_widget("config-storage-nosparse").get_active()
 
         if self.is_default_storage():
-            path = util.get_default_path(self.conn, self.config,
+            path = util.get_default_path(self.conn,
                                          self.vm.get_name())
             logging.debug("Default storage path is: %s" % path)
         else:
@@ -1053,7 +1053,7 @@ class vmmAddHardware(vmmGObjectUI):
             # If creating disk via storage API, we need to thread
             # off a new connection
             if disk.vol_install:
-                newconn = util.dup_lib_conn(self.config, disk.conn)
+                newconn = util.dup_lib_conn(disk.conn)
                 disk.conn = newconn
             logging.debug("Starting background file allocate process")
             disk.setup_dev(self.conn.vmm, meter=meter)
@@ -1118,7 +1118,7 @@ class vmmAddHardware(vmmGObjectUI):
             if self.is_default_storage():
                 # See if the ideal disk path (/default/pool/vmname.img)
                 # exists, and if unused, prompt the use for using it
-                ideal = util.get_ideal_path(self.conn, self.config,
+                ideal = util.get_ideal_path(self.conn,
                                             self.vm.get_name())
                 do_exist = False
                 ret = True
@@ -1185,7 +1185,7 @@ class vmmAddHardware(vmmGObjectUI):
             if not res:
                 return False
 
-        uihelpers.check_path_search_for_qemu(self.topwin, self.config,
+        uihelpers.check_path_search_for_qemu(self.topwin,
                                              self.conn, disk.path)
 
         self._dev = disk

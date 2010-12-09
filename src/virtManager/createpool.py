@@ -412,7 +412,7 @@ class vmmCreatePool(vmmGObjectUI):
         newconn = None
         try:
             # Open a seperate connection to install on since this is async
-            newconn = util.dup_lib_conn(self.config, self._pool.conn)
+            newconn = util.dup_lib_conn(self._pool.conn)
             meter = vmmCreateMeter(asyncjob)
             self._pool.conn = newconn
 
@@ -545,8 +545,7 @@ class vmmCreatePool(vmmGObjectUI):
         if foldermode:
             mode = gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER
 
-        return util.browse_local(self.topwin, dialog_name,
-                                 self.config, self.conn,
+        return util.browse_local(self.topwin, dialog_name, self.conn,
                                  dialog_type=mode,
                                  start_folder=startfolder)
 

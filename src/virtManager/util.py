@@ -27,6 +27,7 @@ import libxml2
 import logging
 import os.path
 
+from virtManager.config import running_config
 import virtManager
 import virtinst
 
@@ -64,13 +65,13 @@ def build_default_pool(conn):
         raise RuntimeError(_("Couldn't create default storage pool '%s': %s") %
                              (DEFAULT_POOL_PATH, str(e)))
 
-def get_ideal_path_info(conn, config, name):
-    path = get_default_dir(conn, config)
+def get_ideal_path_info(conn, name):
+    path = get_default_dir(conn)
     suffix = ".img"
     return (path, name, suffix)
 
-def get_ideal_path(conn, config, name):
-    target, name, suffix = get_ideal_path_info(conn, config, name)
+def get_ideal_path(conn, name):
+    target, name, suffix = get_ideal_path_info(conn, name)
     return os.path.join(target, name) + suffix
 
 def get_default_pool(conn):
@@ -82,18 +83,18 @@ def get_default_pool(conn):
 
     return pool
 
-def get_default_dir(conn, config):
+def get_default_dir(conn):
     pool = get_default_pool(conn)
 
     if pool:
         return pool.get_target_path()
     else:
-        return config.get_default_image_dir(conn)
+        return running_config.get_default_image_dir(conn)
 
-def get_default_path(conn, config, name):
+def get_default_path(conn, name):
     pool = get_default_pool(conn)
 
-    default_dir = get_default_dir(conn, config)
+    default_dir = get_default_dir(conn)
 
     if not pool:
         # Use old generating method
@@ -111,7 +112,7 @@ def get_default_path(conn, config, name):
 
         path = f
     else:
-        target, ignore, suffix = get_ideal_path_info(conn, config, name)
+        target, ignore, suffix = get_ideal_path_info(conn, name)
 
         path = virtinst.Storage.StorageVolume.find_free_name(name,
                         pool_object=pool.pool, suffix=suffix)
@@ -153,7 +154,7 @@ def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
     return ret
 
 
-def browse_local(parent, dialog_name, config, conn, start_folder=None,
+def browse_local(parent, dialog_name, conn, start_folder=None,
                  _type=None, dialog_type=gtk.FILE_CHOOSER_ACTION_OPEN,
                  confirm_func=None, browse_reason=None):
     """
@@ -161,7 +162,6 @@ def browse_local(parent, dialog_name, config, conn, start_folder=None,
 
     @param parent: Parent window for the filechooser
     @param dialog_name: String to use in the title bar of the filechooser.
-    @param config: vmmConfig used by calling class
     @param conn: vmmConnection used by calling class
     @param start_folder: Folder the filechooser is viewing at startup
     @param _type: File extension to filter by (e.g. "iso", "png")
@@ -209,7 +209,8 @@ def browse_local(parent, dialog_name, config, conn, start_folder=None,
 
     # Set initial dialog folder
     if browse_reason:
-        start_folder = config.get_default_directory(conn, browse_reason)
+        start_folder = running_config.get_default_directory(conn,
+                                                            browse_reason)
 
     if start_folder != None:
         if os.access(start_folder, os.R_OK):
@@ -228,19 +229,19 @@ def browse_local(parent, dialog_name, config, conn, start_folder=None,
 
     # Store the chosen directory in gconf if necessary
     if ret and browse_reason and not ret.startswith("/dev"):
-        config.set_default_directory(os.path.dirname(ret), browse_reason)
-
+        running_config.set_default_directory(os.path.dirname(ret),
+                                             browse_reason)
     return ret
 
-def dup_lib_conn(config, libconn):
-    return _dup_all_conn(config, None, libconn=libconn,
+def dup_lib_conn(libconn):
+    return _dup_all_conn(None, libconn=libconn,
                          return_conn_class=False)
 
-def dup_conn(config, conn, return_conn_class=False):
-    return _dup_all_conn(config, conn, None,
+def dup_conn(conn, return_conn_class=False):
+    return _dup_all_conn(conn, None,
                          return_conn_class=return_conn_class)
 
-def _dup_all_conn(config, conn, libconn, return_conn_class):
+def _dup_all_conn(conn, libconn, return_conn_class):
 
     is_readonly = False
 
@@ -265,7 +266,7 @@ def _dup_all_conn(config, conn, libconn, return_conn_class):
         return return_conn_class and conn or vmm
 
     logging.debug("Duplicating connection for async operation.")
-    newconn = virtManager.connection.vmmConnection(uri, is_readonly)
+    newconn = virtManager.connection.vmmConnection(uri, readOnly=is_readonly)
     newconn.open(sync=True)
 
     if return_conn_class:

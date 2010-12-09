@@ -264,8 +264,9 @@ class vmmStorageBrowser(vmmGObjectUI):
                           "".join(traceback.format_exc()))
 
     def browse_local(self, src_ignore):
-        filename = util.browse_local(parent=self.topwin, config=self.config,
-                                     conn=self.conn, **self.local_args)
+        filename = util.browse_local(parent=self.topwin,
+                                     conn=self.conn,
+                                     **self.local_args)
         if filename:
             self._do_finish(path=filename)
 

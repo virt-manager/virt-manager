@@ -29,6 +29,14 @@ import dbus
 from virtManager.netdev import vmmNetDevice
 from virtManager.mediadev import vmmMediaDevice
 
+_hal_helper = None
+
+def get_hal_helper():
+    global _hal_helper
+    if not _hal_helper:
+        _hal_helper = vmmHalHelper()
+    return _hal_helper
+
 class vmmHalHelper(gobject.GObject):
     __gsignals__ = {
         "netdev-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,

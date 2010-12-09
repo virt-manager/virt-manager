@@ -21,6 +21,7 @@
 import gobject
 import gtk
 
+from virtManager.baseclass import vmmGObject
 from virtManager.error import vmmErrorDialog
 
 try:
@@ -39,7 +40,7 @@ def build_image_menu_item(label):
 
     return menu_item
 
-class vmmSystray(gobject.GObject):
+class vmmSystray(vmmGObject):
     __gsignals__ = {
         "action-toggle-manager": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, []),
@@ -67,11 +68,9 @@ class vmmSystray(gobject.GObject):
                             gobject.TYPE_NONE, []),
     }
 
-    def __init__(self, config, engine):
-        gobject.GObject.__init__(self)
+    def __init__(self, engine):
+        vmmGObject.__init__(self)
 
-        self.config = config
-        self.engine = engine
         self.topwin = None
         self.err = vmmErrorDialog()
 
@@ -82,14 +81,14 @@ class vmmSystray(gobject.GObject):
         self.systray_icon = None
         self.systray_indicator = False
 
+        engine.connect("connection-added", self.conn_added)
+        engine.connect("connection-removed", self.conn_removed)
+
         # Are we using Application Indicators?
         if appindicator is not None:
             self.systray_indicator = True
 
         self.init_systray_menu()
-
-        self.engine.connect("connection-added", self.conn_added)
-        self.engine.connect("connection-removed", self.conn_removed)
 
         self.config.on_view_system_tray_changed(self.show_systray)
         self.show_systray()
@@ -437,4 +436,4 @@ class vmmSystray(gobject.GObject):
     def exit_app(self, ignore):
         self.emit("action-exit-app")
 
-gobject.type_register(vmmSystray)
+vmmGObject.type_register(vmmSystray)

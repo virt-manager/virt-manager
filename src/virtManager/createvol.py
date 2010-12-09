@@ -222,7 +222,7 @@ class vmmCreateVolume(vmmGObjectUI):
     def _async_vol_create(self, asyncjob):
         newconn = None
         try:
-            newconn = util.dup_conn(self.config, self.conn)
+            newconn = util.dup_conn(self.conn)
 
             # Lookup different pool obj
             newpool = newconn.storagePoolLookupByName(self.parent_pool.get_name())

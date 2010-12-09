@@ -101,10 +101,9 @@ class vmmConnection(vmmGObject):
     STATE_ACTIVE = 2
     STATE_INACTIVE = 3
 
-    def __init__(self, uri, readOnly=None, engine=None):
+    def __init__(self, uri, readOnly=False):
         vmmGObject.__init__(self)
 
-        self.engine = engine
         self.connectThread = None
         self.connectError = None
         self.uri = uri
@@ -159,11 +158,6 @@ class vmmConnection(vmmGObject):
     #################
     # Init routines #
     #################
-
-    def get_hal_helper(self):
-        if self.engine:
-            return self.engine.get_hal_helper()
-        return None
 
     def _set_hal_remove_sig(self, hal_helper):
         if not self.hal_helper_remove_sig:

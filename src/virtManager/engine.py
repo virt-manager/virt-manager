@@ -32,7 +32,6 @@ import dbus
 
 from virtManager.about import vmmAbout
 from virtManager.baseclass import vmmGObject
-from virtManager.halhelper import vmmHalHelper
 from virtManager.clone import vmmCloneVM
 from virtManager.connect import vmmConnect
 from virtManager.connection import vmmConnection
@@ -249,7 +248,6 @@ class vmmEngine(vmmGObject):
         # keep running in system tray if enabled
         self.windows = 0
 
-        self.hal_helper = None
         self.init_systray()
 
         self.config.on_stats_update_interval_changed(self.reschedule_timer)
@@ -264,7 +262,7 @@ class vmmEngine(vmmGObject):
         if self.systray:
             return
 
-        self.systray = vmmSystray(self.config, self)
+        self.systray = vmmSystray(self)
         self.systray.connect("action-toggle-manager", self._do_toggle_manager)
         self.systray.connect("action-suspend-domain", self._do_suspend_domain)
         self.systray.connect("action-resume-domain", self._do_resume_domain)
@@ -281,15 +279,6 @@ class vmmEngine(vmmGObject):
         if self.windows == 0 and not systray_enabled:
             # Show the manager so that the user can control the application
             self.show_manager()
-
-    def get_hal_helper(self):
-        if not self.hal_helper:
-            self.hal_helper = vmmHalHelper()
-        return self.hal_helper
-
-    def get_config(self):
-        return self.config
-
 
     ########################
     # First run PackageKit #
@@ -412,7 +401,7 @@ class vmmEngine(vmmGObject):
         self.schedule_timer()
 
     def schedule_timer(self):
-        interval = self.get_config().get_stats_update_interval() * 1000
+        interval = self.config.get_stats_update_interval() * 1000
 
         if self.timer != None:
             gobject.source_remove(self.timer)
@@ -496,7 +485,7 @@ class vmmEngine(vmmGObject):
         if conn:
             return conn
 
-        conn = vmmConnection(uri, readOnly, self)
+        conn = vmmConnection(uri, readOnly=readOnly)
         self.connections[uri] = {
             "connection": conn,
             "windowHost": None,
@@ -822,7 +811,7 @@ class vmmEngine(vmmGObject):
         if not managed:
             path = util.browse_local(src.topwin,
                                      _("Save Virtual Machine"),
-                                     self.config, conn,
+                                     conn,
                                      dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE,
                                      browse_reason=self.config.CONFIG_DIR_SAVE)
             if not path:
@@ -863,7 +852,7 @@ class vmmEngine(vmmGObject):
 
     def _save_callback(self, vm, file_to_save, asyncjob):
         try:
-            conn = util.dup_conn(self.config, vm.connection,
+            conn = util.dup_conn(vm.connection,
                                  return_conn_class=True)
             newvm = conn.get_vm(vm.get_uuid())
 
@@ -884,7 +873,7 @@ class vmmEngine(vmmGObject):
 
         path = util.browse_local(src.topwin,
                                  _("Restore Virtual Machine"),
-                                 self.config, conn,
+                                 conn,
                                  browse_reason=self.config.CONFIG_DIR_RESTORE)
 
         if not path:
@@ -901,7 +890,7 @@ class vmmEngine(vmmGObject):
 
     def _restore_saved_callback(self, file_to_load, conn, asyncjob):
         try:
-            newconn = util.dup_conn(self.config, conn,
+            newconn = util.dup_conn(conn,
                                     return_conn_class=True)
             newconn.restore(file_to_load)
         except Exception, e:

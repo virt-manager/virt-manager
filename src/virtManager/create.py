@@ -352,7 +352,7 @@ class vmmCreate(vmmGObjectUI):
         if not self.host_storage_timer:
             self.host_storage_timer = util.safe_timeout_add(3 * 1000,
                                                     uihelpers.host_space_tick,
-                                                    self.conn, self.config,
+                                                    self.conn,
                                                     label_widget)
         self.window.get_widget("enable-storage").set_active(True)
         self.window.get_widget("config-storage-create").set_active(True)
@@ -854,7 +854,7 @@ class vmmCreate(vmmGObjectUI):
             if len(self.failed_guest.disks) > 0:
                 return self.failed_guest.disks[0].path
 
-        return util.get_default_path(self.conn, self.config, name)
+        return util.get_default_path(self.conn, name)
 
     def is_default_storage(self):
         usedef = self.window.get_widget("config-storage-create").get_active()
@@ -1329,7 +1329,7 @@ class vmmCreate(vmmGObjectUI):
                 path = None
 
             if path:
-                uihelpers.check_path_search_for_qemu(self.topwin, self.config,
+                uihelpers.check_path_search_for_qemu(self.topwin,
                                                      self.conn, path)
 
 
@@ -1388,7 +1388,7 @@ class vmmCreate(vmmGObjectUI):
             if self.is_default_storage() and not revalidate:
                 # See if the ideal disk path (/default/pool/vmname.img)
                 # exists, and if unused, prompt the use for using it
-                ideal = util.get_ideal_path(self.conn, self.config,
+                ideal = util.get_ideal_path(self.conn,
                                             self.guest.name)
                 do_exist = False
                 ret = True
@@ -1438,7 +1438,7 @@ class vmmCreate(vmmGObjectUI):
                 return False
 
         if not revalidate:
-            uihelpers.check_path_search_for_qemu(self.topwin, self.config,
+            uihelpers.check_path_search_for_qemu(self.topwin,
                                                  self.conn, disk.path)
 
         self.disk = disk
@@ -1617,7 +1617,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             logging.debug("Starting background install process")
 
-            guest.conn = util.dup_conn(self.config, self.conn)
+            guest.conn = util.dup_conn(self.conn)
             for dev in guest.get_all_devices():
                 dev.conn = guest.conn
 

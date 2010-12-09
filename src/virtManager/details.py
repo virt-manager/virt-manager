@@ -462,7 +462,6 @@ class vmmDetails(vmmGObjectUI):
     def init_menus(self):
         # Shutdown button menu
         uihelpers.build_shutdown_button_menu(
-                                   self.config,
                                    self.window.get_widget("control-shutdown"),
                                    self.control_vm_shutdown,
                                    self.control_vm_reboot,
@@ -1083,7 +1082,7 @@ class vmmDetails(vmmGObjectUI):
         path = util.browse_local(
                         self.topwin,
                         _("Save Virtual Machine Screenshot"),
-                        self.config, self.vm.get_connection(),
+                        self.vm.get_connection(),
                         _type = ("png", "PNG files"),
                         dialog_type = gtk.FILE_CHOOSER_ACTION_SAVE,
                         browse_reason=self.config.CONFIG_DIR_SCREENSHOT)

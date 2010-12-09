@@ -31,6 +31,7 @@ from virtinst import VirtualDisk
 
 from virtManager import util
 from virtManager.error import vmmErrorDialog
+from virtManager.config import running_config
 
 OPTICAL_DEV_PATH = 0
 OPTICAL_LABEL = 1
@@ -70,9 +71,9 @@ def set_sparse_tooltip(widget):
                    "available storage space.")
     util.tooltip_wrapper(widget, sparse_str)
 
-def host_disk_space(conn, config):
+def host_disk_space(conn):
     pool = util.get_default_pool(conn)
-    path = util.get_default_dir(conn, config)
+    path = util.get_default_dir(conn)
 
     avail = 0
     if pool:
@@ -90,8 +91,8 @@ def host_disk_space(conn, config):
 
     return float(avail / 1024.0 / 1024.0 / 1024.0)
 
-def host_space_tick(conn, config, widget):
-    max_storage = host_disk_space(conn, config)
+def host_space_tick(conn, widget):
+    max_storage = host_disk_space(conn)
 
     def pretty_storage(size):
         return "%.1f Gb" % float(size)
@@ -638,9 +639,9 @@ def mediadev_set_default_selection(widget):
 # Build toolbar shutdown button menu (manager and details toolbar) #
 ####################################################################
 
-def build_shutdown_button_menu(config, widget, shutdown_cb, reboot_cb,
+def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb,
                                destroy_cb, save_cb):
-    icon_name = config.get_shutdown_icon_name()
+    icon_name = running_config.get_shutdown_icon_name()
     widget.set_icon_name(icon_name)
     menu = gtk.Menu()
     widget.set_menu(menu)
@@ -681,7 +682,7 @@ def build_shutdown_button_menu(config, widget, shutdown_cb, reboot_cb,
 #####################################
 # Path permissions checker for qemu #
 #####################################
-def check_path_search_for_qemu(parent, config, conn, path):
+def check_path_search_for_qemu(parent, conn, path):
     set_error_parent(parent)
 
     if conn.is_remote() or not conn.is_qemu_system():
@@ -689,7 +690,7 @@ def check_path_search_for_qemu(parent, config, conn, path):
 
     user = QEMU_SYSTEM_EMULATOR_USER
 
-    skip_paths = config.get_perms_fix_ignore()
+    skip_paths = running_config.get_perms_fix_ignore()
     broken_paths = VirtualDisk.check_path_search_for_user(conn.vmm, path, user)
     for p in broken_paths:
         if p in skip_paths:
@@ -707,7 +708,7 @@ def check_path_search_for_qemu(parent, config, conn, path):
                     buttons=gtk.BUTTONS_YES_NO)
 
     if chkres:
-        config.add_perms_fix_ignore(broken_paths)
+        running_config.add_perms_fix_ignore(broken_paths)
     if not resp:
         return
 
@@ -730,7 +731,7 @@ def check_path_search_for_qemu(parent, config, conn, path):
                          _("Don't ask about these directories again."))
 
     if chkres:
-        config.add_perms_fix_ignore(errors.keys())
+        running_config.add_perms_fix_ignore(errors.keys())
 
 ######################################
 # Interface startmode widget builder #
