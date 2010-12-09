@@ -305,16 +305,16 @@ class vmmHost(vmmGObjectUI):
         self.engine.decrement_window_counter()
         return 1
 
-    def show_help(self, src):
+    def show_help(self, src_ignore):
         self.emit("action-show-help", "virt-manager-host-window")
 
-    def view_manager(self, src):
+    def view_manager(self, src_ignore):
         self.emit("action-view-manager")
 
-    def restore_domain(self, src):
+    def restore_domain(self, src_ignore):
         self.emit("action-restore-domain", self.conn.get_uri())
 
-    def exit_app(self, src):
+    def exit_app(self, src_ignore):
         self.emit("action-exit-app")
 
     def reset_state(self):
@@ -373,7 +373,7 @@ class vmmHost(vmmGObjectUI):
     # Virtual Network functions
     # -------------------------
 
-    def delete_network(self, src):
+    def delete_network(self, src_ignore):
         net = self.current_network()
         if net is None:
             return
@@ -388,7 +388,7 @@ class vmmHost(vmmGObjectUI):
             self.err.show_err(_("Error deleting network: %s") % str(e),
                               "".join(traceback.format_exc()))
 
-    def start_network(self, src):
+    def start_network(self, src_ignore):
         net = self.current_network()
         if net is None:
             return
@@ -399,7 +399,7 @@ class vmmHost(vmmGObjectUI):
             self.err.show_err(_("Error starting network: %s") % str(e),
                               "".join(traceback.format_exc()))
 
-    def stop_network(self, src):
+    def stop_network(self, src_ignore):
         net = self.current_network()
         if net is None:
             return
@@ -410,7 +410,7 @@ class vmmHost(vmmGObjectUI):
             self.err.show_err(_("Error stopping network: %s") % str(e),
                               "".join(traceback.format_exc()))
 
-    def add_network(self, src):
+    def add_network(self, src_ignore):
         try:
             if self.addnet is None:
                 self.addnet = vmmCreateNetwork(self.conn)
@@ -419,7 +419,7 @@ class vmmHost(vmmGObjectUI):
             self.err.show_err(_("Error launching network wizard: %s") % str(e),
                               "".join(traceback.format_exc()))
 
-    def net_apply(self, src):
+    def net_apply(self, src_ignore):
         net = self.current_network()
         if net is None:
             return
@@ -432,7 +432,7 @@ class vmmHost(vmmGObjectUI):
             return
         self.window.get_widget("net-apply").set_sensitive(False)
 
-    def net_autostart_changed(self, src):
+    def net_autostart_changed(self, src_ignore):
         auto = self.window.get_widget("net-autostart").get_active()
         self.window.get_widget("net-autostart").set_label(auto and \
                                                           _("On Boot") or \
@@ -447,7 +447,7 @@ class vmmHost(vmmGObjectUI):
             return self.conn.get_net(curruuid)
         return None
 
-    def refresh_network(self, src, uri, uuid):
+    def refresh_network(self, src_ignore, uri_ignore, uuid):
         sel = self.window.get_widget("net-list").get_selection()
         active = sel.get_selected()
         if active[1] != None:
@@ -542,7 +542,7 @@ class vmmHost(vmmGObjectUI):
         self.window.get_widget("net-ip4-forwarding").set_text(_("Isolated virtual network"))
         self.window.get_widget("net-apply").set_sensitive(False)
 
-    def repopulate_networks(self, src, uri, uuid):
+    def repopulate_networks(self, src_ignore, uri_ignore, uuid_ignore):
         self.populate_networks(self.window.get_widget("net-list").get_model())
 
     def populate_networks(self, model):
@@ -565,7 +565,7 @@ class vmmHost(vmmGObjectUI):
     # ------------------------------
 
 
-    def stop_pool(self, src):
+    def stop_pool(self, src_ignore):
         pool = self.current_pool()
         if pool is not None:
             try:
@@ -575,7 +575,7 @@ class vmmHost(vmmGObjectUI):
                                     (pool.get_name(), str(e)),
                                   "".join(traceback.format_exc()))
 
-    def start_pool(self, src):
+    def start_pool(self, src_ignore):
         pool = self.current_pool()
         if pool is not None:
             try:
@@ -585,7 +585,7 @@ class vmmHost(vmmGObjectUI):
                                     (pool.get_name(), str(e)),
                                   "".join(traceback.format_exc()))
 
-    def delete_pool(self, src):
+    def delete_pool(self, src_ignore):
         pool = self.current_pool()
         if pool is None:
             return
@@ -600,7 +600,7 @@ class vmmHost(vmmGObjectUI):
             self.err.show_err(_("Error deleting pool: %s") % str(e),
                               "".join(traceback.format_exc()))
 
-    def pool_refresh(self, src):
+    def pool_refresh(self, src_ignore):
         pool = self.current_pool()
         if pool is None:
             return
@@ -613,7 +613,7 @@ class vmmHost(vmmGObjectUI):
                                (pool.get_name(), str(e)),
                                "".join(traceback.format_exc()))
 
-    def delete_vol(self, src):
+    def delete_vol(self, src_ignore):
         vol = self.current_vol()
         if vol is None:
             return
@@ -632,7 +632,7 @@ class vmmHost(vmmGObjectUI):
             return
         self.populate_storage_volumes()
 
-    def add_pool(self, src):
+    def add_pool(self, src_ignore):
         try:
             if self.addpool is None:
                 self.addpool = vmmCreatePool(self.conn)
@@ -641,7 +641,7 @@ class vmmHost(vmmGObjectUI):
             self.err.show_err(_("Error launching pool wizard: %s") % str(e),
                               "".join(traceback.format_exc()))
 
-    def add_vol(self, src):
+    def add_vol(self, src_ignore):
         pool = self.current_pool()
         if pool is None:
             return
@@ -682,23 +682,24 @@ class vmmHost(vmmGObjectUI):
             return pool.get_volume(curruuid)
         return None
 
-    def pool_apply(self, src):
+    def pool_apply(self, src_ignore):
         pool = self.current_pool()
         if pool is None:
             return
 
         try:
-            pool.set_autostart(self.window.get_widget("pool-autostart").get_active())
+            do_auto = self.window.get_widget("pool-autostart").get_active()
+            pool.set_autostart(do_auto)
         except Exception, e:
             self.err.show_err(_("Error setting pool autostart: %s") % str(e),
                               "".join(traceback.format_exc()))
             return
         self.window.get_widget("pool-apply").set_sensitive(False)
 
-    def pool_autostart_changed(self, src):
+    def pool_autostart_changed(self, src_ignore):
         auto = self.window.get_widget("pool-autostart").get_active()
-        self.window.get_widget("pool-autostart").set_label(auto and \
-                                                           _("On Boot") or \
+        self.window.get_widget("pool-autostart").set_label(auto and
+                                                           _("On Boot") or
                                                            _("Never"))
         self.window.get_widget("pool-apply").set_sensitive(True)
 
@@ -751,7 +752,7 @@ class vmmHost(vmmGObjectUI):
         self.window.get_widget("vol-add").set_sensitive(active)
         self.window.get_widget("vol-delete").set_sensitive(False)
 
-    def refresh_storage_pool(self, src, uri, uuid):
+    def refresh_storage_pool(self, src_ignore, uri_ignore, uuid):
         refresh_pool_in_list(self.window.get_widget("pool-list"),
                              self.conn, uuid)
         curpool = self.current_pool()
@@ -791,7 +792,7 @@ class vmmHost(vmmGObjectUI):
 
         self.window.get_widget("vol-delete").set_sensitive(True)
 
-    def popup_vol_menu(self, widget, event):
+    def popup_vol_menu(self, widget_ignore, event):
         if event.button != 3:
             return
 
@@ -807,7 +808,7 @@ class vmmHost(vmmGObjectUI):
             clipboard.set_text(target_path)
 
 
-    def repopulate_storage_pools(self, src, uri, uuid):
+    def repopulate_storage_pools(self, src_ignore, uri_ignore, uuid_ignore):
         pool_list = self.window.get_widget("pool-list")
         populate_storage_pools(pool_list, self.conn)
 
@@ -826,7 +827,7 @@ class vmmHost(vmmGObjectUI):
     # Interface manager methods #
     #############################
 
-    def stop_interface(self, src):
+    def stop_interface(self, src_ignore):
         interface = self.current_interface()
         if interface is None:
             return
@@ -852,7 +853,7 @@ class vmmHost(vmmGObjectUI):
                               (interface.get_name(), str(e)),
                               "".join(traceback.format_exc()))
 
-    def start_interface(self, src):
+    def start_interface(self, src_ignore):
         interface = self.current_interface()
         if interface is None:
             return
@@ -878,7 +879,7 @@ class vmmHost(vmmGObjectUI):
                               (interface.get_name(), str(e)),
                               "".join(traceback.format_exc()))
 
-    def delete_interface(self, src):
+    def delete_interface(self, src_ignore):
         interface = self.current_interface()
         if interface is None:
             return
@@ -895,7 +896,7 @@ class vmmHost(vmmGObjectUI):
             self.err.show_err(_("Error deleting interface: %s") % str(e),
                               "".join(traceback.format_exc()))
 
-    def add_interface(self, src):
+    def add_interface(self, src_ignore):
         try:
             if self.addinterface is None:
                 self.addinterface = vmmCreateInterface(self.conn)
@@ -920,7 +921,7 @@ class vmmHost(vmmGObjectUI):
 
         return None
 
-    def interface_apply(self, src):
+    def interface_apply(self, src_ignore):
         interface = self.current_interface()
         if interface is None:
             return
@@ -939,7 +940,7 @@ class vmmHost(vmmGObjectUI):
         # XXX: This will require an interface restart
         self.window.get_widget("interface-apply").set_sensitive(False)
 
-    def interface_startmode_changed(self, src):
+    def interface_startmode_changed(self, src_ignore):
         self.window.get_widget("interface-apply").set_sensitive(True)
 
     def set_interface_error_page(self, msg):
@@ -1049,7 +1050,7 @@ class vmmHost(vmmGObjectUI):
                                                                    show_child)
         self.populate_interface_children()
 
-    def refresh_interface(self, src, uri, name):
+    def refresh_interface(self, src_ignore, uri_ignore, name):
         iface_list = self.window.get_widget("interface-list")
         sel = iface_list.get_selection()
         active = sel.get_selected()
@@ -1072,7 +1073,7 @@ class vmmHost(vmmGObjectUI):
         self.window.get_widget("interface-start").set_sensitive(False)
         self.window.get_widget("interface-apply").set_sensitive(False)
 
-    def repopulate_interfaces(self, src, uri, name):
+    def repopulate_interfaces(self, src_ignore, uri_ignore, name_ignore):
         interface_list = self.window.get_widget("interface-list")
         self.populate_interfaces(interface_list.get_model())
 

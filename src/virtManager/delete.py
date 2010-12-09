@@ -44,7 +44,7 @@ class vmmDeleteDialog(vmmGObjectUI):
     __gsignals__ = {
     }
 
-    def __init__(self, config, vm):
+    def __init__(self, vm):
         vmmGObjectUI.__init__(self, "vmm-delete.glade", "vmm-delete")
         self.vm = vm
         self.conn = vm.connection
@@ -119,7 +119,7 @@ class vmmDeleteDialog(vmmGObjectUI):
                     paths.append(row[STORAGE_ROW_PATH])
         return paths
 
-    def finish(self, src):
+    def finish(self, src_ignore):
         devs = self.get_paths_to_delete()
 
         self.topwin.set_sensitive(False)

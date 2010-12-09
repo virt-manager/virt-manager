@@ -139,7 +139,7 @@ class vmmChooseCD(vmmGObjectUI):
                                                             _("Floppy D_rive"))
             self.window.get_widget("iso-image").set_label(_("Floppy _Image"))
 
-    def set_storage_path(self, src, path):
+    def set_storage_path(self, src_ignore, path):
         self.window.get_widget("iso-path").set_text(path)
 
     def _browse_file(self):

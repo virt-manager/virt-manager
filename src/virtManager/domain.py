@@ -445,6 +445,7 @@ class vmmDomainBase(vmmLibvirtObject):
         xml = self.get_xml()
 
         def get_boot_xml(doc, ctx):
+            ignore = doc
             ret = ctx.xpathEval("/domain/os/boot")
             devs = []
             for node in ret:
@@ -1130,6 +1131,8 @@ class vmmDomain(vmmDomainBase):
     ########################
 
     def _update_start_vcpus(self, ignore, oldstatus, status):
+        ignore = status
+
         if oldstatus not in [ libvirt.VIR_DOMAIN_SHUTDOWN,
                               libvirt.VIR_DOMAIN_SHUTOFF,
                               libvirt.VIR_DOMAIN_CRASHED ]:
@@ -1356,6 +1359,7 @@ class vmmDomainVirtinst(vmmDomainBase):
         return self._backend
 
     def _define(self, newxml):
+        ignore = newxml
         self._orig_xml = None
         util.safe_idle_add(util.idle_emit, self, "config-changed")
 

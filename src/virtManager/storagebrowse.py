@@ -209,7 +209,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             return pool.get_volume(curruuid)
         return None
 
-    def refresh_storage_pool(self, src, uri, uuid):
+    def refresh_storage_pool(self, src_ignore, uri_ignore, uuid):
         pool_list = self.window.get_widget("pool-list")
         virtManager.host.refresh_pool_in_list(pool_list, self.conn, uuid)
         curpool = self.current_pool()
@@ -220,14 +220,14 @@ class vmmStorageBrowser(vmmGObjectUI):
         # update vol list
         self.pool_selected(self.window.get_widget("pool-list").get_selection())
 
-    def repopulate_storage_pools(self, src, uri, uuid):
+    def repopulate_storage_pools(self, src_ignore, uri_ignore, uuid_ignore):
         pool_list = self.window.get_widget("pool-list")
         virtManager.host.populate_storage_pools(pool_list, self.conn)
 
 
     # Listeners
 
-    def pool_selected(self, src):
+    def pool_selected(self, src_ignore):
         pool = self.current_pool()
         self.window.get_widget("new-volume").set_sensitive(bool(pool))
         if pool:
@@ -245,7 +245,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         cp.refresh()
         self.refresh_storage_pool(None, None, cp.get_uuid())
 
-    def new_volume(self, src):
+    def new_volume(self, src_ignore):
         pool = self.current_pool()
         if pool is None:
             return
@@ -263,7 +263,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             self.show_err(_("Error launching volume wizard: %s") % str(e),
                           "".join(traceback.format_exc()))
 
-    def browse_local(self, src):
+    def browse_local(self, src_ignore):
         filename = util.browse_local(parent=self.topwin, config=self.config,
                                      conn=self.conn, **self.local_args)
         if filename:

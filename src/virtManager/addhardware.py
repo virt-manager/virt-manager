@@ -694,7 +694,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         self.window.get_widget("create-forward").show()
 
-    def page_changed(self, notebook, page, page_number):
+    def page_changed(self, notebook_ignore, page_ignore, page_number):
         devbox = self.window.get_widget("host-device")
         devbox.hide()
 
@@ -1344,7 +1344,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         self.storage_browser.show(conn)
 
-    def show_help(self, src):
+    def show_help(self, src_ignore):
         # help to show depends on the notebook page, yahoo
         page = self.window.get_widget("create-pages").get_current_page()
         if page == PAGE_INTRO:

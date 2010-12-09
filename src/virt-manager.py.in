@@ -165,7 +165,7 @@ def setup_logging(debug_stdout):
     logging.info("Application startup")
 
     # Register libvirt handler
-    def libvirt_callback(ctx, err):
+    def libvirt_callback(ctx_ignore, err):
         if err[3] != libvirt.VIR_ERR_ERROR:
             # Don't log libvirt errors: global error handler will do that
             logging.warn("Non-error from libvirt: '%s'" % err[2])

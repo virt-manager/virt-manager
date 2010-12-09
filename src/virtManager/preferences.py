@@ -195,7 +195,7 @@ class vmmPreferences(vmmGObjectUI):
             keystr = ""
         return keystr
 
-    def grabkeys_dlg_press(self, src, ev, defs):
+    def grabkeys_dlg_press(self, src_ignore, ev, defs):
         label = defs['label']
         # Try to get the index, it fails when not found
         try:
@@ -205,12 +205,12 @@ class vmmPreferences(vmmGObjectUI):
 
         label.set_text( self.grabkeys_get_string(defs['keysyms']) )
 
-    def grabkeys_dlg_release(self, src, ev, defs):
+    def grabkeys_dlg_release(self, src_ignore, ev, defs):
         label = defs['label']
         defs['keysyms'].remove(ev.keyval)
         label.set_text( self.grabkeys_get_string(defs['keysyms']) )
 
-    def change_grab_keys(self, src):
+    def change_grab_keys(self, src_ignore):
         dialog = gtk.Dialog ( _("Configure grab key combination"),
                               None,
                               gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
@@ -272,7 +272,7 @@ class vmmPreferences(vmmGObjectUI):
     def change_confirm_interface(self, src):
         self.config.set_confirm_interface(src.get_active())
 
-    def show_help(self, src):
+    def show_help(self, src_ignore):
         # From the Preferences window, show the help document from
         # the Preferences page
         self.emit("action-show-help", "virt-manager-preferences-window")

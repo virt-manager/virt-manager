@@ -713,6 +713,7 @@ class vmmDetails(vmmGObjectUI):
         self.vm.set_details_window_size(event.width, event.height)
 
     def popup_addhw_menu(self, widget, event):
+        ignore = widget
         if event.button != 3:
             return
 
@@ -836,7 +837,7 @@ class vmmDetails(vmmGObjectUI):
 
         return page
 
-    def hw_selected(self, src=None, page=None, selected=True):
+    def hw_selected(self, ignore1=None, page=None, selected=True):
         pagetype = self.force_get_hw_pagetype(page)
 
         self.window.get_widget("config-remove").set_sensitive(True)
@@ -998,13 +999,13 @@ class vmmDetails(vmmGObjectUI):
     # External action listeners #
     #############################
 
-    def show_help(self, src):
+    def show_help(self, src_ignore):
         self.emit("action-show-help", "virt-manager-details-window")
 
-    def view_manager(self, src):
+    def view_manager(self, src_ignore):
         self.emit("action-view-manager")
 
-    def exit_app(self, src):
+    def exit_app(self, src_ignore):
         self.emit("action-exit-app")
 
     def activate_console_page(self):
@@ -1017,13 +1018,13 @@ class vmmDetails(vmmGObjectUI):
     def activate_config_page(self):
         self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
 
-    def add_hardware(self, src):
+    def add_hardware(self, src_ignore):
         if self.addhw is None:
             self.addhw = vmmAddHardware(self.vm)
 
         self.addhw.show()
 
-    def remove_xml_dev(self, src):
+    def remove_xml_dev(self, src_ignore):
         info = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not info:
             return
@@ -1036,45 +1037,56 @@ class vmmDetails(vmmGObjectUI):
             return
 
         if src.get_active():
-            self.emit("action-suspend-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+            self.emit("action-suspend-domain",
+                      self.vm.get_connection().get_uri(),
+                      self.vm.get_uuid())
         else:
-            self.emit("action-resume-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+            self.emit("action-resume-domain",
+                      self.vm.get_connection().get_uri(),
+                      self.vm.get_uuid())
 
-    def control_vm_run(self, src):
-        self.emit("action-run-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+    def control_vm_run(self, src_ignore):
+        self.emit("action-run-domain",
+                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_shutdown(self, src):
-        self.emit("action-shutdown-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+    def control_vm_shutdown(self, src_ignore):
+        self.emit("action-shutdown-domain",
+                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_reboot(self, src):
-        self.emit("action-reboot-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+    def control_vm_reboot(self, src_ignore):
+        self.emit("action-reboot-domain",
+                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_console(self, src):
-        self.emit("action-show-console", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+    def control_vm_console(self, src_ignore):
+        self.emit("action-show-console",
+                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_save(self, src):
-        self.emit("action-save-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+    def control_vm_save(self, src_ignore):
+        self.emit("action-save-domain",
+                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_destroy(self, src):
-        self.emit("action-destroy-domain", self.vm.get_connection().get_uri(), self.vm.get_uuid())
+    def control_vm_destroy(self, src_ignore):
+        self.emit("action-destroy-domain",
+                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_clone(self, src):
-        self.emit("action-clone-domain", self.vm.get_connection().get_uri(),
-                  self.vm.get_uuid())
+    def control_vm_clone(self, src_ignore):
+        self.emit("action-clone-domain",
+                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_migrate(self, src):
-        self.emit("action-migrate-domain", self.vm.get_connection().get_uri(),
-                  self.vm.get_uuid())
+    def control_vm_migrate(self, src_ignore):
+        self.emit("action-migrate-domain",
+                  self.vm.get_connection().get_uri(), self.vm.get_uuid())
 
-    def control_vm_screenshot(self, src):
+    def control_vm_screenshot(self, src_ignore):
         # If someone feels kind they could extend this code to allow
         # user to choose what image format they'd like to save in....
-        path = util.browse_local(self.topwin,
-                                 _("Save Virtual Machine Screenshot"),
-                                 self.config, self.vm.get_connection(),
-                                 _type = ("png", "PNG files"),
-                                 dialog_type = gtk.FILE_CHOOSER_ACTION_SAVE,
-                                 browse_reason=self.config.CONFIG_DIR_SCREENSHOT)
+        path = util.browse_local(
+                        self.topwin,
+                        _("Save Virtual Machine Screenshot"),
+                        self.config, self.vm.get_connection(),
+                        _type = ("png", "PNG files"),
+                        dialog_type = gtk.FILE_CHOOSER_ACTION_SAVE,
+                        browse_reason=self.config.CONFIG_DIR_SCREENSHOT)
         if not path:
             return
 
@@ -1106,7 +1118,7 @@ class vmmDetails(vmmGObjectUI):
     # Serial Console pieces
     # ------------------------------
 
-    def control_serial_tab(self, src, name, target_port):
+    def control_serial_tab(self, src_ignore, name, target_port):
         is_graphics = (name == "graphics")
         is_serial = not is_graphics
 
@@ -1131,16 +1143,16 @@ class vmmDetails(vmmGObjectUI):
             self.serial_copy.set_sensitive(False)
         self.serial_popup.popup(None, None, None, 0, event.time)
 
-    def serial_close_tab(self, src, pagenum):
+    def serial_close_tab(self, src_ignore, pagenum):
         tab_idx = (pagenum - PAGE_DYNAMIC_OFFSET)
         if (tab_idx < 0) or (tab_idx > len(self.serial_tabs)-1):
             return
         return self._close_serial_tab(self.serial_tabs[tab_idx])
 
-    def serial_copy_text(self, src, terminal):
+    def serial_copy_text(self, src_ignore, terminal):
         terminal.copy_clipboard()
 
-    def serial_paste_text(self, src, terminal):
+    def serial_paste_text(self, src_ignore, terminal):
         terminal.paste_clipboard()
 
     def _show_serial_tab(self, name, target_port):
@@ -1196,10 +1208,10 @@ class vmmDetails(vmmGObjectUI):
         show_type = (val.lower() != "none")
         self.window.get_widget("security-type-box").set_sensitive(show_type)
 
-    def security_label_changed(self, label):
+    def security_label_changed(self, label_ignore):
         self.window.get_widget("config-apply").set_sensitive(True)
 
-    def security_type_changed(self, button, sensitive = True):
+    def security_type_changed(self, button):
         self.window.get_widget("config-apply").set_sensitive(True)
         self.window.get_widget("security-label").set_sensitive(not button.get_active())
 
@@ -1222,10 +1234,10 @@ class vmmDetails(vmmGObjectUI):
             mem = memadj.value
         return mem
 
-    def config_maxmem_changed(self, src):
+    def config_maxmem_changed(self, src_ignore):
         self.window.get_widget("config-apply").set_sensitive(True)
 
-    def config_memory_changed(self, src):
+    def config_memory_changed(self, src_ignore):
         self.window.get_widget("config-apply").set_sensitive(True)
 
         maxadj = self.window.get_widget("config-maxmem").get_adjustment()
@@ -1289,7 +1301,7 @@ class vmmDetails(vmmGObjectUI):
                                   boot_row[BOOT_DEV_TYPE])
         self.config_enable_apply()
 
-    def config_boot_move(self, src, move_up):
+    def config_boot_move(self, src_ignore, move_up):
         boot_row = self.get_boot_selection()
         if not boot_row:
             return
@@ -1314,7 +1326,7 @@ class vmmDetails(vmmGObjectUI):
         self.config_enable_apply()
 
     # CDROM Eject/Connect
-    def toggle_storage_media(self, src):
+    def toggle_storage_media(self, src_ignore):
         disk = self.get_hw_selection(HW_LIST_COL_DEVICE)
         if not disk:
             return
@@ -1328,7 +1340,7 @@ class vmmDetails(vmmGObjectUI):
             self.change_storage_media(dev_id_info, None)
             return
 
-        def change_cdrom_wrapper(src, dev_id_info, newpath):
+        def change_cdrom_wrapper(src_ignore, dev_id_info, newpath):
             return self.change_storage_media(dev_id_info, newpath)
 
         # Launch 'Choose CD' dialog
@@ -1447,7 +1459,7 @@ class vmmDetails(vmmGObjectUI):
                                           self.vm.hotplug_vcpus,
                                           (vcpus,))
 
-    def config_vcpu_pin(self, src, path, new_text):
+    def config_vcpu_pin(self, src_ignore, path, new_text):
         vcpu_list = self.window.get_widget("config-vcpu-list")
         vcpu_model = vcpu_list.get_model()
         row = vcpu_model[path]
@@ -1771,11 +1783,11 @@ class vmmDetails(vmmGObjectUI):
         def _dsk_rx_tx_text(rx, tx, unit):
             return ('<span color="#82003B">%(rx)d %(unit)s read</span>\n'
                     '<span color="#295C45">%(tx)d %(unit)s write</span>' %
-                    locals())
+                    {"rx": rx, "tx": tx, "unit": unit})
         def _net_rx_tx_text(rx, tx, unit):
             return ('<span color="#82003B">%(rx)d %(unit)s in</span>\n'
                     '<span color="#295C45">%(tx)d %(unit)s out</span>' %
-                    locals())
+                    {"rx": rx, "tx": tx, "unit": unit})
 
         cpu_txt = _("Disabled")
         mem_txt = _("Disabled")

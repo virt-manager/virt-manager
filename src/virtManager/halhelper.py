@@ -283,7 +283,7 @@ class vmmHalHelper(gobject.GObject):
 gobject.type_register(vmmHalHelper)
 
 
-def get_net_bridge_owner(name, sysfspath):
+def get_net_bridge_owner(name_ignore, sysfspath):
     # Now magic to determine if the device is part of a bridge
     brportpath = os.path.join(sysfspath, "brport")
 
@@ -300,7 +300,7 @@ def get_net_bridge_owner(name, sysfspath):
                       traceback.format_exc (stacktrace))
     return None
 
-def get_net_mac_address(name, sysfspath):
+def get_net_mac_address(name_ignore, sysfspath):
     mac = None
     addrpath = sysfspath + "/address"
     if os.path.exists(addrpath):
@@ -323,7 +323,7 @@ def get_bonding_masters():
             masters = rline[:].split(' ')
     return masters
 
-def is_net_bonding_slave(name, sysfspath):
+def is_net_bonding_slave(name_ignore, sysfspath):
     masterpath = sysfspath + "/master"
     if os.path.exists(masterpath):
         return True

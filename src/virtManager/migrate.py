@@ -50,7 +50,7 @@ class vmmMigrateDialog(vmmGObjectUI):
     __gsignals__ = {
     }
 
-    def __init__(self, config, vm, engine):
+    def __init__(self, vm, engine):
         vmmGObjectUI.__init__(self, "vmm-migrate.glade", "vmm-migrate")
         self.vm = vm
         self.conn = vm.connection
@@ -413,7 +413,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         return True
 
-    def finish(self, src):
+    def finish(self, src_ignore):
         try:
             if not self.validate():
                 return

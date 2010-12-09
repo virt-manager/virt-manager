@@ -212,7 +212,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             green = gtk.gdk.color_parse("#c0ffc0")
             src.modify_base(gtk.STATE_NORMAL, green)
 
-    def change_forward_type(self, src):
+    def change_forward_type(self, src_ignore):
         skip_fwd = self.window.get_widget("net-forward-none").get_active()
 
         self.window.get_widget("net-forward-mode").set_sensitive(not skip_fwd)
@@ -255,7 +255,7 @@ class vmmCreateNetwork(vmmGObjectUI):
     def get_config_dhcp_enable(self):
         return self.window.get_widget("net-dhcp-enable").get_active()
 
-    def page_changed(self, notebook, page, page_number):
+    def page_changed(self, notebook_ignore, page_ignore, page_number):
         # would you like some spaghetti with your salad, sir?
 
         if page_number == PAGE_INTRO:
@@ -414,7 +414,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.window.get_widget("create-back").set_sensitive(True)
         return True
 
-    def show_help(self, src):
+    def show_help(self, src_ignore):
         # help to show depends on the notebook page, yahoo
         page = self.window.get_widget("create-pages").get_current_page()
         if page == PAGE_INTRO:

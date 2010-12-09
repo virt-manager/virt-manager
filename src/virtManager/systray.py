@@ -264,10 +264,10 @@ class vmmSystray(gobject.GObject):
 
     # Listeners
 
-    def systray_activate(self, widget):
+    def systray_activate(self, widget_ignore):
         self.emit("action-toggle-manager")
 
-    def systray_popup(self, widget, button, event_time):
+    def systray_popup(self, widget_ignore, button, event_time):
         if button != 3:
             return
 
@@ -290,7 +290,7 @@ class vmmSystray(gobject.GObject):
             self.systray_menu.insert(self.conn_menuitems[uri], 0)
 
 
-    def conn_added(self, engine, conn):
+    def conn_added(self, engine_ignore, conn):
         conn.connect("vm-added", self.vm_added)
         conn.connect("vm-removed", self.vm_removed)
         conn.connect("state-changed", self.conn_state_changed)
@@ -312,7 +312,7 @@ class vmmSystray(gobject.GObject):
         self.conn_state_changed(conn)
         self.populate_vm_list(conn)
 
-    def conn_removed(self, engine, conn):
+    def conn_removed(self, engine_ignore, conn):
         if not self.conn_menuitems.has_key(conn.get_uri()):
             return
 
@@ -382,7 +382,7 @@ class vmmSystray(gobject.GObject):
         self.vm_state_changed(vm)
         menu_item.show()
 
-    def vm_removed(self, conn, uri, uuid):
+    def vm_removed(self, conn_ignore, uri, uuid):
         vm_mappings = self.conn_vm_menuitems[uri]
         if not vm_mappings:
             return

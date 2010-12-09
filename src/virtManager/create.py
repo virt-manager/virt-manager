@@ -1086,7 +1086,7 @@ class vmmCreate(vmmGObjectUI):
 
         instnotebook.set_current_page(instpage)
 
-    def back(self, src):
+    def back(self, src_ignore):
         notebook = self.window.get_widget("create-pages")
         curpage = notebook.get_current_page()
         is_import = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
@@ -1100,7 +1100,7 @@ class vmmCreate(vmmGObjectUI):
 
         notebook.set_current_page(next_page)
 
-    def forward(self, ignore=None):
+    def forward(self, src_ignore=None):
         notebook = self.window.get_widget("create-pages")
         curpage = notebook.get_current_page()
         is_import = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
@@ -1171,7 +1171,7 @@ class vmmCreate(vmmGObjectUI):
 
     def build_guest(self, installer, name):
         guest = installer.guest_from_installer()
-        guest.name = self.get_config_name()
+        guest.name = name
 
         # Generate UUID
         try:
@@ -1504,7 +1504,7 @@ class vmmCreate(vmmGObjectUI):
     def reset_guest_type(self):
         self.change_caps()
 
-    def finish(self, src):
+    def finish(self, src_ignore):
         # Validate the final page
         page = self.window.get_widget("create-pages").get_current_page()
         if self.validate(page) != True:

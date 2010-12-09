@@ -398,6 +398,7 @@ class vmmCloneVM(vmmGObjectUI):
         disk_name_box.pack_start(disk_name_label, True)
 
         def sep_func(model, it, combo):
+            ignore = combo
             return model[it][2]
 
         # [String, sensitive, is sep]
@@ -491,7 +492,7 @@ class vmmCloneVM(vmmGObjectUI):
         ok_button.set_sensitive(clone)
         util.tooltip_wrapper(ok_button, tooltip)
 
-    def net_show_popup(self, widget, event):
+    def net_show_popup(self, widget_ignore, event):
         if event.button != 3:
             return
 
@@ -509,7 +510,7 @@ class vmmCloneVM(vmmGObjectUI):
 
         self.change_mac.show_all()
 
-    def storage_show_popup(self, widget, event):
+    def storage_show_popup(self, widget_ignore, event):
         if event.button != 3:
             return
 
@@ -691,9 +692,7 @@ class vmmCloneVM(vmmGObjectUI):
         self.clone_design = cd
         return True
 
-    def finish(self, src):
-
-        # validate input
+    def finish(self, src_ignore):
         try:
             if not self.validate():
                 return
@@ -760,7 +759,7 @@ class vmmCloneVM(vmmGObjectUI):
     def change_storage_browse(self, ignore):
 
         cs = self.change_storage_window
-        def callback(self, txt):
+        def callback(src_ignore, txt):
             cs.get_widget("change-storage-new").set_text(txt)
 
         if self.storage_browser == None:
@@ -808,6 +807,7 @@ def can_we_clone(conn, vol, path):
 
 def do_we_default(conn, vol, path, ro, shared, devtype):
     """ Returns (do we clone by default?, info string if not)"""
+    ignore = conn
     info = ""
 
     def append_str(str1, str2, delim=", "):

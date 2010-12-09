@@ -144,6 +144,7 @@ def build_video_combo(vm, video_dev, no_default=False):
         video_dev.set_active(0)
 
 def build_sound_combo(vm, combo, no_default=False):
+    ignore = vm
     dev_model = gtk.ListStore(str)
     combo.set_model(dev_model)
     text = gtk.CellRendererText()
@@ -164,6 +165,7 @@ def build_sound_combo(vm, combo, no_default=False):
         combo.set_active(0)
 
 def build_watchdogmodel_combo(vm, combo, no_default=False):
+    ignore = vm
     dev_model = gtk.ListStore(str)
     combo.set_model(dev_model)
     text = gtk.CellRendererText()
@@ -179,6 +181,7 @@ def build_watchdogmodel_combo(vm, combo, no_default=False):
         combo.set_active(0)
 
 def build_watchdogaction_combo(vm, combo, no_default=False):
+    ignore = vm
     dev_model = gtk.ListStore(str, str)
     combo.set_model(dev_model)
     text = gtk.CellRendererText()
@@ -221,6 +224,7 @@ def populate_netmodel_combo(vm, combo):
             model.append([m, m])
 
 def build_cache_combo(vm, combo, no_default=False):
+    ignore = vm
     dev_model = gtk.ListStore(str, str)
     combo.set_model(dev_model)
     text = gtk.CellRendererText()

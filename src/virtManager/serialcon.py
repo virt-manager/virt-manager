@@ -71,10 +71,10 @@ class vmmSerialConsole(gtk.HBox):
     def handle_realize(self, ignore=None):
         self.opentty()
 
-    def handle_unrealize(self, src=None, ignore=None):
+    def handle_unrealize(self, src_ignore=None, ignore=None):
         self.closetty()
 
-    def vm_status_changed(self, src, oldstatus_ignore, status):
+    def vm_status_changed(self, src_ignore, oldstatus_ignore, status):
         if status in [ libvirt.VIR_DOMAIN_RUNNING ]:
             self.opentty()
         else:
@@ -130,11 +130,11 @@ class vmmSerialConsole(gtk.HBox):
         self.ptysrc = None
         self.ptytermios = None
 
-    def send_data(self, src, text, length):
+    def send_data(self, src_ignore, text, length_ignore):
         if self.ptyio != None:
             os.write(self.ptyio, text)
 
-    def display_data(self, src, cond):
+    def display_data(self, src_ignore, cond):
         if cond == gobject.IO_IN:
             data = os.read(self.ptyio, 1024)
             self.terminal.feed(data, len(data))

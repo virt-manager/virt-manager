@@ -213,7 +213,7 @@ class vmmManager(vmmGObjectUI):
 
         self.engine.increment_window_counter()
 
-    def close(self, src=None, src2=None):
+    def close(self, src_ignore=None, src2_ignore=None):
         if not self.is_visible():
             return
 
@@ -506,25 +506,25 @@ class vmmManager(vmmGObjectUI):
 
         self.config.set_manager_window_size(event.width, event.height)
 
-    def exit_app(self, src=None, src2=None):
+    def exit_app(self, src_ignore=None, src2_ignore=None):
         self.emit("action-exit-app")
 
-    def new_connection(self, src=None):
+    def new_connection(self, src_ignore=None):
         self.emit("action-show-connect")
 
-    def new_vm(self, ignore=None):
+    def new_vm(self, src_ignore=None):
         self.emit("action-show-create", self.current_connection_uri())
 
-    def show_about(self, src):
+    def show_about(self, src_ignore):
         self.emit("action-show-about")
 
-    def show_help(self, src):
+    def show_help(self, src_ignore):
         self.emit("action-show-help", None)
 
-    def show_preferences(self, src):
+    def show_preferences(self, src_ignore):
         self.emit("action-show-preferences")
 
-    def show_host(self, src):
+    def show_host(self, src_ignore):
         uri = self.current_connection_uri(default_selection=True)
         self.emit("action-show-host", uri)
 
@@ -689,7 +689,7 @@ class vmmManager(vmmGObjectUI):
     def vm_row_key(self, vm):
         return vm.get_uuid() + ":" + vm.get_connection().get_uri()
 
-    def vm_added(self, connection, uri, vmuuid):
+    def vm_added(self, connection, uri_ignore, vmuuid):
         vm = connection.get_vm(vmuuid)
         vm.connect("status-changed", self.vm_status_changed)
         vm.connect("resources-sampled", self.vm_resources_sampled)
@@ -699,7 +699,7 @@ class vmmManager(vmmGObjectUI):
 
         self._append_vm(model, vm, connection)
 
-    def vm_removed(self, connection, uri, vmuuid):
+    def vm_removed(self, connection, uri_ignore, vmuuid):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
@@ -751,6 +751,7 @@ class vmmManager(vmmGObjectUI):
         return color
 
     def _build_vm_markup(self, vm, row):
+        ignore = vm
         domtext     = ("<span size='smaller' weight='bold'>%s</span>" %
                        row[ROW_NAME])
         statetext   = "<span size='smaller'>%s</span>" % row[ROW_STATUS]
@@ -806,7 +807,7 @@ class vmmManager(vmmGObjectUI):
         self.rows[conn.get_uri()] = model[path]
         return _iter
 
-    def _add_connection(self, engine, conn):
+    def _add_connection(self, engine_ignore, conn):
         # Make sure error page isn't showing
         self.window.get_widget("vm-notebook").set_current_page(0)
 
@@ -825,7 +826,7 @@ class vmmManager(vmmGObjectUI):
         row = self._append_connection(vmlist.get_model(), conn)
         vmlist.get_selection().select_iter(row)
 
-    def _remove_connection(self, engine, conn):
+    def _remove_connection(self, engine_ignore, conn):
         model = self.window.get_widget("vm-list").get_model()
         parent = self.rows[conn.get_uri()].iter
         if parent is not None:
@@ -842,7 +843,7 @@ class vmmManager(vmmGObjectUI):
     # State/UI updating methods #
     #############################
 
-    def vm_status_changed(self, vm, status, ignore):
+    def vm_status_changed(self, vm, status_ignore, oldstatus_ignore):
         parent = self.rows[vm.get_connection().get_uri()].iter
 
         vmlist = self.window.get_widget("vm-list")
@@ -944,7 +945,7 @@ class vmmManager(vmmGObjectUI):
         self.window.get_widget("menu_host_details").set_sensitive(host_details)
         self.window.get_widget("menu_edit_delete").set_sensitive(delete)
 
-    def popup_vm_menu_key(self, widget, event):
+    def popup_vm_menu_key(self, widget_ignore, event):
         if gtk.gdk.keyval_name(event.keyval) != "Menu":
             return False
 
@@ -1069,19 +1070,19 @@ class vmmManager(vmmGObjectUI):
         }
         set_stats[stats_id](visible)
 
-    def cpu_usage_img(self,  column, cell, model, _iter, data):
+    def cpu_usage_img(self, column_ignore, cell, model, _iter, data):
         if model.get_value(_iter, ROW_HANDLE) is None:
             return
         data = model.get_value(_iter, ROW_HANDLE).cpu_time_vector_limit(40)
         cell.set_property('data_array', data)
 
-    def disk_io_img(self,  column, cell, model, _iter, data):
+    def disk_io_img(self, column_ignore, cell, model, _iter, data):
         if model.get_value(_iter, ROW_HANDLE) is None:
             return
         data = model.get_value(_iter, ROW_HANDLE).disk_io_vector_limit(40)
         cell.set_property('data_array', data)
 
-    def network_traffic_img(self,  column, cell, model, _iter, data):
+    def network_traffic_img(self, column_ignore, cell, model, _iter, data):
         if model.get_value(_iter, ROW_HANDLE) is None:
             return
         data = model.get_value(_iter, ROW_HANDLE).network_traffic_vector_limit(40)

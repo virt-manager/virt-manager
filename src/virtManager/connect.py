@@ -152,6 +152,7 @@ class vmmConnect(vmmGObjectUI):
             self.window.get_widget("hypervisor").set_active(1)
 
     def add_service(self, interface, protocol, name, type, domain, flags):
+        ignore = flags
         try:
             # Async service resolving
             res = self.server.ServiceResolverNew(interface, protocol, name,
@@ -167,6 +168,12 @@ class vmmConnect(vmmGObjectUI):
             logging.exception(e)
 
     def remove_service(self, interface, protocol, name, type, domain, flags):
+        ignore = domain
+        ignore = protocol
+        ignore = flags
+        ignore = interface
+        ignore = type
+
         try:
             model = self.window.get_widget("hostname").get_model()
             name = str(name)
@@ -178,6 +185,15 @@ class vmmConnect(vmmGObjectUI):
 
     def add_conn_to_list(self, interface, protocol, name, type, domain,
                          host, aprotocol, address, port, text, flags):
+        ignore = domain
+        ignore = protocol
+        ignore = flags
+        ignore = interface
+        ignore = type
+        ignore = text
+        ignore = aprotocol
+        ignore = port
+
         try:
             model = self.window.get_widget("hostname").get_model()
             for row in model:
@@ -236,16 +252,16 @@ class vmmConnect(vmmGObjectUI):
 
         self.window.get_widget("hostname").child.set_text(entry)
 
-    def hostname_changed(self, src):
+    def hostname_changed(self, src_ignore):
         self.populate_uri()
 
-    def hypervisor_changed(self, src):
+    def hypervisor_changed(self, src_ignore):
         self.populate_uri()
 
-    def username_changed(self, src):
+    def username_changed(self, src_ignore):
         self.populate_uri()
 
-    def connect_remote_toggled(self, src):
+    def connect_remote_toggled(self, src_ignore):
         is_remote = self.is_remote()
         self.window.get_widget("hostname").set_sensitive(is_remote)
         self.window.get_widget("connection").set_sensitive(is_remote)
@@ -259,7 +275,7 @@ class vmmConnect(vmmGObjectUI):
         self.populate_default_user()
         self.populate_uri()
 
-    def connection_changed(self, src):
+    def connection_changed(self, src_ignore):
         self.populate_default_user()
         self.populate_uri()
 

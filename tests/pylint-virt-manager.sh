@@ -65,7 +65,6 @@ addmsg "W0704"      # W0704: Exception doesn't do anything
 
 # Potentially useful messages, disabled for now
 addmsg "W0511"      # W0511: FIXME and XXX: messages
-addmsg "W0613"      # W0613: Unused arguments
 addmsg_support "W6501"      # W6501: Using string formatters in logging message
                             #        (see help message for info)
 
@@ -83,7 +82,7 @@ AWK=awk
 pylint --ignore=$IGNOREFILES $FILES \
   --reports=$SHOW_REPORT \
   --output-format=colorized \
-  --dummy-variables-rgx="dummy|ignore*" \
+  --dummy-variables-rgx="dummy|ignore.*|.*_ignore" \
   --disable=${DMSG}\
   --disable=${DCHECKERS} 2>&1 | \
   egrep -ve "$NO_PYL_CONFIG" \

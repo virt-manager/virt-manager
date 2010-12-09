@@ -364,7 +364,7 @@ def uuidstr(rawuuid):
     return "".join(uuid)
 
 def bind_escape_key_close(vmmobj):
-    def close_on_escape(src, event):
+    def close_on_escape(src_ignore, event):
         if gtk.gdk.keyval_name(event.keyval) == "Escape":
             vmmobj.close()
 

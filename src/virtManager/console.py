@@ -184,7 +184,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.topwin.set_title(_("Press %s to release pointer.") % keystr +
                               " " + self.title)
 
-    def pointer_ungrabbed(self, src):
+    def pointer_ungrabbed(self, src_ignore):
         self.topwin.set_title(self.title)
 
     def _disable_modifiers(self):
@@ -287,7 +287,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         self.update_scaling()
 
-    def size_to_vm(self, src):
+    def size_to_vm(self, src_ignore):
         # Resize the console to best fit the VM resolution
         if not self.desktop_resolution:
             return
@@ -346,7 +346,7 @@ class vmmConsolePages(vmmGObjectUI):
             if status == libvirt.VIR_DOMAIN_CRASHED:
                 self.activate_unavailable_page(_("Guest has crashed"))
 
-    def update_widget_states(self, vm, status):
+    def update_widget_states(self, vm, status_ignore):
         runable = vm.is_runable()
         pages   = self.window.get_widget("console-pages")
         page    = pages.get_current_page()
@@ -424,7 +424,7 @@ class vmmConsolePages(vmmGObjectUI):
     # VNC Specific methods #
     ########################
 
-    def _vnc_disconnected(self, src):
+    def _vnc_disconnected(self, src_ignore):
         errout = ""
         if self.vncTunnel is not None:
             errout = self.get_tunnel_err_output()
@@ -450,7 +450,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         self.activate_unavailable_page(error)
 
-    def _vnc_initialized(self, src):
+    def _vnc_initialized(self, src_ignore):
         self.vnc_connected = True
         logging.debug("VNC initialized")
         self.activate_viewer_page()
@@ -580,7 +580,7 @@ class vmmConsolePages(vmmGObjectUI):
                                       libvirt.VIR_DOMAIN_CRASHED ] or
                 self.vm.get_id() < 0)
 
-    def try_login(self, src=None):
+    def try_login(self, src_ignore=None):
         if self.skip_connect_attempt():
             # Don't try and login for these cases
             return
@@ -646,7 +646,7 @@ class vmmConsolePages(vmmGObjectUI):
                      traceback.format_exc (stacktrace))
             logging.error(details)
 
-    def set_credentials(self, src=None):
+    def set_credentials(self, src_ignore=None):
         passwd = self.window.get_widget("console-auth-password")
         if passwd.flags() & gtk.VISIBLE:
             self.vncViewer.set_credential(gtkvnc.CREDENTIAL_PASSWORD,
@@ -660,7 +660,7 @@ class vmmConsolePages(vmmGObjectUI):
             self.config.set_console_password(self.vm, passwd.get_text(),
                                              username.get_text())
 
-    def _vnc_auth_credential(self, src, credList):
+    def _vnc_auth_credential(self, src_ignore, credList):
         for i in range(len(credList)):
             if credList[i] not in [gtkvnc.CREDENTIAL_PASSWORD,
                                    gtkvnc.CREDENTIAL_USERNAME,
@@ -688,7 +688,7 @@ class vmmConsolePages(vmmGObjectUI):
         if withUsername or withPassword:
             self.activate_auth_page(withPassword, withUsername)
 
-    def desktop_resize(self, src, w, h):
+    def desktop_resize(self, src_ignore, w, h):
         self.desktop_resolution = (w, h)
         self.window.get_widget("console-vnc-scroll").queue_resize()
 
@@ -738,7 +738,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         widget.queue_resize()
 
-    def scroll_size_allocate(self, src, req):
+    def scroll_size_allocate(self, src_ignore, req):
         if not self.desktop_resolution:
             return
 

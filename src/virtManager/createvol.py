@@ -187,8 +187,7 @@ class vmmCreateVolume(vmmGObjectUI):
         if cap < alloc:
             alloc_widget.set_value(cap)
 
-    def finish(self, src):
-        # validate input
+    def finish(self, src_ignore):
         try:
             if not self.validate():
                 return

@@ -178,6 +178,9 @@ def packagekit_search(session, pk_control, package_name):
 
     found = []
     def package(info, package_id, summary):
+        ignore = info
+        ignore = summary
+
         found_name = str(package_id.split(";")[0])
         if found_name in PACKAGEKIT_PACKAGES:
             found.append(found_name)
@@ -186,7 +189,7 @@ def packagekit_search(session, pk_control, package_name):
         raise RuntimeError("PackageKit search failure: %s %s" %
                             (code, details))
 
-    def finished(ignore, runtime):
+    def finished(ignore, runtime_ignore):
         gtk.main_quit()
 
     pk_trans.connect_to_signal('Finished', finished)
@@ -375,16 +378,17 @@ class vmmEngine(gobject.GObject):
             logging.exception("Error connecting to %s" % uri)
             return None
 
-    def _do_connect(self, src, uri):
+    def _do_connect(self, src_ignore, uri):
         return self.connect_to_uri(uri)
 
-    def _connect_cancelled(self, connect):
+    def _connect_cancelled(self, connect_ignore):
         self.windowConnect = None
         if len(self.connections.keys()) == 0:
             self.exit_app()
 
 
     def _do_vm_removed(self, connection, hvuri, vmuuid):
+        ignore = connection
         if self.connections[hvuri]["windowDetails"].has_key(vmuuid):
             self.connections[hvuri]["windowDetails"][vmuuid].close()
             del self.connections[hvuri]["windowDetails"][vmuuid]
@@ -606,7 +610,7 @@ class vmmEngine(gobject.GObject):
         if self.windowConnect:
             return self.windowConnect
 
-        def connect_wrap(src, *args):
+        def connect_wrap(src_ignore, *args):
             return self.connect_to_uri(*args)
 
         obj = vmmConnect()

@@ -358,6 +358,7 @@ class vmmConnection(gobject.GObject):
         return hostname
 
     def get_hostname(self, resolveLocal=False):
+        ignore = resolveLocal
         try:
             return self.get_qualified_hostname()
         except:
@@ -485,6 +486,7 @@ class vmmConnection(gobject.GObject):
         return self._nodedev_capable
 
     def _get_flags_helper(self, obj, key, check_func):
+        ignore = obj
         flags_dict = self._xml_flags.get(key)
 
         if flags_dict == None:
@@ -956,6 +958,7 @@ class vmmConnection(gobject.GObject):
             return -1
 
     def _do_creds(self, creds, cbdata):
+        ignore = cbdata
         try:
             if (len(creds) == 1 and
                 creds[0][0] == libvirt.VIR_CRED_EXTERNAL and

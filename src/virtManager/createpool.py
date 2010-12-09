@@ -426,7 +426,7 @@ class vmmCreatePool(vmmGObjectUI):
             details = "".join(traceback.format_exc())
             asyncjob.set_error(error, details)
 
-    def page_changed(self, notebook, page, page_number):
+    def page_changed(self, notebook_ignore, page_ignore, page_number):
         if page_number == PAGE_NAME:
             self.window.get_widget("pool-back").set_sensitive(False)
             self.window.get_widget("pool-finish").hide()
