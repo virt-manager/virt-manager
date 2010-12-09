@@ -130,9 +130,9 @@ class vmmCloneVM(vmmGObjectUI):
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
-        self.topwin.hide()
         self.change_mac_close()
         self.change_storage_close()
+        self.topwin.hide()
         return 1
 
     def change_mac_close(self, ignore1=None, ignore2=None):

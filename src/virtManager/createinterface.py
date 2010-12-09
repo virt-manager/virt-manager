@@ -148,10 +148,12 @@ class vmmCreateInterface(vmmGObjectUI):
         self.ip_config.show_all()
 
     def close(self, ignore1=None, ignore2=None):
+        self.ip_config.hide()
+        self.bridge_config.hide()
+        self.bond_config.hide()
         self.topwin.hide()
 
         return 1
-
 
     ###########################
     # Initialization routines #

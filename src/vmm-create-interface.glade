@@ -5,7 +5,9 @@
   <widget class="GtkDialog" id="ip-config">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">IP Configuration</property>
-    <property name="type_hint">normal</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
     <signal name="delete_event" handler="on_ip_config_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox3">
@@ -541,7 +543,9 @@
   <widget class="GtkDialog" id="bond-config">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Bonding configuration</property>
-    <property name="type_hint">normal</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
     <signal name="delete_event" handler="on_bond_config_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox2">
@@ -1076,7 +1080,9 @@
   <widget class="GtkDialog" id="bridge-config">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Bridge configuration</property>
-    <property name="type_hint">normal</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
     <signal name="delete_event" handler="on_bridge_config_delete_event"/>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox1">
