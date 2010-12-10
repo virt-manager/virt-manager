@@ -42,16 +42,38 @@ def cb_wrapper(callback, asyncjob, *args, **kwargs):
     try:
         callback(asyncjob, *args, **kwargs)
     except Exception, e:
-        asyncjob.set_error(e, "".join(traceback.format_exc()))
+        asyncjob.set_error(str(e), "".join(traceback.format_exc()))
+
+def _simple_async(callback, args, title, text, parent, errorintro,
+                  show_progress):
+    asyncjob = vmmAsyncJob(callback, args, title, text,
+                           show_progress=show_progress)
+    error, details = asyncjob.run()
+    if error is None:
+        return
+
+    error = errorintro + ": " + error
+    parent.err.show_err(error, error + "\n\n" + details)
 
 # Displays a progress bar while executing the "callback" method.
 class vmmAsyncJob(vmmGObjectUI):
 
+    @staticmethod
+    def simple_async(callback, args, title, text, parent, errorintro):
+        _simple_async(callback, args, title, text, parent, errorintro, True)
+
+    @staticmethod
+    def simple_async_noshow(callback, args, parent, errorintro):
+        _simple_async(callback, args, "", "", parent, errorintro, False)
+
+
     def __init__(self, callback, args, title, text,
-                 run_main=True, cancel_back=None, cancel_args=None):
+                 run_main=True, show_progress=True,
+                 cancel_back=None, cancel_args=None):
         vmmGObjectUI.__init__(self, "vmm-progress.glade", "vmm-progress")
 
         self.run_main = bool(run_main)
+        self.show_progress = bool(show_progress)
         self.cancel_job = cancel_back
         self.cancel_args = cancel_args or []
         self.cancel_args = [self] + self.cancel_args
@@ -82,7 +104,9 @@ class vmmAsyncJob(vmmGObjectUI):
 
     def run(self):
         timer = util.safe_timeout_add(100, self.exit_if_necessary)
-        self.topwin.present()
+
+        if self.show_progress:
+            self.topwin.present()
 
         if not self.cancel_job:
             self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))

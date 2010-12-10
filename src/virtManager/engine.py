@@ -880,8 +880,8 @@ class vmmEngine(vmmGObject):
 
         progWin = vmmAsyncJob(self._restore_saved_callback,
                               [path, conn],
-                              _("Restoring Virtual Machine"),
-                              _("Restoring Virtual Machine"))
+                              _("Restoring domain"),
+                              _("Restoring domain"))
         error, details = progWin.run()
 
         if error is not None:
@@ -959,11 +959,24 @@ class vmmEngine(vmmGObject):
         vm = conn.get_vm(uuid)
 
         logging.debug("Starting vm '%s'." % vm.get_name())
-        try:
+
+        def asyncfunc(asyncjob):
+            ignore = asyncjob
             vm.startup()
-        except Exception, e:
-            src.err.show_err(_("Error starting domain: %s" % str(e)),
-                             "".join(traceback.format_exc()))
+
+        if vm.hasSavedImage():
+            # VM will be restored, which can take some time, so show a
+            # progress dialog.
+            errorintro  = _("Error restoring domain")
+            title = _("Restoring domain")
+            text = _("Restoring domain")
+            vmmAsyncJob.simple_async(asyncfunc, [], title, text, src,
+                                     errorintro)
+
+        else:
+            # Regular startup
+            errorintro  = _("Error starting domain")
+            vmmAsyncJob.simple_async_noshow(asyncfunc, [], src, errorintro)
 
     def _do_shutdown_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
