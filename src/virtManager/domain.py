@@ -1110,11 +1110,12 @@ class vmmDomain(vmmDomainBase):
 
     def _get_guest(self, inactive=False, refresh_if_necc=True):
         xml = self._get_domain_xml(inactive, refresh_if_necc)
-        get_inactive = inactive
 
-        if self.is_active() and get_inactive:
-            # We don't cache guest for 'inactive' XML while guest is running,
-            # so just return it
+        if inactive:
+            # If inactive XML requested, always return a fresh guest even
+            # the current Guest is inactive XML (like when the domain is
+            # stopped). Callers that request inactive are basically expecting
+            # a new copy.
             return self._build_guest(xml)
 
         return self._guest
