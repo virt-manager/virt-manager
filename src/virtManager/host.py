@@ -382,6 +382,8 @@ class vmmHost(vmmGObjectUI):
                                    "delete the network %s?") % net.get_name())
         if not result:
             return
+
+        logging.debug("Deleting network '%s'" % net.get_name())
         try:
             net.delete()
         except Exception, e:
@@ -393,6 +395,7 @@ class vmmHost(vmmGObjectUI):
         if net is None:
             return
 
+        logging.debug("Starting network '%s'" % net.get_name())
         try:
             net.start()
         except Exception, e:
@@ -404,6 +407,7 @@ class vmmHost(vmmGObjectUI):
         if net is None:
             return
 
+        logging.debug("Stopping network '%s'" % net.get_name())
         try:
             net.stop()
         except Exception, e:
@@ -411,6 +415,7 @@ class vmmHost(vmmGObjectUI):
                               "".join(traceback.format_exc()))
 
     def add_network(self, src_ignore):
+        logging.debug("Launching 'Add Network'")
         try:
             if self.addnet is None:
                 self.addnet = vmmCreateNetwork(self.conn)
@@ -424,6 +429,7 @@ class vmmHost(vmmGObjectUI):
         if net is None:
             return
 
+        logging.debug("Applying changes for network '%s'" % net.get_name())
         try:
             net.set_autostart(self.window.get_widget("net-autostart").get_active())
         except Exception, e:
@@ -448,11 +454,17 @@ class vmmHost(vmmGObjectUI):
         return None
 
     def refresh_network(self, src_ignore, uri_ignore, uuid):
-        sel = self.window.get_widget("net-list").get_selection()
+        uilist = self.window.get_widget("net-list")
+        sel = uilist.get_selection()
         active = sel.get_selected()
+
+        for row in uilist.get_model():
+            if row[0] == uuid:
+                row[4] = self.conn.get_net(uuid).is_active()
+
         if active[1] != None:
-            curruuid = active[0].get_value(active[1], 0)
-            if curruuid == uuid:
+            currname = active[0].get_value(active[1], 0)
+            if currname == uuid:
                 self.net_selected(sel)
 
     def set_net_error_page(self, msg):
@@ -567,23 +579,29 @@ class vmmHost(vmmGObjectUI):
 
     def stop_pool(self, src_ignore):
         pool = self.current_pool()
-        if pool is not None:
-            try:
-                pool.stop()
-            except Exception, e:
-                self.err.show_err(_("Error starting pool '%s': %s") % \
-                                    (pool.get_name(), str(e)),
-                                  "".join(traceback.format_exc()))
+        if pool is None:
+            return
+
+        logging.debug("Stopping pool '%s'" % pool.get_name())
+        try:
+            pool.stop()
+        except Exception, e:
+            self.err.show_err(_("Error starting pool '%s': %s") % \
+                               (pool.get_name(), str(e)),
+                               "".join(traceback.format_exc()))
 
     def start_pool(self, src_ignore):
         pool = self.current_pool()
-        if pool is not None:
-            try:
-                pool.start()
-            except Exception, e:
-                self.err.show_err(_("Error starting pool '%s': %s") % \
-                                    (pool.get_name(), str(e)),
-                                  "".join(traceback.format_exc()))
+        if pool is None:
+            return
+
+        logging.debug("Starting pool '%s'" % pool.get_name())
+        try:
+            pool.start()
+        except Exception, e:
+            self.err.show_err(_("Error starting pool '%s': %s") % \
+                               (pool.get_name(), str(e)),
+                                "".join(traceback.format_exc()))
 
     def delete_pool(self, src_ignore):
         pool = self.current_pool()
@@ -594,6 +612,8 @@ class vmmHost(vmmGObjectUI):
                                    "delete the pool %s?") % pool.get_name())
         if not result:
             return
+
+        logging.debug("Deleting pool '%s'" % pool.get_name())
         try:
             pool.delete()
         except Exception, e:
@@ -605,6 +625,7 @@ class vmmHost(vmmGObjectUI):
         if pool is None:
             return
 
+        logging.debug("Refresh pool '%s'" % pool.get_name())
         try:
             pool.refresh()
             self.refresh_current_pool()
@@ -623,6 +644,7 @@ class vmmHost(vmmGObjectUI):
         if not result:
             return
 
+        logging.debug("Deleting volume '%s'" % vol.get_name())
         try:
             vol.delete()
             self.refresh_current_pool()
@@ -633,6 +655,7 @@ class vmmHost(vmmGObjectUI):
         self.populate_storage_volumes()
 
     def add_pool(self, src_ignore):
+        logging.debug("Launching 'Add Pool' wizard")
         try:
             if self.addpool is None:
                 self.addpool = vmmCreatePool(self.conn)
@@ -645,6 +668,9 @@ class vmmHost(vmmGObjectUI):
         pool = self.current_pool()
         if pool is None:
             return
+
+        logging.debug("Launching 'Add Volume' wizard for pool '%s'" %
+                      pool.get_name())
         try:
             if self.addvol is None:
                 self.addvol = vmmCreateVolume(self.conn, pool)
@@ -687,6 +713,7 @@ class vmmHost(vmmGObjectUI):
         if pool is None:
             return
 
+        logging.debug("Applying changes for pool '%s'" % pool.get_name())
         try:
             do_auto = self.window.get_widget("pool-autostart").get_active()
             pool.set_autostart(do_auto)
@@ -846,6 +873,7 @@ class vmmHost(vmmGObjectUI):
                 return
             self.config.set_confirm_interface(not skip_prompt)
 
+        logging.debug("Stopping interface '%s'" % interface.get_name())
         try:
             interface.stop()
         except Exception, e:
@@ -872,6 +900,7 @@ class vmmHost(vmmGObjectUI):
                 return
             self.config.set_confirm_interface(not skip_prompt)
 
+        logging.debug("Starting interface '%s'" % interface.get_name())
         try:
             interface.start()
         except Exception, e:
@@ -890,6 +919,7 @@ class vmmHost(vmmGObjectUI):
         if not result:
             return
 
+        logging.debug("Deleting interface '%s'" % interface.get_name())
         try:
             interface.delete()
         except Exception, e:
@@ -897,6 +927,7 @@ class vmmHost(vmmGObjectUI):
                               "".join(traceback.format_exc()))
 
     def add_interface(self, src_ignore):
+        logging.debug("Launching 'Add Interface' wizard")
         try:
             if self.addinterface is None:
                 self.addinterface = vmmCreateInterface(self.conn)
@@ -930,6 +961,8 @@ class vmmHost(vmmGObjectUI):
         model = start_list.get_model()
         newmode = model[start_list.get_active()][0]
 
+        logging.debug("Applying changes for interface '%s'" %
+                      interface.get_name())
         try:
             interface.set_startmode(newmode)
         except Exception, e:
