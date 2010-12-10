@@ -475,12 +475,12 @@ class vmmDomainBase(vmmLibvirtObject):
         consoles = filter(lambda x: x.virtual_device_type == "console", devs)
 
         for dev in serials:
-            devlist.append(["Serial %s" % (dev.index + 1), dev.char_type,
-                            dev.source_path, dev.index])
+            devlist.append(["Serial %s" % (dev.vmmindex + 1), dev.char_type,
+                            dev.source_path, dev.vmmindex])
 
         for dev in consoles:
-            devlist.append(["Text Console %s" % (dev.index + 1),
-                            dev.char_type, dev.source_path, dev.index])
+            devlist.append(["Text Console %s" % (dev.vmmindex + 1),
+                            dev.char_type, dev.source_path, dev.vmmindex])
 
         return devlist
 
