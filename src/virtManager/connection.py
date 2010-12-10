@@ -399,6 +399,10 @@ class vmmConnection(vmmGObject):
             return True
         return False
 
+    def is_session_uri(self):
+        path = virtinst.util.uri_split(self.uri)[3]
+        return path == "/session"
+
     # Connection capabilities debug helpers
     def is_kvm_supported(self):
         return self.get_capabilities().is_kvm_available()
@@ -1161,7 +1165,7 @@ class vmmConnection(vmmGObject):
             else:
                 # Try to create the default storage pool
                 try:
-                    util.build_default_pool(self.vmm)
+                    util.build_default_pool(self)
                 except Exception, e:
                     logging.debug("Building default pool failed: %s" % str(e))
 

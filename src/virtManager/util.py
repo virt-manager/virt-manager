@@ -31,22 +31,31 @@ from virtManager.config import running_config
 import virtManager
 import virtinst
 
-DEFAULT_POOL_NAME = "default"
-DEFAULT_POOL_PATH = "/var/lib/libvirt/images"
+# FIXME: selinux policy also has a ~/VirtualMachines/isos dir
+def get_default_pool_path(conn):
+    if conn.is_session_uri():
+        return os.path.expanduser("~/VirtualMachines")
+    return "/var/lib/libvirt/images"
 
-def build_default_pool(conn):
+def get_default_pool_name(conn):
+    ignore = conn
+    return "default"
+
+def build_default_pool(vmmconn):
     """
     Helper to build the 'default' storage pool
     """
     # FIXME: This should use config.get_default_image_path ?
-
+    conn = vmmconn.vmm
     if not virtinst.util.is_storage_capable(conn):
         # VirtualDisk will raise an error for us
         return
 
+    path = get_default_pool_path(vmmconn)
+    name = get_default_pool_name(vmmconn)
     pool = None
     try:
-        pool = conn.storagePoolLookupByName(DEFAULT_POOL_NAME)
+        pool = conn.storagePoolLookupByName(name)
     except libvirt.libvirtError:
         pass
 
@@ -55,15 +64,15 @@ def build_default_pool(conn):
 
     try:
         logging.debug("Attempting to build default pool with target '%s'" %
-                      DEFAULT_POOL_PATH)
+                      path)
         defpool = virtinst.Storage.DirectoryPool(conn=conn,
-                                                 name=DEFAULT_POOL_NAME,
-                                                 target_path=DEFAULT_POOL_PATH)
+                                                 name=name,
+                                                 target_path=path)
         newpool = defpool.install(build=True, create=True)
         newpool.setAutostart(True)
     except Exception, e:
         raise RuntimeError(_("Couldn't create default storage pool '%s': %s") %
-                             (DEFAULT_POOL_PATH, str(e)))
+                             (path, str(e)))
 
 def get_ideal_path_info(conn, name):
     path = get_default_dir(conn)
@@ -76,9 +85,10 @@ def get_ideal_path(conn, name):
 
 def get_default_pool(conn):
     pool = None
+    default_name = get_default_pool_name(conn)
     for uuid in conn.list_pool_uuids():
         p = conn.get_pool(uuid)
-        if p.get_name() == DEFAULT_POOL_NAME:
+        if p.get_name() == default_name:
             pool = p
 
     return pool
