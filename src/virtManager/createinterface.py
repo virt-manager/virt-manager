@@ -21,7 +21,6 @@
 import gobject
 import gtk
 
-import sys
 import traceback
 import logging
 
@@ -1115,44 +1114,28 @@ class vmmCreateInterface(vmmGObjectUI):
                               title=_("Creating virtual interface"),
                               text=_("The virtual interface is now being "
                                      "created."))
-        progWin.run()
-        error, details = progWin.get_error()
-
-        if error != None:
-            self.err.show_err(error, details)
+        error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
         if error:
-            return
+            error = _("Error creating interface: '%s'") % error
+            self.err.show_err(error, error + "\n" + details)
+        else:
+            # FIXME: Hmm, shouldn't we emit a signal here rather than do this?
+            self.conn.tick(noStatsUpdate=True)
+            self.close()
 
-        # FIXME: Hmm, shouldn't we emit a signal here rather than do this?
-        self.conn.tick(noStatsUpdate=True)
-        self.close()
-
-
-    def do_install(self, activate, asyncjob):
+    def do_install(self, asyncjob, activate):
         meter = vmmCreateMeter(asyncjob)
         error = None
         details = None
-        try:
-            self.interface.conn = util.dup_conn(self.conn).vmm
 
-            self.interface.install(meter, create=activate)
-            logging.debug("Install completed")
-        except:
-            (_type, value, stacktrace) = sys.exc_info ()
+        self.interface.conn = util.dup_conn(self.conn).vmm
 
-            # Detailed error message, in English so it can be Googled.
-            details = ("Error creating interface: '%s'" %
-                       (str(_type) + " " + str(value) + "\n" +
-                       traceback.format_exc (stacktrace)))
-            error = (_("Error creating interface: '%s'") % str(value))
-
-        if error:
-            asyncjob.set_error(error, details)
-
+        self.interface.install(meter, create=activate)
+        logging.debug("Install completed")
 
     def show_help(self, ignore):
         # No help available yet.

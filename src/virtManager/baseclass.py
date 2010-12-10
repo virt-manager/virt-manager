@@ -38,7 +38,7 @@ class vmmGObject(gobject.GObject):
 
     def get_hal_helper(self):
         from virtManager import halhelper
-        return virtManager.halhelper.get_hal_helper()
+        return halhelper.get_hal_helper()
 
 class vmmGObjectUI(vmmGObject):
     def __init__(self, filename, windowname):

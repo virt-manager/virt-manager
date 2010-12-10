@@ -234,8 +234,10 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
     return ret
 
 def dup_lib_conn(libconn):
-    vmmconn = _dup_all_conn(None, libconn)
-    return vmmconn.vmm
+    conn = _dup_all_conn(None, libconn)
+    if isinstance(conn, virtManager.connection.vmmConnection):
+        return conn.vmm
+    return conn
 
 def dup_conn(conn):
     return _dup_all_conn(conn, None)

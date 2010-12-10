@@ -20,6 +20,8 @@
 
 import logging
 import threading
+import traceback
+
 import gtk
 import gobject
 
@@ -30,38 +32,35 @@ from virtManager.baseclass import vmmGObjectUI
 # code in the run() method every now & then
 class asyncJobWorker(threading.Thread):
     def __init__(self, callback, args):
-        threading.Thread.__init__(self, target=callback, args=args)
+        args = [callback] + args
+        threading.Thread.__init__(self, target=cb_wrapper, args=args)
 
     def run(self):
         threading.Thread.run(self)
 
+def cb_wrapper(callback, asyncjob, *args, **kwargs):
+    try:
+        callback(asyncjob, *args, **kwargs)
+    except Exception, e:
+        asyncjob.set_error(e, "".join(traceback.format_exc()))
+
 # Displays a progress bar while executing the "callback" method.
 class vmmAsyncJob(vmmGObjectUI):
 
-    def __init__(self, callback, args=None,
-                 text=_("Please wait a few moments..."),
-                 title=_("Operation in progress"),
+    def __init__(self, callback, args, title, text,
                  run_main=True, cancel_back=None, cancel_args=None):
         vmmGObjectUI.__init__(self, "vmm-progress.glade", "vmm-progress")
-
-        self.topwin.set_title(title)
-
-        self.window.signal_autoconnect({
-            "on_async_job_delete_event" : self.delete,
-            "on_async_job_cancel_clicked" : self.cancel,
-        })
 
         self.run_main = bool(run_main)
         self.cancel_job = cancel_back
         self.cancel_args = cancel_args or []
-        self.cancel_args.append(self)
+        self.cancel_args = [self] + self.cancel_args
         if self.cancel_job:
             self.window.get_widget("cancel-async-job").show()
         else:
             self.window.get_widget("cancel-async-job").hide()
         self.job_canceled = False
 
-        # Callback sets this if there is an error
         self._error_info = None
         self._data = None
 
@@ -69,10 +68,17 @@ class vmmAsyncJob(vmmGObjectUI):
         self.pbar = self.window.get_widget("pbar")
         self.window.get_widget("pbar-text").set_text(text)
 
-        args.append(self)
+        args = [self] + args
         self.bg_thread = asyncJobWorker(callback, args)
         self.bg_thread.setDaemon(True)
         self.is_pulsing = True
+
+        self.window.signal_autoconnect({
+            "on_async_job_delete_event" : self.delete,
+            "on_async_job_cancel_clicked" : self.cancel,
+        })
+
+        self.topwin.set_title(title)
 
     def run(self):
         timer = util.safe_timeout_add(100, self.exit_if_necessary)
@@ -98,6 +104,7 @@ class vmmAsyncJob(vmmGObjectUI):
             self.exit_if_necessary(force_exit=True)
 
         self.topwin.destroy()
+        return self._get_error()
 
     def delete(self, ignore1=None, ignore2=None):
         thread_active = (self.bg_thread.isAlive() or not self.run_main)
@@ -175,7 +182,7 @@ class vmmAsyncJob(vmmGObjectUI):
     def set_error(self, error, details):
         self._error_info = (error, details)
 
-    def get_error(self):
+    def _get_error(self):
         if not self._error_info:
             return (None, None)
         return self._error_info

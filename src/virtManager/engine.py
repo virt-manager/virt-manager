@@ -104,9 +104,9 @@ def check_packagekit(errbox):
     progWin = vmmAsyncJob(_do_async_search,
                           [session, pk_control],
                           _("Searching for available hypervisors..."),
+                          _("Searching for available hypervisors..."),
                           run_main=False)
-    progWin.run()
-    error, ignore = progWin.get_error()
+    error, ignore = progWin.run()
     if error:
         return
 
@@ -146,7 +146,7 @@ def check_packagekit(errbox):
 
     return (True, LIBVIRT_DAEMON in do_install)
 
-def _do_async_search(session, pk_control, asyncjob):
+def _do_async_search(asyncjob, session, pk_control):
     found = []
     try:
         for name in PACKAGEKIT_PACKAGES:
@@ -827,15 +827,16 @@ class vmmEngine(vmmGObject):
         progWin = vmmAsyncJob(self._save_callback,
                               [vm, path],
                               _("Saving Virtual Machine"),
+                              _("Saving Virtual Machine"),
                               cancel_back=_cancel_back,
                               cancel_args=_cancel_args)
-        progWin.run()
-        error, details = progWin.get_error()
+        error, details = progWin.run()
 
         if error is not None:
-            src.err.show_err(_("Error saving domain: %s") % error, details)
+            error = _("Error saving domain: %s") % error
+            src.err.show_err(error, error + "\n" + details)
 
-    def _save_cancel(self, vm, asyncjob):
+    def _save_cancel(self, asyncjob, vm):
         logging.debug("Cancelling save job")
         if not vm:
             return
@@ -850,18 +851,17 @@ class vmmEngine(vmmGObject):
         asyncjob.job_canceled = True
         return
 
-    def _save_callback(self, vm, file_to_save, asyncjob):
+    def _save_callback(self, asyncjob, vm, file_to_save):
         try:
             conn = util.dup_conn(vm.connection)
             newvm = conn.get_vm(vm.get_uuid())
 
             newvm.save(file_to_save)
         except Exception, e:
-            if not (isinstance(e, libvirt.libvirtError) and
-                    asyncjob.job_canceled):
-                # If job is cancelled, we should not report the error
-                # to user.
-                asyncjob.set_error(str(e), "".join(traceback.format_exc()))
+            # If job is cancelled, don't report error to user.
+            if isinstance(e, libvirt.libvirtError) and asyncjob.job_canceled:
+                return
+            raise e
 
     def _do_restore_domain(self, src, uri):
         conn = self._lookup_connection(uri)
@@ -879,23 +879,19 @@ class vmmEngine(vmmGObject):
             return
 
         progWin = vmmAsyncJob(self._restore_saved_callback,
-                              [path, conn], _("Restoring Virtual Machine"))
-        progWin.run()
-        error, details = progWin.get_error()
+                              [path, conn],
+                              _("Restoring Virtual Machine"),
+                              _("Restoring Virtual Machine"))
+        error, details = progWin.run()
 
         if error is not None:
-            src.err.show_err(error, details,
-                             title=_("Error restoring domain"))
+            error = _("Error restoring domain: %s") % error
+            src.err.show_err(error, error + "\n" + details)
 
-    def _restore_saved_callback(self, file_to_load, conn, asyncjob):
-        try:
-            newconn = util.dup_conn(conn)
-            newconn.restore(file_to_load)
-        except Exception, e:
-            err = (_("Error restoring domain '%s': %s") %
-                                  (file_to_load, str(e)))
-            details = "".join(traceback.format_exc())
-            asyncjob.set_error(err, details)
+    def _restore_saved_callback(self, asyncjob, file_to_load, conn):
+        ignore = asyncjob
+        newconn = util.dup_conn(conn)
+        newconn.restore(file_to_load)
 
     def _do_destroy_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)

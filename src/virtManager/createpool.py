@@ -396,35 +396,31 @@ class vmmCreatePool(vmmGObjectUI):
                               title=_("Creating storage pool..."),
                               text=_("Creating the storage pool may take a "
                                      "while..."))
-        progWin.run()
-        error, details = progWin.get_error()
-
-        if error is not None:
-            self.err.show_err(error, details)
+        error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
-        if not error:
+        if error:
+            error = _("Error creating pool: %s") % error
+            self.err.show_err(error, error + "\n" + details)
+        else:
             self.close()
 
-    def _async_pool_create(self, asyncjob):
+    def _async_pool_create(self, asyncjob, *args, **kwargs):
+        print args, kwargs
         newconn = None
-        try:
-            # Open a seperate connection to install on since this is async
-            newconn = util.dup_lib_conn(self._pool.conn)
-            meter = vmmCreateMeter(asyncjob)
-            self._pool.conn = newconn
+        
+        # Open a seperate connection to install on since this is async
+        newconn = util.dup_lib_conn(self._pool.conn)
+        meter = vmmCreateMeter(asyncjob)
+        self._pool.conn = newconn
 
-            logging.debug("Starting backround pool creation.")
-            build = self.window.get_widget("pool-build").get_active()
-            poolobj = self._pool.install(create=True, meter=meter, build=build)
-            poolobj.setAutostart(True)
-            logging.debug("Pool creating succeeded.")
-        except Exception, e:
-            error = _("Error creating pool: %s") % str(e)
-            details = "".join(traceback.format_exc())
-            asyncjob.set_error(error, details)
+        logging.debug("Starting backround pool creation.")
+        build = self.window.get_widget("pool-build").get_active()
+        poolobj = self._pool.install(create=True, meter=meter, build=build)
+        poolobj.setAutostart(True)
+        logging.debug("Pool creating succeeded.")
 
     def page_changed(self, notebook_ignore, page_ignore, page_number):
         if page_number == PAGE_NAME:

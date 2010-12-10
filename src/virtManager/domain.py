@@ -200,6 +200,7 @@ class vmmDomainBase(vmmLibvirtObject):
         # attempt may result in a lookup failure. If device is present
         # in the active XML, assume all is good.
         if find_device(self._get_guest(), origdev):
+            logging.debug("Device in active config but not inactive config.")
             return
 
         raise RuntimeError(_("Could not find specified device in the "

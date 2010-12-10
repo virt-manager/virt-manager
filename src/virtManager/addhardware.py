@@ -989,25 +989,35 @@ class vmmAddHardware(vmmGObjectUI):
     ######################
 
     def setup_device(self):
-        if (self._dev.virtual_device_type ==
+        if (self._dev.virtual_device_type !=
             virtinst.VirtualDevice.VIRTUAL_DEV_DISK):
-            progWin = vmmAsyncJob(self.do_file_allocate,
-                                  [self._dev],
-                                  title=_("Creating Storage File"),
-                                  text=_("Allocation of disk storage may take "
-                                         "a few minutes to complete."))
-            progWin.run()
-
-            error, details = progWin.get_error()
-            if error:
-                return (error, details)
-
-        else:
             self._dev.setup_dev(self.conn.vmm)
+            return
+
+        def do_file_allocate(asyncjob, disk):
+            meter = vmmCreateMeter(asyncjob)
+
+            # If creating disk via storage API, we need to thread
+            # off a new connection
+            if disk.vol_install:
+                newconn = util.dup_lib_conn(disk.conn)
+                disk.conn = newconn
+            logging.debug("Starting background file allocate process")
+            disk.setup_dev(self.conn.vmm, meter=meter)
+            logging.debug("Allocation completed")
+
+        progWin = vmmAsyncJob(do_file_allocate,
+                              [self._dev],
+                              title=_("Creating Storage File"),
+                              text=_("Allocation of disk storage may take "
+                                     "a few minutes to complete."))
+
+        return progWin.run()
+
 
     def add_device(self):
         ret = self.setup_device()
-        if ret:
+        if ret and ret[0]:
             # Encountered an error
             return (True, ret)
 
@@ -1045,24 +1055,6 @@ class vmmAddHardware(vmmGObjectUI):
             return (True, None)
 
         return (False, None)
-
-    def do_file_allocate(self, disk, asyncjob):
-        meter = vmmCreateMeter(asyncjob)
-        newconn = None
-        try:
-            # If creating disk via storage API, we need to thread
-            # off a new connection
-            if disk.vol_install:
-                newconn = util.dup_lib_conn(disk.conn)
-                disk.conn = newconn
-            logging.debug("Starting background file allocate process")
-            disk.setup_dev(self.conn.vmm, meter=meter)
-            logging.debug("Allocation completed")
-        except Exception, e:
-            details = (_("Unable to complete install: '%s'") %
-                         "".join(traceback.format_exc()))
-            error = _("Unable to complete install: '%s'") % str(e)
-            asyncjob.set_error(error, details)
 
 
     ###########################

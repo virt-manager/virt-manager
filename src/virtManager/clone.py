@@ -709,51 +709,39 @@ class vmmCloneVM(vmmGObjectUI):
         if self.clone_design.clone_devices:
             text = title + _(" and selected storage (this may take a while)")
 
-        progWin = vmmAsyncJob(self._async_clone, [],
-                              title=title, text=text)
-        progWin.run()
-        error, details = progWin.get_error()
+        progWin = vmmAsyncJob(self._async_clone, [], title, text)
+        error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
         if error is not None:
-            self.err.show_err(error, details)
+            error = (_("Error creating virtual machine clone '%s': %s") %
+                      (self.clone_design.clone_name, error))
+            self.err.show_err(error, error + "\n" + details)
         else:
             self.close()
             self.conn.tick(noStatsUpdate=True)
 
     def _async_clone(self, asyncjob):
         newconn = None
-        error = None
-        details = None
 
         try:
-            try:
-                self.orig_vm.set_cloning(True)
+            self.orig_vm.set_cloning(True)
 
-                # Open a seperate connection to install on since this is async
-                logging.debug("Threading off connection to clone VM.")
-                newconn = util.dup_conn(self.conn).vmm
-                meter = vmmCreateMeter(asyncjob)
+            # Open a seperate connection to install on since this is async
+            logging.debug("Threading off connection to clone VM.")
+            newconn = util.dup_conn(self.conn).vmm
+            meter = vmmCreateMeter(asyncjob)
 
-                self.clone_design.orig_connection = newconn
-                for d in self.clone_design.clone_virtual_disks:
-                    d.conn = newconn
+            self.clone_design.orig_connection = newconn
+            for d in self.clone_design.clone_virtual_disks:
+                d.conn = newconn
 
-                self.clone_design.setup()
-                CloneManager.start_duplicate(self.clone_design, meter)
-            finally:
-                self.orig_vm.set_cloning(False)
-
-        except Exception, e:
-            error = (_("Error creating virtual machine clone '%s': %s") %
-                      (self.clone_design.clone_name, str(e)))
-            details = "".join(traceback.format_exc())
-
-        if error:
-            asyncjob.set_error(error, details)
-        return
+            self.clone_design.setup()
+            CloneManager.start_duplicate(self.clone_design, meter)
+        finally:
+            self.orig_vm.set_cloning(False)
 
     def change_storage_browse(self, ignore):
 

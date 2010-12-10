@@ -51,9 +51,6 @@ class vmmLibvirtObject(vmmGObject):
         self._xml = None
         self._is_xml_valid = False
 
-        # Cached XML that accumulates changes to define
-        self._xml_to_define = None
-
         # These should be set by the child classes if necessary
         self._inactive_xml_flags = 0
         self._active_xml_flags = 0
@@ -128,7 +125,7 @@ class vmmLibvirtObject(vmmGObject):
     # Internal API functions #
     ##########################
 
-    def __xml_to_redefine(self):
+    def _xml_to_redefine(self):
         return _sanitize_xml(self.get_xml(inactive=True))
 
     def _redefine_helper(self, origxml, newxml):
@@ -143,13 +140,15 @@ class vmmLibvirtObject(vmmGObject):
                           self.get_name(), diff)
 
             self._define(newxml)
+        else:
+            logging.debug("Redefine requested, but XML didn't change!")
 
         # Make sure we have latest XML
         self.refresh_xml(forcesignal=True)
         return
 
     def _redefine_xml(self, newxml):
-        origxml = self.__xml_to_redefine()
+        origxml = self._xml_to_redefine()
         return self._redefine_helper(origxml, newxml)
 
 vmmGObject.type_register(vmmLibvirtObject)

@@ -132,8 +132,7 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         progWin = vmmAsyncJob(self._async_delete, [devs],
                               title=title, text=text)
-        progWin.run()
-        error, details = progWin.get_error()
+        error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
@@ -145,11 +144,9 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.conn.tick(noStatsUpdate=True)
 
 
-    def _async_delete(self, paths, asyncjob):
+    def _async_delete(self, asyncjob, paths):
         newconn = None
         storage_errors = []
-        error = None
-        details = None
 
         try:
             # Open a seperate connection to install on since this is async

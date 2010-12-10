@@ -21,7 +21,6 @@
 import gobject
 import gtk
 
-import sys
 import time
 import traceback
 import threading
@@ -1583,16 +1582,14 @@ class vmmCreate(vmmGObjectUI):
                                      "and retrieval of the installation "
                                      "images may take a few minutes to "
                                      "complete."))
-        progWin.run()
-        error, details = progWin.get_error()
-
-        if error != None:
-            self.err.show_err(error, details)
+        error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
         if error:
+            error = (_("Unable to complete install: '%s'") % error)
+            self.err.show_err(error, error + "\n" + details)
             self.failed_guest = self.guest
             return
 
@@ -1610,51 +1607,33 @@ class vmmCreate(vmmGObjectUI):
         self.close()
 
 
-    def do_install(self, guest, asyncjob):
+    def do_install(self, asyncjob, guest):
         meter = vmmCreateMeter(asyncjob)
-        error = None
-        details = None
-        try:
-            logging.debug("Starting background install process")
 
-            guest.conn = util.dup_conn(self.conn).vmm
-            for dev in guest.get_all_devices():
-                dev.conn = guest.conn
+        logging.debug("Starting background install process")
 
-            dom = guest.start_install(False, meter = meter)
-            if dom == None:
-                error = _("Guest installation failed to complete")
-                details = error
-                logging.error("Guest install did not return a domain")
-            else:
-                logging.debug("Install completed")
+        guest.conn = util.dup_conn(self.conn).vmm
+        for dev in guest.get_all_devices():
+            dev.conn = guest.conn
 
-            # Make sure we pick up the domain object
-            self.conn.tick(noStatsUpdate=True)
-            vm = self.conn.get_vm(guest.uuid)
+        guest.start_install(False, meter = meter)
+        logging.debug("Install completed")
 
-            if vm.is_shutoff():
-                # Domain is already shutdown, but no error was raised.
-                # Probably means guest had no 'install' phase, as in
-                # for live cds. Try to restart the domain.
-                vm.startup()
-            else:
-                # Register a status listener, which will restart the
-                # guest after the install has finished
-                util.connect_opt_out(vm, "status-changed",
-                                     self.check_install_status, guest)
+        # Make sure we pick up the domain object
+        self.conn.tick(noStatsUpdate=True)
+        vm = self.conn.get_vm(guest.uuid)
 
-        except:
-            (_type, value, stacktrace) = sys.exc_info ()
+        if vm.is_shutoff():
+            # Domain is already shutdown, but no error was raised.
+            # Probably means guest had no 'install' phase, as in
+            # for live cds. Try to restart the domain.
+            vm.startup()
+        else:
+            # Register a status listener, which will restart the
+            # guest after the install has finished
+            util.connect_opt_out(vm, "status-changed",
+                                 self.check_install_status, guest)
 
-            # Detailed error message, in English so it can be Googled.
-            details = ("Unable to complete install '%s'" %
-                       (str(_type) + " " + str(value) + "\n" +
-                       traceback.format_exc (stacktrace)))
-            error = (_("Unable to complete install: '%s'") % str(value))
-
-        if error:
-            asyncjob.set_error(error, details)
 
     def check_install_status(self, vm, ignore1, ignore2, virtinst_guest=None):
         if vm.is_crashed():

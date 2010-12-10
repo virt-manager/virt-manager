@@ -203,38 +203,31 @@ class vmmCreateVolume(vmmGObjectUI):
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
         progWin = vmmAsyncJob(self._async_vol_create, [],
-                              title=_("Creating storage volume..."),
-                              text=_("Creating the storage volume may take a "
-                                     "while..."))
-        progWin.run()
-        error, details = progWin.get_error()
-
-        if error is not None:
-            self.show_err(error, details)
+                              _("Creating storage volume..."),
+                              _("Creating the storage volume may take a "
+                                "while..."))
+        error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
-        if not error:
+        if error:
+            error = _("Error creating vol: %s") % error
+            self.show_err(error, error + "\n" + details)
+        else:
             self.emit("vol-created")
             self.close()
 
     def _async_vol_create(self, asyncjob):
-        newconn = None
-        try:
-            newconn = util.dup_conn(self.conn).vmm
+        newconn = util.dup_conn(self.conn).vmm
 
-            # Lookup different pool obj
-            newpool = newconn.storagePoolLookupByName(self.parent_pool.get_name())
-            self.vol.pool = newpool
+        # Lookup different pool obj
+        newpool = newconn.storagePoolLookupByName(self.parent_pool.get_name())
+        self.vol.pool = newpool
 
-            meter = vmmCreateMeter(asyncjob)
-            logging.debug("Starting backround vol creation.")
-            self.vol.install(meter=meter)
-        except Exception, e:
-            error = _("Error creating vol: %s") % str(e)
-            details = "".join(traceback.format_exc())
-            asyncjob.set_error(error, details)
+        meter = vmmCreateMeter(asyncjob)
+        logging.debug("Starting backround vol creation.")
+        self.vol.install(meter=meter)
 
     def validate(self):
         name = self.window.get_widget("vol-name").get_text()

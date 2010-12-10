@@ -53,7 +53,7 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def set_active(self, state):
         self.active = state
-        self._update_xml()
+        self.refresh_xml()
 
     def is_active(self):
         return self.active
@@ -67,11 +67,11 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def start(self):
         self.pool.create(0)
-        self._update_xml()
+        self.refresh_xml()
 
     def stop(self):
         self.pool.destroy()
-        self._update_xml()
+        self.refresh_xml()
 
     def delete(self, nodelete=True):
         if nodelete:

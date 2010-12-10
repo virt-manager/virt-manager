@@ -447,22 +447,21 @@ class vmmMigrateDialog(vmmGObjectUI):
         progWin = vmmAsyncJob(self._async_migrate,
                               [self.vm, destconn, uri, rate, live, secure,
                                max_downtime],
-                              title=_("Migrating VM '%s'" % self.vm.get_name()),
-                              text=(_("Migrating VM '%s' from %s to %s. "
-                                      "This may take awhile.") %
-                                      (self.vm.get_name(), srchost, dsthost)),
+                              _("Migrating VM '%s'" % self.vm.get_name()),
+                              (_("Migrating VM '%s' from %s to %s. "
+                                 "This may take awhile.") %
+                                (self.vm.get_name(), srchost, dsthost)),
                               cancel_back=_cancel_back,
                               cancel_args=_cancel_args)
-        progWin.run()
-        error, details = progWin.get_error()
-
-        if error:
-            self.err.show_err(error, details)
+        error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
-        if error is None:
+        if error:
+            error = _("Unable to migrate guest: %s") % error
+            self.err.show_err(error, error + "\n" + details)
+        else:
             self.conn.tick(noStatsUpdate=True)
             destconn.tick(noStatsUpdate=True)
             self.close()
@@ -482,7 +481,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             logging.warning("Error setting migrate downtime: %s" % e)
             return False
 
-    def cancel_migration(self, vm, asyncjob):
+    def cancel_migration(self, asyncjob, vm):
         logging.debug("Cancelling migrate job")
         if not vm:
             return
@@ -497,43 +496,37 @@ class vmmMigrateDialog(vmmGObjectUI):
         asyncjob.job_canceled = True
         return
 
-    def _async_migrate(self, origvm, origdconn, migrate_uri, rate, live,
-                       secure, max_downtime, asyncjob):
-        errinfo = None
+    def _async_migrate(self, asyncjob,
+                       origvm, origdconn, migrate_uri, rate, live,
+                       secure, max_downtime):
         try:
-            try:
-                ignore = vmmCreateMeter(asyncjob)
+            ignore = vmmCreateMeter(asyncjob)
 
-                srcconn = util.dup_conn(origvm.get_connection())
-                dstconn = util.dup_conn(origdconn)
+            srcconn = util.dup_conn(origvm.get_connection())
+            dstconn = util.dup_conn(origdconn)
 
-                vminst = srcconn.vmm.lookupByName(origvm.get_name())
-                vm = vmmDomain(srcconn, vminst, vminst.UUID())
+            vminst = srcconn.vmm.lookupByName(origvm.get_name())
+            vm = vmmDomain(srcconn, vminst, vminst.UUID())
 
-                logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
-                              srcconn.get_uri(), dstconn.get_uri())
-                timer = None
-                if max_downtime != 0:
-                    # 0 means that the spin box migrate-max-downtime does not
-                    # be enabled.
-                    current_thread = threading.currentThread()
-                    timer = util.safe_timeout_add(100,
-                                                  self._async_set_max_downtime,
-                                                  vm, max_downtime,
-                                                  current_thread)
-                vm.migrate(dstconn, migrate_uri, rate, live, secure)
-                if timer:
-                    gobject.source_remove(timer)
-            except Exception, e:
-                if not (isinstance(e, libvirt.libvirtError) and
-                        asyncjob.job_canceled):
-                    # If job is cancelled, we should not report the error
-                    # to user.
-                    errinfo = (str(e), ("Unable to migrate guest:\n %s" %
-                                        "".join(traceback.format_exc())))
-        finally:
-            if errinfo:
-                asyncjob.set_error(errinfo[0], errinfo[1])
+            logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
+                          srcconn.get_uri(), dstconn.get_uri())
+            timer = None
+            if max_downtime != 0:
+                # 0 means that the spin box migrate-max-downtime does not
+                # be enabled.
+                current_thread = threading.currentThread()
+                timer = util.safe_timeout_add(100,
+                                              self._async_set_max_downtime,
+                                              vm, max_downtime,
+                                              current_thread)
+            vm.migrate(dstconn, migrate_uri, rate, live, secure)
+            if timer:
+                gobject.source_remove(timer)
+        except Exception, e:
+            # If job is cancelled, don't report error
+            if isinstance(e, libvirt.libvirtError) and asyncjob.job_canceled:
+                return
+            raise e
 
 
 vmmGObjectUI.type_register(vmmMigrateDialog)

@@ -21,6 +21,7 @@
 import virtinst
 from virtinst import Interface
 
+from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmInterface(vmmLibvirtObject):
@@ -118,7 +119,7 @@ class vmmInterface(vmmLibvirtObject):
 
             return doc.serialize()
 
-        self._redefine_xml(set_start_xml)
+        self._redefine(util.xml_parse_wrapper, set_start_xml)
 
 
     def get_slaves(self):
@@ -210,5 +211,20 @@ class vmmInterface(vmmLibvirtObject):
         if ret:
             ret = "  %s\n" % ret
         return ret
+
+    def _redefine(self, xml_func, *args):
+        """
+        Helper function for altering a redefining VM xml
+
+        @param xml_func: Function to alter the running XML. Takes the
+                         original XML as its first argument.
+        @param args: Extra arguments to pass to xml_func
+        """
+        origxml = self._xml_to_redefine()
+        # Sanitize origxml to be similar to what we will get back
+        origxml = util.xml_parse_wrapper(origxml, lambda d, c: d.serialize())
+
+        newxml = xml_func(origxml, *args)
+        self._redefine_xml(newxml)
 
 vmmLibvirtObject.type_register(vmmInterface)
