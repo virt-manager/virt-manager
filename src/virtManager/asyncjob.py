@@ -25,6 +25,8 @@ import traceback
 import gtk
 import gobject
 
+import libvirt
+
 from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
 
@@ -42,6 +44,12 @@ def cb_wrapper(callback, asyncjob, *args, **kwargs):
     try:
         callback(asyncjob, *args, **kwargs)
     except Exception, e:
+        # If job is cancelled, don't report error to user.
+        if (isinstance(e, libvirt.libvirtError) and
+            asyncjob.can_cancel() and
+            asyncjob.job_canceled):
+            return
+
         asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
 def _simple_async(callback, args, title, text, parent, errorintro,
@@ -155,6 +163,9 @@ class vmmAsyncJob(vmmGObjectUI):
         markup = "<small>%s</small>" % summary
         self.window.get_widget("warning-box").show()
         self.window.get_widget("warning-text").set_markup(markup)
+
+    def can_cancel(self):
+        return bool(self.cancel_job)
 
     def cancel(self, ignore1=None, ignore2=None):
         if not self.cancel_job:

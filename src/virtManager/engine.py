@@ -817,12 +817,11 @@ class vmmEngine(vmmGObject):
             if not path:
                 return
 
+        _cancel_back = None
+        _cancel_args = []
         if vm.getjobinfo_supported:
             _cancel_back = self._save_cancel
             _cancel_args = [vm]
-        else:
-            _cancel_back = None
-            _cancel_args = [None]
 
         progWin = vmmAsyncJob(self._save_callback,
                               [vm, path],
@@ -852,16 +851,12 @@ class vmmEngine(vmmGObject):
         return
 
     def _save_callback(self, asyncjob, vm, file_to_save):
-        try:
-            conn = util.dup_conn(vm.connection)
-            newvm = conn.get_vm(vm.get_uuid())
+        ignore = asyncjob
 
-            newvm.save(file_to_save)
-        except Exception, e:
-            # If job is cancelled, don't report error to user.
-            if isinstance(e, libvirt.libvirtError) and asyncjob.job_canceled:
-                return
-            raise e
+        conn = util.dup_conn(vm.connection)
+        newvm = conn.get_vm(vm.get_uuid())
+        newvm.save(file_to_save)
+
 
     def _do_restore_domain(self, src, uri):
         conn = self._lookup_connection(uri)

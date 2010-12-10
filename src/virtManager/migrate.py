@@ -499,34 +499,29 @@ class vmmMigrateDialog(vmmGObjectUI):
     def _async_migrate(self, asyncjob,
                        origvm, origdconn, migrate_uri, rate, live,
                        secure, max_downtime):
-        try:
-            ignore = vmmCreateMeter(asyncjob)
+        ignore = vmmCreateMeter(asyncjob)
 
-            srcconn = util.dup_conn(origvm.get_connection())
-            dstconn = util.dup_conn(origdconn)
+        srcconn = util.dup_conn(origvm.get_connection())
+        dstconn = util.dup_conn(origdconn)
 
-            vminst = srcconn.vmm.lookupByName(origvm.get_name())
-            vm = vmmDomain(srcconn, vminst, vminst.UUID())
+        vminst = srcconn.vmm.lookupByName(origvm.get_name())
+        vm = vmmDomain(srcconn, vminst, vminst.UUID())
 
-            logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
-                          srcconn.get_uri(), dstconn.get_uri())
-            timer = None
-            if max_downtime != 0:
-                # 0 means that the spin box migrate-max-downtime does not
-                # be enabled.
-                current_thread = threading.currentThread()
-                timer = util.safe_timeout_add(100,
-                                              self._async_set_max_downtime,
-                                              vm, max_downtime,
-                                              current_thread)
-            vm.migrate(dstconn, migrate_uri, rate, live, secure)
-            if timer:
-                gobject.source_remove(timer)
-        except Exception, e:
-            # If job is cancelled, don't report error
-            if isinstance(e, libvirt.libvirtError) and asyncjob.job_canceled:
-                return
-            raise e
+        logging.debug("Migrating vm=%s from %s to %s", vm.get_name(),
+                      srcconn.get_uri(), dstconn.get_uri())
 
+        timer = None
+        if max_downtime != 0:
+            # 0 means that the spin box migrate-max-downtime does not
+            # be enabled.
+            current_thread = threading.currentThread()
+            timer = util.safe_timeout_add(100,
+                                          self._async_set_max_downtime,
+                                          vm, max_downtime,
+                                          current_thread)
+
+        vm.migrate(dstconn, migrate_uri, rate, live, secure)
+        if timer:
+            gobject.source_remove(timer)
 
 vmmGObjectUI.type_register(vmmMigrateDialog)
