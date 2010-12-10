@@ -18,9 +18,12 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
 import libvirt
 import logging
+import time
+import threading
+
+import gobject
 
 import virtinst
 from virtManager import util
@@ -71,6 +74,45 @@ def find_device(guest, origdev):
             return dev
 
     return None
+
+def start_job_progress_thread(vm, meter, progtext):
+    current_thread = threading.currentThread()
+
+    def jobinfo_cb():
+        while True:
+            time.sleep(.5)
+
+            if not current_thread.isAlive():
+                return False
+
+            try:
+                jobinfo = vm.job_info()
+                data_total      = float(jobinfo[3])
+                #data_processed  = float(jobinfo[4])
+                data_remaining  = float(jobinfo[5])
+
+                # data_total is 0 if the job hasn't started yet
+                if not data_total:
+                    continue
+
+                if not meter.started:
+                    meter.start(size=data_total,
+                                text=progtext)
+
+                progress = data_total - data_remaining
+                meter.update(progress)
+            except:
+                logging.exception("Error calling jobinfo")
+                return False
+
+        return True
+
+    if vm.getjobinfo_supported:
+        t = threading.Thread(target=jobinfo_cb,
+                             name="job progress reporting",
+                             args=())
+        t.daemon = True
+        t.start()
 
 class vmmDomainBase(vmmLibvirtObject):
     """
@@ -972,12 +1014,17 @@ class vmmDomain(vmmDomainBase):
             return False
         return self._backend.hasManagedSaveImage(0)
 
-    def save(self, filename=None):
+    def save(self, filename=None, meter=None):
         self.set_install_abort(True)
+
+        if meter:
+            start_job_progress_thread(self, meter, _("Saving domain to disk"))
+
         if not self.managedsave_supported:
             self._backend.save(filename)
         else:
             self._backend.managedSave(0)
+
         self._update_status()
 
     def destroy(self):
@@ -1007,6 +1054,8 @@ class vmmDomain(vmmDomainBase):
         if self.get_autostart() != val:
             self._backend.setAutostart(val)
 
+    def job_info(self):
+        return self._backend.jobInfo()
     def abort_job(self):
         self._backend.abortJob()
 
@@ -1014,7 +1063,9 @@ class vmmDomain(vmmDomainBase):
         self._backend.migrateSetMaxDowntime(max_downtime, flag)
 
     def migrate(self, destconn, interface=None, rate=0,
-                live=False, secure=False):
+                live=False, secure=False, meter=None):
+        self.set_install_abort(True)
+
         newname = None
 
         flags = 0
@@ -1029,6 +1080,10 @@ class vmmDomain(vmmDomainBase):
 
         logging.debug("Migrating: conn=%s flags=%s dname=%s uri=%s rate=%s" %
                       (destconn.vmm, flags, newname, interface, rate))
+
+        if meter:
+            start_job_progress_thread(self, meter, _("Migrating domain"))
+
         self._backend.migrate(destconn.vmm, flags, newname, interface, rate)
         destconn.define_domain(newxml)
 

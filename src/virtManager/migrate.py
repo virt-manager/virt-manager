@@ -499,7 +499,7 @@ class vmmMigrateDialog(vmmGObjectUI):
     def _async_migrate(self, asyncjob,
                        origvm, origdconn, migrate_uri, rate, live,
                        secure, max_downtime):
-        ignore = vmmCreateMeter(asyncjob)
+        meter = vmmCreateMeter(asyncjob)
 
         srcconn = util.dup_conn(origvm.get_connection())
         dstconn = util.dup_conn(origdconn)
@@ -520,7 +520,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                                           vm, max_downtime,
                                           current_thread)
 
-        vm.migrate(dstconn, migrate_uri, rate, live, secure)
+        vm.migrate(dstconn, migrate_uri, rate, live, secure, meter=meter)
         if timer:
             gobject.source_remove(timer)
 

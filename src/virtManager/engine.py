@@ -35,6 +35,7 @@ from virtManager.baseclass import vmmGObject
 from virtManager.clone import vmmCloneVM
 from virtManager.connect import vmmConnect
 from virtManager.connection import vmmConnection
+from virtManager.createmeter import vmmCreateMeter
 from virtManager.preferences import vmmPreferences
 from virtManager.manager import vmmManager
 from virtManager.migrate import vmmMigrateDialog
@@ -851,11 +852,11 @@ class vmmEngine(vmmGObject):
         return
 
     def _save_callback(self, asyncjob, vm, file_to_save):
-        ignore = asyncjob
-
         conn = util.dup_conn(vm.connection)
         newvm = conn.get_vm(vm.get_uuid())
-        newvm.save(file_to_save)
+        meter = vmmCreateMeter(asyncjob)
+
+        newvm.save(file_to_save, meter=meter)
 
 
     def _do_restore_domain(self, src, uri):
