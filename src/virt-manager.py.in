@@ -46,7 +46,7 @@ appversion = "::VERSION::"
 gettext_app = "virt-manager"
 gettext_dir = "::GETTEXTDIR::"
 virtinst_str = "::VIRTINST_VERSION::"
-virtinst_version = tuple([ int(num) for num in virtinst_str.split('.')])
+virtinst_version = tuple([int(num) for num in virtinst_str.split('.')])
 
 gconf_dir = "/apps/" + appname
 asset_dir = "::ASSETDIR::"
@@ -62,7 +62,7 @@ def _show_startup_error(msg, details):
     from virtManager.error import vmmErrorDialog
     err = vmmErrorDialog()
     title = _("Error starting Virtual Machine Manager")
-    err.show_err(title + ": " +  msg, details, title, async=False,
+    err.show_err(title + ": " + msg, details, title, async=False,
                  debug=False)
 
 def setup_i18n():
@@ -199,7 +199,7 @@ def parse_commandline():
                          help="Do not autostart connections")
     optParser.add_option("--show-domain-creator", action="callback",
         callback=opt_show_cb, dest="show", help="Create a new virtual machine")
-    optParser.add_option("--show-domain-editor",  type="string",
+    optParser.add_option("--show-domain-editor", type="string",
         metavar="UUID", action="callback", callback=opt_show_cb,
         help="Edit a domain configuration")
     optParser.add_option("--show-domain-performance", type="string",
@@ -300,7 +300,7 @@ def opt_show_cb(option, opt_str, value, parser):
     if option.metavar == "UUID":
         setattr(parser.values, "uuid", value)
     s = str(option)
-    show = s[s.rindex('-')+1:]
+    show = s[s.rindex('-') + 1:]
     setattr(parser.values, "show", show)
 
 # Run me!

@@ -109,7 +109,7 @@ class vmmNetwork(vmmLibvirtObject):
         gateway = IP(addrStr)
 
         network = IP(gateway.int() & netmask.int())
-        return IP(str(network)+ "/" + netmaskStr)
+        return IP(str(network) + "/" + netmaskStr)
 
     def get_ipv4_forward(self):
         xml = self.get_xml()

@@ -377,7 +377,7 @@ class vmmEngine(vmmGObject):
 
     def _do_vm_removed(self, connection, hvuri, vmuuid):
         ignore = connection
-        if self.connections[hvuri]["windowDetails"].has_key(vmuuid):
+        if vmuuid in self.connections[hvuri]["windowDetails"]:
             self.connections[hvuri]["windowDetails"][vmuuid].close()
             del self.connections[hvuri]["windowDetails"][vmuuid]
 
@@ -453,7 +453,7 @@ class vmmEngine(vmmGObject):
         """
         Present VM console if recently started
         """
-        if not(self.connections[uri]["windowConsole"].has_key(uuid)):
+        if uuid not in self.connections[uri]["windowConsole"]:
             return
 
         console = self.connections[uri]["windowConsole"][uuid]
@@ -845,7 +845,7 @@ class vmmEngine(vmmGObject):
             vm.abort_job()
         except Exception, e:
             logging.exception("Error cancelling save job")
-            asyncjob.show_warning(_("Error cancelling save job: %s") %  str(e))
+            asyncjob.show_warning(_("Error cancelling save job: %s") % str(e))
             return
 
         asyncjob.job_canceled = True

@@ -131,7 +131,7 @@ class vmmStoragePool(vmmLibvirtObject):
         new_vol_list = {}
 
         for volname in vols:
-            if self._volumes.has_key(volname):
+            if volname in self._volumes:
                 new_vol_list[volname] = self._volumes[volname]
             else:
                 new_vol_list[volname] = vmmStorageVolume(self.connection,
@@ -141,9 +141,9 @@ class vmmStoragePool(vmmLibvirtObject):
 
 
     def _prettyify(self, val):
-        if val > (1024*1024*1024):
-            return "%2.2f GB" % (val/(1024.0*1024.0*1024.0))
+        if val > (1024 * 1024 * 1024):
+            return "%2.2f GB" % (val / (1024.0 * 1024.0 * 1024.0))
         else:
-            return "%2.2f MB" % (val/(1024.0*1024.0))
+            return "%2.2f MB" % (val / (1024.0 * 1024.0))
 
 vmmLibvirtObject.type_register(vmmStoragePool)

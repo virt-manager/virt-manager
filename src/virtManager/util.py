@@ -393,4 +393,3 @@ def iface_in_use_by(conn, name):
             use_str += iface.get_name()
 
     return use_str
-

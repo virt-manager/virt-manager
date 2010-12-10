@@ -75,7 +75,7 @@ class vmmSerialConsole(gtk.HBox):
         self.closetty()
 
     def vm_status_changed(self, src_ignore, oldstatus_ignore, status):
-        if status in [ libvirt.VIR_DOMAIN_RUNNING ]:
+        if status in [libvirt.VIR_DOMAIN_RUNNING]:
             self.opentty()
         else:
             self.closetty()
@@ -142,4 +142,3 @@ class vmmSerialConsole(gtk.HBox):
         else:
             self.closetty()
             return False
-

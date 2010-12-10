@@ -22,7 +22,8 @@ import gobject
 import gtk
 
 import logging
-import os, sys
+import os
+import sys
 import traceback
 import re
 import threading
@@ -283,15 +284,15 @@ class vmmConnection(vmmGObject):
         if self.vmm is None:
             return ""
         mem = self.host_memory_size()
-        if mem > (10*1024*1024):
-            return "%2.2f GB" % (mem/(1024.0*1024.0))
+        if mem > (10 * 1024 * 1024):
+            return "%2.2f GB" % (mem / (1024.0 * 1024.0))
         else:
-            return "%2.0f MB" % (mem/1024.0)
+            return "%2.0f MB" % (mem / 1024.0)
 
     def host_memory_size(self):
         if self.vmm is None:
             return 0
-        return self.hostinfo[1]*1024
+        return self.hostinfo[1] * 1024
 
     def host_architecture(self):
         if self.vmm is None:
@@ -771,7 +772,7 @@ class vmmConnection(vmmGObject):
 
     def _netdev_added(self, ignore, netdev):
         name = netdev.get_name()
-        if self.netdevs.has_key(name):
+        if name in self.netdevs:
             return
 
         self.netdevs[name] = netdev
@@ -779,13 +780,13 @@ class vmmConnection(vmmGObject):
     # Optical HAL listener
     def _optical_added(self, ignore, dev):
         key = dev.get_key()
-        if self.mediadevs.has_key(key):
+        if key in self.mediadevs:
             return
 
         self._add_mediadev(key, dev)
 
     def _nodedev_mediadev_added(self, ignore1, ignore2, name):
-        if self.mediadevs.has_key(name):
+        if name in self.mediadevs:
             return
 
         vobj = self.get_nodedev(name)
@@ -796,7 +797,7 @@ class vmmConnection(vmmGObject):
         self._add_mediadev(name, mediadev)
 
     def _nodedev_mediadev_removed(self, ignore1, ignore2, name):
-        if not self.mediadevs.has_key(name):
+        if name not in self.mediadevs:
             return
 
         self._remove_mediadev(name)
@@ -852,8 +853,8 @@ class vmmConnection(vmmGObject):
             self._open_thread()
         else:
             logging.debug("Scheduling background open thread for " + self.uri)
-            self.connectThread = threading.Thread(target = self._open_thread,
-                                                name = "Connect %s" % self.uri)
+            self.connectThread = threading.Thread(target=self._open_thread,
+                                                  name="Connect %s" % self.uri)
             self.connectThread.setDaemon(True)
             self.connectThread.start()
 
@@ -928,8 +929,8 @@ class vmmConnection(vmmGObject):
             ent.connect("activate", _on_ent_activate)
             entry.append(ent)
 
-            box.attach(label[row], 0, 1, row, row+1, gtk.FILL, 0, 0, 0)
-            box.attach(entry[row], 1, 2, row, row+1, gtk.FILL, 0, 0, 0)
+            box.attach(label[row], 0, 1, row, row + 1, gtk.FILL, 0, 0, 0)
+            box.attach(entry[row], 1, 2, row, row + 1, gtk.FILL, 0, 0, 0)
             row = row + 1
 
         vbox = dialog.get_child()
@@ -1107,7 +1108,7 @@ class vmmConnection(vmmGObject):
             try:
                 net = self.vmm.networkLookupByName(name)
                 uuid = util.uuidstr(net.UUID())
-                if not origNets.has_key(uuid):
+                if uuid not in origNets:
                     # Brand new network
                     currentNets[uuid] = vmmNetwork(self, net, uuid, True)
                     newNets.append(uuid)
@@ -1127,7 +1128,7 @@ class vmmConnection(vmmGObject):
             try:
                 net = self.vmm.networkLookupByName(name)
                 uuid = util.uuidstr(net.UUID())
-                if not origNets.has_key(uuid):
+                if uuid not in origNets:
                     currentNets[uuid] = vmmNetwork(self, net, uuid, False)
                     newNets.append(uuid)
                 else:
@@ -1180,7 +1181,7 @@ class vmmConnection(vmmGObject):
             try:
                 pool = self.vmm.storagePoolLookupByName(name)
                 uuid = util.uuidstr(pool.UUID())
-                if not origPools.has_key(uuid):
+                if uuid not in origPools:
                     currentPools[uuid] = vmmStoragePool(self, pool, uuid, True)
                     newPools.append(uuid)
                     startPools.append(uuid)
@@ -1197,7 +1198,7 @@ class vmmConnection(vmmGObject):
             try:
                 pool = self.vmm.storagePoolLookupByName(name)
                 uuid = util.uuidstr(pool.UUID())
-                if not origPools.has_key(uuid):
+                if uuid not in origPools:
                     currentPools[uuid] = vmmStoragePool(self, pool, uuid, False)
                     newPools.append(uuid)
                 else:
@@ -1242,7 +1243,7 @@ class vmmConnection(vmmGObject):
         def check_obj(name, is_active):
             key = name
 
-            if not orig.has_key(key):
+            if key not in orig:
                 obj = self.vmm.interfaceLookupByName(name)
                 # Object is brand new this tick period
                 current[key] = vmmInterface(self, obj, key, is_active)
@@ -1303,7 +1304,7 @@ class vmmConnection(vmmGObject):
         def check_obj(name):
             key = name
 
-            if not orig.has_key(key):
+            if key not in orig:
                 obj = self.vmm.nodeDeviceLookupByName(name)
                 vdev = virtinst.NodeDeviceParser.parse(obj.XMLDesc(0))
 
@@ -1370,7 +1371,7 @@ class vmmConnection(vmmGObject):
         # Filter out active domains which haven't changed
         if newActiveIDs != None:
             for _id in newActiveIDs:
-                if oldActiveIDs.has_key(_id):
+                if _id in oldActiveIDs:
                     # No change, copy across existing VM object
                     vm = oldActiveIDs[_id]
                     curUUIDs[vm.get_uuid()] = vm
@@ -1392,7 +1393,7 @@ class vmmConnection(vmmGObject):
         # Filter out inactive domains which haven't changed
         if newInactiveNames != None:
             for name in newInactiveNames:
-                if oldInactiveNames.has_key(name):
+                if name in oldInactiveNames:
                     # No change, copy across existing VM object
                     vm = oldInactiveNames[name]
                     curUUIDs[vm.get_uuid()] = vm
@@ -1415,7 +1416,7 @@ class vmmConnection(vmmGObject):
         # only new domains
         for uuid in maybeNewUUIDs.keys():
             rawvm = maybeNewUUIDs[uuid]
-            if not(self.vms.has_key(uuid)):
+            if uuid not in self.vms:
                 vm = vmmDomain(self, rawvm, uuid)
                 newUUIDs.append(uuid)
                 curUUIDs[uuid] = vm
@@ -1427,7 +1428,7 @@ class vmmConnection(vmmGObject):
         # Finalize list of domains which went away altogether
         for uuid in self.vms.keys():
             vm = self.vms[uuid]
-            if not(curUUIDs.has_key(uuid)):
+            if uuid not in curUUIDs:
                 oldUUIDs[uuid] = vm
 
         return (startedUUIDs, newUUIDs, oldUUIDs, curUUIDs, activeUUIDs)
@@ -1582,8 +1583,12 @@ class vmmConnection(vmmGObject):
         pcentCpuTime = 0
         if len(self.record) > 0:
             prevTimestamp = self.record[0]["timestamp"]
+            host_cpus = self.host_active_processor_count()
 
-            pcentCpuTime = (cpuTime) * 100.0 / ((now - prevTimestamp)*1000.0*1000.0*1000.0*self.host_active_processor_count())
+            pcentCpuTime = ((cpuTime) * 100.0 /
+                            ((now - prevTimestamp) *
+                             1000.0 * 1000.0 * 1000.0 * host_cpus))
+
             # Due to timing diffs between getting wall time & getting
             # the domain's time, its possible to go a tiny bit over
             # 100% utilization. This freaks out users of the data, so
@@ -1620,9 +1625,9 @@ class vmmConnection(vmmGObject):
     def cpu_time_vector(self):
         vector = []
         stats = self.record
-        for i in range(self.config.get_stats_history_length()+1):
+        for i in range(self.config.get_stats_history_length() + 1):
             if i < len(stats):
-                vector.append(stats[i]["cpuTimePercent"]/100.0)
+                vector.append(stats[i]["cpuTimePercent"] / 100.0)
             else:
                 vector.append(0)
         return vector
@@ -1645,10 +1650,10 @@ class vmmConnection(vmmGObject):
 
     def pretty_current_memory(self):
         mem = self.current_memory()
-        if mem > (10*1024*1024):
-            return "%2.2f GB" % (mem/(1024.0*1024.0))
+        if mem > (10 * 1024 * 1024):
+            return "%2.2f GB" % (mem / (1024.0 * 1024.0))
         else:
-            return "%2.0f MB" % (mem/1024.0)
+            return "%2.0f MB" % (mem / 1024.0)
 
     def current_memory_percentage(self):
         if len(self.record) == 0:
@@ -1658,9 +1663,9 @@ class vmmConnection(vmmGObject):
     def current_memory_vector(self):
         vector = []
         stats = self.record
-        for i in range(self.config.get_stats_history_length()+1):
+        for i in range(self.config.get_stats_history_length() + 1):
             if i < len(stats):
-                vector.append(stats[i]["memoryPercent"]/100.0)
+                vector.append(stats[i]["memoryPercent"] / 100.0)
             else:
                 vector.append(0)
         return vector
@@ -1693,11 +1698,11 @@ class vmmConnection(vmmGObject):
 
     def disk_io_vector_limit(self, dummy):
         """No point to accumulate unnormalized I/O for a conenction"""
-        return [ 0.0 ]
+        return [0.0]
 
     def network_traffic_vector_limit(self, dummy):
         """No point to accumulate unnormalized Rx/Tx for a conenction"""
-        return [ 0.0 ]
+        return [0.0]
 
 
     ####################################
@@ -1711,4 +1716,3 @@ class vmmConnection(vmmGObject):
                                        self.config.get_iso_paths)
 
 gobject.type_register(vmmConnection)
-

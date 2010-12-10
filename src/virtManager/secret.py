@@ -42,12 +42,12 @@ class vmmSecret:
         return self.attributes
 
     def has_attribute(self, key):
-        return self.attributes.has_key(key)
+        return key in self.attributes
 
     def add_attribute(self, key, value):
         if type(value) != str:
             value = str(value)
-        
+
         self.attributes[key] = value
 
     def list_attributes(self):

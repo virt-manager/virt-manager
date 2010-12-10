@@ -20,7 +20,8 @@
 
 import logging
 import traceback
-import os, statvfs
+import os
+import statvfs
 
 import libvirt
 import gtk
@@ -215,7 +216,7 @@ def populate_netmodel_combo(vm, combo):
     # [xml value, label]
     model.append([None, _("Hypervisor default")])
     if vm.is_hvm():
-        mod_list = [ "rtl8139", "ne2k_pci", "pcnet" ]
+        mod_list = ["rtl8139", "ne2k_pci", "pcnet"]
         if vm.get_hv_type() == "kvm":
             mod_list.append("e1000")
             mod_list.append("virtio")
@@ -343,7 +344,7 @@ def populate_network_list(net_list, conn):
 
         label = pretty_network_desc(nettype, net.get_name(), net)
         if not net.is_active():
-            label +=  " (%s)" % _("Inactive")
+            label += " (%s)" % _("Inactive")
 
         hasNet = True
         # FIXME: Should we use 'default' even if it's inactive?
@@ -386,7 +387,7 @@ def populate_network_list(net_list, conn):
                 brlabel = _("(Empty bridge)")
         else:
             sensitive = False
-            brlabel = "(%s)" %  _("Not bridged")
+            brlabel = "(%s)" % _("Not bridged")
 
         label = _("Host device %s %s") % (br.get_name(), brlabel)
         if hasShared and not brIdxLabel:
@@ -477,12 +478,12 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         elif nettype == VirtualNetworkInterface.TYPE_USER:
             pass
 
-        net = VirtualNetworkInterface(conn = conn.vmm,
-                                      type = nettype,
-                                      bridge = bridge,
-                                      network = netname,
-                                      macaddr = macaddr,
-                                      model = model)
+        net = VirtualNetworkInterface(conn=conn.vmm,
+                                      type=nettype,
+                                      bridge=bridge,
+                                      network=netname,
+                                      macaddr=macaddr,
+                                      model=model)
     except Exception, e:
         return err_dial.val_err(_("Error with network parameters."), str(e))
 
@@ -565,7 +566,7 @@ def mediadev_removed(ignore_helper, key, widget):
             del(model[idx])
 
             if idx > active and active != -1:
-                widget.set_active(active-1)
+                widget.set_active(active - 1)
             elif idx == active:
                 widget.set_active(-1)
 
@@ -746,4 +747,3 @@ def build_startmode_combo(start_list):
     start_model.append(["none"])
     start_model.append(["onboot"])
     start_model.append(["hotplug"])
-

@@ -78,7 +78,7 @@ def draw_fill(cairo_ct, cell_area, points, taper=False):
     if not len(points):
         return
 
-    last_point = _line_helper(cairo_ct, cell_area, points, for_fill = True)
+    last_point = _line_helper(cairo_ct, cell_area, points, for_fill=True)
     if not last_point:
         # Nothing to draw
         #return

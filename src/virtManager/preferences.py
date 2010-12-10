@@ -116,7 +116,7 @@ class vmmPreferences(vmmGObjectUI):
         self.window.get_widget("prefs-stats-update-interval").set_value(
             self.config.get_stats_update_interval())
     def refresh_history_length(self, ignore1=None, ignore2=None,
-                               ignore3=None,ignore4=None):
+                               ignore3=None, ignore4=None):
         self.window.get_widget("prefs-stats-history-len").set_value(
             self.config.get_stats_history_length())
 
@@ -203,35 +203,35 @@ class vmmPreferences(vmmGObjectUI):
         except:
             defs['keysyms'].append(ev.keyval)
 
-        label.set_text( self.grabkeys_get_string(defs['keysyms']) )
+        label.set_text(self.grabkeys_get_string(defs['keysyms']))
 
     def grabkeys_dlg_release(self, src_ignore, ev, defs):
         label = defs['label']
         defs['keysyms'].remove(ev.keyval)
-        label.set_text( self.grabkeys_get_string(defs['keysyms']) )
+        label.set_text(self.grabkeys_get_string(defs['keysyms']))
 
     def change_grab_keys(self, src_ignore):
-        dialog = gtk.Dialog ( _("Configure grab key combination"),
-                              None,
-                              gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                              (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
-                               gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
-        label = gtk.Label( _("Please press desired grab key combination") )
+        dialog = gtk.Dialog(_("Configure grab key combination"),
+                            None,
+                            gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+                            (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
+                             gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+        label = gtk.Label(_("Please press desired grab key combination"))
         dialog.set_size_request(325, 160)
         (dialog.get_content_area()).add(
-            gtk.Label( _("You can now define grab keys by pressing them.\n"
-                         "To confirm your selection please click OK button\n"
-                         "while you have desired keys pressed.") )
-        )
+            gtk.Label(_("You can now define grab keys by pressing them.\n"
+                        "To confirm your selection please click OK button\n"
+                        "while you have desired keys pressed.")))
+
         (dialog.get_content_area()).add(label)
-        defs = { 'label': label, 'keysyms': [] }
+        defs = {'label': label, 'keysyms': []}
         dialog.connect("key-press-event", self.grabkeys_dlg_press, defs)
         dialog.connect("key-release-event", self.grabkeys_dlg_release, defs)
         dialog.show_all()
         result = dialog.run()
 
         if result == gtk.RESPONSE_ACCEPT:
-            self.config.set_keys_combination( defs['keysyms'] )
+            self.config.set_keys_combination(defs['keysyms'])
 
         self.refresh_grabkeys_combination()
         dialog.destroy()

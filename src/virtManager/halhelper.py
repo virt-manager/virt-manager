@@ -81,11 +81,11 @@ class vmmHalHelper(gobject.GObject):
             self.hal_iface.connect_to_signal("DeviceRemoved",
                                              self._device_removed)
         except Exception, e:
-            (_type, value, stacktrace) = sys.exc_info ()
+            (_type, value, stacktrace) = sys.exc_info()
             logging.error("Unable to connect to HAL to list network "
                           "devices: '%s'" +
                           str(_type) + " " + str(value) + "\n" +
-                          traceback.format_exc (stacktrace))
+                          traceback.format_exc(stacktrace))
             self.startup_error = str(e)
 
     def connect(self, name, callback, *args):
@@ -200,7 +200,7 @@ class vmmHalHelper(gobject.GObject):
         # If running a device in bridged mode, there's a reasonable
         # chance that the actual ethernet device has been renamed to
         # something else. ethN -> pethN
-        psysfspath = sysfspath[0:len(sysfspath)-len(name)] + "p" + name
+        psysfspath = sysfspath[0:len(sysfspath) - len(name)] + "p" + name
         if os.path.exists(psysfspath):
             logging.debug("Device %s named to p%s" % (name, name))
             name = "p" + name
@@ -228,7 +228,7 @@ class vmmHalHelper(gobject.GObject):
                     # If running a device in bridged mode, there's areasonable
                     # chance that the actual ethernet device has beenrenamed to
                     # something else. ethN -> pethN
-                    pvlanpath = (vlanpath[0:len(vlanpath)-len(vlanname)] +
+                    pvlanpath = (vlanpath[0:len(vlanpath) - len(vlanname)] +
                                  "p" + vlanname)
                     if os.path.exists(pvlanpath):
                         logging.debug("Device %s named to p%s" % (vlanname,
@@ -302,10 +302,10 @@ def get_net_bridge_owner(name_ignore, sysfspath):
             (ignore, bridge) = os.path.split(dest)
             return bridge
     except:
-        (_type, value, stacktrace) = sys.exc_info ()
+        (_type, value, stacktrace) = sys.exc_info()
         logging.error("Unable to determine if device is shared:" +
                       str(_type) + " " + str(value) + "\n" +
-                      traceback.format_exc (stacktrace))
+                      traceback.format_exc(stacktrace))
     return None
 
 def get_net_mac_address(name_ignore, sysfspath):

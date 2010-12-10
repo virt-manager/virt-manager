@@ -453,14 +453,15 @@ class vmmCloneVM(vmmGObjectUI):
         num_c = min(len(self.target_list), 3)
         if num_c:
             scroll = self.window.get_widget("clone-storage-scroll")
-            scroll.set_size_request(-1, 80*num_c)
+            scroll.set_size_request(-1, 80 * num_c)
         storage_box.show_all()
 
         no_storage = not bool(len(self.target_list))
-        self.window.get_widget("clone-storage-box").set_property("visible", 
-                                                                not no_storage)
-        self.window.get_widget("clone-no-storage-pass").set_property("visible", 
-                                                                no_storage)
+        self.window.get_widget("clone-storage-box").set_property("visible",
+                                                            not no_storage)
+        self.window.get_widget("clone-no-storage-pass").set_property(
+                                                            "visible",
+                                                            no_storage)
 
         skip_targets = []
         new_disks = []
@@ -498,9 +499,9 @@ class vmmCloneVM(vmmGObjectUI):
         self.netmenu.popup(None, None, None, 0, event.time)
 
     def net_change_mac(self, ignore, origmac):
-        row = self.net_list[origmac]
+        row      = self.net_list[origmac]
         orig_mac = row[NETWORK_INFO_ORIG_MAC]
-        new_mac =  row[NETWORK_INFO_NEW_MAC]
+        new_mac  = row[NETWORK_INFO_NEW_MAC]
         typ = row[NETWORK_INFO_LABEL]
 
         self.change_mac_window.get_widget("change-mac-orig").set_text(orig_mac)

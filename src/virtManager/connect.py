@@ -49,7 +49,7 @@ def default_conn_user(conn):
 class vmmConnect(vmmGObjectUI):
     __gsignals__ = {
         "completed": (gobject.SIGNAL_RUN_FIRST,
-                      gobject.TYPE_NONE, (str,object,object)),
+                      gobject.TYPE_NONE, (str, object, object)),
         "cancelled": (gobject.SIGNAL_RUN_FIRST,
                       gobject.TYPE_NONE, ())
         }

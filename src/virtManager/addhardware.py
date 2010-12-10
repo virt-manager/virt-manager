@@ -57,9 +57,9 @@ char_widget_mappings = {
     "source_mode" : "char-mode",
     "source_host" : "char-host",
     "source_port" : "char-port",
-    "bind_port": "char-bind-port",
-    "bind_host": "char-bind-host",
-    "protocol" : "char-use-telnet",
+    "bind_port" : "char-bind-port",
+    "bind_host" : "char-bind-host",
+    "protocol"  : "char-use-telnet",
 }
 
 class vmmAddHardware(vmmGObjectUI):
@@ -179,7 +179,7 @@ class vmmAddHardware(vmmGObjectUI):
         notebook.set_show_tabs(False)
 
         black = gtk.gdk.color_parse("#000")
-        for num in range(PAGE_SUMMARY+1):
+        for num in range(PAGE_SUMMARY + 1):
             name = "page" + str(num) + "-title"
             self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL, black)
 
@@ -381,7 +381,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Sound init
         sound_box = self.window.get_widget("sound-model")
         sound_box.set_active(0)
-                
+
         # Hostdev init
         host_devtype = self.window.get_widget("host-device-type")
         self.populate_host_device_type_model(host_devtype.get_model())
@@ -453,11 +453,11 @@ class vmmAddHardware(vmmGObjectUI):
             model.append([bus, device, icon, desc, gtk.ICON_SIZE_BUTTON])
 
         if self.vm.is_hvm():
-            add_dev("ide",  virtinst.VirtualDisk.DEVICE_DISK, "IDE disk")
-            add_dev("ide",  virtinst.VirtualDisk.DEVICE_CDROM, "IDE cdrom")
-            add_dev("fdc",  virtinst.VirtualDisk.DEVICE_FLOPPY, "Floppy disk")
+            add_dev("ide", virtinst.VirtualDisk.DEVICE_DISK, "IDE disk")
+            add_dev("ide", virtinst.VirtualDisk.DEVICE_CDROM, "IDE cdrom")
+            add_dev("fdc", virtinst.VirtualDisk.DEVICE_FLOPPY, "Floppy disk")
             add_dev("scsi", virtinst.VirtualDisk.DEVICE_DISK, "SCSI disk")
-            add_dev("usb",  virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
+            add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
         if self.vm.get_hv_type() == "kvm":
             add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK, "Virtio Disk")
         if self.vm.get_connection().is_xen():
@@ -478,8 +478,8 @@ class vmmAddHardware(vmmGObjectUI):
 
     def populate_host_device_type_model(self, model):
         model.clear()
-        for m in [ ["PCI Device", "pci", None, "net", "80203"],
-                   ["USB Device", "usb_device", None, None, None]]:
+        for m in [["PCI Device", "pci", None, "net", "80203"],
+                  ["USB Device", "usb_device", None, None, None]]:
             model.append(m)
 
     def populate_host_device_model(self, model, devtype, devcap, subtype,
@@ -728,8 +728,8 @@ class vmmAddHardware(vmmGObjectUI):
                 value = gtk.Label(value)
                 value.set_alignment(0, .5)
 
-                summary_table.attach(label, 0, 1, row, row+1, gtk.FILL, 0)
-                summary_table.attach(value, 1, 2, row, row+1, gtk.FILL, 0)
+                summary_table.attach(label, 0, 1, row, row + 1, gtk.FILL, 0)
+                summary_table.attach(value, 1, 2, row, row + 1, gtk.FILL, 0)
 
                 row += 1
                 if row == 10:
@@ -1136,14 +1136,14 @@ class vmmAddHardware(vmmGObjectUI):
             if not diskpath:
                 return self.err.val_err(_("A storage path must be specified."))
 
-            disk = virtinst.VirtualDisk(conn = self.conn.vmm,
-                                        path = diskpath,
-                                        size = disksize,
-                                        sparse = sparse,
-                                        readOnly = readonly,
-                                        device = device,
-                                        bus = bus,
-                                        driverCache = cache)
+            disk = virtinst.VirtualDisk(conn=self.conn.vmm,
+                                        path=diskpath,
+                                        size=disksize,
+                                        sparse=sparse,
+                                        readOnly=readonly,
+                                        device=device,
+                                        bus=bus,
+                                        driverCache=cache)
 
             if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
                 not self.vm.is_hvm() and
@@ -1172,7 +1172,7 @@ class vmmAddHardware(vmmGObjectUI):
         # Disk collision
         if disk.is_conflict_disk(self.conn.vmm):
             res = self.err.yes_no(_('Disk "%s" is already in use by another '
-                                    'guest!' %  disk.path),
+                                    'guest!' % disk.path),
                                   _("Do you really want to use the disk?"))
             if not res:
                 return False
@@ -1246,8 +1246,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         try:
             self._dev = virtinst.VirtualHostDevice.device_from_node(
-                            conn = self.vm.get_connection().vmm,
-                            name = nodedev_name)
+                            conn=self.vm.get_connection().vmm,
+                            name=nodedev_name)
         except Exception, e:
             return self.err.val_err(_("Host device parameter error"), str(e))
 

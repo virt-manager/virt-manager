@@ -87,8 +87,8 @@ class vmmConfig(object):
         self.appversion = appversion
         self.conf_dir = gconf_dir
         self.conf = gconf.client_get_default()
-        self.conf.add_dir (gconf_dir,
-                           gconf.CLIENT_PRELOAD_NONE)
+        self.conf.add_dir(gconf_dir,
+                          gconf.CLIENT_PRELOAD_NONE)
 
         self.glade_dir = glade_dir
         self.icon_dir = icon_dir
@@ -300,7 +300,7 @@ class vmmConfig(object):
             return False
 
     # Keys preferences
-    def get_keys_combination(self, syms = False):
+    def get_keys_combination(self, syms=False):
         val = self.conf.get_string(self.conf_dir + "/keys/grab-keys")
         if syms == True:
             return val
@@ -494,7 +494,7 @@ class vmmConfig(object):
             urls.insert(0, url)
             length = self.get_url_list_length()
             if len(urls) > length:
-                del urls[len(urls) -1]
+                del urls[len(urls) - 1]
             self.conf.set_list(gconf_path, gconf.VALUE_STRING, urls)
 
     def add_media_url(self, url):
@@ -707,7 +707,9 @@ class vmmConfig(object):
         # one if the attributes match - which they will since UUID
         # is our unique key
 
-        secret = vmmSecret(self.get_secret_name(vm), password, { "uuid" : vm.get_uuid(), "hvuri": vm.get_connection().get_uri() })
+        secret = vmmSecret(self.get_secret_name(vm), password,
+                           {"uuid" : vm.get_uuid(),
+                            "hvuri": vm.get_connection().get_uri()})
         _id = self.keyring.add_secret(secret)
         if _id != None:
             self.conf.set_int(self.conf_dir + "/console/passwords/" + vm.get_uuid(), _id)

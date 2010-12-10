@@ -20,7 +20,8 @@
 
 import gtk
 
-import os, stat
+import os
+import stat
 import traceback
 import logging
 
@@ -157,7 +158,7 @@ class vmmDeleteDialog(vmmGObjectUI):
             for path in paths:
                 try:
                     logging.debug("Deleting path: %s" % path)
-                    meter.start(text = _("Deleting path '%s'") % path)
+                    meter.start(text=_("Deleting path '%s'") % path)
                     self._async_delete_path(newconn, path, meter)
                 except Exception, e:
                     storage_errors.append((str(e),

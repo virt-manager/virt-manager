@@ -204,4 +204,3 @@ class vmmAsyncJob(vmmGObjectUI):
             if self.run_main:
                 gtk.main_quit()
             return False
-

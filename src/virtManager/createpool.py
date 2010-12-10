@@ -342,7 +342,7 @@ class vmmCreatePool(vmmGObjectUI):
             return (False, False)
         if self._pool.type in [Storage.StoragePool.TYPE_DIR,
                                Storage.StoragePool.TYPE_FS,
-                               Storage.StoragePool.TYPE_NETFS ]:
+                               Storage.StoragePool.TYPE_NETFS]:
             # Building for these simply entails creating a directory
             return (True, False)
         elif self._pool.type in [Storage.StoragePool.TYPE_LOGICAL,
@@ -410,7 +410,7 @@ class vmmCreatePool(vmmGObjectUI):
     def _async_pool_create(self, asyncjob, *args, **kwargs):
         print args, kwargs
         newconn = None
-        
+
         # Open a seperate connection to install on since this is async
         newconn = util.dup_lib_conn(self._pool.conn)
         meter = vmmCreateMeter(asyncjob)
@@ -492,11 +492,12 @@ class vmmCreatePool(vmmGObjectUI):
                 return self.err.val_err(_("Pool Parameter Error"), str(e))
 
             buildval = self.window.get_widget("pool-build").get_active()
-            buildsen = self.window.get_widget("pool-build").get_property("sensitive")
+            buildsen = self.window.get_widget("pool-build").get_property(
+                                                                "sensitive")
             if buildsen and buildval:
-                ret =  self.err.yes_no(_("Building a pool of this type will "
-                                         "format the source device. Are you "
-                                         "sure you want to 'build' this pool?"))
+                ret = self.err.yes_no(_("Building a pool of this type will "
+                                        "format the source device. Are you "
+                                        "sure you want to 'build' this pool?"))
                 if not ret:
                     return ret
 

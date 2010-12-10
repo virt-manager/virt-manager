@@ -70,18 +70,18 @@ gtk.rc_parse_string(rcstring)
 
 class vmmManager(vmmGObjectUI):
     __gsignals__ = {
-        "action-show-connect":(gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, []),
+        "action-show-connect": (gobject.SIGNAL_RUN_FIRST,
+                                gobject.TYPE_NONE, []),
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),
+                                gobject.TYPE_NONE, (str, str)),
         "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),
+                                gobject.TYPE_NONE, (str, str)),
         "action-refresh-console": (gobject.SIGNAL_RUN_FIRST,
-                                   gobject.TYPE_NONE, (str,str)),
+                                   gobject.TYPE_NONE, (str, str)),
         "action-refresh-terminal": (gobject.SIGNAL_RUN_FIRST,
-                                    gobject.TYPE_NONE, (str,str)),
+                                    gobject.TYPE_NONE, (str, str)),
         "action-show-details": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),
+                                gobject.TYPE_NONE, (str, str)),
         "action-show-about": (gobject.SIGNAL_RUN_FIRST,
                               gobject.TYPE_NONE, []),
         "action-show-host": (gobject.SIGNAL_RUN_FIRST,
@@ -109,11 +109,12 @@ class vmmManager(vmmGObjectUI):
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                                gobject.TYPE_NONE, [str]),
         "action-migrate-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str,str)),
+                                  gobject.TYPE_NONE, (str, str)),
         "action-clone-domain": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),
+                                gobject.TYPE_NONE, (str, str)),
         "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
-                            gobject.TYPE_NONE, []),}
+                            gobject.TYPE_NONE, []),
+    }
 
     def __init__(self, engine):
         vmmGObjectUI.__init__(self, "vmm-manager.glade", "vmm-manager")
@@ -183,10 +184,8 @@ class vmmManager(vmmGObjectUI):
         # Initialize stat polling columns based on global polling
         # preferences (we want signal handlers for this)
         for typ, init_val in \
-            [ (cfg.STATS_DISK,
-               self.config.get_stats_enable_disk_poll()),
-              (cfg.STATS_NETWORK,
-               self.config.get_stats_enable_net_poll())]:
+            [(cfg.STATS_DISK, self.config.get_stats_enable_disk_poll()),
+             (cfg.STATS_NETWORK, self.config.get_stats_enable_net_poll())]:
             self.enable_polling(None, None, init_val, typ)
 
         self.engine.connect("connection-added", self._add_connection)
@@ -656,7 +655,7 @@ class vmmManager(vmmGObjectUI):
         if conn.get_state() != vmmConnection.STATE_DISCONNECTED:
             conn.close()
 
-    def open_connection(self, ignore = None):
+    def open_connection(self, ignore=None):
         conn = self.current_connection()
         if conn.get_state() == vmmConnection.STATE_DISCONNECTED:
             conn.open()
@@ -664,21 +663,22 @@ class vmmManager(vmmGObjectUI):
 
     def _connect_error(self, conn, details):
         if conn.get_driver() == "xen" and not conn.is_remote():
-            self.err.show_err(_("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
-                              "Verify that:\n" +
-                              " - A Xen host kernel was booted\n" +
-                              " - The Xen service has been started\n"),
-                              details,
-                              title=_("Virtual Machine Manager Connection Failure"))
+            self.err.show_err(
+            _("Unable to open a connection to the Xen hypervisor/daemon.\n\n" +
+              "Verify that:\n" +
+              " - A Xen host kernel was booted\n" +
+              " - The Xen service has been started\n"),
+              details,
+              title=_("Virtual Machine Manager Connection Failure"))
         else:
-            self.err.show_err(_("Unable to open a connection to the libvirt "
-                                "management daemon.\n\n" +
-                                "Libvirt URI is: %s\n\n" % conn.get_uri() +
-                                "Verify that:\n" +
-                                " - The 'libvirtd' daemon has been started\n"),
-                              details,
-                              title=_("Virtual Machine Manager Connection "
-                                      "Failure"))
+            self.err.show_err(
+            _("Unable to open a connection to the libvirt "
+              "management daemon.\n\n" +
+              "Libvirt URI is: %s\n\n" % conn.get_uri() +
+              "Verify that:\n" +
+              " - The 'libvirtd' daemon has been started\n"),
+              details,
+              title=_("Virtual Machine Manager Connection Failure"))
 
 
     ####################################
@@ -758,7 +758,7 @@ class vmmManager(vmmGObjectUI):
 
     def _append_vm(self, model, vm, conn):
         row_key = self.vm_row_key(vm)
-        if self.rows.has_key(row_key):
+        if row_key in self.rows:
             return
 
         parent = self.rows[conn.get_uri()].iter
@@ -810,7 +810,7 @@ class vmmManager(vmmGObjectUI):
         # Make sure error page isn't showing
         self.window.get_widget("vm-notebook").set_current_page(0)
 
-        if self.rows.has_key(conn.get_uri()):
+        if conn.get_uri() in self.rows:
             return
 
         conn.connect("vm-added", self.vm_added)
@@ -865,7 +865,7 @@ class vmmManager(vmmGObjectUI):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
 
-        if not self.rows.has_key(self.vm_row_key(vm)):
+        if self.vm_row_key(vm) not in self.rows:
             return
 
         row = self.rows[self.vm_row_key(vm)]

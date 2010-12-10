@@ -81,7 +81,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         notebook.set_show_tabs(False)
 
         black = gtk.gdk.color_parse("#000")
-        for num in range(PAGE_SUMMARY+1):
+        for num in range(PAGE_SUMMARY + 1):
             name = "page" + str(num) + "-title"
             self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL, black)
 
@@ -268,7 +268,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         elif page_number == PAGE_DHCP:
             ip = self.get_config_ip4()
             start = int(ip.len() / 2)
-            end = ip.len()-2
+            end = ip.len() - 2
             if self.window.get_widget("net-dhcp-start").get_text() == "":
                 self.window.get_widget("net-dhcp-start").set_text(str(ip[start]))
             if self.window.get_widget("net-dhcp-end").get_text() == "":
@@ -288,14 +288,17 @@ class vmmCreateNetwork(vmmGObjectUI):
                 end = self.get_config_dhcp_end()
                 self.window.get_widget("summary-dhcp-start").set_text(str(start))
                 self.window.get_widget("summary-dhcp-end").set_text(str(end))
-                self.window.get_widget("label-dhcp-start").set_text( _("Start address:") )
+                self.window.get_widget("label-dhcp-start").set_text(
+                                                        _("Start address:"))
                 self.window.get_widget("label-dhcp-start").show()
                 self.window.get_widget("label-dhcp-end").show()
                 self.window.get_widget("summary-dhcp-start").show()
                 self.window.get_widget("summary-dhcp-end").show()
             else:
-                self.window.get_widget("label-dhcp-start").set_text( _("Status:") )
-                self.window.get_widget("summary-dhcp-start").set_text( _("Disabled") )
+                self.window.get_widget("label-dhcp-start").set_text(
+                                                                _("Status:"))
+                self.window.get_widget("summary-dhcp-start").set_text(
+                                                                _("Disabled"))
                 self.window.get_widget("label-dhcp-end").hide()
                 self.window.get_widget("summary-dhcp-end").hide()
 

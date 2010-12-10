@@ -561,7 +561,7 @@ class vmmDomainBase(vmmLibvirtObject):
             bus = dev.bus
             key = devtype + (bus or "")
 
-            if not idx_mapping.has_key(key):
+            if key not in idx_mapping:
                 idx_mapping[key] = 1
 
             dev.disk_bus_index = idx_mapping[key]
@@ -624,9 +624,11 @@ class vmmDomainBase(vmmLibvirtObject):
             cpuTime = info[4] - prevCpuTime
             cpuTimeAbs = info[4]
 
-            pcentCpuTime = ((cpuTime) * 100.0 /
-                            (((now - prevTimestamp)*1000.0*1000.0*1000.0) *
-                               self.connection.host_active_processor_count()))
+            pcentCpuTime = (
+                (cpuTime) * 100.0 /
+                (((now - prevTimestamp) * 1000.0 * 1000.0 * 1000.0) *
+                 self.connection.host_active_processor_count()))
+
             # Due to timing diffs between getting wall time & getting
             # the domain's time, its possible to go a tiny bit over
             # 100% utilization. This freaks out users of the data, so
@@ -670,17 +672,17 @@ class vmmDomainBase(vmmLibvirtObject):
 
     def get_memory_pretty(self):
         mem = self.get_memory()
-        if mem > (10*1024*1024):
-            return "%2.2f GB" % (mem/(1024.0*1024.0))
+        if mem > (10 * 1024 * 1024):
+            return "%2.2f GB" % (mem / (1024.0 * 1024.0))
         else:
-            return "%2.0f MB" % (mem/1024.0)
+            return "%2.0f MB" % (mem / 1024.0)
 
     def maximum_memory_pretty(self):
         mem = self.maximum_memory()
-        if mem > (10*1024*1024):
-            return "%2.2f GB" % (mem/(1024.0*1024.0))
+        if mem > (10 * 1024 * 1024):
+            return "%2.2f GB" % (mem / (1024.0 * 1024.0))
         else:
-            return "%2.0f MB" % (mem/1024.0)
+            return "%2.0f MB" % (mem / 1024.0)
 
     def cpu_time_pretty(self):
         return "%2.2f %%" % self.cpu_time_percentage()
@@ -706,19 +708,19 @@ class vmmDomainBase(vmmLibvirtObject):
         stats = self.record
         ceil = float(max(self.maxRecord[name1], self.maxRecord[name2]))
         maxlen = self.config.get_stats_history_length()
-        for n in [ name1, name2 ]:
+        for n in [name1, name2]:
             for i in range(maxlen + 1):
                 if i < len(stats):
-                    vector.append(float(stats[i][n])/ceil)
+                    vector.append(float(stats[i][n]) / ceil)
                 else:
                     vector.append(0.0)
         return vector
 
     def in_out_vector_limit(self, data, limit):
-        l = len(data)/2
+        l = len(data) / 2
         end = [l, limit][l > limit]
         if l > limit:
-            data = data[0:end] + data[l:l+end]
+            data = data[0:end] + data[l:l + end]
         d = map(lambda x, y: (x + y) / 2, data[0:end], data[end:end * 2])
         return d
 
@@ -1136,9 +1138,9 @@ class vmmDomain(vmmDomainBase):
     def _update_start_vcpus(self, ignore, oldstatus, status):
         ignore = status
 
-        if oldstatus not in [ libvirt.VIR_DOMAIN_SHUTDOWN,
-                              libvirt.VIR_DOMAIN_SHUTOFF,
-                              libvirt.VIR_DOMAIN_CRASHED ]:
+        if oldstatus not in [libvirt.VIR_DOMAIN_SHUTDOWN,
+                             libvirt.VIR_DOMAIN_SHUTOFF,
+                             libvirt.VIR_DOMAIN_CRASHED]:
             return
 
         # Want to track the startup vcpu amount, which is the
@@ -1288,17 +1290,18 @@ class vmmDomain(vmmDomainBase):
         rdBytes, wrBytes = self._disk_io()
         rxBytes, txBytes = self._network_traffic()
 
-        newStats = { "timestamp": now,
-                     "cpuTime": cpuTime,
-                     "cpuTimeAbs": cpuTimeAbs,
-                     "cpuTimePercent": pcentCpuTime,
-                     "currMemPercent": pcentCurrMem,
-                     "maxMemPercent": pcentMaxMem,
-                     "diskRdKB": rdBytes / 1024,
-                     "diskWrKB": wrBytes / 1024,
-                     "netRxKB": rxBytes / 1024,
-                     "netTxKB": txBytes / 1024,
-                     }
+        newStats = {
+            "timestamp": now,
+            "cpuTime": cpuTime,
+            "cpuTimeAbs": cpuTimeAbs,
+            "cpuTimePercent": pcentCpuTime,
+            "currMemPercent": pcentCurrMem,
+            "maxMemPercent": pcentMaxMem,
+            "diskRdKB": rdBytes / 1024,
+            "diskWrKB": wrBytes / 1024,
+            "netRxKB": rxBytes / 1024,
+            "netTxKB": txBytes / 1024,
+        }
 
         nSamples = 5
         if nSamples > len(self.record):
@@ -1308,8 +1311,8 @@ class vmmDomain(vmmDomainBase):
             avg = ["cpuTimeAbs"]
             percent = 0
         else:
-            startCpuTime = self.record[nSamples-1]["cpuTimeAbs"]
-            startTimestamp = self.record[nSamples-1]["timestamp"]
+            startCpuTime = self.record[nSamples - 1]["cpuTimeAbs"]
+            startTimestamp = self.record[nSamples - 1]["timestamp"]
 
             avg = ((newStats["cpuTimeAbs"] - startCpuTime) / nSamples)
             percent = ((newStats["cpuTimeAbs"] - startCpuTime) * 100.0 /
@@ -1319,7 +1322,7 @@ class vmmDomain(vmmDomainBase):
         newStats["cpuTimeMovingAvg"] = avg
         newStats["cpuTimeMovingAvgPercent"] = percent
 
-        for r in [ "diskRd", "diskWr", "netRx", "netTx" ]:
+        for r in ["diskRd", "diskWr", "netRx", "netTx"]:
             newStats[r + "Rate"] = self._get_cur_rate(r + "KB")
             self._set_max_rate(newStats, r + "Rate")
 

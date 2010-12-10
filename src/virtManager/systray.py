@@ -61,9 +61,9 @@ class vmmSystray(vmmGObject):
         "action-show-host": (gobject.SIGNAL_RUN_FIRST,
                               gobject.TYPE_NONE, [str]),
         "action-show-details": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),
+                                gobject.TYPE_NONE, (str, str)),
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),
+                                gobject.TYPE_NONE, (str, str)),
         "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
                             gobject.TYPE_NONE, []),
     }
@@ -133,11 +133,11 @@ class vmmSystray(vmmGObject):
             return
 
         if self.systray_indicator:
-            self.systray_icon = appindicator.Indicator ("virt-manager",
+            self.systray_icon = appindicator.Indicator("virt-manager",
                                 "virt-manager-icon",
                                 appindicator.CATEGORY_OTHER)
-            self.systray_icon.set_status (appindicator.STATUS_ACTIVE)
-            self.systray_icon.set_menu (self.systray_menu)
+            self.systray_icon.set_status(appindicator.STATUS_ACTIVE)
+            self.systray_icon.set_menu(self.systray_menu)
 
         else:
             iconfile = self.config.get_icon_dir() + "/virt-manager-icon.svg"
@@ -158,9 +158,9 @@ class vmmSystray(vmmGObject):
         else:
             if self.systray_indicator:
                 if do_show:
-                    self.systray_icon.set_status (appindicator.STATUS_ACTIVE)
+                    self.systray_icon.set_status(appindicator.STATUS_ACTIVE)
                 else:
-                    self.systray_icon.set_status (appindicator.STATUS_PASSIVE)
+                    self.systray_icon.set_status(appindicator.STATUS_PASSIVE)
             else:
                 self.systray_icon.set_visible(do_show)
 
@@ -250,8 +250,8 @@ class vmmSystray(vmmGObject):
         uuid = vm.get_uuid()
         uri = vm.get_connection().get_uri()
 
-        if self.conn_vm_menuitems.has_key(uri):
-            if self.conn_vm_menuitems[uri].has_key(uuid):
+        if uri in self.conn_vm_menuitems:
+            if uuid in self.conn_vm_menuitems[uri]:
                 return self.conn_vm_menuitems[uri][uuid]
         return None
 
@@ -294,7 +294,7 @@ class vmmSystray(vmmGObject):
         conn.connect("vm-removed", self.vm_removed)
         conn.connect("state-changed", self.conn_state_changed)
 
-        if self.conn_menuitems.has_key(conn.get_uri()):
+        if conn.get_uri() in self.conn_menuitems:
             return
 
         menu_item = gtk.MenuItem(conn.get_pretty_desc_inactive(), False)
@@ -312,7 +312,7 @@ class vmmSystray(vmmGObject):
         self.populate_vm_list(conn)
 
     def conn_removed(self, engine_ignore, conn):
-        if not self.conn_menuitems.has_key(conn.get_uri()):
+        if conn.get_uri() in self.conn_menuitems:
             return
 
         menu_item = self.conn_menuitems[conn.get_uri()]
@@ -353,7 +353,7 @@ class vmmSystray(vmmGObject):
         for i in range(0, len(vm_names)):
             name = vm_names[i]
             uuid = vm_mappings[name]
-            if self.conn_vm_menuitems[uri].has_key(uuid):
+            if uuid in self.conn_vm_menuitems[uri]:
                 vm_item = self.conn_vm_menuitems[uri][uuid]
                 vm_submenu.insert(vm_item, i)
 
@@ -364,7 +364,7 @@ class vmmSystray(vmmGObject):
         vm.connect("status-changed", self.vm_state_changed)
 
         vm_mappings = self.conn_vm_menuitems[uri]
-        if vm_mappings.has_key(uuid):
+        if uuid in vm_mappings:
             return
 
         # Build VM list entry
@@ -386,7 +386,7 @@ class vmmSystray(vmmGObject):
         if not vm_mappings:
             return
 
-        if vm_mappings.has_key(uuid):
+        if uuid in vm_mappings:
             conn_item = self.conn_menuitems[uri]
             vm_menu_item = vm_mappings[uuid]
             vm_menu = conn_item.get_submenu()

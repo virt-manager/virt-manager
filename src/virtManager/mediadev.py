@@ -44,7 +44,7 @@ class vmmMediaDevice(vmmGObject):
         if nodedev.device_type != "storage":
             return None
 
-        if nodedev.drive_type not in [ MEDIA_CDROM, MEDIA_FLOPPY]:
+        if nodedev.drive_type not in [MEDIA_CDROM, MEDIA_FLOPPY]:
             return None
 
         drvtype = nodedev.drive_type
@@ -62,7 +62,7 @@ class vmmMediaDevice(vmmGObject):
         return obj
 
     def __init__(self, path, key, has_media, media_label, media_key,
-                 nodedev_obj = None, media_type = MEDIA_CDROM):
+                 nodedev_obj=None, media_type=MEDIA_CDROM):
         vmmGObject.__init__(self)
 
         self.path = path

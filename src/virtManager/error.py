@@ -48,7 +48,7 @@ def _launch_dialog(dialog, primary_text, secondary_text, title,
     return res
 
 class vmmErrorDialog (object):
-    def __init__ (self, parent=None):
+    def __init__(self, parent=None):
         self._parent = parent
         self._simple = None
 
@@ -149,8 +149,8 @@ class _errorDialog (gtk.MessageDialog):
     """
     Custom error dialog with optional check boxes or details drop down
     """
-    def __init__ (self, *args, **kwargs):
-        gtk.MessageDialog.__init__ (self, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        gtk.MessageDialog.__init__(self, *args, **kwargs)
         self.set_title("")
 
         self.chk_vbox = None
@@ -176,16 +176,16 @@ class _errorDialog (gtk.MessageDialog):
     def init_details(self):
         # Init details buffer
         self.buffer = gtk.TextBuffer()
-        self.buf_expander = gtk.Expander (_("Details"))
-        sw = gtk.ScrolledWindow ()
-        sw.set_shadow_type (gtk.SHADOW_IN)
-        sw.set_size_request (400, 240)
-        sw.set_policy (gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        details = gtk.TextView (self.buffer)
-        details.set_editable (False)
-        details.set_overwrite (False)
-        details.set_cursor_visible (False)
-        details.set_wrap_mode (gtk.WRAP_WORD)
+        self.buf_expander = gtk.Expander(_("Details"))
+        sw = gtk.ScrolledWindow()
+        sw.set_shadow_type(gtk.SHADOW_IN)
+        sw.set_size_request(400, 240)
+        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        details = gtk.TextView(self.buffer)
+        details.set_editable(False)
+        details.set_overwrite(False)
+        details.set_cursor_visible(False)
+        details.set_wrap_mode(gtk.WRAP_WORD)
         sw.add(details)
         self.buf_expander.add(sw)
         self.vbox.pack_start(self.buf_expander)

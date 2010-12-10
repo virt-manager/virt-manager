@@ -58,9 +58,9 @@ INSTALL_PAGE_IMPORT = 3
 class vmmCreate(vmmGObjectUI):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),
+                                gobject.TYPE_NONE, (str, str)),
         "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str,str)),
+                                 gobject.TYPE_NONE, (str, str)),
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
                              gobject.TYPE_NONE, [str]),
     }
@@ -493,11 +493,11 @@ class vmmCreate(vmmGObjectUI):
 
         # Memory
         memory = int(self.conn.host_memory_size())
-        mem_label = _("Up to %(maxmem)s available on the host") % {'maxmem': \
-                    self.pretty_memory(memory) }
+        mem_label = (_("Up to %(maxmem)s available on the host") %
+                     {'maxmem': self.pretty_memory(memory)})
         mem_label = ("<span size='small' color='#484848'>%s</span>" %
                      mem_label)
-        self.window.get_widget("config-mem").set_range(50, memory/1024)
+        self.window.get_widget("config-mem").set_range(50, memory / 1024)
         self.window.get_widget("phys-mem-label").set_markup(mem_label)
 
         # CPU
@@ -517,8 +517,8 @@ class vmmCreate(vmmGObjectUI):
         cmax = int(cmax)
         if cmax <= 0:
             cmax = 1
-        cpu_label = _("Up to %(numcpus)d available") % { 'numcpus': \
-                                                            int(phys_cpus)}
+        cpu_label = (_("Up to %(numcpus)d available") %
+                     {'numcpus': int(phys_cpus)})
         cpu_label = ("<span size='small' color='#484848'>%s</span>" %
                      cpu_label)
         self.window.get_widget("config-cpus").set_range(1, cmax)
@@ -631,7 +631,7 @@ class vmmCreate(vmmGObjectUI):
 
         arch_list.set_active(default)
 
-    def populate_conn_list(self, urihint = None):
+    def populate_conn_list(self, urihint=None):
         conn_list = self.window.get_widget("create-conn")
         model = conn_list.get_model()
         model.clear()
@@ -714,8 +714,8 @@ class vmmCreate(vmmGObjectUI):
          newdom) = virtinst.CapabilitiesParser.guest_lookup(
                                                         conn=self.conn.vmm,
                                                         caps=self.caps,
-                                                        os_type = gtype,
-                                                        type = dtype,
+                                                        os_type=gtype,
+                                                        type=dtype,
                                                         accelerated=True,
                                                         arch=arch)
 
@@ -1130,7 +1130,7 @@ class vmmCreate(vmmGObjectUI):
         # Update page number
         page_lbl = ("<span color='#59B0E2'>%s</span>" %
                     _("Step %(current_page)d of %(max_page)d") %
-                    {'current_page': pagenum+1, 'max_page': PAGE_FINISH+1})
+                    {'current_page': pagenum + 1, 'max_page': PAGE_FINISH + 1})
 
         self.window.get_widget("config-pagenum").set_markup(page_lbl)
 
@@ -1413,10 +1413,10 @@ class vmmCreate(vmmGObjectUI):
             if not diskpath:
                 return self.verr(_("A storage path must be specified."))
 
-            disk = virtinst.VirtualDisk(conn = self.conn.vmm,
-                                        path = diskpath,
-                                        size = disksize,
-                                        sparse = sparse)
+            disk = virtinst.VirtualDisk(conn=self.conn.vmm,
+                                        path=diskpath,
+                                        size=disksize,
+                                        sparse=sparse)
 
         except Exception, e:
             return self.verr(_("Storage parameter error."), str(e))
@@ -1481,9 +1481,9 @@ class vmmCreate(vmmGObjectUI):
 
     # Interesting methods
     def build_installer(self, instclass):
-        installer = instclass(conn = self.conn.vmm,
-                              type = self.capsdomain.hypervisor_type,
-                              os_type = self.capsguest.os_type)
+        installer = instclass(conn=self.conn.vmm,
+                              type=self.capsdomain.hypervisor_type,
+                              os_type=self.capsguest.os_type)
         installer.arch = self.capsguest.arch
 
         return installer
@@ -1496,9 +1496,9 @@ class vmmCreate(vmmGObjectUI):
 
         # FIXME: some things are dependent on domain type (vcpu max)
         if instmeth == INSTALL_PAGE_URL:
-            self.change_caps(gtype = "xen")
+            self.change_caps(gtype="xen")
         else:
-            self.change_caps(gtype = "hvm")
+            self.change_caps(gtype="hvm")
 
     def reset_guest_type(self):
         self.change_caps()
@@ -1616,7 +1616,7 @@ class vmmCreate(vmmGObjectUI):
         for dev in guest.get_all_devices():
             dev.conn = guest.conn
 
-        guest.start_install(False, meter = meter)
+        guest.start_install(False, meter=meter)
         logging.debug("Install completed")
 
         # Make sure we pick up the domain object
@@ -1675,7 +1675,7 @@ class vmmCreate(vmmGObjectUI):
         return "%.1f Gb" % float(size)
 
     def pretty_memory(self, mem):
-        return "%d MB" % (mem/1024.0)
+        return "%d MB" % (mem / 1024.0)
 
     # Distro detection methods
 

@@ -370,8 +370,8 @@ class vmmCreateInterface(vmmGObjectUI):
         self.window.get_widget("interface-name-entry").hide()
         self.window.get_widget("interface-name-label").hide()
 
-        if itype in [ Interface.Interface.INTERFACE_TYPE_BRIDGE,
-                      Interface.Interface.INTERFACE_TYPE_BOND ]:
+        if itype in [Interface.Interface.INTERFACE_TYPE_BRIDGE,
+                     Interface.Interface.INTERFACE_TYPE_BOND]:
             widget = "interface-name-entry"
         else:
             widget = "interface-name-label"
@@ -524,13 +524,13 @@ class vmmCreateInterface(vmmGObjectUI):
                 continue
 
             if itype == Interface.Interface.INTERFACE_TYPE_ETHERNET:
-                if row_dict.has_key(name):
+                if name in row_dict:
                     del(row_dict[name])
 
                 # We only want 'unconfigured' interfaces here
                 continue
 
-            if row_dict.has_key(name):
+            if name in row_dict:
                 # Interface was listed via nodedev APIs
                 row = row_dict[name]
                 row[INTERFACE_ROW_KEY] = key
@@ -640,8 +640,8 @@ class vmmCreateInterface(vmmGObjectUI):
         active = src.get_active()
         model = slave_list.get_model()
 
-        if itype in [ Interface.Interface.INTERFACE_TYPE_ETHERNET,
-                      Interface.Interface.INTERFACE_TYPE_VLAN ]:
+        if itype in [Interface.Interface.INTERFACE_TYPE_ETHERNET,
+                     Interface.Interface.INTERFACE_TYPE_VLAN]:
             # Deselect any selected rows
             for row in model:
                 if row == model[index]:
@@ -656,8 +656,8 @@ class vmmCreateInterface(vmmGObjectUI):
 
     def update_interface_name(self, ignore1=None, ignore2=None):
         itype = self.get_config_interface_type()
-        if itype not in [ Interface.Interface.INTERFACE_TYPE_VLAN,
-                          Interface.Interface.INTERFACE_TYPE_ETHERNET ]:
+        if itype not in [Interface.Interface.INTERFACE_TYPE_VLAN,
+                         Interface.Interface.INTERFACE_TYPE_ETHERNET]:
             # The rest have editable name fields, so don't overwrite
             return
 
@@ -874,7 +874,7 @@ class vmmCreateInterface(vmmGObjectUI):
         # Update page number
         page_lbl = ("<span color='#59B0E2'>%s</span>" %
                     _("Step %(current_page)d of %(max_page)d") %
-                    {'current_page': next_page, 'max_page': PAGE_DETAILS+1})
+                    {'current_page': next_page, 'max_page': PAGE_DETAILS + 1})
 
         self.window.get_widget("header-pagenum").set_markup(page_lbl)
 

@@ -85,4 +85,3 @@ class vmmKeyring:
             return True
         except:
             return False
-

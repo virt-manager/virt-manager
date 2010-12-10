@@ -59,10 +59,10 @@ HW_LIST_TYPE_HOSTDEV = 11
 HW_LIST_TYPE_VIDEO = 12
 HW_LIST_TYPE_WATCHDOG = 13
 
-remove_pages = [ HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
-                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
-                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO,
-                 HW_LIST_TYPE_WATCHDOG]
+remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
+                HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
+                HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO,
+                HW_LIST_TYPE_WATCHDOG]
 
 # Boot device columns
 BOOT_DEV_TYPE = 0
@@ -113,10 +113,10 @@ def safeint(val, fmt="%.3d"):
     return fmt % int(val)
 
 def prettyify_bytes(val):
-    if val > (1024*1024*1024):
-        return "%2.2f GB" % (val/(1024.0*1024.0*1024.0))
+    if val > (1024 * 1024 * 1024):
+        return "%2.2f GB" % (val / (1024.0 * 1024.0 * 1024.0))
     else:
-        return "%2.2f MB" % (val/(1024.0*1024.0))
+        return "%2.2f MB" % (val / (1024.0 * 1024.0))
 
 def build_hostdev_label(hostdev):
     # String shown in the devices details section
@@ -218,11 +218,11 @@ def lookup_nodedev(vmmconn, hostdev):
 class vmmDetails(vmmGObjectUI):
     __gsignals__ = {
         "action-show-console": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),
+                                gobject.TYPE_NONE, (str, str)),
         "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str,str)),
+                                 gobject.TYPE_NONE, (str, str)),
         "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str,str)),
+                                 gobject.TYPE_NONE, (str, str)),
         "action-suspend-domain": (gobject.SIGNAL_RUN_FIRST,
                                   gobject.TYPE_NONE, (str, str)),
         "action-resume-domain": (gobject.SIGNAL_RUN_FIRST,
@@ -240,9 +240,9 @@ class vmmDetails(vmmGObjectUI):
         "action-view-manager": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, []),
         "action-migrate-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str,str)),
+                                  gobject.TYPE_NONE, (str, str)),
         "action-clone-domain": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str,str)),
+                                gobject.TYPE_NONE, (str, str)),
         "details-closed": (gobject.SIGNAL_RUN_FIRST,
                            gobject.TYPE_NONE, ()),
         }
@@ -535,7 +535,7 @@ class vmmDetails(vmmGObjectUI):
         self.disk_io_graph.set_property("reversed", True)
         self.disk_io_graph.set_property("filled", False)
         self.disk_io_graph.set_property("num_sets", 2)
-        self.disk_io_graph.set_property("rgb", map(lambda x: x/255.0,
+        self.disk_io_graph.set_property("rgb", map(lambda x: x / 255.0,
                                         [0x82, 0x00, 0x3B, 0x29, 0x5C, 0x45]))
         graph_table.attach(self.disk_io_graph, 1, 2, 2, 3)
 
@@ -544,7 +544,7 @@ class vmmDetails(vmmGObjectUI):
         self.network_traffic_graph.set_property("filled", False)
         self.network_traffic_graph.set_property("num_sets", 2)
         self.network_traffic_graph.set_property("rgb",
-                                                map(lambda x: x/255.0,
+                                                map(lambda x: x / 255.0,
                                                     [0x82, 0x00, 0x3B,
                                                      0x29, 0x5C, 0x45]))
         graph_table.attach(self.network_traffic_graph, 1, 2, 3, 4)
@@ -584,7 +584,7 @@ class vmmDetails(vmmGObjectUI):
         clock_combo.pack_start(text, True)
         clock_combo.add_attribute(text, 'text', 0)
         clock_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
-        for offset in [ "localtime", "utc" ]:
+        for offset in ["localtime", "utc"]:
             clock_model.append([offset])
 
         # Security info tooltips
@@ -737,7 +737,7 @@ class vmmDetails(vmmGObjectUI):
         on_graphics = (self.last_console_page == PAGE_CONSOLE)
 
         group = None
-        usable_types = [ "pty" ]
+        usable_types = ["pty"]
         for dev in devs:
             sensitive = False
             msg = ""
@@ -1083,8 +1083,8 @@ class vmmDetails(vmmGObjectUI):
                         self.topwin,
                         _("Save Virtual Machine Screenshot"),
                         self.vm.get_connection(),
-                        _type = ("png", "PNG files"),
-                        dialog_type = gtk.FILE_CHOOSER_ACTION_SAVE,
+                        _type=("png", "PNG files"),
+                        dialog_type=gtk.FILE_CHOOSER_ACTION_SAVE,
                         browse_reason=self.config.CONFIG_DIR_SCREENSHOT)
         if not path:
             return
@@ -1096,11 +1096,11 @@ class vmmDetails(vmmGObjectUI):
 
         # Save along with a little metadata about us & the domain
         image.save(filename, 'png',
-                   { 'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
-                     'tEXt::Domain Name': self.vm.get_name(),
-                     'tEXt::Domain UUID': self.vm.get_uuid(),
-                     'tEXt::Generator App': self.config.get_appname(),
-                     'tEXt::Generator Version': self.config.get_appversion() })
+                   {'tEXt::Hypervisor URI': self.vm.get_connection().get_uri(),
+                    'tEXt::Domain Name': self.vm.get_name(),
+                    'tEXt::Domain UUID': self.vm.get_uuid(),
+                    'tEXt::Generator App': self.config.get_appname(),
+                    'tEXt::Generator Version': self.config.get_appversion()})
 
         msg = gtk.MessageDialog(self.topwin,
                                 gtk.DIALOG_MODAL,
@@ -1144,7 +1144,7 @@ class vmmDetails(vmmGObjectUI):
 
     def serial_close_tab(self, src_ignore, pagenum):
         tab_idx = (pagenum - PAGE_DYNAMIC_OFFSET)
-        if (tab_idx < 0) or (tab_idx > len(self.serial_tabs)-1):
+        if (tab_idx < 0) or (tab_idx > len(self.serial_tabs) - 1):
             return
         return self._close_serial_tab(self.serial_tabs[tab_idx])
 
@@ -1436,7 +1436,7 @@ class vmmDetails(vmmGObjectUI):
                                            self.vm.define_apic,
                                            self.vm.define_clock,
                                            self.vm.define_seclabel,
-                                           self.vm.define_description,],
+                                           self.vm.define_description],
                                           [(enable_acpi,),
                                            (enable_apic,),
                                            (clock,),
@@ -1797,8 +1797,8 @@ class vmmDetails(vmmGObjectUI):
 
         vm_memory = self.vm.current_memory()
         host_memory = self.vm.get_connection().host_memory_size()
-        mem_txt = "%d MB of %d MB" % (int(round(vm_memory/1024.0)),
-                                      int(round(host_memory/1024.0)))
+        mem_txt = "%d MB of %d MB" % (int(round(vm_memory / 1024.0)),
+                                      int(round(host_memory / 1024.0)))
 
         if self.config.get_stats_enable_disk_poll():
             dsk_txt = _dsk_rx_tx_text(self.vm.disk_read_rate(),
@@ -1890,9 +1890,9 @@ class vmmDetails(vmmGObjectUI):
     def refresh_config_memory(self):
         host_mem_widget = self.window.get_widget("state-host-memory")
         vm_mem_widget = self.window.get_widget("state-vm-memory")
-        host_mem = self.vm.get_connection().host_memory_size()/1024
-        vm_cur_mem = self.vm.get_memory()/1024.0
-        vm_max_mem = self.vm.maximum_memory()/1024.0
+        host_mem = self.vm.get_connection().host_memory_size() / 1024
+        vm_cur_mem = self.vm.get_memory() / 1024.0
+        vm_max_mem = self.vm.maximum_memory() / 1024.0
 
         host_mem_widget.set_text("%d MB" % (int(round(host_mem))))
         vm_mem_widget.set_text("%d MB" % int(round(vm_cur_mem)))
@@ -1982,7 +1982,7 @@ class vmmDetails(vmmGObjectUI):
                 name = vnet.get_name()
                 name_dict[name] = vnet
 
-            if source and name_dict.has_key(source):
+            if source and source in name_dict:
                 netobj = name_dict[source]
 
         desc = uihelpers.pretty_network_desc(nettype, source, netobj)
@@ -2358,7 +2358,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Append all remaining boot_rows that aren't enabled
         for dev in old_order:
-            if boot_rows.has_key(dev):
+            if dev in boot_rows:
                 boot_model.append(boot_rows[dev])
                 del(boot_rows[dev])
 

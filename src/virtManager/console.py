@@ -88,11 +88,13 @@ class vmmConsolePages(vmmGObjectUI):
                     # we encapsulate this into try/except block
                     try:
                         keys = map(int, grab_keys.split(','))
-                        self.vncViewer.set_grab_keys( keys )
+                        self.vncViewer.set_grab_keys(keys)
                     except:
-                        logging.debug("Error in grab_keys configuration in GConf")
-            except Exception, e:
-                logging.debug("Error when getting the grab keys combination: %s" % str(e))
+                        logging.exception("Error in grab_keys configuration "
+                                          "in GConf")
+            except:
+                logging.exception("Error when getting the grab keys "
+                                  "combination")
 
         self.init_vnc()
 
@@ -484,7 +486,7 @@ class vmmConsolePages(vmmGObjectUI):
         if username:
             argv += ['-l', username]
 
-        argv += [ server ]
+        argv += [server]
 
         # Build 'nc' command run on the remote host
         #
@@ -576,8 +578,8 @@ class vmmConsolePages(vmmGObjectUI):
 
     def guest_not_avail(self):
         return (not self.vm.get_handle() or
-                self.vm.status() in [ libvirt.VIR_DOMAIN_SHUTOFF,
-                                      libvirt.VIR_DOMAIN_CRASHED ] or
+                self.vm.status() in [libvirt.VIR_DOMAIN_SHUTOFF,
+                                     libvirt.VIR_DOMAIN_CRASHED] or
                 self.vm.get_id() < 0)
 
     def try_login(self, src_ignore=None):
@@ -639,11 +641,11 @@ class vmmConsolePages(vmmGObjectUI):
                 self.vncViewer.open_host(connhost, str(vncport))
 
         except:
-            (typ, value, stacktrace) = sys.exc_info ()
+            (typ, value, stacktrace) = sys.exc_info()
             details = \
                     "Unable to start virtual machine '%s'" % \
                     (str(typ) + " " + str(value) + "\n" + \
-                     traceback.format_exc (stacktrace))
+                     traceback.format_exc(stacktrace))
             logging.error(details)
 
     def set_credentials(self, src_ignore=None):

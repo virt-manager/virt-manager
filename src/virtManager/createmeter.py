@@ -50,7 +50,7 @@ class vmmCreateMeter(progress.BaseMeter):
             self.asyncjob.pulse_pbar(out, text)
         else:
             frac = self.re.fraction_read()
-            out = "%3i%% %5sB" % (frac*100, fread)
+            out = "%3i%% %5sB" % (frac * 100, fread)
             self.asyncjob.set_pbar_fraction(frac, out, text)
 
     def _do_end(self, amount_read, now=None):
