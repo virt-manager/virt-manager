@@ -224,6 +224,10 @@ class vmmAddHardware(vmmGObjectUI):
         cache_list = self.window.get_widget("config-storage-cache")
         uihelpers.build_cache_combo(self.vm, cache_list)
 
+        # Disk format mode
+        format_list = self.window.get_widget("config-storage-format")
+        uihelpers.build_storage_format_combo(self.vm, format_list)
+
         # Sparse tooltip
         sparse_info = self.window.get_widget("config-storage-nosparse-info")
         uihelpers.set_sparse_tooltip(sparse_info)
@@ -330,6 +334,9 @@ class vmmAddHardware(vmmGObjectUI):
         self.window.get_widget("config-storage-size").set_value(8)
         self.window.get_widget("config-storage-entry").set_text("")
         self.window.get_widget("config-storage-nosparse").set_active(True)
+        # Don't specify by default, so we don't overwrite possibly working
+        # libvirt detection
+        self.window.get_widget("config-storage-format").child.set_text("")
         target_list = self.window.get_widget("config-storage-devtype")
         self.populate_target_device_model(target_list.get_model())
         if len(target_list.get_model()) > 0:
@@ -550,6 +557,10 @@ class vmmAddHardware(vmmGObjectUI):
             idx = 1
         return cache.get_model()[cache.get_active()][idx]
 
+    def get_config_disk_format(self):
+        fmt = self.window.get_widget("config-storage-format")
+        return fmt.child.get_text()
+
     # Input getters
     def get_config_input(self):
         target = self.window.get_widget("input-type")
@@ -747,6 +758,7 @@ class vmmAddHardware(vmmGObjectUI):
                 (_("Device type:"), self._dev.device),
                 (_("Bus type:"),    self._dev.bus),
                 (_("Cache mode:"),  self.get_config_disk_cache(label=True)),
+                (_("Format:"),  self._dev.format or "default"),
             ]
             title = _("Storage")
 
@@ -1092,6 +1104,7 @@ class vmmAddHardware(vmmGObjectUI):
     def validate_page_storage(self):
         bus, device = self.get_config_disk_target()
         cache = self.get_config_disk_cache()
+        fmt = self.get_config_disk_format()
 
         # Make sure default pool is running
         if self.is_default_storage():
@@ -1143,7 +1156,8 @@ class vmmAddHardware(vmmGObjectUI):
                                         readOnly=readonly,
                                         device=device,
                                         bus=bus,
-                                        driverCache=cache)
+                                        driverCache=cache,
+                                        format=fmt)
 
             if (disk.type == virtinst.VirtualDisk.TYPE_FILE and
                 not self.vm.is_hvm() and

@@ -243,6 +243,22 @@ def build_cache_combo(vm, combo, no_default=False):
         dev_model.append([None, "default"])
     combo.set_active(0)
 
+
+#####################################
+# Storage format list/combo helpers #
+#####################################
+
+def build_storage_format_combo(vm, combo):
+    ignore = vm
+    dev_model = gtk.ListStore(str)
+    combo.set_model(dev_model)
+    combo.set_text_column(0)
+
+    for m in ["raw", "qcow2", "vmdk"]:
+        dev_model.append([m])
+
+    combo.set_active(0)
+
 #######################################################################
 # Widgets for listing network device options (in create, addhardware) #
 #######################################################################

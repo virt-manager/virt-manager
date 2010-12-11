@@ -354,6 +354,7 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_readonly_changed": self.config_enable_apply,
             "on_disk_shareable_changed": self.config_enable_apply,
             "on_disk_cache_combo_changed": self.config_enable_apply,
+            "on_disk_format_changed": self.config_enable_apply,
 
             "on_network_model_combo_changed": self.config_enable_apply,
 
@@ -659,9 +660,14 @@ class vmmDetails(vmmGObjectUI):
         txtCol.add_attribute(text, 'sensitive', BOOT_ACTIVE)
 
         no_default = not self.is_customize_dialog
+
         # Disk cache combo
         disk_cache = self.window.get_widget("disk-cache-combo")
         uihelpers.build_cache_combo(self.vm, disk_cache)
+
+        # Disk format combo
+        format_list = self.window.get_widget("disk-format")
+        uihelpers.build_storage_format_combo(self.vm, format_list)
 
         # Network model
         net_model = self.window.get_widget("network-model-combo")
@@ -1528,13 +1534,16 @@ class vmmDetails(vmmGObjectUI):
         do_readonly = self.window.get_widget("disk-readonly").get_active()
         do_shareable = self.window.get_widget("disk-shareable").get_active()
         cache = self.get_combo_label_value("disk-cache")
+        fmt = self.window.get_widget("disk-format").child.get_text()
 
         return self._change_config_helper([self.vm.define_disk_readonly,
                                            self.vm.define_disk_shareable,
-                                           self.vm.define_disk_cache],
+                                           self.vm.define_disk_cache,
+                                           self.vm.define_disk_driver_type],
                                           [(dev_id_info, do_readonly),
                                            (dev_id_info, do_shareable),
-                                           (dev_id_info, cache)])
+                                           (dev_id_info, cache),
+                                           (dev_id_info, fmt)])
 
     # Audio options
     def config_sound_apply(self, dev_id_info):
@@ -1927,6 +1936,7 @@ class vmmDetails(vmmGObjectUI):
         bus = disk.bus
         idx = disk.disk_bus_index
         cache = disk.driver_cache
+        driver_type = disk.driver_type or ""
 
         size = _("Unknown")
         if not path:
@@ -1953,6 +1963,7 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("disk-shareable").set_active(share)
         self.window.get_widget("disk-size").set_text(size)
         self.set_combo_label("disk-cache", 0, cache)
+        self.window.get_widget("disk-format").child.set_text(driver_type)
 
         button = self.window.get_widget("config-cdrom-connect")
         if is_cdrom or is_floppy:
