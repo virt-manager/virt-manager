@@ -354,6 +354,7 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_readonly_changed": self.config_enable_apply,
             "on_disk_shareable_changed": self.config_enable_apply,
             "on_disk_cache_combo_changed": self.config_enable_apply,
+            "on_disk_bus_combo_changed": self.config_enable_apply,
             "on_disk_format_changed": self.config_enable_apply,
 
             "on_network_model_combo_changed": self.config_enable_apply,
@@ -668,6 +669,10 @@ class vmmDetails(vmmGObjectUI):
         # Disk format combo
         format_list = self.window.get_widget("disk-format")
         uihelpers.build_storage_format_combo(self.vm, format_list)
+
+        # Disk bus combo
+        disk_bus = self.window.get_widget("disk-bus-combo")
+        uihelpers.build_disk_bus_combo(self.vm, disk_bus)
 
         # Network model
         net_model = self.window.get_widget("network-model-combo")
@@ -1397,16 +1402,22 @@ class vmmDetails(vmmGObjectUI):
 
     # Helper for accessing value of combo/label pattern
     def get_combo_label_value(self, prefix, model_idx=0):
-        combo = self.window.get_widget(prefix + "-combo")
+        comboname = prefix + "-combo"
         label = self.window.get_widget(prefix + "-label")
         value = None
 
-        if combo.get_property("visible"):
-            value = combo.get_model()[combo.get_active()][model_idx]
-        else:
+        if label.get_property("visible"):
             value = label.get_text()
+        else:
+            value = self.get_combo_value(comboname, model_idx)
 
         return value
+
+    def get_combo_value(self, widgetname, model_idx=0):
+        combo = self.window.get_widget(widgetname)
+        if combo.get_active() < 0:
+            return None
+        return combo.get_model()[combo.get_active()][model_idx]
 
     # Overview section
     def config_overview_apply(self):
@@ -1535,15 +1546,18 @@ class vmmDetails(vmmGObjectUI):
         do_shareable = self.window.get_widget("disk-shareable").get_active()
         cache = self.get_combo_label_value("disk-cache")
         fmt = self.window.get_widget("disk-format").child.get_text()
+        bus = self.get_combo_label_value("disk-bus")
 
         return self._change_config_helper([self.vm.define_disk_readonly,
                                            self.vm.define_disk_shareable,
                                            self.vm.define_disk_cache,
-                                           self.vm.define_disk_driver_type],
+                                           self.vm.define_disk_driver_type,
+                                           self.vm.define_disk_bus],
                                           [(dev_id_info, do_readonly),
                                            (dev_id_info, do_shareable),
                                            (dev_id_info, cache),
-                                           (dev_id_info, fmt)])
+                                           (dev_id_info, fmt),
+                                           (dev_id_info, bus)])
 
     # Audio options
     def config_sound_apply(self, dev_id_info):
@@ -1965,6 +1979,11 @@ class vmmDetails(vmmGObjectUI):
         self.set_combo_label("disk-cache", 0, cache)
         self.window.get_widget("disk-format").child.set_text(driver_type)
 
+        no_default = not self.is_customize_dialog
+
+        self.populate_disk_bus_combo(devtype, no_default)
+        self.set_combo_label("disk-bus", 0, bus)
+
         button = self.window.get_widget("config-cdrom-connect")
         if is_cdrom or is_floppy:
             if not path:
@@ -2175,6 +2194,32 @@ class vmmDetails(vmmGObjectUI):
     ############################
     # Hardware list population #
     ############################
+
+    def populate_disk_bus_combo(self, devtype, no_default):
+        buslist     = self.window.get_widget("disk-bus-combo")
+        busmodel    = buslist.get_model()
+        busmodel.clear()
+
+        buses = []
+        if devtype == virtinst.VirtualDisk.DEVICE_FLOPPY:
+            buses.append(["fdc", "Floppy"])
+        elif devtype == virtinst.VirtualDisk.DEVICE_CDROM:
+            buses.append(["ide", "IDE"])
+            buses.append(["scsi", "SCSI"])
+        else:
+            if self.vm.is_hvm():
+                buses.append(["ide", "IDE"])
+                buses.append(["scsi", "SCSI"])
+                buses.append(["usb", "USB"])
+            if self.vm.get_hv_type() == "kvm":
+                buses.append(["virtio", "Virtio"])
+            if self.vm.get_connection().is_xen():
+                buses.append(["xen", "Xen"])
+
+        for row in buses:
+            busmodel.append(row)
+        if not no_default:
+            busmodel.append([None, "default"])
 
     def populate_hw_list(self):
         hw_list_model = self.window.get_widget("hw-list").get_model()

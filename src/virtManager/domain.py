@@ -365,6 +365,10 @@ class vmmDomainBase(vmmLibvirtObject):
         def change(editdev):
             editdev.driver_type = new_driver_type or None
         return self._redefine_device(change, devobj)
+    def define_disk_bus(self, devobj, newval):
+        def change(editdev):
+            editdev.bus = newval
+        return self._redefine_device(change, devobj)
 
     def define_network_model(self, devobj, newmodel):
         def change(editdev):
