@@ -40,7 +40,7 @@ VM_STORAGE_FILE = 2
 
 DEFAULT_STORAGE_FILE_SIZE = 500
 
-PAGE_INTRO = 0
+PAGE_ERROR = 0
 PAGE_DISK = 1
 PAGE_NETWORK = 2
 PAGE_INPUT = 3
@@ -50,7 +50,6 @@ PAGE_HOSTDEV = 6
 PAGE_CHAR = 7
 PAGE_VIDEO = 8
 PAGE_WATCHDOG = 9
-PAGE_SUMMARY = 10
 
 char_widget_mappings = {
     "source_path" : "char-path",
@@ -82,15 +81,10 @@ class vmmAddHardware(vmmGObjectUI):
         self._dev = None
 
         self.window.signal_autoconnect({
-            "on_create_pages_switch_page" : self.page_changed,
             "on_create_cancel_clicked" : self.close,
             "on_vmm_create_delete_event" : self.close,
-            "on_create_back_clicked" : self.back,
-            "on_create_forward_clicked" : self.forward,
             "on_create_finish_clicked" : self.finish,
             "on_create_help_clicked": self.show_help,
-
-            "on_hardware_type_changed"  : self.hardware_type_changed,
 
             "on_config_storage_browse_clicked": self.browse_storage,
             "on_config_storage_select_toggled": self.toggle_storage_select,
@@ -119,11 +113,16 @@ class vmmAddHardware(vmmGObjectUI):
         # XXX: Help docs useless/out of date
         self.window.get_widget("create-help").hide()
 
+
         finish_img = gtk.image_new_from_stock(gtk.STOCK_QUIT,
                                               gtk.ICON_SIZE_BUTTON)
         self.window.get_widget("create-finish").set_image(finish_img)
 
         self.set_initial_state()
+
+        hwlist = self.window.get_widget("hardware-list")
+        hwlist.get_selection().connect("changed", self.hw_selected)
+        self.hw_selected()
 
     def update_doc(self, ignore1, ignore2, param):
         doc = self._build_doc_str(param)
@@ -179,24 +178,31 @@ class vmmAddHardware(vmmGObjectUI):
         notebook.set_show_tabs(False)
 
         black = gtk.gdk.color_parse("#000")
-        for num in range(PAGE_SUMMARY + 1):
+        lastpage = notebook.get_n_pages()
+        for num in range(1, lastpage):
             name = "page" + str(num) + "-title"
             self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL, black)
 
-        # Main HW list
-        hw_list = self.window.get_widget("hardware-type")
         # Name, icon name, page number, is sensitive, tooltip, icon size
         model = gtk.ListStore(str, str, int, bool, str)
+        hw_list = self.window.get_widget("hardware-list")
         hw_list.set_model(model)
+
+        hw_col = gtk.TreeViewColumn("Hardware")
+        hw_col.set_spacing(6)
+        hw_col.set_min_width(165)
+
         icon = gtk.CellRendererPixbuf()
         icon.set_property("stock-size", gtk.ICON_SIZE_BUTTON)
-        hw_list.pack_start(icon, False)
-        hw_list.add_attribute(icon, 'icon-name', 1)
         text = gtk.CellRendererText()
         text.set_property("xpad", 6)
-        hw_list.pack_start(text, True)
-        hw_list.add_attribute(text, 'text', 0)
-        hw_list.add_attribute(text, 'sensitive', 3)
+
+        hw_col.pack_start(icon, False)
+        hw_col.pack_start(text, True)
+        hw_col.add_attribute(icon, 'icon-name', 1)
+        hw_col.add_attribute(text, 'text', 0)
+        hw_col.add_attribute(text, 'sensitive', 3)
+        hw_list.append_column(hw_col)
 
         # Virtual network list
         net_list = self.window.get_widget("net-list")
@@ -317,10 +323,6 @@ class vmmAddHardware(vmmGObjectUI):
         notebook.set_current_page(0)
 
         # Hide the "finish" button until the appropriate time
-        self.window.get_widget("create-finish").hide()
-        self.window.get_widget("create-forward").show()
-        self.window.get_widget("create-forward").grab_focus()
-        self.window.get_widget("create-back").set_sensitive(False)
         self.window.get_widget("create-help").hide()
 
         # Storage init
@@ -406,7 +408,8 @@ class vmmAddHardware(vmmGObjectUI):
         self.window.get_widget("char-use-telnet").set_active(False)
 
         # Available HW options
-        model = self.window.get_widget("hardware-type").get_model()
+        hwlist = self.window.get_widget("hardware-list")
+        model = hwlist.get_model()
         model.clear()
 
         def add_hw_option(name, icon, page, sensitive, tooltip):
@@ -441,7 +444,7 @@ class vmmAddHardware(vmmGObjectUI):
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
 
-        self.window.get_widget("hardware-type").set_active(0)
+        self.set_hw_selection(0)
 
     #########################
     # UI population methods #
@@ -516,10 +519,10 @@ class vmmAddHardware(vmmGObjectUI):
     ########################
 
     def get_config_hardware_type(self):
-        _type = self.window.get_widget("hardware-type")
-        if _type.get_active_iter() == None:
+        row = self.get_hw_selection()
+        if not row:
             return None
-        return _type.get_model().get_value(_type.get_active_iter(), 2)
+        return row[2]
 
     # Disk getters
     def is_default_storage(self):
@@ -657,21 +660,54 @@ class vmmAddHardware(vmmGObjectUI):
     # UI listeners #
     ################
 
-    def hardware_type_changed(self, src):
-        if src.get_active() < 0:
+    def set_hw_selection(self, page):
+        hwlist = self.window.get_widget("hardware-list")
+        selection = hwlist.get_selection()
+        selection.select_path(str(page))
+
+    def get_hw_selection(self):
+        vmlist = self.window.get_widget("hardware-list")
+        selection = vmlist.get_selection()
+        active = selection.get_selected()
+
+        treestore, treeiter = active
+        if treeiter != None:
+            return treestore[treeiter]
+        return None
+
+    def hw_selected(self, src=None):
+        ignore = src
+        self._dev = None
+
+        devbox = self.window.get_widget("host-device")
+        devbox.hide()
+
+        row = self.get_hw_selection()
+        if not row:
+            self.set_hw_selection(0)
             return
 
-        row = src.get_model()[src.get_active()]
-
+        page = row[2]
         sens = row[3]
         msg = row[4] or ""
 
-        self.window.get_widget("create-forward").set_sensitive(sens)
-        self.window.get_widget("hardware-info-box").set_property("visible",
-                                                                 (not sens))
-        self.window.get_widget("hardware-info").set_text(msg)
+        if not sens:
+            self.window.get_widget("create-pages").set_current_page(
+                                                                PAGE_ERROR)
+            self.window.get_widget("hardware-info").set_text(msg)
+            return
 
-    def forward(self, ignore=None):
+        if page == PAGE_CHAR:
+            devtype = self.window.get_widget("char-device-type")
+            self.change_char_device_type(devtype)
+            self.set_page_char_type()
+
+        elif page == PAGE_HOSTDEV:
+            devbox.show()
+
+        self.window.get_widget("create-pages").set_current_page(page)
+
+    def finish(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
         try:
             if self.validate(notebook.get_current_page()) == False:
@@ -682,202 +718,6 @@ class vmmAddHardware(vmmGObjectUI):
                               "".join(traceback.format_exc()))
             return
 
-        hwtype = self.get_config_hardware_type()
-        if notebook.get_current_page() == PAGE_INTRO:
-            notebook.set_current_page(hwtype)
-        else:
-            notebook.set_current_page(PAGE_SUMMARY)
-            self.window.get_widget("create-finish").show()
-            self.window.get_widget("create-finish").grab_focus()
-            self.window.get_widget("create-forward").hide()
-        self.window.get_widget("create-back").set_sensitive(True)
-
-    def back(self, ignore=None):
-        notebook = self.window.get_widget("create-pages")
-
-        if notebook.get_current_page() == PAGE_SUMMARY:
-            hwtype = self.get_config_hardware_type()
-            notebook.set_current_page(hwtype)
-            self.window.get_widget("create-finish").hide()
-        else:
-            notebook.set_current_page(PAGE_INTRO)
-            self.window.get_widget("create-back").set_sensitive(False)
-
-        self.window.get_widget("create-forward").show()
-
-    def page_changed(self, notebook_ignore, page_ignore, page_number):
-        devbox = self.window.get_widget("host-device")
-        devbox.hide()
-
-        if page_number == PAGE_CHAR:
-            devtype = self.window.get_widget("char-device-type")
-            self.change_char_device_type(devtype)
-            self.set_page_char_type()
-
-        elif page_number == PAGE_SUMMARY:
-            self.populate_summary()
-
-        elif page_number == PAGE_HOSTDEV:
-            devbox.show()
-
-        return
-
-    def populate_summary(self):
-        hwpage = self.get_config_hardware_type()
-
-        summary_table = self.window.get_widget("summary-table")
-        for c in summary_table.get_children():
-            summary_table.remove(c)
-
-        def set_table(title, info_list):
-            self.window.get_widget("summary-title").set_markup("<b>%s</b>" %
-                                                               title)
-            row = 0
-            for label, value in info_list:
-                label = gtk.Label(label)
-                label.set_alignment(1, .5)
-                value = gtk.Label(value)
-                value.set_alignment(0, .5)
-
-                summary_table.attach(label, 0, 1, row, row + 1, gtk.FILL, 0)
-                summary_table.attach(value, 1, 2, row, row + 1, gtk.FILL, 0)
-
-                row += 1
-                if row == 10:
-                    return
-
-            summary_table.show_all()
-
-        if hwpage == PAGE_DISK:
-            size_str = (self._dev.size and ("%2.2f GB" % self._dev.size)
-                                       or "-")
-
-            info_list = [
-                (_("Disk image:"),  self._dev.path),
-                (_("Disk size:"),   size_str),
-                (_("Device type:"), self._dev.device),
-                (_("Bus type:"),    self._dev.bus),
-                (_("Cache mode:"),  self.get_config_disk_cache(label=True)),
-                (_("Format:"),  self._dev.format or "default"),
-            ]
-            title = _("Storage")
-
-        elif hwpage == PAGE_NETWORK:
-            net_type, net_target = self.get_config_network()
-            macaddr = self.get_config_macaddr()
-            model = self.get_config_net_model()[1]
-            net_label = virtinst.VirtualNetworkInterface.get_network_type_desc(net_type)
-            net_target = net_target or "-"
-
-            info_list = [
-                (_("Network type:"),     net_label),
-                (_("Target:"),          net_target),
-                (_("MAC address:"),     macaddr or "-"),
-                (_("Model:"),           model or "-"),
-            ]
-            title = _("Network")
-
-        elif hwpage == PAGE_INPUT:
-            ignore, typ, model = self.get_config_input()
-            if typ == virtinst.VirtualInputDevice.INPUT_TYPE_TABLET:
-                mode_label = _("Absolute movement")
-            else:
-                mode_label = _("Relative movement")
-
-            info_list = [
-                (_("Type:"), typ),
-                (_("Mode:"), mode_label),
-            ]
-            title = _("Pointer")
-
-        elif hwpage == PAGE_GRAPHICS:
-            graphics = self.get_config_graphics()
-            is_vnc = (graphics == virtinst.VirtualGraphics.TYPE_VNC)
-
-            type_label = is_vnc and _("VNC server") or _("Local SDL window")
-            addr = is_vnc and self.get_config_vnc_address() or _("N/A")
-            port_label = _("N/A")
-            passwd_label = _("N/A")
-            keymap_label = _("N/A")
-
-            if is_vnc:
-                port = self.get_config_vnc_port()
-                passwd = self.get_config_vnc_password()
-                keymap = self.get_config_keymap()
-
-                port_label = ((port == -1) and ("Automatically allocated")
-                                           or port)
-                passwd_label = passwd and _("Yes") or _("No")
-                keymap_label = keymap and keymap or _("Same as host")
-
-            info_list = [
-                (_("Type:"),    type_label),
-                (_("Address:"), addr),
-                (_("Port:"),    port_label),
-                (_("Password:"), passwd_label),
-                (_("Keymap:"),  keymap_label),
-            ]
-            title = _("Graphics")
-
-        elif hwpage == PAGE_SOUND:
-            info_list = [
-                (_("Model:"),   self._dev.model),
-            ]
-            title = _("Sound")
-
-        elif hwpage == PAGE_CHAR:
-            mode = None
-
-            info_list = [
-                (_("Type:"), VirtualCharDevice.get_char_type_desc(self._dev.char_type)),
-            ]
-
-            if self._dev.supports_property("source_mode"):
-                mode = self._dev.source_mode.capitalize()
-            if self._dev.supports_property("source_path"):
-                path = self._dev.source_path
-                label = "%sPath:" % (mode and mode + " " or "")
-                info_list.append((label, path))
-
-            if self._dev.supports_property("source_host"):
-                host = "%s:%s" % (self._dev.source_host, self._dev.source_port)
-                label = "%sHost:" % (mode and mode + " " or "")
-                info_list.append((label, host))
-
-            if self._dev.supports_property("bind_host"):
-                bind_host = "%s:%s" % (self._dev.bind_host,
-                                       self._dev.bind_port)
-                info_list.append(("Bind Host:", bind_host))
-            if self._dev.supports_property("protocol"):
-                proto = self._dev.protocol
-                info_list.append((_("Protocol:"), proto))
-
-            title = self.get_char_type().capitalize()
-
-        elif hwpage == PAGE_HOSTDEV:
-            info_list = [
-                (_("Type:"),    self.get_config_host_device_type_info()[0]),
-                (_("Device:"),  self.get_config_host_device_info()[0]),
-            ]
-            title = _("Physical Host Device")
-
-        elif hwpage == PAGE_VIDEO:
-            info_list = [
-                (_("Model:"), self._dev.model_type),
-            ]
-            title = _("Video")
-
-        elif hwpage == PAGE_WATCHDOG:
-            title = _("Watchdog")
-            info_list = [
-                (_("Model:"), self._dev.model),
-                (_("Action:"), self._dev.get_action_desc(self._dev.action))
-            ]
-
-        set_table(title, info_list)
-
-
-    def finish(self, ignore=None):
         self.topwin.set_sensitive(False)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
@@ -895,6 +735,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
+        self._dev = None
         if not failure:
             self.close()
 
@@ -960,11 +801,11 @@ class vmmAddHardware(vmmGObjectUI):
 
     # Char device listeners
     def get_char_type(self):
-        hw_list = self.window.get_widget("hardware-type")
-        if hw_list.get_active() < 0:
-            label = "serial"
-        else:
-            label = hw_list.get_model()[hw_list.get_active()][0]
+        row = self.get_hw_selection()
+        label = "serial"
+
+        if row:
+            label = row[0]
 
         if label.lower() == "parallel":
             return VirtualDevice.VIRTUAL_DEV_PARALLEL
@@ -1074,8 +915,9 @@ class vmmAddHardware(vmmGObjectUI):
     ###########################
 
     def validate(self, page_num):
-        if page_num == PAGE_INTRO:
-            return self.validate_page_intro()
+        if page_num == PAGE_ERROR:
+            self._dev = None
+            return True
         elif page_num == PAGE_DISK:
             return self.validate_page_storage()
         elif page_num == PAGE_NETWORK:
@@ -1094,12 +936,6 @@ class vmmAddHardware(vmmGObjectUI):
             return self.validate_page_video()
         elif page_num == PAGE_WATCHDOG:
             return self.validate_page_watchdog()
-
-    def validate_page_intro(self):
-        if self.get_config_hardware_type() == None:
-            return self.err.val_err(_("Hardware Type Required"),
-                    _("You must specify what type of hardware to add."))
-        self._dev = None
 
     def validate_page_storage(self):
         bus, device = self.get_config_disk_target()
@@ -1353,7 +1189,7 @@ class vmmAddHardware(vmmGObjectUI):
     def show_help(self, src_ignore):
         # help to show depends on the notebook page, yahoo
         page = self.window.get_widget("create-pages").get_current_page()
-        if page == PAGE_INTRO:
+        if page == PAGE_ERROR:
             self.emit("action-show-help", "virt-manager-create-wizard")
         elif page == PAGE_DISK:
             self.emit("action-show-help", "virt-manager-storage-space")
