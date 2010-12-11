@@ -178,10 +178,8 @@ class vmmAddHardware(vmmGObjectUI):
         notebook.set_show_tabs(False)
 
         black = gtk.gdk.color_parse("#000")
-        lastpage = notebook.get_n_pages()
-        for num in range(1, lastpage):
-            name = "page" + str(num) + "-title"
-            self.window.get_widget(name).modify_bg(gtk.STATE_NORMAL, black)
+        self.window.get_widget("page-title-box").modify_bg(
+                                                    gtk.STATE_NORMAL, black)
 
         # Name, icon name, page number, is sensitive, tooltip, icon size
         model = gtk.ListStore(str, str, int, bool, str)
@@ -700,11 +698,11 @@ class vmmAddHardware(vmmGObjectUI):
         if page == PAGE_CHAR:
             devtype = self.window.get_widget("char-device-type")
             self.change_char_device_type(devtype)
-            self.set_page_char_type()
 
         elif page == PAGE_HOSTDEV:
             devbox.show()
 
+        self.set_page_title(page)
         self.window.get_widget("create-pages").set_current_page(page)
 
     def finish(self, ignore=None):
@@ -811,10 +809,35 @@ class vmmAddHardware(vmmGObjectUI):
             return VirtualDevice.VIRTUAL_DEV_PARALLEL
         return VirtualDevice.VIRTUAL_DEV_SERIAL
 
-    def set_page_char_type(self):
-        char_type = self.get_char_type().capitalize()
-        self.window.get_widget("char-title-label").set_markup(
-            """<span weight="heavy" size="xx-large" foreground="#FFF">%s Device</span>""" % char_type)
+    def dev_to_title(self, page):
+        if page == PAGE_ERROR:
+            return _("Error")
+        if page == PAGE_DISK:
+            return _("Storage")
+        if page == PAGE_NETWORK:
+            return _("Network")
+        if page == PAGE_INPUT:
+            return _("Input")
+        if page == PAGE_GRAPHICS:
+            return _("Graphics")
+        if page == PAGE_SOUND:
+            return _("Sound")
+        if page == PAGE_HOSTDEV:
+            return _("Host Device")
+        if page == PAGE_VIDEO:
+            return _("Video Device")
+        if page == PAGE_WATCHDOG:
+            return _("Watchdog Device")
+
+        if page != PAGE_CHAR:
+            raise RuntimeError("Unknown page %s" % page)
+        return self.get_char_type().capitalize() + " Device"
+
+    def set_page_title(self, page):
+        title = self.dev_to_title(page)
+        markup = ("""<span weight="heavy" size="xx-large" """
+                  """foreground="#FFF">%s</span>""") % title
+        self.window.get_widget("page-title-label").set_markup(markup)
 
     def change_char_device_type(self, src):
         self.update_doc(None, None, "char_type")
