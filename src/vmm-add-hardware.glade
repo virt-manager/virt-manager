@@ -1308,47 +1308,21 @@ to connect to the virtual machine.</property>
                                 <child>
                                   <widget class="GtkAlignment" id="alignment6">
                                     <property name="visible">True</property>
-                                    <property name="left_padding">24</property>
                                     <child>
                                       <widget class="GtkTable" id="table3">
                                         <property name="visible">True</property>
-                                        <property name="n_rows">3</property>
+                                        <property name="n_rows">2</property>
                                         <property name="n_columns">2</property>
                                         <property name="column_spacing">12</property>
                                         <property name="row_spacing">6</property>
                                         <child>
-                                          <widget class="GtkComboBox" id="host-device-type">
-                                            <property name="visible">True</property>
-                                            <signal name="changed" handler="on_host_device_type_changed"/>
-                                          </widget>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options">GTK_FILL</property>
-                                          </packing>
-                                        </child>
-                                        <child>
                                           <widget class="GtkLabel" id="label20">
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">_Device:</property>
+                                            <property name="xpad">1</property>
+                                            <property name="label" translatable="yes">Host _Device:</property>
                                             <property name="use_underline">True</property>
-                                          </widget>
-                                          <packing>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options">GTK_FILL</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <widget class="GtkLabel" id="label18">
-                                            <property name="visible">True</property>
-                                            <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Device _Type:</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="mnemonic_widget">host-device-type</property>
+                                            <property name="mnemonic_widget">host-device</property>
                                           </widget>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
@@ -1372,8 +1346,8 @@ to connect to the virtual machine.</property>
                                           </widget>
                                           <packing>
                                             <property name="right_attach">2</property>
-                                            <property name="top_attach">2</property>
-                                            <property name="bottom_attach">3</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -1386,8 +1360,6 @@ to connect to the virtual machine.</property>
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
                                             <property name="y_options">GTK_FILL</property>
                                           </packing>
                                         </child>

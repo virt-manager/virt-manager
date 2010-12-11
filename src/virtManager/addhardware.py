@@ -103,8 +103,6 @@ class vmmAddHardware(vmmGObjectUI):
             "on_graphics_port_auto_toggled": self.change_port_auto,
             "on_graphics_keymap_toggled": self.change_keymap,
 
-            "on_host_device_type_changed": self.change_host_device_type,
-
             "on_char_device_type_changed": self.change_char_device_type,
 
             # Char dev info signals
@@ -130,7 +128,6 @@ class vmmAddHardware(vmmGObjectUI):
 
         hwlist = self.window.get_widget("hardware-list")
         hwlist.get_selection().connect("changed", self.hw_selected)
-        self.hw_selected()
 
     def update_doc(self, ignore1, ignore2, param):
         doc = self._build_doc_str(param)
@@ -189,8 +186,9 @@ class vmmAddHardware(vmmGObjectUI):
         self.window.get_widget("page-title-box").modify_bg(
                                                     gtk.STATE_NORMAL, black)
 
-        # Name, icon name, page number, is sensitive, tooltip, icon size
-        model = gtk.ListStore(str, str, int, bool, str)
+        # Name, icon name, page number, is sensitive, tooltip, icon size,
+        # device type (serial/parallel)...
+        model = gtk.ListStore(str, str, int, bool, str, str)
         hw_list = self.window.get_widget("hardware-list")
         hw_list.set_model(model)
 
@@ -265,15 +263,6 @@ class vmmAddHardware(vmmGObjectUI):
         sound_list = self.window.get_widget("sound-model")
         uihelpers.build_sound_combo(self.vm, sound_list)
 
-        host_devtype = self.window.get_widget("host-device-type")
-        # Description, nodedev type, specific type capability, sub type,
-        # sub cap
-        host_devtype_model = gtk.ListStore(str, str, str, str, str)
-        host_devtype.set_model(host_devtype_model)
-        text = gtk.CellRendererText()
-        host_devtype.pack_start(text, True)
-        host_devtype.add_attribute(text, 'text', 0)
-
         # model = [ Description, nodedev name ]
         host_dev = self.window.get_widget("host-device")
         host_dev_model = gtk.ListStore(str, str)
@@ -323,11 +312,59 @@ class vmmAddHardware(vmmGObjectUI):
         combo = self.window.get_widget("watchdog-action")
         uihelpers.build_watchdogaction_combo(self.vm, combo)
 
-
-    def reset_state(self):
+        # Available HW options
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
 
+        have_storage = (is_local or is_storage_capable)
+        storage_tooltip = None
+        if not have_storage:
+            storage_tooltip = _("Connection does not support storage"
+                                " management.")
+
+        hwlist = self.window.get_widget("hardware-list")
+        model = hwlist.get_model()
+        model.clear()
+
+        def add_hw_option(name, icon, page, sensitive, errortxt, devtype=None):
+            model.append([name, icon, page, sensitive, errortxt, devtype])
+
+        add_hw_option("Storage", "drive-harddisk", PAGE_DISK, have_storage,
+                      have_storage and storage_tooltip or None)
+        add_hw_option("Network", "network-idle", PAGE_NETWORK, True, None)
+        add_hw_option("Input", "input-mouse", PAGE_INPUT, self.vm.is_hvm(),
+                      _("Not supported for this guest type."))
+        add_hw_option("Graphics", "video-display", PAGE_GRAPHICS,
+                      True, None)
+        add_hw_option("Sound", "audio-card", PAGE_SOUND,
+                      self.vm.is_hvm(),
+                      _("Not supported for this guest type."))
+        add_hw_option("Serial", gtk.STOCK_CONNECT, PAGE_CHAR,
+                      self.vm.is_hvm(),
+                      _("Not supported for this guest type."),
+                      "serial")
+        add_hw_option("Parallel", gtk.STOCK_CONNECT, PAGE_CHAR,
+                      self.vm.is_hvm(),
+                      _("Not supported for this guest type."),
+                      "parallel")
+        add_hw_option("USB Host Device", "system-run", PAGE_HOSTDEV,
+                      self.vm.get_connection().is_nodedev_capable(),
+                      _("Connection does not support host device enumeration"),
+                      "usb")
+        add_hw_option("PCI Host Device", "system-run", PAGE_HOSTDEV,
+                      self.vm.get_connection().is_nodedev_capable(),
+                      _("Connection does not support host device enumeration"),
+                      "pci")
+        add_hw_option("Video", "video-display", PAGE_VIDEO,
+                      virtinst.support.check_conn_support(
+                            self.vm.get_connection().vmm,
+                            virtinst.support.SUPPORT_CONN_DOMAIN_VIDEO),
+                      _("Libvirt version does not support video devices."))
+        add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
+                      self.vm.is_hvm(),
+                      _("Not supported for this guest type."))
+
+    def reset_state(self):
         # Storage init
         label_widget = self.window.get_widget("phys-hd-label")
         if not self.host_storage_timer:
@@ -346,12 +383,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.populate_target_device_model(target_list.get_model())
         if len(target_list.get_model()) > 0:
             target_list.set_active(0)
-
-        have_storage = (is_local or is_storage_capable)
-        storage_tooltip = None
-        if not have_storage:
-            storage_tooltip = _("Connection does not support storage"
-                                " management.")
 
         # Network init
         newmac = uihelpers.generate_macaddr(self.vm.get_connection())
@@ -394,13 +425,6 @@ class vmmAddHardware(vmmGObjectUI):
         sound_box = self.window.get_widget("sound-model")
         sound_box.set_active(0)
 
-        # Hostdev init
-        host_devtype = self.window.get_widget("host-device-type")
-        self.populate_host_device_type_model(host_devtype.get_model())
-        host_devtype.set_active(0)
-
-        # Set available HW options
-
         # Char parameters
         self.window.get_widget("char-device-type").set_active(0)
         self.window.get_widget("char-path").set_text("")
@@ -409,43 +433,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.window.get_widget("char-bind-host").set_text("127.0.0.1")
         self.window.get_widget("char-bind-port").get_adjustment().value = 4556
         self.window.get_widget("char-use-telnet").set_active(False)
-
-        # Available HW options
-        hwlist = self.window.get_widget("hardware-list")
-        model = hwlist.get_model()
-        model.clear()
-
-        def add_hw_option(name, icon, page, sensitive, tooltip):
-            model.append([name, icon, page, sensitive, tooltip])
-
-        add_hw_option("Storage", "drive-harddisk", PAGE_DISK, have_storage,
-                      have_storage and storage_tooltip or None)
-        add_hw_option("Network", "network-idle", PAGE_NETWORK, True, None)
-        add_hw_option("Input", "input-mouse", PAGE_INPUT, self.vm.is_hvm(),
-                      _("Not supported for this guest type."))
-        add_hw_option("Graphics", "video-display", PAGE_GRAPHICS,
-                      True, None)
-        add_hw_option("Sound", "audio-card", PAGE_SOUND,
-                      self.vm.is_hvm(),
-                      _("Not supported for this guest type."))
-        add_hw_option("Serial", gtk.STOCK_CONNECT, PAGE_CHAR,
-                      self.vm.is_hvm(),
-                      _("Not supported for this guest type."))
-        add_hw_option("Parallel", gtk.STOCK_CONNECT, PAGE_CHAR,
-                      self.vm.is_hvm(),
-                      _("Not supported for this guest type."))
-        add_hw_option("Physical Host Device", "system-run", PAGE_HOSTDEV,
-                      self.vm.get_connection().is_nodedev_capable(),
-                      _("Connection does not support host device "
-                      "enumeration"))
-        add_hw_option("Video", "video-display", PAGE_VIDEO,
-                      virtinst.support.check_conn_support(
-                            self.vm.get_connection().vmm,
-                            virtinst.support.SUPPORT_CONN_DOMAIN_VIDEO),
-                      _("Libvirt version does not support video devices."))
-        add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
-                      self.vm.is_hvm(),
-                      _("Not supported for this guest type."))
 
         # Hide all notebook pages, so the wizard isn't as big as the largest
         # page
@@ -496,14 +483,9 @@ class vmmAddHardware(vmmGObjectUI):
         model.append([_("VNC server"), "vnc"])
         model.append([_("Local SDL window"), "sdl"])
 
-    def populate_host_device_type_model(self, model):
-        model.clear()
-        for m in [["PCI Device", "pci", None, "net", "80203"],
-                  ["USB Device", "usb_device", None, None, None]]:
-            model.append(m)
-
-    def populate_host_device_model(self, model, devtype, devcap, subtype,
-                                   subcap):
+    def populate_host_device_model(self, devtype, devcap, subtype, subcap):
+        devlist = self.window.get_widget("host-device")
+        model = devlist.get_model()
         model.clear()
         subdevs = []
 
@@ -522,7 +504,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         if len(model) == 0:
             model.append([_("No Devices Available"), None])
-
+        set_list_selection(devlist, 0)
 
     ########################
     # get_config_* methods #
@@ -646,8 +628,13 @@ class vmmAddHardware(vmmGObjectUI):
 
     # Host device getters
     def get_config_host_device_type_info(self):
-        devbox = self.window.get_widget("host-device-type")
-        return devbox.get_model()[devbox.get_active()]
+        pci_info = ["PCI Device", "pci", None, "net", "80203"]
+        usb_info = ["USB Device", "usb_device", None, None, None]
+        row = self.get_hw_selection()
+
+        if row and row[5] == "pci":
+            return pci_info
+        return usb_info
 
     def get_config_host_device_info(self):
         devrow = get_list_selection(self.window.get_widget("host-device"))
@@ -699,6 +686,12 @@ class vmmAddHardware(vmmGObjectUI):
         if page == PAGE_CHAR:
             devtype = self.window.get_widget("char-device-type")
             self.change_char_device_type(devtype)
+
+        if page == PAGE_HOSTDEV:
+            (ignore, devtype, devcap,
+             subtype, subcap) = self.get_config_host_device_type_info()
+            self.populate_host_device_model(devtype, devcap,
+                                            subtype, subcap)
 
         self.set_page_title(page)
         notebook.get_nth_page(page).show()
@@ -783,28 +776,15 @@ class vmmAddHardware(vmmGObjectUI):
         else:
             self.window.get_widget("graphics-keymap").set_sensitive(True)
 
-    # Hostdevice listeners
-    def change_host_device_type(self, src):
-        devbox = self.window.get_widget("host-device")
-        if src.get_active() < 0:
-            devbox.get_model().clear()
-            return
-
-        (ignore, devtype, devcap,
-         subtype, subcap) = src.get_model()[src.get_active()]
-        self.populate_host_device_model(devbox.get_model(), devtype, devcap,
-                                        subtype, subcap)
-        set_list_selection(devbox, 0)
-
     # Char device listeners
     def get_char_type(self):
         row = self.get_hw_selection()
         label = "serial"
 
         if row:
-            label = row[0]
+            label = row[5]
 
-        if label.lower() == "parallel":
+        if label == "parallel":
             return VirtualDevice.VIRTUAL_DEV_PARALLEL
         return VirtualDevice.VIRTUAL_DEV_SERIAL
 
@@ -821,16 +801,17 @@ class vmmAddHardware(vmmGObjectUI):
             return _("Graphics")
         if page == PAGE_SOUND:
             return _("Sound")
-        if page == PAGE_HOSTDEV:
-            return _("Host Device")
         if page == PAGE_VIDEO:
             return _("Video Device")
         if page == PAGE_WATCHDOG:
             return _("Watchdog Device")
 
-        if page != PAGE_CHAR:
-            raise RuntimeError("Unknown page %s" % page)
-        return self.get_char_type().capitalize() + " Device"
+        if page == PAGE_CHAR:
+            return self.get_char_type().capitalize() + " Device"
+        if page == PAGE_HOSTDEV:
+            return self.get_config_host_device_type_info()[0]
+
+        raise RuntimeError("Unknown page %s" % page)
 
     def set_page_title(self, page):
         title = self.dev_to_title(page)
