@@ -56,6 +56,19 @@ char_widget_mappings = {
     "protocol"  : "char-use-telnet",
 }
 
+def get_list_selection(widget):
+    selection = widget.get_selection()
+    active = selection.get_selected()
+
+    treestore, treeiter = active
+    if treeiter != None:
+        return treestore[treeiter]
+    return None
+
+def set_list_selection(widget, rownum):
+    selection = widget.get_selection()
+    selection.select_path(str(rownum))
+
 class vmmAddHardware(vmmGObjectUI):
     __gsignals__ = {
         "action-show-help": (gobject.SIGNAL_RUN_FIRST,
@@ -261,14 +274,17 @@ class vmmAddHardware(vmmGObjectUI):
         host_devtype.pack_start(text, True)
         host_devtype.add_attribute(text, 'text', 0)
 
+        # model = [ Description, nodedev name ]
         host_dev = self.window.get_widget("host-device")
-        # Description, nodedev name
         host_dev_model = gtk.ListStore(str, str)
         host_dev.set_model(host_dev_model)
+
+        host_col = gtk.TreeViewColumn()
         text = gtk.CellRendererText()
-        host_dev.pack_start(text, True)
-        host_dev.add_attribute(text, 'text', 0)
+        host_col.pack_start(text, True)
+        host_col.add_attribute(text, 'text', 0)
         host_dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        host_dev.append_column(host_col)
 
         # Video device
         video_dev = self.window.get_widget("video-model")
@@ -634,8 +650,10 @@ class vmmAddHardware(vmmGObjectUI):
         return devbox.get_model()[devbox.get_active()]
 
     def get_config_host_device_info(self):
-        devbox = self.window.get_widget("host-device")
-        return devbox.get_model()[devbox.get_active()]
+        devrow = get_list_selection(self.window.get_widget("host-device"))
+        if not devrow:
+            return []
+        return devrow
 
     # Video Getters
     def get_config_video_model(self):
@@ -655,19 +673,10 @@ class vmmAddHardware(vmmGObjectUI):
     ################
 
     def set_hw_selection(self, page):
-        hwlist = self.window.get_widget("hardware-list")
-        selection = hwlist.get_selection()
-        selection.select_path(str(page))
+        set_list_selection(self.window.get_widget("hardware-list"), page)
 
     def get_hw_selection(self):
-        vmlist = self.window.get_widget("hardware-list")
-        selection = vmlist.get_selection()
-        active = selection.get_selected()
-
-        treestore, treeiter = active
-        if treeiter != None:
-            return treestore[treeiter]
-        return None
+        return get_list_selection(self.window.get_widget("hardware-list"))
 
     def hw_selected(self, src=None):
         ignore = src
@@ -785,7 +794,7 @@ class vmmAddHardware(vmmGObjectUI):
          subtype, subcap) = src.get_model()[src.get_active()]
         self.populate_host_device_model(devbox.get_model(), devtype, devcap,
                                         subtype, subcap)
-        devbox.set_active(0)
+        set_list_selection(devbox, 0)
 
     # Char device listeners
     def get_char_type(self):
@@ -1101,7 +1110,8 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Sound device parameter error"), str(e))
 
     def validate_page_hostdev(self):
-        ignore, nodedev_name = self.get_config_host_device_info()
+        ret = self.get_config_host_device_info()
+        nodedev_name = ret and ret[1] or None
 
         if nodedev_name == None:
             return self.err.val_err(_("Physical Device Required"),
