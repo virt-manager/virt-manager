@@ -66,8 +66,12 @@ def get_list_selection(widget):
     return None
 
 def set_list_selection(widget, rownum):
+    path = str(rownum)
     selection = widget.get_selection()
-    selection.select_path(str(rownum))
+
+    selection.unselect_all()
+    widget.set_cursor(path)
+    selection.select_path(path)
 
 class vmmAddHardware(vmmGObjectUI):
     __gsignals__ = {
@@ -263,6 +267,7 @@ class vmmAddHardware(vmmGObjectUI):
         sound_list = self.window.get_widget("sound-model")
         uihelpers.build_sound_combo(self.vm, sound_list)
 
+        # Host device list
         # model = [ Description, nodedev name ]
         host_dev = self.window.get_widget("host-device")
         host_dev_model = gtk.ListStore(str, str)
@@ -279,6 +284,7 @@ class vmmAddHardware(vmmGObjectUI):
         video_dev = self.window.get_widget("video-model")
         uihelpers.build_video_combo(self.vm, video_dev)
 
+        # Char device type
         char_devtype = self.window.get_widget("char-device-type")
         # Type name, desc
         char_devtype_model = gtk.ListStore(str, str)
@@ -286,11 +292,12 @@ class vmmAddHardware(vmmGObjectUI):
         text = gtk.CellRendererText()
         char_devtype.pack_start(text, True)
         char_devtype.add_attribute(text, 'text', 1)
-        char_devtype_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
         for t in VirtualCharDevice.char_types:
             desc = VirtualCharDevice.get_char_type_desc(t)
-            char_devtype_model.append([t, desc + " (%s)" % t])
+            row = [t, desc + " (%s)" % t]
+            char_devtype_model.append(row)
 
+        # Character dev mode
         char_mode = self.window.get_widget("char-mode")
         # Mode name, desc
         char_mode_model = gtk.ListStore(str, str)
@@ -303,7 +310,9 @@ class vmmAddHardware(vmmGObjectUI):
             desc = VirtualCharDevice.get_char_mode_desc(t)
             char_mode_model.append([t, desc + " (%s)" % t])
 
-        self.window.get_widget("char-info-box").modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("grey"))
+        self.window.get_widget("char-info-box").modify_bg(
+                                                gtk.STATE_NORMAL,
+                                                gtk.gdk.color_parse("grey"))
 
         # Watchdog widgets
         combo = self.window.get_widget("watchdog-model")
