@@ -216,10 +216,11 @@ def populate_netmodel_combo(vm, combo):
     # [xml value, label]
     model.append([None, _("Hypervisor default")])
     if vm.is_hvm():
-        mod_list = ["rtl8139", "ne2k_pci", "pcnet"]
+        mod_list = ["rtl8139", "ne2k_pci", "pcnet", "e1000"]
         if vm.get_hv_type() == "kvm":
-            mod_list.append("e1000")
             mod_list.append("virtio")
+        if vm.get_hv_type() == "xen":
+            mod_list.append("netfront")
         mod_list.sort()
 
         for m in mod_list:
