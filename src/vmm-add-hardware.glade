@@ -65,6 +65,7 @@
                   <widget class="GtkAlignment" id="pages-align">
                     <property name="visible">True</property>
                     <property name="left_padding">6</property>
+                    <property name="right_padding">12</property>
                     <child>
                       <widget class="GtkNotebook" id="create-pages">
                         <property name="visible">True</property>
@@ -1316,7 +1317,9 @@ to connect to the virtual machine.</property>
                                         <property name="column_spacing">12</property>
                                         <property name="row_spacing">6</property>
                                         <child>
-                                          <widget class="GtkComboBox" id="host-device"/>
+                                          <widget class="GtkComboBox" id="host-device">
+                                            <property name="visible">True</property>
+                                          </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
@@ -1476,7 +1479,7 @@ to connect to the virtual machine.</property>
                                               <widget class="GtkAlignment" id="alignment9">
                                                 <property name="visible">True</property>
                                                 <property name="top_padding">2</property>
-                                                <property name="left_padding">22</property>
+                                                <property name="left_padding">24</property>
                                                 <child>
                                                   <widget class="GtkTable" id="char-param-table">
                                                     <property name="visible">True</property>

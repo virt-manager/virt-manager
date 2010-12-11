@@ -35,11 +35,6 @@ from virtManager.createmeter import vmmCreateMeter
 from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.baseclass import vmmGObjectUI
 
-VM_STORAGE_PARTITION = 1
-VM_STORAGE_FILE = 2
-
-DEFAULT_STORAGE_FILE_SIZE = 500
-
 PAGE_ERROR = 0
 PAGE_DISK = 1
 PAGE_NETWORK = 2
@@ -317,12 +312,6 @@ class vmmAddHardware(vmmGObjectUI):
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
 
-        notebook = self.window.get_widget("create-pages")
-        notebook.set_current_page(0)
-
-        # Hide the "finish" button until the appropriate time
-        self.window.get_widget("create-help").hide()
-
         # Storage init
         label_widget = self.window.get_widget("phys-hd-label")
         if not self.host_storage_timer:
@@ -441,6 +430,13 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
+
+        # Hide all notebook pages, so the wizard isn't as big as the largest
+        # page
+        notebook = self.window.get_widget("create-pages")
+        for page in range(notebook.get_n_pages()):
+            widget = notebook.get_nth_page(page)
+            widget.hide()
 
         self.set_hw_selection(0)
 
@@ -676,9 +672,7 @@ class vmmAddHardware(vmmGObjectUI):
     def hw_selected(self, src=None):
         ignore = src
         self._dev = None
-
-        devbox = self.window.get_widget("host-device")
-        devbox.hide()
+        notebook = self.window.get_widget("create-pages")
 
         row = self.get_hw_selection()
         if not row:
@@ -690,20 +684,16 @@ class vmmAddHardware(vmmGObjectUI):
         msg = row[4] or ""
 
         if not sens:
-            self.window.get_widget("create-pages").set_current_page(
-                                                                PAGE_ERROR)
+            page = PAGE_ERROR
             self.window.get_widget("hardware-info").set_text(msg)
-            return
 
         if page == PAGE_CHAR:
             devtype = self.window.get_widget("char-device-type")
             self.change_char_device_type(devtype)
 
-        elif page == PAGE_HOSTDEV:
-            devbox.show()
-
         self.set_page_title(page)
-        self.window.get_widget("create-pages").set_current_page(page)
+        notebook.get_nth_page(page).show()
+        notebook.set_current_page(page)
 
     def finish(self, ignore=None):
         notebook = self.window.get_widget("create-pages")
