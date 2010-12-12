@@ -825,6 +825,24 @@ class vmmManager(vmmGObjectUI):
         row = self._append_connection(vmlist.get_model(), conn)
         vmlist.get_selection().select_iter(row)
 
+        # Try to make sure that 2 row descriptions don't collide
+        connrows = []
+        descs = []
+        for row in self.rows.values():
+            if row[ROW_IS_CONN]:
+                connrows.append(row)
+        for row in connrows:
+            descs.append(row[ROW_NAME])
+
+        for row in connrows:
+            conn = row[ROW_HANDLE]
+            name = row[ROW_NAME]
+            if descs.count(name) <= 1:
+                continue
+
+            newname = conn.get_pretty_desc_inactive(False, True)
+            self.conn_refresh_resources(conn, newname)
+
     def _remove_connection(self, engine_ignore, conn):
         model = self.window.get_widget("vm-list").get_model()
         parent = self.rows[conn.get_uri()].iter
@@ -879,11 +897,13 @@ class vmmManager(vmmGObjectUI):
         self.conn_refresh_resources(conn)
         self.vm_selected()
 
-    def conn_refresh_resources(self, conn):
+    def conn_refresh_resources(self, conn, newname=None):
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
         row = self.rows[conn.get_uri()]
 
+        if newname:
+            row[ROW_NAME] = newname
         row[ROW_MARKUP] = self._build_conn_markup(conn, row)
         row[ROW_STATUS] = ("<span size='smaller'>%s</span>" %
                            conn.get_state_text())

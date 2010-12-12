@@ -418,7 +418,7 @@ class vmmConnection(vmmGObject):
 
     # Connection pretty print routines
 
-    def _get_pretty_desc(self, active, shorthost):
+    def _get_pretty_desc(self, active, shorthost, show_trans):
         def match_whole_string(orig, reg):
             match = re.match(reg, orig)
             if not match:
@@ -429,14 +429,19 @@ class vmmConnection(vmmGObject):
         def is_ip_addr(orig):
             return match_whole_string(orig, "[0-9.]+")
 
-        (scheme, ignore, hostname,
+        (scheme, username, hostname,
          path, ignore, ignore) = virtinst.util.uri_split(self.uri)
 
         hv = ""
         rest = ""
-        scheme = scheme.split("+")[0]
+        transport = ""
+        port = ""
+        if scheme.count("+"):
+            transport = scheme.split("+")[1]
+            scheme = scheme.split("+")[0]
 
         if hostname.count(":"):
+            port = hostname.split(":")[1]
             hostname = hostname.split(":")[0]
 
         if hostname:
@@ -456,6 +461,14 @@ class vmmConnection(vmmGObject):
         else:
             hv = scheme.capitalize()
 
+        if show_trans:
+            if transport:
+                hv += "+" + transport
+            if username:
+                hostname = username + "@" + hostname
+            if port:
+                hostname += ":" + port
+
         if path and path != "/system" and path != "/":
             if path == "/session":
                 hv += " Usermode"
@@ -464,11 +477,11 @@ class vmmConnection(vmmGObject):
 
         return "%s (%s)" % (rest, hv)
 
-    def get_pretty_desc_inactive(self, shorthost=True):
-        return self._get_pretty_desc(False, shorthost)
+    def get_pretty_desc_inactive(self, shorthost=True, transport=False):
+        return self._get_pretty_desc(False, shorthost, transport)
 
-    def get_pretty_desc_active(self, shorthost=True):
-        return self._get_pretty_desc(True, shorthost)
+    def get_pretty_desc_active(self, shorthost=True, transport=False):
+        return self._get_pretty_desc(True, shorthost, transport)
 
 
     #######################
