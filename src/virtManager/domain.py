@@ -207,12 +207,12 @@ class vmmDomainBase(vmmLibvirtObject):
     def detach_device(self, devobj):
         raise NotImplementedError()
 
+    def hotplug_graphics_password(self, devobj, newval):
+        raise NotImplementedError()
     def hotplug_storage_media(self, devobj, newpath):
         raise NotImplementedError()
-
     def hotplug_vcpus(self, vcpus):
         raise NotImplementedError()
-
     def hotplug_both_mem(self, memory, maxmem):
         raise NotImplementedError()
 
@@ -1131,6 +1131,14 @@ class vmmDomain(vmmDomainBase):
         xml = devobj.get_xml_config()
         self._backend.detachDevice(xml)
 
+    def update_device(self, devobj, flags=1):
+        if not self.is_active():
+            return
+
+        # Default flag is VIR_DOMAIN_DEVICE_MODIFY_LIVE
+        xml = devobj.get_xml_config()
+        self._backend.updateDeviceFlags(xml, flags)
+
     def hotplug_vcpus(self, vcpus):
         vcpus = int(vcpus)
         if vcpus != self.vcpu_count():
@@ -1164,6 +1172,10 @@ class vmmDomain(vmmDomainBase):
     def hotplug_storage_media(self, devobj, newpath):
         devobj.path = newpath
         self.attach_device(devobj)
+
+    def hotplug_graphics_password(self, devobj, newval):
+        devobj.passwd = newval or None
+        self.update_device(devobj)
 
     ####################
     # End internal API #
@@ -1479,6 +1491,12 @@ class vmmDomainVirtinst(vmmDomainBase):
     def attach_device(self, devobj):
         return
     def detach_device(self, devobj):
+        return
+    def update_device(self, devobj, flags=1):
+        ignore = devobj
+        ignore = flags
+        return
+    def hotplug_graphics_password(self, devobj, newval):
         return
     def hotplug_storage_media(self, devobj, newpath):
         return

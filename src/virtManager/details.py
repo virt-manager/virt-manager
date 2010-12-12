@@ -1584,13 +1584,15 @@ class vmmDetails(vmmGObjectUI):
 
     # Graphics options
     def config_graphics_apply(self, dev_id_info):
-        passwd = self.window.get_widget("vnc-password").get_text()
+        passwd = self.window.get_widget("vnc-password").get_text() or None
         keymap = self.get_combo_label_value("vnc-keymap")
 
         return self._change_config_helper([self.vm.define_graphics_password,
                                            self.vm.define_graphics_keymap],
                                           [(dev_id_info, passwd),
-                                           (dev_id_info, keymap)])
+                                           (dev_id_info, keymap)],
+                                          [self.vm.hotplug_graphics_password],
+                                          [(dev_id_info, passwd)])
 
 
     # Video options
