@@ -343,6 +343,10 @@ class vmmDomainBase(vmmLibvirtObject):
         def change(guest):
             guest.installer.bootconfig.bootorder = boot_list
         return self._redefine_guest(change)
+    def set_boot_menu(self, newval):
+        def change(guest):
+            guest.installer.bootconfig.enable_bootmenu = bool(newval)
+        return self._redefine_guest(change)
 
     # virtinst.VirtualDevice XML persistent change Impls
     def define_storage_media(self, devobj, newpath):
@@ -515,6 +519,9 @@ class vmmDomainBase(vmmLibvirtObject):
             return devs
 
         return util.xml_parse_wrapper(xml, get_boot_xml)
+    def get_boot_menu(self):
+        guest = self._get_guest()
+        return bool(guest.installer.bootconfig.enable_bootmenu)
 
     def get_seclabel(self):
         xml = self.get_xml()

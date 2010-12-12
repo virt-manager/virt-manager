@@ -350,6 +350,7 @@ class vmmDetails(vmmGObjectUI):
             "on_config_boot_movedown_clicked" : (self.config_boot_move,
                                                  False),
             "on_config_autostart_changed": self.config_enable_apply,
+            "on_boot_menu_changed": self.config_enable_apply,
 
             "on_disk_readonly_changed": self.config_enable_apply,
             "on_disk_shareable_changed": self.config_enable_apply,
@@ -1540,8 +1541,11 @@ class vmmDetails(vmmGObjectUI):
                 return False
 
         bootdevs = self.get_config_boot_devs()
-        return self._change_config_helper(self.vm.set_boot_device,
-                                          (bootdevs,))
+        bootmenu = self.window.get_widget("boot-menu").get_active()
+        return self._change_config_helper([self.vm.set_boot_device,
+                                           self.vm.set_boot_menu],
+                                          [(bootdevs,),
+                                           (bootmenu,)])
 
     # CDROM
     def change_storage_media(self, dev_id_info, newpath):
@@ -2209,13 +2213,13 @@ class vmmDetails(vmmGObjectUI):
         except libvirt.libvirtError:
             autoval = None
 
-        if autoval is not None:
-            self.window.get_widget("config-autostart").set_active(autoval)
-            self.window.get_widget("config-autostart").set_sensitive(True)
-        else:
-            # Autostart isn't supported
-            self.window.get_widget("config-autostart").set_active(False)
-            self.window.get_widget("config-autostart").set_sensitive(False)
+        autostart_chk = self.window.get_widget("config-autostart")
+        enable_autostart = (autoval is not None)
+        autostart_chk.set_sensitive(enable_autostart)
+        autostart_chk.set_active(enable_autostart and autoval or False)
+
+        menu = self.vm.get_boot_menu() or False
+        self.window.get_widget("boot-menu").set_active(menu)
 
         # Refresh Boot Device list
         self.repopulate_boot_list()
