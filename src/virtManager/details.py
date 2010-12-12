@@ -26,6 +26,7 @@ import traceback
 import os
 
 import virtManager.uihelpers as uihelpers
+from virtManager.storagebrowse import vmmStorageBrowser
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.addhardware import vmmAddHardware
 from virtManager.choosecd import vmmChooseCD
@@ -273,6 +274,7 @@ class vmmDetails(vmmGObjectUI):
         self.last_console_page = PAGE_CONSOLE
         self.addhw = None
         self.media_choosers = {"cdrom": None, "floppy": None}
+        self.storage_browser = None
 
         self.ignorePause = False
         self.ignoreDetails = False
@@ -351,6 +353,11 @@ class vmmDetails(vmmGObjectUI):
                                                  False),
             "on_config_autostart_changed": self.config_enable_apply,
             "on_boot_menu_changed": self.config_enable_apply,
+            "on_boot_kernel_changed": self.config_enable_apply,
+            "on_boot_kernel_initrd_changed": self.config_enable_apply,
+            "on_boot_kernel_args_changed": self.config_enable_apply,
+            "on_boot_kernel_browse_clicked": self.browse_kernel,
+            "on_boot_kernel_initrd_browse_clicked": self.browse_initrd,
 
             "on_disk_readonly_changed": self.config_enable_apply,
             "on_disk_shareable_changed": self.config_enable_apply,
@@ -1212,6 +1219,28 @@ class vmmDetails(vmmGObjectUI):
     ##############################
     # Details/Hardware listeners #
     ##############################
+    def _browse_file(self, callback, is_media=False):
+        if is_media:
+            reason = self.config.CONFIG_DIR_MEDIA
+        else:
+            reason = self.config.CONFIG_DIR_IMAGE
+
+        if self.storage_browser == None:
+            self.storage_browser = vmmStorageBrowser(self.conn)
+
+        self.storage_browser.set_finish_cb(callback)
+        self.storage_browser.set_browse_reason(reason)
+        self.storage_browser.show(self.conn)
+
+    def browse_kernel(self, src_ignore):
+        def cb(ignore, path):
+            self.window.get_widget("boot-kernel").set_text(path)
+        self._browse_file(cb)
+    def browse_initrd(self, src_ignore):
+        def cb(ignore, path):
+            self.window.get_widget("boot-kernel-initrd").set_text(path)
+        self._browse_file(cb)
+
     def config_enable_apply(self, ignore1=None, ignore2=None):
         self.window.get_widget("config-apply").set_sensitive(True)
 
@@ -1542,10 +1571,17 @@ class vmmDetails(vmmGObjectUI):
 
         bootdevs = self.get_config_boot_devs()
         bootmenu = self.window.get_widget("boot-menu").get_active()
+
+        kernel = self.window.get_widget("boot-kernel").get_text()
+        initrd = self.window.get_widget("boot-kernel-initrd").get_text()
+        args = self.window.get_widget("boot-kernel-args").get_text()
+
         return self._change_config_helper([self.vm.set_boot_device,
-                                           self.vm.set_boot_menu],
+                                           self.vm.set_boot_menu,
+                                           self.vm.set_boot_kernel],
                                           [(bootdevs,),
-                                           (bootmenu,)])
+                                           (bootmenu,),
+                                           (kernel, initrd, args)])
 
     # CDROM
     def change_storage_media(self, dev_id_info, newpath):
@@ -2220,6 +2256,14 @@ class vmmDetails(vmmGObjectUI):
 
         menu = self.vm.get_boot_menu() or False
         self.window.get_widget("boot-menu").set_active(menu)
+
+        kernel, initrd, args = self.vm.get_boot_kernel_info()
+        expand = bool(kernel or initrd or args)
+        self.window.get_widget("boot-kernel").set_text(kernel or "")
+        self.window.get_widget("boot-kernel-initrd").set_text(initrd or "")
+        self.window.get_widget("boot-kernel-args").set_text(args or "")
+        if expand:
+            self.window.get_widget("boot-kernel-expander").set_expanded(True)
 
         # Refresh Boot Device list
         self.repopulate_boot_list()
