@@ -54,6 +54,7 @@ STORAGE_INFO_DO_DEFAULT = 8
 STORAGE_INFO_DEFINFO = 9
 STORAGE_INFO_FAILINFO = 10
 STORAGE_INFO_COMBO = 11
+STORAGE_INFO_MANUAL_PATH = 12
 
 NETWORK_INFO_LABEL = 0
 NETWORK_INFO_ORIG_MAC = 1
@@ -299,6 +300,7 @@ class vmmCloneVM(vmmGObjectUI):
             storage_row.insert(STORAGE_INFO_DEFINFO, definfo)
             storage_row.insert(STORAGE_INFO_FAILINFO, failinfo)
             storage_row.insert(STORAGE_INFO_COMBO, None)
+            storage_row.insert(STORAGE_INFO_MANUAL_PATH, False)
 
             skip_targets = all_targets[:]
             skip_targets.remove(force_target)
@@ -338,8 +340,7 @@ class vmmCloneVM(vmmGObjectUI):
 
             try:
                 # Generate disk path, make sure that works
-                clone_path = None
-                clone_path = CloneManager.generate_clone_disk_path(path, cd)
+                clone_path = self.generate_clone_path_name(path)
 
                 logging.debug("Original path: %s\nGenerated clone path: %s" %
                               (path, clone_path))
@@ -357,6 +358,36 @@ class vmmCloneVM(vmmGObjectUI):
             storage_add()
 
         return storage_list, all_targets
+
+    def generate_clone_path_name(self, origpath, newname=None):
+        cd = self.clone_design
+        if not newname:
+            newname = cd.clone_name
+        clone_path = CloneManager.generate_clone_disk_path(origpath, cd,
+                                                           newname=newname)
+        return clone_path
+
+    def set_paths_from_clone_name(self):
+        cd = self.clone_design
+        newname = self.window.get_widget("clone-new-name").get_text()
+
+        if not newname:
+            return
+        if cd.clone_name == newname:
+            return
+
+        for row in self.storage_list.values():
+            origpath = row[STORAGE_INFO_ORIG_PATH]
+            if row[STORAGE_INFO_MANUAL_PATH]:
+                continue
+            if not row[STORAGE_INFO_DO_CLONE]:
+                return
+            try:
+                newpath = self.generate_clone_path_name(origpath, newname)
+                row[STORAGE_INFO_NEW_PATH] = newpath
+            except Exception, e:
+                logging.debug("Generating new path from clone name failed: "
+                              + str(e))
 
     def build_storage_entry(self, disk, storage_box):
         origpath = disk[STORAGE_INFO_ORIG_PATH]
@@ -546,6 +577,10 @@ class vmmCloneVM(vmmGObjectUI):
         cs.get_widget("change-storage-browse").set_sensitive(do_clone)
 
     def storage_change_path(self, row):
+        # If storage paths are dependent on manually entered clone name,
+        # make sure they are up to date
+        self.set_paths_from_clone_name()
+
         orig = row[STORAGE_INFO_ORIG_PATH]
         new  = row[STORAGE_INFO_NEW_PATH]
         tgt  = row[STORAGE_INFO_TARGET]
@@ -626,6 +661,7 @@ class vmmCloneVM(vmmGObjectUI):
             self.clone_design.clone_devices = new_path
             self.populate_storage_lists()
             row[STORAGE_INFO_NEW_PATH] = new_path
+            row[STORAGE_INFO_MANUAL_PATH] = True
         except Exception, e:
             self.err.show_err(_("Error changing storage path: %s") % str(e),
                                 "".join(traceback.format_exc()))
@@ -640,6 +676,7 @@ class vmmCloneVM(vmmGObjectUI):
 
     # Listeners
     def validate(self):
+        self.set_paths_from_clone_name()
         name = self.window.get_widget("clone-new-name").get_text()
 
         # Make another clone_design
