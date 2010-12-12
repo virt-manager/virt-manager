@@ -825,11 +825,11 @@ class vmmEngine(vmmGObject):
             _cancel_args = [vm]
 
         progWin = vmmAsyncJob(self._save_callback,
-                              [vm, path],
-                              _("Saving Virtual Machine"),
-                              _("Saving Virtual Machine"),
-                              cancel_back=_cancel_back,
-                              cancel_args=_cancel_args)
+                    [vm, path],
+                    _("Saving Virtual Machine"),
+                    _("Saving virtual machine memory to disk "),
+                    cancel_back=_cancel_back,
+                    cancel_args=_cancel_args)
         error, details = progWin.run()
 
         if error is not None:
@@ -875,9 +875,9 @@ class vmmEngine(vmmGObject):
             return
 
         progWin = vmmAsyncJob(self._restore_saved_callback,
-                              [path, conn],
-                              _("Restoring domain"),
-                              _("Restoring domain"))
+                    [path, conn],
+                    _("Restoring Virtual Machine"),
+                    _("Restoring virtual machine memory from disk"))
         error, details = progWin.run()
 
         if error is not None:
@@ -964,8 +964,8 @@ class vmmEngine(vmmGObject):
             # VM will be restored, which can take some time, so show a
             # progress dialog.
             errorintro  = _("Error restoring domain")
-            title = _("Restoring domain")
-            text = _("Restoring domain")
+            title = _("Restoring Virtual Machine")
+            text = _("Restoring virtual machine memory from disk")
             vmmAsyncJob.simple_async(asyncfunc, [], title, text, src,
                                      errorintro)
 
