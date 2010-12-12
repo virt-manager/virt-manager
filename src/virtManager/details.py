@@ -359,6 +359,9 @@ class vmmDetails(vmmGObjectUI):
 
             "on_network_model_combo_changed": self.config_enable_apply,
 
+            "on_vnc_keymap_combo_changed": self.config_enable_apply,
+            "on_vnc_password_changed": self.config_enable_apply,
+
             "on_sound_model_combo_changed": self.config_enable_apply,
 
             "on_video_model_combo_changed": self.config_enable_apply,
@@ -677,6 +680,11 @@ class vmmDetails(vmmGObjectUI):
         # Network model
         net_model = self.window.get_widget("network-model-combo")
         uihelpers.build_netmodel_combo(self.vm, net_model)
+
+        # Graphics keymap
+        vnc_keymap = self.window.get_widget("vnc-keymap-combo")
+        uihelpers.build_vnc_keymap_combo(self.vm, vnc_keymap,
+                                         no_default=no_default)
 
         # Sound model
         sound_dev = self.window.get_widget("sound-model-combo")
@@ -1388,6 +1396,8 @@ class vmmDetails(vmmGObjectUI):
             ret = self.config_disk_apply(key)
         elif pagetype is HW_LIST_TYPE_NIC:
             ret = self.config_network_apply(key)
+        elif pagetype is HW_LIST_TYPE_GRAPHICS:
+            ret = self.config_graphics_apply(key)
         elif pagetype is HW_LIST_TYPE_SOUND:
             ret = self.config_sound_apply(key)
         elif pagetype is HW_LIST_TYPE_VIDEO:
@@ -1571,6 +1581,17 @@ class vmmDetails(vmmGObjectUI):
         model = self.get_combo_label_value("network-model")
         return self._change_config_helper(self.vm.define_network_model,
                                           (dev_id_info, model))
+
+    # Graphics options
+    def config_graphics_apply(self, dev_id_info):
+        passwd = self.window.get_widget("vnc-password").get_text()
+        keymap = self.get_combo_label_value("vnc-keymap")
+
+        return self._change_config_helper([self.vm.define_graphics_password,
+                                           self.vm.define_graphics_keymap],
+                                          [(dev_id_info, passwd),
+                                           (dev_id_info, keymap)])
+
 
     # Video options
     def config_video_apply(self, dev_id_info):
@@ -2060,29 +2081,36 @@ class vmmDetails(vmmGObjectUI):
         if not gfx:
             return
 
-        is_vnc = (gfx.type == "vnc")
-        is_sdl = (gfx.type == "sdl")
+        gtype = gfx.type
+        is_vnc = (gtype == "vnc")
+        is_sdl = (gtype == "sdl")
+        is_other = (not any([is_vnc, is_sdl]))
 
-        port = _("N/A")
+        self.window.get_widget("vnc-frame").set_property("visible", is_vnc)
+        self.window.get_widget("sdl-frame").set_property("visible", is_sdl)
+        self.window.get_widget("other-frame").set_property("visible", is_other)
+
         if is_vnc:
-            gtype = _("VNC server")
             port  = (gfx.port == -1 and
                      _("Automatically allocated") or
                      str(gfx.port))
+            address = (gfx.listen or "127.0.0.1")
+            passwd  = gfx.passwd or ""
+            keymap  = (gfx.keymap or None)
+
+            self.window.get_widget("vnc-port").set_text(port)
+            self.window.get_widget("vnc-address").set_text(address)
+            self.window.get_widget("vnc-password").set_text(passwd)
+            self.set_combo_label("vnc-keymap", 0, keymap)
         elif is_sdl:
-            gtype = _("Local SDL window")
+            display = gfx.display or _("Unknown")
+            xauth   = gfx.xauth or _("Unknown")
+
+            self.window.get_widget("sdl-display").set_text(display)
+            self.window.get_widget("sdl-xauth").set_text(xauth)
+
         else:
-            gtype = gfx.type
-
-        address = (is_vnc and (gfx.listen or "127.0.0.1") or _("N/A"))
-        passwd  = (is_vnc and "-" or _("N/A"))
-        keymap  = (is_vnc and (gfx.keymap or _("None")) or _("N/A"))
-
-        self.window.get_widget("graphics-type").set_text(gtype)
-        self.window.get_widget("graphics-address").set_text(address)
-        self.window.get_widget("graphics-port").set_text(port)
-        self.window.get_widget("graphics-password").set_text(passwd)
-        self.window.get_widget("graphics-keymap").set_text(keymap)
+            self.window.get_widget("graphics-other-type").set_text(gtype)
 
     def refresh_sound_page(self):
         sound = self.get_hw_selection(HW_LIST_COL_DEVICE)

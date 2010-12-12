@@ -256,6 +256,27 @@ def build_disk_bus_combo(vm, combo, no_default=False):
         dev_model.append([None, "default"])
     combo.set_active(-1)
 
+def build_vnc_keymap_combo(vm, combo, no_default=False):
+    ignore = vm
+
+    model = gtk.ListStore(str, str)
+    combo.set_model(model)
+    text = gtk.CellRendererText()
+    combo.pack_start(text, True)
+    combo.add_attribute(text, 'text', 1)
+
+    if not no_default:
+        model.append([None, "default"])
+    else:
+        model.append([None, "Auto"])
+
+    model.append([virtinst.VirtualGraphics.KEYMAP_LOCAL,
+                  "Copy local keymap"])
+    for k in virtinst.VirtualGraphics.valid_keymaps():
+        model.append([k, k])
+
+    combo.set_active(-1)
+
 #####################################
 # Storage format list/combo helpers #
 #####################################
