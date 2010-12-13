@@ -1053,8 +1053,11 @@ class vmmManager(vmmGObjectUI):
             widgn = "menu_view_stats_network"
         widget = self.window.get_widget(widgn)
 
+        disabled_text = _(" (disabled)")
         tool_text = ""
-        if conf_entry and (conf_entry == True or \
+        current_text = widget.get_label().strip(disabled_text)
+
+        if conf_entry and (conf_entry == True or
                            conf_entry.get_value().get_bool()):
             widget.set_sensitive(True)
         else:
@@ -1062,8 +1065,10 @@ class vmmManager(vmmGObjectUI):
                 widget.set_active(False)
             widget.set_sensitive(False)
             tool_text = _("Disabled in preferences dialog.")
+            current_text = current_text + disabled_text
 
         util.tooltip_wrapper(widget, tool_text)
+        widget.set_label(current_text)
 
     def toggle_network_traffic_visible_widget(self, *ignore):
         vmlist = self.window.get_widget("vm-list")
