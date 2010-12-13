@@ -37,7 +37,7 @@ bin_SCRIPTS_IN += virt-manager-tui.in
 bin_SCRIPTS += virt-manager-tui
 
 python_DATA_IN += $(PACKAGE)-tui.py.in
-python_DATA = $(PACKAGE)-tui.py
+python_DATA += $(PACKAGE)-tui.py
 endif
 
 @INTLTOOL_DESKTOP_RULE@
