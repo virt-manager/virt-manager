@@ -48,7 +48,7 @@ AC_ARG_WITH([qemu-user],
     [DEFAULT_QEMU_USER=$withval],
     [DEFAULT_QEMU_USER="root"])
 
-dnl
+dnl Don't list options that rhel doesn't support
 AC_ARG_ENABLE([unsupported-rhel-options],
   AC_HELP_STRING(
     [--enable-unsupported-rhel-options],
@@ -56,6 +56,13 @@ AC_ARG_ENABLE([unsupported-rhel-options],
   [test "x$enableval" == "xno" && ENABLE_UNSUPPORTED_RHEL_OPTS=0],
   [ENABLE_UNSUPPORTED_RHEL_OPTS=1])
 
+dnl Allow passing in a prefered distro list
+AC_ARG_WITH([preferred-distros],
+    AC_HELP_STRING(
+        [--with-preferred-distros],
+        [Distros to list first in New VM wizard @<:@default=root@:>@]),
+    [PREFERRED_DISTROS=$withval],
+    [PREFERRED_DISTROS=""])
 
 dnl -----------------------
 dnl Variable substitution
@@ -63,6 +70,7 @@ dnl -----------------------
 AC_SUBST([VIRTINST_VERSION])
 AC_SUBST([DEFAULT_QEMU_USER])
 AC_SUBST([ENABLE_UNSUPPORTED_RHEL_OPTS])
+AC_SUBST([PREFERRED_DISTROS])
 AM_CONDITIONAL([INSTALL_TUI], [test "x$with_tui" = "xyes"])
 
 
@@ -100,6 +108,11 @@ if test "x$ENABLE_UNSUPPORTED_RHEL_OPTS" = "x1" ; then
 AC_MSG_NOTICE([Enable unsupported RHEL opts:    yes])
 else
 AC_MSG_NOTICE([Enable unsupported RHEL opts:    no])
+fi
+if test "x$PREFERRED_DISTROS" = "x" ; then
+AC_MSG_NOTICE([Preferred distros:               none])
+else
+AC_MSG_NOTICE([Preferred distros:               $PREFERRED_DISTROS])
 fi
 
 AC_MSG_NOTICE([])

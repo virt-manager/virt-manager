@@ -62,6 +62,7 @@ endif
 	  -e "s,::VIRTINST_VERSION::,$(VIRTINST_VERSION)," \
 	  -e "s,::DEFAULT_QEMU_USER::,$(DEFAULT_QEMU_USER)," \
 	  -e "s,::ENABLE_UNSUPPORTED_RHEL_OPTS::,$(ENABLE_UNSUPPORTED_RHEL_OPTS)," \
+	  -e "s|::PREFERRED_DISTROS::|$(PREFERRED_DISTROS)|" \
 	  < $< > $@
 
 $(PACKAGE): $(srcdir)/$(PACKAGE).in

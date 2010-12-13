@@ -688,7 +688,9 @@ class vmmCreate(vmmGObjectUI):
             model.append([OS_GENERIC, _("Generic")])
             return
 
-        variants = virtinst.FullVirtGuest.list_os_variants(_type)
+        preferred = self.config.preferred_distros
+        variants = virtinst.FullVirtGuest.list_os_variants(_type,
+                                                           preferred)
         for variant in variants:
             model.append([variant,
                           virtinst.FullVirtGuest.get_os_variant_label(_type,
