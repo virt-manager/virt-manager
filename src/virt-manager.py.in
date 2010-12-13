@@ -57,6 +57,7 @@ pyarchlib_dir = "::PYARCHLIBDIR::"
 data_dir = "::DATADIR::"
 
 default_qemu_user = "::DEFAULT_QEMU_USER::"
+rhel_enable_unsupported_opts = bool(int("::ENABLE_UNSUPPORTED_RHEL_OPTS::"))
 
 logging_setup = False
 
@@ -379,6 +380,7 @@ def main():
                                           icon_dir, data_dir)
     virtManager.config.running_config = config
     config.default_qemu_user = default_qemu_user
+    config.enable_unsupported_rhel_opts = rhel_enable_unsupported_opts
 
     # Now we've got basic environment up & running we can fork
     if not options.nofork and not options.debug:

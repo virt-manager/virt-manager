@@ -28,6 +28,10 @@ dnl ====================================
 dnl = End tests for scrollkeeper
 dnl ====================================
 
+
+dnl ---------------
+dnl Option handling
+dnl ---------------
 dnl Install TUI
 AC_ARG_WITH([tui],
   AC_HELP_STRING(
@@ -44,8 +48,21 @@ AC_ARG_WITH([qemu-user],
     [DEFAULT_QEMU_USER=$withval],
     [DEFAULT_QEMU_USER="root"])
 
+dnl
+AC_ARG_ENABLE([unsupported-rhel-options],
+  AC_HELP_STRING(
+    [--enable-unsupported-rhel-options],
+    [enable VM config options unsupported by RHEL @<:@default=yes@:>@]),
+  [test "x$enableval" == "xno" && ENABLE_UNSUPPORTED_RHEL_OPTS=0],
+  [ENABLE_UNSUPPORTED_RHEL_OPTS=1])
+
+
+dnl -----------------------
+dnl Variable substitution
+dnl -----------------------
 AC_SUBST([VIRTINST_VERSION])
 AC_SUBST([DEFAULT_QEMU_USER])
+AC_SUBST([ENABLE_UNSUPPORTED_RHEL_OPTS])
 AM_CONDITIONAL([INSTALL_TUI], [test "x$with_tui" = "xyes"])
 
 
@@ -71,12 +88,19 @@ AC_OUTPUT(Makefile
 
 AC_MSG_NOTICE([])
 AC_MSG_NOTICE([])
-AC_MSG_NOTICE([Required virtinst:   $VIRTINST_VERSION])
-AC_MSG_NOTICE([Default qemu user:   $DEFAULT_QEMU_USER])
+
+AC_MSG_NOTICE([Required virtinst:               $VIRTINST_VERSION])
+AC_MSG_NOTICE([Default qemu user:               $DEFAULT_QEMU_USER])
 if test "x$with_tui" = "xyes" ; then
-AC_MSG_NOTICE([Install TUI:         yes])
+AC_MSG_NOTICE([Install TUI:                     yes])
 else
-AC_MSG_NOTICE([Install TUI:         no])
+AC_MSG_NOTICE([Install TUI:                     no])
 fi
+if test "x$ENABLE_UNSUPPORTED_RHEL_OPTS" = "x1" ; then
+AC_MSG_NOTICE([Enable unsupported RHEL opts:    yes])
+else
+AC_MSG_NOTICE([Enable unsupported RHEL opts:    no])
+fi
+
 AC_MSG_NOTICE([])
 AC_MSG_NOTICE([])

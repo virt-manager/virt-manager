@@ -101,6 +101,9 @@ class vmmConfig(object):
 
         self.default_qemu_user = "root"
 
+        # Use this key to disable certain features not supported on RHEL
+        self.enable_unsupported_rhel_opts = True
+
         self.status_icons = {
             libvirt.VIR_DOMAIN_BLOCKED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 18, 18),
             libvirt.VIR_DOMAIN_CRASHED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_crashed.png", 18, 18),

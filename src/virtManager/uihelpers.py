@@ -41,8 +41,6 @@ OPTICAL_DEV_KEY = 3
 OPTICAL_MEDIA_KEY = 4
 OPTICAL_IS_VALID = 5
 
-SUPPORTED_SOUND_MODELS = None
-
 ##############################################################
 # Initialize an error object to use for validation functions #
 ##############################################################
@@ -140,7 +138,6 @@ def build_video_combo(vm, video_dev, no_default=False):
         video_dev.set_active(0)
 
 def build_sound_combo(vm, combo, no_default=False):
-    ignore = vm
     dev_model = gtk.ListStore(str)
     combo.set_model(dev_model)
     text = gtk.CellRendererText()
@@ -148,12 +145,14 @@ def build_sound_combo(vm, combo, no_default=False):
     combo.add_attribute(text, 'text', 0)
     dev_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
 
+    disable_rhel = not vm.enable_unsupported_rhel_opts()
+    rhel6_soundmodels = ["ac97", "es1370"]
+
     for m in virtinst.VirtualAudio.MODELS:
         if m == virtinst.VirtualAudio.MODEL_DEFAULT and no_default:
             continue
 
-        if (SUPPORTED_SOUND_MODELS is not None and
-            m not in SUPPORTED_SOUND_MODELS):
+        if (disable_rhel and m not in rhel6_soundmodels):
             continue
 
         dev_model.append([m])
