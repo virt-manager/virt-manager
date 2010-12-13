@@ -85,7 +85,11 @@ def host_disk_space(conn):
     return float(avail / 1024.0 / 1024.0 / 1024.0)
 
 def host_space_tick(conn, widget):
-    max_storage = host_disk_space(conn)
+    try:
+        max_storage = host_disk_space(conn)
+    except:
+        logging.exception("Error determining host disk space")
+        return 0
 
     def pretty_storage(size):
         return "%.1f Gb" % float(size)
