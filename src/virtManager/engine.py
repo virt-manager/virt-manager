@@ -685,7 +685,9 @@ class vmmEngine(vmmGObject):
 
     def _do_toggle_manager(self, ignore):
         manager = self.get_manager()
-        if not manager.close():
+        if manager.is_visible():
+            manager.close()
+        else:
             manager.show()
 
     def _do_show_manager(self, src):

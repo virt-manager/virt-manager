@@ -129,6 +129,7 @@ class vmmManager(vmmGObjectUI):
 
         w, h = self.config.get_manager_window_size()
         self.topwin.set_default_size(w or 550, h or 550)
+        self.prev_position = None
 
         self.init_vmlist()
         self.init_stats()
@@ -210,12 +211,16 @@ class vmmManager(vmmGObjectUI):
         if vis:
             return
 
+        if self.prev_position:
+            self.topwin.move(*self.prev_position)
+            self.prev_position = None
         self.engine.increment_window_counter()
 
     def close(self, src_ignore=None, src2_ignore=None):
         if not self.is_visible():
             return
 
+        self.prev_position = self.topwin.get_position()
         self.topwin.hide()
         self.engine.decrement_window_counter()
         return 1
