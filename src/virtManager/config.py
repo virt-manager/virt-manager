@@ -93,10 +93,13 @@ class vmmConfig(object):
         self.glade_dir = glade_dir
         self.icon_dir = icon_dir
         self.data_dir = data_dir
+
         # We don't create it straight away, since we don't want
         # to block the app pending user authorizaation to access
         # the keyring
         self.keyring = None
+
+        self.default_qemu_user = "root"
 
         self.status_icons = {
             libvirt.VIR_DOMAIN_BLOCKED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 18, 18),

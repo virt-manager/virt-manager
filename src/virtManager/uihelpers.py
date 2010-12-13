@@ -43,12 +43,6 @@ OPTICAL_IS_VALID = 5
 
 SUPPORTED_SOUND_MODELS = None
 
-# What user we guess the qemu:///system starts the emulator as. Some distros
-# may use a nonroot user, so simply changing this will cause several UI
-# pieces to attempt to verify that permissions are correct. Eventually this
-# should be exposed via capabilities so we can determine this programmatically.
-QEMU_SYSTEM_EMULATOR_USER = "root"
-
 ##############################################################
 # Initialize an error object to use for validation functions #
 ##############################################################
@@ -739,7 +733,7 @@ def check_path_search_for_qemu(parent, conn, path):
     if conn.is_remote() or not conn.is_qemu_system():
         return
 
-    user = QEMU_SYSTEM_EMULATOR_USER
+    user = running_config.default_qemu_user
 
     skip_paths = running_config.get_perms_fix_ignore()
     broken_paths = VirtualDisk.check_path_search_for_user(conn.vmm, path, user)

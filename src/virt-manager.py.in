@@ -56,6 +56,8 @@ pylib_dir = "::PYLIBDIR::"
 pyarchlib_dir = "::PYARCHLIBDIR::"
 data_dir = "::DATADIR::"
 
+default_qemu_user = "::DEFAULT_QEMU_USER::"
+
 logging_setup = False
 
 def _show_startup_error(msg, details):
@@ -376,6 +378,7 @@ def main():
                                           gconf_dir, glade_dir,
                                           icon_dir, data_dir)
     virtManager.config.running_config = config
+    config.default_qemu_user = default_qemu_user
 
     # Now we've got basic environment up & running we can fork
     if not options.nofork and not options.debug:

@@ -59,7 +59,9 @@ endif
 	  -e "s,::GETTEXTDIR::,$(datadir)/locale," \
 	  -e "s,::DATADIR::,$(datadir)," \
 	  -e "s,::PYARCHLIBDIR::,$(pkglibdir)," \
-	  -e "s,::VIRTINST_VERSION::,$(VIRTINST_VERSION)," < $< > $@
+	  -e "s,::VIRTINST_VERSION::,$(VIRTINST_VERSION)," \
+	  -e "s,::DEFAULT_QEMU_USER::,$(DEFAULT_QEMU_USER)," \
+	  < $< > $@
 
 $(PACKAGE): $(srcdir)/$(PACKAGE).in
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PYTHONDIR::,$(pkgdatadir)," < $< > $@

@@ -13,8 +13,6 @@ IT_PROG_INTLTOOL([0.35.0], [no-xml])
 AM_GNU_GETTEXT_VERSION([0.14.1])
 AM_GNU_GETTEXT([external])
 
-AC_SUBST([VIRTINST_VERSION])
-
 dnl ====================================
 dnl = Begin tests for scrollkeeper
 dnl ====================================
@@ -30,7 +28,7 @@ dnl ====================================
 dnl = End tests for scrollkeeper
 dnl ====================================
 
-dnl Avahi library
+dnl Install TUI
 AC_ARG_WITH([tui],
   AC_HELP_STRING(
     [--with-tui],
@@ -38,7 +36,18 @@ AC_ARG_WITH([tui],
   [],
   [with_tui=yes])
 
+dnl Default QEMU user
+AC_ARG_WITH([qemu-user],
+    AC_HELP_STRING(
+        [--with-qemu-user],
+        [user libvirt uses to launch qemu processes @<:@default=root@:>@]),
+    [DEFAULT_QEMU_USER=$withval],
+    [DEFAULT_QEMU_USER="root"])
+
+AC_SUBST([VIRTINST_VERSION])
+AC_SUBST([DEFAULT_QEMU_USER])
 AM_CONDITIONAL([INSTALL_TUI], [test "x$with_tui" = "xyes"])
+
 
 AC_OUTPUT(Makefile
           pixmaps/Makefile
@@ -59,3 +68,15 @@ AC_OUTPUT(Makefile
           tests/Makefile
           virt-manager.spec)
 
+
+AC_MSG_NOTICE([])
+AC_MSG_NOTICE([])
+AC_MSG_NOTICE([Required virtinst:   $VIRTINST_VERSION])
+AC_MSG_NOTICE([Default qemu user:   $DEFAULT_QEMU_USER])
+if test "x$with_tui" = "xyes" ; then
+AC_MSG_NOTICE([Install TUI:         yes])
+else
+AC_MSG_NOTICE([Install TUI:         no])
+fi
+AC_MSG_NOTICE([])
+AC_MSG_NOTICE([])
