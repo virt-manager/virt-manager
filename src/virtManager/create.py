@@ -385,9 +385,9 @@ class vmmCreate(vmmGObjectUI):
 
             if self.conn.is_qemu():
                 error += "\n\n"
-                error += _("This usually means that qemu or kvm is not\n"
-                           "installed on your machine. Please ensure they\n"
-                           "are installed as intended.")
+                error += _("This usually means that QEMU or KVM is not\n"
+                           "installed on your machine, or the KVM kernel "
+                           "modules are not loaded.")
             return self.startup_error(error)
 
         # A bit out of order, but populate arch + hv lists so we can
