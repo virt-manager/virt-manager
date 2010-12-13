@@ -27,7 +27,6 @@ import gobject
 
 import virtinst
 from virtManager import util
-import virtinst.util as vutil
 import virtinst.support as support
 
 from virtManager.libvirtobject import vmmLibvirtObject
@@ -460,71 +459,51 @@ class vmmDomainBase(vmmLibvirtObject):
         return False
 
     def get_abi_type(self):
-        return str(vutil.get_xml_path(self.get_xml(),
-                                      "/domain/os/type")).lower()
+        return self._get_guest().installer.os_type
 
     def get_hv_type(self):
-        return str(vutil.get_xml_path(self.get_xml(), "/domain/@type")).lower()
+        return self._get_guest().installer.type
 
     def get_pretty_hv_type(self):
         return util.pretty_hv(self.get_abi_type(), self.get_hv_type())
 
     def get_arch(self):
-        return vutil.get_xml_path(self.get_xml(), "/domain/os/type/@arch")
+        return self._get_guest().installer.arch
 
     def get_emulator(self):
-        return vutil.get_xml_path(self.get_xml(), "/domain/devices/emulator")
+        return self._get_guest().emulator
 
     def get_acpi(self):
-        return bool(vutil.get_xml_path(self.get_xml(),
-                                       "count(/domain/features/acpi)"))
+        return bool(self._get_guest().features["acpi"])
 
     def get_apic(self):
-        return bool(vutil.get_xml_path(self.get_xml(),
-                                       "count(/domain/features/apic)"))
+        return bool(self._get_guest().features["apic"])
 
     def get_clock(self):
-        return vutil.get_xml_path(self.get_xml(), "/domain/clock/@offset")
+        return self._get_guest().clock.offset
 
     def get_description(self):
-        return vutil.get_xml_path(self.get_xml(), "/domain/description")
+        return self._get_guest().description
 
     def get_memory(self):
-        return int(vutil.get_xml_path(self.get_xml(), "/domain/currentMemory"))
+        return int(self._get_guest().memory * 1024)
 
     def maximum_memory(self):
-        return int(vutil.get_xml_path(self.get_xml(), "/domain/memory"))
+        return int(self._get_guest().maxmemory * 1024)
 
     def vcpu_count(self):
-        return int(vutil.get_xml_path(self.get_xml(), "/domain/vcpu"))
+        return int(self._get_guest().vcpus)
 
     def vcpu_max_count(self):
         if self._startup_vcpus == None:
-            self._startup_vcpus = int(vutil.get_xml_path(self.get_xml(),
-                                      "/domain/vcpu"))
+            self._startup_vcpus = int(self.vcpu_count())
         return int(self._startup_vcpus)
 
     def vcpu_pinning(self):
-        cpuset = vutil.get_xml_path(self.get_xml(), "/domain/vcpu/@cpuset")
-        # We need to set it to empty string not to show None in the entry
-        if cpuset is None:
-            cpuset = ""
-        return cpuset
+        return self._get_guest().cpuset or ""
 
     def get_boot_device(self):
-        xml = self.get_xml()
-
-        def get_boot_xml(doc, ctx):
-            ignore = doc
-            ret = ctx.xpathEval("/domain/os/boot")
-            devs = []
-            for node in ret:
-                dev = node.prop("dev")
-                if dev:
-                    devs.append(dev)
-            return devs
-
-        return util.xml_parse_wrapper(xml, get_boot_xml)
+        return self._get_guest().installer.bootconfig.bootorder
 
     def get_boot_menu(self):
         guest = self._get_guest()
@@ -539,12 +518,11 @@ class vmmDomainBase(vmmLibvirtObject):
         return (kernel, initrd, args)
 
     def get_seclabel(self):
-        xml = self.get_xml()
-        model = vutil.get_xml_path(xml, "/domain/seclabel/@model")
-        t     = vutil.get_xml_path(self.get_xml(), "/domain/seclabel/@type")
-        label = vutil.get_xml_path(self.get_xml(), "/domain/seclabel/label")
+        model = self._get_guest().seclabel.model
+        t     = self._get_guest().seclabel.type or "dynamic"
+        label = self._get_guest().seclabel.label or ""
 
-        return [model, t or "dynamic", label or ""]
+        return [model, t, label]
 
     # Device listing
 
