@@ -219,6 +219,9 @@ def parse_commandline():
 
 
 def launch_specific_window(engine, show, uri, uuid):
+    if not show:
+        return
+
     logging.debug("Launching requested window '%s'" % show)
     if show == 'creator':
         engine.show_domain_creator(uri)
