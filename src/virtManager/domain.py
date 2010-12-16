@@ -301,6 +301,20 @@ class vmmDomainBase(vmmLibvirtObject):
             guest.cpuset = cpuset
         return self._redefine_guest(change)
 
+    def define_cpu_topology(self, sockets, cores, threads):
+        def change(guest):
+            cpu = guest.cpu
+            cpu.sockets = sockets
+            cpu.cores = cores
+            cpu.threads = threads
+        return self._redefine_guest(change)
+    def define_cpu(self, model, from_host):
+        def change(guest):
+            if from_host:
+                guest.cpu.copy_host_cpu()
+            guest.cpu.model = model
+        return self._redefine_guest(change)
+
     def define_both_mem(self, memory, maxmem):
         def change(guest):
             guest.memory = int(int(memory) / 1024)
@@ -511,6 +525,9 @@ class vmmDomainBase(vmmLibvirtObject):
 
     def vcpu_pinning(self):
         return self._get_guest().cpuset or ""
+
+    def get_cpu_config(self):
+        return self._get_guest().cpu
 
     def get_boot_device(self):
         return self._get_guest().installer.bootconfig.bootorder

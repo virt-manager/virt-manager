@@ -279,6 +279,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.ignorePause = False
         self.ignoreDetails = False
+        self._cpu_copy_host = False
 
         self.console = vmmConsolePages(self.vm, self.window)
 
@@ -345,6 +346,12 @@ class vmmDetails(vmmGObjectUI):
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_vcpupin_changed": self.config_vcpus_changed,
             "on_config_vcpupin_generate_clicked": self.config_vcpupin_generate,
+            "on_cpu_model_changed": self.config_enable_apply,
+            "on_cpu_cores_changed": self.config_enable_apply,
+            "on_cpu_sockets_changed": self.config_enable_apply,
+            "on_cpu_threads_changed": self.config_enable_apply,
+            "on_cpu_copy_host_clicked": self.config_cpu_copy_host,
+            "on_cpu_topology_enable_toggled": self.config_cpu_topology_enable,
 
             "on_config_memory_changed": self.config_memory_changed,
             "on_config_maxmem_changed": self.config_maxmem_changed,
@@ -1325,6 +1332,24 @@ class vmmDetails(vmmGObjectUI):
 
         self.config_enable_apply()
 
+    def config_cpu_copy_host(self, src_ignore):
+        # Update UI with output copied from host
+        try:
+            CPU = virtinst.CPU(self.vm.get_connection().vmm)
+            CPU.copy_host_cpu()
+
+            self._refresh_cpu_config(CPU)
+            self._cpu_copy_host = True
+        except Exception, e:
+            self.err.show_err(_("Error copying host CPU: %s") % str(e),
+                              "".join(traceback.format_exc()))
+            return
+
+    def config_cpu_topology_enable(self, src):
+        do_enable = src.get_active()
+        self.window.get_widget("cpu-topology-table").set_sensitive(do_enable)
+        self.config_enable_apply()
+
     # Boot device / Autostart
     def config_bootdev_selected(self, ignore):
         boot_row = self.get_boot_selection()
@@ -1508,15 +1533,35 @@ class vmmDetails(vmmGObjectUI):
         vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
         cpuset = self.window.get_widget("config-vcpupin").get_text()
 
+        do_top = self.window.get_widget("cpu-topology-enable").get_active()
+        sockets = self.window.get_widget("cpu-sockets").get_value()
+        cores = self.window.get_widget("cpu-cores").get_value()
+        threads = self.window.get_widget("cpu-threads").get_value()
+        model = self.window.get_widget("cpu-model").get_text() or None
+
         logging.info("Setting vcpus for %s to %s, cpuset is %s" %
                      (self.vm.get_name(), str(vcpus), cpuset))
 
-        return self._change_config_helper([self.vm.define_vcpus,
-                                           self.vm.define_cpuset],
-                                          [(vcpus,),
-                                           (cpuset,)],
-                                          self.vm.hotplug_vcpus,
-                                          (vcpus,))
+        if not do_top:
+            sockets = None
+            cores = None
+            threads = None
+
+        define_funcs = [self.vm.define_vcpus,
+                        self.vm.define_cpuset,
+                        self.vm.define_cpu,
+                        self.vm.define_cpu_topology]
+        define_args  = [(vcpus,),
+                        (cpuset,),
+                        (model, self._cpu_copy_host),
+                        (sockets, cores, threads)]
+
+        ret = self._change_config_helper(define_funcs, define_args,
+                                         self.vm.hotplug_vcpus,
+                                         (vcpus,))
+
+        if ret:
+            self._cpu_copy_host = False
 
     def config_vcpu_pin(self, src_ignore, path, new_text):
         vcpu_list = self.window.get_widget("config-vcpu-list")
@@ -1911,16 +1956,14 @@ class vmmDetails(vmmGObjectUI):
         self.network_traffic_graph.set_property("data_array",
                                                 self.vm.network_traffic_vector())
 
-    def refresh_config_cpu(self):
+    def _refresh_cpu_count(self, user_changed):
         conn = self.vm.get_connection()
         host_active_count = conn.host_active_processor_count()
         cpu_max = (self.vm.is_runable() and
                    conn.get_max_vcpus(self.vm.get_hv_type()) or
                    self.vm.vcpu_max_count())
         curvcpus = self.vm.vcpu_count()
-        vcpupin  = self.vm.vcpu_pinning()
 
-        config_apply = self.window.get_widget("config-apply")
         vcpus_adj = self.window.get_widget("config-vcpus").get_adjustment()
 
         vcpus_adj.upper = cpu_max
@@ -1928,7 +1971,8 @@ class vmmDetails(vmmGObjectUI):
                                                            host_active_count)
         self.window.get_widget("state-vm-maxvcpus").set_text(str(cpu_max))
 
-        if not config_apply.get_property("sensitive"):
+        # If user manually changes vcpus, don't overwrite the value
+        if not user_changed:
             vcpus_adj.value = curvcpus
 
         self.window.get_widget("state-vm-vcpus").set_text(str(curvcpus))
@@ -1937,6 +1981,10 @@ class vmmDetails(vmmGObjectUI):
         warn = bool(vcpus_adj.value > host_active_count)
         self.window.get_widget("config-vcpus-warn-box").set_property(
                                                             "visible", warn)
+    def _refresh_cpu_pinning(self):
+        conn = self.vm.get_connection()
+        host_active_count = conn.host_active_processor_count()
+        vcpupin  = self.vm.vcpu_pinning()
 
         # Populate VCPU pinning
         self.window.get_widget("config-vcpupin").set_text(vcpupin)
@@ -1975,6 +2023,30 @@ class vmmDetails(vmmGObjectUI):
             vcpupin = build_cpuset_str(vcpu_pinning[idx])
 
             vcpu_model.append([vcpu, vcpucur, vcpupin])
+
+    def _refresh_cpu_config(self, cpu):
+        model = cpu.model or ""
+
+        show_top = bool(cpu.sockets or cpu.cores or cpu.threads)
+        sockets = cpu.sockets or 1
+        cores = cpu.cores or 1
+        threads = cpu.threads or 1
+
+        self.window.get_widget("cpu-topology-enable").set_active(show_top)
+        self.window.get_widget("cpu-model").set_text(model)
+        self.window.get_widget("cpu-sockets").set_value(sockets)
+        self.window.get_widget("cpu-cores").set_value(cores)
+        self.window.get_widget("cpu-threads").set_value(threads)
+
+    def refresh_config_cpu(self):
+        self._cpu_copy_host = False
+        config_apply = self.window.get_widget("config-apply")
+        user_changed = config_apply.get_property("sensitive")
+        cpu = self.vm.get_cpu_config()
+
+        self._refresh_cpu_count(user_changed)
+        self._refresh_cpu_pinning()
+        self._refresh_cpu_config(cpu)
 
     def refresh_config_memory(self):
         host_mem_widget = self.window.get_widget("state-host-memory")
