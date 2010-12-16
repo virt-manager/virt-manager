@@ -45,6 +45,7 @@ def compare_device(origdev, newdev, idx):
         "parallel"  : ["char_type", "target_port"],
         "console"   : ["char_type", "target_type", "target_port"],
         "graphics"  : ["type", "vmmindex"],
+        "controller" : ["type", "index"],
     }
 
     if id(origdev) == id(newdev):
@@ -617,6 +618,8 @@ class vmmDomainBase(vmmLibvirtObject):
         return self._build_device_list("graphics")
     def get_sound_devices(self):
         return self._build_device_list("sound")
+    def get_controller_devices(self):
+        return self._build_device_list("controller")
 
     def get_disk_devices(self, refresh_if_necc=True, inactive=False):
         devs = self._build_device_list("disk", refresh_if_necc, inactive)

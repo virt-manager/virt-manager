@@ -59,11 +59,12 @@ HW_LIST_TYPE_CHAR = 10
 HW_LIST_TYPE_HOSTDEV = 11
 HW_LIST_TYPE_VIDEO = 12
 HW_LIST_TYPE_WATCHDOG = 13
+HW_LIST_TYPE_CONTROLLER = 14
 
 remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO,
-                HW_LIST_TYPE_WATCHDOG]
+                HW_LIST_TYPE_WATCHDOG, HW_LIST_TYPE_CONTROLLER]
 
 # Boot device columns
 BOOT_DEV_TYPE = 0
@@ -899,6 +900,8 @@ class vmmDetails(vmmGObjectUI):
                 self.refresh_video_page()
             elif pagetype == HW_LIST_TYPE_WATCHDOG:
                 self.refresh_watchdog_page()
+            elif pagetype == HW_LIST_TYPE_CONTROLLER:
+                self.refresh_controller_page()
             else:
                 pagetype = -1
         except Exception, e:
@@ -2241,6 +2244,14 @@ class vmmDetails(vmmGObjectUI):
         self.set_combo_label("watchdog-model", 0, model)
         self.set_combo_label("watchdog-action", 0, action)
 
+    def refresh_controller_page(self):
+        dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not dev:
+            return
+
+        type_label = virtinst.VirtualController.pretty_type(dev.type)
+        self.window.get_widget("controller-type").set_text(type_label)
+
     def refresh_boot_page(self):
         # Refresh autostart
         try:
@@ -2443,6 +2454,12 @@ class vmmDetails(vmmGObjectUI):
 
         for watch in self.vm.get_watchdog_devices():
             update_hwlist(HW_LIST_TYPE_WATCHDOG, watch, _("Watchdog"),
+                          "device_pci")
+
+        for cont in self.vm.get_controller_devices():
+            pretty_type = virtinst.VirtualController.pretty_type(cont.type)
+            update_hwlist(HW_LIST_TYPE_CONTROLLER, cont,
+                          _("Controller %s") % pretty_type,
                           "device_pci")
 
         devs = range(len(hw_list_model))

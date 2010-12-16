@@ -600,7 +600,7 @@ class vmmConsolePages(vmmGObjectUI):
         except Exception, e:
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after
-            logging.debug("Getting graphics console failed: %s" % str(e))
+            logging.exception("Getting graphics console failed: %s" % str(e))
             return
 
         if protocol is None:
