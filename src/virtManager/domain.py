@@ -308,10 +308,14 @@ class vmmDomainBase(vmmLibvirtObject):
             cpu.cores = cores
             cpu.threads = threads
         return self._redefine_guest(change)
-    def define_cpu(self, model, from_host):
+    def define_cpu(self, model, vendor, from_host):
         def change(guest):
             if from_host:
                 guest.cpu.copy_host_cpu()
+            else:
+                # Since we don't expose this in the UI, have host value trump
+                # caps value
+                guest.cpu.vendor = vendor
             guest.cpu.model = model
         return self._redefine_guest(change)
 

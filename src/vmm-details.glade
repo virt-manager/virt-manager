@@ -2078,11 +2078,8 @@ I/O:</property>
                                                   <widget class="GtkHBox" id="hbox21">
                                                     <property name="visible">True</property>
                                                     <child>
-                                                      <widget class="GtkEntry" id="cpu-model">
+                                                      <widget class="GtkComboBoxEntry" id="cpu-model">
                                                         <property name="visible">True</property>
-                                                        <property name="can_focus">True</property>
-                                                        <property name="invisible_char">●</property>
-                                                        <property name="width_chars">15</property>
                                                         <signal name="changed" handler="on_cpu_model_changed"/>
                                                       </widget>
                                                       <packing>
@@ -2208,9 +2205,9 @@ I/O:</property>
                                               <widget class="GtkCheckButton" id="cpu-topology-enable">
                                                 <property name="label" translatable="yes">Manually set CPU topology</property>
                                                 <property name="visible">True</property>
-                                                <property name="active">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
+                                                <property name="active">True</property>
                                                 <property name="draw_indicator">True</property>
                                                 <signal name="toggled" handler="on_cpu_topology_enable_toggled"/>
                                               </widget>

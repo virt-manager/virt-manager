@@ -681,6 +681,27 @@ class vmmDetails(vmmGObjectUI):
 
         no_default = not self.is_customize_dialog
 
+        # CPU model combo
+        caps = self.vm.get_connection().get_capabilities()
+        cpu_values = None
+        cpu_names = []
+
+        try:
+            cpu_values = caps.get_cpu_values(self.vm.get_arch())
+            cpu_names = sorted(map(lambda c: c.model, cpu_values.cpus),
+                               key=str.lower)
+        except:
+            logging.exception("Error populating CPU model list")
+
+        cpu_model = self.window.get_widget("cpu-model")
+
+        model = gtk.ListStore(str, object)
+        cpu_model.set_model(model)
+        cpu_model.set_text_column(0)
+        model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        for name in cpu_names:
+            model.append([name, cpu_values.get_cpu(name)])
+
         # Disk cache combo
         disk_cache = self.window.get_widget("disk-cache-combo")
         uihelpers.build_cache_combo(self.vm, disk_cache)
@@ -1226,6 +1247,16 @@ class vmmDetails(vmmGObjectUI):
 
         return devs
 
+    def get_config_cpu_model(self):
+        cpu_list = self.window.get_widget("cpu-model")
+        model = cpu_list.child.get_text()
+
+        for row in cpu_list.get_model():
+            if model == row[0]:
+                return model, row[1].vendor
+
+        return model, None
+
     ##############################
     # Details/Hardware listeners #
     ##############################
@@ -1537,7 +1568,7 @@ class vmmDetails(vmmGObjectUI):
         sockets = self.window.get_widget("cpu-sockets").get_value()
         cores = self.window.get_widget("cpu-cores").get_value()
         threads = self.window.get_widget("cpu-threads").get_value()
-        model = self.window.get_widget("cpu-model").get_text() or None
+        model, vendor = self.get_config_cpu_model()
 
         logging.info("Setting vcpus for %s to %s, cpuset is %s" %
                      (self.vm.get_name(), str(vcpus), cpuset))
@@ -1553,7 +1584,7 @@ class vmmDetails(vmmGObjectUI):
                         self.vm.define_cpu_topology]
         define_args  = [(vcpus,),
                         (cpuset,),
-                        (model, self._cpu_copy_host),
+                        (model, vendor, self._cpu_copy_host),
                         (sockets, cores, threads)]
 
         ret = self._change_config_helper(define_funcs, define_args,
@@ -2033,7 +2064,7 @@ class vmmDetails(vmmGObjectUI):
         threads = cpu.threads or 1
 
         self.window.get_widget("cpu-topology-enable").set_active(show_top)
-        self.window.get_widget("cpu-model").set_text(model)
+        self.window.get_widget("cpu-model").child.set_text(model)
         self.window.get_widget("cpu-sockets").set_value(sockets)
         self.window.get_widget("cpu-cores").set_value(cores)
         self.window.get_widget("cpu-threads").set_value(threads)
