@@ -578,15 +578,14 @@ class vmmDomainBase(vmmLibvirtObject):
         gdevs = self.get_graphics_devices()
         connhost = self.connection.get_uri_hostname()
         transport, username = self.connection.get_transport()
-        vncport = None
         gport = None
         gtype = None
         if gdevs:
             gport = gdevs[0].port
             gtype = gdevs[0].type
 
-        if gtype == 'vnc':
-            vncport = int(gport)
+        if gtype in ['vnc', 'spice']:
+            gport = int(gport)
 
         if connhost == None:
             # Force use of 127.0.0.1, because some (broken) systems don't
@@ -600,16 +599,17 @@ class vmmDomainBase(vmmLibvirtObject):
         if connhost.count(":"):
             connhost, connport = connhost.split(":", 1)
 
-        # Build VNC uri for debugging
-        vncuri = None
-        if gtype == 'vnc':
-            vncuri = str(gtype) + "://"
+        # Build VNC/SPICE uri for debugging
+        guri = None
+        if gtype in ['vnc', 'spice']:
+            guri = str(gtype) + "://"
             if username:
-                vncuri = vncuri + str(username) + '@'
-            vncuri += str(connhost) + ":" + str(vncport)
+                guri = guri + str(username) + '@'
+            sep = {'vnc': ':', 'spice': '?port='}[gtype]
+            guri += str(connhost) + sep + str(gport)
 
-        return [gtype, connhost, vncport, transport, username, connport,
-                vncuri]
+        return [gtype, connhost, gport, transport, username, connport,
+                guri]
 
 
     def _build_device_list(self, device_type,
