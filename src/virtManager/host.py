@@ -23,6 +23,7 @@ import gtk
 import traceback
 import logging
 
+from virtinst import VirtualDisk
 from virtinst import Storage
 from virtinst import Interface
 
@@ -182,7 +183,7 @@ class vmmHost(vmmGObjectUI):
         volCopyPath.connect("activate", self.copy_vol_path)
         self.volmenu.add(volCopyPath)
 
-        volListModel = gtk.ListStore(str, str, str, str)
+        volListModel = gtk.ListStore(str, str, str, str, str)
         self.window.get_widget("vol-list").set_model(volListModel)
 
         volCol = gtk.TreeViewColumn("Volumes")
@@ -205,6 +206,13 @@ class vmmHost(vmmGObjectUI):
         volFormatCol.add_attribute(vol_txt3, 'text', 3)
         volFormatCol.set_sort_column_id(3)
         self.window.get_widget("vol-list").append_column(volFormatCol)
+
+        volUseCol = gtk.TreeViewColumn("Used By")
+        vol_txt4 = gtk.CellRendererText()
+        volUseCol.pack_start(vol_txt4, False)
+        volUseCol.add_attribute(vol_txt4, 'text', 4)
+        volUseCol.set_sort_column_id(4)
+        self.window.get_widget("vol-list").append_column(volUseCol)
 
         volListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
@@ -846,8 +854,20 @@ class vmmHost(vmmGObjectUI):
         vols = pool.get_volumes()
         for key in vols.keys():
             vol = vols[key]
+
+            path = vol.get_target_path()
+            namestr = None
+            try:
+                if path:
+                    names = VirtualDisk.path_in_use_by(self.conn.vmm, path)
+                    namestr = ", ".join(names)
+                    if not namestr:
+                        namestr = None
+            except:
+                logging.exception("Failed to determine if storage volume in "
+                                  "use.")
             model.append([key, vol.get_name(), vol.get_pretty_capacity(),
-                          vol.get_format() or ""])
+                          vol.get_format() or "", namestr])
 
 
     #############################
