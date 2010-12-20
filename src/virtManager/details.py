@@ -719,7 +719,7 @@ class vmmDetails(vmmGObjectUI):
         uihelpers.build_netmodel_combo(self.vm, net_model)
 
         # Graphics keymap
-        vnc_keymap = self.window.get_widget("vnc-keymap-combo")
+        vnc_keymap = self.window.get_widget("gfx-keymap-combo")
         uihelpers.build_vnc_keymap_combo(self.vm, vnc_keymap,
                                          no_default=no_default)
 
@@ -1703,8 +1703,8 @@ class vmmDetails(vmmGObjectUI):
 
     # Graphics options
     def config_graphics_apply(self, dev_id_info):
-        passwd = self.window.get_widget("vnc-password").get_text() or None
-        keymap = self.get_combo_label_value("vnc-keymap")
+        passwd = self.window.get_widget("gfx-password").get_text() or None
+        keymap = self.get_combo_label_value("gfx-keymap")
 
         return self._change_config_helper([self.vm.define_graphics_password,
                                            self.vm.define_graphics_keymap],
@@ -2229,16 +2229,29 @@ class vmmDetails(vmmGObjectUI):
         if not gfx:
             return
 
+        title = self.window.get_widget("graphics-title")
+        table = self.window.get_widget("graphics-table")
+        table.foreach(lambda w, ignore: w.hide(), ())
+
+        def set_title(text):
+            title.set_markup("<b>%s</b>" % text)
+
+        def show_row(widget_name, suffix=""):
+            base = "gfx-%s" % widget_name
+            self.window.get_widget(base + "-title").show()
+            self.window.get_widget(base + suffix).show()
+
+        def show_text(widget_name, text):
+            show_row(widget_name)
+            self.window.get_widget("gfx-" + widget_name).set_text(text)
+
         gtype = gfx.type
         is_vnc = (gtype == "vnc")
         is_sdl = (gtype == "sdl")
-        is_other = (not any([is_vnc, is_sdl]))
-
-        self.window.get_widget("vnc-frame").set_property("visible", is_vnc)
-        self.window.get_widget("sdl-frame").set_property("visible", is_sdl)
-        self.window.get_widget("other-frame").set_property("visible", is_other)
 
         if is_vnc:
+            set_title(_("VNC Display"))
+
             port  = (gfx.port == -1 and
                      _("Automatically allocated") or
                      str(gfx.port))
@@ -2246,19 +2259,26 @@ class vmmDetails(vmmGObjectUI):
             passwd  = gfx.passwd or ""
             keymap  = (gfx.keymap or None)
 
-            self.window.get_widget("vnc-port").set_text(port)
-            self.window.get_widget("vnc-address").set_text(address)
-            self.window.get_widget("vnc-password").set_text(passwd)
-            self.set_combo_label("vnc-keymap", 0, keymap)
+            show_text("port", port)
+            show_text("address", address)
+            show_text("password", passwd)
+
+            show_row("keymap", "-box")
+            self.set_combo_label("gfx-keymap", 0, keymap)
+
         elif is_sdl:
+            set_title(_("Local SDL Window"))
+
             display = gfx.display or _("Unknown")
             xauth   = gfx.xauth or _("Unknown")
 
-            self.window.get_widget("sdl-display").set_text(display)
-            self.window.get_widget("sdl-xauth").set_text(xauth)
+            show_text("display", display)
+            show_text("xauth", xauth)
 
         else:
-            self.window.get_widget("graphics-other-type").set_text(gtype)
+            gtype = str(gtype).upper()
+            set_title(_("%s Display") % gtype)
+            show_text("type", gtype)
 
     def refresh_sound_page(self):
         sound = self.get_hw_selection(HW_LIST_COL_DEVICE)
