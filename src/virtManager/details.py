@@ -2245,28 +2245,40 @@ class vmmDetails(vmmGObjectUI):
             show_row(widget_name)
             self.window.get_widget("gfx-" + widget_name).set_text(text)
 
+        def port_to_string(port):
+            if port is None:
+                return "-"
+            return (port == -1 and _("Automatically allocated") or str(port))
+
         gtype = gfx.type
         is_vnc = (gtype == "vnc")
         is_sdl = (gtype == "sdl")
+        is_spice = (gtype == "spice")
+        is_other = not any([is_vnc, is_sdl, is_spice])
 
-        if is_vnc:
-            set_title(_("VNC Display"))
+        set_title(_("%(graphicstype)s Server") %
+                  {"graphicstype" : str(gtype).upper()})
 
-            port  = (gfx.port == -1 and
-                     _("Automatically allocated") or
-                     str(gfx.port))
+        if is_vnc or is_spice:
+            port  = port_to_string(gfx.port)
             address = (gfx.listen or "127.0.0.1")
-            passwd  = gfx.passwd or ""
             keymap  = (gfx.keymap or None)
 
             show_text("port", port)
             show_text("address", address)
-            show_text("password", passwd)
 
             show_row("keymap", "-box")
             self.set_combo_label("gfx-keymap", 0, keymap)
 
-        elif is_sdl:
+        if is_vnc:
+            passwd  = gfx.passwd or ""
+            show_text("password", passwd)
+
+        if is_spice:
+            tlsport = port_to_string(gfx.tlsPort)
+            show_text("tlsport", tlsport)
+
+        if is_sdl:
             set_title(_("Local SDL Window"))
 
             display = gfx.display or _("Unknown")
@@ -2275,10 +2287,8 @@ class vmmDetails(vmmGObjectUI):
             show_text("display", display)
             show_text("xauth", xauth)
 
-        else:
-            gtype = str(gtype).upper()
-            set_title(_("%s Display") % gtype)
-            show_text("type", gtype)
+        if is_other:
+            show_text("type", str(gtype).upper())
 
     def refresh_sound_page(self):
         sound = self.get_hw_selection(HW_LIST_COL_DEVICE)
