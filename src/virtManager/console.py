@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 #
 # Copyright (C) 2006-2008 Red Hat, Inc.
 # Copyright (C) 2006 Daniel P. Berrange <berrange@redhat.com>
+# Copyright (C) 2010 Marc-André Lureau <marcandre.lureau@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,6 +48,146 @@ def has_property(obj, setting):
         return False
     return True
 
+
+class Tunnel(object):
+    def __init__(self):
+        self.outfd = None
+        self.errfd = None
+        self.pid = None
+
+    def open(self, server, addr, port, username, sshport):
+        if self.outfd is not None:
+            return -1
+
+        # Build SSH cmd
+        argv = ["ssh", "ssh"]
+        if sshport:
+            argv += ["-p", str(sshport)]
+
+        if username:
+            argv += ['-l', username]
+
+        argv += [server]
+
+        # Build 'nc' command run on the remote host
+        #
+        # This ugly thing is a shell script to detect availability of
+        # the -q option for 'nc': debian and suse based distros need this
+        # flag to ensure the remote nc will exit on EOF, so it will go away
+        # when we close the VNC tunnel. If it doesn't go away, subsequent
+        # VNC connection attempts will hang.
+        #
+        # Fedora's 'nc' doesn't have this option, and apparently defaults
+        # to the desired behavior.
+        #
+        nc_params = "%s %s" % (addr, str(port))
+        nc_cmd = (
+            """nc -q 2>&1 | grep -q "requires an argument";"""
+            """if [ $? -eq 0 ] ; then"""
+            """   CMD="nc -q 0 %(nc_params)s";"""
+            """else"""
+            """   CMD="nc %(nc_params)s";"""
+            """fi;"""
+            """eval "$CMD";""" %
+            {'nc_params': nc_params})
+
+        argv.append("sh -c")
+        argv.append("'%s'" % nc_cmd)
+
+        argv_str = reduce(lambda x, y: x + " " + y, argv[1:])
+        logging.debug("Creating SSH tunnel: %s" % argv_str)
+
+        fds      = socket.socketpair()
+        errorfds = socket.socketpair()
+
+        pid = os.fork()
+        if pid == 0:
+            fds[0].close()
+            errorfds[0].close()
+
+            os.close(0)
+            os.close(1)
+            os.close(2)
+            os.dup(fds[1].fileno())
+            os.dup(fds[1].fileno())
+            os.dup(errorfds[1].fileno())
+            os.execlp(*argv)
+            os._exit(1)
+        else:
+            fds[1].close()
+            errorfds[1].close()
+
+        logging.debug("Tunnel PID=%d OUTFD=%d ERRFD=%d" %
+                      (pid, fds[0].fileno(), errorfds[0].fileno()))
+        errorfds[0].setblocking(0)
+
+        self.outfd = fds[0]
+        self.errfd = errorfds[0]
+        self.pid = pid
+
+        fd = fds[0].fileno()
+        if fd < 0:
+            raise SystemError("can't open a new tunnel: fd=%d" % fd)
+        return fd
+
+    def close(self):
+        if self.outfd is None:
+            return
+
+        logging.debug("Shutting down tunnel PID=%d OUTFD=%d ERRFD=%d" %
+                      (self.pid, self.outfd.fileno(),
+                       self.errfd.fileno()))
+        self.outfd.close()
+        self.outfd = None
+        self.errfd.close()
+        self.errfd = None
+
+        os.kill(self.pid, signal.SIGKILL)
+        self.pid = None
+
+    def get_err_output(self):
+        errout = ""
+        while True:
+            try:
+                new = self.errfd.recv(1024)
+            except:
+                break
+
+            if not new:
+                break
+
+            errout += new
+
+        return errout
+
+
+class Tunnels(object):
+    def __init__(self, server, addr, port, username, sshport):
+        self.server = server
+        self.addr = addr
+        self.port = port
+        self.username = username
+        self.sshport = sshport
+        self._tunnels = []
+
+    def open_new(self):
+        t = Tunnel()
+        fd = t.open(self.server, self.addr, self.port,
+                    self.username, self.sshport)
+        self._tunnels.append(t)
+        return fd
+
+    def close_all(self):
+        for l in self._tunnels:
+            l.close()
+
+    def get_err_output(self):
+        errout = ""
+        for l in self._tunnels:
+            errout += l.get_err_output()
+        return errout
+
+
 class vmmConsolePages(vmmGObjectUI):
     def __init__(self, vm, window):
         vmmGObjectUI.__init__(self, None, None)
@@ -70,7 +212,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         # Initialize display widget
         self.scale_type = self.vm.get_console_scaling()
-        self.vncTunnel = None
+        self.tunnels = None
         self.vncViewerRetriesScheduled = 0
         self.vncViewerRetryDelay = 125
         self.vnc_connected = False
@@ -428,9 +570,10 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _vnc_disconnected(self, src_ignore):
         errout = ""
-        if self.vncTunnel is not None:
-            errout = self.get_tunnel_err_output()
-            self.close_tunnel()
+        if self.tunnels is not None:
+            errout = self.tunnels.get_err_output()
+            self.tunnels.close_all()
+            self.tunnels = None
 
         self.vnc_connected = False
         logging.debug("VNC disconnected")
@@ -473,104 +616,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         if self.vncViewerRetryDelay < 2000:
             self.vncViewerRetryDelay = self.vncViewerRetryDelay * 2
-
-    def open_tunnel(self, server, vncaddr, vncport, username, sshport):
-        if self.vncTunnel is not None:
-            return -1
-
-        # Build SSH cmd
-        argv = ["ssh", "ssh"]
-        if sshport:
-            argv += ["-p", str(sshport)]
-
-        if username:
-            argv += ['-l', username]
-
-        argv += [server]
-
-        # Build 'nc' command run on the remote host
-        #
-        # This ugly thing is a shell script to detect availability of
-        # the -q option for 'nc': debian and suse based distros need this
-        # flag to ensure the remote nc will exit on EOF, so it will go away
-        # when we close the VNC tunnel. If it doesn't go away, subsequent
-        # VNC connection attempts will hang.
-        #
-        # Fedora's 'nc' doesn't have this option, and apparently defaults
-        # to the desired behavior.
-        #
-        nc_params = "%s %s" % (vncaddr, str(vncport))
-        nc_cmd = (
-            """nc -q 2>&1 | grep -q "requires an argument";"""
-            """if [ $? -eq 0 ] ; then"""
-            """   CMD="nc -q 0 %(nc_params)s";"""
-            """else"""
-            """   CMD="nc %(nc_params)s";"""
-            """fi;"""
-            """eval "$CMD";""" %
-            {'nc_params': nc_params})
-
-        argv.append("sh -c")
-        argv.append("'%s'" % nc_cmd)
-
-        argv_str = reduce(lambda x, y: x + " " + y, argv[1:])
-        logging.debug("Creating SSH tunnel: %s" % argv_str)
-
-        fds      = socket.socketpair()
-        errorfds = socket.socketpair()
-
-        pid = os.fork()
-        if pid == 0:
-            fds[0].close()
-            errorfds[0].close()
-
-            os.close(0)
-            os.close(1)
-            os.close(2)
-            os.dup(fds[1].fileno())
-            os.dup(fds[1].fileno())
-            os.dup(errorfds[1].fileno())
-            os.execlp(*argv)
-            os._exit(1)
-        else:
-            fds[1].close()
-            errorfds[1].close()
-
-        logging.debug("Tunnel PID=%d OUTFD=%d ERRFD=%d" %
-                      (pid, fds[0].fileno(), errorfds[0].fileno()))
-        errorfds[0].setblocking(0)
-        self.vncTunnel = [fds[0], errorfds[0], pid]
-
-        return fds[0].fileno()
-
-    def close_tunnel(self):
-        if self.vncTunnel is None:
-            return
-
-        logging.debug("Shutting down tunnel PID=%d OUTFD=%d ERRFD=%d" %
-                      (self.vncTunnel[2], self.vncTunnel[0].fileno(),
-                       self.vncTunnel[1].fileno()))
-        self.vncTunnel[0].close()
-        self.vncTunnel[1].close()
-
-        os.kill(self.vncTunnel[2], signal.SIGKILL)
-        self.vncTunnel = None
-
-    def get_tunnel_err_output(self):
-        errfd = self.vncTunnel[1]
-        errout = ""
-        while True:
-            try:
-                new = errfd.recv(1024)
-            except:
-                break
-
-            if not new:
-                break
-
-            errout += new
-
-        return errout
 
     def skip_connect_attempt(self):
         return (self.vnc_connected or
@@ -628,12 +673,13 @@ class vmmConsolePages(vmmGObjectUI):
 
         try:
             if trans in ("ssh", "ext"):
-                if self.vncTunnel:
+                if self.tunnels:
                     # Tunnel already open, no need to continue
                     return
 
-                fd = self.open_tunnel(connhost, "127.0.0.1", vncport,
-                                      username, connport)
+                self.tunnels = Tunnels(connhost, "127.0.0.1", vncport,
+                                       username, connport)
+                fd = self.tunnels.open_new()
                 if fd >= 0:
                     self.vncViewer.open_fd(fd)
 
