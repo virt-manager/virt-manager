@@ -393,7 +393,7 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkLabel" id="label29">
+                                          <widget class="GtkLabel" id="label1">
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Storage _format:</property>
@@ -646,7 +646,7 @@
                                                     <property name="visible">True</property>
                                                     <property name="spacing">6</property>
                                                     <child>
-                                                      <widget class="GtkLabel" id="label1">
+                                                      <widget class="GtkLabel" id="label2">
                                                         <property name="visible">True</property>
                                                         <property name="label" translatable="yes">_Bridge name:</property>
                                                         <property name="use_underline">True</property>
@@ -917,52 +917,6 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <widget class="GtkHBox" id="hbox68">
-                                            <property name="visible">True</property>
-                                            <property name="spacing">6</property>
-                                            <child>
-                                              <widget class="GtkSpinButton" id="graphics-port">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="invisible_char">●</property>
-                                                <property name="adjustment">5900 5900 5999 1 10 0</property>
-                                                <property name="climb_rate">1</property>
-                                                <property name="snap_to_ticks">True</property>
-                                                <property name="numeric">True</property>
-                                                <property name="update_policy">if-valid</property>
-                                              </widget>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <widget class="GtkCheckButton" id="graphics-port-auto">
-                                                <property name="label" translatable="yes">A_utomatically allocated</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">False</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="draw_indicator">True</property>
-                                                <signal name="toggled" handler="on_graphics_port_auto_toggled"/>
-                                              </widget>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">False</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                          </widget>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="top_attach">3</property>
-                                            <property name="bottom_attach">4</property>
-                                            <property name="x_options">GTK_FILL</property>
-                                            <property name="y_options">GTK_FILL</property>
-                                          </packing>
-                                        </child>
-                                        <child>
                                           <widget class="GtkEntry" id="graphics-password">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
@@ -1000,7 +954,7 @@
                                                   <widget class="GtkLabel" id="label428">
                                                     <property name="visible">True</property>
                                                     <property name="xpad">7</property>
-                                                    <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; VNC server is strongly recommended because it allows the virtual display to be embedded inside this application. It may also be used to allow access to the virtual display from a remote system.&lt;/small&gt;</property>
+                                                    <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Tip:&lt;/b&gt; VNC or SPICE server is strongly recommended because it allows the virtual display to be embedded inside this application. It may also be used to allow access to the virtual display from a remote system.&lt;/small&gt;</property>
                                                     <property name="use_markup">True</property>
                                                     <property name="wrap">True</property>
                                                   </widget>
@@ -1106,7 +1060,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkLabel" id="label2">
+                                              <widget class="GtkLabel" id="label5">
                                                 <property name="visible">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="xalign">0</property>
@@ -1167,6 +1121,76 @@
                                             <property name="top_attach">1</property>
                                             <property name="bottom_attach">2</property>
                                             <property name="x_options">GTK_FILL</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkTable" id="table8">
+                                            <property name="visible">True</property>
+                                            <property name="n_columns">4</property>
+                                            <property name="column_spacing">6</property>
+                                            <child>
+                                              <widget class="GtkLabel" id="label29">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">1</property>
+                                                <property name="label" translatable="yes">_TLS port:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">graphics-port</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkSpinButton" id="graphics-port">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="invisible_char">●</property>
+                                                <property name="adjustment">5900 5900 5999 1 10 0</property>
+                                                <property name="climb_rate">1</property>
+                                                <property name="snap_to_ticks">True</property>
+                                                <property name="numeric">True</property>
+                                                <property name="update_policy">if-valid</property>
+                                              </widget>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkCheckButton" id="graphics-port-auto">
+                                                <property name="label" translatable="yes">A_utomatically allocated</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal name="toggled" handler="on_graphics_port_auto_toggled"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkSpinButton" id="graphics-tls-port">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="invisible_char">●</property>
+                                                <property name="adjustment">5901 5900 5999 1 10 0</property>
+                                                <property name="climb_rate">1</property>
+                                                <property name="snap_to_ticks">True</property>
+                                                <property name="numeric">True</property>
+                                                <property name="update_policy">if-valid</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">3</property>
+                                            <property name="bottom_attach">4</property>
                                           </packing>
                                         </child>
                                       </widget>
@@ -1272,7 +1296,7 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="label5">
+                          <widget class="GtkLabel" id="label7">
                             <property name="visible">True</property>
                             <property name="label">sound</property>
                           </widget>

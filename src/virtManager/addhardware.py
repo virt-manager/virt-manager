@@ -493,6 +493,7 @@ class vmmAddHardware(vmmGObjectUI):
     def populate_graphics_model(self, model):
         model.clear()
         model.append([_("VNC server"), "vnc"])
+        model.append([_("SPICE server"), "spice"])
         model.append([_("Local SDL window"), "sdl"])
 
     def populate_host_device_model(self, devtype, devcap, subtype, subcap):
@@ -583,20 +584,27 @@ class vmmAddHardware(vmmGObjectUI):
             return None
         return _type.get_model().get_value(_type.get_active_iter(), 1)
 
-    def get_config_vnc_port(self):
+    def get_config_graphics_port(self):
         port = self.window.get_widget("graphics-port")
         portAuto = self.window.get_widget("graphics-port-auto")
         if portAuto.get_active():
             return -1
         return int(port.get_value())
 
-    def get_config_vnc_address(self):
+    def get_config_graphics_tls_port(self):
+        port = self.window.get_widget("graphics-tls-port")
+        portAuto = self.window.get_widget("graphics-port-auto")
+        if portAuto.get_active():
+            return -1
+        return int(port.get_value())
+
+    def get_config_graphics_address(self):
         addr = self.window.get_widget("graphics-address")
         if addr.get_active():
             return "0.0.0.0"
         return "127.0.0.1"
 
-    def get_config_vnc_password(self):
+    def get_config_graphics_password(self):
         pw = self.window.get_widget("graphics-password")
         return pw.get_text()
 
@@ -762,7 +770,7 @@ class vmmAddHardware(vmmGObjectUI):
     # Graphics listeners
     def change_graphics_type(self, ignore=None):
         graphics = self.get_config_graphics()
-        if graphics == "vnc":
+        if graphics in ["vnc", "spice"]:
             self.window.get_widget("graphics-port-auto").set_sensitive(True)
             self.window.get_widget("graphics-address").set_sensitive(True)
             self.window.get_widget("graphics-password").set_sensitive(True)
@@ -770,6 +778,7 @@ class vmmAddHardware(vmmGObjectUI):
             self.change_port_auto()
         else:
             self.window.get_widget("graphics-port").set_sensitive(False)
+            self.window.get_widget("graphics-tls-port").set_sensitive(False)
             self.window.get_widget("graphics-port-auto").set_sensitive(False)
             self.window.get_widget("graphics-address").set_sensitive(False)
             self.window.get_widget("graphics-password").set_sensitive(False)
@@ -777,10 +786,14 @@ class vmmAddHardware(vmmGObjectUI):
             self.window.get_widget("graphics-keymap").set_sensitive(False)
 
     def change_port_auto(self, ignore=None):
+        graphics = self.get_config_graphics()
+        tls_enable = graphics == "spice"
         if self.window.get_widget("graphics-port-auto").get_active():
             self.window.get_widget("graphics-port").set_sensitive(False)
+            self.window.get_widget("graphics-tls-port").set_sensitive(False)
         else:
             self.window.get_widget("graphics-port").set_sensitive(True)
+            self.window.get_widget("graphics-tls-port").set_sensitive(tls_enable)
 
     def change_keymap(self, ignore=None):
         if self.window.get_widget("graphics-keymap-chk").get_active():
@@ -1079,17 +1092,17 @@ class vmmAddHardware(vmmGObjectUI):
 
     def validate_page_graphics(self):
         graphics = self.get_config_graphics()
-        if graphics == "vnc":
-            _type = virtinst.VirtualGraphics.TYPE_VNC
-        else:
-            _type = virtinst.VirtualGraphics.TYPE_SDL
+        _type = {"vnc": virtinst.VirtualGraphics.TYPE_VNC,
+                 "spice": virtinst.VirtualGraphics.TYPE_SPICE,
+                 "sdl": virtinst.VirtualGraphics.TYPE_SDL}[graphics]
 
         self._dev = virtinst.VirtualGraphics(type=_type,
                                              conn=self.vm.get_connection().vmm)
         try:
-            self._dev.port   = self.get_config_vnc_port()
-            self._dev.passwd = self.get_config_vnc_password()
-            self._dev.listen = self.get_config_vnc_address()
+            self._dev.port   = self.get_config_graphics_port()
+            self._dev.tlsPort = self.get_config_graphics_tls_port()
+            self._dev.passwd = self.get_config_graphics_password()
+            self._dev.listen = self.get_config_graphics_address()
             self._dev.keymap = self.get_config_keymap()
         except ValueError, e:
             self.err.val_err(_("Graphics device parameter error"), str(e))
