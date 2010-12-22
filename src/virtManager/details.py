@@ -462,11 +462,12 @@ class vmmDetails(vmmGObjectUI):
             return
 
         self.topwin.hide()
-        if self.console.vncViewer.flags() & gtk.VISIBLE:
+        if self.console.viewer and self.console.viewer.get_widget() and \
+                self.console.viewer.get_widget().flags() & gtk.VISIBLE:
             try:
-                self.console.vncViewer.close()
+                self.console.close_viewer()
             except:
-                logging.error("Failure when disconnecting from VNC server")
+                logging.error("Failure when disconnecting from desktop server")
         self.engine.decrement_window_counter()
 
         self.emit("details-closed")
@@ -1150,7 +1151,7 @@ class vmmDetails(vmmGObjectUI):
         filename = path
         if not(filename.endswith(".png")):
             filename += ".png"
-        image = self.console.vncViewer.get_pixbuf()
+        image = self.console.viewer.get_pixbuf()
 
         # Save along with a little metadata about us & the domain
         image.save(filename, 'png',

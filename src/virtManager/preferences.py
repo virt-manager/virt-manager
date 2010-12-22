@@ -161,11 +161,10 @@ class vmmPreferences(vmmGObjectUI):
 
         prefs_button = self.window.get_widget("prefs-keys-grab-changebtn")
         self.window.get_widget("prefs-keys-grab-sequence").set_text(val)
-        if not self.config.grab_keys_supported():
+        if not self.config.vnc_grab_keys_supported():
             util.tooltip_wrapper(prefs_button,
                                  _("Installed version of GTK-VNC doesn't "
                                    "support configurable grab keys"))
-            prefs_button.set_sensitive(False)
 
     def refresh_confirm_forcepoweroff(self, ignore1=None, ignore2=None,
                                       ignore3=None, ignore4=None):

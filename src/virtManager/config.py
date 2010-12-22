@@ -299,7 +299,7 @@ class vmmConfig(object):
 
     # Check whether we have GTK-VNC that supports configurable grab keys
     # installed on the system
-    def grab_keys_supported(self):
+    def vnc_grab_keys_supported(self):
         try:
             import gtkvnc
             return hasattr(gtkvnc.Display, "set_grab_keys")
