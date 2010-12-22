@@ -21,9 +21,11 @@
 #
 
 import gtk
+import gobject
 
 import libvirt
 import gtkvnc
+import SpiceClientGtk as spice
 
 import os
 import sys
@@ -329,6 +331,98 @@ class VNCViewer(Viewer):
 
     def set_credential_password(self, cred):
         self.display.set_credential(gtkvnc.CREDENTIAL_PASSWORD, cred)
+
+
+class SpiceViewer(Viewer):
+    def __init__(self, console, config):
+        Viewer.__init__(self, console, config)
+        self.spice_session = None
+        self.display = None
+        self.audio = None
+
+    def get_widget(self):
+        return self.display
+
+    def _init_widget(self):
+        try:
+            keys = self.get_grab_keys_from_config()
+            self.display.set_grab_keys(keys)
+        except Exception, e:
+            logging.debug("Error when getting the grab keys combination: %s" % str(e))
+
+        self.console.refresh_scaling()
+
+        self.display.realize()
+        self.display.connect("mouse-grab", lambda src, g: g and self.console.pointer_grabbed(src))
+        self.display.connect("mouse-grab", lambda src, g: g or self.console.pointer_ungrabbed(src))
+        self.display.show()
+
+    def close(self):
+        if self.spice_session is not None:
+            self.spice_session.disconnect()
+            self.spice_session = None
+
+    def is_open(self):
+        return self.spice_session != None
+
+    def _main_channel_event_cb(self, channel, event):
+        if event == spice.CHANNEL_CLOSED:
+            self.console.disconnected()
+
+    def _channel_open_fd_request(self, channel, tls_ignore):
+        if not self.console.tunnels:
+            raise SystemError("Got fd request with no configured tunnel!")
+
+        fd = self.console.tunnels.open_new()
+        channel.open_fd(fd)
+
+    def _channel_new_cb(self, session, channel):
+        self.console.connected()
+        gobject.GObject.connect(channel, "open-fd",
+                                self._channel_open_fd_request)
+
+        if type(channel) == spice.MainChannel:
+            channel.connect_after("channel-event", self._main_channel_event_cb)
+            return
+
+        if type(channel) == spice.DisplayChannel:
+            channel_id = channel.get_property("channel-id")
+            self.display = spice.Display(self.spice_session, channel_id)
+            self.console.window.get_widget("console-vnc-viewport").add(self.display)
+            self._init_widget()
+            self.console.activate_viewer_page()
+            return
+
+        if type(channel) in [spice.PlaybackChannel, spice.RecordChannel] and \
+                not self.audio:
+            self.audio = spice.Audio(self.spice_session)
+            return
+
+    def open_host(self, uri, connhost_ignore, port_ignore, password=None):
+        self.spice_session = spice.Session()
+        self.spice_session.set_property("uri", uri)
+        if password:
+            self.spice_session.set_property("password", password)
+        gobject.GObject.connect(self.spice_session, "channel-new",
+                                self._channel_new_cb)
+        self.spice_session.connect()
+
+    def open_fd(self, fd, password=None):
+        self.spice_session = spice.Session()
+        if password:
+            self.spice_session.set_property("password", password)
+        gobject.GObject.connect(self.spice_session, "channel-new",
+                                self._channel_new_cb)
+        self.spice_session.open_fd(fd)
+
+    def set_credential_password(self, cred):
+        self.spice_session.set_property("password", cred)
+
+    def get_scaling(self):
+        return self.display.get_property("resize-guest")
+
+    def set_scaling(self, scaling):
+        self.display.set_property("resize-guest", scaling)
 
 
 class vmmConsolePages(vmmGObjectUI):
@@ -739,8 +833,8 @@ class vmmConsolePages(vmmGObjectUI):
                             _("Graphical console not configured for guest"))
             return
 
-        if protocol != "vnc":
-            logging.debug("Not a VNC console, disabling")
+        if protocol not in ["vnc", "spice"]:
+            logging.debug("Not a VNC or SPICE console, disabling")
             self.activate_unavailable_page(
                             _("Graphical console not supported for guest"))
             return
@@ -751,9 +845,13 @@ class vmmConsolePages(vmmGObjectUI):
             self.schedule_retry()
             return
 
-        self.viewer = VNCViewer(self, self.config)
-        self.window.get_widget("console-vnc-viewport").add(self.viewer.get_widget())
-        self.viewer.init_widget()
+        if protocol == "vnc":
+            self.viewer = VNCViewer(self, self.config)
+            self.window.get_widget("console-vnc-viewport").add(self.viewer.get_widget())
+            self.viewer.init_widget()
+        else:
+            self.viewer = SpiceViewer(self, self.config)
+
         self.set_enable_accel()
 
         self.activate_unavailable_page(
