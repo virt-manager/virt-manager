@@ -205,7 +205,7 @@ class Viewer(object):
         return self.display.get_pixbuf()
 
     def get_grab_keys_from_config(self):
-        keys = None
+        keys = []
         grab_keys = self.config.get_keys_combination(True)
         if grab_keys is not None:
             # If somebody edited this in GConf it would fail so
@@ -214,8 +214,7 @@ class Viewer(object):
                 keys = map(int, grab_keys.split(','))
             except:
                 logging.debug("Error in grab_keys configuration in GConf")
-        if keys is None:
-            raise Exception("No grab_keys configuration")
+
         return keys
 
     def get_grab_keys(self):
@@ -235,6 +234,14 @@ class Viewer(object):
     def send_keys(self, keys):
         return self.display.send_keys(keys)
 
+    def set_grab_keys(self):
+        try:
+            keys = self.get_grab_keys_from_config()
+            if keys:
+                self.display.set_grab_keys(keys)
+        except Exception, e:
+            logging.debug("Error when getting the grab keys combination: %s" %
+                          str(e))
 
 class VNCViewer(Viewer):
     def __init__(self, console, config):
@@ -247,11 +254,7 @@ class VNCViewer(Viewer):
     def init_widget(self):
         # Set default grab key combination if found and supported
         if self.config.vnc_grab_keys_supported():
-            try:
-                keys = self.get_grab_keys_from_config()
-                self.display.set_grab_keys(keys)
-            except Exception, e:
-                logging.debug("Error when getting the grab keys combination: %s" % str(e))
+            self.set_grab_keys()
 
         self.display.realize()
 
@@ -351,12 +354,7 @@ class SpiceViewer(Viewer):
         return self.display
 
     def _init_widget(self):
-        try:
-            keys = self.get_grab_keys_from_config()
-            self.display.set_grab_keys(keys)
-        except Exception, e:
-            logging.debug("Error when getting the grab keys combination: %s" % str(e))
-
+        self.set_grab_keys()
         self.console.refresh_scaling()
 
         self.display.realize()
