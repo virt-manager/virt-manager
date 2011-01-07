@@ -2257,16 +2257,14 @@ class vmmDetails(vmmGObjectUI):
             port  = port_to_string(gfx.port)
             address = (gfx.listen or "127.0.0.1")
             keymap  = (gfx.keymap or None)
+            passwd  = gfx.passwd or ""
 
+            show_text("password", passwd)
             show_text("port", port)
             show_text("address", address)
 
             show_row("keymap", "-box")
             self.set_combo_label("gfx-keymap", 0, keymap)
-
-        if is_vnc:
-            passwd  = gfx.passwd or ""
-            show_text("password", passwd)
 
         if is_spice:
             tlsport = port_to_string(gfx.tlsPort)

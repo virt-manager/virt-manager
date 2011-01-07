@@ -404,6 +404,8 @@ class SpiceViewer(Viewer):
     def _main_channel_event_cb(self, channel, event):
         if event == spice.CHANNEL_CLOSED:
             self.console.disconnected()
+        elif event == spice.CHANNEL_ERROR_AUTH:
+            self.console.activate_auth_page()
 
     def _channel_open_fd_request(self, channel, tls_ignore):
         if not self.console.tunnels:
@@ -459,6 +461,11 @@ class SpiceViewer(Viewer):
 
     def set_credential_password(self, cred):
         self.spice_session.set_property("password", cred)
+        if self.console.tunnels:
+            fd = self.console.tunnels.open_new()
+            self.spice_session.open_fd(fd)
+        else:
+            self.spice_session.connect()
 
     def get_scaling(self):
         return self.display.get_property("resize-guest")
