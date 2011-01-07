@@ -266,8 +266,10 @@ class VNCViewer(Viewer):
         self.display.connect("vnc-pointer-grab", self.console.pointer_grabbed)
         self.display.connect("vnc-pointer-ungrab", self.console.pointer_ungrabbed)
         self.display.connect("vnc-auth-credential", self._auth_credential)
-        self.display.connect("vnc-initialized", lambda src: self.console.connected())
-        self.display.connect("vnc-disconnected", lambda src: self.console.disconnected())
+        self.display.connect("vnc-initialized",
+                             lambda src: self.console.connected())
+        self.display.connect("vnc-disconnected",
+                             lambda src: self.console.disconnected())
         self.display.connect("vnc-desktop-resize", self.console.desktop_resize)
         self.display.connect("focus-in-event", self.console.viewer_focus_changed)
         self.display.connect("focus-out-event", self.console.viewer_focus_changed)
@@ -366,6 +368,8 @@ class SpiceViewer(Viewer):
         if self.spice_session is not None:
             self.spice_session.disconnect()
             self.spice_session = None
+            self.audio = None
+            self.display = None
 
     def is_open(self):
         return self.spice_session != None
@@ -382,7 +386,6 @@ class SpiceViewer(Viewer):
         channel.open_fd(fd)
 
     def _channel_new_cb(self, session, channel):
-        self.console.connected()
         gobject.GObject.connect(channel, "open-fd",
                                 self._channel_open_fd_request)
 
@@ -395,11 +398,11 @@ class SpiceViewer(Viewer):
             self.display = spice.Display(self.spice_session, channel_id)
             self.console.window.get_widget("console-vnc-viewport").add(self.display)
             self._init_widget()
-            self.console.activate_viewer_page()
+            self.console.connected()
             return
 
-        if type(channel) in [spice.PlaybackChannel, spice.RecordChannel] and \
-                not self.audio:
+        if (type(channel) in [spice.PlaybackChannel, spice.RecordChannel] and
+            not self.audio):
             self.audio = spice.Audio(self.spice_session)
             return
 
