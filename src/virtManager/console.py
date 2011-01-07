@@ -24,8 +24,13 @@ import gtk
 import gobject
 
 import libvirt
+
 import gtkvnc
-import SpiceClientGtk as spice
+
+try:
+    import SpiceClientGtk as spice
+except Exception, e:
+    spice = None
 
 import os
 import sys
@@ -828,15 +833,21 @@ class vmmConsolePages(vmmGObjectUI):
             return
 
         if protocol is None:
-            logging.debug("No graphics configured in guest")
+            logging.debug("No graphics configured for guest")
             self.activate_unavailable_page(
                             _("Graphical console not configured for guest"))
             return
 
-        if protocol not in ["vnc", "spice"]:
-            logging.debug("Not a VNC or SPICE console, disabling")
-            self.activate_unavailable_page(
-                            _("Graphical console not supported for guest"))
+        if protocol not in self.config.embeddable_graphics():
+            logging.debug("Don't know how to show graphics type '%s'"
+                          "disabling console page" % protocol)
+
+            msg = (_("Cannot display graphical console type '%s'")
+                     % protocol)
+            if protocol == "spice":
+                msg += ":\n %s" % self.config.get_spice_error()
+
+            self.activate_unavailable_page(msg)
             return
 
         if gport == -1:
@@ -849,7 +860,7 @@ class vmmConsolePages(vmmGObjectUI):
             self.viewer = VNCViewer(self, self.config)
             self.window.get_widget("console-vnc-viewport").add(self.viewer.get_widget())
             self.viewer.init_widget()
-        else:
+        elif protocol == "spice":
             self.viewer = SpiceViewer(self, self.config)
 
         self.set_enable_accel()

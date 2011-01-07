@@ -1601,7 +1601,7 @@ class vmmCreate(vmmGObjectUI):
         if self.config.get_console_popup() == 1:
             # user has requested console on new created vms only
             gtype = vm.get_graphics_console()[0]
-            if gtype in ["vnc", "spice"]:
+            if gtype in self.config.embeddable_graphics():
                 self.emit("action-show-console", self.conn.get_uri(),
                           guest.uuid)
             else:

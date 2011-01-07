@@ -718,15 +718,16 @@ class vmmManager(vmmGObjectUI):
     def vm_started(self, connection, uri, vmuuid):
         vm = connection.get_vm(vmuuid)
         logging.debug("VM %s started" % vm.get_name())
-        if self.config.get_console_popup() == 2 and not vm.is_management_domain():
-            # user has requested consoles on all vms
-            gtype = vm.get_graphics_console()[0]
-            if gtype in ["vnc", "spice"]:
-                self.emit("action-show-console", uri, vmuuid)
-            elif not connection.is_remote():
-                self.emit("action-show-terminal", uri, vmuuid)
-        else:
+        if (self.config.get_console_popup() != 2 or
+            vm.is_management_domain()):
             self.emit("action-refresh-console", uri, vmuuid)
+
+        # user has requested consoles on all vms
+        gtype = vm.get_graphics_console()[0]
+        if gtype in self.config.embeddable_graphics():
+            self.emit("action-show-console", uri, vmuuid)
+        elif not connection.is_remote():
+            self.emit("action-show-terminal", uri, vmuuid)
 
     def _build_conn_hint(self, conn):
         hint = conn.get_uri()

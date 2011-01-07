@@ -17,13 +17,20 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 #
-import gconf
 import os
+import logging
 
 import gtk
+import gconf
+
 import libvirt
 import virtinst
-import logging
+
+_spice_error = None
+try:
+    import SpiceClientGtk as spice_ignore
+except Exception, _spice_error:
+    logging.debug("Error importing spice: %s" % _spice_error)
 
 from virtManager.keyring import vmmKeyring
 from virtManager.secret import vmmSecret
@@ -156,6 +163,15 @@ class vmmConfig(object):
 
     def get_data_dir(self):
         return self.data_dir
+
+    def get_spice_error(self):
+        return _spice_error and str(_spice_error) or None
+
+    def embeddable_graphics(self):
+        ret = ["vnc"]
+        if not bool(self.get_spice_error()):
+            ret.append("spice")
+        return ret
 
     # Per-VM/Connection/Connection Host Option dealings
     def _perconn_helper(self, uri, pref_func, func_type, value=None):
