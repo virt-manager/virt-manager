@@ -29,7 +29,7 @@ import gtkvnc
 
 try:
     import SpiceClientGtk as spice
-except Exception, e:
+except:
     spice = None
 
 import os

@@ -28,7 +28,8 @@ import virtinst
 
 _spice_error = None
 try:
-    import SpiceClientGtk as spice_ignore
+    import SpiceClientGtk
+    ignore = SpiceClientGtk
 except Exception, _spice_error:
     logging.debug("Error importing spice: %s" % _spice_error)
 
