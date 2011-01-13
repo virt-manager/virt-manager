@@ -33,11 +33,9 @@ except:
     spice = None
 
 import os
-import sys
 import signal
 import socket
 import logging
-import traceback
 
 from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
@@ -62,19 +60,19 @@ class Tunnel(object):
         self.errfd = None
         self.pid = None
 
-    def open(self, server, addr, port, username, sshport):
+    def open(self, connhost, connuser, connport, gaddr, gport):
         if self.outfd is not None:
             return -1
 
         # Build SSH cmd
         argv = ["ssh", "ssh"]
-        if sshport:
-            argv += ["-p", str(sshport)]
+        if connport:
+            argv += ["-p", str(connport)]
 
-        if username:
-            argv += ['-l', username]
+        if connuser:
+            argv += ['-l', connuser]
 
-        argv += [server]
+        argv += [connhost]
 
         # Build 'nc' command run on the remote host
         #
@@ -87,7 +85,8 @@ class Tunnel(object):
         # Fedora's 'nc' doesn't have this option, and apparently defaults
         # to the desired behavior.
         #
-        nc_params = "%s %s" % (addr, str(port))
+        nc_params = "%s %s" % (gaddr, gport)
+
         nc_cmd = (
             """nc -q 2>&1 | grep -q "requires an argument";"""
             """if [ $? -eq 0 ] ; then"""
@@ -169,18 +168,19 @@ class Tunnel(object):
 
 
 class Tunnels(object):
-    def __init__(self, server, addr, port, username, sshport):
-        self.server = server
-        self.addr = addr
-        self.port = port
-        self.username = username
-        self.sshport = sshport
+    def __init__(self, connhost, connuser, connport, gaddr, gport):
+        self.connhost = connhost
+        self.connuser = connuser
+        self.connport = connport
+
+        self.gaddr = gaddr
+        self.gport = gport
         self._tunnels = []
 
     def open_new(self):
         t = Tunnel()
-        fd = t.open(self.server, self.addr, self.port,
-                    self.username, self.sshport)
+        fd = t.open(self.connhost, self.connuser, self.connport,
+                    self.gaddr, self.gport)
         self._tunnels.append(t)
         return fd
 
@@ -200,6 +200,9 @@ class Viewer(object):
         self.console = console
         self.config = config
         self.display = None
+
+    def get_widget(self):
+        return self.display
 
     def get_pixbuf(self):
         return self.display.get_pixbuf()
@@ -243,13 +246,14 @@ class Viewer(object):
             logging.debug("Error when getting the grab keys combination: %s" %
                           str(e))
 
+    def open_host(self, host, user, port, password=None):
+        raise NotImplementedError()
+
 class VNCViewer(Viewer):
     def __init__(self, console, config):
         Viewer.__init__(self, console, config)
         self.display = gtkvnc.Display()
-
-    def get_widget(self):
-        return self.display
+        self.sockfd = None
 
     def init_widget(self):
         # Set default grab key combination if found and supported
@@ -315,12 +319,19 @@ class VNCViewer(Viewer):
 
     def close(self):
         self.display.close()
+        if not self.sockfd:
+            return
+
+        self.sockfd.close()
+        self.sockfd = None
 
     def is_open(self):
         return self.display.is_open()
 
-    def open_host(self, uri_ignore, connhost, port):
-        self.display.open_host(connhost, port)
+    def open_host(self, host, user, port, password=None):
+        ignore = password
+        ignore = user
+        self.display.open_host(host, port)
 
     def open_fd(self, fd):
         self.display.open_fd(fd)
@@ -349,9 +360,6 @@ class SpiceViewer(Viewer):
         self.spice_session = None
         self.display = None
         self.audio = None
-
-    def get_widget(self):
-        return self.display
 
     def _init_widget(self):
         self.set_grab_keys()
@@ -404,7 +412,12 @@ class SpiceViewer(Viewer):
             self.audio = spice.Audio(self.spice_session)
             return
 
-    def open_host(self, uri, connhost_ignore, port_ignore, password=None):
+    def open_host(self, host, user, port, password=None):
+        uri = "spice://"
+        uri += (user and str(user) or "")
+        uri += str(host) + "?port=" + str(port)
+        logging.debug("spice uri: %s" % uri)
+
         self.spice_session = spice.Session()
         self.spice_session.set_property("uri", uri)
         if password:
@@ -824,9 +837,9 @@ class vmmConsolePages(vmmGObjectUI):
             return
 
         try:
-            (protocol, connhost,
-             gport, trans, username,
-             connport, guri) = self.vm.get_graphics_console()
+            (protocol, transport,
+             connhost, connuser, connport,
+             gaddr, gport) = self.vm.get_graphics_console()
         except Exception, e:
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after
@@ -859,7 +872,8 @@ class vmmConsolePages(vmmGObjectUI):
 
         if protocol == "vnc":
             self.viewer = VNCViewer(self, self.config)
-            self.window.get_widget("console-vnc-viewport").add(self.viewer.get_widget())
+            self.window.get_widget("console-vnc-viewport").add(
+                                                    self.viewer.get_widget())
             self.viewer.init_widget()
         elif protocol == "spice":
             self.viewer = SpiceViewer(self, self.config)
@@ -868,31 +882,32 @@ class vmmConsolePages(vmmGObjectUI):
 
         self.activate_unavailable_page(
                 _("Connecting to graphical console for guest"))
-        logging.debug("Starting connect process for %s: %s %s" %
-                      (guri, connhost, str(gport)))
 
+        logging.debug("Starting connect process for "
+                      "proto=%s trans=%s connhost=%s connuser=%s "
+                      "connport=%s gaddr=%s gport=%s" %
+                      (protocol, transport, connhost, connuser, connport,
+                       gaddr, gport))
         try:
-            if trans in ("ssh", "ext"):
+            if transport in ("ssh", "ext"):
                 if self.tunnels:
                     # Tunnel already open, no need to continue
                     return
 
-                self.tunnels = Tunnels(connhost, "127.0.0.1", gport,
-                                       username, connport)
+                self.tunnels = Tunnels(connhost, connuser, connport,
+                                       gaddr, gport)
                 fd = self.tunnels.open_new()
                 if fd >= 0:
                     self.viewer.open_fd(fd)
 
             else:
-                self.viewer.open_host(guri, connhost, str(gport))
+                self.viewer.open_host(connhost, connuser,
+                                      str(gport))
 
-        except:
-            (typ, value, stacktrace) = sys.exc_info()
-            details = \
-                    "Unable to start virtual machine '%s'" % \
-                    (str(typ) + " " + str(value) + "\n" + \
-                     traceback.format_exc(stacktrace))
-            logging.error(details)
+        except Exception, e:
+            logging.exception("Error connection to graphical console")
+            self.activate_unavailable_page(
+                    _("Error connecting to graphical console") + ":\n%s" % e)
 
     def set_credentials(self, src_ignore=None):
         passwd = self.window.get_widget("console-auth-password")

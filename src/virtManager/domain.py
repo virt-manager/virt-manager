@@ -577,15 +577,19 @@ class vmmDomainBase(vmmLibvirtObject):
     def get_graphics_console(self):
         gdevs = self.get_graphics_devices()
         connhost = self.connection.get_uri_hostname()
-        transport, username = self.connection.get_transport()
-        gport = None
-        gtype = None
-        if gdevs:
-            gport = gdevs[0].port
-            gtype = gdevs[0].type
+        transport, connuser = self.connection.get_transport()
 
-        if gtype in ['vnc', 'spice']:
-            gport = int(gport)
+        gdev = gdevs and gdevs[0] or None
+        gtype = None
+        gport = None
+        gaddr = None
+
+        if gdevs:
+            gport = gdev.port
+            if gport != None:
+                gport = int(gport)
+            gtype = gdev.type
+            gaddr = "127.0.0.1"
 
         if connhost == None:
             # Force use of 127.0.0.1, because some (broken) systems don't
@@ -599,17 +603,9 @@ class vmmDomainBase(vmmLibvirtObject):
         if connhost.count(":"):
             connhost, connport = connhost.split(":", 1)
 
-        # Build VNC/SPICE uri for debugging
-        guri = None
-        if gtype in ['vnc', 'spice']:
-            guri = str(gtype) + "://"
-            if username:
-                guri = guri + str(username) + '@'
-            sep = {'vnc': ':', 'spice': '?port='}[gtype]
-            guri += str(connhost) + sep + str(gport)
-
-        return [gtype, connhost, gport, transport, username, connport,
-                guri]
+        return [gtype, transport,
+                connhost, connuser, connport,
+                gaddr, gport]
 
 
     def _build_device_list(self, device_type,
