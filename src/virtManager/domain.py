@@ -316,7 +316,7 @@ class vmmDomainBase(vmmLibvirtObject):
                 # Since we don't expose this in the UI, have host value trump
                 # caps value
                 guest.cpu.vendor = vendor
-            guest.cpu.model = model
+            guest.cpu.model = model or None
         return self._redefine_guest(change)
 
     def define_both_mem(self, memory, maxmem):
