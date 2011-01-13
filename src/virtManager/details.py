@@ -341,7 +341,6 @@ class vmmDetails(vmmGObjectUI):
             "on_overview_clock_changed": self.config_enable_apply,
             "on_security_label_changed": self.security_label_changed,
             "on_security_type_changed": self.security_type_changed,
-            "on_security_model_changed": self.security_model_changed,
 
             "on_config_vcpus_changed": self.config_vcpus_changed,
             "on_config_vcpupin_changed": self.config_vcpus_changed,
@@ -1287,17 +1286,6 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("config-apply").set_sensitive(True)
 
     # Overview -> Security
-    def security_model_changed(self, combo):
-        model = combo.get_model()
-        idx = combo.get_active()
-        if idx < 0:
-            return
-
-        self.window.get_widget("config-apply").set_sensitive(True)
-        val = model[idx][0]
-        show_type = (val.lower() != "none")
-        self.window.get_widget("security-type-box").set_sensitive(show_type)
-
     def security_label_changed(self, label_ignore):
         self.window.get_widget("config-apply").set_sensitive(True)
 
@@ -1531,19 +1519,15 @@ class vmmDetails(vmmGObjectUI):
             clock = self.window.get_widget("overview-clock-label").get_text()
 
         # Security
-        combo = self.window.get_widget("security-model")
-        model = combo.get_model()
-        semodel = model[combo.get_active()][0]
-
-        if not semodel or str(semodel).lower() == "none":
-            semodel = None
-
         if self.window.get_widget("security-dynamic").get_active():
             setype = "dynamic"
         else:
             setype = "static"
 
         selabel = self.window.get_widget("security-label").get_text()
+        semodel = None
+        if self.window.get_widget("security-type-box").get_sensitive():
+            semodel = self.window.get_widget("security-model").get_text()
 
         # Description
         desc_widget = self.window.get_widget("overview-description")
@@ -1919,22 +1903,13 @@ class vmmDetails(vmmGObjectUI):
         self.set_combo_label("overview-clock", 0, clock)
 
         # Security details
-        vmmodel, ignore, vmlabel = self.vm.get_seclabel()
-        semodel_combo = self.window.get_widget("security-model")
-        semodel_model = semodel_combo.get_model()
+        semodel, ignore, vmlabel = self.vm.get_seclabel()
         caps = self.vm.get_connection().get_capabilities()
 
-        semodel_model.clear()
-        semodel_model.append(["None"])
         if caps.host.secmodel and caps.host.secmodel.model:
-            semodel_model.append([caps.host.secmodel.model])
-
-        active = 0
-        for i in range(0, len(semodel_model)):
-            if vmmodel and vmmodel == semodel_model[i][0]:
-                active = i
-                break
-        semodel_combo.set_active(active)
+            semodel = caps.host.secmodel.model
+        self.window.get_widget("security-type-box").set_sensitive(bool(semodel))
+        self.window.get_widget("security-model").set_text(semodel or _("None"))
 
         if self.vm.get_seclabel()[1] == "static":
             self.window.get_widget("security-static").set_active(True)
@@ -1942,7 +1917,6 @@ class vmmDetails(vmmGObjectUI):
             self.window.get_widget("security-dynamic").set_active(True)
 
         self.window.get_widget("security-label").set_text(vmlabel)
-        semodel_combo.emit("changed")
 
     def refresh_stats_page(self):
         def _dsk_rx_tx_text(rx, tx, unit):
