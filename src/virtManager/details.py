@@ -1302,11 +1302,12 @@ class vmmDetails(vmmGObjectUI):
 
     # Overview -> Security
     def security_label_changed(self, label_ignore):
-        self.window.get_widget("config-apply").set_sensitive(True)
+        self.config_enable_apply()
 
     def security_type_changed(self, button):
-        self.window.get_widget("config-apply").set_sensitive(True)
-        self.window.get_widget("security-label").set_sensitive(not button.get_active())
+        self.config_enable_apply()
+        self.window.get_widget("security-label").set_sensitive(
+                                                    not button.get_active())
 
     # Memory
     def config_get_maxmem(self):
@@ -1987,19 +1988,11 @@ class vmmDetails(vmmGObjectUI):
 
         curadj = self.window.get_widget("config-vcpus").get_adjustment()
         maxadj = self.window.get_widget("config-maxvcpus").get_adjustment()
+        curadj.value = int(curvcpus)
+        maxadj.value = int(maxvcpus)
 
         self.window.get_widget("state-host-cpus").set_text(
                                                         str(host_active_count))
-
-        if self.window.get_widget("config-apply").get_property("sensitive"):
-            curval = self.config_get_vcpus()
-            maxval = self.config_get_maxvcpus()
-            if maxval < curval:
-                maxadj.value = curval
-            maxadj.lower = curval
-        else:
-            curadj.value = int(curvcpus)
-            maxadj.value = int(maxvcpus)
 
         # Warn about overcommit
         warn = bool(self.config_get_vcpus() > host_active_count)
