@@ -2065,13 +2065,11 @@ class vmmDetails(vmmGObjectUI):
 
     def refresh_config_memory(self):
         host_mem_widget = self.window.get_widget("state-host-memory")
-        vm_mem_widget = self.window.get_widget("state-vm-memory")
         host_mem = self.vm.get_connection().host_memory_size() / 1024
         vm_cur_mem = self.vm.get_memory() / 1024.0
         vm_max_mem = self.vm.maximum_memory() / 1024.0
 
         host_mem_widget.set_text("%d MB" % (int(round(host_mem))))
-        vm_mem_widget.set_text("%d MB" % int(round(vm_cur_mem)))
 
         curmem = self.window.get_widget("config-memory").get_adjustment()
         maxmem = self.window.get_widget("config-maxmem").get_adjustment()
