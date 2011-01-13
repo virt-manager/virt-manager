@@ -1591,8 +1591,9 @@ class vmmDetails(vmmGObjectUI):
                         (sockets, cores, threads)]
 
         ret = self._change_config_helper(define_funcs, define_args,
-                                         self.vm.hotplug_vcpus,
-                                         (vcpus,))
+                                         [self.vm.hotplug_vcpus,
+                                          self.config_vcpu_pin_cpuset],
+                                         [(vcpus,), (cpuset,)])
 
         if ret:
             self._cpu_copy_host = False
@@ -1619,6 +1620,18 @@ class vmmDetails(vmmGObjectUI):
 
         self._refresh_runtime_pinning()
 
+    def config_vcpu_pin_cpuset(self, cpuset):
+        conn = self.vm.get_connection()
+        vcpu_list = self.window.get_widget("config-vcpu-list")
+        vcpu_model = vcpu_list.get_model()
+
+        if self.vm.vcpu_pinning() == cpuset:
+            return
+
+        pinlist = virtinst.Guest.cpuset_str_to_tuple(conn.vmm, cpuset)
+        for row in vcpu_model:
+            vcpu_num = row[0]
+            self.vm.pin_vcpu(int(vcpu_num), pinlist)
 
     # Memory
     def config_memory_apply(self):
