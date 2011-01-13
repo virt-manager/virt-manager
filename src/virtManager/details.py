@@ -1622,8 +1622,6 @@ class vmmDetails(vmmGObjectUI):
 
     # Memory
     def config_memory_apply(self):
-        self.refresh_config_memory()
-
         curmem = None
         maxmem = self.config_get_maxmem()
         if self.window.get_widget("config-memory").get_property("sensitive"):
@@ -2077,16 +2075,8 @@ class vmmDetails(vmmGObjectUI):
 
         curmem = self.window.get_widget("config-memory").get_adjustment()
         maxmem = self.window.get_widget("config-maxmem").get_adjustment()
-
-        if self.window.get_widget("config-apply").get_property("sensitive"):
-            memval = self.config_get_memory()
-            maxval = self.config_get_maxmem()
-            if maxval < memval:
-                maxmem.value = memval
-            maxmem.lower = memval
-        else:
-            curmem.value = int(round(vm_cur_mem))
-            maxmem.value = int(round(vm_max_mem))
+        curmem.value = int(round(vm_cur_mem))
+        maxmem.value = int(round(vm_max_mem))
 
         if (not
             self.window.get_widget("config-memory").get_property("sensitive")):
