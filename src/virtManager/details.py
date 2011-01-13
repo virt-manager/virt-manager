@@ -1052,6 +1052,9 @@ class vmmDetails(vmmGObjectUI):
         details = self.window.get_widget("details-pages")
         self.page_refresh(details.get_current_page())
 
+        # This is safe to refresh, and is dependent on domain state
+        self._refresh_runtime_pinning()
+
 
     #############################
     # External action listeners #
@@ -1613,7 +1616,7 @@ class vmmDetails(vmmGObjectUI):
                               "".join(traceback.format_exc()))
             return
 
-        self.refresh_config_cpu()
+        self._refresh_runtime_pinning()
 
 
     # Memory
@@ -2003,12 +2006,13 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("config-vcpus-warn-box").set_property(
                                                             "visible", warn)
     def _refresh_cpu_pinning(self):
+        # Populate VCPU pinning
+        vcpupin  = self.vm.vcpu_pinning()
+        self.window.get_widget("config-vcpupin").set_text(vcpupin)
+
+    def _refresh_runtime_pinning(self):
         conn = self.vm.get_connection()
         host_active_count = conn.host_active_processor_count()
-        vcpupin  = self.vm.vcpu_pinning()
-
-        # Populate VCPU pinning
-        self.window.get_widget("config-vcpupin").set_text(vcpupin)
 
         vcpu_list = self.window.get_widget("config-vcpu-list")
         vcpu_model = vcpu_list.get_model()
@@ -2065,6 +2069,7 @@ class vmmDetails(vmmGObjectUI):
 
         self._refresh_cpu_count()
         self._refresh_cpu_pinning()
+        self._refresh_runtime_pinning()
         self._refresh_cpu_config(cpu)
 
     def refresh_config_memory(self):
