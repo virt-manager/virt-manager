@@ -343,6 +343,7 @@ class vmmDetails(vmmGObjectUI):
             "on_security_type_changed": self.security_type_changed,
 
             "on_config_vcpus_changed": self.config_vcpus_changed,
+            "on_config_maxvcpus_changed": self.config_maxvcpus_changed,
             "on_config_vcpupin_changed": self.config_vcpus_changed,
             "on_config_vcpupin_generate_clicked": self.config_vcpupin_generate,
             "on_cpu_model_changed": self.config_enable_apply,
@@ -1260,6 +1261,17 @@ class vmmDetails(vmmGObjectUI):
     ##############################
     # Details/Hardware listeners #
     ##############################
+    def _spin_get_helper(self, wname):
+        widget = self.window.get_widget(wname)
+        adj = widget.get_adjustment()
+        txt = widget.get_text()
+
+        try:
+            ret = int(txt)
+        except:
+            ret = adj.value
+        return ret
+
     def _browse_file(self, callback, is_media=False):
         if is_media:
             reason = self.config.CONFIG_DIR_MEDIA
@@ -1295,28 +1307,15 @@ class vmmDetails(vmmGObjectUI):
 
     # Memory
     def config_get_maxmem(self):
-        maxadj = self.window.get_widget("config-maxmem").get_adjustment()
-        txtmax = self.window.get_widget("config-maxmem").get_text()
-        try:
-            maxmem = int(txtmax)
-        except:
-            maxmem = maxadj.value
-        return maxmem
-
+        return self._spin_get_helper("config-maxmem")
     def config_get_memory(self):
-        memadj = self.window.get_widget("config-memory").get_adjustment()
-        txtmem = self.window.get_widget("config-memory").get_text()
-        try:
-            mem = int(txtmem)
-        except:
-            mem = memadj.value
-        return mem
+        return self._spin_get_helper("config-memory")
 
     def config_maxmem_changed(self, src_ignore):
-        self.window.get_widget("config-apply").set_sensitive(True)
+        self.config_enable_apply()
 
     def config_memory_changed(self, src_ignore):
-        self.window.get_widget("config-apply").set_sensitive(True)
+        self.config_enable_apply()
 
         maxadj = self.window.get_widget("config-maxmem").get_adjustment()
 
@@ -1330,6 +1329,11 @@ class vmmDetails(vmmGObjectUI):
         return virtinst.Guest.generate_cpuset(self.conn.vmm, mem)
 
     # VCPUS
+    def config_get_vcpus(self):
+        return self._spin_get_helper("config-vcpus")
+    def config_get_maxvcpus(self):
+        return self._spin_get_helper("config-maxvcpus")
+
     def config_vcpupin_generate(self, ignore):
         try:
             pinstr = self.generate_cpuset()
@@ -1341,15 +1345,24 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("config-vcpupin").set_text(pinstr)
 
     def config_vcpus_changed(self, ignore):
+        self.config_enable_apply()
+
         conn = self.vm.get_connection()
         host_active_count = conn.host_active_processor_count()
-        vcpus_adj = self.window.get_widget("config-vcpus").get_adjustment()
+        cur = self.config_get_vcpus()
 
         # Warn about overcommit
-        warn = bool(vcpus_adj.value > host_active_count)
+        warn = bool(cur > host_active_count)
         self.window.get_widget("config-vcpus-warn-box").set_property(
                                                             "visible", warn)
 
+        maxadj = self.window.get_widget("config-maxvcpus").get_adjustment()
+        maxval = self.config_get_maxvcpus()
+        if maxval < cur:
+            maxadj.value = cur
+        maxadj.lower = cur
+
+    def config_maxvcpus_changed(self, ignore):
         self.config_enable_apply()
 
     def config_cpu_copy_host(self, src_ignore):
@@ -1546,7 +1559,8 @@ class vmmDetails(vmmGObjectUI):
 
     # CPUs
     def config_vcpus_apply(self):
-        vcpus = self.window.get_widget("config-vcpus").get_adjustment().value
+        vcpus = self.config_get_vcpus()
+        maxv = self.config_get_maxvcpus()
         cpuset = self.window.get_widget("config-vcpupin").get_text()
 
         do_top = self.window.get_widget("cpu-topology-enable").get_active()
@@ -1567,7 +1581,7 @@ class vmmDetails(vmmGObjectUI):
                         self.vm.define_cpuset,
                         self.vm.define_cpu,
                         self.vm.define_cpu_topology]
-        define_args  = [(vcpus,),
+        define_args  = [(vcpus, maxv),
                         (cpuset,),
                         (model, vendor, self._cpu_copy_host),
                         (sockets, cores, threads)]
@@ -1962,29 +1976,30 @@ class vmmDetails(vmmGObjectUI):
         self.network_traffic_graph.set_property("data_array",
                                                 self.vm.network_traffic_vector())
 
-    def _refresh_cpu_count(self, user_changed):
+    def _refresh_cpu_count(self):
         conn = self.vm.get_connection()
         host_active_count = conn.host_active_processor_count()
-        cpu_max = (self.vm.is_runable() and
-                   conn.get_max_vcpus(self.vm.get_hv_type()) or
-                   self.vm.vcpu_max_count())
+        maxvcpus = self.vm.vcpu_max_count()
         curvcpus = self.vm.vcpu_count()
 
-        vcpus_adj = self.window.get_widget("config-vcpus").get_adjustment()
+        curadj = self.window.get_widget("config-vcpus").get_adjustment()
+        maxadj = self.window.get_widget("config-maxvcpus").get_adjustment()
 
-        vcpus_adj.upper = cpu_max
-        self.window.get_widget("state-host-cpus").set_text("%s" %
-                                                           host_active_count)
-        self.window.get_widget("state-vm-maxvcpus").set_text(str(cpu_max))
+        self.window.get_widget("state-host-cpus").set_text(
+                                                        str(host_active_count))
 
-        # If user manually changes vcpus, don't overwrite the value
-        if not user_changed:
-            vcpus_adj.value = curvcpus
-
-        self.window.get_widget("state-vm-vcpus").set_text(str(curvcpus))
+        if self.window.get_widget("config-apply").get_property("sensitive"):
+            curval = self.config_get_vcpus()
+            maxval = self.config_get_maxvcpus()
+            if maxval < curval:
+                maxadj.value = curval
+            maxadj.lower = curval
+        else:
+            curadj.value = int(curvcpus)
+            maxadj.value = int(maxvcpus)
 
         # Warn about overcommit
-        warn = bool(vcpus_adj.value > host_active_count)
+        warn = bool(self.config_get_vcpus() > host_active_count)
         self.window.get_widget("config-vcpus-warn-box").set_property(
                                                             "visible", warn)
     def _refresh_cpu_pinning(self):
@@ -2046,11 +2061,9 @@ class vmmDetails(vmmGObjectUI):
 
     def refresh_config_cpu(self):
         self._cpu_copy_host = False
-        config_apply = self.window.get_widget("config-apply")
-        user_changed = config_apply.get_property("sensitive")
         cpu = self.vm.get_cpu_config()
 
-        self._refresh_cpu_count(user_changed)
+        self._refresh_cpu_count()
         self._refresh_cpu_pinning()
         self._refresh_cpu_config(cpu)
 

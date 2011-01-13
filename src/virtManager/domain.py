@@ -292,9 +292,10 @@ class vmmDomainBase(vmmLibvirtObject):
         self.redefine_cached()
         return ret
 
-    def define_vcpus(self, vcpus):
+    def define_vcpus(self, vcpus, maxvcpus):
         def change(guest):
             guest.vcpus = int(vcpus)
+            guest.maxvcpus = int(maxvcpus)
         return self._redefine_guest(change)
     def define_cpuset(self, cpuset):
         def change(guest):
@@ -523,6 +524,11 @@ class vmmDomainBase(vmmLibvirtObject):
         return int(self._get_guest().vcpus)
 
     def vcpu_max_count(self):
+        guest = self._get_guest()
+        has_xml_max = (guest.vcpus != guest.maxvcpus)
+        if has_xml_max or not self.is_active():
+            return guest.maxvcpus
+
         if self._startup_vcpus == None:
             self._startup_vcpus = int(self.vcpu_count())
         return int(self._startup_vcpus)

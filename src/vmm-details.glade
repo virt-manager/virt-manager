@@ -1827,40 +1827,10 @@ I/O:</property>
                                               <widget class="GtkTable" id="table30">
                                                 <property name="visible">True</property>
                                                 <property name="border_width">3</property>
-                                                <property name="n_rows">4</property>
+                                                <property name="n_rows">3</property>
                                                 <property name="n_columns">2</property>
                                                 <property name="column_spacing">12</property>
                                                 <property name="row_spacing">6</property>
-                                                <child>
-                                                  <widget class="GtkLabel" id="state-vm-maxvcpus">
-                                                    <property name="visible">True</property>
-                                                    <property name="xalign">0</property>
-                                                    <property name="label">8</property>
-                                                    <property name="selectable">True</property>
-                                                  </widget>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="right_attach">2</property>
-                                                    <property name="top_attach">2</property>
-                                                    <property name="bottom_attach">3</property>
-                                                    <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"></property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <widget class="GtkLabel" id="state-vm-vcpus">
-                                                    <property name="visible">True</property>
-                                                    <property name="xalign">0</property>
-                                                    <property name="label">2</property>
-                                                    <property name="selectable">True</property>
-                                                  </widget>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="right_attach">2</property>
-                                                    <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"></property>
-                                                  </packing>
-                                                </child>
                                                 <child>
                                                   <widget class="GtkLabel" id="state-host-cpus">
                                                     <property name="visible">True</property>
@@ -1871,8 +1841,6 @@ I/O:</property>
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="right_attach">2</property>
-                                                    <property name="top_attach">3</property>
-                                                    <property name="bottom_attach">4</property>
                                                     <property name="x_options">GTK_FILL</property>
                                                     <property name="y_options"></property>
                                                   </packing>
@@ -1884,8 +1852,6 @@ I/O:</property>
                                                     <property name="label" translatable="yes">Logical host CPUs:</property>
                                                   </widget>
                                                   <packing>
-                                                    <property name="top_attach">3</property>
-                                                    <property name="bottom_attach">4</property>
                                                     <property name="x_options">GTK_FILL</property>
                                                     <property name="y_options"></property>
                                                   </packing>
@@ -1904,21 +1870,10 @@ I/O:</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <widget class="GtkLabel" id="label347">
-                                                    <property name="visible">True</property>
-                                                    <property name="xalign">1</property>
-                                                    <property name="label" translatable="yes">Current allocation:</property>
-                                                  </widget>
-                                                  <packing>
-                                                    <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"></property>
-                                                  </packing>
-                                                </child>
-                                                <child>
                                                   <widget class="GtkLabel" id="label333">
                                                     <property name="visible">True</property>
                                                     <property name="xalign">1</property>
-                                                    <property name="label" translatable="yes">Change a_llocation:</property>
+                                                    <property name="label" translatable="yes">Current a_llocation:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">config-vcpus</property>
                                                   </widget>
@@ -1969,6 +1924,42 @@ I/O:</property>
                                                     <property name="top_attach">1</property>
                                                     <property name="bottom_attach">2</property>
                                                     <property name="x_options">GTK_FILL</property>
+                                                    <property name="y_options">GTK_FILL</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkHBox" id="hbox3">
+                                                    <property name="visible">True</property>
+                                                    <child>
+                                                      <widget class="GtkSpinButton" id="config-maxvcpus">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="invisible_char">●</property>
+                                                        <property name="adjustment">1 1 1024 1 2 0</property>
+                                                        <signal name="changed" handler="on_config_maxvcpus_changed"/>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <widget class="GtkAlignment" id="alignment28">
+                                                        <property name="visible">True</property>
+                                                        <child>
+                                                          <placeholder/>
+                                                        </child>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">2</property>
+                                                    <property name="bottom_attach">3</property>
+                                                    <property name="y_options">GTK_FILL</property>
                                                   </packing>
                                                 </child>
                                               </widget>
