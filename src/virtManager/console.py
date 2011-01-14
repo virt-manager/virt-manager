@@ -394,9 +394,9 @@ class SpiceViewer(Viewer):
     def close(self):
         if self.spice_session is not None:
             self.spice_session.disconnect()
-            self.spice_session = None
-            self.audio = None
-            self.display = None
+        self.spice_session = None
+        self.audio = None
+        self.display = None
 
     def is_open(self):
         return self.spice_session != None
@@ -708,13 +708,19 @@ class vmmConsolePages(vmmGObjectUI):
                 self.activate_unavailable_page(_("Guest has crashed"))
 
     def close_viewer(self):
-        if self.viewer is not None:
-            v = self.viewer # close_viewer() can be reentered
-            self.viewer = None
-            if v.get_widget():
-                self.window.get_widget("console-vnc-viewport").remove(v.get_widget())
-            v.close()
-            self.viewer_connected = False
+        viewport = self.window.get_widget("console-vnc-viewport")
+        if self.viewer is None:
+            return
+
+        v = self.viewer # close_viewer() can be reentered
+        self.viewer = None
+        w = v.get_widget()
+
+        if w and w in viewport.get_children():
+            viewport.remove(w)
+
+        v.close()
+        self.viewer_connected = False
 
     def update_widget_states(self, vm, status_ignore):
         runable = vm.is_runable()
