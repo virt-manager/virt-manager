@@ -496,6 +496,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.viewerRetryDelay = 125
         self.viewer = None
         self.viewer_connected = False
+        self.viewer_connecting = False
 
         finish_img = gtk.image_new_from_stock(gtk.STOCK_YES,
                                               gtk.ICON_SIZE_BUTTON)
@@ -749,6 +750,7 @@ class vmmConsolePages(vmmGObjectUI):
     ###################
 
     def activate_unavailable_page(self, msg):
+        self.close_viewer()
         self.window.get_widget("console-pages").set_current_page(PAGE_UNAVAILABLE)
         self.window.get_widget("details-menu-vm-screenshot").set_sensitive(False)
         self.window.get_widget("console-unavailable").set_label("<b>" + msg + "</b>")
@@ -845,7 +847,7 @@ class vmmConsolePages(vmmGObjectUI):
             self.viewerRetryDelay = self.viewerRetryDelay * 2
 
     def skip_connect_attempt(self):
-        return (self.viewer_connected or
+        return (self.viewer or
                 not self.is_visible())
 
     def guest_not_avail(self):
@@ -855,6 +857,16 @@ class vmmConsolePages(vmmGObjectUI):
                 self.vm.get_id() < 0)
 
     def try_login(self, src_ignore=None):
+        if self.viewer_connecting:
+            return
+
+        try:
+            self.viewer_connecting = True
+            self._try_login()
+        finally:
+            self.viewer_connecting = False
+
+    def _try_login(self):
         if self.skip_connect_attempt():
             # Don't try and login for these cases
             return
@@ -899,16 +911,6 @@ class vmmConsolePages(vmmGObjectUI):
             self.schedule_retry()
             return
 
-        if protocol == "vnc":
-            self.viewer = VNCViewer(self, self.config)
-            self.window.get_widget("console-vnc-viewport").add(
-                                                    self.viewer.get_widget())
-            self.viewer.init_widget()
-        elif protocol == "spice":
-            self.viewer = SpiceViewer(self, self.config)
-
-        self.set_enable_accel()
-
         self.activate_unavailable_page(
                 _("Connecting to graphical console for guest"))
 
@@ -918,6 +920,16 @@ class vmmConsolePages(vmmGObjectUI):
                       (protocol, transport, connhost, connuser, connport,
                        gaddr, gport, gsocket))
         try:
+            if protocol == "vnc":
+                self.viewer = VNCViewer(self, self.config)
+                self.window.get_widget("console-vnc-viewport").add(
+                                                    self.viewer.get_widget())
+                self.viewer.init_widget()
+            elif protocol == "spice":
+                self.viewer = SpiceViewer(self, self.config)
+
+            self.set_enable_accel()
+
             if transport in ("ssh", "ext"):
                 if self.tunnels:
                     # Tunnel already open, no need to continue
