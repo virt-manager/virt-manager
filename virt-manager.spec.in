@@ -153,6 +153,15 @@ fi
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Fri Jan 14 2011 Cole Robinson <crobinso@redhat.com> - 0.8.6-1
+- SPICE support (requires spice-gtk) (Marc-André Lureau)
+- Option to configure CPU model
+- Option to configure CPU topology
+- Save and migration cancellation (Wen Congyang)
+- Save and migration progress reporting
+- Option to enable bios boot menu
+- Option to configure direct kernel/initrd boot
+
 * Tue Aug 24 2010 Cole Robinson <crobinso@redhat.com> - 0.8.5-1
 - Improved save/restore support
 - Option to view and change disk cache mode
