@@ -2,12 +2,12 @@
    ===================
 
 The GNOME virt manager provides the ability to control its high level
-UI actions via a DBus service. 
+UI actions via a DBus service.
 
 Interface description
 ---------------------
 
-The service is intended to run on the session bus, and when launched 
+The service is intended to run on the session bus, and when launched
 will register a well known bus name of 'com.redhat.virt.manager'.
 Within this service, a single object is to be exported under the
 path of '/com/redhat/virt/manager'.
@@ -39,14 +39,14 @@ which contains the following methods:
      NB. the domain creator is only accessible as root.
 
  - show_host_summary(string:uri)
-     Displays the window showing a summary of all active domains 
+     Displays the window showing a summary of all active domains
      on the host
 
  - show_connect()
      Displays the dialog for connecting to a hypervisor
- 
-In all these methods the 'uri' parameter is the URI for the hypervisor,
-typically either 'Xen', or 'test://default'.
+
+In all these methods the 'uri' parameter is the libvirt URI for the
+hypervisor, typically either 'qemu:///system', or 'xen:///'
 
 Example usage from shell
 ------------------------
@@ -65,7 +65,7 @@ command as follows:
   $dbus-send --print-reply --session --dest="com.redhat.virt.manager" \
              "/com/redhat/virt/manager"
              "com.redhat.virt.manager.show_domain_performance" \
-             "string:xen" \
+             "string:qemu:///system" \
              "string:349025e8-ad34-34ff-239a-12ae095249f3"
 
 Example usage from python
@@ -83,7 +83,8 @@ Example usage from python
   virt_object = bus.get_object("com.redhat.virt.manager",
                                "/com/redhat/virt/manager")
   virt_iface = dbus.Interface(virt_object, "com.redhat.virt.manager")
-  virt_iface.show_domain_performance("xen", "349025e8-ad34-34ff-239a-12ae095249f3")
+  virt_iface.show_domain_performance("qemu:///system",
+                                     "349025e8-ad34-34ff-239a-12ae095249f3")
 
 
 
