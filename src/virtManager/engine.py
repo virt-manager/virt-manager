@@ -47,22 +47,6 @@ from virtManager.error import vmmErrorDialog
 from virtManager.systray import vmmSystray
 import virtManager.util as util
 
-
-# List of packages to look for via packagekit at first startup.
-# If this list is empty, no attempt to contact packagekit is made
-LIBVIRT_DAEMON = ""
-HV_PACKAGE = ""
-OTHER_PACKAGES = []
-PACKAGEKIT_PACKAGES = []
-
-if LIBVIRT_DAEMON:
-    PACKAGEKIT_PACKAGES.append(LIBVIRT_DAEMON)
-if HV_PACKAGE:
-    PACKAGEKIT_PACKAGES.append(HV_PACKAGE)
-if OTHER_PACKAGES:
-    PACKAGEKIT_PACKAGES.extend(OTHER_PACKAGES)
-
-
 def default_uri():
     tryuri = None
     if os.path.exists("/var/lib/xend") and os.path.exists("/proc/xen"):
@@ -80,12 +64,12 @@ def default_uri():
 # PackageKit lookup helpers #
 #############################
 
-def check_packagekit(errbox):
+def check_packagekit(errbox, packages, libvirt_packages):
     """
     Returns None when we determine nothing useful.
     Returns (success, did we just install libvirt) otherwise.
     """
-    if not PACKAGEKIT_PACKAGES:
+    if not packages:
         logging.debug("No PackageKit packages to search for.")
         return
 
@@ -103,7 +87,7 @@ def check_packagekit(errbox):
 
     found = []
     progWin = vmmAsyncJob(_do_async_search,
-                          [session, pk_control],
+                          [session, pk_control, packages],
                           _("Searching for available hypervisors..."),
                           _("Searching for available hypervisors..."),
                           run_main=False)
@@ -113,7 +97,7 @@ def check_packagekit(errbox):
 
     found = progWin.get_data()
 
-    not_found = filter(lambda x: x not in found, PACKAGEKIT_PACKAGES)
+    not_found = filter(lambda x: x not in found, packages)
     logging.debug("Missing packages: %s" % not_found)
 
     do_install = not_found
@@ -145,13 +129,19 @@ def check_packagekit(errbox):
                         "".join(traceback.format_exc()))
         return
 
-    return (True, LIBVIRT_DAEMON in do_install)
+    need_libvirt = False
+    for p in libvirt_packages:
+        if p in do_install:
+            need_libvirt = True
+            break
 
-def _do_async_search(asyncjob, session, pk_control):
+    return (True, need_libvirt)
+
+def _do_async_search(asyncjob, session, pk_control, packages):
     found = []
     try:
-        for name in PACKAGEKIT_PACKAGES:
-            ret_found = packagekit_search(session, pk_control, name)
+        for name in packages:
+            ret_found = packagekit_search(session, pk_control, name, packages)
             found += ret_found
 
     except Exception, e:
@@ -171,7 +161,7 @@ def packagekit_install(package_list):
     logging.debug("Installing packages: %s" % package_list)
     pk_control.InstallPackageNames(0, package_list, "hide-confirm-search")
 
-def packagekit_search(session, pk_control, package_name):
+def packagekit_search(session, pk_control, package_name, packages):
     tid = pk_control.GetTid()
     pk_trans = dbus.Interface(
                     session.get_object("org.freedesktop.PackageKit", tid),
@@ -183,7 +173,7 @@ def packagekit_search(session, pk_control, package_name):
         ignore = summary
 
         found_name = str(package_id.split(";")[0])
-        if found_name in PACKAGEKIT_PACKAGES:
+        if found_name in packages:
             found.append(found_name)
 
     def error(code, details):
@@ -304,7 +294,10 @@ class vmmEngine(vmmGObject):
         ret = None
         did_install_libvirt = False
         try:
-            ret = check_packagekit(self.err)
+            libvirt_packages = self.config.libvirt_packages
+            packages = self.config.hv_packages + libvirt_packages
+
+            ret = check_packagekit(self.err, packages, libvirt_packages)
         except:
             logging.exception("Error talking to PackageKit")
 

@@ -48,6 +48,22 @@ AC_ARG_WITH([qemu-user],
     [DEFAULT_QEMU_USER=$withval],
     [DEFAULT_QEMU_USER="root"])
 
+dnl Distro libvirt package name
+AC_ARG_WITH([libvirt-package-names],
+    AC_HELP_STRING(
+        [--with-libvirt-package-names],
+        [name of libvirt distro packages virt-manager will check for on first run @<:@default=none@:>@]),
+    [LIBVIRT_PACKAGES=$withval],
+    [LIBVIRT_PACKAGES=""])
+
+dnl Recommended HV packages
+AC_ARG_WITH([kvm-packages],
+    AC_HELP_STRING(
+        [--with-kvm-packages],
+        [recommended kvm packages virt-manager will check for on first run @<:@default=none@:>@]),
+    [KVM_PACKAGES=$withval],
+    [KVM_PACKAGES=""])
+
 dnl Don't list options that rhel doesn't support
 AC_ARG_ENABLE([unsupported-rhel-options],
   AC_HELP_STRING(
@@ -60,7 +76,7 @@ dnl Allow passing in a prefered distro list
 AC_ARG_WITH([preferred-distros],
     AC_HELP_STRING(
         [--with-preferred-distros],
-        [Distros to list first in New VM wizard @<:@default=root@:>@]),
+        [Distros to list first in New VM wizard @<:@default=none@:>@]),
     [PREFERRED_DISTROS=$withval],
     [PREFERRED_DISTROS=""])
 
@@ -71,6 +87,8 @@ AC_SUBST([VIRTINST_VERSION])
 AC_SUBST([DEFAULT_QEMU_USER])
 AC_SUBST([ENABLE_UNSUPPORTED_RHEL_OPTS])
 AC_SUBST([PREFERRED_DISTROS])
+AC_SUBST([LIBVIRT_PACKAGES])
+AC_SUBST([KVM_PACKAGES])
 AM_CONDITIONAL([INSTALL_TUI], [test "x$with_tui" = "xyes"])
 
 
@@ -113,6 +131,16 @@ if test "x$PREFERRED_DISTROS" = "x" ; then
 AC_MSG_NOTICE([Preferred distros:               none])
 else
 AC_MSG_NOTICE([Preferred distros:               $PREFERRED_DISTROS])
+fi
+if test "x$LIBVIRT_PACKAGES" = "x" ; then
+AC_MSG_NOTICE([Libvirt packages:                none])
+else
+AC_MSG_NOTICE([Libvirt Packages:                $LIBVIRT_PACKAGES])
+fi
+if test "x$KVM_PACKAGES" = "x" ; then
+AC_MSG_NOTICE([KVM packages:                    none])
+else
+AC_MSG_NOTICE([KVM packages:                    $KVM_PACKAGES])
 fi
 
 AC_MSG_NOTICE([])

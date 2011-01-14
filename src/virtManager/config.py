@@ -112,6 +112,8 @@ class vmmConfig(object):
         # Use this key to disable certain features not supported on RHEL
         self.enable_unsupported_rhel_opts = True
         self.preferred_distros = []
+        self.hv_packages = []
+        self.libvirt_packages = []
 
         self.status_icons = {
             libvirt.VIR_DOMAIN_BLOCKED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 18, 18),

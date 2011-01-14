@@ -63,6 +63,8 @@ endif
 	  -e "s,::DEFAULT_QEMU_USER::,$(DEFAULT_QEMU_USER)," \
 	  -e "s,::ENABLE_UNSUPPORTED_RHEL_OPTS::,$(ENABLE_UNSUPPORTED_RHEL_OPTS)," \
 	  -e "s|::PREFERRED_DISTROS::|$(PREFERRED_DISTROS)|" \
+	  -e "s|::HV_PACKAGES::|$(KVM_PACKAGES)|" \
+	  -e "s|::LIBVIRT_PACKAGES::|$(LIBVIRT_PACKAGES)|" \
 	  < $< > $@
 
 $(PACKAGE): $(srcdir)/$(PACKAGE).in
