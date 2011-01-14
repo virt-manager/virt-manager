@@ -60,7 +60,7 @@ class Tunnel(object):
         self.errfd = None
         self.pid = None
 
-    def open(self, connhost, connuser, connport, gaddr, gport):
+    def open(self, connhost, connuser, connport, gaddr, gport, gsocket):
         if self.outfd is not None:
             return -1
 
@@ -85,7 +85,10 @@ class Tunnel(object):
         # Fedora's 'nc' doesn't have this option, and apparently defaults
         # to the desired behavior.
         #
-        nc_params = "%s %s" % (gaddr, gport)
+        if gsocket:
+            nc_params = "-U %s" % gsocket
+        else:
+            nc_params = "%s %s" % (gaddr, gport)
 
         nc_cmd = (
             """nc -q 2>&1 | grep -q "requires an argument";"""
@@ -168,19 +171,20 @@ class Tunnel(object):
 
 
 class Tunnels(object):
-    def __init__(self, connhost, connuser, connport, gaddr, gport):
+    def __init__(self, connhost, connuser, connport, gaddr, gport, gsocket):
         self.connhost = connhost
         self.connuser = connuser
         self.connport = connport
 
         self.gaddr = gaddr
         self.gport = gport
+        self.gsocket = gsocket
         self._tunnels = []
 
     def open_new(self):
         t = Tunnel()
         fd = t.open(self.connhost, self.connuser, self.connport,
-                    self.gaddr, self.gport)
+                    self.gaddr, self.gport, self.gsocket)
         self._tunnels.append(t)
         return fd
 
@@ -246,7 +250,7 @@ class Viewer(object):
             logging.debug("Error when getting the grab keys combination: %s" %
                           str(e))
 
-    def open_host(self, host, user, port, password=None):
+    def open_host(self, host, user, port, socketpath, password=None):
         raise NotImplementedError()
 
 class VNCViewer(Viewer):
@@ -328,10 +332,27 @@ class VNCViewer(Viewer):
     def is_open(self):
         return self.display.is_open()
 
-    def open_host(self, host, user, port, password=None):
+    def open_host(self, host, user, port, socketpath, password=None):
         ignore = password
         ignore = user
-        self.display.open_host(host, port)
+
+        if not socketpath:
+            self.display.open_host(host, port)
+            return
+
+        try:
+            sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            sock.connect(socketpath)
+            self.sockfd = sock
+        except Exception, e:
+            raise RuntimeError(_("Error opening socket path '%s': %s") %
+                               (socketpath, e))
+
+        fd = self.sockfd.fileno()
+        if fd < 0:
+            raise RuntimeError((_("Error opening socket path '%s'") %
+                                socketpath) + " fd=%s" % fd)
+        self.open_fd(fd)
 
     def open_fd(self, fd):
         self.display.open_fd(fd)
@@ -412,7 +433,9 @@ class SpiceViewer(Viewer):
             self.audio = spice.Audio(self.spice_session)
             return
 
-    def open_host(self, host, user, port, password=None):
+    def open_host(self, host, user, port, socketpath, password=None):
+        ignore = socketpath
+
         uri = "spice://"
         uri += (user and str(user) or "")
         uri += str(host) + "?port=" + str(port)
@@ -839,7 +862,7 @@ class vmmConsolePages(vmmGObjectUI):
         try:
             (protocol, transport,
              connhost, connuser, connport,
-             gaddr, gport) = self.vm.get_graphics_console()
+             gaddr, gport, gsocket) = self.vm.get_graphics_console()
         except Exception, e:
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after
@@ -885,9 +908,9 @@ class vmmConsolePages(vmmGObjectUI):
 
         logging.debug("Starting connect process for "
                       "proto=%s trans=%s connhost=%s connuser=%s "
-                      "connport=%s gaddr=%s gport=%s" %
+                      "connport=%s gaddr=%s gport=%s gsocket=%s" %
                       (protocol, transport, connhost, connuser, connport,
-                       gaddr, gport))
+                       gaddr, gport, gsocket))
         try:
             if transport in ("ssh", "ext"):
                 if self.tunnels:
@@ -895,14 +918,14 @@ class vmmConsolePages(vmmGObjectUI):
                     return
 
                 self.tunnels = Tunnels(connhost, connuser, connport,
-                                       gaddr, gport)
+                                       gaddr, gport, gsocket)
                 fd = self.tunnels.open_new()
                 if fd >= 0:
                     self.viewer.open_fd(fd)
 
             else:
                 self.viewer.open_host(connhost, connuser,
-                                      str(gport))
+                                      str(gport), gsocket)
 
         except Exception, e:
             logging.exception("Error connection to graphical console")

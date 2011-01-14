@@ -589,13 +589,15 @@ class vmmDomainBase(vmmLibvirtObject):
         gtype = None
         gport = None
         gaddr = None
+        gsocket = None
 
-        if gdevs:
+        if gdev:
             gport = gdev.port
             if gport != None:
                 gport = int(gport)
             gtype = gdev.type
             gaddr = "127.0.0.1"
+            gsocket = gdev.socket
 
         if connhost == None:
             # Force use of 127.0.0.1, because some (broken) systems don't
@@ -611,7 +613,7 @@ class vmmDomainBase(vmmLibvirtObject):
 
         return [gtype, transport,
                 connhost, connuser, connport,
-                gaddr, gport]
+                gaddr, gport, gsocket]
 
 
     def _build_device_list(self, device_type,
