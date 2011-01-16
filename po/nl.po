@@ -2,13 +2,13 @@
 # Copyright (C) 2006-2009 The Free Software Foundation, Inc.
 # This file is distributed under the same license as the virt-manager package.
 # Peter van Egdom <p.van.egdom@gmail.com>, 2007-2009.
-# Geert Warrink <geert.warrink@onsnet.nu>, 2010.
+# Geert Warrink <geert.warrink@onsnet.nu>, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 11:04-0500\n"
-"PO-Revision-Date: 2010-08-25 19:43+0200\n"
+"POT-Creation-Date: 2011-01-14 15:27-0500\n"
+"PO-Revision-Date: 2011-01-16 13:32+0200\n"
 "Last-Translator: Geert Warrink <geert.warrink@onsnet.nu>\n"
 "Language-Team: Fedora\n"
 "Language: nl\n"
@@ -27,13 +27,13 @@ msgstr "Virtuele machines beheren"
 msgid "Virtual Machine Manager"
 msgstr "Virtuele machine beheerder"
 
-#: ../src/virt-manager.py.in:68
+#: ../src/virt-manager.py.in:74
 msgid "Error starting Virtual Machine Manager"
 msgstr "Fout bij het starten van Virtuele machine beheerder"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:340
+#: ../src/virt-manager.py.in:346
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "GTK initialiseren mislukt: %s"
@@ -108,7 +108,7 @@ msgstr "Standaard schermafdruk pad"
 
 #: ../src/virt-manager.schemas.in.h:18
 msgid "Enable menu accelerators in console window"
-msgstr ""
+msgstr "Zet menu versnellers in console venster aan"
 
 #: ../src/virt-manager.schemas.in.h:19
 msgid "Install sound device for local VM"
@@ -212,6 +212,8 @@ msgid ""
 "Whether to enable menu accelerators while connected to the guest graphical "
 "console."
 msgstr ""
+"Moet menu versnellers wel of niet aanzetten bij verbinding met de gast "
+"grafische console."
 
 #: ../src/virt-manager.schemas.in.h:43
 msgid "Whether to install a sound device for local VMs or not"
@@ -311,9 +313,8 @@ msgid "VNC server"
 msgstr "VNC server"
 
 #: ../src/virtManager/addhardware.py:496
-#, fuzzy
 msgid "SPICE server"
-msgstr "VNC server"
+msgstr "SPICE server"
 
 #: ../src/virtManager/addhardware.py:497
 msgid "Local SDL window"
@@ -359,14 +360,12 @@ msgid "Sound"
 msgstr "Geluid"
 
 #: ../src/virtManager/addhardware.py:830
-#, fuzzy
 msgid "Video Device"
-msgstr "Apparaat:"
+msgstr "Video apparaat"
 
 #: ../src/virtManager/addhardware.py:832
-#, fuzzy
 msgid "Watchdog Device"
-msgstr "Bewaker"
+msgstr "Bewaker apparaat"
 
 #: ../src/virtManager/addhardware.py:892
 msgid "Creating Storage File"
@@ -483,11 +482,11 @@ msgstr "Bewaker parameter fout"
 
 #: ../src/virtManager/asyncjob.py:145
 msgid "Cancel the job before closing window?"
-msgstr ""
+msgstr "De taak afsluiten voor het sluiten van het venster?"
 
 #: ../src/virtManager/asyncjob.py:177
 msgid "Cancelling job..."
-msgstr ""
+msgstr "Taak afsluiten..."
 
 #: ../src/virtManager/asyncjob.py:184 ../src/virtManager/asyncjob.py:194
 #: ../src/vmm-progress.glade.h:3
@@ -752,56 +751,55 @@ msgid "Unsupported console authentication type"
 msgstr "Niet-ondersteunde console authenticatie type"
 
 #: ../src/virtManager/console.py:348
-#, fuzzy, python-format
+#, python-format
 msgid "Error opening socket path '%s': %s"
-msgstr "Fout bij veranderen van opslag pad: %s"
+msgstr "Fout bij openen van socket pad '%s': %s"
 
 #: ../src/virtManager/console.py:353
-#, fuzzy, python-format
+#, python-format
 msgid "Error opening socket path '%s'"
-msgstr "Fout bij veranderen van opslag pad: %s"
+msgstr "Fout bij openen van socket pad '%s'"
 
-#: ../src/virtManager/console.py:542
+#: ../src/virtManager/console.py:543
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Druk op %s om aanwijzer vrij te geven."
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:705 ../src/virtManager/console.py:858
+#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
 msgid "Guest not running"
 msgstr "Gast draait niet"
 
-#: ../src/virtManager/console.py:708
+#: ../src/virtManager/console.py:709
 msgid "Guest has crashed"
 msgstr "Gast is gecrasht"
 
-#: ../src/virtManager/console.py:811
-#, fuzzy
+#: ../src/virtManager/console.py:819
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
-msgstr "Fout: VNC verbinding met hypervisor host werd geweigerd of verbroken!"
+msgstr ""
+"Fout: viewer verbinding met hypervisor host werd geweigerd of verbroken!"
 
-#: ../src/virtManager/console.py:875
+#: ../src/virtManager/console.py:893
 msgid "Graphical console not configured for guest"
 msgstr "Grafische console is niet geconfigureerd voor gast"
 
-#: ../src/virtManager/console.py:882
-#, fuzzy, python-format
+#: ../src/virtManager/console.py:900
+#, python-format
 msgid "Cannot display graphical console type '%s'"
-msgstr "Kan geen toegang krijgen tot console pad '%s'."
+msgstr "Kan grafische console type '%s' net tonen"
 
-#: ../src/virtManager/console.py:892
+#: ../src/virtManager/console.py:910
 msgid "Graphical console is not yet active for guest"
 msgstr "Grafische console is nog niet actief voor gast"
 
-#: ../src/virtManager/console.py:907
+#: ../src/virtManager/console.py:915
 msgid "Connecting to graphical console for guest"
 msgstr "Verbinden met grafische console voor gast"
 
-#: ../src/virtManager/console.py:933
-#, fuzzy
+#: ../src/virtManager/console.py:951
 msgid "Error connecting to graphical console"
-msgstr "Verbinden met grafische console voor gast"
+msgstr "Fout bij verbinden met grafische console"
 
 #: ../src/virtManager/create.py:319
 msgid "No active connection to install on."
@@ -820,14 +818,13 @@ msgstr ""
 "opties gevonden."
 
 #: ../src/virtManager/create.py:388
-#, fuzzy
 msgid ""
 "This usually means that QEMU or KVM is not\n"
 "installed on your machine, or the KVM kernel modules are not loaded."
 msgstr ""
-"Dit betekent gewoonlijk dat qemu of kvm niet\n"
-"geïnstalleerd is op jouw machine. Wees er zeker\n"
-"dat ze geïnstalleerd zijn zoals bedoeld."
+"Dit betekent gewoonlijk dat QEMU of KVM niet\n"
+"geïnstalleerd is op jouw machine, of dat de KVM kernel modules niet geladen "
+"zijn."
 
 #: ../src/virtManager/create.py:403
 msgid ""
@@ -919,9 +916,8 @@ msgid "None"
 msgstr "Geen"
 
 #: ../src/virtManager/create.py:943
-#, fuzzy
 msgid "Network selection does not support PXE"
-msgstr "Netwerk selectie fout."
+msgstr "Netwerk selectie ondersteunt PXE niet"
 
 #: ../src/virtManager/create.py:1135 ../src/virtManager/createinterface.py:876
 #, python-format
@@ -988,9 +984,8 @@ msgid "Network device required for %s install."
 msgstr "Netwerk apparaat vereist installatie van %s."
 
 #: ../src/virtManager/create.py:1554
-#, fuzzy
 msgid "Error starting installation: "
-msgstr "Fout bij het instellen van media locatie."
+msgstr "Fout bij opstarten van installatie:"
 
 #: ../src/virtManager/create.py:1582
 msgid "Creating Virtual Machine"
@@ -1424,9 +1419,8 @@ msgid "Pinning"
 msgstr "Vastzetten"
 
 #: ../src/virtManager/details.py:784
-#, fuzzy
 msgid "No text console available"
-msgstr "Geen verbindingen beschikbaar."
+msgstr "Geen tekst console beschikbaar."
 
 #: ../src/virtManager/details.py:806
 msgid "Serial console not yet supported over remote connection."
@@ -1447,9 +1441,8 @@ msgid "Can not access console path '%s'."
 msgstr "Kan geen toegang krijgen tot console pad '%s'."
 
 #: ../src/virtManager/details.py:832
-#, fuzzy
 msgid "No graphical console available"
-msgstr "Toon de grafische console"
+msgstr "Geen grafische console beschikbaar"
 
 #: ../src/virtManager/details.py:837
 #, python-format
@@ -1495,9 +1488,9 @@ msgid "Error generating CPU configuration: %s"
 msgstr "Fout bij het valideren CPU configuratie: %s"
 
 #: ../src/virtManager/details.py:1381
-#, fuzzy, python-format
+#, python-format
 msgid "Error copying host CPU: %s"
-msgstr "Fout bij aanmaken volume: %s"
+msgstr "Fout bij kopiëren van host CPU: %s"
 
 #: ../src/virtManager/details.py:1611
 #, python-format
@@ -1518,9 +1511,9 @@ msgstr "Fout bij het veranderen van autostart waarde: %s"
 msgid "Are you sure you want to remove this device?"
 msgstr "Weet je zeker dat je dit apparaat wilt verwijderen?"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:805
-#: ../src/virtManager/engine.py:905 ../src/virtManager/engine.py:929
-#: ../src/virtManager/engine.py:988 ../src/virtManager/engine.py:1012
+#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
+#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
+#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
 msgid "Don't ask me again."
 msgstr "Vraag me het niet nog een keer."
 
@@ -1530,14 +1523,12 @@ msgid "Error Removing Device: %s"
 msgstr "Fout bij verwijderen van apparaat: %s"
 
 #: ../src/virtManager/details.py:1785
-#, fuzzy
 msgid "Device could not be removed from the running machine"
-msgstr "Apparaat kon niet verwijderd worden uit de draaiende machine."
+msgstr "Apparaat kon niet verwijderd worden uit de draaiende machine"
 
 #: ../src/virtManager/details.py:1787
-#, fuzzy
 msgid "This change will take effect after the next VM reboot."
-msgstr "Deze wijziging wordt van kracht na de volgende opstart van VM"
+msgstr "Deze wijziging wordt van kracht na de volgende opstart van VM."
 
 #: ../src/virtManager/details.py:1840
 #, python-format
@@ -1594,36 +1585,32 @@ msgstr "Automatisch toegewezen"
 #: ../src/virtManager/details.py:2246
 #, python-format
 msgid "%(graphicstype)s Server"
-msgstr ""
+msgstr "%(graphicstype)s server"
 
 #: ../src/virtManager/details.py:2269
-#, fuzzy
 msgid "Local SDL Window"
 msgstr "Lokaal SDL venster"
 
 #: ../src/virtManager/details.py:2300
-#, fuzzy
 msgid "Serial Device"
-msgstr "Geen seriële apparaten gevonden"
+msgstr "Serieel apparaat"
 
 #: ../src/virtManager/details.py:2302
-#, fuzzy
 msgid "Parallel Device"
-msgstr "Doel apparaat:"
+msgstr "Parallel apparaat"
 
 #: ../src/virtManager/details.py:2304
-#, fuzzy
 msgid "Console Device"
-msgstr "Console"
+msgstr "Console apparaat"
 
 #: ../src/virtManager/details.py:2306
 msgid "Channel Device"
-msgstr ""
+msgstr "Kanaal apparaat"
 
 #: ../src/virtManager/details.py:2308
-#, fuzzy, python-format
+#, python-format
 msgid "%s Device"
-msgstr "Apparaat:"
+msgstr "%s apparaat"
 
 #: ../src/virtManager/details.py:2313
 msgid "Primary Console"
@@ -1658,12 +1645,13 @@ msgstr "Bewaker"
 #: ../src/virtManager/details.py:2582
 #, python-format
 msgid "Controller %s"
-msgstr ""
+msgstr "Controller %s"
 
 #: ../src/virtManager/domain.py:248
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
+"Kon gespecificeerde apparaat niet vinden in de inactieve VM configuratie: %s"
 
 #: ../src/virtManager/domain.py:873
 msgid "Running"
@@ -1694,20 +1682,18 @@ msgid "Cannot resume guest while cloning operation in progress"
 msgstr "Kan gast niet hervatten zolang het kloon proces nog bezig is"
 
 #: ../src/virtManager/domain.py:1075
-#, fuzzy
 msgid "Saving domain to disk"
-msgstr "Fout bij opslaan van domein: %s"
+msgstr "Domein opslaan op schijf"
 
 #: ../src/virtManager/domain.py:1139
-#, fuzzy
 msgid "Migrating domain"
-msgstr "Fout bij starten van domein: %s"
+msgstr "Domein migreren"
 
-#: ../src/virtManager/engine.py:107 ../src/virtManager/engine.py:108
+#: ../src/virtManager/engine.py:91 ../src/virtManager/engine.py:92
 msgid "Searching for available hypervisors..."
 msgstr "Zoeken naar beschikbare hypervisors..."
 
-#: ../src/virtManager/engine.py:130
+#: ../src/virtManager/engine.py:114
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -1722,17 +1708,17 @@ msgstr ""
 "Deze zijn vereis om lokaal KVM gasten aan te maken.\n"
 "Wil je ze nu installeren?"
 
-#: ../src/virtManager/engine.py:135
+#: ../src/virtManager/engine.py:119
 msgid "Packages required for KVM usage"
 msgstr "Pakketten vereist voor gebruik van KVM "
 
-#: ../src/virtManager/engine.py:144
+#: ../src/virtManager/engine.py:128
 #, python-format
 msgid "Error talking to PackageKit: %s"
 msgstr "Fout bij communicatie met PackageKit: %s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:294
+#: ../src/virtManager/engine.py:284
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1750,7 +1736,7 @@ msgstr ""
 "Een hypervisor verbinding kan be handmatig\n"
 "toegevoegd worden met Bestand->Verbinding toevoegen"
 
-#: ../src/virtManager/engine.py:325
+#: ../src/virtManager/engine.py:318
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1774,61 +1760,61 @@ msgstr ""
 "virt-manager zal verbinden met libvirt bij de volgende keer\n"
 "dat de toepassing opstart."
 
-#: ../src/virtManager/engine.py:333
+#: ../src/virtManager/engine.py:326
 msgid "Libvirt service must be started"
 msgstr "Libvirt service moet gestart worden."
 
-#: ../src/virtManager/engine.py:534
+#: ../src/virtManager/engine.py:527
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "Onbekende verbinding URI %s"
 
-#: ../src/virtManager/engine.py:547
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:540
+#, python-format
 msgid "Error launching 'About' dialog: %s"
-msgstr "Fout bij lanceren van aangepaste dialoog: "
+msgstr "Fout bij lanceren van 'Over' dialoog: %s "
 
-#: ../src/virtManager/engine.py:559
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:552
+#, python-format
 msgid "Unable to display documentation: %s"
-msgstr "Kan apparaat niet toevoegen: %s"
+msgstr "Kan documentatie niet tonen: %s"
 
-#: ../src/virtManager/engine.py:575
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:568
+#, python-format
 msgid "Error launching preferences: %s"
-msgstr "Fout bij het lanceren van interface assistent: %s"
+msgstr "Fout bij lanceren van voorkeuren: %s"
 
-#: ../src/virtManager/engine.py:595
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:588
+#, python-format
 msgid "Error launching host dialog: %s"
-msgstr "Fout bij lanceren van aangepaste dialoog: "
+msgstr "Fout bij lanceren van host dialoog: %s"
 
-#: ../src/virtManager/engine.py:615
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:608
+#, python-format
 msgid "Error launching connect dialog: %s"
-msgstr "Fout bij lanceren van aangepaste dialoog: "
+msgstr "Fout bij lanceren van verbinding dialoog: %s"
 
-#: ../src/virtManager/engine.py:648
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:641
+#, python-format
 msgid "Error launching details: %s"
-msgstr "Fout bij het lanceren van de netwerk assistent: %s"
+msgstr "Fout bij lanceren van details: %s"
 
-#: ../src/virtManager/engine.py:699 ../src/virtManager/engine.py:716
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
+#, python-format
 msgid "Error launching manager: %s"
-msgstr "Fout bij het lanceren van de volume assistent: %s"
+msgstr "Fout bij lanceren van beheerder: %s"
 
-#: ../src/virtManager/engine.py:730
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:723
+#, python-format
 msgid "Error launching migrate dialog: %s"
-msgstr "Fout bij lanceren van aangepaste dialoog: "
+msgstr "Fout bij lanceren van migratie dialoog: %s"
 
-#: ../src/virtManager/engine.py:748
+#: ../src/virtManager/engine.py:741
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "Fout bij het instellen van kloon parameters: %s"
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:789
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
@@ -1836,64 +1822,62 @@ msgstr ""
 "Opslaan van virtuele machines via verbindingen op afstand wordt niet "
 "ondersteund met deze libvirt versie of hypervisor."
 
-#: ../src/virtManager/engine.py:803
+#: ../src/virtManager/engine.py:796
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "Weet je zeker dat je '%s' wilt opslaan?"
 
-#: ../src/virtManager/engine.py:816
+#: ../src/virtManager/engine.py:809
 msgid "Save Virtual Machine"
 msgstr "Virtuele machine opslaan"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:824
 msgid "Saving Virtual Machine"
 msgstr "Opslaan van virtuele machine"
 
-#: ../src/virtManager/engine.py:832
-#, fuzzy
+#: ../src/virtManager/engine.py:825
 msgid "Saving virtual machine memory to disk "
-msgstr "Opslaan van virtuele machine"
+msgstr "Opslaan van virtuele machine naar schijf"
 
-#: ../src/virtManager/engine.py:838
+#: ../src/virtManager/engine.py:831
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "Fout bij opslaan van domein: %s"
 
-#: ../src/virtManager/engine.py:850
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:843
+#, python-format
 msgid "Error cancelling save job: %s"
-msgstr "Fout bij aanmaken volume: %s"
+msgstr "Fout bij afbreken opslag taak: %s"
 
-#: ../src/virtManager/engine.py:867
+#: ../src/virtManager/engine.py:860
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr ""
 "Virtuele machines herstellen via verbindingen op afstand wordt nog niet "
 "ondersteund"
 
-#: ../src/virtManager/engine.py:872
+#: ../src/virtManager/engine.py:865
 msgid "Restore Virtual Machine"
 msgstr "Virtuele machine herstellen"
 
-#: ../src/virtManager/engine.py:881 ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
 msgid "Restoring Virtual Machine"
 msgstr "Virtuele machine herstellen"
 
-#: ../src/virtManager/engine.py:882 ../src/virtManager/engine.py:970
-#, fuzzy
+#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
 msgid "Restoring virtual machine memory from disk"
-msgstr "Virtuele machine herstellen"
+msgstr "Virtuele machine geheugen herstellen van schijf"
 
-#: ../src/virtManager/engine.py:886
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:879
+#, python-format
 msgid "Error restoring domain: %s"
-msgstr "Fout bij het herstellen van domein"
+msgstr "Fout bij het herstellen van domein: %s"
 
-#: ../src/virtManager/engine.py:901
+#: ../src/virtManager/engine.py:894
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Weet je zeker dat je uitschakelen wilt forceren voor '%s'?"
 
-#: ../src/virtManager/engine.py:903
+#: ../src/virtManager/engine.py:896
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -1901,50 +1885,49 @@ msgstr ""
 "Dit zal de VM onmiddellijk uitschakelen zonder het OS af te sluiten en kan "
 "leiden tot data verlies."
 
-#: ../src/virtManager/engine.py:917 ../src/virtManager/engine.py:1000
+#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "Fout tijdens het afsluiten van domein: %s"
 
-#: ../src/virtManager/engine.py:927
+#: ../src/virtManager/engine.py:920
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Weet je zeker dat je '%s' wilt pauzeren?"
 
-#: ../src/virtManager/engine.py:941
+#: ../src/virtManager/engine.py:934
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "Fout bij het pauzeren van domein: %s"
 
-#: ../src/virtManager/engine.py:952
+#: ../src/virtManager/engine.py:945
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "Fout bij vervolgen van domein: %s"
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:968
+#: ../src/virtManager/engine.py:961
 msgid "Error restoring domain"
 msgstr "Fout bij het herstellen van domein"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:976
-#, fuzzy
+#: ../src/virtManager/engine.py:969
 msgid "Error starting domain"
-msgstr "Fout bij starten van domein: %s"
+msgstr "Fout bij starten van domein"
 
-#: ../src/virtManager/engine.py:986
+#: ../src/virtManager/engine.py:979
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Weet je zeker dat je '%s' wilt uitschakelen?"
 
-#: ../src/virtManager/engine.py:1010
+#: ../src/virtManager/engine.py:1003
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "Weet je zeker dat je '%s' opnieuw op wilt starten?"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1028 ../src/virtManager/engine.py:1043
+#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
 #, python-format
 msgid "Error rebooting domain: %s"
 msgstr "Fout bij het opstarten van domein: %s"
@@ -2242,19 +2225,16 @@ msgid "Double click to connect"
 msgstr "Dubbel-klik om te verbinden"
 
 #: ../src/virtManager/manager.py:740
-#, fuzzy
 msgid "Not Connected"
-msgstr "Ver_binden"
+msgstr "Niet verbonden"
 
 #: ../src/virtManager/manager.py:742
-#, fuzzy
 msgid "Connecting..."
-msgstr "Bezig met verbinden"
+msgstr "Verbinding maken..."
 
 #: ../src/virtManager/manager.py:1062
-#, fuzzy
 msgid " (disabled)"
-msgstr "Uitgeschakeld"
+msgstr " (uitgezet)"
 
 #: ../src/virtManager/manager.py:1073
 msgid "Disabled in preferences dialog."
@@ -2273,9 +2253,8 @@ msgid "Migrate"
 msgstr "Migreren"
 
 #: ../src/virtManager/migrate.py:142
-#, fuzzy
 msgid "Libvirt version does not support setting downtime."
-msgstr "Libvirt versie ondersteunt geen media lijst."
+msgstr "Libvirt versie ondersteunt geen instelling uitvaltijd."
 
 #: ../src/virtManager/migrate.py:158
 msgid "Libvirt version does not support tunnelled migration."
@@ -2310,9 +2289,8 @@ msgid "Connection is disconnected."
 msgstr "Verbinding wordt verbroken."
 
 #: ../src/virtManager/migrate.py:403
-#, fuzzy
 msgid "max downtime must be greater than 0."
-msgstr "Poort moet groter dan 0 zijn."
+msgstr "max uitvaltijd moet groter dan 0 zijn."
 
 #: ../src/virtManager/migrate.py:406
 msgid "An interface must be specified."
@@ -2337,14 +2315,14 @@ msgid "Migrating VM '%s' from %s to %s. This may take awhile."
 msgstr "VM '%s' migreren van %s naar %s. Dit kan even duren."
 
 #: ../src/virtManager/migrate.py:462
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to migrate guest: %s"
-msgstr "Niet in staat om de installatie te voltooien: '%s'"
+msgstr "Kan gast niet migreren: %s"
 
 #: ../src/virtManager/migrate.py:493
-#, fuzzy, python-format
+#, python-format
 msgid "Error cancelling migrate job: %s"
-msgstr "Fout bij het veranderen van VM configuratie: %s"
+msgstr "Fout bij afbreken van migratie taak: %s"
 
 #: ../src/virtManager/network.py:32
 #, python-format
@@ -2370,9 +2348,8 @@ msgstr ""
 "Geïnstalleerde versie van GTK-VNC ondersteunt instelbare grijp toetsen niet"
 
 #: ../src/virtManager/preferences.py:213
-#, fuzzy
 msgid "Configure grab key combination"
-msgstr "Configureer toetsen combinatie"
+msgstr "Configureer grijp toets combinatie"
 
 #: ../src/virtManager/preferences.py:218
 msgid "Please press desired grab key combination"
@@ -2384,6 +2361,9 @@ msgid ""
 "To confirm your selection please click OK button\n"
 "while you have desired keys pressed."
 msgstr ""
+"Je kunt nu grijp toetsen definiëren door erop te drukken\n"
+"Om jouw selectie te bevestigen klik je op de OK knop\n"
+"terwijl je de gewenste toetsen ingedrukt houdt."
 
 #: ../src/virtManager/storagebrowse.py:121
 msgid "Size"
@@ -2534,9 +2514,8 @@ msgid "Couldn't create default storage pool '%s': %s"
 msgstr "Kon standaard opslag pool '%s' niet aanmaken: %s"
 
 #: ../src/vmm-about.glade.h:1
-#, fuzzy
 msgid "Copyright (C) 2006-2010 Red Hat Inc."
-msgstr "Copyright (C) 2006-2009 Red Hat Inc."
+msgstr "Copyright (C) 2006-2010 Red Hat Inc."
 
 #: ../src/vmm-about.glade.h:2
 msgid "Powered by libvirt"
@@ -2558,17 +2537,16 @@ msgid "<b>Device Parameters</b>"
 msgstr "<b>Apparaat parameters</b>"
 
 #: ../src/vmm-add-hardware.glade.h:3
-#, fuzzy
 msgid ""
 "<small><b>Tip:</b> VNC or SPICE server is strongly recommended because it "
 "allows the virtual display to be embedded inside this application. It may "
 "also be used to allow access to the virtual display from a remote system.</"
 "small>"
 msgstr ""
-"<small><b>Tip:</b> VNC server wordt sterk aanbevolen omdat hierdoor het "
-"virtuele display ingesloten wordt in deze toepassing. Het kan ook gebruikt "
-"worden om toegang te verlenen tot het virtuele display vanaf een systeem op "
-"afstand.</small>"
+"<small><b>Tip:</b> VNC of SPICE server wordt sterk aanbevolen omdat hierdoor "
+"het virtuele display ingesloten wordt in deze toepassing. Het kan ook "
+"gebruikt worden om toegang te verlenen tot het virtuele display vanaf een "
+"systeem op afstand.</small>"
 
 #: ../src/vmm-add-hardware.glade.h:4
 msgid "A_utomatically allocated"
@@ -2611,7 +2589,6 @@ msgid "H_ost:"
 msgstr "H_ost:"
 
 #: ../src/vmm-add-hardware.glade.h:14
-#, fuzzy
 msgid "Host _Device:"
 msgstr "_Host apparaat:"
 
@@ -2628,13 +2605,12 @@ msgid "Pa_ssword:"
 msgstr "_Wachtwoord:"
 
 #: ../src/vmm-add-hardware.glade.h:18
-#, fuzzy
 msgid ""
 "Please indicate how you would like to assign space on the host system for "
 "your virtual storage device."
 msgstr ""
-"Geef aan hoe je ruimte op dit fysieke host systeem wilt toekennen voor jouw "
-"nieuwe virtuele opslag apparaat."
+"Geef aan hoe je ruimte wilt toekennen op het host systeem voor jouw virtuele "
+"opslag apparaat."
 
 #: ../src/vmm-add-hardware.glade.h:19
 msgid "Please indicate how you would like to view the virtual display."
@@ -2695,9 +2671,8 @@ msgid "Select _managed or other existing storage"
 msgstr "Selecteer beheerd of andere bestaande opslag"
 
 #: ../src/vmm-add-hardware.glade.h:32
-#, fuzzy
 msgid "Storage _format:"
-msgstr "Opslag pad"
+msgstr "Opslag _formaat:"
 
 #: ../src/vmm-add-hardware.glade.h:33
 msgid "Use Te_lnet:"
@@ -2768,9 +2743,8 @@ msgid "_Port:"
 msgstr "_Poort:"
 
 #: ../src/vmm-add-hardware.glade.h:49
-#, fuzzy
 msgid "_TLS port:"
-msgstr "_Poort:"
+msgstr "_TLS_poort:"
 
 #: ../src/vmm-add-hardware.glade.h:50 ../src/vmm-create-pool.glade.h:17
 msgid "_Type:"
@@ -3655,18 +3629,16 @@ msgid "<b>CPUs</b>"
 msgstr "<b>CPU's</b>"
 
 #: ../src/vmm-details.glade.h:7
-#, fuzzy
 msgid "<b>Configuration</b>"
-msgstr "<b>IP configuratie</b>"
+msgstr "<b>Configuratie</b>"
 
 #: ../src/vmm-details.glade.h:8
-#, fuzzy
 msgid "<b>Controller</b>"
-msgstr "<b>Consoles</b>"
+msgstr "<b>Controller</b>"
 
 #: ../src/vmm-details.glade.h:9
 msgid "<b>Direct kernel boot</b>"
-msgstr ""
+msgstr "<b>Direct kernel opstarten</b>"
 
 #: ../src/vmm-details.glade.h:10
 msgid "<b>Hypervisor Details</b>"
@@ -3685,9 +3657,8 @@ msgid "<b>Performance</b>"
 msgstr "<b>Performance</b>"
 
 #: ../src/vmm-details.glade.h:14
-#, fuzzy
 msgid "<b>Pinning</b>"
-msgstr "<b>CPU vastzetten</b>"
+msgstr "<b>Vastzetten</b>"
 
 #: ../src/vmm-details.glade.h:15
 msgid "<b>Security</b>"
@@ -3720,14 +3691,12 @@ msgstr ""
 "synchroon beweegt met de lokale bureaublad cursor."
 
 #: ../src/vmm-details.glade.h:20
-#, fuzzy
 msgid "<b>Topology</b>"
-msgstr "<b>Beeldscherm</b>"
+msgstr "<b>Topologie</b>"
 
 #: ../src/vmm-details.glade.h:21
-#, fuzzy
 msgid "<b>Video</b>"
-msgstr "<b>Geheugen</b>"
+msgstr "<b>Video</b>"
 
 #: ../src/vmm-details.glade.h:22
 msgid "<b>Virtual Disk</b>"
@@ -3762,9 +3731,8 @@ msgid "Address:"
 msgstr "Adres:"
 
 #: ../src/vmm-details.glade.h:30
-#, fuzzy
 msgid "Advanced _options"
-msgstr "Geavanceerde opties"
+msgstr "Geavanceerde _opties"
 
 #: ../src/vmm-details.glade.h:31 ../src/vmm-host.glade.h:16
 msgid "Architecture:"
@@ -3779,9 +3747,8 @@ msgid "Begin Installation"
 msgstr "Begin met installatie"
 
 #: ../src/vmm-details.glade.h:34
-#, fuzzy
 msgid "Browse"
-msgstr "_Bladeren"
+msgstr "Bladeren"
 
 #: ../src/vmm-details.glade.h:35
 msgid ""
@@ -3808,27 +3775,24 @@ msgid "Console"
 msgstr "Console"
 
 #: ../src/vmm-details.glade.h:41
-#, fuzzy
 msgid "Copy host CPU configuration"
-msgstr "Genereren van _NUMA host configuratie"
+msgstr "Kopiëren van host CPU configuratie"
 
 #: ../src/vmm-details.glade.h:42
 msgid "Cores:"
-msgstr ""
+msgstr "Kernen:"
 
 #: ../src/vmm-details.glade.h:43
-#, fuzzy
 msgid "Current a_llocation:"
-msgstr "Huidige toewijzing:"
+msgstr "Huidige t_oewijzing:"
 
 #: ../src/vmm-details.glade.h:44
 msgid "D_ynamic"
 msgstr "D_ynamisch"
 
 #: ../src/vmm-details.glade.h:45
-#, fuzzy
 msgid "Default _pinning:"
-msgstr "Initieel _vastzetten:"
+msgstr "Standaard _vastzetten:"
 
 #: ../src/vmm-details.glade.h:46
 msgid "Description:"
@@ -3855,9 +3819,8 @@ msgstr ""
 "I/O:"
 
 #: ../src/vmm-details.glade.h:53
-#, fuzzy
 msgid "Disk B_us:"
-msgstr "Schijfgebruik:"
+msgstr "Schijf b_us:"
 
 #: ../src/vmm-details.glade.h:54
 msgid "Emulator:"
@@ -3873,7 +3836,7 @@ msgstr "A_CPI inschakelen:"
 
 #: ../src/vmm-details.glade.h:57
 msgid "Enable boot me_nu"
-msgstr ""
+msgstr "Opstart me_nu aanzetten"
 
 #: ../src/vmm-details.glade.h:58
 msgid "Generate from host _NUMA configuration"
@@ -3889,16 +3852,15 @@ msgstr "Hypervisor:"
 
 #: ../src/vmm-details.glade.h:61
 msgid "Initrd path:"
-msgstr ""
+msgstr "Initrd pad:"
 
 #: ../src/vmm-details.glade.h:62
 msgid "Kernel arguments:"
 msgstr "Kernel argumenten:"
 
 #: ../src/vmm-details.glade.h:63
-#, fuzzy
 msgid "Kernel path:"
-msgstr "Kernel opties:"
+msgstr "Kernel pad:"
 
 #: ../src/vmm-details.glade.h:64
 msgid "Logical host CPUs:"
@@ -3918,7 +3880,7 @@ msgstr "Ma_ximale toewijzing:"
 
 #: ../src/vmm-details.glade.h:69
 msgid "Manually set CPU topology"
-msgstr ""
+msgstr "Stel CPU topologie handmatig in"
 
 #: ../src/vmm-details.glade.h:70
 msgid "Max Memory Select"
@@ -4026,7 +3988,7 @@ msgstr "De virtuele machine afsluiten"
 
 #: ../src/vmm-details.glade.h:96
 msgid "Sockets:"
-msgstr ""
+msgstr "Sockets:"
 
 #: ../src/vmm-details.glade.h:97
 msgid "Source Path:"
@@ -4045,9 +4007,8 @@ msgid "Start virt_ual machine on host boot up"
 msgstr "Start virtuele machine bij opstarten van host"
 
 #: ../src/vmm-details.glade.h:102
-#, fuzzy
 msgid "Storage forma_t:"
-msgstr "Opslag pad"
+msgstr "Opslag formaa_t:"
 
 #: ../src/vmm-details.glade.h:103
 msgid "Storage size:"
@@ -4058,9 +4019,8 @@ msgid "Switch to fullscreen view"
 msgstr "Omschakelen naar volledig scherm weergave"
 
 #: ../src/vmm-details.glade.h:105
-#, fuzzy
 msgid "TLS Port:"
-msgstr "Poort:"
+msgstr "TLS poort:"
 
 #: ../src/vmm-details.glade.h:106
 msgid "T_oolbar"
@@ -4071,9 +4031,8 @@ msgid "Target device:"
 msgstr "Doel apparaat:"
 
 #: ../src/vmm-details.glade.h:108
-#, fuzzy
 msgid "Threads:"
-msgstr "Hoofden:"
+msgstr "Threads:"
 
 #: ../src/vmm-details.glade.h:109
 msgid "Total host memory:"
@@ -4194,58 +4153,52 @@ msgid "_View Manager"
 msgstr "Geef _beheerder weer"
 
 #: ../src/vmm-details.glade.h:146
-#, fuzzy
 msgid "boot"
-msgstr "_Herstarten"
+msgstr "opstarten"
 
 #: ../src/vmm-details.glade.h:147
 msgid "chr"
-msgstr ""
+msgstr "chr"
 
 #: ../src/vmm-details.glade.h:148
 msgid "cntrl"
-msgstr ""
+msgstr "cntrl"
 
 #: ../src/vmm-details.glade.h:149
 msgid "cpu"
-msgstr ""
+msgstr "cpu"
 
 #: ../src/vmm-details.glade.h:150
-#, fuzzy
 msgid "dsk"
-msgstr "schijf\t"
+msgstr "dsk\t"
 
 #: ../src/vmm-details.glade.h:151
 msgid "inp"
-msgstr ""
+msgstr "inp"
 
 #: ../src/vmm-details.glade.h:153
-#, fuzzy
 msgid "mem"
-msgstr "Geheugen"
+msgstr "mem"
 
 #: ../src/vmm-details.glade.h:154
-#, fuzzy
 msgid "net"
-msgstr "Netwerk"
+msgstr "net"
 
 #: ../src/vmm-details.glade.h:155
 msgid "over"
-msgstr ""
+msgstr "over"
 
 #: ../src/vmm-details.glade.h:156
-#, fuzzy
 msgid "snd"
-msgstr "seconden"
+msgstr "snd"
 
 #: ../src/vmm-details.glade.h:157
 msgid "stat"
-msgstr ""
+msgstr "stat"
 
 #: ../src/vmm-details.glade.h:158
-#, fuzzy
 msgid "vid"
-msgstr "Vid"
+msgstr "vid"
 
 #: ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
@@ -4501,7 +4454,7 @@ msgstr "<span color='#484848'>Originele host:</span>"
 
 #: ../src/vmm-migrate.glade.h:7
 msgid "Max downtime:"
-msgstr ""
+msgstr "Max uitvaltijd:"
 
 #: ../src/vmm-migrate.glade.h:8
 msgid "Mbps"
@@ -4525,7 +4478,7 @@ msgstr "_Tunnel migratie via de libvirt daemon:"
 
 #: ../src/vmm-migrate.glade.h:15
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 #: ../src/vmm-open-connection.glade.h:1
 msgid "Add Connection"
@@ -4631,13 +4584,15 @@ msgstr "Terugkoppeling"
 
 #: ../src/vmm-preferences.glade.h:12
 msgid "Force console keyboard shortcuts:"
-msgstr ""
+msgstr "Forceer console sneltoetsen:"
 
 #: ../src/vmm-preferences.glade.h:13
 msgid ""
 "Force console menu accelerators while the console is active. Enabling this "
 "may overwrite keyboard interaction with the guest."
 msgstr ""
+"Forceer console menu versnellers als de console actief is. Dit aanzetten kan "
+"toetsenbord interactie met de gast overschrijven."
 
 #: ../src/vmm-preferences.glade.h:14
 msgid "General"
