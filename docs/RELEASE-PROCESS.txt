@@ -1,6 +1,11 @@
    Procedure for doing new releases
   =================================
 
+Before release:
+    verify virt-manager runs fine on RHEL5 (older gtk)
+    Make sure distcheck passes, make rpm works fine
+    All virtinst/virt-manager tests and pylint checks
+
 Preparing the source tree:
 
  1. Sync up latest translations - see po/README.txt
