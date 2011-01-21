@@ -721,6 +721,7 @@ class vmmManager(vmmGObjectUI):
         if (self.config.get_console_popup() != 2 or
             vm.is_management_domain()):
             self.emit("action-refresh-console", uri, vmuuid)
+            return
 
         # user has requested consoles on all vms
         gtype = vm.get_graphics_console()[0]
