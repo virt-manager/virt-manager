@@ -350,6 +350,7 @@ def main():
     setup_logging(options.debug)
 
     logging.debug("Launched as: %s" % origargs)
+    logging.debug("GTK version: %s" % str(gtk.gtk_version))
 
     # Make sure we have a sufficiently new virtinst version, since we are
     # very closely tied to the lib
