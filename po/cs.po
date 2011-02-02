@@ -2,41 +2,41 @@
 # Copyright (C) 2007 FSF
 # This file is distributed under the same license as the virt-manager package.
 # Milan Kerslager <kerslage@linux.cz>, 2007.
+# Zdenek Styblik <stybla@turnovfree.net>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 11:04-0500\n"
-"PO-Revision-Date: 2007-05-06 16:54+0100\n"
-"Last-Translator: Milan Kerslager <kerslage@linux.cz>\n"
-"Language-Team: Czech <cs@li.org>\n"
-"Language: cs\n"
+"POT-Creation-Date: 2011-01-14 15:27-0500\n"
+"PO-Revision-Date: 2010-11-13 22:09+0100\n"
+"Last-Translator: Zdenek Styblik <stybla@turnovfree.net>\n"
+"Language-Team: czech <libvir-list@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
+"Plural-Forms: \n"
 
 #: ../src/virt-manager.desktop.in.in.h:1
-#, fuzzy
 msgid "Manage virtual machines"
-msgstr "Ukládání virtuálního stroje"
+msgstr "Spravovat virtuální stroje"
 
 #: ../src/virt-manager.desktop.in.in.h:2 ../src/virtManager/systray.py:149
 #: ../src/vmm-manager.glade.h:7
 msgid "Virtual Machine Manager"
 msgstr "Správce virtuálních strojů"
 
-#: ../src/virt-manager.py.in:68
-#, fuzzy
+#: ../src/virt-manager.py.in:74
 msgid "Error starting Virtual Machine Manager"
-msgstr "Správce virtuálních strojů"
+msgstr "Chyba při spouštění Správce virtuálních strojů"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:340
-#, fuzzy, python-format
+#: ../src/virt-manager.py.in:346
+#, python-format
 msgid "Unable to initialize GTK: %s"
-msgstr "Nelze inicializovat GTK: "
+msgstr "Nelze inicializovat GTK: %s"
 
 #: ../src/virt-manager.schemas.in.h:1
 msgid "Confirm device interface start and stop"
@@ -67,14 +67,12 @@ msgid "Default manager window height"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:8
-#, fuzzy
 msgid "Default manager window width"
-msgstr "Nesprávná adresa FV média"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:9
-#, fuzzy
 msgid "Default media path"
-msgstr "Nesprávná adresa FV média"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:10
 msgid "Default path for choosing VM images"
@@ -110,7 +108,7 @@ msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:18
 msgid "Enable menu accelerators in console window"
-msgstr ""
+msgstr "Zapnout akceleraci menu v okně konzole"
 
 #: ../src/virt-manager.schemas.in.h:19
 msgid "Install sound device for local VM"
@@ -129,41 +127,36 @@ msgid "Poll net i/o stats"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:23
-#, fuzzy
 msgid "Show cpu usage in summary"
-msgstr "Síťový provoz"
+msgstr "Zobrazit souhrnné využití CPU"
 
 #: ../src/virt-manager.schemas.in.h:24
-#, fuzzy
 msgid "Show disk I/O in summary"
-msgstr "Síťový provoz"
+msgstr "Zobrazit souhrnné I/O disku"
 
 #: ../src/virt-manager.schemas.in.h:25
-#, fuzzy
 msgid "Show network I/O in summary"
-msgstr "Síťový provoz"
+msgstr "Zobrazit souhrnné I/O sítě"
 
 #: ../src/virt-manager.schemas.in.h:26
 msgid "Show system tray icon"
-msgstr ""
+msgstr "Zobrazit ikonu v sys-tray"
 
 #: ../src/virt-manager.schemas.in.h:27
 msgid "Show system tray icon while app is running"
-msgstr ""
+msgstr "Zobrazit ikonu v sys-tray pokud aplikace běží"
 
 #: ../src/virt-manager.schemas.in.h:28
 msgid "Show the cpu usage field in the domain list summary view"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:29
-#, fuzzy
 msgid "Show the disk I/O field in the domain list summary view"
-msgstr "Síťový provoz"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:30
-#, fuzzy
 msgid "Show the network I/O field in the domain list summary view"
-msgstr "Síťový provoz"
+msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:31
 msgid "The length of the list of URLs"
@@ -184,11 +177,11 @@ msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:35
 msgid "The statistics update interval"
-msgstr ""
+msgstr "Interval aktualizace statistik"
 
 #: ../src/virt-manager.schemas.in.h:36
 msgid "The statistics update interval in seconds"
-msgstr ""
+msgstr "Interval aktualizace statistik v sekundách"
 
 #: ../src/virt-manager.schemas.in.h:37
 msgid "When to pop up a console for a guest"
@@ -275,14 +268,13 @@ msgstr ""
 #: ../src/virtManager/addhardware.py:331 ../src/virtManager/create.py:445
 #: ../src/virtManager/create.py:537
 msgid "Connection does not support storage management."
-msgstr ""
+msgstr "Spojení neumožňuje správu úložiště."
 
 #: ../src/virtManager/addhardware.py:345 ../src/virtManager/addhardware.py:350
 #: ../src/virtManager/addhardware.py:353 ../src/virtManager/addhardware.py:357
 #: ../src/virtManager/addhardware.py:374
-#, fuzzy
 msgid "Not supported for this guest type."
-msgstr "Uživatelské síťování"
+msgstr "Není podporováno pro tento typ hosta."
 
 #: ../src/virtManager/addhardware.py:361 ../src/virtManager/addhardware.py:365
 msgid "Connection does not support host device enumeration"
@@ -290,37 +282,34 @@ msgstr ""
 
 #: ../src/virtManager/addhardware.py:371
 msgid "Libvirt version does not support video devices."
-msgstr ""
+msgstr "Tato verze libvirt nepodporuje video zařízení."
 
 #: ../src/virtManager/addhardware.py:487 ../src/virtManager/details.py:2190
 msgid "EvTouch USB Graphics Tablet"
-msgstr ""
+msgstr "Grafický USB tablet EvTouch"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
 #: ../src/virtManager/addhardware.py:491 ../src/virtManager/details.py:2192
 msgid "Generic USB Mouse"
-msgstr ""
+msgstr "Obecná USB myš"
 
 #: ../src/virtManager/addhardware.py:495
-#, fuzzy
 msgid "VNC server"
-msgstr "Nikdy"
+msgstr "VNC server"
 
 #: ../src/virtManager/addhardware.py:496
-#, fuzzy
 msgid "SPICE server"
-msgstr "Nikdy"
+msgstr "SPICE server"
 
 #: ../src/virtManager/addhardware.py:497
 msgid "Local SDL window"
 msgstr ""
 
 #: ../src/virtManager/addhardware.py:519
-#, fuzzy
 msgid "No Devices Available"
-msgstr "Typ připojení"
+msgstr "Žádná zařízení nejsou dostupná"
 
 #: ../src/virtManager/addhardware.py:726
 #, python-format
@@ -328,60 +317,54 @@ msgid "Uncaught error validating hardware input: %s"
 msgstr ""
 
 #: ../src/virtManager/addhardware.py:739
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to add device: %s"
-msgstr "Nelze inicializovat GTK: "
+msgstr "Nelze přidat zařízení: %s"
 
 #: ../src/virtManager/addhardware.py:818
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 #: ../src/virtManager/addhardware.py:820 ../src/vmm-create.glade.h:40
 #: ../src/vmm-host.glade.h:53
-#, fuzzy
 msgid "Storage"
-msgstr "<b>Úložný prostor</b>"
+msgstr "Úložiště"
 
 #: ../src/virtManager/addhardware.py:822
 msgid "Network"
 msgstr "Síť"
 
 #: ../src/virtManager/addhardware.py:824 ../src/virtManager/details.py:2532
-#, fuzzy
 msgid "Input"
-msgstr "Úvod"
+msgstr "Vstup"
 
 #: ../src/virtManager/addhardware.py:826
-#, fuzzy
 msgid "Graphics"
-msgstr "_Grafická konzole"
+msgstr "Grafika"
 
 #: ../src/virtManager/addhardware.py:828
 msgid "Sound"
-msgstr ""
+msgstr "Zvuk"
 
 #: ../src/virtManager/addhardware.py:830
-#, fuzzy
 msgid "Video Device"
-msgstr "<b>Konzole</b>"
+msgstr "Video zařízení"
 
 #: ../src/virtManager/addhardware.py:832
 msgid "Watchdog Device"
-msgstr ""
+msgstr "Watchdog zařízení"
 
 #: ../src/virtManager/addhardware.py:892
 msgid "Creating Storage File"
 msgstr "Vytváření úložného souboru"
 
 #: ../src/virtManager/addhardware.py:893
-#, fuzzy
 msgid "Allocation of disk storage may take a few minutes to complete."
-msgstr "Alokace diskového úložného prostoru může chvíli "
+msgstr "Dokončení alokace diskového úložného prostoru může chvíli trvat."
 
 #: ../src/virtManager/addhardware.py:918
-#, fuzzy
 msgid "Are you sure you want to add this device?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Jste si jistí, že chcete přidat toto zařízení?"
 
 #: ../src/virtManager/addhardware.py:921
 msgid ""
@@ -390,9 +373,9 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/addhardware.py:934
-#, fuzzy, python-format
+#, python-format
 msgid "Error adding device: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při přidávání zařízení: %s"
 
 #: ../src/virtManager/addhardware.py:1006 ../src/virtManager/create.py:1409
 #, python-format
@@ -410,14 +393,13 @@ msgid "A storage path must be specified."
 msgstr ""
 
 #: ../src/virtManager/addhardware.py:1032 ../src/virtManager/create.py:1425
-#, fuzzy
 msgid "Storage parameter error."
-msgstr "Využití sítě:"
+msgstr "Chyba v parametru úložiště."
 
 #. Fatal errors are reported when setting 'size'
 #: ../src/virtManager/addhardware.py:1046 ../src/virtManager/create.py:1430
 msgid "Not Enough Free Space"
-msgstr ""
+msgstr "Nedostatek volného místa"
 
 #: ../src/virtManager/addhardware.py:1052 ../src/virtManager/create.py:1436
 #, python-format
@@ -425,36 +407,32 @@ msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "Disk '%s' již používá jiný host!"
 
 #: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1438
-#, fuzzy
 msgid "Do you really want to use the disk?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Skutečně chcete použít disk?"
 
 #: ../src/virtManager/addhardware.py:1071
-#, fuzzy
 msgid "Network selection error."
-msgstr "Síť"
+msgstr "Chyba při výběru sítě."
 
 #: ../src/virtManager/addhardware.py:1072
 msgid "A network source must be selected."
 msgstr ""
 
 #: ../src/virtManager/addhardware.py:1075
-#, fuzzy
 msgid "Invalid MAC address"
-msgstr "Neplatná DHCP adresa"
+msgstr "Neplatná MAC adresa"
 
 #: ../src/virtManager/addhardware.py:1076
 msgid "A MAC address must be entered."
-msgstr ""
+msgstr "MAC adresa musí být zadána."
 
 #: ../src/virtManager/addhardware.py:1108
 msgid "Graphics device parameter error"
-msgstr ""
+msgstr "Chyba v parametru grafického zařízení"
 
 #: ../src/virtManager/addhardware.py:1116
-#, fuzzy
 msgid "Sound device parameter error"
-msgstr "Využití sítě:"
+msgstr "Chyba v parametru zvukového zařízení"
 
 #: ../src/virtManager/addhardware.py:1123
 msgid "Physical Device Required"
@@ -462,27 +440,24 @@ msgstr "Vyžadováno fyzické zařízení"
 
 #: ../src/virtManager/addhardware.py:1124
 msgid "A device must be selected."
-msgstr ""
+msgstr "Zařízení musí být vybráno"
 
 #: ../src/virtManager/addhardware.py:1131
-#, fuzzy
 msgid "Host device parameter error"
-msgstr "Využití sítě:"
+msgstr ""
 
 #: ../src/virtManager/addhardware.py:1171
-#, fuzzy, python-format
+#, python-format
 msgid "%s device parameter error"
-msgstr "Využití sítě:"
+msgstr "Chyba v parametru %s zařízení"
 
 #: ../src/virtManager/addhardware.py:1182
-#, fuzzy
 msgid "Video device parameter error"
-msgstr "Využití sítě:"
+msgstr "Chyba v parametru video zařízení"
 
 #: ../src/virtManager/addhardware.py:1195
-#, fuzzy
 msgid "Watchdog parameter error"
-msgstr "Využití sítě:"
+msgstr "Chyba v parametru watchdogu"
 
 #: ../src/virtManager/asyncjob.py:145
 msgid "Cancel the job before closing window?"
@@ -502,9 +477,8 @@ msgid "Completed"
 msgstr "Dokončeno"
 
 #: ../src/virtManager/choosecd.py:91 ../src/virtManager/choosecd.py:97
-#, fuzzy
 msgid "Invalid Media Path"
-msgstr "Nesprávná adresa FV média"
+msgstr "Nesprávná cesta k médiu"
 
 #: ../src/virtManager/choosecd.py:92
 msgid "A media path must be specified."
@@ -519,49 +493,46 @@ msgid "Floppy _Image"
 msgstr ""
 
 #: ../src/virtManager/clone.py:208 ../src/virtManager/clone.py:455
-#, fuzzy
 msgid "Details..."
-msgstr "Detaily"
+msgstr "Detaily..."
 
 #: ../src/virtManager/clone.py:239
-#, fuzzy
 msgid "Usermode"
-msgstr "_Host:"
+msgstr "Uživatelský mód"
 
 #: ../src/virtManager/clone.py:251
-#, fuzzy
 msgid "Virtual Network"
-msgstr "Virtuální CPU"
+msgstr "Virtuální síť"
 
 #: ../src/virtManager/clone.py:324
 msgid "Nothing to clone."
-msgstr ""
+msgstr "Nic ke klonování."
 
 #: ../src/virtManager/clone.py:447
 msgid "Clone this disk"
-msgstr ""
+msgstr "Klonovat tento disk"
 
 #: ../src/virtManager/clone.py:451
 #, python-format
 msgid "Share disk with %s"
-msgstr ""
+msgstr "Sdílet disk s %s"
 
 #: ../src/virtManager/clone.py:463
 msgid "Storage cannot be shared or cloned."
-msgstr ""
+msgstr "Úložiště nemůže být sdíleno nebo naklonováno."
 
 #: ../src/virtManager/clone.py:519
 msgid "One or more disks cannot be cloned or shared."
-msgstr ""
+msgstr "Jeden nebo více disků nemůže být naklonováno nebo sdíleno."
 
 #: ../src/virtManager/clone.py:624
 #, python-format
 msgid "Error changing MAC address: %s"
-msgstr ""
+msgstr "Chyba při změně MAC adresy: %s"
 
 #: ../src/virtManager/clone.py:652
 msgid "Cloning will overwrite the existing file"
-msgstr ""
+msgstr "Klonování přepíše existující soubor"
 
 #: ../src/virtManager/clone.py:654
 msgid ""
@@ -570,9 +541,9 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/clone.py:666
-#, fuzzy, python-format
+#, python-format
 msgid "Error changing storage path: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při změně cesty k úložišti: %s"
 
 #: ../src/virtManager/clone.py:718
 msgid "Skipping disks may cause data to be overwritten."
@@ -594,23 +565,22 @@ msgid "Uncaught error validating input: %s"
 msgstr ""
 
 #: ../src/virtManager/clone.py:744
-#, fuzzy, python-format
+#, python-format
 msgid "Creating virtual machine clone '%s'"
-msgstr "Vytváření virtuálního stroje"
+msgstr "Vytvářím klon virtuálního stroje '%s'"
 
 #: ../src/virtManager/clone.py:748 ../src/virtManager/delete.py:132
 msgid " and selected storage (this may take a while)"
 msgstr ""
 
 #: ../src/virtManager/clone.py:757
-#, fuzzy, python-format
+#, python-format
 msgid "Error creating virtual machine clone '%s': %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při vytváření klonu virtuálního stroje '%s': %s"
 
 #: ../src/virtManager/clone.py:808
-#, fuzzy
 msgid "No storage to clone."
-msgstr "Umístění _ISO obrazu:"
+msgstr "Žádné úložiště ke klonování."
 
 #: ../src/virtManager/clone.py:814
 msgid "Connection does not support managed storage cloning."
@@ -628,32 +598,31 @@ msgstr ""
 
 #: ../src/virtManager/clone.py:824 ../src/virtManager/delete.py:329
 msgid "No write access to parent directory."
-msgstr ""
+msgstr "Nedostatečná oprávnění pro zápis do nadřazeného adresáře."
 
 #: ../src/virtManager/clone.py:826 ../src/virtManager/delete.py:327
 msgid "Path does not exist."
-msgstr ""
+msgstr "Cesta neexistuje."
 
 #: ../src/virtManager/clone.py:848
 msgid "Removable"
-msgstr ""
+msgstr "Odebíratelné"
 
 #: ../src/virtManager/clone.py:851
 msgid "Read Only"
-msgstr ""
+msgstr "Pouze pro čtení"
 
 #: ../src/virtManager/clone.py:853
 msgid "No write access"
-msgstr ""
+msgstr "Nedostatečná oprávnění pro zápis"
 
 #: ../src/virtManager/clone.py:856
 msgid "Shareable"
 msgstr ""
 
 #: ../src/virtManager/config.py:73
-#, fuzzy
 msgid "Locate or create storage volume"
-msgstr "Najděte nebo vytvořte nový soubor pro ukládání"
+msgstr "Najděte nebo vytvořte nový svazek pro ukládání"
 
 #: ../src/virtManager/config.py:74
 msgid "Locate existing storage"
@@ -706,19 +675,16 @@ msgid "Could not initialize HAL for media listing: %s"
 msgstr ""
 
 #: ../src/virtManager/connection.py:581
-#, fuzzy
 msgid "Disconnected"
-msgstr "_Připojit"
+msgstr "Odpojeno"
 
 #: ../src/virtManager/connection.py:583
-#, fuzzy
 msgid "Connecting"
-msgstr "Typ připojení"
+msgstr "Připojuji se"
 
 #: ../src/virtManager/connection.py:586
-#, fuzzy
 msgid "Active (RO)"
-msgstr "Aktivní"
+msgstr "Aktivní (RO)"
 
 #: ../src/virtManager/connection.py:588 ../src/virtManager/host.py:508
 #: ../src/virtManager/host.py:777 ../src/virtManager/host.py:1044
@@ -738,7 +704,7 @@ msgstr "Neaktivní"
 #: ../src/virtManager/details.py:2271 ../src/virtManager/details.py:2272
 #: ../src/virtManager/host.py:1039
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámý"
 
 #: ../src/virtManager/console.py:295
 msgid "Unable to provide requested credentials to the VNC server"
@@ -750,74 +716,70 @@ msgid "The credential type %s is not supported"
 msgstr ""
 
 #: ../src/virtManager/console.py:297
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Nelze inicializovat GTK: "
+msgstr "Nelze se autentizovat"
 
 #: ../src/virtManager/console.py:301
 msgid "Unsupported console authentication type"
 msgstr ""
 
 #: ../src/virtManager/console.py:348
-#, fuzzy, python-format
+#, python-format
 msgid "Error opening socket path '%s': %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při otevíraní cesty socketu '%s': %s"
 
 #: ../src/virtManager/console.py:353
-#, fuzzy, python-format
+#, python-format
 msgid "Error opening socket path '%s'"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při otevíraní cesty socketu '%s'"
 
-#: ../src/virtManager/console.py:542
-#, fuzzy, python-format
+#: ../src/virtManager/console.py:543
+#, python-format
 msgid "Press %s to release pointer."
-msgstr "Stiskněte Ctrl+Alt pro uvolnění ukazatele myši."
+msgstr "Stiskněte %s pro uvolnění ukazatele myši."
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:705 ../src/virtManager/console.py:858
+#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
 msgid "Guest not running"
-msgstr ""
+msgstr "Host neběží"
 
-#: ../src/virtManager/console.py:708
+#: ../src/virtManager/console.py:709
 msgid "Guest has crashed"
-msgstr ""
+msgstr "Host havaroval"
 
-#: ../src/virtManager/console.py:811
+#: ../src/virtManager/console.py:819
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr ""
 
-#: ../src/virtManager/console.py:875
+#: ../src/virtManager/console.py:893
 msgid "Graphical console not configured for guest"
-msgstr ""
+msgstr "Grafická konzole pro tohoto hosta nebyla nakonfigurována"
 
-#: ../src/virtManager/console.py:882
+#: ../src/virtManager/console.py:900
 #, python-format
 msgid "Cannot display graphical console type '%s'"
-msgstr ""
+msgstr "Nelze zobrazit grafickou konzoli typu '%s'"
 
-#: ../src/virtManager/console.py:892
+#: ../src/virtManager/console.py:910
 msgid "Graphical console is not yet active for guest"
-msgstr ""
+msgstr "Grafická konzole ještě není aktivní"
 
-#: ../src/virtManager/console.py:907
+#: ../src/virtManager/console.py:915
 msgid "Connecting to graphical console for guest"
-msgstr ""
+msgstr "Připojují se ke grafické konzoli hosta"
 
-#: ../src/virtManager/console.py:933
-#, fuzzy
+#: ../src/virtManager/console.py:951
 msgid "Error connecting to graphical console"
-msgstr "_Grafická konzole"
+msgstr "Chyba při připojování ke grafické konzoli"
 
 #: ../src/virtManager/create.py:319
-#, fuzzy
 msgid "No active connection to install on."
-msgstr "Typ připojení"
+msgstr ""
 
 #: ../src/virtManager/create.py:380
-#, fuzzy
 msgid "Connection is read only."
-msgstr "Typ připojení"
+msgstr "Připojení je pouze pro čtení."
 
 #: ../src/virtManager/create.py:383
 msgid ""
@@ -873,7 +835,7 @@ msgstr ""
 #: ../src/virtManager/create.py:511
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
-msgstr ""
+msgstr "Hypervizor podporuje pouze %d virtualních CPU"
 
 #: ../src/virtManager/create.py:521
 #, python-format
@@ -887,54 +849,50 @@ msgstr ""
 #: ../src/virtManager/create.py:680 ../src/virtManager/create.py:689
 #: ../src/virtManager/create.py:764 ../src/virtManager/create.py:766
 msgid "Generic"
-msgstr ""
+msgstr "Obecný"
 
 #: ../src/virtManager/create.py:746
-#, fuzzy
 msgid "Local CDROM/ISO"
-msgstr "_Místní host:"
+msgstr "Lokální CDROM/ISO"
 
 #: ../src/virtManager/create.py:748
-#, fuzzy
 msgid "URL Install Tree"
-msgstr "Vyžadováno instalační médium"
+msgstr ""
 
 #: ../src/virtManager/create.py:750
-#, fuzzy
 msgid "PXE Install"
-msgstr "PV instalace"
+msgstr "PXE instalace"
 
 #: ../src/virtManager/create.py:752
 msgid "Import existing OS image"
-msgstr ""
+msgstr "Importovat existující obraz OS"
 
 #: ../src/virtManager/create.py:755 ../src/virtManager/details.py:1918
 #: ../src/virtManager/details.py:1941
 msgid "None"
-msgstr ""
+msgstr "Žádný"
 
 #: ../src/virtManager/create.py:943
-#, fuzzy
 msgid "Network selection does not support PXE"
-msgstr "Síť"
+msgstr "Zvolená síť nepodporuje PXE"
 
 #: ../src/virtManager/create.py:1135 ../src/virtManager/createinterface.py:876
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
-msgstr ""
+msgstr "Krok %(current_page)d z %(max_page)d"
 
 #: ../src/virtManager/create.py:1182
-#, fuzzy, python-format
+#, python-format
 msgid "Error setting UUID: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při nastavování UUID: %s"
 
 #: ../src/virtManager/create.py:1193
 msgid "Error setting up graphics device:"
-msgstr ""
+msgstr "Chyba při nastavování grafického zařízení:"
 
 #: ../src/virtManager/create.py:1203
 msgid "Error setting up sound device:"
-msgstr ""
+msgstr "Chyba při nastavování zvukového zařízení:"
 
 #: ../src/virtManager/create.py:1223 ../src/virtManager/createinterface.py:905
 #, python-format
@@ -954,14 +912,12 @@ msgid "An install tree is required."
 msgstr ""
 
 #: ../src/virtManager/create.py:1278
-#, fuzzy
 msgid "A storage path to import is required."
-msgstr "Vyžadována cesta k ISO"
+msgstr ""
 
 #: ../src/virtManager/create.py:1288
-#, fuzzy
 msgid "Error setting installer parameters."
-msgstr "Správce virtuálních strojů"
+msgstr "Chyba při nastavování parametrů instalátoru."
 
 #: ../src/virtManager/create.py:1306
 msgid "Error setting install media location."
@@ -969,15 +925,15 @@ msgstr ""
 
 #: ../src/virtManager/create.py:1316
 msgid "Error setting OS information."
-msgstr ""
+msgstr "Chyba při nastavování informací o OS."
 
 #: ../src/virtManager/create.py:1353
 msgid "Error setting CPUs."
-msgstr ""
+msgstr "Chyba při nastavování CPU."
 
 #: ../src/virtManager/create.py:1360
 msgid "Error setting guest memory."
-msgstr ""
+msgstr "Chyba při nastavování paměti hosta."
 
 #: ../src/virtManager/create.py:1469
 #, python-format
@@ -985,9 +941,8 @@ msgid "Network device required for %s install."
 msgstr ""
 
 #: ../src/virtManager/create.py:1554
-#, fuzzy
 msgid "Error starting installation: "
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #: ../src/virtManager/create.py:1582
 msgid "Creating Virtual Machine"
@@ -1005,32 +960,30 @@ msgid "Unable to complete install: '%s'"
 msgstr "Nelze dokončit instalaci: '%s'"
 
 #: ../src/virtManager/create.py:1672
-#, fuzzy, python-format
+#, python-format
 msgid "Error continue install: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #: ../src/virtManager/create.py:1768
-#, fuzzy
 msgid "Detecting"
-msgstr "Typ připojení"
+msgstr "Detekuji"
 
 #: ../src/virtManager/createinterface.py:189
 #: ../src/virtManager/uihelpers.py:302
 msgid "Bridge"
-msgstr ""
+msgstr "Most"
 
 #: ../src/virtManager/createinterface.py:191
 msgid "Bond"
 msgstr ""
 
 #: ../src/virtManager/createinterface.py:193
-#, fuzzy
 msgid "Ethernet"
-msgstr "Ostatní"
+msgstr "Ethernet"
 
 #: ../src/virtManager/createinterface.py:195
 msgid "VLAN"
-msgstr ""
+msgstr "VLAN"
 
 #: ../src/virtManager/createinterface.py:210 ../src/virtManager/manager.py:368
 #: ../src/virtManager/storagebrowse.py:114 ../src/vmm-create-net.glade.h:29
@@ -1044,21 +997,20 @@ msgstr "Typ"
 
 #: ../src/virtManager/createinterface.py:212
 msgid "In use by"
-msgstr ""
+msgstr "Momentálně užívá"
 
 #: ../src/virtManager/createinterface.py:250
 #: ../src/virtManager/createinterface.py:260
-#, fuzzy
 msgid "System default"
-msgstr "Hypervisor:"
+msgstr ""
 
 #: ../src/virtManager/createinterface.py:496
 msgid "Choose interface(s) to bridge:"
-msgstr ""
+msgstr "Vyberte rozhraní k přemostění:"
 
 #: ../src/virtManager/createinterface.py:499
 msgid "Choose parent interface:"
-msgstr ""
+msgstr "Vyberte nadřazené rozhraní:"
 
 #: ../src/virtManager/createinterface.py:501
 msgid "Choose interfaces to bond:"
@@ -1066,20 +1018,19 @@ msgstr ""
 
 #: ../src/virtManager/createinterface.py:503
 msgid "Choose an unconfigured interface:"
-msgstr ""
+msgstr "Vyberte nenakonfigurované rozhraní:"
 
 #: ../src/virtManager/createinterface.py:558
-#, fuzzy
 msgid "No interface selected"
-msgstr "Síťový provoz"
+msgstr "Nebylo výbráno žádné rozhraní"
 
 #: ../src/virtManager/createinterface.py:918
 msgid "An interface name is required."
-msgstr ""
+msgstr "Jméno rozhraní je požadováno."
 
 #: ../src/virtManager/createinterface.py:922
 msgid "An interface must be selected"
-msgstr ""
+msgstr "Rozhraní musí být vybráno"
 
 #: ../src/virtManager/createinterface.py:953
 #, python-format
@@ -1093,47 +1044,43 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/createinterface.py:991
-#, fuzzy
 msgid "Error setting interface parameters."
-msgstr "Správce virtuálních strojů"
+msgstr "Chyba při nastavování parametrů rozhraní."
 
 #: ../src/virtManager/createinterface.py:1068
-#, fuzzy, python-format
+#, python-format
 msgid "Error validating IP configuration: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při ověřování IP konfigurace: %s"
 
 #: ../src/virtManager/createinterface.py:1114
-#, fuzzy
 msgid "Creating virtual interface"
-msgstr "Vytváření virtuálního stroje"
+msgstr "Vytváření virtuálního rozhraní"
 
 #: ../src/virtManager/createinterface.py:1115
-#, fuzzy
 msgid "The virtual interface is now being created."
-msgstr "Virtuální stroj je nyní vytvářen. "
+msgstr "Virtuální rozhraní je nyní vytvářeno."
 
 #: ../src/virtManager/createinterface.py:1123
-#, fuzzy, python-format
+#, python-format
 msgid "Error creating interface: '%s'"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při vytváření rozhraní: '%s'"
 
 #: ../src/virtManager/createnet.py:96
-#, fuzzy
 msgid "Any physical device"
-msgstr "NAT do nějakého fyzického zařízení"
+msgstr "Jakékoliv fyzické rozhraní"
 
 #: ../src/virtManager/createnet.py:99
-#, fuzzy, python-format
+#, python-format
 msgid "Physical device %s"
-msgstr "NAT do fyzického zařízení %s"
+msgstr "Fyzické rozhraní %s"
 
 #: ../src/virtManager/createnet.py:110 ../src/virtManager/network.py:34
 msgid "NAT"
-msgstr ""
+msgstr "NAT"
 
 #: ../src/virtManager/createnet.py:111
 msgid "Routed"
-msgstr ""
+msgstr "Routovaný"
 
 #: ../src/virtManager/createnet.py:178
 #, python-format
@@ -1157,9 +1104,8 @@ msgid "Other"
 msgstr "Ostatní"
 
 #: ../src/virtManager/createnet.py:292 ../src/vmm-create-net.glade.h:43
-#, fuzzy
 msgid "Start address:"
-msgstr "MAC adresa"
+msgstr "Počáteční adresa:"
 
 #: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:101
 msgid "Status:"
@@ -1170,12 +1116,12 @@ msgstr "Stav:"
 #: ../src/virtManager/details.py:1963 ../src/virtManager/host.py:530
 #: ../src/virtManager/host.py:531
 msgid "Disabled"
-msgstr ""
+msgstr "Vypnutý"
 
 #: ../src/virtManager/createnet.py:353
-#, fuzzy, python-format
+#, python-format
 msgid "Error creating virtual network: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při vytváření virtuální sítě: %s"
 
 #: ../src/virtManager/createnet.py:364 ../src/virtManager/createnet.py:367
 msgid "Invalid Network Name"
@@ -1207,9 +1153,8 @@ msgid "The network prefix must be at least /4 (16 addresses)"
 msgstr "Síťový prefix musí být alespoň /4 (16 adres)"
 
 #: ../src/virtManager/createnet.py:386
-#, fuzzy
 msgid "Check Network Address"
-msgstr "Neplatná síťová adresa"
+msgstr "Ověřit síťovou adresu"
 
 #: ../src/virtManager/createnet.py:387
 msgid ""
@@ -1254,26 +1199,24 @@ msgstr ""
 
 #: ../src/virtManager/createpool.py:364
 msgid "Choose target directory"
-msgstr ""
+msgstr "Zvolte cílový adresář"
 
 #: ../src/virtManager/createpool.py:396
-#, fuzzy
 msgid "Creating storage pool..."
-msgstr "Vytváření úložného souboru"
+msgstr "Vytváření úložiště..."
 
 #: ../src/virtManager/createpool.py:397
 msgid "Creating the storage pool may take a while..."
-msgstr ""
+msgstr "Vytváření úložiště může chvíli trvat..."
 
 #: ../src/virtManager/createpool.py:405
 #, python-format
 msgid "Error creating pool: %s"
-msgstr ""
+msgstr "Chyba při vytváření úložiště: %s"
 
 #: ../src/virtManager/createpool.py:470 ../src/virtManager/createpool.py:492
-#, fuzzy
 msgid "Pool Parameter Error"
-msgstr "Využití sítě:"
+msgstr "Chyba v parametru úložiště"
 
 #: ../src/virtManager/createpool.py:498
 msgid ""
@@ -1290,43 +1233,40 @@ msgid "Create a logical volume group from the source device."
 msgstr ""
 
 #: ../src/virtManager/createvol.py:206
-#, fuzzy
 msgid "Creating storage volume..."
-msgstr "Vytváření úložného souboru"
+msgstr "Vytváření svazku..."
 
 #: ../src/virtManager/createvol.py:207
 msgid "Creating the storage volume may take a while..."
-msgstr ""
+msgstr "Vytváření svazku může chvíli trvat..."
 
 #: ../src/virtManager/createvol.py:215
 #, python-format
 msgid "Error creating vol: %s"
-msgstr ""
+msgstr "Chyba při vytváření svazku: %s"
 
 #: ../src/virtManager/createvol.py:248
-#, fuzzy
 msgid "Volume Parameter Error"
-msgstr "Využití sítě:"
+msgstr "Chyba v parametru svazku"
 
 #: ../src/virtManager/delete.py:86
-#, fuzzy
 msgid "Delete"
-msgstr "Smazat stroj"
+msgstr "Smazat"
 
 #: ../src/virtManager/delete.py:129
-#, fuzzy, python-format
+#, python-format
 msgid "Deleting virtual machine '%s'"
-msgstr "Obnovení virtuálního stroje"
+msgstr "Smazat virtuální stroj '%s'"
 
 #: ../src/virtManager/delete.py:161
 #, python-format
 msgid "Deleting path '%s'"
-msgstr ""
+msgstr "Odstraňování cesty '%s'"
 
 #: ../src/virtManager/delete.py:172
-#, fuzzy, python-format
+#, python-format
 msgid "Error deleting virtual machine '%s': %s"
-msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
+msgstr "Chyba při mazání virtuálního stroje '%s': %s"
 
 #: ../src/virtManager/delete.py:188
 msgid "Additionally, there were errors removing certain storage devices: \n"
@@ -1337,14 +1277,12 @@ msgid "Errors encountered while removing certain storage devices."
 msgstr ""
 
 #: ../src/virtManager/delete.py:273
-#, fuzzy
 msgid "Storage Path"
-msgstr "<b>Úložný prostor</b>"
+msgstr "Cesta k úložišti"
 
 #: ../src/virtManager/delete.py:274
-#, fuzzy
 msgid "Target"
-msgstr "<b>Úložný prostor</b>"
+msgstr "Cíl"
 
 #: ../src/virtManager/delete.py:322
 msgid "Cannot delete iscsi share."
@@ -1359,9 +1297,8 @@ msgid "Cannot delete unmanaged block device."
 msgstr ""
 
 #: ../src/virtManager/delete.py:351
-#, fuzzy
 msgid "Storage is read-only."
-msgstr "Typ připojení"
+msgstr "Úložiště je pouze pro čtení"
 
 #: ../src/virtManager/delete.py:353
 msgid "No write access to path."
@@ -1377,15 +1314,16 @@ msgid ""
 "Storage is in use by the following virtual machines:\n"
 "- %s "
 msgstr ""
+"Úložiště již využívají následující virtuální stroje:\n"
+"- %s "
 
 #: ../src/virtManager/details.py:503
-#, fuzzy
 msgid "Add Hardware"
-msgstr "Hardware"
+msgstr "Přidat hardware"
 
 #: ../src/virtManager/details.py:539
 msgid "Close tab"
-msgstr ""
+msgstr "Zavřít záložku"
 
 #: ../src/virtManager/details.py:614
 msgid ""
@@ -1406,32 +1344,28 @@ msgid "Libvirt did not detect NUMA capabilities."
 msgstr ""
 
 #: ../src/virtManager/details.py:633
-#, fuzzy
 msgid "VCPU"
 msgstr "VCPU"
 
 #: ../src/virtManager/details.py:634
-#, fuzzy
 msgid "On CPU"
-msgstr "VCPU"
+msgstr "Na CPU"
 
 #: ../src/virtManager/details.py:635
-#, fuzzy
 msgid "Pinning"
-msgstr "Spuštený"
+msgstr ""
 
 #: ../src/virtManager/details.py:784
-#, fuzzy
 msgid "No text console available"
-msgstr "Typ připojení"
+msgstr "Žádná textová konzole není dostupná"
 
 #: ../src/virtManager/details.py:806
 msgid "Serial console not yet supported over remote connection."
-msgstr ""
+msgstr "Seriová konzole ještě není podporována přes vzdálené spojení."
 
 #: ../src/virtManager/details.py:809
 msgid "Serial console not available for inactive guest."
-msgstr ""
+msgstr "Seriová konzole není dostupná pro neaktivního hosta."
 
 #: ../src/virtManager/details.py:811
 #, python-format
@@ -1444,24 +1378,22 @@ msgid "Can not access console path '%s'."
 msgstr ""
 
 #: ../src/virtManager/details.py:832
-#, fuzzy
 msgid "No graphical console available"
-msgstr "_Grafická konzole"
+msgstr "Žádná grafická konzole není dostupná"
 
 #: ../src/virtManager/details.py:837
-#, fuzzy, python-format
+#, python-format
 msgid "Graphical Console %s"
-msgstr "_Grafická konzole"
+msgstr "Grafická konzole %s"
 
 #: ../src/virtManager/details.py:937
-#, fuzzy, python-format
+#, python-format
 msgid "Error refreshing hardware page: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při obnovování seznamu hardware: %s"
 
 #: ../src/virtManager/details.py:992 ../src/virtManager/manager.py:934
-#, fuzzy
 msgid "_Restore"
-msgstr "Reservovaná"
+msgstr "_Obnovit"
 
 #. Build VM context menu
 #: ../src/virtManager/details.py:994 ../src/virtManager/manager.py:319
@@ -1488,24 +1420,24 @@ msgid "Screenshot saved"
 msgstr "Snímek obrazovky uložen"
 
 #: ../src/virtManager/details.py:1346
-#, fuzzy, python-format
+#, python-format
 msgid "Error generating CPU configuration: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při generování CPU konfigurace: %s"
 
 #: ../src/virtManager/details.py:1381
-#, fuzzy, python-format
+#, python-format
 msgid "Error copying host CPU: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #: ../src/virtManager/details.py:1611
-#, fuzzy, python-format
+#, python-format
 msgid "Error building pin list: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #: ../src/virtManager/details.py:1617
-#, fuzzy, python-format
+#, python-format
 msgid "Error pinning vcpus: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #: ../src/virtManager/details.py:1661
 #, python-format
@@ -1513,45 +1445,44 @@ msgid "Error changing autostart value: %s"
 msgstr ""
 
 #: ../src/virtManager/details.py:1755
-#, fuzzy
 msgid "Are you sure you want to remove this device?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Jste si jistí, že chcete odebrat toto zařízení?"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:805
-#: ../src/virtManager/engine.py:905 ../src/virtManager/engine.py:929
-#: ../src/virtManager/engine.py:988 ../src/virtManager/engine.py:1012
+#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
+#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
+#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
 msgid "Don't ask me again."
 msgstr ""
 
 #: ../src/virtManager/details.py:1768
 #, python-format
 msgid "Error Removing Device: %s"
-msgstr ""
+msgstr "Chyba při odebírání zařízení: %s"
 
 #: ../src/virtManager/details.py:1785
 msgid "Device could not be removed from the running machine"
-msgstr ""
+msgstr "Zařízení nemohlo být odebráno z běžícího stroje"
 
 #: ../src/virtManager/details.py:1787
 msgid "This change will take effect after the next VM reboot."
-msgstr ""
+msgstr "Tato změna se projeví až při přístím zapnutí VM."
 
 #: ../src/virtManager/details.py:1840
-#, fuzzy, python-format
+#, python-format
 msgid "Error changing VM configuration: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při změně konfigurace VM: %s"
 
 #: ../src/virtManager/details.py:1850
 msgid "Some changes may require a guest reboot to take effect."
-msgstr ""
+msgstr "Některé změny mohou vyžadovat reboot hosta, aby se projevily."
 
 #: ../src/virtManager/details.py:1853
 msgid "These changes will take effect after the next guest reboot."
-msgstr ""
+msgstr "Tyto změny se projeví při přístím zapnutí hosta."
 
 #: ../src/virtManager/details.py:1931 ../src/vmm-add-hardware.glade.h:30
 msgid "Same as host"
-msgstr ""
+msgstr "Stejné jako hostitel"
 
 #: ../src/virtManager/details.py:2027
 msgid "VCPU info only available for running domain."
@@ -1562,17 +1493,17 @@ msgid "Virtual machine does not support runtime VPCU info."
 msgstr ""
 
 #: ../src/virtManager/details.py:2034
-#, fuzzy, python-format
+#, python-format
 msgid "Error getting VCPU info: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #: ../src/virtManager/details.py:2194
 msgid "Xen Mouse"
-msgstr ""
+msgstr "Myš Xen"
 
 #: ../src/virtManager/details.py:2196
 msgid "PS/2 Mouse"
-msgstr ""
+msgstr "Myš PS/2"
 
 #: ../src/virtManager/details.py:2201
 msgid "Absolute Movement"
@@ -1583,9 +1514,8 @@ msgid "Relative Movement"
 msgstr ""
 
 #: ../src/virtManager/details.py:2238
-#, fuzzy
 msgid "Automatically allocated"
-msgstr "Automaticky otenřít konzole:"
+msgstr "Automaticky alokováno"
 
 #: ../src/virtManager/details.py:2246
 #, python-format
@@ -1593,71 +1523,64 @@ msgid "%(graphicstype)s Server"
 msgstr ""
 
 #: ../src/virtManager/details.py:2269
-#, fuzzy
 msgid "Local SDL Window"
-msgstr "_Místní host:"
+msgstr ""
 
 #: ../src/virtManager/details.py:2300
-#, fuzzy
 msgid "Serial Device"
-msgstr "<b>Úložný prostor</b>"
+msgstr "Seriové zařízení"
 
 #: ../src/virtManager/details.py:2302
-#, fuzzy
 msgid "Parallel Device"
-msgstr "<b>Úložný prostor</b>"
+msgstr "Paralelní zařízení"
 
 #: ../src/virtManager/details.py:2304
-#, fuzzy
 msgid "Console Device"
-msgstr "_Sériová konzole"
+msgstr "Zařízení konzole"
 
 #: ../src/virtManager/details.py:2306
 msgid "Channel Device"
 msgstr ""
 
 #: ../src/virtManager/details.py:2308
-#, fuzzy, python-format
+#, python-format
 msgid "%s Device"
-msgstr "_Host:"
+msgstr "Zařízení %s"
 
 #: ../src/virtManager/details.py:2313
-#, fuzzy
 msgid "Primary Console"
-msgstr "_Sériová konzole"
+msgstr "Primární konzole"
 
 #: ../src/virtManager/details.py:2527
 msgid "Tablet"
-msgstr ""
+msgstr "Tablet"
 
 #: ../src/virtManager/details.py:2530
-#, fuzzy
 msgid "Mouse"
-msgstr "Zastavit"
+msgstr "Myš"
 
 #: ../src/virtManager/details.py:2539
 #, python-format
 msgid "Display %s"
-msgstr ""
+msgstr "Display %s"
 
 #: ../src/virtManager/details.py:2545
 #, python-format
 msgid "Sound: %s"
-msgstr ""
+msgstr "Zvuk: %s"
 
 #: ../src/virtManager/details.py:2573
-#, fuzzy
 msgid "Video"
-msgstr "demo"
+msgstr "Video"
 
 #: ../src/virtManager/details.py:2576
 msgid "Watchdog"
-msgstr ""
+msgstr "Watchdog"
 
 #: ../src/virtManager/details.py:2582
 #, python-format
 msgid "Controller %s"
-msgstr ""
+msgstr "Řadič %s"
 
 #: ../src/virtManager/domain.py:248
 #, python-format
@@ -1673,9 +1596,8 @@ msgid "Paused"
 msgstr "Zastavený"
 
 #: ../src/virtManager/domain.py:877
-#, fuzzy
 msgid "Shutting Down"
-msgstr "Ukončit"
+msgstr "Ukončuji"
 
 #: ../src/virtManager/domain.py:879
 msgid "Shutoff"
@@ -1695,17 +1617,17 @@ msgstr ""
 
 #: ../src/virtManager/domain.py:1075
 msgid "Saving domain to disk"
-msgstr ""
+msgstr "Ukládám doménu na disk"
 
 #: ../src/virtManager/domain.py:1139
 msgid "Migrating domain"
-msgstr ""
+msgstr "Migruji doménu"
 
-#: ../src/virtManager/engine.py:107 ../src/virtManager/engine.py:108
+#: ../src/virtManager/engine.py:91 ../src/virtManager/engine.py:92
 msgid "Searching for available hypervisors..."
 msgstr ""
 
-#: ../src/virtManager/engine.py:130
+#: ../src/virtManager/engine.py:114
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -1715,17 +1637,17 @@ msgid ""
 "Would you like to install them now?"
 msgstr ""
 
-#: ../src/virtManager/engine.py:135
+#: ../src/virtManager/engine.py:119
 msgid "Packages required for KVM usage"
 msgstr ""
 
-#: ../src/virtManager/engine.py:144
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:128
+#, python-format
 msgid "Error talking to PackageKit: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:294
+#: ../src/virtManager/engine.py:284
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1736,7 +1658,7 @@ msgid ""
 "added via File->Add Connection"
 msgstr ""
 
-#: ../src/virtManager/engine.py:325
+#: ../src/virtManager/engine.py:318
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1750,183 +1672,175 @@ msgid ""
 "start up."
 msgstr ""
 
-#: ../src/virtManager/engine.py:333
-#, fuzzy
+#: ../src/virtManager/engine.py:326
 msgid "Libvirt service must be started"
-msgstr " - Xen služba byla spuštěna\n"
+msgstr ""
 
-#: ../src/virtManager/engine.py:534
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:527
+#, python-format
 msgid "Unknown connection URI %s"
-msgstr "Navázat spojení"
+msgstr ""
 
-#: ../src/virtManager/engine.py:547
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:540
+#, python-format
 msgid "Error launching 'About' dialog: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
-#: ../src/virtManager/engine.py:559
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:552
+#, python-format
 msgid "Unable to display documentation: %s"
-msgstr "Nelze inicializovat GTK: "
+msgstr "Nelze zobrazit dokumentaci: %s"
 
-#: ../src/virtManager/engine.py:575
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:568
+#, python-format
 msgid "Error launching preferences: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
-#: ../src/virtManager/engine.py:595
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:588
+#, python-format
 msgid "Error launching host dialog: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
-#: ../src/virtManager/engine.py:615
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:608
+#, python-format
 msgid "Error launching connect dialog: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
-#: ../src/virtManager/engine.py:648
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:641
+#, python-format
 msgid "Error launching details: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
-#: ../src/virtManager/engine.py:699 ../src/virtManager/engine.py:716
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
+#, python-format
 msgid "Error launching manager: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
-#: ../src/virtManager/engine.py:730
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:723
+#, python-format
 msgid "Error launching migrate dialog: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
-#: ../src/virtManager/engine.py:748
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:741
+#, python-format
 msgid "Error setting clone parameters: %s"
-msgstr "Správce virtuálních strojů"
+msgstr ""
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:789
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr ""
 
-#: ../src/virtManager/engine.py:803
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:796
+#, python-format
 msgid "Are you sure you want to save '%s'?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Jste si jistí, že chcete uložit '%s'?"
 
-#: ../src/virtManager/engine.py:816
+#: ../src/virtManager/engine.py:809
 msgid "Save Virtual Machine"
 msgstr "Uložit virtuální stroj"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:824
 msgid "Saving Virtual Machine"
 msgstr "Ukládání virtuálního stroje"
 
-#: ../src/virtManager/engine.py:832
-#, fuzzy
+#: ../src/virtManager/engine.py:825
 msgid "Saving virtual machine memory to disk "
-msgstr "Ukládání virtuálního stroje"
+msgstr "Ukládám obsah paměťi virtuálního stroje na disk "
 
-#: ../src/virtManager/engine.py:838
+#: ../src/virtManager/engine.py:831
 #, python-format
 msgid "Error saving domain: %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:850
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:843
+#, python-format
 msgid "Error cancelling save job: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
-#: ../src/virtManager/engine.py:867
+#: ../src/virtManager/engine.py:860
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr ""
 
-#: ../src/virtManager/engine.py:872
+#: ../src/virtManager/engine.py:865
 msgid "Restore Virtual Machine"
 msgstr "Obnovení virtuálního stroje"
 
-#: ../src/virtManager/engine.py:881 ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
 msgid "Restoring Virtual Machine"
 msgstr "Obnovování virtuálního stroje"
 
-#: ../src/virtManager/engine.py:882 ../src/virtManager/engine.py:970
-#, fuzzy
+#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
 msgid "Restoring virtual machine memory from disk"
-msgstr "Obnovování virtuálního stroje"
+msgstr "Obnovuji obsah paměťi virtuálního stroje z disku"
 
-#: ../src/virtManager/engine.py:886
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:879
+#, python-format
 msgid "Error restoring domain: %s"
-msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
+msgstr "Chyba při obnovování domény: %s"
 
-#: ../src/virtManager/engine.py:901
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:894
+#, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
-msgstr "Skutečně chcete disk použít?"
+msgstr ""
 
-#: ../src/virtManager/engine.py:903
-#, fuzzy
+#: ../src/virtManager/engine.py:896
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
-"Tato volba kompletně odstraní virtuální stroj (VM) a může tak poškodit jeho "
-"obraz na disku. Jste si jisti?"
 
-#: ../src/virtManager/engine.py:917 ../src/virtManager/engine.py:1000
+#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
 #, python-format
 msgid "Error shutting down domain: %s"
-msgstr ""
+msgstr "Chyba při ukončování domény: %s"
 
-#: ../src/virtManager/engine.py:927
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:920
+#, python-format
 msgid "Are you sure you want to pause '%s'?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Opravdu chcete uspat '%s'?"
 
-#: ../src/virtManager/engine.py:941
+#: ../src/virtManager/engine.py:934
 #, python-format
 msgid "Error pausing domain: %s"
-msgstr ""
+msgstr "Chyba při uspávání domény: %s"
 
-#: ../src/virtManager/engine.py:952
+#: ../src/virtManager/engine.py:945
 #, python-format
 msgid "Error unpausing domain: %s"
-msgstr ""
+msgstr "Chyba při probouzení domény: %s"
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:968
+#: ../src/virtManager/engine.py:961
 msgid "Error restoring domain"
-msgstr ""
+msgstr "Chyba při obnovování domény"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:976
-#, fuzzy
+#: ../src/virtManager/engine.py:969
 msgid "Error starting domain"
-msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
+msgstr "Chyba při startu domény"
 
-#: ../src/virtManager/engine.py:986
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:979
+#, python-format
 msgid "Are you sure you want to poweroff '%s'?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Opravdu chcete vypnout '%s'?"
 
-#: ../src/virtManager/engine.py:1010
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:1003
+#, python-format
 msgid "Are you sure you want to reboot '%s'?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Opravdu chcete restartovat '%s'?"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1028 ../src/virtManager/engine.py:1043
-#, fuzzy, python-format
+#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
+#, python-format
 msgid "Error rebooting domain: %s"
-msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
+msgstr "Chyba při restartovaní domény: %s"
 
 #: ../src/virtManager/error.py:94
-#, fuzzy
 msgid "Input Error"
-msgstr "Úvod"
+msgstr "Chyba vstupu"
 
 #: ../src/virtManager/error.py:179 ../src/vmm-details.glade.h:47
 msgid "Details"
@@ -1934,18 +1848,17 @@ msgstr "Detaily"
 
 #: ../src/virtManager/host.py:178
 msgid "Copy Volume Path"
-msgstr ""
+msgstr "Zkopírovat cestu svazku"
 
 #: ../src/virtManager/host.py:340
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
-msgstr ""
+msgstr "%(currentmem)s z %(maxmem)s"
 
 #: ../src/virtManager/host.py:358 ../src/virtManager/host.py:359
 #: ../src/virtManager/host.py:360
-#, fuzzy
 msgid "Connection not active."
-msgstr "Typ připojení"
+msgstr "Spojení není aktivní."
 
 #: ../src/virtManager/host.py:365
 msgid "Libvirt connection does not support virtual network management."
@@ -1960,24 +1873,24 @@ msgid "Libvirt connection does not support interface management."
 msgstr ""
 
 #: ../src/virtManager/host.py:389
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Jste si jistí, že chcete trvale smazat tuto síť %s?"
 
 #: ../src/virtManager/host.py:398
 #, python-format
 msgid "Error deleting network: %s"
-msgstr ""
+msgstr "Chyba při mázání sítě: %s"
 
 #: ../src/virtManager/host.py:410
 #, python-format
 msgid "Error starting network: %s"
-msgstr ""
+msgstr "Chyba při spouštění sítě: %s"
 
 #: ../src/virtManager/host.py:422
 #, python-format
 msgid "Error stopping network: %s"
-msgstr ""
+msgstr "Chyba při zastavovaní sítě: %s"
 
 #: ../src/virtManager/host.py:432
 #, python-format
@@ -1991,9 +1904,8 @@ msgstr ""
 
 #: ../src/virtManager/host.py:452 ../src/virtManager/host.py:522
 #: ../src/virtManager/host.py:737 ../src/virtManager/host.py:778
-#, fuzzy
 msgid "On Boot"
-msgstr "Při startu"
+msgstr "Při bootu"
 
 #: ../src/virtManager/host.py:453 ../src/virtManager/host.py:522
 #: ../src/virtManager/host.py:556 ../src/virtManager/host.py:738
@@ -2002,14 +1914,13 @@ msgid "Never"
 msgstr "Nikdy"
 
 #: ../src/virtManager/host.py:487
-#, fuzzy
 msgid "No virtual network selected."
-msgstr "Virtuální CPU"
+msgstr "Nebyla vybrána síť."
 
 #: ../src/virtManager/host.py:497
-#, fuzzy, python-format
+#, python-format
 msgid "Error selecting network: %s"
-msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
+msgstr "Chyba při výběru sítě: %s"
 
 #: ../src/virtManager/host.py:562
 msgid "Isolated virtual network"
@@ -2018,32 +1929,32 @@ msgstr "Izolovaná virtuální síť"
 #: ../src/virtManager/host.py:597 ../src/virtManager/host.py:610
 #, python-format
 msgid "Error starting pool '%s': %s"
-msgstr ""
+msgstr "Chyba při spouštění úložiště '%s': %s"
 
 #: ../src/virtManager/host.py:619
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
-msgstr "Skutečně chcete disk použít?"
+msgstr ""
 
 #: ../src/virtManager/host.py:628
 #, python-format
 msgid "Error deleting pool: %s"
-msgstr ""
+msgstr "Chyba při mázání úložiště: %s"
 
 #: ../src/virtManager/host.py:641
-#, fuzzy, python-format
+#, python-format
 msgid "Error refreshing pool '%s': %s"
-msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
+msgstr ""
 
 #: ../src/virtManager/host.py:650
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Jste si jistí, že chcete trvale smazat tento svazek %s?"
 
 #: ../src/virtManager/host.py:660
 #, python-format
 msgid "Error deleting volume: %s"
-msgstr ""
+msgstr "Chyba při mázání svazku: %s"
 
 #: ../src/virtManager/host.py:672
 #, python-format
@@ -2061,73 +1972,71 @@ msgid "Error setting pool autostart: %s"
 msgstr ""
 
 #: ../src/virtManager/host.py:750
-#, fuzzy
 msgid "No storage pool selected."
-msgstr "Síťový provoz"
+msgstr "Nebylo vybráno úložiště."
 
 #: ../src/virtManager/host.py:760
-#, fuzzy, python-format
+#, python-format
 msgid "Error selecting pool: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při výběru úložiště: %s"
 
 #: ../src/virtManager/host.py:886
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to stop the interface '%s'?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Jste si jistí, že chcete zastavit toto rozhraní '%s'?"
 
 #: ../src/virtManager/host.py:888 ../src/virtManager/host.py:915
 msgid "Don't ask me again for interface start/stop."
 msgstr ""
 
 #: ../src/virtManager/host.py:900
-#, fuzzy, python-format
+#, python-format
 msgid "Error stopping interface '%s': %s"
-msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
+msgstr "Chyba při zastavovaní rozhraní '%s': %s"
 
 #: ../src/virtManager/host.py:913
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to start the interface '%s'?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Jste si jistí, že chcete spustit toto rozhraní '%s'?"
 
 #: ../src/virtManager/host.py:927
-#, fuzzy, python-format
+#, python-format
 msgid "Error starting interface '%s': %s"
-msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
+msgstr "Chyba při spouštění rozhraní '%s': %s"
 
 #: ../src/virtManager/host.py:936
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to permanently delete the interface %s?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Jste si jistí, že chcete trvale smazat toto rozhraní %s?"
 
 #: ../src/virtManager/host.py:946
-#, fuzzy, python-format
+#, python-format
 msgid "Error deleting interface: %s"
-msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
+msgstr "Chyba při mázání rozhraní: %s"
 
 #: ../src/virtManager/host.py:956
-#, fuzzy, python-format
+#, python-format
 msgid "Error launching interface wizard: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #: ../src/virtManager/host.py:989
-#, fuzzy, python-format
+#, python-format
 msgid "Error setting interface startmode: %s"
-msgstr "Správce virtuálních strojů"
+msgstr ""
 
 #: ../src/virtManager/host.py:1009
-#, fuzzy
 msgid "No interface selected."
-msgstr "Síťový provoz"
+msgstr "Nebylo vybráno rozhraní."
 
 #: ../src/virtManager/host.py:1020
-#, fuzzy, python-format
+#, python-format
 msgid "Error selecting interface: %s"
-msgstr "Chyba při obnovení domény '%s'. Neběží už tato doména?"
+msgstr "Chyba při výběru rozhraní: %s"
 
 #: ../src/virtManager/manager.py:320 ../src/virtManager/systray.py:171
 #: ../src/vmm-details.glade.h:134 ../src/vmm-manager.glade.h:18
 msgid "_Pause"
-msgstr "_Zastavit"
+msgstr "_Uspat"
 
 #: ../src/virtManager/manager.py:321
 msgid "R_esume"
@@ -2143,9 +2052,8 @@ msgstr "Ukončit"
 #. Shutdown menu
 #: ../src/virtManager/manager.py:325 ../src/virtManager/systray.py:191
 #: ../src/virtManager/uihelpers.py:702 ../src/vmm-details.glade.h:135
-#, fuzzy
 msgid "_Reboot"
-msgstr "Při startu"
+msgstr "_Restartovat"
 
 #: ../src/virtManager/manager.py:328 ../src/virtManager/systray.py:205
 #: ../src/virtManager/uihelpers.py:714 ../src/vmm-details.glade.h:124
@@ -2153,23 +2061,20 @@ msgid "_Force Off"
 msgstr ""
 
 #: ../src/virtManager/manager.py:331 ../src/virtManager/uihelpers.py:724
-#, fuzzy
 msgid "Sa_ve"
 msgstr "_Uložit"
 
 #: ../src/virtManager/manager.py:334
-#, fuzzy
 msgid "_Clone..."
-msgstr "Zo_brazit:"
+msgstr "_Klonovat..."
 
 #: ../src/virtManager/manager.py:335 ../src/vmm-details.glade.h:130
 msgid "_Migrate..."
-msgstr ""
+msgstr "_Migrovat..."
 
 #: ../src/virtManager/manager.py:336
-#, fuzzy
 msgid "_Delete"
-msgstr "Smazat stroj"
+msgstr "_Smazat"
 
 #: ../src/virtManager/manager.py:350 ../src/vmm-details.glade.h:122
 msgid "_Details"
@@ -2180,17 +2085,15 @@ msgid "CPU usage"
 msgstr "Využití CPU"
 
 #: ../src/virtManager/manager.py:372
-#, fuzzy
 msgid "Disk I/O"
-msgstr "Disk"
+msgstr "Diskové I/O"
 
 #: ../src/virtManager/manager.py:373
-#, fuzzy
 msgid "Network I/O"
-msgstr "Síť"
+msgstr "Síťové I/O"
 
 #: ../src/virtManager/manager.py:570
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This will remove the connection:\n"
 "\n"
@@ -2198,8 +2101,6 @@ msgid ""
 "\n"
 "Are you sure?"
 msgstr ""
-"Tato volba kompletně odstraní virtuální stroj (VM) a může tak poškodit jeho "
-"obraz na disku. Jste si jisti?"
 
 #: ../src/virtManager/manager.py:672
 msgid ""
@@ -2214,52 +2115,48 @@ msgid "Virtual Machine Manager Connection Failure"
 msgstr "Selhalo spojení manažera virtuálních strojů"
 
 #: ../src/virtManager/manager.py:680
-#, fuzzy
 msgid ""
 "Unable to open a connection to the libvirt management daemon.\n"
 "\n"
 msgstr ""
-"Nemohu navázat spojení s Xen hypervisorem/démonem.\n"
+"Nemohu navázat spojení s libvirt démonem.\n"
 "\n"
 
 #: ../src/virtManager/manager.py:735
 msgid "Double click to connect"
-msgstr ""
+msgstr "Dvojklik pro připojení"
 
 #: ../src/virtManager/manager.py:740
-#, fuzzy
 msgid "Not Connected"
-msgstr "_Připojit"
+msgstr "Nepřipojeno"
 
 #: ../src/virtManager/manager.py:742
-#, fuzzy
 msgid "Connecting..."
-msgstr "Typ připojení"
+msgstr "Připojuji se..."
 
 #: ../src/virtManager/manager.py:1062
 msgid " (disabled)"
-msgstr ""
+msgstr "(vypnuto)"
 
 #: ../src/virtManager/manager.py:1073
 msgid "Disabled in preferences dialog."
 msgstr ""
 
 #: ../src/virtManager/mediadev.py:105
-#, fuzzy
 msgid "No media detected"
-msgstr "Médium není k dispozici"
+msgstr "Médium nebylo rozpoznáno"
 
 #: ../src/virtManager/mediadev.py:107
 msgid "Media Unknown"
-msgstr ""
+msgstr "Neznámé médium"
 
 #: ../src/virtManager/migrate.py:113
 msgid "Migrate"
-msgstr ""
+msgstr "Migrovat"
 
 #: ../src/virtManager/migrate.py:142
 msgid "Libvirt version does not support setting downtime."
-msgstr ""
+msgstr "Tato verze libvirt neumožňuje nastavení downtime."
 
 #: ../src/virtManager/migrate.py:158
 msgid "Libvirt version does not support tunnelled migration."
@@ -2280,18 +2177,16 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/migrate.py:313
-#, fuzzy
 msgid "No connections available."
-msgstr "Typ připojení"
+msgstr "Žádná spojení nejsou dostupná."
 
 #: ../src/virtManager/migrate.py:382
 msgid "Connection hypervisors do not match."
 msgstr ""
 
 #: ../src/virtManager/migrate.py:384
-#, fuzzy
 msgid "Connection is disconnected."
-msgstr "Typ připojení"
+msgstr ""
 
 #: ../src/virtManager/migrate.py:403
 msgid "max downtime must be greater than 0."
@@ -2299,53 +2194,51 @@ msgstr ""
 
 #: ../src/virtManager/migrate.py:406
 msgid "An interface must be specified."
-msgstr ""
+msgstr "Rozhraní musí být specifikováno."
 
 #: ../src/virtManager/migrate.py:409
 msgid "Transfer rate must be greater than 0."
-msgstr ""
+msgstr "Přenosová rychlost musí být větší než 0."
 
 #: ../src/virtManager/migrate.py:412
 msgid "Port must be greater than 0."
-msgstr ""
+msgstr "Číslo portu musí být větší než 0."
 
 #: ../src/virtManager/migrate.py:450
 #, python-format
 msgid "Migrating VM '%s'"
-msgstr ""
+msgstr "Migruji VM '%s'"
 
 #: ../src/virtManager/migrate.py:451
 #, python-format
 msgid "Migrating VM '%s' from %s to %s. This may take awhile."
-msgstr ""
+msgstr "Migruji VM '%s' z %s na %s. Toto může chvíli trvat."
 
 #: ../src/virtManager/migrate.py:462
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to migrate guest: %s"
-msgstr "Nelze dokončit instalaci: '%s'"
+msgstr "Nelze zmigrovat hosta: %s"
 
 #: ../src/virtManager/migrate.py:493
-#, fuzzy, python-format
+#, python-format
 msgid "Error cancelling migrate job: %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Chyba při rušení migrace: %s"
 
 #: ../src/virtManager/network.py:32
 #, python-format
 msgid "NAT to %s"
-msgstr ""
+msgstr "NAT na %s"
 
 #: ../src/virtManager/network.py:37
 #, python-format
 msgid "Route to %s"
-msgstr ""
+msgstr "Routa na %s"
 
 #: ../src/virtManager/network.py:39
-#, fuzzy
 msgid "Routed network"
-msgstr "Izolovaná virtuální síť"
+msgstr "Routovaná virtuální síť"
 
 #: ../src/virtManager/network.py:46
-#, fuzzy
 msgid "Isolated network"
 msgstr "Izolovaná virtuální síť"
 
@@ -2370,17 +2263,16 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/storagebrowse.py:121
-#, fuzzy
 msgid "Size"
-msgstr "_Velikost:"
+msgstr "Velikost"
 
 #: ../src/virtManager/storagebrowse.py:128 ../src/vmm-create-pool.glade.h:7
 msgid "Format"
-msgstr ""
+msgstr "Formát"
 
 #: ../src/virtManager/storagebrowse.py:135
 msgid "Used By"
-msgstr ""
+msgstr "Používá"
 
 #: ../src/virtManager/storagebrowse.py:175
 msgid "Cannot use local storage on remote connection."
@@ -2388,12 +2280,11 @@ msgstr ""
 
 #: ../src/virtManager/systray.py:177
 msgid "_Resume"
-msgstr ""
+msgstr "Pok_račovat"
 
 #: ../src/virtManager/systray.py:348 ../src/virtManager/systray.py:397
-#, fuzzy
 msgid "No virtual machines"
-msgstr "Ukládání virtuálního stroje"
+msgstr "Žádné virtuálního stroje"
 
 #: ../src/virtManager/uihelpers.py:60
 msgid ""
@@ -2405,25 +2296,23 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/uihelpers.py:107
-#, fuzzy
 msgid "Default pool is not active."
-msgstr "Virtuální CPU"
+msgstr "Výchozí úložiště není aktivní."
 
 #: ../src/virtManager/uihelpers.py:108
 #, python-format
 msgid "Storage pool '%s' is not active. Would you like to start the pool now?"
-msgstr ""
+msgstr "Úložiště '%s' není aktivní. Chcete jej aktivovat?"
 
 #: ../src/virtManager/uihelpers.py:119
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start storage_pool '%s': %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Nelze aktivovat ú_ložiště '%s': %s"
 
 #. [xml value, label]
 #: ../src/virtManager/uihelpers.py:214
-#, fuzzy
 msgid "Hypervisor default"
-msgstr "Hypervisor:"
+msgstr "Výchozí Hypervizor"
 
 #: ../src/virtManager/uihelpers.py:298
 msgid "Usermode networking"
@@ -2434,17 +2323,16 @@ msgid "Virtual network"
 msgstr "Virtuální síť"
 
 #: ../src/virtManager/uihelpers.py:412
-#, fuzzy
 msgid "No virtual networks available"
-msgstr "Typ připojení"
+msgstr "Žádné virtuální sítě nejsou dostupné"
 
 #: ../src/virtManager/uihelpers.py:434
 msgid "(Empty bridge)"
-msgstr ""
+msgstr "(Prázdný síťový most)"
 
 #: ../src/virtManager/uihelpers.py:437
 msgid "Not bridged"
-msgstr ""
+msgstr "Není přemostěno"
 
 #: ../src/virtManager/uihelpers.py:439
 #, python-format
@@ -2452,49 +2340,45 @@ msgid "Host device %s %s"
 msgstr ""
 
 #: ../src/virtManager/uihelpers.py:476
-#, fuzzy
 msgid "No networking."
-msgstr "Uživatelské síťování"
+msgstr "Žádná síť"
 
 #. After all is said and done, add a manual bridge option
 #: ../src/virtManager/uihelpers.py:481
 msgid "Specify shared device name"
-msgstr ""
+msgstr "Zadejte jméno sdíleného zařízení"
 
 #: ../src/virtManager/uihelpers.py:500
-#, fuzzy
 msgid "Virtual Network is not active."
-msgstr "Virtuální CPU"
+msgstr "Virtuální síť není aktivní"
 
 #: ../src/virtManager/uihelpers.py:501
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
-msgstr ""
+msgstr "Virtuální síť '%s' není aktivní. Chcete ji aktivovat?"
 
 #: ../src/virtManager/uihelpers.py:513
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start virtual network '%s': %s"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Nelze aktivovat virtuální síť '%s': %s"
 
 #: ../src/virtManager/uihelpers.py:535
-#, fuzzy
 msgid "Error with network parameters."
-msgstr "Neplatné jméno sítě"
+msgstr "Chyba v parametrech sítě."
 
 #: ../src/virtManager/uihelpers.py:540 ../src/virtManager/uihelpers.py:542
 msgid "Mac address collision."
-msgstr ""
+msgstr "Kolize MAC adresy"
 
 #: ../src/virtManager/uihelpers.py:543
-#, fuzzy, python-format
+#, python-format
 msgid "%s Are you sure you want to use this address?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "%s Jste si skutečně jistí, že chcete použít tuto adresu?"
 
 #: ../src/virtManager/uihelpers.py:595
-#, fuzzy
 msgid "No device present"
-msgstr "Médium není k dispozici"
+msgstr "Žádné zařízení není přítomné"
 
 #: ../src/virtManager/uihelpers.py:752
 #, python-format
@@ -2502,9 +2386,8 @@ msgid "The emulator may not have search permissions for the path '%s'."
 msgstr ""
 
 #: ../src/virtManager/uihelpers.py:754
-#, fuzzy
 msgid "Do you want to correct this now?"
-msgstr "Skutečně chcete disk použít?"
+msgstr "Chcete to napravit ihned?"
 
 #: ../src/virtManager/uihelpers.py:755 ../src/virtManager/uihelpers.py:779
 msgid "Don't ask about these directories again."
@@ -2518,12 +2401,11 @@ msgstr ""
 #: ../src/virtManager/util.py:74
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
-msgstr ""
+msgstr "Nelze vytvořit výchozí úložiště '%s': %s"
 
 #: ../src/vmm-about.glade.h:1
-#, fuzzy
 msgid "Copyright (C) 2006-2010 Red Hat Inc."
-msgstr "Copyright (C) 2006 Red Hat Inc."
+msgstr "Copyright (C) 2006-2010 Red Hat Inc."
 
 #: ../src/vmm-about.glade.h:2
 msgid "Powered by libvirt"
@@ -2535,14 +2417,12 @@ msgid "translator-credits"
 msgstr "Kredit-překladatelům"
 
 #: ../src/vmm-add-hardware.glade.h:1
-#, fuzzy
 msgid "<b>Character Device</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Znakové zařízení</b>"
 
 #: ../src/vmm-add-hardware.glade.h:2
-#, fuzzy
 msgid "<b>Device Parameters</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Parametry zařízení</b>"
 
 #: ../src/vmm-add-hardware.glade.h:3
 msgid ""
@@ -2553,80 +2433,67 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:4
-#, fuzzy
 msgid "A_utomatically allocated"
-msgstr "Automaticky otenřít konzole:"
+msgstr "A_utomaticky alokováno"
 
 #: ../src/vmm-add-hardware.glade.h:5
-#, fuzzy
 msgid "Ac_tion:"
-msgstr "Umístění _ISO:"
+msgstr "A_kce:"
 
 #: ../src/vmm-add-hardware.glade.h:6
 msgid "Add new virtual hardware"
 msgstr "Přidat nový virtuální hardware"
 
 #: ../src/vmm-add-hardware.glade.h:7 ../src/vmm-create.glade.h:10
-#, fuzzy
 msgid "B_rowse..."
-msgstr "Zobrazit..."
+msgstr "P_rocházet..."
 
 #: ../src/vmm-add-hardware.glade.h:8 ../src/vmm-create.glade.h:14
 msgid "C_reate a disk image on the computer's hard drive"
 msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:9
-#, fuzzy
 msgid "Cache _mode:"
-msgstr "Typ OS:"
+msgstr "_Mód cache:"
 
 #: ../src/vmm-add-hardware.glade.h:10
-#, fuzzy
 msgid "D_evice model:"
-msgstr "Typ OS:"
+msgstr "Model zaříz_ení:"
 
 #: ../src/vmm-add-hardware.glade.h:11
 msgid "Device Type Field"
 msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:12
-#, fuzzy
 msgid "Device _Type:"
-msgstr "Typ OS:"
+msgstr "_Typ zařízení:"
 
 #: ../src/vmm-add-hardware.glade.h:13
-#, fuzzy
 msgid "H_ost:"
-msgstr "_Host:"
+msgstr "H_ost:"
 
 #: ../src/vmm-add-hardware.glade.h:14
-#, fuzzy
 msgid "Host _Device:"
-msgstr "_Host:"
+msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:15
 msgid "Listen on all public network interfaces "
-msgstr ""
+msgstr "Naslouchat na všech síťových rozhraních"
 
 #: ../src/vmm-add-hardware.glade.h:16
-#, fuzzy
 msgid "MAC Address Field"
-msgstr "MAC adresa"
+msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:17
-#, fuzzy
 msgid "Pa_ssword:"
-msgstr "Heslo:"
+msgstr "He_slo:"
 
 #: ../src/vmm-add-hardware.glade.h:18
-#, fuzzy
 msgid ""
 "Please indicate how you would like to assign space on the host system for "
 "your virtual storage device."
 msgstr ""
-"Zvolte prosím, jak chcete přidělit novému virtuálnímu systému úložný "
-"prostor. Toto místo bude využito pro instalaci operačního systému do "
-"virtuálního stroje."
+"Zvolte prosím, jak chcete přidělit novému virtuálnímu systému úložný prostor."
 
 #: ../src/vmm-add-hardware.glade.h:19
 msgid "Please indicate how you would like to view the virtual display."
@@ -2645,88 +2512,64 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:22
-#, fuzzy
 msgid ""
 "Please indicate what physical device\n"
 "to connect to the virtual machine."
 msgstr ""
-"Zvolte prosím, jak chcete přidělit novému virtuálnímu systému úložný "
-"prostor. Toto místo bude využito pro instalaci operačního systému do "
-"virtuálního stroje."
 
 #: ../src/vmm-add-hardware.glade.h:24
-#, fuzzy
 msgid ""
 "Please indicate what sound device type to connect to the virtual machine."
 msgstr ""
-"Zvolte prosím, jak chcete přidělit novému virtuálnímu systému úložný "
-"prostor. Toto místo bude využito pro instalaci operačního systému do "
-"virtuálního stroje."
 
 #: ../src/vmm-add-hardware.glade.h:25
-#, fuzzy
 msgid ""
 "Please indicate what video device type\n"
 "to connect to the virtual machine."
 msgstr ""
-"Zvolte prosím, jak chcete přidělit novému virtuálnímu systému úložný "
-"prostor. Toto místo bude využito pro instalaci operačního systému do "
-"virtuálního stroje."
 
 #: ../src/vmm-add-hardware.glade.h:27
-#, fuzzy
 msgid ""
 "Please indicate what watchdog device type\n"
 "and default action should be used."
 msgstr ""
-"Zvolte prosím, jak chcete přidělit novému virtuálnímu systému úložný "
-"prostor. Toto místo bude využito pro instalaci operačního systému do "
-"virtuálního stroje."
 
 #: ../src/vmm-add-hardware.glade.h:29
-#, fuzzy
 msgid "Po_rt:"
-msgstr "_Port:"
+msgstr "Po_rt:"
 
 #: ../src/vmm-add-hardware.glade.h:31 ../src/vmm-create.glade.h:38
 msgid "Select _managed or other existing storage"
 msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:32
-#, fuzzy
 msgid "Storage _format:"
-msgstr "<b>Úložný prostor</b>"
+msgstr "_Formát dat:"
 
 #: ../src/vmm-add-hardware.glade.h:33
-#, fuzzy
 msgid "Use Te_lnet:"
-msgstr "_Host:"
+msgstr "Použít Te_lnet:"
 
 #: ../src/vmm-add-hardware.glade.h:34 ../src/vmm-create-interface.glade.h:34
 #: ../src/vmm-migrate.glade.h:10
-#, fuzzy
 msgid "_Address:"
-msgstr "MAC adresa"
+msgstr "_Adresa:"
 
 #: ../src/vmm-add-hardware.glade.h:35 ../src/vmm-create.glade.h:46
-#, fuzzy
 msgid "_Allocate entire disk now"
-msgstr "Alokovat virtuální disk ihned?"
+msgstr "_Alokovat celý virtuální disk ihned?"
 
 #: ../src/vmm-add-hardware.glade.h:36
-#, fuzzy
 msgid "_Bind Host:"
-msgstr "_Host:"
+msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:48
-#, fuzzy
 msgid "_Bridge name:"
-msgstr "<b>Jméno stroje:</b>"
+msgstr "Jméno síťového mostu:"
 
 #: ../src/vmm-add-hardware.glade.h:38
-#, fuzzy
 msgid "_Device type:"
-msgstr "Typ OS:"
+msgstr "Typ _zařízení:"
 
 #: ../src/vmm-add-hardware.glade.h:39 ../src/vmm-create-interface.glade.h:37
 #: ../src/vmm-create-net.glade.h:52 ../src/vmm-create-pool.glade.h:13
@@ -2735,142 +2578,126 @@ msgid "_Finish"
 msgstr "_Dokončit"
 
 #: ../src/vmm-add-hardware.glade.h:40 ../src/vmm-create.glade.h:51
-#, fuzzy
 msgid "_GB"
-msgstr "5 GB"
+msgstr "_GB"
 
 #: ../src/vmm-add-hardware.glade.h:41
-#, fuzzy
 msgid "_Host device:"
-msgstr "_Host:"
+msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-details.glade.h:127
 msgid "_Keymap:"
-msgstr ""
+msgstr "Rozložení _klávesnice:"
 
 #: ../src/vmm-add-hardware.glade.h:43
-#, fuzzy
 msgid "_MAC address:"
-msgstr "MAC adresa"
+msgstr "_MAC adresa:"
 
 #: ../src/vmm-add-hardware.glade.h:44 ../src/vmm-create-interface.glade.h:40
 #: ../src/vmm-create-net.glade.h:54
 msgid "_Mode:"
-msgstr ""
+msgstr "_Mód:"
 
 #: ../src/vmm-add-hardware.glade.h:45
 msgid "_Model:"
-msgstr ""
+msgstr "_Model:"
 
 #: ../src/vmm-add-hardware.glade.h:46
-#, fuzzy
 msgid "_Other:"
-msgstr "Ostatní"
+msgstr "_Ostatní:"
 
 #: ../src/vmm-add-hardware.glade.h:47
-#, fuzzy
 msgid "_Path:"
-msgstr "_Port:"
+msgstr "_Cesta:"
 
 #: ../src/vmm-add-hardware.glade.h:48 ../src/vmm-migrate.glade.h:13
-#, fuzzy
 msgid "_Port:"
 msgstr "_Port:"
 
 #: ../src/vmm-add-hardware.glade.h:49
-#, fuzzy
 msgid "_TLS port:"
-msgstr "_Port:"
+msgstr "_TLS port:"
 
 #: ../src/vmm-add-hardware.glade.h:50 ../src/vmm-create-pool.glade.h:17
-#, fuzzy
 msgid "_Type:"
-msgstr "Typ"
+msgstr "_Typ:"
 
 #: ../src/vmm-add-hardware.glade.h:51
 msgid "aa:bb:cc:dd:ee:ff"
-msgstr ""
+msgstr "aa:bb:cc:dd:ee:ff"
 
 #: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create-pool.glade.h:18
 #: ../src/vmm-details.glade.h:152
 msgid "label"
-msgstr ""
+msgstr "štítek"
 
 #: ../src/vmm-choose-cd.glade.h:1
-#, fuzzy
 msgid "<b>Choose Source Device or File</b>"
-msgstr "<b>Konzole</b>"
+msgstr ""
 
 #: ../src/vmm-choose-cd.glade.h:2
-#, fuzzy
 msgid "CD-_ROM or DVD"
-msgstr "_CD-ROM nebo DVD:"
+msgstr "CD-_ROM nebo DVD"
 
 #: ../src/vmm-choose-cd.glade.h:3
 msgid "Choose Media"
-msgstr ""
+msgstr "Vyberte médium"
 
 #: ../src/vmm-choose-cd.glade.h:4 ../src/vmm-clone.glade.h:23
 msgid "_Browse..."
-msgstr "Zo_brazit:"
+msgstr "_Procházet..."
 
 #: ../src/vmm-choose-cd.glade.h:5
-#, fuzzy
 msgid "_Device Media:"
-msgstr "Typ OS:"
+msgstr ""
 
 #: ../src/vmm-choose-cd.glade.h:6
-#, fuzzy
 msgid "_ISO Image Location"
-msgstr "Umístění _ISO obrazu:"
+msgstr "Umístění _ISO obrazu"
 
 #: ../src/vmm-choose-cd.glade.h:7
-#, fuzzy
 msgid "_Location:"
-msgstr "Umístění _ISO:"
+msgstr ""
 
 #: ../src/vmm-clone.glade.h:1
 msgid "<span color='#484848'>MAC:</span>"
-msgstr ""
+msgstr "<span color='#484848'>MAC:</span>"
 
 #: ../src/vmm-clone.glade.h:2
 msgid "<span color='#484848'>Networking:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Síť:</span>"
 
 #: ../src/vmm-clone.glade.h:3
 msgid "<span color='#484848'>New _Path:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Nová _cesta:</span>"
 
 #: ../src/vmm-clone.glade.h:4
 msgid "<span color='#484848'>Path:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Cesta:</span>"
 
 #: ../src/vmm-clone.glade.h:5
 msgid "<span color='#484848'>Size:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Velikost:</span>"
 
 #: ../src/vmm-clone.glade.h:6 ../src/vmm-create.glade.h:6
 msgid "<span color='#484848'>Storage:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Úložiště:</span>"
 
 #: ../src/vmm-clone.glade.h:7
 msgid "<span color='#484848'>Target:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Cíl:</span>"
 
 #: ../src/vmm-clone.glade.h:8
 msgid "<span color='#484848'>Type:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Typ:</span>"
 
 #: ../src/vmm-clone.glade.h:9
 msgid "<span color='#484848'>_Name:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Jmé_no:</span>"
 
 #: ../src/vmm-clone.glade.h:10
-#, fuzzy
 msgid "<span size='large' color='white'>Clone virtual machine</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Vytvořit nový "
-"virtální systém</span>"
+msgstr "<span size='large' color='white'>Klonovat virtuální stroj</span>"
 
 #: ../src/vmm-clone.glade.h:11
 msgid ""
@@ -2881,94 +2708,76 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-clone.glade.h:13
-#, fuzzy
 msgid "C_lone"
-msgstr "Zo_brazit:"
+msgstr "K_lonovat"
 
 #: ../src/vmm-clone.glade.h:14
-#, fuzzy
 msgid "Change MAC address"
-msgstr "MAC adresa"
+msgstr "Změnit MAC adresu"
 
 #: ../src/vmm-clone.glade.h:15
-#, fuzzy
 msgid "Change storage path"
-msgstr "Vytváření úložného souboru"
+msgstr ""
 
 #: ../src/vmm-clone.glade.h:16
-#, fuzzy
 msgid "Clone Virtual Machine"
-msgstr "Obnovení virtuálního stroje"
+msgstr "Klonovat virtuální stroj"
 
 #: ../src/vmm-clone.glade.h:17
 msgid "Create a clone based on:"
-msgstr ""
+msgstr "Vytvořit klon založený na:"
 
 #: ../src/vmm-clone.glade.h:18
-#, fuzzy
 msgid "Create a new disk (c_lone) for the virtual machine"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #: ../src/vmm-clone.glade.h:19
 msgid "Existing disk"
-msgstr ""
+msgstr "Existující disk"
 
 #: ../src/vmm-clone.glade.h:20
-#, fuzzy
 msgid "New _MAC:"
-msgstr "<b>Síť</b>"
+msgstr "Nová _MAC:"
 
 #: ../src/vmm-clone.glade.h:21
-#, fuzzy
 msgid "No networking devices"
-msgstr "Uživatelské síťování"
+msgstr "Žádná síťová zařízení"
 
 #: ../src/vmm-clone.glade.h:22
-#, fuzzy
 msgid "No storage to clone"
-msgstr "Umístění _ISO obrazu:"
+msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:1
-#, fuzzy
 msgid "<b>ARP settings</b>"
-msgstr "<b>Základní detaily</b>"
+msgstr "<b>Nastavení ARP</b>"
 
 #: ../src/vmm-create-interface.glade.h:2
-#, fuzzy
 msgid "<b>Bond configuration</b>"
-msgstr "<b>Konzole</b>"
+msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:3
-#, fuzzy
 msgid "<b>Bridge configuration</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Konfigurace síťového mostu</b>"
 
 #: ../src/vmm-create-interface.glade.h:4
-#, fuzzy
 msgid "<b>IP Configuration</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Konfigurace IP</b>"
 
 #: ../src/vmm-create-interface.glade.h:5
-#, fuzzy
 msgid "<b>MII settings</b>"
-msgstr "<b>Základní detaily</b>"
+msgstr "<b>Nastavení MII</b>"
 
 #: ../src/vmm-create-interface.glade.h:6
-#, fuzzy
 msgid "<span size='large' color='white'>Configure network interface</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Vytvořit nový "
-"virtální systém</span>"
+msgstr "<span size='large' color='white'>Konfigurovat síťové rozhraní</span>"
 
 #: ../src/vmm-create-interface.glade.h:7
-#, fuzzy
 msgid "A_utoconf"
-msgstr "Typ připojení"
+msgstr "A_utokonfigurace"
 
 #: ../src/vmm-create-interface.glade.h:8
-#, fuzzy
 msgid "Addresses:"
-msgstr "MAC adresa"
+msgstr "Adresy:"
 
 #: ../src/vmm-create-interface.glade.h:9
 msgid "Bond mode:"
@@ -2979,33 +2788,28 @@ msgid "Bond monitor mode:"
 msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:11
-#, fuzzy
 msgid "Bonding configuration"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:12
-#, fuzzy
 msgid "Bridge configuration"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Konfigurace síťového mostu"
 
 #: ../src/vmm-create-interface.glade.h:13
 msgid "Bridge settings:"
-msgstr ""
+msgstr "Nastavení síťového mostu:"
 
 #: ../src/vmm-create-interface.glade.h:14
-#, fuzzy
 msgid "C_onfigure"
-msgstr "Zo_brazit:"
+msgstr "K_onfigurovat"
 
 #: ../src/vmm-create-interface.glade.h:15
-#, fuzzy
 msgid "Carrier type:"
-msgstr "Typ hardware"
+msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:16
-#, fuzzy
 msgid "Configure network interface"
-msgstr "Síťový provoz"
+msgstr "Konfigurovat síťové rozhraní"
 
 #: ../src/vmm-create-interface.glade.h:17
 msgid "Down delay:"
@@ -3013,7 +2817,7 @@ msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:18
 msgid "Enable STP:"
-msgstr ""
+msgstr "Zapnout STP:"
 
 #: ../src/vmm-create-interface.glade.h:19
 msgid "Forward delay:"
@@ -3021,120 +2825,104 @@ msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:20
 msgid "Frequency:"
-msgstr ""
+msgstr "Frekvence:"
 
 #: ../src/vmm-create-interface.glade.h:21
-#, fuzzy
 msgid "IP Configuration"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Konfigurace IP"
 
 #: ../src/vmm-create-interface.glade.h:22
-#, fuzzy
 msgid "IP settings:"
-msgstr "<b>Základní detaily</b>"
+msgstr "Nastavení IP:"
 
 #: ../src/vmm-create-interface.glade.h:23 ../src/vmm-create-net.glade.h:26
 msgid "IPv4"
-msgstr ""
+msgstr "IPv4"
 
 #: ../src/vmm-create-interface.glade.h:24
 msgid "IPv6"
-msgstr ""
+msgstr "IPv6"
 
 #: ../src/vmm-create-interface.glade.h:25
 msgid "Insert list desc:"
 msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:26
-#, fuzzy
 msgid "Interval:"
-msgstr "PV instalace"
+msgstr "Interval:"
 
 #: ../src/vmm-create-interface.glade.h:27
-#, fuzzy
 msgid "Ma_nually configure:"
-msgstr "Zo_brazit:"
+msgstr "Ma_nuální konfigurace:"
 
 #: ../src/vmm-create-interface.glade.h:28
 msgid "Select the interface type you would like to configure."
 msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:29
-#, fuzzy
 msgid "Static configuration:"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Statická konfigurace:"
 
 #: ../src/vmm-create-interface.glade.h:30
-#, fuzzy
 msgid "Target address:"
-msgstr "MAC adresa"
+msgstr "Cílová adresa:"
 
 #: ../src/vmm-create-interface.glade.h:31
 msgid "Up delay:"
 msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:32
-#, fuzzy
 msgid "Validate mode:"
-msgstr "<b>Virtualizační metoda:</b>"
+msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:33
-#, fuzzy
 msgid "_Activate now:"
-msgstr "Aktivní"
+msgstr "_Aktivovat:"
 
 #: ../src/vmm-create-interface.glade.h:35
-#, fuzzy
 msgid "_Configure"
-msgstr "Zo_brazit:"
+msgstr "_Konfigurovat"
 
 #: ../src/vmm-create-interface.glade.h:36
-#, fuzzy
 msgid "_Copy interface configuration from:"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Zkopírovat nastavení rozhraní z:"
 
 #: ../src/vmm-create-interface.glade.h:38
 msgid "_Gateway:"
-msgstr ""
+msgstr "_Brána:"
 
 #: ../src/vmm-create-interface.glade.h:39
-#, fuzzy
 msgid "_Interface type:"
-msgstr "Typ OS:"
+msgstr "Typ _rozhraní:"
 
 #: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:14
 #: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:54
-#, fuzzy
 msgid "_Name:"
-msgstr "Jméno:"
+msgstr "_Jméno:"
 
 #: ../src/vmm-create-interface.glade.h:42
-#, fuzzy
 msgid "_Start mode:"
-msgstr "Stav:"
+msgstr ""
 
 #: ../src/vmm-create-interface.glade.h:43
 msgid "_VLAN tag:"
-msgstr ""
+msgstr "_VLAN tag:"
 
 #: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:39
 msgid "seconds"
 msgstr "sekund"
 
 #: ../src/vmm-create-net.glade.h:1
-#, fuzzy
 msgid "<b>DHCP</b>"
-msgstr "<b>CPU</b>"
+msgstr "<b>DHCP</b>"
 
 #: ../src/vmm-create-net.glade.h:2
-#, fuzzy
 msgid "<b>Example:</b> network1"
-msgstr "<b>Příklad:</b> system1"
+msgstr "<b>Příklad:</b> síť1"
 
 #: ../src/vmm-create-net.glade.h:3
-#, fuzzy
 msgid "<b>Forwarding</b>"
-msgstr "<b>Úložný prostor</b>"
+msgstr ""
 
 #: ../src/vmm-create-net.glade.h:4
 msgid ""
@@ -3143,14 +2931,12 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-create-net.glade.h:5
-#, fuzzy
 msgid "<b>IPv4 network</b>"
-msgstr "<b>Síť</b>"
+msgstr "<b>IPv4 síť</b>"
 
 #: ../src/vmm-create-net.glade.h:6
-#, fuzzy
 msgid "<b>Summary</b>"
-msgstr "<b>Souhrn:</b>"
+msgstr "<b>Souhrn</b>"
 
 #: ../src/vmm-create-net.glade.h:7
 msgid ""
@@ -3160,99 +2946,88 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-create-net.glade.h:8
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Choosing an "
 "IPv4 address space</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
-"prostor</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Výběr IPv4 "
+"rozsahu</span>"
 
 #: ../src/vmm-create-net.glade.h:9
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Connecting to "
 "physical network</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
-"prostor</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Propojení s "
+"fyzickou sítí</span>"
 
 #: ../src/vmm-create-net.glade.h:10
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Creating a new "
 "virtual network </span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Vytvořit nový "
-"virtální systém</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Vytváření nové "
+"virtuální sítě</span>"
 
 #: ../src/vmm-create-net.glade.h:11
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Naming your "
 "virtual network </span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Pojmenování "
-"virtuálního systému</span>"
+"virtuální sítě</span>"
 
 #: ../src/vmm-create-net.glade.h:12
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Ready to create "
 "network</span>"
 msgstr ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Připraven k "
-"instalaci</span>"
+"vytvoření virtuální sítě</span>"
 
 #: ../src/vmm-create-net.glade.h:13
-#, fuzzy
 msgid ""
 "<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Selecting the "
 "DHCP range</span>"
 msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Přiřadit úložný "
-"prostor</span>"
+"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Výběr rozsahu "
+"pro DHCP</span>"
 
 #: ../src/vmm-create-net.glade.h:14
-#, fuzzy
 msgid "A <b>name</b> for your new virtual network"
-msgstr "<b>Jméno</b> pro nový virtuální systém"
+msgstr "<b>Jméno</b> pro novou virtuální síť"
 
 #: ../src/vmm-create-net.glade.h:15
 msgid "Broadcast:"
-msgstr ""
+msgstr "Broadcast:"
 
 #: ../src/vmm-create-net.glade.h:16
 msgid "Complete"
 msgstr "Dokončeno"
 
 #: ../src/vmm-create-net.glade.h:17
-#, fuzzy
 msgid "Connectivity:"
-msgstr "_Připojit"
+msgstr "Připojení:"
 
 #: ../src/vmm-create-net.glade.h:18
-#, fuzzy
 msgid "Create a new virtual network"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Vytvořit novou virtuální síť"
 
 #: ../src/vmm-create-net.glade.h:19
 msgid "DHCP"
-msgstr ""
+msgstr "DHCP"
 
 #: ../src/vmm-create-net.glade.h:20
 msgid "E_nd:"
-msgstr ""
+msgstr "Konec:"
 
 #: ../src/vmm-create-net.glade.h:21
-#, fuzzy
 msgid "End Address"
-msgstr "MAC adresa"
+msgstr "Poslední adresa"
 
 #: ../src/vmm-create-net.glade.h:22
-#, fuzzy
 msgid "End address:"
-msgstr "MAC adresa"
+msgstr "Poslední adresa:"
 
 #: ../src/vmm-create-net.glade.h:23
 msgid "For_warding to physical network"
@@ -3264,7 +3039,7 @@ msgstr ""
 
 #: ../src/vmm-create-net.glade.h:25
 msgid "Gateway:"
-msgstr ""
+msgstr "Brána:"
 
 #: ../src/vmm-create-net.glade.h:27
 msgid "Intro"
@@ -3280,37 +3055,31 @@ msgstr ""
 
 #: ../src/vmm-create-net.glade.h:31
 msgid "Netmask:"
-msgstr ""
+msgstr "Maska podsítě:"
 
 #: ../src/vmm-create-net.glade.h:32
-#, fuzzy
 msgid "Network Range"
-msgstr "Využití sítě:"
+msgstr "Síťový rozsah:"
 
 #: ../src/vmm-create-net.glade.h:33
-#, fuzzy
 msgid "Network _Name:"
-msgstr "Využití sítě:"
+msgstr "Jméno sítě:"
 
 #: ../src/vmm-create-net.glade.h:34
-#, fuzzy
 msgid "Network name:"
-msgstr "Využití sítě:"
+msgstr "Jméno sítě:"
 
 #: ../src/vmm-create-net.glade.h:35 ../src/vmm-host.glade.h:39
-#, fuzzy
 msgid "Network:"
-msgstr "Síť"
+msgstr "Síť:"
 
 #: ../src/vmm-create-net.glade.h:36
-#, fuzzy
 msgid "Physical Network"
-msgstr "Virtuální CPU"
+msgstr "Fyzická síť"
 
 #: ../src/vmm-create-net.glade.h:37
-#, fuzzy
 msgid "Please choose a name for your virtual network:"
-msgstr "Vložte prosím jméno virtuálního systému:"
+msgstr "Prosím, napiště jméno vaší virtuální sítě:"
 
 #: ../src/vmm-create-net.glade.h:38
 msgid ""
@@ -3325,39 +3094,37 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-create-net.glade.h:41
-#, fuzzy
 msgid "Size:"
-msgstr "_Velikost:"
+msgstr "Velikost:"
 
 #: ../src/vmm-create-net.glade.h:42
-#, fuzzy
 msgid "Start Address"
-msgstr "MAC adresa"
+msgstr "Počáteční adresa"
 
 #: ../src/vmm-create-net.glade.h:44
 msgid ""
 "The <b>address range</b> from which the <b>DHCP</b> server will allocate "
 "addresses for virtual machines"
 msgstr ""
+"<b>Síťový rozsah</b>, ze kterého bude <b>DHCP</b> server alokovat IP adresy "
+"pro virtuální stroje."
 
 #: ../src/vmm-create-net.glade.h:45
 msgid "The IPv4 <b>address</b> and <b>netmask</b> to assign"
-msgstr ""
+msgstr "IPv4 <b>adresa</b> a <b>maska podsítě</b> k přiřazení:"
 
 #: ../src/vmm-create-net.glade.h:46
-#, fuzzy
 msgid ""
 "This assistant will guide you through creating a new virtual network. You "
 "will be asked for some information about the virtual network you'd like to "
 "create, such as:"
 msgstr ""
-"Průvodce vás provede vytvořením nového virtuálního systému. Budete dotázáni "
-"na několik informací o tom, jak bude virtuální systém vytvořen:"
+"Průvodce vás provede vytvořením nové virtuální sítě. Budete dotázáni na "
+"několik informací o tom, jak bude virtuální síť nakonfigurována:"
 
 #: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:110
-#, fuzzy
 msgid "Type:"
-msgstr "Typ"
+msgstr "Typ:"
 
 #: ../src/vmm-create-net.glade.h:48
 msgid "Whether to <b>forward</b> traffic to the physical network"
@@ -3368,60 +3135,52 @@ msgid "You will need to choose an IPv4 address space for the virtual network:"
 msgstr ""
 
 #: ../src/vmm-create-net.glade.h:50
-#, fuzzy
 msgid "_Destination:"
-msgstr "Cíl"
+msgstr "_Cíl:"
 
 #: ../src/vmm-create-net.glade.h:51
 msgid "_Enable DHCP:"
-msgstr ""
+msgstr "_Zapnout DHCP:"
 
 #: ../src/vmm-create-net.glade.h:53
-#, fuzzy
 msgid "_Isolated virtual network"
-msgstr "Izolovaná virtuální síť"
+msgstr "_Izolovaná virtuální síť"
 
 #: ../src/vmm-create-net.glade.h:55
-#, fuzzy
 msgid "_Network:"
-msgstr "Síť"
+msgstr "_Síť:"
 
 #: ../src/vmm-create-net.glade.h:56
-#, fuzzy
 msgid "_Start:"
-msgstr "Stav:"
+msgstr "_Start:"
 
 #: ../src/vmm-create-pool.glade.h:1
 msgid "<span size='x-large'>Add Storage Pool</span>"
-msgstr ""
+msgstr "<span size='x-large'>Přidat úložiště</span>"
 
 #: ../src/vmm-create-pool.glade.h:2
 msgid "Add a New Storage Pool"
-msgstr ""
+msgstr "Přidat nové úložiště"
 
 #: ../src/vmm-create-pool.glade.h:3
-#, fuzzy
 msgid "B_rowse"
-msgstr "Zobrazit..."
+msgstr "P_rocházet"
 
 #: ../src/vmm-create-pool.glade.h:4
 msgid "B_uild Pool:"
 msgstr ""
 
 #: ../src/vmm-create-pool.glade.h:5
-#, fuzzy
 msgid "Bro_wse"
-msgstr "Zobrazit..."
+msgstr "Pro_cházet"
 
 #: ../src/vmm-create-pool.glade.h:6
-#, fuzzy
 msgid "F_ormat:"
-msgstr "_Port:"
+msgstr "F_ormát:"
 
 #: ../src/vmm-create-pool.glade.h:8
-#, fuzzy
 msgid "Host Na_me:"
-msgstr "_Host:"
+msgstr ""
 
 #: ../src/vmm-create-pool.glade.h:10
 msgid ""
@@ -3430,21 +3189,19 @@ msgstr ""
 
 #: ../src/vmm-create-pool.glade.h:11
 msgid "Step 1 of 2"
-msgstr ""
+msgstr "Krok 1 ze 2"
 
 #: ../src/vmm-create-pool.glade.h:12
 msgid "Step 2 of 2"
-msgstr ""
+msgstr "Krok 2 ze 2"
 
 #: ../src/vmm-create-pool.glade.h:15
-#, fuzzy
 msgid "_Source Path:"
-msgstr "<b>Úložný prostor</b>"
+msgstr ""
 
 #: ../src/vmm-create-pool.glade.h:16
-#, fuzzy
 msgid "_Target Path:"
-msgstr "<b>Úložný prostor</b>"
+msgstr ""
 
 #: ../src/vmm-create-vol.glade.h:1
 msgid "<span size='large'>Storage Volume Quota</span>"
@@ -3470,12 +3227,11 @@ msgstr ""
 
 #: ../src/vmm-create-vol.glade.h:16
 msgid "<span size='x-large'>New Storage Volume</span>"
-msgstr ""
+msgstr "<span size='x-large'>Nový svazek</span>"
 
 #: ../src/vmm-create-vol.glade.h:17
-#, fuzzy
 msgid "Add a Storage Volume"
-msgstr "Jméno _systému:"
+msgstr "Přidat svazek"
 
 #: ../src/vmm-create-vol.glade.h:18
 msgid "Create a storage unit that can be used directly by a virtual machine."
@@ -3488,22 +3244,19 @@ msgstr "MB"
 
 #: ../src/vmm-create-vol.glade.h:20
 msgid "Max Ca_pacity:"
-msgstr ""
+msgstr "Max ka_pacita:"
 
 #: ../src/vmm-create-vol.glade.h:21
-#, fuzzy
 msgid "_Allocation:"
-msgstr "Umístění _ISO:"
+msgstr "_Alokace:"
 
 #: ../src/vmm-create-vol.glade.h:23
-#, fuzzy
 msgid "_Format:"
-msgstr "_Port:"
+msgstr "_Formát:"
 
 #: ../src/vmm-create-vol.glade.h:25
-#, fuzzy
 msgid "available space:"
-msgstr "Nedostupný"
+msgstr "dostupné místo:"
 
 #: ../src/vmm-create.glade.h:1
 msgid "(Insert host mem)"
@@ -3511,155 +3264,135 @@ msgstr ""
 
 #: ../src/vmm-create.glade.h:2
 msgid "<span color='#484848'>CPUs:</span>"
-msgstr ""
+msgstr "<span color='#484848'>CPU:</span>"
 
 #: ../src/vmm-create.glade.h:3
 msgid "<span color='#484848'>Install:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Instalovat:</span>"
 
 #: ../src/vmm-create.glade.h:4
 msgid "<span color='#484848'>Memory:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Paměť:</span>"
 
 #: ../src/vmm-create.glade.h:5
 msgid "<span color='#484848'>OS:</span>"
-msgstr ""
+msgstr "<span color='#484848'>OS:</span>"
 
 #: ../src/vmm-create.glade.h:7
-#, fuzzy
 msgid "<span size='large' color='white'>Create a new virtual machine</span>"
-msgstr ""
-"<span weight=\"heavy\" size=\"xx-large\" foreground=\"#FFF\">Vytvořit nový "
-"virtální systém</span>"
+msgstr "<span size='large' color='white'>Vytvořit nový virtální stroj</span>"
 
 #: ../src/vmm-create.glade.h:8
 msgid "A_utomatically detect operating system based on install media"
-msgstr ""
+msgstr "Automaticky detekovat operační systém na základě instalačního média"
 
 #: ../src/vmm-create.glade.h:9 ../src/vmm-migrate.glade.h:6
-#, fuzzy
 msgid "Advanced options"
-msgstr "Typ připojení"
+msgstr "Rozšířené volby"
 
 #: ../src/vmm-create.glade.h:11
-#, fuzzy
 msgid "Bro_wse..."
-msgstr "Zobrazit..."
+msgstr "Procházet..."
 
 #: ../src/vmm-create.glade.h:12
-#, fuzzy
 msgid "C_PUs:"
-msgstr "VCPU"
+msgstr "CPU:"
 
 #: ../src/vmm-create.glade.h:13
-#, fuzzy
 msgid "C_onnection:"
-msgstr "Typ připojení"
+msgstr "Přip_ojení:"
 
 #: ../src/vmm-create.glade.h:15
 msgid "C_ustomize configuration before install"
-msgstr ""
+msgstr "_Upravit konfiguraci před instalací"
 
 #: ../src/vmm-create.glade.h:16
 msgid "Choose Memory and CPU settings"
-msgstr ""
+msgstr "Nastavte paměť a CPU"
 
 #: ../src/vmm-create.glade.h:17
 msgid "Choose an operating system type and version"
-msgstr ""
+msgstr "Vyberte typ operačního systému a jeho verzi "
 
 #: ../src/vmm-create.glade.h:18
 msgid "Choose how you would like to install the operating system"
-msgstr ""
+msgstr "Vyberte, jak chcete nainstalovat operační systém"
 
 #: ../src/vmm-create.glade.h:19
-#, fuzzy
 msgid "Enter your virtual machine details"
-msgstr "Detaily virtuálního stroje"
+msgstr "Napište detaily virtuálního stroje"
 
 #: ../src/vmm-create.glade.h:20
 msgid "Error message"
-msgstr ""
+msgstr "Chybová hláška"
 
 #: ../src/vmm-create.glade.h:21
-#, fuzzy
 msgid "Finish"
-msgstr "_Dokončit"
+msgstr "Dokončit"
 
 #: ../src/vmm-create.glade.h:22
 msgid "ISO"
-msgstr ""
+msgstr "ISO"
 
 #: ../src/vmm-create.glade.h:23
 msgid "Import _existing disk image"
-msgstr ""
+msgstr "Importovat již existující obraz disku"
 
 #: ../src/vmm-create.glade.h:24
-#, fuzzy
 msgid "Install"
-msgstr "PV instalace"
+msgstr "Installovat"
 
 #: ../src/vmm-create.glade.h:25
-#, fuzzy
 msgid "Kernel options:"
-msgstr "Typ připojení"
+msgstr "Volby kernelu:"
 
 #: ../src/vmm-create.glade.h:26
-#, fuzzy
 msgid "Kickstart URL:"
-msgstr "URL _kickstaru:"
+msgstr "URL Kickstaru:"
 
 #: ../src/vmm-create.glade.h:27
-#, fuzzy
 msgid "Locate your install media"
-msgstr "_Cesta k instalčním médiím:"
+msgstr ""
 
 #: ../src/vmm-create.glade.h:29
-#, fuzzy
 msgid "Memory"
 msgstr "Paměť"
 
 #: ../src/vmm-create.glade.h:31
-#, fuzzy
 msgid "Network _Boot (PXE)"
-msgstr "Síť"
+msgstr "Boot ze sítě (PXE)"
 
 #: ../src/vmm-create.glade.h:32
 msgid "Network _Install (HTTP, FTP, or NFS)"
-msgstr ""
+msgstr "Instalace ze sítě (HTTP, FTP nebo NFS)"
 
 #: ../src/vmm-create.glade.h:33
-#, fuzzy
 msgid "New VM"
-msgstr "<b>Síť</b>"
+msgstr "Nové VM"
 
 #: ../src/vmm-create.glade.h:34
-#, fuzzy
 msgid "OS _type:"
 msgstr "Typ OS:"
 
 #: ../src/vmm-create.glade.h:35
 msgid "PXE"
-msgstr ""
+msgstr "PXE"
 
 #: ../src/vmm-create.glade.h:36
-#, fuzzy
 msgid "Provide the existing storage path:"
-msgstr "Vytvořit nový virtuální systém"
+msgstr ""
 
 #: ../src/vmm-create.glade.h:37
-#, fuzzy
 msgid "Provide the operating system install URL"
-msgstr "<b>Operační systém:</b>"
+msgstr ""
 
 #: ../src/vmm-create.glade.h:39
-#, fuzzy
 msgid "Set a fixed _MAC address"
-msgstr "Nesprávná adresa úložného prostoru"
+msgstr "Nastavit pevnou MAC adresu"
 
 #: ../src/vmm-create.glade.h:41
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: ../src/vmm-create.glade.h:42
 msgid "URL Options"
@@ -3667,104 +3400,91 @@ msgstr ""
 
 #: ../src/vmm-create.glade.h:43
 msgid "URL:"
-msgstr ""
+msgstr "URL:"
 
 #: ../src/vmm-create.glade.h:44
-#, fuzzy
 msgid "Use CD_ROM or DVD"
-msgstr "_CD-ROM nebo DVD:"
+msgstr "Použít CD-_ROM nebo DVD:"
 
 #: ../src/vmm-create.glade.h:45
-#, fuzzy
 msgid "Use _ISO image:"
-msgstr "Najděte ISO obraz"
+msgstr "Použít obraz ISO:"
 
 #: ../src/vmm-create.glade.h:47
-#, fuzzy
 msgid "_Architecture:"
-msgstr "Architektura CPU:"
+msgstr "Architektura:"
 
 #: ../src/vmm-create.glade.h:49
-#, fuzzy
 msgid "_Enable storage for this virtual machine"
-msgstr "Ukládání virtuálního stroje"
+msgstr "Zapnout úložiště pro tento virtuální stroj"
 
 #: ../src/vmm-create.glade.h:52
 msgid "_Local install media (ISO image or CDROM)"
-msgstr ""
+msgstr "Instalace z lokálního média (ISO nebo CDROM)"
 
 #: ../src/vmm-create.glade.h:53
-#, fuzzy
 msgid "_Memory (RAM):"
-msgstr "_Maximální paměť VM (MB):"
+msgstr "_Paměť (RAM):"
 
 #: ../src/vmm-create.glade.h:55
-#, fuzzy
 msgid "_Version:"
-msgstr "_Oddíly"
+msgstr "_Verze:"
 
 #: ../src/vmm-create.glade.h:56
-#, fuzzy
 msgid "_Virt Type:"
-msgstr "Typ"
+msgstr ""
 
 #: ../src/vmm-delete.glade.h:1
-#, fuzzy
 msgid "Delete Confirmation"
-msgstr "Smazat stroj"
+msgstr "Potvrďte smazání"
 
 #: ../src/vmm-delete.glade.h:2
 msgid "Delete _associated storage files"
-msgstr ""
+msgstr "Smazat přidružené svazky"
 
 #: ../src/vmm-details.glade.h:1
 msgid ""
 "0 KBytes/s\n"
 "0KBytes/s"
 msgstr ""
+"0 KBytes/s\n"
+"0KBytes/s"
 
 #: ../src/vmm-details.glade.h:3
-#, fuzzy
 msgid "<b>Autostart</b>"
-msgstr "<b>Souhrn:</b>"
+msgstr "<b>Automatické spuštění</b>"
 
 #: ../src/vmm-details.glade.h:4
-#, fuzzy
 msgid "<b>Basic Details</b>"
 msgstr "<b>Základní detaily</b>"
 
 #: ../src/vmm-details.glade.h:5
-#, fuzzy
 msgid "<b>Boot device order</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Pořadí zařízení při boot</b>"
 
 #: ../src/vmm-details.glade.h:6
 msgid "<b>CPUs</b>"
 msgstr "<b>CPU</b>"
 
 #: ../src/vmm-details.glade.h:7
-#, fuzzy
 msgid "<b>Configuration</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Konfigurace</b>"
 
 #: ../src/vmm-details.glade.h:8
-#, fuzzy
 msgid "<b>Controller</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Řadič</b>"
 
 #: ../src/vmm-details.glade.h:9
 msgid "<b>Direct kernel boot</b>"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:10
-#, fuzzy
 msgid "<b>Hypervisor Details</b>"
-msgstr "Hypervisor:"
+msgstr "<b>Detaily o Hyperizoru</b>"
 
 #: ../src/vmm-details.glade.h:11
-#, fuzzy
 msgid "<b>Machine Settings</b>"
-msgstr "<b>Základní detaily</b>"
+msgstr "<b>Nastavení stroje</b>"
 
 #: ../src/vmm-details.glade.h:12
 msgid "<b>Memory</b>"
@@ -3775,23 +3495,20 @@ msgid "<b>Performance</b>"
 msgstr "<b>Výkon</b>"
 
 #: ../src/vmm-details.glade.h:14
-#, fuzzy
 msgid "<b>Pinning</b>"
-msgstr "<b>CPU</b>"
+msgstr ""
 
 #: ../src/vmm-details.glade.h:15
-#, fuzzy
 msgid "<b>Security</b>"
-msgstr "<b>Souhrn:</b>"
+msgstr "<b>Zabezpečení</b>"
 
 #: ../src/vmm-details.glade.h:16
-#, fuzzy
 msgid "<b>Sound Device</b>"
-msgstr "<b>Úložný prostor</b>"
+msgstr "<b>Zvukové zařízení</b>"
 
 #: ../src/vmm-details.glade.h:17
 msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>Konzole není nyní k dispozici</b>"
+msgstr "<b>Konzole není momentálně k dispozici</b>"
 
 #: ../src/vmm-details.glade.h:18
 msgid ""
@@ -3807,61 +3524,50 @@ msgid ""
 msgstr ""
 
 #: ../src/vmm-details.glade.h:20
-#, fuzzy
 msgid "<b>Topology</b>"
-msgstr "<b>Obraz disku:</b>"
+msgstr "<b>Topologie</b>"
 
 #: ../src/vmm-details.glade.h:21
-#, fuzzy
 msgid "<b>Video</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Video</b>"
 
 #: ../src/vmm-details.glade.h:22
-#, fuzzy
 msgid "<b>Virtual Disk</b>"
-msgstr "<b>Virtuální CPU:</b>"
+msgstr "<b>Virtuální disk</b>"
 
 #: ../src/vmm-details.glade.h:23
-#, fuzzy
 msgid "<b>Virtual Network Interface</b>"
-msgstr "<b>Síť</b>"
+msgstr "<b>Rozhraní virtuální sítě</b>"
 
 #: ../src/vmm-details.glade.h:24
-#, fuzzy
 msgid "<b>Virtual Pointer</b>"
-msgstr "<b>Virtuální CPU:</b>"
+msgstr ""
 
 #: ../src/vmm-details.glade.h:25
-#, fuzzy
 msgid "<b>insert type</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>napište typ</b>"
 
 #: ../src/vmm-details.glade.h:26
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:27
-#, fuzzy
 msgid "A_ction:"
-msgstr "Umístění _ISO:"
+msgstr "Akce:"
 
 #: ../src/vmm-details.glade.h:28
-#, fuzzy
 msgid "A_dd Hardware"
-msgstr "Hardware"
+msgstr "Přidat hardware"
 
 #: ../src/vmm-details.glade.h:29 ../src/vmm-host.glade.h:15
-#, fuzzy
 msgid "Address:"
-msgstr "MAC adresa"
+msgstr "Adresa:"
 
 #: ../src/vmm-details.glade.h:30
-#, fuzzy
 msgid "Advanced _options"
-msgstr "Typ připojení"
+msgstr "Pokročilé volby"
 
 #: ../src/vmm-details.glade.h:31 ../src/vmm-host.glade.h:16
-#, fuzzy
 msgid "Architecture:"
 msgstr "Architektura CPU:"
 
@@ -3870,113 +3576,104 @@ msgid "Auth"
 msgstr "Autorizace"
 
 #: ../src/vmm-details.glade.h:33
-#, fuzzy
 msgid "Begin Installation"
-msgstr "<b>Zdroj instalace:</b>"
+msgstr "Začít instalaci"
 
 #: ../src/vmm-details.glade.h:34
-#, fuzzy
 msgid "Browse"
-msgstr "Zobrazit..."
+msgstr "Procházet"
 
 #: ../src/vmm-details.glade.h:35
-#, fuzzy
 msgid ""
 "CPU\n"
 "usage:"
-msgstr "Využití CPU:"
+msgstr ""
+"Využití\n"
+"CPU:"
 
 #: ../src/vmm-details.glade.h:37
 msgid "C_lock Offset:"
-msgstr ""
+msgstr "Časový posun:"
 
 #: ../src/vmm-details.glade.h:38
-#, fuzzy
 msgid "Cac_he mode:"
-msgstr "Typ OS:"
+msgstr "Mód cache:"
 
 #: ../src/vmm-details.glade.h:39
-#, fuzzy
 msgid "Connect or disconnect media"
-msgstr "Typ připojení"
+msgstr "Připojit nebo odpojit médium"
 
 #: ../src/vmm-details.glade.h:40
-#, fuzzy
 msgid "Console"
-msgstr "_Sériová konzole"
+msgstr "Konzole"
 
 #: ../src/vmm-details.glade.h:41
-#, fuzzy
 msgid "Copy host CPU configuration"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Zkopírovat hostitelskou konfiguraci CPU"
 
 #: ../src/vmm-details.glade.h:42
 msgid "Cores:"
-msgstr ""
+msgstr "Počet jader:"
 
 #: ../src/vmm-details.glade.h:43
-#, fuzzy
 msgid "Current a_llocation:"
-msgstr "Aktivní alokace:"
+msgstr "Aktuální alokace:"
 
 #: ../src/vmm-details.glade.h:44
 msgid "D_ynamic"
-msgstr ""
+msgstr "D_ynamický"
 
 #: ../src/vmm-details.glade.h:45
 msgid "Default _pinning:"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:46
-#, fuzzy
 msgid "Description:"
-msgstr "Cíl"
+msgstr "Popis:"
 
 #: ../src/vmm-details.glade.h:48
-#, fuzzy
 msgid "Device Type:"
-msgstr "Typ OS:"
+msgstr "Typ zařízení:"
 
 #: ../src/vmm-details.glade.h:49
-#, fuzzy
 msgid "Device m_odel:"
-msgstr "Typ OS:"
+msgstr "M_odel zařízení:"
 
 #: ../src/vmm-details.glade.h:50 ../src/vmm-host.glade.h:24
 msgid "Device:"
-msgstr ""
+msgstr "Zařízení:"
 
 #: ../src/vmm-details.glade.h:51
-#, fuzzy
 msgid ""
 "Disk\n"
 "I/O:"
-msgstr "Disk"
+msgstr ""
+"Diskové\n"
+"I/O:"
 
 #: ../src/vmm-details.glade.h:53
-#, fuzzy
 msgid "Disk B_us:"
-msgstr "Využití disku:"
+msgstr "Sběrnice disku:"
 
 #: ../src/vmm-details.glade.h:54
 msgid "Emulator:"
-msgstr ""
+msgstr "Emulátor:"
 
 #: ../src/vmm-details.glade.h:55
 msgid "Enable A_CPI:"
-msgstr ""
+msgstr "Zapnout A_CPI:"
 
 #: ../src/vmm-details.glade.h:56
 msgid "Enable A_PIC:"
-msgstr ""
+msgstr "Zapnout A_PIC:"
 
 #: ../src/vmm-details.glade.h:57
 msgid "Enable boot me_nu"
-msgstr ""
+msgstr "Zapnout boot me_nu"
 
 #: ../src/vmm-details.glade.h:58
 msgid "Generate from host _NUMA configuration"
-msgstr ""
+msgstr "Vygenerovat z hostitelské konfigurace _NUMA"
 
 #: ../src/vmm-details.glade.h:59
 msgid "Heads:"
@@ -3988,35 +3685,31 @@ msgstr "Hypervisor:"
 
 #: ../src/vmm-details.glade.h:61
 msgid "Initrd path:"
-msgstr ""
+msgstr "Cesta k initrd:"
 
 #: ../src/vmm-details.glade.h:62
-#, fuzzy
 msgid "Kernel arguments:"
-msgstr "Typ připojení"
+msgstr "Argumenty kernelu:"
 
 #: ../src/vmm-details.glade.h:63
-#, fuzzy
 msgid "Kernel path:"
-msgstr "Typ připojení"
+msgstr "Cesta ke kernelu:"
 
 #: ../src/vmm-details.glade.h:64
 msgid "Logical host CPUs:"
-msgstr "Logické CPU:"
+msgstr "Logická CPU hostitele:"
 
 #: ../src/vmm-details.glade.h:65
-#, fuzzy
 msgid "MAC address:"
-msgstr "MAC adresa"
+msgstr "MAC adresa:"
 
 #: ../src/vmm-details.glade.h:67
 msgid "M_odel:"
-msgstr ""
+msgstr "M_odel:"
 
 #: ../src/vmm-details.glade.h:68
-#, fuzzy
 msgid "Ma_ximum allocation:"
-msgstr "Maximální alokace:"
+msgstr "Ma_ximální alokace:"
 
 #: ../src/vmm-details.glade.h:69
 msgid "Manually set CPU topology"
@@ -4031,62 +3724,60 @@ msgid "Maximum allocation:"
 msgstr "Maximální alokace:"
 
 #: ../src/vmm-details.glade.h:72
-#, fuzzy
 msgid ""
 "Memory\n"
 "usage:"
-msgstr "Používaná paměť"
+msgstr ""
+"Využití\n"
+"paměti:"
 
 #: ../src/vmm-details.glade.h:74
-#, fuzzy
 msgid "Memory Select"
-msgstr "Využití paměti"
+msgstr "Volba paměti"
 
 #: ../src/vmm-details.glade.h:75 ../src/vmm-host.glade.h:35
 msgid "Mode:"
-msgstr ""
+msgstr "Mód:"
 
 #: ../src/vmm-details.glade.h:76
 msgid "Model:"
-msgstr ""
+msgstr "Model:"
 
 #: ../src/vmm-details.glade.h:77 ../src/vmm-host.glade.h:37
 msgid "Name:"
 msgstr "Jméno:"
 
 #: ../src/vmm-details.glade.h:78
-#, fuzzy
 msgid ""
 "Network\n"
 "I/O:"
-msgstr "Síť"
+msgstr ""
+"Síťové\n"
+"I/O:"
 
 #: ../src/vmm-details.glade.h:80
 msgid "Pause"
-msgstr "Zastavit"
+msgstr "Uspat"
 
 #: ../src/vmm-details.glade.h:81 ../src/vmm-manager.glade.h:3
-#, fuzzy
 msgid "Pause the virtual machine"
-msgstr "Obnovení virtuálního stroje"
+msgstr "Uspat virtuální stroj"
 
 #: ../src/vmm-details.glade.h:82
-#, fuzzy
 msgid "Port:"
-msgstr "_Port:"
+msgstr "Port:"
 
 #: ../src/vmm-details.glade.h:83 ../src/vmm-manager.glade.h:4
-#, fuzzy
 msgid "Power on the virtual machine"
-msgstr "Obnovení virtuálního stroje"
+msgstr "Zapnout virtuální stroj"
 
 #: ../src/vmm-details.glade.h:84
 msgid "RAM:"
-msgstr ""
+msgstr "RAM:"
 
 #: ../src/vmm-details.glade.h:85
 msgid "R_eadonly:"
-msgstr ""
+msgstr "Pouze pro čtení:"
 
 #: ../src/vmm-details.glade.h:86
 msgid "R_untime pinning:"
@@ -4103,24 +3794,21 @@ msgstr "_Ukončit"
 
 #: ../src/vmm-details.glade.h:89
 msgid "Send _Key"
-msgstr ""
+msgstr "Pošli klávesu"
 
 #: ../src/vmm-details.glade.h:90
 msgid "Sharea_ble:"
-msgstr ""
+msgstr "Sdílené:"
 
 #: ../src/vmm-details.glade.h:91
-#, fuzzy
 msgid "Show the graphical console"
-msgstr "_Grafická konzole"
+msgstr "Zobrazit grafickou konzoli"
 
 #: ../src/vmm-details.glade.h:92
-#, fuzzy
 msgid "Show virtual hardware details"
-msgstr "Přidat nový virtuální hardware"
+msgstr "Zobrazit detaily o hardware"
 
 #: ../src/vmm-details.glade.h:93
-#, fuzzy
 msgid "Shut Down"
 msgstr "Ukončit"
 
@@ -4129,67 +3817,60 @@ msgid "Shut down"
 msgstr "Ukončit"
 
 #: ../src/vmm-details.glade.h:95 ../src/vmm-manager.glade.h:6
-#, fuzzy
 msgid "Shutdown the virtual machine"
-msgstr "Obnovení virtuálního stroje"
+msgstr "Ukončení virtuálního stroje"
 
 #: ../src/vmm-details.glade.h:96
 msgid "Sockets:"
-msgstr ""
+msgstr "Sockety:"
 
 #: ../src/vmm-details.glade.h:97
 msgid "Source Path:"
-msgstr ""
+msgstr "Cesta ke zdroji:"
 
 #: ../src/vmm-details.glade.h:98
 msgid "Source device:"
-msgstr ""
+msgstr "Zdrojové rozhraní:"
 
 #: ../src/vmm-details.glade.h:99
 msgid "Source path:"
-msgstr ""
+msgstr "Cesta ke zdroji:"
 
 #: ../src/vmm-details.glade.h:100
-#, fuzzy
 msgid "Start virt_ual machine on host boot up"
-msgstr "Uložit snímek obrazovky virtuálního stroje"
+msgstr "Zapnout VM při startu hostitele"
 
 #: ../src/vmm-details.glade.h:102
-#, fuzzy
 msgid "Storage forma_t:"
-msgstr "<b>Úložný prostor</b>"
+msgstr "Formát úložiště:"
 
 #: ../src/vmm-details.glade.h:103
-#, fuzzy
 msgid "Storage size:"
-msgstr "<b>Úložný prostor</b>"
+msgstr "Velikost úložiště:"
 
 #: ../src/vmm-details.glade.h:104
 msgid "Switch to fullscreen view"
-msgstr ""
+msgstr "Zobrazit přes celou obrazovku"
 
 #: ../src/vmm-details.glade.h:105
-#, fuzzy
 msgid "TLS Port:"
-msgstr "_Port:"
+msgstr "TLS port:"
 
 #: ../src/vmm-details.glade.h:106
-#, fuzzy
 msgid "T_oolbar"
 msgstr "Nástrojová lišta"
 
 #: ../src/vmm-details.glade.h:107
 msgid "Target device:"
-msgstr ""
+msgstr "Cílové zařízení:"
 
 #: ../src/vmm-details.glade.h:108
 msgid "Threads:"
-msgstr ""
+msgstr "Vlákna:"
 
 #: ../src/vmm-details.glade.h:109
-#, fuzzy
 msgid "Total host memory:"
-msgstr "<b>Původně paměti:</b>"
+msgstr "Celková paměť hostitele:"
 
 #: ../src/vmm-details.glade.h:111
 msgid "UUID:"
@@ -4204,19 +3885,16 @@ msgid "VNC"
 msgstr "VNC"
 
 #: ../src/vmm-details.glade.h:114
-#, fuzzy
 msgid "Virtual CPU Affinity Select"
-msgstr "Virtuální CPU"
+msgstr ""
 
 #: ../src/vmm-details.glade.h:115
-#, fuzzy
 msgid "Virtual CPU Select"
-msgstr "Virtuální CPU"
+msgstr "Vybrat virtuální CPU"
 
 #: ../src/vmm-details.glade.h:116
-#, fuzzy
 msgid "Virtual Machine"
-msgstr "_Virtuální stroj"
+msgstr "Virtuální stroj"
 
 #: ../src/vmm-details.glade.h:117
 msgid "Virtual _Machine"
@@ -4224,22 +3902,19 @@ msgstr "_Virtuální stroj"
 
 #: ../src/vmm-details.glade.h:118
 msgid "_Always"
-msgstr ""
+msgstr "Vždy"
 
 #: ../src/vmm-details.glade.h:119
-#, fuzzy
 msgid "_Begin Installation"
-msgstr "<b>Zdroj instalace:</b>"
+msgstr "Začít instalaci"
 
 #: ../src/vmm-details.glade.h:120
-#, fuzzy
 msgid "_Clone"
-msgstr "Zo_brazit:"
+msgstr "Klonovat"
 
 #: ../src/vmm-details.glade.h:121
-#, fuzzy
 msgid "_Console"
-msgstr "_Sériová konzole"
+msgstr "Konzole"
 
 #: ../src/vmm-details.glade.h:123 ../src/vmm-host.glade.h:56
 #: ../src/vmm-manager.glade.h:13
@@ -4247,7 +3922,6 @@ msgid "_File"
 msgstr "_Soubor"
 
 #: ../src/vmm-details.glade.h:125
-#, fuzzy
 msgid "_Fullscreen"
 msgstr "_Celá obrazovka"
 
@@ -4257,27 +3931,22 @@ msgid "_Help"
 msgstr "_Nápověda"
 
 #: ../src/vmm-details.glade.h:128
-#, fuzzy
 msgid "_Label:"
-msgstr "Jméno:"
+msgstr "Štítek:"
 
 #: ../src/vmm-details.glade.h:129
-#, fuzzy
 msgid "_Login"
-msgstr "Přihlášení"
+msgstr "_Přihlásit"
 
 #: ../src/vmm-details.glade.h:131
-#, fuzzy
 msgid "_Never"
 msgstr "Nikdy"
 
 #: ../src/vmm-details.glade.h:132
-#, fuzzy
 msgid "_Only when Fullscreen"
-msgstr "_Celá obrazovka"
+msgstr "_Pouze když na celou obrazovku"
 
 #: ../src/vmm-details.glade.h:133
-#, fuzzy
 msgid "_Password:"
 msgstr "Heslo:"
 
@@ -4286,7 +3955,6 @@ msgid "_Resize to VM"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:138
-#, fuzzy
 msgid "_Save this password in your keyring"
 msgstr "Uložit heslo mezi klíče (keyring)"
 
@@ -4295,401 +3963,348 @@ msgid "_Scale Display"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:140
-#, fuzzy
 msgid "_Static"
-msgstr "Stav"
+msgstr ""
 
 #: ../src/vmm-details.glade.h:141
 msgid "_Take Screenshot"
 msgstr "Snímek _obrazovky"
 
 #: ../src/vmm-details.glade.h:142
-#, fuzzy
 msgid "_Text Consoles"
-msgstr "_Sériová konzole"
+msgstr "_Textová konzole"
 
 #: ../src/vmm-details.glade.h:143 ../src/vmm-open-connection.glade.h:16
-#, fuzzy
 msgid "_Username:"
-msgstr "_Host:"
+msgstr "_Uživatelské jméno:"
 
 #: ../src/vmm-details.glade.h:144 ../src/vmm-manager.glade.h:21
 msgid "_View"
 msgstr "_Zobrazit"
 
 #: ../src/vmm-details.glade.h:145 ../src/vmm-host.glade.h:59
-#, fuzzy
 msgid "_View Manager"
-msgstr "Správce virtuálních strojů"
+msgstr ""
 
 #: ../src/vmm-details.glade.h:146
-#, fuzzy
 msgid "boot"
-msgstr "Při startu"
+msgstr "boot"
 
 #: ../src/vmm-details.glade.h:147
 msgid "chr"
-msgstr ""
+msgstr "chr"
 
 #: ../src/vmm-details.glade.h:148
 msgid "cntrl"
-msgstr ""
+msgstr "cntrl"
 
 #: ../src/vmm-details.glade.h:149
 msgid "cpu"
-msgstr ""
+msgstr "cpu"
 
 #: ../src/vmm-details.glade.h:150
-#, fuzzy
 msgid "dsk"
-msgstr "Disk"
+msgstr "dsk"
 
 #: ../src/vmm-details.glade.h:151
 msgid "inp"
-msgstr ""
+msgstr "inp"
 
 #: ../src/vmm-details.glade.h:153
-#, fuzzy
 msgid "mem"
-msgstr "Paměť"
+msgstr "mem"
 
 #: ../src/vmm-details.glade.h:154
-#, fuzzy
 msgid "net"
-msgstr "Síť"
+msgstr "net"
 
 #: ../src/vmm-details.glade.h:155
 msgid "over"
-msgstr ""
+msgstr "over"
 
 #: ../src/vmm-details.glade.h:156
-#, fuzzy
 msgid "snd"
-msgstr "sekund"
+msgstr "snd"
 
 #: ../src/vmm-details.glade.h:157
 msgid "stat"
-msgstr ""
+msgstr "stat"
 
 #: ../src/vmm-details.glade.h:158
 msgid "vid"
-msgstr ""
+msgstr "vid"
 
 #: ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
 msgstr "<b>Základní detaily</b>"
 
 #: ../src/vmm-host.glade.h:2
-#, fuzzy
 msgid "<b>IPv4 Configuration</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>IPv4 Konfigurace</b>"
 
 #: ../src/vmm-host.glade.h:3
 msgid "<b>IPv4 configuration</b>"
-msgstr ""
+msgstr "<b>IPv4 konfigurace</b>"
 
 #: ../src/vmm-host.glade.h:4
-#, fuzzy
 msgid "<b>IPv6 Configuration</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>IPv6 Konfigurace</b>"
 
 #: ../src/vmm-host.glade.h:5
-#, fuzzy
 msgid "<b>Name</b>"
-msgstr "<b>Úložný prostor</b>"
+msgstr "<b>Jméno</b>"
 
 #: ../src/vmm-host.glade.h:7
-#, fuzzy
 msgid "<b>Slave Interfaces</b>"
-msgstr "<b>Síť</b>"
+msgstr ""
 
 #: ../src/vmm-host.glade.h:8
-#, fuzzy
 msgid "<b>Volumes</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Svazky</b>"
 
 #: ../src/vmm-host.glade.h:9
-#, fuzzy
 msgid "A_utoconnect:"
-msgstr "Typ připojení"
+msgstr "Automatické spojení:"
 
 #: ../src/vmm-host.glade.h:10
-#, fuzzy
 msgid "A_utostart:"
-msgstr "<b>Souhrn:</b>"
+msgstr "Autostart:"
 
 #: ../src/vmm-host.glade.h:12
-#, fuzzy
 msgid "Add Interface"
-msgstr "Síťový provoz"
+msgstr "Přidat rozhraní"
 
 #: ../src/vmm-host.glade.h:13
-#, fuzzy
 msgid "Add Network"
-msgstr "Síť"
+msgstr "Přidat síť"
 
 #: ../src/vmm-host.glade.h:14
 msgid "Add Pool"
-msgstr ""
+msgstr "Přidat úložiště"
 
 #: ../src/vmm-host.glade.h:17
 msgid "CPU usage:"
 msgstr "Využití CPU:"
 
 #: ../src/vmm-host.glade.h:18
-#, fuzzy
 msgid "Connection:"
-msgstr "Typ připojení"
+msgstr "Připojení:"
 
 #: ../src/vmm-host.glade.h:19
 msgid "DHCP end:"
-msgstr ""
+msgstr "DHCP konec:"
 
 #: ../src/vmm-host.glade.h:20
 msgid "DHCP start:"
-msgstr ""
+msgstr "DHCP start:"
 
 #: ../src/vmm-host.glade.h:21
-#, fuzzy
 msgid "Delete Interface"
-msgstr "Síťový provoz"
+msgstr "Smazat rozhraní"
 
 #: ../src/vmm-host.glade.h:22
-#, fuzzy
 msgid "Delete Network"
-msgstr "Síť"
+msgstr "Smazat síť"
 
 #: ../src/vmm-host.glade.h:23
 msgid "Delete Pool"
-msgstr ""
+msgstr "Smazat úložiště"
 
 #: ../src/vmm-host.glade.h:25
 msgid "Forwarding:"
 msgstr ""
 
 #: ../src/vmm-host.glade.h:26
-#, fuzzy
 msgid "Host Details"
-msgstr "_Detaily"
+msgstr "Detaily o hostu"
 
 #: ../src/vmm-host.glade.h:27
-#, fuzzy
 msgid "Hostname:"
-msgstr "_Host:"
+msgstr ""
 
 #: ../src/vmm-host.glade.h:29
 msgid "In use by:"
-msgstr ""
+msgstr "Momentálně užívá:"
 
 #: ../src/vmm-host.glade.h:30
-#, fuzzy
 msgid "Location:"
-msgstr "Umístění _ISO:"
+msgstr ""
 
 #: ../src/vmm-host.glade.h:31
-#, fuzzy
 msgid "Logical CPUs:"
-msgstr "Logické CPU:"
+msgstr "Logická CPU:"
 
 #: ../src/vmm-host.glade.h:32
-#, fuzzy
 msgid "MAC:"
-msgstr "<b>Síť</b>"
+msgstr "MAC:"
 
 #: ../src/vmm-host.glade.h:33
 msgid "Memory usage:"
-msgstr "Používaná paměť"
+msgstr "Používaná paměť:"
 
 #: ../src/vmm-host.glade.h:34
-#, fuzzy
 msgid "Memory:"
-msgstr "Paměť"
+msgstr "Paměť:"
 
 #: ../src/vmm-host.glade.h:38
-#, fuzzy
 msgid "Network Interfaces"
-msgstr "Síťový provoz"
+msgstr "Síťová rozhraní"
 
 #: ../src/vmm-host.glade.h:40
 msgid "Overview"
 msgstr "Souhrn"
 
 #: ../src/vmm-host.glade.h:41
-#, fuzzy
 msgid "Pool Type:"
-msgstr "Typ"
+msgstr "Typ úložiště:"
 
 #: ../src/vmm-host.glade.h:42
 msgid "Refresh volume list"
-msgstr ""
+msgstr "Obnovit seznam svazků"
 
 #: ../src/vmm-host.glade.h:43
-#, fuzzy
 msgid "Restore Saved Machine..."
-msgstr "Obnovit uložený stroj..."
+msgstr "Obnovit uložený VM..."
 
 #: ../src/vmm-host.glade.h:44
 msgid "Restore a saved machine from a filesystem image"
 msgstr "Obnovit virtuální stroj z uloženého obrazu"
 
 #: ../src/vmm-host.glade.h:45
-#, fuzzy
 msgid "Start Interface"
-msgstr "Síťový provoz"
+msgstr "Zapnout rozhraní"
 
 #: ../src/vmm-host.glade.h:46
-#, fuzzy
 msgid "Start Network"
-msgstr "Síť"
+msgstr "Zapnout síť"
 
 #: ../src/vmm-host.glade.h:47
-#, fuzzy
 msgid "Start Pool"
-msgstr "Stav"
+msgstr "Zapnout úložiště"
 
 #: ../src/vmm-host.glade.h:48
-#, fuzzy
 msgid "Start mode:"
-msgstr "MAC adresa"
+msgstr ""
 
 #: ../src/vmm-host.glade.h:49
-#, fuzzy
 msgid "State:"
 msgstr "Stav:"
 
 #: ../src/vmm-host.glade.h:50
-#, fuzzy
 msgid "Stop Interface"
-msgstr "Síťový provoz"
+msgstr "Zastavit rozhraní"
 
 #: ../src/vmm-host.glade.h:51
-#, fuzzy
 msgid "Stop Network"
-msgstr "Síť"
+msgstr "Zastavit síť"
 
 #: ../src/vmm-host.glade.h:52
 msgid "Stop Pool"
-msgstr ""
+msgstr "Zastavit úložiště"
 
 #: ../src/vmm-host.glade.h:54
-#, fuzzy
 msgid "Virtual Networks"
-msgstr "Virtuální CPU"
+msgstr "Virtuální sítě"
 
 #: ../src/vmm-host.glade.h:55
-#, fuzzy
 msgid "_Delete Volume"
-msgstr "Smazat stroj"
+msgstr "_Smazat svazek"
 
 #: ../src/vmm-host.glade.h:58 ../src/vmm-storage-browse.glade.h:4
-#, fuzzy
 msgid "_New Volume"
-msgstr "Smazat stroj"
+msgstr "_Nový svazek"
 
 #: ../src/vmm-manager.glade.h:1
-#, fuzzy
 msgid "Create a new virtual machine"
-msgstr "Vytvořit nový virtuální systém"
+msgstr "Vytvořit nový virtuální stroj"
 
 #: ../src/vmm-manager.glade.h:2
-#, fuzzy
 msgid "New"
-msgstr "_Zobrazit"
+msgstr "Nový"
 
 #: ../src/vmm-manager.glade.h:5
-#, fuzzy
 msgid "Show the virtual machine console and details"
-msgstr "Detaily virtuálního stroje"
+msgstr "Zobraz konzoli a detaily VM"
 
 #: ../src/vmm-manager.glade.h:8
-#, fuzzy
 msgid "_Add Connection..."
-msgstr "Navázat spojení..."
+msgstr "Přidat spojení..."
 
 #: ../src/vmm-manager.glade.h:9
-#, fuzzy
 msgid "_CPU Usage"
 msgstr "Využití CPU"
 
 #: ../src/vmm-manager.glade.h:10
-#, fuzzy
 msgid "_Connection Details"
-msgstr "Typ připojení"
+msgstr "Detaily spojení"
 
 #: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:30
-#, fuzzy
 msgid "_Disk I/O"
-msgstr "Disk"
+msgstr "Diskové I/O"
 
 #: ../src/vmm-manager.glade.h:12
 msgid "_Edit"
 msgstr "_Změnit"
 
 #: ../src/vmm-manager.glade.h:14
-#, fuzzy
 msgid "_Graph"
-msgstr "_Grafická konzole"
+msgstr "_Graf"
 
 #: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:34
-#, fuzzy
 msgid "_Network I/O"
-msgstr "Síť"
+msgstr "Síťové I/O"
 
 #: ../src/vmm-manager.glade.h:17
 msgid "_Open"
-msgstr ""
+msgstr "Otevřít"
 
 #: ../src/vmm-manager.glade.h:20
-#, fuzzy
 msgid "_Shutdown"
-msgstr "Ukončit"
+msgstr "Vypnout"
 
 #: ../src/vmm-manager.glade.h:22
-#, fuzzy
 msgid "_Virtual Machine Details"
 msgstr "Detaily virtuálního stroje"
 
 #: ../src/vmm-migrate.glade.h:1
-#, fuzzy
 msgid "<b>Connectivity</b>"
-msgstr "_Připojit"
+msgstr ""
 
 #: ../src/vmm-migrate.glade.h:2
 msgid "<span color='#484848'>Migrate _offline:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Migrovat offline:</span>"
 
 #: ../src/vmm-migrate.glade.h:3
 msgid "<span color='#484848'>Name:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Jméno:</span>"
 
 #: ../src/vmm-migrate.glade.h:4
 msgid "<span color='#484848'>New host:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Nový host:</span>"
 
 #: ../src/vmm-migrate.glade.h:5
 msgid "<span color='#484848'>Original host:</span>"
-msgstr ""
+msgstr "<span color='#484848'>Původní host:</span>"
 
 #: ../src/vmm-migrate.glade.h:7
 msgid "Max downtime:"
-msgstr ""
+msgstr "Maximální downtime:"
 
 #: ../src/vmm-migrate.glade.h:8
 msgid "Mbps"
-msgstr ""
+msgstr "Mbps"
 
 #: ../src/vmm-migrate.glade.h:9
-#, fuzzy
 msgid "Migrate the virtual machine"
-msgstr "Obnovení virtuálního stroje"
+msgstr "Migrovat virtuální stroj"
 
 #: ../src/vmm-migrate.glade.h:11
 msgid "_Bandwidth:"
-msgstr ""
+msgstr "Propustnost:"
 
 #: ../src/vmm-migrate.glade.h:12
 msgid "_Migrate"
-msgstr ""
+msgstr "_Migrovat"
 
 #: ../src/vmm-migrate.glade.h:14
 msgid "_Tunnel migration through libvirt's daemon:"
@@ -4697,44 +4312,39 @@ msgstr ""
 
 #: ../src/vmm-migrate.glade.h:15
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 #: ../src/vmm-open-connection.glade.h:1
-#, fuzzy
 msgid "Add Connection"
-msgstr "Typ připojení"
+msgstr "Přidat spojení"
 
 #: ../src/vmm-open-connection.glade.h:2
 msgid "Co_nnect"
 msgstr "_Připojit"
 
 #: ../src/vmm-open-connection.glade.h:3
-#, fuzzy
 msgid "Connect to _remote host"
-msgstr "Typ připojení"
+msgstr "Spojení se vzdáleným hostem"
 
 #: ../src/vmm-open-connection.glade.h:4
-#, fuzzy
 msgid "Connection Select"
-msgstr "Typ připojení"
+msgstr "Výběr spojení"
 
 #: ../src/vmm-open-connection.glade.h:5
 msgid "Generated URI:"
-msgstr ""
+msgstr "Vygenerovaná URI:"
 
 #: ../src/vmm-open-connection.glade.h:6
-#, fuzzy
 msgid "H_ostname:"
-msgstr "_Host:"
+msgstr ""
 
 #: ../src/vmm-open-connection.glade.h:7
-#, fuzzy
 msgid "Hypervisor Select"
-msgstr "Hypervisor:"
+msgstr "Vybrat Hypervizora"
 
 #: ../src/vmm-open-connection.glade.h:8
 msgid "Me_thod:"
-msgstr ""
+msgstr "Me_toda:"
 
 #: ../src/vmm-open-connection.glade.h:9
 msgid ""
@@ -4742,77 +4352,69 @@ msgid ""
 "TCP (SASL, Kerberos, ...)\n"
 "SSL/TLS with certificates"
 msgstr ""
+"SSH\n"
+"TCP (SASL, Kerberos, ...)\n"
+"SSL/TLS s certifikáty"
 
 #: ../src/vmm-open-connection.glade.h:12
-#, fuzzy
 msgid ""
 "Xen\n"
 "QEMU/KVM"
 msgstr ""
 "Xen\n"
-"QEMU"
+"QEMU/KVM"
 
 #: ../src/vmm-open-connection.glade.h:14
-#, fuzzy
 msgid "_Autoconnect:"
-msgstr "Typ připojení"
+msgstr "_Automatické připojení:"
 
 #: ../src/vmm-open-connection.glade.h:15
-#, fuzzy
 msgid "_Hypervisor:"
-msgstr "Hypervisor:"
+msgstr "_Hypervizor:"
 
 #: ../src/vmm-preferences.glade.h:1
-#, fuzzy
 msgid "<b>Confirmations</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Potvrzení</b>"
 
 #: ../src/vmm-preferences.glade.h:2
-#, fuzzy
 msgid "<b>Enable Stats Polling</b>"
-msgstr "<b>Monitorování stavu</b>"
+msgstr "<b>Zapnout Monitorování stavu</b>"
 
 #: ../src/vmm-preferences.glade.h:3
-#, fuzzy
 msgid "<b>General</b>"
-msgstr "<b>Konzole</b>"
+msgstr "<b>Obecné</b>"
 
 #: ../src/vmm-preferences.glade.h:4
-#, fuzzy
 msgid "<b>Graphical Consoles</b>"
-msgstr "_Grafická konzole"
+msgstr "<b>Grafické konzole</b>"
 
 #: ../src/vmm-preferences.glade.h:5
-#, fuzzy
 msgid "<b>New VM</b>"
-msgstr "<b>Síť</b>"
+msgstr "<b>Nový VM</b>"
 
 #: ../src/vmm-preferences.glade.h:6
-#, fuzzy
 msgid "<b>Stats Options</b>"
-msgstr "<b>Monitorování stavu</b>"
+msgstr "<b>Volby statistik</b>"
 
 #: ../src/vmm-preferences.glade.h:7
-#, fuzzy
 msgid "Automatically _open consoles:"
-msgstr "Automaticky otenřít konzole:"
+msgstr "Automaticky otevírat konzole:"
 
 #: ../src/vmm-preferences.glade.h:8
 msgid "Change..."
-msgstr ""
+msgstr "Změnit..."
 
 #: ../src/vmm-preferences.glade.h:9
-#, fuzzy
 msgid "Device re_moval:"
-msgstr "Typ OS:"
+msgstr "O_debrání zařízení:"
 
 #: ../src/vmm-preferences.glade.h:10
 msgid "Enable _system tray icon"
-msgstr ""
+msgstr "Zapnout ikonu v sys-tray"
 
 #: ../src/vmm-preferences.glade.h:11
 msgid "Feedback"
-msgstr ""
+msgstr "Zpětná vázba"
 
 #: ../src/vmm-preferences.glade.h:12
 msgid "Force console keyboard shortcuts:"
@@ -4826,37 +4428,32 @@ msgstr ""
 
 #: ../src/vmm-preferences.glade.h:14
 msgid "General"
-msgstr ""
+msgstr "Obecné"
 
 #: ../src/vmm-preferences.glade.h:15
-#, fuzzy
 msgid "Grab keys:"
-msgstr "Zachytit vstup z klávesnice:"
+msgstr ""
 
 #: ../src/vmm-preferences.glade.h:16
-#, fuzzy
 msgid "Graphical console _scaling:"
-msgstr "_Grafická konzole"
+msgstr ""
 
 #: ../src/vmm-preferences.glade.h:17
-#, fuzzy
 msgid "Install Audio Device:"
-msgstr "<b>Zdroj instalace:</b>"
+msgstr "Nainstalovat audio zařízení:"
 
 #: ../src/vmm-preferences.glade.h:18
-#, fuzzy
 msgid "Maintain h_istory of"
-msgstr "Udržovat historii"
+msgstr "Udržovat h_istorii o"
 
 #: ../src/vmm-preferences.glade.h:19
-#, fuzzy
 msgid ""
 "Never\n"
 "For all new domains\n"
 "For all domains"
 msgstr ""
 "Nikdy\n"
-"Pro nové domény\n"
+"Pro všechny nové domény\n"
 "Pro všechny domény"
 
 #: ../src/vmm-preferences.glade.h:22
@@ -4865,56 +4462,53 @@ msgid ""
 "Fullscreen only\n"
 "Always"
 msgstr ""
+"Nikdy\n"
+"Pouze na celou obrazovku\n"
+"Vždy"
 
 #: ../src/vmm-preferences.glade.h:25
 msgid "Not supported"
-msgstr ""
+msgstr "Není podporováno"
 
 #: ../src/vmm-preferences.glade.h:26
 msgid "Poweroff/_Reboot/Save:"
-msgstr ""
+msgstr "Vypnout/_Restartovat/Uložit:"
 
 #: ../src/vmm-preferences.glade.h:27
 msgid "Preferences"
 msgstr "Nastavení"
 
 #: ../src/vmm-preferences.glade.h:28
-#, fuzzy
 msgid "Stats"
-msgstr "Stav"
+msgstr "Statistiky"
 
 #: ../src/vmm-preferences.glade.h:29
-#, fuzzy
 msgid "VM Details"
-msgstr "Detaily"
+msgstr "Detaily VM"
 
 #: ../src/vmm-preferences.glade.h:31
 msgid "_Force Poweroff:"
-msgstr ""
+msgstr "_Vynutit vypnutí:"
 
 #: ../src/vmm-preferences.glade.h:32
 msgid "_Interface start/stop:"
-msgstr ""
+msgstr "_Rozhraní start/stop:"
 
 #: ../src/vmm-preferences.glade.h:33
-#, fuzzy
 msgid "_Local virtual machine"
-msgstr "Ukládání virtuálního stroje"
+msgstr "_Lokální virtuální stroj"
 
 #: ../src/vmm-preferences.glade.h:35
-#, fuzzy
 msgid "_Pause:"
-msgstr "_Zastavit"
+msgstr "_Uspat"
 
 #: ../src/vmm-preferences.glade.h:36
-#, fuzzy
 msgid "_Remote virtual machine"
-msgstr "Obnovení virtuálního stroje"
+msgstr "_Vzdálený virtuální stroj"
 
 #: ../src/vmm-preferences.glade.h:37
-#, fuzzy
 msgid "_Update status every"
-msgstr "Aktualizovat stav každých"
+msgstr "_Aktualizovat stav každých"
 
 #: ../src/vmm-preferences.glade.h:38
 msgid "samples"
@@ -4929,18 +4523,16 @@ msgid "Please wait a few moments..."
 msgstr "Počekejte prosím chviličku..."
 
 #: ../src/vmm-storage-browse.glade.h:1
-#, fuzzy
 msgid "Choose Storage Volume"
-msgstr "Jméno _systému:"
+msgstr "Vyberte úložiště"
 
 #: ../src/vmm-storage-browse.glade.h:2
 msgid "Choose _Volume"
-msgstr ""
+msgstr "Vybrat _Svazek"
 
 #: ../src/vmm-storage-browse.glade.h:3
-#, fuzzy
 msgid "_Browse Local"
-msgstr "Zobrazit..."
+msgstr "_Procházet lokální"
 
 #~ msgid "Disk image:"
 #~ msgstr "Obraz disku:"
