@@ -320,12 +320,12 @@ class vmmCreatePool(vmmGObjectUI):
         if selection != -1:
             return model[selection][1]
 
-        return src.child.get_text()
+        return src.child.get_text().strip()
 
     def get_config_host(self):
         host = self.window.get_widget("pool-hostname")
         if host.get_property("sensitive"):
-            return host.get_text()
+            return host.get_text().strip()
         return None
 
     def get_config_format(self):
