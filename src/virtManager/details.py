@@ -2047,8 +2047,8 @@ class vmmDetails(vmmGObjectUI):
             return pinstr.strip(",")
 
         for idx in range(len(vcpu_info)):
-            vcpu = vcpu_info[idx][0]
-            vcpucur = vcpu_info[idx][3]
+            vcpu = str(vcpu_info[idx][0])
+            vcpucur = str(vcpu_info[idx][3])
             vcpupin = build_cpuset_str(vcpu_pinning[idx])
 
             vcpu_model.append([vcpu, vcpucur, vcpupin])
