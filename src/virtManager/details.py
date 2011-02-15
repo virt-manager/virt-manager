@@ -2241,7 +2241,7 @@ class vmmDetails(vmmGObjectUI):
         is_vnc = (gtype == "vnc")
         is_sdl = (gtype == "sdl")
         is_spice = (gtype == "spice")
-        is_other = not any([is_vnc, is_sdl, is_spice])
+        is_other = not (True in [is_vnc, is_sdl, is_spice])
 
         set_title(_("%(graphicstype)s Server") %
                   {"graphicstype" : str(gtype).upper()})
