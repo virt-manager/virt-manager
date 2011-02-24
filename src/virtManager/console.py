@@ -905,7 +905,7 @@ class vmmConsolePages(vmmGObjectUI):
             self.activate_unavailable_page(msg)
             return
 
-        if gport == -1:
+        if (gport == -1 and not gsocket):
             self.activate_unavailable_page(
                             _("Graphical console is not yet active for guest"))
             self.schedule_retry()
