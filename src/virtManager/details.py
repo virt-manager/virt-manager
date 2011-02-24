@@ -1543,7 +1543,8 @@ class vmmDetails(vmmGObjectUI):
 
         selabel = self.window.get_widget("security-label").get_text()
         semodel = None
-        if self.window.get_widget("security-type-box").get_sensitive():
+        if self.window.get_widget("security-type-box").get_property(
+                                                                "sensitive"):
             semodel = self.window.get_widget("security-model").get_text()
 
         # Description
