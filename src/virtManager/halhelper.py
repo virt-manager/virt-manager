@@ -83,9 +83,8 @@ class vmmHalHelper(gobject.GObject):
         except Exception, e:
             (_type, value, stacktrace) = sys.exc_info()
             logging.error("Unable to connect to HAL to list network "
-                          "devices: '%s'" +
-                          str(_type) + " " + str(value) + "\n" +
-                          traceback.format_exc(stacktrace))
+                          "devices: " +
+                          str(_type) + " " + str(value))
             self.startup_error = str(e)
 
     def connect(self, name, callback, *args):
