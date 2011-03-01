@@ -1938,15 +1938,21 @@ class vmmDetails(vmmGObjectUI):
 
         if caps.host.secmodel and caps.host.secmodel.model:
             semodel = caps.host.secmodel.model
-        self.window.get_widget("security-type-box").set_sensitive(bool(semodel))
+
         self.window.get_widget("security-model").set_text(semodel or _("None"))
 
-        if self.vm.get_seclabel()[1] == "static":
-            self.window.get_widget("security-static").set_active(True)
+        if not semodel or semodel == "apparmor":
+            self.window.get_widget("security-type-box").hide()
+            self.window.get_widget("security-type-label").hide()
         else:
-            self.window.get_widget("security-dynamic").set_active(True)
+            self.window.get_widget("security-type-box").set_sensitive(bool(semodel))
 
-        self.window.get_widget("security-label").set_text(vmlabel)
+            if self.vm.get_seclabel()[1] == "static":
+                self.window.get_widget("security-static").set_active(True)
+            else:
+                self.window.get_widget("security-dynamic").set_active(True)
+
+            self.window.get_widget("security-label").set_text(vmlabel)
 
     def refresh_stats_page(self):
         def _dsk_rx_tx_text(rx, tx, unit):
