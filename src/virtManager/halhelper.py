@@ -19,8 +19,6 @@
 
 import logging
 import os
-import sys
-import traceback
 import glob
 
 import gobject
@@ -81,10 +79,8 @@ class vmmHalHelper(gobject.GObject):
             self.hal_iface.connect_to_signal("DeviceRemoved",
                                              self._device_removed)
         except Exception, e:
-            (_type, value, stacktrace) = sys.exc_info()
             logging.error("Unable to connect to HAL to list network "
-                          "devices: " +
-                          str(_type) + " " + str(value))
+                          "devices: " + str(e))
             self.startup_error = str(e)
 
     def connect(self, name, callback, *args):
@@ -301,10 +297,8 @@ def get_net_bridge_owner(name_ignore, sysfspath):
             (ignore, bridge) = os.path.split(dest)
             return bridge
     except:
-        (_type, value, stacktrace) = sys.exc_info()
-        logging.error("Unable to determine if device is shared:" +
-                      str(_type) + " " + str(value) + "\n" +
-                      traceback.format_exc(stacktrace))
+        logging.exception("Unable to determine if device is shared")
+
     return None
 
 def get_net_mac_address(name_ignore, sysfspath):
