@@ -1003,9 +1003,9 @@ class vmmAddHardware(vmmGObjectUI):
 
                 if do_exist and not ret:
                     do_use = self.err.yes_no(
-                        _("The following path already exists, but is not\n"
+                        _("The following storage already exists, but is not\n"
                           "in use by any virtual machine:\n\n%s\n\n"
-                          "Would you like to use this path?") % ideal)
+                          "Would you like to reuse this storage?") % ideal)
 
                     if do_use:
                         diskpath = ideal
