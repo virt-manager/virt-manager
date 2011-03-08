@@ -155,7 +155,11 @@ class vmmCreateVolume(vmmGObjectUI):
     def populate_vol_format(self):
         model = self.window.get_widget("vol-format").get_model()
         model.clear()
+
         formats = self.vol_class.formats
+        if hasattr(self.vol_class, "create_formats"):
+            formats = getattr(self.vol_class, "create_formats")
+
         for f in formats:
             model.append([f, f])
 
