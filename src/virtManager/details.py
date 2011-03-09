@@ -2114,6 +2114,8 @@ class vmmDetails(vmmGObjectUI):
         idx = disk.disk_bus_index
         cache = disk.driver_cache
         driver_type = disk.driver_type or ""
+        show_format = (disk.path_exists(disk.conn, disk.path) or not
+                       self.is_customize_dialog)
 
         size = _("Unknown")
         if not path:
@@ -2140,6 +2142,8 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("disk-shareable").set_active(share)
         self.window.get_widget("disk-size").set_text(size)
         self.set_combo_label("disk-cache", 0, cache)
+
+        self.window.get_widget("disk-format").set_sensitive(show_format)
         self.window.get_widget("disk-format").child.set_text(driver_type)
 
         no_default = not self.is_customize_dialog
