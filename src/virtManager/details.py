@@ -2114,8 +2114,8 @@ class vmmDetails(vmmGObjectUI):
         idx = disk.disk_bus_index
         cache = disk.driver_cache
         driver_type = disk.driver_type or ""
-        show_format = (disk.path_exists(disk.conn, disk.path) or not
-                       self.is_customize_dialog)
+        show_format = (not self.is_customize_dialog or
+                       disk.path_exists(disk.conn, disk.path))
 
         size = _("Unknown")
         if not path:
