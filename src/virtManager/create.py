@@ -90,6 +90,9 @@ class vmmCreate(vmmGObjectUI):
         # 'Guest' class from the previous failed install
         self.failed_guest = None
 
+        # Whether there was an error at dialog startup
+        self.have_startup_error = False
+
         # Host space polling
         self.host_storage_timer = None
 
@@ -180,6 +183,7 @@ class vmmCreate(vmmGObjectUI):
 
     # State init methods
     def startup_error(self, error):
+        self.have_startup_error = True
         self.window.get_widget("startup-error-box").show()
         self.window.get_widget("install-box").hide()
         self.window.get_widget("create-forward").set_sensitive(False)
@@ -292,6 +296,7 @@ class vmmCreate(vmmGObjectUI):
     def reset_state(self, urihint=None):
 
         self.failed_guest = None
+        self.have_startup_error = False
         self.guest = None
         self.disk = None
         self.nic = None
@@ -1106,6 +1111,9 @@ class vmmCreate(vmmGObjectUI):
         notebook = self.window.get_widget("create-pages")
         curpage = notebook.get_current_page()
         is_import = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
+
+        if self.have_startup_error:
+            return
 
         if curpage == PAGE_INSTALL and self.should_detect_media():
             # Make sure we have detected the OS before validating the page
