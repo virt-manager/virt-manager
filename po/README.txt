@@ -1,14 +1,12 @@
   Notes on translation process
   ============================
 
-The translations for virt-manager are handled by the fedora community
-via transifex. Translations are committed directly to the repo, so the
-maintainers job is quite easy :)
+The translations for virt-manager are handled via transifex.net.
+To pull in the latest translations requires the transifex-client package:
 
-To update the virt-manager translation template, run
-
+  tx pull
   make update-po
 
 Translators can easily sign up to contribute:
 
-https://translate.fedoraproject.org/
+http://help.transifex.net/
