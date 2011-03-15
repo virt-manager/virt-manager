@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 11:04-0500\n"
+"POT-Creation-Date: 2011-01-14 15:27-0500\n"
 "PO-Revision-Date: 2008-10-10 16:09+1000\n"
 "Last-Translator: Terry Chuang <tchuang@redhat.com>\n"
 "Language-Team:  <zh@li.org>\n"
@@ -27,13 +27,13 @@ msgstr "管理虛擬機器"
 msgid "Virtual Machine Manager"
 msgstr "虛擬機器管理員"
 
-#: ../src/virt-manager.py.in:68
+#: ../src/virt-manager.py.in:74
 msgid "Error starting Virtual Machine Manager"
 msgstr "啟用虛擬機器管理員時發生錯誤"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:340
+#: ../src/virt-manager.py.in:346
 #, fuzzy, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "無法啟動 GTK："
@@ -781,47 +781,47 @@ msgstr "更改 autostart 值的時候發生錯誤：%s"
 msgid "Error opening socket path '%s'"
 msgstr "更改 autostart 值的時候發生錯誤：%s"
 
-#: ../src/virtManager/console.py:542
+#: ../src/virtManager/console.py:543
 #, fuzzy, python-format
 msgid "Press %s to release pointer."
 msgstr "按下 Ctrl+Alt 來釋放指標。"
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:705 ../src/virtManager/console.py:858
+#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
 msgid "Guest not running"
 msgstr "客座端沒有在運作"
 
-#: ../src/virtManager/console.py:708
+#: ../src/virtManager/console.py:709
 msgid "Guest has crashed"
 msgstr "客座端當機"
 
-#: ../src/virtManager/console.py:811
+#: ../src/virtManager/console.py:819
 #, fuzzy
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr "TCP/IP 錯誤：連至 hypervisor 主機的 VNC 連線被拒絕或是斷線了！"
 
-#: ../src/virtManager/console.py:875
+#: ../src/virtManager/console.py:893
 #, fuzzy
 msgid "Graphical console not configured for guest"
 msgstr "主控台尚未針對於客座端進行配置"
 
-#: ../src/virtManager/console.py:882
+#: ../src/virtManager/console.py:900
 #, fuzzy, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "無法存取主控台路徑「%s」。"
 
-#: ../src/virtManager/console.py:892
+#: ../src/virtManager/console.py:910
 #, fuzzy
 msgid "Graphical console is not yet active for guest"
 msgstr "客座端還無法啟用主控台"
 
-#: ../src/virtManager/console.py:907
+#: ../src/virtManager/console.py:915
 #, fuzzy
 msgid "Connecting to graphical console for guest"
 msgstr "連至客座端的主控台"
 
-#: ../src/virtManager/console.py:933
+#: ../src/virtManager/console.py:951
 #, fuzzy
 msgid "Error connecting to graphical console"
 msgstr "連至客座端的主控台"
@@ -1542,9 +1542,9 @@ msgstr "更改 autostart 值的時候發生錯誤：%s"
 msgid "Are you sure you want to remove this device?"
 msgstr "您是否確定要移除此裝置？"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:805
-#: ../src/virtManager/engine.py:905 ../src/virtManager/engine.py:929
-#: ../src/virtManager/engine.py:988 ../src/virtManager/engine.py:1012
+#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
+#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
+#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
 msgid "Don't ask me again."
 msgstr ""
 
@@ -1727,11 +1727,11 @@ msgstr "儲存網域時發生錯誤：%s"
 msgid "Migrating domain"
 msgstr "啟動網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:107 ../src/virtManager/engine.py:108
+#: ../src/virtManager/engine.py:91 ../src/virtManager/engine.py:92
 msgid "Searching for available hypervisors..."
 msgstr ""
 
-#: ../src/virtManager/engine.py:130
+#: ../src/virtManager/engine.py:114
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -1741,17 +1741,17 @@ msgid ""
 "Would you like to install them now?"
 msgstr ""
 
-#: ../src/virtManager/engine.py:135
+#: ../src/virtManager/engine.py:119
 msgid "Packages required for KVM usage"
 msgstr ""
 
-#: ../src/virtManager/engine.py:144
+#: ../src/virtManager/engine.py:128
 #, fuzzy, python-format
 msgid "Error talking to PackageKit: %s"
 msgstr "啟動網域時發生錯誤：%s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:294
+#: ../src/virtManager/engine.py:284
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1762,7 +1762,7 @@ msgid ""
 "added via File->Add Connection"
 msgstr ""
 
-#: ../src/virtManager/engine.py:325
+#: ../src/virtManager/engine.py:318
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1776,124 +1776,124 @@ msgid ""
 "start up."
 msgstr ""
 
-#: ../src/virtManager/engine.py:333
+#: ../src/virtManager/engine.py:326
 #, fuzzy
 msgid "Libvirt service must be started"
 msgstr " - Xen 服務已經啟動\n"
 
-#: ../src/virtManager/engine.py:534
+#: ../src/virtManager/engine.py:527
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:547
+#: ../src/virtManager/engine.py:540
 #, fuzzy, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "啟動卷冊精靈時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:559
+#: ../src/virtManager/engine.py:552
 #, fuzzy, python-format
 msgid "Unable to display documentation: %s"
 msgstr "無法啟動 GTK："
 
-#: ../src/virtManager/engine.py:575
+#: ../src/virtManager/engine.py:568
 #, fuzzy, python-format
 msgid "Error launching preferences: %s"
 msgstr "啟動網路精靈時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:595
+#: ../src/virtManager/engine.py:588
 #, fuzzy, python-format
 msgid "Error launching host dialog: %s"
 msgstr "啟動卷冊精靈時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:615
+#: ../src/virtManager/engine.py:608
 #, fuzzy, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "啟動卷冊精靈時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:648
+#: ../src/virtManager/engine.py:641
 #, fuzzy, python-format
 msgid "Error launching details: %s"
 msgstr "啟動網路精靈時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:699 ../src/virtManager/engine.py:716
+#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
 #, fuzzy, python-format
 msgid "Error launching manager: %s"
 msgstr "啟動卷冊精靈時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:730
+#: ../src/virtManager/engine.py:723
 #, fuzzy, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "啟動卷冊精靈時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:748
+#: ../src/virtManager/engine.py:741
 #, fuzzy, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "設定 net autostart 時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:789
 #, fuzzy
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr "還未支援透過遠端連線來儲存虛擬機器。"
 
-#: ../src/virtManager/engine.py:803
+#: ../src/virtManager/engine.py:796
 #, fuzzy, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "您確定要使用此位址？"
 
-#: ../src/virtManager/engine.py:816
+#: ../src/virtManager/engine.py:809
 msgid "Save Virtual Machine"
 msgstr "儲存虛擬機器"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:824
 msgid "Saving Virtual Machine"
 msgstr "虛擬機器儲存中"
 
-#: ../src/virtManager/engine.py:832
+#: ../src/virtManager/engine.py:825
 #, fuzzy
 msgid "Saving virtual machine memory to disk "
 msgstr "虛擬機器儲存中"
 
-#: ../src/virtManager/engine.py:838
+#: ../src/virtManager/engine.py:831
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "儲存網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:850
+#: ../src/virtManager/engine.py:843
 #, fuzzy, python-format
 msgid "Error cancelling save job: %s"
 msgstr "建立 vol 時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:867
+#: ../src/virtManager/engine.py:860
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr "還未支援透過遠端連線回復虛擬機器"
 
-#: ../src/virtManager/engine.py:872
+#: ../src/virtManager/engine.py:865
 msgid "Restore Virtual Machine"
 msgstr "回復虛擬機器"
 
-#: ../src/virtManager/engine.py:881 ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
 msgid "Restoring Virtual Machine"
 msgstr "虛擬機器回復中"
 
-#: ../src/virtManager/engine.py:882 ../src/virtManager/engine.py:970
+#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
 #, fuzzy
 msgid "Restoring virtual machine memory from disk"
 msgstr "虛擬機器回復中"
 
-#: ../src/virtManager/engine.py:886
+#: ../src/virtManager/engine.py:879
 #, fuzzy, python-format
 msgid "Error restoring domain: %s"
 msgstr "啟動網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:901
+#: ../src/virtManager/engine.py:894
 #, fuzzy, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "您是否確定要移除此裝置？"
 
-#: ../src/virtManager/engine.py:903
+#: ../src/virtManager/engine.py:896
 #, fuzzy
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
@@ -1902,51 +1902,51 @@ msgstr ""
 "這將會立即在不關閉作業系統的情況下關閉虛擬機器，這可能會造成資料遺失，您確定"
 "要這樣做嗎？"
 
-#: ../src/virtManager/engine.py:917 ../src/virtManager/engine.py:1000
+#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "關閉網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:927
+#: ../src/virtManager/engine.py:920
 #, fuzzy, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "您確定要使用此位址？"
 
-#: ../src/virtManager/engine.py:941
+#: ../src/virtManager/engine.py:934
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "暫停網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:952
+#: ../src/virtManager/engine.py:945
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "再次啟用網域時發生錯誤：%s"
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:968
+#: ../src/virtManager/engine.py:961
 #, fuzzy
 msgid "Error restoring domain"
 msgstr "啟動網域時發生錯誤：%s"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:976
+#: ../src/virtManager/engine.py:969
 #, fuzzy
 msgid "Error starting domain"
 msgstr "啟動網域時發生錯誤：%s"
 
-#: ../src/virtManager/engine.py:986
+#: ../src/virtManager/engine.py:979
 #, fuzzy, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "您是否確定要移除此裝置？"
 
-#: ../src/virtManager/engine.py:1010
+#: ../src/virtManager/engine.py:1003
 #, fuzzy, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "您是否確定要移除此裝置？"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1028 ../src/virtManager/engine.py:1043
+#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
 #, fuzzy, python-format
 msgid "Error rebooting domain: %s"
 msgstr "啟動網域時發生錯誤：%s"

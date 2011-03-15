@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 11:04-0500\n"
+"POT-Creation-Date: 2011-01-14 15:27-0500\n"
 "PO-Revision-Date: 2010-07-26 15:58+0530\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
 "Language-Team: Marathi <fedora-trans-mr@redhat.com>\n"
@@ -29,13 +29,13 @@ msgstr "वर्च्युअल मशीन व्यवस्थापन"
 msgid "Virtual Machine Manager"
 msgstr "वर्च्युअल मशीन व्यवस्थापक"
 
-#: ../src/virt-manager.py.in:68
+#: ../src/virt-manager.py.in:74
 msgid "Error starting Virtual Machine Manager"
 msgstr "वर्च्युअल मशीन व्यवस्थापक सुरू करतेवेळी त्रुटी आढळली"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:340
+#: ../src/virt-manager.py.in:346
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "GTK प्रारंभ करण्यास अशक्य: %s"
@@ -762,44 +762,44 @@ msgstr "स्टोरेज मार्ग बदलवतेवेळी त
 msgid "Error opening socket path '%s'"
 msgstr "स्टोरेज मार्ग बदलवतेवेळी त्रुटी: %s"
 
-#: ../src/virtManager/console.py:542
+#: ../src/virtManager/console.py:543
 #, fuzzy, python-format
 msgid "Press %s to release pointer."
 msgstr "पॉईन्टर सोडण्याकरीता Ctrl+Alt दाबा."
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:705 ../src/virtManager/console.py:858
+#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
 msgid "Guest not running"
 msgstr "अतिथी कार्यरत नाही"
 
-#: ../src/virtManager/console.py:708
+#: ../src/virtManager/console.py:709
 msgid "Guest has crashed"
 msgstr "अतिथी नष्ट झाले"
 
-#: ../src/virtManager/console.py:811
+#: ../src/virtManager/console.py:819
 #, fuzzy
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr "त्रुटी: हायपरवाइजर यजमान करीता VNC जुळवणी अस्वीकार्य किंवा खंडीत झाली!"
 
-#: ../src/virtManager/console.py:875
+#: ../src/virtManager/console.py:893
 msgid "Graphical console not configured for guest"
 msgstr "अतिथीकरीता ग्राफिकल कंसोल संरचीत केले नाही"
 
-#: ../src/virtManager/console.py:882
+#: ../src/virtManager/console.py:900
 #, fuzzy, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "कंसोल मार्ग '%s' करीता प्रवेश नाही."
 
-#: ../src/virtManager/console.py:892
+#: ../src/virtManager/console.py:910
 msgid "Graphical console is not yet active for guest"
 msgstr "अतिथी करीता कंसोल अजूनही सक्रिय केले नाही"
 
-#: ../src/virtManager/console.py:907
+#: ../src/virtManager/console.py:915
 msgid "Connecting to graphical console for guest"
 msgstr "अतिथीकरीता ग्राफिकल कंसोलशी जुळवणी करत आहे"
 
-#: ../src/virtManager/console.py:933
+#: ../src/virtManager/console.py:951
 #, fuzzy
 msgid "Error connecting to graphical console"
 msgstr "अतिथीकरीता ग्राफिकल कंसोलशी जुळवणी करत आहे"
@@ -1516,9 +1516,9 @@ msgstr "स्वयंप्रारंभ मुल्य बदलवित�
 msgid "Are you sure you want to remove this device?"
 msgstr "तुम्हाला नक्की हे साधण काढून टाकायचे?"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:805
-#: ../src/virtManager/engine.py:905 ../src/virtManager/engine.py:929
-#: ../src/virtManager/engine.py:988 ../src/virtManager/engine.py:1012
+#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
+#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
+#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
 msgid "Don't ask me again."
 msgstr "पुनः विचारू नका."
 
@@ -1700,11 +1700,11 @@ msgstr "क्षेत्र संचयन करतेवेळी त्र
 msgid "Migrating domain"
 msgstr "क्षेत्र सुरू करतेवेळी त्रुटी आढळली: %s"
 
-#: ../src/virtManager/engine.py:107 ../src/virtManager/engine.py:108
+#: ../src/virtManager/engine.py:91 ../src/virtManager/engine.py:92
 msgid "Searching for available hypervisors..."
 msgstr "उपलब्ध हायपरवाइजरकरीता शोधत आहे..."
 
-#: ../src/virtManager/engine.py:130
+#: ../src/virtManager/engine.py:114
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -1719,17 +1719,17 @@ msgstr ""
 "याची आवश्यकता KVM अतिथी स्थानीयरित्या निर्माण करण्यास असते.\n"
 "यांस आत्ता प्रतिष्ठापीत करायला आवडेल?"
 
-#: ../src/virtManager/engine.py:135
+#: ../src/virtManager/engine.py:119
 msgid "Packages required for KVM usage"
 msgstr "KVM वापरणी करीता आवश्यक संकुले"
 
-#: ../src/virtManager/engine.py:144
+#: ../src/virtManager/engine.py:128
 #, python-format
 msgid "Error talking to PackageKit: %s"
 msgstr "PackageKit सह संवाद साधतेवेळी त्रुटी: %s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:294
+#: ../src/virtManager/engine.py:284
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1747,7 +1747,7 @@ msgstr ""
 "हायपरवाइजर जुळवणी \n"
 "फाइल ->जुळवणी समावेष करा, यानुरूप स्वहस्ते समावेश करणे शक्य आहे"
 
-#: ../src/virtManager/engine.py:325
+#: ../src/virtManager/engine.py:318
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1771,172 +1771,172 @@ msgstr ""
 "virt-manager libvirt सह पुढील ऍप्लिकेशन स्टार्ट अपवेळी\n"
 "जोडणी स्थापीत करेल."
 
-#: ../src/virtManager/engine.py:333
+#: ../src/virtManager/engine.py:326
 msgid "Libvirt service must be started"
 msgstr "Libvirt सर्व्हिस सुरू करणे आवश्यक आहे"
 
-#: ../src/virtManager/engine.py:534
+#: ../src/virtManager/engine.py:527
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "अपरिचीत जुळवणी URI %s"
 
-#: ../src/virtManager/engine.py:547
+#: ../src/virtManager/engine.py:540
 #, fuzzy, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "मनपसंत संवाद सुरू करतेवेळी त्रुटी आढळली: "
 
-#: ../src/virtManager/engine.py:559
+#: ../src/virtManager/engine.py:552
 #, fuzzy, python-format
 msgid "Unable to display documentation: %s"
 msgstr "साधण समावेष करण्यास अशक्य: %s"
 
-#: ../src/virtManager/engine.py:575
+#: ../src/virtManager/engine.py:568
 #, fuzzy, python-format
 msgid "Error launching preferences: %s"
 msgstr "संवाद सहाय्यक सुरू करतेवेळी त्रुटी: %s"
 
-#: ../src/virtManager/engine.py:595
+#: ../src/virtManager/engine.py:588
 #, fuzzy, python-format
 msgid "Error launching host dialog: %s"
 msgstr "मनपसंत संवाद सुरू करतेवेळी त्रुटी आढळली: "
 
-#: ../src/virtManager/engine.py:615
+#: ../src/virtManager/engine.py:608
 #, fuzzy, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "मनपसंत संवाद सुरू करतेवेळी त्रुटी आढळली: "
 
-#: ../src/virtManager/engine.py:648
+#: ../src/virtManager/engine.py:641
 #, fuzzy, python-format
 msgid "Error launching details: %s"
 msgstr "नेटवर्क सहाय्यक दाखल करतेवेळी त्रुटी: %s"
 
-#: ../src/virtManager/engine.py:699 ../src/virtManager/engine.py:716
+#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
 #, fuzzy, python-format
 msgid "Error launching manager: %s"
 msgstr "आवाज सहाय्यक दाखल करतेवेळी त्रुटी: %s"
 
-#: ../src/virtManager/engine.py:730
+#: ../src/virtManager/engine.py:723
 #, fuzzy, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "मनपसंत संवाद सुरू करतेवेळी त्रुटी आढळली: "
 
-#: ../src/virtManager/engine.py:748
+#: ../src/virtManager/engine.py:741
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "क्लोन घटक सेटकरतेवेळी त्रुटी: %s"
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:789
 #, fuzzy
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr "रिमोट जोडणीवरील वर्च्युअल मशीन्स् यांना साठवणे समर्थीत नाही."
 
-#: ../src/virtManager/engine.py:803
+#: ../src/virtManager/engine.py:796
 #, fuzzy, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "तुम्हाला नक्की '%s' बंद करायचे?"
 
-#: ../src/virtManager/engine.py:816
+#: ../src/virtManager/engine.py:809
 msgid "Save Virtual Machine"
 msgstr "वर्च्युअल मशीन सुरक्षित करा"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:824
 msgid "Saving Virtual Machine"
 msgstr "वर्च्युअल मशीन सुरक्षित करत आहे"
 
-#: ../src/virtManager/engine.py:832
+#: ../src/virtManager/engine.py:825
 #, fuzzy
 msgid "Saving virtual machine memory to disk "
 msgstr "वर्च्युअल मशीन सुरक्षित करत आहे"
 
-#: ../src/virtManager/engine.py:838
+#: ../src/virtManager/engine.py:831
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "क्षेत्र संचयन करतेवेळी त्रुटी आढळली: %s"
 
-#: ../src/virtManager/engine.py:850
+#: ../src/virtManager/engine.py:843
 #, fuzzy, python-format
 msgid "Error cancelling save job: %s"
 msgstr "vol बनवितेवेळी त्रुटी: %s"
 
-#: ../src/virtManager/engine.py:867
+#: ../src/virtManager/engine.py:860
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr "दूर्रस्थ जुळवणी वरील वर्च्युअल मशीनचे पुन्हस्थापन अजूनही समर्थीत नाही"
 
-#: ../src/virtManager/engine.py:872
+#: ../src/virtManager/engine.py:865
 msgid "Restore Virtual Machine"
 msgstr "वर्च्युअल मशीन पुनःरक्षित करा"
 
-#: ../src/virtManager/engine.py:881 ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
 msgid "Restoring Virtual Machine"
 msgstr "वर्च्युअल मशीन पुनःरक्षित आहे"
 
-#: ../src/virtManager/engine.py:882 ../src/virtManager/engine.py:970
+#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
 #, fuzzy
 msgid "Restoring virtual machine memory from disk"
 msgstr "वर्च्युअल मशीन पुनःरक्षित आहे"
 
-#: ../src/virtManager/engine.py:886
+#: ../src/virtManager/engine.py:879
 #, fuzzy, python-format
 msgid "Error restoring domain: %s"
 msgstr "क्षेत्र पूर्वस्थितीत आणतेवेळी त्रुटी"
 
-#: ../src/virtManager/engine.py:901
+#: ../src/virtManager/engine.py:894
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "तुम्हाला नक्की '%s' जबरन बंद टाकायचे?"
 
-#: ../src/virtManager/engine.py:903
+#: ../src/virtManager/engine.py:896
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "यामुळे VM लगेचच OS ला बंद न केल्यावरही बंद होईल व माहिती सुद्धा लुप्त होऊ शकते."
 
-#: ../src/virtManager/engine.py:917 ../src/virtManager/engine.py:1000
+#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "क्षेत्र बंद करतेवेळी त्रुटी आढळली: %s"
 
-#: ../src/virtManager/engine.py:927
+#: ../src/virtManager/engine.py:920
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "तुम्हाला नक्की '%s' बंद करायचे?"
 
-#: ../src/virtManager/engine.py:941
+#: ../src/virtManager/engine.py:934
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "क्षेत्र स्तब्ध करतेवेळी त्रुटी आढळली: %s"
 
-#: ../src/virtManager/engine.py:952
+#: ../src/virtManager/engine.py:945
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "क्षेत्र अस्तब्ध करतेवेळी त्रुटी आढळली: %s"
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:968
+#: ../src/virtManager/engine.py:961
 msgid "Error restoring domain"
 msgstr "क्षेत्र पूर्वस्थितीत आणतेवेळी त्रुटी"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:976
+#: ../src/virtManager/engine.py:969
 #, fuzzy
 msgid "Error starting domain"
 msgstr "क्षेत्र सुरू करतेवेळी त्रुटी आढळली: %s"
 
-#: ../src/virtManager/engine.py:986
+#: ../src/virtManager/engine.py:979
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "तुम्हाला नक्की '%s' बंद करायचे?"
 
-#: ../src/virtManager/engine.py:1010
+#: ../src/virtManager/engine.py:1003
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "तुम्हाला नक्की '%s' पुनः सुरू करायचे?"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1028 ../src/virtManager/engine.py:1043
+#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
 #, python-format
 msgid "Error rebooting domain: %s"
 msgstr "क्षेत्र पुनः सुरू करतेवेळी त्रुटी आढळली: %s"

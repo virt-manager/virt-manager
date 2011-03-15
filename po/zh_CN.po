@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 11:04-0500\n"
+"POT-Creation-Date: 2011-01-14 15:27-0500\n"
 "PO-Revision-Date: 2010-02-15 23:37+0800\n"
 "Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
 "Language-Team: Simplified Chinese <i18n-zh@googlegroups.com>\n"
@@ -28,13 +28,13 @@ msgstr "管理虚拟机"
 msgid "Virtual Machine Manager"
 msgstr "虚拟系统管理器"
 
-#: ../src/virt-manager.py.in:68
+#: ../src/virt-manager.py.in:74
 msgid "Error starting Virtual Machine Manager"
 msgstr "启动虚拟系统管理器出错"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:340
+#: ../src/virt-manager.py.in:346
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "无法初始化 GTK：%s"
@@ -747,44 +747,44 @@ msgstr "更改存储路径出错：%s"
 msgid "Error opening socket path '%s'"
 msgstr "更改存储路径出错：%s"
 
-#: ../src/virtManager/console.py:542
+#: ../src/virtManager/console.py:543
 #, fuzzy, python-format
 msgid "Press %s to release pointer."
 msgstr "按 Ctrl+Alt 释放指针。"
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:705 ../src/virtManager/console.py:858
+#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
 msgid "Guest not running"
 msgstr "虚拟机系统没有运行"
 
-#: ../src/virtManager/console.py:708
+#: ../src/virtManager/console.py:709
 msgid "Guest has crashed"
 msgstr "虚拟机系统崩溃"
 
-#: ../src/virtManager/console.py:811
+#: ../src/virtManager/console.py:819
 #, fuzzy
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr "TCP/IP 错误：到监控程序主机的 VNC 连接被拒绝或者断开连接！"
 
-#: ../src/virtManager/console.py:875
+#: ../src/virtManager/console.py:893
 msgid "Graphical console not configured for guest"
 msgstr "没有为虚拟机系统配置图形控制台"
 
-#: ../src/virtManager/console.py:882
+#: ../src/virtManager/console.py:900
 #, fuzzy, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "无法访问控制台路径 '%s'。"
 
-#: ../src/virtManager/console.py:892
+#: ../src/virtManager/console.py:910
 msgid "Graphical console is not yet active for guest"
 msgstr "没有为虚拟机系统激活图形控制台"
 
-#: ../src/virtManager/console.py:907
+#: ../src/virtManager/console.py:915
 msgid "Connecting to graphical console for guest"
 msgstr "为虚拟机系统连接到图形控制台"
 
-#: ../src/virtManager/console.py:933
+#: ../src/virtManager/console.py:951
 #, fuzzy
 msgid "Error connecting to graphical console"
 msgstr "为虚拟机系统连接到图形控制台"
@@ -1493,9 +1493,9 @@ msgstr "更改自动启动值出错：%s"
 msgid "Are you sure you want to remove this device?"
 msgstr "您确定要删除这个设备吗？"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:805
-#: ../src/virtManager/engine.py:905 ../src/virtManager/engine.py:929
-#: ../src/virtManager/engine.py:988 ../src/virtManager/engine.py:1012
+#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
+#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
+#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
 msgid "Don't ask me again."
 msgstr "不要再问。"
 
@@ -1677,11 +1677,11 @@ msgstr "保存域出错：%s"
 msgid "Migrating domain"
 msgstr "启动域出错：%s"
 
-#: ../src/virtManager/engine.py:107 ../src/virtManager/engine.py:108
+#: ../src/virtManager/engine.py:91 ../src/virtManager/engine.py:92
 msgid "Searching for available hypervisors..."
 msgstr ""
 
-#: ../src/virtManager/engine.py:130
+#: ../src/virtManager/engine.py:114
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -1691,17 +1691,17 @@ msgid ""
 "Would you like to install them now?"
 msgstr ""
 
-#: ../src/virtManager/engine.py:135
+#: ../src/virtManager/engine.py:119
 msgid "Packages required for KVM usage"
 msgstr ""
 
-#: ../src/virtManager/engine.py:144
+#: ../src/virtManager/engine.py:128
 #, fuzzy, python-format
 msgid "Error talking to PackageKit: %s"
 msgstr "启动域出错：%s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:294
+#: ../src/virtManager/engine.py:284
 #, fuzzy
 msgid ""
 "Could not detect a default hypervisor. Make\n"
@@ -1718,7 +1718,7 @@ msgstr ""
 "可通过 文件 -> 添加连接 \n"
 "手动添加管理程序"
 
-#: ../src/virtManager/engine.py:325
+#: ../src/virtManager/engine.py:318
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1732,173 +1732,173 @@ msgid ""
 "start up."
 msgstr ""
 
-#: ../src/virtManager/engine.py:333
+#: ../src/virtManager/engine.py:326
 #, fuzzy
 msgid "Libvirt service must be started"
 msgstr "必须选择一个设备。"
 
-#: ../src/virtManager/engine.py:534
+#: ../src/virtManager/engine.py:527
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "未知连接 URI %s"
 
-#: ../src/virtManager/engine.py:547
+#: ../src/virtManager/engine.py:540
 #, fuzzy, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "启动卷向导出错：%s"
 
-#: ../src/virtManager/engine.py:559
+#: ../src/virtManager/engine.py:552
 #, fuzzy, python-format
 msgid "Unable to display documentation: %s"
 msgstr "无法添加设备：%s"
 
-#: ../src/virtManager/engine.py:575
+#: ../src/virtManager/engine.py:568
 #, fuzzy, python-format
 msgid "Error launching preferences: %s"
 msgstr "启动接口向导出错：%s"
 
-#: ../src/virtManager/engine.py:595
+#: ../src/virtManager/engine.py:588
 #, fuzzy, python-format
 msgid "Error launching host dialog: %s"
 msgstr "启动卷向导出错：%s"
 
-#: ../src/virtManager/engine.py:615
+#: ../src/virtManager/engine.py:608
 #, fuzzy, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "启动卷向导出错：%s"
 
-#: ../src/virtManager/engine.py:648
+#: ../src/virtManager/engine.py:641
 #, fuzzy, python-format
 msgid "Error launching details: %s"
 msgstr "启动网络向导：%s"
 
-#: ../src/virtManager/engine.py:699 ../src/virtManager/engine.py:716
+#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
 #, fuzzy, python-format
 msgid "Error launching manager: %s"
 msgstr "启动卷向导出错：%s"
 
-#: ../src/virtManager/engine.py:730
+#: ../src/virtManager/engine.py:723
 #, fuzzy, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "启动卷向导出错：%s"
 
-#: ../src/virtManager/engine.py:748
+#: ../src/virtManager/engine.py:741
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "设定克隆参数出错：%s"
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:789
 #, fuzzy
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr "还不支持通过远程连接保存虚拟机。"
 
-#: ../src/virtManager/engine.py:803
+#: ../src/virtManager/engine.py:796
 #, fuzzy, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "您确定要暂停 '%s' 吗？"
 
-#: ../src/virtManager/engine.py:816
+#: ../src/virtManager/engine.py:809
 msgid "Save Virtual Machine"
 msgstr "保存虚拟机"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:824
 msgid "Saving Virtual Machine"
 msgstr "正在保存虚拟机"
 
-#: ../src/virtManager/engine.py:832
+#: ../src/virtManager/engine.py:825
 #, fuzzy
 msgid "Saving virtual machine memory to disk "
 msgstr "正在保存虚拟机"
 
-#: ../src/virtManager/engine.py:838
+#: ../src/virtManager/engine.py:831
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "保存域出错：%s"
 
-#: ../src/virtManager/engine.py:850
+#: ../src/virtManager/engine.py:843
 #, fuzzy, python-format
 msgid "Error cancelling save job: %s"
 msgstr "创建卷出错：%s"
 
-#: ../src/virtManager/engine.py:867
+#: ../src/virtManager/engine.py:860
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr "尚不支持通过远程连接恢复虚拟机"
 
-#: ../src/virtManager/engine.py:872
+#: ../src/virtManager/engine.py:865
 msgid "Restore Virtual Machine"
 msgstr "恢复虚拟机"
 
-#: ../src/virtManager/engine.py:881 ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
 msgid "Restoring Virtual Machine"
 msgstr "正在恢复虚拟机"
 
-#: ../src/virtManager/engine.py:882 ../src/virtManager/engine.py:970
+#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
 #, fuzzy
 msgid "Restoring virtual machine memory from disk"
 msgstr "正在恢复虚拟机"
 
-#: ../src/virtManager/engine.py:886
+#: ../src/virtManager/engine.py:879
 #, fuzzy, python-format
 msgid "Error restoring domain: %s"
 msgstr "恢复域出错"
 
-#: ../src/virtManager/engine.py:901
+#: ../src/virtManager/engine.py:894
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "您确定要强制关闭 '%s' 吗？"
 
-#: ../src/virtManager/engine.py:903
+#: ../src/virtManager/engine.py:896
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "这将立即关闭 VM 而不关闭操作系统，并可能造成数据丢失。"
 
-#: ../src/virtManager/engine.py:917 ../src/virtManager/engine.py:1000
+#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "关闭域出错：%s"
 
-#: ../src/virtManager/engine.py:927
+#: ../src/virtManager/engine.py:920
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "您确定要暂停 '%s' 吗？"
 
-#: ../src/virtManager/engine.py:941
+#: ../src/virtManager/engine.py:934
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "暂停域出错：%s"
 
-#: ../src/virtManager/engine.py:952
+#: ../src/virtManager/engine.py:945
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "取消域暂停出错：%s"
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:968
+#: ../src/virtManager/engine.py:961
 msgid "Error restoring domain"
 msgstr "恢复域出错"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:976
+#: ../src/virtManager/engine.py:969
 #, fuzzy
 msgid "Error starting domain"
 msgstr "启动域出错：%s"
 
-#: ../src/virtManager/engine.py:986
+#: ../src/virtManager/engine.py:979
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "您确定要关闭 '%s' 吗？"
 
-#: ../src/virtManager/engine.py:1010
+#: ../src/virtManager/engine.py:1003
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "您确定要重启 '%s' 吗？"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1028 ../src/virtManager/engine.py:1043
+#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
 #, fuzzy, python-format
 msgid "Error rebooting domain: %s"
 msgstr "启动域出错：%s"

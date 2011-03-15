@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 11:04-0500\n"
+"POT-Creation-Date: 2011-01-14 15:27-0500\n"
 "PO-Revision-Date: 2009-12-11 11:34+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@fedoraproject.org>\n"
 "Language-Team: Assamese <>\n"
@@ -27,13 +27,13 @@ msgstr "ভাৰ্চুৱেল যন্ত্ৰৰ পৰিচালন�
 msgid "Virtual Machine Manager"
 msgstr "ভাৰ্চুৱেল যন্ত্ৰ পৰিচালক"
 
-#: ../src/virt-manager.py.in:68
+#: ../src/virt-manager.py.in:74
 msgid "Error starting Virtual Machine Manager"
 msgstr "ভাৰ্চুৱেল যন্ত্ৰ পৰিচালক আৰম্ভ কৰোঁতে সমস্যা"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:340
+#: ../src/virt-manager.py.in:346
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "GTK আৰম্ভ কৰোঁতে ব্যৰ্থ: %s"
@@ -756,21 +756,21 @@ msgstr "সংগ্ৰহস্থলৰ পাথ পৰিবৰ্তন ক
 msgid "Error opening socket path '%s'"
 msgstr "সংগ্ৰহস্থলৰ পাথ পৰিবৰ্তন কৰিবলৈ ত্ৰুটি: %s"
 
-#: ../src/virtManager/console.py:542
+#: ../src/virtManager/console.py:543
 #, fuzzy, python-format
 msgid "Press %s to release pointer."
 msgstr "পইন্টাৰ মুক্ত কৰোঁতে Ctrl+Alt টিপক  ।"
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:705 ../src/virtManager/console.py:858
+#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
 msgid "Guest not running"
 msgstr "অতিথি বৰ্তমানে চলা নাই"
 
-#: ../src/virtManager/console.py:708
+#: ../src/virtManager/console.py:709
 msgid "Guest has crashed"
 msgstr "অতিথি বিপৰ্যস্ত হৈছে"
 
-#: ../src/virtManager/console.py:811
+#: ../src/virtManager/console.py:819
 #, fuzzy
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
@@ -778,24 +778,24 @@ msgstr ""
 "TCP/IP সংযোগ: হাইপাৰ-ভাইছৰ গৃহস্থৰ সৈতে VNC সংযোগ প্ৰত্যাখ্যান কৰা হৈছে বা সংযোগ "
 "বিচ্ছিন্ন হৈছে!"
 
-#: ../src/virtManager/console.py:875
+#: ../src/virtManager/console.py:893
 msgid "Graphical console not configured for guest"
 msgstr "অতিথিৰ বাবে কন্সোলৰ বিন্যাস কৰা হোৱা নাই"
 
-#: ../src/virtManager/console.py:882
+#: ../src/virtManager/console.py:900
 #, fuzzy, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "কন্সোল পাথ '%s' প্ৰয়োগ কৰোঁতে ব্যৰ্থ  ।"
 
-#: ../src/virtManager/console.py:892
+#: ../src/virtManager/console.py:910
 msgid "Graphical console is not yet active for guest"
 msgstr "অতিথিৰ বাবে কন্সোল বৰ্তমানে সক্ৰিয় নহয়"
 
-#: ../src/virtManager/console.py:907
+#: ../src/virtManager/console.py:915
 msgid "Connecting to graphical console for guest"
 msgstr "অতিথিৰ বাবে নিৰ্ধাৰিত কন্সোলৰ সৈতে সংযোগ স্থাপন কৰা হৈছে"
 
-#: ../src/virtManager/console.py:933
+#: ../src/virtManager/console.py:951
 #, fuzzy
 msgid "Error connecting to graphical console"
 msgstr "অতিথিৰ বাবে নিৰ্ধাৰিত কন্সোলৰ সৈতে সংযোগ স্থাপন কৰা হৈছে"
@@ -1507,9 +1507,9 @@ msgstr "স্বয়ংক্ৰিয় প্ৰাৰম্ভৰ মান প
 msgid "Are you sure you want to remove this device?"
 msgstr "আপুনি নিশ্চিতৰূপে এই যন্ত্ৰ আঁতৰাবলৈ ইচ্ছুক নে ?"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:805
-#: ../src/virtManager/engine.py:905 ../src/virtManager/engine.py:929
-#: ../src/virtManager/engine.py:988 ../src/virtManager/engine.py:1012
+#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
+#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
+#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
 msgid "Don't ask me again."
 msgstr ""
 
@@ -1693,11 +1693,11 @@ msgstr "ডোমেইন সংৰক্ষণ কৰোঁতে ব্যৰ
 msgid "Migrating domain"
 msgstr "ডোমেইন প্ৰব্ৰজন কৰোঁতে ব্যৰ্থ: %s"
 
-#: ../src/virtManager/engine.py:107 ../src/virtManager/engine.py:108
+#: ../src/virtManager/engine.py:91 ../src/virtManager/engine.py:92
 msgid "Searching for available hypervisors..."
 msgstr ""
 
-#: ../src/virtManager/engine.py:130
+#: ../src/virtManager/engine.py:114
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -1707,17 +1707,17 @@ msgid ""
 "Would you like to install them now?"
 msgstr ""
 
-#: ../src/virtManager/engine.py:135
+#: ../src/virtManager/engine.py:119
 msgid "Packages required for KVM usage"
 msgstr ""
 
-#: ../src/virtManager/engine.py:144
+#: ../src/virtManager/engine.py:128
 #, fuzzy, python-format
 msgid "Error talking to PackageKit: %s"
 msgstr "ডোমেইন আৰম্ভ কৰোঁতে ব্যৰ্থ: %s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:294
+#: ../src/virtManager/engine.py:284
 #, fuzzy
 msgid ""
 "Could not detect a default hypervisor. Make\n"
@@ -1735,7 +1735,7 @@ msgstr ""
 "এটা হাইপাৰ্ভাইছৰৰ সংযোগ আপুনি নিজেই যোগ কৰিব পাৰে \n"
 "নথিপত্ৰ->সংযোগ যোগ কৰক - এৰে  ।"
 
-#: ../src/virtManager/engine.py:325
+#: ../src/virtManager/engine.py:318
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1749,62 +1749,62 @@ msgid ""
 "start up."
 msgstr ""
 
-#: ../src/virtManager/engine.py:333
+#: ../src/virtManager/engine.py:326
 #, fuzzy
 msgid "Libvirt service must be started"
 msgstr "যন্ত্ৰ নিৰ্ব্বাচন কৰা আৱশ্যক  ।"
 
-#: ../src/virtManager/engine.py:534
+#: ../src/virtManager/engine.py:527
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "সংযোগৰ অজ্ঞাত URI %s"
 
-#: ../src/virtManager/engine.py:547
+#: ../src/virtManager/engine.py:540
 #, fuzzy, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "আয়তন উইজাৰ্ড আৰম্ভ কৰোঁতে ত্ৰুটি: %s"
 
-#: ../src/virtManager/engine.py:559
+#: ../src/virtManager/engine.py:552
 #, fuzzy, python-format
 msgid "Unable to display documentation: %s"
 msgstr "যন্ত্ৰ যোগ কৰোঁতে ব্যৰ্থ: %s"
 
-#: ../src/virtManager/engine.py:575
+#: ../src/virtManager/engine.py:568
 #, fuzzy, python-format
 msgid "Error launching preferences: %s"
 msgstr "নে'টৱৰ্ক উইজাৰ্ড আৰম্ভ কৰোঁতে ত্ৰুটি: %s"
 
-#: ../src/virtManager/engine.py:595
+#: ../src/virtManager/engine.py:588
 #, fuzzy, python-format
 msgid "Error launching host dialog: %s"
 msgstr "আয়তন উইজাৰ্ড আৰম্ভ কৰোঁতে ত্ৰুটি: %s"
 
-#: ../src/virtManager/engine.py:615
+#: ../src/virtManager/engine.py:608
 #, fuzzy, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "আয়তন উইজাৰ্ড আৰম্ভ কৰোঁতে ত্ৰুটি: %s"
 
-#: ../src/virtManager/engine.py:648
+#: ../src/virtManager/engine.py:641
 #, fuzzy, python-format
 msgid "Error launching details: %s"
 msgstr "নে'টৱৰ্ক উইজাৰ্ড আৰম্ভ কৰোঁতে ত্ৰুটি: %s"
 
-#: ../src/virtManager/engine.py:699 ../src/virtManager/engine.py:716
+#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
 #, fuzzy, python-format
 msgid "Error launching manager: %s"
 msgstr "আয়তন উইজাৰ্ড আৰম্ভ কৰোঁতে ত্ৰুটি: %s"
 
-#: ../src/virtManager/engine.py:730
+#: ../src/virtManager/engine.py:723
 #, fuzzy, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "আয়তন উইজাৰ্ড আৰম্ভ কৰোঁতে ত্ৰুটি: %s"
 
-#: ../src/virtManager/engine.py:748
+#: ../src/virtManager/engine.py:741
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "ক্লোন সংক্ৰান্ত স্থিতিমাপ নিৰ্ধাৰণ কৰিবলৈ ত্ৰুটি: %s"
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:789
 #, fuzzy
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
@@ -1812,62 +1812,62 @@ msgid ""
 msgstr ""
 "দূৰবৰ্তী সংযোগ মাধ্যমত ভাৰ্চুৱেল যন্ত্ৰ সংৰক্ষণৰ প্ৰণালী এই মুহূৰ্ত অৱধি সমৰ্থিত নহয়  ।"
 
-#: ../src/virtManager/engine.py:803
+#: ../src/virtManager/engine.py:796
 #, fuzzy, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "আপুনি নিশ্চিতৰূপে '%s' ব্যৱহাৰ কৰিবলৈ ইচ্ছুক নে ?"
 
-#: ../src/virtManager/engine.py:816
+#: ../src/virtManager/engine.py:809
 msgid "Save Virtual Machine"
 msgstr "ভাৰ্চুৱেল যন্ত্ৰ সংৰক্ষণ কৰক"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:824
 msgid "Saving Virtual Machine"
 msgstr "ভাৰ্চুৱেল যন্ত্ৰ সংৰক্ষণ কৰা হৈছে"
 
-#: ../src/virtManager/engine.py:832
+#: ../src/virtManager/engine.py:825
 #, fuzzy
 msgid "Saving virtual machine memory to disk "
 msgstr "ভাৰ্চুৱেল যন্ত্ৰ সংৰক্ষণ কৰা হৈছে"
 
-#: ../src/virtManager/engine.py:838
+#: ../src/virtManager/engine.py:831
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "ডোমেইন সংৰক্ষণ কৰোঁতে ব্যৰ্থ: %s"
 
-#: ../src/virtManager/engine.py:850
+#: ../src/virtManager/engine.py:843
 #, fuzzy, python-format
 msgid "Error cancelling save job: %s"
 msgstr "আয়তন নিৰ্মাণ কৰোঁতে ত্ৰুটি: %s"
 
-#: ../src/virtManager/engine.py:867
+#: ../src/virtManager/engine.py:860
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr "দূৰবৰ্তী সংযোগ মাধ্যমত ভাৰ্চুৱেল যন্ত্ৰ পুনৰুদ্ধাৰৰ প্ৰক্ৰিয়া বৰ্তমানে সমৰ্থিত নহয়"
 
-#: ../src/virtManager/engine.py:872
+#: ../src/virtManager/engine.py:865
 msgid "Restore Virtual Machine"
 msgstr "ভাৰ্চুৱেল যন্ত্ৰ পুনঃ স্থাপন কৰক"
 
-#: ../src/virtManager/engine.py:881 ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
 msgid "Restoring Virtual Machine"
 msgstr "ভাৰ্চুৱেল যন্ত্ৰ পুনৰুদ্ধাৰ কৰা হৈছে"
 
-#: ../src/virtManager/engine.py:882 ../src/virtManager/engine.py:970
+#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
 #, fuzzy
 msgid "Restoring virtual machine memory from disk"
 msgstr "ভাৰ্চুৱেল যন্ত্ৰ পুনৰুদ্ধাৰ কৰা হৈছে"
 
-#: ../src/virtManager/engine.py:886
+#: ../src/virtManager/engine.py:879
 #, fuzzy, python-format
 msgid "Error restoring domain: %s"
 msgstr "ডোমেইন পুনঃ প্ৰতিষ্ঠা কৰোঁতে ব্যৰ্থ"
 
-#: ../src/virtManager/engine.py:901
+#: ../src/virtManager/engine.py:894
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "আপুনি নিশ্চিতৰূপে '%s' আঁতৰাবলৈ ইচ্ছুক নে ?"
 
-#: ../src/virtManager/engine.py:903
+#: ../src/virtManager/engine.py:896
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -1875,50 +1875,50 @@ msgstr ""
 "ইয়াৰ ফলত কাৰ্যকৰপ্ৰণালী সঠিকৰূপে বন্ধ নকৰি VM তৎক্ষনাৎ বন্ধ কৰা হ'ব আৰু তথ্য "
 "ক্ষতিগ্ৰস্ত হ'ব পাৰে  । আপুনি নিশ্চিত নে?"
 
-#: ../src/virtManager/engine.py:917 ../src/virtManager/engine.py:1000
+#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "ডোমেইন বন্ধ কৰোঁতে ব্যৰ্থ: %s"
 
-#: ../src/virtManager/engine.py:927
+#: ../src/virtManager/engine.py:920
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "আপুনি নিশ্চিতৰূপে '%s' ব্যৱহাৰ কৰিবলৈ ইচ্ছুক নে ?"
 
-#: ../src/virtManager/engine.py:941
+#: ../src/virtManager/engine.py:934
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "ডোমেইন স্থগিত কৰোঁতে ব্যৰ্থ: %s"
 
-#: ../src/virtManager/engine.py:952
+#: ../src/virtManager/engine.py:945
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "স্থগিত ডোমেইন পুনৰাৰম্ভ কৰোঁতে সমস্যা: %s"
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:968
+#: ../src/virtManager/engine.py:961
 msgid "Error restoring domain"
 msgstr "ডোমেইন পুনঃ প্ৰতিষ্ঠা কৰোঁতে ব্যৰ্থ"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:976
+#: ../src/virtManager/engine.py:969
 #, fuzzy
 msgid "Error starting domain"
 msgstr "ডোমেইন আৰম্ভ কৰোঁতে ব্যৰ্থ: %s"
 
-#: ../src/virtManager/engine.py:986
+#: ../src/virtManager/engine.py:979
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "আপুনি নিশ্চিতৰূপে '%s' আঁতৰাবলৈ ইচ্ছুক নে ?"
 
-#: ../src/virtManager/engine.py:1010
+#: ../src/virtManager/engine.py:1003
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "আপুনি নিশ্চিতৰূপে '%s' আঁতৰাবলৈ ইচ্ছুক নে ?"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1028 ../src/virtManager/engine.py:1043
+#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
 #, fuzzy, python-format
 msgid "Error rebooting domain: %s"
 msgstr "ডোমেইন আৰম্ভ কৰোঁতে ব্যৰ্থ: %s"

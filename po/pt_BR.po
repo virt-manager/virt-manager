@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 11:04-0500\n"
+"POT-Creation-Date: 2011-01-14 15:27-0500\n"
 "PO-Revision-Date: 2008-11-06 11:39-0300\n"
 "Last-Translator: Taylon <taylonsilva@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <fedora-trans-pt_br@redhat.com>\n"
@@ -31,13 +31,13 @@ msgstr "Gerencie máquinas virtuais"
 msgid "Virtual Machine Manager"
 msgstr "Gerenciador de Máquinas Virtuais"
 
-#: ../src/virt-manager.py.in:68
+#: ../src/virt-manager.py.in:74
 msgid "Error starting Virtual Machine Manager"
 msgstr "Erro ao iniciar o Gerenciador de Máquina Virtual"
 
 #. ...the risk is we catch too much though
 #. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:340
+#: ../src/virt-manager.py.in:346
 #, fuzzy, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "Não foi possível inicializar o GTK: "
@@ -799,21 +799,21 @@ msgstr "Erro ao alterar o valor de inicialização automática: %s"
 msgid "Error opening socket path '%s'"
 msgstr "Erro ao alterar o valor de inicialização automática: %s"
 
-#: ../src/virtManager/console.py:542
+#: ../src/virtManager/console.py:543
 #, fuzzy, python-format
 msgid "Press %s to release pointer."
 msgstr "Pressione Ctrl+Alt para liberar o ponteiro."
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:705 ../src/virtManager/console.py:858
+#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
 msgid "Guest not running"
 msgstr "O convidado não está em execução"
 
-#: ../src/virtManager/console.py:708
+#: ../src/virtManager/console.py:709
 msgid "Guest has crashed"
 msgstr "O Convidado falhou"
 
-#: ../src/virtManager/console.py:811
+#: ../src/virtManager/console.py:819
 #, fuzzy
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
@@ -821,27 +821,27 @@ msgstr ""
 "Erro no TCP/IP: A conexão VNC do hipervisor hospedeiro foi recusada ou "
 "perdida!"
 
-#: ../src/virtManager/console.py:875
+#: ../src/virtManager/console.py:893
 #, fuzzy
 msgid "Graphical console not configured for guest"
 msgstr "Console não configurado para o convidado"
 
-#: ../src/virtManager/console.py:882
+#: ../src/virtManager/console.py:900
 #, fuzzy, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Não foi possível acessar o caminho '%s' do console."
 
-#: ../src/virtManager/console.py:892
+#: ../src/virtManager/console.py:910
 #, fuzzy
 msgid "Graphical console is not yet active for guest"
 msgstr "O console ainda não esta ativo para o convidado"
 
-#: ../src/virtManager/console.py:907
+#: ../src/virtManager/console.py:915
 #, fuzzy
 msgid "Connecting to graphical console for guest"
 msgstr "Conectando ao console do convidado"
 
-#: ../src/virtManager/console.py:933
+#: ../src/virtManager/console.py:951
 #, fuzzy
 msgid "Error connecting to graphical console"
 msgstr "Conectando ao console do convidado"
@@ -1566,9 +1566,9 @@ msgstr "Erro ao alterar o valor de inicialização automática: %s"
 msgid "Are you sure you want to remove this device?"
 msgstr "Você realmente deseja remover este dispositivo?"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:805
-#: ../src/virtManager/engine.py:905 ../src/virtManager/engine.py:929
-#: ../src/virtManager/engine.py:988 ../src/virtManager/engine.py:1012
+#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
+#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
+#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
 msgid "Don't ask me again."
 msgstr ""
 
@@ -1751,11 +1751,11 @@ msgstr "Erro ao salvar o domínio: %s"
 msgid "Migrating domain"
 msgstr "Erro ao iniciar o domínio: %s"
 
-#: ../src/virtManager/engine.py:107 ../src/virtManager/engine.py:108
+#: ../src/virtManager/engine.py:91 ../src/virtManager/engine.py:92
 msgid "Searching for available hypervisors..."
 msgstr ""
 
-#: ../src/virtManager/engine.py:130
+#: ../src/virtManager/engine.py:114
 #, python-format
 msgid ""
 "The following packages are not installed:\n"
@@ -1765,17 +1765,17 @@ msgid ""
 "Would you like to install them now?"
 msgstr ""
 
-#: ../src/virtManager/engine.py:135
+#: ../src/virtManager/engine.py:119
 msgid "Packages required for KVM usage"
 msgstr ""
 
-#: ../src/virtManager/engine.py:144
+#: ../src/virtManager/engine.py:128
 #, fuzzy, python-format
 msgid "Error talking to PackageKit: %s"
 msgstr "Erro ao iniciar o domínio: %s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:294
+#: ../src/virtManager/engine.py:284
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1786,7 +1786,7 @@ msgid ""
 "added via File->Add Connection"
 msgstr ""
 
-#: ../src/virtManager/engine.py:325
+#: ../src/virtManager/engine.py:318
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1800,62 +1800,62 @@ msgid ""
 "start up."
 msgstr ""
 
-#: ../src/virtManager/engine.py:333
+#: ../src/virtManager/engine.py:326
 #, fuzzy
 msgid "Libvirt service must be started"
 msgstr "O caminho da mídia deve ser especificado."
 
-#: ../src/virtManager/engine.py:534
+#: ../src/virtManager/engine.py:527
 #, fuzzy, python-format
 msgid "Unknown connection URI %s"
 msgstr "Abrir conexão"
 
-#: ../src/virtManager/engine.py:547
+#: ../src/virtManager/engine.py:540
 #, fuzzy, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "Erro ao executar o assistente de volume: %s"
 
-#: ../src/virtManager/engine.py:559
+#: ../src/virtManager/engine.py:552
 #, fuzzy, python-format
 msgid "Unable to display documentation: %s"
 msgstr "Não foi possível inicializar o GTK: "
 
-#: ../src/virtManager/engine.py:575
+#: ../src/virtManager/engine.py:568
 #, fuzzy, python-format
 msgid "Error launching preferences: %s"
 msgstr "Erro ao executar o assistente de rede: %s"
 
-#: ../src/virtManager/engine.py:595
+#: ../src/virtManager/engine.py:588
 #, fuzzy, python-format
 msgid "Error launching host dialog: %s"
 msgstr "Erro ao executar o assistente de volume: %s"
 
-#: ../src/virtManager/engine.py:615
+#: ../src/virtManager/engine.py:608
 #, fuzzy, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "Erro ao executar o assistente de volume: %s"
 
-#: ../src/virtManager/engine.py:648
+#: ../src/virtManager/engine.py:641
 #, fuzzy, python-format
 msgid "Error launching details: %s"
 msgstr "Erro ao executar o assistente de rede: %s"
 
-#: ../src/virtManager/engine.py:699 ../src/virtManager/engine.py:716
+#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
 #, fuzzy, python-format
 msgid "Error launching manager: %s"
 msgstr "Erro ao executar o assistente de volume: %s"
 
-#: ../src/virtManager/engine.py:730
+#: ../src/virtManager/engine.py:723
 #, fuzzy, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "Erro ao executar o assistente de volume: %s"
 
-#: ../src/virtManager/engine.py:748
+#: ../src/virtManager/engine.py:741
 #, fuzzy, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "Erro ao configurar a inicialização automática da rede: %s"
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:789
 #, fuzzy
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
@@ -1863,63 +1863,63 @@ msgid ""
 msgstr ""
 "O salvamento de máquinas virtuais por conexões remotas ainda não é suportado"
 
-#: ../src/virtManager/engine.py:803
+#: ../src/virtManager/engine.py:796
 #, fuzzy, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "Você realmente deseja usar esse endereço?"
 
-#: ../src/virtManager/engine.py:816
+#: ../src/virtManager/engine.py:809
 msgid "Save Virtual Machine"
 msgstr "Salvar máquina virtual"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:824
 msgid "Saving Virtual Machine"
 msgstr "Salvando máquina virtual"
 
-#: ../src/virtManager/engine.py:832
+#: ../src/virtManager/engine.py:825
 #, fuzzy
 msgid "Saving virtual machine memory to disk "
 msgstr "Salvando máquina virtual"
 
-#: ../src/virtManager/engine.py:838
+#: ../src/virtManager/engine.py:831
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "Erro ao salvar o domínio: %s"
 
-#: ../src/virtManager/engine.py:850
+#: ../src/virtManager/engine.py:843
 #, fuzzy, python-format
 msgid "Error cancelling save job: %s"
 msgstr "Erro ao criar o volume: %s"
 
-#: ../src/virtManager/engine.py:867
+#: ../src/virtManager/engine.py:860
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr ""
 "A restauração de máquinas virtuais ainda não é suportada em conexões remotas"
 
-#: ../src/virtManager/engine.py:872
+#: ../src/virtManager/engine.py:865
 msgid "Restore Virtual Machine"
 msgstr "Restaurar máquina virtual"
 
-#: ../src/virtManager/engine.py:881 ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
 msgid "Restoring Virtual Machine"
 msgstr "Restaurando máquina virtual"
 
-#: ../src/virtManager/engine.py:882 ../src/virtManager/engine.py:970
+#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
 #, fuzzy
 msgid "Restoring virtual machine memory from disk"
 msgstr "Restaurando máquina virtual"
 
-#: ../src/virtManager/engine.py:886
+#: ../src/virtManager/engine.py:879
 #, fuzzy, python-format
 msgid "Error restoring domain: %s"
 msgstr "Erro ao iniciar o domínio: %s"
 
-#: ../src/virtManager/engine.py:901
+#: ../src/virtManager/engine.py:894
 #, fuzzy, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Você realmente deseja remover este dispositivo?"
 
-#: ../src/virtManager/engine.py:903
+#: ../src/virtManager/engine.py:896
 #, fuzzy
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
@@ -1928,51 +1928,51 @@ msgstr ""
 "Isso irá desligar imediatamente a MV sem encerrar o SO, isso pode causar "
 "perda de dados. Você tem certeza?"
 
-#: ../src/virtManager/engine.py:917 ../src/virtManager/engine.py:1000
+#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "Erro ao desligar o domínio: %s"
 
-#: ../src/virtManager/engine.py:927
+#: ../src/virtManager/engine.py:920
 #, fuzzy, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Você realmente deseja usar esse endereço?"
 
-#: ../src/virtManager/engine.py:941
+#: ../src/virtManager/engine.py:934
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "Erro ao pausar o domínio: %s"
 
-#: ../src/virtManager/engine.py:952
+#: ../src/virtManager/engine.py:945
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "Erro ao despausar o domínio: %s"
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:968
+#: ../src/virtManager/engine.py:961
 #, fuzzy
 msgid "Error restoring domain"
 msgstr "Erro ao iniciar o domínio: %s"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:976
+#: ../src/virtManager/engine.py:969
 #, fuzzy
 msgid "Error starting domain"
 msgstr "Erro ao iniciar o domínio: %s"
 
-#: ../src/virtManager/engine.py:986
+#: ../src/virtManager/engine.py:979
 #, fuzzy, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Você realmente deseja remover este dispositivo?"
 
-#: ../src/virtManager/engine.py:1010
+#: ../src/virtManager/engine.py:1003
 #, fuzzy, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "Você realmente deseja remover este dispositivo?"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1028 ../src/virtManager/engine.py:1043
+#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
 #, fuzzy, python-format
 msgid "Error rebooting domain: %s"
 msgstr "Erro ao iniciar o domínio: %s"
