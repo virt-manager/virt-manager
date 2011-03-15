@@ -512,7 +512,9 @@ class vmmDomainBase(vmmLibvirtObject):
         return self._get_guest().clock.offset
 
     def get_description(self):
-        return self._get_guest().description
+        # Always show the inactive <description>, let's us fake hotplug
+        # for a field that's strictly metadata
+        return self._get_guest(inactive=True).description
 
     def get_memory(self):
         return int(self._get_guest().memory * 1024)
