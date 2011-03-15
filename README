@@ -40,7 +40,7 @@ please report any success to the mailing lists
 
 The latter is available from
 
-http://hg.et.redhat.com/virt/applications/virtinst--devel
+http://git.fedorahosted.org/git/python-virtinst.git
 
 Contact
 -------
@@ -71,16 +71,18 @@ Patches should be submitted either as unified diffs:
    diff -ruN virt-manager-X.Y.Z virt-manager-X.Y.Z-myfeature \
       > myfeature.patch
 
-Alternatively use Mercurial and submit a changeset bundle against
-the main source repository:
+Alternatively use git and submit a diff against the main source repository:
 
-   hg clone  http://hg.et.redhat.com/virt/applications/virt-manager--devel
+   git clone git://git.fedorahosted.org/git/virt-manager.git
    cd virt-manager--devel
-   ... make some changes & commit them locally...
-   hg export -r my_feature_revision > my_feature.patch
+   ... make your changes ...
+   git commit -a -m "Some changelog message"
+   git show > my_feature.patch
 
 Then mail the 'myfeature.patch' file to the virt-tools-list@redhat.com list,
 with [PATCH] and a brief description in the subject.
+
+Using git format-patch and/or git send-email is also fine.
 
 Related software
 ----------------
