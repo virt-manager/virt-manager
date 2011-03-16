@@ -375,6 +375,12 @@ class vmmDetails(vmmGObjectUI):
 
             "on_network_model_combo_changed": self.config_enable_apply,
 
+            "on_virtualport-type_changed": self.config_enable_apply,
+            "on_virtualport-managerid_changed": self.config_enable_apply,
+            "on_virtualport-typeid_changed": self.config_enable_apply,
+            "on_virtualport-typeidversion_changed": self.config_enable_apply,
+            "on_virtualport-instanceid_changed": self.config_enable_apply,
+
             "on_vnc_keymap_combo_changed": self.config_enable_apply,
             "on_vnc_password_changed": self.config_enable_apply,
 
@@ -1713,8 +1719,19 @@ class vmmDetails(vmmGObjectUI):
     # Network options
     def config_network_apply(self, dev_id_info):
         model = self.get_combo_label_value("network-model")
-        return self._change_config_helper(self.vm.define_network_model,
-                                          (dev_id_info, model))
+        virtualport_type = self.window.get_widget("virtualport-type").get_text()
+        virtualport_managerid = self.window.get_widget("virtualport-managerid").get_text()
+        virtualport_typeid = self.window.get_widget("virtualport-typeid").get_text()
+        virtualport_typeidversion = self.window.get_widget("virtualport-typeidversion").get_text()
+        virtualport_instanceid = self.window.get_widget("virtualport-instanceid").get_text()
+        return self._change_config_helper([self.vm.define_network_model,
+                                          self.vm.define_virtualport],
+                                          [(dev_id_info, model),
+                                          (dev_id_info, virtualport_type,
+                                          virtualport_managerid,
+                                          virtualport_typeid,
+                                          virtualport_typeidversion,
+                                          virtualport_instanceid)])
 
     # Graphics options
     def config_graphics_apply(self, dev_id_info):
@@ -2186,6 +2203,21 @@ class vmmDetails(vmmGObjectUI):
 
         self.window.get_widget("network-mac-address").set_text(net.macaddr)
         self.window.get_widget("network-source-device").set_text(desc)
+
+        if nettype == "direct":
+            self.window.get_widget("virtualport-type").set_text(net.virtualport.type)
+            self.window.get_widget("virtualport-managerid").set_text(net.virtualport.managerid)
+            self.window.get_widget("virtualport-typeid").set_text(net.virtualport.typeid)
+            self.window.get_widget("virtualport-typeidversion").set_text(net.virtualport.typeidversion)
+            self.window.get_widget("virtualport-instanceid").set_text(net.virtualport.instanceid)
+            self.window.get_widget("virtualport-expander").set_property("visible", True)
+        else:
+            self.window.get_widget("virtualport-type").set_text("")
+            self.window.get_widget("virtualport-managerid").set_text("")
+            self.window.get_widget("virtualport-typeid").set_text("")
+            self.window.get_widget("virtualport-typeidversion").set_text("")
+            self.window.get_widget("virtualport-instanceid").set_text("")
+            self.window.get_widget("virtualport-expander").hide()
 
         uihelpers.populate_netmodel_combo(self.vm,
                             self.window.get_widget("network-model-combo"))

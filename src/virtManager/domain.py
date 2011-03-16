@@ -404,6 +404,15 @@ class vmmDomainBase(vmmLibvirtObject):
             editdev.model = newmodel
         return self._redefine_device(change, devobj)
 
+    def define_virtualport(self, devobj, newtype, newmanagerid, newtypeid, newtypeidversion, newinstanceid):
+        def change(editdev):
+            editdev.virtualport.type = newtype or None
+            editdev.virtualport.managerid = newmanagerid or None
+            editdev.virtualport.typeid = newtypeid or None
+            editdev.virtualport.typeidversion = newtypeidversion or None
+            editdev.virtualport.instanceid = newinstanceid or None
+        return self._redefine_device(change, devobj)
+
     def define_graphics_password(self, devobj, newval):
         def change(editdev):
             editdev.passwd = newval or None
