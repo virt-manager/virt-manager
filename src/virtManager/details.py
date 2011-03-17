@@ -373,6 +373,8 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_bus_combo_changed": self.config_enable_apply,
             "on_disk_format_changed": self.config_enable_apply,
 
+            "on_network_source_combo_changed": self.config_enable_apply,
+            "on_network_bridge_changed": self.config_enable_apply,
             "on_network_model_combo_changed": self.config_enable_apply,
 
             "on_vport_type_changed": self.config_enable_apply,
@@ -722,6 +724,11 @@ class vmmDetails(vmmGObjectUI):
         disk_bus = self.window.get_widget("disk-bus-combo")
         uihelpers.build_disk_bus_combo(self.vm, disk_bus)
 
+        # Network source
+        net_source = self.window.get_widget("network-source-combo")
+        net_bridge = self.window.get_widget("network-bridge-box")
+        uihelpers.init_network_list(net_source, net_bridge)
+
         # Network model
         net_model = self.window.get_widget("network-model-combo")
         uihelpers.build_netmodel_combo(self.vm, net_model)
@@ -764,19 +771,29 @@ class vmmDetails(vmmGObjectUI):
 
     # Helper function to handle the combo/label pattern used for
     # video model, sound model, network model, etc.
-    def set_combo_label(self, prefix, value, model_idx=0, label=""):
+    def set_combo_label(self, prefix, value, model_idx=0, label="",
+                        comparefunc=None):
         label = label or value
         model_label = self.window.get_widget(prefix + "-label")
         model_combo = self.window.get_widget(prefix + "-combo")
-        model_list = map(lambda x: x[model_idx], model_combo.get_model())
-        model_in_list = (value in model_list)
+
+        idx = -1
+        if comparefunc:
+            model_in_list, idx = comparefunc(model_combo.get_model(), value)
+        else:
+            model_list = map(lambda x: x[model_idx], model_combo.get_model())
+            model_in_list = (value in model_list)
+            if model_in_list:
+                idx = model_list.index(value)
 
         model_label.set_property("visible", not model_in_list)
         model_combo.set_property("visible", model_in_list)
         model_label.set_text(label or "")
 
         if model_in_list:
-            model_combo.set_active(model_list.index(value))
+            model_combo.set_active(idx)
+        else:
+            model_combo.set_active(-1)
 
     # Helper for accessing value of combo/label pattern
     def get_combo_value(self, widgetname, model_idx=0):
@@ -1733,21 +1750,28 @@ class vmmDetails(vmmGObjectUI):
 
     # Network options
     def config_network_apply(self, dev_id_info):
+        net_list = self.window.get_widget("network-source-combo")
+        net_bridge = self.window.get_widget("network-bridge")
+        nettype, source = uihelpers.get_network_selection(net_list, net_bridge)
+
         model = self.get_combo_label_value("network-model")
+
         vport_type = self.window.get_widget("vport-type").get_text()
         vport_managerid = self.window.get_widget("vport-managerid").get_text()
         vport_typeid = self.window.get_widget("vport-typeid").get_text()
-        vport_typeidversion = self.window.get_widget("vport-typeidversion").get_text()
-        vport_instanceid = self.window.get_widget("vport-instanceid").get_text()
+        vport_idver = self.window.get_widget("vport-typeidversion").get_text()
+        vport_instid = self.window.get_widget("vport-instanceid").get_text()
 
         return self._change_config_helper([self.vm.define_network_model,
-                                          self.vm.define_virtualport],
+                                          self.vm.define_virtualport,
+                                          self.vm.define_network_source],
                                           [(dev_id_info, model),
                                           (dev_id_info, vport_type,
                                           vport_managerid,
                                           vport_typeid,
-                                          vport_typeidversion,
-                                          vport_instanceid)])
+                                          vport_idver,
+                                          vport_instid),
+                                          (dev_id_info, nettype, source)])
 
     # Graphics options
     def config_graphics_apply(self, dev_id_info):
@@ -2221,7 +2245,28 @@ class vmmDetails(vmmGObjectUI):
         desc = uihelpers.pretty_network_desc(nettype, source, netobj)
 
         self.window.get_widget("network-mac-address").set_text(net.macaddr)
-        self.window.get_widget("network-source-device").set_text(desc)
+        uihelpers.populate_network_list(
+                    self.window.get_widget("network-source-combo"),
+                    self.conn)
+        self.window.get_widget("network-source-combo").set_active(-1)
+
+        self.window.get_widget("network-bridge").set_text("")
+        def compare_network(model, info):
+            for idx in range(len(model)):
+                row = model[idx]
+                if row[0] == info[0] and row[1] == info[1]:
+                    return True, idx
+
+            if info[0] == virtinst.VirtualNetworkInterface.TYPE_BRIDGE:
+                idx = (len(model) - 1)
+                self.window.get_widget("network-bridge").set_text(str(info[1]))
+                return True, idx
+
+            return False, 0
+
+        self.set_combo_label("network-source",
+                             (nettype, source), label=desc,
+                             comparefunc=compare_network)
 
         # Virtualport config
         show_vport = (nettype == "direct")

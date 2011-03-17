@@ -332,24 +332,31 @@ def net_list_changed(net_list, bridge_box):
     if active < 0:
         return
 
+    if not bridge_box:
+        return
+
     row = net_list.get_model()[active]
     show_bridge = row[5]
 
     bridge_box.set_property("visible", show_bridge)
 
 def get_network_selection(net_list, bridge_entry):
+    idx = net_list.get_active()
+    if idx == -1:
+        return None, None
+
     row = net_list.get_model()[net_list.get_active()]
     net_type = row[0]
     net_src = row[1]
     net_check_bridge = row[5]
 
-    if net_check_bridge:
+    if net_check_bridge and bridge_entry:
         net_type = VirtualNetworkInterface.TYPE_BRIDGE
         net_src = bridge_entry.get_text()
 
     return net_type, net_src
 
-def populate_network_list(net_list, conn):
+def populate_network_list(net_list, conn, show_manual_bridge=True):
     model = net_list.get_model()
     model.clear()
 
@@ -477,10 +484,11 @@ def populate_network_list(net_list, conn):
         model.insert(0, row)
         default = 0
 
-    # After all is said and done, add a manual bridge option
-    manual_row = build_row(None, None, _("Specify shared device name"),
-                           True, False, manual_bridge=True)
-    model.append(manual_row)
+    if show_manual_bridge:
+        # After all is said and done, add a manual bridge option
+        manual_row = build_row(None, None, _("Specify shared device name"),
+                               True, False, manual_bridge=True)
+        model.append(manual_row)
 
     set_active(default)
     return return_warn

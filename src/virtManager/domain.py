@@ -399,6 +399,14 @@ class vmmDomainBase(vmmLibvirtObject):
             editdev.bus = newval
         return self._redefine_device(change, devobj)
 
+    def define_network_source(self, devobj, newtype, newsource):
+        def change(editdev):
+            if not newtype:
+                return
+            editdev.source = None
+            editdev.type = newtype
+            editdev.source = newsource
+        return self._redefine_device(change, devobj)
     def define_network_model(self, devobj, newmodel):
         def change(editdev):
             editdev.model = newmodel
