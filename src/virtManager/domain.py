@@ -309,7 +309,7 @@ class vmmDomainBase(vmmLibvirtObject):
             cpu.cores = cores
             cpu.threads = threads
         return self._redefine_guest(change)
-    def define_cpu(self, model, vendor, from_host):
+    def define_cpu(self, model, vendor, from_host, featurelist):
         def change(guest):
             if from_host:
                 guest.cpu.copy_host_cpu()
@@ -318,6 +318,17 @@ class vmmDomainBase(vmmLibvirtObject):
                 # caps value
                 guest.cpu.vendor = vendor
             guest.cpu.model = model or None
+
+            # Sync feature lists
+            origfeatures = guest.cpu.features
+            for f in origfeatures:
+                if f.name not in featurelist:
+                    guest.cpu.remove_feature(f)
+                else:
+                    featurelist.remove(f.name)
+            for f in featurelist:
+                guest.cpu.add_feature(f)
+
         return self._redefine_guest(change)
 
     def define_both_mem(self, memory, maxmem):

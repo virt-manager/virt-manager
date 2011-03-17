@@ -691,18 +691,50 @@ class vmmDetails(vmmGObjectUI):
 
         no_default = not self.is_customize_dialog
 
-        # CPU model combo
+        # CPU features
         caps = self.vm.get_connection().get_capabilities()
         cpu_values = None
         cpu_names = []
+        all_features = []
 
         try:
             cpu_values = caps.get_cpu_values(self.vm.get_arch())
             cpu_names = sorted(map(lambda c: c.model, cpu_values.cpus),
                                key=str.lower)
+            all_features = cpu_values.features
         except:
             logging.exception("Error populating CPU model list")
 
+        # [ feature name, enabled? ]
+        feat_list = self.window.get_widget("cpu-features")
+        feat_model = gtk.ListStore(str, bool)
+        feat_list.set_model(feat_model)
+
+        nameCol = gtk.TreeViewColumn()
+        chkCol = gtk.TreeViewColumn()
+
+        feat_list.append_column(nameCol)
+        feat_list.append_column(chkCol)
+
+        name_text = gtk.CellRendererText()
+        nameCol.pack_start(name_text, True)
+        nameCol.add_attribute(name_text, 'text', 0)
+        nameCol.set_sort_column_id(0)
+
+        feat_toggle = gtk.CellRendererToggle()
+        chkCol.pack_start(feat_toggle, True)
+        chkCol.add_attribute(feat_toggle, 'active', 1)
+        chkCol.set_sort_column_id(1)
+
+        def feature_changed(src, index, model):
+            model[index][1] = not src.get_active()
+            self.config_enable_apply()
+
+        feat_toggle.connect("toggled", feature_changed, feat_model)
+        for name in all_features:
+            feat_model.append([name, False])
+
+        # CPU model combo
         cpu_model = self.window.get_widget("cpu-model")
 
         model = gtk.ListStore(str, object)
@@ -1318,6 +1350,16 @@ class vmmDetails(vmmGObjectUI):
 
         return model, None
 
+    def get_config_cpu_features(self):
+        feature_list = self.window.get_widget("cpu-features")
+        ret = []
+
+        for row in feature_list.get_model():
+            if row[1]:
+                ret.append(row[0])
+
+        return ret
+
     ##############################
     # Details/Hardware listeners #
     ##############################
@@ -1611,6 +1653,7 @@ class vmmDetails(vmmGObjectUI):
         cores = self.window.get_widget("cpu-cores").get_value()
         threads = self.window.get_widget("cpu-threads").get_value()
         model, vendor = self.get_config_cpu_model()
+        features = self.get_config_cpu_features()
 
         logging.info("Setting vcpus for %s to %s, cpuset is %s" %
                      (self.vm.get_name(), str(vcpus), cpuset))
@@ -1626,7 +1669,7 @@ class vmmDetails(vmmGObjectUI):
                         self.vm.define_cpu_topology]
         define_args  = [(vcpus, maxv),
                         (cpuset,),
-                        (model, vendor, self._cpu_copy_host),
+                        (model, vendor, self._cpu_copy_host, features),
                         (sockets, cores, threads)]
 
         ret = self._change_config_helper(define_funcs, define_args,
@@ -2121,6 +2164,7 @@ class vmmDetails(vmmGObjectUI):
             vcpu_model.append([vcpu, vcpucur, vcpupin])
 
     def _refresh_cpu_config(self, cpu):
+        feature_ui = self.window.get_widget("cpu-features")
         model = cpu.model or ""
 
         show_top = bool(cpu.sockets or cpu.cores or cpu.threads)
@@ -2133,6 +2177,15 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("cpu-sockets").set_value(sockets)
         self.window.get_widget("cpu-cores").set_value(cores)
         self.window.get_widget("cpu-threads").set_value(threads)
+
+        def has_feature(name):
+            for f in cpu.features:
+                if f.name == name:
+                    return True
+            return False
+
+        for row in feature_ui.get_model():
+            row[1] = has_feature(row[0])
 
     def refresh_config_cpu(self):
         self._cpu_copy_host = False

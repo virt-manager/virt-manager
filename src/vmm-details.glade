@@ -2032,8 +2032,9 @@ I/O:</property>
                                         <property name="left_padding">21</property>
                                         <property name="right_padding">12</property>
                                         <child>
-                                          <widget class="GtkHBox" id="hbox20">
+                                          <widget class="GtkVBox" id="vbox220">
                                             <property name="visible">True</property>
+                                            <property name="spacing">6</property>
                                             <child>
                                               <widget class="GtkTable" id="table15">
                                                 <property name="visible">True</property>
@@ -2135,10 +2136,62 @@ I/O:</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkAlignment" id="alignment32">
+                                              <widget class="GtkExpander" id="cpu-features-expander">
                                                 <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
                                                 <child>
-                                                  <placeholder/>
+                                                  <widget class="GtkAlignment" id="alignment29">
+                                                    <property name="visible">True</property>
+                                                    <property name="left_padding">21</property>
+                                                    <child>
+                                                      <widget class="GtkHBox" id="hbox19">
+                                                        <property name="visible">True</property>
+                                                        <property name="spacing">6</property>
+                                                        <child>
+                                                          <widget class="GtkScrolledWindow" id="scrolledwindow4">
+                                                            <property name="height_request">150</property>
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="hscrollbar_policy">never</property>
+                                                            <property name="vscrollbar_policy">automatic</property>
+                                                            <property name="shadow_type">etched-in</property>
+                                                            <child>
+                                                            <widget class="GtkTreeView" id="cpu-features">
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="headers_visible">False</property>
+                                                            </widget>
+                                                            </child>
+                                                          </widget>
+                                                          <packing>
+                                                            <property name="expand">False</property>
+                                                            <property name="position">0</property>
+                                                          </packing>
+                                                        </child>
+                                                        <child>
+                                                          <widget class="GtkAlignment" id="alignment32">
+                                                            <property name="visible">True</property>
+                                                            <child>
+                                                            <placeholder/>
+                                                            </child>
+                                                          </widget>
+                                                          <packing>
+                                                            <property name="position">1</property>
+                                                          </packing>
+                                                        </child>
+                                                      </widget>
+                                                    </child>
+                                                  </widget>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="label5">
+                                                    <property name="visible">True</property>
+                                                    <property name="label" translatable="yes">&lt;b&gt;CPU Features&lt;/b&gt;</property>
+                                                    <property name="use_markup">True</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="type">label_item</property>
+                                                  </packing>
                                                 </child>
                                               </widget>
                                               <packing>
