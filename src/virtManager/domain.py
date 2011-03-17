@@ -404,7 +404,8 @@ class vmmDomainBase(vmmLibvirtObject):
             editdev.model = newmodel
         return self._redefine_device(change, devobj)
 
-    def define_virtualport(self, devobj, newtype, newmanagerid, newtypeid, newtypeidversion, newinstanceid):
+    def define_virtualport(self, devobj, newtype, newmanagerid,
+                           newtypeid, newtypeidversion, newinstanceid):
         def change(editdev):
             editdev.virtualport.type = newtype or None
             editdev.virtualport.managerid = newmanagerid or None
