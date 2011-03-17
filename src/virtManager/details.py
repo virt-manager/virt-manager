@@ -750,7 +750,7 @@ class vmmDetails(vmmGObjectUI):
 
     # Helper function to handle the combo/label pattern used for
     # video model, sound model, network model, etc.
-    def set_combo_label(self, prefix, model_idx, value):
+    def set_combo_label(self, prefix, value, model_idx=0):
         model_label = self.window.get_widget(prefix + "-label")
         model_combo = self.window.get_widget(prefix + "-combo")
         model_list = map(lambda x: x[model_idx], model_combo.get_model())
@@ -762,6 +762,25 @@ class vmmDetails(vmmGObjectUI):
 
         if model_in_list:
             model_combo.set_active(model_list.index(value))
+
+    # Helper for accessing value of combo/label pattern
+    def get_combo_value(self, widgetname, model_idx=0):
+        combo = self.window.get_widget(widgetname)
+        if combo.get_active() < 0:
+            return None
+        return combo.get_model()[combo.get_active()][model_idx]
+
+    def get_combo_label_value(self, prefix, model_idx=0):
+        comboname = prefix + "-combo"
+        label = self.window.get_widget(prefix + "-label")
+        value = None
+
+        if label.get_property("visible"):
+            value = label.get_text()
+        else:
+            value = self.get_combo_value(comboname, model_idx)
+
+        return value
 
     ##########################
     # Window state listeners #
@@ -1511,25 +1530,6 @@ class vmmDetails(vmmGObjectUI):
         if ret is not False:
             self.window.get_widget("config-apply").set_sensitive(False)
 
-    # Helper for accessing value of combo/label pattern
-    def get_combo_label_value(self, prefix, model_idx=0):
-        comboname = prefix + "-combo"
-        label = self.window.get_widget(prefix + "-label")
-        value = None
-
-        if label.get_property("visible"):
-            value = label.get_text()
-        else:
-            value = self.get_combo_value(comboname, model_idx)
-
-        return value
-
-    def get_combo_value(self, widgetname, model_idx=0):
-        combo = self.window.get_widget(widgetname)
-        if combo.get_active() < 0:
-            return None
-        return combo.get_model()[combo.get_active()][model_idx]
-
     # Overview section
     def config_overview_apply(self):
         # Machine details
@@ -1947,7 +1947,7 @@ class vmmDetails(vmmGObjectUI):
 
         if not clock:
             clock = _("Same as host")
-        self.set_combo_label("overview-clock", 0, clock)
+        self.set_combo_label("overview-clock", clock)
 
         # Security details
         semodel, ignore, vmlabel = self.vm.get_seclabel()
@@ -2158,7 +2158,7 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("disk-readonly").set_sensitive(not is_cdrom)
         self.window.get_widget("disk-shareable").set_active(share)
         self.window.get_widget("disk-size").set_text(size)
-        self.set_combo_label("disk-cache", 0, cache)
+        self.set_combo_label("disk-cache", cache)
 
         self.window.get_widget("disk-format").set_sensitive(show_format)
         self.window.get_widget("disk-format").child.set_text(driver_type)
@@ -2166,7 +2166,7 @@ class vmmDetails(vmmGObjectUI):
         no_default = not self.is_customize_dialog
 
         self.populate_disk_bus_combo(devtype, no_default)
-        self.set_combo_label("disk-bus", 0, bus)
+        self.set_combo_label("disk-bus", bus)
 
         button = self.window.get_widget("config-cdrom-connect")
         if is_cdrom or is_floppy:
@@ -2221,7 +2221,7 @@ class vmmDetails(vmmGObjectUI):
 
         uihelpers.populate_netmodel_combo(self.vm,
                             self.window.get_widget("network-model-combo"))
-        self.set_combo_label("network-model", 0, model)
+        self.set_combo_label("network-model", model)
 
     def refresh_input_page(self):
         inp = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -2300,7 +2300,7 @@ class vmmDetails(vmmGObjectUI):
             show_text("address", address)
 
             show_row("keymap", "-box")
-            self.set_combo_label("gfx-keymap", 0, keymap)
+            self.set_combo_label("gfx-keymap", keymap)
 
         if is_spice:
             tlsport = port_to_string(gfx.tlsPort)
@@ -2323,7 +2323,7 @@ class vmmDetails(vmmGObjectUI):
         if not sound:
             return
 
-        self.set_combo_label("sound-model", 0, sound.model)
+        self.set_combo_label("sound-model", sound.model)
 
     def refresh_char_page(self):
         chardev = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -2392,7 +2392,7 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("video-ram").set_text(ramlabel)
         self.window.get_widget("video-heads").set_text(heads and heads or "-")
 
-        self.set_combo_label("video-model", 0, model)
+        self.set_combo_label("video-model", model)
 
     def refresh_watchdog_page(self):
         watch = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -2402,8 +2402,8 @@ class vmmDetails(vmmGObjectUI):
         model = watch.model
         action = watch.action
 
-        self.set_combo_label("watchdog-model", 0, model)
-        self.set_combo_label("watchdog-action", 0, action)
+        self.set_combo_label("watchdog-model", model)
+        self.set_combo_label("watchdog-action", action)
 
     def refresh_controller_page(self):
         dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
