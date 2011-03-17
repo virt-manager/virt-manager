@@ -421,6 +421,10 @@ class vmmDomainBase(vmmLibvirtObject):
         def change(editdev):
             editdev.keymap = newval
         return self._redefine_device(change, devobj)
+    def define_graphics_type(self, devobj, newval):
+        def change(editdev):
+            editdev.type = newval
+        return self._redefine_device(change, devobj)
 
     def define_sound_model(self, devobj, newmodel):
         def change(editdev):

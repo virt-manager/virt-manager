@@ -381,6 +381,7 @@ class vmmDetails(vmmGObjectUI):
             "on_virtualport-typeidversion_changed": self.config_enable_apply,
             "on_virtualport-instanceid_changed": self.config_enable_apply,
 
+            "on_gfx_type_combo_changed": self.config_enable_apply,
             "on_vnc_keymap_combo_changed": self.config_enable_apply,
             "on_vnc_password_changed": self.config_enable_apply,
 
@@ -725,9 +726,22 @@ class vmmDetails(vmmGObjectUI):
         net_model = self.window.get_widget("network-model-combo")
         uihelpers.build_netmodel_combo(self.vm, net_model)
 
+        # Graphics type
+        gfx_type = self.window.get_widget("gfx-type-combo")
+        model = gtk.ListStore(str, str)
+        gfx_type.set_model(model)
+        text = gtk.CellRendererText()
+        gfx_type.pack_start(text, True)
+        gfx_type.add_attribute(text, 'text', 1)
+        model.append([virtinst.VirtualGraphics.TYPE_VNC,
+                      "VNC"])
+        model.append([virtinst.VirtualGraphics.TYPE_SPICE,
+                      "SPICE"])
+        gfx_type.set_active(-1)
+
         # Graphics keymap
-        vnc_keymap = self.window.get_widget("gfx-keymap-combo")
-        uihelpers.build_vnc_keymap_combo(self.vm, vnc_keymap,
+        gfx_keymap = self.window.get_widget("gfx-keymap-combo")
+        uihelpers.build_vnc_keymap_combo(self.vm, gfx_keymap,
                                          no_default=no_default)
 
         # Sound model
@@ -750,7 +764,8 @@ class vmmDetails(vmmGObjectUI):
 
     # Helper function to handle the combo/label pattern used for
     # video model, sound model, network model, etc.
-    def set_combo_label(self, prefix, value, model_idx=0):
+    def set_combo_label(self, prefix, value, model_idx=0, label=""):
+        label = label or value
         model_label = self.window.get_widget(prefix + "-label")
         model_combo = self.window.get_widget(prefix + "-combo")
         model_list = map(lambda x: x[model_idx], model_combo.get_model())
@@ -758,7 +773,7 @@ class vmmDetails(vmmGObjectUI):
 
         model_label.set_property("visible", not model_in_list)
         model_combo.set_property("visible", model_in_list)
-        model_label.set_text(value or "")
+        model_label.set_text(label or "")
 
         if model_in_list:
             model_combo.set_active(model_list.index(value))
@@ -1735,13 +1750,16 @@ class vmmDetails(vmmGObjectUI):
 
     # Graphics options
     def config_graphics_apply(self, dev_id_info):
+        gtype = self.get_combo_label_value("gfx-type")
         passwd = self.window.get_widget("gfx-password").get_text() or None
         keymap = self.get_combo_label_value("gfx-keymap")
 
         return self._change_config_helper([self.vm.define_graphics_password,
-                                           self.vm.define_graphics_keymap],
+                                           self.vm.define_graphics_keymap,
+                                           self.vm.define_graphics_type],
                                           [(dev_id_info, passwd),
-                                           (dev_id_info, keymap)],
+                                           (dev_id_info, keymap),
+                                           (dev_id_info, gtype)],
                                           [self.vm.hotplug_graphics_password],
                                           [(dev_id_info, passwd)])
 
@@ -2289,6 +2307,7 @@ class vmmDetails(vmmGObjectUI):
         set_title(_("%(graphicstype)s Server") %
                   {"graphicstype" : str(gtype).upper()})
 
+        settype = ""
         if is_vnc or is_spice:
             port  = port_to_string(gfx.port)
             address = (gfx.listen or "127.0.0.1")
@@ -2301,6 +2320,7 @@ class vmmDetails(vmmGObjectUI):
 
             show_row("keymap", "-box")
             self.set_combo_label("gfx-keymap", keymap)
+            settype = gtype
 
         if is_spice:
             tlsport = port_to_string(gfx.tlsPort)
@@ -2316,7 +2336,11 @@ class vmmDetails(vmmGObjectUI):
             show_text("xauth", xauth)
 
         if is_other:
-            show_text("type", str(gtype).upper())
+            settype = str(gtype).upper()
+
+        if settype:
+            show_row("type", "-box")
+            self.set_combo_label("gfx-type", gtype, label=settype)
 
     def refresh_sound_page(self):
         sound = self.get_hw_selection(HW_LIST_COL_DEVICE)

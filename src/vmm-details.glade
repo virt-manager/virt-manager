@@ -4304,18 +4304,6 @@ I/O:</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkLabel" id="gfx-type">
-                                                <property name="visible">True</property>
-                                                <property name="xalign">0</property>
-                                                <property name="label">label</property>
-                                              </widget>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
-                                                <property name="x_options">GTK_FILL</property>
-                                              </packing>
-                                            </child>
-                                            <child>
                                               <widget class="GtkLabel" id="gfx-xauth">
                                                 <property name="visible">True</property>
                                                 <property name="xalign">0</property>
@@ -4395,6 +4383,37 @@ I/O:</property>
                                                 <property name="right_attach">2</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
+                                                <property name="x_options">GTK_FILL</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkHBox" id="gfx-type-box">
+                                                <property name="visible">True</property>
+                                                <child>
+                                                  <widget class="GtkComboBox" id="gfx-type-combo">
+                                                    <property name="visible">True</property>
+                                                    <signal name="changed" handler="on_gfx_type_combo_changed"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="gfx-type-label">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="label">label</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="x_options">GTK_FILL</property>
                                               </packing>
                                             </child>
