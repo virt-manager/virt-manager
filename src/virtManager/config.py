@@ -508,6 +508,18 @@ class vmmConfig(object):
     def on_sound_remote_changed(self, cb, data=None):
         self.conf.notify_add(self.conf_dir + "/new-vm/remote-sound", cb, data)
 
+    def get_graphics_type(self):
+        ret = self.conf.get_string(self.conf_dir + "/new-vm/graphics_type")
+        if ret == None:
+            ret = "vnc"
+        return ret
+    def set_graphics_type(self, gtype):
+        self.conf.set_string(self.conf_dir + "/new-vm/graphics_type",
+                             gtype.lower())
+    def on_graphics_type_changed(self, cb, data=None):
+        self.conf.notify_add(self.conf_dir + "/new-vm/graphics_type",
+                             cb, data)
+
 
     # URL/Media path history
     def _url_add_helper(self, gconf_path, url):

@@ -43,6 +43,7 @@ class vmmPreferences(vmmGObjectUI):
         self.config.on_stats_history_length_changed(self.refresh_history_length)
         self.config.on_sound_local_changed(self.refresh_sound_local)
         self.config.on_sound_remote_changed(self.refresh_sound_remote)
+        self.config.on_graphics_type_changed(self.refresh_graphics_type)
         self.config.on_stats_enable_disk_poll_changed(self.refresh_disk_poll)
         self.config.on_stats_enable_net_poll_changed(self.refresh_net_poll)
 
@@ -60,6 +61,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_console_scaling()
         self.refresh_sound_local()
         self.refresh_sound_remote()
+        self.refresh_graphics_type()
         self.refresh_disk_poll()
         self.refresh_net_poll()
         self.refresh_grabkeys_combination()
@@ -89,6 +91,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_confirm_removedev_toggled": self.change_confirm_removedev,
             "on_prefs_confirm_interface_toggled": self.change_confirm_interface,
             "on_prefs_btn_keys_define_clicked": self.change_grab_keys,
+            "on_prefs_graphics_type_changed": self.change_graphics_type,
             })
         util.bind_escape_key_close(self)
 
@@ -143,6 +146,11 @@ class vmmPreferences(vmmGObjectUI):
                              ignore4=None):
         self.window.get_widget("prefs-sound-remote").set_active(
             self.config.get_remote_sound())
+    def refresh_graphics_type(self, ignore1=None, ignore2=None, ignore=None,
+                             ignore4=None):
+        active = {"vnc": 0,
+                  "spice": 1}[self.config.get_graphics_type()]
+        self.window.get_widget("prefs-graphics-type").set_active(active)
 
     def refresh_disk_poll(self, ignore1=None, ignore2=None, ignore3=None,
                           ignore4=None):
@@ -270,6 +278,13 @@ class vmmPreferences(vmmGObjectUI):
         self.config.set_confirm_removedev(src.get_active())
     def change_confirm_interface(self, src):
         self.config.set_confirm_interface(src.get_active())
+
+    def change_graphics_type(self, src):
+        gtype = 'vnc'
+        idx = src.get_active()
+        if idx >= 0:
+            gtype = src.get_model()[idx][0]
+        self.config.set_graphics_type(gtype)
 
     def show_help(self, src_ignore):
         # From the Preferences window, show the help document from

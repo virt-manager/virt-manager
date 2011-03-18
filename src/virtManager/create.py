@@ -901,6 +901,9 @@ class vmmCreate(vmmGObjectUI):
             return self.config.get_remote_sound()
         return self.config.get_local_sound()
 
+    def get_config_graphics_type(self):
+        return self.config.get_graphics_type()
+
     def get_config_customize(self):
         return self.window.get_widget("summary-customize").get_active()
 
@@ -1193,8 +1196,9 @@ class vmmCreate(vmmGObjectUI):
 
         # Set up graphics device
         try:
+            gtype = self.get_config_graphics_type()
             guest.add_device(virtinst.VirtualGraphics(
-                                        type=virtinst.VirtualGraphics.TYPE_VNC,
+                                        type=gtype,
                                         conn=guest.conn))
             guest.add_device(virtinst.VirtualVideoDevice(conn=guest.conn))
         except Exception, e:

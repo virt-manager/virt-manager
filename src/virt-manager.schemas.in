@@ -196,6 +196,19 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/::PACKAGE::/new-vm/graphics-type</key>
+      <applyto>/apps/::PACKAGE::/new-vm/graphics-type</applyto>
+      <owner>::PACKAGE::</owner>
+      <type>string</type>
+      <default>vnc</default>
+
+      <locale name="C">
+        <short>Install selected graphics type for new VM</short>
+        <long>Install selected graphics type for new VM. vnc or spice</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/::PACKAGE::/system-tray</key>
       <applyto>/apps/::PACKAGE::/system-tray</applyto>
       <owner>::PACKAGE::</owner>
