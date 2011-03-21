@@ -46,8 +46,8 @@ class vmmChooseCD(vmmGObjectUI):
             "on_fv_iso_location_browse_clicked": self.browse_fv_iso_location,
             "on_cd_path_changed": self.change_cd_path,
             "on_ok_clicked": self.ok,
-            "on_vmm_choose_cd_delete_event": self.cancel,
-            "on_cancel_clicked": self.cancel,
+            "on_vmm_choose_cd_delete_event": self.close,
+            "on_cancel_clicked": self.close,
             })
 
         self.window.get_widget("iso-image").set_active(True)
@@ -58,9 +58,6 @@ class vmmChooseCD(vmmGObjectUI):
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
         return 1
-
-    def cancel(self, ignore1=None, ignore2=None):
-        self.topwin.hide()
 
     def show(self):
         self.reset_state()
@@ -99,7 +96,7 @@ class vmmChooseCD(vmmGObjectUI):
         uihelpers.check_path_search_for_qemu(self.topwin, self.conn, path)
 
         self.emit("cdrom-chosen", self.dev_id_info, path)
-        self.cancel()
+        self.close()
 
     def media_toggled(self, ignore1=None, ignore2=None):
         if self.window.get_widget("physical-media").get_active():
