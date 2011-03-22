@@ -322,6 +322,7 @@ def main():
     setup_pypath()
 
     # Need to do this before GTK strips args like --sync
+    gtk_error = None
     origargs = " ".join(sys.argv[:])
 
     # Urgh, pygtk merely logs a warning when failing to open
@@ -343,12 +344,22 @@ def main():
     except Warning, e:
         # ...the risk is we catch too much though
         # Damned if we do, damned if we dont :-)(
-        raise RuntimeError(_("Unable to initialize GTK: %s") % str(e))
+        gtk_error = str(e)
+    except Exception, e:
+        gtk_error = e
     warnings.resetwarnings()
 
+    # Need to parse CLI after import gtk, since gtk strips --sync
     (options, ignore) = parse_commandline()
-    setup_logging(options.debug)
 
+    # Only raise this error after parsing the CLI, so users at least
+    # get --help output and CLI validation
+    if gtk_error:
+        if type(gtk_error) is str:
+            raise RuntimeError(_("Unable to initialize GTK: %s") % gtk_error)
+        raise gtk_error
+
+    setup_logging(options.debug)
     logging.debug("Launched as: %s" % origargs)
     logging.debug("GTK version: %s" % str(gtk.gtk_version))
 
