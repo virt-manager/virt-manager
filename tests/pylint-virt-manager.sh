@@ -26,6 +26,9 @@ UNABLE_IMPORT="Unable to import '(appindicator)"
 # os._exit is needed for forked processes.
 OS_EXIT="protected member _exit of a client class"
 
+# False positive
+MAIN_NONETYPE="main:.*Raising NoneType while.*"
+
 # Avahi API may have requirements on callback argument names, so ignore these
 # warnings
 BTYPE_LIST="(vmmConnect.add_service|vmmConnect.remove_service|vmmConnect.add_conn_to_list)"
@@ -96,6 +99,7 @@ pylint --ignore=$IGNOREFILES $PYLINT_FILES \
         -ve "$OS_EXIT" \
         -ve "$BUILTIN_TYPE" \
         -ve "$INFER_ERRORS" \
+        -ve "$MAIN_NONETYPE" \
         -ve "$TEST_HACKS" \
         -ve "$UNABLE_IMPORT" | \
 $AWK '\
