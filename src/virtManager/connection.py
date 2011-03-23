@@ -833,11 +833,16 @@ class vmmConnection(vmmGObject):
             return
 
         self.vmm = None
-        self.nets = {}
+        self.nodedevs = {}
+        self.netdevs = {}
+        self.mediadevs = {}
+        self.interfaces = {}
         self.pools = {}
+        self.nets = {}
         self.vms = {}
         self.activeUUIDs = []
         self.record = []
+
         self._change_state(self.STATE_DISCONNECTED)
 
     def _open_dev_conn(self, uri):
