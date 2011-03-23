@@ -1169,10 +1169,14 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
 
     def add_hardware(self, src_ignore):
-        if self.addhw is None:
-            self.addhw = vmmAddHardware(self.vm)
+        try:
+            if self.addhw is None:
+                self.addhw = vmmAddHardware(self.vm)
 
-        self.addhw.show()
+            self.addhw.show()
+        except Exception, e:
+            self.err.show_err((_("Error launching hardware dialog: %s") %
+                               str(e)), "".join(traceback.format_exc()))
 
     def remove_xml_dev(self, src_ignore):
         info = self.get_hw_selection(HW_LIST_COL_DEVICE)
