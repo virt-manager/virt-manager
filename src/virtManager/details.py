@@ -336,6 +336,7 @@ class vmmDetails(vmmGObjectUI):
 
             "on_details_pages_switch_page": self.switch_page,
 
+            "on_overview_name_changed": self.config_enable_apply,
             "on_overview_acpi_changed": self.config_enable_apply,
             "on_overview_apic_changed": self.config_enable_apply,
             "on_overview_clock_changed": self.config_enable_apply,
@@ -1093,6 +1094,7 @@ class vmmDetails(vmmGObjectUI):
         self.toggle_toolbar(
             self.window.get_widget("details-menu-view-toolbar"))
 
+        active  = vm.is_active()
         destroy = vm.is_destroyable()
         run     = vm.is_runable()
         stop    = vm.is_stoppable()
@@ -1120,6 +1122,8 @@ class vmmDetails(vmmGObjectUI):
             self.window.get_widget("details-menu-pause").set_active(paused)
         finally:
             self.ignorePause = False
+
+        self.window.get_widget("overview-name").set_editable(not active)
 
         self.window.get_widget("config-vcpus").set_sensitive(not ro)
         self.window.get_widget("config-vcpupin").set_sensitive(not ro)
@@ -1610,6 +1614,9 @@ class vmmDetails(vmmGObjectUI):
 
     # Overview section
     def config_overview_apply(self):
+        # Overview details
+        name = self.window.get_widget("overview-name").get_text()
+
         # Machine details
         enable_acpi = self.window.get_widget("overview-acpi").get_active()
         enable_apic = self.window.get_widget("overview-apic").get_active()
@@ -1635,12 +1642,14 @@ class vmmDetails(vmmGObjectUI):
         desc_widget = self.window.get_widget("overview-description")
         desc = desc_widget.get_buffer().get_property("text") or ""
 
-        return self._change_config_helper([self.vm.define_acpi,
+        return self._change_config_helper([self.vm.define_name,
+                                           self.vm.define_acpi,
                                            self.vm.define_apic,
                                            self.vm.define_clock,
                                            self.vm.define_seclabel,
                                            self.vm.define_description],
-                                          [(enable_acpi,),
+                                          [(name,),
+                                           (enable_acpi,),
                                            (enable_apic,),
                                            (clock,),
                                            (semodel, setype, selabel),

@@ -485,8 +485,9 @@ class vmmConsolePages(vmmGObjectUI):
         self.topwin = self.window.get_widget(self.windowname)
         self.err = vmmErrorDialog(self.topwin)
 
-        self.title = vm.get_name() + " " + self.topwin.get_title()
-        self.topwin.set_title(self.title)
+        self.pointer_is_grabbed = False
+        self.change_title()
+        self.vm.connect("config-changed", self.change_title)
 
         # State for disabling modifiers when keyboard is grabbed
         self.accel_groups = gtk.accel_groups_from_object(self.topwin)
@@ -533,6 +534,17 @@ class vmmConsolePages(vmmGObjectUI):
     # Initialization helpers #
     ##########################
 
+    def change_title(self, ignore1=None):
+        title = self.vm.get_name() + " " + _("Virtual Machine")
+
+        if self.pointer_is_grabbed and self.viewer:
+            keystr = self.viewer.get_grab_keys()
+            keymsg = _("Press %s to release pointer.") % keystr
+
+            title = keymsg + " " + title
+
+        self.topwin.set_title(title)
+
     def viewer_focus_changed(self, ignore1=None, ignore2=None):
         has_focus = self.viewer and self.viewer.get_widget() and \
             self.viewer.get_widget().get_property("has-focus")
@@ -546,12 +558,12 @@ class vmmConsolePages(vmmGObjectUI):
             self._enable_modifiers()
 
     def pointer_grabbed(self, src_ignore):
-        keystr = self.viewer.get_grab_keys()
-        self.topwin.set_title(_("Press %s to release pointer.") % keystr +
-                              " " + self.title)
+        self.pointer_is_grabbed = True
+        self.change_title()
 
     def pointer_ungrabbed(self, src_ignore):
-        self.topwin.set_title(self.title)
+        self.pointer_is_grabbed = False
+        self.change_title()
 
     def _disable_modifiers(self):
         if self.gtk_settings_accel is not None:

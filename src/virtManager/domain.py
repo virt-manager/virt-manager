@@ -158,6 +158,10 @@ class vmmDomainBase(vmmLibvirtObject):
         self._stats_disk_supported = True
         self._stats_disk_skip = []
 
+    def change_name_backend(self, newbackend):
+        # Used for changing the domain object after a rename
+        self._backend = newbackend
+
     # Info accessors
     def get_name(self):
         raise NotImplementedError()
@@ -349,6 +353,29 @@ class vmmDomainBase(vmmLibvirtObject):
                 seclabel.label = label
 
         return self._redefine_guest(change)
+
+    def define_name(self, newname):
+        # Do this, so that _guest_to_define has original inactive XML
+        self._invalidate_xml()
+
+        guest = self._get_guest_to_define()
+        if guest.name == newname:
+            return
+
+        if self.is_active():
+            raise RuntimeError(_("Cannot rename an active guest"))
+
+        logging.debug("Changing guest name to '%s'" % newname)
+        origxml = guest.get_xml_config()
+        guest.name = newname
+        newxml = guest.get_xml_config()
+
+        try:
+            self.get_connection().rename_vm(self, origxml, newxml)
+        finally:
+            self._invalidate_xml()
+
+        self.emit("config-changed")
 
     def define_acpi(self, newvalue):
         def change(guest):

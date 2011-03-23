@@ -697,6 +697,7 @@ class vmmManager(vmmGObjectUI):
         vm = connection.get_vm(vmuuid)
         vm.connect("status-changed", self.vm_status_changed)
         vm.connect("resources-sampled", self.vm_resources_sampled)
+        vm.connect("config-changed", self.vm_resources_sampled)
 
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
@@ -763,12 +764,7 @@ class vmmManager(vmmGObjectUI):
         statetext   = "<span size='smaller'>%s</span>" % row[ROW_STATUS]
         return domtext + "\n" + statetext
 
-    def _append_vm(self, model, vm, conn):
-        row_key = self.vm_row_key(vm)
-        if row_key in self.rows:
-            return
-
-        parent = self.rows[conn.get_uri()].iter
+    def _build_vm_row(self, vm):
         row = []
         row.insert(ROW_HANDLE, vm)
         row.insert(ROW_NAME, vm.get_name())
@@ -785,11 +781,23 @@ class vmmManager(vmmGObjectUI):
 
         row[ROW_MARKUP] = self._build_vm_markup(vm, row)
 
+        return row
+
+    def _append_vm(self, model, vm, conn):
+        row_key = self.vm_row_key(vm)
+        if row_key in self.rows:
+            return
+
+        row = self._build_vm_row(vm)
+        parent = self.rows[conn.get_uri()].iter
+
         _iter = model.append(parent, row)
         path = model.get_path(_iter)
         self.rows[row_key] = model[path]
+
         # Expand a connection when adding a vm to it
-        self.window.get_widget("vm-list").expand_row(model.get_path(parent), False)
+        self.window.get_widget("vm-list").expand_row(model.get_path(parent),
+                                                     False)
 
     def _append_connection(self, model, conn):
         row = []
@@ -894,6 +902,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         row = self.rows[self.vm_row_key(vm)]
+        row[ROW_NAME] = vm.get_name()
         row[ROW_STATUS] = vm.run_status()
         row[ROW_STATUS_ICON] = vm.run_status_icon_large()
         row[ROW_IS_VM_RUNNING] = vm.is_active()
