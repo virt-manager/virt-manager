@@ -938,6 +938,7 @@ class vmmCreate(vmmGObjectUI):
         src = self.window.get_widget("config-netdev")
         idx = src.get_active()
         show_pxe_warn = True
+        pxe_install = (self.get_config_install_page() == INSTALL_PAGE_PXE)
 
         if not idx < 0:
             row = src.get_model()[idx]
@@ -949,7 +950,7 @@ class vmmCreate(vmmGObjectUI):
                  (ntype == virtinst.VirtualNetworkInterface.TYPE_VIRTUAL and
                   not obj.can_pxe())))
 
-        self.set_net_warn(show_pxe_warn,
+        self.set_net_warn(show_pxe_warn and pxe_install,
                           _("Network selection does not support PXE"), False)
 
     def hv_changed(self, src):
