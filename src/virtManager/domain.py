@@ -317,10 +317,11 @@ class vmmDomainBase(vmmLibvirtObject):
         def change(guest):
             if from_host:
                 guest.cpu.copy_host_cpu()
-            else:
+            elif guest.cpu.model != model:
                 # Since we don't expose this in the UI, have host value trump
                 # caps value
                 guest.cpu.vendor = vendor
+
             guest.cpu.model = model or None
 
             # Sync feature lists
