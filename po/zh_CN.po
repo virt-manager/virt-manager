@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 15:27-0500\n"
+"POT-Creation-Date: 2011-03-24 16:35-0400\n"
 "PO-Revision-Date: 2010-02-15 23:37+0800\n"
 "Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
 "Language-Team: Simplified Chinese <i18n-zh@googlegroups.com>\n"
@@ -32,9 +32,7 @@ msgstr "虚拟系统管理器"
 msgid "Error starting Virtual Machine Manager"
 msgstr "启动虚拟系统管理器出错"
 
-#. ...the risk is we catch too much though
-#. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:346
+#: ../src/virt-manager.py.in:359
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "无法初始化 GTK：%s"
@@ -113,115 +111,124 @@ msgid "Enable menu accelerators in console window"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:19
+#, fuzzy
+msgid "Install selected graphics type for new VM"
+msgstr "为远程 VM 安装声音设备"
+
+#: ../src/virt-manager.schemas.in.h:20
+msgid "Install selected graphics type for new VM. vnc or spice"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:21
 msgid "Install sound device for local VM"
 msgstr "为本地 VM 安装声音设备"
 
-#: ../src/virt-manager.schemas.in.h:20
+#: ../src/virt-manager.schemas.in.h:22
 msgid "Install sound device for remote VM"
 msgstr "为远程 VM 安装声音设备"
 
-#: ../src/virt-manager.schemas.in.h:21
+#: ../src/virt-manager.schemas.in.h:23
 msgid "Poll disk i/o stats"
 msgstr "轮询磁盘 I/O 统计"
 
-#: ../src/virt-manager.schemas.in.h:22
+#: ../src/virt-manager.schemas.in.h:24
 msgid "Poll net i/o stats"
 msgstr "轮询网络 I/O 统计"
 
-#: ../src/virt-manager.schemas.in.h:23
+#: ../src/virt-manager.schemas.in.h:25
 msgid "Show cpu usage in summary"
 msgstr "显示 CPU 用量总数"
 
-#: ../src/virt-manager.schemas.in.h:24
+#: ../src/virt-manager.schemas.in.h:26
 msgid "Show disk I/O in summary"
 msgstr "显示磁盘 I/O 总数"
 
-#: ../src/virt-manager.schemas.in.h:25
+#: ../src/virt-manager.schemas.in.h:27
 msgid "Show network I/O in summary"
 msgstr "显示网络 I/O 总数"
 
-#: ../src/virt-manager.schemas.in.h:26
+#: ../src/virt-manager.schemas.in.h:28
 msgid "Show system tray icon"
 msgstr "显示系统托盘图标"
 
-#: ../src/virt-manager.schemas.in.h:27
+#: ../src/virt-manager.schemas.in.h:29
 msgid "Show system tray icon while app is running"
 msgstr "程序运行时显示系统托盘图标"
 
-#: ../src/virt-manager.schemas.in.h:28
+#: ../src/virt-manager.schemas.in.h:30
 msgid "Show the cpu usage field in the domain list summary view"
 msgstr "在域列表总览中显示 CPU 用量字段"
 
-#: ../src/virt-manager.schemas.in.h:29
+#: ../src/virt-manager.schemas.in.h:31
 msgid "Show the disk I/O field in the domain list summary view"
 msgstr "在域列表总览中显示磁盘 I/O 字段"
 
-#: ../src/virt-manager.schemas.in.h:30
+#: ../src/virt-manager.schemas.in.h:32
 msgid "Show the network I/O field in the domain list summary view"
 msgstr "在域列表总览中显示网络 I/O 字段"
 
-#: ../src/virt-manager.schemas.in.h:31
+#: ../src/virt-manager.schemas.in.h:33
 msgid "The length of the list of URLs"
 msgstr "URL 列表的长度"
 
-#: ../src/virt-manager.schemas.in.h:32
+#: ../src/virt-manager.schemas.in.h:34
 msgid "The number of samples to keep in the statistics history"
 msgstr "统计记录中保存的示例数目"
 
-#: ../src/virt-manager.schemas.in.h:33
+#: ../src/virt-manager.schemas.in.h:35
 msgid ""
 "The number of urls to keep in the history for the install media address page."
 msgstr "在历史记录中为安装介质地址页保留的 url 数目"
 
-#: ../src/virt-manager.schemas.in.h:34
+#: ../src/virt-manager.schemas.in.h:36
 msgid "The statistics history length"
 msgstr "统计记录长度"
 
-#: ../src/virt-manager.schemas.in.h:35
+#: ../src/virt-manager.schemas.in.h:37
 msgid "The statistics update interval"
 msgstr "统计更新间隔"
 
-#: ../src/virt-manager.schemas.in.h:36
+#: ../src/virt-manager.schemas.in.h:38
 msgid "The statistics update interval in seconds"
 msgstr "以秒为单位记录统计更新间隔"
 
-#: ../src/virt-manager.schemas.in.h:37
+#: ../src/virt-manager.schemas.in.h:39
 msgid "When to pop up a console for a guest"
 msgstr "何时为虚拟机系统提示控制台"
 
-#: ../src/virt-manager.schemas.in.h:38
+#: ../src/virt-manager.schemas.in.h:40
 msgid "When to scale the VM graphical console"
 msgstr "何时标记 VM 图形控制台"
 
-#: ../src/virt-manager.schemas.in.h:39
+#: ../src/virt-manager.schemas.in.h:41
 msgid ""
 "When to scale the VM graphical console. 0 = never, 1 = only when in full "
 "screen mode, 2 = Always"
 msgstr "何时标记 VM 图形控制台。0 = 从不，1 = 只在全屏模式，2 = 总是"
 
-#: ../src/virt-manager.schemas.in.h:40
+#: ../src/virt-manager.schemas.in.h:42
 msgid "Whether or not the app will poll VM disk i/o statistics"
 msgstr "程序是否轮询 VM 磁盘 I/O 统计"
 
-#: ../src/virt-manager.schemas.in.h:41
+#: ../src/virt-manager.schemas.in.h:43
 msgid "Whether or not the app will poll VM network i/o statistics"
 msgstr "程序是否轮询 VM 网络 I/O 统计"
 
-#: ../src/virt-manager.schemas.in.h:42
+#: ../src/virt-manager.schemas.in.h:44
 msgid ""
 "Whether to enable menu accelerators while connected to the guest graphical "
 "console."
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:43
+#: ../src/virt-manager.schemas.in.h:45
 msgid "Whether to install a sound device for local VMs or not"
 msgstr "是否为本地 VM 安装声音设备"
 
-#: ../src/virt-manager.schemas.in.h:44
+#: ../src/virt-manager.schemas.in.h:46
 msgid "Whether to install a sound device for remote VMs or not"
 msgstr "是否为远程 VM 安装声音设备"
 
-#: ../src/virt-manager.schemas.in.h:45
+#: ../src/virt-manager.schemas.in.h:47
 msgid ""
 "Whether to pop up a console for a guest. 0 = never, 1 = only on creation of "
 "a new guest, 2 = On creation of any guest"
@@ -229,49 +236,49 @@ msgstr ""
 "是否为虚拟机系统提示控制台。0 = 从不，1 = 只在创建新虚拟机系统时，2 = 创建任"
 "意虚拟机系统时"
 
-#: ../src/virt-manager.schemas.in.h:46
+#: ../src/virt-manager.schemas.in.h:48
 msgid "Whether to show VM button toolbar in Details display"
 msgstr "是否在详情显示中显示 VM 按钮工具栏"
 
-#: ../src/virt-manager.schemas.in.h:47
+#: ../src/virt-manager.schemas.in.h:49
 msgid "Whether to show notification when grabbing mouse"
 msgstr "获得鼠标时是否显示通知"
 
-#: ../src/virt-manager.schemas.in.h:48
+#: ../src/virt-manager.schemas.in.h:50
 msgid ""
 "Whether to show the notification hint when grabbing the mouse in the console"
 msgstr "在控制台中获得鼠标时是否显示通知"
 
-#: ../src/virt-manager.schemas.in.h:49
+#: ../src/virt-manager.schemas.in.h:51
 msgid ""
 "Whether to show toolbar containing Virtual Machine action buttons (such as "
 "Run, Pause, Shutdown) in the details display"
 msgstr "是否在详情显示中显示含有虚拟机动作按钮(比如运行、暂停、关闭)的工具栏"
 
-#: ../src/virt-manager.schemas.in.h:50
+#: ../src/virt-manager.schemas.in.h:52
 msgid "Whether we require confirmation to forcepoweroff a VM"
 msgstr "是否需要确认方可强制关闭 VM 电源"
 
-#: ../src/virt-manager.schemas.in.h:51
+#: ../src/virt-manager.schemas.in.h:53
 msgid "Whether we require confirmation to pause a VM"
 msgstr "是否需要确认方可暂停 VM？"
 
-#: ../src/virt-manager.schemas.in.h:52
+#: ../src/virt-manager.schemas.in.h:54
 msgid "Whether we require confirmation to poweroff/reboot a VM"
 msgstr "是否需要确认方可关闭/重启 VM"
 
-#: ../src/virt-manager.schemas.in.h:53
+#: ../src/virt-manager.schemas.in.h:55
 msgid "Whether we require confirmation to remove a virtual device"
 msgstr "是否需要确认方可删除虚拟设备"
 
-#: ../src/virt-manager.schemas.in.h:54
+#: ../src/virt-manager.schemas.in.h:56
 #, fuzzy
 msgid ""
 "Whether we require confirmation to start or stop a libvirt virtual interface"
 msgstr "是否需要确认方可删除虚拟设备"
 
-#: ../src/virtManager/addhardware.py:331 ../src/virtManager/create.py:445
-#: ../src/virtManager/create.py:537
+#: ../src/virtManager/addhardware.py:331 ../src/virtManager/create.py:452
+#: ../src/virtManager/create.py:544
 msgid "Connection does not support storage management."
 msgstr "连接不支持存储管理。"
 
@@ -289,14 +296,14 @@ msgstr "连接不支持主机设备枚举"
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt 版本不支持视频设备。"
 
-#: ../src/virtManager/addhardware.py:487 ../src/virtManager/details.py:2190
+#: ../src/virtManager/addhardware.py:487 ../src/virtManager/details.py:2388
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB 图形表格"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:491 ../src/virtManager/details.py:2192
+#: ../src/virtManager/addhardware.py:491 ../src/virtManager/details.py:2390
 msgid "Generic USB Mouse"
 msgstr "通用 USB 鼠标"
 
@@ -306,7 +313,7 @@ msgstr "VNC 服务器"
 
 #: ../src/virtManager/addhardware.py:496
 #, fuzzy
-msgid "SPICE server"
+msgid "Spice server"
 msgstr "VNC 服务器"
 
 #: ../src/virtManager/addhardware.py:497
@@ -340,7 +347,7 @@ msgstr "存储"
 msgid "Network"
 msgstr "网络"
 
-#: ../src/virtManager/addhardware.py:824 ../src/virtManager/details.py:2532
+#: ../src/virtManager/addhardware.py:824 ../src/virtManager/details.py:2734
 msgid "Input"
 msgstr "输入"
 
@@ -385,36 +392,36 @@ msgstr ""
 msgid "Error adding device: %s"
 msgstr "添加设备出错：%s"
 
-#: ../src/virtManager/addhardware.py:1006 ../src/virtManager/create.py:1409
+#: ../src/virtManager/addhardware.py:1006 ../src/virtManager/create.py:1430
 #, python-format
 msgid ""
-"The following path already exists, but is not\n"
+"The following storage already exists, but is not\n"
 "in use by any virtual machine:\n"
 "\n"
 "%s\n"
 "\n"
-"Would you like to use this path?"
+"Would you like to reuse this storage?"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1014 ../src/virtManager/create.py:1417
+#: ../src/virtManager/addhardware.py:1014 ../src/virtManager/create.py:1438
 msgid "A storage path must be specified."
 msgstr "必须指定存储路径。"
 
-#: ../src/virtManager/addhardware.py:1032 ../src/virtManager/create.py:1425
+#: ../src/virtManager/addhardware.py:1032 ../src/virtManager/create.py:1446
 msgid "Storage parameter error."
 msgstr "存储参数错误。"
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:1046 ../src/virtManager/create.py:1430
+#: ../src/virtManager/addhardware.py:1046 ../src/virtManager/create.py:1451
 msgid "Not Enough Free Space"
 msgstr "没有足够空间"
 
-#: ../src/virtManager/addhardware.py:1052 ../src/virtManager/create.py:1436
+#: ../src/virtManager/addhardware.py:1052 ../src/virtManager/create.py:1457
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "另一个虚拟机系统已经使用磁盘“%s”了！"
 
-#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1438
+#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1459
 msgid "Do you really want to use the disk?"
 msgstr "您确实要使用这个磁盘吗？"
 
@@ -487,19 +494,19 @@ msgstr "处理中..."
 msgid "Completed"
 msgstr "已完成"
 
-#: ../src/virtManager/choosecd.py:91 ../src/virtManager/choosecd.py:97
+#: ../src/virtManager/choosecd.py:88 ../src/virtManager/choosecd.py:94
 msgid "Invalid Media Path"
 msgstr "无效介质路径"
 
-#: ../src/virtManager/choosecd.py:92
+#: ../src/virtManager/choosecd.py:89
 msgid "A media path must be specified."
 msgstr "必须指定介质路径。"
 
-#: ../src/virtManager/choosecd.py:138
+#: ../src/virtManager/choosecd.py:135
 msgid "Floppy D_rive"
 msgstr "软驱(_R)"
 
-#: ../src/virtManager/choosecd.py:139
+#: ../src/virtManager/choosecd.py:136
 msgid "Floppy _Image"
 msgstr "软盘镜像(_I)"
 
@@ -574,7 +581,7 @@ msgstr ""
 "运行新虚拟机系统将会覆盖这些磁盘映像中的数据。"
 
 #: ../src/virtManager/clone.py:737 ../src/virtManager/createpool.py:382
-#: ../src/virtManager/createvol.py:195 ../src/virtManager/migrate.py:433
+#: ../src/virtManager/createvol.py:199 ../src/virtManager/migrate.py:433
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "确认输入时未捕获的错误：%s"
@@ -611,11 +618,11 @@ msgid ""
 "managed storage volumes."
 msgstr ""
 
-#: ../src/virtManager/clone.py:824 ../src/virtManager/delete.py:329
+#: ../src/virtManager/clone.py:824 ../src/virtManager/delete.py:330
 msgid "No write access to parent directory."
 msgstr "没有到父目录的写入访问。"
 
-#: ../src/virtManager/clone.py:826 ../src/virtManager/delete.py:327
+#: ../src/virtManager/clone.py:826 ../src/virtManager/delete.py:328
 msgid "Path does not exist."
 msgstr "路径不存在。"
 
@@ -709,16 +716,26 @@ msgstr "活跃"
 #: ../src/virtManager/connection.py:590 ../src/virtManager/host.py:508
 #: ../src/virtManager/host.py:551 ../src/virtManager/host.py:777
 #: ../src/virtManager/host.py:808 ../src/virtManager/host.py:1044
-#: ../src/virtManager/uihelpers.py:394
+#: ../src/virtManager/uihelpers.py:401
 msgid "Inactive"
 msgstr "不活跃"
 
-#: ../src/virtManager/connection.py:592 ../src/virtManager/create.py:1726
-#: ../src/virtManager/details.py:1917 ../src/virtManager/details.py:2111
-#: ../src/virtManager/details.py:2271 ../src/virtManager/details.py:2272
+#: ../src/virtManager/connection.py:592 ../src/virtManager/create.py:1747
+#: ../src/virtManager/details.py:2054 ../src/virtManager/details.py:2271
+#: ../src/virtManager/details.py:2469 ../src/virtManager/details.py:2470
 #: ../src/virtManager/host.py:1039
 msgid "Unknown"
 msgstr "未知"
+
+#: ../src/virtManager/connection.py:768
+#, python-format
+msgid ""
+"Domain rename failed. Attempting to recover also failed.\n"
+"\n"
+"Original error: %s\n"
+"\n"
+"Recover error: %s"
+msgstr ""
 
 #: ../src/virtManager/console.py:295
 msgid "Unable to provide requested credentials to the VNC server"
@@ -747,70 +764,74 @@ msgstr "更改存储路径出错：%s"
 msgid "Error opening socket path '%s'"
 msgstr "更改存储路径出错：%s"
 
-#: ../src/virtManager/console.py:543
+#: ../src/virtManager/console.py:538 ../src/vmm-details.glade.h:117
+msgid "Virtual Machine"
+msgstr "虚拟机"
+
+#: ../src/virtManager/console.py:542
 #, fuzzy, python-format
 msgid "Press %s to release pointer."
 msgstr "按 Ctrl+Alt 释放指针。"
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
+#: ../src/virtManager/console.py:725 ../src/virtManager/console.py:895
 msgid "Guest not running"
 msgstr "虚拟机系统没有运行"
 
-#: ../src/virtManager/console.py:709
+#: ../src/virtManager/console.py:728
 msgid "Guest has crashed"
 msgstr "虚拟机系统崩溃"
 
-#: ../src/virtManager/console.py:819
+#: ../src/virtManager/console.py:838
 #, fuzzy
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr "TCP/IP 错误：到监控程序主机的 VNC 连接被拒绝或者断开连接！"
 
-#: ../src/virtManager/console.py:893
+#: ../src/virtManager/console.py:912
 msgid "Graphical console not configured for guest"
 msgstr "没有为虚拟机系统配置图形控制台"
 
-#: ../src/virtManager/console.py:900
+#: ../src/virtManager/console.py:919
 #, fuzzy, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "无法访问控制台路径 '%s'。"
 
-#: ../src/virtManager/console.py:910
+#: ../src/virtManager/console.py:929
 msgid "Graphical console is not yet active for guest"
 msgstr "没有为虚拟机系统激活图形控制台"
 
-#: ../src/virtManager/console.py:915
+#: ../src/virtManager/console.py:934
 msgid "Connecting to graphical console for guest"
 msgstr "为虚拟机系统连接到图形控制台"
 
-#: ../src/virtManager/console.py:951
+#: ../src/virtManager/console.py:970
 #, fuzzy
 msgid "Error connecting to graphical console"
 msgstr "为虚拟机系统连接到图形控制台"
 
-#: ../src/virtManager/create.py:319
+#: ../src/virtManager/create.py:324
 msgid "No active connection to install on."
 msgstr "没有活跃连接可用于安装。"
 
-#: ../src/virtManager/create.py:380
+#: ../src/virtManager/create.py:387
 msgid "Connection is read only."
 msgstr "连接为只读。"
 
-#: ../src/virtManager/create.py:383
+#: ../src/virtManager/create.py:390
 #, fuzzy
 msgid ""
 "No hypervisor options were found for this\n"
 "connection."
 msgstr "这个连接没有可用安装选项。"
 
-#: ../src/virtManager/create.py:388
+#: ../src/virtManager/create.py:395
 msgid ""
 "This usually means that QEMU or KVM is not\n"
 "installed on your machine, or the KVM kernel modules are not loaded."
 msgstr ""
 
-#: ../src/virtManager/create.py:403
+#: ../src/virtManager/create.py:410
 msgid ""
 "Host supports full virtualization, but\n"
 "no related install options are available.\n"
@@ -818,175 +839,175 @@ msgid ""
 "system BIOS."
 msgstr ""
 
-#: ../src/virtManager/create.py:410
+#: ../src/virtManager/create.py:417
 msgid ""
 "Host does not appear to support hardware\n"
 "virtualization. Install options may be limited."
 msgstr ""
 
-#: ../src/virtManager/create.py:416
+#: ../src/virtManager/create.py:423
 msgid ""
 "KVM is not available. This may mean the KVM\n"
 "package is not installed, or the KVM kernel modules \n"
 "are not loaded. Your virtual machines may perform poorly."
 msgstr ""
 
-#: ../src/virtManager/create.py:439
+#: ../src/virtManager/create.py:446
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "%s 安装不可用于半虚拟虚拟机系统。"
 
-#: ../src/virtManager/create.py:443
+#: ../src/virtManager/create.py:450
 msgid "URL installs not available for remote connections."
 msgstr "URL 安装不可用于远程连接。"
 
-#: ../src/virtManager/create.py:457
+#: ../src/virtManager/create.py:464
 msgid "No install options available for this connection."
 msgstr "这个连接没有可用安装选项。"
 
-#: ../src/virtManager/create.py:497
+#: ../src/virtManager/create.py:504
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "主机中最多有 %(maxmem)s 可用"
 
-#: ../src/virtManager/create.py:511
+#: ../src/virtManager/create.py:518
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
 msgstr "管理程序只支持 %d 虚拟 CPU。"
 
-#: ../src/virtManager/create.py:521
+#: ../src/virtManager/create.py:528
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "最多有 %(numcpus)d 可用"
 
-#: ../src/virtManager/create.py:603
+#: ../src/virtManager/create.py:610
 #, fuzzy
 msgid "Only URL or import installs are supported for paravirt."
 msgstr "半虚拟这支持 URL 安装。"
 
-#: ../src/virtManager/create.py:680 ../src/virtManager/create.py:689
-#: ../src/virtManager/create.py:764 ../src/virtManager/create.py:766
+#: ../src/virtManager/create.py:687 ../src/virtManager/create.py:696
+#: ../src/virtManager/create.py:771 ../src/virtManager/create.py:773
 msgid "Generic"
 msgstr "通用"
 
-#: ../src/virtManager/create.py:746
+#: ../src/virtManager/create.py:753
 msgid "Local CDROM/ISO"
 msgstr "本地光驱/映像"
 
-#: ../src/virtManager/create.py:748
+#: ../src/virtManager/create.py:755
 msgid "URL Install Tree"
 msgstr "URL 安装树"
 
-#: ../src/virtManager/create.py:750
+#: ../src/virtManager/create.py:757
 msgid "PXE Install"
 msgstr "PXE 安装"
 
-#: ../src/virtManager/create.py:752
+#: ../src/virtManager/create.py:759
 #, fuzzy
 msgid "Import existing OS image"
 msgstr "定位现有存储"
 
-#: ../src/virtManager/create.py:755 ../src/virtManager/details.py:1918
-#: ../src/virtManager/details.py:1941
+#: ../src/virtManager/create.py:762 ../src/virtManager/details.py:2055
+#: ../src/virtManager/details.py:2083
 msgid "None"
 msgstr "无"
 
-#: ../src/virtManager/create.py:943
+#: ../src/virtManager/create.py:954
 #, fuzzy
 msgid "Network selection does not support PXE"
 msgstr "网络选择错误。"
 
-#: ../src/virtManager/create.py:1135 ../src/virtManager/createinterface.py:876
+#: ../src/virtManager/create.py:1149 ../src/virtManager/createinterface.py:876
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "%(max_page)d 的步骤 %(current_page)d"
 
-#: ../src/virtManager/create.py:1182
+#: ../src/virtManager/create.py:1196
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "设定 UUID 出错：%s"
 
-#: ../src/virtManager/create.py:1193
+#: ../src/virtManager/create.py:1214
 msgid "Error setting up graphics device:"
 msgstr "设定图形设备出错："
 
-#: ../src/virtManager/create.py:1203
+#: ../src/virtManager/create.py:1224
 msgid "Error setting up sound device:"
 msgstr "设定声音设备出错："
 
-#: ../src/virtManager/create.py:1223 ../src/virtManager/createinterface.py:905
+#: ../src/virtManager/create.py:1244 ../src/virtManager/createinterface.py:905
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "验证安装参数时未捕获的错误：%s"
 
-#: ../src/virtManager/create.py:1235
+#: ../src/virtManager/create.py:1256
 msgid "Invalid System Name"
 msgstr "无效的系统名"
 
-#: ../src/virtManager/create.py:1255
+#: ../src/virtManager/create.py:1276
 msgid "An install media selection is required."
 msgstr "需要选择安装介质。"
 
-#: ../src/virtManager/create.py:1265
+#: ../src/virtManager/create.py:1286
 msgid "An install tree is required."
 msgstr "需要安装树。"
 
-#: ../src/virtManager/create.py:1278
+#: ../src/virtManager/create.py:1299
 #, fuzzy
 msgid "A storage path to import is required."
 msgstr "必须指定存储路径。"
 
-#: ../src/virtManager/create.py:1288
+#: ../src/virtManager/create.py:1309
 msgid "Error setting installer parameters."
 msgstr "设定安装程序参数出错。"
 
-#: ../src/virtManager/create.py:1306
+#: ../src/virtManager/create.py:1327
 msgid "Error setting install media location."
 msgstr "设定安装介质位置出错。"
 
-#: ../src/virtManager/create.py:1316
+#: ../src/virtManager/create.py:1337
 msgid "Error setting OS information."
 msgstr "设定操作系统信息出错。"
 
-#: ../src/virtManager/create.py:1353
+#: ../src/virtManager/create.py:1374
 msgid "Error setting CPUs."
 msgstr "设定 CPU 出错。"
 
-#: ../src/virtManager/create.py:1360
+#: ../src/virtManager/create.py:1381
 msgid "Error setting guest memory."
 msgstr "设定虚拟机系统内存出错。"
 
-#: ../src/virtManager/create.py:1469
+#: ../src/virtManager/create.py:1490
 #, python-format
 msgid "Network device required for %s install."
 msgstr "%s 安装需要网络设备。"
 
-#: ../src/virtManager/create.py:1554
+#: ../src/virtManager/create.py:1575
 #, fuzzy
 msgid "Error starting installation: "
 msgstr "设定安装介质位置出错。"
 
-#: ../src/virtManager/create.py:1582
+#: ../src/virtManager/create.py:1603
 msgid "Creating Virtual Machine"
 msgstr "创建虚拟机"
 
-#: ../src/virtManager/create.py:1583
+#: ../src/virtManager/create.py:1604
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr "现已创建虚拟机。分配磁盘存储和搜索安装程序映像需要几分钟方可完成。"
 
-#: ../src/virtManager/create.py:1594
+#: ../src/virtManager/create.py:1615
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "无法完成安装：'%s'"
 
-#: ../src/virtManager/create.py:1672
+#: ../src/virtManager/create.py:1693
 #, fuzzy, python-format
 msgid "Error continue install: %s"
 msgstr "创建卷出错：%s"
 
-#: ../src/virtManager/create.py:1768
+#: ../src/virtManager/create.py:1789
 msgid "Detecting"
 msgstr "检测中"
 
@@ -1143,13 +1164,13 @@ msgstr "其它"
 msgid "Start address:"
 msgstr "起始地址："
 
-#: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:101
+#: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:102
 msgid "Status:"
 msgstr "状态："
 
-#: ../src/virtManager/createnet.py:301 ../src/virtManager/details.py:1960
-#: ../src/virtManager/details.py:1961 ../src/virtManager/details.py:1962
-#: ../src/virtManager/details.py:1963 ../src/virtManager/host.py:530
+#: ../src/virtManager/createnet.py:301 ../src/virtManager/details.py:2108
+#: ../src/virtManager/details.py:2109 ../src/virtManager/details.py:2110
+#: ../src/virtManager/details.py:2111 ../src/virtManager/host.py:530
 #: ../src/virtManager/host.py:531
 msgid "Disabled"
 msgstr "禁用的"
@@ -1268,20 +1289,20 @@ msgstr "格式化源设备。"
 msgid "Create a logical volume group from the source device."
 msgstr "在源设备创建逻辑卷组。"
 
-#: ../src/virtManager/createvol.py:206
+#: ../src/virtManager/createvol.py:210
 msgid "Creating storage volume..."
 msgstr "创建存储卷......"
 
-#: ../src/virtManager/createvol.py:207
+#: ../src/virtManager/createvol.py:211
 msgid "Creating the storage volume may take a while..."
 msgstr "创建存储卷可能需要一些时间......"
 
-#: ../src/virtManager/createvol.py:215
+#: ../src/virtManager/createvol.py:219
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "创建卷出错：%s"
 
-#: ../src/virtManager/createvol.py:248
+#: ../src/virtManager/createvol.py:252
 msgid "Volume Parameter Error"
 msgstr "卷参数错误"
 
@@ -1294,57 +1315,57 @@ msgstr "删除"
 msgid "Deleting virtual machine '%s'"
 msgstr "删除虚拟机 '%s'"
 
-#: ../src/virtManager/delete.py:161
+#: ../src/virtManager/delete.py:162
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "删除路径 '%s'"
 
-#: ../src/virtManager/delete.py:172
+#: ../src/virtManager/delete.py:173
 #, python-format
 msgid "Error deleting virtual machine '%s': %s"
 msgstr "删除虚拟机出错 '%s'：%s"
 
-#: ../src/virtManager/delete.py:188
+#: ../src/virtManager/delete.py:189
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "另外，删除某些存储设备时出错：\n"
 
-#: ../src/virtManager/delete.py:192
+#: ../src/virtManager/delete.py:193
 msgid "Errors encountered while removing certain storage devices."
 msgstr "删除默写存储设备时出错。"
 
-#: ../src/virtManager/delete.py:273
+#: ../src/virtManager/delete.py:274
 msgid "Storage Path"
 msgstr "存储路径"
 
-#: ../src/virtManager/delete.py:274
+#: ../src/virtManager/delete.py:275
 msgid "Target"
 msgstr "目标"
 
-#: ../src/virtManager/delete.py:322
+#: ../src/virtManager/delete.py:323
 msgid "Cannot delete iscsi share."
 msgstr "无法删除 iscsi 共享。"
 
-#: ../src/virtManager/delete.py:325
+#: ../src/virtManager/delete.py:326
 msgid "Cannot delete unmanaged remote storage."
 msgstr "无法删除自由远程存储。"
 
-#: ../src/virtManager/delete.py:331
+#: ../src/virtManager/delete.py:332
 msgid "Cannot delete unmanaged block device."
 msgstr "无法删除自由块设备。"
 
-#: ../src/virtManager/delete.py:351
+#: ../src/virtManager/delete.py:352
 msgid "Storage is read-only."
 msgstr "存储为只读。"
 
-#: ../src/virtManager/delete.py:353
+#: ../src/virtManager/delete.py:354
 msgid "No write access to path."
 msgstr "没有到路径的写入访问。"
 
-#: ../src/virtManager/delete.py:356
+#: ../src/virtManager/delete.py:357
 msgid "Storage is marked as shareable."
 msgstr "将存储标记为可共享。"
 
-#: ../src/virtManager/delete.py:366
+#: ../src/virtManager/delete.py:367
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
@@ -1353,16 +1374,16 @@ msgstr ""
 "以下虚拟机在使用存储：\n"
 "- %s "
 
-#: ../src/virtManager/details.py:503
+#: ../src/virtManager/details.py:513
 #, fuzzy
 msgid "Add Hardware"
 msgstr "添加硬件(_D)"
 
-#: ../src/virtManager/details.py:539
+#: ../src/virtManager/details.py:549
 msgid "Close tab"
 msgstr "关闭标签"
 
-#: ../src/virtManager/details.py:614
+#: ../src/virtManager/details.py:624
 #, fuzzy
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
@@ -1372,7 +1393,7 @@ msgstr ""
 "静态 SELinux 安全性类型让 libvirt 总是启动带指定标签的虚拟机系统进程。管理员"
 "负责确保正确标记磁盘中的映像。"
 
-#: ../src/virtManager/details.py:616
+#: ../src/virtManager/details.py:626
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
 "unique label for the guest process and guest image, ensuring total isolation "
@@ -1381,77 +1402,82 @@ msgstr ""
 "静态 SELinux 安全性类型让 libvirt 自动为虚拟机系统进程和虚拟机系统映像选择唯"
 "一标签，保证完全独立于该虚拟机系统。(默认)"
 
-#: ../src/virtManager/details.py:625
+#: ../src/virtManager/details.py:635
 msgid "Libvirt did not detect NUMA capabilities."
 msgstr ""
 
-#: ../src/virtManager/details.py:633
+#: ../src/virtManager/details.py:643
 msgid "VCPU"
 msgstr "VCPU"
 
-#: ../src/virtManager/details.py:634
+#: ../src/virtManager/details.py:644
 msgid "On CPU"
 msgstr "CPU 中"
 
-#: ../src/virtManager/details.py:635
+#: ../src/virtManager/details.py:645
 msgid "Pinning"
 msgstr "Pinning"
 
-#: ../src/virtManager/details.py:784
+#: ../src/virtManager/details.py:874
 #, fuzzy
 msgid "No text console available"
 msgstr "没有可用连接。"
 
-#: ../src/virtManager/details.py:806
+#: ../src/virtManager/details.py:896
 msgid "Serial console not yet supported over remote connection."
 msgstr "还不支持通过远程连接的串口控制台。"
 
-#: ../src/virtManager/details.py:809
+#: ../src/virtManager/details.py:899
 msgid "Serial console not available for inactive guest."
 msgstr "在不活跃的虚拟机系统中串口控制台不可用。"
 
-#: ../src/virtManager/details.py:811
+#: ../src/virtManager/details.py:901
 #, python-format
 msgid "Console for device type '%s' not yet supported."
 msgstr "还不支持用于设备类型 '%s' 的控制台。"
 
-#: ../src/virtManager/details.py:814
+#: ../src/virtManager/details.py:904
 #, python-format
 msgid "Can not access console path '%s'."
 msgstr "无法访问控制台路径 '%s'。"
 
-#: ../src/virtManager/details.py:832
+#: ../src/virtManager/details.py:922
 #, fuzzy
 msgid "No graphical console available"
 msgstr "显示图形控制台"
 
-#: ../src/virtManager/details.py:837
+#: ../src/virtManager/details.py:927
 #, python-format
 msgid "Graphical Console %s"
 msgstr "图形控制台 %s"
 
-#: ../src/virtManager/details.py:937
+#: ../src/virtManager/details.py:1027
 #, fuzzy, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "更改存储路径出错：%s"
 
-#: ../src/virtManager/details.py:992 ../src/virtManager/manager.py:934
+#: ../src/virtManager/details.py:1082 ../src/virtManager/manager.py:944
 #, fuzzy
 msgid "_Restore"
 msgstr "恢复(_R)"
 
 #. Build VM context menu
-#: ../src/virtManager/details.py:994 ../src/virtManager/manager.py:319
-#: ../src/virtManager/manager.py:936 ../src/virtManager/systray.py:184
-#: ../src/vmm-details.glade.h:137 ../src/vmm-manager.glade.h:19
+#: ../src/virtManager/details.py:1084 ../src/virtManager/manager.py:319
+#: ../src/virtManager/manager.py:946 ../src/virtManager/systray.py:184
+#: ../src/vmm-details.glade.h:141 ../src/vmm-manager.glade.h:19
 msgid "_Run"
 msgstr "运行(_R)"
 
-#: ../src/virtManager/details.py:1146
+#: ../src/virtManager/details.py:1182
+#, fuzzy, python-format
+msgid "Error launching hardware dialog: %s"
+msgstr "启动卷向导出错：%s"
+
+#: ../src/virtManager/details.py:1243
 msgid "Save Virtual Machine Screenshot"
 msgstr "保存虚拟机截屏"
 
-#: ../src/virtManager/details.py:1171
+#: ../src/virtManager/details.py:1268
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1460,219 +1486,223 @@ msgstr ""
 "截屏已保存到: \n"
 "%s"
 
-#: ../src/virtManager/details.py:1173
+#: ../src/virtManager/details.py:1270
 msgid "Screenshot saved"
 msgstr "截屏已保存"
 
-#: ../src/virtManager/details.py:1346
+#: ../src/virtManager/details.py:1469
 #, fuzzy, python-format
 msgid "Error generating CPU configuration: %s"
 msgstr "更改 VM 配置出错：%s"
 
-#: ../src/virtManager/details.py:1381
+#: ../src/virtManager/details.py:1504
 #, fuzzy, python-format
 msgid "Error copying host CPU: %s"
 msgstr "创建卷出错：%s"
 
-#: ../src/virtManager/details.py:1611
+#: ../src/virtManager/details.py:1726
 #, python-format
 msgid "Error building pin list: %s"
 msgstr "构建 pin 列表出错：%s"
 
-#: ../src/virtManager/details.py:1617
+#: ../src/virtManager/details.py:1732
 #, python-format
 msgid "Error pinning vcpus: %s"
 msgstr "pinning vcpu 出错：%s"
 
-#: ../src/virtManager/details.py:1661
+#: ../src/virtManager/details.py:1776
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "更改自动启动值出错：%s"
 
-#: ../src/virtManager/details.py:1755
+#: ../src/virtManager/details.py:1892
 msgid "Are you sure you want to remove this device?"
 msgstr "您确定要删除这个设备吗？"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
-#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
-#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
+#: ../src/virtManager/details.py:1893 ../src/virtManager/engine.py:801
+#: ../src/virtManager/engine.py:901 ../src/virtManager/engine.py:925
+#: ../src/virtManager/engine.py:984 ../src/virtManager/engine.py:1008
 msgid "Don't ask me again."
 msgstr "不要再问。"
 
-#: ../src/virtManager/details.py:1768
+#: ../src/virtManager/details.py:1905
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "删除设备出错：%s"
 
-#: ../src/virtManager/details.py:1785
+#: ../src/virtManager/details.py:1922
 #, fuzzy
 msgid "Device could not be removed from the running machine"
 msgstr "无法从运行的机器中删除设备。"
 
-#: ../src/virtManager/details.py:1787
+#: ../src/virtManager/details.py:1924
 #, fuzzy
 msgid "This change will take effect after the next VM reboot."
 msgstr "更改会在下一次 VM 重启时生效"
 
-#: ../src/virtManager/details.py:1840
+#: ../src/virtManager/details.py:1977
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "更改 VM 配置出错：%s"
 
-#: ../src/virtManager/details.py:1850
+#: ../src/virtManager/details.py:1987
 msgid "Some changes may require a guest reboot to take effect."
 msgstr "有些更改可能需要重启虚拟机系统方可生效。"
 
-#: ../src/virtManager/details.py:1853
+#: ../src/virtManager/details.py:1990
 msgid "These changes will take effect after the next guest reboot."
 msgstr "这些更改会在下一次虚拟机系统重启时生效。"
 
-#: ../src/virtManager/details.py:1931 ../src/vmm-add-hardware.glade.h:30
+#: ../src/virtManager/details.py:2073 ../src/vmm-add-hardware.glade.h:30
 msgid "Same as host"
 msgstr "同宿主机"
 
-#: ../src/virtManager/details.py:2027
+#: ../src/virtManager/details.py:2175
 msgid "VCPU info only available for running domain."
 msgstr "VCPU 信息只对运行的域可用。"
 
-#: ../src/virtManager/details.py:2029
+#: ../src/virtManager/details.py:2177
 msgid "Virtual machine does not support runtime VPCU info."
 msgstr "虚拟机不支持运行时 VCPU 信息。"
 
-#: ../src/virtManager/details.py:2034
+#: ../src/virtManager/details.py:2182
 #, python-format
 msgid "Error getting VCPU info: %s"
 msgstr "获取 VCPU 信息出错：%s"
 
-#: ../src/virtManager/details.py:2194
+#: ../src/virtManager/details.py:2392
 msgid "Xen Mouse"
 msgstr "Xen 鼠标"
 
-#: ../src/virtManager/details.py:2196
+#: ../src/virtManager/details.py:2394
 msgid "PS/2 Mouse"
 msgstr "PS/2 鼠标"
 
-#: ../src/virtManager/details.py:2201
+#: ../src/virtManager/details.py:2399
 msgid "Absolute Movement"
 msgstr "绝对移动"
 
-#: ../src/virtManager/details.py:2203
+#: ../src/virtManager/details.py:2401
 msgid "Relative Movement"
 msgstr "相对移动"
 
-#: ../src/virtManager/details.py:2238
+#: ../src/virtManager/details.py:2436
 msgid "Automatically allocated"
 msgstr "自动分配"
 
-#: ../src/virtManager/details.py:2246
+#: ../src/virtManager/details.py:2444
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr ""
 
-#: ../src/virtManager/details.py:2269
+#: ../src/virtManager/details.py:2467
 #, fuzzy
 msgid "Local SDL Window"
 msgstr "本地 SDL 窗口"
 
-#: ../src/virtManager/details.py:2300
+#: ../src/virtManager/details.py:2502
 #, fuzzy
 msgid "Serial Device"
 msgstr "没有找到串口设备"
 
-#: ../src/virtManager/details.py:2302
+#: ../src/virtManager/details.py:2504
 #, fuzzy
 msgid "Parallel Device"
 msgstr "目标设备："
 
-#: ../src/virtManager/details.py:2304
+#: ../src/virtManager/details.py:2506
 #, fuzzy
 msgid "Console Device"
 msgstr "控制台"
 
-#: ../src/virtManager/details.py:2306
+#: ../src/virtManager/details.py:2508
 msgid "Channel Device"
 msgstr ""
 
-#: ../src/virtManager/details.py:2308
+#: ../src/virtManager/details.py:2510
 #, fuzzy, python-format
 msgid "%s Device"
 msgstr "设备："
 
-#: ../src/virtManager/details.py:2313
+#: ../src/virtManager/details.py:2515
 msgid "Primary Console"
 msgstr "主控制台"
 
-#: ../src/virtManager/details.py:2527
+#: ../src/virtManager/details.py:2729
 msgid "Tablet"
 msgstr "表格"
 
-#: ../src/virtManager/details.py:2530
+#: ../src/virtManager/details.py:2732
 msgid "Mouse"
 msgstr "鼠标"
 
-#: ../src/virtManager/details.py:2539
+#: ../src/virtManager/details.py:2741
 #, python-format
 msgid "Display %s"
 msgstr "显示 %s"
 
-#: ../src/virtManager/details.py:2545
+#: ../src/virtManager/details.py:2747
 #, python-format
 msgid "Sound: %s"
 msgstr "声音：%s"
 
-#: ../src/virtManager/details.py:2573
+#: ../src/virtManager/details.py:2775
 msgid "Video"
 msgstr "视频"
 
-#: ../src/virtManager/details.py:2576
+#: ../src/virtManager/details.py:2778
 msgid "Watchdog"
 msgstr ""
 
-#: ../src/virtManager/details.py:2582
+#: ../src/virtManager/details.py:2784
 #, python-format
 msgid "Controller %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:248
+#: ../src/virtManager/domain.py:252
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:873
+#: ../src/virtManager/domain.py:916
 msgid "Running"
 msgstr "运行中"
 
-#: ../src/virtManager/domain.py:875
+#: ../src/virtManager/domain.py:918
 msgid "Paused"
 msgstr "已暂停"
 
-#: ../src/virtManager/domain.py:877
+#: ../src/virtManager/domain.py:920
 #, fuzzy
 msgid "Shutting Down"
 msgstr "正在关闭"
 
-#: ../src/virtManager/domain.py:879
+#: ../src/virtManager/domain.py:922
 msgid "Shutoff"
 msgstr "关闭? Shutoff 是什么"
 
-#: ../src/virtManager/domain.py:881
+#: ../src/virtManager/domain.py:924
 msgid "Crashed"
 msgstr "已崩溃"
 
 #: ../src/virtManager/domain.py:1046
+msgid "Cannot rename an active guest"
+msgstr ""
+
+#: ../src/virtManager/domain.py:1112
 msgid "Cannot start guest while cloning operation in progress"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1060
+#: ../src/virtManager/domain.py:1127
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1075
+#: ../src/virtManager/domain.py:1142
 #, fuzzy
 msgid "Saving domain to disk"
 msgstr "保存域出错：%s"
 
-#: ../src/virtManager/domain.py:1139
+#: ../src/virtManager/domain.py:1206
 #, fuzzy
 msgid "Migrating domain"
 msgstr "启动域出错：%s"
@@ -1701,7 +1731,7 @@ msgid "Error talking to PackageKit: %s"
 msgstr "启动域出错：%s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:284
+#: ../src/virtManager/engine.py:287
 #, fuzzy
 msgid ""
 "Could not detect a default hypervisor. Make\n"
@@ -1718,7 +1748,7 @@ msgstr ""
 "可通过 文件 -> 添加连接 \n"
 "手动添加管理程序"
 
-#: ../src/virtManager/engine.py:318
+#: ../src/virtManager/engine.py:321
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1732,173 +1762,173 @@ msgid ""
 "start up."
 msgstr ""
 
-#: ../src/virtManager/engine.py:326
+#: ../src/virtManager/engine.py:329
 #, fuzzy
 msgid "Libvirt service must be started"
 msgstr "必须选择一个设备。"
 
-#: ../src/virtManager/engine.py:527
+#: ../src/virtManager/engine.py:530
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "未知连接 URI %s"
 
-#: ../src/virtManager/engine.py:540
+#: ../src/virtManager/engine.py:543
 #, fuzzy, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "启动卷向导出错：%s"
 
-#: ../src/virtManager/engine.py:552
+#: ../src/virtManager/engine.py:555
 #, fuzzy, python-format
 msgid "Unable to display documentation: %s"
 msgstr "无法添加设备：%s"
 
-#: ../src/virtManager/engine.py:568
+#: ../src/virtManager/engine.py:571
 #, fuzzy, python-format
 msgid "Error launching preferences: %s"
 msgstr "启动接口向导出错：%s"
 
-#: ../src/virtManager/engine.py:588
+#: ../src/virtManager/engine.py:591
 #, fuzzy, python-format
 msgid "Error launching host dialog: %s"
 msgstr "启动卷向导出错：%s"
 
-#: ../src/virtManager/engine.py:608
+#: ../src/virtManager/engine.py:611
 #, fuzzy, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "启动卷向导出错：%s"
 
-#: ../src/virtManager/engine.py:641
+#: ../src/virtManager/engine.py:644
 #, fuzzy, python-format
 msgid "Error launching details: %s"
 msgstr "启动网络向导：%s"
 
-#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
+#: ../src/virtManager/engine.py:695 ../src/virtManager/engine.py:712
 #, fuzzy, python-format
 msgid "Error launching manager: %s"
 msgstr "启动卷向导出错：%s"
 
-#: ../src/virtManager/engine.py:723
+#: ../src/virtManager/engine.py:726
 #, fuzzy, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "启动卷向导出错：%s"
 
-#: ../src/virtManager/engine.py:741
+#: ../src/virtManager/engine.py:744
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "设定克隆参数出错：%s"
 
-#: ../src/virtManager/engine.py:789
+#: ../src/virtManager/engine.py:792
 #, fuzzy
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr "还不支持通过远程连接保存虚拟机。"
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:799
 #, fuzzy, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "您确定要暂停 '%s' 吗？"
 
-#: ../src/virtManager/engine.py:809
+#: ../src/virtManager/engine.py:812
 msgid "Save Virtual Machine"
 msgstr "保存虚拟机"
 
-#: ../src/virtManager/engine.py:824
+#: ../src/virtManager/engine.py:827
 msgid "Saving Virtual Machine"
 msgstr "正在保存虚拟机"
 
-#: ../src/virtManager/engine.py:825
+#: ../src/virtManager/engine.py:828
 #, fuzzy
 msgid "Saving virtual machine memory to disk "
 msgstr "正在保存虚拟机"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:834
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "保存域出错：%s"
 
-#: ../src/virtManager/engine.py:843
+#: ../src/virtManager/engine.py:846
 #, fuzzy, python-format
 msgid "Error cancelling save job: %s"
 msgstr "创建卷出错：%s"
 
-#: ../src/virtManager/engine.py:860
+#: ../src/virtManager/engine.py:863
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr "尚不支持通过远程连接恢复虚拟机"
 
-#: ../src/virtManager/engine.py:865
+#: ../src/virtManager/engine.py:868
 msgid "Restore Virtual Machine"
 msgstr "恢复虚拟机"
 
-#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
+#: ../src/virtManager/engine.py:877 ../src/virtManager/engine.py:965
 msgid "Restoring Virtual Machine"
 msgstr "正在恢复虚拟机"
 
-#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
+#: ../src/virtManager/engine.py:878 ../src/virtManager/engine.py:966
 #, fuzzy
 msgid "Restoring virtual machine memory from disk"
 msgstr "正在恢复虚拟机"
 
-#: ../src/virtManager/engine.py:879
+#: ../src/virtManager/engine.py:882
 #, fuzzy, python-format
 msgid "Error restoring domain: %s"
 msgstr "恢复域出错"
 
-#: ../src/virtManager/engine.py:894
+#: ../src/virtManager/engine.py:897
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "您确定要强制关闭 '%s' 吗？"
 
-#: ../src/virtManager/engine.py:896
+#: ../src/virtManager/engine.py:899
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr "这将立即关闭 VM 而不关闭操作系统，并可能造成数据丢失。"
 
-#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
+#: ../src/virtManager/engine.py:913 ../src/virtManager/engine.py:996
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "关闭域出错：%s"
 
-#: ../src/virtManager/engine.py:920
+#: ../src/virtManager/engine.py:923
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "您确定要暂停 '%s' 吗？"
 
-#: ../src/virtManager/engine.py:934
+#: ../src/virtManager/engine.py:937
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "暂停域出错：%s"
 
-#: ../src/virtManager/engine.py:945
+#: ../src/virtManager/engine.py:948
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "取消域暂停出错：%s"
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:961
+#: ../src/virtManager/engine.py:964
 msgid "Error restoring domain"
 msgstr "恢复域出错"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:972
 #, fuzzy
 msgid "Error starting domain"
 msgstr "启动域出错：%s"
 
-#: ../src/virtManager/engine.py:979
+#: ../src/virtManager/engine.py:982
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "您确定要关闭 '%s' 吗？"
 
-#: ../src/virtManager/engine.py:1003
+#: ../src/virtManager/engine.py:1006
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "您确定要重启 '%s' 吗？"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
+#: ../src/virtManager/engine.py:1024 ../src/virtManager/engine.py:1039
 #, fuzzy, python-format
 msgid "Error rebooting domain: %s"
 msgstr "启动域出错：%s"
@@ -2106,7 +2136,7 @@ msgid "Error selecting interface: %s"
 msgstr "删除接口出错：%s"
 
 #: ../src/virtManager/manager.py:320 ../src/virtManager/systray.py:171
-#: ../src/vmm-details.glade.h:134 ../src/vmm-manager.glade.h:18
+#: ../src/vmm-details.glade.h:138 ../src/vmm-manager.glade.h:18
 msgid "_Pause"
 msgstr "暂停(_P)"
 
@@ -2116,22 +2146,22 @@ msgstr "恢复(_E)"
 
 #: ../src/virtManager/manager.py:323 ../src/virtManager/manager.py:326
 #: ../src/virtManager/systray.py:198 ../src/virtManager/systray.py:216
-#: ../src/virtManager/uihelpers.py:708
+#: ../src/virtManager/uihelpers.py:716
 msgid "_Shut Down"
 msgstr "关机(_S)"
 
 #. Shutdown menu
 #: ../src/virtManager/manager.py:325 ../src/virtManager/systray.py:191
-#: ../src/virtManager/uihelpers.py:702 ../src/vmm-details.glade.h:135
+#: ../src/virtManager/uihelpers.py:710 ../src/vmm-details.glade.h:139
 msgid "_Reboot"
 msgstr "重启(_R)"
 
 #: ../src/virtManager/manager.py:328 ../src/virtManager/systray.py:205
-#: ../src/virtManager/uihelpers.py:714 ../src/vmm-details.glade.h:124
+#: ../src/virtManager/uihelpers.py:722 ../src/vmm-details.glade.h:127
 msgid "_Force Off"
 msgstr "强制关机(_F)"
 
-#: ../src/virtManager/manager.py:331 ../src/virtManager/uihelpers.py:724
+#: ../src/virtManager/manager.py:331 ../src/virtManager/uihelpers.py:732
 #, fuzzy
 msgid "Sa_ve"
 msgstr "保存(_S)"
@@ -2141,7 +2171,7 @@ msgstr "保存(_S)"
 msgid "_Clone..."
 msgstr "克隆(_C)"
 
-#: ../src/virtManager/manager.py:335 ../src/vmm-details.glade.h:130
+#: ../src/virtManager/manager.py:335 ../src/vmm-details.glade.h:133
 msgid "_Migrate..."
 msgstr "迁移(_M)..."
 
@@ -2150,7 +2180,7 @@ msgstr "迁移(_M)..."
 msgid "_Delete"
 msgstr "删除"
 
-#: ../src/virtManager/manager.py:350 ../src/vmm-details.glade.h:122
+#: ../src/virtManager/manager.py:350 ../src/vmm-details.glade.h:125
 msgid "_Details"
 msgstr "详情(_D)"
 
@@ -2201,28 +2231,28 @@ msgstr ""
 "无法打开到 libvirt 管理守护进程的连接。\n"
 "\n"
 
-#: ../src/virtManager/manager.py:735
+#: ../src/virtManager/manager.py:737
 msgid "Double click to connect"
 msgstr "双击进行连接"
 
-#: ../src/virtManager/manager.py:740
+#: ../src/virtManager/manager.py:742
 #, fuzzy
 msgid "Not Connected"
 msgstr "连接(_N)"
 
-#: ../src/virtManager/manager.py:742
+#: ../src/virtManager/manager.py:744
 #, fuzzy
 msgid "Connecting..."
 msgstr "连接中"
 
-#: ../src/virtManager/manager.py:1062
+#: ../src/virtManager/manager.py:1081
+msgid "Disabled in preferences dialog."
+msgstr "在属性对话中禁用。"
+
+#: ../src/virtManager/manager.py:1087
 #, fuzzy
 msgid " (disabled)"
 msgstr "禁用的"
-
-#: ../src/virtManager/manager.py:1073
-msgid "Disabled in preferences dialog."
-msgstr "在属性对话中禁用。"
 
 #: ../src/virtManager/mediadev.py:105
 #, fuzzy
@@ -2327,20 +2357,20 @@ msgstr "路由的网络"
 msgid "Isolated network"
 msgstr "隔离的网络"
 
-#: ../src/virtManager/preferences.py:166
+#: ../src/virtManager/preferences.py:183
 msgid "Installed version of GTK-VNC doesn't support configurable grab keys"
 msgstr ""
 
-#: ../src/virtManager/preferences.py:213
+#: ../src/virtManager/preferences.py:230
 #, fuzzy
 msgid "Configure grab key combination"
 msgstr "<b>IPv4 配置</b>"
 
-#: ../src/virtManager/preferences.py:218
+#: ../src/virtManager/preferences.py:235
 msgid "Please press desired grab key combination"
 msgstr ""
 
-#: ../src/virtManager/preferences.py:221
+#: ../src/virtManager/preferences.py:238
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
@@ -2412,79 +2442,79 @@ msgstr "用户模式联网"
 msgid "Virtual network"
 msgstr "虚拟网络"
 
-#: ../src/virtManager/uihelpers.py:412
+#: ../src/virtManager/uihelpers.py:419
 msgid "No virtual networks available"
 msgstr "没有可用虚拟网络"
 
-#: ../src/virtManager/uihelpers.py:434
+#: ../src/virtManager/uihelpers.py:441
 msgid "(Empty bridge)"
 msgstr "(空桥接)"
 
-#: ../src/virtManager/uihelpers.py:437
+#: ../src/virtManager/uihelpers.py:444
 msgid "Not bridged"
 msgstr "未桥接"
 
-#: ../src/virtManager/uihelpers.py:439
+#: ../src/virtManager/uihelpers.py:446
 #, python-format
 msgid "Host device %s %s"
 msgstr "主机设备 %s %s"
 
-#: ../src/virtManager/uihelpers.py:476
+#: ../src/virtManager/uihelpers.py:483
 msgid "No networking."
 msgstr "无联网。"
 
 #. After all is said and done, add a manual bridge option
-#: ../src/virtManager/uihelpers.py:481
+#: ../src/virtManager/uihelpers.py:489
 msgid "Specify shared device name"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:500
+#: ../src/virtManager/uihelpers.py:508
 msgid "Virtual Network is not active."
 msgstr "虚拟网络不活跃。"
 
-#: ../src/virtManager/uihelpers.py:501
+#: ../src/virtManager/uihelpers.py:509
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr "虚拟网络“%s”不活跃。您现在要启动该网络吗？"
 
-#: ../src/virtManager/uihelpers.py:513
+#: ../src/virtManager/uihelpers.py:521
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "无法启动虚拟网络“%s”: %s"
 
-#: ../src/virtManager/uihelpers.py:535
+#: ../src/virtManager/uihelpers.py:543
 msgid "Error with network parameters."
 msgstr "网络参数错误。"
 
-#: ../src/virtManager/uihelpers.py:540 ../src/virtManager/uihelpers.py:542
+#: ../src/virtManager/uihelpers.py:548 ../src/virtManager/uihelpers.py:550
 msgid "Mac address collision."
 msgstr "MAC 地址冲突。"
 
-#: ../src/virtManager/uihelpers.py:543
+#: ../src/virtManager/uihelpers.py:551
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "%s 您确定要使用这个地址吗？"
 
-#: ../src/virtManager/uihelpers.py:595
+#: ../src/virtManager/uihelpers.py:603
 #, fuzzy
 msgid "No device present"
 msgstr "没有介质出现"
 
-#: ../src/virtManager/uihelpers.py:752
+#: ../src/virtManager/uihelpers.py:760
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr "模拟程序可能没有对路径“%s”的搜索权限。"
 
-#: ../src/virtManager/uihelpers.py:754
+#: ../src/virtManager/uihelpers.py:762
 msgid "Do you want to correct this now?"
 msgstr "您要现在改正吗？"
 
-#: ../src/virtManager/uihelpers.py:755 ../src/virtManager/uihelpers.py:779
+#: ../src/virtManager/uihelpers.py:763 ../src/virtManager/uihelpers.py:787
 msgid "Don't ask about these directories again."
 msgstr "不要再询问这些目录。"
 
-#: ../src/virtManager/uihelpers.py:768
+#: ../src/virtManager/uihelpers.py:776
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr "为以下目录更改权限时遇到问题："
@@ -2521,7 +2551,7 @@ msgstr "<b>设备参数</b>"
 #: ../src/vmm-add-hardware.glade.h:3
 #, fuzzy
 msgid ""
-"<small><b>Tip:</b> VNC or SPICE server is strongly recommended because it "
+"<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
 "allows the virtual display to be embedded inside this application. It may "
 "also be used to allow access to the virtual display from a remote system.</"
 "small>"
@@ -2672,6 +2702,7 @@ msgid "_Bind Host:"
 msgstr "绑定主机(_B)："
 
 #: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:48
+#: ../src/vmm-details.glade.h:122
 #, fuzzy
 msgid "_Bridge name:"
 msgstr "桥接"
@@ -2695,7 +2726,7 @@ msgstr "_GB"
 msgid "_Host device:"
 msgstr "主机设备："
 
-#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-details.glade.h:127
+#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-details.glade.h:130
 msgid "_Keymap:"
 msgstr ""
 
@@ -2738,7 +2769,7 @@ msgid "aa:bb:cc:dd:ee:ff"
 msgstr "aa:bb:cc:dd:ee:ff"
 
 #: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create-pool.glade.h:18
-#: ../src/vmm-details.glade.h:152
+#: ../src/vmm-details.glade.h:150
 msgid "label"
 msgstr "标签"
 
@@ -3044,6 +3075,7 @@ msgstr "设备类型(_D)："
 
 #: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:14
 #: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:54
+#: ../src/vmm-details.glade.h:134
 msgid "_Name:"
 msgstr "名称(_N)："
 
@@ -3056,7 +3088,7 @@ msgstr "启动(_S)： "
 msgid "_VLAN tag:"
 msgstr ""
 
-#: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:39
+#: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:40
 msgid "seconds"
 msgstr "秒"
 
@@ -3271,7 +3303,7 @@ msgid ""
 msgstr ""
 "本助手将协助您创建新的虚拟网络。将需要您提供要创建虚拟系统的一些信息，比如： "
 
-#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:110
+#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:111
 msgid "Type:"
 msgstr "类型："
 
@@ -3401,7 +3433,7 @@ msgid "Create a storage unit that can be used directly by a virtual machine."
 msgstr "创建一个虚拟机可直接使用的存储单位。"
 
 #: ../src/vmm-create-vol.glade.h:19 ../src/vmm-create.glade.h:28
-#: ../src/vmm-details.glade.h:66
+#: ../src/vmm-details.glade.h:67
 msgid "MB"
 msgstr "MB"
 
@@ -3630,57 +3662,62 @@ msgid "<b>Boot device order</b>"
 msgstr "<b>引导设备</b>"
 
 #: ../src/vmm-details.glade.h:6
-msgid "<b>CPUs</b>"
+#, fuzzy
+msgid "<b>CPU Features</b>"
 msgstr "<b>CPU</b>"
 
 #: ../src/vmm-details.glade.h:7
+msgid "<b>CPUs</b>"
+msgstr "<b>CPU</b>"
+
+#: ../src/vmm-details.glade.h:8
 #, fuzzy
 msgid "<b>Configuration</b>"
 msgstr "<b>IPv4 配置</b>"
 
-#: ../src/vmm-details.glade.h:8
+#: ../src/vmm-details.glade.h:9
 #, fuzzy
 msgid "<b>Controller</b>"
 msgstr "<b>Consoles</b>"
 
-#: ../src/vmm-details.glade.h:9
+#: ../src/vmm-details.glade.h:10
 msgid "<b>Direct kernel boot</b>"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:10
+#: ../src/vmm-details.glade.h:11
 msgid "<b>Hypervisor Details</b>"
 msgstr "<b>管理程序详情</b>"
 
-#: ../src/vmm-details.glade.h:11
+#: ../src/vmm-details.glade.h:12
 msgid "<b>Machine Settings</b>"
 msgstr "<b>机器设置</b>"
 
-#: ../src/vmm-details.glade.h:12
+#: ../src/vmm-details.glade.h:13
 msgid "<b>Memory</b>"
 msgstr "<b>内存</b>"
 
-#: ../src/vmm-details.glade.h:13 ../src/vmm-host.glade.h:6
+#: ../src/vmm-details.glade.h:14 ../src/vmm-host.glade.h:6
 msgid "<b>Performance</b>"
 msgstr "<b>性能</b>"
 
-#: ../src/vmm-details.glade.h:14
+#: ../src/vmm-details.glade.h:15
 #, fuzzy
 msgid "<b>Pinning</b>"
 msgstr "Pinning"
 
-#: ../src/vmm-details.glade.h:15
+#: ../src/vmm-details.glade.h:16
 msgid "<b>Security</b>"
 msgstr "<b>安全</b>"
 
-#: ../src/vmm-details.glade.h:16
+#: ../src/vmm-details.glade.h:17
 msgid "<b>Sound Device</b>"
 msgstr "<b>声音设备</b>"
 
-#: ../src/vmm-details.glade.h:17
+#: ../src/vmm-details.glade.h:18
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>终端目前不可用</b>"
 
-#: ../src/vmm-details.glade.h:18
+#: ../src/vmm-details.glade.h:19
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
@@ -3688,7 +3725,7 @@ msgstr ""
 "<b>窍门：</b>“源”指的是从主机操作系统中看到的信息，“目标”指从虚拟机系统操作系"
 "统中看到的信息"
 
-#: ../src/vmm-details.glade.h:19
+#: ../src/vmm-details.glade.h:20
 msgid ""
 "<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
 "OS will ensure that the virtual cursor moves in sync with the local desktop "
@@ -3697,61 +3734,57 @@ msgstr ""
 "<b>窍门：</b>在虚拟机系统操作系统中将图形表格配置为默认指针可保证虚拟光标与本"
 "地桌面光标的移动同步。"
 
-#: ../src/vmm-details.glade.h:20
+#: ../src/vmm-details.glade.h:21
 #, fuzzy
 msgid "<b>Topology</b>"
 msgstr "<b>Consoles</b>"
 
-#: ../src/vmm-details.glade.h:21
+#: ../src/vmm-details.glade.h:22
 #, fuzzy
 msgid "<b>Video</b>"
 msgstr "<b>视频设备</b>"
 
-#: ../src/vmm-details.glade.h:22
+#: ../src/vmm-details.glade.h:23
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>虚拟磁盘</b>"
 
-#: ../src/vmm-details.glade.h:23
+#: ../src/vmm-details.glade.h:24
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>虚拟网络接口</b>"
 
-#: ../src/vmm-details.glade.h:24
+#: ../src/vmm-details.glade.h:25
 msgid "<b>Virtual Pointer</b>"
 msgstr "<b>虚拟指针</b>"
 
-#: ../src/vmm-details.glade.h:25
+#: ../src/vmm-details.glade.h:26
 msgid "<b>insert type</b>"
 msgstr "<b>插入类型</b>"
 
-#: ../src/vmm-details.glade.h:26
+#: ../src/vmm-details.glade.h:27
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:27
+#: ../src/vmm-details.glade.h:28
 #, fuzzy
 msgid "A_ction:"
 msgstr "位置(_L)："
 
-#: ../src/vmm-details.glade.h:28
+#: ../src/vmm-details.glade.h:29
 msgid "A_dd Hardware"
 msgstr "添加硬件(_D)"
 
-#: ../src/vmm-details.glade.h:29 ../src/vmm-host.glade.h:15
+#: ../src/vmm-details.glade.h:30 ../src/vmm-host.glade.h:15
 msgid "Address:"
 msgstr "地址："
 
-#: ../src/vmm-details.glade.h:30
+#: ../src/vmm-details.glade.h:31
 #, fuzzy
 msgid "Advanced _options"
 msgstr "高级选项"
 
-#: ../src/vmm-details.glade.h:31 ../src/vmm-host.glade.h:16
+#: ../src/vmm-details.glade.h:32 ../src/vmm-host.glade.h:16
 msgid "Architecture:"
 msgstr "构架："
-
-#: ../src/vmm-details.glade.h:32
-msgid "Auth"
-msgstr "认证"
 
 #: ../src/vmm-details.glade.h:33
 #, fuzzy
@@ -3875,45 +3908,54 @@ msgid "Initrd path:"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:62
+msgid "Instance id:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:63
 #, fuzzy
 msgid "Kernel arguments:"
 msgstr "内核参数："
 
-#: ../src/vmm-details.glade.h:63
+#: ../src/vmm-details.glade.h:64
 #, fuzzy
 msgid "Kernel path:"
 msgstr "内核参数："
 
-#: ../src/vmm-details.glade.h:64
+#: ../src/vmm-details.glade.h:65
 #, fuzzy
 msgid "Logical host CPUs:"
 msgstr "逻辑 CPU："
 
-#: ../src/vmm-details.glade.h:65
+#: ../src/vmm-details.glade.h:66
 msgid "MAC address:"
 msgstr "MAC 地址："
 
-#: ../src/vmm-details.glade.h:67
+#: ../src/vmm-details.glade.h:68
 msgid "M_odel:"
 msgstr "型号(_O)："
 
-#: ../src/vmm-details.glade.h:68
+#: ../src/vmm-details.glade.h:69
 msgid "Ma_ximum allocation:"
 msgstr "最大分配量(_X)："
 
-#: ../src/vmm-details.glade.h:69
+#: ../src/vmm-details.glade.h:70
+#, fuzzy
+msgid "Managerid:"
+msgstr "查看管理器(_V)"
+
+#: ../src/vmm-details.glade.h:71
 msgid "Manually set CPU topology"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:70
+#: ../src/vmm-details.glade.h:72
 msgid "Max Memory Select"
 msgstr "最大内存选择"
 
-#: ../src/vmm-details.glade.h:71
+#: ../src/vmm-details.glade.h:73
 msgid "Maximum allocation:"
 msgstr "最大分配量："
 
-#: ../src/vmm-details.glade.h:72
+#: ../src/vmm-details.glade.h:74
 msgid ""
 "Memory\n"
 "usage:"
@@ -3921,23 +3963,19 @@ msgstr ""
 "内存\n"
 "用量："
 
-#: ../src/vmm-details.glade.h:74
+#: ../src/vmm-details.glade.h:76
 msgid "Memory Select"
 msgstr "内存选择"
 
-#: ../src/vmm-details.glade.h:75 ../src/vmm-host.glade.h:35
+#: ../src/vmm-details.glade.h:77 ../src/vmm-host.glade.h:35
 msgid "Mode:"
 msgstr "模式："
 
-#: ../src/vmm-details.glade.h:76
+#: ../src/vmm-details.glade.h:78
 msgid "Model:"
 msgstr "模式："
 
-#: ../src/vmm-details.glade.h:77 ../src/vmm-host.glade.h:37
-msgid "Name:"
-msgstr "名称："
-
-#: ../src/vmm-details.glade.h:78
+#: ../src/vmm-details.glade.h:79
 msgid ""
 "Network\n"
 "I/O:"
@@ -3945,294 +3983,243 @@ msgstr ""
 "网络\n"
 "I/O："
 
-#: ../src/vmm-details.glade.h:80
+#: ../src/vmm-details.glade.h:81
 msgid "Pause"
 msgstr "暂停"
 
-#: ../src/vmm-details.glade.h:81 ../src/vmm-manager.glade.h:3
+#: ../src/vmm-details.glade.h:82 ../src/vmm-manager.glade.h:3
 msgid "Pause the virtual machine"
 msgstr "暂停虚拟机"
 
-#: ../src/vmm-details.glade.h:82
+#: ../src/vmm-details.glade.h:83
 msgid "Port:"
 msgstr "端口："
 
-#: ../src/vmm-details.glade.h:83 ../src/vmm-manager.glade.h:4
+#: ../src/vmm-details.glade.h:84 ../src/vmm-manager.glade.h:4
 msgid "Power on the virtual machine"
 msgstr "打开虚拟机"
 
-#: ../src/vmm-details.glade.h:84
+#: ../src/vmm-details.glade.h:85
 msgid "RAM:"
 msgstr "RAM："
 
-#: ../src/vmm-details.glade.h:85
+#: ../src/vmm-details.glade.h:86
 msgid "R_eadonly:"
 msgstr "只读(_E)："
 
-#: ../src/vmm-details.glade.h:86
+#: ../src/vmm-details.glade.h:87
 #, fuzzy
 msgid "R_untime pinning:"
 msgstr "初始化 _pinning："
 
-#: ../src/vmm-details.glade.h:87
+#: ../src/vmm-details.glade.h:88
 msgid "Run"
 msgstr "运行"
 
-#: ../src/vmm-details.glade.h:88
+#: ../src/vmm-details.glade.h:89
 msgid "S_hut Down"
 msgstr "关机(_H)"
 
-#: ../src/vmm-details.glade.h:89
+#: ../src/vmm-details.glade.h:90
 msgid "Send _Key"
 msgstr "发送按键(_K)"
 
-#: ../src/vmm-details.glade.h:90
+#: ../src/vmm-details.glade.h:91
 msgid "Sharea_ble:"
 msgstr "可共享(_B)："
 
-#: ../src/vmm-details.glade.h:91
+#: ../src/vmm-details.glade.h:92
 msgid "Show the graphical console"
 msgstr "显示图形控制台"
 
-#: ../src/vmm-details.glade.h:92
+#: ../src/vmm-details.glade.h:93
 msgid "Show virtual hardware details"
 msgstr "显示虚拟硬件详情"
 
-#: ../src/vmm-details.glade.h:93
+#: ../src/vmm-details.glade.h:94
 msgid "Shut Down"
 msgstr "关机"
 
-#: ../src/vmm-details.glade.h:94
+#: ../src/vmm-details.glade.h:95
 msgid "Shut down"
 msgstr "关闭"
 
-#: ../src/vmm-details.glade.h:95 ../src/vmm-manager.glade.h:6
+#: ../src/vmm-details.glade.h:96 ../src/vmm-manager.glade.h:6
 msgid "Shutdown the virtual machine"
 msgstr "关闭虚拟机"
 
-#: ../src/vmm-details.glade.h:96
+#: ../src/vmm-details.glade.h:97
 msgid "Sockets:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:97
+#: ../src/vmm-details.glade.h:98
 msgid "Source Path:"
 msgstr "源路径："
 
-#: ../src/vmm-details.glade.h:98
+#: ../src/vmm-details.glade.h:99
 msgid "Source device:"
 msgstr "源设备："
 
-#: ../src/vmm-details.glade.h:99
+#: ../src/vmm-details.glade.h:100
 msgid "Source path:"
 msgstr "源路径："
 
-#: ../src/vmm-details.glade.h:100
+#: ../src/vmm-details.glade.h:101
 msgid "Start virt_ual machine on host boot up"
 msgstr "主机引导时启动虚拟机(_U)"
 
-#: ../src/vmm-details.glade.h:102
+#: ../src/vmm-details.glade.h:103
 #, fuzzy
 msgid "Storage forma_t:"
 msgstr "存储路径"
 
-#: ../src/vmm-details.glade.h:103
+#: ../src/vmm-details.glade.h:104
 #, fuzzy
 msgid "Storage size:"
 msgstr "存储"
 
-#: ../src/vmm-details.glade.h:104
+#: ../src/vmm-details.glade.h:105
 msgid "Switch to fullscreen view"
 msgstr "切换到全屏"
 
-#: ../src/vmm-details.glade.h:105
+#: ../src/vmm-details.glade.h:106
 #, fuzzy
 msgid "TLS Port:"
 msgstr "端口："
 
-#: ../src/vmm-details.glade.h:106
+#: ../src/vmm-details.glade.h:107
 msgid "T_oolbar"
 msgstr "工具条(_O)"
 
-#: ../src/vmm-details.glade.h:107
+#: ../src/vmm-details.glade.h:108
 msgid "Target device:"
 msgstr "目标设备："
 
-#: ../src/vmm-details.glade.h:108
+#: ../src/vmm-details.glade.h:109
 #, fuzzy
 msgid "Threads:"
 msgstr "标头："
 
-#: ../src/vmm-details.glade.h:109
+#: ../src/vmm-details.glade.h:110
 msgid "Total host memory:"
 msgstr "总主机内存："
 
-#: ../src/vmm-details.glade.h:111
+#: ../src/vmm-details.glade.h:112
+msgid "Typeid version:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:113
+#, fuzzy
+msgid "Typeid:"
+msgstr "类型："
+
+#: ../src/vmm-details.glade.h:114
 msgid "UUID:"
 msgstr "UUID："
 
-#: ../src/vmm-details.glade.h:112
-msgid "Unavailable"
-msgstr "不可用"
-
-#: ../src/vmm-details.glade.h:113
-msgid "VNC"
-msgstr "VNC"
-
-#: ../src/vmm-details.glade.h:114
+#: ../src/vmm-details.glade.h:115
 msgid "Virtual CPU Affinity Select"
 msgstr "虚拟 CPU 亲和性选择"
 
-#: ../src/vmm-details.glade.h:115
+#: ../src/vmm-details.glade.h:116
 msgid "Virtual CPU Select"
 msgstr "虚拟 CPU 选择"
 
-#: ../src/vmm-details.glade.h:116
-msgid "Virtual Machine"
-msgstr "虚拟机"
-
-#: ../src/vmm-details.glade.h:117
+#: ../src/vmm-details.glade.h:118
 msgid "Virtual _Machine"
 msgstr "虚拟机(_M)"
 
-#: ../src/vmm-details.glade.h:118
+#: ../src/vmm-details.glade.h:119
+#, fuzzy
+msgid "Virtual port"
+msgstr "虚拟网络"
+
+#: ../src/vmm-details.glade.h:120
 msgid "_Always"
 msgstr "总是(_A)"
 
-#: ../src/vmm-details.glade.h:119
+#: ../src/vmm-details.glade.h:121
 #, fuzzy
 msgid "_Begin Installation"
 msgstr "完成安装"
 
-#: ../src/vmm-details.glade.h:120
+#: ../src/vmm-details.glade.h:123
 msgid "_Clone"
 msgstr "克隆(_C)"
 
-#: ../src/vmm-details.glade.h:121
+#: ../src/vmm-details.glade.h:124
 msgid "_Console"
 msgstr "控制台(_C)"
 
-#: ../src/vmm-details.glade.h:123 ../src/vmm-host.glade.h:56
+#: ../src/vmm-details.glade.h:126 ../src/vmm-host.glade.h:56
 #: ../src/vmm-manager.glade.h:13
 msgid "_File"
 msgstr "文件(_F)"
 
-#: ../src/vmm-details.glade.h:125
+#: ../src/vmm-details.glade.h:128
 msgid "_Fullscreen"
 msgstr "全屏(_F)"
 
-#: ../src/vmm-details.glade.h:126 ../src/vmm-host.glade.h:57
+#: ../src/vmm-details.glade.h:129 ../src/vmm-host.glade.h:57
 #: ../src/vmm-manager.glade.h:15
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../src/vmm-details.glade.h:128
+#: ../src/vmm-details.glade.h:131
 msgid "_Label:"
 msgstr "标签(_L)"
 
-#: ../src/vmm-details.glade.h:129
+#: ../src/vmm-details.glade.h:132
 msgid "_Login"
 msgstr "登录(_L)"
 
-#: ../src/vmm-details.glade.h:131
+#: ../src/vmm-details.glade.h:135
 msgid "_Never"
 msgstr "从不(_N)"
 
-#: ../src/vmm-details.glade.h:132
+#: ../src/vmm-details.glade.h:136
 msgid "_Only when Fullscreen"
 msgstr "仅全屏时(_O)"
 
-#: ../src/vmm-details.glade.h:133
+#: ../src/vmm-details.glade.h:137
 msgid "_Password:"
 msgstr "密码(_P)："
 
-#: ../src/vmm-details.glade.h:136
+#: ../src/vmm-details.glade.h:140
 msgid "_Resize to VM"
 msgstr "适应虚拟机尺寸(_R)"
 
-#: ../src/vmm-details.glade.h:138
+#: ../src/vmm-details.glade.h:142
 msgid "_Save this password in your keyring"
 msgstr "将密码保存到钥匙环(_S)"
 
-#: ../src/vmm-details.glade.h:139
+#: ../src/vmm-details.glade.h:143
 msgid "_Scale Display"
 msgstr "计量显示(_S)"
 
-#: ../src/vmm-details.glade.h:140
+#: ../src/vmm-details.glade.h:144
 msgid "_Static"
 msgstr "静态(_S)"
 
-#: ../src/vmm-details.glade.h:141
+#: ../src/vmm-details.glade.h:145
 msgid "_Take Screenshot"
 msgstr "截屏(_T)"
 
-#: ../src/vmm-details.glade.h:142
+#: ../src/vmm-details.glade.h:146
 msgid "_Text Consoles"
 msgstr "文本控制台(_T)"
 
-#: ../src/vmm-details.glade.h:143 ../src/vmm-open-connection.glade.h:16
+#: ../src/vmm-details.glade.h:147 ../src/vmm-open-connection.glade.h:16
 msgid "_Username:"
 msgstr "用户名(_U)："
 
-#: ../src/vmm-details.glade.h:144 ../src/vmm-manager.glade.h:21
+#: ../src/vmm-details.glade.h:148 ../src/vmm-manager.glade.h:21
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../src/vmm-details.glade.h:145 ../src/vmm-host.glade.h:59
+#: ../src/vmm-details.glade.h:149 ../src/vmm-host.glade.h:59
 msgid "_View Manager"
 msgstr "查看管理器(_V)"
-
-#: ../src/vmm-details.glade.h:146
-#, fuzzy
-msgid "boot"
-msgstr "重启(_R)"
-
-#: ../src/vmm-details.glade.h:147
-msgid "chr"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:148
-msgid "cntrl"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:149
-msgid "cpu"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:150
-msgid "dsk"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:151
-msgid "inp"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:153
-#, fuzzy
-msgid "mem"
-msgstr "内存"
-
-#: ../src/vmm-details.glade.h:154
-#, fuzzy
-msgid "net"
-msgstr "网络"
-
-#: ../src/vmm-details.glade.h:155
-msgid "over"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:156
-#, fuzzy
-msgid "snd"
-msgstr "秒"
-
-#: ../src/vmm-details.glade.h:157
-msgid "stat"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:158
-#, fuzzy
-msgid "vid"
-msgstr "Vid"
 
 #: ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
@@ -4350,6 +4337,10 @@ msgstr "内存占用："
 msgid "Memory:"
 msgstr "内存："
 
+#: ../src/vmm-host.glade.h:37
+msgid "Name:"
+msgstr "名称："
+
 #: ../src/vmm-host.glade.h:38
 msgid "Network Interfaces"
 msgstr "网络接口"
@@ -4447,7 +4438,7 @@ msgstr "_CPU 用量"
 msgid "_Connection Details"
 msgstr "连接选择"
 
-#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:30
+#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:31
 msgid "_Disk I/O"
 msgstr "磁盘 I/O(_D)"
 
@@ -4459,7 +4450,7 @@ msgstr "编辑(_E)"
 msgid "_Graph"
 msgstr "图形(_G)"
 
-#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:34
+#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:35
 msgid "_Network I/O"
 msgstr "网络 I/O(_N)"
 
@@ -4654,10 +4645,15 @@ msgid "Install Audio Device:"
 msgstr "安装音频设备："
 
 #: ../src/vmm-preferences.glade.h:18
+#, fuzzy
+msgid "Install Graphics:"
+msgstr "图形"
+
+#: ../src/vmm-preferences.glade.h:19
 msgid "Maintain h_istory of"
 msgstr "维护历史记录(_H)"
 
-#: ../src/vmm-preferences.glade.h:19
+#: ../src/vmm-preferences.glade.h:20
 msgid ""
 "Never\n"
 "For all new domains\n"
@@ -4667,7 +4663,7 @@ msgstr ""
 "对于新域\n"
 "对于所有域"
 
-#: ../src/vmm-preferences.glade.h:22
+#: ../src/vmm-preferences.glade.h:23
 msgid ""
 "Never\n"
 "Fullscreen only\n"
@@ -4677,53 +4673,53 @@ msgstr ""
 "只在全屏时\n"
 "总是"
 
-#: ../src/vmm-preferences.glade.h:25
+#: ../src/vmm-preferences.glade.h:26
 msgid "Not supported"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:26
+#: ../src/vmm-preferences.glade.h:27
 #, fuzzy
 msgid "Poweroff/_Reboot/Save:"
 msgstr "关机/重启(_R)："
 
-#: ../src/vmm-preferences.glade.h:27
+#: ../src/vmm-preferences.glade.h:28
 msgid "Preferences"
 msgstr "首选项"
 
-#: ../src/vmm-preferences.glade.h:28
+#: ../src/vmm-preferences.glade.h:29
 msgid "Stats"
 msgstr "统计"
 
-#: ../src/vmm-preferences.glade.h:29
+#: ../src/vmm-preferences.glade.h:30
 msgid "VM Details"
 msgstr "虚拟机详情"
 
-#: ../src/vmm-preferences.glade.h:31
+#: ../src/vmm-preferences.glade.h:32
 msgid "_Force Poweroff:"
 msgstr "强制关机(_F)："
 
-#: ../src/vmm-preferences.glade.h:32
+#: ../src/vmm-preferences.glade.h:33
 #, fuzzy
 msgid "_Interface start/stop:"
 msgstr "设备类型(_D)："
 
-#: ../src/vmm-preferences.glade.h:33
+#: ../src/vmm-preferences.glade.h:34
 msgid "_Local virtual machine"
 msgstr "本地虚拟机(_L)"
 
-#: ../src/vmm-preferences.glade.h:35
+#: ../src/vmm-preferences.glade.h:36
 msgid "_Pause:"
 msgstr "暂停(_P)："
 
-#: ../src/vmm-preferences.glade.h:36
+#: ../src/vmm-preferences.glade.h:37
 msgid "_Remote virtual machine"
 msgstr "远程虚拟机(_R)"
 
-#: ../src/vmm-preferences.glade.h:37
+#: ../src/vmm-preferences.glade.h:38
 msgid "_Update status every"
 msgstr "更新状态间隔(_U)："
 
-#: ../src/vmm-preferences.glade.h:38
+#: ../src/vmm-preferences.glade.h:39
 msgid "samples"
 msgstr "范例"
 
@@ -4746,6 +4742,35 @@ msgstr "选择卷(_V)"
 #: ../src/vmm-storage-browse.glade.h:3
 msgid "_Browse Local"
 msgstr "本地浏览(_B)"
+
+#~ msgid "Auth"
+#~ msgstr "认证"
+
+#~ msgid "Unavailable"
+#~ msgstr "不可用"
+
+#~ msgid "VNC"
+#~ msgstr "VNC"
+
+#, fuzzy
+#~ msgid "boot"
+#~ msgstr "重启(_R)"
+
+#, fuzzy
+#~ msgid "mem"
+#~ msgstr "内存"
+
+#, fuzzy
+#~ msgid "net"
+#~ msgstr "网络"
+
+#, fuzzy
+#~ msgid "snd"
+#~ msgstr "秒"
+
+#, fuzzy
+#~ msgid "vid"
+#~ msgstr "Vid"
 
 #~ msgid "When to grab keyboard input for the console"
 #~ msgstr "何时为控制台获得键盘输入"

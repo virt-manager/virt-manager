@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 15:27-0500\n"
+"POT-Creation-Date: 2011-03-24 16:35-0400\n"
 "PO-Revision-Date: 2010-02-23 10:02+0100\n"
 "Last-Translator: Nikolas Slivka <snicore@gmail.com>\n"
 "Language-Team: Hungarian Fedora Translation Team <fedor-trans-hu@redhat."
@@ -40,9 +40,7 @@ msgstr "Virtuális gép igazgatója"
 msgid "Error starting Virtual Machine Manager"
 msgstr "Hiba a Virtuális gép igazgatójának indításakor"
 
-#. ...the risk is we catch too much though
-#. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:346
+#: ../src/virt-manager.py.in:359
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "GTK-t nem lehet inicializálni: %s"
@@ -122,167 +120,176 @@ msgid "Enable menu accelerators in console window"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:19
+#, fuzzy
+msgid "Install selected graphics type for new VM"
+msgstr "Hangeszköz telepítés a távoli virtuális géphez"
+
+#: ../src/virt-manager.schemas.in.h:20
+msgid "Install selected graphics type for new VM. vnc or spice"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:21
 msgid "Install sound device for local VM"
 msgstr "Hangeszköz telepítés a helyi virtuális géphez"
 
-#: ../src/virt-manager.schemas.in.h:20
+#: ../src/virt-manager.schemas.in.h:22
 msgid "Install sound device for remote VM"
 msgstr "Hangeszköz telepítés a távoli virtuális géphez"
 
-#: ../src/virt-manager.schemas.in.h:21
+#: ../src/virt-manager.schemas.in.h:23
 msgid "Poll disk i/o stats"
 msgstr "Lemez I/O állapotok gyűjtése"
 
-#: ../src/virt-manager.schemas.in.h:22
+#: ../src/virt-manager.schemas.in.h:24
 msgid "Poll net i/o stats"
 msgstr "Hálózat I/O állapotok gyűjtése"
 
-#: ../src/virt-manager.schemas.in.h:23
+#: ../src/virt-manager.schemas.in.h:25
 #, fuzzy
 msgid "Show cpu usage in summary"
 msgstr "Hálózati forgalom"
 
-#: ../src/virt-manager.schemas.in.h:24
+#: ../src/virt-manager.schemas.in.h:26
 #, fuzzy
 msgid "Show disk I/O in summary"
 msgstr "Hálózati forgalom"
 
-#: ../src/virt-manager.schemas.in.h:25
+#: ../src/virt-manager.schemas.in.h:27
 #, fuzzy
 msgid "Show network I/O in summary"
 msgstr "Hálózati forgalom"
 
-#: ../src/virt-manager.schemas.in.h:26
+#: ../src/virt-manager.schemas.in.h:28
 msgid "Show system tray icon"
 msgstr "Ikon megjelenítése a paneltálcán"
 
-#: ../src/virt-manager.schemas.in.h:27
+#: ../src/virt-manager.schemas.in.h:29
 msgid "Show system tray icon while app is running"
 msgstr "Ikon megjelenítése a paneltálcán, amíg az alkalmazás fut"
 
-#: ../src/virt-manager.schemas.in.h:28
+#: ../src/virt-manager.schemas.in.h:30
 msgid "Show the cpu usage field in the domain list summary view"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:29
+#: ../src/virt-manager.schemas.in.h:31
 #, fuzzy
 msgid "Show the disk I/O field in the domain list summary view"
 msgstr "Hálózati forgalom"
 
-#: ../src/virt-manager.schemas.in.h:30
+#: ../src/virt-manager.schemas.in.h:32
 #, fuzzy
 msgid "Show the network I/O field in the domain list summary view"
 msgstr "Hálózati forgalom"
 
-#: ../src/virt-manager.schemas.in.h:31
+#: ../src/virt-manager.schemas.in.h:33
 msgid "The length of the list of URLs"
 msgstr "Az URL-ek maximális száma"
 
-#: ../src/virt-manager.schemas.in.h:32
+#: ../src/virt-manager.schemas.in.h:34
 msgid "The number of samples to keep in the statistics history"
 msgstr "A minták száma a statisztika történet előzményeihez"
 
-#: ../src/virt-manager.schemas.in.h:33
+#: ../src/virt-manager.schemas.in.h:35
 msgid ""
 "The number of urls to keep in the history for the install media address page."
 msgstr "A url címek száma a telepítési adathordozók címeinek előzményeihez."
 
-#: ../src/virt-manager.schemas.in.h:34
+#: ../src/virt-manager.schemas.in.h:36
 msgid "The statistics history length"
 msgstr "Az előzmény statisztikák hossza"
 
-#: ../src/virt-manager.schemas.in.h:35
+#: ../src/virt-manager.schemas.in.h:37
 msgid "The statistics update interval"
 msgstr "A statisztika frissítési időköze"
 
-#: ../src/virt-manager.schemas.in.h:36
+#: ../src/virt-manager.schemas.in.h:38
 msgid "The statistics update interval in seconds"
 msgstr "A frissítés intervalluma, másodpercben"
 
-#: ../src/virt-manager.schemas.in.h:37
+#: ../src/virt-manager.schemas.in.h:39
 msgid "When to pop up a console for a guest"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:38
+#: ../src/virt-manager.schemas.in.h:40
 msgid "When to scale the VM graphical console"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:39
+#: ../src/virt-manager.schemas.in.h:41
 msgid ""
 "When to scale the VM graphical console. 0 = never, 1 = only when in full "
 "screen mode, 2 = Always"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:40
+#: ../src/virt-manager.schemas.in.h:42
 msgid "Whether or not the app will poll VM disk i/o statistics"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:41
+#: ../src/virt-manager.schemas.in.h:43
 msgid "Whether or not the app will poll VM network i/o statistics"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:42
+#: ../src/virt-manager.schemas.in.h:44
 msgid ""
 "Whether to enable menu accelerators while connected to the guest graphical "
 "console."
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:43
+#: ../src/virt-manager.schemas.in.h:45
 msgid "Whether to install a sound device for local VMs or not"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:44
+#: ../src/virt-manager.schemas.in.h:46
 msgid "Whether to install a sound device for remote VMs or not"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:45
+#: ../src/virt-manager.schemas.in.h:47
 msgid ""
 "Whether to pop up a console for a guest. 0 = never, 1 = only on creation of "
 "a new guest, 2 = On creation of any guest"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:46
+#: ../src/virt-manager.schemas.in.h:48
 msgid "Whether to show VM button toolbar in Details display"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:47
+#: ../src/virt-manager.schemas.in.h:49
 msgid "Whether to show notification when grabbing mouse"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:48
+#: ../src/virt-manager.schemas.in.h:50
 msgid ""
 "Whether to show the notification hint when grabbing the mouse in the console"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:49
+#: ../src/virt-manager.schemas.in.h:51
 msgid ""
 "Whether to show toolbar containing Virtual Machine action buttons (such as "
 "Run, Pause, Shutdown) in the details display"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:50
+#: ../src/virt-manager.schemas.in.h:52
 msgid "Whether we require confirmation to forcepoweroff a VM"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:51
+#: ../src/virt-manager.schemas.in.h:53
 msgid "Whether we require confirmation to pause a VM"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:52
+#: ../src/virt-manager.schemas.in.h:54
 msgid "Whether we require confirmation to poweroff/reboot a VM"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:53
+#: ../src/virt-manager.schemas.in.h:55
 msgid "Whether we require confirmation to remove a virtual device"
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:54
+#: ../src/virt-manager.schemas.in.h:56
 msgid ""
 "Whether we require confirmation to start or stop a libvirt virtual interface"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:331 ../src/virtManager/create.py:445
-#: ../src/virtManager/create.py:537
+#: ../src/virtManager/addhardware.py:331 ../src/virtManager/create.py:452
+#: ../src/virtManager/create.py:544
 msgid "Connection does not support storage management."
 msgstr ""
 
@@ -300,14 +307,14 @@ msgstr "A csatlakozás nem támogat gazdaeszköz felsorolást"
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt verzió nem támogat videó eszközt."
 
-#: ../src/virtManager/addhardware.py:487 ../src/virtManager/details.py:2190
+#: ../src/virtManager/addhardware.py:487 ../src/virtManager/details.py:2388
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB Graphics Tablet"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:491 ../src/virtManager/details.py:2192
+#: ../src/virtManager/addhardware.py:491 ../src/virtManager/details.py:2390
 msgid "Generic USB Mouse"
 msgstr "Általános egér (USB)"
 
@@ -317,7 +324,7 @@ msgstr "VNC szerver"
 
 #: ../src/virtManager/addhardware.py:496
 #, fuzzy
-msgid "SPICE server"
+msgid "Spice server"
 msgstr "VNC szerver"
 
 #: ../src/virtManager/addhardware.py:497
@@ -351,7 +358,7 @@ msgstr "Tároló"
 msgid "Network"
 msgstr "Hálózat"
 
-#: ../src/virtManager/addhardware.py:824 ../src/virtManager/details.py:2532
+#: ../src/virtManager/addhardware.py:824 ../src/virtManager/details.py:2734
 msgid "Input"
 msgstr "Bemenet"
 
@@ -401,36 +408,36 @@ msgstr ""
 msgid "Error adding device: %s"
 msgstr "Hiba a rendszerindítási eszköz cseréjekor: %s"
 
-#: ../src/virtManager/addhardware.py:1006 ../src/virtManager/create.py:1409
+#: ../src/virtManager/addhardware.py:1006 ../src/virtManager/create.py:1430
 #, python-format
 msgid ""
-"The following path already exists, but is not\n"
+"The following storage already exists, but is not\n"
 "in use by any virtual machine:\n"
 "\n"
 "%s\n"
 "\n"
-"Would you like to use this path?"
+"Would you like to reuse this storage?"
 msgstr ""
 
-#: ../src/virtManager/addhardware.py:1014 ../src/virtManager/create.py:1417
+#: ../src/virtManager/addhardware.py:1014 ../src/virtManager/create.py:1438
 msgid "A storage path must be specified."
 msgstr "Meg kell adni egy tároló elérési útvonalat."
 
-#: ../src/virtManager/addhardware.py:1032 ../src/virtManager/create.py:1425
+#: ../src/virtManager/addhardware.py:1032 ../src/virtManager/create.py:1446
 msgid "Storage parameter error."
 msgstr "Tároló paraméter hiba."
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:1046 ../src/virtManager/create.py:1430
+#: ../src/virtManager/addhardware.py:1046 ../src/virtManager/create.py:1451
 msgid "Not Enough Free Space"
 msgstr "Nem áll rendelkezésre elegendő szabad hely."
 
-#: ../src/virtManager/addhardware.py:1052 ../src/virtManager/create.py:1436
+#: ../src/virtManager/addhardware.py:1052 ../src/virtManager/create.py:1457
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "\"%s\" lemez használatban van egy másik vendég rendszer által!"
 
-#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1438
+#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1459
 msgid "Do you really want to use the disk?"
 msgstr "Biztosan használni szeretné a lemezt?"
 
@@ -505,19 +512,19 @@ msgstr "Feldolgozás..."
 msgid "Completed"
 msgstr "Befejezve"
 
-#: ../src/virtManager/choosecd.py:91 ../src/virtManager/choosecd.py:97
+#: ../src/virtManager/choosecd.py:88 ../src/virtManager/choosecd.py:94
 msgid "Invalid Media Path"
 msgstr "Érvénytelen adathordozó elérési útvonal"
 
-#: ../src/virtManager/choosecd.py:92
+#: ../src/virtManager/choosecd.py:89
 msgid "A media path must be specified."
 msgstr "Meg kell adni egy elérési útvonalat az adathordozóhoz."
 
-#: ../src/virtManager/choosecd.py:138
+#: ../src/virtManager/choosecd.py:135
 msgid "Floppy D_rive"
 msgstr "Floppy M_eghajtó"
 
-#: ../src/virtManager/choosecd.py:139
+#: ../src/virtManager/choosecd.py:136
 msgid "Floppy _Image"
 msgstr ""
 
@@ -591,7 +598,7 @@ msgid ""
 msgstr ""
 
 #: ../src/virtManager/clone.py:737 ../src/virtManager/createpool.py:382
-#: ../src/virtManager/createvol.py:195 ../src/virtManager/migrate.py:433
+#: ../src/virtManager/createvol.py:199 ../src/virtManager/migrate.py:433
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr ""
@@ -628,11 +635,11 @@ msgid ""
 "managed storage volumes."
 msgstr ""
 
-#: ../src/virtManager/clone.py:824 ../src/virtManager/delete.py:329
+#: ../src/virtManager/clone.py:824 ../src/virtManager/delete.py:330
 msgid "No write access to parent directory."
 msgstr "Nincs írási jogosultság a szülő könyvtárhoz."
 
-#: ../src/virtManager/clone.py:826 ../src/virtManager/delete.py:327
+#: ../src/virtManager/clone.py:826 ../src/virtManager/delete.py:328
 msgid "Path does not exist."
 msgstr "Az útvonal nem létezik."
 
@@ -732,16 +739,26 @@ msgstr "Aktív"
 #: ../src/virtManager/connection.py:590 ../src/virtManager/host.py:508
 #: ../src/virtManager/host.py:551 ../src/virtManager/host.py:777
 #: ../src/virtManager/host.py:808 ../src/virtManager/host.py:1044
-#: ../src/virtManager/uihelpers.py:394
+#: ../src/virtManager/uihelpers.py:401
 msgid "Inactive"
 msgstr "Inaktív"
 
-#: ../src/virtManager/connection.py:592 ../src/virtManager/create.py:1726
-#: ../src/virtManager/details.py:1917 ../src/virtManager/details.py:2111
-#: ../src/virtManager/details.py:2271 ../src/virtManager/details.py:2272
+#: ../src/virtManager/connection.py:592 ../src/virtManager/create.py:1747
+#: ../src/virtManager/details.py:2054 ../src/virtManager/details.py:2271
+#: ../src/virtManager/details.py:2469 ../src/virtManager/details.py:2470
 #: ../src/virtManager/host.py:1039
 msgid "Unknown"
 msgstr "Ismeretlen"
+
+#: ../src/virtManager/connection.py:768
+#, python-format
+msgid ""
+"Domain rename failed. Attempting to recover also failed.\n"
+"\n"
+"Original error: %s\n"
+"\n"
+"Recover error: %s"
+msgstr ""
 
 #: ../src/virtManager/console.py:295
 msgid "Unable to provide requested credentials to the VNC server"
@@ -770,70 +787,74 @@ msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 msgid "Error opening socket path '%s'"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/console.py:543
+#: ../src/virtManager/console.py:538 ../src/vmm-details.glade.h:117
+msgid "Virtual Machine"
+msgstr "Virtuális gép"
+
+#: ../src/virtManager/console.py:542
 #, fuzzy, python-format
 msgid "Press %s to release pointer."
 msgstr "Nyomja meg a Ctrl+Alt kombinációt a mutató elengedéséhez."
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
+#: ../src/virtManager/console.py:725 ../src/virtManager/console.py:895
 msgid "Guest not running"
 msgstr "A vendég nem fut"
 
-#: ../src/virtManager/console.py:709
+#: ../src/virtManager/console.py:728
 msgid "Guest has crashed"
 msgstr "A vendég összeomlott"
 
-#: ../src/virtManager/console.py:819
+#: ../src/virtManager/console.py:838
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr ""
 
-#: ../src/virtManager/console.py:893
+#: ../src/virtManager/console.py:912
 msgid "Graphical console not configured for guest"
 msgstr ""
 
-#: ../src/virtManager/console.py:900
+#: ../src/virtManager/console.py:919
 #, fuzzy, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Nem található grafikus konzol."
 
-#: ../src/virtManager/console.py:910
+#: ../src/virtManager/console.py:929
 msgid "Graphical console is not yet active for guest"
 msgstr ""
 
-#: ../src/virtManager/console.py:915
+#: ../src/virtManager/console.py:934
 #, fuzzy
 msgid "Connecting to graphical console for guest"
 msgstr "Nem található grafikus konzol."
 
-#: ../src/virtManager/console.py:951
+#: ../src/virtManager/console.py:970
 #, fuzzy
 msgid "Error connecting to graphical console"
 msgstr "Nem található grafikus konzol."
 
-#: ../src/virtManager/create.py:319
+#: ../src/virtManager/create.py:324
 msgid "No active connection to install on."
 msgstr "Nincs aktív kapcsolat a telepítéshez."
 
-#: ../src/virtManager/create.py:380
+#: ../src/virtManager/create.py:387
 msgid "Connection is read only."
 msgstr "A csatlakozás csak olvasható."
 
-#: ../src/virtManager/create.py:383
+#: ../src/virtManager/create.py:390
 #, fuzzy
 msgid ""
 "No hypervisor options were found for this\n"
 "connection."
 msgstr "Nincs elérhető telepítési beállítás ehhez a kapcsolathoz."
 
-#: ../src/virtManager/create.py:388
+#: ../src/virtManager/create.py:395
 msgid ""
 "This usually means that QEMU or KVM is not\n"
 "installed on your machine, or the KVM kernel modules are not loaded."
 msgstr ""
 
-#: ../src/virtManager/create.py:403
+#: ../src/virtManager/create.py:410
 msgid ""
 "Host supports full virtualization, but\n"
 "no related install options are available.\n"
@@ -841,159 +862,159 @@ msgid ""
 "system BIOS."
 msgstr ""
 
-#: ../src/virtManager/create.py:410
+#: ../src/virtManager/create.py:417
 msgid ""
 "Host does not appear to support hardware\n"
 "virtualization. Install options may be limited."
 msgstr ""
 
-#: ../src/virtManager/create.py:416
+#: ../src/virtManager/create.py:423
 msgid ""
 "KVM is not available. This may mean the KVM\n"
 "package is not installed, or the KVM kernel modules \n"
 "are not loaded. Your virtual machines may perform poorly."
 msgstr ""
 
-#: ../src/virtManager/create.py:439
+#: ../src/virtManager/create.py:446
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr ""
 
-#: ../src/virtManager/create.py:443
+#: ../src/virtManager/create.py:450
 msgid "URL installs not available for remote connections."
 msgstr ""
 
-#: ../src/virtManager/create.py:457
+#: ../src/virtManager/create.py:464
 msgid "No install options available for this connection."
 msgstr "Nincs elérhető telepítési beállítás ehhez a kapcsolathoz."
 
-#: ../src/virtManager/create.py:497
+#: ../src/virtManager/create.py:504
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "%(maxmem)s áll rendelkezésre a gazda gépen"
 
-#: ../src/virtManager/create.py:511
+#: ../src/virtManager/create.py:518
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
 msgstr ""
 
-#: ../src/virtManager/create.py:521
+#: ../src/virtManager/create.py:528
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "%(numcpus)d elérhető"
 
-#: ../src/virtManager/create.py:603
+#: ../src/virtManager/create.py:610
 #, fuzzy
 msgid "Only URL or import installs are supported for paravirt."
 msgstr "Csak az URL telepítések támogatottak a paravirt-hez."
 
-#: ../src/virtManager/create.py:680 ../src/virtManager/create.py:689
-#: ../src/virtManager/create.py:764 ../src/virtManager/create.py:766
+#: ../src/virtManager/create.py:687 ../src/virtManager/create.py:696
+#: ../src/virtManager/create.py:771 ../src/virtManager/create.py:773
 msgid "Generic"
 msgstr "Általános"
 
-#: ../src/virtManager/create.py:746
+#: ../src/virtManager/create.py:753
 msgid "Local CDROM/ISO"
 msgstr "Helyi CDROM/ISO"
 
-#: ../src/virtManager/create.py:748
+#: ../src/virtManager/create.py:755
 msgid "URL Install Tree"
 msgstr "URL telepítési út"
 
-#: ../src/virtManager/create.py:750
+#: ../src/virtManager/create.py:757
 msgid "PXE Install"
 msgstr "PXE telepítés"
 
-#: ../src/virtManager/create.py:752
+#: ../src/virtManager/create.py:759
 #, fuzzy
 msgid "Import existing OS image"
 msgstr "Tároló eszköz keresése"
 
-#: ../src/virtManager/create.py:755 ../src/virtManager/details.py:1918
-#: ../src/virtManager/details.py:1941
+#: ../src/virtManager/create.py:762 ../src/virtManager/details.py:2055
+#: ../src/virtManager/details.py:2083
 msgid "None"
 msgstr "Semmi"
 
-#: ../src/virtManager/create.py:943
+#: ../src/virtManager/create.py:954
 #, fuzzy
 msgid "Network selection does not support PXE"
 msgstr "Hálózat"
 
-#: ../src/virtManager/create.py:1135 ../src/virtManager/createinterface.py:876
+#: ../src/virtManager/create.py:1149 ../src/virtManager/createinterface.py:876
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "%(current_page)d lépés a(az) %(max_page)d lépésből"
 
-#: ../src/virtManager/create.py:1182
+#: ../src/virtManager/create.py:1196
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "Hiba az UUID beállításakor: %s"
 
-#: ../src/virtManager/create.py:1193
+#: ../src/virtManager/create.py:1214
 msgid "Error setting up graphics device:"
 msgstr "Hiba a grafikus eszköz beállításakor:"
 
-#: ../src/virtManager/create.py:1203
+#: ../src/virtManager/create.py:1224
 msgid "Error setting up sound device:"
 msgstr "Hiba a hang eszköz beállításakor:"
 
-#: ../src/virtManager/create.py:1223 ../src/virtManager/createinterface.py:905
+#: ../src/virtManager/create.py:1244 ../src/virtManager/createinterface.py:905
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr ""
 
-#: ../src/virtManager/create.py:1235
+#: ../src/virtManager/create.py:1256
 msgid "Invalid System Name"
 msgstr "Érvénytelen rendszernév"
 
-#: ../src/virtManager/create.py:1255
+#: ../src/virtManager/create.py:1276
 msgid "An install media selection is required."
 msgstr "Egy telepítési adathordozót választani kell."
 
-#: ../src/virtManager/create.py:1265
+#: ../src/virtManager/create.py:1286
 msgid "An install tree is required."
 msgstr "Meg kell adni egy telepítési útvonalat."
 
-#: ../src/virtManager/create.py:1278
+#: ../src/virtManager/create.py:1299
 #, fuzzy
 msgid "A storage path to import is required."
 msgstr "Meg kell adni egy tároló elérési útvonalat."
 
-#: ../src/virtManager/create.py:1288
+#: ../src/virtManager/create.py:1309
 msgid "Error setting installer parameters."
 msgstr "Hiba a telepítési paraméterek beállításakor."
 
-#: ../src/virtManager/create.py:1306
+#: ../src/virtManager/create.py:1327
 msgid "Error setting install media location."
 msgstr "Hiba a telepítési adathordozó helyének beállításakor."
 
-#: ../src/virtManager/create.py:1316
+#: ../src/virtManager/create.py:1337
 msgid "Error setting OS information."
 msgstr "Hiba az OS információk beállításakor."
 
-#: ../src/virtManager/create.py:1353
+#: ../src/virtManager/create.py:1374
 msgid "Error setting CPUs."
 msgstr "Hiba a processzorok beállításakor."
 
-#: ../src/virtManager/create.py:1360
+#: ../src/virtManager/create.py:1381
 msgid "Error setting guest memory."
 msgstr "Hiba a vendég rendszer memória beállítása közben."
 
-#: ../src/virtManager/create.py:1469
+#: ../src/virtManager/create.py:1490
 #, python-format
 msgid "Network device required for %s install."
 msgstr "Hálózati eszköz szükséges %s telepítésekor."
 
-#: ../src/virtManager/create.py:1554
+#: ../src/virtManager/create.py:1575
 #, fuzzy
 msgid "Error starting installation: "
 msgstr "Hiba a telepítési adathordozó helyének beállításakor."
 
-#: ../src/virtManager/create.py:1582
+#: ../src/virtManager/create.py:1603
 msgid "Creating Virtual Machine"
 msgstr "Virtuális gép létrehozása"
 
-#: ../src/virtManager/create.py:1583
+#: ../src/virtManager/create.py:1604
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1001,17 +1022,17 @@ msgstr ""
 "A virtuális gép készítése most elindul. A lemezterület kialakítása és a "
 "telepítési lemezkép kinyerése néhány percet igénybe vehet."
 
-#: ../src/virtManager/create.py:1594
+#: ../src/virtManager/create.py:1615
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Nem lehet befejezni a telepítést: '%s'"
 
-#: ../src/virtManager/create.py:1672
+#: ../src/virtManager/create.py:1693
 #, fuzzy, python-format
 msgid "Error continue install: %s"
 msgstr "Hiba a kötet készítésekor: %s"
 
-#: ../src/virtManager/create.py:1768
+#: ../src/virtManager/create.py:1789
 msgid "Detecting"
 msgstr "Detektálás"
 
@@ -1169,13 +1190,13 @@ msgstr "Egyéb"
 msgid "Start address:"
 msgstr "Kezdő címek:"
 
-#: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:101
+#: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:102
 msgid "Status:"
 msgstr "Állapot:"
 
-#: ../src/virtManager/createnet.py:301 ../src/virtManager/details.py:1960
-#: ../src/virtManager/details.py:1961 ../src/virtManager/details.py:1962
-#: ../src/virtManager/details.py:1963 ../src/virtManager/host.py:530
+#: ../src/virtManager/createnet.py:301 ../src/virtManager/details.py:2108
+#: ../src/virtManager/details.py:2109 ../src/virtManager/details.py:2110
+#: ../src/virtManager/details.py:2111 ../src/virtManager/host.py:530
 #: ../src/virtManager/host.py:531
 msgid "Disabled"
 msgstr "Letiltva"
@@ -1294,20 +1315,20 @@ msgstr "A forrás eszköz formázása."
 msgid "Create a logical volume group from the source device."
 msgstr "Új kötetcsoport készítése a forrás eszközön."
 
-#: ../src/virtManager/createvol.py:206
+#: ../src/virtManager/createvol.py:210
 msgid "Creating storage volume..."
 msgstr "Tároló kötet készítése..."
 
-#: ../src/virtManager/createvol.py:207
+#: ../src/virtManager/createvol.py:211
 msgid "Creating the storage volume may take a while..."
 msgstr ""
 
-#: ../src/virtManager/createvol.py:215
+#: ../src/virtManager/createvol.py:219
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "Hiba a kötet készítésekor: %s"
 
-#: ../src/virtManager/createvol.py:248
+#: ../src/virtManager/createvol.py:252
 msgid "Volume Parameter Error"
 msgstr "Kötet paraméter hiba"
 
@@ -1320,160 +1341,165 @@ msgstr "Törlés"
 msgid "Deleting virtual machine '%s'"
 msgstr "'%s' virtuális gép törlése"
 
-#: ../src/virtManager/delete.py:161
+#: ../src/virtManager/delete.py:162
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "'%s' elérési útvonal törlése"
 
-#: ../src/virtManager/delete.py:172
+#: ../src/virtManager/delete.py:173
 #, python-format
 msgid "Error deleting virtual machine '%s': %s"
 msgstr "Hiba a '%s' virtuális gép törlésekor: %s"
 
-#: ../src/virtManager/delete.py:188
+#: ../src/virtManager/delete.py:189
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 
-#: ../src/virtManager/delete.py:192
+#: ../src/virtManager/delete.py:193
 msgid "Errors encountered while removing certain storage devices."
 msgstr ""
 
-#: ../src/virtManager/delete.py:273
+#: ../src/virtManager/delete.py:274
 msgid "Storage Path"
 msgstr "Tároló elérési útvonal"
 
-#: ../src/virtManager/delete.py:274
+#: ../src/virtManager/delete.py:275
 msgid "Target"
 msgstr "Cél"
 
-#: ../src/virtManager/delete.py:322
+#: ../src/virtManager/delete.py:323
 msgid "Cannot delete iscsi share."
 msgstr "Nem törölhető iscsi megosztás."
 
-#: ../src/virtManager/delete.py:325
+#: ../src/virtManager/delete.py:326
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Nem lehet törölni a nem menedzselt távoli tárolót."
 
-#: ../src/virtManager/delete.py:331
+#: ../src/virtManager/delete.py:332
 msgid "Cannot delete unmanaged block device."
 msgstr "Nem lehet törölni a nem menedzselt távoli blokk eszközt."
 
-#: ../src/virtManager/delete.py:351
+#: ../src/virtManager/delete.py:352
 msgid "Storage is read-only."
 msgstr "A tároló csak olvasható."
 
-#: ../src/virtManager/delete.py:353
+#: ../src/virtManager/delete.py:354
 msgid "No write access to path."
 msgstr "Nincs írási jogosultság az elérési úthoz."
 
-#: ../src/virtManager/delete.py:356
+#: ../src/virtManager/delete.py:357
 msgid "Storage is marked as shareable."
 msgstr "A tároló megoszthatóként jelölt."
 
-#: ../src/virtManager/delete.py:366
+#: ../src/virtManager/delete.py:367
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
 "- %s "
 msgstr ""
 
-#: ../src/virtManager/details.py:503
+#: ../src/virtManager/details.py:513
 #, fuzzy
 msgid "Add Hardware"
 msgstr "H_ardver hozzáadása"
 
-#: ../src/virtManager/details.py:539
+#: ../src/virtManager/details.py:549
 msgid "Close tab"
 msgstr "Fül bezárása"
 
-#: ../src/virtManager/details.py:614
+#: ../src/virtManager/details.py:624
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
 "with the specified label. The administrator is responsible for making sure "
 "the images are labeled correctly on disk."
 msgstr ""
 
-#: ../src/virtManager/details.py:616
+#: ../src/virtManager/details.py:626
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
 "unique label for the guest process and guest image, ensuring total isolation "
 "of the guest. (Default)"
 msgstr ""
 
-#: ../src/virtManager/details.py:625
+#: ../src/virtManager/details.py:635
 msgid "Libvirt did not detect NUMA capabilities."
 msgstr ""
 
-#: ../src/virtManager/details.py:633
+#: ../src/virtManager/details.py:643
 #, fuzzy
 msgid "VCPU"
 msgstr "CPU"
 
-#: ../src/virtManager/details.py:634
+#: ../src/virtManager/details.py:644
 #, fuzzy
 msgid "On CPU"
 msgstr "CPU"
 
-#: ../src/virtManager/details.py:635
+#: ../src/virtManager/details.py:645
 #, fuzzy
 msgid "Pinning"
 msgstr "Futás"
 
-#: ../src/virtManager/details.py:784
+#: ../src/virtManager/details.py:874
 #, fuzzy
 msgid "No text console available"
 msgstr "Nincs elérhető kapcsolat."
 
-#: ../src/virtManager/details.py:806
+#: ../src/virtManager/details.py:896
 msgid "Serial console not yet supported over remote connection."
 msgstr ""
 
-#: ../src/virtManager/details.py:809
+#: ../src/virtManager/details.py:899
 msgid "Serial console not available for inactive guest."
 msgstr ""
 
-#: ../src/virtManager/details.py:811
+#: ../src/virtManager/details.py:901
 #, python-format
 msgid "Console for device type '%s' not yet supported."
 msgstr ""
 
-#: ../src/virtManager/details.py:814
+#: ../src/virtManager/details.py:904
 #, python-format
 msgid "Can not access console path '%s'."
 msgstr ""
 
-#: ../src/virtManager/details.py:832
+#: ../src/virtManager/details.py:922
 #, fuzzy
 msgid "No graphical console available"
 msgstr "Grafikus konzol megjelenítése"
 
-#: ../src/virtManager/details.py:837
+#: ../src/virtManager/details.py:927
 #, python-format
 msgid "Graphical Console %s"
 msgstr "%s grafikus konzol"
 
-#: ../src/virtManager/details.py:937
+#: ../src/virtManager/details.py:1027
 #, fuzzy, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/details.py:992 ../src/virtManager/manager.py:934
+#: ../src/virtManager/details.py:1082 ../src/virtManager/manager.py:944
 #, fuzzy
 msgid "_Restore"
 msgstr "_Folytatás"
 
 #. Build VM context menu
-#: ../src/virtManager/details.py:994 ../src/virtManager/manager.py:319
-#: ../src/virtManager/manager.py:936 ../src/virtManager/systray.py:184
-#: ../src/vmm-details.glade.h:137 ../src/vmm-manager.glade.h:19
+#: ../src/virtManager/details.py:1084 ../src/virtManager/manager.py:319
+#: ../src/virtManager/manager.py:946 ../src/virtManager/systray.py:184
+#: ../src/vmm-details.glade.h:141 ../src/vmm-manager.glade.h:19
 msgid "_Run"
 msgstr "_Futtatás"
 
-#: ../src/virtManager/details.py:1146
+#: ../src/virtManager/details.py:1182
+#, fuzzy, python-format
+msgid "Error launching hardware dialog: %s"
+msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
+
+#: ../src/virtManager/details.py:1243
 msgid "Save Virtual Machine Screenshot"
 msgstr "Virtuális gép képernyőképének mentése"
 
-#: ../src/virtManager/details.py:1171
+#: ../src/virtManager/details.py:1268
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1482,221 +1508,225 @@ msgstr ""
 "A képernyőkép ide került:\n"
 "%s"
 
-#: ../src/virtManager/details.py:1173
+#: ../src/virtManager/details.py:1270
 msgid "Screenshot saved"
 msgstr "Képernyőkép mentve"
 
-#: ../src/virtManager/details.py:1346
+#: ../src/virtManager/details.py:1469
 #, fuzzy, python-format
 msgid "Error generating CPU configuration: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/details.py:1381
+#: ../src/virtManager/details.py:1504
 #, fuzzy, python-format
 msgid "Error copying host CPU: %s"
 msgstr "Hiba a kötet készítésekor: %s"
 
-#: ../src/virtManager/details.py:1611
+#: ../src/virtManager/details.py:1726
 #, fuzzy, python-format
 msgid "Error building pin list: %s"
 msgstr "Hiba a CPU kijelzés beállításakor: %s"
 
-#: ../src/virtManager/details.py:1617
+#: ../src/virtManager/details.py:1732
 #, fuzzy, python-format
 msgid "Error pinning vcpus: %s"
 msgstr "Hiba a vcpu értékek cseréjekor: %s"
 
-#: ../src/virtManager/details.py:1661
+#: ../src/virtManager/details.py:1776
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Hiba az automatikus indítás cseréjekor: %s"
 
-#: ../src/virtManager/details.py:1755
+#: ../src/virtManager/details.py:1892
 msgid "Are you sure you want to remove this device?"
 msgstr "Biztos benne, hogy el kívánja távolítani ezt az eszközt?"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
-#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
-#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
+#: ../src/virtManager/details.py:1893 ../src/virtManager/engine.py:801
+#: ../src/virtManager/engine.py:901 ../src/virtManager/engine.py:925
+#: ../src/virtManager/engine.py:984 ../src/virtManager/engine.py:1008
 msgid "Don't ask me again."
 msgstr "Ne kérdezze meg újra."
 
-#: ../src/virtManager/details.py:1768
+#: ../src/virtManager/details.py:1905
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Hiba az eszköz eltávolításakor: %s"
 
-#: ../src/virtManager/details.py:1785
+#: ../src/virtManager/details.py:1922
 msgid "Device could not be removed from the running machine"
 msgstr ""
 
-#: ../src/virtManager/details.py:1787
+#: ../src/virtManager/details.py:1924
 #, fuzzy
 msgid "This change will take effect after the next VM reboot."
 msgstr ""
 "Ezek a változások a vendég rendszer következő újraindításakor érvényesülnek."
 
-#: ../src/virtManager/details.py:1840
+#: ../src/virtManager/details.py:1977
 #, fuzzy, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/details.py:1850
+#: ../src/virtManager/details.py:1987
 msgid "Some changes may require a guest reboot to take effect."
 msgstr ""
 
-#: ../src/virtManager/details.py:1853
+#: ../src/virtManager/details.py:1990
 #, fuzzy
 msgid "These changes will take effect after the next guest reboot."
 msgstr ""
 "Ezek a változások a vendég rendszer következő újraindításakor érvényesülnek."
 
-#: ../src/virtManager/details.py:1931 ../src/vmm-add-hardware.glade.h:30
+#: ../src/virtManager/details.py:2073 ../src/vmm-add-hardware.glade.h:30
 msgid "Same as host"
 msgstr "Megegyezik a kiszolgálóval"
 
-#: ../src/virtManager/details.py:2027
+#: ../src/virtManager/details.py:2175
 msgid "VCPU info only available for running domain."
 msgstr ""
 
-#: ../src/virtManager/details.py:2029
+#: ../src/virtManager/details.py:2177
 msgid "Virtual machine does not support runtime VPCU info."
 msgstr ""
 
-#: ../src/virtManager/details.py:2034
+#: ../src/virtManager/details.py:2182
 #, fuzzy, python-format
 msgid "Error getting VCPU info: %s"
 msgstr "Hiba a CPU kijelzés beállításakor: %s"
 
-#: ../src/virtManager/details.py:2194
+#: ../src/virtManager/details.py:2392
 msgid "Xen Mouse"
 msgstr "Xen egér"
 
-#: ../src/virtManager/details.py:2196
+#: ../src/virtManager/details.py:2394
 msgid "PS/2 Mouse"
 msgstr "PS/2 egér"
 
-#: ../src/virtManager/details.py:2201
+#: ../src/virtManager/details.py:2399
 msgid "Absolute Movement"
 msgstr "Abszolút mozgatási mód"
 
-#: ../src/virtManager/details.py:2203
+#: ../src/virtManager/details.py:2401
 msgid "Relative Movement"
 msgstr "Relatív mozgatási mód"
 
-#: ../src/virtManager/details.py:2238
+#: ../src/virtManager/details.py:2436
 msgid "Automatically allocated"
 msgstr "Automatikus kiosztás"
 
-#: ../src/virtManager/details.py:2246
+#: ../src/virtManager/details.py:2444
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr ""
 
-#: ../src/virtManager/details.py:2269
+#: ../src/virtManager/details.py:2467
 #, fuzzy
 msgid "Local SDL Window"
 msgstr "Helyi SDL ablak"
 
-#: ../src/virtManager/details.py:2300
+#: ../src/virtManager/details.py:2502
 #, fuzzy
 msgid "Serial Device"
 msgstr "Forrás eszköz:"
 
-#: ../src/virtManager/details.py:2302
+#: ../src/virtManager/details.py:2504
 #, fuzzy
 msgid "Parallel Device"
 msgstr "Forrás eszköz:"
 
-#: ../src/virtManager/details.py:2304
+#: ../src/virtManager/details.py:2506
 #, fuzzy
 msgid "Console Device"
 msgstr "Konzol"
 
-#: ../src/virtManager/details.py:2306
+#: ../src/virtManager/details.py:2508
 msgid "Channel Device"
 msgstr ""
 
-#: ../src/virtManager/details.py:2308
+#: ../src/virtManager/details.py:2510
 #, fuzzy, python-format
 msgid "%s Device"
 msgstr "Eszköz:"
 
-#: ../src/virtManager/details.py:2313
+#: ../src/virtManager/details.py:2515
 #, fuzzy
 msgid "Primary Console"
 msgstr "(Elsődleges konzol)"
 
-#: ../src/virtManager/details.py:2527
+#: ../src/virtManager/details.py:2729
 msgid "Tablet"
 msgstr "Tablet PC"
 
-#: ../src/virtManager/details.py:2530
+#: ../src/virtManager/details.py:2732
 msgid "Mouse"
 msgstr "Egér"
 
-#: ../src/virtManager/details.py:2539
+#: ../src/virtManager/details.py:2741
 #, python-format
 msgid "Display %s"
 msgstr "%s képernyő"
 
-#: ../src/virtManager/details.py:2545
+#: ../src/virtManager/details.py:2747
 #, python-format
 msgid "Sound: %s"
 msgstr "Hang: %s"
 
-#: ../src/virtManager/details.py:2573
+#: ../src/virtManager/details.py:2775
 msgid "Video"
 msgstr "Videó"
 
-#: ../src/virtManager/details.py:2576
+#: ../src/virtManager/details.py:2778
 msgid "Watchdog"
 msgstr ""
 
-#: ../src/virtManager/details.py:2582
+#: ../src/virtManager/details.py:2784
 #, python-format
 msgid "Controller %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:248
+#: ../src/virtManager/domain.py:252
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:873
+#: ../src/virtManager/domain.py:916
 msgid "Running"
 msgstr "Futás"
 
-#: ../src/virtManager/domain.py:875
+#: ../src/virtManager/domain.py:918
 msgid "Paused"
 msgstr "Megállítva"
 
-#: ../src/virtManager/domain.py:877
+#: ../src/virtManager/domain.py:920
 #, fuzzy
 msgid "Shutting Down"
 msgstr "Leállítás"
 
-#: ../src/virtManager/domain.py:879
+#: ../src/virtManager/domain.py:922
 msgid "Shutoff"
 msgstr "Lekapcsolás"
 
-#: ../src/virtManager/domain.py:881
+#: ../src/virtManager/domain.py:924
 msgid "Crashed"
 msgstr "Összeomlás"
 
 #: ../src/virtManager/domain.py:1046
+msgid "Cannot rename an active guest"
+msgstr ""
+
+#: ../src/virtManager/domain.py:1112
 msgid "Cannot start guest while cloning operation in progress"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1060
+#: ../src/virtManager/domain.py:1127
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1075
+#: ../src/virtManager/domain.py:1142
 msgid "Saving domain to disk"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1139
+#: ../src/virtManager/domain.py:1206
 #, fuzzy
 msgid "Migrating domain"
 msgstr "'%s' virtuális gép migrálása"
@@ -1725,7 +1755,7 @@ msgid "Error talking to PackageKit: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:284
+#: ../src/virtManager/engine.py:287
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1736,7 +1766,7 @@ msgid ""
 "added via File->Add Connection"
 msgstr ""
 
-#: ../src/virtManager/engine.py:318
+#: ../src/virtManager/engine.py:321
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1750,123 +1780,123 @@ msgid ""
 "start up."
 msgstr ""
 
-#: ../src/virtManager/engine.py:326
+#: ../src/virtManager/engine.py:329
 #, fuzzy
 msgid "Libvirt service must be started"
 msgstr "Egy eszközt ki kell választani."
 
-#: ../src/virtManager/engine.py:527
+#: ../src/virtManager/engine.py:530
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "Ismeretlen %s URI kapcsolat"
 
-#: ../src/virtManager/engine.py:540
+#: ../src/virtManager/engine.py:543
 #, fuzzy, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/engine.py:552
+#: ../src/virtManager/engine.py:555
 #, fuzzy, python-format
 msgid "Unable to display documentation: %s"
 msgstr "Az eszközt nem lehet hozzáadni: %s"
 
-#: ../src/virtManager/engine.py:568
+#: ../src/virtManager/engine.py:571
 #, fuzzy, python-format
 msgid "Error launching preferences: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/engine.py:588
+#: ../src/virtManager/engine.py:591
 #, fuzzy, python-format
 msgid "Error launching host dialog: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/engine.py:608
+#: ../src/virtManager/engine.py:611
 #, fuzzy, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/engine.py:641
+#: ../src/virtManager/engine.py:644
 #, fuzzy, python-format
 msgid "Error launching details: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
+#: ../src/virtManager/engine.py:695 ../src/virtManager/engine.py:712
 #, fuzzy, python-format
 msgid "Error launching manager: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/engine.py:723
+#: ../src/virtManager/engine.py:726
 #, fuzzy, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "Hiba a tároló elérési útvonalának cseréjekor: %s"
 
-#: ../src/virtManager/engine.py:741
+#: ../src/virtManager/engine.py:744
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "Hiba a klónozási paraméterek beállításakor: %s"
 
-#: ../src/virtManager/engine.py:789
+#: ../src/virtManager/engine.py:792
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr ""
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:799
 #, fuzzy, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "Biztos benne, hogy használni kívánja ezt a címet?"
 
-#: ../src/virtManager/engine.py:809
+#: ../src/virtManager/engine.py:812
 msgid "Save Virtual Machine"
 msgstr "Virtuális gép mentése"
 
-#: ../src/virtManager/engine.py:824
+#: ../src/virtManager/engine.py:827
 msgid "Saving Virtual Machine"
 msgstr "Virtuális gép mentése"
 
-#: ../src/virtManager/engine.py:825
+#: ../src/virtManager/engine.py:828
 #, fuzzy
 msgid "Saving virtual machine memory to disk "
 msgstr "Virtuális gép mentése"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:834
 #, python-format
 msgid "Error saving domain: %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:843
+#: ../src/virtManager/engine.py:846
 #, fuzzy, python-format
 msgid "Error cancelling save job: %s"
 msgstr "Hiba a kötet készítésekor: %s"
 
-#: ../src/virtManager/engine.py:860
+#: ../src/virtManager/engine.py:863
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr ""
 
-#: ../src/virtManager/engine.py:865
+#: ../src/virtManager/engine.py:868
 msgid "Restore Virtual Machine"
 msgstr "Virtuális gép visszaállítása"
 
-#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
+#: ../src/virtManager/engine.py:877 ../src/virtManager/engine.py:965
 msgid "Restoring Virtual Machine"
 msgstr "Virtuális gép visszaállítása"
 
-#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
+#: ../src/virtManager/engine.py:878 ../src/virtManager/engine.py:966
 #, fuzzy
 msgid "Restoring virtual machine memory from disk"
 msgstr "Virtuális gép visszaállítása"
 
-#: ../src/virtManager/engine.py:879
+#: ../src/virtManager/engine.py:882
 #, fuzzy, python-format
 msgid "Error restoring domain: %s"
 msgstr "Hiba '%s' tartomány visszaállításakor: %s"
 
-#: ../src/virtManager/engine.py:894
+#: ../src/virtManager/engine.py:897
 #, fuzzy, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Biztos benne, hogy el kívánja távolítani ezt az eszközt?"
 
-#: ../src/virtManager/engine.py:896
+#: ../src/virtManager/engine.py:899
 #, fuzzy
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
@@ -1875,50 +1905,50 @@ msgstr ""
 "Ez azonnal kikapcsolja a virtuális gépet az operációs rendszerének "
 "leállítása nélkül, ami adatvesztéssel járhat. Biztos benne?"
 
-#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
+#: ../src/virtManager/engine.py:913 ../src/virtManager/engine.py:996
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:920
+#: ../src/virtManager/engine.py:923
 #, fuzzy, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Biztos benne, hogy használni kívánja ezt a címet?"
 
-#: ../src/virtManager/engine.py:934
+#: ../src/virtManager/engine.py:937
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr ""
 
-#: ../src/virtManager/engine.py:945
+#: ../src/virtManager/engine.py:948
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr ""
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:961
+#: ../src/virtManager/engine.py:964
 msgid "Error restoring domain"
 msgstr ""
 
 #. Regular startup
-#: ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:972
 #, fuzzy
 msgid "Error starting domain"
 msgstr "Hiba '%s' tartomány visszaállításakor: %s"
 
-#: ../src/virtManager/engine.py:979
+#: ../src/virtManager/engine.py:982
 #, fuzzy, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Biztos benne, hogy el kívánja távolítani ezt az eszközt?"
 
-#: ../src/virtManager/engine.py:1003
+#: ../src/virtManager/engine.py:1006
 #, fuzzy, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "Biztos benne, hogy el kívánja távolítani ezt az eszközt?"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
+#: ../src/virtManager/engine.py:1024 ../src/virtManager/engine.py:1039
 #, fuzzy, python-format
 msgid "Error rebooting domain: %s"
 msgstr "Hiba '%s' tartomány visszaállításakor: %s"
@@ -2127,7 +2157,7 @@ msgid "Error selecting interface: %s"
 msgstr "Hiba a '%s' virtuális gép törlésekor: %s"
 
 #: ../src/virtManager/manager.py:320 ../src/virtManager/systray.py:171
-#: ../src/vmm-details.glade.h:134 ../src/vmm-manager.glade.h:18
+#: ../src/vmm-details.glade.h:138 ../src/vmm-manager.glade.h:18
 msgid "_Pause"
 msgstr "_Megállítás"
 
@@ -2138,22 +2168,22 @@ msgstr "_Folytatás"
 
 #: ../src/virtManager/manager.py:323 ../src/virtManager/manager.py:326
 #: ../src/virtManager/systray.py:198 ../src/virtManager/systray.py:216
-#: ../src/virtManager/uihelpers.py:708
+#: ../src/virtManager/uihelpers.py:716
 msgid "_Shut Down"
 msgstr "_Leállítás"
 
 #. Shutdown menu
 #: ../src/virtManager/manager.py:325 ../src/virtManager/systray.py:191
-#: ../src/virtManager/uihelpers.py:702 ../src/vmm-details.glade.h:135
+#: ../src/virtManager/uihelpers.py:710 ../src/vmm-details.glade.h:139
 msgid "_Reboot"
 msgstr "_Újraindítás"
 
 #: ../src/virtManager/manager.py:328 ../src/virtManager/systray.py:205
-#: ../src/virtManager/uihelpers.py:714 ../src/vmm-details.glade.h:124
+#: ../src/virtManager/uihelpers.py:722 ../src/vmm-details.glade.h:127
 msgid "_Force Off"
 msgstr "_Erőltetett bezárás"
 
-#: ../src/virtManager/manager.py:331 ../src/virtManager/uihelpers.py:724
+#: ../src/virtManager/manager.py:331 ../src/virtManager/uihelpers.py:732
 #, fuzzy
 msgid "Sa_ve"
 msgstr "_Mentés"
@@ -2163,7 +2193,7 @@ msgstr "_Mentés"
 msgid "_Clone..."
 msgstr "_Klónozás"
 
-#: ../src/virtManager/manager.py:335 ../src/vmm-details.glade.h:130
+#: ../src/virtManager/manager.py:335 ../src/vmm-details.glade.h:133
 #, fuzzy
 msgid "_Migrate..."
 msgstr "_Migrálás"
@@ -2173,7 +2203,7 @@ msgstr "_Migrálás"
 msgid "_Delete"
 msgstr "Törlés"
 
-#: ../src/virtManager/manager.py:350 ../src/vmm-details.glade.h:122
+#: ../src/virtManager/manager.py:350 ../src/vmm-details.glade.h:125
 msgid "_Details"
 msgstr "_Részletek"
 
@@ -2224,28 +2254,28 @@ msgstr ""
 "Nem lehet kapcsolatba lépni a libvirt felügyelő szolgáltatásával.\n"
 "\n"
 
-#: ../src/virtManager/manager.py:735
+#: ../src/virtManager/manager.py:737
 msgid "Double click to connect"
 msgstr ""
 
-#: ../src/virtManager/manager.py:740
+#: ../src/virtManager/manager.py:742
 #, fuzzy
 msgid "Not Connected"
 msgstr "_Kapcsolódás"
 
-#: ../src/virtManager/manager.py:742
+#: ../src/virtManager/manager.py:744
 #, fuzzy
 msgid "Connecting..."
 msgstr "Kapcsolódás"
 
-#: ../src/virtManager/manager.py:1062
+#: ../src/virtManager/manager.py:1081
+msgid "Disabled in preferences dialog."
+msgstr "Letíltott a beállítások párbeszédablakban."
+
+#: ../src/virtManager/manager.py:1087
 #, fuzzy
 msgid " (disabled)"
 msgstr "Letiltva"
-
-#: ../src/virtManager/manager.py:1073
-msgid "Disabled in preferences dialog."
-msgstr "Letíltott a beállítások párbeszédablakban."
 
 #: ../src/virtManager/mediadev.py:105
 #, fuzzy
@@ -2357,20 +2387,20 @@ msgstr "Elkülönített hálózat"
 msgid "Isolated network"
 msgstr "Elkülönített hálózat"
 
-#: ../src/virtManager/preferences.py:166
+#: ../src/virtManager/preferences.py:183
 msgid "Installed version of GTK-VNC doesn't support configurable grab keys"
 msgstr ""
 
-#: ../src/virtManager/preferences.py:213
+#: ../src/virtManager/preferences.py:230
 #, fuzzy
 msgid "Configure grab key combination"
 msgstr "<b>IPv4 konfiguráció</b>"
 
-#: ../src/virtManager/preferences.py:218
+#: ../src/virtManager/preferences.py:235
 msgid "Please press desired grab key combination"
 msgstr ""
 
-#: ../src/virtManager/preferences.py:221
+#: ../src/virtManager/preferences.py:238
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
@@ -2440,82 +2470,82 @@ msgstr "Felhasználói üzemmódú hálózat"
 msgid "Virtual network"
 msgstr "Virtuális hálózat"
 
-#: ../src/virtManager/uihelpers.py:412
+#: ../src/virtManager/uihelpers.py:419
 msgid "No virtual networks available"
 msgstr "Nincs elérhető virtuális hálózat"
 
-#: ../src/virtManager/uihelpers.py:434
+#: ../src/virtManager/uihelpers.py:441
 #, fuzzy
 msgid "(Empty bridge)"
 msgstr "Nincs csatlakozva"
 
-#: ../src/virtManager/uihelpers.py:437
+#: ../src/virtManager/uihelpers.py:444
 msgid "Not bridged"
 msgstr "Nincs csatlakozva"
 
-#: ../src/virtManager/uihelpers.py:439
+#: ../src/virtManager/uihelpers.py:446
 #, python-format
 msgid "Host device %s %s"
 msgstr "%s Gazda eszköz %s"
 
-#: ../src/virtManager/uihelpers.py:476
+#: ../src/virtManager/uihelpers.py:483
 msgid "No networking."
 msgstr "Nincs hálózat."
 
 #. After all is said and done, add a manual bridge option
-#: ../src/virtManager/uihelpers.py:481
+#: ../src/virtManager/uihelpers.py:489
 msgid "Specify shared device name"
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:500
+#: ../src/virtManager/uihelpers.py:508
 msgid "Virtual Network is not active."
 msgstr "A virtuális hálózat nem aktív."
 
-#: ../src/virtManager/uihelpers.py:501
+#: ../src/virtManager/uihelpers.py:509
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr ""
 "A '%s' virtuális hálózat nem aktív. El akarja most indítani ezt a hálózatot?"
 
-#: ../src/virtManager/uihelpers.py:513
+#: ../src/virtManager/uihelpers.py:521
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "A '%s' virtuális hálózat nem indítható: %s"
 
-#: ../src/virtManager/uihelpers.py:535
+#: ../src/virtManager/uihelpers.py:543
 msgid "Error with network parameters."
 msgstr "Hiba a hálózati paraméterekkel."
 
-#: ../src/virtManager/uihelpers.py:540 ../src/virtManager/uihelpers.py:542
+#: ../src/virtManager/uihelpers.py:548 ../src/virtManager/uihelpers.py:550
 msgid "Mac address collision."
 msgstr "Mac cím ütközés."
 
-#: ../src/virtManager/uihelpers.py:543
+#: ../src/virtManager/uihelpers.py:551
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "%s Biztosan használni akarja ezt a címet?"
 
-#: ../src/virtManager/uihelpers.py:595
+#: ../src/virtManager/uihelpers.py:603
 #, fuzzy
 msgid "No device present"
 msgstr "Nincs bent lemez"
 
-#: ../src/virtManager/uihelpers.py:752
+#: ../src/virtManager/uihelpers.py:760
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:754
+#: ../src/virtManager/uihelpers.py:762
 #, fuzzy
 msgid "Do you want to correct this now?"
 msgstr "Biztosan használni szeretné a lemezt?"
 
-#: ../src/virtManager/uihelpers.py:755 ../src/virtManager/uihelpers.py:779
+#: ../src/virtManager/uihelpers.py:763 ../src/virtManager/uihelpers.py:787
 msgid "Don't ask about these directories again."
 msgstr ""
 
-#: ../src/virtManager/uihelpers.py:768
+#: ../src/virtManager/uihelpers.py:776
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr ""
@@ -2549,7 +2579,7 @@ msgstr "<b>Eszköz paraméterek</b>"
 
 #: ../src/vmm-add-hardware.glade.h:3
 msgid ""
-"<small><b>Tip:</b> VNC or SPICE server is strongly recommended because it "
+"<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
 "allows the virtual display to be embedded inside this application. It may "
 "also be used to allow access to the virtual display from a remote system.</"
 "small>"
@@ -2711,6 +2741,7 @@ msgid "_Bind Host:"
 msgstr "Kapcsolt gazda:"
 
 #: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:48
+#: ../src/vmm-details.glade.h:122
 #, fuzzy
 msgid "_Bridge name:"
 msgstr "Híd"
@@ -2734,7 +2765,7 @@ msgstr "_GB"
 msgid "_Host device:"
 msgstr "%s Gazda eszköz %s"
 
-#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-details.glade.h:127
+#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-details.glade.h:130
 msgid "_Keymap:"
 msgstr "Billentyűzet _kiosztása:"
 
@@ -2777,7 +2808,7 @@ msgid "aa:bb:cc:dd:ee:ff"
 msgstr ""
 
 #: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create-pool.glade.h:18
-#: ../src/vmm-details.glade.h:152
+#: ../src/vmm-details.glade.h:150
 msgid "label"
 msgstr "címke"
 
@@ -3084,6 +3115,7 @@ msgstr "Eszköz tipusa:"
 
 #: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:14
 #: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:54
+#: ../src/vmm-details.glade.h:134
 msgid "_Name:"
 msgstr "_Név:"
 
@@ -3096,7 +3128,7 @@ msgstr "Kezdés:"
 msgid "_VLAN tag:"
 msgstr ""
 
-#: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:39
+#: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:40
 msgid "seconds"
 msgstr "másodpercek"
 
@@ -3309,7 +3341,7 @@ msgstr ""
 "E segéd végigvezeti egy új virtuális hálózat létrehozásának a folyamatán. "
 "Kérdez néhány információt a kívánt virtuális hálózatról, pl:"
 
-#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:110
+#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:111
 msgid "Type:"
 msgstr "Típus:"
 
@@ -3442,7 +3474,7 @@ msgid "Create a storage unit that can be used directly by a virtual machine."
 msgstr ""
 
 #: ../src/vmm-create-vol.glade.h:19 ../src/vmm-create.glade.h:28
-#: ../src/vmm-details.glade.h:66
+#: ../src/vmm-details.glade.h:67
 msgid "MB"
 msgstr "MB"
 
@@ -3677,126 +3709,127 @@ msgid "<b>Boot device order</b>"
 msgstr "<b>Rendszerindító eszközök</b>"
 
 #: ../src/vmm-details.glade.h:6
-msgid "<b>CPUs</b>"
+#, fuzzy
+msgid "<b>CPU Features</b>"
 msgstr "<b>CPU-k</b>"
 
 #: ../src/vmm-details.glade.h:7
+msgid "<b>CPUs</b>"
+msgstr "<b>CPU-k</b>"
+
+#: ../src/vmm-details.glade.h:8
 #, fuzzy
 msgid "<b>Configuration</b>"
 msgstr "<b>IPv4 konfiguráció</b>"
 
-#: ../src/vmm-details.glade.h:8
+#: ../src/vmm-details.glade.h:9
 #, fuzzy
 msgid "<b>Controller</b>"
 msgstr "<b>Konzolok</b>"
 
-#: ../src/vmm-details.glade.h:9
+#: ../src/vmm-details.glade.h:10
 msgid "<b>Direct kernel boot</b>"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:10
+#: ../src/vmm-details.glade.h:11
 #, fuzzy
 msgid "<b>Hypervisor Details</b>"
 msgstr "Felügyelői alapérték"
 
-#: ../src/vmm-details.glade.h:11
+#: ../src/vmm-details.glade.h:12
 #, fuzzy
 msgid "<b>Machine Settings</b>"
 msgstr "<b>Gép részletek</b>"
 
-#: ../src/vmm-details.glade.h:12
+#: ../src/vmm-details.glade.h:13
 msgid "<b>Memory</b>"
 msgstr "<b>Memória</b>"
 
-#: ../src/vmm-details.glade.h:13 ../src/vmm-host.glade.h:6
+#: ../src/vmm-details.glade.h:14 ../src/vmm-host.glade.h:6
 msgid "<b>Performance</b>"
 msgstr "<b>Teljesítmény</b>"
 
-#: ../src/vmm-details.glade.h:14
+#: ../src/vmm-details.glade.h:15
 #, fuzzy
 msgid "<b>Pinning</b>"
 msgstr "<b>CPU-k</b>"
 
-#: ../src/vmm-details.glade.h:15
+#: ../src/vmm-details.glade.h:16
 msgid "<b>Security</b>"
 msgstr "<b>Biztonság</b>"
 
-#: ../src/vmm-details.glade.h:16
+#: ../src/vmm-details.glade.h:17
 msgid "<b>Sound Device</b>"
 msgstr "<b>Hang eszköz</b>"
 
-#: ../src/vmm-details.glade.h:17
+#: ../src/vmm-details.glade.h:18
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>A konzol jelenleg elérhetetlen</b>"
 
-#: ../src/vmm-details.glade.h:18
+#: ../src/vmm-details.glade.h:19
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:19
+#: ../src/vmm-details.glade.h:20
 msgid ""
 "<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
 "OS will ensure that the virtual cursor moves in sync with the local desktop "
 "cursor."
 msgstr ""
 
-#: ../src/vmm-details.glade.h:20
+#: ../src/vmm-details.glade.h:21
 #, fuzzy
 msgid "<b>Topology</b>"
 msgstr "<b>Lemezképmás:</b>"
 
-#: ../src/vmm-details.glade.h:21
+#: ../src/vmm-details.glade.h:22
 #, fuzzy
 msgid "<b>Video</b>"
 msgstr "<b>Videó eszköz</b>"
 
-#: ../src/vmm-details.glade.h:22
+#: ../src/vmm-details.glade.h:23
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>Virtuális lemez</b>"
 
-#: ../src/vmm-details.glade.h:23
+#: ../src/vmm-details.glade.h:24
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Virtuális hálózati interfész</b>"
 
-#: ../src/vmm-details.glade.h:24
+#: ../src/vmm-details.glade.h:25
 msgid "<b>Virtual Pointer</b>"
 msgstr "<b>Virtuális mutató</b>"
 
-#: ../src/vmm-details.glade.h:25
+#: ../src/vmm-details.glade.h:26
 msgid "<b>insert type</b>"
 msgstr "<b>típus beszúrása</b>"
 
-#: ../src/vmm-details.glade.h:26
+#: ../src/vmm-details.glade.h:27
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:27
+#: ../src/vmm-details.glade.h:28
 #, fuzzy
 msgid "A_ction:"
 msgstr "_Hely:"
 
-#: ../src/vmm-details.glade.h:28
+#: ../src/vmm-details.glade.h:29
 msgid "A_dd Hardware"
 msgstr "H_ardver hozzáadása"
 
-#: ../src/vmm-details.glade.h:29 ../src/vmm-host.glade.h:15
+#: ../src/vmm-details.glade.h:30 ../src/vmm-host.glade.h:15
 msgid "Address:"
 msgstr "Cím:"
 
-#: ../src/vmm-details.glade.h:30
+#: ../src/vmm-details.glade.h:31
 #, fuzzy
 msgid "Advanced _options"
 msgstr "Speciális lehetőségek"
 
-#: ../src/vmm-details.glade.h:31 ../src/vmm-host.glade.h:16
+#: ../src/vmm-details.glade.h:32 ../src/vmm-host.glade.h:16
 msgid "Architecture:"
 msgstr "Architektúra:"
-
-#: ../src/vmm-details.glade.h:32
-msgid "Auth"
-msgstr "Auth"
 
 #: ../src/vmm-details.glade.h:33
 #, fuzzy
@@ -3921,45 +3954,54 @@ msgid "Initrd path:"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:62
+msgid "Instance id:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:63
 #, fuzzy
 msgid "Kernel arguments:"
 msgstr "Kernel opciók:"
 
-#: ../src/vmm-details.glade.h:63
+#: ../src/vmm-details.glade.h:64
 #, fuzzy
 msgid "Kernel path:"
 msgstr "Kernel opciók:"
 
-#: ../src/vmm-details.glade.h:64
+#: ../src/vmm-details.glade.h:65
 msgid "Logical host CPUs:"
 msgstr "Logikai gazdarendszer CPU-k:"
 
-#: ../src/vmm-details.glade.h:65
+#: ../src/vmm-details.glade.h:66
 msgid "MAC address:"
 msgstr "MAC-cím:"
 
-#: ../src/vmm-details.glade.h:67
+#: ../src/vmm-details.glade.h:68
 msgid "M_odel:"
 msgstr "M_odell:"
 
-#: ../src/vmm-details.glade.h:68
+#: ../src/vmm-details.glade.h:69
 #, fuzzy
 msgid "Ma_ximum allocation:"
 msgstr "Legnagyobb foglalás:"
 
-#: ../src/vmm-details.glade.h:69
+#: ../src/vmm-details.glade.h:70
+#, fuzzy
+msgid "Managerid:"
+msgstr "Kezelői nézet"
+
+#: ../src/vmm-details.glade.h:71
 msgid "Manually set CPU topology"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:70
+#: ../src/vmm-details.glade.h:72
 msgid "Max Memory Select"
 msgstr "Maximális memória választása"
 
-#: ../src/vmm-details.glade.h:71
+#: ../src/vmm-details.glade.h:73
 msgid "Maximum allocation:"
 msgstr "Legnagyobb foglalás:"
 
-#: ../src/vmm-details.glade.h:72
+#: ../src/vmm-details.glade.h:74
 msgid ""
 "Memory\n"
 "usage:"
@@ -3967,23 +4009,19 @@ msgstr ""
 "Memória-\n"
 "használat:"
 
-#: ../src/vmm-details.glade.h:74
+#: ../src/vmm-details.glade.h:76
 msgid "Memory Select"
 msgstr "Memória választás"
 
-#: ../src/vmm-details.glade.h:75 ../src/vmm-host.glade.h:35
+#: ../src/vmm-details.glade.h:77 ../src/vmm-host.glade.h:35
 msgid "Mode:"
 msgstr "Mód:"
 
-#: ../src/vmm-details.glade.h:76
+#: ../src/vmm-details.glade.h:78
 msgid "Model:"
 msgstr "Modell:"
 
-#: ../src/vmm-details.glade.h:77 ../src/vmm-host.glade.h:37
-msgid "Name:"
-msgstr "Név:"
-
-#: ../src/vmm-details.glade.h:78
+#: ../src/vmm-details.glade.h:79
 msgid ""
 "Network\n"
 "I/O:"
@@ -3991,310 +4029,258 @@ msgstr ""
 "Hálózat\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:80
+#: ../src/vmm-details.glade.h:81
 msgid "Pause"
 msgstr "Megállítás"
 
-#: ../src/vmm-details.glade.h:81 ../src/vmm-manager.glade.h:3
+#: ../src/vmm-details.glade.h:82 ../src/vmm-manager.glade.h:3
 #, fuzzy
 msgid "Pause the virtual machine"
 msgstr "Távoli virtuális gép"
 
-#: ../src/vmm-details.glade.h:82
+#: ../src/vmm-details.glade.h:83
 msgid "Port:"
 msgstr "Port:"
 
-#: ../src/vmm-details.glade.h:83 ../src/vmm-manager.glade.h:4
+#: ../src/vmm-details.glade.h:84 ../src/vmm-manager.glade.h:4
 #, fuzzy
 msgid "Power on the virtual machine"
 msgstr "Távoli virtuális gép"
 
-#: ../src/vmm-details.glade.h:84
+#: ../src/vmm-details.glade.h:85
 msgid "RAM:"
 msgstr "RAM:"
 
-#: ../src/vmm-details.glade.h:85
+#: ../src/vmm-details.glade.h:86
 #, fuzzy
 msgid "R_eadonly:"
 msgstr "Csak olvasható"
 
-#: ../src/vmm-details.glade.h:86
+#: ../src/vmm-details.glade.h:87
 #, fuzzy
 msgid "R_untime pinning:"
 msgstr "Fizikai CPU kijelzése:"
 
-#: ../src/vmm-details.glade.h:87
+#: ../src/vmm-details.glade.h:88
 msgid "Run"
 msgstr "Futás"
 
-#: ../src/vmm-details.glade.h:88
+#: ../src/vmm-details.glade.h:89
 msgid "S_hut Down"
 msgstr "_Leállítás"
 
-#: ../src/vmm-details.glade.h:89
+#: ../src/vmm-details.glade.h:90
 #, fuzzy
 msgid "Send _Key"
 msgstr "Billentyű küldése"
 
-#: ../src/vmm-details.glade.h:90
+#: ../src/vmm-details.glade.h:91
 #, fuzzy
 msgid "Sharea_ble:"
 msgstr "Megosztható"
 
-#: ../src/vmm-details.glade.h:91
+#: ../src/vmm-details.glade.h:92
 msgid "Show the graphical console"
 msgstr "Grafikus konzol megjelenítése"
 
-#: ../src/vmm-details.glade.h:92
+#: ../src/vmm-details.glade.h:93
 #, fuzzy
 msgid "Show virtual hardware details"
 msgstr "Új virtuális hardver hozzáadása"
 
-#: ../src/vmm-details.glade.h:93
+#: ../src/vmm-details.glade.h:94
 msgid "Shut Down"
 msgstr "Leállítás"
 
-#: ../src/vmm-details.glade.h:94
+#: ../src/vmm-details.glade.h:95
 msgid "Shut down"
 msgstr "Leállítás"
 
-#: ../src/vmm-details.glade.h:95 ../src/vmm-manager.glade.h:6
+#: ../src/vmm-details.glade.h:96 ../src/vmm-manager.glade.h:6
 #, fuzzy
 msgid "Shutdown the virtual machine"
 msgstr "Távoli virtuális gép"
 
-#: ../src/vmm-details.glade.h:96
+#: ../src/vmm-details.glade.h:97
 msgid "Sockets:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:97
+#: ../src/vmm-details.glade.h:98
 msgid "Source Path:"
 msgstr "Forrás útvonal:"
 
-#: ../src/vmm-details.glade.h:98
+#: ../src/vmm-details.glade.h:99
 msgid "Source device:"
 msgstr "Forrás eszköz"
 
-#: ../src/vmm-details.glade.h:99
+#: ../src/vmm-details.glade.h:100
 msgid "Source path:"
 msgstr "Forrás elérési útvonala:"
 
-#: ../src/vmm-details.glade.h:100
+#: ../src/vmm-details.glade.h:101
 #, fuzzy
 msgid "Start virt_ual machine on host boot up"
 msgstr "Virtuális gép indítása a gazda gép indulásakor"
 
-#: ../src/vmm-details.glade.h:102
+#: ../src/vmm-details.glade.h:103
 #, fuzzy
 msgid "Storage forma_t:"
 msgstr "Tároló elérési útvonal"
 
-#: ../src/vmm-details.glade.h:103
+#: ../src/vmm-details.glade.h:104
 #, fuzzy
 msgid "Storage size:"
 msgstr "Tároló"
 
-#: ../src/vmm-details.glade.h:104
+#: ../src/vmm-details.glade.h:105
 msgid "Switch to fullscreen view"
 msgstr "Váltás a teljes képernyős nézethez"
 
-#: ../src/vmm-details.glade.h:105
+#: ../src/vmm-details.glade.h:106
 #, fuzzy
 msgid "TLS Port:"
 msgstr "Port:"
 
-#: ../src/vmm-details.glade.h:106
+#: ../src/vmm-details.glade.h:107
 msgid "T_oolbar"
 msgstr "Eszköz_tár"
 
-#: ../src/vmm-details.glade.h:107
+#: ../src/vmm-details.glade.h:108
 msgid "Target device:"
 msgstr "Cél eszköz:"
 
-#: ../src/vmm-details.glade.h:108
+#: ../src/vmm-details.glade.h:109
 #, fuzzy
 msgid "Threads:"
 msgstr "Fejek:"
 
-#: ../src/vmm-details.glade.h:109
+#: ../src/vmm-details.glade.h:110
 #, fuzzy
 msgid "Total host memory:"
 msgstr "<b>Kezdeti memória:</b>"
 
-#: ../src/vmm-details.glade.h:111
+#: ../src/vmm-details.glade.h:112
+msgid "Typeid version:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:113
+#, fuzzy
+msgid "Typeid:"
+msgstr "Típus:"
+
+#: ../src/vmm-details.glade.h:114
 msgid "UUID:"
 msgstr "UUID:"
 
-#: ../src/vmm-details.glade.h:112
-msgid "Unavailable"
-msgstr "Elérhetetlen"
-
-#: ../src/vmm-details.glade.h:113
-msgid "VNC"
-msgstr "VNC"
-
-#: ../src/vmm-details.glade.h:114
+#: ../src/vmm-details.glade.h:115
 msgid "Virtual CPU Affinity Select"
 msgstr "Virtuális CPU renedelkezésre-állás kiválasztása"
 
-#: ../src/vmm-details.glade.h:115
+#: ../src/vmm-details.glade.h:116
 msgid "Virtual CPU Select"
 msgstr "Virtuális CPU választása"
 
-#: ../src/vmm-details.glade.h:116
-msgid "Virtual Machine"
-msgstr "Virtuális gép"
-
-#: ../src/vmm-details.glade.h:117
+#: ../src/vmm-details.glade.h:118
 msgid "Virtual _Machine"
 msgstr "Virtuális _gép"
 
-#: ../src/vmm-details.glade.h:118
+#: ../src/vmm-details.glade.h:119
+#, fuzzy
+msgid "Virtual port"
+msgstr "Virtuális hálózat"
+
+#: ../src/vmm-details.glade.h:120
 msgid "_Always"
 msgstr "_Mindig"
 
-#: ../src/vmm-details.glade.h:119
+#: ../src/vmm-details.glade.h:121
 #, fuzzy
 msgid "_Begin Installation"
 msgstr "<b>Telepítés forrása:</b>"
 
-#: ../src/vmm-details.glade.h:120
+#: ../src/vmm-details.glade.h:123
 #, fuzzy
 msgid "_Clone"
 msgstr "_Klónozás"
 
-#: ../src/vmm-details.glade.h:121
+#: ../src/vmm-details.glade.h:124
 msgid "_Console"
 msgstr "_Konzol"
 
-#: ../src/vmm-details.glade.h:123 ../src/vmm-host.glade.h:56
+#: ../src/vmm-details.glade.h:126 ../src/vmm-host.glade.h:56
 #: ../src/vmm-manager.glade.h:13
 msgid "_File"
 msgstr "_Fájl"
 
-#: ../src/vmm-details.glade.h:125
+#: ../src/vmm-details.glade.h:128
 msgid "_Fullscreen"
 msgstr "Teljes ké_pernyő"
 
-#: ../src/vmm-details.glade.h:126 ../src/vmm-host.glade.h:57
+#: ../src/vmm-details.glade.h:129 ../src/vmm-host.glade.h:57
 #: ../src/vmm-manager.glade.h:15
 msgid "_Help"
 msgstr "_Súgó"
 
-#: ../src/vmm-details.glade.h:128
+#: ../src/vmm-details.glade.h:131
 msgid "_Label:"
 msgstr "_Címke:"
 
-#: ../src/vmm-details.glade.h:129
+#: ../src/vmm-details.glade.h:132
 msgid "_Login"
 msgstr "Beje_lentkezés"
 
-#: ../src/vmm-details.glade.h:131
+#: ../src/vmm-details.glade.h:135
 msgid "_Never"
 msgstr "_Soha"
 
-#: ../src/vmm-details.glade.h:132
+#: ../src/vmm-details.glade.h:136
 #, fuzzy
 msgid "_Only when Fullscreen"
 msgstr "Csak ha teljes képernyős"
 
-#: ../src/vmm-details.glade.h:133
+#: ../src/vmm-details.glade.h:137
 msgid "_Password:"
 msgstr "_Jelszó:"
 
-#: ../src/vmm-details.glade.h:136
+#: ../src/vmm-details.glade.h:140
 msgid "_Resize to VM"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:138
+#: ../src/vmm-details.glade.h:142
 #, fuzzy
 msgid "_Save this password in your keyring"
 msgstr "Jelszó elmentése a kulcstartóra"
 
-#: ../src/vmm-details.glade.h:139
+#: ../src/vmm-details.glade.h:143
 #, fuzzy
 msgid "_Scale Display"
 msgstr "Képernyő méretezése"
 
-#: ../src/vmm-details.glade.h:140
+#: ../src/vmm-details.glade.h:144
 msgid "_Static"
 msgstr "_Statikus"
 
-#: ../src/vmm-details.glade.h:141
+#: ../src/vmm-details.glade.h:145
 msgid "_Take Screenshot"
 msgstr "Képernyőkép _készítése"
 
-#: ../src/vmm-details.glade.h:142
+#: ../src/vmm-details.glade.h:146
 #, fuzzy
 msgid "_Text Consoles"
 msgstr "Konzolok"
 
-#: ../src/vmm-details.glade.h:143 ../src/vmm-open-connection.glade.h:16
+#: ../src/vmm-details.glade.h:147 ../src/vmm-open-connection.glade.h:16
 msgid "_Username:"
 msgstr "_Felhasználónév:"
 
-#: ../src/vmm-details.glade.h:144 ../src/vmm-manager.glade.h:21
+#: ../src/vmm-details.glade.h:148 ../src/vmm-manager.glade.h:21
 msgid "_View"
 msgstr "_Nézet"
 
-#: ../src/vmm-details.glade.h:145 ../src/vmm-host.glade.h:59
+#: ../src/vmm-details.glade.h:149 ../src/vmm-host.glade.h:59
 #, fuzzy
 msgid "_View Manager"
 msgstr "Kezelői nézet"
-
-#: ../src/vmm-details.glade.h:146
-#, fuzzy
-msgid "boot"
-msgstr "Újraindítás"
-
-#: ../src/vmm-details.glade.h:147
-msgid "chr"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:148
-msgid "cntrl"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:149
-msgid "cpu"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:150
-#, fuzzy
-msgid "dsk"
-msgstr "Lemez"
-
-#: ../src/vmm-details.glade.h:151
-msgid "inp"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:153
-#, fuzzy
-msgid "mem"
-msgstr "Memória"
-
-#: ../src/vmm-details.glade.h:154
-#, fuzzy
-msgid "net"
-msgstr "Hálózat"
-
-#: ../src/vmm-details.glade.h:155
-msgid "over"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:156
-#, fuzzy
-msgid "snd"
-msgstr "másodpercek"
-
-#: ../src/vmm-details.glade.h:157
-msgid "stat"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:158
-#, fuzzy
-msgid "vid"
-msgstr "Vid"
 
 #: ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
@@ -4413,6 +4399,10 @@ msgstr "Memóriahasználat:"
 msgid "Memory:"
 msgstr "Memória:"
 
+#: ../src/vmm-host.glade.h:37
+msgid "Name:"
+msgstr "Név:"
+
 #: ../src/vmm-host.glade.h:38
 #, fuzzy
 msgid "Network Interfaces"
@@ -4513,7 +4503,7 @@ msgstr "_CPU-használat"
 msgid "_Connection Details"
 msgstr "Kapcsolat választása"
 
-#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:30
+#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:31
 msgid "_Disk I/O"
 msgstr "_Lemez I/O"
 
@@ -4525,7 +4515,7 @@ msgstr "S_zerkesztés"
 msgid "_Graph"
 msgstr "_Grafikon"
 
-#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:34
+#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:35
 msgid "_Network I/O"
 msgstr "_Hálózat I/O"
 
@@ -4731,10 +4721,15 @@ msgstr "Hangeszköz telepítése:"
 
 #: ../src/vmm-preferences.glade.h:18
 #, fuzzy
+msgid "Install Graphics:"
+msgstr "Grafika"
+
+#: ../src/vmm-preferences.glade.h:19
+#, fuzzy
 msgid "Maintain h_istory of"
 msgstr "Történet fenntartása"
 
-#: ../src/vmm-preferences.glade.h:19
+#: ../src/vmm-preferences.glade.h:20
 msgid ""
 "Never\n"
 "For all new domains\n"
@@ -4744,7 +4739,7 @@ msgstr ""
 "Új tartományokhoz\n"
 "Minden tartományhoz"
 
-#: ../src/vmm-preferences.glade.h:22
+#: ../src/vmm-preferences.glade.h:23
 msgid ""
 "Never\n"
 "Fullscreen only\n"
@@ -4754,54 +4749,54 @@ msgstr ""
 "Csak teljes képernyőnél\n"
 "Mindig"
 
-#: ../src/vmm-preferences.glade.h:25
+#: ../src/vmm-preferences.glade.h:26
 msgid "Not supported"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:26
+#: ../src/vmm-preferences.glade.h:27
 msgid "Poweroff/_Reboot/Save:"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:27
+#: ../src/vmm-preferences.glade.h:28
 msgid "Preferences"
 msgstr "Beállítások"
 
-#: ../src/vmm-preferences.glade.h:28
+#: ../src/vmm-preferences.glade.h:29
 msgid "Stats"
 msgstr "Statisztikák"
 
-#: ../src/vmm-preferences.glade.h:29
+#: ../src/vmm-preferences.glade.h:30
 msgid "VM Details"
 msgstr "VM részletek"
 
-#: ../src/vmm-preferences.glade.h:31
+#: ../src/vmm-preferences.glade.h:32
 #, fuzzy
 msgid "_Force Poweroff:"
 msgstr "_Erőltetett bezárás"
 
-#: ../src/vmm-preferences.glade.h:32
+#: ../src/vmm-preferences.glade.h:33
 #, fuzzy
 msgid "_Interface start/stop:"
 msgstr "Eszköz tipusa:"
 
-#: ../src/vmm-preferences.glade.h:33
+#: ../src/vmm-preferences.glade.h:34
 msgid "_Local virtual machine"
 msgstr "He_lyi virtuális gép"
 
-#: ../src/vmm-preferences.glade.h:35
+#: ../src/vmm-preferences.glade.h:36
 msgid "_Pause:"
 msgstr "_Megállítás:"
 
-#: ../src/vmm-preferences.glade.h:36
+#: ../src/vmm-preferences.glade.h:37
 msgid "_Remote virtual machine"
 msgstr "Távoli vi_rtuális gép"
 
-#: ../src/vmm-preferences.glade.h:37
+#: ../src/vmm-preferences.glade.h:38
 #, fuzzy
 msgid "_Update status every"
 msgstr "Állapot időszerűsítése minden"
 
-#: ../src/vmm-preferences.glade.h:38
+#: ../src/vmm-preferences.glade.h:39
 msgid "samples"
 msgstr "minták"
 
@@ -4824,6 +4819,39 @@ msgstr "Kötet _választása:"
 #: ../src/vmm-storage-browse.glade.h:3
 msgid "_Browse Local"
 msgstr "_Tallózás…"
+
+#~ msgid "Auth"
+#~ msgstr "Auth"
+
+#~ msgid "Unavailable"
+#~ msgstr "Elérhetetlen"
+
+#~ msgid "VNC"
+#~ msgstr "VNC"
+
+#, fuzzy
+#~ msgid "boot"
+#~ msgstr "Újraindítás"
+
+#, fuzzy
+#~ msgid "dsk"
+#~ msgstr "Lemez"
+
+#, fuzzy
+#~ msgid "mem"
+#~ msgstr "Memória"
+
+#, fuzzy
+#~ msgid "net"
+#~ msgstr "Hálózat"
+
+#, fuzzy
+#~ msgid "snd"
+#~ msgstr "másodpercek"
+
+#, fuzzy
+#~ msgid "vid"
+#~ msgstr "Vid"
 
 #~ msgid "Unexpected Error"
 #~ msgstr "Nem meghatározott hiba"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager.tip.pa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 15:27-0500\n"
+"POT-Creation-Date: 2011-03-24 16:35-0400\n"
 "PO-Revision-Date: 2010-10-18 12:04+0530\n"
 "Last-Translator: Jaswinder Singh <jsingh@redhat.com>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -33,9 +33,7 @@ msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਮੈਨੇਜਰ"
 msgid "Error starting Virtual Machine Manager"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਮੈਨੇਜਰ ਚਲਾਉਣ ਸਮੇਂ ਗਲਤੀ"
 
-#. ...the risk is we catch too much though
-#. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:346
+#: ../src/virt-manager.py.in:359
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "GTK ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਅਸਮਰਥ: %s"
@@ -113,87 +111,96 @@ msgid "Enable menu accelerators in console window"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:19
+#, fuzzy
+msgid "Install selected graphics type for new VM"
+msgstr "ਰਿਮੋਟ VM ਲਈ ਸਾਊਂਡ ਜੰਤਰ ਇੰਸਟਾਲ ਕਰੋ"
+
+#: ../src/virt-manager.schemas.in.h:20
+msgid "Install selected graphics type for new VM. vnc or spice"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:21
 msgid "Install sound device for local VM"
 msgstr "ਲੋਕਲ VM ਲਈ ਸਾਊਂਡ ਜੰਤਰ ਇੰਸਟਾਲ ਕਰੋ"
 
-#: ../src/virt-manager.schemas.in.h:20
+#: ../src/virt-manager.schemas.in.h:22
 msgid "Install sound device for remote VM"
 msgstr "ਰਿਮੋਟ VM ਲਈ ਸਾਊਂਡ ਜੰਤਰ ਇੰਸਟਾਲ ਕਰੋ"
 
-#: ../src/virt-manager.schemas.in.h:21
+#: ../src/virt-manager.schemas.in.h:23
 msgid "Poll disk i/o stats"
 msgstr "ਪੋਲ ਡਿਸਕ i/o ਹਾਲਤ"
 
-#: ../src/virt-manager.schemas.in.h:22
+#: ../src/virt-manager.schemas.in.h:24
 msgid "Poll net i/o stats"
 msgstr "ਪੋਲ ਨੈੱਟ i/o ਹਾਲਤ"
 
-#: ../src/virt-manager.schemas.in.h:23
+#: ../src/virt-manager.schemas.in.h:25
 msgid "Show cpu usage in summary"
 msgstr "ਸੰਖੇਪ ਵਿੱਚ cpu ਵਰਤੋਂ ਵੇਖਾਓ"
 
-#: ../src/virt-manager.schemas.in.h:24
+#: ../src/virt-manager.schemas.in.h:26
 msgid "Show disk I/O in summary"
 msgstr "ਸੰਖੇਪ ਵਿੱਚ ਡਿਸਕ I/O ਵੇਖੋ"
 
-#: ../src/virt-manager.schemas.in.h:25
+#: ../src/virt-manager.schemas.in.h:27
 msgid "Show network I/O in summary"
 msgstr "ਸੰਖੇਪ ਵਿੱਚ ਨੈੱਟਵਰਕ I/O ਵੇਖੋ"
 
-#: ../src/virt-manager.schemas.in.h:26
+#: ../src/virt-manager.schemas.in.h:28
 msgid "Show system tray icon"
 msgstr "ਸਿਸਟਮ ਟਰੇ ਆਈਕਾਨ ਵੇਖੋ"
 
-#: ../src/virt-manager.schemas.in.h:27
+#: ../src/virt-manager.schemas.in.h:29
 msgid "Show system tray icon while app is running"
 msgstr "ਸਿਸਟਮ ਟਰੇ ਆਈਕਾਨ ਨੂੰ ਐਪਲੀਕੇਸ਼ਨ ਚੱਲਣ ਤੇ ਵੇਖੋ"
 
-#: ../src/virt-manager.schemas.in.h:28
+#: ../src/virt-manager.schemas.in.h:30
 msgid "Show the cpu usage field in the domain list summary view"
 msgstr "ਡੋਮੇਨ ਸੂਚੀ ਸੰਖੇਪ ਦਰਿਸ਼ ਵਿੱਚ cpu ਵਰਤੋਂ ਖੇਤਰ ਵੇਖੋ"
 
-#: ../src/virt-manager.schemas.in.h:29
+#: ../src/virt-manager.schemas.in.h:31
 msgid "Show the disk I/O field in the domain list summary view"
 msgstr "ਡੋਮੇਨ ਸੂਚੀ ਸੰਖੇਪ ਦਰਿਸ਼ ਵਿੱਚ ਡਿਸਕ I/O ਖੇਤਰ ਵੇਖੋ"
 
-#: ../src/virt-manager.schemas.in.h:30
+#: ../src/virt-manager.schemas.in.h:32
 msgid "Show the network I/O field in the domain list summary view"
 msgstr "ਡੋਮੇਨ ਸੂਚੀ ਸੰਖੇਪ ਦਰਿਸ਼ ਵਿੱਚ ਨੈੱਟਵਰਕ I/O ਖੇਤਰ ਵੇਖਾਓ"
 
-#: ../src/virt-manager.schemas.in.h:31
+#: ../src/virt-manager.schemas.in.h:33
 msgid "The length of the list of URLs"
 msgstr "URLs ਦੀ ਸੂਚੀ ਦੀ ਲੰਬਾਈ"
 
-#: ../src/virt-manager.schemas.in.h:32
+#: ../src/virt-manager.schemas.in.h:34
 msgid "The number of samples to keep in the statistics history"
 msgstr "ਅੰਕੜਾ ਅਤੀਤ ਵਿੱਚ ਰੱਖਣ ਲਈ ਸੈਂਪਲਾਂ ਦੀ ਗਿਣਤੀ"
 
-#: ../src/virt-manager.schemas.in.h:33
+#: ../src/virt-manager.schemas.in.h:35
 msgid ""
 "The number of urls to keep in the history for the install media address page."
 msgstr "ਇੰਸਟਾਲ ਮੀਡੀਆ ਐਡਰੈੱਸ ਪੇਜ਼ ਲਈ ਅਤੀਤ ਵਿੱਚ ਰੱਖਣ ਵਾਸਤੇ urls ਦੀ ਗਿਣਤੀ।"
 
-#: ../src/virt-manager.schemas.in.h:34
+#: ../src/virt-manager.schemas.in.h:36
 msgid "The statistics history length"
 msgstr "ਅੰਕੜਾ ਅਤੀਤ ਲੰਬਾਈ"
 
-#: ../src/virt-manager.schemas.in.h:35
+#: ../src/virt-manager.schemas.in.h:37
 msgid "The statistics update interval"
 msgstr "ਅੰਕੜਾ ਅੱਪਡੇਟ ਅੰਤਰਾਲ"
 
-#: ../src/virt-manager.schemas.in.h:36
+#: ../src/virt-manager.schemas.in.h:38
 msgid "The statistics update interval in seconds"
 msgstr "ਅੰਕੜਾ ਅੱਪਡੇਟ ਅੰਤਰਾਲ ਸਕਿੰਟਾਂ ਵਿੱਚ"
 
-#: ../src/virt-manager.schemas.in.h:37
+#: ../src/virt-manager.schemas.in.h:39
 msgid "When to pop up a console for a guest"
 msgstr "ਇੱਕ ਗੈੱਸਟ ਲਈ ਕੰਸੋਲ ਨੂੰ ਪਾਪਅੱਪ ਕਰਨਾ ਹੈ"
 
-#: ../src/virt-manager.schemas.in.h:38
+#: ../src/virt-manager.schemas.in.h:40
 msgid "When to scale the VM graphical console"
 msgstr "VM ਗਰਾਫੀਕਲ ਕੰਸੋਲ ਨੂੰ ਕਦੋਂ ਸਕੇਲ ਕਰਨਾ ਹੈ"
 
-#: ../src/virt-manager.schemas.in.h:39
+#: ../src/virt-manager.schemas.in.h:41
 msgid ""
 "When to scale the VM graphical console. 0 = never, 1 = only when in full "
 "screen mode, 2 = Always"
@@ -201,29 +208,29 @@ msgstr ""
 "VM ਗਰਾਫੀਕਲ ਕੰਸੋਲ ਨੂੰ ਕਦੋਂ ਸਕੇਲ ਕਰਨਾ ਹੈ। 0 = ਕਦੇ ਨਹੀਂ, 1 = ਸਿਰਫ ਜਦੋਂ ਫੁੱਲ ਸਕਰੀਨ ਮੋਡ ਵਿੱਚ ਹੋਵੇ, "
 "2 = ਹਮੇਸ਼ਾ"
 
-#: ../src/virt-manager.schemas.in.h:40
+#: ../src/virt-manager.schemas.in.h:42
 msgid "Whether or not the app will poll VM disk i/o statistics"
 msgstr "ਕੀ ਕਾਰਜ VM ਡਿਸਕ i/o ਅੰਕੜਿਆਂ ਨੂੰ ਪੂਲ ਕਰੇਗਾ"
 
-#: ../src/virt-manager.schemas.in.h:41
+#: ../src/virt-manager.schemas.in.h:43
 msgid "Whether or not the app will poll VM network i/o statistics"
 msgstr "ਕੀ ਕਾਰਜ VM ਨੈੱਟਵਰਕ i/o ਅੰਕੜਿਆਂ ਨੂੰ ਪੂਲ ਕਰੇਗਾ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:42
+#: ../src/virt-manager.schemas.in.h:44
 msgid ""
 "Whether to enable menu accelerators while connected to the guest graphical "
 "console."
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:43
+#: ../src/virt-manager.schemas.in.h:45
 msgid "Whether to install a sound device for local VMs or not"
 msgstr "ਕੀ ਲੋਕਲ VMs ਲਈ ਸਾਊਂਡ ਜੰਤਰ ਇੰਸਟਾਲ ਕਰਨਾ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:44
+#: ../src/virt-manager.schemas.in.h:46
 msgid "Whether to install a sound device for remote VMs or not"
 msgstr "ਕੀ ਰਿਮੋਟ VMs ਲਈ ਸਾਊਂਡ ਜੰਤਰ ਇੰਸਟਾਲ ਕਰਨਾ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:45
+#: ../src/virt-manager.schemas.in.h:47
 msgid ""
 "Whether to pop up a console for a guest. 0 = never, 1 = only on creation of "
 "a new guest, 2 = On creation of any guest"
@@ -231,20 +238,20 @@ msgstr ""
 "ਇੱਕ ਗਿਸਟ ਲਈ ਕੰਸੋਲ ਪਾਪਅੱਪ ਕਰਨਾ ਹੈ। 0 = ਕਦੇ-ਨਹੀਂ, 1 = ਸਿਰਫ ਨਵਾਂ ਗਿਸਟ ਬਣਨ ਤੇ, 2 = ਕਿਸੇ ਵੀ "
 "ਗਿਸਟ ਦੇ ਬਣਨ ਤੇ"
 
-#: ../src/virt-manager.schemas.in.h:46
+#: ../src/virt-manager.schemas.in.h:48
 msgid "Whether to show VM button toolbar in Details display"
 msgstr "ਵੇਰਵੇ ਵਿੱਚ VM ਬਟਨ ਟੂਲਬਾਰ ਟੀ ਵੇਖਣੀ ਹੈ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:47
+#: ../src/virt-manager.schemas.in.h:49
 msgid "Whether to show notification when grabbing mouse"
 msgstr "ਮਾਊਸ ਹਿਲਾਉਣ ਤੇ ਸੂਚਨਾ ਵੇਖਾਉਣੀ ਹੈ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:48
+#: ../src/virt-manager.schemas.in.h:50
 msgid ""
 "Whether to show the notification hint when grabbing the mouse in the console"
 msgstr "ਕੰਸੋਲ ਵਿੱਚ ਮਾਊਸ ਹਿਲਾਉਣ ਤੇ ਸੂਚਨਾ ਸੰਕੇਤ ਵੇਖਾਉਣਾ ਹੈ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:49
+#: ../src/virt-manager.schemas.in.h:51
 msgid ""
 "Whether to show toolbar containing Virtual Machine action buttons (such as "
 "Run, Pause, Shutdown) in the details display"
@@ -252,29 +259,29 @@ msgstr ""
 "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਕਾਰਵਾਈ ਬਟਨਾਂ (ਜਿਵੇਂ ਚਲਾਓ, ਰੋਕੋ, ਬੰਦ) ਵਾਲਾ ਟੂਲਬਾਰ ਵੇਰਵਾ ਝਲਕ ਵਿੱਚ ਵੇਖਾਉਣਾ ਹੈ "
 "ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:50
+#: ../src/virt-manager.schemas.in.h:52
 msgid "Whether we require confirmation to forcepoweroff a VM"
 msgstr "ਇੱਕ VM ਨੂੰ ਧੱਕੇ ਨਾਲ ਬੰਦ ਕਰਨ ਲਈ ਪੁਸ਼ਟੀ ਲੋੜੀਂਦੀ ਹੈ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:51
+#: ../src/virt-manager.schemas.in.h:53
 msgid "Whether we require confirmation to pause a VM"
 msgstr "ਇੱਕ VM ਨੂੰ ਸ਼ਾਂਤ ਕਰਨ ਲਈ ਪੁਸ਼ਟੀ ਲੋੜੀਂਦੀ ਹੈ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:52
+#: ../src/virt-manager.schemas.in.h:54
 msgid "Whether we require confirmation to poweroff/reboot a VM"
 msgstr "ਇੱਕ VM ਨੂੰ ਬੰਦ/ਮੁੜ-ਚਾਲੂ ਕਰਨ ਲਈ ਪੁਸ਼ਟੀ ਲੋੜੀਂਦੀ ਹੈ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:53
+#: ../src/virt-manager.schemas.in.h:55
 msgid "Whether we require confirmation to remove a virtual device"
 msgstr "ਇੱਕ ਵਰਚੁਅਲ ਜੰਤਰ ਨੂੰ ਹਟਾਉਣ ਲਈ ਪੁਸ਼ਟੀ ਲੋੜੀਂਦੀ ਹੈ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virt-manager.schemas.in.h:54
+#: ../src/virt-manager.schemas.in.h:56
 msgid ""
 "Whether we require confirmation to start or stop a libvirt virtual interface"
 msgstr "ਸਾਨੂੰ libvirt ਵਰਚੁਅਲ ਇੰਟਰਫੇਸ ਚਾਲੂ ਜਾਂ ਬੰਦ ਕਰਨ ਲਈ ਪੁਸ਼ਟੀ ਲੋੜੀਂਦੀ ਹੈ ਜਾਂ ਨਹੀਂ"
 
-#: ../src/virtManager/addhardware.py:331 ../src/virtManager/create.py:445
-#: ../src/virtManager/create.py:537
+#: ../src/virtManager/addhardware.py:331 ../src/virtManager/create.py:452
+#: ../src/virtManager/create.py:544
 msgid "Connection does not support storage management."
 msgstr "ਸਟੋਰੇਜ਼ ਪਰਬੰਧਨ ਨੂੰ ਕੁਨੈਕਸ਼ਨ ਸਹਿਯੋਗ ਨਹੀਂ ਦਿੰਦਾ।"
 
@@ -292,14 +299,14 @@ msgstr "ਹੋਸਟ ਜੰਤਰ ਸੂਚੀ ਨੂੰ ਕੁਨੈਕਸ਼ਨ �
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt ਵਰਜਨ ਵਿਡੀਓ ਜੰਤਰਾਂ ਨੂੰ ਸਹਿਯੋਗ ਨਹੀਂ ਦਿੰਦਾ।"
 
-#: ../src/virtManager/addhardware.py:487 ../src/virtManager/details.py:2190
+#: ../src/virtManager/addhardware.py:487 ../src/virtManager/details.py:2388
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB ਗਰਾਫਿਕਸ ਟੈਬਲਿਟ"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:491 ../src/virtManager/details.py:2192
+#: ../src/virtManager/addhardware.py:491 ../src/virtManager/details.py:2390
 msgid "Generic USB Mouse"
 msgstr "ਆਮ USB ਮਾਊਸ"
 
@@ -309,7 +316,7 @@ msgstr "VNC ਸਰਵਰ"
 
 #: ../src/virtManager/addhardware.py:496
 #, fuzzy
-msgid "SPICE server"
+msgid "Spice server"
 msgstr "VNC ਸਰਵਰ"
 
 #: ../src/virtManager/addhardware.py:497
@@ -343,7 +350,7 @@ msgstr "ਸਟੋਰੇਜ਼"
 msgid "Network"
 msgstr "ਨੈੱਟਵਰਕ"
 
-#: ../src/virtManager/addhardware.py:824 ../src/virtManager/details.py:2532
+#: ../src/virtManager/addhardware.py:824 ../src/virtManager/details.py:2734
 msgid "Input"
 msgstr "ਇੰਪੁੱਟ"
 
@@ -390,15 +397,15 @@ msgstr ""
 msgid "Error adding device: %s"
 msgstr "ਜੰਤਰ ਸ਼ਾਮਿਲ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/addhardware.py:1006 ../src/virtManager/create.py:1409
-#, python-format
+#: ../src/virtManager/addhardware.py:1006 ../src/virtManager/create.py:1430
+#, fuzzy, python-format
 msgid ""
-"The following path already exists, but is not\n"
+"The following storage already exists, but is not\n"
 "in use by any virtual machine:\n"
 "\n"
 "%s\n"
 "\n"
-"Would you like to use this path?"
+"Would you like to reuse this storage?"
 msgstr ""
 "ਹੇਠਲਾ ਮਾਰਗ ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ, ਪਰ ਕਿਸੇ ਵਰਚੁਅਲ ਮਸ਼ੀਨ\n"
 "ਵਲੋਂ ਨਹੀਂ ਵਰਤਿਆ ਗਿਆ ਹੈ:\n"
@@ -407,25 +414,25 @@ msgstr ""
 "\n"
 "ਕੀ ਤੁਸੀਂ ਇਹ ਮਾਰਗ ਵਰਤਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: ../src/virtManager/addhardware.py:1014 ../src/virtManager/create.py:1417
+#: ../src/virtManager/addhardware.py:1014 ../src/virtManager/create.py:1438
 msgid "A storage path must be specified."
 msgstr "ਸਟੋਰੇਜ਼ ਮਾਰਗ ਦੇਣਾ ਜਰੂਰੀ ਹੈ।"
 
-#: ../src/virtManager/addhardware.py:1032 ../src/virtManager/create.py:1425
+#: ../src/virtManager/addhardware.py:1032 ../src/virtManager/create.py:1446
 msgid "Storage parameter error."
 msgstr "ਸਟੋਰੇਜ਼ ਪੈਰਾਮੀਟਰ ਗਲਤੀ।"
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:1046 ../src/virtManager/create.py:1430
+#: ../src/virtManager/addhardware.py:1046 ../src/virtManager/create.py:1451
 msgid "Not Enough Free Space"
 msgstr "ਲੋੜੀਂਦੀ ਫਰੀ ਸਪੇਸ ਨਹੀਂ ਹੈ"
 
-#: ../src/virtManager/addhardware.py:1052 ../src/virtManager/create.py:1436
+#: ../src/virtManager/addhardware.py:1052 ../src/virtManager/create.py:1457
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "ਡਿਸਕ \"%s\" ਪਹਿਲਾਂ ਹੀ ਹੋਰ ਗੈੱਸਟ ਦੀ ਵਰਤੋਂ ਵਿੱਚ ਹੈ!"
 
-#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1438
+#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1459
 msgid "Do you really want to use the disk?"
 msgstr "ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਡਿਸਕ ਨੂੰ ਵਰਤਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
@@ -495,19 +502,19 @@ msgstr "ਕਾਰਵਾਈ ਜਾਰੀ ਹੈ..."
 msgid "Completed"
 msgstr "ਮੁਕੰਮਲ"
 
-#: ../src/virtManager/choosecd.py:91 ../src/virtManager/choosecd.py:97
+#: ../src/virtManager/choosecd.py:88 ../src/virtManager/choosecd.py:94
 msgid "Invalid Media Path"
 msgstr "ਗਲਤ ਮੀਡਿਆ ਮਾਰਗ"
 
-#: ../src/virtManager/choosecd.py:92
+#: ../src/virtManager/choosecd.py:89
 msgid "A media path must be specified."
 msgstr "ਇੱਕ ਮੀਡੀਆ ਮਾਰਗ ਦੇਣਾ ਜਰੂਰੀ ਹੈ।"
 
-#: ../src/virtManager/choosecd.py:138
+#: ../src/virtManager/choosecd.py:135
 msgid "Floppy D_rive"
 msgstr "ਫਲਾਪੀ ਡਰਾਈਵ(_R)"
 
-#: ../src/virtManager/choosecd.py:139
+#: ../src/virtManager/choosecd.py:136
 msgid "Floppy _Image"
 msgstr "ਫਲਾਪੀ ਈਮੇਜ਼(_I)"
 
@@ -584,7 +591,7 @@ msgstr ""
 "ਨਵਾਂ ਗੈੱਸਟ ਚਲਾਉਣ ਨਾਲ ਇਹਨਾਂ ਡਿਸਕ ਈਮੇਜ਼ਾਂ ਵਿਚਲਾ ਡਾਟਾ ਮੁੜ ਲਿਖਿਆ ਜਾਵੇਗਾ।"
 
 #: ../src/virtManager/clone.py:737 ../src/virtManager/createpool.py:382
-#: ../src/virtManager/createvol.py:195 ../src/virtManager/migrate.py:433
+#: ../src/virtManager/createvol.py:199 ../src/virtManager/migrate.py:433
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "ਅਣਜਾਣ ਗਲਤੀ ਇੰਪੁੱਟ ਪ੍ਰਮਾਣਿਕਤਾ ਦੌਰਾਨ: %s"
@@ -623,11 +630,11 @@ msgstr ""
 "ਕਲੋਨ ਕੀਤੇ ਜਾਣ ਵਾਲੇ ਬਲਾਕ ਜੰਤਰ libvirt\n"
 "ਵਲੋਂ ਪਰਬੰਧ ਕੀਤੇ ਸਟੋਰੇਜ਼ ਵਾਲੀਅਮ ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ।"
 
-#: ../src/virtManager/clone.py:824 ../src/virtManager/delete.py:329
+#: ../src/virtManager/clone.py:824 ../src/virtManager/delete.py:330
 msgid "No write access to parent directory."
 msgstr "ਮੁੱਢਲੀ ਡਾਇਰੈਕਟਰੀ ਉੱਤੇ ਕੋਈ ਲਿਖਣ ਅਧਿਕਾਰ ਨਹੀਂ।"
 
-#: ../src/virtManager/clone.py:826 ../src/virtManager/delete.py:327
+#: ../src/virtManager/clone.py:826 ../src/virtManager/delete.py:328
 msgid "Path does not exist."
 msgstr "ਟਿਕਾਣਾ ਮੌਜੂਦ ਨਹੀਂ ਹੈ।"
 
@@ -720,16 +727,26 @@ msgstr "ਸਰਗਰਮ"
 #: ../src/virtManager/connection.py:590 ../src/virtManager/host.py:508
 #: ../src/virtManager/host.py:551 ../src/virtManager/host.py:777
 #: ../src/virtManager/host.py:808 ../src/virtManager/host.py:1044
-#: ../src/virtManager/uihelpers.py:394
+#: ../src/virtManager/uihelpers.py:401
 msgid "Inactive"
 msgstr "ਨਾ-ਸਰਗਰਮ"
 
-#: ../src/virtManager/connection.py:592 ../src/virtManager/create.py:1726
-#: ../src/virtManager/details.py:1917 ../src/virtManager/details.py:2111
-#: ../src/virtManager/details.py:2271 ../src/virtManager/details.py:2272
+#: ../src/virtManager/connection.py:592 ../src/virtManager/create.py:1747
+#: ../src/virtManager/details.py:2054 ../src/virtManager/details.py:2271
+#: ../src/virtManager/details.py:2469 ../src/virtManager/details.py:2470
 #: ../src/virtManager/host.py:1039
 msgid "Unknown"
 msgstr "ਅਣਜਾਣ"
+
+#: ../src/virtManager/connection.py:768
+#, python-format
+msgid ""
+"Domain rename failed. Attempting to recover also failed.\n"
+"\n"
+"Original error: %s\n"
+"\n"
+"Recover error: %s"
+msgstr ""
 
 #: ../src/virtManager/console.py:295
 msgid "Unable to provide requested credentials to the VNC server"
@@ -758,57 +775,61 @@ msgstr "ਸਟੋਰੇਜ਼ ਟਿਕਾਣਾ ਬਦਲਣ ਵਿੱਚ ਗਲ�
 msgid "Error opening socket path '%s'"
 msgstr "ਸਟੋਰੇਜ਼ ਟਿਕਾਣਾ ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/console.py:543
+#: ../src/virtManager/console.py:538 ../src/vmm-details.glade.h:117
+msgid "Virtual Machine"
+msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ"
+
+#: ../src/virtManager/console.py:542
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "ਪੁਆਇੰਟਰ ਛੱਡਣ ਲਈ %s ਦੱਬੋ।"
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
+#: ../src/virtManager/console.py:725 ../src/virtManager/console.py:895
 msgid "Guest not running"
 msgstr "ਗੈੱਸਟ ਨਹੀਂ ਚੱਲ ਰਿਹਾ"
 
-#: ../src/virtManager/console.py:709
+#: ../src/virtManager/console.py:728
 msgid "Guest has crashed"
 msgstr "ਗੈੱਸਟ ਕਰੈਸ਼ ਹੋ ਗਿਆ ਹੈ"
 
-#: ../src/virtManager/console.py:819
+#: ../src/virtManager/console.py:838
 #, fuzzy
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr "ਗਲਤੀ: ਹਾਈਪਰਵਾਈਸਰ ਹੋਸਟ ਨਾਲ VNC ਕੁਨੈਕਸ਼ਨ ਬੰਦ ਹੋ ਗਿਆ ਹੈ ਜਾਂ ਟੁੱਟ ਗਿਆ ਹੈ!"
 
-#: ../src/virtManager/console.py:893
+#: ../src/virtManager/console.py:912
 msgid "Graphical console not configured for guest"
 msgstr "ਗੈੱਸਟ ਲਈ ਗਰਾਫੀਕਲ ਕੰਸੋਲ ਸੰਰਚਿਤ ਨਹੀਂ ਹੈ"
 
-#: ../src/virtManager/console.py:900
+#: ../src/virtManager/console.py:919
 #, fuzzy, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "ਕਨਸੋਲ ਮਾਰਗ '%s' ਨਹੀਂ ਵਰਤ ਸਕਦਾ।"
 
-#: ../src/virtManager/console.py:910
+#: ../src/virtManager/console.py:929
 msgid "Graphical console is not yet active for guest"
 msgstr "ਹਾਲੇ ਗੈੱਸਟ ਲਈ ਗਰਾਫੀਕਲ ਕੰਸੋਲ ਸਰਗਰਮ ਨਹੀਂ ਹੈ"
 
-#: ../src/virtManager/console.py:915
+#: ../src/virtManager/console.py:934
 msgid "Connecting to graphical console for guest"
 msgstr "ਗੈੱਸਟ ਲਈ  ਗਰਾਫੀਕਲ ਕੰਸੋਲ ਨਾਲ ਜੁੜ ਰਿਹਾ ਹੈ"
 
-#: ../src/virtManager/console.py:951
+#: ../src/virtManager/console.py:970
 #, fuzzy
 msgid "Error connecting to graphical console"
 msgstr "ਗੈੱਸਟ ਲਈ  ਗਰਾਫੀਕਲ ਕੰਸੋਲ ਨਾਲ ਜੁੜ ਰਿਹਾ ਹੈ"
 
-#: ../src/virtManager/create.py:319
+#: ../src/virtManager/create.py:324
 msgid "No active connection to install on."
 msgstr "ਇੰਸਟਾਲ ਕਰਨ ਲਈ ਕੋਈ ਜੰਤਰ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/create.py:380
+#: ../src/virtManager/create.py:387
 msgid "Connection is read only."
 msgstr "ਕੁਨੈਕਸ਼ਨ ਸਿਰਫ ਪੜਨ ਲਈ ਹੈ।"
 
-#: ../src/virtManager/create.py:383
+#: ../src/virtManager/create.py:390
 msgid ""
 "No hypervisor options were found for this\n"
 "connection."
@@ -816,7 +837,7 @@ msgstr ""
 "ਇਸ ਕੁਨੈਕਸ਼ਨ ਲਈ ਕੋਈ ਹਾਈਪਰਵਾਈਸਰ ਚੋਣ ਉਪਲੱਬਧ\n"
 "ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/create.py:388
+#: ../src/virtManager/create.py:395
 #, fuzzy
 msgid ""
 "This usually means that QEMU or KVM is not\n"
@@ -826,7 +847,7 @@ msgstr ""
 "ਇੰਸਟਾਲ ਨਹੀਂ ਹਨ। ਕਿਰਪਾ ਕਰਕੇ ਜਾਂਚ ਕਰੋ ਕਿ ਇਹ ਇੰਸਟਾਲ\n"
 "ਕੀਤੇ ਗਏ ਹਨ।"
 
-#: ../src/virtManager/create.py:403
+#: ../src/virtManager/create.py:410
 msgid ""
 "Host supports full virtualization, but\n"
 "no related install options are available.\n"
@@ -838,7 +859,7 @@ msgstr ""
 "ਇਸ ਦਾ ਮਤਲਬ ਹੈ ਕਿ ਤੁਹਾਡੇ ਸਿਸਟਮ BIOS ਵਿੱਚ\n"
 "ਸਹਿਯੋਗ ਅਯੋਗ ਕੀਤਾ ਹੋਇਆ ਹੈ।"
 
-#: ../src/virtManager/create.py:410
+#: ../src/virtManager/create.py:417
 msgid ""
 "Host does not appear to support hardware\n"
 "virtualization. Install options may be limited."
@@ -846,7 +867,7 @@ msgstr ""
 "ਇੰਝ ਲੱਗਦਾ ਹੈ ਜਿਵੇਂ ਹੋਸਟ ਹਾਰਡਵੇਅਰ ਵਰਚੁਅਲਾਈਜੇਸ਼ਨ ਨੂੰ\n"
 "ਸਹਿਯੋਗ ਨਹੀਂ ਦਿੰਦਾ ਹੈ। ਇੰਸਟਾਲ ਚੋਣਾਂ ਸੀਮਿਤ ਹੋ ਸਕਦੀਆਂ ਹਨ।"
 
-#: ../src/virtManager/create.py:416
+#: ../src/virtManager/create.py:423
 msgid ""
 "KVM is not available. This may mean the KVM\n"
 "package is not installed, or the KVM kernel modules \n"
@@ -856,143 +877,143 @@ msgstr ""
 "ਪੈਕੇਜ ਇੰਸਟਾਲ ਨਹੀਂ ਹੈ, ਜਾਂ KVM ਕਰਨਲ ਮੋਡੀਊਲ ਲੋਡ \n"
 "ਨਹੀਂ ਹੋਏ ਹਨ। ਤੁਹਾਡੀ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਵਧੀਆ ਨਹੀਨ ਚੱਲੇਗੀ।"
 
-#: ../src/virtManager/create.py:439
+#: ../src/virtManager/create.py:446
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "%s ਇੰਸਟਾਲ paravirt ਗਿਸਟਾਂ ਲਈ ਉਪਲੱਬਧ ਨਹੀਂ ਹਨ।"
 
-#: ../src/virtManager/create.py:443
+#: ../src/virtManager/create.py:450
 msgid "URL installs not available for remote connections."
 msgstr "URL ਇੰਸਟਾਲ ਰਿਮੋਟ ਕੁਨੈਕਸ਼ਨਾਂ ਲਈ ਉਪਲੱਬਧ ਨਹੀਂ ਹਨ।"
 
-#: ../src/virtManager/create.py:457
+#: ../src/virtManager/create.py:464
 msgid "No install options available for this connection."
 msgstr "ਇਸ ਕੁਨੈਕਸ਼ਨ ਲਈ ਕੋਈ ਇੰਸਟਾਲ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/create.py:497
+#: ../src/virtManager/create.py:504
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "%(maxmem)s ਤੱਕ ਹੋਸਟ ਤੇ ਉਪਲੱਬਧ ਹਨ"
 
-#: ../src/virtManager/create.py:511
+#: ../src/virtManager/create.py:518
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
 msgstr "ਹਾਈਪਰਵਾਈਸਰ ਸਿਰਫ %d ਵਰਚੁਅਲ CPUs ਨੂੰ ਸਹਿਯੋਗ ਦਿੰਦਾ ਹੈ।"
 
-#: ../src/virtManager/create.py:521
+#: ../src/virtManager/create.py:528
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "%(numcpus)d ਤੱਕ ਉਪਲੱਬਧ ਹਨ"
 
-#: ../src/virtManager/create.py:603
+#: ../src/virtManager/create.py:610
 msgid "Only URL or import installs are supported for paravirt."
 msgstr "ਸਿਰਫ URL ਜਾਂ ਇੰਪੋਰਟ ਇੰਸਟਾਲ paravirt ਲਈ ਉਪਲੱਬਧ ਹਨ।"
 
-#: ../src/virtManager/create.py:680 ../src/virtManager/create.py:689
-#: ../src/virtManager/create.py:764 ../src/virtManager/create.py:766
+#: ../src/virtManager/create.py:687 ../src/virtManager/create.py:696
+#: ../src/virtManager/create.py:771 ../src/virtManager/create.py:773
 msgid "Generic"
 msgstr "ਆਮ"
 
-#: ../src/virtManager/create.py:746
+#: ../src/virtManager/create.py:753
 msgid "Local CDROM/ISO"
 msgstr "ਲੋਕਲ CDROM/ISO"
 
-#: ../src/virtManager/create.py:748
+#: ../src/virtManager/create.py:755
 msgid "URL Install Tree"
 msgstr "URL ਇੰਸਟਾਲ ਟਰੀ"
 
-#: ../src/virtManager/create.py:750
+#: ../src/virtManager/create.py:757
 msgid "PXE Install"
 msgstr "PXE ਇੰਸਟਾਲ"
 
-#: ../src/virtManager/create.py:752
+#: ../src/virtManager/create.py:759
 msgid "Import existing OS image"
 msgstr "ਮੌਜੂਦਾ OS ਈਮੇਜ਼ ਇੰਪੋਰਟ ਕਰੋ"
 
-#: ../src/virtManager/create.py:755 ../src/virtManager/details.py:1918
-#: ../src/virtManager/details.py:1941
+#: ../src/virtManager/create.py:762 ../src/virtManager/details.py:2055
+#: ../src/virtManager/details.py:2083
 msgid "None"
 msgstr "ਕੋਈ ਨਹੀਂ"
 
-#: ../src/virtManager/create.py:943
+#: ../src/virtManager/create.py:954
 #, fuzzy
 msgid "Network selection does not support PXE"
 msgstr "ਨੈੱਟਵਰਕ ਚੋਣ ਗਲਤੀ।"
 
-#: ../src/virtManager/create.py:1135 ../src/virtManager/createinterface.py:876
+#: ../src/virtManager/create.py:1149 ../src/virtManager/createinterface.py:876
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "Step %(current_page)d of %(max_page)d"
 
-#: ../src/virtManager/create.py:1182
+#: ../src/virtManager/create.py:1196
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "UUID ਸੈਟਿੰਗ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/create.py:1193
+#: ../src/virtManager/create.py:1214
 msgid "Error setting up graphics device:"
 msgstr "ਗਰਾਫਿਕਸ ਜੰਤਰ ਸੈੱਟ ਕਰਨ ਵੇਲੇ ਗਲਤੀ:"
 
-#: ../src/virtManager/create.py:1203
+#: ../src/virtManager/create.py:1224
 msgid "Error setting up sound device:"
 msgstr "ਸਾਊਂਡ ਜੰਤਰ ਸੈੱਟ ਕਰਨ ਵੇਲੇ ਗਲਤੀ:"
 
-#: ../src/virtManager/create.py:1223 ../src/virtManager/createinterface.py:905
+#: ../src/virtManager/create.py:1244 ../src/virtManager/createinterface.py:905
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "ਅਣਜਾਣੀ ਗਲਤੀ ਜੋ ਇੰਸਟਾਲ ਪੈਰਾਮੀਟਰਾਂ ਨੂੰ ਪ੍ਰਮਾਣਿਤ ਕਰਦੀ ਹੈ: %s"
 
-#: ../src/virtManager/create.py:1235
+#: ../src/virtManager/create.py:1256
 msgid "Invalid System Name"
 msgstr "ਗਲਤ ਸਿਸਟਮ ਨਾਂ"
 
-#: ../src/virtManager/create.py:1255
+#: ../src/virtManager/create.py:1276
 msgid "An install media selection is required."
 msgstr "ਇੱਕ ਇੰਸਟਾਲ ਮੀਡੀਆ ਚੁਣਨ ਦੀ ਲੋੜ ਹੈ।"
 
-#: ../src/virtManager/create.py:1265
+#: ../src/virtManager/create.py:1286
 msgid "An install tree is required."
 msgstr "ਇੱਕ ਇੰਸਟਾਲ ਟਰੀ ਲੋੜੀਂਦਾ ਹੈ।"
 
-#: ../src/virtManager/create.py:1278
+#: ../src/virtManager/create.py:1299
 msgid "A storage path to import is required."
 msgstr "ਇੰਪੋਰਟ ਕਰਨ ਲਈ ਸਟੋਰੇਜ਼ ਮਾਰਗ ਦੀ ਲੋੜ ਹੈ।"
 
-#: ../src/virtManager/create.py:1288
+#: ../src/virtManager/create.py:1309
 msgid "Error setting installer parameters."
 msgstr "ਇੰਸਾਟਲਰ ਪੈਰਾਮੀਟਰ ਸੈੱਟ ਕਰਨ ਵਿੱਚ ਗਲਤੀ।"
 
-#: ../src/virtManager/create.py:1306
+#: ../src/virtManager/create.py:1327
 msgid "Error setting install media location."
 msgstr "ਇੰਸਟਾਲ ਮੀਡੀਆ ਟਿਕਾਣਾ ਸੈੱਟ ਕਰਨ ਵਿੱਚ ਗਲਤੀ।"
 
-#: ../src/virtManager/create.py:1316
+#: ../src/virtManager/create.py:1337
 msgid "Error setting OS information."
 msgstr "OS ਜਾਣਕਾਰੀ ਸੈੱਟ ਕਰਨ ਵਿੱਚ ਗਲਤੀ।"
 
-#: ../src/virtManager/create.py:1353
+#: ../src/virtManager/create.py:1374
 msgid "Error setting CPUs."
 msgstr "CPUs ਸੈੱਟਿੰਗ ਵਿੱਚ ਗਲਤੀ।"
 
-#: ../src/virtManager/create.py:1360
+#: ../src/virtManager/create.py:1381
 msgid "Error setting guest memory."
 msgstr "ਗੈੱਸਟ ਮੈਮੋਰੀ ਸੈਟਿੰਗ ਵਿੱਚ ਗਲਤੀ।"
 
-#: ../src/virtManager/create.py:1469
+#: ../src/virtManager/create.py:1490
 #, python-format
 msgid "Network device required for %s install."
 msgstr "ਨੈੱਟਵਰਕ ਜੰਤਰ ਦੀ %s ਇੰਸਟਾਲ ਲਈ ਲੋੜ ਹੈ।"
 
-#: ../src/virtManager/create.py:1554
+#: ../src/virtManager/create.py:1575
 #, fuzzy
 msgid "Error starting installation: "
 msgstr "ਇੰਸਟਾਲ ਮੀਡੀਆ ਟਿਕਾਣਾ ਸੈੱਟ ਕਰਨ ਵਿੱਚ ਗਲਤੀ।"
 
-#: ../src/virtManager/create.py:1582
+#: ../src/virtManager/create.py:1603
 msgid "Creating Virtual Machine"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਬਣਾਈ ਜਾ ਰਹੀ ਹੈ"
 
-#: ../src/virtManager/create.py:1583
+#: ../src/virtManager/create.py:1604
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1000,17 +1021,17 @@ msgstr ""
 "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਹੁਣ ਬਣਾਈ ਗਈ ਹੈ। ਡਿਸਕ ਸਟੋਰੇਜ਼ ਦਾ ਨਿਰਧਾਰਨ ਅਤੇ ਇੰਸਟਾਲੇਸ਼ਨ ਈਮੇਜ਼ ਦੀ ਪ੍ਰਾਪਤੀ ਮੁਕੰਮਲ "
 "ਹੋਣ ਲਈ ਕੁਝ ਸਮਾਂ ਲੈ ਸਕਦੀ ਹੈ।"
 
-#: ../src/virtManager/create.py:1594
+#: ../src/virtManager/create.py:1615
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "ਮੁਕੰਮਲ ਇੰਸਟਾਲ ਵਿੱਚ ਅਸਮਰਥ: '%s'"
 
-#: ../src/virtManager/create.py:1672
+#: ../src/virtManager/create.py:1693
 #, python-format
 msgid "Error continue install: %s"
 msgstr "ਇੰਸਟਾਲ ਜਾਰੀ ਕਰਨ ਵੇਲੇ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/create.py:1768
+#: ../src/virtManager/create.py:1789
 msgid "Detecting"
 msgstr "ਖੋਜ ਜਾਰੀ"
 
@@ -1159,13 +1180,13 @@ msgstr "ਹੋਰ"
 msgid "Start address:"
 msgstr "ਸ਼ੁਰੂਆਤੀ ਐਡਰੈੱਸ:"
 
-#: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:101
+#: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:102
 msgid "Status:"
 msgstr "ਹਾਲਤ:"
 
-#: ../src/virtManager/createnet.py:301 ../src/virtManager/details.py:1960
-#: ../src/virtManager/details.py:1961 ../src/virtManager/details.py:1962
-#: ../src/virtManager/details.py:1963 ../src/virtManager/host.py:530
+#: ../src/virtManager/createnet.py:301 ../src/virtManager/details.py:2108
+#: ../src/virtManager/details.py:2109 ../src/virtManager/details.py:2110
+#: ../src/virtManager/details.py:2111 ../src/virtManager/host.py:530
 #: ../src/virtManager/host.py:531
 msgid "Disabled"
 msgstr "ਅਯੋਗ"
@@ -1287,20 +1308,20 @@ msgstr "ਸਰੋਤ ਜੰਤਰ ਫਾਰਮੈਟ ਕਰੋ"
 msgid "Create a logical volume group from the source device."
 msgstr "ਸਰੋਤ ਜੰਤਰ ਤੋਂ ਇੱਕ ਲਾਜ਼ੀਕਲ ਵਾਲੀਅਮ ਬਣਾਓ।"
 
-#: ../src/virtManager/createvol.py:206
+#: ../src/virtManager/createvol.py:210
 msgid "Creating storage volume..."
 msgstr "ਸਟੋਰੇਜ਼ ਵਾਲੀਅਮ ਬਣਾਉਣਾ..."
 
-#: ../src/virtManager/createvol.py:207
+#: ../src/virtManager/createvol.py:211
 msgid "Creating the storage volume may take a while..."
 msgstr "ਸਟੋਰੇਜ਼ ਵਾਲੀਅਮ ਬਣਨ ਤੇ ਕੁਝ ਸਮਾਂ ਲੱਗ ਸਕਦਾ ਹੈ..."
 
-#: ../src/virtManager/createvol.py:215
+#: ../src/virtManager/createvol.py:219
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "ਵਾਲੀਅਮ ਬਣਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/createvol.py:248
+#: ../src/virtManager/createvol.py:252
 msgid "Volume Parameter Error"
 msgstr "ਵਾਲੀਅਮ ਪੈਰਾਮੀਟਰ ਗਲਤੀ"
 
@@ -1313,57 +1334,57 @@ msgstr "ਹਟਾਓ"
 msgid "Deleting virtual machine '%s'"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ '%s' ਹਟਾਈ ਜਾ ਰਹੀ ਹੈ"
 
-#: ../src/virtManager/delete.py:161
+#: ../src/virtManager/delete.py:162
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "ਟਿਕਾਣਾ '%s' ਹਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: ../src/virtManager/delete.py:172
+#: ../src/virtManager/delete.py:173
 #, python-format
 msgid "Error deleting virtual machine '%s': %s"
 msgstr "ਵਰਟੁਅਲ ਮਸ਼ੀਨ '%s' ਨੂੰ ਹਟਾਉਣ ਵੇਲੇ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/delete.py:188
+#: ../src/virtManager/delete.py:189
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "ਨਾਲ ਹੀ, ਕੁਝ ਸਟੋਰਜ਼ ਜੰਤਰਾਂ ਨੂੰ ਹਟਾਉਣ ਵੇਲੇ ਗਲਤੀਆਂ ਆਈਆਂ ਹਨ: \n"
 
-#: ../src/virtManager/delete.py:192
+#: ../src/virtManager/delete.py:193
 msgid "Errors encountered while removing certain storage devices."
 msgstr "ਕੁਝ ਸਟੋਰੇਜ਼ ਜੰਤਰਾਂ ਨੂੰ ਹਟਾਉਣ ਵੇਲੇ ਗਲਤੀ ਆਈ ਹੈ।"
 
-#: ../src/virtManager/delete.py:273
+#: ../src/virtManager/delete.py:274
 msgid "Storage Path"
 msgstr "ਸਰੋਤ ਟਿਕਾਣਾ"
 
-#: ../src/virtManager/delete.py:274
+#: ../src/virtManager/delete.py:275
 msgid "Target"
 msgstr "ਟਾਰਗਿਟ"
 
-#: ../src/virtManager/delete.py:322
+#: ../src/virtManager/delete.py:323
 msgid "Cannot delete iscsi share."
 msgstr "iscsi ਸ਼ੇਅਰ ਨੂੰ ਹਟਾ ਨਹੀਂ ਸਕਦਾ।"
 
-#: ../src/virtManager/delete.py:325
+#: ../src/virtManager/delete.py:326
 msgid "Cannot delete unmanaged remote storage."
 msgstr "ਨਾ-ਪਰਬੰਧਿਤ ਸਟੋਰੇਜ਼ ਨੂੰ ਹਟਾ ਨਹੀਂ ਸਕਦਾ।"
 
-#: ../src/virtManager/delete.py:331
+#: ../src/virtManager/delete.py:332
 msgid "Cannot delete unmanaged block device."
 msgstr "ਨਾ-ਪਰਬੰਧਿਤ ਬਲਾਕ ਜੰਤਰ ਨੂੰ ਹਟਾ ਨਹੀਂ ਸਕਦਾ ਹੈ।"
 
-#: ../src/virtManager/delete.py:351
+#: ../src/virtManager/delete.py:352
 msgid "Storage is read-only."
 msgstr "ਸਟੋਰੇਜ਼ ਸਿਰਫ ਪੜਨ ਲਈ ਹੈ।"
 
-#: ../src/virtManager/delete.py:353
+#: ../src/virtManager/delete.py:354
 msgid "No write access to path."
 msgstr "ਟਿਕਾਣੇ ਨੂੰ ਕੋਈ ਲਿਖਣ ਅਧਿਕਾਰ ਨਹੀਂ।"
 
-#: ../src/virtManager/delete.py:356
+#: ../src/virtManager/delete.py:357
 msgid "Storage is marked as shareable."
 msgstr "ਸਟੋਰੇਜ਼ ਨੂੰ ਸ਼ੇਅਰ-ਯੋਗ ਮਾਰਕ ਕੀਤਾ ਹੈ।"
 
-#: ../src/virtManager/delete.py:366
+#: ../src/virtManager/delete.py:367
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
@@ -1372,15 +1393,15 @@ msgstr ""
 "ਸਟੋਰੇਜ਼ ਨੂੰ ਹੇਠਲੀਆਂ ਵਰਚੁਅਲ ਮਸ਼ੀਨਾਂ ਵਰਤ ਰਹੀਆਂ ਹਨ:\n"
 "- %s "
 
-#: ../src/virtManager/details.py:503
+#: ../src/virtManager/details.py:513
 msgid "Add Hardware"
 msgstr "ਹਾਰਡਵੇਅਰ ਸ਼ਾਮਲ"
 
-#: ../src/virtManager/details.py:539
+#: ../src/virtManager/details.py:549
 msgid "Close tab"
 msgstr "ਟੈਬ ਬੰਦ ਕਰੋ"
 
-#: ../src/virtManager/details.py:614
+#: ../src/virtManager/details.py:624
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
 "with the specified label. The administrator is responsible for making sure "
@@ -1389,7 +1410,7 @@ msgstr ""
 "ਸਥਿਰ SELinux ਸੁਰੱਖਿਆ ਕਿਸਮ ਦਰਸਾਉਂਦੀ ਹੈ ਕਿ libvirt ਨੂੰ ਹਮੇਸ਼ਾ ਖਾਸ ਲੇਬਲ ਨਾਲ ਗੈੱਸਟ ਪਰੋਸੈਸ ਵਲੋਂ "
 "ਸ਼ੁਰੂ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ। ਪਰਸ਼ਾਸ਼ਕ ਇਸ ਲਈ ਜ਼ਿੰਮੇਵਾਰ ਕਿ ਈਮੇਜ਼ ਡਿਸਕ ਉੱਤੇ ਠੀਕ ਤਰ੍ਹਾਂ ਲੇਬਲ ਕੀਤੇ ਹੋਣ।"
 
-#: ../src/virtManager/details.py:616
+#: ../src/virtManager/details.py:626
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
 "unique label for the guest process and guest image, ensuring total isolation "
@@ -1398,76 +1419,81 @@ msgstr ""
 "ਡਾਇਨਾਮਿਕ SELinux ਸਕਿਊਰਿਟੀ ਕਿਸਮ libvirt ਨੂੰ ਗਿਸਟ ਕਾਰਜ ਅਤੇ ਗਿਸਟ ਈਮੇਜ਼ ਲਈ ਵੱਕਰਾ ਲੇਬਲ "
 "ਆਟੋਮੈਟਿਕ ਦੇਣ ਲਈ ਦੱਸਦੀ ਹੈ, ਜਿਸ ਨਾਲ ਗਿਸਟ ਦੀ ਆਈਸੋਲੇਸ਼ਨ ਹੁੰਦੀ ਹੈ। (ਮੂਲ)"
 
-#: ../src/virtManager/details.py:625
+#: ../src/virtManager/details.py:635
 msgid "Libvirt did not detect NUMA capabilities."
 msgstr "Libvirt ਨੂੰ NUMA ਸਮਰੱਥਾ ਨਹੀਂ ਮਿਲੀ।"
 
-#: ../src/virtManager/details.py:633
+#: ../src/virtManager/details.py:643
 msgid "VCPU"
 msgstr "VCPU"
 
-#: ../src/virtManager/details.py:634
+#: ../src/virtManager/details.py:644
 msgid "On CPU"
 msgstr "CPU ਉੱਤੇ"
 
-#: ../src/virtManager/details.py:635
+#: ../src/virtManager/details.py:645
 msgid "Pinning"
 msgstr "ਪਿੰਨਿੰਗ"
 
-#: ../src/virtManager/details.py:784
+#: ../src/virtManager/details.py:874
 #, fuzzy
 msgid "No text console available"
 msgstr "ਕੋਈ ਕੰਸੋਲ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/details.py:806
+#: ../src/virtManager/details.py:896
 msgid "Serial console not yet supported over remote connection."
 msgstr "ਹਾਲੇ ਸੀਰੀਅਲ ਕੰਸੋਲਾਂ ਨੂੰ ਰਿਮੋਟ ਕੁਨੈਕਸ਼ਨਾਂ ਤੇ ਸਹਿਯੋਗ ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/details.py:809
+#: ../src/virtManager/details.py:899
 msgid "Serial console not available for inactive guest."
 msgstr "ਨਾ-ਸਰਗਰਮ ਗੈੱਸਟ ਲਈ ਸੀਰੀਅਲ ਕੰਸੋਲ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/details.py:811
+#: ../src/virtManager/details.py:901
 #, python-format
 msgid "Console for device type '%s' not yet supported."
 msgstr "ਜੰਤਰ ਕਿਸਮ '%s' ਲਈ ਕਨਸੋਲ ਸਹਿਯੋਗੀ ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/details.py:814
+#: ../src/virtManager/details.py:904
 #, python-format
 msgid "Can not access console path '%s'."
 msgstr "ਕਨਸੋਲ ਮਾਰਗ '%s' ਨਹੀਂ ਵਰਤ ਸਕਦਾ।"
 
-#: ../src/virtManager/details.py:832
+#: ../src/virtManager/details.py:922
 #, fuzzy
 msgid "No graphical console available"
 msgstr "ਗਰਾਫੀਕਲ ਕਨਸੋਲ ਵੇਖੋ"
 
-#: ../src/virtManager/details.py:837
+#: ../src/virtManager/details.py:927
 #, python-format
 msgid "Graphical Console %s"
 msgstr "ਗਰਾਫੀਕਲ ਕੰਸੋਲ %s"
 
-#: ../src/virtManager/details.py:937
+#: ../src/virtManager/details.py:1027
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "ਹਾਰਡਵੇਅਰ ਪੇਜ਼ ਮੁੜ-ਤਾਜ਼ਾ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/details.py:992 ../src/virtManager/manager.py:934
+#: ../src/virtManager/details.py:1082 ../src/virtManager/manager.py:944
 msgid "_Restore"
 msgstr "ਰੀ-ਸਟੋਰ ਕਰੋ(_R)"
 
 #. Build VM context menu
-#: ../src/virtManager/details.py:994 ../src/virtManager/manager.py:319
-#: ../src/virtManager/manager.py:936 ../src/virtManager/systray.py:184
-#: ../src/vmm-details.glade.h:137 ../src/vmm-manager.glade.h:19
+#: ../src/virtManager/details.py:1084 ../src/virtManager/manager.py:319
+#: ../src/virtManager/manager.py:946 ../src/virtManager/systray.py:184
+#: ../src/vmm-details.glade.h:141 ../src/vmm-manager.glade.h:19
 msgid "_Run"
 msgstr "ਚਲਾਓ(_R)"
 
-#: ../src/virtManager/details.py:1146
+#: ../src/virtManager/details.py:1182
+#, fuzzy, python-format
+msgid "Error launching hardware dialog: %s"
+msgstr "ਪਸੰਦੀਦਾ ਡਾਈਲਾਗ ਚਲਾਉਣ ਵੇਲੇ ਗਲਤੀ: "
+
+#: ../src/virtManager/details.py:1243
 msgid "Save Virtual Machine Screenshot"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਸਕਰੀਨ-ਸ਼ਾਟ ਸੰਭਾਲੋ"
 
-#: ../src/virtManager/details.py:1171
+#: ../src/virtManager/details.py:1268
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1476,218 +1502,222 @@ msgstr ""
 "ਸਕਰੀਨ-ਸ਼ਾਟ ਨੂੰ ਸੰਭਾਲਿਆ ਗਿਆ ਹੈ:\n"
 "%s"
 
-#: ../src/virtManager/details.py:1173
+#: ../src/virtManager/details.py:1270
 msgid "Screenshot saved"
 msgstr "ਸਕਰੀਨਸ਼ਾਟ ਸੰਭਲਿਆ"
 
-#: ../src/virtManager/details.py:1346
+#: ../src/virtManager/details.py:1469
 #, python-format
 msgid "Error generating CPU configuration: %s"
 msgstr "CPU ਸੰਰਚਨਾ ਬਣਾਉਣ ਲਈ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/details.py:1381
+#: ../src/virtManager/details.py:1504
 #, fuzzy, python-format
 msgid "Error copying host CPU: %s"
 msgstr "ਵਾਲੀਅਮ ਬਣਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/details.py:1611
+#: ../src/virtManager/details.py:1726
 #, python-format
 msgid "Error building pin list: %s"
 msgstr "ਪਿੰਨ ਸੂਚੀ ਬਣਾਉਣ ਵੇਲੇ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/details.py:1617
+#: ../src/virtManager/details.py:1732
 #, python-format
 msgid "Error pinning vcpus: %s"
 msgstr "vcpus ਪਿੰਨ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/details.py:1661
+#: ../src/virtManager/details.py:1776
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "ਆਟੋਸਟਾਰਟ ਮੁੱਲ ਤਬਦੀਲ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/details.py:1755
+#: ../src/virtManager/details.py:1892
 msgid "Are you sure you want to remove this device?"
 msgstr "ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਇਸ ਜੰਤਰ ਨੂੰ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
-#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
-#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
+#: ../src/virtManager/details.py:1893 ../src/virtManager/engine.py:801
+#: ../src/virtManager/engine.py:901 ../src/virtManager/engine.py:925
+#: ../src/virtManager/engine.py:984 ../src/virtManager/engine.py:1008
 msgid "Don't ask me again."
 msgstr "ਮੈਨੂੰ ਫੇਰ ਨਾ ਪੁੱਛੋ।"
 
-#: ../src/virtManager/details.py:1768
+#: ../src/virtManager/details.py:1905
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "ਜੰਤਰ ਹਟਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/details.py:1785
+#: ../src/virtManager/details.py:1922
 #, fuzzy
 msgid "Device could not be removed from the running machine"
 msgstr "ਚੱਲ ਰਹੀ ਮਸ਼ੀਨ ਤੋਂ ਜੰਤਰ ਹਟਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ।"
 
-#: ../src/virtManager/details.py:1787
+#: ../src/virtManager/details.py:1924
 #, fuzzy
 msgid "This change will take effect after the next VM reboot."
 msgstr "ਇਹ ਤਬਦੀਲੀਆਂ ਅਗਲੀ ਵਾਰ ਮੁੜ-ਚਾਲੂ ਕਰਨ ਤੇ ਲਾਗੂ ਹੋਣਗੀਆਂ।"
 
-#: ../src/virtManager/details.py:1840
+#: ../src/virtManager/details.py:1977
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "VM ਸੰਰਚਨਾ ਤਬਦੀਲ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/details.py:1850
+#: ../src/virtManager/details.py:1987
 msgid "Some changes may require a guest reboot to take effect."
 msgstr "ਕੁਝ ਤਬਦੀਲੀਆਂ ਲਾਗੂ ਕਰਨ ਲਈ ਗੈੱਸਟ ਨੂੰ ਮੁੜ-ਚਾਲੂ ਕਰਨ ਦੀ ਲੋੜ ਹੈ।"
 
-#: ../src/virtManager/details.py:1853
+#: ../src/virtManager/details.py:1990
 msgid "These changes will take effect after the next guest reboot."
 msgstr "ਇਹ ਤਬਦੀਲੀਆਂ ਅਗਲੀ ਵਾਰ  ਗੈੱਸਟ ਦੇ ਮੁੜ-ਚਾਲੂ ਕਰਨ ਤੇ ਲਾਗੂ ਹੋਣਗੀਆਂ।"
 
-#: ../src/virtManager/details.py:1931 ../src/vmm-add-hardware.glade.h:30
+#: ../src/virtManager/details.py:2073 ../src/vmm-add-hardware.glade.h:30
 msgid "Same as host"
 msgstr "ਹੋਸਟ ਵਜੋਂ"
 
-#: ../src/virtManager/details.py:2027
+#: ../src/virtManager/details.py:2175
 msgid "VCPU info only available for running domain."
 msgstr "VCPU ਜਾਣਕਾਰੀ ਸਿਰਫ ਚੱਲ ਰਹੀਆਂ ਮਸ਼ੀਨਾਂ ਲਈ ਉਪਲੱਬਧ ਹੈ।"
 
-#: ../src/virtManager/details.py:2029
+#: ../src/virtManager/details.py:2177
 msgid "Virtual machine does not support runtime VPCU info."
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਰੰਨਟਾਈਮ VPCU ਜਾਣਕਾਰੀ ਨੂੰ ਸਹਿਯੋਗ ਨਹੀਂ ਦਿੰਦੀ।"
 
-#: ../src/virtManager/details.py:2034
+#: ../src/virtManager/details.py:2182
 #, python-format
 msgid "Error getting VCPU info: %s"
 msgstr "VCPU ਜਾਣਕਾਰੀ ਲੈਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/details.py:2194
+#: ../src/virtManager/details.py:2392
 msgid "Xen Mouse"
 msgstr "Xen ਮਾਊਸ"
 
-#: ../src/virtManager/details.py:2196
+#: ../src/virtManager/details.py:2394
 msgid "PS/2 Mouse"
 msgstr "PS/2 ਮਾਊਸ"
 
-#: ../src/virtManager/details.py:2201
+#: ../src/virtManager/details.py:2399
 msgid "Absolute Movement"
 msgstr "ਅਸਲੀ ਹਿੱਲਜੁੱਲ"
 
-#: ../src/virtManager/details.py:2203
+#: ../src/virtManager/details.py:2401
 msgid "Relative Movement"
 msgstr "ਸੰਬੰਧਿਤ ਹਿੱਲਜੁੱਲ"
 
-#: ../src/virtManager/details.py:2238
+#: ../src/virtManager/details.py:2436
 msgid "Automatically allocated"
 msgstr "ਆਟੋਮੈਟਿਕ ਹੀ ਜਾਰੀ ਕਰੋ"
 
-#: ../src/virtManager/details.py:2246
+#: ../src/virtManager/details.py:2444
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr ""
 
-#: ../src/virtManager/details.py:2269
+#: ../src/virtManager/details.py:2467
 #, fuzzy
 msgid "Local SDL Window"
 msgstr "ਲੋਕਲ SDL ਵਿੰਡੋ"
 
-#: ../src/virtManager/details.py:2300
+#: ../src/virtManager/details.py:2502
 #, fuzzy
 msgid "Serial Device"
 msgstr "ਸਰੋਤ ਜੰਤਰ"
 
-#: ../src/virtManager/details.py:2302
+#: ../src/virtManager/details.py:2504
 #, fuzzy
 msgid "Parallel Device"
 msgstr "ਸਰੋਤ ਜੰਤਰ"
 
-#: ../src/virtManager/details.py:2304
+#: ../src/virtManager/details.py:2506
 #, fuzzy
 msgid "Console Device"
 msgstr "ਕਨਸੋਲ"
 
-#: ../src/virtManager/details.py:2306
+#: ../src/virtManager/details.py:2508
 msgid "Channel Device"
 msgstr ""
 
-#: ../src/virtManager/details.py:2308
+#: ../src/virtManager/details.py:2510
 #, fuzzy, python-format
 msgid "%s Device"
 msgstr "ਜੰਤਰ:"
 
-#: ../src/virtManager/details.py:2313
+#: ../src/virtManager/details.py:2515
 msgid "Primary Console"
 msgstr "ਪ੍ਰਾਇਮਰੀ ਕੰਸੋਲ"
 
-#: ../src/virtManager/details.py:2527
+#: ../src/virtManager/details.py:2729
 msgid "Tablet"
 msgstr "ਟੈਬਲਿਟ"
 
-#: ../src/virtManager/details.py:2530
+#: ../src/virtManager/details.py:2732
 msgid "Mouse"
 msgstr "ਮਾਊਸ"
 
-#: ../src/virtManager/details.py:2539
+#: ../src/virtManager/details.py:2741
 #, python-format
 msgid "Display %s"
 msgstr "ਡਿਸਪਲੇਅ %s"
 
-#: ../src/virtManager/details.py:2545
+#: ../src/virtManager/details.py:2747
 #, python-format
 msgid "Sound: %s"
 msgstr "ਸਾਊਂਡ: %s"
 
-#: ../src/virtManager/details.py:2573
+#: ../src/virtManager/details.py:2775
 msgid "Video"
 msgstr "ਵਿਡੀਓ"
 
-#: ../src/virtManager/details.py:2576
+#: ../src/virtManager/details.py:2778
 msgid "Watchdog"
 msgstr "ਵਾਚਡੌਗ"
 
-#: ../src/virtManager/details.py:2582
+#: ../src/virtManager/details.py:2784
 #, python-format
 msgid "Controller %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:248
+#: ../src/virtManager/domain.py:252
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:873
+#: ../src/virtManager/domain.py:916
 msgid "Running"
 msgstr "ਚੱਲ ਰਿਹਾ ਹੈ"
 
-#: ../src/virtManager/domain.py:875
+#: ../src/virtManager/domain.py:918
 msgid "Paused"
 msgstr "ਵਿਰਾਮ ਹੈ"
 
-#: ../src/virtManager/domain.py:877
+#: ../src/virtManager/domain.py:920
 msgid "Shutting Down"
 msgstr "ਬੰਦ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: ../src/virtManager/domain.py:879
+#: ../src/virtManager/domain.py:922
 msgid "Shutoff"
 msgstr "ਬੰਦ ਕਰੋ"
 
-#: ../src/virtManager/domain.py:881
+#: ../src/virtManager/domain.py:924
 msgid "Crashed"
 msgstr "ਨਸ਼ਟ ਹੋਇਆ"
 
 #: ../src/virtManager/domain.py:1046
+msgid "Cannot rename an active guest"
+msgstr ""
+
+#: ../src/virtManager/domain.py:1112
 msgid "Cannot start guest while cloning operation in progress"
 msgstr "ਕਲੋਨ ਕਰਨ ਦੀ ਕਾਰਵਾਈ ਦੌਰਾਨ ਗੈੱਸਟ ਸ਼ੁਰੂ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ"
 
-#: ../src/virtManager/domain.py:1060
+#: ../src/virtManager/domain.py:1127
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr "ਕਲੋਨ ਕਰਨ ਦੀ ਕਾਰਵਾਈ ਦੌਰਾਨ ਗੈੱਸਟ ਮੁੜ-ਪ੍ਰਾਪਤ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ"
 
-#: ../src/virtManager/domain.py:1075
+#: ../src/virtManager/domain.py:1142
 #, fuzzy
 msgid "Saving domain to disk"
 msgstr "ਡੋਮੇਨ ਸੰਭਾਲਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/domain.py:1139
+#: ../src/virtManager/domain.py:1206
 #, fuzzy
 msgid "Migrating domain"
 msgstr "ਡੋਮੇਨ ਚਾਲੂ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
@@ -1721,7 +1751,7 @@ msgid "Error talking to PackageKit: %s"
 msgstr "PackageKit ਨਾਲ ਸੰਪਰਕ ਵੇਲੇ ਗਲਤੀ: %s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:284
+#: ../src/virtManager/engine.py:287
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1739,7 +1769,7 @@ msgstr ""
 "ਹਾਈਪਰਵਾਈਜ਼ਰ ਕੁਨੈਕਸ਼ਨ ਨੂੰ ਫਾਇਲ->ਕੁਨੈਕਸ਼ਨ ਸ਼ਾਮਲ ਰਾਹੀਂ\n"
 "ਖੁਦ ਜੋੜਿਆ ਜਾ ਸਕਦਾ ਹੈ"
 
-#: ../src/virtManager/engine.py:318
+#: ../src/virtManager/engine.py:321
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1763,61 +1793,61 @@ msgstr ""
 "virt-manager ਅਗਲੇ ਐਪਲੀਕੇਸ਼ਨ ਸੈੱਟਅੱਪ ਤੇ libvirt ਨਾਲ\n"
 " ਜੁੜ ਜਾਵੇਗਾ।"
 
-#: ../src/virtManager/engine.py:326
+#: ../src/virtManager/engine.py:329
 msgid "Libvirt service must be started"
 msgstr "Libvirt ਸਰਵਿਸ ਮੁੜ-ਚਾਲੂ ਕਰਨੀ ਪਵੇਗੀ"
 
-#: ../src/virtManager/engine.py:527
+#: ../src/virtManager/engine.py:530
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "ਅਣਜਾਣ ਕੁਨੈਕਸ਼ਨ URI %s"
 
-#: ../src/virtManager/engine.py:540
+#: ../src/virtManager/engine.py:543
 #, fuzzy, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "ਪਸੰਦੀਦਾ ਡਾਈਲਾਗ ਚਲਾਉਣ ਵੇਲੇ ਗਲਤੀ: "
 
-#: ../src/virtManager/engine.py:552
+#: ../src/virtManager/engine.py:555
 #, fuzzy, python-format
 msgid "Unable to display documentation: %s"
 msgstr "ਜੰਤਰ ਸ਼ਾਮਿਲ ਕਰਨ ਵਿੱਚ ਅਸਮਰਥ: %s"
 
-#: ../src/virtManager/engine.py:568
+#: ../src/virtManager/engine.py:571
 #, fuzzy, python-format
 msgid "Error launching preferences: %s"
 msgstr "ਇੰਟਰਫੇਸ ਡਾਈਲਾਗ ਚਲਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/engine.py:588
+#: ../src/virtManager/engine.py:591
 #, fuzzy, python-format
 msgid "Error launching host dialog: %s"
 msgstr "ਪਸੰਦੀਦਾ ਡਾਈਲਾਗ ਚਲਾਉਣ ਵੇਲੇ ਗਲਤੀ: "
 
-#: ../src/virtManager/engine.py:608
+#: ../src/virtManager/engine.py:611
 #, fuzzy, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "ਪਸੰਦੀਦਾ ਡਾਈਲਾਗ ਚਲਾਉਣ ਵੇਲੇ ਗਲਤੀ: "
 
-#: ../src/virtManager/engine.py:641
+#: ../src/virtManager/engine.py:644
 #, fuzzy, python-format
 msgid "Error launching details: %s"
 msgstr "ਨੈੱਟਵਰਕ ਡਾਈਲਾਗ ਚਲਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
+#: ../src/virtManager/engine.py:695 ../src/virtManager/engine.py:712
 #, fuzzy, python-format
 msgid "Error launching manager: %s"
 msgstr "ਵਾਲੀਅਮ ਡਾਈਲਾਗ ਚਲਾਉਣ ਵੇਲੇ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/engine.py:723
+#: ../src/virtManager/engine.py:726
 #, fuzzy, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "ਪਸੰਦੀਦਾ ਡਾਈਲਾਗ ਚਲਾਉਣ ਵੇਲੇ ਗਲਤੀ: "
 
-#: ../src/virtManager/engine.py:741
+#: ../src/virtManager/engine.py:744
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "ਕਲੋਨ ਪੈਰਾਮੀਟਰ ਸੈੱਟ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/engine.py:789
+#: ../src/virtManager/engine.py:792
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
@@ -1825,112 +1855,112 @@ msgstr ""
 "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਨੂੰ ਰਿਮੋਟ ਕੁਨੈਕਸ਼ਨ ਉੱਤੇ ਸੰਭਾਲਣਾ ਇਹ libvirt ਵਰਜਨ ਜਾਂ ਹਾਈਪਰਵਰਜਰ ਰਾਹੀਂ ਸਹਾਇਕ "
 "ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:799
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "ਕੀ ਤੁਸੀ '%s' ਨੂੰ ਸੰਭਾਲਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: ../src/virtManager/engine.py:809
+#: ../src/virtManager/engine.py:812
 msgid "Save Virtual Machine"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਸੰਭਾਲੋ"
 
-#: ../src/virtManager/engine.py:824
+#: ../src/virtManager/engine.py:827
 msgid "Saving Virtual Machine"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਸੰਭਾਲੀ ਜਾ ਰਹੀ ਹੈ"
 
-#: ../src/virtManager/engine.py:825
+#: ../src/virtManager/engine.py:828
 #, fuzzy
 msgid "Saving virtual machine memory to disk "
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਸੰਭਾਲੀ ਜਾ ਰਹੀ ਹੈ"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:834
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "ਡੋਮੇਨ ਸੰਭਾਲਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/engine.py:843
+#: ../src/virtManager/engine.py:846
 #, fuzzy, python-format
 msgid "Error cancelling save job: %s"
 msgstr "ਵਾਲੀਅਮ ਬਣਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/engine.py:860
+#: ../src/virtManager/engine.py:863
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr "ਹਾਲੇ ਰਿਮੋਟ ਕੁਨੈਕਸ਼ਨ ਤੇ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਨੂੰ ਸੰਭਾਲਣ ਲਈ ਸਹਿਯੋਗ ਨਹੀਂ ਹੈ"
 
-#: ../src/virtManager/engine.py:865
+#: ../src/virtManager/engine.py:868
 msgid "Restore Virtual Machine"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਮੁੜ-ਸਟੋਰ"
 
-#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
+#: ../src/virtManager/engine.py:877 ../src/virtManager/engine.py:965
 msgid "Restoring Virtual Machine"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਮੁੜ-ਸਟੋਰ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ"
 
-#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
+#: ../src/virtManager/engine.py:878 ../src/virtManager/engine.py:966
 #, fuzzy
 msgid "Restoring virtual machine memory from disk"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਮੁੜ-ਸਟੋਰ ਕੀਤੀ ਜਾ ਰਹੀ ਹੈ"
 
-#: ../src/virtManager/engine.py:879
+#: ../src/virtManager/engine.py:882
 #, fuzzy, python-format
 msgid "Error restoring domain: %s"
 msgstr "ਡੋਮੇਨ ਮੁੜ-ਸੰਭਾਲਣ ਵਿੱਚ ਗਲਤੀ"
 
-#: ../src/virtManager/engine.py:894
+#: ../src/virtManager/engine.py:897
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "ਕੀ ਤੁਸੀਂ '%s' ਨੂੰ ਧੱਕੇ ਨਾਲ ਬੰਦ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: ../src/virtManager/engine.py:896
+#: ../src/virtManager/engine.py:899
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
 "ਇਹ ਤੁਰੰਤ VM ਨੂੰ ਹਟਾਏਗਾ ਅਤੇ ਇਸਦਾ ਈਮੇਜ਼ ਨਿਕਾਰਾ ਹੋ ਸਕਦਾ ਹੈ। ਕੀ ਤੁਸੀਂ ਜਾਰੀ ਰੱਖਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
+#: ../src/virtManager/engine.py:913 ../src/virtManager/engine.py:996
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "ਡੋਮੇਨ ਬੰਦ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/engine.py:920
+#: ../src/virtManager/engine.py:923
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ '%s' ਨੂੰ ਸ਼ਾਂਤ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: ../src/virtManager/engine.py:934
+#: ../src/virtManager/engine.py:937
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "ਡੋਮੇਨ ਵਿਰਾਮ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/engine.py:945
+#: ../src/virtManager/engine.py:948
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "ਡੋਮੇਨ ਵਿਰਾਮ ਹਟਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:961
+#: ../src/virtManager/engine.py:964
 msgid "Error restoring domain"
 msgstr "ਡੋਮੇਨ ਮੁੜ-ਸੰਭਾਲਣ ਵਿੱਚ ਗਲਤੀ"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:972
 #, fuzzy
 msgid "Error starting domain"
 msgstr "ਡੋਮੇਨ ਚਾਲੂ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
-#: ../src/virtManager/engine.py:979
+#: ../src/virtManager/engine.py:982
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ '%s' ਨੂੰ ਬੰਦ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: ../src/virtManager/engine.py:1003
+#: ../src/virtManager/engine.py:1006
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ '%s' ਨੂੰ ਮੁੜ-ਚਾਲੂ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
+#: ../src/virtManager/engine.py:1024 ../src/virtManager/engine.py:1039
 #, python-format
 msgid "Error rebooting domain: %s"
 msgstr "ਡੋਮੇਨ ਮੁੜ-ਚਾਲੂ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %s"
@@ -2131,7 +2161,7 @@ msgid "Error selecting interface: %s"
 msgstr "ਇੰਟਰਫੇਸ ਚੁਣਨ ਵਿੱਚ ਗਲਤੀ: %s"
 
 #: ../src/virtManager/manager.py:320 ../src/virtManager/systray.py:171
-#: ../src/vmm-details.glade.h:134 ../src/vmm-manager.glade.h:18
+#: ../src/vmm-details.glade.h:138 ../src/vmm-manager.glade.h:18
 msgid "_Pause"
 msgstr "ਵਿਰਾਮ(_P)"
 
@@ -2141,22 +2171,22 @@ msgstr "ਮੁੜ-ਪ੍ਰਾਪਤ(_e)"
 
 #: ../src/virtManager/manager.py:323 ../src/virtManager/manager.py:326
 #: ../src/virtManager/systray.py:198 ../src/virtManager/systray.py:216
-#: ../src/virtManager/uihelpers.py:708
+#: ../src/virtManager/uihelpers.py:716
 msgid "_Shut Down"
 msgstr "ਬੰਦ ਕਰੋ(_S)"
 
 #. Shutdown menu
 #: ../src/virtManager/manager.py:325 ../src/virtManager/systray.py:191
-#: ../src/virtManager/uihelpers.py:702 ../src/vmm-details.glade.h:135
+#: ../src/virtManager/uihelpers.py:710 ../src/vmm-details.glade.h:139
 msgid "_Reboot"
 msgstr "ਮੁੜ-ਚਾਲੂ(_R)"
 
 #: ../src/virtManager/manager.py:328 ../src/virtManager/systray.py:205
-#: ../src/virtManager/uihelpers.py:714 ../src/vmm-details.glade.h:124
+#: ../src/virtManager/uihelpers.py:722 ../src/vmm-details.glade.h:127
 msgid "_Force Off"
 msgstr "ਫੋਰਸ ਆਫ(_F)"
 
-#: ../src/virtManager/manager.py:331 ../src/virtManager/uihelpers.py:724
+#: ../src/virtManager/manager.py:331 ../src/virtManager/uihelpers.py:732
 msgid "Sa_ve"
 msgstr "ਸੰਭਾਲੋ(_v)"
 
@@ -2164,7 +2194,7 @@ msgstr "ਸੰਭਾਲੋ(_v)"
 msgid "_Clone..."
 msgstr "ਕਲੋਨ ਕਰੋ(_C)..."
 
-#: ../src/virtManager/manager.py:335 ../src/vmm-details.glade.h:130
+#: ../src/virtManager/manager.py:335 ../src/vmm-details.glade.h:133
 msgid "_Migrate..."
 msgstr "ਮਾਈਗਰੇਟ(_M)..."
 
@@ -2172,7 +2202,7 @@ msgstr "ਮਾਈਗਰੇਟ(_M)..."
 msgid "_Delete"
 msgstr "ਹਟਾਓ(_D)"
 
-#: ../src/virtManager/manager.py:350 ../src/vmm-details.glade.h:122
+#: ../src/virtManager/manager.py:350 ../src/vmm-details.glade.h:125
 msgid "_Details"
 msgstr "ਵੇਰਵਾ(_D)"
 
@@ -2223,28 +2253,28 @@ msgstr ""
 "libvirt ਪਰਬੰਧਨ ਡੌਮਨ ਨਾਲ ਕੁਨੈਕਸ਼ਨ ਖੋਲ੍ਹਣ ਲਈ ਅਸਮਰੱਥ ਹੈ।\n"
 "\n"
 
-#: ../src/virtManager/manager.py:735
+#: ../src/virtManager/manager.py:737
 msgid "Double click to connect"
 msgstr "ਕੁਨੈਕਟ ਲਈ ਡਬਲ ਕਲਿੱਕ"
 
-#: ../src/virtManager/manager.py:740
+#: ../src/virtManager/manager.py:742
 #, fuzzy
 msgid "Not Connected"
 msgstr "ਕੁਨੈਕਟ ਕਰੋ(_n)"
 
-#: ../src/virtManager/manager.py:742
+#: ../src/virtManager/manager.py:744
 #, fuzzy
 msgid "Connecting..."
 msgstr "ਕੁਨੈਕਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: ../src/virtManager/manager.py:1062
+#: ../src/virtManager/manager.py:1081
+msgid "Disabled in preferences dialog."
+msgstr "ਪਸੰਦ ਡਾਈਲਾਗ ਵਿੱਚ ਅਯੋਗ।"
+
+#: ../src/virtManager/manager.py:1087
 #, fuzzy
 msgid " (disabled)"
 msgstr "ਅਯੋਗ"
-
-#: ../src/virtManager/manager.py:1073
-msgid "Disabled in preferences dialog."
-msgstr "ਪਸੰਦ ਡਾਈਲਾਗ ਵਿੱਚ ਅਯੋਗ।"
 
 #: ../src/virtManager/mediadev.py:105
 msgid "No media detected"
@@ -2348,20 +2378,20 @@ msgstr "ਰਾਊਟ ਕੀਤਾ ਨੈੱਟਵਰਕ"
 msgid "Isolated network"
 msgstr "ਵੱਖ ਕੀਤਾ ਨੈੱਟਵਰਕ"
 
-#: ../src/virtManager/preferences.py:166
+#: ../src/virtManager/preferences.py:183
 msgid "Installed version of GTK-VNC doesn't support configurable grab keys"
 msgstr "GTK-VNC ਦਾ ਇੰਸਟਾਲ ਹੋਇਆ ਵਰਜਨ ਸੰਰਚਨਾ ਯੋਗ ਸਵਿੱਚਾਂ ਲੈਣ ਲਈ ਸਹਾਇਕ ਨਹੀਂ"
 
-#: ../src/virtManager/preferences.py:213
+#: ../src/virtManager/preferences.py:230
 #, fuzzy
 msgid "Configure grab key combination"
 msgstr "ਸਵਿੱਚ ਮਿਸ਼ਰਨ ਸੰਰਚਨਾ"
 
-#: ../src/virtManager/preferences.py:218
+#: ../src/virtManager/preferences.py:235
 msgid "Please press desired grab key combination"
 msgstr "ਲੋੜੀਦਾ ਸਵਿੱਚ ਮਿਸ਼ਰਨ ਦੱਬੋ ਜੀ"
 
-#: ../src/virtManager/preferences.py:221
+#: ../src/virtManager/preferences.py:238
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
@@ -2432,78 +2462,78 @@ msgstr "ਯੂਜ਼ਰ-ਮੋਡ ਨੈੱਟਵਰਕਿੰਗ"
 msgid "Virtual network"
 msgstr "ਵਰਚੁਅਲ ਨੈੱਟਵਰਕ"
 
-#: ../src/virtManager/uihelpers.py:412
+#: ../src/virtManager/uihelpers.py:419
 msgid "No virtual networks available"
 msgstr "ਕੋਈ ਵਰਚੁਅਲ ਨੈੱਟਵਰਕ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/uihelpers.py:434
+#: ../src/virtManager/uihelpers.py:441
 msgid "(Empty bridge)"
 msgstr "(ਖਾਲੀ ਬਰਿੱਜ)"
 
-#: ../src/virtManager/uihelpers.py:437
+#: ../src/virtManager/uihelpers.py:444
 msgid "Not bridged"
 msgstr "ਕੋਈ ਬਰਿੱਜ ਨਹੀਂ"
 
-#: ../src/virtManager/uihelpers.py:439
+#: ../src/virtManager/uihelpers.py:446
 #, python-format
 msgid "Host device %s %s"
 msgstr "ਹੋਸਟ ਜੰਤਰ %s %s"
 
-#: ../src/virtManager/uihelpers.py:476
+#: ../src/virtManager/uihelpers.py:483
 msgid "No networking."
 msgstr "ਕੋਈ ਨੈੱਟਵਰਕਿੰਗ ਨਹੀਂ।"
 
 #. After all is said and done, add a manual bridge option
-#: ../src/virtManager/uihelpers.py:481
+#: ../src/virtManager/uihelpers.py:489
 msgid "Specify shared device name"
 msgstr "ਸਾਂਝੇ ਕੀਤੇ ਜੰਤਰ ਨਾਂ ਦਿਓ"
 
-#: ../src/virtManager/uihelpers.py:500
+#: ../src/virtManager/uihelpers.py:508
 msgid "Virtual Network is not active."
 msgstr "ਵਰਚੁਅਲ ਪੈਰਾਮੀਟਰ ਸਰਗਰਮ ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/uihelpers.py:501
+#: ../src/virtManager/uihelpers.py:509
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr "ਵਰਚੁਅਲ ਨੈੱਟਵਰਕ '%s' ਸਰਗਰਮ ਨਹੀਂ ਹੈ। ਕੀ ਤੁਸੀਂ ਹੁਣ ਨੈੱਟਵਰਕ ਚਾਲੂ ਕਰਨਾ ਚਾਹੋਗੇ?"
 
-#: ../src/virtManager/uihelpers.py:513
+#: ../src/virtManager/uihelpers.py:521
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "ਵਰਚੁਅਲ ਨੈੱਟਵਰਕ ਚਾਲੂ ਨਹੀਂ ਕਰ ਸਕਦਾ '%s': %s"
 
-#: ../src/virtManager/uihelpers.py:535
+#: ../src/virtManager/uihelpers.py:543
 msgid "Error with network parameters."
 msgstr "ਨੈੱਟਵਰਕ ਪੈਰਾਮੀਟਰ ਨਾਲ ਗਲਤੀ।"
 
-#: ../src/virtManager/uihelpers.py:540 ../src/virtManager/uihelpers.py:542
+#: ../src/virtManager/uihelpers.py:548 ../src/virtManager/uihelpers.py:550
 msgid "Mac address collision."
 msgstr "Mac ਐਡਰੈੱਸ ਕੁਲੀਜ਼ਨ।"
 
-#: ../src/virtManager/uihelpers.py:543
+#: ../src/virtManager/uihelpers.py:551
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "%s ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਇਸ ਐਡਰੈੱਸ ਨੂੰ ਵਰਤਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: ../src/virtManager/uihelpers.py:595
+#: ../src/virtManager/uihelpers.py:603
 msgid "No device present"
 msgstr "ਕੋਈ ਜੰਤਰ ਮੌਜੂਦ ਨਹੀਂ"
 
-#: ../src/virtManager/uihelpers.py:752
+#: ../src/virtManager/uihelpers.py:760
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr "ਇੰਮੂਲੇਟਰ ਕੋਲ ਮਾਰਗ '%s' ਲਈ ਖੋਜ ਅਧਿਕਾਰ ਨਹੀਂ ਹੈ।"
 
-#: ../src/virtManager/uihelpers.py:754
+#: ../src/virtManager/uihelpers.py:762
 msgid "Do you want to correct this now?"
 msgstr "ਕੀ ਤੁਸੀਂ ਇਸ ਨੂੰ ਹੁਣੇ ਠੀਕ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: ../src/virtManager/uihelpers.py:755 ../src/virtManager/uihelpers.py:779
+#: ../src/virtManager/uihelpers.py:763 ../src/virtManager/uihelpers.py:787
 msgid "Don't ask about these directories again."
 msgstr "ਇਹ ਹਦਾਇਤਾਂ ਲਈ ਫੇਰ ਨਾ ਪੁੱਛੋ।"
 
-#: ../src/virtManager/uihelpers.py:768
+#: ../src/virtManager/uihelpers.py:776
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr "ਅੱਗੇ ਦਿੱਤੀਆਂ ਡਾਇਰੈਕਟਰੀਆਂ ਲਈ ਅਧਿਕਾਰ ਬਦਲਣ ਦੌਰਾਨ ਗਲਤੀਆਂ ਆਈਆਂ ਹਨ:"
@@ -2540,7 +2570,7 @@ msgstr "<b>ਜੰਤਰ ਪੈਰਾਮੀਟਰ</b>"
 #: ../src/vmm-add-hardware.glade.h:3
 #, fuzzy
 msgid ""
-"<small><b>Tip:</b> VNC or SPICE server is strongly recommended because it "
+"<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
 "allows the virtual display to be embedded inside this application. It may "
 "also be used to allow access to the virtual display from a remote system.</"
 "small>"
@@ -2691,6 +2721,7 @@ msgid "_Bind Host:"
 msgstr "ਬਾਈਂਡ ਹੋਸਟ(_B):"
 
 #: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:48
+#: ../src/vmm-details.glade.h:122
 msgid "_Bridge name:"
 msgstr "ਬਰਿੱਜ ਨਾਂ(_B):"
 
@@ -2712,7 +2743,7 @@ msgstr "_GB"
 msgid "_Host device:"
 msgstr "ਹੋਸਟ ਜੰਤਰ(_H):"
 
-#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-details.glade.h:127
+#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-details.glade.h:130
 msgid "_Keymap:"
 msgstr "ਕੀਮੈਪ(_K):"
 
@@ -2755,7 +2786,7 @@ msgid "aa:bb:cc:dd:ee:ff"
 msgstr "aa:bb:cc:dd:ee:ff"
 
 #: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create-pool.glade.h:18
-#: ../src/vmm-details.glade.h:152
+#: ../src/vmm-details.glade.h:150
 msgid "label"
 msgstr "ਲੇਬਲ"
 
@@ -3028,6 +3059,7 @@ msgstr "ਇੰਟਰਫੇਸ ਕਿਸਮ(_I):"
 
 #: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:14
 #: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:54
+#: ../src/vmm-details.glade.h:134
 msgid "_Name:"
 msgstr "ਨਾਂ(_N):"
 
@@ -3039,7 +3071,7 @@ msgstr "ਸ਼ੁਰੂਆਤੀ ਮੋਡ(_S):"
 msgid "_VLAN tag:"
 msgstr "_VLAN ਟੈਗ:"
 
-#: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:39
+#: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:40
 msgid "seconds"
 msgstr "ਸਕਿੰਟ"
 
@@ -3256,7 +3288,7 @@ msgstr ""
 "ਇਹ ਸਹਾਇਕ ਇੱਕ ਨਵਾਂ ਫ਼ਰਜ਼ੀ (ਵਰਚੁਅਲ) ਸਿਸਟਮ ਬਣਾਉਣ ਲਈ ਤੁਹਾਡੀ ਅਗਵਾਈ ਕਰੇਗਾ। ਤੁਹਾਨੂੰ ਤੁਹਾਡੇ ਲੋੜੀਦੇ "
 "ਨਵੇਂ ਵਰਚੁਅਲ ਸਿਸਟਮ ਬਣਾਉਣ ਲਈ ਕੁਝ ਜਾਣਕਾਰੀ ਪੁੱਛੀ ਜਾ ਸਕਦੀ ਹੈ, ਜਿਵੇਂ ਕਿ:"
 
-#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:110
+#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:111
 msgid "Type:"
 msgstr "ਕਿਸਮ:"
 
@@ -3386,7 +3418,7 @@ msgid "Create a storage unit that can be used directly by a virtual machine."
 msgstr "ਸਟੋਰੇਜ਼ ਯੂਨਿਟ ਬਣਾਓ, ਜੋ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਵਲੋਂ ਵਰਤਿਆ ਜਾਵੇਗਾ।"
 
 #: ../src/vmm-create-vol.glade.h:19 ../src/vmm-create.glade.h:28
-#: ../src/vmm-details.glade.h:66
+#: ../src/vmm-details.glade.h:67
 msgid "MB"
 msgstr "MB"
 
@@ -3611,57 +3643,62 @@ msgid "<b>Boot device order</b>"
 msgstr "<b>ਬੂਟ ਜੰਤਰ ਕ੍ਰਮ</b>"
 
 #: ../src/vmm-details.glade.h:6
-msgid "<b>CPUs</b>"
+#, fuzzy
+msgid "<b>CPU Features</b>"
 msgstr "<b>CPU</b>"
 
 #: ../src/vmm-details.glade.h:7
+msgid "<b>CPUs</b>"
+msgstr "<b>CPU</b>"
+
+#: ../src/vmm-details.glade.h:8
 #, fuzzy
 msgid "<b>Configuration</b>"
 msgstr "<b>IP ਸੰਰਚਨਾ</b>"
 
-#: ../src/vmm-details.glade.h:8
+#: ../src/vmm-details.glade.h:9
 #, fuzzy
 msgid "<b>Controller</b>"
 msgstr "<b>ਕੰਨਸੋਲ</b>"
 
-#: ../src/vmm-details.glade.h:9
+#: ../src/vmm-details.glade.h:10
 msgid "<b>Direct kernel boot</b>"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:10
+#: ../src/vmm-details.glade.h:11
 msgid "<b>Hypervisor Details</b>"
 msgstr "<b>ਹਾਈਪਰਵਾਈਜ਼ਰ ਵੇਰਵਾ</b>"
 
-#: ../src/vmm-details.glade.h:11
+#: ../src/vmm-details.glade.h:12
 msgid "<b>Machine Settings</b>"
 msgstr "<b>ਮਸ਼ੀਨ ਸੈਟਿੰਗ</b>"
 
-#: ../src/vmm-details.glade.h:12
+#: ../src/vmm-details.glade.h:13
 msgid "<b>Memory</b>"
 msgstr "<b>ਮੈਮੋਰੀ</b>"
 
-#: ../src/vmm-details.glade.h:13 ../src/vmm-host.glade.h:6
+#: ../src/vmm-details.glade.h:14 ../src/vmm-host.glade.h:6
 msgid "<b>Performance</b>"
 msgstr "<b>ਸਮਰੱਥਾ</b>"
 
-#: ../src/vmm-details.glade.h:14
+#: ../src/vmm-details.glade.h:15
 #, fuzzy
 msgid "<b>Pinning</b>"
 msgstr "<b>CPU ਪਿੰਨਿੰਗ</b>"
 
-#: ../src/vmm-details.glade.h:15
+#: ../src/vmm-details.glade.h:16
 msgid "<b>Security</b>"
 msgstr "<b>ਸੁਰੱਖਿਆ</b>"
 
-#: ../src/vmm-details.glade.h:16
+#: ../src/vmm-details.glade.h:17
 msgid "<b>Sound Device</b>"
 msgstr "<b>ਸਾਊਂਡ ਜੰਤਰ</b>"
 
-#: ../src/vmm-details.glade.h:17
+#: ../src/vmm-details.glade.h:18
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>ਕਨਸੋਂਸ ਇਸ ਸਮੇਂ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ</b>"
 
-#: ../src/vmm-details.glade.h:18
+#: ../src/vmm-details.glade.h:19
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
@@ -3669,7 +3706,7 @@ msgstr ""
 "<b>ਟਿੱਪਣੀ:</b> 'ਸੋਰਸ' ਦਾ ਮਤਲਬ ਹੈ ਜਾਣਕਾਰੀ ਜੋ ਹੋਸਟ OS ਤੋਂ ਮਿਲੀ ਹੈ, ਜਦੋਂ ਕਿ 'ਟਾਰਗਿਟ' ਦਾ "
 "ਮਤਲਬ ਹੈ ਜਾਣਕਾਰੀ ਜੋ ਗਿਸਟ OS ਤੋਂ ਮਿਲੀ ਹੈ"
 
-#: ../src/vmm-details.glade.h:19
+#: ../src/vmm-details.glade.h:20
 msgid ""
 "<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
 "OS will ensure that the virtual cursor moves in sync with the local desktop "
@@ -3678,60 +3715,56 @@ msgstr ""
 "<b>ਟਿੱਪਣੀ:</b>ਗਰਾਫਿਕਸ ਟੈਬਲਿਟ ਜੋ ਗਿਸਟ OS ਵਿੱਚ ਮੂਲ ਪੁਆਂਇਟਰ ਦੇ ਤੌਰ ਤੇ ਸੰਰਚਿਤ ਕਰਨ ਨਾਲ ਵਰਚੁਅਲ "
 "ਕਰਸਰ ਲੋਕਲ ਡੈਸਕਟਾਪ ਕਰਸਰ ਨਾਲ ਸਮਕਾਲੀ ਹੁੰਦਾ ਹੈ।"
 
-#: ../src/vmm-details.glade.h:20
+#: ../src/vmm-details.glade.h:21
 #, fuzzy
 msgid "<b>Topology</b>"
 msgstr "<b>ਕੰਨਸੋਲ</b>"
 
-#: ../src/vmm-details.glade.h:21
+#: ../src/vmm-details.glade.h:22
 #, fuzzy
 msgid "<b>Video</b>"
 msgstr "<b>ਵੀਡੀਓ ਜੰਤਰ</b>"
 
-#: ../src/vmm-details.glade.h:22
+#: ../src/vmm-details.glade.h:23
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>ਵਰਚੁਅਲ ਡਿਸਕ</b>"
 
-#: ../src/vmm-details.glade.h:23
+#: ../src/vmm-details.glade.h:24
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>ਵਰਚੁਅਲ ਨੈੱਟਵਰਕ ਇੰਟਰਫੇਸ</b>"
 
-#: ../src/vmm-details.glade.h:24
+#: ../src/vmm-details.glade.h:25
 msgid "<b>Virtual Pointer</b>"
 msgstr "<b>ਵਰਚੁਅਲ ਪੁਆਇੰਟਰ</b>"
 
-#: ../src/vmm-details.glade.h:25
+#: ../src/vmm-details.glade.h:26
 msgid "<b>insert type</b>"
 msgstr "<b>ਕਿਸਮ ਦਿਓ</b>"
 
-#: ../src/vmm-details.glade.h:26
+#: ../src/vmm-details.glade.h:27
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr "<small>ਵੱਧ vCPUs ਦੇਣ ਨਾਲ ਕਾਰਗੁਜ਼ਾਰੀ ਪਰਭਾਵਿਤ ਹੋ ਸਕਦੀ ਹੈ</small>"
 
-#: ../src/vmm-details.glade.h:27
+#: ../src/vmm-details.glade.h:28
 msgid "A_ction:"
 msgstr "ਕਾਰਵਾਈ(_C):"
 
-#: ../src/vmm-details.glade.h:28
+#: ../src/vmm-details.glade.h:29
 msgid "A_dd Hardware"
 msgstr "ਹਾਰਡਵੇਅਰ ਸ਼ਾਮਲ(_d)"
 
-#: ../src/vmm-details.glade.h:29 ../src/vmm-host.glade.h:15
+#: ../src/vmm-details.glade.h:30 ../src/vmm-host.glade.h:15
 msgid "Address:"
 msgstr "ਐਡਰੈੱਸ:"
 
-#: ../src/vmm-details.glade.h:30
+#: ../src/vmm-details.glade.h:31
 #, fuzzy
 msgid "Advanced _options"
 msgstr "ਤਕਨੀਕੀ ਚੋਣਾਂ"
 
-#: ../src/vmm-details.glade.h:31 ../src/vmm-host.glade.h:16
+#: ../src/vmm-details.glade.h:32 ../src/vmm-host.glade.h:16
 msgid "Architecture:"
 msgstr "ਢਾਂਚਾ:"
-
-#: ../src/vmm-details.glade.h:32
-msgid "Auth"
-msgstr "ਪਰਮਾਣ"
 
 #: ../src/vmm-details.glade.h:33
 msgid "Begin Installation"
@@ -3851,44 +3884,53 @@ msgid "Initrd path:"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:62
+msgid "Instance id:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:63
 #, fuzzy
 msgid "Kernel arguments:"
 msgstr "ਕਰਨਲ ਚੋਣਾਂ:"
 
-#: ../src/vmm-details.glade.h:63
+#: ../src/vmm-details.glade.h:64
 #, fuzzy
 msgid "Kernel path:"
 msgstr "ਕਰਨਲ ਚੋਣਾਂ:"
 
-#: ../src/vmm-details.glade.h:64
+#: ../src/vmm-details.glade.h:65
 msgid "Logical host CPUs:"
 msgstr "ਲਾਜ਼ੀਕਲ ਹੋਸਟ CPU:"
 
-#: ../src/vmm-details.glade.h:65
+#: ../src/vmm-details.glade.h:66
 msgid "MAC address:"
 msgstr "MAC ਐਡਰੈੱਸ:"
 
-#: ../src/vmm-details.glade.h:67
+#: ../src/vmm-details.glade.h:68
 msgid "M_odel:"
 msgstr "ਮਾਡਲ(_o):"
 
-#: ../src/vmm-details.glade.h:68
+#: ../src/vmm-details.glade.h:69
 msgid "Ma_ximum allocation:"
 msgstr "ਵੱਧੋ-ਵੱਧ ਜਾਰੀ(_x):"
 
-#: ../src/vmm-details.glade.h:69
+#: ../src/vmm-details.glade.h:70
+#, fuzzy
+msgid "Managerid:"
+msgstr "ਮੈਨੇਜਰ ਵੇਖੋ(_V)"
+
+#: ../src/vmm-details.glade.h:71
 msgid "Manually set CPU topology"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:70
+#: ../src/vmm-details.glade.h:72
 msgid "Max Memory Select"
 msgstr "ਵੱਧੋ-ਵੱਧ ਮੈਮੋਰੀ ਚੋਣ"
 
-#: ../src/vmm-details.glade.h:71
+#: ../src/vmm-details.glade.h:73
 msgid "Maximum allocation:"
 msgstr "ਵੱਧੋ-ਵੱਧ ਜਾਰੀ:"
 
-#: ../src/vmm-details.glade.h:72
+#: ../src/vmm-details.glade.h:74
 msgid ""
 "Memory\n"
 "usage:"
@@ -3896,23 +3938,19 @@ msgstr ""
 "ਮੈਮੋਰੀ \n"
 "ਵਰਤੋਂ:"
 
-#: ../src/vmm-details.glade.h:74
+#: ../src/vmm-details.glade.h:76
 msgid "Memory Select"
 msgstr "ਮੈਮੋਰੀ ਚੁਣੋ"
 
-#: ../src/vmm-details.glade.h:75 ../src/vmm-host.glade.h:35
+#: ../src/vmm-details.glade.h:77 ../src/vmm-host.glade.h:35
 msgid "Mode:"
 msgstr "ਮੋਡ:"
 
-#: ../src/vmm-details.glade.h:76
+#: ../src/vmm-details.glade.h:78
 msgid "Model:"
 msgstr "ਮਾਡਲ:"
 
-#: ../src/vmm-details.glade.h:77 ../src/vmm-host.glade.h:37
-msgid "Name:"
-msgstr "ਨਾਂ:"
-
-#: ../src/vmm-details.glade.h:78
+#: ../src/vmm-details.glade.h:79
 msgid ""
 "Network\n"
 "I/O:"
@@ -3920,291 +3958,240 @@ msgstr ""
 "ਨੈੱਟਵਰਕ\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:80
+#: ../src/vmm-details.glade.h:81
 msgid "Pause"
 msgstr "ਵਿਰਾਮ"
 
-#: ../src/vmm-details.glade.h:81 ../src/vmm-manager.glade.h:3
+#: ../src/vmm-details.glade.h:82 ../src/vmm-manager.glade.h:3
 msgid "Pause the virtual machine"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਪੌਜ਼ ਕਰੋ"
 
-#: ../src/vmm-details.glade.h:82
+#: ../src/vmm-details.glade.h:83
 msgid "Port:"
 msgstr "ਪੋਰਟ:"
 
-#: ../src/vmm-details.glade.h:83 ../src/vmm-manager.glade.h:4
+#: ../src/vmm-details.glade.h:84 ../src/vmm-manager.glade.h:4
 msgid "Power on the virtual machine"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਚਾਲੂ ਕਰੋ"
 
-#: ../src/vmm-details.glade.h:84
+#: ../src/vmm-details.glade.h:85
 msgid "RAM:"
 msgstr "RAM:"
 
-#: ../src/vmm-details.glade.h:85
+#: ../src/vmm-details.glade.h:86
 msgid "R_eadonly:"
 msgstr "ਪੜ੍ਹਨ ਲਈ(_e):"
 
-#: ../src/vmm-details.glade.h:86
+#: ../src/vmm-details.glade.h:87
 msgid "R_untime pinning:"
 msgstr "ਰਨਟਾਈਮ ਪਿੰਨਿੰਗ(_u):"
 
-#: ../src/vmm-details.glade.h:87
+#: ../src/vmm-details.glade.h:88
 msgid "Run"
 msgstr "ਚਲਾਓ"
 
-#: ../src/vmm-details.glade.h:88
+#: ../src/vmm-details.glade.h:89
 msgid "S_hut Down"
 msgstr "ਬੰਦ ਕਰੋ(_h)"
 
-#: ../src/vmm-details.glade.h:89
+#: ../src/vmm-details.glade.h:90
 msgid "Send _Key"
 msgstr "ਸਵਿੱਚ ਭੇਜੋ(_K)"
 
-#: ../src/vmm-details.glade.h:90
+#: ../src/vmm-details.glade.h:91
 msgid "Sharea_ble:"
 msgstr "ਸ਼ੇਅਰ-ਯੋਗ(_b):"
 
-#: ../src/vmm-details.glade.h:91
+#: ../src/vmm-details.glade.h:92
 msgid "Show the graphical console"
 msgstr "ਗਰਾਫੀਕਲ ਕਨਸੋਲ ਵੇਖੋ"
 
-#: ../src/vmm-details.glade.h:92
+#: ../src/vmm-details.glade.h:93
 msgid "Show virtual hardware details"
 msgstr "ਵਰਚੁਅਲ ਹਾਰਡਵੇਅਰ ਵੇਰਵਾ ਵੇਖੋ"
 
-#: ../src/vmm-details.glade.h:93
+#: ../src/vmm-details.glade.h:94
 msgid "Shut Down"
 msgstr "ਬੰਦ ਕਰੋ"
 
-#: ../src/vmm-details.glade.h:94
+#: ../src/vmm-details.glade.h:95
 msgid "Shut down"
 msgstr "ਬੰਦ ਕਰੋ"
 
-#: ../src/vmm-details.glade.h:95 ../src/vmm-manager.glade.h:6
+#: ../src/vmm-details.glade.h:96 ../src/vmm-manager.glade.h:6
 msgid "Shutdown the virtual machine"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਬੰਦ ਕਰੋ"
 
-#: ../src/vmm-details.glade.h:96
+#: ../src/vmm-details.glade.h:97
 msgid "Sockets:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:97
+#: ../src/vmm-details.glade.h:98
 msgid "Source Path:"
 msgstr "ਸਰੋਤ ਮਾਰਗ:"
 
-#: ../src/vmm-details.glade.h:98
+#: ../src/vmm-details.glade.h:99
 msgid "Source device:"
 msgstr "ਸਰੋਤ ਜੰਤਰ:"
 
-#: ../src/vmm-details.glade.h:99
+#: ../src/vmm-details.glade.h:100
 msgid "Source path:"
 msgstr "ਸਰੋਤ ਮਾਰਗ:"
 
-#: ../src/vmm-details.glade.h:100
+#: ../src/vmm-details.glade.h:101
 msgid "Start virt_ual machine on host boot up"
 msgstr "ਹੋਸਟ ਚਾਲੂ ਹੋਣ ਤੇ ਵਰਚੁਅਲ ਮਸ਼ੀਨ ਚਲਾਓ(_u)"
 
-#: ../src/vmm-details.glade.h:102
+#: ../src/vmm-details.glade.h:103
 #, fuzzy
 msgid "Storage forma_t:"
 msgstr "ਸਰੋਤ ਟਿਕਾਣਾ"
 
-#: ../src/vmm-details.glade.h:103
+#: ../src/vmm-details.glade.h:104
 msgid "Storage size:"
 msgstr "ਸਟੋਰੇਜ਼ ਅਕਾਰ:"
 
-#: ../src/vmm-details.glade.h:104
+#: ../src/vmm-details.glade.h:105
 msgid "Switch to fullscreen view"
 msgstr "ਪੂਰੀ ਸਕਰੀਨ ਝਲਕ ਤੇ ਜਾਓ"
 
-#: ../src/vmm-details.glade.h:105
+#: ../src/vmm-details.glade.h:106
 #, fuzzy
 msgid "TLS Port:"
 msgstr "ਪੋਰਟ:"
 
-#: ../src/vmm-details.glade.h:106
+#: ../src/vmm-details.glade.h:107
 msgid "T_oolbar"
 msgstr "ਟੂਲਬਾਰ(_o)"
 
-#: ../src/vmm-details.glade.h:107
+#: ../src/vmm-details.glade.h:108
 msgid "Target device:"
 msgstr "ਟਾਰਗੇਟ ਜੰਤਰ:"
 
-#: ../src/vmm-details.glade.h:108
+#: ../src/vmm-details.glade.h:109
 #, fuzzy
 msgid "Threads:"
 msgstr "ਹੈੱਡ:"
 
-#: ../src/vmm-details.glade.h:109
+#: ../src/vmm-details.glade.h:110
 msgid "Total host memory:"
 msgstr "ਕੁੱਲ ਹੋਸਟ ਮੈਮੋਰੀ:"
 
-#: ../src/vmm-details.glade.h:111
+#: ../src/vmm-details.glade.h:112
+msgid "Typeid version:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:113
+#, fuzzy
+msgid "Typeid:"
+msgstr "ਕਿਸਮ:"
+
+#: ../src/vmm-details.glade.h:114
 msgid "UUID:"
 msgstr "UUID:"
 
-#: ../src/vmm-details.glade.h:112
-msgid "Unavailable"
-msgstr "ਨਾ-ਉਪਲੱਬਧ"
-
-#: ../src/vmm-details.glade.h:113
-msgid "VNC"
-msgstr "VNC"
-
-#: ../src/vmm-details.glade.h:114
+#: ../src/vmm-details.glade.h:115
 msgid "Virtual CPU Affinity Select"
 msgstr "ਵਰਚੁਅਲ CPU ਸੰਬੰਧ ਚੁਣੋ"
 
-#: ../src/vmm-details.glade.h:115
+#: ../src/vmm-details.glade.h:116
 msgid "Virtual CPU Select"
 msgstr "ਵਰਚੁਅਲ CPU ਚੁਣੋ"
 
-#: ../src/vmm-details.glade.h:116
-msgid "Virtual Machine"
-msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ"
-
-#: ../src/vmm-details.glade.h:117
+#: ../src/vmm-details.glade.h:118
 msgid "Virtual _Machine"
 msgstr "ਵਰਚੁਅਲ ਮਸ਼ੀਨ(_M)"
 
-#: ../src/vmm-details.glade.h:118
+#: ../src/vmm-details.glade.h:119
+#, fuzzy
+msgid "Virtual port"
+msgstr "ਵਰਚੁਅਲ ਨੈੱਟਵਰਕ"
+
+#: ../src/vmm-details.glade.h:120
 msgid "_Always"
 msgstr "ਹਮੇਸ਼ਾਂ(_A)"
 
-#: ../src/vmm-details.glade.h:119
+#: ../src/vmm-details.glade.h:121
 msgid "_Begin Installation"
 msgstr "ਇੰਸਟਾਲੇਸ਼ਨ ਸ਼ੁਰੂ(_B)"
 
-#: ../src/vmm-details.glade.h:120
+#: ../src/vmm-details.glade.h:123
 msgid "_Clone"
 msgstr "ਕਲੋਨ(_C)"
 
-#: ../src/vmm-details.glade.h:121
+#: ../src/vmm-details.glade.h:124
 msgid "_Console"
 msgstr "ਕਨਸੋਲ(_C)"
 
-#: ../src/vmm-details.glade.h:123 ../src/vmm-host.glade.h:56
+#: ../src/vmm-details.glade.h:126 ../src/vmm-host.glade.h:56
 #: ../src/vmm-manager.glade.h:13
 msgid "_File"
 msgstr "ਫਾਇਲ(_F)"
 
-#: ../src/vmm-details.glade.h:125
+#: ../src/vmm-details.glade.h:128
 msgid "_Fullscreen"
 msgstr "ਪੂਰੀ ਸਕਰੀਨ(_F)"
 
-#: ../src/vmm-details.glade.h:126 ../src/vmm-host.glade.h:57
+#: ../src/vmm-details.glade.h:129 ../src/vmm-host.glade.h:57
 #: ../src/vmm-manager.glade.h:15
 msgid "_Help"
 msgstr "ਮੱਦਦ(_H)"
 
-#: ../src/vmm-details.glade.h:128
+#: ../src/vmm-details.glade.h:131
 msgid "_Label:"
 msgstr "ਲੇਬਲ(_L):"
 
-#: ../src/vmm-details.glade.h:129
+#: ../src/vmm-details.glade.h:132
 msgid "_Login"
 msgstr "ਲਾਗਇਨ(_L)"
 
-#: ../src/vmm-details.glade.h:131
+#: ../src/vmm-details.glade.h:135
 msgid "_Never"
 msgstr "ਕਦੇ ਨਹੀਂ(_N)"
 
-#: ../src/vmm-details.glade.h:132
+#: ../src/vmm-details.glade.h:136
 msgid "_Only when Fullscreen"
 msgstr "ਸਿਰਫ ਪੂਰੀ ਸਕਰੀਨ 'ਤੇ(_O)"
 
-#: ../src/vmm-details.glade.h:133
+#: ../src/vmm-details.glade.h:137
 msgid "_Password:"
 msgstr "ਪਾਸਵਰਡ(_P):"
 
-#: ../src/vmm-details.glade.h:136
+#: ../src/vmm-details.glade.h:140
 msgid "_Resize to VM"
 msgstr "VM ਮੁੜ-ਅਕਾਰ(_R)"
 
-#: ../src/vmm-details.glade.h:138
+#: ../src/vmm-details.glade.h:142
 msgid "_Save this password in your keyring"
 msgstr "ਇਹ ਪਾਸਵਰਡ ਆਪਣੇ ਕੀ-ਰਿੰਗ ਵਿੱਚ ਸੰਭਾਲੋ(_S)"
 
-#: ../src/vmm-details.glade.h:139
+#: ../src/vmm-details.glade.h:143
 msgid "_Scale Display"
 msgstr "ਡਿਸਪਲੇਅ ਸਕੇਲ ਕਰੋ(_S)"
 
-#: ../src/vmm-details.glade.h:140
+#: ../src/vmm-details.glade.h:144
 msgid "_Static"
 msgstr "ਸਥਿਰ(_S)"
 
-#: ../src/vmm-details.glade.h:141
+#: ../src/vmm-details.glade.h:145
 msgid "_Take Screenshot"
 msgstr "ਸਕਰੀਨ-ਸ਼ਾਟ ਲਵੋ(_T)"
 
-#: ../src/vmm-details.glade.h:142
+#: ../src/vmm-details.glade.h:146
 msgid "_Text Consoles"
 msgstr "ਟੈਕਸਟ ਕਨਸੋਲ(_T)"
 
-#: ../src/vmm-details.glade.h:143 ../src/vmm-open-connection.glade.h:16
+#: ../src/vmm-details.glade.h:147 ../src/vmm-open-connection.glade.h:16
 msgid "_Username:"
 msgstr "ਯੂਜ਼ਰ-ਨਾਂ(_U):"
 
-#: ../src/vmm-details.glade.h:144 ../src/vmm-manager.glade.h:21
+#: ../src/vmm-details.glade.h:148 ../src/vmm-manager.glade.h:21
 msgid "_View"
 msgstr "ਝਲਕ(_V)"
 
-#: ../src/vmm-details.glade.h:145 ../src/vmm-host.glade.h:59
+#: ../src/vmm-details.glade.h:149 ../src/vmm-host.glade.h:59
 msgid "_View Manager"
 msgstr "ਮੈਨੇਜਰ ਵੇਖੋ(_V)"
-
-#: ../src/vmm-details.glade.h:146
-#, fuzzy
-msgid "boot"
-msgstr "ਰੀਬੂਟ"
-
-#: ../src/vmm-details.glade.h:147
-msgid "chr"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:148
-msgid "cntrl"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:149
-msgid "cpu"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:150
-msgid "dsk"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:151
-msgid "inp"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:153
-#, fuzzy
-msgid "mem"
-msgstr "ਮੈਮੋਰੀ"
-
-#: ../src/vmm-details.glade.h:154
-#, fuzzy
-msgid "net"
-msgstr "ਨੈੱਟ"
-
-#: ../src/vmm-details.glade.h:155
-msgid "over"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:156
-#, fuzzy
-msgid "snd"
-msgstr "ਸਕਿੰਟ"
-
-#: ../src/vmm-details.glade.h:157
-msgid "stat"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:158
-#, fuzzy
-msgid "vid"
-msgstr "Vid"
 
 #: ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
@@ -4318,6 +4305,10 @@ msgstr "ਮੈਮੋਰੀ ਵਰਤੋਂ:"
 msgid "Memory:"
 msgstr "ਮੈਮੋਰੀ:"
 
+#: ../src/vmm-host.glade.h:37
+msgid "Name:"
+msgstr "ਨਾਂ:"
+
 #: ../src/vmm-host.glade.h:38
 msgid "Network Interfaces"
 msgstr "ਨੈੱਟਵਰਕ ਇੰਟਰਫੇਸ"
@@ -4410,7 +4401,7 @@ msgstr "_CPU ਵਰਤੋਂ"
 msgid "_Connection Details"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਵੇਰਵਾ(_C)"
 
-#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:30
+#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:31
 msgid "_Disk I/O"
 msgstr "ਡਿਸਕ I/O(_D)"
 
@@ -4422,7 +4413,7 @@ msgstr "ਸੋਧ(_E)"
 msgid "_Graph"
 msgstr "ਗਰਾਫ਼(_G)"
 
-#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:34
+#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:35
 msgid "_Network I/O"
 msgstr "ਨੈੱਟਵਰਕ I/O(_N)"
 
@@ -4615,10 +4606,15 @@ msgid "Install Audio Device:"
 msgstr "ਆਡੀਓ ਜੰਤਰ ਇੰਸਟਾਲ ਕਰੋ:"
 
 #: ../src/vmm-preferences.glade.h:18
+#, fuzzy
+msgid "Install Graphics:"
+msgstr "ਗਰਾਫਿਕਸ"
+
+#: ../src/vmm-preferences.glade.h:19
 msgid "Maintain h_istory of"
 msgstr "ਇਸ ਦਾ ਅਤੀਤ ਰੱਖੋ(_i)"
 
-#: ../src/vmm-preferences.glade.h:19
+#: ../src/vmm-preferences.glade.h:20
 msgid ""
 "Never\n"
 "For all new domains\n"
@@ -4628,7 +4624,7 @@ msgstr ""
 "ਸਭ ਨਵੇਂ ਡੋਮੇਨਾਂ ਲਈ\n"
 "ਸਭ ਡੋਮੇਨਾਂ ਲਈ"
 
-#: ../src/vmm-preferences.glade.h:22
+#: ../src/vmm-preferences.glade.h:23
 msgid ""
 "Never\n"
 "Fullscreen only\n"
@@ -4638,51 +4634,51 @@ msgstr ""
 "ਸਿਰਫ ਪੂਰਾ ਪਰਦਾ\n"
 "ਹਮੇਸ਼ਾ"
 
-#: ../src/vmm-preferences.glade.h:25
+#: ../src/vmm-preferences.glade.h:26
 msgid "Not supported"
 msgstr "ਸਹਾਇਕ ਨਹੀਂ"
 
-#: ../src/vmm-preferences.glade.h:26
+#: ../src/vmm-preferences.glade.h:27
 msgid "Poweroff/_Reboot/Save:"
 msgstr "ਬੰਦ/ਮੁੜ-ਚਾਲੂ/ਸੰਭਾਲੋ(_R):"
 
-#: ../src/vmm-preferences.glade.h:27
+#: ../src/vmm-preferences.glade.h:28
 msgid "Preferences"
 msgstr "ਮੇਰੀ ਪਸੰਦ"
 
-#: ../src/vmm-preferences.glade.h:28
+#: ../src/vmm-preferences.glade.h:29
 msgid "Stats"
 msgstr "ਹਾਲਤ"
 
-#: ../src/vmm-preferences.glade.h:29
+#: ../src/vmm-preferences.glade.h:30
 msgid "VM Details"
 msgstr "VM ਵੇਰਵਾ"
 
-#: ../src/vmm-preferences.glade.h:31
+#: ../src/vmm-preferences.glade.h:32
 msgid "_Force Poweroff:"
 msgstr "ਧੱਕੇ ਨਾਲ ਬੰਦ ਕਰੋ(_F):"
 
-#: ../src/vmm-preferences.glade.h:32
+#: ../src/vmm-preferences.glade.h:33
 msgid "_Interface start/stop:"
 msgstr "ਇੰਟਰਫੇਸ ਚਾਲੂ/ਬੰਦ ਕਰੋ(_I):"
 
-#: ../src/vmm-preferences.glade.h:33
+#: ../src/vmm-preferences.glade.h:34
 msgid "_Local virtual machine"
 msgstr "ਲੋਕਲ ਵਰਚੁਅਲ ਮਸ਼ੀਨ(_L)"
 
-#: ../src/vmm-preferences.glade.h:35
+#: ../src/vmm-preferences.glade.h:36
 msgid "_Pause:"
 msgstr "ਵਿਰਾਮ(_P):"
 
-#: ../src/vmm-preferences.glade.h:36
+#: ../src/vmm-preferences.glade.h:37
 msgid "_Remote virtual machine"
 msgstr "ਰਿਮੋਟ ਵਰਚੁਅਲ ਮਸ਼ੀਨ(_R)"
 
-#: ../src/vmm-preferences.glade.h:37
+#: ../src/vmm-preferences.glade.h:38
 msgid "_Update status every"
 msgstr "ਹਾਲਤ ਅੱਪਡੇਟ ਕਰੋ ਹਰੇਕ(_U)"
 
-#: ../src/vmm-preferences.glade.h:38
+#: ../src/vmm-preferences.glade.h:39
 msgid "samples"
 msgstr "ਸੈਂਪਲ"
 
@@ -4705,6 +4701,35 @@ msgstr "ਵਾਲੀਅਮ ਚੁਣੋ(_V)"
 #: ../src/vmm-storage-browse.glade.h:3
 msgid "_Browse Local"
 msgstr "ਲੋਕਲ ਝਲਕ(_B)"
+
+#~ msgid "Auth"
+#~ msgstr "ਪਰਮਾਣ"
+
+#~ msgid "Unavailable"
+#~ msgstr "ਨਾ-ਉਪਲੱਬਧ"
+
+#~ msgid "VNC"
+#~ msgstr "VNC"
+
+#, fuzzy
+#~ msgid "boot"
+#~ msgstr "ਰੀਬੂਟ"
+
+#, fuzzy
+#~ msgid "mem"
+#~ msgstr "ਮੈਮੋਰੀ"
+
+#, fuzzy
+#~ msgid "net"
+#~ msgstr "ਨੈੱਟ"
+
+#, fuzzy
+#~ msgid "snd"
+#~ msgstr "ਸਕਿੰਟ"
+
+#, fuzzy
+#~ msgid "vid"
+#~ msgstr "Vid"
 
 #~ msgid "When to grab keyboard input for the console"
 #~ msgstr "ਕਦੋਂ ਕੰਸੋਲ ਲਈ ਕੀਬੋਰਡ ਇੰਪੁੱਟ ਲੈਣੀ ਹੈ"

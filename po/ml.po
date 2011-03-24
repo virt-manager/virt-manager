@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-14 15:27-0500\n"
+"POT-Creation-Date: 2011-03-24 16:35-0400\n"
 "PO-Revision-Date: 2010-04-13 10:10+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -34,9 +34,7 @@ msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ മാനേ�
 msgid "Error starting Virtual Machine Manager"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ മാനേജര്‍ ആരംഭിക്കുന്നതില്‍ പിശക്"
 
-#. ...the risk is we catch too much though
-#. Damned if we do, damned if we dont :-)(
-#: ../src/virt-manager.py.in:346
+#: ../src/virt-manager.py.in:359
 #, python-format
 msgid "Unable to initialize GTK: %s"
 msgstr "GTK ഇനിഷ്യലൈസ് ചെയ്യുവാന്‍ അസാധ്യം: %s"
@@ -114,87 +112,96 @@ msgid "Enable menu accelerators in console window"
 msgstr ""
 
 #: ../src/virt-manager.schemas.in.h:19
+#, fuzzy
+msgid "Install selected graphics type for new VM"
+msgstr "റിമോട്ട് വിഎമിനുള്ള ശബ്ദ ഡിവൈസ് ഇന്‍സ്റ്റോള്‍ ചെയ്യുക"
+
+#: ../src/virt-manager.schemas.in.h:20
+msgid "Install selected graphics type for new VM. vnc or spice"
+msgstr ""
+
+#: ../src/virt-manager.schemas.in.h:21
 msgid "Install sound device for local VM"
 msgstr "ലോക്കല്‍ വിഎമിനുള്ള ശബ്ദ ഡിവൈസ് ഇന്‍സ്റ്റോള്‍ ചെയ്യുക"
 
-#: ../src/virt-manager.schemas.in.h:20
+#: ../src/virt-manager.schemas.in.h:22
 msgid "Install sound device for remote VM"
 msgstr "റിമോട്ട് വിഎമിനുള്ള ശബ്ദ ഡിവൈസ് ഇന്‍സ്റ്റോള്‍ ചെയ്യുക"
 
-#: ../src/virt-manager.schemas.in.h:21
+#: ../src/virt-manager.schemas.in.h:23
 msgid "Poll disk i/o stats"
 msgstr "Poll disk i/o stats"
 
-#: ../src/virt-manager.schemas.in.h:22
+#: ../src/virt-manager.schemas.in.h:24
 msgid "Poll net i/o stats"
 msgstr "Poll net i/o stats"
 
-#: ../src/virt-manager.schemas.in.h:23
+#: ../src/virt-manager.schemas.in.h:25
 msgid "Show cpu usage in summary"
 msgstr "സിപിയു ഉപയോഗം സമ്മറിയില്‍ കാണിക്കുക"
 
-#: ../src/virt-manager.schemas.in.h:24
+#: ../src/virt-manager.schemas.in.h:26
 msgid "Show disk I/O in summary"
 msgstr "ഡിസ്ക് I/O സമ്മറിയില്‍ കാണിക്കുക"
 
-#: ../src/virt-manager.schemas.in.h:25
+#: ../src/virt-manager.schemas.in.h:27
 msgid "Show network I/O in summary"
 msgstr "നെറ്റ്‌വര്‍ക്ക് I/O സമ്മറിയില്‍ കാണിക്കുക"
 
-#: ../src/virt-manager.schemas.in.h:26
+#: ../src/virt-manager.schemas.in.h:28
 msgid "Show system tray icon"
 msgstr "സിസ്റ്റം ട്രേ ചിഹ്നം കാണിക്കുക"
 
-#: ../src/virt-manager.schemas.in.h:27
+#: ../src/virt-manager.schemas.in.h:29
 msgid "Show system tray icon while app is running"
 msgstr "പ്രയോഗം പ്രവര്‍ത്തനത്തിലുള്ളപ്പോള്‍ സിസ്റ്റം ട്രേ ചിഹ്നം കാണിക്കുക"
 
-#: ../src/virt-manager.schemas.in.h:28
+#: ../src/virt-manager.schemas.in.h:30
 msgid "Show the cpu usage field in the domain list summary view"
 msgstr "ഡൊമെയിന്‍ ലിസ്റ്റ് സമ്മറിയില്‍ സിപിയു ഉപയോഗത്തിന്റെ ഫീള്‍ഡ് കാണിക്കുക"
 
-#: ../src/virt-manager.schemas.in.h:29
+#: ../src/virt-manager.schemas.in.h:31
 msgid "Show the disk I/O field in the domain list summary view"
 msgstr "ഡൊമെയിന്‍ ലിസ്റ്റ് സമ്മറിയില്‍ ഡിസ്ക് I/O ഫീള്‍ഡ് കാണിക്കുക"
 
-#: ../src/virt-manager.schemas.in.h:30
+#: ../src/virt-manager.schemas.in.h:32
 msgid "Show the network I/O field in the domain list summary view"
 msgstr "ഡൊമെയിന്‍ ലിസ്റ്റ് സമ്മറിയില്‍ നെറ്റ്‌വര്‍ക്ക് I/O ഫീള്‍ഡ് കാണിക്കുക"
 
-#: ../src/virt-manager.schemas.in.h:31
+#: ../src/virt-manager.schemas.in.h:33
 msgid "The length of the list of URLs"
 msgstr "യുആര്‍എലുകളുടെ പട്ടികയുടെ വ്യാപ്തി"
 
-#: ../src/virt-manager.schemas.in.h:32
+#: ../src/virt-manager.schemas.in.h:34
 msgid "The number of samples to keep in the statistics history"
 msgstr "സ്ഥിതിവിവരക്കണക്കുകളുടെ ഹിസ്റ്ററിയിലുള്ള മാതൃകകളുടെ എണ്ണം"
 
-#: ../src/virt-manager.schemas.in.h:33
+#: ../src/virt-manager.schemas.in.h:35
 msgid ""
 "The number of urls to keep in the history for the install media address page."
 msgstr "ഇന്‍സ്റ്റോള്‍ മീഡിയ വിലാസത്തിനുള്ള താളിന്റെ ഹിസ്റ്ററിയില്‍ സൂക്ഷിക്കേണ്ട യുആര്‍എലുകളുടെ എണ്ണം."
 
-#: ../src/virt-manager.schemas.in.h:34
+#: ../src/virt-manager.schemas.in.h:36
 msgid "The statistics history length"
 msgstr "സ്ഥിതിവിവരകണക്കുകളുടെ ഹിസ്റ്ററിയുടെ വ്യാപ്തി"
 
-#: ../src/virt-manager.schemas.in.h:35
+#: ../src/virt-manager.schemas.in.h:37
 msgid "The statistics update interval"
 msgstr "സ്ഥിതിവിവരക്കണക്കുകള്‍ പരിഷ്കരിക്കപ്പെടുന്ന സമയം"
 
-#: ../src/virt-manager.schemas.in.h:36
+#: ../src/virt-manager.schemas.in.h:38
 msgid "The statistics update interval in seconds"
 msgstr "സ്ഥിതിവിവരക്കണക്കുകള്‍ പരിഷ്കരിക്കപ്പെടുന്ന സമയം നിമിഷങ്ങളില്‍"
 
-#: ../src/virt-manager.schemas.in.h:37
+#: ../src/virt-manager.schemas.in.h:39
 msgid "When to pop up a console for a guest"
 msgstr "ഒരു ഗസ്റ്റിനു് എപ്പോഴാണു് കണ്‍സോള്‍ ലഭ്യമാക്കേണ്ടതു്"
 
-#: ../src/virt-manager.schemas.in.h:38
+#: ../src/virt-manager.schemas.in.h:40
 msgid "When to scale the VM graphical console"
 msgstr "വിഎം ഗ്രാഫിക്കല്‍ മോഡ് എപ്പോള്‍ അളക്കണം"
 
-#: ../src/virt-manager.schemas.in.h:39
+#: ../src/virt-manager.schemas.in.h:41
 msgid ""
 "When to scale the VM graphical console. 0 = never, 1 = only when in full "
 "screen mode, 2 = Always"
@@ -202,29 +209,29 @@ msgstr ""
 "വി എം ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ സ്കേല്‍ ചെയ്യേണ്ടതെപ്പോള്‍ള്‍. 0 = ഒരിക്കലുമില്ല, 1 = സ്ക്രീന്‍ പൂര്‍ണ്ണ "
 "വലിപ്പത്തിലാകുമ്പോള്‍, 2എപ്പോഴും"
 
-#: ../src/virt-manager.schemas.in.h:40
+#: ../src/virt-manager.schemas.in.h:42
 msgid "Whether or not the app will poll VM disk i/o statistics"
 msgstr "പ്രയോഗം വിഎം ഡിസ്ക് i/o സ്ഥിതിവിവരക്കണക്കുകള്‍ poll ചെയ്യണമോ വേണ്ടയോ എന്നു്"
 
-#: ../src/virt-manager.schemas.in.h:41
+#: ../src/virt-manager.schemas.in.h:43
 msgid "Whether or not the app will poll VM network i/o statistics"
 msgstr "പ്രയോഗം വിഎം നെറ്റ്‌വര്‍ക്ക് i/o സ്ഥിതിവിവരക്കണക്കുകള്‍ poll ചെയ്യണമോ വേണ്ടയോ എന്നു്"
 
-#: ../src/virt-manager.schemas.in.h:42
+#: ../src/virt-manager.schemas.in.h:44
 msgid ""
 "Whether to enable menu accelerators while connected to the guest graphical "
 "console."
 msgstr ""
 
-#: ../src/virt-manager.schemas.in.h:43
+#: ../src/virt-manager.schemas.in.h:45
 msgid "Whether to install a sound device for local VMs or not"
 msgstr "ലോക്കല്‍ വിഎംമുകള്‍ക്കു് ഒരു സൌണ്ട് ഡിവൈസ് ഇന്‍സ്റ്റോള്‍ ചെയ്യണമോ വേണ്ടയോ"
 
-#: ../src/virt-manager.schemas.in.h:44
+#: ../src/virt-manager.schemas.in.h:46
 msgid "Whether to install a sound device for remote VMs or not"
 msgstr "റിമോട്ട് വിഎംമുകള്‍ക്കു് ഒരു സൌണ്ട് ഡിവൈസ് ഇന്‍സ്റ്റോള്‍ ചെയ്യണമോ വേണ്ടയോ"
 
-#: ../src/virt-manager.schemas.in.h:45
+#: ../src/virt-manager.schemas.in.h:47
 msgid ""
 "Whether to pop up a console for a guest. 0 = never, 1 = only on creation of "
 "a new guest, 2 = On creation of any guest"
@@ -232,52 +239,52 @@ msgstr ""
 "ഒരു ഗസ്റ്റിനു് എപ്പോഴാണു് കണ്‍സോള്‍ ലഭ്യമാക്കേണ്ടതു്. 0 = ഒരിക്കലുമില്ല, 1 = ഒരു പുതിയ ഗസ്റ്റിനെ "
 "ഉണ്ടാക്കുമ്പോള്‍ മാത്രം, 2 = ഏതെങ്കിലും ഒരു ഗസ്റ്റിനെ ഉണ്ടാക്കുമ്പോള്‍"
 
-#: ../src/virt-manager.schemas.in.h:46
+#: ../src/virt-manager.schemas.in.h:48
 msgid "Whether to show VM button toolbar in Details display"
 msgstr "വിശദാംശങ്ങള്‍ കാണിക്കുമ്പോള്‍ വിഎം ബട്ടണ്‍ ഉപകരണപട്ട കാണിക്കണമോആ"
 
-#: ../src/virt-manager.schemas.in.h:47
+#: ../src/virt-manager.schemas.in.h:49
 msgid "Whether to show notification when grabbing mouse"
 msgstr "മൌസ് കൈയിലെടുക്കുമ്പോള്‍ മുന്നറിയിപ്പു് നല്‍കുക"
 
-#: ../src/virt-manager.schemas.in.h:48
-msgid ""
-"Whether to show the notification hint when grabbing the mouse in the console"
-msgstr ""
-"Whether to show the notification hint when grabbing the mouse in the console"
-
-#: ../src/virt-manager.schemas.in.h:49
-msgid ""
-"Whether to show toolbar containing Virtual Machine action buttons (such as "
-"Run, Pause, Shutdown) in the details display"
-msgstr ""
-"Whether to show toolbar containing Virtual Machine action buttons (such as "
-"Run, Pause, Shutdown) in the details display"
-
 #: ../src/virt-manager.schemas.in.h:50
+msgid ""
+"Whether to show the notification hint when grabbing the mouse in the console"
+msgstr ""
+"Whether to show the notification hint when grabbing the mouse in the console"
+
+#: ../src/virt-manager.schemas.in.h:51
+msgid ""
+"Whether to show toolbar containing Virtual Machine action buttons (such as "
+"Run, Pause, Shutdown) in the details display"
+msgstr ""
+"Whether to show toolbar containing Virtual Machine action buttons (such as "
+"Run, Pause, Shutdown) in the details display"
+
+#: ../src/virt-manager.schemas.in.h:52
 msgid "Whether we require confirmation to forcepoweroff a VM"
 msgstr "ഒരു VM നിര്‍ബന്ധമായി ഓഫ് ചെയ്യുന്നതു് ഉറപ്പാക്കണമോ"
 
-#: ../src/virt-manager.schemas.in.h:51
+#: ../src/virt-manager.schemas.in.h:53
 msgid "Whether we require confirmation to pause a VM"
 msgstr "ഒരു VM തല്‍ക്കാലത്തേക്ക് നിര്‍ത്തുന്നതു് ഉറപ്പാക്കണമോ"
 
-#: ../src/virt-manager.schemas.in.h:52
+#: ../src/virt-manager.schemas.in.h:54
 msgid "Whether we require confirmation to poweroff/reboot a VM"
 msgstr "ഒരു VM ഓഫ്/റീബൂട്ട് ചെയ്യുന്നതു് ഉറപ്പാക്കണമോ"
 
-#: ../src/virt-manager.schemas.in.h:53
+#: ../src/virt-manager.schemas.in.h:55
 msgid "Whether we require confirmation to remove a virtual device"
 msgstr "ഒരു വിര്‍ച്ച്വല്‍ ഡിവൈസ് നീക്കം ചെയ്യുന്നതു് ഉറപ്പാക്കണമോ"
 
-#: ../src/virt-manager.schemas.in.h:54
+#: ../src/virt-manager.schemas.in.h:56
 msgid ""
 "Whether we require confirmation to start or stop a libvirt virtual interface"
 msgstr ""
 "ഒരു libvrt വിര്‍ച്ച്വല്‍ ഇന്റര്‍ഫെയിസ് ആരംഭിക്കുന്നതിനോ നിര്‍ത്തുന്നതിനോ ഉറപ്പാക്കല്‍ ആവശ്യമുണ്ടോ എന്നു്"
 
-#: ../src/virtManager/addhardware.py:331 ../src/virtManager/create.py:445
-#: ../src/virtManager/create.py:537
+#: ../src/virtManager/addhardware.py:331 ../src/virtManager/create.py:452
+#: ../src/virtManager/create.py:544
 msgid "Connection does not support storage management."
 msgstr "കണക്ഷന്‍ സ്റ്റോറേജ് മാനേജ്മെന്റ് പിന്തുണയ്ക്കുന്നില്ല."
 
@@ -295,14 +302,14 @@ msgstr "കണക്ഷന്‍ ഹോസ്റ്റ് ഡിവൈസ് എ
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt പതിപ്പ് വീഡിയോ ഡിവൈസുകളെ പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../src/virtManager/addhardware.py:487 ../src/virtManager/details.py:2190
+#: ../src/virtManager/addhardware.py:487 ../src/virtManager/details.py:2388
 msgid "EvTouch USB Graphics Tablet"
 msgstr "ഇവി ടച്ച് യുഎസ്ബി ഗ്രാഫിക്സ് ടാബ്ലറ്റ്"
 
 #. XXX libvirt needs to support 'model' for input devices to distinguish
 #. wacom from evtouch tablets
 #. model.append([_("Wacom Graphics Tablet"), "tablet", "usb", True])
-#: ../src/virtManager/addhardware.py:491 ../src/virtManager/details.py:2192
+#: ../src/virtManager/addhardware.py:491 ../src/virtManager/details.py:2390
 msgid "Generic USB Mouse"
 msgstr "ജനറിക് യുഎസ്ബി മൌസ്"
 
@@ -312,7 +319,7 @@ msgstr "വിഎന്‍സി സര്‍വര്‍"
 
 #: ../src/virtManager/addhardware.py:496
 #, fuzzy
-msgid "SPICE server"
+msgid "Spice server"
 msgstr "വിഎന്‍സി സര്‍വര്‍"
 
 #: ../src/virtManager/addhardware.py:497
@@ -346,7 +353,7 @@ msgstr "സംഭരണം"
 msgid "Network"
 msgstr "നെറ്റ്‍വര്‍ക്ക്"
 
-#: ../src/virtManager/addhardware.py:824 ../src/virtManager/details.py:2532
+#: ../src/virtManager/addhardware.py:824 ../src/virtManager/details.py:2734
 msgid "Input"
 msgstr "ഇന്‍പുട്ട്"
 
@@ -393,15 +400,15 @@ msgstr ""
 msgid "Error adding device: %s"
 msgstr "ഡിവൈസ് ചേര്‍ക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/addhardware.py:1006 ../src/virtManager/create.py:1409
-#, python-format
+#: ../src/virtManager/addhardware.py:1006 ../src/virtManager/create.py:1430
+#, fuzzy, python-format
 msgid ""
-"The following path already exists, but is not\n"
+"The following storage already exists, but is not\n"
 "in use by any virtual machine:\n"
 "\n"
 "%s\n"
 "\n"
-"Would you like to use this path?"
+"Would you like to reuse this storage?"
 msgstr ""
 "ഈ പാഥ് നിലവിലുണ്ടു്, പക്ഷേ വിര്‍ച്ച്വല്‍\n"
 "മഷീനുകളൊന്നും ഇതുപയോഗിക്കുന്നില്ല:\n"
@@ -410,25 +417,25 @@ msgstr ""
 "\n"
 "നിങ്ങള്‍ക്കു് ഈ പാഥ് ഉപയോഗിക്കണമോ?"
 
-#: ../src/virtManager/addhardware.py:1014 ../src/virtManager/create.py:1417
+#: ../src/virtManager/addhardware.py:1014 ../src/virtManager/create.py:1438
 msgid "A storage path must be specified."
 msgstr "ഒരു സ്റ്റോറേജ് പാഥ് നല്‍കേണ്ടതുണ്ടു്."
 
-#: ../src/virtManager/addhardware.py:1032 ../src/virtManager/create.py:1425
+#: ../src/virtManager/addhardware.py:1032 ../src/virtManager/create.py:1446
 msgid "Storage parameter error."
 msgstr "സ്റ്റോറേജ് പരാമീറ്റര്‍ പിശക്."
 
 #. Fatal errors are reported when setting 'size'
-#: ../src/virtManager/addhardware.py:1046 ../src/virtManager/create.py:1430
+#: ../src/virtManager/addhardware.py:1046 ../src/virtManager/create.py:1451
 msgid "Not Enough Free Space"
 msgstr "മതിയായ ഉപയോഗത്തിലില്ലാത്ത സ്ഥലം ലഭ്യമല്ല"
 
-#: ../src/virtManager/addhardware.py:1052 ../src/virtManager/create.py:1436
+#: ../src/virtManager/addhardware.py:1052 ../src/virtManager/create.py:1457
 #, python-format
 msgid "Disk \"%s\" is already in use by another guest!"
 msgstr "\"%s\" എന്ന ഡിസ്ക് മറ്റൊരു ഗസ്റ്റ് നിലവില്‍ ഉപയോഗിക്കുന്നു !"
 
-#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1438
+#: ../src/virtManager/addhardware.py:1054 ../src/virtManager/create.py:1459
 msgid "Do you really want to use the disk?"
 msgstr "നിങ്ങള്‍ക്കു് ഡിസ്ക് ഉപയോഗിക്കണമോ?"
 
@@ -499,19 +506,19 @@ msgstr "പ്റക്റിയ നടക്കുന്നു..."
 msgid "Completed"
 msgstr "പൂര്‍ത്തിയാക്കിയിരിക്കുന്നു"
 
-#: ../src/virtManager/choosecd.py:91 ../src/virtManager/choosecd.py:97
+#: ../src/virtManager/choosecd.py:88 ../src/virtManager/choosecd.py:94
 msgid "Invalid Media Path"
 msgstr "അസാധുവായ മീഡിയാ പാഥ്"
 
-#: ../src/virtManager/choosecd.py:92
+#: ../src/virtManager/choosecd.py:89
 msgid "A media path must be specified."
 msgstr "മീഡിയയ്ക്കുള്ള പാഥ് നല്‍കേണ്ടതുണ്ടു്"
 
-#: ../src/virtManager/choosecd.py:138
+#: ../src/virtManager/choosecd.py:135
 msgid "Floppy D_rive"
 msgstr "ഫ്ലോപ്പി ഡ്രൈ_വ്"
 
-#: ../src/virtManager/choosecd.py:139
+#: ../src/virtManager/choosecd.py:136
 msgid "Floppy _Image"
 msgstr "ഫ്ലോപ്പി _ഇമേജ്"
 
@@ -588,7 +595,7 @@ msgstr ""
 "പുതിയ ഗസ്റ്റ് പ്രവര്‍ത്തിപ്പിക്കുന്നതു് ഈ ഡിസ്ക് ഇമേജുകളിലുള്ള ഡേറ്റാ മാറ്റിയെഴുതുന്നു."
 
 #: ../src/virtManager/clone.py:737 ../src/virtManager/createpool.py:382
-#: ../src/virtManager/createvol.py:195 ../src/virtManager/migrate.py:433
+#: ../src/virtManager/createvol.py:199 ../src/virtManager/migrate.py:433
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "Uncaught error validating input: %s"
@@ -628,11 +635,11 @@ msgstr ""
 "ക്ലോണ്‍ ചെയ്യുവാനുള്ള ബ്ലോക്ക് ഡിവൈസുകള്‍\n"
 "കൈകാര്യം ചെയ്യണം."
 
-#: ../src/virtManager/clone.py:824 ../src/virtManager/delete.py:329
+#: ../src/virtManager/clone.py:824 ../src/virtManager/delete.py:330
 msgid "No write access to parent directory."
 msgstr "പേരന്റ് ഡയറക്ടറിയിലേക്ക് write അനുമതിയില്ല.കുക"
 
-#: ../src/virtManager/clone.py:826 ../src/virtManager/delete.py:327
+#: ../src/virtManager/clone.py:826 ../src/virtManager/delete.py:328
 msgid "Path does not exist."
 msgstr "പാഥ് നിലവിലില്ല."
 
@@ -726,16 +733,26 @@ msgstr "സജീവം"
 #: ../src/virtManager/connection.py:590 ../src/virtManager/host.py:508
 #: ../src/virtManager/host.py:551 ../src/virtManager/host.py:777
 #: ../src/virtManager/host.py:808 ../src/virtManager/host.py:1044
-#: ../src/virtManager/uihelpers.py:394
+#: ../src/virtManager/uihelpers.py:401
 msgid "Inactive"
 msgstr "നിര്‍ജീവം"
 
-#: ../src/virtManager/connection.py:592 ../src/virtManager/create.py:1726
-#: ../src/virtManager/details.py:1917 ../src/virtManager/details.py:2111
-#: ../src/virtManager/details.py:2271 ../src/virtManager/details.py:2272
+#: ../src/virtManager/connection.py:592 ../src/virtManager/create.py:1747
+#: ../src/virtManager/details.py:2054 ../src/virtManager/details.py:2271
+#: ../src/virtManager/details.py:2469 ../src/virtManager/details.py:2470
 #: ../src/virtManager/host.py:1039
 msgid "Unknown"
 msgstr "അപരിചിതം"
+
+#: ../src/virtManager/connection.py:768
+#, python-format
+msgid ""
+"Domain rename failed. Attempting to recover also failed.\n"
+"\n"
+"Original error: %s\n"
+"\n"
+"Recover error: %s"
+msgstr ""
 
 #: ../src/virtManager/console.py:295
 msgid "Unable to provide requested credentials to the VNC server"
@@ -764,57 +781,61 @@ msgstr "സംഭരണ പാഥ് മാറ്റുന്നതില്‍ 
 msgid "Error opening socket path '%s'"
 msgstr "സംഭരണ പാഥ് മാറ്റുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/console.py:543
+#: ../src/virtManager/console.py:538 ../src/vmm-details.glade.h:117
+msgid "Virtual Machine"
+msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ "
+
+#: ../src/virtManager/console.py:542
 #, fuzzy, python-format
 msgid "Press %s to release pointer."
 msgstr "പോയിന്‍ററ്‍ ലഭ്യമാക്കുന്നതിനായി Ctrl+Alt അമറ്‍ത്തുക."
 
 #. Guest isn't running, schedule another try
-#: ../src/virtManager/console.py:706 ../src/virtManager/console.py:876
+#: ../src/virtManager/console.py:725 ../src/virtManager/console.py:895
 msgid "Guest not running"
 msgstr "ഗസ്റ്റ് പ്രവര്‍ത്തിക്കുന്നില്ല"
 
-#: ../src/virtManager/console.py:709
+#: ../src/virtManager/console.py:728
 msgid "Guest has crashed"
 msgstr "ഗസ്റ്റിനു് തകരാറു സംഭവിച്ചിരിക്കുന്നു"
 
-#: ../src/virtManager/console.py:819
+#: ../src/virtManager/console.py:838
 #, fuzzy
 msgid ""
 "Error: viewer connection to hypervisor host got refused or disconnected!"
 msgstr "പിശക്: ഹൈപ്പര്‍വൈസര്‍ലേക്കുള്ള വിഎന്‍സി കണക്ഷന്‍ നിരസിച്ചു അല്ലെങ്കില്‍ വേര്‍പെട്ടു!"
 
-#: ../src/virtManager/console.py:893
+#: ../src/virtManager/console.py:912
 msgid "Graphical console not configured for guest"
 msgstr "ഗസ്റ്റിനുള്ള ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ ക്രമികരിച്ചിട്ടില്ല"
 
-#: ../src/virtManager/console.py:900
+#: ../src/virtManager/console.py:919
 #, fuzzy, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "കണ്‍സോള്‍ പാഥ് '%s'-ലേക്കു് പ്രവേശിക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/virtManager/console.py:910
+#: ../src/virtManager/console.py:929
 msgid "Graphical console is not yet active for guest"
 msgstr "ഗസ്റ്റിനുള്ള ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ ഇതുവരെ സജീവമല്ല"
 
-#: ../src/virtManager/console.py:915
+#: ../src/virtManager/console.py:934
 msgid "Connecting to graphical console for guest"
 msgstr "ഗസ്റ്റിനുള്ള ഗ്രാഫിക്കല്‍ കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യുന്നു"
 
-#: ../src/virtManager/console.py:951
+#: ../src/virtManager/console.py:970
 #, fuzzy
 msgid "Error connecting to graphical console"
 msgstr "ഗസ്റ്റിനുള്ള ഗ്രാഫിക്കല്‍ കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യുന്നു"
 
-#: ../src/virtManager/create.py:319
+#: ../src/virtManager/create.py:324
 msgid "No active connection to install on."
 msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനായി സജീവമായ കണക്ഷന്‍ ലഭ്യമല്ല."
 
-#: ../src/virtManager/create.py:380
+#: ../src/virtManager/create.py:387
 msgid "Connection is read only."
 msgstr "കണക്ഷന്‍ റീഡ് ഒണ്‍ലി ആണു്."
 
-#: ../src/virtManager/create.py:383
+#: ../src/virtManager/create.py:390
 msgid ""
 "No hypervisor options were found for this\n"
 "connection."
@@ -822,7 +843,7 @@ msgstr ""
 "ഈ കണക്ഷനുള്ള ഹൈപ്പര്‍വൈസര്‍ ഉപാധികള്‍\n"
 "ലഭ്യമല്ല."
 
-#: ../src/virtManager/create.py:388
+#: ../src/virtManager/create.py:395
 #, fuzzy
 msgid ""
 "This usually means that QEMU or KVM is not\n"
@@ -832,7 +853,7 @@ msgstr ""
 "സിസ്റ്റത്തില്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ലെന്നാണു്. ദയവായി ഇവ\n"
 "ഇന്‍സ്റ്റോള്‍ ചെയ്തെന്നുറപ്പാക്കുക."
 
-#: ../src/virtManager/create.py:403
+#: ../src/virtManager/create.py:410
 msgid ""
 "Host supports full virtualization, but\n"
 "no related install options are available.\n"
@@ -843,7 +864,7 @@ msgstr ""
 "പക്ഷേ ഇതിനുള്ള ഇന്‍സ്റ്റോള്‍ ഉപാധികള്‍ ലഭ്യമല്ല.\n"
 "ഒരു പക്ഷേ, നിങ്ങളുടെ സിസ്റ്റം ബയോസില്‍ പിന്തുണ പ്രവര്‍ത്തന രഹിതമാവാം."
 
-#: ../src/virtManager/create.py:410
+#: ../src/virtManager/create.py:417
 msgid ""
 "Host does not appear to support hardware\n"
 "virtualization. Install options may be limited."
@@ -851,7 +872,7 @@ msgstr ""
 "ഹോസ്റ്റ് ഹാര്‍ഡ്‌വെയര്‍ വിര്‍ച്ച്വലൈസേഷന്‍ പിന്തുണയ്ക്കുന്നില്ല. \n"
 "ഇന്‍സ്റ്റോള്‍ ഉപാധികള്‍ അധികമുണ്ടാവില്ല."
 
-#: ../src/virtManager/create.py:416
+#: ../src/virtManager/create.py:423
 msgid ""
 "KVM is not available. This may mean the KVM\n"
 "package is not installed, or the KVM kernel modules \n"
@@ -861,143 +882,143 @@ msgstr ""
 "ചെയ്തിട്ടില്ല, അല്ലെങ്കില്‍ കെവിഎം കേര്‍ണല്‍ ഘടകങ്ങള്‍ ലഭ്യമാക്കിയിട്ടില്ല. \n"
 "ഇതിനാല്‍ നിങ്ങളുടെ വിര്‍ച്ച്വല്‍ മഷീനുകളുടെ പ്രവര്‍ത്തനം മെച്ചപ്പെട്ടതാവില്ല."
 
-#: ../src/virtManager/create.py:439
+#: ../src/virtManager/create.py:446
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr "paravirt ഗസ്റ്റുകള്‍ക്ക് %s ഇന്‍സ്റ്റോളുകള്‍ ലഭ്യമല്ല."
 
-#: ../src/virtManager/create.py:443
+#: ../src/virtManager/create.py:450
 msgid "URL installs not available for remote connections."
 msgstr "റിമോട്ട് കണക്ഷനുകള്‍ക്ക് URL ഇന്‍സ്റ്റോളുകള്‍ ലഭ്യമല്ല."
 
-#: ../src/virtManager/create.py:457
+#: ../src/virtManager/create.py:464
 msgid "No install options available for this connection."
 msgstr "ഈ കണക്ഷനു് ഇന്‍സ്റ്റോള്‍ ഉപാധികള്‍ ലഭ്യമല്ല."
 
-#: ../src/virtManager/create.py:497
+#: ../src/virtManager/create.py:504
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "ഹോസ്റ്റില്‍ %(maxmem)s വരെ ലഭ്യമാണു്"
 
-#: ../src/virtManager/create.py:511
+#: ../src/virtManager/create.py:518
 #, python-format
 msgid "Hypervisor only supports %d virtual CPUs."
 msgstr "ഹൈപ്പര്‍വൈസര്‍ %d വിര്‍ച്ച്വല്‍ സിപിയു മാത്രം പിന്തുണയ്ക്കുന്നു."
 
-#: ../src/virtManager/create.py:521
+#: ../src/virtManager/create.py:528
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "%(numcpus)d വരെ ലഭ്യമാണു്"
 
-#: ../src/virtManager/create.py:603
+#: ../src/virtManager/create.py:610
 msgid "Only URL or import installs are supported for paravirt."
 msgstr "paravirt-ല്‍ URL, ഇന്‍സ്റ്റോളുകള്‍ ഇംപോര്‍ട്ട് ചെയ്യുന്നതു് എന്നിവ മാത്രം പിന്തുണയ്ക്കുന്നു."
 
-#: ../src/virtManager/create.py:680 ../src/virtManager/create.py:689
-#: ../src/virtManager/create.py:764 ../src/virtManager/create.py:766
+#: ../src/virtManager/create.py:687 ../src/virtManager/create.py:696
+#: ../src/virtManager/create.py:771 ../src/virtManager/create.py:773
 msgid "Generic"
 msgstr "സാധാരണ"
 
-#: ../src/virtManager/create.py:746
+#: ../src/virtManager/create.py:753
 msgid "Local CDROM/ISO"
 msgstr "ലോക്കല്‍ CDROM/ISO"
 
-#: ../src/virtManager/create.py:748
+#: ../src/virtManager/create.py:755
 msgid "URL Install Tree"
 msgstr "URL ഇന്‍സ്റ്റോള്‍ ട്രീ"
 
-#: ../src/virtManager/create.py:750
+#: ../src/virtManager/create.py:757
 msgid "PXE Install"
 msgstr "PXE ഇന്‍സ്റ്റോള്‍"
 
-#: ../src/virtManager/create.py:752
+#: ../src/virtManager/create.py:759
 msgid "Import existing OS image"
 msgstr "നിലവിലുള്ള ഒഎസ് ഇമേജ് ഇംപോര്‍ട്ട് ചെയ്യുക"
 
-#: ../src/virtManager/create.py:755 ../src/virtManager/details.py:1918
-#: ../src/virtManager/details.py:1941
+#: ../src/virtManager/create.py:762 ../src/virtManager/details.py:2055
+#: ../src/virtManager/details.py:2083
 msgid "None"
 msgstr "ഒന്നുമില്ല"
 
-#: ../src/virtManager/create.py:943
+#: ../src/virtManager/create.py:954
 #, fuzzy
 msgid "Network selection does not support PXE"
 msgstr "നെറ്റ്‌വര്‍ക്ക് തെരഞ്ഞെടുക്കലില്‍ പിശക്."
 
-#: ../src/virtManager/create.py:1135 ../src/virtManager/createinterface.py:876
+#: ../src/virtManager/create.py:1149 ../src/virtManager/createinterface.py:876
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "Step %(current_page)d of %(max_page)d"
 
-#: ../src/virtManager/create.py:1182
+#: ../src/virtManager/create.py:1196
 #, python-format
 msgid "Error setting UUID: %s"
 msgstr "UUID ക്രമീകരിക്കുന്നില്‍ പിശക്: %s"
 
-#: ../src/virtManager/create.py:1193
+#: ../src/virtManager/create.py:1214
 msgid "Error setting up graphics device:"
 msgstr "ഗ്രാഫിക്സ് ഡിവൈസ് ക്രമികരിക്കുന്നതില്‍ പിശക്:"
 
-#: ../src/virtManager/create.py:1203
+#: ../src/virtManager/create.py:1224
 msgid "Error setting up sound device:"
 msgstr "ശബ്ദ ഡിവൈസ് ക്രമികരിക്കുന്നതില്‍ പിശക്:"
 
-#: ../src/virtManager/create.py:1223 ../src/virtManager/createinterface.py:905
+#: ../src/virtManager/create.py:1244 ../src/virtManager/createinterface.py:905
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "ഇന്‍സ്റ്റോള്‍ പരാമീറ്ററുകള്‍ പരിശോധിക്കുമ്പോള്‍ ലഭ്യമാകാത്ത പിശക്: %s"
 
-#: ../src/virtManager/create.py:1235
+#: ../src/virtManager/create.py:1256
 msgid "Invalid System Name"
 msgstr "തെറ്റായ സിസ്റ്റം നാമം"
 
-#: ../src/virtManager/create.py:1255
+#: ../src/virtManager/create.py:1276
 msgid "An install media selection is required."
 msgstr "ഒരു ഇന്‍സ്റ്റോള്‍ മീഡിയ തെരഞ്ഞെടുക്കേണ്ടതുണ്ടു്."
 
-#: ../src/virtManager/create.py:1265
+#: ../src/virtManager/create.py:1286
 msgid "An install tree is required."
 msgstr "ഒരു ഇന്‍സ്റ്റോള്‍ ട്രീ ആവശ്യമുണ്ടു്."
 
-#: ../src/virtManager/create.py:1278
+#: ../src/virtManager/create.py:1299
 msgid "A storage path to import is required."
 msgstr "ഇംപോര്‍ട്ട് ചെയ്യുന്നതിനായി ഒരു സ്റ്റോറേജ് പാഥ് നല്‍കേണ്ടതുണ്ടു്."
 
-#: ../src/virtManager/create.py:1288
+#: ../src/virtManager/create.py:1309
 msgid "Error setting installer parameters."
 msgstr "ഇന്‍സ്റ്റോളര്‍ പരാമീറ്ററുകള്‍ ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../src/virtManager/create.py:1306
+#: ../src/virtManager/create.py:1327
 msgid "Error setting install media location."
 msgstr "ഇന്‍സ്റ്റോള്‍ മീഡിയ സ്ഥാനം ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../src/virtManager/create.py:1316
+#: ../src/virtManager/create.py:1337
 msgid "Error setting OS information."
 msgstr "ഒഎസ് വിവരം ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../src/virtManager/create.py:1353
+#: ../src/virtManager/create.py:1374
 msgid "Error setting CPUs."
 msgstr "സിപിയു ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../src/virtManager/create.py:1360
+#: ../src/virtManager/create.py:1381
 msgid "Error setting guest memory."
 msgstr "ഗസ്റ്റ് മെമ്മറി ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../src/virtManager/create.py:1469
+#: ../src/virtManager/create.py:1490
 #, python-format
 msgid "Network device required for %s install."
 msgstr "%s ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനായി നെറ്റ്‌വര്‍ക്ക് ഡിവൈസ് ആവശ്യമുണ്ടു്."
 
-#: ../src/virtManager/create.py:1554
+#: ../src/virtManager/create.py:1575
 #, fuzzy
 msgid "Error starting installation: "
 msgstr "ഇന്‍സ്റ്റോള്‍ മീഡിയ സ്ഥാനം ക്രമീകരിക്കുന്നതില്‍ പിശക്."
 
-#: ../src/virtManager/create.py:1582
+#: ../src/virtManager/create.py:1603
 msgid "Creating Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ ഉണ്ടാക്കുന്നു"
 
-#: ../src/virtManager/create.py:1583
+#: ../src/virtManager/create.py:1604
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1005,17 +1026,17 @@ msgstr ""
 "വിര്‍ച്ച്വല്‍ മഷീന്‍ ഇപ്പോള്‍ ഉണ്ടാക്കുന്നു. ഡിസ്ക് സ്റ്റോറേജും ഇന്‍സ്റ്റലേഷന്‍ ഇമേജും ലഭ്യമാക്കുന്നതു് "
 "പൂര്‍ണ്ണമാക്കുന്നതിനു് അല്‍പം സമയമെടുക്കുന്നു."
 
-#: ../src/virtManager/create.py:1594
+#: ../src/virtManager/create.py:1615
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "ഇന്‍സ്റ്റ്ലേഷന്‍ പൂറ്‍ത്തിയാക്കുവാന്‍ സാധ്യമായില്ല: '%s'"
 
-#: ../src/virtManager/create.py:1672
+#: ../src/virtManager/create.py:1693
 #, python-format
 msgid "Error continue install: %s"
 msgstr "ഇന്‍സ്റ്റോള്‍ തുടരുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/create.py:1768
+#: ../src/virtManager/create.py:1789
 msgid "Detecting"
 msgstr "കണ്ടുപിടിക്കുന്നു"
 
@@ -1164,13 +1185,13 @@ msgstr "മറ്റ് പലത്"
 msgid "Start address:"
 msgstr "ആരംഭിക്കുന്ന വിലാസം:"
 
-#: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:101
+#: ../src/virtManager/createnet.py:299 ../src/vmm-details.glade.h:102
 msgid "Status:"
 msgstr "അവസ്ഥ:"
 
-#: ../src/virtManager/createnet.py:301 ../src/virtManager/details.py:1960
-#: ../src/virtManager/details.py:1961 ../src/virtManager/details.py:1962
-#: ../src/virtManager/details.py:1963 ../src/virtManager/host.py:530
+#: ../src/virtManager/createnet.py:301 ../src/virtManager/details.py:2108
+#: ../src/virtManager/details.py:2109 ../src/virtManager/details.py:2110
+#: ../src/virtManager/details.py:2111 ../src/virtManager/host.py:530
 #: ../src/virtManager/host.py:531
 msgid "Disabled"
 msgstr "പ്രവര്‍ത്തന രഹിതം"
@@ -1295,20 +1316,20 @@ msgstr "സോഴ്സ് ഡിവൈസ് ഫോര്‍മാറ്റ് 
 msgid "Create a logical volume group from the source device."
 msgstr "സോഴ്സ് ഡിവൈസില്‍ നിന്നും ഒരു ലോജിക്കല്‍ വോള്യം ഗ്രൂപ്പ് ഉണ്ടാക്കുക."
 
-#: ../src/virtManager/createvol.py:206
+#: ../src/virtManager/createvol.py:210
 msgid "Creating storage volume..."
 msgstr "പുതിയ സ്റ്റോറേജ് വോള്യം ഉണ്ടാക്കുന്നു..."
 
-#: ../src/virtManager/createvol.py:207
+#: ../src/virtManager/createvol.py:211
 msgid "Creating the storage volume may take a while..."
 msgstr "സ്റ്റോറേജ് വോള്യം ഉണ്ടാക്കുന്നതിനു് കുറച്ചു് സമയം എടുക്കുന്നു..."
 
-#: ../src/virtManager/createvol.py:215
+#: ../src/virtManager/createvol.py:219
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "വോള്യം ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/createvol.py:248
+#: ../src/virtManager/createvol.py:252
 msgid "Volume Parameter Error"
 msgstr "വോള്യം പരാമീറ്റര്‍ പിശക്"
 
@@ -1321,57 +1342,57 @@ msgstr "വെട്ടി മാറ്റുക"
 msgid "Deleting virtual machine '%s'"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ '%s' ഇല്ലാതാക്കുന്നു"
 
-#: ../src/virtManager/delete.py:161
+#: ../src/virtManager/delete.py:162
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "'%s' പാഥ് വെട്ടി നീക്കുന്നു"
 
-#: ../src/virtManager/delete.py:172
+#: ../src/virtManager/delete.py:173
 #, python-format
 msgid "Error deleting virtual machine '%s': %s"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ '%s' ഇല്ലാതാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/delete.py:188
+#: ../src/virtManager/delete.py:189
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "കൂടാതെ, ചില സ്റ്റോറേജ് ഡിവൈസുകള്‍ നീക്കം ചെയ്യുന്നതില്‍ പിശകുണ്ട്: \n"
 
-#: ../src/virtManager/delete.py:192
+#: ../src/virtManager/delete.py:193
 msgid "Errors encountered while removing certain storage devices."
 msgstr "ചില സംഭരണ ഡിവൈസുകള്‍ നീക്കം ചെയ്യുമ്പോള്‍ പിശകുകള്‍ ഉണ്ടായിരിക്കുന്നു."
 
-#: ../src/virtManager/delete.py:273
+#: ../src/virtManager/delete.py:274
 msgid "Storage Path"
 msgstr "സ്റ്റോറേജ് പാഥ്"
 
-#: ../src/virtManager/delete.py:274
+#: ../src/virtManager/delete.py:275
 msgid "Target"
 msgstr "ടാര്‍ഗറ്റ്"
 
-#: ../src/virtManager/delete.py:322
+#: ../src/virtManager/delete.py:323
 msgid "Cannot delete iscsi share."
 msgstr "iscsi ഷെയര്‍ വെട്ടി നീക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/virtManager/delete.py:325
+#: ../src/virtManager/delete.py:326
 msgid "Cannot delete unmanaged remote storage."
 msgstr "കൈകാര്യം ചെയ്യാത്ത റിമോട്ട് സ്റ്റോറേജ് വെട്ടി നീക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/virtManager/delete.py:331
+#: ../src/virtManager/delete.py:332
 msgid "Cannot delete unmanaged block device."
 msgstr "കൈകാര്യം ചെയ്യാത്ത ബ്ലോക്ക് ഡിവൈസ് വെട്ടി നീക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/virtManager/delete.py:351
+#: ../src/virtManager/delete.py:352
 msgid "Storage is read-only."
 msgstr "സ്റ്റോറേജ് റീഡ്-ഒണ്‍ലിയാണു്."
 
-#: ../src/virtManager/delete.py:353
+#: ../src/virtManager/delete.py:354
 msgid "No write access to path."
 msgstr "പാഥിലേക്ക് റൈറ്റ് അനുവതി ലഭ്യമല്ല."
 
-#: ../src/virtManager/delete.py:356
+#: ../src/virtManager/delete.py:357
 msgid "Storage is marked as shareable."
 msgstr "സ്റ്റോറേജ് പങ്കിടുന്നവയായി അടയാളപ്പെടുത്തിയിരിക്കുന്നു."
 
-#: ../src/virtManager/delete.py:366
+#: ../src/virtManager/delete.py:367
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
@@ -1380,15 +1401,15 @@ msgstr ""
 "താഴെ പറഞ്ഞിരിക്കുന്ന വിര്‍ച്ച്വല്‍ മഷീനുകള്‍ സ്റ്റോറേജ് ഉപയോഗിക്കുന്നു:\n"
 "- %s "
 
-#: ../src/virtManager/details.py:503
+#: ../src/virtManager/details.py:513
 msgid "Add Hardware"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ ചേര്‍ക്കുക"
 
-#: ../src/virtManager/details.py:539
+#: ../src/virtManager/details.py:549
 msgid "Close tab"
 msgstr "ടാബ് അടയ്ക്കുക"
 
-#: ../src/virtManager/details.py:614
+#: ../src/virtManager/details.py:624
 #, fuzzy
 msgid ""
 "Static SELinux security type tells libvirt to always start the guest process "
@@ -1399,7 +1420,7 @@ msgstr ""
 "സുരക്ഷ എപ്പോഴും libvrt-നെ അനുവദിക്കുന്നു. ഡിസ്കില്‍ ഇമേജുകള്‍ ശരിയായി ലേബല്‍ ചെയ്തിരിക്കുന്ന എന്നു് "
 "അഡ്മിനിസ്ട്രേറ്റര്‍ ഉറപ്പാക്കേണ്ടതാണു്."
 
-#: ../src/virtManager/details.py:616
+#: ../src/virtManager/details.py:626
 msgid ""
 "The dynamic SELinux security type tells libvirt to automatically pick a "
 "unique label for the guest process and guest image, ensuring total isolation "
@@ -1408,77 +1429,82 @@ msgstr ""
 "ഗസ്റ്റ് പ്രക്രിയയ്ക്കും ഗസ്റ്റ് ഇമേജിനും ഒരൊറ്റ ലേബല്‍ സ്വയമായി തെരഞ്ഞെടുക്കുന്നതിനായി ഡൈനമിക് "
 "തരത്തിലുള്ള SELinux സുരക്ഷ libvrt-നെ അനുവദിക്കുന്നു. (സ്വതവേയുള്ളതു്)"
 
-#: ../src/virtManager/details.py:625
+#: ../src/virtManager/details.py:635
 msgid "Libvirt did not detect NUMA capabilities."
 msgstr ""
 
-#: ../src/virtManager/details.py:633
+#: ../src/virtManager/details.py:643
 msgid "VCPU"
 msgstr "VCPU"
 
-#: ../src/virtManager/details.py:634
+#: ../src/virtManager/details.py:644
 msgid "On CPU"
 msgstr "CPU-വില്‍"
 
-#: ../src/virtManager/details.py:635
+#: ../src/virtManager/details.py:645
 msgid "Pinning"
 msgstr "പിന്നിങ്"
 
-#: ../src/virtManager/details.py:784
+#: ../src/virtManager/details.py:874
 #, fuzzy
 msgid "No text console available"
 msgstr "കണക്ഷനുകള്‍ ലഭ്യമല്ല."
 
-#: ../src/virtManager/details.py:806
+#: ../src/virtManager/details.py:896
 msgid "Serial console not yet supported over remote connection."
 msgstr "റിമോട്ട് കണക്ഷനു് പകരമായി സീരിയല്‍ കണ്‍സോളിനുള്ള പിന്തുണ ലഭ്യമല്ല"
 
-#: ../src/virtManager/details.py:809
+#: ../src/virtManager/details.py:899
 msgid "Serial console not available for inactive guest."
 msgstr "സജീവമല്ലാത്ത ഗസ്റ്റിനു് സീരിയല്‍ കണ്‍സോള്‍ ലഭ്യമല്ല."
 
-#: ../src/virtManager/details.py:811
+#: ../src/virtManager/details.py:901
 #, python-format
 msgid "Console for device type '%s' not yet supported."
 msgstr "'%s' തരത്തിലുള്ള ഡിവൈസിനുള്ള കണ്‍സോളിനുള്ള പിന്തുണ ലഭ്യമല്ല."
 
-#: ../src/virtManager/details.py:814
+#: ../src/virtManager/details.py:904
 #, python-format
 msgid "Can not access console path '%s'."
 msgstr "കണ്‍സോള്‍ പാഥ് '%s'-ലേക്കു് പ്രവേശിക്കുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/virtManager/details.py:832
+#: ../src/virtManager/details.py:922
 #, fuzzy
 msgid "No graphical console available"
 msgstr "ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ കാണിക്കുക"
 
-#: ../src/virtManager/details.py:837
+#: ../src/virtManager/details.py:927
 #, python-format
 msgid "Graphical Console %s"
 msgstr "ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ %s"
 
-#: ../src/virtManager/details.py:937
+#: ../src/virtManager/details.py:1027
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ താള്‍ പുതുക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/details.py:992 ../src/virtManager/manager.py:934
+#: ../src/virtManager/details.py:1082 ../src/virtManager/manager.py:944
 #, fuzzy
 msgid "_Restore"
 msgstr "_വീണ്ടും ആരംഭിക്കുക"
 
 #. Build VM context menu
-#: ../src/virtManager/details.py:994 ../src/virtManager/manager.py:319
-#: ../src/virtManager/manager.py:936 ../src/virtManager/systray.py:184
-#: ../src/vmm-details.glade.h:137 ../src/vmm-manager.glade.h:19
+#: ../src/virtManager/details.py:1084 ../src/virtManager/manager.py:319
+#: ../src/virtManager/manager.py:946 ../src/virtManager/systray.py:184
+#: ../src/vmm-details.glade.h:141 ../src/vmm-manager.glade.h:19
 msgid "_Run"
 msgstr "പ്രവര്‍ത്തിപ്പിക്കുക (_R)"
 
-#: ../src/virtManager/details.py:1146
+#: ../src/virtManager/details.py:1182
+#, fuzzy, python-format
+msgid "Error launching hardware dialog: %s"
+msgstr "യഥേഷ്ടമുള്ള ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക് %s"
+
+#: ../src/virtManager/details.py:1243
 msgid "Save Virtual Machine Screenshot"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീനിന്‍റെ സ്ക്രീന്‍ഷോട്ട് സൂക്ഷിക്കുക"
 
-#: ../src/virtManager/details.py:1171
+#: ../src/virtManager/details.py:1268
 #, python-format
 msgid ""
 "The screenshot has been saved to:\n"
@@ -1487,219 +1513,223 @@ msgstr ""
 "ഇതിലേക്ക് സ്ക്രീന്‍ഷോട്ട് സൂക്ഷിച്ചിരിക്കുന്നു:\n"
 "%s"
 
-#: ../src/virtManager/details.py:1173
+#: ../src/virtManager/details.py:1270
 msgid "Screenshot saved"
 msgstr "സ്ക്രീന്‍ഷോട്ട് സൂക്ഷിച്ചിരിക്കുന്നു"
 
-#: ../src/virtManager/details.py:1346
+#: ../src/virtManager/details.py:1469
 #, fuzzy, python-format
 msgid "Error generating CPU configuration: %s"
 msgstr "ഐപി ക്രമീകരണം ഉറപ്പാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/details.py:1381
+#: ../src/virtManager/details.py:1504
 #, fuzzy, python-format
 msgid "Error copying host CPU: %s"
 msgstr "വോള്യം ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/details.py:1611
+#: ../src/virtManager/details.py:1726
 #, python-format
 msgid "Error building pin list: %s"
 msgstr "പിന്‍ പട്ടിക തയ്യാറാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/details.py:1617
+#: ../src/virtManager/details.py:1732
 #, python-format
 msgid "Error pinning vcpus: %s"
 msgstr "vcpu പിന്‍ ചെയ്യുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/details.py:1661
+#: ../src/virtManager/details.py:1776
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "ഓട്ടോസ്റ്റാര്‍ട്ട് മൂല്ല്യം മാറ്റുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/details.py:1755
+#: ../src/virtManager/details.py:1892
 msgid "Are you sure you want to remove this device?"
 msgstr "നിങ്ങള്‍ക്ക് ഈ ഡിവൈസ് നീക്കം ചെയ്യണമെന്നുറപ്പാണോ?"
 
-#: ../src/virtManager/details.py:1756 ../src/virtManager/engine.py:798
-#: ../src/virtManager/engine.py:898 ../src/virtManager/engine.py:922
-#: ../src/virtManager/engine.py:981 ../src/virtManager/engine.py:1005
+#: ../src/virtManager/details.py:1893 ../src/virtManager/engine.py:801
+#: ../src/virtManager/engine.py:901 ../src/virtManager/engine.py:925
+#: ../src/virtManager/engine.py:984 ../src/virtManager/engine.py:1008
 msgid "Don't ask me again."
 msgstr "ഇനി ചോദിക്കരുതു്."
 
-#: ../src/virtManager/details.py:1768
+#: ../src/virtManager/details.py:1905
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "ഡിവൈസ് നീക്കം ചെയ്യുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/details.py:1785
+#: ../src/virtManager/details.py:1922
 #, fuzzy
 msgid "Device could not be removed from the running machine"
 msgstr "പ്രവര്‍ത്തനത്തിലുള്ള മഷീനില്‍ നിന്നും ഡിവൈസ് നീക്കം ചെയ്യുവാന്‍ സാധ്യമല്ല."
 
-#: ../src/virtManager/details.py:1787
+#: ../src/virtManager/details.py:1924
 #, fuzzy
 msgid "This change will take effect after the next VM reboot."
 msgstr "അടുത്ത VM റീബൂട്ടില്‍ ഈ മാറ്റങ്ങള്‍ ലഭ്യമാകുന്നു"
 
-#: ../src/virtManager/details.py:1840
+#: ../src/virtManager/details.py:1977
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "VM ക്രമീകരണം മാറ്റുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/details.py:1850
+#: ../src/virtManager/details.py:1987
 msgid "Some changes may require a guest reboot to take effect."
 msgstr "ചില മാറ്റങ്ങള്‍ പ്രാവര്‍ത്തികമാകുന്നതിനായി ഗസ്റ്റ് റീബൂട്ട് ചെയ്യേണ്ടതുണ്ടു്."
 
-#: ../src/virtManager/details.py:1853
+#: ../src/virtManager/details.py:1990
 msgid "These changes will take effect after the next guest reboot."
 msgstr "അടുത്ത ഗസ്റ്റ് റീബൂട്ടില്‍ ഈ മാറ്റങ്ങള്‍ ലഭ്യമാകുന്നു."
 
-#: ../src/virtManager/details.py:1931 ../src/vmm-add-hardware.glade.h:30
+#: ../src/virtManager/details.py:2073 ../src/vmm-add-hardware.glade.h:30
 msgid "Same as host"
 msgstr "ഹോസ്റ്റ് പോലെ തന്നെ"
 
-#: ../src/virtManager/details.py:2027
+#: ../src/virtManager/details.py:2175
 msgid "VCPU info only available for running domain."
 msgstr "പ്രവര്‍ത്തനത്തിലുള്ള ഡൊമെയിന്‍ മാത്രം VCPU വിവരം ലഭ്യമാകൂ."
 
-#: ../src/virtManager/details.py:2029
+#: ../src/virtManager/details.py:2177
 msgid "Virtual machine does not support runtime VPCU info."
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ റണ്‍ടൈം VPCU വിവരം പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../src/virtManager/details.py:2034
+#: ../src/virtManager/details.py:2182
 #, python-format
 msgid "Error getting VCPU info: %s"
 msgstr "VCPU വിവരം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/details.py:2194
+#: ../src/virtManager/details.py:2392
 msgid "Xen Mouse"
 msgstr "Xen മൌസ്"
 
-#: ../src/virtManager/details.py:2196
+#: ../src/virtManager/details.py:2394
 msgid "PS/2 Mouse"
 msgstr "PS/2 മൌസ്"
 
-#: ../src/virtManager/details.py:2201
+#: ../src/virtManager/details.py:2399
 msgid "Absolute Movement"
 msgstr "ആബ്സല്യൂട്ട് മൂവ്മെന്റ്"
 
-#: ../src/virtManager/details.py:2203
+#: ../src/virtManager/details.py:2401
 msgid "Relative Movement"
 msgstr "റിലേറ്റീവ് മൂവ്മെന്റ്"
 
-#: ../src/virtManager/details.py:2238
+#: ../src/virtManager/details.py:2436
 msgid "Automatically allocated"
 msgstr "സ്വയമായി ലഭ്യമാക്കുന്നു"
 
-#: ../src/virtManager/details.py:2246
+#: ../src/virtManager/details.py:2444
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr ""
 
-#: ../src/virtManager/details.py:2269
+#: ../src/virtManager/details.py:2467
 #, fuzzy
 msgid "Local SDL Window"
 msgstr "ലോക്കല്‍ എസ്ഡിഎല്‍ ജാലകം"
 
-#: ../src/virtManager/details.py:2300
+#: ../src/virtManager/details.py:2502
 #, fuzzy
 msgid "Serial Device"
 msgstr "സീരിയല്‍ ഡിവൈസുകള്‍ ലഭ്യമല്ല"
 
-#: ../src/virtManager/details.py:2302
+#: ../src/virtManager/details.py:2504
 #, fuzzy
 msgid "Parallel Device"
 msgstr "ടാറ്‍ഗറ്റ് ഡിവൈസ്:"
 
-#: ../src/virtManager/details.py:2304
+#: ../src/virtManager/details.py:2506
 #, fuzzy
 msgid "Console Device"
 msgstr "കണ്‍സോള്‍ "
 
-#: ../src/virtManager/details.py:2306
+#: ../src/virtManager/details.py:2508
 msgid "Channel Device"
 msgstr ""
 
-#: ../src/virtManager/details.py:2308
+#: ../src/virtManager/details.py:2510
 #, fuzzy, python-format
 msgid "%s Device"
 msgstr "ഡിവൈസ്:"
 
-#: ../src/virtManager/details.py:2313
+#: ../src/virtManager/details.py:2515
 msgid "Primary Console"
 msgstr "പ്രൈമറി കണ്‍സോള്‍"
 
-#: ../src/virtManager/details.py:2527
+#: ../src/virtManager/details.py:2729
 msgid "Tablet"
 msgstr "ടാബ്ലറ്റ്"
 
-#: ../src/virtManager/details.py:2530
+#: ../src/virtManager/details.py:2732
 msgid "Mouse"
 msgstr "മൌസ്"
 
-#: ../src/virtManager/details.py:2539
+#: ../src/virtManager/details.py:2741
 #, python-format
 msgid "Display %s"
 msgstr "%s കാണിക്കുക"
 
-#: ../src/virtManager/details.py:2545
+#: ../src/virtManager/details.py:2747
 #, python-format
 msgid "Sound: %s"
 msgstr "ശബ്ദം: %s"
 
-#: ../src/virtManager/details.py:2573
+#: ../src/virtManager/details.py:2775
 msgid "Video"
 msgstr "വീഡിയോ"
 
-#: ../src/virtManager/details.py:2576
+#: ../src/virtManager/details.py:2778
 msgid "Watchdog"
 msgstr "വാച്ച്ഡോഗ്"
 
-#: ../src/virtManager/details.py:2582
+#: ../src/virtManager/details.py:2784
 #, python-format
 msgid "Controller %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:248
+#: ../src/virtManager/domain.py:252
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 
-#: ../src/virtManager/domain.py:873
+#: ../src/virtManager/domain.py:916
 msgid "Running"
 msgstr "പ്രവര്‍ത്തനത്തില്‍"
 
-#: ../src/virtManager/domain.py:875
+#: ../src/virtManager/domain.py:918
 msgid "Paused"
 msgstr "താല്‍കാലികമായി നിര്‍ത്തിയിരിക്കുന്നു"
 
-#: ../src/virtManager/domain.py:877
+#: ../src/virtManager/domain.py:920
 #, fuzzy
 msgid "Shutting Down"
 msgstr "അടച്ചു പൂട്ടുന്നു"
 
-#: ../src/virtManager/domain.py:879
+#: ../src/virtManager/domain.py:922
 msgid "Shutoff"
 msgstr "അടച്ചു പൂട്ടുക"
 
-#: ../src/virtManager/domain.py:881
+#: ../src/virtManager/domain.py:924
 msgid "Crashed"
 msgstr "തകര്‍ന്നിരിക്കുന്നു"
 
 #: ../src/virtManager/domain.py:1046
+msgid "Cannot rename an active guest"
+msgstr ""
+
+#: ../src/virtManager/domain.py:1112
 msgid "Cannot start guest while cloning operation in progress"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1060
+#: ../src/virtManager/domain.py:1127
 msgid "Cannot resume guest while cloning operation in progress"
 msgstr ""
 
-#: ../src/virtManager/domain.py:1075
+#: ../src/virtManager/domain.py:1142
 #, fuzzy
 msgid "Saving domain to disk"
 msgstr "ഡൊമെയിന്‍ സൂക്ഷിക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/domain.py:1139
+#: ../src/virtManager/domain.py:1206
 #, fuzzy
 msgid "Migrating domain"
 msgstr "ഡൊമെയിന്‍ ആരംഭിക്കുന്നതില്‍ പിശക്: %s"
@@ -1733,7 +1763,7 @@ msgid "Error talking to PackageKit: %s"
 msgstr "പാക്കേജ്കിറ്റുമായി ബന്ധപ്പെടുന്നതില്‍ പിശക്: %s"
 
 #. Manager fail message
-#: ../src/virtManager/engine.py:284
+#: ../src/virtManager/engine.py:287
 msgid ""
 "Could not detect a default hypervisor. Make\n"
 "sure the appropriate virtualization packages\n"
@@ -1751,7 +1781,7 @@ msgstr ""
 "ഒരു ഹൈപ്പര്‍വൈസര്‍ കണക്ഷന്‍ നിങ്ങള്‍ക്ക് ചേര്‍ക്കാം: \n"
 "ഫയല്‍->കണക്ഷന്‍ ചേര്‍ക്കുക"
 
-#: ../src/virtManager/engine.py:318
+#: ../src/virtManager/engine.py:321
 msgid ""
 "Libvirt was just installed, so the 'libvirtd' service will\n"
 "will need to be started. This can be done with one \n"
@@ -1775,123 +1805,123 @@ msgstr ""
 "അടുത്ത തവണ പ്രയോഗം ആരംഭിക്കുമ്പോള്‍, virt-manager libvirt-ലേക്ക്\n"
 "കണക്ട് ചെയ്യുന്നു."
 
-#: ../src/virtManager/engine.py:326
+#: ../src/virtManager/engine.py:329
 msgid "Libvirt service must be started"
 msgstr "Libvrt സര്‍വീസ് ആരംഭിക്കണം"
 
-#: ../src/virtManager/engine.py:527
+#: ../src/virtManager/engine.py:530
 #, python-format
 msgid "Unknown connection URI %s"
 msgstr "അപരിചിതമായ കണക്ഷന്‍ URI %s"
 
-#: ../src/virtManager/engine.py:540
+#: ../src/virtManager/engine.py:543
 #, fuzzy, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "യഥേഷ്ടമുള്ള ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക് %s"
 
-#: ../src/virtManager/engine.py:552
+#: ../src/virtManager/engine.py:555
 #, fuzzy, python-format
 msgid "Unable to display documentation: %s"
 msgstr "ഡിവൈസ് ചേര്‍ക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: ../src/virtManager/engine.py:568
+#: ../src/virtManager/engine.py:571
 #, fuzzy, python-format
 msgid "Error launching preferences: %s"
 msgstr "ഇന്റര്‍ഫെയിസ് വിസാര്‍ഡ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/engine.py:588
+#: ../src/virtManager/engine.py:591
 #, fuzzy, python-format
 msgid "Error launching host dialog: %s"
 msgstr "യഥേഷ്ടമുള്ള ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക് %s"
 
-#: ../src/virtManager/engine.py:608
+#: ../src/virtManager/engine.py:611
 #, fuzzy, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "യഥേഷ്ടമുള്ള ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക് %s"
 
-#: ../src/virtManager/engine.py:641
+#: ../src/virtManager/engine.py:644
 #, fuzzy, python-format
 msgid "Error launching details: %s"
 msgstr "നെറ്റ്‌വര്‍ക്ക് വിസാര്‍ഡ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/engine.py:692 ../src/virtManager/engine.py:709
+#: ../src/virtManager/engine.py:695 ../src/virtManager/engine.py:712
 #, fuzzy, python-format
 msgid "Error launching manager: %s"
 msgstr "വോള്യം വിസാര്‍ഡ് ലഭ്യമാക്കുന്നതില്‍ പിശക് %s"
 
-#: ../src/virtManager/engine.py:723
+#: ../src/virtManager/engine.py:726
 #, fuzzy, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "യഥേഷ്ടമുള്ള ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക് %s"
 
-#: ../src/virtManager/engine.py:741
+#: ../src/virtManager/engine.py:744
 #, python-format
 msgid "Error setting clone parameters: %s"
 msgstr "ക്ലോണ്‍ പരാമീറ്ററുകള്‍ ക്രമീകരിക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/engine.py:789
+#: ../src/virtManager/engine.py:792
 #, fuzzy
 msgid ""
 "Saving virtual machines over remote connections is not supported with this "
 "libvirt version or hypervisor."
 msgstr "റിമോട്ട് കണക്ഷനുകള്‍ക്കു് പകരം വിര്‍ച്ച്വല്‍ മഷീനുകള്‍ സൂക്ഷിക്കുന്നതു് പിന്തുണയ്ക്കുന്നില്ല."
 
-#: ../src/virtManager/engine.py:796
+#: ../src/virtManager/engine.py:799
 #, fuzzy, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "നിങ്ങള്‍ '%s' നല്‍ക്കാലത്തേക്കു് നിര്‍ത്തണമോ?"
 
-#: ../src/virtManager/engine.py:809
+#: ../src/virtManager/engine.py:812
 msgid "Save Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ സൂക്ഷിക്കുക"
 
-#: ../src/virtManager/engine.py:824
+#: ../src/virtManager/engine.py:827
 msgid "Saving Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ സൂക്ഷിക്കുന്നു"
 
-#: ../src/virtManager/engine.py:825
+#: ../src/virtManager/engine.py:828
 #, fuzzy
 msgid "Saving virtual machine memory to disk "
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ സൂക്ഷിക്കുന്നു"
 
-#: ../src/virtManager/engine.py:831
+#: ../src/virtManager/engine.py:834
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "ഡൊമെയിന്‍ സൂക്ഷിക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/engine.py:843
+#: ../src/virtManager/engine.py:846
 #, fuzzy, python-format
 msgid "Error cancelling save job: %s"
 msgstr "വോള്യം ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/engine.py:860
+#: ../src/virtManager/engine.py:863
 msgid "Restoring virtual machines over remote connections is not yet supported"
 msgstr "റിമോട്ട് കണക്ഷനുകള്‍ക്കു് പകരം വിര്‍ച്ച്വല്‍ മഷീനുകള്‍ വീണ്ടെടുക്കുന്നതിനുള്ള പിന്തുണ ലഭ്യമല്ല"
 
-#: ../src/virtManager/engine.py:865
+#: ../src/virtManager/engine.py:868
 msgid "Restore Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ വീണ്ടെടുക്കുക"
 
-#: ../src/virtManager/engine.py:874 ../src/virtManager/engine.py:962
+#: ../src/virtManager/engine.py:877 ../src/virtManager/engine.py:965
 msgid "Restoring Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ വീണ്ടെടുക്കുന്നു"
 
-#: ../src/virtManager/engine.py:875 ../src/virtManager/engine.py:963
+#: ../src/virtManager/engine.py:878 ../src/virtManager/engine.py:966
 #, fuzzy
 msgid "Restoring virtual machine memory from disk"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ വീണ്ടെടുക്കുന്നു"
 
-#: ../src/virtManager/engine.py:879
+#: ../src/virtManager/engine.py:882
 #, fuzzy, python-format
 msgid "Error restoring domain: %s"
 msgstr "ഡൊമെയിന്‍ വീണ്ടെടുക്കുന്നതില്‍ പിശക്"
 
-#: ../src/virtManager/engine.py:894
+#: ../src/virtManager/engine.py:897
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "നിങ്ങള്‍ക്ക് '%s' നിര്‍ബന്ധമായും ഓഫ് ചെയ്യണമെന്നുറപ്പാണോ?"
 
-#: ../src/virtManager/engine.py:896
+#: ../src/virtManager/engine.py:899
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -1899,50 +1929,50 @@ msgstr ""
 "ഓപ്പറേറ്റിങ് സിസ്റ്റം അടച്ചു പൂട്ടാതെ ഇതു് ഉടന്‍ തന്നെ വിഎംമിന്റെ പവര്‍ ഓഫ് ചെയ്യുന്നു, ഇതു് ഡേറ്റാ "
 "നഷ്ടപ്പെടുത്തിയേക്കാം."
 
-#: ../src/virtManager/engine.py:910 ../src/virtManager/engine.py:993
+#: ../src/virtManager/engine.py:913 ../src/virtManager/engine.py:996
 #, python-format
 msgid "Error shutting down domain: %s"
 msgstr "ഡൊമെയിന്‍ അടച്ചു പൂട്ടുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/engine.py:920
+#: ../src/virtManager/engine.py:923
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "നിങ്ങള്‍ '%s' നല്‍ക്കാലത്തേക്കു് നിര്‍ത്തണമോ?"
 
-#: ../src/virtManager/engine.py:934
+#: ../src/virtManager/engine.py:937
 #, python-format
 msgid "Error pausing domain: %s"
 msgstr "ഡൊമെയിന്‍ പോ്‍പോസ് ചെയ്യുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/engine.py:945
+#: ../src/virtManager/engine.py:948
 #, python-format
 msgid "Error unpausing domain: %s"
 msgstr "ഡൊമെയിന്‍ അണ്‍പോസ് ചെയ്യുന്നതില്‍ പിശക്: %s"
 
 #. VM will be restored, which can take some time, so show a
 #. progress dialog.
-#: ../src/virtManager/engine.py:961
+#: ../src/virtManager/engine.py:964
 msgid "Error restoring domain"
 msgstr "ഡൊമെയിന്‍ വീണ്ടെടുക്കുന്നതില്‍ പിശക്"
 
 #. Regular startup
-#: ../src/virtManager/engine.py:969
+#: ../src/virtManager/engine.py:972
 #, fuzzy
 msgid "Error starting domain"
 msgstr "ഡൊമെയിന്‍ ആരംഭിക്കുന്നതില്‍ പിശക്: %s"
 
-#: ../src/virtManager/engine.py:979
+#: ../src/virtManager/engine.py:982
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "നിങ്ങള്‍ക്ക് ഈ '%s' ഓഫ് ചെയ്യണമെന്നുറപ്പാണോ?"
 
-#: ../src/virtManager/engine.py:1003
+#: ../src/virtManager/engine.py:1006
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "നിങ്ങള്‍ക്ക് '%s' റീബൂട്ട് ചെയ്യണമെന്നുറപ്പാണോ?"
 
 #. Raise the original error message
-#: ../src/virtManager/engine.py:1021 ../src/virtManager/engine.py:1036
+#: ../src/virtManager/engine.py:1024 ../src/virtManager/engine.py:1039
 #, python-format
 msgid "Error rebooting domain: %s"
 msgstr "ഡൊമെയിന്‍ റീബൂട്ട് ചെയ്യുന്നതില്‍ പിശക്: %s"
@@ -2143,7 +2173,7 @@ msgid "Error selecting interface: %s"
 msgstr "ഇന്റര്‍ഫെയിസ് തെരഞ്ഞെടുക്കുന്നതില്‍ പിശക്: %s"
 
 #: ../src/virtManager/manager.py:320 ../src/virtManager/systray.py:171
-#: ../src/vmm-details.glade.h:134 ../src/vmm-manager.glade.h:18
+#: ../src/vmm-details.glade.h:138 ../src/vmm-manager.glade.h:18
 msgid "_Pause"
 msgstr "താല്‍ക്കാലികമായി നിര്‍ത്തുക (_P)"
 
@@ -2153,22 +2183,22 @@ msgstr "_വീണ്ടും ആരംഭിക്കുക"
 
 #: ../src/virtManager/manager.py:323 ../src/virtManager/manager.py:326
 #: ../src/virtManager/systray.py:198 ../src/virtManager/systray.py:216
-#: ../src/virtManager/uihelpers.py:708
+#: ../src/virtManager/uihelpers.py:716
 msgid "_Shut Down"
 msgstr "_അടച്ചു പൂട്ടുക"
 
 #. Shutdown menu
 #: ../src/virtManager/manager.py:325 ../src/virtManager/systray.py:191
-#: ../src/virtManager/uihelpers.py:702 ../src/vmm-details.glade.h:135
+#: ../src/virtManager/uihelpers.py:710 ../src/vmm-details.glade.h:139
 msgid "_Reboot"
 msgstr "_റീബൂട്ട് ചെയ്യുക"
 
 #: ../src/virtManager/manager.py:328 ../src/virtManager/systray.py:205
-#: ../src/virtManager/uihelpers.py:714 ../src/vmm-details.glade.h:124
+#: ../src/virtManager/uihelpers.py:722 ../src/vmm-details.glade.h:127
 msgid "_Force Off"
 msgstr "_നിര്‍ബന്ധിച്ചു് പവര്‍ ഓഫ് ചെയ്യുക"
 
-#: ../src/virtManager/manager.py:331 ../src/virtManager/uihelpers.py:724
+#: ../src/virtManager/manager.py:331 ../src/virtManager/uihelpers.py:732
 #, fuzzy
 msgid "Sa_ve"
 msgstr "സൂക്ഷിക്കുക (_S)"
@@ -2178,7 +2208,7 @@ msgstr "സൂക്ഷിക്കുക (_S)"
 msgid "_Clone..."
 msgstr "_ക്ലോണ്‍"
 
-#: ../src/virtManager/manager.py:335 ../src/vmm-details.glade.h:130
+#: ../src/virtManager/manager.py:335 ../src/vmm-details.glade.h:133
 msgid "_Migrate..."
 msgstr "_നീക്കുക..."
 
@@ -2186,7 +2216,7 @@ msgstr "_നീക്കുക..."
 msgid "_Delete"
 msgstr "_വെട്ടി മാറ്റുക"
 
-#: ../src/virtManager/manager.py:350 ../src/vmm-details.glade.h:122
+#: ../src/virtManager/manager.py:350 ../src/vmm-details.glade.h:125
 msgid "_Details"
 msgstr "_വിശദവിവരങ്ങള്‍"
 
@@ -2236,28 +2266,28 @@ msgstr ""
 "libvirt മാനേജ്മെന്റ് ഡെമണിലേക്കു് ഒരു കണക്ഷന്‍ തുറക്കുവാന്‍ സാധ്യമല്ല.\n"
 "\n"
 
-#: ../src/virtManager/manager.py:735
+#: ../src/virtManager/manager.py:737
 msgid "Double click to connect"
 msgstr "കണക്ട് ചെയ്യുന്നതിനായി ഡബിള്‍ ക്ലിക്ക് ചെയ്യുക"
 
-#: ../src/virtManager/manager.py:740
+#: ../src/virtManager/manager.py:742
 #, fuzzy
 msgid "Not Connected"
 msgstr "കണക്ട് ചെയ്യുക (_n)"
 
-#: ../src/virtManager/manager.py:742
+#: ../src/virtManager/manager.py:744
 #, fuzzy
 msgid "Connecting..."
 msgstr "കണക്ട് ചെയ്യുന്നു"
 
-#: ../src/virtManager/manager.py:1062
+#: ../src/virtManager/manager.py:1081
+msgid "Disabled in preferences dialog."
+msgstr "മുന്‍ഗണനകള്‍ക്കുള്ള ഡയലോഗില്‍ പ്രവര്‍ത്തന രഹിതമാക്കിയിരിക്കുന്നു."
+
+#: ../src/virtManager/manager.py:1087
 #, fuzzy
 msgid " (disabled)"
 msgstr "പ്രവര്‍ത്തന രഹിതം"
-
-#: ../src/virtManager/manager.py:1073
-msgid "Disabled in preferences dialog."
-msgstr "മുന്‍ഗണനകള്‍ക്കുള്ള ഡയലോഗില്‍ പ്രവര്‍ത്തന രഹിതമാക്കിയിരിക്കുന്നു."
 
 #: ../src/virtManager/mediadev.py:105
 msgid "No media detected"
@@ -2362,20 +2392,20 @@ msgstr "റൌട്ടഡ് നെറ്റ്‌വര്‍ക്ക്്"
 msgid "Isolated network"
 msgstr "ഒറ്റപ്പെട്ട നെറ്റ്‌വര്‍ക്ക്്"
 
-#: ../src/virtManager/preferences.py:166
+#: ../src/virtManager/preferences.py:183
 msgid "Installed version of GTK-VNC doesn't support configurable grab keys"
 msgstr ""
 
-#: ../src/virtManager/preferences.py:213
+#: ../src/virtManager/preferences.py:230
 #, fuzzy
 msgid "Configure grab key combination"
 msgstr "IP ക്രമീകരണം"
 
-#: ../src/virtManager/preferences.py:218
+#: ../src/virtManager/preferences.py:235
 msgid "Please press desired grab key combination"
 msgstr ""
 
-#: ../src/virtManager/preferences.py:221
+#: ../src/virtManager/preferences.py:238
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
@@ -2449,78 +2479,78 @@ msgstr "യൂസര്‍മോഡ് നെറ്റ്‌വര്‍ക്�
 msgid "Virtual network"
 msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വറ്‍ക്ക്"
 
-#: ../src/virtManager/uihelpers.py:412
+#: ../src/virtManager/uihelpers.py:419
 msgid "No virtual networks available"
 msgstr "ഒരു വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്കുകളും ലഭ്യമല്ല"
 
-#: ../src/virtManager/uihelpers.py:434
+#: ../src/virtManager/uihelpers.py:441
 msgid "(Empty bridge)"
 msgstr "(ബ്രിഡ്ജ് ശൂന്യം)"
 
-#: ../src/virtManager/uihelpers.py:437
+#: ../src/virtManager/uihelpers.py:444
 msgid "Not bridged"
 msgstr "ബ്രിഡ്ജ് ചെയ്തിട്ടില്ല"
 
-#: ../src/virtManager/uihelpers.py:439
+#: ../src/virtManager/uihelpers.py:446
 #, python-format
 msgid "Host device %s %s"
 msgstr "ഹോസ്റ്റ് ‍ഡിവൈസ് %s %s"
 
-#: ../src/virtManager/uihelpers.py:476
+#: ../src/virtManager/uihelpers.py:483
 msgid "No networking."
 msgstr "നെറ്റ്‌വര്‍ക്കിങ് ലഭ്യമല്ല."
 
 #. After all is said and done, add a manual bridge option
-#: ../src/virtManager/uihelpers.py:481
+#: ../src/virtManager/uihelpers.py:489
 msgid "Specify shared device name"
 msgstr "പങ്കിടുന്ന ഡിവൈസ് നാമം വ്യക്തമാക്കുക"
 
-#: ../src/virtManager/uihelpers.py:500
+#: ../src/virtManager/uihelpers.py:508
 msgid "Virtual Network is not active."
 msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് സജീവമല്ല."
 
-#: ../src/virtManager/uihelpers.py:501
+#: ../src/virtManager/uihelpers.py:509
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് '%s' സജീവമല്ല. നിങ്ങള്‍ക്കു് ഉടന്‍ നെറ്റ്‌വര്‍ക്ക് ആരംഭിക്കണമോ?"
 
-#: ../src/virtManager/uihelpers.py:513
+#: ../src/virtManager/uihelpers.py:521
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക് '%s' ആരംഭിക്കുവാന്‍ സാധ്യമായില്ല: %s"
 
-#: ../src/virtManager/uihelpers.py:535
+#: ../src/virtManager/uihelpers.py:543
 msgid "Error with network parameters."
 msgstr "നെറ്റ്‌വര്‍ക്ക് പരാമീറ്ററുകളില്‍ പിശക്."
 
-#: ../src/virtManager/uihelpers.py:540 ../src/virtManager/uihelpers.py:542
+#: ../src/virtManager/uihelpers.py:548 ../src/virtManager/uihelpers.py:550
 msgid "Mac address collision."
 msgstr "മാക് വിലാസത്തില്‍ തകരാര്‍."
 
-#: ../src/virtManager/uihelpers.py:543
+#: ../src/virtManager/uihelpers.py:551
 #, python-format
 msgid "%s Are you sure you want to use this address?"
 msgstr "%s ഈ വിലാസമുപയോഗിക്കണമെന്നു് നിങ്ങള്‍ക്കുറപ്പാണോ?"
 
-#: ../src/virtManager/uihelpers.py:595
+#: ../src/virtManager/uihelpers.py:603
 msgid "No device present"
 msgstr "ഡിവൈസ് ലഭ്യമല്ല"
 
-#: ../src/virtManager/uihelpers.py:752
+#: ../src/virtManager/uihelpers.py:760
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr "'%s' പാഥ് തെരയുന്നതിനുള്ള അനുവാദങ്ങള്‍ എമുലേറ്ററിനു് ലഭ്യമല്ല."
 
-#: ../src/virtManager/uihelpers.py:754
+#: ../src/virtManager/uihelpers.py:762
 msgid "Do you want to correct this now?"
 msgstr "നിങ്ങള്‍ക്കു് ഇതു് ഇപ്പോള്‍ ശരിയാക്കണമോ?"
 
-#: ../src/virtManager/uihelpers.py:755 ../src/virtManager/uihelpers.py:779
+#: ../src/virtManager/uihelpers.py:763 ../src/virtManager/uihelpers.py:787
 msgid "Don't ask about these directories again."
 msgstr "ഈ ഡയറക്ടറികളെപ്പറ്റി ഇനി ചോദിക്കരുതു്."
 
-#: ../src/virtManager/uihelpers.py:768
+#: ../src/virtManager/uihelpers.py:776
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr "ഈ ഡയറക്ടറികള്‍ക്കു് അനുവാദങ്ങള്‍ മാറ്റുന്നതില്‍ പിശകുകള്‍ നേരിട്ടിരിക്കുന്നു:"
@@ -2555,7 +2585,7 @@ msgstr "<b>ഡിവൈസ് പരാമീറ്ററുകള്‍</b>"
 #: ../src/vmm-add-hardware.glade.h:3
 #, fuzzy
 msgid ""
-"<small><b>Tip:</b> VNC or SPICE server is strongly recommended because it "
+"<small><b>Tip:</b> VNC or Spice server is strongly recommended because it "
 "allows the virtual display to be embedded inside this application. It may "
 "also be used to allow access to the virtual display from a remote system.</"
 "small>"
@@ -2709,6 +2739,7 @@ msgid "_Bind Host:"
 msgstr "_Bind Host:"
 
 #: ../src/vmm-add-hardware.glade.h:37 ../src/vmm-create.glade.h:48
+#: ../src/vmm-details.glade.h:122
 msgid "_Bridge name:"
 msgstr "_ബ്രിഡ്ജ് നാമം:"
 
@@ -2730,7 +2761,7 @@ msgstr "_GB"
 msgid "_Host device:"
 msgstr "_ഹോസ്റ്റ് ‍ഡിവൈസ്:"
 
-#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-details.glade.h:127
+#: ../src/vmm-add-hardware.glade.h:42 ../src/vmm-details.glade.h:130
 msgid "_Keymap:"
 msgstr "_കീമാപ്പ്:"
 
@@ -2773,7 +2804,7 @@ msgid "aa:bb:cc:dd:ee:ff"
 msgstr "aa:bb:cc:dd:ee:ff"
 
 #: ../src/vmm-add-hardware.glade.h:52 ../src/vmm-create-pool.glade.h:18
-#: ../src/vmm-details.glade.h:152
+#: ../src/vmm-details.glade.h:150
 msgid "label"
 msgstr "ീലേബല്‍"
 
@@ -3046,6 +3077,7 @@ msgstr "ഏതു തരം _ഇന്റര്‍ഫെയിസ്:"
 
 #: ../src/vmm-create-interface.glade.h:41 ../src/vmm-create-pool.glade.h:14
 #: ../src/vmm-create-vol.glade.h:24 ../src/vmm-create.glade.h:54
+#: ../src/vmm-details.glade.h:134
 msgid "_Name:"
 msgstr "_പേര്:"
 
@@ -3057,7 +3089,7 @@ msgstr "_ആരംഭ മോഡ്:"
 msgid "_VLAN tag:"
 msgstr "_VLAN റ്റാഗ്:"
 
-#: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:39
+#: ../src/vmm-create-interface.glade.h:44 ../src/vmm-preferences.glade.h:40
 msgid "seconds"
 msgstr "സെക്കന്‍ഡുകള്‍"
 
@@ -3277,7 +3309,7 @@ msgstr ""
 "ഒരു വിര്‍ച്ച്വല്‍ നെറ്റ്‌വറ്‍ക്ക് ഉണ്ടാക്കുന്നതിനായി നിങ്ങള്‍ക്ക് ഈ സഹായി ലഭ്യമാണ്. നിങ്ങള്‍ ഉണ്ടാക്കുവാന്‍ "
 "ആഗ്രഹിക്കുന്ന വിര്‍ച്ച്വല്‍ നെറ്റ്‌വറ്‍ക്കിന് ആവശ്യമുളള താഴെ പറയുന്ന ചില വിവരങ്ങള്‍ നല്‍കുക:"
 
-#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:110
+#: ../src/vmm-create-net.glade.h:47 ../src/vmm-details.glade.h:111
 msgid "Type:"
 msgstr "ഏത് തരം:"
 
@@ -3408,7 +3440,7 @@ msgid "Create a storage unit that can be used directly by a virtual machine."
 msgstr "ഒരു വിര്‍ച്ച്വല്‍ മഷീനു് നേരിട്ടുപയോഗിക്കുവാന്‍ സാധിക്കുന്ന ഒരു സ്റ്റോറേജ് യൂണിറ്റ് ഉണ്ടാക്കുക."
 
 #: ../src/vmm-create-vol.glade.h:19 ../src/vmm-create.glade.h:28
-#: ../src/vmm-details.glade.h:66
+#: ../src/vmm-details.glade.h:67
 msgid "MB"
 msgstr "MB"
 
@@ -3634,64 +3666,69 @@ msgid "<b>Boot device order</b>"
 msgstr "<b>ബൂട്ട് ഡിവൈസിന്റെ ക്രമം</b>"
 
 #: ../src/vmm-details.glade.h:6
-msgid "<b>CPUs</b>"
+#, fuzzy
+msgid "<b>CPU Features</b>"
 msgstr "<b>CPU</b>"
 
 #: ../src/vmm-details.glade.h:7
+msgid "<b>CPUs</b>"
+msgstr "<b>CPU</b>"
+
+#: ../src/vmm-details.glade.h:8
 #, fuzzy
 msgid "<b>Configuration</b>"
 msgstr "<b>IP ക്രമീകരണം</b>"
 
-#: ../src/vmm-details.glade.h:8
+#: ../src/vmm-details.glade.h:9
 #, fuzzy
 msgid "<b>Controller</b>"
 msgstr "<b>കണ്‍സോളുകള്‍</b>"
 
-#: ../src/vmm-details.glade.h:9
+#: ../src/vmm-details.glade.h:10
 msgid "<b>Direct kernel boot</b>"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:10
+#: ../src/vmm-details.glade.h:11
 msgid "<b>Hypervisor Details</b>"
 msgstr "<b>ഹൈപ്പര്‍വൈസര്‍ വിശദാംശങ്ങള്‍</b>"
 
-#: ../src/vmm-details.glade.h:11
+#: ../src/vmm-details.glade.h:12
 msgid "<b>Machine Settings</b>"
 msgstr "<b>മഷീന്‍ സജ്ജീകരണങ്ങള്‍</b>"
 
-#: ../src/vmm-details.glade.h:12
+#: ../src/vmm-details.glade.h:13
 msgid "<b>Memory</b>"
 msgstr "<b>മെമ്മറി</b>"
 
-#: ../src/vmm-details.glade.h:13 ../src/vmm-host.glade.h:6
+#: ../src/vmm-details.glade.h:14 ../src/vmm-host.glade.h:6
 msgid "<b>Performance</b>"
 msgstr "<b>പ്രവര്‍ത്തനം</b>"
 
-#: ../src/vmm-details.glade.h:14
+#: ../src/vmm-details.glade.h:15
 #, fuzzy
 msgid "<b>Pinning</b>"
 msgstr "<b>CPU പിന്നിങ്</b>"
 
-#: ../src/vmm-details.glade.h:15
+#: ../src/vmm-details.glade.h:16
 msgid "<b>Security</b>"
 msgstr "<b>സുരക്ഷ</b>"
 
-#: ../src/vmm-details.glade.h:16
+#: ../src/vmm-details.glade.h:17
 msgid "<b>Sound Device</b>"
 msgstr "<b>ശബ്ദ ഡിവൈസ്</b>"
 
-#: ../src/vmm-details.glade.h:17
+#: ../src/vmm-details.glade.h:18
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>കണ്‍സോള്‍ നിലവില്‍ ലഭ്യമല്ല</b>"
 
-#: ../src/vmm-details.glade.h:18
+#: ../src/vmm-details.glade.h:19
 msgid ""
 "<b>Tip:</b> 'source' refers to information seen from the host OS, while "
 "'target' refers to information seen from the guest OS"
 msgstr ""
 "<b>സൂചന:</b> 'സോഴ്സ്'- ഹോസ്റ്റ് ഒഎസിലുള്ള വിവരങ്ങള്‍, 'ടാര്‍ഗറ്റ്' - ഗസ്റ്റ് ഒഎസിലുള്ള വിവരങ്ങള്‍."
 
-#: ../src/vmm-details.glade.h:19
+#: ../src/vmm-details.glade.h:20
 msgid ""
 "<b>Tip:</b> A graphics tablet configured as the default pointer in the guest "
 "OS will ensure that the virtual cursor moves in sync with the local desktop "
@@ -3700,60 +3737,56 @@ msgstr ""
 "<b>സൂചന:</b> ഗസ്റ്റ് ഒഎസില്‍ സ്വതവേയുള്ള പോയിന്ററായി ഒരു ഗ്രാഫിക്സ് ടാബ്ലെറ്റ് ക്രമീകരിക്കുന്നതു്, "
 "ലോക്കല്‍ ഡസക്ടോപ്പ് കര്‍സറിനൊപ്പം വിര്‍ച്ച്വല്‍ കര്‍സര്‍ നീങ്ങുന്നതിനായി സഹായിക്കുന്നു."
 
-#: ../src/vmm-details.glade.h:20
+#: ../src/vmm-details.glade.h:21
 #, fuzzy
 msgid "<b>Topology</b>"
 msgstr "<b>കണ്‍സോളുകള്‍</b>"
 
-#: ../src/vmm-details.glade.h:21
+#: ../src/vmm-details.glade.h:22
 #, fuzzy
 msgid "<b>Video</b>"
 msgstr "<b>മെമ്മറി</b>"
 
-#: ../src/vmm-details.glade.h:22
+#: ../src/vmm-details.glade.h:23
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>വിര്‍ച്ച്വല്‍ ഡിസ്ക്</b>"
 
-#: ../src/vmm-details.glade.h:23
+#: ../src/vmm-details.glade.h:24
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>വിറ്‍ച്ച്വല്‍ നെറ്റ്‌വറ്‍ക്ക് ഇന്‍ററ്‍ഫെയിസ്</b>"
 
-#: ../src/vmm-details.glade.h:24
+#: ../src/vmm-details.glade.h:25
 msgid "<b>Virtual Pointer</b>"
 msgstr "<b>വിര്‍ച്ച്വല്‍ പോയിന്റര്‍</b>"
 
-#: ../src/vmm-details.glade.h:25
+#: ../src/vmm-details.glade.h:26
 msgid "<b>insert type</b>"
 msgstr "<b>insert type</b>"
 
-#: ../src/vmm-details.glade.h:26
+#: ../src/vmm-details.glade.h:27
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:27
+#: ../src/vmm-details.glade.h:28
 msgid "A_ction:"
 msgstr "പ്ര_വര്‍ത്തി:"
 
-#: ../src/vmm-details.glade.h:28
+#: ../src/vmm-details.glade.h:29
 msgid "A_dd Hardware"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ _ചേര്‍ക്കുക"
 
-#: ../src/vmm-details.glade.h:29 ../src/vmm-host.glade.h:15
+#: ../src/vmm-details.glade.h:30 ../src/vmm-host.glade.h:15
 msgid "Address:"
 msgstr "വിലാസം:"
 
-#: ../src/vmm-details.glade.h:30
+#: ../src/vmm-details.glade.h:31
 #, fuzzy
 msgid "Advanced _options"
 msgstr "അധികമായ ഉപാധികള്‍"
 
-#: ../src/vmm-details.glade.h:31 ../src/vmm-host.glade.h:16
+#: ../src/vmm-details.glade.h:32 ../src/vmm-host.glade.h:16
 msgid "Architecture:"
 msgstr "ആറ്‍ക്കിറ്റക്ചറ്‍:"
-
-#: ../src/vmm-details.glade.h:32
-msgid "Auth"
-msgstr "Auth"
 
 #: ../src/vmm-details.glade.h:33
 #, fuzzy
@@ -3875,45 +3908,54 @@ msgid "Initrd path:"
 msgstr ""
 
 #: ../src/vmm-details.glade.h:62
+msgid "Instance id:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:63
 #, fuzzy
 msgid "Kernel arguments:"
 msgstr "കേര്‍ണല്‍ ഉപാധികള്‍:"
 
-#: ../src/vmm-details.glade.h:63
+#: ../src/vmm-details.glade.h:64
 #, fuzzy
 msgid "Kernel path:"
 msgstr "കേര്‍ണല്‍ ഉപാധികള്‍:"
 
-#: ../src/vmm-details.glade.h:64
+#: ../src/vmm-details.glade.h:65
 #, fuzzy
 msgid "Logical host CPUs:"
 msgstr "ലോജിക്കല്‍ CPU-കള്‍:"
 
-#: ../src/vmm-details.glade.h:65
+#: ../src/vmm-details.glade.h:66
 msgid "MAC address:"
 msgstr "MAC വിലാസം:"
 
-#: ../src/vmm-details.glade.h:67
+#: ../src/vmm-details.glade.h:68
 msgid "M_odel:"
 msgstr "_മോഡല്‍:"
 
-#: ../src/vmm-details.glade.h:68
+#: ../src/vmm-details.glade.h:69
 msgid "Ma_ximum allocation:"
 msgstr "_ഏറ്റവും കൂടുതല്‍ അലോക്കേഷന്‍:"
 
-#: ../src/vmm-details.glade.h:69
+#: ../src/vmm-details.glade.h:70
+#, fuzzy
+msgid "Managerid:"
+msgstr "നിരീക്ഷകനെ _കാണുക"
+
+#: ../src/vmm-details.glade.h:71
 msgid "Manually set CPU topology"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:70
+#: ../src/vmm-details.glade.h:72
 msgid "Max Memory Select"
 msgstr "ഏറ്റവും കൂടുതല്‍ മെമ്മറി തെരഞ്ഞെടുക്കുക"
 
-#: ../src/vmm-details.glade.h:71
+#: ../src/vmm-details.glade.h:73
 msgid "Maximum allocation:"
 msgstr "ഏറ്റവും കൂടുതല്‍ അലോക്കേഷന്‍:"
 
-#: ../src/vmm-details.glade.h:72
+#: ../src/vmm-details.glade.h:74
 msgid ""
 "Memory\n"
 "usage:"
@@ -3921,23 +3963,19 @@ msgstr ""
 "മെമ്മറി\n"
 "ഉപയോഗം:"
 
-#: ../src/vmm-details.glade.h:74
+#: ../src/vmm-details.glade.h:76
 msgid "Memory Select"
 msgstr "മെമ്മറി തെരഞ്ഞെടുക്കല്‍"
 
-#: ../src/vmm-details.glade.h:75 ../src/vmm-host.glade.h:35
+#: ../src/vmm-details.glade.h:77 ../src/vmm-host.glade.h:35
 msgid "Mode:"
 msgstr "മോഡ്:"
 
-#: ../src/vmm-details.glade.h:76
+#: ../src/vmm-details.glade.h:78
 msgid "Model:"
 msgstr "മോഡല്‍:"
 
-#: ../src/vmm-details.glade.h:77 ../src/vmm-host.glade.h:37
-msgid "Name:"
-msgstr "പേര്:"
-
-#: ../src/vmm-details.glade.h:78
+#: ../src/vmm-details.glade.h:79
 msgid ""
 "Network\n"
 "I/O:"
@@ -3945,293 +3983,242 @@ msgstr ""
 "നെറ്റ്‌വര്‍ക്ക്\n"
 "I/O:"
 
-#: ../src/vmm-details.glade.h:80
+#: ../src/vmm-details.glade.h:81
 msgid "Pause"
 msgstr "തല്‍ക്കാലികമായി നിര്‍ത്തുക"
 
-#: ../src/vmm-details.glade.h:81 ../src/vmm-manager.glade.h:3
+#: ../src/vmm-details.glade.h:82 ../src/vmm-manager.glade.h:3
 msgid "Pause the virtual machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ തല്‍ക്കാലത്തേക്ക് നിര്‍ത്തുക"
 
-#: ../src/vmm-details.glade.h:82
+#: ../src/vmm-details.glade.h:83
 msgid "Port:"
 msgstr "പോര്‍ട്ട്: "
 
-#: ../src/vmm-details.glade.h:83 ../src/vmm-manager.glade.h:4
+#: ../src/vmm-details.glade.h:84 ../src/vmm-manager.glade.h:4
 msgid "Power on the virtual machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ ഓണ്‍ ചെയ്യുക"
 
-#: ../src/vmm-details.glade.h:84
+#: ../src/vmm-details.glade.h:85
 msgid "RAM:"
 msgstr "RAM:"
 
-#: ../src/vmm-details.glade.h:85
+#: ../src/vmm-details.glade.h:86
 msgid "R_eadonly:"
 msgstr "_റീഡ് ഒണ്‍ലി:"
 
-#: ../src/vmm-details.glade.h:86
+#: ../src/vmm-details.glade.h:87
 #, fuzzy
 msgid "R_untime pinning:"
 msgstr "പ്രാരംഭ പിന്നിങ്:"
 
-#: ../src/vmm-details.glade.h:87
+#: ../src/vmm-details.glade.h:88
 msgid "Run"
 msgstr "പ്രവര്‍ത്തിപ്പിക്കുക"
 
-#: ../src/vmm-details.glade.h:88
+#: ../src/vmm-details.glade.h:89
 msgid "S_hut Down"
 msgstr "പു_റത്തു് കടക്കുക"
 
-#: ../src/vmm-details.glade.h:89
+#: ../src/vmm-details.glade.h:90
 msgid "Send _Key"
 msgstr "_കീ അയയ്ക്കുക"
 
-#: ../src/vmm-details.glade.h:90
+#: ../src/vmm-details.glade.h:91
 msgid "Sharea_ble:"
 msgstr "_പങ്കിടുവാന്‍ സാധിക്കുന്ന:"
 
-#: ../src/vmm-details.glade.h:91
+#: ../src/vmm-details.glade.h:92
 msgid "Show the graphical console"
 msgstr "ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ കാണിക്കുക"
 
-#: ../src/vmm-details.glade.h:92
+#: ../src/vmm-details.glade.h:93
 msgid "Show virtual hardware details"
 msgstr "പുതിയ വിര്‍ച്ച്വല്‍ ഹാര്‍ഡ്‌വെയര്‍ കാണിക്കുക"
 
-#: ../src/vmm-details.glade.h:93
+#: ../src/vmm-details.glade.h:94
 msgid "Shut Down"
 msgstr "അടച്ചു പൂട്ടുക"
 
-#: ../src/vmm-details.glade.h:94
+#: ../src/vmm-details.glade.h:95
 msgid "Shut down"
 msgstr "അടച്ചു പൂട്ടുക"
 
-#: ../src/vmm-details.glade.h:95 ../src/vmm-manager.glade.h:6
+#: ../src/vmm-details.glade.h:96 ../src/vmm-manager.glade.h:6
 msgid "Shutdown the virtual machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ അടച്ചുപൂട്ടുക"
 
-#: ../src/vmm-details.glade.h:96
+#: ../src/vmm-details.glade.h:97
 msgid "Sockets:"
 msgstr ""
 
-#: ../src/vmm-details.glade.h:97
+#: ../src/vmm-details.glade.h:98
 msgid "Source Path:"
 msgstr "സോഴ്സ് പാഥ്:"
 
-#: ../src/vmm-details.glade.h:98
+#: ../src/vmm-details.glade.h:99
 msgid "Source device:"
 msgstr "ഉറവിടത്തിന്‍റെ ഡിവൈസ്:"
 
-#: ../src/vmm-details.glade.h:99
+#: ../src/vmm-details.glade.h:100
 msgid "Source path:"
 msgstr "ഉറവിടത്തിന്‍റെ പാഥ്:"
 
-#: ../src/vmm-details.glade.h:100
+#: ../src/vmm-details.glade.h:101
 msgid "Start virt_ual machine on host boot up"
 msgstr "ഹോസ്റ്റ് ബൂട്ട് ചെയ്യുമ്പോള്‍ _വിര്‍ച്ച്വല്‍ മഷീന്‍ ആരംഭിക്കുക"
 
-#: ../src/vmm-details.glade.h:102
+#: ../src/vmm-details.glade.h:103
 #, fuzzy
 msgid "Storage forma_t:"
 msgstr "സ്റ്റോറേജ് പാഥ്"
 
-#: ../src/vmm-details.glade.h:103
+#: ../src/vmm-details.glade.h:104
 msgid "Storage size:"
 msgstr "സംഭരണത്തിന്റെ വ്യാപ്തി:"
 
-#: ../src/vmm-details.glade.h:104
+#: ../src/vmm-details.glade.h:105
 msgid "Switch to fullscreen view"
 msgstr "പൂര്‍ണ്ണ സ്ക്രീന്‍ കാഴ്ചയിലേക്ക് മാറുക"
 
-#: ../src/vmm-details.glade.h:105
+#: ../src/vmm-details.glade.h:106
 #, fuzzy
 msgid "TLS Port:"
 msgstr "പോര്‍ട്ട്: "
 
-#: ../src/vmm-details.glade.h:106
+#: ../src/vmm-details.glade.h:107
 msgid "T_oolbar"
 msgstr "_ടൂള്‍ബാര്‍"
 
-#: ../src/vmm-details.glade.h:107
+#: ../src/vmm-details.glade.h:108
 msgid "Target device:"
 msgstr "ടാറ്‍ഗറ്റ് ഡിവൈസ്:"
 
-#: ../src/vmm-details.glade.h:108
+#: ../src/vmm-details.glade.h:109
 #, fuzzy
 msgid "Threads:"
 msgstr "Heads:"
 
-#: ../src/vmm-details.glade.h:109
+#: ../src/vmm-details.glade.h:110
 msgid "Total host memory:"
 msgstr "മൊത്തം ഹോസ്റ്റ് മെമ്മറി:"
 
-#: ../src/vmm-details.glade.h:111
+#: ../src/vmm-details.glade.h:112
+msgid "Typeid version:"
+msgstr ""
+
+#: ../src/vmm-details.glade.h:113
+#, fuzzy
+msgid "Typeid:"
+msgstr "ഏത് തരം:"
+
+#: ../src/vmm-details.glade.h:114
 msgid "UUID:"
 msgstr "UUID:"
 
-#: ../src/vmm-details.glade.h:112
-msgid "Unavailable"
-msgstr "ലഭ്യമല്ലാത്തവ"
-
-#: ../src/vmm-details.glade.h:113
-msgid "VNC"
-msgstr "VNC"
-
-#: ../src/vmm-details.glade.h:114
+#: ../src/vmm-details.glade.h:115
 msgid "Virtual CPU Affinity Select"
 msgstr "വിര്‍ച്ച്വല്‍ സിപിയു ആഫിനിറ്റി തെരഞ്ഞെടുക്കല്‍"
 
-#: ../src/vmm-details.glade.h:115
+#: ../src/vmm-details.glade.h:116
 msgid "Virtual CPU Select"
 msgstr "വിര്‍ച്ച്വല്‍ സിപിയു തെരഞ്ഞെടുക്കല്‍"
 
-#: ../src/vmm-details.glade.h:116
-msgid "Virtual Machine"
-msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ "
-
-#: ../src/vmm-details.glade.h:117
+#: ../src/vmm-details.glade.h:118
 msgid "Virtual _Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ (_M)"
 
-#: ../src/vmm-details.glade.h:118
+#: ../src/vmm-details.glade.h:119
+#, fuzzy
+msgid "Virtual port"
+msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക്"
+
+#: ../src/vmm-details.glade.h:120
 msgid "_Always"
 msgstr "_എപ്പോഴും"
 
-#: ../src/vmm-details.glade.h:119
+#: ../src/vmm-details.glade.h:121
 #, fuzzy
 msgid "_Begin Installation"
 msgstr "ഇന്‍സ്റ്റോള്‍ പൂര്‍ത്തിയാക്കുക"
 
-#: ../src/vmm-details.glade.h:120
+#: ../src/vmm-details.glade.h:123
 msgid "_Clone"
 msgstr "_ക്ലോണ്‍"
 
-#: ../src/vmm-details.glade.h:121
+#: ../src/vmm-details.glade.h:124
 msgid "_Console"
 msgstr "_കണ്‍സോള്‍ "
 
-#: ../src/vmm-details.glade.h:123 ../src/vmm-host.glade.h:56
+#: ../src/vmm-details.glade.h:126 ../src/vmm-host.glade.h:56
 #: ../src/vmm-manager.glade.h:13
 msgid "_File"
 msgstr "ഫയല്‍ (_F)"
 
-#: ../src/vmm-details.glade.h:125
+#: ../src/vmm-details.glade.h:128
 msgid "_Fullscreen"
 msgstr "_സ്ക്രീന്‍ പൂര്‍ണ്ണ വലിപ്പത്തില്‍"
 
-#: ../src/vmm-details.glade.h:126 ../src/vmm-host.glade.h:57
+#: ../src/vmm-details.glade.h:129 ../src/vmm-host.glade.h:57
 #: ../src/vmm-manager.glade.h:15
 msgid "_Help"
 msgstr "സഹായം (_H)"
 
-#: ../src/vmm-details.glade.h:128
+#: ../src/vmm-details.glade.h:131
 msgid "_Label:"
 msgstr "_ലേബല്‍:"
 
-#: ../src/vmm-details.glade.h:129
+#: ../src/vmm-details.glade.h:132
 msgid "_Login"
 msgstr "_ലോഗിന്‍ ചെയ്യുക"
 
-#: ../src/vmm-details.glade.h:131
+#: ../src/vmm-details.glade.h:135
 msgid "_Never"
 msgstr "_ഒരിക്കലും ഇല്ല"
 
-#: ../src/vmm-details.glade.h:132
+#: ../src/vmm-details.glade.h:136
 msgid "_Only when Fullscreen"
 msgstr "സ്ക്രീന്‍ പൂര്‍ണ്ണവലിപ്പത്തിലുള്ളപ്പോള്‍ _മാത്രം"
 
-#: ../src/vmm-details.glade.h:133
+#: ../src/vmm-details.glade.h:137
 msgid "_Password:"
 msgstr "_രഹസ്യവാക്ക്:"
 
-#: ../src/vmm-details.glade.h:136
+#: ../src/vmm-details.glade.h:140
 msgid "_Resize to VM"
 msgstr "VM-ന്റെ വ്യാപ്തിയായി _മാറ്റുക"
 
-#: ../src/vmm-details.glade.h:138
+#: ../src/vmm-details.glade.h:142
 msgid "_Save this password in your keyring"
 msgstr "നിങ്ങളുടെ കീ റിങില്‍ ഈ രഹസ്യവാക്ക് _സൂക്ഷിക്കുക"
 
-#: ../src/vmm-details.glade.h:139
+#: ../src/vmm-details.glade.h:143
 msgid "_Scale Display"
 msgstr "_പ്രദര്‍ശനം അളക്കുക"
 
-#: ../src/vmm-details.glade.h:140
+#: ../src/vmm-details.glade.h:144
 msgid "_Static"
 msgstr "_സ്റ്റാറ്റിക്"
 
-#: ../src/vmm-details.glade.h:141
+#: ../src/vmm-details.glade.h:145
 msgid "_Take Screenshot"
 msgstr "സ്ക്രീന്‍ ഷോട്ട് എടുക്കുക (_T)"
 
-#: ../src/vmm-details.glade.h:142
+#: ../src/vmm-details.glade.h:146
 msgid "_Text Consoles"
 msgstr "_ടെക്സ്റ്റ് കണ്‍സോളുകള്‍"
 
-#: ../src/vmm-details.glade.h:143 ../src/vmm-open-connection.glade.h:16
+#: ../src/vmm-details.glade.h:147 ../src/vmm-open-connection.glade.h:16
 msgid "_Username:"
 msgstr "_ഉപയോക്തൃനാമം:"
 
-#: ../src/vmm-details.glade.h:144 ../src/vmm-manager.glade.h:21
+#: ../src/vmm-details.glade.h:148 ../src/vmm-manager.glade.h:21
 msgid "_View"
 msgstr "കാഴ്ച (_V)"
 
-#: ../src/vmm-details.glade.h:145 ../src/vmm-host.glade.h:59
+#: ../src/vmm-details.glade.h:149 ../src/vmm-host.glade.h:59
 msgid "_View Manager"
 msgstr "നിരീക്ഷകനെ _കാണുക"
-
-#: ../src/vmm-details.glade.h:146
-#, fuzzy
-msgid "boot"
-msgstr "_റീബൂട്ട് ചെയ്യുക"
-
-#: ../src/vmm-details.glade.h:147
-msgid "chr"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:148
-msgid "cntrl"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:149
-msgid "cpu"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:150
-msgid "dsk"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:151
-msgid "inp"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:153
-#, fuzzy
-msgid "mem"
-msgstr "മെമ്മറി"
-
-#: ../src/vmm-details.glade.h:154
-#, fuzzy
-msgid "net"
-msgstr "നെറ്റ്"
-
-#: ../src/vmm-details.glade.h:155
-msgid "over"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:156
-#, fuzzy
-msgid "snd"
-msgstr "സെക്കന്‍ഡുകള്‍"
-
-#: ../src/vmm-details.glade.h:157
-msgid "stat"
-msgstr ""
-
-#: ../src/vmm-details.glade.h:158
-#, fuzzy
-msgid "vid"
-msgstr "Vid"
 
 #: ../src/vmm-host.glade.h:1
 msgid "<b>Basic details</b>"
@@ -4345,6 +4332,10 @@ msgstr "മെമ്മറി ഉപയോഗം:"
 msgid "Memory:"
 msgstr "മെമ്മറി:"
 
+#: ../src/vmm-host.glade.h:37
+msgid "Name:"
+msgstr "പേര്:"
+
 #: ../src/vmm-host.glade.h:38
 msgid "Network Interfaces"
 msgstr "നെറ്റ്‌വര്‍ക്ക് ഇന്റര്‍ഫെയിസുകള്‍"
@@ -4438,7 +4429,7 @@ msgstr "_CPU ഉപയോഗം"
 msgid "_Connection Details"
 msgstr "ഏത് തരം കണക്ഷന്‍"
 
-#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:30
+#: ../src/vmm-manager.glade.h:11 ../src/vmm-preferences.glade.h:31
 msgid "_Disk I/O"
 msgstr "_ഡിസ്ക് I/O"
 
@@ -4450,7 +4441,7 @@ msgstr "മാറ്റം വരുത്തുക (_E)"
 msgid "_Graph"
 msgstr "_ഗ്രാഫ്"
 
-#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:34
+#: ../src/vmm-manager.glade.h:16 ../src/vmm-preferences.glade.h:35
 msgid "_Network I/O"
 msgstr "_നെറ്റ്‌വര്‍ക്ക് I/O"
 
@@ -4644,10 +4635,15 @@ msgid "Install Audio Device:"
 msgstr "ഓഡിയ ഡിവൈസ് ഇന്‍സ്റ്റോള്‍ ചെയ്യുക:"
 
 #: ../src/vmm-preferences.glade.h:18
+#, fuzzy
+msgid "Install Graphics:"
+msgstr "ഗ്രാഫിക്സ്"
+
+#: ../src/vmm-preferences.glade.h:19
 msgid "Maintain h_istory of"
 msgstr "_നാള്‍വഴി കൈകാര്യം ചെയ്യേണ്ടത്"
 
-#: ../src/vmm-preferences.glade.h:19
+#: ../src/vmm-preferences.glade.h:20
 msgid ""
 "Never\n"
 "For all new domains\n"
@@ -4657,7 +4653,7 @@ msgstr ""
 "എല്ലാ പുതിയ ഡൊമെയിനുകള്‍ക്ക്\n"
 "എല്ലാ ഡൊമെയിനുകള്‍ക്ക്"
 
-#: ../src/vmm-preferences.glade.h:22
+#: ../src/vmm-preferences.glade.h:23
 msgid ""
 "Never\n"
 "Fullscreen only\n"
@@ -4667,52 +4663,52 @@ msgstr ""
 "സ്ക്രീന്‍ പൂര്‍ണ്ണ വലിപ്പത്തിലാകുമ്പോള്‍ മാത്രം\n"
 "എപ്പോഴും"
 
-#: ../src/vmm-preferences.glade.h:25
+#: ../src/vmm-preferences.glade.h:26
 msgid "Not supported"
 msgstr ""
 
-#: ../src/vmm-preferences.glade.h:26
+#: ../src/vmm-preferences.glade.h:27
 #, fuzzy
 msgid "Poweroff/_Reboot/Save:"
 msgstr "പവര്‍ഓഫ് ചെയ്യുക/റീബൂട്ട് ചെയ്യുക:"
 
-#: ../src/vmm-preferences.glade.h:27
+#: ../src/vmm-preferences.glade.h:28
 msgid "Preferences"
 msgstr "ഗുണഗണങ്ങള്‍"
 
-#: ../src/vmm-preferences.glade.h:28
+#: ../src/vmm-preferences.glade.h:29
 msgid "Stats"
 msgstr "അവസ്ഥ"
 
-#: ../src/vmm-preferences.glade.h:29
+#: ../src/vmm-preferences.glade.h:30
 msgid "VM Details"
 msgstr "വി എം വിശദവിവരങ്ങള്‍"
 
-#: ../src/vmm-preferences.glade.h:31
+#: ../src/vmm-preferences.glade.h:32
 msgid "_Force Poweroff:"
 msgstr "_നിര്‍ബന്ധിച്ചു് പവര്‍ ഓഫ് ചെയ്യുക:"
 
-#: ../src/vmm-preferences.glade.h:32
+#: ../src/vmm-preferences.glade.h:33
 msgid "_Interface start/stop:"
 msgstr "_ഇന്റര്‍ഫെയിസ് ആരംഭം/അവസാനം:"
 
-#: ../src/vmm-preferences.glade.h:33
+#: ../src/vmm-preferences.glade.h:34
 msgid "_Local virtual machine"
 msgstr "_ലോക്കല്‍ വിര്‍ച്ച്വല്‍ മഷീന്‍"
 
-#: ../src/vmm-preferences.glade.h:35
+#: ../src/vmm-preferences.glade.h:36
 msgid "_Pause:"
 msgstr "_താല്‍ക്കാലികമായി നിര്‍ത്തുക:"
 
-#: ../src/vmm-preferences.glade.h:36
+#: ../src/vmm-preferences.glade.h:37
 msgid "_Remote virtual machine"
 msgstr "_റിമോട്ട് വിര്‍ച്ച്വല്‍ മഷീന്‍ "
 
-#: ../src/vmm-preferences.glade.h:37
+#: ../src/vmm-preferences.glade.h:38
 msgid "_Update status every"
 msgstr "സ്റ്റേറ്റസ് _പുതുക്കേണ്ടതു് എല്ലാ"
 
-#: ../src/vmm-preferences.glade.h:38
+#: ../src/vmm-preferences.glade.h:39
 msgid "samples"
 msgstr "മാതൃകകള്‍"
 
@@ -4735,6 +4731,35 @@ msgstr "_വോള്യം തെരഞ്ഞെടുക്കുക"
 #: ../src/vmm-storage-browse.glade.h:3
 msgid "_Browse Local"
 msgstr "ലോക്കല്‍ _തെരയുക"
+
+#~ msgid "Auth"
+#~ msgstr "Auth"
+
+#~ msgid "Unavailable"
+#~ msgstr "ലഭ്യമല്ലാത്തവ"
+
+#~ msgid "VNC"
+#~ msgstr "VNC"
+
+#, fuzzy
+#~ msgid "boot"
+#~ msgstr "_റീബൂട്ട് ചെയ്യുക"
+
+#, fuzzy
+#~ msgid "mem"
+#~ msgstr "മെമ്മറി"
+
+#, fuzzy
+#~ msgid "net"
+#~ msgstr "നെറ്റ്"
+
+#, fuzzy
+#~ msgid "snd"
+#~ msgstr "സെക്കന്‍ഡുകള്‍"
+
+#, fuzzy
+#~ msgid "vid"
+#~ msgstr "Vid"
 
 #~ msgid "When to grab keyboard input for the console"
 #~ msgstr "കണ്‍സോളിനുള്ള കീബോര്‍ഡ് ഇന്‍പുട്ട് ലഭ്യമാക്കേണ്ടതെപ്പോള്‍"
