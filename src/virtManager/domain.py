@@ -1116,8 +1116,7 @@ class vmmDomain(vmmDomainBase):
 
     def delete(self):
         self._backend.undefine()
-        del(self._backend)
-        self._backend = None
+        # XXX: If want to release domain here, fix connection polling
 
     def resume(self):
         if self.get_cloning():

@@ -751,6 +751,7 @@ class vmmConnection(vmmGObject):
     def rename_vm(self, domainobj, origxml, newxml):
         # Undefine old domain
         domainobj.delete()
+        domainobj.release_handle()
 
         newobj = None
         try:
