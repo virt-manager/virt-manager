@@ -148,6 +148,7 @@ class vmmDeleteDialog(vmmGObjectUI):
     def _async_delete(self, asyncjob, paths):
         newconn = None
         storage_errors = []
+        details = ""
 
         try:
             # Open a seperate connection to install on since this is async
