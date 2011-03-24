@@ -509,10 +509,7 @@ class vmmConfig(object):
         self.conf.notify_add(self.conf_dir + "/new-vm/remote-sound", cb, data)
 
     def get_graphics_type(self):
-        ret = self.conf.get_string(self.conf_dir + "/new-vm/graphics_type")
-        if ret == None:
-            ret = "vnc"
-        return ret
+        return self.conf.get_string(self.conf_dir + "/new-vm/graphics_type")
     def set_graphics_type(self, gtype):
         self.conf.set_string(self.conf_dir + "/new-vm/graphics_type",
                              gtype.lower())

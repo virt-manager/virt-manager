@@ -148,8 +148,17 @@ class vmmPreferences(vmmGObjectUI):
             self.config.get_remote_sound())
     def refresh_graphics_type(self, ignore1=None, ignore2=None, ignore=None,
                              ignore4=None):
-        active = {"vnc": 0,
-                  "spice": 1}[self.config.get_graphics_type()]
+        combo = self.window.get_widget("prefs-graphics-type")
+        model = combo.get_model()
+        gtype = self.config.get_graphics_type()
+
+        # Default to row 0 == vnc
+        active = 0
+        for rowidx in range(len(model)):
+            if model[rowidx][0].lower() == gtype:
+                active = rowidx
+                break
+
         self.window.get_widget("prefs-graphics-type").set_active(active)
 
     def refresh_disk_poll(self, ignore1=None, ignore2=None, ignore3=None,
@@ -284,7 +293,7 @@ class vmmPreferences(vmmGObjectUI):
         idx = src.get_active()
         if idx >= 0:
             gtype = src.get_model()[idx][0]
-        self.config.set_graphics_type(gtype)
+        self.config.set_graphics_type(gtype.lower())
 
     def show_help(self, src_ignore):
         # From the Preferences window, show the help document from
