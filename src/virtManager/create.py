@@ -1197,9 +1197,15 @@ class vmmCreate(vmmGObjectUI):
         # Set up graphics device
         try:
             gtype = self.get_config_graphics_type()
-            guest.add_device(virtinst.VirtualGraphics(
-                                        type=gtype,
-                                        conn=guest.conn))
+            if (gtype == virtinst.VirtualGraphics.TYPE_SPICE and not
+                virtinst.support.check_conn_support(guest.conn,
+                            virtinst.support.SUPPORT_CONN_HV_GRAPHICS_SPICE)):
+                logging.debug("Spice requested by HV doesn't support it. "
+                              "Using VNC graphics.")
+                gtype = virtinst.VirtualGraphics.TYPE_VNC
+
+            guest.add_device(virtinst.VirtualGraphics(type=gtype,
+                                                      conn=guest.conn))
             guest.add_device(virtinst.VirtualVideoDevice(conn=guest.conn))
         except Exception, e:
             self.err.show_err(_("Error setting up graphics device:") + str(e),
