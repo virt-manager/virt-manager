@@ -776,7 +776,7 @@ class vmmDetails(vmmGObjectUI):
         model.append([virtinst.VirtualGraphics.TYPE_VNC,
                       "VNC"])
         model.append([virtinst.VirtualGraphics.TYPE_SPICE,
-                      "SPICE"])
+                      "Spice"])
         gfx_type.set_active(-1)
 
         # Graphics keymap
@@ -925,7 +925,7 @@ class vmmDetails(vmmGObjectUI):
         else:
             dev = devs[0]
             item = gtk.RadioMenuItem(group, _("Graphical Console %s") %
-                                     dev.type.upper())
+                                     dev.pretty_type_simple(dev.type))
             if group == None:
                 group = item
 
@@ -2417,7 +2417,7 @@ class vmmDetails(vmmGObjectUI):
         is_other = not (True in [is_vnc, is_sdl, is_spice])
 
         set_title(_("%(graphicstype)s Server") %
-                  {"graphicstype" : str(gtype).upper()})
+                  {"graphicstype" : gfx.pretty_type_simple(gtype)})
 
         settype = ""
         if is_vnc or is_spice:
@@ -2448,7 +2448,7 @@ class vmmDetails(vmmGObjectUI):
             show_text("xauth", xauth)
 
         if is_other:
-            settype = str(gtype).upper()
+            settype = gfx.pretty_type_simple(gtype)
 
         if settype:
             show_row("type", "-box")
@@ -2713,7 +2713,7 @@ class vmmDetails(vmmGObjectUI):
         # Populate list of graphics devices
         for gfx in self.vm.get_graphics_devices():
             update_hwlist(HW_LIST_TYPE_GRAPHICS, gfx,
-                          _("Display %s") % (gfx.type.upper()),
+                          _("Display %s") % gfx.pretty_type_simple(gfx.type),
                           "video-display")
 
         # Populate list of sound devices

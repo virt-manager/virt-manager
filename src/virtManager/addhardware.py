@@ -493,7 +493,7 @@ class vmmAddHardware(vmmGObjectUI):
     def populate_graphics_model(self, model):
         model.clear()
         model.append([_("VNC server"), "vnc"])
-        model.append([_("SPICE server"), "spice"])
+        model.append([_("Spice server"), "spice"])
         model.append([_("Local SDL window"), "sdl"])
 
     def populate_host_device_model(self, devtype, devcap, subtype, subcap):
