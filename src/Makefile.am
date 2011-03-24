@@ -49,7 +49,9 @@ endif
 	sed -e "s,::PACKAGE::,$(PACKAGE)," -e "s,::PREFIX::,$(prefix)," < $< > $@
 
 %.schemas: $(srcdir)/%.schemas.in ${top_builddir}/config.status
-	sed -e "s,::PACKAGE::,$(PACKAGE)," < $< > $@
+	sed -e "s|::DEFAULT_GRAPHICS::|$(DEFAULT_GRAPHICS)|g" \
+	    -e "s,::PACKAGE::,$(PACKAGE)," \
+	    < $< > $@
 
 %.py: $(srcdir)/%.py.in ${top_builddir}/config.status
 	sed -e "s,::PACKAGE::,$(PACKAGE)," \
