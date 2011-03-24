@@ -153,6 +153,15 @@ fi
 %{_datadir}/dbus-1/services/%{name}.service
 
 %changelog
+* Thu Mar 24 2011 Cole Robinson <crobinso@redhat.com> - 0.8.7-1
+- Allow renaming an offline VM
+- Spice password support (Marc-André Lureau)
+- Allow editting NIC <virtualport> settings (Gerhard Stenzel)
+- Allow enabling/disabling individual CPU features
+- Allow easily changing graphics type between VNC and SPICE for existing
+  VM
+- Allow easily changing network source device for existing VM
+
 * Fri Jan 14 2011 Cole Robinson <crobinso@redhat.com> - 0.8.6-1
 - SPICE support (requires spice-gtk) (Marc-André Lureau)
 - Option to configure CPU model
