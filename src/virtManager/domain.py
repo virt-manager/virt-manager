@@ -355,27 +355,7 @@ class vmmDomainBase(vmmLibvirtObject):
         return self._redefine_guest(change)
 
     def define_name(self, newname):
-        # Do this, so that _guest_to_define has original inactive XML
-        self._invalidate_xml()
-
-        guest = self._get_guest_to_define()
-        if guest.name == newname:
-            return
-
-        if self.is_active():
-            raise RuntimeError(_("Cannot rename an active guest"))
-
-        logging.debug("Changing guest name to '%s'" % newname)
-        origxml = guest.get_xml_config()
-        guest.name = newname
-        newxml = guest.get_xml_config()
-
-        try:
-            self.get_connection().rename_vm(self, origxml, newxml)
-        finally:
-            self._invalidate_xml()
-
-        self.emit("config-changed")
+        raise NotImplementedError()
 
     def define_acpi(self, newvalue):
         def change(guest):
@@ -1053,6 +1033,29 @@ class vmmDomain(vmmDomainBase):
     def disk_write_rate(self):
         return self._get_record_helper("diskWrRate")
 
+    def define_name(self, newname):
+        # Do this, so that _guest_to_define has original inactive XML
+        self._invalidate_xml()
+
+        guest = self._get_guest_to_define()
+        if guest.name == newname:
+            return
+
+        if self.is_active():
+            raise RuntimeError(_("Cannot rename an active guest"))
+
+        logging.debug("Changing guest name to '%s'" % newname)
+        origxml = guest.get_xml_config()
+        guest.name = newname
+        newxml = guest.get_xml_config()
+
+        try:
+            self.get_connection().rename_vm(self, origxml, newxml)
+        finally:
+            self._invalidate_xml()
+
+        self.emit("config-changed")
+
     def _unregister_reboot_listener(self):
         if self.reboot_listener == None:
             return
@@ -1595,6 +1598,11 @@ class vmmDomainVirtinst(vmmDomainBase):
     def set_autostart(self, val):
         self._backend.autostart = bool(val)
         util.safe_idle_add(util.idle_emit, self, "config-changed")
+
+    def define_name(self, newname):
+        def change(guest):
+            guest.name = str(newname)
+        return self._redefine_guest(change)
 
     def attach_device(self, devobj):
         return
