@@ -375,6 +375,8 @@ class vmmCreate(vmmGObjectUI):
         net_warn_box.hide()
         net_expander.set_expanded(False)
 
+        # Make sure window is a sane size
+        self.topwin.resize(1, 1)
 
     def set_conn_state(self):
         # Update all state that has some dependency on the current connection
