@@ -1116,6 +1116,8 @@ class vmmDomain(vmmDomainBase):
 
     def delete(self):
         self._backend.undefine()
+        del(self._backend)
+        self._backend = None
 
     def resume(self):
         if self.get_cloning():
