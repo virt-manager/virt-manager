@@ -337,8 +337,8 @@ class vmmDetails(vmmGObjectUI):
             "on_details_pages_switch_page": self.switch_page,
 
             "on_overview_name_changed": self.config_enable_apply,
-            "on_overview_acpi_changed": self.config_enable_apply,
-            "on_overview_apic_changed": self.config_enable_apply,
+            "on_overview_acpi_changed": self.config_acpi_changed,
+            "on_overview_apic_changed": self.config_apic_changed,
             "on_overview_clock_changed": self.config_enable_apply,
             "on_security_label_changed": self.security_label_changed,
             "on_security_type_changed": self.security_type_changed,
@@ -1407,6 +1407,22 @@ class vmmDetails(vmmGObjectUI):
     def config_enable_apply(self, ignore1=None, ignore2=None):
         self.window.get_widget("config-apply").set_sensitive(True)
 
+    # Overview -> Machine settings
+    def config_acpi_changed(self, ignore):
+        widget = self.window.get_widget("overview-acpi")
+        incon = widget.get_inconsistent()
+        widget.set_inconsistent(False)
+        if incon:
+            widget.set_active(True)
+        self.config_enable_apply()
+    def config_apic_changed(self, ignore):
+        widget = self.window.get_widget("overview-apic")
+        incon = widget.get_inconsistent()
+        widget.set_inconsistent(False)
+        if incon:
+            widget.set_active(True)
+        self.config_enable_apply()
+
     # Overview -> Security
     def security_label_changed(self, label_ignore):
         self.config_enable_apply()
@@ -1619,7 +1635,11 @@ class vmmDetails(vmmGObjectUI):
 
         # Machine details
         enable_acpi = self.window.get_widget("overview-acpi").get_active()
+        if self.window.get_widget("overview-acpi").get_inconsistent():
+            enable_acpi = None
         enable_apic = self.window.get_widget("overview-apic").get_active()
+        if self.window.get_widget("overview-apic").get_inconsistent():
+            enable_apic = None
         clock_combo = self.window.get_widget("overview-clock-combo")
         if clock_combo.get_property("visible"):
             clock = clock_combo.get_model()[clock_combo.get_active()][0]
@@ -2041,8 +2061,13 @@ class vmmDetails(vmmGObjectUI):
         apic = self.vm.get_apic()
         clock = self.vm.get_clock()
 
-        self.window.get_widget("overview-acpi").set_active(acpi)
-        self.window.get_widget("overview-apic").set_active(apic)
+        # Hack in a way to represent 'default' acpi/apic for customize dialog
+        self.window.get_widget("overview-acpi").set_active(bool(acpi))
+        self.window.get_widget("overview-acpi").set_inconsistent(
+                                acpi is None and self.is_customize_dialog)
+        self.window.get_widget("overview-apic").set_active(bool(apic))
+        self.window.get_widget("overview-apic").set_inconsistent(
+                                apic is None and self.is_customize_dialog)
 
         if not clock:
             clock = _("Same as host")
