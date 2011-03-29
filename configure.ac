@@ -69,7 +69,9 @@ AC_ARG_ENABLE([unsupported-rhel-options],
   AC_HELP_STRING(
     [--enable-unsupported-rhel-options],
     [enable VM config options unsupported by RHEL @<:@default=yes@:>@]),
-  [test "x$enableval" == "xno" && ENABLE_UNSUPPORTED_RHEL_OPTS=0],
+  [test "x$enableval" == "xno" && \
+   ENABLE_UNSUPPORTED_RHEL_OPTS=0 ||
+   ENABLE_UNSUPPORTED_RHEL_OPTS=1],
   [ENABLE_UNSUPPORTED_RHEL_OPTS=1])
 
 dnl Allow passing in a prefered distro list
