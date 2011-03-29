@@ -81,7 +81,7 @@ AC_ARG_WITH([preferred-distros],
     [PREFERRED_DISTROS=""])
 
 dnl Default graphics type (spice/vnc)
-AC_ARG_WITH([--with-default-graphics],
+AC_ARG_WITH([default-graphics],
     AC_HELP_STRING(
         [--with-default-graphics],
         [default graphics type for new guests in gconf(spice or vnc) @<:@default=vnc@:>@]),
