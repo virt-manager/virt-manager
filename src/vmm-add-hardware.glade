@@ -1504,7 +1504,7 @@ to connect to the virtual machine.</property>
                                                 <child>
                                                   <widget class="GtkTable" id="char-param-table">
                                                     <property name="visible">True</property>
-                                                    <property name="n_rows">5</property>
+                                                    <property name="n_rows">6</property>
                                                     <property name="n_columns">2</property>
                                                     <property name="column_spacing">8</property>
                                                     <property name="row_spacing">8</property>
@@ -1517,6 +1517,34 @@ to connect to the virtual machine.</property>
                                                       <packing>
                                                         <property name="left_attach">1</property>
                                                         <property name="right_attach">2</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <widget class="GtkEntry" id="char-target-name">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <signal name="focus_in_event" handler="char_name_focus_in"/>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="left_attach">1</property>
+                                                        <property name="right_attach">2</property>
+                                                        <property name="top_attach">5</property>
+                                                        <property name="bottom_attach">6</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <widget class="GtkLabel" id="target-name-label">
+                                                        <property name="visible">True</property>
+                                                        <property name="xalign">0</property>
+                                                        <property name="label" translatable="yes">Name:</property>
+                                                        <property name="use_underline">True</property>
+                                                        <property name="mnemonic_widget">char-use-telnet</property>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="top_attach">5</property>
+                                                        <property name="bottom_attach">6</property>
+                                                        <property name="x_options">GTK_FILL</property>
+                                                        <property name="y_options"></property>
                                                       </packing>
                                                     </child>
                                                     <child>

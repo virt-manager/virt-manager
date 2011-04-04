@@ -54,6 +54,7 @@ char_widget_mappings = {
     "bind_port" : "char-bind-port",
     "bind_host" : "char-bind-host",
     "protocol"  : "char-use-telnet",
+    "target_name" : "char-target-name",
 }
 
 def get_list_selection(widget):
@@ -117,6 +118,7 @@ class vmmAddHardware(vmmGObjectUI):
             "char_host_focus_in": (self.update_doc, "source_host"),
             "char_bind_host_focus_in": (self.update_doc, "bind_host"),
             "char_telnet_focus_in": (self.update_doc, "protocol"),
+            "char_name_focus_in": (self.update_doc, "target_name"),
             })
         util.bind_escape_key_close(self)
 
@@ -443,6 +445,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.window.get_widget("char-bind-host").set_text("127.0.0.1")
         self.window.get_widget("char-bind-port").get_adjustment().value = 4556
         self.window.get_widget("char-use-telnet").set_active(False)
+        self.window.get_widget("char-target-name").set_text("com.redhat.spice.0")
 
         # Hide all notebook pages, so the wizard isn't as big as the largest
         # page
@@ -1143,6 +1146,7 @@ class vmmAddHardware(vmmGObjectUI):
         bind_host = self.window.get_widget("char-bind-host").get_text()
         source_port = self.window.get_widget("char-port").get_adjustment().value
         bind_port = self.window.get_widget("char-bind-port").get_adjustment().value
+        target_name = self.window.get_widget("char-target-name").get_text()
 
         if self.window.get_widget("char-use-telnet").get_active():
             protocol = VirtualCharDevice.CHAR_PROTOCOL_TELNET
@@ -1156,6 +1160,7 @@ class vmmAddHardware(vmmGObjectUI):
             "bind_port": bind_port,
             "bind_host": bind_host,
             "protocol": protocol,
+            "target_name": target_name,
         }
 
         try:
