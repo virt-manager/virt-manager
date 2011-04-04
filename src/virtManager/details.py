@@ -2495,6 +2495,7 @@ class vmmDetails(vmmGObjectUI):
         target_port = chardev.target_port
         dev_type = chardev.char_type or "pty"
         src_path = chardev.source_path
+        target_name = chardev.target_name
         primary = hasattr(chardev, "virtmanager_console_dup")
 
         typelabel = ""
@@ -2518,6 +2519,7 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("char-type").set_markup(typelabel)
         self.window.get_widget("char-dev-type").set_text(dev_type)
         self.window.get_widget("char-source-path").set_text(src_path or "-")
+        self.window.get_widget("char-target-name").set_text(target_name or "-")
 
     def refresh_hostdev_page(self):
         hostdev = self.get_hw_selection(HW_LIST_COL_DEVICE)

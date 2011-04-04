@@ -4681,7 +4681,7 @@ I/O:</property>
                                           <widget class="GtkTable" id="table37">
                                             <property name="visible">True</property>
                                             <property name="border_width">3</property>
-                                            <property name="n_rows">2</property>
+                                            <property name="n_rows">3</property>
                                             <property name="n_columns">2</property>
                                             <property name="column_spacing">8</property>
                                             <property name="row_spacing">4</property>
@@ -4689,7 +4689,7 @@ I/O:</property>
                                               <widget class="GtkLabel" id="label503">
                                                 <property name="visible">True</property>
                                                 <property name="xalign">1</property>
-                                                <property name="label" translatable="yes">Device Type:</property>
+                                                <property name="label" translatable="yes">Device type:</property>
                                               </widget>
                                               <packing>
                                                 <property name="x_options">GTK_FILL</property>
@@ -4700,11 +4700,24 @@ I/O:</property>
                                               <widget class="GtkLabel" id="label505">
                                                 <property name="visible">True</property>
                                                 <property name="xalign">1</property>
-                                                <property name="label" translatable="yes">Source Path:</property>
+                                                <property name="label" translatable="yes">Source path:</property>
                                               </widget>
                                               <packing>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
+                                                <property name="x_options">GTK_FILL</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="label505">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">1</property>
+                                                <property name="label" translatable="yes">Target name:</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
                                                 <property name="x_options">GTK_FILL</property>
                                                 <property name="y_options"></property>
                                               </packing>
@@ -4735,6 +4748,22 @@ I/O:</property>
                                                 <property name="right_attach">2</property>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
+                                                <property name="x_options">GTK_FILL</property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="char-target-name">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0</property>
+                                                <property name="label" translatable="yes">label508</property>
+                                                <property name="selectable">True</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
                                                 <property name="x_options">GTK_FILL</property>
                                                 <property name="y_options"></property>
                                               </packing>
