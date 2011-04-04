@@ -2752,7 +2752,7 @@ class vmmDetails(vmmGObjectUI):
             port = chardev.target_port
 
             label = devtype.capitalize()
-            if devtype != "console":
+            if devtype not in ["console", "channel"]:
                 # Don't show port for console
                 label += " %s" % (int(port) + 1)
 

@@ -46,6 +46,7 @@ def compare_device(origdev, newdev, idx):
         "console"   : ["char_type", "target_type", "target_port"],
         "graphics"  : ["type", "vmmindex"],
         "controller" : ["type", "index"],
+        "channel"   : ["char_type", "target_name"],
     }
 
     if id(origdev) == id(newdev):
@@ -713,8 +714,9 @@ class vmmDomainBase(vmmLibvirtObject):
         serials     = self._build_device_list("serial")
         parallels   = self._build_device_list("parallel")
         consoles    = self._build_device_list("console")
+        channels    = self._build_device_list("channel")
 
-        for devicelist in [serials, parallels, consoles]:
+        for devicelist in [serials, parallels, consoles, channels]:
             devs.extend(devicelist)
 
         # Don't display <console> if it's just a duplicate of <serial>

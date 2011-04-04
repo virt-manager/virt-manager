@@ -286,19 +286,6 @@ class vmmAddHardware(vmmGObjectUI):
         video_dev = self.window.get_widget("video-model")
         uihelpers.build_video_combo(self.vm, video_dev)
 
-        # Char device type
-        char_devtype = self.window.get_widget("char-device-type")
-        # Type name, desc
-        char_devtype_model = gtk.ListStore(str, str)
-        char_devtype.set_model(char_devtype_model)
-        text = gtk.CellRendererText()
-        char_devtype.pack_start(text, True)
-        char_devtype.add_attribute(text, 'text', 1)
-        for t in VirtualCharDevice.char_types:
-            desc = VirtualCharDevice.get_char_type_desc(t)
-            row = [t, desc + " (%s)" % t]
-            char_devtype_model.append(row)
-
         # Character dev mode
         char_mode = self.window.get_widget("char-mode")
         # Mode name, desc
@@ -358,6 +345,10 @@ class vmmAddHardware(vmmGObjectUI):
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."),
                       "parallel")
+        add_hw_option("Channel", gtk.STOCK_CONNECT, PAGE_CHAR,
+                      self.vm.is_hvm(),
+                      _("Not supported for this guest type."),
+                      "channel")
         add_hw_option("USB Host Device", "system-run", PAGE_HOSTDEV,
                       self.vm.get_connection().is_nodedev_capable(),
                       _("Connection does not support host device enumeration"),
@@ -688,6 +679,23 @@ class vmmAddHardware(vmmGObjectUI):
     def get_hw_selection(self):
         return get_list_selection(self.window.get_widget("hardware-list"))
 
+    def update_char_device_type_model(self):
+        # Char device type
+        char_devtype = self.window.get_widget("char-device-type")
+        dev_type = self.get_char_type()
+        # Type name, desc
+        char_devtype_model = gtk.ListStore(str, str)
+        char_devtype.clear()
+        char_devtype.set_model(char_devtype_model)
+        text = gtk.CellRendererText()
+        char_devtype.pack_start(text, True)
+        char_devtype.add_attribute(text, 'text', 1)
+        for t in VirtualCharDevice.char_types_for_dev_type[dev_type]:
+            desc = VirtualCharDevice.get_char_type_desc(t)
+            row = [t, desc + " (%s)" % t]
+            char_devtype_model.append(row)
+        char_devtype.set_active(0)
+
     def hw_selected(self, src=None):
         ignore = src
         self._dev = None
@@ -707,6 +715,7 @@ class vmmAddHardware(vmmGObjectUI):
             self.window.get_widget("hardware-info").set_text(msg)
 
         if page == PAGE_CHAR:
+            self.update_char_device_type_model()
             devtype = self.window.get_widget("char-device-type")
             self.change_char_device_type(devtype)
 
@@ -814,6 +823,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         if label == "parallel":
             return VirtualDevice.VIRTUAL_DEV_PARALLEL
+        elif label == "channel":
+            return VirtualDevice.VIRTUAL_DEV_CHANNEL
         return VirtualDevice.VIRTUAL_DEV_SERIAL
 
     def dev_to_title(self, page):
@@ -849,6 +860,9 @@ class vmmAddHardware(vmmGObjectUI):
 
     def change_char_device_type(self, src):
         self.update_doc(None, None, "char_type")
+        idx = src.get_active()
+        if idx < 0:
+            return
 
         chartype = self.get_char_type()
         devtype = src.get_model()[src.get_active()][0]
@@ -863,7 +877,6 @@ class vmmAddHardware(vmmGObjectUI):
             self.window.get_widget(widget_name).set_sensitive(make_visible)
 
         has_mode = self._dev.supports_property("source_mode")
-
         if has_mode and self.window.get_widget("char-mode").get_active() == -1:
             self.window.get_widget("char-mode").set_active(0)
 
