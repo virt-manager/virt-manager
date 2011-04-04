@@ -26,6 +26,7 @@ import threading
 import gobject
 
 import virtinst
+from virtinst.VirtualCharDevice import VirtualCharSpicevmcDevice
 from virtManager import util
 import virtinst.support as support
 
@@ -450,9 +451,20 @@ class vmmDomainBase(vmmLibvirtObject):
         def change(editdev):
             editdev.keymap = newval
         return self._redefine_device(change, devobj)
-    def define_graphics_type(self, devobj, newval):
+    def define_graphics_type(self, devobj, newval, spicevmc):
         def change(editdev):
             editdev.type = newval
+            if spicevmc:
+                guest = self._get_guest_to_define()
+                if newval == "spice":
+                    guest.add_device(VirtualCharSpicevmcDevice(guest.conn))
+                else:
+                    channels = guest.get_devices("channel")
+                    channels = filter(lambda x: x.char_type ==
+                                      virtinst.VirtualCharDevice.CHAR_SPICEVMC, channels)
+                    for dev in channels:
+                        guest.remove_device(dev)
+
         return self._redefine_device(change, devobj)
 
     def define_sound_model(self, devobj, newmodel):

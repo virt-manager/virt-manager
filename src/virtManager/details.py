@@ -1850,17 +1850,54 @@ class vmmDetails(vmmGObjectUI):
                                           (dev_id_info, nettype, source)])
 
     # Graphics options
+    def _do_change_spicevmc(self, gdev, newgtype):
+        has_multi_spice = (len(filter(
+                                lambda dev: dev.type == dev.TYPE_SPICE,
+                                self.vm.get_graphics_devices())) > 1)
+        has_spicevmc = bool(filter(
+                            (lambda dev:
+                                (dev.dev_type == dev.DEV_CHANNEL and
+                                 dev.char_type == dev.CHAR_SPICEVMC)),
+                            self.vm.get_char_devices()))
+        fromspice = (gdev.type == "spice")
+        tospice = (newgtype == "spice")
+
+        if fromspice and tospice:
+            return False
+        if not fromspice and not tospice:
+            return False
+
+        print tospice, fromspice, has_spicevmc, has_multi_spice
+
+        if tospice and has_spicevmc:
+            return False
+        if fromspice and not has_spicevmc:
+            return False
+
+        if fromspice and has_multi_spice:
+            # Don't offer to remove if there are other spice displays
+            return False
+
+        msg = (_("You are switching graphics type to %(gtype)s, "
+                 "would you like to %(action)s Spice agent channels?") %
+                {"gtype": newgtype,
+                 "action": fromspice and "remove" or "add"})
+        return self.err.yes_no(msg)
+
     def config_graphics_apply(self, dev_id_info):
         gtype = self.get_combo_label_value("gfx-type")
         passwd = self.window.get_widget("gfx-password").get_text() or None
         keymap = self.get_combo_label_value("gfx-keymap")
+
+        change_spicevmc = self._do_change_spicevmc(dev_id_info, gtype)
 
         return self._change_config_helper([self.vm.define_graphics_password,
                                            self.vm.define_graphics_keymap,
                                            self.vm.define_graphics_type],
                                           [(dev_id_info, passwd),
                                            (dev_id_info, keymap),
-                                           (dev_id_info, gtype)],
+                                           (dev_id_info, gtype,
+                                            change_spicevmc)],
                                           [self.vm.hotplug_graphics_password],
                                           [(dev_id_info, passwd)])
 
