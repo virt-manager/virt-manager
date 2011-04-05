@@ -938,7 +938,8 @@ class vmmAddHardware(vmmGObjectUI):
                   "Would you like to make the device available after the "
                   "next VM shutdown?")),
                 dialog_type=gtk.MESSAGE_WARNING,
-                buttons=gtk.BUTTONS_YES_NO)
+                buttons=gtk.BUTTONS_YES_NO,
+                async=False)
 
             if not res:
                 return (False, None)
