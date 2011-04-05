@@ -2528,11 +2528,41 @@ class vmmDetails(vmmGObjectUI):
         if not chardev:
             return
 
+        show_target_type = not (chardev.dev_type in
+                                [chardev.DEV_SERIAL, chardev.DEV_PARALLEL])
+
+        def show_ui(param, val=None):
+            widgetname = "char-" + param.replace("_", "-")
+            labelname = widgetname + "-label"
+            doshow = chardev.supports_property(param)
+
+            # Exception: don't show target type for serial/parallel
+            if (param == "target_type" and not show_target_type):
+                doshow = False
+
+            if not val and doshow:
+                val = getattr(chardev, param)
+
+            self.window.get_widget(widgetname).set_property("visible", doshow)
+            self.window.get_widget(labelname).set_property("visible", doshow)
+            self.window.get_widget(widgetname).set_text(val or "-")
+
+        def build_host_str(base):
+            if (not chardev.supports_property(base + "_host") or
+                not chardev.supports_property(base + "_port")):
+                return ""
+
+            host = getattr(chardev, base + "_host") or ""
+            port = getattr(chardev, base + "_port") or ""
+
+            ret = str(host)
+            if port:
+                ret += ":%s" % str(port)
+            return ret
+
         char_type = chardev.virtual_device_type.capitalize()
         target_port = chardev.target_port
         dev_type = chardev.char_type or "pty"
-        src_path = chardev.source_path
-        target_name = chardev.target_name
         primary = hasattr(chardev, "virtmanager_console_dup")
 
         typelabel = ""
@@ -2547,7 +2577,7 @@ class vmmDetails(vmmGObjectUI):
         else:
             typelabel = _("%s Device") % char_type.capitalize()
 
-        if target_port is not None:
+        if target_port is not None and not show_target_type:
             typelabel += " %s" % (int(target_port) + 1)
         if primary:
             typelabel += " (%s)" % _("Primary Console")
@@ -2555,8 +2585,13 @@ class vmmDetails(vmmGObjectUI):
 
         self.window.get_widget("char-type").set_markup(typelabel)
         self.window.get_widget("char-dev-type").set_text(dev_type)
-        self.window.get_widget("char-source-path").set_text(src_path or "-")
-        self.window.get_widget("char-target-name").set_text(target_name or "-")
+
+        # Device type specific properties, only show if apply to the cur dev
+        show_ui("source_host", build_host_str("source"))
+        show_ui("bind_host", build_host_str("bind"))
+        show_ui("source_path")
+        show_ui("target_type")
+        show_ui("target_name")
 
     def refresh_hostdev_page(self):
         hostdev = self.get_hw_selection(HW_LIST_COL_DEVICE)
