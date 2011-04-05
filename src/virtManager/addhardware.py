@@ -872,9 +872,19 @@ class vmmAddHardware(vmmGObjectUI):
                                                        chartype,
                                                        devtype)
 
+        show_something = False
         for param_name, widget_name in char_widget_mappings.items():
             make_visible = self._dev.supports_property(param_name)
-            self.window.get_widget(widget_name).set_sensitive(make_visible)
+            if make_visible:
+                show_something = True
+
+            self.window.get_widget(widget_name).set_property("visible",
+                                                             make_visible)
+            self.window.get_widget(widget_name + "-label").set_property(
+                                                    "visible", make_visible)
+
+        self.window.get_widget("char-param-box").set_property("visible",
+                                                              show_something)
 
         has_mode = self._dev.supports_property("source_mode")
         if has_mode and self.window.get_widget("char-mode").get_active() == -1:
