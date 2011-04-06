@@ -673,7 +673,7 @@ class vmmManager(vmmGObjectUI):
               "Verify that:\n" +
               " - A Xen host kernel was booted\n" +
               " - The Xen service has been started\n"),
-              details,
+              details=details,
               title=_("Virtual Machine Manager Connection Failure"))
         else:
             self.err.show_err(
@@ -682,7 +682,7 @@ class vmmManager(vmmGObjectUI):
               "Libvirt URI is: %s\n\n" % conn.get_uri() +
               "Verify that:\n" +
               " - The 'libvirtd' daemon has been started\n"),
-              details,
+              details=details,
               title=_("Virtual Machine Manager Connection Failure"))
 
 

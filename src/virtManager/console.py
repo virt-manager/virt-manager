@@ -292,13 +292,17 @@ class VNCViewer(Viewer):
             if credList[i] not in [gtkvnc.CREDENTIAL_PASSWORD,
                                    gtkvnc.CREDENTIAL_USERNAME,
                                    gtkvnc.CREDENTIAL_CLIENTNAME]:
-                self.console.err.show_err(summary=_("Unable to provide requested credentials to the VNC server"),
-                                          details=_("The credential type %s is not supported") % (str(credList[i])),
-                                          title=_("Unable to authenticate"),
-                                          async=True)
-                self.console.viewerRetriesScheduled = 10 # schedule_retry will error out
+                self.console.err.show_err(
+    summary=_("Unable to provide requested credentials to the VNC server"),
+    details=_("The credential type %s is not supported") % (str(credList[i])),
+    title=_("Unable to authenticate"),
+    async=True)
+
+                # schedule_retry will error out
+                self.console.viewerRetriesScheduled = 10
                 self.close()
-                self.console.activate_unavailable_page(_("Unsupported console authentication type"))
+                self.console.activate_unavailable_page(
+                                _("Unsupported console authentication type"))
                 return
 
         withUsername = False

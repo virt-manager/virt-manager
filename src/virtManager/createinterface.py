@@ -21,7 +21,6 @@
 import gobject
 import gtk
 
-import traceback
 import logging
 
 from virtinst import Interface
@@ -903,8 +902,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
         except Exception, e:
             self.err.show_err(_("Uncaught error validating install "
-                                "parameters: %s") % str(e),
-                                "".join(traceback.format_exc()))
+                                "parameters: %s") % str(e))
             return
 
     def validate_details_page(self):
@@ -1066,8 +1064,7 @@ class vmmCreateInterface(vmmGObjectUI):
             self.build_ip_info()
         except Exception, e:
             self.err.show_err(_("Error validating IP configuration: %s") %
-                              str(e),
-                              "".join(traceback.format_exc()))
+                              str(e))
             return False
 
         return True
@@ -1121,7 +1118,8 @@ class vmmCreateInterface(vmmGObjectUI):
 
         if error:
             error = _("Error creating interface: '%s'") % error
-            self.err.show_err(error, error + "\n" + details)
+            self.err.show_err(error,
+                              details=(error + "\n" + details))
         else:
             # FIXME: Hmm, shouldn't we emit a signal here rather than do this?
             self.conn.tick(noStatsUpdate=True)

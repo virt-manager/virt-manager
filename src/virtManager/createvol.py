@@ -21,7 +21,6 @@
 import gobject
 import gtk
 
-import traceback
 import logging
 
 from virtManager import util
@@ -196,8 +195,7 @@ class vmmCreateVolume(vmmGObjectUI):
             if not self.validate():
                 return
         except Exception, e:
-            self.show_err(_("Uncaught error validating input: %s") % str(e),
-                            "".join(traceback.format_exc()))
+            self.show_err(_("Uncaught error validating input: %s") % str(e))
             return
 
         logging.debug("Creating volume with xml:\n%s" %
@@ -217,7 +215,8 @@ class vmmCreateVolume(vmmGObjectUI):
 
         if error:
             error = _("Error creating vol: %s") % error
-            self.show_err(error, error + "\n" + details)
+            self.show_err(error,
+                          details=(error + "\n" + details))
         else:
             self.emit("vol-created")
             self.close()
@@ -252,7 +251,7 @@ class vmmCreateVolume(vmmGObjectUI):
             return self.val_err(_("Volume Parameter Error"), str(e))
         return True
 
-    def show_err(self, info, details):
+    def show_err(self, info, details=None):
         async = not self.topwin.get_modal()
         self.err.show_err(info, details, async=async)
 

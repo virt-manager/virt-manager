@@ -72,7 +72,10 @@ def _show_startup_error(msg, details):
     from virtManager.error import vmmErrorDialog
     err = vmmErrorDialog()
     title = _("Error starting Virtual Machine Manager")
-    err.show_err(title + ": " + msg, details, title, async=False,
+    err.show_err(title + ": " + msg,
+                 details=details,
+                 title=title,
+                 async=False,
                  debug=False)
 
 def setup_i18n():

@@ -22,7 +22,6 @@ import gobject
 import gtk
 import logging
 import re
-import traceback
 
 import virtManager.util as util
 from virtManager.IPy import IP
@@ -350,8 +349,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         try:
             self.conn.create_network(xml)
         except Exception, e:
-            self.err.show_err(_("Error creating virtual network: %s" % str(e)),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error creating virtual network: %s" % str(e)))
             return
 
         self.conn.tick(noStatsUpdate=True)

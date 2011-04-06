@@ -22,7 +22,6 @@ import gobject
 import gtk
 
 import time
-import traceback
 import threading
 import logging
 
@@ -1193,8 +1192,7 @@ class vmmCreate(vmmGObjectUI):
         try:
             guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
         except Exception, e:
-            self.err.show_err(_("Error setting UUID: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error setting UUID: %s") % str(e))
             return None
 
         # Set up graphics device
@@ -1211,8 +1209,7 @@ class vmmCreate(vmmGObjectUI):
                                                       conn=guest.conn))
             guest.add_device(virtinst.VirtualVideoDevice(conn=guest.conn))
         except Exception, e:
-            self.err.show_err(_("Error setting up graphics device:") + str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error setting up graphics device:") + str(e))
             return None
 
         # Set up sound device (if present)
@@ -1221,8 +1218,7 @@ class vmmCreate(vmmGObjectUI):
             if self.get_config_sound():
                 guest.sound_devs.append(virtinst.VirtualAudio(conn=guest.conn))
         except Exception, e:
-            self.err.show_err(_("Error setting up sound device:") + str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error setting up sound device:") + str(e))
             return None
 
         return guest
@@ -1242,8 +1238,7 @@ class vmmCreate(vmmGObjectUI):
 
         except Exception, e:
             self.err.show_err(_("Uncaught error validating install "
-                                "parameters: %s") % str(e),
-                                "".join(traceback.format_exc()))
+                                "parameters: %s") % str(e))
             return
 
     def validate_name_page(self):
@@ -1572,8 +1567,7 @@ class vmmCreate(vmmGObjectUI):
             self.topwin.window.set_cursor(
                                     gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
 
-            self.err.show_err(_("Error starting installation: ") + str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error starting installation: ") + str(e))
 
     def customize(self, guest):
         virtinst_guest = vmmDomainVirtinst(self.conn, guest, self.guest.uuid)
@@ -1613,7 +1607,8 @@ class vmmCreate(vmmGObjectUI):
 
         if error:
             error = (_("Unable to complete install: '%s'") % error)
-            self.err.show_err(error, error + "\n" + details)
+            self.err.show_err(error,
+                              details=(error + "\n" + details))
             self.failed_guest = self.guest
             return
 
@@ -1690,8 +1685,7 @@ class vmmCreate(vmmGObjectUI):
             logging.debug("Install should be completed, starting VM.")
             vm.startup()
         except Exception, e:
-            self.err.show_err(_("Error continue install: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error continue install: %s") % str(e))
 
         return True
 

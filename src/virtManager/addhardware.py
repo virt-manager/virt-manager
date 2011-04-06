@@ -736,8 +736,7 @@ class vmmAddHardware(vmmGObjectUI):
                 return
         except Exception, e:
             self.err.show_err(_("Uncaught error validating hardware "
-                                "input: %s") % str(e),
-                              "".join(traceback.format_exc()))
+                                "input: %s") % str(e))
             return
 
         self.topwin.set_sensitive(False)
@@ -752,7 +751,7 @@ class vmmAddHardware(vmmGObjectUI):
             details = "".join(traceback.format_exc())
 
         if error is not None:
-            self.err.show_err(error, details)
+            self.err.show_err(error, details=details)
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
@@ -942,7 +941,7 @@ class vmmAddHardware(vmmGObjectUI):
         if attach_err:
             res = self.err.show_err(
                 _("Are you sure you want to add this device?"),
-                attach_err[0] + "\n\n" + attach_err[1],
+                details=(attach_err[0] + "\n\n" + attach_err[1]),
                 text2=(
                 _("This device could not be attached to the running machine. "
                   "Would you like to make the device available after the "
@@ -958,8 +957,7 @@ class vmmAddHardware(vmmGObjectUI):
         try:
             self.vm.add_device(self._dev)
         except Exception, e:
-            self.err.show_err(_("Error adding device: %s" % str(e)),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error adding device: %s" % str(e)))
             return (True, None)
 
         return (False, None)

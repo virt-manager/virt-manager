@@ -61,7 +61,8 @@ def _simple_async(callback, args, title, text, parent, errorintro,
         return
 
     error = errorintro + ": " + error
-    parent.err.show_err(error, error + "\n\n" + details)
+    parent.err.show_err(error,
+                        details=(error + "\n\n" + details))
 
 # Displays a progress bar while executing the "callback" method.
 class vmmAsyncJob(vmmGObjectUI):

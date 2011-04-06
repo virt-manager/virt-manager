@@ -21,7 +21,6 @@
 import gtk
 
 import copy
-import traceback
 import logging
 
 from virtManager import util
@@ -379,8 +378,7 @@ class vmmCreatePool(vmmGObjectUI):
                 self.window.get_widget("pool-forward").grab_focus()
                 notebook.next_page()
         except Exception, e:
-            self.err.show_err(_("Uncaught error validating input: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Uncaught error validating input: %s") % str(e))
             return
 
     def back(self, ignore=None):
@@ -403,7 +401,8 @@ class vmmCreatePool(vmmGObjectUI):
 
         if error:
             error = _("Error creating pool: %s") % error
-            self.err.show_err(error, error + "\n" + details)
+            self.err.show_err(error,
+                              details=(error + "\n" + details))
         else:
             self.close()
 

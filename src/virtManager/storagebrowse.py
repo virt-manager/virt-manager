@@ -21,7 +21,6 @@
 import gobject
 import gtk
 
-import traceback
 import logging
 
 import virtinst
@@ -259,8 +258,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             self.addvol.set_name_hint(self.vm_name)
             self.addvol.show()
         except Exception, e:
-            self.show_err(_("Error launching volume wizard: %s") % str(e),
-                          "".join(traceback.format_exc()))
+            self.show_err(_("Error launching volume wizard: %s") % str(e))
 
     def browse_local(self, src_ignore):
         if not self.local_args.get("dialog_name"):
@@ -311,7 +309,7 @@ class vmmStorageBrowser(vmmGObjectUI):
             model.append([key, vol.get_name(), vol.get_pretty_capacity(),
                           vol.get_format() or "", namestr])
 
-    def show_err(self, info, details):
+    def show_err(self, info, details=None):
         self.err.show_err(info, details, async=False)
 
 vmmGObjectUI.type_register(vmmStorageBrowser)

@@ -20,6 +20,7 @@
 import gtk
 
 import logging
+import traceback
 
 import virtManager.util as util
 
@@ -57,13 +58,16 @@ class vmmErrorDialog (object):
     def get_parent(self):
         return self._parent
 
-    def show_err(self, summary, details, title="",
+    def show_err(self, summary, details=None, title="",
                  async=True, debug=True,
                  dialog_type=gtk.MESSAGE_ERROR,
                  buttons=gtk.BUTTONS_CLOSE,
                  text2=None):
         if debug:
             logging.debug("dialog message: %s : %s" % (summary, details))
+
+        if details is None:
+            details = "".join(traceback.format_exc())
 
         dialog = _errorDialog(parent=self.get_parent(),
                               type=dialog_type, buttons=buttons)

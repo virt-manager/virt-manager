@@ -19,7 +19,6 @@
 #
 
 import logging
-import traceback
 import os
 import statvfs
 
@@ -118,8 +117,7 @@ def check_default_pool_active(topwin, conn):
         except Exception, e:
             return topwin.err.show_err(_("Could not start storage_pool "
                                          "'%s': %s") %
-                                         (default_pool.get_name(), str(e)),
-                                         "".join(traceback.format_exc()))
+                                         (default_pool.get_name(), str(e)))
     return True
 
 #####################################################
@@ -519,8 +517,7 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
             logging.info("Started network '%s'." % devname)
         except Exception, e:
             return err_dial.show_err(_("Could not start virtual network "
-                                       "'%s': %s") % (devname, str(e)),
-                                       "".join(traceback.format_exc()))
+                                       "'%s': %s") % (devname, str(e)))
 
     # Create network device
     try:

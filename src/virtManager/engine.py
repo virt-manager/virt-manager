@@ -125,8 +125,7 @@ def check_packagekit(errbox, packages, libvirt_packages):
     try:
         packagekit_install(do_install)
     except Exception, e:
-        errbox.show_err(_("Error talking to PackageKit: %s") % str(e),
-                        "".join(traceback.format_exc()))
+        errbox.show_err(_("Error talking to PackageKit: %s") % str(e))
         return
 
     need_libvirt = False
@@ -540,8 +539,7 @@ class vmmEngine(vmmGObject):
                 self.windowAbout = vmmAbout()
             self.windowAbout.show()
         except Exception, e:
-            src.err.show_err(_("Error launching 'About' dialog: %s") % str(e),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching 'About' dialog: %s") % str(e))
 
     def _do_show_help(self, src, index):
         try:
@@ -552,8 +550,7 @@ class vmmEngine(vmmGObject):
             logging.debug("Showing help for %s" % uri)
             gtk.show_uri(None, uri, gtk.get_current_event_time())
         except Exception, e:
-            src.err.show_err(_("Unable to display documentation: %s") % e,
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Unable to display documentation: %s") % e)
 
     def _get_preferences(self):
         if self.windowPreferences:
@@ -568,8 +565,7 @@ class vmmEngine(vmmGObject):
         try:
             self._get_preferences().show()
         except Exception, e:
-            src.err.show_err(_("Error launching preferences: %s") % str(e),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching preferences: %s") % str(e))
 
     def _get_host_dialog(self, uri):
         if self.connections[uri]["windowHost"]:
@@ -588,8 +584,7 @@ class vmmEngine(vmmGObject):
         try:
             self._get_host_dialog(uri).show()
         except Exception, e:
-            src.err.show_err(_("Error launching host dialog: %s") % str(e),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching host dialog: %s") % str(e))
 
     def _get_connect_dialog(self):
         if self.windowConnect:
@@ -608,8 +603,7 @@ class vmmEngine(vmmGObject):
         try:
             self._get_connect_dialog().show()
         except Exception, e:
-            src.err.show_err(_("Error launching connect dialog: %s") % str(e),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching connect dialog: %s") % str(e))
 
     def _get_details_dialog(self, uri, uuid):
         if uuid in self.connections[uri]["windowDetails"]:
@@ -641,8 +635,7 @@ class vmmEngine(vmmGObject):
             details.show()
             return details
         except Exception, e:
-            src.err.show_err(_("Error launching details: %s") % str(e),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching details: %s") % str(e))
 
     def _do_show_console(self, src, uri, uuid):
         win = self._do_show_details(src, uri, uuid)
@@ -692,8 +685,7 @@ class vmmEngine(vmmGObject):
         except Exception, e:
             if not src:
                 raise
-            src.err.show_err(_("Error launching manager: %s") % str(e),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching manager: %s") % str(e))
 
     def _get_create_dialog(self):
         if self.windowCreate:
@@ -709,8 +701,7 @@ class vmmEngine(vmmGObject):
         try:
             self._get_create_dialog().show(uri)
         except Exception, e:
-            src.err.show_err(_("Error launching manager: %s") % str(e),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching manager: %s") % str(e))
 
     def _do_show_migrate(self, src, uri, uuid):
         try:
@@ -723,8 +714,7 @@ class vmmEngine(vmmGObject):
             self.windowMigrate.set_state(vm)
             self.windowMigrate.show()
         except Exception, e:
-            src.err.show_err(_("Error launching migrate dialog: %s") %
-                             str(e), "".join(traceback.format_exc()))
+            src.err.show_err(_("Error launching migrate dialog: %s") % str(e))
 
     def _do_show_clone(self, src, uri, uuid):
         con = self._lookup_connection(uri)
@@ -741,8 +731,7 @@ class vmmEngine(vmmGObject):
 
             clone_window.show()
         except Exception, e:
-            src.err.show_err(_("Error setting clone parameters: %s") %
-                             str(e), "".join(traceback.format_exc()))
+            src.err.show_err(_("Error setting clone parameters: %s") % str(e))
 
     ##########################################
     # Window launchers from virt-manager cli #
@@ -832,7 +821,8 @@ class vmmEngine(vmmGObject):
 
         if error is not None:
             error = _("Error saving domain: %s") % error
-            src.err.show_err(error, error + "\n" + details)
+            src.err.show_err(error,
+                             details=(error + "\n" + details))
 
     def _save_cancel(self, asyncjob, vm):
         logging.debug("Cancelling save job")
@@ -880,7 +870,8 @@ class vmmEngine(vmmGObject):
 
         if error is not None:
             error = _("Error restoring domain: %s") % error
-            src.err.show_err(error, error + "\n" + details)
+            src.err.show_err(error,
+                             details=(error + "\n" + details))
 
     def _restore_saved_callback(self, asyncjob, file_to_load, conn):
         ignore = asyncjob
@@ -910,8 +901,7 @@ class vmmEngine(vmmGObject):
         try:
             vm.destroy()
         except Exception, e:
-            src.err.show_err(_("Error shutting down domain: %s" % str(e)),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error shutting down domain: %s" % str(e)))
 
     def _do_suspend_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
@@ -934,8 +924,7 @@ class vmmEngine(vmmGObject):
         try:
             vm.suspend()
         except Exception, e:
-            src.err.show_err(_("Error pausing domain: %s" % str(e)),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error pausing domain: %s" % str(e)))
 
     def _do_resume_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
@@ -945,8 +934,7 @@ class vmmEngine(vmmGObject):
         try:
             vm.resume()
         except Exception, e:
-            src.err.show_err(_("Error unpausing domain: %s" % str(e)),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error unpausing domain: %s" % str(e)))
 
     def _do_run_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
@@ -993,8 +981,7 @@ class vmmEngine(vmmGObject):
         try:
             vm.shutdown()
         except Exception, e:
-            src.err.show_err(_("Error shutting down domain: %s" % str(e)),
-                             "".join(traceback.format_exc()))
+            src.err.show_err(_("Error shutting down domain: %s" % str(e)))
 
     def _do_reboot_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
@@ -1022,8 +1009,7 @@ class vmmEngine(vmmGObject):
             no_support = virtinst.support.is_error_nosupport(reboot_err)
             if not no_support:
                 src.err.show_err(_("Error rebooting domain: %s" %
-                                 str(reboot_err)),
-                                 "".join(traceback.format_exc()))
+                                 str(reboot_err)))
 
         if not no_support:
             return
@@ -1037,7 +1023,6 @@ class vmmEngine(vmmGObject):
 
             # Raise the original error message
             src.err.show_err(_("Error rebooting domain: %s" %
-                             str(reboot_err)),
-                             "".join(traceback.format_exc()))
+                             str(reboot_err)))
 
 vmmGObject.type_register(vmmEngine)

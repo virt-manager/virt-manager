@@ -140,7 +140,7 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.close()
 
         if error is not None:
-            self.err.show_err(error, details)
+            self.err.show_err(error, details=details)
 
         self.conn.tick(noStatsUpdate=True)
 

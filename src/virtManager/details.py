@@ -1024,8 +1024,7 @@ class vmmDetails(vmmGObjectUI):
             else:
                 pagetype = -1
         except Exception, e:
-            self.err.show_err(_("Error refreshing hardware page: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error refreshing hardware page: %s") % str(e))
             return
 
         rem = pagetype in remove_pages
@@ -1180,7 +1179,7 @@ class vmmDetails(vmmGObjectUI):
             self.addhw.show()
         except Exception, e:
             self.err.show_err((_("Error launching hardware dialog: %s") %
-                               str(e)), "".join(traceback.format_exc()))
+                               str(e)))
 
     def remove_xml_dev(self, src_ignore):
         info = self.get_hw_selection(HW_LIST_COL_DEVICE)
@@ -1501,8 +1500,7 @@ class vmmDetails(vmmGObjectUI):
             self._refresh_cpu_config(CPU)
             self._cpu_copy_host = True
         except Exception, e:
-            self.err.show_err(_("Error copying host CPU: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error copying host CPU: %s") % str(e))
             return
 
     def config_cpu_topology_enable(self, src):
@@ -1729,8 +1727,7 @@ class vmmDetails(vmmGObjectUI):
         try:
             self.vm.pin_vcpu(vcpu_num, pinlist)
         except Exception, e:
-            self.err.show_err(_("Error pinning vcpus: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error pinning vcpus: %s") % str(e))
             return
 
         self._refresh_runtime_pinning()
@@ -1774,7 +1771,7 @@ class vmmDetails(vmmGObjectUI):
                 self.vm.set_autostart(auto.get_active())
             except Exception, e:
                 self.err.show_err((_("Error changing autostart value: %s") %
-                                   str(e)), "".join(traceback.format_exc()))
+                                   str(e)))
                 return False
 
         bootdevs = self.get_config_boot_devs()
@@ -1939,8 +1936,7 @@ class vmmDetails(vmmGObjectUI):
         try:
             self.vm.remove_device(dev_id_info)
         except Exception, e:
-            self.err.show_err(_("Error Removing Device: %s" % str(e)),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error Removing Device: %s" % str(e)))
             return
 
         # Try to hot remove
@@ -1957,7 +1953,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.err.show_err(
             _("Device could not be removed from the running machine"),
-            detach_err[0] + "\n\n" + detach_err[1],
+            details=(detach_err[0] + "\n\n" + detach_err[1]),
             text2=_("This change will take effect after the next VM reboot."),
             buttons=gtk.BUTTONS_OK,
             dialog_type=gtk.MESSAGE_INFO)
@@ -2012,7 +2008,7 @@ class vmmDetails(vmmGObjectUI):
                 self.vm.redefine_cached()
         except Exception, e:
             self.err.show_err((_("Error changing VM configuration: %s") %
-                              str(e)), "".join(traceback.format_exc()))
+                              str(e)))
             # If we fail, make sure we flush the cache
             self.vm.refresh_xml()
             return False
@@ -2032,7 +2028,8 @@ class vmmDetails(vmmGObjectUI):
             for err1, tb in hotplug_err:
                 hotplug_msg += (err1 + "\n\n" + tb + "\n")
 
-            self.err.show_err(msg, details=hotplug_msg,
+            self.err.show_err(msg,
+                              details=hotplug_msg,
                               buttons=gtk.BUTTONS_OK,
                               dialog_type=dtype)
 

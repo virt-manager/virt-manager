@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import traceback
 import logging
 import os
 
@@ -621,8 +620,7 @@ class vmmCloneVM(vmmGObjectUI):
                                     macaddr=new)
             row[NETWORK_INFO_NEW_MAC] = new
         except Exception, e:
-            self.err.show_err(_("Error changing MAC address: %s") % str(e),
-                                "".join(traceback.format_exc()))
+            self.err.show_err(_("Error changing MAC address: %s") % str(e))
             return
 
         self.change_mac_close()
@@ -663,8 +661,7 @@ class vmmCloneVM(vmmGObjectUI):
             row[STORAGE_INFO_NEW_PATH] = new_path
             row[STORAGE_INFO_MANUAL_PATH] = True
         except Exception, e:
-            self.err.show_err(_("Error changing storage path: %s") % str(e),
-                                "".join(traceback.format_exc()))
+            self.err.show_err(_("Error changing storage path: %s") % str(e))
             return
 
         self.change_storage_close()
@@ -734,8 +731,7 @@ class vmmCloneVM(vmmGObjectUI):
             if not self.validate():
                 return
         except Exception, e:
-            self.err.show_err(_("Uncaught error validating input: %s") % str(e),
-                                "".join(traceback.format_exc()))
+            self.err.show_err(_("Uncaught error validating input: %s") % str(e))
             return
 
         self.topwin.set_sensitive(False)
@@ -756,7 +752,8 @@ class vmmCloneVM(vmmGObjectUI):
         if error is not None:
             error = (_("Error creating virtual machine clone '%s': %s") %
                       (self.clone_design.clone_name, error))
-            self.err.show_err(error, error + "\n" + details)
+            self.err.show_err(error,
+                              details=(error + "\n" + details))
         else:
             self.close()
             self.conn.tick(noStatsUpdate=True)

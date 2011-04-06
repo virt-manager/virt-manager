@@ -431,7 +431,8 @@ class vmmMigrateDialog(vmmGObjectUI):
         except Exception, e:
             details = "".join(traceback.format_exc())
             self.err.show_err((_("Uncaught error validating input: %s") %
-                               str(e)), details)
+                               str(e)),
+                               details=details)
             return
 
         self.topwin.set_sensitive(False)
@@ -460,7 +461,8 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         if error:
             error = _("Unable to migrate guest: %s") % error
-            self.err.show_err(error, error + "\n" + details)
+            self.err.show_err(error,
+                              details=(error + "\n" + details))
         else:
             self.conn.tick(noStatsUpdate=True)
             destconn.tick(noStatsUpdate=True)

@@ -20,7 +20,6 @@
 
 import gobject
 import gtk
-import traceback
 import logging
 
 from virtinst import VirtualDisk
@@ -395,8 +394,7 @@ class vmmHost(vmmGObjectUI):
         try:
             net.delete()
         except Exception, e:
-            self.err.show_err(_("Error deleting network: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error deleting network: %s") % str(e))
 
     def start_network(self, src_ignore):
         net = self.current_network()
@@ -407,8 +405,7 @@ class vmmHost(vmmGObjectUI):
         try:
             net.start()
         except Exception, e:
-            self.err.show_err(_("Error starting network: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error starting network: %s") % str(e))
 
     def stop_network(self, src_ignore):
         net = self.current_network()
@@ -419,8 +416,7 @@ class vmmHost(vmmGObjectUI):
         try:
             net.stop()
         except Exception, e:
-            self.err.show_err(_("Error stopping network: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error stopping network: %s") % str(e))
 
     def add_network(self, src_ignore):
         logging.debug("Launching 'Add Network'")
@@ -429,8 +425,7 @@ class vmmHost(vmmGObjectUI):
                 self.addnet = vmmCreateNetwork(self.conn)
             self.addnet.show()
         except Exception, e:
-            self.err.show_err(_("Error launching network wizard: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error launching network wizard: %s") % str(e))
 
     def net_apply(self, src_ignore):
         net = self.current_network()
@@ -441,8 +436,7 @@ class vmmHost(vmmGObjectUI):
         try:
             net.set_autostart(self.window.get_widget("net-autostart").get_active())
         except Exception, e:
-            self.err.show_err(_("Error setting net autostart: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error setting net autostart: %s") % str(e))
             return
         self.window.get_widget("net-apply").set_sensitive(False)
 
@@ -594,9 +588,8 @@ class vmmHost(vmmGObjectUI):
         try:
             pool.stop()
         except Exception, e:
-            self.err.show_err(_("Error starting pool '%s': %s") % \
-                               (pool.get_name(), str(e)),
-                               "".join(traceback.format_exc()))
+            self.err.show_err(_("Error starting pool '%s': %s") %
+                               (pool.get_name(), str(e)))
 
     def start_pool(self, src_ignore):
         pool = self.current_pool()
@@ -607,9 +600,8 @@ class vmmHost(vmmGObjectUI):
         try:
             pool.start()
         except Exception, e:
-            self.err.show_err(_("Error starting pool '%s': %s") % \
-                               (pool.get_name(), str(e)),
-                                "".join(traceback.format_exc()))
+            self.err.show_err(_("Error starting pool '%s': %s") %
+                               (pool.get_name(), str(e)))
 
     def delete_pool(self, src_ignore):
         pool = self.current_pool()
@@ -625,8 +617,7 @@ class vmmHost(vmmGObjectUI):
         try:
             pool.delete()
         except Exception, e:
-            self.err.show_err(_("Error deleting pool: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error deleting pool: %s") % str(e))
 
     def pool_refresh(self, src_ignore):
         pool = self.current_pool()
@@ -638,9 +629,8 @@ class vmmHost(vmmGObjectUI):
             pool.refresh()
             self.refresh_current_pool()
         except Exception, e:
-            self.err.show_err(_("Error refreshing pool '%s': %s") % \
-                               (pool.get_name(), str(e)),
-                               "".join(traceback.format_exc()))
+            self.err.show_err(_("Error refreshing pool '%s': %s") %
+                               (pool.get_name(), str(e)))
 
     def delete_vol(self, src_ignore):
         vol = self.current_vol()
@@ -657,8 +647,7 @@ class vmmHost(vmmGObjectUI):
             vol.delete()
             self.refresh_current_pool()
         except Exception, e:
-            self.err.show_err(_("Error deleting volume: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error deleting volume: %s") % str(e))
             return
         self.populate_storage_volumes()
 
@@ -669,8 +658,7 @@ class vmmHost(vmmGObjectUI):
                 self.addpool = vmmCreatePool(self.conn)
             self.addpool.show()
         except Exception, e:
-            self.err.show_err(_("Error launching pool wizard: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error launching pool wizard: %s") % str(e))
 
     def add_vol(self, src_ignore):
         pool = self.current_pool()
@@ -687,8 +675,7 @@ class vmmHost(vmmGObjectUI):
                 self.addvol.set_parent_pool(pool)
             self.addvol.show()
         except Exception, e:
-            self.err.show_err(_("Error launching volume wizard: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error launching volume wizard: %s") % str(e))
 
     def refresh_current_pool(self, ignore1=None):
         cp = self.current_pool()
@@ -726,8 +713,7 @@ class vmmHost(vmmGObjectUI):
             do_auto = self.window.get_widget("pool-autostart").get_active()
             pool.set_autostart(do_auto)
         except Exception, e:
-            self.err.show_err(_("Error setting pool autostart: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error setting pool autostart: %s") % str(e))
             return
         self.window.get_widget("pool-apply").set_sensitive(False)
 
@@ -897,9 +883,8 @@ class vmmHost(vmmGObjectUI):
         try:
             interface.stop()
         except Exception, e:
-            self.err.show_err(_("Error stopping interface '%s': %s") % \
-                              (interface.get_name(), str(e)),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error stopping interface '%s': %s") %
+                              (interface.get_name(), str(e)))
 
     def start_interface(self, src_ignore):
         interface = self.current_interface()
@@ -924,9 +909,8 @@ class vmmHost(vmmGObjectUI):
         try:
             interface.start()
         except Exception, e:
-            self.err.show_err(_("Error starting interface '%s': %s") % \
-                              (interface.get_name(), str(e)),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error starting interface '%s': %s") %
+                              (interface.get_name(), str(e)))
 
     def delete_interface(self, src_ignore):
         interface = self.current_interface()
@@ -943,8 +927,7 @@ class vmmHost(vmmGObjectUI):
         try:
             interface.delete()
         except Exception, e:
-            self.err.show_err(_("Error deleting interface: %s") % str(e),
-                              "".join(traceback.format_exc()))
+            self.err.show_err(_("Error deleting interface: %s") % str(e))
 
     def add_interface(self, src_ignore):
         logging.debug("Launching 'Add Interface' wizard")
@@ -954,7 +937,7 @@ class vmmHost(vmmGObjectUI):
             self.addinterface.show()
         except Exception, e:
             self.err.show_err(_("Error launching interface wizard: %s") %
-                              str(e), "".join(traceback.format_exc()))
+                              str(e))
 
     def refresh_current_interface(self, ignore1=None):
         cp = self.current_interface()
@@ -987,7 +970,7 @@ class vmmHost(vmmGObjectUI):
             interface.set_startmode(newmode)
         except Exception, e:
             self.err.show_err(_("Error setting interface startmode: %s") %
-                              str(e), "".join(traceback.format_exc()))
+                              str(e))
             return
 
         # XXX: This will require an interface restart
