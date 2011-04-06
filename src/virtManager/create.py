@@ -548,7 +548,7 @@ class vmmCreate(vmmGObjectUI):
         # Networking
         net_list        = self.window.get_widget("config-netdev")
 
-        do_warn = uihelpers.populate_network_list(net_list, self.conn)
+        do_warn = uihelpers.populate_network_list(net_list, self.conn, False)
         self.set_net_warn(self.conn.netdev_error or do_warn,
                           self.conn.netdev_error, True)
 

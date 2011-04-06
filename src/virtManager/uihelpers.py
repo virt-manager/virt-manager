@@ -354,7 +354,7 @@ def get_network_selection(net_list, bridge_entry):
 
     return net_type, net_src
 
-def populate_network_list(net_list, conn, show_manual_bridge=True):
+def populate_network_list(net_list, conn, show_direct_interfaces=True):
     model = net_list.get_model()
     model.clear()
 
@@ -438,8 +438,15 @@ def populate_network_list(net_list, conn, show_manual_bridge=True):
                 bridge_name = name
                 brlabel = _("(Empty bridge)")
         else:
-            sensitive = False
-            brlabel = "(%s)" % _("Not bridged")
+            if (show_direct_interfaces and virtinst.support.check_conn_support(conn.vmm,
+                         virtinst.support.SUPPORT_CONN_HV_DIRECT_INTERFACE)):
+                sensitive = True
+                nettype = VirtualNetworkInterface.TYPE_DIRECT
+                bridge_name = name
+                brlabel = ": %s" % _("macvtap")
+            else:
+                sensitive = False
+                brlabel = "(%s)" % _("Not bridged")
 
         label = _("Host device %s %s") % (br.get_name(), brlabel)
         if hasShared and not brIdxLabel:
@@ -482,11 +489,10 @@ def populate_network_list(net_list, conn, show_manual_bridge=True):
         model.insert(0, row)
         default = 0
 
-    if show_manual_bridge:
-        # After all is said and done, add a manual bridge option
-        manual_row = build_row(None, None, _("Specify shared device name"),
-                               True, False, manual_bridge=True)
-        model.append(manual_row)
+    # After all is said and done, add a manual bridge option
+    manual_row = build_row(None, None, _("Specify shared device name"),
+                           True, False, manual_bridge=True)
+    model.append(manual_row)
 
     set_active(default)
     return return_warn
@@ -526,6 +532,8 @@ def validate_network(parent, conn, nettype, devname, macaddr, model=None):
         if nettype == VirtualNetworkInterface.TYPE_VIRTUAL:
             netname = devname
         elif nettype == VirtualNetworkInterface.TYPE_BRIDGE:
+            bridge = devname
+        elif nettype == VirtualNetworkInterface.TYPE_DIRECT:
             bridge = devname
         elif nettype == VirtualNetworkInterface.TYPE_USER:
             pass
