@@ -462,7 +462,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         if error:
             error = _("Unable to migrate guest: %s") % error
             self.err.show_err(error,
-                              details=(error + "\n" + details))
+                              details=details)
         else:
             self.conn.tick(noStatsUpdate=True)
             destconn.tick(noStatsUpdate=True)

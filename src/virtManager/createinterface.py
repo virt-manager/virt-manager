@@ -1119,7 +1119,7 @@ class vmmCreateInterface(vmmGObjectUI):
         if error:
             error = _("Error creating interface: '%s'") % error
             self.err.show_err(error,
-                              details=(error + "\n" + details))
+                              details=details)
         else:
             # FIXME: Hmm, shouldn't we emit a signal here rather than do this?
             self.conn.tick(noStatsUpdate=True)

@@ -310,6 +310,8 @@ class vmmStorageBrowser(vmmGObjectUI):
                           vol.get_format() or "", namestr])
 
     def show_err(self, info, details=None):
-        self.err.show_err(info, details, async=False)
+        self.err.show_err(info,
+                          details=details,
+                          async=False)
 
 vmmGObjectUI.type_register(vmmStorageBrowser)

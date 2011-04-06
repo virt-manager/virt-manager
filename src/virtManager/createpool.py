@@ -402,7 +402,7 @@ class vmmCreatePool(vmmGObjectUI):
         if error:
             error = _("Error creating pool: %s") % error
             self.err.show_err(error,
-                              details=(error + "\n" + details))
+                              details=details)
         else:
             self.close()
 

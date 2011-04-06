@@ -216,7 +216,7 @@ class vmmCreateVolume(vmmGObjectUI):
         if error:
             error = _("Error creating vol: %s") % error
             self.show_err(error,
-                          details=(error + "\n" + details))
+                          details=details)
         else:
             self.emit("vol-created")
             self.close()

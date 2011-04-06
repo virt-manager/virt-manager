@@ -822,7 +822,7 @@ class vmmEngine(vmmGObject):
         if error is not None:
             error = _("Error saving domain: %s") % error
             src.err.show_err(error,
-                             details=(error + "\n" + details))
+                             details=details)
 
     def _save_cancel(self, asyncjob, vm):
         logging.debug("Cancelling save job")
@@ -871,7 +871,7 @@ class vmmEngine(vmmGObject):
         if error is not None:
             error = _("Error restoring domain: %s") % error
             src.err.show_err(error,
-                             details=(error + "\n" + details))
+                             details=details)
 
     def _restore_saved_callback(self, asyncjob, file_to_load, conn):
         ignore = asyncjob

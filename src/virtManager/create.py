@@ -1608,7 +1608,7 @@ class vmmCreate(vmmGObjectUI):
         if error:
             error = (_("Unable to complete install: '%s'") % error)
             self.err.show_err(error,
-                              details=(error + "\n" + details))
+                              details=details)
             self.failed_guest = self.guest
             return
 
