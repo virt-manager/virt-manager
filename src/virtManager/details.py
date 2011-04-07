@@ -194,7 +194,7 @@ def lookup_nodedev(vmmconn, hostdev):
     if devtype == 'usb':
         devtype = 'usb_device'
 
-    devs = vmmconn.get_devices(devtype, None)
+    devs = vmmconn.get_nodedevs(devtype, None)
     for dev in devs:
         # Try to get info from {product|vendor}_id
         if (attrVal(dev, "product_id") == product_id and

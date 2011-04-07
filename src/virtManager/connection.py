@@ -688,7 +688,7 @@ class vmmConnection(vmmGObject):
         return self.interfaces[name]
     def get_nodedev(self, name):
         return self.nodedevs[name]
-    def get_devices(self, devtype=None, devcap=None):
+    def get_nodedevs(self, devtype=None, devcap=None):
         retdevs = []
         for vdev in self.nodedevs.values():
             if devtype and vdev.device_type != devtype:

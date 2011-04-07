@@ -228,7 +228,7 @@ class vmmCreatePool(vmmGObjectUI):
             use_list.set_active(0)
 
     def list_scsi_adapters(self):
-        scsi_hosts = self.conn.get_devices("scsi_host")
+        scsi_hosts = self.conn.get_nodedevs("scsi_host")
         host_list = map(lambda dev: dev.host, scsi_hosts)
 
         clean_list = []

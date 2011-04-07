@@ -506,7 +506,7 @@ class vmmCreateInterface(vmmGObjectUI):
         iface_list = []
         row_dict = {}
 
-        for phys in self.conn.get_devices("net"):
+        for phys in self.conn.get_nodedevs("net"):
             row_dict[phys.interface] = [phys.interface,
                                         False, False, phys.interface,
                                         "ethernet", False, True, None,

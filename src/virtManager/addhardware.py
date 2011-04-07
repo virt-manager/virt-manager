@@ -497,9 +497,9 @@ class vmmAddHardware(vmmGObjectUI):
         subdevs = []
 
         if subtype:
-            subdevs = self.vm.get_connection().get_devices(subtype, subcap)
+            subdevs = self.vm.get_connection().get_nodedevs(subtype, subcap)
 
-        devs = self.vm.get_connection().get_devices(devtype, devcap)
+        devs = self.vm.get_connection().get_nodedevs(devtype, devcap)
         for dev in devs:
             prettyname = dev.pretty_name()
 
