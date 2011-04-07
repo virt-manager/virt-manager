@@ -1492,8 +1492,9 @@ class vmmCreate(vmmGObjectUI):
 
         if self.nic and self.nic in self.guest.get_devices("interface"):
             self.guest.remove_device(self.nic)
-        self.nic = nic
-        self.guest.add_device(self.nic)
+        if nic:
+            self.nic = nic
+            self.guest.add_device(self.nic)
 
         return True
 
