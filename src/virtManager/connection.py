@@ -119,7 +119,7 @@ class vmmConnection(vmmGObject):
         self._caps_xml = None
 
         self.network_capable = None
-        self.storage_capable = None
+        self._storage_capable = None
         self.interface_capable = None
         self._nodedev_capable = None
 
@@ -489,7 +489,19 @@ class vmmConnection(vmmGObject):
     #######################
 
     def is_storage_capable(self):
-        return virtinst.util.is_storage_capable(self.vmm)
+        if self._storage_capable == None:
+            self._storage_capable = virtinst.util.is_storage_capable(self.vmm)
+            if self._storage_capable is False:
+                logging.debug("Connection doesn't seem to support storage "
+                              "APIs. Skipping all storage polling.")
+            else:
+                # Try to create the default storage pool
+                try:
+                    util.build_default_pool(self)
+                except Exception, e:
+                    logging.debug("Building default pool failed: %s" % str(e))
+
+        return self._storage_capable
 
     def is_nodedev_capable(self):
         if self._nodedev_capable == None:
@@ -1202,20 +1214,7 @@ class vmmConnection(vmmGObject):
         newActivePoolNames = []
         newInactivePoolNames = []
 
-        if self.storage_capable == None:
-            self.storage_capable = virtinst.util.is_storage_capable(self.vmm)
-            if self.storage_capable is False:
-                logging.debug("Connection doesn't seem to support storage "
-                              "APIs. Skipping all storage polling.")
-
-            else:
-                # Try to create the default storage pool
-                try:
-                    util.build_default_pool(self)
-                except Exception, e:
-                    logging.debug("Building default pool failed: %s" % str(e))
-
-        if not self.storage_capable:
+        if self.is_storage_capable() is False:
             return (stopPools, startPools, origPools, newPools, currentPools)
 
         try:

@@ -47,9 +47,6 @@ def build_default_pool(vmmconn):
     """
     # FIXME: This should use config.get_default_image_path ?
     conn = vmmconn.vmm
-    if not virtinst.util.is_storage_capable(conn):
-        # VirtualDisk will raise an error for us
-        return
 
     path = get_default_pool_path(vmmconn)
     name = get_default_pool_name(vmmconn)
