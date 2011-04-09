@@ -68,14 +68,12 @@ def host_disk_space(conn):
     path = util.get_default_dir(conn)
 
     avail = 0
-    if pool:
+    if pool and pool.is_active():
         # FIXME: make sure not inactive?
         # FIXME: use a conn specific function after we send pool-added
-        pool = virtinst.util.lookup_pool_by_path(conn.vmm, path)
-        if pool and pool.info()[0] == libvirt.VIR_STORAGE_POOL_RUNNING:
-            pool.refresh(0)
-            avail = int(virtinst.util.get_xml_path(pool.XMLDesc(0),
-                                                   "/pool/available"))
+        pool.refresh()
+        avail = int(virtinst.util.get_xml_path(pool.get_xml(),
+                                               "/pool/available"))
 
     elif not conn.is_remote():
         vfs = os.statvfs(os.path.dirname(path))
