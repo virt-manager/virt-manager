@@ -42,6 +42,7 @@ from virtManager.interface import vmmInterface
 from virtManager.netdev import vmmNetDevice
 from virtManager.mediadev import vmmMediaDevice
 from virtManager.baseclass import vmmGObject
+from virtManager.nodedev import vmmNodeDevice
 
 class vmmConnection(vmmGObject):
     __gsignals__ = {
@@ -690,7 +691,8 @@ class vmmConnection(vmmGObject):
         return self.nodedevs[name]
     def get_nodedevs(self, devtype=None, devcap=None):
         retdevs = []
-        for vdev in self.nodedevs.values():
+        for dev in self.nodedevs.values():
+            vdev = dev.get_virtinst_obj()
             if devtype and vdev.device_type != devtype:
                 continue
 
@@ -1355,12 +1357,11 @@ class vmmConnection(vmmGObject):
 
             if key not in orig:
                 obj = self.vmm.nodeDeviceLookupByName(name)
-                vdev = virtinst.NodeDeviceParser.parse(obj.XMLDesc(0))
+                dev = vmmNodeDevice(self, obj, name)
 
                 # Object is brand new this tick period
-                current[key] = vdev
+                current[key] = dev
                 new.append(key)
-
             else:
                 # Previously known object, remove it from the orig list
                 current[key] = orig[key]

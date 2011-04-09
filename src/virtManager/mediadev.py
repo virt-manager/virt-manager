@@ -40,7 +40,9 @@ class vmmMediaDevice(vmmGObject):
     }
 
     @staticmethod
-    def mediadev_from_nodedev(conn, nodedev):
+    def mediadev_from_nodedev(conn, dev):
+        nodedev = dev.get_virtinst_obj()
+
         if nodedev.device_type != "storage":
             return None
 
@@ -54,9 +56,8 @@ class vmmMediaDevice(vmmGObject):
         media_label = nodedev.media_label
         media_key = None
 
-        nodedev_obj = conn.vmm.nodeDeviceLookupByName(key)
         obj = vmmMediaDevice(path, key, has_media, media_label, media_key,
-                             nodedev_obj, drvtype)
+                             dev, drvtype)
         obj.enable_poll_for_media()
 
         return obj
@@ -153,7 +154,8 @@ class vmmMediaDevice(vmmGObject):
             return False
 
         try:
-            xml = self.nodedev_obj.XMLDesc(0)
+            self.nodedev_obj.refresh_xml()
+            xml = self.nodedev_obj.get_xml()
         except:
             # Assume the device was removed
             return False
