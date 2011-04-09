@@ -659,7 +659,7 @@ class vmmConnection(vmmGObject):
         for name, iface in self.interfaces.items():
             interface_to_netdev(iface)
 
-        for nodedev in self.get_devices("net"):
+        for nodedev in self.get_nodedevs("net"):
             nodedev_to_netdev(nodedev)
 
         # Mark NetDevices as bridged where appropriate
