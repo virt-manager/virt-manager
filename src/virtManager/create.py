@@ -1201,7 +1201,7 @@ class vmmCreate(vmmGObjectUI):
             if (gtype == virtinst.VirtualGraphics.TYPE_SPICE and not
                 virtinst.support.check_conn_support(guest.conn,
                             virtinst.support.SUPPORT_CONN_HV_GRAPHICS_SPICE)):
-                logging.debug("Spice requested by HV doesn't support it. "
+                logging.debug("Spice requested but HV doesn't support it. "
                               "Using VNC graphics.")
                 gtype = virtinst.VirtualGraphics.TYPE_VNC
 
