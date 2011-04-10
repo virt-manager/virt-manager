@@ -22,7 +22,6 @@ import logging
 import os
 import statvfs
 
-import libvirt
 import gtk
 
 import virtinst

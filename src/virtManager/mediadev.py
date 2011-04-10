@@ -40,7 +40,7 @@ class vmmMediaDevice(vmmGObject):
     }
 
     @staticmethod
-    def mediadev_from_nodedev(conn, dev):
+    def mediadev_from_nodedev(dev):
         nodedev = dev.get_virtinst_obj()
 
         if nodedev.device_type != "storage":

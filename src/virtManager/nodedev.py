@@ -18,9 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import logging
-
 import virtinst
 
 from virtManager.libvirtobject import vmmLibvirtObject
@@ -41,6 +38,12 @@ class vmmNodeDevice(vmmLibvirtObject):
 
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
+
+    def get_name(self):
+        return self.name
+
+    def is_active(self):
+        return True
 
     def get_virtinst_obj(self):
         if not self._virtinst_obj:

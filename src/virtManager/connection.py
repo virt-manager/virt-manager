@@ -871,7 +871,7 @@ class vmmConnection(vmmGObject):
             return
 
         vobj = self.get_nodedev(name)
-        mediadev = vmmMediaDevice.mediadev_from_nodedev(self, vobj)
+        mediadev = vmmMediaDevice.mediadev_from_nodedev(vobj)
         if not mediadev:
             return
 
