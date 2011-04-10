@@ -171,7 +171,7 @@ class vmmConnection(vmmGObject):
         """
         Determine how we will be polling for net devices (HAL or libvirt)
         """
-        if self.is_nodedev_capable() and self.interface_capable:
+        if self.is_nodedev_capable() and self.is_interface_capable():
             try:
                 self._build_libvirt_netdev_list()
                 self.netdev_use_libvirt = True
@@ -503,6 +503,28 @@ class vmmConnection(vmmGObject):
                     logging.debug("Building default pool failed: %s" % str(e))
 
         return self._storage_capable
+
+    def is_network_capable(self):
+        if self.network_capable == None:
+            self.network_capable = virtinst.support.check_conn_support(
+                                       self.vmm,
+                                       virtinst.support.SUPPORT_CONN_NETWORK)
+            if self.network_capable is False:
+                logging.debug("Connection doesn't seem to support network "
+                              "APIs. Skipping all network polling.")
+
+        return self.network_capable
+
+    def is_interface_capable(self):
+        if self.interface_capable == None:
+            self.interface_capable = virtinst.support.check_conn_support(
+                                       self.vmm,
+                                       virtinst.support.SUPPORT_CONN_INTERFACE)
+            if self.interface_capable is False:
+                logging.debug("Connection doesn't seem to support interface "
+                              "APIs. Skipping all interface polling.")
+
+        return self.interface_capable
 
     def is_nodedev_capable(self):
         if self._nodedev_capable == None:
@@ -1135,135 +1157,10 @@ class vmmConnection(vmmGObject):
     # Tick/Update methods #
     #######################
 
-    def _update_nets(self):
-        """
-        Return lists of start/stopped/new networks
-        """
-
-        origNets = self.nets
-        currentNets = {}
-        startNets = []
-        stopNets = []
-        newNets = []
-        newActiveNetNames = []
-        newInactiveNetNames = []
-
-        if self.network_capable == None:
-            self.network_capable = virtinst.support.check_conn_support(
-                                       self.vmm,
-                                       virtinst.support.SUPPORT_CONN_NETWORK)
-            if self.network_capable is False:
-                logging.debug("Connection doesn't seem to support network "
-                              "APIs. Skipping all network polling.")
-
-        if not self.network_capable:
-            return (stopNets, startNets, origNets, newNets, currentNets)
-
-        try:
-            newActiveNetNames = self.vmm.listNetworks()
-        except:
-            logging.exception("Unable to list active networks")
-        try:
-            newInactiveNetNames = self.vmm.listDefinedNetworks()
-        except:
-            logging.exception("Unable to list inactive networks")
-
-        for name in newActiveNetNames:
-            try:
-                net = self.vmm.networkLookupByName(name)
-                uuid = util.uuidstr(net.UUID())
-                if uuid not in origNets:
-                    # Brand new network
-                    currentNets[uuid] = vmmNetwork(self, net, uuid, True)
-                    newNets.append(uuid)
-                    startNets.append(uuid)
-                else:
-                    # Already present network, see if it changed state
-                    currentNets[uuid] = origNets[uuid]
-                    if not currentNets[uuid].is_active():
-                        currentNets[uuid].set_active(True)
-                        startNets.append(uuid)
-                    del origNets[uuid]
-            except:
-                logging.exception("Couldn't fetch active network name '%s'" %
-                                  name)
-
-        for name in newInactiveNetNames:
-            try:
-                net = self.vmm.networkLookupByName(name)
-                uuid = util.uuidstr(net.UUID())
-                if uuid not in origNets:
-                    currentNets[uuid] = vmmNetwork(self, net, uuid, False)
-                    newNets.append(uuid)
-                else:
-                    currentNets[uuid] = origNets[uuid]
-                    if currentNets[uuid].is_active():
-                        currentNets[uuid].set_active(False)
-                        stopNets.append(uuid)
-                    del origNets[uuid]
-            except:
-                logging.exception("Couldn't fetch inactive network name '%s'"
-                                  % name)
-
-        return (startNets, stopNets, newNets, origNets, currentNets)
-
-    def _update_pools(self):
-        origPools = self.pools
-        currentPools = {}
-        startPools = []
-        stopPools = []
-        newPools = []
-        newActivePoolNames = []
-        newInactivePoolNames = []
-
-        if self.is_storage_capable() is False:
-            return (stopPools, startPools, origPools, newPools, currentPools)
-
-        try:
-            newActivePoolNames = self.vmm.listStoragePools()
-        except:
-            logging.exception("Unable to list active pools")
-        try:
-            newInactivePoolNames = self.vmm.listDefinedStoragePools()
-        except:
-            logging.exception("Unable to list inactive pools")
-
-        for name in newActivePoolNames:
-            try:
-                pool = self.vmm.storagePoolLookupByName(name)
-                uuid = util.uuidstr(pool.UUID())
-                if uuid not in origPools:
-                    currentPools[uuid] = vmmStoragePool(self, pool, uuid, True)
-                    newPools.append(uuid)
-                    startPools.append(uuid)
-                else:
-                    currentPools[uuid] = origPools[uuid]
-                    if not currentPools[uuid].is_active():
-                        currentPools[uuid].set_active(True)
-                        startPools.append(uuid)
-                    del origPools[uuid]
-            except:
-                logging.exception("Couldn't fetch active pool '%s'" % name)
-
-        for name in newInactivePoolNames:
-            try:
-                pool = self.vmm.storagePoolLookupByName(name)
-                uuid = util.uuidstr(pool.UUID())
-                if uuid not in origPools:
-                    currentPools[uuid] = vmmStoragePool(self, pool, uuid, False)
-                    newPools.append(uuid)
-                else:
-                    currentPools[uuid] = origPools[uuid]
-                    if currentPools[uuid].is_active():
-                        currentPools[uuid].set_active(False)
-                        stopPools.append(uuid)
-                    del origPools[uuid]
-            except:
-                logging.exception("Couldn't fetch inactive pool '%s'" % name)
-        return (stopPools, startPools, origPools, newPools, currentPools)
-
-    def _update_interfaces(self):
-        orig = self.interfaces
+    def _poll_helper(self,
+                     origlist, typename, check_support,
+                     active_list, inactive_list,
+                     lookup_func, build_class):
         current = {}
         start = []
         stop = []
@@ -1271,40 +1168,30 @@ class vmmConnection(vmmGObject):
         newActiveNames = []
         newInactiveNames = []
 
-        if self.interface_capable == None:
-            self.interface_capable = virtinst.support.check_conn_support(
-                                       self.vmm,
-                                       virtinst.support.SUPPORT_CONN_INTERFACE)
-            if self.interface_capable is False:
-                logging.debug("Connection doesn't seem to support interface "
-                              "APIs. Skipping all interface polling.")
-
-        if not self.interface_capable:
-            return (stop, start, orig, new, current)
+        if not check_support():
+            return (stop, start, origlist, new, current)
 
         try:
-            newActiveNames = self.vmm.listInterfaces()
+            newActiveNames = active_list()
         except:
-            logging.exception("Unable to list active interfaces")
+            logging.exception("Unable to list active %ss" % typename)
         try:
-            newInactiveNames = self.vmm.listDefinedInterfaces()
+            newInactiveNames = inactive_list()
         except:
-            logging.exception("Unable to list inactive interfaces")
+            logging.exception("Unable to list inactive %ss" % typename)
 
-        def check_obj(name, is_active):
-            key = name
-
-            if key not in orig:
-                obj = self.vmm.interfaceLookupByName(name)
+        def check_obj(key, is_active):
+            if key not in origlist:
+                obj = lookup_func(key)
                 # Object is brand new this tick period
-                current[key] = vmmInterface(self, obj, key, is_active)
+                current[key] = build_class(self, obj, key, is_active)
                 new.append(key)
 
                 if is_active:
                     start.append(key)
             else:
                 # Previously known object, see if it changed state
-                current[key] = orig[key]
+                current[key] = origlist[key]
 
                 if current[key].is_active() != is_active:
                     current[key].set_active(is_active)
@@ -1314,66 +1201,77 @@ class vmmConnection(vmmGObject):
                     else:
                         stop.append(key)
 
-                del orig[key]
+                del origlist[key]
 
         for name in newActiveNames:
             try:
                 check_obj(name, True)
             except:
                 logging.exception("Couldn't fetch active "
-                                  "interface '%s'" % name)
+                                  "%s '%s'" % (typename, name))
 
         for name in newInactiveNames:
             try:
                 check_obj(name, False)
             except:
                 logging.exception("Couldn't fetch inactive "
-                                  "interface '%s'" % name)
+                                  "%s '%s'" % (typename, name))
 
-        return (stop, start, orig, new, current)
+        return (stop, start, origlist, new, current)
+
+    def _update_nets(self):
+        orig = self.nets
+        name = "network"
+        active_list = self.vmm.listNetworks
+        inactive_list = self.vmm.listDefinedNetworks
+        check_support = self.is_network_capable
+        lookup_func = self.vmm.networkLookupByName
+        build_class = vmmNetwork
+
+        return self._poll_helper(orig, name, check_support,
+                                 active_list, inactive_list,
+                                 lookup_func, build_class)
+
+    def _update_pools(self):
+        orig = self.pools
+        name = "pool"
+        active_list = self.vmm.listStoragePools
+        inactive_list = self.vmm.listDefinedStoragePools
+        check_support = self.is_storage_capable
+        lookup_func = self.vmm.storagePoolLookupByName
+        build_class = vmmStoragePool
+
+        return self._poll_helper(orig, name, check_support,
+                                 active_list, inactive_list,
+                                 lookup_func, build_class)
+
+    def _update_interfaces(self):
+        orig = self.interfaces
+        name = "interface"
+        active_list = self.vmm.listInterfaces
+        inactive_list = self.vmm.listDefinedInterfaces
+        check_support = self.is_interface_capable
+        lookup_func = self.vmm.interfaceLookupByName
+        build_class = vmmInterface
+
+        return self._poll_helper(orig, name, check_support,
+                                 active_list, inactive_list,
+                                 lookup_func, build_class)
+
 
     def _update_nodedevs(self):
         orig = self.nodedevs
-        current = {}
-        new = []
-        newActiveNames = []
+        name = "nodedev"
+        active_list = lambda: self.vmm.listDevices(None, 0)
+        inactive_list = lambda: []
+        check_support = self.is_nodedev_capable
+        lookup_func = self.vmm.nodeDeviceLookupByName
+        build_class = (lambda conn, obj, key, ignore:
+                        vmmNodeDevice(conn, obj, key))
 
-        if self._nodedev_capable == None:
-            self._nodedev_capable = self.is_nodedev_capable()
-            if self._nodedev_capable is False:
-                logging.debug("Connection doesn't seem to support nodedev "
-                              "APIs. Skipping all nodedev polling.")
-
-        if not self.is_nodedev_capable():
-            return (orig, new, current)
-
-        try:
-            newActiveNames = self.vmm.listDevices(None, 0)
-        except:
-            logging.exception("Unable to list nodedev devices")
-
-        def check_obj(name):
-            key = name
-
-            if key not in orig:
-                obj = self.vmm.nodeDeviceLookupByName(name)
-                dev = vmmNodeDevice(self, obj, name)
-
-                # Object is brand new this tick period
-                current[key] = dev
-                new.append(key)
-            else:
-                # Previously known object, remove it from the orig list
-                current[key] = orig[key]
-                del orig[key]
-
-        for name in newActiveNames:
-            try:
-                check_obj(name)
-            except:
-                logging.exception("Couldn't fetch nodedev '%s'" % name)
-
-        return (orig, new, current)
+        return self._poll_helper(orig, name, check_support,
+                                 active_list, inactive_list,
+                                 lookup_func, build_class)
 
     def _update_vms(self):
         """
@@ -1503,7 +1401,8 @@ class vmmConnection(vmmGObject):
          newInterfaces, self.interfaces) = self._update_interfaces()
 
         # Update nodedevice list
-        (oldNodedevs, newNodedevs, self.nodedevs) = self._update_nodedevs()
+        (ignore, ignore, oldNodedevs,
+         newNodedevs, self.nodedevs) = self._update_nodedevs()
 
         # Poll for changed/new/removed VMs
         (startVMs, newVMs, oldVMs,
