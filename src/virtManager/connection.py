@@ -1525,7 +1525,7 @@ class vmmConnection(vmmGObject):
                 continue
 
             cpuTime += vm.cpu_time()
-            mem += vm.get_memory()
+            mem += vm.stats_memory()
             rdRate += vm.disk_read_rate()
             wrRate += vm.disk_write_rate()
             rxRate += vm.network_rx_rate()

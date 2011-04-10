@@ -755,6 +755,8 @@ class vmmDomainBase(vmmLibvirtObject):
         return status
 
     def _sample_mem_stats(self, info):
+        currmem = info[2]
+        maxmem = info[1]
         pcentCurrMem = info[2] * 100.0 / self.connection.host_memory_size()
         pcentMaxMem = info[1] * 100.0 / self.connection.host_memory_size()
 
@@ -763,7 +765,7 @@ class vmmDomainBase(vmmLibvirtObject):
         if pcentMaxMem > 100:
             pcentMaxMem = 100.0
 
-        return pcentCurrMem, pcentMaxMem
+        return pcentCurrMem, pcentMaxMem, currmem, maxmem
 
     def _sample_cpu_stats(self, info, now):
         prevCpuTime = 0
@@ -814,7 +816,7 @@ class vmmDomainBase(vmmLibvirtObject):
     def stats_memory(self):
         if not self.is_active():
             return 0
-        return self.get_memory()
+        return self._get_record_helper("curmem")
 
     def stats_memory_pretty(self):
         if not self.is_active():
@@ -1504,7 +1506,8 @@ class vmmDomain(vmmDomainBase):
             info[1] = self.connection.host_memory_size()
 
         cpuTime, cpuTimeAbs, pcentCpuTime = self._sample_cpu_stats(info, now)
-        pcentCurrMem, pcentMaxMem = self._sample_mem_stats(info)
+        (pcentCurrMem, pcentMaxMem,
+         curmem, maxmem) = self._sample_mem_stats(info)
         rdBytes, wrBytes = self._disk_io()
         rxBytes, txBytes = self._network_traffic()
 
@@ -1513,6 +1516,8 @@ class vmmDomain(vmmDomainBase):
             "cpuTime": cpuTime,
             "cpuTimeAbs": cpuTimeAbs,
             "cpuTimePercent": pcentCpuTime,
+            "curmem": curmem,
+            "maxmem": maxmem,
             "currMemPercent": pcentCurrMem,
             "maxMemPercent": pcentMaxMem,
             "diskRdKB": rdBytes / 1024,
