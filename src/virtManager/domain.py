@@ -175,9 +175,9 @@ class vmmDomainBase(vmmLibvirtObject):
     def status(self):
         raise NotImplementedError()
 
-    def get_memory_percentage(self):
+    def stats_memory_percentage(self):
         raise NotImplementedError()
-    def maximum_memory_percentage(self):
+    def stats_maxmem_percentage(self):
         raise NotImplementedError()
     def cpu_time(self):
         raise NotImplementedError()
@@ -816,11 +816,6 @@ class vmmDomainBase(vmmLibvirtObject):
             return 0
         return self.get_memory()
 
-    def stats_memory_percentage(self):
-        if not self.is_active():
-            return 0
-        return self.get_memory_percentage()
-
     def stats_memory_pretty(self):
         if not self.is_active():
             return "0 MB"
@@ -1034,9 +1029,11 @@ class vmmDomain(vmmDomainBase):
             return 0
         return self.record[0][record_name]
 
-    def get_memory_percentage(self):
+    def stats_memory_percentage(self):
+        if not self.is_active():
+            return 0
         return self._get_record_helper("currMemPercent")
-    def maximum_memory_percentage(self):
+    def stats_maxmem_percentage(self):
         return self._get_record_helper("maxMemPercent")
     def cpu_time(self):
         return self._get_record_helper("cpuTime")
@@ -1603,9 +1600,9 @@ class vmmDomainVirtinst(vmmDomainBase):
         return self._backend.autostart
 
     # Stats stubs
-    def get_memory_percentage(self):
+    def stats_memory_percentage(self):
         return 0
-    def maximum_memory_percentage(self):
+    def stats_maxmem_percentage(self):
         return 0
     def cpu_time(self):
         return 0
