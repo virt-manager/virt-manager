@@ -917,7 +917,7 @@ class vmmConsolePages(vmmGObjectUI):
             return
 
         if protocol not in self.config.embeddable_graphics():
-            logging.debug("Don't know how to show graphics type '%s'"
+            logging.debug("Don't know how to show graphics type '%s' "
                           "disabling console page" % protocol)
 
             msg = (_("Cannot display graphical console type '%s'")
