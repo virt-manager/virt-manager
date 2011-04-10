@@ -1351,17 +1351,19 @@ class vmmDomain(vmmDomainBase):
         self.vcpu_max_count()
 
     def _update_status(self, status=None):
-        try:
-            info = self.get_info()
-        except libvirt.libvirtError, e:
-            if (hasattr(libvirt, "VIR_ERR_NO_DOMAIN") and
-                e.get_error_code() == getattr(libvirt, "VIR_ERR_NO_DOMAIN")):
-                # Possibly a transient domain that was removed on shutdown
-                return
-            raise
-
         if status == None:
+            try:
+                info = self.get_info()
+            except libvirt.libvirtError, e:
+                if (hasattr(libvirt, "VIR_ERR_NO_DOMAIN") and
+                    e.get_error_code() == getattr(libvirt,
+                                                  "VIR_ERR_NO_DOMAIN")):
+                    # Possibly a transient domain that was removed on shutdown
+                    return
+                raise
+
             status = info[0]
+
         status = self._normalize_status(status)
 
         if status != self.lastStatus:
