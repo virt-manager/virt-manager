@@ -147,6 +147,9 @@ class vmmDomainBase(vmmLibvirtObject):
 
         self._install_abort = False
         self._startup_vcpus = None
+        self._is_management_domain = None
+        self._id = None
+        self._name = None
 
         self.managedsave_supported = False
 
@@ -517,9 +520,9 @@ class vmmDomainBase(vmmLibvirtObject):
         return False
 
     def is_management_domain(self):
-        if self.get_id() == 0:
-            return True
-        return False
+        if self._is_management_domain == None:
+            self._is_management_domain = (self.get_id() == 0)
+        return self._is_management_domain
 
     def is_hvm(self):
         if self.get_abi_type() == "hvm":
@@ -809,17 +812,17 @@ class vmmDomainBase(vmmLibvirtObject):
             self.maxRecord[what] = record[what]
 
     def current_memory(self):
-        if self.get_id() == -1:
+        if not self.is_active():
             return 0
         return self.get_memory()
 
     def current_memory_percentage(self):
-        if self.get_id() == -1:
+        if not self.is_active():
             return 0
         return self.get_memory_percentage()
 
     def current_memory_pretty(self):
-        if self.get_id() == -1:
+        if not self.is_active():
             return "0 MB"
         return self.get_memory_pretty()
 
@@ -1224,9 +1227,13 @@ class vmmDomain(vmmDomainBase):
 
     # Genertc backend APIs
     def get_name(self):
-        return self._backend.name()
+        if self._name == None:
+            self._name = self._backend.name()
+        return self._name
     def get_id(self):
-        return self._backend.ID()
+        if self._id == None:
+            self._id = self._backend.ID()
+        return self._id
 
     # Hotplug routines
     def attach_device(self, devobj):
@@ -1482,6 +1489,8 @@ class vmmDomain(vmmDomainBase):
 
         # Invalidate cached xml
         self._invalidate_xml()
+        self._id = None
+        self._name = None
 
         info = self.get_info()
         expected = self.config.get_stats_history_length()
@@ -1493,8 +1502,8 @@ class vmmDomain(vmmDomainBase):
         # (ie MAX_LONG) so lets clamp it to the actual
         # physical RAM in machine which is the effective
         # real world limit
-        # XXX need to skip this for non-Xen
-        if self.get_id() == 0:
+        if (self.get_connection().is_xen() and
+            self.is_management_domain()):
             info[1] = self.connection.host_memory_size()
 
         cpuTime, cpuTimeAbs, pcentCpuTime = self._sample_cpu_stats(info, now)

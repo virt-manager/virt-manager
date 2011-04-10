@@ -877,7 +877,7 @@ class vmmConsolePages(vmmGObjectUI):
         return (not self.vm.get_handle() or
                 self.vm.status() in [libvirt.VIR_DOMAIN_SHUTOFF,
                                      libvirt.VIR_DOMAIN_CRASHED] or
-                self.vm.get_id() < 0)
+                not self.vm.is_active())
 
     def try_login(self, src_ignore=None):
         if self.viewer_connecting:

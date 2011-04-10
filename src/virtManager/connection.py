@@ -1283,13 +1283,13 @@ class vmmConnection(vmmGObject):
         for uuid in self.vms.keys():
             # first pull out all the current inactive VMs we know about
             vm = self.vms[uuid]
-            if vm.get_id() == -1:
+            if not vm.is_active():
                 oldInactiveNames[vm.get_name()] = vm
         for uuid in self.activeUUIDs:
             # Now get all the vms that were active the last time around
             # and are still active
             vm = self.vms[uuid]
-            if vm.get_id() != -1:
+            if vm.is_active():
                 oldActiveIDs[vm.get_id()] = vm
 
         newActiveIDs = []
@@ -1521,13 +1521,15 @@ class vmmConnection(vmmGObject):
 
         for uuid in self.vms:
             vm = self.vms[uuid]
-            if vm.get_id() != -1:
-                cpuTime = cpuTime + vm.cpu_time()
-                mem = mem + vm.get_memory()
-                rdRate += vm.disk_read_rate()
-                wrRate += vm.disk_write_rate()
-                rxRate += vm.network_rx_rate()
-                txRate += vm.network_tx_rate()
+            if not vm.is_active():
+                continue
+
+            cpuTime += vm.cpu_time()
+            mem += vm.get_memory()
+            rdRate += vm.disk_read_rate()
+            wrRate += vm.disk_write_rate()
+            rxRate += vm.network_rx_rate()
+            txRate += vm.network_tx_rate()
 
         pcentCpuTime = 0
         if len(self.record) > 0:
