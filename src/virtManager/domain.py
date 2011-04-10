@@ -811,17 +811,17 @@ class vmmDomainBase(vmmLibvirtObject):
         if record[what] > self.maxRecord[what]:
             self.maxRecord[what] = record[what]
 
-    def current_memory(self):
+    def stats_memory(self):
         if not self.is_active():
             return 0
         return self.get_memory()
 
-    def current_memory_percentage(self):
+    def stats_memory_percentage(self):
         if not self.is_active():
             return 0
         return self.get_memory_percentage()
 
-    def current_memory_pretty(self):
+    def stats_memory_pretty(self):
         if not self.is_active():
             return "0 MB"
         return self.get_memory_pretty()
@@ -884,7 +884,7 @@ class vmmDomainBase(vmmLibvirtObject):
         return self._vector_helper("cpuTimePercent")
     def cpu_time_moving_avg_vector(self):
         return self._vector_helper("cpuTimeMovingAvgPercent")
-    def current_memory_vector(self):
+    def stats_memory_vector(self):
         return self._vector_helper("currMemPercent")
     def network_traffic_vector(self):
         return self._in_out_vector_helper("netRxRate", "netTxRate")

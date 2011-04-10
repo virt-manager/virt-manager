@@ -334,7 +334,7 @@ class vmmHost(vmmGObjectUI):
 
     def refresh_resources(self, ignore=None):
         self.window.get_widget("performance-cpu").set_text("%d %%" % self.conn.cpu_time_percentage())
-        vm_memory = self.conn.pretty_current_memory()
+        vm_memory = self.conn.pretty_stats_memory()
         host_memory = self.conn.pretty_host_memory_size()
         self.window.get_widget("performance-memory").set_text(_("%(currentmem)s of %(maxmem)s") % {'currentmem': vm_memory, 'maxmem': host_memory})
 
@@ -342,7 +342,7 @@ class vmmHost(vmmGObjectUI):
         cpu_vector.reverse()
         self.cpu_usage_graph.set_property("data_array", cpu_vector)
 
-        memory_vector = self.conn.current_memory_vector()
+        memory_vector = self.conn.stats_memory_vector()
         memory_vector.reverse()
         self.memory_usage_graph.set_property("data_array", memory_vector)
 

@@ -1572,6 +1572,10 @@ class vmmConnection(vmmGObject):
     ########################
     # Stats getter methods #
     ########################
+    def _get_record_helper(self, record_name):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0][record_name]
 
     def cpu_time_vector(self):
         vector = []
@@ -1590,28 +1594,22 @@ class vmmConnection(vmmGObject):
         return cpudata
 
     def cpu_time_percentage(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["cpuTimePercent"]
+        return self._get_record_helper("cpuTimePercent")
 
-    def current_memory(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["memory"]
+    def stats_memory(self):
+        return self._get_record_helper("memory")
 
-    def pretty_current_memory(self):
-        mem = self.current_memory()
+    def pretty_stats_memory(self):
+        mem = self.stats_memory()
         if mem > (10 * 1024 * 1024):
             return "%2.2f GB" % (mem / (1024.0 * 1024.0))
         else:
             return "%2.0f MB" % (mem / 1024.0)
 
-    def current_memory_percentage(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["memoryPercent"]
+    def stats_memory_percentage(self):
+        return self._get_record_helper("memoryPercent")
 
-    def current_memory_vector(self):
+    def stats_memory_vector(self):
         vector = []
         stats = self.record
         for i in range(self.config.get_stats_history_length() + 1):
@@ -1622,27 +1620,19 @@ class vmmConnection(vmmGObject):
         return vector
 
     def network_rx_rate(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["netRxRate"]
+        return self._get_record_helper("netRxRate")
 
     def network_tx_rate(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["netTxRate"]
+        return self._get_record_helper("netTxRate")
 
     def network_traffic_rate(self):
         return self.network_tx_rate() + self.network_rx_rate()
 
     def disk_read_rate(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["diskRdRate"]
+        return self._get_record_helper("diskRdRate")
 
     def disk_write_rate(self):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0]["diskWrRate"]
+        return self._get_record_helper("diskWrRate")
 
     def disk_io_rate(self):
         return self.disk_read_rate() + self.disk_write_rate()

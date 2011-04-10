@@ -2146,7 +2146,7 @@ class vmmDetails(vmmGObjectUI):
 
         cpu_txt = "%d %%" % self.vm.cpu_time_percentage()
 
-        vm_memory = self.vm.current_memory()
+        vm_memory = self.vm.stats_memory()
         host_memory = self.vm.get_connection().host_memory_size()
         mem_txt = "%d MB of %d MB" % (int(round(vm_memory / 1024.0)),
                                       int(round(host_memory / 1024.0)))
@@ -2167,7 +2167,7 @@ class vmmDetails(vmmGObjectUI):
         self.cpu_usage_graph.set_property("data_array",
                                           self.vm.cpu_time_vector())
         self.memory_usage_graph.set_property("data_array",
-                                             self.vm.current_memory_vector())
+                                             self.vm.stats_memory_vector())
         self.disk_io_graph.set_property("data_array",
                                         self.vm.disk_io_vector())
         self.network_traffic_graph.set_property("data_array",
