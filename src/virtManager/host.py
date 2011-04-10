@@ -364,7 +364,7 @@ class vmmHost(vmmGObjectUI):
                 _("Libvirt connection does not support virtual network "
                   "management."))
 
-        if not self.conn.storage_capable:
+        if not self.conn.is_storage_capable():
             self.set_storage_error_page(
                 _("Libvirt connection does not support storage management."))
 
