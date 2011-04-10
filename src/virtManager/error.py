@@ -63,9 +63,6 @@ class vmmErrorDialog (object):
                  dialog_type=gtk.MESSAGE_ERROR,
                  buttons=gtk.BUTTONS_CLOSE,
                  text2=None):
-        if debug:
-            logging.debug("dialog message: %s : %s" % (summary, details))
-
         if details is None:
             details = summary + "\n\n" + "".join(traceback.format_exc())
 
@@ -73,6 +70,9 @@ class vmmErrorDialog (object):
         if (dialog_type == gtk.MESSAGE_ERROR and not
             details.count(summary)):
             details = summary + "\n\n" + details
+
+        if debug:
+            logging.debug("dialog message: %s : %s" % (summary, details))
 
         dialog = _errorDialog(parent=self.get_parent(),
                               type=dialog_type, buttons=buttons)
