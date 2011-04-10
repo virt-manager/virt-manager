@@ -153,6 +153,9 @@ class vmmMediaDevice(vmmGObject):
         if not self.nodedev_obj:
             return False
 
+        if not self.nodedev_obj.get_connection().is_active():
+            return False
+
         try:
             self.nodedev_obj.refresh_xml()
             xml = self.nodedev_obj.get_xml()
