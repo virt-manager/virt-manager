@@ -1277,9 +1277,18 @@ class vmmConnection(vmmGObject):
         """
         returns lists of changed VM states
         """
-
+        newActiveIDs = []
+        newInactiveNames = []
         oldActiveIDs = {}
         oldInactiveNames = {}
+
+        current = {}
+        maybenew = {}
+        gone = {}
+        start = []
+        new = []
+        activeUUIDs = []
+
         for uuid in self.vms.keys():
             # first pull out all the current inactive VMs we know about
             vm = self.vms[uuid]
@@ -1292,24 +1301,15 @@ class vmmConnection(vmmGObject):
             if vm.is_active():
                 oldActiveIDs[vm.get_id()] = vm
 
-        newActiveIDs = []
         try:
             newActiveIDs = self.vmm.listDomainsID()
         except:
             logging.exception("Unable to list active domains")
 
-        newInactiveNames = []
         try:
             newInactiveNames = self.vmm.listDefinedDomains()
         except:
             logging.exception("Unable to list inactive domains")
-
-        curUUIDs = {}       # new master list of vms
-        maybeNewUUIDs = {}  # list of vms that changed state or are brand new
-        oldUUIDs = {}       # no longer present vms
-        newUUIDs = []       # brand new vms
-        startedUUIDs = []   # previously present vms that are now running
-        activeUUIDs = []    # all running vms
 
         # NB in these first 2 loops, we go to great pains to
         # avoid actually instantiating a new VM object so that
@@ -1317,69 +1317,64 @@ class vmmConnection(vmmGObject):
         # XenD too much & thus slowing stuff down.
 
         # Filter out active domains which haven't changed
-        if newActiveIDs != None:
-            for _id in newActiveIDs:
-                if _id in oldActiveIDs:
-                    # No change, copy across existing VM object
-                    vm = oldActiveIDs[_id]
-                    curUUIDs[vm.get_uuid()] = vm
-                    activeUUIDs.append(vm.get_uuid())
-                else:
-                    # May be a new VM, we have no choice but
-                    # to create the wrapper so we can see
-                    # if its a previously inactive domain.
-                    try:
-                        vm = self.vmm.lookupByID(_id)
-                        uuid = util.uuidstr(vm.UUID())
-                        maybeNewUUIDs[uuid] = vm
-                        startedUUIDs.append(uuid)
-                        activeUUIDs.append(uuid)
-                    except:
-                        logging.exception("Couldn't fetch domain id '%s'" %
-                                          str(_id))
+        for _id in newActiveIDs:
+            if _id in oldActiveIDs:
+                # No change, copy across existing VM object
+                vm = oldActiveIDs[_id]
+                current[vm.get_uuid()] = vm
+                activeUUIDs.append(vm.get_uuid())
+            else:
+                # May be a new VM, we have no choice but
+                # to create the wrapper so we can see
+                # if its a previously inactive domain.
+                try:
+                    vm = self.vmm.lookupByID(_id)
+                    uuid = util.uuidstr(vm.UUID())
+                    maybenew[uuid] = vm
+                    start.append(uuid)
+                    activeUUIDs.append(uuid)
+                except:
+                    logging.exception("Couldn't fetch domain id '%s'" % _id)
 
         # Filter out inactive domains which haven't changed
-        if newInactiveNames != None:
-            for name in newInactiveNames:
-                if name in oldInactiveNames:
-                    # No change, copy across existing VM object
-                    vm = oldInactiveNames[name]
-                    curUUIDs[vm.get_uuid()] = vm
-                else:
-                    # May be a new VM, we have no choice but
-                    # to create the wrapper so we can see
-                    # if its a previously inactive domain.
-                    try:
-                        vm = self.vmm.lookupByName(name)
-                        uuid = util.uuidstr(vm.UUID())
-                        maybeNewUUIDs[uuid] = vm
-                    except:
-                        logging.exception("Couldn't fetch domain id '%s'" %
-                                          str(id))
+        for name in newInactiveNames:
+            if name in oldInactiveNames:
+                # No change, copy across existing VM object
+                vm = oldInactiveNames[name]
+                current[vm.get_uuid()] = vm
+            else:
+                # May be a new VM, we have no choice but
+                # to create the wrapper so we can see
+                # if its a previously inactive domain.
+                try:
+                    vm = self.vmm.lookupByName(name)
+                    uuid = util.uuidstr(vm.UUID())
+                    maybenew[uuid] = vm
+                except:
+                    logging.exception("Couldn't fetch domain '%s'" % name)
 
         # At this point, maybeNewUUIDs has domains which are
         # either completely new, or changed state.
 
         # Filter out VMs which merely changed state, leaving
         # only new domains
-        for uuid in maybeNewUUIDs.keys():
-            rawvm = maybeNewUUIDs[uuid]
+        for uuid in maybenew.keys():
+            rawvm = maybenew[uuid]
             if uuid not in self.vms:
                 vm = vmmDomain(self, rawvm, uuid)
-                newUUIDs.append(uuid)
-                curUUIDs[uuid] = vm
+                new.append(uuid)
             else:
                 vm = self.vms[uuid]
                 vm.set_handle(rawvm)
-                curUUIDs[uuid] = vm
+            current[uuid] = vm
 
         # Finalize list of domains which went away altogether
         for uuid in self.vms.keys():
             vm = self.vms[uuid]
-            if uuid not in curUUIDs:
-                oldUUIDs[uuid] = vm
+            if uuid not in current:
+                gone[uuid] = vm
 
-        return (startedUUIDs, newUUIDs, oldUUIDs, curUUIDs, activeUUIDs)
+        return (start, new, gone, current, activeUUIDs)
 
     def tick(self, noStatsUpdate=False):
         """ main update function: polls for new objects, updates stats, ..."""
