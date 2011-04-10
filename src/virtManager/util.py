@@ -400,3 +400,19 @@ def iface_in_use_by(conn, name):
             use_str += iface.get_name()
 
     return use_str
+
+def pretty_mem(val):
+    val = int(val)
+    if val > (10 * 1024 * 1024):
+        return "%2.2f GB" % (val / (1024.0 * 1024.0))
+    else:
+        return "%2.0f MB" % (val / 1024.0)
+
+def pretty_bytes(val):
+    val = int(val)
+    if val > (1024 * 1024 * 1024):
+        return "%2.2f GB" % (val / (1024.0 * 1024.0 * 1024.0))
+    else:
+        return "%2.2f MB" % (val / (1024.0 * 1024.0))
+
+xpath = virtinst.util.get_xml_path

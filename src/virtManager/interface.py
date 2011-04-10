@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import virtinst
 from virtinst import Interface
 
 from virtManager import util
@@ -52,15 +51,14 @@ class vmmInterface(vmmLibvirtObject):
 
     def xpath(self, *args, **kwargs):
         # Must use this function for ALL XML parsing
-        ret = virtinst.util.get_xml_path(self.get_xml(), *args, **kwargs)
+        ret = util.xpath(self.get_xml(), *args, **kwargs)
         if ret:
             return ret
         if not self.is_active():
             return ret
 
         # The running config did not have the info requested
-        return virtinst.util.get_xml_path(self.get_xml(inactive=True),
-                                          *args, **kwargs)
+        return util.xpath(self.get_xml(inactive=True), *args, **kwargs)
 
     def set_active(self, state):
         self.active = state

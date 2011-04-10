@@ -20,8 +20,8 @@
 
 import gobject
 import virtinst
-import virtinst.util as util
 
+from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 from virtManager.storagevol import vmmStorageVolume
 
@@ -87,24 +87,24 @@ class vmmStoragePool(vmmLibvirtObject):
         return self.pool.autostart()
 
     def get_target_path(self):
-        return util.get_xml_path(self.get_xml(), "/pool/target/path")
+        return util.xpath(self.get_xml(), "/pool/target/path")
 
     def get_allocation(self):
-        return long(util.get_xml_path(self.get_xml(), "/pool/allocation"))
+        return long(util.xpath(self.get_xml(), "/pool/allocation"))
     def get_available(self):
-        return long(util.get_xml_path(self.get_xml(), "/pool/available"))
+        return long(util.xpath(self.get_xml(), "/pool/available"))
     def get_capacity(self):
-        return long(util.get_xml_path(self.get_xml(), "/pool/capacity"))
+        return long(util.xpath(self.get_xml(), "/pool/capacity"))
 
     def get_pretty_allocation(self):
-        return self._prettyify(self.get_allocation())
+        return util.pretty_bytes(self.get_allocation())
     def get_pretty_available(self):
-        return self._prettyify(self.get_available())
+        return util.pretty_bytes(self.get_available())
     def get_pretty_capacity(self):
-        return self._prettyify(self.get_capacity())
+        return util.pretty_bytes(self.get_capacity())
 
     def get_type(self):
-        return util.get_xml_path(self.get_xml(), "/pool/@type")
+        return util.xpath(self.get_xml(), "/pool/@type")
 
     def get_volumes(self):
         self.update_volumes()
@@ -138,12 +138,5 @@ class vmmStoragePool(vmmLibvirtObject):
                                     self.pool.storageVolLookupByName(volname),
                                     volname)
         self._volumes = new_vol_list
-
-
-    def _prettyify(self, val):
-        if val > (1024 * 1024 * 1024):
-            return "%2.2f GB" % (val / (1024.0 * 1024.0 * 1024.0))
-        else:
-            return "%2.2f MB" % (val / (1024.0 * 1024.0))
 
 vmmLibvirtObject.type_register(vmmStoragePool)

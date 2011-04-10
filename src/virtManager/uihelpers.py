@@ -71,8 +71,7 @@ def host_disk_space(conn):
         # FIXME: make sure not inactive?
         # FIXME: use a conn specific function after we send pool-added
         pool.refresh()
-        avail = int(virtinst.util.get_xml_path(pool.get_xml(),
-                                               "/pool/available"))
+        avail = int(util.xpath(pool.get_xml(), "/pool/available"))
 
     elif not conn.is_remote():
         vfs = os.statvfs(os.path.dirname(path))

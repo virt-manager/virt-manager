@@ -824,18 +824,10 @@ class vmmDomainBase(vmmLibvirtObject):
         return self.get_memory_pretty()
 
     def get_memory_pretty(self):
-        mem = self.get_memory()
-        if mem > (10 * 1024 * 1024):
-            return "%2.2f GB" % (mem / (1024.0 * 1024.0))
-        else:
-            return "%2.0f MB" % (mem / 1024.0)
+        return util.pretty_mem(self.get_memory())
 
     def maximum_memory_pretty(self):
-        mem = self.maximum_memory()
-        if mem > (10 * 1024 * 1024):
-            return "%2.2f GB" % (mem / (1024.0 * 1024.0))
-        else:
-            return "%2.0f MB" % (mem / 1024.0)
+        return util.pretty_mem(self.maximum_memory())
 
     def cpu_time_pretty(self):
         return "%2.2f %%" % self.cpu_time_percentage()

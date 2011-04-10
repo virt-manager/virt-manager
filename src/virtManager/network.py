@@ -18,8 +18,7 @@
 # MA 02110-1301 USA.
 #
 
-import virtinst.util as util
-
+from virtManager import util
 from virtManager.IPy import IP
 from virtManager.libvirtobject import vmmLibvirtObject
 
@@ -102,8 +101,8 @@ class vmmNetwork(vmmLibvirtObject):
 
     def get_ipv4_network(self):
         xml = self.get_xml()
-        addrStr = util.get_xml_path(xml, "/network/ip/@address")
-        netmaskStr = util.get_xml_path(xml, "/network/ip/@netmask")
+        addrStr = util.xpath(xml, "/network/ip/@address")
+        netmaskStr = util.xpath(xml, "/network/ip/@netmask")
 
         netmask = IP(netmaskStr)
         gateway = IP(addrStr)
@@ -113,14 +112,14 @@ class vmmNetwork(vmmLibvirtObject):
 
     def get_ipv4_forward(self):
         xml = self.get_xml()
-        fw = util.get_xml_path(xml, "/network/forward/@mode")
-        forwardDev = util.get_xml_path(xml, "/network/forward/@dev")
+        fw = util.xpath(xml, "/network/forward/@mode")
+        forwardDev = util.xpath(xml, "/network/forward/@dev")
         return [fw, forwardDev]
 
     def get_ipv4_dhcp_range(self):
         xml = self.get_xml()
-        dhcpstart = util.get_xml_path(xml, "/network/ip/dhcp/range[1]/@start")
-        dhcpend = util.get_xml_path(xml, "/network/ip/dhcp/range[1]/@end")
+        dhcpstart = util.xpath(xml, "/network/ip/dhcp/range[1]/@start")
+        dhcpend = util.xpath(xml, "/network/ip/dhcp/range[1]/@end")
         if not dhcpstart or not dhcpend:
             return None
 
@@ -135,6 +134,6 @@ class vmmNetwork(vmmLibvirtObject):
         forward = self.get_ipv4_forward()[0]
         if forward and forward != "nat":
             return True
-        return bool(util.get_xml_path(xml, "/network/ip/dhcp/bootp/@file"))
+        return bool(util.xpath(xml, "/network/ip/dhcp/bootp/@file"))
 
 vmmLibvirtObject.type_register(vmmNetwork)

@@ -284,11 +284,7 @@ class vmmConnection(vmmGObject):
     def pretty_host_memory_size(self):
         if self.vmm is None:
             return ""
-        mem = self.host_memory_size()
-        if mem > (10 * 1024 * 1024):
-            return "%2.2f GB" % (mem / (1024.0 * 1024.0))
-        else:
-            return "%2.0f MB" % (mem / 1024.0)
+        return util.pretty_mem(self.host_memory_size())
 
     def host_memory_size(self):
         if self.vmm is None:
@@ -1595,11 +1591,7 @@ class vmmConnection(vmmGObject):
         return self._get_record_helper("memory")
 
     def pretty_stats_memory(self):
-        mem = self.stats_memory()
-        if mem > (10 * 1024 * 1024):
-            return "%2.2f GB" % (mem / (1024.0 * 1024.0))
-        else:
-            return "%2.0f MB" % (mem / 1024.0)
+        return util.pretty_mem(self.stats_memory())
 
     def stats_memory_percentage(self):
         return self._get_record_helper("memoryPercent")
