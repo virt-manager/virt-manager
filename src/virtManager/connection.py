@@ -1275,15 +1275,14 @@ class vmmConnection(vmmGObject):
         oldActiveIDs = {}
         oldInactiveNames = {}
 
+        origlist = self.vms
         current = {}
-        maybenew = {}
-        gone = {}
         start = []
         new = []
 
         # Build list of previous vms with proper id/name mappings
-        for uuid in self.vms.keys():
-            vm = self.vms[uuid]
+        for uuid in origlist:
+            vm = origlist[uuid]
             if vm.is_active():
                 oldActiveIDs[vm.get_id()] = vm
             else:
@@ -1304,63 +1303,55 @@ class vmmConnection(vmmGObject):
         # the common case of 'no new/old VMs' avoids hitting
         # XenD too much & thus slowing stuff down.
 
-        # Filter out active domains which haven't changed
+        def add_vm(vm):
+            uuid = vm.get_uuid()
+
+            current[uuid] = vm
+            del(origlist[uuid])
+
+        def check_new(rawvm, uuid):
+            if uuid in origlist:
+                vm = origlist[uuid]
+                del(origlist[uuid])
+            else:
+                vm = vmmDomain(self, rawvm, uuid)
+                new.append(uuid)
+
+            current[uuid] = vm
+
         for _id in newActiveIDs:
             if _id in oldActiveIDs:
                 # No change, copy across existing VM object
                 vm = oldActiveIDs[_id]
-                current[vm.get_uuid()] = vm
+                add_vm(vm)
             else:
-                # May be a new VM, we have no choice but
-                # to create the wrapper so we can see
-                # if its a previously inactive domain.
+                # Check if domain is brand new, or old one that changed state
                 try:
                     vm = self.vmm.lookupByID(_id)
                     uuid = util.uuidstr(vm.UUID())
-                    maybenew[uuid] = vm
+
                     start.append(uuid)
+                    check_new(vm, uuid)
                 except:
                     logging.exception("Couldn't fetch domain id '%s'" % _id)
 
-        # Filter out inactive domains which haven't changed
+
         for name in newInactiveNames:
             if name in oldInactiveNames:
                 # No change, copy across existing VM object
                 vm = oldInactiveNames[name]
-                current[vm.get_uuid()] = vm
+                add_vm(vm)
             else:
-                # May be a new VM, we have no choice but
-                # to create the wrapper so we can see
-                # if its a previously inactive domain.
+                # Check if domain is brand new, or old one that changed state
                 try:
                     vm = self.vmm.lookupByName(name)
                     uuid = util.uuidstr(vm.UUID())
-                    maybenew[uuid] = vm
+
+                    check_new(vm, uuid)
                 except:
                     logging.exception("Couldn't fetch domain '%s'" % name)
 
-        # At this point, maybeNewUUIDs has domains which are
-        # either completely new, or changed state.
-
-        # Filter out VMs which merely changed state, leaving
-        # only new domains
-        for uuid in maybenew.keys():
-            rawvm = maybenew[uuid]
-            if uuid not in self.vms:
-                vm = vmmDomain(self, rawvm, uuid)
-                new.append(uuid)
-            else:
-                vm = self.vms[uuid]
-                vm.set_handle(rawvm)
-            current[uuid] = vm
-
-        # Finalize list of domains which went away altogether
-        for uuid in self.vms.keys():
-            vm = self.vms[uuid]
-            if uuid not in current:
-                gone[uuid] = vm
-
-        return (start, new, gone, current)
+        return (start, new, origlist, current)
 
     def tick(self, noStatsUpdate=False):
         """ main update function: polls for new objects, updates stats, ..."""
@@ -1465,6 +1456,7 @@ class vmmConnection(vmmGObject):
         if noStatsUpdate:
             updateVMs = newVMs
 
+        updateVMs = {}
         for uuid in updateVMs:
             vm = self.vms[uuid]
             try:
@@ -1477,13 +1469,13 @@ class vmmConnection(vmmGObject):
                 logging.exception("Tick for VM '%s' failed" % vm.get_name())
 
         if not noStatsUpdate:
-            self._recalculate_stats(now)
+            self._recalculate_stats(now, updateVMs)
 
             util.safe_idle_add(util.idle_emit, self, "resources-sampled")
 
         return 1
 
-    def _recalculate_stats(self, now):
+    def _recalculate_stats(self, now, vms):
         if self.vmm is None:
             return
 
@@ -1499,8 +1491,8 @@ class vmmConnection(vmmGObject):
         rxRate = 0
         txRate = 0
 
-        for uuid in self.vms:
-            vm = self.vms[uuid]
+        for uuid in vms:
+            vm = vms[uuid]
             if not vm.is_active():
                 continue
 
