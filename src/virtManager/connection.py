@@ -141,8 +141,6 @@ class vmmConnection(vmmGObject):
         self.nets = {}
         # Virtual machines. UUID -> vmmDomain object
         self.vms = {}
-        # Running virtual machines. UUID -> vmmDomain object
-        self.activeUUIDs = []
         # Resource utilization statistics
         self.record = []
         self.hostinfo = None
@@ -900,7 +898,6 @@ class vmmConnection(vmmGObject):
         self.pools = {}
         self.nets = {}
         self.vms = {}
-        self.activeUUIDs = []
         self.record = []
 
         self._change_state(self.STATE_DISCONNECTED)
@@ -1283,19 +1280,14 @@ class vmmConnection(vmmGObject):
         gone = {}
         start = []
         new = []
-        activeUUIDs = []
 
+        # Build list of previous vms with proper id/name mappings
         for uuid in self.vms.keys():
-            # first pull out all the current inactive VMs we know about
-            vm = self.vms[uuid]
-            if not vm.is_active():
-                oldInactiveNames[vm.get_name()] = vm
-        for uuid in self.activeUUIDs:
-            # Now get all the vms that were active the last time around
-            # and are still active
             vm = self.vms[uuid]
             if vm.is_active():
                 oldActiveIDs[vm.get_id()] = vm
+            else:
+                oldInactiveNames[vm.get_name()] = vm
 
         try:
             newActiveIDs = self.vmm.listDomainsID()
@@ -1318,7 +1310,6 @@ class vmmConnection(vmmGObject):
                 # No change, copy across existing VM object
                 vm = oldActiveIDs[_id]
                 current[vm.get_uuid()] = vm
-                activeUUIDs.append(vm.get_uuid())
             else:
                 # May be a new VM, we have no choice but
                 # to create the wrapper so we can see
@@ -1328,7 +1319,6 @@ class vmmConnection(vmmGObject):
                     uuid = util.uuidstr(vm.UUID())
                     maybenew[uuid] = vm
                     start.append(uuid)
-                    activeUUIDs.append(uuid)
                 except:
                     logging.exception("Couldn't fetch domain id '%s'" % _id)
 
@@ -1370,7 +1360,7 @@ class vmmConnection(vmmGObject):
             if uuid not in current:
                 gone[uuid] = vm
 
-        return (start, new, gone, current, activeUUIDs)
+        return (start, new, gone, current)
 
     def tick(self, noStatsUpdate=False):
         """ main update function: polls for new objects, updates stats, ..."""
@@ -1396,8 +1386,7 @@ class vmmConnection(vmmGObject):
          newNodedevs, self.nodedevs) = self._update_nodedevs()
 
         # Poll for changed/new/removed VMs
-        (startVMs, newVMs, oldVMs,
-         self.vms, self.activeUUIDs) = self._update_vms()
+        (startVMs, newVMs, oldVMs, self.vms) = self._update_vms()
 
         def tick_send_signals():
             """

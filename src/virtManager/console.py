@@ -874,10 +874,7 @@ class vmmConsolePages(vmmGObjectUI):
                 not self.is_visible())
 
     def guest_not_avail(self):
-        return (not self.vm.get_handle() or
-                self.vm.status() in [libvirt.VIR_DOMAIN_SHUTOFF,
-                                     libvirt.VIR_DOMAIN_CRASHED] or
-                not self.vm.is_active())
+        return (self.vm.is_shutoff() or self.vm.is_crashed())
 
     def try_login(self, src_ignore=None):
         if self.viewer_connecting:

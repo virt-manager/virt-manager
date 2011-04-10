@@ -529,12 +529,6 @@ class vmmDomainBase(vmmLibvirtObject):
             return True
         return False
 
-    def is_active(self):
-        if self.get_id() == -1:
-            return False
-        else:
-            return True
-
     def get_id_pretty(self):
         i = self.get_id()
         if i < 0:
@@ -889,6 +883,9 @@ class vmmDomainBase(vmmLibvirtObject):
         return self.in_out_vector_limit(self.network_traffic_vector(), limit)
     def disk_io_vector_limit(self, limit):
         return self.in_out_vector_limit(self.disk_io_vector(), limit)
+
+    def is_active(self):
+        return not self.is_shutoff()
 
     def is_shutoff(self):
         return self.status() == libvirt.VIR_DOMAIN_SHUTOFF
