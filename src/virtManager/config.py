@@ -176,6 +176,9 @@ class vmmConfig(object):
             ret.append("spice")
         return ret
 
+    def remove_notifier(self, h):
+        self.conf.notify_remove(h)
+
     # Per-VM/Connection/Connection Host Option dealings
     def _perconn_helper(self, uri, pref_func, func_type, value=None):
         suffix = "connection_prefs/%s" % gconf.escape_key(uri, len(uri))
@@ -436,11 +439,11 @@ class vmmConfig(object):
         self.conf.set_bool(self.conf_dir + "/stats/enable-net-poll", val)
 
     def on_stats_enable_disk_poll_changed(self, cb, userdata=None):
-        self.conf.notify_add(self.conf_dir + "/stats/enable-disk-poll", cb,
-                             userdata)
+        return self.conf.notify_add(self.conf_dir + "/stats/enable-disk-poll",
+                                    cb, userdata)
     def on_stats_enable_net_poll_changed(self, cb, userdata=None):
-        self.conf.notify_add(self.conf_dir + "/stats/enable-net-poll", cb,
-                             userdata)
+        return self.conf.notify_add(self.conf_dir + "/stats/enable-net-poll",
+                                    cb, userdata)
 
     # VM Console preferences
     def on_console_popup_changed(self, callback):

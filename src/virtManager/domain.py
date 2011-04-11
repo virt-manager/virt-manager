@@ -966,11 +966,6 @@ class vmmDomain(vmmDomainBase):
 
         self.lastStatus = libvirt.VIR_DOMAIN_SHUTOFF
 
-        self.config.on_stats_enable_net_poll_changed(
-                                            self.toggle_sample_network_traffic)
-        self.config.on_stats_enable_disk_poll_changed(
-                                            self.toggle_sample_disk_io)
-
         self.getvcpus_supported = support.check_domain_support(self._backend,
                                             support.SUPPORT_DOMAIN_GETVCPUS)
         self.managedsave_supported = self.connection.get_dom_managedsave_supported(self._backend)
@@ -987,13 +982,22 @@ class vmmDomain(vmmDomainBase):
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
         (self._inactive_xml_flags,
-         self._active_xml_flags) = self.connection.get_dom_flags(
-                                                            self._backend)
+         self._active_xml_flags) = self.connection.get_dom_flags(self._backend)
 
-        # Hook up our own status listeners
         self._update_status()
-        self.connect("status-changed", self._update_start_vcpus)
-        self.connect("config-changed", self._reparse_xml)
+
+        # Hook up listeners that need to be cleaned up
+        self.add_gconf_handle(
+            self.config.on_stats_enable_net_poll_changed(
+                                        self.toggle_sample_network_traffic))
+        self.add_gconf_handle(
+            self.config.on_stats_enable_disk_poll_changed(
+                                        self.toggle_sample_disk_io))
+
+        self.add_gobject_handle(
+            self.connect("status-changed", self._update_start_vcpus))
+        self.add_gobject_handle(
+            self.connect("config-changed", self._reparse_xml))
 
     ##########################
     # Internal virDomain API #

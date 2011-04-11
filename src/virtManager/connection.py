@@ -890,15 +890,33 @@ class vmmConnection(vmmGObject):
         if self.vmm == None:
             return
 
+        def cleanup(devs):
+            for dev in devs.values():
+                dev.cleanup()
+
         self.vmm = None
-        self.nodedevs = {}
-        self.netdevs = {}
-        self.mediadevs = {}
-        self.interfaces = {}
-        self.pools = {}
-        self.nets = {}
-        self.vms = {}
         self.record = []
+
+        cleanup(self.nodedevs)
+        self.nodedevs = {}
+
+        cleanup(self.netdevs)
+        self.netdevs = {}
+
+        cleanup(self.mediadevs)
+        self.mediadevs = {}
+
+        cleanup(self.interfaces)
+        self.interfaces = {}
+
+        cleanup(self.pools)
+        self.pools = {}
+
+        cleanup(self.nets)
+        self.nets = {}
+
+        cleanup(self.vms)
+        self.vms = {}
 
         self._change_state(self.STATE_DISCONNECTED)
 

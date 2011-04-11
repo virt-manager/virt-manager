@@ -142,8 +142,10 @@ class vmmMediaDevice(vmmGObject):
 
         self.poll_signal = util.safe_timeout_add(MEDIA_TIMEOUT * 1000,
                                                  self._poll_for_media)
+        self.add_gobject_timeout(self.poll_signal)
 
     def disable_poll_for_media(self):
+        self.remove_gobject_timeout(self.poll_signal)
         self.poll_signal = None
 
     def _poll_for_media(self):

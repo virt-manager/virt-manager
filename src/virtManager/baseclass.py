@@ -19,6 +19,8 @@
 #
 
 import os
+import sys
+import logging
 
 import gtk
 import gobject
@@ -36,9 +38,49 @@ class vmmGObject(gobject.GObject):
         gobject.GObject.__init__(self)
         self.config = virtManager.config.running_config
 
+        self._gobject_handles = []
+        self._gobject_timeouts = []
+        self._gconf_handles = []
+
+    def cleanup(self):
+        # Do any cleanup required to drop reference counts so object is
+        # actually reaped by python. Usually means unregistering callbacks
+        try:
+            for h in self._gconf_handles[:]:
+                self.remove_gconf_handle(h)
+            for h in self._gobject_handles[:]:
+                self.remove_gobject_handle(h)
+            for h in self._gobject_timeouts[:]:
+                self.remove_gobject_timeout(h)
+        except:
+            logging.exception("Error cleaning up %s" % self)
+
+    def add_gconf_handle(self, handle):
+        self._gconf_handles.append(handle)
+    def remove_gconf_handle(self, handle):
+        self.config.remove_notifier(handle)
+        self._gconf_handles.remove(handle)
+
+    def add_gobject_handle(self, handle):
+        self._gobject_handles.append(handle)
+    def remove_gobject_handle(self, handle):
+        self.disconnect(handle)
+        self._gobject_handles.remove(handle)
+
+    def add_gobject_timeout(self, handle):
+        self._gobject_timeouts.append(handle)
+    def remove_gobject_timeout(self, handle):
+        gobject.source_remove(handle)
+        self._gobject_timeouts.remove(handle)
+
+    def refcount(self):
+        # Function generates 2 temporary refs, so adjust total accordingly
+        return (sys.getrefcount(self) - 2)
+
     def get_hal_helper(self):
         from virtManager import halhelper
         return halhelper.get_hal_helper()
+
 
 class vmmGObjectUI(vmmGObject):
     def __init__(self, filename, windowname):
