@@ -1864,8 +1864,6 @@ class vmmDetails(vmmGObjectUI):
         if not fromspice and not tospice:
             return False
 
-        print tospice, fromspice, has_spicevmc, has_multi_spice
-
         if tospice and has_spicevmc:
             return False
         if fromspice and not has_spicevmc:
