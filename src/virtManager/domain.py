@@ -155,11 +155,11 @@ class vmmDomainBase(vmmLibvirtObject):
 
         self._guest_to_define = None
 
-        self._network_traffic = None
+        self._enable_net_poll = False
         self._stats_net_supported = True
         self._stats_net_skip = []
 
-        self._disk_io = None
+        self._enable_disk_poll = False
         self._stats_disk_supported = True
         self._stats_disk_skip = []
 
@@ -1378,39 +1378,34 @@ class vmmDomain(vmmDomainBase):
 
     def toggle_sample_network_traffic(self, ignore1=None, ignore2=None,
                                       ignore3=None, ignore4=None):
-        if not self.config.get_stats_enable_net_poll():
-            self._network_traffic = lambda: (0, 0)
-            return
+        self._enable_net_poll = self.config.get_stats_enable_net_poll()
 
-        if len(self.record) > 1:
+        if self._enable_net_poll and len(self.record) > 1:
             # resample the current value before calculating the rate in
             # self.tick() otherwise we'd get a huge spike when switching
             # from 0 to bytes_transfered_so_far
             rxBytes, txBytes = self._sample_network_traffic()
             self.record[0]["netRxKB"] = rxBytes / 1024
             self.record[0]["netTxKB"] = txBytes / 1024
-        self._network_traffic = self._sample_network_traffic
 
     def toggle_sample_disk_io(self, ignore1=None, ignore2=None,
                               ignore3=None, ignore4=None):
-        if not self.config.get_stats_enable_disk_poll():
-            self._disk_io = lambda: (0, 0)
-            return
+        self._enable_disk_poll = self.config.get_stats_enable_disk_poll()
 
-        if len(self.record) > 1:
+        if self._enable_disk_poll and len(self.record) > 1:
             # resample the current value before calculating the rate in
             # self.tick() otherwise we'd get a huge spike when switching
             # from 0 to bytes_transfered_so_far
             rdBytes, wrBytes = self._sample_disk_io()
             self.record[0]["diskRdKB"] = rdBytes / 1024
             self.record[0]["diskWrKB"] = wrBytes / 1024
-        self._disk_io = self._sample_disk_io
-
 
     def _sample_network_traffic(self):
         rx = 0
         tx = 0
-        if not self._stats_net_supported or not self.is_active():
+        if (not self._stats_net_supported or not
+            not self._enable_net_poll or
+            not self.is_active()):
             return rx, tx
 
         for netdev in self.get_network_devices(refresh_if_necc=False):
@@ -1442,7 +1437,9 @@ class vmmDomain(vmmDomainBase):
     def _sample_disk_io(self):
         rd = 0
         wr = 0
-        if not self._stats_disk_supported or not self.is_active():
+        if (not self._stats_disk_supported or
+            not self._enable_disk_poll or
+            not self.is_active()):
             return rd, wr
 
         for disk in self.get_disk_devices(refresh_if_necc=False):
@@ -1497,8 +1494,8 @@ class vmmDomain(vmmDomainBase):
         cpuTime, cpuTimeAbs, pcentCpuTime = self._sample_cpu_stats(info, now)
         (pcentCurrMem, pcentMaxMem,
          curmem, maxmem) = self._sample_mem_stats(info)
-        rdBytes, wrBytes = self._disk_io()
-        rxBytes, txBytes = self._network_traffic()
+        rdBytes, wrBytes = self._sample_disk_io()
+        rxBytes, txBytes = self._sample_network_traffic()
 
         newStats = {
             "timestamp": now,
