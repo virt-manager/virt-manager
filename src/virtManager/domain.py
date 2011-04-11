@@ -231,6 +231,8 @@ class vmmDomainBase(vmmLibvirtObject):
     def _invalidate_xml(self):
         vmmLibvirtObject._invalidate_xml(self)
         self._guest_to_define = None
+        self._name = None
+        self._id = None
 
     def _get_guest_to_define(self):
         if not self._guest_to_define:
@@ -1476,10 +1478,8 @@ class vmmDomain(vmmDomainBase):
         if self.connection.get_state() != self.connection.STATE_ACTIVE:
             return
 
-        # Invalidate cached xml
+        # Invalidate cached values
         self._invalidate_xml()
-        self._id = None
-        self._name = None
 
         info = self.get_info()
         expected = self.config.get_stats_history_length()
