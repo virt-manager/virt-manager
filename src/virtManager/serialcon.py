@@ -18,26 +18,47 @@
 # MA 02110-1301 USA.
 #
 
-import gtk
-import vte
 import os
-import gobject
 import termios
 import tty
 import pty
 import fcntl
 import logging
 
+import gtk
+import gobject
+
+import vte
+
 import libvirt
 
-class vmmSerialConsole(gtk.HBox):
+from virtManager.baseclass import vmmGObject
+
+class vmmSerialConsole(vmmGObject):
     def __init__(self, vm, target_port):
-        gtk.HBox.__init__(self)
+        vmmGObject.__init__(self)
 
         self.vm = vm
         self.target_port = target_port
         self.ttypath = None
 
+        self.ptyio = None
+        self.ptysrc = None
+        self.ptytermios = None
+
+        self.terminal = None
+        self.init_terminal()
+
+        self.box = None
+        self.init_ui()
+
+        self.box.connect("realize", self.handle_realize)
+        self.box.connect("unrealize", self.handle_unrealize)
+        self.vm.connect("config-changed", self.update_tty_path)
+        self.vm.connect("status-changed", self.vm_status_changed)
+        self.update_tty_path(self.vm)
+
+    def init_terminal(self):
         self.terminal = vte.Terminal()
         self.terminal.set_cursor_blinks(True)
         self.terminal.set_emulation("xterm")
@@ -52,21 +73,20 @@ class vmmSerialConsole(gtk.HBox):
         self.terminal.connect("commit", self.send_data)
         self.terminal.show()
 
+    def init_ui(self):
+        self.box = gtk.HBox()
         scrollbar = gtk.VScrollbar()
         scrollbar.set_adjustment(self.terminal.get_adjustment())
 
-        self.pack_start(self.terminal)
-        self.pack_start(scrollbar, expand=False, fill=False)
+        self.box.pack_start(self.terminal)
+        self.box.pack_start(scrollbar, expand=False, fill=False)
 
-        self.ptyio = None
-        self.ptysrc = None
-        self.ptytermios = None
+    def cleanup(self):
+        vmmGObject.cleanup(self)
 
-        self.connect("realize", self.handle_realize)
-        self.connect("unrealize", self.handle_unrealize)
-        self.vm.connect("config-changed", self.update_tty_path)
-        self.vm.connect("status-changed", self.vm_status_changed)
-        self.update_tty_path(self.vm)
+        self.vm = None
+        self.terminal = None
+        self.box = None
 
     def handle_realize(self, ignore=None):
         self.opentty()

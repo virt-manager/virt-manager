@@ -272,6 +272,7 @@ class vmmDetails(vmmGObjectUI):
 
 
         self.serial_tabs = []
+        self.serial_mappings = {}
         self.last_console_page = PAGE_CONSOLE
         self.addhw = None
         self.media_choosers = {"cdrom": None, "floppy": None}
@@ -1314,13 +1315,16 @@ class vmmDetails(vmmGObjectUI):
 
     def _show_serial_tab(self, name, target_port):
         if not self.serial_tabs.count(name):
-            child = vmmSerialConsole(self.vm, target_port)
-            child.terminal.connect("button-press-event",
-                                   self.show_serial_rcpopup)
+            serial = vmmSerialConsole(self.vm, target_port)
+            serial.terminal.connect("button-press-event",
+                                    self.show_serial_rcpopup)
+
             title = gtk.Label(name)
+            child = serial.box
             child.show_all()
             self.window.get_widget("details-pages").append_page(child, title)
             self.serial_tabs.append(name)
+            self.serial_mappings[name] = serial
 
         page_idx = self.serial_tabs.index(name) + PAGE_DYNAMIC_OFFSET
         self.window.get_widget("details-pages").set_current_page(page_idx)
@@ -1331,7 +1335,11 @@ class vmmDetails(vmmGObjectUI):
 
         page_idx = self.serial_tabs.index(name) + PAGE_DYNAMIC_OFFSET
         self.window.get_widget("details-pages").remove_page(page_idx)
+
+        self.serial_mappings[name].cleanup()
+        del(self.serial_mappings[name])
         self.serial_tabs.remove(name)
+
 
     ############################
     # Details/Hardware getters #
