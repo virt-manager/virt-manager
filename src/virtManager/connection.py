@@ -828,6 +828,7 @@ class vmmConnection(vmmGObject):
 
     # Generic media device helpers
     def _remove_mediadev(self, key):
+        self.mediadevs[key].cleanup()
         del(self.mediadevs[key])
         self.emit("mediadev-removed", key)
     def _add_mediadev(self, key, dev):
@@ -838,6 +839,7 @@ class vmmConnection(vmmGObject):
         # Physical net device
         for name, obj in self.netdevs.items():
             if obj.get_hal_path() == hal_path:
+                self.netdevs[name].cleanup()
                 del self.netdevs[name]
                 return
 
@@ -1379,8 +1381,8 @@ class vmmConnection(vmmGObject):
         self.hostinfo = self.vmm.getInfo()
 
         # Poll for new virtual network objects
-        (startNets, stopNets, newNets,
-         oldNets, self.nets) = self._update_nets()
+        (startNets, stopNets, oldNets,
+         newNets, self.nets) = self._update_nets()
 
         # Update pools
         (stopPools, startPools, oldPools,
@@ -1417,13 +1419,7 @@ class vmmConnection(vmmGObject):
             # Update VM states
             for uuid in oldVMs:
                 self.emit("vm-removed", self.uri, uuid)
-
-                # This forces the backing virDomain to be deleted and
-                # unreferenced. Not forcing this seems to cause refcount
-                # issues, and if the user creates another domain with the
-                # same name, libvirt will return the original UUID when
-                # requested, causing confusion.
-                oldVMs[uuid].release_handle()
+                oldVMs[uuid].cleanup()
             for uuid in newVMs:
                 self.emit("vm-added", self.uri, uuid)
             for uuid in startVMs:
@@ -1432,6 +1428,7 @@ class vmmConnection(vmmGObject):
             # Update virtual network states
             for uuid in oldNets:
                 self.emit("net-removed", self.uri, uuid)
+                oldNets[uuid].cleanup()
             for uuid in newNets:
                 self.emit("net-added", self.uri, uuid)
             for uuid in startNets:
@@ -1442,6 +1439,7 @@ class vmmConnection(vmmGObject):
             # Update storage pool states
             for uuid in oldPools:
                 self.emit("pool-removed", self.uri, uuid)
+                oldPools[uuid].cleanup()
             for uuid in newPools:
                 self.emit("pool-added", self.uri, uuid)
             for uuid in startPools:
@@ -1452,6 +1450,7 @@ class vmmConnection(vmmGObject):
             # Update interface states
             for name in oldInterfaces:
                 self.emit("interface-removed", self.uri, name)
+                oldInterfaces[uuid].cleanup()
             for name in newInterfaces:
                 self.emit("interface-added", self.uri, name)
             for name in startInterfaces:
@@ -1462,6 +1461,7 @@ class vmmConnection(vmmGObject):
             # Update nodedev list
             for name in oldNodedevs:
                 self.emit("nodedev-removed", self.uri, name)
+                oldNodedevs[uuid].cleanup()
             for name in newNodedevs:
                 self.emit("nodedev-added", self.uri, name)
 
