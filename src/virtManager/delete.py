@@ -45,10 +45,10 @@ class vmmDeleteDialog(vmmGObjectUI):
     __gsignals__ = {
     }
 
-    def __init__(self, vm):
+    def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-delete.glade", "vmm-delete")
-        self.vm = vm
-        self.conn = vm.connection
+        self.vm = None
+        self.conn = None
 
         self.window.signal_autoconnect({
             "on_vmm_delete_delete_event" : self.close,
@@ -63,7 +63,6 @@ class vmmDeleteDialog(vmmGObjectUI):
         image.show()
         self.window.get_widget("icon-box").pack_end(image, False)
 
-
         prepare_storage_list(self.window.get_widget("delete-storage-list"))
 
     def toggle_remove_storage(self, src):
@@ -71,12 +70,17 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.window.get_widget("delete-storage-list").set_sensitive(dodel)
 
 
-    def show(self):
+    def show(self, vm):
+        self.vm = vm
+        self.conn = vm.get_connection()
+
         self.reset_state()
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
+        self.vm = None
+        self.conn = None
         return 1
 
     def reset_state(self):
@@ -94,11 +98,6 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         populate_storage_list(self.window.get_widget("delete-storage-list"),
                               self.vm, self.conn)
-
-    def set_vm(self, vm):
-        self.vm = vm
-        self.conn = vm.connection
-        self.reset_state()
 
     def get_config_format(self):
         format_combo = self.window.get_widget("vol-format")
@@ -137,13 +136,14 @@ class vmmDeleteDialog(vmmGObjectUI):
 
         self.topwin.set_sensitive(True)
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.TOP_LEFT_ARROW))
-        self.close()
+        conn = self.conn
 
         if error is not None:
             self.err.show_err(error, details=details)
 
-        self.conn.tick(noStatsUpdate=True)
+        conn.tick(noStatsUpdate=True)
 
+        self.close()
 
     def _async_delete(self, asyncjob, paths):
         newconn = None
