@@ -517,12 +517,13 @@ class vmmEngine(vmmGObject):
         del self.connections[uri]
         self.config.remove_connection(conn.get_uri())
 
-    def connect(self, name, callback):
-        handle_id = gobject.GObject.connect(self, name, callback)
+    def connect(self, name, callback, *args):
+        handle_id = vmmGObject.connect(self, name, callback, *args)
 
         if name == "connection-added":
             for uri in self.connections.keys():
-                self.emit("connection-added", self.connections[uri]["connection"])
+                self.emit("connection-added",
+                          self.connections[uri]["connection"])
 
         return handle_id
 

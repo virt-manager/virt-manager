@@ -996,10 +996,8 @@ class vmmDomain(vmmDomainBase):
             self.config.on_stats_enable_disk_poll_changed(
                                         self.toggle_sample_disk_io))
 
-        self.add_gobject_handle(
-            self.connect("status-changed", self._update_start_vcpus))
-        self.add_gobject_handle(
-            self.connect("config-changed", self._reparse_xml))
+        self.connect("status-changed", self._update_start_vcpus)
+        self.connect("config-changed", self._reparse_xml)
 
     ##########################
     # Internal virDomain API #

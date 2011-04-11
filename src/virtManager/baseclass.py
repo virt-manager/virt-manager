@@ -52,23 +52,26 @@ class vmmGObject(gobject.GObject):
             for h in self._gconf_handles[:]:
                 self.remove_gconf_handle(h)
             for h in self._gobject_handles[:]:
-                self.remove_gobject_handle(h)
+                self.disconnect(h)
             for h in self._gobject_timeouts[:]:
                 self.remove_gobject_timeout(h)
         except:
             logging.exception("Error cleaning up %s" % self)
+
+    def connect(self, name, callback, *args):
+        ret = gobject.GObject.connect(self, name, callback, *args)
+        self._gobject_handles.append(ret)
+        return ret
+    def disconnect(self, handle):
+        ret = gobject.GObject.disconnect(self, handle)
+        self._gobject_handles.remove(handle)
+        return ret
 
     def add_gconf_handle(self, handle):
         self._gconf_handles.append(handle)
     def remove_gconf_handle(self, handle):
         self.config.remove_notifier(handle)
         self._gconf_handles.remove(handle)
-
-    def add_gobject_handle(self, handle):
-        self._gobject_handles.append(handle)
-    def remove_gobject_handle(self, handle):
-        self.disconnect(handle)
-        self._gobject_handles.remove(handle)
 
     def add_gobject_timeout(self, handle):
         self._gobject_timeouts.append(handle)
@@ -101,6 +104,7 @@ class vmmGObjectUI(vmmGObject):
         self.window = None
         self.topwin = None
         self.gladefile = None
+        self.err = None
 
         if filename:
             self.gladefile = os.path.join(self.config.get_glade_dir(),
@@ -111,4 +115,11 @@ class vmmGObjectUI(vmmGObject):
             self.topwin = self.window.get_widget(self.windowname)
             self.topwin.hide()
 
-        self.err = vmmErrorDialog(self.topwin)
+            self.err = vmmErrorDialog(self.topwin)
+
+    def cleanup(self):
+        vmmGObject.cleanup(self)
+        self.window = None
+        self.topwin = None
+        self.gladefile = None
+        self.err = None

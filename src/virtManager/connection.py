@@ -306,7 +306,7 @@ class vmmConnection(vmmGObject):
                 self.hostinfo[6] * self.hostinfo[7])
 
     def connect(self, name, callback, *args):
-        handle_id = gobject.GObject.connect(self, name, callback, *args)
+        handle_id = vmmGObject.connect(self, name, callback, *args)
 
         if name == "vm-added":
             for uuid in self.vms.keys():
@@ -1642,4 +1642,4 @@ class vmmConnection(vmmGObject):
         return self.config.get_perhost(self.get_uri(),
                                        self.config.get_iso_paths)
 
-gobject.type_register(vmmConnection)
+vmmGObject.type_register(vmmConnection)
