@@ -360,10 +360,10 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
     iface_dict = {}
 
     def build_row(nettype, name, label, is_sensitive, is_running,
-                  manual_bridge=False, obj=None):
+                  manual_bridge=False, key=None):
         return [nettype, name, label,
                 is_sensitive, is_running, manual_bridge,
-                obj]
+                key]
 
     def set_active(idx):
         net_list.set_active(idx)
@@ -401,7 +401,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
             netIdxLabel = label
 
         vnet_dict[label] = build_row(nettype, net.get_name(), label, True,
-                                     net.is_active(), obj=net)
+                                     net.is_active(), key=net.get_uuid())
 
         # Build a list of vnet bridges, so we know not to list them
         # in the physical interface list
@@ -448,7 +448,8 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
         if hasShared and not brIdxLabel:
             brIdxLabel = label
 
-        row = build_row(nettype, bridge_name, label, sensitive, True, obj=br)
+        row = build_row(nettype, bridge_name, label, sensitive, True,
+                        key=br.get_name())
 
         if sensitive:
             bridge_dict[label] = row
