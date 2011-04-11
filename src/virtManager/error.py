@@ -22,6 +22,7 @@ import gtk
 import logging
 import traceback
 
+from virtManager.baseclass import vmmGObject
 import virtManager.util as util
 
 def safe_set_text(self, text):
@@ -48,8 +49,9 @@ def _launch_dialog(dialog, primary_text, secondary_text, title,
 
     return res
 
-class vmmErrorDialog (object):
+class vmmErrorDialog(vmmGObject):
     def __init__(self, parent=None):
+        vmmGObject.__init__(self)
         self._parent = parent
         self._simple = None
 
@@ -231,3 +233,5 @@ class _errorDialog (gtk.MessageDialog):
             res = [res, chkbox.get_active()]
 
         return res
+
+vmmGObject.type_register(vmmErrorDialog)

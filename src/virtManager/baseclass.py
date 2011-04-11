@@ -26,7 +26,6 @@ import gtk
 import gobject
 
 import virtManager.config
-from virtManager.error import vmmErrorDialog
 
 class vmmGObject(gobject.GObject):
 
@@ -115,7 +114,7 @@ class vmmGObjectUI(vmmGObject):
             self.topwin = self.window.get_widget(self.windowname)
             self.topwin.hide()
 
-            self.err = vmmErrorDialog(self.topwin)
+            self.err = virtManager.error.vmmErrorDialog(self.topwin)
 
     def cleanup(self):
         vmmGObject.cleanup(self)
