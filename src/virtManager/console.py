@@ -534,6 +534,10 @@ class vmmConsolePages(vmmGObjectUI):
             return 1
         return 0
 
+    def cleanup(self):
+        vmmGObjectUI.cleanup(self)
+        self.vm = None
+
     ##########################
     # Initialization helpers #
     ##########################

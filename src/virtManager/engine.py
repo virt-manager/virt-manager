@@ -376,23 +376,29 @@ class vmmEngine(vmmGObject):
 
     def _do_vm_removed(self, connection, hvuri, vmuuid):
         ignore = connection
-        if vmuuid in self.connections[hvuri]["windowDetails"]:
-            self.connections[hvuri]["windowDetails"][vmuuid].close()
-            del self.connections[hvuri]["windowDetails"][vmuuid]
+        if vmuuid not in self.connections[hvuri]["windowDetails"]:
+            return
+
+        self.connections[hvuri]["windowDetails"][vmuuid].cleanup()
+        del(self.connections[hvuri]["windowDetails"][vmuuid])
 
     def _do_connection_changed(self, connection):
-        if connection.get_state() == connection.STATE_ACTIVE or \
-           connection.get_state() == connection.STATE_CONNECTING:
+        if (connection.get_state() == connection.STATE_ACTIVE or
+            connection.get_state() == connection.STATE_CONNECTING):
             return
 
         hvuri = connection.get_uri()
+
         for vmuuid in self.connections[hvuri]["windowDetails"].keys():
-            self.connections[hvuri]["windowDetails"][vmuuid].close()
-            del self.connections[hvuri]["windowDetails"][vmuuid]
+            self.connections[hvuri]["windowDetails"][vmuuid].cleanup()
+            del(self.connections[hvuri]["windowDetails"][vmuuid])
+
         if self.connections[hvuri]["windowHost"] is not None:
             self.connections[hvuri]["windowHost"].close()
             self.connections[hvuri]["windowHost"] = None
-        if (self.windowCreate and self.windowCreate.conn and
+
+        if (self.windowCreate and
+            self.windowCreate.conn and
             self.windowCreate.conn.get_uri() == hvuri):
             self.windowCreate.close()
 

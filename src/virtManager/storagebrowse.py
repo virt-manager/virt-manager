@@ -86,6 +86,27 @@ class vmmStorageBrowser(vmmGObjectUI):
             self.addvol.close()
         return 1
 
+    def cleanup(self):
+        self.close()
+        vmmGObjectUI.cleanup(self)
+
+        try:
+            self.remove_conn()
+            self.conn = None
+
+            if self.addvol:
+                self.addvol.cleanup()
+                self.addvol = None
+        except:
+            logging.exception("Error cleaning up storagebrowse")
+
+    def remove_conn(self):
+        if not self.conn:
+            return
+
+        for i in self.conn_signal_ids:
+            self.conn.disconnect(i)
+
     def set_finish_cb(self, callback):
         if self.finish_cb_id:
             self.disconnect(self.finish_cb_id)
@@ -140,11 +161,9 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         volListModel.set_sort_column_id(1, gtk.SORT_ASCENDING)
 
-
     def reset_state(self, conn=None):
         if conn and conn != self.conn:
-            for i in self.conn_signal_ids:
-                self.conn.disconnect(i)
+            self.remove_conn()
             self.conn = conn
 
         pool_list = self.window.get_widget("pool-list")

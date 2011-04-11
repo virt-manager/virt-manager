@@ -164,7 +164,25 @@ class vmmAddHardware(vmmGObjectUI):
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
         self.remove_timers()
+        if self.storage_browser:
+            self.storage_browser.close()
+
         return 1
+
+    def cleanup(self):
+        self.close()
+        vmmGObjectUI.cleanup(self)
+
+        try:
+            self.vm = None
+            self.conn = None
+            self._dev = None
+
+            if self.storage_browser:
+                self.storage_browser.cleanup()
+                self.storage_browser = None
+        except:
+            logging.exception("Error cleaning up addhw")
 
     def remove_timers(self):
         try:
@@ -350,16 +368,16 @@ class vmmAddHardware(vmmGObjectUI):
                       _("Not supported for this guest type."),
                       "channel")
         add_hw_option("USB Host Device", "system-run", PAGE_HOSTDEV,
-                      self.vm.get_connection().is_nodedev_capable(),
+                      self.conn.is_nodedev_capable(),
                       _("Connection does not support host device enumeration"),
                       "usb")
         add_hw_option("PCI Host Device", "system-run", PAGE_HOSTDEV,
-                      self.vm.get_connection().is_nodedev_capable(),
+                      self.conn.is_nodedev_capable(),
                       _("Connection does not support host device enumeration"),
                       "pci")
         add_hw_option("Video", "video-display", PAGE_VIDEO,
                       virtinst.support.check_conn_support(
-                            self.vm.get_connection().vmm,
+                            self.conn.vmm,
                             virtinst.support.SUPPORT_CONN_DOMAIN_VIDEO),
                       _("Libvirt version does not support video devices."))
         add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
@@ -388,16 +406,16 @@ class vmmAddHardware(vmmGObjectUI):
             target_list.set_active(0)
 
         # Network init
-        newmac = uihelpers.generate_macaddr(self.vm.get_connection())
+        newmac = uihelpers.generate_macaddr(self.conn)
         self.window.get_widget("mac-address").set_active(bool(newmac))
         self.window.get_widget("create-mac-address").set_text(newmac)
         self.change_macaddr_use()
 
         net_list = self.window.get_widget("net-list")
         net_warn = self.window.get_widget("net-list-warn")
-        uihelpers.populate_network_list(net_list, self.vm.get_connection())
+        uihelpers.populate_network_list(net_list, self.conn)
 
-        error = self.vm.get_connection().netdev_error
+        error = self.conn.netdev_error
         if error:
             net_warn.show()
             util.tooltip_wrapper(net_warn, error)
@@ -473,7 +491,7 @@ class vmmAddHardware(vmmGObjectUI):
                 add_dev("usb", virtinst.VirtualDisk.DEVICE_DISK, "USB disk")
         if self.vm.get_hv_type() == "kvm":
             add_dev("virtio", virtinst.VirtualDisk.DEVICE_DISK, "Virtio Disk")
-        if self.vm.get_connection().is_xen():
+        if self.conn.is_xen():
             add_dev("xen", virtinst.VirtualDisk.DEVICE_DISK, "Virtual disk")
 
     def populate_input_model(self, model):
@@ -497,9 +515,9 @@ class vmmAddHardware(vmmGObjectUI):
         subdevs = []
 
         if subtype:
-            subdevs = self.vm.get_connection().get_nodedevs(subtype, subcap)
+            subdevs = self.conn.get_nodedevs(subtype, subcap)
 
-        devs = self.vm.get_connection().get_nodedevs(devtype, devcap)
+        devs = self.conn.get_nodedevs(devtype, devcap)
         for dev in devs:
             prettyname = dev.pretty_name()
 
@@ -865,7 +883,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         chartype = self.get_char_type()
         devtype = src.get_model()[src.get_active()][0]
-        conn = self.vm.get_connection().vmm
+        conn = self.conn.vmm
 
         self._dev = VirtualCharDevice.get_dev_instance(conn,
                                                        chartype,
@@ -1100,7 +1118,7 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Invalid MAC address"),
                                     _("A MAC address must be entered."))
 
-        ret = uihelpers.validate_network(self.topwin, self.vm.get_connection(),
+        ret = uihelpers.validate_network(self.topwin, self.conn,
                                          nettype, devname, mac, model)
         if ret == False:
             return False
@@ -1122,7 +1140,7 @@ class vmmAddHardware(vmmGObjectUI):
                  "sdl": virtinst.VirtualGraphics.TYPE_SDL}[graphics]
 
         self._dev = virtinst.VirtualGraphics(type=_type,
-                                             conn=self.vm.get_connection().vmm)
+                                             conn=self.conn.vmm)
         try:
             self._dev.port   = self.get_config_graphics_port()
             self._dev.tlsPort = self.get_config_graphics_tls_port()
@@ -1150,7 +1168,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         try:
             self._dev = virtinst.VirtualHostDevice.device_from_node(
-                            conn=self.vm.get_connection().vmm,
+                            conn=self.conn.vmm,
                             name=nodedev_name)
         except Exception, e:
             return self.err.val_err(_("Host device parameter error"), str(e))
@@ -1159,7 +1177,7 @@ class vmmAddHardware(vmmGObjectUI):
         chartype = self.get_char_type()
         devbox = self.window.get_widget("char-device-type")
         devtype = devbox.get_model()[devbox.get_active()][0]
-        conn = self.vm.get_connection().vmm
+        conn = self.conn.vmm
 
         devclass = VirtualCharDevice.get_dev_instance(conn, chartype, devtype)
 
@@ -1199,7 +1217,7 @@ class vmmAddHardware(vmmGObjectUI):
                                     chartype.capitalize(), str(e))
 
     def validate_page_video(self):
-        conn = self.vm.get_connection().vmm
+        conn = self.conn.vmm
         model = self.get_config_video_model()
 
         try:
@@ -1210,7 +1228,7 @@ class vmmAddHardware(vmmGObjectUI):
                                     str(e))
 
     def validate_page_watchdog(self):
-        conn = self.vm.get_connection().vmm
+        conn = self.conn.vmm
         model = self.get_config_watchdog_model()
         action = self.get_config_watchdog_action()
 
@@ -1233,7 +1251,7 @@ class vmmAddHardware(vmmGObjectUI):
             if path:
                 textent.set_text(path)
 
-        conn = self.vm.get_connection()
+        conn = self.conn
         if self.storage_browser == None:
             self.storage_browser = vmmStorageBrowser(conn)
 

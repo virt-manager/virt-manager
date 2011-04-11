@@ -119,6 +119,7 @@ class vmmGObjectUI(vmmGObject):
     def cleanup(self):
         vmmGObject.cleanup(self)
         self.window = None
+        self.topwin.destroy()
         self.topwin = None
         self.gladefile = None
         self.err = None

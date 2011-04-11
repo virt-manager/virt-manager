@@ -17,6 +17,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301 USA.
 #
+
+import logging
+
 import gobject
 
 import virtManager.uihelpers as uihelpers
@@ -48,7 +51,7 @@ class vmmChooseCD(vmmGObjectUI):
             "on_ok_clicked": self.ok,
             "on_vmm_choose_cd_delete_event": self.close,
             "on_cancel_clicked": self.close,
-            })
+        })
 
         self.window.get_widget("iso-image").set_active(True)
 
@@ -57,11 +60,29 @@ class vmmChooseCD(vmmGObjectUI):
 
     def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
+        if self.storage_browser:
+            self.storage_browser.close()
+
         return 1
 
     def show(self):
         self.reset_state()
         self.topwin.show()
+
+    def cleanup(self):
+        self.close()
+
+        try:
+            self.conn = None
+            self.dev_id_info = None
+
+            if self.storage_browser:
+                self.storage_browser.cleanup()
+                self.storage_browser = None
+        except:
+            logging.exception("Error cleaning up choosecd")
+
+        vmmGObjectUI.cleanup(self)
 
     def reset_state(self):
         cd_path = self.window.get_widget("cd-path")
