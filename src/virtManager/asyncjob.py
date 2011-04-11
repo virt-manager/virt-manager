@@ -137,7 +137,14 @@ class vmmAsyncJob(vmmGObjectUI):
             self.exit_if_necessary(force_exit=True)
 
         self.topwin.destroy()
+        self.cleanup()
         return self._get_error()
+
+    def cleanup(self):
+        vmmGObjectUI.cleanup(self)
+        self.bg_thread = None
+        self.cancel_job = None
+        self.cancel_args = None
 
     def delete(self, ignore1=None, ignore2=None):
         thread_active = (self.bg_thread.isAlive() or not self.run_main)
