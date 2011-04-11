@@ -42,6 +42,9 @@ class vmmGObject(gobject.GObject):
         self._gobject_timeouts = []
         self._gconf_handles = []
 
+        self._object_key = str(self)
+        self.config.add_object(self._object_key)
+
     def cleanup(self):
         # Do any cleanup required to drop reference counts so object is
         # actually reaped by python. Usually means unregistering callbacks
@@ -81,6 +84,14 @@ class vmmGObject(gobject.GObject):
         from virtManager import halhelper
         return halhelper.get_hal_helper()
 
+    def __del__(self):
+        if hasattr(gobject.GObject, "__del__"):
+            getattr(gobject.GObject, "__del__")(self)
+
+        try:
+            self.config.remove_object(self._object_key)
+        except:
+            logging.exception("Error removing %s" % self._object_key)
 
 class vmmGObjectUI(vmmGObject):
     def __init__(self, filename, windowname):

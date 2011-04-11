@@ -47,6 +47,9 @@ from virtManager.error import vmmErrorDialog
 from virtManager.systray import vmmSystray
 import virtManager.util as util
 
+# Enable this to get a report of leaked objects on app shutdown
+debug_ref_leaks = False
+
 def default_uri():
     tryuri = None
     if os.path.exists("/var/lib/xend") and os.path.exists("/proc/xen"):
@@ -473,6 +476,12 @@ class vmmEngine(vmmGObject):
         conns = self.connections.values()
         for conn in conns:
             conn["connection"].close()
+        self.connections = {}
+
+        if debug_ref_leaks:
+            for name in self.config.get_objects():
+                logging.debug("Leaked %s" % name)
+
         logging.debug("Exiting app normally.")
         gtk.main_quit()
 

@@ -115,6 +115,8 @@ class vmmConfig(object):
         self.hv_packages = []
         self.libvirt_packages = []
 
+        self._objects = []
+
         self.status_icons = {
             libvirt.VIR_DOMAIN_BLOCKED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 18, 18),
             libvirt.VIR_DOMAIN_CRASHED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_crashed.png", 18, 18),
@@ -178,6 +180,15 @@ class vmmConfig(object):
 
     def remove_notifier(self, h):
         self.conf.notify_remove(h)
+
+    # Used for debugging reference leaks, we keep track of all objects
+    # come and go so we can do a leak report at app shutdown
+    def add_object(self, obj):
+        self._objects.append(obj)
+    def remove_object(self, obj):
+        self._objects.remove(obj)
+    def get_objects(self):
+        return self._objects[:]
 
     # Per-VM/Connection/Connection Host Option dealings
     def _perconn_helper(self, uri, pref_func, func_type, value=None):
