@@ -1450,7 +1450,7 @@ class vmmConnection(vmmGObject):
             # Update interface states
             for name in oldInterfaces:
                 self.emit("interface-removed", self.uri, name)
-                oldInterfaces[uuid].cleanup()
+                oldInterfaces[name].cleanup()
             for name in newInterfaces:
                 self.emit("interface-added", self.uri, name)
             for name in startInterfaces:
@@ -1461,7 +1461,7 @@ class vmmConnection(vmmGObject):
             # Update nodedev list
             for name in oldNodedevs:
                 self.emit("nodedev-removed", self.uri, name)
-                oldNodedevs[uuid].cleanup()
+                oldNodedevs[name].cleanup()
             for name in newNodedevs:
                 self.emit("nodedev-added", self.uri, name)
 
