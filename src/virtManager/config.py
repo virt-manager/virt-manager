@@ -323,12 +323,14 @@ class vmmConfig(object):
                            state)
 
     def on_vmlist_cpu_usage_visible_changed(self, cb):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/cpu_usage", cb)
+        return self.conf.notify_add(self.conf_dir + "/vmlist-fields/cpu_usage",
+                                    cb)
     def on_vmlist_disk_io_visible_changed(self, cb):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/disk_usage", cb)
+        return self.conf.notify_add(self.conf_dir + "/vmlist-fields/disk_usage",
+                                    cb)
     def on_vmlist_network_traffic_visible_changed(self, cb):
-        self.conf.notify_add(self.conf_dir + "/vmlist-fields/network_traffic",
-                             cb)
+        return self.conf.notify_add(
+                        self.conf_dir + "/vmlist-fields/network_traffic", cb)
 
     # Check whether we have GTK-VNC that supports configurable grab keys
     # installed on the system
@@ -395,20 +397,20 @@ class vmmConfig(object):
         self.conf.set_bool(self.conf_dir + "/confirm/interface_power", val)
 
     def on_confirm_forcepoweroff_changed(self, cb):
-        self.conf.notify_add(self.conf_dir + "/confirm/forcepoweroff", cb)
+        return self.conf.notify_add(self.conf_dir + "/confirm/forcepoweroff", cb)
     def on_confirm_poweroff_changed(self, cb):
-        self.conf.notify_add(self.conf_dir + "/confirm/poweroff", cb)
+        return self.conf.notify_add(self.conf_dir + "/confirm/poweroff", cb)
     def on_confirm_pause_changed(self, cb):
-        self.conf.notify_add(self.conf_dir + "/confirm/pause", cb)
+        return self.conf.notify_add(self.conf_dir + "/confirm/pause", cb)
     def on_confirm_removedev_changed(self, cb):
-        self.conf.notify_add(self.conf_dir + "/confirm/removedev", cb)
+        return self.conf.notify_add(self.conf_dir + "/confirm/removedev", cb)
     def on_confirm_interface_changed(self, cb):
-        self.conf.notify_add(self.conf_dir + "/confirm/interface_power", cb)
+        return self.conf.notify_add(self.conf_dir + "/confirm/interface_power", cb)
 
 
     # System tray visibility
     def on_view_system_tray_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/system-tray", callback)
+        return self.conf.notify_add(self.conf_dir + "/system-tray", callback)
     def get_view_system_tray(self):
         return self.conf.get_bool(self.conf_dir + "/system-tray")
     def set_view_system_tray(self, val):
@@ -433,9 +435,9 @@ class vmmConfig(object):
         self.conf.set_int(self.conf_dir + "/stats/history-length", length)
 
     def on_stats_update_interval_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/stats/update-interval", callback)
+        return self.conf.notify_add(self.conf_dir + "/stats/update-interval", callback)
     def on_stats_history_length_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/stats/history-length", callback)
+        return self.conf.notify_add(self.conf_dir + "/stats/history-length", callback)
 
 
     # Disable/Enable different stats polling
@@ -458,7 +460,7 @@ class vmmConfig(object):
 
     # VM Console preferences
     def on_console_popup_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/console/popup", callback)
+        return self.conf.notify_add(self.conf_dir + "/console/popup", callback)
     def get_console_popup(self):
         console_pref = self.conf.get_int(self.conf_dir + "/console/popup")
         if console_pref == None:
@@ -468,7 +470,7 @@ class vmmConfig(object):
         self.conf.set_int(self.conf_dir + "/console/popup", pref)
 
     def on_console_accels_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/console/enable-accels", callback)
+        return self.conf.notify_add(self.conf_dir + "/console/enable-accels", callback)
     def get_console_accels(self):
         console_pref = self.conf.get_bool(self.conf_dir +
                                           "/console/enable-accels")
@@ -479,7 +481,7 @@ class vmmConfig(object):
         self.conf.set_bool(self.conf_dir + "/console/enable-accels", pref)
 
     def on_console_scaling_changed(self, callback):
-        self.conf.notify_add(self.conf_dir + "/console/scaling", callback)
+        return self.conf.notify_add(self.conf_dir + "/console/scaling", callback)
     def get_console_scaling(self):
         ret = self.conf.get(self.conf_dir + "/console/scaling")
         if ret != None:
@@ -518,9 +520,9 @@ class vmmConfig(object):
         self.conf.set_bool(self.conf_dir + "/new-vm/remote-sound", state)
 
     def on_sound_local_changed(self, cb, data=None):
-        self.conf.notify_add(self.conf_dir + "/new-vm/local-sound", cb, data)
+        return self.conf.notify_add(self.conf_dir + "/new-vm/local-sound", cb, data)
     def on_sound_remote_changed(self, cb, data=None):
-        self.conf.notify_add(self.conf_dir + "/new-vm/remote-sound", cb, data)
+        return self.conf.notify_add(self.conf_dir + "/new-vm/remote-sound", cb, data)
 
     def get_graphics_type(self):
         ret = self.conf.get_string(self.conf_dir + "/new-vm/graphics_type")
@@ -531,8 +533,8 @@ class vmmConfig(object):
         self.conf.set_string(self.conf_dir + "/new-vm/graphics_type",
                              gtype.lower())
     def on_graphics_type_changed(self, cb, data=None):
-        self.conf.notify_add(self.conf_dir + "/new-vm/graphics_type",
-                             cb, data)
+        return self.conf.notify_add(self.conf_dir + "/new-vm/graphics_type",
+                                    cb, data)
 
 
     # URL/Media path history
