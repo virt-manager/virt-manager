@@ -312,7 +312,7 @@ class vmmSystray(vmmGObject):
         self.populate_vm_list(conn)
 
     def conn_removed(self, engine_ignore, conn):
-        if conn.get_uri() in self.conn_menuitems:
+        if not conn.get_uri() in self.conn_menuitems:
             return
 
         menu_item = self.conn_menuitems[conn.get_uri()]
