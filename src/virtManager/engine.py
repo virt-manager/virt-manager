@@ -212,7 +212,7 @@ class vmmEngine(vmmGObject):
         "connection-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                              [object]),
         "connection-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                               [object])
+                               [str])
         }
 
     def __init__(self):
@@ -519,8 +519,9 @@ class vmmEngine(vmmGObject):
     def remove_connection(self, uri):
         conn = self.connections[uri]["connection"]
         conn.close()
-        self.emit("connection-removed", conn)
         del self.connections[uri]
+
+        self.emit("connection-removed", uri)
         self.config.remove_connection(conn.get_uri())
 
     def connect(self, name, callback, *args):

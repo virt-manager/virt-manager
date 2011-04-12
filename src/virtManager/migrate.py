@@ -353,10 +353,10 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.destconn_rows.append(newrow)
         self.populate_dest_combo()
 
-    def dest_remove_connection(self, engine_ignore, conn):
+    def dest_remove_connection(self, engine_ignore, uri):
         # Make sure connection isn't already present
         for row in self.destconn_rows:
-            if row[1] and row[1].get_uri() == conn.get_uri():
+            if row[1] and row[1].get_uri() == uri:
                 self.destconn_rows.remove(row)
 
         self.populate_dest_combo()

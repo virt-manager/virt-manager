@@ -855,17 +855,21 @@ class vmmManager(vmmGObjectUI):
             newname = conn.get_pretty_desc_inactive(False, True)
             self.conn_refresh_resources(conn, newname)
 
-    def _remove_connection(self, engine_ignore, conn):
+    def _remove_connection(self, engine_ignore, uri):
         model = self.window.get_widget("vm-list").get_model()
-        parent = self.rows[conn.get_uri()].iter
-        if parent is not None:
+        parent = self.rows[uri].iter
+
+        if parent is None:
+            return
+
+        child = model.iter_children(parent)
+        while child is not None:
+            del self.rows[self.vm_row_key(model.get_value(child, ROW_HANDLE))]
+            model.remove(child)
             child = model.iter_children(parent)
-            while child is not None:
-                del self.rows[self.vm_row_key(model.get_value(child, ROW_HANDLE))]
-                model.remove(child)
-                child = model.iter_children(parent)
-            model.remove(parent)
-            del self.rows[conn.get_uri()]
+        model.remove(parent)
+
+        del self.rows[uri]
 
 
     #############################
