@@ -76,8 +76,6 @@ class vmmManager(vmmGObjectUI):
                                 gobject.TYPE_NONE, (str, str)),
         "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
                                 gobject.TYPE_NONE, (str, str)),
-        "action-refresh-console": (gobject.SIGNAL_RUN_FIRST,
-                                   gobject.TYPE_NONE, (str, str)),
         "action-refresh-terminal": (gobject.SIGNAL_RUN_FIRST,
                                     gobject.TYPE_NONE, (str, str)),
         "action-show-details": (gobject.SIGNAL_RUN_FIRST,
@@ -716,9 +714,9 @@ class vmmManager(vmmGObjectUI):
     def vm_started(self, connection, uri, vmuuid):
         vm = connection.get_vm(vmuuid)
         logging.debug("VM %s started" % vm.get_name())
+
         if (self.config.get_console_popup() != 2 or
             vm.is_management_domain()):
-            self.emit("action-refresh-console", uri, vmuuid)
             return
 
         # user has requested consoles on all vms

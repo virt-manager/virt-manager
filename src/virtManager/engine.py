@@ -454,19 +454,6 @@ class vmmEngine(vmmGObject):
         gobject.source_remove(self.timer)
         self.schedule_timer()
 
-    def refresh_console(self, ignore, uri, uuid):
-        """
-        Present VM console if recently started
-        """
-        if uuid not in self.connections[uri]["windowConsole"]:
-            return
-
-        console = self.connections[uri]["windowConsole"][uuid]
-        if not(console.is_visible()):
-            return
-
-        console.show()
-
     def increment_window_counter(self):
         self.windows += 1
         logging.debug("window counter incremented to %s" % self.windows)
@@ -501,9 +488,8 @@ class vmmEngine(vmmGObject):
             "connection": conn,
             "windowHost": None,
             "windowDetails": {},
-            "windowConsole": {},
             "windowClone": None,
-            }
+        }
 
         conn.connect("vm-removed", self._do_vm_removed)
         conn.connect("state-changed", self._do_connection_changed)
@@ -683,7 +669,6 @@ class vmmEngine(vmmGObject):
         obj.connect("action-show-host", self._do_show_host)
         obj.connect("action-show-connect", self._do_show_connect)
         obj.connect("action-connect", self._do_connect)
-        obj.connect("action-refresh-console", self.refresh_console)
         obj.connect("action-exit-app", self.exit_app)
 
         self.windowManager = obj
