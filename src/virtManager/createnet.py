@@ -75,6 +75,21 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.reset_state()
         self.topwin.present()
 
+    def is_visible(self):
+        if self.topwin.flags() & gtk.VISIBLE:
+            return 1
+        return 0
+
+    def close(self, ignore1=None, ignore2=None):
+        self.topwin.hide()
+        return 1
+
+    def cleanup(self):
+        self.close()
+        self.conn = None
+
+        vmmGObjectUI.cleanup(self)
+
     def set_initial_state(self):
         notebook = self.window.get_widget("create-pages")
         notebook.set_show_tabs(False)
@@ -310,14 +325,6 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.window.get_widget("create-finish").show()
             self.window.get_widget("create-finish").grab_focus()
 
-    def close(self, ignore1=None, ignore2=None):
-        self.topwin.hide()
-        return 1
-
-    def is_visible(self):
-        if self.topwin.flags() & gtk.VISIBLE:
-            return 1
-        return 0
 
     def finish(self, ignore=None):
         name = self.get_config_name()

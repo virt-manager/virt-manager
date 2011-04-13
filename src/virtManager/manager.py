@@ -129,17 +129,18 @@ class vmmManager(vmmGObjectUI):
         self.topwin.set_default_size(w or 550, h or 550)
         self.prev_position = None
 
-        self.init_vmlist()
-        self.init_stats()
-        self.init_toolbar()
-
         self.vmmenu = gtk.Menu()
         self.vmmenushutdown = gtk.Menu()
         self.vmmenu_items = {}
         self.vmmenushutdown_items = {}
         self.connmenu = gtk.Menu()
         self.connmenu_items = {}
-        self.init_context_menus()
+
+        # There seem to be ref counting issues with calling
+        # list.get_column, so avoid it
+        self.diskcol = None
+        self.netcol = None
+        self.cpucol = None
 
         self.window.signal_autoconnect({
             "on_menu_view_cpu_usage_activate":  (self.toggle_stats_visible,
@@ -171,7 +172,12 @@ class vmmManager(vmmGObjectUI):
             "on_menu_edit_preferences_activate": self.show_preferences,
             "on_menu_help_about_activate": self.show_about,
             "on_menu_help_activate": self.show_help,
-            })
+        })
+
+        self.init_vmlist()
+        self.init_stats()
+        self.init_toolbar()
+        self.init_context_menus()
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("menu_help").hide()
@@ -223,6 +229,38 @@ class vmmManager(vmmGObjectUI):
         self.engine.decrement_window_counter()
         return 1
 
+
+    def cleanup(self):
+        self.close()
+
+        try:
+            self.engine = None
+            self.rows = None
+
+            self.diskcol = None
+            self.cpucol = None
+            self.netcol = None
+
+            if self.delete_dialog:
+                self.delete_dialog.cleanup()
+                self.delete_dialog = None
+
+            self.vmmenu.destroy()
+            self.vmmenu = None
+            self.vmmenu_items = None
+            self.vmmenushutdown.destroy()
+            self.vmmenushutdown = None
+            self.vmmenushutdown_items = None
+            self.connmenu.destroy()
+            self.connmenu = None
+            self.connmenu_items = None
+
+        except:
+            logging.exception("Error cleaning up manager")
+
+        vmmGObjectUI.cleanup(self)
+
+
     def is_visible(self):
         return bool(self.topwin.flags() & gtk.VISIBLE)
 
@@ -235,19 +273,25 @@ class vmmManager(vmmGObjectUI):
     ################
 
     def init_stats(self):
-        self.config.on_vmlist_cpu_usage_visible_changed(
-                                    self.toggle_cpu_usage_visible_widget)
-        self.config.on_vmlist_disk_io_visible_changed(
-                                    self.toggle_disk_io_visible_widget)
-        self.config.on_vmlist_network_traffic_visible_changed(
-                                    self.toggle_network_traffic_visible_widget)
+        self.add_gconf_handle(
+            self.config.on_vmlist_cpu_usage_visible_changed(
+                                    self.toggle_cpu_usage_visible_widget))
+        self.add_gconf_handle(
+            self.config.on_vmlist_disk_io_visible_changed(
+                                    self.toggle_disk_io_visible_widget))
+        self.add_gconf_handle(
+            self.config.on_vmlist_network_traffic_visible_changed(
+                                self.toggle_network_traffic_visible_widget))
 
         # Register callbacks with the global stats enable/disable values
         # that disable the associated vmlist widgets if reporting is disabled
-        self.config.on_stats_enable_disk_poll_changed(self.enable_polling,
-                                                      cfg.STATS_DISK)
-        self.config.on_stats_enable_net_poll_changed(self.enable_polling,
-                                                     cfg.STATS_NETWORK)
+        self.add_gconf_handle(
+            self.config.on_stats_enable_disk_poll_changed(self.enable_polling,
+                                                          cfg.STATS_DISK))
+        self.add_gconf_handle(
+            self.config.on_stats_enable_net_poll_changed(self.enable_polling,
+                                                         cfg.STATS_NETWORK))
+
 
         self.window.get_widget("menu_view_stats_cpu").set_active(
                             self.config.is_vmlist_cpu_usage_visible())
@@ -441,6 +485,9 @@ class vmmManager(vmmGObjectUI):
 
         model.set_sort_column_id(COL_NAME, gtk.SORT_ASCENDING)
 
+        self.diskcol = diskIOCol
+        self.netcol = networkTrafficCol
+        self.cpucol = cpuUsageCol
 
     ##################
     # Helper methods #
@@ -1090,19 +1137,14 @@ class vmmManager(vmmGObjectUI):
             widget.set_label(current_text)
 
     def toggle_network_traffic_visible_widget(self, *ignore):
-        vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(COL_NETWORK)
-        col.set_visible(self.config.is_vmlist_network_traffic_visible())
+        self.netcol.set_visible(
+            self.config.is_vmlist_network_traffic_visible())
 
     def toggle_disk_io_visible_widget(self, *ignore):
-        vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(COL_DISK)
-        col.set_visible(self.config.is_vmlist_disk_io_visible())
+        self.diskcol.set_visible(self.config.is_vmlist_disk_io_visible())
 
     def toggle_cpu_usage_visible_widget(self, *ignore):
-        vmlist = self.window.get_widget("vm-list")
-        col = vmlist.get_column(COL_CPU)
-        col.set_visible(self.config.is_vmlist_cpu_usage_visible())
+        self.cpucol.set_visible(self.config.is_vmlist_cpu_usage_visible())
 
     def toggle_stats_visible(self, src, stats_id):
         visible = src.get_active()

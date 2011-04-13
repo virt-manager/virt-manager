@@ -131,7 +131,32 @@ class vmmCloneVM(vmmGObjectUI):
         self.change_mac_close()
         self.change_storage_close()
         self.topwin.hide()
+
+        self.orig_vm = None
+        self.clone_design = None
+        self.storage_list = {}
+        self.target_list = []
+        self.net_list = {}
+        self.mac_list = []
+
         return 1
+
+    def cleanup(self):
+        self.close()
+
+        self.conn = None
+
+        self.change_mac.destroy()
+        self.change_mac = None
+
+        self.change_storage.destroy()
+        self.change_storage = None
+
+        if self.storage_browser:
+            self.storage_browser.cleanup()
+            self.storage_browser = None
+
+        vmmGObjectUI.cleanup(self)
 
     def change_mac_close(self, ignore1=None, ignore2=None):
         self.change_mac.hide()

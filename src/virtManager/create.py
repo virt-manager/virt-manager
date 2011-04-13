@@ -155,8 +155,32 @@ class vmmCreate(vmmGObjectUI):
 
         if self.config_window:
             self.config_window.close()
+        if self.storage_browser:
+            self.storage_browser.close()
 
         return 1
+
+    def cleanup(self):
+        self.close()
+        self.remove_conn()
+
+        self.conn = None
+        self.caps = None
+        self.capsguest = None
+        self.capsdomain = None
+
+        self.guest = None
+        self.disk = None
+        self.nic = None
+
+        try:
+            if self.storage_browser:
+                self.storage_browser.cleanup()
+                self.storage_browser = None
+        except:
+            logging.exception("Error cleaning up create")
+
+        vmmGObjectUI.cleanup(self)
 
     def remove_timers(self):
         try:
@@ -166,15 +190,20 @@ class vmmCreate(vmmGObjectUI):
         except:
             pass
 
+    def remove_conn(self):
+        if not self.conn:
+            return
+
+        for signal in self.conn_signals:
+            self.conn.disconnect(signal)
+        self.conn_signals = []
+        self.conn = None
+
     def set_conn(self, newconn, force_validate=False):
         if self.conn == newconn and not force_validate:
             return
 
-        if self.conn:
-            for signal in self.conn_signals:
-                self.conn.disconnect(signal)
-            self.conn_signals = []
-
+        self.remove_conn()
         self.conn = newconn
         if self.conn:
             self.set_conn_state()

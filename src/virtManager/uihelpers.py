@@ -50,6 +50,10 @@ def set_error_parent(parent):
     err_dial.set_parent(parent)
     err_dial = err_dial
 
+def cleanup():
+    global err_dial
+    err_dial = None
+
 ############################################################
 # Helpers for shared storage UI between create/addhardware #
 ############################################################

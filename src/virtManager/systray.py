@@ -18,6 +18,8 @@
 # MA 02110-1301 USA.
 #
 
+import logging
+
 import gobject
 import gtk
 
@@ -90,7 +92,9 @@ class vmmSystray(vmmGObject):
 
         self.init_systray_menu()
 
-        self.config.on_view_system_tray_changed(self.show_systray)
+        self.add_gconf_handle(
+            self.config.on_view_system_tray_changed(self.show_systray))
+
         self.show_systray()
 
     def is_visible(self):
@@ -101,6 +105,20 @@ class vmmSystray(vmmGObject):
             return (self.config.get_view_system_tray() and
                     self.systray_icon and
                     self.systray_icon.is_embedded())
+
+    def cleanup(self):
+        vmmGObject.cleanup(self)
+
+        try:
+            self.err = None
+
+            if self.systray_menu:
+                self.systray_menu.destroy()
+                self.systray_menu = None
+
+            self.systray_icon = None
+        except:
+            logging.exception("Error cleaning up systray")
 
     # Initialization routines
 

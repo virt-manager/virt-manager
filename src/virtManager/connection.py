@@ -146,6 +146,7 @@ class vmmConnection(vmmGObject):
         self.hostinfo = None
 
         self.hal_helper_remove_sig = None
+        self.hal_handles = []
 
         self.netdev_initialized = False
         self.netdev_error = ""
@@ -164,6 +165,7 @@ class vmmConnection(vmmGObject):
             sig = hal_helper.connect("device-removed",
                                      self._haldev_removed)
             self.hal_helper_remove_sig = sig
+            self.hal_handles.append(sig)
 
     def _init_netdev(self):
         """
@@ -186,7 +188,8 @@ class vmmConnection(vmmGObject):
             else:
                 error = hal_helper.get_init_error()
                 if not error:
-                    hal_helper.connect("netdev-added", self._netdev_added)
+                    self.hal_handles.append(
+                        hal_helper.connect("netdev-added", self._netdev_added))
                     self._set_hal_remove_sig(hal_helper)
 
                 else:
@@ -225,7 +228,8 @@ class vmmConnection(vmmGObject):
             else:
                 error = hal_helper.get_init_error()
                 if not error:
-                    hal_helper.connect("optical-added", self._optical_added)
+                    self.hal_handles.append(
+                      hal_helper.connect("optical-added", self._optical_added))
                     self._set_hal_remove_sig(hal_helper)
 
                 else:
@@ -921,6 +925,16 @@ class vmmConnection(vmmGObject):
         self.vms = {}
 
         self._change_state(self.STATE_DISCONNECTED)
+
+    def cleanup(self):
+        # Do this first, so signals are unregistered before we change state
+        vmmGObject.cleanup(self)
+        self.close()
+
+        hal_helper = self.get_hal_helper()
+        if hal_helper:
+            for h in self.hal_handles:
+                hal_helper.disconnect(h)
 
     def _open_dev_conn(self, uri):
         """

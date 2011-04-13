@@ -91,6 +91,19 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.topwin.hide()
         return 1
 
+    def cleanup(self):
+        self.close()
+
+        self.vm = None
+        self.conn = None
+        self.engine = None
+        self.destconn_rows = None
+
+        # Not sure why we need to do this manually, but it matters
+        self.window.get_widget("migrate-dest").get_model().clear()
+
+        vmmGObjectUI.cleanup(self)
+
     def init_state(self):
         # [hostname, conn, can_migrate, tooltip]
         dest_model = gtk.ListStore(str, object, bool, str)

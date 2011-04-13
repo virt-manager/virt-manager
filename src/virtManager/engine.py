@@ -45,10 +45,11 @@ from virtManager.create import vmmCreate
 from virtManager.host import vmmHost
 from virtManager.error import vmmErrorDialog
 from virtManager.systray import vmmSystray
+import virtManager.uihelpers as uihelpers
 import virtManager.util as util
 
 # Enable this to get a report of leaked objects on app shutdown
-debug_ref_leaks = False
+debug_ref_leaks = True
 
 def default_uri():
     tryuri = None
@@ -246,8 +247,10 @@ class vmmEngine(vmmGObject):
 
         self.init_systray()
 
-        self.config.on_stats_update_interval_changed(self.reschedule_timer)
-        self.config.on_view_system_tray_changed(self.system_tray_changed)
+        self.add_gconf_handle(
+            self.config.on_stats_update_interval_changed(self.reschedule_timer))
+        self.add_gconf_handle(
+            self.config.on_view_system_tray_changed(self.system_tray_changed))
 
         self.schedule_timer()
         self.load_stored_uris()
@@ -349,8 +352,6 @@ class vmmEngine(vmmGObject):
 
     def connect_to_uri(self, uri, readOnly=None, autoconnect=False,
                        do_start=True):
-        self.windowConnect = None
-
         try:
             conn = self._check_connection(uri)
             if not conn:
@@ -368,10 +369,9 @@ class vmmEngine(vmmGObject):
     def _do_connect(self, src_ignore, uri):
         return self.connect_to_uri(uri)
 
-    def _connect_cancelled(self, connect_ignore):
-        self.windowConnect = None
+    def _connect_cancelled(self, src):
         if len(self.connections.keys()) == 0:
-            self.exit_app()
+            self.exit_app(src)
 
 
     def _do_vm_removed(self, connection, hvuri, vmuuid):
@@ -392,10 +392,6 @@ class vmmEngine(vmmGObject):
         for vmuuid in self.connections[hvuri]["windowDetails"].keys():
             self.connections[hvuri]["windowDetails"][vmuuid].cleanup()
             del(self.connections[hvuri]["windowDetails"][vmuuid])
-
-        if self.connections[hvuri]["windowHost"] is not None:
-            self.connections[hvuri]["windowHost"].close()
-            self.connections[hvuri]["windowHost"] = None
 
         if (self.windowCreate and
             self.windowCreate.conn and
@@ -461,18 +457,79 @@ class vmmEngine(vmmGObject):
     def decrement_window_counter(self):
         self.windows -= 1
         logging.debug("window counter decremented to %s" % self.windows)
+
         # Don't exit if system tray is enabled
-        if self.windows <= 0 and not self.systray.is_visible():
+        if (self.windows <= 0 and
+            self.systray and
+            not self.systray.is_visible()):
             self.exit_app()
 
-    def exit_app(self, ignore_src=None):
-        conns = self.connections.values()
-        for conn in conns:
-            conn["connection"].close()
-        self.connections = {}
+    def cleanup(self):
+        try:
+            vmmGObject.cleanup(self)
+            uihelpers.cleanup()
+            self.err = None
+
+            if self.timer != None:
+                gobject.source_remove(self.timer)
+
+            if self.systray:
+                self.systray.cleanup()
+                self.systray = None
+
+            self.get_manager()
+            if self.windowManager:
+                self.windowManager.cleanup()
+                self.windowManager = None
+
+            if self.windowPreferences:
+                self.windowPreferences.cleanup()
+                self.windowPreferences = None
+
+            if self.windowAbout:
+                self.windowAbout.cleanup()
+                self.windowAbout = None
+
+            if self.windowConnect:
+                self.windowConnect.cleanup()
+                self.windowConnect = None
+
+            if self.windowCreate:
+                self.windowCreate.cleanup()
+                self.windowCreate = None
+
+            if self.windowMigrate:
+                self.windowMigrate.cleanup()
+                self.windowMigrate = None
+
+            # Do this last, so any manually 'disconnected' signals
+            # take precedence over cleanup signal removal
+            for uri in self.connections:
+                self.cleanup_connection(uri)
+            self.connections = {}
+        except:
+            logging.exception("Error cleaning up engine")
+
+    def exit_app(self, src=None):
+        if self.err is None:
+            # Already in cleanup
+            return
+
+        self.cleanup()
 
         if debug_ref_leaks:
-            for name in self.config.get_objects():
+            objs = self.config.get_objects()
+            if src and src.object_key in objs:
+                # Whatever UI initiates the app exit will always appear
+                # to leak
+                logging.debug("Exitting app from %s, skipping leak check" %
+                              src.object_key)
+                objs.remove(src.object_key)
+
+            # Engine will always appear to leak
+            objs.remove(self.object_key)
+
+            for name in objs:
                 logging.debug("Leaked %s" % name)
 
         logging.debug("Exiting app normally.")
@@ -502,13 +559,28 @@ class vmmEngine(vmmGObject):
 
         return conn
 
+    def cleanup_connection(self, uri):
+        try:
+            if self.connections[uri]["windowHost"]:
+                self.connections[uri]["windowHost"].cleanup()
+            if self.connections[uri]["windowClone"]:
+                self.connections[uri]["windowClone"].cleanup()
+
+            details = self.connections[uri]["windowDetails"]
+            for win in details.values():
+                win.cleanup()
+
+            self.connections[uri]["connection"].cleanup()
+        except:
+            logging.exception("Error cleaning up conn in engine")
+
+
     def remove_connection(self, uri):
-        conn = self.connections[uri]["connection"]
-        conn.close()
-        del self.connections[uri]
+        self.cleanup_connection(uri)
+        del(self.connections[uri])
 
         self.emit("connection-removed", uri)
-        self.config.remove_connection(conn.get_uri())
+        self.config.remove_connection(uri)
 
     def connect(self, name, callback, *args):
         handle_id = vmmGObject.connect(self, name, callback, *args)
@@ -683,7 +755,8 @@ class vmmEngine(vmmGObject):
 
     def _do_show_manager(self, src):
         try:
-            self.get_manager().show()
+            manager = self.get_manager()
+            manager.show()
         except Exception, e:
             if not src:
                 raise

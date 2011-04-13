@@ -41,8 +41,8 @@ class vmmGObject(gobject.GObject):
         self._gobject_timeouts = []
         self._gconf_handles = []
 
-        self._object_key = str(self)
-        self.config.add_object(self._object_key)
+        self.object_key = str(self)
+        self.config.add_object(self.object_key)
 
     def cleanup(self):
         # Do any cleanup required to drop reference counts so object is
@@ -78,6 +78,11 @@ class vmmGObject(gobject.GObject):
         gobject.source_remove(handle)
         self._gobject_timeouts.remove(handle)
 
+    def _printtrace(self, msg):
+        import traceback
+        print "%s (%s %s)\n:%s" % (msg, self.object_key, self.refcount(),
+                                   "".join(traceback.format_stack()))
+
     def refcount(self):
         # Function generates 2 temporary refs, so adjust total accordingly
         return (sys.getrefcount(self) - 2)
@@ -91,9 +96,9 @@ class vmmGObject(gobject.GObject):
             getattr(gobject.GObject, "__del__")(self)
 
         try:
-            self.config.remove_object(self._object_key)
+            self.config.remove_object(self.object_key)
         except:
-            logging.exception("Error removing %s" % self._object_key)
+            logging.exception("Error removing %s" % self.object_key)
 
 class vmmGObjectUI(vmmGObject):
     def __init__(self, filename, windowname):
