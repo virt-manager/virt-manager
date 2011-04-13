@@ -234,7 +234,7 @@ class vmmConfig(object):
             elif func_type == self._PEROBJ_FUNC_GET:
                 ret = pref_func()
             elif func_type == self._PEROBJ_FUNC_LISTEN:
-                pref_func(value)
+                ret = pref_func(value)
         finally:
             self.conf_dir = oldconf
 
@@ -256,7 +256,8 @@ class vmmConfig(object):
             ret = pref_func()
         return ret
     def listen_pervm(self, uri, uuid, pref_func, cb):
-        self._pervm_helper(uri, uuid, pref_func, self._PEROBJ_FUNC_LISTEN, cb)
+        return self._pervm_helper(uri, uuid, pref_func,
+                                  self._PEROBJ_FUNC_LISTEN, cb)
 
     def set_perconn(self, uri, pref_func, value):
         self._perconn_helper(uri, pref_func, self._PEROBJ_FUNC_SET, value)
@@ -267,7 +268,8 @@ class vmmConfig(object):
             ret = pref_func()
         return ret
     def listen_perconn(self, uri, pref_func, cb):
-        self._perconn_helper(uri, pref_func, self._PEROBJ_FUNC_LISTEN, cb)
+        return self._perconn_helper(uri, pref_func,
+                                    self._PEROBJ_FUNC_LISTEN, cb)
 
     def set_perhost(self, uri, pref_func, value):
         self._perhost_helper(uri, pref_func, self._PEROBJ_FUNC_SET, value)
@@ -278,7 +280,8 @@ class vmmConfig(object):
             ret = pref_func()
         return ret
     def listen_perhost(self, uri, pref_func, cb):
-        self._perhost_helper(uri, pref_func, self._PEROBJ_FUNC_LISTEN, cb)
+        return self._perhost_helper(uri, pref_func,
+                                    self._PEROBJ_FUNC_LISTEN, cb)
 
     def reconcile_vm_entries(self, uri, current_vms):
         """

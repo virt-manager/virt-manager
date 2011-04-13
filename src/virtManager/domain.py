@@ -942,8 +942,9 @@ class vmmDomainBase(vmmLibvirtObject):
         return self.config.get_pervm(self.connection.get_uri(), self.uuid,
                                      self.config.get_console_scaling)
     def on_console_scaling_changed(self, cb):
-        self.config.listen_pervm(self.connection.get_uri(), self.uuid,
-                                 self.config.on_console_scaling_changed, cb)
+        return self.config.listen_pervm(self.connection.get_uri(), self.uuid,
+                                        self.config.on_console_scaling_changed,
+                                        cb)
 
     def set_details_window_size(self, w, h):
         self.config.set_pervm(self.connection.get_uri(), self.uuid,

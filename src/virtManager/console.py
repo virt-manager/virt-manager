@@ -502,13 +502,13 @@ class vmmConsolePages(vmmGObjectUI):
         self.desktop_resolution = None
 
         # Initialize display widget
-        self.scale_type = self.vm.get_console_scaling()
+        self.viewer = None
         self.tunnels = None
         self.viewerRetriesScheduled = 0
         self.viewerRetryDelay = 125
-        self.viewer = None
         self.viewer_connected = False
         self.viewer_connecting = False
+        self.scale_type = self.vm.get_console_scaling()
 
         finish_img = gtk.image_new_from_stock(gtk.STOCK_YES,
                                               gtk.ICON_SIZE_BUTTON)
@@ -523,11 +523,13 @@ class vmmConsolePages(vmmGObjectUI):
         # Signals are added by vmmDetails. Don't use signal_autoconnect here
         # or it changes will be overwritten
         # Set console scaling
-        self.vm.on_console_scaling_changed(self.refresh_scaling)
+        self.add_gconf_handle(
+            self.vm.on_console_scaling_changed(self.refresh_scaling))
 
         scroll = self.window.get_widget("console-vnc-scroll")
         scroll.connect("size-allocate", self.scroll_size_allocate)
-        self.config.on_console_accels_changed(self.set_enable_accel)
+        self.add_gconf_handle(
+            self.config.on_console_accels_changed(self.set_enable_accel))
 
     def is_visible(self):
         if self.topwin.flags() & gtk.VISIBLE:
@@ -537,6 +539,7 @@ class vmmConsolePages(vmmGObjectUI):
     def cleanup(self):
         vmmGObjectUI.cleanup(self)
         self.vm = None
+        self.viewer = None
 
     ##########################
     # Initialization helpers #
