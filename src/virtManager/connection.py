@@ -1488,7 +1488,6 @@ class vmmConnection(vmmGObject):
         if noStatsUpdate:
             updateVMs = newVMs
 
-        updateVMs = {}
         for uuid in updateVMs:
             vm = self.vms[uuid]
             try:
