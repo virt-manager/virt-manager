@@ -73,6 +73,17 @@ class vmmCloneVM(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "vmm-clone.glade", "vmm-clone")
         self.orig_vm = orig_vm
 
+        self.conn = self.orig_vm.connection
+        self.clone_design = None
+
+        self.storage_list = {}
+        self.target_list = []
+
+        self.net_list = {}
+        self.mac_list = []
+
+        self.storage_browser = None
+
         self.change_mac_window = gtk.glade.XML(self.gladefile,
                                                "vmm-change-mac",
                                                domain="virt-manager")
@@ -95,19 +106,6 @@ class vmmCloneVM(vmmGObjectUI):
 
             "on_change_storage_browse_clicked" : self.change_storage_browse,
         })
-
-        self.conn = self.orig_vm.connection
-        self.clone_design = None
-
-        self.storage_list = {}
-        self.target_list = []
-
-        self.net_list = {}
-        self.mac_list = []
-
-        self.storagemenu = None
-        self.netmenu = None
-        self.storage_browser = None
 
         self.window.signal_autoconnect({
             "on_clone_delete_event" : self.close,
@@ -522,12 +520,6 @@ class vmmCloneVM(vmmGObjectUI):
         ok_button.set_sensitive(clone)
         util.tooltip_wrapper(ok_button, tooltip)
 
-    def net_show_popup(self, widget_ignore, event):
-        if event.button != 3:
-            return
-
-        self.netmenu.popup(None, None, None, 0, event.time)
-
     def net_change_mac(self, ignore, origmac):
         row      = self.net_list[origmac]
         orig_mac = row[NETWORK_INFO_ORIG_MAC]
@@ -539,12 +531,6 @@ class vmmCloneVM(vmmGObjectUI):
         self.change_mac_window.get_widget("change-mac-new").set_text(new_mac)
 
         self.change_mac.show_all()
-
-    def storage_show_popup(self, widget_ignore, event):
-        if event.button != 3:
-            return
-
-        self.storagemenu.popup(None, None, None, 0, event.time)
 
     def storage_combo_changed(self, src, target):
         idx = src.get_active()
