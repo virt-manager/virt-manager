@@ -450,11 +450,12 @@ class vmmEngine(vmmGObject):
         gobject.source_remove(self.timer)
         self.schedule_timer()
 
-    def increment_window_counter(self):
+    def increment_window_counter(self, src):
+        ignore = src
         self.windows += 1
         logging.debug("window counter incremented to %s" % self.windows)
 
-    def decrement_window_counter(self):
+    def decrement_window_counter(self, src):
         self.windows -= 1
         logging.debug("window counter decremented to %s" % self.windows)
 
@@ -462,7 +463,7 @@ class vmmEngine(vmmGObject):
         if (self.windows <= 0 and
             self.systray and
             not self.systray.is_visible()):
-            self.exit_app()
+            self.exit_app(src)
 
     def cleanup(self):
         try:
@@ -510,7 +511,7 @@ class vmmEngine(vmmGObject):
         except:
             logging.exception("Error cleaning up engine")
 
-    def exit_app(self, src=None):
+    def exit_app(self, src):
         if self.err is None:
             # Already in cleanup
             return
@@ -519,7 +520,7 @@ class vmmEngine(vmmGObject):
 
         if debug_ref_leaks:
             objs = self.config.get_objects()
-            if src and src.object_key in objs:
+            if src.object_key in objs:
                 # Whatever UI initiates the app exit will always appear
                 # to leak
                 logging.debug("Exitting app from %s, skipping leak check" %
@@ -647,11 +648,15 @@ class vmmEngine(vmmGObject):
             return self.connections[uri]["windowHost"]
 
         con = self._lookup_connection(uri)
-        obj = vmmHost(con, self)
+        obj = vmmHost(con)
+
         obj.connect("action-show-help", self._do_show_help)
         obj.connect("action-exit-app", self.exit_app)
         obj.connect("action-view-manager", self._do_show_manager)
         obj.connect("action-restore-domain", self._do_restore_domain)
+        obj.connect("host-opened", self.increment_window_counter)
+        obj.connect("host-closed", self.decrement_window_counter)
+
         self.connections[uri]["windowHost"] = obj
         return self.connections[uri]["windowHost"]
 
@@ -686,7 +691,7 @@ class vmmEngine(vmmGObject):
 
         con = self._lookup_connection(uri)
 
-        obj = vmmDetails(con.get_vm(uuid), self)
+        obj = vmmDetails(con.get_vm(uuid))
         obj.connect("action-save-domain", self._do_save_domain)
         obj.connect("action-destroy-domain", self._do_destroy_domain)
         obj.connect("action-show-help", self._do_show_help)
@@ -699,6 +704,8 @@ class vmmEngine(vmmGObject):
         obj.connect("action-view-manager", self._do_show_manager)
         obj.connect("action-migrate-domain", self._do_show_migrate)
         obj.connect("action-clone-domain", self._do_show_clone)
+        obj.connect("details-opened", self.increment_window_counter)
+        obj.connect("details-closed", self.decrement_window_counter)
 
         self.connections[uri]["windowDetails"][uuid] = obj
         self.connections[uri]["windowDetails"][uuid].show()
@@ -742,6 +749,8 @@ class vmmEngine(vmmGObject):
         obj.connect("action-show-connect", self._do_show_connect)
         obj.connect("action-connect", self._do_connect)
         obj.connect("action-exit-app", self.exit_app)
+        obj.connect("manager-opened", self.increment_window_counter)
+        obj.connect("manager-closed", self.decrement_window_counter)
 
         self.windowManager = obj
         return self.windowManager

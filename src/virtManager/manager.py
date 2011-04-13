@@ -112,6 +112,10 @@ class vmmManager(vmmGObjectUI):
                                 gobject.TYPE_NONE, (str, str)),
         "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
                             gobject.TYPE_NONE, []),
+        "manager-closed": (gobject.SIGNAL_RUN_FIRST,
+                           gobject.TYPE_NONE, ()),
+        "manager-opened": (gobject.SIGNAL_RUN_FIRST,
+                           gobject.TYPE_NONE, ()),
     }
 
     def __init__(self, engine):
@@ -218,7 +222,8 @@ class vmmManager(vmmGObjectUI):
         if self.prev_position:
             self.topwin.move(*self.prev_position)
             self.prev_position = None
-        self.engine.increment_window_counter()
+
+        self.emit("manager-opened")
 
     def close(self, src_ignore=None, src2_ignore=None):
         if not self.is_visible():
@@ -226,7 +231,8 @@ class vmmManager(vmmGObjectUI):
 
         self.prev_position = self.topwin.get_position()
         self.topwin.hide()
-        self.engine.decrement_window_counter()
+        self.emit("manager-closed")
+
         return 1
 
 

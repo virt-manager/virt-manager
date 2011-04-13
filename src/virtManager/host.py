@@ -49,17 +49,22 @@ class vmmHost(vmmGObjectUI):
                                 gobject.TYPE_NONE, []),
         "action-restore-domain": (gobject.SIGNAL_RUN_FIRST,
                                   gobject.TYPE_NONE, (str,)),
+        "host-closed": (gobject.SIGNAL_RUN_FIRST,
+                        gobject.TYPE_NONE, ()),
+        "host-opened": (gobject.SIGNAL_RUN_FIRST,
+                        gobject.TYPE_NONE, ()),
         }
-    def __init__(self, conn, engine):
+    def __init__(self, conn):
         vmmGObjectUI.__init__(self, "vmm-host.glade", "vmm-host")
         self.conn = conn
-        self.engine = engine
 
         self.title = conn.get_short_hostname() + " " + self.topwin.get_title()
         self.topwin.set_title(self.title)
 
-        self.PIXBUF_STATE_RUNNING = gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_running.png", 18, 18)
-        self.PIXBUF_STATE_SHUTOFF = gtk.gdk.pixbuf_new_from_file_at_size(self.config.get_icon_dir() + "/state_shutoff.png", 18, 18)
+        self.PIXBUF_STATE_RUNNING = gtk.gdk.pixbuf_new_from_file_at_size(
+                self.config.get_icon_dir() + "/state_running.png", 18, 18)
+        self.PIXBUF_STATE_SHUTOFF = gtk.gdk.pixbuf_new_from_file_at_size(
+                self.config.get_icon_dir() + "/state_shutoff.png", 18, 18)
 
         self.addnet = None
         self.addpool = None
@@ -299,7 +304,7 @@ class vmmHost(vmmGObjectUI):
         if vis:
             return
 
-        self.engine.increment_window_counter()
+        self.emit("host-opened")
 
     def is_visible(self):
         return bool(self.topwin.flags() & gtk.VISIBLE)
@@ -309,7 +314,8 @@ class vmmHost(vmmGObjectUI):
             return
 
         self.topwin.hide()
-        self.engine.decrement_window_counter()
+        self.emit("host-closed")
+
         return 1
 
     def cleanup(self):
@@ -317,8 +323,6 @@ class vmmHost(vmmGObjectUI):
 
         try:
             self.conn = None
-            self.engine = None
-
 
             if self.addnet:
                 self.addnet.cleanup()

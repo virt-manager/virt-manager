@@ -247,14 +247,15 @@ class vmmDetails(vmmGObjectUI):
                                 gobject.TYPE_NONE, (str, str)),
         "details-closed": (gobject.SIGNAL_RUN_FIRST,
                            gobject.TYPE_NONE, ()),
+        "details-opened": (gobject.SIGNAL_RUN_FIRST,
+                           gobject.TYPE_NONE, ()),
         }
 
 
-    def __init__(self, vm, engine, parent=None):
+    def __init__(self, vm, parent=None):
         vmmGObjectUI.__init__(self, "vmm-details.glade", "vmm-details")
         self.vm = vm
         self.conn = self.vm.get_connection()
-        self.engine = engine
 
         self.is_customize_dialog = False
         if parent:
@@ -460,7 +461,6 @@ class vmmDetails(vmmGObjectUI):
         try:
             self.vm = None
             self.conn = None
-            self.engine = None
             self.addhwmenu = None
 
             self.console.cleanup()
@@ -492,7 +492,7 @@ class vmmDetails(vmmGObjectUI):
         if vis:
             return
 
-        self.engine.increment_window_counter()
+        self.emit("details-opened")
         self.refresh_vm_state()
 
     def close(self, ignore1=None, ignore2=None):
@@ -510,7 +510,6 @@ class vmmDetails(vmmGObjectUI):
                 self.console.close_viewer()
             except:
                 logging.error("Failure when disconnecting from desktop server")
-        self.engine.decrement_window_counter()
 
         self.emit("details-closed")
         return 1
