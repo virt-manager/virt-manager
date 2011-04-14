@@ -185,6 +185,7 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         # Manually trigger vol_selected, so buttons are in the correct state
         self.vol_selected()
+        self.pool_selected()
 
         tooltip = None
         is_remote = self.conn.is_remote()
@@ -196,17 +197,20 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         # Set data based on browse type
         self.local_args["browse_reason"] = self.browse_reason
-        allow_create = True
-
         data = self.config.browse_reason_data.get(self.browse_reason)
         if data:
             self.topwin.set_title(data["storage_title"])
             self.local_args["dialog_name"] = data["local_title"]
-            allow_create = data["enable_create"]
 
-        self.window.get_widget("new-volume").set_sensitive(allow_create)
 
     # Convenience helpers
+    def allow_create(self):
+        data = self.config.browse_reason_data.get(self.browse_reason)
+        if not data:
+            return True
+
+        return data["enable_create"]
+
     def current_pool(self):
         sel = self.window.get_widget("pool-list").get_selection()
         active = sel.get_selected()
@@ -244,11 +248,15 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     # Listeners
 
-    def pool_selected(self, src_ignore):
+    def pool_selected(self, src_ignore=None):
         pool = self.current_pool()
-        self.window.get_widget("new-volume").set_sensitive(bool(pool))
+        newvol = bool(pool)
         if pool:
-            self.window.get_widget("new-volume").set_sensitive(pool.is_active())
+            newvol = pool.is_active()
+
+        newvol = newvol and self.allow_create()
+        self.window.get_widget("new-volume").set_sensitive(newvol)
+
         self.populate_storage_volumes()
 
     def vol_selected(self, ignore=None):
