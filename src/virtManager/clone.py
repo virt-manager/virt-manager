@@ -223,6 +223,7 @@ class vmmCloneVM(vmmGObjectUI):
         net_box = self.window.get_widget("clone-network-box")
         for c in net_box.get_children():
             net_box.remove(c)
+            c.destroy()
 
         self.net_list = {}
         self.mac_list = []
@@ -502,6 +503,7 @@ class vmmCloneVM(vmmGObjectUI):
         storage_box = self.window.get_widget("clone-storage-box")
         for c in storage_box.get_children():
             storage_box.remove(c)
+            c.destroy()
 
         for target in self.target_list:
             disk = self.storage_list[target]
