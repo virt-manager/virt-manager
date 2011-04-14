@@ -128,6 +128,7 @@ class vmmCloneVM(vmmGObjectUI):
     def show(self, parent):
         self.reset_state()
         self.topwin.set_transient_for(parent)
+        self.topwin.resize(1, 1)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
