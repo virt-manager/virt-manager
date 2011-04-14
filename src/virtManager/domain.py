@@ -987,7 +987,7 @@ class vmmDomain(vmmDomainBase):
         (self._inactive_xml_flags,
          self._active_xml_flags) = self.connection.get_dom_flags(self._backend)
 
-        self._update_status()
+        self.force_update_status()
 
         # Hook up listeners that need to be cleaned up
         self.add_gconf_handle(
@@ -1110,23 +1110,23 @@ class vmmDomain(vmmDomainBase):
         self.set_install_abort(True)
         self._unregister_reboot_listener()
         self._backend.shutdown()
-        self._update_status()
+        self.force_update_status()
 
     def reboot(self):
         self.set_install_abort(True)
         self._backend.reboot(0)
-        self._update_status()
+        self.force_update_status()
 
     def startup(self):
         if self.get_cloning():
             raise RuntimeError(_("Cannot start guest while cloning "
                                  "operation in progress"))
         self._backend.create()
-        self._update_status()
+        self.force_update_status()
 
     def suspend(self):
         self._backend.suspend()
-        self._update_status()
+        self.force_update_status()
 
     def delete(self):
         self._backend.undefine()
@@ -1138,7 +1138,7 @@ class vmmDomain(vmmDomainBase):
                                  "operation in progress"))
 
         self._backend.resume()
-        self._update_status()
+        self.force_update_status()
 
     def hasSavedImage(self):
         if not self.managedsave_supported:
@@ -1156,13 +1156,13 @@ class vmmDomain(vmmDomainBase):
         else:
             self._backend.managedSave(0)
 
-        self._update_status()
+        self.force_update_status()
 
     def destroy(self):
         self.set_install_abort(True)
         self._unregister_reboot_listener()
         self._backend.destroy()
-        self._update_status()
+        self.force_update_status()
 
     def interfaceStats(self, device):
         return self._backend.interfaceStats(device)
@@ -1350,32 +1350,33 @@ class vmmDomain(vmmDomainBase):
         self._startup_vcpus = None
         self.vcpu_max_count()
 
-    def _update_status(self, status=None):
-        if status == None:
-            try:
-                info = self.get_info()
-            except libvirt.libvirtError, e:
-                if (hasattr(libvirt, "VIR_ERR_NO_DOMAIN") and
-                    e.get_error_code() == getattr(libvirt,
-                                                  "VIR_ERR_NO_DOMAIN")):
-                    # Possibly a transient domain that was removed on shutdown
-                    return
-                raise
+    def force_update_status(self):
+        try:
+            info = self.get_info()
+        except libvirt.libvirtError, e:
+            if (hasattr(libvirt, "VIR_ERR_NO_DOMAIN") and
+                e.get_error_code() == getattr(libvirt, "VIR_ERR_NO_DOMAIN")):
+                # Possibly a transient domain that was removed on shutdown
+                return
+            raise
 
-            status = info[0]
+        self._update_status(info[0])
 
+    def _update_status(self, status):
         status = self._normalize_status(status)
 
-        if status != self.lastStatus:
-            oldstatus = self.lastStatus
-            self.lastStatus = status
+        if status == self.lastStatus:
+            return
 
-            # Send 'config-changed' before a status-update, so users
-            # are operating with fresh XML
-            self.refresh_xml()
+        oldstatus = self.lastStatus
+        self.lastStatus = status
 
-            util.safe_idle_add(util.idle_emit, self, "status-changed",
-                               oldstatus, status)
+        # Send 'config-changed' before a status-update, so users
+        # are operating with fresh XML
+        self.refresh_xml()
+
+        util.safe_idle_add(util.idle_emit, self, "status-changed",
+                           oldstatus, status)
 
     ##################
     # Stats handling #
