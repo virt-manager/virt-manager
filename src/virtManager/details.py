@@ -1145,13 +1145,7 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("control-pause").set_sensitive(stop)
         self.window.get_widget("details-menu-pause").set_sensitive(stop)
 
-        # Set pause widget states
-        try:
-            self.ignorePause = True
-            self.window.get_widget("control-pause").set_active(paused)
-            self.window.get_widget("details-menu-pause").set_active(paused)
-        finally:
-            self.ignorePause = False
+        self.set_pause_state(paused)
 
         self.window.get_widget("overview-name").set_editable(not active)
 
@@ -1220,11 +1214,20 @@ class vmmDetails(vmmGObjectUI):
         devtype = info.virtual_device_type
         self.remove_device(devtype, info)
 
+    def set_pause_state(self, paused):
+        # Set pause widget states
+        try:
+            self.ignorePause = True
+            self.window.get_widget("control-pause").set_active(paused)
+            self.window.get_widget("details-menu-pause").set_active(paused)
+        finally:
+            self.ignorePause = False
+
     def control_vm_pause(self, src):
         if self.ignorePause:
             return
 
-        if src.get_active():
+        if not self.vm.is_paused():
             self.emit("action-suspend-domain",
                       self.vm.get_connection().get_uri(),
                       self.vm.get_uuid())
@@ -1232,6 +1235,9 @@ class vmmDetails(vmmGObjectUI):
             self.emit("action-resume-domain",
                       self.vm.get_connection().get_uri(),
                       self.vm.get_uuid())
+
+        # Let state handler listener change things if necc.
+        self.set_pause_state(not src.get_active())
 
     def control_vm_run(self, src_ignore):
         self.emit("action-run-domain",
