@@ -67,7 +67,8 @@ def _simple_async(callback, args, title, text, parent, errorintro,
         docb = tmpcb
 
     asyncjob = vmmAsyncJob(docb, args, title, text, parent.topwin,
-                           show_progress=show_progress)
+                           show_progress=show_progress,
+                           run_main=parent.config.support_threading)
     error, details = asyncjob.run()
     if error is None:
         return
@@ -94,6 +95,13 @@ class vmmAsyncJob(vmmGObjectUI):
     def __init__(self, callback, args, title, text, parent,
                  run_main=True, show_progress=True,
                  cancel_back=None, cancel_args=None):
+        """
+        @run_main: If False, run synchronously without a separate thread
+        @show_progress: If False, don't actually show a progress dialog
+        @cancel_back: If operation supports cancelling, call this function
+                      when cancel button is clicked
+        @cancel_args: Arguments for optional cancel_back
+        """
         vmmGObjectUI.__init__(self, "vmm-progress.glade", "vmm-progress")
 
         self.run_main = bool(run_main)

@@ -268,7 +268,7 @@ def _dup_all_conn(conn, libconn):
         # between instances
         return conn or vmm
 
-    if virtinst.support.support_threading():
+    if running_config.support_threading:
         # Libvirt 0.6.0 implemented client side request threading: this
         # removes the need to actually duplicate the connection.
         return conn or vmm

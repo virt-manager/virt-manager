@@ -117,6 +117,8 @@ class vmmConfig(object):
 
         self._objects = []
 
+        self.support_threading = virtinst.support.support_threading()
+
         self.status_icons = {
             libvirt.VIR_DOMAIN_BLOCKED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 18, 18),
             libvirt.VIR_DOMAIN_CRASHED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_crashed.png", 18, 18),

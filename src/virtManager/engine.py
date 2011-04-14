@@ -236,8 +236,7 @@ class vmmEngine(vmmGObject):
 
         self._tick_thread = None
         self._tick_thread_slow = False
-        self._libvirt_support_threading = virtinst.support.support_threading()
-        if not self._libvirt_support_threading:
+        if not self.config.support_threading:
             logging.debug("Libvirt doesn't support threading, skipping.")
 
         # Counter keeping track of how many manager and details windows
@@ -413,7 +412,7 @@ class vmmEngine(vmmGObject):
         self.timer = gobject.timeout_add(interval, self.tick)
 
     def tick(self):
-        if not self._libvirt_support_threading:
+        if not self.config.support_threading:
             return self._tick()
 
         if self._tick_thread and self._tick_thread.isAlive():
