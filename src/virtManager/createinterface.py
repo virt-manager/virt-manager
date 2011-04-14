@@ -80,6 +80,7 @@ class vmmCreateInterface(vmmGObjectUI):
             "on_bridge_config_delete_event": self.bridge_config_finish,
             "on_bridge_ok_clicked" : self.bridge_config_finish,
         })
+        self.bridge_config.set_transient_for(self.topwin)
 
         # Bond configuration dialog
         self.bond_config_win = gtk.glade.XML(self.gladefile,
@@ -92,6 +93,7 @@ class vmmCreateInterface(vmmGObjectUI):
 
             "on_bond_monitor_mode_changed": self.bond_monitor_mode_changed,
         })
+        self.bond_config.set_transient_for(self.topwin)
 
         self.ip_config_win = gtk.glade.XML(self.gladefile,
                                            "ip-config",
@@ -109,6 +111,7 @@ class vmmCreateInterface(vmmGObjectUI):
             "on_ipv6_address_add_clicked": self.ipv6_address_add,
             "on_ipv6_address_remove_clicked": self.ipv6_address_remove,
         })
+        self.ip_config.set_transient_for(self.topwin)
 
         self.ip_manually_changed = False
 
@@ -131,8 +134,9 @@ class vmmCreateInterface(vmmGObjectUI):
 
         self.set_initial_state()
 
-    def show(self):
+    def show(self, parent):
         self.reset_state()
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def show_bond_config(self, src):
@@ -1128,9 +1132,9 @@ class vmmCreateInterface(vmmGObjectUI):
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
         progWin = vmmAsyncJob(self.do_install, [activate],
-                              title=_("Creating virtual interface"),
-                              text=_("The virtual interface is now being "
-                                     "created."))
+                              _("Creating virtual interface"),
+                              _("The virtual interface is now being created."),
+                              self.topwin)
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)

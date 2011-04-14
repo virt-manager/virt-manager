@@ -1207,7 +1207,7 @@ class vmmDetails(vmmGObjectUI):
             if self.addhw is None:
                 self.addhw = vmmAddHardware(self.vm)
 
-            self.addhw.show()
+            self.addhw.show(self.topwin)
         except Exception, e:
             self.err.show_err((_("Error launching hardware dialog: %s") %
                                str(e)))
@@ -1430,7 +1430,7 @@ class vmmDetails(vmmGObjectUI):
 
         self.storage_browser.set_finish_cb(callback)
         self.storage_browser.set_browse_reason(reason)
-        self.storage_browser.show(self.conn)
+        self.storage_browser.show(self.topwin, self.conn)
 
     def browse_kernel(self, src_ignore):
         def cb(ignore, path):
@@ -1626,7 +1626,7 @@ class vmmDetails(vmmGObjectUI):
 
         dialog = self.media_choosers[devtype]
         dialog.dev_id_info = dev_id_info
-        dialog.show()
+        dialog.show(self.topwin)
 
     ##################################################
     # Details/Hardware config changes (apply button) #

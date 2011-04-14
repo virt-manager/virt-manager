@@ -106,9 +106,10 @@ class vmmConnect(vmmGObjectUI):
         self.topwin.hide()
         self.stop_browse()
 
-    def show(self):
-        self.topwin.present()
+    def show(self, parent):
         self.reset_state()
+        self.topwin.set_transient_for(parent)
+        self.topwin.present()
 
     def set_initial_state(self):
         stock_img = gtk.image_new_from_stock(gtk.STOCK_CONNECT,

@@ -93,6 +93,7 @@ class vmmCloneVM(vmmGObjectUI):
             "on_change_mac_cancel_clicked" : self.change_mac_close,
             "on_change_mac_ok_clicked" : self.change_mac_finish,
         })
+        self.change_mac.set_transient_for(self.topwin)
 
         self.change_storage_window = gtk.glade.XML(self.gladefile,
                                                    "vmm-change-storage",
@@ -106,6 +107,7 @@ class vmmCloneVM(vmmGObjectUI):
 
             "on_change_storage_browse_clicked" : self.change_storage_browse,
         })
+        self.change_storage.set_transient_for(self.topwin)
 
         self.window.signal_autoconnect({
             "on_clone_delete_event" : self.close,
@@ -123,8 +125,9 @@ class vmmCloneVM(vmmGObjectUI):
 
         self.set_initial_state()
 
-    def show(self):
+    def show(self, parent):
         self.reset_state()
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
@@ -754,7 +757,7 @@ class vmmCloneVM(vmmGObjectUI):
         if self.clone_design.clone_devices:
             text = title + _(" and selected storage (this may take a while)")
 
-        progWin = vmmAsyncJob(self._async_clone, [], title, text)
+        progWin = vmmAsyncJob(self._async_clone, [], title, text, self.topwin)
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
@@ -799,7 +802,7 @@ class vmmCloneVM(vmmGObjectUI):
             self.storage_browser = vmmStorageBrowser(self.conn)
             self.storage_browser.connect("storage-browse-finish", callback)
 
-        self.storage_browser.show(self.conn)
+        self.storage_browser.show(self.topwin, self.conn)
 
     def show_help(self, ignore1=None):
         # Nothing yet

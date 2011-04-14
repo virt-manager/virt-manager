@@ -102,7 +102,8 @@ class vmmPreferences(vmmGObjectUI):
         self.topwin.hide()
         return 1
 
-    def show(self):
+    def show(self, parent):
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     #########################
@@ -228,19 +229,26 @@ class vmmPreferences(vmmGObjectUI):
 
     def change_grab_keys(self, src_ignore):
         dialog = gtk.Dialog(_("Configure grab key combination"),
-                            None,
+                            self.topwin,
                             gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
                             (gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
                              gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
-        label = gtk.Label(_("Please press desired grab key combination"))
-        dialog.set_size_request(325, 160)
-        (dialog.get_content_area()).add(
-            gtk.Label(_("You can now define grab keys by pressing them.\n"
-                        "To confirm your selection please click OK button\n"
-                        "while you have desired keys pressed.")))
+        dialog.set_default_size(325, 160)
+        dialog.set_border_width(6)
 
-        (dialog.get_content_area()).add(label)
-        defs = {'label': label, 'keysyms': []}
+        infolabel = gtk.Label(
+                    _("You can now define grab keys by pressing them.\n"
+                      "To confirm your selection please click OK button\n"
+                      "while you have desired keys pressed."))
+        keylabel = gtk.Label(_("Please press desired grab key combination"))
+
+        vbox = gtk.VBox()
+        vbox.set_spacing(12)
+        vbox.pack_start(infolabel, False, False)
+        vbox.pack_start(keylabel, False, False)
+        dialog.get_content_area().add(vbox)
+
+        defs = {'label': keylabel, 'keysyms': []}
         dialog.connect("key-press-event", self.grabkeys_dlg_press, defs)
         dialog.connect("key-release-event", self.grabkeys_dlg_release, defs)
         dialog.show_all()

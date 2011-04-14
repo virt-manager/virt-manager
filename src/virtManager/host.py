@@ -464,7 +464,7 @@ class vmmHost(vmmGObjectUI):
         try:
             if self.addnet is None:
                 self.addnet = vmmCreateNetwork(self.conn)
-            self.addnet.show()
+            self.addnet.show(self.topwin)
         except Exception, e:
             self.err.show_err(_("Error launching network wizard: %s") % str(e))
 
@@ -697,7 +697,7 @@ class vmmHost(vmmGObjectUI):
         try:
             if self.addpool is None:
                 self.addpool = vmmCreatePool(self.conn)
-            self.addpool.show()
+            self.addpool.show(self.topwin)
         except Exception, e:
             self.err.show_err(_("Error launching pool wizard: %s") % str(e))
 
@@ -714,7 +714,7 @@ class vmmHost(vmmGObjectUI):
                 self.addvol.connect("vol-created", self.refresh_current_pool)
             else:
                 self.addvol.set_parent_pool(pool)
-            self.addvol.show()
+            self.addvol.show(self.topwin)
         except Exception, e:
             self.err.show_err(_("Error launching volume wizard: %s") % str(e))
 
@@ -975,7 +975,7 @@ class vmmHost(vmmGObjectUI):
         try:
             if self.addinterface is None:
                 self.addinterface = vmmCreateInterface(self.conn)
-            self.addinterface.show()
+            self.addinterface.show(self.topwin)
         except Exception, e:
             self.err.show_err(_("Error launching interface wizard: %s") %
                               str(e))

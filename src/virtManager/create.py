@@ -144,9 +144,10 @@ class vmmCreate(vmmGObjectUI):
             return True
         return False
 
-    def show(self, uri=None):
+    def show(self, parent, uri=None):
         self.reset_state(uri)
-        self.topwin.show()
+
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
@@ -1617,7 +1618,6 @@ class vmmCreate(vmmGObjectUI):
 
 
         self.config_window = vmmDetails(virtinst_guest,
-                                        self.engine,
                                         self.topwin)
         self.config_window_signal = self.config_window.connect(
                                                         "details-closed",
@@ -1627,12 +1627,13 @@ class vmmCreate(vmmGObjectUI):
 
     def start_install(self, guest):
         progWin = vmmAsyncJob(self.do_install, [guest],
-                              title=_("Creating Virtual Machine"),
-                              text=_("The virtual machine is now being "
-                                     "created. Allocation of disk storage "
-                                     "and retrieval of the installation "
-                                     "images may take a few minutes to "
-                                     "complete."))
+                              _("Creating Virtual Machine"),
+                              _("The virtual machine is now being "
+                                "created. Allocation of disk storage "
+                                "and retrieval of the installation "
+                                "images may take a few minutes to "
+                                "complete."),
+                              self.topwin)
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
@@ -1859,7 +1860,7 @@ class vmmCreate(vmmGObjectUI):
         self.storage_browser.set_vm_name(self.get_config_name())
         self.storage_browser.set_finish_cb(callback)
         self.storage_browser.set_browse_reason(reason)
-        self.storage_browser.show(self.conn)
+        self.storage_browser.show(self.topwin, self.conn)
 
     def show_help(self, ignore):
         # No help available yet.

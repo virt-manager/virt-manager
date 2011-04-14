@@ -71,8 +71,9 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         self.set_initial_state()
 
-    def show(self):
+    def show(self, parent):
         self.reset_state()
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def is_visible(self):

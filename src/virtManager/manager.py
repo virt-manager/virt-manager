@@ -630,7 +630,7 @@ class vmmManager(vmmGObjectUI):
 
         if not self.delete_dialog:
             self.delete_dialog = vmmDeleteDialog()
-        self.delete_dialog.show(vm)
+        self.delete_dialog.show(vm, self.topwin)
 
     def set_pause_state(self, state):
         src = self.window.get_widget("vm-pause")

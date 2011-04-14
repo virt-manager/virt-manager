@@ -103,8 +103,9 @@ class vmmCreatePool(vmmGObjectUI):
 
         self.set_initial_state()
 
-    def show(self):
+    def show(self, parent):
         self.reset_state()
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
@@ -399,9 +400,10 @@ class vmmCreatePool(vmmGObjectUI):
         self.topwin.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
 
         progWin = vmmAsyncJob(self._async_pool_create, [],
-                              title=_("Creating storage pool..."),
-                              text=_("Creating the storage pool may take a "
-                                     "while..."))
+                              _("Creating storage pool..."),
+                              _("Creating the storage pool may take a "
+                                "while..."),
+                              self.topwin)
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)
@@ -414,8 +416,7 @@ class vmmCreatePool(vmmGObjectUI):
         else:
             self.close()
 
-    def _async_pool_create(self, asyncjob, *args, **kwargs):
-        print args, kwargs
+    def _async_pool_create(self, asyncjob):
         newconn = None
 
         # Open a seperate connection to install on since this is async
@@ -427,7 +428,7 @@ class vmmCreatePool(vmmGObjectUI):
         build = self.window.get_widget("pool-build").get_active()
         poolobj = self._pool.install(create=True, meter=meter, build=build)
         poolobj.setAutostart(True)
-        logging.debug("Pool creating succeeded.")
+        logging.debug("Pool creation succeeded")
 
     def page_changed(self, notebook_ignore, page_ignore, page_number):
         if page_number == PAGE_NAME:

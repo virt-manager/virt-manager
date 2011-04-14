@@ -54,7 +54,7 @@ def cb_wrapper(callback, asyncjob, *args, **kwargs):
 
 def _simple_async(callback, args, title, text, parent, errorintro,
                   show_progress):
-    asyncjob = vmmAsyncJob(callback, args, title, text,
+    asyncjob = vmmAsyncJob(callback, args, title, text, parent.topwin,
                            show_progress=show_progress)
     error, details = asyncjob.run()
     if error is None:
@@ -76,7 +76,7 @@ class vmmAsyncJob(vmmGObjectUI):
         _simple_async(callback, args, "", "", parent, errorintro, False)
 
 
-    def __init__(self, callback, args, title, text,
+    def __init__(self, callback, args, title, text, parent,
                  run_main=True, show_progress=True,
                  cancel_back=None, cancel_args=None):
         vmmGObjectUI.__init__(self, "vmm-progress.glade", "vmm-progress")
@@ -98,6 +98,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self.stage = self.window.get_widget("pbar-stage")
         self.pbar = self.window.get_widget("pbar")
         self.window.get_widget("pbar-text").set_text(text)
+        self.topwin.set_transient_for(parent)
 
         args = [self] + args
         self.bg_thread = asyncJobWorker(callback, args)

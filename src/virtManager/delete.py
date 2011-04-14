@@ -70,11 +70,12 @@ class vmmDeleteDialog(vmmGObjectUI):
         self.window.get_widget("delete-storage-list").set_sensitive(dodel)
 
 
-    def show(self, vm):
+    def show(self, vm, parent):
         self.vm = vm
         self.conn = vm.get_connection()
 
         self.reset_state()
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
@@ -139,7 +140,7 @@ class vmmDeleteDialog(vmmGObjectUI):
             text = title + _(" and selected storage (this may take a while)")
 
         progWin = vmmAsyncJob(self._async_delete, [devs],
-                              title=title, text=text)
+                              title, text, self.topwin)
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)

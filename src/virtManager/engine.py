@@ -94,7 +94,7 @@ def check_packagekit(errbox, packages, libvirt_packages):
                           [session, pk_control, packages],
                           _("Searching for available hypervisors..."),
                           _("Searching for available hypervisors..."),
-                          run_main=False)
+                          None, run_main=False)
     error, ignore = progWin.run()
     if error:
         return
@@ -639,7 +639,7 @@ class vmmEngine(vmmGObject):
 
     def _do_show_preferences(self, src):
         try:
-            self._get_preferences().show()
+            self._get_preferences().show(src.topwin)
         except Exception, e:
             src.err.show_err(_("Error launching preferences: %s") % str(e))
 
@@ -681,7 +681,7 @@ class vmmEngine(vmmGObject):
 
     def _do_show_connect(self, src):
         try:
-            self._get_connect_dialog().show()
+            self._get_connect_dialog().show(src.topwin)
         except Exception, e:
             src.err.show_err(_("Error launching connect dialog: %s") % str(e))
 
@@ -783,7 +783,7 @@ class vmmEngine(vmmGObject):
 
     def _do_show_create(self, src, uri):
         try:
-            self._get_create_dialog().show(uri)
+            self._get_create_dialog().show(src.topwin, uri)
         except Exception, e:
             src.err.show_err(_("Error launching manager: %s") % str(e))
 
@@ -796,7 +796,7 @@ class vmmEngine(vmmGObject):
                 self.windowMigrate = vmmMigrateDialog(vm, self)
 
             self.windowMigrate.set_state(vm)
-            self.windowMigrate.show()
+            self.windowMigrate.show(src.topwin)
         except Exception, e:
             src.err.show_err(_("Error launching migrate dialog: %s") % str(e))
 
@@ -813,7 +813,7 @@ class vmmEngine(vmmGObject):
             else:
                 clone_window.set_orig_vm(orig_vm)
 
-            clone_window.show()
+            clone_window.show(src.topwin)
         except Exception, e:
             src.err.show_err(_("Error setting clone parameters: %s") % str(e))
 
@@ -899,6 +899,7 @@ class vmmEngine(vmmGObject):
                     [vm, path],
                     _("Saving Virtual Machine"),
                     _("Saving virtual machine memory to disk "),
+                    src.topwin,
                     cancel_back=_cancel_back,
                     cancel_args=_cancel_args)
         error, details = progWin.run()
@@ -949,7 +950,8 @@ class vmmEngine(vmmGObject):
         progWin = vmmAsyncJob(self._restore_saved_callback,
                     [path, conn],
                     _("Restoring Virtual Machine"),
-                    _("Restoring virtual machine memory from disk"))
+                    _("Restoring virtual machine memory from disk"),
+                    src.topwin)
         error, details = progWin.run()
 
         if error is not None:

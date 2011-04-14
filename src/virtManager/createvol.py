@@ -75,8 +75,9 @@ class vmmCreateVolume(vmmGObjectUI):
         self.reset_state()
 
 
-    def show(self):
+    def show(self, parent):
         self.reset_state()
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
@@ -217,7 +218,8 @@ class vmmCreateVolume(vmmGObjectUI):
         progWin = vmmAsyncJob(self._async_vol_create, [],
                               _("Creating storage volume..."),
                               _("Creating the storage volume may take a "
-                                "while..."))
+                                "while..."),
+                              self.topwin)
         error, details = progWin.run()
 
         self.topwin.set_sensitive(True)

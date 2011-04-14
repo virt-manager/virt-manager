@@ -32,7 +32,6 @@ from virtManager.baseclass import vmmGObjectUI
 
 class vmmStorageBrowser(vmmGObjectUI):
     __gsignals__ = {
-        #"vol-created": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
         "storage-browse-finish": (gobject.SIGNAL_RUN_FIRST,
                                   gobject.TYPE_NONE, [str]),
     }
@@ -76,8 +75,9 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         self.set_initial_state()
 
-    def show(self, conn=None):
+    def show(self, parent, conn=None):
         self.reset_state(conn)
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
@@ -275,7 +275,7 @@ class vmmStorageBrowser(vmmGObjectUI):
                 self.addvol.set_parent_pool(pool)
             self.addvol.set_modal(True)
             self.addvol.set_name_hint(self.vm_name)
-            self.addvol.show()
+            self.addvol.show(self.topwin)
         except Exception, e:
             self.show_err(_("Error launching volume wizard: %s") % str(e))
 

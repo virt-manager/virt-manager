@@ -65,8 +65,9 @@ class vmmChooseCD(vmmGObjectUI):
 
         return 1
 
-    def show(self):
+    def show(self, parent):
         self.reset_state()
+        self.topwin.set_transient_for(parent)
         self.topwin.show()
 
     def cleanup(self):
@@ -166,6 +167,6 @@ class vmmChooseCD(vmmGObjectUI):
                                          self.set_storage_path)
 
         self.storage_browser.set_browse_reason(self.config.CONFIG_DIR_MEDIA)
-        self.storage_browser.show(self.conn)
+        self.storage_browser.show(self.topwin, self.conn)
 
 vmmGObjectUI.type_register(vmmChooseCD)

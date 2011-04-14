@@ -82,9 +82,9 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         self.init_state()
 
-    def show(self):
+    def show(self, parent):
         self.reset_state()
-        self.topwin.show()
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
@@ -465,6 +465,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                               (_("Migrating VM '%s' from %s to %s. "
                                  "This may take awhile.") %
                                 (self.vm.get_name(), srchost, dsthost)),
+                              self.topwin,
                               cancel_back=_cancel_back,
                               cancel_args=_cancel_args)
         error, details = progWin.run()

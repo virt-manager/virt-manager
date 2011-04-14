@@ -157,8 +157,9 @@ class vmmAddHardware(vmmGObjectUI):
 
         return doc
 
-    def show(self):
+    def show(self, parent):
         self.reset_state()
+        self.topwin.set_transient_for(parent)
         self.topwin.present()
 
     def close(self, ignore1=None, ignore2=None):
@@ -932,9 +933,10 @@ class vmmAddHardware(vmmGObjectUI):
 
         progWin = vmmAsyncJob(do_file_allocate,
                               [self._dev],
-                              title=_("Creating Storage File"),
-                              text=_("Allocation of disk storage may take "
-                                     "a few minutes to complete."))
+                              _("Creating Storage File"),
+                              _("Allocation of disk storage may take "
+                                "a few minutes to complete."),
+                              self.topwin)
 
         return progWin.run()
 
@@ -1258,7 +1260,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.storage_browser.set_finish_cb(set_storage_cb)
         self.storage_browser.set_browse_reason(self.config.CONFIG_DIR_IMAGE)
 
-        self.storage_browser.show(conn)
+        self.storage_browser.show(self.topwin, conn)
 
     def show_help(self, src_ignore):
         # help to show depends on the notebook page, yahoo
