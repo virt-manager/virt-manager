@@ -1026,23 +1026,20 @@ class vmmEngine(vmmGObject):
 
         logging.debug("Starting vm '%s'." % vm.get_name())
 
-        def asyncfunc(asyncjob):
-            ignore = asyncjob
-            vm.startup()
-
         if vm.hasSavedImage():
             # VM will be restored, which can take some time, so show a
             # progress dialog.
             errorintro  = _("Error restoring domain")
             title = _("Restoring Virtual Machine")
             text = _("Restoring virtual machine memory from disk")
-            vmmAsyncJob.simple_async(asyncfunc, [], title, text, src,
+            vmmAsyncJob.simple_async(vm.startup,
+                                     [], title, text, src,
                                      errorintro)
 
         else:
             # Regular startup
             errorintro  = _("Error starting domain")
-            vmmAsyncJob.simple_async_noshow(asyncfunc, [], src, errorintro)
+            vmmAsyncJob.simple_async_noshow(vm.startup, [], src, errorintro)
 
     def _do_shutdown_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)

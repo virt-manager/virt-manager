@@ -53,8 +53,20 @@ def cb_wrapper(callback, asyncjob, *args, **kwargs):
         asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
 def _simple_async(callback, args, title, text, parent, errorintro,
-                  show_progress):
-    asyncjob = vmmAsyncJob(callback, args, title, text, parent.topwin,
+                  show_progress, simplecb):
+    """
+    @show_progress: Whether to actually show a progress dialog
+    @simplecb: If true, build a callback wrapper that ignores the asyncjob
+               param that's passed to every cb by default
+    """
+    docb = callback
+    if simplecb:
+        def tmpcb(job, *args, **kwargs):
+            ignore = job
+            callback(*args, **kwargs)
+        docb = tmpcb
+
+    asyncjob = vmmAsyncJob(docb, args, title, text, parent.topwin,
                            show_progress=show_progress)
     error, details = asyncjob.run()
     if error is None:
@@ -68,12 +80,15 @@ def _simple_async(callback, args, title, text, parent, errorintro,
 class vmmAsyncJob(vmmGObjectUI):
 
     @staticmethod
-    def simple_async(callback, args, title, text, parent, errorintro):
-        _simple_async(callback, args, title, text, parent, errorintro, True)
+    def simple_async(callback, args, title, text, parent, errorintro,
+                     simplecb=True):
+        _simple_async(callback, args, title, text, parent, errorintro, True,
+                      simplecb)
 
     @staticmethod
-    def simple_async_noshow(callback, args, parent, errorintro):
-        _simple_async(callback, args, "", "", parent, errorintro, False)
+    def simple_async_noshow(callback, args, parent, errorintro, simplecb=True):
+        _simple_async(callback, args, "", "", parent, errorintro, False,
+                      simplecb)
 
 
     def __init__(self, callback, args, title, text, parent,
