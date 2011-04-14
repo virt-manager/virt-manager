@@ -416,3 +416,22 @@ def pretty_bytes(val):
         return "%2.2f MB" % (val / (1024.0 * 1024.0))
 
 xpath = virtinst.util.get_xml_path
+
+def chkbox_helper(src, getcb, setcb, text1, text2=None):
+    """
+    Helper to prompt user about proceeding with an operation
+    Returns True if operation should be cancelled
+    """
+    do_prompt = getcb()
+    if not do_prompt:
+        return False
+
+    res = src.err.warn_chkbox(text1=text1, text2=text2,
+                              chktext=_("Don't ask me again."),
+                              buttons=gtk.BUTTONS_YES_NO)
+    response, skip_prompt = res
+    if not response:
+        return True
+
+    setcb(not skip_prompt)
+    return False

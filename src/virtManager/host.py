@@ -906,19 +906,11 @@ class vmmHost(vmmGObjectUI):
         if interface is None:
             return
 
-        do_prompt = self.config.get_confirm_interface()
-
-        if do_prompt:
-            res = self.err.warn_chkbox(
-                    text1=_("Are you sure you want to stop the interface "
-                            "'%s'?" % interface.get_name()),
-                    chktext=_("Don't ask me again for interface start/stop."),
-                    buttons=gtk.BUTTONS_YES_NO)
-
-            response, skip_prompt = res
-            if not response:
-                return
-            self.config.set_confirm_interface(not skip_prompt)
+        if util.chkbox_helper(self, self.config.get_confirm_interface,
+            self.config.set_confirm_interface,
+            text1=_("Are you sure you want to stop the interface "
+                    "'%s'?" % interface.get_name())):
+            return
 
         logging.debug("Stopping interface '%s'" % interface.get_name())
         try:
@@ -932,19 +924,11 @@ class vmmHost(vmmGObjectUI):
         if interface is None:
             return
 
-        do_prompt = self.config.get_confirm_interface()
-
-        if do_prompt:
-            res = self.err.warn_chkbox(
-                    text1=_("Are you sure you want to start the interface "
-                            "'%s'?" % interface.get_name()),
-                    chktext=_("Don't ask me again for interface start/stop."),
-                    buttons=gtk.BUTTONS_YES_NO)
-
-            response, skip_prompt = res
-            if not response:
-                return
-            self.config.set_confirm_interface(not skip_prompt)
+        if util.chkbox_helper(self, self.config.get_confirm_interface,
+            self.config.set_confirm_interface,
+            text1=_("Are you sure you want to start the interface "
+                    "'%s'?" % interface.get_name())):
+            return
 
         logging.debug("Starting interface '%s'" % interface.get_name())
         try:

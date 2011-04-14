@@ -1961,18 +1961,11 @@ class vmmDetails(vmmGObjectUI):
     # Device removal
     def remove_device(self, dev_type, dev_id_info):
         logging.debug("Removing device: %s %s" % (dev_type, dev_id_info))
-        do_prompt = self.config.get_confirm_removedev()
 
-        if do_prompt:
-            res = self.err.warn_chkbox(
-                    text1=(_("Are you sure you want to remove this device?")),
-                    chktext=_("Don't ask me again."),
-                    buttons=gtk.BUTTONS_YES_NO)
-
-            response, skip_prompt = res
-            if not response:
-                return
-            self.config.set_confirm_removedev(not skip_prompt)
+        if util.chkbox_helper(self, self.config.get_confirm_removedev,
+            self.config.set_confirm_removedev,
+            text1=(_("Are you sure you want to remove this device?"))):
+            return
 
         # Define the change
         try:
