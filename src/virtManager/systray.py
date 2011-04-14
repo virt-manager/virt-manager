@@ -335,6 +335,7 @@ class vmmSystray(vmmGObject):
 
         menu_item = self.conn_menuitems[uri]
         self.systray_menu.remove(menu_item)
+        menu_item.destroy()
         del(self.conn_menuitems[uri])
         self.conn_vm_menuitems[uri] = {}
 
@@ -409,6 +410,7 @@ class vmmSystray(vmmGObject):
             vm_menu_item = vm_mappings[uuid]
             vm_menu = conn_item.get_submenu()
             vm_menu.remove(vm_menu_item)
+            vm_menu_item.destroy()
             del(vm_mappings[uuid])
 
             if len(vm_menu.get_children()) == 0:
