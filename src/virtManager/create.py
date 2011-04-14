@@ -1606,17 +1606,20 @@ class vmmCreate(vmmGObjectUI):
     def customize(self, guest):
         virtinst_guest = vmmDomainVirtinst(self.conn, guest, self.guest.uuid)
 
-        if self.config_window:
-            self.config_window.disconnect(self.config_window_signal)
-            self.config_window.close()
-            del(self.config_window)
+        def cleanup_config_window():
+            if self.config_window:
+                self.config_window.disconnect(self.config_window_signal)
+                self.config_window.cleanup()
+                self.config_window = None
 
         def start_install_wrapper(ignore, guest):
+            cleanup_config_window()
             if not self.is_visible():
                 return
             self._check_start_error(self.start_install, guest)
 
 
+        cleanup_config_window()
         self.config_window = vmmDetails(virtinst_guest,
                                         self.topwin)
         self.config_window_signal = self.config_window.connect(
