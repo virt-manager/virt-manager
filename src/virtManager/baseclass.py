@@ -78,10 +78,11 @@ class vmmGObject(gobject.GObject):
         gobject.source_remove(handle)
         self._gobject_timeouts.remove(handle)
 
-    def _printtrace(self, msg):
+    def _logtrace(self, msg):
         import traceback
-        print "%s (%s %s)\n:%s" % (msg, self.object_key, self.refcount(),
-                                   "".join(traceback.format_stack()))
+        logging.debug("%s (%s %s)\n:%s" %
+                      (msg, self.object_key, self.refcount(),
+                       "".join(traceback.format_stack())))
 
     def refcount(self):
         # Function generates 2 temporary refs, so adjust total accordingly
