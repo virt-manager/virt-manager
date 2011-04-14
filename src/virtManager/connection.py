@@ -1575,11 +1575,6 @@ class vmmConnection(vmmGObject):
     ########################
     # Stats getter methods #
     ########################
-    def _get_record_helper(self, record_name):
-        if len(self.record) == 0:
-            return 0
-        return self.record[0][record_name]
-
     def cpu_time_vector(self):
         vector = []
         stats = self.record
@@ -1596,18 +1591,6 @@ class vmmConnection(vmmGObject):
             cpudata = cpudata[0:limit]
         return cpudata
 
-    def cpu_time_percentage(self):
-        return self._get_record_helper("cpuTimePercent")
-
-    def stats_memory(self):
-        return self._get_record_helper("memory")
-
-    def pretty_stats_memory(self):
-        return util.pretty_mem(self.stats_memory())
-
-    def stats_memory_percentage(self):
-        return self._get_record_helper("memoryPercent")
-
     def stats_memory_vector(self):
         vector = []
         stats = self.record
@@ -1618,31 +1601,41 @@ class vmmConnection(vmmGObject):
                 vector.append(0)
         return vector
 
+    def disk_io_vector_limit(self, dummy):
+        #No point to accumulate unnormalized I/O for a conenction
+        return [0.0]
+    def network_traffic_vector_limit(self, dummy):
+        #No point to accumulate unnormalized Rx/Tx for a connection
+        return [0.0]
+
+    def _get_record_helper(self, record_name):
+        if len(self.record) == 0:
+            return 0
+        return self.record[0][record_name]
+
+    def stats_memory(self):
+        return self._get_record_helper("memory")
+    def stats_memory_percentage(self):
+        return self._get_record_helper("memoryPercent")
+    def cpu_time_percentage(self):
+        return self._get_record_helper("cpuTimePercent")
+
     def network_rx_rate(self):
         return self._get_record_helper("netRxRate")
-
     def network_tx_rate(self):
         return self._get_record_helper("netTxRate")
-
     def network_traffic_rate(self):
         return self.network_tx_rate() + self.network_rx_rate()
 
+    def pretty_stats_memory(self):
+        return util.pretty_mem(self.stats_memory())
+
     def disk_read_rate(self):
         return self._get_record_helper("diskRdRate")
-
     def disk_write_rate(self):
         return self._get_record_helper("diskWrRate")
-
     def disk_io_rate(self):
         return self.disk_read_rate() + self.disk_write_rate()
-
-    def disk_io_vector_limit(self, dummy):
-        """No point to accumulate unnormalized I/O for a conenction"""
-        return [0.0]
-
-    def network_traffic_vector_limit(self, dummy):
-        """No point to accumulate unnormalized Rx/Tx for a conenction"""
-        return [0.0]
 
 
     ####################################
