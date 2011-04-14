@@ -520,15 +520,13 @@ class vmmEngine(vmmGObject):
 
         if debug_ref_leaks:
             objs = self.config.get_objects()
-            if src.object_key in objs:
-                # Whatever UI initiates the app exit will always appear
-                # to leak
-                logging.debug("Exitting app from %s, skipping leak check" %
-                              src.object_key)
-                objs.remove(src.object_key)
 
             # Engine will always appear to leak
             objs.remove(self.object_key)
+
+            if src.object_key in objs:
+                # UI that initiates the app exit will always appear to leak
+                objs.remove(src.object_key)
 
             for name in objs:
                 logging.debug("Leaked %s" % name)
