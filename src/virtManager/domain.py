@@ -175,6 +175,8 @@ class vmmDomainBase(vmmLibvirtObject):
     def status(self):
         raise NotImplementedError()
 
+    def stats_memory(self):
+        raise NotImplementedError()
     def stats_memory_percentage(self):
         raise NotImplementedError()
     def stats_maxmem_percentage(self):
@@ -809,11 +811,6 @@ class vmmDomainBase(vmmLibvirtObject):
         if record[what] > self.maxRecord[what]:
             self.maxRecord[what] = record[what]
 
-    def stats_memory(self):
-        if not self.is_active():
-            return 0
-        return self._get_record_helper("curmem")
-
     def stats_memory_pretty(self):
         if not self.is_active():
             return "0 MB"
@@ -1025,9 +1022,9 @@ class vmmDomain(vmmDomainBase):
             return 0
         return self.record[0][record_name]
 
+    def stats_memory(self):
+        return self._get_record_helper("curmem")
     def stats_memory_percentage(self):
-        if not self.is_active():
-            return 0
         return self._get_record_helper("currMemPercent")
     def stats_maxmem_percentage(self):
         return self._get_record_helper("maxMemPercent")
@@ -1595,6 +1592,8 @@ class vmmDomainVirtinst(vmmDomainBase):
         return self._backend.autostart
 
     # Stats stubs
+    def stats_memory(self):
+        return 0
     def stats_memory_percentage(self):
         return 0
     def stats_maxmem_percentage(self):
