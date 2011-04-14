@@ -194,7 +194,9 @@ def setup_logging(debug_stdout):
     sys.excepthook = exception_log
 
 def parse_commandline():
-    optParser = OptionParser(version=appversion)
+    optParser = OptionParser(version=appversion,
+                             usage="virt-manager [options]")
+
     optParser.add_option("--profile", dest="profile",
         help="Generate runtime performance profile stats", metavar="FILE")
     optParser.set_defaults(uuid=None)
