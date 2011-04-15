@@ -135,6 +135,11 @@ def main():
                             (virtinst.__version__) +
                            "\n\n" + msg)
 
+    # Hack in the default URI for this instance of the tui
+    if options.uri:
+        import virtManagerTui.libvirtworker
+        virtManagerTui.libvirtworker.default_url = options.uri
+
     # start the app
     from virtManagerTui.mainmenu import MainMenu
     MainMenu()
