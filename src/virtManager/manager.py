@@ -943,6 +943,7 @@ class vmmManager(vmmGObjectUI):
 
         # Update run/shutdown/pause button states
         self.vm_selected()
+        self.vm_resources_sampled(vm)
 
     def vm_resources_sampled(self, vm):
         vmlist = self.window.get_widget("vm-list")
