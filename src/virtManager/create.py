@@ -396,13 +396,6 @@ class vmmCreate(vmmGObjectUI):
 
         # Final page
         self.window.get_widget("summary-customize").set_active(False)
-        net_expander    = self.window.get_widget("config-advanced-expander")
-        net_warn_icon   = self.window.get_widget("config-netdev-warn-icon")
-        net_warn_box    = self.window.get_widget("config-netdev-warn-box")
-        net_expander.hide()
-        net_warn_icon.hide()
-        net_warn_box.hide()
-        net_expander.set_expanded(False)
 
         # Make sure window is a sane size
         self.topwin.resize(1, 1)
@@ -577,6 +570,13 @@ class vmmCreate(vmmGObjectUI):
 
         # Networking
         net_list        = self.window.get_widget("config-netdev")
+        net_expander    = self.window.get_widget("config-advanced-expander")
+        net_warn_icon   = self.window.get_widget("config-netdev-warn-icon")
+        net_warn_box    = self.window.get_widget("config-netdev-warn-box")
+        net_expander.hide()
+        net_warn_icon.hide()
+        net_warn_box.hide()
+        net_expander.set_expanded(False)
 
         do_warn = uihelpers.populate_network_list(net_list, self.conn, False)
         self.set_net_warn(self.conn.netdev_error or do_warn,
