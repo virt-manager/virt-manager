@@ -288,33 +288,37 @@ class VNCViewer(Viewer):
         self.display.show()
 
     def _auth_credential(self, src_ignore, credList):
-        for i in range(len(credList)):
-            if credList[i] not in [gtkvnc.CREDENTIAL_PASSWORD,
-                                   gtkvnc.CREDENTIAL_USERNAME,
-                                   gtkvnc.CREDENTIAL_CLIENTNAME]:
-                self.console.err.show_err(
-    summary=_("Unable to provide requested credentials to the VNC server"),
-    details=_("The credential type %s is not supported") % (str(credList[i])),
-    title=_("Unable to authenticate"),
-    async=True)
+        for cred in credList:
+            if cred in [gtkvnc.CREDENTIAL_PASSWORD,
+                        gtkvnc.CREDENTIAL_USERNAME,
+                        gtkvnc.CREDENTIAL_CLIENTNAME]:
+                continue
 
-                # schedule_retry will error out
-                self.console.viewerRetriesScheduled = 10
-                self.close()
-                self.console.activate_unavailable_page(
-                                _("Unsupported console authentication type"))
-                return
+            self.console.err.show_err(
+                summary=_("Unable to provide requested credentials to "
+                          "the VNC server"),
+                details=(_("The credential type %s is not supported") %
+                         (str(cred))),
+                title=_("Unable to authenticate"),
+                async=True)
+
+            # schedule_retry will error out
+            self.console.viewerRetriesScheduled = 10
+            self.close()
+            self.console.activate_unavailable_page(
+                            _("Unsupported console authentication type"))
+            return
 
         withUsername = False
         withPassword = False
-        for i in range(len(credList)):
-            logging.debug("Got credential request %s", str(credList[i]))
-            if credList[i] == gtkvnc.CREDENTIAL_PASSWORD:
+        for cred in credList:
+            logging.debug("Got credential request %s" % cred)
+            if cred == gtkvnc.CREDENTIAL_PASSWORD:
                 withPassword = True
-            elif credList[i] == gtkvnc.CREDENTIAL_USERNAME:
+            elif cred == gtkvnc.CREDENTIAL_USERNAME:
                 withUsername = True
-            elif credList[i] == gtkvnc.CREDENTIAL_CLIENTNAME:
-                self.display.set_credential(credList[i], "libvirt-vnc")
+            elif cred == gtkvnc.CREDENTIAL_CLIENTNAME:
+                self.display.set_credential(cred, "libvirt-vnc")
 
         if withUsername or withPassword:
             self.console.activate_auth_page(withPassword, withUsername)
