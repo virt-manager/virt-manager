@@ -486,7 +486,7 @@ def populate_network_list(net_list, conn, show_direct_interfaces=True):
                 break
     else:
         return_warn = True
-        row = build_row(None, None, _("No networking."), True, False)
+        row = build_row(None, None, _("No networking"), True, False)
         model.insert(0, row)
         default = 0
 
