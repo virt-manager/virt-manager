@@ -430,15 +430,6 @@ class vmmManager(vmmGObjectUI):
         vmlist.append_column(diskIOCol)
         vmlist.append_column(networkTrafficCol)
 
-        # For the columns which follow, we deliberately bind columns
-        # to fields in the list store & on each update copy the info
-        # out of the vmmDomain object into the store. Although this
-        # sounds foolish, empirically this is faster than using the
-        # set_cell_data_func() callbacks to pull the data out of
-        # vmmDomain on demand. I suspect this is because the latter
-        # needs to do many transitions  C<->Python for callbacks
-        # which are relatively slow.
-
         status_icon = gtk.CellRendererPixbuf()
         statusCol.pack_start(status_icon, False)
         statusCol.add_attribute(status_icon, 'pixbuf', ROW_STATUS_ICON)
