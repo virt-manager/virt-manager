@@ -48,8 +48,6 @@ class vmmConnection(vmmGObject):
     __gsignals__ = {
         "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                      [str, str]),
-        "vm-started": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                     [str, str]),
         "vm-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
                        [str, str]),
 
@@ -1311,7 +1309,6 @@ class vmmConnection(vmmGObject):
 
         origlist = self.vms
         current = {}
-        start = []
         new = []
 
         # Build list of previous vms with proper id/name mappings
@@ -1364,7 +1361,6 @@ class vmmConnection(vmmGObject):
                     vm = self.vmm.lookupByID(_id)
                     uuid = util.uuidstr(vm.UUID())
 
-                    start.append(uuid)
                     check_new(vm, uuid)
                 except:
                     logging.exception("Couldn't fetch domain id '%s'" % _id)
@@ -1385,7 +1381,7 @@ class vmmConnection(vmmGObject):
                 except:
                     logging.exception("Couldn't fetch domain '%s'" % name)
 
-        return (start, new, origlist, current)
+        return (new, origlist, current)
 
     def tick(self, noStatsUpdate=False):
         """ main update function: polls for new objects, updates stats, ..."""
@@ -1411,7 +1407,7 @@ class vmmConnection(vmmGObject):
          newNodedevs, self.nodedevs) = self._update_nodedevs()
 
         # Poll for changed/new/removed VMs
-        (startVMs, newVMs, oldVMs, self.vms) = self._update_vms()
+        (newVMs, oldVMs, self.vms) = self._update_vms()
 
         def tick_send_signals():
             """
@@ -1436,8 +1432,6 @@ class vmmConnection(vmmGObject):
                 oldVMs[uuid].cleanup()
             for uuid in newVMs:
                 self.emit("vm-added", self.uri, uuid)
-            for uuid in startVMs:
-                self.emit("vm-started", self.uri, uuid)
 
             # Update virtual network states
             for uuid in oldNets:

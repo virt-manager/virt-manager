@@ -23,6 +23,8 @@ import gtk
 
 import logging
 
+import libvirt
+
 import virtManager.config as cfg
 import virtManager.uihelpers as uihelpers
 from virtManager.connection import vmmConnection
@@ -755,21 +757,6 @@ class vmmManager(vmmGObjectUI):
                 del self.rows[self.vm_row_key(vm)]
                 break
 
-    def vm_started(self, connection, uri, vmuuid):
-        vm = connection.get_vm(vmuuid)
-        logging.debug("VM %s started" % vm.get_name())
-
-        if (self.config.get_console_popup() != 2 or
-            vm.is_management_domain()):
-            return
-
-        # user has requested consoles on all vms
-        gtype = vm.get_graphics_console()[0]
-        if gtype in self.config.embeddable_graphics():
-            self.emit("action-show-console", uri, vmuuid)
-        elif not connection.is_remote():
-            self.emit("action-show-terminal", uri, vmuuid)
-
     def _build_conn_hint(self, conn):
         hint = conn.get_uri()
         if conn.state == conn.STATE_DISCONNECTED:
@@ -872,7 +859,6 @@ class vmmManager(vmmGObjectUI):
         conn.connect("resources-sampled", self.conn_refresh_resources)
         conn.connect("state-changed", self.conn_state_changed)
         conn.connect("connect-error", self._connect_error)
-        conn.connect("vm-started", self.vm_started)
 
         # add the connection to the treeModel
         vmlist = self.window.get_widget("vm-list")
@@ -918,11 +904,32 @@ class vmmManager(vmmGObjectUI):
     # State/UI updating methods #
     #############################
 
-    def vm_status_changed(self, vm, status_ignore, oldstatus_ignore):
-        parent = self.rows[vm.get_connection().get_uri()].iter
+    def _vm_started(self, vm):
+        connection = vm.get_connection()
+        uri = connection.get_uri()
+        vmuuid = vm.get_uuid()
 
+        logging.debug("VM %s started" % vm.get_name())
+
+        if (self.config.get_console_popup() != 2 or
+            vm.is_management_domain()):
+            return
+
+        # user has requested consoles on all vms
+        gtype = vm.get_graphics_console()[0]
+        if gtype in self.config.embeddable_graphics():
+            self.emit("action-show-console", uri, vmuuid)
+        elif not connection.is_remote():
+            self.emit("action-show-terminal", uri, vmuuid)
+
+    def vm_status_changed(self, vm, oldstatus, newstatus):
+        ignore = newstatus
+        parent = self.rows[vm.get_connection().get_uri()].iter
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
+
+        if vm.is_active() and oldstatus is libvirt.VIR_DOMAIN_SHUTOFF:
+            self._vm_started(vm)
 
         missing = True
         for row in range(model.iter_n_children(parent)):
