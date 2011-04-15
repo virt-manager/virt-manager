@@ -23,8 +23,6 @@ import gtk
 
 import logging
 
-import libvirt
-
 import virtManager.config as cfg
 import virtManager.uihelpers as uihelpers
 from virtManager.connection import vmmConnection
@@ -904,32 +902,12 @@ class vmmManager(vmmGObjectUI):
     # State/UI updating methods #
     #############################
 
-    def _vm_started(self, vm):
-        connection = vm.get_connection()
-        uri = connection.get_uri()
-        vmuuid = vm.get_uuid()
-
-        logging.debug("VM %s started" % vm.get_name())
-
-        if (self.config.get_console_popup() != 2 or
-            vm.is_management_domain()):
-            return
-
-        # user has requested consoles on all vms
-        gtype = vm.get_graphics_console()[0]
-        if gtype in self.config.embeddable_graphics():
-            self.emit("action-show-console", uri, vmuuid)
-        elif not connection.is_remote():
-            self.emit("action-show-terminal", uri, vmuuid)
-
     def vm_status_changed(self, vm, oldstatus, newstatus):
         ignore = newstatus
+        ignore = oldstatus
         parent = self.rows[vm.get_connection().get_uri()].iter
         vmlist = self.window.get_widget("vm-list")
         model = vmlist.get_model()
-
-        if vm.is_active() and oldstatus is libvirt.VIR_DOMAIN_SHUTOFF:
-            self._vm_started(vm)
 
         missing = True
         for row in range(model.iter_n_children(parent)):

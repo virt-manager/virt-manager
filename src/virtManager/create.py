@@ -1649,18 +1649,18 @@ class vmmCreate(vmmGObjectUI):
             self.failed_guest = self.guest
             return
 
-        vm = self.conn.get_vm(guest.uuid)
-
-        if self.config.get_console_popup() == 1:
-            # user has requested console on new created vms only
-            gtype = vm.get_graphics_console()[0]
-            if gtype in self.config.embeddable_graphics():
-                self.emit("action-show-console", self.conn.get_uri(),
-                          guest.uuid)
-            else:
-                self.emit("action-show-terminal", self.conn.get_uri(),
-                          guest.uuid)
         self.close()
+
+        # Launch details dialog for new VM
+        vm = self.conn.get_vm(guest.uuid)
+        gtype = vm.get_graphics_console()[0]
+        if gtype in self.config.embeddable_graphics():
+            self.emit("action-show-console", self.conn.get_uri(),
+                      guest.uuid)
+        elif vm.get_connection().is_remote():
+            self.emit("action-show-terminal", self.conn.get_uri(),
+                      guest.uuid)
+
 
 
     def do_install(self, asyncjob, guest):

@@ -36,7 +36,6 @@ class vmmPreferences(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "vmm-preferences.glade", "vmm-preferences")
 
         self.add_gconf_handle(self.config.on_view_system_tray_changed(self.refresh_view_system_tray))
-        self.add_gconf_handle(self.config.on_console_popup_changed(self.refresh_console_popup))
         self.add_gconf_handle(self.config.on_console_accels_changed(self.refresh_console_accels))
         self.add_gconf_handle(self.config.on_console_scaling_changed(self.refresh_console_scaling))
         self.add_gconf_handle(self.config.on_stats_update_interval_changed(self.refresh_update_interval))
@@ -56,7 +55,6 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_view_system_tray()
         self.refresh_update_interval()
         self.refresh_history_length()
-        self.refresh_console_popup()
         self.refresh_console_accels()
         self.refresh_console_scaling()
         self.refresh_sound_local()
@@ -75,7 +73,6 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_system_tray_toggled" : self.change_view_system_tray,
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
             "on_prefs_stats_history_length_changed": self.change_history_length,
-            "on_prefs_console_popup_changed": self.change_console_popup,
             "on_prefs_console_accels_toggled": self.change_console_accels,
             "on_prefs_console_scaling_changed": self.change_console_scaling,
             "on_prefs_close_clicked": self.close,
@@ -124,10 +121,6 @@ class vmmPreferences(vmmGObjectUI):
         self.window.get_widget("prefs-stats-history-len").set_value(
             self.config.get_stats_history_length())
 
-    def refresh_console_popup(self, ignore1=None, ignore2=None,
-                              ignore3=None, ignore4=None):
-        self.window.get_widget("prefs-console-popup").set_active(
-            self.config.get_console_popup())
     def refresh_console_accels(self, ignore1=None, ignore2=None,
                                 ignore3=None, ignore4=None):
         self.window.get_widget("prefs-console-accels").set_active(
@@ -268,8 +261,6 @@ class vmmPreferences(vmmGObjectUI):
     def change_history_length(self, src):
         self.config.set_stats_history_length(src.get_value_as_int())
 
-    def change_console_popup(self, box):
-        self.config.set_console_popup(box.get_active())
     def change_console_accels(self, src):
         self.config.set_console_accels(src.get_active())
     def change_console_scaling(self, box):

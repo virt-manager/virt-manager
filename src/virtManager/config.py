@@ -36,10 +36,6 @@ except Exception, _spice_error:
 from virtManager.keyring import vmmKeyring
 from virtManager.secret import vmmSecret
 
-CONSOLE_POPUP_NEVER = 0
-CONSOLE_POPUP_NEW_ONLY = 1
-CONSOLE_POPUP_ALWAYS = 2
-
 CONSOLE_KEYGRAB_NEVER = 0
 CONSOLE_KEYGRAB_FULLSCREEN = 1
 CONSOLE_KEYGRAB_MOUSEOVER = 2
@@ -464,16 +460,6 @@ class vmmConfig(object):
                                     cb, userdata)
 
     # VM Console preferences
-    def on_console_popup_changed(self, callback):
-        return self.conf.notify_add(self.conf_dir + "/console/popup", callback)
-    def get_console_popup(self):
-        console_pref = self.conf.get_int(self.conf_dir + "/console/popup")
-        if console_pref == None:
-            console_pref = 0
-        return console_pref
-    def set_console_popup(self, pref):
-        self.conf.set_int(self.conf_dir + "/console/popup", pref)
-
     def on_console_accels_changed(self, callback):
         return self.conf.notify_add(self.conf_dir + "/console/enable-accels", callback)
     def get_console_accels(self):
