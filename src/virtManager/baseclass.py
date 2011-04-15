@@ -42,7 +42,10 @@ class vmmGObject(gobject.GObject):
         self._gconf_handles = []
 
         self.object_key = str(self)
-        self.config.add_object(self.object_key)
+
+        # Config might not be available if we error early in startup
+        if self.config:
+            self.config.add_object(self.object_key)
 
     def cleanup(self):
         # Do any cleanup required to drop reference counts so object is
@@ -97,7 +100,8 @@ class vmmGObject(gobject.GObject):
             getattr(gobject.GObject, "__del__")(self)
 
         try:
-            self.config.remove_object(self.object_key)
+            if self.config:
+                self.config.remove_object(self.object_key)
         except:
             logging.exception("Error removing %s" % self.object_key)
 
