@@ -920,7 +920,6 @@ class vmmEngine(vmmGObject):
 
         newvm.save(file_to_save, meter=meter)
 
-
     def _do_restore_domain(self, src, uri):
         conn = self._lookup_connection(uri)
         if conn.is_remote():
@@ -936,22 +935,12 @@ class vmmEngine(vmmGObject):
         if not path:
             return
 
-        progWin = vmmAsyncJob(self._restore_saved_callback,
-                    [path, conn],
-                    _("Restoring Virtual Machine"),
-                    _("Restoring virtual machine memory from disk"),
-                    src.topwin)
-        error, details = progWin.run()
+        def cb():
+            newconn = util.dup_conn(conn)
+            newconn.restore(path)
 
-        if error is not None:
-            error = _("Error restoring domain: %s") % error
-            src.err.show_err(error,
-                             details=details)
-
-    def _restore_saved_callback(self, asyncjob, file_to_load, conn):
-        ignore = asyncjob
-        newconn = util.dup_conn(conn)
-        newconn.restore(file_to_load)
+        vmmAsyncJob.simple_async_noshow(cb, [], src,
+                                        _("Error restoring domain"))
 
     def _do_destroy_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
@@ -966,10 +955,8 @@ class vmmEngine(vmmGObject):
             return
 
         logging.debug("Destroying vm '%s'." % vm.get_name())
-        try:
-            vm.destroy()
-        except Exception, e:
-            src.err.show_err(_("Error shutting down domain: %s" % str(e)))
+        vmmAsyncJob.simple_async_noshow(vm.destroy, [], src,
+                                        _("Error shutting down domain"))
 
     def _do_suspend_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
@@ -982,20 +969,16 @@ class vmmEngine(vmmGObject):
             return
 
         logging.debug("Pausing vm '%s'." % vm.get_name())
-        try:
-            vm.suspend()
-        except Exception, e:
-            src.err.show_err(_("Error pausing domain: %s" % str(e)))
+        vmmAsyncJob.simple_async_noshow(vm.suspend, [], src,
+                                        _("Error pausing domain"))
 
     def _do_resume_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
         vm = conn.get_vm(uuid)
 
         logging.debug("Unpausing vm '%s'." % vm.get_name())
-        try:
-            vm.resume()
-        except Exception, e:
-            src.err.show_err(_("Error unpausing domain: %s" % str(e)))
+        vmmAsyncJob.simple_async_noshow(vm.resume, [], src,
+                                        _("Error unpausing domain"))
 
     def _do_run_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
@@ -1029,10 +1012,8 @@ class vmmEngine(vmmGObject):
             return
 
         logging.debug("Shutting down vm '%s'." % vm.get_name())
-        try:
-            vm.shutdown()
-        except Exception, e:
-            src.err.show_err(_("Error shutting down domain: %s" % str(e)))
+        vmmAsyncJob.simple_async_noshow(vm.shutdown, [], src,
+                                        _("Error shutting down domain"))
 
     def _do_reboot_domain(self, src, uri, uuid):
         conn = self._lookup_connection(uri)
@@ -1045,28 +1026,32 @@ class vmmEngine(vmmGObject):
             return
 
         logging.debug("Rebooting vm '%s'." % vm.get_name())
-        no_support = False
-        reboot_err = None
-        try:
-            vm.reboot()
-        except Exception, reboot_err:
-            no_support = virtinst.support.is_error_nosupport(reboot_err)
+
+        def reboot_cb():
+            no_support = False
+            reboot_err = None
+            try:
+                vm.reboot()
+            except Exception, reboot_err:
+                no_support = virtinst.support.is_error_nosupport(reboot_err)
+                if not no_support:
+                    src.err.show_err(_("Error rebooting domain: %s" %
+                                     str(reboot_err)))
+
             if not no_support:
+                return
+
+            # Reboot isn't supported. Let's try to emulate it
+            logging.debug("Hypervisor doesn't support reboot, let's fake it")
+            try:
+                vm.manual_reboot()
+            except:
+                logging.exception("Could not fake a reboot")
+
+                # Raise the original error message
                 src.err.show_err(_("Error rebooting domain: %s" %
                                  str(reboot_err)))
 
-        if not no_support:
-            return
-
-        # Reboot isn't supported. Let's try to emulate it
-        logging.debug("Hypervisor doesn't support reboot, let's fake it")
-        try:
-            vm.manual_reboot()
-        except:
-            logging.exception("Could not fake a reboot")
-
-            # Raise the original error message
-            src.err.show_err(_("Error rebooting domain: %s" %
-                             str(reboot_err)))
+        vmmAsyncJob.simple_async_noshow(reboot_cb, [], src, "")
 
 vmmGObject.type_register(vmmEngine)

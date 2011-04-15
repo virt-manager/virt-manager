@@ -28,6 +28,7 @@ from virtinst import Interface
 
 from virtManager import uihelpers
 from virtManager import util
+from virtManager.asyncjob import vmmAsyncJob
 from virtManager.connection import vmmConnection
 from virtManager.createnet import vmmCreateNetwork
 from virtManager.createpool import vmmCreatePool
@@ -432,10 +433,8 @@ class vmmHost(vmmGObjectUI):
             return
 
         logging.debug("Deleting network '%s'" % net.get_name())
-        try:
-            net.delete()
-        except Exception, e:
-            self.err.show_err(_("Error deleting network: %s") % str(e))
+        vmmAsyncJob.simple_async_noshow(net.delete, [], self,
+                            _("Error deleting network '%s'") % net.get_name())
 
     def start_network(self, src_ignore):
         net = self.current_network()
@@ -443,10 +442,8 @@ class vmmHost(vmmGObjectUI):
             return
 
         logging.debug("Starting network '%s'" % net.get_name())
-        try:
-            net.start()
-        except Exception, e:
-            self.err.show_err(_("Error starting network: %s") % str(e))
+        vmmAsyncJob.simple_async_noshow(net.start, [], self,
+                            _("Error starting network '%s'") % net.get_name())
 
     def stop_network(self, src_ignore):
         net = self.current_network()
@@ -454,10 +451,8 @@ class vmmHost(vmmGObjectUI):
             return
 
         logging.debug("Stopping network '%s'" % net.get_name())
-        try:
-            net.stop()
-        except Exception, e:
-            self.err.show_err(_("Error stopping network: %s") % str(e))
+        vmmAsyncJob.simple_async_noshow(net.stop, [], self,
+                            _("Error stopping network '%s'") % net.get_name())
 
     def add_network(self, src_ignore):
         logging.debug("Launching 'Add Network'")
@@ -475,7 +470,8 @@ class vmmHost(vmmGObjectUI):
 
         logging.debug("Applying changes for network '%s'" % net.get_name())
         try:
-            net.set_autostart(self.window.get_widget("net-autostart").get_active())
+            auto = self.window.get_widget("net-autostart").get_active()
+            net.set_autostart(auto)
         except Exception, e:
             self.err.show_err(_("Error setting net autostart: %s") % str(e))
             return
@@ -483,8 +479,8 @@ class vmmHost(vmmGObjectUI):
 
     def net_autostart_changed(self, src_ignore):
         auto = self.window.get_widget("net-autostart").get_active()
-        self.window.get_widget("net-autostart").set_label(auto and \
-                                                          _("On Boot") or \
+        self.window.get_widget("net-autostart").set_label(auto and
+                                                          _("On Boot") or
                                                           _("Never"))
         self.window.get_widget("net-apply").set_sensitive(True)
 
@@ -626,11 +622,8 @@ class vmmHost(vmmGObjectUI):
             return
 
         logging.debug("Stopping pool '%s'" % pool.get_name())
-        try:
-            pool.stop()
-        except Exception, e:
-            self.err.show_err(_("Error starting pool '%s': %s") %
-                               (pool.get_name(), str(e)))
+        vmmAsyncJob.simple_async_noshow(pool.stop, [], self,
+                            _("Error stopping pool '%s'") % pool.get_name())
 
     def start_pool(self, src_ignore):
         pool = self.current_pool()
@@ -638,11 +631,8 @@ class vmmHost(vmmGObjectUI):
             return
 
         logging.debug("Starting pool '%s'" % pool.get_name())
-        try:
-            pool.start()
-        except Exception, e:
-            self.err.show_err(_("Error starting pool '%s': %s") %
-                               (pool.get_name(), str(e)))
+        vmmAsyncJob.simple_async_noshow(pool.start, [], self,
+                            _("Error starting pool '%s'") % pool.get_name())
 
     def delete_pool(self, src_ignore):
         pool = self.current_pool()
@@ -655,23 +645,21 @@ class vmmHost(vmmGObjectUI):
             return
 
         logging.debug("Deleting pool '%s'" % pool.get_name())
-        try:
-            pool.delete()
-        except Exception, e:
-            self.err.show_err(_("Error deleting pool: %s") % str(e))
+        vmmAsyncJob.simple_async_noshow(pool.delete, [], self,
+                            _("Error deleting pool '%s'") % pool.get_name())
 
     def pool_refresh(self, src_ignore):
         pool = self.current_pool()
         if pool is None:
             return
 
-        logging.debug("Refresh pool '%s'" % pool.get_name())
-        try:
+        def cb():
             pool.refresh()
             self.refresh_current_pool()
-        except Exception, e:
-            self.err.show_err(_("Error refreshing pool '%s': %s") %
-                               (pool.get_name(), str(e)))
+
+        logging.debug("Refresh pool '%s'" % pool.get_name())
+        vmmAsyncJob.simple_async_noshow(cb, [], self,
+                            _("Error refreshing pool '%s'") % pool.get_name())
 
     def delete_vol(self, src_ignore):
         vol = self.current_vol()
@@ -683,14 +671,14 @@ class vmmHost(vmmGObjectUI):
         if not result:
             return
 
-        logging.debug("Deleting volume '%s'" % vol.get_name())
-        try:
+        def cb():
             vol.delete()
             self.refresh_current_pool()
-        except Exception, e:
-            self.err.show_err(_("Error deleting volume: %s") % str(e))
-            return
-        self.populate_storage_volumes()
+            self.populate_storage_volumes()
+
+        logging.debug("Deleting volume '%s'" % vol.get_name())
+        vmmAsyncJob.simple_async_noshow(cb, [], self,
+                        _("Error refreshing volume '%s'") % vol.get_name())
 
     def add_pool(self, src_ignore):
         logging.debug("Launching 'Add Pool' wizard")
@@ -913,11 +901,8 @@ class vmmHost(vmmGObjectUI):
             return
 
         logging.debug("Stopping interface '%s'" % interface.get_name())
-        try:
-            interface.stop()
-        except Exception, e:
-            self.err.show_err(_("Error stopping interface '%s': %s") %
-                              (interface.get_name(), str(e)))
+        vmmAsyncJob.simple_async_noshow(interface.stop, [], self,
+                    _("Error stopping interface '%s'") % interface.get_name())
 
     def start_interface(self, src_ignore):
         interface = self.current_interface()
@@ -931,11 +916,8 @@ class vmmHost(vmmGObjectUI):
             return
 
         logging.debug("Starting interface '%s'" % interface.get_name())
-        try:
-            interface.start()
-        except Exception, e:
-            self.err.show_err(_("Error starting interface '%s': %s") %
-                              (interface.get_name(), str(e)))
+        vmmAsyncJob.simple_async_noshow(interface.start, [], self,
+                    _("Error starting interface '%s'") % interface.get_name())
 
     def delete_interface(self, src_ignore):
         interface = self.current_interface()
@@ -949,10 +931,8 @@ class vmmHost(vmmGObjectUI):
             return
 
         logging.debug("Deleting interface '%s'" % interface.get_name())
-        try:
-            interface.delete()
-        except Exception, e:
-            self.err.show_err(_("Error deleting interface: %s") % str(e))
+        vmmAsyncJob.simple_async_noshow(interface.delete, [], self,
+                    _("Error deleting interface '%s'") % interface.get_name())
 
     def add_interface(self, src_ignore):
         logging.debug("Launching 'Add Interface' wizard")
