@@ -637,14 +637,14 @@ class vmmManager(vmmGObjectUI):
 
         do_pause = src.get_active()
 
+        # Set button state back to original value: just let the status
+        # update function fix things for us
+        self.set_pause_state(not do_pause)
+
         if do_pause:
             self.pause_vm(None)
         else:
             self.resume_vm(None)
-
-        # Set button state back to original value: just let the status
-        # update function fix things for us
-        self.set_pause_state(not do_pause)
 
     def start_vm(self, ignore):
         vm = self.current_vm()

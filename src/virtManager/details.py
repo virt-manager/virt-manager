@@ -1227,6 +1227,9 @@ class vmmDetails(vmmGObjectUI):
         if self.ignorePause:
             return
 
+        # Let state handler listener change things if necc.
+        self.set_pause_state(not src.get_active())
+
         if not self.vm.is_paused():
             self.emit("action-suspend-domain",
                       self.vm.get_connection().get_uri(),
@@ -1236,8 +1239,6 @@ class vmmDetails(vmmGObjectUI):
                       self.vm.get_connection().get_uri(),
                       self.vm.get_uuid())
 
-        # Let state handler listener change things if necc.
-        self.set_pause_state(not src.get_active())
 
     def control_vm_run(self, src_ignore):
         self.emit("action-run-domain",
