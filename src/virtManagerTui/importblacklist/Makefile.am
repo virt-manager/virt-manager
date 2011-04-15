@@ -1,6 +1,4 @@
-SUBDIRS = importblacklist
-
-pythondir = $(pkgdatadir)/virtManagerTui
+pythondir = $(pkgdatadir)/virtManagerTui/importblacklist
 python_DATA = $(wildcard $(srcdir)/*.py)
 
 EXTRA_DIST = $(python_DATA)

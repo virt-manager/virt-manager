@@ -118,6 +118,7 @@ AC_OUTPUT(Makefile
           src/Makefile
           src/virtManager/Makefile
           src/virtManagerTui/Makefile
+          src/virtManagerTui/importblacklist/Makefile
           man/Makefile
           tests/Makefile
           virt-manager.spec)

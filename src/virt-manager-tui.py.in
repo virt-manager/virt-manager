@@ -61,7 +61,7 @@ def setup_pypath():
     # First 2 hacks are to point python to local dir for source files in dev,
     # the third is the main path if you have  normal install
     if os.path.exists(os.getcwd() + "/src/virt-manager.py"):
-        pass
+        sys.path.insert(0, os.getcwd() + "/src/virtManagerTui/importblacklist")
     elif os.path.exists(os.getcwd() + "/build/src/virt-manager.py"):
         sys.path.insert(0, os.getcwd() + "/src")
     else:
