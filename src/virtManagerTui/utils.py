@@ -16,14 +16,7 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import logging
 import re
-
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)-8s %(message)s',
-                    datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='/var/log/ovirt-nodeadmin.log',
-                    filemode='w')
 
 def string_is_not_blank(value):
     if len(value) > 0: return True

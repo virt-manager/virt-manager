@@ -28,7 +28,7 @@ import sys
 import traceback
 
 # These are substituted into code based on --prefix given to configure
-appname = "::PACKAGE::"
+appname = "::PACKAGE::-tui"
 appversion = "::VERSION::"
 gettext_app = "virt-manager"
 gettext_dir = "::GETTEXTDIR::"
@@ -112,7 +112,10 @@ def main():
     setup_i18n()
     setup_pypath()
 
+    from virtManager import cli
+
     (options, ignore) = parse_commandline()
+    cli.setup_logging(appname, options.debug)
 
     # Make sure we have a sufficiently new virtinst version, since we are
     # very closely tied to the lib
