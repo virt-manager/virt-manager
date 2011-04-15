@@ -41,7 +41,9 @@ def get_default_url():
     return default_url
 
 class VirtManagerConfig:
-    def __init__(self, filename = "/etc/remote-libvirt.conf"):
+    def __init__(self, filename=None):
+        if filename is None:
+            filename = os.path.expanduser("~/.virt-manager/virt-manager-tui.conf")
         self.__filename = filename
 
     def get_connection_list(self):
