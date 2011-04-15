@@ -974,7 +974,8 @@ class vmmCreate(vmmGObjectUI):
             ntype = row[0]
             key = row[6]
 
-            if ntype == virtinst.VirtualNetworkInterface.TYPE_USER:
+            if (ntype == None or
+                ntype == virtinst.VirtualNetworkInterface.TYPE_USER):
                 show_pxe_warn = True
             elif ntype != virtinst.VirtualNetworkInterface.TYPE_VIRTUAL:
                 show_pxe_warn = False
@@ -982,7 +983,10 @@ class vmmCreate(vmmGObjectUI):
                 obj = self.conn.get_net(key)
                 show_pxe_warn = not obj.can_pxe()
 
-        self.set_net_warn(show_pxe_warn and pxe_install,
+        if not (show_pxe_warn and pxe_install):
+            return
+
+        self.set_net_warn(True,
                           _("Network selection does not support PXE"), False)
 
     def hv_changed(self, src):
