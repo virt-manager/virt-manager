@@ -1100,7 +1100,7 @@ class vmmDomain(vmmDomainBase):
         # Request a shutdown
         self.shutdown()
 
-        self.reboot_listener = util.connect_opt_out(self, "status-changed",
+        self.reboot_listener = self.connect_opt_out("status-changed",
                                                     reboot_listener, self)
 
     def shutdown(self):

@@ -305,33 +305,6 @@ def pretty_hv(gtype, domtype):
 
     return label
 
-def connect_once(obj, signal, func, *args):
-    id_list = []
-
-    def wrap_func(*wrapargs):
-        if id_list:
-            obj.disconnect(id_list[0])
-
-        return func(*wrapargs)
-
-    conn_id = obj.connect(signal, wrap_func, *args)
-    id_list.append(conn_id)
-
-    return conn_id
-
-def connect_opt_out(obj, signal, func, *args):
-    id_list = []
-
-    def wrap_func(*wrapargs):
-        ret = func(*wrapargs)
-        if ret and id_list:
-            obj.disconnect(id_list[0])
-
-    conn_id = obj.connect(signal, wrap_func, *args)
-    id_list.append(conn_id)
-
-    return conn_id
-
 def idle_emit(self, signal, *args):
     """
     Safe wrapper for using 'self.emit' with gobject.idle_add

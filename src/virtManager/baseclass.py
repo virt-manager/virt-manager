@@ -95,6 +95,33 @@ class vmmGObject(gobject.GObject):
         from virtManager import halhelper
         return halhelper.get_hal_helper()
 
+    def connect_once(self, signal, func, *args):
+        id_list = []
+
+        def wrap_func(*wrapargs):
+            if id_list:
+                self.disconnect(id_list[0])
+
+            return func(*wrapargs)
+
+        conn_id = self.connect(signal, wrap_func, *args)
+        id_list.append(conn_id)
+
+        return conn_id
+
+    def connect_opt_out(self, signal, func, *args):
+        id_list = []
+
+        def wrap_func(*wrapargs):
+            ret = func(*wrapargs)
+            if ret and id_list:
+                self.disconnect(id_list[0])
+
+        conn_id = self.connect(signal, wrap_func, *args)
+        id_list.append(conn_id)
+
+        return conn_id
+
     def __del__(self):
         if hasattr(gobject.GObject, "__del__"):
             getattr(gobject.GObject, "__del__")(self)

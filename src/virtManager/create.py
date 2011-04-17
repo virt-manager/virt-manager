@@ -1691,8 +1691,8 @@ class vmmCreate(vmmGObjectUI):
         else:
             # Register a status listener, which will restart the
             # guest after the install has finished
-            util.connect_opt_out(vm, "status-changed",
-                                 self.check_install_status, guest)
+            vm.connect_opt_out("status-changed",
+                               self.check_install_status, guest)
 
 
     def check_install_status(self, vm, ignore1, ignore2, virtinst_guest=None):
@@ -1714,8 +1714,8 @@ class vmmCreate(vmmGObjectUI):
                     # will force one final restart.
                     virtinst_guest.continue_install()
 
-                    util.connect_opt_out(vm, "status-changed",
-                                         self.check_install_status, None)
+                    vm.connect_opt_out("status-changed",
+                                       self.check_install_status, None)
                     return True
 
             if vm.get_install_abort():
