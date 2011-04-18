@@ -18,8 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import gtk
-
 import libvirt
 import libxml2
 
@@ -131,6 +129,8 @@ def get_default_path(conn, name):
 def tooltip_wrapper(obj, txt, func="set_tooltip_text"):
     # Catch & ignore errors - set_tooltip_* is in gtk >= 2.12
     # and we can easily work with lower versions
+    import gtk
+
     try:
         funcptr = getattr(obj, func)
         funcptr(txt)
@@ -161,7 +161,7 @@ def xml_parse_wrapper(xml, parse_func, *args, **kwargs):
 
 
 def browse_local(parent, dialog_name, conn, start_folder=None,
-                 _type=None, dialog_type=gtk.FILE_CHOOSER_ACTION_OPEN,
+                 _type=None, dialog_type=None,
                  confirm_func=None, browse_reason=None):
     """
     Helper function for launching a filechooser
@@ -178,10 +178,14 @@ def browse_local(parent, dialog_name, conn, start_folder=None,
         value, and store the user chosen path.
 
     """
+    import gtk
 
     # Initial setup
     overwrite_confirm = False
     choose_button = gtk.STOCK_OPEN
+
+    if dialog_type is None:
+        dialog_type = gtk.FILE_CHOOSER_ACTION_OPEN
     if dialog_type == gtk.FILE_CHOOSER_ACTION_SAVE:
         choose_button = gtk.STOCK_SAVE
         overwrite_confirm = True
@@ -361,6 +365,8 @@ def chkbox_helper(src, getcb, setcb, text1, text2=None):
     Helper to prompt user about proceeding with an operation
     Returns True if operation should be cancelled
     """
+    import gtk
+
     do_prompt = getcb()
     if not do_prompt:
         return False
