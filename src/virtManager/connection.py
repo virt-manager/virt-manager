@@ -1152,13 +1152,13 @@ class vmmConnection(vmmGObject):
         # We want to kill off this thread asap, so schedule a gobject
         # idle even to inform the UI of result
         logging.debug("Background open thread complete, scheduling notify")
-        util.safe_idle_add(self._open_notify)
+        self.safe_idle_add(self._open_notify)
         self.connectThread = None
 
     def _open_notify(self):
         logging.debug("Notifying open result")
 
-        util.safe_idle_add(util.idle_emit, self, "state-changed")
+        self.idle_emit("state-changed")
 
         if self.state == self.STATE_ACTIVE:
             caps = self.get_capabilities_xml()
@@ -1173,8 +1173,7 @@ class vmmConnection(vmmGObject):
                                              self.vms.keys())
 
         if self.state == self.STATE_DISCONNECTED:
-            util.safe_idle_add(util.idle_emit, self, "connect-error",
-                               self.connectError)
+            self.idle_emit("connect-error", self.connectError)
             self.connectError = None
 
 
@@ -1473,7 +1472,7 @@ class vmmConnection(vmmGObject):
             for name in newNodedevs:
                 self.emit("nodedev-added", self.uri, name)
 
-        util.safe_idle_add(tick_send_signals)
+        self.safe_idle_add(tick_send_signals)
 
         # Finally, we sample each domain
         now = time()
@@ -1496,7 +1495,7 @@ class vmmConnection(vmmGObject):
         if not noStatsUpdate:
             self._recalculate_stats(now, updateVMs)
 
-            util.safe_idle_add(util.idle_emit, self, "resources-sampled")
+            self.idle_emit("resources-sampled")
 
         return 1
 

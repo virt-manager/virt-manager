@@ -19,7 +19,6 @@
 #
 
 import gtk
-import gobject
 
 import libvirt
 import libxml2
@@ -304,32 +303,6 @@ def pretty_hv(gtype, domtype):
             label = "test (hvm)"
 
     return label
-
-def idle_emit(self, signal, *args):
-    """
-    Safe wrapper for using 'self.emit' with gobject.idle_add
-    """
-    self.emit(signal, *args)
-    return False
-
-def _safe_wrapper(func, *args):
-    gtk.gdk.threads_enter()
-    try:
-        return func(*args)
-    finally:
-        gtk.gdk.threads_leave()
-
-def safe_idle_add(func, *args):
-    """
-    Make sure idle functions are run thread safe
-    """
-    return gobject.idle_add(_safe_wrapper, func, *args)
-
-def safe_timeout_add(timeout, func, *args):
-    """
-    Make sure timeout functions are run thread safe
-    """
-    return gobject.timeout_add(timeout, _safe_wrapper, func, *args)
 
 def uuidstr(rawuuid):
     hx = ['0', '1', '2', '3', '4', '5', '6', '7',

@@ -23,7 +23,6 @@ import logging
 
 import virtinst
 
-from virtManager import util
 from virtManager.baseclass import vmmGObject
 
 MEDIA_FLOPPY = "floppy"
@@ -140,7 +139,7 @@ class vmmMediaDevice(vmmGObject):
         if self.poll_signal:
             return
 
-        self.poll_signal = util.safe_timeout_add(MEDIA_TIMEOUT * 1000,
+        self.poll_signal = self.safe_timeout_add(MEDIA_TIMEOUT * 1000,
                                                  self._poll_for_media)
         self.add_gobject_timeout(self.poll_signal)
 

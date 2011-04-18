@@ -440,7 +440,7 @@ class vmmEngine(vmmGObject):
                     logging.exception("Could not refresh connection %s." % uri)
                     logging.debug("Closing connection since libvirtd "
                                   "appears to have stopped.")
-                    util.safe_idle_add(conn.close)
+                    self.safe_idle_add(conn.close)
                 else:
                     raise
         return 1

@@ -27,6 +27,13 @@ import gobject
 
 import virtManager.config
 
+def _safe_wrapper(func, *args):
+    gtk.gdk.threads_enter()
+    try:
+        return func(*args)
+    finally:
+        gtk.gdk.threads_leave()
+
 class vmmGObject(gobject.GObject):
 
     @staticmethod
@@ -121,6 +128,28 @@ class vmmGObject(gobject.GObject):
         id_list.append(conn_id)
 
         return conn_id
+
+    def idle_emit(self, signal, *args):
+        """
+        Safe wrapper for using 'self.emit' with gobject.idle_add
+        """
+        def emitwrap(_s, *_a):
+            self.emit(_s, *_a)
+            return False
+
+        self.safe_idle_add(emitwrap, signal, *args)
+
+    def safe_idle_add(self, func, *args):
+        """
+        Make sure idle functions are run thread safe
+        """
+        return gobject.idle_add(_safe_wrapper, func, *args)
+
+    def safe_timeout_add(self, timeout, func, *args):
+        """
+        Make sure timeout functions are run thread safe
+        """
+        return gobject.timeout_add(timeout, _safe_wrapper, func, *args)
 
     def __del__(self):
         if hasattr(gobject.GObject, "__del__"):

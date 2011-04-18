@@ -384,7 +384,7 @@ class vmmCreate(vmmGObjectUI):
         label_widget = self.window.get_widget("phys-hd-label")
         label_widget.set_markup("")
         if not self.host_storage_timer:
-            self.host_storage_timer = util.safe_timeout_add(3 * 1000,
+            self.host_storage_timer = self.safe_timeout_add(3 * 1000,
                                                     uihelpers.host_space_tick,
                                                     self.conn,
                                                     label_widget)
@@ -1841,7 +1841,7 @@ class vmmCreate(vmmGObjectUI):
             self.mediaDetected = True
             logging.debug("Leaving OS detection thread.")
             if forward:
-                util.safe_idle_add(self.forward, ())
+                self.safe_idle_add(self.forward, ())
 
         return
 

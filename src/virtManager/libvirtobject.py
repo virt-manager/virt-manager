@@ -25,7 +25,6 @@ import logging
 
 import libxml2
 
-from virtManager import util
 from virtManager.baseclass import vmmGObject
 
 def _sanitize_xml(xml):
@@ -111,7 +110,7 @@ class vmmLibvirtObject(vmmGObject):
         self._is_xml_valid = True
 
         if origxml != self._xml or forcesignal:
-            util.safe_idle_add(util.idle_emit, self, "config-changed")
+            self.idle_emit("config-changed")
 
     ######################################
     # Internal XML cache/update routines #

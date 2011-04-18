@@ -1372,8 +1372,7 @@ class vmmDomain(vmmDomainBase):
         # are operating with fresh XML
         self.refresh_xml()
 
-        util.safe_idle_add(util.idle_emit, self, "status-changed",
-                           oldstatus, status)
+        self.idle_emit("status-changed", oldstatus, status)
 
     ##################
     # Stats handling #
@@ -1538,7 +1537,7 @@ class vmmDomain(vmmDomainBase):
 
         self.record.insert(0, newStats)
         self._update_status(info[0])
-        util.safe_idle_add(util.idle_emit, self, "resources-sampled")
+        self.idle_emit("resources-sampled")
 
 
 class vmmDomainVirtinst(vmmDomainBase):
@@ -1577,7 +1576,7 @@ class vmmDomainVirtinst(vmmDomainBase):
     def _define(self, newxml):
         ignore = newxml
         self._orig_xml = None
-        util.safe_idle_add(util.idle_emit, self, "config-changed")
+        self.idle_emit("config-changed")
 
     def _redefine_xml(self, newxml):
         # We need to cache origxml in order to have something to diff against
@@ -1614,7 +1613,7 @@ class vmmDomainVirtinst(vmmDomainBase):
     # Device/XML hotplug implementations
     def set_autostart(self, val):
         self._backend.autostart = bool(val)
-        util.safe_idle_add(util.idle_emit, self, "config-changed")
+        self.idle_emit("config-changed")
 
     def define_name(self, newname):
         def change(guest):

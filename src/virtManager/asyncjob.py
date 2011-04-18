@@ -27,7 +27,6 @@ import gobject
 
 import libvirt
 
-from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
 
 # This thin wrapper only exists so we can put debugging
@@ -136,7 +135,7 @@ class vmmAsyncJob(vmmGObjectUI):
         self.topwin.set_title(title)
 
     def run(self):
-        timer = util.safe_timeout_add(100, self.exit_if_necessary)
+        timer = self.safe_timeout_add(100, self.exit_if_necessary)
 
         if self.show_progress:
             self.topwin.present()

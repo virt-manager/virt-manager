@@ -207,7 +207,7 @@ class vmmManager(vmmGObjectUI):
                                         vmlist.get_model().get_iter_first())
 
         # Queue up the default connection detector
-        util.safe_idle_add(self.engine.add_default_connection)
+        self.safe_idle_add(self.engine.add_default_connection)
 
     ##################
     # Common methods #
