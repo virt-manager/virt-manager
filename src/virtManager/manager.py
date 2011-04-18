@@ -18,10 +18,9 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
-
 import logging
+
+import gtk
 
 import virtManager.uihelpers as uihelpers
 from virtManager.connection import vmmConnection
@@ -68,55 +67,6 @@ gtk.rc_parse_string(rcstring)
 
 
 class vmmManager(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-connect": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, []),
-        "action-show-console": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str, str)),
-        "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str, str)),
-        "action-refresh-terminal": (gobject.SIGNAL_RUN_FIRST,
-                                    gobject.TYPE_NONE, (str, str)),
-        "action-show-details": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str, str)),
-        "action-show-about": (gobject.SIGNAL_RUN_FIRST,
-                              gobject.TYPE_NONE, []),
-        "action-show-host": (gobject.SIGNAL_RUN_FIRST,
-                              gobject.TYPE_NONE, [str]),
-        "action-show-preferences": (gobject.SIGNAL_RUN_FIRST,
-                                    gobject.TYPE_NONE, []),
-        "action-show-create": (gobject.SIGNAL_RUN_FIRST,
-                               gobject.TYPE_NONE, [str]),
-        "action-suspend-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str, str)),
-        "action-resume-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str, str)),
-        "action-run-domain": (gobject.SIGNAL_RUN_FIRST,
-                              gobject.TYPE_NONE, (str, str)),
-        "action-shutdown-domain": (gobject.SIGNAL_RUN_FIRST,
-                                   gobject.TYPE_NONE, (str, str)),
-        "action-reboot-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str, str)),
-        "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str, str)),
-        "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
-                               gobject.TYPE_NONE, (str, str)),
-        "action-connect": (gobject.SIGNAL_RUN_FIRST,
-                           gobject.TYPE_NONE, [str]),
-        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                               gobject.TYPE_NONE, [str]),
-        "action-migrate-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str, str)),
-        "action-clone-domain": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str, str)),
-        "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
-                            gobject.TYPE_NONE, []),
-        "manager-closed": (gobject.SIGNAL_RUN_FIRST,
-                           gobject.TYPE_NONE, ()),
-        "manager-opened": (gobject.SIGNAL_RUN_FIRST,
-                           gobject.TYPE_NONE, ()),
-    }
-
     def __init__(self, engine):
         vmmGObjectUI.__init__(self, "vmm-manager.glade", "vmm-manager")
         self.engine = engine
@@ -1156,3 +1106,26 @@ class vmmManager(vmmGObjectUI):
         cell.set_property('data_array', data)
 
 vmmGObjectUI.type_register(vmmManager)
+vmmManager.signal_new(vmmManager, "action-show-connect", [])
+vmmManager.signal_new(vmmManager, "action-show-console", [str, str])
+vmmManager.signal_new(vmmManager, "action-show-terminal", [str, str])
+vmmManager.signal_new(vmmManager, "action-refresh-terminal", [str, str])
+vmmManager.signal_new(vmmManager, "action-show-details", [str, str])
+vmmManager.signal_new(vmmManager, "action-show-about", [])
+vmmManager.signal_new(vmmManager, "action-show-host", [str])
+vmmManager.signal_new(vmmManager, "action-show-preferences", [])
+vmmManager.signal_new(vmmManager, "action-show-create", [str])
+vmmManager.signal_new(vmmManager, "action-suspend-domain", [str, str])
+vmmManager.signal_new(vmmManager, "action-resume-domain", [str, str])
+vmmManager.signal_new(vmmManager, "action-run-domain", [str, str])
+vmmManager.signal_new(vmmManager, "action-shutdown-domain", [str, str])
+vmmManager.signal_new(vmmManager, "action-reboot-domain", [str, str])
+vmmManager.signal_new(vmmManager, "action-destroy-domain", [str, str])
+vmmManager.signal_new(vmmManager, "action-save-domain", [str, str])
+vmmManager.signal_new(vmmManager, "action-connect", [str])
+vmmManager.signal_new(vmmManager, "action-show-help", [str])
+vmmManager.signal_new(vmmManager, "action-migrate-domain", [str, str])
+vmmManager.signal_new(vmmManager, "action-clone-domain", [str, str])
+vmmManager.signal_new(vmmManager, "action-exit-app", [])
+vmmManager.signal_new(vmmManager, "manager-closed", [])
+vmmManager.signal_new(vmmManager, "manager-opened", [])

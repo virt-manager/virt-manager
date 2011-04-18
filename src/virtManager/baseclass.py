@@ -41,6 +41,13 @@ class vmmGObject(gobject.GObject):
     def type_register(*args, **kwargs):
         gobject.type_register(*args, **kwargs)
 
+    @staticmethod
+    def signal_new(klass, signal, args):
+        gobject.signal_new(signal, klass,
+                           gobject.SIGNAL_RUN_FIRST,
+                           gobject.TYPE_NONE,
+                           args)
+
     def __init__(self):
         gobject.GObject.__init__(self)
         self.config = util.running_config

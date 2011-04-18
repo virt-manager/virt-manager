@@ -21,9 +21,7 @@
 import logging
 import os
 
-import gobject
 import gtk
-
 
 from virtManager.baseclass import vmmGObjectUI
 from virtManager.asyncjob import vmmAsyncJob
@@ -63,12 +61,65 @@ NETWORK_INFO_NEW_MAC = 2
 # XXX: What to do for cleanup if clone fails?
 # XXX: Disable mouse scroll for combo boxes
 
-class vmmCloneVM(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                             gobject.TYPE_NONE, [str]),
-    }
+def can_we_clone(conn, vol, path):
+    """Is the passed path even clone-able"""
+    ret = True
+    msg = None
 
+    if not path:
+        msg = _("No storage to clone.")
+
+    elif vol:
+        # Managed storage
+        if not virtinst.Storage.is_create_vol_from_supported(conn.vmm):
+            if conn.is_remote() or not os.access(path, os.R_OK):
+                msg = _("Connection does not support managed storage cloning.")
+    else:
+        is_dev = path.startswith("/dev")
+        if conn.is_remote():
+            msg = _("Cannot clone unmanaged remote storage.")
+        elif not os.access(path, os.R_OK):
+            if is_dev:
+                msg = _("Block devices to clone must be libvirt\n"
+                        "managed storage volumes.")
+            else:
+                msg = _("No write access to parent directory.")
+        elif not os.path.exists(path):
+            msg = _("Path does not exist.")
+
+    if msg:
+        ret = False
+
+    return (ret, msg)
+
+def do_we_default(conn, vol, path, ro, shared, devtype):
+    """ Returns (do we clone by default?, info string if not)"""
+    ignore = conn
+    info = ""
+
+    def append_str(str1, str2, delim=", "):
+        if not str2:
+            return str1
+        if str1:
+            str1 += delim
+        str1 += str2
+        return str1
+
+    if (devtype == virtinst.VirtualDisk.DEVICE_CDROM or
+        devtype == virtinst.VirtualDisk.DEVICE_FLOPPY):
+        info = append_str(info, _("Removable"))
+
+    if ro:
+        info = append_str(info, _("Read Only"))
+    elif not vol and path and not os.access(path, os.W_OK):
+        info = append_str(info, _("No write access"))
+
+    if shared:
+        info = append_str(info, _("Shareable"))
+
+    return (not info, info)
+
+class vmmCloneVM(vmmGObjectUI):
     def __init__(self, orig_vm):
         vmmGObjectUI.__init__(self, "vmm-clone.glade", "vmm-clone")
         self.orig_vm = orig_vm
@@ -812,61 +863,4 @@ class vmmCloneVM(vmmGObjectUI):
         return
 
 vmmGObjectUI.type_register(vmmCloneVM)
-
-def can_we_clone(conn, vol, path):
-    """Is the passed path even clone-able"""
-    ret = True
-    msg = None
-
-    if not path:
-        msg = _("No storage to clone.")
-
-    elif vol:
-        # Managed storage
-        if not virtinst.Storage.is_create_vol_from_supported(conn.vmm):
-            if conn.is_remote() or not os.access(path, os.R_OK):
-                msg = _("Connection does not support managed storage cloning.")
-    else:
-        is_dev = path.startswith("/dev")
-        if conn.is_remote():
-            msg = _("Cannot clone unmanaged remote storage.")
-        elif not os.access(path, os.R_OK):
-            if is_dev:
-                msg = _("Block devices to clone must be libvirt\n"
-                        "managed storage volumes.")
-            else:
-                msg = _("No write access to parent directory.")
-        elif not os.path.exists(path):
-            msg = _("Path does not exist.")
-
-    if msg:
-        ret = False
-
-    return (ret, msg)
-
-def do_we_default(conn, vol, path, ro, shared, devtype):
-    """ Returns (do we clone by default?, info string if not)"""
-    ignore = conn
-    info = ""
-
-    def append_str(str1, str2, delim=", "):
-        if not str2:
-            return str1
-        if str1:
-            str1 += delim
-        str1 += str2
-        return str1
-
-    if (devtype == virtinst.VirtualDisk.DEVICE_CDROM or
-        devtype == virtinst.VirtualDisk.DEVICE_FLOPPY):
-        info = append_str(info, _("Removable"))
-
-    if ro:
-        info = append_str(info, _("Read Only"))
-    elif not vol and path and not os.access(path, os.W_OK):
-        info = append_str(info, _("No write access"))
-
-    if shared:
-        info = append_str(info, _("Shareable"))
-
-    return (not info, info)
+vmmCloneVM.signal_new(vmmCloneVM, "action-show-help", [str])

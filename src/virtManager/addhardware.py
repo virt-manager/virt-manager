@@ -75,10 +75,6 @@ def set_list_selection(widget, rownum):
     selection.select_path(path)
 
 class vmmAddHardware(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, [str]),
-        }
     def __init__(self, vm):
         vmmGObjectUI.__init__(self,
                               "vmm-add-hardware.glade", "vmm-add-hardware")
@@ -1272,4 +1268,5 @@ class vmmAddHardware(vmmGObjectUI):
         elif page == PAGE_NETWORK:
             self.emit("action-show-help", "virt-manager-network")
 
-gobject.type_register(vmmAddHardware)
+vmmAddHardware.type_register(vmmAddHardware)
+vmmAddHardware.signal_new(vmmAddHardware, "action-show-help", [str])

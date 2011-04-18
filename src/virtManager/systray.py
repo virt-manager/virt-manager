@@ -20,7 +20,6 @@
 
 import logging
 
-import gobject
 import gtk
 
 from virtManager.baseclass import vmmGObject
@@ -43,33 +42,6 @@ def build_image_menu_item(label):
     return menu_item
 
 class vmmSystray(vmmGObject):
-    __gsignals__ = {
-        "action-toggle-manager": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, []),
-        "action-view-manager": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, []),
-        "action-suspend-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str, str)),
-        "action-resume-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str, str)),
-        "action-run-domain": (gobject.SIGNAL_RUN_FIRST,
-                              gobject.TYPE_NONE, (str, str)),
-        "action-shutdown-domain": (gobject.SIGNAL_RUN_FIRST,
-                                   gobject.TYPE_NONE, (str, str)),
-        "action-reboot-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str, str)),
-        "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str, str)),
-        "action-show-host": (gobject.SIGNAL_RUN_FIRST,
-                              gobject.TYPE_NONE, [str]),
-        "action-show-details": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str, str)),
-        "action-show-console": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str, str)),
-        "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
-                            gobject.TYPE_NONE, []),
-    }
-
     def __init__(self, engine):
         vmmGObject.__init__(self)
 
@@ -457,3 +429,15 @@ class vmmSystray(vmmGObject):
         self.emit("action-exit-app")
 
 vmmGObject.type_register(vmmSystray)
+vmmSystray.signal_new(vmmSystray, "action-toggle-manager", [])
+vmmSystray.signal_new(vmmSystray, "action-view-manager", [])
+vmmSystray.signal_new(vmmSystray, "action-suspend-domain", [str, str])
+vmmSystray.signal_new(vmmSystray, "action-resume-domain", [str, str])
+vmmSystray.signal_new(vmmSystray, "action-run-domain", [str, str])
+vmmSystray.signal_new(vmmSystray, "action-shutdown-domain", [str, str])
+vmmSystray.signal_new(vmmSystray, "action-reboot-domain", [str, str])
+vmmSystray.signal_new(vmmSystray, "action-destroy-domain", [str, str])
+vmmSystray.signal_new(vmmSystray, "action-show-host", [str])
+vmmSystray.signal_new(vmmSystray, "action-show-details", [str, str])
+vmmSystray.signal_new(vmmSystray, "action-show-console", [str, str])
+vmmSystray.signal_new(vmmSystray, "action-exit-app", [])

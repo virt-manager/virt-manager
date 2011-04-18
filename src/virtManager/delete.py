@@ -42,9 +42,6 @@ STORAGE_ROW_ICON_SIZE = 6
 STORAGE_ROW_TOOLTIP = 7
 
 class vmmDeleteDialog(vmmGObjectUI):
-    __gsignals__ = {
-    }
-
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-delete.glade", "vmm-delete")
         self.vm = None

@@ -29,8 +29,7 @@ try:
 except:
     logging.warning("gnomekeyring bindings not installed, no keyring support")
 
-class vmmKeyring:
-
+class vmmKeyring(object):
     def __init__(self):
         self.keyring = None
         if not haveKeyring:

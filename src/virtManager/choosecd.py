@@ -20,8 +20,6 @@
 
 import logging
 
-import gobject
-
 import virtManager.uihelpers as uihelpers
 import virtManager.util as util
 from virtManager.baseclass import vmmGObjectUI
@@ -29,13 +27,6 @@ from virtManager.mediadev import MEDIA_FLOPPY
 from virtManager.storagebrowse import vmmStorageBrowser
 
 class vmmChooseCD(vmmGObjectUI):
-    __gsignals__ = {
-        "cdrom-chosen": (gobject.SIGNAL_RUN_FIRST,
-                         gobject.TYPE_NONE,
-                         # dev, new path
-                         (gobject.TYPE_PYOBJECT, str)),
-    }
-
     def __init__(self, dev_id_info, connection, media_type):
         vmmGObjectUI.__init__(self, "vmm-choose-cd.glade", "vmm-choose-cd")
 
@@ -170,3 +161,4 @@ class vmmChooseCD(vmmGObjectUI):
         self.storage_browser.show(self.topwin, self.conn)
 
 vmmGObjectUI.type_register(vmmChooseCD)
+vmmChooseCD.signal_new(vmmChooseCD, "cdrom-chosen", [object, str])

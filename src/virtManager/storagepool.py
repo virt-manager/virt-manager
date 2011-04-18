@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
 import virtinst
 
 from virtManager import util
@@ -26,10 +25,6 @@ from virtManager.libvirtobject import vmmLibvirtObject
 from virtManager.storagevol import vmmStorageVolume
 
 class vmmStoragePool(vmmLibvirtObject):
-    __gsignals__ = {
-        "refreshed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, []),
-    }
-
     def __init__(self, connection, pool, uuid, active):
         vmmLibvirtObject.__init__(self, connection)
 
@@ -140,3 +135,4 @@ class vmmStoragePool(vmmLibvirtObject):
         self._volumes = new_vol_list
 
 vmmLibvirtObject.type_register(vmmStoragePool)
+vmmStoragePool.signal_new(vmmStoragePool, "refreshed", [])

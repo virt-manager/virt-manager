@@ -18,12 +18,13 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
-import virtinst
 import logging
-import dbus
 import socket
+
+import gtk
+
+import virtinst
+import dbus
 
 from virtManager.baseclass import vmmGObjectUI
 
@@ -47,13 +48,6 @@ def default_conn_user(conn):
     return current_user()
 
 class vmmConnect(vmmGObjectUI):
-    __gsignals__ = {
-        "completed": (gobject.SIGNAL_RUN_FIRST,
-                      gobject.TYPE_NONE, (str, object, object)),
-        "cancelled": (gobject.SIGNAL_RUN_FIRST,
-                      gobject.TYPE_NONE, ())
-        }
-
     def __init__(self):
         vmmGObjectUI.__init__(self,
                               "vmm-open-connection.glade",
@@ -404,3 +398,5 @@ class vmmConnect(vmmGObjectUI):
 
 
 vmmGObjectUI.type_register(vmmConnect)
+vmmConnect.signal_new(vmmConnect, "completed", [str, object, object])
+vmmConnect.signal_new(vmmConnect, "cancelled", [])

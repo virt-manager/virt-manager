@@ -18,10 +18,9 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
-
 import logging
+
+import gtk
 
 import virtinst
 
@@ -31,11 +30,6 @@ from virtManager.createvol import vmmCreateVolume
 from virtManager.baseclass import vmmGObjectUI
 
 class vmmStorageBrowser(vmmGObjectUI):
-    __gsignals__ = {
-        "storage-browse-finish": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, [str]),
-    }
-
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
                             "vmm-storage-browse.glade",
@@ -342,3 +336,4 @@ class vmmStorageBrowser(vmmGObjectUI):
                           async=False)
 
 vmmGObjectUI.type_register(vmmStorageBrowser)
+vmmStorageBrowser.signal_new(vmmStorageBrowser, "storage-browse-finish", [str])

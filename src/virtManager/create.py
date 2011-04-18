@@ -57,15 +57,6 @@ INSTALL_PAGE_IMPORT = 3
 
 
 class vmmCreate(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-console": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str, str)),
-        "action-show-terminal": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str, str)),
-        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                             gobject.TYPE_NONE, [str]),
-    }
-
     def __init__(self, engine):
         vmmGObjectUI.__init__(self, "vmm-create.glade", "vmm-create")
         self.engine = engine
@@ -1879,3 +1870,6 @@ class vmmCreate(vmmGObjectUI):
         return self.err.val_err(msg, extra)
 
 vmmGObjectUI.type_register(vmmCreate)
+vmmCreate.signal_new(vmmCreate, "action-show-console", [str, str])
+vmmCreate.signal_new(vmmCreate, "action-show-terminal", [str, str])
+vmmCreate.signal_new(vmmCreate, "action-show-help", [str])

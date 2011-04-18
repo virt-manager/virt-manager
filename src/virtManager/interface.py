@@ -24,8 +24,6 @@ from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmInterface(vmmLibvirtObject):
-    __gsignals__ = {}
-
     def __init__(self, connection, interface, name, active):
         vmmLibvirtObject.__init__(self, connection)
 

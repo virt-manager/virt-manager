@@ -21,9 +21,9 @@ import logging
 import os
 import glob
 
-import gobject
 import dbus
 
+from virtManager.baseclass import vmmGObject
 from virtManager.netdev import vmmNetDevice
 from virtManager.mediadev import vmmMediaDevice
 
@@ -35,20 +35,53 @@ def get_hal_helper():
         _hal_helper = vmmHalHelper()
     return _hal_helper
 
-class vmmHalHelper(gobject.GObject):
-    __gsignals__ = {
-        "netdev-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         [object]),
-        "optical-added"  : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                            [object]),
-        "optical-media-added"  : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                                  [str, str, str]),
-        "device-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                           [str]),
-    }
+def get_net_bridge_owner(name_ignore, sysfspath):
+    # Now magic to determine if the device is part of a bridge
+    brportpath = os.path.join(sysfspath, "brport")
 
+    try:
+        if os.path.exists(brportpath):
+            brlinkpath = os.path.join(brportpath, "bridge")
+            dest = os.readlink(brlinkpath)
+            (ignore, bridge) = os.path.split(dest)
+            return bridge
+    except:
+        logging.exception("Unable to determine if device is shared")
+
+    return None
+
+def get_net_mac_address(name_ignore, sysfspath):
+    mac = None
+    addrpath = sysfspath + "/address"
+    if os.path.exists(addrpath):
+        df = open(addrpath, 'r')
+        mac = df.readline().strip(" \n\t")
+        df.close()
+    return mac
+
+def get_bonding_masters():
+    masters = []
+    if os.path.exists("/sys/class/net/bonding_masters"):
+        f = open("/sys/class/net/bonding_masters")
+        while True:
+            rline = f.readline()
+            if not rline:
+                break
+            if rline == "\x00":
+                continue
+            rline = rline.strip("\n\t")
+            masters = rline[:].split(' ')
+    return masters
+
+def is_net_bonding_slave(name_ignore, sysfspath):
+    masterpath = sysfspath + "/master"
+    if os.path.exists(masterpath):
+        return True
+    return False
+
+class vmmHalHelper(vmmGObject):
     def __init__(self):
-        gobject.GObject.__init__(self)
+        vmmGObject.__init__(self)
 
         self.bus = None
         self.hal_iface = None
@@ -84,7 +117,7 @@ class vmmHalHelper(gobject.GObject):
             self.startup_error = str(e)
 
     def connect(self, name, callback, *args):
-        handle_id = gobject.GObject.connect(self, name, callback, *args)
+        handle_id = vmmGObject.connect(self, name, callback, *args)
 
         if name == "netdev-added":
             self.populate_netdevs()
@@ -283,49 +316,8 @@ class vmmHalHelper(gobject.GObject):
 
         return None, None
 
-gobject.type_register(vmmHalHelper)
-
-
-def get_net_bridge_owner(name_ignore, sysfspath):
-    # Now magic to determine if the device is part of a bridge
-    brportpath = os.path.join(sysfspath, "brport")
-
-    try:
-        if os.path.exists(brportpath):
-            brlinkpath = os.path.join(brportpath, "bridge")
-            dest = os.readlink(brlinkpath)
-            (ignore, bridge) = os.path.split(dest)
-            return bridge
-    except:
-        logging.exception("Unable to determine if device is shared")
-
-    return None
-
-def get_net_mac_address(name_ignore, sysfspath):
-    mac = None
-    addrpath = sysfspath + "/address"
-    if os.path.exists(addrpath):
-        df = open(addrpath, 'r')
-        mac = df.readline().strip(" \n\t")
-        df.close()
-    return mac
-
-def get_bonding_masters():
-    masters = []
-    if os.path.exists("/sys/class/net/bonding_masters"):
-        f = open("/sys/class/net/bonding_masters")
-        while True:
-            rline = f.readline()
-            if not rline:
-                break
-            if rline == "\x00":
-                continue
-            rline = rline.strip("\n\t")
-            masters = rline[:].split(' ')
-    return masters
-
-def is_net_bonding_slave(name_ignore, sysfspath):
-    masterpath = sysfspath + "/master"
-    if os.path.exists(masterpath):
-        return True
-    return False
+vmmHalHelper.type_register(vmmHalHelper)
+vmmHalHelper.signal_new(vmmHalHelper, "netdev-added", [object])
+vmmHalHelper.signal_new(vmmHalHelper, "optical-added", [object])
+vmmHalHelper.signal_new(vmmHalHelper, "optical-media-added", [str, str, str])
+vmmHalHelper.signal_new(vmmHalHelper, "device-removed", [str])

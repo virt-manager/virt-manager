@@ -23,9 +23,6 @@ import virtinst
 from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmNodeDevice(vmmLibvirtObject):
-    __gsignals__ = {
-    }
-
     def __init__(self, connection, backend, name):
         vmmLibvirtObject.__init__(self, connection)
 

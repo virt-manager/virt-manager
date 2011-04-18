@@ -209,13 +209,6 @@ def packagekit_search(session, pk_control, package_name, packages):
 
 
 class vmmEngine(vmmGObject):
-    __gsignals__ = {
-        "connection-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                             [object]),
-        "connection-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                               [str])
-        }
-
     def __init__(self):
         vmmGObject.__init__(self)
 
@@ -1055,3 +1048,5 @@ class vmmEngine(vmmGObject):
         vmmAsyncJob.simple_async_noshow(reboot_cb, [], src, "")
 
 vmmGObject.type_register(vmmEngine)
+vmmEngine.signal_new(vmmEngine, "connection-added", [object])
+vmmEngine.signal_new(vmmEngine, "connection-removed", [str])

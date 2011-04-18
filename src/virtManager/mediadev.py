@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
 import logging
 
 import virtinst
@@ -31,13 +30,6 @@ MEDIA_CDROM = "cdrom"
 MEDIA_TIMEOUT = 3
 
 class vmmMediaDevice(vmmGObject):
-    __gsignals__ = {
-        "media-added"  : (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                          []),
-        "media-removed"  : (gobject.SIGNAL_RUN_FIRST,
-                            gobject.TYPE_NONE, []),
-    }
-
     @staticmethod
     def mediadev_from_nodedev(dev):
         nodedev = dev.get_virtinst_obj()
@@ -181,3 +173,5 @@ class vmmMediaDevice(vmmGObject):
         return True
 
 vmmGObject.type_register(vmmMediaDevice)
+vmmMediaDevice.signal_new(vmmMediaDevice, "media-added", [])
+vmmMediaDevice.signal_new(vmmMediaDevice, "media-removed", [])

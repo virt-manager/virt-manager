@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
 import gtk
 
 import virtManager.util as util
@@ -28,10 +27,6 @@ PREFS_PAGE_STATS    = 0
 PREFS_PAGE_VM_PREFS = 1
 
 class vmmPreferences(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                             gobject.TYPE_NONE, [str]),
-        }
     def __init__(self):
         vmmGObjectUI.__init__(self, "vmm-preferences.glade", "vmm-preferences")
 
@@ -298,3 +293,6 @@ class vmmPreferences(vmmGObjectUI):
         # From the Preferences window, show the help document from
         # the Preferences page
         self.emit("action-show-help", "virt-manager-preferences-window")
+
+vmmPreferences.type_register(vmmPreferences)
+vmmPreferences.signal_new(vmmPreferences, "action-show-help", [str])

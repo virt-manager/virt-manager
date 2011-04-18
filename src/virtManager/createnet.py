@@ -18,10 +18,10 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
 import logging
 import re
+
+import gtk
 
 from virtManager.IPy import IP
 from virtManager.network import vmmNetwork
@@ -36,10 +36,6 @@ PAGE_SUMMARY = 5
 
 
 class vmmCreateNetwork(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, [str]),
-        }
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "vmm-create-net.glade", "vmm-create-net")
         self.conn = conn
@@ -439,3 +435,4 @@ class vmmCreateNetwork(vmmGObjectUI):
             self.emit("action-show-help", "virt-manager-create-net-sumary")
 
 vmmGObjectUI.type_register(vmmCreateNetwork)
+vmmCreateNetwork.signal_new(vmmCreateNetwork, "action-show-help", [str])

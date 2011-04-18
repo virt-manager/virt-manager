@@ -19,8 +19,7 @@
 #
 
 
-class vmmSecret:
-
+class vmmSecret(object):
     def __init__(self, name, secret=None, attributes=None):
 
         self.name = name

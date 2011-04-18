@@ -18,12 +18,12 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
-
 import traceback
 import logging
 import threading
+
+import gobject
+import gtk
 
 import virtinst
 import libvirt
@@ -47,9 +47,6 @@ def uri_join(uri_tuple):
 
 
 class vmmMigrateDialog(vmmGObjectUI):
-    __gsignals__ = {
-    }
-
     def __init__(self, vm, engine):
         vmmGObjectUI.__init__(self, "vmm-migrate.glade", "vmm-migrate")
         self.vm = vm

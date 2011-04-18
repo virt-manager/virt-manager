@@ -18,7 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
 import gtk
 
 import logging
@@ -58,11 +57,6 @@ IP_STATIC = 1
 IP_NONE = 2
 
 class vmmCreateInterface(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                             gobject.TYPE_NONE, [str]),
-    }
-
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
                               "vmm-create-interface.glade",
@@ -1164,3 +1158,4 @@ class vmmCreateInterface(vmmGObjectUI):
         pass
 
 vmmGObjectUI.type_register(vmmCreateInterface)
+vmmCreateInterface.signal_new(vmmCreateInterface, "action-show-help", [str])

@@ -18,9 +18,9 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
 import logging
+
+import gtk
 
 from virtinst import VirtualDisk
 from virtinst import Storage
@@ -41,20 +41,6 @@ INTERFACE_PAGE_INFO = 0
 INTERFACE_PAGE_ERROR = 1
 
 class vmmHost(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                               gobject.TYPE_NONE, [str]),
-        "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
-                            gobject.TYPE_NONE, []),
-        "action-view-manager": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, []),
-        "action-restore-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str,)),
-        "host-closed": (gobject.SIGNAL_RUN_FIRST,
-                        gobject.TYPE_NONE, ()),
-        "host-opened": (gobject.SIGNAL_RUN_FIRST,
-                        gobject.TYPE_NONE, ()),
-        }
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "vmm-host.glade", "vmm-host")
         self.conn = conn
@@ -1203,3 +1189,9 @@ def get_pool_size_percent(conn, uuid):
     return "<span size='small' color='#484848'>%s%%</span>" % int(per)
 
 vmmGObjectUI.type_register(vmmHost)
+vmmHost.signal_new(vmmHost, "action-show-help", [str])
+vmmHost.signal_new(vmmHost, "action-exit-app", [])
+vmmHost.signal_new(vmmHost, "action-view-manager", [])
+vmmHost.signal_new(vmmHost, "action-restore-domain", [str])
+vmmHost.signal_new(vmmHost, "host-closed", [])
+vmmHost.signal_new(vmmHost, "host-opened", [])

@@ -18,18 +18,16 @@
 # MA 02110-1301 USA.
 #
 
-import libvirt
 import logging
 import time
 import threading
 
-import gobject
-
+import libvirt
 import virtinst
 from virtinst.VirtualCharDevice import VirtualCharSpicevmcDevice
-from virtManager import util
 import virtinst.support as support
 
+from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
 def compare_device(origdev, newdev, idx):
@@ -121,15 +119,6 @@ class vmmDomainBase(vmmLibvirtObject):
     Base class for vmmDomain objects. Provides common set up and methods
     for domain backends (libvirt virDomain, virtinst Guest)
     """
-    __gsignals__ = {
-        "status-changed": (gobject.SIGNAL_RUN_FIRST,
-                           gobject.TYPE_NONE,
-                           [int, int]),
-        "resources-sampled": (gobject.SIGNAL_RUN_FIRST,
-                              gobject.TYPE_NONE,
-                              []),
-        }
-
     def __init__(self, connection, backend, uuid):
         vmmLibvirtObject.__init__(self, connection)
 
@@ -1639,5 +1628,9 @@ class vmmDomainVirtinst(vmmDomainBase):
         raise NotImplementedError()
 
 vmmLibvirtObject.type_register(vmmDomainVirtinst)
+
 vmmLibvirtObject.type_register(vmmDomainBase)
+vmmDomainBase.signal_new(vmmDomainBase, "status-changed", [int, int])
+vmmDomainBase.signal_new(vmmDomainBase, "resources-sampled", [])
+
 vmmLibvirtObject.type_register(vmmDomain)

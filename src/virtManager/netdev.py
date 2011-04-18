@@ -20,8 +20,6 @@
 from virtManager.baseclass import vmmGObject
 
 class vmmNetDevice(vmmGObject):
-    __gsignals__ = {}
-
     def __init__(self, name, mac, is_shared, bridge=None, hal_path=None):
         vmmGObject.__init__(self)
 

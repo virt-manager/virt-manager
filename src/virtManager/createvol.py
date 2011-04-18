@@ -18,10 +18,9 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
-
 import logging
+
+import gtk
 
 from virtManager import util
 from virtManager.baseclass import vmmGObjectUI
@@ -34,10 +33,6 @@ DEFAULT_ALLOC = 0
 DEFAULT_CAP   = 1000
 
 class vmmCreateVolume(vmmGObjectUI):
-    __gsignals__ = {
-        "vol-created": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, [])
-    }
-
     def __init__(self, conn, parent_pool):
         vmmGObjectUI.__init__(self, "vmm-create-vol.glade", "vmm-create-vol")
         self.conn = conn
@@ -279,3 +274,4 @@ class vmmCreateVolume(vmmGObjectUI):
         return ret
 
 vmmGObjectUI.type_register(vmmCreateVolume)
+vmmCreateVolume.signal_new(vmmCreateVolume, "vol-created", [])

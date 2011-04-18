@@ -22,8 +22,6 @@ from virtManager import util
 from virtManager.libvirtobject import vmmLibvirtObject
 
 class vmmStorageVolume(vmmLibvirtObject):
-    __gsignals__ = {}
-
     def __init__(self, connection, vol, name):
         vmmLibvirtObject.__init__(self, connection)
 

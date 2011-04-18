@@ -218,40 +218,6 @@ def lookup_nodedev(vmmconn, hostdev):
     return found_dev
 
 class vmmDetails(vmmGObjectUI):
-    __gsignals__ = {
-        "action-show-console": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str, str)),
-        "action-save-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str, str)),
-        "action-destroy-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str, str)),
-        "action-suspend-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str, str)),
-        "action-resume-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str, str)),
-        "action-run-domain": (gobject.SIGNAL_RUN_FIRST,
-                              gobject.TYPE_NONE, (str, str)),
-        "action-shutdown-domain": (gobject.SIGNAL_RUN_FIRST,
-                                   gobject.TYPE_NONE, (str, str)),
-        "action-reboot-domain": (gobject.SIGNAL_RUN_FIRST,
-                                 gobject.TYPE_NONE, (str, str)),
-        "action-show-help": (gobject.SIGNAL_RUN_FIRST,
-                               gobject.TYPE_NONE, [str]),
-        "action-exit-app": (gobject.SIGNAL_RUN_FIRST,
-                            gobject.TYPE_NONE, []),
-        "action-view-manager": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, []),
-        "action-migrate-domain": (gobject.SIGNAL_RUN_FIRST,
-                                  gobject.TYPE_NONE, (str, str)),
-        "action-clone-domain": (gobject.SIGNAL_RUN_FIRST,
-                                gobject.TYPE_NONE, (str, str)),
-        "details-closed": (gobject.SIGNAL_RUN_FIRST,
-                           gobject.TYPE_NONE, ()),
-        "details-opened": (gobject.SIGNAL_RUN_FIRST,
-                           gobject.TYPE_NONE, ()),
-        }
-
-
     def __init__(self, vm, parent=None):
         vmmGObjectUI.__init__(self, "vmm-details.glade", "vmm-details")
         self.vm = vm
@@ -2982,3 +2948,18 @@ class vmmDetails(vmmGObjectUI):
 
 
 vmmGObjectUI.type_register(vmmDetails)
+vmmDetails.signal_new(vmmDetails, "action-show-console", [str, str])
+vmmDetails.signal_new(vmmDetails, "action-save-domain", [str, str])
+vmmDetails.signal_new(vmmDetails, "action-destroy-domain", [str, str])
+vmmDetails.signal_new(vmmDetails, "action-suspend-domain", [str, str])
+vmmDetails.signal_new(vmmDetails, "action-resume-domain", [str, str])
+vmmDetails.signal_new(vmmDetails, "action-run-domain", [str, str])
+vmmDetails.signal_new(vmmDetails, "action-shutdown-domain", [str, str])
+vmmDetails.signal_new(vmmDetails, "action-reboot-domain", [str, str])
+vmmDetails.signal_new(vmmDetails, "action-show-help", [str])
+vmmDetails.signal_new(vmmDetails, "action-exit-app", [])
+vmmDetails.signal_new(vmmDetails, "action-view-manager", [])
+vmmDetails.signal_new(vmmDetails, "action-migrate-domain", [str, str])
+vmmDetails.signal_new(vmmDetails, "action-clone-domain", [str, str])
+vmmDetails.signal_new(vmmDetails, "details-closed", [])
+vmmDetails.signal_new(vmmDetails, "details-opened", [])

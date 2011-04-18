@@ -18,9 +18,6 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
-
 import logging
 import os
 import sys
@@ -30,71 +27,24 @@ import threading
 from time import time
 from socket import gethostbyaddr, gethostname
 
+import gtk
+
 import dbus
 import libvirt
 import virtinst
 
 from virtManager import util
+from virtManager.baseclass import vmmGObject
+
 from virtManager.domain import vmmDomain
 from virtManager.network import vmmNetwork
 from virtManager.storagepool import vmmStoragePool
 from virtManager.interface import vmmInterface
 from virtManager.netdev import vmmNetDevice
 from virtManager.mediadev import vmmMediaDevice
-from virtManager.baseclass import vmmGObject
 from virtManager.nodedev import vmmNodeDevice
 
 class vmmConnection(vmmGObject):
-    __gsignals__ = {
-        "vm-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                     [str, str]),
-        "vm-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                       [str, str]),
-
-        "net-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                      [str, str]),
-        "net-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        [str, str]),
-        "net-started": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        [str, str]),
-        "net-stopped": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        [str, str]),
-
-        "pool-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                       [str, str]),
-        "pool-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         [str, str]),
-        "pool-started": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         [str, str]),
-        "pool-stopped": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                         [str, str]),
-
-        "interface-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                            [str, str]),
-        "interface-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                              [str, str]),
-        "interface-started": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                              [str, str]),
-        "interface-stopped": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                              [str, str]),
-
-        "nodedev-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                          [str, str]),
-        "nodedev-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                            [str, str]),
-
-        "mediadev-added": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                          [object]),
-        "mediadev-removed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                            [str]),
-
-        "resources-sampled": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                              []),
-        "state-changed": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                          []),
-        "connect-error": (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                          [str]),
-        }
 
     STATE_DISCONNECTED = 0
     STATE_CONNECTING = 1
@@ -1149,8 +1099,8 @@ class vmmConnection(vmmGObject):
 
             self.connectError = "%s\n\n%s" % (str(value), str(tb))
 
-        # We want to kill off this thread asap, so schedule a gobject
-        # idle even to inform the UI of result
+        # We want to kill off this thread asap, so schedule an
+        # idle event to inform the UI of result
         logging.debug("Background open thread complete, scheduling notify")
         self.safe_idle_add(self._open_notify)
         self.connectThread = None
@@ -1648,3 +1598,30 @@ class vmmConnection(vmmGObject):
                                        self.config.get_iso_paths)
 
 vmmGObject.type_register(vmmConnection)
+vmmGObject.signal_new(vmmConnection, "vm-added", [str, str])
+vmmGObject.signal_new(vmmConnection, "vm-removed", [str, str])
+
+vmmGObject.signal_new(vmmConnection, "net-added", [str, str])
+vmmGObject.signal_new(vmmConnection, "net-removed", [str, str])
+vmmGObject.signal_new(vmmConnection, "net-started", [str, str])
+vmmGObject.signal_new(vmmConnection, "net-stopped", [str, str])
+
+vmmGObject.signal_new(vmmConnection, "pool-added", [str, str])
+vmmGObject.signal_new(vmmConnection, "pool-removed", [str, str])
+vmmGObject.signal_new(vmmConnection, "pool-started", [str, str])
+vmmGObject.signal_new(vmmConnection, "pool-stopped", [str, str])
+
+vmmGObject.signal_new(vmmConnection, "interface-added", [str, str])
+vmmGObject.signal_new(vmmConnection, "interface-removed", [str, str])
+vmmGObject.signal_new(vmmConnection, "interface-started", [str, str])
+vmmGObject.signal_new(vmmConnection, "interface-stopped", [str, str])
+
+vmmGObject.signal_new(vmmConnection, "nodedev-added", [str, str])
+vmmGObject.signal_new(vmmConnection, "nodedev-removed", [str, str])
+
+vmmGObject.signal_new(vmmConnection, "mediadev-added", [object])
+vmmGObject.signal_new(vmmConnection, "mediadev-removed", [str])
+
+vmmGObject.signal_new(vmmConnection, "resources-sampled", [])
+vmmGObject.signal_new(vmmConnection, "state-changed", [])
+vmmGObject.signal_new(vmmConnection, "connect-error", [str])

@@ -99,9 +99,6 @@ def draw_fill(cairo_ct, cell_area, points, taper=False):
 
 
 class CellRendererSparkline(gtk.CellRenderer):
-    __gsignals__ = {
-    }
-
     __gproperties__ = {
         # 'name' : (gobject.TYPE_*,
         #           nickname, long desc, (type related args), mode)
@@ -272,8 +269,6 @@ class CellRendererSparkline(gtk.CellRenderer):
         setattr(self, name, value)
 
 class Sparkline(gtk.DrawingArea):
-    __gsignals__ = {}
-
     __gproperties__ = {
         # 'name' : (gobject.TYPE_*,
         #           nickname, long desc, (type related args), mode)

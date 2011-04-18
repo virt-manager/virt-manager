@@ -34,9 +34,6 @@ PAGE_NAME   = 0
 PAGE_FORMAT = 1
 
 class vmmCreatePool(vmmGObjectUI):
-    __gsignals__ = {
-    }
-
     def __init__(self, conn):
         vmmGObjectUI.__init__(self,
                               "vmm-create-pool.glade",
