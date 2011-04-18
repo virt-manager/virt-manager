@@ -26,13 +26,6 @@ import gconf
 import libvirt
 import virtinst
 
-_spice_error = None
-try:
-    import SpiceClientGtk
-    ignore = SpiceClientGtk
-except Exception, _spice_error:
-    logging.debug("Error importing spice: %s" % _spice_error)
-
 from virtManager.keyring import vmmKeyring
 from virtManager.secret import vmmSecret
 
@@ -114,6 +107,7 @@ class vmmConfig(object):
         self._objects = []
 
         self.support_threading = virtinst.support.support_threading()
+        self._spice_error = None
 
         self.status_icons = {
             libvirt.VIR_DOMAIN_BLOCKED: gtk.gdk.pixbuf_new_from_file_at_size(self.get_icon_dir() + "/state_running.png", 18, 18),
@@ -168,7 +162,15 @@ class vmmConfig(object):
         return self.data_dir
 
     def get_spice_error(self):
-        return _spice_error and str(_spice_error) or None
+        if self._spice_error is None:
+            try:
+                import SpiceClientGtk
+                ignore = SpiceClientGtk
+                self._spice_error = False
+            except Exception, self._spice_error:
+                logging.debug("Error importing spice: %s" % self._spice_error)
+
+        return self._spice_error and str(self._spice_error) or None
 
     def embeddable_graphics(self):
         ret = ["vnc"]
