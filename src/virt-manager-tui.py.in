@@ -105,7 +105,8 @@ def opt_show_cb(option, opt_str, value, parser):
     setattr(parser.values, "show", show)
 
 def _show_startup_error(message, details):
-    errordlg = DialogScreen("Error Starting Virtual Machine Manager", message)
+    errordlg = DialogScreen("Error Starting Virtual Machine Manager",
+                            message + "\n\n" + details)
     errordlg.show()
 
 def main():
