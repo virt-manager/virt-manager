@@ -29,20 +29,6 @@ import virtinst
 from virtManager.keyring import vmmKeyring
 from virtManager.secret import vmmSecret
 
-CONSOLE_KEYGRAB_NEVER = 0
-CONSOLE_KEYGRAB_FULLSCREEN = 1
-CONSOLE_KEYGRAB_MOUSEOVER = 2
-
-STATS_CPU = 0
-STATS_DISK = 1
-STATS_NETWORK = 2
-
-DEFAULT_XEN_IMAGE_DIR = "/var/lib/xen/images"
-DEFAULT_XEN_SAVE_DIR = "/var/lib/xen/dump"
-
-DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
-DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
-
 running_config = None
 
 class vmmConfig(object):
@@ -74,9 +60,23 @@ class vmmConfig(object):
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2
 
+    CONSOLE_KEYGRAB_NEVER = 0
+    CONSOLE_KEYGRAB_FULLSCREEN = 1
+    CONSOLE_KEYGRAB_MOUSEOVER = 2
+
+    STATS_CPU = 0
+    STATS_DISK = 1
+    STATS_NETWORK = 2
+
     _PEROBJ_FUNC_SET    = 0
     _PEROBJ_FUNC_GET    = 1
     _PEROBJ_FUNC_LISTEN = 2
+
+    DEFAULT_XEN_IMAGE_DIR = "/var/lib/xen/images"
+    DEFAULT_XEN_SAVE_DIR = "/var/lib/xen/dump"
+
+    DEFAULT_VIRT_IMAGE_DIR = "/var/lib/libvirt/images"
+    DEFAULT_VIRT_SAVE_DIR = "/var/lib/libvirt"
 
     def __init__(self, appname, appversion, gconf_dir, glade_dir, icon_dir,
                  data_dir):
@@ -681,21 +681,21 @@ class vmmConfig(object):
 
     def get_default_image_dir(self, connection):
         if connection.is_xen():
-            return DEFAULT_XEN_IMAGE_DIR
+            return self.DEFAULT_XEN_IMAGE_DIR
 
         if (connection.is_qemu_session() or
-            not os.access(DEFAULT_VIRT_IMAGE_DIR, os.W_OK)):
+            not os.access(self.DEFAULT_VIRT_IMAGE_DIR, os.W_OK)):
             return os.getcwd()
 
         # Just return the default dir since the intention is that it
         # is a managed pool and the user will be able to install to it.
-        return DEFAULT_VIRT_IMAGE_DIR
+        return self.DEFAULT_VIRT_IMAGE_DIR
 
     def get_default_save_dir(self, connection):
         if connection.is_xen():
-            return DEFAULT_XEN_SAVE_DIR
-        elif os.access(DEFAULT_VIRT_SAVE_DIR, os.W_OK):
-            return DEFAULT_VIRT_SAVE_DIR
+            return self.DEFAULT_XEN_SAVE_DIR
+        elif os.access(self.DEFAULT_VIRT_SAVE_DIR, os.W_OK):
+            return self.DEFAULT_VIRT_SAVE_DIR
         else:
             return os.getcwd()
 

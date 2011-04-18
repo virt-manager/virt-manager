@@ -23,7 +23,6 @@ import gtk
 
 import logging
 
-import virtManager.config as cfg
 import virtManager.uihelpers as uihelpers
 from virtManager.connection import vmmConnection
 from virtManager.baseclass import vmmGObjectUI
@@ -148,11 +147,11 @@ class vmmManager(vmmGObjectUI):
 
         self.window.signal_autoconnect({
             "on_menu_view_cpu_usage_activate":  (self.toggle_stats_visible,
-                                                    cfg.STATS_CPU),
+                                                 self.config.STATS_CPU),
             "on_menu_view_disk_io_activate" :   (self.toggle_stats_visible,
-                                                    cfg.STATS_DISK),
+                                                 self.config.STATS_DISK),
             "on_menu_view_network_traffic_activate": (self.toggle_stats_visible,
-                                                cfg.STATS_NETWORK),
+                                                      self.config.STATS_NETWORK),
 
             "on_vm_manager_delete_event": self.close,
             "on_vmm_manager_configure_event": self.window_resized,
@@ -192,9 +191,9 @@ class vmmManager(vmmGObjectUI):
 
         # Initialize stat polling columns based on global polling
         # preferences (we want signal handlers for this)
-        for typ, init_val in \
-            [(cfg.STATS_DISK, self.config.get_stats_enable_disk_poll()),
-             (cfg.STATS_NETWORK, self.config.get_stats_enable_net_poll())]:
+        for typ, init_val in [
+            (self.config.STATS_DISK, self.config.get_stats_enable_disk_poll()),
+            (self.config.STATS_NETWORK, self.config.get_stats_enable_net_poll())]:
             self.enable_polling(None, None, init_val, typ)
 
         self.engine.connect("connection-added", self._add_connection)
@@ -293,10 +292,10 @@ class vmmManager(vmmGObjectUI):
         # that disable the associated vmlist widgets if reporting is disabled
         self.add_gconf_handle(
             self.config.on_stats_enable_disk_poll_changed(self.enable_polling,
-                                                          cfg.STATS_DISK))
+                                                    self.config.STATS_DISK))
         self.add_gconf_handle(
             self.config.on_stats_enable_net_poll_changed(self.enable_polling,
-                                                         cfg.STATS_NETWORK))
+                                                    self.config.STATS_NETWORK))
 
 
         self.window.get_widget("menu_view_stats_cpu").set_active(
@@ -1092,9 +1091,9 @@ class vmmManager(vmmGObjectUI):
         return cmp(model.get_value(iter1, ROW_HANDLE).network_traffic_rate(), model.get_value(iter2, ROW_HANDLE).network_traffic_rate())
 
     def enable_polling(self, ignore1, ignore2, conf_entry, userdata):
-        if userdata == cfg.STATS_DISK:
+        if userdata == self.config.STATS_DISK:
             widgn = "menu_view_stats_disk"
-        elif userdata == cfg.STATS_NETWORK:
+        elif userdata == self.config.STATS_NETWORK:
             widgn = "menu_view_stats_network"
         widget = self.window.get_widget(widgn)
 
@@ -1132,9 +1131,9 @@ class vmmManager(vmmGObjectUI):
     def toggle_stats_visible(self, src, stats_id):
         visible = src.get_active()
         set_stats = {
-        cfg.STATS_CPU: self.config.set_vmlist_cpu_usage_visible,
-        cfg.STATS_DISK: self.config.set_vmlist_disk_io_visible,
-        cfg.STATS_NETWORK: self.config.set_vmlist_network_traffic_visible,
+            self.config.STATS_CPU: self.config.set_vmlist_cpu_usage_visible,
+            self.config.STATS_DISK: self.config.set_vmlist_disk_io_visible,
+            self.config.STATS_NETWORK: self.config.set_vmlist_network_traffic_visible,
         }
         set_stats[stats_id](visible)
 
