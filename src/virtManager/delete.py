@@ -56,7 +56,7 @@ class vmmDeleteDialog(vmmGObjectUI):
             "on_delete_ok_clicked" : self.finish,
             "on_delete_remove_storage_toggled" : self.toggle_remove_storage,
         })
-        util.bind_escape_key_close(self)
+        self.bind_escape_key_close()
 
         image = gtk.image_new_from_icon_name("vm_delete_wizard",
                                              gtk.ICON_SIZE_DIALOG)

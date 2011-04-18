@@ -315,13 +315,6 @@ def uuidstr(rawuuid):
             uuid.append('-')
     return "".join(uuid)
 
-def bind_escape_key_close(vmmobj):
-    def close_on_escape(src_ignore, event):
-        if gtk.gdk.keyval_name(event.keyval) == "Escape":
-            vmmobj.close()
-
-    vmmobj.topwin.connect("key-press-event", close_on_escape)
-
 def safe_set_prop(self, prop, value):
     """
     Make sure a gtk property is supported, and set to value

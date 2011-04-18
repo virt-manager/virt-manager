@@ -189,3 +189,10 @@ class vmmGObjectUI(vmmGObject):
         self.topwin = None
         self.gladefile = None
         self.err = None
+
+    def bind_escape_key_close(self):
+        def close_on_escape(src_ignore, event):
+            if gtk.gdk.keyval_name(event.keyval) == "Escape":
+                self.close()
+
+        self.topwin.connect("key-press-event", close_on_escape)

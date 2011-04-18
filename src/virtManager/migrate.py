@@ -70,7 +70,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             "on_migrate_set_port_toggled" : self.toggle_set_port,
             "on_migrate_set_maxdowntime_toggled" : self.toggle_set_maxdowntime,
         })
-        util.bind_escape_key_close(self)
+        self.bind_escape_key_close()
 
         blue = gtk.gdk.color_parse("#0072A8")
         self.window.get_widget("migrate-header").modify_bg(gtk.STATE_NORMAL,

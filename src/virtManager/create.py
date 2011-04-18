@@ -135,7 +135,7 @@ class vmmCreate(vmmGObjectUI):
             "on_config_hv_changed": self.hv_changed,
             "on_config_arch_changed": self.arch_changed,
         })
-        util.bind_escape_key_close(self)
+        self.bind_escape_key_close()
 
         self.set_initial_state()
 

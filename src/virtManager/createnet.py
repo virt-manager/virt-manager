@@ -23,7 +23,6 @@ import gtk
 import logging
 import re
 
-import virtManager.util as util
 from virtManager.IPy import IP
 from virtManager.network import vmmNetwork
 from virtManager.baseclass import vmmGObjectUI
@@ -61,7 +60,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             "on_net_dhcp_end_changed": self.change_dhcp_end,
             "on_create_help_clicked": self.show_help,
             })
-        util.bind_escape_key_close(self)
+        self.bind_escape_key_close()
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("create-help").hide()

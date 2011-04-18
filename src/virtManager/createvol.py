@@ -55,7 +55,7 @@ class vmmCreateVolume(vmmGObjectUI):
             "on_vol_allocation_value_changed" : self.vol_allocation_changed,
             "on_vol_capacity_value_changed"   : self.vol_capacity_changed,
         })
-        util.bind_escape_key_close(self)
+        self.bind_escape_key_close()
 
         format_list = self.window.get_widget("vol-format")
         format_model = gtk.ListStore(str, str)

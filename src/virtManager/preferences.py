@@ -90,7 +90,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_btn_keys_define_clicked": self.change_grab_keys,
             "on_prefs_graphics_type_changed": self.change_graphics_type,
             })
-        util.bind_escape_key_close(self)
+        self.bind_escape_key_close()
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("prefs-help").hide()

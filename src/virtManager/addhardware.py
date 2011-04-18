@@ -120,7 +120,7 @@ class vmmAddHardware(vmmGObjectUI):
             "char_telnet_focus_in": (self.update_doc, "protocol"),
             "char_name_focus_in": (self.update_doc, "target_name"),
             })
-        util.bind_escape_key_close(self)
+        self.bind_escape_key_close()
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("create-help").hide()

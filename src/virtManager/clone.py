@@ -115,7 +115,7 @@ class vmmCloneVM(vmmGObjectUI):
             "on_clone_ok_clicked" : self.finish,
             "on_clone_help_clicked" : self.show_help,
         })
-        util.bind_escape_key_close(self)
+        self.bind_escape_key_close()
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("clone-help").hide()

@@ -130,7 +130,7 @@ class vmmCreateInterface(vmmGObjectUI):
             "on_ip_config_button_clicked": self.show_ip_config,
             "on_vlan_tag_changed": self.update_interface_name,
         })
-        util.bind_escape_key_close(self)
+        self.bind_escape_key_close()
 
         self.set_initial_state()
 
