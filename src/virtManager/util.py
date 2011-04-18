@@ -24,9 +24,10 @@ import libxml2
 import logging
 import os.path
 
-from virtManager.config import running_config
 import virtManager
 import virtinst
+
+running_config = None
 
 # FIXME: selinux policy also has a ~/VirtualMachines/isos dir
 def get_default_pool_path(conn):

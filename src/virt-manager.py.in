@@ -401,10 +401,11 @@ def main():
     # doesn't think we closed the app, therefor robbing us of
     # display access
     import virtManager.config
+    import virtManager.util
     config = virtManager.config.vmmConfig(appname, appversion,
                                           gconf_dir, glade_dir,
                                           icon_dir, data_dir)
-    virtManager.config.running_config = config
+    virtManager.util.running_config = config
     config.default_qemu_user = default_qemu_user
     config.enable_unsupported_rhel_opts = rhel_enable_unsupported_opts
     config.preferred_distros = preferred_distros

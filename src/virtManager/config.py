@@ -29,8 +29,6 @@ import virtinst
 from virtManager.keyring import vmmKeyring
 from virtManager.secret import vmmSecret
 
-running_config = None
-
 class vmmConfig(object):
 
     # GConf directory names for saving last used paths

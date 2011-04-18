@@ -25,7 +25,8 @@ import logging
 import gtk
 import gobject
 
-import virtManager.config
+import virtManager
+import virtManager.util as util
 
 def _safe_wrapper(func, *args):
     gtk.gdk.threads_enter()
@@ -42,7 +43,7 @@ class vmmGObject(gobject.GObject):
 
     def __init__(self):
         gobject.GObject.__init__(self)
-        self.config = virtManager.config.running_config
+        self.config = util.running_config
 
         self._gobject_handles = []
         self._gobject_timeouts = []

@@ -30,7 +30,6 @@ from virtinst import VirtualDisk
 
 from virtManager import util
 from virtManager.error import vmmErrorDialog
-from virtManager.config import running_config
 
 OPTICAL_DEV_PATH = 0
 OPTICAL_LABEL = 1
@@ -703,7 +702,7 @@ def mediadev_set_default_selection(widget):
 
 def build_shutdown_button_menu(widget, shutdown_cb, reboot_cb,
                                destroy_cb, save_cb):
-    icon_name = running_config.get_shutdown_icon_name()
+    icon_name = util.running_config.get_shutdown_icon_name()
     widget.set_icon_name(icon_name)
     menu = gtk.Menu()
     widget.set_menu(menu)
@@ -750,9 +749,9 @@ def check_path_search_for_qemu(parent, conn, path):
     if conn.is_remote() or not conn.is_qemu_system():
         return
 
-    user = running_config.default_qemu_user
+    user = util.running_config.default_qemu_user
 
-    skip_paths = running_config.get_perms_fix_ignore()
+    skip_paths = util.running_config.get_perms_fix_ignore()
     broken_paths = VirtualDisk.check_path_search_for_user(conn.vmm, path, user)
     for p in broken_paths:
         if p in skip_paths:
@@ -770,7 +769,7 @@ def check_path_search_for_qemu(parent, conn, path):
                     buttons=gtk.BUTTONS_YES_NO)
 
     if chkres:
-        running_config.add_perms_fix_ignore(broken_paths)
+        util.running_config.add_perms_fix_ignore(broken_paths)
     if not resp:
         return
 
@@ -793,7 +792,7 @@ def check_path_search_for_qemu(parent, conn, path):
                          _("Don't ask about these directories again."))
 
     if chkres:
-        running_config.add_perms_fix_ignore(errors.keys())
+        util.running_config.add_perms_fix_ignore(errors.keys())
 
 ######################################
 # Interface startmode widget builder #
