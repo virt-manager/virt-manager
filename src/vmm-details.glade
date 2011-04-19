@@ -3687,7 +3687,7 @@ I/O:</property>
                                           <widget class="GtkTable" id="table31">
                                             <property name="visible">True</property>
                                             <property name="border_width">3</property>
-                                            <property name="n_rows">3</property>
+                                            <property name="n_rows">4</property>
                                             <property name="n_columns">2</property>
                                             <property name="column_spacing">8</property>
                                             <property name="row_spacing">4</property>
@@ -3850,6 +3850,52 @@ I/O:</property>
                                               <packing>
                                                 <property name="left_attach">1</property>
                                                 <property name="right_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkHBox" id="network-source-mode-box">
+                                                <property name="visible">True</property>
+                                                <property name="spacing">6</property>
+                                                <child>
+                                                  <widget class="GtkComboBox" id="network-source-mode-combo">
+                                                    <property name="visible">True</property>
+                                                    <signal name="changed" handler="on_network-source-mode-combo_changed"/>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="network-source-mode-label">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="label">unknown mode</property>
+                                                    <property name="selectable">True</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="network-source-mode">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">1</property>
+                                                <property name="label" translatable="yes">Source mode:</property>
+                                                <property name="use_underline">True</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
                                               </packing>
                                             </child>
                                           </widget>

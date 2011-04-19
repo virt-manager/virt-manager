@@ -192,6 +192,26 @@ def build_watchdogaction_combo(vm, combo, no_default=False):
     if len(dev_model) > 0:
         combo.set_active(0)
 
+def build_source_mode_combo(vm, combo):
+    source_mode = gtk.ListStore(str, str)
+    combo.set_model(source_mode)
+    text = gtk.CellRendererText()
+    combo.pack_start(text, True)
+    combo.add_attribute(text, 'text', 1)
+
+    populate_source_mode_combo(vm, combo)
+    combo.set_active(0)
+
+def populate_source_mode_combo(vm, combo):
+    model = combo.get_model()
+    model.clear()
+
+    # [xml value, label]
+    model.append([None, _("")])
+    model.append(["vepa", "vepa"])
+    model.append(["bridge", "bridge"])
+    model.append(["private", "private"])
+
 def build_netmodel_combo(vm, combo):
     dev_model = gtk.ListStore(str, str)
     combo.set_model(dev_model)
@@ -311,20 +331,20 @@ def pretty_network_desc(nettype, source=None, netobj=None):
 
     return ret
 
-def init_network_list(net_list, bridge_box):
+def init_network_list(net_list, bridge_box, source_mode_box=None, source_mode_label=None, vport_expander=None):
     # [ network type, source name, label, sensitive?, net is active,
     #   manual bridge, net instance]
     net_model = gtk.ListStore(str, str, str, bool, bool, bool, object)
     net_list.set_model(net_model)
 
-    net_list.connect("changed", net_list_changed, bridge_box)
+    net_list.connect("changed", net_list_changed, bridge_box, source_mode_box,source_mode_label, vport_expander)
 
     text = gtk.CellRendererText()
     net_list.pack_start(text, True)
     net_list.add_attribute(text, 'text', 2)
     net_list.add_attribute(text, 'sensitive', 3)
 
-def net_list_changed(net_list, bridge_box):
+def net_list_changed(net_list, bridge_box, source_mode_box, source_mode_label, vport_expander):
     active = net_list.get_active()
     if active < 0:
         return
@@ -333,6 +353,13 @@ def net_list_changed(net_list, bridge_box):
         return
 
     row = net_list.get_model()[active]
+
+    if source_mode_box != None:
+        show_source_mode = (row[0] == VirtualNetworkInterface.TYPE_DIRECT)
+        source_mode_box.set_property("visible", show_source_mode)
+        source_mode_label.set_property("visible", show_source_mode)
+        vport_expander.set_property("visible", show_source_mode)
+
     show_bridge = row[5]
 
     bridge_box.set_property("visible", show_bridge)

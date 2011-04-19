@@ -378,6 +378,7 @@ class vmmDetails(vmmGObjectUI):
 
             "on_network_source_combo_changed": self.config_enable_apply,
             "on_network_bridge_changed": self.config_enable_apply,
+            "on_network-source-mode-combo_changed": self.config_enable_apply,
             "on_network_model_combo_changed": self.config_enable_apply,
 
             "on_vport_type_changed": self.config_enable_apply,
@@ -791,7 +792,14 @@ class vmmDetails(vmmGObjectUI):
         # Network source
         net_source = self.window.get_widget("network-source-combo")
         net_bridge = self.window.get_widget("network-bridge-box")
-        uihelpers.init_network_list(net_source, net_bridge)
+        source_mode_box   = self.window.get_widget("network-source-mode-box")
+        source_mode_label = self.window.get_widget("network-source-mode")
+        vport_expander = self.window.get_widget("vport-expander")
+        uihelpers.init_network_list(net_source, net_bridge, source_mode_box, source_mode_label, vport_expander)
+
+        # source mode
+        source_mode = self.window.get_widget("network-source-mode-combo")
+        uihelpers.build_source_mode_combo(self.vm, source_mode)
 
         # Network model
         net_model = self.window.get_widget("network-model-combo")
@@ -1872,6 +1880,11 @@ class vmmDetails(vmmGObjectUI):
         net_bridge = self.window.get_widget("network-bridge")
         nettype, source = uihelpers.get_network_selection(net_list, net_bridge)
 
+        if (nettype  == "direct"):
+            source_mode = self.get_combo_label_value("network-source-mode")
+        else:
+            source_mode = ""
+
         model = self.get_combo_label_value("network-model")
 
         vport_type = self.window.get_widget("vport-type").get_text()
@@ -1889,7 +1902,7 @@ class vmmDetails(vmmGObjectUI):
                                           vport_typeid,
                                           vport_idver,
                                           vport_instid),
-                                          (dev_id_info, nettype, source)])
+                                          (dev_id_info, nettype, source, source_mode)])
 
     # Graphics options
     def _do_change_spicevmc(self, gdev, newgtype):
@@ -2390,6 +2403,7 @@ class vmmDetails(vmmGObjectUI):
 
         nettype = net.type
         source = net.get_source()
+        source_mode = net.source_mode
         model = net.model
 
         netobj = None
@@ -2428,6 +2442,11 @@ class vmmDetails(vmmGObjectUI):
         self.set_combo_label("network-source",
                              (nettype, source), label=desc,
                              comparefunc=compare_network)
+
+        # source mode
+        uihelpers.populate_source_mode_combo(self.vm,
+                            self.window.get_widget("network-source-mode-combo"))
+        self.set_combo_label("network-source-mode", source_mode)
 
         # Virtualport config
         show_vport = (nettype == "direct")
