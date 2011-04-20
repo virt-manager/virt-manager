@@ -1197,16 +1197,22 @@ class vmmConnection(vmmGObject):
 
         try:
             newActiveNames = active_list()
-        except:
-            logging.exception("Unable to list active %ss" % typename)
+        except Exception, e:
+            logging.debug("Unable to list active %ss: %s" % (typename, e))
         try:
             newInactiveNames = inactive_list()
-        except:
-            logging.exception("Unable to list inactive %ss" % typename)
+        except Exception, e:
+            logging.debug("Unable to list inactive %ss: %s" % (typename, e))
 
         def check_obj(key, is_active):
             if key not in origlist:
-                obj = lookup_func(key)
+                try:
+                    obj = lookup_func(key)
+                except Exception, e:
+                    logging.debug("Could not fetch %s '%s': %s" %
+                                  (typename, key, e))
+                    return
+
                 # Object is brand new this tick period
                 current[key] = build_class(self, obj, key, is_active)
                 new.append(key)
@@ -1320,13 +1326,13 @@ class vmmConnection(vmmGObject):
 
         try:
             newActiveIDs = self.vmm.listDomainsID()
-        except:
-            logging.exception("Unable to list active domains")
+        except Exception, e:
+            logging.debug("Unable to list active domains: %s" % e)
 
         try:
             newInactiveNames = self.vmm.listDefinedDomains()
-        except:
-            logging.exception("Unable to list inactive domains")
+        except Exception, e:
+            logging.exception("Unable to list inactive domains: %s" % e)
 
         # NB in these first 2 loops, we go to great pains to
         # avoid actually instantiating a new VM object so that
