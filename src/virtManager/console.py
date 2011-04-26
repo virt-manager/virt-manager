@@ -252,11 +252,16 @@ class Viewer(object):
     def open_host(self, host, user, port, socketpath, password=None):
         raise NotImplementedError()
 
+    def get_desktop_resolution(self):
+        raise NotImplementedError()
+
 class VNCViewer(Viewer):
     def __init__(self, console, config):
         Viewer.__init__(self, console, config)
         self.display = gtkvnc.Display()
         self.sockfd = None
+        # Last noticed desktop resolution
+        self.desktop_resolution = None
 
     def init_widget(self):
         # Set default grab key combination if found and supported
@@ -280,11 +285,18 @@ class VNCViewer(Viewer):
                              lambda src: self.console.connected())
         self.display.connect("vnc-disconnected",
                              lambda src: self.console.disconnected())
-        self.display.connect("vnc-desktop-resize", self.console.desktop_resize)
+        self.display.connect("vnc-desktop-resize", self._desktop_resize)
         self.display.connect("focus-in-event", self.console.viewer_focus_changed)
         self.display.connect("focus-out-event", self.console.viewer_focus_changed)
 
         self.display.show()
+
+    def _desktop_resize(self, src_ignore, w, h):
+        self.desktop_resolution = (w, h)
+        self.console.window.get_widget("console-vnc-scroll").queue_resize()
+
+    def get_desktop_resolution(self):
+        return self.desktop_resolution
 
     def _auth_credential(self, src_ignore, credList):
         for cred in credList:
@@ -388,6 +400,7 @@ class SpiceViewer(Viewer):
         self.spice_session = None
         self.display = None
         self.audio = None
+        self.display_channel = None
 
     def _init_widget(self):
         self.set_grab_keys()
@@ -404,6 +417,7 @@ class SpiceViewer(Viewer):
         self.spice_session = None
         self.audio = None
         self.display = None
+        self.display_channel = None
 
     def is_open(self):
         return self.spice_session != None
@@ -431,6 +445,7 @@ class SpiceViewer(Viewer):
 
         if type(channel) == spice.DisplayChannel:
             channel_id = channel.get_property("channel-id")
+            self.display_channel = channel
             self.display = spice.Display(self.spice_session, channel_id)
             self.console.window.get_widget("console-vnc-viewport").add(self.display)
             self._init_widget()
@@ -441,6 +456,11 @@ class SpiceViewer(Viewer):
             not self.audio):
             self.audio = spice.Audio(self.spice_session)
             return
+
+    def get_desktop_resolution(self):
+        if not self.display_channel:
+            return None
+        return self.display_channel.get_properties("width", "height")
 
     def open_host(self, host, user, port, socketpath, password=None):
         ignore = socketpath
@@ -500,9 +520,6 @@ class vmmConsolePages(vmmGObjectUI):
         self.accel_groups = gtk.accel_groups_from_object(self.topwin)
         self.gtk_settings_accel = None
         self.gtk_settings_mnemonic = None
-
-        # Last noticed desktop resolution
-        self.desktop_resolution = None
 
         # Initialize display widget
         self.viewer = None
@@ -684,10 +701,12 @@ class vmmConsolePages(vmmGObjectUI):
 
     def size_to_vm(self, src_ignore):
         # Resize the console to best fit the VM resolution
-        if not self.desktop_resolution:
+        if not self.viewer:
+            return
+        if not self.viewer.get_desktop_resolution():
             return
 
-        w, h = self.desktop_resolution
+        w, h = self.viewer.get_desktop_resolution()
         self.topwin.unmaximize()
         self.topwin.resize(1, 1)
         self.queue_scroll_resize_helper(w, h)
@@ -992,10 +1011,6 @@ class vmmConsolePages(vmmGObjectUI):
             self.config.set_console_password(self.vm, passwd.get_text(),
                                              username.get_text())
 
-    def desktop_resize(self, src_ignore, w, h):
-        self.desktop_resolution = (w, h)
-        self.window.get_widget("console-vnc-scroll").queue_resize()
-
     def queue_scroll_resize_helper(self, w, h):
         """
         Resize the VNC container widget to the requested size. The new size
@@ -1043,7 +1058,7 @@ class vmmConsolePages(vmmGObjectUI):
         widget.queue_resize()
 
     def scroll_size_allocate(self, src_ignore, req):
-        if not self.viewer or not self.desktop_resolution:
+        if not self.viewer or not self.viewer.get_desktop_resolution():
             return
 
         scroll = self.window.get_widget("console-vnc-scroll")
@@ -1053,7 +1068,9 @@ class vmmConsolePages(vmmGObjectUI):
         dy = 0
         align_ratio = float(req.width) / float(req.height)
 
-        desktop_w, desktop_h = self.desktop_resolution
+        desktop_w, desktop_h = self.viewer.get_desktop_resolution()
+        if desktop_h == 0:
+            return
         desktop_ratio = float(desktop_w) / float(desktop_h)
 
         if not is_scale:
