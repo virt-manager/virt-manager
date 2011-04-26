@@ -445,6 +445,11 @@ class SpiceViewer(Viewer):
 
         if type(channel) == spice.DisplayChannel:
             channel_id = channel.get_property("channel-id")
+
+            if channel_id != 0:
+                logging.debug("Spice multi-head unsupported")
+                return
+
             self.display_channel = channel
             self.display = spice.Display(self.spice_session, channel_id)
             self.console.window.get_widget("console-vnc-viewport").add(self.display)
