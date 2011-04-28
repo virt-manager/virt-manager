@@ -22,11 +22,9 @@ import os
 import sys
 import logging
 
-import gtk
-import gobject
-
 import virtManager
-import virtManager.util as util
+
+running_config, gobject, GObject, gtk = virtManager.guidiff.get_imports()
 
 def _safe_wrapper(func, *args):
     gtk.gdk.threads_enter()
@@ -35,24 +33,29 @@ def _safe_wrapper(func, *args):
     finally:
         gtk.gdk.threads_leave()
 
-class vmmGObject(gobject.GObject):
-
-    _leak_check = True
+class vmmGObject(GObject):
 
     @staticmethod
     def type_register(*args, **kwargs):
+        if not hasattr(gobject, "type_register"):
+            return
         gobject.type_register(*args, **kwargs)
 
     @staticmethod
     def signal_new(klass, signal, args):
+        if not hasattr(gobject, "signal_new"):
+            return
+
         gobject.signal_new(signal, klass,
                            gobject.SIGNAL_RUN_FIRST,
                            gobject.TYPE_NONE,
                            args)
 
+    _leak_check = True
+
     def __init__(self):
-        gobject.GObject.__init__(self)
-        self.config = util.running_config
+        GObject.__init__(self)
+        self.config = running_config
 
         self._gobject_handles = []
         self._gobject_timeouts = []
@@ -78,11 +81,15 @@ class vmmGObject(gobject.GObject):
             logging.exception("Error cleaning up %s" % self)
 
     def connect(self, name, callback, *args):
-        ret = gobject.GObject.connect(self, name, callback, *args)
+        if not hasattr(GObject, "connect"):
+            return
+        ret = GObject.connect(self, name, callback, *args)
         self._gobject_handles.append(ret)
         return ret
     def disconnect(self, handle):
-        ret = gobject.GObject.disconnect(self, handle)
+        if not hasattr(GObject, "disconnect"):
+            return
+        ret = GObject.disconnect(self, handle)
         self._gobject_handles.remove(handle)
         return ret
 
@@ -95,6 +102,8 @@ class vmmGObject(gobject.GObject):
     def add_gobject_timeout(self, handle):
         self._gobject_timeouts.append(handle)
     def remove_gobject_timeout(self, handle):
+        if not hasattr(gobject, "source_remove"):
+            return
         gobject.source_remove(handle)
         self._gobject_timeouts.remove(handle)
 
@@ -161,9 +170,14 @@ class vmmGObject(gobject.GObject):
         """
         return gobject.timeout_add(timeout, _safe_wrapper, func, *args)
 
+    def emit(self, *args, **kwargs):
+        if not hasattr(GObject, "emit"):
+            return
+        return GObject.emit(self, *args, **kwargs)
+
     def __del__(self):
-        if hasattr(gobject.GObject, "__del__"):
-            getattr(gobject.GObject, "__del__")(self)
+        if hasattr(GObject, "__del__"):
+            getattr(GObject, "__del__")(self)
 
         try:
             if self.config:

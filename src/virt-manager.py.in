@@ -354,6 +354,9 @@ def main():
     config.hv_packages = hv_packages
     config.libvirt_packages = libvirt_packages
 
+    import virtManager.guidiff
+    virtManager.guidiff.is_gui(True)
+
     # Now we've got basic environment up & running we can fork
     if not options.nofork and not options.debug:
         drop_tty()

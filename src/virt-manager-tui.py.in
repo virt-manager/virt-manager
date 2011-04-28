@@ -136,6 +136,9 @@ def main():
                             (virtinst.__version__) +
                            "\n\n" + msg)
 
+    import virtManager.guidiff
+    virtManager.guidiff.is_gui(False)
+
     # Hack in the default URI for this instance of the tui
     if options.uri:
         import virtManagerTui.libvirtworker
