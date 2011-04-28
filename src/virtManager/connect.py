@@ -102,7 +102,7 @@ class vmmConnect(vmmGObjectUI):
         self.emit("cancelled")
         return 1
 
-    def close(self):
+    def close(self, ignore1=None, ignore2=None):
         self.topwin.hide()
         self.stop_browse()
 

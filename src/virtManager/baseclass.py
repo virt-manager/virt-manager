@@ -191,6 +191,9 @@ class vmmGObjectUI(vmmGObject):
         self.gladefile = None
         self.err = None
 
+    def close(self, ignore1=None, ignore2=None):
+        pass
+
     def bind_escape_key_close(self):
         def close_on_escape(src_ignore, event):
             if gtk.gdk.keyval_name(event.keyval) == "Escape":
