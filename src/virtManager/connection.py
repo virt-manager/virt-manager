@@ -24,8 +24,8 @@ import sys
 import traceback
 import re
 import threading
-from time import time
-from socket import gethostbyaddr, gethostname
+import time
+import socket
 
 import gtk
 
@@ -286,7 +286,7 @@ class vmmConnection(vmmGObject):
             return uri_hostname
 
         # This can throw an exception, so beware when calling!
-        return gethostbyaddr(gethostname())[0]
+        return socket.gethostbyaddr(socket.gethostname())[0]
 
     def get_uri_hostname(self):
         return virtinst.util.get_uri_hostname(self.uri)
@@ -1431,7 +1431,7 @@ class vmmConnection(vmmGObject):
         self.safe_idle_add(tick_send_signals)
 
         # Finally, we sample each domain
-        now = time()
+        now = time.time()
 
         updateVMs = self.vms
         if noStatsUpdate:
