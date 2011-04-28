@@ -203,6 +203,7 @@ def build_source_mode_combo(vm, combo):
     combo.set_active(0)
 
 def populate_source_mode_combo(vm, combo):
+    ignore = vm
     model = combo.get_model()
     model.clear()
 
@@ -331,20 +332,24 @@ def pretty_network_desc(nettype, source=None, netobj=None):
 
     return ret
 
-def init_network_list(net_list, bridge_box, source_mode_box=None, source_mode_label=None, vport_expander=None):
+def init_network_list(net_list, bridge_box,
+                      source_mode_box=None, source_mode_label=None,
+                      vport_expander=None):
     # [ network type, source name, label, sensitive?, net is active,
     #   manual bridge, net instance]
     net_model = gtk.ListStore(str, str, str, bool, bool, bool, object)
     net_list.set_model(net_model)
 
-    net_list.connect("changed", net_list_changed, bridge_box, source_mode_box,source_mode_label, vport_expander)
+    net_list.connect("changed", net_list_changed, bridge_box, source_mode_box,
+                     source_mode_label, vport_expander)
 
     text = gtk.CellRendererText()
     net_list.pack_start(text, True)
     net_list.add_attribute(text, 'text', 2)
     net_list.add_attribute(text, 'sensitive', 3)
 
-def net_list_changed(net_list, bridge_box, source_mode_box, source_mode_label, vport_expander):
+def net_list_changed(net_list, bridge_box,
+                     source_mode_box, source_mode_label, vport_expander):
     active = net_list.get_active()
     if active < 0:
         return
