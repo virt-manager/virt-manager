@@ -37,6 +37,8 @@ def _safe_wrapper(func, *args):
 
 class vmmGObject(gobject.GObject):
 
+    _leak_check = True
+
     @staticmethod
     def type_register(*args, **kwargs):
         gobject.type_register(*args, **kwargs)
@@ -59,7 +61,7 @@ class vmmGObject(gobject.GObject):
         self.object_key = str(self)
 
         # Config might not be available if we error early in startup
-        if self.config:
+        if self.config and self._leak_check:
             self.config.add_object(self.object_key)
 
     def cleanup(self):

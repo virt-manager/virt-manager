@@ -80,6 +80,9 @@ def is_net_bonding_slave(name_ignore, sysfspath):
     return False
 
 class vmmHalHelper(vmmGObject):
+    # Can't find a way to properly cleanup dbus signals
+    _leak_check = False
+
     def __init__(self):
         vmmGObject.__init__(self)
 
