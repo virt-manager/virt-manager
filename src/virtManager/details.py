@@ -18,12 +18,13 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
-import libvirt
 import logging
 import traceback
 import os
+
+import gtk
+
+import libvirt
 
 import virtManager.uihelpers as uihelpers
 from virtManager.storagebrowse import vmmStorageBrowser
@@ -584,8 +585,7 @@ class vmmDetails(vmmGObjectUI):
     def init_details(self):
         # Hardware list
         # [ label, icon name, icon size, hw type, hw data/class]
-        hw_list_model = gtk.ListStore(str, str, int, int,
-                                      gobject.TYPE_PYOBJECT)
+        hw_list_model = gtk.ListStore(str, str, int, int, object)
         self.window.get_widget("hw-list").set_model(hw_list_model)
 
         hwCol = gtk.TreeViewColumn("Hardware")

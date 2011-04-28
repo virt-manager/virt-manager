@@ -18,12 +18,11 @@
 # MA 02110-1301 USA.
 #
 
-import gobject
-import gtk
-
 import time
 import threading
 import logging
+
+import gtk
 
 import virtinst
 
@@ -179,7 +178,7 @@ class vmmCreate(vmmGObjectUI):
     def remove_timers(self):
         try:
             if self.host_storage_timer:
-                gobject.source_remove(self.host_storage_timer)
+                self.remove_gobject_timeout(self.host_storage_timer)
                 self.host_storage_timer = None
         except:
             pass
