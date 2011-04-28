@@ -42,6 +42,8 @@ OS_GENERIC = "generic"
 # Number of seconds to wait for media detection
 DETECT_TIMEOUT = 20
 
+DEFAULT_MEM = 1024
+
 PAGE_NAME = 0
 PAGE_INSTALL = 1
 PAGE_MEM = 2
@@ -377,7 +379,7 @@ class vmmCreate(vmmGObjectUI):
         self.window.get_widget("install-import-entry").set_text("")
 
         # Mem / CPUs
-        self.window.get_widget("config-mem").set_value(512)
+        self.window.get_widget("config-mem").set_value(DEFAULT_MEM)
         self.window.get_widget("config-cpus").set_value(1)
 
         # Storage
