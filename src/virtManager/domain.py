@@ -1627,10 +1627,10 @@ class vmmDomainVirtinst(vmmDomainBase):
     def hotplug_both_mem(self, memory, maxmem):
         raise NotImplementedError()
 
-vmmLibvirtObject.type_register(vmmDomainVirtinst)
-
 vmmLibvirtObject.type_register(vmmDomainBase)
 vmmDomainBase.signal_new(vmmDomainBase, "status-changed", [int, int])
 vmmDomainBase.signal_new(vmmDomainBase, "resources-sampled", [])
+
+vmmLibvirtObject.type_register(vmmDomainVirtinst)
 
 vmmLibvirtObject.type_register(vmmDomain)
