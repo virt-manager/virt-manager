@@ -54,14 +54,14 @@ class vmmConnection(vmmGObject):
     def __init__(self, uri, readOnly=False):
         vmmGObject.__init__(self)
 
-        self.connectThread = None
-        self.connectError = None
-        self.uri = uri
-        if self.uri is None or self.uri.lower() == "xen":
-            self.uri = "xen:///"
+        self._uri = uri
+        if self._uri is None or self._uri.lower() == "xen":
+            self._uri = "xen:///"
 
         self.readOnly = readOnly
         self.state = self.STATE_DISCONNECTED
+        self.connectThread = None
+        self.connectError = None
         self.vmm = None
 
         self._caps = None
@@ -204,7 +204,7 @@ class vmmConnection(vmmGObject):
         return self.readOnly
 
     def get_uri(self):
-        return self.uri
+        return self._uri
 
     def invalidate_caps(self):
         self._caps_xml = None
@@ -262,7 +262,7 @@ class vmmConnection(vmmGObject):
 
         if name == "vm-added":
             for uuid in self.vms.keys():
-                self.emit("vm-added", self.uri, uuid)
+                self.emit("vm-added", self.get_uri(), uuid)
         elif name == "mediadev-added":
             for dev in self.mediadevs.values():
                 self.emit("mediadev-added", dev)
@@ -289,7 +289,7 @@ class vmmConnection(vmmGObject):
         return socket.gethostbyaddr(socket.gethostname())[0]
 
     def get_uri_hostname(self):
-        return virtinst.util.get_uri_hostname(self.uri)
+        return virtinst.util.get_uri_hostname(self.get_uri())
 
     def get_short_hostname(self):
         hostname = self.get_hostname()
@@ -306,48 +306,48 @@ class vmmConnection(vmmGObject):
             return self.get_uri_hostname()
 
     def get_transport(self):
-        return virtinst.util.get_uri_transport(self.uri)
+        return virtinst.util.get_uri_transport(self.get_uri())
 
     def get_driver(self):
-        return virtinst.util.get_uri_driver(self.uri)
+        return virtinst.util.get_uri_driver(self.get_uri())
 
     def is_local(self):
         return bool(self.get_uri_hostname() == "localhost")
 
     def is_xen(self):
-        scheme = virtinst.util.uri_split(self.uri)[0]
+        scheme = virtinst.util.uri_split(self.get_uri())[0]
         return scheme.startswith("xen")
 
     def is_qemu(self):
-        scheme = virtinst.util.uri_split(self.uri)[0]
+        scheme = virtinst.util.uri_split(self.get_uri())[0]
         return scheme.startswith("qemu")
 
     def is_remote(self):
-        return virtinst.util.is_uri_remote(self.uri)
+        return virtinst.util.is_uri_remote(self.get_uri())
 
     def is_qemu_system(self):
         (scheme, ignore, ignore,
-         path, ignore, ignore) = virtinst.util.uri_split(self.uri)
+         path, ignore, ignore) = virtinst.util.uri_split(self.get_uri())
         if path == "/system" and scheme.startswith("qemu"):
             return True
         return False
 
     def is_qemu_session(self):
         (scheme, ignore, ignore,
-         path, ignore, ignore) = virtinst.util.uri_split(self.uri)
+         path, ignore, ignore) = virtinst.util.uri_split(self.get_uri())
         if path == "/session" and scheme.startswith("qemu"):
             return True
         return False
 
     def is_test_conn(self):
         (scheme, ignore, ignore,
-         ignore, ignore, ignore) = virtinst.util.uri_split(self.uri)
+         ignore, ignore, ignore) = virtinst.util.uri_split(self.get_uri())
         if scheme.startswith("test"):
             return True
         return False
 
     def is_session_uri(self):
-        path = virtinst.util.uri_split(self.uri)[3]
+        path = virtinst.util.uri_split(self.get_uri())[3]
         return path == "/session"
 
     # Connection capabilities debug helpers
@@ -377,7 +377,7 @@ class vmmConnection(vmmGObject):
             return match_whole_string(orig, "[0-9.]+")
 
         (scheme, username, hostname,
-         path, ignore, ignore) = virtinst.util.uri_split(self.uri)
+         path, ignore, ignore) = virtinst.util.uri_split(self.get_uri())
 
         hv = ""
         rest = ""
@@ -910,12 +910,14 @@ class vmmConnection(vmmGObject):
         self._change_state(self.STATE_CONNECTING)
 
         if sync:
-            logging.debug("Opening connection synchronously: %s" % self.uri)
+            logging.debug("Opening connection synchronously: %s" %
+                          self.get_uri())
             self._open_thread()
         else:
-            logging.debug("Scheduling background open thread for " + self.uri)
+            logging.debug("Scheduling background open thread for " +
+                         self.get_uri())
             self.connectThread = threading.Thread(target=self._open_thread,
-                                                  name="Connect %s" % self.uri)
+                                            name="Connect %s" % self.get_uri())
             self.connectThread.setDaemon(True)
             self.connectThread.start()
 
@@ -1027,9 +1029,9 @@ class vmmConnection(vmmGObject):
             return self._do_creds_dialog(creds)
         except Exception, e:
             # Detailed error message, in English so it can be Googled.
-            self.connectError = ("Failed to get credentials for '%s':\n%s\n%s"
-                                 % (str(self.uri), str(e),
-                                    "".join(traceback.format_exc())))
+            self.connectError = (
+                "Failed to get credentials for '%s':\n%s\n%s" %
+                (self.get_uri(), str(e), "".join(traceback.format_exc())))
             return -1
 
     def _acquire_tgt(self):
@@ -1048,7 +1050,7 @@ class vmmConnection(vmmGObject):
         try:
             flags = 0
 
-            tmp = self._open_dev_conn(self.uri)
+            tmp = self._open_dev_conn(self.get_uri())
             if tmp:
                 self.vmm = tmp
                 return
@@ -1058,7 +1060,7 @@ class vmmConnection(vmmGObject):
                 flags = libvirt.VIR_CONNECT_RO
 
             if virtinst.support.support_openauth():
-                self.vmm = libvirt.openAuth(self.uri,
+                self.vmm = libvirt.openAuth(self.get_uri(),
                                             [[libvirt.VIR_CRED_AUTHNAME,
                                               libvirt.VIR_CRED_PASSPHRASE,
                                               libvirt.VIR_CRED_EXTERNAL],
@@ -1066,9 +1068,9 @@ class vmmConnection(vmmGObject):
                                              None], flags)
             else:
                 if flags:
-                    self.vmm = libvirt.openReadOnly(self.uri)
+                    self.vmm = libvirt.openReadOnly(self.get_uri())
                 else:
-                    self.vmm = libvirt.open(self.uri)
+                    self.vmm = libvirt.open(self.get_uri())
         except:
             return sys.exc_info()
 
@@ -1371,6 +1373,7 @@ class vmmConnection(vmmGObject):
             app with long tick operations.
             """
             # Connection closed out from under us
+            uri = self.get_uri()
             if not self.vmm:
                 return
 
@@ -1383,50 +1386,50 @@ class vmmConnection(vmmGObject):
 
             # Update VM states
             for uuid in oldVMs:
-                self.emit("vm-removed", self.uri, uuid)
+                self.emit("vm-removed", uri, uuid)
                 oldVMs[uuid].cleanup()
             for uuid in newVMs:
-                self.emit("vm-added", self.uri, uuid)
+                self.emit("vm-added", uri, uuid)
 
             # Update virtual network states
             for uuid in oldNets:
-                self.emit("net-removed", self.uri, uuid)
+                self.emit("net-removed", uri, uuid)
                 oldNets[uuid].cleanup()
             for uuid in newNets:
-                self.emit("net-added", self.uri, uuid)
+                self.emit("net-added", uri, uuid)
             for uuid in startNets:
-                self.emit("net-started", self.uri, uuid)
+                self.emit("net-started", uri, uuid)
             for uuid in stopNets:
-                self.emit("net-stopped", self.uri, uuid)
+                self.emit("net-stopped", uri, uuid)
 
             # Update storage pool states
             for uuid in oldPools:
-                self.emit("pool-removed", self.uri, uuid)
+                self.emit("pool-removed", uri, uuid)
                 oldPools[uuid].cleanup()
             for uuid in newPools:
-                self.emit("pool-added", self.uri, uuid)
+                self.emit("pool-added", uri, uuid)
             for uuid in startPools:
-                self.emit("pool-started", self.uri, uuid)
+                self.emit("pool-started", uri, uuid)
             for uuid in stopPools:
-                self.emit("pool-stopped", self.uri, uuid)
+                self.emit("pool-stopped", uri, uuid)
 
             # Update interface states
             for name in oldInterfaces:
-                self.emit("interface-removed", self.uri, name)
+                self.emit("interface-removed", uri, name)
                 oldInterfaces[name].cleanup()
             for name in newInterfaces:
-                self.emit("interface-added", self.uri, name)
+                self.emit("interface-added", uri, name)
             for name in startInterfaces:
-                self.emit("interface-started", self.uri, name)
+                self.emit("interface-started", uri, name)
             for name in stopInterfaces:
-                self.emit("interface-stopped", self.uri, name)
+                self.emit("interface-stopped", uri, name)
 
             # Update nodedev list
             for name in oldNodedevs:
-                self.emit("nodedev-removed", self.uri, name)
+                self.emit("nodedev-removed", uri, name)
                 oldNodedevs[name].cleanup()
             for name in newNodedevs:
-                self.emit("nodedev-added", self.uri, name)
+                self.emit("nodedev-added", uri, name)
 
         self.safe_idle_add(tick_send_signals)
 
