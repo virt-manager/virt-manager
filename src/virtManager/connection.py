@@ -44,6 +44,13 @@ from virtManager.netdev import vmmNetDevice
 from virtManager.mediadev import vmmMediaDevice
 from virtManager.nodedev import vmmNodeDevice
 
+def _is_virtinst_test_uri(uri):
+    try:
+        import virtinst.cli
+        return bool(virtinst.cli._is_virtinst_test_uri(uri))
+    except:
+        return False
+
 class vmmConnection(vmmGObject):
 
     STATE_DISCONNECTED = 0
@@ -66,6 +73,7 @@ class vmmConnection(vmmGObject):
 
         self._caps = None
         self._caps_xml = None
+        self._is_virtinst_test_uri = _is_virtinst_test_uri(self._uri)
 
         self.network_capable = None
         self._storage_capable = None
@@ -315,10 +323,16 @@ class vmmConnection(vmmGObject):
         return bool(self.get_uri_hostname() == "localhost")
 
     def is_xen(self):
+        if self._is_virtinst_test_uri:
+            return self.get_uri().count(",xen")
+
         scheme = virtinst.util.uri_split(self.get_uri())[0]
         return scheme.startswith("xen")
 
     def is_qemu(self):
+        if self._is_virtinst_test_uri:
+            return self.get_uri().count(",qemu")
+
         scheme = virtinst.util.uri_split(self.get_uri())[0]
         return scheme.startswith("qemu")
 
@@ -889,15 +903,12 @@ class vmmConnection(vmmGObject):
         Allow using virtinsts connection hacking to fake capabilities
         and other reproducible/testable behavior
         """
-        try:
-            import virtinst.cli as cli
-            if not cli._is_virtinst_test_uri(uri):
-                return
-        except:
+        if not self._is_virtinst_test_uri:
             return
 
         try:
-            return cli._open_test_uri(uri)
+            import virtinst.cli
+            return virtinst.cli._open_test_uri(uri)
         except:
             logging.exception("Trouble opening test URI")
         return
