@@ -1086,7 +1086,7 @@ class vmmConnection(vmmGObject):
             return sys.exc_info()
 
     def _open_thread(self):
-        logging.debug("Background thread is running")
+        logging.debug("Background 'open connection' thread is running")
 
         done = False
         while not done:
