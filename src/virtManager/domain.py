@@ -234,14 +234,6 @@ class vmmDomain(vmmLibvirtObject):
     def get_install_abort(self):
         return bool(self._install_abort)
 
-    def set_handle(self, vm):
-        self._backend = vm
-    def release_handle(self):
-        del(self._backend)
-        self._backend = None
-    def get_handle(self):
-        return self._backend
-
     def enable_unsupported_rhel_opts(self):
         if not self.is_libexec_qemu():
             return True

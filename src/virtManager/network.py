@@ -60,10 +60,6 @@ class vmmNetwork(vmmLibvirtObject):
     def _define(self, xml):
         return self.get_connection().vmm.networkDefineXML(xml)
 
-
-    def set_handle(self, net):
-        self.net = net
-
     def set_active(self, state):
         self.active = state
 
