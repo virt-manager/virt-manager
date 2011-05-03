@@ -44,8 +44,8 @@ from virtManager.nodedev import vmmNodeDevice
 
 def _is_virtinst_test_uri(uri):
     try:
-        import virtinst.cli
-        return bool(virtinst.cli._is_virtinst_test_uri(uri))
+        from virtinst import cli
+        return bool(cli._is_virtinst_test_uri(uri))
     except:
         return False
 
@@ -905,8 +905,8 @@ class vmmConnection(vmmGObject):
             return
 
         try:
-            import virtinst.cli
-            return virtinst.cli._open_test_uri(uri)
+            from virtinst import cli
+            return cli._open_test_uri(uri)
         except:
             logging.exception("Trouble opening test URI")
         return
