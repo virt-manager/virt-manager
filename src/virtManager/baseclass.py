@@ -162,6 +162,8 @@ class vmmGObject(GObject):
         """
         Make sure idle functions are run thread safe
         """
+        if not hasattr(gobject, "idle_add"):
+            return func(*args)
         return gobject.idle_add(_safe_wrapper, func, *args)
 
     def safe_timeout_add(self, timeout, func, *args):
