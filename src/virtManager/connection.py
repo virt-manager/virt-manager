@@ -27,8 +27,6 @@ import threading
 import time
 import socket
 
-import gtk
-
 import dbus
 import libvirt
 import virtinst
@@ -933,36 +931,58 @@ class vmmConnection(vmmGObject):
             self.connectThread.start()
 
     def _do_creds_polkit(self, action):
+        """
+        Libvirt openAuth callback for PolicyKit < 1.0
+        """
         if os.getuid() == 0:
             logging.debug("Skipping policykit check as root")
             return 0
+
         logging.debug("Doing policykit for %s" % action)
 
         try:
-            bus = dbus.SessionBus()
             # First try to use org.freedesktop.PolicyKit.AuthenticationAgent
             # which is introduced with PolicyKit-0.7
-            obj = bus.get_object("org.freedesktop.PolicyKit.AuthenticationAgent", "/")
-            pkit = dbus.Interface(obj, "org.freedesktop.PolicyKit.AuthenticationAgent")
+            bus = dbus.SessionBus()
+
+            obj = bus.get_object(
+                        "org.freedesktop.PolicyKit.AuthenticationAgent", "/")
+            pkit = dbus.Interface(obj,
+                        "org.freedesktop.PolicyKit.AuthenticationAgent")
+
             pkit.ObtainAuthorization(action, 0, os.getpid())
         except dbus.exceptions.DBusException, e:
-            if e.get_dbus_name() != "org.freedesktop.DBus.Error.ServiceUnknown":
-                raise e
+            if (e.get_dbus_name() !=
+                "org.freedesktop.DBus.Error.ServiceUnknown"):
+                raise
+
             logging.debug("Falling back to org.gnome.PolicyKit")
             # If PolicyKit < 0.7, fallback to org.gnome.PolicyKit
-            obj = bus.get_object("org.gnome.PolicyKit", "/org/gnome/PolicyKit/Manager")
+            obj = bus.get_object("org.gnome.PolicyKit",
+                                 "/org/gnome/PolicyKit/Manager")
             pkit = dbus.Interface(obj, "org.gnome.PolicyKit.Manager")
             pkit.ShowDialog(action, 0)
+
         return 0
 
     def _do_creds_dialog(self, creds):
+        """
+        Thread safe wrapper for libvirt openAuth user/pass callback
+        """
         try:
+            import gtk
+
             gtk.gdk.threads_enter()
             return self._do_creds_dialog_main(creds)
         finally:
             gtk.gdk.threads_leave()
 
     def _do_creds_dialog_main(self, creds):
+        """
+        Libvirt openAuth callback for username/password credentials
+        """
+        import gtk
+
         dialog = gtk.Dialog("Authentication required", None, 0,
                             (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                              gtk.STOCK_OK, gtk.RESPONSE_OK))
@@ -1026,6 +1046,9 @@ class vmmConnection(vmmGObject):
             return -1
 
     def _do_creds(self, creds, cbdata):
+        """
+        Generic libvirt openAuth callback
+        """
         ignore = cbdata
         try:
             if (len(creds) == 1 and
@@ -1046,6 +1069,9 @@ class vmmConnection(vmmGObject):
             return -1
 
     def _acquire_tgt(self):
+        """
+        Try to get kerberos ticket if openAuth seems to require it
+        """
         logging.debug("In acquire tgt.")
         try:
             bus = dbus.SessionBus()
