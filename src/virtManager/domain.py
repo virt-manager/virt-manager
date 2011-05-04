@@ -608,7 +608,17 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_video_model(self, devobj, newmodel):
         def change(editdev):
+            if newmodel == editdev.model_type:
+                return
+
             editdev.model_type = newmodel
+
+            # Clear out heads/ram values so they reset to default. If
+            # we ever allow editing these values in the UI we should
+            # drop this
+            editdev.vram = None
+            editdev.heads = None
+
         return self._redefine_device(change, devobj)
 
     # Watchdog define methods
