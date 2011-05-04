@@ -572,19 +572,28 @@ class vmmDomain(vmmLibvirtObject):
         def change(editdev):
             editdev.keymap = newval
         return self._redefine_device(change, devobj)
-    def define_graphics_type(self, devobj, newval, spicevmc):
+    def define_graphics_type(self, devobj, newval, apply_spice_defaults):
+        def handle_spice():
+            if not apply_spice_defaults:
+                return
+
+            guest = self._get_guest_to_define()
+            is_spice = (newval == virtinst.VirtualGraphics.TYPE_SPICE)
+
+            if is_spice:
+                guest.add_device(VirtualCharSpicevmcDevice(guest.conn))
+            else:
+                channels = guest.get_devices("channel")
+                channels = filter(lambda x:
+                            (x.char_type ==
+                             virtinst.VirtualCharDevice.CHAR_SPICEVMC),
+                           channels)
+                for dev in channels:
+                    guest.remove_device(dev)
+
         def change(editdev):
             editdev.type = newval
-            if spicevmc:
-                guest = self._get_guest_to_define()
-                if newval == "spice":
-                    guest.add_device(VirtualCharSpicevmcDevice(guest.conn))
-                else:
-                    channels = guest.get_devices("channel")
-                    channels = filter(lambda x: x.char_type ==
-                                      virtinst.VirtualCharDevice.CHAR_SPICEVMC, channels)
-                    for dev in channels:
-                        guest.remove_device(dev)
+            handle_spice()
 
         return self._redefine_device(change, devobj)
 
