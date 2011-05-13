@@ -116,6 +116,10 @@ class LibvirtWorker:
             self.__vmmconn = old_vmmconn
             raise error
 
+    def get_capabilities(self):
+        '''Returns the capabilities for this libvirt host.'''
+        return self.__capabilities
+
     def list_domains(self, defined = True, started = True):
         '''Lists all domains.'''
         # XXX: This doesn't abide the passed parameters
