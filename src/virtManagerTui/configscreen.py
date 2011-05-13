@@ -160,20 +160,23 @@ class DomainListConfigScreen(ConfigScreen):
         ConfigScreen.__init__(self, title)
 
     def get_domain_list_page(self, screen, defined=True, created=True):
-        domains = self.get_libvirt().list_domains(defined, created)
+        domuuids = self.get_libvirt().list_domains(defined, created)
+        self.__has_domains = bool(domuuids)
         result = None
 
-        if len(domains) > 0:
-            self.__has_domains = True
+        if self.__has_domains:
             self.__domain_list = Listbox(0)
-            for name in domains:
-                self.__domain_list.append(name, name)
+            for uuid in domuuids:
+                dom = self.get_libvirt().get_domain(uuid)
+
+                # dom is a vmmDomain
+                self.__domain_list.append(dom.get_name(), dom)
             result = [self.__domain_list]
         else:
-            self.__has_domains = False
             grid = Grid(1, 1)
             grid.setField(Label("There are no domains available."), 0, 0)
             result = [grid]
+
         return result
 
     def get_selected_domain(self):
