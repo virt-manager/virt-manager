@@ -16,12 +16,15 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import dbus
-import libvirt
 import os
-import virtinst
 import utils
 import logging
+
+import dbus
+import virtinst
+import libvirt
+
+from virtManager.connection import vmmConnection
 
 from domainconfig import DomainConfig
 
@@ -78,8 +81,11 @@ class LibvirtWorker:
         logging.info("Connecting to libvirt: %s" % url)
         self.__url  = None
         self.__conn = None
+        self.__vmmconn = None
+
         self.open_connection(url)
-        self.__capabilities = virtinst.CapabilitiesParser.parse(self.__conn.getCapabilities())
+
+        self.__capabilities = self.__vmmconn.get_capabilities()
         self.__net = virtinst.VirtualNetworkInterface(conn = self.__conn)
         self.__net.setup(self.__conn)
         (self.__new_guest, self.__new_domain) = virtinst.CapabilitiesParser.guest_lookup(conn = self.__conn)
@@ -95,31 +101,30 @@ class LibvirtWorker:
         '''Lets the user change the url for the connection.'''
         old_conn = self.__conn
         old_url  = self.__url
+        old_vmmconn = self.__vmmconn
+
         try:
-            self.__conn = libvirt.open(url)
+            self.__vmmconn = vmmConnection(url)
+            self.__vmmconn.open(sync=True)
+
+            self.__conn = self.__vmmconn.vmm
             self.__url  = url
             set_default_url(url)
         except Exception, error:
             self.__conn = old_conn
             self.__url  = old_url
+            self.__vmmconn = old_vmmconn
             raise error
 
     def list_domains(self, defined = True, started = True):
         '''Lists all domains.'''
-        result = []
-        if defined:
-            result.extend(self.__conn.listDefinedDomains())
-        if started:
-            for id in self.__conn.listDomainsID():
-                result.append(self.__conn.lookupByID(id).name())
-        return result
+        # XXX: This doesn't abide the passed parameters
+        self.__vmmconn.tick()
+        return self.__vmmconn.list_vm_uuids()
 
-    def get_domain(self, name):
+    def get_domain(self, uuid):
         '''Returns the specified domain.'''
-        result = self.__conn.lookupByName(name)
-        if result is None: raise Exception("No such domain exists: %s" % name)
-
-        return result
+        return self.__vmmconn.get_vm(uuid)
 
     def domain_exists(self, name):
         '''Returns whether a domain with the specified node exists.'''
