@@ -50,17 +50,24 @@ class ListDomainsConfigScreen(DomainListConfigScreen):
 
     def get_detail_page_elements(self, screen):
         domain = self.get_selected_domain()
-        grid = Grid(2, 5)
-        grid.setField(Label("Name:  "), 0, 0, anchorRight = 1)
-        grid.setField(Label(domain.get_name()), 1, 0, anchorLeft = 1)
-        grid.setField(Label("UUID:  "), 0, 1, anchorRight = 1)
-        grid.setField(Label(domain.get_uuid()), 1, 1, anchorLeft = 1)
-        grid.setField(Label("OS Type:  "), 0, 2, anchorRight = 1)
-        grid.setField(Label(domain.get_abi_type()), 1, 2, anchorLeft = 1)
-        grid.setField(Label("Max. Memory:  "), 0, 3, anchorRight = 1)
-        grid.setField(Label(str(domain.maximum_memory())), 1, 3, anchorLeft = 1)
-        grid.setField(Label("Max. VCPUs:  "), 0, 4, anchorRight = 1)
-        grid.setField(Label(str(domain.vcpu_count())), 1, 4, anchorLeft = 1)
+        fields = []
+
+        fields.append(("Name", domain.get_name()))
+        fields.append(("UUID", domain.get_uuid()))
+        fields.append(("OS Type", domain.get_abi_type()))
+        fields.append(("Max. Memory", domain.maximum_memory()))
+        fields.append(("Max. VCPUs", domain.vcpu_count()))
+
+        grid = Grid(2, len(fields))
+        row = 0
+        for field in fields:
+            if field[1] is not None:
+                grid.setField(Label("%s :  " % field[0]), 0, row, anchorRight = 1)
+                grid.setField(Label(field[1]), 1, row, anchorLeft = 1)
+            else:
+                grid.setField(Label("%s" % field[0]), 1, row)
+            row += 1
+
         return [grid]
 
 def ListDomains():
