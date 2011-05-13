@@ -52,11 +52,39 @@ class ListDomainsConfigScreen(DomainListConfigScreen):
         domain = self.get_selected_domain()
         fields = []
 
+        # build the list to display
+        fields.append(("Basic Details", None))
         fields.append(("Name", domain.get_name()))
         fields.append(("UUID", domain.get_uuid()))
-        fields.append(("OS Type", domain.get_abi_type()))
-        fields.append(("Max. Memory", domain.maximum_memory()))
-        fields.append(("Max. VCPUs", domain.vcpu_count()))
+        fields.append(("Status", domain.run_status()))
+        fields.append(("Description", domain.get_description() or ""))
+        fields.append(("", None))
+
+        fields.append(("Hypervisor Details", None))
+        fields.append(("Hypervisor", domain.get_pretty_hv_type()))
+        fields.append(("Architecture", domain.get_arch() or "Unknown"))
+        fields.append(("Emulator", domain.get_emulator() or "None"))
+        fields.append(("", None))
+
+        fields.append(("Machine Settings", None))
+        if bool(domain.get_acpi()):
+            fields.append(("ACPI", "Enabled"))
+        if bool(domain.get_apic()):
+            fields.append(("APIC", "Enabled"))
+        fields.append(("Clock offset", domain.get_clock() or "Same as host"))
+        fields.append(("", None))
+
+        fields.append(("Security", None))
+
+        semodel, setype, vmlabel = domain.get_seclabel()
+        caps = self.get_libvirt().get_capabilities()
+        if caps.host.secmodel  and caps.host.secmodel.model:
+            semodel = caps.host.secmodel.model
+        fields.append(("Model", semodel or "None"))
+
+        if semodel is not None and semodel != "apparmor":
+            fields.append(("Type", setype))
+            fields.append(("Label", vmlabel))
 
         grid = Grid(2, len(fields))
         row = 0
