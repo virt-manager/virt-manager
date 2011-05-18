@@ -38,6 +38,7 @@ import socket
 import logging
 
 import virtManager.util as util
+import virtManager.uihelpers as uihelpers
 from virtManager.autodrawer import AutoDrawer
 from virtManager.baseclass import vmmGObjectUI, vmmGObject
 from virtManager.error import vmmErrorDialog
@@ -550,6 +551,7 @@ class vmmConsolePages(vmmGObjectUI):
         # Fullscreen toolbar
         self.fs_toolbar = None
         self.fs_drawer = None
+        self.keycombo_menu = uihelpers.build_keycombo_menu(self.send_key)
         self.init_fs_toolbar()
 
         finish_img = gtk.image_new_from_stock(gtk.STOCK_YES,
@@ -586,6 +588,8 @@ class vmmConsolePages(vmmGObjectUI):
             self.viewer.cleanup()
         self.viewer = None
 
+        self.keycombo_menu.destroy()
+        self.keycombo_menu = None
         self.fs_toolbar.destroy()
         self.fs_toolbar = None
         self.fs_drawer.destroy()
@@ -611,6 +615,26 @@ class vmmConsolePages(vmmGObjectUI):
         button.show()
         self.fs_toolbar.add(button)
         button.connect("clicked", self.leave_fullscreen)
+
+        def keycombo_menu_clicked(src):
+            ignore = src
+            def menu_location(menu, toolbar):
+                ignore = menu
+                x, y = toolbar.window.get_origin()
+                ignore, height = toolbar.window.get_size()
+
+                return x, y + height, True
+
+            self.keycombo_menu.popup(None, None, menu_location, 0,
+                                     gtk.get_current_event_time(),
+                                     self.fs_toolbar)
+
+        item = gtk.ToolButton()
+        item.set_icon_name("preferences-desktop-keyboard-shortcuts")
+        util.tooltip_wrapper(item, _("Send key combination"))
+        item.show_all()
+        item.connect("clicked", keycombo_menu_clicked)
+        self.fs_toolbar.add(item)
 
         self.fs_drawer = AutoDrawer()
         self.fs_drawer.set_active(False)
@@ -781,38 +805,8 @@ class vmmConsolePages(vmmGObjectUI):
         self.topwin.resize(1, 1)
         self.queue_scroll_resize_helper(w, h)
 
-    def send_key(self, src):
-        keys = None
-        if src.get_name() == "details-menu-send-cad":
-            keys = ["Control_L", "Alt_L", "Delete"]
-        elif src.get_name() == "details-menu-send-cab":
-            keys = ["Control_L", "Alt_L", "BackSpace"]
-        elif src.get_name() == "details-menu-send-caf1":
-            keys = ["Control_L", "Alt_L", "F1"]
-        elif src.get_name() == "details-menu-send-caf2":
-            keys = ["Control_L", "Alt_L", "F2"]
-        elif src.get_name() == "details-menu-send-caf3":
-            keys = ["Control_L", "Alt_L", "F3"]
-        elif src.get_name() == "details-menu-send-caf4":
-            keys = ["Control_L", "Alt_L", "F4"]
-        elif src.get_name() == "details-menu-send-caf5":
-            keys = ["Control_L", "Alt_L", "F5"]
-        elif src.get_name() == "details-menu-send-caf6":
-            keys = ["Control_L", "Alt_L", "F6"]
-        elif src.get_name() == "details-menu-send-caf7":
-            keys = ["Control_L", "Alt_L", "F7"]
-        elif src.get_name() == "details-menu-send-caf8":
-            keys = ["Control_L", "Alt_L", "F8"]
-        elif src.get_name() == "details-menu-send-caf9":
-            keys = ["Control_L", "Alt_L", "F9"]
-        elif src.get_name() == "details-menu-send-caf10":
-            keys = ["Control_L", "Alt_L", "F10"]
-        elif src.get_name() == "details-menu-send-caf11":
-            keys = ["Control_L", "Alt_L", "F11"]
-        elif src.get_name() == "details-menu-send-caf12":
-            keys = ["Control_L", "Alt_L", "F12"]
-        elif src.get_name() == "details-menu-send-printscreen":
-            keys = ["Print"]
+    def send_key(self, src, keys):
+        ignore = src
 
         if keys != None:
             self.viewer.send_keys(keys)

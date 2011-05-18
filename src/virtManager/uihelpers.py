@@ -839,3 +839,30 @@ def build_startmode_combo(start_list):
     start_model.append(["none"])
     start_model.append(["onboot"])
     start_model.append(["hotplug"])
+
+
+#########################
+# Console keycombo menu #
+#########################
+
+def build_keycombo_menu(cb):
+    menu = gtk.Menu()
+
+    def make_item(name, combo):
+        item = gtk.MenuItem(name, use_underline=True)
+        item.connect("activate", cb, combo)
+
+        menu.add(item)
+
+    make_item("Ctrl+Alt+_Backspace", ["Control_L", "Alt_L", "BackSpace"])
+    make_item("Ctrl+Alt+_Delete", ["Control_L", "Alt_L", "Delete"])
+    menu.add(gtk.SeparatorMenuItem())
+
+    for i in range(1, 13):
+        make_item("Ctrl+Alt+F_%d" % i, ["Control_L", "Alt_L", "F%d" % i])
+    menu.add(gtk.SeparatorMenuItem())
+
+    make_item("_Printscreen", ["Print"])
+
+    menu.show_all()
+    return menu

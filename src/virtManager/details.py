@@ -257,6 +257,7 @@ class vmmDetails(vmmGObjectUI):
         self.topwin.set_default_size(w or 800, h or 600)
 
         self.addhwmenu = None
+        self.keycombo_menu = None
         self.init_menus()
         self.init_details()
 
@@ -381,22 +382,6 @@ class vmmDetails(vmmGObjectUI):
             "on_details_menu_view_scale_always_toggled": self.console.set_scale_type,
             "on_details_menu_view_scale_fullscreen_toggled": self.console.set_scale_type,
             "on_details_menu_view_scale_never_toggled": self.console.set_scale_type,
-
-            "on_details_menu_send_cad_activate": self.console.send_key,
-            "on_details_menu_send_cab_activate": self.console.send_key,
-            "on_details_menu_send_caf1_activate": self.console.send_key,
-            "on_details_menu_send_caf2_activate": self.console.send_key,
-            "on_details_menu_send_caf3_activate": self.console.send_key,
-            "on_details_menu_send_caf4_activate": self.console.send_key,
-            "on_details_menu_send_caf5_activate": self.console.send_key,
-            "on_details_menu_send_caf6_activate": self.console.send_key,
-            "on_details_menu_send_caf7_activate": self.console.send_key,
-            "on_details_menu_send_caf8_activate": self.console.send_key,
-            "on_details_menu_send_caf9_activate": self.console.send_key,
-            "on_details_menu_send_caf10_activate": self.console.send_key,
-            "on_details_menu_send_caf11_activate": self.console.send_key,
-            "on_details_menu_send_caf12_activate": self.console.send_key,
-            "on_details_menu_send_printscreen_activate": self.console.send_key,
 
             "on_console_auth_password_activate": self.console.auth_login,
             "on_console_auth_login_clicked": self.console.auth_login,
@@ -530,6 +515,12 @@ class vmmDetails(vmmGObjectUI):
         self.window.get_widget("details-pages").set_show_tabs(False)
         self.window.get_widget("console-pages").set_show_tabs(False)
         self.window.get_widget("details-menu-view-toolbar").set_active(self.config.get_details_show_toolbar())
+
+        # Keycombo menu (ctrl+alt+del etc.)
+        self.keycombo_menu = uihelpers.build_keycombo_menu(
+                                                    self.console.send_key)
+        self.window.get_widget("details-menu-send-key").set_submenu(
+                                                    self.keycombo_menu)
 
         # XXX: Help docs useless/out of date
         self.window.get_widget("help_menuitem").hide()
