@@ -37,7 +37,7 @@ import signal
 import socket
 import logging
 
-from virtManager.baseclass import vmmGObjectUI
+from virtManager.baseclass import vmmGObjectUI, vmmGObject
 from virtManager.error import vmmErrorDialog
 
 # Console pages
@@ -198,10 +198,19 @@ class Tunnels(object):
         return errout
 
 
-class Viewer(object):
-    def __init__(self, console, config):
+class Viewer(vmmGObject):
+    def __init__(self, console):
+        vmmGObject.__init__(self)
         self.console = console
-        self.config = config
+        self.display = None
+
+    def cleanup(self):
+        vmmGObject.cleanup(self)
+
+        self.console = None
+
+        if self.display:
+            self.display.destroy()
         self.display = None
 
     def get_widget(self):
@@ -256,10 +265,11 @@ class Viewer(object):
         raise NotImplementedError()
 
 class VNCViewer(Viewer):
-    def __init__(self, console, config):
-        Viewer.__init__(self, console, config)
+    def __init__(self, console):
+        Viewer.__init__(self, console)
         self.display = gtkvnc.Display()
         self.sockfd = None
+
         # Last noticed desktop resolution
         self.desktop_resolution = None
 
@@ -395,8 +405,8 @@ class VNCViewer(Viewer):
 
 
 class SpiceViewer(Viewer):
-    def __init__(self, console, config):
-        Viewer.__init__(self, console, config)
+    def __init__(self, console):
+        Viewer.__init__(self, console)
         self.spice_session = None
         self.display = None
         self.audio = None
@@ -564,6 +574,9 @@ class vmmConsolePages(vmmGObjectUI):
     def cleanup(self):
         vmmGObjectUI.cleanup(self)
         self.vm = None
+
+        if self.viewer:
+            self.viewer.cleanup()
         self.viewer = None
 
     ##########################
@@ -778,6 +791,7 @@ class vmmConsolePages(vmmGObjectUI):
             viewport.remove(w)
 
         v.close()
+        v.cleanup()
         self.viewer_connected = False
 
     def update_widget_states(self, vm, status_ignore):
@@ -975,12 +989,12 @@ class vmmConsolePages(vmmGObjectUI):
                        gaddr, gport, gsocket))
         try:
             if protocol == "vnc":
-                self.viewer = VNCViewer(self, self.config)
+                self.viewer = VNCViewer(self)
                 self.window.get_widget("console-vnc-viewport").add(
                                                     self.viewer.get_widget())
                 self.viewer.init_widget()
             elif protocol == "spice":
-                self.viewer = SpiceViewer(self, self.config)
+                self.viewer = SpiceViewer(self)
 
             self.set_enable_accel()
 
