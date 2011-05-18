@@ -37,6 +37,8 @@ import signal
 import socket
 import logging
 
+import virtManager.util as util
+from virtManager.autodrawer import AutoDrawer
 from virtManager.baseclass import vmmGObjectUI, vmmGObject
 from virtManager.error import vmmErrorDialog
 
@@ -545,6 +547,11 @@ class vmmConsolePages(vmmGObjectUI):
         self.viewer_connecting = False
         self.scale_type = self.vm.get_console_scaling()
 
+        # Fullscreen toolbar
+        self.fs_toolbar = None
+        self.fs_drawer = None
+        self.init_fs_toolbar()
+
         finish_img = gtk.image_new_from_stock(gtk.STOCK_YES,
                                               gtk.ICON_SIZE_BUTTON)
         self.window.get_widget("console-auth-login").set_image(finish_img)
@@ -579,9 +586,43 @@ class vmmConsolePages(vmmGObjectUI):
             self.viewer.cleanup()
         self.viewer = None
 
+        self.fs_toolbar.destroy()
+        self.fs_toolbar = None
+        self.fs_drawer.destroy()
+        self.fs_drawer = None
+
     ##########################
     # Initialization helpers #
     ##########################
+
+    def init_fs_toolbar(self):
+        scroll = self.window.get_widget("console-vnc-scroll")
+        pages = self.window.get_widget("console-pages")
+        pages.remove(scroll)
+
+        self.fs_toolbar = gtk.Toolbar()
+        self.fs_toolbar.set_show_arrow(False)
+        self.fs_toolbar.set_no_show_all(True)
+        self.fs_toolbar.set_style(gtk.TOOLBAR_BOTH_HORIZ)
+
+        # Exit fullscreen button
+        button = gtk.ToolButton(gtk.STOCK_LEAVE_FULLSCREEN)
+        util.tooltip_wrapper(button, _("Leave fullscreen"))
+        button.show()
+        self.fs_toolbar.add(button)
+        button.connect("clicked", self.leave_fullscreen)
+
+        self.fs_drawer = AutoDrawer()
+        self.fs_drawer.set_active(False)
+        self.fs_drawer.set_over(self.fs_toolbar)
+        self.fs_drawer.set_under(scroll)
+        self.fs_drawer.set_offset(-1)
+        self.fs_drawer.set_fill(False)
+        self.fs_drawer.set_overlap_pixels(1)
+        self.fs_drawer.set_nooverlap_pixels(0)
+        self.fs_drawer.show_all()
+
+        pages.add(self.fs_drawer)
 
     def change_title(self, ignore1=None):
         title = self.vm.get_name() + " " + _("Virtual Machine")
@@ -703,17 +744,28 @@ class vmmConsolePages(vmmGObjectUI):
 
     def toggle_fullscreen(self, src):
         do_fullscreen = src.get_active()
+        self._change_fullscreen(do_fullscreen)
 
+    def leave_fullscreen(self, ignore):
+        self._change_fullscreen(False)
+
+    def _change_fullscreen(self, do_fullscreen):
         self.window.get_widget("control-fullscreen").set_active(do_fullscreen)
 
         if do_fullscreen:
             self.topwin.fullscreen()
+            self.fs_toolbar.show()
+            self.fs_drawer.set_active(True)
             self.window.get_widget("toolbar-box").hide()
+            self.window.get_widget("details-menubar").hide()
         else:
+            self.fs_toolbar.hide()
+            self.fs_drawer.set_active(False)
             self.topwin.unfullscreen()
 
             if self.window.get_widget("details-menu-view-toolbar").get_active():
                 self.window.get_widget("toolbar-box").show()
+            self.window.get_widget("details-menubar").show()
 
         self.update_scaling()
 
