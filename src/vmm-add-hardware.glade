@@ -6,7 +6,7 @@
     <property name="visible">True</property>
     <property name="title" translatable="yes">Add new virtual hardware</property>
     <property name="type_hint">dialog</property>
-    <signal name="delete_event" handler="on_vmm_create_delete_event"/>
+    <signal name="delete_event" handler="on_vmm_create_delete_event" swapped="no"/>
     <child>
       <widget class="GtkVBox" id="vbox23">
         <property name="visible">True</property>
@@ -74,7 +74,7 @@
                         <property name="tab_border">0</property>
                         <property name="tab_hborder">0</property>
                         <property name="tab_vborder">0</property>
-                        <signal name="switch_page" handler="on_create_pages_switch_page"/>
+                        <signal name="switch_page" handler="on_create_pages_switch_page" swapped="no"/>
                         <child>
                           <widget class="GtkVBox" id="page0-box">
                             <property name="visible">True</property>
@@ -270,7 +270,7 @@
                                                 <property name="receives_default">False</property>
                                                 <property name="draw_indicator">True</property>
                                                 <property name="group">config-storage-create</property>
-                                                <signal name="toggled" handler="on_config_storage_select_toggled"/>
+                                                <signal name="toggled" handler="on_config_storage_select_toggled" swapped="no"/>
                                                 <child>
                                                   <widget class="GtkLabel" id="label124">
                                                     <property name="visible">True</property>
@@ -303,7 +303,7 @@
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">True</property>
                                                 <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="on_config_storage_browse_clicked"/>
+                                                <signal name="clicked" handler="on_config_storage_browse_clicked" swapped="no"/>
                                               </widget>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -345,7 +345,7 @@
                                             <accessibility>
                                               <atkproperty name="AtkObject::accessible-name" translatable="yes">Device Type Field</atkproperty>
                                             </accessibility>
-                                            <signal name="changed" handler="on_target_device_changed"/>
+                                            <signal name="changed" handler="on_target_device_changed" swapped="no"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -518,7 +518,7 @@
                                                 <property name="receives_default">False</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="draw_indicator">True</property>
-                                                <signal name="clicked" handler="on_mac_address_clicked"/>
+                                                <signal name="clicked" handler="on_mac_address_clicked" swapped="no"/>
                                               </widget>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -863,7 +863,7 @@
                                         <child>
                                           <widget class="GtkComboBox" id="graphics-type">
                                             <property name="visible">True</property>
-                                            <signal name="changed" handler="on_graphics_type_changed"/>
+                                            <signal name="changed" handler="on_graphics_type_changed" swapped="no"/>
                                           </widget>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -1040,7 +1040,7 @@
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="relief">half</property>
                                                 <property name="draw_indicator">True</property>
-                                                <signal name="toggled" handler="on_graphics_keymap_toggled"/>
+                                                <signal name="toggled" handler="on_graphics_keymap_toggled" swapped="no"/>
                                               </widget>
                                               <packing>
                                                 <property name="x_options">GTK_FILL</property>
@@ -1162,7 +1162,7 @@
                                                 <property name="receives_default">False</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="draw_indicator">True</property>
-                                                <signal name="toggled" handler="on_graphics_port_auto_toggled"/>
+                                                <signal name="toggled" handler="on_graphics_port_auto_toggled" swapped="no"/>
                                               </widget>
                                               <packing>
                                                 <property name="left_attach">3</property>
@@ -1450,8 +1450,8 @@ to connect to the virtual machine.</property>
                                                     <child>
                                                       <widget class="GtkComboBox" id="char-device-type">
                                                         <property name="visible">True</property>
-                                                        <signal name="changed" handler="on_char_device_type_changed"/>
-                                                        <signal name="focus" handler="on_char_device_type_focus"/>
+                                                        <signal name="changed" handler="on_char_device_type_changed" swapped="no"/>
+                                                        <signal name="focus" handler="on_char_device_type_focus" swapped="no"/>
                                                       </widget>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -1511,7 +1511,7 @@ to connect to the virtual machine.</property>
                                                       <widget class="GtkEntry" id="char-path">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
-                                                        <signal name="focus_in_event" handler="char_path_focus_in"/>
+                                                        <signal name="focus_in_event" handler="char_path_focus_in" swapped="no"/>
                                                       </widget>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -1522,7 +1522,7 @@ to connect to the virtual machine.</property>
                                                       <widget class="GtkEntry" id="char-target-name">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
-                                                        <signal name="focus_in_event" handler="char_name_focus_in"/>
+                                                        <signal name="focus_in_event" handler="char_name_focus_in" swapped="no"/>
                                                       </widget>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -1553,7 +1553,7 @@ to connect to the virtual machine.</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">False</property>
                                                         <property name="draw_indicator">True</property>
-                                                        <signal name="focus_in_event" handler="char_telnet_focus_in"/>
+                                                        <signal name="focus_in_event" handler="char_telnet_focus_in" swapped="no"/>
                                                       </widget>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -1582,8 +1582,8 @@ to connect to the virtual machine.</property>
                                                     <child>
                                                       <widget class="GtkComboBox" id="char-mode">
                                                         <property name="visible">True</property>
-                                                        <signal name="changed" handler="on_char_mode_changed"/>
-                                                        <signal name="focus" handler="on_char_mode_focus"/>
+                                                        <signal name="changed" handler="on_char_mode_changed" swapped="no"/>
+                                                        <signal name="focus" handler="on_char_mode_focus" swapped="no"/>
                                                       </widget>
                                                       <packing>
                                                         <property name="left_attach">1</property>
@@ -1644,7 +1644,7 @@ to connect to the virtual machine.</property>
                                                           <widget class="GtkEntry" id="char-host">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">True</property>
-                                                            <signal name="focus_in_event" handler="char_host_focus_in"/>
+                                                            <signal name="focus_in_event" handler="char_host_focus_in" swapped="no"/>
                                                           </widget>
                                                           <packing>
                                                             <property name="position">0</property>
@@ -1668,7 +1668,7 @@ to connect to the virtual machine.</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="adjustment">0 0 67000 1 10 0</property>
-                                                            <signal name="focus_in_event" handler="char_host_focus_in"/>
+                                                            <signal name="focus_in_event" handler="char_host_focus_in" swapped="no"/>
                                                           </widget>
                                                           <packing>
                                                             <property name="expand">False</property>
@@ -1691,7 +1691,7 @@ to connect to the virtual machine.</property>
                                                           <widget class="GtkEntry" id="char-bind-host">
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">True</property>
-                                                            <signal name="focus_in_event" handler="char_bind_host_focus_in"/>
+                                                            <signal name="focus_in_event" handler="char_bind_host_focus_in" swapped="no"/>
                                                           </widget>
                                                           <packing>
                                                             <property name="position">0</property>
@@ -1715,7 +1715,7 @@ to connect to the virtual machine.</property>
                                                             <property name="visible">True</property>
                                                             <property name="can_focus">True</property>
                                                             <property name="adjustment">0 0 67000 1 10 0</property>
-                                                            <signal name="focus_in_event" handler="char_bind_host_focus_in"/>
+                                                            <signal name="focus_in_event" handler="char_bind_host_focus_in" swapped="no"/>
                                                           </widget>
                                                           <packing>
                                                             <property name="expand">False</property>
@@ -1927,7 +1927,7 @@ and default action should be used.</property>
                                         <property name="n_rows">2</property>
                                         <property name="n_columns">2</property>
                                         <property name="column_spacing">12</property>
-                                        <property name="row_spacing">12</property>
+                                        <property name="row_spacing">6</property>
                                         <child>
                                           <widget class="GtkComboBox" id="watchdog-model">
                                             <property name="visible">True</property>
@@ -2004,6 +2004,199 @@ and default action should be used.</property>
                             <property name="type">tab</property>
                           </packing>
                         </child>
+                        <child>
+                          <widget class="GtkVBox" id="page10-box">
+                            <property name="visible">True</property>
+                            <property name="spacing">12</property>
+                            <child>
+                              <widget class="GtkLabel" id="label16">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Please indicate what watchdog device type
+and default action should be used.</property>
+                                <property name="use_markup">True</property>
+                                <property name="wrap">True</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkAlignment" id="alignment16">
+                                <property name="visible">True</property>
+                                <property name="left_padding">24</property>
+                                <child>
+                                  <widget class="GtkTable" id="table9">
+                                    <property name="visible">True</property>
+                                    <property name="n_rows">4</property>
+                                    <property name="n_columns">2</property>
+                                    <property name="column_spacing">12</property>
+                                    <property name="row_spacing">6</property>
+                                    <child>
+                                      <widget class="GtkLabel" id="label18">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">_Type:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">fs-type-combo</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="x_options">GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkHBox" id="hbox11">
+                                        <property name="visible">True</property>
+                                        <child>
+                                          <widget class="GtkComboBox" id="fs-type-combo">
+                                            <property name="visible">True</property>
+                                            <signal name="changed" handler="on_fs_type_combo_changed" swapped="no"/>
+                                          </widget>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="fs-type-label">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label">Passthrough</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="label19">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">_Mode:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">fs-type-combo</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkHBox" id="hbox12">
+                                        <property name="visible">True</property>
+                                        <child>
+                                          <widget class="GtkComboBox" id="fs-mode-combo">
+                                            <property name="visible">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="fs-mode-label">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">Default</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="fs-source-title">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label">_Source label:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">fs-source</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                        <property name="x_options">GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkLabel" id="label33">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Ta_rget path:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">fs-target</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="bottom_attach">4</property>
+                                        <property name="x_options">GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkEntry" id="fs-source">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="invisible_char">●</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkEntry" id="fs-target">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="invisible_char">●</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">3</property>
+                                        <property name="bottom_attach">4</property>
+                                      </packing>
+                                    </child>
+                                  </widget>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="position">10</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="label14">
+                            <property name="visible">True</property>
+                            <property name="label">fs</property>
+                          </widget>
+                          <packing>
+                            <property name="position">10</property>
+                            <property name="tab_fill">False</property>
+                            <property name="type">tab</property>
+                          </packing>
+                        </child>
                       </widget>
                     </child>
                   </widget>
@@ -2033,7 +2226,7 @@ and default action should be used.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_create_help_clicked"/>
+                <signal name="clicked" handler="on_create_help_clicked" swapped="no"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -2049,7 +2242,7 @@ and default action should be used.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_create_cancel_clicked"/>
+                <signal name="clicked" handler="on_create_cancel_clicked" swapped="no"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -2064,7 +2257,7 @@ and default action should be used.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_create_finish_clicked"/>
+                <signal name="clicked" handler="on_create_finish_clicked" swapped="no"/>
               </widget>
               <packing>
                 <property name="expand">False</property>

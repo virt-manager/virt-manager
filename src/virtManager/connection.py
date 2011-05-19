@@ -320,6 +320,15 @@ class vmmConnection(vmmGObject):
     def is_local(self):
         return bool(self.get_uri_hostname() == "localhost")
 
+    def is_lxc(self):
+        if self._is_virtinst_test_uri:
+            self.get_uri().count(",lxc")
+
+        return virtinst.util.uri_split(self.get_uri())[0].startswith("lxc")
+
+    def is_openvz(self):
+        return virtinst.util.uri_split(self.get_uri())[0].startswith("openvz")
+
     def is_xen(self):
         if self._is_virtinst_test_uri:
             return self.get_uri().count(",xen")

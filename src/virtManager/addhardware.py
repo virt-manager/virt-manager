@@ -25,7 +25,7 @@ import gtk
 
 import virtinst
 from virtinst import (VirtualCharDevice, VirtualDevice, VirtualVideoDevice,
-                      VirtualWatchdog)
+                      VirtualWatchdog, VirtualFilesystem)
 
 import virtManager.util as util
 import virtManager.uihelpers as uihelpers
@@ -44,6 +44,7 @@ PAGE_HOSTDEV = 6
 PAGE_CHAR = 7
 PAGE_VIDEO = 8
 PAGE_WATCHDOG = 9
+PAGE_FILESYSTEM = 10
 
 char_widget_mappings = {
     "source_path" : "char-path",
@@ -104,6 +105,8 @@ class vmmAddHardware(vmmGObjectUI):
             "on_graphics_keymap_toggled": self.change_keymap,
 
             "on_char_device_type_changed": self.change_char_device_type,
+
+            "on_fs_type_combo_changed": self.change_fs_type,
 
             # Char dev info signals
             "char_device_type_focus": (self.update_doc, "char_type"),
@@ -324,6 +327,24 @@ class vmmAddHardware(vmmGObjectUI):
         combo = self.window.get_widget("watchdog-action")
         uihelpers.build_watchdogaction_combo(self.vm, combo)
 
+        def simple_store_set(comboname, values):
+            combo = self.window.get_widget(comboname)
+            model = gtk.ListStore(str, str)
+            combo.set_model(model)
+            text = gtk.CellRendererText()
+            combo.pack_start(text, True)
+            combo.add_attribute(text, 'text', 1)
+            model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+            for val in values:
+                model.append([val, val.capitalize()])
+
+        # Filesystem widgets
+        simple_store_set("fs-type-combo",
+                         [VirtualFilesystem.TYPE_MOUNT,
+                          VirtualFilesystem.TYPE_TEMPLATE])
+        simple_store_set("fs-mode-combo", VirtualFilesystem.MOUNT_MODES)
+        self.show_pair_combo("fs-type", self.conn.is_openvz())
+
         # Available HW options
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
@@ -379,6 +400,13 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option("Watchdog", "device_pci", PAGE_WATCHDOG,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
+        add_hw_option("Filesystem", gtk.STOCK_DIRECTORY, PAGE_FILESYSTEM,
+                      virtinst.support.check_conn_hv_support(
+                        self.conn.vmm,
+                        virtinst.support.SUPPORT_CONN_HV_FILESYSTEM,
+                        self.vm.get_hv_type()),
+                      _("Not supported for this hypervisor/libvirt "
+                        "combination."))
 
     def reset_state(self):
         # Storage init
@@ -451,6 +479,12 @@ class vmmAddHardware(vmmGObjectUI):
         self.window.get_widget("char-bind-port").get_adjustment().value = 4556
         self.window.get_widget("char-use-telnet").set_active(False)
         self.window.get_widget("char-target-name").set_text("com.redhat.spice.0")
+
+        # FS params
+        self.window.get_widget("fs-type-combo").set_active(0)
+        self.window.get_widget("fs-mode-combo").set_active(0)
+        self.window.get_widget("fs-source").set_text("")
+        self.window.get_widget("fs-target").set_text("")
 
         # Hide all notebook pages, so the wizard isn't as big as the largest
         # page
@@ -683,6 +717,22 @@ class vmmAddHardware(vmmGObjectUI):
         modbox = self.window.get_widget("watchdog-action")
         return modbox.get_model()[modbox.get_active()][0]
 
+    # FS getters
+    def get_config_fs_mode(self):
+        name = "fs-mode-combo"
+        combo = self.window.get_widget(name)
+        if not combo.get_property("visible"):
+            return None
+
+        return combo.get_model()[combo.get_active()][0]
+    def get_config_fs_type(self):
+        name = "fs-type-combo"
+        combo = self.window.get_widget(name)
+        if not combo.get_property("visible"):
+            return None
+
+        return combo.get_model()[combo.get_active()][0]
+
     ################
     # UI listeners #
     ################
@@ -857,6 +907,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("Video Device")
         if page == PAGE_WATCHDOG:
             return _("Watchdog Device")
+        if page == PAGE_FILESYSTEM:
+            return _("Filesystem Passthrough")
 
         if page == PAGE_CHAR:
             return self.get_char_type().capitalize() + " Device"
@@ -902,6 +954,31 @@ class vmmAddHardware(vmmGObjectUI):
         has_mode = self._dev.supports_property("source_mode")
         if has_mode and self.window.get_widget("char-mode").get_active() == -1:
             self.window.get_widget("char-mode").set_active(0)
+
+    def show_pair_combo(self, basename, show_combo):
+        combo = self.window.get_widget(basename + "-combo")
+        label = self.window.get_widget(basename + "-label")
+
+        combo.set_property("visible", show_combo)
+        label.set_property("visible", not show_combo)
+
+    def change_fs_type(self, src):
+        idx = src.get_active()
+        fstype = None
+        show_mode_combo = False
+
+        if idx >= 0 and src.get_property("visible"):
+            fstype = src.get_model()[idx][0]
+
+        if fstype == virtinst.VirtualFilesystem.TYPE_TEMPLATE:
+            source_text = _("Te_mplate:")
+        else:
+            source_text = _("_Source path:")
+            show_mode_combo = self.conn.is_qemu()
+
+        self.window.get_widget("fs-source-title").set_text(source_text)
+        self.window.get_widget("fs-source-title").set_use_underline(True)
+        self.show_pair_combo("fs-mode", show_mode_combo)
 
 
     ######################
@@ -1004,6 +1081,8 @@ class vmmAddHardware(vmmGObjectUI):
             return self.validate_page_video()
         elif page_num == PAGE_WATCHDOG:
             return self.validate_page_watchdog()
+        elif page_num == PAGE_FILESYSTEM:
+            return self.validate_page_filesystem()
 
     def validate_page_storage(self):
         bus, device = self.get_config_disk_target()
@@ -1237,6 +1316,29 @@ class vmmAddHardware(vmmGObjectUI):
             return self.err.val_err(_("Watchdog parameter error"),
                                     str(e))
 
+    def validate_page_filesystem(self):
+        conn = self.conn.vmm
+        source = self.window.get_widget("fs-source").get_text()
+        target = self.window.get_widget("fs-target").get_text()
+        mode = self.get_config_fs_mode()
+        fstype = self.get_config_fs_type()
+
+        if not source:
+            return self.err.val_err(_("A filesystem source must be specified"))
+        if not target:
+            return self.err.val_err(_("A filesystem target must be specified"))
+
+        try:
+            self._dev = virtinst.VirtualFilesystem(conn=conn)
+            self._dev.source = source
+            self._dev.target = target
+            if mode:
+                self._dev.mode = mode
+            if fstype:
+                self._dev.type = fstype
+        except Exception, e:
+            return self.err.val_err(_("Filesystem parameter error"),
+                                    str(e))
 
 
     ####################
