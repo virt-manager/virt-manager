@@ -212,6 +212,7 @@ def populate_source_mode_combo(vm, combo):
     model.append(["vepa", "vepa"])
     model.append(["bridge", "bridge"])
     model.append(["private", "private"])
+    model.append(["passthrough", "passthrough"])
 
 def build_netmodel_combo(vm, combo):
     dev_model = gtk.ListStore(str, str)
