@@ -108,6 +108,19 @@ class OverBox(parentclass):
         geo.height = height
         return geo
 
+    def _set_overwin_size(self, alloc):
+        # Trying to set the overwindow size to 0,0 always draws a 1,1 pixel
+        # on the screen. Have this wrapper hide the window if trying to
+        # resize to 0,0
+
+        self.overWin.move_resize(alloc.x, alloc.y,
+                                 alloc.width, alloc.height)
+
+        if alloc.height == 0 and alloc.width == 0:
+            self.overWin.hide()
+        else:
+            self.overWin.show()
+
     def _set_background(self):
         style = self.get_style()
         style.set_background(self.window, gtk.STATE_NORMAL)
@@ -223,12 +236,13 @@ class OverBox(parentclass):
             self.underWidget.set_parent_window(self.underWin)
         self.underWin.show()
 
+        overalloc = self._get_over_window_geometry()
         self.overWin = make_window(window,
                                    self._get_over_window_geometry())
         self.overWin.set_user_data(self)
         if self.overWidget:
             self.overWidget.set_parent_window(self.overWin)
-        self.overWin.show()
+        self._set_overwin_size(overalloc)
 
         self._set_background()
 
@@ -258,8 +272,7 @@ class OverBox(parentclass):
                                     newalloc.width, newalloc.height)
             self.underWin.move_resize(under.x, under.y,
                                       under.width, under.height)
-            self.overWin.move_resize(over.x, over.y,
-                                     over.width, over.height)
+            self._set_overwin_size(over)
 
         under.x = 0
         under.y = 0
