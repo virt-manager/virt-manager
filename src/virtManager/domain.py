@@ -46,6 +46,7 @@ def compare_device(origdev, newdev, idx):
         "graphics"  : ["type", "vmmindex"],
         "controller" : ["type", "index"],
         "channel"   : ["char_type", "target_name"],
+        "filesystem" : ["target" , "vmmindex"],
     }
 
     if id(origdev) == id(newdev):
@@ -888,6 +889,8 @@ class vmmDomain(vmmLibvirtObject):
         return self._build_device_list("sound")
     def get_controller_devices(self):
         return self._build_device_list("controller")
+    def get_filesystem_devices(self):
+        return self._build_device_list("filesystem")
 
     def get_disk_devices(self, refresh_if_necc=True, inactive=False):
         devs = self._build_device_list("disk", refresh_if_necc, inactive)

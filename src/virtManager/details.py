@@ -61,11 +61,13 @@ HW_LIST_TYPE_HOSTDEV = 11
 HW_LIST_TYPE_VIDEO = 12
 HW_LIST_TYPE_WATCHDOG = 13
 HW_LIST_TYPE_CONTROLLER = 14
+HW_LIST_TYPE_FILESYSTEM = 15
 
 remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
                 HW_LIST_TYPE_HOSTDEV, HW_LIST_TYPE_DISK, HW_LIST_TYPE_VIDEO,
-                HW_LIST_TYPE_WATCHDOG, HW_LIST_TYPE_CONTROLLER]
+                HW_LIST_TYPE_WATCHDOG, HW_LIST_TYPE_CONTROLLER,
+                HW_LIST_TYPE_FILESYSTEM]
 
 # Boot device columns
 BOOT_DEV_TYPE = 0
@@ -1017,6 +1019,8 @@ class vmmDetails(vmmGObjectUI):
                 self.refresh_watchdog_page()
             elif pagetype == HW_LIST_TYPE_CONTROLLER:
                 self.refresh_controller_page()
+            elif pagetype == HW_LIST_TYPE_FILESYSTEM:
+                self.refresh_filesystem_page()
             else:
                 pagetype = -1
         except Exception, e:
@@ -2656,6 +2660,16 @@ class vmmDetails(vmmGObjectUI):
         type_label = virtinst.VirtualController.pretty_type(dev.type)
         self.window.get_widget("controller-type").set_text(type_label)
 
+    def refresh_filesystem_page(self):
+        dev = self.get_hw_selection(HW_LIST_COL_DEVICE)
+        if not dev:
+            return
+
+        self.window.get_widget("fs-type").set_text(dev.type)
+        self.window.get_widget("fs-mode").set_text(dev.mode)
+        self.window.get_widget("fs-source").set_text(dev.source)
+        self.window.get_widget("fs-target").set_text(dev.target)
+
     def refresh_boot_page(self):
         # Refresh autostart
         try:
@@ -2856,15 +2870,24 @@ class vmmDetails(vmmGObjectUI):
         for vid in self.vm.get_video_devices():
             update_hwlist(HW_LIST_TYPE_VIDEO, vid, _("Video"), "video-display")
 
+        # Populate watchdog devices
         for watch in self.vm.get_watchdog_devices():
             update_hwlist(HW_LIST_TYPE_WATCHDOG, watch, _("Watchdog"),
                           "device_pci")
 
+        # Populate controller devices
         for cont in self.vm.get_controller_devices():
             pretty_type = virtinst.VirtualController.pretty_type(cont.type)
             update_hwlist(HW_LIST_TYPE_CONTROLLER, cont,
                           _("Controller %s") % pretty_type,
                           "device_pci")
+
+        # Populate filesystem devices
+        for fs in self.vm.get_filesystem_devices():
+            target = fs.target[:8]
+            update_hwlist(HW_LIST_TYPE_FILESYSTEM, fs,
+                          _("Filesystem %s") % target,
+                          gtk.STOCK_DIRECTORY)
 
         devs = range(len(hw_list_model))
         devs.reverse()
