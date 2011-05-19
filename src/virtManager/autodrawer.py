@@ -283,7 +283,7 @@ class OverBox(parentclass):
 
     def do_style_set(self, style):
         if self.is_realized():
-            self.set_background()
+            self._set_background()
 
         parentclass.do_style_set(self, style)
 
