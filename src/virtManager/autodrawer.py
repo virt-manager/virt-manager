@@ -356,6 +356,7 @@ class AutoDrawer(Drawer):
         self.delayValue = 250
         self.overlapPixels = 0
         self.noOverlapPixels = 1
+        self.overAllocID = None
 
         self.over = None
         self.eventBox = gtk.EventBox()
@@ -382,14 +383,27 @@ class AutoDrawer(Drawer):
 
         if oldChild:
             self.eventBox.remove(oldChild)
+            oldChild.disconnect(self.overAllocID)
+            oldChild.destroy()
 
         if newover:
+            def size_allocate(src, newalloc):
+                req = (newalloc.width, newalloc.height)
+                if req == src.size_request():
+                    # If over widget was just allocated it's requested size,
+                    # something caused it to pop up, so make sure state
+                    # is updated.
+                    #
+                    # Without this, switching to fullscreen keeps the toolbar
+                    # stuck open until mouse over
+                    self._update(False)
+
             self.eventBox.add(newover)
+            self.overAllocID = newover.connect("size-allocate", size_allocate)
 
         self.over = newover
 
     def _update(self, do_immediate):
-
         toplevel = self.get_toplevel()
         if not toplevel or not toplevel.is_toplevel():
             # The autoDrawer cannot function properly without a toplevel.
