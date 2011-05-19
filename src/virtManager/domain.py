@@ -543,9 +543,10 @@ class vmmDomain(vmmLibvirtObject):
             if not newtype:
                 return
             editdev.source = None
+
             editdev.type = newtype
             editdev.source = newsource
-            editdev.source_mode = newmode
+            editdev.source_mode = newmode or None
         return self._redefine_device(change, devobj)
     def define_network_model(self, devobj, newmodel):
         def change(editdev):

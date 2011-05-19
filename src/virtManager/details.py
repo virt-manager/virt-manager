@@ -1837,10 +1837,9 @@ class vmmDetails(vmmGObjectUI):
         net_bridge = self.window.get_widget("network-bridge")
         nettype, source = uihelpers.get_network_selection(net_list, net_bridge)
 
+        source_mode = None
         if (nettype  == "direct"):
             source_mode = self.get_combo_label_value("network-source-mode")
-        else:
-            source_mode = ""
 
         model = self.get_combo_label_value("network-model")
 

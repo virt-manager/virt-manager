@@ -209,10 +209,10 @@ def populate_source_mode_combo(vm, combo):
 
     # [xml value, label]
     model.append([None, _("")])
-    model.append(["vepa", "vepa"])
-    model.append(["bridge", "bridge"])
-    model.append(["private", "private"])
-    model.append(["passthrough", "passthrough"])
+    model.append(["vepa", "VEPA"])
+    model.append(["bridge", "Bridge"])
+    model.append(["private", "Private"])
+    model.append(["passthrough", "Passthrough"])
 
 def build_netmodel_combo(vm, combo):
     dev_model = gtk.ListStore(str, str)
