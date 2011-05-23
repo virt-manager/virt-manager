@@ -120,11 +120,20 @@ class LibvirtWorker:
         '''Returns the capabilities for this libvirt host.'''
         return self.__capabilities
 
-    def list_domains(self, defined = True, started = True):
+    def list_domains(self, defined = True, created = True):
         '''Lists all domains.'''
-        # XXX: This doesn't abide the passed parameters
         self.__vmmconn.tick()
-        return self.__vmmconn.list_vm_uuids()
+        uuids = self.__vmmconn.list_vm_uuids()
+        result = []
+        for uuid in uuids:
+            include = False
+            domain = self.get_domain(uuid)
+            if domain.status() in [libvirt.VIR_DOMAIN_RUNNING]:
+                if created: include = True
+            else:
+                if defined: include = True
+            if include: result.append(uuid)
+        return result
 
     def get_domain(self, uuid):
         '''Returns the specified domain.'''

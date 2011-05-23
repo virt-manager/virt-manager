@@ -167,10 +167,10 @@ class DomainListConfigScreen(ConfigScreen):
         if self.__has_domains:
             self.__domain_list = Listbox(0)
             for uuid in domuuids:
-                dom = self.get_libvirt().get_domain(uuid)
+                domain = self.get_libvirt().get_domain(uuid)
 
                 # dom is a vmmDomain
-                self.__domain_list.append(dom.get_name(), dom)
+                self.__domain_list.append(domain.get_name(), domain)
             result = [self.__domain_list]
         else:
             grid = Grid(1, 1)
