@@ -47,10 +47,13 @@ class StopDomainConfigScreen(DomainListConfigScreen):
             if self.get_selected_domain() is not None:
                 domain = self.get_selected_domain()
                 try:
-                    self.get_libvirt().destroy_domain(domain)
-                    return True
+                    if domain.is_stoppable():
+                        domain.destroy()
+                        return True
+                    else:
+                        errors.append("%s is not in a stoppable state: state=%s" % (domain.get_name(), domain.run_status()))
                 except Exception, error:
-                    errors.append("There was an error stop the domain: %s" % domain)
+                    errors.append("There was an error stopping the domain: %s" % domain)
                     errors.append(str(error))
             else:
                 errors.append("You must first select a domain to stop.")
@@ -58,7 +61,7 @@ class StopDomainConfigScreen(DomainListConfigScreen):
 
     def get_stop_page(self, screen):
         grid = Grid(1, 1)
-        grid.setField(Label("%s was successfully stoped." % self.get_selected_domain()), 0, 0)
+        grid.setField(Label("%s was successfully stopped." % self.get_selected_domain().get_name()), 0, 0)
         return [grid]
 
 def StopDomain():

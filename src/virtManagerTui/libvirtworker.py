@@ -145,11 +145,6 @@ class LibvirtWorker:
         if name in domains: return True
         return False
 
-    def destroy_domain(self, name):
-        '''Destroys the specified domain.'''
-        domain = self.get_domain(name)
-        domain.destroy()
-
     def undefine_domain(self, name):
         '''Undefines the specified domain.'''
         domain = self.get_domain(name)
