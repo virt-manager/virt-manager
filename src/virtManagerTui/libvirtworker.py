@@ -145,11 +145,6 @@ class LibvirtWorker:
         if name in domains: return True
         return False
 
-    def create_domain(self, name):
-        '''Creates the specified domain.'''
-        domain = self.get_domain(name)
-        domain.create()
-
     def destroy_domain(self, name):
         '''Destroys the specified domain.'''
         domain = self.get_domain(name)

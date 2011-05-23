@@ -30,7 +30,7 @@ class StartDomainConfigScreen(DomainListConfigScreen):
 
     def get_elements_for_page(self, screen, page):
         if page is self.LIST_PAGE:
-            return self.get_domain_list_page(screen, started = False)
+            return self.get_domain_list_page(screen, created = False)
         elif page is self.START_PAGE:
             return self.get_start_domain_page(screen)
 
@@ -47,17 +47,20 @@ class StartDomainConfigScreen(DomainListConfigScreen):
             if self.get_selected_domain() is not None:
                 domain = self.get_selected_domain()
                 try:
-                    self.get_libvirt().create_domain(domain)
+                    if domain.is_unpauseable():
+                        domain.resume()
+                    else:
+                        domain.startup()
                     return True
                 except Exception, error:
-                    errors.append("There was an error creating the domain: %s" % domain)
+                    errors.append("There was an error creating the domain: %s" % domain.get_name())
                     errors.append(str(error))
             else:
                 errors.append("You must first select a domain to start.")
 
     def get_start_domain_page(self, screen):
         grid = Grid(1, 1)
-        grid.setField(Label("%s was successfully started." % self.get_selected_domain()), 0, 0)
+        grid.setField(Label("%s was successfully started." % self.get_selected_domain().get_name()), 0, 0)
         return [grid]
 
 def StartDomain():
