@@ -58,7 +58,7 @@ class RemoveDomainConfigScreen(DomainListConfigScreen):
             if self.__confirm_remove.value():
                 domain = self.get_selected_domain()
                 try:
-                    self.get_libvirt().undefine_domain(domain)
+                    domain.delete()
                     return True
                 except Exception, error:
                     errors.append("Failed to remove %s." % domain)
@@ -68,14 +68,14 @@ class RemoveDomainConfigScreen(DomainListConfigScreen):
         return False
 
     def get_confirm_page(self, screen):
-        self.__confirm_remove = Checkbox("Check here to confirm undefining %s." % self.get_selected_domain(), 0)
+        self.__confirm_remove = Checkbox("Check here to confirm undefining %s." % self.get_selected_domain().get_name(), 0)
         grid = Grid(1, 1)
         grid.setField(self.__confirm_remove, 0, 0)
         return [grid]
 
     def get_remove_page(self, screen):
         grid = Grid(1, 1)
-        grid.setField(Label("%s has been removed." % self.get_selected_domain()), 0, 0)
+        grid.setField(Label("%s has been removed." % self.get_selected_domain().get_name()), 0, 0)
         return [grid]
 
 def RemoveDomain():
