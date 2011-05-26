@@ -191,8 +191,8 @@ class NetworkListConfigScreen(ConfigScreen):
     def __init__(self, title):
         ConfigScreen.__init__(self, title)
 
-    def get_network_list_page(self, screen, defined=True, created=True):
-        uuids = self.get_libvirt().list_networks(defined, created)
+    def get_network_list_page(self, screen, defined=True, started=True):
+        uuids = self.get_libvirt().list_networks(defined, started)
         result = None
 
         if len(uuids) > 0:

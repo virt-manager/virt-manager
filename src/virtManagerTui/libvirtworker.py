@@ -184,6 +184,7 @@ class LibvirtWorker:
         uuid -- the network's identifier
 
         '''
+        self.__vmmconn.tick()
         result = self.__vmmconn.get_net(uuid)
         if result is None: raise Exception("No such network exists: uuid=%s" % uuid)
 
@@ -230,11 +231,6 @@ class LibvirtWorker:
         xml += "</network>\n"
 
         self.__conn.networkDefineXML(xml)
-
-    def create_network(self, name):
-        '''Creates a defined network.'''
-        network = self.get_network(name)
-        network.create()
 
     def destroy_network(self, name):
         '''Destroys the specified network.'''

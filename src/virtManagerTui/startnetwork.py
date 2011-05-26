@@ -29,7 +29,7 @@ class StartNetworkConfigScreen(NetworkListConfigScreen):
         NetworkListConfigScreen.__init__(self, "Start A Network")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:  return self.get_network_list_page(screen, created = False)
+        if   page is LIST_PAGE:  return self.get_network_list_page(screen, started = False)
         elif page is START_PAGE: return self.get_start_network_page(screen)
 
     def page_has_next(self, page):
@@ -40,12 +40,16 @@ class StartNetworkConfigScreen(NetworkListConfigScreen):
 
     def validate_input(self, page, errors):
         if page is LIST_PAGE:
-            self.get_libvirt().start_network(self.get_selected_network())
-            return True
+            network = self.get_selected_network()
+            if network.is_active():
+                errors.append("%s is already started." % network.get_name())
+            else:
+                network.start()
+                return True
 
     def get_start_network_page(self, screen):
-        return [Label("Network Started"),
-                Label("%s was successfully started." % self.get_selected_network())]
+        network = self.get_selected_network()
+        return [Label("%s was successfully started." % network.get_name())]
 
 def StartNetwork():
     screen = StartNetworkConfigScreen()
