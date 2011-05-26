@@ -211,7 +211,8 @@ class NetworkListConfigScreen(ConfigScreen):
                 grid]
 
     def get_selected_network(self):
-        return self.__network_list.current()
+        uuid = self.__network_list.current()
+        return self.get_libvirt().get_network(uuid)
 
     def has_selectable_networks(self):
         return self.__has_networks
