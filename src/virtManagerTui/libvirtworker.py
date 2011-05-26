@@ -230,7 +230,7 @@ class LibvirtWorker:
         xml += "  </ip>\n"
         xml += "</network>\n"
 
-        self.__conn.networkDefineXML(xml)
+        self.__vmmconn.create_network(xml)
 
     def undefine_network(self, name):
         '''Undefines the specified network.'''
