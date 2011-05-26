@@ -232,11 +232,6 @@ class LibvirtWorker:
 
         self.__conn.networkDefineXML(xml)
 
-    def destroy_network(self, name):
-        '''Destroys the specified network.'''
-        network = self.get_network(name)
-        network.destroy()
-
     def undefine_network(self, name):
         '''Undefines the specified network.'''
         network = self.get_network(name)

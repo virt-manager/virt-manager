@@ -43,13 +43,13 @@ class StopNetworkConfigScreen(NetworkListConfigScreen):
     def validate_input(self, page, errors):
         if page is LIST_PAGE:
             network = self.get_selected_network()
-            self.get_libvirt().stop_network(network)
+            network.stop()
             return True
         return False
 
     def get_stop_network_page(self, screen):
-        return [Label("Network Stoped"),
-                Label("%s has been stoped." % self.get_selected_network())]
+        network = self.get_selected_network()
+        return [Label("%s has been stopped." % network.get_name())]
 
 def StopNetwork():
     screen = StopNetworkConfigScreen()
