@@ -256,11 +256,6 @@ class vmmDomain(vmmLibvirtObject):
             self._is_management_domain = (self.get_id() == 0)
         return self._is_management_domain
 
-    def is_hvm(self):
-        if self.get_abi_type() == "hvm":
-            return True
-        return False
-
     def get_id_pretty(self):
         i = self.get_id()
         if i < 0:
@@ -509,6 +504,10 @@ class vmmDomain(vmmLibvirtObject):
             guest.installer.bootconfig.initrd = initrd or None
             guest.installer.bootconfig.kernel_args = args or None
         return self._redefine_guest(change)
+    def set_boot_init(self, init):
+        def change(guest):
+            guest.installer.init = init
+        return self._redefine_guest(change)
 
     # Disk define methods
 
@@ -739,6 +738,13 @@ class vmmDomain(vmmLibvirtObject):
     # XML Parsing routines #
     ########################
 
+    def is_container(self):
+        return self._get_guest().installer.is_container()
+    def is_xenpv(self):
+        return self._get_guest().installer.is_xenpv()
+    def is_hvm(self):
+        return self._get_guest().installer.is_hvm()
+
     def get_uuid(self):
         return self.uuid
     def get_abi_type(self):
@@ -749,6 +755,8 @@ class vmmDomain(vmmLibvirtObject):
         return util.pretty_hv(self.get_abi_type(), self.get_hv_type())
     def get_arch(self):
         return self._get_guest().installer.arch
+    def get_init(self):
+        return self._get_guest().installer.init
     def get_emulator(self):
         return self._get_guest().emulator
     def get_acpi(self):

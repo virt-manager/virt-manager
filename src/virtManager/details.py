@@ -339,6 +339,7 @@ class vmmDetails(vmmGObjectUI):
             "on_boot_kernel_args_changed": self.config_enable_apply,
             "on_boot_kernel_browse_clicked": self.browse_kernel,
             "on_boot_kernel_initrd_browse_clicked": self.browse_initrd,
+            "on_boot_init_path_changed": self.config_enable_apply,
 
             "on_disk_readonly_changed": self.config_enable_apply,
             "on_disk_shareable_changed": self.config_enable_apply,
@@ -1794,13 +1795,22 @@ class vmmDetails(vmmGObjectUI):
         kernel = self.window.get_widget("boot-kernel").get_text()
         initrd = self.window.get_widget("boot-kernel-initrd").get_text()
         args = self.window.get_widget("boot-kernel-args").get_text()
+        init = self.window.get_widget("boot-init-path").get_text()
 
-        return self._change_config_helper([self.vm.set_boot_device,
-                                           self.vm.set_boot_menu,
-                                           self.vm.set_boot_kernel],
-                                          [(bootdevs,),
-                                           (bootmenu,),
-                                           (kernel, initrd, args)])
+        funcs = [self.vm.set_boot_device,
+                 self.vm.set_boot_menu,
+                 self.vm.set_boot_kernel]
+        opts = [(bootdevs,),
+                (bootmenu,),
+                (kernel, initrd, args)]
+
+        if self.window.get_widget("boot-init-path").get_property("visible"):
+            if not init:
+                return self.err.val_err(_("An init path must be specified"))
+            funcs.append(self.vm.set_boot_init)
+            opts.append((init,))
+
+        return self._change_config_helper(funcs, opts)
 
     # CDROM
     def change_storage_media(self, dev_id_info, newpath):
@@ -2678,14 +2688,24 @@ class vmmDetails(vmmGObjectUI):
         except libvirt.libvirtError:
             autoval = None
 
+        # Autostart
         autostart_chk = self.window.get_widget("config-autostart")
         enable_autostart = (autoval is not None)
         autostart_chk.set_sensitive(enable_autostart)
         autostart_chk.set_active(enable_autostart and autoval or False)
 
-        menu = self.vm.get_boot_menu() or False
-        self.window.get_widget("boot-menu").set_active(menu)
+        show_kernel = not self.vm.is_container()
+        show_init = self.vm.is_container()
+        show_boot = (not self.vm.is_container() and not self.vm.is_xenpv())
 
+        self.window.get_widget("boot-order-align").set_property("visible",
+                                                                show_boot)
+        self.window.get_widget("boot-kernel-align").set_property("visible",
+                                                                 show_kernel)
+        self.window.get_widget("boot-init-align").set_property("visible",
+                                                               show_init)
+
+        # Kernel/initrd boot
         kernel, initrd, args = self.vm.get_boot_kernel_info()
         expand = bool(kernel or initrd or args)
         self.window.get_widget("boot-kernel").set_text(kernel or "")
@@ -2694,7 +2714,13 @@ class vmmDetails(vmmGObjectUI):
         if expand:
             self.window.get_widget("boot-kernel-expander").set_expanded(True)
 
-        # Refresh Boot Device list
+        # <init> populate
+        init = self.vm.get_init()
+        self.window.get_widget("boot-init-path").set_text(init or "")
+
+        # Boot menu populate
+        menu = self.vm.get_boot_menu() or False
+        self.window.get_widget("boot-menu").set_active(menu)
         self.repopulate_boot_list()
 
 
