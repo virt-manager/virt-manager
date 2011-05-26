@@ -30,15 +30,9 @@ class UndefineNetworkConfigScreen(NetworkListConfigScreen):
         NetworkListConfigScreen.__init__(self, "Undefine A Network")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:     return self.get_network_list_page(screen, created = False)
+        if   page is LIST_PAGE:     return self.get_network_list_page(screen, started = False)
         elif page is CONFIRM_PAGE:  return self.get_confirm_page(screen)
         elif page is UNDEFINE_PAGE: return self.get_undefine_network_page(screen)
-
-    def process_input(self, page, errors):
-        if page is LIST_PAGE:
-            network = self.get_selected_network()
-            self.get_libvirt().undefine_network(network)
-            return True
 
     def page_has_next(self, page):
         if page is LIST_PAGE:    return self.has_selectable_networks()
@@ -57,31 +51,26 @@ class UndefineNetworkConfigScreen(NetworkListConfigScreen):
     def validate_input(self, page, errors):
         if   page is LIST_PAGE: return True
         elif page is CONFIRM_PAGE:
+            network = self.get_selected_network()
             if self.__confirm_undefine.value():
+                self.__deleted_network_name = network.get_name()
+                network.delete()
                 return True
             else:
-                errors.append("You must confirm undefining %s." % self.get_selected_network())
-        elif page is UNDEFINE_PAGE: return True
-        return False
-
-    def process_input(self, page):
-        if   page is LIST_PAGE:     return True
-        elif page is CONFIRM_PAGE:
-            network = self.get_selected_network()
-            self.get_libvirt().undefine_network(network)
-            return True
+                errors.append("You must confirm undefining %s." % network.get_name())
         elif page is UNDEFINE_PAGE: return True
         return False
 
     def get_confirm_page(self, screen):
-        self.__confirm_undefine = Checkbox("Check here to confirm undefining %s." % self.get_selected_network(), 0)
+        network = self.get_selected_network()
+        self.__confirm_undefine = Checkbox("Check here to confirm undefining %s." % network.get_name())
         grid = Grid(1, 1)
         grid.setField(self.__confirm_undefine, 0, 0)
         return [grid]
 
     def get_undefine_network_page(self, screen):
-        return [Label("Network Is Undefined"),
-                Label("Network has been undefined: %s" % self.get_selected_network())]
+        network_name = self.__deleted_network_name
+        return [Label("Network has been undefined: %s" % network_name)]
 
 def UndefineNetwork():
     screen = UndefineNetworkConfigScreen()
