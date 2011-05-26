@@ -21,7 +21,7 @@ import traceback
 
 from menuscreen      import MenuScreen
 from definenet       import DefineNetwork
-from createnetwork   import CreateNetwork
+from startnetwork    import StartNetwork
 from destroynetwork  import DestroyNetwork
 from undefinenetwork import UndefineNetwork
 from listnetworks    import ListNetworks
@@ -30,7 +30,7 @@ import utils
 import logging
 
 DEFINE_NETWORK   = 1
-CREATE_NETWORK   = 2
+START_NETWORK    = 2
 DESTROY_NETWORK  = 3
 UNDEFINE_NETWORK = 4
 LIST_NETWORKS    = 5
@@ -41,14 +41,14 @@ class NetworkMenuScreen(MenuScreen):
 
     def get_menu_items(self):
         return (("Define A Network",   DEFINE_NETWORK),
-                ("Create A Network",   CREATE_NETWORK),
+                ("Start A Network",    START_NETWORK),
                 ("Destroy A Network",  DESTROY_NETWORK),
                 ("Undefine A Network", UNDEFINE_NETWORK),
                 ("List Networks",      LIST_NETWORKS))
 
     def handle_selection(self, item):
         if   item is DEFINE_NETWORK:   DefineNetwork()
-        elif item is CREATE_NETWORK:   CreateNetwork()
+        elif item is START_NETWORK:    StartNetwork()
         elif item is DESTROY_NETWORK:  DestroyNetwork()
         elif item is UNDEFINE_NETWORK: UndefineNetwork()
         elif item is LIST_NETWORKS:    ListNetworks()

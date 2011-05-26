@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# createnetwork.py - Copyright (C) 2009 Red Hat, Inc.
+# startnetwork.py - Copyright (C) 2009 Red Hat, Inc.
 # Written by Darryl L. Pierce <dpierce@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,31 +22,31 @@ from snack import *
 from configscreen import *
 
 LIST_PAGE   = 1
-CREATE_PAGE = 2
+START_PAGE = 2
 
-class CreateNetworkConfigScreen(NetworkListConfigScreen):
+class StartNetworkConfigScreen(NetworkListConfigScreen):
     def __init__(self):
-        NetworkListConfigScreen.__init__(self, "Create A Network")
+        NetworkListConfigScreen.__init__(self, "Start A Network")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:   return self.get_network_list_page(screen, created = False)
-        elif page is CREATE_PAGE: return self.get_create_network_page(screen)
+        if   page is LIST_PAGE:  return self.get_network_list_page(screen, created = False)
+        elif page is START_PAGE: return self.get_start_network_page(screen)
 
     def page_has_next(self, page):
         if page is LIST_PAGE: return self.has_selectable_networks()
 
     def page_has_back(self, page):
-        return (page is CREATE_PAGE)
+        return (page is START_PAGE)
 
     def validate_input(self, page, errors):
         if page is LIST_PAGE:
-            self.get_libvirt().create_network(self.get_selected_network())
+            self.get_libvirt().start_network(self.get_selected_network())
             return True
 
-    def get_create_network_page(self, screen):
+    def get_start_network_page(self, screen):
         return [Label("Network Started"),
                 Label("%s was successfully started." % self.get_selected_network())]
 
-def CreateNetwork():
-    screen = CreateNetworkConfigScreen()
+def StartNetwork():
+    screen = StartNetworkConfigScreen()
     screen.start()
