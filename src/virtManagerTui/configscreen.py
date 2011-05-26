@@ -192,14 +192,15 @@ class NetworkListConfigScreen(ConfigScreen):
         ConfigScreen.__init__(self, title)
 
     def get_network_list_page(self, screen, defined=True, created=True):
-        networks = self.get_libvirt().list_networks(defined, created)
+        uuids = self.get_libvirt().list_networks(defined, created)
         result = None
 
-        if len(networks) > 0:
+        if len(uuids) > 0:
             self.__has_networks = True
             self.__network_list = Listbox(0)
-            for name in networks:
-                self.__network_list.append(name, name)
+            for uuid in uuids:
+                network = self.get_libvirt().get_network(uuid)
+                self.__network_list.append(uuid, network.get_name())
             result = self.__network_list
         else:
             self.__has_networks = False

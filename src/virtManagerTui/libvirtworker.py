@@ -164,20 +164,28 @@ class LibvirtWorker:
         started -- Include only started networks. (default True)
 
         '''
+        self.__vmmconn.tick()
+        uuids = self.__vmmconn.list_net_uuids()
         result = []
-        if defined: result.extend(self.__conn.listDefinedNetworks())
-        if started: result.extend(self.__conn.listNetworks())
+        for uuid in uuids:
+            include = False
+            net = self.__vmmconn.get_net(uuid)
+            if net.is_active():
+                if started: include = True
+            else:
+                if defined: include = True
+            if include: result.append(uuid)
         return result
 
-    def get_network(self, name):
+    def get_network(self, uuid):
         '''Returns the specified network. Raises an exception if the netowrk does not exist.
 
         Keyword arguments:
-        name -- the name of the network
+        uuid -- the network's identifier
 
         '''
-        result = self.__conn.networkLookupByName(name)
-        if result is None: raise Exception("No such network exists: %s" % name)
+        result = self.__vmmconn.get_net(uuid)
+        if result is None: raise Exception("No such network exists: uuid=%s" % uuid)
 
         return result
 
