@@ -36,19 +36,43 @@ class ListNetworksConfigScreen(NetworkListConfigScreen):
         elif page is DETAILS_PAGE: return self.get_network_details_page(screen)
 
     def get_network_details_page(self, screen):
-        network = self.get_libvirt().get_network(self.get_selected_network())
-        grid = Grid(2, 3)
-        grid.setField(Label("Name:"), 0, 0, anchorRight = 1)
-        grid.setField(Label(network.name()), 1, 0, anchorLeft = 1)
-        grid.setField(Label("Autostart:"), 0, 1, anchorRight = 1)
-        label = "No"
-        if network.autostart(): label = "Yes"
-        grid.setField(Label(label), 1, 1, anchorLeft = 1)
-        if network.bridgeName() is not "":
-            grid.setField(Label("Bridge:"), 0, 2, anchorRight = 1)
-            grid.setField(Label(network.bridgeName()), 1, 2, anchorLeft = 1)
-        return [Label("Network Interface Details"),
-                grid]
+        network = self.get_selected_network()
+        fields = []
+
+        fields.append(("Basic details", None))
+        fields.append(("Name", network.get_name()))
+        fields.append(("Device", network.get_bridge_device()))
+        fields.append(("Autostart", "Yes" if network.get_autostart() else "No"))
+        fields.append(("State", "Active" if network.is_active() else "Inactive"))
+        fields.append(("Autostart", "On Boot" if network.get_autostart() else "Never"))
+
+        fields.append(("IPv4 configuration", None))
+        fields.append(("Network", network.get_ipv4_network().strNormal()))
+
+        if network.get_ipv4_dhcp_range() is not None:
+            (dhcp_start, dhcp_end) = network.get_ipv4_dhcp_range()
+            dhcp_start = dhcp_start.strNormal()
+            dhcp_end   = dhcp_end.strNormal()
+        else:
+            dhcp_start = "Disabled"
+            dhcp_end   = "Disabled"
+
+        fields.append(("DHCP start", dhcp_start))
+        fields.append(("DHCP end", dhcp_end))
+
+        fields.append(("Forwarding", network.pretty_forward_mode()))
+
+        grid = Grid(2, len(fields))
+        row = 0
+        for field in fields:
+            if field[1] is not None:
+                grid.setField(Label("%s :  "% field[0]), 0, row, anchorRight = 1)
+                grid.setField(Label(field[1]), 1, row, anchorLeft = 1)
+            else:
+                grid.setField(Label(field[0]), 1, row)
+            row += 1
+
+        return [Label("Network Interface Details"), grid]
 
 def ListNetworks():
     screen = ListNetworksConfigScreen()
