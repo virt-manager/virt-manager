@@ -157,27 +157,48 @@ class LibvirtWorker:
         virtmachine.migrate(target_conn, libvirt.VIR_MIGRATE_LIVE, None, None, 0)
 
     def list_networks(self, defined = True, started = True):
-        '''Lists all networks.'''
+        '''Lists all networks that meet the given criteria.
+
+        Keyword arguments:
+        defined -- Include defined, but not started, networks. (default True)
+        started -- Include only started networks. (default True)
+
+        '''
         result = []
         if defined: result.extend(self.__conn.listDefinedNetworks())
         if started: result.extend(self.__conn.listNetworks())
         return result
 
     def get_network(self, name):
-        '''Returns the specified network.'''
+        '''Returns the specified network. Raises an exception if the netowrk does not exist.
+
+        Keyword arguments:
+        name -- the name of the network
+
+        '''
         result = self.__conn.networkLookupByName(name)
         if result is None: raise Exception("No such network exists: %s" % name)
 
         return result
 
     def network_exists(self, name):
-        '''Returns if a network with the given name already exists.'''
+        '''Returns True if the specified network exists.
+
+        Keyword arguments:
+        name -- the name of the network
+
+        '''
         networks = self.list_networks()
         if name in networks: return True
         return False
 
     def define_network(self, config):
-        '''Defines a new network.'''
+        '''Defines a new network.
+
+        Keyword arguments:
+        config -- the network descriptor
+
+        '''
         # since there's no other way currently, we'll have to use XML
         name = config.get_name()
         ip = config.get_ipv4_address_raw()
