@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# destroynetwork.py - Copyright (C) 2009 Red Hat, Inc.
+# stopnetwork.py - Copyright (C) 2009 Red Hat, Inc.
 # Written by Darryl L. Pierce <dpierce@redhat.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,36 +21,36 @@
 from snack import *
 from configscreen import *
 
-LIST_PAGE    = 1
-DESTROY_PAGE = 2
+LIST_PAGE = 1
+STOP_PAGE = 2
 
-class DestroyNetworkConfigScreen(NetworkListConfigScreen):
+class StopNetworkConfigScreen(NetworkListConfigScreen):
     def __init__(self):
-        NetworkListConfigScreen.__init__(self, "Destroy A Network")
+        NetworkListConfigScreen.__init__(self, "Stop A Network")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:    return self.get_network_list_page(screen, defined = False)
-        elif page is DESTROY_PAGE: return self.get_destroy_network_page(screen)
+        if   page is LIST_PAGE: return self.get_network_list_page(screen, defined = False)
+        elif page is STOP_PAGE: return self.get_stop_network_page(screen)
 
     def page_has_next(self, page):
         if page is LIST_PAGE: return self.has_selectable_networks()
         return False
 
     def page_has_back(self, page):
-        if page is DESTROY_PAGE: return True
+        if page is STOP_PAGE: return True
         return False
 
     def validate_input(self, page, errors):
         if page is LIST_PAGE:
             network = self.get_selected_network()
-            self.get_libvirt().destroy_network(network)
+            self.get_libvirt().stop_network(network)
             return True
         return False
 
-    def get_destroy_network_page(self, screen):
-        return [Label("Network Destroyed"),
-                Label("%s has been destroyed." % self.get_selected_network())]
+    def get_stop_network_page(self, screen):
+        return [Label("Network Stoped"),
+                Label("%s has been stoped." % self.get_selected_network())]
 
-def DestroyNetwork():
-    screen = DestroyNetworkConfigScreen()
+def StopNetwork():
+    screen = StopNetworkConfigScreen()
     screen.start()
