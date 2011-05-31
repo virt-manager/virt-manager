@@ -18,7 +18,6 @@
 #
 
 from newt_syrup.dialogscreen import DialogScreen
-from optparse import OptionParser, OptionValueError
 
 import gettext
 import locale
@@ -26,6 +25,7 @@ import logging
 import os
 import sys
 import traceback
+import optparse
 
 # These are substituted into code based on --prefix given to configure
 appname = "::PACKAGE::-tui"
@@ -69,40 +69,15 @@ def setup_pypath():
         sys.path.insert(0, pyarchlib_dir)
 
 def parse_commandline():
-    optParser = OptionParser(version=appversion)
-    optParser.add_option("--profile", dest="profile", help="Generate runtime performance profile stats", metavar="FILE")
-    optParser.set_defaults(uuid=None)
+    optParser = optparse.OptionParser(version=appversion)
+
     optParser.add_option("-c", "--connect", dest="uri",
         help="Connect to hypervisor at URI", metavar="URI")
     optParser.add_option("--debug", action="store_true", dest="debug",
         help="Print debug output to stdout (implies --no-fork)",
         default=False)
-    optParser.add_option("--no-dbus", action="store_true", dest="nodbus",
-        help="Disable DBus service for controlling UI")
-    optParser.add_option("--no-fork", action="store_true", dest="nofork",
-        help="Don't fork into background on startup")
-    optParser.add_option("--no-conn-autostart", action="store_true",
-                         dest="no_conn_auto",
-                         help="Do not autostart connections")
-    optParser.add_option("--show-domain-creator", action="callback",
-        callback=opt_show_cb, dest="show", help="Create a new virtual machine")
-    optParser.add_option("--show-domain-editor",  type="string", metavar="UUID",
-        action="callback", callback=opt_show_cb, help="Edit a domain configuration")
-    optParser.add_option("--show-domain-performance", type="string", metavar="UUID",
-        action="callback", callback=opt_show_cb, help="Show a domain performance")
-    optParser.add_option("--show-domain-console", type="string", metavar="UUID",
-        action="callback", callback=opt_show_cb, help="Show a domain console")
-    optParser.add_option("--show-host-summary", action="callback",
-       callback=opt_show_cb, help="Show a host summary")
 
     return optParser.parse_args()
-
-def opt_show_cb(option, opt_str, value, parser):
-    if option.metavar=="UUID":
-        setattr(parser.values, "uuid", value)
-    s = str(option)
-    show = s[s.rindex('-')+1:]
-    setattr(parser.values, "show", show)
 
 def _show_startup_error(message, details):
     errordlg = DialogScreen("Error Starting Virtual Machine Manager",
