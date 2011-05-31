@@ -261,6 +261,7 @@ def main():
     setup_i18n()
     setup_pypath()
 
+    import virtManager
     from virtManager import cli
 
     # Need to do this before GTK strips args like --sync
@@ -307,6 +308,7 @@ def main():
 
     logging.debug("Launched as: %s" % origargs)
     logging.debug("GTK version: %s" % str(gtk.gtk_version))
+    logging.debug("virtManager import: %s" % str(virtManager))
 
     # Make sure we have a sufficiently new virtinst version, since we are
     # very closely tied to the lib
