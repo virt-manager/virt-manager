@@ -23,6 +23,7 @@ import sys
 import logging
 
 import virtManager
+import virtManager.guidiff
 
 running_config, gobject, GObject, gtk = virtManager.guidiff.get_imports()
 
