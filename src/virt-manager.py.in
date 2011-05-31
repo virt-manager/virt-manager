@@ -27,7 +27,7 @@ import locale
 import gettext
 import traceback
 import signal
-from optparse import OptionParser, OptionValueError
+import optparse
 
 try:
     # Make sure we have a default '_' implementation, in case something
@@ -130,8 +130,8 @@ def drop_stdio():
     os.dup2(0, 2)
 
 def parse_commandline():
-    optParser = OptionParser(version=appversion,
-                             usage="virt-manager [options]")
+    optParser = optparse.OptionParser(version=appversion,
+                                      usage="virt-manager [options]")
 
     optParser.add_option("--profile", dest="profile",
         help="Generate runtime performance profile stats", metavar="FILE")
@@ -373,7 +373,8 @@ def main():
                                           appname + "-icon.svg")
 
     if options.show and options.uri == None:
-        raise OptionValueError("can't use --show-* options without --connect")
+        raise optparse.OptionValueError("can't use --show-* options "
+                                        "without --connect")
 
     engine = vmmEngine()
 

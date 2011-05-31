@@ -17,7 +17,6 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-import traceback
 import utils
 
 from configscreen import ConfigScreen
@@ -42,8 +41,6 @@ class AddStoragePoolConfigScreen(ConfigScreen):
         return page < CONFIRM_PAGE
 
     def page_has_back(self, page):
-        return page > POOL_NAME_PAGE
-
         return page > POOL_NAME_PAGE
 
     def page_has_finish(self, page):
@@ -133,8 +130,8 @@ class AddStoragePoolConfigScreen(ConfigScreen):
             rows += 1
         if self.__config.needs_format():
             formats = []
-            for format in self.__config.get_formats():
-                formats.append([format, format, format is self.__config.get_format()])
+            for fmt in self.__config.get_formats():
+                formats.append([fmt, fmt, fmt is self.__config.get_format()])
             self.__formats = snack.RadioBar(screen, formats)
             rows += 1
         if self.__config.needs_hostname():
@@ -174,6 +171,7 @@ class AddStoragePoolConfigScreen(ConfigScreen):
                 grid]
 
     def get_confirm_page(self, screen):
+        ignore = screen
         grid = snack.Grid(2, 2)
         grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
         grid.setField(snack.Label(self.__config.get_name()), 1, 0, anchorLeft = 1)

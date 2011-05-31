@@ -68,12 +68,14 @@ class RemoveDomainConfigScreen(DomainListConfigScreen):
         return False
 
     def get_confirm_page(self, screen):
+        ignore = screen
         self.__confirm_remove = snack.Checkbox("Check here to confirm undefining %s." % self.get_selected_domain().get_name(), 0)
         grid = snack.Grid(1, 1)
         grid.setField(self.__confirm_remove, 0, 0)
         return [grid]
 
     def get_remove_page(self, screen):
+        ignore = screen
         grid = snack.Grid(1, 1)
         grid.setField(snack.Label("%s has been removed." % self.get_selected_domain().get_name()), 0, 0)
         return [grid]

@@ -23,7 +23,6 @@ import os
 from createmeter  import CreateMeter
 from domainconfig import DomainConfig
 from configscreen import ConfigScreen
-import utils
 from virtinst import Guest
 
 VM_DETAILS_PAGE      =  1
@@ -42,13 +41,13 @@ BRIDGE_PAGE          = 13
 VIRT_DETAILS_PAGE    = 14
 CONFIRM_PAGE         = 15
 
-LOCATION="location"
-KICKSTART="kickstart"
-KERNELOPTS="kernel.options"
-OS_TYPE="os.type"
-OS_VARIANT="os.variant"
-MEMORY="memory"
-CPUS="cpus"
+LOCATION = "location"
+KICKSTART = "kickstart"
+KERNELOPTS = "kernel.options"
+OS_TYPE = "os.type"
+OS_VARIANT = "os.variant"
+MEMORY = "memory"
+CPUS = "cpus"
 
 class DomainConfigScreen(ConfigScreen):
     def __init__(self):
@@ -314,7 +313,7 @@ class DomainConfigScreen(ConfigScreen):
                                                 ("Network Boot (PXE)",
                                                  DomainConfig.PXE_INSTALL,
                                                  self.__config.is_install_type(DomainConfig.PXE_INSTALL))))
-        grid = snack.Grid(2,3)
+        grid = snack.Grid(2, 3)
         grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
         grid.setField(self.__guest_name, 1, 0, anchorLeft = 1)
         grid.setField(snack.Label("Choose how you would like to install the operating system"), 1, 1,
@@ -330,7 +329,7 @@ class DomainConfigScreen(ConfigScreen):
                                                   ("Use ISO image",
                                                    DomainConfig.INSTALL_SOURCE_ISO,
                                                    self.__config.get_use_cdrom_source() is False)))
-        grid = snack.Grid(1,1)
+        grid = snack.Grid(1, 1)
         grid.setField(self.__install_source, 0, 0, anchorLeft = 1)
         return [snack.Label("Locate your install media"),
                 grid]
@@ -347,6 +346,7 @@ class DomainConfigScreen(ConfigScreen):
                 grid]
 
     def get_select_iso_page(self, screen):
+        ignore = screen
         self.__iso_path = snack.Entry(50, self.__config.get_iso_path())
         grid = snack.Grid(1, 2)
         grid.setField(snack.Label("Enter ISO path:"), 0, 0, anchorLeft = 1)
@@ -355,10 +355,11 @@ class DomainConfigScreen(ConfigScreen):
                 grid]
 
     def get_network_install_page(self, screen):
+        ignore = screen
         self.__install_url    = snack.Entry(50, self.__config.get_install_url())
         self.__kickstart_url  = snack.Entry(50, self.__config.get_kickstart_url())
         self.__kernel_options = snack.Entry(50, self.__config.get_kernel_options())
-        grid = snack.Grid(2,3)
+        grid = snack.Grid(2, 3)
         grid.setField(snack.Label("URL:"), 0, 0, anchorRight = 1)
         grid.setField(self.__install_url, 1, 0, anchorLeft = 1)
         grid.setField(snack.Label("Kickstart URL:"), 0, 1, anchorRight = 1)
@@ -370,8 +371,8 @@ class DomainConfigScreen(ConfigScreen):
 
     def get_os_type_page(self, screen):
         types = []
-        for type in Guest.list_os_types():
-            types.append([Guest.get_os_type_label(type), type, self.__config.is_os_type(type)])
+        for typ in Guest.list_os_types():
+            types.append([Guest.get_os_type_label(typ), typ, self.__config.is_os_type(typ)])
         self.__os_types = snack.RadioBar(screen, types)
         grid = snack.Grid(1, 1)
         grid.setField(self.__os_types, 0, 0, anchorLeft = 1)
@@ -380,9 +381,9 @@ class DomainConfigScreen(ConfigScreen):
 
     def get_os_variant_page(self, screen):
         variants = []
-        type = self.__config.get_os_type()
-        for variant in Guest.list_os_variants(type):
-            variants.append([Guest.get_os_variant_label(type, variant), variant, self.__config.is_os_variant(variant)])
+        typ = self.__config.get_os_type()
+        for variant in Guest.list_os_variants(typ):
+            variants.append([Guest.get_os_variant_label(typ, variant), variant, self.__config.is_os_variant(variant)])
         self.__os_variants = snack.RadioBar(screen, variants)
         grid = snack.Grid(1, 1)
         grid.setField(self.__os_variants, 0, 0, anchorLeft = 1)
@@ -390,9 +391,10 @@ class DomainConfigScreen(ConfigScreen):
                 grid]
 
     def get_ram_and_cpu_page(self, screen):
+        ignore = screen
         self.__memory = snack.Entry(10, str(self.__config.get_memory()))
         self.__cpus   = snack.Entry(10, str(self.__config.get_cpus()))
-        grid = snack.Grid(2,2)
+        grid = snack.Grid(2, 2)
         grid.setField(snack.Label("Memory (RAM):"), 0, 0, anchorRight = 1)
         grid.setField(self.__memory, 1, 0, anchorLeft = 1)
         grid.setField(snack.Label("CPUs:"), 0, 1, anchorRight = 1)
@@ -408,13 +410,14 @@ class DomainConfigScreen(ConfigScreen):
                                                    (["Select managed or other existing storage",
                                                      DomainConfig.EXISTING_STORAGE,
                                                      self.__config.get_use_local_storage() is False])))
-        grid = snack.Grid(1,2)
+        grid = snack.Grid(1, 2)
         grid.setField(self.__enable_storage, 0, 0, anchorLeft = 1)
         grid.setField(self.__storage_type, 0, 1, anchorLeft = 1)
         return [snack.Label("Configure storage"),
                 grid]
 
     def get_local_storage_page(self, screen):
+        ignore = screen
         self.__storage_size     = snack.Entry(6, str(self.__config.get_storage_size()))
         self.__allocate_storage = snack.Checkbox("Allocate entire disk now", self.__config.get_allocate_storage())
         grid = snack.Grid(2, 2)
@@ -441,20 +444,20 @@ class DomainConfigScreen(ConfigScreen):
                 grid]
 
     def get_select_volume_page(self, screen):
-       volumes = []
-       for volume in self.get_libvirt().list_storage_volumes(self.__config.get_storage_pool()):
-           volumes.append([volume, volume, volume == self.__config.get_storage_volume()])
-       if len(volumes) > 0:
-           self.__storage_volume = snack.RadioBar(screen, (volumes))
-           grid = snack.Grid(2, 1)
-           grid.setField(snack.Label("Storage volumes:"), 0, 0, anchorTop = 1)
-           grid.setField(self.__storage_volume, 1, 0)
-           self.__has_volumes = True
-       else:
-           grid = snack.Label("This storage pool has no defined volumes.")
-           self.__has_volumes = False
-       return [snack.Label("Configure Managed Storage: Select A Volume"),
-               grid]
+        volumes = []
+        for volume in self.get_libvirt().list_storage_volumes(self.__config.get_storage_pool()):
+            volumes.append([volume, volume, volume == self.__config.get_storage_volume()])
+        if len(volumes) > 0:
+            self.__storage_volume = snack.RadioBar(screen, (volumes))
+            grid = snack.Grid(2, 1)
+            grid.setField(snack.Label("Storage volumes:"), 0, 0, anchorTop = 1)
+            grid.setField(self.__storage_volume, 1, 0)
+            self.__has_volumes = True
+        else:
+            grid = snack.Label("This storage pool has no defined volumes.")
+            self.__has_volumes = False
+        return [snack.Label("Configure Managed Storage: Select A Volume"),
+                grid]
 
     def get_bridge_page(self, screen):
         bridges = []
@@ -471,8 +474,8 @@ class DomainConfigScreen(ConfigScreen):
 
     def get_virt_details_page(self, screen):
         virt_types = []
-        for type in self.get_libvirt().list_virt_types():
-            virt_types.append([type, type, self.__config.is_virt_type(type)])
+        for typ in self.get_libvirt().list_virt_types():
+            virt_types.append([typ, typ, self.__config.is_virt_type(typ)])
         self.__virt_types = snack.RadioBar(screen, (virt_types))
         archs = []
         for arch in self.get_libvirt().list_architectures():
@@ -487,6 +490,7 @@ class DomainConfigScreen(ConfigScreen):
                 grid]
 
     def get_confirm_page(self, screen):
+        ignore = screen
         grid = snack.Grid(2, 6)
         grid.setField(snack.Label("OS:"), 0, 0, anchorRight = 1)
         grid.setField(snack.Label(Guest.get_os_variant_label(self.__config.get_os_type(),

@@ -48,6 +48,7 @@ class StartNetworkConfigScreen(NetworkListConfigScreen):
                 return True
 
     def get_start_network_page(self, screen):
+        ignore = screen
         network = self.get_selected_network()
         return [snack.Label("%s was successfully started." % network.get_name())]
 

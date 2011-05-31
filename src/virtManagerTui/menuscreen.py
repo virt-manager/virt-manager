@@ -19,7 +19,6 @@
 import snack
 import traceback
 
-import utils
 import logging
 
 EXIT_MENU = 99
@@ -27,6 +26,12 @@ EXIT_MENU = 99
 class MenuScreen:
     def __init__(self, title):
         self.__title = title
+
+    def get_menu_items(self):
+        raise NotImplementedError()
+
+    def handle_selection(self, item):
+        raise NotImplementedError()
 
     def start(self):
         finished = False
@@ -38,7 +43,7 @@ class MenuScreen:
             menu.append("Exit Menu", EXIT_MENU)
             gridform = snack.GridForm(screen, self.__title, 1, 4)
             gridform.add(menu, 0, 0)
-            result = gridform.run();
+            result = gridform.run()
             screen.popWindow()
             screen.finish()
 

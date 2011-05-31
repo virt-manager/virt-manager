@@ -17,10 +17,8 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import os
-import utils
 import logging
 
-import dbus
 import virtinst
 import libvirt
 
@@ -28,8 +26,8 @@ from virtManager.connection import vmmConnection
 
 from domainconfig import DomainConfig
 
-DEFAULT_POOL_TARGET_PATH="/var/lib/libvirt/images"
-DEFAULT_URL="qemu:///system"
+DEFAULT_POOL_TARGET_PATH = "/var/lib/libvirt/images"
+DEFAULT_URL = "qemu:///system"
 
 default_url = DEFAULT_URL
 
@@ -52,8 +50,8 @@ class VirtManagerConfig:
     def get_connection_list(self):
         result = []
         if os.path.exists(self.__filename):
-            input = file(self.__filename, "r")
-            for entry in input: result.append(entry[0:-1])
+            inp = file(self.__filename, "r")
+            for entry in inp: result.append(entry[0:-1])
         return result
 
     def add_connection(self, connection):
@@ -72,7 +70,7 @@ class VirtManagerConfig:
         output = file(self.__filename, "w")
         for entry in connections:
             print >> output, entry
-        output.close
+        output.close()
 
 class LibvirtWorker:
     '''Provides utilities for interfacing with libvirt.'''
@@ -313,7 +311,7 @@ class LibvirtWorker:
 
     def get_storage_volume(self, poolname, volumename):
         '''Returns a reference to the specified storage volume.'''
-        pool =self.get_storage_pool(poolname)
+        pool = self.get_storage_pool(poolname)
         volume = pool.storageVolLookupByName(volumename)
         return volume
 
@@ -367,8 +365,8 @@ class LibvirtWorker:
     def list_virt_types(self):
         virt_types = self.get_virt_types()
         result = []
-        for type in virt_types:
-            result.append(type[0])
+        for typ in virt_types:
+            result.append(typ[0])
         return result
 
     def get_default_architecture(self):
@@ -377,8 +375,8 @@ class LibvirtWorker:
 
     def get_hypervisor(self, virt_type):
         virt_types = self.get_virt_types()
-        for type in virt_types:
-            if type[0] is virt_type: return type[1]
+        for typ in virt_types:
+            if typ[0] is virt_type: return typ[1]
         return None
 
     def get_default_virt_type(self):
@@ -387,14 +385,15 @@ class LibvirtWorker:
 
     def get_os_type(self, virt_type):
         virt_types = self.get_virt_types()
-        for type in virt_types:
-            if type[0] is virt_type: return type[2]
+        for typ in virt_types:
+            if typ[0] is virt_type: return typ[2]
         return None
 
     def list_architectures(self):
         result = []
         for guest in self.__capabilities.guests:
             for domain in guest.domains:
+                ignore = domain
                 label = guest.arch
                 for row in result:
                     if row == label:
@@ -484,8 +483,8 @@ class LibvirtWorker:
                 path = volume.path()
 
             if path is not None:
-                storage= virtinst.VirtualDisk(conn = self.__conn,
-                                              path = path,
-                                              size = config.get_storage_size())
+                storage = virtinst.VirtualDisk(conn = self.__conn,
+                                               path = path,
+                                               size = config.get_storage_size())
                 self.__guest.disks.append(storage)
         self.__guest.conn = self.__conn

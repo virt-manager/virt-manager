@@ -36,6 +36,7 @@ class StopStoragePoolConfigScreen(StorageListConfigScreen):
         return page is LIST_POOLS_PAGE and self.has_selectable_pools()
 
     def page_has_back(self, page):
+        ignore = page
         return False
 
     def page_has_finish(self, page):
@@ -55,6 +56,7 @@ class StopStoragePoolConfigScreen(StorageListConfigScreen):
             self.set_finished()
 
     def get_final_page(self, screen):
+        ignore = screen
         return [snack.Label("Storage pool stopped: %s" % self.get_selected_pool())]
 
 def StopStoragePool():

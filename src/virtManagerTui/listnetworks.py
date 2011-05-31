@@ -37,6 +37,7 @@ class ListNetworksConfigScreen(NetworkListConfigScreen):
         elif page is DETAILS_PAGE: return self.get_network_details_page(screen)
 
     def get_network_details_page(self, screen):
+        ignore = screen
         network = self.get_selected_network()
         fields = []
 

@@ -112,6 +112,8 @@ class AddHostConfigScreen(ConfigScreen):
                 grid]
 
     def get_confirm_page(self, screen):
+        ignore = screen
+
         grid = snack.Grid(2, 4)
         grid.setField(snack.Label("Hypervisor:"), 0, 0, anchorRight = 1)
         grid.setField(snack.Label(HYPERVISORS[self.__hypervisor.getSelection()]), 1, 0, anchorLeft = 1)

@@ -17,7 +17,6 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import dbus
-import virtinst
 
 class HALWorker:
     '''Provides utilities for working with HAL to get hardware information.'''

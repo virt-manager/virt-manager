@@ -62,6 +62,7 @@ class UndefineNetworkConfigScreen(NetworkListConfigScreen):
         return False
 
     def get_confirm_page(self, screen):
+        ignore = screen
         network = self.get_selected_network()
         self.__confirm_undefine = snack.Checkbox("Check here to confirm undefining %s." % network.get_name())
         grid = snack.Grid(1, 1)
@@ -69,6 +70,7 @@ class UndefineNetworkConfigScreen(NetworkListConfigScreen):
         return [grid]
 
     def get_undefine_network_page(self, screen):
+        ignore = screen
         network_name = self.__deleted_network_name
         return [snack.Label("Network has been undefined: %s" % network_name)]
 

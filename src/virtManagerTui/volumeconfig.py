@@ -64,8 +64,8 @@ class StorageVolumeConfig:
             self.__formats = self.__volume_class.formats
         return self.__formats
 
-    def set_format(self, format):
-        self.__format = format
+    def set_format(self, fmt):
+        self.__format = fmt
 
     def get_format(self):
         return self.__format

@@ -16,8 +16,6 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
-
 from menuscreen import MenuScreen
 from changehost import ChangeHost
 from addhost    import AddHost

@@ -17,7 +17,6 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-import traceback
 
 from createmeter import CreateMeter
 from configscreen import StorageListConfigScreen
@@ -67,7 +66,7 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
     def get_back_page(self, page):
         if page is MAX_CAPACITY_PAGE:
             if self.__config.needs_format():
-                return VOLUME_FORMAT_PATH
+                return VOLUME_FORMAT_PAGE
             else:
                 return VOLUME_NAME_PAGE
         return StorageListConfigScreen.get_back_page(self, page)
@@ -128,6 +127,7 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
             self.set_finished()
 
     def get_volume_name_page(self, screen):
+        ignore = screen
         self.__name = snack.Entry(50, self.__config.get_name())
         grid = snack.Grid(2, 1)
         grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
@@ -137,15 +137,17 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
                 snack.Label("Name of the volume to create. File extension may be appended.")]
 
     def get_volume_format_page(self, screen):
+        ignore = screen
         self.__formats = snack.Listbox(0)
-        for format in self.__config.get_formats_for_pool():
-            self.__formats.append(format, format)
+        for fmt in self.__config.get_formats_for_pool():
+            self.__formats.append(fmt, fmt)
         grid = snack.Grid(1, 1)
         grid.setField(self.__formats, 0, 0)
         return [snack.Label("Select The Volume Format"),
                 grid]
 
     def get_max_capacity_page(self, screen):
+        ignore = screen
         self.__capacity = snack.Entry(6, str(self.__config.get_max_capacity()))
         self.__allocation = snack.Entry(6, str(self.__config.get_allocation()))
         grid = snack.Grid(2, 2)
@@ -159,6 +161,7 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
                 grid]
 
     def get_confirm_page(self, screen):
+        ignore = screen
         grid = snack.Grid(2, 5)
         grid.setField(snack.Label("Volume Name:"), 0, 0, anchorRight = 1)
         grid.setField(snack.Label("%s (%s)" % (self.__config.get_name(), self.__config.get_pool().name())), 1, 0, anchorLeft = 1)

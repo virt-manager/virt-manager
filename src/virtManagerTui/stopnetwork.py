@@ -48,6 +48,7 @@ class StopNetworkConfigScreen(NetworkListConfigScreen):
         return False
 
     def get_stop_network_page(self, screen):
+        ignore = screen
         network = self.get_selected_network()
         return [snack.Label("%s has been stopped." % network.get_name())]
 

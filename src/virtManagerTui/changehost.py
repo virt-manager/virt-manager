@@ -19,7 +19,6 @@
 import snack
 
 import logging
-import libvirtworker
 from configscreen import HostListConfigScreen
 
 CONNECTION_LIST_PAGE = 1
@@ -53,6 +52,7 @@ class ChangeHostConfigScreen(HostListConfigScreen):
         return page is CONNECTED_PAGE
 
     def get_connected_page(self, screen):
+        ignore = screen
         return [snack.Label("Connected to %s" % self.get_selected_connection())]
 
 def ChangeHost():

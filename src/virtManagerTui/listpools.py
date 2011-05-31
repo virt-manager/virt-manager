@@ -34,7 +34,7 @@ class ListStoragePoolsConfigScreen(StorageListConfigScreen):
 
     def page_has_next(self, page):
         if page is LIST_PAGE and self.has_selectable_pools():
-                return True
+            return True
         return False
 
     def page_has_back(self, page):
@@ -42,11 +42,12 @@ class ListStoragePoolsConfigScreen(StorageListConfigScreen):
         return False
 
     def get_pool_details_page(self, screen):
+        ignore = screen
         pool = self.get_libvirt().get_storage_pool(self.get_selected_pool())
-        volumes = snack.Listbox(0);
+        volumes = snack.Listbox(0)
         for name in pool.listVolumes():
             volume = pool.storageVolLookupByName(name)
-            volumes.append("%s (%s)" % (name, util.size_as_mb_or_gb(volume.info()[1])), name)
+            volumes.append("%s (%s)" % (name, utils.size_as_mb_or_gb(volume.info()[1])), name)
         grid = snack.Grid(2, 3)
         grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
         grid.setField(snack.Label(pool.name()), 1, 0, anchorLeft = 1)

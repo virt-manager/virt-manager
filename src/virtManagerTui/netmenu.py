@@ -16,18 +16,12 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
-import traceback
-
 from menuscreen      import MenuScreen
 from definenet       import DefineNetwork
 from startnetwork    import StartNetwork
 from stopnetwork     import StopNetwork
 from undefinenetwork import UndefineNetwork
 from listnetworks    import ListNetworks
-
-import utils
-import logging
 
 DEFINE_NETWORK   = 1
 START_NETWORK    = 2

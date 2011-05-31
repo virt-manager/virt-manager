@@ -17,7 +17,6 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 from IPy import IP
-import logging
 
 class NetworkConfig:
     def __init__(self):

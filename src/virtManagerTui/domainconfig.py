@@ -48,6 +48,7 @@ class DomainConfig:
         self.__cpus = 1
         self.__enable_storage = True
         self.__use_local_storage = True
+        self.__existing_storage = False
         self.__storage_size = 8.0
         self.__allocate_storage = True
         self.__storage_pool = ""
@@ -63,8 +64,8 @@ class DomainConfig:
     def get_guest_name(self):
         return self.__guest_name
 
-    def set_install_type(self, type):
-        self.__install_type = type
+    def set_install_type(self, typ):
+        self.__install_type = typ
 
     def get_install_type(self):
         return self.__install_type
@@ -72,8 +73,8 @@ class DomainConfig:
     def get_install_type_text(self):
         return DomainConfig.INSTALL_TYPE_TEXT[self.get_install_type()]
 
-    def is_install_type(self, type):
-        return self.__install_type == type
+    def is_install_type(self, typ):
+        return self.__install_type == typ
 
     def set_install_location(self, location):
         self.__install_location = location
@@ -123,15 +124,15 @@ class DomainConfig:
     def get_kernel_options(self):
         return self.__kernel_options
 
-    def set_os_type(self, type):
-        self.__os_type = type
-        self.__os_variant = Guest.list_os_variants(type)[0]
+    def set_os_type(self, typ):
+        self.__os_type = typ
+        self.__os_variant = Guest.list_os_variants(typ)[0]
 
     def get_os_type(self):
         return self.__os_type
 
-    def is_os_type(self, type):
-        return self.__os_type == type
+    def is_os_type(self, typ):
+        return self.__os_type == typ
 
     def set_os_variant(self, variant):
         self.__os_variant = variant
@@ -205,14 +206,14 @@ class DomainConfig:
     def get_mac_address(self):
         return self.__mac_address
 
-    def set_virt_type(self, type):
-        self.__virt_type = type
+    def set_virt_type(self, typ):
+        self.__virt_type = typ
 
     def get_virt_type(self):
         return self.__virt_type
 
-    def is_virt_type(self, type):
-        return self.__virt_type == type
+    def is_virt_type(self, typ):
+        return self.__virt_type == typ
 
     def set_architecture(self, architecture):
         self.__architecture = architecture

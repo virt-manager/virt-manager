@@ -59,6 +59,7 @@ class StartDomainConfigScreen(DomainListConfigScreen):
                 errors.append("You must first select a domain to start.")
 
     def get_start_domain_page(self, screen):
+        ignore = screen
         grid = snack.Grid(1, 1)
         grid.setField(snack.Label("%s was successfully started." % self.get_selected_domain().get_name()), 0, 0)
         return [grid]

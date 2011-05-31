@@ -60,6 +60,7 @@ class StopDomainConfigScreen(DomainListConfigScreen):
         return False
 
     def get_stop_page(self, screen):
+        ignore = screen
         grid = snack.Grid(1, 1)
         grid.setField(snack.Label("%s was successfully stopped." % self.get_selected_domain().get_name()), 0, 0)
         return [grid]

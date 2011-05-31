@@ -18,7 +18,7 @@
 
 from virtinst import Storage
 
-ROOT_TARGET_PATH="/var/lib/libvirt/images/%s"
+ROOT_TARGET_PATH = "/var/lib/libvirt/images/%s"
 
 class PoolConfig:
     def __init__(self, libvirt):
@@ -120,8 +120,8 @@ class PoolConfig:
     def get_formats(self):
         return self.__pool.formats
 
-    def set_format(self, format):
-        self.__format = format
+    def set_format(self, fmt):
+        self.__format = fmt
 
     def get_format(self):
         return self.__format

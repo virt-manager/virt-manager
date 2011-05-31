@@ -16,9 +16,6 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
-import traceback
-
 from menuscreen    import MenuScreen
 from addpool       import AddStoragePool
 from startpool     import StartStoragePool

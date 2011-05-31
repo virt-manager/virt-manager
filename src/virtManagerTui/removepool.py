@@ -36,6 +36,7 @@ class RemoveStoragePoolConfigScreen(StorageListConfigScreen):
         return page is LIST_POOLS_PAGE and self.has_selectable_pools()
 
     def page_has_back(self, page):
+        ignore = page
         return False
 
     def page_has_finish(self, page):
@@ -61,6 +62,7 @@ class RemoveStoragePoolConfigScreen(StorageListConfigScreen):
             self.set_finished()
 
     def get_confirm_page(self, screen):
+        ignore = screen
         self.__confirm = snack.Checkbox("Check here to confirm deleting pool: %s" % self.get_selected_pool())
         grid = snack.Grid(1, 1)
         grid.setField(self.__confirm, 0, 0)

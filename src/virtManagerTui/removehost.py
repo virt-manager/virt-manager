@@ -55,6 +55,7 @@ class RemoveHostConfigScreen(HostListConfigScreen):
             self.set_finished()
 
     def get_confirm_remove_page(self, screen):
+        ignore = screen
         self.__confirm = snack.Checkbox("Remove this connection: %s" % self.get_selected_connection(), 0)
         grid = snack.Grid(1, 1)
         grid.setField(self.__confirm, 0, 0)

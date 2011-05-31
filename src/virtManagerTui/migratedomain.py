@@ -19,7 +19,6 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-from libvirtworker import LibvirtWorker
 from configscreen import DomainListConfigScreen
 
 LIST_DOMAINS  = 1
@@ -64,6 +63,7 @@ class MigrateDomainConfigScreen(DomainListConfigScreen):
             self.set_finished()
 
     def get_target_page(self, screen):
+        ignore = screen
         self.__targets = snack.Listbox(0)
         for connection in self.get_virt_manager_config().get_connection_list():
             self.__targets.append(connection, connection)
@@ -71,6 +71,7 @@ class MigrateDomainConfigScreen(DomainListConfigScreen):
                 self.__targets]
 
     def get_confirm_page(self, screen):
+        ignore = screen
         self.__confirm = snack.Checkbox("Confirm migrating this virtual machine.")
         grid = snack.Grid(1, 1)
         grid.setField(self.__confirm, 0, 0)

@@ -74,6 +74,8 @@ class CreateUserConfigScreen(ConfigScreen):
         return (page is CONFIRM_PAGE)
 
     def get_details_page(self, screen):
+        ignore = screen
+
         if self.__username is None:
             self.__username = snack.Entry(50, "")
             self.__password = snack.Entry(50, "", password = 1)
@@ -92,6 +94,7 @@ class CreateUserConfigScreen(ConfigScreen):
                 grid]
 
     def get_confirm_page(self, screen):
+        ignore = screen
         grid = snack.Grid(1, 2)
         grid.setField(snack.Label("Username: %s" % self.__username.value()), 0, 0)
         admin_label = "is not"

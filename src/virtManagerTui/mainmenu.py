@@ -16,17 +16,11 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
-import traceback
-
 from menuscreen  import MenuScreen
 from nodemenu    import NodeMenu
 from netmenu     import NetworkMenu
 from storagemenu import StoragePoolMenu
 from hostmenu    import HostMenu
-
-import utils
-import logging
 
 NODE_MENU    =  1
 NETWORK_MENU =  2

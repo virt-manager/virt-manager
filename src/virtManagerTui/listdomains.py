@@ -19,7 +19,6 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-from libvirtworker import LibvirtWorker
 from configscreen import DomainListConfigScreen
 
 class ListDomainsConfigScreen(DomainListConfigScreen):
@@ -49,6 +48,7 @@ class ListDomainsConfigScreen(DomainListConfigScreen):
             return self.get_detail_page_elements(screen)
 
     def get_detail_page_elements(self, screen):
+        ignore = screen
         domain = self.get_selected_domain()
         fields = []
 

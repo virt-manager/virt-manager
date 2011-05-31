@@ -53,12 +53,16 @@ class ConfigScreen:
         self.__finished = True
 
     def get_elements_for_page(self, screen, page):
+        ignore = screen
+        ignore = page
         return []
 
     def page_has_next(self, page):
+        ignore = page
         return False
 
     def page_has_finish(self, page):
+        ignore = page
         return False
 
     def get_back_page(self, page):
@@ -75,16 +79,19 @@ class ConfigScreen:
         self.__current_page = self.get_next_page(self.__current_page)
 
     def validate_input(self, page, errors):
+        ignore = page
+        ignore = errors
         return True
 
     def process_input(self, page):
+        ignore = page
         return
 
     def get_page_list(self):
         return []
 
     def get_current_page(self):
-        0
+        return 0
 
     def start(self):
         active = True
@@ -160,6 +167,7 @@ class DomainListConfigScreen(ConfigScreen):
         ConfigScreen.__init__(self, title)
 
     def get_domain_list_page(self, screen, defined=True, created=True):
+        ignore = screen
         domuuids = self.get_libvirt().list_domains(defined, created)
         self.__has_domains = bool(domuuids)
         result = None
@@ -192,6 +200,7 @@ class NetworkListConfigScreen(ConfigScreen):
         ConfigScreen.__init__(self, title)
 
     def get_network_list_page(self, screen, defined=True, started=True):
+        ignore = screen
         uuids = self.get_libvirt().list_networks(defined, started)
         result = None
 
@@ -224,6 +233,7 @@ class StorageListConfigScreen(ConfigScreen):
         ConfigScreen.__init__(self, title)
 
     def get_storage_pool_list_page(self, screen, defined=True, created=True):
+        ignore = screen
         pools = self.get_libvirt().list_storage_pools(defined=defined, created=created)
         if len(pools) > 0:
             self.__has_pools = True
@@ -247,6 +257,7 @@ class StorageListConfigScreen(ConfigScreen):
 
     def get_storage_volume_list_page(self, screen):
         '''Requires that self.__pools_list have a selected element.'''
+        ignore = screen
         pool = self.get_libvirt().get_storage_pool(self.get_selected_pool())
         if len(pool.listVolumes()) > 0:
             self.__has_volumes = True
@@ -276,6 +287,7 @@ class HostListConfigScreen(ConfigScreen):
         ConfigScreen.__init__(self, title)
 
     def get_connection_list_page(self, screen):
+        ignore = screen
         connections = self.get_virt_manager_config().get_connection_list()
         result = None
 

@@ -18,11 +18,9 @@
 
 import snack
 from IPy import IP
-import traceback
 import logging
 import re
 
-import utils
 from configscreen import ConfigScreen
 from networkconfig import NetworkConfig
 
@@ -138,6 +136,7 @@ class DefineNetworkConfigScreen(ConfigScreen):
         return False
 
     def get_network_name_page(self, screen):
+        ignore = screen
         self.__name = snack.Entry(50, self.__config.get_name())
         grid = snack.Grid(2, 1)
         grid.setField(snack.Label("Network Name:"), 0, 0)
@@ -146,6 +145,7 @@ class DefineNetworkConfigScreen(ConfigScreen):
                 grid]
 
     def get_ipv4_address_page(self, screen):
+        ignore = screen
         self.__ipv4_address = snack.Entry(18, self.__config.get_ipv4_address())
         grid = snack.Grid(2, 1)
         grid.setField(snack.Label("Network:"), 0, 0, anchorRight = 1)
@@ -157,6 +157,7 @@ class DefineNetworkConfigScreen(ConfigScreen):
                 snack.Label("e.g., 10.0.0.0/8, 172.168.0.0/12, 192.168.0.0/16")]
 
     def get_network_details_page(self, screen):
+        ignore = screen
         grid = snack.Grid(2, 6)
         grid.setField(snack.Label("Network:"), 0, 0, anchorRight = 1)
         grid.setField(snack.Label(self.__config.get_ipv4_address()), 1, 0, anchorLeft = 1)
@@ -174,6 +175,7 @@ class DefineNetworkConfigScreen(ConfigScreen):
                 grid]
 
     def get_public_network_alert_page(self, screen):
+        ignore = screen
         grid = snack.Grid(1, 2)
         grid.setField(snack.Label("The network should normally use a private IPv4 address."), 0, 0, anchorLeft = 1)
         grid.setField(snack.Label("Use this non-private address anyway?"), 0, 1, anchorLeft = 1)
@@ -181,9 +183,10 @@ class DefineNetworkConfigScreen(ConfigScreen):
                 grid]
 
     def get_dhcp_range_page(self, screen):
+        ignore = screen
         self.__start_address = snack.Entry(15, self.__config.get_ipv4_start_address())
         self.__end_address   = snack.Entry(15, self.__config.get_ipv4_end_address())
-        grid = snack.Grid(2,2)
+        grid = snack.Grid(2, 2)
         grid.setField(snack.Label("Start:"), 0, 0, anchorRight = 1)
         grid.setField(self.__start_address, 1, 0, anchorLeft = 1)
         grid.setField(snack.Label("End:"), 0, 1, anchorRight = 1)
@@ -195,6 +198,7 @@ class DefineNetworkConfigScreen(ConfigScreen):
                 snack.Label("their default values.")]
 
     def get_network_type_page(self, screen):
+        ignore = screen
         self.__isolated_network = snack.Checkbox("Isolated virtual network",
                                            self.__config.is_isolated_network())
         grid = snack.Grid(1, 3)
@@ -205,6 +209,7 @@ class DefineNetworkConfigScreen(ConfigScreen):
                 grid]
 
     def get_select_physical_network_page(self, screen):
+        ignore = screen
         devices = []
         devices.append(["NAT to any physical device", "", self.__config.get_physical_device() == ""])
         for device in self.get_hal().list_network_devices():
@@ -217,6 +222,7 @@ class DefineNetworkConfigScreen(ConfigScreen):
                 grid]
 
     def get_summary_page(self, screen):
+        ignore = screen
         grid1 = snack.Grid(2, 1)
         grid1.setField(snack.Label("Network name:"), 0, 0, anchorRight = 1)
         grid1.setField(snack.Label(self.__config.get_name()), 1, 0, anchorLeft = 1)

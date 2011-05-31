@@ -17,10 +17,7 @@
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
 import snack
-import traceback
 
-import utils
-from createmeter import CreateMeter
 from configscreen import StorageListConfigScreen
 from volumeconfig import StorageVolumeConfig
 
@@ -65,6 +62,7 @@ class RemoveVolumeConfigScreen(StorageListConfigScreen):
         return page is CONFIRM_PAGE
 
     def get_confirm_page(self, screen):
+        ignore = screen
         self.__confirm = snack.Checkbox("Check here to confirm deleting volume: %s" % self.get_selected_volume())
         grid = snack.Grid(1, 1)
         grid.setField(self.__confirm, 0, 0)

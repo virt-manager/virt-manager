@@ -16,11 +16,7 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-import snack
-import traceback
-
 from menuscreen     import MenuScreen
-from configscreen   import ConfigScreen
 from adddomain      import AddDomain
 from startdomain    import StartDomain
 from stopdomain     import StopDomain
@@ -29,9 +25,6 @@ from removedomain   import RemoveDomain
 from listdomains    import ListDomains
 from migratedomain  import MigrateDomain
 from createuser     import CreateUser
-
-import utils
-import logging
 
 ADD_DOMAIN     = 1
 START_DOMAIN   = 2
@@ -57,14 +50,22 @@ class NodeMenuScreen(MenuScreen):
                 ("Create A User",             CREATE_USER))
 
     def handle_selection(self, item):
-            if   item is ADD_DOMAIN:     AddDomain()
-            elif item is START_DOMAIN:   StartDomain()
-            elif item is STOP_DOMAIN:    StopDomain()
-            elif item is PAUSE_DOMAIN:   PauseDomain()
-            elif item is REMOVE_DOMAIN:  RemoveDomain()
-            elif item is LIST_DOMAINS:   ListDomains()
-            elif item is MIGRATE_DOMAIN: MigrateDomain()
-            elif item is CREATE_USER:    CreateUser()
+        if item is ADD_DOMAIN:
+            AddDomain()
+        elif item is START_DOMAIN:
+            StartDomain()
+        elif item is STOP_DOMAIN:
+            StopDomain()
+        elif item is PAUSE_DOMAIN:
+            PauseDomain()
+        elif item is REMOVE_DOMAIN:
+            RemoveDomain()
+        elif item is LIST_DOMAINS:
+            ListDomains()
+        elif item is MIGRATE_DOMAIN:
+            MigrateDomain()
+        elif item is CREATE_USER:
+            CreateUser()
 
 def NodeMenu():
     screen = NodeMenuScreen()
