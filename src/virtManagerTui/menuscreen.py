@@ -16,7 +16,7 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
+import snack
 import traceback
 
 import utils
@@ -31,12 +31,12 @@ class MenuScreen:
     def start(self):
         finished = False
         while finished == False:
-            screen = SnackScreen()
-            menu = Listbox(height = 0, width = 0, returnExit = 1)
+            screen = snack.SnackScreen()
+            menu = snack.Listbox(height = 0, width = 0, returnExit = 1)
             for menu_item in self.get_menu_items():
                 menu.append(menu_item[0], menu_item[1])
             menu.append("Exit Menu", EXIT_MENU)
-            gridform = GridForm(screen, self.__title, 1, 4)
+            gridform = snack.GridForm(screen, self.__title, 1, 4)
             gridform.add(menu, 0, 0)
             result = gridform.run();
             screen.popWindow()
@@ -46,9 +46,9 @@ class MenuScreen:
                 if result.current() == EXIT_MENU: finished = True
                 else: self.handle_selection(result.current())
             except Exception, error:
-                screen = SnackScreen()
+                screen = snack.SnackScreen()
                 logging.info("An exception occurred: %s" % str(error))
-                ButtonChoiceWindow(screen,
+                snack.ButtonChoiceWindow(screen,
                                    "An Exception Has Occurred",
                                    str(error) + "\n" + traceback.format_exc(),
                                    buttons = ["OK"])

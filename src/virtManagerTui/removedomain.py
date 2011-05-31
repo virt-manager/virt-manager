@@ -18,8 +18,8 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
-from configscreen import *
+import snack
+from configscreen import DomainListConfigScreen
 
 class RemoveDomainConfigScreen(DomainListConfigScreen):
     LIST_PAGE     = 1
@@ -68,14 +68,14 @@ class RemoveDomainConfigScreen(DomainListConfigScreen):
         return False
 
     def get_confirm_page(self, screen):
-        self.__confirm_remove = Checkbox("Check here to confirm undefining %s." % self.get_selected_domain().get_name(), 0)
-        grid = Grid(1, 1)
+        self.__confirm_remove = snack.Checkbox("Check here to confirm undefining %s." % self.get_selected_domain().get_name(), 0)
+        grid = snack.Grid(1, 1)
         grid.setField(self.__confirm_remove, 0, 0)
         return [grid]
 
     def get_remove_page(self, screen):
-        grid = Grid(1, 1)
-        grid.setField(Label("%s has been removed." % self.get_selected_domain().get_name()), 0, 0)
+        grid = snack.Grid(1, 1)
+        grid.setField(snack.Label("%s has been removed." % self.get_selected_domain().get_name()), 0, 0)
         return [grid]
 
 def RemoveDomain():

@@ -16,9 +16,9 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
+import snack
 
-from configscreen import *
+from configscreen import HostListConfigScreen
 
 SELECT_HOST_PAGE    = 1
 CONFIRM_REMOVE_PAGE = 2
@@ -55,10 +55,10 @@ class RemoveHostConfigScreen(HostListConfigScreen):
             self.set_finished()
 
     def get_confirm_remove_page(self, screen):
-        self.__confirm = Checkbox("Remove this connection: %s" % self.get_selected_connection(), 0)
-        grid = Grid(1, 1)
+        self.__confirm = snack.Checkbox("Remove this connection: %s" % self.get_selected_connection(), 0)
+        grid = snack.Grid(1, 1)
         grid.setField(self.__confirm, 0, 0)
-        return [Label("Remove Host Connection"),
+        return [snack.Label("Remove Host Connection"),
                 grid]
 
 def RemoveHost():

@@ -16,13 +16,13 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
+import snack
 import traceback
 
 from createmeter import CreateMeter
-from configscreen import *
+from configscreen import StorageListConfigScreen
 from volumeconfig import StorageVolumeConfig
-from utils import *
+import utils
 
 SELECT_POOL_PAGE   = 1
 VOLUME_NAME_PAGE   = 2
@@ -79,7 +79,7 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
             else:
                 errors.append("You must select a storage pool.")
         elif page is VOLUME_NAME_PAGE:
-            if string_is_not_blank(self.__name.value()):
+            if utils.string_is_not_blank(self.__name.value()):
                 return True
             else:
                 errors.append("Storage object name can only contain alphanumeric, '_', '.', or '-' characters.")
@@ -89,8 +89,8 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
             else:
                 errors.append("You must select a volume format.")
         elif page is MAX_CAPACITY_PAGE:
-            if string_is_not_blank(self.__capacity.value()):
-                if string_is_not_blank(self.__allocation.value()):
+            if utils.string_is_not_blank(self.__capacity.value()):
+                if utils.string_is_not_blank(self.__allocation.value()):
                     capacity = int(self.__capacity.value())
                     allocation = int(self.__allocation.value())
                     if capacity > 0:
@@ -128,49 +128,49 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
             self.set_finished()
 
     def get_volume_name_page(self, screen):
-        self.__name = Entry(50, self.__config.get_name())
-        grid = Grid(2, 1)
-        grid.setField(Label("Name:"), 0, 0, anchorRight = 1)
+        self.__name = snack.Entry(50, self.__config.get_name())
+        grid = snack.Grid(2, 1)
+        grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
         grid.setField(self.__name, 1, 0, anchorLeft = 1)
-        return [Label("New Storage Volume"),
+        return [snack.Label("New Storage Volume"),
                 grid,
-                Label("Name of the volume to create. File extension may be appended.")]
+                snack.Label("Name of the volume to create. File extension may be appended.")]
 
     def get_volume_format_page(self, screen):
-        self.__formats = Listbox(0)
+        self.__formats = snack.Listbox(0)
         for format in self.__config.get_formats_for_pool():
             self.__formats.append(format, format)
-        grid = Grid(1, 1)
+        grid = snack.Grid(1, 1)
         grid.setField(self.__formats, 0, 0)
-        return [Label("Select The Volume Format"),
+        return [snack.Label("Select The Volume Format"),
                 grid]
 
     def get_max_capacity_page(self, screen):
-        self.__capacity = Entry(6, str(self.__config.get_max_capacity()))
-        self.__allocation = Entry(6, str(self.__config.get_allocation()))
-        grid = Grid(2, 2)
-        grid.setField(Label("Max. Capacity (MB):"), 0, 0, anchorRight = 1)
+        self.__capacity = snack.Entry(6, str(self.__config.get_max_capacity()))
+        self.__allocation = snack.Entry(6, str(self.__config.get_allocation()))
+        grid = snack.Grid(2, 2)
+        grid.setField(snack.Label("Max. Capacity (MB):"), 0, 0, anchorRight = 1)
         grid.setField(self.__capacity, 1, 0, anchorLeft = 1)
-        grid.setField(Label("Allocation (MB):"), 0, 1, anchorRight = 1)
+        grid.setField(snack.Label("Allocation (MB):"), 0, 1, anchorRight = 1)
         grid.setField(self.__allocation, 1, 1, anchorLeft = 1)
-        return [Label("Storage Volume Quota"),
-                Label("%s's available space: %s" % (self.__config.get_pool().name(),
-                                                    size_as_mb_or_gb(self.__config.get_pool().info()[3]))),
+        return [snack.Label("Storage Volume Quota"),
+                snack.Label("%s's available space: %s" % (self.__config.get_pool().name(),
+                                                    utils.size_as_mb_or_gb(self.__config.get_pool().info()[3]))),
                 grid]
 
     def get_confirm_page(self, screen):
-        grid = Grid(2, 5)
-        grid.setField(Label("Volume Name:"), 0, 0, anchorRight = 1)
-        grid.setField(Label("%s (%s)" % (self.__config.get_name(), self.__config.get_pool().name())), 1, 0, anchorLeft = 1)
+        grid = snack.Grid(2, 5)
+        grid.setField(snack.Label("Volume Name:"), 0, 0, anchorRight = 1)
+        grid.setField(snack.Label("%s (%s)" % (self.__config.get_name(), self.__config.get_pool().name())), 1, 0, anchorLeft = 1)
         if self.__config.needs_format():
-            grid.setField(Label("Format:"), 0, 1, anchorRight = 1)
-            grid.setField(Label(self.__config.get_format()), 1, 1, anchorLeft = 1)
+            grid.setField(snack.Label("Format:"), 0, 1, anchorRight = 1)
+            grid.setField(snack.Label(self.__config.get_format()), 1, 1, anchorLeft = 1)
         # NOTE: here we multiply the sizes by 1024^2 since the size_as_mb_or_gb is expect bytes
-        grid.setField(Label("Max. Capacity:"), 0, 2, anchorRight = 1)
-        grid.setField(Label("%s" % (size_as_mb_or_gb(self.__config.get_max_capacity() * 1024**2))), 1, 2, anchorLeft = 1)
-        grid.setField(Label("Allocation:"), 0, 3, anchorRight = 1)
-        grid.setField(Label("%s" % (size_as_mb_or_gb(self.__config.get_allocation() * 1024**2))), 1, 3, anchorLeft = 1)
-        return [Label("Ready To Allocation New Storage Volume"),
+        grid.setField(snack.Label("Max. Capacity:"), 0, 2, anchorRight = 1)
+        grid.setField(snack.Label("%s" % (utils.size_as_mb_or_gb(self.__config.get_max_capacity() * 1024**2))), 1, 2, anchorLeft = 1)
+        grid.setField(snack.Label("Allocation:"), 0, 3, anchorRight = 1)
+        grid.setField(snack.Label("%s" % (utils.size_as_mb_or_gb(self.__config.get_allocation() * 1024**2))), 1, 3, anchorLeft = 1)
+        return [snack.Label("Ready To Allocation New Storage Volume"),
                 grid]
 
 def AddStorageVolume():

@@ -16,9 +16,9 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
+import snack
 from halworker import HALWorker
-from libvirtworker import *
+from libvirtworker import LibvirtWorker, VirtManagerConfig
 import traceback
 
 BACK_BUTTON   = "back"
@@ -89,28 +89,28 @@ class ConfigScreen:
     def start(self):
         active = True
         while active and (self.__finished == False):
-            screen = SnackScreen()
+            screen = snack.SnackScreen()
             elements = self.get_elements_for_page(screen, self.__current_page)
             # TODO: need to set the form height to the number of elements on the page
-            gridform = GridForm(screen, self.get_title(), 2, 2)
+            gridform = snack.GridForm(screen, self.get_title(), 2, 2)
 
             # Here you would put the list of elements
             # and programmatically set the indicator as
             # they're rendered
             pages = self.get_page_list()
             if len(pages) > 0:
-                leftmenu = Grid(2, len(pages))
+                leftmenu = snack.Grid(2, len(pages))
                 current_element = 0
                 for page in pages:
-                    leftmenu.setField(Label(page), 0, current_element, anchorLeft = 1)
+                    leftmenu.setField(snack.Label(page), 0, current_element, anchorLeft = 1)
                     indicator = " "
                     if current_element == self.__current_page - 1:
                         indicator = "<-"
-                    leftmenu.setField(Label(indicator), 1, current_element)
+                    leftmenu.setField(snack.Label(indicator), 1, current_element)
                     current_element += 1
                 gridform.add(leftmenu, 0, 0, anchorTop = 1, padding = (3, 0, 3, 0))
 
-            content = Grid(1, len(elements) + 1)
+            content = snack.Grid(1, len(elements) + 1)
             current_element = 0
             for element in elements:
                 content.setField(element, 0, current_element)
@@ -121,7 +121,7 @@ class ConfigScreen:
             if self.page_has_next(self.__current_page): buttons.append(["Next", NEXT_BUTTON, "F12"])
             if self.page_has_finish(self.__current_page): buttons.append(["Finish", FINISH_BUTTON, "F10"])
             buttons.append(["Cancel", CANCEL_BUTTON, "ESC"])
-            buttonbar = ButtonBar(screen, buttons)
+            buttonbar = snack.ButtonBar(screen, buttons)
             content.setField(buttonbar, 0, current_element, growx = 1)
             gridform.add(content, 1, 0, anchorTop = 1)
             current_element += 1
@@ -139,14 +139,14 @@ class ConfigScreen:
                         error_text = ""
                         for error in errors:
                             error_text += "%s\n" % error
-                            ButtonChoiceWindow(screen,
+                            snack.ButtonChoiceWindow(screen,
                                                "There Were Errors",
                                                error_text,
                                                buttons = ["OK"])
                 elif pressed == CANCEL_BUTTON:
                     active = False
             except Exception, error:
-                ButtonChoiceWindow(screen,
+                snack.ButtonChoiceWindow(screen,
                                    "An Exception Has Occurred",
                                    str(error) + "\n" + traceback.format_exc(),
                                    buttons = ["OK"])
@@ -165,7 +165,7 @@ class DomainListConfigScreen(ConfigScreen):
         result = None
 
         if self.__has_domains:
-            self.__domain_list = Listbox(0)
+            self.__domain_list = snack.Listbox(0)
             for uuid in domuuids:
                 domain = self.get_libvirt().get_domain(uuid)
 
@@ -173,8 +173,8 @@ class DomainListConfigScreen(ConfigScreen):
                 self.__domain_list.append(domain.get_name(), domain)
             result = [self.__domain_list]
         else:
-            grid = Grid(1, 1)
-            grid.setField(Label("There are no domains available."), 0, 0)
+            grid = snack.Grid(1, 1)
+            grid.setField(snack.Label("There are no domains available."), 0, 0)
             result = [grid]
 
         return result
@@ -197,17 +197,17 @@ class NetworkListConfigScreen(ConfigScreen):
 
         if len(uuids) > 0:
             self.__has_networks = True
-            self.__network_list = Listbox(0)
+            self.__network_list = snack.Listbox(0)
             for uuid in uuids:
                 network = self.get_libvirt().get_network(uuid)
                 self.__network_list.append(uuid, network.get_name())
             result = self.__network_list
         else:
             self.__has_networks = False
-            result = Label("There are no networks available.")
-        grid = Grid(1, 1)
+            result = snack.Label("There are no networks available.")
+        grid = snack.Grid(1, 1)
         grid.setField(result, 0, 0)
-        return [Label("Network List"),
+        return [snack.Label("Network List"),
                 grid]
 
     def get_selected_network(self):
@@ -227,16 +227,16 @@ class StorageListConfigScreen(ConfigScreen):
         pools = self.get_libvirt().list_storage_pools(defined=defined, created=created)
         if len(pools) > 0:
             self.__has_pools = True
-            self.__pools_list = Listbox(0)
+            self.__pools_list = snack.Listbox(0)
             for pool in pools:
                 self.__pools_list.append(pool, pool)
             result = self.__pools_list
         else:
             self.__has_pools = False
-            result = Label("There are no storage pools available.")
-        grid = Grid(1, 1)
+            result = snack.Label("There are no storage pools available.")
+        grid = snack.Grid(1, 1)
         grid.setField(result, 0, 0)
-        return [Label("Storage Pool List"),
+        return [snack.Label("Storage Pool List"),
                 grid]
 
     def get_selected_pool(self):
@@ -250,17 +250,17 @@ class StorageListConfigScreen(ConfigScreen):
         pool = self.get_libvirt().get_storage_pool(self.get_selected_pool())
         if len(pool.listVolumes()) > 0:
             self.__has_volumes = True
-            self.__volumes_list = Listbox(0)
+            self.__volumes_list = snack.Listbox(0)
             for volname in pool.listVolumes():
                 volume = pool.storageVolLookupByName(volname)
                 self.__volumes_list.append("%s (%0.2f GB)" % (volume.name(), volume.info()[2] / 1024**3), volume.name())
             result = self.__volumes_list
         else:
             self.__has_volumes = False
-            result = Label("There are no storage volumes available.")
-        grid = Grid(1, 1)
+            result = snack.Label("There are no storage volumes available.")
+        grid = snack.Grid(1, 1)
         grid.setField(result, 0, 0)
-        return [Label("Storage Volume List"),
+        return [snack.Label("Storage Volume List"),
                 grid]
 
     def get_selected_volume(self):
@@ -281,16 +281,16 @@ class HostListConfigScreen(ConfigScreen):
 
         if len(connections) > 0:
             self.__has_connections = True
-            self.__connection_list = Listbox(0)
+            self.__connection_list = snack.Listbox(0)
             for connection in connections:
                 self.__connection_list.append(connection, connection)
             result = self.__connection_list
         else:
             self.__has_connections = False
-            result = Label("There are no defined connections.")
-        grid = Grid(1, 1)
+            result = snack.Label("There are no defined connections.")
+        grid = snack.Grid(1, 1)
         grid.setField(result, 0, 0)
-        return [Label("Host List"),
+        return [snack.Label("Host List"),
                 grid]
 
     def get_selected_connection(self):

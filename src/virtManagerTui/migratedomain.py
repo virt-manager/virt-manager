@@ -18,9 +18,9 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
+import snack
 from libvirtworker import LibvirtWorker
-from configscreen import *
+from configscreen import DomainListConfigScreen
 
 LIST_DOMAINS  = 1
 SELECT_TARGET = 2
@@ -64,15 +64,15 @@ class MigrateDomainConfigScreen(DomainListConfigScreen):
             self.set_finished()
 
     def get_target_page(self, screen):
-        self.__targets = Listbox(0)
+        self.__targets = snack.Listbox(0)
         for connection in self.get_virt_manager_config().get_connection_list():
             self.__targets.append(connection, connection)
-        return [Label("Select A Target Host"),
+        return [snack.Label("Select A Target Host"),
                 self.__targets]
 
     def get_confirm_page(self, screen):
-        self.__confirm = Checkbox("Confirm migrating this virtual machine.")
-        grid = Grid(1, 1)
+        self.__confirm = snack.Checkbox("Confirm migrating this virtual machine.")
+        grid = snack.Grid(1, 1)
         grid.setField(self.__confirm, 0, 0)
         return [grid]
 

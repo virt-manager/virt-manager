@@ -16,13 +16,13 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
+import snack
 import traceback
 
+import utils
 from createmeter import CreateMeter
-from configscreen import *
+from configscreen import StorageListConfigScreen
 from volumeconfig import StorageVolumeConfig
-from utils import *
 
 SELECT_POOL_PAGE   = 1
 SELECT_VOLUME_PAGE = 2
@@ -65,10 +65,10 @@ class RemoveVolumeConfigScreen(StorageListConfigScreen):
         return page is CONFIRM_PAGE
 
     def get_confirm_page(self, screen):
-        self.__confirm = Checkbox("Check here to confirm deleting volume: %s" % self.get_selected_volume())
-        grid = Grid(1, 1)
+        self.__confirm = snack.Checkbox("Check here to confirm deleting volume: %s" % self.get_selected_volume())
+        grid = snack.Grid(1, 1)
         grid.setField(self.__confirm, 0, 0)
-        return [Label("Remove Selected Storage Volume"),
+        return [snack.Label("Remove Selected Storage Volume"),
                 grid]
 
 def RemoveStorageVolume():

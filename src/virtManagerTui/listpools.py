@@ -16,10 +16,10 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
+import snack
 
-from configscreen import *
-from utils import *
+from configscreen import StorageListConfigScreen
+import utils
 
 LIST_PAGE    = 1
 DETAILS_PAGE = 2
@@ -43,20 +43,20 @@ class ListStoragePoolsConfigScreen(StorageListConfigScreen):
 
     def get_pool_details_page(self, screen):
         pool = self.get_libvirt().get_storage_pool(self.get_selected_pool())
-        volumes = Listbox(0);
+        volumes = snack.Listbox(0);
         for name in pool.listVolumes():
             volume = pool.storageVolLookupByName(name)
-            volumes.append("%s (%s)" % (name, size_as_mb_or_gb(volume.info()[1])), name)
-        grid = Grid(2, 3)
-        grid.setField(Label("Name:"), 0, 0, anchorRight = 1)
-        grid.setField(Label(pool.name()), 1, 0, anchorLeft = 1)
-        grid.setField(Label("Volumes:"), 0, 1, anchorRight = 1)
+            volumes.append("%s (%s)" % (name, util.size_as_mb_or_gb(volume.info()[1])), name)
+        grid = snack.Grid(2, 3)
+        grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
+        grid.setField(snack.Label(pool.name()), 1, 0, anchorLeft = 1)
+        grid.setField(snack.Label("Volumes:"), 0, 1, anchorRight = 1)
         grid.setField(volumes, 1, 1, anchorLeft = 1)
-        grid.setField(Label("Autostart:"), 0, 2, anchorRight = 1)
+        grid.setField(snack.Label("Autostart:"), 0, 2, anchorRight = 1)
         label = "No"
         if pool.autostart(): label = "Yes"
-        grid.setField(Label(label), 1, 2, anchorLeft = 1)
-        return [Label("Details For Storage Pool: %s" % self.get_selected_pool()),
+        grid.setField(snack.Label(label), 1, 2, anchorLeft = 1)
+        return [snack.Label("Details For Storage Pool: %s" % self.get_selected_pool()),
                 grid]
 
 def ListStoragePools():

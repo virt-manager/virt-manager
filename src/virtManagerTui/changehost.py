@@ -16,11 +16,11 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
+import snack
 
 import logging
 import libvirtworker
-from configscreen import *
+from configscreen import HostListConfigScreen
 
 CONNECTION_LIST_PAGE = 1
 CONNECTED_PAGE       = 2
@@ -53,7 +53,7 @@ class ChangeHostConfigScreen(HostListConfigScreen):
         return page is CONNECTED_PAGE
 
     def get_connected_page(self, screen):
-        return [Label("Connected to %s" % self.get_selected_connection())]
+        return [snack.Label("Connected to %s" % self.get_selected_connection())]
 
 def ChangeHost():
     screen = ChangeHostConfigScreen()

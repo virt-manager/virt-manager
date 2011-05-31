@@ -18,14 +18,13 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
+import snack
 import os
 from createmeter  import CreateMeter
 from domainconfig import DomainConfig
 from configscreen import ConfigScreen
 import utils
-
-from virtinst import *
+from virtinst import Guest
 
 VM_DETAILS_PAGE      =  1
 LOCAL_INSTALL_PAGE   =  2
@@ -305,8 +304,8 @@ class DomainConfigScreen(ConfigScreen):
             return True
 
     def get_vm_details_page(self, screen):
-        self.__guest_name = Entry(50, self.__config.get_guest_name())
-        self.__install_type = RadioBar(screen, (("Local install media (ISO image or CDROM)",
+        self.__guest_name = snack.Entry(50, self.__config.get_guest_name())
+        self.__install_type = snack.RadioBar(screen, (("Local install media (ISO image or CDROM)",
                                                  DomainConfig.LOCAL_INSTALL,
                                                  self.__config.is_install_type(DomainConfig.LOCAL_INSTALL)),
                                                 ("Network Install (HTTP, FTP, or NFS)",
@@ -315,25 +314,25 @@ class DomainConfigScreen(ConfigScreen):
                                                 ("Network Boot (PXE)",
                                                  DomainConfig.PXE_INSTALL,
                                                  self.__config.is_install_type(DomainConfig.PXE_INSTALL))))
-        grid = Grid(2,3)
-        grid.setField(Label("Name:"), 0, 0, anchorRight = 1)
+        grid = snack.Grid(2,3)
+        grid.setField(snack.Label("Name:"), 0, 0, anchorRight = 1)
         grid.setField(self.__guest_name, 1, 0, anchorLeft = 1)
-        grid.setField(Label("Choose how you would like to install the operating system"), 1, 1,
+        grid.setField(snack.Label("Choose how you would like to install the operating system"), 1, 1,
                       anchorLeft = 1, anchorTop = 1)
         grid.setField(self.__install_type, 1, 2, anchorLeft = 1)
-        return [Label("Enter your machine details"),
+        return [snack.Label("Enter your machine details"),
                 grid]
 
     def get_local_install_page(self, screen):
-        self.__install_source = RadioBar(screen, (("Use CDROM or DVD",
+        self.__install_source = snack.RadioBar(screen, (("Use CDROM or DVD",
                                                    DomainConfig.INSTALL_SOURCE_CDROM,
                                                    self.__config.get_use_cdrom_source()),
                                                   ("Use ISO image",
                                                    DomainConfig.INSTALL_SOURCE_ISO,
                                                    self.__config.get_use_cdrom_source() is False)))
-        grid = Grid(1,1)
+        grid = snack.Grid(1,1)
         grid.setField(self.__install_source, 0, 0, anchorLeft = 1)
-        return [Label("Locate your install media"),
+        return [snack.Label("Locate your install media"),
                 grid]
 
     def get_select_cdrom_page(self, screen):
@@ -341,42 +340,42 @@ class DomainConfigScreen(ConfigScreen):
         media = self.get_hal().list_installable_volumes()
         for drive in media.keys():
             drives.append([media[drive], drive, self.__config.is_install_media(drive)])
-        self.__install_media = RadioBar(screen, (drives))
-        grid = Grid(1, 1)
+        self.__install_media = snack.RadioBar(screen, (drives))
+        grid = snack.Grid(1, 1)
         grid.setField(self.__install_media, 0, 0)
-        return [Label("Select the install media"),
+        return [snack.Label("Select the install media"),
                 grid]
 
     def get_select_iso_page(self, screen):
-        self.__iso_path = Entry(50, self.__config.get_iso_path())
-        grid = Grid(1, 2)
-        grid.setField(Label("Enter ISO path:"), 0, 0, anchorLeft = 1)
+        self.__iso_path = snack.Entry(50, self.__config.get_iso_path())
+        grid = snack.Grid(1, 2)
+        grid.setField(snack.Label("Enter ISO path:"), 0, 0, anchorLeft = 1)
         grid.setField(self.__iso_path, 0, 1, anchorLeft = 1)
-        return [Label("Enter the full path to an install ISO"),
+        return [snack.Label("Enter the full path to an install ISO"),
                 grid]
 
     def get_network_install_page(self, screen):
-        self.__install_url    = Entry(50, self.__config.get_install_url())
-        self.__kickstart_url  = Entry(50, self.__config.get_kickstart_url())
-        self.__kernel_options = Entry(50, self.__config.get_kernel_options())
-        grid = Grid(2,3)
-        grid.setField(Label("URL:"), 0, 0, anchorRight = 1)
+        self.__install_url    = snack.Entry(50, self.__config.get_install_url())
+        self.__kickstart_url  = snack.Entry(50, self.__config.get_kickstart_url())
+        self.__kernel_options = snack.Entry(50, self.__config.get_kernel_options())
+        grid = snack.Grid(2,3)
+        grid.setField(snack.Label("URL:"), 0, 0, anchorRight = 1)
         grid.setField(self.__install_url, 1, 0, anchorLeft = 1)
-        grid.setField(Label("Kickstart URL:"), 0, 1, anchorRight = 1)
+        grid.setField(snack.Label("Kickstart URL:"), 0, 1, anchorRight = 1)
         grid.setField(self.__kickstart_url, 1, 1, anchorLeft = 1)
-        grid.setField(Label("Kernel Options:"), 0, 2, anchorRight = 1)
+        grid.setField(snack.Label("Kernel Options:"), 0, 2, anchorRight = 1)
         grid.setField(self.__kernel_options, 1, 2, anchorLeft = 1)
-        return [Label("Provide the operating system URL"),
+        return [snack.Label("Provide the operating system URL"),
                 grid]
 
     def get_os_type_page(self, screen):
         types = []
         for type in Guest.list_os_types():
             types.append([Guest.get_os_type_label(type), type, self.__config.is_os_type(type)])
-        self.__os_types = RadioBar(screen, types)
-        grid = Grid(1, 1)
+        self.__os_types = snack.RadioBar(screen, types)
+        grid = snack.Grid(1, 1)
         grid.setField(self.__os_types, 0, 0, anchorLeft = 1)
-        return [Label("Choose the operating system type"),
+        return [snack.Label("Choose the operating system type"),
                 grid]
 
     def get_os_variant_page(self, screen):
@@ -384,45 +383,45 @@ class DomainConfigScreen(ConfigScreen):
         type = self.__config.get_os_type()
         for variant in Guest.list_os_variants(type):
             variants.append([Guest.get_os_variant_label(type, variant), variant, self.__config.is_os_variant(variant)])
-        self.__os_variants = RadioBar(screen, variants)
-        grid = Grid(1, 1)
+        self.__os_variants = snack.RadioBar(screen, variants)
+        grid = snack.Grid(1, 1)
         grid.setField(self.__os_variants, 0, 0, anchorLeft = 1)
-        return [Label("Choose the operating system version"),
+        return [snack.Label("Choose the operating system version"),
                 grid]
 
     def get_ram_and_cpu_page(self, screen):
-        self.__memory = Entry(10, str(self.__config.get_memory()))
-        self.__cpus   = Entry(10, str(self.__config.get_cpus()))
-        grid = Grid(2,2)
-        grid.setField(Label("Memory (RAM):"), 0, 0, anchorRight = 1)
+        self.__memory = snack.Entry(10, str(self.__config.get_memory()))
+        self.__cpus   = snack.Entry(10, str(self.__config.get_cpus()))
+        grid = snack.Grid(2,2)
+        grid.setField(snack.Label("Memory (RAM):"), 0, 0, anchorRight = 1)
         grid.setField(self.__memory, 1, 0, anchorLeft = 1)
-        grid.setField(Label("CPUs:"), 0, 1, anchorRight = 1)
+        grid.setField(snack.Label("CPUs:"), 0, 1, anchorRight = 1)
         grid.setField(self.__cpus, 1, 1, anchorLeft = 1)
-        return [Label("Choose memory and CPU settings"),
+        return [snack.Label("Choose memory and CPU settings"),
                 grid]
 
     def get_enable_storage_page(self, screen):
-        self.__enable_storage = Checkbox("Enable storage for this virtual machine", self.__config.get_enable_storage())
-        self.__storage_type     = RadioBar(screen,((["Create a disk image on the computer's hard disk",
+        self.__enable_storage = snack.Checkbox("Enable storage for this virtual machine", self.__config.get_enable_storage())
+        self.__storage_type     = snack.RadioBar(screen,((["Create a disk image on the computer's hard disk",
                                                      DomainConfig.NEW_STORAGE,
                                                      self.__config.get_use_local_storage()]),
                                                    (["Select managed or other existing storage",
                                                      DomainConfig.EXISTING_STORAGE,
                                                      self.__config.get_use_local_storage() is False])))
-        grid = Grid(1,2)
+        grid = snack.Grid(1,2)
         grid.setField(self.__enable_storage, 0, 0, anchorLeft = 1)
         grid.setField(self.__storage_type, 0, 1, anchorLeft = 1)
-        return [Label("Configure storage"),
+        return [snack.Label("Configure storage"),
                 grid]
 
     def get_local_storage_page(self, screen):
-        self.__storage_size     = Entry(6, str(self.__config.get_storage_size()))
-        self.__allocate_storage = Checkbox("Allocate entire disk now", self.__config.get_allocate_storage())
-        grid = Grid(2, 2)
+        self.__storage_size     = snack.Entry(6, str(self.__config.get_storage_size()))
+        self.__allocate_storage = snack.Checkbox("Allocate entire disk now", self.__config.get_allocate_storage())
+        grid = snack.Grid(2, 2)
         grid.setField(self.__allocate_storage, 0, 0, growx = 1, anchorLeft = 1)
-        grid.setField(Label("Storage size (GB):"), 0, 1, anchorLeft = 1)
+        grid.setField(snack.Label("Storage size (GB):"), 0, 1, anchorLeft = 1)
         grid.setField(self.__storage_size, 1, 1)
-        return [Label("Configure local storage"),
+        return [snack.Label("Configure local storage"),
                 grid]
 
     def get_select_pool_page(self, screen):
@@ -430,15 +429,15 @@ class DomainConfigScreen(ConfigScreen):
         for pool in self.get_libvirt().list_storage_pools():
             pools.append([pool, pool, pool == self.__config.get_storage_pool()])
         if len(pools) > 0:
-            self.__storage_pool = RadioBar(screen, (pools))
-            grid = Grid(2, 1)
-            grid.setField(Label("Storage pool:"), 0, 0, anchorTop = 1)
+            self.__storage_pool = snack.RadioBar(screen, (pools))
+            grid = snack.Grid(2, 1)
+            grid.setField(snack.Label("Storage pool:"), 0, 0, anchorTop = 1)
             grid.setField(self.__storage_pool, 1, 0)
             self.__has_pools = True
         else:
-            grid = Label("There are no storage pools available.")
+            grid = snack.Label("There are no storage pools available.")
             self.__has_pools = False
-        return [Label("Configure Managed Storage: Select A Pool"),
+        return [snack.Label("Configure Managed Storage: Select A Pool"),
                 grid]
 
     def get_select_volume_page(self, screen):
@@ -446,65 +445,65 @@ class DomainConfigScreen(ConfigScreen):
        for volume in self.get_libvirt().list_storage_volumes(self.__config.get_storage_pool()):
            volumes.append([volume, volume, volume == self.__config.get_storage_volume()])
        if len(volumes) > 0:
-           self.__storage_volume = RadioBar(screen, (volumes))
-           grid = Grid(2, 1)
-           grid.setField(Label("Storage volumes:"), 0, 0, anchorTop = 1)
+           self.__storage_volume = snack.RadioBar(screen, (volumes))
+           grid = snack.Grid(2, 1)
+           grid.setField(snack.Label("Storage volumes:"), 0, 0, anchorTop = 1)
            grid.setField(self.__storage_volume, 1, 0)
            self.__has_volumes = True
        else:
-           grid = Label("This storage pool has no defined volumes.")
+           grid = snack.Label("This storage pool has no defined volumes.")
            self.__has_volumes = False
-       return [Label("Configure Managed Storage: Select A Volume"),
+       return [snack.Label("Configure Managed Storage: Select A Volume"),
                grid]
 
     def get_bridge_page(self, screen):
         bridges = []
         for bridge in self.get_libvirt().list_bridges():
             bridges.append(["Virtual network '%s'" % bridge.name(), bridge.name(), self.__config.get_network_bridge() is bridge.name()])
-        self.__network_bridges = RadioBar(screen, (bridges))
+        self.__network_bridges = snack.RadioBar(screen, (bridges))
         if self.__config.get_mac_address() is None:
             self.__config.set_mac_address(self.get_libvirt().generate_mac_address())
-        self.__mac_address = Entry(20, self.__config.get_mac_address())
-        grid = Grid(1, 1)
+        self.__mac_address = snack.Entry(20, self.__config.get_mac_address())
+        grid = snack.Grid(1, 1)
         grid.setField(self.__network_bridges, 0, 0)
-        return [Label("Select an existing bridge"),
+        return [snack.Label("Select an existing bridge"),
                 grid]
 
     def get_virt_details_page(self, screen):
         virt_types = []
         for type in self.get_libvirt().list_virt_types():
             virt_types.append([type, type, self.__config.is_virt_type(type)])
-        self.__virt_types = RadioBar(screen, (virt_types))
+        self.__virt_types = snack.RadioBar(screen, (virt_types))
         archs = []
         for arch in self.get_libvirt().list_architectures():
             archs.append([arch, arch, self.__config.is_architecture(arch)])
-        self.__architectures = RadioBar(screen, (archs))
-        grid = Grid(2, 2)
-        grid.setField(Label("Virt Type:"), 0, 0, anchorRight = 1, anchorTop = 1)
+        self.__architectures = snack.RadioBar(screen, (archs))
+        grid = snack.Grid(2, 2)
+        grid.setField(snack.Label("Virt Type:"), 0, 0, anchorRight = 1, anchorTop = 1)
         grid.setField(self.__virt_types, 1, 0, anchorLeft = 1)
-        grid.setField(Label("Architecture:"), 0, 1, anchorRight = 1, anchorTop = 1)
+        grid.setField(snack.Label("Architecture:"), 0, 1, anchorRight = 1, anchorTop = 1)
         grid.setField(self.__architectures, 1, 1, anchorLeft = 1)
-        return [Label("Configure virtualization details"),
+        return [snack.Label("Configure virtualization details"),
                 grid]
 
     def get_confirm_page(self, screen):
-        grid = Grid(2, 6)
-        grid.setField(Label("OS:"), 0, 0, anchorRight = 1)
-        grid.setField(Label(Guest.get_os_variant_label(self.__config.get_os_type(),
+        grid = snack.Grid(2, 6)
+        grid.setField(snack.Label("OS:"), 0, 0, anchorRight = 1)
+        grid.setField(snack.Label(Guest.get_os_variant_label(self.__config.get_os_type(),
                                                        self.__config.get_os_variant())), 1, 0, anchorLeft = 1)
-        grid.setField(Label("Install:"), 0, 1, anchorRight = 1)
-        grid.setField(Label(self.__config.get_install_type_text()), 1, 1, anchorLeft = 1)
-        grid.setField(Label("Memory:"), 0, 2, anchorRight = 1)
-        grid.setField(Label("%s MB" % self.__config.get_memory()), 1, 2, anchorLeft = 1)
-        grid.setField(Label("CPUs:"), 0, 3, anchorRight = 1)
-        grid.setField(Label("%d" % self.__config.get_cpus()), 1, 3, anchorLeft = 1)
-        grid.setField(Label("Storage:"), 0, 4, anchorRight = 1)
-        grid.setField(Label("%s (on %s)" % (self.__config.get_storage_volume(),
+        grid.setField(snack.Label("Install:"), 0, 1, anchorRight = 1)
+        grid.setField(snack.Label(self.__config.get_install_type_text()), 1, 1, anchorLeft = 1)
+        grid.setField(snack.Label("Memory:"), 0, 2, anchorRight = 1)
+        grid.setField(snack.Label("%s MB" % self.__config.get_memory()), 1, 2, anchorLeft = 1)
+        grid.setField(snack.Label("CPUs:"), 0, 3, anchorRight = 1)
+        grid.setField(snack.Label("%d" % self.__config.get_cpus()), 1, 3, anchorLeft = 1)
+        grid.setField(snack.Label("Storage:"), 0, 4, anchorRight = 1)
+        grid.setField(snack.Label("%s (on %s)" % (self.__config.get_storage_volume(),
                                             self.__config.get_storage_pool())),
                       1, 4, anchorLeft = 1)
-        grid.setField(Label("Network:"), 0, 5, anchorRight = 1)
-        grid.setField(Label(self.__config.get_network_bridge()), 1, 5, anchorLeft = 1)
-        return [Label("Ready to begin installation of %s" % self.__config.get_guest_name()),
+        grid.setField(snack.Label("Network:"), 0, 5, anchorRight = 1)
+        grid.setField(snack.Label(self.__config.get_network_bridge()), 1, 5, anchorLeft = 1)
+        return [snack.Label("Ready to begin installation of %s" % self.__config.get_guest_name()),
                 grid]
 
 def AddDomain():

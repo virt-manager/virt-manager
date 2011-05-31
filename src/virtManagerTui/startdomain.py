@@ -18,8 +18,8 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
-from configscreen import *
+import snack
+from configscreen import DomainListConfigScreen
 
 class StartDomainConfigScreen(DomainListConfigScreen):
     LIST_PAGE  = 1
@@ -59,8 +59,8 @@ class StartDomainConfigScreen(DomainListConfigScreen):
                 errors.append("You must first select a domain to start.")
 
     def get_start_domain_page(self, screen):
-        grid = Grid(1, 1)
-        grid.setField(Label("%s was successfully started." % self.get_selected_domain().get_name()), 0, 0)
+        grid = snack.Grid(1, 1)
+        grid.setField(snack.Label("%s was successfully started." % self.get_selected_domain().get_name()), 0, 0)
         return [grid]
 
 def StartDomain():

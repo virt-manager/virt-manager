@@ -18,9 +18,9 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
+import snack
 from libvirtworker import LibvirtWorker
-from configscreen import *
+from configscreen import DomainListConfigScreen
 
 class ListDomainsConfigScreen(DomainListConfigScreen):
     LIST_PAGE   = 1
@@ -86,14 +86,14 @@ class ListDomainsConfigScreen(DomainListConfigScreen):
             fields.append(("Type", setype))
             fields.append(("Label", vmlabel))
 
-        grid = Grid(2, len(fields))
+        grid = snack.Grid(2, len(fields))
         row = 0
         for field in fields:
             if field[1] is not None:
-                grid.setField(Label("%s :  " % field[0]), 0, row, anchorRight = 1)
-                grid.setField(Label(field[1]), 1, row, anchorLeft = 1)
+                grid.setField(snack.Label("%s :  " % field[0]), 0, row, anchorRight = 1)
+                grid.setField(snack.Label(field[1]), 1, row, anchorLeft = 1)
             else:
-                grid.setField(Label("%s" % field[0]), 1, row)
+                grid.setField(snack.Label("%s" % field[0]), 1, row)
             row += 1
 
         return [grid]

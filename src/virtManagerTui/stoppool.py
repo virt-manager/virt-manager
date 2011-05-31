@@ -18,8 +18,8 @@
 # MA  02110-1301, USA.  A copy of the GNU General Public License is
 # also available at http://www.gnu.org/copyleft/gpl.html.
 
-from snack import *
-from configscreen import *
+import snack
+from configscreen import StorageListConfigScreen
 
 LIST_POOLS_PAGE    = 1
 FINAL_PAGE         = 2
@@ -55,7 +55,7 @@ class StopStoragePoolConfigScreen(StorageListConfigScreen):
             self.set_finished()
 
     def get_final_page(self, screen):
-        return [Label("Storage pool stopped: %s" % self.get_selected_pool())]
+        return [snack.Label("Storage pool stopped: %s" % self.get_selected_pool())]
 
 def StopStoragePool():
     screen = StopStoragePoolConfigScreen()
