@@ -208,13 +208,14 @@ class Viewer(vmmGObject):
         self.display = None
 
     def cleanup(self):
-        vmmGObject.cleanup(self)
+        self.close()
 
-        self.console = None
+        vmmGObject.cleanup(self)
 
         if self.display:
             self.display.destroy()
         self.display = None
+        self.console = None
 
     def get_widget(self):
         return self.display
@@ -429,6 +430,7 @@ class SpiceViewer(Viewer):
             self.spice_session.disconnect()
         self.spice_session = None
         self.audio = None
+        self.display.destroy()
         self.display = None
         self.display_channel = None
 
