@@ -386,6 +386,7 @@ class vmmDetails(vmmGObjectUI):
             "on_details_menu_view_scale_fullscreen_toggled": self.console.set_scale_type,
             "on_details_menu_view_scale_never_toggled": self.console.set_scale_type,
 
+            "on_console_pages_switch_page": self.console.page_changed,
             "on_console_auth_password_activate": self.console.auth_login,
             "on_console_auth_login_clicked": self.console.auth_login,
         })
@@ -1073,6 +1074,7 @@ class vmmDetails(vmmGObjectUI):
         self.page_refresh(newpage)
 
         self.sync_details_console_view(newpage == PAGE_DETAILS)
+        self.console.set_allow_fullscreen()
 
         if newpage == PAGE_CONSOLE or newpage >= PAGE_DYNAMIC_OFFSET:
             self.last_console_page = newpage

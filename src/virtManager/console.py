@@ -553,7 +553,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.tunnels = None
         self.viewerRetriesScheduled = 0
         self.viewerRetryDelay = 125
-        self.viewer_connected = False
+        self._viewer_connected = False
         self.viewer_connecting = False
         self.scale_type = self.vm.get_console_scaling()
 
@@ -583,6 +583,8 @@ class vmmConsolePages(vmmGObjectUI):
         scroll.connect("size-allocate", self.scroll_size_allocate)
         self.add_gconf_handle(
             self.config.on_console_accels_changed(self.set_enable_accel))
+
+        self.page_changed()
 
     def is_visible(self):
         if self.topwin.flags() & gtk.VISIBLE:
@@ -924,6 +926,21 @@ class vmmConsolePages(vmmGObjectUI):
         if self.viewer and self.viewer.get_widget():
             self.viewer.get_widget().grab_focus()
 
+    def page_changed(self, ignore1=None, ignore2=None, ignore3=None):
+        self.set_allow_fullscreen()
+
+    def set_allow_fullscreen(self):
+        cpage = self.window.get_widget("console-pages").get_current_page()
+        dpage = self.window.get_widget("details-pages").get_current_page()
+
+        allow_fullscreen = (dpage == 0 and
+                            cpage == PAGE_VIEWER and
+                            self.viewer_connected)
+
+        print "ALLOW FULLSCREEN", dpage, cpage, self.viewer_connected, allow_fullscreen
+        self.window.get_widget("control-fullscreen").set_sensitive(allow_fullscreen)
+        self.window.get_widget("details-menu-view-fullscreen").set_sensitive(allow_fullscreen)
+
     def disconnected(self):
         errout = ""
         if self.tunnels is not None:
@@ -950,6 +967,13 @@ class vmmConsolePages(vmmGObjectUI):
             error += "\n\nError: %s" % errout
 
         self.activate_unavailable_page(error)
+
+    def _set_viewer_connected(self, val):
+        self._viewer_connected = val
+        self.set_allow_fullscreen()
+    def _get_viewer_connected(self):
+        return self._viewer_connected
+    viewer_connected = property(_get_viewer_connected, _set_viewer_connected)
 
     def connected(self):
         self.viewer_connected = True
