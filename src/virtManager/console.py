@@ -476,7 +476,8 @@ class SpiceViewer(Viewer):
             return
 
     def get_desktop_resolution(self):
-        if not self.display_channel:
+        if (not self.display_channel or
+            not has_property(self.display_channel, "width")):
             return None
         return self.display_channel.get_properties("width", "height")
 
