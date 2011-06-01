@@ -33,23 +33,34 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
     def __init__(self):
         StorageListConfigScreen.__init__(self, "Add A New Storage Volume")
         self.__config = StorageVolumeConfig()
+        self.__name = None
+        self.__capacity = None
+        self.__allocation = None
+        self.__formats = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is SELECT_POOL_PAGE:   return self.get_storage_pool_list_page(screen)
-        elif page is VOLUME_NAME_PAGE:   return self.get_volume_name_page(screen)
-        elif page is VOLUME_FORMAT_PAGE: return self.get_volume_format_page(screen)
-        elif page is MAX_CAPACITY_PAGE:  return self.get_max_capacity_page(screen)
-        elif page is CONFIRM_PAGE:       return self.get_confirm_page(screen)
+        if   page is SELECT_POOL_PAGE:
+            return self.get_storage_pool_list_page(screen)
+        elif page is VOLUME_NAME_PAGE:
+            return self.get_volume_name_page(screen)
+        elif page is VOLUME_FORMAT_PAGE:
+            return self.get_volume_format_page(screen)
+        elif page is MAX_CAPACITY_PAGE:
+            return self.get_max_capacity_page(screen)
+        elif page is CONFIRM_PAGE:
+            return self.get_confirm_page(screen)
 
     def page_has_next(self, page):
         if page is SELECT_POOL_PAGE:
             return self.has_selectable_pools()
         else:
-            if page < CONFIRM_PAGE: return True
+            if page < CONFIRM_PAGE:
+                return True
         return False
 
     def page_has_back(self, page):
-        if page > SELECT_POOL_PAGE: return True
+        if page > SELECT_POOL_PAGE:
+            return True
         return False
 
     def page_has_finish(self, page):
@@ -109,7 +120,8 @@ class AddVolumeConfigScreen(StorageListConfigScreen):
                     errors.append("An allocation value must be entered.")
             else:
                 errors.append("A maximum volume capacity must be entered.")
-        elif page is CONFIRM_PAGE: return True
+        elif page is CONFIRM_PAGE:
+            return True
         return False
 
     def process_input(self, page):

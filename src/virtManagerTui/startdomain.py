@@ -35,11 +35,13 @@ class StartDomainConfigScreen(DomainListConfigScreen):
             return self.get_start_domain_page(screen)
 
     def page_has_next(self, page):
-        if page is self.LIST_PAGE: return self.has_selectable_domains()
+        if page is self.LIST_PAGE:
+            return self.has_selectable_domains()
         return False
 
     def page_has_back(self, page):
-        if page is self.START_PAGE: return True
+        if page is self.START_PAGE:
+            return True
         return False
 
     def validate_input(self, page, errors):

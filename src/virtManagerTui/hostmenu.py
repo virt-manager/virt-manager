@@ -35,9 +35,12 @@ class HostMenuScreen(MenuScreen):
                 ("Remove A Host", REMOVE_HOST))
 
     def handle_selection(self, item):
-        if   item is SELECT_HOST: ChangeHost()
-        elif item is ADD_HOST:    AddHost()
-        elif item is REMOVE_HOST: RemoveHost()
+        if   item is SELECT_HOST:
+            ChangeHost()
+        elif item is ADD_HOST:
+            AddHost()
+        elif item is REMOVE_HOST:
+            RemoveHost()
 
 def HostMenu():
     screen = HostMenuScreen()

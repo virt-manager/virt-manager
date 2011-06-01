@@ -29,8 +29,10 @@ class ListStoragePoolsConfigScreen(StorageListConfigScreen):
         StorageListConfigScreen.__init__(self, "List Storage Pools")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:    return self.get_storage_pool_list_page(screen)
-        elif page is DETAILS_PAGE: return self.get_pool_details_page(screen)
+        if   page is LIST_PAGE:
+            return self.get_storage_pool_list_page(screen)
+        elif page is DETAILS_PAGE:
+            return self.get_pool_details_page(screen)
 
     def page_has_next(self, page):
         if page is LIST_PAGE and self.has_selectable_pools():
@@ -38,7 +40,8 @@ class ListStoragePoolsConfigScreen(StorageListConfigScreen):
         return False
 
     def page_has_back(self, page):
-        if page is DETAILS_PAGE: return True
+        if page is DETAILS_PAGE:
+            return True
         return False
 
     def get_pool_details_page(self, screen):
@@ -55,7 +58,8 @@ class ListStoragePoolsConfigScreen(StorageListConfigScreen):
         grid.setField(volumes, 1, 1, anchorLeft = 1)
         grid.setField(snack.Label("Autostart:"), 0, 2, anchorRight = 1)
         label = "No"
-        if pool.autostart(): label = "Yes"
+        if pool.autostart():
+            label = "Yes"
         grid.setField(snack.Label(label), 1, 2, anchorLeft = 1)
         return [snack.Label("Details For Storage Pool: %s" % self.get_selected_pool()),
                 grid]

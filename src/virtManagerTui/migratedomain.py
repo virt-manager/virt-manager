@@ -29,15 +29,22 @@ class MigrateDomainConfigScreen(DomainListConfigScreen):
     def __init__(self):
         DomainListConfigScreen.__init__(self, "Migrate Virtual Machine")
         self.__configured = False
+        self.__confirm = None
+        self.__targets = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_DOMAINS:  return self.get_domain_list_page(screen)
-        elif page is SELECT_TARGET: return self.get_target_page(screen)
-        elif page is CONFIRM_PAGE:  return self.get_confirm_page(screen)
+        if   page is LIST_DOMAINS:
+            return self.get_domain_list_page(screen)
+        elif page is SELECT_TARGET:
+            return self.get_target_page(screen)
+        elif page is CONFIRM_PAGE:
+            return self.get_confirm_page(screen)
 
     def page_has_next(self, page):
-        if   page is LIST_DOMAINS: return self.has_selectable_domains()
-        else: return page < CONFIRM_PAGE
+        if   page is LIST_DOMAINS:
+            return self.has_selectable_domains()
+        else:
+            return page < CONFIRM_PAGE
 
     def page_has_back(self, page):
         return page < CONFIRM_PAGE
@@ -46,7 +53,8 @@ class MigrateDomainConfigScreen(DomainListConfigScreen):
         return page is CONFIRM_PAGE
 
     def validate_input(self, page, errors):
-        if   page is LIST_DOMAINS: return self.get_selected_domain() is not None
+        if   page is LIST_DOMAINS:
+            return self.get_selected_domain() is not None
         elif page is SELECT_TARGET:
             if self.__targets.current() is None:
                 errors.append("Please enter a target hostname or IP address.")

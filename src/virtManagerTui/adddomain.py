@@ -56,22 +56,62 @@ class DomainConfigScreen(ConfigScreen):
         self.__config.set_architecture(self.get_libvirt().get_default_architecture())
         self.__config.set_virt_type(self.get_libvirt().get_default_virt_type())
 
+        self.__guest_name = None
+        self.__install_url = None
+        self.__storage_volume = None
+        self.__network_bridges = None
+        self.__os_types = None
+        self.__os_variants = None
+        self.__virt_types = None
+        self.__storage_size = None
+        self.__storage_type = None
+        self.__storage_pool = None
+        self.__kickstart_url = None
+        self.__kernel_options = None
+        self.__install_type = None
+        self.__cpus = None
+        self.__memory = None
+        self.__allocate_storage = None
+        self.__enable_storage = None
+        self.__has_volumes = None
+        self.__install_media = None
+        self.__has_pools = None
+        self.__mac_address = None
+        self.__architectures = None
+        self.__iso_path = None
+        self.__install_source = None
+
     def get_elements_for_page(self, screen, page):
-        if page is VM_DETAILS_PAGE:        return self.get_vm_details_page(screen)
-        elif page is LOCAL_INSTALL_PAGE:   return self.get_local_install_page(screen)
-        elif page is SELECT_CDROM_PAGE:    return self.get_select_cdrom_page(screen)
-        elif page is SELECT_ISO_PAGE:      return self.get_select_iso_page(screen)
-        elif page is NETWORK_INSTALL_PAGE: return self.get_network_install_page(screen)
-        elif page is OS_TYPE_PAGE:         return self.get_os_type_page(screen)
-        elif page is OS_VARIANT_PAGE:      return self.get_os_variant_page(screen)
-        elif page is RAM_CPU_PAGE:         return self.get_ram_and_cpu_page(screen)
-        elif page is ENABLE_STORAGE_PAGE:  return self.get_enable_storage_page(screen)
-        elif page is LOCAL_STORAGE_PAGE:   return self.get_local_storage_page(screen)
-        elif page is SELECT_POOL_PAGE:     return self.get_select_pool_page(screen)
-        elif page is SELECT_VOLUME_PAGE:   return self.get_select_volume_page(screen)
-        elif page is BRIDGE_PAGE:          return self.get_bridge_page(screen)
-        elif page is VIRT_DETAILS_PAGE:    return self.get_virt_details_page(screen)
-        elif page is CONFIRM_PAGE:         return self.get_confirm_page(screen)
+        if page is VM_DETAILS_PAGE:
+            return self.get_vm_details_page(screen)
+        elif page is LOCAL_INSTALL_PAGE:
+            return self.get_local_install_page(screen)
+        elif page is SELECT_CDROM_PAGE:
+            return self.get_select_cdrom_page(screen)
+        elif page is SELECT_ISO_PAGE:
+            return self.get_select_iso_page(screen)
+        elif page is NETWORK_INSTALL_PAGE:
+            return self.get_network_install_page(screen)
+        elif page is OS_TYPE_PAGE:
+            return self.get_os_type_page(screen)
+        elif page is OS_VARIANT_PAGE:
+            return self.get_os_variant_page(screen)
+        elif page is RAM_CPU_PAGE:
+            return self.get_ram_and_cpu_page(screen)
+        elif page is ENABLE_STORAGE_PAGE:
+            return self.get_enable_storage_page(screen)
+        elif page is LOCAL_STORAGE_PAGE:
+            return self.get_local_storage_page(screen)
+        elif page is SELECT_POOL_PAGE:
+            return self.get_select_pool_page(screen)
+        elif page is SELECT_VOLUME_PAGE:
+            return self.get_select_volume_page(screen)
+        elif page is BRIDGE_PAGE:
+            return self.get_bridge_page(screen)
+        elif page is VIRT_DETAILS_PAGE:
+            return self.get_virt_details_page(screen)
+        elif page is CONFIRM_PAGE:
+            return self.get_confirm_page(screen)
         return []
 
     def get_page_list(self):
@@ -130,8 +170,10 @@ class DomainConfigScreen(ConfigScreen):
                 return True
             else:
                 errors.append("An install tree is required.")
-        elif page is OS_TYPE_PAGE: return True
-        elif page is OS_VARIANT_PAGE: return True
+        elif page is OS_TYPE_PAGE:
+            return True
+        elif page is OS_VARIANT_PAGE:
+            return True
         elif page is RAM_CPU_PAGE:
             if (len(self.__memory.value()) > 0 and len(self.__cpus.value()) > 0) \
                     and  (int(self.__memory.value()) > 0 and int(self.__cpus.value()) > 0):
@@ -145,7 +187,8 @@ class DomainConfigScreen(ConfigScreen):
                     errors.append("A value must be entered for CPUs.")
                 elif int(self.__cpus.value()) <= 0:
                     errors.append("A positive integer value must be entered for memory.")
-        elif page is ENABLE_STORAGE_PAGE: return True
+        elif page is ENABLE_STORAGE_PAGE:
+            return True
         elif page is LOCAL_STORAGE_PAGE:
             if len(self.__storage_size.value()) > 0:
                 if float(self.__storage_size.value()) > 0:
@@ -180,7 +223,8 @@ class DomainConfigScreen(ConfigScreen):
                 errors.append("Please select a virtualization type.")
             if self.__architectures.getSelection() is None:
                 errors.append("Please selection an architecture.")
-        elif page is CONFIRM_PAGE: return True
+        elif page is CONFIRM_PAGE:
+            return True
         return False
 
     def process_input(self, page):
@@ -257,7 +301,8 @@ class DomainConfigScreen(ConfigScreen):
             else:
                 result = SELECT_VOLUME_PAGE
         else:
-            if page > 1: result = page - 1
+            if page > 1:
+                result = page - 1
         return result
 
     def get_next_page(self, page):
@@ -293,12 +338,15 @@ class DomainConfigScreen(ConfigScreen):
         return result
 
     def page_has_finish(self, page):
-        if page is CONFIRM_PAGE: return True
+        if page is CONFIRM_PAGE:
+            return True
         return False
 
     def page_has_next(self, page):
-        if   page is SELECT_POOL_PAGE: return self.__has_pools
-        elif page is SELECT_VOLUME_PAGE: return self.__has_volumes
+        if   page is SELECT_POOL_PAGE:
+            return self.__has_pools
+        elif page is SELECT_VOLUME_PAGE:
+            return self.__has_volumes
         elif page < CONFIRM_PAGE:
             return True
 

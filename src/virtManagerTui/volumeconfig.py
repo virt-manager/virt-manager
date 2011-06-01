@@ -27,6 +27,8 @@ class StorageVolumeConfig:
         self.__format = None
         self.__max_capacity = 10000
         self.__allocation = 0
+        self.__pool_type = None
+        self.__volume_class = None
 
     def set_pool(self, pool):
         self.__pool = pool

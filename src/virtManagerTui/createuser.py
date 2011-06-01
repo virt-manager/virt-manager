@@ -31,12 +31,17 @@ class CreateUserConfigScreen(ConfigScreen):
     def __init__(self):
         ConfigScreen.__init__(self, "Create A User Account")
         self.__username = None
+        self.__password = None
+        self.__confirm = None
+        self.__adminuser = None
         self.__useradmin = libuser.admin()
         self.__user_worker = UserWorker()
 
     def get_elements_for_page(self, screen, page):
-        if   page is DETAILS_PAGE: return self.get_details_page(screen)
-        elif page is CONFIRM_PAGE: return self.get_confirm_page(screen)
+        if   page is DETAILS_PAGE:
+            return self.get_details_page(screen)
+        elif page is CONFIRM_PAGE:
+            return self.get_confirm_page(screen)
 
     def validate_input(self, page, errors):
         if page is DETAILS_PAGE:

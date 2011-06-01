@@ -48,7 +48,8 @@ class MenuScreen:
             screen.finish()
 
             try:
-                if result.current() == EXIT_MENU: finished = True
+                if result.current() == EXIT_MENU:
+                    finished = True
                 else: self.handle_selection(result.current())
             except Exception, error:
                 screen = snack.SnackScreen()

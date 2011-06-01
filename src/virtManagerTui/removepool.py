@@ -27,10 +27,13 @@ CONFIRM_PAGE       = 2
 class RemoveStoragePoolConfigScreen(StorageListConfigScreen):
     def __init__(self):
         StorageListConfigScreen.__init__(self, "Remove A Storage Pool")
+        self.__confirm = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_POOLS_PAGE: return self.get_storage_pool_list_page(screen)
-        elif page is CONFIRM_PAGE:    return self.get_confirm_page(screen)
+        if   page is LIST_POOLS_PAGE:
+            return self.get_storage_pool_list_page(screen)
+        elif page is CONFIRM_PAGE:
+            return self.get_confirm_page(screen)
 
     def page_has_next(self, page):
         return page is LIST_POOLS_PAGE and self.has_selectable_pools()

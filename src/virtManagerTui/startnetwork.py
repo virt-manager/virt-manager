@@ -29,11 +29,14 @@ class StartNetworkConfigScreen(NetworkListConfigScreen):
         NetworkListConfigScreen.__init__(self, "Start A Network")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:  return self.get_network_list_page(screen, started = False)
-        elif page is START_PAGE: return self.get_start_network_page(screen)
+        if   page is LIST_PAGE:
+            return self.get_network_list_page(screen, started = False)
+        elif page is START_PAGE:
+            return self.get_start_network_page(screen)
 
     def page_has_next(self, page):
-        if page is LIST_PAGE: return self.has_selectable_networks()
+        if page is LIST_PAGE:
+            return self.has_selectable_networks()
 
     def page_has_back(self, page):
         return (page is START_PAGE)

@@ -29,8 +29,10 @@ class StartStoragePoolConfigScreen(StorageListConfigScreen):
         StorageListConfigScreen.__init__(self, "Start A Storage Pool")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_POOLS_PAGE: return self.get_storage_pool_list_page(screen, created = False)
-        elif page is FINAL_PAGE:      return self.get_final_page(screen)
+        if   page is LIST_POOLS_PAGE:
+            return self.get_storage_pool_list_page(screen, created = False)
+        elif page is FINAL_PAGE:
+            return self.get_final_page(screen)
 
     def page_has_next(self, page):
         return page is LIST_POOLS_PAGE and self.has_selectable_pools()

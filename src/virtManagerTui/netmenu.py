@@ -41,11 +41,16 @@ class NetworkMenuScreen(MenuScreen):
                 ("List Networks",      LIST_NETWORKS))
 
     def handle_selection(self, item):
-        if   item is DEFINE_NETWORK:   DefineNetwork()
-        elif item is START_NETWORK:    StartNetwork()
-        elif item is STOP_NETWORK:     StopNetwork()
-        elif item is UNDEFINE_NETWORK: UndefineNetwork()
-        elif item is LIST_NETWORKS:    ListNetworks()
+        if   item is DEFINE_NETWORK:
+            DefineNetwork()
+        elif item is START_NETWORK:
+            StartNetwork()
+        elif item is STOP_NETWORK:
+            StopNetwork()
+        elif item is UNDEFINE_NETWORK:
+            UndefineNetwork()
+        elif item is LIST_NETWORKS:
+            ListNetworks()
 
 def NetworkMenu():
     screen = NetworkMenuScreen()

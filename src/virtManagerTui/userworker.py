@@ -32,6 +32,7 @@ class UserWorker:
         self.__admin.addUser(user)
         if other_group is not None:
             group = self.__admin.lookupGroupByName(other_group)
-            if group is None: raise Exception("Invalid group specified: %s" % other_group)
+            if group is None:
+                raise Exception("Invalid group specified: %s" % other_group)
             user.add('pw_gid', group.get('pw_gid')[0])
             self.__admin.modifyUser(user)

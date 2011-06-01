@@ -39,10 +39,14 @@ class MainMenuScreen(MenuScreen):
                 ("Host Administration",         HOST_MENU))
 
     def handle_selection(self, page):
-        if   page is NODE_MENU:    NodeMenu()
-        elif page is NETWORK_MENU: NetworkMenu()
-        elif page is STORAGE_MENU: StoragePoolMenu()
-        elif page is HOST_MENU:    HostMenu()
+        if   page is NODE_MENU:
+            NodeMenu()
+        elif page is NETWORK_MENU:
+            NetworkMenu()
+        elif page is STORAGE_MENU:
+            StoragePoolMenu()
+        elif page is HOST_MENU:
+            HostMenu()
 
 def MainMenu():
     screen = MainMenuScreen()

@@ -51,7 +51,8 @@ class VirtManagerConfig:
         result = []
         if os.path.exists(self.__filename):
             inp = file(self.__filename, "r")
-            for entry in inp: result.append(entry[0:-1])
+            for entry in inp:
+                result.append(entry[0:-1])
         return result
 
     def add_connection(self, connection):
@@ -75,11 +76,14 @@ class VirtManagerConfig:
 class LibvirtWorker:
     '''Provides utilities for interfacing with libvirt.'''
     def __init__(self, url = None):
-        if url is None: url = get_default_url()
+        if url is None:
+            url = get_default_url()
         logging.info("Connecting to libvirt: %s" % url)
         self.__url  = None
         self.__conn = None
         self.__vmmconn = None
+        self.__guest = None
+        self.__domain = None
 
         self.open_connection(url)
 
@@ -127,10 +131,13 @@ class LibvirtWorker:
             include = False
             domain = self.get_domain(uuid)
             if domain.status() in [libvirt.VIR_DOMAIN_RUNNING]:
-                if created: include = True
+                if created:
+                    include = True
             else:
-                if defined: include = True
-            if include: result.append(uuid)
+                if defined:
+                    include = True
+            if include:
+                result.append(uuid)
         return result
 
     def get_domain(self, uuid):
@@ -140,7 +147,8 @@ class LibvirtWorker:
     def domain_exists(self, name):
         '''Returns whether a domain with the specified node exists.'''
         domains = self.list_domains()
-        if name in domains: return True
+        if name in domains:
+            return True
         return False
 
     def undefine_domain(self, name):
@@ -169,10 +177,13 @@ class LibvirtWorker:
             include = False
             net = self.__vmmconn.get_net(uuid)
             if net.is_active():
-                if started: include = True
+                if started:
+                    include = True
             else:
-                if defined: include = True
-            if include: result.append(uuid)
+                if defined:
+                    include = True
+            if include:
+                result.append(uuid)
         return result
 
     def get_network(self, uuid):
@@ -184,7 +195,8 @@ class LibvirtWorker:
         '''
         self.__vmmconn.tick()
         result = self.__vmmconn.get_net(uuid)
-        if result is None: raise Exception("No such network exists: uuid=%s" % uuid)
+        if result is None:
+            raise Exception("No such network exists: uuid=%s" % uuid)
 
         return result
 
@@ -196,7 +208,8 @@ class LibvirtWorker:
 
         '''
         networks = self.list_networks()
-        if name in networks: return True
+        if name in networks:
+            return True
         return False
 
     def define_network(self, config):
@@ -238,14 +251,17 @@ class LibvirtWorker:
     def list_storage_pools(self, defined=True, created=True):
         '''Returns the list of all defined storage pools.'''
         pools = []
-        if defined: pools.extend(self.__conn.listDefinedStoragePools())
-        if created: pools.extend(self.__conn.listStoragePools())
+        if defined:
+            pools.extend(self.__conn.listDefinedStoragePools())
+        if created:
+            pools.extend(self.__conn.listStoragePools())
         return pools
 
     def storage_pool_exists(self, name):
         '''Returns whether a storage pool exists.'''
         pools = self.list_storage_pools()
-        if name in pools: return True
+        if name in pools:
+            return True
         return False
 
     def create_storage_pool(self, name):
@@ -341,7 +357,8 @@ class LibvirtWorker:
                 domain_type = domain.hypervisor_type
                 label = domain_type
 
-                if domain_type is "kvm" and guest_type is "xen": label = "xenner"
+                if domain_type is "kvm" and guest_type is "xen":
+                    label = "xenner"
                 elif domain_type is "xen":
                     if guest_type is "xen":
                         label = "xen (paravirt)"
@@ -357,7 +374,8 @@ class LibvirtWorker:
                     if row[0] == label:
                         label = None
                         break
-                if label is None: continue
+                if label is None:
+                    continue
 
                 result.append([label, domain_type, guest_type])
         return result
@@ -376,7 +394,8 @@ class LibvirtWorker:
     def get_hypervisor(self, virt_type):
         virt_types = self.get_virt_types()
         for typ in virt_types:
-            if typ[0] is virt_type: return typ[1]
+            if typ[0] is virt_type:
+                return typ[1]
         return None
 
     def get_default_virt_type(self):
@@ -386,7 +405,8 @@ class LibvirtWorker:
     def get_os_type(self, virt_type):
         virt_types = self.get_virt_types()
         for typ in virt_types:
-            if typ[0] is virt_type: return typ[2]
+            if typ[0] is virt_type:
+                return typ[2]
         return None
 
     def list_architectures(self):
@@ -399,13 +419,16 @@ class LibvirtWorker:
                     if row == label:
                         label = None
                         break
-                if label is None: continue
+                if label is None:
+                    continue
 
                 result.append(label)
         return result
 
     def define_domain(self, config, meter):
-        location = extra = kickstart = None
+        location = None
+        extra = None
+        kickstart = None
 
         if config.get_install_type() == DomainConfig.LOCAL_INSTALL:
             if config.get_use_cdrom_source():
@@ -432,16 +455,22 @@ class LibvirtWorker:
         self.__guest.maxmemory = config.get_memory()
 
         self.__guest.installer.location = location
-        if config.get_use_cdrom_source(): self.__guest.installer.cdrom = True
+        if config.get_use_cdrom_source():
+            self.__guest.installer.cdrom = True
         extraargs = ""
-        if extra: extraargs += extra
-        if kickstart: extraargs += " ks=%s" % kickstart
-        if extraargs: self.__guest.installer.extraarags = extraargs
+        if extra:
+            extraargs += extra
+        if kickstart:
+            extraargs += " ks=%s" % kickstart
+        if extraargs:
+            self.__guest.installer.extraarags = extraargs
 
         self.__guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
 
-        if config.get_os_type() != "generic": self.__guest.os_type = config.get_os_type()
-        if config.get_os_variant() != "generic": self.__guest.os_variant = config.get_os_variant()
+        if config.get_os_type() != "generic":
+            self.__guest.os_type = config.get_os_type()
+        if config.get_os_variant() != "generic":
+            self.__guest.os_variant = config.get_os_variant()
 
         self.__guest._graphics_dev = virtinst.VirtualGraphics(type = virtinst.VirtualGraphics.TYPE_VNC)
         self.__guest.sound_devs = []

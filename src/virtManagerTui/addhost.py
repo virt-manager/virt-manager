@@ -43,10 +43,16 @@ class AddHostConfigScreen(ConfigScreen):
     def __init__(self):
         ConfigScreen.__init__(self, "Add A Remote Host")
         self.__configured = False
+        self.__connection = None
+        self.__hostname = None
+        self.__autoconnect = None
+        self.__hypervisor = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is DETAILS_PAGE: return self.get_details_page(screen)
-        elif page is CONFIRM_PAGE: return self.get_confirm_page(screen)
+        if page is DETAILS_PAGE:
+            return self.get_details_page(screen)
+        elif page is CONFIRM_PAGE:
+            return self.get_confirm_page(screen)
 
     def page_has_next(self, page):
         return page < CONFIRM_PAGE
@@ -65,7 +71,8 @@ class AddHostConfigScreen(ConfigScreen):
                 return True
             else:
                 errors.append("You must enter a remote hostname.")
-        elif page is CONFIRM_PAGE: return True
+        elif page is CONFIRM_PAGE:
+            return True
         return False
 
     def process_input(self, page):
@@ -75,15 +82,23 @@ class AddHostConfigScreen(ConfigScreen):
             hostname = self.__hostname.value()
 
             if   hv is HYPERVISOR_XEN:
-                if   conn is CONNECTION_LOCAL:    url = "xen:///"
-                elif conn is CONNECTION_KERBEROS: url = "xen+tcp:///" + hostname + "/"
-                elif conn is CONNECTION_SSL:      url = "xen+tls:///" + hostname + "/"
-                elif conn is CONNECTION_SSH:      url = "xen+ssh:///" + hostname + "/"
+                if   conn is CONNECTION_LOCAL:
+                    url = "xen:///"
+                elif conn is CONNECTION_KERBEROS:
+                    url = "xen+tcp:///" + hostname + "/"
+                elif conn is CONNECTION_SSL:
+                    url = "xen+tls:///" + hostname + "/"
+                elif conn is CONNECTION_SSH:
+                    url = "xen+ssh:///" + hostname + "/"
             elif hv is HYPERVISOR_KVM:
-                if   conn is CONNECTION_LOCAL:    url = "qemu:///system"
-                elif conn is CONNECTION_KERBEROS: url = "qemu+tcp://" + hostname + "/system"
-                elif conn is CONNECTION_SSL:      url = "qemu+tls://" + hostname + "/system"
-                elif conn is CONNECTION_SSH:      url = "qemu+ssh://" + hostname + "/system"
+                if   conn is CONNECTION_LOCAL:
+                    url = "qemu:///system"
+                elif conn is CONNECTION_KERBEROS:
+                    url = "qemu+tcp://" + hostname + "/system"
+                elif conn is CONNECTION_SSL:
+                    url = "qemu+tls://" + hostname + "/system"
+                elif conn is CONNECTION_SSH:
+                    url = "qemu+ssh://" + hostname + "/system"
 
             self.get_virt_manager_config().add_connection(url)
             self.set_finished()
@@ -127,7 +142,8 @@ class AddHostConfigScreen(ConfigScreen):
         grid.setField(snack.Label(hostname), 1, 2, anchorLeft = 1)
         grid.setField(snack.Label("Autoconnect on Startup:"), 0, 3, anchorRight = 1)
         label = "Yes"
-        if not self.__autoconnect.value(): label = "No"
+        if not self.__autoconnect.value():
+            label = "No"
         grid.setField(snack.Label(label), 1, 3, anchorLeft = 1)
         return [snack.Label("Confirm Connection"),
                 grid]

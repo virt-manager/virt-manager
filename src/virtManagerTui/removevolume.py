@@ -29,20 +29,28 @@ class RemoveVolumeConfigScreen(StorageListConfigScreen):
     def __init__(self):
         StorageListConfigScreen.__init__(self, "Add A New Storage Volume")
         self.__config = StorageVolumeConfig()
+        self.__confirm = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is SELECT_POOL_PAGE:   return self.get_storage_pool_list_page(screen)
-        elif page is SELECT_VOLUME_PAGE: return self.get_storage_volume_list_page(screen)
-        elif page is CONFIRM_PAGE:       return self.get_confirm_page(screen)
+        if   page is SELECT_POOL_PAGE:
+            return self.get_storage_pool_list_page(screen)
+        elif page is SELECT_VOLUME_PAGE:
+            return self.get_storage_volume_list_page(screen)
+        elif page is CONFIRM_PAGE:
+            return self.get_confirm_page(screen)
 
     def page_has_next(self, page):
-        if   page is SELECT_POOL_PAGE:   return self.has_selectable_pools()
-        elif page is SELECT_VOLUME_PAGE: return self.has_selectable_volumes()
+        if   page is SELECT_POOL_PAGE:
+            return self.has_selectable_pools()
+        elif page is SELECT_VOLUME_PAGE:
+            return self.has_selectable_volumes()
         return False
 
     def validate_input(self, page, errors):
-        if   page is SELECT_POOL_PAGE:   return self.get_selected_pool() is not None
-        elif page is SELECT_VOLUME_PAGE: return self.get_selected_volume() is not None
+        if   page is SELECT_POOL_PAGE:
+            return self.get_selected_pool() is not None
+        elif page is SELECT_VOLUME_PAGE:
+            return self.get_selected_volume() is not None
         elif page is CONFIRM_PAGE:
             if self.__confirm.value():
                 return True

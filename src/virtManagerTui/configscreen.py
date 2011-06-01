@@ -66,7 +66,8 @@ class ConfigScreen:
         return False
 
     def get_back_page(self, page):
-        if page > 1: return page - 1
+        if page > 1:
+            return page - 1
         return page
 
     def go_back(self):
@@ -124,9 +125,12 @@ class ConfigScreen:
                 current_element += 1
             # create the navigation buttons
             buttons = []
-            if self.__current_page > 1: buttons.append(["Back", BACK_BUTTON, "F11"])
-            if self.page_has_next(self.__current_page): buttons.append(["Next", NEXT_BUTTON, "F12"])
-            if self.page_has_finish(self.__current_page): buttons.append(["Finish", FINISH_BUTTON, "F10"])
+            if self.__current_page > 1:
+                buttons.append(["Back", BACK_BUTTON, "F11"])
+            if self.page_has_next(self.__current_page):
+                buttons.append(["Next", NEXT_BUTTON, "F12"])
+            if self.page_has_finish(self.__current_page):
+                buttons.append(["Finish", FINISH_BUTTON, "F10"])
             buttons.append(["Cancel", CANCEL_BUTTON, "ESC"])
             buttonbar = snack.ButtonBar(screen, buttons)
             content.setField(buttonbar, 0, current_element, growx = 1)
@@ -165,6 +169,8 @@ class DomainListConfigScreen(ConfigScreen):
 
     def __init__(self, title):
         ConfigScreen.__init__(self, title)
+        self.__has_domains = None
+        self.__domain_list = None
 
     def get_domain_list_page(self, screen, defined=True, created=True):
         ignore = screen
@@ -198,6 +204,8 @@ class NetworkListConfigScreen(ConfigScreen):
 
     def __init__(self, title):
         ConfigScreen.__init__(self, title)
+        self.__has_networks = None
+        self.__network_list = None
 
     def get_network_list_page(self, screen, defined=True, started=True):
         ignore = screen
@@ -231,6 +239,10 @@ class StorageListConfigScreen(ConfigScreen):
 
     def __init__(self, title):
         ConfigScreen.__init__(self, title)
+        self.__has_pools = None
+        self.__pools_list = None
+        self.__has_volumes = None
+        self.__volumes_list = None
 
     def get_storage_pool_list_page(self, screen, defined=True, created=True):
         ignore = screen
@@ -285,6 +297,8 @@ class HostListConfigScreen(ConfigScreen):
 
     def __init__(self, title):
         ConfigScreen.__init__(self, title)
+        self.__has_connections = None
+        self.__connection_list = None
 
     def get_connection_list_page(self, screen):
         ignore = screen

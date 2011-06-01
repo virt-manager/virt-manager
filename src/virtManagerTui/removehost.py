@@ -26,10 +26,13 @@ CONFIRM_REMOVE_PAGE = 2
 class RemoveHostConfigScreen(HostListConfigScreen):
     def __init__(self):
         HostListConfigScreen.__init__(self, "Remove Host Connection")
+        self.__confirm = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is SELECT_HOST_PAGE:    return self.get_connection_list_page(screen)
-        elif page is CONFIRM_REMOVE_PAGE: return self.get_confirm_remove_page(screen)
+        if   page is SELECT_HOST_PAGE:
+            return self.get_connection_list_page(screen)
+        elif page is CONFIRM_REMOVE_PAGE:
+            return self.get_confirm_remove_page(screen)
 
     def page_has_next(self, page):
         return page is SELECT_HOST_PAGE and self.has_selectable_connections()
@@ -41,7 +44,8 @@ class RemoveHostConfigScreen(HostListConfigScreen):
         return page is CONFIRM_REMOVE_PAGE
 
     def validate_input(self, page, errors):
-        if   page is SELECT_HOST_PAGE: return True
+        if   page is SELECT_HOST_PAGE:
+            return True
         elif page is CONFIRM_REMOVE_PAGE:
             if self.__confirm.value():
                 return True

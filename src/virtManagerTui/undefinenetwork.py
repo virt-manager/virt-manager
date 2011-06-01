@@ -28,28 +28,40 @@ UNDEFINE_PAGE = 3
 class UndefineNetworkConfigScreen(NetworkListConfigScreen):
     def __init__(self):
         NetworkListConfigScreen.__init__(self, "Undefine A Network")
+        self.__deleted_network_name = None
+        self.__confirm_undefine = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:     return self.get_network_list_page(screen, started = False)
-        elif page is CONFIRM_PAGE:  return self.get_confirm_page(screen)
-        elif page is UNDEFINE_PAGE: return self.get_undefine_network_page(screen)
+        if   page is LIST_PAGE:
+            return self.get_network_list_page(screen, started = False)
+        elif page is CONFIRM_PAGE:
+            return self.get_confirm_page(screen)
+        elif page is UNDEFINE_PAGE:
+            return self.get_undefine_network_page(screen)
 
     def page_has_next(self, page):
-        if page is LIST_PAGE:    return self.has_selectable_networks()
-        if page is CONFIRM_PAGE: return True
+        if page is LIST_PAGE:
+            return self.has_selectable_networks()
+        if page is CONFIRM_PAGE:
+            return True
         return False
 
     def page_has_back(self, page):
-        if page is CONFIRM_PAGE: return True
-        if page is UNDEFINE_PAGE: return True
+        if page is CONFIRM_PAGE:
+            return True
+        if page is UNDEFINE_PAGE:
+            return True
         return False
 
     def get_back_page(self, page):
-        if   page is CONFIRM_PAGE: return LIST_PAGE
-        elif page is UNDEFINE_PAGE: return LIST_PAGE
+        if   page is CONFIRM_PAGE:
+            return LIST_PAGE
+        elif page is UNDEFINE_PAGE:
+            return LIST_PAGE
 
     def validate_input(self, page, errors):
-        if   page is LIST_PAGE: return True
+        if   page is LIST_PAGE:
+            return True
         elif page is CONFIRM_PAGE:
             network = self.get_selected_network()
             if self.__confirm_undefine.value():
@@ -58,7 +70,8 @@ class UndefineNetworkConfigScreen(NetworkListConfigScreen):
                 return True
             else:
                 errors.append("You must confirm undefining %s." % network.get_name())
-        elif page is UNDEFINE_PAGE: return True
+        elif page is UNDEFINE_PAGE:
+            return True
         return False
 
     def get_confirm_page(self, screen):

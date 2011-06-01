@@ -24,6 +24,9 @@ class NetworkConfig:
         self.set_ipv4_address("192.168.100.0/24")
         self.__isolated_network = True
         self.__physical_device = ""
+        self.__ipv4_end = None
+        self.__ipv4_start = None
+        self.__ipv4_address = None
 
     def set_name(self, name):
         self.__name = name

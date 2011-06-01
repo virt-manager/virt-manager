@@ -33,8 +33,10 @@ class ListNetworksConfigScreen(NetworkListConfigScreen):
         return (page is DETAILS_PAGE)
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE:    return self.get_network_list_page(screen)
-        elif page is DETAILS_PAGE: return self.get_network_details_page(screen)
+        if   page is LIST_PAGE:
+            return self.get_network_list_page(screen)
+        elif page is DETAILS_PAGE:
+            return self.get_network_details_page(screen)
 
     def get_network_details_page(self, screen):
         ignore = screen

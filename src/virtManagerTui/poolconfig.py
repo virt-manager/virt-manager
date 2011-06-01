@@ -31,6 +31,14 @@ class PoolConfig:
         self.__source_path = ""
         self.__build_pool  = False
 
+        self.__needs_source_path = None
+        self.__needs_target_path = None
+        self.__pool = None
+        self.__needs_hostname = None
+        self.__needs_build_pool = None
+        self.__needs_format = None
+        self.__type = None
+
     def get_pool(self):
         return self.__pool
 

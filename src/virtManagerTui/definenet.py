@@ -37,16 +37,30 @@ class DefineNetworkConfigScreen(ConfigScreen):
     def __init__(self):
         ConfigScreen.__init__(self, "Create A Virtual Network Interface")
         self.__config = NetworkConfig()
+        self.__end_address = None
+        self.__start_address = None
+        self.__name = None
+        self.__isolated_network = None
+        self.__physical_devices = None
+        self.__ipv4_address = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is NETWORK_NAME_PAGE:            return self.get_network_name_page(screen)
-        elif page is IPV4_ADDRESS_PAGE:            return self.get_ipv4_address_page(screen)
-        elif page is PUBLIC_NETWORK_ALERT_PAGE:    return self.get_public_network_alert_page(screen)
-        elif page is NETWORK_DETAILS_PAGE:         return self.get_network_details_page(screen)
-        elif page is DHCP_RANGE_PAGE:              return self.get_dhcp_range_page(screen)
-        elif page is NETWORK_TYPE_PAGE:            return self.get_network_type_page(screen)
-        elif page is SELECT_PHYSICAL_NETWORK_PAGE: return self.get_select_physical_network_page(screen)
-        elif page is SUMMARY_PAGE:                 return self.get_summary_page(screen)
+        if   page is NETWORK_NAME_PAGE:
+            return self.get_network_name_page(screen)
+        elif page is IPV4_ADDRESS_PAGE:
+            return self.get_ipv4_address_page(screen)
+        elif page is PUBLIC_NETWORK_ALERT_PAGE:
+            return self.get_public_network_alert_page(screen)
+        elif page is NETWORK_DETAILS_PAGE:
+            return self.get_network_details_page(screen)
+        elif page is DHCP_RANGE_PAGE:
+            return self.get_dhcp_range_page(screen)
+        elif page is NETWORK_TYPE_PAGE:
+            return self.get_network_type_page(screen)
+        elif page is SELECT_PHYSICAL_NETWORK_PAGE:
+            return self.get_select_physical_network_page(screen)
+        elif page is SUMMARY_PAGE:
+            return self.get_summary_page(screen)
 
     def validate_input(self, page, errors):
         if page is NETWORK_NAME_PAGE:
@@ -66,8 +80,10 @@ class DefineNetworkConfigScreen(ConfigScreen):
                     errors.append("The network address could not be understood: %s" % str(error))
             else:
                 errors.append("Network must be entered in the format 1.2.3.4/8")
-        elif page is PUBLIC_NETWORK_ALERT_PAGE: return True
-        elif page is NETWORK_DETAILS_PAGE: return True
+        elif page is PUBLIC_NETWORK_ALERT_PAGE:
+            return True
+        elif page is NETWORK_DETAILS_PAGE:
+            return True
         elif page is DHCP_RANGE_PAGE:
             try:
                 if len(self.__start_address.value()) > 0 and len(self.__end_address.value()) > 0:
@@ -82,9 +98,12 @@ class DefineNetworkConfigScreen(ConfigScreen):
             except Exception, error:
                 logging.error(str(error))
                 errors.append("The start and/or end addresses could not be understood.")
-        elif page is NETWORK_TYPE_PAGE: return True
-        elif page is SELECT_PHYSICAL_NETWORK_PAGE: return True
-        elif page is SUMMARY_PAGE: return True
+        elif page is NETWORK_TYPE_PAGE:
+            return True
+        elif page is SELECT_PHYSICAL_NETWORK_PAGE:
+            return True
+        elif page is SUMMARY_PAGE:
+            return True
         return False
 
     def process_input(self, page):
@@ -125,14 +144,17 @@ class DefineNetworkConfigScreen(ConfigScreen):
         return ConfigScreen.get_back_page(self, page)
 
     def page_has_finish(self, page):
-        if page is SUMMARY_PAGE: return True
+        if page is SUMMARY_PAGE:
+            return True
         return False
 
     def page_has_next(self, page):
-        if page < SUMMARY_PAGE: return True
+        if page < SUMMARY_PAGE:
+            return True
 
     def page_has_back(self, page):
-        if page > NETWORK_NAME_PAGE: return True
+        if page > NETWORK_NAME_PAGE:
+            return True
         return False
 
     def get_network_name_page(self, screen):

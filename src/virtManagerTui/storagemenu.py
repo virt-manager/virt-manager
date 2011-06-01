@@ -47,13 +47,20 @@ class StoragePoolMenuScreen(MenuScreen):
                 ("List Storage Pools",      LIST_POOLS))
 
     def handle_selection(self, item):
-        if   item is ADD_POOL:      AddStoragePool()
-        elif item is START_POOL:    StartStoragePool()
-        elif item is STOP_POOL:     StopStoragePool()
-        elif item is REMOVE_POOL:   RemoveStoragePool()
-        elif item is ADD_VOLUME:    AddStorageVolume()
-        elif item is REMOVE_VOLUME: RemoveStorageVolume()
-        elif item is LIST_POOLS:    ListStoragePools()
+        if   item is ADD_POOL:
+            AddStoragePool()
+        elif item is START_POOL:
+            StartStoragePool()
+        elif item is STOP_POOL:
+            StopStoragePool()
+        elif item is REMOVE_POOL:
+            RemoveStoragePool()
+        elif item is ADD_VOLUME:
+            AddStorageVolume()
+        elif item is REMOVE_VOLUME:
+            RemoveStorageVolume()
+        elif item is LIST_POOLS:
+            ListStoragePools()
 
 def StoragePoolMenu():
     screen = StoragePoolMenuScreen()

@@ -19,7 +19,8 @@
 import re
 
 def string_is_not_blank(value):
-    if len(value) > 0: return True
+    if len(value) > 0:
+        return True
     return False
 
 def string_has_no_spaces(value):

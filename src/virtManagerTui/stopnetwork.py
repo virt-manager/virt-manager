@@ -29,15 +29,19 @@ class StopNetworkConfigScreen(NetworkListConfigScreen):
         NetworkListConfigScreen.__init__(self, "Stop A Network")
 
     def get_elements_for_page(self, screen, page):
-        if   page is LIST_PAGE: return self.get_network_list_page(screen, defined = False)
-        elif page is STOP_PAGE: return self.get_stop_network_page(screen)
+        if   page is LIST_PAGE:
+            return self.get_network_list_page(screen, defined = False)
+        elif page is STOP_PAGE:
+            return self.get_stop_network_page(screen)
 
     def page_has_next(self, page):
-        if page is LIST_PAGE: return self.has_selectable_networks()
+        if page is LIST_PAGE:
+            return self.has_selectable_networks()
         return False
 
     def page_has_back(self, page):
-        if page is STOP_PAGE: return True
+        if page is STOP_PAGE:
+            return True
         return False
 
     def validate_input(self, page, errors):

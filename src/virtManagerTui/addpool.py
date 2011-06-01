@@ -31,11 +31,21 @@ class AddStoragePoolConfigScreen(ConfigScreen):
     def __init__(self):
         ConfigScreen.__init__(self, "Add A Storage Pool")
         self.__config = PoolConfig(self.get_libvirt())
+        self.__hostname = None
+        self.__formats = None
+        self.__name = None
+        self.__type = None
+        self.__build_pool = None
+        self.__target_path = None
+        self.__source_path = None
 
     def get_elements_for_page(self, screen, page):
-        if   page is POOL_NAME_PAGE:    return self.get_pool_name_page(screen)
-        elif page is POOL_DETAILS_PAGE: return self.get_pool_details_page(screen)
-        elif page is CONFIRM_PAGE:      return self.get_confirm_page(screen)
+        if   page is POOL_NAME_PAGE:
+            return self.get_pool_name_page(screen)
+        elif page is POOL_DETAILS_PAGE:
+            return self.get_pool_details_page(screen)
+        elif page is CONFIRM_PAGE:
+            return self.get_confirm_page(screen)
 
     def page_has_next(self, page):
         return page < CONFIRM_PAGE
@@ -83,7 +93,8 @@ class AddStoragePoolConfigScreen(ConfigScreen):
                     errors.append("you  must enter a source path.")
                     result = False
             return result
-        elif page is CONFIRM_PAGE: return True
+        elif page is CONFIRM_PAGE:
+            return True
         return False
 
     def process_input(self, page):
