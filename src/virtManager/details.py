@@ -1615,28 +1615,31 @@ class vmmDetails(vmmGObjectUI):
         key = devobj
         ret = False
 
-        if pagetype is HW_LIST_TYPE_GENERAL:
-            ret = self.config_overview_apply()
-        elif pagetype is HW_LIST_TYPE_CPU:
-            ret = self.config_vcpus_apply()
-        elif pagetype is HW_LIST_TYPE_MEMORY:
-            ret = self.config_memory_apply()
-        elif pagetype is HW_LIST_TYPE_BOOT:
-            ret = self.config_boot_options_apply()
-        elif pagetype is HW_LIST_TYPE_DISK:
-            ret = self.config_disk_apply(key)
-        elif pagetype is HW_LIST_TYPE_NIC:
-            ret = self.config_network_apply(key)
-        elif pagetype is HW_LIST_TYPE_GRAPHICS:
-            ret = self.config_graphics_apply(key)
-        elif pagetype is HW_LIST_TYPE_SOUND:
-            ret = self.config_sound_apply(key)
-        elif pagetype is HW_LIST_TYPE_VIDEO:
-            ret = self.config_video_apply(key)
-        elif pagetype is HW_LIST_TYPE_WATCHDOG:
-            ret = self.config_watchdog_apply(key)
-        else:
-            ret = False
+        try:
+            if pagetype is HW_LIST_TYPE_GENERAL:
+                ret = self.config_overview_apply()
+            elif pagetype is HW_LIST_TYPE_CPU:
+                ret = self.config_vcpus_apply()
+            elif pagetype is HW_LIST_TYPE_MEMORY:
+                ret = self.config_memory_apply()
+            elif pagetype is HW_LIST_TYPE_BOOT:
+                ret = self.config_boot_options_apply()
+            elif pagetype is HW_LIST_TYPE_DISK:
+                ret = self.config_disk_apply(key)
+            elif pagetype is HW_LIST_TYPE_NIC:
+                ret = self.config_network_apply(key)
+            elif pagetype is HW_LIST_TYPE_GRAPHICS:
+                ret = self.config_graphics_apply(key)
+            elif pagetype is HW_LIST_TYPE_SOUND:
+                ret = self.config_sound_apply(key)
+            elif pagetype is HW_LIST_TYPE_VIDEO:
+                ret = self.config_video_apply(key)
+            elif pagetype is HW_LIST_TYPE_WATCHDOG:
+                ret = self.config_watchdog_apply(key)
+            else:
+                ret = False
+        except Exception, e:
+            self.err.show_err(_("Error apply changes: %s") % e)
 
         if ret is not False:
             self.window.get_widget("config-apply").set_sensitive(False)
