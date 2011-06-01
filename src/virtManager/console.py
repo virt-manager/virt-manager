@@ -207,6 +207,9 @@ class Viewer(vmmGObject):
         self.console = console
         self.display = None
 
+    def close(self):
+        raise NotImplementedError()
+
     def cleanup(self):
         self.close()
 
@@ -430,7 +433,8 @@ class SpiceViewer(Viewer):
             self.spice_session.disconnect()
         self.spice_session = None
         self.audio = None
-        self.display.destroy()
+        if self.display:
+            self.display.destroy()
         self.display = None
         self.display_channel = None
 
@@ -439,9 +443,11 @@ class SpiceViewer(Viewer):
 
     def _main_channel_event_cb(self, channel, event):
         if event == spice.CHANNEL_CLOSED:
-            self.console.disconnected()
+            if self.console:
+                self.console.disconnected()
         elif event == spice.CHANNEL_ERROR_AUTH:
-            self.console.activate_auth_page()
+            if self.console:
+                self.console.activate_auth_page()
 
     def _channel_open_fd_request(self, channel, tls_ignore):
         if not self.console.tunnels:
