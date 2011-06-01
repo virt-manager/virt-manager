@@ -29,9 +29,9 @@ from virtManager.mediadev import vmmMediaDevice
 
 _hal_helper = None
 
-def get_hal_helper():
+def get_hal_helper(init=True):
     global _hal_helper
-    if not _hal_helper:
+    if not _hal_helper and init:
         _hal_helper = vmmHalHelper()
     return _hal_helper
 

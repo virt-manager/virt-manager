@@ -899,7 +899,7 @@ class vmmConnection(vmmGObject):
         vmmGObject.cleanup(self)
         self.close()
 
-        hal_helper = self.get_hal_helper()
+        hal_helper = self.get_hal_helper(init=False)
         if hal_helper:
             for h in self.hal_handles:
                 hal_helper.disconnect(h)
