@@ -779,7 +779,7 @@ class vmmConsolePages(vmmGObjectUI):
         do_fullscreen = src.get_active()
         self._change_fullscreen(do_fullscreen)
 
-    def leave_fullscreen(self, ignore):
+    def leave_fullscreen(self, ignore=None):
         self._change_fullscreen(False)
 
     def _change_fullscreen(self, do_fullscreen):
@@ -848,6 +848,7 @@ class vmmConsolePages(vmmGObjectUI):
         v.close()
         v.cleanup()
         self.viewer_connected = False
+        self.leave_fullscreen()
 
     def update_widget_states(self, vm, status_ignore):
         runable = vm.is_runable()
