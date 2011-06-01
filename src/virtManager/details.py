@@ -1798,7 +1798,6 @@ class vmmDetails(vmmGObjectUI):
         kernel = self.window.get_widget("boot-kernel").get_text()
         initrd = self.window.get_widget("boot-kernel-initrd").get_text()
         args = self.window.get_widget("boot-kernel-args").get_text()
-        init = self.window.get_widget("boot-init-path").get_text()
 
         funcs = [self.vm.set_boot_device,
                  self.vm.set_boot_menu,
@@ -1807,7 +1806,8 @@ class vmmDetails(vmmGObjectUI):
                 (bootmenu,),
                 (kernel, initrd, args)]
 
-        if self.window.get_widget("boot-init-path").get_property("visible"):
+        if self.window.get_widget("boot-init-align").get_property("visible"):
+            init = self.window.get_widget("boot-init-path").get_text()
             if not init:
                 return self.err.val_err(_("An init path must be specified"))
             funcs.append(self.vm.set_boot_init)
