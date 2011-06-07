@@ -53,7 +53,8 @@ INSTALL_PAGE_ISO = 0
 INSTALL_PAGE_URL = 1
 INSTALL_PAGE_PXE = 2
 INSTALL_PAGE_IMPORT = 3
-
+INSTALL_PAGE_CONTAINER_APP = 4
+INSTALL_PAGE_CONTAINER_OS = 5
 
 class vmmCreate(vmmGObjectUI):
     def __init__(self, engine):
@@ -110,6 +111,7 @@ class vmmCreate(vmmGObjectUI):
             "on_install_local_box_changed": self.detect_media_os,
             "on_install_local_browse_clicked": self.browse_iso,
             "on_install_import_browse_clicked": self.browse_import,
+            "on_install_app_browse_clicked": self.browse_app,
 
             "on_install_detect_os_toggled": self.toggle_detect_os,
             "on_install_os_type_changed": self.change_os_type,
@@ -218,7 +220,6 @@ class vmmCreate(vmmGObjectUI):
                                                          error)
 
     def set_initial_state(self):
-
         self.window.get_widget("create-pages").set_show_tabs(False)
         self.window.get_widget("install-method-pages").set_show_tabs(False)
 
@@ -315,7 +316,6 @@ class vmmCreate(vmmGObjectUI):
         uihelpers.set_sparse_tooltip(sparse_info)
 
     def reset_state(self, urihint=None):
-
         self.failed_guest = None
         self.have_startup_error = False
         self.guest = None
@@ -367,6 +367,9 @@ class vmmCreate(vmmGObjectUI):
 
         # Install import
         self.window.get_widget("install-import-entry").set_text("")
+
+        # Install container app
+        self.window.get_widget("install-app-entry").set_text("/bin/sh")
 
         # Mem / CPUs
         self.window.get_widget("config-mem").set_value(DEFAULT_MEM)
@@ -442,11 +445,13 @@ class vmmCreate(vmmGObjectUI):
         is_local = not self.conn.is_remote()
         is_storage_capable = self.conn.is_storage_capable()
         is_pv = (self.capsguest.os_type == "xen")
+        is_container = self.conn.is_container()
 
         # Install Options
         method_tree = self.window.get_widget("method-tree")
         method_pxe = self.window.get_widget("method-pxe")
         method_local = self.window.get_widget("method-local")
+        method_container_app = self.window.get_widget("method-container-app")
 
         method_tree.set_sensitive(is_local)
         method_local.set_sensitive(not is_pv)
@@ -481,6 +486,13 @@ class vmmCreate(vmmGObjectUI):
         util.tooltip_wrapper(method_tree, tree_tt)
         util.tooltip_wrapper(method_local, local_tt)
         util.tooltip_wrapper(method_pxe, pxe_tt)
+
+        # Container install options
+        method_container_app.set_active(True)
+        self.window.get_widget("virt-install-box").set_property(
+                                                "visible", not is_container)
+        self.window.get_widget("container-install-box").set_property(
+                                                "visible", is_container)
 
         # Install local
         iso_option = self.window.get_widget("install-local-iso")
@@ -778,6 +790,10 @@ class vmmCreate(vmmGObjectUI):
             install = _("PXE Install")
         elif instmethod == INSTALL_PAGE_IMPORT:
             install = _("Import existing OS image")
+        elif instmethod == INSTALL_PAGE_CONTAINER_APP:
+            install = _("Application container")
+        elif instmethod == INSTALL_PAGE_CONTAINER_APP:
+            install = _("Operating system container")
 
         if len(self.guest.disks) == 0:
             storage = _("None")
@@ -815,14 +831,20 @@ class vmmCreate(vmmGObjectUI):
         return curpage == PAGE_INSTALL
 
     def get_config_install_page(self):
-        if self.window.get_widget("method-local").get_active():
-            return INSTALL_PAGE_ISO
-        elif self.window.get_widget("method-tree").get_active():
-            return INSTALL_PAGE_URL
-        elif self.window.get_widget("method-pxe").get_active():
-            return INSTALL_PAGE_PXE
-        elif self.window.get_widget("method-import").get_active():
-            return INSTALL_PAGE_IMPORT
+        if self.window.get_widget("virt-install-box").get_property("visible"):
+            if self.window.get_widget("method-local").get_active():
+                return INSTALL_PAGE_ISO
+            elif self.window.get_widget("method-tree").get_active():
+                return INSTALL_PAGE_URL
+            elif self.window.get_widget("method-pxe").get_active():
+                return INSTALL_PAGE_PXE
+            elif self.window.get_widget("method-import").get_active():
+                return INSTALL_PAGE_IMPORT
+        else:
+            if self.window.get_widget("method-container-app").get_active():
+                return INSTALL_PAGE_CONTAINER_APP
+            if self.window.get_widget("method-container-os").get_active():
+                return INSTALL_PAGE_CONTAINER_OS
 
     def get_config_os_info(self):
         d_list = self.window.get_widget("install-os-type")
@@ -877,6 +899,9 @@ class vmmCreate(vmmGObjectUI):
 
     def get_config_import_path(self):
         return self.window.get_widget("install-import-entry").get_text()
+
+    def get_config_container_app_path(self):
+        return self.window.get_widget("install-app-entry").get_text()
 
     def get_default_path(self, name):
         # Don't generate a new path if the install failed
@@ -1073,6 +1098,12 @@ class vmmCreate(vmmGObjectUI):
         else:
             nodetect_label.show()
 
+    def browse_app(self, ignore1=None, ignore2=None):
+        def set_app_path(ignore, path):
+            self.window.get_widget("install-app-entry").set_text(path)
+
+        self._browse_file(set_app_path, is_media=False)
+
     def browse_import(self, ignore1=None, ignore2=None):
         def set_import_path(ignore, path):
             self.window.get_widget("install-import-entry").set_text(path)
@@ -1107,7 +1138,14 @@ class vmmCreate(vmmGObjectUI):
     def set_install_page(self):
         instnotebook = self.window.get_widget("install-method-pages")
         detectbox = self.window.get_widget("install-detect-os-box")
+        osbox = self.window.get_widget("install-os-distro-box")
         instpage = self.get_config_install_page()
+
+        # Setting OS value for a container guest doesn't really matter
+        # at the moment
+        iscontainer = instpage in [INSTALL_PAGE_CONTAINER_APP,
+                                   INSTALL_PAGE_CONTAINER_OS]
+        osbox.set_property("visible", iscontainer)
 
         # Detection only works/ is valid for URL,
         # FIXME: Also works for CDROM if running as root (since we need to
@@ -1125,17 +1163,25 @@ class vmmCreate(vmmGObjectUI):
         else:
             instnotebook.show()
 
+
         instnotebook.set_current_page(instpage)
+
+    def container_install(self):
+        return self.get_config_install_page() in [INSTALL_PAGE_CONTAINER_APP,
+                                                  INSTALL_PAGE_CONTAINER_OS]
+    def skip_disk_page(self):
+        return self.get_config_install_page() in [INSTALL_PAGE_IMPORT,
+                                                  INSTALL_PAGE_CONTAINER_APP,
+                                                  INSTALL_PAGE_CONTAINER_OS]
 
     def back(self, src_ignore):
         notebook = self.window.get_widget("create-pages")
         curpage = notebook.get_current_page()
-        is_import = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
         next_page = curpage - 1
 
         if curpage == PAGE_INSTALL:
             self.reset_guest_type()
-        elif curpage == PAGE_FINISH and is_import:
+        elif curpage == PAGE_FINISH and self.skip_disk_page():
             # Skip over storage page
             next_page -= 1
 
@@ -1144,7 +1190,6 @@ class vmmCreate(vmmGObjectUI):
     def forward(self, src_ignore=None):
         notebook = self.window.get_widget("create-pages")
         curpage = notebook.get_current_page()
-        is_import = (self.get_config_install_page() == INSTALL_PAGE_IMPORT)
 
         if self.have_startup_error:
             return
@@ -1163,7 +1208,7 @@ class vmmCreate(vmmGObjectUI):
             self.guest_from_install_type()
 
         next_page = curpage + 1
-        if next_page == PAGE_STORAGE and is_import:
+        if next_page == PAGE_STORAGE and self.skip_disk_page():
             # Skip storage page for import installs
             next_page += 1
 
@@ -1186,6 +1231,9 @@ class vmmCreate(vmmGObjectUI):
 
         if pagenum == PAGE_INSTALL:
             self.detect_media_os()
+            self.window.get_widget("install-os-distro-box").set_property(
+                                                "visible",
+                                                not self.container_install())
 
         if pagenum != PAGE_FINISH:
             self.window.get_widget("create-forward").show()
@@ -1293,8 +1341,8 @@ class vmmCreate(vmmGObjectUI):
         ks = None
         cdrom = False
         is_import = False
+        init = None
         distro, variant, ignore1, ignore2 = self.get_config_os_info()
-
 
         if instmethod == INSTALL_PAGE_ISO:
             instclass = virtinst.DistroInstaller
@@ -1326,6 +1374,13 @@ class vmmCreate(vmmGObjectUI):
             if not import_path:
                 return self.verr(_("A storage path to import is required."))
 
+        elif instmethod == INSTALL_PAGE_CONTAINER_APP:
+            instclass = virtinst.ContainerInstaller
+
+            init = self.get_config_container_app_path()
+            if not init:
+                return self.verr(_("An application path is required."))
+
         # Build the installer and Guest instance
         try:
             installer = self.build_installer(instclass)
@@ -1351,6 +1406,10 @@ class vmmCreate(vmmGObjectUI):
 
             if extraargs:
                 self.guest.installer.extraargs = extraargs
+
+            if init:
+                self.guest.installer.init = init
+
         except Exception, e:
             return self.verr(_("Error setting install media location."),
                              str(e))
@@ -1382,8 +1441,6 @@ class vmmCreate(vmmGObjectUI):
             if path:
                 uihelpers.check_path_search_for_qemu(self.topwin,
                                                      self.conn, path)
-
-
 
         # Validation passed, store the install path (if there is one) in
         # gconf
