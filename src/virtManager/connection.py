@@ -420,14 +420,28 @@ class vmmConnection(vmmGObject):
         else:
             rest = "localhost"
 
-        if scheme == "qemu":
-            hv = "QEMU"
-            if active and self.is_kvm_supported():
-                hv += "/KVM"
-        elif scheme in ('esx', 'gsx'):
-            hv = scheme.upper()
-        else:
-            hv = scheme.capitalize()
+        pretty_map = {
+            "esx"       : "ESX",
+            "gsx"       : "GSX",
+            "libxl"     : "libxl",
+            "lxc"       : "LXC",
+            "openvz"    : "OpenVZ",
+            "phyp"      : "phyp",
+            "qemu"      : "QEMU",
+            "test"      : "test",
+            "uml"       : "UML",
+            "vbox"      : "VBox",
+            "vmware"    : "VMWare",
+            "xen"       : "xen",
+            "xenapi"    : "XenAPI",
+        }
+
+        hv = scheme
+        if scheme in pretty_map:
+            hv = pretty_map[scheme]
+
+        if hv == "QEMU" and active and self.is_kvm_supported():
+            hv += "/KVM"
 
         if show_trans:
             if transport:
