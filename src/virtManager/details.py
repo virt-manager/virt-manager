@@ -1189,7 +1189,21 @@ class vmmDetails(vmmGObjectUI):
         self.emit("action-exit-app")
 
     def activate_console_page(self):
-        self.window.get_widget("details-pages").set_current_page(PAGE_CONSOLE)
+        pages = self.window.get_widget("details-pages")
+        pages.set_current_page(PAGE_CONSOLE)
+
+        if self.vm.get_graphics_devices() or not self.vm.get_serial_devs():
+            return
+
+        # Show serial console
+        devs = self.build_serial_list()
+        for name, ignore, sensitive, ignore, cb, serialidx in devs:
+            if not sensitive or not cb:
+                continue
+
+            self._show_serial_tab(name, serialidx)
+            break
+
 
     def activate_performance_page(self):
         self.window.get_widget("details-pages").set_current_page(PAGE_DETAILS)
