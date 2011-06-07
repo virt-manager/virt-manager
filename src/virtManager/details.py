@@ -420,9 +420,6 @@ class vmmDetails(vmmGObjectUI):
             self.conn = None
             self.addhwmenu = None
 
-            self.console.cleanup()
-            self.console = None
-
             if self.addhw:
                 self.addhw.cleanup()
                 self.addhw = None
@@ -438,6 +435,9 @@ class vmmDetails(vmmGObjectUI):
 
             for name in self.serial_tabs:
                 self._close_serial_tab(name)
+
+            self.console.cleanup()
+            self.console = None
         except:
             logging.exception("Error cleaning up details")
 

@@ -937,7 +937,6 @@ class vmmConsolePages(vmmGObjectUI):
                             cpage == PAGE_VIEWER and
                             self.viewer_connected)
 
-        print "ALLOW FULLSCREEN", dpage, cpage, self.viewer_connected, allow_fullscreen
         self.window.get_widget("control-fullscreen").set_sensitive(allow_fullscreen)
         self.window.get_widget("details-menu-view-fullscreen").set_sensitive(allow_fullscreen)
 
