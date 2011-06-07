@@ -865,58 +865,88 @@ class vmmDetails(vmmGObjectUI):
 
         self.addhwmenu.popup(None, None, None, 0, event.time)
 
+    def build_serial_list(self):
+        ret = []
+        usable_types = ["pty"]
+
+        def add_row(text, err, sensitive, do_radio, cb, serialidx):
+            ret.append([text, err, sensitive, do_radio, cb, serialidx])
+
+        devs = self.vm.get_serial_devs()
+        if len(devs) == 0:
+            add_row(_("No text console available"),
+                    None, False, False, None, None)
+
+        for serialdesc, serialtype, serialpath, serialidx in devs:
+            sensitive = False
+            err = None
+
+            if self.vm.get_connection().is_remote():
+                err = _("Serial console not yet supported over remote "
+                         "connection.")
+            elif not self.vm.is_active():
+                err = _("Serial console not available for inactive guest.")
+            elif not serialtype in usable_types:
+                err = (_("Console for device type '%s' not yet supported.") %
+                         serialtype)
+            elif serialpath and not os.access(serialpath, os.R_OK | os.W_OK):
+                err = _("Can not access console path '%s'.") % str(serialpath)
+            else:
+                sensitive = True
+
+            def cb(src):
+                return self.control_serial_tab(src, serialdesc, serialidx)
+
+            add_row(serialdesc, err, sensitive, True, cb, serialidx)
+
+        return ret
+
+    def current_serial_dev(self):
+        showing_serial = (self.last_console_page >= PAGE_DYNAMIC_OFFSET)
+        if not showing_serial:
+            return
+
+        serial_idx = self.last_console_page - PAGE_DYNAMIC_OFFSET
+        if len(self.serial_tabs) < serial_idx:
+            return
+
+        return self.serial_tabs[serial_idx]
+
     def populate_serial_menu(self, src):
         for ent in src:
             src.remove(ent)
 
-        devs = self.vm.get_serial_devs()
-        if len(devs) == 0:
-            item = gtk.MenuItem(_("No text console available"))
-            item.set_sensitive(False)
-            src.add(item)
+        serial_page_dev = self.current_serial_dev()
+        showing_graphics = (self.last_console_page == PAGE_CONSOLE)
 
-        on_serial = (self.last_console_page >= PAGE_DYNAMIC_OFFSET)
-        serial_page_dev = None
-        if on_serial:
-            serial_idx = self.last_console_page - PAGE_DYNAMIC_OFFSET
-            if len(self.serial_tabs) >= serial_idx:
-                serial_page_dev = self.serial_tabs[serial_idx]
-        on_graphics = (self.last_console_page == PAGE_CONSOLE)
-
+        # Populate serial devices
         group = None
-        usable_types = ["pty"]
-        for dev in devs:
-            sensitive = False
-            msg = ""
-            item = gtk.RadioMenuItem(group, dev[0])
-            if group == None:
-                group = item
-
-            if self.vm.get_connection().is_remote():
-                msg = _("Serial console not yet supported over remote "
-                        "connection.")
-            elif not self.vm.is_active():
-                msg = _("Serial console not available for inactive guest.")
-            elif not dev[1] in usable_types:
-                msg = _("Console for device type '%s' not yet supported.") % \
-                        dev[1]
-            elif dev[2] and not os.access(dev[2], os.R_OK | os.W_OK):
-                msg = _("Can not access console path '%s'.") % str(dev[2])
+        itemlist = self.build_serial_list()
+        for msg, err, sensitive, do_radio, cb, ignore in itemlist:
+            if do_radio:
+                item = gtk.RadioMenuItem(group, msg)
+                if group is None:
+                    group = item
             else:
-                sensitive = True
+                item = gtk.MenuItem(msg)
 
-            if not sensitive:
-                util.tooltip_wrapper(item, msg)
             item.set_sensitive(sensitive)
 
-            if sensitive and on_serial and serial_page_dev == dev[0]:
-                # Tab is already open, make sure marked as such
+            if err and not sensitive:
+                util.tooltip_wrapper(item, err)
+
+            if cb:
+                item.connect("toggled", cb)
+
+            # Tab is already open, make sure marked as such
+            if sensitive and serial_page_dev and serial_page_dev == msg:
                 item.set_active(True)
-            item.connect("toggled", self.control_serial_tab, dev[0], dev[3])
+
             src.add(item)
 
         src.add(gtk.SeparatorMenuItem())
 
+        # Populate graphical devices
         devs = self.vm.get_graphics_devices()
         if len(devs) == 0:
             item = gtk.MenuItem(_("No graphical console available"))
@@ -929,7 +959,7 @@ class vmmDetails(vmmGObjectUI):
             if group == None:
                 group = item
 
-            if on_graphics:
+            if showing_graphics:
                 item.set_active(True)
             item.connect("toggled", self.control_serial_tab,
                          dev.virtual_device_type, dev.type)
