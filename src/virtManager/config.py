@@ -37,6 +37,7 @@ class vmmConfig(object):
     CONFIG_DIR_SAVE = "save"
     CONFIG_DIR_RESTORE = "restore"
     CONFIG_DIR_SCREENSHOT = "screenshot"
+    CONFIG_DIR_FS = "fs"
 
     # Metadata mapping for browse types. Prob shouldn't go here, but works
     # for now.
@@ -51,7 +52,14 @@ class vmmConfig(object):
             "enable_create" : False,
             "storage_title" : _("Locate ISO media volume"),
             "local_title"   : _("Locate ISO media"),
-        }
+        },
+
+        CONFIG_DIR_FS : {
+            "enable_create" : False,
+            "storage_title" : _("Locate directory volume"),
+            "local_title"   : _("Locate directory volume"),
+            "dialog_type"   : gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
+        },
     }
 
     CONSOLE_SCALE_NEVER = 0
