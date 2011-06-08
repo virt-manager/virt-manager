@@ -1212,42 +1212,46 @@ class vmmCreate(vmmGObjectUI):
         # insufficient network option
         self.check_network_selection()
 
+    def get_graphics_device(self, guest):
+        if guest.installer.is_container():
+            return
+
+        gtype = self.get_config_graphics_type()
+        if (gtype == virtinst.VirtualGraphics.TYPE_SPICE and not
+            virtinst.support.check_conn_support(guest.conn,
+                            virtinst.support.SUPPORT_CONN_HV_GRAPHICS_SPICE)):
+            logging.debug("Spice requested but HV doesn't support it. "
+                          "Using VNC graphics.")
+            gtype = virtinst.VirtualGraphics.TYPE_VNC
+
+        return virtinst.VirtualGraphics(conn=guest.conn, type=gtype)
+
+    def get_video_device(self, guest):
+        if guest.installer.is_container():
+            return
+        return virtinst.VirtualVideoDevice(conn=guest.conn)
+
+    def get_sound_device(self, guest):
+        if not self.get_config_sound() or guest.installer.is_container():
+            return
+        return virtinst.VirtualAudio(conn=guest.conn)
 
     def build_guest(self, installer, name):
         guest = installer.guest_from_installer()
         guest.name = name
 
-        # Generate UUID
+        # Set up default devices
         try:
-            guest.uuid = virtinst.util.uuidToString(virtinst.util.randomUUID())
-        except Exception, e:
-            self.err.show_err(_("Error setting UUID: %s") % str(e))
-            return None
+            devs = []
+            devs.append(self.get_graphics_device(guest))
+            devs.append(self.get_video_device(guest))
+            devs.append(self.get_sound_device(guest))
+            for dev in devs:
+                if dev:
+                    guest.add_device(dev)
 
-        # Set up graphics device
-        try:
-            gtype = self.get_config_graphics_type()
-            if (gtype == virtinst.VirtualGraphics.TYPE_SPICE and not
-                virtinst.support.check_conn_support(guest.conn,
-                            virtinst.support.SUPPORT_CONN_HV_GRAPHICS_SPICE)):
-                logging.debug("Spice requested but HV doesn't support it. "
-                              "Using VNC graphics.")
-                gtype = virtinst.VirtualGraphics.TYPE_VNC
-
-            guest.add_device(virtinst.VirtualGraphics(type=gtype,
-                                                      conn=guest.conn))
-            guest.add_device(virtinst.VirtualVideoDevice(conn=guest.conn))
         except Exception, e:
-            self.err.show_err(_("Error setting up graphics device:") + str(e))
-            return None
-
-        # Set up sound device (if present)
-        guest.sound_devs = []
-        try:
-            if self.get_config_sound():
-                guest.sound_devs.append(virtinst.VirtualAudio(conn=guest.conn))
-        except Exception, e:
-            self.err.show_err(_("Error setting up sound device:") + str(e))
+            self.err.show_err(_("Error setting up default devices:") + str(e))
             return None
 
         return guest
