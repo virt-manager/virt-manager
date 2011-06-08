@@ -381,3 +381,20 @@ def chkbox_helper(src, getcb, setcb, text1, text2=None):
 
     setcb(not skip_prompt)
     return False
+
+def get_list_selection(widget):
+    selection = widget.get_selection()
+    active = selection.get_selected()
+
+    treestore, treeiter = active
+    if treeiter != None:
+        return treestore[treeiter]
+    return None
+
+def set_list_selection(widget, rownum):
+    path = str(rownum)
+    selection = widget.get_selection()
+
+    selection.unselect_all()
+    widget.set_cursor(path)
+    selection.select_path(path)

@@ -57,23 +57,6 @@ char_widget_mappings = {
     "target_name" : "char-target-name",
 }
 
-def get_list_selection(widget):
-    selection = widget.get_selection()
-    active = selection.get_selected()
-
-    treestore, treeiter = active
-    if treeiter != None:
-        return treestore[treeiter]
-    return None
-
-def set_list_selection(widget, rownum):
-    path = str(rownum)
-    selection = widget.get_selection()
-
-    selection.unselect_all()
-    widget.set_cursor(path)
-    selection.select_path(path)
-
 class vmmAddHardware(vmmGObjectUI):
     def __init__(self, vm):
         vmmGObjectUI.__init__(self,
@@ -559,7 +542,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         if len(model) == 0:
             model.append([_("No Devices Available"), None])
-        set_list_selection(devlist, 0)
+        util.set_list_selection(devlist, 0)
 
     ########################
     # get_config_* methods #
@@ -699,7 +682,7 @@ class vmmAddHardware(vmmGObjectUI):
         return usb_info
 
     def get_config_host_device_info(self):
-        devrow = get_list_selection(self.window.get_widget("host-device"))
+        devrow = util.get_list_selection(self.window.get_widget("host-device"))
         if not devrow:
             return []
         return devrow
@@ -738,10 +721,10 @@ class vmmAddHardware(vmmGObjectUI):
     ################
 
     def set_hw_selection(self, page):
-        set_list_selection(self.window.get_widget("hardware-list"), page)
+        util.set_list_selection(self.window.get_widget("hardware-list"), page)
 
     def get_hw_selection(self):
-        return get_list_selection(self.window.get_widget("hardware-list"))
+        return util.get_list_selection(self.window.get_widget("hardware-list"))
 
     def update_char_device_type_model(self):
         # Char device type
