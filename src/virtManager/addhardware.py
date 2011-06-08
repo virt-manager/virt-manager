@@ -90,6 +90,7 @@ class vmmAddHardware(vmmGObjectUI):
             "on_char_device_type_changed": self.change_char_device_type,
 
             "on_fs_type_combo_changed": self.change_fs_type,
+            "on_fs_source_browse_clicked": self.browse_fs_source,
 
             # Char dev info signals
             "char_device_type_focus": (self.update_doc, "char_type"),
@@ -807,6 +808,13 @@ class vmmAddHardware(vmmGObjectUI):
         if not failure:
             self.close()
 
+    def show_pair_combo(self, basename, show_combo):
+        combo = self.window.get_widget(basename + "-combo")
+        label = self.window.get_widget(basename + "-label")
+
+        combo.set_property("visible", show_combo)
+        label.set_property("visible", not show_combo)
+
     # Storage listeners
     def browse_storage(self, ignore1):
         self._browse_file(self.window.get_widget("config-storage-entry"))
@@ -938,12 +946,9 @@ class vmmAddHardware(vmmGObjectUI):
         if has_mode and self.window.get_widget("char-mode").get_active() == -1:
             self.window.get_widget("char-mode").set_active(0)
 
-    def show_pair_combo(self, basename, show_combo):
-        combo = self.window.get_widget(basename + "-combo")
-        label = self.window.get_widget(basename + "-label")
-
-        combo.set_property("visible", show_combo)
-        label.set_property("visible", not show_combo)
+    # FS listeners
+    def browse_fs_source(self, ignore1):
+        self._browse_file(self.window.get_widget("fs-source"), isdir=True)
 
     def change_fs_type(self, src):
         idx = src.get_active()
@@ -1328,17 +1333,20 @@ class vmmAddHardware(vmmGObjectUI):
     # Unsorted helpers #
     ####################
 
-    def _browse_file(self, textent):
+    def _browse_file(self, textent, isdir=False):
         def set_storage_cb(src, path):
             if path:
                 textent.set_text(path)
 
         conn = self.conn
+        reason = (isdir and
+                  self.config.CONFIG_DIR_FS or
+                  self.config.CONFIG_DIR_IMAGE)
         if self.storage_browser == None:
             self.storage_browser = vmmStorageBrowser(conn)
 
         self.storage_browser.set_finish_cb(set_storage_cb)
-        self.storage_browser.set_browse_reason(self.config.CONFIG_DIR_IMAGE)
+        self.storage_browser.set_browse_reason(reason)
 
         self.storage_browser.show(self.topwin, conn)
 
